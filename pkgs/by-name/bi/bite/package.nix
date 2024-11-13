@@ -16,7 +16,6 @@
   pango,
   vulkan-loader,
   stdenv,
-  darwin,
   wayland,
 }:
 rustPlatform.buildRustPackage rec {
@@ -49,36 +48,21 @@ rustPlatform.buildRustPackage rec {
     imagemagick
   ];
 
-  buildInputs =
-    [
-      atk
-      cairo
-      gdk-pixbuf
-      glib
-      gtk3
-      libxkbcommon
-      pango
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.CoreGraphics
-      darwin.apple_sdk.frameworks.Foundation
-      darwin.apple_sdk.frameworks.Metal
-      darwin.apple_sdk.frameworks.QuartzCore
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-    ];
+  buildInputs = [
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    gtk3
+    libxkbcommon
+    pango
+    vulkan-loader
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland ];
 
-  runtimeDependencies =
-    [
-      libxkbcommon
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-    ];
+  runtimeDependencies = [
+    libxkbcommon
+    vulkan-loader
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland ];
 
   postInstall = ''
     wrapProgram $out/bin/bite \
@@ -95,7 +79,10 @@ rustPlatform.buildRustPackage rec {
       icon = "bite";
       desktopName = "BiTE";
       comment = meta.description;
-      categories = ["Development" "Utility"];
+      categories = [
+        "Development"
+        "Utility"
+      ];
     })
   ];
 
@@ -103,7 +90,7 @@ rustPlatform.buildRustPackage rec {
     description = "Disassembler focused on comprehensive rust support";
     homepage = "https://github.com/WINSDK/bite";
     license = licenses.mit;
-    maintainers = with maintainers; [vinnymeller];
+    maintainers = with maintainers; [ vinnymeller ];
     mainProgram = "bite";
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
