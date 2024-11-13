@@ -7,17 +7,18 @@
   cmake,
   ninja,
 
-  folly,
   openssl,
   glog,
   double-conversion,
   zstd,
-  libsodium,
   gflags,
-  zlib,
   libevent,
   apple-sdk_11,
   darwinMinVersionHook,
+
+  folly,
+  libsodium,
+  zlib,
 
   gtest,
 }:
@@ -40,20 +41,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      folly
       openssl
       glog
       double-conversion
       zstd
-      libsodium
       gflags
-      zlib
       libevent
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_11
       (darwinMinVersionHook "11.0")
     ];
+
+  propagatedBuildInputs = [
+    folly
+    libsodium
+    zlib
+  ];
 
   checkInputs = [
     gtest

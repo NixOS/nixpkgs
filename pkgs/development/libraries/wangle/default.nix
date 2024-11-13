@@ -10,8 +10,6 @@
 , fizz
 , folly
 , gtest
-, libsodium
-, zlib
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,8 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libsodium
-    zlib
     double-conversion
     fizz
     folly

@@ -4,7 +4,6 @@
 , bison
 , libevent
 , double-conversion
-, libsodium
 , fizz
 , flex
 , folly
@@ -55,7 +54,6 @@ stdenv.mkDerivation rec {
     wangle
     zlib
     zstd
-    libsodium
   ];
 
   meta = with lib; {
