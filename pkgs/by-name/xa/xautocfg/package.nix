@@ -32,5 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Automatic keyboard repeat rate configuration for new keyboards";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ jceb ];
+    mainProgram = "xautocfg";
   };
 })
