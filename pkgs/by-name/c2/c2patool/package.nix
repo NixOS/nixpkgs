@@ -4,7 +4,6 @@
   fetchFromGitHub,
   rustPlatform,
   libiconv,
-  darwin,
   openssl,
   pkg-config,
   git,
@@ -29,13 +28,8 @@ rustPlatform.buildRustPackage rec {
     git
     pkg-config
   ];
-  buildInputs =
-    [ openssl ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.Carbon
-    ];
+
+  buildInputs = [ openssl ];
 
   checkFlags = [
     # These tests rely on additional executables to be compiled to "target/debug/".
