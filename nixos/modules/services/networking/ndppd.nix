@@ -91,7 +91,7 @@ let
           auto: Same as iface, but instead of manually specifying the outgoing
             interface, check for a matching route in /proc/net/ipv6_route.
         '';
-        default = "auto";
+        default = "static";
       };
       interface = mkOption {
         type = types.nullOr types.str;
