@@ -9175,7 +9175,7 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  fbthrift = darwin.apple_sdk_11_0.callPackage ../development/libraries/fbthrift { };
+  fbthrift = callPackage ../development/libraries/fbthrift { };
 
   fb303 = darwin.apple_sdk_11_0.callPackage ../development/libraries/fb303 { };
 

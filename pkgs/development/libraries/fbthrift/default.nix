@@ -17,6 +17,8 @@
   wangle,
   zlib,
   zstd,
+  apple-sdk_11,
+  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,28 +38,29 @@ stdenv.mkDerivation rec {
     flex
   ];
 
-  cmakeFlags =
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isDarwin then "OFF" else "ON"}"
+  ];
+
+  buildInputs =
     [
-      "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isDarwin then "OFF" else "ON"}"
+      double-conversion
+      fizz
+      folly
+      glog
+      gflags
+      libevent
+      libiberty
+      mvfst
+      openssl
+      wangle
+      zlib
+      zstd
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
+      apple-sdk_11
+      (darwinMinVersionHook "11.0")
     ];
-
-  buildInputs = [
-    double-conversion
-    fizz
-    folly
-    glog
-    gflags
-    libevent
-    libiberty
-    mvfst
-    openssl
-    wangle
-    zlib
-    zstd
-  ];
 
   meta = with lib; {
     description = "Facebook's branch of Apache Thrift";
