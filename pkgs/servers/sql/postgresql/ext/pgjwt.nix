@@ -19,8 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  passthru.tests = {
-    inherit (nixosTests) pgjwt;
+  passthru.tests = lib.recurseIntoAttrs {
+    pgjwt = nixosTests.postgresql.pgjwt.passthru.override postgresql;
 
     extension = postgresqlTestExtension {
       inherit (finalAttrs) finalPackage;

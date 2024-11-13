@@ -43,7 +43,6 @@ rustPlatform.buildRustPackage rec {
     libGL
     xorg.libXcursor
     xorg.libXi
-    xorg.libXrandr
     xorg.libX11
   ];
 

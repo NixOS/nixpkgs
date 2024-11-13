@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "mysqld_exporter";
-  version = "0.15.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "mysqld_exporter";
     rev = "v${version}";
-    sha256 = "sha256-P7EoWa0BWuAr3sjtrUxzofwlklhRLpzwpGVe31hFo7Q=";
+    sha256 = "sha256-2D868CSRoJjgDh0SkpDCTLTVbJ/0kWmLQJMyAKh6s/8=";
   };
 
-  vendorHash = "sha256-GEL9sMwwdGqpklm4yKNqzSOM6I/JzZjg3+ZB2ix2M8w=";
+  vendorHash = "sha256-9mrvqY0wtoMVAL0PEJ/NWtFzaQPcQDAJvYPluwd2Nx4=";
 
   ldflags = let t = "github.com/prometheus/common/version"; in [
     "-s" "-w"

@@ -206,6 +206,12 @@ pkgs/data/misc/cacert/ @ajs124 @lukegb @mweinelt
 pkgs/development/libraries/nss/ @ajs124 @lukegb @mweinelt
 pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
+# Java
+/doc/languages-frameworks/java.section.md @NixOS/java
+/doc/languages-frameworks/gradle.section.md @NixOS/java
+/doc/languages-frameworks/maven.section.md @NixOS/java
+/pkgs/top-level/java-packages.nix @NixOS/java
+
 # Jetbrains
 /pkgs/applications/editors/jetbrains @edwtjo
 
@@ -229,7 +235,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/servers/sql/postgresql @NixOS/postgres
 /nixos/modules/services/databases/postgresql.md @NixOS/postgres
 /nixos/modules/services/databases/postgresql.nix @NixOS/postgres
-/nixos/tests/postgresql.nix @NixOS/postgres
+/nixos/tests/postgresql @NixOS/postgres
 
 # Hardened profile & related modules
 /nixos/modules/profiles/hardened.nix                       @joachifm

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "kornia";
-  version = "0.7.3";
+  version = "0.7.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-iEg27b2JVLtAYLFncaSqIh5FyvmmitKAKP7Tl0WWNdk=";
+    hash = "sha256-Ecps1KniiL1WOGk+i/UAVuXJ2W7cgHSzAKCkZokyWIM=";
   };
 
   build-system = [ setuptools ];

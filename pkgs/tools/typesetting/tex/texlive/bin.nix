@@ -264,6 +264,11 @@ core-big = stdenv.mkDerivation {
       utils/{tpic2pdftex,vlna,xindy,xml2pmx,xpdfopen}
     mkdir WorkDir
     cd WorkDir
+  ''
+  # force XeTeX to use fontconfig instead of Core Text, so that fonts can be made available via FONTCONFIG_FILE,
+  # by tricking configure into thinking that the relevant test result is already in the config cache
+  + lib.optionalString stdenv.isDarwin ''
+    export kpse_cv_have_ApplicationServices=no
   '';
 
   configureFlags = common.configureFlags

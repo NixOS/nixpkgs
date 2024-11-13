@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , cmake
 , brotli, libev, nghttp3, quictls
-, CoreServices
+, apple-sdk_11
 , withJemalloc ? false, jemalloc
 , curlHTTP3
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     nghttp3
     quictls
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreServices
+    apple-sdk_11
   ] ++ lib.optional withJemalloc jemalloc;
 
   cmakeFlags = [

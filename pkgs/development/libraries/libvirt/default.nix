@@ -34,7 +34,7 @@
 , stdenv
 , substituteAll
 , xhtml1
-, yajl
+, json_c
 , writeScript
 , nixosTests
 
@@ -114,13 +114,13 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "10.5.0";
+  version = "10.9.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Nku4l1f34NOUr23KWDH9uZu72OgMK3KfYjsRRbuTvf8=";
+    hash = "sha256-LYQYA5UIKYs+8rSNZDymmrxuTWsgmukP5Y17lGB5UQs=";
     fetchSubmodules = true;
   };
 
@@ -163,6 +163,9 @@ stdenv.mkDerivation rec {
     sed -i '/qemuvhostusertest/d' tests/meson.build
     sed -i '/qemuxml2xmltest/d' tests/meson.build
     sed -i '/domaincapstest/d' tests/meson.build
+    # virshtest frequently times out on Darwin
+    substituteInPlace tests/meson.build \
+      --replace-fail "data.get('timeout', 30)" "data.get('timeout', 120)"
   '' + lib.optionalString enableXen ''
     # Has various hardcoded paths that don't exist outside of a Xen dom0.
     sed -i '/libxlxml2domconfigtest/d' tests/meson.build
@@ -202,7 +205,7 @@ stdenv.mkDerivation rec {
     python3
     readline
     xhtml1
-    yajl
+    json_c
   ] ++ lib.optionals isLinux [
     acl
     attr
@@ -312,7 +315,7 @@ stdenv.mkDerivation rec {
       (feat "ssh_proxy" isLinux)
       (feat "tests" true)
       (feat "udev" isLinux)
-      (feat "yajl" true)
+      (feat "json_c" true)
 
       (driver "ch" isLinux)
       (driver "esx" true)

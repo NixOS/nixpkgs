@@ -72,11 +72,7 @@ stdenv.mkDerivation {
     (lib.getLib systemd)
   ];
 
-  unpackPhase = ''
-    runHook preUnpack
-    ${lib.optionalString stdenv.hostPlatform.isLinux ''dpkg-deb --fsys-tarfile "$src" | tar -x --no-same-owner''}
-    runHook postUnpack
-  '';
+  postUnpack = lib.optionalString stdenv.hostPlatform.isLinux ''dpkg-deb --fsys-tarfile "$src" | tar -x --no-same-owner'';
 
   installPhase =
     if stdenv.hostPlatform.isDarwin then

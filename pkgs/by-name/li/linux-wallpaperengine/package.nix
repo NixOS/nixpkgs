@@ -160,13 +160,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "linux-wallpaperengine";
-  version = "0-unstable-2024-10-13";
+  version = "0-unstable-2024-11-8";
 
   src = fetchFromGitHub {
     owner = "Almamu";
     repo = "linux-wallpaperengine";
-    rev = "ec60a8a57153e49e3684c864a6d809fe9601336b";
-    hash = "sha256-M77Wp6tCXO2oFgfZ0+mdBT07CCYLsDDyHjeHtaDVvu8=";
+    rev = "4a063d0b84d331a0086b3f4605358ee177328d41";
+    hash = "sha256-IRTGFxHPRRRSg0J07pq8fpo1XbMT4aZC+wMVimZlH/Y=";
   };
 
   nativeBuildInputs = [

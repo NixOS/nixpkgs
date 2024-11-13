@@ -67,12 +67,14 @@ stdenv.mkDerivation rec {
         # Disable some tests on x86_64-darwin
         ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
           # These test seem to pass on hydra (rosetta) but not on x86_64-darwin machines
-          "CIRCT :: Target/ExportSMTLIB/attributes.mlir"
-          "CIRCT :: Target/ExportSMTLIB/basic.mlir"
-          "CIRCT :: circt-bmc/comb-errors.mlir"
-          "CIRCT :: circt-bmc/seq-errors.mlir"
-          # This test was having issues with rosetta
-          "CIRCT :: Dialect/SMT/basic.mlir"
+          "CIRCT :: Target/ExportSMTLIB/.*\.mlir"
+          "CIRCT :: circt-bmc/.*\.mlir"
+          # These tests were having issues on rosetta
+          "CIRCT :: Dialect/.*/Reduction/.*\.mlir"
+          "CIRCT :: Dialect/SMT/.*\.mlir"
+          "CIRCT :: circt-as-dis/.*\.mlir"
+          "CIRCT :: circt-reduce/.*\.mlir"
+          "CIRCT :: circt-test/basic.mlir"
         ];
     in
     if lit-filters != [ ] then lib.strings.concatStringsSep "|" lit-filters else null;

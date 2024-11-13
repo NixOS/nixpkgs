@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, SDL2
-, SDL2_mixer
-, libGLU
-, libconfig
-, meson
-, ninja
-, pkg-config
-, fetchFromGitHub
-, fetchpatch
+{
+  stdenv,
+  lib,
+  SDL2,
+  SDL2_mixer,
+  libGLU,
+  libconfig,
+  meson,
+  ninja,
+  pkg-config,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs:{
   pname = "MAR1D";
   version = "unstable-2023-02-02";
 
@@ -22,7 +23,17 @@ stdenv.mkDerivation rec {
     owner = "Radvendii";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  env = {
+    NIXPKGS_CFLAGS_COMPILE = toString [
+      "-Wno-error=array-parameter"
+    ];
+  };
+
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
     SDL2
@@ -40,7 +51,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "First person Super Mario Bros";
     mainProgram = "MAR1D";
     longDescription = ''
@@ -50,8 +61,8 @@ stdenv.mkDerivation rec {
       You must view the world as mario does, as a one dimensional line.
     '';
     homepage = "https://mar1d.com";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ taeer ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ taeer ];
+    platforms = lib.platforms.unix;
   };
-}
+})

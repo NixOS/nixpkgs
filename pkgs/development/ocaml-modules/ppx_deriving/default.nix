@@ -13,7 +13,10 @@
 }:
 
 let params =
-  if lib.versionAtLeast ppxlib.version "0.20" then {
+  if lib.versionAtLeast ppxlib.version "0.32" then {
+    version = "6.0.3";
+    sha256 = "sha256-N0qpezLF4BwJqXgQpIv6IYwhO1tknkRSEBRVrBnJSm0=";
+  } else if lib.versionAtLeast ppxlib.version "0.20" then {
     version = "5.2.1";
     sha256 = "11h75dsbv3rs03pl67hdd3lbim7wjzh257ij9c75fcknbfr5ysz9";
   } else if lib.versionAtLeast ppxlib.version "0.15" then {
@@ -30,7 +33,7 @@ buildDunePackage rec {
   inherit (params) version;
 
   src = fetchurl {
-    url = "https://github.com/ocaml-ppx/ppx_deriving/releases/download/v${version}/ppx_deriving-v${version}.tbz";
+    url = "https://github.com/ocaml-ppx/ppx_deriving/releases/download/v${version}/ppx_deriving-${lib.optionalString (lib.versionOlder version "6.0") "v"}${version}.tbz";
     inherit (params) sha256;
   };
 
@@ -41,11 +44,10 @@ buildDunePackage rec {
   propagatedBuildInputs =
     lib.optional (lib.versionOlder version "5.2") ocaml-migrate-parsetree ++ [
     ppx_derivers
-    result
-  ];
+  ] ++ lib.optional (lib.versionOlder version "6.0") result
+  ;
 
-  doCheck = lib.versionAtLeast ocaml.version "4.08"
-    && lib.versionOlder ocaml.version "5.0";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [
     (if lib.versionAtLeast version "5.2" then ounit2 else ounit)
   ];

@@ -1,19 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ox";
-  version = "0.6.7";
+  version = "0.6.10";
 
   src = fetchFromGitHub {
     owner = "curlpipe";
     repo = pname;
     rev = version;
-    hash = "sha256-UFNOW/INV/65C6UysKi9lGw+PIj2NXF6ejG5UY702/I=";
+    hash = "sha256-7PaAcVatm/gqeZRuzCjoF6ZGDP6mIjDTuhmJQ5wt7x8=";
   };
 
-  cargoHash = "sha256-sy/RNMXJn5k9qw0ghCQA7PqZokpDw0xns4abwa938Gk=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
+  cargoHash = "sha256-2Jk8uDiTGUQqLOOQVlYm5R7qQXIqP0PkFvv5E5qTzT0=";
 
   meta = with lib; {
     description = "Independent Rust text editor that runs in your terminal";

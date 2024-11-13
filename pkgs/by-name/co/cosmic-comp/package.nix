@@ -89,7 +89,7 @@ rustPlatform.buildRustPackage rec {
   # be the common case, so just make them available, don't link them.
   postInstall = ''
     wrapProgramArgs=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr
+        xorg.libX11 xorg.libXcursor xorg.libXi
     ]})
   '' + lib.optionalString useXWayland ''
     wrapProgramArgs+=(--prefix PATH : ${lib.makeBinPath [ xwayland ]})

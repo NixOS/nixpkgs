@@ -33,7 +33,6 @@ let
     xorg.libX11
     xorg.libXcursor
     xorg.libXi
-    xorg.libXrandr
     xorg.libXxf86vm
     xorg.libxcb
     libxkbcommon

@@ -229,7 +229,7 @@ stdenv.mkDerivation rec {
           map (dep: {
             name = dep.name;
             value = dep;
-          }) list
+          }) (lib.filter (x: x != null) list)
         );
       saturateDependencies =
         deps:

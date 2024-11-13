@@ -4,6 +4,7 @@
   callPackage,
   fetchFromGitHub,
   postgresql,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,12 +27,7 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/postgresql/extension sql/*.sql
   '';
 
-  passthru.tests.wal2json = lib.recurseIntoAttrs (
-    callPackage ../../../../../nixos/tests/postgresql-wal2json.nix {
-      inherit (stdenv) system;
-      inherit postgresql;
-    }
-  );
+  passthru.tests = nixosTests.postgresql.wal2json.passthru.override postgresql;
 
   meta = with lib; {
     description = "PostgreSQL JSON output plugin for changeset extraction";
