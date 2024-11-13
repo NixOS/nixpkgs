@@ -4,8 +4,8 @@ Checks:
 - bugprone-*
 # don't find them too problematic
 - -bugprone-easily-swappable-parameters
+- performance-*
 # TODO
-#  - performance-*
 #  - modernize-*
 #  - readability-*
 #  - misc-*
