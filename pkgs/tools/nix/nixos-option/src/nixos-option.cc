@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <cstddef>
 #include <exception>
 #include <functional>
@@ -498,20 +497,13 @@ void printConfigValue(Context & ctx, Out & out, const std::string & path, std::v
     out << ";\n";
 }
 
-// Replace with std::starts_with when C++20 is available
-bool starts_with(const std::string & s, const std::string & prefix)
-{
-    return s.size() >= prefix.size() &&
-           std::equal(s.begin(), std::next(s.begin(), prefix.size()), prefix.begin(), prefix.end());
-}
-
 void printRecursive(Context & ctx, Out & out, const std::string & path)
 {
     mapOptions(
         [&ctx, &out, &path](const std::string & optionPath) {
             mapConfigValuesInOption(
                 [&ctx, &out, &path](const std::string & configPath, std::variant<Value, std::exception_ptr> v) {
-                    if (starts_with(configPath, path)) {
+                    if (configPath.starts_with(path)) {
                         printConfigValue(ctx, out, configPath, v);
                     }
                 },
