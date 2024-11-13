@@ -1,21 +1,22 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, bison
-, libevent
-, double-conversion
-, fizz
-, flex
-, folly
-, glog
-, gflags
-, libiberty
-, mvfst
-, openssl
-, lib
-, wangle
-, zlib
-, zstd
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  bison,
+  libevent,
+  double-conversion,
+  fizz,
+  flex,
+  folly,
+  glog,
+  gflags,
+  libiberty,
+  mvfst,
+  openssl,
+  lib,
+  wangle,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,11 +36,13 @@ stdenv.mkDerivation rec {
     flex
   ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isDarwin then "OFF" else "ON"}"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
-  ];
+  cmakeFlags =
+    [
+      "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isDarwin then "OFF" else "ON"}"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
+    ];
 
   buildInputs = [
     double-conversion
@@ -62,6 +65,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/facebook/fbthrift";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pierreis kylesferrazza ];
+    maintainers = with maintainers; [
+      pierreis
+      kylesferrazza
+    ];
   };
 }
