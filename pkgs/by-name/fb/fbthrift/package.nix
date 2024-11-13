@@ -5,6 +5,7 @@
   fetchFromGitHub,
 
   cmake,
+  ninja,
 
   openssl,
   gflags,
@@ -32,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    ninja
   ];
 
   buildInputs =
