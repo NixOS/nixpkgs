@@ -38,10 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     flex
   ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isDarwin then "OFF" else "ON"}"
-  ];
-
   buildInputs =
     [
       double-conversion
@@ -61,6 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
       apple-sdk_11
       (darwinMinVersionHook "11.0")
     ];
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isDarwin then "OFF" else "ON"}"
+  ];
 
   meta = {
     description = "Facebook's branch of Apache Thrift";
