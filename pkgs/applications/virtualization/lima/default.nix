@@ -8,6 +8,7 @@
 , sigtool
 , makeWrapper
 , nix-update-script
+, apple-sdk_15
 }:
 
 buildGoModule rec {
@@ -25,6 +26,8 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper installShellFiles ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun sigtool ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
   postPatch = ''
     substituteInPlace Makefile \
