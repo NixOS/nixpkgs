@@ -9270,7 +9270,7 @@ with pkgs;
   };
   fftwMpi = fftw.override { enableMpi = true; };
 
-  fizz = darwin.apple_sdk_11_0.callPackage ../development/libraries/fizz { };
+  fizz = callPackage ../development/libraries/fizz { };
 
   flint = callPackage ../development/libraries/flint { };
 
