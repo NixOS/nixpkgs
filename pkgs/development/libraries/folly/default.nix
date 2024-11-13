@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, cmake
-, double-conversion
-, fmt_8
-, gflags
-, glog
-, libevent
-, libiberty
-, libunwind
-, lz4
-, openssl
-, pkg-config
-, xz
-, zlib
-, zstd
-, jemalloc
-, follyMobile ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  double-conversion,
+  fmt_8,
+  gflags,
+  glog,
+  libevent,
+  libiberty,
+  libunwind,
+  lz4,
+  openssl,
+  pkg-config,
+  xz,
+  zlib,
+  zstd,
+  jemalloc,
+  follyMobile ? false,
 
-# for passthru.tests
-, python3
-, watchman
+  # for passthru.tests
+  python3,
+  watchman,
 }:
 
 stdenv.mkDerivation rec {
@@ -60,24 +61,32 @@ stdenv.mkDerivation rec {
   # jemalloc headers are required in include/folly/portability/Malloc.h
   propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" "-fpermissive" ];
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-
-    # temporary hack until folly builds work on aarch64,
-    # see https://github.com/facebook/folly/issues/1880
-    "-DCMAKE_LIBRARY_ARCHITECTURE=${if stdenv.hostPlatform.isx86_64 then "x86_64" else "dummy"}"
-
-    # ensure correct dirs in $dev/lib/pkgconfig/libfolly.pc
-    # see https://github.com/NixOS/nixpkgs/issues/144170
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-  ] ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13"
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}"
+    "-fpermissive"
   ];
+  cmakeFlags =
+    [
+      "-DBUILD_SHARED_LIBS=ON"
+
+      # temporary hack until folly builds work on aarch64,
+      # see https://github.com/facebook/folly/issues/1880
+      "-DCMAKE_LIBRARY_ARCHITECTURE=${if stdenv.hostPlatform.isx86_64 then "x86_64" else "dummy"}"
+
+      # ensure correct dirs in $dev/lib/pkgconfig/libfolly.pc
+      # see https://github.com/NixOS/nixpkgs/issues/144170
+      "-DCMAKE_INSTALL_INCLUDEDIR=include"
+      "-DCMAKE_INSTALL_LIBDIR=lib"
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13"
+    ];
 
   # split outputs to reduce downstream closure sizes
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   # patch prefix issues again
   # see https://github.com/NixOS/nixpkgs/issues/144170
@@ -103,7 +112,15 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/facebook/folly";
     license = licenses.asl20;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
-    maintainers = with maintainers; [ abbradar pierreis ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      abbradar
+      pierreis
+    ];
   };
 }
