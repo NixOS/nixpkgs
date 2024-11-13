@@ -6,8 +6,6 @@
   pkg-config,
   openssl,
   # darwin dependencies
-  darwin,
-  libiconv,
   curl,
 }:
 
@@ -31,17 +29,8 @@ rustPlatform.buildRustPackage rec {
 
   patches = [ ./allow-warnings.patch ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreFoundation
-        Security
-        libiconv
-        curl
-      ]
-    );
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl ];
+
   nativeBuildInputs =
     [ pkg-config ]
     # curl-sys wants to run curl-config on darwin
