@@ -3597,6 +3597,17 @@ with pkgs;
     gz-utils_2
     gz-utils_3;
 
+  inherit ({
+    ignition-math_4 = callPackage ../development/libraries/gz-math/4.nix { };
+    ignition-math_6 = callPackage ../development/libraries/gz-math/6.nix { };
+    gz-math_7 = callPackage ../development/libraries/gz-math/7.nix { };
+    gz-math_8 = callPackage ../development/libraries/gz-math/8.nix { };
+  })
+    ignition-math_4
+    ignition-math_6
+    gz-math_7
+    gz-math_8;
+
   gzip = callPackage ../tools/compression/gzip { };
 
   pdisk = callPackage ../tools/system/pdisk {
