@@ -1,8 +1,11 @@
 {
-  stdenv,
   lib,
+  stdenv,
+
   fetchFromGitHub,
+
   cmake,
+
   fizz,
   folly,
   gflags,
