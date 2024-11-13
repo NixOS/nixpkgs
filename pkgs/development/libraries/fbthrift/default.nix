@@ -2,13 +2,11 @@
 , fetchFromGitHub
 , cmake
 , bison
-, boost
 , libevent
 , double-conversion
 , libsodium
 , fizz
 , flex
-, fmt_8
 , folly
 , glog
 , gflags
@@ -45,10 +43,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
     double-conversion
     fizz
-    fmt_8
     folly
     glog
     gflags
