@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://shantellsans.com/";
-    description = "A marker-style font built for creative expression, typographic play, and animation.";
+    description = "Marker-style font built for creative expression, typographic play, and animation";
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ bodby ];
     platforms = lib.platforms.all;
