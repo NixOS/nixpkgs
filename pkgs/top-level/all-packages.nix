@@ -9259,8 +9259,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
   };
 
-  folly = callPackage ../development/libraries/folly { };
-
   makeFontsConf = callPackage ../development/libraries/fontconfig/make-fonts-conf.nix { };
 
   makeFontsCache = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
