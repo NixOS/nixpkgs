@@ -112,8 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fork of XCompMgr, a sample compositing manager for X servers";
+    license = lib.licenses.mit;
     longDescription = ''
       A fork of XCompMgr, which is a sample compositing manager for X
       servers supporting the XFIXES, DAMAGE, RENDER, and COMPOSITE
@@ -128,15 +129,14 @@ stdenv.mkDerivation (finalAttrs: {
       For gdb to find the source files, you need to run gdb in the bin directory
       of picom package in the nix store.
     '';
-    license = licenses.mit;
     homepage = "https://github.com/yshui/picom";
-    maintainers = with maintainers; [
+    mainProgram = "picom";
+    maintainers = with lib.maintainers; [
       ertes
       gepbird
-      twey
       thiagokokada
+      twey
     ];
-    platforms = platforms.linux;
-    mainProgram = "picom";
+    platforms = lib.platforms.linux;
   };
 })
