@@ -5,6 +5,7 @@
   fetchFromGitHub,
 
   cmake,
+  ninja,
   pkg-config,
 
   boost,
@@ -50,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    ninja
     pkg-config
   ];
 
