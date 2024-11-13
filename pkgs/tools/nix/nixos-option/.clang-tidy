@@ -16,9 +16,10 @@ Checks:
 - misc-*
 # we maybe want to address this?
 - -misc-no-recursion
-# TODO
-#  - cppcoreguidelines-*
-#  - -cppcoreguidelines-avoid-magic-numbers
+- cppcoreguidelines-*
+- -cppcoreguidelines-avoid-magic-numbers
+# We could use std::reference_wrapper, but it's not super important
+- -cppcoreguidelines-avoid-const-or-ref-data-members
 UseColor: true
 CheckOptions:
   misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic: True
