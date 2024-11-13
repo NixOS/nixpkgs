@@ -65,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   doCheck = true;
 
   preCheck =
