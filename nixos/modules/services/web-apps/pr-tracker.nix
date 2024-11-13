@@ -9,7 +9,12 @@ let
   inherit (lib.lists) optionals;
   inherit (lib.attrsets) optionalAttrs;
   inherit (lib.strings) concatStringsSep escapeShellArg;
-  inherit (lib.options) mkEnableOption mkOption mkPackageOption;
+  inherit (lib.options)
+    mkEnableOption
+    mkOption
+    mkPackageOption
+    literalExpression
+    ;
 
   cfg = config.services.pr-tracker;
   dataDir = "/var/lib/pr-tracker";
@@ -118,9 +123,7 @@ in
 
     sourceUrl = mkOption {
       type = types.str;
-      example = "https://github.com/me/my-pr-tracker-fork";
-      default = cfg.package.meta.homepage or "https://git.qyliss.net/pr-tracker";
-      defaultText = "https://git.qyliss.net/pr-tracker";
+      example = literalExpression "pkgs.pr-tracker.meta.homepage";
       description = ''
         The URL where users can download the program's source code.
       '';
