@@ -71,17 +71,21 @@
 }:
 
 let
-  inherit (lib.meta) getExe';
-  inherit (lib.lists) optional optionals;
-  inherit (lib.systems.inspect.patterns) isLinux isAarch64;
-  inherit (lib) teams;
-  inherit (lib.strings)
+  inherit (lib)
     enableFeature
+    getExe'
+    licenses
     makeSearchPathOutput
+    optional
     optionalString
+    optionals
+    systems
+    teams
     versionOlder
+    warn
     ;
-  inherit (lib.licenses)
+  inherit (systems.inspect.patterns) isLinux isAarch64;
+  inherit (licenses)
     cc-by-40
     gpl2Only
     lgpl21Only
