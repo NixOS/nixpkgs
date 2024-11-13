@@ -98,7 +98,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
     changelog = "https://github.com/Backblaze/B2_Command_Line_Tool/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ hrdinka tomhoule ];
+    maintainers = with maintainers; [ hrdinka ];
     mainProgram = "backblaze-b2";
   };
 }
