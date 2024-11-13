@@ -78,13 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
       export GTEST_FILTER="-${lib.concatStringsSep ":" disabledTests}"
     '';
 
-  meta = with lib; {
+  meta = {
     description = "C++14 implementation of the TLS-1.3 standard";
     homepage = "https://github.com/facebookincubator/fizz";
     changelog = "https://github.com/facebookincubator/fizz/releases/tag/v${finalAttrs.version}";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       pierreis
       kylesferrazza
     ];
