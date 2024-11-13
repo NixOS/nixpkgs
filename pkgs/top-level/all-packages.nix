@@ -3740,6 +3740,15 @@ with pkgs;
 
   gyroflow = qt6Packages.callPackage ../applications/video/gyroflow { };
 
+  inherit ({
+    gz-cmake_3 = callPackage ../development/libraries/gz-cmake/3.nix { };
+    ignition-cmake_0 = callPackage ../development/libraries/gz-cmake/0.nix { };
+    ignition-cmake_2 = callPackage ../development/libraries/gz-cmake/2.nix { };
+  })
+    gz-cmake_3
+    ignition-cmake_0
+    ignition-cmake_2;
+
   gzip = callPackage ../tools/compression/gzip { };
 
   pdisk = callPackage ../tools/system/pdisk {
