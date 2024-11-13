@@ -533,6 +533,40 @@ in runBuildTests {
     '';
   };
 
+  cdnAtoms = shouldPass {
+    format = formats.cdn { };
+    input = {
+      null = null;
+      false = false;
+      true = true;
+      int = 10;
+      float = 3.141;
+      str = "foo";
+      attrs.foo = null;
+      list = [
+        1
+        null
+      ];
+      path = ./formats.nix;
+    };
+    expected = ''
+      attrs {
+        "foo": null
+      }
+      "false": false
+      "float": 3.141
+      "int": 10
+      list [
+        1,
+        null
+      ]
+      "null": null
+      "path": "${./formats.nix}"
+      "str": "foo"
+      "true": true
+    '';
+  };
+
   # This test is responsible for
   #   1. testing type coercions
   #   2. providing a more readable example test
