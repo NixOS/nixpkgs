@@ -79,8 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DWATCHMAN_STATE_DIR=${stateDir}"
-    "-DWATCHMAN_VERSION_OVERRIDE=${finalAttrs.version}"
+    (lib.cmakeFeature "WATCHMAN_STATE_DIR" stateDir)
+    (lib.cmakeFeature "WATCHMAN_VERSION_OVERRIDE" finalAttrs.version)
   ];
 
   cargoRoot = "watchman/cli";
