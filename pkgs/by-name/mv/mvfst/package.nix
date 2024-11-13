@@ -7,12 +7,13 @@
   cmake,
   ninja,
 
-  fizz,
   folly,
   gflags,
   glog,
   apple-sdk_11,
   darwinMinVersionHook,
+
+  fizz,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      fizz
       folly
       gflags
       glog
@@ -42,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
       apple-sdk_11
       (darwinMinVersionHook "11.0")
     ];
+
+  propagatedBuildInputs = [
+    fizz
+  ];
 
   cmakeFlags =
     [
