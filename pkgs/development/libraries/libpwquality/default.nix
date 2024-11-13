@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, perl
-, cracklib
-, enablePAM ? stdenv.hostPlatform.isLinux
-, pam
-, enablePython ? false
-, python
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  perl,
+  cracklib,
+  enablePAM ? stdenv.hostPlatform.isLinux,
+  pam,
+  enablePython ? false,
+  python,
 }:
 
 # python binding generates a shared library which are unavailable with musl build
@@ -18,7 +19,12 @@ stdenv.mkDerivation rec {
   pname = "libpwquality";
   version = "1.4.5";
 
-  outputs = [ "out" "dev" "lib" "man" ] ++ lib.optionals enablePython [ "py" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "man"
+  ] ++ lib.optionals enablePython [ "py" ];
 
   src = fetchFromGitHub {
     owner = "libpwquality";
@@ -38,7 +44,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook perl ] ++ lib.optionals enablePython [ (python.withPackages (ps: with ps; [ distutils ])) ];
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
+  ] ++ lib.optionals enablePython [ (python.withPackages (ps: with ps; [ distutils ])) ];
   buildInputs = [ cracklib ] ++ lib.optionals enablePAM [ pam ];
 
   configureFlags = lib.optionals (!enablePython) [ "--disable-python-bindings" ];
@@ -57,7 +66,11 @@ stdenv.mkDerivation rec {
       function and PAM module that can be used instead of pam_cracklib. The
       module supports all the options of pam_cracklib.
     '';
-    license = with licenses; [ bsd3 /* or */ gpl2Plus ];
+    license = with licenses; [
+      bsd3
+      # or
+      gpl2Plus
+    ];
     maintainers = with maintainers; [ jk ];
     platforms = platforms.unix;
   };
