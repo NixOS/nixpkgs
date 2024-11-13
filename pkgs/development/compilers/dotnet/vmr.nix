@@ -57,12 +57,6 @@ let
 
   _icu = if isDarwin then darwin.ICU else icu;
 
-  # error NU1903: Package 'System.Text.Json' 8.0.4 has a known high severity vulnerability,
-  disableNU1903 = fetchpatch {
-    url = "https://github.com/dotnet/sdk/pull/44028.patch";
-    hash = "sha256-r6AOhXhwT8ar3aS0r5CA9sPiBsp3pnnPIVO+5l5CUGM=";
-  };
-
 in
 stdenv.mkDerivation rec {
   pname = "${baseName}-vmr";
@@ -229,10 +223,6 @@ stdenv.mkDerivation rec {
         -i \$prev -t attr -n Project -v "${./patch-npm-packages.proj}" \
         src/aspnetcore/eng/DotNetBuild.props
 
-      # patch is from sdk repo where vmr bits are in src/SourceBuild/content
-      patch -p4 < ${disableNU1903}
-    ''
-    + lib.optionalString (lib.versionAtLeast version "9") ''
       # https://github.com/dotnet/source-build/issues/3131#issuecomment-2030215805
       substituteInPlace \
         src/aspnetcore/eng/Dependencies.props \
@@ -375,6 +365,11 @@ stdenv.mkDerivation rec {
   postConfigure = lib.optionalString (lib.versionAtLeast version "9") ''
     # see patch-npm-packages.proj
     typeset -f isScript patchShebangs > src/aspnetcore/patch-shebangs.sh
+
+    # fix nuget-to-nix failure on package sources which return 401
+    for source in dotnet{7,8,9}-internal{,-transport}; do
+      ./.dotnet/dotnet nuget disable source --configfile src/aspnetcore/NuGet.config $source
+    done
   '';
 
   dontConfigureNuget = true; # NUGET_PACKAGES breaks the build
