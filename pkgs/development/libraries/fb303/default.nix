@@ -9,6 +9,8 @@
   glog,
   python3,
   wangle,
+  apple-sdk_11,
+  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,22 +25,23 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  cmakeFlags =
+  cmakeFlags = [
+    "-DPYTHON_EXTENSIONS=OFF"
+  ];
+
+  buildInputs =
     [
-      "-DPYTHON_EXTENSIONS=OFF"
+      fbthrift
+      fizz
+      folly
+      glog
+      python3
+      wangle
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
+      apple-sdk_11
+      (darwinMinVersionHook "11.0")
     ];
-
-  buildInputs = [
-    fbthrift
-    fizz
-    folly
-    glog
-    python3
-    wangle
-  ];
 
   meta = with lib; {
     description = "Base Thrift service and a common set of functionality for querying stats, options, and other information from a service";
