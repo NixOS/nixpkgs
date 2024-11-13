@@ -687,7 +687,7 @@ checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
 
 [[package]]
 name = "mergiraf"
-version = "0.1.1"
+version = "0.3.0"
 dependencies = [
  "cc",
  "clap",
@@ -705,6 +705,7 @@ dependencies = [
  "tree-sitter",
  "tree-sitter-c-sharp",
  "tree-sitter-cpp",
+ "tree-sitter-dart",
  "tree-sitter-go",
  "tree-sitter-html",
  "tree-sitter-java",
@@ -1181,9 +1182,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "tree-sitter-dart"
+version = "0.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "19f1f70b80ce41343e14aafcef67b5ba2e9de89587535b4aabbabb8036f4e38a"
+dependencies = [
+ "cc",
+ "tree-sitter",
+]
+
+[[package]]
 name = "tree-sitter-go"
-version = "0.23.1"
-source = "git+https://github.com/tree-sitter/tree-sitter-go.git?rev=ecc20866d1bd4d80f3aef06456ed3014d4d598e6#ecc20866d1bd4d80f3aef06456ed3014d4d598e6"
+version = "0.23.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a83995691e929d60d7946ab29a6cace465f0cf5bfdb62d7721f76278537d59ad"
 dependencies = [
  "cc",
  "tree-sitter-language",
@@ -1257,10 +1269,11 @@ dependencies = [
 [[package]]
 name = "tree-sitter-yaml"
 version = "0.6.1"
-source = "git+https://github.com/wetneb/tree-sitter-yaml.git?rev=7b5199133abceb03d6d1d8f1672f49b4f2a71442#7b5199133abceb03d6d1d8f1672f49b4f2a71442"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "aad27ec46ad343d8b514f64dd3fdffb478c592ece561b6c935d90ef55589c6b6"
 dependencies = [
  "cc",
- "tree-sitter-language",
+ "tree-sitter",
 ]
 
 [[package]]
