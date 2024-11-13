@@ -1,25 +1,29 @@
 {
   lib,
   stdenv,
+
   fetchFromGitHub,
-  boost,
+
   cmake,
+  pkg-config,
+
+  boost,
   double-conversion,
-  fmt_8,
   gflags,
   glog,
   libevent,
+  zlib,
+  openssl,
+  xz,
+  lz4,
+  zstd,
   libiberty,
   libunwind,
-  lz4,
-  openssl,
-  pkg-config,
-  xz,
-  zlib,
-  zstd,
+  fmt_8,
   jemalloc,
   apple-sdk_11,
   darwinMinVersionHook,
+
   follyMobile ? false,
 
   # for passthru.tests
@@ -54,17 +58,17 @@ stdenv.mkDerivation (finalAttrs: {
     [
       boost
       double-conversion
-      glog
       gflags
+      glog
       libevent
-      libiberty
-      openssl
-      lz4
-      xz
       zlib
+      openssl
+      xz
+      lz4
+      zstd
+      libiberty
       libunwind
       fmt_8
-      zstd
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux jemalloc
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
