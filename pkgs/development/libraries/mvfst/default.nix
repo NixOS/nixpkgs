@@ -7,6 +7,8 @@
   folly,
   gflags,
   glog,
+  apple-sdk_11,
+  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,16 +24,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
-  ];
-
-  buildInputs = [
-    fizz
-    folly
-    gflags
-    glog
-  ];
+  buildInputs =
+    [
+      fizz
+      folly
+      gflags
+      glog
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_11
+      (darwinMinVersionHook "11.0")
+    ];
 
   meta = with lib; {
     description = "Implementation of the QUIC transport protocol";
