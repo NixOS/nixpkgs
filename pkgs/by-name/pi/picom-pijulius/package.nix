@@ -3,8 +3,6 @@
   lib,
   writeShellScript,
   fetchFromGitHub,
-  pcre,
-  asciidoctor,
   unstableGitUpdater
 }:
 picom.overrideAttrs (previousAttrs: {
@@ -17,9 +15,6 @@ picom.overrideAttrs (previousAttrs: {
     rev = "136ee8d0704753b535d59a4aea03d494929ce081";
     hash = "sha256-om4vHKXA1FFy6b6DrmVunfOMco3SZxiNoIYyXK+j7k8=";
   };
-
-  buildInputs = (previousAttrs.buildInputs or [ ]) ++ [ pcre ];
-  nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [ asciidoctor ];
 
   dontVersionCheck = true;
 
