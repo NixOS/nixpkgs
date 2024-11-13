@@ -366,14 +366,6 @@ let
         ${buildMenuGrub2}
         submenu "HiDPI, Quirks and Accessibility" --class hidpi --class submenu {
           ${grubMenuCfg}
-          submenu "Suggests resolution @720p" --class hidpi-720p {
-            ${grubMenuCfg}
-            ${buildMenuAdditionalParamsGrub2 "video=1280x720@60"}
-          }
-          submenu "Suggests resolution @1080p" --class hidpi-1080p {
-            ${grubMenuCfg}
-            ${buildMenuAdditionalParamsGrub2 "video=1920x1080@60"}
-          }
 
           # If we boot into a graphical environment where X is autoran
           # and always crashes, it makes the media unusable. Allow the user
@@ -398,13 +390,6 @@ let
           submenu "Rotate framebuffer Counter-Clockwise" --class rotate-90ccw {
             ${grubMenuCfg}
             ${buildMenuAdditionalParamsGrub2 "fbcon=rotate:3"}
-          }
-
-          # As a proof of concept, mainly. (Not sure it has accessibility merits.)
-          submenu "" {return}
-          submenu "Use black on white" --class accessibility-blakconwhite {
-            ${grubMenuCfg}
-            ${buildMenuAdditionalParamsGrub2 "vt.default_red=0xFF,0xBC,0x4F,0xB4,0x56,0xBC,0x4F,0x00,0xA1,0xCF,0x84,0xCA,0x8D,0xB4,0x84,0x68 vt.default_grn=0xFF,0x55,0xBA,0xBA,0x4D,0x4D,0xB3,0x00,0xA0,0x8F,0xB3,0xCA,0x88,0x93,0xA4,0x68 vt.default_blu=0xFF,0x58,0x5F,0x58,0xC5,0xBD,0xC5,0x00,0xA8,0xBB,0xAB,0x97,0xBD,0xC7,0xC5,0x68"}
           }
 
           # Serial access is a must!
