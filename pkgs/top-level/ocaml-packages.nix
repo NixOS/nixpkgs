@@ -1395,6 +1395,8 @@ let
 
     ocsipersist-sqlite = callPackage ../development/ocaml-modules/ocsipersist/sqlite.nix { };
 
+    ocsipersist-sqlite-config = callPackage ../development/ocaml-modules/ocsipersist/sqlite-config.nix { };
+
     octavius = callPackage ../development/ocaml-modules/octavius { };
 
     ocurl = callPackage ../development/ocaml-modules/ocurl { };
