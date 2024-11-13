@@ -3577,6 +3577,17 @@ with pkgs;
 
   gyroflow = callPackage ../applications/video/gyroflow { };
 
+  inherit ({
+    ignition-cmake_0 = callPackage ../development/libraries/gz-cmake/0.nix { };
+    ignition-cmake_2 = callPackage ../development/libraries/gz-cmake/2.nix { };
+    gz-cmake_3 = callPackage ../development/libraries/gz-cmake/3.nix { };
+    gz-cmake_4 = callPackage ../development/libraries/gz-cmake/4.nix { };
+  })
+    ignition-cmake_0
+    ignition-cmake_2
+    gz-cmake_3
+    gz-cmake_4;
+
   gzip = callPackage ../tools/compression/gzip { };
 
   pdisk = callPackage ../tools/system/pdisk {
