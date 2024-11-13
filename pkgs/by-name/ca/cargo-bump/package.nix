@@ -3,8 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,8 +19,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-mp2y5q0GYfSlB5aPC6MY9Go8a2JAiPKtVYL9SewfloI=";
 
   nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   meta = with lib; {
     description = "Increments the version number of the current project";
