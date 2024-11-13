@@ -112,10 +112,10 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source C++ library developed and used at Facebook";
     homepage = "https://github.com/facebook/folly";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103
     platforms = [
       "x86_64-linux"
@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       abbradar
       pierreis
     ];
