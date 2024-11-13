@@ -90,10 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
     # see https://github.com/facebook/folly/issues/1880
     "-DCMAKE_LIBRARY_ARCHITECTURE=${if stdenv.hostPlatform.isx86_64 then "x86_64" else "dummy"}"
 
-    # ensure correct dirs in $dev/lib/pkgconfig/libfolly.pc
-    # see https://github.com/NixOS/nixpkgs/issues/144170
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    # Folly uses these instead of the standard CMake variables for some reason.
+    (lib.cmakeFeature "INCLUDE_INSTALL_DIR" "${placeholder "dev"}/include")
+    (lib.cmakeFeature "LIB_INSTALL_DIR" "${placeholder "out"}/lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_DIR" "${placeholder "dev"}/lib/cmake/folly")
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "dev"))
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -101,11 +102,15 @@ stdenv.mkDerivation (finalAttrs: {
     "-fpermissive"
   ];
 
-  # patch prefix issues again
-  # see https://github.com/NixOS/nixpkgs/issues/144170
-  postFixup = ''
-    substituteInPlace $dev/lib/cmake/${finalAttrs.pname}/${finalAttrs.pname}-targets-release.cmake  \
-      --replace '$'{_IMPORT_PREFIX}/lib/ $out/lib/
+  # https://github.com/NixOS/nixpkgs/issues/144170
+  postPatch = ''
+    substituteInPlace CMake/libfolly.pc.in \
+      --replace-fail \
+        ${lib.escapeShellArg "\${exec_prefix}/@LIB_INSTALL_DIR@"} \
+        '@CMAKE_INSTALL_FULL_LIBDIR@' \
+      --replace-fail \
+        ${lib.escapeShellArg "\${prefix}/@CMAKE_INSTALL_INCLUDEDIR@"} \
+        '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
   '';
 
   passthru = {
