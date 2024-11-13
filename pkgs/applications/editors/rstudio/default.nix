@@ -207,7 +207,7 @@ in
       for f in {${if server
         then "crash-handler-proxy,postback,r-ldpath,rpostback,rserver,rserver-pam,rsession,rstudio-server"
         else "diagnostics,rpostback,rstudio"}}; do
-        ln -s $out/lib/rstudio/bin/$f $out/bin
+        ln $out/lib/rstudio/bin/$f $out/bin
       done
 
       for f in .gitignore .Rbuildignore LICENSE README; do
