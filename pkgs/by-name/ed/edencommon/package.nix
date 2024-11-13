@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "facebookexperimental";
     repo = "edencommon";
-    rev = "v${finalAttrs.version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     sha256 = "sha256-1z4QicS98juv4bUEbHBkCjVJHEhnoJyLYp4zMHmDbMg=";
   };
 
