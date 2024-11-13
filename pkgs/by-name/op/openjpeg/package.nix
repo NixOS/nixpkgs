@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, libpng, libtiff, zlib, lcms2, jpylyzer
+, libpng, libtiff, zlib, lcms2
 , jpipLibSupport ? false # JPIP library & executables
 , jpipServerSupport ? false, curl, fcgi # JPIP Server
 , jdk
@@ -17,33 +17,42 @@
 , vips
 }:
 
-let
-  mkFlag = optSet: flag: "-D${flag}=${if optSet then "ON" else "OFF"}";
-in
-
 stdenv.mkDerivation rec {
   pname = "openjpeg";
   version = "2.5.2";
 
-  src = fetchFromGitHub {
-    owner = "uclouvain";
-    repo = "openjpeg";
-    rev = "v${version}";
-    hash = "sha256-mQ9B3MJY2/bg0yY/7jUJrAXM6ozAHT5fmwES5Q1SGxw=";
-  };
+  srcs = [
+    (fetchFromGitHub {
+      owner = "uclouvain";
+      repo = "openjpeg";
+      rev = "v${version}";
+      hash = "sha256-mQ9B3MJY2/bg0yY/7jUJrAXM6ozAHT5fmwES5Q1SGxw=";
+    })
+    # data for tests. may need to get updated with package
+    # https://github.com/uclouvain/openjpeg-data
+    (fetchFromGitHub {
+      name = "data";
+      owner = "uclouvain";
+      repo = "openjpeg-data";
+      rev = "a428429db695fccfc6d698bd13b6937dffd9d005";
+      hash = "sha256-udUi7sPNQJ5uCIAM8SqMGee6vRj1QbF9pLjdpNTQE5k=";
+    })
+  ];
+
+  sourceRoot = "source";
 
   outputs = [ "out" "dev" ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_NAME_DIR=\${CMAKE_INSTALL_PREFIX}/lib"
-    "-DBUILD_SHARED_LIBS=ON"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     "-DBUILD_CODEC=ON"
     "-DBUILD_THIRDPARTY=OFF"
-    (mkFlag jpipLibSupport "BUILD_JPIP")
-    (mkFlag jpipServerSupport "BUILD_JPIP_SERVER")
+    (lib.cmakeBool "BUILD_JPIP" jpipLibSupport)
+    (lib.cmakeBool "BUILD_JPIP_SERVER" jpipServerSupport)
     "-DBUILD_VIEWER=OFF"
     "-DBUILD_JAVA=OFF"
-    (mkFlag doCheck "BUILD_TESTING")
+    "-DOPJ_DATA_ROOT=../../data"
+    (lib.cmakeBool "BUILD_TESTING" doCheck)
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -52,12 +61,15 @@ stdenv.mkDerivation rec {
     ++ lib.optionals jpipServerSupport [ curl fcgi ]
     ++ lib.optional (jpipLibSupport) jdk;
 
-  doCheck = (!stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isPower64); # tests fail on aarch64-linux and powerpc64
-  nativeCheckInputs = [ jpylyzer ];
+  # tests fail on aarch64-linux and powerpc64
+  doCheck = !stdenv.hostPlatform.isPower64
+    && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
   checkPhase = ''
-    substituteInPlace ../tools/ctest_scripts/travis-ci.cmake \
-      --replace "JPYLYZER_EXECUTABLE=" "JPYLYZER_EXECUTABLE=\"$(command -v jpylyzer)\" # "
-    OPJ_SOURCE_DIR=.. ctest -S ../tools/ctest_scripts/travis-ci.cmake
+    runHook preCheck
+    ctest -j $NIX_BUILD_CORES \
+          -E '.*jpylyser' --exclude-from-file ${./exclude-tests}
+    runHook postCheck
   '';
 
   passthru = {
