@@ -9,7 +9,6 @@
   pkg-config,
   removeReferencesTo,
 
-  boost,
   double-conversion,
   fast-float,
   gflags,
@@ -22,10 +21,12 @@
   zstd,
   libiberty,
   libunwind,
-  fmt_8,
-  jemalloc,
   apple-sdk_11,
   darwinMinVersionHook,
+
+  boost,
+  fmt_8,
+  jemalloc,
 
   follyMobile ? false,
 
@@ -76,14 +77,21 @@ stdenv.mkDerivation (finalAttrs: {
       libunwind
       fmt_8
     ]
-    ++ lib.optional stdenv.hostPlatform.isLinux jemalloc
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_11
       (darwinMinVersionHook "11.0")
     ];
 
-  # jemalloc headers are required in include/folly/portability/Malloc.h
-  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux jemalloc;
+  propagatedBuildInputs =
+    [
+      # `folly-config.cmake` pulls these in.
+      boost
+      fmt_8
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # jemalloc headers are required in include/folly/portability/Malloc.h
+      jemalloc
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
@@ -129,8 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    # folly-config.cmake, will `find_package` these, thus there should be
-    # a way to ensure abi compatibility.
     inherit boost;
     fmt = fmt_8;
 

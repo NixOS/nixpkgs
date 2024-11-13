@@ -1,5 +1,4 @@
-{ boost
-, cargo
+{ cargo
 , cmake
 , CoreServices
 , cpptoml
@@ -11,7 +10,6 @@
 , fetchFromGitHub
 , fetchpatch
 , fizz
-, fmt_8
 , folly
 , glog
 , gtest
@@ -67,9 +65,7 @@ stdenv.mkDerivation rec {
     openssl
     gtest
     glog
-    boost
     libevent
-    fmt_8
     libsodium
     zlib
     folly

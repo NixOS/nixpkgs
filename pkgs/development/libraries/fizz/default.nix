@@ -1,12 +1,10 @@
 { stdenv
 , fetchFromGitHub
 , cmake
-, boost
 , libevent
 , double-conversion
 , glog
 , lib
-, fmt_8
 , zstd
 , gflags
 , libiberty
@@ -42,8 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   NIX_LDFLAGS = "-lz";
 
   buildInputs = [
-    fmt_8
-    boost
     double-conversion
     folly
     glog

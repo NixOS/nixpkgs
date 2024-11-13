@@ -30,8 +30,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fizz
     folly
-    folly.boost
-    folly.fmt
     gflags
     glog
     libsodium
