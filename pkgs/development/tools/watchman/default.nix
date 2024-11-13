@@ -1,7 +1,6 @@
 {
   cargo,
   cmake,
-  CoreServices,
   cpptoml,
   double-conversion,
   edencommon,
@@ -16,7 +15,6 @@
   gtest,
   lib,
   libevent,
-  libiconv,
   libsodium,
   libunwind,
   lz4,
@@ -29,6 +27,8 @@
   stdenv,
   wangle,
   zstd,
+  apple-sdk_11,
+  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,16 +42,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-cD8mIYCc+8Z2p3rwKVRFcW9sOBbpb5KHU5VpbXHMpeg=";
   };
 
-  cmakeFlags =
-    [
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DENABLE_EDEN_SUPPORT=NO" # requires sapling (formerly known as eden), which is not packaged in nixpkgs
-      "-DWATCHMAN_STATE_DIR=${stateDir}"
-      "-DWATCHMAN_VERSION_OVERRIDE=${version}"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
-    ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DENABLE_EDEN_SUPPORT=NO" # requires sapling (formerly known as eden), which is not packaged in nixpkgs
+    "-DWATCHMAN_STATE_DIR=${stateDir}"
+    "-DWATCHMAN_VERSION_OVERRIDE=${version}"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -62,26 +58,30 @@ stdenv.mkDerivation rec {
     rustc
   ];
 
-  buildInputs = [
-    pcre2
-    openssl
-    gtest
-    glog
-    libevent
-    libsodium
-    folly
-    fizz
-    wangle
-    fbthrift
-    fb303
-    cpptoml
-    edencommon
-    libunwind
-    double-conversion
-    lz4
-    zstd
-    libiconv
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
+  buildInputs =
+    [
+      pcre2
+      openssl
+      gtest
+      glog
+      libevent
+      libsodium
+      folly
+      fizz
+      wangle
+      fbthrift
+      fb303
+      cpptoml
+      edencommon
+      libunwind
+      double-conversion
+      lz4
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_11
+      (darwinMinVersionHook "11.0")
+    ];
 
   cargoRoot = "watchman/cli";
 
