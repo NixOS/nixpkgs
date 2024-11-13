@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fizz";
-  version = "2024.03.11.00";
+  version = "2024.11.18.00";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "fizz";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-IHWotiVUjGOvebXy4rwsh8U8UMxTrF1VaqXzZMjojiM=";
+    hash = "sha256-mNe+CHEXhkwzek9qy2l6zvPXim9tJV44s+naSm6bQ4Q=";
   };
 
   nativeBuildInputs = [
