@@ -1,4 +1,5 @@
 { stdenv
+, runCommand
 , lib
 , src
 , patches ? [ ]
@@ -88,7 +89,7 @@
 let
   isCrossBuild = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "qtbase";
 
   inherit src version;
@@ -243,6 +244,13 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+  passthru = {
+    plugins = runCommand "${finalAttrs.finalPackage.name}-only-plugins" { } ''
+      mkdir -p "$out/lib/qt-6/plugins"
+      ln -s "${finalAttrs.finalPackage}/lib/qt-6/plugins" "$out/lib/qt-6/plugins"
+    '';
+  };
+
   setupHook = ../hooks/qtbase-setup-hook.sh;
 
   meta = with lib; {
@@ -252,4 +260,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ milahu nickcao LunNova ];
     platforms = platforms.unix ++ platforms.windows;
   };
-}
+})
