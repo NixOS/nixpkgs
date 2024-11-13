@@ -5,6 +5,7 @@
   fetchFromGitHub,
 
   cmake,
+  ninja,
 
   glog,
   gflags,
@@ -30,7 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./increase-test-discovery-timeout.patch
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
   buildInputs =
     [
