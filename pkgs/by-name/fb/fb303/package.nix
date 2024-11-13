@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fb303";
-  version = "2024.03.11.00";
+  version = "2024.11.18.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "fb303";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-Jtztb8CTqvRdRjUa3jaouP5PFAwoM4rKLIfgvOyXUIg=";
+    hash = "sha256-3zQLX42qeOE2bbFmu4Kuvu0Fvq2mBq8YgkVGpyfwaak=";
   };
 
   nativeBuildInputs = [
