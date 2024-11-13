@@ -372,7 +372,7 @@ let
           # to disable this.
           submenu "Disable display-manager" --class quirk-disable-displaymanager {
             ${grubMenuCfg}
-            ${buildMenuAdditionalParamsGrub2 "systemd.mask=display-manager.service"}
+            ${buildMenuAdditionalParamsGrub2 "systemd.mask=display-manager.service plymouth.enable=0"}
           }
 
           # Some laptop and convertibles have the panel installed in an
