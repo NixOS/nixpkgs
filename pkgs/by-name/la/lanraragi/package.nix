@@ -10,13 +10,13 @@
 
 buildNpmPackage rec {
   pname = "lanraragi";
-  version = "0.9.21";
+  version = "0.9.22";
 
   src = fetchFromGitHub {
     owner = "Difegue";
     repo = "LANraragi";
     rev = "v.${version}";
-    hash = "sha256-2YdQeBW1MQiUs5nliloISaxG0yhFJ6ulkU/Urx8PN3Y=";
+    hash = "sha256-4Yais1pkpwDUJ4e2yfgMERVm94S9+eFUotjVdMOwTNE=";
   };
 
   patches = [
