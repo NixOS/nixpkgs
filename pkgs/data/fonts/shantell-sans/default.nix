@@ -14,10 +14,12 @@ stdenvNoCC.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
     install -D -t $out/share/fonts/opentype/ $(find $src -type f -name '*.otf')
 
     install -D -t $out/share/fonts/truetype/ "$(find $src -type f -name '*.ttf')"
     mv $out/share/fonts/truetype/"ShantellSans[BNCE,INFM,SPAC,ital,wght].ttf" $out/share/fonts/truetype/Shantell_Sans_Variable.ttf
+    runHook postInstall
   '';
 
   meta = with lib; {
