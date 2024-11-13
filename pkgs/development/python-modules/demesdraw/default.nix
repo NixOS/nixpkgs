@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "demesdraw";
   version = "0.4.0";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {

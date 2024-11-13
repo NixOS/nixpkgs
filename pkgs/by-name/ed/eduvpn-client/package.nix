@@ -13,7 +13,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "eduvpn-client";
   version = "4.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchurl {
     url = "https://github.com/eduvpn/python-${pname}/releases/download/${version}/python-${pname}-${version}.tar.xz";

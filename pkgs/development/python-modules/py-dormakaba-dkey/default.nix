@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "py-dormakaba-dkey";
   version = "1.0.5";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 

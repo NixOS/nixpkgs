@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "datatable";
   # python 3.10+ support is not in the 1.0.0 release
   version = "unstable-2022-12-15";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "h2oai";

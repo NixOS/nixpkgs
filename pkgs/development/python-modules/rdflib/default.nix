@@ -31,7 +31,7 @@
 buildPythonPackage rec {
   pname = "rdflib";
   version = "7.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

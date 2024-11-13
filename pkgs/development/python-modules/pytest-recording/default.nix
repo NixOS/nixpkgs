@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "pytest-recording";
   version = "0.13.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kiwicom";

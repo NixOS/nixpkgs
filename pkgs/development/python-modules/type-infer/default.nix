@@ -30,7 +30,7 @@ in
 buildPythonPackage rec {
   pname = "type-infer";
   version = "0.0.20";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "cwcwidth";
   version = "0.1.9";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

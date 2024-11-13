@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "hyprshade";
   version = "3.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "loqusion";

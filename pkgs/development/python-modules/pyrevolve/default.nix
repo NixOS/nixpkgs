@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pyrevolve";
   version = "2.2.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

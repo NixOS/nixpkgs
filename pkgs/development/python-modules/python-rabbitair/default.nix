@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "python-rabbitair";
   version = "0.0.8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

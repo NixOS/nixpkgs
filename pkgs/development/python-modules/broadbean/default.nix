@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "broadbean";
   version = "0.14.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

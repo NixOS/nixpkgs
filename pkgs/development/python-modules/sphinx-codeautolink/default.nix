@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "sphinx-codeautolink";
   version = "0.15.2";
-  format = "pyproject";
+  pyproject = true;
 
   outputs = [
     "out"

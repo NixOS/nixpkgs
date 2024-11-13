@@ -24,7 +24,7 @@
 buildPythonPackage rec {
   pname = "rocm-docs-core";
   version = "0.26.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";

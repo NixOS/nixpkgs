@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "aiowatttime";
   version = "2024.06.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 

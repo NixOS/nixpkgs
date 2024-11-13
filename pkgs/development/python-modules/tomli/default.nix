@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "tomli";
   version = "2.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hukkin";

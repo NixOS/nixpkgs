@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "django-debug-toolbar";
   version = "4.4.6";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

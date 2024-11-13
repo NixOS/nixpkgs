@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pname = "nitime";
   version = "0.11";
   disabled = pythonOlder "3.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

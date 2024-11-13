@@ -28,7 +28,7 @@ in
 ps.buildPythonApplication rec {
   pname = "normcap";
   version = "0.5.8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = ps.pythonOlder "3.9";
 

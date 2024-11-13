@@ -18,7 +18,7 @@
 buildPythonApplication rec {
   pname = "rofi-rbw";
   version = "1.4.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdw";

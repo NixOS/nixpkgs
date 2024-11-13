@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "setuptools";
   version = "75.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";

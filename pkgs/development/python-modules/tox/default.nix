@@ -25,7 +25,7 @@
 buildPythonPackage rec {
   pname = "tox";
   version = "4.18.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";

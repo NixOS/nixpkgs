@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "srsly";
   version = "2.4.8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

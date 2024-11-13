@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "pyhumps";
   version = "3.8.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

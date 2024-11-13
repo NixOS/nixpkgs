@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "evtx";
   version = "0.8.5";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

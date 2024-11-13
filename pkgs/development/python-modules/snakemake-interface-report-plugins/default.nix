@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "snakemake-interface-report-plugins";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";

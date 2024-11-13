@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "blinker";
   version = "1.8.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

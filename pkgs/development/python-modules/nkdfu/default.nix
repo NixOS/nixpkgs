@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "nkdfu";
   version = "0.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

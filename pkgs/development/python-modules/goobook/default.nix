@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "goobook";
   version = "3.5.2";
 
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitLab {

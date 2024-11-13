@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "finitude";
   version = "0.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pytest-freezer";
   version = "0.4.8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

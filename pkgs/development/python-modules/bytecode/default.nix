@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "bytecode";
   version = "0.16.0";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

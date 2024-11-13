@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "ttp";
   version = "0.9.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmulyalin";

@@ -9,7 +9,7 @@ buildPythonApplication rec {
   pname = "parquet-tools";
   version = "0.2.16";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ktrueda";

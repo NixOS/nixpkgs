@@ -28,7 +28,7 @@
 buildPythonPackage rec {
   pname = "ormar";
   version = "0.20.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

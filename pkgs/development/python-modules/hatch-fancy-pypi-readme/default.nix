@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "hatch-fancy-pypi-readme";
   version = "24.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

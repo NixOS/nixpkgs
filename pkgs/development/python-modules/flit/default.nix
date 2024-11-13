@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "flit";
   version = "3.9.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "takluyver";

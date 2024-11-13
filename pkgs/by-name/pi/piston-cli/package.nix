@@ -3,7 +3,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "piston-cli";
   version = "1.4.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

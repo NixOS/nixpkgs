@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "funcparserlib";
   version = "1.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

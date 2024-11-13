@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "tikzplotlib";
   version = "0.10.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nschloe";

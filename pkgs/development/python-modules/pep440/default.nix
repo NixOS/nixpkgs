@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "pep440";
   version = "0.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

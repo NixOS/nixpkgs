@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "jaraco-itertools";
   version = "6.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "jaraco.itertools";

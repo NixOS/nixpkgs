@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "fixtures";
   version = "4.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

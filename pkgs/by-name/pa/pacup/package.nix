@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "pacup";
   version = "2.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pacstall";

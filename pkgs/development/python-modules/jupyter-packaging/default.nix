@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "jupyter-packaging";
   version = "0.12.3";
   disabled = pythonOlder "3.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "jupyter_packaging";

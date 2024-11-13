@@ -22,7 +22,7 @@
 buildPythonPackage rec {
   pname = "joblib";
   version = "1.4.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "ilua";
   version = "0.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

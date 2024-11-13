@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pyvera";
   version = "0.3.15";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pavoni";

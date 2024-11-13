@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   disabled = !isPy3k;
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pyfluidsynth";
   version = "1.3.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pyFluidSynth";

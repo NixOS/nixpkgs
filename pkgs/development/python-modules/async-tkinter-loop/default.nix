@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "async-tkinter-loop";
   version = "0.9.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;

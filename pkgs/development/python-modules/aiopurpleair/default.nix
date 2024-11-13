@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "aiopurpleair";
   version = "2023.12.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

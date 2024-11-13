@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-f99NsOsWp+vGecI2DxRfZOCrz/DxaRPEX5LI642HVjw=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   buildInputs = [
     gtk3

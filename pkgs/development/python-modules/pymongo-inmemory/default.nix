@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pymongo-inmemory";
   version = "0.4.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

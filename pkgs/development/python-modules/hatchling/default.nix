@@ -22,7 +22,7 @@
 buildPythonPackage rec {
   pname = "hatchling";
   version = "1.25.0";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {

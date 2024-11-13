@@ -3,7 +3,7 @@
 buildPythonPackage rec {
   pname = "matrix-http-rendezvous-synapse";
   version = "0.1.12";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matrix-org";

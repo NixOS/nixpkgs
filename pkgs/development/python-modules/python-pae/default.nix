@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "python-pae";
   version = "0.1.0";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   # Tests are on GitHub

@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "devtools";
   version = "0.12.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "dicom-numpy";
   version = "0.6.5";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

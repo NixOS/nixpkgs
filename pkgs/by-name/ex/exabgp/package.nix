@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "exabgp";
   version = "4.2.22";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Exa-Networks";

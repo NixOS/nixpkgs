@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "flask-httpauth";
   version = "4.8.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

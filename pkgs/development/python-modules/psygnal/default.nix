@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "psygnal";
   version = "0.11.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

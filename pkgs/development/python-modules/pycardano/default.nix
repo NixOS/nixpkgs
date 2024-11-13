@@ -36,7 +36,7 @@ buildPythonPackage rec {
   pname = "pycardano";
   version = "0.11.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-Cardano";

@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "peewee-migrate";
   version = "1.13.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

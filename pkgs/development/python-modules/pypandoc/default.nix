@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pypandoc";
   version = "1.13";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

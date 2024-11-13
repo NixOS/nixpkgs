@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "hid-parser";
   version = "0.0.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pkg-about";
   version = "1.1.8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

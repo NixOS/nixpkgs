@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "manga-ocr";
   version = "0.1.12";
   disabled = pythonOlder "3.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kha-white";

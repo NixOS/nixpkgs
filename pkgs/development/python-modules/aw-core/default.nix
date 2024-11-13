@@ -21,7 +21,7 @@ buildPythonPackage rec {
   pname = "aw-core";
   version = "0.5.17";
 
-  format = "pyproject";
+  pyproject = true;
 
   # pypi distribution doesn't include tests, so build from source instead
   src = fetchFromGitHub {

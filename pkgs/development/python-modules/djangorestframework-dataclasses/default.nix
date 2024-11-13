@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "djangorestframework-dataclasses";
   version = "1.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oxan";

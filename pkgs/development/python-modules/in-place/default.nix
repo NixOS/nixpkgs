@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "in-place";
   version = "1.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "zwave-me-ws";
   version = "0.4.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pipenv-poetry-migrate";
   version = "0.5.11";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

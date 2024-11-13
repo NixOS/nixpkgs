@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pykka";
   version = "4.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

@@ -25,7 +25,7 @@ in
 python3.pkgs.buildPythonApplication rec {
   pname = "trackma";
   version = "0.8.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "z411";

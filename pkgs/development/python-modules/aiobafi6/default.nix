@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "aiobafi6";
   version = "0.9.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 

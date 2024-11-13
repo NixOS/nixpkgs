@@ -27,7 +27,7 @@ in
 bepastyPython.pkgs.buildPythonPackage rec {
   pname = "bepasty";
   version = "1.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   propagatedBuildInputs = with bepastyPython.pkgs; [
     flask

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "py-dmidecode";
   version = "0.1.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

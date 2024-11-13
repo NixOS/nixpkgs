@@ -24,7 +24,7 @@
 buildPythonPackage rec {
   pname = "aria2p";
   version = "0.12.0";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {

@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "urlscan";
   version = "1.0.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firecat53";

@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "simpleeval";
   version = "1.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danthedeckie";

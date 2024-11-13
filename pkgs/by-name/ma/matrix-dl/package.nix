@@ -6,7 +6,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "matrix-dl";
   version = "unstable-2020-07-14";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rubo77";

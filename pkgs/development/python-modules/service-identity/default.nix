@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "service-identity";
   version = "24.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

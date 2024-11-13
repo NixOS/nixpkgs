@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "clairvoyance";
   version = "2.5.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nikitastupin";

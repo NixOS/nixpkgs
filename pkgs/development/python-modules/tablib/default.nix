@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "tablib";
   version = "3.6.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

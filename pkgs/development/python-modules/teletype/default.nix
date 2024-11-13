@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "teletype";
   version = "1.3.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

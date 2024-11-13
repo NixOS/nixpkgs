@@ -14,7 +14,7 @@
 buildPythonApplication rec {
   pname = "pricehist";
   version = "1.4.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "chrisberkhout";

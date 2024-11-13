@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "refery";
   version = "2.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

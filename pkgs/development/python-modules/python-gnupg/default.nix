@@ -11,7 +11,7 @@ buildPythonPackage rec {
   pname = "python-gnupg";
   version = "0.5.3";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

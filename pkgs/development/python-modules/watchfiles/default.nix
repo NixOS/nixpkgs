@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "watchfiles";
   version = "0.22.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

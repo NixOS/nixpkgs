@@ -20,7 +20,7 @@ let
 in
 buildPythonPackage {
   inherit version pname;
-  format = "pyproject";
+  pyproject = true;
 
   # Pypi source package doesn't contain tests
   src = fetchFromGitHub {

@@ -8,7 +8,7 @@ with python3.pkgs; buildPythonApplication rec {
   pname = "poetry2conda";
   version = "0.3.0";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dojeda";

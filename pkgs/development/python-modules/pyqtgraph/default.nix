@@ -20,7 +20,7 @@ in
 buildPythonPackage rec {
   pname = "pyqtgraph";
   version = "0.13.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyqtgraph";

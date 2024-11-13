@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "drms";
   version = "0.8.0";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   pname = "python-ndn";
   version = "0.4.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "named-data";

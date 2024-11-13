@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "url-normalize";
   version = "1.4.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "niksite";

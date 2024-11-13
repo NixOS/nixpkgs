@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "pytrends";
   version = "4.9.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

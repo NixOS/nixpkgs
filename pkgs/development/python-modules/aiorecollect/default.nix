@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "aiorecollect";
   version = "2023.12.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

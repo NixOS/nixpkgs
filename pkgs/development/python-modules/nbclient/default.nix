@@ -22,7 +22,7 @@ let
   nbclient = buildPythonPackage rec {
     pname = "nbclient";
     version = "0.10.0";
-    format = "pyproject";
+    pyproject = true;
 
     disabled = pythonOlder "3.7";
 

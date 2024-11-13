@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "pysubs2";
   version = "1.7.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tkarabela";

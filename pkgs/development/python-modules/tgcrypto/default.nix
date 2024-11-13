@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.6";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyrogram";

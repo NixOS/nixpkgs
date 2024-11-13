@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "loca";
   version = "2.0.1";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchFromSourcehut {

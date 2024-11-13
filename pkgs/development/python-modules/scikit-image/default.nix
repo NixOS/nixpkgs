@@ -36,7 +36,7 @@ let
   self = buildPythonPackage rec {
     pname = "scikit-image";
     version = "0.24.0";
-    format = "pyproject";
+    pyproject = true;
 
     disabled = pythonOlder "3.8";
 

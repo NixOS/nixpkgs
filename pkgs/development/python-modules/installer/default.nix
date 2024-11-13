@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "installer";
   version = "0.7.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";

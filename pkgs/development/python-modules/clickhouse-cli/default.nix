@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "clickhouse-cli";
   version = "0.3.9";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

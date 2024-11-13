@@ -8,7 +8,7 @@
 buildPythonApplication rec {
   pname = "pandoc-fignos";
   version = "2.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tomduck";

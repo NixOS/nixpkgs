@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "ge25519";
   version = "1.5.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

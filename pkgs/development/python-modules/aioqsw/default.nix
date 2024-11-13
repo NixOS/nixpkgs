@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "aioqsw";
   version = "0.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 

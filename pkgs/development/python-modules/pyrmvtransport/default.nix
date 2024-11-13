@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "pyrmvtransport";
   version = "0.3.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

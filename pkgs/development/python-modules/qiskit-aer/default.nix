@@ -30,7 +30,7 @@
 buildPythonPackage rec {
   pname = "qiskit-aer";
   version = "0.15.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

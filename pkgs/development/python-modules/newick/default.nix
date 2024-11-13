@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "newick";
   version = "1.9.0";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

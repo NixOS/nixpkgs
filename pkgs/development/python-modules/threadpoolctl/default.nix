@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "3.5.0";
 
   disabled = pythonOlder "3.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joblib";

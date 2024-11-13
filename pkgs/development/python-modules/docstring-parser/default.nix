@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "docstring-parser";
   version = "0.15";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

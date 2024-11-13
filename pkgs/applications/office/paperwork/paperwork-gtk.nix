@@ -32,7 +32,7 @@ in
 python3Packages.buildPythonApplication rec {
   inherit src version;
   pname = "paperwork";
-  format = "pyproject";
+  pyproject = true;
 
   sample_docs = sample_documents // {
     # a trick for the update script

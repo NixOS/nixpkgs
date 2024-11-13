@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "pluthon";
   version = "1.0.0";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpShin";

@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "freebox-api";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

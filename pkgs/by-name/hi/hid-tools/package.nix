@@ -7,7 +7,7 @@ python3.pkgs.buildPythonPackage rec {
   pname = "hid-tools";
   version = "0.7";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";

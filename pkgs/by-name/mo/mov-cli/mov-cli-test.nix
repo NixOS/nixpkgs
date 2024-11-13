@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "mov-cli-test";
   version = "1.1.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mov-cli";

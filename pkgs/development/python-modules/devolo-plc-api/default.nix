@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "devolo-plc-api";
   version = "1.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

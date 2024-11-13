@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "zxpy";
   version = "1.6.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tusharsadhwani";

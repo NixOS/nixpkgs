@@ -21,7 +21,7 @@
 buildPythonPackage rec {
   pname = "paperwork-shell";
   inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
-  format = "pyproject";
+  pyproject = true;
 
   sourceRoot = "${src.name}/paperwork-shell";
 

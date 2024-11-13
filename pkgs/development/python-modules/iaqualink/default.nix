@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "iaqualink";
   version = "0.5.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

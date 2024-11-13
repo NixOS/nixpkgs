@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "sensorpro-ble";
   version = "0.5.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

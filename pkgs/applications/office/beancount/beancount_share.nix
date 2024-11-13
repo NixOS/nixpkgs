@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-+ZA84VS0wf9TdrYleYB5OeKz7T8sDtrl4BM7Ft+k7OI=";
   };
 
-  format = "pyproject";
+  pyproject = true;
 
   buildInputs = [
     python3.pkgs.setuptools

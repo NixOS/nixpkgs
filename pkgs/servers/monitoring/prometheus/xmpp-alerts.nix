@@ -9,7 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "prometheus-xmpp-alerts";
   version = "0.5.8";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";

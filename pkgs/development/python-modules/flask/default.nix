@@ -33,7 +33,7 @@
 buildPythonPackage rec {
   pname = "flask";
   version = "3.0.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pysmart";
   version = "1.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "pytest-celery";
   version = "0.1.0";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "celery";

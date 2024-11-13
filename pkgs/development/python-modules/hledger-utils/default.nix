@@ -20,7 +20,7 @@ buildPythonPackage rec {
   pname = "hledger-utils";
   version = "1.14.0";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "nobodyinperson";

@@ -23,7 +23,7 @@
 buildPythonPackage rec {
   pname = "rst2pdf";
   version = "0.102";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

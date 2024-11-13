@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "tomli-w";
   version = "1.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hukkin";

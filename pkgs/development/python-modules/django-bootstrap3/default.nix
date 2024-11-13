@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "django-bootstrap3";
   version = "24.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zostera";

@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "aiomusiccast";
   version = "0.14.8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

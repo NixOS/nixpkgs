@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "spdx-tools";
   version = "0.8.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "pyrituals";
   version = "0.0.6";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {

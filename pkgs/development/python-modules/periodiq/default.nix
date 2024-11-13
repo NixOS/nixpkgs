@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "periodiq";
   version = "0.12.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 

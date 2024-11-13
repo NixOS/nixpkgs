@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "repeated-test";
   version = "2.3.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 

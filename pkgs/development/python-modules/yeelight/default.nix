@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "yeelight";
   version = "0.7.14";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

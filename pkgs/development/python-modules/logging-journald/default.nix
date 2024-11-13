@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "logging-journald";
   version = "0.6.7";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

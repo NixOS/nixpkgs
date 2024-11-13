@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "ufolib2";
   version = "0.16.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "ufoLib2";

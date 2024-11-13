@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "fastnumbers";
   version = "5.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

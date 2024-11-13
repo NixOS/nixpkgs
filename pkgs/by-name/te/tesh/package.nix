@@ -6,7 +6,7 @@ in python3Packages.buildPythonPackage rec {
   pname = "tesh";
   inherit version;
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OceanSprint";

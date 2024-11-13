@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pyopengl-accelerate";
   version = "3.1.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "PyOpenGL-accelerate";

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "patiencediff";
   version = "0.2.15";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

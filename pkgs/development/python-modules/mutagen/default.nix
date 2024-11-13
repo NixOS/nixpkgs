@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "mutagen";
   version = "1.47.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

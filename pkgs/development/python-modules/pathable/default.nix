@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "pathable";
   version = "0.4.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

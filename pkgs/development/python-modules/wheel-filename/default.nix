@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "wheel-filename";
   version = "1.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

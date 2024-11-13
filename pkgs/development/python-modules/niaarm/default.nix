@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "niaarm";
   version = "0.3.12";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

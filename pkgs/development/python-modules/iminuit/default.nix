@@ -22,7 +22,7 @@
 buildPythonPackage rec {
   pname = "iminuit";
   version = "2.30.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

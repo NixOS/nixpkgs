@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     tests = {
       version = testers.testVersion { package = maturin; };
       pyo3 = python3.pkgs.callPackage ./pyo3-test {
-        format = "pyproject";
+        pyproject = true;
         buildAndTestSubdir = "examples/word-count";
         preConfigure = "";
 

@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "inkbird-ble";
   version = "0.5.8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

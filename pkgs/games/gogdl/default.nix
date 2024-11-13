@@ -11,7 +11,7 @@
 buildPythonApplication rec {
   pname = "gogdl";
   version = "1.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";

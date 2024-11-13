@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "stdlib-list";
   version = "0.11.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "stdlib_list";

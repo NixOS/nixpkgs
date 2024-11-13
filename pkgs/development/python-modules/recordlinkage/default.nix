@@ -22,7 +22,7 @@
 buildPythonPackage rec {
   pname = "recordlinkage";
   version = "0.16";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

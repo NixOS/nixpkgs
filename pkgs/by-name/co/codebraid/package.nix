@@ -3,7 +3,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "codebraid";
   version = "0.11.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gpoore";

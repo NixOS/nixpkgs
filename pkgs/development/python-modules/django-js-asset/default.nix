@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "django-js-asset";
   version = "2.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matthiask";

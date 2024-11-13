@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "flask-migrate";
   version = "4.0.7";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "questionary";
   version = "2.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

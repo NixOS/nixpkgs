@@ -18,7 +18,7 @@ buildPythonPackage rec {
   pname = "aw-client";
   version = "0.5.14";
 
-  format = "pyproject";
+  pyproject = true;
 
   # pypi distribution doesn't include tests, so build from source instead
   src = fetchFromGitHub {

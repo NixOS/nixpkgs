@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "aggdraw";
   version = "1.3.19";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytroll";

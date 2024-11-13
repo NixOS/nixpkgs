@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "notifications-android-tv";
   version = "1.2.2";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {

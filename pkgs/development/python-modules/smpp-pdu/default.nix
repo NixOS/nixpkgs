@@ -9,7 +9,7 @@
 buildPythonPackage {
   pname = "smpp-pdu";
   version = "unstable-2022-09-02";
-  format = "pyproject";
+  pyproject = true;
 
   # Upstream was once mozes/smpp.pdu, but it's dead and Python 2 only.
   src = fetchFromGitHub {

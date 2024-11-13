@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "aurorapy";
   version = "0.2.7";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

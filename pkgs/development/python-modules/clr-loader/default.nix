@@ -34,7 +34,7 @@ in
 buildPythonPackage {
   inherit pname version src;
 
-  format = "pyproject";
+  pyproject = true;
 
   buildInputs = dotnetCorePackages.sdk_6_0.packages ++ dotnet-build.nugetDeps;
 

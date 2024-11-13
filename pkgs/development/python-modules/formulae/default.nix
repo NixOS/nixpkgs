@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "formulae";
   version = "0.5.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

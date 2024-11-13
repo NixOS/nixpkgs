@@ -10,7 +10,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "sqlite3-to-mysql";
   version = "2.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.8";
 

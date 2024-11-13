@@ -8,7 +8,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "pyprland";
   version = "2.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.10";
 

@@ -20,7 +20,7 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
 python3.pkgs.buildPythonApplication rec {
   pname = "tuifimanager";
   version = "5.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GiorgosXou";

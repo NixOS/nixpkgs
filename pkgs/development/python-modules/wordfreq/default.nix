@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "wordfreq";
   version = "3.0.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

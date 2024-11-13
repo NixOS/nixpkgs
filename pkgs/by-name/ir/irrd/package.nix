@@ -48,7 +48,7 @@ in
 py.pkgs.buildPythonPackage rec {
   pname = "irrd";
   version = "4.4.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irrdnet";

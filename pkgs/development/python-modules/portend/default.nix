@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "portend";
   version = "3.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

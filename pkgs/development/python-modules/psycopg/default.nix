@@ -62,7 +62,7 @@ let
   psycopg-c = buildPythonPackage {
     pname = "${pname}-c";
     inherit version src;
-    format = "pyproject";
+    pyproject = true;
 
     # apply patches to base repo
     inherit patches;
@@ -118,7 +118,7 @@ in
 
 buildPythonPackage rec {
   inherit pname version src;
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

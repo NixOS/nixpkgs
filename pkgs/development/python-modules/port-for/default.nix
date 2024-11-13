@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "port-for";
   version = "0.7.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

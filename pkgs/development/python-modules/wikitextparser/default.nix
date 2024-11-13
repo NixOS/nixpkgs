@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "wikitextparser";
   version = "0.56.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "5j9";

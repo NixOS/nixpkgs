@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "pysnooz";
   version = "0.10.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "schemainspect";
   version = "3.1.1663587362";
-  format = "pyproject";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {

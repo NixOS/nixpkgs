@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "vehicle";
   version = "2.2.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 

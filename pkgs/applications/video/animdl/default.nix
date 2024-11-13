@@ -20,7 +20,7 @@
 buildPythonApplication {
   pname = "animdl";
   version = "1.7.27";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "justfoolingaround";

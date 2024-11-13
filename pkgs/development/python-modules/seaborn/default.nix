@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "seaborn";
   version = "0.13.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "pysnmplib";
   version = "5.0.24";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

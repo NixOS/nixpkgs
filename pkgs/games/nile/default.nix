@@ -18,7 +18,7 @@ in
 buildPythonApplication {
   pname = "nile";
   inherit version;
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "imLinguin";

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "sly";
   version = "0.5";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

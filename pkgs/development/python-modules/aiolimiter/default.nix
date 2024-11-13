@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "aiolimiter";
   version = "1.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

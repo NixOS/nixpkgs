@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "argon2-cffi";
   version = "23.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "argon2_cffi";

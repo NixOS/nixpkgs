@@ -7,7 +7,7 @@
 pythonPackages.buildPythonApplication rec {
   pname = "git-up";
   version = "2.3.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "git_up";

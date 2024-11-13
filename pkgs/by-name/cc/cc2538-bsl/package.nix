@@ -7,7 +7,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "cc2538-bsl";
   version = "2.1-unstable-2023-10-03";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JelmerT";

@@ -11,7 +11,7 @@ let
     packageOverrides = _: super: {
       pillow = super.pillow.overridePythonAttrs rec {
         version = "9.5.0";
-        format = "pyproject";
+        pyproject = true;
 
         src = fetchPypi {
           pname = "Pillow";
@@ -45,7 +45,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "textual-paint";
   version = "0.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "1j01";

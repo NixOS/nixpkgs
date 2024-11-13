@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "hydra-check";
   version = "1.3.5";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 

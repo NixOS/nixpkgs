@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "libpcap";
   version = "1.11.0b8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -25,7 +25,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "lektor";
   version = "3.4.0b12";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lektor";

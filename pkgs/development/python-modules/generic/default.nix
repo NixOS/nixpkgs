@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "1.1.3";
   disabled = pythonOlder "3.7";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

@@ -24,7 +24,7 @@
 buildPythonPackage rec {
   pname = "flask-babel";
   version = "4.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-babel";

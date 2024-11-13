@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "mmcif-pdbx";
   version = "2.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 

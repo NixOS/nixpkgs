@@ -18,7 +18,7 @@
 buildPythonPackage rec {
   pname = "cmsis-pack-manager";
   version = "0.5.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyocd";

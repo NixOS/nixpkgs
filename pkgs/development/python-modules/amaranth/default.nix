@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "amaranth";
-  format = "pyproject";
+  pyproject = true;
   version = "0.5.3";
   disabled = pythonOlder "3.8";
 

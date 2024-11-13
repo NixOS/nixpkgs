@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "py-pdf-parser";
   version = "0.13.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

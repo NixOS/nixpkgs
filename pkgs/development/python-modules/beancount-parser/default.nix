@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "beancount-parser";
   version = "1.2.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

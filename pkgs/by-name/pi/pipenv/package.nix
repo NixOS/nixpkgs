@@ -27,7 +27,7 @@ let
 in buildPythonApplication rec {
   pname = "pipenv";
   version = "2024.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";

@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "pyqt6-charts";
   version = "6.7.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "ninja";
   inherit (ninja) version;
-  format = "pyproject";
+  pyproject = true;
 
   src = ./stub;
 

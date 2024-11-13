@@ -21,7 +21,7 @@
 buildPythonPackage rec {
   pname = "myst-parser";
   version = "4.0.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 

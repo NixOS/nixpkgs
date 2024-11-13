@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "1.0.5";
 
   disabled = pythonOlder "3.9";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";

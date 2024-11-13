@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   pname = "checkdmarc";
   version = "5.5.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "pyhepmc";
   version = "2.13.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

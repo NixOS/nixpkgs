@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "xnatpy";
   version = "0.5.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

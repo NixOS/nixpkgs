@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "sensor-state-data";
   version = "2.18.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

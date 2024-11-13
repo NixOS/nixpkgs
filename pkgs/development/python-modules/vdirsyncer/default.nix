@@ -28,7 +28,7 @@
 buildPythonPackage rec {
   pname = "vdirsyncer";
   version = "0.19.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "hatch-nodejs-version";
   version = "0.3.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

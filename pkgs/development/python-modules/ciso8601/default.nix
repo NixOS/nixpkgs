@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "ciso8601";
   version = "2.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "closeio";

@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "tiler";
   version = "0.5.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

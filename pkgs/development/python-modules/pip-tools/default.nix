@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "pip-tools";
   version = "7.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

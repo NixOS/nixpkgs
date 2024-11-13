@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "mediafile";
   version = "0.12.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

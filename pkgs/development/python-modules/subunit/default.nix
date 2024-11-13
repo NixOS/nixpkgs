@@ -19,7 +19,7 @@
 
 buildPythonPackage {
   inherit (subunit) name src meta;
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

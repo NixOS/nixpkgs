@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "moat-ble";
   version = "0.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 

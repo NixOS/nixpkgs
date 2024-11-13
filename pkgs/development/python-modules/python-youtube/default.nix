@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "python-youtube";
   version = "0.9.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sns-sdks";

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "pybravia";
   version = "0.3.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

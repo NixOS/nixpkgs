@@ -22,7 +22,7 @@
 buildPythonPackage rec {
   pname = "virtualenv";
   version = "20.26.6";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

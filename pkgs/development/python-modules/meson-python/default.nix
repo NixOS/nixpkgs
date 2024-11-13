@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "meson-python";
   version = "0.16.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;

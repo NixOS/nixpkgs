@@ -22,7 +22,7 @@ buildPythonPackage rec {
     cp ${./Cargo.lock} Cargo.lock
   '';
 
-  format = "pyproject";
+  pyproject = true;
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook

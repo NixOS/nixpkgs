@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "migra";
   version = "3.0.1647431138";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "djrobstep";

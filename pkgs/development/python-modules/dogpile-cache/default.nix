@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "dogpile-cache";
   version = "1.3.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

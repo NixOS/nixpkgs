@@ -3,7 +3,7 @@
 buildPythonApplication rec {
   pname = "spf-engine";
   version = "3.0.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchurl {
     url = "https://launchpad.net/${pname}/${lib.versions.majorMinor version}/${version}/+download/${pname}-${version}.tar.gz";

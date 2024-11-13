@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "instaloader";
   version = "4.13.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

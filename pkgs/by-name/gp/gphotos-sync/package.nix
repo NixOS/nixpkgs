@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "gphotos-sync";
   version = "3.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gilesknap";

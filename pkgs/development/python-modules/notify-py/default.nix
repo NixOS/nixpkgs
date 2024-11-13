@@ -19,7 +19,7 @@
 buildPythonPackage rec {
   pname = "notify-py";
   version = "0.3.43";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

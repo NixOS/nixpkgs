@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "sphinx-intl";
   version = "2.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";

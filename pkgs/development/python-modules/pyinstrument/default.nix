@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "pyinstrument";
   version = "4.7.3";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

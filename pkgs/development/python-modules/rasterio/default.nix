@@ -34,7 +34,7 @@
 buildPythonPackage rec {
   pname = "rasterio";
   version = "1.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

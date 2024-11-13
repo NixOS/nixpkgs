@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # time of writing (2022-03-29), v0.0.11 is the latest as reported on GitHub
   # and PyPI.
   version = "0.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cgarciae";

@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "pyradiomics";
   version = "3.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 

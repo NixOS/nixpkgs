@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "compreffor";
   version = "0.5.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

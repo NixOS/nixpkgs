@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "ds-store";
   version = "1.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "isort";
   version = "5.13.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";

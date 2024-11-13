@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "pytest-raisin";
   version = "0.4";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wimglenn";

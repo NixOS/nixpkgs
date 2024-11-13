@@ -8,7 +8,7 @@
 buildPythonPackage rec {
   pname = "tftpy";
   version = "0.8.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

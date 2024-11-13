@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "gitlint";
   version = "0.19.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jorisroovers";

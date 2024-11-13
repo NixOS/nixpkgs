@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "twentemilieu";
   version = "2.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 

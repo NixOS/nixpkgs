@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "motioneye-client";
   version = "0.3.14";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 

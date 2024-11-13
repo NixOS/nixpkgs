@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pytest-isort";
   version = "3.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "shiv";
   version = "1.0.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;

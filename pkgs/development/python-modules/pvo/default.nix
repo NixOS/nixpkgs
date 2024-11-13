@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "pvo";
   version = "2.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 

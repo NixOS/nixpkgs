@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "beautysh";
   version = "6.2.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lovesegfault";

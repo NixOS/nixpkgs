@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "laspy";
   version = "2.5.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

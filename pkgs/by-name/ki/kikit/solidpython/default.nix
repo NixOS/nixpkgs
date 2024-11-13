@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "solidpython";
   version = "1.1.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SolidCode";

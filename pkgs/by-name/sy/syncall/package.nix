@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "syncall";
   version = "1.8.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bergercookie";

@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "nextinspace";
   version = "2.0.5";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "not-stirred";

@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "hstsparser";
   version = "1.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thebeanogamer";

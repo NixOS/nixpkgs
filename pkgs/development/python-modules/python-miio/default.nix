@@ -28,7 +28,7 @@
 buildPythonPackage rec {
   pname = "python-miio";
   version = "0.5.12";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
