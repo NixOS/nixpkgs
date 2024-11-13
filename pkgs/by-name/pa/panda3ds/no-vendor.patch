@@ -1,0 +1,163 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 051831e0..9bd3cc6b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,3 +1,5 @@
++find_package(PkgConfig REQUIRED)
++
+ # We need to be able to use enable_language(OBJC) on Mac, so we need CMake 3.16 vs the 3.11 we use otherwise. Blame Apple.
+ if (APPLE)
+     set(CMAKE_OSX_DEPLOYMENT_TARGET "10.15" CACHE STRING "Minimum OS X deployment version")
+@@ -121,8 +123,6 @@ add_library(AlberCore STATIC)
+ 
+ include_directories(${PROJECT_SOURCE_DIR}/include/)
+ include_directories(${PROJECT_SOURCE_DIR}/include/kernel)
+-include_directories(${FMT_INCLUDE_DIR})
+-include_directories(third_party/boost/)
+ include_directories(third_party/elfio/)
+ include_directories(third_party/hips/include/)
+ include_directories(third_party/imgui/)
+@@ -142,8 +142,9 @@ add_compile_definitions(WIN32_LEAN_AND_MEAN)  # Make windows.h not include liter
+ add_compile_definitions(SDL_MAIN_HANDLED)
+ 
+ if(ENABLE_DISCORD_RPC AND NOT ANDROID)
+-    add_subdirectory(third_party/discord-rpc)
+-    include_directories(third_party/discord-rpc/include)
++    find_path(DISCORD_RPC_INCLUDE_DIR NAMES discord_rpc.h REQUIRED)
++    find_library(DISCORD_RPC_LIBRARY NAMES discord-rpc REQUIRED)
++    include_directories(${DISCORD_RPC_INCLUDE_DIR})
+ endif()
+ 
+ 
+@@ -160,7 +161,9 @@ if (NOT ANDROID)
+     endif()
+ endif()
+ 
+-add_subdirectory(third_party/fmt)
++find_package(fmt REQUIRED)
++include_directories(${FMT_INCLUDE_DIR})
++
+ add_subdirectory(third_party/toml11)
+ include_directories(third_party/toml11)
+ include_directories(third_party/glm)
+@@ -169,13 +172,13 @@ include_directories(third_party/duckstation)
+ 
+ add_subdirectory(third_party/cmrc)
+ 
+-set(BOOST_ROOT "${CMAKE_SOURCE_DIR}/third_party/boost")
+-set(Boost_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/third_party/boost")
+-set(Boost_NO_SYSTEM_PATHS ON)
+ add_compile_definitions(BOOST_NO_CXX98_FUNCTION_BASE) # Forbid Boost from using std::unary_function (Fixes MacOS build)
+ 
+-add_library(boost INTERFACE)
+-target_include_directories(boost SYSTEM INTERFACE ${Boost_INCLUDE_DIR})
++pkg_check_modules(BOOST REQUIRED boost)
++include_directories(${BOOST_INCLUDE_DIRS})
++link_directories(${BOOST_LIBRARY_DIRS})
++target_link_libraries(AlberCore PRIVATE ${BOOST_LIBRARIES})
++add_definitions(${BOOST_CFLAGS_OTHER})
+ 
+ if(ANDROID)
+     set(CRYPTOPP_OPT_DISABLE_ASM ON CACHE BOOL "" FORCE)
+@@ -188,9 +191,9 @@ add_subdirectory(third_party/cryptopp)
+ add_subdirectory(third_party/glad)
+ 
+ if(ENABLE_LUAJIT)
+-    add_subdirectory(third_party/LuaJIT luajit)
+-    include_directories(third_party/LuaJIT/src ${CMAKE_BINARY_DIR}/luajit)
+-    set_target_properties(luajit PROPERTIES EXCLUDE_FROM_ALL 1)
++    pkg_check_modules(LUAJIT REQUIRED luajit)
++    include_directories(${LUAJIT_INCLUDE_DIRS})
++    link_directories(${LUAJIT_LIBRARY_DIRS})
+ 
+     if(MSVC)
+       target_compile_definitions(libluajit PRIVATE _CRT_SECURE_NO_WARNINGS)
+@@ -199,7 +202,8 @@ if(ENABLE_LUAJIT)
+     endif()
+ 
+     target_compile_definitions(AlberCore PUBLIC "PANDA3DS_ENABLE_LUA=1")
+-    target_link_libraries(AlberCore PRIVATE libluajit)
++    target_link_libraries(AlberCore PRIVATE ${LUAJIT_LIBRARIES})
++    add_definitions(${LUAJIT_CFLAGS_OTHER})
+ endif()
+ 
+ # Check for x64
+@@ -238,7 +242,7 @@ endif()
+ 
+ if(HOST_X64 OR HOST_ARM64)
+     set(DYNARMIC_TESTS OFF)
+-    #set(DYNARMIC_NO_BUNDLED_FMT ON)
++    set(DYNARMIC_NO_BUNDLED_FMT ON)
+     set(DYNARMIC_FRONTENDS "A32" CACHE STRING "")
+     add_subdirectory(third_party/dynarmic)
+     add_compile_definitions(CPU_DYNARMIC)
+@@ -247,7 +251,10 @@ else()
+ endif()
+ 
+ add_subdirectory(third_party/teakra EXCLUDE_FROM_ALL)
+-add_subdirectory(third_party/fdk-aac)
++
++pkg_check_modules(FDK_AAC REQUIRED fdk-aac)
++include_directories(${FDK_AAC_INCLUDE_DIRS})
++link_directories(${FDK_AAC_LIBRARY_DIRS})
+ 
+ set(CAPSTONE_ARCHITECTURE_DEFAULT OFF)
+ set(CAPSTONE_ARM_SUPPORT ON)
+@@ -362,12 +369,13 @@ if(ENABLE_LUAJIT AND NOT ANDROID)
+     # Build luv and libuv for Lua TCP server usage if we're not on Android
+     include_directories(third_party/luv/src)
+     include_directories(third_party/luv/deps/lua-compat-5.3/c-api)
+-    include_directories(third_party/libuv/include)
+     set(THIRD_PARTY_SOURCE_FILES ${THIRD_PARTY_SOURCE_FILES} third_party/luv/src/luv.c)
+-    set(LIBUV_BUILD_SHARED OFF)
+ 
+-    add_subdirectory(third_party/libuv)
+-    target_link_libraries(AlberCore PRIVATE uv_a)
++    pkg_check_modules(LIBUV REQUIRED libuv)
++    include_directories(${LIBUV_INCLUDE_DIRS})
++    link_directories(${LIBUV_LIBRARY_DIRS})
++    target_link_libraries(AlberCore PRIVATE ${LIBUV_LIBRARIES})
++    add_definitions(${LIBUV_CFLAGS_OTHER})
+ endif()
+ 
+ if(ENABLE_QT_GUI)
+@@ -577,12 +585,13 @@ set(ALL_SOURCES ${SOURCE_FILES} ${FS_SOURCE_FILES} ${CRYPTO_SOURCE_FILES} ${KERN
+     ${AUDIO_SOURCE_FILES} ${HEADER_FILES} ${FRONTEND_HEADER_FILES})
+ target_sources(AlberCore PRIVATE ${ALL_SOURCES})
+ 
+-target_link_libraries(AlberCore PRIVATE dynarmic cryptopp glad resources_console_fonts teakra fdk-aac)
++target_link_libraries(AlberCore PRIVATE dynarmic cryptopp glad resources_console_fonts teakra ${FDK_AAC_LIBRARIES})
+ target_link_libraries(AlberCore PUBLIC glad capstone fmt::fmt)
+ 
+ if(ENABLE_DISCORD_RPC AND NOT ANDROID)
+     target_compile_definitions(AlberCore PUBLIC "PANDA3DS_ENABLE_DISCORD_RPC=1")
+-    target_link_libraries(AlberCore PRIVATE discord-rpc)
++    target_link_libraries(AlberCore PRIVATE ${DISCORD_RPC_LIBRARY})
++    add_definitions(${DISCORD_RPC_CFLAGS_OTHER})
+ endif()
+ 
+ if(GPU_DEBUG_INFO)
+@@ -703,10 +712,7 @@ endif()
+ if(ENABLE_TESTS)
+     enable_testing()
+ 
+-    find_package(Catch2 3)
+-    if(NOT Catch2_FOUND)
+-        add_subdirectory(third_party/Catch2)
+-    endif()
++    find_package(Catch2 3 REQUIRED)
+ 
+     add_library(nihstro-headers INTERFACE)
+     target_include_directories(nihstro-headers SYSTEM INTERFACE ./third_party/nihstro/include)
+diff --git a/src/core/audio/aac_decoder.cpp b/src/core/audio/aac_decoder.cpp
+index 281539d8..e9b8832a 100644
+--- a/src/core/audio/aac_decoder.cpp
++++ b/src/core/audio/aac_decoder.cpp
+@@ -1,6 +1,6 @@
+ #include "audio/aac_decoder.hpp"
+ 
+-#include <aacdecoder_lib.h>
++#include <fdk-aac/aacdecoder_lib.h>
+ 
+ #include <vector>
+ using namespace Audio;
