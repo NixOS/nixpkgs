@@ -3749,6 +3749,13 @@ with pkgs;
     ignition-cmake_0
     ignition-cmake_2;
 
+  inherit ({
+    gz-utils_2 = callPackage ../development/libraries/gz-utils/2.nix { };
+    ignition-utils_1 = callPackage ../development/libraries/gz-utils/1.nix { };
+  })
+    gz-utils_2
+    ignition-utils_1;
+
   gzip = callPackage ../tools/compression/gzip { };
 
   pdisk = callPackage ../tools/system/pdisk {
