@@ -5,6 +5,7 @@
   gradle_8,
   jre_headless,
   makeBinaryWrapper,
+  tests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "json2cdn";
@@ -41,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    tests.formats-cdn = tests.pkgs-lib.formats.passthru.entries.pass-cdnAtoms;
+  };
 
   meta = {
     description = "Converts a JSON file to dzikoysk's CDN format";
