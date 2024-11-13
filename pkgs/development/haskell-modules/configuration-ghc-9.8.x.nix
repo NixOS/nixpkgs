@@ -62,6 +62,7 @@ self: super: {
   # https://github.com/haskell/aeson/commit/1a666febd0775d8e88d315ece1b97cd20602fb5f
   aeson = doJailbreak (doDistribute self.aeson_2_2_3_0);
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_2_0;
+  dependent-sum-template = self.dependent-sum-template_0_2_0_1; # template-haskell < 2.22
   xmonad = doDistribute self.xmonad_0_18_0;
   apply-refact = self.apply-refact_0_14_0_0;
   ormolu = self.ormolu_0_7_4_0;
@@ -94,7 +95,6 @@ self: super: {
   #
   blaze-svg = doJailbreak super.blaze-svg; # base <4.19
   commutative-semigroups = doJailbreak super.commutative-semigroups; # base < 4.19
-  dependent-sum-template = doJailbreak super.dependent-sum-template_0_2_0_1; # template-haskell < 2.21
   diagrams-lib = doJailbreak super.diagrams-lib; # base <4.19, text <2.1
   diagrams-postscript = doJailbreak super.diagrams-postscript;  # base <4.19, bytestring <0.12
   diagrams-svg = doJailbreak super.diagrams-svg;  # base <4.19, text <2.1
