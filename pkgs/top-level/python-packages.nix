@@ -14031,6 +14031,8 @@ self: super: with self; {
 
   ropper = callPackage ../development/python-modules/ropper { };
 
+  rosdep = callPackage ../development/python-modules/rosdep { };
+
   rosdistro = callPackage ../development/python-modules/rosdistro { };
 
   rospkg = callPackage ../development/python-modules/rospkg { };
