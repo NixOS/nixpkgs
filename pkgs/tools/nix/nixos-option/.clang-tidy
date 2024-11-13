@@ -1,4 +1,6 @@
 Checks:
+- -*
+- misc-include-cleaner
 # TODO
 #  - bugprone-*
 #  - performance-*

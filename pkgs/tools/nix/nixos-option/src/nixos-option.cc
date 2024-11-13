@@ -1,20 +1,36 @@
-#include <nix/args.hh>             // for argvToStrings, UsageError
-#include <nix/attr-path.hh>        // for findAlongAttrPath, parseAttrPath
-#include <nix/attr-set.hh>         // for Attr, Bindings, Bindings::iterator
-#include <nix/common-eval-args.hh> // for MixEvalArgs
-#include <nix/eval-gc.hh>          // for initGC, initNix
-#include <nix/eval-inline.hh>      // for EvalState::forceValue
-#include <nix/eval.hh>             // for EvalState, initGC, operator<<
-#include <nix/globals.hh>          // for initPlugins, Settings, settings
-#include <nix/nixexpr.hh>          // for Pos
-#include <nix/shared.hh>           // for getArg, LegacyArgs, printVersion
-#include <nix/store-api.hh>        // for openStore
-#include <nix/symbol-table.hh>     // for Symbol, SymbolTable
-#include <nix/types.hh>            // for Error, Path, Strings, PathSet
-#include <nix/util.hh>             // for absPath, baseNameOf
-#include <nix/value.hh>            // for Value, Value::(anonymous), Value:...
-#include <string>                  // for string, operator+, operator==
-#include <utility>                 // for move
+#include <algorithm>
+#include <cstddef>
+#include <exception>
+#include <functional>
+#include <iostream>
+#include <iterator>
+#include <optional>
+#include <sstream>
+#include <string>
+#include <utility>
+#include <variant>
+#include <vector>
+
+#include <nix/args.hh>
+#include <nix/attr-path.hh>
+#include <nix/attr-set.hh>
+#include <nix/common-eval-args.hh>
+#include <nix/error.hh>
+#include <nix/eval-error.hh>
+#include <nix/eval-gc.hh>
+#include <nix/eval.hh>
+#include <nix/file-system.hh>
+#include <nix/globals.hh>
+#include <nix/nixexpr.hh>
+#include <nix/pos-idx.hh>
+#include <nix/print.hh>
+#include <nix/ref.hh>
+#include <nix/shared.hh>
+#include <nix/store-api.hh>
+#include <nix/symbol-table.hh>
+#include <nix/types.hh>
+#include <nix/value.hh>
+#include <nix/value/context.hh>
 
 #include "libnix-copy-paste.hh"
 
