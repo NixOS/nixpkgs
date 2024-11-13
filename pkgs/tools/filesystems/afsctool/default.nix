@@ -6,7 +6,6 @@
 , git
 , zlib
 , sparsehash
-, CoreServices
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config cmake git ];
-  buildInputs = [ zlib sparsehash CoreServices ];
+  buildInputs = [ zlib sparsehash ];
 
   meta = with lib; {
     description = "Utility that allows end-users to leverage HFS+/APFS compression";

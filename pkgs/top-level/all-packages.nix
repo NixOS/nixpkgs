@@ -946,9 +946,7 @@ with pkgs;
 
   libdislocator = callPackage ../tools/security/aflplusplus/libdislocator.nix { };
 
-  afsctool = callPackage ../tools/filesystems/afsctool {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
+  afsctool = callPackage ../tools/filesystems/afsctool { };
 
   aioblescan = with python3Packages; toPythonApplication aioblescan;
 
