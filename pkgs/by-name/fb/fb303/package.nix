@@ -5,6 +5,7 @@
   fetchFromGitHub,
 
   cmake,
+  ninja,
 
   gflags,
   glog,
@@ -27,7 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Jtztb8CTqvRdRjUa3jaouP5PFAwoM4rKLIfgvOyXUIg=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
   buildInputs =
     [
