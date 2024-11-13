@@ -154,7 +154,7 @@ stdenv.mkDerivation rec {
     homepage = "https://keepassxc.org/";
     license = licenses.gpl2Plus;
     mainProgram = "keepassxc";
-    maintainers = with maintainers; [ blankparticle ];
+    maintainers = with maintainers; [ blankparticle sigmasquadron ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
