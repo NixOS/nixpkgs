@@ -48,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+
+    (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
+
     (lib.cmakeBool "PYTHON_EXTENSIONS" false)
   ];
 
