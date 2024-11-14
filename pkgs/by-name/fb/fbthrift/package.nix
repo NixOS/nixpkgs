@@ -5,8 +5,6 @@
   fetchFromGitHub,
 
   cmake,
-  bison,
-  flex,
 
   openssl,
   gflags,
@@ -17,10 +15,6 @@
   zlib,
   zstd,
   mvfst,
-  double-conversion,
-  libevent,
-  libiberty,
-  libsodium,
   apple-sdk_11,
   darwinMinVersionHook,
 }:
@@ -38,8 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    bison
-    flex
   ];
 
   buildInputs =
@@ -53,10 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
       zstd
       mvfst
-      double-conversion
-      libevent
-      libiberty
-      libsodium
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_11
