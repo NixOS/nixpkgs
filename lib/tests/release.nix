@@ -14,19 +14,5 @@ let
 in
   pkgs.symlinkJoin {
     name = "nixpkgs-lib-tests";
-    paths = map testWithNix nixVersions ++
-
-      #
-      # TEMPORARY MIGRATION MECHANISM
-      #
-      # This comment and the expression which follows it should be
-      # removed as part of resolving this issue:
-      #
-      #   https://github.com/NixOS/nixpkgs/issues/272591
-      #
-      [(import ../../pkgs/test/release {
-        inherit pkgs lib nix;
-      })]
-    ;
-
+    paths = map testWithNix nixVersions;
   }
