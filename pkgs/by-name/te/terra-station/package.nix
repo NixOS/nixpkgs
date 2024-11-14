@@ -72,5 +72,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.peterwilli ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "terra-station";
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

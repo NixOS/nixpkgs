@@ -129,5 +129,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
       "x86_64-linux"
       "aarch64-linux"
     ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

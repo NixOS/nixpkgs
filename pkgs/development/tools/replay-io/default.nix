@@ -141,6 +141,7 @@ in rec {
       license = lib.licenses.bsd3;
       maintainers = with maintainers; [ phryneas ];
       platforms = [ "x86_64-linux" ];
+      sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     };
   };
 }

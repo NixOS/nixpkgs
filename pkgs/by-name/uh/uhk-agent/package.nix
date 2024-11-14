@@ -74,5 +74,6 @@ stdenvNoCC.mkDerivation {
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ ngiger nickcao ];
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

@@ -294,6 +294,7 @@ let
         dev = stable;
       }."${channel}";
       mainProgram = pname;
+      sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     };
   }
   ''
