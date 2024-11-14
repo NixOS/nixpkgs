@@ -80,17 +80,15 @@ stdenv'.mkDerivation (finalAttrs: {
       --replace-fail "fixup_bundle" "#fixup_bundle"
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      llvmPackages.llvm
-      python3
-      perl
-      pkg-config
-      rsync
-    ]
-    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ]
-    ++ lib.optionals stdenv.isDarwin [ makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    llvmPackages.llvm
+    python3
+    perl
+    pkg-config
+    rsync
+    makeWrapper
+  ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     capstone
@@ -133,6 +131,8 @@ stdenv'.mkDerivation (finalAttrs: {
       ''
         mkdir -p $out/share/imhex
         rsync -av --exclude="*_schema.json" ${patterns_src}/{constants,encodings,includes,magic,nodes,patterns} $out/share/imhex
+        wrapProgram $out/bin/imhex \
+          --prefix XDG_DATA_DIRS : "$out/share"
       ''
     else if stdenv.isDarwin then
       ''
