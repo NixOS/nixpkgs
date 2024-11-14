@@ -28,6 +28,13 @@ let
     url = "https://patch-diff.githubusercontent.com/raw/NVIDIA/open-gpu-kernel-modules/pull/692.patch";
     hash = "sha256-OYw8TsHDpBE5DBzdZCBT45+AiznzO9SfECz5/uXN5Uc=";
   };
+
+  # Fixes drm device not working with linux 6.12
+  # https://github.com/NVIDIA/open-gpu-kernel-modules/issues/712
+  drm_fop_flags_linux_612_patch  = fetchpatch {
+    url = "https://github.com/Binary-Eater/open-gpu-kernel-modules/commit/8ac26d3c66ea88b0f80504bdd1e907658b41609d.patch";
+    hash = "sha256-+SfIu3uYNQCf/KXhv4PWvruTVKQSh4bgU1moePhe57U=";
+  };
 in
 rec {
   mkDriver = generic;
@@ -64,6 +71,7 @@ rec {
     openSha256 = "sha256-/tM3n9huz1MTE6KKtTCBglBMBGGL/GOHi5ZSUag4zXA=";
     settingsSha256 = "sha256-H7uEe34LdmUFcMcS6bz7sbpYhg9zPCb/5AmZZFTx1QA=";
     persistencedSha256 = "sha256-hdszsACWNqkCh8G4VBNitDT85gk9gJe1BlQ8LdrYIkg=";
+    patchesOpen = [ drm_fop_flags_linux_612_patch ];
   });
 
   # Vulkan developer beta driver
