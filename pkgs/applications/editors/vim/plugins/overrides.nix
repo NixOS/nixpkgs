@@ -2470,7 +2470,10 @@ in
   });
 
   vim-dadbod-ui = super.vim-dadbod-ui.overrideAttrs {
-    dependencies = with self; [ vim-dadbod ];
+    dependencies = [ self.vim-dadbod ];
+
+    doInstallCheck = true;
+    vimCommandCheck = "DBUI";
   };
 
   vim-dasht = super.vim-dasht.overrideAttrs {
