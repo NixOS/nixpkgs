@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
     "--without-included-regex"
   ];
 
+  enableParallelBuilding = true;
+
   __darwinAllowLocalNetworking = true;
   doCheck = true;
   preCheck = ''
