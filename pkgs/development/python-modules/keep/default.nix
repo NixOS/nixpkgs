@@ -6,7 +6,7 @@
   flit-core,
   pygithub,
   requests,
-  terminaltables,
+  terminaltables3,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     click
     pygithub
     requests
-    terminaltables
+    terminaltables3
   ];
 
   # Module no tests
