@@ -110,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ finalAttrs.setupHooks;
 
   buildInputs = [
-    libxkbcommon
     libpng
     libtiff
     libjpeg
@@ -136,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     tinysparql
   ] ++ lib.optionals waylandSupport [
     libGL
+    libxkbcommon
     wayland
     wayland-protocols
   ] ++ lib.optionals xineramaSupport [
