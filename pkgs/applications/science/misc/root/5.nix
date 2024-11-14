@@ -19,8 +19,6 @@
 , xz
 , gsl
 , xxHash
-, Cocoa
-, OpenGL
 , noSplash ? false
 }:
 
@@ -36,7 +34,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ pcre python3 zlib libxml2 lz4 xz gsl xxHash libxcrypt ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ Cocoa OpenGL ]
   ;
 
   patches = [
@@ -147,7 +144,7 @@ stdenv.mkDerivation rec {
     "-Dxml=ON"
     "-Dxrootd=OFF"
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks";
+  ++ lib.optional ((!stdenv.hostPlatform.isDarwin) && (stdenv.cc.libc != null)) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include";
 
   setupHook = ./setup-hook.sh;
 

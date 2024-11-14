@@ -5,6 +5,7 @@
 , fetchurl
 , makeWrapper
 , writeText
+, apple-sdk
 , cmake
 , coreutils
 , git
@@ -50,9 +51,6 @@
 , patchRcPathPosix
 , tbb
 , xrootd
-, Cocoa
-, CoreSymbolication
-, OpenGL
 }:
 
 stdenv.mkDerivation rec {
@@ -110,8 +108,10 @@ stdenv.mkDerivation rec {
     tbb
     xrootd
   ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk.privateFrameworksHook
+  ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ Cocoa CoreSymbolication OpenGL ]
   ;
 
   patches = [
@@ -172,10 +172,8 @@ stdenv.mkDerivation rec {
     "-Dsqlite=OFF"
     "-Dvdt=OFF"
   ]
-  ++ lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
+  ++ lib.optional ((!stdenv.hostPlatform.isDarwin) && (stdenv.cc.libc != null)) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
-
     # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
     # fatal error: could not build module '_Builtin_intrinsics'
     "-Druntime_cxxmodules=OFF"
