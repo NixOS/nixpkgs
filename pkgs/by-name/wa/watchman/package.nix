@@ -91,6 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     lockFile = ./Cargo.lock;
   };
 
+  doCheck = true;
+
   postPatch = ''
     patchShebangs .
     cp ${./Cargo.lock} ${finalAttrs.cargoRoot}/Cargo.lock
