@@ -32,12 +32,12 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "keep" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/orkohunter/keep";
-    description = "Meta CLI toolkit: Personal shell command keeper and snippets manager";
+  meta = {
+    description = "Meta CLI toolkit to keep personal shell command keeper and manage snippets";
+    homepage = "https://github.com/OrkoHunter/keep";
+    changelog = "https://github.com/OrkoHunter/keep/releases/tag/${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ris ];
     mainProgram = "keep";
-    platforms = platforms.all;
-    license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
   };
 }
