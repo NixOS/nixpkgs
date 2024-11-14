@@ -35,9 +35,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs =
-    [
-      gobject-introspection
-    ]
+    [ gobject-introspection ]
     ++ (
       with pythonPackages;
       [
@@ -51,14 +49,14 @@ pythonPackages.buildPythonApplication rec {
       ++ lib.optional (!stdenv.hostPlatform.isDarwin) dbus-python
     );
 
-  propagatedNativeBuildInputs = [
-    gobject-introspection
-  ];
+  propagatedNativeBuildInputs = [ gobject-introspection ];
 
   # There are no tests
   doCheck = false;
 
-  passthru.tests = { inherit (nixosTests) mopidy; };
+  passthru.tests = {
+    inherit (nixosTests) mopidy;
+  };
 
   meta = with lib; {
     homepage = "https://www.mopidy.com/";
