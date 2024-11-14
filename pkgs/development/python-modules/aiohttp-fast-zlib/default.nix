@@ -34,6 +34,8 @@ buildPythonPackage rec {
     zlib_ng = [ zlib-ng ];
   };
 
+  doCheck = false; # tests fail with aiohttp 3.11.0; https://github.com/bdraco/aiohttp-fast-zlib/issues/2
+
   nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "aiohttp_fast_zlib" ];
