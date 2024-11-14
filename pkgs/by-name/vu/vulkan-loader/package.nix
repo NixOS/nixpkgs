@@ -12,6 +12,7 @@
   moltenvk,
   vulkan-headers,
   addDriverRunpath,
+  enableX11 ? stdenv.hostPlatform.isLinux,
   testers,
 }:
 
@@ -43,15 +44,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs =
     [ vulkan-headers ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
+    ++ lib.optionals enableX11 [
       libX11
       libxcb
       libXrandr
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       wayland
     ];
 
   cmakeFlags =
-    [ "-DCMAKE_INSTALL_INCLUDEDIR=${vulkan-headers}/include" ]
+    [
+      "-DCMAKE_INSTALL_INCLUDEDIR=${vulkan-headers}/include"
+      (lib.cmakeBool "BUILD_WSI_XCB_SUPPORT" enableX11)
+      (lib.cmakeBool "BUILD_WSI_XLIB_SUPPORT" enableX11)
+    ]
     ++ lib.optional stdenv.hostPlatform.isDarwin "-DSYSCONFDIR=${moltenvk}/share"
     ++ lib.optional stdenv.hostPlatform.isLinux "-DSYSCONFDIR=${addDriverRunpath.driverLink}/share"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-DUSE_GAS=OFF";
