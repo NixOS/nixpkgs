@@ -31,6 +31,8 @@
 
   gtest,
 
+  nix-update-script,
+
   stateDir ? "",
 }:
 
@@ -104,6 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: Do this in `fmt` rather than downstream.
     remove-references-to -t ${folly.fmt.dev} $out/bin/*
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Watches files and takes action when they change";
