@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql, buildPostgresqlExtension }:
 
 let
   source = {
@@ -28,7 +28,7 @@ let
     };
   }.${lib.versions.major postgresql.version} or (throw "Source for pg_hint_plan is not available for ${postgresql.version}");
 in
-stdenv.mkDerivation {
+buildPostgresqlExtension {
   pname = "pg_hint_plan";
   inherit (source) version;
 
@@ -42,14 +42,6 @@ stdenv.mkDerivation {
   postPatch = lib.optionalString (lib.versionOlder postgresql.version "14") ''
     # https://github.com/ossc-db/pg_hint_plan/commit/e9e564ad59b8bd4a03e0f13b95b5122712e573e6
     substituteInPlace Makefile --replace "LDFLAGS+=-Wl,--build-id" ""
-  '';
-
-  buildInputs = [ postgresql ];
-
-  installPhase = ''
-    install -D -t $out/lib pg_hint_plan${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension *.sql
-    install -D -t $out/share/postgresql/extension *.control
   '';
 
   meta = with lib; {

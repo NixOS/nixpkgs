@@ -13,7 +13,6 @@
 , python3
 , substituteAll
 , zlib
-, fetchpatch
 }:
 
 let
@@ -21,13 +20,13 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.5.2";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     rev = "refs/tags/${version}";
-    hash = "sha256-cesMepnD3fHX2CwnSQ3c5TE9kPSa0FkCVVVZDgXwo8M=";
+    hash = "sha256-st0dbb+GfF0KEyF+Qn/PIE2462ZrrXy8YcnrulHTI8M=";
   };
 
   patches = [
@@ -74,24 +73,6 @@ python3.pkgs.buildPythonApplication rec {
 
     # This edge case is explicitly part of meson but is wrong for nix
     ./007-freebsd-pkgconfig-path.patch
-
-    (fetchpatch {
-      name = "tests-skip-framework-recasting-if-CMake-unavailable.patch";
-      url = "https://github.com/mesonbuild/meson/commit/8a8a3a0578fd8d5a8720a7a706f6f3b99e857f9c.patch";
-      hash = "sha256-XkwNQ5eg/fVekhsFg/V2/S2LbIVGz3H0wsSFlUT3ZZE=";
-    })
-
-    # Fix extraframework lookup on case-sensitive APFS.
-    # https://github.com/mesonbuild/meson/pull/13038
-    ./007-case-sensitive-fs.patch
-
-    # Fix meson's detection for zig's linker
-    # https://github.com/mesonbuild/meson/pull/12293
-    (fetchpatch {
-      name = "linker-support-zig-cc.patch";
-      url = "https://github.com/mesonbuild/meson/pull/12293/commits/2baae244c995794d9addfe6ed924dfa72f01be82.patch";
-      hash = "sha256-dDOmSRBKl/gs7I3kmLXIyQk3zsOdlaYov72pPSel4+I=";
-    })
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [
@@ -129,7 +110,7 @@ python3.pkgs.buildPythonApplication rec {
       patchShebangs 'test cases'
       substituteInPlace \
         'test cases/native/8 external program shebang parsing/script.int.in' \
-        'test cases/common/273 customtarget exe for test/generate.py' \
+        'test cases/common/274 customtarget exe for test/generate.py' \
           --replace /usr/bin/env ${coreutils}/bin/env
     ''
   ]

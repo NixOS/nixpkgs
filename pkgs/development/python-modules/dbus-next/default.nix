@@ -6,7 +6,7 @@
   setuptools,
   dbus,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-asyncio,
   pytest-timeout,
 }:
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     dbus
     pytest
-    pytest-cov
+    pytest-cov-stub
     pytest-asyncio
     pytest-timeout
   ];

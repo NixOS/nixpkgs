@@ -3,6 +3,8 @@
 mesonConfigurePhase() {
     runHook preConfigure
 
+    : ${mesonBuildDir:=build}
+
     local flagsArray=()
 
     if [ -z "${dontAddPrefix-}" ]; then
@@ -28,8 +30,8 @@ mesonConfigurePhase() {
 
     echoCmd 'mesonConfigurePhase flags' "${flagsArray[@]}"
 
-    meson setup build "${flagsArray[@]}"
-    cd build || { echoCmd 'mesonConfigurePhase' "could not cd to build"; exit 1; }
+    meson setup "$mesonBuildDir" "${flagsArray[@]}"
+    cd "$mesonBuildDir" || { echoCmd 'mesonConfigurePhase' "could not cd to $mesonBuildDir"; exit 1; }
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1

@@ -5,9 +5,10 @@
 , openssl
 , postgresql
 , postgresqlTestExtension
+, buildPostgresqlExtension
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildPostgresqlExtension (finalAttrs: {
   pname = "postgresql-lantern";
   version = "0.4.1";
 
@@ -29,18 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     openssl
-    postgresql
   ];
-
-  installPhase = ''
-    runHook preInstall
-
-    install -D -t $out/lib lantern${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension lantern-*.sql
-    install -D -t $out/share/postgresql/extension lantern.control
-
-    runHook postInstall
-  '';
 
   cmakeFlags = [
     "-DBUILD_FOR_DISTRIBUTING=ON"

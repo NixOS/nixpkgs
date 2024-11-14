@@ -20,15 +20,12 @@ mkAppleDerivation (finalAttrs: {
 
   xcodeHash = "sha256-IiTqhEJIZ8JYjlpBS7ITwYlp8ndU6cehus9TIr+5LYM=";
 
-  patches =
-    lib.optionals hostPlatform.isStatic [
-      # Use gperf to implement module loading statically by looking up the module functions in the static binary.
-      ./patches/0001-Support-static-module-loading.patch
-    ]
-    ++ [
-      # Avoid out of bounds write with ISO-2022
-      ./patches/0002-Fix-ISO-2022-out-of-bounds-write-with-encoded-charac.patch
-    ];
+  patches = [
+    # Use gperf to implement module loading statically by looking up the module functions in the static binary.
+    ./patches/0001-Support-static-module-loading.patch
+    # Avoid out of bounds write with ISO-2022
+    ./patches/0002-Fix-ISO-2022-out-of-bounds-write-with-encoded-charac.patch
+  ];
 
   # Propagate `out` only when there are dylibs to link (i.e., don’t propagate when doing a static build).
   propagatedBuildOutputs = lib.optionalString (!hostPlatform.isStatic) "out";

@@ -11,7 +11,7 @@
   torch,
   # check dependencies
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   # , pytest-mpi
   pytest-timeout,
   # , pytorch-image-models
@@ -102,7 +102,7 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     pytest-timeout
     hydra-core
     fairscale

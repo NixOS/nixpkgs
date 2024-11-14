@@ -21,7 +21,7 @@
   tomli,
 
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-xdist,
   mypy,
   sympy,
@@ -62,7 +62,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     pytest-xdist
     mypy
     sympy

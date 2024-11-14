@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, updateAutotoolsGnuConfigScriptsHook }:
+{ lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "mpdecimal";
@@ -10,9 +10,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-lCRFwyRbInMP1Bpnp8XCMdEcsbmTa5wPdjNPt9C0Row=";
   };
 
-  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = [ "LD=${stdenv.cc.targetPrefix}cc" ];
+
+  postPatch = ''
+    # Use absolute library install names on Darwin.
+    substituteInPlace configure.ac \
+      --replace-fail '-install_name @rpath/' "-install_name $out/lib/"
+  '';
 
   postInstall = ''
     mkdir -p $cxx/lib

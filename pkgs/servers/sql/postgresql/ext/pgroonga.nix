@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, pkg-config, postgresql, msgpack-c, groonga }:
+{ lib, stdenv, fetchurl, pkg-config, postgresql, msgpack-c, groonga, buildPostgresqlExtension }:
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "pgroonga";
   version = "3.2.3";
 
@@ -10,22 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ postgresql msgpack-c groonga ];
+  buildInputs = [ msgpack-c groonga ];
 
   makeFlags = [
     "HAVE_MSGPACK=1"
     "MSGPACK_PACKAGE_NAME=msgpack-c"
   ];
-
-  installPhase = ''
-    install -D pgroonga${postgresql.dlSuffix} -t $out/lib/
-    install -D pgroonga.control -t $out/share/postgresql/extension
-    install -D data/pgroonga-*.sql -t $out/share/postgresql/extension
-
-    install -D pgroonga_database${postgresql.dlSuffix} -t $out/lib/
-    install -D pgroonga_database.control -t $out/share/postgresql/extension
-    install -D data/pgroonga_database-*.sql -t $out/share/postgresql/extension
-  '';
 
   meta = with lib; {
     description = "PostgreSQL extension to use Groonga as the index";

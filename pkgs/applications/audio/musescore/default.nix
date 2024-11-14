@@ -31,24 +31,10 @@
 , qtnetworkauth
 , qttools
 , nixosTests
-, darwin
+, apple-sdk_11
 }:
 
-let
-  stdenv' = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-  # portaudio propagates Darwin frameworks. Rebuild it using the 11.0 stdenv
-  # from Qt and the 11.0 SDK frameworks.
-  portaudio' = if stdenv.hostPlatform.isDarwin then portaudio.override {
-    stdenv = stdenv';
-    inherit (darwin.apple_sdk_11_0.frameworks)
-      AudioUnit
-      AudioToolbox
-      CoreAudio
-      CoreServices
-      Carbon
-    ;
-  } else portaudio;
-in stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
   version = "4.4.3";
 
@@ -116,7 +102,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     libpulseaudio
     libsndfile
     libvorbis
-    portaudio'
+    portaudio
     portmidi
     flac
     libopusenc
@@ -132,7 +118,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     alsa-lib
     qtwayland
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Cocoa
+    apple-sdk_11
   ];
 
   postInstall = ''

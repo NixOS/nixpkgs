@@ -34,7 +34,7 @@
   pyparsing,
   pytest,
   pytest-benchmark,
-  pytest-cov,
+  pytest-cov-stub,
   pytz,
   readme-renderer,
   requests,
@@ -106,7 +106,7 @@ buildPythonPackage rec {
     pyparsing
     pytest
     pytest-benchmark
-    pytest-cov
+    pytest-cov-stub
     pytz
     readme-renderer
     requests

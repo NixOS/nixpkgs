@@ -301,6 +301,7 @@ let
               '';
               installPhase = "touch $out";
             } // extraArgs);
+          buildPostgresqlExtension = newSuper.callPackage ./buildPostgresqlExtension.nix {};
         };
         newSelf = self // scope;
         newSuper = { callPackage = newScope (scope // this.pkgs); };

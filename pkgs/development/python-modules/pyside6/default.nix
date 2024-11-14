@@ -11,8 +11,6 @@
   shiboken6,
   llvmPackages,
   symlinkJoin,
-  libGL,
-  darwin,
 }:
 let
   packages = with python.pkgs.qt6; [
@@ -70,7 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
   # cmake/Macros/PySideModules.cmake supposes that all Qt frameworks on macOS
   # reside in the same directory as QtCore.framework, which is not true for Nix.
   # We therefore symLink all required and optional Qt modules in one directory tree ("qt_linked").
-  # Also we remove "Designer" from darwin build, due to linking failure
   postPatch =
     ''
       # Don't ignore optional Qt modules
@@ -98,26 +95,18 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 
   buildInputs =
-    if stdenv.hostPlatform.isLinux then
-      # qtwebengine fails under darwin
-      # see https://github.com/NixOS/nixpkgs/pull/312987
-      packages ++ [ python.pkgs.qt6.qtwebengine ]
-    else
-      with darwin.apple_sdk_11_0.frameworks;
-      [
-        qt_linked
-        libGL
-        cups
-        # frameworks
-        IOKit
-        DiskArbitration
-        CoreBluetooth
-        EventKit
-        AVFoundation
-        Contacts
-        AGL
-        AppKit
-      ];
+    python.pkgs.qt6.darwinVersionInputs
+    ++ (
+      if stdenv.hostPlatform.isLinux then
+        # qtwebengine fails under darwin
+        # see https://github.com/NixOS/nixpkgs/pull/312987
+        packages ++ [ python.pkgs.qt6.qtwebengine ]
+      else
+        [
+          qt_linked
+          cups
+        ]
+    );
 
   propagatedBuildInputs = [ shiboken6 ];
 

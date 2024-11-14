@@ -36,12 +36,9 @@
 , withAlsa ? withHeadlessDeps && stdenv.hostPlatform.isLinux # Alsa in/output supporT
 , withAmf ? withHeadlessDeps && lib.meta.availableOn stdenv.hostPlatform amf # AMD Media Framework video encoding
 , withAom ? withHeadlessDeps # AV1 reference encoder
-, withAppKit ? withHeadlessDeps && stdenv.hostPlatform.isDarwin # Apple AppKit framework
 , withAribb24 ? withFullDeps # ARIB text and caption decoding
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
-, withAudioToolbox ? withHeadlessDeps && stdenv.hostPlatform.isDarwin # Apple AudioToolbox
-, withAvFoundation ? withHeadlessDeps && stdenv.hostPlatform.isDarwin # Apple AVFoundation framework
 , withAvisynth ? withFullDeps # AviSynth script files reading
 , withBluray ? withFullDeps # BluRay reading
 , withBs2b ? withFullDeps # bs2b DSP library
@@ -51,7 +48,6 @@
 , withCelt ? withHeadlessDeps # CELT decoder
 , withChromaprint ? withFullDeps # Audio fingerprinting
 , withCodec2 ? withFullDeps # codec2 en/decoding
-, withCoreImage ? withHeadlessDeps && stdenv.hostPlatform.isDarwin # Apple CoreImage framework
 , withCuda ? withFullDeps && withNvcodec
 , withCudaLLVM ? withFullDeps
 , withCudaNVCC ? withFullDeps && withUnfree && config.cudaSupport
@@ -76,7 +72,10 @@
 , withIlbc ? withFullDeps # iLBC de/encoding
 , withJack ? withFullDeps && !stdenv.hostPlatform.isDarwin # Jack audio
 , withJxl ? withFullDeps && lib.versionAtLeast version "5" # JPEG XL de/encoding
+, withKvazaar ? withFullDeps # HEVC encoding
 , withLadspa ? withFullDeps # LADSPA audio filtering
+, withLc3 ? withFullDeps && lib.versionAtLeast version "7.1" # LC3 de/encoding
+, withLcevcdec ? withFullDeps && lib.versionAtLeast version "7.1" # LCEVC decoding
 , withLcms2 ? withFullDeps # ICC profile support via lcms2
 , withLzma ? withHeadlessDeps # xz-utils
 , withMetal ? false # Unfree and requires manual downloading of files
@@ -101,6 +100,7 @@
 , withQrencode ? withFullDeps && lib.versionAtLeast version "7" # QR encode generation
 , withQuirc ? withFullDeps && lib.versionAtLeast version "7" # QR decoding
 , withRav1e ? withFullDeps # AV1 encoder (focused on speed and safety)
+, withRist ? withHeadlessDeps # Reliable Internet Stream Transport (RIST) protocol
 , withRtmp ? withFullDeps # RTMP[E] support
 , withRubberband ? withFullDeps && withGPL # Rubberband filter
 , withSamba ? withFullDeps && !stdenv.hostPlatform.isDarwin && withGPLv3 # Samba protocol
@@ -121,7 +121,6 @@
 , withV4l2M2m ? withV4l2
 , withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
 , withVdpau ? withSmallDeps && !stdenv.hostPlatform.isMinGW # Vdpau hardware acceleration
-, withVideoToolbox ? withHeadlessDeps && stdenv.hostPlatform.isDarwin # Apple VideoToolbox
 , withVidStab ? withHeadlessDeps && withGPL # Video stabilization
 , withVmaf ? withFullDeps && !stdenv.hostPlatform.isAarch64 && lib.versionAtLeast version "5" # Netflix's VMAF (Video Multi-Method Assessment Fusion)
 , withVoAmrwbenc ? withFullDeps && withVersion3 # AMR-WB encoder
@@ -129,6 +128,7 @@
 , withVpl ? false # Hardware acceleration via intel libvpl
 , withVpx ? withHeadlessDeps && stdenv.buildPlatform == stdenv.hostPlatform # VP8 & VP9 de/encoding
 , withVulkan ? withSmallDeps && !stdenv.hostPlatform.isDarwin
+, withVvenc ? withFullDeps && lib.versionAtLeast version "7.1" # H.266/VVC encoding
 , withWebp ? withHeadlessDeps # WebP encoder
 , withX264 ? withHeadlessDeps && withGPL # H.264/AVC encoder
 , withX265 ? withHeadlessDeps && withGPL # H.265/HEVC encoder
@@ -247,8 +247,10 @@
 , gsm
 , harfbuzz
 , intel-media-sdk
+, kvazaar
 , ladspaH
 , lame
+, lcevcdec
 , lcms2
 , libaom
 , libaribcaption
@@ -268,6 +270,7 @@
 , libilbc
 , libjack2
 , libjxl
+, liblc3
 , libmodplug
 , libmysofa
 , libopenmpt
@@ -276,6 +279,7 @@
 , libplacebo_5
 , libpulseaudio
 , libraw1394
+, librist
 , librsvg
 , libssh
 , libtensorflow
@@ -321,6 +325,7 @@
 , vo-amrwbenc
 , vulkan-headers
 , vulkan-loader
+, vvenc
 , x264
 , x265
 , xavs
@@ -333,14 +338,9 @@
 , zlib
 , zvbi
 /*
- *  Darwin frameworks
+ *  Darwin
  */
-, Accelerate
-, AppKit
-, AudioToolbox
-, AVFoundation
-, CoreImage
-, VideoToolbox
+, apple-sdk_15
 , xcode # unfree contains metalcc and metallib
 /*
  *  Cuda Packages
@@ -465,7 +465,6 @@ stdenv.mkDerivation (finalAttrs: {
       })
     ]
     ++ optionals (lib.versionAtLeast version "7.1") [
-      ./0001-avfoundation.m-macOS-SDK-10.12-compatibility.patch
       ./fix-fate-ffmpeg-spec-disposition-7.1.patch
 
       # Expose a private API for Chromium / Qt WebEngine.
@@ -560,14 +559,11 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withAlsa "alsa")
     (enableFeature withAmf "amf")
     (enableFeature withAom "libaom")
-    (enableFeature withAppKit "appkit")
     (enableFeature withAribb24 "libaribb24")
   ] ++ optionals (versionAtLeast version "6.1") [
     (enableFeature withAribcaption "libaribcaption")
   ] ++ [
     (enableFeature withAss "libass")
-    (enableFeature withAudioToolbox "audiotoolbox")
-    (enableFeature withAvFoundation "avfoundation")
     (enableFeature withAvisynth "avisynth")
     (enableFeature withBluray "libbluray")
     (enableFeature withBs2b "libbs2b")
@@ -577,7 +573,6 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withCelt "libcelt")
     (enableFeature withChromaprint "chromaprint")
     (enableFeature withCodec2 "libcodec2")
-    (enableFeature withCoreImage "coreimage")
     (enableFeature withCuda "cuda")
     (enableFeature withCudaLLVM "cuda-llvm")
     (enableFeature withCudaNVCC "cuda-nvcc")
@@ -609,7 +604,11 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (versionAtLeast finalAttrs.version "5.0") [
     (enableFeature withJxl "libjxl")
   ] ++ [
+    (enableFeature withKvazaar "libkvazaar")
     (enableFeature withLadspa "ladspa")
+  ] ++ optionals (versionAtLeast version "7.1") [
+    (enableFeature withLc3 "liblc3")
+    (enableFeature withLcevcdec "liblcevc-dec")
   ] ++ optionals (versionAtLeast version "5.1") [
     (enableFeature withLcms2 "lcms2")
   ] ++ [
@@ -642,6 +641,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withQuirc "libquirc")
   ] ++ [
     (enableFeature withRav1e "librav1e")
+    (enableFeature withRist "librist")
     (enableFeature withRtmp "librtmp")
     (enableFeature withRubberband "librubberband")
     (enableFeature withSamba "libsmbclient")
@@ -667,13 +667,15 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (versionAtLeast version "6.0")  [
     (enableFeature withVpl "libvpl")
   ] ++ [
-    (enableFeature withVideoToolbox "videotoolbox")
     (enableFeature withVidStab "libvidstab") # Actual min. version 2.0
     (enableFeature withVmaf "libvmaf")
     (enableFeature withVoAmrwbenc "libvo-amrwbenc")
     (enableFeature withVorbis "libvorbis")
     (enableFeature withVpx "libvpx")
     (enableFeature withVulkan "vulkan")
+  ] ++ optionals (versionAtLeast version "7.1")  [
+    (enableFeature withVvenc "libvvenc")
+  ] ++ [
     (enableFeature withWebp "libwebp")
     (enableFeature withX264 "libx264")
     (enableFeature withX265 "libx265")
@@ -732,15 +734,13 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withCudaNVCC [ cuda_nvcc ];
 
   buildInputs = []
+  ++ optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ]
   ++ optionals withAlsa [ alsa-lib ]
   ++ optionals withAmf [ amf-headers ]
   ++ optionals withAom [ libaom ]
-  ++ optionals withAppKit [ AppKit ]
   ++ optionals withAribb24 [ aribb24 ]
   ++ optionals withAribcaption [ libaribcaption ]
   ++ optionals withAss [ libass ]
-  ++ optionals withAudioToolbox [ AudioToolbox ]
-  ++ optionals withAvFoundation [ AVFoundation ]
   ++ optionals withAvisynth [ avisynthplus ]
   ++ optionals withBluray [ libbluray ]
   ++ optionals withBs2b [ libbs2b ]
@@ -750,7 +750,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withCelt [ celt ]
   ++ optionals withChromaprint [ chromaprint ]
   ++ optionals withCodec2 [ codec2 ]
-  ++ optionals withCoreImage [ CoreImage ]
   ++ optionals withCudaNVCC [ cuda_cudart cuda_nvcc ]
   ++ optionals withDav1d [ dav1d ]
   ++ optionals withDc1394 [ libdc1394 libraw1394 ]
@@ -772,7 +771,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withIlbc [ libilbc ]
   ++ optionals withJack [ libjack2 ]
   ++ optionals withJxl [ libjxl ]
+  ++ optionals withKvazaar [ kvazaar ]
   ++ optionals withLadspa [ ladspaH ]
+  ++ optionals withLc3 [ liblc3 ]
+  ++ optionals withLcevcdec [ lcevcdec ]
   ++ optionals withLcms2 [ lcms2 ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
@@ -793,8 +795,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withQrencode [ qrencode ]
   ++ optionals withQuirc [ quirc ]
   ++ optionals withRav1e [ rav1e ]
+  ++ optionals withRist [ librist ]
   ++ optionals withRtmp [ rtmpdump ]
-  ++ optionals withRubberband ([ rubberband ] ++ lib.optional stdenv.hostPlatform.isDarwin Accelerate)
+  ++ optionals withRubberband [ rubberband ]
   ++ optionals withSamba [ samba ]
   ++ optionals withSdl2 [ SDL2 ]
   ++ optionals withShaderc [ shaderc ]
@@ -812,7 +815,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withV4l2 [ libv4l ]
   ++ optionals withVaapi [ (if withSmallDeps then libva else libva-minimal) ]
   ++ optionals withVdpau [ libvdpau ]
-  ++ optionals withVideoToolbox [ VideoToolbox ]
   ++ optionals withVidStab [ vid-stab ]
   ++ optionals withVmaf [ libvmaf ]
   ++ optionals withVoAmrwbenc [ vo-amrwbenc ]
@@ -820,6 +822,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withVpl [ libvpl ]
   ++ optionals withVpx [ libvpx ]
   ++ optionals withVulkan [ vulkan-headers vulkan-loader ]
+  ++ optionals withVvenc [ vvenc ]
   ++ optionals withWebp [ libwebp ]
   ++ optionals withX264 [ x264 ]
   ++ optionals withX265 [ x265 ]

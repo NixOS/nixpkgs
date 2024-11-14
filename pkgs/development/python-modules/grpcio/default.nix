@@ -2,17 +2,14 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
-  grpc,
-  six,
-  protobuf,
-  enum34 ? null,
-  futures ? null,
-  isPy27,
-  pkg-config,
-  cython,
   c-ares,
+  cython,
+  fetchPypi,
   openssl,
+  pkg-config,
+  protobuf,
+  pythonOlder,
+  setuptools,
   zlib,
 }:
 
@@ -21,18 +18,22 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio";
-  format = "setuptools";
-  version = "1.66.2";
+  version = "1.67.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VjWIxYe3XDS5KLxChUjlsA6jjEaXIYGk2Ldbp+PyQjE=";
+    hash = "sha256-4JCyVT4Noch1RJyOdQc91EFd1xyb3mpAYkD99MDuRnw=";
   };
 
   outputs = [
     "out"
     "dev"
   ];
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     cython
@@ -44,15 +45,8 @@ buildPythonPackage rec {
     openssl
     zlib
   ];
-  propagatedBuildInputs =
-    [
-      six
-      protobuf
-    ]
-    ++ lib.optionals (isPy27) [
-      enum34
-      futures
-    ];
+
+  dependencies = [ protobuf ];
 
   preBuild =
     ''
@@ -79,8 +73,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "HTTP/2-based RPC framework";
-    license = licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
+    changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";
+    license = licenses.asl20;
     maintainers = [ ];
   };
 }

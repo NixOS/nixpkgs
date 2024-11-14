@@ -54,6 +54,8 @@ self: super: {
       libiconv
       darwin.libresolv
       darwin.libsbuf
+      # Shipped with the SDK only as a library with no headers
+      (lib.getLib darwin.libutil)
       # Required by some SDK headers
       cupsHeaders
     ]

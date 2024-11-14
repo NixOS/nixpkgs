@@ -4,13 +4,14 @@
 , postgresql
 , postgresqlTestExtension
 , testers
+, buildPostgresqlExtension
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildPostgresqlExtension (finalAttrs: {
   pname = "pg_repack";
   version = "1.5.0";
 
-  buildInputs = postgresql.buildInputs ++ [ postgresql ];
+  buildInputs = postgresql.buildInputs;
 
   src = fetchFromGitHub {
     owner = "reorg";
@@ -18,12 +19,6 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "ver_${finalAttrs.version}";
     sha256 = "sha256-do80phyMxwcRIkYyUt9z02z7byNQhK+pbSaCUmzG+4c=";
   };
-
-  installPhase = ''
-    install -D bin/pg_repack -t $out/bin/
-    install -D lib/pg_repack${postgresql.dlSuffix} -t $out/lib/
-    install -D lib/{pg_repack--${finalAttrs.version}.sql,pg_repack.control} -t $out/share/postgresql/extension
-  '';
 
   passthru.tests = {
     version = testers.testVersion {

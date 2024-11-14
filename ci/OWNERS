@@ -149,8 +149,8 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 
 # Python-related code and docs
 /doc/languages-frameworks/python.section.md   @mweinelt @natsukium
-/maintainers/scripts/update-python-libraries            @natsukium
-/pkgs/development/interpreters/python                   @natsukium
+/maintainers/scripts/update-python-libraries  @mweinelt @natsukium
+/pkgs/development/interpreters/python         @mweinelt @natsukium
 /pkgs/top-level/python-packages.nix                     @natsukium
 /pkgs/top-level/release-python.nix                      @natsukium
 

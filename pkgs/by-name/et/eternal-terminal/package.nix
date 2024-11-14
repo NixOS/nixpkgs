@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
     openssl
     protobuf
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.libutil
   ];
 
   preBuild = ''

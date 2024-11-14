@@ -529,8 +529,24 @@ let
             # mis-compilation in firefox.
             # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
             (metadata.getVersionFile "clang/revert-malloc-alignment-assumption.patch")
+          # This patch prevents global system header directories from
+          # leaking through on non‐NixOS Linux. However, on macOS, the
+          # SDK path is used as the sysroot, and forcing `-nostdlibinc`
+          # breaks `-isysroot` with an unwrapped compiler. As macOS has
+          # no `/usr/include`, there’s essentially no risk to skipping
+          # the patch there. It’s possible that Homebrew headers in
+          # `/usr/local/include` might leak through to unwrapped
+          # compilers being used without an SDK set or something, but
+          # it hopefully shouldn’t matter.
+          #
+          # TODO: Figure out a better solution to this whole problem so
+          # that we won’t have to choose between breaking unwrapped
+          # compilers breaking libclang when we can do Linux‐to‐Darwin
+          # cross‐compilation again.
+          ++ lib.optional (
+            !args.stdenv.hostPlatform.isDarwin || !args.stdenv.targetPlatform.isDarwin
+          ) ./clang/add-nostdlibinc-flag.patch
           ++ [
-            ./clang/add-nostdlibinc-flag.patch
             (substituteAll {
               src =
                 if (lib.versionOlder metadata.release_version "16") then
@@ -946,6 +962,10 @@ let
           (fetchpatch {
             url = "https://github.com/llvm/llvm-project/commit/abc2eae68290c453e1899a94eccc4ed5ea3b69c1.patch";
             hash = "sha256-oxCxOjhi5BhNBEraWalEwa1rS3Mx9CuQgRVZ2hrbd7M=";
+          })
+          (fetchpatch {
+            url = "https://github.com/llvm/llvm-project/commit/5909979869edca359bcbca74042c2939d900680e.patch";
+            hash = "sha256-l4rQHYbblEADBXaZIdqTG0sZzH4fEQvYiqhLYNZDMa8=";
           })
         ];
       };

@@ -1,23 +1,16 @@
-{ lib, stdenv, pg-dump-anon, postgresql, runtimeShell, jitSupport, llvm, nixosTests }:
+{ lib, stdenv, pg-dump-anon, postgresql, runtimeShell, jitSupport, llvm, buildPostgresqlExtension, nixosTests }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildPostgresqlExtension (finalAttrs: {
   pname = "postgresql_anonymizer";
 
   inherit (pg-dump-anon) version src;
 
-  buildInputs = [ postgresql ];
   nativeBuildInputs = [ postgresql ] ++ lib.optional jitSupport llvm;
 
   strictDeps = true;
 
-  makeFlags = [
-    "BINDIR=${placeholder "out"}/bin"
-    "datadir=${placeholder "out"}/share/postgresql"
-    "pkglibdir=${placeholder "out"}/lib"
-    "DESTDIR="
-  ];
-
-  postInstall = ''
+  # Needs to be after postInstall, where removeNestedNixStore runs
+  preFixup = ''
     cat >$out/bin/pg_dump_anon.sh <<'EOF'
     #!${runtimeShell}
     echo "This script is deprecated by upstream. To use the new script,"

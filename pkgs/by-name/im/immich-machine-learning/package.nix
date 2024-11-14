@@ -22,6 +22,7 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   pythonRelaxDeps = [
+    "pillow"
     "pydantic-settings"
   ];
 

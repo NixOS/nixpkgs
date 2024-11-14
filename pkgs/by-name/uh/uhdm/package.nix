@@ -5,7 +5,6 @@
 , python3
 , capnproto
 , gtest
-, darwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,8 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     capnproto
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.libutil
   ];
 
   cmakeFlags = [

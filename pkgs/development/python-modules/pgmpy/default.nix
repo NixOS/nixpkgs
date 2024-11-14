@@ -20,7 +20,7 @@
 
   # tests
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
   coverage,
   mock,
   black,
@@ -69,7 +69,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     # xdoctest
-    pytest-cov
+    pytest-cov-stub
     coverage
     mock
     black

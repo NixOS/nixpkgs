@@ -94,6 +94,12 @@ self: super: ({
     '';
   }) super.git-annex;
 
+  # on*Finish tests rely on a threadDelay timing differential of 0.1s.
+  # You'd think that's plenty of time even though immediate rescheduling
+  # after threadDelay is not guaranteed. However, it appears that these
+  # tests are quite flaky on Darwin.
+  immortal = dontCheck super.immortal;
+
   # Prevents needing to add `security_tool` as a run-time dependency for
   # everything using x509-system to give access to the `security` executable.
   #
@@ -330,6 +336,10 @@ self: super: ({
 
   # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
   zip = dontCheck super.zip;
+
+  snap = super.snap.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
 
   warp = super.warp.overrideAttrs (drv: {
     __darwinAllowLocalNetworking = true;

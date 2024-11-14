@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql, buildPostgresqlExtension }:
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "pg_auto_failover";
   version = "2.1";
 
@@ -11,14 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OIWykfFbVskrkPG/zSmZtZjc+W956KSfIzK7f5QOqpI=";
   };
 
-  buildInputs = postgresql.buildInputs ++ [ postgresql ];
-
-  installPhase = ''
-    install -D -t $out/bin src/bin/pg_autoctl/pg_autoctl
-    install -D -t $out/lib src/monitor/pgautofailover.so
-    install -D -t $out/share/postgresql/extension src/monitor/*.sql
-    install -D -t $out/share/postgresql/extension src/monitor/pgautofailover.control
-  '';
+  buildInputs = postgresql.buildInputs;
 
   meta = with lib; {
     description = "PostgreSQL extension and service for automated failover and high-availability";

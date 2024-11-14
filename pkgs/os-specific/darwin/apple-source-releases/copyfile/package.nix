@@ -91,7 +91,7 @@ mkAppleDerivation {
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 
   buildInputs = lib.optionals (lib.versionOlder (lib.getVersion apple-sdk) "10.13") [
-    apple-sdk_10_13
+    (apple-sdk_10_13.override { enableBootstrap = true; })
   ];
 
   meta.description = "Darwin file copying library";
