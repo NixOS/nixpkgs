@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  flit-core,
   pygithub,
   terminaltables,
   click,
@@ -11,14 +12,16 @@
 buildPythonPackage rec {
   pname = "keep";
   version = "2.11";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-Brwvu/Zevr8sOE3KAwakDDzVMc2VoFxIb1orXAes2U0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ flit-core ];
+
+  dependencies = [
     click
     requests
     terminaltables
