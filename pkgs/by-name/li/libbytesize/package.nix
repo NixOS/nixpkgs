@@ -42,6 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     pkg-config
     python3Packages.python
+  ];
+
+  nativeInstallCheckInputs = [
     python3Packages.pythonImportsCheckHook
   ];
 
@@ -51,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
   ];
 
+  doInstallCheck = true;
   strictDeps = true;
 
   postInstall = ''
