@@ -434,8 +434,8 @@ rec {
       "sha256-OgK+ZM7wn7Elp6xzb1YnZtYP+eARgsP+BIYkQb+E4YE=";
 
   mypy-boto3-dynamodb =
-    buildMypyBoto3Package "dynamodb" "1.35.54"
-      "sha256-qzd/6OxI0XBt8Z1s5bzlRbM27o/O1ZDfR98uqsH69sA=";
+    buildMypyBoto3Package "dynamodb" "1.35.60"
+      "sha256-kurDXEnp8/8jpK1t7l3FTkEODEmpi02TSTxwAOvnRWg=";
 
   mypy-boto3-dynamodbstreams =
     buildMypyBoto3Package "dynamodbstreams" "1.35.0"
