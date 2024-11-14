@@ -12,6 +12,7 @@
   Carbon,
   OpenGL,
   x11Support ? !stdenv.hostPlatform.isDarwin,
+  waylandSupport ? stdenv.hostPlatform.isLinux,
   testers,
 }:
 
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs =
-    lib.optionals (x11Support && !stdenv.hostPlatform.isDarwin) [
+    lib.optionals ((waylandSupport || x11Support) && !stdenv.hostPlatform.isDarwin) [
       libGL
     ]
     ++ lib.optionals x11Support [
@@ -73,14 +74,14 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   mesonFlags = [
-    "-Degl=${if (x11Support && !stdenv.hostPlatform.isDarwin) then "yes" else "no"}"
+    "-Degl=${if ((waylandSupport || x11Support) && !stdenv.hostPlatform.isDarwin) then "yes" else "no"}"
     "-Dglx=${if x11Support then "yes" else "no"}"
     "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
     "-Dx11=${lib.boolToString x11Support}"
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    x11Support && !stdenv.hostPlatform.isDarwin
+    (waylandSupport || x11Support) && !stdenv.hostPlatform.isDarwin
   ) ''-DLIBGL_PATH="${lib.getLib libGL}/lib"'';
 
   doCheck = true;
