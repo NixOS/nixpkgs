@@ -42,8 +42,6 @@ in
     with coq.ocamlPackages; [
       cmdliner
       findlib # run time dependency of SerAPI
-      ppx_deriving
-      ppx_import
       ppx_sexp_conv
       ppx_hash
       sexplib
@@ -63,6 +61,7 @@ in
   };
 }).overrideAttrs(o:
 if lib.versions.isLe "8.19.0+0.19.3" o.version && o.version != "dev" then
+  let ppx_deriving = coq.ocamlPackages.ppx_deriving.override { version = "5.2.1"; }; in
   let inherit (o) version; in {
   src = fetchzip {
     url =
@@ -73,7 +72,7 @@ if lib.versions.isLe "8.19.0+0.19.3" o.version && o.version != "dev" then
     sha256 = release."${version}".sha256;
   };
 
-  patches =
+  patches = lib.optional (lib.versions.isGe "8.16" version) ./sertop.patch ++ (
     if version == "8.10.0+0.7.2"
     then [
       ./8.10.0+0.7.2.patch
@@ -95,10 +94,16 @@ if lib.versions.isLe "8.19.0+0.19.3" o.version && o.version != "dev" then
       ./janestreet-0.16.patch
     ]
     else [
-    ];
+    ]);
 
     propagatedBuildInputs = o.propagatedBuildInputs
-      ++ (with coq.ocamlPackages; [ ppx_deriving_yojson yojson zarith ])  # zarith needed because of Coq
+      ++ (with coq.ocamlPackages; [
+        ppx_deriving
+        (ppx_deriving_yojson.override { inherit ppx_deriving; })
+        (ppx_import.override { inherit ppx_deriving; })
+        yojson
+        zarith  # zarith needed because of Coq
+      ])
     ; }
 else
   { propagatedBuildInputs = o.propagatedBuildInputs ++ [ coq-lsp ]; }
