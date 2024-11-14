@@ -117,7 +117,10 @@ buildNpmPackage rec {
   buildPhase = ''
     export HOME=$TMPDIR
     runHook preBuild
-    npm run build --no-update-notifier --targets ttf::$pname -- --jCmd=$NIX_BUILD_CORES --verbose=9
+
+    # pipe to cat to disable progress bar
+    npm run build --no-update-notifier --targets ttf::$pname -- --jCmd=$NIX_BUILD_CORES --verbosity=9 | cat
+
     runHook postBuild
   '';
 
