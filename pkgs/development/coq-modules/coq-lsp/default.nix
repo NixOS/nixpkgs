@@ -49,4 +49,6 @@
     else
      [ cmdliner ppx_deriving ppx_deriving_yojson ppx_import ppx_sexp_conv
        ppx_compare ppx_hash sexplib ]);
+
+    patches = lib.optional (lib.versions.isEq "0.1.8" o.version) ./coq-loader.patch;
 })
