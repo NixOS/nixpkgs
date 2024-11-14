@@ -171,7 +171,7 @@ let
         url = "https://github.com/postgres/postgres/commit/0a883a067bd78f0ff0607afb18c4f783ac764504.patch";
         hash = "sha256-F3zCaar6w6bwQDno7Tkg7ZbPJ+rhgi8/2NSvFakzQek=";
       }))
-    ] ++ lib.optionals (olderThan "17" && atLeast "14") [
+    ] ++ lib.optionals (olderThan "17" && atLeast "15") [
       # TODO: Remove this with the next set of minor releases
       (fetchpatch ({
           url = "https://github.com/postgres/postgres/commit/b27622c90869aab63cfe22159a459c57768b0fa4.patch";
