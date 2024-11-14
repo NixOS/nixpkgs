@@ -77,6 +77,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Backblaze/b2-sdk-python";
     changelog = "https://github.com/Backblaze/b2-sdk-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ pmw ];
   };
 }
