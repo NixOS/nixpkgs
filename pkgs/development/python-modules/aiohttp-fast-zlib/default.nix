@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-fast-zlib";
-  version = "0.1.1";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiohttp-fast-zlib";
     rev = "v${version}";
-    hash = "sha256-uPmttfEiWmEtQrBZYwiSjLTMmXhZ0MmaAQJMXTSQj+U=";
+    hash = "sha256-fvZVviKN/CL42Zmmm6k/JNdeAljRoqN63rlduNJVr98=";
   };
 
   postPatch = ''
@@ -33,8 +33,6 @@ buildPythonPackage rec {
     isal = [ isal ];
     zlib_ng = [ zlib-ng ];
   };
-
-  doCheck = false; # tests fail with aiohttp 3.11.0; https://github.com/bdraco/aiohttp-fast-zlib/issues/2
 
   nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
