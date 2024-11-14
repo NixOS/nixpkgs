@@ -3619,6 +3619,17 @@ with pkgs;
     gz-math_7
     gz-math_8;
 
+  inherit ({
+    ignition-msgs_5 = callPackage ../development/libraries/gz-msgs/5.nix { };
+    ignition-msgs_8 = callPackage ../development/libraries/gz-msgs/8.nix { };
+    gz-msgs_11 = callPackage ../development/libraries/gz-msgs/11.nix { };
+  })
+    ignition-msgs_5
+    ignition-msgs_8
+    gz-msgs_9
+    gz-msgs_10
+    gz-msgs_11;
+
   gzip = callPackage ../tools/compression/gzip { };
 
   pdisk = callPackage ../tools/system/pdisk {
