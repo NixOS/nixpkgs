@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vvenc";
-  version = "1.12.0";
+  version = "1.12.1-rc1";
 
   outputs = [
     "out"
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fraunhoferhhi";
     repo = "vvenc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-C7ApayhubunkXBqJ/EqntaFPn6zk8rZ9fUqg7kbhvAk=";
+    hash = "sha256-ncgICY8Zdmh/Pj2R9piMH0CLQ1rWnJLHVwQTYpCrBxY=";
   };
 
   nativeBuildInputs = [ cmake ];
