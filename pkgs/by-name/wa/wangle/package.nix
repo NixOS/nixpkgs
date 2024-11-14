@@ -6,6 +6,7 @@
 
   cmake,
   ninja,
+  removeReferencesTo,
 
   folly,
   fizz,
@@ -24,6 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "wangle";
   version = "2024.11.18.00";
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "wangle";
@@ -34,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
+    removeReferencesTo
   ];
 
   buildInputs =
@@ -61,6 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
 
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+
+    (lib.cmakeFeature "INCLUDE_INSTALL_DIR" "${placeholder "dev"}/include")
+    (lib.cmakeFeature "LIB_INSTALL_DIR" "${placeholder "out"}/lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_DIR" "${placeholder "dev"}/lib/cmake/wangle")
   ];
 
   env.GTEST_FILTER =
@@ -96,6 +107,18 @@ stdenv.mkDerivation (finalAttrs: {
     }
 
     runHook postCheck
+  '';
+
+  postFixup = ''
+    # Sanitize header paths to avoid runtime dependencies leaking in
+    # through `__FILE__`.
+    (
+      shopt -s globstar
+      for header in "$dev/include"/**/*.h; do
+        sed -i "1i#line 1 \"$header\"" "$header"
+        remove-references-to -t "$dev" "$header"
+      done
+    )
   '';
 
   meta = {
