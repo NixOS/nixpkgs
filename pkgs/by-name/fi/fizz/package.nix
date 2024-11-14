@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeDir = "../fizz";
 
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
