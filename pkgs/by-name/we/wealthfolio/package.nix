@@ -2,31 +2,31 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cargo-tauri_1,
+  cargo-tauri,
   libsoup,
   nodejs,
   openssl,
   pkg-config,
   pnpm,
   rustPlatform,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wealthfolio";
-  version = "1.0.18";
+  version = "1.0.21";
 
   src = fetchFromGitHub {
     owner = "afadil";
     repo = "wealthfolio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AH0bwzsnGaGE82Ds1pDeZkVY2GXEB7RqHYw+WAt69/4=";
+    hash = "sha256-OWXmYFVr2nOzPeqLZHkteedcQ26bmkrsUF7HYUB+FQE=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) src pname version;
-    hash = "sha256-OpQg/ZZ4M2vszMZeCJAKzqGduxexZfIVe3Jy/hG3Yu0=";
+    hash = "sha256-U2NUym+6cvHkZ/ah2PaOCizdYeD5XzE8lpGnzhu0tW4=";
   };
 
   cargoRoot = "src-tauri";
@@ -35,11 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) pname version src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-jbdshb+Kjnh/yKQlCVaYT3/RQ6Zyo2dm72EToLsbqxc=";
+    hash = "sha256-W8VLswLZpybFPQ1JR4miW7BPDs27RazPGEhw2kyusIw=";
   };
 
   nativeBuildInputs = [
-    cargo-tauri_1.hook
+    cargo-tauri.hook
     nodejs
     pkg-config
     pnpm.configHook
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libsoup
     openssl
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 
   meta = {
