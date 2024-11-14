@@ -17,13 +17,13 @@
 }:
 
 let
-  pkgs = import ./../../default.nix (
+  pkgs = import ./../../default.nix ((
     if include-overlays == false then
       { overlays = []; }
     else if include-overlays == true then
       { } # Let Nixpkgs include overlays impurely.
     else { overlays = include-overlays; }
-  );
+  ) // { config.allowAliases = false; });
 
   inherit (pkgs) lib;
 
