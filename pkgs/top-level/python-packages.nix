@@ -15198,6 +15198,8 @@ self: super: with self; {
 
   ssort = callPackage ../development/python-modules/ssort { };
 
+  stable-baselines3 = callPackage ../development/python-modules/stable-baselines3 { };
+
   stack-data = callPackage ../development/python-modules/stack-data { };
 
   stamina = callPackage ../development/python-modules/stamina { };
