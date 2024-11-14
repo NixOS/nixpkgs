@@ -1,12 +1,12 @@
 {
   lib,
   buildPythonPackage,
+  click,
   fetchPypi,
   flit-core,
   pygithub,
-  terminaltables,
-  click,
   requests,
+  terminaltables,
 }:
 
 buildPythonPackage rec {
@@ -16,20 +16,21 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Brwvu/Zevr8sOE3KAwakDDzVMc2VoFxIb1orXAes2U0=";
+    hash = "sha256-Brwvu/Zevr8sOE3KAwakDDzVMc2VoFxIb1orXAes2U0=";
   };
 
   build-system = [ flit-core ];
 
   dependencies = [
     click
+    pygithub
     requests
     terminaltables
-    pygithub
   ];
 
-  # no tests
+  # Module no tests
   doCheck = false;
+
   pythonImportsCheck = [ "keep" ];
 
   meta = {
