@@ -103,6 +103,7 @@ let
         inherit mainProgram;
         platforms = [ "x86_64-linux" "aarch64-linux" ];
         maintainers = with maintainers; [ mausch ners ];
+        sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
       };
     };
 

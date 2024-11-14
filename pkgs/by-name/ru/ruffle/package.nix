@@ -23,7 +23,7 @@
 }:
 
 let
-  version = "nightly-2024-09-12";
+  version = "nightly-2024-11-07";
 in
 rustPlatform.buildRustPackage {
   pname = "ruffle";
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage {
     owner = "ruffle-rs";
     repo = "ruffle";
     rev = version;
-    hash = "sha256-wvgx6581vvUPb9evvJl328oTP/F8+LhpeHX3vCsHXCc=";
+    hash = "sha256-eufp3myszqguoHGYGqIpv5gMkVx1d4L/GflRgvnxPTQ=";
   };
 
   nativeBuildInputs =
@@ -97,13 +97,11 @@ rustPlatform.buildRustPackage {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ecolor-0.28.1" = "sha256-X1prQIc3jzmWyEmpfQMgowW2qM1r+2T12Nd7HCsPtpc=";
-      "flash-lso-0.6.0" = "sha256-X9XYj88GmkPRy+RxvGM6vFdBxif2XYesKtqwwW2DTw4=";
+      "flash-lso-0.6.0" = "sha256-dhOAnVfxZw9JaOrY17xAeN7/y/aWZP+KUoDQuCf6D3Q=";
       "h263-rs-0.1.0" = "sha256-dyQHnCe7LwwZYlF57sbRzir9vUavN3K8wLhwPIWlmik=";
-      "jpegxr-0.3.1" = "sha256-03gbXA5T02ofgfRaanaixqfrFpxw/UOOftgKZ7hPHY4=";
+      "jpegxr-0.3.1" = "sha256-aV4Qh9ea0CirWU3lScjSKi4mii0cDTnx+miTcqWzxGg=";
       "nellymoser-rs-0.1.2" = "sha256-66yt+CKaw/QFIPeNkZA2mb9ke64rKcAw/6k/pjNYY04=";
       "nihav_codec_support-0.1.0" = "sha256-HAJS4I6yyzQzCf+vmaFp1MWXpcUgFAHPxLhfMVXmN1c=";
-      "rfd-0.14.1" = "sha256-eq4OONgYrtWCogIpjws/1uRxmv3oyIdrimDVaLJ9IMo=";
     };
   };
 

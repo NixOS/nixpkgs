@@ -4752,10 +4752,6 @@ with pkgs;
 
   openrgb-plugin-hardwaresync = libsForQt5.callPackage ../applications/misc/openrgb-plugins/hardwaresync { };
 
-  opensc = callPackage ../tools/security/opensc {
-    inherit (darwin.apple_sdk.frameworks) Carbon PCSC;
-  };
-
   toastify = darwin.apple_sdk_11_0.callPackage ../tools/misc/toastify {};
 
   opensshPackages = dontRecurseIntoAttrs (callPackage ../tools/networking/openssh {});
@@ -11776,10 +11772,6 @@ with pkgs;
 
   eventstore = callPackage ../servers/nosql/eventstore { };
 
-  rustus = callPackage ../servers/networking/rustus {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   fedigroups = callPackage ../servers/fedigroups {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -14392,14 +14384,6 @@ with pkgs;
   gpxsee-qt6 = qt6Packages.callPackage ../applications/misc/gpxsee { };
 
   gpxsee = gpxsee-qt5;
-
-  gtklock = callPackage ../tools/wayland/gtklock { };
-
-  gtklock-playerctl-module = callPackage ../tools/wayland/gtklock/playerctl-module.nix { };
-
-  gtklock-powerbar-module = callPackage ../tools/wayland/gtklock/powerbar-module.nix { };
-
-  gtklock-userinfo-module = callPackage ../tools/wayland/gtklock/userinfo-module.nix { };
 
   guvcview = libsForQt5.callPackage ../os-specific/linux/guvcview { };
 

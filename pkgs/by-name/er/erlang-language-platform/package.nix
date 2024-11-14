@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
       "x86_64-darwin"
     ];
     maintainers = with lib.maintainers; [ offsetcyan ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

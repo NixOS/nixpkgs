@@ -22,7 +22,7 @@
 
 buildGoModule rec {
   pname = "gcs";
-  version = "5.27.0";
+  version = "5.28.1";
 
   src = fetchFromGitHub {
     owner = "richardwilkes";
@@ -43,7 +43,7 @@ buildGoModule rec {
       . refresh-pdf.js.sh
     '';
 
-    hash = "sha256-QVkyemBQ7RrV3dpP3n7Pg0XljdxWtCphZIj2T77nKtU=";
+    hash = "sha256-ArJ+GveG2Y1PYeCuIFJoQ3eVyqvAi4HEeAEd4X03yu4=";
   };
 
   modPostBuild = ''
@@ -51,14 +51,14 @@ buildGoModule rec {
     sed -i 's|-lmupdf[^ ]* |-lmupdf |g' vendor/github.com/richardwilkes/pdf/pdf.go
   '';
 
-  vendorHash = "sha256-+vCc1g5noAl/iwEYhNZJYPiScKqKGKlsuruoUO/4tiU=";
+  vendorHash = "sha256-EmAGkQ+GHzVbSq/nPu0awL79jRmZuMHheBWwanfEgGI=";
 
   frontend = buildNpmPackage {
     name = "${pname}-${version}-frontend";
 
     inherit src;
     sourceRoot = "${src.name}/server/frontend";
-    npmDepsHash = "sha256-VWTJg/pluRYVVBDiJ+t2uhyodRuIFfHpzCZMte1krDM=";
+    npmDepsHash = "sha256-LqOH3jhp4Mx7JGYSjF29kVUny3xNn7oX0qCYi79SH4w=";
 
     installPhase = ''
       runHook preInstall
