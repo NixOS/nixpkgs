@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch2,
+  setuptools,
   humanfriendly,
   verboselogs,
   capturer,
@@ -15,7 +16,7 @@
 buildPythonPackage rec {
   pname = "coloredlogs";
   version = "15.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xolox";
@@ -33,7 +34,9 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ humanfriendly ];
+  build-system = [ setuptools ];
+
+  dependencies = [ humanfriendly ];
 
   nativeCheckInputs = [
     pytestCheckHook
