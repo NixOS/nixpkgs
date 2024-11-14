@@ -1,4 +1,8 @@
-{ stdenv, lib, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   name = "hydra-menu";
@@ -8,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "emad-elsaid";
     repo = "hydra";
     rev = "92d59e3a440eb9ebe098551ba972c894b1601f7f";
-    sha256 = "dSwxIiFqfNp5OhTWl1OCc1XYgMG3pqYfXtQM7thvGOQ=";
+    hash = "sha256-dSwxIiFqfNp5OhTWl1OCc1XYgMG3pqYfXtQM7thvGOQ=";
   };
 
   makeFlags = [
@@ -17,9 +21,9 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A C implementation of Emacs Hydra to be used in the terminal.";
+    description = "C implementation of Emacs Hydra to be used in the terminal";
     homepage = "https://hydra.emadelsaid.com/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ edrex ];
   };
