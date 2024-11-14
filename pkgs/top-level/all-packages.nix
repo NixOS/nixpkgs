@@ -3757,6 +3757,13 @@ with pkgs;
     ignition-common_4;
 
   inherit ({
+    ignition-fuel-tools_4 = callPackage ../development/libraries/gz-fuel-tools/4.nix { };
+    ignition-fuel-tools_7 = callPackage ../development/libraries/gz-fuel-tools/7.nix { };
+  })
+    ignition-fuel-tools_4
+    ignition-fuel-tools_7;
+
+  inherit ({
     gz-utils_2 = callPackage ../development/libraries/gz-utils/2.nix { };
     ignition-utils_1 = callPackage ../development/libraries/gz-utils/1.nix { };
   })
