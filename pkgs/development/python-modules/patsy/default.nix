@@ -1,10 +1,8 @@
 {
   lib,
-  fetchPypi,
-  fetchpatch2,
+  fetchFromGitHub,
   buildPythonPackage,
   setuptools,
-  six,
   numpy,
   scipy, # optional, allows spline-related features (see patsy's docs)
   pytestCheckHook,
@@ -12,27 +10,19 @@
 
 buildPythonPackage rec {
   pname = "patsy";
-  version = "0.5.6";
+  version = "1.0.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-lcbUenIiU1+Ev/f2PXMD8uKXdHpZjbic9cZ/DAx9LNs=";
+  src = fetchFromGitHub {
+    owner = "pydata";
+    repo = "patsy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gtkvFxNzMFiBBiuKhelSSsTilA/fLJSC5QHqDLiRrWE=";
   };
 
-  patches = [
-    # https://github.com/pydata/patsy/pull/212
-    (fetchpatch2 {
-      name = "numpy_2-compatibility.patch";
-      url = "https://github.com/pydata/patsy/commit/251951dd7a4116be1cd34963780b87b4a67b79ae.patch";
-      hash = "sha256-bgHqa8eygf9ADLmDY/8uebuYSFzkKG667BuXvQC4WB4=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [
-    six
+  dependencies = [
     numpy
     scipy
   ];
@@ -42,6 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "patsy" ];
 
   meta = {
+    changelog = "https://github.com/pydata/patsy/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     description = "Python package for describing statistical models";
     homepage = "https://github.com/pydata/patsy";
     license = lib.licenses.bsd2;
