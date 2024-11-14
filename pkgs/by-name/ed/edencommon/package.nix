@@ -104,6 +104,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/facebookexperimental/edencommon";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ kylesferrazza ];
+    maintainers = with lib.maintainers; [
+      kylesferrazza
+      emily
+    ];
   };
 })
