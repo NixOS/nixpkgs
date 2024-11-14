@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snapper";
-  version = "0.11.2";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "sha256-U948AmyQ6c5+FCrDijOVLc/p2wwbq5IWwS66x+O960Y=";
+    sha256 = "sha256-Hh5etDx7nLBYC6VLeZS4F52w2VpaA4aZRvGUQ0QGBJc=";
   };
 
   strictDeps = true;
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Hard-coded root paths, hard-coded root paths everywhere...
-    for file in {client,data,pam,scripts,zypp-plugin}/Makefile.am; do
+    for file in {client,client/installation-helper,client/systemd-helper,data,pam,scripts,zypp-plugin}/Makefile.am; do
       substituteInPlace $file \
         --replace '$(DESTDIR)/usr' "$out" \
         --replace "DESTDIR" "out" \
@@ -47,8 +47,6 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-
-  env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   postInstall = ''
     rm -r $out/etc/cron.*
