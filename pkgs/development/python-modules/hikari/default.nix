@@ -63,6 +63,9 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace hikari/_about.py \
       --replace-fail "__git_sha1__: typing.Final[str] = \"HEAD\"" "__git_sha1__: typing.Final[str] = \"$(cat $src/COMMIT)\""
+    # XXX: Remove once pytest-asyncio is updated to 0.24+
+    substituteInPlace pyproject.toml \
+      --replace-fail "asyncio_default_fixture_loop_scope = \"func\"" ""
   '';
 
   meta = {
