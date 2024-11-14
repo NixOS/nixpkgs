@@ -3,17 +3,16 @@
 , stdenv
 , cmake
 , nix-update-script
-, testers
 }:
 stdenv.mkDerivation rec{
   pname = "magic-enum";
-  version = "0.9.6";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "Neargye";
     repo = "magic_enum";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1pO9FWd0InXqg8+lwRF3YNFTAeVLjqoI9v15LjWxnZY=";
+    hash = "sha256-P6fl/dcGOSE1lTJwZlimbvsTPelHwdQdZr18H4Zji20=";
   };
 
   nativeBuildInputs = [ cmake ];
