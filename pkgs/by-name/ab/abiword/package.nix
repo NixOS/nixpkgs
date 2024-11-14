@@ -20,27 +20,20 @@
 , libxslt
 , goffice
 , wrapGAppsHook3
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "abiword";
-  version = "3.0.5";
+  version = "3.0.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "AbiWord";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-Z55qPm4MYwbG8bvXpX2TH8bxQaJjvb3Em1ymM1XwGqo=";
+    hash = "sha256-PPK4O+NKXdl7DKPOgGlVyCFTol8hhmtq0wdTTtwKQ/4=";
   };
-
-  patches = [
-    # Fix build with libxml2 2.12
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/World/AbiWord/-/commit/2a06be6a10a0718f8a3d8e00c317f5042c99a467.patch";
-      hash = "sha256-vfh81tGXe9dgnjcAtoWHOK8CtW7MZ75FFjnfKTkiKkk=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook269
@@ -76,6 +69,10 @@ stdenv.mkDerivation rec {
   preAutoreconf = ''
     ./autogen-common.sh
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "release-";
+  };
 
   meta = with lib; {
     description = "Word processing program, similar to Microsoft Word";

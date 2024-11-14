@@ -14140,13 +14140,11 @@ with pkgs;
 
   buildMozillaMach = opts: callPackage (import ../applications/networking/browsers/firefox/common.nix opts) { };
 
-  firefoxPackages = recurseIntoAttrs (callPackage ../applications/networking/browsers/firefox/packages.nix {});
-
-  firefox-unwrapped = firefoxPackages.firefox;
-  firefox-beta-unwrapped = firefoxPackages.firefox-beta;
-  firefox-devedition-unwrapped = firefoxPackages.firefox-devedition;
-  firefox-esr-128-unwrapped = firefoxPackages.firefox-esr-128;
-  firefox-esr-unwrapped = firefoxPackages.firefox-esr-128;
+  firefox-unwrapped = callPackage ../applications/networking/browsers/firefox/packages/firefox.nix { };
+  firefox-beta-unwrapped = callPackage ../applications/networking/browsers/firefox/packages/firefox-beta.nix { };
+  firefox-devedition-unwrapped = callPackage ../applications/networking/browsers/firefox/packages/firefox-devedition.nix { };
+  firefox-esr-128-unwrapped = callPackage ../applications/networking/browsers/firefox/packages/firefox-esr-128.nix { };
+  firefox-esr-unwrapped = firefox-esr-128-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-beta = wrapFirefox firefox-beta-unwrapped {
@@ -17029,9 +17027,7 @@ with pkgs;
   deliantra-maps = callPackage ../games/deliantra/maps.nix { };
   deliantra-data = callPackage ../games/deliantra/data.nix { };
 
-  ddnet = callPackage ../games/ddnet {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL Security;
-  };
+  ddnet = callPackage ../games/ddnet {};
   ddnet-server = ddnet.override { buildClient = false; };
 
   devilutionx = callPackage ../games/devilutionx {
@@ -18689,9 +18685,7 @@ with pkgs;
 
   nix-linter = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-linter);
 
-  nixos-option = callPackage ../tools/nix/nixos-option {
-    nix = nixVersions.nix_2_18;
-  };
+  nixos-option = callPackage ../tools/nix/nixos-option { };
 
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 

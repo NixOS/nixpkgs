@@ -60,6 +60,7 @@
   branch ? lib.versions.majorMinor version,
   version,
   vendor ? "nixos",
+  upstreamVersion,
   withFlask ? false,
   withSeaBIOS ? true,
   withOVMF ? true,
@@ -71,17 +72,21 @@
 }:
 
 let
-  inherit (lib.meta) getExe';
-  inherit (lib.lists) optional optionals;
-  inherit (lib.systems.inspect.patterns) isLinux isAarch64;
-  inherit (lib) teams;
-  inherit (lib.strings)
+  inherit (lib)
     enableFeature
+    getExe'
+    licenses
     makeSearchPathOutput
+    optional
     optionalString
+    optionals
+    systems
+    teams
     versionOlder
+    warn
     ;
-  inherit (lib.licenses)
+  inherit (systems.inspect.patterns) isLinux isAarch64;
+  inherit (licenses)
     cc-by-40
     gpl2Only
     lgpl21Only
@@ -287,10 +292,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
-    efi = "boot/xen-${version}.efi";
+    efi = "boot/xen-${upstreamVersion}.efi";
     flaskPolicy =
       if withFlask then
-        "boot/xenpolicy-${version}"
+        warn "This Xen was compiled with FLASK support, but the FLASK file does not match the Xen version number. Please hardcode the path to the FLASK file instead." "boot/xenpolicy-${version}"
       else
         throw "This Xen was compiled without FLASK support.";
     # This test suite is very simple, as Xen's userspace
@@ -335,7 +340,7 @@ stdenv.mkDerivation (finalAttrs: {
         Use with the `qemu_xen` package.
       ''
       + "\nIncludes:\n* `xen.efi`: The Xen Project's [EFI binary](https://xenbits.xenproject.org/docs/${branch}-testing/misc/efi.html), available on the `boot` output of this package."
-      + optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy-${version}` file is available on the `boot` output of this package."
+      + optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy-${upstreamVersion}` file is available on the `boot` output of this package."
       + optionalString withSeaBIOS "\n* `seabios`: Support for the SeaBIOS boot firmware on HVM domains."
       + optionalString withOVMF "\n* `ovmf`: Support for the OVMF UEFI boot firmware on HVM domains."
       + optionalString withIPXE "\n* `ipxe`: Support for the iPXE boot firmware on HVM domains.";

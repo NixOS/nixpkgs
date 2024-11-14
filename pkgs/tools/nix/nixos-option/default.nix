@@ -1,33 +1,34 @@
-{ lib
-, stdenv
-, boost
-, cmake
-, pkg-config
-, installShellFiles
-, nix
+{
+  lib,
+  stdenv,
+  boost,
+  meson,
+  ninja,
+  pkg-config,
+  installShellFiles,
+  nix,
 }:
 
 stdenv.mkDerivation {
   name = "nixos-option";
 
-  src = ./src;
+  src = ./.;
 
   postInstall = ''
-    installManPage ${./nixos-option.8}
+    installManPage ../nixos-option.8
   '';
 
   strictDeps = true;
+
   nativeBuildInputs = [
-    cmake
+    meson
+    ninja
     pkg-config
     installShellFiles
   ];
   buildInputs = [
     boost
     nix
-  ];
-  cmakeFlags = [
-    "-DNIX_DEV_INCLUDEPATH=${nix.dev}/include/nix"
   ];
 
   meta = with lib; {
