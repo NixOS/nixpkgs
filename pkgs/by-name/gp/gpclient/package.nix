@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   inherit (gpauth) version src meta;
 
   buildAndTestSubdir = "apps/gpclient";
-  cargoHash = "sha256-aJYFBvVrj1n2+9WLLBH5WTRRzTle19LsdJ2DielJYik=";
+  cargoHash = "sha256-lKfcWKOxpXEB28JajypOdyJNxLIAI8udMlaEo+6pecQ=";
 
   nativeBuildInputs = [
     perl
@@ -47,6 +47,6 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     substituteInPlace $out/share/applications/gpgui.desktop \
-      --replace-fail /usr/bin/gpclient $out/bin/gpclient
+      --replace-fail /usr/bin/gpclient gpclient
   '';
 }
