@@ -586,6 +586,8 @@ self: super: with self; {
 
   amqtt = callPackage ../development/python-modules/amqtt { };
 
+  amulet-core = callPackage ../development/python-modules/amulet-core { };
+
   amulet-leveldb = callPackage ../development/python-modules/amulet-leveldb { };
 
   amulet-nbt = callPackage ../development/python-modules/amulet-nbt { };
