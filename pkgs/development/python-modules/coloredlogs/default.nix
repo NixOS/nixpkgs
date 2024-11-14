@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   humanfriendly,
   verboselogs,
   capturer,
@@ -22,6 +23,15 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-TodI2Wh8M0qMM2K5jzqlLmUKILa5+5qq4ByLttmAA7E=";
   };
+
+  patches = [
+    # https://github.com/xolox/python-coloredlogs/pull/120
+    (fetchpatch2 {
+      name = "python313-compat.patch";
+      url = "https://github.com/xolox/python-coloredlogs/commit/9d4f4020897fcf48d381de8e099dc29b53fc9531.patch?full_index=1";
+      hash = "sha256-Z7MYzyoQBMLBS7c0r5zITuHpl5yn4Vg7Xf/CiG7jTSs=";
+    })
+  ];
 
   propagatedBuildInputs = [ humanfriendly ];
 
