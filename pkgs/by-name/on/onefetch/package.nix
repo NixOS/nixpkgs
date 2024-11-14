@@ -16,16 +16,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "onefetch";
-  version = "2.21.0";
+  version = "2.22.0";
 
   src = fetchFromGitHub {
     owner = "o2sh";
     repo = pname;
     rev = version;
-    hash = "sha256-KQs7b+skXQhHbfHIJkgowNY2FB6oS2V8TQFdkmElC/k=";
+    hash = "sha256-Gk1hoC6qsLYm7DbbaRSur6GdC9yXQe+mYLUJklXIwZ4=";
   };
 
-  cargoHash = "sha256-gKA1MMahoaDFia8LR33GG3jRttZzHwpUpFawlCQcy7g=";
+  cargoHash = "sha256-4YB10uj4ULhvhn+Yv0dRZO8fRxwm3lEAZ5v+MYHO7lI=";
 
   cargoPatches = [
     # enable pkg-config feature of zstd
