@@ -16,8 +16,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/Applications/Itsycal.app
-    cp -R . $out/Applications/Itsycal.app
+    mkdir -p "$out/Applications/Itsycal.app"
+    cp -R . "$out/Applications/Itsycal.app"
 
     runHook postInstall
   '';
