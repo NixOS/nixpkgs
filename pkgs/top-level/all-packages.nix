@@ -3750,6 +3750,13 @@ with pkgs;
     ignition-cmake_2;
 
   inherit ({
+    ignition-common_3 = callPackage ../development/libraries/gz-common/3.nix { };
+    ignition-common_4 = callPackage ../development/libraries/gz-common/4.nix { };
+  })
+    ignition-common_3
+    ignition-common_4;
+
+  inherit ({
     gz-utils_2 = callPackage ../development/libraries/gz-utils/2.nix { };
     ignition-utils_1 = callPackage ../development/libraries/gz-utils/1.nix { };
   })
