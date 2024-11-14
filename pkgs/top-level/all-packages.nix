@@ -3772,6 +3772,13 @@ with pkgs;
     ignition-math_4
     ignition-math_6;
 
+  inherit ({
+    ignition-msgs_5 = callPackage ../development/libraries/gz-msgs/5.nix { };
+    ignition-msgs_8 = callPackage ../development/libraries/gz-msgs/8.nix { };
+  })
+    ignition-msgs_5
+    ignition-msgs_8;
+
   gzip = callPackage ../tools/compression/gzip { };
 
   pdisk = callPackage ../tools/system/pdisk {
