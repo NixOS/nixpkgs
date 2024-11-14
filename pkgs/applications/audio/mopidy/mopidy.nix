@@ -30,6 +30,7 @@ pythonPackages.buildPythonApplication rec {
     gst-plugins-good
     gst-plugins-ugly
     gst-plugins-rs
+    pipewire
   ];
 
   propagatedBuildInputs =
@@ -55,12 +56,6 @@ pythonPackages.buildPythonApplication rec {
 
   # There are no tests
   doCheck = false;
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${pipewire}/lib/gstreamer-1.0"
-    )
-  '';
 
   meta = with lib; {
     homepage = "https://www.mopidy.com/";
