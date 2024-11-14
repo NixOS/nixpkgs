@@ -17,6 +17,8 @@
   gtest,
   apple-sdk_11,
   darwinMinVersionHook,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -94,6 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
       done
     )
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Shared library for Meta's source control filesystem tools (EdenFS and Watchman)";
