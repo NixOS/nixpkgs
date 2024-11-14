@@ -12,6 +12,7 @@
   cargo,
   rustPlatform,
   ensureNewerSourcesForZipFilesHook,
+  removeReferencesTo,
 
   pcre2,
   openssl,
@@ -52,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     rustPlatform.cargoSetupHook
     ensureNewerSourcesForZipFilesHook
+    removeReferencesTo
   ];
 
   buildInputs =
@@ -96,6 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs .
     cp ${./Cargo.lock} ${finalAttrs.cargoRoot}/Cargo.lock
+  '';
+
+  postFixup = ''
+    # TODO: Do this in `fmt` rather than downstream.
+    remove-references-to -t ${folly.fmt.dev} $out/bin/*
   '';
 
   meta = {
