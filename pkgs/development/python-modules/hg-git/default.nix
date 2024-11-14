@@ -7,6 +7,7 @@
   dulwich,
   mercurial,
   pythonOlder,
+  unzip,
 }:
 
 buildPythonPackage rec {
@@ -22,6 +23,10 @@ buildPythonPackage rec {
     hash = "sha256-lqnCi4MjdPVCIXdYAIDGdRY5zcU5QPrSHzy+NKysMtc=";
   };
 
+  pythonRelaxDeps = [
+    "dulwich"
+  ];
+
   build-system = [
     setuptools
     setuptools-scm
@@ -34,10 +39,25 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hggit" ];
 
-  meta = with lib; {
+  nativeBuildInputs = [
+    unzip
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    patchShebangs .
+    pushd tests
+    ./run-tests.py
+    popd
+
+    runHook postCheck
+  '';
+
+  meta = {
     description = "Push and pull from a Git server using Mercurial";
     homepage = "https://hg-git.github.io/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ koral ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ koral ];
   };
 }
