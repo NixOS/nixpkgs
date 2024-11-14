@@ -588,6 +588,8 @@ self: super: with self; {
 
   amulet-leveldb = callPackage ../development/python-modules/amulet-leveldb { };
 
+  amulet-nbt = callPackage ../development/python-modules/amulet-nbt { };
+
   anchor-kr = callPackage ../development/python-modules/anchor-kr { };
 
   ancp-bids = callPackage ../development/python-modules/ancp-bids { };
