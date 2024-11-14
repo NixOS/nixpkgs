@@ -17,6 +17,8 @@
   fizz,
 
   gtest,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -131,6 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: Do this in `gtest` rather than downstream.
     remove-references-to -t ${gtest.dev} $out/lib/*
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Implementation of the QUIC transport protocol";
