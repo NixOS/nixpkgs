@@ -1238,7 +1238,6 @@ mapAliases {
   ubuntu_font_family = ubuntu-classic; # Added 2024-02-19
   uclibc = uclibc-ng; # Added 2022-06-16
   uclibcCross = uclibc-ng; # Added 2022-06-16
-  uefi-firmware-parser = throw "The uefi-firmware-parser package was dropped since it was unmaintained."; # Added 2024-06-21
   unicorn-emu = throw "'unicorn-emu' has been renamed to/replaced by 'unicorn'"; # Converted to throw 2024-10-17
   uniffi-bindgen = throw "uniffi-bindgen has been removed since upstream no longer provides a standalone package for the CLI";
   unifi-poller = unpoller; # Added 2022-11-24
