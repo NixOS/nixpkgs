@@ -1,16 +1,17 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rustPlatform,
+  apple-sdk_11,
   cacert,
   cargo-tauri_1,
   desktop-file-utils,
+  fetchFromGitHub,
   libsoup,
   nodejs,
   openssl,
   pkg-config,
   pnpm_9,
+  rustPlatform,
   turbo,
   webkitgtk_4_0,
 }:
@@ -53,6 +54,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ openssl ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libsoup
       webkitgtk_4_0
