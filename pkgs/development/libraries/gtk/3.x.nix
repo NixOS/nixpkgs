@@ -168,6 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
     "-Dx11_backend=${lib.boolToString x11Support}"
     "-Dquartz_backend=${lib.boolToString (stdenv.hostPlatform.isDarwin && !x11Support)}"
+    "-Dwayland_backend=${lib.boolToString waylandSupport}"
     "-Dintrospection=${lib.boolToString withIntrospection}"
   ];
 

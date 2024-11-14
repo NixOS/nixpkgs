@@ -177,6 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "broadway-backend" broadwaySupport)
     (lib.mesonEnable "vulkan" vulkanSupport)
     (lib.mesonEnable "print-cups" cupsSupport)
+    (lib.mesonBool "wayland-backend" waylandSupport)
     (lib.mesonBool "x11-backend" x11Support)
   ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64) [
     "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
