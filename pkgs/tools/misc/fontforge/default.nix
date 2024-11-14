@@ -29,10 +29,14 @@
   withExtras ? true,
   Carbon,
   Cocoa,
+  makeWrapper,
 }:
 
 assert withGTK -> withGUI;
 
+let
+  py = python.withPackages (ps: with ps; [ setuptools ]);
+in
 stdenv.mkDerivation rec {
   pname = "fontforge";
   version = "20230101";
@@ -70,6 +74,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     cmake
+    makeWrapper
   ];
   buildInputs =
     [
@@ -77,7 +82,7 @@ stdenv.mkDerivation rec {
       uthash
       woff2
       zeromq
-      python
+      py
       freetype
       zlib
       glib
@@ -111,16 +116,20 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall =
-    # get rid of the runtime dependency on python
-    lib.optionalString (!withPython) ''
-      rm -r "$out/share/fontforge/python"
-    '';
+    ''
+      wrapProgram $out/bin/fontforge --suffix PYTHONPATH : "${py}/${py.sitePackages}"
+    ''
+    +
+      # get rid of the runtime dependency on python
+      lib.optionalString (!withPython) ''
+        rm -r "$out/share/fontforge/python"
+      '';
 
   meta = with lib; {
     description = "Font editor";
     homepage = "https://fontforge.github.io";
     platforms = platforms.all;
     license = licenses.bsd3;
-    maintainers = [ maintainers.erictapen ];
+    maintainers = with maintainers; [ erictapen ulysseszhan ];
   };
 }
