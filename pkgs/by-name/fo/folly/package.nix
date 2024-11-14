@@ -28,6 +28,8 @@
   fmt_11,
   jemalloc,
 
+  gtest,
+
   follyMobile ? false,
 
   # for passthru.tests
@@ -92,8 +94,14 @@ stdenv.mkDerivation (finalAttrs: {
       jemalloc
     ];
 
+  checkInputs = [
+    gtest
+  ];
+
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
 
     # Folly uses these instead of the standard CMake variables for some reason.
     (lib.cmakeFeature "INCLUDE_INSTALL_DIR" "${placeholder "dev"}/include")
@@ -112,6 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
+  doCheck = true;
+
   # https://github.com/NixOS/nixpkgs/issues/144170
   postPatch = ''
     substituteInPlace CMake/libfolly.pc.in \
@@ -121,6 +131,35 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         ${lib.escapeShellArg "\${prefix}/@CMAKE_INSTALL_INCLUDEDIR@"} \
         '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+  '';
+
+  # TODO: Figure out why `GTEST_FILTER` doesn’t work to skip these.
+  checkPhase = ''
+    runHook preCheck
+
+    ctest -j $NIX_BUILD_CORES --output-on-failure --exclude-regex ${
+      lib.escapeShellArg (
+        lib.concatMapStringsSep "|" (test: "^${lib.escapeRegex test}$") (
+          [
+            "concurrency_concurrent_hash_map_test.*/ConcurrentHashMapTest/*.StressTestReclamation"
+            "io_async_ssl_session_test.SSLSessionTest.BasicTest"
+            "io_async_ssl_session_test.SSLSessionTest.NullSessionResumptionTest"
+            "singleton_thread_local_test.SingletonThreadLocalDeathTest.Overload"
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
+            "concurrency_cache_locality_test.CacheLocality.BenchmarkSysfs"
+            "concurrency_cache_locality_test.CacheLocality.LinuxActual"
+            "futures_future_test.Future.NoThrow"
+            "futures_retrying_test.RetryingTest.largeRetries"
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [
+            "buffered_atomic_test.BufferedAtomic.singleThreadUnguardedAccess"
+          ]
+        )
+      )
+    }
+
+    runHook postCheck
   '';
 
   postFixup = ''
