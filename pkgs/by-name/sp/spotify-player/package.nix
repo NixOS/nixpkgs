@@ -27,7 +27,6 @@
   withSixel ? true,
   withFuzzy ? true,
   stdenv,
-  darwin,
   makeBinaryWrapper,
 
   # passthru
@@ -91,18 +90,7 @@ rustPlatform.buildRustPackage rec {
       gst_all_1.gst-devtools
       gst_all_1.gst-plugins-base
       gst_all_1.gst-plugins-good
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && withMediaControl) [
-      darwin.apple_sdk.frameworks.MediaPlayer
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        AudioUnit
-        Cocoa
-      ]
-    );
+    ];
 
   buildNoDefaultFeatures = true;
 
