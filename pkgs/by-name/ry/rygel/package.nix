@@ -23,6 +23,7 @@
   libsoup_3,
   gtk3,
   libmediaart,
+  pipewire,
   sqlite,
   systemd,
   tinysparql,
@@ -74,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       libsoup_3
       gtk3
       libmediaart
+      pipewire
       sqlite
       systemd
       tinysparql
