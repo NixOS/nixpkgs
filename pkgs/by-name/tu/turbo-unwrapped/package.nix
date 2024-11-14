@@ -1,11 +1,10 @@
 {
-  stdenv,
   lib,
-  fetchFromGitHub,
-  rustPlatform,
+  stdenv,
+  apple-sdk_11,
   capnproto,
-  darwin,
   extra-cmake-modules,
+  fetchFromGitHub,
   fontconfig,
   llvmPackages,
   nix-update-script,
@@ -13,6 +12,7 @@
   pkg-config,
   protobuf,
   rust-jemalloc-sys,
+  rustPlatform,
   zlib,
 }:
 
@@ -39,21 +39,12 @@ rustPlatform.buildRustPackage rec {
     # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
     ++ lib.optional stdenv.hostPlatform.isLinux llvmPackages.bintools;
 
-  buildInputs =
-    [
-      fontconfig
-      openssl
-      rust-jemalloc-sys
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk_11_0.frameworks;
-      [
-        CoreFoundation
-        CoreServices
-        IOKit
-      ]
-    );
+  buildInputs = [
+    fontconfig
+    openssl
+    rust-jemalloc-sys
+    zlib
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   cargoBuildFlags = [
     "--package"
