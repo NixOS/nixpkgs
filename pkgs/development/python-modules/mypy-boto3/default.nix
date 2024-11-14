@@ -46,8 +46,8 @@ let
 in
 rec {
   mypy-boto3-accessanalyzer =
-    buildMypyBoto3Package "accessanalyzer" "1.35.0"
-      "sha256-xqzlZtspREjzFnslOFdBOwgRuX7+/QhFY2pnvWdvZbg=";
+    buildMypyBoto3Package "accessanalyzer" "1.35.60"
+      "sha256-xXLkCWbh5JBL2Mt0KIIRQJEhfPeJrIafGf8edWdkwq8=";
 
   mypy-boto3-account =
     buildMypyBoto3Package "account" "1.35.0"
@@ -250,8 +250,8 @@ rec {
       "sha256-8QLyd1uCh26njr6VnNBFROHWFXMSvpO7WRzV8DFZ01U=";
 
   mypy-boto3-cloudtrail =
-    buildMypyBoto3Package "cloudtrail" "1.35.27"
-      "sha256-EZzFE8myIt72X3Mxr+ZZ4lx8O+nTARvm93OhT4ekYpE=";
+    buildMypyBoto3Package "cloudtrail" "1.35.60"
+      "sha256-DuFNdYU7QrUczvCd1mU9jnPBkGfwpskj9F6gSYwJYnA=";
 
   mypy-boto3-cloudtrail-data =
     buildMypyBoto3Package "cloudtrail-data" "1.35.0"
@@ -434,8 +434,8 @@ rec {
       "sha256-OgK+ZM7wn7Elp6xzb1YnZtYP+eARgsP+BIYkQb+E4YE=";
 
   mypy-boto3-dynamodb =
-    buildMypyBoto3Package "dynamodb" "1.35.54"
-      "sha256-qzd/6OxI0XBt8Z1s5bzlRbM27o/O1ZDfR98uqsH69sA=";
+    buildMypyBoto3Package "dynamodb" "1.35.60"
+      "sha256-kurDXEnp8/8jpK1t7l3FTkEODEmpi02TSTxwAOvnRWg=";
 
   mypy-boto3-dynamodbstreams =
     buildMypyBoto3Package "dynamodbstreams" "1.35.0"
@@ -446,8 +446,8 @@ rec {
       "sha256-wBJ7PnAlsi88AZIRPoNgbzOhPwUAJBegtwk+tw1lOwU=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.35.52"
-      "sha256-nvj7AYDTPDNLpAOcWOl5vGbtfEscLDwhVHTdCtK9X5g=";
+    buildMypyBoto3Package "ec2" "1.35.60"
+      "sha256-vIA0qQ4Y8ScBw8e69DC51qrxPEDDZ7y2OTLGBX1hnRo=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.35.0"
@@ -630,8 +630,8 @@ rec {
       "sha256-jHZg5Y9hX7KinsiwNfwAs8bg8uO71JLIKFl6xDAQJwQ=";
 
   mypy-boto3-internetmonitor =
-    buildMypyBoto3Package "internetmonitor" "1.35.8"
-      "sha256-BWNccaLrGmm5liiAOHCeFqSlkDk8wnj+/ipExaVZVis=";
+    buildMypyBoto3Package "internetmonitor" "1.35.60"
+      "sha256-499CCePEtUnJhk3GJJ/BWhpYY5smN91yp3WuSnYBXJo=";
 
   mypy-boto3-iot =
     buildMypyBoto3Package "iot" "1.35.33"
@@ -862,8 +862,8 @@ rec {
       "sha256-v+a4wc62OnHXJv5BHy/oq88FRn3piimmenmAPAOZXOA=";
 
   mypy-boto3-mediaconvert =
-    buildMypyBoto3Package "mediaconvert" "1.35.23"
-      "sha256-TvkVif/foJUzw1tPg8l2Y81neHUfxeZ9aDKtaIYKyRg=";
+    buildMypyBoto3Package "mediaconvert" "1.35.60"
+      "sha256-iURmmne8xlDftE34C1f6EMIM0Ub10vL25isLU4Q6ROI=";
 
   mypy-boto3-medialive =
     buildMypyBoto3Package "medialive" "1.35.23"
@@ -986,8 +986,8 @@ rec {
       "sha256-qyUZN9Gz8Q6TBDg1LW+M58TLwDlmqJ9aCr4021LbSL0=";
 
   mypy-boto3-organizations =
-    buildMypyBoto3Package "organizations" "1.35.28"
-      "sha256-lT/74MV0ZKA1rBoHOuZBM0uAf4/aOQ2V5AMxzGY5RFM=";
+    buildMypyBoto3Package "organizations" "1.35.60"
+      "sha256-xOhCq83c8jf6Nn4lLHiHidFtIk3qzBkCQ/NCV6vq7v0=";
 
   mypy-boto3-osis =
     buildMypyBoto3Package "osis" "1.35.0"
