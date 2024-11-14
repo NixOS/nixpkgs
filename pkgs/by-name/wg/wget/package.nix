@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, gettext, pkg-config, perlPackages
+{ lib, stdenv, fetchurl, gettext, pkg-config, perlPackages
 , libidn2, zlib, pcre, libuuid, libiconv, libintl
 , python3, lzip, darwin
 , withLibpsl ? false, libpsl
@@ -7,20 +7,15 @@
 
 stdenv.mkDerivation rec {
   pname = "wget";
-  version = "1.24.5";
+  version = "1.25.0";
 
   src = fetchurl {
     url = "mirror://gnu/wget/wget-${version}.tar.lz";
-    hash = "sha256-V6EHFR5O+U/flK/+z6xZiWPzcvEyk+2cdAMhBTkLNu4=";
+    hash = "sha256-GSJcx1awoIj8gRSNxqQKDI8ymvf9hIPxx7L+UPTgih8=";
   };
 
   patches = [
     ./remove-runtime-dep-on-openssl-headers.patch
-    (fetchpatch {
-      name = "CVE-2024-38428.patch";
-      url = "https://git.savannah.gnu.org/cgit/wget.git/patch/?id=ed0c7c7e0e8f7298352646b2fd6e06a11e242ace";
-      hash = "sha256-4ZVPufgG/h0UkxF9hQBAtF6QAG4GEz9hHeqEsD47q4U=";
-    })
   ];
 
   preConfigure = ''
