@@ -5,50 +5,67 @@
   cargo-tauri,
   darwin,
   glib-networking,
-  libsoup,
+  libayatana-appindicator,
+  nodejs,
   openssl,
   pkg-config,
-  webkitgtk_4_0,
-  wrapGAppsHook3,
+  pnpm_9,
+  webkitgtk_4_1,
+  wrapGAppsHook4,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "test-app";
   inherit (cargo-tauri) version src;
 
-  # Basic example provided by upstream
-  sourceRoot = "${src.name}/examples/workspace";
+  cargoLock = {
+    inherit (cargo-tauri.cargoDeps) lockFile;
+    outputHashes = {
+      "schemars_derive-0.8.21" = "sha256-AmxBKZXm2Eb+w8/hLQWTol5f22uP8UqaIh+LVLbS20g=";
+    };
+  };
 
-  cargoPatches = [
-    # https://github.com/NixOS/nixpkgs/issues/332957
-    ./update-time-crate.patch
-  ];
+  postPatch = ''
+    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+      --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+  '';
 
-  cargoHash = "sha256-ull9BWzeKsnMi4wcH67FnKFzTjqEdiRlM3f+EKIPvvU=";
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+
+    hash = "sha256-kTr61DFPIIYceB8tZrKFaMG65CZ//djGEOQBLRNPotk=";
+  };
 
   nativeBuildInputs = [
     cargo-tauri.hook
 
+    nodejs
     pkg-config
-    wrapGAppsHook3
+    pnpm_9.configHook
+    wrapGAppsHook4
   ];
 
   buildInputs =
     [ openssl ]
     ++ lib.optionals stdenv.isLinux [
       glib-networking
-      libsoup
-      webkitgtk_4_0
+      libayatana-appindicator
+      webkitgtk_4_1
     ]
-    ++ lib.optionals stdenv.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        CoreServices
-        Security
-        WebKit
-      ]
-    );
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.WebKit
+    ];
+
+  buildAndTestSubdir = "examples/api/src-tauri";
+
+  # This example depends on the actual `api` package to be built in-tree
+  preBuild = ''
+    pnpm --filter '@tauri-apps/api' build
+  '';
 
   # No one should be actually running this, so lets save some time
   buildType = "debug";
