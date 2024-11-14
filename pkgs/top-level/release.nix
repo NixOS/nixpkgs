@@ -12,7 +12,7 @@
 , system ? builtins.currentSystem
 , officialRelease ? false
   # The platform doubles for which we build Nixpkgs.
-, supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]
+, supportedSystems ? import ../../ci/supportedSystems.nix
   # The platform triples for which we build bootstrap tools.
 , bootstrapConfigs ? [
     "aarch64-apple-darwin"
