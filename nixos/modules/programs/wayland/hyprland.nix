@@ -52,6 +52,20 @@ in
       default = true;
     };
 
+    withUWSM = lib.mkEnableOption null // {
+      description = ''
+        Launch Hyprland with the UWSM (Universal Wayland Session Manager) session manager.
+        This has improved systemd support and is recommended for most users.
+        This automatically starts appropiate targets like `graphical-session.target`,
+        and `wayland-session@Hyprland.target`.
+
+        ::: {.note}
+        Some changes may need to be made to Hyprland configs depending on your setup, see
+        [Hyprland wiki](https://wiki.hyprland.org/Useful-Utilities/Systemd-start/#uwsm).
+        :::
+      '';
+    };
+
     systemd.setPath.enable = lib.mkEnableOption null // {
       default = lib.versionOlder cfg.package.version "0.41.2";
       defaultText = lib.literalExpression ''lib.versionOlder cfg.package.version "0.41.2"'';
@@ -69,9 +83,6 @@ in
       {
         environment.systemPackages = [ cfg.package ];
 
-        # To make a Hyprland session available if a display manager like SDDM is enabled:
-        services.displayManager.sessionPackages = [ cfg.package ];
-
         xdg.portal = {
           enable = true;
           extraPortals = [ cfg.portalPackage ];
@@ -84,6 +95,22 @@ in
           '';
         };
       }
+
+      (lib.mkIf (cfg.withUWSM) {
+        programs.uwsm.enable = true;
+        # Configure UWSM to launch Hyprland from a display manager like SDDM
+        programs.uwsm.waylandCompositors = {
+          hyprland = {
+            prettyName = "Hyprland";
+            comment = "Hyprland compositor managed by UWSM";
+            binPath = "/run/current-system/sw/bin/Hyprland";
+          };
+        };
+      })
+      (lib.mkIf (!cfg.withUWSM) {
+        # To make a vanilla Hyprland session available in DM
+        services.displayManager.sessionPackages = [ cfg.package ];
+      })
 
       (import ./wayland-session.nix {
         inherit lib pkgs;
