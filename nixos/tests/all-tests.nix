@@ -619,6 +619,7 @@ in {
   mongodb = handleTest ./mongodb.nix {};
   moodle = handleTest ./moodle.nix {};
   moonraker = handleTest ./moonraker.nix {};
+  mopidy = handleTest ./mopidy.nix {};
   morph-browser = handleTest ./morph-browser.nix { };
   morty = handleTest ./morty.nix {};
   mosquitto = handleTest ./mosquitto.nix {};

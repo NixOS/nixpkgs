@@ -8,6 +8,7 @@
   glib-networking,
   gobject-introspection,
   pipewire,
+  nixosTests,
 }:
 
 pythonPackages.buildPythonApplication rec {
@@ -56,6 +57,8 @@ pythonPackages.buildPythonApplication rec {
 
   # There are no tests
   doCheck = false;
+
+  passthru.tests = { inherit (nixosTests) mopidy; };
 
   meta = with lib; {
     homepage = "https://www.mopidy.com/";
