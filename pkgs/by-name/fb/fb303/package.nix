@@ -15,6 +15,8 @@
   wangle,
   apple-sdk_11,
   darwinMinVersionHook,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -64,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_DIR" "${placeholder "dev"}/lib/cmake/fb303")
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "dev"))
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Base Thrift service and a common set of functionality for querying stats, options, and other information from a service";
