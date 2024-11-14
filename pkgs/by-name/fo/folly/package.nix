@@ -121,12 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/facebook/folly";
     license = lib.licenses.asl20;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
-      "aarch64-linux"
-    ];
+    platforms = lib.platforms.unix;
+    badPlatforms = [ lib.systems.inspect.patterns.is32bit ];
     maintainers = with lib.maintainers; [
       abbradar
       pierreis
