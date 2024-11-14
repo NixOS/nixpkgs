@@ -16115,8 +16115,6 @@ with pkgs;
     wlroots = wlroots_0_18;
   };
 
-  tree-from-tags = callPackage ../applications/audio/tree-from-tags { };
-
   treesheets = callPackage ../applications/office/treesheets {
     wxGTK = wxGTK32;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -19249,5 +19247,9 @@ with pkgs;
 
   cantata = callPackage ../by-name/ca/cantata/package.nix {
     ffmpeg = ffmpeg_6;
+  };
+
+  tree-from-tags = callPackage ../by-name/tr/tree-from-tags/package.nix {
+    ruby = ruby_3_1;
   };
 }

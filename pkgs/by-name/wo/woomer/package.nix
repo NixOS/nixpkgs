@@ -66,7 +66,13 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "woomer";
-    inherit (wayland.meta) platforms;
+    # Not all platforms supported by Wayland are supported by the libraries
+    # used here
+    #
+    # "unresolved import `nix::sys::memfd`"
+    # https://github.com/waycrate/wayshot/blob/cb6bd68dbbe6ab70a5d8fe3bd04cc154f0631cd8/libwayshot/src/screencopy.rs#L11
+    # https://github.com/nix-rust/nix/blob/0e4353a368abfcedea4ebe4345cf7604bb61d238/src/sys/mod.rs#L40-L44
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     # TODO: Remove after upstream is no longer affected by
     # https://github.com/raylib-rs/raylib-rs/issues/74
     broken = stdenv.hostPlatform.isAarch64;
