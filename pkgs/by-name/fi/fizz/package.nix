@@ -62,8 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
-  NIX_LDFLAGS = "-lz";
-
   doCheck = true;
 
   preCheck =
