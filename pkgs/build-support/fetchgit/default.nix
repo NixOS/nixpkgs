@@ -13,7 +13,10 @@ in
 lib.makeOverridable (lib.fetchers.withNormalizedHash { } (
 # NOTE Please document parameter additions or changes in
 #   doc/build-helpers/fetchers.chapter.md
-{ url, rev ? "HEAD", leaveDotGit ? deepClone
+{ url
+, tag ? null
+, rev ? if tag != null then "refs/tags/${tag}" else "HEAD" # FIXME fetching HEAD by default is problematic at best
+, leaveDotGit ? deepClone
 , outputHash ? lib.fakeHash, outputHashAlgo ? null
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
