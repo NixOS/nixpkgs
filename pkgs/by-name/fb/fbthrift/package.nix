@@ -22,6 +22,7 @@
 
   mvfst,
 
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -108,6 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
       done
     )
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Facebook's branch of Apache Thrift";
