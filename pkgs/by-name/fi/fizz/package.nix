@@ -22,6 +22,8 @@
   zlib,
 
   gtest,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -113,6 +115,8 @@ stdenv.mkDerivation (finalAttrs: {
       done
     )
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "C++14 implementation of the TLS-1.3 standard";
