@@ -5,7 +5,6 @@
   rustPlatform,
   cacert,
   cargo-tauri_1,
-  darwin,
   desktop-file-utils,
   libsoup,
   nodejs,
@@ -57,16 +56,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libsoup
       webkitgtk_4_0
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        CoreServices
-        Security
-        WebKit
-      ]
-    );
+    ];
 
   env = {
     TURBO_BINARY_PATH = lib.getExe turbo;
