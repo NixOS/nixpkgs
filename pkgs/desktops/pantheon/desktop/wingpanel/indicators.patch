@@ -1,0 +1,21 @@
+diff --git a/lib/IndicatorManager.vala b/lib/IndicatorManager.vala
+index a99a1ec..0ae7799 100644
+--- a/lib/IndicatorManager.vala
++++ b/lib/IndicatorManager.vala
+@@ -115,7 +115,15 @@ public class Wingpanel.IndicatorManager : GLib.Object {
+         }
+ 
+         /* load indicators */
+-        var base_folder = File.new_for_path (Build.INDICATORS_DIR);
++
++        var indicators_path = Environment.get_variable("WINGPANEL_INDICATORS_PATH");
++        if (indicators_path != null) {
++            debug ("WINGPANEL_INDICATORS_PATH set to %s", indicators_path);
++        } else {
++            critical ("WINGPANEL_INDICATORS_PATH not set");
++        }
++
++        var base_folder = File.new_for_path (indicators_path);
+ 
+         try {
+             monitor = base_folder.monitor_directory (FileMonitorFlags.NONE, null);

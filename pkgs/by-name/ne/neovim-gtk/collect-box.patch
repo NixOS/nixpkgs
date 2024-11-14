@@ -1,0 +1,12 @@
+diff -ru a/src/ui.rs b/src/ui.rs
+--- a/src/ui.rs
++++ b/src/ui.rs
+@@ -385,7 +386,7 @@
+                     files_list
+                         .iter()
+                         .map(|f| misc::escape_filename(f))
+-                        .collect::<Box<_>>()
++                        .collect::<Box<[_]>>()
+                         .join(" ")
+                 ));
+             } else {

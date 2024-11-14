@@ -1,0 +1,58 @@
+commit c534a831c2f7186ebabe4e17f1e1df6d11ebff89
+Author: Samuel Rounce <me@samuelrounce.co.uk>
+Date:   Thu Sep 5 22:17:21 2024 +0100
+
+    [PATCH] NIXOS: don't ignore PYTHONPATH
+    
+    On NixOS or rather within nixpkgs we provide the runtime Python
+    packages via the PYTHONPATH environment variable. FreeCAD tries its
+    best to ignore Python environment variables that are being inherited
+    from the environment. For Python versions >=3.11 it also tries to
+    initialize the interpreter config without any environmental data. We
+    have to initialize the configuration *with* the information from the
+    environment for our packaging to work.
+    
+    Upstream has purposely isolated the environments AFAIK and thus
+    shouldn't accept this patch (as is). What they might accept (once
+    support for older Python versions has been dropped) is removing the
+    PYTHONPATH specific putenv calls.
+---
+ src/Base/Interpreter.cpp | 1 +
+ src/Main/MainGui.cpp     | 3 ---
+ 2 files changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/src/Base/Interpreter.cpp b/src/Base/Interpreter.cpp
+index 2bdc54ccff..ee4f7fc070 100644
+--- a/src/Base/Interpreter.cpp
++++ b/src/Base/Interpreter.cpp
+@@ -593,6 +593,7 @@ void initInterpreter(int argc, char* argv[])
+     PyConfig config;
+     PyConfig_InitIsolatedConfig(&config);
+     config.isolated = 0;
++    config.use_environment = 1;
+     config.user_site_directory = 1;
+ 
+     status = PyConfig_SetBytesArgv(&config, argc, argv);
+diff --git a/src/Main/MainGui.cpp b/src/Main/MainGui.cpp
+index 36087cffd6..89d49d2cc6 100644
+--- a/src/Main/MainGui.cpp
++++ b/src/Main/MainGui.cpp
+@@ -114,10 +114,8 @@ int main(int argc, char** argv)
+     // See https://forum.freecad.org/viewtopic.php?f=18&t=20600
+     // See Gui::Application::runApplication()
+     putenv("LC_NUMERIC=C");
+-    putenv("PYTHONPATH=");
+ #elif defined(FC_OS_MACOSX)
+     (void)QLocale::system();
+-    putenv("PYTHONPATH=");
+ #elif defined(__MINGW32__)
+     const char* mingw_prefix = getenv("MINGW_PREFIX");
+     const char* py_home = getenv("PYTHONHOME");
+@@ -125,7 +123,6 @@ int main(int argc, char** argv)
+         _putenv_s("PYTHONHOME", mingw_prefix);
+     }
+ #else
+-    _putenv("PYTHONPATH=");
+     // https://forum.freecad.org/viewtopic.php?f=4&t=18288
+     // https://forum.freecad.org/viewtopic.php?f=3&t=20515
+     const char* fc_py_home = getenv("FC_PYTHONHOME");

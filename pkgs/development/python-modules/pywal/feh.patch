@@ -1,0 +1,39 @@
+commit c31faa212e09aa62c232d9008e05976b1cdc9ee5
+Author: Frederik Rietdijk <fridh@fridh.nl>
+Date:   Wed Dec 26 12:54:32 2018 +0100
+
+    nix: hardcode feh
+
+diff --git a/pywal/wallpaper.py b/pywal/wallpaper.py
+index ba61e66..fad34f7 100644
+--- a/pywal/wallpaper.py
++++ b/pywal/wallpaper.py
+@@ -47,27 +47,7 @@ def xfconf(path, img):
+ 
+ def set_wm_wallpaper(img):
+     """Set the wallpaper for non desktop environments."""
+-    if shutil.which("feh"):
+-        util.disown(["feh", "--bg-fill", img])
+-
+-    elif shutil.which("nitrogen"):
+-        util.disown(["nitrogen", "--set-zoom-fill", img])
+-
+-    elif shutil.which("bgs"):
+-        util.disown(["bgs", "-z", img])
+-
+-    elif shutil.which("hsetroot"):
+-        util.disown(["hsetroot", "-fill", img])
+-
+-    elif shutil.which("habak"):
+-        util.disown(["habak", "-mS", img])
+-
+-    elif shutil.which("display"):
+-        util.disown(["display", "-backdrop", "-window", "root", img])
+-
+-    else:
+-        logging.error("No wallpaper setter found.")
+-        return
++    return util.disown(["@feh@", "--bg-fill", img])
+ 
+ 
+ def set_desktop_wallpaper(desktop, img):

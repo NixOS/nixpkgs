@@ -1,0 +1,24 @@
+diff --git old/as31/run.c new/as31/run.c
+index 28c5317..9e5263b 100644
+--- old/as31/run.c
++++ new/as31/run.c
+@@ -113,7 +113,8 @@ int run_as31(const char *infile, int lst, int use_stdout,
+ 	}
+ 
+ 	while (!feof(finPre)) {
+-		getline(&lineBuffer,&sizeBuf,finPre);
++		if (getline(&lineBuffer,&sizeBuf,finPre) == -1)
++			break;
+ 		if ((includePtr=strstr(lineBuffer,INC_CMD))) {
+ 			includePtr=includePtr+strlen(INC_CMD);
+ 			while ((*includePtr==' ')||		//move includePtr to filename
+@@ -138,7 +139,8 @@ int run_as31(const char *infile, int lst, int use_stdout,
+ 				mesg_f("Cannot open include file: %s\n",includePtr);
+ 			} else {
+ 				while (!feof(includeFile)) {
+-					getline(&incLineBuffer,&incSizeBuf,includeFile);
++					if (getline(&incLineBuffer,&incSizeBuf,includeFile) == -1)
++						break;
+ 					fprintf(fin,"%s",incLineBuffer);
+ 					if (strlen(incLineBuffer)) {
+ 						incLineCount++;

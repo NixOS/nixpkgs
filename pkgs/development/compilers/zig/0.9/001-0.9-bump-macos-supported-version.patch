@@ -1,0 +1,50 @@
+From 98285b17b3887de37b630da66f09a44f42ddbe01 Mon Sep 17 00:00:00 2001
+From: Jakub Konka <kubkon@jakubkonka.com>
+Date: Tue, 25 Oct 2022 11:46:42 +0200
+Subject: [PATCH] darwin: bump max macOS version to 13.0
+
+---
+ lib/std/target.zig | 4 ++--
+ src/target.zig     | 2 ++
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/lib/std/target.zig b/lib/std/target.zig
+index d791e3b0350..7fbad5baa3c 100644
+--- a/lib/std/target.zig
++++ b/lib/std/target.zig
+@@ -277,13 +277,13 @@ pub const Target = struct {
+                         .aarch64 => VersionRange{
+                             .semver = .{
+                                 .min = .{ .major = 11, .minor = 6 },
+-                                .max = .{ .major = 12, .minor = 0 },
++                                .max = .{ .major = 13, .minor = 0 },
+                             },
+                         },
+                         .x86_64 => VersionRange{
+                             .semver = .{
+                                 .min = .{ .major = 10, .minor = 13 },
+-                                .max = .{ .major = 12, .minor = 0 },
++                                .max = .{ .major = 13, .minor = 0 },
+                             },
+                         },
+                         else => unreachable,
+diff --git a/src/target.zig b/src/target.zig
+index 9e2d26dac65..fc585912c45 100644
+--- a/src/target.zig
++++ b/src/target.zig
+@@ -18,6 +18,7 @@ pub const available_libcs = [_]ArchOsAbi{
+     .{ .arch = .aarch64, .os = .windows, .abi = .gnu },
+     .{ .arch = .aarch64, .os = .macos, .abi = .gnu, .os_ver = .{ .major = 11, .minor = 0 } },
+     .{ .arch = .aarch64, .os = .macos, .abi = .gnu, .os_ver = .{ .major = 12, .minor = 0 } },
++    .{ .arch = .aarch64, .os = .macos, .abi = .gnu, .os_ver = .{ .major = 13, .minor = 0 } },
+     .{ .arch = .armeb, .os = .linux, .abi = .gnueabi },
+     .{ .arch = .armeb, .os = .linux, .abi = .gnueabihf },
+     .{ .arch = .armeb, .os = .linux, .abi = .musleabi },
+@@ -73,6 +74,7 @@ pub const available_libcs = [_]ArchOsAbi{
+     .{ .arch = .x86_64, .os = .macos, .abi = .gnu, .os_ver = .{ .major = 10, .minor = 0 } },
+     .{ .arch = .x86_64, .os = .macos, .abi = .gnu, .os_ver = .{ .major = 11, .minor = 0 } },
+     .{ .arch = .x86_64, .os = .macos, .abi = .gnu, .os_ver = .{ .major = 12, .minor = 0 } },
++    .{ .arch = .x86_64, .os = .macos, .abi = .gnu, .os_ver = .{ .major = 13, .minor = 0 } },
+ };
+ 
+ pub fn libCGenericName(target: std.Target) [:0]const u8 {
