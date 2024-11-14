@@ -32,6 +32,8 @@
 
   follyMobile ? false,
 
+  nix-update-script,
+
   # for passthru.tests
   python3,
   watchman,
@@ -177,6 +179,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit boost;
     fmt = fmt_11;
+
+    updateScript = nix-update-script { };
 
     tests = {
       inherit watchman;
