@@ -3786,6 +3786,13 @@ with pkgs;
     ignition-msgs_5
     ignition-msgs_8;
 
+  inherit ({
+    ignition-transport_8 = callPackage ../development/libraries/gz-transport/8.nix { };
+    ignition-transport_11 = callPackage ../development/libraries/gz-transport/11.nix { };
+  })
+    ignition-transport_8
+    ignition-transport_11;
+
   gzip = callPackage ../tools/compression/gzip { };
 
   pdisk = callPackage ../tools/system/pdisk {
