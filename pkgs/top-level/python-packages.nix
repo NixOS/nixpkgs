@@ -12620,6 +12620,8 @@ self: super: with self; {
 
   pytest-click = callPackage ../development/python-modules/pytest-click { };
 
+  pytest-codspeed = callPackage ../development/python-modules/pytest-codspeed { };
+
   pytest-console-scripts = callPackage ../development/python-modules/pytest-console-scripts { };
 
   pytest-cov = callPackage ../development/python-modules/pytest-cov { };
