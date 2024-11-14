@@ -3589,6 +3589,17 @@ with pkgs;
     gz-cmake_4;
 
   inherit ({
+    ignition-common_3 = callPackage ../development/libraries/gz-common/3.nix { };
+    ignition-common_4 = callPackage ../development/libraries/gz-common/4.nix { };
+    gz-common_5 = callPackage ../development/libraries/gz-common/5.nix { };
+    gz-common_6 = callPackage ../development/libraries/gz-common/6.nix { };
+  })
+    ignition-common_3
+    ignition-common_4
+    gz-common_5
+    gz-common_6;
+
+  inherit ({
     ignition-utils_1 = callPackage ../development/libraries/gz-utils/1.nix { };
     gz-utils_2 = callPackage ../development/libraries/gz-utils/2.nix { };
     gz-utils_3 = callPackage ../development/libraries/gz-utils/3.nix { };
