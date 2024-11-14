@@ -112,7 +112,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Watches files and takes action when they change";
     homepage = "https://facebook.github.io/watchman";
-    maintainers = with lib.maintainers; [ kylesferrazza ];
+    maintainers = with lib.maintainers; [
+      kylesferrazza
+      emily
+    ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };
