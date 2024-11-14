@@ -35,7 +35,7 @@ buildMozillaMach rec {
   tests = {
     inherit (nixosTests) firefox;
   };
-  updateScript = callPackage ./update.nix {
+  updateScript = callPackage ../update.nix {
     attrPath = "firefox-unwrapped";
   };
 }
