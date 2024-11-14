@@ -3650,6 +3650,13 @@ with pkgs;
     ignition-transport_8
     ignition-transport_11;
 
+  inherit ({
+    ignition-tools_1 = callPackage ../development/tools/gz-tools/1.nix { };
+    gz-tools_2 = callPackage ../development/tools/gz-tools/2.nix { };
+  })
+    ignition-tools_1
+    gz-tools_2;
+
   gzip = callPackage ../tools/compression/gzip { };
 
   pdisk = callPackage ../tools/system/pdisk {
