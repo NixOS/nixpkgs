@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "NotBalds";
     repo = "cwe-client-cli";
     rev = "v${version}";
-    hash = "sha256-pL0jPS+zNRI+ED08LBBKb1ql4fxEVrKAsC8Upy2i/2U=";
+    hash = "sha256-3ehzERWV0/hV0Suy9LtCcp+xmaD13Chgu4a0gPT7cHs=";
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
