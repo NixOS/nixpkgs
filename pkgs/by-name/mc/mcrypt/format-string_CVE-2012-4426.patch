@@ -1,0 +1,31 @@
+--- mcrypt-2.6.8/src/errors.c
++++ mcrypt-2.6.8/src/errors.c
+@@ -25,24 +25,24 @@
+
+ void err_quit(char *errmsg)
+ {
+-	fprintf(stderr, errmsg);
++	fprintf(stderr, "%s", errmsg);
+ 	exit(-1);
+ }
+
+ void err_warn(char *errmsg)
+ {
+ 	if (quiet <= 1)
+-		fprintf(stderr, errmsg);
++		fprintf(stderr, "%s", errmsg);
+ }
+
+ void err_info(char *errmsg)
+ {
+ 	if (quiet == 0)
+-		fprintf(stderr, errmsg);
++		fprintf(stderr, "%s", errmsg);
+ }
+
+ void err_crit(char *errmsg)
+ {
+ 	if (quiet <= 2)
+-		fprintf(stderr, errmsg);
++		fprintf(stderr, "%s", errmsg);
+ }

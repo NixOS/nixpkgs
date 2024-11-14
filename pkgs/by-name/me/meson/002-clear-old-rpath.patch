@@ -1,0 +1,20 @@
+diff --git a/mesonbuild/scripts/depfixer.py b/mesonbuild/scripts/depfixer.py
+index 4176b9a03..faaabf616 100644
+--- a/mesonbuild/scripts/depfixer.py
++++ b/mesonbuild/scripts/depfixer.py
+@@ -336,6 +336,15 @@ class Elf(DataSizes):
+         if not new_rpath:
+             self.remove_rpath_entry(entrynum)
+         else:
++            # Clear old rpath to avoid stale references,
++            # not heeding the warning above about de-duplication
++            # since it does not seem to cause issues for us
++            # and not doing so trips up Nix’s reference checker.
++            # See https://github.com/NixOS/nixpkgs/pull/46020
++            # and https://github.com/NixOS/nixpkgs/issues/95163
++            self.bf.seek(rp_off)
++            self.bf.write(b'\0'*len(old_rpath))
++
+             self.bf.seek(rp_off)
+             self.bf.write(new_rpath)
+             self.bf.write(b'\0')
