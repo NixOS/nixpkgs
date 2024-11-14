@@ -1,8 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ncurses
-, perl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+  perl,
+  apple-sdk_11,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +18,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-P4w/PM9UmHmTzS9+WDK3x3MyZ7OoY2yO/Rx0vRMJuLI=";
   };
 
-  buildInputs = [ ncurses perl ];
+  buildInputs = [
+    ncurses
+    perl
+  ] ++ lib.optionals stdenv.isDarwin [ apple-sdk_11 ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -28,12 +33,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/johnsonjh/OpenVi";
     description = "Portable OpenBSD vi for UNIX systems";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ aleksana ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ aleksana ];
     mainProgram = "ovi";
   };
 }
