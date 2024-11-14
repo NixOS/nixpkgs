@@ -119,7 +119,7 @@ let
         src = ./patches/locale-binary-path.patch;
         locale = "${if stdenv.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
       })
-    ] ++ lib.optionals (atLeast "15") [
+    ] ++ lib.optionals (atLeast "15" && olderThan "16") [
       # TODO: Remove this with the next set of minor releases
       (fetchpatch ({
           url = "https://github.com/postgres/postgres/commit/b27622c90869aab63cfe22159a459c57768b0fa4.patch";
