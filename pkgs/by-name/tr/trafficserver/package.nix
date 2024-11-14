@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchzip
+, autoreconfHook
 , makeWrapper
 , nixosTests
 , pkg-config
@@ -10,7 +11,6 @@
 , pcre
 , perlPackages
 , python3
-, catch2
 # recommended dependencies
 , withHwloc ? true
 , hwloc
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   #
   # [1]: https://github.com/apache/trafficserver/pull/5617
   # [2]: https://github.com/apache/trafficserver/blob/3fd2c60/configure.ac#L742-L788
-  nativeBuildInputs = [ makeWrapper pkg-config file python3 ]
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config file python3 ]
     ++ (with perlPackages; [ perl ExtUtilsMakeMaker ])
     ++ lib.optionals stdenv.hostPlatform.isLinux [ linuxHeaders ];
 
@@ -93,10 +93,8 @@ stdenv.mkDerivation rec {
       src/traffic_via/test_traffic_via \
       src/traffic_logstats/tests \
       tools/check-unused-dependencies
-
-    substituteInPlace configure --replace '/usr/bin/file' '${file}/bin/file'
   '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace configure \
+    substituteInPlace configure.ac \
       --replace '/usr/include/linux' '${linuxHeaders}/include/linux'
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # 'xcrun leaks' probably requires non-free XCode
