@@ -1,8 +1,17 @@
-{ lib, stdenv, fetchurl, openjdk17, openjfx17, glib, dpkg, wrapGAppsHook3 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openjdk17,
+  openjfx17,
+  glib,
+  dpkg,
+  wrapGAppsHook3,
+}:
 let
   openjdk = openjdk17.override {
-      enableJavaFX = true;
-      openjfx_jdk = openjfx17.override { withWebKit = true; };
+    enableJavaFX = true;
+    openjfx_jdk = openjfx17.override { withWebKit = true; };
   };
 in
 stdenv.mkDerivation rec {
@@ -13,11 +22,16 @@ stdenv.mkDerivation rec {
     # We use the deb here. First instinct might be to go for the "generic" JAR
     # download, but that is actually a graphical installer that is much harder
     # to unpack than the deb.
-    url = "https://www.bluej.org/download/files/BlueJ-linux-${builtins.replaceStrings ["."] [""] version}.deb";
+    url = "https://www.bluej.org/download/files/BlueJ-linux-${
+      builtins.replaceStrings [ "." ] [ "" ] version
+    }.deb";
     sha256 = "sha256-sOT86opMa9ytxJlfURIsD06HiP+j+oz3lQ0DqmLV1wE=";
   };
 
-  nativeBuildInputs = [ dpkg wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    dpkg
+    wrapGAppsHook3
+  ];
   buildInputs = [ glib ];
 
   dontWrapGApps = true;
@@ -50,4 +64,5 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ chvp ];
     platforms = lib.platforms.linux;
   };
+
 }
