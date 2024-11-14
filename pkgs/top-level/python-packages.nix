@@ -14023,7 +14023,7 @@ self: super: with self; {
   rply = callPackage ../development/python-modules/rply { };
 
   rpm = toPythonModule (pkgs.rpm.override {
-    inherit python;
+    python3 = self.python;
   });
 
   rpmfile = callPackage ../development/python-modules/rpmfile { };
