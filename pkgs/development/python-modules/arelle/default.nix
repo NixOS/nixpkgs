@@ -63,12 +63,6 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml --replace-fail \
         'requires = ["setuptools~=73.0", "wheel~=0.44", "setuptools_scm[toml]~=8.1"]' \
         'requires = ["setuptools", "wheel", "setuptools_scm[toml]"]'
-
-    # Darwin currently doesn't have the native `_decimal` module
-    # Instead, we'll use the wrapper `decimal` module that can fall back to python based implementation
-    # These lines can be removed after https://github.com/NixOS/nixpkgs/pull/354125 hits master
-    substituteInPlace arelle/Validate{DuplicateFacts,XbrlCalcs}.py tests/unit_tests/arelle/test_{xmlvalidate,validatexbrlcalcs}.py  \
-        --replace-fail 'from _decimal import' 'from decimal import'
   '';
 
   build-system = [
