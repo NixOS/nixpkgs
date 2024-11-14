@@ -19,10 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-Brwvu/Zevr8sOE3KAwakDDzVMc2VoFxIb1orXAes2U0=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [
+    flit-core
+  ];
 
   dependencies = [
     click
+    requests
+    terminaltables3
     pygithub
     requests
     terminaltables3
