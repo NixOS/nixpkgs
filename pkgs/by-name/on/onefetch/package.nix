@@ -13,7 +13,6 @@
 
 let
   inherit (darwin) libresolv;
-  inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
 in
 rustPlatform.buildRustPackage rec {
   pname = "onefetch";
@@ -42,9 +41,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [ zstd ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreFoundation
       libresolv
-      Security
     ];
 
   nativeCheckInputs = [
