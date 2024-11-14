@@ -18069,6 +18069,12 @@
     githubId = 5636;
     name = "Steve Purcell";
   };
+  purepani = {
+    email = "purepani+nixpkgs@pm.me";
+    github = "purepani";
+    githubId = 7587353;
+    name = "Satwik Pani";
+  };
   purpole = {
     email = "mail@purpole.io";
     github = "purpole";
