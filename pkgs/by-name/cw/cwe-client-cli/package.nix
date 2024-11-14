@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     dbus
     openssl_3
   ];
-  cargoHash = "sha256-TqaS5zdYHYjHtf4NXX8TRlGlDogn9w6TntaATCNFxS4=";
+  cargoHash = "sha256-iQ8b5+VNU89RiO4t4rI9ULwFv6KS71oVycHT7BeF8jQ=";
 
   meta = {
     description = "Simple command line client for CWE";
