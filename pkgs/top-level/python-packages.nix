@@ -11203,7 +11203,9 @@ self: super: with self; {
 
   py = callPackage ../development/python-modules/py { };
 
-  pycangjie = callPackage ../development/python-modules/pycangjie { };
+  pycangjie = callPackage ../development/python-modules/pycangjie {
+    inherit (pkgs.buildPackages) meson;
+  };
 
   pycapnp = callPackage ../development/python-modules/pycapnp { };
 
