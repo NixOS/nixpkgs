@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
     openssl_3
   ];
   cargoHash = "sha256-iQ8b5+VNU89RiO4t4rI9ULwFv6KS71oVycHT7BeF8jQ=";
-
+  doCheck = false; # no tests
   meta = {
     description = "Simple command line client for CWE";
     homepage = "https://github.com/NotBalds/cwe-client-cli";
