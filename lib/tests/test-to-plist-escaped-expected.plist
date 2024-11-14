@@ -27,6 +27,8 @@
 			<real>0.133700</real>
 			<key>int</key>
 			<integer>42</integer>
+			<key>keys are &lt;escaped&gt;</key>
+			<string>and &lt; so are string values</string>
 			<key>list</key>
 			<array>
 				<integer>3</integer>
@@ -39,7 +41,7 @@
 			<key>path</key>
 			<string>/foo</string>
 			<key>string</key>
-			<string>fn${o}"r\d</string>
+			<string>fn${o}&quot;r\d</string>
 		</dict>
 	</dict>
 </dict>
