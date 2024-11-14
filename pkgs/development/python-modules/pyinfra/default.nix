@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pyinfra";
-  version = "3.0.2";
+  version = "3.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "Fizzadar";
     repo = "pyinfra";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Pjmh/aPsMIwGv5Agf+UGm1T3jv8i9jJQ7SEGc3vDxZg=";
+    hash = "sha256-NHQpYOXlqFU4BtiwiESGV8pM0O8kqCz2TpXOGz8T4zQ=";
   };
 
   build-system = [ setuptools ];

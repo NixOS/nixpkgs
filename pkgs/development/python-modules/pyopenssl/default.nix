@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   openssl,
   setuptools,
   cryptography,
@@ -15,13 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pyopenssl";
-  version = "24.1.0";
+  version = "24.2.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "pyOpenSSL";
-    inherit version;
-    hash = "sha256-yr7Uv6pd+fGhbA72Sgy2Uxi1zQd6ftp9aXATHKL0Gm8=";
+  src = fetchFromGitHub {
+    owner = "pyca";
+    repo = "pyopenssl";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/TQnDWdycN4hQ7ZGvBhMJEZVafmL+0wy9eJ8hC6rfio=";
   };
 
   outputs = [
@@ -30,19 +31,17 @@ buildPythonPackage rec {
     "doc"
   ];
 
+  build-system = [ setuptools ];
+
   nativeBuildInputs = [
     openssl
-    setuptools
     sphinxHook
     sphinx-rtd-theme
   ];
 
-  postPatch = ''
-    # remove cryptography pin
-    sed -i "/cryptography/ s/,<[0-9]*//g" setup.py
-  '';
+  pythonRelaxDeps = [ "cryptography" ];
 
-  propagatedBuildInputs = [ cryptography ];
+  dependencies = [ cryptography ];
 
   nativeCheckInputs = [
     pretend
@@ -90,7 +89,7 @@ buildPythonPackage rec {
       "test_dump_certificate_request"
       "test_export_text"
     ]
-    ++ lib.optionals stdenv.is32bit [
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
       # https://github.com/pyca/pyopenssl/issues/974
       "test_verify_with_time"
     ];

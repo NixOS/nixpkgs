@@ -4,9 +4,9 @@
 , stdenv
 , undmg
 , variant ?
-  if (stdenv.isDarwin && stdenv.isAarch64)
+  if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
   then "arm64"
-  else if (stdenv.isDarwin && stdenv.isx86_64)
+  else if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
   then "intel64"
   else "universal" # not reachable by normal means
 }:

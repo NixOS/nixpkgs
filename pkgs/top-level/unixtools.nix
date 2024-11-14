@@ -224,9 +224,9 @@ let
       darwin = pkgs.darwin.basic_cmds;
     };
     xxd = {
-      linux = pkgs.vim.xxd;
-      darwin = pkgs.vim.xxd;
-      freebsd = pkgs.vim.xxd;
+      linux = pkgs.tinyxxd;
+      darwin = pkgs.tinyxxd;
+      freebsd = pkgs.tinyxxd;
     };
   };
 

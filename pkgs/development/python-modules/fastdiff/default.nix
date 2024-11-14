@@ -48,6 +48,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = [ ];
     # resulting compiled object panics at import
-    broken = stdenv.is32bit;
+    broken = stdenv.hostPlatform.is32bit;
   };
 }

@@ -49,7 +49,7 @@ let
     buildInputs = [
       libgit2
       zlib
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.CoreServices
       darwin.apple_sdk.frameworks.SystemConfiguration

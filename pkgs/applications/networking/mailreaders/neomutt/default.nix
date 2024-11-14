@@ -1,31 +1,81 @@
-{ lib, stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which
-, ncurses, perl , cyrus_sasl, gss, gpgme, libkrb5, libidn2, libxml2, notmuch, openssl
-, lua, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, w3m, mailcap, sqlite, zlib, lndir
-, pkg-config, zstd, enableZstd ? true, enableMixmaster ? false, enableLua ? false
-, withContrib ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gettext,
+  makeWrapper,
+  tcl,
+  which,
+  ncurses,
+  perl,
+  cyrus_sasl,
+  gss,
+  gpgme,
+  libkrb5,
+  libidn2,
+  libxml2,
+  notmuch,
+  openssl,
+  lua,
+  lmdb,
+  libxslt,
+  docbook_xsl,
+  docbook_xml_dtd_42,
+  w3m,
+  mailcap,
+  sqlite,
+  zlib,
+  lndir,
+  pkg-config,
+  zstd,
+  enableZstd ? true,
+  enableMixmaster ? false,
+  enableLua ? false,
+  enableSmimeKeys ? true,
+  withContrib ? true,
 }:
+
+assert lib.warnIf (
+  enableMixmaster
+) "Support for mixmaster has been removed from neomutt since the 20241002 release" true;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neomutt";
-  version = "20240425";
+  version = "20241002";
 
   src = fetchFromGitHub {
-    owner  = "neomutt";
-    repo   = "neomutt";
-    rev    = finalAttrs.version;
-    hash   = "sha256-QBqPFteoAm3AdQN0XTWpho8DEW2BFCCzBcHUZIiSxyQ=";
+    owner = "neomutt";
+    repo = "neomutt";
+    rev = finalAttrs.version;
+    hash = "sha256-c8G0CGg4jrwq+HVR4O0AtaJNzr7pDYsie1410tisLEY=";
   };
 
   buildInputs = [
-    cyrus_sasl gss gpgme libkrb5 libidn2 ncurses
-    notmuch openssl perl lmdb
-    mailcap sqlite
-  ]
-  ++ lib.optional enableZstd zstd
-  ++ lib.optional enableLua lua;
+    cyrus_sasl
+    gss
+    gpgme
+    libkrb5
+    libidn2
+    ncurses
+    notmuch
+    openssl
+    perl
+    lmdb
+    mailcap
+    sqlite
+  ] ++ lib.optional enableZstd zstd ++ lib.optional enableLua lua;
 
   nativeBuildInputs = [
-    docbook_xsl docbook_xml_dtd_42 gettext libxml2 libxslt.bin makeWrapper tcl which zlib w3m
+    docbook_xsl
+    docbook_xml_dtd_42
+    gettext
+    libxml2
+    libxslt.bin
+    makeWrapper
+    tcl
+    which
+    zlib
+    w3m
     pkg-config
   ];
 
@@ -63,17 +113,20 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/neomutt/neomutt/pull/2367
     "--disable-include-path-in-cflags"
     "--zlib"
-  ]
-  ++ lib.optional enableZstd "--zstd"
-  ++ lib.optional enableLua "--lua"
-  ++ lib.optional enableMixmaster "--mixmaster";
+  ] ++ lib.optional enableZstd "--zstd" ++ lib.optional enableLua "--lua";
 
-  postInstall = ''
-    wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"
-  ''
-  # https://github.com/neomutt/neomutt-contrib
-  # Contains vim-keys, keybindings presets and more.
-  + lib.optionalString withContrib "${lib.getExe lndir} ${finalAttrs.passthru.contrib} $out/share/doc/neomutt";
+  postInstall =
+    ''
+      wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"
+    ''
+    + lib.optionalString enableSmimeKeys ''
+      install -m 755 $src/contrib/smime_keys $out/bin;
+      substituteInPlace $out/bin/smime_keys \
+        --replace-fail '/usr/bin/openssl' '${openssl}/bin/openssl';
+    ''
+    # https://github.com/neomutt/neomutt-contrib
+    # Contains vim-keys, keybindings presets and more.
+    + lib.optionalString withContrib "${lib.getExe lndir} ${finalAttrs.passthru.contrib} $out/share/doc/neomutt";
 
   doCheck = true;
 
@@ -111,9 +164,12 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Small but very powerful text-based mail client";
     mainProgram = "neomutt";
-    homepage    = "https://www.neomutt.org";
-    license     = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ erikryb raitobezarius ];
-    platforms   = lib.platforms.unix;
+    homepage = "https://www.neomutt.org";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      erikryb
+      raitobezarius
+    ];
+    platforms = lib.platforms.unix;
   };
 })

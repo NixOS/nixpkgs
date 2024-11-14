@@ -9,9 +9,14 @@
   fetchFromGitHub,
   freenub,
   poetry-core,
+  propcache,
   pyjwt,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-freezegun,
   pytestCheckHook,
   python-dateutil,
+  python-socketio,
   pythonOlder,
   requests-mock,
   requests,
@@ -20,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "6.4.4";
+  version = "8.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,33 +34,32 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "yalexs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vW6BMb0aaGGsXwZci5FE9VuSB/hi0pltIVH/OcL0mnw=";
+    hash = "sha256-0fC12QsCOgFc6GJk5T7kCjVHe9W4Fhwmtv3dwJVh9mM=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "-v -Wdefault --cov=yalexs --cov-report=term-missing:skip-covered" ""
-  '';
-
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [ "aiohttp" ];
 
   dependencies = [
     aiofiles
     aiohttp
     ciso8601
     freenub
+    propcache
     pyjwt
     python-dateutil
+    python-socketio
     requests
     typing-extensions
-  ];
-
-  # aiounittest is not supported on 3.12
-  doCheck = pythonOlder "3.12";
+  ] ++ python-socketio.optional-dependencies.asyncio_client;
 
   nativeCheckInputs = [
     aioresponses
     aiounittest
+    pytest-asyncio
+    pytest-cov-stub
+    pytest-freezegun
     pytestCheckHook
     requests-mock
   ];
@@ -65,7 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for Yale Access (formerly August) Smart Lock and Doorbell";
     homepage = "https://github.com/bdraco/yalexs";
-    changelog = "https://github.com/bdraco/yalexs/releases/tag/v${version}";
+    changelog = "https://github.com/bdraco/yalexs/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

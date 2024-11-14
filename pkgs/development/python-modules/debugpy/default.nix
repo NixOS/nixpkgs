@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.8.2";
+  version = "1.8.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "debugpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J63izrJX7/el36kMHv+IyqDQ1C13CKb40HLOVgOzHEw=";
+    hash = "sha256-zkNV+tFRAxTdl+lCPD4XYI1Oz0dVyX4GGuNdfzy2sJU=";
   };
 
   patches =
@@ -58,14 +58,14 @@ buildPythonPackage rec {
       # - https://github.com/NixOS/nixpkgs/issues/251045
       ./skip-attach-pid-tests.patch
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Hard code GDB path (used to attach to process)
       (substituteAll {
         src = ./hardcode-gdb.patch;
         inherit gdb;
       })
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Hard code LLDB path (used to attach to process)
       (substituteAll {
         src = ./hardcode-lldb.patch;
@@ -73,13 +73,12 @@ buildPythonPackage rec {
       })
     ];
 
-  # Remove pre-compiled "attach" libraries and recompile for host platform
-  # Compile flags taken from linux_and_mac/compile_linux.sh & linux_and_mac/compile_mac.sh
+  # Compile attach library for host platform
+  # Derived from linux_and_mac/compile_linux.sh & linux_and_mac/compile_mac.sh
   preBuild = ''
     (
         set -x
         cd src/debugpy/_vendored/pydevd/pydevd_attach_to_process
-        rm *.so *.dylib *.dll *.exe *.pdb
         $CXX linux_and_mac/attach.cpp -Ilinux_and_mac -std=c++11 -fPIC -nostartfiles ${
           {
             "x86_64-linux" = "-shared -o attach_linux_amd64.so";
@@ -119,12 +118,12 @@ buildPythonPackage rec {
       export DEBUGPY_PROCESS_SPAWN_TIMEOUT=0
       export DEBUGPY_PROCESS_EXIT_TIMEOUT=0
     ''
-    + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
       # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
       export no_proxy='*';
     '';
 
-  postCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  postCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     unset no_proxy
   '';
 

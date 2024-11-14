@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-o2vLNIELd1EYWG26t5gOpnamJrBJeg4P6fcLirkcmfM=";
+    hash = "sha256-o2vLNIELd1EYWG26t5gOpnamJrBJeg4P6fcLirkcmfM=";
   };
 
   # configure wants to find gst-inspect-1.0 via pkgconfig but

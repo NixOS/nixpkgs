@@ -3,7 +3,7 @@
   fetchPypi,
   buildPythonPackage,
   sphinx,
-  pytest-cov,
+  pytest-cov-stub,
   pytest,
   mako,
   numpy,
@@ -16,17 +16,17 @@
 
 buildPythonPackage rec {
   pname = "reikna";
-  version = "0.8.0";
+  version = "0.9.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fpa1Pfo5EAafg7Pgha17G6k5G13fdErjclv0On/uYyI=";
+    hash = "sha256-uzIoGCkIINgmO+r0vAzmihS14GWv5ygakMz3tKIG3zA=";
   };
 
   nativeCheckInputs = [
     sphinx
-    pytest-cov
+    pytest-cov-stub
     pytest
   ];
 

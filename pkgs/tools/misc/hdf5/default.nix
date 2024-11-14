@@ -28,7 +28,7 @@ assert !cppSupport || !mpiSupport;
 let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.14.4.3";
+  version = "1.14.5";
   pname = "hdf5"
     + lib.optionalString cppSupport "-cpp"
     + lib.optionalString fortranSupport "-fortran"
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     owner = "HDFGroup";
     repo = "hdf5";
     rev = "hdf5_${version}";
-    hash = "sha256-lvz3x04SS0oZmUn/BIxQEHnugaDOws46kfT3NAw7Hos=";
+    hash = "sha256-bvtSeyqqrBXVAMzUtiKOhO9RR4SCO+3GnsLux4Mig6I=";
   };
 
   passthru = {
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DHDF5_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake"
     "-DBUILD_STATIC_LIBS=${lib.boolToString enableStatic}"
-  ] ++ lib.optional stdenv.isDarwin "-DHDF5_BUILD_WITH_INSTALL_NAME=ON"
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "-DHDF5_BUILD_WITH_INSTALL_NAME=ON"
     ++ lib.optional cppSupport "-DHDF5_BUILD_CPP_LIB=ON"
     ++ lib.optional fortranSupport "-DHDF5_BUILD_FORTRAN=ON"
     ++ lib.optional szipSupport "-DHDF5_ENABLE_SZIP_SUPPORT=ON"
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals threadsafe [ "-DDHDF5_ENABLE_THREADSAFE:BOOL=ON" "-DHDF5_BUILD_HL_LIB=OFF" ]
     # broken in nixpkgs since around 1.14.3 -> 1.14.4.3
     # https://github.com/HDFGroup/hdf5/issues/4208#issuecomment-2098698567
-    ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) "-DHDF5_ENABLE_NONSTANDARD_FEATURE_FLOAT16=OFF"
+    ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "-DHDF5_ENABLE_NONSTANDARD_FEATURE_FLOAT16=OFF"
   ;
 
   postInstall = ''

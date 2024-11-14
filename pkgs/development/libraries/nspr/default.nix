@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nspr";
-  version = "4.35";
+  version = "4.36";
 
   src = fetchurl {
     url = "mirror://mozilla/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
-    hash = "sha256-fqMpfqWWm10lpd2NR/JEPNqI6e50YwH24eFCb4pqvI8=";
+    hash = "sha256-Vd7DF/FAHNLl26hE00C5MKt1R/gYF5pAArzmLm8caJU=";
   };
 
   patches = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     cd nspr
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure --replace '@executable_path/' "$out/lib/"
     substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
   '';
@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-optimize"
     "--disable-debug"
-  ] ++ lib.optional stdenv.is64bit "--enable-64bit";
+  ] ++ lib.optional stdenv.hostPlatform.is64bit "--enable-64bit";
 
   postInstall = ''
     find $out -name "*.a" -delete
     moveToOutput share "$dev" # just aclocal
   '';
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   enableParallelBuilding = true;
 

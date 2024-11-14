@@ -63,13 +63,8 @@ in {
   libtinfo = makeSharedObjectTest (getSharedObjectFromDebian "libedit.so.2.0.70" (fetchurl {
     url = "mirror://debian/pool/main/libe/libedit/libedit2_3.1-20221030-2_amd64.deb";
     hash = "sha256-HPFKvycW0yedsS0GV6VzfPcAdKHnHTvfcyBmJePInOY=";
-  })) (p: let
-    ncurses' = p.ncurses.overrideAttrs (old: {
-      configureFlags = old.configureFlags ++ [ "--with-termlib" ];
-      postFixup = "";
-    });
-  in [
-    (ncurses'.override { unicodeSupport = false; })
+  })) (p: [
+    p.libtinfo
     p.libbsd
   ]);
 

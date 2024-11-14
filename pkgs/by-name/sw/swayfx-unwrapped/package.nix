@@ -137,7 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/WillPower3309/swayfx/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      eclairevoyant
       ricarch97
     ];
     platforms = lib.platforms.linux;

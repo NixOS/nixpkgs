@@ -9,6 +9,7 @@
   parameterized,
   msgpack,
   pyserial,
+  pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
@@ -32,21 +33,18 @@ buildPythonPackage rec {
     hash = "sha256-p3B1LWSygDX0UhIx4XhXv15H7Hwn9UB20jFIPDZnuNs=";
   };
 
-  postPatch = ''
-    substituteInPlace tox.ini \
-      --replace " --cov=can --cov-config=tox.ini --cov-report=lcov --cov-report=term" ""
-  '';
+  pythonRelaxDeps = [ "msgpack" ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     msgpack
     packaging
     typing-extensions
     wrapt
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     serial = [ pyserial ];
     seeedstudio = [ pyserial ];
     pcan = [ uptime ];
@@ -56,9 +54,10 @@ buildPythonPackage rec {
     future
     hypothesis
     parameterized
+    pytest-cov-stub
     pytest-timeout
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.serial;
+  ] ++ optional-dependencies.serial;
 
   disabledTestPaths = [
     # We don't support all interfaces
@@ -74,7 +73,7 @@ buildPythonPackage rec {
       "test_pack_unpack"
       "test_receive"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # timing sensitive
       "test_general"
       "test_gap"

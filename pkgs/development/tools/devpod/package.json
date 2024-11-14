@@ -26,7 +26,7 @@
     "@tanstack/react-query": "4.36.1",
     "@tanstack/react-query-devtools": "4.36.1",
     "@tanstack/react-table": "8.10.7",
-    "@tauri-apps/api": "1.5.1",
+    "@tauri-apps/api": "1.5.3",
     "dayjs": "1.11.10",
     "framer-motion": "10.16.9",
     "markdown-to-jsx": "7.3.2",
@@ -36,14 +36,14 @@
     "react-icons": "4.12.0",
     "react-router": "6.20.0",
     "react-router-dom": "6.20.0",
-    "tauri-plugin-store-api": "https://github.com/tauri-apps/tauri-plugin-store",
+    "tauri-plugin-store-api": "https://github.com/tauri-apps/tauri-plugin-store#v1",
     "uuid": "9.0.1",
     "xterm": "5.3.0",
     "xterm-addon-fit": "0.7.0"
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "4.36.1",
-    "@tauri-apps/cli": "1.5.2",
+    "@tauri-apps/cli": "1.5.11",
     "@types/node": "18.15.3",
     "@types/react": "18.2.28",
     "@types/react-dom": "18.2.13",
@@ -54,10 +54,13 @@
     "eslint": "8.44.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-config-react-app": "7.0.1",
-    "eslint-plugin-react": "7.32.2",
+    "eslint-plugin-react": "7.34.1",
     "eslint-plugin-react-hooks": "4.6.0",
     "prettier": "3.0.3",
     "typescript": "5.0.4",
     "vite": "4.4.9"
+  },
+  "resolutions": {
+    "lodash": "4.17.21"
   }
 }

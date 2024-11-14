@@ -6,8 +6,6 @@
 with lib;
 
 {
-  environment.noXlibs = mkDefault true;
-
   documentation.enable = mkDefault false;
 
   documentation.doc.enable = mkDefault false;
@@ -21,7 +19,7 @@ with lib;
   # Perl is a default package.
   environment.defaultPackages = mkDefault [ ];
 
-  environment.stub-ld.enable = false;
+  environment.stub-ld.enable = mkDefault false;
 
   # The lessopen package pulls in Perl.
   programs.less.lessopen = mkDefault null;

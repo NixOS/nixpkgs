@@ -18,6 +18,8 @@ let
     makeFSharpWriter
     writeBash
     writeBashBin
+    writeBabashka
+    writeBabashkaBin
     writeDash
     writeDashBin
     writeFish
@@ -29,6 +31,8 @@ let
     writeJSBin
     writeJSON
     writeLua
+    writeNim
+    writeNimBin
     writeNu
     writePerl
     writePerlBin
@@ -85,6 +89,10 @@ recurseIntoAttrs {
       end
     '');
 
+    babashka = expectSuccessBin (writeBabashkaBin "test-writers-babashka-bin" ''
+      (println "success")
+    '');
+
     rust = expectSuccessBin (writeRustBin "test-writers-rust-bin" {} ''
       fn main(){
         println!("success")
@@ -101,6 +109,10 @@ recurseIntoAttrs {
       main = case int of
         18871 -> putStrLn $ id "success"
         _ -> print "fail"
+    '');
+
+    nim = expectSuccessBin (writeNimBin "test-writers-nim-bin" { } ''
+      echo "success"
     '');
 
     js = expectSuccessBin (writeJSBin "test-writers-js-bin" { libraries = [ nodePackages.semver ]; } ''
@@ -185,8 +197,16 @@ recurseIntoAttrs {
       end
     '');
 
+    nim = expectSuccess (writeNim "test-writers-nim" { } ''
+      echo "success"
+    '');
+
     nu = expectSuccess (writeNu "test-writers-nushell" ''
       echo "success"
+    '');
+
+    babashka = expectSuccess (writeBabashka "test-writers-babashka" ''
+      (println "success")
     '');
 
     haskell = expectSuccess (writeHaskell "test-writers-haskell" { libraries = [ haskellPackages.acme-default ]; } ''
@@ -245,30 +265,32 @@ recurseIntoAttrs {
     #  print(y[0]['test'])
     #'');
 
-    fsharp = expectSuccess (makeFSharpWriter {
-      libraries = { fetchNuGet }: [
-        (fetchNuGet { pname = "FSharp.SystemTextJson"; version = "0.17.4"; sha256 = "1bplzc9ybdqspii4q28l8gmfvzpkmgq5l1hlsiyg2h46w881lwg2"; })
-        (fetchNuGet { pname = "System.Text.Json"; version = "4.6.0"; sha256 = "0ism236hwi0k6axssfq58s1d8lihplwiz058pdvl8al71hagri39"; })
-      ];
-    } "test-writers-fsharp" ''
+    # Commented out because fails with 'error FS0039: The value or constructor 'JsonFSharpConverter' is not defined.'
 
-      #r "nuget: FSharp.SystemTextJson, 0.17.4"
-
-      module Json =
-          open System.Text.Json
-          open System.Text.Json.Serialization
-          let options = JsonSerializerOptions()
-          options.Converters.Add(JsonFSharpConverter())
-          let serialize<'a> (o: 'a) = JsonSerializer.Serialize<'a>(o, options)
-          let deserialize<'a> (str: string) = JsonSerializer.Deserialize<'a>(str, options)
-
-      type Letter = A | B
-      let a = {| Hello = Some "World"; Letter = A |}
-      if a |> Json.serialize |> Json.deserialize |> (=) a
-      then "success"
-      else "failed"
-      |> printfn "%s"
-    '');
+    # fsharp = expectSuccess (makeFSharpWriter {
+    #   libraries = { fetchNuGet }: [
+    #     (fetchNuGet { pname = "FSharp.SystemTextJson"; version = "0.17.4"; sha256 = "1bplzc9ybdqspii4q28l8gmfvzpkmgq5l1hlsiyg2h46w881lwg2"; })
+    #     (fetchNuGet { pname = "System.Text.Json"; version = "4.6.0"; sha256 = "0ism236hwi0k6axssfq58s1d8lihplwiz058pdvl8al71hagri39"; })
+    #   ];
+    # } "test-writers-fsharp" ''
+    #
+    #   #r "nuget: FSharp.SystemTextJson, 0.17.4"
+    #
+    #   module Json =
+    #       open System.Text.Json
+    #       open System.Text.Json.Serialization
+    #       let options = JsonSerializerOptions()
+    #       options.Converters.Add(JsonFSharpConverter())
+    #       let serialize<'a> (o: 'a) = JsonSerializer.Serialize<'a>(o, options)
+    #       let deserialize<'a> (str: string) = JsonSerializer.Deserialize<'a>(str, options)
+    #
+    #   type Letter = A | B
+    #   let a = {| Hello = Some "World"; Letter = A |}
+    #   if a |> Json.serialize |> Json.deserialize |> (=) a
+    #   then "success"
+    #   else "failed"
+    #   |> printfn "%s"
+    # '');
 
     #pypy2NoLibs = expectSuccess (writePyPy2 "test-writers-pypy2-no-libs" {} ''
     #  print("success")
@@ -366,6 +388,53 @@ recurseIntoAttrs {
           if [[ "$ThaigerSprint" == "Thailand" ]]; then
             echo "success"
           fi
+        ''
+    );
+
+    babashka-bin = expectSuccessBin (
+      writeBabashkaBin "test-writers-wrapping-babashka-bin"
+        {
+          makeWrapperArgs = [
+            "--set"
+            "ThaigerSprint"
+            "Thailand"
+          ];
+        }
+        ''
+          (when (= (System/getenv "ThaigerSprint") "Thailand")
+            (println "success"))
+        ''
+    );
+
+    babashka = expectSuccess (
+      writeBabashka "test-writers-wrapping-babashka"
+        {
+          makeWrapperArgs = [
+            "--set"
+            "ThaigerSprint"
+            "Thailand"
+          ];
+        }
+        ''
+          (when (= (System/getenv "ThaigerSprint") "Thailand")
+            (println "success"))
+        ''
+    );
+
+    nim = expectSuccess (
+      writeNim "test-writers-wrapping-nim"
+        {
+          makeWrapperArgs = [
+            "--set"
+            "ThaigerSprint"
+            "Thailand"
+          ];
+        }
+        ''
+          import os
+
+          if getEnv("ThaigerSprint") == "Thailand":
+            echo "success"
         ''
     );
 

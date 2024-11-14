@@ -4,28 +4,28 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  substituteAll,
   hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "attrs";
-  version = "23.2.0";
+  version = "24.2.0";
   disabled = pythonOlder "3.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k13DtSnCYvbPduUId9NaS9PB3hlP1B9HoreujxmXHzA=";
+    hash = "sha256-XPsbkUi1sIZWm67APyDXtr87ysyaQr6/h/+qyjYvY0Y=";
   };
 
   patches = [
-    # hatch-vcs and hatch-fancy-pypi-readme depend on pytest, which depends on attrs
-    ./remove-hatch-plugins.patch
+    (substituteAll {
+      # hatch-vcs and hatch-fancy-pypi-readme depend on pytest, which depends on attrs
+      src = ./remove-hatch-plugins.patch;
+      inherit version;
+    })
   ];
-
-  postPatch = ''
-    substituteAllInPlace pyproject.toml
-  '';
 
   nativeBuildInputs = [ hatchling ];
 

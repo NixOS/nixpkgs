@@ -12,8 +12,8 @@
   stdenv,
   # Boolean flags
   enableNativeMidi ? false,
-  enableSdltest ? (!stdenv.isDarwin),
-  enableSmpegtest ? (!stdenv.isDarwin),
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
+  enableSmpegtest ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 stdenv.mkDerivation (finalAttrs: {

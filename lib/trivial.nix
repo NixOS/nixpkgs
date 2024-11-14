@@ -397,6 +397,15 @@ in {
     Set it to the upcoming release, matching the nixpkgs/.version file.
   */
   isInOldestRelease =
+    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2411)
+      "lib.isInOldestRelease is deprecated. Use lib.oldestSupportedReleaseIsAtLeast instead."
+    lib.oldestSupportedReleaseIsAtLeast;
+
+  /**
+    Alias for `isInOldestRelease` introduced in 24.11.
+    Use `isInOldestRelease` in expressions outside of Nixpkgs for greater compatibility.
+   */
+  oldestSupportedReleaseIsAtLeast =
     release:
       release <= lib.trivial.oldestSupportedRelease;
 
@@ -406,7 +415,7 @@ in {
     On each release the first letter is bumped and a new animal is chosen
     starting with that new letter.
   */
-  codeName = "Vicuna";
+  codeName = "Warbler";
 
   /**
     Returns the current nixpkgs version suffix as string.

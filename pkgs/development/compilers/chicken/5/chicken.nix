@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=$(out)"
     "C_COMPILER=$(CC)"
     "CXX_COMPILER=$(CXX)"
-  ] ++ (lib.optionals stdenv.isDarwin [
+  ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [
     "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
     "LINKER_OPTIONS=-headerpad_max_install_names"
     "POSTINSTALL_PROGRAM=install_name_tool"
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     darwin.autoSignDarwinBinariesHook
   ];
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     bootstrap-chicken
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   postCheck = ''
     ./csi -R chicken.pathname -R chicken.platform \
        -p "(assert (equal? \"${toString finalAttrs.binaryVersion}\" (pathname-file (car (repository-path)))))"

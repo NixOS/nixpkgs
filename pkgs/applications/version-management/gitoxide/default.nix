@@ -4,9 +4,7 @@
 , cmake
 , pkg-config
 , stdenv
-, libiconv
-, Security
-, SystemConfiguration
+, apple-sdk_11
 , curl
 , openssl
 , buildPackages
@@ -19,21 +17,21 @@ let
   ein = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/ein";
 in rustPlatform.buildRustPackage rec {
   pname = "gitoxide";
-  version = "0.37.0";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "Byron";
     repo = "gitoxide";
     rev = "v${version}";
-    hash = "sha256-ZnfWIFphIdPHKvpzO0Cn5KCahpvKh56HZun09I1l8Vc=";
+    hash = "sha256-JqWFdZXcmL97w5CochG9kXXH7cN2KMarkNUvfQXbYU0=";
   };
 
-  cargoHash = "sha256-oKcCodoMUaduxXXgUV+z7zlg5mc783PSsgoECdW/Uug=";
+  cargoHash = "sha256-EGPx4NNvgGe+LJ8Gn0ne8O4lCA+9p+E9J7OOhLQDWX0=";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles ];
 
-  buildInputs = [ curl ] ++ (if stdenv.isDarwin
-    then [ libiconv Security SystemConfiguration ]
+  buildInputs = [ curl ] ++ (if stdenv.hostPlatform.isDarwin
+    then [ apple-sdk_11 ]
     else [ openssl ]);
 
   preFixup = lib.optionalString canRunCmd ''

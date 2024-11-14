@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "moon";
-  version = "1.27.6";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "moonrepo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-oadbF1bXDaJPp6R7C6Ozm5NgFPmvPwgiPIDuRiNrWg8=";
+    hash = "sha256-s0JwqEso1Mum+fMTg2rn58oxoSqraQ0iEnsRpgMmtVU=";
   };
 
-  cargoHash = "sha256-p3CBjdWOutEWIQMWS5nAYAsE9BQf2MViyoLIOD1OE/s=";
+  cargoHash = "sha256-5WFB2+dWm0q+Ui7rpVlvVrmCHoc4v5x5QNEbDpANkhA=";
 
   env = {
     RUSTFLAGS = "-C strip=symbols";
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildInputs = [ openssl ] ++
-    lib.optionals stdenv.isDarwin [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.SystemConfiguration
   ];

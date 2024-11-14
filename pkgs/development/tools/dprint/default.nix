@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-86ecnwDDVvgXgBBodP2rSZOn+R52Jap8RCKILttGOn8=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreFoundation Security ];
 
   # Tests fail because they expect a test WASM plugin. Tests already run for
   # every commit upstream on GitHub Actions

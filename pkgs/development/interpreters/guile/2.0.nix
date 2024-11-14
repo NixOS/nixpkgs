@@ -79,7 +79,7 @@ builder rec {
       sha256 = "0p6c1lmw1iniq03z7x5m65kg3lq543kgvdb4nrxsaxjqf3zhl77v";
     })] ++
   (lib.optional (coverageAnalysis != null) ./gcov-file-name.patch)
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ./filter-mkostemp-darwin.patch
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
@@ -92,11 +92,11 @@ builder rec {
 
   # don't have "libgcc_s.so.1" on darwin
   LDFLAGS = lib.optionalString
-    (!stdenv.isDarwin && !stdenv.hostPlatform.isMusl) "-lgcc_s";
+    (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) "-lgcc_s";
 
   configureFlags = [
     "--with-libreadline-prefix"
-  ] ++ lib.optionals stdenv.isSunOS [
+  ] ++ lib.optionals stdenv.hostPlatform.isSunOS [
     # Make sure the right <gmp.h> is found, and not the incompatible
     # /usr/include/mp.h from OpenSolaris. See
     # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
@@ -159,7 +159,7 @@ builder rec {
 
 //
 
-(lib.optionalAttrs (!stdenv.isLinux) {
+(lib.optionalAttrs (!stdenv.hostPlatform.isLinux) {
   # Work around <https://bugs.gnu.org/14201>.
   SHELL = stdenv.shell;
   CONFIG_SHELL = stdenv.shell;

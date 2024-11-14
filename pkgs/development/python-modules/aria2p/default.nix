@@ -45,7 +45,7 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     tui = [
       asciimatics
       pyperclip
@@ -64,7 +64,7 @@ buildPythonPackage rec {
     responses
     psutil
     uvicorn
-  ] ++ passthru.optional-dependencies.tui;
+  ] ++ optional-dependencies.tui;
 
   disabledTests = [
     # require a running display server

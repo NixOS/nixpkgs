@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       markuppy
       odfpy

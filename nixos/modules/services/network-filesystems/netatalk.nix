@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.netatalk;
   settingsFormat = pkgs.formats.ini { };
@@ -10,15 +7,15 @@ in {
   options = {
     services.netatalk = {
 
-      enable = mkEnableOption "the Netatalk AFP fileserver";
+      enable = lib.mkEnableOption "the Netatalk AFP fileserver";
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 548;
         description = "TCP port to be used for AFP.";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         inherit (settingsFormat) type;
         default = { };
         example = {
@@ -38,8 +35,8 @@ in {
         '';
       };
 
-      extmap = mkOption {
-        type = types.lines;
+      extmap = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           File name extension mappings.
@@ -51,14 +48,14 @@ in {
   };
 
   imports = (map (option:
-    mkRemovedOptionModule [ "services" "netatalk" option ]
+    lib.mkRemovedOptionModule [ "services" "netatalk" option ]
     "This option was removed in favor of `services.netatalk.settings`.") [
       "extraConfig"
       "homes"
       "volumes"
     ]);
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.netatalk.settings.Global = {
       "afp port" = toString cfg.port;

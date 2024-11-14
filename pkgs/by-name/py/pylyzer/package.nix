@@ -7,28 +7,26 @@
   python3,
   makeWrapper,
   writeScriptBin,
-  darwin,
   which,
   nix-update-script,
-  testers,
-  pylyzer,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pylyzer";
-  version = "0.0.61";
+  version = "0.0.70";
 
   src = fetchFromGitHub {
     owner = "mtshiba";
     repo = "pylyzer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-t0BzNNofjeBlNqf6iqaWrTzVpzEACyyrZ3YKDYz713U=";
+    hash = "sha256-jj9r5npClLY9mhDHFI92825RYvwn6m9KlngfFL0bqCw=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "rustpython-ast-0.4.0" = "sha256-kMUuqOVFSvvSHOeiYMjWdsLnDu12RyQld3qtTyd5tAM=";
+      "rustpython-ast-0.4.0" = "sha256-RChZlXzdzyLp0Lb/LTLbWfbUzPDhmWkf0uVobflCKRk=";
     };
   };
 
@@ -36,12 +34,14 @@ rustPlatform.buildRustPackage rec {
     git
     python3
     makeWrapper
-  ] ++ lib.optionals stdenv.isDarwin [ (writeScriptBin "diskutil" "") ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ (writeScriptBin "diskutil" "") ];
 
-  buildInputs = [ python3 ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = [
+    python3
+  ];
 
   preBuild = ''
-    export HOME=$TMPDIR
+    export HOME=$(mktemp -d)
   '';
 
   postInstall = ''
@@ -51,19 +51,30 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [ which ];
 
-  checkFlags = [
-    # this test causes stack overflow
-    # > thread 'exec_import' has overflowed its stack
-    "--skip=exec_import"
-  ];
+  checkFlags =
+    [
+      # this test causes stack overflow
+      # > thread 'exec_import' has overflowed its stack
+      "--skip=exec_import"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      # Dict({Str..Obj: Int}) does not implement Iterable(Str..Obj..Obj) and Indexable({"a"}..Obj, Int)
+      # https://github.com/mtshiba/pylyzer/issues/114
+      "--skip=exec_casting"
+    ];
 
   postFixup = ''
     wrapProgram $out/bin/pylyzer --set ERG_PATH $out/lib/erg
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = pylyzer; };
   };
 
   meta = {

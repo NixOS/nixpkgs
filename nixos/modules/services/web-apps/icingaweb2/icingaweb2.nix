@@ -9,7 +9,7 @@
     };
   };
 in {
-  meta.maintainers = with maintainers; [ das_j ];
+  meta.maintainers = teams.helsinki-systems.members;
 
   options.services.icingaweb2 = with types; {
     enable = mkEnableOption "the icingaweb2 web interface";

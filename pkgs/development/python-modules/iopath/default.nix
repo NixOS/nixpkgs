@@ -52,7 +52,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "iopath" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aws = [ boto3 ];
   };
 

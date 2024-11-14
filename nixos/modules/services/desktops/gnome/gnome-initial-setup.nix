@@ -64,13 +64,13 @@ in
   config = lib.mkIf config.services.gnome.gnome-initial-setup.enable {
 
     environment.systemPackages = [
-      pkgs.gnome.gnome-initial-setup
+      pkgs.gnome-initial-setup
     ]
     ++ lib.optional (lib.versionOlder config.system.stateVersion "20.03") createGisStampFilesAutostart
     ;
 
     systemd.packages = [
-      pkgs.gnome.gnome-initial-setup
+      pkgs.gnome-initial-setup
     ];
 
     systemd.user.targets."gnome-session".wants = [
@@ -84,7 +84,7 @@ in
     ];
 
     programs.dconf.profiles.gnome-initial-setup.databases = [
-      "${pkgs.gnome.gnome-initial-setup}/share/gnome-initial-setup/initial-setup-dconf-defaults"
+      "${pkgs.gnome-initial-setup}/share/gnome-initial-setup/initial-setup-dconf-defaults"
     ];
   };
 

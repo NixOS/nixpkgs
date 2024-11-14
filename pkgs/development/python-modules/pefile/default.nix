@@ -1,28 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  future,
   fetchPypi,
-  setuptools-scm,
+  setuptools,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pefile";
-  version = "2023.2.7";
-  format = "setuptools";
+  version = "2024.8.26";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   # DON'T fetch from github, the repo is >60 MB due to test artifacts, which we cannot use
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-guYRQASz1pEcd8OVPjg4ZUsEURuLZuhYPbcMZZmAF9w=";
+    hash = "sha256-P/bF2LQ+jDe7bm3VCFZY1linoL3NILagex/PwcTp1jI=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = [ future ];
+  build-system = [ setuptools ];
 
   # Test data contains properitary executables and malware, and is therefore encrypted
   doCheck = false;

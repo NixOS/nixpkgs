@@ -12,7 +12,7 @@
 , qtsvg
 , qttools
 , wrapQtAppsHook
-, version ? "2.0.0"
+, version ? "2.1.0"
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = {
       "1.4.1" = "sha256-sp/LvQNfodMYQ4kNbBv4PTNfs38XjYLezuxRltZd4kc=";
-      "2.0.0" = "sha256-o5iD4VzsbN81lwDZJuFj8Ugg1RP752M4unu3J5/h8g8=";
+      "2.1.0" = "sha256-F171IgAhRXJ9sTt8VVDVO9hrmyHbCElsskdDmFr3HB0=";
     }."${version}";
   };
 

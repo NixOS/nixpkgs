@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ]
-    ++ lib.optionals (!stdenv.isDarwin) [ pkg-config ] # for finding libsecret
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ] # for finding libsecret
   ;
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
     ++ [ qtbase qttools ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     Security
   ];

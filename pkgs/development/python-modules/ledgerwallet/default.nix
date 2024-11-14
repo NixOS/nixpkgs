@@ -34,7 +34,7 @@ buildPythonPackage rec {
   buildInputs = [
     setuptools
     setuptools-scm
-  ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
   propagatedBuildInputs = [
     cryptography
     click

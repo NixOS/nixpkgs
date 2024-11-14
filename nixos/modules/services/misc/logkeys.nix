@@ -1,22 +1,19 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.logkeys;
 in {
   options.services.logkeys = {
-    enable = mkEnableOption "logkeys, a keylogger service";
+    enable = lib.mkEnableOption "logkeys, a keylogger service";
 
-    device = mkOption {
+    device = lib.mkOption {
       description = "Use the given device as keyboard input event device instead of /dev/input/eventX default.";
       default = null;
-      type = types.nullOr types.str;
+      type = lib.types.nullOr lib.types.str;
       example = "/dev/input/event15";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.logkeys = {
       description = "LogKeys Keylogger Daemon";
       wantedBy = [ "multi-user.target" ];

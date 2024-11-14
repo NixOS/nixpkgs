@@ -18,6 +18,8 @@ let
 
     cd "$gemdir"
 
+    rm -f gemset.nix Gemfile.lock
+    export BUNDLE_FORCE_RUBY_PLATFORM=1
     bundler lock --update
     bundix
   '';

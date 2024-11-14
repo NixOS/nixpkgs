@@ -7,6 +7,7 @@
   pkg-config,
   wayland,
   wayland-protocols,
+  wayland-scanner,
 }:
 stdenv.mkDerivation rec {
   pname = "wlinhibit";
@@ -30,6 +31,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   meta = {

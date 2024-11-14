@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchurl, pkg-config, removeReferencesTo
-, libevent, readline, net-snmp, openssl
+{ stdenv
+, Foundation
+, fetchurl
+, lib
+, libevent
+, net-snmp
+, openssl
+, pkg-config
+, readline
+, removeReferencesTo
 }:
 
 stdenv.mkDerivation rec {
@@ -16,10 +24,16 @@ stdenv.mkDerivation rec {
     "--enable-pie"
     "--with-snmp"
     "--with-systemdsystemunitdir=\${out}/lib/systemd/system"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--with-launchddaemonsdir=no"
+    "--with-privsep-chroot=/var/empty"
+    "--with-privsep-group=nogroup"
+    "--with-privsep-user=nobody"
   ];
 
   nativeBuildInputs = [ pkg-config removeReferencesTo ];
-  buildInputs = [ libevent readline net-snmp openssl ];
+  buildInputs = [ libevent readline net-snmp openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
 
   enableParallelBuilding = true;
 
@@ -34,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "https://lldpd.github.io/";
     license = licenses.isc;
     maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

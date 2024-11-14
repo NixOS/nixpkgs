@@ -6,20 +6,20 @@
 
 stdenv.mkDerivation rec {
   pname = "nghttp3";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZbgByLTkQWd3gfWW2V1kkboblfF9v+0HcNhxrjYpX28=";
+    hash = "sha256-5QsJLN79SkbrCfIGfeJ91AUEf9/V6BWkNE60wOkxdow=";
     fetchSubmodules = true;
   };
 
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices
   ];
 

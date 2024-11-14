@@ -16,7 +16,7 @@ buildGoModule rec {
     owner = "hashicorp";
     repo = "terraform-plugin-docs";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-UEF+CsY302AJApDhnrPoTo09EcR/VOo10bXSf0XgtZk=";
+    hash = "sha256-UEF+CsY302AJApDhnrPoTo09EcR/VOo10bXSf0XgtZk=";
   };
 
   vendorHash = "sha256-ZSHCP0eZWCvSObbUOSl0ohiiX79MyGC2ALowzvMXMv4=";

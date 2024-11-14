@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     qt6.qtbase
   ];
 
-  buildInputs = lib.optional stdenv.isLinux qt6.qtwayland;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
 
   propagatedBuildInputs = with python3.pkgs; [
     cython

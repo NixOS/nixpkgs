@@ -4,26 +4,25 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
-  pytest-runner,
   aiohttp,
   attrs,
   multidict,
   colorlog,
   pynacl,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-randomly,
   pytest-asyncio,
   mock,
 }:
 buildPythonPackage rec {
   pname = "hikari";
-  version = "2.0.0.dev126";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "hikari-py";
     repo = "hikari";
-    rev = version;
-    hash = "sha256-KpF9P92IciILV7zlYTCgtMqhudT9uOR2SQJdWDtxYaA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/A3D3nG1lSCQU92dM+6YroxWlGKrv47ntkZaJZTAJUA=";
     # The git commit is part of the `hikari.__git_sha1__` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
     # to retrieve the commit SHA, and remove the directory afterwards,
@@ -46,15 +45,14 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = true;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     server = [ pynacl ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-runner
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytest-randomly
     mock
   ];

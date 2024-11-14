@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkIf mkOption optional;
+  inherit (lib.types) path bool listOf str port;
   cfg = config.services.darkhttpd;
 
-  args = concatStringsSep " " ([
+  args = lib.concatStringsSep " " ([
     cfg.rootDir
     "--port ${toString cfg.port}"
     "--addr ${cfg.address}"
@@ -14,12 +14,12 @@ let
     ++ optional config.networking.enableIPv6 "--ipv6");
 
 in {
-  options.services.darkhttpd = with types; {
-    enable = mkEnableOption "DarkHTTPd web server";
+  options.services.darkhttpd = {
+    enable = lib.mkEnableOption "DarkHTTPd web server";
 
     port = mkOption {
       default = 80;
-      type = types.port;
+      type = port;
       description = ''
         Port to listen on.
         Pass 0 to let the system choose any free port for you.

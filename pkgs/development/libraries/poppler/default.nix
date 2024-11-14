@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   dontWrapQtApps = true;
 
   # Workaround #54606
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
   '';
 

@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "aiojellyfin";
-  version = "0.10.0";
+  version = "0.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Jc2k";
     repo = "aiojellyfin";
-    rev = "v${version}";
-    hash = "sha256-D4/DlhCeeI4CggW7KGauZ57fHY92JM/kZSUODyNVcNg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-A+uvM1/7HntRMIdknfHr0TMGIjHk7BCwsZopXdVoEO8=";
   };
 
   build-system = [ setuptools ];

@@ -94,7 +94,7 @@
     or (throw "unsupported libc for the pure Linux stdenv");
   files = archLookupTable.${localSystem.system} or (if getCompatibleTools != null then getCompatibleTools
     else (throw "unsupported platform for the pure Linux stdenv"));
-  in files
+  in (config.replaceBootstrapFiles or lib.id) files
 }:
 
 assert crossSystem == localSystem;
@@ -646,10 +646,7 @@ in
             gawk gmp gnumake gnused gnutar gnugrep gnupatch patchelf ed file
           ]
         # Library dependencies
-        ++ map lib.getLib (
-            [ attr acl zlib gnugrep.pcre2 libidn2 libunistring ]
-            ++ lib.optional (gawk.libsigsegv != null) gawk.libsigsegv
-          )
+        ++ map lib.getLib [ attr acl zlib gnugrep.pcre2 libidn2 libunistring ]
         # More complicated cases
         ++ (map (x: lib.getOutput x (getLibc prevStage)) [ "out" "dev" "bin" ] )
         ++  [ linuxHeaders # propagated from .dev

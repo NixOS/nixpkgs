@@ -39,7 +39,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     gpib-ctypes = [ gpib-ctypes ];
     serial = [ pyserial ];
     usb = [ pyusb ];

@@ -81,7 +81,7 @@ buildPythonPackage rec {
   # PermissionError: [Errno 13] Permission denied: '/tmp/back_compat_testdata/test_*.py'
   # See https://github.com/google/jax/blob/jaxlib-v0.4.27/jax/_src/internal_test_util/export_back_compat_test_util.py#L240-L241
   # NOTE: this doesn't seem to be an issue on linux
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export TEST_UNDECLARED_OUTPUTS_DIR=$(mktemp -d)
   '';
 
@@ -108,7 +108,7 @@ buildPythonPackage rec {
       "test_custom_root_with_aux"
       "testEigvalsGrad_shape"
     ]
-    ++ lib.optionals stdenv.isAarch64 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # See https://github.com/google/jax/issues/14793.
       "test_for_loop_fixpoint_correctly_identifies_loop_varying_residuals_unrolled_for_loop"
       "testQdwhWithRandomMatrix3"
@@ -131,7 +131,7 @@ buildPythonPackage rec {
     # Segmentation fault. See https://gist.github.com/zimbatm/e9b61891f3bcf5e4aaefd13f94344fba
     "tests/linalg_test.py"
   ]
-  ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # RuntimeWarning: invalid value encountered in cast
     "tests/lax_test.py"
   ];

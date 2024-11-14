@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kquickcharts";
 
-  extraBuildInputs = [qtdeclarative];
+  extraBuildInputs = [ qtdeclarative ];
 }

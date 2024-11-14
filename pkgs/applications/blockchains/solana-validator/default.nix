@@ -75,8 +75,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config protobuf rustfmt perl rustPlatform.bindgenHook ];
   buildInputs =
-    [ openssl zlib libclang hidapi ] ++ (lib.optionals stdenv.isLinux [ udev ])
-    ++ lib.optionals stdenv.isDarwin [ Security System Libsystem libcxx ];
+    [ openssl zlib libclang hidapi ] ++ (lib.optionals stdenv.hostPlatform.isLinux [ udev ])
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security System Libsystem libcxx ];
   strictDeps = true;
 
   doCheck = false;
@@ -88,7 +88,7 @@ rustPlatform.buildRustPackage rec {
 
     # If set, always finds OpenSSL in the system, even if the vendored feature is enabled.
     OPENSSL_NO_VENDOR = "1";
-  } // lib.optionalAttrs stdenv.isDarwin {
+  } // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Require this on darwin otherwise the compiler starts rambling about missing
     # cmath functions
     CPPFLAGS = "-isystem ${lib.getDev libcxx}/include/c++/v1";

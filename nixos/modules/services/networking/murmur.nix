@@ -6,7 +6,7 @@ let
   cfg = config.services.murmur;
   forking = cfg.logFile != null;
   configFile = pkgs.writeText "murmurd.ini" ''
-    database=/var/lib/murmur/murmur.sqlite
+    database=${cfg.stateDir}/murmur.sqlite
     dbDriver=QSQLITE
 
     autobanAttempts=${toString cfg.autobanAttempts}
@@ -66,6 +66,32 @@ in
         default = false;
         description = ''
           Open ports in the firewall for the Murmur Mumble server.
+        '';
+      };
+
+      user = mkOption {
+        type = types.str;
+        default = "murmur";
+        description = ''
+          The name of an existing user to use to run the service.
+          If not specified, the default user will be created.
+        '';
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "murmur";
+        description = ''
+          The name of an existing group to use to run the service.
+          If not specified, the default group will be created.
+        '';
+      };
+
+      stateDir = mkOption {
+        type = types.path;
+        default = "/var/lib/murmur";
+        description = ''
+          Directory to store data for the server.
         '';
       };
 
@@ -257,7 +283,7 @@ in
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        example = "/var/lib/murmur/murmurd.env";
+        example = literalExpression ''"''${config.services.murmur.stateDir}/murmurd.env"'';
         description = ''
           Environment file as defined in {manpage}`systemd.exec(5)`.
 
@@ -289,14 +315,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.users.murmur = {
+    users.users.murmur = mkIf (cfg.user == "murmur") {
       description     = "Murmur Service user";
-      home            = "/var/lib/murmur";
+      home            = cfg.stateDir;
       createHome      = true;
       uid             = config.ids.uids.murmur;
-      group           = "murmur";
+      group           = cfg.group;
     };
-    users.groups.murmur = {
+    users.groups.murmur = mkIf (cfg.group == "murmur") {
       gid             = config.ids.gids.murmur;
     };
 
@@ -324,8 +350,8 @@ in
         Restart = "always";
         RuntimeDirectory = "murmur";
         RuntimeDirectoryMode = "0700";
-        User = "murmur";
-        Group = "murmur";
+        User = cfg.user;
+        Group = cfg.group;
 
         # service hardening
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
@@ -349,6 +375,7 @@ in
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = "@system-service";
+        UMask = 027;
       };
     };
 
@@ -361,7 +388,7 @@ in
           "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
           "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
         <busconfig>
-          <policy user="murmur">
+          <policy user="${cfg.user}">
             <allow own="net.sourceforge.mumble.murmur"/>
           </policy>
 
@@ -386,9 +413,9 @@ in
 
         r ${config.environment.etc."os-release".source},
         r ${config.environment.etc."lsb-release".source},
-        owner rwk /var/lib/murmur/murmur.sqlite,
-        owner rw /var/lib/murmur/murmur.sqlite-journal,
-        owner r /var/lib/murmur/,
+        owner rwk ${cfg.stateDir}/murmur.sqlite,
+        owner rw ${cfg.stateDir}/murmur.sqlite-journal,
+        owner r ${cfg.stateDir}/,
         r /run/murmur/murmurd.pid,
         r /run/murmur/murmurd.ini,
         r ${configFile},
@@ -406,4 +433,6 @@ in
       }
     '';
   };
+
+  meta.maintainers = with lib.maintainers; [ felixsinger ];
 }

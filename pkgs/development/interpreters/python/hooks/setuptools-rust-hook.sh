@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 echo "Sourcing setuptools-rust-hook"
 
 setuptoolsRustSetup() {

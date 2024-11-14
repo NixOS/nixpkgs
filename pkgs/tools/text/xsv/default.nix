@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-y9f9eBMhSBx6L3cZyZ4VkNSB7yJ55khCskUp6t4HBq4=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     description = "Fast CSV toolkit written in Rust";

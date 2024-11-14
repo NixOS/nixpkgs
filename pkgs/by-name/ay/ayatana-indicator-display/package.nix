@@ -1,30 +1,31 @@
-{ stdenv
-, lib
-, gitUpdater
-, fetchFromGitHub
-, nixosTests
-, accountsservice
-, cmake
-, cppcheck
-, dbus
-, geoclue2
-, glib
-, gsettings-desktop-schemas
-, gtest
-, intltool
-, libayatana-common
-, libgudev
-, libqtdbusmock
-, libqtdbustest
-, libsForQt5
-, lomiri
-, mate
-, pkg-config
-, properties-cpp
-, python3
-, systemd
-, wrapGAppsHook3
-, xsct
+{
+  stdenv,
+  lib,
+  gitUpdater,
+  fetchFromGitHub,
+  nixosTests,
+  accountsservice,
+  cmake,
+  cppcheck,
+  dbus,
+  geoclue2,
+  glib,
+  gsettings-desktop-schemas,
+  gtest,
+  intltool,
+  libayatana-common,
+  libgudev,
+  libqtdbusmock,
+  libqtdbustest,
+  libsForQt5,
+  lomiri,
+  mate,
+  pkg-config,
+  properties-cpp,
+  python3,
+  systemd,
+  wrapGAppsHook3,
+  xsct,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,29 +61,30 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # TODO Can we get around requiring every desktop's schemas just to avoid segfaulting on some systems?
-  buildInputs = [
-    accountsservice
-    geoclue2
-    gsettings-desktop-schemas # gnome schemas
-    glib
-    libayatana-common
-    libgudev
-    libsForQt5.qtbase
-    systemd
-  ] ++ (with lomiri; [
-    cmake-extras
-    lomiri-schemas # lomiri schema
-  ]) ++ (with mate; [
-    mate.marco # marco schema
-    mate.mate-settings-daemon # mate mouse schema
-  ]);
+  buildInputs =
+    [
+      accountsservice
+      geoclue2
+      gsettings-desktop-schemas # gnome schemas
+      glib
+      libayatana-common
+      libgudev
+      libsForQt5.qtbase
+      systemd
+    ]
+    ++ (with lomiri; [
+      cmake-extras
+      lomiri-schemas # lomiri schema
+    ])
+    ++ (with mate; [
+      mate.marco # marco schema
+      mate.mate-settings-daemon # mate mouse schema
+    ]);
 
   nativeCheckInputs = [
     cppcheck
     dbus
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (ps: with ps; [ python-dbusmock ]))
   ];
 
   checkInputs = [
@@ -104,12 +106,17 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   passthru = {
-    ayatana-indicators = [ "ayatana-indicator-display" ];
+    ayatana-indicators = {
+      ayatana-indicator-display = [
+        "ayatana"
+        "lomiri"
+      ];
+    };
     tests.vm = nixosTests.ayatana-indicators;
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ayatana Indicator for Display configuration";
     longDescription = ''
       This Ayatana Indicator is designed to be placed on the right side of a
@@ -117,8 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/AyatanaIndicators/ayatana-indicator-display";
     changelog = "https://github.com/AyatanaIndicators/ayatana-indicator-display/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.linux;
   };
 })

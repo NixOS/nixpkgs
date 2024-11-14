@@ -1,20 +1,17 @@
 # blueman service
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.blueman;
 in {
   ###### interface
   options = {
     services.blueman = {
-      enable = mkEnableOption "blueman, a bluetooth manager";
+      enable = lib.mkEnableOption "blueman, a bluetooth manager";
     };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.blueman ];
 

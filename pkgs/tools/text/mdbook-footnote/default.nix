@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Ig+uVCO5oHIkkvFsKiBiUFzjUgH/Pydn4MVJHb2wKGc=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   meta = with lib; {
     description = "Preprocessor for mdbook to support the inclusion of automatically numbered footnotes";

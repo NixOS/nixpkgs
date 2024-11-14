@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pwkit";
-  version = "1.2.0";
+  version = "1.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "pkgw";
     repo = "pwkit";
     rev = "refs/tags/pwkit@${version}";
-    hash = "sha256-bQno1SIbxAJ1TL068eshfFgAkRXFmbGu2GTbv1BRGU0=";
+    hash = "sha256-FEMPHdXj2XCV5fCcdJsVpDMsJntP6zp1yFkjv1ov478=";
   };
 
   build-system = [ setuptools ];

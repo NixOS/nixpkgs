@@ -244,7 +244,6 @@ in
 
         SystemCallFilter = [
           "@system-service"
-          "~@resources"
           "~@privileged"
         ];
         SystemCallArchitectures = "native";

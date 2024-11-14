@@ -6,13 +6,12 @@
   tqdm,
   libusb1,
   setuptools,
-  setuptools-git-versioning,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyfwup";
-  version = "0.5.0";
+  version = "0.5.2";
 
   pyproject = true;
 
@@ -22,8 +21,14 @@ buildPythonPackage rec {
     owner = "greatscottgadgets";
     repo = "pyfwup";
     rev = "refs/tags/${version}";
-    hash = "sha256-HZaR7X19kWb8w/VcnRHReGPkUBQ/u89BjmkTPpayoxE=";
+    hash = "sha256-Kyc3f8beTg0W1+U7SvZuNPN1pdsco9rBUfoEtR7AI44=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
 
   dependencies = [
     pyusb
@@ -31,10 +36,7 @@ buildPythonPackage rec {
     libusb1
   ];
 
-  build-system = [
-    setuptools
-    setuptools-git-versioning
-  ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [
     "fwup"

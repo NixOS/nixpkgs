@@ -10,17 +10,12 @@ rustPlatform.buildRustPackage {
   pname = "switch-to-configuration";
   version = "0.1.0";
 
-  src = lib.fileset.toSource {
-    root = ./.;
-    fileset = lib.fileset.unions [
-      ./Cargo.lock
-      ./Cargo.toml
-      ./build.rs
-      ./src
-    ];
-  };
+  src = ./src;
 
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoLock = {
+    lockFile = ./src/Cargo.lock;
+    outputHashes."rust-ini-0.21.1" = "sha256-0nSBhme/g+mVsYdiq0Ash0ek9WEdvbf/b9FRxA7sauk=";
+  };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus ];

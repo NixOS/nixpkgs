@@ -1,4 +1,4 @@
-{ stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper }:
+{ stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper, file }:
 
 stdenv.mkDerivation rec {
   pname = "reckon";
@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
   in ''
     runHook preInstall
     mkdir -p $out/bin
-    makeWrapper ${env}/bin/reckon $out/bin/reckon
+    makeWrapper ${env}/bin/reckon $out/bin/reckon \
+      --prefix PATH : ${lib.makeBinPath [ file ]}
     runHook postInstall
   '';
 

@@ -44,12 +44,12 @@
 , openjpeg
 , openssl
 , poppler
-, python3Packages
 , systemd
 , udev
 , util-linux
 , wayland
 , wayland-protocols
+, wayland-scanner
 , writeText
 , xorg
 , zlib
@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
     gtk3
     pkg-config
     check
+    wayland-scanner
   ];
 
   buildInputs = [

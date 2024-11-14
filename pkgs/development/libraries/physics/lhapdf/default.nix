@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   # The Apple SDK only exports locale_t from xlocale.h whereas glibc
   # had decided that xlocale.h should be a part of locale.h
-  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.cc.isGNU) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.cc.isGNU) ''
     substituteInPlace src/GridPDF.cc --replace '#include <locale>' '#include <xlocale.h>'
   '';
 

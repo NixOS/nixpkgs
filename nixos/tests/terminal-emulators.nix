@@ -62,6 +62,9 @@ let tests = {
       konsole.pkg = p: p.plasma5Packages.konsole;
 
       lomiri-terminal-app.pkg = p: p.lomiri.lomiri-terminal-app;
+      # after recent Mesa change, borked software rendering config under x86_64 icewm?
+      # BGR colour display on x86_64, RGB on aarch64
+      lomiri-terminal-app.colourTest = false;
 
       lxterminal.pkg = p: p.lxterminal;
 
@@ -117,6 +120,8 @@ let tests = {
       xfce4-terminal.pkg = p: p.xfce.xfce4-terminal;
 
       xterm.pkg = p: p.xterm;
+
+      zutty.pkg = p: p.zutty;
     };
 in mapAttrs (name: { pkg, executable ? name, cmd ? "SHELL=$command ${executable}", colourTest ? true, pinkValue ? "#FF0087", kill ? false }: makeTest
 {

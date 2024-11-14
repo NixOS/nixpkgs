@@ -14,19 +14,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-texttospeech";
-  version = "2.16.4";
+  version = "2.18.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-B7fioSbikhnSAk3WnkDLMf8IBb2uSVfcukUsatSGJAU=";
+    pname = "google_cloud_texttospeech";
+    inherit version;
+    hash = "sha256-jR91d6b4btSDNeEIFGgCYeKXbaVIiMih1YYETuGRlvQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     proto-plus
     protobuf
@@ -39,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Disable tests that require credentials
+    # Tests that require credentials
     "test_list_voices"
     "test_synthesize_speech"
   ];

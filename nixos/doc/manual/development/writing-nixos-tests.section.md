@@ -71,20 +71,20 @@ nix-build -A nixosTests.hostname
 
 ### Testing outside the NixOS project {#sec-call-nixos-test-outside-nixos}
 
-Outside the `nixpkgs` repository, you can instantiate the test by first importing the NixOS library,
+Outside the `nixpkgs` repository, you can use the `runNixOSTest` function from
+`pkgs.testers`:
 
 ```nix
-let nixos-lib = import (nixpkgs + "/nixos/lib") { };
+let pkgs = import <nixpkgs> {};
 in
 
-nixos-lib.runTest {
+pkgs.testers.runNixOSTest {
   imports = [ ./test.nix ];
-  hostPkgs = pkgs;  # the Nixpkgs package set used outside the VMs
   defaults.services.foo.package = mypkg;
 }
 ```
 
-`runTest` returns a derivation that runs the test.
+`runNixOSTest` returns a derivation that runs the test.
 
 ## Configuring the nodes {#sec-nixos-test-nodes}
 

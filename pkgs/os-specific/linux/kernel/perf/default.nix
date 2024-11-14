@@ -57,13 +57,12 @@ in
 
 stdenv.mkDerivation {
   pname = "perf-linux";
-  version = kernel.version;
+  inherit (kernel) version src;
 
-  inherit (kernel) src;
-
-  # Fix 6.10.0 holding pkg-config completely wrong.
-  # Patches from perf-tools-next, should be in 6.11 or hopefully backported.
-  patches = lib.optionals (lib.versionAtLeast kernel.version "6.10") [
+  patches = lib.optionals (lib.versionAtLeast kernel.version "5.10") [
+    # fix wrong path to dmesg
+    ./fix-dmesg-path.diff
+  ] ++ lib.optionals (lib.versions.majorMinor kernel.version == "6.10") [
     (fetchpatch {
       url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=0f0e1f44569061e3dc590cd0b8cb74d8fd53706b";
       hash = "sha256-9u/zhbsDgwOr4T4k9td/WJYRuSHIfbtfS+oNx8nbOlM=";
@@ -144,7 +143,12 @@ stdenv.mkDerivation {
   ++ lib.optional withZstd zstd
   ++ lib.optional withLibcap libcap
   ++ lib.optional (lib.versionAtLeast kernel.version "5.8") libpfm
-  ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools;
+  ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools
+  # Python 3.12 no longer includes distutils, not needed for 6.0 and newer.
+  ++ lib.optional (!(lib.versionAtLeast kernel.version "6.0") && lib.versionAtLeast python3.version "3.12") [
+    python3.pkgs.distutils
+    python3.pkgs.packaging
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=cpp"

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     gnuplot
     libusb1
     soapysdr
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     GLUT
   ] ++ lib.optionals withGui [
     fltk

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "terraform-compliance";
     repo = "cli";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-2nf/EJcC4KYTBItByX47UqTSs2EOgsUAgRbLEdB4Iyg=";
+    hash = "sha256-2nf/EJcC4KYTBItByX47UqTSs2EOgsUAgRbLEdB4Iyg=";
   };
 
   postPatch = ''

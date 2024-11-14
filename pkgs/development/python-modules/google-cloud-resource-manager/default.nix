@@ -15,19 +15,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-resource-manager";
-  version = "1.12.4";
+  version = "1.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-PtqRSpJekkZe+A+qq34PepMS1IbdThI9LHbgS6xoj/A=";
+    pname = "google_cloud_resource_manager";
+    inherit version;
+    hash = "sha256-rkv2lEPxSzcAfU2EFQEVsJQuiwFlD9eh/G/03Bdg5cQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     google-cloud-core
     grpc-google-iam-v1
@@ -40,7 +41,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # prevent google directory from shadowing google imports
+  # Prevent google directory from shadowing google imports
   preCheck = ''
     rm -r google
   '';

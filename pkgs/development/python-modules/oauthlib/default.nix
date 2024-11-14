@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     rsa = [ cryptography ];
     signedtoken = [
       cryptography
@@ -45,7 +45,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  disabledTests = [
+    # https://github.com/oauthlib/oauthlib/issues/877
+    "test_rsa_bad_keys"
+  ];
 
   pythonImportsCheck = [ "oauthlib" ];
 

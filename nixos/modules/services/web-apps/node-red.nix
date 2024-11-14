@@ -10,7 +10,7 @@ in
   options.services.node-red = {
     enable = mkEnableOption "the Node-RED service";
 
-    package = mkPackageOption pkgs [ "nodePackages" "node-red" ] { };
+    package = mkPackageOption pkgs [ "node-red" ] { };
 
     openFirewall = mkOption {
       type = types.bool;
@@ -31,8 +31,8 @@ in
 
     configFile = mkOption {
       type = types.path;
-      default = "${cfg.package}/lib/node_modules/node-red/settings.js";
-      defaultText = literalExpression ''"''${package}/lib/node_modules/node-red/settings.js"'';
+      default = "${cfg.package}/lib/node_modules/node-red/packages/node_modules/node-red/settings.js";
+      defaultText = literalExpression ''"''${package}/lib/node_modules/node-red/packages/node_modules/node-red/settings.js"'';
       description = ''
         Path to the JavaScript configuration file.
         See <https://github.com/node-red/node-red/blob/master/packages/node_modules/node-red/settings.js>
@@ -118,7 +118,7 @@ in
       environment = {
         HOME = cfg.userDir;
       };
-      path = lib.optionals cfg.withNpmAndGcc [ pkgs.nodePackages.npm pkgs.gcc ];
+      path = lib.optionals cfg.withNpmAndGcc [ pkgs.nodejs pkgs.gcc ];
       serviceConfig = mkMerge [
         {
           User = cfg.user;

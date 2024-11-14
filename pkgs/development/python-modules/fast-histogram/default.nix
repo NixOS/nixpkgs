@@ -10,7 +10,7 @@
   numpy,
   wheel,
   hypothesis,
-  pytest-cov,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     hypothesis
-    pytest-cov
+    pytest-cov-stub
   ];
 
   pytestFlagsArray = [ "${builtins.placeholder "out"}/${python.sitePackages}" ];

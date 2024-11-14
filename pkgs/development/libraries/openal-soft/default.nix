@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, removeReferencesTo
-, alsaSupport ? !stdenv.isDarwin, alsa-lib
-, dbusSupport ? !stdenv.isDarwin, dbus
-, pipewireSupport ? !stdenv.isDarwin, pipewire
-, pulseSupport ? !stdenv.isDarwin, libpulseaudio
+, alsaSupport ? !stdenv.hostPlatform.isDarwin, alsa-lib
+, dbusSupport ? !stdenv.hostPlatform.isDarwin, dbus
+, pipewireSupport ? !stdenv.hostPlatform.isDarwin, pipewire
+, pulseSupport ? !stdenv.hostPlatform.isDarwin, libpulseaudio
 , CoreServices, AudioUnit, AudioToolbox
 }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional dbusSupport dbus
     ++ lib.optional pipewireSupport pipewire
     ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices AudioUnit AudioToolbox ];
 
   cmakeFlags = [
     # Automatically links dependencies without having to rely on dlopen, thus

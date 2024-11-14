@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "arp242";
     repo = "goatcounter";
     rev = "v${version}";
-    sha256 = "sha256-lwiLk/YYxX4QwSDjpU/mAikumGXYMzleRzmPjZGruZU=";
+    hash = "sha256-lwiLk/YYxX4QwSDjpU/mAikumGXYMzleRzmPjZGruZU=";
   };
 
   vendorHash = "sha256-YAb3uBWQc6hWzF1Z5cAg8RzJQSJV+6dkppfczKS832s=";

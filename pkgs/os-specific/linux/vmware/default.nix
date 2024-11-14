@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "vmware-modules";
-  version = "workstation-17.5.1-unstable-2024-01-12-${kernel.version}";
+  version = "workstation-17.6.1-unstable-2024-10-12-${kernel.version}";
 
   src = fetchFromGitHub {
-    owner = "mkubecek";
+    owner = "philipl";
     repo = "vmware-host-modules";
     # Developer no longer provides tags for kernel compatibility fixes
-    # Commit hash for branch workstation-17.5.1 as of 2024-03-07
-    rev = "2c6d66f3f1947384038b765c897b102ecdb18298";
-    hash = "sha256-VKN6nxtgQqElVrSD5++UdngjZio4+vmetGCgTAfgtTs=";
+    # Commit hash for branch workstation-17.6.1 as of 2024-10-15
+    rev = "3a7595bddb2239c2149d7f730a4b57c8bb120d99";
+    hash = "sha256-YqRnym5bOZ2ApMegOAeiUNyhsEsF5g1TVALtkUz/v6E=";
   };
 
   hardeningDisable = [ "pic" ];

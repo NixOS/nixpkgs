@@ -34,7 +34,7 @@ buildPythonPackage rec {
     webencodings
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     css = [ tinycss2 ];
   };
 

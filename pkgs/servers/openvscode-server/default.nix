@@ -103,9 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
     moreutils
   ];
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
     ++ (with xorg; [ libX11 libxkbfile libkrb5 ])
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Cocoa
     Security
@@ -181,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
     find -path "*@vscode/ripgrep" -type d \
       -execdir mkdir -p {}/bin \; \
       -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
     # (see issue #101229)
     pushd ./remote/node_modules/@parcel/watcher

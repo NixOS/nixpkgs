@@ -12,8 +12,11 @@ buildPythonPackage {
   inherit (lammps) pname version src;
 
   env = {
+    # Needed for tests
     inherit LAMMPS_SHARED_LIB;
   };
+  # Don't perform checks if GPU is enabled - because libcuda.so cannot be opened in the sandbox
+  doCheck = if lammps.passthru.packages ? GPU then !lammps.passthru.packages.GPU else true;
   preConfigure = ''
     cd python
     # Upstream assumes that the shared library is located in the same directory

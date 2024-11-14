@@ -24,11 +24,11 @@ let
       sox
       wavpack
     ]
-    ++ (lib.optional stdenv.isLinux monkeysAudio)
+    ++ (lib.optional stdenv.hostPlatform.isLinux monkeysAudio)
   );
   libPath = lib.makeLibraryPath [
     zlib
-    stdenv.cc.cc.lib
+    stdenv.cc.cc
   ];
 in
 perlPackages.buildPerlPackage rec {
@@ -117,8 +117,8 @@ perlPackages.buildPerlPackage rec {
       XMLSimple
       YAMLLibYAML
     ]
-    # ++ (lib.optional stdenv.isDarwin perlPackages.MacFSEvents)
-    ++ (lib.optional stdenv.isLinux perlPackages.LinuxInotify2);
+    # ++ (lib.optional stdenv.hostPlatform.isDarwin perlPackages.MacFSEvents)
+    ++ (lib.optional stdenv.hostPlatform.isLinux perlPackages.LinuxInotify2);
 
   prePatch = ''
     # remove vendored binaries
@@ -179,6 +179,6 @@ perlPackages.buildPerlPackage rec {
       jecaro
     ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

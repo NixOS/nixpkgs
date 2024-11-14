@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jatinchowdhury18";
     repo = "KlonCentaur";
     rev = "v${finalAttrs.version}";
-    sha256 = "0mrzlf4a6f25xd7z9xanpyq7ybb4al01dzpjsgi0jkmlmadyhc4h";
+    hash = "sha256-kDDom6q0Tgni0/L+FgBVZC1/sL9W9fRP60U4o4ijP1c=";
     fetchSubmodules = true;
   };
 

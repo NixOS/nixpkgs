@@ -37,7 +37,7 @@ buildPythonPackage rec {
     tzlocal
   ];
 
-  passthru.optional-dependencies = lib.fix (self: {
+  optional-dependencies = lib.fix (self: {
     kerberos = [ requests-kerberos ];
     sqlalchemy = [ sqlalchemy ];
     external-authentication-token-cache = [ keyring ];
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     httpretty
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "trino" ];
 

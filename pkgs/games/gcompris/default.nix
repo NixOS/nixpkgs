@@ -11,6 +11,7 @@
 , qtcharts
 , qtdeclarative
 , qtgraphicaleffects
+, qtimageformats
 , qtmultimedia
 , qtquickcontrols2
 , qtsensors
@@ -21,11 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gcompris";
-  version = "4.1";
+  version = "4.2";
 
   src = fetchurl {
     url = "mirror://kde/stable/gcompris/qt/src/gcompris-qt-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Pz0cOyBfiexKHUsHXm18Zw2FKu7b7vVuwy4Vu4daBoU=";
+    hash = "sha256-Zocmq8lJxJ5TSLVeix59cAVYQghDK7lUJJeffwjyJWw=";
   };
 
   cmakeFlags = [
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtcharts
     qtdeclarative
     qtgraphicaleffects
+    qtimageformats
     qtmultimedia
     qtquickcontrols2
     qtsensors

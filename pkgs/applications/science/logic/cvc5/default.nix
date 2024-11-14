@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     "-DANTLR3_JAR=${antlr3_4}/lib/antlr/antlr-3.4-complete.jar"
   ];
 
+  doCheck = true;
+
   meta = with lib; {
     description = "High-performance theorem prover and SMT solver";
     mainProgram = "cvc5";

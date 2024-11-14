@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "tests/external" ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # requires access to trash
     "test_load_save_rename"
   ];

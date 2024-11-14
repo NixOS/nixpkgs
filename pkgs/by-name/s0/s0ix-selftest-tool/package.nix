@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "s0ix-selftest-tool";
-  version = "0-unstable-2024-08-13";
+  version = "0-unstable-2024-09-22";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "S0ixSelftestTool";
-    rev = "a9fcb3117ff733e7c307bb579c612065b64bf4b7";
-    hash = "sha256-DcXefQPI4VpkeFH/YM899WEZHIs5IfWOWoUuZV6Ew7M=";
+    rev = "3af4af2009cb01da43ddae906f671d435494a0dc";
+    hash = "sha256-phQxlbQB3J08tPtcw4vqupVgAT9gsSJxgPT044SMMNk=";
   };
 
   # don't use the bundled turbostat binary

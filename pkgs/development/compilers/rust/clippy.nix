@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage {
   dontUpdateAutotoolsGnuConfigScripts = true;
 
   buildInputs = [ rustc.llvm ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   # fixes: error: the option `Z` is only accepted on the nightly compiler
   RUSTC_BOOTSTRAP = 1;
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage {
   #
   # [0]: https://github.com/rust-lang/rust/blob/f77f4d55bdf9d8955d3292f709bd9830c2fdeca5/src/bootstrap/builder.rs#L1543
   # [1]: https://github.com/rust-lang/rust/blob/f77f4d55bdf9d8955d3292f709bd9830c2fdeca5/compiler/rustc_codegen_ssa/src/back/linker.rs#L323-L331
-  preFixup = lib.optionalString stdenv.isDarwin ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath "${rustc.unwrapped}/lib" "$out/bin/clippy-driver"
     install_name_tool -add_rpath "${rustc.unwrapped}/lib" "$out/bin/cargo-clippy"
   '';

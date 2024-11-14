@@ -149,7 +149,6 @@ lib/engines-3/capi.so
 lib/engines-3/devcrypto.so
 lib/engines-3/loader_attic.so
 lib/engines-3/padlock.so
-lib/freebsd/libclang_rt.builtins-x86_64.a
 lib/gawk/filefuncs.so
 lib/gawk/fnmatch.so
 lib/gawk/fork.so

@@ -30,7 +30,7 @@ mkDerivation rec {
 
   src =
     let
-       base_url = "https://dl.tvcdn.de/download/linux/version_${lib.versions.major version}x";
+       base_url = "https://dl.teamviewer.com/download/linux/version_${lib.versions.major version}x";
     in
       {
        x86_64-linux = fetchurl {

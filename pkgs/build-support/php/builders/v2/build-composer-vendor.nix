@@ -34,7 +34,7 @@ let
       composerNoScripts = previousAttrs.composerNoScripts or true;
       composerStrictValidation = previousAttrs.composerStrictValidation or true;
 
-      name = "${previousAttrs.pname}-${previousAttrs.version}-composer-repository";
+      name = "${previousAttrs.pname}-composer-repository-${previousAttrs.version}";
 
       # See https://github.com/NixOS/nix/issues/6660
       dontPatchShebangs = previousAttrs.dontPatchShebangs or true;
@@ -86,13 +86,6 @@ let
 
           runHook postInstallCheck
         '';
-
-      env = {
-        COMPOSER_CACHE_DIR = "/dev/null";
-        COMPOSER_MIRROR_PATH_REPOS = "1";
-        COMPOSER_HTACCESS_PROTECT = "0";
-        COMPOSER_DISABLE_NETWORK = "0";
-      };
 
       outputHashMode = "recursive";
       outputHashAlgo =

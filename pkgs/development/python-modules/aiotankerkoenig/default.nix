@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aiotankerkoenig";
-  version = "0.4.1";
+  version = "0.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "jpbede";
     repo = "aiotankerkoenig";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BB1Cy4Aji5m06LlNj03as4CWF8RcYKAYy4oxPomOP68=";
+    hash = "sha256-WRR4CLVkHN1JR4rwNu0ULoiu0zO0M2YdvCHYp0Tt9VU=";
   };
 
   postPatch = ''

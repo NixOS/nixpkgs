@@ -201,6 +201,26 @@ let
     };
   };
 
+  promTypes.sigv4 = types.submodule {
+    options = {
+      region = mkOpt types.str ''
+        The AWS region.
+      '';
+      access_key = mkOpt types.str ''
+        The Access Key ID.
+      '';
+      secret_key = mkOpt types.str ''
+        The Secret Access Key.
+      '';
+      profile = mkOpt types.str ''
+        The named AWS profile used to authenticate.
+      '';
+      role_arn = mkOpt types.str ''
+        The AWS role ARN.
+      '';
+    };
+  };
+
   promTypes.tls_config = types.submodule {
     options = {
       ca_file = mkOpt types.str ''
@@ -1464,6 +1484,9 @@ let
         Sets the `Authorization` header on every remote write request with the bearer token
         read from the configured file. It is mutually exclusive with `bearer_token`.
       '';
+      sigv4 = mkOpt promTypes.sigv4 ''
+        Configures AWS Signature Version 4 settings.
+      '';
       tls_config = mkOpt promTypes.tls_config ''
         Configures the remote write request's TLS settings.
       '';
@@ -1811,8 +1834,6 @@ in
         StateDirectory = cfg.stateDir;
         StateDirectoryMode = "0700";
         # Hardening
-        AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
-        CapabilityBoundingSet = if (cfg.port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
         DeviceAllow = [ "/dev/null rw" ];
         DevicePolicy = "strict";
         LockPersonality = true;

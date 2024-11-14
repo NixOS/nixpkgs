@@ -34,7 +34,7 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   pythonImportsCheck = [ "y_py" ];
 

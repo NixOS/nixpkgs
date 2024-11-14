@@ -4,6 +4,7 @@
 , python3
 , meson
 , ninja
+, elogind
 , systemd
 , enableSystemd ? true # enableSystemd=false maintained by maintainers.qyliss.
 , pkg-config
@@ -58,7 +59,7 @@
 
 stdenv.mkDerivation(finalAttrs: {
   pname = "pipewire";
-  version = "1.2.2";
+  version = "1.2.6";
 
   outputs = [
     "out"
@@ -74,7 +75,7 @@ stdenv.mkDerivation(finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     rev = finalAttrs.version;
-    sha256 = "sha256-neLQ41p2f2QyOS3r2VxanaHbiVj6nnnkT7kx/On0azM=";
+    sha256 = "sha256-AmrbA1YQBeETLC9u9rQ2f85rG9TASvcbCZ/Xlz7ICdY=";
   };
 
   patches = [
@@ -120,7 +121,7 @@ stdenv.mkDerivation(finalAttrs: {
     ncurses
     readline
     sbc
-  ] ++ (if enableSystemd then [ systemd ] else [ udev ])
+  ] ++ (if enableSystemd then [ systemd ] else [ elogind udev ])
   ++ (if lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing_1 then [ webrtc-audio-processing_1 ] else [ webrtc-audio-processing ])
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform ldacbt) ldacbt
   ++ lib.optional zeroconfSupport avahi
@@ -146,6 +147,7 @@ stdenv.mkDerivation(finalAttrs: {
     (lib.mesonEnable "avahi" zeroconfSupport)
     (lib.mesonEnable "gstreamer" true)
     (lib.mesonEnable "gstreamer-device-provider" true)
+    (lib.mesonOption "logind-provider" (if enableSystemd then "libsystemd" else "libelogind"))
     (lib.mesonEnable "systemd" enableSystemd)
     (lib.mesonEnable "systemd-system-service" enableSystemd)
     (lib.mesonEnable "udev" (!enableSystemd))

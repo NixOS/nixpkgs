@@ -3,7 +3,7 @@
 # All possible values as defined by the spec, version 1.4.
 # Please keep in spec order for easier maintenance.
 # When adding a new value, don't forget to update the Version field below!
-# See https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html
+# See https://specifications.freedesktop.org/desktop-entry-spec/latest
 lib.makeOverridable ({ name # The name of the desktop file
 , type ? "Application"
 # version is hardcoded

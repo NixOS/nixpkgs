@@ -52,7 +52,7 @@ pkgs.linuxPackages_custom {
   version = "6.1.55";
   src = pkgs.fetchurl {
     url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${version}.tar.xz";
-    hash = "sha256:1h0mzx52q9pvdv7rhnvb8g68i7bnlc9rf8gy9qn4alsxq4g28zm8";
+    hash = "sha256-qH4kHsFdU0UsTv4hlxOjdp2IzENrW5jPbvsmLEr/FcA=";
   };
   configfile = ./path_to_config_file;
 }
@@ -67,7 +67,7 @@ pkgs.linuxPackages_custom {
   modDirVersion = "6.1.55";
   src = pkgs.fetchurl {
     url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${modDirVersion}.tar.xz";
-    hash = "sha256:1h0mzx52q9pvdv7rhnvb8g68i7bnlc9rf8gy9qn4alsxq4g28zm8";
+    hash = "sha256-qH4kHsFdU0UsTv4hlxOjdp2IzENrW5jPbvsmLEr/FcA=";
   };
   configfile = ./path_to_config_file;
 }

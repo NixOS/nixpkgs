@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ typing-extensions ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
   ];
 

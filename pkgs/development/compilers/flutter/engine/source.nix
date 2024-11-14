@@ -1,9 +1,7 @@
 {
+  stdenv,
   lib,
   callPackage,
-  buildPlatform,
-  targetPlatform,
-  hostPlatform,
   fetchgit,
   tools ? null,
   curl,
@@ -19,13 +17,14 @@
   url,
 }@pkgs:
 let
-  target-constants = callPackage ./constants.nix { platform = targetPlatform; };
-  build-constants = callPackage ./constants.nix { platform = buildPlatform; };
-  tools = pkgs.tools or (callPackage ./tools.nix { inherit hostPlatform buildPlatform; });
+  target-constants = callPackage ./constants.nix { platform = stdenv.targetPlatform; };
+  build-constants = callPackage ./constants.nix { platform = stdenv.buildPlatform; };
+  tools = pkgs.tools or (callPackage ./tools.nix { });
 
   boolOption = value: if value then "True" else "False";
 in
-runCommand "flutter-engine-source-${version}-${buildPlatform.system}-${targetPlatform.system}"
+runCommand
+  "flutter-engine-source-${version}-${stdenv.buildPlatform.system}-${stdenv.targetPlatform.system}"
   {
     pname = "flutter-engine-source";
     inherit version;
@@ -53,7 +52,7 @@ runCommand "flutter-engine-source-${version}-${buildPlatform.system}-${targetPla
         "custom_vars": {
           "download_fuchsia_deps": False,
           "download_android_deps": False,
-          "download_linux_deps": ${boolOption targetPlatform.isLinux},
+          "download_linux_deps": ${boolOption stdenv.targetPlatform.isLinux},
           "setup_githooks": False,
           "download_esbuild": False,
           "download_dart_sdk": False,
@@ -83,8 +82,8 @@ runCommand "flutter-engine-source-${version}-${buildPlatform.system}-${targetPla
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
     outputHash =
-      (hashes."${buildPlatform.system}" or { })."${targetPlatform.system}"
-        or (throw "Hash not set for ${targetPlatform.system} on ${buildPlatform.system}");
+      (hashes."${stdenv.buildPlatform.system}" or { })."${stdenv.targetPlatform.system}"
+        or (throw "Hash not set for ${stdenv.targetPlatform.system} on ${stdenv.buildPlatform.system}");
   }
   ''
     source ${../../../../build-support/fetchgit/deterministic-git}
@@ -101,7 +100,7 @@ runCommand "flutter-engine-source-${version}-${buildPlatform.system}-${targetPla
 
     rm -rf $out/src/{buildtools,fuchsia}
     rm -rf $out/src/flutter/{buildtools,prebuilts,third_party/swiftshader,third_party/gn/.versions}
-    rm -rf $out/src/flutter/{third_party/dart/tools/sdks/dart-sdk,third_party/ninja/ninja}
+    rm -rf $out/src/flutter/{third_party/dart/tools/sdks/dart-sdk,third_party/ninja/ninja,third_party/java}
     rm -rf $out/src/third_party/{dart/tools/sdks/dart-sdk,libcxx/test}
 
     rm -rf $out/.cipd $out/.gclient $out/.gclient_entries $out/.gclient_previous_custom_vars $out/.gclient_previous_sync_commits

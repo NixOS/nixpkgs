@@ -26,6 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/LibreTranslate/pycld2";
     license = licenses.asl20;
     maintainers = with maintainers; [ misuzu ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

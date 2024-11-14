@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-g25Pw3BlRbuaGjsQav6mU9zVyS1mVUKkgKDOILm8R6U=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   meta = with lib; {
     description = "Static site generator written in Rust";

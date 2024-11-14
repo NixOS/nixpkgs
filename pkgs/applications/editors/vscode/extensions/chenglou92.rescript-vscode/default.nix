@@ -5,12 +5,12 @@
   callPackage,
 }:
 let
-  version = "1.54.0";
+  version = "1.58.0";
   rescript-editor-analysis = callPackage ./rescript-editor-analysis.nix { inherit version; };
   arch =
-    if stdenv.isLinux then
+    if stdenv.hostPlatform.isLinux then
       "linux"
-    else if stdenv.isDarwin then
+    else if stdenv.hostPlatform.isDarwin then
       "darwin"
     else
       throw "Unsupported system: ${stdenv.system}";
@@ -21,7 +21,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     name = "rescript-vscode";
     publisher = "chenglou92";
     inherit version;
-    hash = "sha256-c7TJED5YpHRwn7Ooq8sG+N99b7tH6TOgeC9TTYdb4JA=";
+    hash = "sha256-EuEBbtdCaS4l8ykkxyLLMjEnUMs0IsXoc994a8Pw1Ws=";
   };
   postPatch = ''
     rm -r ${analysisDir}

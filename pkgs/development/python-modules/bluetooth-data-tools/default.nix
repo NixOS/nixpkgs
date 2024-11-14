@@ -14,29 +14,29 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-data-tools";
-  version = "1.19.4";
-  format = "pyproject";
+  version = "1.20.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
+    repo = "bluetooth-data-tools";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VoldKrlD/1Crw0tJcHoMGiLR8uTUI25IlwZ/1AICx84=";
+    hash = "sha256-qg2QZc95DD2uTO0fTwoNaPfL+QSrcqDwJvx41lIZDRs=";
   };
 
   # The project can build both an optimized cython version and an unoptimized
   # python version. This ensures we fail if we build the wrong one.
   env.REQUIRE_CYTHON = 1;
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     poetry-core
     setuptools
   ];
 
-  propagatedBuildInputs = [ cryptography ];
+  dependencies = [ cryptography ];
 
   nativeCheckInputs = [
     pytest-benchmark

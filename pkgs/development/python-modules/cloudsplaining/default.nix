@@ -19,16 +19,16 @@
 
 buildPythonPackage rec {
   pname = "cloudsplaining";
-  version = "0.6.3";
+  version = "0.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "salesforce";
     repo = "cloudsplaining";
     rev = "refs/tags/${version}";
-    hash = "sha256-mRWfb14zKS141cYzShXY+OoHWfs9PB1oJu3spsvv6mI=";
+    hash = "sha256-ZraWGOiJNqVSmxnllaTvpk9+rUQRFcxFIdp91gpAQW0=";
   };
 
   postPatch = ''

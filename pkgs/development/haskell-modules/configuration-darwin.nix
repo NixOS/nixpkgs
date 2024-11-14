@@ -83,9 +83,6 @@ self: super: ({
   with-utf8 = addExtraLibrary pkgs.libiconv super.with-utf8;
   with-utf8_1_1_0_0 = addExtraLibrary pkgs.libiconv super.with-utf8_1_1_0_0;
 
-  # the system-fileio tests use canonicalizePath, which fails in the sandbox
-  system-fileio = dontCheck super.system-fileio;
-
   git-annex = overrideCabal (drv: {
     # We can't use testFlags since git-annex side steps the Cabal test mechanism
     preCheck = drv.preCheck or "" + ''
@@ -96,6 +93,12 @@ self: super: ({
       )
     '';
   }) super.git-annex;
+
+  # on*Finish tests rely on a threadDelay timing differential of 0.1s.
+  # You'd think that's plenty of time even though immediate rescheduling
+  # after threadDelay is not guaranteed. However, it appears that these
+  # tests are quite flaky on Darwin.
+  immortal = dontCheck super.immortal;
 
   # Prevents needing to add `security_tool` as a run-time dependency for
   # everything using x509-system to give access to the `security` executable.
@@ -303,6 +306,13 @@ self: super: ({
     __darwinAllowLocalNetworking = true;
   });
 
+  # network requires `IP_RECVTOS`, which was added in 10.15.
+  network =
+    if lib.versionOlder (lib.getVersion pkgs.apple-sdk) "10.15" then
+      addBuildDepend pkgs.apple-sdk_10_15 super.network
+    else
+      super.network;
+
   foldl = overrideCabal (drv: {
     postPatch = ''
       # This comment has been inserted, so the derivation hash changes, forcing
@@ -326,6 +336,10 @@ self: super: ({
 
   # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
   zip = dontCheck super.zip;
+
+  snap = super.snap.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
 
   warp = super.warp.overrideAttrs (drv: {
     __darwinAllowLocalNetworking = true;
@@ -359,7 +373,7 @@ self: super: ({
     '';
   }) super.di-core;
 
-} // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
+} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {  # aarch64-darwin
 
   # Workarounds for justStaticExecutables on aarch64-darwin. Since dead code
   # elimination barely works on aarch64-darwin, any package that has a
@@ -429,7 +443,7 @@ self: super: ({
   rivet-adaptor-postgresql = dontCheck super.rivet-adaptor-postgresql;
   tmp-proc-postgres = dontCheck super.tmp-proc-postgres;
 
-} // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
+} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isx86_64 {  # x86_64-darwin
 
   # tests appear to be failing to link or something:
   # https://hydra.nixos.org/build/174540882/nixlog/9

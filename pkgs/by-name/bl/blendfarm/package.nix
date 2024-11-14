@@ -6,9 +6,6 @@
   dotnetCorePackages,
   xz,
   pcre,
-  libX11,
-  libICE,
-  libSM,
   autoPatchelfHook,
   bintools,
   fixDarwinDylibNames,
@@ -67,7 +64,7 @@ buildDotnetModule rec {
     ];
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     fontconfig
     openssl
     libkrb5
@@ -77,13 +74,9 @@ buildDotnetModule rec {
   runtimeDeps = [
     xz
     pcre
-    libX11
-    libICE
-    libSM
     libgdiplus
     glib
     libXrandr
-    fontconfig
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ blender ];
 
   # there is no "*.so.3" or "*.so.5" in nixpkgs. So ignore the warning

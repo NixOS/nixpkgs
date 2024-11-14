@@ -1,18 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, dtkwidget
-, gio-qt
-, cmake
-, extra-cmake-modules
-, qttools
-, wayland
-, kwayland
-, dwayland
-, pkg-config
-, wrapQtAppsHook
-, glibmm
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dtkwidget,
+  gio-qt,
+  cmake,
+  extra-cmake-modules,
+  libsForQt5,
+  wayland,
+  dwayland,
+  pkg-config,
+  glibmm,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,23 +29,20 @@ stdenv.mkDerivation rec {
     cmake
     extra-cmake-modules
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     dtkwidget
     gio-qt
     wayland
-    kwayland
     dwayland
     glibmm
     gtest
   ];
 
-  cmakeFlags = [
-    "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user"
-  ];
+  cmakeFlags = [ "-DSYSTEMD_USER_UNIT_DIR=${placeholder "out"}/lib/systemd/user" ];
 
   meta = with lib; {
     description = "DDE optional clipboard manager componment";

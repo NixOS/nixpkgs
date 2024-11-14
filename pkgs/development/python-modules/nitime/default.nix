@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  doCheck = !stdenv.isDarwin; # tests hang indefinitely
+  doCheck = !stdenv.hostPlatform.isDarwin; # tests hang indefinitely
 
   pythonImportsCheck = [ "nitime" ];
 

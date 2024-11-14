@@ -25,12 +25,13 @@
   srptools,
   stdenv,
   tabulate,
+  tinytag,
   zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +40,7 @@ buildPythonPackage rec {
     owner = "postlund";
     repo = "pyatv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-59XDh+TA4UYzfLJtbTiMC6Wz7EvUW22ONM4JQw5t/5o=";
+    hash = "sha256-yjPbSTmHoKnVwNArZw5mGf3Eh4Ei1+DkY9y2XRRy4YA=";
   };
 
   postPatch = ''
@@ -77,6 +78,7 @@ buildPythonPackage rec {
     requests
     srptools
     tabulate
+    tinytag
     zeroconf
   ];
 
@@ -95,7 +97,7 @@ buildPythonPackage rec {
       # https://github.com/postlund/pyatv/issues/2365
       "test_simple_dispatch"
     ]
-    ++ lib.optionals (stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # tests/protocols/raop/test_raop_functional.py::test_stream_retransmission[raop_properties2-2-True] - assert False
       "test_stream_retransmission"
     ];

@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ dasj19 ];
     # configure: error: GTK+ build of wxWidgets is required
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -1,78 +1,13 @@
-diff --git a/src/Widgets/InputMethod/AddEnginesPopover.vala b/src/Widgets/InputMethod/AddEnginesPopover.vala
-index 478e6b02..5b25f2e9 100644
---- a/src/Widgets/InputMethod/AddEnginesPopover.vala
-+++ b/src/Widgets/InputMethod/AddEnginesPopover.vala
-@@ -43,7 +43,6 @@ public class Keyboard.InputMethodPage.AddEnginesPopover : Gtk.Popover {
-         };
-         scrolled.add (listbox);
+diff --git a/src/InputMethod/Widgets/AddEngineDialog.vala b/src/InputMethod/Widgets/AddEngineDialog.vala
+index 0a7f6013..a16904eb 100644
+--- a/src/InputMethod/Widgets/AddEngineDialog.vala
++++ b/src/InputMethod/Widgets/AddEngineDialog.vala
+@@ -70,8 +70,6 @@ public class Keyboard.InputMethodPage.AddEngineDialog : Granite.Dialog {
  
--        var install_button = new Gtk.Button.with_label (_("Install Unlisted Engines…"));
+         get_content_area ().append (frame);
  
-         var cancel_button = new Gtk.Button.with_label (_("Cancel"));
- 
-@@ -55,10 +54,8 @@ public class Keyboard.InputMethodPage.AddEnginesPopover : Gtk.Popover {
-             margin = 12,
-             spacing = 6
-         };
--        button_box.add (install_button);
-         button_box.add (cancel_button);
-         button_box.add (add_button);
--        button_box.set_child_secondary (install_button, true);
- 
-         var grid = new Gtk.Grid ();
-         grid.attach (search_entry, 0, 0);
-@@ -88,30 +85,6 @@ public class Keyboard.InputMethodPage.AddEnginesPopover : Gtk.Popover {
-             listbox.invalidate_filter ();
-         });
- 
--        install_button.clicked.connect (() => {
--            popdown ();
+-        var install_button = add_button (_("Install Unlisted Engines…"), Gtk.ResponseType.OK);
 -
--            var installer = UbuntuInstaller.get_default ();
--            var install_dialog = new InstallEngineDialog ((Gtk.Window) get_toplevel ());
--            install_dialog.response.connect ((response_id) => {
--                if (response_id == Gtk.ResponseType.OK) {
--                    string engine_to_install = install_dialog.get_selected_engine_name ();
--                    install_dialog.destroy ();
--                    installer.install (engine_to_install);
--
--                    var progress_dialog = new ProgressDialog () {
--                        transient_for = (Gtk.Window) get_toplevel ()
--                    };
--                    installer.progress_changed.connect ((p) => {
--                        progress_dialog.progress = p;
--                    });
--                    progress_dialog.run ();
--                } else {
--                    install_dialog.destroy ();
--                }
--            });
--            install_dialog.run ();
--        });
+         var cancel_button = add_button (_("Cancel"), Gtk.ResponseType.CANCEL);
  
-         cancel_button.clicked.connect (() => {
-             popdown ();
-diff --git a/src/meson.build b/src/meson.build
-index 83cde9f6..63d6a88a 100644
---- a/src/meson.build
-+++ b/src/meson.build
-@@ -19,7 +19,6 @@ plug_files = files(
-     'Widgets/Layout/Display.vala',
-     'Widgets/Layout/AdvancedSettingsPanel.vala',
-     'Widgets/Layout/AdvancedSettingsGrid.vala',
--    'Widgets/InputMethod/LanguagesRow.vala',
-     'Widgets/InputMethod/EnginesRow.vala',
-     'Widgets/InputMethod/AddEnginesPopover.vala',
-     'Views/Shortcuts.vala',
-@@ -35,11 +34,6 @@ plug_files = files(
-     'InputSources/SourceSettings.vala',
-     'InputSources/InputSource.vala',
-     'InputMethod/AddEnginesList.vala',
--    'InputMethod/Installer/UbuntuInstaller.vala',
--    'InputMethod/Installer/InstallList.vala',
--    'InputMethod/Installer/aptd-client.vala',
--    'Dialogs/ProgressDialog.vala',
--    'Dialogs/InstallEngineDialog.vala',
-     'Dialogs/ConflictDialog.vala',
-     'Dialogs/AddLayoutDialog.vala'
- )
+         var add_button = add_button (_("Add Engine"), Gtk.ResponseType.ACCEPT);

@@ -402,6 +402,7 @@ with self;
     hash = "sha256-0InGCF34LWQes9S4OgbR6w+6cylThYuj1Dj0aQyTnuY=";
     meta.description = "Websocket library for use with cohttp and async";
     propagatedBuildInputs = [
+      async_ssl
       async_websocket
       cohttp-async
       ppx_jane

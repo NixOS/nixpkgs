@@ -23,13 +23,13 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = "gh-notify";
-  version = "0-unstable-2024-04-24";
+  version = "0-unstable-2024-08-01";
 
   src = fetchFromGitHub {
     owner = "meiji163";
     repo = "gh-notify";
-    rev = "5c2db4cffe39f312d25979dc366f2bc219def9a2";
-    hash = "sha256-AgpNjeRz0RHf8D3ib7x1zixBxh32UUZJleub5W/suuM=";
+    rev = "556df2eecdc0f838244a012759da0b76bcfeb2e7";
+    hash = "sha256-WKv/1AW8wtl7kQ3PE7g2N0ELvdHtons7pYb0K8wsfWg=";
   };
 
   nativeBuildInputs = [

@@ -11,13 +11,12 @@
   poetry-core,
   pytestCheckHook,
   pythonOlder,
-  pytz,
   respx,
 }:
 
 buildPythonPackage rec {
   pname = "pydiscovergy";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -26,7 +25,7 @@ buildPythonPackage rec {
     owner = "jpbede";
     repo = "pydiscovergy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0zyg1EBPOfcA1jAgtNbDCVaTv9hJQ2Xidl+doHbjKrM=";
+    hash = "sha256-g6KWX7APdqB0dNe7p6WGualxSj5fiw+jRq+0qfqTs4w=";
   };
 
   postPatch = ''
@@ -35,13 +34,11 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   dependencies = [
     authlib
     httpx
     mashumaro
     orjson
-    pytz
   ];
 
   nativeCheckInputs = [

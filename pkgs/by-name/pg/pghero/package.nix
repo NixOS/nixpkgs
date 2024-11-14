@@ -24,13 +24,13 @@ let
 in
 {
   pname = "pghero";
-  version = "3.5.0";
+  version = "3.6.1";
 
   src = fetchFromGitHub {
     owner = "pghero";
     repo = "pghero";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6JShYn3QfxPdAVcrJ7/kxzxa4dBEzSkUiLguIH+VCRQ=";
+    hash = "sha256-kABdQRwV5Y/jB9P8kYVmwmntOK0CF/JJYmaINNv26fA=";
   };
 
   strictDeps = true;

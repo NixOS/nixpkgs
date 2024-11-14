@@ -1,6 +1,7 @@
-## Description of changes
 
 <!--
+^ Please summarise the changes you have done and explain why they are necessary here ^
+
 For package updates please link to a changelog or describe changes, this helps your fellow maintainers discover breaking updates.
 For new packages please briefly describe the package or provide a link to its homepage.
 -->
@@ -24,7 +25,7 @@ For new packages please briefly describe the package or provide a link to its ho
   - made sure NixOS tests are [linked](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#linking-nixos-module-tests-to-a-package) to the relevant packages
 - [ ] Tested compilation of all packages that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review rev HEAD"`. Note: all changes have to be committed, also see [nixpkgs-review usage](https://github.com/Mic92/nixpkgs-review#usage)
 - [ ] Tested basic functionality of all binary files (usually in `./result/bin/`)
-- [24.11 Release Notes](https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2411.section.md) (or backporting [23.11](https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2311.section.md) and [24.05](https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2405.section.md) Release notes)
+- [25.05 Release Notes](https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2505.section.md) (or backporting [24.11](https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2411.section.md) and [25.05](https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2505.section.md) Release notes)
   - [ ] (Package updates) Added a release notes entry if the change is major or breaking
   - [ ] (Module updates) Added a release notes entry if the change is significant
   - [ ] (Module addition) Added a release notes entry if adding a new NixOS module

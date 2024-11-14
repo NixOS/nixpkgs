@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     table = [
       flatten-dict
       tabulate
@@ -46,9 +46,9 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-mock
     pytest-test-utils
-  ] ++ passthru.optional-dependencies.table ++ passthru.optional-dependencies.markdown;
+  ] ++ optional-dependencies.table ++ optional-dependencies.markdown;
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [ "tests/test_vega.py" ];
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_vega.py" ];
 
   pythonImportsCheck = [ "dvc_render" ];
 

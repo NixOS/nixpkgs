@@ -37,7 +37,7 @@ convertIconTheme() {
     local -ra scales=([1]="" [2]="@2")
 
     # Based loosely on the algorithm at:
-    # https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html#icon_lookup
+    # https://specifications.freedesktop.org/icon-theme-spec/latest/#icon_lookup
     # Assumes threshold = 2 for ease of implementation.
     function findIcon() {
         local -r iconSize=$1

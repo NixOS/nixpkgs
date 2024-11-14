@@ -64,7 +64,7 @@ unwrapped = stdenv.mkDerivation rec {
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
     ## the rest are optional dependencies
-    ++ optionals stdenv.isLinux [ /*lib*/systemd libcap_ng ]
+    ++ optionals stdenv.hostPlatform.isLinux [ /*lib*/systemd libcap_ng ]
     ++ [ jemalloc nghttp2 ]
     ++ [ fstrm protobufc ] # dnstap support
     ;
@@ -78,7 +78,7 @@ unwrapped = stdenv.mkDerivation rec {
   ]
   ++ optional doInstallCheck "-Dunit_tests=enabled"
   ++ optional doInstallCheck "-Dconfig_tests=enabled"
-  ++ optional stdenv.isLinux "-Dsystemd_files=enabled" # used by NixOS service
+  ++ optional stdenv.hostPlatform.isLinux "-Dsystemd_files=enabled" # used by NixOS service
     #"-Dextra_tests=enabled" # not suitable as in-distro tests; many deps, too.
   ;
 

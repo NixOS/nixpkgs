@@ -12,12 +12,12 @@ By default, root logins using a password are disallowed. They can be
 disabled entirely by setting
 [](#opt-services.openssh.settings.PermitRootLogin) to `"no"`.
 
-You can declaratively specify authorised RSA/DSA public keys for a user
+You can declaratively specify authorised public keys for a user
 as follows:
 
 ```nix
 {
   users.users.alice.openssh.authorizedKeys.keys =
-    [ "ssh-dss AAAAB3NzaC1kc3MAAACBAPIkGWVEt4..." ];
+    [ "ssh-ed25519 AAAAB3NzaC1kc3MAAACBAPIkGWVEt4..." ];
 }
 ```

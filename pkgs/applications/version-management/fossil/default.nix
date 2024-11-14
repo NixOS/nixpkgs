@@ -12,7 +12,7 @@
 , sqlite
 , ed
 , which
-, tcllib
+, tclPackages
 , withJson ? true
 }:
 
@@ -28,15 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
   # required for build time tool `./tools/translate.c`
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ installShellFiles tcl tcllib ];
+  nativeBuildInputs = [ installShellFiles tcl tclPackages.tcllib ];
 
   buildInputs = [ zlib openssl readline which ed ]
-    ++ lib.optional stdenv.isDarwin libiconv
+    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
     ++ lib.optional (!withInternalSqlite) sqlite;
 
   enableParallelBuilding = true;
 
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   configureFlags =
     lib.optional (!withInternalSqlite) "--disable-internal-sqlite"

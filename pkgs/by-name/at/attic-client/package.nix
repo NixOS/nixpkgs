@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , nix
+, nixosTests
 , boost
 , pkg-config
 , stdenv
@@ -11,13 +12,13 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "attic";
-  version = "0-unstable-2024-08-01";
+  version = "0-unstable-2024-10-06";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "attic";
-    rev = "e127acbf9a71ebc0c26bc8e28346822e0a6e16ba";
-    hash = "sha256-GJIz4M5HDB948Ex/8cPvbkrNzl/eKUE7/c21JBu4lb8=";
+    rev = "1b29816235b7573fca7f964709fd201e1a187024";
+    hash = "sha256-icNt2T1obK3hFNgBOgiiyOoiScUfz9blmRbNp3aOUBE=";
   };
 
   nativeBuildInputs = [
@@ -28,19 +29,16 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     nix
     boost
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     SystemConfiguration
   ]);
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "nix-base32-0.1.2-alpha.0" = "sha256-wtPWGOamy3+ViEzCxMSwBcoR4HMMD0t8eyLwXfCDFdo=";
-    };
   };
   cargoBuildFlags = lib.concatMapStrings (c: "-p ${c} ") crates;
 
-  ATTIC_DISTRIBUTOR = "attic";
+  ATTIC_DISTRIBUTOR = "nixpkgs";
   NIX_INCLUDE_PATH = "${lib.getDev nix}/include";
 
   # Attic interacts with Nix directly and its tests require trusted-user access
@@ -55,6 +53,14 @@ rustPlatform.buildRustPackage {
         --fish <($out/bin/attic gen-completions fish)
     fi
   '';
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) atticd;
+    };
+
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Multi-tenant Nix Binary Cache";

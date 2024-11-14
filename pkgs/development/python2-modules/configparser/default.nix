@@ -15,7 +15,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm ];
 
   preConfigure = ''
-    export LC_ALL=${if stdenv.isDarwin then "en_US" else "C"}.UTF-8
+    export LC_ALL=${if stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8
   '';
 
   meta = with lib; {

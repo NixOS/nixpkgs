@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uucp, uutf, cmdliner
-, version ? if lib.versionAtLeast ocaml.version "4.14" then "15.1.0" else "15.0.0"
+, version ? if lib.versionAtLeast ocaml.version "4.14" then "16.0.0" else "15.0.0"
 , cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1"
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
     hash = {
-      "15.1.0" = "sha256-IPI3Wd51HzX4n+uGcgc04us29jMjnKbGgVEAdp0CVMU=";
+      "16.0.0" = "sha256-WAP9uyofhtw6ag6/U4GQAanIFoKWvyA4NgeVweTs/iQ=";
       "15.0.0" = "sha256-q8x3bia1QaKpzrWFxUmLWIraKqby7TuPNGvbSjkY4eM=";
     }."${version}";
   };

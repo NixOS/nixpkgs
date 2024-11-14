@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withPython python;
 
   # error: invalid version number in 'MACOSX_DEPLOYMENT_TARGET=11.0'
-  preConfigure = lib.optionalString (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+  preConfigure = lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
 

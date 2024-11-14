@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "plasma-workspace-wallpapers";
 
-  extraBuildInputs = [extra-cmake-modules];
+  extraBuildInputs = [ extra-cmake-modules ];
 }

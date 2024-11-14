@@ -16,10 +16,7 @@
   pyqt5,
   pyperclip,
   pytestCheckHook,
-  mock,
   python-magic,
-  codecov,
-  coverage,
   qt5,
   # This is usually used as a library, and it'd be a shame to force the GUI
   # libraries to the closure if GUI is not desired.
@@ -73,9 +70,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    codecov
-    coverage
-    mock
     pyperclip
     pyqt5
     python-magic
@@ -88,10 +82,10 @@ buildPythonPackage rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool and Python library to interact with Android Files";
     homepage = "https://github.com/androguard/androguard";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pmiddend ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pmiddend ];
   };
 }

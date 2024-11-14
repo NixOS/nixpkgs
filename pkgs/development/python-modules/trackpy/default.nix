@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # specifically needed for darwin
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.matplotlib
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/soft-matter/trackpy/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = [ ];
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }

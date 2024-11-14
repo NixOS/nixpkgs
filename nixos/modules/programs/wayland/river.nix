@@ -56,7 +56,7 @@ in
     }
 
     (import ./wayland-session.nix {
-      inherit lib;
+      inherit lib pkgs;
       enableXWayland = cfg.xwayland.enable;
     })
   ]);

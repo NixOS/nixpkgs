@@ -34,7 +34,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "bof" ];
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  # Race condition, https://github.com/secdev/scapy/pull/4558
+  # pythonImportsCheck = [ "bof" ];
 
   disabledTests = [
     # Tests are using netcat and cat to do UDP connections

@@ -44,7 +44,7 @@ buildPythonPackage rec {
     six
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     blurhash = [ blurhash ];
     webpush = [
       http-ece
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     pytest-vcr
     requests-mock
     setuptools
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = [
     "test_notifications_dismiss_pre_2_9_2"

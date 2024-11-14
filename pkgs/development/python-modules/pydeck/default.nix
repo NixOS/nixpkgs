@@ -45,7 +45,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     carto = [
       # pydeck-carto
     ];
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pandas
-  ] ++ passthru.optional-dependencies.jupyter;
+  ] ++ optional-dependencies.jupyter;
 
   # tries to start a jupyter server
   disabledTests = [ "test_nbconvert" ];

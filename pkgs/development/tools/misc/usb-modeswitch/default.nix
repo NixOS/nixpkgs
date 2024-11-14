@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ marcweber peterhoeg ];
     platforms = platforms.linux;
+    mainProgram = "usb_modeswitch";
   };
 }

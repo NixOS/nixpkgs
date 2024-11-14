@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     rev = "v${version}";
-    sha256 = "sha256-SYM3zlzhp3NdyOjtXc+pOiWY4/WA/Ax+qAWe18ggq3g=";
+    hash = "sha256-SYM3zlzhp3NdyOjtXc+pOiWY4/WA/Ax+qAWe18ggq3g=";
     repo = "vis";
     owner = "martanne";
   };
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libtermkey
     luaEnv
     tre
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     acl
     libselinux
   ];

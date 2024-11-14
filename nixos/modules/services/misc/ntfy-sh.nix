@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.ntfy-sh;
 
@@ -10,28 +7,28 @@ in
 
 {
   options.services.ntfy-sh = {
-    enable = mkEnableOption "[ntfy-sh](https://ntfy.sh), a push notification service";
+    enable = lib.mkEnableOption "[ntfy-sh](https://ntfy.sh), a push notification service";
 
-    package = mkPackageOption pkgs "ntfy-sh" { };
+    package = lib.mkPackageOption pkgs "ntfy-sh" { };
 
-    user = mkOption {
+    user = lib.mkOption {
       default = "ntfy-sh";
-      type = types.str;
+      type = lib.types.str;
       description = "User the ntfy-sh server runs under.";
     };
 
-    group = mkOption {
+    group = lib.mkOption {
       default = "ntfy-sh";
-      type = types.str;
+      type = lib.types.str;
       description = "Primary group of ntfy-sh user.";
     };
 
-    settings = mkOption {
-      type = types.submodule {
+    settings = lib.mkOption {
+      type = lib.types.submodule {
         freeformType = settingsFormat.type;
         options = {
-          base-url = mkOption {
-            type = types.str;
+          base-url = lib.mkOption {
+            type = lib.types.str;
             example = "https://ntfy.example";
             description = ''
               Public facing base URL of the service
@@ -49,7 +46,7 @@ in
 
       default = { };
 
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           listen-http = ":8080";
         }
@@ -65,7 +62,7 @@ in
     let
       configuration = settingsFormat.generate "server.yml" cfg.settings;
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       # to configure access control via the cli
       environment = {
         etc."ntfy/server.yml".source = configuration;
@@ -73,10 +70,10 @@ in
       };
 
       services.ntfy-sh.settings = {
-        auth-file = mkDefault "/var/lib/ntfy-sh/user.db";
-        listen-http = mkDefault "127.0.0.1:2586";
-        attachment-cache-dir = mkDefault "/var/lib/ntfy-sh/attachments";
-        cache-file = mkDefault "/var/lib/ntfy-sh/cache-file.db";
+        auth-file = lib.mkDefault "/var/lib/ntfy-sh/user.db";
+        listen-http = lib.mkDefault "127.0.0.1:2586";
+        attachment-cache-dir = lib.mkDefault "/var/lib/ntfy-sh/attachments";
+        cache-file = lib.mkDefault "/var/lib/ntfy-sh/cache-file.db";
       };
 
       systemd.services.ntfy-sh = {
@@ -110,11 +107,11 @@ in
         };
       };
 
-      users.groups = optionalAttrs (cfg.group == "ntfy-sh") {
+      users.groups = lib.optionalAttrs (cfg.group == "ntfy-sh") {
         ntfy-sh = { };
       };
 
-      users.users = optionalAttrs (cfg.user == "ntfy-sh") {
+      users.users = lib.optionalAttrs (cfg.user == "ntfy-sh") {
         ntfy-sh = {
           isSystemUser = true;
           group = cfg.group;

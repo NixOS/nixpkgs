@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.logstash;
   ops = lib.optionalString;
@@ -38,8 +35,8 @@ in
 
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "logstash" "address" ] [ "services" "logstash" "listenAddress" ])
-    (mkRemovedOptionModule [ "services" "logstash" "enableWeb" ] "The web interface was removed from logstash")
+    (lib.mkRenamedOptionModule [ "services" "logstash" "address" ] [ "services" "logstash" "listenAddress" ])
+    (lib.mkRemovedOptionModule [ "services" "logstash" "enableWeb" ] "The web interface was removed from logstash")
   ];
 
   ###### interface
@@ -48,23 +45,23 @@ in
 
     services.logstash = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enable logstash.";
       };
 
-      package = mkPackageOption pkgs "logstash" { };
+      package = lib.mkPackageOption pkgs "logstash" { };
 
-      plugins = mkOption {
-        type = types.listOf types.path;
+      plugins = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [ ];
-        example = literalExpression "[ pkgs.logstash-contrib ]";
+        example = lib.literalExpression "[ pkgs.logstash-contrib ]";
         description = "The paths to find other logstash plugins in.";
       };
 
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/logstash";
         description = ''
           A path to directory writable by logstash that it uses to store data.
@@ -72,35 +69,35 @@ in
         '';
       };
 
-      logLevel = mkOption {
-        type = types.enum [ "debug" "info" "warn" "error" "fatal" ];
+      logLevel = lib.mkOption {
+        type = lib.types.enum [ "debug" "info" "warn" "error" "fatal" ];
         default = "warn";
         description = "Logging verbosity level.";
       };
 
-      filterWorkers = mkOption {
-        type = types.int;
+      filterWorkers = lib.mkOption {
+        type = lib.types.int;
         default = 1;
         description = "The quantity of filter workers to run.";
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = "Address on which to start webserver.";
       };
 
-      port = mkOption {
-        type = types.str;
+      port = lib.mkOption {
+        type = lib.types.str;
         default = "9292";
         description = "Port on which to start webserver.";
       };
 
-      inputConfig = mkOption {
-        type = types.lines;
+      inputConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "generator { }";
         description = "Logstash input configuration.";
-        example = literalExpression ''
+        example = lib.literalExpression ''
           '''
             # Read from journal
             pipe {
@@ -111,8 +108,8 @@ in
         '';
       };
 
-      filterConfig = mkOption {
-        type = types.lines;
+      filterConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "logstash filter configuration.";
         example = ''
@@ -129,8 +126,8 @@ in
         '';
       };
 
-      outputConfig = mkOption {
-        type = types.lines;
+      outputConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "stdout { codec => rubydebug }";
         description = "Logstash output configuration.";
         example = ''
@@ -139,8 +136,8 @@ in
         '';
       };
 
-      extraSettings = mkOption {
-        type = types.lines;
+      extraSettings = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "Extra Logstash settings in YAML format.";
         example = ''
@@ -151,8 +148,8 @@ in
         '';
       };
 
-      extraJvmOptions = mkOption {
-        type = types.lines;
+      extraJvmOptions = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "Extra JVM options, one per line (jvm.options format).";
         example = ''
@@ -167,17 +164,17 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.logstash = {
       description = "Logstash Daemon";
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.bash ];
       serviceConfig = {
         ExecStartPre = ''${pkgs.coreutils}/bin/mkdir -p "${cfg.dataDir}" ; ${pkgs.coreutils}/bin/chmod 700 "${cfg.dataDir}"'';
-        ExecStart = concatStringsSep " " (filter (s: stringLength s != 0) [
+        ExecStart = lib.concatStringsSep " " (lib.filter (s: lib.stringLength s != 0) [
           "${cfg.package}/bin/logstash"
           "-w ${toString cfg.filterWorkers}"
-          (concatMapStringsSep " " (x: "--path.plugins ${x}") cfg.plugins)
+          (lib.concatMapStringsSep " " (x: "--path.plugins ${x}") cfg.plugins)
           "${verbosityFlag}"
           "-f ${logstashConf}"
           "--path.settings ${logstashSettingsDir}"

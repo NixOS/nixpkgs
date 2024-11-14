@@ -65,7 +65,7 @@ buildPythonPackage rec {
       "--deselect=tests/test_inputs.py::EmailTest::test_valid_value_check"
       "--deselect=tests/test_logging.py::LoggingTest::test_override_app_level"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "--deselect=tests/test_inputs.py::EmailTest::test_invalid_values_check"
     ];
 
@@ -73,6 +73,12 @@ buildPythonPackage rec {
     # broken in werkzeug 2.3 upgrade
     "test_media_types_method"
     "test_media_types_q"
+    # erroneous use of pytz
+    # https://github.com/python-restx/flask-restx/issues/620
+    # two fixes are proposed: one fixing just tests, and one removing pytz altogether.
+    # we disable the tests in the meanwhile and let upstream decide
+    "test_rfc822_value"
+    "test_iso8601_value"
   ];
 
   pythonImportsCheck = [ "flask_restx" ];

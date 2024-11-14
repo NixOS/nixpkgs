@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libX11, libXinerama, libXft, zlib, writeText
+{ lib, stdenv, fetchurl, fontconfig, libX11, libXinerama, libXft, pkg-config, zlib, writeText
 , conf ? null, patches ? null
   # update script dependencies
 , gitUpdater }:
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Go9T5v0tdJg57IcMXiez4U2lw+6sv8uUXRWeHVQzeV8=";
   };
 
-  buildInputs = [ libX11 libXinerama zlib libXft ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ fontconfig libX11 libXinerama zlib libXft ];
 
   inherit patches;
 
@@ -28,10 +29,14 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    sed -i "s@PREFIX = /usr/local@PREFIX = $out@g" config.mk
+    makeFlagsArray+=(
+      PREFIX="$out"
+      CC="$CC"
+      # default config.mk hardcodes dependent libraries and include paths
+      INCS="`$PKG_CONFIG --cflags fontconfig x11 xft xinerama`"
+      LIBS="`$PKG_CONFIG --libs   fontconfig x11 xft xinerama`"
+    )
   '';
-
-  makeFlags = [ "CC:=$(CC)" ];
 
   passthru.updateScript = gitUpdater { url = "git://git.suckless.org/dmenu"; };
 

@@ -8,7 +8,7 @@
 }:
 
 let
-  ldLibPathEnvName = if stdenv.isDarwin
+  ldLibPathEnvName = if stdenv.hostPlatform.isDarwin
     then "DYLD_LIBRARY_PATH"
     else "LD_LIBRARY_PATH";
 
@@ -150,5 +150,10 @@ in {
         hash = "sha256-LJy3fjbnc9h5DG3/+8bLECwJeBpPxy3hU8sPuhovmcw=";
       })
     ];
+  };
+
+  libressl_4_0 = generic {
+    version = "4.0.0";
+    hash = "sha256-TYQZVfCsw9/HHQ49018oOvRhIiNQ4mhD/qlzHAJGoeQ=";
   };
 }

@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio";
-  version = "5.2";
+  version = "5.2.5";
 
   src = fetchurl {
     url = "https://www.bitwig.com/dl/Bitwig%20Studio/${version}/installer_linux/";
-    hash = "sha256:0cnjwgjbpyrb4pd0841zbhy84ps7gkmq3j148ga826nrxnw082pi";
+    hash = "sha256-x6Uw6o+a3nArMm1Ev5ytGtLDGQ3r872WqlC022zT8Hk=";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook3 ];
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     pango
     pipewire
     pulseaudio
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     vulkan-loader
     xcb-imdkit
     xcbutil
@@ -131,5 +131,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ bfortz michalrus mrVanDalo ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

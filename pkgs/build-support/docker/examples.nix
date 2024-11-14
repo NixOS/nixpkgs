@@ -17,6 +17,52 @@ let
   };
   evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
 
+  nginxArguments = let
+    nginxPort = "80";
+    nginxConf = pkgs.writeText "nginx.conf" ''
+      user nobody nobody;
+      daemon off;
+      error_log /dev/stdout info;
+      pid /dev/null;
+      events {}
+      http {
+        access_log /dev/stdout;
+        server {
+          listen ${nginxPort};
+          index index.html;
+          location / {
+            root ${nginxWebRoot};
+          }
+        }
+      }
+    '';
+    nginxWebRoot = pkgs.writeTextDir "index.html" ''
+      <html><body><h1>Hello from NGINX</h1></body></html>
+    '';
+  in
+  { name = "nginx-container";
+    tag = "latest";
+    contents = [
+      fakeNss
+      pkgs.nginx
+    ];
+
+    extraCommands = ''
+      mkdir -p tmp/nginx_client_body
+
+      # nginx still tries to read this directory even if error_log
+      # directive is specifying another file :/
+      mkdir -p var/log/nginx
+    '';
+
+    config = {
+      Cmd = [ "nginx" "-c" nginxConf ];
+      ExposedPorts = {
+        "${nginxPort}/tcp" = {};
+      };
+    };
+  };
+
 in
 
 rec {
@@ -60,52 +106,10 @@ rec {
   };
 
   # 3. another service example
-  nginx = let
-    nginxPort = "80";
-    nginxConf = pkgs.writeText "nginx.conf" ''
-      user nobody nobody;
-      daemon off;
-      error_log /dev/stdout info;
-      pid /dev/null;
-      events {}
-      http {
-        access_log /dev/stdout;
-        server {
-          listen ${nginxPort};
-          index index.html;
-          location / {
-            root ${nginxWebRoot};
-          }
-        }
-      }
-    '';
-    nginxWebRoot = pkgs.writeTextDir "index.html" ''
-      <html><body><h1>Hello from NGINX</h1></body></html>
-    '';
-  in
-  buildLayeredImage {
-    name = "nginx-container";
-    tag = "latest";
-    contents = [
-      fakeNss
-      pkgs.nginx
-    ];
+  nginx = buildLayeredImage nginxArguments;
 
-    extraCommands = ''
-      mkdir -p tmp/nginx_client_body
-
-      # nginx still tries to read this directory even if error_log
-      # directive is specifying another file :/
-      mkdir -p var/log/nginx
-    '';
-
-    config = {
-      Cmd = [ "nginx" "-c" nginxConf ];
-      ExposedPorts = {
-        "${nginxPort}/tcp" = {};
-      };
-    };
-  };
+  # Used to demonstrate how virtualisation.oci-containers.imageStream works
+  nginxStream = pkgs.dockerTools.streamLayeredImage nginxArguments;
 
   # 4. example of pulling an image. could be used as a base for other images
   nixFromDockerHub = pullImage {

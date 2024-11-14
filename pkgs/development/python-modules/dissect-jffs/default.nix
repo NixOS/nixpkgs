@@ -33,9 +33,6 @@ buildPythonPackage rec {
     dissect-util
   ];
 
-  # Test file handling fails
-  doCheck = true;
-
   pythonImportsCheck = [ "dissect.jffs" ];
 
   meta = with lib; {

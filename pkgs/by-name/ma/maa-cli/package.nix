@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "maa-cli";
-  version = "0.4.11";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "MaaAssistantArknights";
     repo = "maa-cli";
     rev = "v${version}";
-    hash = "sha256-ycX2enTMcBwXXz5khLJEIFcX6pPzsoq5rKpOQIUg1rg=";
+    hash = "sha256-k2mDqsxM6eveIFfdRu6ZxRsIgkA2qZxLfLNeWAEFCfs=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         Security
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = true;
   buildFeatures = [ "git2" ];
 
-  cargoHash = "sha256-Eftr/IxOGD4HCFgePguoZTg99yx1itBH28MHXrHKv8Y=";
+  cargoHash = "sha256-w34+3zRn4ZGA2aZZ3+lZqo4/QcDSpmt1HNb+gZtAavI=";
 
   # maa-cli would only seach libMaaCore.so and resources in itself's path
   # https://github.com/MaaAssistantArknights/maa-cli/issues/67

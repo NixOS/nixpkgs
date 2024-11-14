@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-gYWTv0AXOmpx9Nc8akBMVWkESI0AtnGgvfH9hQZ0peo=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Foundation ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Foundation ];
 
   meta = {
     description = "Disk analyser and cleanup tool";

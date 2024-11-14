@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, installShellFiles, lib, tenv, testers }:
+{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles, lib, tenv, testers }:
 
 buildGoModule rec {
   pname = "tenv";
@@ -23,7 +23,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tenv \
       --zsh <($out/bin/tenv completion zsh) \
       --bash <($out/bin/tenv completion bash) \

@@ -1,36 +1,45 @@
-diff --git i/qga/commands-posix.c w/qga/commands-posix.c
-index 954efed01b..39c4b916ce 100644
---- i/qga/commands-posix.c
-+++ w/qga/commands-posix.c
-@@ -123,6 +123,8 @@ void qmp_guest_shutdown(bool has_mode, const char *mode, Error **errp)
-         execl("/sbin/shutdown", "shutdown", shutdown_flag, "-g0", "-y",
-               "hypervisor initiated shutdown", (char *)NULL);
- #else
-+        execl("/run/current-system/sw/bin/shutdown", "shutdown", "-h", shutdown_flag, "+0",
-+               "hypervisor initiated shutdown", (char *)NULL);
-         execl("/sbin/shutdown", "shutdown", "-h", shutdown_flag, "+0",
-                "hypervisor initiated shutdown", (char *)NULL);
- #endif
-@@ -158,11 +160,13 @@ void qmp_guest_set_time(bool has_time, int64_t time_ns, Error **errp)
-     pid_t pid;
-     Error *local_err = NULL;
-     struct timeval tv;
-+    static const char hwclock_path_nix[] = "/run/current-system/sw/bin/hwclock";
-     static const char hwclock_path[] = "/sbin/hwclock";
-     static int hwclock_available = -1;
- 
-     if (hwclock_available < 0) {
--        hwclock_available = (access(hwclock_path, X_OK) == 0);
-+        hwclock_available = (access(hwclock_path_nix, X_OK) == 0) ||
-+                            (access(hwclock_path, X_OK) == 0);
+diff --git a/qga/commands-posix.c b/qga/commands-posix.c
+index c2bd0b4316..47cee1c351 100644
+--- a/qga/commands-posix.c
++++ b/qga/commands-posix.c
+@@ -246,7 +246,7 @@ void qmp_guest_shutdown(const char *mode, Error **errp)
+         return;
      }
  
-     if (!hwclock_available) {
-@@ -208,6 +212,7 @@ void qmp_guest_set_time(bool has_time, int64_t time_ns, Error **errp)
+-    const char *argv[] = {"/sbin/shutdown",
++    const char *argv[] = {"/run/current-system/sw/bin/shutdown",
+ #ifdef CONFIG_SOLARIS
+                           shutdown_flag, "-g0", "-y",
+ #elif defined(CONFIG_BSD)
+@@ -257,6 +257,10 @@ void qmp_guest_shutdown(const char *mode, Error **errp)
+                           "hypervisor initiated shutdown", (char *) NULL};
  
-         /* Use '/sbin/hwclock -w' to set RTC from the system time,
-          * or '/sbin/hwclock -s' to set the system time from RTC. */
-+        execl(hwclock_path_nix, "hwclock", has_time ? "-w" : "-s", NULL);
-         execl(hwclock_path, "hwclock", has_time ? "-w" : "-s", NULL);
-         _exit(EXIT_FAILURE);
-     } else if (pid < 0) {
+     ga_run_command(argv, NULL, "shutdown", &local_err);
++    if (local_err) {
++        argv[0] = "/sbin/shutdown";
++        ga_run_command(argv, NULL, "shutdown", &local_err);
++    }
+     if (local_err) {
+         error_propagate(errp, local_err);
+         return;
+@@ -270,7 +274,7 @@ void qmp_guest_set_time(bool has_time, int64_t time_ns, Error **errp)
+     int ret;
+     Error *local_err = NULL;
+     struct timeval tv;
+-    const char *argv[] = {"/sbin/hwclock", has_time ? "-w" : "-s", NULL};
++    const char *argv[] = {"/run/current-system/sw/bin/hwclock", has_time ? "-w" : "-s", NULL};
+ 
+     /* If user has passed a time, validate and set it. */
+     if (has_time) {
+@@ -303,6 +307,11 @@ void qmp_guest_set_time(bool has_time, int64_t time_ns, Error **errp)
+      * hardware clock (RTC). */
+     ga_run_command(argv, NULL, "set hardware clock to system time",
+                    &local_err);
++    if (local_err) {
++        argv[0] = "/sbin/hwclock";
++        ga_run_command(argv, NULL, "set hardware clock to system time",
++                       &local_err);
++    }
+     if (local_err) {
+         error_propagate(errp, local_err);
+         return;

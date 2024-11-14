@@ -3,7 +3,6 @@
 , qtwebchannel
 , qtpositioning
 , qtwebsockets
-, fetchpatch2
 , buildPackages
 , bison
 , coreutils
@@ -22,6 +21,7 @@
 , libXtst
 , libxshmfence
 , libXi
+, cups
 , fontconfig
 , freetype
 , harfbuzz
@@ -50,7 +50,7 @@
 , systemd
 , pipewire
 , gn
-, ffmpeg_7
+, ffmpeg
 , lib
 , stdenv
 , glib
@@ -65,31 +65,6 @@
 , bootstrap_cmds
 , cctools
 , xcbuild
-, AGL
-, AVFoundation
-, Accelerate
-, Cocoa
-, CoreLocation
-, CoreML
-, ForceFeedback
-, GameController
-, ImageCaptureCore
-, LocalAuthentication
-, MediaAccessibility
-, MediaPlayer
-, MetalKit
-, Network
-, OpenDirectory
-, Quartz
-, ReplayKit
-, SecurityInterface
-, Vision
-, openbsm
-, libunwind
-, cups
-, libpm
-, sandbox
-, xnu
 }:
 
 qtModule {
@@ -132,14 +107,6 @@ qtModule {
 
     # Override locales install path so they go to QtWebEngine's $out
     ../patches/qtwebengine-locales-path.patch
-
-    # Support FFmpeg 7
-    (fetchpatch2 {
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt6-webengine/-/raw/6bee5464ac6340e925e08c7ed023026e727ae9d5/qtwebengine-ffmpeg-7.patch";
-      hash = "sha256-OdCIu1KMW3YcpCnfUP1uD7OJRl6Iwap9X4aJhGpoaNs=";
-      stripLen = 1;
-      extraPrefix = "src/3rdparty/chromium/";
-    })
   ];
 
   postPatch = ''
@@ -176,8 +143,6 @@ qtModule {
       --replace "AppleClang" "Clang"
     substituteInPlace cmake/Functions.cmake \
       --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
-    substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
-      --replace "\$sysroot/usr" "${xnu}"
   '';
 
   cmakeFlags = [
@@ -206,7 +171,7 @@ qtModule {
   ] ++ lib.optionals enableProprietaryCodecs [
     "-DQT_FEATURE_webengine_proprietary_codecs=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinSdkVersion}"
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0" # Per Qt 6’s deployment target (why doesn’t the hook work?)
   ];
 
   propagatedBuildInputs = [
@@ -237,7 +202,7 @@ qtModule {
     lcms2
 
     libevent
-    ffmpeg_7
+    ffmpeg
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
     zlib
@@ -281,36 +246,10 @@ qtModule {
 
     libkrb5
     mesa
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AGL
-    AVFoundation
-    Accelerate
-    Cocoa
-    CoreLocation
-    CoreML
-    ForceFeedback
-    GameController
-    ImageCaptureCore
-    LocalAuthentication
-    MediaAccessibility
-    MediaPlayer
-    MetalKit
-    Network
-    OpenDirectory
-    Quartz
-    ReplayKit
-    SecurityInterface
-    Vision
-
-    openbsm
-    libunwind
   ];
 
   buildInputs = [
     cups
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libpm
-    sandbox
   ];
 
   requiredSystemFeatures = [ "big-parallel" ];
@@ -319,13 +258,14 @@ qtModule {
     export NINJAFLAGS="-j$NIX_BUILD_CORES"
   '';
 
+  # Debug info is too big to link with LTO.
+  separateDebugInfo = false;
+
   meta = with lib; {
     description = "Web engine based on the Chromium web browser";
     platforms = [ "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7a-linux" "armv7l-linux" "x86_64-linux" ];
     # This build takes a long time; particularly on slow architectures
     # 1 hour on 32x3.6GHz -> maybe 12 hours on 4x2.4GHz
     timeout = 24 * 3600;
-    # Not compatible with macOS 11 without massive patching
-    broken = stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "12";
   };
 }

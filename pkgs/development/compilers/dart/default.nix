@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out
     cp -R * $out/
     echo $libPath
-  '' + lib.optionalString (stdenv.isLinux) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isLinux) ''
     find $out/bin -executable -type f -exec patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) {} \;
   '';
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       testCompile = runCommand "dart-test-compile" {
         nativeBuildInputs = [ finalAttrs.finalPackage ]
-          ++ lib.optionals stdenv.isDarwin [ cctools darwin.sigtool ];
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools darwin.sigtool ];
       } ''
         HELLO_MESSAGE="Hello, world!"
         echo "void main() => print('$HELLO_MESSAGE');" > hello.dart
@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       with C-style syntax. It offers compilation to JavaScript, interfaces,
       mixins, abstract classes, reified generics, and optional typing.
     '';
+    mainProgram = "dart";
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsd3;

@@ -11,11 +11,11 @@
 callPackage ../nginx/generic.nix args rec {
   pname = "openresty";
   nginxVersion = "1.25.3";
-  version = "${nginxVersion}.1";
+  version = "${nginxVersion}.2";
 
   src = fetchurl {
     url = "https://openresty.org/download/openresty-${version}.tar.gz";
-    sha256 = "sha256-MuwaJTpaEyUDVaB1/mW31j7EXFYLviEzUPCZKlfNed8=";
+    sha256 = "sha256-LVZAIrBuM7Rfflz68eXcVx041hgDr5+idU3/81PCjZw=";
   };
 
   # generic.nix applies fixPatch on top of every patch defined there.

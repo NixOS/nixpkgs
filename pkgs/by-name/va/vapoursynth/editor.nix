@@ -20,7 +20,7 @@ let
       owner = "YomikoR";
       repo = pname;
       rev = lib.toLower version;
-      sha256 = "sha256-+/9j9DJDGXbuTvE8ZXIu6wjcof39SyatS36Q6y9hLPg=";
+      hash = "sha256-+/9j9DJDGXbuTvE8ZXIu6wjcof39SyatS36Q6y9hLPg=";
     };
 
     nativeBuildInputs = [ qmake ];

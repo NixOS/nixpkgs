@@ -5,10 +5,14 @@
 , extra-cmake-modules
 , pkg-config
 , qtbase
-, qtquickcontrols2
-, qtx11extras
-, kdelibs4support
+, qtdeclarative
+, qtx11extras ? null  # qt5 only
+, kcoreaddons
+, ki18n
+, knotifications
 , kpipewire
+, kstatusnotifieritem ? null  # qt6 only
+, kwindowsystem
 , wrapQtAppsHook
 }:
 
@@ -30,11 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qtbase
-    qtquickcontrols2
+    qtdeclarative
     qtx11extras
-    kdelibs4support
+    kcoreaddons
+    ki18n
+    knotifications
     kpipewire
+    kstatusnotifieritem
+    kwindowsystem
   ];
+
+  cmakeFlags = ["-DQT_MAJOR_VERSION=${lib.versions.major qtbase.version}"];
 
   meta = {
     description = "Utility to allow streaming Wayland windows to X applications";

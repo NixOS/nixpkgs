@@ -1,7 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   anyqt,
   cachecontrol,
   commonmark,
@@ -10,24 +15,34 @@
   filelock,
   lockfile,
   numpy,
+  pip,
+  qasync,
+  requests-cache,
+  typing-extensions,
+
+  # tests
+  qt5,
   pytest-qt,
   pytestCheckHook,
-  qasync,
-  qt5,
-  requests-cache,
+
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "orange-canvas-core";
-  version = "0.2.1";
-  format = "setuptools";
+  version = "0.2.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-f0E/7jnzoIrV4V1KSbec0MZB/BLz0UVbBCsc3v4dp0o=";
+  src = fetchFromGitHub {
+    owner = "biolab";
+    repo = "orange-canvas-core";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Jp3vCQmRdkFADStVkbCFPiCBqpbI0a4JiJ8qs60rpqw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     anyqt
     cachecontrol
     commonmark
@@ -36,8 +51,10 @@ buildPythonPackage rec {
     filelock
     lockfile
     numpy
+    pip
     qasync
     requests-cache
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "orangecanvas" ];
@@ -54,12 +71,29 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Failed: CALL ERROR: Exceptions caught in Qt event loop
+    "test_create_new_window"
+    "test_dont_load_swp_on_new_window"
+    "test_editlinksnode"
+    "test_flattened"
+    "test_links_edit"
+    "test_links_edit_widget"
+    "test_new_window"
+    "test_toolbox"
+    "test_tooltree_registry"
+    "test_widgettoolgrid"
+  ];
+
   disabledTestPaths = [ "orangecanvas/canvas/items/tests/test_graphicstextitem.py" ];
 
   meta = {
     description = "Orange framework for building graphical user interfaces for editing workflows";
     homepage = "https://github.com/biolab/orange-canvas-core";
+    changelog = "https://github.com/biolab/orange-canvas-core/releases/tag/${version}";
     license = [ lib.licenses.gpl3 ];
     maintainers = [ lib.maintainers.lucasew ];
+    # Segmentation fault during tests
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

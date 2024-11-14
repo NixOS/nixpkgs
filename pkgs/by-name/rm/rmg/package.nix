@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "rmg";
-  version = "0.6.5";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "Rosalie241";
     repo = "RMG";
     rev = "v${version}";
-    hash = "sha256-mgb9Ed11fBQVnhhU5w1958a19dbTOL0ADczUOxKAnqA=";
+    hash = "sha256-3Bl9SEHWQbi58VPpCT4H8TC1E5J5j4lRXS1QF+udPdg=";
   };
 
   nativeBuildInputs = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     "-DUSE_ANGRYLION=${lib.boolToString withAngrylionRdpPlus}"
   ];
 
-  qtWrapperArgs = lib.optionals stdenv.isLinux [
+  qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
   ] ++ lib.optional withWayland "--set RMG_WAYLAND 1";
 

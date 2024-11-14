@@ -1,12 +1,11 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   cfg = config.services.keyd;
 
   keyboardOptions = { ... }: {
     options = {
-      ids = mkOption {
-        type = types.listOf types.str;
+      ids = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "*" ];
         example = [ "*" "-0123:0456" ];
         description = ''
@@ -14,7 +13,7 @@ let
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = (pkgs.formats.ini { }).type;
         default = { };
         example = {
@@ -37,8 +36,8 @@ let
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = ''
           [control+shift]
@@ -55,19 +54,19 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "keyd" "ids" ]
+    (lib.mkRemovedOptionModule [ "services" "keyd" "ids" ]
       ''Use keyboards.<filename>.ids instead. If you don't need a multi-file configuration, just add keyboards.default before the ids. See https://github.com/NixOS/nixpkgs/pull/243271.'')
-    (mkRemovedOptionModule [ "services" "keyd" "settings" ]
+    (lib.mkRemovedOptionModule [ "services" "keyd" "settings" ]
       ''Use keyboards.<filename>.settings instead. If you don't need a multi-file configuration, just add keyboards.default before the settings. See https://github.com/NixOS/nixpkgs/pull/243271.'')
   ];
 
   options.services.keyd = {
-    enable = mkEnableOption "keyd, a key remapping daemon";
+    enable = lib.mkEnableOption "keyd, a key remapping daemon";
 
-    keyboards = mkOption {
-      type = types.attrsOf (types.submodule keyboardOptions);
+    keyboards = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.submodule keyboardOptions);
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           default = {
             ids = [ "*" ];
@@ -93,16 +92,16 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # Creates separate files in the `/etc/keyd/` directory for each key in the dictionary
-    environment.etc = mapAttrs'
+    environment.etc = lib.mapAttrs'
       (name: options:
-        nameValuePair "keyd/${name}.conf" {
+        lib.nameValuePair "keyd/${name}.conf" {
           text = ''
             [ids]
-            ${concatStringsSep "\n" options.ids}
+            ${lib.concatStringsSep "\n" options.ids}
 
-            ${generators.toINI {} options.settings}
+            ${lib.generators.toINI {} options.settings}
             ${options.extraConfig}
           '';
         })
@@ -116,7 +115,7 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      restartTriggers = mapAttrsToList
+      restartTriggers = lib.mapAttrsToList
         (name: options:
           config.environment.etc."keyd/${name}.conf".source
         )

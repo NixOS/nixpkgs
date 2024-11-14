@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchFromGitHub,
   rustPlatform,
   asciidoctor,
   installShellFiles,
@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "qrtool";
-  version = "0.11.4";
+  version = "0.11.6";
 
-  src = fetchFromGitLab {
+  src = fetchFromGitHub {
     owner = "sorairolake";
     repo = "qrtool";
     rev = "v${version}";
-    hash = "sha256-lD/xi2k5baZGUUixy/032jTBevr0uQIT/JmX+d+kPyA=";
+    hash = "sha256-ViDlY60iGNBwCDRgKiNKbsFSXozyzqlTzKpd9NCxrv0=";
   };
 
-  cargoHash = "sha256-lR/LusIgdA+G7YeSLHjxdcC96tOSqSyalVamS42ORs0=";
+  cargoHash = "sha256-Bcu5hyW0uUHkshlBoKNG/NL0XYnrPJa/P8bHdcGjFTc=";
 
   nativeBuildInputs = [
     asciidoctor

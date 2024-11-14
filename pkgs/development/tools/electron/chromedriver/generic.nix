@@ -51,7 +51,7 @@ let
     src = fetcher version (get tags platform) (get hashes platform);
 
     buildInputs = [
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
       glib
       xorg.libxcb
       nspr
@@ -92,5 +92,5 @@ let
 in
   stdenv.mkDerivation (
     (common stdenv.hostPlatform) //
-    (if stdenv.isDarwin then darwin else linux)
+    (if stdenv.hostPlatform.isDarwin then darwin else linux)
   )

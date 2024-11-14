@@ -1,30 +1,31 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libxkbcommon
-, pipewire
-, libGL
-, wayland
-, xorg
-, vulkan-loader
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libxkbcommon,
+  pipewire,
+  vulkan-loader,
+  wayland,
+  libGL,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "coppwr";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "dimtpap";
     repo = "coppwr";
     rev = version;
-    hash = "sha256-7z1b++itHoqVX5KB9gv6dMAzq1j7VDGYzuJArUDPlD4=";
+    hash = "sha256-5TgK/0UN05P3WENch4sBo/Sy9FaMmyH/gZ+6qUyM1z0=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "egui_node_graph-0.4.0" = "sha256-VtHgKWh+bHSFltNgYaFmYhZW9tqwiWJjiCCspeKgSXQ=";
+      "egui_node_graph-0.4.0" = "sha256-OajIef0tSuZ5bFauAeHtN/LQlo+k7k9g0azHDk3HOQc=";
       "libspa-0.8.0" = "sha256-X8mwLtuPuMxZY71GNPAgiJGJ9JNMj7AbCliXiBxJ4vQ=";
     };
   };
@@ -37,13 +38,12 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libxkbcommon
     pipewire
-    libGL
+    vulkan-loader
     wayland
+    libGL
     xorg.libXcursor
     xorg.libXi
-    xorg.libXrandr
     xorg.libX11
-    vulkan-loader
   ];
 
   preBuild = ''
@@ -64,15 +64,21 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     patchelf $out/bin/coppwr \
-      --add-rpath ${lib.makeLibraryPath [ libGL libxkbcommon wayland ]}
+      --add-rpath ${
+        lib.makeLibraryPath [
+          libGL
+          libxkbcommon
+          wayland
+        ]
+      }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Low level control GUI for the PipeWire multimedia server";
     homepage = "https://github.com/dimtpap/coppwr";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ravenz46 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ ravenz46 ];
     mainProgram = "coppwr";
+    platforms = lib.platforms.linux;
   };
 }

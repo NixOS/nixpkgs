@@ -22,7 +22,6 @@ let
     ]
     ++ finalPackage.optional-dependencies.redis
     ++ lib.optionals cfg.celery.enable [ celery ]
-    ++ lib.optionals (cfg.settings.database.backend == "mysql") finalPackage.optional-dependencies.mysql
     ++ lib.optionals (cfg.settings.database.backend == "postgresql") finalPackage.optional-dependencies.postgres;
   };
 in
@@ -184,6 +183,17 @@ in
             };
           };
 
+          files = {
+            upload_limit = lib.mkOption {
+              type = lib.types.ints.positive;
+              default = 10;
+              example = 50;
+              description = ''
+                Maximum file upload size in MiB.
+              '';
+            };
+          };
+
           filesystem = {
             data = lib.mkOption {
               type = lib.types.path;
@@ -293,6 +303,15 @@ in
         $sudo ${lib.getExe' pythonEnv "pretalx-manage"} "$@"
       '')
     ];
+
+    services.logrotate.settings.pretalx = {
+      files = "${cfg.settings.filesystem.logs}/*.log";
+      su = "${cfg.user} ${cfg.group}";
+      frequency = "weekly";
+      rotate = "12";
+      copytruncate = true;
+      compress = true;
+    };
 
     services = {
       nginx = lib.mkIf cfg.nginx.enable {

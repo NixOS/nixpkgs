@@ -8,7 +8,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
 in {
   name = "varnish";
   meta = {
-    maintainers = lib.teams.helsinki-systems.members;
+    maintainers = [ ];
   };
 
   nodes = {

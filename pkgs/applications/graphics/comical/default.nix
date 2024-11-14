@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     wxGTK32
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
 

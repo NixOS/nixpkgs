@@ -26,7 +26,7 @@ buildNpmPackage {
   npmDepsHash = "sha256-T7YNHunncSv+z86Td1QuBt4dMGF1ipo85ZhW7U9I0Zw=";
   npmWorkspace = "packages/tailwindcss-language-server";
 
-  buildInputs = [ libsecret ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security AppKit ]);
+  buildInputs = [ libsecret ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Security AppKit ]);
 
   nativeBuildInputs = [ python3 pkg-config ];
 

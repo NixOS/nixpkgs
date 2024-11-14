@@ -55,7 +55,7 @@ buildPythonPackage rec {
     vine
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     gcs = [ google-cloud-storage ];
     mongodb = [ pymongo ];
     msgpack = [ msgpack ];
@@ -71,7 +71,7 @@ buildPythonPackage rec {
     pytest-timeout
     pytest-xdist
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # test_eventlet touches network
@@ -97,7 +97,7 @@ buildPythonPackage rec {
       "test_stamping_headers_in_options"
       "test_stamping_with_replace"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Too many open files on hydra
       "test_cleanup"
       "test_with_autoscaler_file_descriptor_safety"

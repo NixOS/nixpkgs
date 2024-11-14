@@ -51,10 +51,10 @@ let
   plugins = {
     amqp.buildInputs = [
       yajl
-    ] ++ lib.optionals stdenv.isLinux [ rabbitmq-c ];
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ rabbitmq-c ];
     apache.buildInputs = [ curl ];
     ascent.buildInputs = [ curl libxml2 ];
-    battery.buildInputs = lib.optionals stdenv.isDarwin [
+    battery.buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
       IOKit
     ];
     bind.buildInputs = [ curl libxml2 ];
@@ -63,30 +63,30 @@ let
     curl_json.buildInputs = [ curl yajl ];
     curl_xml.buildInputs = [ curl libxml2 ];
     dbi.buildInputs = [ libdbi ];
-    disk.buildInputs = lib.optionals stdenv.isLinux [
+    disk.buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
       udev
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       IOKit
     ];
     dns.buildInputs = [ libpcap ];
     ipmi.buildInputs = [ openipmi ];
     iptables.buildInputs = [
       libpcap
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
       iptables libmnl
     ];
     java.buildInputs = [ jdk libgcrypt libxml2 ];
     log_logstash.buildInputs = [ yajl ];
     lua.buildInputs = [ lua ];
     memcachec.buildInputs = [ libmemcached cyrus_sasl ];
-    modbus.buildInputs = lib.optionals stdenv.isLinux [ libmodbus ];
+    modbus.buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libmodbus ];
     mqtt.buildInputs = [ mosquitto ];
     mysql.buildInputs = lib.optionals (libmysqlclient != null) [
       libmysqlclient
     ];
     netlink.buildInputs = [
       libpcap
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
       libmnl
     ];
     network.buildInputs = [ libgcrypt ];
@@ -104,15 +104,15 @@ let
     redis.buildInputs = [ hiredis ];
     rrdcached.buildInputs = [ rrdtool libxml2 ];
     rrdtool.buildInputs = [ rrdtool libxml2 ];
-    sensors.buildInputs = lib.optionals stdenv.isLinux [ lm_sensors ];
-    sigrok.buildInputs = lib.optionals stdenv.isLinux [ libsigrok udev ];
-    smart.buildInputs = lib.optionals stdenv.isLinux [ libatasmart udev ];
-    snmp.buildInputs = lib.optionals stdenv.isLinux [ net-snmp ];
-    snmp_agent.buildInputs = lib.optionals stdenv.isLinux [ net-snmp ];
+    sensors.buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ lm_sensors ];
+    sigrok.buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libsigrok udev ];
+    smart.buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libatasmart udev ];
+    snmp.buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ net-snmp ];
+    snmp_agent.buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ net-snmp ];
     varnish.buildInputs = [ curl varnish ];
     virt.buildInputs = [
       libvirt libxml2 yajl
-    ] ++ lib.optionals stdenv.isLinux [ lvm2 udev ];
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ lvm2 udev ];
     write_http.buildInputs = [ curl yajl ];
     write_kafka.buildInputs = [ yajl rdkafka ];
     write_log.buildInputs = [ yajl ];

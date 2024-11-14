@@ -99,7 +99,7 @@ buildVscodeMarketplaceExtension {
         chmod +x "${bin}"
       '') extInfo.binaries
     ))
-    + lib.optionalString stdenv.isLinux (
+    + lib.optionalString stdenv.hostPlatform.isLinux (
       lib.concatStringsSep "\n" (
         map (bin: ''
           patchelf_common "${bin}"

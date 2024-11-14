@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl.dev
     alsa-lib.dev
-    libclang.lib
+    (lib.getLib libclang)
     ffmpeg.dev
     opencv
   ];

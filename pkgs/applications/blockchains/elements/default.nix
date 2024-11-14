@@ -44,9 +44,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs =
     [ autoreconfHook pkg-config ]
-    ++ lib.optionals stdenv.isLinux [ util-linux ]
-    ++ lib.optionals stdenv.isDarwin [ hexdump ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ hexdump ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ autoSignDarwinBinariesHook ]
     ++ lib.optionals withGui [ wrapQtAppsHook ];
 
   buildInputs = [ boost libevent miniupnpc zeromq zlib ]
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   # fix "Killed: 9  test/test_bitcoin"
   # https://github.com/NixOS/nixpkgs/issues/179474
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "fortify" "stackprotector" ];
+  hardeningDisable = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [ "fortify" "stackprotector" ];
 
   nativeCheckInputs = [ python3 ];
 

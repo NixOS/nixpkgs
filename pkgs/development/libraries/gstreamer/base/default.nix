@@ -19,23 +19,26 @@
 , libvisual
 , tremor # provides 'virbisidec'
 , libGL
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
 , gobject-introspection
-, enableX11 ? stdenv.isLinux
+, enableX11 ? stdenv.hostPlatform.isLinux
 , libXext
 , libXi
 , libXv
 , libdrm
-, enableWayland ? stdenv.isLinux
+, enableWayland ? stdenv.hostPlatform.isLinux
+, wayland-scanner
 , wayland
 , wayland-protocols
-, enableAlsa ? stdenv.isLinux
+, enableAlsa ? stdenv.hostPlatform.isLinux
 , alsa-lib
 # TODO: fix once x86_64-darwin sdk updated
-, enableCocoa ? (stdenv.isDarwin && stdenv.isAarch64)
+, enableCocoa ? (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
 , Cocoa
 , OpenGL
 , enableGl ? (enableX11 || enableWayland || enableCocoa)
-, enableCdparanoia ? (!stdenv.isDarwin)
+, enableCdparanoia ? (!stdenv.hostPlatform.isDarwin)
 , cdparanoia
 , glib
 , testers
@@ -46,7 +49,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
-  version = "1.24.3";
+  version = "1.24.7";
 
   outputs = [ "out" "dev" ];
 
@@ -56,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-8QlDl+qnky8G5X67sHWqM6osduS3VjChawLI1K9Ggy4=";
+    hash = "sha256-FSjRdGo5Mpn1rBfr8ToypmAgLx4p0KhSoiUPagWaL9o=";
   };
 
   strictDeps = true;
@@ -72,11 +75,12 @@ stdenv.mkDerivation (finalAttrs: {
     orc
     glib
     gstreamer
+  ] ++ lib.optionals withIntrospection [
     gobject-introspection
   ] ++ lib.optionals enableDocumentation [
     hotdoc
   ] ++ lib.optionals enableWayland [
-    wayland
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -90,11 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     tremor
     pango
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libdrm
     libGL
     libvisual
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     OpenGL
   ] ++ lib.optionals enableAlsa [
     alsa-lib
@@ -110,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     gstreamer
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libdrm
   ];
 
@@ -118,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
     "-Dgl_winsys=${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}"
+    (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "doc" enableDocumentation)
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-Dtests=disabled"
@@ -127,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!enableGl) "-Dgl=disabled"
   ++ lib.optional (!enableAlsa) "-Dalsa=disabled"
   ++ lib.optional (!enableCdparanoia) "-Dcdparanoia=disabled"
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-Ddrm=disabled"
     "-Dlibvisual=disabled"
   ];

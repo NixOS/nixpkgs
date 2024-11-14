@@ -21,7 +21,7 @@ stdenv.mkDerivation (self: {
     qt6.qmake
     qt6.wrapQtAppsHook
   ]
-  ++ lib.optionals (!stdenv.isDarwin) [
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
   ];
 
@@ -33,16 +33,16 @@ stdenv.mkDerivation (self: {
   ];
 
   postPatch = let
-    targetDir = if stdenv.isDarwin then "Applications" else "bin";
+    targetDir = if stdenv.hostPlatform.isDarwin then "Applications" else "bin";
   in ''
     substituteInPlace CloudLogOffline.pro \
       --replace 'target.path = /opt/$''${TARGET}/bin' "target.path = $out/${targetDir}"
   '';
 
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     install -d $out/share/pixmaps
     install -m644 images/logo_circle.svg $out/share/pixmaps/cloudlogoffline.svg
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # FIXME: For some reason, the Info.plist isn't copied correctly to
     # the application bundle when building normally, instead creating an
     # empty file. This doesn't happen when building in a dev shell with
@@ -53,7 +53,7 @@ stdenv.mkDerivation (self: {
     install -m644 macos/Info.plist $out/Applications/CloudLogOffline.app/Contents/Info.plist
   '';
 
-  desktopItems = lib.optionals (!stdenv.isDarwin) [
+  desktopItems = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     (makeDesktopItem {
       name = "cloudlogoffline";
       desktopName = "CloudLogOffline";

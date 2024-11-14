@@ -19,7 +19,7 @@
 
 let
   binPath = lib.makeBinPath ([
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     runc
     crun
     conmon
@@ -34,7 +34,7 @@ let
 
     # this only works for some binaries, others may need to be added to `binPath` or in the modules
     paths = [
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
       aardvark-dns
       netavark
       passt

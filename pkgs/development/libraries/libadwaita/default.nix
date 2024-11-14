@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libadwaita";
-  version = "1.5.3";
+  version = "1.6.1";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GNOME";
     repo = "libadwaita";
     rev = finalAttrs.version;
-    hash = "sha256-NCQCd/QnJg2fEI6q5ys8HQXinGnKaoxhMUHd8rwxAmk=";
+    hash = "sha256-oCTMMKpI7XqpK37SGXgQFNqCZyTuuIE6TOz/k5nUNGU=";
   };
 
   depsBuildBuild = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     appstream
     fribidi
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Foundation
   ];
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     adwaita-icon-theme
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     xvfb-run
   ];
 
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # not ok /Adwaita/ButtonContent/style_class_button - Gdk-FATAL-CRITICAL:
   # gdk_macos_monitor_get_workarea: assertion 'GDK_IS_MACOS_MONITOR (self)' failed
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   separateDebugInfo = true;
 
   checkPhase = ''
@@ -93,12 +93,14 @@ stdenv.mkDerivation (finalAttrs: {
       # AdwSettings needs to be initialized from “org.gnome.desktop.interface” GSettings schema when portal is not used for color scheme.
       # It will not actually be used since the “color-scheme” key will only have been introduced in GNOME 42, falling back to detecting theme name.
       # See adw_settings_constructed function in https://gitlab.gnome.org/GNOME/libadwaita/commit/60ec69f0a5d49cad8a6d79e4ecefd06dc6e3db12
-      "XDG_DATA_DIRS=${glib.getSchemaDataDirPath gsettings-desktop-schemas}"
+      #
+      # The "Validate docs" test looks for various GIR dependencies, thus preserve the existing paths.
+      "XDG_DATA_DIRS=$XDG_DATA_DIRS:${glib.getSchemaDataDirPath gsettings-desktop-schemas}"
 
       # Tests need a cache directory
       "HOME=$TMPDIR"
     )
-    env "''${testEnvironment[@]}" ${lib.optionalString (!stdenv.isDarwin) "xvfb-run"} \
+    env "''${testEnvironment[@]}" ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "xvfb-run"} \
       meson test --print-errorlogs
 
     runHook postCheck

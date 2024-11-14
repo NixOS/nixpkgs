@@ -38,7 +38,7 @@ buildPythonPackage rec {
     tablib
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [ tablib ] ++ tablib.optional-dependencies.all;
     cli = [ tablib ] ++ tablib.optional-dependencies.cli;
     ods = [ tablib ] ++ tablib.optional-dependencies.ods;
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     chardet
     psycopg2
     pytz
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   checkPhase = ''
     runHook preCheck

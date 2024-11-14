@@ -1,4 +1,5 @@
-{ callPackage
+{ stdenv
+, callPackage
 , AVFoundation
 , AudioToolbox
 , Cocoa
@@ -14,12 +15,15 @@
 , Security
 , SystemConfiguration
 , VideoToolbox
+, xpc
 , ipu6ep-camera-hal
 , ipu6epmtl-camera-hal
 }:
 
 {
-  gstreamer = callPackage ./core { inherit Cocoa CoreServices; };
+  inherit stdenv;
+
+  gstreamer = callPackage ./core { inherit Cocoa CoreServices xpc; };
 
   gstreamermm = callPackage ./gstreamermm { };
 

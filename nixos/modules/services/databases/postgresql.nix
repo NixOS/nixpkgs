@@ -7,6 +7,7 @@ let
     concatStringsSep
     const
     elem
+    escapeShellArgs
     filterAttrs
     isString
     literalExpression
@@ -545,7 +546,7 @@ in
               rm -f ${cfg.dataDir}/*.conf
 
               # Initialise the database.
-              initdb -U ${cfg.superUser} ${concatStringsSep " " cfg.initdbArgs}
+              initdb -U ${cfg.superUser} ${escapeShellArgs cfg.initdbArgs}
 
               # See postStart!
               touch "${cfg.dataDir}/.first_startup"
@@ -622,7 +623,46 @@ in
             TimeoutSec = 120;
 
             ExecStart = "${postgresql}/bin/postgres";
+
+            # Hardening
+            CapabilityBoundingSet = [ "" ];
+            DevicePolicy = "closed";
+            PrivateTmp = true;
+            ProtectHome = true;
+            ProtectSystem = "strict";
+            MemoryDenyWriteExecute = lib.mkDefault (cfg.settings.jit == "off");
+            NoNewPrivileges = true;
+            LockPersonality = true;
+            PrivateDevices = true;
+            PrivateMounts = true;
+            ProcSubset = "pid";
+            ProtectClock = true;
+            ProtectControlGroups = true;
+            ProtectHostname = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectProc = "invisible";
+            RemoveIPC = true;
+            RestrictAddressFamilies = [
+              "AF_INET"
+              "AF_INET6"
+              "AF_NETLINK" # used for network interface enumeration
+              "AF_UNIX"
+            ];
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            SystemCallArchitectures = "native";
+            SystemCallFilter = [
+              "@system-service"
+              "~@privileged @resources"
+            ];
+            UMask = if groupAccessAvailable then "0027" else "0077";
           }
+          (mkIf (cfg.dataDir != "/var/lib/postgresql") {
+            ReadWritePaths = [ cfg.dataDir ];
+          })
           (mkIf (cfg.dataDir == "/var/lib/postgresql/${cfg.package.psqlSchema}") {
             StateDirectory = "postgresql postgresql/${cfg.package.psqlSchema}";
             StateDirectoryMode = if groupAccessAvailable then "0750" else "0700";

@@ -2,21 +2,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowsocks-rust";
-  version = "1.20.3";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "shadowsocks";
     repo = pname;
-    hash = "sha256-TVD6yI/I6R2sZGdyE0JsbuN9u5e23MRQCsKpi85JEGM=";
+    hash = "sha256-h18+233lxKNTRCRXUKYA4VzSfJy3ZHgU1KVZn7U36Z4=";
   };
 
-  cargoHash = "sha256-4OXue0KsGxc0EOLRTdr9uTA5t1dl09YJKvavezJ/mxM=";
+  cargoHash = "sha256-rcLcbAH9f1xuLhvaZA9akg84o2E8G1CRfaAY0bWYby0=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security CoreServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security CoreServices ];
 
   buildFeatures = [
     "trust-dns"

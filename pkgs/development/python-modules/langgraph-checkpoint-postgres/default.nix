@@ -5,6 +5,7 @@
   langgraph-checkpoint,
   orjson,
   psycopg,
+  psycopg-pool,
   langgraph-sdk,
   poetry-core,
   pythonOlder,
@@ -12,11 +13,12 @@
   postgresqlTestHook,
   pytestCheckHook,
   pytest-asyncio,
+  stdenvNoCC,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-postgres";
-  version = "1.0.3";
+  version = "2.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -25,7 +27,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langgraph";
     rev = "refs/tags/checkpointpostgres==${version}";
-    hash = "sha256-U7Bymo+Nj82kwjxN33W2MT10jv+lioZUxIKUt8Yxh/s=";
+    hash = "sha256-E3gdHWUYelR/xI3Cv3T2uVwsyt+tOkw9MjX7I2RAuiQ=";
   };
 
   postgresqlTestSetupPost = ''
@@ -41,7 +43,12 @@ buildPythonPackage rec {
     langgraph-checkpoint
     orjson
     psycopg
+    psycopg-pool
   ];
+
+  pythonRelaxDeps = [ "psycopg-pool" ];
+
+  doCheck = !(stdenvNoCC.hostPlatform.isDarwin);
 
   pythonImportsCheck = [ "langgraph.checkpoint.postgres" ];
 

@@ -31,7 +31,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Reusable constraint types to use with typing.Annotated";
     homepage = "https://github.com/annotated-types/annotated-types";
-    changelog = "https://github.com/annotated-types/annotated-types/releases/tag/${src.rev}";
+    changelog = "https://github.com/annotated-types/annotated-types/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ blaggacao ];
   };

@@ -60,7 +60,7 @@ stdenv.mkDerivation {
     quazip
     libngspice
     clipper
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
   ];
 
@@ -93,7 +93,7 @@ stdenv.mkDerivation {
     "phoenix.pro"
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/Fritzing.app $out/Applications/Fritzing.app
     cp FritzingInfo.plist $out/Applications/Fritzing.app/Contents/Info.plist

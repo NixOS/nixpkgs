@@ -92,6 +92,11 @@ lib.mapAttrs mkLicense ({
     free = false;
   };
 
+  ampas = {
+    spdxId = "AMPAS";
+    fullName = "Academy of Motion Picture Arts and Sciences BSD";
+  };
+
   aom = {
     fullName = "Alliance for Open Media Patent License 1.0";
     url = "https://aomedia.org/license/patent-license/";
@@ -208,6 +213,11 @@ lib.mapAttrs mkLicense ({
     fullName = "BSD 3-Clause Clear License";
   };
 
+  bsd3Lbnl = {
+    spdxId = "BSD-3-Clause-LBNL";
+    fullName = "Lawrence Berkeley National Labs BSD variant license";
+  };
+
   bsdOriginal = {
     spdxId = "BSD-4-Clause";
     fullName = ''BSD 4-clause "Original" or "Old" License'';
@@ -229,6 +239,7 @@ lib.mapAttrs mkLicense ({
   };
 
   bsl11 = {
+    spdxId = "BUSL-1.1";
     fullName = "Business Source License 1.1";
     url = "https://mariadb.com/bsl11";
     free = false;
@@ -403,6 +414,12 @@ lib.mapAttrs mkLicense ({
     fullName  = "CeCILL-C Free Software License Agreement";
   };
 
+  cockroachdb-community-license = {
+    fullName = "CockroachDB Community License Agreement";
+    url = "https://www.cockroachlabs.com/cockroachdb-community-license/";
+    free = false;
+  };
+
   cpal10 = {
     spdxId = "CPAL-1.0";
     fullName = "Common Public Attribution License 1.0";
@@ -547,6 +564,13 @@ lib.mapAttrs mkLicense ({
     redistributable = true;
   };
 
+  fsl11Asl20 = {
+    fullName = "Functional Source License, Version 1.1, Apache 2.0 Future License";
+    url = "https://fsl.software/FSL-1.1-Apache-2.0.template.md";
+    free = false;
+    redistributable = true;
+  };
+
   ftl = {
     spdxId = "FTL";
     fullName = "Freetype Project License";
@@ -651,7 +675,7 @@ lib.mapAttrs mkLicense ({
   # Intel's license, seems free
   iasl = {
     spdxId = "Intel-ACPI";
-    fullName = "iASL";
+    fullName = "Intel ACPI Software License Agreement";
     url = "https://old.calculate-linux.org/packages/licenses/iASL";
   };
 
@@ -714,10 +738,9 @@ lib.mapAttrs mkLicense ({
     fullName = "ISC License";
   };
 
-  # Proprietary binaries; free to redistribute without modification.
   databricks = {
-    fullName = "Databricks Proprietary License";
-    url = "https://pypi.org/project/databricks-connect";
+    fullName = "Databricks License";
+    url = "https://www.databricks.com/legal/db-license";
     free = false;
   };
 
@@ -826,11 +849,6 @@ lib.mapAttrs mkLicense ({
     fullName = "PNG Reference Library version 2";
   };
 
-  libssh2 = {
-    fullName = "libssh2 License";
-    url = "https://www.libssh2.org/license.html";
-  };
-
   libtiff = {
     spdxId = "libtiff";
     fullName = "libtiff License";
@@ -872,16 +890,25 @@ lib.mapAttrs mkLicense ({
     url = "https://opensource.org/licenses/MirOS";
   };
 
-  # spdx.org does not (yet) differentiate between the X11 and Expat versions
-  # for details see https://en.wikipedia.org/wiki/MIT_License#Various_versions
   mit = {
     spdxId = "MIT";
     fullName = "MIT License";
   };
-  # https://spdx.org/licenses/MIT-feh.html
+
+  mit-cmu = {
+    spdxId = "MIT-CMU";
+    fullName = "CMU License";
+  };
+
   mit-feh = {
     spdxId = "MIT-feh";
     fullName = "feh License";
+  };
+
+  mit-modern = {
+    # Also known as Zsh license
+    spdxId = "MIT-Modern-Variant";
+    fullName = "MIT License Modern Variant";
   };
 
   mitAdvertising = {
@@ -923,6 +950,11 @@ lib.mapAttrs mkLicense ({
     spdxId = "MulanPSL-2.0";
     fullName = "Mulan Permissive Software License, Version 2";
     url = "https://license.coscl.org.cn/MulanPSL2";
+  };
+
+  naist-2003 = {
+    spdxId = "NAIST-2003";
+    fullName = "Nara Institute of Science and Technology License (2003)";
   };
 
   nasa13 = {
@@ -1080,7 +1112,7 @@ lib.mapAttrs mkLicense ({
   };
 
   purdueBsd = {
-    fullName = " Purdue BSD-Style License"; # also know as lsof license
+    fullName = "Purdue BSD-Style License"; # also known as lsof license
     url = "https://enterprise.dejacode.com/licenses/public/purdue-bsd";
   };
 
@@ -1190,6 +1222,11 @@ lib.mapAttrs mkLicense ({
     fullName = "TCL/TK License";
   };
 
+  tost = {
+    fullName = "Tomorrow Open Source Technology License 1.0";
+    url = "https://github.com/PixarAnimationStudios/OpenUSD/blob/release/LICENSE.txt";
+  };
+
   ucd = {
     fullName = "Unicode Character Database License";
     url = "https://fedoraproject.org/wiki/Licensing:UCD";
@@ -1268,6 +1305,15 @@ lib.mapAttrs mkLicense ({
   watcom = {
     spdxId = "Watcom-1.0";
     fullName = "Sybase Open Watcom Public License 1.0";
+    # Despite being OSI‐approved, this licence is not considered FOSS
+    # by Debian, Fedora, or the FSF, due to an onerous restriction that
+    # requires publication of even privately‐deployed modifications.
+    # This violates the FSF’s freedom 3 and Debian’s “desert island
+    # test” and “dissident test”.
+    #
+    # See: <https://en.wikipedia.org/wiki/Sybase_Open_Watcom_Public_License>
+    free = false;
+    redistributable = true;
   };
 
   w3c = {
@@ -1314,11 +1360,6 @@ lib.mapAttrs mkLicense ({
   zlib = {
     spdxId = "Zlib";
     fullName = "zlib License";
-  };
-
-  zsh = {
-    url = "https://github.com/zsh-users/zsh/blob/master/LICENCE";
-    fullName = "Zsh License";
   };
 
   zpl20 = {

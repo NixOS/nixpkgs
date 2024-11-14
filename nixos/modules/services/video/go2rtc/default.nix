@@ -55,8 +55,8 @@ in
           ffmpeg = {
             bin = mkOption {
               type = path;
-              default = "${lib.getBin pkgs.ffmpeg_6-headless}/bin/ffmpeg";
-              defaultText = literalExpression "\${lib.getBin pkgs.ffmpeg_6-headless}/bin/ffmpeg";
+              default = lib.getExe pkgs.ffmpeg-headless;
+              defaultText = literalExpression "lib.getExe pkgs.ffmpeg-headless";
               description = ''
                 The ffmpeg package to use for transcoding.
               '';

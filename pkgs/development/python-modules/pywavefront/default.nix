@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  passthru.optional-dependencies.visualization = [ pyglet ];
+  optional-dependencies.visualization = [ pyglet ];
 
   nativeCheckInputs = [
     pytestCheckHook

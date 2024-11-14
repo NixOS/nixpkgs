@@ -6,10 +6,17 @@ import ./make-test-python.nix ({ pkgs, ... }:
     testCredentials = {
       password = "Password1_cZPEwpCWvrReripJmAZdmVIZd8HHoHcl";
     };
+
+    # copy certs to store to work around mount namespacing
+    certsPath = pkgs.runCommandNoCC "snakeoil-certs" { } ''
+      mkdir $out
+      cp ${certs."${serverDomain}".cert} $out/snakeoil.crt
+      cp ${certs."${serverDomain}".key} $out/snakeoil.key
+    '';
   in
   {
     name = "kanidm";
-    meta.maintainers = with pkgs.lib.maintainers; [ erictapen Flakebi oddlama ];
+    meta.maintainers = with pkgs.lib.maintainers; [ Flakebi oddlama ];
 
     nodes.server = { pkgs, ... }: {
       services.kanidm = {
@@ -19,8 +26,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
           domain = serverDomain;
           bindaddress = "[::]:443";
           ldapbindaddress = "[::1]:636";
-          tls_chain = certs."${serverDomain}".cert;
-          tls_key = certs."${serverDomain}".key;
+          tls_chain = "${certsPath}/snakeoil.crt";
+          tls_key = "${certsPath}/snakeoil.key";
         };
       };
 
@@ -90,7 +97,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
         with subtest("Test unixd connection"):
             client.wait_for_unit("kanidm-unixd.service")
             client.wait_for_file("/run/kanidm-unixd/sock")
-            client.wait_until_succeeds("kanidm-unix status | grep working!")
+            client.wait_until_succeeds("kanidm-unix status | grep online")
 
         with subtest("Test user creation"):
             client.wait_for_unit("getty@tty1.service")
@@ -100,7 +107,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
             client.send_chars("kanidm person posix set-password testuser\n")
             client.wait_until_tty_matches("1", "Enter new")
             client.send_chars("${testCredentials.password}\n")
-            client.wait_until_tty_matches("1", "Retype")
+            client.wait_until_tty_matches("1", "Reenter")
             client.send_chars("${testCredentials.password}\n")
             output = client.succeed("getent passwd testuser")
             assert "TestUser" in output

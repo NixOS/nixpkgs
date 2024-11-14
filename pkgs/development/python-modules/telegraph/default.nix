@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aio = [ httpx ];
   };
 
@@ -33,8 +33,6 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/" ];
 
   disabledTests = [ "test_get_page" ];
-
-  doCheck = true;
 
   pythonImportsCheck = [ "telegraph" ];
 

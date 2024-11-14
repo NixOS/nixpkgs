@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "TokTok";
     repo   = "toxic";
     rev    = "v${version}";
-    sha256 = "sha256-+nOjlQED2pbYwGV6IGeKK1pymBSrDVWCWKjZ42vib7E=";
+    hash = "sha256-+nOjlQED2pbYwGV6IGeKK1pymBSrDVWCWKjZ42vib7E=";
   };
 
   makeFlags = [ "PREFIX=$(out)"];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libtoxcore libsodium ncurses curl gdk-pixbuf libnotify
-  ] ++ lib.optionals (!stdenv.isAarch32) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isAarch32) [
     openal libopus libvpx freealut qrencode
   ];
   nativeBuildInputs = [ pkg-config libconfig ];

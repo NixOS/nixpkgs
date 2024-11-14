@@ -77,8 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     system = stdenv.hostPlatform.system;
     phpMajor = lib.versions.majorMinor php.version;
   };
-  nativeBuildInputs = lib.optionals (!stdenv.isDarwin) [ autoPatchelfHook ];
-  buildInputs = lib.optionals (!stdenv.isDarwin) [
+  nativeBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ autoPatchelfHook ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     openssl
     zstd
     lz4
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
       chmod +w $out/lib/php/extensions/relay.so
     ''
     + (
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         let
           args =
             lib.strings.concatMapStrings

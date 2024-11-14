@@ -5,44 +5,46 @@
   fetchFromGitHub,
   setuptools,
   icalendar,
-  pytz,
   python-dateutil,
+  tzdata,
   x-wr-timezone,
   pytestCheckHook,
+  pytz,
   restructuredtext-lint,
   pygments,
-  tzdata,
 }:
 
 buildPythonPackage rec {
   pname = "recurring-ical-events";
-  version = "2.2.0";
+  version = "3.3.3";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "niccokunzmann";
     repo = "python-recurring-ical-events";
-    rev = "v${version}";
-    hash = "sha256-Njd+sc35jlA96iVf2uuVN2BK92ctwUDfBAUfpgqtPs0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gEatTTpRiqtDAn+JtoJuVHPYKmEkc5saw3hy4ZYZfX8=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [ "icalendar" ];
+
   dependencies = [
     icalendar
-    pytz
     python-dateutil
+    tzdata
     x-wr-timezone
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytz
     restructuredtext-lint
     pygments
-    tzdata
   ];
 
   pythonImportsCheck = [ "recurring_ical_events" ];

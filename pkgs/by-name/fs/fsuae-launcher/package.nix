@@ -34,6 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "distutils.core" "setuptools"
+  '';
+
   preFixup = ''
     wrapQtApp "$out/bin/fs-uae-launcher" \
       --set PYTHONPATH "$PYTHONPATH"

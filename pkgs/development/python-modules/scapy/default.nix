@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "scapy";
-  version = "2.5.0";
+  version = "2.6.0";
   format = "setuptools";
 
   disabled = isPyPy;
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "secdev";
     repo = "scapy";
-    rev = "v${version}";
-    hash = "sha256-xJlovcxUQOQHfOU0Jgin/ayd2T5fOyeN4Jg0DbLHoeU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-k/wfY5nq/txdiqj5gyHT9FSjnFzazDBawE3+aNe9zrQ=";
   };
 
   patches = [ ./find-library.patch ];

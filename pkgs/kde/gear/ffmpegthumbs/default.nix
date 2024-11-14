@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "ffmpegthumbs";
 
-  extraBuildInputs = [ffmpeg];
+  extraBuildInputs = [ ffmpeg ];
 }

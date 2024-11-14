@@ -3,7 +3,7 @@
 
 let ocamlPackages = coq.ocamlPackages;
     defaultVersion = with lib.versions; lib.switch coq.coq-version [
-      { case = range "8.18" "8.20"; out = "2.1.4"; }
+      { case = range "8.18" "8.20"; out = "2.1.7"; }
       { case = range "8.18" "8.19"; out = "2.1.2"; }
       { case = isEq "8.18"; out = "2.0.3+coq8.18"; }
     ] null;
@@ -15,6 +15,8 @@ let ocamlPackages = coq.ocamlPackages;
       release."2.1.2".sha256 = "sha256-GloY68fLmIv3oiEGNWwmgKv1CMAReBuXzMTUsKOs328=";
       release."2.1.4".rev = "v2.1.4";
       release."2.1.4".sha256 = "sha256-Vwve1sCg5OsGmhDLlOyGCwP6A8g618IzD79vLPw/JtQ=";
+      release."2.1.7".rev = "v2.1.7";
+      release."2.1.7".sha256 = "sha256-HsLv2ziPIUK6Q5/xz8ZvaGWggUCK1AKv47U5M7SCcKU=";
       inherit location; });
     fetched = fetch (if version != null then version else defaultVersion);
 in

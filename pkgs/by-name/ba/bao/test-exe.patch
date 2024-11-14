@@ -1,0 +1,40 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 2f66e42..34240e8 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -26,6 +26,9 @@ path = "src/main.rs"
+ [dependencies.arrayref]
+ version = "0.3.5"
+ 
++[dependencies.assert_cmd]
++version = "2.0.16"
++
+ [dependencies.bao]
+ version = "0.12"
+ 
+diff --git a/tests/test.rs b/tests/test.rs
+index f9427bd..48aabca 100644
+--- a/tests/test.rs
++++ b/tests/test.rs
+@@ -1,8 +1,7 @@
+ use duct::cmd;
+ use rand::prelude::*;
+-use std::env::consts::EXE_EXTENSION;
+ use std::fs;
+-use std::path::{Path, PathBuf};
++use std::path::PathBuf;
+ use std::sync::Once;
+ use tempfile::tempdir;
+ 
+@@ -15,10 +14,7 @@ pub fn bao_exe() -> PathBuf {
+             .expect("build failed");
+     });
+ 
+-    Path::new("target")
+-        .join("debug")
+-        .join("bao")
+-        .with_extension(EXE_EXTENSION)
++    assert_cmd::cargo::cargo_bin("bao")
+ }
+ 
+ #[test]

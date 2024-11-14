@@ -1,26 +1,23 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.mautrix-facebook;
   settingsFormat = pkgs.formats.json {};
   settingsFile = settingsFormat.generate "mautrix-facebook-config.json" cfg.settings;
 
-  puppetRegex = concatStringsSep
+  puppetRegex = lib.concatStringsSep
     ".*"
     (map
-      escapeRegex
-      (splitString
+      lib.escapeRegex
+      (lib.splitString
         "{userid}"
         cfg.settings.bridge.username_template));
 in {
   options = {
     services.mautrix-facebook = {
-      enable = mkEnableOption "Mautrix-Facebook, a Matrix-Facebook hybrid puppeting/relaybot bridge";
+      enable = lib.mkEnableOption "Mautrix-Facebook, a Matrix-Facebook hybrid puppeting/relaybot bridge";
 
-      settings = mkOption rec {
-        apply = recursiveUpdate default;
+      settings = lib.mkOption rec {
+        apply = lib.recursiveUpdate default;
         type = settingsFormat.type;
         default = {
           homeserver = {
@@ -70,7 +67,7 @@ in {
             };
           };
         };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             homeserver = {
               address = "http://localhost:8008";
@@ -93,8 +90,8 @@ in {
         '';
       };
 
-      environmentFile = mkOption {
-        type = types.nullOr types.path;
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
           File containing environment variables to be passed to the mautrix-facebook service.
@@ -103,16 +100,16 @@ in {
         '';
       };
 
-      configurePostgresql = mkOption {
-        type = types.bool;
+      configurePostgresql = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Enable PostgreSQL and create a user and database for mautrix-facebook. The default `settings` reference this database, if you disable this option you must provide a database URL.
         '';
       };
 
-      registrationData = mkOption {
-        type = types.attrs;
+      registrationData = lib.mkOption {
+        type = lib.types.attrs;
         default = {};
         description = ''
           Output data for appservice registration. Simply make any desired changes and serialize to JSON. Note that this data contains secrets so think twice before putting it into the nix store.
@@ -123,7 +120,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.groups.mautrix-facebook = {};
 
     users.users.mautrix-facebook = {
@@ -131,7 +128,7 @@ in {
       isSystemUser = true;
     };
 
-    services.postgresql = mkIf cfg.configurePostgresql {
+    services.postgresql = lib.mkIf cfg.configurePostgresql {
       ensureDatabases = ["mautrix-facebook"];
       ensureUsers = [{
         name = "mautrix-facebook";
@@ -143,8 +140,8 @@ in {
       wantedBy = [ "multi-user.target" ];
       wants = [
         "network-online.target"
-      ] ++ optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
-        ++ optional cfg.configurePostgresql "postgresql.service";
+      ] ++ lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
+        ++ lib.optional cfg.configurePostgresql "postgresql.service";
       after = wants;
 
       serviceConfig = {
@@ -176,11 +173,11 @@ in {
           users = [
             {
               exclusive = true;
-              regex = escapeRegex "@${cfg.settings.appservice.bot_username}:${cfg.settings.homeserver.domain}";
+              regex = lib.escapeRegex "@${cfg.settings.appservice.bot_username}:${cfg.settings.homeserver.domain}";
             }
             {
               exclusive = true;
-              regex = "@${puppetRegex}:${escapeRegex cfg.settings.homeserver.domain}";
+              regex = "@${puppetRegex}:${lib.escapeRegex cfg.settings.homeserver.domain}";
             }
           ];
           aliases = [];
@@ -196,5 +193,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ kevincox ];
+  meta.maintainers = with lib.maintainers; [ kevincox ];
 }

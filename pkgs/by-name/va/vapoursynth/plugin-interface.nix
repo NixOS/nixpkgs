@@ -2,7 +2,6 @@
   lib,
   python3,
   buildEnv,
-  writeText,
   runCommandCC,
   stdenv,
   runCommand,
@@ -35,29 +34,19 @@ let
     paths = deepPlugins;
   };
 
-  pluginLoader =
-    let
-      source = writeText "vapoursynth-nix-plugins.cpp" ''
-        #include <filesystem>
-
-        struct VSCore;
-
-        void VSLoadPluginsNix(void (*load)(VSCore *, const std::filesystem::path &), VSCore *core) {
-        ${lib.concatMapStrings (
-          path: ''load(core, std::filesystem::u8path("${path}/lib/vapoursynth"));''
-        ) deepPlugins}
-        }
-      '';
-    in
-    runCommandCC "vapoursynth-plugin-loader"
+  # Override default plugin path through nixPluginDir symbol
+  nixPlugins =
+    runCommandCC "libvapoursynth-nix-plugins${ext}"
       {
         executable = true;
         preferLocalBuild = true;
         allowSubstitutes = false;
+        src = ''
+          char const nixPluginDir[] = "${pluginsEnv}/lib/vapoursynth";
+        '';
       }
       ''
-        mkdir -p $out/lib
-        $CXX -std=c++17 -shared -fPIC ${source} -o "$out/lib/libvapoursynth-nix-plugins${ext}"
+        $CC -x c -shared -fPIC - -o "$out" <<<"$src"
       '';
 
   ext = stdenv.hostPlatform.extensions.sharedLibrary;
@@ -123,9 +112,7 @@ runCommand "${vapoursynth.name}-with-plugins"
             ${vapoursynth}/$binaryFile
     done
 
-    ln -s \
-        ${pluginLoader}/lib/libvapoursynth-nix-plugins${ext} \
-        $out/lib/libvapoursynth-nix-plugins${ext}
+    ln -s ${nixPlugins} $out/lib/libvapoursynth-nix-plugins${ext}
     ln -s ${vapoursynth}/include $out/include
     ln -s ${vapoursynth}/lib/vapoursynth/* $out/lib/vapoursynth
     ln -s \

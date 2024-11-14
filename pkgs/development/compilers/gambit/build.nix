@@ -78,9 +78,9 @@ gccStdenv.mkDerivation rec {
   ] ++ gambit-params.extraOptions
     # TODO: pick an appropriate architecture to optimize on on x86-64?
     # https://gcc.gnu.org/onlinedocs/gcc-4.8.4/gcc/i386-and-x86-64-Options.html#i386-and-x86-64-Options
-    # ++ lib.optional pkgs.stdenv.isx86_64 "--enable-march=core-avx2"
+    # ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "--enable-march=core-avx2"
     # Do not enable poll on darwin due to https://github.com/gambit/gambit/issues/498
-    ++ lib.optional (!gccStdenv.isDarwin) "--enable-poll";
+    ++ lib.optional (!gccStdenv.hostPlatform.isDarwin) "--enable-poll";
 
   configurePhase = ''
     export CC=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc \
@@ -97,7 +97,7 @@ gccStdenv.mkDerivation rec {
 
     # OS-specific paths are hardcoded in ./configure
     substituteInPlace config.status \
-      ${lib.optionalString (gccStdenv.isDarwin && !gambit-params.stable)
+      ${lib.optionalString (gccStdenv.hostPlatform.isDarwin && !gambit-params.stable)
          ''--replace "/usr/local/opt/openssl@1.1" "${lib.getLib openssl}"''} \
         --replace "/usr/local/opt/openssl" "${lib.getLib openssl}"
 

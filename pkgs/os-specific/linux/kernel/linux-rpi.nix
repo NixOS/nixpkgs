@@ -72,7 +72,7 @@ lib.overrideDerivation (buildLinux (args // {
   # Make copies of the DTBs named after the upstream names so that U-Boot finds them.
   # This is ugly as heck, but I don't know a better solution so far.
   postFixup = ''
-    dtbDir=${if stdenv.isAarch64 then "$out/dtbs/broadcom" else "$out/dtbs"}
+    dtbDir=${if stdenv.hostPlatform.isAarch64 then "$out/dtbs/broadcom" else "$out/dtbs"}
     rm $dtbDir/bcm283*.dtb
     copyDTB() {
       cp -v "$dtbDir/$1" "$dtbDir/$2"
@@ -91,6 +91,7 @@ lib.overrideDerivation (buildLinux (args // {
     copyDTB bcm2709-rpi-2-b.dtb bcm2836-rpi-2-b.dtb
   '' + lib.optionalString (lib.elem stdenv.hostPlatform.system ["armv7l-linux" "aarch64-linux"]) ''
     copyDTB bcm2710-rpi-zero-2.dtb bcm2837-rpi-zero-2.dtb
+    copyDTB bcm2710-rpi-zero-2-w.dtb bcm2837-rpi-zero-2-w.dtb
     copyDTB bcm2710-rpi-3-b.dtb bcm2837-rpi-3-b.dtb
     copyDTB bcm2710-rpi-3-b-plus.dtb bcm2837-rpi-3-a-plus.dtb
     copyDTB bcm2710-rpi-3-b-plus.dtb bcm2837-rpi-3-b-plus.dtb

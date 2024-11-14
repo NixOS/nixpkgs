@@ -4,7 +4,6 @@
   SDL2_image,
   SDL2_net,
   alsa-lib,
-  darwin,
   fetchFromGitHub,
   fetchpatch,
   fluidsynth,
@@ -30,6 +29,8 @@
   stdenv,
   testers,
   zlib-ng,
+  apple-sdk_15,
+  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -80,15 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
       speexdsp
       zlib-ng
     ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
-    ++ lib.optionals stdenv.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AudioUnit
-        Carbon
-        Cocoa
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_15
+      (darwinMinVersionHook "10.15") # from https://www.dosbox-staging.org/releases/macos/
+    ];
 
   outputs = [ "out" "man" ];
 

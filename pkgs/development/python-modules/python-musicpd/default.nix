@@ -7,19 +7,16 @@
 
 buildPythonPackage rec {
   pname = "python-musicpd";
-  version = "0.9.0";
-
-  src = fetchPypi {
-    inherit pname;
-    inherit version;
-    hash = "sha256-/FdM0UolVqhJNpS60Q/nra1hSHKL/LiSMX7/Hcipwco=";
-  };
-
+  version = "0.9.1";
   pyproject = true;
 
-  build-system = [ setuptools ];
+  src = fetchPypi {
+    pname = "python_musicpd";
+    inherit version;
+    hash = "sha256-zKjazEIxja6/tPWFXQhEYlLd1Jl8py9wirKsoDXeGu4=";
+  };
 
-  doCheck = true;
+  build-system = [ setuptools ];
 
   meta = with lib; {
     description = "MPD (Music Player Daemon) client library written in pure Python";

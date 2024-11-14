@@ -1,7 +1,6 @@
 { callPackage
 , kernel ? null
 , stdenv
-, linuxKernel
 , lib
 , nixosTests
 , ...
@@ -15,9 +14,7 @@ callPackage ./generic.nix args {
   # this attribute is the correct one for this package.
   kernelModuleAttribute = "zfs_2_1";
   # check the release notes for compatible kernels
-  kernelCompatible = kernel.kernelOlder "6.8";
-
-  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_6;
+  kernelCompatible = kernel: kernel.kernelOlder "6.8";
 
   # This is a fixed version to the 2.1.x series, move only
   # if the 2.1.x series moves.
@@ -25,9 +22,9 @@ callPackage ./generic.nix args {
 
   hash = "sha256-zFO8fMbirEOrn5W57rAN7IWY6EIXG8jDXqhP7BWJyiY=";
 
-  tests = [
-    nixosTests.zfs.series_2_1
-  ];
+  tests = {
+    inherit (nixosTests.zfs) series_2_1;
+  };
 
   maintainers = [ lib.maintainers.raitobezarius ];
 }

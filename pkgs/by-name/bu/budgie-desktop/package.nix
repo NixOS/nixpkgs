@@ -7,8 +7,8 @@
   budgie-screensaver,
   docbook-xsl-nons,
   glib,
-  gnome,
   gnome-desktop,
+  gnome-settings-daemon,
   graphene,
   gst_all_1,
   gtk-doc,
@@ -26,6 +26,7 @@
   magpie,
   mesa,
   meson,
+  mutter,
   ninja,
   nix-update-script,
   nixosTests,
@@ -79,8 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
     budgie-screensaver
     glib
     gnome-desktop
-    gnome.gnome-settings-daemon
-    gnome.mutter
+    gnome-settings-daemon
+    mutter
     zenity
     graphene
     gst_all_1.gstreamer

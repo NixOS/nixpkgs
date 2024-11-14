@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       ncurses
       ffmpeg
     ]
-    ++ lib.optional stdenv.isDarwin Cocoa;
+    ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
   meta = with lib; {
     description = "Live GLSL coding renderer";
@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     mainProgram = "glslViewer";
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

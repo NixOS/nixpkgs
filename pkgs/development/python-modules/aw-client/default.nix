@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aw-client";
-  version = "0.5.13";
+  version = "0.5.14";
 
   format = "pyproject";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "ActivityWatch";
     repo = "aw-client";
     rev = "v${version}";
-    sha256 = "sha256-A9f1Wj4F6qRvCVj3iRQvsnILewJK1L5tfI2MnAXZ4nY=";
+    sha256 = "sha256-HTyhQz/RaNdCtJIV6YHEd6Yhu9VRJ8E9XdN7NcoO8ao=";
   };
 
   disabled = pythonOlder "3.8";

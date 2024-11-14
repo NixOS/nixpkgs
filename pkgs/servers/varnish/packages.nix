@@ -1,4 +1,4 @@
-{ callPackages, callPackage, varnish60, varnish74, varnish75 }: {
+{ callPackages, callPackage, varnish60, varnish75 }: {
   varnish60Packages = rec {
     varnish = varnish60;
     modules = (callPackages ./modules.nix { inherit varnish; }).modules15;
@@ -12,10 +12,6 @@
       version = "0.4";
       sha256 = "1n94slrm6vn3hpymfkla03gw9603jajclg84bjhwb8kxsk3rxpmk";
     };
-  };
-  varnish74Packages = rec {
-    varnish = varnish74;
-    modules = (callPackages ./modules.nix { inherit varnish; }).modules23;
   };
   varnish75Packages = rec {
     varnish = varnish75;

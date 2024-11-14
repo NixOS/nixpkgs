@@ -75,13 +75,13 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
   pname   = "yosys";
-  version = "0.44";
+  version = "0.47";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo  = "yosys";
-    rev   = "refs/tags/yosys-${finalAttrs.version}";
-    hash  = "sha256-aMVWmryMbVlEm1RNj1ENpLHOpuKRQTJMFZCn+WuaR04=";
+    rev   = "refs/tags/${finalAttrs.version}";
+    hash  = "sha256-9u9aAPTZyt9vzZwryor3GRCGzs/mu2/XtM0XzV7uHfk=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''

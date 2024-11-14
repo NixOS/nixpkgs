@@ -76,7 +76,7 @@ buildPythonPackage rec {
     "test_mongo"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Multiprocessing distributed task queue for Django";

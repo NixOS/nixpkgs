@@ -79,7 +79,6 @@ mkCombyPackage {
     ocamlPackages.patience_diff
     ocamlPackages.toml
     ocamlPackages.cohttp-lwt-unix
-    ocamlPackages.opium
     ocamlPackages.textutils
     ocamlPackages.jst-config
     ocamlPackages.parany
@@ -92,7 +91,7 @@ mkCombyPackage {
     ocamlPackages.dune-configurator
     combyKernel
     combySemantic
-  ] ++ (if !stdenv.isAarch32 && !stdenv.isAarch64 then
+  ] ++ (if !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64 then
     [ ocamlPackages.hack_parallel ]
   else
     [ ]);

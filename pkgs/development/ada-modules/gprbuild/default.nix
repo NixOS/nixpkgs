@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     "LIBRARY_TYPE=relocatable"
   ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Ensure that there is enough space for the `fixDarwinDylibNames` hook to
     # update the install names of the output dylibs.
     NIX_LDFLAGS = "-headerpad_max_install_names";

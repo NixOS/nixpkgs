@@ -4,33 +4,45 @@
   python,
   glibcLocales,
   fetchFromGitHub,
+  pytest-cov-stub,
+  pytestCheckHook,
+  setuptools,
   six,
-  simplejson,
 }:
 
 buildPythonPackage rec {
   pname = "mail-parser";
-  version = "3.15.0";
-  format = "setuptools";
+  version = "4.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SpamScope";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0da2qr4p8jnjw6jdhbagm6slfcjnjyyjkszwfcfqvcywh1zm1sdw";
+    repo = "mail-parser";
+    rev = "refs/tags/${version}";
+    hash = "sha256-WpV1WJFwzAquPXimew86YpEp++dnkIiBe5E4lMBDl7w=";
   };
 
   LC_ALL = "en_US.utf-8";
 
   nativeBuildInputs = [ glibcLocales ];
-  propagatedBuildInputs = [
-    simplejson
+
+  build-system = [ setuptools ];
+
+  pythonRemoveDeps = [ "ipaddress" ];
+
+  dependencies = [
     six
   ];
 
+  pythonImportsCheck = [ "mailparser" ];
+
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
+
   # Taken from .travis.yml
-  checkPhase = ''
-    ${python.interpreter} tests/test_main.py
+  postCheck = ''
     ${python.interpreter} -m mailparser -v
     ${python.interpreter} -m mailparser -h
     ${python.interpreter} -m mailparser -f tests/mails/mail_malformed_3 -j

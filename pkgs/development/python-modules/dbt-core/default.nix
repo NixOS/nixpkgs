@@ -17,7 +17,7 @@
   packaging,
   pathspec,
   protobuf,
-  python,
+  callPackage,
   pythonOlder,
   pytz,
   pyyaml,
@@ -29,28 +29,31 @@
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.8.2";
+  version = "1.8.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-W1bD/XUmBYKzx66/rO//lCG+LOwDSlOW/KQPs0+cKTI=";
+    hash = "sha256-M9O9jLjIr9kolkye5RwaS2jK6dpncEOo1rtxY7WXS7U=";
   };
 
   sourceRoot = "${src.name}/core";
 
   pythonRelaxDeps = [
+    "protobuf"
     "agate"
     "click"
+    "dbt-common"
     "dbt-semantic-interfaces"
+    "logbook"
     "mashumaro"
     "networkx"
-    "logbook"
     "pathspec"
+    "protobuf"
     "urllib3"
   ];
 
@@ -85,7 +88,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru = {
-    withAdapters = python.pkgs.callPackage ./with-adapters.nix { };
+    withAdapters = callPackage ./with-adapters.nix { };
   };
 
   meta = with lib; {

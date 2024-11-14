@@ -1,15 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, dde-qt-dbus-factory
-, wrapQtAppsHook
-, qtbase
-, qtx11extras
-, dtkwidget
-, qt5integration
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  dde-qt-dbus-factory,
+  dtkwidget,
+  libsForQt5,
+  qt5integration,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,12 +26,12 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     dde-qt-dbus-factory
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtx11extras
+    libsForQt5.qtbase
+    libsForQt5.qtx11extras
     dtkwidget
     qt5integration
     gtest

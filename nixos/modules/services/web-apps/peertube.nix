@@ -432,7 +432,6 @@ in {
       path = with pkgs; [ nodejs_18 yarn ffmpeg-headless openssl ];
 
       script = ''
-        #!/bin/sh
         umask 077
         cat > /var/lib/peertube/config/local.yaml <<EOF
         ${lib.optionalString (cfg.secrets.secretsFile != null) ''
@@ -457,7 +456,7 @@ in {
         ln -sf ${cfg.package}/config/default.yaml /var/lib/peertube/config/default.yaml
         ln -sf ${cfg.package}/client/dist -T /var/lib/peertube/www/client
         ln -sf ${cfg.settings.storage.client_overrides} -T /var/lib/peertube/www/client-overrides
-        node dist/server
+        exec node dist/server
       '';
       serviceConfig = {
         Type = "simple";

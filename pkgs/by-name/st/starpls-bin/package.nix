@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, autoPatchelfHook }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "starpls-bin";
@@ -19,6 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isElf [
+    autoPatchelfHook
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isElf [
+    (lib.getLib stdenv.cc.cc)
+  ];
+
   installPhase = ''
     install -D $src $out/bin/starpls
   '';
@@ -30,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "aarch64-darwin" "x86_64-linux" ];
     maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "starpls";
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 })

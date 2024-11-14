@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "huggle";
-  version = "3.4.12";
+  version = "3.4.13";
 
   src = fetchFromGitHub {
     owner = "huggle";
     repo = "huggle3-qt-lx";
     rev = version;
-    sha256 = "scNGmMVZ6z9FTQuZCdwRYk0WP5qKfdb/M9Co8TbiMDE=";
+    sha256 = "sha256-f7Oo6x262Ju9KY8f/xjm9gL6I1fRCaDsQWGWJMUNUfY=";
     fetchSubmodules = true;
   };
 

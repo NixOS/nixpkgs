@@ -1,16 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, dtkcore
-, gsettings-qt
-, libsecret
-, xorg
-, systemd
-, dde-polkit-agent
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  dtkcore,
+  gsettings-qt,
+  libsecret,
+  xorg,
+  systemd,
+  dde-polkit-agent,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     dtkcore
     gsettings-qt
     libsecret

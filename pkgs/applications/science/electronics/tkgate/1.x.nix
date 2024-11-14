@@ -1,8 +1,8 @@
 { lib, stdenv, fetchurl, tcl, tk, libX11, glibc, which, bison, flex, imake, xorgproto, gccmakedep }:
 
 let
-  libiconvInc = lib.optionalString stdenv.isLinux "${glibc.dev}/include";
-  libiconvLib = lib.optionalString stdenv.isLinux "${glibc.out}/lib";
+  libiconvInc = lib.optionalString stdenv.hostPlatform.isLinux "${glibc.dev}/include";
+  libiconvLib = lib.optionalString stdenv.hostPlatform.isLinux "${glibc.out}/lib";
 in
 stdenv.mkDerivation rec {
   pname = "tkgate";

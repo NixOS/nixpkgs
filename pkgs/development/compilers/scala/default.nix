@@ -1,8 +1,19 @@
-{ stdenv, fetchurl, makeWrapper, jre, callPackage }:
+{
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+  callPackage,
+}:
 
 let
   bare = callPackage ./bare.nix {
-    inherit stdenv fetchurl makeWrapper jre;
+    inherit
+      stdenv
+      fetchurl
+      makeWrapper
+      jre
+      ;
   };
 in
 
@@ -21,4 +32,7 @@ stdenv.mkDerivation {
   '';
 
   inherit (bare) meta;
-} // { inherit bare; }
+}
+// {
+  inherit bare;
+}

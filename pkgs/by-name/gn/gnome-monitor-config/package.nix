@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, meson
-, ninja
-, pkg-config
-, cairo
-, glib
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  meson,
+  ninja,
+  pkg-config,
+  cairo,
+  glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnome-monitor-config";
   version = "0-unstable-2023-09-26";
 
@@ -19,10 +20,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-uVWhQ5SCyadDkeOd+pY2cYZAQ0ZvWMlgndcr1ZIEf50=";
   };
 
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    glib
   ];
 
   buildInputs = [
@@ -30,11 +38,10 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    mv src/gnome-monitor-config $out/bin
-    runHook postInstall
+  postPatch = ''
+    substituteInPlace src/meson.build \
+      --replace-fail "executable('gnome-monitor-config', src" \
+                     "executable('gnome-monitor-config', src, install : true"
   '';
 
   meta = with lib; {

@@ -11,12 +11,10 @@
 , bos
 , fpath
 , randomconv
-, cstruct
 }:
 
 buildDunePackage {
   pname = "letsencrypt-app";
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   inherit (letsencrypt)
@@ -37,7 +35,6 @@ buildDunePackage {
     bos
     fpath
     randomconv
-    cstruct
   ];
 
   meta = letsencrypt.meta // {

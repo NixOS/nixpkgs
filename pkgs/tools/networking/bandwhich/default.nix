@@ -25,10 +25,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   # 10 passed; 47 failed https://hydra.nixos.org/build/148943783/nixlog/1
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
     ln --force -s ${./Cargo.lock} Cargo.lock

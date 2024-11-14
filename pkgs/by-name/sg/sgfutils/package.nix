@@ -18,7 +18,7 @@ stdenv.mkDerivation
     hash = "sha256-KWYgTxz32WK3MKouj1WAJtZmleKt5giCpzQPwfWruZQ=";
   };
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
   buildPhase = ''
     runHook preBuild
     make all

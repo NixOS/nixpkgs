@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   LCL_PLATFORM = if withQt then "qt5" else "gtk2";
 
   NIX_LDFLAGS = lib.concatStringsSep " " ([
-    "-L${stdenv.cc.cc.lib}/lib"
+    "-L${lib.getLib stdenv.cc.cc}/lib"
     "-lX11"
     "-lXext"
     "-lXi"

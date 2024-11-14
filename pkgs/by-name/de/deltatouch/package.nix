@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltatouch";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "lk108";
     repo = "deltatouch";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OQrTxxmiBiAc9il1O5aEl9iN3fCfoxSAwJDfrASCPxs=";
+    hash = "sha256-mOs5WlWOkH9A+BZK6hvKq/JKS4k8tzvvov4CYFHyMfA=";
     fetchSubmodules = true;
   };
 
@@ -48,12 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'assets/logo.svg DESTINATION assets' 'assets/logo.svg DESTINATION ''${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/scalable/apps RENAME deltatouch.svg' \
       --replace-fail "\''${DESKTOP_FILE_NAME} DESTINATION \''${DATA_DIR}" "\''${DESKTOP_FILE_NAME} DESTINATION \''${CMAKE_INSTALL_DATAROOTDIR}/applications"
 
-    substituteInPlace plugins/DeltaHandler/CMakeLists.txt plugins/DTWebEngineProfile/CMakeLists.txt \
+    substituteInPlace plugins/{DeltaHandler,HtmlMsgEngineProfile,WebxdcEngineProfile}/CMakeLists.txt \
       --replace-fail 'set(QT_IMPORTS_DIR "/lib/''${ARCH_TRIPLET}")' 'set(QT_IMPORTS_DIR "${placeholder "out"}/${qt5.qtbase.qtQmlPrefix}")'
 
     # Fix import of library dependencies
+    substituteInPlace plugins/{DeltaHandler,WebxdcEngineProfile}/CMakeLists.txt \
+      --replace-fail 'IMPORTED_LOCATION "''${CMAKE_CURRENT_BINARY_DIR}/libdeltachat.so"' 'IMPORTED_LOCATION "${lib.getLib libdeltachat}/lib/libdeltachat.so"'
     substituteInPlace plugins/DeltaHandler/CMakeLists.txt \
-      --replace-fail 'IMPORTED_LOCATION "''${CMAKE_CURRENT_BINARY_DIR}/libdeltachat.so"' 'IMPORTED_LOCATION "${lib.getLib libdeltachat}/lib/libdeltachat.so"' \
       --replace-fail 'IMPORTED_LOCATION "''${CMAKE_CURRENT_BINARY_DIR}/libquirc.so.1.2"' 'IMPORTED_LOCATION "${lib.getLib quirc}/lib/libquirc.so"'
 
     # Fix icon reference in desktop file

@@ -91,6 +91,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper ${steam-run}/bin/steam-run $out/bin/itch \
       --add-flags ${electron}/bin/electron \
       --add-flags $out/share/itch/resources/app \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --set BROTH_USE_LOCAL butler,itch-setup \
       --prefix PATH : ${butler}:${itch-setup}
   '';

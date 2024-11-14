@@ -4,6 +4,7 @@
 , fetchgit
 , fetchurl
 , makeWrapper
+, writeText
 , cmake
 , coreutils
 , git
@@ -56,7 +57,7 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.32.04";
+  version = "6.32.06";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -64,15 +65,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-Ey8Saq59MO+8zX3NmRt62hiQrleYDvMAwWQh+dTQfqg=";
+    hash = "sha256-P8Ay2T/oSN6lrbG0fY8KhieVIyk/7gqis81Sof+rckc=";
   };
 
   clad_src = fetchgit {
     url = "https://github.com/vgvassilev/clad";
     # Make sure that this is the same tag as in the ROOT build files!
     # https://github.com/root-project/root/blob/master/interpreter/cling/tools/plugins/clad/CMakeLists.txt#L76
-    rev = "refs/tags/v1.6";
-    hash = "sha256-Fv3i84lgoifxtyWKhQjj1c4bR9wSl5SPzUh0ZhZBxFI=";
+    rev = "refs/tags/v1.7";
+    hash = "sha256-iKrZsuUerrlrjXBrxcTsFu/t0Pb0sa4UlfSwd1yhg3g=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
@@ -109,8 +110,8 @@ stdenv.mkDerivation rec {
     tbb
     xrootd
   ]
-  ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
-  ++ lib.optionals (stdenv.isDarwin) [ Cocoa CoreSymbolication OpenGL ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ Cocoa CoreSymbolication OpenGL ]
   ;
 
   patches = [
@@ -124,22 +125,22 @@ stdenv.mkDerivation rec {
       fi
     done
     substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
-      --replace 'set(lcgpackages ' '#set(lcgpackages '
+      --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
 
     # We have to bypass the connection check, because it would disable clad.
     # This should probably be fixed upstream with a flag to disable the
     # connectivity check!
     substituteInPlace CMakeLists.txt \
-      --replace 'if(clad AND NO_CONNECTION)' 'if(FALSE)'
+      --replace-fail 'if(clad AND NO_CONNECTION)' 'if(FALSE)'
     # Make sure that clad is not downloaded when building
     substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
-      --replace 'UPDATE_COMMAND ""' 'SOURCE_DIR ${clad_src} DOWNLOAD_COMMAND "" UPDATE_COMMAND ""'
+      --replace-fail 'UPDATE_COMMAND ""' 'SOURCE_DIR ${clad_src} DOWNLOAD_COMMAND "" UPDATE_COMMAND ""'
     # Make sure that clad is finding the right llvm version
     substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
-      --replace '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=${llvm_16.dev}/lib/cmake/llvm'
+      --replace-fail '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=${llvm_16.dev}/lib/cmake/llvm'
 
     substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
-      --replace 'add_clang_symlink(''${link} clang)' ""
+      --replace-fail 'add_clang_symlink(''${link} clang)' ""
 
     # Don't require textutil on macOS
     : > cmake/modules/RootCPack.cmake
@@ -149,11 +150,11 @@ stdenv.mkDerivation rec {
       -e '1iset(nlohmann_json_DIR "${nlohmann_json}/lib/cmake/nlohmann_json/")'
 
     patchShebangs build/unix/
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Eliminate impure reference to /System/Library/PrivateFrameworks
     substituteInPlace core/macosx/CMakeLists.txt \
-      --replace "-F/System/Library/PrivateFrameworks " ""
-  '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+      --replace-fail "-F/System/Library/PrivateFrameworks " ""
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
 
@@ -172,7 +173,7 @@ stdenv.mkDerivation rec {
     "-Dvdt=OFF"
   ]
   ++ lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
 
     # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
@@ -225,7 +226,11 @@ stdenv.mkDerivation rec {
   '';
 
   # error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
-  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-faligned-allocation";
+  env.CXXFLAGS = lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") "-faligned-allocation";
+
+  # workaround for
+  # https://github.com/root-project/root/issues/14778
+  env.NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "--version-script,${writeText "version.map" "ROOT { global: *; };"}";
 
   # To use the debug information on the fly (without installation)
   # add the outPath of root.debug into NIX_DEBUG_INFO_DIRS (in PATH-like format)

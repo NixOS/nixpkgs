@@ -48,7 +48,7 @@ buildPythonPackage rec {
   patches = [
     patchCMakeAbseil
     patchCMakePybind
-  ] ++ (lib.optional stdenv.isDarwin ./0003-don-t-configure-apple.patch);
+  ] ++ (lib.optional stdenv.hostPlatform.isDarwin ./0003-don-t-configure-apple.patch);
 
   dontUseCmakeConfigure = true;
 

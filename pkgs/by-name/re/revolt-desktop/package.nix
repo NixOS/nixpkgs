@@ -31,11 +31,11 @@
     let
       inherit (prev) pname version;
     in
-    if stdenvNoCC.isLinux then
+    if stdenvNoCC.hostPlatform.isLinux then
       {
         src = fetchurl {
           url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-linux.AppImage";
-          sha256 = "sha256-Wsm6ef2Reenq3/aKGaP2yzlOuLKaxKtRHCLLMxvWUUY=";
+          hash = "sha256-Wsm6ef2Reenq3/aKGaP2yzlOuLKaxKtRHCLLMxvWUUY=";
         };
 
         appimageContents = appimageTools.extractType2 { inherit (final) src pname version; };
@@ -64,7 +64,7 @@
         '';
       }
     else
-      assert stdenvNoCC.isDarwin;
+      assert stdenvNoCC.hostPlatform.isDarwin;
       {
         src = fetchzip {
           url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-${version}-mac.zip";

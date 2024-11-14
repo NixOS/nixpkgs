@@ -1,6 +1,6 @@
 import ../make-test-python.nix ({ lib, pkgs, ... }: let
-  oldNetbox = pkgs.netbox_3_6;
-  newNetbox = pkgs.netbox_3_7;
+  oldNetbox = pkgs.netbox_3_7;
+  newNetbox = pkgs.netbox_4_1;
 in {
   name = "netbox-upgrade";
 
@@ -58,8 +58,10 @@ in {
           return header.split()[1]
 
       def check_api_version(version):
+          # Returns 403 with NetBox >= 4.0,
+          # but we still get the API version in the headers
           headers = machine.succeed(
-            "curl -sSfL http://localhost/api/ --head -H 'Content-Type: application/json'"
+            "curl -sSL http://localhost/api/ --head -H 'Content-Type: application/json'"
           )
           assert api_version(headers) == version
 

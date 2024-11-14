@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "cyberpunk-neon";
-  version = "0-unstable-2024-02-23";
+  version = "0-unstable-2024-09-15";
 
   src = fetchFromGitHub {
     owner = "Roboron3042";
     repo = "Cyberpunk-Neon";
-    rev = "258b3956a677d56df3027f3d08eabf07da936ec3";
-    hash = "sha256-00scMHUgesgEmE9naC/AJ9mCRz325jT5WN0uo+u2s6k=";
+    rev = "18febaab8aa808889fb08c368e37be4ca79e0cdd";
+    hash = "sha256-YR8au1ukggYsPGecZMkLIf901dbRJSrXVMs2CzaIMBo=";
   };
 
   outputs = [

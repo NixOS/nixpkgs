@@ -34,7 +34,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pythonImportCheck = "pyfunctional";
+  pythonImportsCheck = [ "functional" ];
 
   meta = {
     description = "Python library for creating data pipelines with chain functional programming";

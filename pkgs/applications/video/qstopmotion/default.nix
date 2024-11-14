@@ -79,7 +79,7 @@ mkDerivation rec {
 
     license = lib.licenses.gpl2Plus;
     maintainers = [ maintainers.leenaars ];
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
     mainProgram = "qstopmotion";
   };

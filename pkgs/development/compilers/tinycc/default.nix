@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       builtins.match "^[0-9]\\.+[0-9]+\\.[0-9]+" version != null;
   in ''
     ${
-      if stdenv.isDarwin && ! versionIsClean finalAttrs.version
+      if stdenv.hostPlatform.isDarwin && ! versionIsClean finalAttrs.version
       then "echo 'not overwriting VERSION since it would upset ld'"
       else "echo ${finalAttrs.version} > VERSION"
     }
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkTarget = "test";
   # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10142.html
-  preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
     rm tests/tests2/{108,114}*
   '';
 
@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ joachifm AndersonTorres ];
     platforms = lib.platforms.unix;
     # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10199.html
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 })
 # TODO: more multiple outputs

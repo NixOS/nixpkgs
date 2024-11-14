@@ -14,16 +14,16 @@
 
 buildGoModule rec {
   pname = "goss";
-  version = "0.4.8";
+  version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "goss-org";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-xabGzCTzWwT8568xg6sdlE32OYPXlG9Fei0DoyAoXgo=";
+    hash = "sha256-GdkLasokpWegjK4kZzAskp1NGwcuMjrjjau75cEo8kg=";
   };
 
-  vendorHash = "sha256-BPW4nC9gxDbyhA5UOfFAtOIusNvwJ7pQiprZsqTiak0=";
+  vendorHash = "sha256-Rf6Xt54y1BN2o90rDW0WvEm4H5pPfsZ786MXFjsAFaM=";
 
   CGO_ENABLED = 0;
 
@@ -37,7 +37,7 @@ buildGoModule rec {
 
   postInstall = let
     runtimeDependencies = [ bash getent ]
-      ++ lib.optionals stdenv.isLinux [ systemd ];
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
   in ''
     wrapProgram $out/bin/goss \
       --prefix PATH : "${lib.makeBinPath runtimeDependencies}"

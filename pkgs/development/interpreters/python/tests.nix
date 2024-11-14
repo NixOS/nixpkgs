@@ -38,7 +38,7 @@ let
         is_nixenv = "False";
         is_virtualenv = "False";
       };
-    } // lib.optionalAttrs (!python.isPyPy && !stdenv.isDarwin) {
+    } // lib.optionalAttrs (!python.isPyPy && !stdenv.hostPlatform.isDarwin) {
       # Use virtualenv from a Nix env.
       # Fails on darwin with
       #   virtualenv: error: argument dest: the destination . is not write-able at /nix/store
@@ -75,7 +75,7 @@ let
         is_virtualenv = "False";
       };
 
-    } // lib.optionalAttrs (python.pythonAtLeast "3.8") {
+    } // {
       # Venv built using Python Nix environment (python.buildEnv)
       # TODO: Cannot create venv from a  nix env
       # Error: Command '['/nix/store/ddc8nqx73pda86ibvhzdmvdsqmwnbjf7-python3-3.7.6-venv/bin/python3.7', '-Im', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.
@@ -105,22 +105,61 @@ let
 
   # Integration tests involving the package set.
   # All PyPy package builds are broken at the moment
-  integrationTests = lib.optionalAttrs (!python.isPyPy) (
-    lib.optionalAttrs (python.isPy3k && !stdenv.isDarwin) { # darwin has no split-debug
-      cpython-gdb = callPackage ./tests/test_cpython_gdb {
-        interpreter = python;
+  integrationTests = lib.optionalAttrs (!python.isPyPy) ({
+    # Make sure tkinter is importable. See https://github.com/NixOS/nixpkgs/issues/238990
+    tkinter = callPackage ./tests/test_tkinter {
+      interpreter = python;
+    };
+  } // lib.optionalAttrs (python.isPy3k && python.pythonOlder "3.13" && !stdenv.hostPlatform.isDarwin) { # darwin has no split-debug
+    # fails on python3.13
+    cpython-gdb = callPackage ./tests/test_cpython_gdb {
+      interpreter = python;
+    };
+  } // lib.optionalAttrs (python.isPy3k && python.pythonOlder "3.13") {
+    # Before the addition of NIX_PYTHONPREFIX mypy was broken with typed packages
+    # mypy does not yet support python3.13
+    # https://github.com/python/mypy/issues/17264
+    nix-pythonprefix-mypy = callPackage ./tests/test_nix_pythonprefix {
+      interpreter = python;
+    };
+  });
+
+  # Test editable package support
+  editableTests = let
+    testPython = python.override {
+      self = testPython;
+      packageOverrides = pyfinal: pyprev: {
+        # An editable package with a script that loads our mutable location
+        my-editable = pyfinal.mkPythonEditablePackage {
+          pname = "my-editable";
+          version = "0.1.0";
+          root = "$NIX_BUILD_TOP/src"; # Use environment variable expansion at runtime
+          # Inject a script
+          scripts = {
+            my-script = "my_editable.main:main";
+          };
+        };
       };
-    } // lib.optionalAttrs (python.pythonAtLeast "3.7") {
-      # Before the addition of NIX_PYTHONPREFIX mypy was broken with typed packages
-      nix-pythonprefix-mypy = callPackage ./tests/test_nix_pythonprefix {
-        interpreter = python;
-      };
-      # Make sure tkinter is importable. See https://github.com/NixOS/nixpkgs/issues/238990
-      tkinter = callPackage ./tests/test_tkinter {
-        interpreter = python;
-      };
-    }
-  );
+    };
+
+
+  in {
+    editable-script = runCommand "editable-test" {
+      nativeBuildInputs = [ (testPython.withPackages (ps: [ ps.my-editable ])) ];
+    } ''
+      mkdir -p src/my_editable
+
+      cat > src/my_editable/main.py << EOF
+      def main():
+        print("hello mutable")
+      EOF
+
+      test "$(my-script)" == "hello mutable"
+      test "$(python -c 'import sys; print(sys.path[1])')" == "$NIX_BUILD_TOP/src"
+
+      touch $out
+    '';
+  };
 
   # Tests to ensure overriding works as expected.
   overrideTests = let
@@ -185,11 +224,11 @@ let
       }
     ) {};
     pythonWithRequests = requests.pythonModule.withPackages (ps: [ requests ]);
-    in lib.optionalAttrs (python.isPy3k && stdenv.isLinux)
+    in lib.optionalAttrs (python.isPy3k && stdenv.hostPlatform.isLinux)
     {
       condaExamplePackage = runCommand "import-requests" {} ''
         ${pythonWithRequests.interpreter} -c "import requests" > $out
       '';
     };
 
-in lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform ) (environmentTests // integrationTests // overrideTests // condaTests)
+in lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform ) (environmentTests // integrationTests // overrideTests // condaTests // editableTests)

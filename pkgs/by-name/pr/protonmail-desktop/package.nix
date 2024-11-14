@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url =
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         "https://github.com/ProtonMail/inbox-desktop/releases/download/${version}/Proton.Mail-darwin-universal-${version}.zip"
       else
         "https://github.com/ProtonMail/inbox-desktop/releases/download/${version}/proton-mail_${version}_amd64.deb";
@@ -38,14 +38,16 @@ stdenv.mkDerivation rec {
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
 
-  sourceRoot = lib.optionalString stdenv.isDarwin ".";
+  sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin ".";
 
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [
-    makeWrapper
-  ] ++ lib.optional stdenv.isLinux dpkg ++ lib.optional stdenv.isDarwin unzip;
+  nativeBuildInputs =
+    [
+      makeWrapper
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux dpkg ++ lib.optional stdenv.hostPlatform.isDarwin unzip;
 
   installPhase =
     let
@@ -65,12 +67,12 @@ stdenv.mkDerivation rec {
     ''
       runHook preInstall
 
-      ${if stdenv.isDarwin then darwin else linux}
+      ${if stdenv.hostPlatform.isDarwin then darwin else linux}
 
       runHook postInstall
     '';
 
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     makeWrapper ${lib.getExe electron} $out/bin/${mainProgram} \
       --add-flags $out/share/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \

@@ -7,13 +7,13 @@
 }:
 buildGoModule rec {
   pname = "lazygit";
-  version = "0.43.1";
+  version = "0.44.1";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-iFx/ffaijhOqEDRW1QVzhQMvSgnS4lKFOzq1YdlkUzc=";
+    hash = "sha256-BP5PMgRq8LHLuUYDrWaX1PgfT9VEhj3xeLE2aDMAPF0=";
   };
 
   vendorHash = null;
@@ -34,6 +34,7 @@ buildGoModule rec {
     maintainers = with maintainers; [
       Br1ght0ne
       equirosa
+      khaneliman
       paveloom
       starsep
     ];

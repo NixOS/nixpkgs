@@ -52,7 +52,7 @@ let
   dbUser = if repoSettings.username != null then repoSettings.username else "mobilizon";
 
   postgresql = config.services.postgresql.package;
-  postgresqlSocketDir = "/var/run/postgresql";
+  postgresqlSocketDir = "/run/postgresql";
 
   secretEnvFile = "/var/lib/mobilizon/secret-env.sh";
 in

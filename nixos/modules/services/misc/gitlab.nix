@@ -1127,6 +1127,11 @@ in {
 
     environment.systemPackages = [ gitlab-rake gitlab-rails cfg.packages.gitlab-shell ];
 
+    systemd.slices.system-gitlab = {
+      description = "GitLab DevOps Platform Slice";
+      documentation = [ "https://docs.gitlab.com/" ];
+    };
+
     systemd.targets.gitlab = {
       description = "Common target for all GitLab services.";
       wantedBy = [ "multi-user.target" ];
@@ -1197,6 +1202,7 @@ in {
       '';
 
       serviceConfig = {
+        Slice = "system-gitlab.slice";
         User = pgsql.superUser;
         Type = "oneshot";
         RemainAfterExit = true;
@@ -1219,6 +1225,9 @@ in {
 
       unitConfig = {
         ConditionPathExists = "!${cfg.registry.certFile}";
+      };
+      serviceConfig = {
+        Slice = "system-gitlab.slice";
       };
     };
 
@@ -1308,6 +1317,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
+        Slice = "system-gitlab.slice";
         RemainAfterExit = true;
 
         ExecStartPre = let
@@ -1424,6 +1434,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
+        Slice = "system-gitlab.slice";
         RemainAfterExit = true;
 
         ExecStart = pkgs.writeShellScript "gitlab-db-config" ''
@@ -1480,6 +1491,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "always";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
+        Slice = "system-gitlab.slice";
         ExecStart = utils.escapeSystemdExecArgs (
           [
             "${cfg.packages.gitlab}/share/gitlab/bin/sidekiq-cluster"
@@ -1512,6 +1524,7 @@ in {
         Restart = "on-failure";
         WorkingDirectory = gitlabEnv.HOME;
         RuntimeDirectory = "gitaly";
+        Slice = "system-gitlab.slice";
         ExecStart = "${cfg.packages.gitaly}/bin/gitaly ${gitalyToml}";
       };
     };
@@ -1573,6 +1586,7 @@ in {
             WorkingDirectory = gitlabEnv.HOME;
             RuntimeDirectory = "gitlab-pages";
             RuntimeDirectoryMode = "0700";
+            Slice = "system-gitlab.slice";
           };
         };
 
@@ -1596,6 +1610,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = gitlabEnv.HOME;
+        Slice = "system-gitlab.slice";
         ExecStartPre = pkgs.writeShellScript "gitlab-workhorse-pre-start" ''
           set -o errexit -o pipefail -o nounset
           shopt -s dotglob nullglob inherit_errexit
@@ -1637,6 +1652,7 @@ in {
         Group = cfg.group;
         ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/bundle exec mail_room -c ${cfg.statePath}/config/mail_room.yml";
         WorkingDirectory = gitlabEnv.HOME;
+        Slice = "system-gitlab.slice";
       };
     };
 
@@ -1671,6 +1687,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
+        Slice = "system-gitlab.slice";
         ExecStart = concatStringsSep " " [
           "${cfg.packages.gitlab.rubyEnv}/bin/bundle" "exec" "puma"
           "-e production"
@@ -1695,6 +1712,7 @@ in {
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
+        Slice = "system-gitlab.slice";
         ExecStart = "${gitlab-rake}/bin/gitlab-rake gitlab:backup:create";
       };
     };

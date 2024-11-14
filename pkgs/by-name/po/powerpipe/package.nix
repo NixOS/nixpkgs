@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "powerpipe";
-  version = "0.4.2";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "powerpipe";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wZav0MKnXEcIaO4WttCRJ+0sTabJeHHxL0vyb8qi4w8=";
+    hash = "sha256-ou24M5S6GfrQxmcmESzhU52ZQqdb+1s2ExLBljM0RR0=";
   };
 
-  vendorHash = "sha256-2n1fImOLk1KIr2rqvbiw/Ze2LPeNlqaQ7mAdUuS/KQM=";
+  vendorHash = "sha256-CveNSjZCdV8YEis0PNP8F9+ht+Q9vz0VWCEp9lCJsTs=";
   proxyVendor = true;
 
   nativeBuildInputs = [

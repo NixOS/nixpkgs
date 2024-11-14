@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
@@ -45,6 +46,14 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pydantic_extra_types" ];
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.all;
+
+  disabledTests = [
+    # outdated jsonschema fixture
+    "test_json_schema"
+  ];
+
+  # PermissionError accessing '/etc/localtime'
+  disabledTestPaths = lib.optionals stdenv.isDarwin [ "tests/test_pendulum_dt.py" ];
 
   meta = with lib; {
     changelog = "https://github.com/pydantic/pydantic-extra-types/blob/${src.rev}/HISTORY.md";

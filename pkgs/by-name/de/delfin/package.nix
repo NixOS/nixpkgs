@@ -21,20 +21,20 @@
 
 stdenv.mkDerivation rec {
   pname = "delfin";
-  version = "0.4.5";
+  version = "0.4.7";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "avery42";
     repo = "delfin";
     rev = "v${version}";
-    hash = "sha256-iqibdVMf4RBl/EuFvE6tEPDliYmRtIYCW/mO+nNKcWU=";
+    hash = "sha256-F4ipIOqMS42nXHRSRpzIlTh61g2xjpog7Zmxn6D29nE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-2V2jx78S0Gj4/w3oduH/s7Pd6XG/GCs4lwhFCdGVdd8=";
+    hash = "sha256-ciw178jBwz4I6I1x6iI45RJ2ITw0JfukLWNyBmE3FZg=";
   };
 
   nativeBuildInputs = [

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs =
-    lib.optionals stdenv.isDarwin [ libobjc Security ];
+    lib.optionals stdenv.hostPlatform.isDarwin [ libobjc Security ];
 
   buildInputs = [ botan2 sqlite ];
 

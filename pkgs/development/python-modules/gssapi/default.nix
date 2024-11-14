@@ -53,10 +53,10 @@ buildPythonPackage rec {
 
   dependencies = [ decorator ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ GSS ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ GSS ];
 
   # k5test is marked as broken on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     k5test

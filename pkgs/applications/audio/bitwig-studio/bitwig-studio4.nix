@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     libxkbcommon
     pipewire
     pulseaudio
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     xcbutil
     xcbutilwm
     zlib
@@ -116,5 +116,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ bfortz michalrus mrVanDalo ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

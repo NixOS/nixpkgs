@@ -157,7 +157,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.fail("pgrep -a canary1")
     machine.fail("kill -0 $(< /run/canary2.pid)")
     machine.succeed('pgrep -a -f "^@canary3$"')
-    machine.succeed('pgrep -a -f "^kcanary$"')
+    machine.succeed('pgrep -a -f "^\\[kcanary\\]$"')
   '';
 
   meta.maintainers = with pkgs.lib.maintainers; [ aszlig ];

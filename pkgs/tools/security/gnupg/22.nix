@@ -4,7 +4,7 @@
 , adns, bzip2, gnutls, libusb1, openldap, readline, sqlite, zlib
 , enableMinimal ? false
 , withPcsc ? !enableMinimal, pcsclite
-, guiSupport ? stdenv.isDarwin, pinentry
+, guiSupport ? stdenv.hostPlatform.isDarwin, pinentry
 , nixosTests
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     # Fix broken SOURCE_DATE_EPOCH usage - remove on the next upstream update
     sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.am
     sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.in
-    '' + lib.optionalString (stdenv.isLinux && withPcsc) ''
+    '' + lib.optionalString (stdenv.hostPlatform.isLinux && withPcsc) ''
       sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
     '';
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     "GPGRT_CONFIG=${lib.getDev libgpg-error}/bin/gpgrt-config"
   ]
   ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentry.binaryPath or "bin/pinentry"}"
-  ++ lib.optional stdenv.isDarwin "--disable-ccid-driver";
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-ccid-driver";
 
   postInstall = if enableMinimal
   then ''

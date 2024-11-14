@@ -1,23 +1,29 @@
-{ lib
-, fetchFromGitHub
-, nix-update-script
-, php
+{
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  php,
+  phpunit,
+  testers,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "phpunit";
-  version = "11.3.1";
+  version = "11.3.6";
 
   src = fetchFromGitHub {
     owner = "sebastianbergmann";
     repo = "phpunit";
     rev = finalAttrs.version;
-    hash = "sha256-uTH5LlXabhsu86Te/oNnIrvq88MhAqYbVTyKEaPtTuU=";
+    hash = "sha256-bJdatRBrORR7KPcpRVIPYo2picQSfh8Pa0waeOZAH8Q=";
   };
 
-  vendorHash = "sha256-cOy5kipPr73LbxmQAsqqR0GfegQp1ARrbqei2zi5JHc=";
+  vendorHash = "sha256-wRgYEwbvvEGCp7/Rat+WUkvv04JqFHssHXtJjeQZo3o=";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = phpunit; };
+  };
 
   meta = {
     changelog = "https://github.com/sebastianbergmann/phpunit/blob/${finalAttrs.version}/ChangeLog-${lib.versions.majorMinor finalAttrs.version}.md";

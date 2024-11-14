@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ markupsafe ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     babel = [ babel ];
     lingua = [ lingua ];
   };
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     chameleon
     mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests =
     lib.optionals isPyPy [

@@ -126,7 +126,7 @@ buildPerlPackage rec {
     man
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   nativeCheckInputs = [
     curl
     git
@@ -138,7 +138,7 @@ buildPerlPackage rec {
     PlackTestExternalServer
     TestSimple13
     XMLTreePP
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     LinuxInotify2
   ];
   preCheck = ''

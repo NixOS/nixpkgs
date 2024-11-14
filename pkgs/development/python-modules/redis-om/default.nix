@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "redis-om";
-  version = "0.3.2";
+  version = "0.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "redis";
     repo = "redis-om-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FN39Db94Z7z3luCDKi8b4Ku7bFwxEOXtBT5aXbDGVtw=";
+    hash = "sha256-Pp404HaFpYEPie9xknoabotFrqcI2ibDlPTM+MmnMbg=";
   };
 
   build-system = [
@@ -85,7 +85,7 @@ buildPythonPackage rec {
     description = "Object mapping, and more, for Redis and Python";
     mainProgram = "migrate";
     homepage = "https://github.com/redis/redis-om-python";
-    changelog = "https://github.com/redis/redis-om-python/releases/tag/${src.rev}";
+    changelog = "https://github.com/redis/redis-om-python/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

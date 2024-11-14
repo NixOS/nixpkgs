@@ -5,7 +5,7 @@
 let
   pname = "roapi-http";
   version = "0.6.0";
-  target = lib.optionalString stdenv.isDarwin "apple-darwin";
+  target = lib.optionalString stdenv.hostPlatform.isDarwin "apple-darwin";
 in
 # TODO build from source, currently compilation fails on darwin on snmalloc with
 #  ./mem/../ds/../pal/pal_apple.h:277:64: error: use of undeclared identifier 'kCCSuccess'

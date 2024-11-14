@@ -4,24 +4,28 @@
   fetchPypi,
   pythonOlder,
   setuptools-scm,
+  hypothesis,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sqids";
-  version = "0.4.1";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/8P7/vY0kb7ouUCpgGU4g0Xb77BtSeQVt6nkdcogD50=";
+    hash = "sha256-ZHeY59W/6yNuesRwnP1M2AhjCmxQ+AIF3xe0yT5WAUA=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "sqids" ];
 

@@ -15,6 +15,10 @@
     boot.kernelPackages = pkgs.linuxPackages_latest;
     time.timeZone = "Utc";
 
+    # The standard resolvconf service tries to write to /etc and crashes,
+    # which makes nixos-rebuild exit uncleanly when switching into the new generation
+    services.resolved.enable = true;
+
     environment.etc = {
       "mountpoint/.keep".text = "keep";
       "filemount".text = "keep";
@@ -23,9 +27,21 @@
     specialisation.new-generation.configuration = {
       environment.etc."newgen".text = "newgen";
     };
+    specialisation.newer-generation.configuration = {
+      environment.etc."newergen".text = "newergen";
+    };
   };
 
-  testScript = ''
+  testScript = /* python */ ''
+    newergen = machine.succeed("realpath /run/current-system/specialisation/newer-generation/bin/switch-to-configuration").rstrip()
+
+    with subtest("/run/etc-metadata/ is mounted"):
+      print(machine.succeed("mountpoint /run/etc-metadata"))
+
+    with subtest("No temporary files leaked into stage 2"):
+      machine.succeed("[ ! -e /etc-metadata-image ]")
+      machine.succeed("[ ! -e /etc-basedir ]")
+
     with subtest("/etc is mounted as an overlay"):
       machine.succeed("findmnt --kernel --type overlay /etc")
 
@@ -50,6 +66,9 @@
     with subtest("switching to the same generation"):
       machine.succeed("/run/current-system/bin/switch-to-configuration test")
 
+    with subtest("the initrd didn't get rebuilt"):
+      machine.succeed("test /run/current-system/initrd -ef /run/current-system/specialisation/new-generation/initrd")
+
     with subtest("switching to a new generation"):
       machine.fail("stat /etc/newgen")
 
@@ -65,5 +84,13 @@
       print(machine.succeed("ls /etc/mountpoint"))
       print(machine.succeed("stat /etc/mountpoint/extra-file"))
       print(machine.succeed("findmnt /etc/filemount"))
+
+      machine.succeed(f"{newergen} switch")
+
+      tmpMounts = machine.succeed("find /tmp -maxdepth 1 -type d -regex '/tmp/nixos-etc\\..*' | wc -l").rstrip()
+      metaMounts = machine.succeed("find /tmp -maxdepth 1 -type d -regex '/tmp/nixos-etc-metadata\\..*' | wc -l").rstrip()
+
+      assert tmpMounts == "0", f"Found {tmpMounts} remaining tmpmounts"
+      assert metaMounts == "1", f"Found {metaMounts} remaining metamounts"
   '';
 }

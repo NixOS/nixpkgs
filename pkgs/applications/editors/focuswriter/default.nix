@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "focuswriter";
-  version = "1.8.8";
+  version = "1.8.9";
 
   src = fetchFromGitHub {
     owner = "gottcode";
     repo = "focuswriter";
     rev = "v${version}";
-    hash = "sha256-6DUUY7pqhmalxTq/LnJteQkd5Z001+kyQb/cUtmuZI4=";
+    hash = "sha256-FFfNjjVwi0bE6oc8LYhXrCKd+nwRQrjWzK5P4DSIIgs=";
   };
 
   nativeBuildInputs = [ pkg-config cmake qttools wrapQtAppsHook ];

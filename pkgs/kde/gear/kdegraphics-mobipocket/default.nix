@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kdegraphics-mobipocket";
 
-  extraBuildInputs = [qt5compat];
+  extraBuildInputs = [ qt5compat ];
 }

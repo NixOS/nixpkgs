@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     libcpucycles
   ];
 
-  preFixup = lib.optionalString stdenv.isDarwin ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id "$out/lib/lib25519.1.dylib" "$out/lib/lib25519.1.dylib"
     for f in $out/bin/*; do
       install_name_tool -change "lib25519.1.dylib" "$out/lib/lib25519.1.dylib" "$f"
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # failure: crypto_pow does not handle p=q overlap
-  doInstallCheck = !stdenv.isDarwin;
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/lib25519-test

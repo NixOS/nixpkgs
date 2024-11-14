@@ -5,30 +5,29 @@
   pythonAtLeast,
   pythonOlder,
   setuptools,
-  backports-zoneinfo,
   python-dateutil,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "time-machine";
-  version = "2.14.2";
+  version = "2.15.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "adamchainz";
-    repo = pname;
-    rev = version;
-    hash = "sha256-u5RxNv+hsL+0yxtiWeYHtmMQY7bvb8WY7ipouj+IZJ8=";
+    repo = "time-machine";
+    rev = "refs/tags/${version}";
+    hash = "sha256-0WYmkrMMeCkBYxy2qGovdxftzrYW9x/3tdeBcYC47Z0=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     python-dateutil
-  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -45,9 +44,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "time_machine" ];
 
   meta = with lib; {
-    changelog = "https://github.com/adamchainz/time-machine/blob/${src.rev}/CHANGELOG.rst";
     description = "Travel through time in your tests";
     homepage = "https://github.com/adamchainz/time-machine";
+    changelog = "https://github.com/adamchainz/time-machine/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

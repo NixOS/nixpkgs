@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.moosefs;
 
@@ -9,14 +6,14 @@ let
 
   settingsFormat = let
     listSep = " ";
-    allowedTypes = with types; [ bool int float str ];
+    allowedTypes = with lib.types; [ bool int float str ];
     valueToString = val:
-        if isList val then concatStringsSep listSep (map (x: valueToString x) val)
-        else if isBool val then (if val then "1" else "0")
+        if lib.isList val then lib.concatStringsSep listSep (map (x: valueToString x) val)
+        else if lib.isBool val then (if val then "1" else "0")
         else toString val;
 
     in {
-      type = with types; let
+      type = with lib.types; let
         valueType = oneOf ([
           (listOf valueType)
         ] ++ allowedTypes) // {
@@ -72,24 +69,24 @@ in {
 
   options = {
     services.moosefs = {
-      masterHost = mkOption {
-        type = types.str;
+      masterHost = lib.mkOption {
+        type = lib.types.str;
         default = null;
         description = "IP or DNS name of master host.";
       };
 
-      runAsUser = mkOption {
-        type = types.bool;
+      runAsUser = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         example = true;
         description = "Run daemons as user moosefs instead of root.";
       };
 
-      client.enable = mkEnableOption "Moosefs client";
+      client.enable = lib.mkEnableOption "Moosefs client";
 
       master = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           description = ''
             Enable Moosefs master daemon.
 
@@ -99,8 +96,8 @@ in {
           default = false;
         };
 
-        exports = mkOption {
-          type = with types; listOf str;
+        exports = lib.mkOption {
+          type = with lib.types; listOf str;
           default = null;
           description = "Paths to export (see mfsexports.cfg).";
           example = [
@@ -109,18 +106,18 @@ in {
           ];
         };
 
-        openFirewall = mkOption {
-          type = types.bool;
+        openFirewall = lib.mkOption {
+          type = lib.types.bool;
           description = "Whether to automatically open the necessary ports in the firewall.";
           default = false;
         };
 
-        settings = mkOption {
-          type = types.submodule {
+        settings = lib.mkOption {
+          type = lib.types.submodule {
             freeformType = settingsFormat.type;
 
-            options.DATA_PATH = mkOption {
-              type = types.str;
+            options.DATA_PATH = lib.mkOption {
+              type = lib.types.str;
               default = "/var/lib/mfs";
               description = "Data storage directory.";
             };
@@ -131,14 +128,14 @@ in {
       };
 
       metalogger = {
-        enable = mkEnableOption "Moosefs metalogger daemon";
+        enable = lib.mkEnableOption "Moosefs metalogger daemon";
 
-        settings = mkOption {
-          type = types.submodule {
+        settings = lib.mkOption {
+          type = lib.types.submodule {
             freeformType = settingsFormat.type;
 
-            options.DATA_PATH = mkOption {
-              type = types.str;
+            options.DATA_PATH = lib.mkOption {
+              type = lib.types.str;
               default = "/var/lib/mfs";
               description = "Data storage directory";
             };
@@ -149,27 +146,27 @@ in {
       };
 
       chunkserver = {
-        enable = mkEnableOption "Moosefs chunkserver daemon";
+        enable = lib.mkEnableOption "Moosefs chunkserver daemon";
 
-        openFirewall = mkOption {
-          type = types.bool;
+        openFirewall = lib.mkOption {
+          type = lib.types.bool;
           description = "Whether to automatically open the necessary ports in the firewall.";
           default = false;
         };
 
-        hdds = mkOption {
-          type = with types; listOf str;
+        hdds = lib.mkOption {
+          type = with lib.types; listOf str;
           default =  null;
           description = "Mount points to be used by chunkserver for storage (see mfshdd.cfg).";
           example = [ "/mnt/hdd1" ];
         };
 
-        settings = mkOption {
-          type = types.submodule {
+        settings = lib.mkOption {
+          type = lib.types.submodule {
             freeformType = settingsFormat.type;
 
-            options.DATA_PATH = mkOption {
-              type = types.str;
+            options.DATA_PATH = lib.mkOption {
+              type = lib.types.str;
               default = "/var/lib/mfs";
               description = "Directory for lock file.";
             };
@@ -183,33 +180,33 @@ in {
 
   ###### implementation
 
-  config =  mkIf ( cfg.client.enable || cfg.master.enable || cfg.metalogger.enable || cfg.chunkserver.enable ) {
+  config =  lib.mkIf ( cfg.client.enable || cfg.master.enable || cfg.metalogger.enable || cfg.chunkserver.enable ) {
 
-    warnings = [ ( mkIf (!cfg.runAsUser) "Running moosefs services as root is not recommended.") ];
+    warnings = [ ( lib.mkIf (!cfg.runAsUser) "Running moosefs services as root is not recommended.") ];
 
     # Service settings
     services.moosefs = {
-      master.settings = mkIf cfg.master.enable {
+      master.settings = lib.mkIf cfg.master.enable {
         WORKING_USER = mfsUser;
         EXPORTS_FILENAME = toString ( pkgs.writeText "mfsexports.cfg"
-          (concatStringsSep "\n" cfg.master.exports));
+          (lib.concatStringsSep "\n" cfg.master.exports));
       };
 
-      metalogger.settings = mkIf cfg.metalogger.enable {
+      metalogger.settings = lib.mkIf cfg.metalogger.enable {
         WORKING_USER = mfsUser;
         MASTER_HOST = cfg.masterHost;
       };
 
-      chunkserver.settings = mkIf cfg.chunkserver.enable {
+      chunkserver.settings = lib.mkIf cfg.chunkserver.enable {
         WORKING_USER = mfsUser;
         MASTER_HOST = cfg.masterHost;
         HDD_CONF_FILENAME = toString ( pkgs.writeText "mfshdd.cfg"
-          (concatStringsSep "\n" cfg.chunkserver.hdds));
+          (lib.concatStringsSep "\n" cfg.chunkserver.hdds));
       };
     };
 
     # Create system user account for daemons
-    users = mkIf ( cfg.runAsUser && ( cfg.master.enable || cfg.metalogger.enable || cfg.chunkserver.enable ) ) {
+    users = lib.mkIf ( cfg.runAsUser && ( cfg.master.enable || cfg.metalogger.enable || cfg.chunkserver.enable ) ) {
       users.moosefs = {
         isSystemUser = true;
         description = "moosefs daemon user";
@@ -228,22 +225,22 @@ in {
 
     # Ensure storage directories exist
     systemd.tmpfiles.rules =
-         optional cfg.master.enable "d ${cfg.master.settings.DATA_PATH} 0700 ${mfsUser} ${mfsUser}"
-      ++ optional cfg.metalogger.enable "d ${cfg.metalogger.settings.DATA_PATH} 0700 ${mfsUser} ${mfsUser}"
-      ++ optional cfg.chunkserver.enable "d ${cfg.chunkserver.settings.DATA_PATH} 0700 ${mfsUser} ${mfsUser}";
+         lib.optional cfg.master.enable "d ${cfg.master.settings.DATA_PATH} 0700 ${mfsUser} ${mfsUser}"
+      ++ lib.optional cfg.metalogger.enable "d ${cfg.metalogger.settings.DATA_PATH} 0700 ${mfsUser} ${mfsUser}"
+      ++ lib.optional cfg.chunkserver.enable "d ${cfg.chunkserver.settings.DATA_PATH} 0700 ${mfsUser} ${mfsUser}";
 
     # Service definitions
-    systemd.services.mfs-master = mkIf cfg.master.enable
+    systemd.services.mfs-master = lib.mkIf cfg.master.enable
     ( systemdService "master" {
       TimeoutStartSec = 1800;
       TimeoutStopSec = 1800;
       Restart = "no";
     } masterCfg );
 
-    systemd.services.mfs-metalogger = mkIf cfg.metalogger.enable
+    systemd.services.mfs-metalogger = lib.mkIf cfg.metalogger.enable
       ( systemdService "metalogger" { Restart = "on-abnormal"; } metaloggerCfg );
 
-    systemd.services.mfs-chunkserver = mkIf cfg.chunkserver.enable
+    systemd.services.mfs-chunkserver = lib.mkIf cfg.chunkserver.enable
       ( systemdService "chunkserver" { Restart = "on-abnormal"; } chunkserverCfg );
     };
 }

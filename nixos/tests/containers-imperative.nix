@@ -33,6 +33,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         stdenv stdenvNoCC emptyContainer.config.containers.foo.path
         libxslt desktop-file-utils texinfo docbook5 libxml2
         docbook_xsl_ns xorg.lndir documentation-highlighter
+        perlPackages.ConfigIniFiles
       ];
     };
 

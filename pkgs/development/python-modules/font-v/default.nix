@@ -26,7 +26,6 @@ buildPythonPackage rec {
     gitpython
   ];
 
-  doCheck = true;
   nativeCheckInputs = [
     git
     pytestCheckHook

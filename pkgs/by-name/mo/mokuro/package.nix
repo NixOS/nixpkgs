@@ -17,12 +17,6 @@ python3Packages.buildPythonApplication rec {
     fetchSubmodules = true;
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-        --replace-fail 'opencv-python' 'opencv'
-  '';
-
-
   pythonRelaxDeps = [ "torchvision" ];
 
   build-system = with python3Packages; [ setuptools-scm ];
@@ -33,7 +27,7 @@ python3Packages.buildPythonApplication rec {
     manga-ocr
     natsort
     numpy
-    opencv4
+    opencv-python
     pillow
     pyclipper
     requests

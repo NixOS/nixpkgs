@@ -8,7 +8,7 @@
 , flex
 , git
 , python3
-, swig4
+, swig
 , boost179
 , cbc       # for clp
 , cimg
@@ -26,7 +26,7 @@
 , readline
 , spdlog
 , tcl
-, tcllib
+, tclPackages
 , xorg
 , yosys
 , zlib
@@ -51,7 +51,7 @@ mkDerivation rec {
     flex
     git
     pkg-config
-    swig4
+    swig
   ];
 
   buildInputs = [
@@ -72,7 +72,7 @@ mkDerivation rec {
     readline
     spdlog
     tcl
-    tcllib
+    tclPackages.tcllib
     yosys
     xorg.libX11
     zlib
@@ -128,5 +128,6 @@ mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ trepetti ];
     platforms = platforms.linux;
+    broken = true; # last successful build 2024-06-30
   };
 }

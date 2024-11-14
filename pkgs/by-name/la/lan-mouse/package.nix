@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     libX11
     libXtst
   ]
-  ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreGraphics;
+  ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.CoreGraphics;
 
   cargoHash = "sha256-pDdpmZPaClU8KjFHO7v3FDQp9D83GQN+SnFg53q2fjs=";
 

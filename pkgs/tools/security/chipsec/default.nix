@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
   version = "1.10.6";
 
-  disabled = !stdenv.isLinux;
+  disabled = !stdenv.hostPlatform.isLinux;
 
   src = fetchFromGitHub {
     owner = "chipsec";

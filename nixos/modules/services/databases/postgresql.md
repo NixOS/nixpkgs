@@ -187,7 +187,7 @@ $ nix-instantiate --eval -A postgresql_13.psqlSchema
 ```
 For an upgrade, a script like this can be used to simplify the process:
 ```nix
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 {
   environment.systemPackages = [
     (let
@@ -196,6 +196,7 @@ For an upgrade, a script like this can be used to simplify the process:
       newPostgres = pkgs.postgresql_13.withPackages (pp: [
         # pp.plv8
       ]);
+      cfg = config.services.postgresql;
     in pkgs.writeScriptBin "upgrade-pg-cluster" ''
       set -eux
       # XXX it's perhaps advisable to stop all services that depend on postgresql
@@ -205,12 +206,12 @@ For an upgrade, a script like this can be used to simplify the process:
 
       export NEWBIN="${newPostgres}/bin"
 
-      export OLDDATA="${config.services.postgresql.dataDir}"
-      export OLDBIN="${config.services.postgresql.package}/bin"
+      export OLDDATA="${cfg.dataDir}"
+      export OLDBIN="${cfg.package}/bin"
 
       install -d -m 0700 -o postgres -g postgres "$NEWDATA"
       cd "$NEWDATA"
-      sudo -u postgres $NEWBIN/initdb -D "$NEWDATA"
+      sudo -u postgres $NEWBIN/initdb -D "$NEWDATA" ${lib.escapeShellArgs cfg.initdbArgs}
 
       sudo -u postgres $NEWBIN/pg_upgrade \
         --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
@@ -362,3 +363,25 @@ postgresql.withJIT.pname
 ```
 
 evaluates to `"foobar"`.
+
+## Service hardening {#module-services-postgres-hardening}
+
+The service created by the [`postgresql`-module](#opt-services.postgresql.enable) uses
+several common hardening options from `systemd`, most notably:
+
+* Memory pages must not be both writable and executable (this only applies to non-JIT setups).
+* A system call filter (see {manpage}`systemd.exec(5)` for details on `@system-service`).
+* A stricter default UMask (`0027`).
+* Only sockets of type `AF_INET`/`AF_INET6`/`AF_NETLINK`/`AF_UNIX` allowed.
+* Restricted filesystem access (private `/tmp`, most of the file-system hierachy is mounted read-only, only process directories in `/proc` that are owned by the same user).
+
+The NixOS module also contains necessary adjustments for extensions from `nixpkgs`
+if these are enabled. If an extension or a postgresql feature from `nixpkgs` breaks
+with hardening, it's considered a bug.
+
+When using extensions that are not packaged in `nixpkgs`, hardening adjustments may
+become necessary.
+
+## Notable differences to upstream {#module-services-postgres-upstream-deviation}
+
+- To avoid circular dependencies between default and -dev outputs, the output of the `pg_config` system view has been removed.

@@ -19,10 +19,10 @@ in stdenv.mkDerivation {
   outputs = [ "out" ];
 
   nativeBuildInputs = [ cmake ninja swift ]
-    ++ lib.optional stdenv.isDarwin DarwinTools; # sw_vers
+    ++ lib.optional stdenv.hostPlatform.isDarwin DarwinTools; # sw_vers
   buildInputs = [ Foundation ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # On Darwin only, Swift uses arm64 as cpu arch.
     substituteInPlace cmake/modules/SwiftSupport.cmake \
       --replace '"aarch64" PARENT_SCOPE' '"arm64" PARENT_SCOPE'
@@ -34,9 +34,9 @@ in stdenv.mkDerivation {
     export MACOSX_DEPLOYMENT_TARGET=10.12
   '';
 
-  cmakeFlags = lib.optional stdenv.isDarwin "-DUSE_FOUNDATION_FRAMEWORK=ON";
+  cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin "-DUSE_FOUNDATION_FRAMEWORK=ON";
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Darwin normally uses the Xcode version of XCTest. Installing
     # swift-corelibs-xctest is probably not officially supported, but we have
     # no alternative. Fix up the installation here.

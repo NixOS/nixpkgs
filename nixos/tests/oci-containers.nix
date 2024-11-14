@@ -12,7 +12,7 @@ let
     name = "oci-containers-${backend}";
 
     meta.maintainers = lib.teams.serokell.members
-                       ++ (with lib.maintainers; [ benley mkaito ]);
+                       ++ (with lib.maintainers; [ benley ]);
 
     nodes = {
       ${backend} = { pkgs, ... }: {
@@ -20,7 +20,7 @@ let
           inherit backend;
           containers.nginx = {
             image = "nginx-container";
-            imageFile = pkgs.dockerTools.examples.nginx;
+            imageStream = pkgs.dockerTools.examples.nginxStream;
             ports = ["8181:80"];
           };
         };

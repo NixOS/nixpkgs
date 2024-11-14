@@ -46,15 +46,15 @@ stdenv.mkDerivation rec {
   buildInputs = [
     blas
     boost
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     ocl-icd
     opencl-headers
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Accelerate
     CoreGraphics
     CoreVideo
   ];
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin [
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     OpenCL
   ];
 

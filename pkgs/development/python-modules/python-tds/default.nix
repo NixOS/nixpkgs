@@ -26,12 +26,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version.get_git_version()" '"${version}"'
+      --replace-fail "version.get_git_version()" '"${version}"'
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ six ];
+  dependencies = [ six ];
 
   nativeCheckInputs = [
     pytestCheckHook

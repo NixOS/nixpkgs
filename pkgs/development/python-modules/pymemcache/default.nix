@@ -40,7 +40,7 @@ buildPythonPackage rec {
     sed -i "/--cov/d" setup.cfg
   '';
 
-  disabledTests = lib.optionals stdenv.is32bit [
+  disabledTests = lib.optionals stdenv.hostPlatform.is32bit [
     # test_compressed_complex is broken on 32-bit platforms
     # this can be removed on the next version bump
     # see also https://github.com/pinterest/pymemcache/pull/480

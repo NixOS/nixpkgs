@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.go-neb;
 
@@ -9,16 +6,16 @@ let
   configFile = settingsFormat.generate "config.yaml" cfg.config;
 in {
   options.services.go-neb = {
-    enable = mkEnableOption "an extensible matrix bot written in Go";
+    enable = lib.mkEnableOption "an extensible matrix bot written in Go";
 
-    bindAddress = mkOption {
-      type = types.str;
+    bindAddress = lib.mkOption {
+      type = lib.types.str;
       description = "Port (and optionally address) to listen on.";
       default = ":4050";
     };
 
-    secretFile = mkOption {
-      type = types.nullOr types.path;
+    secretFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/run/keys/go-neb.env";
       description = ''
@@ -30,12 +27,12 @@ in {
       '';
     };
 
-    baseUrl = mkOption {
-      type = types.str;
+    baseUrl = lib.mkOption {
+      type = lib.types.str;
       description = "Public-facing endpoint that can receive webhooks.";
     };
 
-    config = mkOption {
+    config = lib.mkOption {
       inherit (settingsFormat) type;
       description = ''
         Your {file}`config.yaml` as a Nix attribute set.
@@ -45,7 +42,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.go-neb = let
       finalConfigFile = if cfg.secretFile == null then configFile else "/var/run/go-neb/config.yaml";
     in {
@@ -74,5 +71,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ hexa maralorn ];
+  meta.maintainers = with lib.maintainers; [ hexa maralorn ];
 }

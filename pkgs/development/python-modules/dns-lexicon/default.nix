@@ -46,7 +46,7 @@ buildPythonPackage rec {
     tldextract
   ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     route53 = [ boto3 ];
     localzone = [ localzone ];
     softlayer = [ softlayer ];
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-vcr
-  ] ++ passthru.optional-dependencies.full;
+  ] ++ optional-dependencies.full;
 
   pytestFlagsArray = [ "tests/" ];
 

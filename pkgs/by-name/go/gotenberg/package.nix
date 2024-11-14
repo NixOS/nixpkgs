@@ -88,6 +88,7 @@ buildGoModule rec {
 
   meta = {
     description = "Converts numerous document formats into PDF files";
+    mainProgram = "gotenberg";
     homepage = "https://gotenberg.dev";
     changelog = "https://github.com/gotenberg/gotenberg/releases/tag/v${version}";
     license = lib.licenses.mit;

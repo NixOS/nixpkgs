@@ -12,27 +12,25 @@
   datashaper,
   devtools,
   environs,
-  fastparquet,
   graspologic,
   json-repair,
   lancedb,
+  matplotlib,
   networkx,
   nltk,
-  numba,
   numpy,
   openai,
+  pandas,
   pyaml-env,
+  pyarrow,
   pydantic,
   python-dotenv,
   pyyaml,
   rich,
-  scipy,
-  swifter,
   tenacity,
-  textual,
   tiktoken,
   typing-extensions,
-  uvloop,
+  umap-learn,
   nbformat,
   pytest-asyncio,
   pytestCheckHook,
@@ -40,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "graphrag";
-  version = "0.3.0";
+  version = "0.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "graphrag";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QPUxDMKO2qxF5qrk+vJCrJxyGwVWv7655YAVCis+XwM=";
+    hash = "sha256-H5ITK4m3l+rlIEYXoMIpsE9faCu6rRZuB5zaZQeArOU=";
   };
 
   build-system = [
@@ -55,16 +53,7 @@ buildPythonPackage rec {
     poetry-dynamic-versioning
   ];
 
-  pythonRelaxDeps = [
-    "aiofiles"
-    "azure-identity"
-    "json-repair"
-    "lancedb"
-    "scipy"
-    "tenacity"
-    "textual"
-    "tiktoken"
-  ];
+  pythonRelaxDeps = true;
 
   dependencies = [
     aiofiles
@@ -75,27 +64,25 @@ buildPythonPackage rec {
     datashaper
     devtools
     environs
-    fastparquet
     graspologic
     json-repair
     lancedb
+    matplotlib
     networkx
     nltk
-    numba
     numpy
     openai
+    pandas
     pyaml-env
+    pyarrow
     pydantic
     python-dotenv
     pyyaml
     rich
-    scipy
-    swifter
     tenacity
-    textual
     tiktoken
     typing-extensions
-    uvloop
+    umap-learn
   ];
 
   env.NUMBA_CACHE_DIR = "$TMPDIR";

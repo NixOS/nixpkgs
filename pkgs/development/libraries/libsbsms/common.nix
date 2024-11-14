@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     # Fix buidling on platforms other than x86
     (substituteAll {
       src = ./configure.patch;
-      msse = lib.optionalString stdenv.isx86_64 "-msse";
+      msse = lib.optionalString stdenv.hostPlatform.isx86_64 "-msse";
     })
   ];
 

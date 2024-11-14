@@ -47,7 +47,7 @@ buildPythonPackage rec {
     typepy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       dominate
       elasticsearch
@@ -84,7 +84,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pathvalidate" ];
 

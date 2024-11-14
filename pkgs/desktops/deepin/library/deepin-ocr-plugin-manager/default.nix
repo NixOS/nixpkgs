@@ -1,14 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, cmake
-, qttools
-, wrapQtAppsHook
-, libisoburn
-, ncnn
-, opencv
-, vulkan-headers
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  libsForQt5,
+  ncnn,
+  opencv,
+  vulkan-headers,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,9 +31,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    qttools
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [

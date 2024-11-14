@@ -10,13 +10,13 @@
 buildNimPackage (
   final: prev: {
     pname = "nimble";
-    version = "0-unstable-2024-05-14";
+    version = "0.16.2";
 
     src = fetchFromGitHub {
       owner = "nim-lang";
       repo = "nimble";
-      rev = "f8bd7b5fa6ea7a583b411b5959b06e6b5eb23667";
-      hash = "sha256-aRDaucD6wOUPtXLIrahvK0vBfurdgFrk+swzqzMA09w=";
+      rev = "v${final.version}";
+      hash = "sha256-MVHf19UbOWk8Zba2scj06PxdYYOJA6OXrVyDQ9Ku6Us=";
     };
 
     lockFile = ./lock.json;

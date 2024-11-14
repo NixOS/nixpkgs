@@ -83,6 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       publicDomain
     ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

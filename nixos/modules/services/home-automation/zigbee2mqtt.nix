@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.zigbee2mqtt;
 
@@ -10,28 +7,28 @@ let
 
 in
 {
-  meta.maintainers = with maintainers; [ sweber hexa ];
+  meta.maintainers = with lib.maintainers; [ sweber hexa ];
 
   imports = [
     # Remove warning before the 21.11 release
-    (mkRenamedOptionModule [ "services" "zigbee2mqtt" "config" ] [ "services" "zigbee2mqtt" "settings" ])
+    (lib.mkRenamedOptionModule [ "services" "zigbee2mqtt" "config" ] [ "services" "zigbee2mqtt" "settings" ])
   ];
 
   options.services.zigbee2mqtt = {
-    enable = mkEnableOption "zigbee2mqtt service";
+    enable = lib.mkEnableOption "zigbee2mqtt service";
 
-    package = mkPackageOption pkgs "zigbee2mqtt" { };
+    package = lib.mkPackageOption pkgs "zigbee2mqtt" { };
 
-    dataDir = mkOption {
+    dataDir = lib.mkOption {
       description = "Zigbee2mqtt data directory";
       default = "/var/lib/zigbee2mqtt";
-      type = types.path;
+      type = lib.types.path;
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = format.type;
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           homeassistant = config.services.home-assistant.enable;
           permit_join = true;
@@ -48,21 +45,21 @@ in
     };
   };
 
-  config = mkIf (cfg.enable) {
+  config = lib.mkIf (cfg.enable) {
 
     # preset config values
     services.zigbee2mqtt.settings = {
-      homeassistant = mkDefault config.services.home-assistant.enable;
-      permit_join = mkDefault false;
+      homeassistant = lib.mkDefault config.services.home-assistant.enable;
+      permit_join = lib.mkDefault false;
       mqtt = {
-        base_topic = mkDefault "zigbee2mqtt";
-        server = mkDefault "mqtt://localhost:1883";
+        base_topic = lib.mkDefault "zigbee2mqtt";
+        server = lib.mkDefault "mqtt://localhost:1883";
       };
-      serial.port = mkDefault "/dev/ttyACM0";
+      serial.port = lib.mkDefault "/dev/ttyACM0";
       # reference device/group configuration, that is kept in a separate file
       # to prevent it being overwritten in the units ExecStartPre script
-      devices = mkDefault "devices.yaml";
-      groups = mkDefault "groups.yaml";
+      devices = lib.mkDefault "devices.yaml";
+      groups = lib.mkDefault "groups.yaml";
     };
 
     systemd.services.zigbee2mqtt = {

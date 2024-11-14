@@ -75,13 +75,16 @@ let
 
   mkPhpValue = v: let
     isHasAttr = s: isAttrs v && hasAttr s v;
+    # "you're escaped" -> "'you\'re escaped'"
+    # https://www.php.net/manual/en/language.types.string.php#language.types.string.syntax.single
+    toPhpString = s: "'${escape [ "'" "\\" ] s}'";
   in
-    if isString v then escapeShellArg v
+    if isString v then toPhpString v
     # NOTE: If any value contains a , (comma) this will not get escaped
-    else if isList v && any lib.strings.isCoercibleToString v then escapeShellArg (concatMapStringsSep "," toString v)
+    else if isList v && strings.isConvertibleWithToString v then toPhpString (concatMapStringsSep "," toString v)
     else if isInt v then toString v
     else if isBool v then boolToString v
-    else if isHasAttr "_file" then "trim(file_get_contents(${lib.escapeShellArg v._file}))"
+    else if isHasAttr "_file" then "trim(file_get_contents(${toPhpString (toString v._file)}))"
     else if isHasAttr "_raw" then v._raw
     else abort "The Wordpress config value ${lib.generators.toPretty {} v} can not be encoded."
   ;
@@ -151,8 +154,8 @@ let
             (l: warn "setting this option with a list is deprecated"
               listToAttrs (map (p: nameValuePair (p.name or (throw "${p} does not have a name")) p) l))
             (attrsOf path);
-          default = { inherit (pkgs.wordpressPackages.themes) twentytwentythree; };
-          defaultText = literalExpression "{ inherit (pkgs.wordpressPackages.themes) twentytwentythree; }";
+          default = { inherit (pkgs.wordpressPackages.themes) twentytwentyfour; };
+          defaultText = literalExpression "{ inherit (pkgs.wordpressPackages.themes) twentytwentyfour; }";
           description = ''
             Path(s) to respective theme(s) which are copied from the 'theme' directory.
 
@@ -426,6 +429,7 @@ in
             # standard wordpress .htaccess contents
             <IfModule mod_rewrite.c>
               RewriteEngine On
+              RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
               RewriteBase /
               RewriteRule ^index\.php$ - [L]
               RewriteCond %{REQUEST_FILENAME} !-f

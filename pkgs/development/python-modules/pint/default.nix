@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "pint";
-  version = "0.24.1";
+  version = "0.24.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "hgrecco";
     repo = "pint";
     rev = "refs/tags/${version}";
-    hash = "sha256-PQAQvjMi7pFgNhUbw20vc306aTyEbCQNHGef/pxxpXo=";
+    hash = "sha256-PJEgwshTBIqmKMEro+IT+7v4dab3qD7I45OuTOJloR0=";
   };
 
   build-system = [

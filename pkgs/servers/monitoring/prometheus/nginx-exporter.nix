@@ -13,7 +13,14 @@ buildGoModule rec {
 
   vendorHash = "sha256-qmyqAbwQYgUFFQwCLakQGta2XMGCbCOvCB93S8/TWIs=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = let t = "github.com/prometheus/common/version"; in [
+    "-s"
+    "-w"
+    "-X ${t}.Version=${version}"
+    "-X ${t}.Branch=unknown"
+    "-X ${t}.BuildUser=nix@nixpkgs"
+    "-X ${t}.BuildDate=unknown"
+  ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) nginx; };
 

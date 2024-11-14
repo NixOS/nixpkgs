@@ -16,15 +16,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mixxc";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchCrate {
     pname = "mixxc";
     inherit version;
-    hash = "sha256-Y/9l8t6Vz7yq9T1AyoHnWmIcju1rfcV0S74hiK1fEjo=";
+    hash = "sha256-d/bMDqDR+sBtsI3ToCcByDxqd+aE6rDPRvGBcodU6iA=";
   };
 
-  cargoHash = "sha256-l9inqqUiLObrqd/8pNobwBbLaiPJD39YK/38CWfDh+Q=";
+  cargoHash = "sha256-RoVqQaSlIvAb8mWJNOyALjCHejFEfxjJADQfHZ5EiOs=";
 
   cargoBuildFlags = [ "--locked" ];
 

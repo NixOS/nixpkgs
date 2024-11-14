@@ -17,24 +17,19 @@
 
 buildPythonPackage rec {
   pname = "towncrier";
-  version = "24.7.1";
+  version = "24.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V6BX+u2ryt8aYvb5utcmrlZsHzGkETON24MWmT9YOz0=";
+    hash = "sha256-ATQj7n7tECsvOTwofSLZX2bxo+oQpLqoLSmAAafxivM=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "hatchling ~= 1.17.1" "hatchling"
-  '';
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [ hatchling ];
-
-  propagatedBuildInputs =
+  dependencies =
     [
       click
       incremental
@@ -58,10 +53,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Utility to produce useful, summarised news files";
-    mainProgram = "towncrier";
     homepage = "https://github.com/twisted/towncrier/";
     changelog = "https://github.com/twisted/towncrier/blob/${version}/NEWS.rst";
     license = licenses.mit;
     maintainers = [ ];
+    mainProgram = "towncrier";
   };
 }

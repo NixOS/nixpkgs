@@ -47,12 +47,12 @@ in {
       services.guix = {
         enable = true;
 
-        extraArgs = [
-          # Force to only get all substitutes from the local server. We don't
-          # have anything in the Guix store directory and we cannot get
-          # anything from the official substitute servers anyways.
-          "--substitute-urls='http://server.local:${toString publishPort}'"
+        # Force to only get all substitutes from the local server. We don't
+        # have anything in the Guix store directory and we cannot get
+        # anything from the official substitute servers anyways.
+        substituters.urls = [ "http://server.local:${toString publishPort}" ];
 
+        extraArgs = [
           # Enable autodiscovery of the substitute servers in the local
           # network. This machine shouldn't need to import the signing key from
           # the substitute server since it is automatically done anyways.

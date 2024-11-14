@@ -1,26 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, linkFarm
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, wrapGAppsHook3
-, qtbase
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, deepin-pw-check
-, gsettings-qt
-, lightdm_qt
-, qtx11extras
-, linux-pam
-, xorg
-, gtest
-, xkeyboard_config
-, dbus
-, dde-session-shell
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  linkFarm,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  wrapGAppsHook3,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  deepin-pw-check,
+  gsettings-qt,
+  lightdm_qt,
+  linux-pam,
+  xorg,
+  gtest,
+  xkeyboard_config,
+  dbus,
+  dde-session-shell,
 }:
 
 stdenv.mkDerivation rec {
@@ -63,20 +61,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
     wrapGAppsHook3
   ];
   dontWrapGApps = true;
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     dtkwidget
+    qt5integration
     qt5platform-plugins
     deepin-pw-check
     gsettings-qt
     lightdm_qt
-    qtx11extras
+    libsForQt5.qtx11extras
     linux-pam
     xorg.libXcursor
     xorg.libXtst
@@ -85,21 +84,21 @@ stdenv.mkDerivation rec {
     gtest
   ];
 
-  outputs = [ "out" "dev" ];
-
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
+  outputs = [
+    "out"
+    "dev"
   ];
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru.xgreeters = linkFarm "deepin-greeter-xgreeters" [{
-    path = "${dde-session-shell}/share/xgreeters/lightdm-deepin-greeter.desktop";
-    name = "lightdm-deepin-greeter.desktop";
-  }];
+  passthru.xgreeters = linkFarm "deepin-greeter-xgreeters" [
+    {
+      path = "${dde-session-shell}/share/xgreeters/lightdm-deepin-greeter.desktop";
+      name = "lightdm-deepin-greeter.desktop";
+    }
+  ];
 
   meta = with lib; {
     description = "Deepin desktop-environment - session-shell module";

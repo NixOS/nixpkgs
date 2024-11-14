@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = {
-    changelog = "https://github.com/labelle-org/labelle/releases/tag/${src.rev}";
+    changelog = "https://github.com/labelle-org/labelle/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     description = "Print labels with LabelManager PnP from Dymo";
     homepage = "https://github.com/labelle-org/labelle";
     license = lib.licenses.asl20;

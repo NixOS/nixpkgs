@@ -50,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
       openssl
       libsamplerate
     ]
-    ++ lib.optional stdenv.isLinux alsa-lib
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       AppKit
       CoreFoundation
       Security
@@ -59,7 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   env =
     lib.optionalAttrs stdenv.cc.isClang { CXXFLAGS = "-std=c++11"; }
-    // lib.optionalAttrs stdenv.isDarwin { NIX_CFLAGS_LINK = "-headerpad_max_install_names"; };
+    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      NIX_CFLAGS_LINK = "-headerpad_max_install_names";
+    };
 
   preConfigure = ''
     export LD=$CC
@@ -86,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
           python -m installer --prefix $py dist/*.whl
       )
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # On MacOS relative paths are used to refer to libraries. All libraries use
       # a relative path like ../lib/*.dylib or ../../lib/*.dylib. We need to
       # rewrite these to use absolute ones.

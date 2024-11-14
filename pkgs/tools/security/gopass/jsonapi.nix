@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "gopasspw";
     repo = "gopass-jsonapi";
     rev = "v${version}";
-    hash = "sha256-+CE8cKBEBKK3OeIDq5SUlk23Y5C40fewu6tGMF0mT1c=";
+    hash = "sha256-DbfmjgIUqgWVYyPqkcaeE5JKzqElNbrGnx62Fd8v7Hg=";
   };
 
   vendorHash = "sha256-Aahu0afi6bPnvz/NSZznbp0y9vMJWDj1Bq7tWGRmm7g=";

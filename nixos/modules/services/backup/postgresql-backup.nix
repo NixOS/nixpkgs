@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.postgresqlBackup;
@@ -13,9 +10,9 @@ let
         "gzip" = ".gz";
         "zstd" = ".zstd";
       };
-      compressSuffix = getAttr cfg.compression compressSuffixes;
+      compressSuffix = lib.getAttr cfg.compression compressSuffixes;
 
-      compressCmd = getAttr cfg.compression {
+      compressCmd = lib.getAttr cfg.compression {
         "none" = "cat";
         "gzip" = "${pkgs.gzip}/bin/gzip -c -${toString cfg.compressionLevel} --rsyncable";
         "zstd" = "${pkgs.zstd}/bin/zstd -c -${toString cfg.compressionLevel} --rsyncable";
@@ -24,7 +21,7 @@ let
       mkSqlPath = prefix: suffix: "${cfg.location}/${db}${prefix}.sql${suffix}";
       curFile = mkSqlPath "" compressSuffix;
       prevFile = mkSqlPath ".prev" compressSuffix;
-      prevFiles = map (mkSqlPath ".prev") (attrValues compressSuffixes);
+      prevFiles = map (mkSqlPath ".prev") (lib.attrValues compressSuffixes);
       inProgressFile = mkSqlPath ".in-progress" compressSuffix;
     in {
       enable = true;
@@ -63,7 +60,7 @@ let
 in {
 
   imports = [
-    (mkRemovedOptionModule [ "services" "postgresqlBackup" "period" ] ''
+    (lib.mkRemovedOptionModule [ "services" "postgresqlBackup" "period" ] ''
        A systemd timer is now used instead of cron.
        The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
     '')
@@ -71,11 +68,11 @@ in {
 
   options = {
     services.postgresqlBackup = {
-      enable = mkEnableOption "PostgreSQL dumps";
+      enable = lib.mkEnableOption "PostgreSQL dumps";
 
-      startAt = mkOption {
+      startAt = lib.mkOption {
         default = "*-*-* 01:15:00";
-        type = with types; either (listOf str) str;
+        type = with lib.types; either (listOf str) str;
         description = ''
           This option defines (see `systemd.time` for format) when the
           databases should be dumped.
@@ -83,9 +80,9 @@ in {
         '';
       };
 
-      backupAll = mkOption {
+      backupAll = lib.mkOption {
         default = cfg.databases == [];
-        defaultText = literalExpression "services.postgresqlBackup.databases == []";
+        defaultText = lib.literalExpression "services.postgresqlBackup.databases == []";
         type = lib.types.bool;
         description = ''
           Backup all databases using pg_dumpall.
@@ -96,24 +93,24 @@ in {
         '';
       };
 
-      databases = mkOption {
+      databases = lib.mkOption {
         default = [];
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         description = ''
           List of database names to dump.
         '';
       };
 
-      location = mkOption {
+      location = lib.mkOption {
         default = "/var/backup/postgresql";
-        type = types.path;
+        type = lib.types.path;
         description = ''
           Path of directory where the PostgreSQL database dumps will be placed.
         '';
       };
 
-      pgdumpOptions = mkOption {
-        type = types.separatedString " ";
+      pgdumpOptions = lib.mkOption {
+        type = lib.types.separatedString " ";
         default = "-C";
         description = ''
           Command line options for pg_dump. This options is not used
@@ -123,16 +120,16 @@ in {
         '';
       };
 
-      compression = mkOption {
-        type = types.enum ["none" "gzip" "zstd"];
+      compression = lib.mkOption {
+        type = lib.types.enum ["none" "gzip" "zstd"];
         default = "gzip";
         description = ''
           The type of compression to use on the generated database dump.
         '';
       };
 
-      compressionLevel = mkOption {
-        type = types.ints.between 1 19;
+      compressionLevel = lib.mkOption {
+        type = lib.types.ints.between 1 19;
         default = 6;
         description = ''
           The compression level used when compression is enabled.
@@ -143,7 +140,7 @@ in {
 
   };
 
-  config = mkMerge [
+  config = lib.mkMerge [
     {
       assertions = [
         {
@@ -158,17 +155,17 @@ in {
         }
       ];
     }
-    (mkIf cfg.enable {
+    (lib.mkIf cfg.enable {
       systemd.tmpfiles.rules = [
         "d '${cfg.location}' 0700 postgres - - -"
       ];
     })
-    (mkIf (cfg.enable && cfg.backupAll) {
+    (lib.mkIf (cfg.enable && cfg.backupAll) {
       systemd.services.postgresqlBackup =
         postgresqlBackupService "all" "pg_dumpall";
     })
-    (mkIf (cfg.enable && !cfg.backupAll) {
-      systemd.services = listToAttrs (map (db:
+    (lib.mkIf (cfg.enable && !cfg.backupAll) {
+      systemd.services = lib.listToAttrs (map (db:
         let
           cmd = "pg_dump ${cfg.pgdumpOptions} ${db}";
         in {

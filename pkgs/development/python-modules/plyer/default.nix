@@ -54,7 +54,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "plyer" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Plyer is a platform-independent api to use features commonly found on various platforms";
     homepage = "https://github.com/kivy/plyer";
     license = licenses.mit;

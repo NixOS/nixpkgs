@@ -8,9 +8,8 @@
   zlib,
   stdenv,
   darwin,
+  versionCheckHook,
   nix-update-script,
-  testers,
-  tinymist,
   vscode-extensions,
 }:
 
@@ -18,19 +17,19 @@ rustPlatform.buildRustPackage rec {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.11.19";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ejumGfG98l3N3mA7UX86GYa46hIwxjEB2/jvAW9rv0I=";
+    hash = "sha256-z0JfHEG01q83iHAQA/Ke/DPhKQYwkWv9HRpeUdXmTxs=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "typst-0.11.1" = "sha256-dQf4qYaOni/jwIjRVXXCZLTn6ox3v6EyhCbaONqNtcw=";
+      "typst-0.12.0" = "sha256-E2wSVHqY3SymCwKgbLsASJYaWfrbF8acH15B2STEBF8=";
       "typst-syntax-0.7.0" = "sha256-yrtOmlFAKOqAmhCP7n0HQCOQpU3DWyms5foCdUb9QTg=";
       "typstfmt_lib-0.2.7" = "sha256-LBYsTCjZ+U+lgd7Z3H1sBcWwseoHsuepPd66bWgfvhI=";
     };
@@ -44,7 +43,7 @@ rustPlatform.buildRustPackage rec {
       openssl
       zlib
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk_11_0.frameworks.CoreFoundation
       darwin.apple_sdk_11_0.frameworks.CoreServices
       darwin.apple_sdk_11_0.frameworks.Security
@@ -53,19 +52,23 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     "--skip=e2e"
-    # Fails because of missing `creation_timestamp` field
-    # https://github.com/NixOS/nixpkgs/pull/328756#issuecomment-2241322796
-    "--skip=test_config_update"
+
+    # Require internet access
+    "--skip=docs::package::tests::cetz"
+    "--skip=docs::package::tests::tidy"
+    "--skip=docs::package::tests::touying"
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "-V" ];
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
     tests = {
       vscode-extension = vscode-extensions.myriad-dreamin.tinymist;
-      version = testers.testVersion {
-        command = "${meta.mainProgram} -V";
-        package = tinymist;
-      };
     };
   };
 

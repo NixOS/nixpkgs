@@ -1,11 +1,8 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 {
 
   meta = {
-    maintainers = teams.deepin.members;
+    maintainers = lib.teams.deepin.members;
   };
 
   ###### interface
@@ -14,7 +11,7 @@ with lib;
 
     services.deepin.dde-api = {
 
-      enable = mkEnableOption ''
+      enable = lib.mkEnableOption ''
         the DDE API, which provides some dbus interfaces that is used for screen zone detecting,
         thumbnail generating, and sound playing in Deepin Desktop Environment
       '';
@@ -26,7 +23,7 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.deepin.dde-api.enable {
+  config = lib.mkIf config.services.deepin.dde-api.enable {
 
      environment.systemPackages = [ pkgs.deepin.dde-api ];
 

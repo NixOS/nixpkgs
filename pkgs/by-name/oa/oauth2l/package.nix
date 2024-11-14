@@ -23,7 +23,7 @@ buildGoModule rec {
   preCheck = "export HOME=$(mktemp -d)";
 
   # tests fail on linux for some reason
-  doCheck = stdenv.isDarwin;
+  doCheck = stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Simple CLI for interacting with Google API authentication";

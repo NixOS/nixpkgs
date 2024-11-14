@@ -45,9 +45,9 @@ buildPythonPackage rec {
     future
     scikit-fmm
     openssh
-  ] ++ lib.optionals (!stdenv.isDarwin) [ gmsh ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ gmsh ];
 
-  nativeCheckInputs = lib.optionals (!stdenv.isDarwin) [ gmsh ];
+  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ gmsh ];
 
   # NOTE: Two of the doctests in fipy.matrices.scipyMatrix._ScipyMatrix.CSR fail, and there is no
   # clean way to disable them.

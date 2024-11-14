@@ -43,4 +43,14 @@ in
       ];
     }
   ) extraArgs;
+
+  k3s_1_31 = common (
+    (import ./1_31/versions.nix)
+    // {
+      updateScript = [
+        ./update-script.sh
+        "31"
+      ];
+    }
+  ) extraArgs;
 }

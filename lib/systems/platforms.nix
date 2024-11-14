@@ -201,8 +201,9 @@ rec {
       target = "zImage";
     };
     gcc = {
-      arch = "armv6";
-      fpu = "vfp";
+      # https://en.wikipedia.org/wiki/Raspberry_Pi#Specifications
+      arch = "armv6kz";
+      fpu = "vfpv2";
     };
   };
 

@@ -1,7 +1,4 @@
 { config, lib, pkgs, utils, ... }:
-
-with lib;
-
 let
 
   uid = config.ids.uids.gpsd;
@@ -21,16 +18,16 @@ in {
 
     services.gpsd = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable `gpsd`, a GPS service daemon.
         '';
       };
 
-      devices = mkOption {
-        type = types.listOf types.str;
+      devices = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "/dev/ttyUSB0" ];
         description = ''
           List of devices that `gpsd` should subscribe to.
@@ -43,8 +40,8 @@ in {
         '';
       };
 
-      readonly = mkOption {
-        type = types.bool;
+      readonly = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to enable the broken-device-safety, otherwise
@@ -60,40 +57,40 @@ in {
         '';
       };
 
-      nowait = mkOption {
-        type = types.bool;
+      nowait = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           don't wait for client connects to poll GPS
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 2947;
         description = ''
           The port where to listen for TCP connections.
         '';
       };
 
-      debugLevel = mkOption {
-        type = types.int;
+      debugLevel = lib.mkOption {
+        type = lib.types.int;
         default = 0;
         description = ''
           The debugging level.
         '';
       };
 
-      listenany = mkOption {
-        type = types.bool;
+      listenany = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Listen on all addresses rather than just loopback.
         '';
       };
 
-      extraArgs = mkOption {
-        type = types.listOf types.str;
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "-r" "-s" "19200" ];
         description = ''
@@ -108,7 +105,7 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.gpsd = {
       inherit uid;
@@ -131,9 +128,9 @@ in {
         in ''
           ${pkgs.gpsd}/sbin/gpsd -D "${toString cfg.debugLevel}"  \
             -S "${toString cfg.port}"                             \
-            ${optionalString cfg.readonly "-b"}                   \
-            ${optionalString cfg.nowait "-n"}                     \
-            ${optionalString cfg.listenany "-G"}                  \
+            ${lib.optionalString cfg.readonly "-b"}                   \
+            ${lib.optionalString cfg.nowait "-n"}                     \
+            ${lib.optionalString cfg.listenany "-G"}                  \
             ${extraArgs}                                          \
             ${devices}
         '';

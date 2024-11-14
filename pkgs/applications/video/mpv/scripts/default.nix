@@ -111,8 +111,10 @@ let
       modernx-zydezu = callPackage ./modernx-zydezu.nix { };
       mpris = callPackage ./mpris.nix { };
       mpv-cheatsheet = callPackage ./mpv-cheatsheet.nix { };
+      mpv-discord = callPackage ./mpv-discord.nix { };
       mpv-notify-send = callPackage ./mpv-notify-send.nix { };
       mpv-osc-modern = callPackage ./mpv-osc-modern.nix { };
+      mpv-osc-tethys = callPackage ./mpv-osc-tethys.nix { };
       mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { };
       mpv-slicing = callPackage ./mpv-slicing.nix { };
       mpv-webm = callPackage ./mpv-webm.nix { };

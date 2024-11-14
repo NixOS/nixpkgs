@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional openexrSupport openexr
     ++ lib.optional librsvgSupport librsvg
     ++ lib.optional openjpegSupport openjpeg
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ApplicationServices
       Foundation
     ];

@@ -1,12 +1,12 @@
 { buildDunePackage, git
-, rresult, result, bigstringaf
+, rresult, bigstringaf
 , fmt, bos, fpath, uri, digestif, logs, lwt
-, mirage-clock, mirage-clock-unix, astring, awa, cmdliner
+, mirage-clock, mirage-clock-unix, astring, cmdliner
 , decompress, domain-name, ipaddr, mtime
-, tcpip, awa-mirage, mirage-flow, mirage-unix
+, tcpip, mirage-flow, mirage-unix
 , alcotest, alcotest-lwt, base64, cstruct
 , ke, mirage-crypto-rng, git-binary
-, ptime, mimic, ca-certs-nss, tls, tls-mirage
+, mimic, tls
 , cacert, happy-eyeballs-lwt, git-mirage
 }:
 
@@ -17,19 +17,17 @@ buildDunePackage {
   minimalOCamlVersion = "4.08";
 
   buildInputs = [
-    awa
-    awa-mirage
     cmdliner
     mirage-clock
     tcpip
   ];
   propagatedBuildInputs = [
-    rresult result bigstringaf
+    rresult bigstringaf
     fmt bos fpath digestif logs lwt
     astring decompress
     domain-name ipaddr mirage-flow mirage-unix
-    cstruct ptime mimic ca-certs-nss
-    tls tls-mirage git happy-eyeballs-lwt
+    cstruct mimic
+    tls git happy-eyeballs-lwt
     git-mirage mirage-clock-unix
   ];
   checkInputs = [

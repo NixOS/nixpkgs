@@ -1,26 +1,29 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
+
+  # dependencies
   numpy,
-  pytestCheckHook,
+
+  # tests
   absl-py,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ml-dtypes";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jax-ml";
     repo = "ml_dtypes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3qZ1lS1IdSXNLRNE9tyuO9qauVBDlECZvmmwaOffD30=";
+    hash = "sha256-+6job9fEHVguh9JBE/NUv+QezwQohuKPO8DlhbaawZ4=";
     # Since this upstream patch (https://github.com/jax-ml/ml_dtypes/commit/1bfd097e794413b0d465fa34f2eff0f3828ff521),
     # the attempts to use the nixpkgs packaged eigen dependency have failed.
     # Hence, we rely on the bundled eigen library.
@@ -29,20 +32,17 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "numpy~=1.21.2" "numpy" \
-      --replace "numpy~=1.23.3" "numpy" \
-      --replace "numpy~=1.26.0" "numpy" \
-      --replace "numpy==2.0.0rc1" "numpy" \
-      --replace "setuptools~=68.1.0" "setuptools"
+      --replace-fail "numpy~=2.0" "numpy" \
+      --replace-fail "setuptools~=73.0.1" "setuptools"
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     absl-py
+    pytestCheckHook
   ];
 
   preCheck = ''
@@ -53,12 +53,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ml_dtypes" ];
 
-  meta = with lib; {
+  meta = {
     description = "Stand-alone implementation of several NumPy dtype extensions used in machine learning libraries";
     homepage = "https://github.com/jax-ml/ml_dtypes";
     changelog = "https://github.com/jax-ml/ml_dtypes/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       GaetanLepage
       samuela
     ];

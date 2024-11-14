@@ -35,13 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-panel";
-  version = "2.0.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-m+LUG7hnkIJj48HJIy6pMyv3YZ/RfuSXbdBKJ9mi764=";
+    hash = "sha256-IlT7qXWMKFkmHNjXJYivawd4HnOBzILtIE6XaM/ZvkM=";
   };
 
   nativeBuildInputs = [

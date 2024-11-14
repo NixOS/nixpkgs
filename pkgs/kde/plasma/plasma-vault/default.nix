@@ -25,5 +25,5 @@ mkKdeDerivation {
     ''-DNIXPKGS_GOCRYPTFS=\"${lib.getBin gocryptfs}/bin/gocryptfs\"''
   ];
 
-  extraNativeBuildInputs = [pkg-config];
+  extraNativeBuildInputs = [ pkg-config ];
 }

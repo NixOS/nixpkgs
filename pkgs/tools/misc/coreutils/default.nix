@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
       echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
       echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
     ''
-  ])) + (optionalString stdenv.isAarch64 ''
+  ])) + (optionalString stdenv.hostPlatform.isAarch64 ''
     # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
     sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/cut/cut-huge-range.sh
   '');
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
     ++ optional withPrefix "--program-prefix=g"
     # the shipped configure script doesn't enable nls, but using autoreconfHook
     # does so which breaks the build
-    ++ optional stdenv.isDarwin "--disable-nls"
+    ++ optional stdenv.hostPlatform.isDarwin "--disable-nls"
     ++ optionals (isCross && stdenv.hostPlatform.libc == "glibc") [
       # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
       # don't know why it is not properly detected cross building with glibc.
@@ -154,7 +154,7 @@ stdenv.mkDerivation rec {
   # With non-standard storeDir: https://github.com/NixOS/nix/issues/512
   doCheck = (!isCross)
     && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl")
-    && !stdenv.isAarch32;
+    && !stdenv.hostPlatform.isAarch32;
 
   # Prevents attempts of running 'help2man' on cross-built binaries.
   PERL = if isCross then "missing" else null;

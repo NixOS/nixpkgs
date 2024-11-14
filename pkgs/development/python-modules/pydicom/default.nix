@@ -66,11 +66,11 @@ buildPythonPackage {
       # tries to remove a dicom inside $HOME/.pydicom/data/ and download it again
       "test_fetch_data_files"
     ]
-    ++ lib.optionals stdenv.isAarch64 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # https://github.com/pydicom/pydicom/issues/1386
       "test_array"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # flaky, hard to reproduce failure outside hydra
       "test_time_check"
     ];

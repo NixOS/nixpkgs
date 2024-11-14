@@ -51,7 +51,7 @@ let
     nativeBuildInputs = [ autoPatchelfHook ];
 
     buildInputs = [
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
       gtk2
       pango
       cairo
@@ -93,6 +93,6 @@ let
     mainProgram = "bcompare";
   };
 in
-if stdenv.isDarwin
+if stdenv.hostPlatform.isDarwin
 then darwin
 else linux

@@ -1,35 +1,4 @@
 {
-  "activity-tracker": {
-    "attrs": {
-      "meta": {
-        "changelog": "https://github.com/williamkray/maubot-kickbot/releases",
-        "description": "A plugin that minimally tracks user activity within a space. Useful for kicking inactive users from a private community.",
-        "downloadPage": "https://github.com/williamkray/maubot-kickbot/releases",
-        "homepage": "https://github.com/williamkray/maubot-kickbot"
-      }
-    },
-    "github": {
-      "hash": "sha256-TLaGpLrTR4TLR0TjY3v9FFST8JxEP4swJ7kzt0fDwJI=",
-      "owner": "williamkray",
-      "repo": "maubot-kickbot",
-      "rev": "a4c31c7a1492585f2155705be8cab7e3f73f6b69"
-    },
-    "manifest": {
-      "database": true,
-      "database_type": "asyncpg",
-      "extra_files": [
-        "base-config.yaml"
-      ],
-      "id": "org.jobmachine.kickbot",
-      "license": "MIT",
-      "main_class": "KickBot",
-      "maubot": "0.1.0",
-      "modules": [
-        "kickbot"
-      ],
-      "version": "0.0.10"
-    }
-  },
   "alertbot": {
     "attrs": {
       "meta": {
@@ -116,17 +85,17 @@
     "attrs": {
       "meta": {
         "changelog": "https://github.com/coffeebank/coffee-maubot/releases",
-        "description": "An anime/manga bot for Matrix. Search anime, manga (manhwa/manhua), and light novels from Anilist. See series info, status, and episodes/chapters.",
+        "description": "An anime/manga bot for Matrix. Search anime, manga (manhwa/manhua), and light novels. See series info, status, episodes/chapters, and tags. Search Anilist, MangaDex, and Batoto.",
         "downloadPage": "https://github.com/coffeebank/coffee-maubot/releases",
         "homepage": "https://github.com/coffeebank/coffee-maubot/tree/master/animemanga"
       },
       "postPatch": "cd animemanga"
     },
     "github": {
-      "hash": "sha256-k+M/Wk4nyXUZBJxmxQr64dPp3rK7i1oQeLFtncle3dI=",
+      "hash": "sha256-dKSXBwkIVFnoTcjXQXPf8xdzP44VZR8Bq3KQhsBpABA=",
       "owner": "coffeebank",
       "repo": "coffee-maubot",
-      "rev": "b25112508d65f7560910e67d3074dd60f4048821"
+      "rev": "f2329cf643a80fc7200fd225ba697fea639f2e99"
     },
     "manifest": {
       "database": false,
@@ -140,7 +109,7 @@
       "modules": [
         "animemanga"
       ],
-      "version": "0.1.1.216"
+      "version": "0.2.0.66"
     }
   },
   "antithread": {
@@ -201,36 +170,36 @@
       "version": "1.0.0"
     }
   },
-  "bard": {
+  "awareness-bot": {
     "attrs": {
       "meta": {
-        "changelog": "https://github.com/ser/maubot-bard/releases",
-        "description": "Allow your maubot instance to return queries from Google(TM) Bard(TM) pseudoAI",
-        "downloadPage": "https://github.com/ser/maubot-bard/releases",
-        "homepage": "https://github.com/ser/maubot-bard/",
-        "license": "MIT"
+        "changelog": "https://github.com/besendorf/awareness-bot/releases",
+        "description": "maubot plugin that helps moderate a matrix room by muting users that use foul language",
+        "downloadPage": "https://github.com/besendorf/awareness-bot/releases",
+        "homepage": "https://github.com/besendorf/awareness-bot",
+        "license": "AGPL-3.0-only"
       }
     },
     "github": {
-      "hash": "sha256-E8pz71wfH+SmFNzBcPUrnqK0xs7wlyB6SaRXH/PDqKw=",
-      "owner": "ser",
-      "repo": "maubot-bard",
-      "rev": "4ff3ce8d86ed19c973dee89228779fed74811341"
+      "hash": "sha256-ZXmsDQSr07M46BLRmSnKw1KkBwCQt7Ki6dPx9oxunwE=",
+      "owner": "besendorf",
+      "repo": "awareness-bot",
+      "rev": "a7d77491c371e189f8fac7f8c2ff31ac48c32e08"
     },
     "manifest": {
       "config": true,
-      "dependencies": [
-        "bardapi"
-      ],
+      "database": true,
+      "database_type": "asyncpg",
       "extra_files": [
         "base-config.yaml"
       ],
-      "id": "sergevictor.eu.maubot.bard",
-      "main_class": "BardPlugin",
+      "id": "org.besendorf.awarenessbot",
+      "main_class": "Awareness",
+      "maubot": "0.1.0",
       "modules": [
-        "bard"
+        "awarenessbot"
       ],
-      "version": "0.99.100"
+      "version": "1.0.0"
     }
   },
   "characterai": {
@@ -279,10 +248,10 @@
       }
     },
     "github": {
-      "hash": "sha256-XOhjSrgbVUwMO6/v/Znoc5l/k2n6Zi42Ydhv9/vyX7E=",
+      "hash": "sha256-ZloRMHaYl1rt2vurLo7pugQRg9gIT4X2LCmxOqACb2c=",
       "owner": "williamkray",
       "repo": "maubot-chatgpt",
-      "rev": "d313920165f8fca7a04314a73bb1dca30c67d9f5"
+      "rev": "101ea08743ed7bd251c3c0de7386d322e650af26"
     },
     "manifest": {
       "config": true,
@@ -296,7 +265,7 @@
       "modules": [
         "gpt"
       ],
-      "version": "0.0.10"
+      "version": "0.0.11"
     }
   },
   "choose": {
@@ -310,10 +279,10 @@
       "postPatch": "cd choose"
     },
     "github": {
-      "hash": "sha256-k+M/Wk4nyXUZBJxmxQr64dPp3rK7i1oQeLFtncle3dI=",
+      "hash": "sha256-dKSXBwkIVFnoTcjXQXPf8xdzP44VZR8Bq3KQhsBpABA=",
       "owner": "coffeebank",
       "repo": "coffee-maubot",
-      "rev": "b25112508d65f7560910e67d3074dd60f4048821"
+      "rev": "f2329cf643a80fc7200fd225ba697fea639f2e99"
     },
     "manifest": {
       "database": false,
@@ -358,35 +327,35 @@
       "version": "1.0.0"
     }
   },
-  "create-room": {
+  "communitybot": {
     "attrs": {
       "meta": {
-        "changelog": "https://github.com/williamkray/maubot-createroom/releases",
-        "description": "A plugin that creates new rooms and automatically sets them to be part of a private Matrix Space.",
-        "downloadPage": "https://github.com/williamkray/maubot-createroom/releases",
-        "homepage": "https://github.com/williamkray/maubot-createroom"
+        "changelog": "https://github.com/williamkray/maubot-communitybot/releases",
+        "description": "helps admins manage a matrix space, with user management, room creation\ntools, and much more! replaces activity-tracker, createroom, and welcome\nplugins.\n",
+        "downloadPage": "https://github.com/williamkray/maubot-communitybot/releases",
+        "homepage": "https://github.com/williamkray/maubot-communitybot"
       }
     },
     "github": {
-      "hash": "sha256-x1eoUX8u1IR/hLgS8YcpSoTByl+m3GoTW3fnFMDs1XA=",
+      "hash": "sha256-wO63G2mdpz2FWjatVY5R+L7Chki087Ev7oMfpgyOnxM=",
       "owner": "williamkray",
-      "repo": "maubot-createroom",
-      "rev": "4eecdcffa6c06276287c2a3d4e65905a72ad18ad"
+      "repo": "maubot-communitybot",
+      "rev": "v0.1.7"
     },
     "manifest": {
-      "config": true,
-      "database": false,
+      "database": true,
+      "database_type": "asyncpg",
       "extra_files": [
         "base-config.yaml"
       ],
-      "id": "org.jobmachine.createspaceroom",
+      "id": "org.jobmachine.communitybot",
       "license": "MIT",
-      "main_class": "CreateSpaceRoom",
+      "main_class": "CommunityBot",
       "maubot": "0.1.0",
       "modules": [
-        "createspaceroom"
+        "community"
       ],
-      "version": "0.1.2"
+      "version": "0.1.7"
     }
   },
   "dice": {
@@ -533,6 +502,36 @@
       "version": "3.0.0"
     }
   },
+  "gemini": {
+    "attrs": {
+      "meta": {
+        "changelog": "https://github.com/shanks219/maubot-gemini-bot/releases",
+        "description": "A simple gemini-pro chatbot.",
+        "downloadPage": "https://github.com/shanks219/maubot-gemini-bot/releases",
+        "homepage": "https://github.com/shanks219/maubot-gemini-bot/"
+      }
+    },
+    "github": {
+      "hash": "sha256-mPKPksfgK1eyCiqqxC3/mPKEwVXjVAMYz8PHf78l7wk=",
+      "owner": "shanks219",
+      "repo": "maubot-gemini-bot",
+      "rev": "v0.1.0"
+    },
+    "manifest": {
+      "config": true,
+      "extra_files": [
+        "base-config.yaml"
+      ],
+      "id": "com.shanks.matrix.bot.gemini",
+      "license": "MIT",
+      "main_class": "GeminiBot",
+      "maubot": "0.1.0",
+      "modules": [
+        "geminibot"
+      ],
+      "version": "1.0.0"
+    }
+  },
   "gifme": {
     "attrs": {
       "meta": {
@@ -543,10 +542,10 @@
       }
     },
     "github": {
-      "hash": "sha256-5MHLtm3qktUyvWyuwQEUQWL8fxszZ6h/hHClLLr0Uvs=",
+      "hash": "sha256-VtZp4c3bbKCgbqQoJRnkle7Qn1zSGhgSPFAIlijQDOs=",
       "owner": "williamkray",
       "repo": "maubot-gifme",
-      "rev": "6dbbb9ebce903887b62f95b04f4640779762e57a"
+      "rev": "a896a07fba53c90455431e79904f79d949c91f92"
     },
     "manifest": {
       "database": true,
@@ -715,10 +714,10 @@
       }
     },
     "github": {
-      "hash": "sha256-twvVeMD2nRwpazc21inbdr6mUjMXJ4T6v5ieNrwB+O4=",
+      "hash": "sha256-UWJGvLs/zrg3pNtZjc2PLNZfmiWl7QWGesyjojljXeQ=",
       "owner": "ser",
       "repo": "maubot-hateheif",
-      "rev": "52cf166960ac3fb71d291e13d5f3621caa9d7af1"
+      "rev": "64b36a2447c6bb3bedc25e8afd85abde60c3d755"
     },
     "manifest": {
       "config": true,
@@ -838,10 +837,10 @@
       "postPatch": "cd jadict"
     },
     "github": {
-      "hash": "sha256-k+M/Wk4nyXUZBJxmxQr64dPp3rK7i1oQeLFtncle3dI=",
+      "hash": "sha256-dKSXBwkIVFnoTcjXQXPf8xdzP44VZR8Bq3KQhsBpABA=",
       "owner": "coffeebank",
       "repo": "coffee-maubot",
-      "rev": "b25112508d65f7560910e67d3074dd60f4048821"
+      "rev": "f2329cf643a80fc7200fd225ba697fea639f2e99"
     },
     "manifest": {
       "database": false,
@@ -855,7 +854,7 @@
       "modules": [
         "jadict"
       ],
-      "version": "0.1.0.10"
+      "version": "0.1.1.12"
     }
   },
   "join": {
@@ -868,10 +867,10 @@
       }
     },
     "github": {
-      "hash": "sha256-aqpL+KO5p0hre7RCUZrM270Ah+cR4cQxZn7LTXLT79k=",
+      "hash": "sha256-6bggnk3196M0eCkfYTJWLhiIwIVTtluffQzc58yIYzw=",
       "owner": "williamkray",
       "repo": "maubot-join",
-      "rev": "1b57758dfe3a2191588bb903ea546328146e69d8"
+      "rev": "v0.3.1"
     },
     "manifest": {
       "database": false,
@@ -885,7 +884,7 @@
       "modules": [
         "join"
       ],
-      "version": "0.3.0"
+      "version": "0.3.1"
     }
   },
   "karma": {
@@ -917,6 +916,44 @@
         "karma"
       ],
       "version": "1.0.1"
+    }
+  },
+  "kodict": {
+    "attrs": {
+      "meta": {
+        "changelog": "https://github.com/coffeebank/coffee-maubot/releases",
+        "description": "A Korean dictionary Matrix bot for searching and translating Korean vocabulary (Hangul/Hangeul, Hanja). Searches National Institute of Korean Language's Korean-English Learners' Dictionary (\ud55c\uad6d\uc5b4\uae30\ucd08\uc0ac\uc804).",
+        "downloadPage": "https://github.com/coffeebank/coffee-maubot/releases",
+        "homepage": "https://github.com/coffeebank/coffee-maubot/tree/master/kodict"
+      },
+      "postPatch": "cd kodict"
+    },
+    "github": {
+      "hash": "sha256-dKSXBwkIVFnoTcjXQXPf8xdzP44VZR8Bq3KQhsBpABA=",
+      "owner": "coffeebank",
+      "repo": "coffee-maubot",
+      "rev": "f2329cf643a80fc7200fd225ba697fea639f2e99"
+    },
+    "manifest": {
+      "database": false,
+      "dependencies": [
+        "cssselect",
+        "kodict-core",
+        "korean-romanizer",
+        "krdict.py@git+https://github.com/coffeebank/krdict.py",
+        "lxml"
+      ],
+      "extra_files": [
+        "base-config.yaml"
+      ],
+      "id": "coffee.maubot.kodict",
+      "license": "AGPL-3.0-or-later",
+      "main_class": "KodictBot",
+      "maubot": "0.1.0",
+      "modules": [
+        "kodict"
+      ],
+      "version": "0.1.0.366"
     }
   },
   "ldap-ad-inviterbot": {
@@ -952,6 +989,68 @@
         "inviter"
       ],
       "version": "0.1.6"
+    }
+  },
+  "ldap-inviter": {
+    "attrs": {
+      "meta": {
+        "changelog": "https://github.com/davidmehren/maubot-ldap-inviter/releases",
+        "description": "A maubot plugin to invite users to Matrix rooms according to LDAP groups",
+        "downloadPage": "https://github.com/davidmehren/maubot-ldap-inviter/releases",
+        "homepage": "https://github.com/davidmehren/maubot-ldap-inviter"
+      }
+    },
+    "github": {
+      "hash": "sha256-eLbAFGQ/WGXvL8N4B1MW9Q4mY5axXl8PEdIEYtmiyb0=",
+      "owner": "davidmehren",
+      "repo": "maubot-ldap-inviter",
+      "rev": "ece581ba397df0030f65eeccbe141b7fc3fcfb19"
+    },
+    "manifest": {
+      "config": true,
+      "extra_files": [
+        "base-config.yaml"
+      ],
+      "id": "de.herrmehren.ldap-inviter",
+      "license": "MIT",
+      "main_class": "LDAPInviterBot",
+      "maubot": "0.1.0",
+      "modules": [
+        "inviter"
+      ],
+      "version": "0.0.1"
+    }
+  },
+  "llm": {
+    "attrs": {
+      "meta": {
+        "changelog": "https://github.com/brokensandals/maubot-llm/releases",
+        "description": "Allows chatting with LLMs running on OpenAI-compatible servers (including local instances like LM Studio). Can use different backends, models, and system prompts per room.",
+        "downloadPage": "https://github.com/brokensandals/maubot-llm/releases",
+        "homepage": "https://github.com/brokensandals/maubot-llm"
+      }
+    },
+    "github": {
+      "hash": "sha256-b/zFfgZPaODyyfk8ZgU+fihgqbsuxspGQj+oDmG3Nqc=",
+      "owner": "brokensandals",
+      "repo": "maubot-llm",
+      "rev": "fc527836acf57cad90020d2dc0127a44ae7f73bd"
+    },
+    "manifest": {
+      "config": true,
+      "database": true,
+      "database_type": "asyncpg",
+      "extra_files": [
+        "base-config.yaml"
+      ],
+      "id": "net.brokensandals.llm",
+      "license": "MIT",
+      "main_class": "LlmBot",
+      "maubot": "0.1.0",
+      "modules": [
+        "maubot_llm"
+      ],
+      "version": "1.0.0"
     }
   },
   "local-stt": {
@@ -1020,6 +1119,40 @@
       "version": "1.0.0"
     }
   },
+  "matrix-to-discourse": {
+    "attrs": {
+      "meta": {
+        "changelog": "https://github.com/gitayam/matrix-to-discourse/releases",
+        "description": "A plugin create Discourse forum post from messages in Matrix or Bridged rooms and perform advanced forum searches directly from Matrix or Bridged rooms. Perfect for community building and engagement.",
+        "downloadPage": "https://github.com/gitayam/matrix-to-discourse/releases",
+        "homepage": "https://github.com/gitayam/matrix-to-discourse"
+      }
+    },
+    "github": {
+      "hash": "sha256-QIFgCQL9O/SVemXfxlXzPcPQ/qx68IU7ntArCk946iA=",
+      "owner": "gitayam",
+      "repo": "matrix-to-discourse",
+      "rev": "v0.1.0.1"
+    },
+    "manifest": {
+      "dependencies": [
+        "aiohttp",
+        "maubot",
+        "mautrix",
+        "openai",
+        "pyyaml",
+        "requests"
+      ],
+      "id": "com.irregularchat.matrix_to_discourse",
+      "license": "GPL-3.0",
+      "main_class": "MatrixToDiscourseBot",
+      "maubot": "0.1.0",
+      "modules": [
+        "bot"
+      ],
+      "version": "0.1.0.0"
+    }
+  },
   "media": {
     "attrs": {
       "meta": {
@@ -1056,10 +1189,10 @@
       }
     },
     "github": {
-      "hash": "sha256-qtGGCaATIzJMRhLWzFN0kSa6P/tlckCkxatKEfXyi0E=",
+      "hash": "sha256-dSsCmDAKfr1HyxiOUb+ogB86FRzuRYJIZ4/vk+PP8r8=",
       "owner": "edwardsdean",
       "repo": "maubot_metric_bot",
-      "rev": "0.0.4"
+      "rev": "0.0.5"
     },
     "manifest": {
       "database": false,
@@ -1070,7 +1203,7 @@
       "modules": [
         "metric"
       ],
-      "version": "0.0.4"
+      "version": "0.0.5"
     }
   },
   "ntfy": {
@@ -1116,24 +1249,24 @@
       }
     },
     "github": {
-      "hash": "sha256-+aDQF/hW66M25zsvIsjNt7K2l32rV1g3fPrb45XdHVU=",
+      "hash": "sha256-vw2MT4pwmUUWolgzkq0nZ/YaAlKUANrN0NPXXFf7B1k=",
       "owner": "tcpipuk",
       "repo": "maubot-openai-translate",
-      "rev": "v0.3.0"
+      "rev": "v0.3.1"
     },
     "manifest": {
       "config": true,
       "extra_files": [
         "base-config.yaml"
       ],
-      "id": "xyz.maubot.openaitranslate",
+      "id": "uk.tcpip.openaitranslate",
       "license": "AGPL-3.0-or-later",
       "main_class": "OpenAITranslate",
       "maubot": "0.1.0",
       "modules": [
         "openaitranslate"
       ],
-      "version": "0.3.0"
+      "version": "0.3.1"
     }
   },
   "ovgumensabot": {
@@ -1259,6 +1392,36 @@
       "version": "3.0.1"
     }
   },
+  "pretix-inviter": {
+    "attrs": {
+      "meta": {
+        "changelog": "https://github.com/fedora-infra/maubot-pretix-invite/blob/v0.3.2/CHANGELOG.md",
+        "description": "A maubot plugin for inviting event participants from the pretix ticketing platform into a matrix room",
+        "downloadPage": "https://github.com/fedora-infra/maubot-pretix-invite/releases",
+        "homepage": "https://github.com/fedora-infra/maubot-pretix-invite"
+      }
+    },
+    "github": {
+      "hash": "sha256-KgWGvZ7QHcH0/u6+kodW8MAXtco4MM5MpbKscW903nQ=",
+      "owner": "fedora-infra",
+      "repo": "maubot-pretix-invite",
+      "rev": "v0.3.2"
+    },
+    "manifest": {
+      "config": true,
+      "extra_files": [
+        "base-config.yaml"
+      ],
+      "id": "org.fedoraproject.maubot.events",
+      "license": "MIT",
+      "main_class": "EventManagement",
+      "modules": [
+        "event_helper"
+      ],
+      "version": "0.3.2",
+      "webapp": true
+    }
+  },
   "random-quote": {
     "attrs": {
       "meta": {
@@ -1331,10 +1494,10 @@
       }
     },
     "github": {
-      "hash": "sha256-GfroQ7iaBfN8WClORrkYccPHq8FsKupZtYKJvHGZg1o=",
+      "hash": "sha256-IKuOJFBfSC4sKSKoD+MuvuLBrsAMhs/PC1qYb5nP5jk=",
       "owner": "ajkessel",
       "repo": "reacjibot",
-      "rev": "v0.7.4"
+      "rev": "v2.7.14"
     },
     "manifest": {
       "extra_files": [
@@ -1347,7 +1510,7 @@
       "modules": [
         "reacjibot"
       ],
-      "version": "0.7.4"
+      "version": "2.7.14"
     }
   },
   "reactbot": {
@@ -1590,10 +1753,10 @@
       "postPatch": "cd send-custom-html"
     },
     "github": {
-      "hash": "sha256-k+M/Wk4nyXUZBJxmxQr64dPp3rK7i1oQeLFtncle3dI=",
+      "hash": "sha256-dKSXBwkIVFnoTcjXQXPf8xdzP44VZR8Bq3KQhsBpABA=",
       "owner": "coffeebank",
       "repo": "coffee-maubot",
-      "rev": "b25112508d65f7560910e67d3074dd60f4048821"
+      "rev": "f2329cf643a80fc7200fd225ba697fea639f2e99"
     },
     "manifest": {
       "database": false,
@@ -1607,7 +1770,7 @@
       "modules": [
         "sendcustomhtml"
       ],
-      "version": "0.1.0.6"
+      "version": "0.2.0.256"
     }
   },
   "social-media-download": {
@@ -1620,10 +1783,10 @@
       }
     },
     "github": {
-      "hash": "sha256-RMyQzGz2Z4m9FN0Nt5E6Tj0yZarysygCtvEZDfG143M=",
+      "hash": "sha256-naHY6f034uGnPIHidI7WXjcf2h/t0IYaPkO5QfKkXMs=",
       "owner": "ggogel",
       "repo": "SocialMediaDownloadMaubot",
-      "rev": "1.2.0"
+      "rev": "1.4.2"
     },
     "manifest": {
       "config": true,
@@ -1639,7 +1802,7 @@
         "instaloader",
         "socialmediadownload"
       ],
-      "version": "1.2.0"
+      "version": "1.4.2"
     }
   },
   "songwhip": {
@@ -1799,17 +1962,17 @@
     "attrs": {
       "meta": {
         "changelog": "https://github.com/coffeebank/coffee-maubot/releases",
-        "description": "Get the time in specific cities. Check timezones.  !timein New York  (Python 3.9+) (Python <3.9 requires pytz, fuzzywuzzy)",
+        "description": "Get the time in specific cities. Check timezones.  !timein America/New_York  (Python 3.9+)",
         "downloadPage": "https://github.com/coffeebank/coffee-maubot/releases",
         "homepage": "https://github.com/coffeebank/coffee-maubot/tree/master/timein"
       },
       "postPatch": "cd timein"
     },
     "github": {
-      "hash": "sha256-k+M/Wk4nyXUZBJxmxQr64dPp3rK7i1oQeLFtncle3dI=",
+      "hash": "sha256-dKSXBwkIVFnoTcjXQXPf8xdzP44VZR8Bq3KQhsBpABA=",
       "owner": "coffeebank",
       "repo": "coffee-maubot",
-      "rev": "b25112508d65f7560910e67d3074dd60f4048821"
+      "rev": "f2329cf643a80fc7200fd225ba697fea639f2e99"
     },
     "manifest": {
       "database": false,
@@ -1892,10 +2055,10 @@
       }
     },
     "github": {
-      "hash": "sha256-8ZAH9Kn0EQYY9gLx48gF+aEsFOdlZlrbUIvLMP0uwi4=",
+      "hash": "sha256-Gm90IsokLEhbWGksHgjSQNBY/WOpccqfKJTmwD2cvBE=",
       "owner": "yoxcu",
       "repo": "maubot-token",
-      "rev": "v1.1.0"
+      "rev": "v1.1.1"
     },
     "manifest": {
       "config": true,
@@ -1911,7 +2074,7 @@
       "modules": [
         "tokenbot"
       ],
-      "version": "1.1.0"
+      "version": "1.1.1"
     }
   },
   "translate": {
@@ -1953,16 +2116,17 @@
       }
     },
     "github": {
-      "hash": "sha256-WlrFt+uj6E7Ecg+3KW6fjrMXSUP5YFA5ZyitvBON3pA=",
+      "hash": "sha256-CMEwzkvHnBpFUg7HssAF7ga221XCQlU/dScMy7JhmuQ=",
       "owner": "jeffcasavant",
       "repo": "MaubotTrumpTweet",
-      "rev": "v1.1.2"
+      "rev": "v1.1.3"
     },
     "isPoetry": true,
     "manifest": {
       "database": false,
       "dependencies": [
-        "Pillow>=9.0.1, <10.0.0"
+        "Pillow>=9.3.0, <10.0.0",
+        "asyncpg>=0.26.0"
       ],
       "extra_files": [
         "res/font/Roboto-Black.ttf",
@@ -2021,7 +2185,7 @@
       "modules": [
         "trumptweet"
       ],
-      "version": "1.1.2"
+      "version": "1.1.3"
     }
   },
   "twilio": {
@@ -2128,10 +2292,10 @@
       "postPatch": "cd urlpreview"
     },
     "github": {
-      "hash": "sha256-k+M/Wk4nyXUZBJxmxQr64dPp3rK7i1oQeLFtncle3dI=",
+      "hash": "sha256-dKSXBwkIVFnoTcjXQXPf8xdzP44VZR8Bq3KQhsBpABA=",
       "owner": "coffeebank",
       "repo": "coffee-maubot",
-      "rev": "b25112508d65f7560910e67d3074dd60f4048821"
+      "rev": "f2329cf643a80fc7200fd225ba697fea639f2e99"
     },
     "manifest": {
       "database": false,
@@ -2187,10 +2351,10 @@
       }
     },
     "github": {
-      "hash": "sha256-GGbd7PvW2P0u1h7Cp1GMuEg3uQ0osZBWWHzSW524aBc=",
+      "hash": "sha256-1UCQxUldc9nE9wh4OUsHcQay5TuPLkY8ppcTAb/10EQ=",
       "owner": "jkhsjdhjs",
       "repo": "maubot-webhook",
-      "rev": "v0.2.0"
+      "rev": "v0.4.0"
     },
     "manifest": {
       "config": true,
@@ -2207,38 +2371,8 @@
       "modules": [
         "plugin"
       ],
-      "version": "0.2.0",
+      "version": "0.4.0",
       "webapp": true
-    }
-  },
-  "welcome": {
-    "attrs": {
-      "meta": {
-        "changelog": "https://github.com/williamkray/maubot-welcome/releases",
-        "description": "A plugin that greets new people with a configurable message when they join a room.",
-        "downloadPage": "https://github.com/williamkray/maubot-welcome/releases",
-        "homepage": "https://github.com/williamkray/maubot-welcome"
-      }
-    },
-    "github": {
-      "hash": "sha256-8BIDj/kHys/Pw1n1lLtxjYOstI/UG5UAlxD+3rpKj0Q=",
-      "owner": "williamkray",
-      "repo": "maubot-welcome",
-      "rev": "a6d3e6cbea87056a1d4694f5379c9ae9d9cdf1c5"
-    },
-    "manifest": {
-      "database": false,
-      "extra_files": [
-        "base-config.yaml"
-      ],
-      "id": "org.jobmachine.welcome",
-      "license": "MIT",
-      "main_class": "Greeter",
-      "maubot": "0.1.0",
-      "modules": [
-        "welcome"
-      ],
-      "version": "0.0.4"
     }
   },
   "wolframalpha": {

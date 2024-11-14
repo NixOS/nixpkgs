@@ -2,7 +2,7 @@
   buildPythonPackage,
   pythonOlder,
   cmake,
-  swig4,
+  swig,
   elastix,
   itk,
   numpy,
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    swig4
+    swig
     scikit-build
   ];
   propagatedBuildInputs = [

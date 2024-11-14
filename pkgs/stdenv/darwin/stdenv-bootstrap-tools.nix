@@ -18,20 +18,22 @@
   gnused,
   gnutar,
   gzip,
+  jq,
   ld64,
   libffi,
   libiconv,
+  libtapi,
   libxml2,
-  libyaml,
   llvmPackages,
   ncurses,
   nukeReferences,
+  oniguruma,
   openssl,
   patch,
   pbzx,
   runCommand,
   writeText,
-  xar,
+  xarMinimal,
   xz,
   zlib,
 }:
@@ -113,21 +115,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     in
     ''
-      mkdir -p $out/bin $out/lib $out/lib/darwin
+      mkdir -p $out/bin $out/include $out/lib $out/lib/darwin
 
-      ${lib.optionalString stdenv.targetPlatform.isx86_64 ''
-        # Copy libSystem's .o files for various low-level boot stuff.
-        cp -d ${getLib darwin.Libsystem}/lib/*.o $out/lib
-
-        # Resolv is actually a link to another package, so let's copy it properly
-        cp -L ${getLib darwin.Libsystem}/lib/libresolv.9.dylib $out/lib
-      ''}
-
-      cp -rL ${getDev darwin.Libsystem}/include $out
       chmod -R u+w $out/include
       cp -rL ${getDev libiconv}/include/* $out/include
       cp -rL ${getDev gnugrep.pcre2}/include/* $out/include
-      mv $out/include $out/include-Libsystem
 
       # Copy binutils.
       for i in as ld ar ranlib nm strip otool install_name_tool lipo codesign_allocate; do
@@ -163,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp ${getBin xz}/bin/xz $out/bin
       cp -d ${getLib bzip2}/lib/libbz2*.dylib $out/lib
       cp -d ${getLib gmpxx}/lib/libgmp*.dylib $out/lib
-      cp -d ${getLib xar}/lib/libxar*.dylib $out/lib
+      cp -d ${getLib xarMinimal}/lib/libxar*.dylib $out/lib
       cp -d ${getLib xz}/lib/liblzma*.dylib $out/lib
       cp -d ${getLib zlib}/lib/libz*.dylib $out/lib
 
@@ -185,17 +177,18 @@ stdenv.mkDerivation (finalAttrs: {
       cp -d ${getLib llvmPackages.llvm}/lib/libLLVM.dylib $out/lib
       cp -d ${getLib libffi}/lib/libffi*.dylib $out/lib
 
-      mkdir $out/include
       cp -rd ${getDev llvmPackages.libcxx}/include/c++ $out/include
 
-      # copy .tbd assembly utils
-      cp ${getBin darwin.rewrite-tbd}/bin/rewrite-tbd $out/bin
-      cp -d ${getLib libyaml}/lib/libyaml*.dylib $out/lib
+      # Copy tools needed to build the SDK
+      cp -d ${getBin jq}/bin/* $out/bin
+      cp -d ${getBin libtapi}/bin/* $out/bin
+
+      cp -d ${getLib jq}/lib/lib*.dylib $out/lib
+      cp -d ${getLib oniguruma}/lib/lib*.dylib $out/lib
+      cp -d ${getLib libtapi}/lib/libtapi*.dylib $out/lib
 
       # copy sigtool
       cp -d ${getBin darwin.sigtool}/bin/{codesign,sigtool} $out/bin
-
-      cp -d ${getLib darwin.libtapi}/lib/libtapi*.dylib $out/lib
 
       # tools needed to unpack bootstrap archive
       mkdir -p unpack/bin unpack/lib

@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql, buildPostgresqlExtension }:
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "jsonb_deep_sum";
   version = "unstable-2021-12-24";
 
@@ -10,16 +10,6 @@ stdenv.mkDerivation rec {
     rev = "d9c69aa6b7da860e5522a9426467e67cb787980c";
     sha256 = "sha256-W1wNILAwTAjFPezq+grdRMA59KEnMZDz69n9xQUqdc0=";
   };
-
-  buildInputs = [ postgresql ];
-
-  installPhase = ''
-    mkdir -p $out/{lib,share/postgresql/extension}
-
-    cp *${postgresql.dlSuffix} $out/lib
-    cp *.sql     $out/share/postgresql/extension
-    cp *.control $out/share/postgresql/extension
-  '';
 
   meta = with lib; {
     description = "PostgreSQL extension to easily add jsonb numeric";

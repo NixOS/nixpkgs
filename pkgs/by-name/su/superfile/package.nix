@@ -5,16 +5,16 @@
 }:
 buildGoModule rec {
   pname = "superfile";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "yorukot";
     repo = "superfile";
     rev = "v${version}";
-    hash = "sha256-ajLlXySf/YLHrwwacV5yIF8qU5pKvEoOwpDoxh49qaU=";
+    hash = "sha256-/MdcfZpYr7vvPIq0rqLrPRPPU+cyp2y0EyxQPf9znwQ=";
   };
 
-  vendorHash = "sha256-vybe4KNj6ZhvXRTiN7e5+IhOewfK5L2jKPrcdCYGc4k=";
+  vendorHash = "sha256-8WGmksKH0rmfRH6Xxd0ACl1FS7YPphG7hsIB5/o38lQ=";
 
   ldflags = ["-s" "-w"];
 

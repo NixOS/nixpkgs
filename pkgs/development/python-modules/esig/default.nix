@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     iisignature = [ iisignature ];
   };
 

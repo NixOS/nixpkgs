@@ -4,8 +4,6 @@
   nixosTests,
   fetchFromGitHub,
   rustPlatform,
-  libiconv,
-  darwin,
   openssl,
   pkg-config,
   nix-update-script,
@@ -13,25 +11,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "3.3.8";
+  version = "3.3.10";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = "agate";
     rev = "v${version}";
-    hash = "sha256-HK4ZTpRe6dEvBnjZLisSGXJmD5gTPEnf6f/gN0AHUsI=";
+    hash = "sha256-uuMOe5yi0DSD7mTPnI0m/lpkv6Lb669vndwPE01oSUU=";
   };
 
-  cargoHash = "sha256-yRCH4TRZ3m7ZG/NAEi1YDisSoad6FxCyojtXVvwbU9w=";
+  cargoHash = "sha256-6iEpOUhpWClgfAry8xIHJUPaAVKdPVaq3cTrSql9roo=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [ openssl ];
 
   doInstallCheck = true;
   installCheckPhase = ''

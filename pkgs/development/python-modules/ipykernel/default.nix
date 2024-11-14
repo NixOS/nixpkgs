@@ -8,7 +8,6 @@
   pythonOlder,
   appnope,
   comm,
-  debugpy,
   ipython,
   jupyter-client,
   jupyter-core,
@@ -37,15 +36,12 @@ buildPythonPackage rec {
   };
 
   # debugpy is optional, see https://github.com/ipython/ipykernel/pull/767
-  postPatch = ''
-    sed -i "/debugpy/d" pyproject.toml
-  '';
+  pythonRemoveDeps = [ "debugpy" ];
 
   nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     comm
-    debugpy
     ipython
     jupyter-client
     jupyter-core
@@ -56,7 +52,7 @@ buildPythonPackage rec {
     pyzmq
     tornado
     traitlets
-  ] ++ lib.optionals stdenv.isDarwin [ appnope ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ appnope ];
 
   # check in passthru.tests.pytest to escape infinite recursion with ipyparallel
   doCheck = false;

@@ -82,10 +82,18 @@ rec {
     , destination ? ""
     , checkPhase ? ""
     , meta ? { }
+    , passthru ? { }
     , allowSubstitutes ? false
     , preferLocalBuild ? true
     , derivationArgs ? { }
     }:
+    assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
+      destination must be an absolute path, relative to the derivation's out path,
+      got '${destination}' instead.
+
+      Ensure that the path starts with a / and specifies at least the filename.
+    '';
+
     let
       matches = builtins.match "/bin/([^/]+)" destination;
     in
@@ -98,7 +106,8 @@ rec {
           {
             mainProgram = lib.head matches;
           } // meta // derivationArgs.meta or {};
-      } // removeAttrs derivationArgs [ "passAsFile" "meta" ])
+        passthru = passthru // derivationArgs.passthru or {};
+      } // removeAttrs derivationArgs [ "passAsFile" "meta" "passthru" ])
       ''
         target=$out${lib.escapeShellArg destination}
         mkdir -p "$(dirname "$target")"
@@ -214,6 +223,12 @@ rec {
        */
       meta ? { },
       /*
+         `stdenv.mkDerivation`'s `passthru` argument.
+
+         Type: AttrSet
+       */
+      passthru ? { },
+      /*
          The `checkPhase` to run. Defaults to `shellcheck` on supported
          platforms and `bash -n`.
 
@@ -256,7 +271,7 @@ rec {
       derivationArgs ? { },
     }:
     writeTextFile {
-      inherit name meta derivationArgs;
+      inherit name meta passthru derivationArgs;
       executable = true;
       destination = "/bin/${name}";
       allowSubstitutes = true;
@@ -359,9 +374,10 @@ rec {
     , destination ? ""   # relative path appended to $out eg "/bin/foo"
     , checkPhase ? ""    # syntax checks, e.g. for scripts
     , meta ? { }
+    , passthru ? { }
     }:
     runCommandLocal name
-      { inherit files executable checkPhase meta destination; }
+      { inherit files executable checkPhase meta passthru destination; }
       ''
         file=$out$destination
         mkdir -p "$(dirname "$file")"
@@ -462,7 +478,11 @@ rec {
     as a easy way to build multiple derivations at once.
    */
   symlinkJoin =
-    args_@{ name
+    args_@{
+      name ?
+        assert lib.assertMsg (args_ ? pname && args_ ? version)
+          "symlinkJoin requires either a `name` OR `pname` and `version`";
+        "${args_.pname}-${args_.version}"
     , paths
     , preferLocalBuild ? true
     , allowSubstitutes ? false
@@ -588,7 +608,7 @@ rec {
   makeSetupHook =
     { name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook"
     , deps ? [ ]
-      # hooks go in nativeBuildInput so these will be nativeBuildInput
+      # hooks go in nativeBuildInputs so these will be nativeBuildInputs
     , propagatedBuildInputs ? [ ]
       # these will be buildInputs
     , depsTargetTargetPropagated ? [ ]

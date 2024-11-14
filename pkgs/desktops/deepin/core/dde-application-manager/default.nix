@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qt6Packages
-, dtk6core
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qt6Packages,
+  dtk6core,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt6Packages.wrapQtAppsHook
+    qt6Packages.wrapQtAppsNoGuiHook
   ];
 
   buildInputs = [

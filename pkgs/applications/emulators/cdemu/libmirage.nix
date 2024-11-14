@@ -2,13 +2,15 @@
 , glib, libsndfile, zlib, bzip2, xz, libsamplerate, intltool
 , pcre, util-linux, libselinux, libsepol }:
 
-stdenv.mkDerivation {
-
+let
   inherit (callPackage ./common-drv-attrs.nix {
-    version = "3.2.7";
+    version = "3.2.9";
     pname = "libmirage";
-    hash = "sha256-+okkgNeVS8yoKSrQDy4It7PiPlTSiOsUoFxQ1FS9s9M=";
+    hash = "sha256-JBd+wHSZRyRW1SZsaAaRO2dNUFkpwRCr3s1f39KyWIs=";
   }) pname version src meta;
+in
+stdenv.mkDerivation {
+  inherit pname version src;
 
   PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "${placeholder "out"}/share/gir-1.0";
   PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_TYPELIBDIR = "${placeholder "out"}/lib/girepository-1.0";
@@ -16,4 +18,13 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake pkg-config intltool gobject-introspection ];
   propagatedBuildInputs = [ pcre util-linux libselinux libsepol ];
 
+  meta = {
+    inherit (meta)
+      maintainers
+      license
+      platforms
+      ;
+    description = "CD-ROM image access library";
+    homepage = "https://cdemu.sourceforge.io/about/libmirage/";
+  };
 }

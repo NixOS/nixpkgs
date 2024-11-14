@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     libPath = lib.makeLibraryPath [
       libsecret
       glib
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
     ];
   in
     ''

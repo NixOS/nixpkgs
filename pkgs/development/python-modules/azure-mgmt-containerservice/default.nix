@@ -11,14 +11,15 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerservice";
-  version = "31.0.0";
+  version = "32.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-E0NY1/iMTSm0AJ+R12GYYeH61dvqXhR0At1hrZa1Yko=";
+    pname = "azure_mgmt_containerservice";
+    inherit version;
+    hash = "sha256-rxOS1MT1F0tbt+OyjpITfSmPOt1U5AJ3LfKvzPEmO6A=";
   };
 
   build-system = [ setuptools ];

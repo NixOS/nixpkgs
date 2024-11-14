@@ -65,7 +65,7 @@ let
       nativeLibs = [ pkgs.sqlite ];
     });
     cl-webkit2 = super.cl-webkit2.overrideLispAttrs (o: {
-      nativeLibs = [ pkgs.webkitgtk ];
+      nativeLibs = [ pkgs.webkitgtk_4_0 ];
     });
     dbd-mysql = super.dbd-mysql.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.mariadb.client ];
@@ -86,7 +86,7 @@ let
     cffi-libffi = super.cffi-libffi.overrideLispAttrs (o: {
       nativeBuildInputs = [ pkgs.libffi ];
       nativeLibs = [ pkgs.libffi ];
-      patches = lib.optionals stdenv.isDarwin [ ./patches/cffi-libffi-darwin-ffi-h.patch ];
+      patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./patches/cffi-libffi-darwin-ffi-h.patch ];
     });
     cl-rabbit = super.cl-rabbit.overrideLispAttrs (o: {
       nativeBuildInputs = [ pkgs.rabbitmq-c ];
@@ -97,6 +97,9 @@ let
     });
     sqlite = super.sqlite.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.sqlite ];
+    });
+    duckdb = super.duckdb.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.duckdb ];
     });
     cl-libuv = super.cl-libuv.overrideLispAttrs (o: {
       nativeBuildInputs = [ pkgs.libuv ];
@@ -249,9 +252,6 @@ let
     });
     libusb-ffi = super.libusb-ffi.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.libusb-compat-0_1 ];
-    });
-    cl-fam = super.cl-fam.overrideLispAttrs (o: {
-      nativeLibs = [ pkgs.fam ];
     });
     jpeg-turbo = super.jpeg-turbo.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.libjpeg_turbo ];

@@ -4,7 +4,6 @@
   aiohttp,
   boto3,
   buildPythonPackage,
-  codecov,
   fetchFromGitHub,
   flake8,
   flask-sockets,
@@ -21,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.31.0";
+  version = "3.33.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -30,7 +29,7 @@ buildPythonPackage rec {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6fuC2yIGtjIxnEiI2/1sQ5RZB18WlteozyS8/XDTwkg=";
+    hash = "sha256-6Uvp7hVFgHVavJO6Un5L793pOOOBtaT4+eywS3rRWUU=";
   };
 
   postPatch = ''
@@ -50,7 +49,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    codecov
     flake8
     flask-sockets
     moto

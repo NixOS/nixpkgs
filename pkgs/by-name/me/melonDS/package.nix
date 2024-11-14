@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";
-  version = "0.9.5-unstable-2024-08-11";
+  version = "0.9.5-unstable-2024-09-29";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "e290c42360f5f2ae7182c5430234545f3b066876";
-    hash = "sha256-idsUxEsR9MPAY3arH4UNEsB6Cds4yZUaZOilqUQCnDE";
+    rev = "e9446fa9dc3ba64c22f8e5bb611ad394b5729eda";
+    hash = "sha256-0YNF9NPKaaKzC3d8cXG4Od3AUc1zxVtuB5u2Q8ruwr0=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       qtmultimedia
       zstd
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       wayland
       qtwayland
     ];
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   qtWrapperArgs =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       "--prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           libpcap
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
     ];
 

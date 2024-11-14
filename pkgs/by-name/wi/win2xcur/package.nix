@@ -8,7 +8,7 @@ python3Packages.buildPythonPackage rec {
     owner = "quantum5";
     repo = "win2xcur";
     rev = "v${version}";
-    sha256 = "sha256-OjLj+QYg8YOJzDq3Y6/uyEXlNWbPm8VA/b1yP9jT6Jo=";
+    hash = "sha256-OjLj+QYg8YOJzDq3Y6/uyEXlNWbPm8VA/b1yP9jT6Jo=";
   };
 
   propagatedBuildInputs = with python3Packages; [ numpy wand ];

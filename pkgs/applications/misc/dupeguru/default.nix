@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "GUI tool to find duplicate files in a system";
     homepage = "https://github.com/arsenetar/dupeguru";
     license = licenses.bsd3;

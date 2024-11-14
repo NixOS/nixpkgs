@@ -12,7 +12,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       { ... }:
       {
         virtualisation.docker.enable = true;
-        virtualisation.docker.storageDriver = "overlay";  # defaults to overlay2
+        virtualisation.docker.storageDriver = "overlay2";
       };
   };
 

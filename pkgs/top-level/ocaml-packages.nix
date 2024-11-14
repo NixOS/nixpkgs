@@ -56,6 +56,10 @@ let
 
     atdgen-runtime = callPackage ../development/ocaml-modules/atdgen/runtime.nix { };
 
+    augeas = callPackage ../development/ocaml-modules/augeas {
+      inherit (pkgs) augeas;
+    };
+
     awa = callPackage ../development/ocaml-modules/awa { };
 
     awa-mirage = callPackage ../development/ocaml-modules/awa/mirage.nix { };
@@ -63,6 +67,8 @@ let
     ### B ###
 
     b0 = callPackage ../development/ocaml-modules/b0 { };
+
+    backoff = callPackage ../development/ocaml-modules/backoff { };
 
     bap = janeStreet_0_15.bap;
 
@@ -442,6 +448,8 @@ let
     eio_main = callPackage ../development/ocaml-modules/eio/main.nix { };
     eio_posix = callPackage ../development/ocaml-modules/eio/posix.nix { };
 
+    eio-ssl = callPackage ../development/ocaml-modules/eio-ssl { };
+
     either = callPackage ../development/ocaml-modules/either { };
 
     elina = callPackage ../development/ocaml-modules/elina { };
@@ -508,31 +516,31 @@ let
 
     ffmpeg = callPackage ../development/ocaml-modules/ffmpeg { };
     ffmpeg-av = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-av.nix {
-      inherit (pkgs) ffmpeg;
+      ffmpeg = pkgs.ffmpeg_6;
       inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox VideoToolbox;
     };
     ffmpeg-avcodec = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avcodec.nix {
-      inherit (pkgs) ffmpeg;
+      ffmpeg = pkgs.ffmpeg_6;
       inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox VideoToolbox;
     };
     ffmpeg-avdevice = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avdevice.nix {
-      inherit (pkgs) ffmpeg;
+      ffmpeg = pkgs.ffmpeg_6;
       inherit (pkgs.darwin.apple_sdk.frameworks) AppKit AudioToolbox AVFoundation Cocoa CoreImage ForceFeedback OpenGL VideoToolbox;
     };
     ffmpeg-avfilter = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avfilter.nix {
-      inherit (pkgs) ffmpeg;
+      ffmpeg = pkgs.ffmpeg_6;
       inherit (pkgs.darwin.apple_sdk.frameworks) AppKit CoreImage OpenGL VideoToolbox;
     };
     ffmpeg-avutil = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avutil.nix {
-      inherit (pkgs) ffmpeg;
+      ffmpeg = pkgs.ffmpeg_6;
       inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox VideoToolbox;
     };
     ffmpeg-swresample = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swresample.nix {
-      inherit (pkgs) ffmpeg;
+      ffmpeg = pkgs.ffmpeg_6;
       inherit (pkgs.darwin.apple_sdk.frameworks) VideoToolbox;
     };
     ffmpeg-swscale = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swscale.nix {
-      inherit (pkgs) ffmpeg;
+      ffmpeg = pkgs.ffmpeg_6;
       inherit (pkgs.darwin.apple_sdk.frameworks) VideoToolbox;
     };
 
@@ -656,6 +664,8 @@ let
 
     h2 = callPackage ../development/ocaml-modules/h2 { };
 
+    h2-eio = callPackage ../development/ocaml-modules/h2/eio.nix { };
+
     hack_parallel = callPackage ../development/ocaml-modules/hack_parallel { };
 
     hacl-star = callPackage ../development/ocaml-modules/hacl-star { };
@@ -686,6 +696,14 @@ let
     httpaf = callPackage ../development/ocaml-modules/httpaf { };
 
     httpaf-lwt-unix = callPackage ../development/ocaml-modules/httpaf/lwt-unix.nix { };
+
+    httpun = callPackage ../development/ocaml-modules/httpun { };
+
+    httpun-eio = callPackage ../development/ocaml-modules/httpun/eio.nix { };
+
+    httpun-types = callPackage ../development/ocaml-modules/httpun/types.nix { };
+
+    httpun-ws = callPackage ../development/ocaml-modules/httpun-ws { };
 
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
@@ -894,6 +912,8 @@ let
     kafka_lwt = callPackage ../development/ocaml-modules/kafka/lwt.nix { };
 
     kcas = callPackage ../development/ocaml-modules/kcas { };
+
+    kdf = callPackage ../development/ocaml-modules/kdf { };
 
     ke = callPackage ../development/ocaml-modules/ke { };
 
@@ -1175,6 +1195,8 @@ let
 
     mirage-vnetif = callPackage ../development/ocaml-modules/mirage-vnetif { };
 
+    mlbdd = callPackage ../development/ocaml-modules/mlbdd { };
+
     mldoc =  callPackage ../development/ocaml-modules/mldoc { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
@@ -1199,11 +1221,20 @@ let
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
+    multicore-bench =  callPackage ../development/ocaml-modules/multicore-bench { };
+
+    multicore-magic =  callPackage ../development/ocaml-modules/multicore-magic { };
+
     multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
 
     mustache =  callPackage ../development/ocaml-modules/mustache { };
 
     ### N ###
+
+    nbd = pkgs.libnbd.override {
+      ocamlPackages = self;
+      buildOcamlBindings = true;
+    };
 
     netchannel = callPackage ../development/ocaml-modules/netchannel { };
 
@@ -1377,6 +1408,8 @@ let
     odoc-parser = callPackage ../development/ocaml-modules/odoc-parser { };
 
     ogg = callPackage ../development/ocaml-modules/ogg { };
+
+    ohex = callPackage ../development/ocaml-modules/ohex { };
 
     ojs = callPackage ../development/ocaml-modules/gen_js_api/ojs.nix { };
 
@@ -1778,6 +1811,8 @@ let
 
     terminal_size = callPackage ../development/ocaml-modules/terminal_size { };
 
+    terml = callPackage ../development/ocaml-modules/terml { };
+
     tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
 
     tezt = callPackage ../development/ocaml-modules/tezt { };
@@ -2028,7 +2063,7 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_latest = ocamlPackages_5_2;
 
-  ocamlPackages = ocamlPackages_5_1;
+  ocamlPackages = ocamlPackages_5_2;
 
   # We still have packages that rely on unsafe-string, which is deprecated in OCaml 4.06.0.
   # Below are aliases for porting them to the latest versions of the OCaml 4 series.

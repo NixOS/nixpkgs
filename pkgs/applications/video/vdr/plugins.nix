@@ -1,6 +1,6 @@
 { lib, stdenv, vdr, fetchFromGitHub
-, graphicsmagick, pcre
-, boost, libgcrypt, perl, util-linux, groff, ncurses
+, graphicsmagick
+, boost, libgcrypt, ncurses
 , callPackage
 }: let
   mkPlugin = name: stdenv.mkDerivation {
@@ -11,6 +11,8 @@
     installFlags = [ "DESTDIR=$(out)" ];
   };
 in {
+
+  epgsearch = callPackage ./epgsearch {};
 
   markad = callPackage ./markad {};
 
@@ -50,56 +52,6 @@ in {
     meta = with lib; {
       inherit (src.meta) homepage;
       description = "DVB Frontend Status Monitor plugin for VDR";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
-      inherit (vdr.meta) platforms;
-    };
-
-  };
-
-  epgsearch = stdenv.mkDerivation rec {
-    pname = "vdr-epgsearch";
-    version = "2.4.2";
-
-    src = fetchFromGitHub {
-      repo = "vdr-plugin-epgsearch";
-      owner = "vdr-projects";
-      sha256 = "sha256-C+WSdGTnDBTWLvpjG5GBaK8pYbht431nL5iaL/a0H4Y=";
-      rev = "v${version}";
-    };
-
-    postPatch = ''
-      for f in *.sh; do
-        patchShebangs "$f"
-      done
-    '';
-
-    nativeBuildInputs = [
-      perl # for pod2man and pos2html
-      util-linux
-      groff
-    ];
-
-    buildInputs = [
-      vdr
-      pcre
-    ];
-
-    buildFlags = [
-      "SENDMAIL="
-      "REGEXLIB=pcre"
-    ];
-
-    installFlags = [
-      "DESTDIR=$(out)"
-    ];
-
-    outputs = [ "out" "man" ];
-
-    meta = with lib; {
-      inherit (src.meta) homepage;
-      description = "Searchtimer and replacement of the VDR program menu";
-      mainProgram = "createcats";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
       inherit (vdr.meta) platforms;

@@ -1,4 +1,4 @@
-From a3506c9bc8929645b7b08859e47039b8cc830d22 Mon Sep 17 00:00:00 2001
+From 4ae0e860aa2c8c056379a7b6cc0f7a735de9ab12 Mon Sep 17 00:00:00 2001
 From: Bernardo Meurer <bernardo@meurer.org>
 Date: Fri, 15 Oct 2021 23:07:40 -0700
 Subject: [PATCH 2/2] tlp-sleep.service: reintroduce
@@ -18,10 +18,10 @@ systemd itself to not use the hook scripts. As per the manual:
  create mode 100644 tlp-sleep.service.in
 
 diff --git a/Makefile b/Makefile
-index 1c436ad..fd5211b 100644
+index df3abb7..5a47001 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -84,6 +84,7 @@ INFILES = \
+@@ -83,6 +83,7 @@ INFILES = \
  	tlp.rules \
  	tlp-readconfs \
  	tlp-run-on \
@@ -29,7 +29,7 @@ index 1c436ad..fd5211b 100644
  	tlp.service \
  	tlp-stat \
  	tlp.upstart \
-@@ -115,7 +116,6 @@ SHFILES = \
+@@ -114,7 +115,6 @@ SHFILES = \
  	tlp-rdw-udev.in \
  	tlp-rf.in \
  	tlp-run-on.in \
@@ -37,7 +37,7 @@ index 1c436ad..fd5211b 100644
  	tlp-sleep.elogind \
  	tlp-stat.in \
  	tlp-usb-udev.in \
-@@ -172,7 +172,7 @@ ifneq ($(TLP_NO_INIT),1)
+@@ -170,7 +170,7 @@ ifneq ($(TLP_NO_INIT),1)
  endif
  ifneq ($(TLP_WITH_SYSTEMD),0)
  	install -D -m 644 tlp.service $(_SYSD)/tlp.service
@@ -46,15 +46,15 @@ index 1c436ad..fd5211b 100644
  endif
  ifneq ($(TLP_WITH_ELOGIND),0)
  	install -D -m 755 tlp-sleep.elogind $(_ELOD)/49-tlp-sleep
-@@ -240,7 +240,7 @@ uninstall-tlp:
+@@ -253,7 +253,7 @@ uninstall-tlp:
  	rm $(_ULIB)/rules.d/85-tlp.rules
  	rm -f $(_SYSV)/tlp
  	rm -f $(_SYSD)/tlp.service
 -	rm -f $(_SDSL)/tlp-sleep
 +	rm -f $(_SYSD)/tlp-sleep.service
  	rm -f $(_ELOD)/49-tlp-sleep
+ 	rm -f $(_SHCPL)/tlp
  	rm -f $(_SHCPL)/tlp-stat
- 	rm -f $(_SHCPL)/bluetooth
 diff --git a/tlp-sleep.service.in b/tlp-sleep.service.in
 new file mode 100644
 index 0000000..79c202c
@@ -81,5 +81,5 @@ index 0000000..79c202c
 +[Install]
 +WantedBy=sleep.target
 -- 
-2.41.0
+2.44.1
 

@@ -162,7 +162,7 @@ in {
   name = "grafana-provision";
 
   meta = with maintainers; {
-    maintainers = [ kfears willibutz ];
+    maintainers = [ willibutz ];
   };
 
   inherit nodes;

@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aw-core";
-  version = "0.5.16";
+  version = "0.5.17";
 
   format = "pyproject";
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "ActivityWatch";
     repo = "aw-core";
     rev = "v${version}";
-    sha256 = "sha256-7xT7bOGzH5G4WpgNo8pDyiQqX0dWNLNHpgssozUa9kQ=";
+    sha256 = "sha256-bKxf+fqm+6V3JgDluKVpqq5hRL3Z+x8SHMRQmNe8vUA=";
   };
 
   disabled = pythonOlder "3.8";
@@ -51,7 +51,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "platformdirs"
-    "iso8601"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -65,11 +64,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Core library for ActivityWatch";
     mainProgram = "aw-cli";
     homepage = "https://github.com/ActivityWatch/aw-core";
-    maintainers = with maintainers; [ huantian ];
-    license = licenses.mpl20;
+    maintainers = with lib.maintainers; [ huantian ];
+    license = lib.licenses.mpl20;
   };
 }

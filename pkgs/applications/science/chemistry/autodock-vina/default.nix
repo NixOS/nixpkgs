@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost'
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     glibc.static
   ];
 

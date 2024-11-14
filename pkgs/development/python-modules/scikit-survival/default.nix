@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "scikit-survival";
-  version = "0.22.2";
+  version = "0.23.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DpyGdQwN4VgGYmdREJlPB6NWiVWu8Ur4ExbysxADMr8=";
+    hash = "sha256-JFI3SDOK74vQdoUOStYlc4e0VHps97KjV3a1NQSN6E0=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +71,7 @@ buildPythonPackage rec {
       "test_survival_svm"
       "test_tree"
     ]
-    ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64)
+    ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
       # floating point mismatch on aarch64
       # 27079905.88052468 to far from 27079905.880496684
       "test_coxnet";

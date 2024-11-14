@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase qtsvg qtwebkit qttools
     libvorbis hunspell xz lzo
-  ] ++ lib.optionals stdenv.isLinux [ qtx11extras libXtst ]
-    ++ lib.optionals stdenv.isDarwin [ bzip2 libiconv ]
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qtx11extras libXtst ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ bzip2 libiconv ]
     ++ lib.optional withCC opencc
     ++ lib.optional withEpwing libeb
     ++ lib.optional withExtraTiff libtiff
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     (lib.optional withZim "CONFIG+=zim_support")
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv GoldenDict.app $out/Applications
   '';

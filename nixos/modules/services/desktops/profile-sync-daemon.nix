@@ -1,19 +1,16 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.psd;
 in {
-  options.services.psd = with types; {
-    enable = mkOption {
+  options.services.psd = with lib.types; {
+    enable = lib.mkOption {
       type = bool;
       default = false;
       description = ''
         Whether to enable the Profile Sync daemon.
       '';
     };
-    resyncTimer = mkOption {
+    resyncTimer = lib.mkOption {
       type = str;
       default = "1h";
       example = "1h 30min";
@@ -27,7 +24,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd = {
       user = {
         services = {

@@ -5,7 +5,9 @@
 , findutils
 , gettext
 , gnused
+, inetutils
 , installShellFiles
+, jq
 , less
 , ncurses
 , nixos-option
@@ -16,14 +18,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "home-manager";
-  version = "0-unstable-2024-08-11";
+  version = "0-unstable-2024-10-20";
 
   src = fetchFromGitHub {
     name = "home-manager-source";
     owner = "nix-community";
     repo = "home-manager";
-    rev = "086f619dd991a4d355c07837448244029fc2d9ab";
-    hash = "sha256-97wn0ihhGqfMb8WcUgzzkM/TuAxce2Gd20A8oiruju4=";
+    rev = "fe56302339bb28e3471632379d733547caec8103";
+    hash = "sha256-Dtmm1OU8Ymiy9hVWn/a2B8DhRYo9Eoyx9veERdOBR4o=";
   };
 
   nativeBuildInputs = [
@@ -40,9 +42,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -D -m755 home-manager/home-manager $out/bin/home-manager
     install -D -m755 lib/bash/home-manager.sh $out/share/bash/home-manager.sh
 
-    installShellCompletion --bash --name home-manager.bash home-manager/completion.bash
-    installShellCompletion --fish --name home-manager.fish home-manager/completion.fish
-    installShellCompletion --zsh --name _home-manager home-manager/completion.zsh
+    installShellCompletion --cmd home-manager \
+      --bash home-manager/completion.bash \
+      --fish home-manager/completion.fish \
+      --zsh home-manager/completion.zsh
 
     for pofile in home-manager/po/*.po; do
       lang="''${pofile##*/}"
@@ -63,15 +66,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           findutils
           gettext
           gnused
+          jq
           less
           ncurses
           nixos-option
-          unixtools.hostname
+          inetutils # for `hostname`
         ]
       }" \
-      --subst-var-by HOME_MANAGER_LIB '${placeholder "out"}/share/bash/home-manager.sh' \
+      --subst-var-by HOME_MANAGER_LIB "$out/share/bash/home-manager.sh" \
       --subst-var-by HOME_MANAGER_PATH "${finalAttrs.src}" \
-      --subst-var-by OUT '${placeholder "out"}'
+      --subst-var-by OUT "$out"
   '';
 
   passthru.updateScript = unstableGitUpdater {
@@ -89,7 +93,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "home-manager";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres bryango ];
     platforms = lib.platforms.unix;
   };
 })

@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
   buildInputs = [ bzip2 qtbase libnova proj_7 openjpeg libpng ];
   cmakeFlags = [ "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/openjpeg-${lib.versions.majorMinor openjpeg.version}" ]
-    ++ lib.optionals stdenv.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
 
   postInstall =
-    if stdenv.isDarwin then ''
+    if stdenv.hostPlatform.isDarwin then ''
       mkdir -p "$out/Applications" "$out/XyGrib/XyGrib.app/Contents/Resources"
       cp "../data/img/xyGrib.icns" "$out/XyGrib/XyGrib.app/Contents/Resources/xyGrib.icns"
       mv $out/XyGrib/XyGrib.app $out/Applications

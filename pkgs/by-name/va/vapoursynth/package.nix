@@ -8,7 +8,6 @@
   runCommandCC,
   runCommand,
   vapoursynth,
-  writeText,
   buildEnv,
   zimg,
   libass,
@@ -20,16 +19,14 @@
 
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
-  version = "69";
+  version = "70";
 
   src = fetchFromGitHub {
     owner = "vapoursynth";
     repo = "vapoursynth";
     rev = "R${version}";
-    hash = "sha256-T2bCVNH0dLM9lFYChXzvD6AJM3xEtOVCb2tI10tIXJs=";
+    hash = "sha256-jkRjFKHNTekXluSKQ33QqsGRy7LKnkmG97U5WIjI6EM=";
   };
-
-  patches = [ ./nix-plugin-loader.patch ];
 
   nativeBuildInputs = [
     pkg-config
@@ -47,12 +44,13 @@ stdenv.mkDerivation rec {
         ]
       ))
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       ApplicationServices
     ];
 
   enableParallelBuilding = true;
+  doInstallCheck = true;
 
   passthru = rec {
     # If vapoursynth is added to the build inputs of mpv and then
@@ -66,7 +64,6 @@ stdenv.mkDerivation rec {
         lib
         python3
         buildEnv
-        writeText
         runCommandCC
         stdenv
         runCommand
@@ -83,6 +80,14 @@ stdenv.mkDerivation rec {
     };
   };
 
+  postPatch = ''
+    # Export weak symbol nixPluginDir to permit override of default plugin path
+    sed -E -i \
+      -e 's/(VS_PATH_PLUGINDIR)/(nixPluginDir ? nixPluginDir : \1)/g' \
+      -e '1i\extern char const __attribute__((weak)) nixPluginDir[];' \
+      src/core/vscore.cpp
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/vspipe \
         --prefix PYTHONPATH : $out/${python3.sitePackages}
@@ -92,8 +97,20 @@ stdenv.mkDerivation rec {
     mkdir $out/lib/vapoursynth
   '';
 
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    libv="$out/lib/libvapoursynth${stdenv.hostPlatform.extensions.sharedLibrary}"
+    if ! $NM -g -P "$libv" | grep -q '^nixPluginDir w'; then
+      echo "Weak symbol nixPluginDir is missing from $libv." >&2
+      exit 1
+    fi
+
+    runHook postInstallCheck
+  '';
+
   meta = with lib; {
-    broken = stdenv.isDarwin; # see https://github.com/NixOS/nixpkgs/pull/189446 for partial fix
+    broken = stdenv.hostPlatform.isDarwin; # see https://github.com/NixOS/nixpkgs/pull/189446 for partial fix
     description = "Video processing framework with the future in mind";
     homepage = "http://www.vapoursynth.com/";
     license = licenses.lgpl21;

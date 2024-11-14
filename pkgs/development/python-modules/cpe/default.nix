@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "cpe";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "nilp0inter";
     repo = "cpe";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nHFgsFNoDf1VJI7XOe62NOuL67AZCP/LFsymt7Q8L2U=";
+    hash = "sha256-QI5XHy2TDSUqK6BZBoFWViBcOKfo+zg0ulzEzF4eg4w=";
   };
 
   build-system = [ setuptools ];

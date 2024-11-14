@@ -52,11 +52,16 @@ let
       else null
     );
 
+  cleanModule = lib.flip removeAttrs [
+    "link" # Remove link not to symlink directories. These have been processed to store paths already.
+    "funding" # Remove funding to get rid sponsorship nag in build output
+  ];
+
   # Manage node_modules outside of the store with hooks
   hooks = callPackages ./hooks { };
 
 in
-{
+lib.fix (self: {
   importNpmLock =
     { npmRoot ? null
     , package ? importJSON (npmRoot + "/package.json")
@@ -67,6 +72,10 @@ in
     # Example: { "node_modules/axios" = { curlOptsList = [ "--verbose" ]; }; }
     # This will download the axios package with curl's verbose option.
     , fetcherOpts ?  {}
+    # A map from node_module path to an alternative package to use instead of fetching the source in package-lock.json.
+    # Example: { "node_modules/axios" = stdenv.mkDerivation { ... }; }
+    # This is usefull if you want to inject custom sources for a specific package.
+    , packageSourceOverrides ? {}
     }:
     let
       mapLockDependencies =
@@ -89,15 +98,13 @@ in
           mapAttrs
             (modulePath: module:
               let
-                src = fetchModule {
+                src = packageSourceOverrides.${modulePath} or (fetchModule {
                   inherit module npmRoot;
                   fetcherOpts = fetcherOpts.${modulePath} or {};
-                };
+                });
               in
-              (removeAttrs module [
-                "link"
-                "funding"
-              ]) // lib.optionalAttrs (src != null) {
+              cleanModule module
+              // lib.optionalAttrs (src != null) {
                 resolved = "file:${src}";
               } // lib.optionalAttrs (module ? dependencies) {
                 dependencies = mapLockDependencies module.dependencies;
@@ -133,8 +140,52 @@ in
       cp "$packageLockPath" $out/package-lock.json
     '';
 
+  # Build node modules from package.json & package-lock.json
+  buildNodeModules =
+    { npmRoot ? null
+    , package ? importJSON (npmRoot + "/package.json")
+    , packageLock ? importJSON (npmRoot + "/package-lock.json")
+    , nodejs
+    , derivationArgs ? { }
+    }:
+    stdenv.mkDerivation ({
+      pname = derivationArgs.pname or "${getName package}-node-modules";
+      version = derivationArgs.version or getVersion package;
+
+      dontUnpack = true;
+
+      npmDeps = self.importNpmLock {
+        inherit npmRoot package packageLock;
+      };
+
+      package = toJSON package;
+      packageLock = toJSON packageLock;
+
+      installPhase = ''
+        runHook preInstall
+        mkdir $out
+        cp package.json $out/
+        cp package-lock.json $out/
+        [[ -d node_modules ]] && mv node_modules $out/
+        runHook postInstall
+      '';
+    } // derivationArgs // {
+      nativeBuildInputs = [
+        nodejs
+        nodejs.passthru.python
+        hooks.npmConfigHook
+      ] ++ derivationArgs.nativeBuildInputs or [ ];
+
+      passAsFile = [ "package" "packageLock" ] ++ derivationArgs.passAsFile or [ ];
+
+      postPatch = ''
+        cp --no-preserve=mode "$packagePath" package.json
+        cp --no-preserve=mode "$packageLockPath" package-lock.json
+      '' + derivationArgs.postPatch or "";
+    });
+
   inherit hooks;
-  inherit (hooks) npmConfigHook;
+  inherit (hooks) npmConfigHook linkNodeModulesHook;
 
   __functor = self: self.importNpmLock;
-}
+})

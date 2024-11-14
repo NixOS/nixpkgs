@@ -1,34 +1,33 @@
-{ lib, stdenv, fetchurl, openssl }:
-let
-  # Let's not pull the whole apache httpd package
-  mime_file = fetchurl {
-    url = "https://raw.githubusercontent.com/apache/httpd/906e419c1f703360e2e8ec077b393347f993884f/docs/conf/mime.types";
-    sha256 = "ef972fc545cbff4c0daa2b2e6b440859693b3c10435ee90f10fa6fffad800c16";
-  };
-in
-stdenv.mkDerivation rec {
+{ lib, stdenv, fetchFromGitHub, mailcap, openssl }:
+
+stdenv.mkDerivation {
   pname = "webfs";
-  version = "1.21";
+  version = "1.21-unstable-2021-02-24";
 
-  src = fetchurl {
-    url = "https://www.kraxel.org/releases/webfs/webfs-${version}.tar.gz";
-    sha256 = "98c1cb93473df08e166e848e549f86402e94a2f727366925b1c54ab31064a62a";
+  src = fetchFromGitHub {
+    owner = "ourway";
+    repo = "webfsd";
+    rev = "228affae0774251c6925372d465eb4e648327879";
+    hash = "sha256-uTo9f66cOKSsIGLUj1E/ywMXT1peekb93UlFBrfkpN0=";
   };
-
-  patches = [ ./ls.c.patch ];
 
   buildInputs = [ openssl ];
 
   makeFlags = [
-    "mimefile=${mime_file}"
-    "prefix=$(out)"
+    "mimefile=${placeholder "out"}/etc/mime.types"
+    "prefix=${placeholder "out"}"
+    "USE_THREADS=yes"
   ];
+
+  postInstall = ''
+    install -Dm444 -t $out/etc ${mailcap}/etc/mime.types
+  '';
 
   meta = with lib; {
     description = "HTTP server for purely static content";
-    homepage    = "http://linux.bytesex.org/misc/webfs.html";
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.all;
+    homepage = "http://linux.bytesex.org/misc/webfs.html";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
     maintainers = with maintainers; [ zimbatm ];
     mainProgram = "webfsd";
   };

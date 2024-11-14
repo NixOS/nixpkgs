@@ -13,7 +13,7 @@
 , xmlto
 , autoreconfHook
 , autoconf-archive
-, x11Support ? (stdenv.isLinux || stdenv.isDarwin)
+, x11Support ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin)
 , xorg
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uh8h0r2dM52i1KqHgMCd8y/qh5mLc9ok9Jq53x42pQ8=";
   };
 
-  patches = lib.optional stdenv.isSunOS ./implement-getgrouplist.patch;
+  patches = lib.optional stdenv.hostPlatform.isSunOS ./implement-getgrouplist.patch;
 
   postPatch = ''
     substituteInPlace bus/Makefile.am \
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
       libICE
       libSM
     ]) ++ lib.optional enableSystemd systemdMinimal
-    ++ lib.optionals stdenv.isLinux [ audit libapparmor ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ audit libapparmor ];
   # ToDo: optional selinux?
 
   __darwinAllowLocalNetworking = true;
@@ -84,10 +84,10 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
   ] ++ lib.optional (!x11Support) "--without-x"
-  ++ lib.optionals stdenv.isLinux [ "--enable-apparmor" "--enable-libaudit" ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-apparmor" "--enable-libaudit" ]
   ++ lib.optionals enableSystemd [ "SYSTEMCTL=${systemdMinimal}/bin/systemctl" ];
 
-  NIX_CFLAGS_LINK = lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed";
+  NIX_CFLAGS_LINK = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-Wl,--as-needed";
 
   enableParallelBuilding = true;
 

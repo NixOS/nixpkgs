@@ -1,17 +1,14 @@
 { config, lib, ... }:
-
-with lib;
-
 let
 
-  sysctlOption = mkOptionType {
+  sysctlOption = lib.mkOptionType {
     name = "sysctl option value";
     check = val:
       let
-        checkType = x: isBool x || isString x || isInt x || x == null;
+        checkType = x: lib.isBool x || lib.isString x || lib.isInt x || x == null;
       in
         checkType val || (val._type or "" == "override" && checkType val.content);
-    merge = loc: defs: mergeOneOption loc (filterOverrides defs);
+    merge = loc: defs: lib.mergeOneOption loc (lib.filterOverrides defs);
   };
 
 in
@@ -20,33 +17,33 @@ in
 
   options = {
 
-    boot.kernel.sysctl = mkOption {
+    boot.kernel.sysctl = lib.mkOption {
       type = let
-        highestValueType = types.ints.unsigned // {
+        highestValueType = lib.types.ints.unsigned // {
           merge = loc: defs:
-            foldl
+            lib.foldl
               (a: b: if b.value == null then null else lib.max a b.value)
               0
-              (filterOverrides defs);
+              (lib.filterOverrides defs);
         };
-      in types.submodule {
-        freeformType = types.attrsOf sysctlOption;
+      in lib.types.submodule {
+        freeformType = lib.types.attrsOf sysctlOption;
         options = {
-          "net.core.rmem_max" = mkOption {
-            type = types.nullOr highestValueType;
+          "net.core.rmem_max" = lib.mkOption {
+            type = lib.types.nullOr highestValueType;
             default = null;
             description = "The maximum receive socket buffer size in bytes. In case of conflicting values, the highest will be used.";
           };
 
-          "net.core.wmem_max" = mkOption {
-            type = types.nullOr highestValueType;
+          "net.core.wmem_max" = lib.mkOption {
+            type = lib.types.nullOr highestValueType;
             default = null;
             description = "The maximum send socket buffer size in bytes. In case of conflicting values, the highest will be used.";
           };
         };
       };
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         { "net.ipv4.tcp_syncookies" = false; "vm.swappiness" = 60; }
       '';
       description = ''
@@ -66,8 +63,8 @@ in
   config = {
 
     environment.etc."sysctl.d/60-nixos.conf".text =
-      concatStrings (mapAttrsToList (n: v:
-        optionalString (v != null) "${n}=${if v == false then "0" else toString v}\n"
+      lib.concatStrings (lib.mapAttrsToList (n: v:
+        lib.optionalString (v != null) "${n}=${if v == false then "0" else toString v}\n"
       ) config.boot.kernel.sysctl);
 
     systemd.services.systemd-sysctl =
@@ -77,10 +74,10 @@ in
 
     # Hide kernel pointers (e.g. in /proc/modules) for unprivileged
     # users as these make it easier to exploit kernel vulnerabilities.
-    boot.kernel.sysctl."kernel.kptr_restrict" = mkDefault 1;
+    boot.kernel.sysctl."kernel.kptr_restrict" = lib.mkDefault 1;
 
     # Improve compatibility with applications that allocate
     # a lot of memory, like modern games
-    boot.kernel.sysctl."vm.max_map_count" = mkDefault 1048576;
+    boot.kernel.sysctl."vm.max_map_count" = lib.mkDefault 1048576;
   };
 }

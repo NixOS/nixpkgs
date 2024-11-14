@@ -30,11 +30,12 @@ in
       }
 
       (import ./wayland-session.nix {
-        inherit lib;
+        inherit lib pkgs;
         # Hardcoded path in Mir, not really possible to disable
         enableXWayland = true;
         # No portal support yet: https://github.com/mattkae/miracle-wm/issues/164
         enableWlrPortal = false;
+        enableGtkPortal = false;
       })
     ]
   );

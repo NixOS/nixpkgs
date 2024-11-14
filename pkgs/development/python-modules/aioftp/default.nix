@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchPypi,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -14,37 +15,31 @@
 
 buildPythonPackage rec {
   pname = "aioftp";
-  version = "0.22.3";
+  version = "0.23.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uqKxMYaqAWIuS4LyfC9I9Nr7SORXprGPzamakl4NwnA=";
+    hash = "sha256-uA6t2MqV0ru8+r594Vy+AawRey50Z3FzdN5Ge62TVws=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov" ""
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [ siosocks ];
-
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     socks = [ siosocks ];
   };
 
   nativeCheckInputs = [
     async-timeout
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     trustme
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # uses 127.0.0.2, which macos doesn't like
     "test_pasv_connection_pasv_forced_response_address"
   ];

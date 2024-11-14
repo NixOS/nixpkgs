@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools-scm ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     images = [ pillow ];
   };
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
       --replace "--no-cov-on-fail" ""
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.images;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.images;
 
   pythonImportsCheck = [ "barcode" ];
 

@@ -119,9 +119,6 @@ in
         # gunicorn needs setuid
         SystemCallFilter = [ "@system-service" "~@privileged" "@resources" "@setuid" "@keyring" ];
         UMask = "0066";
-      } // lib.optionalAttrs (cfg.port < 1024) {
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
       };
 
       wantedBy = [ "multi-user.target" ];

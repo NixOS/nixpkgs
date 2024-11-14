@@ -12,6 +12,7 @@
 , systemd
 , pam
 , fuse
+, libdrm
 , libjpeg
 , libopus
 , nasm
@@ -27,18 +28,18 @@
 let
   xorgxrdp = stdenv.mkDerivation rec {
     pname = "xorgxrdp";
-    version = "0.9.20";
+    version = "0.10.2";
 
     src = fetchFromGitHub {
       owner = "neutrinolabs";
       repo = "xorgxrdp";
       rev = "v${version}";
-      hash = "sha256-cAAWk/GqR5zJmh7EAzX3qJiYNl/RrDWdncdFeqsFIaU=";
+      hash = "sha256-xwkGY9dD747kyTvoXrYAIoiFBzQe5ngskUYQhDawnbU=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf automake which libtool nasm ];
 
-    buildInputs = [ xorg.xorgserver ];
+    buildInputs = [ xorg.xorgserver libdrm ];
 
     postPatch = ''
       # patch from Debian, allows to run xrdp daemon under unprivileged user
@@ -50,9 +51,10 @@ let
         --replace 'sysconfdir="/etc"' "sysconfdir=$out/etc"
     '';
 
-    preConfigure = "./bootstrap";
-
-    configureFlags = [ "XRDP_CFLAGS=-I${xrdp.src}/common"  ];
+    preConfigure = ''
+      ./bootstrap
+      export XRDP_CFLAGS="-I${xrdp.src}/common -I${libdrm.dev}/include -I${libdrm.dev}/include/libdrm"
+    '';
 
     enableParallelBuilding = true;
 
@@ -61,7 +63,7 @@ let
 
   xrdp = stdenv.mkDerivation rec {
     pname = "xrdp";
-    version = "0.9.25.1";
+    version = "0.10.1";
 
     src = applyPatches {
       inherit version;
@@ -72,7 +74,7 @@ let
         repo = "xrdp";
         rev = "v${version}";
         fetchSubmodules = true;
-        hash = "sha256-oAs0oWkCyj3ObdJuHLfT25ZzkTrxNAXDiFU64OOP4Ow=";
+        hash = "sha256-lqifQJ/JX+0304arVctsEBEDFPhEPn2OWLyjAQW1who=";
       };
     };
 
@@ -94,7 +96,7 @@ let
     ];
 
     postPatch = ''
-      substituteInPlace sesman/xauth.c --replace "xauth -q" "${xorg.xauth}/bin/xauth -q"
+      substituteInPlace sesman/sesexec/xauth.c --replace "xauth -q" "${xorg.xauth}/bin/xauth -q"
 
       substituteInPlace configure.ac --replace /usr/include/ ""
     '';
@@ -128,6 +130,7 @@ let
       cp $src/keygen/openssl.conf $out/share/xrdp/openssl.conf
 
       substituteInPlace $out/etc/xrdp/sesman.ini --replace /etc/xrdp/pulse $out/etc/xrdp/pulse
+      substituteInPlace $out/etc/xrdp/sesman.ini --replace '#SessionSockdirGroup=root' 'SessionSockdirGroup=xrdp'
 
       # remove all session types except Xorg (they are not supported by this setup)
       perl -i -ne 'print unless /\[(X11rdp|Xvnc|console|vnc-any|sesman-any|rdp-any|neutrinordp-any)\]/ .. /^$/' $out/etc/xrdp/xrdp.ini

@@ -16,7 +16,7 @@ let
   generic =
     {
       version,
-      sha256,
+      hash,
       patches ? [ ],
     }:
     stdenv.mkDerivation {
@@ -32,7 +32,7 @@ let
         owner = "fmtlib";
         repo = "fmt";
         rev = version;
-        inherit sha256;
+        inherit hash;
       };
 
       inherit patches;
@@ -70,21 +70,21 @@ in
 {
   fmt_8 = generic {
     version = "8.1.1";
-    sha256 = "sha256-leb2800CwdZMJRWF5b1Y9ocK0jXpOX/nwo95icDf308=";
+    hash = "sha256-leb2800CwdZMJRWF5b1Y9ocK0jXpOX/nwo95icDf308=";
   };
 
   fmt_9 = generic {
     version = "9.1.0";
-    sha256 = "sha256-rP6ymyRc7LnKxUXwPpzhHOQvpJkpnRFOt2ctvUNlYI0=";
+    hash = "sha256-rP6ymyRc7LnKxUXwPpzhHOQvpJkpnRFOt2ctvUNlYI0=";
   };
 
   fmt_10 = generic {
     version = "10.2.1";
-    sha256 = "sha256-pEltGLAHLZ3xypD/Ur4dWPWJ9BGVXwqQyKcDWVmC3co=";
+    hash = "sha256-pEltGLAHLZ3xypD/Ur4dWPWJ9BGVXwqQyKcDWVmC3co=";
   };
 
   fmt_11 = generic {
-    version = "11.0.1";
-    sha256 = "sha256-EPidbZxCvysrL64AzbpJDowiNxqy4ii+qwSWAFwf/Ps=";
+    version = "11.0.2";
+    hash = "sha256-IKNt4xUoVi750zBti5iJJcCk3zivTt7nU12RIf8pM+0=";
   };
 }

@@ -36,10 +36,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "tests" ];
-  disabledTests = lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
-    # slightly exceeds numerical tolerance on aarch64-linux:
-    "test_fts_frozen_bn_track_running_stats"
-  ];
+  disabledTests =
+    # torch._dynamo.exc.BackendCompilerFailed: backend='inductor' raised:
+    # LoweringException: ImportError: cannot import name 'triton_key' from 'triton.compiler.compiler'
+    lib.optionals (pythonOlder "3.12") [
+      "test_fts_dynamo_enforce_p0"
+      "test_fts_dynamo_resume"
+      "test_fts_dynamo_intrafit"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+      # slightly exceeds numerical tolerance on aarch64-linux:
+      "test_fts_frozen_bn_track_running_stats"
+    ];
 
   pythonImportsCheck = [ "finetuning_scheduler" ];
 
@@ -50,6 +58,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
     # "No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package" at import time:
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

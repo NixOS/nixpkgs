@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sway-overfocus";
-  version = "0.2.3-fix";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "korreman";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KHbYlxgrrZdNKJ7R9iVflbbP1c6qohM/NHBSYuzxEt4=";
+    hash = "sha256-trpjKA0TV8InSfViIXKnMDeZeFXZfavpiU7/R3JDQkQ=";
   };
 
-  cargoHash = "sha256-zp6PSu8P+ZUhrqi5Vxpe+z9zBaSkdVQBMGNP0FVOviQ=";
+  cargoHash = "sha256-uAzD4x7pSyem2juQi/4223Cbt6pVt4gynhn2lWMSKSQ=";
 
   # Crate without tests.
   doCheck = false;

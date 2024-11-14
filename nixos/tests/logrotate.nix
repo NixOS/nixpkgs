@@ -127,5 +127,7 @@ import ./make-test-python.nix ({ pkgs, ... }: rec {
           if info["ActiveState"] != "failed":
               raise Exception('logrotate-checkconf.service was not failed')
 
+      machine.log(machine.execute("systemd-analyze security logrotate.service | grep -v ✓")[1])
+
     '';
 })

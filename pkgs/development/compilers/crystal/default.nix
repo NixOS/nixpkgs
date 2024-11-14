@@ -19,6 +19,7 @@
 , libffi
 , llvmPackages_13
 , llvmPackages_15
+, llvmPackages_18
 , makeWrapper
 , openssl
 , pcre2
@@ -144,7 +145,7 @@ let
         substituteInPlace spec/std/socket/udp_socket_spec.cr \
           --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
 
-      '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.7.0") ''
+      '' + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.7.0") ''
         # See https://github.com/NixOS/nixpkgs/pull/195606#issuecomment-1356491277
         substituteInPlace spec/compiler/loader/unix_spec.cr \
           --replace 'it "parses file paths"' 'pending "parses file paths"'
@@ -175,7 +176,7 @@ let
         libxml2
         openssl
       ] ++ extraBuildInputs
-      ++ lib.optionals stdenv.isDarwin [ libiconv ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"
@@ -246,6 +247,7 @@ let
       passthru.buildCrystalPackage = callPackage ./build-package.nix {
         crystal = finalAttrs.finalPackage;
       };
+      passthru.llvmPackages = llvmPackages;
 
       meta = with lib; {
         inherit (binary.meta) platforms;
@@ -314,5 +316,21 @@ rec {
     llvmPackages = llvmPackages_15;
   };
 
-  crystal = crystal_1_11;
+  crystal_1_12 = generic {
+    version = "1.12.1";
+    sha256 = "sha256-Q6uI9zPZ3IOGyUuWdC179GPktPGFPRbRWKtOF4YWCBw=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_18;
+  };
+
+  crystal_1_14 = generic {
+    version = "1.14.0";
+    sha256 = "sha256-ayMF5yinHVOUaZxhlmqxb/iiGJHmloeYuKcnrPmxo9Y=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_18;
+    doCheck = false; # Some compiler spec problems on x86-64_linux with the .0 release
+  };
+
+
+  crystal = crystal_1_14;
 }

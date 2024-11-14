@@ -15,47 +15,47 @@ let
   phpMajor = lib.versions.majorMinor php.version;
   inherit (stdenv.hostPlatform) system;
 
-  version = "1.92.22";
+  version = "1.92.25";
 
   hashes = {
     "x86_64-linux" = {
       system = "amd64";
       hash = {
-        "8.1" = "sha256-MWAKoshKC+hW8ldRLfYQIcMwpSHvW+hV9dRMvZ4rqcU=";
-        "8.2" = "sha256-xAdECbxuaV5PxG+X7+o2p5pOEG9lgRLuOTp46k5I4RM=";
-        "8.3" = "sha256-4vCLpSy4kJ4qwOSonSFvlevCfNMxjIU6AUswm0uG59o=";
+        "8.1" = "sha256-owV7Eo/2Qszm5alNppm6DHS7YLZyFDHnQ//jRfM+m1s=";
+        "8.2" = "sha256-1eECdIo+eET5tZz9neuC8WRtuJpNbJz+A2i0J9lqnms=";
+        "8.3" = "sha256-rfY849xL5AjWNtzzLIud+8+JWuOpmhNM7pdpR1tnNmo=";
       };
     };
     "i686-linux" = {
       system = "i386";
       hash = {
-        "8.1" = "sha256-fvXv3Yn3FXBO4EIgb/5LI3jJxV5HA2Q2JCNy14bA8eU=";
-        "8.2" = "sha256-0m2ze1e09IUGjTpxbyTOchQBBMa86cpiMrAImiXrAZ0=";
-        "8.3" = "sha256-nhVP4/Ls71MxPN6Ko1bDG8PSHkHQt+vC08EbP0WAL8g=";
+        "8.1" = "sha256-b3Dy18FawjtuiASwYCdS1Q5gOv1WSx6f3ESwow8wj4E=";
+        "8.2" = "sha256-vFNT/KR1RkxsYwjxLZewSYv2MbG1P7qdcxwzGZho7as=";
+        "8.3" = "sha256-TtsWgvrw4orrOFTuWPaPlS3LT9d101HiCGIrBKz4MaI=";
       };
     };
     "aarch64-linux" = {
       system = "arm64";
       hash = {
-        "8.1" = "sha256-pvzKVvtpBh+nwppqSqxSsR989mWzwyAHtwIdDjWx08o=";
-        "8.2" = "sha256-O6RhO/PY2C4GubYl/jcTzpWeiUKSGy8Np4/KrlMsE1Y=";
-        "8.3" = "sha256-3sfjwXq980oRV8u+IAamyYKDp2UMREFaynigz/dpyXE=";
+        "8.1" = "sha256-bCS3gfUDr68KKmWy73G9ripYlCTAZuMssThyEDCGDgM=";
+        "8.2" = "sha256-FQlfdsVeClSLLCJqQPp0fo1CqpshkTo1iUw/9QI9JBc=";
+        "8.3" = "sha256-cThRmDf1HTaCT/KuvT3TMcmsCMky407p9u3hwtGtWDQ=";
       };
     };
     "aarch64-darwin" = {
       system = "arm64";
       hash = {
-        "8.1" = "sha256-peZmwxzQ2NCKkq5qSraIb4pnnJDwcRkCyGW8qeBSGRk=";
-        "8.2" = "sha256-MvF7S+VITEnsJSLz3xEy927zIR6TN+p3nRGQFjKqtu8=";
-        "8.3" = "sha256-sUlD8cPk7emJPtz4en6AcFxs/7NUjxUMkqf/Qs3INIA=";
+        "8.1" = "sha256-ZbUUtljjvQ0dcly/eTovTECTZn9OOcx3VDe1gKEICyA=";
+        "8.2" = "sha256-8xjs5IrsdbcjmTfni/hbtN+qFmnUgFK3KG8ntbNgBeI=";
+        "8.3" = "sha256-kDf+5rATt6/DMH5zZoom2Y5j/6CFFj8claJHlMq285o=";
       };
     };
     "x86_64-darwin" = {
       system = "amd64";
       hash = {
-        "8.1" = "sha256-kMftb/fC9uyMZyjP4jmtYLM+xEhFqP7umQ5FLvR9vAo=";
-        "8.2" = "sha256-W8LXYz8KzWlzdpyqmo7XQmkzuyfXO0BZSkiBIlfi18g=";
-        "8.3" = "sha256-a/Q7avEJr/we5GF2NxTZywpsal5AkAGxEABMPCgy2LM=";
+        "8.1" = "sha256-i1QxRGump5G3eMKjXFokqRr9FD6wsdPoUbjE7w3/a0A=";
+        "8.2" = "sha256-O7L4LgAbLRsz/F+esGwwnxAdD1gT30QEy3FEOQxTNu0=";
+        "8.3" = "sha256-a5oCtzCb8T/bA5GOOfyN7dMzeK29ZUBZceEnlqme41I=";
       };
     };
   };
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit system phpMajor;
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 

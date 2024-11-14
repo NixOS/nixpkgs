@@ -9,7 +9,7 @@
 
 buildDunePackage rec {
   pname = "tsdl-mixer";
-  version = "0.5";
+  version = "0.6";
 
   duneVersion = "3";
 
@@ -17,7 +17,7 @@ buildDunePackage rec {
     owner = "sanette";
     repo = pname;
     rev = version;
-    hash = "sha256-HGtO5iO3lxuVa707MDIhw0pgDZLHt9qY+Rd24sFkags=";
+    hash = "sha256-szuGmLzgGyQExCQwpopVNswtZZdhP29Q1+uNQJZb43Q=";
   };
 
   buildInputs = [

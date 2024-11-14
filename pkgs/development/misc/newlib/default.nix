@@ -86,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-newlib-retargetable-locking"
   ]);
 
+  enableParallelBuilding = true;
   dontDisableStatic = true;
 
   # apply necessary nano changes from https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/manifest/copy_nano_libraries.sh?rev=4c50be6ccb9c4205a5262a3925317073&hash=1375A7B0A1CD0DB9B9EB0D2B574ADF66

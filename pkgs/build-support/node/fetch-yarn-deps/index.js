@@ -42,7 +42,7 @@ const downloadFileHttps = (fileName, url, expectedHash, hashType = 'sha1') => {
 				} else if (h != expectedHash) return reject(new Error(`hash mismatch, expected ${expectedHash}, got ${h} for ${url}`))
 				resolve()
 			})
-                        res.on('error', e => reject(e))
+			res.on('error', e => reject(e))
 		})
 		get(url)
 	})
@@ -88,13 +88,14 @@ const isGitUrl = pattern => {
 }
 
 const downloadPkg = (pkg, verbose) => {
-	const fileMarker = '@file:'
-	const split = pkg.key.split(fileMarker)
-	if (split.length == 2) {
-		console.info(`ignoring lockfile entry "${split[0]}" which points at path "${split[1]}"`)
-		return
-	} else if (split.length > 2) {
-		throw new Error(`The lockfile entry key "${pkg.key}" contains "${fileMarker}" more than once. Processing is not implemented.`)
+	for (let marker of ['@file:', '@link:']) {
+		const split = pkg.key.split(marker)
+		if (split.length == 2) {
+			console.info(`ignoring lockfile entry "${split[0]}" which points at path "${split[1]}"`)
+			return
+		} else if (split.length > 2) {
+			throw new Error(`The lockfile entry key "${pkg.key}" contains "${marker}" more than once. Processing is not implemented.`)
+		}
 	}
 
 	if (pkg.resolved === undefined) {
@@ -141,10 +142,20 @@ const performParallel = tasks => {
 	return Promise.all(workers)
 }
 
+// This could be implemented using [`Map.groupBy`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/groupBy),
+// but that method is only supported starting with Node 21
+const uniqueBy = (arr, callback) => {
+	const map = new Map()
+	for (const elem of arr) {
+		map.set(callback(elem), elem)
+	}
+	return [...map.values()]
+}
+
 const prefetchYarnDeps = async (lockContents, verbose) => {
 	const lockData = lockfile.parse(lockContents)
 	await performParallel(
-		Object.entries(lockData.object)
+		uniqueBy(Object.entries(lockData.object), ([_, value]) => value.resolved)
 		.map(([key, value]) => () => downloadPkg({ key, ...value }, verbose))
 	)
 	await fs.promises.writeFile('yarn.lock', lockContents)

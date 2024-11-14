@@ -58,7 +58,7 @@ buildPythonPackage rec {
     setuptools-rust
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   propagatedBuildInputs =
     [
@@ -71,9 +71,15 @@ buildPythonPackage rec {
       tzlocal
       urllib3
     ]
-    ++ passthru.optional-dependencies.launchpad
-    ++ passthru.optional-dependencies.fastimport
-    ++ passthru.optional-dependencies.github;
+    ++ optional-dependencies.launchpad
+    ++ optional-dependencies.fastimport
+    ++ optional-dependencies.github;
+
+  optional-dependencies = {
+    launchpad = [ launchpadlib ];
+    fastimport = [ fastimport ];
+    github = [ pygithub ];
+  };
 
   nativeCheckInputs = [ testtools ];
 
@@ -106,11 +112,6 @@ buildPythonPackage rec {
     tests.version = testers.testVersion {
       package = breezy;
       command = "HOME=$TMPDIR brz --version";
-    };
-    optional-dependencies = {
-      launchpad = [ launchpadlib ];
-      fastimport = [ fastimport ];
-      github = [ pygithub ];
     };
   };
 

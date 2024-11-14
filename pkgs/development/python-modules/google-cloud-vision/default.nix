@@ -14,19 +14,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
-  version = "3.7.3";
+  version = "3.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7kjEjoIMfgmTJmOYaXD+9FbcD0XHr3KdRvHz3ZfB37Y=";
+    pname = "google_cloud_vision";
+    inherit version;
+    hash = "sha256-WRydHKJjCPEFV/0LH+zOuqemUZn3Ant33HMRggQAcgs=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     proto-plus
     protobuf

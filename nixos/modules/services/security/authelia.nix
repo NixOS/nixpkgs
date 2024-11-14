@@ -165,10 +165,10 @@ let
 
             log = {
               level = mkOption {
-                type = types.enum [ "info" "debug" "trace" ];
+                type = types.enum [ "trace" "debug" "info" "warn" "error" ];
                 default = "debug";
                 example = "info";
-                description = "Level of verbosity for logs: info, debug, trace.";
+                description = "Level of verbosity for logs.";
               };
 
               format = mkOption {
@@ -308,7 +308,8 @@ in
         {
           description = "Authelia authentication and authorization server";
           wantedBy = [ "multi-user.target" ];
-          after = [ "network.target" ];
+          after = [ "network-online.target" ]; # Checks SMTP notifier creds during startup
+          wants = [ "network-online.target" ];
           environment =
             (lib.filterAttrs (_: v: v != null) {
               X_AUTHELIA_CONFIG_FILTERS = lib.mkIf (oidcJwksConfigFile != [ ]) "template";

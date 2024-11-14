@@ -100,7 +100,7 @@ $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
     darwin-builder = nixpkgs.lib.nixosSystem {
       system = linuxSystem;
       modules = [
-        "${nixpkgs}/nixos/modules/profiles/macos-builder.nix"
+        "${nixpkgs}/nixos/modules/profiles/nix-builder-vm.nix"
         { virtualisation = {
             host.pkgs = pkgs;
             darwin-builder.workingDirectory = "/var/lib/darwin-builder";
@@ -158,7 +158,7 @@ in the example below and rebuild.
     darwin-builder = nixpkgs.lib.nixosSystem {
       system = linuxSystem;
       modules = [
-        "${nixpkgs}/nixos/modules/profiles/macos-builder.nix"
+        "${nixpkgs}/nixos/modules/profiles/nix-builder-vm.nix"
         {
           virtualisation.host.pkgs = pkgs;
           virtualisation.darwin-builder.diskSize = 5120;
@@ -185,6 +185,6 @@ nix-repl> darwin.linux-builder.nixosConfig.nix.package
 «derivation /nix/store/...-nix-2.17.0.drv»
 
 nix-repl> :p darwin.linux-builder.nixosOptions.virtualisation.memorySize.definitionsWithLocations
-[ { file = "/home/user/src/nixpkgs/nixos/modules/profiles/macos-builder.nix"; value = 3072; } ]
+[ { file = "/home/user/src/nixpkgs/nixos/modules/profiles/nix-builder-vm.nix"; value = 3072; } ]
 
 ```

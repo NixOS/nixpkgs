@@ -36,7 +36,7 @@ buildPythonPackage rec {
     six
   ];
 
-  doCheck = !stdenv.isDarwin; # could not create shared memory segment: Operation not permitted
+  doCheck = !stdenv.hostPlatform.isDarwin; # could not create shared memory segment: Operation not permitted
 
   nativeCheckInputs = [
     djangorestframework

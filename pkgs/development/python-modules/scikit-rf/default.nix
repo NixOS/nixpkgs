@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "scikit-rf";
-  version = "1.2.0";
+  version = "1.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "scikit-rf";
     repo = "scikit-rf";
     rev = "refs/tags/v${version}";
-    hash = "sha256-K+iOpgEKwYtv8be/dLeDHYUDI8xZsoqB7mYDkVeCA10=";
+    hash = "sha256-tUMOTRazs531OKGUZbh+Ee1omkFY3CAUAMmpKcNCdZU=";
   };
 
   postPatch = ''
@@ -65,14 +65,14 @@ buildPythonPackage rec {
       sphinx
       nbsphinx
       openpyxl
+      nbval
     ];
   };
 
-  env = lib.optionalAttrs stdenv.isDarwin { MPLBACKEND = "Agg"; };
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { MPLBACKEND = "Agg"; };
 
   nativeCheckInputs = [
     pytest-mock
-    nbval
     matplotlib
     pyvisa
     openpyxl
@@ -83,7 +83,7 @@ buildPythonPackage rec {
   # test_calibration.py generates a divide by zero error on darwin
   # https://github.com/scikit-rf/scikit-rf/issues/972
   disabledTestPaths = lib.optional (
-    stdenv.isAarch64 && stdenv.isDarwin
+    stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin
   ) "skrf/calibration/tests/test_calibration.py";
 
   pythonImportsCheck = [ "skrf" ];

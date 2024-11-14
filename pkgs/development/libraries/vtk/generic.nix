@@ -30,11 +30,11 @@ in stdenv.mkDerivation {
 
   buildInputs = [ libpng libtiff ]
     ++ optionals enableQt [ (qtEnv "qvtk-qt-env" [ qtx11extras qttools qtdeclarative ]) ]
-    ++ optionals stdenv.isLinux [
+    ++ optionals stdenv.hostPlatform.isLinux [
       libGLU
       xorgproto
       libXt
-    ] ++ optionals stdenv.isDarwin [
+    ] ++ optionals stdenv.hostPlatform.isDarwin [
       xpc
       AGL
       Cocoa
@@ -52,8 +52,8 @@ in stdenv.mkDerivation {
     ] ++ optionals enablePython [
       python
     ];
-  propagatedBuildInputs = optionals stdenv.isDarwin [ libobjc ]
-    ++ optionals stdenv.isLinux [ libX11 libGL ];
+  propagatedBuildInputs = optionals stdenv.hostPlatform.isDarwin [ libobjc ]
+    ++ optionals stdenv.hostPlatform.isLinux [ libX11 libGL ];
     # see https://github.com/NixOS/nixpkgs/pull/178367#issuecomment-1238827254
 
   patches = map fetchpatch patchesToFetch;
@@ -64,7 +64,7 @@ in stdenv.mkDerivation {
       -i ThirdParty/libproj/vtklibproj/src/proj_json_streaming_writer.hpp \
       -i IO/Image/vtkSEPReader.h
   ''
-  + optionalString stdenv.isDarwin ''
+  + optionalString stdenv.hostPlatform.isDarwin ''
     sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-${majorVersion}|' ./Parallel/Core/CMakeLists.txt
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/' ./ThirdParty/libxml2/vtklibxml2/xmlschemas.c
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/g' ./ThirdParty/libxml2/vtklibxml2/xpath.c
@@ -83,7 +83,7 @@ in stdenv.mkDerivation {
     "-DVTK_MODULE_USE_EXTERNAL_vtkpng=ON"
     "-DVTK_MODULE_USE_EXTERNAL_vtktiff=1"
     "-DVTK_MODULE_ENABLE_VTK_RenderingExternal=YES"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "-DOPENGL_INCLUDE_DIR=${libGL}/include"
     (lib.cmakeBool "VTK_OPENGL_HAS_EGL" enableEgl)
   ] ++ [
@@ -94,7 +94,7 @@ in stdenv.mkDerivation {
   ] ++ optionals enableQt [
     "-DVTK_GROUP_ENABLE_Qt:STRING=YES"
   ]
-    ++ optionals stdenv.isDarwin [ "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ]
+    ++ optionals stdenv.hostPlatform.isDarwin [ "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ]
     ++ optionals enablePython [
       "-DVTK_WRAP_PYTHON:BOOL=ON"
       "-DVTK_PYTHON_VERSION:STRING=${pythonMajor}"

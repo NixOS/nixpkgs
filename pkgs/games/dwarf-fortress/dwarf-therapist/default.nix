@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-GNinja" ];
 
   installPhase =
-    if stdenv.isDarwin then ''
+    if stdenv.hostPlatform.isDarwin then ''
       mkdir -p $out/Applications
       cp -r DwarfTherapist.app $out/Applications
     '' else null;

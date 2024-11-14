@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     gtk4
     libadwaita
     pango
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
     darwin.apple_sdk.frameworks.CoreBluetooth
     darwin.apple_sdk.frameworks.CoreGraphics

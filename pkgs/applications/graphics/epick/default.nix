@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-OQZPOiMTpoWabxHa3TJG8L3zq8WxMeFttw8xggSXsMA=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     expat
     fontconfig
     freetype
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libXcursor
     xorg.libXi
     xorg.libXrandr
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
   ];
 
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 assets/icon.png $out/share/icons/hicolor/48x48/apps/epick.png
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/epick --add-rpath ${lib.makeLibraryPath [ libGL ]}
   '';
 

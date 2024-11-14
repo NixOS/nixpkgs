@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       libXext          # libXext.so.6
       alsa-lib          # libasound.so.2
       freetype         # libfreetype.so.6
-      stdenv.cc.cc.lib # libstdc++.so.6
+      (lib.getLib stdenv.cc.cc) # libstdc++.so.6
     ];
   in ''
     patchelf \

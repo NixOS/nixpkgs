@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-0huZP1hopHaN5R1Hki6YutpvoASfIHzHMl/Y4czHHMo=";
   };
   prePatch = ''
-    substituteInPlace cmake/FindGTK3.cmake --replace GTK3_CFLAGS_OTHER ""
+    substituteInPlace cmake/FindGTK3.cmake --replace-fail GTK3_CFLAGS_OTHER ""
   '' + lib.optionalString (!dbusSupport) ''
-    substituteInPlace cmake/modules.cmake --replace 'list(APPEND MODULES ctrl_dbus)' ""
+    substituteInPlace cmake/modules.cmake --replace-fail 'list(APPEND MODULES ctrl_dbus)' ""
   '';
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
@@ -86,9 +86,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = '' -I${librem}/include/rem -I${gsm}/include/gsm
+  env.NIX_CFLAGS_COMPILE = ''
+    -I${librem}/include/rem -I${gsm}/include/gsm
     -DHAVE_INTTYPES_H -D__GLIBC__
-    -D__need_timeval -D__need_timespec -D__need_time_t '';
+    -D__need_timeval -D__need_timespec -D__need_time_t
+  '';
 
   doInstallCheck = true;
   # CMake feature detection is prone to breakage between upgrades:

@@ -98,6 +98,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2;
     maintainers = [ maintainers.puffnfresh ];
     platforms = platforms.linux;
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 }

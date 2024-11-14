@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "earlyoom";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

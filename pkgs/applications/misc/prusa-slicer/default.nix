@@ -128,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     catch2
   ] ++ lib.optionals withSystemd [
     systemd
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.CoreWLAN
   ];
 
@@ -208,9 +208,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "G-code generator for 3D printer";
     homepage = "https://github.com/prusa3d/PrusaSlicer";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ moredread tweber tmarkus ];
+    maintainers = with maintainers; [ tweber tmarkus ];
     platforms = platforms.unix;
-  } // lib.optionalAttrs (stdenv.isDarwin) {
+  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
     mainProgram = "PrusaSlicer";
   };
 })

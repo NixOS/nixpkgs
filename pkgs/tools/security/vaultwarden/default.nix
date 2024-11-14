@@ -9,23 +9,23 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.32.0";
+  version = "1.32.4";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "vaultwarden";
     rev = version;
-    hash = "sha256-y8+hkvUKj0leJJ5w72HOVDSOtKW6y2Y44VfOZSetn4M=";
+    hash = "sha256-fT1o+nR7k1fLFS4TeoP1Gm1P0uLTu6Dai6hMGraAKjE=";
   };
 
-  cargoHash = "sha256-1Z0ba1FhxQ5qVpofi0XD1MYz02QCvdXGeuViW3lU6JQ=";
+  cargoHash = "sha256-xidkmkRVIyQ3mutkmR3oObEwi1uRLCiRSyF5GpWVM9w=";
 
   # used for "Server Installed" version in admin panel
   env.VW_VERSION = version;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security CoreServices SystemConfiguration ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security CoreServices SystemConfiguration ]
     ++ lib.optional (dbBackend == "mysql") libmysqlclient
     ++ lib.optional (dbBackend == "postgresql") postgresql;
 

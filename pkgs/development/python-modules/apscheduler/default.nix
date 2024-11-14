@@ -64,7 +64,7 @@ buildPythonPackage rec {
       "test_add_pending_job"
       "test_shutdown"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_submit_job"
       "test_max_instances"
     ];

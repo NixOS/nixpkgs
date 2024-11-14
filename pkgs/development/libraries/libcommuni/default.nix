@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   dontUseQmakeConfigure = true;
   configureFlags = [ "-config" "release" ]
     # Build mixes up dylibs/frameworks if one is not explicitly specified.
-    ++ lib.optionals stdenv.isDarwin [ "-config" "qt_framework" ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-config" "qt_framework" ];
 
   dontWrapQtApps = true;
 

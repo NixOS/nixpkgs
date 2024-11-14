@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opendht";
-  version = "3.1.11";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "savoirfairelinux";
     repo = "opendht";
     rev = "v${version}";
-    hash = "sha256-lJaQGkhpKfSSNVbP+NqommagtoWyi8CdauVxEhiI9Bc=";
+    hash = "sha256-s172Sj1EvV7Lmnmd+xyKmYF2cDEa8Bot10ovggEsOFg=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     restinio
     http-parser
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 
