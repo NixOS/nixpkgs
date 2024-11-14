@@ -5730,18 +5730,6 @@ with pkgs;
 
   yapf = with python3Packages; toPythonApplication yapf;
 
-  inherit
-    ({
-      yarn-berry_3 = callPackage ../development/tools/yarn-berry { berryVersion = 3; };
-
-      yarn-berry_4 = callPackage ../development/tools/yarn-berry { };
-    })
-    yarn-berry_3
-    yarn-berry_4
-    ;
-
-  yarn-berry = yarn-berry_4;
-
   yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea/yarn2nix { pkgs = pkgs.__splicedPackages; };
 
   inherit (yarn2nix-moretea)
