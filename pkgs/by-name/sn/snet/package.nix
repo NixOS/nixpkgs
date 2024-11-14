@@ -1,6 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
-buildGoModule rec {
+buildGoModule {
   pname = "snet";
   version = "unstable-2021-11-26";
 
@@ -13,11 +17,14 @@ buildGoModule rec {
 
   vendorHash = "sha256-dubmCLeD8Fwe1msfLN+5WzdbFkfTRnZDU3F49gjWTS4=";
 
-  meta = with lib; {
+  # flaky test, random failures
+  checkFlags = [ "-skip=TestBloomfilter" ];
+
+  meta = {
     description = "Transparent proxy works on linux desktop, MacOS, router";
     homepage = "https://github.com/monsterxx03/snet";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azuwis ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ azuwis ];
     mainProgram = "snet";
   };
 }

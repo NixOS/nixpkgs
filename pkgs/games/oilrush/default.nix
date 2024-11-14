@@ -72,6 +72,7 @@ stdenv.mkDerivation {
     #maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.linux;
     hydraPlatforms = [];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 
 }

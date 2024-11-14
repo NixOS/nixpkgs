@@ -74,5 +74,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }
