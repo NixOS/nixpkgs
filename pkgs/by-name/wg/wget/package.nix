@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, gettext, pkg-config, perlPackages
 , libidn2, zlib, pcre, libuuid, libiconv, libintl
-, python3, lzip, darwin
+, nukeReferences, python3, lzip, darwin
 , withLibpsl ? false, libpsl
 , withOpenssl ? true, openssl
 }:
@@ -14,15 +14,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-GSJcx1awoIj8gRSNxqQKDI8ymvf9hIPxx7L+UPTgih8=";
   };
 
-  patches = [
-    ./remove-runtime-dep-on-openssl-headers.patch
-  ];
-
   preConfigure = ''
     patchShebangs doc
   '';
 
-  nativeBuildInputs = [ gettext pkg-config perlPackages.perl lzip libiconv libintl ];
+  nativeBuildInputs = [ gettext pkg-config perlPackages.perl lzip libiconv libintl nukeReferences ];
   buildInputs = [ libidn2 zlib pcre libuuid ]
     ++ lib.optional withOpenssl openssl
     ++ lib.optional withLibpsl libpsl
@@ -34,6 +30,12 @@ stdenv.mkDerivation rec {
     # https://lists.gnu.org/archive/html/bug-wget/2021-01/msg00076.html
     "--without-included-regex"
   ];
+
+  preBuild = ''
+    # avoid runtime references to build-only depends
+    make -C src version.c
+    nuke-refs src/version.c
+  '';
 
   enableParallelBuilding = true;
 
