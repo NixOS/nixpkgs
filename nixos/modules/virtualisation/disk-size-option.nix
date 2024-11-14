@@ -16,7 +16,7 @@ in
     virtualisation.diskSize = lib.mkOption {
       type = t.either (t.enum [ "auto" ]) t.ints.positive;
       default = if config.virtualisation.diskSizeAutoSupported then "auto" else 1024;
-      defaultText = "\"auto\" if diskSizeAutoSupported, else 1024";
+      defaultText = lib.literalExpression "if virtualisation.diskSizeAutoSupported then \"auto\" else 1024";
       description = ''
         The disk size in megabytes of the virtual machine.
       '';
