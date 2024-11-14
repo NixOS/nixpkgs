@@ -54,6 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
       (darwinMinVersionHook "11.0")
     ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+
+    (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
+  ];
+
   postPatch = ''
     # The CMake build requires the FBThrift Python support even though
     # it’s not used, presumably because of the relevant code having
