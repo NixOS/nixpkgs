@@ -25,6 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  configureFlags = [
+    (lib.enableFeature (!stdenv.hostPlatform.isDarwin) "sdltest")
+  ];
+
   buildInputs = [
     SDL
     SDL_mixer

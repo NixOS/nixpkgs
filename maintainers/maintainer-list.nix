@@ -15915,6 +15915,12 @@
     githubId = 30374463;
     name = "Michal S.";
   };
+  notthebee = {
+    email = "moe@notthebe.ee";
+    github = "notthebee";
+    githubId = 30384331;
+    name = "Wolfgang";
+  };
   notthemessiah = {
     email = "brian.cohen.88@gmail.com";
     github = "NOTtheMessiah";

@@ -11,7 +11,7 @@
   fetchNpmDeps,
   gtk3,
   wrapGAppsHook3,
-  cargo-tauri,
+  cargo-tauri_1,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [
-    cargo-tauri.hook
+    cargo-tauri_1.hook
     nodejs
     npmHooks.npmConfigHook
     pkg-config
