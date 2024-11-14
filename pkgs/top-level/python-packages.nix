@@ -11958,6 +11958,8 @@ self: super: with self; {
 
   pymc = callPackage ../development/python-modules/pymc { };
 
+  pymctranslate = callPackage ../development/python-modules/pymctranslate { };
+
   pymdstat = callPackage ../development/python-modules/pymdstat { };
 
   pymdown-extensions = callPackage ../development/python-modules/pymdown-extensions { };
