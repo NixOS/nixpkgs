@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_polars";
   inherit (nushell) version src;
 
-  cargoHash = "sha256-bpZphNYHx9LkEu9JlGrIkks2M99JRjc+skY8MqPHMJA=";
+  cargoHash = "sha256-CMrq0UVJxXoyHo9OvatW9tlknqzOuK70NI8H/ZgbYBY=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
   buildInputs =
