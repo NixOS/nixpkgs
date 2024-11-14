@@ -12,7 +12,9 @@
   libxslt,
   gobject-introspection,
   wrapGAppsHook3,
+  wrapGAppsNoGuiHook,
   python3,
+  gdk-pixbuf,
   glib,
   gssdp_1_6,
   gupnp_1_6,
@@ -21,6 +23,8 @@
   gst_all_1,
   libgee,
   libsoup_3,
+  libX11,
+  withGtk ? true,
   gtk3,
   libmediaart,
   pipewire,
@@ -60,12 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libxslt # for xsltproc
     gobject-introspection
-    wrapGAppsHook3
+    (if withGtk then wrapGAppsHook3 else wrapGAppsNoGuiHook)
     python3
   ];
 
   buildInputs =
     [
+      gdk-pixbuf
       glib
       gssdp_1_6
       gupnp_1_6
@@ -76,11 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
       gtk3
       libmediaart
       pipewire
+      libX11
       sqlite
       systemd
       tinysparql
       shared-mime-info
     ]
+    ++ lib.optionals withGtk [ gtk3 ]
     ++ (with gst_all_1; [
       gstreamer
       gst-editing-services
@@ -95,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dapi-docs=false"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
+    (lib.mesonEnable "gtk" withGtk)
   ];
 
   doCheck = true;
