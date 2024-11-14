@@ -37,7 +37,7 @@
 , nlohmann_json
 , pkg-config
 , procps
-, python
+, python3
 , which
 , xxHash
 , zlib
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     patchRcPathCsh
     patchRcPathFish
     patchRcPathPosix
-    python.pkgs.numpy
+    python3.pkgs.numpy
     tbb
     xrootd
   ]
