@@ -74,6 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/facebook/fb303";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ kylesferrazza ];
+    maintainers = with lib.maintainers; [
+      kylesferrazza
+      emily
+    ];
   };
 })
