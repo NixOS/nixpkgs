@@ -54,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeDir = "../wangle";
 
   cmakeFlags = [
-    "-Wno-dev"
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
