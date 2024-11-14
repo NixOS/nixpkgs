@@ -6,6 +6,7 @@
 
   cmake,
   ninja,
+  removeReferencesTo,
 
   openssl,
   glog,
@@ -27,6 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "fizz";
   version = "2024.11.18.00";
 
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+  ];
+
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "fizz";
@@ -37,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
+    removeReferencesTo
   ];
 
   buildInputs =
@@ -67,7 +75,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+
+    (lib.cmakeFeature "BIN_INSTALL_DIR" "${placeholder "bin"}/bin")
+    (lib.cmakeFeature "INCLUDE_INSTALL_DIR" "${placeholder "dev"}/include")
+    (lib.cmakeFeature "LIB_INSTALL_DIR" "${placeholder "out"}/lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_DIR" "${placeholder "dev"}/lib/cmake/fizz")
+    # Fizz puts test headers into `${CMAKE_INSTALL_PREFIX}/include`
+    # for other projects to consume.
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "dev"))
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -84,6 +101,18 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       export GTEST_FILTER="-${lib.concatStringsSep ":" disabledTests}"
     '';
+
+  postFixup = ''
+    # Sanitize header paths to avoid runtime dependencies leaking in
+    # through `__FILE__`.
+    (
+      shopt -s globstar
+      for header in "$dev/include"/**/*.h; do
+        sed -i "1i#line 1 \"$header\"" "$header"
+        remove-references-to -t "$dev" "$header"
+      done
+    )
+  '';
 
   meta = {
     description = "C++14 implementation of the TLS-1.3 standard";
