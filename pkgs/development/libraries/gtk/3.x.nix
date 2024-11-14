@@ -51,6 +51,14 @@
 , testers
 }:
 
+assert lib.assertMsg (builtins.any (x: x) [
+  stdenv.hostPlatform.isDarwin
+  stdenv.hostPlatform.isWindows
+  broadwaySupport
+  waylandSupport
+  x11Support
+]) "At least one backend must be enabled";
+
 let
 
   gtkCleanImmodulesCache = substituteAll {
