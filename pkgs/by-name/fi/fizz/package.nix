@@ -77,11 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck =
     let
       disabledTests = [
-        # these don't work with openssl 3.x probably due to
-        # https://github.com/openssl/openssl/issues/13283
-        "DefaultCertificateVerifierTest.TestVerifySuccess"
-        "DefaultCertificateVerifierTest.TestVerifyWithIntermediates"
-
         # timing-related & flaky
         "SlidingBloomReplayCacheTest.TestTimeBucketing"
       ];
