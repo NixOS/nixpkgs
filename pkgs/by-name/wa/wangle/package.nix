@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeDir = "../wangle";
 
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
