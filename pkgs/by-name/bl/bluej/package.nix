@@ -41,13 +41,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple integrated development environment for Java";
     homepage = "https://www.bluej.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2ClasspathPlus;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl2ClasspathPlus;
     mainProgram = "bluej";
-    maintainers = with maintainers; [ chvp ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ chvp ];
+    platforms = lib.platforms.linux;
   };
 }
