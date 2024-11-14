@@ -6,6 +6,7 @@
 
   cmake,
   ninja,
+  removeReferencesTo,
 
   glog,
   gflags,
@@ -22,6 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "edencommon";
   version = "2024.11.18.00";
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   src = fetchFromGitHub {
     owner = "facebookexperimental";
     repo = "edencommon";
@@ -37,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
+    removeReferencesTo
   ];
 
   buildInputs =
@@ -58,6 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
 
     (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
+
+    (lib.cmakeFeature "INCLUDE_INSTALL_DIR" "${placeholder "dev"}/include")
+    (lib.cmakeFeature "LIB_INSTALL_DIR" "${placeholder "out"}/lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_DIR" "${placeholder "dev"}/lib/cmake/edencommon")
   ];
 
   doCheck = true;
@@ -70,6 +81,18 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         'find_package(FBThrift CONFIG REQUIRED COMPONENTS cpp2 py)' \
         'find_package(FBThrift CONFIG REQUIRED COMPONENTS cpp2)'
+  '';
+
+  postFixup = ''
+    # Sanitize header paths to avoid runtime dependencies leaking in
+    # through `__FILE__`.
+    (
+      shopt -s globstar
+      for header in "$dev/include"/**/*.h; do
+        sed -i "1i#line 1 \"$header\"" "$header"
+        remove-references-to -t "$dev" "$header"
+      done
+    )
   '';
 
   meta = {
