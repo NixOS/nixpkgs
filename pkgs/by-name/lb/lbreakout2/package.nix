@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "lbreakout2";
     maintainers = with lib.maintainers; [ AndersonTorres ciil ];
     platforms = lib.platforms.unix;
+    hydraPlatforms = lib.platforms.linux; # build hangs on both Darwin platforms, needs investigation
   };
 })
