@@ -1,16 +1,13 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   dbus,
   fetchFromGitHub,
   openssl,
   pkg-config,
   rustPlatform,
-  AppKit,
-  Cocoa,
-  Foundation,
-  Security,
   samba,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -31,31 +28,32 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      dbus
-      openssl
-      samba
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Cocoa
-      Foundation
-      Security
-    ];
+  buildInputs = [
+    dbus
+    openssl
+    samba
+  ];
 
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      "-framework"
-      "AppKit"
-    ]
-  );
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
-  # Requires network access
-  doCheck = false;
+  checkFeatures = [ "isolated-tests" ];
+  checkFlags =
+    [
+      # requires networking
+      "--skip=cli::remote::test::test_should_make_remote_args_from_one_bookmark_and_one_remote_with_local_dir"
+      "--skip=cli::remote::test::test_should_make_remote_args_from_two_bookmarks_and_local_dir"
+      "--skip=cli::remote::test::test_should_make_remote_args_from_two_remotes_and_local_dir"
+    ]
+    ++ lib.optionals stdenvNoCC.isDarwin [
+      "--skip=system::watcher::test::should_poll_file_removed"
+      "--skip=system::watcher::test::should_poll_file_update"
+    ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -69,6 +67,8 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "termscp";
     maintainers = with lib.maintainers; [
       fab
+      gepbird
     ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }
