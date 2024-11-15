@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, unzip
-, gmp
-, scalp
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  unzip,
+  gmp,
+  scalp,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,11 +13,13 @@ stdenv.mkDerivation rec {
   version = "1.80";
 
   src = fetchurl {
-    url = "https://gitlab.com/kumm/pagsuite/-/raw/master/releases/pagsuite_${lib.replaceStrings ["."] ["_"] version}.zip";
+    url = "https://gitlab.com/kumm/pagsuite/-/raw/master/releases/pagsuite_${
+      lib.replaceStrings [ "." ] [ "_" ] version
+    }.zip";
     hash = "sha256-TYd+dleVPWEWU9Cb3XExd7ixJZyiUAp9QLtorYJSIbQ=";
   };
 
-  sourceRoot = "pagsuite_${lib.replaceStrings ["."] ["_"] version}";
+  sourceRoot = "pagsuite_${lib.replaceStrings [ "." ] [ "_" ] version}";
 
   nativeBuildInputs = [
     cmake
