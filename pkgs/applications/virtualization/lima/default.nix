@@ -39,8 +39,13 @@ buildGoModule rec {
 
   buildPhase = ''
     runHook preBuild
-    make "VERSION=v${version}" binaries
+    make "VERSION=v${version}" "CC=${stdenv.cc.targetPrefix}cc" binaries
     runHook postBuild
+  '';
+
+  preCheck = ''
+    # Workaround for: could not create "/homeless-shelter/.lima/_config" directory: mkdir /homeless-shelter: permission denied
+    export LIMA_HOME="$(mktemp -d)"
   '';
 
   installPhase = ''
