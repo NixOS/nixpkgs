@@ -20,6 +20,10 @@ let
 
   wrapper = {
       extraName ? ""
+    # certain plugins need a custom configuration (available in passthru.initLua)
+    # to work with nix.
+    # if true, the wrapper automatically appends those snippets when necessary
+    , autoconfigure ? false
     # should contain all args but the binary. Can be either a string or list
     , wrapperArgs ? []
     , withPython2 ? false
@@ -87,11 +91,19 @@ let
     packpathDirs.myNeovimPackages = myVimPackage;
     finalPackdir = neovimUtils.packDir packpathDirs;
 
+    luaPluginRC = let
+      op = acc: normalizedPlugin:
+           acc ++ lib.optional (finalAttrs.autoconfigure && normalizedPlugin.plugin.passthru ? initLua) normalizedPlugin.plugin.passthru.initLua;
+      in
+        lib.foldl' op [] pluginsNormalized;
+
     rcContent = ''
       ${luaRcContent}
     '' + lib.optionalString (neovimRcContent' != null) ''
       vim.cmd.source "${writeText "init.vim" neovimRcContent'}"
-    '';
+    '' +
+      lib.concatStringsSep "\n" luaPluginRC
+    ;
 
     getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
 
@@ -155,7 +167,7 @@ let
       __structuredAttrs = true;
       dontUnpack = true;
       inherit viAlias vimAlias withNodeJs withPython3 withPerl withRuby;
-      inherit wrapRc providerLuaRc packpathDirs;
+      inherit autoconfigure wrapRc providerLuaRc packpathDirs;
       inherit python3Env rubyEnv;
       inherit wrapperArgs generatedWrapperArgs;
       luaRcContent = rcContent;
