@@ -39,8 +39,9 @@ let
     inherit ruby;
   }) args;
 
-  cmdArgs = removeAttrs args [ "pname" "postBuild" "gemConfig" "passthru" "gemset" "gemdir" ] // {
+  cmdArgs = removeAttrs args [ "postBuild" "gemConfig" "passthru" "gemset" "gemdir" ] // {
     inherit preferLocalBuild allowSubstitutes; # pass the defaults
+    inherit (basicEnv) version;
 
     nativeBuildInputs = nativeBuildInputs ++ lib.optionals (scripts != []) [ makeWrapper ];
 
