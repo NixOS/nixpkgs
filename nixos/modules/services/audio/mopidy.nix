@@ -13,7 +13,7 @@ let
     pathsToLink = [ "/${pkgs.mopidyPackages.python.sitePackages}" ];
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
-      makeWrapper ${pkgs.mopidy}/bin/mopidy $out/bin/mopidy \
+      makeWrapper ${lib.getExe pkgs.mopidy} $out/bin/mopidy \
         --prefix PYTHONPATH : $out/${pkgs.mopidyPackages.python.sitePackages}
     '';
   };
