@@ -11,21 +11,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unison";
-  version = "2.53.5";
+  version = "2.53.7";
 
   src = fetchFromGitHub {
     owner = "bcpierce00";
     repo = "unison";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XCdK38jG7tRI+/Zk72JVY8a/pPJF6KVaf8l2s3hgxLs=";
+    hash = "sha256-QmYcxzsnbRDQdqkLh82OLWrLF6v3qzf1aOIcnz0kwEk=";
   };
 
   strictDeps = true;
-
-  # uimac requires xcode
-  postPatch = ''
-    sed -i -e 's/ macuimaybe//' src/Makefile
-  '';
 
   nativeBuildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib ]
     ++ lib.optionals enableX11 [ copyDesktopItems wrapGAppsHook3 ];
