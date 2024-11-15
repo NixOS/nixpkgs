@@ -9,14 +9,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "s3ql";
-  version = "5.2.2";
+  version = "5.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "s3ql";
     repo = "s3ql";
     rev = "refs/tags/s3ql-${version}";
-    hash = "sha256-D+fUl9UpJ7vxoVzB6MlrgnyAqEYbUkc+0w6iepYuZnk=";
+    hash = "sha256-hNqKLpJd0vj96Jx4YnqYsPLq/iTbvmtvjyLrYozaxpk=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
