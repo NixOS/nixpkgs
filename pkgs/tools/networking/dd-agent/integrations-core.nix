@@ -33,7 +33,7 @@
 #
 # [1]: https://github.com/DataDog/integrations-core
 
-{ pkgs, python, extraIntegrations ? {} }:
+{ pkgs, python, extraIntegrations ? { }, }:
 
 let
   inherit (pkgs.lib) attrValues mapAttrs;
@@ -42,18 +42,21 @@ let
     owner = "DataDog";
     repo = "integrations-core";
     rev = version;
-    sha256 = "sha256-CIzuJ97KwsG1k65Y+8IUSka/3JX1pmQKN3hPHzZnGhQ=";
+    sha256 = "sha256-tgY8Jh7N9ot3Xp+JfsA9vEzj62H2OPTEh6b1YzyNGRU=";
   };
-  version = "7.38.0";
+  version = "7.50.2";
 
   # Build helper to build a single datadog integration package.
-  buildIntegration = { pname, ... }@args: python.pkgs.buildPythonPackage (args // {
-    inherit src version;
-    name = "datadog-integration-${pname}-${version}";
+  buildIntegration = { pname, ... }@args:
+    python.pkgs.buildPythonPackage (args // {
+      inherit src version;
+      name = "datadog-integration-${pname}-${version}";
+      pyproject = true;
 
-    sourceRoot = "${src.name}/${args.sourceRoot or pname}";
-    doCheck = false;
-  });
+      sourceRoot = "${src.name}/${args.sourceRoot or pname}";
+      buildInputs = with python.pkgs; [ hatchling setuptools ];
+      doCheck = false;
+    });
 
   # Base package depended on by all other integrations.
   datadog_checks_base = buildIntegration {
