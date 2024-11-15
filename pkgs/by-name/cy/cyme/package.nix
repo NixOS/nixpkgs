@@ -13,16 +13,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cyme";
-  version = "1.8.4";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "tuna-f1sh";
     repo = "cyme";
     rev = "v${version}";
-    hash = "sha256-5433lq3u+s4LiC9089Ul7wGJiouQdVDoM3RT0QSiAnU=";
+    hash = "sha256-1UjzTf0lX4WKNrNR2n/Xb0sfFvF/OnGbHtx6FP3SlM0=";
   };
 
-  cargoHash = "sha256-EW4M072qWCghg4UlhjMBR6DVzKsu/foE+j4MOSiHqNk=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "nusb-0.1.10" = "sha256-fo4Bi82/4tlYCeunpFrLVV3J2FtF+P95mF8JwTzVVbA=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -37,7 +42,6 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # doctest that requires access outside sandbox
     "--skip=udev::hwdb::get"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # system_profiler is not available in the sandbox
     "--skip=test_run"
   ];
