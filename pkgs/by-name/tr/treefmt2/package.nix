@@ -19,8 +19,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X git.numtide.com/numtide/treefmt/build.Name=treefmt"
-    "-X git.numtide.com/numtide/treefmt/build.Version=v${version}"
+    "-X github.com/numtide/treefmt/build.Name=treefmt"
+    "-X github.com/numtide/treefmt/build.Version=v${version}"
   ];
 
   meta = {
