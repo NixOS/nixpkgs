@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, ghq }:
 
 buildGoModule rec {
   pname = "ghq";
@@ -23,6 +23,12 @@ buildGoModule rec {
     install -m 444 -D ${src}/misc/zsh/_ghq $out/share/zsh/site-functions/_ghq
     install -m 444 -D ${src}/misc/bash/_ghq $out/share/bash-completion/completions/_ghq
   '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = ghq;
+    };
+  };
 
   meta = {
     description = "Remote repository management made easy";
