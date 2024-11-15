@@ -11,13 +11,13 @@
 }:
 
 let
-  version = "0.17.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "SmilyOrg";
     repo = "photofield";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GYU0BR5X3s3SGmZEFMyK7m+zUa2i2E9krAbtk8dwPdg=";
+    hash = "sha256-leCXj8vETlrU1fwTqLcjcCGvhWWC1ESjpNDWSytAq4s=";
   };
 
   webui = buildNpmPackage {
