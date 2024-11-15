@@ -34,7 +34,7 @@ crystal.buildCrystalPackage rec {
     owner = "iv-org";
     repo = "invidious";
     fetchSubmodules = true;
-    rev = versions.invidious.rev or "v${version}";
+    rev = versions.invidious.rev or "refs/tags/v${version}";
     inherit (versions.invidious) hash;
   };
 
@@ -128,12 +128,12 @@ crystal.buildCrystalPackage rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source alternative front-end to YouTube";
     mainProgram = "invidious";
     homepage = "https://invidious.io/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       _999eagle
       GaetanLepage
       sbruder
