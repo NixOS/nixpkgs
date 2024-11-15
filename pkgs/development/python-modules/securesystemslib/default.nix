@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "securesystemslib";
-  version = "0.31.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,15 +28,10 @@ buildPythonPackage rec {
     owner = "secure-systems-lab";
     repo = "securesystemslib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-REi38rIVZmWawFGcrPl9QzSthW4jHZDr/0ug7kJRz3Y=";
+    hash = "sha256-PDivKunqQcGnER4eyWtGE5gvbqvhavXF7n/O2rTFTkI=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "hatchling==1.18.0" "hatchling"
-  '';
-
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
   optional-dependencies = {
     PySPX = [ pyspx ];
