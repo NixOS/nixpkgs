@@ -11,6 +11,8 @@
   postlight-parser,
   readability-extractor,
   chromium,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 let
@@ -170,6 +172,9 @@ python.pkgs.buildPythonApplication rec {
     ];
   };
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   makeWrapperArgs = [
     "--set USE_NODE True" # used through dependencies, not needed explicitly
@@ -189,14 +194,20 @@ python.pkgs.buildPythonApplication rec {
     )
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Open source self-hosted web archiving";
     homepage = "https://archivebox.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       siraben
       viraptor
+      pyrox0
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
+    mainProgram = "archivebox";
   };
 }
