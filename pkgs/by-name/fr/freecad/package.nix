@@ -212,7 +212,7 @@ stdenv.mkDerivation (finalAttrs: {
       right at home with FreeCAD.
     '';
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ gebner AndersonTorres srounce ];
+    maintainers = with lib.maintainers; [ gebner srounce ];
     platforms = lib.platforms.linux;
   };
 })
