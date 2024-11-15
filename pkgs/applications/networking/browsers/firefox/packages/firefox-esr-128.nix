@@ -32,7 +32,7 @@ buildMozillaMach rec {
   tests = {
     inherit (nixosTests) firefox-esr-128;
   };
-  updateScript = callPackage ./update.nix {
+  updateScript = callPackage ../update.nix {
     attrPath = "firefox-esr-128-unwrapped";
     versionPrefix = "128";
     versionSuffix = "esr";
