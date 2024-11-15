@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "joincap";
-  version = "0.10.2";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "assafmo";
     repo = "joincap";
     rev = "v${version}";
-    hash = "sha256-Xli9G/VkDWKkc+7mldmLfvigvPPcdcToc4e15uoadDQ=";
+    hash = "sha256-HvqtAno26ZSggiXbQpkw5ghxCrmmLb5uDdeSQ2QVeq0=";
   };
 
-  vendorHash = "sha256-YsLIbt3uiA1d08yIEhSRdep1+52AxRvbIzDHlhc5s7Y=";
+  vendorHash = "sha256-pIu/f7hpSUJG5az7sV9tlXJfIjVT37bTV49kTkR80ek=";
 
   buildInputs = [
     libpcap
