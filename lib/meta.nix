@@ -15,6 +15,7 @@ let
     assertMsg
     ;
   inherit (lib.attrsets) mapAttrs' filterAttrs;
+  inherit (lib.meta.platform) evalConstraints;
   inherit (builtins) isString match typeOf;
 
 in
@@ -295,7 +296,7 @@ rec {
   availableOn =
     platform: pkg:
     if pkg ? meta.platformConstraints then
-      lib.meta.platform.evalConstraints platform pkg.meta.platformConstraints
+      evalConstraints platform pkg.meta.platformConstraints
     else if pkg ? meta.platforms then
       # Legacy platform declarations
       any (platformMatch platform) pkg.meta.platforms

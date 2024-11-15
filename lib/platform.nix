@@ -24,7 +24,19 @@
 #   (NOT isMusl)
 # ]
 
-{
+let
+  inherit (lib.meta) platformMatch;
+  inherit (lib) head;
+
+  operations = {
+    OR = lib.any lib.id;
+    AND = lib.all lib.id;
+    NOT = x: !(head x);
+  };
+
+in
+
+rec {
   /**
     A DSL to declare which platform properties constrain a package's function.
     Many packages only work on some platforms, CPUs or other properties of a platform.
@@ -128,20 +140,9 @@
 
   */
   evalConstraints =
-    platform: initialValue:
-    let
-      operations = {
-        OR = lib.any lib.id;
-        AND = lib.all lib.id;
-        NOT = x: !(lib.head x); # We have a list with one value
-      };
-      platformMatch' = lib.meta.platformMatch platform;
-      recurse =
-        expression:
-        if expression ? __operation then
-          operations.${expression.__operation} (map recurse expression.value)
-        else
-          platformMatch' expression;
-    in
-    recurse initialValue;
+    platform: constraint:
+    if constraint ? __operation then
+      operations.${constraint.__operation} (map (evalConstraints platform) constraint.value)
+    else
+      platformMatch platform constraint;
 }
