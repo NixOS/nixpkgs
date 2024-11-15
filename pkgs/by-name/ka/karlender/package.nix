@@ -69,9 +69,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Mobile-friendly GTK calendar application";
-    mainProgram = "karlender";
     homepage = "https://gitlab.com/floers/karlender";
     license = lib.licenses.gpl3Plus;
+    mainProgram = "karlender";
     maintainers = with lib.maintainers; [
       chuangzhu
       bot-wxt1221
