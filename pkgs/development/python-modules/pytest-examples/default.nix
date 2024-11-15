@@ -3,6 +3,7 @@
   black,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   hatchling,
   pytest,
   pytestCheckHook,
@@ -31,6 +32,13 @@ buildPythonPackage rec {
   '';
 
   pythonRemoveDeps = [ "ruff" ];
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/pydantic/pytest-examples/pull/37.patch";
+      hash = "sha256-SISZl2mTDrazQjlwtS9c/dkfY05VKapkdvCmfB0/cQU=";
+    })
+  ];
 
   build-system = [
     hatchling
