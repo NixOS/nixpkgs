@@ -276,7 +276,13 @@ rec {
           // lib.optionalAttrs (updateAttrPath != null) {
             updateScript = nix-update-script {
               attrPath = updateAttrPath;
-              extraArgs = [ "--url=https://github.com/gradle/gradle" ];
+              extraArgs = [
+                "--url=https://github.com/gradle/gradle"
+                # Gradle’s .0 releases are tagged as `vX.Y.0`, but the actual
+                # release version omits the `.0`, so we’ll wanto to only capture
+                # the version up but not including the the trailing `.0`.
+                "--version-regex=^v(\\d+\\.\\d+(?:\\.[1-9]\\d?)?)(\\.0)?$"
+              ];
             };
           };
 
