@@ -18967,7 +18967,7 @@ with pkgs;
     boost186
   ;
 
-  boost = boost181;
+  boost = boost186;
 
   bosh-cli = callPackage ../applications/networking/cluster/bosh-cli { };
 
