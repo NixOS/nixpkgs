@@ -5027,6 +5027,12 @@
     githubId = 118536343;
     name = "David Hamelin";
   };
+  David-Kopczynski = {
+    name = "David Elias Chris Kopczynski";
+    email = "mail@davidkopczynski.com";
+    github = "David-Kopczynski";
+    githubId = 53194670;
+  };
   david-r-cox = {
     email = "david@integrated-reasoning.com";
     github = "david-r-cox";
