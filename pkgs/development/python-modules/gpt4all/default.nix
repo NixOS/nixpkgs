@@ -7,7 +7,6 @@
   tqdm,
   typing-extensions,
   pythonOlder,
-  pytestCheckHook,
   setuptools,
 }:
 let
