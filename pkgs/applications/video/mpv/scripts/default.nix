@@ -98,6 +98,7 @@ let
         ;
 
       buildLua = callPackage ./buildLua.nix { };
+      autosub = callPackage ./autosub.nix { };
       autosubsync-mpv = callPackage ./autosubsync-mpv.nix { };
       chapterskip = callPackage ./chapterskip.nix { };
       convert = callPackage ./convert.nix { };
