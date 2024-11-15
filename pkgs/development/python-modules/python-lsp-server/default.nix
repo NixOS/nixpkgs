@@ -34,6 +34,7 @@
   matplotlib,
   numpy,
   pandas,
+  pytest-cov-stub,
   pytestCheckHook,
   websockets,
 
@@ -54,12 +55,6 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-oFqa7DtFpJmDZrw+GJqrFH3QqnMAu9159q3IWT9vRko=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
-      --replace-fail "--cov pylsp --cov test" ""
-  '';
 
   pythonRelaxDeps = [
     "autopep8"
@@ -115,6 +110,7 @@ buildPythonPackage rec {
     matplotlib
     numpy
     pandas
+    pytest-cov-stub
     pytestCheckHook
   ] ++ optional-dependencies.all;
 
@@ -127,6 +123,8 @@ buildPythonPackage rec {
     "test_autoimport_code_actions_and_completions_for_notebook_document"
     # avoid dependencies on many Qt things just to run one singular test
     "test_pyqt_completion"
+    # https://github.com/python-lsp/python-lsp-server/issues/602
+    "test_jedi_completion_with_fuzzy_enabled"
   ];
 
   preCheck = ''
