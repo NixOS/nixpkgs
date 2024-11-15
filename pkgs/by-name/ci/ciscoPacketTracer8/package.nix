@@ -13,6 +13,7 @@
   makeWrapper,
   qt5,
   requireFile,
+  version ? "8.2.2",
 }:
 
 let
@@ -28,14 +29,14 @@ let
   };
 in
 
-stdenvNoCC.mkDerivation (args: {
+stdenvNoCC.mkDerivation {
   pname = "ciscoPacketTracer8";
 
-  version = "8.2.2";
+  inherit version;
 
   src = requireFile {
-    name = names.${args.version};
-    hash = hashes.${args.version};
+    name = names.${version};
+    hash = hashes.${version};
     url = "https://www.netacad.com";
   };
 
@@ -117,4 +118,4 @@ stdenvNoCC.mkDerivation (args: {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-})
+}
