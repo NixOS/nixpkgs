@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "mlxtend";
-  version = "0.23.1";
+  version = "0.23.2";
   pyproject = true;
 
   disabled = isPy27;
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     owner = "rasbt";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FlP6UqX/Ejk9c3Enm0EJ0xqy7iOhDlFqjWWxd4VIczQ=";
+    hash = "sha256-zkHc7jARGQf2YzQb1d2u/wKgqAAXk+WdNnu0cKvIAvQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     scipy
     numpy
     scikit-learn
@@ -43,17 +43,17 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "-sv" ];
 
   disabledTestPaths = [
-    # image tests download files over the network
-    "mlxtend/image"
+    "mlxtend/evaluate/f_test.py" # need clean
+    "mlxtend/evaluate/tests/test_feature_importance.py" # urlopen error
+    "mlxtend/evaluate/tests/test_bias_variance_decomp.py" # keras.api._v2
+    "mlxtend/evaluate/tests/test_bootstrap_point632.py" # keras.api._v2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library of Python tools and extensions for data science";
     homepage = "https://github.com/rasbt/mlxtend";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ evax ];
-    platforms = platforms.unix;
-    # incompatible with nixpkgs scikit-learn version
-    broken = true;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ evax ];
+    platforms = lib.platforms.unix;
   };
 }
