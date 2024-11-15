@@ -6,14 +6,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-gra";
-  version = "0.6.0";
+  version = "0.6.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-cli7qaIVYvoZpDml/QAxm2vjvh/g28zlDSpU9IIUBfw=";
+    hash = "sha256-JbBcpp/E3WlQrwdxMsbSdmIEnDTQj/1XDwAWJsniRu0=";
   };
 
-  cargoHash = "sha256-xsaavcpDaiDDbL3Dl+7NLcfB5U6vuYsVPoIuA/KXCvI=";
+  cargoHash = "sha256-wfMiqWcEsL6/d6XFnEFm/lCbelU7BHC7JKdHREnynAU=";
 
   meta = {
     license = lib.licenses.gpl3Plus;
