@@ -261,8 +261,9 @@ Technically, we'd not want to have EOL'ed packages in a stable NixOS release, wh
 Thus:
 - In September/October the new major version will be released and added to nixos-unstable.
 - In November the last minor version for the oldest major will be released.
-- Both the current stable .05 release and nixos-unstable should be updated to the latest minor.
-- In November, before branch-off for the .11 release, the EOL-ed major will be removed from nixos-unstable.
+- Both the current stable .05 release and nixos-unstable should be updated to the latest minor that will usually be released in November.
+  - This is relevant for people who need to use this major for as long as possible. In that case its desirable to be able to pin nixpkgs to a commit that still has it, at the latest minor available.
+- In November, before branch-off for the .11 release and after the update to the latest minor, the EOL-ed major will be removed from nixos-unstable.
 
 This leaves a small gap of a couple of weeks after the latest minor release and the end of our support window for the .05 release, in which there could be an emergency release to other major versions of PostgreSQL - but not the oldest major we have in that branch. In that case: If we can't trivially patch the issue, we will mark the package/version as insecure **immediately**.
 
@@ -292,7 +293,7 @@ postgresql_15.pkgs.pg_partman        postgresql_15.pkgs.pgroonga
 To add plugins via NixOS configuration, set `services.postgresql.extraPlugins`:
 ```nix
 {
-  services.postgresql.package = pkgs.postgresql_12;
+  services.postgresql.package = pkgs.postgresql_17;
   services.postgresql.extraPlugins = ps: with ps; [
     pg_repack
     postgis
@@ -303,7 +304,7 @@ To add plugins via NixOS configuration, set `services.postgresql.extraPlugins`:
 You can build custom PostgreSQL-with-plugins (to be used outside of NixOS) using function `.withPackages`. For example, creating a custom PostgreSQL package in an overlay can look like:
 ```nix
 self: super: {
-  postgresql_custom = self.postgresql_12.withPackages (ps: [
+  postgresql_custom = self.postgresql_17.withPackages (ps: [
     ps.pg_repack
     ps.postgis
   ]);
