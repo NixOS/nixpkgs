@@ -784,15 +784,10 @@ fn path_to_unit_name(bin_path: &Path, path: &str) -> String {
 // Returns a set containing the same contents as the passed in `units`, minus the units in
 // `units_to_filter`.
 fn filter_units(units_to_filter: &HashSet<String>, units: &HashSet<String>) -> HashSet<String> {
-    let mut res = HashSet::new();
-
-    for unit in units {
-        if !units_to_filter.contains(unit) {
-            res.insert(unit.to_string());
-        }
-    }
-
-    res
+    units
+        .difference(units_to_filter)
+        .map(|string| string.to_owned())
+        .collect()
 }
 
 fn unit_is_active<'a>(conn: &LocalConnection, unit: &str) -> Result<bool> {
