@@ -984,6 +984,8 @@ self: super: with self; {
 
   audio-metadata = callPackage ../development/python-modules/audio-metadata { };
 
+  audioop-lts = callPackage ../development/python-modules/audioop-lts { };
+
   audioread = callPackage ../development/python-modules/audioread { };
 
   audiotools = callPackage ../development/python-modules/audiotools {
