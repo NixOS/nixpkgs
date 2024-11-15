@@ -36,6 +36,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  doCheck = pythonOlder "3.13"; # https://github.com/pallets-eco/flask-sqlalchemy/issues/1379
+
   disabledTests = [
     # flaky
     "test_session_scoping_changing"
