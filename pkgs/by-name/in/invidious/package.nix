@@ -1,14 +1,15 @@
-{ lib
-, callPackage
-, crystal
-, fetchFromGitHub
-, librsvg
-, pkg-config
-, libxml2
-, openssl
-, shards
-, sqlite
-, nixosTests
+{
+  lib,
+  callPackage,
+  crystal,
+  fetchFromGitHub,
+  librsvg,
+  pkg-config,
+  libxml2,
+  openssl,
+  shards,
+  sqlite,
+  nixosTests,
 
   # All versions, revisions, and checksums are stored in ./versions.json.
   # The update process is the following:
@@ -19,7 +20,7 @@
   #     but nix's sandboxing does not allow that)
   #   * if shard.lock changed
   #     * recreate shards.nix by running crystal2nix
-, versions ? lib.importJSON ./versions.json
+  versions ? lib.importJSON ./versions.json,
 }:
 let
   # normally video.js is downloaded at build time
@@ -75,8 +76,15 @@ crystal.buildCrystalPackage rec {
           --replace-fail 'Process.run(%(rsvg-convert' 'Process.run(%(${lib.getBin librsvg}/bin/rsvg-convert'
     '';
 
-  nativeBuildInputs = [ pkg-config shards ];
-  buildInputs = [ libxml2 openssl sqlite ];
+  nativeBuildInputs = [
+    pkg-config
+    shards
+  ];
+  buildInputs = [
+    libxml2
+    openssl
+    sqlite
+  ];
 
   format = "crystal";
   shardsFile = ./shards.nix;
@@ -114,7 +122,9 @@ crystal.buildCrystalPackage rec {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) invidious; };
+    tests = {
+      inherit (nixosTests) invidious;
+    };
     updateScript = ./update.sh;
   };
 
