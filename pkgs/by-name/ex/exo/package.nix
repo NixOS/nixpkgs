@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
+  unstableGitUpdater,
 }:
 python3Packages.buildPythonApplication {
   pname = "exo";
@@ -63,6 +64,12 @@ python3Packages.buildPythonApplication {
 
   # Tests require `mlx` which is not supported on linux.
   doCheck = stdenv.isDarwin;
+
+  passthru = {
+    updateScript = unstableGitUpdater {
+      hardcodeZeroVersion = true;
+    };
+  };
 
   meta = {
     description = "Run your own AI cluster at home with everyday devices";
