@@ -331,6 +331,22 @@ self: super: ({
   # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
   zip = dontCheck super.zip;
 
+  http-streams = super.http-streams.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
+  io-streams = super.io-streams.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
+  io-streams-haproxy = super.io-streams-haproxy.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
+  openssl-streams = super.openssl-streams.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
   snap = super.snap.overrideAttrs (drv: {
     __darwinAllowLocalNetworking = true;
   });
