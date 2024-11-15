@@ -8,6 +8,8 @@
   pythonOlder,
   reactivex,
   setuptools,
+  pandas,
+  polars,
   urllib3,
 }:
 
@@ -34,6 +36,15 @@ buildPythonPackage rec {
     reactivex
     urllib3
   ];
+
+  optional-dependencies = {
+    pandas = [ pandas ];
+    polars = [ polars ];
+    dataframe = [
+      pandas
+      polars
+    ];
+  };
 
   # Missing ORC support
   # https://github.com/NixOS/nixpkgs/issues/212863
