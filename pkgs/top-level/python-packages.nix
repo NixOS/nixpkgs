@@ -10419,6 +10419,8 @@ self: super: with self; {
     inherit (pkgs) protobuf;
   };
 
+  pyldavis = callPackage ../development/python-modules/pyldavis { };
+
   pylddwrap = callPackage ../development/python-modules/pylddwrap { };
 
   pyloadapi = callPackage ../development/python-modules/pyloadapi { };
