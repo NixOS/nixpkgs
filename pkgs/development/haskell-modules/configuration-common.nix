@@ -3057,4 +3057,10 @@ self: super: {
     })
   ] super.hailgun;
 
+  # opencascade-hs requires the include path configuring relative to the
+  # opencascade subdirectory in include.
+  opencascade-hs = appendConfigureFlags [
+    "--extra-include-dirs=${lib.getDev pkgs.opencascade-occt}/include/opencascade"
+  ] super.opencascade-hs;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
