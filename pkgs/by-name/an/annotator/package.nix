@@ -6,23 +6,25 @@
   meson,
   ninja,
   vala,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   desktop-file-utils,
+  gtk3,
   libgee,
   pantheon,
   libxml2,
   libhandy,
+  libportal-gtk4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "annotator";
-  version = "1.2.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "phase1geo";
     repo = "annotator";
     rev = version;
-    hash = "sha256-VHvznkGvrE8o9qq+ijrIStSavq46dS8BqclWEWZ8mG8=";
+    hash = "sha256-mv3fMlYB4XcAWI6O6wN8ujNRDLZlX3ef/gKdOMYEHq0=";
   };
 
   nativeBuildInputs = [
@@ -30,14 +32,16 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    wrapGAppsHook3
+    wrapGAppsHook4
     desktop-file-utils
   ];
 
   buildInputs = [
+    gtk3
     libgee
-    pantheon.granite
+    pantheon.granite7
     libxml2
+    libportal-gtk4
     libhandy
   ];
 
