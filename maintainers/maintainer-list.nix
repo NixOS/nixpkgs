@@ -16746,11 +16746,6 @@
     githubId = 160646;
     name = "Patrick Jackson";
   };
-  patryk-s = {
-    github = "patryk-s";
-    githubId = 4283480;
-    name = "Patryk Sidzina";
-  };
   patryk27 = {
     email = "pwychowaniec@pm.me";
     github = "Patryk27";
@@ -16763,6 +16758,11 @@
     github = "patryk4815";
     githubId = 3074260;
     name = "Patryk Sondej";
+  };
+  patryk-s = {
+    github = "patryk-s";
+    githubId = 4283480;
+    name = "Patryk Sidzina";
   };
   patternspandemic = {
     email = "patternspandemic@live.com";
