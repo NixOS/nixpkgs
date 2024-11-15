@@ -7925,8 +7925,6 @@ self: super: with self; {
 
   mdutils = callPackage ../development/python-modules/mdutils { };
 
-  mdp = callPackage ../development/python-modules/mdp { };
-
   mean-average-precision = callPackage ../development/python-modules/mean-average-precision { };
 
   measurement = callPackage ../development/python-modules/measurement { };
