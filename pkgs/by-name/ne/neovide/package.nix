@@ -64,13 +64,16 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   SKIA_GN_COMMAND = "${gn}/bin/gn";
   SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
 
-  nativeBuildInputs = [
-    cctools.libtool
-    makeWrapper
-    pkg-config
-    python3 # skia
-    removeReferencesTo
-  ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+      pkg-config
+      python3 # skia
+      removeReferencesTo
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools.libtool
+    ];
 
   nativeCheckInputs = [ neovim ];
 
