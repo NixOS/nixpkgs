@@ -1440,8 +1440,6 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/BSNES
 
-  bsnes-hd = callPackage ../applications/emulators/bsnes/bsnes-hd { };
-
   ### APPLICATIONS/EMULATORS/DOLPHIN-EMU
 
   dolphin-emu = qt6Packages.callPackage ../applications/emulators/dolphin-emu {
