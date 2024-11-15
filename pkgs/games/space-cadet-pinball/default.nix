@@ -1,16 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, fetchzip
-, cmake, SDL2, SDL2_mixer, Cocoa
-, unrar-wrapper, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchzip,
+  cmake,
+  SDL2,
+  SDL2_mixer,
+  Cocoa,
+  unrar-wrapper,
+  makeWrapper,
 }:
 
 let
-  assets = (fetchzip {
-    url = "https://archive.org/download/SpaceCadet_Plus95/Space_Cadet.rar";
-    sha256 = "sha256-fC+zsR8BY6vXpUkVd6i1jF0IZZxVKVvNi6VWCKT+pA4=";
-    stripRoot = false;
-  }).overrideAttrs (old: {
-    nativeBuildInputs = old.nativeBuildInputs ++ [ unrar-wrapper ];
-  });
+  assets =
+    (fetchzip {
+      url = "https://archive.org/download/SpaceCadet_Plus95/Space_Cadet.rar";
+      sha256 = "sha256-fC+zsR8BY6vXpUkVd6i1jF0IZZxVKVvNi6VWCKT+pA4=";
+      stripRoot = false;
+    }).overrideAttrs
+      (old: {
+        nativeBuildInputs = old.nativeBuildInputs ++ [ unrar-wrapper ];
+      });
 in
 stdenv.mkDerivation rec {
   pname = "SpaceCadetPinball";
@@ -23,7 +33,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-W2P7Txv3RtmKhQ5c0+b4ghf+OMsN+ydUZt+6tB+LClM=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+  ];
   buildInputs = [
     SDL2
     SDL2_mixer
@@ -52,7 +65,10 @@ stdenv.mkDerivation rec {
     description = "Reverse engineering of 3D Pinball for Windows – Space Cadet, a game bundled with Windows";
     homepage = "https://github.com/k4zmu2a/SpaceCadetPinball";
     # The assets are unfree while the code is labeled as MIT
-    license = with licenses; [ unfree mit ];
+    license = with licenses; [
+      unfree
+      mit
+    ];
     maintainers = [ maintainers.hqurve ];
     platforms = platforms.all;
     mainProgram = "SpaceCadetPinball";
