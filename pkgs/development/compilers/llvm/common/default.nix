@@ -773,8 +773,8 @@ let
           extraBuildCommands =
             lib.optionalString (lib.versions.major metadata.release_version == "13") (
               ''
-                echo "-rtlib=compiler-rt -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
-                echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
+                echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags-link
+                echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags-link
               ''
               + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
                 echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
@@ -793,7 +793,6 @@ let
           nixSupport.cc-cflags =
             [
               "-rtlib=compiler-rt"
-              "-Wno-unused-command-line-argument"
               "-B${targetLlvmLibraries.compiler-rt}/lib"
             ]
             ++ lib.optional (
@@ -828,8 +827,8 @@ let
           extraBuildCommands =
             lib.optionalString (lib.versions.major metadata.release_version == "13") (
               ''
-                echo "-rtlib=compiler-rt -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
-                echo "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib" >> $out/nix-support/cc-cflags
+                echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags-link
+                echo "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib" >> $out/nix-support/cc-cflags-link
               ''
               + lib.optionalString (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isDarwin) ''
                 echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
@@ -845,10 +844,10 @@ let
             + mkExtraBuildCommandsBasicRt cc;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
-          nixSupport.cc-cflags =
+          nixSupport.cc-cflags = lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+          nixSupport.cc-cflags-link =
             [
               "-rtlib=compiler-rt"
-              "-Wno-unused-command-line-argument"
               "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
             ]
             ++ lib.optional (
@@ -858,8 +857,7 @@ let
               !stdenv.targetPlatform.isWasm
               && !stdenv.targetPlatform.isFreeBSD
               && stdenv.targetPlatform.useLLVM or false
-            ) "-lunwind"
-            ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+            ) "-lunwind";
           nixSupport.cc-ldflags = lib.optionals (
             !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
           ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
@@ -874,22 +872,21 @@ let
           extraPackages = [ targetLlvmLibraries.compiler-rt-no-libc ];
           extraBuildCommands =
             lib.optionalString (lib.versions.major metadata.release_version == "13") ''
-              echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags
-              echo "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib" >> $out/nix-support/cc-cflags
-              echo "-nostdlib++" >> $out/nix-support/cc-cflags
+              echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags-link
+              echo "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib" >> $out/nix-support/cc-cflags-link
+              echo "-nostdlib++" >> $out/nix-support/cc-cflags-link
             ''
             + mkExtraBuildCommandsBasicRt cc;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
-          nixSupport.cc-cflags =
-            [
-              "-rtlib=compiler-rt"
-              "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
-              "-nostdlib++"
-            ]
-            ++ lib.optional (
-              lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
-            ) "-fno-exceptions";
+          nixSupport.cc-cflags = lib.optional (
+            lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
+          ) "-fno-exceptions";
+          nixSupport.cc-cflags-link = [
+            "-rtlib=compiler-rt"
+            "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
+            "-nostdlib++"
+          ];
         }
       );
 
@@ -901,20 +898,19 @@ let
           extraPackages = [ targetLlvmLibraries.compiler-rt-no-libc ];
           extraBuildCommands =
             lib.optionalString (lib.versions.major metadata.release_version == "13") ''
-              echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags
-              echo "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib" >> $out/nix-support/cc-cflags
+              echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags-link
+              echo "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib" >> $out/nix-support/cc-cflags-link
             ''
             + mkExtraBuildCommandsBasicRt cc;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
-          nixSupport.cc-cflags =
-            [
-              "-rtlib=compiler-rt"
-              "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
-            ]
-            ++ lib.optional (
-              lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
-            ) "-fno-exceptions";
+          nixSupport.cc-cflags-link = [
+            "-rtlib=compiler-rt"
+            "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
+          ];
+          nixSupport.cc-cflags = lib.optional (
+            lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
+          ) "-fno-exceptions";
         }
       );
 
@@ -926,16 +922,15 @@ let
           extraPackages = [ ];
           extraBuildCommands =
             lib.optionalString (lib.versions.major metadata.release_version == "13") ''
-              echo "-nostartfiles" >> $out/nix-support/cc-cflags
+              echo "-nostartfiles" >> $out/nix-support/cc-cflags-link
             ''
             + mkExtraBuildCommands0 cc;
         }
         // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "14") {
-          nixSupport.cc-cflags =
-            [ "-nostartfiles" ]
-            ++ lib.optional (
-              lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
-            ) "-fno-exceptions";
+          nixSupport.cc-cflags = lib.optional (
+            lib.versionAtLeast metadata.release_version "15" && stdenv.targetPlatform.isWasm
+          ) "-fno-exceptions";
+          nixSupport.cc-cflags-link = [ "-nostartfiles" ];
         }
       );
 
