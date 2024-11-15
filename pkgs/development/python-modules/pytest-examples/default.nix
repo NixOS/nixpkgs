@@ -25,18 +25,14 @@ buildPythonPackage rec {
     hash = "sha256-R0gSWQEGMkJhkeXImyris2wzqjJ0hC3zO0voEdhWLoY=";
   };
 
-  postPatch = ''
-    # ruff binary is used directly, the ruff Python package is not needed
-    substituteInPlace pytest_examples/lint.py \
-      --replace-fail "'ruff'" "'${lib.getExe ruff}'"
-  '';
-
-  pythonRemoveDeps = [ "ruff" ];
-
   patches = [
     (fetchpatch2 {
       url = "https://github.com/pydantic/pytest-examples/pull/37.patch";
       hash = "sha256-SISZl2mTDrazQjlwtS9c/dkfY05VKapkdvCmfB0/cQU=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/pydantic/pytest-examples/pull/41.patch";
+      hash = "sha256-E8j8clAUZEJo0ZXBS8VaaoT4krEVdfPIaVC94kFKO0c=";
     })
   ];
 
@@ -44,7 +40,7 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  buildInputs = [ pytest ];
+  buildInputs = [ pytest ruff ];
 
   dependencies = [ black ];
 
