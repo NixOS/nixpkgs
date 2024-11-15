@@ -22,7 +22,6 @@
 , rustc
 , shared-mime-info
 , wrapGAppsHook4
-, darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -77,14 +76,16 @@ stdenv.mkDerivation rec {
     poppler
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AudioUnit
   ];
 
   postPatch = ''
     chmod +x build-aux/*.py
     patchShebangs build-aux
   '';
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/flxzt/rnote";
@@ -93,7 +94,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda gepbird yrd ];
     platforms = platforms.unix;
-    # compiler error since 2023-11-17
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }
