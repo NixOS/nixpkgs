@@ -27,6 +27,12 @@ buildPythonPackage rec {
     hash = "sha256-4P+bQEldyBNh4qsIkoZLXnUOrQ5wVGbr55xbS0oQMMM=";
   };
 
+  postPatch = ''
+    # Upstream falls back to a default version if not in a GitHub Actions
+    substituteInPlace setup.py \
+      --replace-fail "version=get_version()," "version = '${version}',"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
