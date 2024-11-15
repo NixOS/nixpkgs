@@ -17549,6 +17549,8 @@ self: super: with self; {
 
   vulcan-api = callPackage ../development/python-modules/vulcan-api { };
 
+  vulkan = callPackage ../development/python-modules/vulkan { };
+
   vultr = callPackage ../development/python-modules/vultr { };
 
   vulture = callPackage ../development/python-modules/vulture { };
