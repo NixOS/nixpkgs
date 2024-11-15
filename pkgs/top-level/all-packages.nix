@@ -5649,6 +5649,8 @@ with pkgs;
 
   inherit (openconnectPackages) openconnect openconnect_openssl;
 
+  globalprotect-openconnect = libsForQt5.callPackage ../tools/networking/globalprotect-openconnect { };
+
   sssd = callPackage ../os-specific/linux/sssd {
     inherit (perlPackages) Po4a;
     # python312Packages.python-ldap is broken
@@ -12299,6 +12301,10 @@ with pkgs;
   scalene = with python3Packages; toPythonApplication scalene;
 
   shairplay = callPackage ../servers/shairplay { avahi = avahi-compat; };
+
+  shairport-sync-airplay2 = shairport-sync.override {
+    enableAirplay2 = true;
+  };
 
   showoff = callPackage ../servers/http/showoff { };
 

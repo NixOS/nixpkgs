@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "sumo";
-  version = "2.3.8";
+  version = "2.3.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "SMTG-UCL";
     repo = "sumo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nQ5US7maFcOJCqFYeokGiBFp3jhiOPSfCBeclLdHdkk=";
+    hash = "sha256-e+nkTRopI0QeGq52e3Eqx2RJg82A7mvIaIuZ+yN18+o=";
   };
 
   nativeBuildInputs = [ cython ];

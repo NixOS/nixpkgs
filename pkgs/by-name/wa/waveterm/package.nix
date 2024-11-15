@@ -4,7 +4,6 @@
   fetchurl,
   makeDesktopItem,
   copyDesktopItems,
-  unzip,
   autoPatchelfHook,
   atk,
   at-spi2-atk,
@@ -29,32 +28,34 @@
   wrapGAppsHook3,
   udev,
   libGL,
+  fetchzip,
 }:
 
 let
   pname = "waveterm";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src =
     let
       inherit (stdenv.hostPlatform) system;
-      selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
+      selectSystem = attrs: attrs.${system};
       suffix = selectSystem {
-        x86_64-linux = "waveterm-linux-x64-${version}.zip";
-        aarch64-linux = "waveterm-linux-arm64-${version}.zip";
-        x86_64-darwin = "Wave-darwin-universal-${version}.zip ";
-        aarch64-darwin = "Wave-darwin-arm64-${version}.zip";
+        x86_64-linux = "waveterm-linux-x64";
+        aarch64-linux = "waveterm-linux-arm64";
+        x86_64-darwin = "Wave-darwin-x64";
+        aarch64-darwin = "Wave-darwin-arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-DtpS9jRQljAhPA9Qcpd5acIeCyb5E/Nkyg3LXa4wrk0=";
-        aarch64-linux = "sha256-xM+34vsp+LFCYAFIrb0mKQRy/vPqn7FFvPlzV4JWPCg=";
-        x86_64-darwin = "sha256-fadf/qOec1liqpBOH+lTEGnTYJlvL8QJ3kHNcuI1wew=";
-        aarch64-darwin = "sha256-kKDDeIyO4CSxLWYpJyfz0Egl2S1ADRk4N/XXpsCBXVo=";
+        x86_64-linux = "sha256-s6s/SfLNVwRN50OgqWTohHT8/rFuu4P3hpxfhA7kPOU=";
+        aarch64-linux = "sha256-dxQbTPvge3QY40rWKAOV/uuTPzHsfNk9USxICoF1CQM=";
+        x86_64-darwin = "sha256-/nedzsQxqLclK5uwOKZ/WgRwjoHDCxLuI+/T1B3cyJM=";
+        aarch64-darwin = "sha256-lBJEJHgBozrR+JF5jlbmuG2c0P19qmjJUhwlJtHqkRE=";
       };
     in
-    fetchurl {
-      url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/${suffix}";
+    fetchzip {
+      url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/${suffix}-${version}.zip";
       inherit hash;
+      stripRoot = false;
     };
 
   passthru.updateScript = ./update.sh;
@@ -84,12 +85,6 @@ let
     })
   ];
 
-  unpackPhase = ''
-    runHook preUnpack
-    unzip ${src} -d ./
-    runHook postUnpack
-  '';
-
   meta = {
     description = "Open-source, cross-platform terminal for seamless workflows";
     homepage = "https://www.waveterm.dev";
@@ -111,13 +106,11 @@ let
       version
       src
       desktopItems
-      unpackPhase
       meta
       passthru
       ;
 
     nativeBuildInputs = [
-      unzip
       copyDesktopItems
       autoPatchelfHook
       wrapGAppsHook3
@@ -152,8 +145,10 @@ let
 
     installPhase = ''
       runHook preInstall
+
       mkdir -p $out/waveterm $out/bin
       cp -r ./* $out/waveterm/
+
       runHook postInstall
     '';
 
@@ -172,21 +167,18 @@ let
       pname
       version
       src
-      unpackPhase
       meta
       passthru
       ;
-
-    nativeBuildInputs = [
-      unzip
-    ];
 
     sourceRoot = "Wave.app";
 
     installPhase = ''
       runHook preInstall
+
       mkdir -p $out/Applications/Wave.app
       cp -R . $out/Applications/Wave.app
+
       runHook postInstall
     '';
   };
