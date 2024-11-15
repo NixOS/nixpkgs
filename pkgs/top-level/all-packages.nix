@@ -17347,7 +17347,7 @@ with pkgs;
     buildShareware = true;
   };
 
-  space-cadet-pinball = callPackage ../games/space-cadet-pinball {
+  space-cadet-pinball = callPackage ../by-name/sp/space-cadet-pinball/package.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
