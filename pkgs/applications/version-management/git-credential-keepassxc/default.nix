@@ -1,9 +1,6 @@
 { lib
-, stdenv
 , rustPlatform
 , fetchFromGitHub
-, DiskArbitration
-, Foundation
 , withNotification ? false
 , withYubikey ? false
 , withStrictCaller ? false
@@ -22,8 +19,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-jBUp0jes4wtr8cmqceEBb6noqGkJUHbIfYgWOw5KMF4=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ DiskArbitration Foundation ];
 
   buildFeatures = []
     ++ lib.optional withNotification "notification"

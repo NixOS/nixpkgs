@@ -4,7 +4,6 @@
   dbus,
   eudev,
   fetchFromGitHub,
-  fetchpatch,
   libdisplay-info,
   libglvnd,
   libinput,
@@ -26,22 +25,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "0.1.10";
+  version = "0.1.10.1";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ea15x8+AAm90aeU1zNWXzX7ZfenzQRUgORyjOdn4Uoc=";
+    hash = "sha256-Qjf7alRbPPERfiZsM9EMKX+HwjESky1tieh5PJIkLwE=";
   };
-
-  patches = [
-    # Fix scrolling not working with missing mouse config
-    (fetchpatch {
-      url = "https://github.com/YaLTeR/niri/commit/1951d2a9f262196a706f2645efb18dac3c4d6839.patch";
-      hash = "sha256-P/0LMYZ4HD0iG264BMnK4sLNNLmtbefF230GyC+t6qg=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs resources/niri-session
@@ -52,8 +43,8 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "smithay-0.3.0" = "sha256-nSM7LukWHO2n2eWz5ipFNkTCYDvx/VvPXnKVngJFU0U=";
       "libspa-0.8.0" = "sha256-kp5x5QhmgEqCrt7xDRfMFGoTK5IXOuvW2yOW02B8Ftk=";
+      "smithay-0.3.0" = "sha256-nSM7LukWHO2n2eWz5ipFNkTCYDvx/VvPXnKVngJFU0U=";
     };
   };
 
