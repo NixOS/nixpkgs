@@ -2,22 +2,14 @@
 
 buildPostgresqlExtension rec {
   pname = "pg_bigm";
-  version = "1.2-20200228";
+  version = "1.2-20240606";
 
   src = fetchFromGitHub {
     owner = "pgbigm";
     repo = "pg_bigm";
     rev = "v${version}";
-    hash = "sha256-3lspEglVWzEUTiRIWqW0DpQe8gDn9R/RxsWuI9znYc8=";
+    hash = "sha256-5Uy1DmGZR4WdtRUvNdZ5b9zBHJUb9idcEzW20rkreBs=";
   };
-
-  patches = [
-    # Fix compatibility with PostgreSQL 16. Remove with the next release.
-    (fetchpatch {
-      url = "https://github.com/pgbigm/pg_bigm/commit/2a9d783c52a1d7a2eb414da6f091f6035da76edf.patch";
-      hash = "sha256-LuMpSUPnT8cPChQfA9sJEKP4aGpsbN5crfTKLnDzMN8=";
-    })
-  ];
 
   makeFlags = [ "USE_PGXS=1" ];
 
