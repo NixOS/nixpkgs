@@ -3888,6 +3888,23 @@ let
         };
       };
 
+      pollywoggames.pico8-ls = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "pico8-ls";
+          publisher = "PollywogGames";
+          version = "0.5.5";
+          hash = "sha256-MTIBCZcqJ+Dq1ECTkj24QIrg4MqT/xWcyYkp6vJRlnM=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/PollywogGames.pico8-ls/changelog";
+          description = "VSCode extension for full language support for the PICO-8 dialect of Lua";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=PollywogGames.pico8-ls";
+          homepage = "https://github.com/japhib/pico8-ls";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.dotmobo ];
+        };
+      };
+
       prisma.prisma = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "prisma";
