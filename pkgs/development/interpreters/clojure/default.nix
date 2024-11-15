@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       offers a software transactional memory system and reactive Agent
       system that ensure clean, correct, multithreaded designs.
     '';
-    maintainers = with maintainers; [ jlesquembre thiagokokada ];
+    maintainers = with maintainers; [ jlesquembre ];
     platforms = platforms.unix;
   };
 })
