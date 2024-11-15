@@ -361,16 +361,21 @@ in
         '' + lib.optionalString (cfg.privilegedAdministrators != null) ''
           rm -f /etc/openafs/server/UserList
         '';
-        serviceConfig = {
+        serviceConfig =
+          let
+            bosAddr = if (cfg.advertisedAddresses != [ ])
+                      then builtins.head cfg.advertisedAddresses
+                      else "localhost";
+          in {
           ExecStart = "${openafsBin}/bin/bosserver -nofork";
           ExecStartPost = mkIf (cfg.privilegedAdministrators != null)
             (pkgs.writeShellScript "openafs-admin-init" ''
                for admin in ${lib.escapeShellArgs cfg.privilegedAdministrators}
                do
-                 ${openafsBin}/bin/bos adduser localhost "$admin" -localauth
+                 ${openafsBin}/bin/bos adduser ${bosAddr} "$admin" -localauth
                done
              '');
-          ExecStop = "${openafsBin}/bin/bos shutdown localhost -wait -localauth";
+          ExecStop = "${openafsBin}/bin/bos shutdown ${bosAddr} -wait -localauth";
         };
       };
     };
