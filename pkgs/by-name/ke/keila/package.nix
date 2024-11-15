@@ -1,16 +1,18 @@
-{ lib, beamPackages
+{ lib, elixir
+, beamPackages
 , fetchFromGitHub
+, nix-update-script
 }:
 
 beamPackages.mixRelease rec {
   pname = "keila";
-  version = "0.14.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "pentacent";
     repo = "keila";
     rev = "v${version}";
-    sha256 = "sha256-HyRHzxbFmVM3/fIIaB2aLBG7pKsQ8+QocGkZVtodwVc=";
+    sha256 = "sha256-CHl6PEbEjXVZ1h5zAjM76mkAJ0L8a95iIcRhzb9WIxc=";
   };
 
   mixNixDeps = import ./mix_deps.nix {
@@ -22,7 +24,7 @@ beamPackages.mixRelease rec {
   meta = with lib; {
     description = "Open Source alternative to newsletter tools like Mailchimp or Sendinblue";
     homepage = "https://keila.io";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     platforms = platforms.unix;
     maintainers = with lib.maintainers; [ dvn0 ];
   };

@@ -114,12 +114,12 @@ let
 
     db_connection = buildMix rec {
       name = "db_connection";
-      version = "2.5.0";
+      version = "2.7.0";
 
       src = fetchHex {
         pkg = "db_connection";
         version = "${version}";
-        sha256 = "c92d5ba26cd69ead1ff7582dbb860adeedfff39774105a4f1c92cbb654b55aa2";
+        sha256 = "dcf08f31b2701f857dfc787fbad78223d61a32204f217f15e881dd93e4bdd3ff";
       };
 
       beamDeps = [ telemetry ];
@@ -166,12 +166,12 @@ let
 
     ecto = buildMix rec {
       name = "ecto";
-      version = "3.10.1";
+      version = "3.11.2";
 
       src = fetchHex {
         pkg = "ecto";
         version = "${version}";
-        sha256 = "d2ac4255f1601bdf7ac74c0ed971102c6829dc158719b94bd30041bbad77f87a";
+        sha256 = "3c38bca2c6f8d8023f2145326cc8a80100c3ffe4dcbd9842ff867f7fc6156c65";
       };
 
       beamDeps = [ decimal jason telemetry ];
@@ -179,12 +179,12 @@ let
 
     ecto_sql = buildMix rec {
       name = "ecto_sql";
-      version = "3.10.1";
+      version = "3.11.3";
 
       src = fetchHex {
         pkg = "ecto_sql";
         version = "${version}";
-        sha256 = "f6a25bdbbd695f12c8171eaff0851fa4c8e72eec1e98c7364402dda9ce11c56b";
+        sha256 = "e5f36e3d736b99c7fee3e631333b8394ade4bafe9d96d35669fca2d81c2be928";
       };
 
       beamDeps = [ db_connection ecto postgrex telemetry ];
@@ -335,12 +335,12 @@ let
 
     hackney = buildRebar3 rec {
       name = "hackney";
-      version = "1.19.1";
+      version = "1.20.1";
 
       src = fetchHex {
         pkg = "hackney";
         version = "${version}";
-        sha256 = "8aa08234bdefc269995c63c2282cf3cd0e36febe3a6bfab11b610572fdd1cad0";
+        sha256 = "fe9094e5f1a2a2c0a7d10918fee36bfec0ec2a979994cff8cfe8058cd9af38e3";
       };
 
       beamDeps = [ certifi idna metrics mimerl parse_trans ssl_verify_fun unicode_util_compat ];
@@ -400,12 +400,12 @@ let
 
     jason = buildMix rec {
       name = "jason";
-      version = "1.4.1";
+      version = "1.4.4";
 
       src = fetchHex {
         pkg = "jason";
         version = "${version}";
-        sha256 = "fbb01ecdfd565b56261302f7e1fcc27c4fb8f32d56eab74db621fc154604a7a1";
+        sha256 = "c5eb0cab91f094599f94d55bc63409236a8ec69a21a67814529e8d5f6cc90b3b";
       };
 
       beamDeps = [ decimal ];
@@ -478,15 +478,28 @@ let
 
     mimerl = buildRebar3 rec {
       name = "mimerl";
-      version = "1.2.0";
+      version = "1.3.0";
 
       src = fetchHex {
         pkg = "mimerl";
         version = "${version}";
-        sha256 = "f278585650aa581986264638ebf698f8bb19df297f66ad91b18910dfc6e19323";
+        sha256 = "a1e15a50d1887217de95f0b9b0793e32853f7c258a5cd227650889b38839fe9d";
       };
 
       beamDeps = [];
+    };
+
+    mjml = buildMix rec {
+      name = "mjml";
+      version = "4.0.0";
+
+      src = fetchHex {
+        pkg = "mjml";
+        version = "${version}";
+        sha256 = "0886a411f9a850bc4ac6b878c9c0dbea168669176fde1f6583acf55fa8b628dd";
+      };
+
+      beamDeps = [ rustler_precompiled ];
     };
 
     nimble_csv = buildMix rec {
@@ -517,12 +530,12 @@ let
 
     oban = buildMix rec {
       name = "oban";
-      version = "2.15.0";
+      version = "2.18.0";
 
       src = fetchHex {
         pkg = "oban";
         version = "${version}";
-        sha256 = "22e181c540335d1dd5c995be00435927075519207d62b3de32477d95dbf9dfd3";
+        sha256 = "aace1eff6f8227ae38d4274af967d96f051c2f0a5152f2ef9809dd1f97866745";
       };
 
       beamDeps = [ ecto_sql jason postgrex telemetry ];
@@ -712,12 +725,12 @@ let
 
     postgrex = buildMix rec {
       name = "postgrex";
-      version = "0.17.1";
+      version = "0.19.0";
 
       src = fetchHex {
         pkg = "postgrex";
         version = "${version}";
-        sha256 = "14b057b488e73be2beee508fb1955d8db90d6485c6466428fe9ccf1d6692a555";
+        sha256 = "dba2d2a0a8637defbf2307e8629cb2526388ba7348f67d04ec77a5d6a72ecfae";
       };
 
       beamDeps = [ db_connection decimal jason ];
@@ -734,6 +747,19 @@ let
       };
 
       beamDeps = [];
+    };
+
+    rustler_precompiled = buildMix rec {
+      name = "rustler_precompiled";
+      version = "0.7.2";
+
+      src = fetchHex {
+        pkg = "rustler_precompiled";
+        version = "${version}";
+        sha256 = "7663faaeadc9e93e605164dcf9e69168e35f2f8b7f2b9eb4e400d1a8e0fe2999";
+      };
+
+      beamDeps = [ castore ];
     };
 
     solid = buildMix rec {
@@ -829,12 +855,12 @@ let
 
     tls_certificate_check = buildRebar3 rec {
       name = "tls_certificate_check";
-      version = "1.20.0";
+      version = "1.22.1";
 
       src = fetchHex {
         pkg = "tls_certificate_check";
         version = "${version}";
-        sha256 = "ab57b74b1a63dc5775650699a3ec032ec0065005eff1f020818742b7312a8426";
+        sha256 = "3092be0babdc0e14c2e900542351e066c0fa5a9cf4b3597559ad1e67f07938c0";
       };
 
       beamDeps = [ ssl_verify_fun ];
@@ -842,12 +868,12 @@ let
 
     tzdata = buildMix rec {
       name = "tzdata";
-      version = "1.1.1";
+      version = "1.1.2";
 
       src = fetchHex {
         pkg = "tzdata";
         version = "${version}";
-        sha256 = "a69cec8352eafcd2e198dea28a34113b60fdc6cb57eb5ad65c10292a6ba89787";
+        sha256 = "cec7b286e608371602318c414f344941d5eb0375e14cfdab605cca2fe66cba8b";
       };
 
       beamDeps = [ hackney ];
