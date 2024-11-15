@@ -362,6 +362,7 @@
   ./security/polkit.nix
   ./security/rngd.nix
   ./security/rtkit.nix
+  ./security/soteria.nix
   ./security/sudo.nix
   ./security/sudo-rs.nix
   ./security/systemd-confinement.nix
