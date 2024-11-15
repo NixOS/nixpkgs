@@ -1,0 +1,13 @@
+diff --git a/tests/pytest/test_periodic.py b/tests/pytest/test_periodic.py
+index a363b2f..cdd7ff4 100644
+--- a/tests/pytest/test_periodic.py
++++ b/tests/pytest/test_periodic.py
+@@ -99,7 +99,7 @@ def test_quasiperiodic():
+     with TaskManager():
+         a.Assemble()
+         f.Assemble()
+-        u.vec.data = a.mat.Inverse(fes.FreeDofs()) * f.vec
++        u.vec.data = a.mat.Inverse(fes.FreeDofs(),inverse="umfpack") * f.vec
+ 
+     u_true = exp(1J * k * (d[0] * x + d[1] * y + d[2] * z))
+     assert sqrt(Integrate(Conj(u_true-u)*(u_true-u),mesh).real) < 1e-8

@@ -19,42 +19,6 @@
 }:
 assert withParmetis -> mpiSupport;
 assert withPtScotch -> mpiSupport;
-let
-  profile = if mpiSupport then "debian.PAR" else "debian.SEQ";
-  metisFlags =
-    if withParmetis then
-      ''
-        IMETIS="-I${parmetis}/include -I${metis}/include" \
-        LMETIS="-L${parmetis}/lib -lparmetis -L${metis}/lib -lmetis"
-      ''
-    else
-      ''
-        IMETIS=-I${metis}/include \
-        LMETIS="-L${metis}/lib -lmetis"
-      '';
-  scotchFlags =
-    if withPtScotch then
-      ''
-        ISCOTCH=-I${scotch.dev}/include \
-        LSCOTCH="-L${scotch}/lib -lptscotch -lptesmumps -lptscotcherr"
-      ''
-    else
-      ''
-        ISCOTCH=-I${scotch.dev}/include \
-        LSCOTCH="-L${scotch}/lib -lesmumps -lscotch -lscotcherr"
-      '';
-  macroFlags =
-    "-Dmetis -Dpord -Dscotch"
-    + lib.optionalString withParmetis " -Dparmetis"
-    + lib.optionalString withPtScotch " -Dptscotch";
-  # Optimized options
-  # Disable -fopenmp in lines below to benefit from OpenMP
-  optFlags = ''
-    OPTF="-O3 -fallow-argument-mismatch" \
-    OPTL="-O3" \
-    OPTC="-O3"
-  '';
-in
 stdenv.mkDerivation (finalAttrs: {
   name = "mumps";
   version = "5.7.3";
@@ -70,25 +34,63 @@ stdenv.mkDerivation (finalAttrs: {
       "-Wl,-install_name,$out/lib/libmumps_common"
   '';
 
-  configurePhase = ''
-    cp Make.inc/Makefile.${profile} ./Makefile.inc
-  '';
+  configurePhase =
+    let
+      profile = if mpiSupport then "debian.PAR" else "debian.SEQ";
+    in
+    ''
+      cp Make.inc/Makefile.${profile} ./Makefile.inc
+    '';
 
   enableParallelBuilding = true;
 
+  LMETIS = toString ([ "-lmetis" ] ++ lib.optional withParmetis "-lparmetis");
+  LSCOTCH = toString (
+    if withPtScotch then
+      [
+        "-lptscotch"
+        "-lptesmumps"
+        "-lptscotcherr"
+      ]
+    else
+      [
+        "-lesmumps"
+        "-lscotch"
+        "-lscotcherr"
+      ]
+  );
+  ORDERINGSF = toString (
+    [
+      "-Dmetis"
+      "-Dpord"
+      "-Dscotch"
+    ]
+    ++ lib.optional withParmetis "-Dparmetis"
+    ++ lib.optional withPtScotch "-Dptscotch"
+  );
+  OPTF = toString [
+    "-O3"
+    "-fallow-argument-mismatch"
+  ];
+
   preBuild = ''
-    makeFlagsArray+=(${metisFlags} ${scotchFlags} ORDERINGSF="${macroFlags}" ${optFlags})
+    makeFlagsArray+=(
+      ISCOTCH=-I${scotch.dev}/include
+      LSCOTCH="$LSCOTCH"
+      LMETIS="$LMETIS"
+      ORDERINGSF="$ORDERINGSF"
+      OPTF="$OPTF"
+      OPTC=-O3
+      OPTL=-O3
+      SCALAP=-lscalapack
+      allshared
+    )
   '';
 
-  makeFlags =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      "SONAME="
-      "LIBEXT_SHARED=.dylib"
-    ]
-    ++ [
-      "SCALAP=-lscalapack"
-      "allshared"
-    ];
+  makeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "SONAME="
+    "LIBEXT_SHARED=.dylib"
+  ];
 
   installPhase =
     ''
@@ -105,12 +107,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     gfortran
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames ++ lib.optional mpiSupport mpi;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   # Parmetis should be placed before scotch to avoid conflict of header file "parmetis.h"
-  buildInputs =
+  propagatedBuildInputs =
     lib.optional withParmetis parmetis
-    ++ lib.optional mpiSupport scalapack
+    ++ lib.optionals mpiSupport [
+      mpi
+      scalapack
+    ]
     ++ [
       blas
       lapack
@@ -125,7 +130,6 @@ stdenv.mkDerivation (finalAttrs: {
     ${lib.optionalString stdenv.hostPlatform.isDarwin "export DYLD_LIBRARY_PATH=$out/lib\n"}
     ${lib.optionalString mpiSupport "export MPIRUN='mpirun -n 2'\n"}
     cd examples
-    make all
     $MPIRUN ./ssimpletest <input_simpletest_real
     $MPIRUN ./dsimpletest <input_simpletest_real
     $MPIRUN ./csimpletest <input_simpletest_cmplx

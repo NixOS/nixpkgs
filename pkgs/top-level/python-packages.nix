@@ -9013,6 +9013,8 @@ self: super: with self; {
 
   netdisco = callPackage ../development/python-modules/netdisco { };
 
+  netgen = toPythonModule (pkgs.netgen.override { python3 = python; });
+
   nethsm = callPackage ../development/python-modules/nethsm { };
 
   netifaces = callPackage ../development/python-modules/netifaces { };
@@ -9056,6 +9058,8 @@ self: super: with self; {
   nftables = callPackage ../os-specific/linux/nftables/python.nix {
     inherit (pkgs) nftables;
   };
+
+  ngsolve = toPythonModule (pkgs.ngsolve.override { python3 = python; });
 
   nh3 = callPackage ../development/python-modules/nh3 { };
 
