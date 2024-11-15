@@ -16746,6 +16746,11 @@
     githubId = 160646;
     name = "Patrick Jackson";
   };
+  patryk-s = {
+    github = "patryk-s";
+    githubId = 4283480;
+    name = "Patryk Sidzina";
+  };
   patryk27 = {
     email = "pwychowaniec@pm.me";
     github = "Patryk27";
