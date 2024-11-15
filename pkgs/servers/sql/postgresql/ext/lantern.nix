@@ -10,13 +10,13 @@
 
 buildPostgresqlExtension (finalAttrs: {
   pname = "postgresql-lantern";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "lanterndata";
     repo = "lantern";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-V8W61hELXeaVvNZgRUcckFlCMWis7NENlRKySxsK/L8=";
+    hash = "sha256-IsDD/um5pVvbzin8onf45DQVszl+Id/pJSQ2iijgHmg=";
     fetchSubmodules = true;
   };
 
