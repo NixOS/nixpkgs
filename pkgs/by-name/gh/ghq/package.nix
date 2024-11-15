@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, ghq }:
+{ lib, buildGoModule, fetchFromGitHub, testers, nix-update-script, ghq }:
 
 buildGoModule rec {
   pname = "ghq";
@@ -28,6 +28,7 @@ buildGoModule rec {
     tests.version = testers.testVersion {
       package = ghq;
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {
