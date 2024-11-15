@@ -2035,6 +2035,8 @@ self: super: with self; {
 
   captcha = callPackage ../development/python-modules/captcha { };
 
+  captum = callPackage ../development/python-modules/captum { };
+
   capturer = callPackage ../development/python-modules/capturer { };
 
   carbon = callPackage ../development/python-modules/carbon { };
