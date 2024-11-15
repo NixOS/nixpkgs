@@ -79,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
+
     (lib.cmakeFeature "WATCHMAN_STATE_DIR" stateDir)
     (lib.cmakeFeature "WATCHMAN_VERSION_OVERRIDE" finalAttrs.version)
   ];
