@@ -10938,8 +10938,6 @@ with pkgs;
 
   SDL = SDL1;
 
-  SDL2 = callPackage ../development/libraries/SDL2 { };
-
   sdr-j-fm = libsForQt5.callPackage ../applications/radio/sdr-j-fm { };
 
   sdrpp = callPackage ../applications/radio/sdrpp {
