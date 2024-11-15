@@ -27,7 +27,7 @@ let
     mkdir $out
     ${concatStringsSep "\n" (mapAttrsToList (path: file: ''
         mkdir -p "$out/$(dirname ${path})"
-        ln -s "${file}" "$out/${path}"
+        ${if path == "apps_groups.conf" then "cp" else "ln -s"} "${file}" "$out/${path}"
       '') cfg.configDir)}
   '';
 
