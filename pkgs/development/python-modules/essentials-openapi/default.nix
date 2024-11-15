@@ -53,14 +53,18 @@ buildPythonPackage rec {
     ];
   };
 
+  pythonRelaxDeps = [
+    "markupsafe"
+  ];
+
   pythonImportsCheck = [ "openapidocs" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Neoteroi/essentials-openapi";
     description = "Functions to handle OpenAPI Documentation";
     changelog = "https://github.com/Neoteroi/essentials-openapi/releases/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aldoborrero
       zimbatm
     ];

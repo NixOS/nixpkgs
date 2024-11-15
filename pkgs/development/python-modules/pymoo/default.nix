@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   setuptools,
   pytestCheckHook,
   writeText,
@@ -38,14 +37,6 @@ buildPythonPackage rec {
     hash = "sha256-iGWPepZw3kJzw5HKV09CvemVvkvFQ38GVP+BAryBSs0=";
   };
 
-  patches = [
-    # https://github.com/anyoptimization/pymoo/pull/407
-    (fetchpatch {
-      url = "https://github.com/anyoptimization/pymoo/commit/be57ece64275469daece1e8ef12b2b6ee05362c9.diff";
-      hash = "sha256-BLPrUqNbAsAecfYahESEJF6LD+kehUYmkTvl/nvyqII=";
-    })
-  ];
-
   pythonRelaxDeps = [ "cma" ];
   pythonRemoveDeps = [ "alive-progress" ];
 
@@ -74,6 +65,10 @@ buildPythonPackage rec {
     substituteInPlace pymoo/config.py \
       --replace-fail "https://raw.githubusercontent.com/anyoptimization/pymoo-data/main/" \
                 "file://$pymoo_data/"
+
+    # Some tests require a grad backend to be configured, this is a hacky way to do so.
+    # The choice must be either "jax.numpy" or "autograd.numpy"
+    echo 'from pymoo.gradient import activate; activate("autograd.numpy")' >> tests/conftest.py
   '';
   nativeCheckInputs = [
     pytestCheckHook
@@ -87,6 +82,14 @@ buildPythonPackage rec {
     # ModuleNotFoundError: No module named 'pymoo.cython.non_dominated_sorting'
     "test_fast_non_dominated_sorting"
     "test_efficient_non_dominated_sort"
+    "test_dominance_degree_non_dominated_sort"
+
+    # sensitive to float precision
+    "test_cd_and_pcd"
+  ];
+  disabledTestPaths = [
+    # sensitive to float precision
+    "tests/algorithms/test_no_modfication.py"
   ];
   # Avoid crashing sandboxed build on macOS
   MATPLOTLIBRC = writeText "" ''

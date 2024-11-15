@@ -33,7 +33,7 @@ buildMozillaMach rec {
   tests = {
     inherit (nixosTests) firefox-beta;
   };
-  updateScript = callPackage ./update.nix {
+  updateScript = callPackage ../update.nix {
     attrPath = "firefox-beta-unwrapped";
     versionSuffix = "b[0-9]*";
   };
