@@ -873,6 +873,17 @@ fn remove_file_if_exists(p: impl AsRef<Path>) -> std::io::Result<()> {
     }
 }
 
+fn format_unit_slice(units: &[String]) -> String {
+    let mut units = units.to_owned();
+    units.sort_by_key(|name| name.to_lowercase());
+    units.join(", ")
+}
+
+fn format_unit_set(units: &HashSet<String>) -> String {
+    let vec = units.iter().cloned().collect::<Vec<_>>();
+    format_unit_slice(&vec)
+}
+
 /// Performs switch-to-configuration functionality for a single non-root user
 fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     if Path::new(&parent_exe)
@@ -1310,23 +1321,16 @@ won't take effect until you reboot the system.
     // Show dry-run actions.
     if *action == Action::DryActivate {
         if !units_to_stop_filtered.is_empty() {
-            let mut units = units_to_stop_filtered
-                .iter()
-                .map(String::as_str)
-                .collect::<Vec<&str>>();
-            units.sort_by_key(|name| name.to_lowercase());
-            eprintln!("would stop the following units: {}", units.join(", "));
+            eprintln!(
+                "would stop the following units: {}",
+                format_unit_set(&units_to_stop_filtered)
+            );
         }
 
         if !units_to_skip.is_empty() {
-            let mut units = units_to_skip
-                .iter()
-                .map(String::as_str)
-                .collect::<Vec<&str>>();
-            units.sort_by_key(|name| name.to_lowercase());
             eprintln!(
                 "would NOT stop the following changed units: {}",
-                units.join(", ")
+                format_unit_set(&units_to_skip)
             );
         }
 
@@ -1415,31 +1419,25 @@ won't take effect until you reboot the system.
         }
 
         if !units_to_reload.is_empty() {
-            let mut units = units_to_reload
-                .iter()
-                .map(String::as_str)
-                .collect::<Vec<&str>>();
-            units.sort_by_key(|name| name.to_lowercase());
-            eprintln!("would reload the following units: {}", units.join(", "));
+            eprintln!(
+                "would reload the following units: {}",
+                format_unit_set(&units_to_reload)
+            );
         }
 
         if !units_to_restart.is_empty() {
-            let mut units = units_to_restart
-                .iter()
-                .map(String::as_str)
-                .collect::<Vec<&str>>();
-            units.sort_by_key(|name| name.to_lowercase());
-            eprintln!("would restart the following units: {}", units.join(", "));
+            eprintln!(
+                "would restart the following units: {}",
+                format_unit_set(&units_to_restart)
+            );
         }
 
         let units_to_start_filtered = filter_units(&units_to_filter, &units_to_start);
         if !units_to_start_filtered.is_empty() {
-            let mut units = units_to_start_filtered
-                .iter()
-                .map(String::as_str)
-                .collect::<Vec<&str>>();
-            units.sort_by_key(|name| name.to_lowercase());
-            eprintln!("would start the following units: {}", units.join(", "));
+            eprintln!(
+                "would start the following units: {}",
+                format_unit_set(&units_to_start_filtered)
+            );
         }
 
         std::process::exit(0);
@@ -1449,12 +1447,10 @@ won't take effect until you reboot the system.
 
     if !units_to_stop.is_empty() {
         if !units_to_stop_filtered.is_empty() {
-            let mut units = units_to_stop_filtered
-                .iter()
-                .map(String::as_str)
-                .collect::<Vec<&str>>();
-            units.sort_by_key(|name| name.to_lowercase());
-            eprintln!("stopping the following units: {}", units.join(", "));
+            eprintln!(
+                "stopping the following units: {}",
+                format_unit_set(&units_to_stop_filtered)
+            );
         }
 
         for unit in &units_to_stop {
@@ -1471,14 +1467,9 @@ won't take effect until you reboot the system.
     }
 
     if !units_to_skip.is_empty() {
-        let mut units = units_to_skip
-            .iter()
-            .map(String::as_str)
-            .collect::<Vec<&str>>();
-        units.sort_by_key(|name| name.to_lowercase());
         eprintln!(
             "NOT restarting the following changed units: {}",
-            units.join(", "),
+            format_unit_set(&units_to_skip)
         );
     }
 
@@ -1697,14 +1688,12 @@ won't take effect until you reboot the system.
 
     // Reload units that need it. This includes remounting changed mount units.
     if !units_to_reload.is_empty() {
-        let mut units = units_to_reload
-            .iter()
-            .map(String::as_str)
-            .collect::<Vec<&str>>();
-        units.sort_by_key(|name| name.to_lowercase());
-        eprintln!("reloading the following units: {}", units.join(", "));
+        eprintln!(
+            "reloading the following units: {}",
+            format_unit_set(&units_to_reload)
+        );
 
-        for unit in units {
+        for unit in &units_to_reload {
             match systemd.reload_unit(unit, "replace") {
                 Ok(job_path) => {
                     submitted_jobs
@@ -1726,14 +1715,12 @@ won't take effect until you reboot the system.
 
     // Restart changed services (those that have to be restarted rather than stopped and started).
     if !units_to_restart.is_empty() {
-        let mut units = units_to_restart
-            .iter()
-            .map(String::as_str)
-            .collect::<Vec<&str>>();
-        units.sort_by_key(|name| name.to_lowercase());
-        eprintln!("restarting the following units: {}", units.join(", "));
+        eprintln!(
+            "restarting the following units: {}",
+            format_unit_set(&units_to_restart)
+        );
 
-        for unit in units {
+        for unit in &units_to_restart {
             match systemd.restart_unit(unit, "replace") {
                 Ok(job_path) => {
                     let mut jobs = submitted_jobs.borrow_mut();
@@ -1758,12 +1745,10 @@ won't take effect until you reboot the system.
     // time because we'll get a "Failed to add path to set" error from systemd.
     let units_to_start_filtered = filter_units(&units_to_filter, &units_to_start);
     if !units_to_start_filtered.is_empty() {
-        let mut units = units_to_start_filtered
-            .iter()
-            .map(String::as_str)
-            .collect::<Vec<&str>>();
-        units.sort_by_key(|name| name.to_lowercase());
-        eprintln!("starting the following units: {}", units.join(", "));
+        eprintln!(
+            "starting the following units: {}",
+            format_unit_set(&units_to_start_filtered)
+        );
     }
 
     for unit in &units_to_start {
@@ -1856,18 +1841,16 @@ won't take effect until you reboot the system.
     }
 
     if !new_units.is_empty() {
-        new_units.sort_by_key(|name| name.to_lowercase());
         eprintln!(
             "the following new units were started: {}",
-            new_units.join(", ")
+            format_unit_slice(&new_units)
         );
     }
 
     if !failed_units.is_empty() {
-        failed_units.sort_by_key(|name| name.to_lowercase());
         eprintln!(
             "warning: the following units failed: {}",
-            failed_units.join(", ")
+            format_unit_slice(&failed_units)
         );
         _ = std::process::Command::new(new_systemd.join("bin/systemctl"))
             .arg("status")
