@@ -5148,6 +5148,8 @@ with pkgs;
 
   rainbowstream = with python3.pkgs; toPythonApplication rainbowstream;
 
+  railsy = callPackage ../by-name/ra/railsy { };
+
   rapidgzip = with python3Packages; toPythonApplication rapidgzip;
 
   rar = callPackage ../tools/archivers/rar { };

@@ -14569,6 +14569,12 @@
     githubId = 16974598;
     name = "Mike Playle";
   };
+  mkaram = {
+    name = "Mahdy Karam";
+    email = "mahdykaram@outlook.com";
+    github = "mmkaram";
+    githubId = 64036912;
+  };
   mkazulak = {
     email = "kazulakm@gmail.com";
     github = "mulderr";
