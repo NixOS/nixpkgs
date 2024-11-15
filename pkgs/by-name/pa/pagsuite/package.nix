@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   cmake,
   unzip,
   gmp,
@@ -18,6 +19,14 @@ stdenv.mkDerivation rec {
     }.zip";
     hash = "sha256-TYd+dleVPWEWU9Cb3XExd7ixJZyiUAp9QLtorYJSIbQ=";
   };
+
+  patches = [
+    # Fix issue with latest ScaLP update
+    (fetchpatch {
+      url = "https://gitlab.com/kumm/pagsuite/-/commit/cae9f78bec93a7f197461358f2f796f6b5778781.patch";
+      hash = "sha256-12IisS6oGYLRicORTemHB7bw9EB9cuQjxG8f6X0WMrU=";
+    })
+  ];
 
   sourceRoot = "pagsuite_${lib.replaceStrings [ "." ] [ "_" ] version}";
 
