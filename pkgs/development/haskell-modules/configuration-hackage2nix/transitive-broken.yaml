@@ -4138,8 +4138,6 @@ dont-distribute-packages:
  - warp-grpc
  - warp-quic
  - warped
- - waterfall-cad
- - waterfall-cad-examples
  - wavesurfer
  - wavy
  - weatherhs
