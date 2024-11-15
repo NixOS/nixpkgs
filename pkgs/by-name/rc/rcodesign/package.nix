@@ -8,28 +8,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rcodesign";
-  version = "0.27.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "indygreg";
     repo = "apple-platform-rs";
     rev = "apple-codesign/${version}";
-    hash = "sha256-F6Etl3Zbpmh3A/VeCcSXIy3W1WYFg8WUSJBJV/akCxU=";
+    hash = "sha256-xyjq5mdc29OwzlUAQZWSg1k68occ81i7KBGUiiq0ke0=";
   };
 
-  cargoPatches = [
-    # Update time to a version that is compatible with Rust 1.80
-    ./update-time-rs-in-cargo-lock.patch
-  ];
-
   patches = [
-    # Fix rcodesign’s verbosity level to set the logging level as intended. Needed for cli_tests.
-    ./fix-verbosity-level.patch
     # Disable cli_tests test that requires network access.
     ./disable-sign-for-notarization-test.patch
   ];
 
-  cargoHash = "sha256-VrexypkCW58asvzXo3wj/Rgi72tiGuchA31BkEZoYpI=";
+  cargoHash = "sha256-xMhyKovXoBPZp6epWQ+CYODpyvHgpv6eZfdWPTuDnK8=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
