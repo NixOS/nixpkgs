@@ -39,8 +39,8 @@ buildPythonPackage rec {
   disabledTests = [
     # flaky
     "test_session_scoping_changing"
-    # https://github.com/pallets-eco/flask-sqlalchemy/issues/1084
-    "test_persist_selectable"
+    # https://github.com/pallets-eco/flask-sqlalchemy/issues/1378
+    "test_explicit_table"
   ];
 
   pytestFlagsArray = lib.optionals (pythonAtLeast "3.12") [
