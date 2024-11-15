@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mmkaram";
     repo = "railsy";
-    rev = "v${version}";
+    rev = "ref/tags/v${version}";
     hash = "sha256-rmU5/j2HpErcv+bSeskBSPb/CXXmPPf7cJq9+zAfnc0=";
   };
 
@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
 
   PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
 
-  meta = with lib; {
+  meta =  {
     description = "Temporary email client in Rust";
     homepage = "https://mmkaram.github.io/railsy.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mmkaram ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lib.maintainers.mmkaram ];
+    platforms = lib.platforms.unix;
   };
 }
