@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, appstream
-, appstream-glib
-, cargo
-, cmake
-, desktop-file-utils
-, dos2unix
-, glib
-, gst_all_1
-, gtk4
-, libadwaita
-, libxml2
-, meson
-, ninja
-, pkg-config
-, poppler
-, python3
-, rustPlatform
-, rustc
-, shared-mime-info
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  appstream,
+  appstream-glib,
+  cargo,
+  cmake,
+  desktop-file-utils,
+  dos2unix,
+  glib,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  poppler,
+  python3,
+  rustPlatform,
+  rustc,
+  shared-mime-info,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
@@ -66,17 +67,19 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "cli" true)
   ];
 
-  buildInputs = [
-    appstream
-    glib
-    gst_all_1.gstreamer
-    gtk4
-    libadwaita
-    libxml2
-    poppler
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-  ];
+  buildInputs =
+    [
+      appstream
+      glib
+      gst_all_1.gstreamer
+      gtk4
+      libadwaita
+      libxml2
+      poppler
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ];
 
   postPatch = ''
     chmod +x build-aux/*.py
@@ -92,7 +95,11 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/flxzt/rnote/releases/tag/${src.rev}";
     description = "Simple drawing application to create handwritten notes";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda gepbird yrd ];
+    maintainers = with maintainers; [
+      dotlambda
+      gepbird
+      yrd
+    ];
     platforms = platforms.unix;
   };
 }
