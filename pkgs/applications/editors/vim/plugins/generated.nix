@@ -11171,6 +11171,18 @@ final: prev:
     meta.homepage = "https://github.com/camspiers/snap/";
   };
 
+  snipe-nvim = buildVimPlugin {
+    pname = "snipe.nvim";
+    version = "2024-10-15";
+    src = fetchFromGitHub {
+      owner = "leath-dub";
+      repo = "snipe.nvim";
+      rev = "e2d43b9290480d745910b5a872a504651da29bd3";
+      sha256 = "0qp8ix27nm4j1y91p5mqzw9pg7lq8jbyhiig8j7kw0lwnyx93srh";
+    };
+    meta.homepage = "https://github.com/leath-dub/snipe.nvim/";
+  };
+
   snippets-nvim = buildVimPlugin {
     pname = "snippets.nvim";
     version = "2020-09-09";
