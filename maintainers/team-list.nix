@@ -1076,7 +1076,6 @@ with lib.maintainers;
     members = [
       hehongbo
       lach
-      rane
       sigmasquadron
     ];
     scope = "Maintain the Xen Project Hypervisor and the related tooling ecosystem.";
