@@ -42,6 +42,7 @@ let
     maintainers = with lib.maintainers; [
       gepbird
       stepbrobd
+      Guanran928
     ];
     mainProgram = "osu!";
     platforms = [

@@ -106,6 +106,7 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [
       gepbird
       thiagokokada
+      Guanran928
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "osu!";
