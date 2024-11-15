@@ -55,7 +55,7 @@ let
   ];
   buildInputs = glLibs ++ libs;
   runpathPackages = glLibs ++ [ stdenv.cc.cc stdenv.cc.libc ];
-  version = "1.0.16";
+  version = "1.0.17";
 in
 stdenv.mkDerivation {
   pname = "tana";
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/tanainc/tana-desktop-releases/releases/download/v${version}/tana_${version}_amd64.deb";
-    hash = "sha256-XLjzvMai5HyxEGK02DfBAKy5jva9wEGcf5A/38jzu+s=";
+    hash = "sha256-IgF4VWCp3M6tQBfFAPR9u9UgGFs6f7qU3s94nGYEKkY=";
   };
 
   nativeBuildInputs = [
