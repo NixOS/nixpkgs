@@ -50,13 +50,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cemu";
-  version = "2.2";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-d4FMAj99SPj5S1p5nAUFNo386ZJvWxOKD9iGxHJYVBI=";
+    hash = "sha256-JBd5ntU1fFDvQpNbfP63AQANzuQTdfd4dfB29/BN5LM=";
   };
 
   patches = [

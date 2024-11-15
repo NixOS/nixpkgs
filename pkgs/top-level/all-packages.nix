@@ -7682,7 +7682,7 @@ with pkgs;
   nqp = callPackage  ../development/interpreters/rakudo/nqp.nix { };
   zef = callPackage ../development/interpreters/rakudo/zef.nix { };
 
-  inherit (ocamlPackages) reason;
+  inherit (ocamlPackages) reason rtop;
 
   buildRubyGem = callPackage ../development/ruby-modules/gem {
     inherit (darwin) libobjc;
