@@ -1,6 +1,5 @@
 { lib, beamPackages
 , fetchFromGitHub
-, ...
 }:
 
 beamPackages.mixRelease rec {
@@ -18,10 +17,13 @@ beamPackages.mixRelease rec {
     inherit beamPackages lib;
   };
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
-    description = "Keila is an Open Source alternative to newsletter tools like Mailchimp or Sendinblue.";
+    description = "Open Source alternative to newsletter tools like Mailchimp or Sendinblue";
     homepage = "https://keila.io";
     license = licenses.agpl3;
     platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ dvn0 ];
   };
 }
