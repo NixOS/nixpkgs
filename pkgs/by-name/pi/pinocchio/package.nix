@@ -9,7 +9,7 @@
   eigen,
   example-robot-data,
   fetchFromGitHub,
-  hpp-fcl,
+  coal,
   jrl-cmakemodules,
   lib,
   pkg-config,
@@ -77,12 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
       boost
       eigen
     ]
-    ++ lib.optionals (!pythonSupport && collisionSupport) [ hpp-fcl ]
+    ++ lib.optionals (!pythonSupport && collisionSupport) [ coal ]
     ++ lib.optionals pythonSupport [
       python3Packages.boost
       python3Packages.eigenpy
     ]
-    ++ lib.optionals (pythonSupport && collisionSupport) [ python3Packages.hpp-fcl ]
+    ++ lib.optionals (pythonSupport && collisionSupport) [ python3Packages.coal ]
     ++ lib.optionals (!pythonSupport && casadiSupport) [ casadi ]
     ++ lib.optionals (pythonSupport && casadiSupport) [ python3Packages.casadi ];
 
