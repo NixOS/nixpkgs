@@ -1,0 +1,53 @@
+From 3e9f115a8e931452d74e37da6f279e8bdd057088 Mon Sep 17 00:00:00 2001
+From: Reno Dakota <paparodeo@proton.me>
+Date: Thu, 14 Nov 2024 23:27:41 +0000
+Subject: [PATCH] configurator: c file name is last in compiler args
+
+Re-order the compiler arguments so the c file name is last. This works
+around a clang bug which will suppress errors for unsupported flags if
+linker arguments come after the c file name. This suppression is a
+problem because it indicates that some argument is supported when it is
+not which can result in build errors.
+
+`https://github.com/llvm/llvm-project/issues/116278`
+
+eg: on aarch64 darwin and clang > 16 `-mpopcnt` will generate an error
+
+```
+$ clang -mpopcnt hello.c
+clang: error: unsupported option '-mpopcnt' for target 'aarch64-apple-darwin'
+$ echo $?
+1
+```
+
+however, if appending `-lpthread`:
+
+```
+$ clang -mpopcnt hello.c -lpthread
+$ echo $?
+0
+```
+
+Which is a problem as code will assume `-mpopcnt` is supported and will
+then break later when compiling with the unsupported flag
+
+Signed-off-by: Reno Dakota <paparodeo@proton.me>
+---
+ otherlibs/configurator/src/v1.ml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/otherlibs/configurator/src/v1.ml b/otherlibs/configurator/src/v1.ml
+index ddd8446fb14..0bfd8ab4071 100644
+--- a/otherlibs/configurator/src/v1.ml
++++ b/otherlibs/configurator/src/v1.ml
+@@ -418,9 +418,9 @@ let compile_and_link_c_prog t ?(c_flags = []) ?(link_flags = []) code =
+          [ c_flags
+          ; [ "-I"; t.stdlib_dir ]
+          ; output_flag
+-         ; [ c_fname ]
+          ; t.c_libraries
+          ; link_flags
++         ; [ c_fname ]
+          ])
+   in
+   if ok then Ok () else Error ()

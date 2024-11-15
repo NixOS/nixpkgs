@@ -3,7 +3,13 @@
 buildDunePackage rec {
   pname = "dune-configurator";
 
-  inherit (dune_3) src version patches;
+  inherit (dune_3) src version;
+
+  patches = dune_3.patches or [] ++ [
+    # https://github.com/ocaml/dune/pull/11123
+    # https://github.com/llvm/llvm-project/issues/116278
+    ./clang-arg-order-workaround.patch
+  ];
 
   # This fixes finding csexp
   postPatch = ''
