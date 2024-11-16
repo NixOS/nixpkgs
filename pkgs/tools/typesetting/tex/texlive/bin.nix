@@ -267,7 +267,7 @@ core-big = stdenv.mkDerivation {
   ''
   # force XeTeX to use fontconfig instead of Core Text, so that fonts can be made available via FONTCONFIG_FILE,
   # by tricking configure into thinking that the relevant test result is already in the config cache
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export kpse_cv_have_ApplicationServices=no
   '';
 

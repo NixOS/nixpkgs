@@ -4,7 +4,7 @@
 , enableQt             ? enableQT
 , enableXM             ? false
 , libGLX
-, enableOpenGLX11      ? !stdenv.isDarwin
+, enableOpenGLX11      ? !stdenv.hostPlatform.isDarwin
 , enablePython         ? false
 , enableRaytracerX11   ? false
 

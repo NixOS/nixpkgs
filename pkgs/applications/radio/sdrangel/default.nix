@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     soapysdr-with-plugins
     uhd
     zlib
-  ] ++ lib.optionals stdenv.isLinux [ qtwayland ] ++ lib.optionals withSDRplay [ sdrplay ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ] ++ lib.optionals withSDRplay [ sdrplay ];
 
   cmakeFlags = [
     "-DAPT_DIR=${aptdec}"

@@ -59,7 +59,7 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.eelco ];
     license = licenses.lgpl21;
     # See https://github.com/edolstra/nix-serve/issues/57
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     platforms = nix.meta.platforms;
     mainProgram = "nix-serve";
   };

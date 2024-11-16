@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: ({
       [ libinput ]
       ++ lib.optional withGtk3 gtk3
     )
-    ++ lib.optional stdenv.isDarwin darwinVersionInputs
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwinVersionInputs
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysqlSupport) libmysqlclient

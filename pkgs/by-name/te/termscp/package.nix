@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
       "--skip=cli::remote::test::test_should_make_remote_args_from_two_bookmarks_and_local_dir"
       "--skip=cli::remote::test::test_should_make_remote_args_from_two_remotes_and_local_dir"
     ]
-    ++ lib.optionals stdenvNoCC.isDarwin [
+    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
       "--skip=system::watcher::test::should_poll_file_removed"
       "--skip=system::watcher::test::should_poll_file_update"
     ];

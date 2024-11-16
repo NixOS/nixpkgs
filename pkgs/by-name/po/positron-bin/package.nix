@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   inherit version pname;
 
   src =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       fetchurl {
         url = "https://github.com/posit-dev/positron/releases/download/${version}/Positron-${version}.dmg";
         hash = "sha256-5Ym42InDgFLGdZk0LYV1H0eC5WzmsYToG1KLdiGgTto=";

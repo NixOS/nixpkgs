@@ -356,7 +356,7 @@ let
       swift-driver
       swift-system
       swift-tools-support-core
-    ] ++ lib.optionals stdenv.isDarwin [ (darwinMinVersionHook "10.15.4") ];
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ (darwinMinVersionHook "10.15.4") ];
 
     cmakeFlags = [
       "-DUSE_CMAKE_INSTALL=ON"
@@ -386,7 +386,7 @@ in stdenv.mkDerivation (commonAttrs // {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CryptoKit
       LocalAuthentication
-  ] ++ lib.optionals stdenv.isDarwin [ (darwinMinVersionHook "10.15.4") ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ (darwinMinVersionHook "10.15.4") ];
 
   configurePhase = generated.configure + ''
     # Functionality provided by Xcode XCTest, but not available in
