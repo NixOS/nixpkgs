@@ -128,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
       pierreis
       kylesferrazza
       emily
+      techknowlogick
     ];
   };
 })
