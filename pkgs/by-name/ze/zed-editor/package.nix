@@ -35,7 +35,7 @@
   apple-sdk_15,
   darwinMinVersionHook,
   makeWrapper,
-  nodePackages_latest,
+  nodejs_22,
 
   withGLES ? false,
 }:
@@ -217,9 +217,7 @@ rustPlatform.buildRustPackage rec {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-rpath ${gpu-lib}/lib $out/libexec/*
     patchelf --add-rpath ${wayland}/lib $out/libexec/*
-    wrapProgram $out/libexec/zed-editor --suffix PATH : ${
-      lib.makeBinPath [ nodePackages_latest.nodejs ]
-    }
+    wrapProgram $out/libexec/zed-editor --suffix PATH : ${lib.makeBinPath [ nodejs_22 ]}
   '';
 
   preCheck = ''
