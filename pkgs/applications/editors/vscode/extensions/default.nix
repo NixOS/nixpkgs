@@ -836,6 +836,22 @@ let
         };
       };
 
+      capatech.betacode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "betacode";
+          publisher = "capatech";
+          version = "0.1.10";
+          hash = "sha256-Sq+s1dM+gZo73VaGEAX88fgVRAhWklg0LKv+yH46Jfw=";
+        };
+        meta = {
+          description = "VSCode extension for writing polytonic Greek";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Capatech.betacode";
+          homepage = "https://github.com/kugland/vscode-extension-betacode";
+          license = lib.licenses.gpl3;
+          maintainers = with lib.maintainers; [ thtrf ];
+        };
+      };
+
       carrie999.cyberpunk-2020 = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "cyberpunk-2020";
