@@ -57,7 +57,9 @@
     license = lib.licenses.mpl20;
     mainProgram = "floorp";
   };
-  tests = [ nixosTests.floorp ];
+  tests = {
+    inherit (nixosTests) floorp;
+  };
 }).override {
   # Upstream build configuration can be found at
   # .github/workflows/src/linux/shared/mozconfig_linux_base
