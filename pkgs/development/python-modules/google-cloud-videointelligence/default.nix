@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-videointelligence";
-  version = "2.13.5";
+  version = "2.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_videointelligence";
     inherit version;
-    hash = "sha256-cpx3TA+1Ukr8rsRjN7lGCI2qWu2RoOLhXwA1TXw7+KM=";
+    hash = "sha256-w0d4YvbhtUsQB0gZQ6SXTNKeDRIuc92BDNQUrfdh9Ow=";
   };
 
   build-system = [ setuptools ];
