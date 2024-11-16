@@ -2907,6 +2907,29 @@ buildLuarocksPackage {
   };
 }) {};
 
+orgmode = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, tree-sitter-orgmode }:
+buildLuarocksPackage {
+  pname = "orgmode";
+  version = "0.3.61-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/orgmode-0.3.61-1.rockspec";
+    sha256 = "1sdmqaq3vzpb0c74n45piqrlcw3liiqlv282nrgr16jzsz1c870g";
+  }).outPath;
+  src = fetchzip {
+    url    = "https://github.com/nvim-orgmode/orgmode/archive/0.3.61.zip";
+    sha256 = "1gkpwyfvw9z92277q6311r924rmb9zidgmlr4xxkmn2xrj5qwl7x";
+  };
+
+  disabled = luaOlder "5.1";
+  propagatedBuildInputs = [ tree-sitter-orgmode ];
+
+  meta = {
+    homepage = "https://nvim-orgmode.github.io/";
+    description = "Orgmode clone written in Lua for Neovim 0.9+.";
+    license.fullName = "MIT";
+  };
+}) {};
+
 pathlib-nvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, nvim-nio }:
 buildLuarocksPackage {
   pname = "pathlib.nvim";
