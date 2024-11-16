@@ -92,20 +92,24 @@ stdenv'.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
 
-  buildInputs = [
-    capstone
-    curl
-    dbus
-    file
-    fmt
-    glfw3
-    gtk3
-    jansson
-    libGLU
-    mbedtls
-    nlohmann_json
-    yara
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk_11_0.frameworks.UniformTypeIdentifiers ];
+  buildInputs =
+    [
+      capstone
+      curl
+      dbus
+      file
+      fmt
+      glfw3
+      gtk3
+      jansson
+      libGLU
+      mbedtls
+      nlohmann_json
+      yara
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.UniformTypeIdentifiers
+    ];
 
   # autoPatchelfHook only searches for *.so and *.so.*, and won't find *.hexpluglib
   # however, we will append to RUNPATH ourselves

@@ -7,7 +7,10 @@
 let
   arch = if stdenv.hostPlatform.isAarch64 then "aarch64" else "x86_64";
   release =
-    if stdenv.hostPlatform.isDarwin then "macos-${arch}-apple-darwin" else "linux-${arch}-unknown-linux-gnu";
+    if stdenv.hostPlatform.isDarwin then
+      "macos-${arch}-apple-darwin"
+    else
+      "linux-${arch}-unknown-linux-gnu";
 
   hashes = {
     linux-aarch64-unknown-linux-gnu = "sha256-vWMrq/uFU/uyuDnsxZK0ZyvtraVCZwvGjzO1a5QjR8g=";
