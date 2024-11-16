@@ -4,33 +4,54 @@
   pkgs,
   ...
 }:
-with lib;
 let
+  inherit (lib)
+    literalExpression
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkOption
+    mkRenamedOptionModule
+    types
+    ;
+
   cfg = config.services.rss-bridge;
 
   poolName = "rss-bridge";
 
-  cfgHalf = lib.mapAttrsRecursive (
-    path: value:
-    let
-      envName = lib.toUpper ("RSSBRIDGE_" + lib.concatStringsSep "_" path);
-      envValue =
-        if lib.isList value then
-          lib.concatStringsSep "," value
-        else if lib.isBool value then
-          lib.boolToString value
-        else
-          toString value;
-    in
-    if (value != null) then "fastcgi_param \"${envName}\" \"${envValue}\";" else null
-  ) cfg.config;
-  cfgEnv = lib.concatStringsSep "\n" (lib.collect lib.isString cfgHalf);
+  cfgEnv = lib.pipe cfg.config [
+    (lib.mapAttrsRecursive (
+      path: value:
+      lib.optionalAttrs (value != null) {
+        name = lib.toUpper "RSSBRIDGE_${lib.concatStringsSep "_" path}";
+        value =
+          if lib.isList value then
+            lib.concatStringsSep "," value
+          else if lib.isBool value then
+            lib.boolToString value
+          else
+            toString value;
+      }
+    ))
+    (lib.collect (x: lib.isString x.name or false && lib.isString x.value or false))
+    lib.listToAttrs
+  ];
 in
 {
   imports = [
     (mkRenamedOptionModule
-      [ "services" "rss-bridge" "whitelist" ]
-      [ "services" "rss-bridge" "config" "system" "enabled_bridges" ]
+      [
+        "services"
+        "rss-bridge"
+        "whitelist"
+      ]
+      [
+        "services"
+        "rss-bridge"
+        "config"
+        "system"
+        "enabled_bridges"
+      ]
     )
   ];
 
@@ -97,12 +118,12 @@ in
                 type = types.str;
                 description = "Directory where to store cache files (if cache.type = \"file\").";
                 default = "${cfg.dataDir}/cache/";
-                defaultText = options.literalExpression "\${config.services.rss-bridge.dataDir}/cache/";
+                defaultText = literalExpression "\${config.services.rss-bridge.dataDir}/cache/";
               };
             };
           };
         };
-        example = options.literalExpression ''
+        example = literalExpression ''
           {
             system.enabled_bridges = [ "*" ];
             error = {
@@ -127,7 +148,7 @@ in
     services.phpfpm.pools = mkIf (cfg.pool == poolName) {
       ${poolName} = {
         user = cfg.user;
-        settings = mapAttrs (name: mkDefault) {
+        settings = lib.mapAttrs (name: mkDefault) {
           "listen.owner" = cfg.user;
           "listen.group" = cfg.user;
           "listen.mode" = "0600";
@@ -166,7 +187,7 @@ in
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
               fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-              ${cfgEnv}
+              ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "fastcgi_param \"${n}\" \"${v}\";") cfgEnv)}
             '';
           };
         };
