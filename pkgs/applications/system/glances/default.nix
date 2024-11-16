@@ -2,6 +2,7 @@
   stdenv,
   buildPythonApplication,
   fetchFromGitHub,
+  fetchpatch,
   isPyPy,
   lib,
   defusedxml,
@@ -34,6 +35,16 @@ buildPythonApplication rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-8Jm6DE3B7OQkaNwX/KwXMNZHUyvPtln8mJYaD6yzJRM=";
   };
+
+  patches = [
+    # Fixes KeyError: 'bytes_sent_rate_per_sec' traceback on startup
+    # Remove on releases after 4.2.1
+    (fetchpatch {
+      name = "KeyError_bytes_sent_rate_per_sec.patch";
+      url = "https://github.com/nicolargo/glances/commit/07656fd7ff67e4b189aa14ca1645c90a580d72f1.patch";
+      hash = "sha256-laE4pYGiaLqJh1CmGYkVHsFD2/4C5t0PfTLrGPVzvEs=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
