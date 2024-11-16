@@ -21,18 +21,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-uUq+xElZMcG5SWzha9/8COaenycII5aiXmm7sXGgjXE=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cosmic-client-toolkit-0.1.0" = "sha256-st46wmOncJvu0kj6qaot6LT/ojmW/BwXbbGf8s0mdZ8=";
-      "cosmic-config-0.1.0" = "sha256-eynEjV7eTRoOUA1v4Ac0FP2h9KQtIDx32WkY0hR4xig=";
-      "cosmic-notifications-util-0.1.0" = "sha256-F1+Y74JdpehRPTANzERwNVE6Q6n5f5HAFtawLQVMFrA=";
-      "launch-pad-0.1.0" = "sha256-tnbSJ/GP9GTnLnikJmvb9XrJSgnUnWjadABHF43L1zc=";
-      "smithay-0.3.0" = "sha256-OI+wtDeJ/2bJyiTxL+F53j1CWnZ0aH7XjUmM6oN45Ow=";
-      "smithay-client-toolkit-0.18.0" = "sha256-GhCZ7Eb6q7SwA+NeHSiHwx/Fnrw3R6Zm5N2meMOJ2/4=";
-      "xdg-shell-wrapper-0.1.0" = "sha256-8+RXbYiYeoIGUOsJ7yCc2iYtIGKIwDCzSdq9ISuWxIE=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-1XtW72KPdRM5gHIM3Fw2PZCobBXYDMAqjZ//Ebr51tc=";
 
   nativeBuildInputs = [ just pkg-config ];
   buildInputs = [ libglvnd libxkbcommon wayland ];
