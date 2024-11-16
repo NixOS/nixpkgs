@@ -12308,6 +12308,10 @@ with pkgs;
 
   shairplay = callPackage ../servers/shairplay { avahi = avahi-compat; };
 
+  shairport-sync-airplay2 = shairport-sync.override {
+    enableAirplay2 = true;
+  };
+
   showoff = callPackage ../servers/http/showoff { };
 
   ruby-zoom = callPackage ../tools/text/ruby-zoom { };
