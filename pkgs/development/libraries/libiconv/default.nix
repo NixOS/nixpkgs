@@ -7,7 +7,7 @@
 
 # assert !stdenv.hostPlatform.isLinux || stdenv.hostPlatform != stdenv.buildPlatform; # TODO: improve on cross
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "libiconv";
   version = "1.17";
 
@@ -21,6 +21,9 @@ stdenv.mkDerivation (rec {
   # necessary to build on FreeBSD native pending inclusion of
   # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+
+  # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
+  hardeningDisable = lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
 
   setupHooks = [
     ../../../build-support/setup-hooks/role.bash
@@ -92,7 +95,4 @@ stdenv.mkDerivation (rec {
     # This library is not needed on GNU platforms.
     hydraPlatforms = with lib.platforms; cygwin ++ darwin ++ freebsd;
   };
-} // lib.optionalAttrs (stdenv.hostPlatform.libc == "bionic") {
-  # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
-  hardeningDisable = [ "fortify" ];
-})
+}
