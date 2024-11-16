@@ -54,10 +54,12 @@ buildGoModule rec {
     cp -r _output/* $out
     wrapProgram $out/bin/limactl \
       --prefix PATH : ${lib.makeBinPath [ qemu ]}
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd limactl \
       --bash <($out/bin/limactl completion bash) \
       --fish <($out/bin/limactl completion fish) \
       --zsh <($out/bin/limactl completion zsh)
+  '' + ''
     runHook postInstall
   '';
 
