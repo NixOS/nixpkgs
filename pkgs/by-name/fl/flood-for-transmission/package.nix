@@ -1,8 +1,14 @@
 # To use this package, use: `services.transmission.webHome = pkgs.flood-for-transmission;`
+# The configuration [1] can be modified by overriding floodSettings:
+# pkgs.flood-for-transmission.override {
+#   floodSettings.SWITCH_COLORS = true;
+# };
+# [1]: https://github.com/johman10/flood-for-transmission?tab=readme-ov-file#beta-customization
 {
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  floodSettings ? null,
 }:
 
 buildNpmPackage rec {
@@ -24,8 +30,14 @@ buildNpmPackage rec {
     runHook preInstall
 
     cp -r public $out
+    rm $out/config.json.defaults
+    touch $out/config.json
 
     runHook postInstall
+  '';
+
+  postInstall = lib.optionalString (floodSettings != null) ''
+    echo '${builtins.toJSON floodSettings}' > $out/config.json
   '';
 
   meta = {
