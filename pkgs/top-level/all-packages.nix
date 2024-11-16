@@ -35013,7 +35013,6 @@ with pkgs;
 
   ungoogled-chromium = callPackage ../applications/networking/browsers/chromium ((config.chromium or {}) // {
     ungoogled = true;
-    channel = "ungoogled-chromium";
   });
 
   uni = callPackage ../applications/misc/uni { };

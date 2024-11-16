@@ -4,7 +4,7 @@
 , buildPlatform
 , pkgsBuildBuild
 # Channel data:
-, channel, upstream-info
+, upstream-info
 # Helper functions:
 , chromiumVersionAtLeast, versionRange
 
