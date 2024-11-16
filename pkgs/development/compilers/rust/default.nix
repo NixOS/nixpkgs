@@ -56,7 +56,7 @@ in
       # Like `buildRustPackages`, but may also contain prebuilt binaries to
       # break cycle. Just like `bootstrapTools` for nixpkgs as a whole,
       # nothing in the final package set should refer to this.
-      bootstrapRustPackages = if fastCross
+      bootstrapRustPackages = if (fastCross || stdenv.buildPlatform != stdenv.hostPlatform)
       then pkgsBuildBuild.rustPackages
       else
         self.buildRustPackages.overrideScope (_: _:
