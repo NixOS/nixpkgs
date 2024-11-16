@@ -8,6 +8,7 @@
 , ncurses
 , testers
 , udev
+, apple-sdk_12
 , addDriverRunpath
 , amd ? false
 , intel ? false
@@ -53,7 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   nativeBuildInputs = [ cmake gtest ] ++ lib.optional nvidia addDriverRunpath;
 
-  buildInputs = [ ncurses udev ]
+  buildInputs = [ ncurses ]
+    ++ lib.optional stdenv.isLinux udev
+    ++ lib.optional stdenv.isDarwin apple-sdk_12
     ++ lib.optional nvidia cudatoolkit
     ++ lib.optional needDrm libdrm
   ;
@@ -83,8 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Syllo/nvtop";
     changelog = "https://github.com/Syllo/nvtop/releases/tag/${finalAttrs.version}";
     license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ willibutz gbtb anthonyroussel ];
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ willibutz gbtb anthonyroussel moni ];
     mainProgram = "nvtop";
   };
 })
