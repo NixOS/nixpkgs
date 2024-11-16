@@ -24,6 +24,7 @@
   openexr_3,
   bash-completion,
   testers,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
@@ -73,8 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     openexr_3
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
