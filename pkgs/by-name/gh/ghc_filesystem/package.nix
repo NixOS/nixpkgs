@@ -1,4 +1,4 @@
-{ stdenv, lib, cmake, fetchFromGitHub }:
+{ stdenv, lib, apple-sdk_11, cmake, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "filesystem";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   meta = with lib; {
     description = "header-only single-file C++ std::filesystem compatible helper library";
