@@ -10,8 +10,7 @@
 
 # package customization
 # Note: enable* flags should not require full rebuilds (i.e. only affect the wrapper)
-, channel ? "stable"
-, upstream-info ? (import ./upstream-info.nix).${channel}
+, upstream-info ? (import ./upstream-info.nix).${if !ungoogled then "stable" else "ungoogled-chromium"}
 , proprietaryCodecs ? true
 , enableWideVine ? false
 , ungoogled ? false # Whether to build chromium or ungoogled-chromium
@@ -46,7 +45,7 @@ let
     inherit stdenv upstream-info;
 
     mkChromiumDerivation = callPackage ./common.nix ({
-      inherit channel chromiumVersionAtLeast versionRange;
+      inherit chromiumVersionAtLeast versionRange;
       inherit proprietaryCodecs
               cupsSupport pulseSupport ungoogled;
       gnChromium = buildPackages.gn.overrideAttrs (oldAttrs: {
@@ -69,7 +68,7 @@ let
     });
 
     browser = callPackage ./browser.nix {
-      inherit channel chromiumVersionAtLeast enableWideVine ungoogled;
+      inherit chromiumVersionAtLeast enableWideVine ungoogled;
     };
 
     # ungoogled-chromium is, contrary to its name, not a build of
@@ -79,8 +78,6 @@ let
     # patched into their shebangs.
     ungoogled-chromium = pkgsBuildBuild.callPackage ./ungoogled.nix {};
   };
-
-  suffix = lib.optionalString (channel != "stable" && channel != "ungoogled-chromium") ("-" + channel);
 
   sandboxExecutableName = chromium.browser.passthru.sandboxExecutableName;
 
@@ -99,7 +96,7 @@ let
 
 in stdenv.mkDerivation {
   pname = lib.optionalString ungoogled "ungoogled-"
-    + "chromium${suffix}";
+    + "chromium";
   inherit (chromium.browser) version;
 
   nativeBuildInputs = [
