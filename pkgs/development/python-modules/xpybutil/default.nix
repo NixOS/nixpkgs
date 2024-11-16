@@ -25,7 +25,7 @@ buildPythonPackage rec {
     xcffib
   ];
 
-  propagatedNativeBuildInputs = [ xcffib ];
+  nativeBuildInputs = [ xcffib ];
 
   # no tests
   doCheck = false;

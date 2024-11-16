@@ -21,8 +21,10 @@ buildPythonPackage rec {
   };
 
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ wayland-scanner ];
-  propagatedNativeBuildInputs = [ cffi ];
+  nativeBuildInputs = [
+    cffi
+    wayland-scanner
+  ];
   buildInputs = [ wayland ];
   propagatedBuildInputs = [ cffi ];
   nativeCheckInputs = [ pytestCheckHook ];

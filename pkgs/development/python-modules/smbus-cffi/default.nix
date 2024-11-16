@@ -27,7 +27,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedNativeBuildInputs = [ cffi ];
+  nativeBuildInputs = [ cffi ];
 
   propagatedBuildInputs = [ cffi ];
 

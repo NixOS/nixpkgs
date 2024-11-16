@@ -31,8 +31,10 @@ buildPythonPackage rec {
     hash = "sha256-cssr4UBIwMvInM8bV4YwE6mXf9USSMMAzMcgAefEPbs=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  propagatedNativeBuildInputs = [ cffi ];
+  nativeBuildInputs = [
+    cffi
+    pkg-config
+  ];
   buildInputs = [
     libinput
     libxkbcommon
