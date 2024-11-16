@@ -12348,10 +12348,9 @@ with pkgs;
     matomo_5
     matomo-beta;
 
-  inherit (callPackages ../servers/unifi { })
-    unifi8;
+  unifi = callPackage ../servers/unifi { };
 
-  unifi = unifi8;
+  unifi8 = unifi;
 
   unpackerr = callPackage ../servers/unpackerr {
     inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
