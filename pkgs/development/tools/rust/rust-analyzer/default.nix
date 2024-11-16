@@ -1,10 +1,8 @@
 {
   lib,
   stdenv,
-  callPackage,
   fetchFromGitHub,
   rustPlatform,
-  CoreServices,
   cmake,
   libiconv,
   useMimalloc ? false,
@@ -44,7 +42,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = lib.optional useMimalloc cmake;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreServices
     libiconv
   ];
 
