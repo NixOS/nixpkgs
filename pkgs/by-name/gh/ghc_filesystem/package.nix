@@ -1,4 +1,10 @@
-{ stdenv, lib, apple-sdk_11, cmake, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  apple-sdk_11,
+  cmake,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "filesystem";
