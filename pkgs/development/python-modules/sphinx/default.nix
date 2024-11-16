@@ -36,6 +36,7 @@
   html5lib,
   pytestCheckHook,
   pytest-xdist,
+  graphviz
 }:
 
 buildPythonPackage rec {
@@ -93,6 +94,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-xdist
     typing-extensions
+    graphviz
   ];
 
   preCheck = ''
