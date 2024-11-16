@@ -573,6 +573,17 @@ in
         inherit lib;
         inherit (self) stdenvNoCC coreutils gnugrep runtimeShell;
         fortify-headers = self.fortify-headers;
+        # In preparation for GCC 14 becoming the default,
+        # backport the new default errors to GCC 13.
+        # TODO: Remove these before 25.05.
+        nixSupport.cc-cflags = lib.optionals (lib.versionAtLeast prevStage.gcc-unwrapped.version "13") [
+          "-Werror=implicit-int"
+          "-Werror=implicit-function-declaration"
+          "-Werror=declaration-missing-parameter-type"
+          "-Werror=return-mismatch"
+          "-Werror=int-conversion"
+          "-Werror=incompatible-pointer-types"
+        ];
       };
     };
     extraNativeBuildInputs = [
