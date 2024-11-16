@@ -50,7 +50,7 @@ pythonPackages.buildPythonApplication rec {
 
   nativeCheckInputs = [ pythonPackages.pytestCheckHook ];
 
-  passthru.updateScript = throw "This package is pinned to 0.17.1 for YAML 1.1 support";
+  # nixpkgs-update: no auto update
 
   meta = with lib; {
     changelog = "https://github.com/remarshal-project/remarshal/releases/tag/v${version}";
