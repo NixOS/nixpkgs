@@ -69,5 +69,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ asymmetric ];
+    mainProgram = "btrbk";
   };
 }
