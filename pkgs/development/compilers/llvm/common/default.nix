@@ -521,6 +521,12 @@ let
             (metadata.getVersionFile "clang/purity.patch")
             # https://reviews.llvm.org/D51899
             (metadata.getVersionFile "clang/gnu-install-dirs.patch")
+
+            # https://github.com/llvm/llvm-project/pull/116476
+            # prevent clang ignoring warnings / errors for unsuppored
+            # options when building & linking a source file with trailing
+            # libraries. eg: `clang -munsupported hello.c -lc`
+            ./clang/clang-unsupported-option.patch
           ]
           ++ lib.optional (lib.versions.major metadata.release_version == "13")
             # Revert of https://reviews.llvm.org/D100879
