@@ -17,13 +17,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-I5e0iqXlZqDOMa1PlnrxpcKt1c2mbnSbVQrpi1Gh25o=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   nativeBuildInputs = [
-    postgresql
+    postgresql.dev
     python3
   ];
 
   buildInputs = [
-    postgresql
+    postgresql.lib
   ];
 
   postPatch = ''
