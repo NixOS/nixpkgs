@@ -147,8 +147,8 @@ let
         src = fetchFromGitHub {
           owner = "ggerganov";
           repo = "llama.cpp";
-          rev = "45f097645efb11b6d09a5b4adbbfd7c312ac0126";
-          hash = "sha256-kZlH+Xpt38Ymc9TW7qRVyN7ISwed4ycA0M0808+UcXM=";
+          rev = "6423c65aa8be1b98f990cf207422505ac5a441a1";
+          hash = "sha256-DI3VhXEeok/wIFuM/l1hJJZlpxvyKY6Kmi97o3g0Ppk=";
           fetchSubmodules = true;
         };
         postPatch =
@@ -246,7 +246,7 @@ let
     src = fetchFromGitHub {
       owner = "mudler";
       repo = "go-piper";
-      rev = "9d0100873a7dbb0824dfea40e8cec70a1b110759";
+      rev = "e10ca041a885d4a8f3871d52924b47792d5e5aa0";
       hash = "sha256-Yv9LQkWwGpYdOS0FvtP0vZ0tRyBAx27sdmziBR4U4n8=";
       fetchSubmodules = true;
     };
@@ -299,8 +299,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "a5abfe6a90495f7bf19fe70d016ecc255e97359c";
-      hash = "sha256-XSPO1Wtqlq1krwAH98jMIGWa1Npmnjd5oCJ0lc3D3H4=";
+      rev = "31aea563a83803c710691fed3e8d700e06ae6788";
+      hash = "sha256-YCYRx+DHhxazJ3ZAdmuqeYHOX5v6JEZhU9eo487yEtk=";
     };
 
     nativeBuildInputs = [
@@ -431,12 +431,12 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.22.1";
+  version = "2.23.0";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-vIjjGs3IIxnWlLsybQNWJHbWNnoInVh+otJ7vNODcik=";
+    hash = "sha256-7i2qW9yh++YQrEnjjxkHB7GJZSIIJQFJ9GyU2Rp9+kk=";
   };
 
   prepare-sources =
@@ -460,7 +460,7 @@ let
   self = buildGo123Module.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-tb2nVUCUdaOWHpJz4zMqgfJ4PYUqGwV/0lj76n36sUg=";
+    vendorHash = "sha256-bLeKh0aKSQrD5jTydG0ZLW5RCNb3oKvjCSeA9juI3B8=";
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString with_stablediffusion " -isystem ${opencv}/include/opencv4";
 
