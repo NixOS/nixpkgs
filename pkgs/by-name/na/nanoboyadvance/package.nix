@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   substituteAll,
   cmake,
   python3Packages,
@@ -33,6 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-Ba7nbd0DxDHfNXXu9DLfnxTQTiJIQYSES9CP5Bfq4K0=";
       };
     })
+    (fetchpatch {
+      name = "fix-darwin-bundle-install-path.patch";
+      url = "https://github.com/nba-emu/NanoBoyAdvance/commit/bd07a261141cd1f67b828d20f6d01a97adf91c16.patch";
+      hash = "sha256-Nqz35PGfPBZ3Lg6szez4k3R/NkgObNndvbxY8JCY40Y";
+    })
   ];
 
   nativeBuildInputs = [
@@ -49,12 +55,17 @@ stdenv.mkDerivation (finalAttrs: {
     libunarr
   ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "USE_SYSTEM_FMT" true)
-    (lib.cmakeBool "USE_SYSTEM_TOML11" true)
-    (lib.cmakeBool "USE_SYSTEM_UNARR" true)
-    (lib.cmakeBool "PORTABLE_MODE" false)
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "USE_SYSTEM_FMT" true)
+      (lib.cmakeBool "USE_SYSTEM_TOML11" true)
+      (lib.cmakeBool "USE_SYSTEM_UNARR" true)
+      (lib.cmakeBool "PORTABLE_MODE" false)
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      (lib.cmakeBool "MACOS_BUILD_APP_BUNDLE" true)
+      (lib.cmakeBool "MACOS_BUNDLE_QT" false)
+    ];
 
   meta = {
     description = "Cycle-accurate Nintendo Game Boy Advance emulator";
