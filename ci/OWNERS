@@ -143,6 +143,8 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/tests/amazon-ssm-agent.nix                 @arianvp
 /nixos/modules/system/boot/grow-partition.nix     @arianvp
 
+# nixos-rebuild-ng
+/pkgs/by-name/ni/nixos-rebuild-ng                 @thiagokokada
 
 
 # Updaters

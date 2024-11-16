@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-legacy";
-  version = "0.9.48.post3";
+  version = "0.9.48.post4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_legacy";
     inherit version;
-    hash = "sha256-9pafEIXvsKvr1jZ+RvNRICDz9rnAhvRYpRmDDdYeggY=";
+    hash = "sha256-+Kl2Tn4TSlK/715T0tYlYb/AH8CYdMUcwAHfb1MCrjA=";
   };
 
   pythonRelaxDeps = [ "tenacity" ];
