@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , ffmpeg
 , rustPlatform
@@ -14,17 +15,25 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "zmwangx";
     repo = "metadata";
-    rev = "v${version}";
-    hash = "sha256-OFWdCV9Msy/mNaSubqoJi4tBiFqL7RuWWQluSnKe4fU=";
+    rev = "ec9614cfa64ffc95d74e4b19496ebd9b026e692b";
+    hash = "sha256-ugirYg3l+zIfKAqp2smLgG99mX9tsy9rmGe6lFAwx5o=";
   };
 
-  cargoHash = "sha256-F5jXS/W600nbQtu1FD4+DawrFsO+5lJjvAvTiFKT840=";
+  cargoHash = "sha256-OMm39sgbq2wTRJTVoCf5imJe3hmf+Djq9w9tzKBrkIM=";
 
   nativeBuildInputs = [
     pkg-config
     asciidoc
     installShellFiles
     rustPlatform.bindgenHook
+  ];
+
+  cargoPatches = [
+    (fetchpatch {
+      name = "update-crate-ffmpeg-next-version.patch";
+      url = "https://github.com/myclevorname/metadata/commit/a1bc9f53d9aa0aeb17cbb530a1da1de4fdf85328.diff";
+      hash = "sha256-LEwOK1UFUwLZhqLnoUor5CSOwz4DDjNFMnMOGq1S1Sc=";
+    })
   ];
 
   postBuild = ''

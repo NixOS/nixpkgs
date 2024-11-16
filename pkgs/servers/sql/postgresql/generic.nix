@@ -29,10 +29,6 @@ let
       # PL/Python
       , pythonSupport ? false
       , python3
-
-      # detection of crypt fails when using llvm stdenv, so we add it manually
-      # for <13 (where it got removed: https://github.com/postgres/postgres/commit/c45643d618e35ec2fe91438df15abd4f3c0d85ca)
-      , libxcrypt
     } @args:
   let
     atLeast = lib.versionAtLeast version;
@@ -97,7 +93,6 @@ let
       icu
       libuuid
     ]
-      ++ lib.optionals (olderThan "13") [ libxcrypt ]
       ++ lib.optionals jitSupport [ llvmPackages.llvm ]
       ++ lib.optionals lz4Enabled [ lz4 ]
       ++ lib.optionals zstdEnabled [ zstd ]
@@ -126,10 +121,7 @@ let
     # those paths. This avoids a lot of circular dependency problems with different outputs,
     # and allows splitting them cleanly.
     env.CFLAGS = "-fdata-sections -ffunction-sections"
-      + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections")
-      # Makes cross-compiling work when xml2-config can't be executed on the host.
-      # Fixed upstream in https://github.com/postgres/postgres/commit/0bc8cebdb889368abdf224aeac8bc197fe4c9ae6
-      + lib.optionalString (olderThan "13") " -I${libxml2.dev}/include/libxml2";
+      + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections");
 
     configureFlags = [
       "--with-openssl"
@@ -165,8 +157,8 @@ let
     ] ++ lib.optionals stdenv'.hostPlatform.isMusl (
       # Using fetchurl instead of fetchpatch on purpose: https://github.com/NixOS/nixpkgs/issues/240141
       map fetchurl (lib.attrValues muslPatches)
-    ) ++ lib.optionals stdenv'.hostPlatform.isLinux  [
-      (if atLeast "13" then ./patches/socketdir-in-run-13+.patch else ./patches/socketdir-in-run.patch)
+    ) ++ lib.optionals stdenv'.hostPlatform.isLinux [
+    ./patches/socketdir-in-run-13+.patch
     ] ++ lib.optionals (stdenv'.hostPlatform.isDarwin && olderThan "16") [
       ./patches/export-dynamic-darwin-15-.patch
     ];
