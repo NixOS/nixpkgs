@@ -11895,6 +11895,8 @@ self: super: with self; {
 
   pymilter = callPackage ../development/python-modules/pymilter { };
 
+  py-mini-racer = callPackage ../development/python-modules/py-mini-racer { };
+
   pymilvus = callPackage ../development/python-modules/pymilvus { };
 
   pymitv = callPackage ../development/python-modules/pymitv { };
