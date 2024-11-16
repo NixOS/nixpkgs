@@ -10,6 +10,8 @@ from typing import assert_never
 from .models import Action, Flake, NRError, Profile
 from .nix import (
     edit,
+    find_file,
+    get_nixpkgs_rev,
     list_generations,
     nixos_build,
     nixos_build_flake,
@@ -86,7 +88,20 @@ def execute(argv: list[str]) -> None:
     if args.upgrade or args.upgrade_all:
         upgrade_channels(bool(args.upgrade_all))
 
-    match action := Action(args.action):
+    action = Action(args.action)
+    # Only run shell scripts from the Nixpkgs tree if the action is
+    # "switch", "boot", or "test". With other actions (such as "build"),
+    # the user may reasonably expect that no code from the Nixpkgs tree is
+    # executed, so it's safe to run nixos-rebuild against a potentially
+    # untrusted tree.
+    can_run = action in (Action.SWITCH, Action.BOOT, Action.TEST)
+    if can_run and not flake:
+        nixpkgs_path = find_file("nixpkgs", nix_flags)
+        rev = get_nixpkgs_rev(nixpkgs_path)
+        if nixpkgs_path and rev:
+            (nixpkgs_path / ".version-suffix").write_text(rev)
+
+    match action:
         case Action.SWITCH | Action.BOOT:
             info("building the system configuration...")
             if args.rollback:
