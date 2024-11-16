@@ -185,15 +185,15 @@ mkDerivation (finalAttrs: {
     # Reduce closure size by cleaning the environment of the emacs dumper
     ''
       substituteInPlace src/Makefile.in \
-        --replace 'RUN_TEMACS = ./temacs' 'RUN_TEMACS = env -i ./temacs'
+        --replace-warn 'RUN_TEMACS = ./temacs' 'RUN_TEMACS = env -i ./temacs'
     ''
 
     ''
       substituteInPlace lisp/international/mule-cmds.el \
-        --replace /usr/share/locale ${gettext}/share/locale
+        --replace-warn /usr/share/locale ${gettext}/share/locale
 
       for makefile_in in $(find . -name Makefile.in -print); do
-        substituteInPlace $makefile_in --replace /bin/pwd pwd
+        substituteInPlace $makefile_in --replace-warn /bin/pwd pwd
       done
     ''
 
