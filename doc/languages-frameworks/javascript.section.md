@@ -594,6 +594,24 @@ To install the package `yarnInstallHook` uses both `npm` and `yarn` to cleanup p
 
 - `yarnKeepDevDeps`: Disables the removal of devDependencies from `node_modules` before installation.
 
+#### Use with `yarn-berry` and newer lockfiles {#javascript-yarnberry}
+
+The above works well with `yarn` version 1. However, `yarn-berry` introduced a new version of lockfiles, which will not work with classic `yarn`. To still be able to use `fetchYarnDeps` with `yarn-berry`, you will need to specify the `yarnVersion` like so:
+
+```nix
+yarnOfflineCache = fetchYarnDeps {
+  yarnLock = finalAttrs.src + "/yarn.lock";
+  yarnVersion = 3;
+  hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+};
+```
+
+`yarnVersion = 3` is for `yarn-berry_3` lockfiles and `yarnVersion = 4` will use `yarn-berry_4` to generate `node_modules`.
+
+The hook to be used with `yarn-berry` is called `yarnBerry3ConfigHook` for version 3 lockfiles and `yarnBerry4ConfigHook` for version 4 lockfiles.
+
+There is currently neither a `yarnBuildHook` nor a `yarnInstallHook` for `yarn-berry`, so you will need to implement the buildPhase and/or installPhase yourself. You cannot mix a `yarn-berry` cache with the v1 `yarnBuildHook` or `yarnInstallHook`, since the version of `yarn` as well as the lockfiles differ.
+
 ### yarn2nix {#javascript-yarn2nix}
 
 WARNING: The `yarn2nix` functions have been deprecated in favor of the new `yarnConfigHook`, `yarnBuildHook` and `yarnInstallHook`. Documentation for them still appears here for the sake of the packages that still use them. See also a tracking issue [#324246](https://github.com/NixOS/nixpkgs/issues/324246).
