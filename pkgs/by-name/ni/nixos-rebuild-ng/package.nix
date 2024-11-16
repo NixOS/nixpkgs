@@ -1,9 +1,9 @@
 {
   lib,
   installShellFiles,
+  mkShell,
   nix,
   nixos-rebuild,
-  nixos-rebuild-ng,
   python3,
   runCommand,
   withNgSuffix ? true,
@@ -60,37 +60,42 @@ python3.pkgs.buildPythonApplication rec {
 
   pytestFlagsArray = [ "-vv" ];
 
-  # NOTE: this is a CI test rather than a build-time test because we want to
-  # keep the build closures small
-  passthru.tests = {
-    ci =
-      runCommand "${pname}-ci"
-        {
-          nativeBuildInputs = [
-            nixos-rebuild-ng # to trigger build
-            (python3.withPackages (
-              ps: with ps; [
-                mypy
-                pytest
-                ruff
-                types-tabulate
-              ]
-            ))
-          ];
-        }
-        ''
-          export RUFF_CACHE_DIR="$(mktemp -d)"
-
-          echo -e "\x1b[32m## run mypy\x1b[0m"
-          mypy ${src}
-          echo -e "\x1b[32m## run ruff\x1b[0m"
-          ruff check ${src}
-          echo -e "\x1b[32m## run ruff format\x1b[0m"
-          ruff format --check ${src}
-
-          touch $out
+  passthru =
+    let
+      python-with-pkgs = python3.withPackages (
+        ps: with ps; [
+          mypy
+          pytest
+          ruff
+          types-tabulate
+          # dependencies
+          tabulate
+        ]
+      );
+    in
+    {
+      devShell = mkShell {
+        packages = [ python-with-pkgs ];
+        shellHook = ''
+          cd pkgs/by-name/ni/nixos-rebuild-ng/src || true
         '';
-  };
+      };
+
+      # NOTE: this is a passthru test rather than a build-time test because we
+      # want to keep the build closures small
+      tests.ci = runCommand "${pname}-ci" { nativeBuildInputs = [ python-with-pkgs ]; } ''
+        export RUFF_CACHE_DIR="$(mktemp -d)"
+
+        echo -e "\x1b[32m## run mypy\x1b[0m"
+        mypy ${src}
+        echo -e "\x1b[32m## run ruff\x1b[0m"
+        ruff check ${src}
+        echo -e "\x1b[32m## run ruff format\x1b[0m"
+        ruff format --check ${src}
+
+        touch $out
+      '';
+    };
 
   meta = {
     description = "Rebuild your NixOS configuration and switch to it, on local hosts and remote";

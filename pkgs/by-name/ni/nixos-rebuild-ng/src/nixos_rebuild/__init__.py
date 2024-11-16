@@ -231,7 +231,3 @@ def main() -> None:
             raise ex
         else:
             sys.exit(str(ex))
-
-
-if __name__ == "__main__":
-    main()
