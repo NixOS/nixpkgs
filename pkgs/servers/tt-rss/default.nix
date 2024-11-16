@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchgit }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tt-rss";
@@ -23,11 +28,18 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru = {
+    inherit (nixosTests) tt-rss;
+  };
+
   meta = with lib; {
     description = "Web-based news feed (RSS/Atom) aggregator";
     license = licenses.gpl2Plus;
     homepage = "https://tt-rss.org";
-    maintainers = with maintainers; [ globin zohl ];
+    maintainers = with maintainers; [
+      globin
+      zohl
+    ];
     platforms = platforms.all;
   };
 }
