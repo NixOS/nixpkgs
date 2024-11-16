@@ -1,33 +1,31 @@
-{ lib
-, stdenv
-, fetchurl
-, dpkg
-, autoPatchelfHook
-, wrapQtAppsHook
-, qtbase
-, qtdeclarative
-, qtsvg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texturepacker";
-  version = "7.4.0";
+  version = "7.5.0";
 
   src = fetchurl {
     url = "https://www.codeandweb.com/download/texturepacker/${finalAttrs.version}/TexturePacker-${finalAttrs.version}.deb";
-    hash = "sha256-v+azjIIscmp72WB3gki0CKb+z+FYsuJxIx9jvdfs+qM=";
+    hash = "sha256-zUT9NnBNtgFqNr7e9IAqWuK61MjrQuC+gCi1D2m1kGc=";
   };
 
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtdeclarative
-    qtsvg
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtsvg
   ];
 
   installPhase = ''
