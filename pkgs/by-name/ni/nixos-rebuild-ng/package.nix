@@ -3,10 +3,12 @@
   installShellFiles,
   nix,
   nixos-rebuild,
+  nixos-rebuild-ng,
   python3,
+  runCommand,
   withNgSuffix ? true,
 }:
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication rec {
   pname = "nixos-rebuild-ng";
   version = "0.0.0";
   src = ./src;
@@ -18,7 +20,6 @@ python3.pkgs.buildPythonApplication {
 
   dependencies = with python3.pkgs; [
     tabulate
-    types-tabulate
   ];
 
   nativeBuildInputs = [
@@ -55,20 +56,41 @@ python3.pkgs.buildPythonApplication {
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
-    mypy
-    ruff
   ];
 
   pytestFlagsArray = [ "-vv" ];
 
-  postCheck = ''
-    echo -e "\x1b[32m## run mypy\x1b[0m"
-    mypy nixos_rebuild tests
-    echo -e "\x1b[32m## run ruff\x1b[0m"
-    ruff check nixos_rebuild tests
-    echo -e "\x1b[32m## run ruff format\x1b[0m"
-    ruff format --check nixos_rebuild tests
-  '';
+  # NOTE: this is a CI test rather than a build-time test because we want to
+  # keep the build closures small
+  passthru.tests = {
+    ci =
+      runCommand "${pname}-ci"
+        {
+          nativeBuildInputs = [
+            nixos-rebuild-ng # to trigger build
+            (python3.withPackages (
+              ps: with ps; [
+                mypy
+                pytest
+                ruff
+                types-tabulate
+              ]
+            ))
+          ];
+        }
+        ''
+          export RUFF_CACHE_DIR="$(mktemp -d)"
+
+          echo -e "\x1b[32m## run mypy\x1b[0m"
+          mypy ${src}
+          echo -e "\x1b[32m## run ruff\x1b[0m"
+          ruff check ${src}
+          echo -e "\x1b[32m## run ruff format\x1b[0m"
+          ruff format --check ${src}
+
+          touch $out
+        '';
+  };
 
   meta = {
     description = "Rebuild your NixOS configuration and switch to it, on local hosts and remote";

@@ -96,4 +96,10 @@ And use `nixos-rebuild-ng` instead of `nixos-rebuild`.
 - [ ] Improve documentation
 - [ ] `nixos-rebuild repl` (calling old `nixos-rebuild` for now)
 - [ ] `nix` build/bootstrap
-- [ ] Reduce build closure
+- [ ] Generate tab completion via [`shtab`](https://docs.iterative.ai/shtab/)
+- [x] Reduce build closure
+
+## TODON'T
+
+- Reimplement `systemd-run` logic (will be moved to the new
+  [`apply`](https://github.com/NixOS/nixpkgs/pull/344407) script)
