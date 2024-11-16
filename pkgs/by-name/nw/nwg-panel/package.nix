@@ -89,13 +89,13 @@ python3Packages.buildPythonApplication rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nwg-piotr/nwg-panel";
     changelog = "https://github.com/nwg-piotr/nwg-panel/releases/tag/v${version}";
     description = "GTK3-based panel for Sway window manager";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ludovicopiero ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ludovicopiero ];
     mainProgram = "nwg-panel";
   };
 }
