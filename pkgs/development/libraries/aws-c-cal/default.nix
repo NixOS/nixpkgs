@@ -2,6 +2,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-cal";
+  # nixpkgs-update: no auto update
   version = "0.8.0";
 
   src = fetchFromGitHub {

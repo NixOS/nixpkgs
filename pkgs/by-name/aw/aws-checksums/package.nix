@@ -2,6 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-checksums";
+  # nixpkgs-update: no auto update
   version = "0.2.2";
 
   src = fetchFromGitHub {

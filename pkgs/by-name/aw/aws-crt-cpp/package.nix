@@ -17,6 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-crt-cpp";
+  # nixpkgs-update: no auto update
   version = "0.29.4";
 
   outputs = [ "out" "dev" ];

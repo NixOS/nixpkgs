@@ -13,6 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-mqtt";
+  # nixpkgs-update: no auto update
   version = "0.11.0";
 
   src = fetchFromGitHub {

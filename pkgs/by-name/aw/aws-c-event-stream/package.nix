@@ -2,6 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-event-stream";
+  # nixpkgs-update: no auto update
   version = "0.5.0";
 
   src = fetchFromGitHub {

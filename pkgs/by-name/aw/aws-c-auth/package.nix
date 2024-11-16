@@ -14,6 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-auth";
+  # nixpkgs-update: no auto update
   version = "0.8.0";
 
   src = fetchFromGitHub {

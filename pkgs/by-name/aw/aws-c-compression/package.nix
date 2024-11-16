@@ -7,6 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-compression";
+  # nixpkgs-update: no auto update
   version = "0.3.0";
 
   src = fetchFromGitHub {

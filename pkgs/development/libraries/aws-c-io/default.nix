@@ -2,6 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-io";
+  # nixpkgs-update: no auto update
   version = "0.15.3";
 
   src = fetchFromGitHub {

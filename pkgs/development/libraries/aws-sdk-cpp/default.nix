@@ -27,6 +27,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
+  # nixpkgs-update: no auto update
   version = "1.11.448";
 
   src = fetchFromGitHub {
