@@ -19,12 +19,15 @@ in
 
     systemd = {
       packages = [ cfg.package ];
-      user.services.hypridle.wantedBy = [ "graphical-session.target" ];
-      user.services.hypridle.path = [
-        config.programs.hyprland.package
-        config.programs.hyprlock.package
-        pkgs.procps
-      ];
+      user.services.hypridle = {
+        wantedBy = [ "graphical-session.target" ];
+        path = [
+          config.programs.hyprland.package
+          config.programs.hyprlock.package
+          pkgs.procps
+        ];
+        unitConfig.ConditionEnvironment = "XDG_CURRENT_DESKTOP=Hyprland";
+      };
     };
   };
 
