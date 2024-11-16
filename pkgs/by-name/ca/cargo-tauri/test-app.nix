@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  rustPlatform,
   cargo-tauri,
   glib-networking,
   libayatana-appindicator,
@@ -9,28 +8,27 @@
   openssl,
   pkg-config,
   pnpm_9,
+  rustPlatform,
   webkitgtk_4_1,
   wrapGAppsHook4,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  pnpm = pnpm_9;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "test-app";
   inherit (cargo-tauri) version src;
-
-  cargoLock = {
-    inherit (cargo-tauri.cargoDeps) lockFile;
-    outputHashes = {
-      "schemars_derive-0.8.21" = "sha256-AmxBKZXm2Eb+w8/hLQWTol5f22uP8UqaIh+LVLbS20g=";
-    };
-  };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit
+  inherit (cargo-tauri) cargoDeps;
+
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs)
       pname
       version
       src
@@ -44,7 +42,9 @@ rustPlatform.buildRustPackage rec {
 
     nodejs
     pkg-config
-    pnpm_9.configHook
+    pnpm.configHook
+    rustPlatform.cargoCheckHook
+    rustPlatform.cargoSetupHook
     wrapGAppsHook4
   ];
 
@@ -70,4 +70,4 @@ rustPlatform.buildRustPackage rec {
   meta = {
     inherit (cargo-tauri.hook.meta) platforms;
   };
-}
+})
