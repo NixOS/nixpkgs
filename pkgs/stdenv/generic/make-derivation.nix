@@ -493,10 +493,16 @@ else let
         "/bin/sh"
       ];
       __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
-    }) // (
+    }) // lib.optionalAttrs (!__structuredAttrs) (
       makeOutputChecks attrs
     ) // lib.optionalAttrs (__structuredAttrs) {
-      outputChecks = builtins.mapAttrs (_: makeOutputChecks) attrs.outputChecks or {};
+      outputChecks = builtins.listToAttrs (map (name: {
+        inherit name;
+        value = lib.zipAttrsWith (_: builtins.concatLists) [
+          (makeOutputChecks attrs)
+          (makeOutputChecks attrs.outputChecks.${name} or {})
+        ];
+      }) outputs);
     };
 
 in
