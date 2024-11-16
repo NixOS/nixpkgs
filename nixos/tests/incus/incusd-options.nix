@@ -44,7 +44,7 @@ import ../make-test-python.nix (
           preseed = {
             networks = [
               {
-                name = "nixostestbr0";
+                name = "incusbr0";
                 type = "bridge";
                 config = {
                   "ipv4.address" = "10.0.100.1/24";
@@ -58,12 +58,12 @@ import ../make-test-python.nix (
                 devices = {
                   eth0 = {
                     name = "eth0";
-                    network = "nixostestbr0";
+                    network = "incusbr0";
                     type = "nic";
                   };
                   root = {
                     path = "/";
-                    pool = "nixostest_pool";
+                    pool = "default";
                     size = "35GiB";
                     type = "disk";
                   };
@@ -72,43 +72,69 @@ import ../make-test-python.nix (
             ];
             storage_pools = [
               {
-                name = "nixostest_pool";
+                name = "default";
                 driver = "dir";
               }
             ];
           };
         };
+
       };
+
       networking.nftables.enable = true;
+
+      users.users.testuser = {
+        isNormalUser = true;
+        shell = pkgs.bashInteractive;
+        group = "incus";
+        uid = 1000;
+      };
     };
 
-    testScript = ''
-      def instance_is_up(_) -> bool:
-          status, _ = machine.execute("incus exec container --disable-stdin --force-interactive /run/current-system/sw/bin/systemctl -- is-system-running")
-          return status == 0
+    testScript = # python
+      ''
+        def wait_for_instance(name: str, project: str = "default"):
+            def instance_is_up(_) -> bool:
+                status, _ = machine.execute(f"incus exec {name} --disable-stdin --force-interactive --project {project} -- /run/current-system/sw/bin/systemctl is-system-running")
+                return status == 0
 
-      machine.wait_for_unit("incus.service")
-      machine.wait_for_unit("incus-preseed.service")
+            with machine.nested(f"Waiting for instance {name} to start and be usable"):
+              retry(instance_is_up)
 
-      with subtest("Container image can be imported"):
-          machine.succeed("incus image import ${container-image-metadata} ${container-image-rootfs} --alias nixos")
+        machine.wait_for_unit("incus.service")
+        machine.wait_for_unit("incus-preseed.service")
 
-      with subtest("Container can be launched and managed"):
-          machine.succeed("incus launch nixos container")
-          with machine.nested("Waiting for instance to start and be usable"):
-            retry(instance_is_up)
-          machine.succeed("echo true | incus exec container /run/current-system/sw/bin/bash -")
+        with subtest("Container image can be imported"):
+            machine.succeed("incus image import ${container-image-metadata} ${container-image-rootfs} --alias nixos")
 
-      with subtest("Verify preseed resources created"):
-          machine.succeed("incus profile show default")
-          machine.succeed("incus network info nixostestbr0")
-          machine.succeed("incus storage show nixostest_pool")
+        with subtest("Container can be launched and managed"):
+            machine.succeed("incus launch nixos instance1")
+            wait_for_instance("instance1")
+            machine.succeed("echo true | incus exec instance1 /run/current-system/sw/bin/bash -")
 
-      with subtest("Instance is stopped when softDaemonRestart is disabled and services is stopped"):
-          pid = machine.succeed("incus info container | grep 'PID'").split(":")[1].strip()
-          machine.succeed(f"ps {pid}")
-          machine.succeed("systemctl stop incus")
-          machine.fail(f"ps {pid}")
-    '';
+        with subtest("Verify preseed resources created"):
+            machine.succeed("incus profile show default")
+            machine.succeed("incus network info incusbr0")
+            machine.succeed("incus storage show default")
+
+        with subtest("Instance is stopped when softDaemonRestart is disabled and services is stopped"):
+            pid = machine.succeed("incus info instance1 | grep 'PID'").split(":")[1].strip()
+            machine.succeed(f"ps {pid}")
+            machine.succeed("systemctl stop incus")
+            machine.fail(f"ps {pid}")
+
+        with subtest("incus-user allows restricted access for users"):
+            machine.fail("incus project show user-1000")
+            machine.succeed("su - testuser bash -c 'incus list'")
+            # a project is created dynamically for the user
+            machine.succeed("incus project show user-1000")
+            # users shouldn't be able to list storage pools
+            machine.fail("su - testuser bash -c 'incus storage list'")
+
+        with subtest("incus-user allows users to launch instances"):
+            machine.succeed("su - testuser bash -c 'incus image import ${container-image-metadata} ${container-image-rootfs} --alias nixos'")
+            machine.succeed("su - testuser bash -c 'incus launch nixos instance2'")
+            wait_for_instance("instance2", "user-1000")
+      '';
   }
 )
