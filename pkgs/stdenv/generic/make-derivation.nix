@@ -495,7 +495,9 @@ else let
       __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
     }) // (
       makeOutputChecks attrs
-    );
+    ) // lib.optionalAttrs (__structuredAttrs) {
+      outputChecks = builtins.mapAttrs (_: makeOutputChecks) attrs.outputChecks or {};
+    };
 
 in
   derivationArg;
