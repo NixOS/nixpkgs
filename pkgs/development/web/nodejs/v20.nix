@@ -55,5 +55,20 @@ buildNodejs {
       stripLen = 1;
       hash = "sha256-WVxsoEcJu0WBTyelNrVQFTZxJhnekQb1GrueeRBRdnY=";
     })
+    # Backport V8 fixes for LLVM 19.
+    (fetchpatch2 {
+      url = "https://chromium.googlesource.com/v8/v8/+/182d9c05e78b1ddb1cb8242cd3628a7855a0336f%5E%21/?format=TEXT";
+      decode = "base64 -d";
+      extraPrefix = "deps/v8/";
+      stripLen = 1;
+      hash = "sha256-bDTwFbATPn5W4VifWz/SqaiigXYDWHq785C64VezuUE=";
+    })
+    (fetchpatch2 {
+      url = "https://chromium.googlesource.com/v8/v8/+/1a3ecc2483b2dba6ab9f7e9f8f4b60dbfef504b7%5E%21/?format=TEXT";
+      decode = "base64 -d";
+      extraPrefix = "deps/v8/";
+      stripLen = 1;
+      hash = "sha256-6y3aEqxNC4iTQEv1oewodJrhOHxjp5xZMq1P1QL94Rg=";
+    })
   ] ++ gypPatches;
 }
