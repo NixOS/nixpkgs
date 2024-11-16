@@ -3,6 +3,7 @@
   buildPythonPackage,
   openvino-native,
   numpy,
+  pythonPackages,
   python,
 }:
 
@@ -11,7 +12,10 @@ buildPythonPackage {
   inherit (openvino-native) version;
   format = "other";
 
-  src = openvino-native.python;
+  src =
+    (openvino-native.override {
+      python3Packages = pythonPackages;
+    }).python;
 
   propagatedBuildInputs = [ numpy ];
 
