@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  paho-mqtt,
+  paho-mqtt_2,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
 
   dependencies = [
-    paho-mqtt
+    paho-mqtt_2
     python-dateutil
     weconnect
   ] ++ weconnect.optional-dependencies.Images;
@@ -49,12 +49,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "weconnect_mqtt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client that publishes data from Volkswagen WeConnect";
     homepage = "https://github.com/tillsteinbach/WeConnect-mqtt";
     changelog = "https://github.com/tillsteinbach/WeConnect-mqtt/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "weconnect-mqtt";
   };
 }
