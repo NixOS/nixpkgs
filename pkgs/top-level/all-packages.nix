@@ -19249,4 +19249,9 @@ with pkgs;
   tree-from-tags = callPackage ../by-name/tr/tree-from-tags/package.nix {
     ruby = ruby_3_1;
   };
+
+  edrawmax = libsForQt5.callPackage ../applications/graphics/edrawmax { };
+  edrawmax-cn = libsForQt5.callPackage ../applications/graphics/edrawmax {
+    useChineseVersion = true;
+  };
 }
