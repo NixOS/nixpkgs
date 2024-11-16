@@ -199,6 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
       abbradar
       pierreis
       emily
+      techknowlogick
     ];
   };
 })
