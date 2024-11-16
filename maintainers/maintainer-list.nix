@@ -7141,6 +7141,12 @@
     githubId = 628359;
     name = "Felix Singer";
   };
+  felixzieger = {
+    name = "Felix Zieger";
+    github = "felixzieger";
+    githubId = 67903933;
+    email = "nixpkgs@felixzieger.de";
+  };
   felschr = {
     email = "dev@felschr.com";
     matrix = "@felschr:matrix.org";
