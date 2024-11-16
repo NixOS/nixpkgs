@@ -31,6 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/gulrak/filesystem";
     changelog = "https://github.com/gulrak/filesystem/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bbjubjub ];
+    maintainers = with lib.maintainers; [
+      bbjubjub
+      getchoo
+    ];
   };
 })
