@@ -3,7 +3,6 @@
   stdenv,
   rustPlatform,
   cargo-tauri,
-  darwin,
   glib-networking,
   libayatana-appindicator,
   nodejs,
@@ -55,9 +54,6 @@ rustPlatform.buildRustPackage rec {
       glib-networking
       libayatana-appindicator
       webkitgtk_4_1
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.WebKit
     ];
 
   buildAndTestSubdir = "examples/api/src-tauri";
