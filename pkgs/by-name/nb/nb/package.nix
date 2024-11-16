@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, installShellFiles, testers, nb }:
+{ stdenv, lib, fetchFromGitHub, installShellFiles, testers, nix-update-script, nb }:
 
 stdenv.mkDerivation rec {
   pname = "nb";
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
       # Setting EDITOR to avoid: "Command line text editor not found"
       command = "EDITOR=nano nb --version";
     };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
