@@ -1,30 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gtest
-, cudatoolkit
-, libdrm
-, ncurses
-, testers
-, udev
-, apple-sdk_12
-, addDriverRunpath
-, amd ? false
-, intel ? false
-, msm ? false
-, nvidia ? false
-, apple ? false
-, panfrost ? false
-, panthor ? false
-, ascend ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  cudatoolkit,
+  libdrm,
+  ncurses,
+  testers,
+  udev,
+  apple-sdk_12,
+  addDriverRunpath,
+  amd ? false,
+  intel ? false,
+  msm ? false,
+  nvidia ? false,
+  apple ? false,
+  panfrost ? false,
+  panthor ? false,
+  ascend ? false,
 }:
 
 let
   drm-postFixup = ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${lib.makeLibraryPath [ libdrm ncurses udev ]}" \
+      --set-rpath "${
+        lib.makeLibraryPath [
+          libdrm
+          ncurses
+          udev
+        ]
+      }" \
       $out/bin/nvtop
   '';
   needDrm = (amd || msm || panfrost || panthor);
@@ -52,20 +59,25 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "PANTHOR_SUPPORT" panthor)
     (cmakeBool "ASCEND_SUPPORT" ascend)
   ];
-  nativeBuildInputs = [ cmake gtest ] ++ lib.optional nvidia addDriverRunpath;
+  nativeBuildInputs = [
+    cmake
+    gtest
+  ] ++ lib.optional nvidia addDriverRunpath;
 
-  buildInputs = [ ncurses ]
+  buildInputs =
+    [ ncurses ]
     ++ lib.optional stdenv.isLinux udev
     ++ lib.optional stdenv.isDarwin apple-sdk_12
     ++ lib.optional nvidia cudatoolkit
-    ++ lib.optional needDrm libdrm
-  ;
+    ++ lib.optional needDrm libdrm;
 
   # this helps cmake to find <drm.h>
   env.NIX_CFLAGS_COMPILE = lib.optionalString needDrm "-isystem ${lib.getDev libdrm}/include/libdrm";
 
   # ordering of fixups is important
-  postFixup = (lib.optionalString needDrm drm-postFixup) + (lib.optionalString nvidia "addDriverRunpath $out/bin/nvtop");
+  postFixup =
+    (lib.optionalString needDrm drm-postFixup)
+    + (lib.optionalString nvidia "addDriverRunpath $out/bin/nvtop");
 
   doCheck = true;
 
@@ -87,7 +99,12 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Syllo/nvtop/releases/tag/${finalAttrs.version}";
     license = licenses.gpl3Only;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ willibutz gbtb anthonyroussel moni ];
+    maintainers = with maintainers; [
+      willibutz
+      gbtb
+      anthonyroussel
+      moni
+    ];
     mainProgram = "nvtop";
   };
 })
