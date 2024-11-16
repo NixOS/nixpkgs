@@ -69,7 +69,7 @@ def download_git_tree(url: str, git_sha_rev: str, out_dir: Path) -> None:
     tree_out_dir = out_dir / "git" / git_sha_rev
     eprint(f"Fetching {url}#{git_sha_rev} -> git/{git_sha_rev}")
 
-    cmd = ["nix-prefetch-git", "--builder", "--quiet", "--url", url, "--rev", git_sha_rev, "--out", str(tree_out_dir)]
+    cmd = ["nix-prefetch-git", "--builder", "--quiet", "--fetch-submodules", "--url", url, "--rev", git_sha_rev, "--out", str(tree_out_dir)]
     subprocess.check_output(cmd)
 
 
