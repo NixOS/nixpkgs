@@ -154,13 +154,18 @@ let
     # make sure all the dependencies of the plugin are also derivations
     drv // { dependencies = map (pluginToDrv knownPlugins) (drv.dependencies or [ ]); };
 
-  # transitive closure of plugin dependencies (plugin needs to be a derivation)
-  transitiveClosure =
-    plugin:
-    [ plugin ]
-    ++ (lib.unique (builtins.concatLists (map transitiveClosure plugin.dependencies or [ ])));
-
-  findDependenciesRecursively = plugins: lib.concatMap transitiveClosure plugins;
+  findDependenciesRecursively =
+    plugins:
+    if plugins == [ ] then
+      [ ]
+    else
+      let
+        # reverse so lib.unique prefers the last duplicate plugin instead of the first one
+        getPluginDependencies = plugin: lib.reverseList (plugin.dependencies or [ ]);
+      in
+      lib.unique (
+        (findDependenciesRecursively (lib.concatLists (map getPluginDependencies plugins))) ++ plugins
+      );
 
   vamDictToNames =
     x: if builtins.isString x then [ x ] else (lib.optional (x ? name) x.name) ++ (x.names or [ ]);
