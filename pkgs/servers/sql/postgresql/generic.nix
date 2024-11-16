@@ -315,25 +315,33 @@ let
     };
   });
 
-  postgresqlWithPackages = { postgresql, buildEnv }: f: buildEnv {
+  postgresqlWithPackages = { postgresql, buildEnv }: f: let
+    installedExtensions = f postgresql.pkgs;
+  in buildEnv {
     name = "${postgresql.pname}-and-plugins-${postgresql.version}";
-    paths = f postgresql.pkgs ++ [
+    paths = installedExtensions ++ [
         postgresql
         postgresql.man   # in case user installs this into environment
     ];
 
     pathsToLink = ["/"];
 
-    passthru.version = postgresql.version;
-    passthru.psqlSchema = postgresql.psqlSchema;
-    passthru.withJIT = postgresqlWithPackages {
-      inherit buildEnv;
-      postgresql = postgresql.withJIT;
-    } f;
-    passthru.withoutJIT = postgresqlWithPackages {
-      inherit buildEnv;
-      postgresql = postgresql.withoutJIT;
-    } f;
+    passthru = {
+      inherit installedExtensions;
+      inherit (postgresql)
+        psqlSchema
+        version
+      ;
+
+      withJIT = postgresqlWithPackages {
+        inherit buildEnv;
+        postgresql = postgresql.withJIT;
+      } f;
+      withoutJIT = postgresqlWithPackages {
+        inherit buildEnv;
+        postgresql = postgresql.withoutJIT;
+      } f;
+    };
   };
 
 in
