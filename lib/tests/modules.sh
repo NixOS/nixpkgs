@@ -321,6 +321,12 @@ checkConfigOutput '^"null or package"$' options.nullablePackageWithDefault.type.
 checkConfigOutput '^"myPkgs\.hello"$' options.packageWithPkgsText.defaultText.text ./declare-mkPackageOption.nix
 checkConfigOutput '^"hello-other"$' options.packageFromOtherSet.default.pname ./declare-mkPackageOption.nix
 
+# Check mkAllocatorModule
+checkConfigOutput '42069' config.expected.example.port ./declare-mkAllocatorModule.nix
+checkConfigError 'Key missing_value.example is missing a value[^$]*' config.missing_value.example ./declare-mkAllocatorModule.nix
+checkConfigError 'Key conflict.a and conflict.b have the same values[^$]*' config.conflict.a ./declare-mkAllocatorModule.nix
+checkConfigError 'The following keys have invalid values: invalid.example[^$]*' config.invalid ./declare-mkAllocatorModule.nix
+
 # submoduleWith
 
 ## specialArgs should work
