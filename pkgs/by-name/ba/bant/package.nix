@@ -40,8 +40,8 @@ buildBazelPackage rec {
   fetchAttrs = {
     hash =
       {
-        aarch64-linux = "sha256-K+uGH3ox49taSPZ1aLYPrOLNRO3aLQeOSdrkmTC444U=";
-        x86_64-linux = "sha256-yNwD3n7exyG5LbhR2GuKIvoul6UQnyk3+8pLpnDzjFw=";
+        aarch64-linux = "sha256-E4VHjDa0qkHmKUNpTBfJi7dhMLcd1z5he+p31/XvUl8=";
+        x86_64-linux = "sha256-M7xhAIhTcVLCUkmy4giGxbr7DgHrXbg0e8D/bL6yZWU=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
