@@ -8,16 +8,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpqxx";
-  version = "7.7.5";
+  version = "7.9.2";
 
   src = fetchFromGitHub {
     owner = "jtv";
     repo = "libpqxx";
     rev = finalAttrs.version;
-    hash = "sha256-mvGPMbk4b8NmPvzy5hS+Au69NtDGha8ONTEQf6I3VZE=";
+    hash = "sha256-I5e0iqXlZqDOMa1PlnrxpcKt1c2mbnSbVQrpi1Gh25o=";
   };
 
   nativeBuildInputs = [
+    postgresql
     python3
   ];
 
@@ -25,8 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     postgresql
   ];
 
-  preConfigure = ''
-    patchShebangs ./tools/splitconfig
+  postPatch = ''
+    patchShebangs ./tools/splitconfig.py
   '';
 
   configureFlags = [
