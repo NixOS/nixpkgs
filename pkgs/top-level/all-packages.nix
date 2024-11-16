@@ -7081,8 +7081,7 @@ with pkgs;
   opensyclWithRocm = opensycl.override { rocmSupport = true; };
 
   rustfmt = rustPackages.rustfmt;
-  rust-analyzer-unwrapped = callPackage ../development/tools/rust/rust-analyzer { };
-  rust-analyzer = callPackage ../development/tools/rust/rust-analyzer/wrapper.nix { };
+  rust-analyzer = callPackage ../by-name/ru/rust-analyzer-unwrapped/wrapper.nix { };
   rust-bindgen-unwrapped = callPackage ../development/tools/rust/bindgen/unwrapped.nix { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
