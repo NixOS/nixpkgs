@@ -37,10 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
+    changelog = "https://github.com/jtv/libpqxx/releases/tag/${finalAttrs.version}";
     description = "C++ library to access PostgreSQL databases";
+    downloadPage = "https://github.com/jtv/libpqxx";
     homepage = "https://pqxx.org/development/libpqxx/";
     license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
     maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 })
