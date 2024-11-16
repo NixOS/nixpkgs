@@ -1,0 +1,361 @@
+Backport `-Wreturn-mismatch`
+
+Disabled by default.
+
+Original author: Florian Weimer <fweimer@redhat.com>
+Original commit: 6e312b2b864bf923a9d772429f014375bf9dabc8
+
+diff --git a/gcc/c/c-typeck.cc b/gcc/c/c-typeck.cc
+index a17879698e..ffaf3688ec 100644
+--- a/gcc/c/c-typeck.cc
++++ b/gcc/c/c-typeck.cc
+@@ -11293,17 +11293,11 @@
+       if ((warn_return_type >= 0 || flag_isoc99)
+ 	  && valtype != NULL_TREE && TREE_CODE (valtype) != VOID_TYPE)
+ 	{
+-	  bool warned_here;
+-	  if (flag_isoc99)
+-	    warned_here = pedwarn
+-	      (loc, warn_return_type >= 0 ? OPT_Wreturn_type : 0,
+-	       "%<return%> with no value, in function returning non-void");
+-	  else
+-	    warned_here = warning_at
+-	      (loc, OPT_Wreturn_type,
+-	       "%<return%> with no value, in function returning non-void");
+ 	  no_warning = true;
+-	  if (warned_here)
++	  if (emit_diagnostic (flag_isoc99 ? DK_PEDWARN : DK_WARNING,
++			       loc, OPT_Wreturn_mismatch,
++			       "%<return%> with no value,"
++			       " in function returning non-void"))
+ 	    inform (DECL_SOURCE_LOCATION (current_function_decl),
+ 		    "declared here");
+ 	}
+@@ -11314,7 +11308,7 @@
+       bool warned_here;
+       if (TREE_CODE (TREE_TYPE (retval)) != VOID_TYPE)
+ 	warned_here = pedwarn
+-	  (xloc, warn_return_type >= 0 ? OPT_Wreturn_type : 0,
++	  (xloc, OPT_Wreturn_mismatch,
+ 	   "%<return%> with a value, in function returning void");
+       else
+ 	warned_here = pedwarn
+diff --git a/gcc/c-family/c.opt b/gcc/c-family/c.opt
+index a75038930a..0e0c98f5e0 100644
+--- a/gcc/c-family/c.opt
++++ b/gcc/c-family/c.opt
+@@ -1238,6 +1238,10 @@
+ C++ ObjC++ Var(warn_reorder) Warning LangEnabledBy(C++ ObjC++,Wall)
+ Warn when the compiler reorders code.
+ 
++Wreturn-mismatch
++C ObjC Var(warn_return_mismatch) Warning Init(-1)
++Warn whenever void-returning functions return a non-void expressions, or a return expression is missing in a function not returning void.
++
+ Wreturn-type
+ C ObjC C++ ObjC++ Var(warn_return_type) Warning LangEnabledBy(C ObjC C++ ObjC++,Wall) Init(-1)
+ Warn whenever a function's return type defaults to \"int\" (C), or about inconsistent return types (C++).
+diff --git a/gcc/testsuite/gcc.dg/Wreturn-mismatch-1.c b/gcc/testsuite/gcc.dg/Wreturn-mismatch-1.c
+new file mode 100644
+index 0000000000..3bad847ecf
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/Wreturn-mismatch-1.c
+@@ -1,0 +1,40 @@
++/* { dg-do compile } */
++/* { dg-options "" } */
++
++void f1 (void);
++
++int
++f2 (void)
++{
++  f1 ();
++}
++
++static inline int
++f3 (void)
++{
++  f1 ();
++}
++
++void
++f4 (void)
++{
++  return 1; /* { dg-warning "'return' with a value\[^\n\r\]*-Wreturn-mismatch" } */
++}
++
++void
++f5 (void)
++{
++  return f1 (); /* { dg-bogus "ISO C" } */
++}
++
++int
++f6 (void)
++{
++  return; /* { dg-warning "'return' with no value\[^\n\r\]*-Wreturn-mismatch" } */
++}
++
++int
++f7 (void)
++{
++  return f1 (); /* { dg-error "void value not ignored as it ought to be" } */
++}
+diff --git a/gcc/testsuite/gcc.dg/Wreturn-mismatch-2.c b/gcc/testsuite/gcc.dg/Wreturn-mismatch-2.c
+new file mode 100644
+index 0000000000..49eb5a5a95
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/Wreturn-mismatch-2.c
+@@ -1,0 +1,41 @@
++/* { dg-do compile } */
++/* { dg-options "-Wall" } */
++
++void f1 (void);
++
++int
++f2 (void)
++{
++  f1 ();
++} /* { dg-warning "control reaches end of non-void\[^\n\r\]*-Wreturn-type" } */
++
++static inline int
++f3 (void)
++{
++  f1 ();
++} /* { dg-warning "no return statement in function\[^\n\r\]*-Wreturn-type" } */
++
++void
++f4 (void)
++{
++  return 1; /* { dg-warning "with a value,\[^\n\r\]*-Wreturn-mismatch" } */
++}
++
++void
++f5 (void)
++{
++  return f1 ();
++}
++
++int
++f6 (void)
++{
++  return; /* { dg-warning "with no value,\[^\n\r\]*Wreturn-mismatch" } */
++}
++
++int
++f7 (void)
++{
++  return f1 (); /* { dg-error "void value not ignored as it ought to be" } */
++} /* { dg-warning "control reaches end of non-void\[^\n\r\]*-Wreturn-type" } */
++
+diff --git a/gcc/testsuite/gcc.dg/Wreturn-mismatch-3.c b/gcc/testsuite/gcc.dg/Wreturn-mismatch-3.c
+new file mode 100644
+index 0000000000..ee77ec6a76
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/Wreturn-mismatch-3.c
+@@ -1,0 +1,40 @@
++/* { dg-do compile } */
++/* { dg-options "-pedantic-errors" } */
++
++void f1 (void);
++
++int
++f2 (void)
++{
++  f1 ();
++}
++
++static inline int
++f3 (void)
++{
++  f1 ();
++}
++
++void
++f4 (void)
++{
++  return 1; /* { dg-error "with a value,\[^\n\r\]*-Wreturn-mismatch" } */
++}
++
++void
++f5 (void)
++{
++  return f1 (); /* { dg-error "with expression, in function\[^\n\r\]*-Wpedantic" } */
++}
++
++int
++f6 (void)
++{
++  return; /* { dg-error "with no value,\[^\n\r\]*Wreturn-mismatch" }  */
++}
++
++int
++f7 (void)
++{
++  return f1 (); /* { dg-error "void value not ignored as it ought to be" } */
++}
+diff --git a/gcc/testsuite/gcc.dg/Wreturn-mismatch-4.c b/gcc/testsuite/gcc.dg/Wreturn-mismatch-4.c
+new file mode 100644
+index 0000000000..f73e8a05dc
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/Wreturn-mismatch-4.c
+@@ -1,0 +1,40 @@
++/* { dg-do compile } */
++/* { dg-options "-std=gnu89" } */
++
++void f1 (void);
++
++int
++f2 (void)
++{
++  f1 ();
++}
++
++static inline int
++f3 (void)
++{
++  f1 ();
++}
++
++void
++f4 (void)
++{
++  return 1; /* { dg-warning "with a value,\[^\n\r\]*-Wreturn-mismatch" } */
++}
++
++void
++f5 (void)
++{
++  return f1 ();
++}
++
++int
++f6 (void)
++{
++  return; /* { dg-bogus "with no value" }  */
++}
++
++int
++f7 (void)
++{
++  return f1 (); /* { dg-error "void value not ignored as it ought to be" } */
++}
+diff --git a/gcc/testsuite/gcc.dg/Wreturn-mismatch-5.c b/gcc/testsuite/gcc.dg/Wreturn-mismatch-5.c
+new file mode 100644
+index 0000000000..f2fd3294b7
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/Wreturn-mismatch-5.c
+@@ -1,0 +1,40 @@
++/* { dg-do compile } */
++/* { dg-options "-std=gnu89 -pedantic-errors" } */
++
++void f1 (void);
++
++int
++f2 (void)
++{
++  f1 ();
++}
++
++static inline int
++f3 (void)
++{
++  f1 ();
++}
++
++void
++f4 (void)
++{
++  return 1; /* { dg-error "with a value,\[^\n\r\]*-Wreturn-mismatch" } */
++}
++
++void
++f5 (void)
++{
++  return f1 (); /* { dg-error "with expression\[^\n\r\]*-Wpedantic" } */
++}
++
++int
++f6 (void)
++{
++  return;
++}
++
++int
++f7 (void)
++{
++  return f1 (); /* { dg-error "void value not ignored as it ought to be" } */
++}
+diff --git a/gcc/testsuite/gcc.dg/Wreturn-mismatch-6.c b/gcc/testsuite/gcc.dg/Wreturn-mismatch-6.c
+new file mode 100644
+index 0000000000..51543fb714
+--- /dev/null
++++ b/gcc/testsuite/gcc.dg/Wreturn-mismatch-6.c
+@@ -1,0 +1,40 @@
++/* { dg-do compile } */
++/* { dg-options "-std=c90 -pedantic-errors -Wreturn-type" } */
++
++void f1 (void);
++
++int
++f2 (void)
++{
++  f1 ();
++} /* { dg-warning "control reaches end of non-void\[^\n\r\]*-Wreturn-type" } */
++
++static __inline__ int
++f3 (void)
++{
++  f1 ();
++} /* { dg-warning "no return statement in function\[^\n\r\]*-Wreturn-type" } */
++
++void
++f4 (void)
++{
++  return 1; /* { dg-error "with a value,\[^\n\r\]*-Wreturn-mismatch" } */
++}
++
++void
++f5 (void)
++{
++  return f1 (); /* { dg-error "with expression\[^\n\r\]*-Wpedantic" } */
++}
++
++int
++f6 (void)
++{
++  return; /* { dg-warning "'return' with no value\[^\n\r\]*-Wreturn-mismatch" } */
++}
++
++int
++f7 (void)
++{
++  return f1 (); /* { dg-error "void value not ignored as it ought to be" } */
++} /* { dg-warning "control reaches end of non-void\[^\n\r\]*-Wreturn-type" } */
+diff --git a/gcc/testsuite/gcc.dg/noncompile/pr55976-1.c b/gcc/testsuite/gcc.dg/noncompile/pr55976-1.c
+index d078990bd8..d348b03ad9 100644
+--- a/gcc/testsuite/gcc.dg/noncompile/pr55976-1.c
++++ b/gcc/testsuite/gcc.dg/noncompile/pr55976-1.c
+@@ -1,6 +1,6 @@
+ /* PR c/55976 */
+ /* { dg-do compile } */
+-/* { dg-options "-Werror=return-type" } */
++/* { dg-options "-Werror=return-mismatch" } */
+ /* { dg-prune-output "some warnings being treated as errors" } */
+ 
+ /* Verify warnings for return type become errors.  */
+diff --git a/gcc/testsuite/gcc.dg/noncompile/pr55976-2.c b/gcc/testsuite/gcc.dg/noncompile/pr55976-2.c
+index 0e493d0e8a..d6f07a9572 100644
+--- a/gcc/testsuite/gcc.dg/noncompile/pr55976-2.c
++++ b/gcc/testsuite/gcc.dg/noncompile/pr55976-2.c
+@@ -1,8 +1,8 @@
+ /* PR c/55976 */
+ /* { dg-do compile } */
+-/* { dg-options "-Wno-return-type" } */
++/* { dg-options "-Wno-return-mismatch" } */
+ 
+-/* Verify that -Wno-return-type turns off warnings about function return
++/* Verify that -Wno-return-mismatch turns off warnings about function return
+    type.  */
+ 
+ void t () { return 1; } /* normally generates function returning void */

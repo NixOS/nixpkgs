@@ -54,6 +54,12 @@ in
 ## 1. Patches relevant to gcc>=12 on every platform ####################################
 
 []
+++ optionals is13 [
+  # Backport GCC 14 warnings to GCC 13.
+  # TODO: Remove these before 25.05.
+  ./13/backport-wreturn-mismatch.patch
+  ./13/backport-wdeclaration-missing-parameter-type.patch
+]
 ++ optional (!atLeast12) ./fix-bug-80431.patch
 ++ optional (targetPlatform != hostPlatform) ./libstdc++-target.patch
 ++ optionals (noSysDirs) (

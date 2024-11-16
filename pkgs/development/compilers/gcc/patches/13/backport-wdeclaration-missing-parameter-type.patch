@@ -1,0 +1,37 @@
+Backport `-Wdeclaration-missing-parameter-type`
+
+As a default warning option rather than a `permerror`.
+
+Original author: Florian Weimer <fweimer@redhat.com>
+Original commit: ff9efa3fc48baa1dee7ed376c25ecfcfbc28d35c
+
+diff --git a/gcc/c/c-decl.cc b/gcc/c/c-decl.cc
+index 7dcb1141bf..ef86d5bf35 100644
+--- a/gcc/c/c-decl.cc
++++ b/gcc/c/c-decl.cc
+@@ -8215,7 +8215,9 @@
+     {
+       if (!funcdef_flag)
+ 	{
+-	  pedwarn (input_location, 0, "parameter names (without types) in "
++	  pedwarn (input_location,
++		   OPT_Wdeclaration_missing_parameter_type,
++		   "parameter names (without types) in "
+ 		   "function declaration");
+ 	  arg_info->parms = NULL_TREE;
+ 	}
+diff --git a/gcc/c-family/c.opt b/gcc/c-family/c.opt
+index 0e0c98f5e0..98affb1152 100644
+--- a/gcc/c-family/c.opt
++++ b/gcc/c-family/c.opt
+@@ -571,6 +571,10 @@
+ C ObjC Var(warn_declaration_after_statement) Init(-1) Warning
+ Warn when a declaration is found after a statement.
+ 
++Wdeclaration-missing-parameter-type
++C ObjC Var(warn_declaration_missing_parameter) Warning Init(1)
++Warn for missing parameter types in function declarations.
++
+ Wdelete-incomplete
+ C++ ObjC++ Var(warn_delete_incomplete) Init(1) Warning
+ Warn when deleting a pointer to incomplete type.
