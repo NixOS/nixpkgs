@@ -115,6 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       kylesferrazza
       emily
+      techknowlogick
     ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
