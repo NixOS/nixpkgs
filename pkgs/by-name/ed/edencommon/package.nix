@@ -107,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       kylesferrazza
       emily
+      techknowlogick
     ];
   };
 })
