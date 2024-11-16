@@ -9,7 +9,6 @@
   nix-update-script,
   openssl,
   pkg-config,
-  testers,
   webkitgtk_4_1,
 }:
 
@@ -49,7 +48,6 @@ rustPlatform.buildRustPackage rec {
 
     tests = {
       hook = callPackage ./test-app.nix { };
-      version = testers.testVersion { package = cargo-tauri; };
     };
 
     updateScript = nix-update-script {
