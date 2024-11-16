@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  configureFlags = [ "--enable-aligned=yes" ];
+
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   enableParallelBuilding = true;
