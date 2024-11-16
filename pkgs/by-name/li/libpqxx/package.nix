@@ -6,15 +6,15 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpqxx";
   version = "7.7.5";
 
   src = fetchFromGitHub {
     owner = "jtv";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-mvGPMbk4b8NmPvzy5hS+Au69NtDGha8ONTEQf6I3VZE=";
+    repo = "libpqxx";
+    rev = finalAttrs.version;
+    hash = "sha256-mvGPMbk4b8NmPvzy5hS+Au69NtDGha8ONTEQf6I3VZE=";
   };
 
   nativeBuildInputs = [
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})
