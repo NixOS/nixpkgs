@@ -31,11 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configureFlags = [
-    "--enable-shared --disable-documentation"
+    "--disable-documentation"
+    "--enable-shared"
   ];
-  CXXFLAGS = [
-    "-std=c++17"
-  ];
+
+  strictDeps = true;
 
   meta = {
     changelog = "https://github.com/jtv/libpqxx/releases/tag/${finalAttrs.version}";
