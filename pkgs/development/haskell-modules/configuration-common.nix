@@ -3062,4 +3062,9 @@ self: super: {
      '';
   }) super.quickcheck-state-machine;
 
+  testcontainers = lib.pipe super.testcontainers [
+    dontCheck   # Tests require docker
+    doJailbreak # https://github.com/testcontainers/testcontainers-hs/pull/58
+  ];
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

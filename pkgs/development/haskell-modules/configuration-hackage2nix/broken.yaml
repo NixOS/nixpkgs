@@ -6016,7 +6016,6 @@ broken-packages:
   - terntup # failure in job https://hydra.nixos.org/build/233203746 at 2023-09-02
   - tersmu # failure in job https://hydra.nixos.org/build/233253842 at 2023-09-02
   - testCom # failure in job https://hydra.nixos.org/build/233210118 at 2023-09-02
-  - testcontainers # failure in job https://hydra.nixos.org/build/233226596 at 2023-09-02
   - TestExplode # failure in job https://hydra.nixos.org/build/233207327 at 2023-09-02
   - test-fixture # failure in job https://hydra.nixos.org/build/233203103 at 2023-09-02
   - test-framework-doctest # failure in job https://hydra.nixos.org/build/233256232 at 2023-09-02
