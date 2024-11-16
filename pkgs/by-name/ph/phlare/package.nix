@@ -1,10 +1,11 @@
 {
   lib,
-  buildGoModule,
+  buildGo122Module,
   fetchFromGitHub,
 }:
-
-buildGoModule rec {
+# breaks in go 1.23 with `invalid reference to runtime.aeskeysched`
+# won't be fixed upstream since the repository is archived.
+buildGo122Module rec {
   pname = "phlare";
   version = "0.6.1";
 
