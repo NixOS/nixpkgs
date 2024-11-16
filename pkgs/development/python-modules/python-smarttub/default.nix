@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "mdz";
     repo = "python-smarttub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Dy7Nsq3qhVWb9W6ledD+Gq3fMQ/qLsxGmTBB+AQ5IZc=";
+    hash = "sha256-ErGBOO5aes4Avmt2M6rkZPmjwsCMZdNnLhMDYhlULzU=";
   };
 
   build-system = [ setuptools ];
