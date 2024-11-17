@@ -112,7 +112,7 @@ in
       environment = {
         MEILI_DB_PATH = "/var/lib/meilisearch";
         MEILI_HTTP_ADDR = "${cfg.listenAddress}:${toString cfg.listenPort}";
-        MEILI_NO_ANALYTICS = toString cfg.noAnalytics;
+        MEILI_NO_ANALYTICS = boolToString cfg.noAnalytics;
         MEILI_ENV = cfg.environment;
         MEILI_DUMP_DIR = "/var/lib/meilisearch/dumps";
         MEILI_LOG_LEVEL = cfg.logLevel;
