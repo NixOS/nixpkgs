@@ -439,6 +439,7 @@ in {
   livebook-service = handleTest ./livebook-service.nix {};
   pyload = handleTest ./pyload.nix {};
   oci-containers = handleTestOn ["aarch64-linux" "x86_64-linux"] ./oci-containers.nix {};
+  oci-containers-systemd = handleTestOn ["x86_64-linux"] ./oci-containers-systemd.nix {};
   odoo = handleTest ./odoo.nix {};
   odoo17 = handleTest ./odoo.nix { package = pkgs.odoo17; };
   odoo16 = handleTest ./odoo.nix { package = pkgs.odoo16; };

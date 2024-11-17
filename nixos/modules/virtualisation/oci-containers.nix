@@ -277,49 +277,14 @@ let
   mkService = name: container: let
     dependsOn = map (x: "${cfg.backend}-${x}.service") container.dependsOn;
     escapedName = escapeShellArg name;
-    preStartScript = pkgs.writeShellApplication {
-      name = "pre-start";
-      runtimeInputs = [ ];
-      text = ''
-        ${cfg.backend} rm -f ${name} || true
-        ${optionalString (isValidLogin container.login) ''
-          # try logging in, if it fails, check if image exists locally
-          ${cfg.backend} login \
-          ${container.login.registry} \
-          --username ${container.login.username} \
-          --password-stdin < ${container.login.passwordFile} \
-          || ${cfg.backend} image inspect ${container.image} >/dev/null \
-          || { echo "image doesn't exist locally and login failed" >&2 ; exit 1; }
-        ''}
-        ${optionalString (container.imageFile != null) ''
-          ${cfg.backend} load -i ${container.imageFile}
-        ''}
-        ${optionalString (container.imageStream != null) ''
-          ${container.imageStream} | ${cfg.backend} load
-        ''}
-        ${optionalString (cfg.backend == "podman") ''
-          rm -f /run/podman-${escapedName}.ctr-id
-        ''}
-      '';
+
+    extractedImage = pkgs.dockerTools.extractImage {
+      src = container.imageFile;
     };
-  in {
-    wantedBy = [] ++ optional (container.autoStart) "multi-user.target";
-    wants = lib.optional (container.imageFile == null && container.imageStream == null)  "network-online.target";
-    after = lib.optionals (cfg.backend == "docker") [ "docker.service" "docker.socket" ]
-            # if imageFile or imageStream is not set, the service needs the network to download the image from the registry
-            ++ lib.optionals (container.imageFile == null && container.imageStream == null) [ "network-online.target" ]
-            ++ dependsOn;
-    requires = dependsOn;
-    environment = proxy_env;
 
-    path =
-      if cfg.backend == "docker" then [ config.virtualisation.docker.package ]
-      else if cfg.backend == "podman" then [ config.virtualisation.podman.package ]
-      else throw "Unhandled backend: ${cfg.backend}";
-
-    script = concatStringsSep " \\\n  " ([
-      "exec ${cfg.backend} "
-    ]  ++ map escapeShellArg container.preRunExtraOptions ++ [
+    containerRuntimeCommand = [ "exec" cfg.backend ]
+    ++ container.preRunExtraOptions
+    ++ [
       "run"
       "--rm"
       "--name=${escapedName}"
@@ -344,41 +309,112 @@ let
       ++ map escapeShellArg container.extraOptions
       ++ [container.image]
       ++ map escapeShellArg container.cmd
+    ;
+
+    systemdRuntimeCommand = ["exec" "/_nix_entrypoint"];
+  in {
+    wantedBy = [] ++ optional (container.autoStart) "multi-user.target";
+    wants = lib.optional (container.imageFile == null && container.imageStream == null)  "network-online.target";
+    after = lib.optionals (cfg.backend == "docker") [ "docker.service" "docker.socket" ]
+            # if imageFile or imageStream is not set, the service needs the network to download the image from the registry
+            ++ lib.optionals (container.imageFile == null && container.imageStream == null) [ "network-online.target" ]
+            ++ dependsOn;
+    requires = dependsOn;
+
+    environment = proxy_env // container.environment //
+    (
+      if cfg.backend == "systemd" then {
+        CONTAINER_NAME = escapedName;
+        CONTAINER_ENTRYPOINT = container.entrypoint;
+        CONTAINER_HOSTNAME = container.hostname;
+        CONTAINER_WORKDIR = container.workdir;
+      } else {}
     );
 
-    preStop = if cfg.backend == "podman"
-      then "podman stop --ignore --cidfile=/run/podman-${escapedName}.ctr-id"
-      else "${cfg.backend} stop ${name} || true";
+    path = {
+      docker = [ config.virtualisation.docker.package ];
+      podman = [ config.virtualisation.podman.package ];
+      systemd = [ ];
+    }.${cfg.backend} or (throw "Unhandled backend: ${cfg.backend}");
 
-    postStop = if cfg.backend == "podman"
-      then "podman rm -f --ignore --cidfile=/run/podman-${escapedName}.ctr-id"
-      else "${cfg.backend} rm -f ${name} || true";
+    preStart = (mkIf (cfg.backend != "systemd") ''
+      ${cfg.backend} rm -f ${name} || true
+      ${optionalString (isValidLogin container.login) ''
+        # try logging in, if it fails, check if image exists locally
+        ${cfg.backend} login \
+        ${container.login.registry} \
+        --username ${container.login.username} \
+        --password-stdin < ${container.login.passwordFile} \
+        || ${cfg.backend} image inspect ${container.image} >/dev/null \
+        || { echo "image doesn't exist locally and login failed" >&2 ; exit 1; }
+      ''}
+      ${optionalString (container.imageFile != null) ''
+        ${cfg.backend} load -i ${container.imageFile}
+      ''}
+      ${optionalString (container.imageStream != null) ''
+        ${container.imageStream} | ${cfg.backend} load
+      ''}
+      ${optionalString (cfg.backend == "podman") ''
+        rm -f /run/podman-${escapedName}.ctr-id
+      ''}
+    '');
 
-    serviceConfig = {
-      ### There is no generalized way of supporting `reload` for docker
-      ### containers. Some containers may respond well to SIGHUP sent to their
-      ### init process, but it is not guaranteed; some apps have other reload
-      ### mechanisms, some don't have a reload signal at all, and some docker
-      ### images just have broken signal handling.  The best compromise in this
-      ### case is probably to leave ExecReload undefined, so `systemctl reload`
-      ### will at least result in an error instead of potentially undefined
-      ### behaviour.
-      ###
-      ### Advanced users can still override this part of the unit to implement
-      ### a custom reload handler, since the result of all this is a normal
-      ### systemd service from the perspective of the NixOS module system.
-      ###
-      # ExecReload = ...;
-      ###
-      ExecStartPre = [ "${preStartScript}/bin/pre-start" ];
-      TimeoutStartSec = 0;
-      TimeoutStopSec = 120;
-      Restart = "always";
-    } // optionalAttrs (cfg.backend == "podman") {
-      Environment="PODMAN_SYSTEMD_UNIT=podman-${name}.service";
-      Type="notify";
-      NotifyAccess="all";
-    };
+    preStop = {
+      podman =  "podman stop --ignore --cidfile=/run/podman-${escapedName}.ctr-id";
+      systemd = "true";
+    }.${cfg.backend} or "${cfg.backend} stop ${name} || true";
+
+    postStop = {
+      podman = "podman rm -f --ignore --cidfile=/run/podman-${escapedName}.ctr-id";
+      systemd = "true";
+    }.${cfg.backend} or "${cfg.backend} rm -f ${name} || true";
+
+    script = lib.mkMerge [
+      (lib.mkIf (cfg.backend == "systemd") ''
+        ${lib.getExe pkgs.xorg.lndir} ${extractedImage} / | tail -n 1
+      '')
+      (concatStringsSep " \\\n  " ({
+        docker = containerRuntimeCommand;
+        podman = containerRuntimeCommand;
+        systemd = systemdRuntimeCommand;
+      }.${cfg.backend}))
+    ];
+
+    serviceConfig = lib.mkMerge [
+      {
+        ### There is no generalized way of supporting `reload` for docker
+        ### containers. Some containers may respond well to SIGHUP sent to their
+        ### init process, but it is not guaranteed; some apps have other reload
+        ### mechanisms, some don't have a reload signal at all, and some docker
+        ### images just have broken signal handling.  The best compromise in this
+        ### case is probably to leave ExecReload undefined, so `systemctl reload`
+        ### will at least result in an error instead of potentially undefined
+        ### behaviour.
+        ###
+        ### Advanced users can still override this part of the unit to implement
+        ### a custom reload handler, since the result of all this is a normal
+        ### systemd service from the perspective of the NixOS module system.
+        ###
+        # ExecReload = ...;
+        ###
+        TimeoutStartSec = 0;
+        TimeoutStopSec = 120;
+        Restart = "always";
+      }
+      {
+        podman = {
+          Environment="PODMAN_SYSTEMD_UNIT=podman-${name}.service";
+          Type="notify";
+          NotifyAccess="all";
+        };
+        systemd = {
+          EnvironmentFile = container.environmentFiles;
+          RootEphemeral = true;
+          BindReadOnlyPaths = [ "/nix/store" ];
+          TemporaryFileSystem = "/";
+        };
+      }.${cfg.backend} or {}
+    ];
   };
 
 in {
@@ -399,7 +435,7 @@ in {
   options.virtualisation.oci-containers = {
 
     backend = mkOption {
-      type = types.enum [ "podman" "docker" ];
+      type = types.enum [ "podman" "docker" "systemd" ];
       default = if versionAtLeast config.system.stateVersion "22.05" then "podman" else "docker";
       description = "The underlying Docker implementation to use.";
     };
@@ -418,14 +454,19 @@ in {
 
       assertions =
         let
-          toAssertion = _: { imageFile, imageStream, ... }:
-            { assertion = imageFile == null || imageStream == null;
-
+          toAssertion = { imageFile, imageStream, ... }: [
+            {
+              assertion = imageFile == null || imageStream == null;
               message = "You can only define one of imageFile and imageStream";
-            };
+            }
+            {
+              assertion = cfg.backend == "systemd" -> imageFile != null;
+              message = "The systemd backend can't fetch container images at runtime. Please specify imageFile.";
+            }
+          ];
 
         in
-          lib.mapAttrsToList toAssertion cfg.containers;
+          lib.flatten (map toAssertion (lib.attrValues cfg.containers));
     }
     (lib.mkIf (cfg.backend == "podman") {
       virtualisation.podman.enable = true;
