@@ -2021,6 +2021,12 @@ in
     configurePhase = "cd vim";
   };
 
+  one-nvim = super.one-nvim.overrideAttrs {
+    # E5108: /lua/one-nvim.lua:14: Unknown option 't_Co'
+    # https://github.com/Th3Whit3Wolf/one-nvim/issues/23
+    meta.broken = true;
+  };
+
   # The plugin depends on either skim-vim or fzf-vim, but we don't want to force the user so we
   # avoid choosing one of them and leave it to the user
   openscad-nvim = super.openscad-nvim.overrideAttrs {
