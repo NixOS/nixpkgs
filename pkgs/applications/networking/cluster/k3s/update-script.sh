@@ -10,6 +10,7 @@ trap "rm -rf ${WORKDIR}" EXIT
 
 NIXPKGS_ROOT="$(git rev-parse --show-toplevel)"/
 NIXPKGS_K3S_PATH=$(cd $(dirname ${BASH_SOURCE[0]}); pwd -P)/
+OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_ROOT. {}; k3s_1_${MINOR_VERSION}.version or (builtins.parseDrvName k3s_1_${MINOR_VERSION}.name).version" | tr -d '"')"
 cd ${NIXPKGS_K3S_PATH}
 
 cd 1_${MINOR_VERSION}
@@ -153,12 +154,11 @@ fi
 
 # Implement commit
 # See https://nixos.org/manual/nixpkgs/stable/#var-passthru-updateScript-commit
-OLD_VERSION="$(nix-instantiate --eval -E "with import $NIXPKGS_ROOT. {}; k3s.version or (builtins.parseDrvName k3s.name).version" | tr -d '"')"
 cat <<EOF
 [{
     "attrPath": "k3s_1_${MINOR_VERSION}",
     "oldVersion": "$OLD_VERSION",
     "newVersion": "$K3S_VERSION",
-    "files": ["$PWD/versions.nix","$PWD/chart-versions.nix"]
+    "files": ["$PWD/versions.nix","$PWD/chart-versions.nix","$PWD/images-versions.json"]
 }]
 EOF
