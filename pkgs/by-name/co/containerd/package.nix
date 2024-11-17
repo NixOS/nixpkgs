@@ -5,6 +5,7 @@
   fetchFromGitHub,
   go-md2man,
   kubernetes,
+  nix-update-script,
   nixosTests,
   util-linux,
 }:
@@ -61,9 +62,13 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) docker;
-  } // kubernetes.tests;
+  passthru = {
+    tests = {
+      inherit (nixosTests) docker;
+    } // kubernetes.tests;
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Daemon to control runC";
