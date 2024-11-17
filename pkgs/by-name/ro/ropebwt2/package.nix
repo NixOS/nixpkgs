@@ -17,13 +17,15 @@ stdenv.mkDerivation {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
   installPhase = ''
     runHook preInstall
+
     install -Dm755 ropebwt2 -t $out/bin
+
     runHook postInstall
   '';
   meta = {
     homepage = "https://github.com/lh3/ropebwt2";
     description = "Incremental construction of FM-index for DNA sequences";
-    mainProgram = "ropebwwith lib; t2";
+    mainProgram = "ropebwt2";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ apraga ];
     platforms = lib.platforms.unix;
