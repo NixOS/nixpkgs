@@ -13,6 +13,16 @@ let
     eula=true
   '';
 
+  opsFile = pkgs.writeText "ops.json" (
+    builtins.toJSON (
+      lib.mapAttrsToList (n: v: {
+        name = n;
+        uuid = v;
+        level = 4;
+      }) cfg.ops
+    )
+  );
+
   whitelistFile = pkgs.writeText "whitelist.json" (
     builtins.toJSON (
       lib.mapAttrsToList (n: v: {
@@ -83,6 +93,7 @@ in
         description = ''
           Whether to use a declarative Minecraft server configuration.
           Only if set to `true`, the options
+          {option}`services.minecraft-server.ops`,
           {option}`services.minecraft-server.whitelist` and
           {option}`services.minecraft-server.serverProperties` will be
           applied.
@@ -113,6 +124,32 @@ in
         default = false;
         description = ''
           Whether to open ports in the firewall for the server.
+        '';
+      };
+
+      ops = lib.mkOption {
+        type =
+          let
+            minecraftUUID =
+              lib.types.strMatching "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+              // {
+                description = "Minecraft UUID";
+              };
+          in
+          lib.types.attrsOf minecraftUUID;
+        default = { };
+        description = ''
+          Level 4 operators. Only has an effect when
+          {option}`services.minecraft-server.declarative` is
+          `true`. This is a mapping from Minecraft usernames
+          to UUIDs. You can use https://mcuuid.net/ to
+          get a Minecraft UUID for a username.
+        '';
+        example = lib.literalExpression ''
+          {
+            username1 = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
+            username2 = "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy";
+          };
         '';
       };
 
@@ -273,12 +310,14 @@ in
 
                 # Was declarative before, no need to back up anything
                 ln -sf ${whitelistFile} whitelist.json
+                ln -sf ${opsFile} ops.json
                 cp -f ${serverPropertiesFile} server.properties
 
               else
 
                 # Declarative for the first time, backup stateful files
                 ln -sb --suffix=.stateful ${whitelistFile} whitelist.json
+                ln -sb --suffix=.stateful ${opsFile} ops.json
                 cp -b --suffix=.stateful ${serverPropertiesFile} server.properties
 
                 # server.properties must have write permissions, because every time
