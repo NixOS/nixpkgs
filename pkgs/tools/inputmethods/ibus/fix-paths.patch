@@ -2,12 +2,13 @@ diff --git a/configure.ac b/configure.ac
 index a3cdb2da..cade9466 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -469,11 +469,11 @@ PKG_CHECK_EXISTS([pygobject-3.0 >= $PYGOBJECT_REQUIRED],
- if test "x$enable_pygobject" = "xyes"; then
+@@ -531,12 +531,12 @@
      PKG_CHECK_MODULES(PYTHON, [pygobject-3.0 >= $PYGOBJECT_REQUIRED])
  
--    pyoverridesdir=`$PYTHON -c "import gi; print(gi._overridesdir)"`
-+    pyoverridesdir="$prefix/@pythonSitePackages@/gi/overrides"
+     if test x"$pyoverridesdir" = x""; then
+-        pyoverridesdir=`$PYTHON -c "import gi; print(gi._overridesdir)"`
++        pyoverridesdir="$prefix/@pythonSitePackages@/gi/overrides"
+     fi
      AC_SUBST(pyoverridesdir)
  
      if test x"$enable_python2" = x"yes"; then
