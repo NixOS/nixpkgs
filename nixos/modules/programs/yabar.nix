@@ -64,8 +64,8 @@ in
         description = ''
           The package which contains the `yabar` binary.
 
-          Nixpkgs provides the `yabar` and `yabar-unstable`
-          derivations since 18.03, so it's possible to choose.
+          Nixpkgs provides the `yabar` and `yabar-unstable`,
+          so it's possible to choose.
         '';
       };
 
