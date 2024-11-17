@@ -14,16 +14,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lact";
-  version = "0.5.6";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
     rev = "v${version}";
-    hash = "sha256-iz6Pl+A7Y/Ljot3QH2GaopgtfuYLpTLSq6uSprQ2EEU=";
+    hash = "sha256-goNwLtVjNY3O/BhFrCcM3X11dtM34XgfHL6bh+YFoIY=";
   };
 
-  cargoHash = "sha256-uoMkz+0Jr07GpMRUKuJvrTTSAGdhLf35q/8but1fwIk=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-rgpBmoGCNMU5nFVxzNtqsPaOn93mHW5P2isKgbP9UN4=";
 
   nativeBuildInputs = [
     blueprint-compiler
@@ -40,7 +41,7 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     # tries and fails to initialize gtk
-    "--skip=app::root_stack::thermals_page::fan_curve_frame::tests::set_get_curve"
+    "--skip=app::pages::thermals_page::fan_curve_frame::tests::set_get_curve"
   ];
 
   postPatch = ''
@@ -52,13 +53,6 @@ rustPlatform.buildRustPackage rec {
 
     substituteInPlace res/io.github.lact-linux.desktop \
       --replace Exec={lact,$out/bin/lact}
-
-    pushd $cargoDepsCopy/pciid-parser
-    oldHash=$(sha256sum src/lib.rs | cut -d " " -f 1)
-    substituteInPlace src/lib.rs --subst-var-by hwdata ${hwdata}
-    substituteInPlace .cargo-checksum.json \
-      --replace $oldHash $(sha256sum src/lib.rs | cut -d " " -f 1)
-    popd
   '';
 
   postInstall = ''
