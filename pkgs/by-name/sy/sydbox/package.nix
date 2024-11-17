@@ -7,6 +7,8 @@
   pkg-config,
   rustPlatform,
   scdoc,
+  sydbox,
+  testers,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -64,6 +66,11 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru = {
+    tests.version = testers.testVersion {
+      package = sydbox;
+      command = "syd -V";
+    };
+
     updateScript = nix-update-script { };
   };
 
