@@ -14,22 +14,41 @@ let
       postgresql-clauses = makeEnsureTestFor package;
     };
 
-  test-sql = pkgs.writeText "postgresql-test" ''
-    CREATE EXTENSION pgcrypto; -- just to check if lib loading works
-    CREATE TABLE sth (
-      id int
+  test-sql =
+    enablePLv8Test:
+    pkgs.writeText "postgresql-test" (
+      ''
+        CREATE EXTENSION pgcrypto; -- just to check if lib loading works
+        CREATE TABLE sth (
+          id int
+        );
+        INSERT INTO sth (id) VALUES (1);
+        INSERT INTO sth (id) VALUES (1);
+        INSERT INTO sth (id) VALUES (1);
+        INSERT INTO sth (id) VALUES (1);
+        INSERT INTO sth (id) VALUES (1);
+        CREATE TABLE xmltest ( doc xml );
+        INSERT INTO xmltest (doc) VALUES ('<test>ok</test>'); -- check if libxml2 enabled
+      ''
+      + lib.optionalString enablePLv8Test ''
+        -- check if hardening gets relaxed
+        CREATE EXTENSION plv8;
+        -- try to trigger the V8 JIT, which requires MemoryDenyWriteExecute
+        DO $$
+          let xs = [];
+          for (let i = 0, n = 400000; i < n; i++) {
+              xs.push(Math.round(Math.random() * n))
+          }
+          console.log(xs.reduce((acc, x) => acc + x, 0));
+        $$ LANGUAGE plv8;
+      ''
     );
-    INSERT INTO sth (id) VALUES (1);
-    INSERT INTO sth (id) VALUES (1);
-    INSERT INTO sth (id) VALUES (1);
-    INSERT INTO sth (id) VALUES (1);
-    INSERT INTO sth (id) VALUES (1);
-    CREATE TABLE xmltest ( doc xml );
-    INSERT INTO xmltest (doc) VALUES ('<test>ok</test>'); -- check if libxml2 enabled
-  '';
 
   makeTestForWithBackupAll =
     package: backupAll:
+    let
+      enablePLv8Check = !package.pkgs.plv8.meta.broken;
+    in
     makeTest {
       name = "postgresql${lib.optionalString backupAll "-backup-all"}-${package.name}";
       meta = with lib.maintainers; {
@@ -37,12 +56,17 @@ let
       };
 
       nodes.machine =
-        { ... }:
+        { config, ... }:
         {
           services.postgresql = {
             inherit package;
             enable = true;
             enableJIT = lib.hasInfix "-jit-" package.name;
+            # plv8 doesn't support postgresql with JIT, so we only run the test
+            # for the non-jit variant.
+            # TODO(@Ma27) split this off into its own VM test and move a few other
+            # extension tests to use postgresqlTestExtension.
+            extensions = lib.mkIf enablePLv8Check (ps: with ps; [ plv8 ]);
           };
 
           services.postgresqlBackup = {
@@ -69,7 +93,7 @@ let
 
           with subtest("Postgresql is available just after unit start"):
               machine.succeed(
-                  "cat ${test-sql} | sudo -u postgres psql"
+                  "cat ${test-sql enablePLv8Check} | sudo -u postgres psql"
               )
 
           with subtest("Postgresql survives restart (bug #1735)"):
