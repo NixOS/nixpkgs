@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     ]))
   ];
 
-  ${if stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64 then "mesonCheckFlags" else null} = [
+  mesonCheckFlags = lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
     # Tests regularly exceed the default timeout on `x86_64-darwin`.
     "--timeout-multiplier=0"
   ];
