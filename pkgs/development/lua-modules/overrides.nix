@@ -703,6 +703,7 @@ in
       sed -i -e "1 s|.*|#\!${coreutils}/bin/env -S ${neovim-unwrapped}/bin/nvim -l|" "$out/bin/nlua"
       '';
     dontPatchShebangs = true;
+    meta.mainProgram = "nlua";
   });
 
   psl = prev.psl.overrideAttrs (drv: {
