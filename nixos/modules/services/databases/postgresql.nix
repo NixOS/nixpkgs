@@ -492,7 +492,7 @@ in
         mkThrow = ver: throw "postgresql_${ver} was removed, please upgrade your postgresql version.";
         mkWarn = ver: warn ''
           The postgresql package is not pinned and selected automatically by
-          `systemd.stateVersion`. Right now this is `pkgs.postgresql_${ver}`, the
+          `system.stateVersion`. Right now this is `pkgs.postgresql_${ver}`, the
           oldest postgresql version available and thus the next that will be
           removed when EOL on the next stable cycle.
 
