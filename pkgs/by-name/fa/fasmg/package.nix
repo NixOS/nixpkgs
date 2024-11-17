@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     mainProgram = "fasmg";
     homepage = "https://flatassembler.net";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ orivej luc65r ];
+    maintainers = with maintainers; [ orivej clevor ];
     platforms = with platforms; intersectLists (linux ++ darwin) x86;
   };
 }
