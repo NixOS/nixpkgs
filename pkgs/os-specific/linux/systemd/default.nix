@@ -1,5 +1,3 @@
-# NOTE: Make sure to (re-)format this file on changes with `nixpkgs-fmt`!
-
 {
   stdenv,
   lib,
@@ -8,7 +6,6 @@
   testers,
   fetchFromGitHub,
   fetchzip,
-  fetchpatch2,
   buildPackages,
   makeBinaryWrapper,
   ninja,
@@ -188,14 +185,14 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "256.9";
+  version = "257.1";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1720202583";
+  releaseTimestamp = "1734643670";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
@@ -206,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${version}";
-    hash = "sha256-Pp75XXF1R0XEzowRIw4BA/SSCQq8K4YVoPlmXrkU9nQ=";
+    hash = "sha256-w+PBpu3XjYob2VYh8FHU4sUZaWHVO9k5g0/vIj0cTvo=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -236,51 +233,43 @@ stdenv.mkDerivation (finalAttrs: {
       ./0015-tpm2_context_init-fix-driver-name-checking.patch
       ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
       ./0017-meson.build-do-not-create-systemdstatedir.patch
-
-      # https://github.com/systemd/systemd/issues/33392
-      (fetchpatch2 {
-        url = "https://github.com/systemd/systemd/commit/f8b02a56febf14adf2474875a1b6625f1f346a6f.patch?full_index=1";
-        hash = "sha256-qRW92gPtACjk+ifptkw5mujhHlkCF56M3azGIjLiMKE=";
-        revert = true;
-      })
+      ./0018-Revert-bootctl-update-list-remove-all-instances-of-s.patch # https://github.com/systemd/systemd/issues/33392
     ]
-    ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
-      ./0018-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
+      ./0019-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
     ]
-    ++ lib.optional stdenv.hostPlatform.isMusl (
+    ++ lib.optionals stdenv.hostPlatform.isMusl (
       let
         oe-core = fetchzip {
-          url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-89b75b46371d5e9172cb496b461824d8551a2af5.tar.gz";
-          hash = "sha256-etdIIdo3FezVafEYP5uAS9pO36Rdea2A+Da1P44cPXg=";
+          url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-86ab9abd1073474f25d0ad878d5bea01ba633772.tar.gz";
+          hash = "sha256-avTJC905erZIQ3OGBNwOcCgk0fQWju6X2P1kRJGxRYI=";
         };
-        musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
       in
-      [
-        (musl-patches + "/0004-missing_type.h-add-comparison_fn_t.patch")
-        (musl-patches + "/0005-add-fallback-parse_printf_format-implementation.patch")
-        (musl-patches + "/0006-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
-        (musl-patches + "/0007-add-missing-FTW_-macros-for-musl.patch")
-        (musl-patches + "/0008-Use-uintmax_t-for-handling-rlim_t.patch")
-        (musl-patches + "/0009-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
-        (musl-patches + "/0010-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
-        (musl-patches + "/0011-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
-        (musl-patches + "/0012-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch")
-        (musl-patches + "/0013-avoid-redefinition-of-prctl_mm_map-structure.patch")
-        (musl-patches + "/0014-do-not-disable-buffer-in-writing-files.patch")
-        (musl-patches + "/0015-Handle-__cpu_mask-usage.patch")
-        (musl-patches + "/0016-Handle-missing-gshadow.patch")
-        (musl-patches + "/0017-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
-        (musl-patches + "/0018-pass-correct-parameters-to-getdents64.patch")
-        (musl-patches + "/0019-Adjust-for-musl-headers.patch")
-        (musl-patches + "/0020-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
-        (musl-patches + "/0021-errno-util-Make-STRERROR-portable-for-musl.patch")
-        (musl-patches + "/0022-sd-event-Make-malloc_trim-conditional-on-glibc.patch")
-        (musl-patches + "/0023-shared-Do-not-use-malloc_info-on-musl.patch")
-        (musl-patches + "/0024-avoid-missing-LOCK_EX-declaration.patch")
-        (musl-patches + "/0025-include-signal.h-to-avoid-the-undeclared-error.patch")
-        (musl-patches + "/0026-undef-stdin-for-references-using-stdin-as-a-struct-m.patch")
-        (musl-patches + "/0027-adjust-header-inclusion-order-to-avoid-redeclaration.patch")
-        (musl-patches + "/0028-build-path.c-avoid-boot-time-segfault-for-musl.patch")
+      map (patch: "${oe-core}/meta/recipes-core/systemd/systemd/${patch}") [
+        "0003-missing_type.h-add-comparison_fn_t.patch"
+        "0004-add-fallback-parse_printf_format-implementation.patch"
+        "0005-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch"
+        "0006-add-missing-FTW_-macros-for-musl.patch"
+        "0007-Use-uintmax_t-for-handling-rlim_t.patch"
+        "0008-Define-glibc-compatible-basename-for-non-glibc-syste.patch"
+        "0009-Do-not-disable-buffering-when-writing-to-oom_score_a.patch"
+        "0010-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch"
+        "0011-avoid-redefinition-of-prctl_mm_map-structure.patch"
+        "0012-do-not-disable-buffer-in-writing-files.patch"
+        "0013-Handle-__cpu_mask-usage.patch"
+        "0014-Handle-missing-gshadow.patch"
+        "0015-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch"
+        "0016-pass-correct-parameters-to-getdents64.patch"
+        "0017-Adjust-for-musl-headers.patch"
+        "0018-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch"
+        "0019-errno-util-Make-STRERROR-portable-for-musl.patch"
+        "0020-sd-event-Make-malloc_trim-conditional-on-glibc.patch"
+        "0021-shared-Do-not-use-malloc_info-on-musl.patch"
+        "0022-avoid-missing-LOCK_EX-declaration.patch"
+        "0023-include-signal.h-to-avoid-the-undeclared-error.patch"
+        "0024-undef-stdin-for-references-using-stdin-as-a-struct-m.patch"
+        "0025-adjust-header-inclusion-order-to-avoid-redeclaration.patch"
+        "0026-build-path.c-avoid-boot-time-segfault-for-musl.patch"
       ]
     );
 
@@ -437,6 +426,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
       (lib.mesonOption "debug-shell" "${bashInteractive}/bin/bash")
       (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
+      (lib.mesonOption "shellprofiledir" "${placeholder "out"}/etc/profile.d")
       (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
 
       # Attempts to check /usr/sbin and that fails in macOS sandbox because
@@ -677,6 +667,8 @@ stdenv.mkDerivation (finalAttrs: {
               "src/import/importd.c"
               # runs `tar` but also also creates a temporary directory with the string
               "src/import/pull-tar.c"
+              # tar referenced as file suffix
+              "src/shared/import-util.c"
             ];
           }
         ]
