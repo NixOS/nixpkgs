@@ -1,6 +1,6 @@
 use std::{
     cell::RefCell,
-    collections::{HashMap, HashSet},
+    collections::{BTreeSet, HashMap},
     io::{BufRead, Read, Write},
     os::unix::{fs::PermissionsExt, process::CommandExt},
     path::{Path, PathBuf},
@@ -53,6 +53,9 @@ use crate::{
 };
 
 type UnitInfo = HashMap<String, HashMap<String, Vec<String>>>;
+
+// We use a BTreeSet to get deterministic behavior.
+type StringSet = BTreeSet<String>;
 
 const SYSINIT_REACTIVATION_TARGET: &str = "sysinit-reactivation.target";
 
@@ -507,11 +510,11 @@ fn handle_modified_unit(
     new_base_unit_file: &Path,
     new_unit_info: Option<&UnitInfo>,
     active_cur: &HashMap<String, UnitState>,
-    units_to_stop: &mut HashSet<String>,
-    units_to_start: &mut HashSet<String>,
-    units_to_reload: &mut HashSet<String>,
-    units_to_restart: &mut HashSet<String>,
-    units_to_skip: &mut HashSet<String>,
+    units_to_stop: &mut StringSet,
+    units_to_start: &mut StringSet,
+    units_to_reload: &mut StringSet,
+    units_to_restart: &mut StringSet,
+    units_to_skip: &mut StringSet,
 ) -> Result<()> {
     let use_restart_as_stop_and_start = new_unit_info.is_none();
 
@@ -695,7 +698,7 @@ fn unrecord_unit(p: impl AsRef<Path>, unit: &str) {
     }
 }
 
-fn map_from_list_file(p: impl AsRef<Path>) -> HashSet<String> {
+fn map_from_list_file(p: impl AsRef<Path>) -> StringSet {
     std::fs::read_to_string(p)
         .unwrap_or_default()
         .lines()
@@ -783,7 +786,7 @@ fn path_to_unit_name(bin_path: &Path, path: &str) -> String {
 
 // Returns a set containing the same contents as the passed in `units`, minus the units in
 // `units_to_filter`.
-fn filter_units(units_to_filter: &HashSet<String>, units: &HashSet<String>) -> HashSet<String> {
+fn filter_units(units_to_filter: &StringSet, units: &StringSet) -> StringSet {
     units
         .difference(units_to_filter)
         .map(|string| string.to_owned())
@@ -879,7 +882,7 @@ fn format_unit_slice(units: &[String]) -> String {
     units.join(", ")
 }
 
-fn format_unit_set(units: &HashSet<String>) -> String {
+fn format_unit_set(units: &StringSet) -> String {
     let vec = units.iter().cloned().collect::<Vec<_>>();
     format_unit_slice(&vec)
 }
@@ -1057,9 +1060,9 @@ won't take effect until you reboot the system.
     let handler = SigHandler::Handler(handle_sigpipe);
     unsafe { signal::signal(Signal::SIGPIPE, handler) }.context("Failed to set SIGPIPE handler")?;
 
-    let mut units_to_stop = HashSet::new();
-    let mut units_to_skip = HashSet::new();
-    let mut units_to_filter = HashSet::new(); // units not shown
+    let mut units_to_stop = StringSet::new();
+    let mut units_to_skip = StringSet::new();
+    let mut units_to_filter = StringSet::new(); // units not shown
 
     let mut units_to_start = map_from_list_file(START_LIST_FILE);
     let mut units_to_restart = map_from_list_file(RESTART_LIST_FILE);
@@ -1905,7 +1908,7 @@ fn main() -> anyhow::Result<()> {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::{HashMap, HashSet};
+    use super::*;
 
     #[test]
     fn parse_fstab() {
@@ -1957,16 +1960,16 @@ invalid
     #[test]
     fn filter_units() {
         assert_eq!(
-            super::filter_units(&HashSet::new(), &HashSet::new()),
-            HashSet::new()
+            super::filter_units(&StringSet::new(), &StringSet::new()),
+            StringSet::new()
         );
 
         assert_eq!(
             super::filter_units(
-                &HashSet::from(["foo".to_string()]),
-                &HashSet::from(["foo".to_string(), "bar".to_string()])
+                &StringSet::from(["foo".to_string()]),
+                &StringSet::from(["foo".to_string(), "bar".to_string()])
             ),
-            HashSet::from(["bar".to_string()])
+            StringSet::from(["bar".to_string()])
         );
     }
 
