@@ -2446,9 +2446,7 @@ with pkgs;
     inherit (darwin) libobjc libresolv;
   };
 
-  gping = callPackage ../tools/networking/gping {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  gping = callPackage ../tools/networking/gping { };
 
   greg = callPackage ../applications/audio/greg {
     pythonPackages = python3Packages;
