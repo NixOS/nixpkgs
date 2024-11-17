@@ -6224,6 +6224,8 @@ self: super: with self; {
 
   iniparse = callPackage ../development/python-modules/iniparse { };
 
+  inject = callPackage ../development/python-modules/inject { };
+
   injector = callPackage ../development/python-modules/injector { };
 
   inkbird-ble = callPackage ../development/python-modules/inkbird-ble { };
