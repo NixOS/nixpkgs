@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage rec {
     description = "Linux AMDGPU Controller";
     homepage = "https://github.com/ilya-zlobintsev/LACT";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ figsoda atemu ];
     platforms = lib.platforms.linux;
     mainProgram = "lact";
   };
