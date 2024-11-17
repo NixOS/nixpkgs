@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , installShellFiles
 , testers
+, nix-update-script
 , go-task
 }:
 
@@ -46,10 +47,14 @@ buildGoModule rec {
       --replace-fail '#compdef task' '#compdef task go-task'
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = go-task;
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = go-task;
+      };
     };
+
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
