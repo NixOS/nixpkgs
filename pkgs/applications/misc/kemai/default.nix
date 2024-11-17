@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   magic-enum,
   range-v3,
@@ -19,23 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "kemai";
-  version = "0.10.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "AlexandrePTJ";
     repo = "kemai";
-    rev = version;
-    hash = "sha256-wclBAgeDyAIw/nGF6lzIwbwdoZMBTu+tjxsnIxIkODM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2Cyrd0fKaEHkDaKF8lFwuoLvl6553rp3ET2xLUUrTnk=";
   };
-
-  patches = [
-    # Backport the fix for an issue where LICENSE.txt ends up in /bin
-    # Remove in next release
-    (fetchpatch {
-      url = "https://github.com/AlexandrePTJ/kemai/commit/e279679dd7308efebe004252d168d7308f3b99ce.patch";
-      hash = "sha256-5cmRRMVATf4ul4HhaQKiE0yTN2qd+MfNFQzGTLLpOyg=";
-    })
-  ];
 
   buildInputs = [
     qtbase
@@ -62,12 +52,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Kimai desktop client written in QT6";
     homepage = "https://github.com/AlexandrePTJ/kemai";
-    license = licenses.mit;
-    maintainers = with maintainers; [ poelzi ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ poelzi ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "Kemai";
   };
