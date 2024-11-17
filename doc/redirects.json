@@ -3899,6 +3899,12 @@
   "sec-emacs-config": [
     "index.html#sec-emacs-config"
   ],
+  "sec-emacs-lisp": [
+    "index.html#sec-emacs-lisp"
+  ],
+  "sec-emacs-lisp-packages-bulk-update": [
+    "index.html#sec-emacs-lisp-packages-bulk-update"
+  ],
   "sec-firefox": [
     "index.html#sec-firefox"
   ],
