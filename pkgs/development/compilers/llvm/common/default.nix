@@ -1006,6 +1006,13 @@ let
         ++ [
           (metadata.getVersionFile "compiler-rt/X86-support-extension.patch") # Add support for i486 i586 i686 by reusing i386 config
         ]
+        ++ lib.optional (lib.versions.major metadata.release_version == "12") (fetchpatch {
+          # fixes the parallel build on aarch64 darwin
+          name = "fix-symlink-race-aarch64-darwin.patch";
+          url = "https://github.com/llvm/llvm-project/commit/b31080c596246bc26d2493cfd5e07f053cf9541c.patch";
+          relative = "compiler-rt";
+          hash = "sha256-Cv2NC8402yU7QaTR6TzdH+qyWRy+tTote7KKWtKRWFQ=";
+        })
         ++ lib.optional (
           lib.versions.major metadata.release_version == "12"
           || (
