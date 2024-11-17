@@ -1,12 +1,10 @@
-from __future__ import annotations
-
 import os
 import platform
 import re
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, ClassVar, TypedDict, override
+from typing import Any, ClassVar, Self, TypedDict, override
 
 
 class NRError(Exception):
@@ -54,15 +52,15 @@ class Flake:
         return f"{self.path}#{self.attr}"
 
     @classmethod
-    def parse(cls, flake_str: str, hostname: str | None = None) -> Flake:
+    def parse(cls, flake_str: str, hostname: str | None = None) -> Self:
         m = cls._re.match(flake_str)
         assert m is not None, f"got no matches for {flake_str}"
         attr = m.group("attr")
         nixos_attr = f"nixosConfigurations.{attr or hostname or "default"}"
-        return Flake(Path(m.group("path")), nixos_attr)
+        return cls(Path(m.group("path")), nixos_attr)
 
     @classmethod
-    def from_arg(cls, flake_arg: Any) -> Flake | None:
+    def from_arg(cls, flake_arg: Any) -> Self | None:
         hostname = platform.node()
         match flake_arg:
             case str(s):
@@ -106,15 +104,15 @@ class Profile:
     name: str
     path: Path
 
-    @staticmethod
-    def from_name(name: str = "system") -> Profile:
+    @classmethod
+    def from_name(cls, name: str = "system") -> Self:
         match name:
             case "system":
-                return Profile(name, Path("/nix/var/nix/profiles/system"))
+                return cls(name, Path("/nix/var/nix/profiles/system"))
             case _:
                 path = Path("/nix/var/nix/profiles/system-profiles") / name
                 path.parent.mkdir(mode=0o755, parents=True, exist_ok=True)
-                return Profile(name, path)
+                return cls(name, path)
 
 
 @dataclass(frozen=True)
@@ -122,10 +120,10 @@ class SSH:
     host: str
     opts: list[str]
 
-    @staticmethod
-    def from_arg(host: str | None) -> SSH | None:
+    @classmethod
+    def from_arg(cls, host: str | None) -> Self | None:
         if host:
             opts = os.getenv("SSH_OPTS", "").split()
-            return SSH(host, opts)
+            return cls(host, opts)
         else:
             return None

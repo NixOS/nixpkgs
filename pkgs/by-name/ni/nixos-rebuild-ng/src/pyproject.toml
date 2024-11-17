@@ -38,8 +38,6 @@ ignore_missing_imports = true
 extend-select = [
     # ensure imports are sorted
     "I",
-    # require 'from __future__ import annotations'
-    "FA102",
     # require `check` argument for `subprocess.run`
     "PLW1510",
 ]
