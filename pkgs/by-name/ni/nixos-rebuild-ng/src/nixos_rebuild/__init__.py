@@ -7,8 +7,6 @@ import sys
 from subprocess import run
 from typing import assert_never
 
-from tabulate import tabulate
-
 from .models import Action, Flake, NRError, Profile
 from .nix import (
     edit,
@@ -177,6 +175,8 @@ def execute(argv: list[str]) -> None:
             if args.json:
                 print(json.dumps(generations, indent=2))
             else:
+                from tabulate import tabulate
+
                 headers = {
                     "generation": "Generation",
                     "date": "Build-date",

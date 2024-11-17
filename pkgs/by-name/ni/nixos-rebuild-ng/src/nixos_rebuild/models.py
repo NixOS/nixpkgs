@@ -46,9 +46,7 @@ class Action(Enum):
 class Flake:
     path: Path
     attr: str
-    _re: ClassVar[re.Pattern[str]] = re.compile(
-        r"^(?P<path>[^\#]*)\#?(?P<attr>[^\#\"]*)$"
-    )
+    _re: ClassVar = re.compile(r"^(?P<path>[^\#]*)\#?(?P<attr>[^\#\"]*)$")
 
     @override
     def __str__(self) -> str:
