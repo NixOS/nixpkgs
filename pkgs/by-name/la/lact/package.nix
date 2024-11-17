@@ -9,7 +9,6 @@
 , libdrm
 , vulkan-loader
 , coreutils
-, hwdata
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -66,12 +65,12 @@ rustPlatform.buildRustPackage rec {
       --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux AMDGPU Controller";
     homepage = "https://github.com/ilya-zlobintsev/LACT";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
+    platforms = lib.platforms.linux;
     mainProgram = "lact";
   };
 }
