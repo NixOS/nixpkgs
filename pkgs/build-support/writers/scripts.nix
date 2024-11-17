@@ -587,8 +587,8 @@ rec {
     ''
       (println "hello world")
     ''
-    :::
     ```
+    :::
   */
   writeBabashka =
     name:
