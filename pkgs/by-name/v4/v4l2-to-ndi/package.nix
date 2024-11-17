@@ -55,7 +55,7 @@ stdenv.mkDerivation {
       pinpox
       MayNiklas
     ];
-    mainProgram = "v4l2-to-ndi";
+    mainProgram = "v4l2ndi";
     platforms = platforms.linux;
   };
 }
