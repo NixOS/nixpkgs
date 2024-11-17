@@ -48,7 +48,7 @@ stdenv.mkDerivation {
       shaderc
       spirv-tools
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       wrapGAppsHook4
     ];
 
@@ -66,13 +66,13 @@ stdenv.mkDerivation {
       yaml-cpp
       zstd
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       ffts
       gtkmm3
       libtirpc
     ]
     ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_11
       (darwinMinVersionHook "10.15")
       moltenvk
@@ -84,7 +84,7 @@ stdenv.mkDerivation {
       --replace-fail '"/share/' '"/../share/'
   '';
 
-  cmakeFlags = lib.optionals stdenv.isDarwin [
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_INSTALL_RPATH=${lib.strings.makeLibraryPath [ vulkan-loader ]}"
   ];
 

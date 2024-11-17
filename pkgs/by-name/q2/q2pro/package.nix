@@ -21,8 +21,8 @@
   wayland-scanner,
   makeWrapper,
   versionCheckHook,
-  x11Support ? stdenv.isLinux,
-  waylandSupport ? stdenv.isLinux,
+  x11Support ? stdenv.hostPlatform.isLinux,
+  waylandSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: rec {
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     (lib.mesonBool "variable-fps" true)
     (lib.mesonEnable "wayland" waylandSupport)
     (lib.mesonEnable "x11" x11Support)
-    (lib.mesonEnable "icmp-errors" stdenv.isLinux)
+    (lib.mesonEnable "icmp-errors" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "windows-crash-dumps" false)
   ];
 

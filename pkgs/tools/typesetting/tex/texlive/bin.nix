@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, buildPackages
 , texlive
 , zlib, libiconv, libpng, libX11
-, freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
+, freetype, ttfautohint, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
 , perl, perlPackages, python3Packages, pkg-config, cmake, ninja
 , libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr, mupdf-headless
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
@@ -267,7 +267,7 @@ core-big = stdenv.mkDerivation {
   ''
   # force XeTeX to use fontconfig instead of Core Text, so that fonts can be made available via FONTCONFIG_FILE,
   # by tricking configure into thinking that the relevant test result is already in the config cache
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export kpse_cv_have_ApplicationServices=no
   '';
 
@@ -355,6 +355,7 @@ dvisvgm = stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-manpage" # man pages are provided by the doc container
+    "--with-ttfautohint"
   ];
 
   # PDF handling requires mutool (from mupdf) since Ghostscript 10.01
@@ -364,7 +365,7 @@ dvisvgm = stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ core brotli ghostscript zlib freetype woff2 potrace xxHash mupdf-headless ];
+  buildInputs = [ core brotli ghostscript zlib freetype ttfautohint woff2 potrace xxHash mupdf-headless ];
 
   enableParallelBuilding = true;
 };

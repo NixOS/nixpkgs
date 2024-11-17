@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "--with-working-dir=/var/lib/bacula"
     "--mandir=\${out}/share/man"
   ] ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "ac_cv_func_setpgrp_void=yes"
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # bacula’s `configure` script fails to detect CoreFoundation correctly,
       # but these symbols are available in the nixpkgs CoreFoundation framework.
       "gt_cv_func_CFLocaleCopyCurrent=yes"
