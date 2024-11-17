@@ -1,5 +1,6 @@
 { lib
 , rustPlatform
+, stdenv
 , fetchFromGitHub
 , blueprint-compiler
 , pkg-config
@@ -60,9 +61,8 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 res/io.github.lact-linux.png -t $out/share/pixmaps
   '';
 
-  postFixup = ''
-    patchelf $out/bin/.lact-wrapped \
-      --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
+  postFixup = lib.optionalString stdenv.targetPlatform.isElf ''
+    patchelf $out/bin/.lact-wrapped --add-needed libvulkan.so --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
   meta = {
