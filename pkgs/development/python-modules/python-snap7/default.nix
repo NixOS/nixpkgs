@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "2.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "gijzelaerr";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   prePatch = ''
     substituteInPlace snap7/common.py \
-      --replace "lib_location = None" "lib_location = '${snap7}/lib/libsnap7.so'"
+      --replace-fail "lib_location = None" "lib_location = '${snap7}/lib/libsnap7.so'"
   '';
 
   build-system = [ setuptools ];
@@ -38,9 +38,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python wrapper for the snap7 PLC communication library";
-    mainProgram = "snap7-server";
     homepage = "https://github.com/gijzelaerr/python-snap7";
+    changelog = "https://github.com/gijzelaerr/python-snap7/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ freezeboy ];
+    mainProgram = "snap7-server";
   };
 }
