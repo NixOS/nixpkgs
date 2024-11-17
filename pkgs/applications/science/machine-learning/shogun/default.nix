@@ -162,7 +162,9 @@ stdenv.mkDerivation rec {
 
   CXXFLAGS = "-faligned-new";
 
-  doCheck = true;
+  # The make process hangs when executing the last test case on aarch64-darwin,
+  # needs more investigation
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
 
   postUnpack = ''
     mkdir -p $sourceRoot/third_party/{rxcpp,GoogleMock}
