@@ -39,10 +39,6 @@
   }
   ```
 
-  ## optionsDocBook
-
-  deprecated since 23.11 and will be removed in 24.05.
-
   ## optionsAsciiDoc
 
   Documentation rendered as AsciiDoc. This is useful for e.g. man pages.
@@ -219,6 +215,4 @@ in rec {
       echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
       echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
     '';
-
-  optionsDocBook = throw "optionsDocBook has been removed in 24.05";
 }
