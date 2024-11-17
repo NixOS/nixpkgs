@@ -1,30 +1,39 @@
-{ lib
-, stdenv
-, callPackage
-, fetchFromGitHub
-, rustPlatform
-, CoreServices
-, cmake
-, libiconv
-, useMimalloc ? false
-, doCheck ? true
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  libiconv,
+  useMimalloc ? false,
+  doCheck ? true,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2024-09-02";
-  cargoHash = "sha256-t45RzYkuywGByGWwUON3dW0aKjLYcFXB8uy4CybPuf4=";
+  version = "2024-11-11";
+  cargoHash = "sha256-lzbk/APerZih7+1ZxBKl0rUHCJJA8W8RIqalEfu+MFI=";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = version;
-    hash = "sha256-YH0kH5CSOnAuPUB1BUzUqvnKiv5SgDhfMNjrkki9Ahk=";
+    hash = "sha256-TDI1s2Sc/rpMLwful1NcTjYBbqzbQ4Mjw5PPOuOXVfg=";
   };
 
-  cargoBuildFlags = [ "--bin" "rust-analyzer" "--bin" "rust-analyzer-proc-macro-srv" ];
-  cargoTestFlags = [ "--package" "rust-analyzer" "--package" "proc-macro-srv-cli" ];
+  cargoBuildFlags = [
+    "--bin"
+    "rust-analyzer"
+    "--bin"
+    "rust-analyzer-proc-macro-srv"
+  ];
+  cargoTestFlags = [
+    "--package"
+    "rust-analyzer"
+    "--package"
+    "proc-macro-srv-cli"
+  ];
 
   # Code format check requires more dependencies but don't really matter for packaging.
   # So just ignore it.
@@ -33,7 +42,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = lib.optional useMimalloc cmake;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreServices
     libiconv
   ];
 
@@ -58,13 +66,18 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     updateScript = nix-update-script { };
     # FIXME: Pass overrided `rust-analyzer` once `buildRustPackage` also implements #119942
-    tests.neovim-lsp = callPackage ./test-neovim-lsp.nix { };
+    # FIXME: test script can't find rust std lib so hover doesn't return expected result
+    # https://github.com/NixOS/nixpkgs/pull/354304
+    # tests.neovim-lsp = callPackage ./test-neovim-lsp.nix { };
   };
 
   meta = with lib; {
     description = "Modular compiler frontend for the Rust language";
     homepage = "https://rust-analyzer.github.io";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     maintainers = with maintainers; [ oxalica ];
     mainProgram = "rust-analyzer";
   };
