@@ -20208,6 +20208,12 @@
     githubId = 37938646;
     matrix = "@sodiboo:arcticfoxes.net";
   };
+  sofiedotcafe = {
+    email = "jesper.halenius@jh-devv.com";
+    github = "sofiedotcafe";
+    githubId = 122896463;
+    name = "Sofie";
+  };
   softinio = {
     email = "code@softinio.com";
     github = "softinio";
