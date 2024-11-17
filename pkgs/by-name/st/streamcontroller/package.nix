@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     repo = "StreamController";
     owner = "StreamController";
     rev = version;
-    hash = "sha256-UBcsA9pAo7fONhk4vYXQU4EgSVKm1D7/7nvL9BaNIgo=";
+    hash = "sha256-w2ElVus0dgA375lv58q3H8ZmQ+8iBxC4vxtJSlKssoM=";
   };
 
   # The installation method documented upstream
