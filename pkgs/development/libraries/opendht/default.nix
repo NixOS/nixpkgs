@@ -12,22 +12,22 @@
 , libargon2
 , jsoncpp
 , restinio
-, http-parser
+, llhttp
 , openssl
 , fmt
 , enableProxyServerAndClient ? false
 , enablePushNotifications ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "opendht";
-  version = "3.2.0";
+  version = "3.2.0-unstable-2025-01-05";
 
   src = fetchFromGitHub {
     owner = "savoirfairelinux";
     repo = "opendht";
-    rev = "v${version}";
-    hash = "sha256-s172Sj1EvV7Lmnmd+xyKmYF2cDEa8Bot10ovggEsOFg=";
+    rev = "5237f0a3b3eb8965f294de706ad73596569ae1dd";
+    hash = "sha256-qErVKyZQR/asJ8qr0sRDaXZ8jUV7RaSLnJka5baWa7Q=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableProxyServerAndClient [
     jsoncpp
     restinio
-    http-parser
+    llhttp
     openssl
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
