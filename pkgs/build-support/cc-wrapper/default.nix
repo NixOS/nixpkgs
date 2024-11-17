@@ -629,6 +629,20 @@ stdenvNoCC.mkDerivation {
       echo " -L${libcxx_solib}" >> $out/nix-support/cc-ldflags
     ''
 
+    ## Prevent clang from seeing /usr/include. There is a desire to achieve this
+    ## through alternate means because it breaks -sysroot and related functionality.
+    #
+    # This flag prevents global system header directories from
+    # leaking through on non‐NixOS Linux. However, on macOS, the
+    # SDK path is used as the sysroot, and forcing `-nostdlibinc`
+    # breaks `-isysroot` with an unwrapped compiler. As macOS has
+    # no `/usr/include`, there’s essentially no risk to dropping
+    # the flag there. See discussion in NixOS/nixpkgs#191152.
+    #
+    + optionalString ((cc.isClang or false) && !targetPlatform.isDarwin) ''
+      echo " -nostdlibinc" >> $out/nix-support/cc-cflags
+    ''
+
     ##
     ## Man page and info support
     ##
