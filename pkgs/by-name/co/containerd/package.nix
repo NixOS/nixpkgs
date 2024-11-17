@@ -16,13 +16,15 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-DFAP+zjBYP2SpyD8KXGvI3i/PUZ6d4jdzGyFfr1lzj4=";
   };
 
   postPatch = "patchShebangs .";
 
   vendorHash = null;
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     go-md2man
@@ -63,15 +65,15 @@ buildGoModule rec {
     inherit (nixosTests) docker;
   } // kubernetes.tests;
 
-  meta = with lib; {
-    changelog = "https://github.com/containerd/containerd/releases/tag/${src.rev}";
-    homepage = "https://containerd.io/";
+  meta = {
     description = "Daemon to control runC";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    homepage = "https://containerd.io/";
+    changelog = "https://github.com/containerd/containerd/releases/tag/${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       offline
       vdemeester
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
