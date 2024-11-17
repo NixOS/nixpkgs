@@ -45,20 +45,20 @@ buildNpmPackage rec {
       zip
       makeWrapper
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       wayland-scanner
       copyDesktopItems
     ];
 
   buildInputs =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       libxkbcommon
       libX11
       libXtst
       libXi
       wayland
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_11
     ];
 
@@ -69,7 +69,7 @@ buildNpmPackage rec {
     # use our own node headers since we skip downloading them
     NIX_CFLAGS_COMPILE = "-I${nodejs}/include/node";
     # disable code signing on Darwin
-    CSC_IDENTITY_AUTO_DISCOVERY = lib.optionalString stdenv.isDarwin "false";
+    CSC_IDENTITY_AUTO_DISCOVERY = lib.optionalString stdenv.hostPlatform.isDarwin "false";
   };
 
   postConfigure = ''
@@ -103,7 +103,7 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    ${lib.optionalString stdenv.isLinux ''
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/share/kando
       cp -r out/*/{locales,resources{,.pak}} $out/share/kando
 
@@ -115,7 +115,7 @@ buildNpmPackage rec {
           --inherit-argv0
     ''}
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       cp -r out/*/Kando.app $out/Applications
       makeWrapper $out/Applications/Kando.app/Contents/MacOS/Kando $out/bin/kando

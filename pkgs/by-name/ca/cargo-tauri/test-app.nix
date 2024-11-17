@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       glib-networking
       libayatana-appindicator
       webkitgtk_4_1

@@ -167,7 +167,7 @@ in buildNpmPackage rec {
 
     mkdir $out
 
-    pushd apps/desktop/dist/linux-${lib.optionalString stdenv.isAarch64 "arm64-"}unpacked
+    pushd apps/desktop/dist/linux-${lib.optionalString stdenv.hostPlatform.isAarch64 "arm64-"}unpacked
     mkdir -p $out/opt/Bitwarden
     cp -r locales resources{,.pak} $out/opt/Bitwarden
     popd

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     perl
-  ] ++ lib.optionals stdenv.isDarwin [ apple-sdk_11 ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   makeFlags = [
     "PREFIX=$(out)"

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "format"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-narrowing";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch64 "-Wno-narrowing";
 
   nativeBuildInputs = [
     cmake

@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   # Stop build scripts from searching global include paths
   LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
   configurePhase = let genericFlags = "LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB";
-    linuxFlags = lib.optionalString stdenv.isLinux "LINUX_CONF_CC=$CC_FOR_BUILD";
-    freebsdFlags = lib.optionalString stdenv.isFreeBSD "FREEBSD_SYS=${freebsd.sys.src}/sys";
+    linuxFlags = lib.optionalString stdenv.hostPlatform.isLinux "LINUX_CONF_CC=$CC_FOR_BUILD";
+    freebsdFlags = lib.optionalString stdenv.hostPlatform.isFreeBSD "FREEBSD_SYS=${freebsd.sys.src}/sys";
     in "${genericFlags} ${linuxFlags} ${freebsdFlags} ./Configure -n ${dialect}";
 
   preBuild = ''
