@@ -62,11 +62,13 @@ rustPlatform.buildRustPackage rec {
     make $makeFlags install-{man,vim}
   '';
 
-  meta = with lib; {
-    homepage = "https://sydbox.exherbo.org/";
+  meta = {
     description = "seccomp-based application sandbox";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mvs ];
+    homepage = "https://sydbox.exherbo.org/";
+    changelog = "https://gitlab.exherbo.org/sydbox/sydbox/-/blob/v${version}/ChangeLog.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mvs ];
+    mainProgram = "syd";
+    platforms = lib.platforms.linux;
   };
 }
