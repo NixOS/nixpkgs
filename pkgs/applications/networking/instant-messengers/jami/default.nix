@@ -188,6 +188,12 @@ stdenv.mkDerivation rec {
     inherit src version meta;
     sourceRoot = "${src.name}/daemon";
 
+    # Fix for libgit2 breaking changes
+    postPatch = ''
+      substituteInPlace src/jamidht/conversationrepository.cpp \
+        --replace-fail "git_commit* const" "const git_commit*"
+    '';
+
     nativeBuildInputs = [
       autoreconfHook
       pkg-config
