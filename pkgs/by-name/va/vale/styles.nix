@@ -45,12 +45,12 @@ in
 {
   alex = buildStyle rec {
     name = "alex";
-    version = "0.2.2";
+    version = "0.2.3";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "alex";
       rev = "v${version}";
-      hash = "sha256-mfeMa+KlkqwyS+h+oo5p5+P2bsmZ0BOph2nbQiaoNqM=";
+      hash = "sha256-p0CQg6ZLusSKr57SugwlnoDEoPNVY3UIM8rHHxOL2l0=";
     };
     meta = {
       description = "Vale-compatible implementation of the guidelines enforced by the alex linter";
