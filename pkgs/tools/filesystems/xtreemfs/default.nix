@@ -74,8 +74,8 @@ stdenv.mkDerivation {
     substituteInPlace cpp/CMakeLists.txt \
       --replace '"/lib64" "/usr/lib64"' '"${attr.out}/lib" "${lib.getLib fuse}/lib"'
 
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${fuse}/include"
-    export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -L${fuse}/lib"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${lib.getDev fuse}/include"
+    export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -L${lib.getLib fuse}/lib"
 
     export DESTDIR=$out
 
