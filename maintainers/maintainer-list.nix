@@ -5798,6 +5798,12 @@
     githubId = 6806011;
     name = "Robert Schütz";
   };
+  dotmobo = {
+    email = "morgan.bohn@gmail.com";
+    github = "dotmobo";
+    githubId = 1997638;
+    name = ".mobo";
+  };
   dottedmag = {
     email = "dottedmag@dottedmag.net";
     github = "dottedmag";
