@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, nixosTests
-, nix-update-script
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+  nix-update-script,
+  python3,
 }:
 
 let
