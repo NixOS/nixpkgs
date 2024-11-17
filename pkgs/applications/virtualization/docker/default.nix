@@ -53,6 +53,9 @@ rec {
       pname = "docker-containerd";
       inherit version;
 
+      # We only need binaries
+      outputs = [ "out" ];
+
       src = fetchFromGitHub {
         owner = "containerd";
         repo = "containerd";
@@ -62,6 +65,9 @@ rec {
 
       buildInputs = oldAttrs.buildInputs
         ++ lib.optionals withSeccomp [ libseccomp ];
+
+      # See above
+      installTargets = "install";
     });
 
     docker-tini = tini.overrideAttrs {
