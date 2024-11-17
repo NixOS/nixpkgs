@@ -85,6 +85,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       offline
       vdemeester
+      getchoo
     ];
     mainProgram = "containerd";
     platforms = lib.platforms.linux;
