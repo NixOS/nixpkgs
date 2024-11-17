@@ -85,6 +85,7 @@ jobs:
             echo "Some new/changed Nix files are not properly formatted"
             echo "Please go to the Nixpkgs root directory, run \`nix-shell\`, then:"
             echo "nixfmt ${unformattedFiles[*]@Q}"
+            echo "Make sure your branch is up to date with master, rebase if not."
             echo "If you're having trouble, please ping @NixOS/nix-formatting"
             exit 1
           fi
