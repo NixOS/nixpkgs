@@ -185,7 +185,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "256.7";
+  version = "256.8";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -203,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${version}";
-    hash = "sha256-x214fOhEWLoiexRrN4lGx4Pqx2+jYN94w9GzntVRcZ4=";
+    hash = "sha256-L/MCsCCMVvK7LgxlaLFpnmsJuTu33cPaiMxIpHU7Tzg=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -232,6 +232,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0015-tpm2_context_init-fix-driver-name-checking.patch
     ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
     ./0017-meson.build-do-not-create-systemdstatedir.patch
+    ./0019-Revert-boot-Make-initrd_prepare-semantically-equival.patch
 
     # https://github.com/systemd/systemd/issues/33392
     (fetchpatch2 {

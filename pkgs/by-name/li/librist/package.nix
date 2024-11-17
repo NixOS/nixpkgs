@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   patches = [
     # https://github.com/NixOS/nixpkgs/pull/257020
     ./darwin.patch
+    # https://code.videolan.org/rist/librist/-/merge_requests/257
+    ./musl.patch
   ];
 
   nativeBuildInputs = [
