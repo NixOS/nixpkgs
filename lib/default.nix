@@ -152,7 +152,7 @@ let
       scrubOptionValue literalExpression literalExample
       showOption showOptionWithDefLocs showFiles
       unknownModule mkOption mkPackageOption mkPackageOptionMD
-      mdDoc literalMD;
+      literalMD;
     inherit (self.types) isType setType defaultTypeMerge defaultFunctor
       isOptionType mkOptionType;
     inherit (self.asserts)

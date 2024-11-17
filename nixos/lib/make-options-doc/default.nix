@@ -111,17 +111,7 @@
 # instead of printing warnings for eg options with missing descriptions (which may be lost
 # by nix build unless -L is given), emit errors instead and fail the build
 , warningsAreErrors ? true
-# allow docbook option docs if `true`. only markdown documentation is allowed when set to
-# `false`, and a different renderer may be used with different bugs and performance
-# characteristics but (hopefully) indistinguishable output.
-# deprecated since 23.11.
-# TODO remove in a while.
-, allowDocBook ? false
-# TODO remove in a while (see https://github.com/NixOS/nixpkgs/issues/300735)
-, markdownByDefault ? true
 }:
-
-assert markdownByDefault && ! allowDocBook;
 
 let
   rawOpts = lib.optionAttrSetToDocList options;
