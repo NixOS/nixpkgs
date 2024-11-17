@@ -104,6 +104,7 @@ in
         --zsh completions/zsh/_busted \
         --bash completions/bash/busted.bash
     '';
+    meta.mainProgram = "busted";
   });
 
   cqueues = prev.cqueues.overrideAttrs (oa: rec {
