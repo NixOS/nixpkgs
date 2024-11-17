@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-DYoily2dX/mbDFpQivGZZ/JMTIblooMzeoMw19w1Ky4=";
   };
 
-  nativeBuildInputs = [
+  buildInputs = [
     openssl_1_1
     libpcap
   ];
