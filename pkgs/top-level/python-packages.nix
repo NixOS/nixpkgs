@@ -15055,6 +15055,8 @@ self: super: with self; {
 
   spacy-alignments = callPackage ../development/python-modules/spacy-alignments { };
 
+  spacy-curated-transformers = callPackage ../development/python-modules/spacy-curated-transformers { };
+
   spacy-legacy = callPackage ../development/python-modules/spacy/legacy.nix { };
 
   spacy-loggers = callPackage ../development/python-modules/spacy-loggers { };
