@@ -10,13 +10,13 @@
 }:
 let
   pname = "flclash";
-  version = "0.8.67";
+  version = "0.8.68";
   src =
     (fetchFromGitHub {
       owner = "chen08209";
       repo = "FlClash";
       rev = "v${version}";
-      hash = "sha256-Z5iZ+7YOHKsf14qSg3dLaKCAC46e27xNdcojEHPaonU=";
+      hash = "sha256-0S3sNmOxM5SpRLpYzi4br5/PJnxDklFHsEAKiHd0vOM=";
       fetchSubmodules = true;
     }).overrideAttrs
       (_: {
@@ -27,7 +27,7 @@ let
   libclash = buildGoModule {
     inherit pname version src;
     modRoot = "./core";
-    vendorHash = "sha256-sruM0NM3JZJWtC+Y+faiiCveDXFybA1c3GvuhhnV7sM=";
+    vendorHash = "sha256-BpZB+0r7x7Ntldimo/nHXIu98jwhcA53l3kMav9lHkA=";
     buildPhase = ''
       runHook preBuild
 
