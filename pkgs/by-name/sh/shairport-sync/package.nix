@@ -18,19 +18,31 @@
 , libconfig
 , libpulseaudio
 , libjack2
+, libsndfile
+, libao
+, libsoundio
+, mosquitto
 , pipewire
 , soxr
+, alac
+, sndio
 , enableAirplay2 ? false
 , enableStdout ? true
 , enableAlsa ? true
+, enableSndio ? true
 , enablePulse ? true
 , enablePipe ? true
 , enablePipewire ? true
+, enableAo ? true
 , enableJack ? true
-, enableMetadata ? false
+, enableSoundio ? true
+, enableMetadata ? true
 , enableMpris ? stdenv.hostPlatform.isLinux
+, enableMqttClient ? true
 , enableDbus ? stdenv.hostPlatform.isLinux
 , enableSoxr ? true
+, enableAlac ? true
+, enableConvolution ? true
 , enableLibdaemon ? false
 }:
 
@@ -70,10 +82,16 @@ stdenv.mkDerivation rec {
   ]
   ++ optional enableLibdaemon libdaemon
   ++ optional enableAlsa alsa-lib
+  ++ optional enableSndio sndio
+  ++ optional enableMqttClient mosquitto
   ++ optional enablePulse libpulseaudio
   ++ optional enablePipewire pipewire
+  ++ optional enableAo libao
   ++ optional enableJack libjack2
+  ++ optional enableSoundio libsoundio
   ++ optional enableSoxr soxr
+  ++ optional enableAlac alac
+  ++ optional enableConvolution libsndfile
   ++ optionals enableAirplay2 [
     libplist
     libsodium
@@ -100,13 +118,19 @@ stdenv.mkDerivation rec {
   ++ optional enablePulse "--with-pa"
   ++ optional enablePipewire "--with-pw"
   ++ optional enableAlsa "--with-alsa"
+  ++ optional enableSndio "--with-sndio"
+  ++ optional enableAo "--with-ao"
   ++ optional enableJack "--with-jack"
+  ++ optional enableSoundio "--with-soundio"
   ++ optional enableStdout "--with-stdout"
   ++ optional enablePipe "--with-pipe"
   ++ optional enableSoxr "--with-soxr"
+  ++ optional enableAlac "--with-apple-alac"
+  ++ optional enableConvolution "--with-convolution"
   ++ optional enableDbus "--with-dbus-interface"
   ++ optional enableMetadata "--with-metadata"
   ++ optional enableMpris "--with-mpris-interface"
+  ++ optional enableMqttClient "--with-mqtt-client"
   ++ optional enableLibdaemon "--with-libdaemon"
   ++ optional enableAirplay2 "--with-airplay-2";
 
