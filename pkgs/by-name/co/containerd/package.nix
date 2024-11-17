@@ -15,6 +15,12 @@ buildGoModule rec {
   pname = "containerd";
   version = "2.0.0";
 
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
