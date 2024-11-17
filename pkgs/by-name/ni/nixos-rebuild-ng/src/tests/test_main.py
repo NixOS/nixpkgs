@@ -2,7 +2,7 @@ import textwrap
 from pathlib import Path
 from subprocess import PIPE, CompletedProcess
 from typing import Any
-from unittest.mock import call, patch
+from unittest.mock import ANY, call, patch
 
 import pytest
 
@@ -10,10 +10,7 @@ import nixos_rebuild as nr
 
 from .helpers import get_qualified_name
 
-
-@pytest.fixture(autouse=True)
-def setup(monkeypatch: Any) -> None:
-    monkeypatch.setenv("LOCALE_ARCHIVE", "/locale")
+DEFAULT_RUN_KWARGS = {"text": True, "errors": "surrogateescape", "env": ANY}
 
 
 def test_parse_args() -> None:
@@ -70,6 +67,7 @@ def test_parse_args() -> None:
     assert r2.attr == "bar"
 
 
+@patch.dict(nr.process.os.environ, {}, clear=True)
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
 @patch(get_qualified_name(nr.nix.shutil.which), autospec=True, return_value="/bin/git")
 def test_execute_nix_boot(mock_which: Any, mock_run: Any, tmp_path: Path) -> None:
@@ -99,17 +97,18 @@ def test_execute_nix_boot(mock_which: Any, mock_run: Any, tmp_path: Path) -> Non
                 ["nix-instantiate", "--find-file", "nixpkgs", "-vvv"],
                 stdout=PIPE,
                 check=False,
-                text=True,
+                **DEFAULT_RUN_KWARGS,
             ),
             call(
                 ["git", "-C", nixpkgs_path, "rev-parse", "--short", "HEAD"],
                 check=False,
                 stdout=PIPE,
-                text=True,
+                **DEFAULT_RUN_KWARGS,
             ),
             call(
                 ["git", "-C", nixpkgs_path, "diff", "--quiet"],
                 check=False,
+                **DEFAULT_RUN_KWARGS,
             ),
             call(
                 [
@@ -121,8 +120,8 @@ def test_execute_nix_boot(mock_which: Any, mock_run: Any, tmp_path: Path) -> Non
                     "-vvv",
                 ],
                 check=True,
-                text=True,
                 stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
             ),
             call(
                 [
@@ -133,16 +132,18 @@ def test_execute_nix_boot(mock_which: Any, mock_run: Any, tmp_path: Path) -> Non
                     config_path,
                 ],
                 check=True,
+                **DEFAULT_RUN_KWARGS,
             ),
             call(
                 [config_path / "bin/switch-to-configuration", "boot"],
-                env={"NIXOS_INSTALL_BOOTLOADER": "0", "LOCALE_ARCHIVE": "/locale"},
                 check=True,
+                **(DEFAULT_RUN_KWARGS | {"env": {"NIXOS_INSTALL_BOOTLOADER": "0"}}),
             ),
         ]
     )
 
 
+@patch.dict(nr.process.os.environ, {}, clear=True)
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
 def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
@@ -183,8 +184,8 @@ def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
                     "-v",
                 ],
                 check=True,
-                text=True,
                 stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
             ),
             call(
                 [
@@ -196,11 +197,12 @@ def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
                     config_path,
                 ],
                 check=True,
+                **DEFAULT_RUN_KWARGS,
             ),
             call(
                 ["sudo", config_path / "bin/switch-to-configuration", "switch"],
-                env={"NIXOS_INSTALL_BOOTLOADER": "1", "LOCALE_ARCHIVE": "/locale"},
                 check=True,
+                **(DEFAULT_RUN_KWARGS | {"env": {"NIXOS_INSTALL_BOOTLOADER": "1"}}),
             ),
         ]
     )
@@ -225,14 +227,15 @@ def test_execute_switch_rollback(mock_run: Any, tmp_path: Path) -> None:
                     Path("/nix/var/nix/profiles/system"),
                 ],
                 check=True,
+                **DEFAULT_RUN_KWARGS,
             ),
             call(
                 [
                     Path("/nix/var/nix/profiles/system/bin/switch-to-configuration"),
                     "switch",
                 ],
-                env={"NIXOS_INSTALL_BOOTLOADER": "1", "LOCALE_ARCHIVE": "/locale"},
                 check=True,
+                **DEFAULT_RUN_KWARGS,
             ),
         ]
     )
@@ -281,9 +284,9 @@ def test_execute_test_rollback(
                     Path("/nix/var/nix/profiles/system-profiles/foo"),
                     "--list-generations",
                 ],
-                text=True,
-                stdout=True,
                 check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
             ),
             call(
                 [
@@ -292,8 +295,8 @@ def test_execute_test_rollback(
                     ),
                     "test",
                 ],
-                env={"NIXOS_INSTALL_BOOTLOADER": "0", "LOCALE_ARCHIVE": "/locale"},
                 check=True,
+                **DEFAULT_RUN_KWARGS,
             ),
         ]
     )

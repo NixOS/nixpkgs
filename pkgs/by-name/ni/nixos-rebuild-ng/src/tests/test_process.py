@@ -1,6 +1,8 @@
 from typing import Any
 from unittest.mock import patch
 
+import pytest
+
 import nixos_rebuild.models as m
 import nixos_rebuild.process as p
 
@@ -9,13 +11,34 @@ from .helpers import get_qualified_name
 
 @patch(get_qualified_name(p.subprocess.run))
 def test_run(mock_run: Any) -> None:
-    p.run(["test", "--with", "flags"], check=True)
-    mock_run.assert_called_with(["test", "--with", "flags"], check=True)
+    p.run_wrapper(["test", "--with", "flags"], check=True)
+    mock_run.assert_called_with(
+        ["test", "--with", "flags"],
+        check=True,
+        text=True,
+        errors="surrogateescape",
+        env=None,
+    )
 
-    p.run(["test", "--with", "flags"], check=False, sudo=True)
-    mock_run.assert_called_with(["sudo", "test", "--with", "flags"], check=False)
+    with patch.dict(p.os.environ, {"PATH": "/path/to/bin"}, clear=True):
+        p.run_wrapper(
+            ["test", "--with", "flags"],
+            check=False,
+            sudo=True,
+            extra_env={"FOO": "bar"},
+        )
+    mock_run.assert_called_with(
+        ["sudo", "test", "--with", "flags"],
+        check=False,
+        text=True,
+        errors="surrogateescape",
+        env={
+            "PATH": "/path/to/bin",
+            "FOO": "bar",
+        },
+    )
 
-    p.run(
+    p.run_wrapper(
         ["test", "--with", "flags"],
         check=True,
         remote=m.SSH("user@localhost", ["--ssh", "opt"]),
@@ -23,12 +46,29 @@ def test_run(mock_run: Any) -> None:
     mock_run.assert_called_with(
         ["ssh", "--ssh", "opt", "user@localhost", "--", "test", "--with", "flags"],
         check=True,
+        text=True,
+        errors="surrogateescape",
+        env=None,
     )
 
-    p.run(
+    p.run_wrapper(
+        ["test", "--with", "flags"],
+        check=False,
+        env={"FOO": "bar"},
+    )
+    mock_run.assert_called_with(
+        ["test", "--with", "flags"],
+        check=False,
+        env={"FOO": "bar"},
+        text=True,
+        errors="surrogateescape",
+    )
+
+    p.run_wrapper(
         ["test", "--with", "flags"],
         check=True,
         sudo=True,
+        extra_env={"FOO": "bar"},
         remote=m.SSH("user@localhost", ["--ssh", "opt"]),
     )
     mock_run.assert_called_with(
@@ -39,9 +79,22 @@ def test_run(mock_run: Any) -> None:
             "user@localhost",
             "--",
             "sudo",
+            "env",
+            "FOO=bar",
             "test",
             "--with",
             "flags",
         ],
         check=True,
+        env=None,
+        text=True,
+        errors="surrogateescape",
     )
+
+    with pytest.raises(AssertionError):
+        p.run_wrapper(
+            ["test", "--with", "flags"],
+            check=False,
+            env={"foo": "bar"},
+            remote=m.SSH("user@localhost", []),
+        )

@@ -12,7 +12,7 @@ import nixos_rebuild.nix as n
 from .helpers import get_qualified_name
 
 
-@patch(get_qualified_name(n.run, n), autospec=True)
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_edit(mock_run: Any, monkeypatch: Any, tmpdir: Any) -> None:
     # Flake
     flake = m.Flake.parse(".#attr")
@@ -49,7 +49,7 @@ def test_get_nixpkgs_rev(mock_which: Any) -> None:
     path = Path("/path/to/nix")
 
     with patch(
-        get_qualified_name(n.run, n),
+        get_qualified_name(n.run_wrapper, n),
         autospec=True,
         side_effect=[CompletedProcess([], 0, "")],
     ) as mock_run:
@@ -58,7 +58,6 @@ def test_get_nixpkgs_rev(mock_which: Any) -> None:
             ["git", "-C", path, "rev-parse", "--short", "HEAD"],
             check=False,
             stdout=PIPE,
-            text=True,
         )
 
     expected_calls = [
@@ -66,7 +65,6 @@ def test_get_nixpkgs_rev(mock_which: Any) -> None:
             ["git", "-C", path, "rev-parse", "--short", "HEAD"],
             check=False,
             stdout=PIPE,
-            text=True,
         ),
         call(
             ["git", "-C", path, "diff", "--quiet"],
@@ -75,7 +73,7 @@ def test_get_nixpkgs_rev(mock_which: Any) -> None:
     ]
 
     with patch(
-        get_qualified_name(n.run, n),
+        get_qualified_name(n.run_wrapper, n),
         autospec=True,
         side_effect=[
             CompletedProcess([], 0, "0f7c82403fd6"),
@@ -86,7 +84,7 @@ def test_get_nixpkgs_rev(mock_which: Any) -> None:
         mock_run.assert_has_calls(expected_calls)
 
     with patch(
-        get_qualified_name(n.run, n),
+        get_qualified_name(n.run_wrapper, n),
         autospec=True,
         side_effect=[
             CompletedProcess([], 0, "0f7c82403fd6"),
@@ -118,7 +116,7 @@ def test_get_generations_from_nix_store(tmp_path: Path) -> None:
 
 
 @patch(
-    get_qualified_name(n.run, n),
+    get_qualified_name(n.run_wrapper, n),
     autospec=True,
     return_value=CompletedProcess(
         [],
@@ -183,7 +181,7 @@ def test_list_generations(mock_get_generations: Any, tmp_path: Path) -> None:
 
 
 @patch(
-    get_qualified_name(n.run, n),
+    get_qualified_name(n.run_wrapper, n),
     autospec=True,
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
@@ -209,13 +207,12 @@ def test_nixos_build_flake(mock_run: Any) -> None:
             "foo",
         ],
         check=True,
-        text=True,
         stdout=PIPE,
     )
 
 
 @patch(
-    get_qualified_name(n.run, n),
+    get_qualified_name(n.run_wrapper, n),
     autospec=True,
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
@@ -224,7 +221,6 @@ def test_nixos_build(mock_run: Any, monkeypatch: Any) -> None:
     mock_run.assert_called_with(
         ["nix-build", "<nixpkgs/nixos>", "--attr", "attr", "--nix-flag", "foo"],
         check=True,
-        text=True,
         stdout=PIPE,
     )
 
@@ -232,7 +228,6 @@ def test_nixos_build(mock_run: Any, monkeypatch: Any) -> None:
     mock_run.assert_called_with(
         ["nix-build", "file", "--attr", "preAttr.attr"],
         check=True,
-        text=True,
         stdout=PIPE,
     )
 
@@ -240,7 +235,6 @@ def test_nixos_build(mock_run: Any, monkeypatch: Any) -> None:
     mock_run.assert_called_with(
         ["nix-build", "file", "--attr", "attr", "--no-out-link"],
         check=True,
-        text=True,
         stdout=PIPE,
     )
 
@@ -248,12 +242,11 @@ def test_nixos_build(mock_run: Any, monkeypatch: Any) -> None:
     mock_run.assert_called_with(
         ["nix-build", "default.nix", "--attr", "preAttr.attr", "--keep-going"],
         check=True,
-        text=True,
         stdout=PIPE,
     )
 
 
-@patch(get_qualified_name(n.run, n), autospec=True)
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_rollback(mock_run: Any, tmp_path: Path) -> None:
     path = tmp_path / "test"
     path.touch()
@@ -269,7 +262,7 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
     path.touch()
     profile = m.Profile("system", path)
 
-    with patch(get_qualified_name(n.run, n), autospec=True) as mock_run:
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         mock_run.return_value = CompletedProcess(
             [],
             0,
@@ -288,12 +281,12 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
             == path.parent / "foo-2083-link"
         )
 
-    with patch(get_qualified_name(n.run, n), autospec=True) as mock_run:
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         mock_run.return_value = CompletedProcess([], 0, stdout="")
         assert n.rollback_temporary_profile(profile) is None
 
 
-@patch(get_qualified_name(n.run, n), autospec=True)
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_set_profile(mock_run: Any) -> None:
     profile_path = Path("/path/to/profile")
     config_path = Path("/path/to/config")
@@ -306,7 +299,7 @@ def test_set_profile(mock_run: Any) -> None:
     )
 
 
-@patch(get_qualified_name(n.run, n), autospec=True)
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
     profile_path = Path("/path/to/profile")
     config_path = Path("/path/to/config")
@@ -323,7 +316,7 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
         )
     mock_run.assert_called_with(
         [profile_path / "bin/switch-to-configuration", "switch"],
-        env={"NIXOS_INSTALL_BOOTLOADER": "0", "LOCALE_ARCHIVE": ""},
+        extra_env={"NIXOS_INSTALL_BOOTLOADER": "0"},
         check=True,
         sudo=False,
     )
@@ -342,6 +335,7 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
 
     with monkeypatch.context() as mp:
         mp.setenv("LOCALE_ARCHIVE", "/path/to/locale")
+        mp.setenv("PATH", "/path/to/bin")
         mp.setattr(Path, Path.exists.__name__, lambda self: True)
 
         n.switch_to_configuration(
@@ -356,7 +350,7 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
             config_path / "specialisation/special/bin/switch-to-configuration",
             "test",
         ],
-        env={"NIXOS_INSTALL_BOOTLOADER": "1", "LOCALE_ARCHIVE": "/path/to/locale"},
+        extra_env={"NIXOS_INSTALL_BOOTLOADER": "1"},
         check=True,
         sudo=True,
     )
@@ -372,11 +366,11 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
     ],
 )
 def test_upgrade_channels(mock_glob: Any) -> None:
-    with patch(get_qualified_name(n.run, n), autospec=True) as mock_run:
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.upgrade_channels(False)
     mock_run.assert_called_with(["nix-channel", "--update", "nixos"], check=False)
 
-    with patch(get_qualified_name(n.run, n), autospec=True) as mock_run:
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.upgrade_channels(True)
     mock_run.assert_has_calls(
         [
