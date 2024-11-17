@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postPatch = ''
-    sed -ie 's|/var/lib/wifish|${placeholder "out"}/var/lib/wifish|' wifish
+    sed -i -e 's|/var/lib/wifish|${placeholder "out"}/var/lib/wifish|' wifish
   '';
 
   dontConfigure = true;

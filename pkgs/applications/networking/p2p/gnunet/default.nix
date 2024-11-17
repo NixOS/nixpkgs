@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
     # /etc/{resolv.conf,hosts}, replace all references to `localhost'
     # by their IPv4 equivalent.
     find . \( -name \*.c -or -name \*.conf \) | \
-      xargs sed -ie 's|\<localhost\>|127.0.0.1|g'
+      xargs sed -i -e 's|\<localhost\>|127.0.0.1|g'
 
     # Make sure the tests don't rely on `/tmp', for the sake of chroot
     # builds.
     find . \( -iname \*test\*.c -or -name \*.conf \) | \
-      xargs sed -ie "s|/tmp|$TMPDIR|g"
+      xargs sed -i -e "s|/tmp|$TMPDIR|g"
   '';
 
   # unfortunately, there's still a few failures with impure tests

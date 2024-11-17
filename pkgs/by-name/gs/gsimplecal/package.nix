@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    sed -ie '/sys\/sysctl.h/d' src/Unique.cpp
+    sed -i -e '/sys\/sysctl.h/d' src/Unique.cpp
   '';
 
   enableParallelBuilding = true;

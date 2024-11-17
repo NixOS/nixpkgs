@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
     # Part of the same Makefile target which calls git to update submodules
     ln -s src submodules/lua/include
     # ldconfig is irrelevant, disable it inside `make installforce`.
-    sed -iE 's/ldconfig/echo skippin ldconfig/' Makefile
-    sed -iE '/ld.so.conf.d/d' Makefile
+    sed -i 's/ldconfig/echo skippin ldconfig/' Makefile
+    sed -i '/ld.so.conf.d/d' Makefile
   '';
 
   preInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

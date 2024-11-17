@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
      substituteInPlace ambfor/makefile --replace 'FFLAGS =' 'FFLAGS = -fallow-argument-mismatch'
 
-     sed -in '/^# DO NOT DELETE THIS LINE/q;' surf/Makefile
+     sed -i '/^# DO NOT DELETE THIS LINE/q;' surf/Makefile
   '';
 
   preInstall = ''

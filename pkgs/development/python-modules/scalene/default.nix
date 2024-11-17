@@ -59,8 +59,8 @@ buildPythonPackage rec {
     mkdir vendor/printf
     cp ${printf-src}/printf.c vendor/printf/printf.cpp
     cp -r ${printf-src}/* vendor/printf
-    sed -i"" 's/^#define printf printf_/\/\/&/' vendor/printf/printf.h
-    sed -i"" 's/^#define vsnprintf vsnprintf_/\/\/&/' vendor/printf/printf.h
+    sed -i 's/^#define printf printf_/\/\/&/' vendor/printf/printf.h
+    sed -i 's/^#define vsnprintf vsnprintf_/\/\/&/' vendor/printf/printf.h
   '';
 
   nativeBuildInputs = [

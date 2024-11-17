@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
   postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     ln -s ${mktable}/bin/mktable mktable
     # stop make from recompiling mktable
-    sed -ie 's!mktable.*:.*!mktable:!' Makefile.in
+    sed -i -e 's!mktable.*:.*!mktable:!' Makefile.in
   '';
 
   # updateAutotoolsGnuConfigScriptsHook necessary to build on FreeBSD native pending inclusion of

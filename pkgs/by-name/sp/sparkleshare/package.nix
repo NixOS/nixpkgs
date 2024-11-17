@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     # SparkleShare's default desktop file falls back to flatpak.
-    sed -ie "s_^Exec=.*_Exec=$out/bin/sparkleshare_" SparkleShare/Linux/SparkleShare.Autostart.desktop
+    sed -i -e "s_^Exec=.*_Exec=$out/bin/sparkleshare_" SparkleShare/Linux/SparkleShare.Autostart.desktop
 
     # Nix will manage the icon cache.
     echo '#!/bin/sh' >scripts/post-install.sh
