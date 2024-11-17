@@ -1154,8 +1154,8 @@ rec {
       "sha256-pM5+b6he5Gp9DuD2Uz/x+SYmVzxhZIh/gJ626S9I19g=";
 
   mypy-boto3-route53resolver =
-    buildMypyBoto3Package "route53resolver" "1.35.38"
-      "sha256-MVADJUXYj6HvnJIZZJVfi/rMRCJFE1BZfcoQKvlg69Y=";
+    buildMypyBoto3Package "route53resolver" "1.35.63"
+      "sha256-zKEDuWjd3Uh7QEFfz/1NUW8JAwhapDBAiXzAuPLXb/c=";
 
   mypy-boto3-rum =
     buildMypyBoto3Package "rum" "1.35.0"
