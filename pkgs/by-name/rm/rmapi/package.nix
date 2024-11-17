@@ -2,23 +2,23 @@
 
 buildGoModule rec {
   pname = "rmapi";
-  version = "0.0.25";
+  version = "0.0.27.1";
 
   src = fetchFromGitHub {
-    owner = "juruen";
+    owner = "ddvk";
     repo = "rmapi";
     rev = "v${version}";
-    sha256 = "sha256-7pwCd9tey7w5B8UgsMLHegPqmmY1prLM+Sk9o42X9lY=";
+    sha256 = "sha256-nwGTBCzA9+J3S3Gd3YgwCWAj/gMcoS19awluDZWZCbU=";
   };
 
-  vendorHash = "sha256-Id2RaiSxthyR6egDQz2zulbSZ4STRTaA3yQIr6Mx9kg=";
+  vendorHash = "sha256-5m3/XFyBEWM8UB3WylkBj+QWI5XsnlVD4K3BhKVVCB4=";
 
   doCheck = false;
 
   meta = with lib; {
     description = "Go app that allows access to the ReMarkable Cloud API programmatically";
-    homepage = "https://github.com/juruen/rmapi";
-    changelog = "https://github.com/juruen/rmapi/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/ddvk/rmapi";
+    changelog = "https://github.com/ddvk/rmapi/blob/v${version}/CHANGELOG.md";
     license = licenses.agpl3Only;
     maintainers = [ maintainers.nickhu ];
     mainProgram = "rmapi";
