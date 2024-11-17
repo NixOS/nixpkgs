@@ -87,6 +87,7 @@ buildPythonPackage rec {
     "tomlkit"
     "aiofiles"
     "markupsafe"
+    "pillow"
   ];
 
   pythonRemoveDeps = [
