@@ -89,7 +89,7 @@ recurseIntoAttrs {
       end
     '');
 
-    babashka = expectSuccessBin (writeBabashkaBin "test-writers-babashka-bin" ''
+    babashka = expectSuccessBin (writeBabashkaBin "test-writers-babashka-bin" { } ''
       (println "success")
     '');
 
@@ -205,7 +205,7 @@ recurseIntoAttrs {
       echo "success"
     '');
 
-    babashka = expectSuccess (writeBabashka "test-writers-babashka" ''
+    babashka = expectSuccess (writeBabashka "test-writers-babashka" { } ''
       (println "success")
     '');
 
