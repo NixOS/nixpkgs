@@ -61,12 +61,12 @@ in
 
   google = buildStyle rec {
     name = "Google";
-    version = "0.6.1";
+    version = "0.6.2";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Google";
       rev = "v${version}";
-      hash = "sha256-jSmfUgzlIbDVh2zLtnTNpM/z6dHMp358F9adLZ5+qcw=";
+      hash = "sha256-ldwK9tMA04H/jTd3dQeRX/sZOwZcyPb+I56cDg0vZDg=";
     };
     meta = {
       description = "Vale-compatible implementation of the Google Developer Documentation Style Guide";
