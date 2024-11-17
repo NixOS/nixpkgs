@@ -79,7 +79,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://sydbox.exherbo.org/";
     changelog = "https://gitlab.exherbo.org/sydbox/sydbox/-/blob/v${version}/ChangeLog.md";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ mvs ];
+    maintainers = with lib.maintainers; [
+      mvs
+      getchoo
+    ];
     mainProgram = "syd";
     platforms = lib.platforms.linux;
   };
