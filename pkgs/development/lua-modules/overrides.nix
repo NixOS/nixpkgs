@@ -575,11 +575,10 @@ in
 
   haskell-tools-nvim  = prev.haskell-tools-nvim.overrideAttrs(oa: {
     doCheck = lua.luaversion == "5.1";
-    nativeCheckInputs = [ final.nlua final.busted ];
     checkPhase = ''
       runHook preCheck
       export HOME=$(mktemp -d)
-      busted --lua=nlua
+      ${lib.getExe final.busted} --lua=${lib.getExe final.nlua}
       runHook postCheck
     '';
   });
