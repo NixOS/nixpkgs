@@ -4,7 +4,6 @@
   buildGoModule,
   fetchFromGitHub,
   go-md2man,
-  installShellFiles,
   kubernetes,
   nixosTests,
   util-linux,
@@ -21,30 +20,42 @@ buildGoModule rec {
     hash = "sha256-DFAP+zjBYP2SpyD8KXGvI3i/PUZ6d4jdzGyFfr1lzj4=";
   };
 
+  postPatch = "patchShebangs .";
+
   vendorHash = null;
 
   nativeBuildInputs = [
     go-md2man
-    installShellFiles
     util-linux
   ];
 
   buildInputs = [ btrfs-progs ];
 
-  BUILDTAGS = lib.optionals (btrfs-progs == null) [ "no_btrfs" ];
+  tags = lib.optionals (btrfs-progs == null) [ "no_btrfs" ];
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+
+    "BUILDTAGS=${toString tags}"
+    "REVISION=${src.rev}"
+    "VERSION=v${version}"
+  ];
+
+  installTargets = [
+    "install"
+    "install-doc"
+    "install-man"
+  ];
 
   buildPhase = ''
     runHook preBuild
-    patchShebangs .
-    make binaries "VERSION=v${version}" "REVISION=${src.rev}"
+    make $makeFlags
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    install -Dm555 bin/* -t $out/bin
-    installShellCompletion --bash contrib/autocomplete/ctr
-    installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
+    make $makeFlags $installTargets
     runHook postInstall
   '';
 
