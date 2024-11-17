@@ -2,14 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "keepmenu";
-  version = "1.4.0";
+  version = "1.4.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "keepmenu";
     rev = version;
-    hash = "sha256-3vFg+9Nw+NhuPJbrmBahXwa13wXlBg5IMYwJ+unn88k=";
+    hash = "sha256-Kzt2RqyYvOWnbkflwTHzlnpUaruVQvdGys57DDpH9o8=";
   };
 
   nativeBuildInputs = with python3Packages; [
