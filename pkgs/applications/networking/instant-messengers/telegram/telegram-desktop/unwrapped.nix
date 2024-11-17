@@ -46,14 +46,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "5.8.0";
+  version = "5.8.1";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-qx1IG9uQfonWrY+/UIFQ6t96FoS3v51E8ry1IKLqaRQ=";
+    hash = "sha256-9042n0fU+phXAll5o5uyoHLXbIyrGkNGrqTUTf9LWDc=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
