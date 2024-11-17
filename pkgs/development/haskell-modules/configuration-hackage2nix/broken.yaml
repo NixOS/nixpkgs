@@ -1533,7 +1533,6 @@ broken-packages:
   - enchant # failure in job https://hydra.nixos.org/build/233196992 at 2023-09-02
   - Encode # failure in job https://hydra.nixos.org/build/252712962 at 2024-03-16
   - encode-string # failure in job https://hydra.nixos.org/build/233251833 at 2023-09-02
-  - encoding # failure in job https://hydra.nixos.org/build/233216476 at 2023-09-02
   - encoding-io # failure in job https://hydra.nixos.org/build/233208714 at 2023-09-02
   - encryptable # failure in job https://hydra.nixos.org/build/233215911 at 2023-09-02
   - endo # failure in job https://hydra.nixos.org/build/233222561 at 2023-09-02
@@ -6236,7 +6235,6 @@ broken-packages:
   - trivia # failure in job https://hydra.nixos.org/build/233234176 at 2023-09-02
   - tropical # failure in job https://hydra.nixos.org/build/233212835 at 2023-09-02
   - tropical-geometry # failure in job https://hydra.nixos.org/build/234465815 at 2023-09-13
-  - true-name # failure in job https://hydra.nixos.org/build/252712188 at 2024-03-16
   - trust-chain # failure in job https://hydra.nixos.org/build/233252622 at 2023-09-02
   - tsession # failure in job https://hydra.nixos.org/build/233259005 at 2023-09-02
   - tslib # failure in job https://hydra.nixos.org/build/233225813 at 2023-09-02

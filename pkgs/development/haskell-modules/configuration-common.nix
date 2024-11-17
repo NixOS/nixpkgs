@@ -19,8 +19,8 @@ in
 with haskellLib;
 
 self: super: {
-  # enable list-transformer, jailbreaking is necessary until next release >0.13.0: https://github.com/ivanperez-keera/dunai/issues/427
-  dunai = doJailbreak (addBuildDepend self.list-transformer (enableCabalFlag "list-transformer" super.dunai));
+  # https://github.com/ivanperez-keera/dunai/issues/427
+  dunai = addBuildDepend self.list-transformer (enableCabalFlag "list-transformer" super.dunai);
 
   # Make sure that Cabal_* can be built as-is
   Cabal_3_10_3_0 = doDistribute (super.Cabal_3_10_3_0.override {
@@ -238,13 +238,7 @@ self: super: {
   # currently, cabal-plan seems to get not much maintenance
   cabal-plan = doJailbreak super.cabal-plan;
 
-  # test dependency has incorrect upper bound but still supports the newer dependency
-  # https://github.com/fused-effects/fused-effects/issues/451
-  # https://github.com/fused-effects/fused-effects/pull/452
-  fused-effects = doJailbreak super.fused-effects;
-
   # support for transformers >= 0.6
-  fused-effects-random = doJailbreak super.fused-effects-random;
   fused-effects-readline = doJailbreak super.fused-effects-readline;
 
   leveldb-haskell = overrideCabal (drv: {
@@ -882,9 +876,6 @@ self: super: {
   # https://github.com/nomeata/tasty-expected-failure/issues/21
   tasty-expected-failure = dontCheck super.tasty-expected-failure;
 
-  # Waiting on https://github.com/RaphaelJ/friday/pull/36
-  friday = doJailbreak super.friday;
-
   # Won't compile with recent versions of QuickCheck.
   inilist = dontCheck super.inilist;
 
@@ -1233,9 +1224,6 @@ self: super: {
   # dontCheck can be removed on the next package set bump
   vulkan-utils = dontCheck (addExtraLibrary pkgs.vulkan-headers super.vulkan-utils);
 
-  # https://github.com/dmwit/encoding/pull/3
-  encoding = doJailbreak (appendPatch ./patches/encoding-Cabal-2.0.patch super.encoding);
-
   # Work around overspecified constraint on github ==0.18.
   github-backup = doJailbreak super.github-backup;
 
@@ -1341,10 +1329,6 @@ self: super: {
     (dontCheckIf (!pkgs.postgresql.doCheck))
   ];
 
-  # Requires pqueue <1.5 but it works fine with pqueue-1.5.0.0
-  # https://github.com/haskell-beam/beam/pull/705
-  beam-migrate = doJailbreak super.beam-migrate;
-
   users-postgresql-simple = addTestToolDepends [
     pkgs.postgresql
     pkgs.postgresqlTestHook
@@ -1428,10 +1412,6 @@ self: super: {
 
   # https://github.com/erikd/hjsmin/issues/32
   hjsmin = dontCheck super.hjsmin;
-
-  # too strict bounds on text in the test suite
-  # https://github.com/audreyt/string-qq/pull/3
-  string-qq = doJailbreak super.string-qq;
 
   # Remove for hail > 0.2.0.0
   hail = overrideCabal (drv: {
@@ -1895,10 +1875,6 @@ self: super: {
 
   hercules-ci-agent = self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ] super.hercules-ci-agent;
 
-  # Test suite doesn't compile with aeson 2.0
-  # https://github.com/hercules-ci/hercules-ci-agent/pull/387
-  hercules-ci-api-agent = dontCheck super.hercules-ci-api-agent;
-
   hercules-ci-cli = lib.pipe super.hercules-ci-cli [
     unmarkBroken
     (overrideCabal (drv: { hydraPlatforms = super.hercules-ci-cli.meta.platforms; }))
@@ -1913,9 +1889,6 @@ self: super: {
     relative = "pipes-aeson";
     sha256 = "sha256-kFV6CcwKdMq+qSgyc+eIApnaycq5A++pEEVr2A9xvts=";
   }) super.pipes-aeson;
-
-  # 2024-09-18: transformers <0.6  https://github.com/Gabriella439/Haskell-Pipes-Extras-Library/pull/19
-  pipes-extras = assert super.pipes-extras.version == "1.0.15"; doJailbreak super.pipes-extras;
 
   moto-postgresql = appendPatches [
     # https://gitlab.com/k0001/moto/-/merge_requests/3
@@ -2038,10 +2011,6 @@ self: super: {
   #   https://github.com/noinia/hgeometry/commit/a6abecb1ce4a7fd96b25cc1a5c65cd4257ecde7a#commitcomment-49282301
   hgeometry-combinatorial = dontCheck (doJailbreak super.hgeometry-combinatorial);
 
-  # Too strict version bounds on ansi-terminal
-  # https://github.com/kowainik/co-log/pull/218
-  co-log = doJailbreak super.co-log;
-
   # Test suite has a too strict bound on base
   # https://github.com/jswebtools/language-ecmascript/pull/88
   # Test suite doesn't compile anymore
@@ -2069,16 +2038,13 @@ self: super: {
   # Need https://github.com/obsidiansystems/cli-extras/pull/12 and more
   cli-extras = doJailbreak super.cli-extras;
 
-  cli-git = lib.pipe super.cli-git [
-    doJailbreak
-    (addBuildTool pkgs.git)
-  ];
+  cli-git = addBuildTool pkgs.git super.cli-git;
 
   # Need https://github.com/obsidiansystems/cli-nix/pull/5 and more
   cli-nix = addBuildTools [
     pkgs.nix
     pkgs.nix-prefetch-git
-  ] (doJailbreak super.cli-nix);
+  ] super.cli-nix;
 
   nix-thunk = doJailbreak super.nix-thunk;
 
@@ -2404,8 +2370,6 @@ self: super: {
   # Invalid CPP in test suite: https://github.com/cdornan/memory-cd/issues/1
   memory-cd = dontCheck super.memory-cd;
 
-  # https://github.com/haskell/fgl/pull/99
-  fgl = doJailbreak super.fgl;
   fgl-arbitrary = doJailbreak super.fgl-arbitrary;
 
   # raaz-0.3 onwards uses backpack and it does not play nicely with
@@ -2478,9 +2442,6 @@ self: super: {
   # 2023-07-18: https://github.com/srid/ema/issues/156
   ema = doJailbreak super.ema;
 
-  # 2024-03-02: base <=4.18.0.0  https://github.com/srid/url-slug/pull/2
-  url-slug = doJailbreak super.url-slug;
-
   glirc = super.glirc.override {
     vty = self.vty_6_2;
     vty-unix = super.vty-unix.override {
@@ -2527,7 +2488,6 @@ self: super: {
   system-fileio = doJailbreak (dontCheck super.system-fileio);
 
   # Bounds too strict on base and ghc-prim: https://github.com/tibbe/ekg-core/pull/43 (merged); waiting on hackage release
-  ekg-core = assert super.ekg-core.version == "0.1.1.7"; doJailbreak super.ekg-core;
   hasura-ekg-core = doJailbreak super.hasura-ekg-core;
 
   # Test suite doesn't support hspec 2.8
@@ -2749,7 +2709,6 @@ self: super: {
 
   heist-extra = doJailbreak super.heist-extra;  # base <4.18.0.0.0
   unionmount = doJailbreak super.unionmount;  # base <4.18
-  path-tree = doJailbreak super.path-tree;  # base <4.18  https://github.com/srid/pathtree/pull/1
   tailwind = doJailbreak super.tailwind;  # base <=4.17.0.0
   tagtree = doJailbreak super.tagtree;  # base <=4.17  https://github.com/srid/tagtree/issues/1
   commonmark-wikilink = doJailbreak super.commonmark-wikilink; # base <4.18.0.0.0
@@ -2825,18 +2784,6 @@ self: super: {
   swagger2 = doJailbreak super.swagger2;
 
   html-charset = dontCheck super.html-charset;
-
-  # true-name-0.1.0.4 has been tagged, but has not been released to Hackage.
-  # Also, beyond 0.1.0.4 an additional patch is required to make true-name
-  # compatible with current versions of template-haskell
-  # https://github.com/liyang/true-name/pull/4
-  true-name = appendPatch (fetchpatch {
-    url = "https://github.com/liyang/true-name/compare/0.1.0.3...nuttycom:true-name:update_template_haskell.patch";
-    hash = "sha256-ZMBXGGc2X5AKXYbqgkLXkg5BhEwyj022E37sUEWahtc=";
-  }) (overrideCabal (drv: {
-    revision = null;
-    editedCabalFile = null;
-  }) super.true-name);
 
   # 2024-08-15: primitive >=0.9 && <0.10
   posix-api = doJailbreak super.posix-api;
@@ -2986,10 +2933,6 @@ self: super: {
   # https://github.com/isovector/type-errors/issues/9
   type-errors = dontCheck super.type-errors;
 
-  # 2024-05-15: Hackage distribution is missing files needed for tests
-  # https://github.com/isovector/cornelis/issues/150
-  cornelis = dontCheck super.cornelis;
-
   lzma = doJailbreak (super.lzma.overrideScope (self: super: {
     tasty = super.tasty_1_5_2;
   }));
@@ -3012,9 +2955,6 @@ self: super: {
   # 2024-07-09: zinza has bumped their QuickCheck and tasty dependencies beyond stackage lts.
   # Can possibly be removed once QuickCheck >= 2.15 and tasty >= 1.5
   zinza = dontCheck super.zinza;
-
-  # Doesn't officially support hedgehog > 1.3 yet: https://github.com/coot/free-algebras/pull/33
-  free-algebras = doJailbreak super.free-algebras;
 
   pdftotext = overrideCabal (drv: {
       postPatch = ''
