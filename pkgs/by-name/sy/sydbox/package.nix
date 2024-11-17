@@ -3,6 +3,7 @@
   fetchFromGitLab,
   libseccomp,
   mandoc,
+  nix-update-script,
   pkg-config,
   rustPlatform,
   scdoc,
@@ -61,6 +62,10 @@ rustPlatform.buildRustPackage rec {
 
     make $makeFlags install-{man,vim}
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "seccomp-based application sandbox";
