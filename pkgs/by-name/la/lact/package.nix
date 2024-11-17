@@ -45,13 +45,13 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace lact-daemon/src/server/system.rs \
-      --replace 'Command::new("uname")' 'Command::new("${coreutils}/bin/uname")'
+      --replace-fail 'Command::new("uname")' 'Command::new("${coreutils}/bin/uname")'
 
     substituteInPlace res/lactd.service \
-      --replace ExecStart={lact,$out/bin/lact}
+      --replace-fail ExecStart={lact,$out/bin/lact}
 
     substituteInPlace res/io.github.lact-linux.desktop \
-      --replace Exec={lact,$out/bin/lact}
+      --replace-fail Exec={lact,$out/bin/lact}
   '';
 
   postInstall = ''
