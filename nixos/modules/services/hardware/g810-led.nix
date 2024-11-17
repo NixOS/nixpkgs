@@ -36,9 +36,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.etc."g810-led/profile" = lib.mkIf (cfg.profile != null) cfg.profile;
+    environment.etc."g810-led/profile".text = lib.mkIf (cfg.profile != null) cfg.profile;
 
-    services.udev.packages = [ config.package ];
+    services.udev.packages = [ cfg.package ];
   };
 
   meta.maintainers = with lib.maintainers; [ GaetanLepage ];

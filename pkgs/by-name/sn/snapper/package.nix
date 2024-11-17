@@ -1,36 +1,72 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config, docbook_xsl, libxslt, docbook_xml_dtd_45
-, acl, attr, boost, btrfs-progs, coreutils, dbus, diffutils, e2fsprogs, libxml2
-, lvm2, pam, util-linux, json_c, nixosTests
-, ncurses, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  docbook_xsl,
+  libxslt,
+  docbook_xml_dtd_45,
+  acl,
+  attr,
+  boost,
+  btrfs-progs,
+  coreutils,
+  dbus,
+  diffutils,
+  e2fsprogs,
+  libxml2,
+  lvm2,
+  pam,
+  util-linux,
+  json_c,
+  nixosTests,
+  ncurses,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "snapper";
-  version = "0.11.2";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "sha256-U948AmyQ6c5+FCrDijOVLc/p2wwbq5IWwS66x+O960Y=";
+    sha256 = "sha256-Hh5etDx7nLBYC6VLeZS4F52w2VpaA4aZRvGUQ0QGBJc=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    autoreconfHook pkg-config
-    docbook_xsl libxslt docbook_xml_dtd_45
+    autoreconfHook
+    pkg-config
+    docbook_xsl
+    libxslt
+    docbook_xml_dtd_45
   ];
   buildInputs = [
-    acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
-    lvm2 pam util-linux json_c ncurses zlib
+    acl
+    attr
+    boost
+    btrfs-progs
+    dbus
+    diffutils
+    e2fsprogs
+    libxml2
+    lvm2
+    pam
+    util-linux
+    json_c
+    ncurses
+    zlib
   ];
 
   passthru.tests.snapper = nixosTests.snapper;
 
   postPatch = ''
     # Hard-coded root paths, hard-coded root paths everywhere...
-    for file in {client,data,pam,scripts,zypp-plugin}/Makefile.am; do
+    for file in {client,client/installation-helper,client/systemd-helper,data,pam,scripts,zypp-plugin}/Makefile.am; do
       substituteInPlace $file \
         --replace '$(DESTDIR)/usr' "$out" \
         --replace "DESTDIR" "out" \
@@ -41,14 +77,12 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--disable-ext4"	# requires patched kernel & e2fsprogs
+    "--disable-ext4" # requires patched kernel & e2fsprogs
     "DIFFBIN=${diffutils}/bin/diff"
     "RMBIN=${coreutils}/bin/rm"
   ];
 
   enableParallelBuilding = true;
-
-  env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   postInstall = ''
     rm -r $out/etc/cron.*
@@ -62,12 +96,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for Linux filesystem snapshot management";
     homepage = "http://snapper.io";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "snapper";
-    maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ markuskowa ];
+    platforms = lib.platforms.linux;
   };
 }
