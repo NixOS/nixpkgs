@@ -634,8 +634,8 @@ rec {
       "sha256-499CCePEtUnJhk3GJJ/BWhpYY5smN91yp3WuSnYBXJo=";
 
   mypy-boto3-iot =
-    buildMypyBoto3Package "iot" "1.35.33"
-      "sha256-4+EVog8UUrl70ixcAviqrLUJVMqmXjyX80fzAn80hso=";
+    buildMypyBoto3Package "iot" "1.35.63"
+      "sha256-Fj0ZKzDHx4t2qmroAbHfg1zXQ17CjKXiozROSLsoC4Y=";
 
   mypy-boto3-iot-data =
     buildMypyBoto3Package "iot-data" "1.35.34"
