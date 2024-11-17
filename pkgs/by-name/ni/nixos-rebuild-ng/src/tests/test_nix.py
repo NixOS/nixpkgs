@@ -16,7 +16,7 @@ from .helpers import get_qualified_name
 def test_edit(mock_run: Any, monkeypatch: Any, tmpdir: Any) -> None:
     # Flake
     flake = m.Flake.parse(".#attr")
-    n.edit(flake, ["--commit-lock-file"])
+    n.edit(flake, commit_lock_file=True)
     mock_run.assert_called_with(
         [
             "nix",
@@ -193,8 +193,8 @@ def test_nixos_build_flake(mock_run: Any) -> None:
     assert n.nixos_build_flake(
         "toplevel",
         flake,
-        ["--nix-flag", "foo"],
         no_link=True,
+        nix_flag="foo",
     ) == Path("/path/to/file")
     mock_run.assert_called_with(
         [
@@ -220,9 +220,7 @@ def test_nixos_build_flake(mock_run: Any) -> None:
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
 def test_nixos_build(mock_run: Any, monkeypatch: Any) -> None:
-    assert n.nixos_build("attr", None, None, ["--nix-flag", "foo"]) == Path(
-        "/path/to/file"
-    )
+    assert n.nixos_build("attr", None, None, nix_flag="foo") == Path("/path/to/file")
     mock_run.assert_called_with(
         ["nix-build", "<nixpkgs/nixos>", "--attr", "attr", "--nix-flag", "foo"],
         check=True,

@@ -15,20 +15,27 @@ from .models import (
     NRError,
     Profile,
 )
-from .utils import dict_to_flags, info
+from .utils import Args, dict_to_flags, info
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
 
 
-def edit(flake: Flake | None, nix_flags: list[str] | None = None) -> None:
+def edit(flake: Flake | None, **flake_flags: Args) -> None:
     "Try to find and open NixOS configuration file in editor."
     if flake:
         run(
-            ["nix", *FLAKE_FLAGS, "edit", *(nix_flags or []), "--", str(flake)],
+            [
+                "nix",
+                *FLAKE_FLAGS,
+                "edit",
+                *(dict_to_flags(flake_flags)),
+                "--",
+                str(flake),
+            ],
             check=False,
         )
     else:
-        if nix_flags:
+        if flake_flags:
             raise NRError("'edit' does not support extra Nix flags")
         nixos_config = Path(
             os.getenv("NIXOS_CONFIG")
@@ -49,10 +56,10 @@ def edit(flake: Flake | None, nix_flags: list[str] | None = None) -> None:
             raise NRError("cannot find NixOS config file")
 
 
-def find_file(file: str, nix_flags: list[str] | None = None) -> Path | None:
+def find_file(file: str, **nix_flags: Args) -> Path | None:
     "Find classic Nixpkgs location."
     r = run(
-        ["nix-instantiate", "--find-file", file, *(nix_flags or [])],
+        ["nix-instantiate", "--find-file", file, *dict_to_flags(nix_flags)],
         stdout=PIPE,
         check=False,
         text=True,
@@ -207,8 +214,7 @@ def nixos_build(
     attr: str,
     pre_attr: str | None,
     file: str | None,
-    nix_flags: list[str] | None = None,
-    **kwargs: bool | str,
+    **nix_flags: Args,
 ) -> Path:
     """Build NixOS attribute using classic Nix.
 
@@ -227,7 +233,7 @@ def nixos_build(
         ]
     else:
         run_args = ["nix-build", "<nixpkgs/nixos>", "--attr", attr]
-    run_args += dict_to_flags(kwargs) + (nix_flags or [])
+    run_args += dict_to_flags(nix_flags)
     r = run(run_args, check=True, text=True, stdout=PIPE)
     return Path(r.stdout.strip())
 
@@ -235,8 +241,7 @@ def nixos_build(
 def nixos_build_flake(
     attr: str,
     flake: Flake,
-    nix_flags: list[str] | None = None,
-    **kwargs: bool | str,
+    **flake_flags: Args,
 ) -> Path:
     """Build NixOS attribute using Flakes.
 
@@ -249,7 +254,7 @@ def nixos_build_flake(
         "--print-out-paths",
         f"{flake}.config.system.build.{attr}",
     ]
-    run_args += dict_to_flags(kwargs) + (nix_flags or [])
+    run_args += dict_to_flags(flake_flags)
     r = run(run_args, check=True, text=True, stdout=PIPE)
     return Path(r.stdout.strip())
 

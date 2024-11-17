@@ -21,19 +21,19 @@ from .nix import (
     switch_to_configuration,
     upgrade_channels,
 )
-from .utils import info
+from .utils import flags_to_dict, info
 
-VERBOSE = False
+VERBOSE = 0
 
 
-def parse_args(argv: list[str]) -> tuple[argparse.Namespace, list[str]]:
+def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="nixos-rebuild",
         description="Reconfigure a NixOS machine",
         add_help=False,
         allow_abbrev=False,
     )
-    parser.add_argument("--help", action="store_true")
+    parser.add_argument("--help", "-h", action="store_true")
     parser.add_argument("--file", "-f")
     parser.add_argument("--attr", "-A")
     parser.add_argument("--flake", nargs="?", const=True)
@@ -48,13 +48,44 @@ def parse_args(argv: list[str]) -> tuple[argparse.Namespace, list[str]]:
     parser.add_argument("--upgrade-all", action="store_true")
     parser.add_argument("--json", action="store_true")
     parser.add_argument("action", choices=Action.values(), nargs="?")
+    parser.add_argument("--verbose", "-v", action="count", default=0)
 
-    args, remainder = parser.parse_known_args(argv[1:])
+    common_group = parser.add_argument_group("Common flags")
+    common_group.add_argument("--include", "-I")
+    common_group.add_argument("--max-jobs", "-j")
+    common_group.add_argument("--cores")
+    common_group.add_argument("--log-format")
+    common_group.add_argument("--quiet", action="store_true")
+    common_group.add_argument("--print-build-logs", "-L", action="store_true")
+    common_group.add_argument("--show-trace", action="store_true")
+    common_group.add_argument("--keep-going", "-k", action="store_true")
+    common_group.add_argument("--keep-failed", "-K", action="store_true")
+    common_group.add_argument("--fallback", action="store_true")
+    common_group.add_argument("--repair", action="store_true")
+    common_group.add_argument("--option", nargs=2)
+
+    nix_group = parser.add_argument_group("Classic Nix flags")
+    nix_group.add_argument("--no-build-output", "-Q", action="store_true")
+
+    flake_group = parser.add_argument_group("Flake flags")
+    flake_group.add_argument("--accept-flake-config", action="store_true")
+    flake_group.add_argument("--refresh", action="store_true")
+    flake_group.add_argument("--impure", action="store_true")
+    flake_group.add_argument("--offline", action="store_true")
+    flake_group.add_argument("--no-net", action="store_true")
+    flake_group.add_argument("--recreate-lock-file", action="store_true")
+    flake_group.add_argument("--no-update-lock-file", action="store_true")
+    flake_group.add_argument("--no-write-lock-file", action="store_true")
+    flake_group.add_argument("--no-registries", action="store_true")
+    flake_group.add_argument("--commit-lock-file", action="store_true")
+    flake_group.add_argument("--update-input")
+    flake_group.add_argument("--override-input", nargs=2)
+
+    args = parser.parse_args(argv[1:])
 
     global VERBOSE
-    # Manually parse verbose flag since this is a nix flag that also affect
-    # the script
-    VERBOSE = any(v == "--verbose" or v.startswith("-v") for v in remainder)
+    # This flag affects both nix and this script
+    VERBOSE = args.verbose
 
     # https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/nixos-rebuild/nixos-rebuild.sh#L56
     if args.action == Action.DRY_RUN.value:
@@ -76,11 +107,48 @@ def parse_args(argv: list[str]) -> tuple[argparse.Namespace, list[str]]:
         r = run(["man", "8", "nixos-rebuild"], check=False)
         parser.exit(r.returncode)
 
-    return args, remainder
+    return args
 
 
 def execute(argv: list[str]) -> None:
-    args, nix_flags = parse_args(argv)
+    args = parse_args(argv)
+
+    common_flags = flags_to_dict(
+        args,
+        [
+            "verbose",
+            "include",
+            "max_jobs",
+            "cores",
+            "log_format",
+            "quiet",
+            "print_build_logs",
+            "show_trace",
+            "keep_going",
+            "keep_failed",
+            "fallback",
+            "repair",
+            "option",
+        ],
+    )
+    nix_flags = common_flags | flags_to_dict(args, ["no_build_output"])
+    flake_flags = common_flags | flags_to_dict(
+        args,
+        [
+            "accept_flake_config",
+            "refresh",
+            "impure",
+            "offline",
+            "no_net",
+            "recreate_lock_file",
+            "no_update_lock_file",
+            "no_write_lock_file",
+            "no_registries",
+            "commit_lock_file",
+            "update_input",
+            "override_input",
+        ],
+    )
 
     profile = Profile.from_name(args.profile_name)
     flake = Flake.from_arg(args.flake)
@@ -96,7 +164,7 @@ def execute(argv: list[str]) -> None:
     # untrusted tree.
     can_run = action in (Action.SWITCH, Action.BOOT, Action.TEST)
     if can_run and not flake:
-        nixpkgs_path = find_file("nixpkgs", nix_flags)
+        nixpkgs_path = find_file("nixpkgs", **nix_flags)
         rev = get_nixpkgs_rev(nixpkgs_path)
         if nixpkgs_path and rev:
             (nixpkgs_path / ".version-suffix").write_text(rev)
@@ -110,8 +178,8 @@ def execute(argv: list[str]) -> None:
                 path_to_config = nixos_build_flake(
                     "toplevel",
                     flake,
-                    nix_flags,
                     no_link=True,
+                    **flake_flags,
                 )
                 set_profile(profile, path_to_config)
             else:
@@ -119,8 +187,8 @@ def execute(argv: list[str]) -> None:
                     "system",
                     args.attr,
                     args.file,
-                    nix_flags,
                     no_out_link=True,
+                    **nix_flags,
                 )
                 set_profile(profile, path_to_config)
             switch_to_configuration(
@@ -142,18 +210,18 @@ def execute(argv: list[str]) -> None:
                 path_to_config = nixos_build_flake(
                     "toplevel",
                     flake,
-                    nix_flags,
                     keep_going=True,
                     dry_run=dry_run,
+                    **flake_flags,
                 )
             else:
                 path_to_config = nixos_build(
                     "system",
                     args.attr,
                     args.file,
-                    nix_flags,
                     keep_going=True,
                     dry_run=dry_run,
+                    **nix_flags,
                 )
             if action in (Action.TEST, Action.DRY_ACTIVATE):
                 switch_to_configuration(
@@ -168,21 +236,21 @@ def execute(argv: list[str]) -> None:
                 path_to_config = nixos_build_flake(
                     attr,
                     flake,
-                    nix_flags,
                     keep_going=True,
+                    **flake_flags,
                 )
             else:
                 path_to_config = nixos_build(
                     attr,
                     args.attr,
                     args.file,
-                    nix_flags,
                     keep_going=True,
+                    **nix_flags,
                 )
             vm_path = next(path_to_config.glob("bin/run-*-vm"), "./result/bin/run-*-vm")
             print(f"Done. The virtual machine can be started by running '{vm_path}'")
         case Action.EDIT:
-            edit(flake, nix_flags)
+            edit(flake, **flake_flags)
         case Action.DRY_RUN:
             assert False, "DRY_RUN should be a DRY_BUILD alias"
         case Action.LIST_GENERATIONS:

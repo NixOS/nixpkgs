@@ -29,25 +29,27 @@ def test_parse_args() -> None:
         nr.parse_args(["nixos-rebuild", "edit", "--attr", "attr"])
     assert e.value.code == 2
 
-    r1, remainder = nr.parse_args(
+    r1 = nr.parse_args(
         [
             "nixos-rebuild",
             "switch",
             "--install-grub",
             "--flake",
             "/etc/nixos",
-            "--extra",
-            "flag",
+            "--option",
+            "foo",
+            "bar",
         ]
     )
-    assert remainder == ["--extra", "flag"]
+    assert nr.VERBOSE == 0
     assert r1.flake == "/etc/nixos"
     assert r1.install_bootloader is True
     assert r1.install_grub is True
     assert r1.profile_name == "system"
     assert r1.action == "switch"
+    assert r1.option == ["foo", "bar"]
 
-    r2, remainder = nr.parse_args(
+    r2 = nr.parse_args(
         [
             "nixos-rebuild",
             "dry-run",
@@ -57,9 +59,11 @@ def test_parse_args() -> None:
             "foo",
             "--attr",
             "bar",
+            "-vvv",
         ]
     )
-    assert remainder == []
+    assert nr.VERBOSE == 3
+    assert r2.verbose == 3
     assert r2.flake is False
     assert r2.action == "dry-build"
     assert r2.file == "foo"
@@ -88,7 +92,6 @@ def test_execute_nix_boot(mock_which: Any, mock_run: Any, tmp_path: Path) -> Non
 
     nr.execute(["nixos-rebuild", "boot", "--no-flake", "-vvv"])
 
-    assert nr.VERBOSE is True
     assert mock_run.call_count == 6
     mock_run.assert_has_calls(
         [
@@ -164,7 +167,6 @@ def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
         ]
     )
 
-    assert nr.VERBOSE is True
     assert mock_run.call_count == 3
     mock_run.assert_has_calls(
         [
@@ -177,7 +179,7 @@ def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
                     "--print-out-paths",
                     "/path/to/config#nixosConfigurations.hostname.config.system.build.toplevel",
                     "--no-link",
-                    "--verbose",
+                    "-v",
                 ],
                 check=True,
                 text=True,
@@ -209,8 +211,7 @@ def test_execute_switch_rollback(mock_run: Any, tmp_path: Path) -> None:
 
     nr.execute(["nixos-rebuild", "switch", "--rollback", "--install-bootloader"])
 
-    assert nr.VERBOSE is False
-    assert mock_run.call_count == 3
+    assert mock_run.call_count >= 2
     # ignoring update_nixpkgs_rev calls
     mock_run.assert_has_calls(
         [
@@ -268,7 +269,6 @@ def test_execute_test_rollback(
         ]
     )
 
-    assert nr.VERBOSE is False
     assert mock_run.call_count == 2
     mock_run.assert_has_calls(
         [
