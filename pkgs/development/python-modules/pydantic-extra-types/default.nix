@@ -53,7 +53,7 @@ buildPythonPackage rec {
   ];
 
   # PermissionError accessing '/etc/localtime'
-  disabledTestPaths = lib.optionals stdenv.isDarwin [ "tests/test_pendulum_dt.py" ];
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_pendulum_dt.py" ];
 
   meta = with lib; {
     changelog = "https://github.com/pydantic/pydantic-extra-types/blob/${src.rev}/HISTORY.md";

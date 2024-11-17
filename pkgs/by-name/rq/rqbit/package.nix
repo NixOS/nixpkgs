@@ -47,13 +47,13 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-esDUzzVm5J8fKftBfk5StJzN1YzLa1p0t7BsoxzrowI=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
 
   buildInputs =
-    lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   preConfigure = ''
     mkdir -p crates/librqbit/webui/dist

@@ -104,7 +104,7 @@ assert useSysroot -> !(args.doCheck or true);
 
 stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "cargoLock" ]) // lib.optionalAttrs useSysroot {
   RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
-} // lib.optionalAttrs (stdenv.isDarwin && buildType == "debug") {
+} // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && buildType == "debug") {
   RUSTFLAGS =
     "-C split-debuginfo=packed "
     + lib.optionalString useSysroot "--sysroot ${sysroot} "
