@@ -8451,6 +8451,12 @@
     githubId = 6578603;
     name = "Jonas Rembser";
   };
+  gurjaka = {
+    name = "Gurami Esartia";
+    email = "esartia.gurika@gmail.com";
+    github = "Gurjaka";
+    githubId = 143032436;
+  };
   guserav = {
     github = "guserav";
     githubId = 28863828;
