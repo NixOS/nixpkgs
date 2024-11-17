@@ -13,14 +13,16 @@
 , tllist
 , fcft
 , enableCairo ? true
-, svgSupport ? true
 , pngSupport ? true
-# Optional dependencies
+, svgSupport ? true
+, svgBackend ? "nanosvg" # alternative: "librsvg"
+  # Optional dependencies
 , cairo
 , libpng
+, librsvg
 }:
 
-assert svgSupport -> enableCairo;
+assert (svgSupport && svgBackend == "nanosvg") -> enableCairo;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fuzzel";
@@ -54,14 +56,15 @@ stdenv.mkDerivation (finalAttrs: {
     tllist
     fcft
   ] ++ lib.optional enableCairo cairo
-    ++ lib.optional pngSupport libpng;
+  ++ lib.optional pngSupport libpng
+  ++ lib.optional (svgSupport && svgBackend == "librsvg") librsvg;
 
   mesonBuildType = "release";
 
   mesonFlags = [
-    "-Denable-cairo=${if enableCairo then "enabled" else "disabled"}"
-    "-Dpng-backend=${if pngSupport then "libpng" else "none"}"
-    "-Dsvg-backend=${if svgSupport then "nanosvg" else "none"}"
+    (lib.mesonEnable "enable-cairo" enableCairo)
+    (lib.mesonOption "png-backend" (if pngSupport then "libpng" else "none"))
+    (lib.mesonOption "svg-backend" (if svgSupport then svgBackend else "none"))
   ];
 
   meta = with lib; {
