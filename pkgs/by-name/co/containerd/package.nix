@@ -86,6 +86,7 @@ buildGoModule rec {
       offline
       vdemeester
     ];
+    mainProgram = "containerd";
     platforms = lib.platforms.linux;
   };
 }
