@@ -48,7 +48,7 @@ stdenv.mkDerivation (
 
       # Prefix hackery because of a bug in stdenv (it tries to `mkdir
       # $prefix', which doesn't work due to the DESTDIR).
-      configureFlags="--prefix=$prefix $configureFlags"
+      prependToVar configureFlags "--prefix=$prefix"
       dontAddPrefix=1
       prefix=$TMPDIR/inst$prefix
     '';

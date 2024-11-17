@@ -50,12 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     lua -e "" || {
         luajit -e "" && {
             export LUA_SUFFIX=jit
-            configureFlags="$configureFlags --lua-suffix=$LUA_SUFFIX"
+            appendToVar configureFlags "--lua-suffix=$LUA_SUFFIX"
         }
     }
     lua_inc="$(echo "${lua}/include"/*/)"
     if test -n "$lua_inc"; then
-        configureFlags="$configureFlags --with-lua-include=$lua_inc"
+        appendToVar configureFlags "--with-lua-include=$lua_inc"
     fi
   '';
 

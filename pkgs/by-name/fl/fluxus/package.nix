@@ -58,10 +58,8 @@ stdenv.mkDerivation {
     "RacketInclude=${racket}/include/racket"
     "RacketLib=${racket}/lib/racket"
     "DESTDIR=build"
+    "Prefix=${placeholder "out"}"
   ];
-  configurePhase = ''
-    sconsFlags+=" Prefix=$out"
-  '';
   installPhase = ''
     mkdir -p $out
     cp -r build$out/* $out/

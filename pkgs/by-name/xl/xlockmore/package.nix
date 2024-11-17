@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   # fine via PAM without super user privileges.
   configureFlags =
     [ "--disable-setuid"
+      "--enable-appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
     ] ++ (lib.optional (pam != null) "--enable-pam");
 
   postPatch =
@@ -27,7 +28,6 @@ stdenv.mkDerivation rec {
     in ''
       sed -i 's,\(for ac_dir in\),\1 ${inputs},' configure.ac
       sed -i 's,/usr/,/no-such-dir/,g' configure.ac
-      configureFlags+=" --enable-appdefaultdir=$out/share/X11/app-defaults"
     '';
 
   hardeningDisable = [ "format" ]; # no build output otherwise
