@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "3.16.0";
+  version = "3.18.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_translate";
     inherit version;
-    hash = "sha256-B5fZVMT26gcyKelQASugg6TMl1K0MdwGJOJZTih0ae8=";
+    hash = "sha256-v7/54cMaDbbO12h+s0Jg5FGgMJh83QP3fb/LyYjt82E=";
   };
 
   build-system = [ setuptools ];
