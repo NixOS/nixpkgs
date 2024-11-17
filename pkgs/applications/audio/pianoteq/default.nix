@@ -111,8 +111,6 @@ let
     stdenv.mkDerivation {
       inherit name;
       builder = writeShellScript "builder.sh" ''
-        source $stdenv/setup
-
         curlVersion=$(${curl}/bin/curl -V | head -1 | cut -d' ' -f2)
 
         # Curl flags to handle redirects, not use EPSV, handle cookies for
