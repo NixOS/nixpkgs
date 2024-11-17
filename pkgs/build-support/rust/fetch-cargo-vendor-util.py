@@ -118,18 +118,16 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
     out_dir.mkdir(exist_ok=True)
     shutil.copy(lockfile_path, out_dir / "Cargo.lock")
 
-    # create a pool with at most 10 concurrent jobs
-    with mp.Pool(min(10, mp.cpu_count())) as pool:
+    # fetch git trees sequentially, since fetching concurrently leads to flaky behaviour
+    if len(git_packages) != 0:
+        (out_dir / "git").mkdir()
+        for git_sha_rev, url in git_sha_rev_to_url.items():
+            download_git_tree(url, git_sha_rev, out_dir)
 
-        if len(git_packages) != 0:
-            (out_dir / "git").mkdir()
-            # run download jobs in parallel
-            git_args_gen = ((url, git_sha_rev, out_dir) for git_sha_rev, url in git_sha_rev_to_url.items())
-            pool.starmap(download_git_tree, git_args_gen)
-
+    # run tarball download jobs in parallel, with at most 5 concurrent download jobs
+    with mp.Pool(min(5, mp.cpu_count())) as pool:
         if len(registry_packages) != 0:
             (out_dir / "tarballs").mkdir()
-            # run download jobs in parallel
             tarball_args_gen = ((pkg, out_dir) for pkg in registry_packages)
             pool.starmap(download_tarball, tarball_args_gen)
 
