@@ -5,24 +5,16 @@
   ...
 }:
 let
-  inherit (builtins)
-    attrNames
-    head
-    map
-    match
-    readFile
-    ;
   inherit (lib) types;
   inherit (config.environment) etc;
   cfg = config.security.apparmor;
-  mkDisableOption =
-    name:
-    lib.mkEnableOption name
-    // {
-      default = true;
-      example = false;
-    };
-  enabledPolicies = lib.filterAttrs (n: p: p.enable) cfg.policies;
+  enabledPolicies = lib.filterAttrs (n: p: p.state != "disable") cfg.policies;
+  buildPolicyPath = n: p: lib.defaultTo (pkgs.writeText n p.profile) p.path;
+
+  # Accessing submodule options when not defined results in an error thunk rather than a regular option object
+  # We can emulate the behavior of `<option>.isDefined` by attempting to evaluate it instead
+  # This is required because getting isDefined on a submodule is not possible in global module asserts.
+  submoduleOptionIsDefined = value: (builtins.tryEval value).success;
 in
 
 {
@@ -31,7 +23,7 @@ in
       "security"
       "apparmor"
       "confineSUIDApplications"
-    ] "Please use the new options: `security.apparmor.policies.<policy>.enable'.")
+    ] "Please use the new options: `security.apparmor.policies.<policy>.state'.")
     (lib.mkRemovedOptionModule [
       "security"
       "apparmor"
@@ -65,20 +57,32 @@ in
           AppArmor policies.
         '';
         type = types.attrsOf (
-          types.submodule (
-            { name, config, ... }:
-            {
-              options = {
-                enable = mkDisableOption "loading of the profile into the kernel";
-                enforce = mkDisableOption "enforcing of the policy or only complain in the logs";
-                profile = lib.mkOption {
-                  description = "The policy of the profile.";
-                  type = types.lines;
-                  apply = pkgs.writeText name;
-                };
+          types.submodule {
+            options = {
+              state = lib.mkOption {
+                description = "How strictly this policy should be enforced";
+                type = types.enum [
+                  "disable"
+                  "complain"
+                  "enforce"
+                ];
+                # should enforce really be the default?
+                # the docs state that this should only be used once one is REALLY sure nothing's gonna break
+                default = "enforce";
               };
-            }
-          )
+
+              profile = lib.mkOption {
+                description = "The profile file contents. Incompatible with path.";
+                type = types.lines;
+              };
+
+              path = lib.mkOption {
+                description = "A path of a profile file to include. Incompatible with profile.";
+                type = types.nullOr types.path;
+                default = null;
+              };
+            };
+          }
         );
         default = { };
       };
@@ -117,12 +121,20 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = map (policy: {
-      assertion = match ".*/.*" policy == null;
-      message = "`security.apparmor.policies.\"${policy}\"' must not contain a slash.";
-      # Because, for instance, aa-remove-unknown uses profiles_names_list() in rc.apparmor.functions
-      # which does not recurse into sub-directories.
-    }) (attrNames cfg.policies);
+    assertions = lib.concatLists (
+      lib.mapAttrsToList (policyName: policyCfg: [
+        {
+          assertion = builtins.match ".*/.*" policyName == null;
+          message = "`security.apparmor.policies.\"${policyName}\"' must not contain a slash.";
+          # Because, for instance, aa-remove-unknown uses profiles_names_list() in rc.apparmor.functions
+          # which does not recurse into sub-directories.
+        }
+        {
+          assertion = lib.xor (policyCfg.path != null) (submoduleOptionIsDefined policyCfg.profile);
+          message = "`security.apparmor.policies.\"${policyName}\"` must define exactly one of either path or profile.";
+        }
+      ]) cfg.policies
+    );
 
     environment.systemPackages = [
       pkgs.apparmor-utils
@@ -133,7 +145,7 @@ in
       # because aa-remove-unknown reads profiles from all /etc/apparmor.d/*
       lib.mapAttrsToList (name: p: {
         inherit name;
-        path = p.profile;
+        path = buildPolicyPath name p;
       }) enabledPolicies
       ++ lib.mapAttrsToList (name: path: { inherit name path; }) cfg.includes
     );
@@ -226,21 +238,24 @@ in
             kill
           '';
           commonOpts =
-            p: "--verbose --show-cache ${lib.optionalString (!p.enforce) "--complain "}${p.profile}";
+            n: p:
+            "--verbose --show-cache ${
+              lib.optionalString (p.state == "complain") "--complain "
+            }${buildPolicyPath n p}";
         in
         {
           Type = "oneshot";
           RemainAfterExit = "yes";
           ExecStartPre = "${pkgs.apparmor-utils}/bin/aa-teardown";
           ExecStart = lib.mapAttrsToList (
-            n: p: "${pkgs.apparmor-parser}/bin/apparmor_parser --add ${commonOpts p}"
+            n: p: "${pkgs.apparmor-parser}/bin/apparmor_parser --add ${commonOpts n p}"
           ) enabledPolicies;
           ExecStartPost = lib.optional cfg.killUnconfinedConfinables killUnconfinedConfinables;
           ExecReload =
             # Add or replace into the kernel profiles in enabledPolicies
             # (because AppArmor can do that without stopping the processes already confined).
             lib.mapAttrsToList (
-              n: p: "${pkgs.apparmor-parser}/bin/apparmor_parser --replace ${commonOpts p}"
+              n: p: "${pkgs.apparmor-parser}/bin/apparmor_parser --replace ${commonOpts n p}"
             ) enabledPolicies
             ++
               # Remove from the kernel any profile whose name is not
@@ -262,5 +277,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ julm grimmauld ];
+  meta.maintainers = with lib.maintainers; [
+    julm
+    grimmauld
+  ];
 }
