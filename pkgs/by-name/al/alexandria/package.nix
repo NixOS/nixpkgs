@@ -2,7 +2,6 @@
   rustPlatform,
   lib,
   fetchFromGitHub,
-  libsoup,
   pkg-config,
   webkitgtk_4_0,
   openssl,
@@ -12,17 +11,19 @@
   gtk3,
   wrapGAppsHook3,
   cargo-tauri_1,
+  librsvg,
+  libappindicator-gtk3,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "alexandria";
-  version = "0.12";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "btpf";
     repo = "Alexandria";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NX89Sg639dSwUcUGrpgmdcO4tXl2iszctiRDcBVLbUA=";
+    hash = "sha256-18i3/HLTfhBSa9/c55dCOfFal+V40wcHcLoYt1dU+d0=";
     fetchSubmodules = true;
   };
 
@@ -33,10 +34,10 @@ rustPlatform.buildRustPackage rec {
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}";
-    hash = "sha256-/RGaZMCJftjzvFLp8J/d9+MsxQwe7P0WfISz0JE3fn4=";
+    hash = "sha256-6r9bEY7e1Eef/0/CJ26ITpFJcCVUEKLrFx+TNEomLPE=";
   };
 
-  cargoHash = "sha256-W8HCpGuDkq8XfdrSvYfAHyX+oh30/bX29qdclN4P5yo=";
+  cargoHash = "sha256-AsR2BJuz4RdPX1lmORwn6nK+8cm2Xmm1EOsxYkWx3hc=";
 
   env = {
     OPENSSL_NO_VENDOR = 1;
@@ -55,7 +56,8 @@ rustPlatform.buildRustPackage rec {
     openssl
     webkitgtk_4_0
     gtk3
-    libsoup
+    librsvg
+    libappindicator-gtk3
   ];
 
   npmRoot = "..";
