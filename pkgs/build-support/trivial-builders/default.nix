@@ -640,13 +640,8 @@ rec {
         substituteAll ${script} $out/nix-support/setup-hook
       '');
 
-
-  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
-  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeReferencesToFile
-  # TODO: Convert to throw after Nixpkgs 24.05 branch-off.
-  writeReferencesToFile = (if config.allowAliases then lib.warn else throw)
-    "writeReferencesToFile is deprecated in favour of writeClosure"
-    (path: writeClosure [ path ]);
+  # Remove after 25.05 branch-off
+  writeReferencesToFile = throw "writeReferencesToFile has been removed. Use writeClosure instead.";
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeClosure
