@@ -1,5 +1,5 @@
 { lib, stdenvNoCC, buildPackages
-, subversion, glibcLocales, sshSupport ? true, openssh ? null
+, cacert, subversion, glibcLocales, sshSupport ? true, openssh ? null
 }:
 
 { url, rev ? "HEAD", sha256 ? "", hash ? ""
@@ -38,7 +38,7 @@ else
 stdenvNoCC.mkDerivation {
   name = name_;
   builder = ./builder.sh;
-  nativeBuildInputs = [ subversion glibcLocales ]
+  nativeBuildInputs = [ cacert subversion glibcLocales ]
     ++ lib.optional sshSupport openssh;
 
   SVN_SSH = if sshSupport then "${buildPackages.openssh}/bin/ssh" else null;
