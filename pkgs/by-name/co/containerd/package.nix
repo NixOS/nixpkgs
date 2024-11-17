@@ -8,6 +8,7 @@
   nix-update-script,
   nixosTests,
   util-linux,
+  btrfsSupport ? btrfs-progs != null,
 }:
 
 buildGoModule rec {
@@ -32,9 +33,9 @@ buildGoModule rec {
     util-linux
   ];
 
-  buildInputs = [ btrfs-progs ];
+  buildInputs = lib.optional btrfsSupport btrfs-progs;
 
-  tags = lib.optionals (btrfs-progs == null) [ "no_btrfs" ];
+  tags = lib.optional (!btrfsSupport) "no_btrfs";
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
