@@ -144,13 +144,13 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web app for browsing, reading and downloading eBooks stored in a Calibre database";
     homepage = "https://github.com/janeczku/calibre-web";
     changelog = "https://github.com/janeczku/calibre-web/releases/tag/${src.tag}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pborzenkov ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ pborzenkov ];
     mainProgram = "calibre-web";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }
