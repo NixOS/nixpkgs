@@ -4,7 +4,7 @@ import os
 import shutil
 from datetime import datetime
 from pathlib import Path
-from subprocess import PIPE, CalledProcessError, run
+from subprocess import PIPE, CalledProcessError
 from typing import Final
 
 from .models import (
@@ -15,6 +15,7 @@ from .models import (
     NRError,
     Profile,
 )
+from .process import run
 from .utils import Args, dict_to_flags, info
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
@@ -280,14 +281,15 @@ def rollback_temporary_profile(profile: Profile) -> Path | None:
         return None
 
 
-def set_profile(profile: Profile, path_to_config: Path) -> None:
+def set_profile(profile: Profile, path_to_config: Path, sudo: bool) -> None:
     "Set a path as the current active Nix profile."
-    run(["nix-env", "-p", profile.path, "--set", path_to_config], check=True)
+    run(["nix-env", "-p", profile.path, "--set", path_to_config], check=True, sudo=sudo)
 
 
 def switch_to_configuration(
     path_to_config: Path,
     action: Action,
+    sudo: bool,
     install_bootloader: bool = False,
     specialisation: str | None = None,
 ) -> None:
@@ -313,6 +315,7 @@ def switch_to_configuration(
             "LOCALE_ARCHIVE": os.getenv("LOCALE_ARCHIVE", ""),
         },
         check=True,
+        sudo=sudo,
     )
 
 

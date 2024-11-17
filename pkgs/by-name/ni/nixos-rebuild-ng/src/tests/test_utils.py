@@ -1,6 +1,6 @@
 import argparse
 
-from nixos_rebuild import utils as u
+import nixos_rebuild.utils as u
 
 
 def test_dict_to_flags() -> None:

@@ -47,6 +47,9 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--upgrade", action="store_true")
     parser.add_argument("--upgrade-all", action="store_true")
     parser.add_argument("--json", action="store_true")
+    parser.add_argument("--sudo", action="store_true")
+    # TODO: add deprecated=True in Python >=3.13
+    parser.add_argument("--use-remote-sudo", dest="sudo", action="store_true")
     parser.add_argument("action", choices=Action.values(), nargs="?")
     parser.add_argument("--verbose", "-v", action="count", default=0)
 
@@ -181,7 +184,7 @@ def execute(argv: list[str]) -> None:
                     no_link=True,
                     **flake_flags,
                 )
-                set_profile(profile, path_to_config)
+                set_profile(profile, path_to_config, sudo=args.sudo)
             else:
                 path_to_config = nixos_build(
                     "system",
@@ -190,10 +193,11 @@ def execute(argv: list[str]) -> None:
                     no_out_link=True,
                     **nix_flags,
                 )
-                set_profile(profile, path_to_config)
+                set_profile(profile, path_to_config, sudo=args.sudo)
             switch_to_configuration(
                 path_to_config,
                 action,
+                sudo=args.sudo,
                 specialisation=args.specialisation,
                 install_bootloader=args.install_bootloader,
             )
@@ -227,6 +231,7 @@ def execute(argv: list[str]) -> None:
                 switch_to_configuration(
                     path_to_config,
                     action,
+                    sudo=args.sudo,
                     specialisation=args.specialisation,
                 )
         case Action.BUILD_VM | Action.BUILD_VM_WITH_BOOTLOADER:

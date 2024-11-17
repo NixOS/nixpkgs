@@ -6,8 +6,8 @@ from unittest.mock import ANY, call, patch
 
 import pytest
 
+import nixos_rebuild.models as m
 import nixos_rebuild.nix as n
-from nixos_rebuild import models as m
 
 from .helpers import get_qualified_name
 
@@ -297,10 +297,12 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
 def test_set_profile(mock_run: Any) -> None:
     profile_path = Path("/path/to/profile")
     config_path = Path("/path/to/config")
-    n.set_profile(m.Profile("system", profile_path), config_path)
+    n.set_profile(m.Profile("system", profile_path), config_path, sudo=False)
 
     mock_run.assert_called_with(
-        ["nix-env", "-p", profile_path, "--set", config_path], check=True
+        ["nix-env", "-p", profile_path, "--set", config_path],
+        check=True,
+        sudo=False,
     )
 
 
@@ -315,6 +317,7 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
         n.switch_to_configuration(
             profile_path,
             m.Action.SWITCH,
+            sudo=False,
             specialisation=None,
             install_bootloader=False,
         )
@@ -322,12 +325,14 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
         [profile_path / "bin/switch-to-configuration", "switch"],
         env={"NIXOS_INSTALL_BOOTLOADER": "0", "LOCALE_ARCHIVE": ""},
         check=True,
+        sudo=False,
     )
 
     with pytest.raises(m.NRError) as e:
         n.switch_to_configuration(
             config_path,
             m.Action.BOOT,
+            sudo=False,
             specialisation="special",
         )
     assert (
@@ -342,6 +347,7 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
         n.switch_to_configuration(
             Path("/path/to/config"),
             m.Action.TEST,
+            sudo=True,
             install_bootloader=True,
             specialisation="special",
         )
@@ -352,6 +358,7 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
         ],
         env={"NIXOS_INSTALL_BOOTLOADER": "1", "LOCALE_ARCHIVE": "/path/to/locale"},
         check=True,
+        sudo=True,
     )
 
 

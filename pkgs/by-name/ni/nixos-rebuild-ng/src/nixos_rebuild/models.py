@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import platform
 import re
 from dataclasses import dataclass
@@ -114,3 +115,17 @@ class Profile:
                 path = Path("/nix/var/nix/profiles/system-profiles") / name
                 path.parent.mkdir(mode=0o755, parents=True, exist_ok=True)
                 return Profile(name, path)
+
+
+@dataclass(frozen=True)
+class SSH:
+    host: str
+    opts: list[str]
+
+    @staticmethod
+    def from_arg(host: str | None) -> SSH | None:
+        if host:
+            opts = os.getenv("SSH_OPTS", "").split()
+            return SSH(host, opts)
+        else:
+            return None

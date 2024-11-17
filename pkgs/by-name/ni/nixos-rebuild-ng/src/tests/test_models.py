@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Any
 from unittest.mock import patch
 
-from nixos_rebuild import models as m
+import nixos_rebuild.models as m
 
 from .helpers import get_qualified_name
 
@@ -98,3 +98,12 @@ def test_profile_from_name(mock_mkdir: Any) -> None:
         Path("/nix/var/nix/profiles/system-profiles/something"),
     )
     mock_mkdir.assert_called_once()
+
+
+def test_ssh_from_name(monkeypatch: Any) -> None:
+    assert m.SSH.from_arg("user@localhost") == m.SSH("user@localhost", [])
+
+    monkeypatch.setenv("SSH_OPTS", "-f foo -b bar")
+    assert m.SSH.from_arg("user@localhost") == m.SSH(
+        "user@localhost", ["-f", "foo", "-b", "bar"]
+    )
