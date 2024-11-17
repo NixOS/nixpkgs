@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  mysql_jdbc,
   extensions ? { },
   libJars ? [ ],
   nixosTests,
@@ -19,16 +20,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "apache-druid";
-  version = "30.0.0";
+  version = "31.0.0";
 
   src = fetchurl {
     url = "mirror://apache/druid/${finalAttrs.version}/apache-druid-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-mRYorVkNzM94LP53G78eW20N5UsvMP7Lv4rAysmPwXw=";
-  };
-
-  mysqlConnector = fetchurl {
-    url = "mirror://maven/mysql/mysql-connector-java/5.1.48/mysql-connector-java-5.1.48.jar";
-    hash = "sha256-VuJsqqOCH1rkr0T5x09mz4uE6gFRatOAPLsOkEm27Kg=";
+    hash = "sha256-xppAoKNS/qB8WVMwBPxxHbOy5uDGl3IxrCWV1T+YQkE=";
   };
 
   dontBuild = true;
@@ -61,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     mkdir $out
     mv * $out
-    ${optionalString mysqlSupport "cp ${finalAttrs.mysqlConnector} $out/extensions/mysql-metadata-storage"}
+    ${optionalString mysqlSupport "ln -s ${mysql_jdbc}/share/java/mysql-connector-java.jar $out/extensions/mysql-metadata-storage"}
     ${finalAttrs.loadExtensions}
     ${finalAttrs.loadJars}
     runHook postInstall
