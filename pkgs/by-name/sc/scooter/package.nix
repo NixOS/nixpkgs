@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "scooter";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "thomasschafer";
     repo = "scooter";
     rev = "v${version}";
-    hash = "sha256-5YosLJHfrXv6ev7r0gAW5bzkSIwIBUj/Fl3+tklTKQo=";
+    hash = "sha256-2dtNQkeJXp3bub07KIpouJ2lVaTe7UECic3DIpKmQJU=";
   };
 
-  cargoHash = "sha256-GY52JN07igDJVuKXR9iIqNj1obhPs70dOmU1wGy8ZrI";
+  cargoHash = "sha256-qi8twbE6ooATbzhQNvkgvXEVOQzsMqhr7BjsN+3r3tA=";
 
   meta = {
     description = "Interactive find and replace in the terminal";
