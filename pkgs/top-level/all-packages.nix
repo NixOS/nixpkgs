@@ -1908,6 +1908,8 @@ with pkgs;
     beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_17; });
   };
 
+  pacup = perlPackages.pacup;
+
   pass = callPackage ../tools/security/pass { };
 
   pass-nodmenu = callPackage ../tools/security/pass {
