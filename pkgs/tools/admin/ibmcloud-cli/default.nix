@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -D ibmcloud $out/bin/ibmcloud
     mkdir -p $out/share/ibmcloud
-    cp CF_CLI_Notices.txt CF_CLI_SLC_Notices.txt LICENSE NOTICE $out/share/ibmcloud
+    cp LICENSE NOTICE $out/share/ibmcloud
     export HOME=$(mktemp -d)
     installShellCompletion --cmd ibmcloud --bash <($out/bin/ibmcloud --generate-bash-completion)
 
