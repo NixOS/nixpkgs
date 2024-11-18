@@ -43,6 +43,4 @@ in {
 
   gsm = callPackage ../development/gnuradio-modules/gsm/default.nix { };
 
-  nacl = callPackage ../development/gnuradio-modules/nacl/default.nix { };
-
 })
