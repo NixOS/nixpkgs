@@ -2,10 +2,10 @@
   lib,
   callPackage,
   writeShellApplication,
+  nzportable-assets,
+  nzportable-quakec,
 }:
 let
-  assets = callPackage ./assets.nix { };
-  quakec = callPackage ./quakec.nix { };
   fteqw = callPackage ./fteqw.nix { };
 
   # We use the youngest version of all of the dependencies as the version number.
@@ -14,9 +14,9 @@ let
   dateString =
     lib.pipe
       [
-        assets
+        nzportable-assets
         fteqw
-        quakec
+        nzportable-quakec
       ]
       [
         # Find the youngest (most recently updated) version
@@ -33,7 +33,7 @@ writeShellApplication {
 
   text = ''
     runDir=''${XDG_DATA_HOME:-$HOME/.local/share}/nzportable
-    data=${assets.pc}
+    data=${nzportable-assets.pc}
 
     relinkGameFiles() {
       mkdir -p "$runDir"/nzp
@@ -43,7 +43,7 @@ writeShellApplication {
 
       # Link game files
       ln -s $data/default.fmf "$runDir"
-      ln -st "$runDir"/nzp $data/nzp/* ${quakec.fte}/*
+      ln -st "$runDir"/nzp $data/nzp/* ${nzportable-quakec.fte}/*
 
       # Write current version
       echo "${version}" > "$runDir"/nzp/version.txt
@@ -69,7 +69,7 @@ writeShellApplication {
     inherit version;
     passthru = {
       updateScript = callPackage ./update.nix { };
-      inherit assets quakec fteqw;
+      inherit fteqw;
     };
   };
 

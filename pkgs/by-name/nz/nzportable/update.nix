@@ -36,7 +36,7 @@ lib.getExe (writeShellApplication {
     }
 
     update nzportable.fteqw fteqw bleeding-edge
-    update nzportable.assets assets newest
-    update nzportable.quakec quakec bleeding-edge
+    update nzportable-assets assets newest
+    update nzportable-quakec quakec bleeding-edge
   '';
 })

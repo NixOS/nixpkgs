@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   python3,
-  nzportable,
+  fteqcc,
 }:
 stdenvNoCC.mkDerivation {
   pname = "nzp-quakec";
@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation {
     colorama
     fastcrc
     pandas
-    nzportable.fteqw
+    fteqcc
   ];
 
   buildPhase = ''
