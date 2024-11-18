@@ -41,6 +41,4 @@ in {
 
   grnet = callPackage ../development/gnuradio-modules/grnet/default.nix { };
 
-  gsm = callPackage ../development/gnuradio-modules/gsm/default.nix { };
-
 })
