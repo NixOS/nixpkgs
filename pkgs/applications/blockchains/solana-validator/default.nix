@@ -68,13 +68,8 @@ rustPlatform.buildRustPackage rec {
     inherit hash;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "crossbeam-epoch-0.9.5" = "sha256-Jf0RarsgJiXiZ+ddy0vp4jQ59J9m0k3sgXhWhCdhgws=";
-      "tokio-1.29.1" = "sha256-Z/kewMCqkPVTXdoBcSaFKG5GSQAdkdpj3mAzLLCjjGk=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-9fw0yVE7k1WRpw2uxPXr6bInCruOz3/nwV/qaSQiZg0=";
 
   cargoBuildFlags = builtins.map (n: "--bin=${n}") solanaPkgs;
 
