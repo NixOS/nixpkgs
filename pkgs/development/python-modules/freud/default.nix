@@ -51,13 +51,6 @@ buildPythonPackage rec {
     touch extern/{voro++,fsph,Eigen}/.git
   '';
 
-  # Scipy still depends on numpy 1, and so we'd get 'package duplicates in
-  # closure' error if we'd use numpy_2
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'numpy>=2.0.0rc1' 'numpy' \
-  '';
-
   nativeBuildInputs = [
     cmake
     cython

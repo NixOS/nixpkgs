@@ -36,11 +36,6 @@ buildPythonPackage rec {
     hash = "sha256-NhVY4rCTqZvr5p8f1H+shqGSYHpMFu05ugqACyq2DDQ=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0"  "numpy"
-  '';
-
   build-system = [
     astropy-extension-helpers
     cython

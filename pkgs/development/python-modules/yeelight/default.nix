@@ -3,8 +3,8 @@
   async-timeout,
   buildPythonPackage,
   fetchFromGitLab,
+  fetchpatch2,
   flit-core,
-  future,
   ifaddr,
   pytestCheckHook,
   pythonOlder,
@@ -13,7 +13,7 @@
 buildPythonPackage rec {
   pname = "yeelight";
   version = "0.7.14";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -24,12 +24,17 @@ buildPythonPackage rec {
     hash = "sha256-BnMvRs95rsmoBa/5bp0zShgU1BBHtZzyADjbH0y1d/o=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  patches = [
+    (fetchpatch2 {
+      name = "remove-future-dependency.patch";
+      url = "https://gitlab.com/stavros/python-yeelight/-/commit/654f4f34e0246e65d8db02a107e2ab706de4806d.patch";
+      hash = "sha256-olKpYCzIq/E7zup40Kwzwgk5iOtCubLHo9uQDOhaByQ=";
+    })
+  ];
 
-  propagatedBuildInputs = [
-    future
-    ifaddr
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  build-system = [ flit-core ];
+
+  dependencies = [ ifaddr ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

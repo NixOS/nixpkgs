@@ -279,8 +279,6 @@ self: super: with self; {
 
   aiohttp-wsgi = callPackage ../development/python-modules/aiohttp-wsgi { };
 
-  aiohttp-zlib-ng = callPackage ../development/python-modules/aiohttp-zlib-ng { };
-
   aioitertools = callPackage ../development/python-modules/aioitertools { };
 
   aiobiketrax = callPackage ../development/python-modules/aiobiketrax { };
@@ -986,6 +984,8 @@ self: super: with self; {
 
   audio-metadata = callPackage ../development/python-modules/audio-metadata { };
 
+  audioop-lts = callPackage ../development/python-modules/audioop-lts { };
+
   audioread = callPackage ../development/python-modules/audioread { };
 
   audiotools = callPackage ../development/python-modules/audiotools {
@@ -1402,6 +1402,8 @@ self: super: with self; {
     enablePython = true;
   });
 
+  baize = callPackage ../development/python-modules/baize { };
+
   bambi = callPackage ../development/python-modules/bambi { };
 
   pad4pi = callPackage ../development/python-modules/pad4pi { };
@@ -1447,8 +1449,6 @@ self: super: with self; {
   bacpypes = callPackage ../development/python-modules/bacpypes { };
 
   bagit = callPackage ../development/python-modules/bagit { };
-
-  baize = callPackage ../development/python-modules/baize { };
 
   banal = callPackage ../development/python-modules/banal { };
 
@@ -5970,8 +5970,6 @@ self: super: with self; {
 
   huey = callPackage ../development/python-modules/huey { };
 
-  hug = callPackage ../development/python-modules/hug { };
-
   huggingface-hub = callPackage ../development/python-modules/huggingface-hub { };
 
   huisbaasje-client = callPackage ../development/python-modules/huisbaasje-client { };
@@ -9249,7 +9247,7 @@ self: super: with self; {
 
   numpy_1 = callPackage ../development/python-modules/numpy/1.nix { };
   numpy_2 = callPackage ../development/python-modules/numpy/2.nix { };
-  numpy = if self.pythonOlder "3.13" then numpy_1 else numpy_2;
+  numpy = numpy_2;
 
   numpy-groupies = callPackage ../development/python-modules/numpy-groupies { };
 
@@ -12611,6 +12609,8 @@ self: super: with self; {
   pytest-cid = callPackage ../development/python-modules/pytest-cid { };
 
   pytest-click = callPackage ../development/python-modules/pytest-click { };
+
+  pytest-codspeed = callPackage ../development/python-modules/pytest-codspeed { };
 
   pytest-console-scripts = callPackage ../development/python-modules/pytest-console-scripts { };
 

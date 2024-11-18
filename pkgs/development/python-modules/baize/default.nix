@@ -1,18 +1,13 @@
 {
   buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
   lib,
-  fetchPypi,
-  pytestCheckHook,
   pdm-pep517,
-  pytest-httpx,
+  pytest-asyncio,
+  pytestCheckHook,
   setuptools,
   starlette,
-  anyio,
-  pytest-asyncio,
-  pytest-tornasync,
-  pytest-trio,
-  pytest-twisted,
-  twisted,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +15,11 @@ buildPythonPackage rec {
   version = "0.22.2";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-J+l8NsSTpCh7Uws+Zp45LXkLEBBurqOsOr8Iik/9smY=";
+  src = fetchFromGitHub {
+    owner = "abersheeran";
+    repo = "baize";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-vsYt1q8QEDmEXjd8dlzHr85Fz3YAjPowS+oBWYGbG1o=";
   };
 
   build-system = [
@@ -30,31 +27,29 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  dependencies = [
+  pythonImportsCheck = [ "baize" ];
+
+  nativeCheckInputs = [
+    httpx
+    pytest-asyncio
+    pytestCheckHook
     starlette
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-httpx
-    anyio
-    pytest-asyncio
-    pytest-tornasync
-    pytest-trio
-    pytest-twisted
-    twisted
-  ];
-
   disabledTests = [
-    # https://github.com/abersheeran/baize/issues/67
+    # test relies on last modified date, which is set to 1970-01-01 in the sandbox
     "test_files"
+    # starlette.testclient.WebSocketDenialResponse
     "test_request_response"
   ];
 
   meta = {
     description = "Powerful and exquisite WSGI/ASGI framework/toolkit";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
-    homepage = "https://baize.aber.sh/";
+    homepage = "https://github.com/abersheeran/baize";
     license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      dotlambda
+      bot-wxt1221
+    ];
   };
 }

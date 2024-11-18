@@ -8,6 +8,9 @@
   setuptools,
   idna,
   multidict,
+  propcache,
+  hypothesis,
+  pytest-codspeed,
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
@@ -15,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.13.1";
+  version = "1.17.1";
 
   disabled = pythonOlder "3.8";
 
@@ -25,7 +28,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "yarl";
     rev = "refs/tags/v${version}";
-    hash = "sha256-I6/c5Q6/SRw8PIW4rPLKhVRVPRIC+n+Cz+UrKn5Pv/0=";
+    hash = "sha256-0/3hyx0n4UHlqZyGLGfdNlm04gCYiBjYYbaqRPoSfgA=";
   };
 
   build-system = [
@@ -37,6 +40,7 @@ buildPythonPackage rec {
   dependencies = [
     idna
     multidict
+    propcache
   ];
 
   preCheck = ''
@@ -45,6 +49,8 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    hypothesis
+    pytest-codspeed
     pytest-cov-stub
     pytest-xdist
     pytestCheckHook

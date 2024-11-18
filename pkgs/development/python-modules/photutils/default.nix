@@ -35,11 +35,6 @@ buildPythonPackage rec {
     hash = "sha256-gXtC6O8rXBBa8VMuqxshnJieAahv3bCY2C1BXNmJxb4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "'numpy>=2.0.0'," ""
-  '';
-
   build-system = [
     setuptools
     setuptools-scm
