@@ -94,16 +94,8 @@ rustPlatform.buildRustPackage {
 
   cargoBuildFlags = [ "--workspace" ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "flash-lso-0.6.0" = "sha256-dhOAnVfxZw9JaOrY17xAeN7/y/aWZP+KUoDQuCf6D3Q=";
-      "h263-rs-0.1.0" = "sha256-dyQHnCe7LwwZYlF57sbRzir9vUavN3K8wLhwPIWlmik=";
-      "jpegxr-0.3.1" = "sha256-aV4Qh9ea0CirWU3lScjSKi4mii0cDTnx+miTcqWzxGg=";
-      "nellymoser-rs-0.1.2" = "sha256-66yt+CKaw/QFIPeNkZA2mb9ke64rKcAw/6k/pjNYY04=";
-      "nihav_codec_support-0.1.0" = "sha256-HAJS4I6yyzQzCf+vmaFp1MWXpcUgFAHPxLhfMVXmN1c=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-waVI/s5jERZL7NpEoHoU9SFN/IQSa5UeIIJIT/C+sDA=";
 
   meta = with lib; {
     description = "Adobe Flash Player emulator written in the Rust programming language";
