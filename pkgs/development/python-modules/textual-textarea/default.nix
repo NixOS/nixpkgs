@@ -1,9 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   poetry-core,
   pyperclip,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
   textual,
 }:
 
@@ -12,28 +15,33 @@ buildPythonPackage rec {
   version = "0.14.4";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "textual_textarea";
-    inherit version;
-    hash = "sha256-VgSJF5sZQmuFRrhSF1Cs3iL1cCGzr8CLBkNVcEj7cxU=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "tconbeer";
+    repo = "textual-textarea";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tmbSCU1VgxR9aXG22UVpweD71dVmhKSRBTDm1Gf33jM=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     pyperclip
     textual
+  ] ++ textual.optional-dependencies.syntax;
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "textual_textarea"
-  ];
+  pythonImportsCheck = [ "textual_textarea" ];
 
   meta = {
     description = "A text area (multi-line input) with syntax highlighting for Textual";
-    homepage = "https://pypi.org/project/textual-textarea/";
+    homepage = "https://github.com/tconbeer/textual-textarea";
+    changelog = "https://github.com/tconbeer/textual-textarea/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pcboy ];
   };
