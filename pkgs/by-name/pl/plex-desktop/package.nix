@@ -14,6 +14,7 @@
   libGL,
   libapparmor,
   libbsd,
+  libdrm,
   libedit,
   libffi_3_3,
   libgcrypt,
@@ -122,7 +123,10 @@ let
 in
 buildFHSEnv {
   inherit pname version meta;
-  targetPkgs = pkgs: [ xkeyboard_config ];
+  targetPkgs = pkgs: [
+    libdrm
+    xkeyboard_config
+  ];
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications $out/share/icons/hicolor/scalable/apps
