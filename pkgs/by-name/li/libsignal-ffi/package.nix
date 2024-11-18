@@ -42,13 +42,8 @@ rustPlatform.buildRustPackage rec {
   env.BORING_BSSL_PATH = "${boringssl-wrapper}";
 
   # The Cargo.lock contains git dependencies
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "boring-4.9.0" = "sha256-RSpaMzMUXp+WuqqDwLErP5yLT0YhYGoOUWCuSt4jR3I=";
-      "curve25519-dalek-4.1.3" = "sha256-bPh7eEgcZnq9C3wmSnnYv0C4aAP+7pnwk9Io29GrI4A=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-N5eNFhsMVNyqWhPgrhNU90XskXhW+ZBBFzFZdr7+fYA=";
 
   cargoBuildFlags = [
     "-p"
