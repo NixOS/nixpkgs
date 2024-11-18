@@ -4,6 +4,7 @@
   buildGoModule,
   callPackage,
   enableWebui ? true,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -37,6 +38,8 @@ buildGoModule rec {
     "-w"
     "-X main.version=v${version}"
   ];
+
+  passthru.tests.rmfakecloud = nixosTests.rmfakecloud;
 
   meta = with lib; {
     description = "Host your own cloud for the Remarkable";

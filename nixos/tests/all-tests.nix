@@ -879,6 +879,7 @@ in {
   retroarch = handleTest ./retroarch.nix {};
   rke2 = handleTestOn ["aarch64-linux" "x86_64-linux"] ./rke2 {};
   rkvm = handleTest ./rkvm {};
+  rmfakecloud = runTest ./rmfakecloud.nix;
   robustirc-bridge = handleTest ./robustirc-bridge.nix {};
   roundcube = handleTest ./roundcube.nix {};
   rosenpass = handleTest ./rosenpass.nix {};
