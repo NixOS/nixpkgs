@@ -1578,11 +1578,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXt = callPackage ({ stdenv, pkg-config, fetchurl, libICE, xorgproto, libSM, libX11, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libXt";
-    version = "1.3.0";
+    version = "1.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXt-1.3.0.tar.xz";
-      sha256 = "14dz66rp66ar2a5q0fbsnlcqkbd34801pzdxj3f0hzc2vcy0p0jj";
+      url = "mirror://xorg/individual/lib/libXt-1.3.1.tar.xz";
+      sha256 = "120jjd6l7fjdxy5myrc1dmc0cwpqa18a97hrbg0d9x146frp99z0";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
