@@ -29,13 +29,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-f+yVuyoer0bn38iYR94TUKRT5VzQHDZQyowtas+QOK0=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "dialoguer-0.10.4" = "sha256-WDqUKOu7Y0HElpPxf2T8EpzAY3mY8sSn9lf0V0jyAFc=";
-      "monotrail-utils-0.0.1" = "sha256-ydNdg6VI+Z5wXe2bEzRtavw0rsrcJkdsJ5DvXhbaDE4=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-hXbnDbDu72qu36QFqfwJZ99yUCgAQiW30VGWxDMBwrE=";
 
   env = {
     OPENSSL_NO_VENDOR = 1;
