@@ -21,12 +21,9 @@ let
       # TODO: remove this if plugin stops using nightly rust
       RUSTC_BOOTSTRAP = true;
     };
-    cargoLock = {
-      lockFile = ./Cargo.lock;
-      outputHashes = {
-        "frizbee-0.1.0" = "sha256-eYth+xOIqwGPkH39OxNCMA9zE+5CTNpsuX8Ue/mySIA=";
-      };
-    };
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-9+L2oVGy+sPKjIGlAtQ+1hR9/7q5fmbFCStyP9ECTkY=";
+
   };
 in
 vimUtils.buildVimPlugin {
