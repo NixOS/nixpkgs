@@ -1436,21 +1436,13 @@ self: super: with self; {
 
   backoff = callPackage ../development/python-modules/backoff { };
 
-  backports-cached-property = callPackage ../development/python-modules/backports-cached-property { };
-
   backports-datetime-fromisoformat = callPackage ../development/python-modules/backports-datetime-fromisoformat { };
 
   backports-entry-points-selectable = callPackage ../development/python-modules/backports-entry-points-selectable { };
 
-  backports-shutil-get-terminal-size = callPackage ../development/python-modules/backports-shutil-get-terminal-size { };
-
-  backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which { };
-
   backports-strenum = callPackage ../development/python-modules/backports-strenum { };
 
   backports-tarfile = callPackage ../development/python-modules/backports-tarfile { };
-
-  backports-zoneinfo = callPackage ../development/python-modules/backports-zoneinfo { };
 
   bacpypes = callPackage ../development/python-modules/bacpypes { };
 
