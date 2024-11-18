@@ -18234,15 +18234,6 @@ with pkgs;
 
   ns-3 = callPackage ../development/libraries/science/networking/ns-3 { python = python3; };
 
-  root = callPackage ../applications/science/misc/root {
-    python = python3;
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreSymbolication OpenGL;
-  };
-
-  root5 = lowPrio (callPackage ../applications/science/misc/root/5.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
-  });
-
   rink = callPackage ../applications/science/misc/rink {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
