@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "0.82.0";
+  version = "0.86.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = "textual";
     rev = "refs/tags/v${version}";
-    hash = "sha256-belpoXQ+CkTchK+FjI/Ur8v4cNgzX39xLdNfPCwaU6E=";
+    hash = "sha256-5msCFv79nAmoaP9gZxV3DXMLTyVlSFb+qyA5jHWwc50=";
   };
 
   build-system = [ poetry-core ];
