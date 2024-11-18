@@ -54,13 +54,9 @@ let
     '' + ''
       cp -r ${monorepoSrc}/${baseName} "$out"
     '') else src;
-
-  preConfigure = lib.optionalString (!haveLibc) ''
-    cmakeFlagsArray+=(-DCMAKE_C_FLAGS="-nodefaultlibs -ffreestanding")
-  '';
 in
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   inherit pname version patches;
 
   src = src';
@@ -183,7 +179,9 @@ stdenv.mkDerivation ({
       --replace-fail 'find_program(CODESIGN codesign)' ""
   '';
 
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  preConfigure = lib.optionalString (lib.versionOlder release_version "16" && !haveLibc) ''
+    cmakeFlagsArray+=(-DCMAKE_C_FLAGS="-nodefaultlibs -ffreestanding")
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     cmakeFlagsArray+=(
       "-DDARWIN_macosx_CACHED_SYSROOT=$SDKROOT"
       "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=$(jq -r .Version "$SDKROOT/SDKSettings.json")"
@@ -232,4 +230,4 @@ stdenv.mkDerivation ({
       # `enable_execute_stack.c` Also doesn't sound like something WASM would support.
       || (stdenv.hostPlatform.isWasm && haveLibc);
   };
-} // (if lib.versionOlder release_version "16" then { inherit preConfigure; } else {}))
+}
