@@ -8,7 +8,7 @@
 
 // NOLINTBEGIN
 // From nix/src/nix/repl.cc
-bool isVarName(const std::string_view & s)
+bool isVarName(std::string_view s)
 {
     if (s.size() == 0) return false;
     if (nix::isReservedKeyword(s)) return false;
