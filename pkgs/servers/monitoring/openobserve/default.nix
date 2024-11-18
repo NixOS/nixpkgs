@@ -1,17 +1,18 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, protobuf
-, bzip2
-, oniguruma
-, sqlite
-, xz
-, zlib
-, zstd
-, stdenv
-, apple_sdk
-, buildNpmPackage
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  protobuf,
+  bzip2,
+  oniguruma,
+  sqlite,
+  xz,
+  zlib,
+  zstd,
+  stdenv,
+  apple_sdk,
+  buildNpmPackage,
 }:
 
 let
@@ -62,33 +63,33 @@ rustPlatform.buildRustPackage {
   preBuild = ''
     cp -r ${web}/share/openobserve-ui web/dist
   '';
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "chromiumoxide-0.5.7" = "sha256-GHrm5u8FtXRUjSRGMU4PNU6AJZ5W2KcgfZY1c/CBVYA=";
-      "enrichment-0.1.0" = "sha256-Ui4rsvmemOF00E4yBRFRS2gw9qliDrNEVQu5fvIpahA=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-YaxMG/mBPxYV7wPaLUEi+jODYRdFUEqArOSZ7EKIUvk=";
 
   nativeBuildInputs = [
     pkg-config
     protobuf
   ];
 
-  buildInputs = [
-    bzip2
-    oniguruma
-    sqlite
-    xz
-    zlib
-    zstd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with apple_sdk.frameworks; [
-    CoreFoundation
-    CoreServices
-    IOKit
-    Security
-    SystemConfiguration
-  ]);
+  buildInputs =
+    [
+      bzip2
+      oniguruma
+      sqlite
+      xz
+      zlib
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with apple_sdk.frameworks;
+      [
+        CoreFoundation
+        CoreServices
+        IOKit
+        Security
+        SystemConfiguration
+      ]
+    );
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
