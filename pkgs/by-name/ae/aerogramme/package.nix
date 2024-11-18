@@ -21,15 +21,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # must use our own Cargo.lock due to git dependencies
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "imap-codec-2.0.0" = "sha256-o64Q74Q84xLRfU4K4JtcjyS0J8mfoApvUs9siscd0RA=";
-      "imap-flow-0.1.0" = "sha256-IopxybuVt5OW6vFiw/4MxojzaNZrKu2xyfaX6F8IYlA=";
-      "k2v-client-0.0.4" = "sha256-V71FCIsgK3VStFOzVntm8P0vXRobF5rQ74qar+cKyik=";
-      "smtp-message-0.1.0" = "sha256-FoSakm3D1xg1vefLf/zkyvzsij1G0QstK3CRo+LbByE=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-GPj8qhfKgfAadQD9DJafN4ec8L6oY62PS/w/ljkPHpw=";
 
   # disable network tests as Nix sandbox breaks them
   doCheck = false;
