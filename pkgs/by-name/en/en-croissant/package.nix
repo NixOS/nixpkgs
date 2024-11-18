@@ -34,13 +34,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-hvWXSegUWJvwCU5NLb2vqnl+FIWpCLxw96s9NUIgJTI=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tauri-plugin-log-0.0.0" = "sha256-t+zmMMSnD9ASZZvqlhu1ah2OjCUtRXdk/xaI37uI49c=";
-      "vampirc-uci-0.11.1" = "sha256-g2JjHZoAmmZ7xsw4YnkUPRXJxsYmBqflWxCFkFEvMXQ=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6cBGOdJ7jz+mOl2EEXxoLNeX9meW+ybQxAxnnHAplIc=";
 
   cargoRoot = "src-tauri";
 
