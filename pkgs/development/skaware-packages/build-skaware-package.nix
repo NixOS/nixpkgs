@@ -6,8 +6,6 @@
 , version
   # : string
 , sha256 ? lib.fakeSha256
-  # : drv | null
-, manpages ? null
   # : string
 , description
   # : list Platform
@@ -66,15 +64,7 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  outputs =
-    if manpages == null
-    then outputs
-    else
-    assert (lib.assertMsg (!lib.elem "man" outputs) "If you pass `manpages` to `skawarePackages.buildPackage`, you cannot have a `man` output already!");
-    # insert as early as posible, but keep the first element
-    if lib.length outputs > 0
-    then [(lib.head outputs) "man"] ++ lib.tail outputs
-    else ["man"];
+  inherit outputs;
 
   dontDisableStatic = true;
   enableParallelBuilding = true;
@@ -108,13 +98,6 @@ stdenv.mkDerivation {
        docFiles = commonMetaFiles;
      }} $doc/share/doc/${pname}
 
-    ${if manpages == null
-      then ''echo "no manpages for this package"''
-      else ''
-        echo "copying manpages"
-        cp -vr ${manpages} $man
-      ''}
-
     ${postInstall}
   '';
 
@@ -122,7 +105,7 @@ stdenv.mkDerivation {
     ${cleanPackaging.checkForRemainingFiles}
   '';
 
-  passthru = passthru // (if manpages == null then {} else { inherit manpages; });
+  inherit passthru;
 
   meta = {
     homepage = "https://skarnet.org/software/${pname}/";
