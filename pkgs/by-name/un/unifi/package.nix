@@ -13,14 +13,16 @@ stdenv.mkDerivation rec {
   # see https://community.ui.com/releases / https://www.ui.com/download/unifi
   src = fetchurl {
     url = "https://dl.ui.com/unifi/${version}/unifi_sysvinit_all.deb";
-    sha256 = "sha256-004ZJEoj23FyFEBznqrpPzQ9E6DYpD7gBxa3ewSunIo=";
+    hash = "sha256-004ZJEoj23FyFEBznqrpPzQ9E6DYpD7gBxa3ewSunIo=";
   };
 
   nativeBuildInputs = [ dpkg ];
 
   unpackPhase = ''
     runHook preUnpack
+
     dpkg-deb -x $src ./
+
     runHook postUnpack
   '';
 
@@ -48,6 +50,5 @@ stdenv.mkDerivation rec {
       globin
       patryk27
     ];
-    knownVulnerabilities = [ ];
   };
 }
