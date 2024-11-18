@@ -39,18 +39,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-0DEEgaQf4/NIbmRQyTdEuj4bPTLX8gjAhv4r48wfNZs=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "greptime-proto-0.1.0" = "sha256-QT3PZnHJoVghuRCGoZIH6L8jnX7Wn9eSuQqHIyrUY4E=";
-      "greptimedb-ingester-0.1.0" = "sha256-1M9yWXDZ6U9JTVyXQg9ZcSSGJp7GXtaCfQHdtjhw6FY=";
-      "heim-0.1.0-rc.1" = "sha256-pMraYKr6srTQqEzoBx9gGHHlJ7nMKwj50ftimQAkfL0=";
-      "nix-0.26.2" = "sha256-uquYvRT56lhupkrESpxwKEimRFhmYvri10n3dj0f2yg=";
-      "ntapi-0.3.7" = "sha256-G6ZCsa3GWiI/FeGKiK9TWkmTxen7nwpXvm5FtjNtjWU=";
-      "tokio-util-0.7.11" = "sha256-oV9fSPjLMY1KbcbDP2WTVjF/N0qlQBPDIYHOp3aNCTY=";
-      "tracing-0.2.0" = "sha256-YAxeEofFA43PX2hafh3RY+C81a2v6n1fGzYz2FycC3M=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3Cuv0UwIqhdnpkDueXuhA5QfnSY0QDM76DGdgq+1GWQ=";
 
   nativeBuildInputs =
     [
