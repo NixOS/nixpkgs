@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, nixosTests
-, nix-update-script
-, protobuf
-, rust-jemalloc-sys
-, Security
-, nodejs
-, yarn
-, fetchYarnDeps
-, fixup-yarn-lock
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  nixosTests,
+  nix-update-script,
+  protobuf,
+  rust-jemalloc-sys,
+  Security,
+  nodejs,
+  yarn,
+  fetchYarnDeps,
+  fixup-yarn-lock,
 }:
 
 let
@@ -85,17 +86,8 @@ rustPlatform.buildRustPackage rec {
     rust-jemalloc-sys
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "chitchat-0.8.0" = "sha256-6K2noPoFaDnOxQIEV1WbmVPfRGwlI/WS1OWSBH2qb1Q=";
-      "mrecordlog-0.4.0" = "sha256-9LIVs+BqK9FLSfHL3vm9LL+/FXIXJ6v617QLv4luQik=";
-      "ownedbytes-0.6.0" = "sha256-in18/NYYIgUiZ9sm8NgJlebWidRp34DR7AhOD1Nh0aw=";
-      "pulsar-5.0.2" = "sha256-j7wpsAro6x4fk3pvSL4fxLkddJFq8duZ7jDj0Edf3YQ=";
-      "sasl2-sys-0.1.20+2.1.28" = "sha256-u4BsfmTDFxuY3i1amLCsr7MDv356YPThMHclura0Sxs=";
-      "whichlang-0.1.0" = "sha256-7AvLGjtWHjG0TnZdg9p5D+O0H19uo2sqPxJMn6mOU0k=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Q2FIobrYD3ir12TZtNUi8dmWs4QmjwbcuorVBnMg88s=";
 
   CARGO_PROFILE_RELEASE_LTO = "fat";
   CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
