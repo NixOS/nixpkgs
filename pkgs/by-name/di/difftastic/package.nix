@@ -1,9 +1,10 @@
-{ lib
-, fetchpatch
-, rustPlatform
-, fetchFromGitHub
-, testers
-, difftastic
+{
+  lib,
+  fetchpatch,
+  rustPlatform,
+  fetchFromGitHub,
+  testers,
+  difftastic,
 }:
 
 let
@@ -26,9 +27,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-hhkcujMuirBTIwUP3RMZ+F76T1TLcjMqa5l328xrwRg=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3yM0tP8t6ieDXHV7EM6Z6tNrid3Hy7WMCY0vLggprbI=";
 
   # skip flaky tests
   checkFlags = [
@@ -47,7 +47,11 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Wilfred/difftastic";
     changelog = "https://github.com/Wilfred/difftastic/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ethancedwards8 figsoda matthiasbeyer ];
+    maintainers = with maintainers; [
+      ethancedwards8
+      figsoda
+      matthiasbeyer
+    ];
     mainProgram = "difft";
   };
 }
