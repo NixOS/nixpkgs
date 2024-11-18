@@ -14564,8 +14564,6 @@ self: super: with self; {
 
   qiskit-finance = callPackage ../development/python-modules/qiskit-finance { };
 
-  qiskit-ibmq-provider = callPackage ../development/python-modules/qiskit-ibmq-provider { };
-
   qiskit-machine-learning = callPackage ../development/python-modules/qiskit-machine-learning { };
 
   qiskit-nature = callPackage ../development/python-modules/qiskit-nature { };
