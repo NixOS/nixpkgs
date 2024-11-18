@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
       --zsh $BANDWHICH_GEN_DIR/_bandwhich
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI utility for displaying current network utilization";
     longDescription = ''
       bandwhich sniffs a given network interface and records IP packet size, cross
@@ -52,12 +52,12 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/imsnif/bandwhich";
     changelog = "https://github.com/imsnif/bandwhich/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       figsoda
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "bandwhich";
   };
 }
