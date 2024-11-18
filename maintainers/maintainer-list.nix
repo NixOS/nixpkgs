@@ -11856,6 +11856,12 @@
     githubId = 1903418;
     name = "Kovacsics Robert";
   };
+  kpanuragh = {
+    email = "kpanuragh@gmail.com";
+    github = "kpanuragh";
+    githubId = 36616831;
+    name = "Anuragh K P";
+  };
   kquick = {
     email = "quick@sparq.org";
     github = "kquick";

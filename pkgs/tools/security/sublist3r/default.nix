@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sublist3r";
-  version = "1.1"; # Version tag or commit hash of the repository
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "aboul3la";
     repo = "Sublist3r";
-    rev = "master"; # Or specify a commit hash for a specific version
+    rev = "master";
     sha256 = "nrnb3jAIHw6WXR7VLNmi1YdfMBzHEIiMlGSbrvEi6Uc=";
   };
 
