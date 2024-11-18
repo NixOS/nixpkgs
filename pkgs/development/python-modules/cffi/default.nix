@@ -53,6 +53,11 @@ else
 
     nativeCheckInputs = [ pytestCheckHook ];
 
+    disabledTests = lib.optionals stdenv.hostPlatform.isFreeBSD [
+      # https://github.com/python-cffi/cffi/pull/144
+      "test_dlopen_handle"
+    ];
+
     meta = with lib; {
       changelog = "https://github.com/python-cffi/cffi/releases/tag/v${version}";
       description = "Foreign Function Interface for Python calling C code";
