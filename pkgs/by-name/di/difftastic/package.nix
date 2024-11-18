@@ -27,9 +27,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-hhkcujMuirBTIwUP3RMZ+F76T1TLcjMqa5l328xrwRg=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3yM0tP8t6ieDXHV7EM6Z6tNrid3Hy7WMCY0vLggprbI=";
 
   # skip flaky tests
   checkFlags = [
