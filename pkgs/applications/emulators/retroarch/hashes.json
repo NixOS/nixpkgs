@@ -45,10 +45,10 @@
         "src": {
             "owner": "libretro",
             "repo": "beetle-ngp-libretro",
-            "rev": "09869bb6032610714e22d09b95a81ea291937a8f",
-            "hash": "sha256-chMtMPUMHQ0iVcERfQApKnGQmV822QkYce2wvSj2Uck="
+            "rev": "139fe34c8dfc5585d6ee1793a7902bca79d544de",
+            "hash": "sha256-ruWnCgMxfpPHTWQ7vgNUczmGRzNKKhoZTNlUcNgm4T8="
         },
-        "version": "unstable-2024-06-28"
+        "version": "unstable-2024-10-21"
     },
     "beetle-pce": {
         "fetcher": "fetchFromGitHub",
