@@ -21,6 +21,7 @@ let
   atLeast220 = lib.versionAtLeast version "2.20pre";
   atLeast221 = lib.versionAtLeast version "2.21pre";
   atLeast224 = lib.versionAtLeast version "2.24pre";
+  atLeast225 = lib.versionAtLeast version "2.25pre";
   # Major.minor versions unaffected by CVE-2024-27297
   unaffectedByFodSandboxEscape = [
     "2.3"
@@ -72,6 +73,7 @@ in
 , nixVersions
 , openssl
 , perl
+, python3
 , pkg-config
 , rapidcheck
 , Security
@@ -151,6 +153,8 @@ self = stdenv.mkDerivation {
     libgit2
   ] ++ lib.optionals (atLeast224 || lib.versionAtLeast version "pre20240626") [
     toml11
+  ] ++ lib.optionals (atLeast225 && enableDocumentation) [
+    python3
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ] ++ lib.optionals (stdenv.hostPlatform.isx86_64) [
