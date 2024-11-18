@@ -283,7 +283,10 @@ let
           # to an emulator program. That is, if an emulator requires additional
           # arguments, a wrapper should be used.
           if pkgs.stdenv.hostPlatform.canExecute final
-          then "${pkgs.execline}/bin/exec"
+          # We use a bootstrap package set here to avoid bringing in
+          # an entire cURL/OpenSSL/etc. set to download the execline
+          # source code.
+          then "${pkgs.stdenv.__bootPackages.stdenv.__bootPackages.execline}/bin/exec"
           else if final.isWindows
           then "${wine}/bin/wine${optionalString (final.parsed.cpu.bits == 64) "64"}"
           else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null
