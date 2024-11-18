@@ -1,20 +1,21 @@
 { lib
-, fetchgit
+, fetchFromGitHub
 , buildGoModule
 , pigeon
 }:
 
 buildGoModule rec {
   pname = "verifpal";
-  version = "0.27.0";
+  version = "0.27.4";
 
-  src = fetchgit {
-    url = "https://source.symbolic.software/verifpal/verifpal.git";
+  src = fetchFromGitHub {
+    owner = "symbolicsoft";
+    repo = "verifpal";
     rev = "v${version}";
-    hash = "sha256-rihY5p6nJ1PKjI+gn3NNXy+uzeBG2UNyRYy3UjScf2Q=";
+    hash = "sha256-kBeQ7U97Ezj85A/FbNnE1dXR7VJzx0EUrDbzwOgKl8E=";
   };
 
-  vendorHash = "sha256-XOCRwh2nEIC+GjGwqd7nhGWQD7vBMLEZZ2FNxs0NX+E=";
+  vendorHash = "sha256-FvboLGdT+/W5on7NSzRp9QfV2peNVICypSFWAGFakLU=";
 
   nativeBuildInputs = [ pigeon ];
 
