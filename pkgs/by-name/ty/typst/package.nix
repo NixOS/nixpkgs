@@ -23,12 +23,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-OfTMJ7ylVOJjL295W3Flj2upTiUQXmfkyDFSE1v8+a4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "typst-dev-assets-0.12.0" = "sha256-YLxLuhpAUzktjyprZAhZ4GjcXEDUDdLtSzc5onzLuto=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dphMJ1KkZARSntvyEayAtlYw8lL39K7Iw0X4n8nz3z8=";
 
   nativeBuildInputs = [
     installShellFiles
