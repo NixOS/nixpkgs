@@ -47,13 +47,8 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : ${lib.makeBinPath [ pyFxADeps ]}
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "deadpool-0.7.0" = "sha256-yQwn45EuzmPBwuT+iLJ/LLWAkBkW2vF+GLswdbpFVAY=";
-      "sentry-0.34.0" = "sha256-BdWz6EIEm2YU3DG3ODkuXCVCMV6srdyx2gXkOxINjHc=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-02eQtaWvVnWK4VRgrazHOZ4UJLDhkMx58p+52DivZ1Y=";
 
   # almost all tests need a DB to test against
   doCheck = false;
