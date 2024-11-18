@@ -22396,6 +22396,12 @@
     githubId = 90456;
     name = "Rebecca (Bex) Kelly";
   };
+  ToyVo = {
+    name = "Collin Diekvoss";
+    email = "Collin@Diekvoss.com";
+    github = "ToyVo";
+    githubId = 5168912;
+  };
   tpw_rules = {
     name = "Thomas Watson";
     email = "twatson52@icloud.com";
