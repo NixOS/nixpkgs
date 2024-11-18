@@ -35,10 +35,10 @@
         "src": {
             "owner": "libretro",
             "repo": "beetle-lynx-libretro",
-            "rev": "d982616da671c3dd9c9271dd9d95c5c7d1393191",
-            "hash": "sha256-pAk5uLv5/2n3lZOWp5a5IdPqHM9vLacv8/X6wni5+dE="
+            "rev": "7fead71b49e0f08be5c4d4224fea73c6174763bf",
+            "hash": "sha256-fYBx/bjbhRXoVIGnEg4/oMVm705ivL1os+FfVQLRSyI="
         },
-        "version": "unstable-2024-06-28"
+        "version": "unstable-2024-10-21"
     },
     "beetle-ngp": {
         "fetcher": "fetchFromGitHub",
