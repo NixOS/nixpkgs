@@ -1,0 +1,18 @@
+diff --git a/src-tauri/Cargo.toml b/src-tauri/Cargo.toml
+index e18999b..442c847 100644
+--- a/src-tauri/Cargo.toml
++++ b/src-tauri/Cargo.toml
+@@ -14,13 +14,6 @@ rust-version = "1.77.2"
+ strip = "debuginfo"
+ lto = true
+ 
+-# Patches
+-[package.metadata.patch]
+-crates = ["tauri-plugin-shell"]
+-
+-[patch.crates-io]
+-tauri-plugin-shell = { path="./target/patch/tauri-plugin-shell-2.0.1" }
+-
+ [build-dependencies]
+ tauri-build = { version = "2.0.0", features = [] }
+ 
