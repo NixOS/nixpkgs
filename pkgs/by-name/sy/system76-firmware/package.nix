@@ -1,4 +1,14 @@
-{ rustPlatform, lib, fetchFromGitHub, xz, pkg-config, openssl, dbus, efibootmgr, makeWrapper }:
+{
+  rustPlatform,
+  lib,
+  fetchFromGitHub,
+  xz,
+  pkg-config,
+  openssl,
+  dbus,
+  efibootmgr,
+  makeWrapper,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "system76-firmware";
   # Check Makefile when updating, make sure postInstall matches make install
@@ -11,18 +21,21 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-nLbDhs+FxIcoVK66bwUAxAubikic5NT8yOA/mH/irgQ=";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
 
-  buildInputs = [ xz openssl dbus ];
+  buildInputs = [
+    xz
+    openssl
+    dbus
+  ];
 
   cargoBuildFlags = [ "--workspace" ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ecflash-0.1.0" = "sha256-W613wbW54R65/rs6oiPAH/qov2OVEjMMszpUJdX4TxI=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tCV9MnTNewIUKluU6oG1Z0fdCgO0VQWT+rLbWy0oJkc=";
 
   # Purposefully don't install systemd unit file, that's for NixOS
   postInstall = ''
@@ -39,6 +52,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pop-os/system76-firmware";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ shlevy ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }
