@@ -714,6 +714,7 @@ mapAliases {
   qds_sdk = qds-sdk; # added 2023-10-21
   qiskit-ibmq-provider = throw "qiskit-imbq-provider has been removed, since it was deprecated upstream"; # added 2025-09-13
   qiskit-ignis = throw "qiskit-ignis has been removed, since it was deprecated upstream"; # added 2025-09-13
+  qiskit-terra = throw "qiskit-terra has been removed, since it was deprecated upstream."; # added 2025-09-13
   qmk-dotty-dict = throw "qmk-dotty-dict has been removed. It is no longer needed since the fixes have been merged into dotty-dict."; # added 2025-01-01
   Quandl = quandl; # added 2023-02-19
   quamash = throw "'quamash' has been removed, since it is unmaintained and broken"; # added 2024-10-17
