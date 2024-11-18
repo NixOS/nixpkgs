@@ -1,4 +1,12 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, Security, sqlite, xdg-utils}:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  Security,
+  sqlite,
+  xdg-utils,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "anup";
@@ -11,19 +19,17 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-4pXF4p4K8+YihVB9NdgT6bOidmQEgWXUbcbvgXJ0IDA=";
   };
 
-  buildInputs = [
-    sqlite
-    xdg-utils
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-  ];
+  buildInputs =
+    [
+      sqlite
+      xdg-utils
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+    ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tui-utils-0.10.0" = "sha256-xazeXTGiMFZEcSFEF26te3LQ5oFFcskIiYkLzfsXf/A=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-925R5pG514JiA7iUegFkxrDpA3o7T/Ct4Igqqcdo3rw=";
 
   meta = with lib; {
     homepage = "https://github.com/Acizza/anup";
