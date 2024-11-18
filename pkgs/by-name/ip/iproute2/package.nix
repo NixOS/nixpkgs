@@ -34,6 +34,11 @@ stdenv.mkDerivation rec {
       url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/patch/?id=6a77abab92516e65f07f8657fc4e384c4541ce0e";
       hash = "sha256-19FzTDvgnmqVFBykVgXl4VIsHs8Cy9NWGOLpxifxVlI=";
     })
+    (fetchpatch {
+      name = "musl-mst-2.patch";
+      url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/patch/?id=043ef90e2fa94397eb5c85330889ca4146a6d58a";
+      hash = "sha256-6q4NcdT2YXhhbMgLaiAjO2WFUcM9Pv8+J34rGzJqU5Q=";
+    })
   ];
 
   postPatch = ''
