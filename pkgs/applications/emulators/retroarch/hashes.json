@@ -206,10 +206,10 @@
         "src": {
             "owner": "libretro",
             "repo": "desmume",
-            "rev": "b518fec54b79f2f71a7536715efcdcd7f60638a8",
-            "hash": "sha256-X6ZL+XdsrdPoOU5zqNsUraMrlPU/HmKWUolrWjFcbDQ="
+            "rev": "7f05a8d447b00acd9e0798aee97b4f72eb505ef9",
+            "hash": "sha256-BttWMunVbfPOTGx+DV+3QyOwW+55tgXKVIn99DZhbBI="
         },
-        "version": "unstable-2024-01-11"
+        "version": "unstable-2024-10-21"
     },
     "desmume2015": {
         "fetcher": "fetchFromGitHub",
