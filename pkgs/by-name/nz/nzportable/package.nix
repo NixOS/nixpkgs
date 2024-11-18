@@ -11,6 +11,9 @@
   zip,
   gettext,
   writableDirWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  imagemagick,
 
   libpng,
   zlib,
@@ -85,6 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
     zip
     gettext
     writableDirWrapper
+    copyDesktopItems
+    imagemagick
   ];
 
   buildInputs =
@@ -128,9 +133,31 @@ stdenv.mkDerivation (finalAttrs: {
       "FTE_TOOL_MASTER"
     ];
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "nzportable";
+      desktopName = "Nazi Zombies: Portable";
+      comment = description;
+      icon = "nzportable";
+      exec = "nzportable";
+      categories = [
+        "Game"
+        "ActionGame"
+        "Shooter"
+      ];
+      keywords = [
+        "Zombies"
+        "CoD"
+      ];
+      prefersNonDefaultGPU = true;
+    })
+  ];
+
   postInstall = ''
     # Remove original FTEQW desktop file
     rm $out/share/applications/fteqw.desktop
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    magick ${nzportable-assets}/gfx/menu/nzp_logo.tga $out/share/icons/hicolor/256x256/apps/nzportable.png
   '';
 
   postFixup =
