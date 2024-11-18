@@ -28,12 +28,8 @@ rustPlatform.buildRustPackage rec {
       Security
     ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tui-utils-0.10.0" = "sha256-xazeXTGiMFZEcSFEF26te3LQ5oFFcskIiYkLzfsXf/A=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-925R5pG514JiA7iUegFkxrDpA3o7T/Ct4Igqqcdo3rw=";
 
   meta = with lib; {
     homepage = "https://github.com/Acizza/anup";
