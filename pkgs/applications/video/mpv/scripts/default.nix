@@ -117,6 +117,7 @@ let
       mpv-osc-tethys = callPackage ./mpv-osc-tethys.nix { };
       mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { };
       mpv-slicing = callPackage ./mpv-slicing.nix { };
+      mpv-subtitle-lines = callPackage ./mpv-subtitle-lines.nix { };
       mpv-webm = callPackage ./mpv-webm.nix { };
       mpvacious = callPackage ./mpvacious.nix { };
       quack = callPackage ./quack.nix { };
