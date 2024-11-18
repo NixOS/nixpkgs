@@ -26,13 +26,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-fod3ZkJktmJGHF8nSSp9lVMg/qYKQd4EiauFGTSvbsg=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "const-field-offset-0.1.5" = "sha256-QtlvLwe27tLLdWhqiKzXoUvBsBcZbfwY84jXUduzCKw=";
-      "supergfxctl-5.2.4" = "sha256-MQJJaTajPQ45BU6zyMx0Wwf7tAPcT4EURWWbZxrbGzE=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8QnbfklXULIOciJS0d/bnFriK+1xwNZvYVd9vPGvG7Q=";
 
   postPatch = ''
     files="
