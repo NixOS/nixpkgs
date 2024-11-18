@@ -1338,7 +1338,7 @@ self: super: {
   beam-postgres = lib.pipe super.beam-postgres [
     # Requires pg_ctl command during tests
     (addTestToolDepends [pkgs.postgresql])
-    (dontCheckIf (!pkgs.postgresql.doCheck))
+    (dontCheckIf (!pkgs.postgresql.doCheck || !self.testcontainers.doCheck))
   ];
 
   # Requires pqueue <1.5 but it works fine with pqueue-1.5.0.0
@@ -3061,5 +3061,10 @@ self: super: {
       ${drv.postPatch or ""}
      '';
   }) super.quickcheck-state-machine;
+
+  testcontainers = lib.pipe super.testcontainers [
+    dontCheck   # Tests require docker
+    doJailbreak # https://github.com/testcontainers/testcontainers-hs/pull/58
+  ];
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
