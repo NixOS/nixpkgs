@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitea
-, rustPlatform
-, makeWrapper
-, protobuf
-, Security
-, imagemagick
-, ffmpeg
-, exiftool
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchFromGitea,
+  rustPlatform,
+  makeWrapper,
+  protobuf,
+  Security,
+  imagemagick,
+  ffmpeg,
+  exiftool,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,12 +24,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "mEZBFDR+/aMRFw54Yq+f1gyEz8H+5IggNCpzv3UdDFg=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo-0.3.lock;
-    outputHashes = {
-      "aws-creds-0.29.1" = "bwDFmDPThMLrpaB7cAj/2/vJKhbX6/DqgcIRBVKSZhg=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-XTT2M5qUb3+WZzT17b1q5kAqyVr7ShUS4IexpI3wrX0=";
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
@@ -39,10 +36,18 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram "$out/bin/pict-rs" \
-        --prefix PATH : "${lib.makeBinPath [ imagemagick ffmpeg exiftool ]}"
+        --prefix PATH : "${
+          lib.makeBinPath [
+            imagemagick
+            ffmpeg
+            exiftool
+          ]
+        }"
   '';
 
-  passthru.tests = { inherit (nixosTests) pict-rs; };
+  passthru.tests = {
+    inherit (nixosTests) pict-rs;
+  };
 
   meta = with lib; {
     description = "Simple image hosting service";
