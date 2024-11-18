@@ -70,7 +70,6 @@ in
 , mdbook-linkcheck
 , nlohmann_json
 , nixosTests
-, nixVersions
 , openssl
 , perl
 , python3
@@ -178,10 +177,9 @@ self = stdenv.mkDerivation {
     (darwinMinVersionHook "10.13")
   ];
 
-
   propagatedBuildInputs = [
     boehmgc
-  ] ++ lib.optionals (atLeast27) [
+  ] ++ lib.optionals atLeast27 [
     nlohmann_json
   ];
 
