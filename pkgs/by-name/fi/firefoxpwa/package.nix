@@ -40,13 +40,8 @@ rustPlatform.buildRustPackage rec {
   sourceRoot = "${src.name}/native";
   buildFeatures = [ "immutable-runtime" ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "mime-0.4.0-a.0" = "sha256-LjM7LH6rL3moCKxVsA+RUL9lfnvY31IrqHa9pDIAZNE=";
-      "web_app_manifest-0.0.0" = "sha256-G+kRN8AEmAY1TxykhLmgoX8TG8y2lrv7SCRJlNy0QzA=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6zUBbhRHAPOmIjE5picbtMBdfv7Kjk9d1ox9KiAAkMk=";
 
   preConfigure = ''
     sed -i 's;version = "0.0.0";version = "${version}";' Cargo.toml
