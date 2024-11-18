@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, cmake
-, fetchFromGitHub
-, rustPlatform
-, testers
-, Security
+{
+  stdenv,
+  lib,
+  cmake,
+  fetchFromGitHub,
+  rustPlatform,
+  testers,
+  Security,
 }:
 
 let
@@ -20,15 +21,14 @@ let
       sha256 = "sha256-aXScqJ1LijMSAy9YkS5QyXtTqxd19lLt3BbyVXlbw8o=";
     };
 
-    nativeBuildInputs = [ cmake rustPlatform.bindgenHook ];
+    nativeBuildInputs = [
+      cmake
+      rustPlatform.bindgenHook
+    ];
     buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
-    cargoLock = {
-      lockFile = ./Cargo.lock;
-      outputHashes = {
-        "amazon-qldb-driver-0.1.0" = "sha256-az0rANBcryHHnpGWvo15TGGW4KMUULZHaj5msIHts14=";
-      };
-    };
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-tD35Py81QLDVlBahYzgskOQK5lQW03xuCnUwVUi4oLU=";
 
     passthru.tests.version = testers.testVersion { inherit package; };
 
