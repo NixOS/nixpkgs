@@ -17,6 +17,7 @@ let
     port
     str
     submodule
+    path
     ;
   cfg = config.services.navidrome;
   settingsFormat = pkgs.formats.json { };
@@ -54,6 +55,17 @@ in
         description = "Configuration for Navidrome, see <https://www.navidrome.org/docs/usage/configuration-options/> for supported values.";
       };
 
+      credentialsFile = mkOption {
+        type = path;
+        description = ''
+          Path to a JSON file to be merged with the settings.
+          Useful to merge a file which is better kept out of the Nix store
+          to set secret config parameters like api keys.
+        '';
+        default = "/dev/null";
+        example = "/var/lib/secrets/navidrome/settings.json";
+      };
+
       user = mkOption {
         type = str;
         default = "navidrome";
@@ -78,8 +90,16 @@ in
     let
       inherit (lib) mkIf optional getExe;
       WorkingDirectory = "/var/lib/navidrome";
+      rootDir = "/run/navidrome";
+      settingsFile = settingsFormat.generate "navidrome.json" cfg.settings;
     in
     mkIf cfg.enable {
+      system.activationScripts = {
+        navidrome-demon = ''
+          install -d -m 700 '${WorkingDirectory}'
+          chown -R '${cfg.user}:${cfg.group}' ${WorkingDirectory}
+        '';
+      };
       systemd = {
         tmpfiles.settings.navidromeDirs = {
           "${cfg.settings.DataFolder or WorkingDirectory}"."d" = {
@@ -96,18 +116,30 @@ in
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
           serviceConfig = {
+            ExecStartPre = [
+              (
+                "+"
+                + pkgs.writeShellScript "navidrome-prestart" ''
+                  ${pkgs.jq}/bin/jq --slurp add ${settingsFile} '${cfg.credentialsFile}' |
+                  install -D -m 600 -o '${cfg.user}' -g '${cfg.group}' /dev/stdin "${WorkingDirectory}/settings.json"
+                ''
+              )
+            ];
             ExecStart = ''
-              ${getExe cfg.package} --configfile ${settingsFormat.generate "navidrome.json" cfg.settings}
+              ${getExe cfg.package} --configfile "${WorkingDirectory}/settings.json"
             '';
             User = cfg.user;
             Group = cfg.group;
-            StateDirectory = "navidrome";
+            StateDirectory = baseNameOf rootDir;
+            RuntimeDirectory = baseNameOf rootDir;
             inherit WorkingDirectory;
-            RuntimeDirectory = "navidrome";
-            RootDirectory = "/run/navidrome";
-            ReadWritePaths = "";
+            MountAPIVFS = true;
             BindPaths =
-              optional (cfg.settings ? DataFolder) cfg.settings.DataFolder
+              [
+                "${WorkingDirectory}"
+                "/run"
+              ]
+              ++ optional (cfg.settings ? DataFolder) cfg.settings.DataFolder
               ++ optional (cfg.settings ? CacheFolder) cfg.settings.CacheFolder;
             BindReadOnlyPaths = [
               # navidrome uses online services to download additional album metadata / covers
