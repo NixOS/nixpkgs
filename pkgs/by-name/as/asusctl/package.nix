@@ -1,17 +1,18 @@
-{ lib
-, rustPlatform
-, fetchFromGitLab
-, systemd
-, coreutils
-, gnugrep
-, pkg-config
-, fontconfig
-, libGL
-, libinput
-, libxkbcommon
-, mesa
-, seatd
-, wayland
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  systemd,
+  coreutils,
+  gnugrep,
+  pkg-config,
+  fontconfig,
+  libGL,
+  libinput,
+  libxkbcommon,
+  mesa,
+  seatd,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,13 +26,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-fod3ZkJktmJGHF8nSSp9lVMg/qYKQd4EiauFGTSvbsg=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "const-field-offset-0.1.5" = "sha256-QtlvLwe27tLLdWhqiKzXoUvBsBcZbfwY84jXUduzCKw=";
-      "supergfxctl-5.2.4" = "sha256-MQJJaTajPQ45BU6zyMx0Wwf7tAPcT4EURWWbZxrbGzE=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-8QnbfklXULIOciJS0d/bnFriK+1xwNZvYVd9vPGvG7Q=";
 
   postPatch = ''
     files="
@@ -93,6 +89,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/asus-linux/asusctl";
     license = licenses.mpl20;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ k900 aacebedo ];
+    maintainers = with maintainers; [
+      k900
+      aacebedo
+    ];
   };
 }
