@@ -1,15 +1,22 @@
-{ lib, python3Packages, fetchFromGitHub, xvfb-run, xdotool, dmenu }:
+{ dmenu
+, fetchFromGitHub
+, lib
+, python3Packages
+, xdotool
+, xsel
+, xvfb-run
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "keepmenu";
-  version = "1.4.0";
+  version = "1.4.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "keepmenu";
     rev = version;
-    hash = "sha256-3vFg+9Nw+NhuPJbrmBahXwa13wXlBg5IMYwJ+unn88k=";
+    hash = "sha256-Kzt2RqyYvOWnbkflwTHzlnpUaruVQvdGys57DDpH9o8=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -22,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     pynput
   ];
 
-  nativeCheckInputs = [ xvfb-run xdotool dmenu ];
+  nativeCheckInputs = [ dmenu xdotool xsel xvfb-run ];
 
   postPatch = ''
     substituteInPlace tests/keepmenu-config.ini tests/tests.py \
