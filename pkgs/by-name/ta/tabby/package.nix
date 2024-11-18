@@ -124,18 +124,8 @@ rustPlatform.buildRustPackage {
     fetchSubmodules = true;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ollama-rs-0.1.9" = "sha256-d6sKUxc8VQbRkVqMOeNFqDdKesq5k32AQShK67y2ssg=";
-      "oneshot-0.1.6" = "sha256-PmYuHuNTqToMyMHPRFDUaHUvFkVftx9ZCOBwXj+4Hc4=";
-      "ownedbytes-0.7.0" = "sha256-p0+ohtW0VLmfDTZw/LfwX2gYfuYuoOBcE+JsguK7Wn8=";
-      "sqlx-0.7.4" = "sha256-tcISzoSfOZ0jjNgGpuPPxjMxmBUPw/5FVDoALZEAHKY=";
-      "tree-sitter-c-0.21.3" = "sha256-ucbHLS2xyGo1uyKZv/K1HNXuMo4GpTY327cgdVS9F3c=";
-      "tree-sitter-cpp-0.22.1" = "sha256-3akSuQltFMF6I32HwRU08+Hcl9ojxPGk2ZuOX3gAObw=";
-      "tree-sitter-solidity-1.2.6" = "sha256-S00hdzMoIccPYBEvE092/RIMnG8YEnDGk6GJhXlr4ng=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-GNDNEafzT96jq0CbdrrcxxRPAFfK8gEBVsXAfRgTskQ=";
 
   # https://github.com/TabbyML/tabby/blob/v0.7.0/.github/workflows/release.yml#L39
   cargoBuildFlags =
