@@ -24,20 +24,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-27oSk8fnTvl1zJ8xYkZHkWVTq+AVDn4Zi1s56T49T1Q=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "calamine-0.26.1" = "sha256-3WLXR6ZQoAi6/HtfEouCg9mR5E8iAt8Qzy3fZIrZbKA=";
-      "csv-1.3.0" = "sha256-QP+N76BTvoHyWOezl+ICwOOqEIfoJBt6PBouxZ6EZks=";
-      "csvlens-0.10.1" = "sha256-w1nRXz1g4MHKbp3GQ9osZGi4bTDzTdQjfKevl1/4DHA=";
-      "dynfmt-0.1.5" = "sha256-/SrNOOQJW3XFZOPL/mzdOBppVCaJNNyGBuJumQGx6sA=";
-      "grex-1.4.5" = "sha256-g8yPcnDV7hu/K8Ib8j8n+Qz9O7G4zdbMnQopBBn4mr0=";
-      "local-encoding-0.2.0" = "sha256-ThXYKr3u/n2kvINcyobB2Ayex2sNbJEOyyjZH993Z4U=";
-      "polars-0.44.2" = "sha256-MqQoHLluWWkWFOK4+Njq/NnYm30XGze9S9cJ7ysPLOw=";
-      "publicsuffix-2.2.3" = "sha256-CV7ey5v1Lma+7q7dL4UfwSy7GjtK/OZvmrbyexFOfBY=";
-      "strum-0.26.3" = "sha256-R3bPqTwxyts7uYSas/3Ij39/m64DH0A++DMIdYqmSqA=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-tu9HCFAxmmYVgmJyHunBtGSqKGzwbX2vi6ju4cv33wc=";
 
   buildInputs =
     [
