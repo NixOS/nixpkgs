@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "FEBio";
-  version = "4.7";
+  version = "4.8";
 
   src = fetchFromGitHub {
     owner = "febiosoftware";
     repo = "FEBio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RRdIOyXg4jYW76ABfJdMfVtCYMLYFdvyOI98nHXCof8=";
+    hash = "sha256-x2QYnMMiGd2x2jvBMLBK7zdJv3yzYHkJ6a+0xes6OOk=";
   };
 
   patches = [
