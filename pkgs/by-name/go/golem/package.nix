@@ -44,12 +44,8 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/golemcloud/golem-examples/blob/v1.0.6/build.rs#L9
   GOLEM_WIT_ROOT = "../golem-wit-1.0.3";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cranelift-bforest-0.108.1" = "sha256-WVRj6J7yXLFOsud9qKugmYja0Pe7AqZ0O2jgkOtHRg8=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-nqI1lTrqWs4wLtlVeWdf11K6gs+pNRHWqyWMSlSSBx4=";
 
   # Tests are failing in the sandbox because of some redis integration tests
   doCheck = false;
