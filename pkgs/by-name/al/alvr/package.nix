@@ -46,17 +46,12 @@ rustPlatform.buildRustPackage rec {
     owner = "alvr-org";
     repo = "ALVR";
     rev = "refs/tags/v${version}";
-    fetchSubmodules = true; #TODO devendor openvr
+    fetchSubmodules = true; # TODO devendor openvr
     hash = "sha256-zqeh9U0A/KHlRieq9Lf+7f04K3JG/vpE2gZ916ReXLc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "openxr-0.19.0" = "sha256-bnMSjJh+zjLw4Pdxr7LLm6qYAJOK7hz5xORKZ2pVcGw=";
-      "settings-schema-0.2.0" = "sha256-luEdAKDTq76dMeo5kA+QDTHpRMFUg3n0qvyQ7DkId0k=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-m0Cm8xKIdUtMy2+T6duPsB6aYm+vV7o9e+jrvQQfeSM=";
 
   patches = [
     (substituteAll {
