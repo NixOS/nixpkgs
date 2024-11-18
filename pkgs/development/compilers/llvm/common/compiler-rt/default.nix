@@ -8,7 +8,6 @@
 , monorepoSrc ? null
 , runCommand
 , apple-sdk
-, apple-sdk_10_13
 , cmake
 , ninja
 , python3
@@ -47,14 +46,6 @@ let
   baseName = "compiler-rt";
   pname = baseName + lib.optionalString (haveLibc) "-libc";
 
-  # Sanitizers require 10.13 or newer. Instead of disabling them for most x86_64-darwin users,
-  # build them with a newer SDK and the default (10.12) deployment target.
-  apple-sdk' =
-    if lib.versionOlder (lib.getVersion apple-sdk) "10.13" then
-      apple-sdk_10_13.override { enableBootstrap = true; }
-    else
-      apple-sdk.override { enableBootstrap = true; };
-
   src' = if monorepoSrc != null then
     runCommand "${baseName}-src-${version}" {} (''
       mkdir -p "$out"
@@ -80,10 +71,7 @@ stdenv.mkDerivation ({
     ++ [ python3 libllvm.dev ];
   buildInputs =
     lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
-    ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include
-    # Adding the bootstrap SDK to `buildInputs` on static builds  propagates it, breaking `xcrun`.
-    # This can be removed once the minimum SDK >10.12 on x86_64-darwin.
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic) [ apple-sdk' ];
+    ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
 
   env = {
     NIX_CFLAGS_COMPILE = toString ([
@@ -148,7 +136,7 @@ stdenv.mkDerivation ({
     # Darwin support, so force it to be enabled during the first stage of the compiler-rt bootstrap.
     "-DCOMPILER_RT_HAS_G_FLAG=ON"
   ] ++ [
-    "-DDARWIN_macosx_CACHED_SYSROOT=${apple-sdk'.sdkroot}"
+    "-DDARWIN_macosx_CACHED_SYSROOT=${apple-sdk.sdkroot}"
     "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=${lib.versions.majorMinor (lib.getVersion apple-sdk)}"
     "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.darwinArch}"
     "-DDARWIN_osx_BUILTIN_ARCHS=${stdenv.hostPlatform.darwinArch}"
