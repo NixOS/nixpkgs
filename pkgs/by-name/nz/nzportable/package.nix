@@ -131,6 +131,18 @@ stdenv.mkDerivation (finalAttrs: {
       "FTE_TOOL_IMAGE"
       "FTE_TOOL_QTV"
       "FTE_TOOL_MASTER"
+      "FTE_TOOL_QCC"
+      "FTE_TOOL_HTTPSV"
+      "FTE_MENU_SYS"
+      "FTE_CSADDON"
+      "FTE_PLUG_QUAKE3"
+      "FTE_PLUG_COD"
+      "FTE_PLUG_QI"
+      "FTE_PLUG_EZHUD"
+      "FTE_PLUG_IRC"
+      "FTE_PLUG_HL2"
+      "FTE_PLUG_MODELS"
+      "FTE_PLUG_XMPP"
     ];
 
   desktopItems = [
