@@ -41,12 +41,12 @@ rustPlatform.buildRustPackage rec {
   #
   checkType = "debug";
 
-  meta = with lib; {
+  meta = {
     description = "GIF encoder based on libimagequant (pngquant)";
     homepage = "https://gif.ski/";
     changelog = "https://github.com/ImageOptim/gifski/releases/tag/${src.rev}";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "gifski";
   };
 }
