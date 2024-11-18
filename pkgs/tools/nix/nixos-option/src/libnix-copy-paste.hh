@@ -2,4 +2,4 @@
 
 #include <string_view>
 
-bool isVarName(const std::string_view & s);
+bool isVarName(std::string_view s);
