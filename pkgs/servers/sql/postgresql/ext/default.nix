@@ -72,6 +72,8 @@ in {
 
     pg_net = super.callPackage ./pg_net.nix { };
 
+    pg-semver = super.callPackage ./pg-semver.nix { };
+
     pgtap = super.callPackage ./pgtap.nix { };
 
     smlar = super.callPackage ./smlar.nix { };

@@ -48,6 +48,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "lxml"
     "mean_average_precision"
+    "pillow"
     "torchvision"
   ];
 
