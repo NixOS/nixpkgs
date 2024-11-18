@@ -25,12 +25,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-eXUeXBFW2ejkOeMUujMwY0gidzdaX9yWWOfx1ZwA3lk=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libdrm_amdgpu_sys-0.7.5" = "sha256-IkA1kJggkaSWzdDBHpNjU8WZr6wpSQWohERiHWQS2UY=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-t8lnwq4V81OwtT9AVL2JLM6ZbcWKRdyY2bjwZ6y6Suk=";
 
   buildInputs = [
     libdrm
