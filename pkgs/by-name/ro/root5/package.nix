@@ -121,6 +121,11 @@ stdenv.mkDerivation rec {
       substituteInPlace misc/memstat/src/TMemStatHook.cxx \
         --replace "defined(R__GNU) && (defined(R__LINUX) || defined(__APPLE__))" \
                   "defined(R__GNU) && (defined(__APPLE__))"
+
+      # python 3.12
+      substituteInPlace bindings/pyroot/src/PyROOT.h \
+        --replace " PyUnicode_GET_SIZE" " PyUnicode_GetLength" \
+        --replace " PyUnicode_GetSize" " PyUnicode_GetLength"
     ''
     # Fix CINTSYSDIR for "build" version of rootcint
     # This is probably a bug that breaks out-of-source builds
@@ -168,6 +173,8 @@ stdenv.mkDerivation rec {
     "-Dxrootd=OFF"
   ]
   ++ lib.optional ((!stdenv.hostPlatform.isDarwin) && (stdenv.cc.libc != null)) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include";
+
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   setupHook = ./setup-hook.sh;
 
