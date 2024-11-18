@@ -17,12 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-liGGnaUhi3/d4SxpiG/P1wp89brqUJaLyo9/KJvPf9I=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "reflexo-0.5.0-rc7" = "sha256-XjzHo9HprI1FVPDwNQ0Gw9iTXspo6PUsxz3BOd6qkL0=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-w0rXxPmkPUJYttJe5Q4wSdZHsZATzmLC7aXGF6FDICI=";
 
   # Disabling tests requiring network access
   checkFlags = [
