@@ -34,9 +34,9 @@ stdenv.mkDerivation {
     makeWrapper
     python3
     stripJavaArchivesHook
+    which
   ];
   buildInputs = [
-    which
     attr
   ];
 
