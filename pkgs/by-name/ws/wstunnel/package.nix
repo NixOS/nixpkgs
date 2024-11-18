@@ -23,12 +23,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-ufssj7m5mly2B33e1DWY2e6AH0zTPh3SozYc663QjJ4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "fastwebsockets-0.8.0" = "sha256-eqtCh9fMOG2uvL/GLUVXNiSB+ovYLc/Apuq9zssn8hU=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2kpUxMT9zWEr64EP1btN+9oW87a0/bmGWUQyZakenfY=";
 
   nativeBuildInputs = [ versionCheckHook ];
 
