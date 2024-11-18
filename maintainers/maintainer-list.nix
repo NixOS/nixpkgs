@@ -9468,6 +9468,12 @@
     githubId = 4085046;
     name = "Imuli";
   };
+  imurx = {
+    email = "imurx@proton.me";
+    github = "imurx";
+    githubId = 3698237;
+    name = "ImUrX";
+  };
   inclyc = {
     email = "i@lyc.dev";
     github = "inclyc";
