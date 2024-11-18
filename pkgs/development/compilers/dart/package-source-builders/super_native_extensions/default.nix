@@ -19,28 +19,8 @@ let
 
     sourceRoot = "${src.name}/rust";
 
-    cargoLock =
-      rec {
-        _0_8_22 = {
-          lockFile = ./Cargo-0.8.22.lock;
-          outputHashes = {
-            "mime_guess-2.0.4" = "sha256-KSw0YUTGqNEWY9pMvQplUGajJgoP2BRwVX6qZPpB2rI=";
-          };
-        };
-        _0_9_0-dev_3 = _0_8_22;
-        _0_8_24 = _0_8_22;
-        _0_8_21 = _0_8_22;
-        _0_8_20 = _0_8_22;
-        _0_8_19 = _0_8_22;
-        _0_8_18 = _0_8_22;
-        _0_8_17 = _0_8_22;
-      }
-      .${"_" + (lib.replaceStrings [ "." ] [ "_" ] version)} or (throw ''
-        Unsupported version of pub 'super_native_extensions': '${version}'
-        Please add ${src}/rust/Cargo.lock
-        to this path, and add corresponding entry here. If the lock
-        is the same with existing versions, add an alias here.
-      '');
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-gYYoC3bGJrYY1uUHfqMv6pp4SK+P9fRoBsLtf34rsCg=";
 
     nativeBuildInputs = [ pkg-config ];
 
