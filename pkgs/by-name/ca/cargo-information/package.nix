@@ -22,12 +22,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-gu1t0jMBJ+mJIVMGy1JlabzcOT4lbmTvO/VQfxLLsWM=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cargo-test-macro-0.2.1" = "sha256-3sergm2T4VXT41ERCLL7p9+pJwIKzT54qdla8V58Psk=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-e8XUbYnv9LQ8RRKGq1h9ueystl526arMac9h6Klwz+E=";
 
   checkFlags = [
     # Require network access
