@@ -18,12 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-8PUtlhy8rsQw3TqgpxWiVettGhncHetWCZcrDXjsR5M=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "packet-builder-0.7.0" = "sha256-KxNrnLZ/z3JJ3E1pCTJF9tNXI7XYNRc6ooTUz3avpjw=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-E0K0DEL3AaXrQcvbQO2yo+IcPBnMapJTF77jyL1VJxc=";
 
   checkFlags = [
     # failing in upstream CI
@@ -36,10 +32,6 @@ rustPlatform.buildRustPackage rec {
 
   # 10 passed; 47 failed https://hydra.nixos.org/build/148943783/nixlog/1
   doCheck = !stdenv.hostPlatform.isDarwin;
-
-  postPatch = ''
-    ln --force -s ${./Cargo.lock} Cargo.lock
-  '';
 
   preConfigure = ''
     export BANDWHICH_GEN_DIR=_shell-files
