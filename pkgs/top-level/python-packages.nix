@@ -2575,6 +2575,8 @@ self: super: with self; {
 
   cometblue-lite = callPackage ../development/python-modules/cometblue-lite { };
 
+  comicapi = callPackage ../development/python-modules/comicapi { };
+
   comicon = callPackage ../development/python-modules/comicon { };
 
   comm = callPackage ../development/python-modules/comm { };
