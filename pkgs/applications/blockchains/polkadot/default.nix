@@ -45,12 +45,8 @@ rustPlatform.buildRustPackage rec {
     rm .git_commit
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "simple-mermaid-0.1.0" = "sha256-IekTldxYq+uoXwGvbpkVTXv2xrcZ0TQfyyE2i2zH+6w=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-dkb/rctDYOPXTjeANe0v0olb9Qolq0v/Gl5tn0lRz3U=";
 
   buildType = "production";
 
