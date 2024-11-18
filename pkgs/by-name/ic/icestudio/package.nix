@@ -12,13 +12,13 @@
 
 let
   # Use unstable because it has improvements for finding python
-  version = "0-unstable-2024-07-11";
+  version = "0-unstable-2024-11-18";
 
   src = fetchFromGitHub {
     owner = "FPGAwars";
     repo = "icestudio";
-    rev = "5df95bfbcc9540675897256e0a372f8039b534c5";
-    hash = "sha256-0HETAeR8OCsu7caP8SbBVYSLQIxMKjV1flR24MizSnU=";
+    rev = "87d057adb1e795352a7dd67666a69ada4269b2e8";
+    hash = "sha256-VZuc5Wa6o5PMUE+P4EMDl/pI/zmcff9OEhqeCfS4bzE=";
   };
 
   collection = fetchurl {
@@ -29,7 +29,7 @@ let
   app = buildNpmPackage {
     pname = "icestudio-app";
     inherit version src;
-    npmDepsHash = "sha256-gfkLW8OaCpaq5KHBhttqMTQPfhUCs22ii6UvNxqWnsQ=";
+    npmDepsHash = "sha256-CbrnhnhCG8AdAqySO6fB5hZ128lHyC3WH/vZcFtv6Ko=";
     sourceRoot = "${src.name}/app";
     dontNpmBuild = true;
     installPhase = ''
@@ -50,7 +50,7 @@ in
 buildNpmPackage rec {
   pname = "icestudio";
   inherit version src;
-  npmDepsHash = "sha256-K90zgKHqNEvjjM20YaXa24J0dGA2MESNvzvsr31AR2Y=";
+  npmDepsHash = "sha256-y1lo5+qJ6JBxjt7wtUmTHuJHMH9Mztf6xmmadI8zBgA=";
   npmFlags = [
     # Use the legacy dependency resolution, with less strict version
     # requirements for transative dependencies
