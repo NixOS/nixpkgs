@@ -519,10 +519,10 @@
         "src": {
             "owner": "libretro",
             "repo": "mgba",
-            "rev": "3e349d52f42151085639aed9550967b88cde4f43",
-            "hash": "sha256-gTviFmJF+7n0SFUL6PZovLTMyrEeQyAyAJY2i40GEao="
+            "rev": "747362c02d2e71ee7c363e8dcb240925be8af906",
+            "hash": "sha256-dBhdS6C1H02iwdYDVvJmkPWob81vpmQJdHUHJFAq2vo="
         },
-        "version": "unstable-2024-09-24"
+        "version": "unstable-2024-11-12"
     },
     "mrboom": {
         "fetcher": "fetchFromGitHub",
