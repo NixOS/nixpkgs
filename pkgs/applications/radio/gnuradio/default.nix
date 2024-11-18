@@ -10,7 +10,6 @@
 , orc
 , boost
 , spdlog
-, swig
 , mpir
 , doxygen
 , python
