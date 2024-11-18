@@ -1343,6 +1343,7 @@ mapAliases {
   yi = throw "'yi' has been removed, as it was broken and unmaintained"; # added 2024-05-09
   youtrack_2022_3 = throw "'youtrack_2022_3' has been removed as it was deprecated. Please update to the 'youtrack' package."; # Added 2024-10-17
   yrd = throw "'yrd' has been removed, as it was broken and unmaintained"; # added 2024-05-27
+  yubikey-manager-qt = throw "'yubikey-manager-qt' has been removed, use 'yubioath-flutter' instead"; # Added 2024-11-11
 
   ### Z ###
 

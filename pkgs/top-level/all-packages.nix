@@ -11360,8 +11360,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices SystemConfiguration;
   };
 
-  yubikey-manager-qt = libsForQt5.callPackage ../tools/misc/yubikey-manager-qt { };
-
   yubikey-personalization-gui = libsForQt5.callPackage ../tools/misc/yubikey-personalization-gui { };
 
   zlib = callPackage ../development/libraries/zlib {
