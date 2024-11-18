@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,12 +16,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-vakCBDyL/Su55tkn/SJ5ShZcYC8l+p2acpve/fTN0uI=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "suricatax-rule-parser-0.1.0" = "sha256-qwkZFmvgfXrH0zHPq/dVfxpWkulPDT+CzPQQHfeBotg=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-b3PQQlSRt1ysnJIkBXdG1KRUdEJ8h1WLzbmZXx9VjqU=";
 
   meta = {
     description = "Web Based Event Viewer (GUI) for Suricata EVE Events in Elastic Search";
