@@ -25,15 +25,8 @@ let
     };
 
     # `Cargo.lock` has git dependencies, meaning can't use `cargoHash`
-    cargoLock = {
-      lockFile = ./Cargo.lock;
-      outputHashes = {
-        "lber-0.4.3" = "sha256-ff0C4uOAohbwHIFt6c0iGQwPDUTJhO3vHlSUDK/yEbY=";
-        "opaque-ke-0.6.1" = "sha256-99gaDv7eIcYChmvOKQ4yXuaGVzo2Q6BcgSQOzsLF+fM=";
-        "yew_form-0.1.8" = "sha256-1n9C7NiFfTjbmc9B5bDEnz7ZpYJo9ZT8/dioRXJ65hc=";
-      };
-    };
-
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-zsOQSHVgJyv3VlKiufayQEPKEVWljgL2px9di8LK8bk=";
   };
 
   frontend = rustPlatform.buildRustPackage (
