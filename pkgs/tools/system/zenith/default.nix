@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, IOKit
-, nvidiaSupport ? false
-, makeWrapper
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  IOKit,
+  nvidiaSupport ? false,
+  makeWrapper,
 }:
 
 assert nvidiaSupport -> stdenv.hostPlatform.isLinux;
@@ -25,13 +26,8 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "heim-0.1.0-rc.1" = "sha256-TKEG0YxF44wLz+qxpS/VfRKucqyl97t3PDxjPajbD58=";
-      "sysinfo-0.15.1" = "sha256-faMxXEHL7DFQLYrAJ+yBL6yiepZotofPF2+SizGQj4A=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xfp+nR4ihaTO4AZHizYg4qqf9MR030Qb5bN2nzhbytQ=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ] ++ lib.optional nvidiaSupport makeWrapper;
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
@@ -44,7 +40,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Sort of like top or htop but with zoom-able charts, network, and disk usage"
+    description =
+      "Sort of like top or htop but with zoom-able charts, network, and disk usage"
       + lib.optionalString nvidiaSupport ", and NVIDIA GPU usage";
     mainProgram = "zenith";
     homepage = "https://github.com/bvaisvil/zenith";
