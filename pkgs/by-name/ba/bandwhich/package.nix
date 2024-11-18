@@ -10,22 +10,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bandwhich";
-  version = "0.23.0";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8PUtlhy8rsQw3TqgpxWiVettGhncHetWCZcrDXjsR5M=";
+    hash = "sha256-gXPX5drVXsfkssPMdhqIpFsYNSbelE9mKwO+nGEy4Qs=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-E0K0DEL3AaXrQcvbQO2yo+IcPBnMapJTF77jyL1VJxc=";
-
-  checkFlags = [
-    # failing in upstream CI
-    "--skip=tests::cases::ui::layout_under_50_width_under_50_height"
-  ];
+  cargoHash = "sha256-bsyEEbwBTDcIOc+PRkZqcfqcDgQnchuVy8a8eSZZUHU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
