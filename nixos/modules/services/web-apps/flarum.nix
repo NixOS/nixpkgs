@@ -163,7 +163,7 @@ in {
 
     services.mysql = mkIf cfg.enable {
       enable = true;
-      package = pkgs.mysql;
+      package = pkgs.mariadb;
       ensureDatabases = [cfg.database.database];
       ensureUsers = [
         {
