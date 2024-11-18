@@ -20,13 +20,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-crMA0jdCGNDvwTzYXiDpz+1O2Tk84j5cLcQAaplCDFs=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "smbios-lib-0.9.1" = "sha256-3L8JaA75j9Aaqg1z9lVs61m6CvXDeQprEFRq+UDCHQo=";
-      "uefi-0.20.0" = "sha256-/3WNHuc27N89M7s+WT64SHyFOp7YRyzz6B+neh1vejY=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-gMB0N+Y6WhXsphjE5aFt13bx3/SVKm+oPjvLU7/fKzA=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];
