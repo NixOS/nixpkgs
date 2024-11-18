@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, rustPlatform
-, buildNpmPackage
-, fetchFromGitHub
-, pkg-config
-, ncurses
-, sqlite
-, testers
-, moonfire-nvr
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  buildNpmPackage,
+  fetchFromGitHub,
+  pkg-config,
+  ncurses,
+  sqlite,
+  testers,
+  moonfire-nvr,
+  darwin,
 }:
 
 let
@@ -33,30 +34,30 @@ let
       runHook postInstall
     '';
   };
-in rustPlatform.buildRustPackage {
+in
+rustPlatform.buildRustPackage {
   inherit pname version src;
 
   sourceRoot = "${src.name}/server";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "coded-0.2.0-pre" = "sha256-ICDvLFCsiPCzAzf3nrRhH/McNPVQz1+uVOmj6Uc5teg=";
-      "hashlink-0.8.1" = "sha256-h7DEapTVy0SSTaOV9rCkdH3em4A9+PS0k1QQh1+0P4c=";
-      "mp4-0.9.2" = "sha256-mJZJDzD8Ep9c+4QusyBtRoqAArHK9SLdFxG1AR7JydE=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-qQyeOQhor3erqLZ66HRsdCP/+DdoVWDfs51SmW0GujE=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    ncurses
-    sqlite
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    Security
-  ]);
+  buildInputs =
+    [
+      ncurses
+      sqlite
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Security
+      ]
+    );
 
   postInstall = ''
     mkdir -p $out/lib/ui
