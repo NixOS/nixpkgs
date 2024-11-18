@@ -27,12 +27,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-R3fr52v5DAfl+Isk2AspDabQIx00IoIoFKbkTSSgvXA=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "update-informer-1.1.0" = "sha256-pvt4f7tfefWin+DMql/zarN/q9gijpERF7l0CxcvX2s=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-2T6yqJXnEQehCGnJIod0tYZCNuSYjjP8QRmHWnUKJ04=";
 
   nativeBuildInputs =
     [
