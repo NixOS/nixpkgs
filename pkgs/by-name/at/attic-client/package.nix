@@ -39,9 +39,9 @@ rustPlatform.buildRustPackage {
       ]
     );
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0C/dtLaYkGYOsudbaFjsg/eYsUt3Kt4lCcSNyW6kjJU=";
+
   cargoBuildFlags = lib.concatMapStrings (c: "-p ${c} ") crates;
 
   ATTIC_DISTRIBUTOR = "nixpkgs";
