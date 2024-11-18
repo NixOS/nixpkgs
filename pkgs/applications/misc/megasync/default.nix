@@ -81,13 +81,13 @@ mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/020-megasync-sdk-fix-cmake-dependencies-detection.patch?h=megasync";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/020-megasync-sdk-fix-cmake-dependencies-detection.patch?h=megasync&id=4b1eca5bc0d75709dee3a1260264d1b6386d3398";
       hash = "sha256-y3WhLkawFzQRzzRBpioiyAT3F1NDQvYBOm2888g5V5c=";
       extraPrefix = "src/MEGASync/mega/";
       stripLen = true;
     })
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/030-megasync-app-fix-cmake-dependencies-detection.patch?h=megasync";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/030-megasync-app-fix-cmake-dependencies-detection.patch?h=megasync&id=4b1eca5bc0d75709dee3a1260264d1b6386d3398";
       hash = "sha256-11XWctv1veUEguc9Xvz2hMYw26CaCwu6M4hyA+5r81U=";
     })
     ./megasync-fix-cmake-install-bindir.patch
