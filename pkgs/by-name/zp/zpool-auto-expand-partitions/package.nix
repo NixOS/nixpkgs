@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, cloud-utils
-, fetchFromGitHub
-, pkg-config
-, util-linux
-, zfs
+{
+  lib,
+  rustPlatform,
+  cloud-utils,
+  fetchFromGitHub,
+  pkg-config,
+  util-linux,
+  zfs,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "zpool-auto-expand-partitions";
@@ -17,12 +18,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-N1znZbJULEeNR4ABSrUtHHkmz08N+CZqX6Ni7jFzc4c=";
   };
 
-  cargoLock.lockFile = ./Cargo.lock;
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xxTnNwqDlym4Bviek38PRUwmPKUSTnI9GOEYYyBxW+s=";
+
   # We rely on a fork of libzfs in order to bump the bindgen version to fix
   # builds against LLVM 16.
-  cargoLock.outputHashes = {
-    "libzfs-0.6.16" = "sha256-kQunP/xW1Zb1q+TcgAkmZkt1yDnJo9CwF5qldikVN94=";
-  };
 
   preBuild = ''
     substituteInPlace src/grow.rs \
