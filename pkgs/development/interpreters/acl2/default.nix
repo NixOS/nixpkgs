@@ -158,5 +158,6 @@ in stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ kini raskin ];
     platforms = platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
