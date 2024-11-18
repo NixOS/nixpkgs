@@ -570,11 +570,11 @@
         "src": {
             "owner": "AZO234",
             "repo": "NP2kai",
-            "rev": "c2ca4046860264cb307e768f529f180caee5e224",
-            "hash": "sha256-RizN+NpVp0paXvdt7OudX9/5GJms1YvJ+NVe9iV3nnw=",
+            "rev": "4b109eaac4f79b04065ff5025319fce51537e04d",
+            "hash": "sha256-tRFvK8d5Y/umy/b1BKN85ZSaDWyK95hII4RVng7A5uU=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-01-10"
+        "version": "unstable-2024-11-03"
     },
     "nxengine": {
         "fetcher": "fetchFromGitHub",
