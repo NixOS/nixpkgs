@@ -38,7 +38,7 @@
 
 stdenv.mkDerivation rec {
   pname = "legcord";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src =
     let
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
       {
         x86_64-linux = fetchurl {
           url = "${base}/v${version}/Legcord-${version}-linux-amd64.deb";
-          hash = "sha256-MvSnYE6JLnZUA/Td0XuvOAENEtMGWSQuFFDa8cnBB1s=";
+          hash = "sha256-if8429pR0yljKnld+eJRhFP+s/HNO8rp/fCzjl4q8ww=";
         };
         aarch64-linux = fetchurl {
           url = "${base}/v${version}/Legcord-${version}-linux-arm64.deb";
-          hash = "sha256-+HD162RfcNxNXpjW5HPAmhCQIFRXuPXdC/jQgT0aV1k=";
+          hash = "sha256-mEz1rMUGR3RHLbHPV+GbXmws0rbgZGuUB2ri3WJjQlI=";
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
