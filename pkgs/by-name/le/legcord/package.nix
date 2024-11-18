@@ -11,20 +11,20 @@
 }:
 stdenv.mkDerivation rec {
   pname = "legcord";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "Legcord";
     repo = "Legcord";
     rev = "v${version}";
-    hash = "sha256-YmNRkNN7lWHMbUiGOxPa9b+TaLybj1XE7AonCnB88KY=";
+    hash = "sha256-1nM0v8cjLcctvRcGHGtbyGxaqonIY8wM9s413NxTo+I=";
   };
 
   nativeBuildInputs = [ pnpm.configHook nodejs makeWrapper copyDesktopItems ];
 
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    hash = "sha256-ZPTp6l7qtvgsYPY6FZvhuYxD8TdkBkaQO2SG1fQzU7s=";
+    hash = "sha256-E1kT3WiCYkLwrfHa11P1Z6e0fVnZSpXEQStr1NPjEJU=";
   };
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
