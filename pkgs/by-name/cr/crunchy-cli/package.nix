@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, darwin
-, fetchFromGitHub
-, openssl
-, pkg-config
-, rustPlatform
-, nix-update-script
+{
+  lib,
+  stdenv,
+  darwin,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,22 +20,20 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-qBIfDkd4a0m1GNgK4tSq2/dLP8K5Pp4m/M468eHgIAg=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "native-tls-0.2.12" = "sha256-YqiX3xj2ionDlDRzkClqkt0E4HY4zt0B6+rGf850ZCk=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-+m6O00wAxJFzjNu4jLIPhf4NmAP67PWS7s9VxkYGKn0=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
