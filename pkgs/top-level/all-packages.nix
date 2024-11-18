@@ -10455,10 +10455,10 @@ with pkgs;
   nuspell = callPackage ../development/libraries/nuspell { };
   nuspellWithDicts = dicts: callPackage ../development/libraries/nuspell/wrapper.nix { inherit dicts; };
 
-  nv-codec-headers-9 = nv-codec-headers.override { majorVersion = "9"; };
-  nv-codec-headers-10 = nv-codec-headers.override { majorVersion = "10"; };
-  nv-codec-headers-11 = nv-codec-headers.override { majorVersion = "11"; };
-  nv-codec-headers-12 = nv-codec-headers.override { majorVersion = "12"; };
+  nv-codec-headers-9 = nv-codec-headers.passthru.versions.v9;
+  nv-codec-headers-10 = nv-codec-headers.passthru.versions.v10;
+  nv-codec-headers-11 = nv-codec-headers.passthru.versions.v11;
+  nv-codec-headers-12 = nv-codec-headers.passthru.versions.v12;
 
   nvidiaCtkPackages =
     callPackage ../by-name/nv/nvidia-container-toolkit/packages.nix
