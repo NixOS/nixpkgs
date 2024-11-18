@@ -17,13 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-AmHTnCUTHoeLsOJrD35BooU9mZr5ctoCJmjW5CaTYBY=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libmonado-rs-0.1.0" = "sha256-bbbo/Mkix6nUGLwplvj6m8IXOcZY5UoWc1xZnI67IlU=";
-      "openxr-0.19.0" = "sha256-kbEYoN4UvUEaZA9LJWEKx1X1r+l91GjTWs1hNXhr7cw=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-XaUtlEa71uOlsLrSa2p6tSUnKHfKE3wRQN6ujnAJKPI=";
 
   buildInputs = [
     openxr-loader
