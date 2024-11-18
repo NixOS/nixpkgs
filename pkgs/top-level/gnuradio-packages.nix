@@ -47,6 +47,4 @@ in {
 
   rds = callPackage ../development/gnuradio-modules/rds/default.nix { };
 
-  limesdr = callPackage ../development/gnuradio-modules/limesdr/default.nix { };
-
 })
