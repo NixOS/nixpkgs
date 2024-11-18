@@ -12,10 +12,13 @@ in
   options.programs.obs-studio = {
     enable = lib.mkEnableOption "Free and open source software for video recording and live streaming";
 
-    package = lib.mkPackageOption pkgs "obs-studio" { example = "obs-studio"; };
+    package = lib.mkPackageOption pkgs "obs-studio" {
+      nullable = true;
+      example = "obs-studio";
+    };
 
     finalPackage = lib.mkOption {
-      type = lib.types.package;
+      type = lib.types.nullOr lib.types.package;
       visible = false;
       readOnly = true;
       description = "Resulting customized OBS Studio package.";
@@ -39,11 +42,16 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    programs.obs-studio.finalPackage = pkgs.wrapOBS.override { obs-studio = cfg.package; } {
-      plugins = cfg.plugins;
+    assertions = lib.singleton {
+      assertion = cfg.package == null -> cfg.plugins == [ ];
+      message = "Plugins cannot be set if package is null";
     };
 
-    environment.systemPackages = [ cfg.finalPackage ];
+    programs.obs-studio.finalPackage = lib.mapNullable (
+      obs-studio: pkgs.wrapOBS.override { inherit obs-studio; } { plugins = cfg.plugins; }
+    ) cfg.package;
+
+    environment.systemPackages = lib.optional (cfg.finalPackage != null) cfg.finalPackage;
 
     boot = lib.mkIf cfg.enableVirtualCamera {
       kernelModules = [ "v4l2loopback" ];
