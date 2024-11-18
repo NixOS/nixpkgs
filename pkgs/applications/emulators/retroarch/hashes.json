@@ -185,10 +185,10 @@
         "src": {
             "owner": "libretro",
             "repo": "bsnes-mercury",
-            "rev": "60c204ca17941704110885a815a65c740572326f",
-            "hash": "sha256-eJ0lac1I7E4YdsVVrIuXx31UL9w3OR6QTVHq5YBgnJU="
+            "rev": "0f35d044bf2f2b879018a0500e676447e93a1db1",
+            "hash": "sha256-skVREKYITZn+gKKSZmwuBCWrG0jb/pifwIgat8VyQ8U="
         },
-        "version": "unstable-2023-11-01"
+        "version": "unstable-2024-10-21"
     },
     "citra": {
         "fetcher": "fetchFromGitHub",
