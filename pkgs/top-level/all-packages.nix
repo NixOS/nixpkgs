@@ -19241,4 +19241,5 @@ with pkgs;
   tree-from-tags = callPackage ../by-name/tr/tree-from-tags/package.nix {
     ruby = ruby_3_1;
   };
+  sublist3r = callPackage ../tools/security/sublist3r { };
 }
