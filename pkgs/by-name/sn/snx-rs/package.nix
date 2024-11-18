@@ -35,12 +35,8 @@ rustPlatform.buildRustPackage {
     "--skip=platform::linux::net::tests::test_default_ip"
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "isakmp-0.1.0" = "sha256-6v5xhkt9iaQg3Eh8S1tXW55oLv4YFDYvY0cfsepMuIM=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-RlYepSswszCV0/vboP3A6STyeAY8ddyrNzkmN0AHwRQ=";
 
   meta = {
     description = "Open source Linux client for Checkpoint VPN tunnels";
