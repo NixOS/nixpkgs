@@ -1,0 +1,19 @@
+diff -r 89bccf7127ba src/CMakeLists.txt
+--- a/src/CMakeLists.txt	Sun Jul 09 15:14:38 2023 -0400
++++ b/src/CMakeLists.txt	Fri Dec 01 10:16:26 2023 -0300
+@@ -642,15 +642,6 @@
+ 	add_definitions( -DBACKPATCH )
+ endif( BACKPATCH )
+ 
+-# Update gitinfo.h
+-
+-get_target_property( UPDATEREVISION_EXE updaterevision LOCATION )
+-
+-add_custom_target( revision_check ALL
+-	COMMAND ${UPDATEREVISION_EXE} src/gitinfo.h
+-	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+-	DEPENDS updaterevision )
+-
+ # Libraries ZDoom needs
+ 
+ message( STATUS "Fluid synth libs: ${FLUIDSYNTH_LIBRARIES}" )
