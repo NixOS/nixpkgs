@@ -39,6 +39,10 @@ buildPythonPackage rec {
     tabulate
   ];
 
+  pythonRelaxDeps = [
+    "pillow"
+  ];
+
   pythonImportsCheck = [
     "docling_core"
   ];

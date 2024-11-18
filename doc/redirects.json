@@ -1274,6 +1274,9 @@
   "fetchgit": [
     "index.html#fetchgit"
   ],
+  "ex-fetchgit-sparseCheckout": [
+    "index.html#ex-fetchgit-sparseCheckout"
+  ],
   "fetchfossil": [
     "index.html#fetchfossil"
   ],
