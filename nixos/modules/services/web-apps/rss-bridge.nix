@@ -11,6 +11,7 @@ let
     mkEnableOption
     mkIf
     mkOption
+    mkPackageOption
     mkRenamedOptionModule
     types
     ;
@@ -61,7 +62,8 @@ in
 
       user = mkOption {
         type = types.str;
-        default = "nginx";
+        default = if cfg.virtualHostType == null then "rss-bridge" else cfg.virtualHostType;
+        defaultText = "{option}`config.services.rss-bridge.virtualHostType` or \"rss-bridge\"";
         description = ''
           User account under which both the service and the web-application run.
         '';
@@ -69,11 +71,14 @@ in
 
       group = mkOption {
         type = types.str;
-        default = "nginx";
+        default = if cfg.virtualHostType == null then "rss-bridge" else cfg.virtualHostType;
+        defaultText = "{option}`config.services.rss-bridge.virtualHostType` or \"rss-bridge\"";
         description = ''
           Group under which the web-application run.
         '';
       };
+
+      package = mkPackageOption pkgs "rss-bridge" { };
 
       pool = mkOption {
         type = types.str;
@@ -98,7 +103,20 @@ in
         type = types.nullOr types.str;
         default = "rss-bridge";
         description = ''
-          Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
+          Name of the nginx or caddy virtualhost to use and setup. If null, do not setup any virtualhost.
+        '';
+      };
+
+      virtualHostType = mkOption {
+        type = types.nullOr (
+          types.enum [
+            "nginx"
+            "caddy"
+          ]
+        );
+        default = "nginx";
+        description = ''
+          Type of virtualhost to use and setup. If null, do not setup any virtualhost.
         '';
       };
 
@@ -171,11 +189,11 @@ in
       };
     };
 
-    services.nginx = mkIf (cfg.virtualHost != null) {
+    services.nginx = mkIf (cfg.virtualHost != null && cfg.virtualHostType == "nginx") {
       enable = true;
       virtualHosts = {
         ${cfg.virtualHost} = {
-          root = "${pkgs.rss-bridge}";
+          root = "${cfg.package}";
 
           locations."/" = {
             tryFiles = "$uri /index.php$is_args$args";
@@ -191,6 +209,19 @@ in
             '';
           };
         };
+      };
+    };
+
+    services.caddy = mkIf (cfg.virtualHost != null && cfg.virtualHostType == "caddy") {
+      enable = true;
+      virtualHosts.${cfg.virtualHost} = {
+        extraConfig = ''
+          root * ${cfg.package}
+          file_server
+          php_fastcgi unix/${config.services.phpfpm.pools.${cfg.pool}.socket} {
+          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "  env ${n} \"${v}\"") cfgEnv)}
+          }
+        '';
       };
     };
   };
