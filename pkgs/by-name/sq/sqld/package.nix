@@ -28,17 +28,8 @@ rustPlatform.buildRustPackage rec {
     "sqld"
   ];
 
-  cargoHash = "";
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "console-api-0.5.0" = "sha256-MfaxtzOqyblk6aTMqJGRP+123aK0Kq7ODNp/3lehkpQ=";
-      "hyper-rustls-0.24.1" = "sha256-dYN42bnbY+4+etmimrnoyzmrKvCZ05fYr1qLQFvzRTk=";
-      "rheaper-0.2.0" = "sha256-u5z6J1nmUbIQjDDqqdkT0axNBOvwbFBYghYW/r1rDHc=";
-      "s3s-0.10.1-dev" = "sha256-y4DZnRsQzRNsCIp6vrppZkfXSP50LCHWYrKRoIHYPik=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-hjU1Sbs68qX+Vv01Lku063OT1Sp7EMVxLyUkzcriRc0=";
 
   nativeBuildInputs = [
     cmake
