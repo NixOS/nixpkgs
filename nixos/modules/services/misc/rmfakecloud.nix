@@ -17,13 +17,7 @@ in
     services.rmfakecloud = {
       enable = mkEnableOption "rmfakecloud remarkable self-hosted cloud";
 
-      package = mkPackageOption pkgs "rmfakecloud" {
-        extraDescription = ''
-          ::: {.note}
-          The default does not include the web user interface.
-          :::
-        '';
-      };
+      package = mkPackageOption pkgs "rmfakecloud" { };
 
       storageUrl = mkOption {
         type = types.str;
