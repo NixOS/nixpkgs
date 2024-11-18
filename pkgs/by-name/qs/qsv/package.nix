@@ -1,5 +1,4 @@
 {
-  darwin,
   fetchFromGitHub,
   file,
   lib,
@@ -27,23 +26,11 @@ rustPlatform.buildRustPackage {
   useFetchCargoVendor = true;
   cargoHash = "sha256-tu9HCFAxmmYVgmJyHunBtGSqKGzwbX2vi6ju4cv33wc=";
 
-  buildInputs =
-    [
-      file
-      sqlite
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        CoreFoundation
-        CoreGraphics
-        IOKit
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    file
+    sqlite
+    zstd
+  ];
 
   nativeBuildInputs = [
     pkg-config
