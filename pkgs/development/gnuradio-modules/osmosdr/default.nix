@@ -92,11 +92,11 @@ in mkDerivation {
     ]
   ;
 
-  meta = with lib; {
+  meta = {
     description = "Gnuradio block for OsmoSDR and rtl-sdr";
     homepage = "https://sdr.osmocom.org/trac/wiki/GrOsmoSDR";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ bjornfor ];
+    platforms = lib.platforms.unix;
   };
 }
