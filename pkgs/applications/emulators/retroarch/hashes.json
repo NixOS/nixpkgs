@@ -684,10 +684,10 @@
         "src": {
             "owner": "libretro",
             "repo": "prosystem-libretro",
-            "rev": "a639359434cde73e6cdc651763afc587c1afb678",
-            "hash": "sha256-rcn1puMQXCKogONe2oUpcDEj8S6/oVRcuWLDkinZgnk="
+            "rev": "acae250da8d98b8b9707cd499e2a0bf6d8500652",
+            "hash": "sha256-AGF3K3meZEEsnzHmMTCsFXBGNvWVELH8a8qET07kP0o="
         },
-        "version": "unstable-2024-06-28"
+        "version": "unstable-2024-10-21"
     },
     "puae": {
         "fetcher": "fetchFromGitHub",
