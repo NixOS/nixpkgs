@@ -10,7 +10,7 @@
 
 # package customization
 # Note: enable* flags should not require full rebuilds (i.e. only affect the wrapper)
-, upstream-info ? (import ./upstream-info.nix).${if !ungoogled then "stable" else "ungoogled-chromium"}
+, upstream-info ? (lib.importJSON ./info.json).${if !ungoogled then "chromium" else "ungoogled-chromium"}
 , proprietaryCodecs ? true
 , enableWideVine ? false
 , ungoogled ? false # Whether to build chromium or ungoogled-chromium
@@ -49,9 +49,10 @@ let
       inherit proprietaryCodecs
               cupsSupport pulseSupport ungoogled;
       gnChromium = buildPackages.gn.overrideAttrs (oldAttrs: {
-        inherit (upstream-info.deps.gn) version;
+        version = if (upstream-info.deps.gn ? "version") then upstream-info.deps.gn.version else "0";
         src = fetchgit {
-          inherit (upstream-info.deps.gn) url rev hash;
+          url = "https://gn.googlesource.com/gn";
+          inherit (upstream-info.deps.gn) rev hash;
         };
       } // lib.optionalAttrs (chromiumVersionAtLeast "127") {
         # Relax hardening as otherwise gn unstable 2024-06-06 and later fail with:
@@ -64,7 +65,6 @@ let
         # As a work around until gn is updated again, we filter specifically that patch out.
         patches = lib.filter (e: lib.getName e != "LFS64.patch") oldAttrs.patches;
       });
-      recompressTarball = callPackage ./recompress-tarball.nix { inherit chromiumVersionAtLeast; };
     });
 
     browser = callPackage ./browser.nix {
