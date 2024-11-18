@@ -17752,6 +17752,8 @@ self: super: with self; {
 
   urlman = callPackage ../development/python-modules/urlman { };
 
+  urlobject = callPackage ../development/python-modules/urlobject { };
+
   urlpy = callPackage ../development/python-modules/urlpy { };
 
   urwid = callPackage ../development/python-modules/urwid { };
