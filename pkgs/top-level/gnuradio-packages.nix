@@ -45,6 +45,4 @@ in {
 
   nacl = callPackage ../development/gnuradio-modules/nacl/default.nix { };
 
-  rds = callPackage ../development/gnuradio-modules/rds/default.nix { };
-
 })
