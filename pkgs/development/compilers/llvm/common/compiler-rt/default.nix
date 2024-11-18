@@ -7,11 +7,11 @@
 , src ? null
 , monorepoSrc ? null
 , runCommand
-, apple-sdk
 , cmake
 , ninja
 , python3
 , libllvm
+, jq
 , libcxx
 , linuxHeaders
 , freebsd
@@ -68,7 +68,8 @@ stdenv.mkDerivation ({
 
   nativeBuildInputs = [ cmake ]
     ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-    ++ [ python3 libllvm.dev ];
+    ++ [ python3 libllvm.dev ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ jq ];
   buildInputs =
     lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
     ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
@@ -136,8 +137,6 @@ stdenv.mkDerivation ({
     # Darwin support, so force it to be enabled during the first stage of the compiler-rt bootstrap.
     "-DCOMPILER_RT_HAS_G_FLAG=ON"
   ] ++ [
-    "-DDARWIN_macosx_CACHED_SYSROOT=${apple-sdk.sdkroot}"
-    "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=${lib.versions.majorMinor (lib.getVersion apple-sdk)}"
     "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.darwinArch}"
     "-DDARWIN_osx_BUILTIN_ARCHS=${stdenv.hostPlatform.darwinArch}"
     "-DSANITIZER_MIN_OSX_VERSION=${stdenv.hostPlatform.darwinMinVersion}"
@@ -182,6 +181,13 @@ stdenv.mkDerivation ({
     ''
     substituteInPlace cmake/Modules/AddCompilerRT.cmake \
       --replace-fail 'find_program(CODESIGN codesign)' ""
+  '';
+
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cmakeFlagsArray+=(
+      "-DDARWIN_macosx_CACHED_SYSROOT=$SDKROOT"
+      "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=$(jq -r .Version "$SDKROOT/SDKSettings.json")"
+    )
   '';
 
   # Hack around weird upsream RPATH bug
