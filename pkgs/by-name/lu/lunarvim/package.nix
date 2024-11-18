@@ -13,8 +13,8 @@
 , gzip
 , lua-language-server
 , neovim
+, neovim-node-client
 , nodejs
-, nodePackages
 , ripgrep
 , tree-sitter
 , unzip
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     lua-language-server
     neovim
     nodejs
-    nodePackages.neovim
+    neovim-node-client
     ripgrep
     tree-sitter
     unzip
