@@ -35,7 +35,7 @@ lib.getExe (writeShellApplication {
       update-source-version "$attr" "0-unstable-$timestamp" "$hash" --rev="$rev" "$@"
     }
 
-    update nzportable.fteqw fteqw bleeding-edge
+    update nzportable fteqw bleeding-edge --version-key=fteqwVersion
     update nzportable-assets assets newest
     update nzportable-quakec quakec bleeding-edge
   '';
