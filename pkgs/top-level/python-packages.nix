@@ -17579,9 +17579,7 @@ self: super: with self; {
 
   uuid6 = callPackage ../development/python-modules/uuid6 { };
 
-  uv = toPythonModule (pkgs.uv.override {
-    python3Packages = self;
-  });
+  uv = callPackage ../development/python-modules/uv { };
 
   uvcclient = callPackage ../development/python-modules/uvcclient { };
 
