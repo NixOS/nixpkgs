@@ -426,6 +426,7 @@
         - doc/languages-frameworks/ruby.section.md
         - pkgs/development/interpreters/ruby/**/*
         - pkgs/development/ruby-modules/**/*
+        - pkgs/top-level/ruby-packages.nix
 
 "6.topic: rust":
   - any:
