@@ -76,12 +76,9 @@ rustPlatform.buildRustPackage {
     ++ dotnetSdk.packages
     ++ dotnetBuild.nugetDeps;
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tauri-plugin-single-instance-0.0.0" = "sha256-Mf2/cnKotd751ZcSHfiSLNe2nxBfo4dMBdoCwQhe7yI=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-At3Br2TrtVAqTS3mLklugiU9JnlueoLjGWRVm/MsbMs=";
+
   buildAndTestSubdir = subdir;
 
   npmDeps = fetchNpmDeps {
