@@ -15295,7 +15295,7 @@ with pkgs;
     backend = "wayland";
   };
 
-  rstudio = libsForQt5.callPackage ../applications/editors/rstudio {
+  rstudio = callPackage ../applications/editors/rstudio {
     jdk = jdk8;
   };
 

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchurl,
   fetchFromGitHub,
   makeDesktopItem,
@@ -11,11 +10,7 @@
   zlib,
   openssl,
   R,
-  qtbase,
-  qtxmlpatterns,
-  qtsensors,
-  qtwebengine,
-  qtwebchannel,
+  libsForQt5,
   quarto,
   libuuid,
   hunspellDicts,
@@ -29,7 +24,6 @@
   soci,
   postgresql,
   nodejs,
-  qmake,
   server ? false, # build server version
   sqlite,
   pam,
@@ -74,7 +68,7 @@ let
 
   description = "Set of integrated tools for the R language";
 in
-(if server then stdenv.mkDerivation else mkDerivation) (
+stdenv.mkDerivation (
   rec {
     inherit
       pname
@@ -97,6 +91,7 @@ in
       ]
       ++ lib.optionals (!server) [
         copyDesktopItems
+        libsForQt5.wrapQtAppsHook
       ];
 
     buildInputs =
@@ -119,11 +114,11 @@ in
           ]
         else
           [
-            qtbase
-            qtxmlpatterns
-            qtsensors
-            qtwebengine
-            qtwebchannel
+            libsForQt5.qtbase
+            libsForQt5.qtxmlpatterns
+            libsForQt5.qtsensors
+            libsForQt5.qtwebengine
+            libsForQt5.qtwebchannel
           ]
       );
 
@@ -139,7 +134,7 @@ in
         "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/lib/rstudio"
       ]
       ++ lib.optionals (!server) [
-        "-DQT_QMAKE_EXECUTABLE=${qmake}/bin/qmake"
+        "-DQT_QMAKE_EXECUTABLE=${libsForQt5.qmake}/bin/qmake"
       ];
 
     # Hack RStudio to only use the input R and provided libclang.
