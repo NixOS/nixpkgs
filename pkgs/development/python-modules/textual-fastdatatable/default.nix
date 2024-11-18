@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "textual-fastdatatable";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "textual_fastdatatable";
     inherit version;
-    hash = "sha256-AS3SiwetCHkCMu8H81xbp5QvN/2GCvMlWgU4qZKvBRU=";
+    hash = "sha256-45uLpUzBb+xH+a+DIFiXB4YjabyFE4wmv1Tw3JtpNow=";
   };
 
   build-system = [
