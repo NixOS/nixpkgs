@@ -296,6 +296,7 @@
   ./programs/sysdig.nix
   ./programs/system-config-printer.nix
   ./programs/systemtap.nix
+  ./programs/tcpdump.nix
   ./programs/thefuck.nix
   ./programs/thunar.nix
   ./programs/thunderbird.nix
