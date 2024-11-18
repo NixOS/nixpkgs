@@ -79,7 +79,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/casualsnek/onthespot";
     changelog = "https://github.com/casualsnek/onthespot/releases/tag/v${version}";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ onny ];
+    maintainers = with lib.maintainers; [
+      onny
+      ryand56
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "onthespot_gui";
   };
