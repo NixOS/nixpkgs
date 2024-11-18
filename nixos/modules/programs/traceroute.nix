@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.traceroute;
-in {
+in
+{
   options = {
     programs.traceroute = {
       enable = lib.mkOption {
