@@ -21,12 +21,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-yBLSN5+rPPoxA6Bn1O2NNGNo9cDfowZdaOtVvvUmNAM=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tree-sitter-xml-0.7.0" = "sha256-RTWvOUAs3Uql9DKsP1jf9FZZHaZORE40GXd+6g6RQZw=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-FEQSZM+PFYrY+7WbZqVYqM67sEurjCR5ih49azNCyQ4=";
 
   nativeCheckInputs = [
     git
