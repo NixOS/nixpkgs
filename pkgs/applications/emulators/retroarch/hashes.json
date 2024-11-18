@@ -895,9 +895,9 @@
         "src": {
             "owner": "libretro",
             "repo": "yabause",
-            "rev": "4c96b96f7fbe07223627c469ff33376b2a634748",
-            "hash": "sha256-7hEpGh2EcrlUoRiUNntaMZEQtStglYAY1MeCub5p8f8="
+            "rev": "c35712c5ed33e18d77097f2059a036e19d1d66f2",
+            "hash": "sha256-4/gxWNPkGKBf4ti7ZF4GXgng6ZPyM9prrvK0S5tZ6V8="
         },
-        "version": "unstable-2023-01-03"
+        "version": "unstable-2024-10-21"
     }
 }
