@@ -20,12 +20,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-CRYp1ktmmY4OS23+LNKOBQJUMkd+GXptBp5LPfbyZAc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "compiletest_rs-0.10.2" = "sha256-JTfVfMW0bCbFjQxeAFu3Aex9QmGnx0wp6weGrNlQieA=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-sLxDj4ftc6te67wnYE7bXWC8O+CMVk9lVrLcQT5Q0gk=";
 
   buildNoDefaultFeatures = true;
 
