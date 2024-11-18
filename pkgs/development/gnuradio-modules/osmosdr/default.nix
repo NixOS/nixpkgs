@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, darwin
 , mkDerivation
 , fetchgit
 , gnuradio
@@ -71,9 +70,6 @@ in mkDerivation {
   ] ++ lib.optionals (gnuradio.hasFeature "python-support") [
       python.pkgs.numpy
       python.pkgs.pybind11
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.IOKit
-    darwin.apple_sdk.frameworks.Security
   ];
   cmakeFlags = [
     (if (gnuradio.hasFeature "python-support") then

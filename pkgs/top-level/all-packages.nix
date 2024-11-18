@@ -13637,7 +13637,6 @@ with pkgs;
 
   gnuradio = callPackage ../applications/radio/gnuradio/wrapper.nix {
     unwrapped = callPackage ../applications/radio/gnuradio {
-      inherit (darwin.apple_sdk.frameworks) CoreAudio;
       python = python311;
     };
   };
