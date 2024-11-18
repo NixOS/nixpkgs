@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, cmake
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, expat
-, fontconfig
-, freetype
-, libGL
-, udev
-, libxkbcommon
-, wayland
-, vulkan-loader
-, xorg
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  expat,
+  fontconfig,
+  freetype,
+  libGL,
+  udev,
+  libxkbcommon,
+  wayland,
+  vulkan-loader,
+  xorg,
 }:
 
 let
@@ -47,13 +48,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-LLDgo4GoRTVYt72IT0II7O5wiMDrvJhe0f2yjzxQgsE=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "liana-6.0.0" = "sha256-04jER209Q9xj9HJ6cLXuK3a2b6fIjAYI+X0+J8noP6A=";
-      "iced_futures-0.12.3" = "sha256-ztWEde3bJpT8lmk+pNhj/v2cpw/z3TNvzCSvEXwinKQ=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-F8IrVhnwDDk3SO5OtuhgnQo/H+NbAni9RCuz4ZQzYwI=";
 
   nativeBuildInputs = [
     pkg-config
