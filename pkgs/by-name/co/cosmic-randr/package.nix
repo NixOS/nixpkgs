@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, just
-, pkg-config
-, wayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  just,
+  pkg-config,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +22,10 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-S5zvh/pJA3JMwQ3K5RPPHuHKLQA9g1Ae7NLWgy9b5FA=";
 
-  nativeBuildInputs = [ just pkg-config ];
+  nativeBuildInputs = [
+    just
+    pkg-config
+  ];
   buildInputs = [ wayland ];
 
   dontUseJustBuild = true;
