@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.tcpdump;
-in {
+in
+{
   options = {
     programs.tcpdump = {
       enable = lib.mkOption {

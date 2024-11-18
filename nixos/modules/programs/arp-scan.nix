@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.arp-scan;
-in {
+in
+{
   options = {
     programs.arp-scan = {
       enable = lib.mkOption {
