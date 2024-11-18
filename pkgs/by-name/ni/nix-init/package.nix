@@ -16,6 +16,8 @@
   spdx-license-list-data,
   nix,
   nurl,
+  testers,
+  nix-init,
 }:
 
 let
@@ -90,6 +92,10 @@ rustPlatform.buildRustPackage rec {
     NIX = lib.getExe nix;
     NURL = lib.getExe nurl;
     ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
+
+  passthru.tests.version = testers.testVersion {
+    package = nix-init;
   };
 
   meta = with lib; {
