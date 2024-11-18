@@ -62,12 +62,12 @@ rustPlatform.buildRustPackage rec {
       libiconv
     ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dfinity/quill";
     changelog = "https://github.com/dfinity/quill/releases/tag/v${version}";
     description = "Minimalistic ledger and governance toolkit for cold wallets on the Internet Computer";
     mainProgram = "quill";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ imalison ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ imalison ];
   };
 }
