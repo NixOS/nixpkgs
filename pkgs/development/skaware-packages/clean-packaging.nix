@@ -3,7 +3,7 @@
 # files were either discarded or moved to outputs.
 # This ensures nothing is forgotten and new files
 # are correctly handled on update.
-{ lib, stdenv, file, writeScript }:
+{ lib, stdenv, writeScript }:
 
 let
   globWith = lib.concatMapStringsSep "\n";
@@ -35,15 +35,15 @@ let
 
   # Shell script to check whether the build directory is empty.
   # If there are still files remaining, exit 1 with a helpful
-  # listing of all remaining files and their types.
+  # listing of all remaining files.
   checkForRemainingFiles = writeScript "check-for-remaining-files.sh" ''
     #!${stdenv.shell}
     echo "Checking for remaining source files"
-    rem=$(find -mindepth 1 -xtype f -print0 \
+    rem=$(find -mindepth 1 -xtype f -print \
            | tee $TMP/remaining-files)
     if [[ "$rem" != "" ]]; then
       echo "ERROR: These files should be either moved or deleted:"
-      cat $TMP/remaining-files | xargs -0 ${file}/bin/file
+      cat $TMP/remaining-files
       exit 1
     fi
   '';
