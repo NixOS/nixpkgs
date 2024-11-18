@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "textual-textarea";
-  version = "0.14.2";
+  version = "0.14.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "textual_textarea";
     inherit version;
-    hash = "sha256-AJU7BBoev6pBrLhvbfF4I7l+E8YnO5jCD5OIsNf6NW0=";
+    hash = "sha256-VgSJF5sZQmuFRrhSF1Cs3iL1cCGzr8CLBkNVcEj7cxU=";
   };
 
   build-system = [
