@@ -25,10 +25,10 @@
         "src": {
             "owner": "libretro",
             "repo": "beetle-gba-libretro",
-            "rev": "38182572571a48cb58057cde64b915237c4e2d58",
-            "hash": "sha256-4xnXWswozlcXBNI1lbGSNW/gAdIeLLO9Bf1SxOFLhSo="
+            "rev": "6cee80685f735ea6c2373db2622a1f1ee9f39d39",
+            "hash": "sha256-a3XgExXVCUFw3GLCUkEl6now2L8qVdNOaXvrDMcT1ZE="
         },
-        "version": "unstable-2021-09-18"
+        "version": "unstable-2024-10-21"
     },
     "beetle-lynx": {
         "fetcher": "fetchFromGitHub",
