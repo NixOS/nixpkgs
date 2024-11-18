@@ -22,6 +22,7 @@
 , python3
 , speexdsp
 , libglvnd
+, headless ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [ "format" ];
-  makeFlags = [ "SYSDEPS=true" "PREFIX=$(out)" ];
+  makeFlags = lib.optional headless "HEADLESS=true" ++ [ "SYSDEPS=true" "PREFIX=$(out)" ];
 
   postInstall = ''
     wrapProgram $out/bin/Cardinal \
