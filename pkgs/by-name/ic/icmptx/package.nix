@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  nixosTests,
   fetchFromGitea,
 }:
 
@@ -23,6 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   strictDeps = true;
+
+  passthru.tests = {
+    inherit (nixosTests) icmptx;
+  };
 
   meta = {
     description = "IP-over-ICMP tunnel";
