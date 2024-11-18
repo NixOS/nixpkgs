@@ -396,6 +396,7 @@ mapAliases {
   PyVirtualDisplay = throw "'PyVirtualDisplay' has been renamed to/replaced by 'pyvirtualdisplay'"; # Converted to throw 2025-10-29
   pyvoro = throw "pyvoro has been removed because it is unmaintained upstream and has been marked as broken since 2023."; # Added 2025-10-11
   qds_sdk = throw "'qds_sdk' has been renamed to/replaced by 'qds-sdk'"; # Converted to throw 2025-10-29
+  qiskit-ignis = throw "qiskit-ignis has been removed, since it was deprecated upstream"; # added 2025-09-13
   Quandl = throw "'Quandl' has been renamed to/replaced by 'quandl'"; # Converted to throw 2025-10-29
   querystring_parser = throw "'querystring_parser' has been renamed to/replaced by 'querystring-parser'"; # Converted to throw 2025-10-29
   radian = throw "radian has been promoted to a top-level attribute name: `pkgs.radian`"; # added 2025-05-02
