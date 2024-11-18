@@ -5668,6 +5668,12 @@
     name = "Will Dietz";
     keys = [ { fingerprint = "389A 78CB CD88 5E0C 4701  DEB9 FD42 C7D0 D414 94C8"; } ];
   };
+  duckle29 = {
+    name = "Mikkel Jeppesen";
+    github = "Duckle29";
+    githubId = 2756925;
+    keys = [ { fingerprint = "C290 76FD 298D 46E8 7884  7292 2BCB CF8F 65FD ACB8"; } ];
+  };
   dudymas = {
     email = "jeremy.white@cloudposse.com";
     github = "dudymas";
