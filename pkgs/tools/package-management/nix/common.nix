@@ -53,6 +53,7 @@ in
 , gnutar
 , gtest
 , gzip
+, iconv
 , jq
 , lib
 , libarchive
@@ -163,6 +164,20 @@ self = stdenv.mkDerivation {
     aws-sdk-cpp
   ] ++ lib.optional (atLeast218 && stdenv.hostPlatform.isDarwin) [
     darwin.apple_sdk.libs.sandbox
+  ] ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic) [
+    # libarchive requires a iconv.pc file to be present
+    (pkgs.runCommand "iconv-pkgconfig" {} ''
+      mkdir -p $out/lib/pkgconfig
+      cat > $out/lib/pkgconfig/iconv.pc <<EOF
+      prefix=${iconv}
+
+      Name: iconv
+      Description: GNU iconv
+      Version: ${lib.getVersion iconv}
+      Libs: -liconv
+      EOF
+    '')
+    iconv
   ] ++ lib.optional (atLeast224 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Fix the following error with the default x86_64-darwin SDK:
     #
@@ -174,6 +189,8 @@ self = stdenv.mkDerivation {
     (darwinMinVersionHook "10.13")
   ];
 
+  NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
+      "-framework CoreFoundation -framework SystemConfiguration";
 
   propagatedBuildInputs = [
     boehmgc
