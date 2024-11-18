@@ -3,12 +3,7 @@
 , fetchCrate
 , pkg-config
 , openssl
-, stdenv
 , curl
-, CoreFoundation
-, CoreServices
-, Security
-, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,13 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    curl
-    CoreFoundation
-    CoreServices
-    Security
-    SystemConfiguration
-  ];
+  buildInputs = [ curl openssl ];
 
   meta = with lib; {
     description = "Cargo subcommand for displaying when Rust dependencies are out of date";

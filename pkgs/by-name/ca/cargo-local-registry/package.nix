@@ -6,8 +6,6 @@
 , libgit2
 , openssl
 , zlib
-, stdenv
-, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +22,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-lTtxCRK4J3dQ6fwjOwYvKa0ykr28guAwVN/J8pfLn9s=";
 
   nativeBuildInputs = [
-    curl
     pkg-config
   ];
 
@@ -33,10 +30,6 @@ rustPlatform.buildRustPackage rec {
     libgit2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    darwin.apple_sdk.frameworks.CoreFoundation
   ];
 
   # tests require internet access

@@ -4,9 +4,7 @@
 , pkg-config
 , libgit2
 , openssl
-, stdenv
 , curl
-, darwin
 , git
 }:
 
@@ -35,13 +33,14 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libgit2
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    curl
-    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   nativeCheckInputs = [
     git
+  ];
+
+  checkInputs = [
+    curl
   ];
 
   # disable vendored-libgit2 and vendored-openssl

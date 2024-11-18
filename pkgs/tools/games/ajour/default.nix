@@ -11,6 +11,7 @@
 , freetype
 , kdialog
 , zenity
+, curl
 , openssl
 , libglvnd
 , libX11
@@ -62,6 +63,7 @@ in rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
+    curl
     expat
     freetype
     openssl

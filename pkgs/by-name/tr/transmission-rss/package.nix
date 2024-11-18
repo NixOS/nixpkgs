@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, darwin }:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, curl, openssl }:
 
 rustPlatform.buildRustPackage rec {
   version = "0.3.1";
@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "herlon214";
     repo = pname;
     rev = "5bbad7a81621a194b7a8b11a56051308a7ccbf06";
-    sha256 = "sha256-SkEgxinqPA9feOIF68oewVyRKv3SY6fWWZLGJeH+r4M=";
+    hash = "sha256-SkEgxinqPA9feOIF68oewVyRKv3SY6fWWZLGJeH+r4M=";
   };
 
   cargoPatches = [ ./update-cargo-lock-version.patch ];
@@ -16,11 +16,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-QNMdqoxxY8ao2O44hJxZNgLrPwzu9+ieweTPc7pfFY4=";
 
   nativeBuildInputs = [pkg-config];
-  buildInputs = [openssl]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-      Security
-      SystemConfiguration
-    ]);
+  buildInputs = [curl openssl];
 
   OPENSSL_NO_VENDOR = 1;
 

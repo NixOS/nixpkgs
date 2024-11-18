@@ -8,9 +8,9 @@
   pkg-config,
 
   # buildInputs
+  curl,
   openssl,
   stdenv,
-  darwin,
 
   versionCheckHook,
 
@@ -46,16 +46,10 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk;
-      [
-        frameworks.CoreServices
-        frameworks.SystemConfiguration
-        Libsystem
-      ]
-    );
+  buildInputs = [
+    curl
+    openssl
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd rye \

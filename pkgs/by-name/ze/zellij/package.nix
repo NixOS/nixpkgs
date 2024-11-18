@@ -27,17 +27,10 @@ rustPlatform.buildRustPackage rec {
 
   env.OPENSSL_NO_VENDOR = 1;
 
-  # Workaround for https://github.com/zellij-org/zellij/issues/3720
-  postPatch = ''
-    substituteInPlace zellij-utils/Cargo.toml \
-      --replace-fail 'isahc = "1.7.2"' 'isahc = { version = "1.7.2", default-features = false, features = ["http2", "text-decoding"] }'
-  '';
-
   nativeBuildInputs = [
     mandown
     installShellFiles
     pkg-config
-    (lib.getDev curl)
   ];
 
   buildInputs = [

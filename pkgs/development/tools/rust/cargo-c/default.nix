@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-UfhIz87s0CLUDbIpWMPzGQ7qVmh14GuiFoquauSbTOw=";
 
-  nativeBuildInputs = [ pkg-config (lib.getDev curl) ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl curl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     libiconv

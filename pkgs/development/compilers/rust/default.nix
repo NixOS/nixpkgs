@@ -93,7 +93,6 @@ in
       cargo = if (!fastCross) then self.callPackage ./cargo.nix {
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;
-        inherit CoreFoundation Security;
       } else self.callPackage ./cargo_cross.nix {};
       cargo-auditable = self.callPackage ./cargo-auditable.nix { };
       cargo-auditable-cargo-wrapper = self.callPackage ./cargo-auditable-cargo-wrapper.nix { };

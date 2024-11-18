@@ -5,8 +5,6 @@
 , pkg-config
 , libgit2
 , openssl
-, stdenv
-, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +19,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-K9I7Eg43BS2SKq5zZ3eZrMkmuHAx09OX240sH0eGs+k=";
 
   nativeBuildInputs = [
-    curl.dev
     pkg-config
   ];
 
@@ -29,9 +26,6 @@ rustPlatform.buildRustPackage rec {
     curl
     libgit2
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
   ];
 
   env = {

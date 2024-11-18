@@ -4,6 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
+  curl,
   openssl,
   protobuf,
   rdkafka,
@@ -11,11 +12,7 @@
   zstd,
   rust-jemalloc-sys,
   rust-jemalloc-sys-unprefixed,
-  Security,
-  libiconv,
   coreutils,
-  CoreServices,
-  SystemConfiguration,
   tzdata,
   cmake,
   perl,
@@ -62,8 +59,10 @@ rustPlatform.buildRustPackage {
     ]
     # Provides the mig command used by the build scripts
     ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
+
   buildInputs =
     [
+      curl
       oniguruma
       openssl
       protobuf
@@ -73,11 +72,7 @@ rustPlatform.buildRustPackage {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       rust-jemalloc-sys
-      Security
-      libiconv
       coreutils
-      CoreServices
-      SystemConfiguration
     ];
 
   # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.

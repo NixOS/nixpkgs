@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, CoreServices, Security, libiconv, SystemConfiguration }:
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, curl, openssl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-udeps";
@@ -15,9 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  # TODO figure out how to use provided curl instead of compiling curl from curl-sys
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Security libiconv SystemConfiguration ];
+  buildInputs = [ curl openssl ];
 
   # Requires network access
   doCheck = false;

@@ -6,8 +6,6 @@
 , libgit2
 , openssl
 , zlib
-, stdenv
-, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +22,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-xkPvbC/ot4U3gca57pEEze0jaQhUAZV1MEX0E6E1BmE=";
 
   nativeBuildInputs = [
-    curl
     pkg-config
   ];
 
@@ -33,8 +30,6 @@ rustPlatform.buildRustPackage rec {
     libgit2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
   ];
 
   meta = with lib; {

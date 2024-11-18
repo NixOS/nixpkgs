@@ -3,6 +3,7 @@
 , rustPlatform
 , cmake
 , pkg-config
+, curl
 , openssl
 }:
 
@@ -20,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-cwk8yFt8JrYkYlNUW9n/bgMUA6jyOpG0TSh5C+eERLY=";
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [ curl openssl ];
 
   meta = with lib; {
     description = "Simple CLI client for installing and maintaining linux GOG games";

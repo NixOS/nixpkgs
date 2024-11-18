@@ -1,13 +1,9 @@
-{ lib, stdenv
+{ lib
 , fetchFromGitHub
 , rustPlatform
 , perl
 , pkg-config
-, SystemConfiguration
-, Security
-, CoreFoundation
 , curl
-, libiconv
 , openssl
 , git
 }:
@@ -33,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ perl pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ SystemConfiguration Security CoreFoundation libiconv curl ];
+  buildInputs = [ curl openssl ];
 
   nativeCheckInputs = [ git ];
 
