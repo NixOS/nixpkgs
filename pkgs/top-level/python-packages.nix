@@ -16894,6 +16894,8 @@ self: super: with self; {
 
   text-unidecode = callPackage ../development/python-modules/text-unidecode { };
 
+  text2digits = callPackage ../development/python-modules/text2digits { };
+
   textacy = callPackage ../development/python-modules/textacy { };
 
   textdistance = callPackage ../development/python-modules/textdistance { };
