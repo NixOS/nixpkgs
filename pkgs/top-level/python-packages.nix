@@ -16478,6 +16478,8 @@ self: super: with self; {
 
   texsoup = callPackage ../development/python-modules/texsoup { };
 
+  text2digits = callPackage ../development/python-modules/text2digits { };
+
   textblob = callPackage ../development/python-modules/textblob { };
 
   textfsm = callPackage ../development/python-modules/textfsm { };
