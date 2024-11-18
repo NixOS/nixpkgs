@@ -17,12 +17,8 @@ rustPlatform.buildRustPackage {
   pname = "${pname}-unwrapped";
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoLock = {
-    lockFile = ./Cargo-tauri.lock;
-    outputHashes = {
-      "sysproxy-0.3.0" = sysproxy-hash;
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-RR1Exl4+WG7uBYI3sKU8U4UpUD9qWonz6IAKkK79e/U=";
 
   env = {
     OPENSSL_NO_VENDOR = 1;
