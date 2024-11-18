@@ -24,12 +24,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "mEZBFDR+/aMRFw54Yq+f1gyEz8H+5IggNCpzv3UdDFg=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo-0.3.lock;
-    outputHashes = {
-      "aws-creds-0.29.1" = "bwDFmDPThMLrpaB7cAj/2/vJKhbX6/DqgcIRBVKSZhg=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-XTT2M5qUb3+WZzT17b1q5kAqyVr7ShUS4IexpI3wrX0=";
 
   # needed for internal protobuf c wrapper library
   PROTOC = "${protobuf}/bin/protoc";
