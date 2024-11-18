@@ -4,6 +4,8 @@ Checks:
 - -bugprone-easily-swappable-parameters
 - performance-*
 - modernize-*
+# doesn't improve readability much in this project
+- -modernize-use-trailing-return-type
 - readability-*
 # don't find them too problematic
 - -readability-identifier-length
