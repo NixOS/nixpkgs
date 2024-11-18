@@ -1,4 +1,15 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, Security, libiconv, pkg-config, protobuf, buildPackages }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  openssl,
+  Security,
+  libiconv,
+  pkg-config,
+  protobuf,
+  buildPackages,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "quill";
@@ -39,9 +50,16 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ pkg-config protobuf ];
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security libiconv ];
+  nativeBuildInputs = [
+    pkg-config
+    protobuf
+  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      libiconv
+    ];
 
   meta = with lib; {
     homepage = "https://github.com/dfinity/quill";
