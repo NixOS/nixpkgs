@@ -30,12 +30,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-DR1aPbSqAVhL/m/Maa3mPzNWwK4A1WvDd/PwEMVYn5g=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "wry-0.44.1" = "sha256-I1qkUVTu+Yqk1Imo1w5rG/lRSPLITF5BdcjBsPe+jXU=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cIJooOuAmDieikpm7W78rjTjxO1c+Sk005Y/VN/cqRg=";
 
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
