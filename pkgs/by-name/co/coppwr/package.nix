@@ -22,13 +22,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-5TgK/0UN05P3WENch4sBo/Sy9FaMmyH/gZ+6qUyM1z0=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "egui_node_graph-0.4.0" = "sha256-OajIef0tSuZ5bFauAeHtN/LQlo+k7k9g0azHDk3HOQc=";
-      "libspa-0.8.0" = "sha256-X8mwLtuPuMxZY71GNPAgiJGJ9JNMj7AbCliXiBxJ4vQ=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xF/eBBXlbOfGy9avDkOXT/q72DHJ7Zlu3lfDsTwo+3U=";
 
   nativeBuildInputs = [
     pkg-config
