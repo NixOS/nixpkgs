@@ -27,14 +27,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-NEm6qsU/Kes1rtNCsEauShpJZzrhBtOqo70uzrWpYtE=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "dpi-0.1.1" = "sha256-25sOvEBhlIaekTeWvy3UhjPI1xrJbOQvw/OkTg12kQY=";
-      "glyphon-0.5.0" = "sha256-OGXLqiMjaZ7gR5ANkuCgkfn/I7c/4h9SRE6MZZMW3m4=";
-      "iced-0.13.0-dev" = "sha256-VXaE4+qXakYSyO5rcBbCe4QuJv/oguxdqUEbhXfmh2U=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-OaUoQC9JRXsi1BBPcKbpnKr2WMJ+FJ6g26Dr8bYFhLY=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -102,28 +96,33 @@ rustPlatform.buildRustPackage rec {
     ''
   );
 
-  postInstall = ''
-    install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
-      $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    APP_DIR="$out/Applications/Halloy.app/Contents"
+  postInstall =
+    ''
+      install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
+        $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      APP_DIR="$out/Applications/Halloy.app/Contents"
 
-    mkdir -p "$APP_DIR/MacOS"
-    cp -r ${src}/assets/macos/Halloy.app/Contents/* "$APP_DIR"
+      mkdir -p "$APP_DIR/MacOS"
+      cp -r ${src}/assets/macos/Halloy.app/Contents/* "$APP_DIR"
 
-    substituteInPlace "$APP_DIR/Info.plist" \
-      --replace-fail "{{ VERSION }}" "${version}" \
-      --replace-fail "{{ BUILD }}" "${version}-nixpkgs"
+      substituteInPlace "$APP_DIR/Info.plist" \
+        --replace-fail "{{ VERSION }}" "${version}" \
+        --replace-fail "{{ BUILD }}" "${version}-nixpkgs"
 
-    makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
-  '';
+      makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
+    '';
 
   meta = with lib; {
     description = "IRC application";
     homepage = "https://github.com/squidowl/halloy";
     changelog = "https://github.com/squidowl/halloy/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab iivusly ];
+    maintainers = with maintainers; [
+      fab
+      iivusly
+    ];
     mainProgram = "halloy";
   };
 }
