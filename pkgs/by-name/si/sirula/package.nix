@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, gtk3
-, gtk-layer-shell
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  gtk3,
+  gtk-layer-shell,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,16 +18,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-S0WbqY49nKaBUMWfgDKZxFLJuk7uFcnTfV8s86V0Zxs=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "osstrtools-0.2.2" = "sha256-Co4pcikfN4vtIVK7ZsRGCWMAhMJWNNVZe/AdN1nMlmQ=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QlxDIVp4y/t1fUpafmk8z3yPVeiHArFy+RQ+agU8XmU=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gtk3 gtk-layer-shell ];
+  buildInputs = [
+    gtk3
+    gtk-layer-shell
+  ];
 
   meta = with lib; {
     description = "Simple app launcher for wayland written in rust";
