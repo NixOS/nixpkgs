@@ -267,10 +267,10 @@
         "src": {
             "owner": "libretro",
             "repo": "81-libretro",
-            "rev": "c0d56c5bc5cd48715b4e83cbb3d241a6bed94c2a",
-            "hash": "sha256-XkXZlH359NtOemkArSc1+UXhU55W3hVeM7zH/LRr1zo="
+            "rev": "ffc99f27f092addc9ddd34dd0e3a3d4d1c053cbf",
+            "hash": "sha256-3AIXk3LJHZHWIojMeo2BJHWYDHQ17WVbkwjFhXM14ZE="
         },
-        "version": "unstable-2024-06-28"
+        "version": "unstable-2024-10-21"
     },
     "fbalpha2012": {
         "fetcher": "fetchFromGitHub",
