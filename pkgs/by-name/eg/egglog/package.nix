@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage {
@@ -16,12 +17,8 @@ rustPlatform.buildRustPackage {
 
   useNextest = true;
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "generic_symbolic_expressions-5.0.3" = "sha256-UX6fS470YJMdNnn0GR3earMGQK3p/YvaFia7IEvGGKg=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-7o2cM4igwJGaACU5dJ4Urp/RSBVyr1uFocgk6zplf4I=";
 
   meta = with lib; {
     description = "Fixpoint reasoning system that unifies Datalog and equality saturation";
