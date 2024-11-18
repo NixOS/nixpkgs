@@ -14,10 +14,8 @@
   pysocks,
 
   # tests
-  backports-zoneinfo,
   pytestCheckHook,
   pytest-timeout,
-  pythonOlder,
   tornado,
   trustme,
 }:
@@ -43,15 +41,12 @@ let
       socks = [ pysocks ];
     };
 
-    nativeCheckInputs =
-      [
-        pytest-timeout
-        pytestCheckHook
-        tornado
-        trustme
-      ]
-      ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ]
-      ++ lib.flatten (builtins.attrValues optional-dependencies);
+    nativeCheckInputs = [
+      pytest-timeout
+      pytestCheckHook
+      tornado
+      trustme
+    ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
     # Tests in urllib3 are mostly timeout-based instead of event-based and
     # are therefore inherently flaky. On your own machine, the tests will
