@@ -9430,6 +9430,8 @@ self: super: with self; {
 
   netifaces2 = callPackage ../development/python-modules/netifaces2 { };
 
+  netifaces-plus = callPackage ../development/python-modules/netifaces-plus { };
+
   netmiko = callPackage ../development/python-modules/netmiko { };
 
   netio = callPackage ../development/python-modules/netio { };
