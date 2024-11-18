@@ -39,6 +39,4 @@ in {
 
   fosphor = callPackage ../development/gnuradio-modules/fosphor/default.nix { };
 
-  grnet = callPackage ../development/gnuradio-modules/grnet/default.nix { };
-
 })
