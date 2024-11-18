@@ -25,14 +25,8 @@ rustPlatform.buildRustPackage {
 
   cargoBuildFlags = [ "--package=meilisearch" ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "rhai-1.20.0" = "sha256-lirpciSMM+OJh6Z4Ok3nZyJSdP8SNyUG15T9QqPNjII=";
-      "hf-hub-0.3.2" = "sha256-tsn76b+/HRvPnZ7cWd8SBcEdnMPtjUEIRJipOJUbz54=";
-      "tokenizers-0.15.2" = "sha256-lWvCu2hDJFzK6IUBJ4yeL4eZkOA08LHEMfiKXVvkog8=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cEJTokDJQuc9Le5+3ObMDNJmEhWEb+Qh0TV9xZkD9D8=";
 
   # Default features include mini dashboard which downloads something from the internet.
   buildNoDefaultFeatures = true;
