@@ -24,12 +24,8 @@ rustPlatform.buildRustPackage rec {
     libusb1
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "sysfs-class-0.1.3" = "sha256-ztfwfCRAkxUd/LLNG5fpVuFdgX+tCKL3F35qYJ2GDm8=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-/dhuWgHysJ2oWgJ6jc9u4tsUOxlFt/awlK/9Jk1GHCM=";
 
   postInstall = ''
     install -D -m 0644 data/com.system76.PowerDaemon.conf $out/etc/dbus-1/system.d/com.system76.PowerDaemon.conf
