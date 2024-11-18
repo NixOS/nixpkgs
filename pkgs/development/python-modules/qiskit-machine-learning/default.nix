@@ -11,7 +11,7 @@
   fastdtw,
   numpy,
   psutil,
-  qiskit-terra,
+  qiskit,
   scikit-learn,
   sparse,
   torch,
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     numpy
     psutil
     torch
-    qiskit-terra
+    qiskit
     scikit-learn
     sparse
   ];
@@ -81,12 +81,15 @@ buildPythonPackage rec {
     "test_qgan_training"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Software for developing quantum computing programs";
     homepage = "https://qiskit.org";
     downloadPage = "https://github.com/QISKit/qiskit-optimization/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      drewrisinger
+      guelakais
+    ];
   };
 }

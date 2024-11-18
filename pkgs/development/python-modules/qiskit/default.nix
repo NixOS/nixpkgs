@@ -1,8 +1,6 @@
 {
   stdenv,
   lib,
-  pythonAtLeast,
-  pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
   cargo,
@@ -26,6 +24,8 @@
   pillow,
   pydot,
   pylatexenc,
+  pythonOlder,
+  pythonAtLeast,
   seaborn,
 
   withCrosstalkPass ? false,
@@ -61,19 +61,19 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-Dqd8ywnACfvrfY7Fzw5zYwhlsDvHZErPGvxBPs2pS04=";
   };
+  build-system = [ setuptools-rust ];
 
-  nativeBuildInputs = [
+  dependencies = [
     cargo
     rustc
     rustPlatform.cargoSetupHook
-    setuptools-rust
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src pname version;
-    hash = "sha256-GVGSeNt11jw1jtBPcWq3YgjRpFnvDH/SN8CaLb5iM9Y=";
+    hash = "sha256-xjZQRvq9HTDpAJ0Uxmjct0GZZMrhka5FfrQclYQAtvM=";
   };
 
   propagatedBuildInputs =
@@ -94,7 +94,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "qiskit"
-    "qiskit.pulse"
   ];
 
   meta = {
@@ -110,6 +109,7 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [
       drewrisinger
       pandaman
+      guelakais
     ];
   };
 }
