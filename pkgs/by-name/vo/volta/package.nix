@@ -18,17 +18,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-+j3WRpunV+3YfZnyuKA/CsiKr+gOaP2NbmnyoGMN+Mg=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "detect-indent-0.1.0" = "sha256-qtPkPaBiyuT8GhpEFdU7IkAgKnCbTES0FB2CvNKWqic=";
-      "semver-0.9.0" = "sha256-nw1somkZe9Qi36vjfWlTcDqHAIbaJj72KBTfmucVxXs=";
-      "semver-parser-0.10.0" = "sha256-iTGnKSddsriF6JS6lvJNjp9aDzGtfjrHEiCijeie3uE=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-uBN5pRmd7l58Q4eauGQhUbab4kKHYm3VpJW+aRDsHJ4=";
 
-  buildInputs = [ installShellFiles ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security libiconv ];
+  buildInputs =
+    [ installShellFiles ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      libiconv
+    ];
 
   HOME = "$TMPDIR";
 
