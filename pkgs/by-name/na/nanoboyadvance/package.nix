@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
   cmake,
   python3Packages,
   libsForQt5,
@@ -12,6 +11,14 @@
   libunarr,
 }:
 
+let
+  gladSrc = fetchFromGitHub {
+    owner = "Dav1dde";
+    repo = "glad";
+    rev = "v2.0.5";
+    hash = "sha256-Ba7nbd0DxDHfNXXu9DLfnxTQTiJIQYSES9CP5Bfq4K0=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nanoboyadvance";
   version = "1.8.1";
@@ -22,18 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-du3dPTg3OxNTWXDQo2m9W0rJxtrkn+lQSh/XGiu/eGg=";
   };
-
-  patches = [
-    (substituteAll {
-      src = ./dont-fetch-glad.patch;
-      gladSrc = fetchFromGitHub {
-        owner = "Dav1dde";
-        repo = "glad";
-        rev = "v2.0.5";
-        hash = "sha256-Ba7nbd0DxDHfNXXu9DLfnxTQTiJIQYSES9CP5Bfq4K0=";
-      };
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -50,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GLAD" "${gladSrc}")
     (lib.cmakeBool "USE_SYSTEM_FMT" true)
     (lib.cmakeBool "USE_SYSTEM_TOML11" true)
     (lib.cmakeBool "USE_SYSTEM_UNARR" true)
