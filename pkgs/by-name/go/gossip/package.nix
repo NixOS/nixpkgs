@@ -29,19 +29,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-mPM5HYPEUQ+cGrJ3G/0pmSN4ZQ9SvSNACJRTkgqTAeY=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "egui-video-0.1.0" = "sha256-mks5wYl9s8AjaEtYx3hjOPoV7g+SbK2sC/cnqsc6sM4=";
-      "nostr-types-0.8.0-unstable" = "sha256-ewwOmJaGGRZ25xIM+8fGtB3m46MDQ2WpP0fGF6F5yR4=";
-      "ecolor-0.28.1" = "sha256-X0cUCNBCsWpeoiqbEp8o9QVl29DzIVe9jjNEq9SQ7kM=";
-      "ffmpeg-next-7.0.4" = "sha256-ED7zY944YLVR9dgRvXuCC2n7szKkPMH8DJX4jVBNRIQ=";
-      "watcher-0.1.0" = "sha256-SdwmbP8JrhkBbHEzSFALf0dF2T2xHigORizRRoPVblA=";
-      "lightning-0.0.123-beta" = "sha256-gngH0mOC9USzwUGP4bjb1foZAvg6QHuzODv7LG49MsA=";
-      "musig2-0.1.0" = "sha256-++1x7uHHR7KEhl8LF3VywooULiTzKeDu3e+0/c/8p9Y=";
-      "nip44-0.1.0" = "sha256-u2ALoHQrPVNoX0wjJmQ+BYRzIKsi0G5xPbYjgsNZZ7A=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-YX/+GHm/pA1VDcQqpTjNlBFpbQgvwZfEl1A3W9K1MaY=";
 
   # See https://github.com/mikedilger/gossip/blob/0.9/README.md.
   RUSTFLAGS = "--cfg tokio_unstable";
