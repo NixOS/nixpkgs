@@ -174,6 +174,27 @@ rec {
         | cat  # pipe through cat to force-disable progress bar
     '';
 
+  extractImage = {
+    # Packed OCI image from pullImage or buildImage
+    src,
+    name ? src.name,
+    meta ? {},
+    buildInputs ? []
+  } @ args:
+
+  runCommand name (args // {
+    buildInputs = buildInputs ++ [ jq makeWrapper ];
+    meta = meta // {
+      mainProgram = "_nix_entrypoint";
+    };
+    extractScript = writePython3 "extract" { } ./extract-image.py;
+  }) ''
+
+    $extractScript $src $out \
+      --generate-wrapper-args wrapper-args.json \
+      --generate-entrypoint $out/_nix_entrypoint
+  '';
+
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.
   # And we cannot untar it, because then we cannot preserve permissions etc.
   inherit tarsum; # pkgs.dockerTools.tarsum
