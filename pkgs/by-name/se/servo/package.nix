@@ -70,21 +70,8 @@ rustPlatform.buildRustPackage {
   };
 
   # need to use a `Cargo.lock` as there are git dependencies
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "derive_common-0.0.1" = "sha256-z0I2fQQlbUqaFU1EX45eYDy5IbZJ4SIget7WHzq4St0=";
-      "fontsan-0.5.2" = "sha256-4id66xxQ8iu0+OvJKH77WYPUE0eoVa9oUHmr6lRFPa8=";
-      "gilrs-0.10.6" = "sha256-RIfowFShWTPqgVWliK8Fc4cJw0YKITLvmexmTC0SwQk=";
-      "mozjs-0.14.1" = "sha256-RMM28Rd0r58VLfNEJzjWw3Ze6oKEi5lC1Edv03tJbfY=";
-      "peek-poke-0.3.0" = "sha256-WCZYX68vZrPhaAZwpx9/lUp3bVsLMwtmlJSW8wNb2ks=";
-      "servo-media-0.1.0" = "sha256-+J/6ZJPM9eus6YHJA6ENJD63CBiJTtKZdfORq9n6Nf8=";
-      "signpost-0.1.0" = "sha256-xRVXwW3Gynace9Yk5r1q7xA60yy6xhC5wLAyMJ6rPRs=";
-      "webxr-0.0.1" = "sha256-HZ8oWm5BaBLBXo4dS2CbWjpExry7dzeB2ddRLh7+98w=";
-      "naga-22.0.0" = "sha256-Xi2lWZCv4V2mUbQmwV1aw3pcvIIcyltKvv/C+LVqqDI=";
-      "raqote-0.8.5" = "sha256-WLsz5q08VNmYBxUhQ0hOn0K0RVFnnjaWF/MuQGkO/Rg=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-cvc1l2b2MZvKdEyxP3DsSyF5eZ3zgj+H/zw80O3NLDQ=";
 
   # Remap absolute path between modules to include SEMVER
   # set `HOME` to a temp dir for write access
