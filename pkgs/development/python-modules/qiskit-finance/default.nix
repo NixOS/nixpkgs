@@ -12,7 +12,7 @@
   numpy,
   pandas,
   psutil,
-  qiskit-terra,
+  qiskit,
   qiskit-optimization,
   scikit-learn,
   scipy,
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     numpy
     pandas
     psutil
-    qiskit-terra
+    qiskit
     qiskit-optimization
     quandl
     scikit-learn

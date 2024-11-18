@@ -11,7 +11,7 @@
   fastdtw,
   numpy,
   psutil,
-  qiskit-terra,
+  qiskit,
   scikit-learn,
   sparse,
   torch,
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     numpy
     psutil
     torch
-    qiskit-terra
+    qiskit
     scikit-learn
     sparse
   ];
