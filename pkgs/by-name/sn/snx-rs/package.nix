@@ -1,4 +1,15 @@
-{ fetchFromGitHub, rustPlatform, lib, pkg-config, openssl, glib, atk, gtk3, libsoup, webkitgtk_4_1 }:
+{
+  fetchFromGitHub,
+  rustPlatform,
+  lib,
+  pkg-config,
+  openssl,
+  glib,
+  atk,
+  gtk3,
+  libsoup,
+  webkitgtk_4_1,
+}:
 rustPlatform.buildRustPackage {
   pname = "snx-rs";
   version = "2.2.3";
@@ -11,18 +22,21 @@ rustPlatform.buildRustPackage {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl glib atk gtk3 libsoup webkitgtk_4_1 ];
+  buildInputs = [
+    openssl
+    glib
+    atk
+    gtk3
+    libsoup
+    webkitgtk_4_1
+  ];
 
   checkFlags = [
     "--skip=platform::linux::net::tests::test_default_ip"
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "isakmp-0.1.0" = "sha256-6v5xhkt9iaQg3Eh8S1tXW55oLv4YFDYvY0cfsepMuIM=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-RlYepSswszCV0/vboP3A6STyeAY8ddyrNzkmN0AHwRQ=";
 
   meta = {
     description = "Open source Linux client for Checkpoint VPN tunnels";
