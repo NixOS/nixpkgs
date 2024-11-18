@@ -17,12 +17,8 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrold";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "nvml-wrapper-0.10.0" = "sha256-pMiULWT+nJXcDfLDeACG/DaPF5+AbzpoIUWWWz8mQ+0=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TvWBMglaGDkpYrvVIzXNPx1chWD1+rClLwPVMiMHIUA=";
 
   buildInputs = [
     libdrm
