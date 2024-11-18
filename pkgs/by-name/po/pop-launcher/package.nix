@@ -29,13 +29,9 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cosmic-client-toolkit-0.1.0" = "sha256-6XM6kcM2CEGAziCkal4uO0EL1nEWOKb3rFs7hFh6r7Y=";
-      "switcheroo-control-0.1.0" = "sha256-mklNPKVMO6iFrxki2DwiL5K78KiWpGxksisYldaASIE=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Htre2gzAlNfxBkBvMMtjYbUcuwNw+tB4DI18iBA+g34=";
+
   cargoBuildFlags = [
     "--package"
     "pop-launcher-bin"
