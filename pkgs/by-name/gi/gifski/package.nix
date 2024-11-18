@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  ffmpeg,
+  ffmpeg_6,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_6
   ];
 
   buildFeatures = [ "video" ];

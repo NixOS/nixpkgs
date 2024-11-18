@@ -3564,10 +3564,6 @@ with pkgs;
 
   gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
-  gifski = callPackage ../tools/graphics/gifski {
-    ffmpeg = ffmpeg_6;
-  };
-
   gitlab = callPackage ../applications/version-management/gitlab { };
   gitlab-ee = callPackage ../applications/version-management/gitlab {
     gitlabEnterprise = true;
