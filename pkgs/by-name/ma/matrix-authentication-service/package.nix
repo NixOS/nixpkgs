@@ -26,12 +26,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-QLtyYxV2yXHJtwWgGcyi7gRcKypYoy9Z8bkEuTopVXc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "sea-query-0.32.0-rc.1" = "sha256-Q/NFiIBu8L5rQj4jwcIo8ACmAhLBy4HSTcJv06UdK8E=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-zrrkQGQIfzc+2qJkYS4fmf7RuLsjTPZPsZ5x9mqMaMQ=";
 
   npmDeps = fetchNpmDeps {
     name = "${pname}-${version}-npm-deps";
