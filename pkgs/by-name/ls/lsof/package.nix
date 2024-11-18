@@ -6,13 +6,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "lsof";
-  version = "4.99.3";
+  version = "4.99.4";
 
   src = fetchFromGitHub {
     owner = "lsof-org";
     repo = "lsof";
     rev = version;
-    hash = "sha256-XW3l+E9D8hgI9jGJGKkIAKa8O9m0JHgZhEASqg4gYuw=";
+    hash = "sha256-JyvQV/JOMaL/3jUr6O0YIzJU/JcXVR65CJf5ip7334w=";
   };
 
   postPatch = ''

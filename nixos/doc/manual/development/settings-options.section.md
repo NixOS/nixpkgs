@@ -312,6 +312,8 @@ have a predefined type and string generator already declared under
     may be transformed into multiple key-value pairs depending on
     `listToValue`).
 
+    The attribute `lib.type.atom` contains the used INI atom.
+
 `pkgs.formats.iniWithGlobalSection` { *`listsAsDuplicateKeys`* ? false, *`listToValue`* ? null, \.\.\. }
 
 :   A function taking an attribute set with values
@@ -332,6 +334,8 @@ have a predefined type and string generator already declared under
     sections as with *pkgs.formats.ini* and *globalSection* being just a single
     attrset of key-value pairs for a single section, the global section which
     preceedes the section definitions.
+
+    The attribute `lib.type.atom` contains the used INI atom.
 
 `pkgs.formats.toml` { }
 

@@ -15,7 +15,6 @@
   iconv,
 
   # dependencies
-  backports-zoneinfo,
   importlib-resources,
   python-dateutil,
   time-machine,
@@ -79,7 +78,6 @@ buildPythonPackage rec {
     ]
     ++ lib.optional (!isPyPy) [ time-machine ]
     ++ lib.optionals (pythonOlder "3.9") [
-      backports-zoneinfo
       importlib-resources
     ];
 
