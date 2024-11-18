@@ -129,6 +129,12 @@ stdenv.mkDerivation (finalAttrs: {
     ''
   ];
 
+  # Ensure we reference 'lib' (not 'out') of Swift.
+  # TODO: Remove this once the Swift wrapper doesn’t include these.
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export SWIFT_LIB_DYNAMIC="${lib.getLib swift.swift}/lib/swift/macosx"
+  '';
+
   mesonFlags = [
     (lib.mesonOption "default_library" "shared")
     (lib.mesonBool "libmpv" true)
