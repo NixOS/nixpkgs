@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, SystemConfiguration
-, python3
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  SystemConfiguration,
+  python3,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,12 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-BYYqvPJu/eFJ9lt07A0p7pd8pGFccUe/okFqGEObhY4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "rustpython-doc-0.3.0" = "sha256-34ERuLFKzUD9Xmf1zlafe42GLWZfUlw17ejf/NN6yH4=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-LuxET01n5drYmPXXhCl0Cs9yoCQKwWah8FWfmKmLdsg=";
 
   # freeze the stdlib into the rustpython binary
   cargoBuildFlags = [ "--features=freeze-stdlib" ];
