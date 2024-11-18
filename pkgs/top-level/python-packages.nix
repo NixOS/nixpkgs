@@ -10025,6 +10025,8 @@ self: super: with self; {
 
   netifaces = callPackage ../development/python-modules/netifaces { };
 
+  netifaces-plus = callPackage ../development/python-modules/netifaces-plus { };
+
   netifaces2 = callPackage ../development/python-modules/netifaces2 { };
 
   netio = callPackage ../development/python-modules/netio { };
