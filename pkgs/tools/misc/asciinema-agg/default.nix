@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, Security }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "agg";
@@ -11,12 +17,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-WCUYnveTWWQOzhIViMkSnyQ6vgLs5HDLWa/xvfZMh3A=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "avt-0.8.0" = "sha256-5IN8P/2UWJ2EmkbbTSGWECTqiD8TeOd8LgwLZ+W2z90=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-q4T4Tbl1NPzA7/X21KglhoWTRrYnVQ5ULrSa6UZm8lc=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security
