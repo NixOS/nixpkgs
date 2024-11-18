@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "rmfakecloud";
-  version = "0.0.18";
+  version = "0.0.21";
 
   src = fetchFromGitHub {
     owner = "ddvk";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-J8oB5C5FYZTVq9zopHoL6WYpfTyiiyrQ4YSGu+2eaKw=";
+    hash = "sha256-Opx39FUo4Kzezi96D9iraA8gkqCPVfMf4LhxtVpsuNQ=";
   };
 
-  vendorHash = "sha256-S43qNDAlDWhrkfSffCooveemR1Z7KXS18t97UoolgBM=";
+  vendorHash = "sha256-9tfxE03brUvCYusmewiqNpCkKyIS9qePqylrzDWrJLY=";
 
   ui = callPackage ./webui.nix { inherit version src; };
 
