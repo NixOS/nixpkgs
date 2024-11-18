@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, ffmpeg
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  ffmpeg,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,12 +17,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Sl8HRc5tfRcYxXsXmvZ3M+f7PU7+1jz+IKWPhWWQ/us=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ffmpeg-sys-next-6.1.0" = "sha256-RB9sDQoP68Dzqk8tIuYlOX3dZcS64hKI5KpTGq/7xbM=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-iWH0lXHolLpNVE/pgy1cOwiTMNRVy2JrruhQ/S4tp8M=";
 
   nativeBuildInputs = [
     pkg-config
