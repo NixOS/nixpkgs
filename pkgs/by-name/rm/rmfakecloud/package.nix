@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, buildGoModule, callPackage, enableWebui ? true }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  callPackage,
+  enableWebui ? true,
+}:
 
 buildGoModule rec {
   pname = "rmfakecloud";
@@ -15,22 +21,31 @@ buildGoModule rec {
 
   ui = callPackage ./webui.nix { inherit version src; };
 
-  postPatch = if enableWebui then ''
-    mkdir -p ui/build
-    cp -r ${ui}/* ui/build
-  '' else ''
-    sed -i '/go:/d' ui/assets.go
-  '';
+  postPatch =
+    if enableWebui then
+      ''
+        mkdir -p ui/build
+        cp -r ${ui}/* ui/build
+      ''
+    else
+      ''
+        sed -i '/go:/d' ui/assets.go
+      '';
 
   ldflags = [
-    "-s" "-w" "-X main.version=v${version}"
+    "-s"
+    "-w"
+    "-X main.version=v${version}"
   ];
 
   meta = with lib; {
     description = "Host your own cloud for the Remarkable";
     homepage = "https://ddvk.github.io/rmfakecloud/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ pacien martinetd ];
+    maintainers = with maintainers; [
+      pacien
+      martinetd
+    ];
     mainProgram = "rmfakecloud";
   };
 }
