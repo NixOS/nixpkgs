@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,12 +15,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-yhnt7edhgVy/cZ6FpF6AZWPoeMeEKTXP+87no2KeIYU=";
   };
 
-  cargoLock = {
-    lockFile = ./workstyle-Cargo.lock;
-    outputHashes = {
-      "swayipc-3.0.1" = "sha256-3Jhz3+LhncSRvo3n7Dh5d+RWQSvEff9teuaDZLLLEHk=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-es8kS1w71TuQ1pKb4/wXtpukWEBqUJUA+GX3uXOYbtU=";
 
   doCheck = false; # No tests
 
