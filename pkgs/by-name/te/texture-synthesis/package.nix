@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "texture-synthesis";
@@ -11,12 +16,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0n1wbxcnxb7x5xwakxdzq7kg1fn0c48i520j03p7wvm5x97vm5h4";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "img_hash-2.1.0" = "sha256-Ba26n//bZweYvb5p47U209dHrsDHKHLQ3YEHbKT+hjE=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Y7Pl25be3FOn+sVSNwR9BZ0NWhRM8cPsBkhJ6rWzDKE=";
 
   # tests fail for unknown reasons on aarch64-darwin
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
@@ -24,7 +25,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Example-based texture synthesis written in Rust";
     homepage = "https://github.com/embarkstudios/texture-synthesis";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "texture-synthesis";
   };
