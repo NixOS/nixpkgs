@@ -18126,6 +18126,8 @@ self: super: with self; {
 
   urlmatch = callPackage ../development/python-modules/urlmatch { };
 
+  urlobject = callPackage ../development/python-modules/urlobject { };
+
   urlpy = callPackage ../development/python-modules/urlpy { };
 
   urwid = callPackage ../development/python-modules/urwid { };
