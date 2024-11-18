@@ -11,7 +11,7 @@
   h5py,
   numpy,
   psutil,
-  qiskit-terra,
+  qiskit,
   rustworkx,
   scikit-learn,
   scipy,
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     h5py
     numpy
     psutil
-    qiskit-terra
+    qiskit
     rustworkx
     scikit-learn
     scipy
