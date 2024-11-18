@@ -233,7 +233,7 @@ in lib.makeExtensible (self: ({
     self_attribute_name = "git";
   };
 
-  latest = self.nix_2_24;
+  latest = self.nix_2_25;
 
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,
