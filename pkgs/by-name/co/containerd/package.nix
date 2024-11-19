@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   btrfs-progs,
   buildGoModule,
   fetchFromGitHub,
@@ -9,6 +10,7 @@
   nixosTests,
   util-linux,
   btrfsSupport ? btrfs-progs != null,
+  withMan ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
 buildGoModule rec {
@@ -18,8 +20,7 @@ buildGoModule rec {
   outputs = [
     "out"
     "doc"
-    "man"
-  ];
+  ] ++ lib.optional withMan "man";
 
   src = fetchFromGitHub {
     owner = "containerd";
@@ -35,9 +36,8 @@ buildGoModule rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    go-md2man
     util-linux
-  ];
+  ] ++ lib.optional withMan go-md2man;
 
   buildInputs = lib.optional btrfsSupport btrfs-progs;
 
@@ -54,8 +54,7 @@ buildGoModule rec {
   installTargets = [
     "install"
     "install-doc"
-    "install-man"
-  ];
+  ] ++ lib.optional withMan "install-man";
 
   buildPhase = ''
     runHook preBuild
