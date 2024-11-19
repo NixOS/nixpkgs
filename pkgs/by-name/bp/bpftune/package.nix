@@ -12,26 +12,22 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftune";
-  version = "0-unstable-2024-06-07";
+  version = "0-unstable-2024-10-25";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "bpftune";
-    rev = "04bab5dd306b55b3e4e13e261af2480b7ccff9fc";
-    hash = "sha256-kVjvupZ6HxJocwXWOrxUNqEGl0welJRlZwvOmMKqeBA=";
+    rev = "6a50f5ff619caeea6f04d889e3a60de6c12feb76";
+    hash = "sha256-yol6VFelqQiPKLg1UUeP+r/+XO4fjYeDbIeI29gZ7j4=";
   };
 
   postPatch = ''
     # otherwise shrink rpath would drop $out/lib from rpath
     substituteInPlace src/Makefile \
-      --replace-fail /lib64   /lib \
       --replace-fail /sbin    /bin \
       --replace-fail ldconfig true
     substituteInPlace src/bpftune.service \
       --replace-fail /usr/sbin/bpftune "$out/bin/bpftune"
-    substituteInPlace include/bpftune/libbpftune.h \
-      --replace-fail /usr/lib64/bpftune/       "$out/lib/bpftune/" \
-      --replace-fail /usr/local/lib64/bpftune/ "$out/lib/bpftune/"
     substituteInPlace src/libbpftune.c \
       --replace-fail /lib/modules /run/booted-system/kernel-modules/lib/modules
   '';
@@ -51,6 +47,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "prefix=${placeholder "out"}"
     "confprefix=${placeholder "out"}/etc"
+    "libdir=lib"
     "BPFTUNE_VERSION=${version}"
     "NL_INCLUDE=${lib.getDev libnl}/include/libnl3"
     "BPF_INCLUDE=${lib.getDev libbpf}/include"
