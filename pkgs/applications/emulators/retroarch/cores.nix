@@ -159,14 +159,7 @@ lib.makeScope newScope (self: rec {
 
   gambatte = self.callPackage ./cores/gambatte.nix {  };
 
-  genesis-plus-gx = mkLibretroCore {
-    core = "genesis-plus-gx";
-    meta = {
-      description = "Enhanced Genesis Plus libretro port";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
-    };
-  };
+  genesis-plus-gx = self.callPackage ./cores/genesis-plus-gx.nix {  };
 
   gpsp = mkLibretroCore {
     core = "gpsp";
