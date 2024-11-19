@@ -4,13 +4,16 @@
   autoPatchelfHook,
   fuse3,
   maven,
-  jdk,
+  jdk23,
   makeShellWrapper,
   glib,
   wrapGAppsHook3,
   libayatana-appindicator,
 }:
 
+let
+  jdk = jdk23.override { enableJavaFX = true; };
+in
 maven.buildMavenPackage rec {
   pname = "cryptomator";
   version = "1.14.1";
