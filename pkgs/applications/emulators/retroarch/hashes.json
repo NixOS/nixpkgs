@@ -378,10 +378,10 @@
         "src": {
             "owner": "libretro",
             "repo": "gw-libretro",
-            "rev": "feab76c102166784230dc44c45cad4cb49a1c9a7",
-            "hash": "sha256-dtcsPTemFqgfBtFp4RF0Q2B/3bCHY4CqJGibwV+lfwI="
+            "rev": "435e5cfd4bf6aea03a84259e9b8dba3daf3ff5bd",
+            "hash": "sha256-csaOqrZMSk9xZUlGAKgypV38q9XE7K6hLLdBC10g9Ao="
         },
-        "version": "unstable-2024-06-28"
+        "version": "unstable-2024-10-21"
     },
     "handy": {
         "fetcher": "fetchFromGitHub",
