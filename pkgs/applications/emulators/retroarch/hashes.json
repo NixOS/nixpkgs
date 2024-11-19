@@ -694,10 +694,10 @@
         "src": {
             "owner": "libretro",
             "repo": "libretro-uae",
-            "rev": "527564f2748901068a5fef891c5073a4d6cd089b",
-            "hash": "sha256-tzZVG4B+rzHqhw28cmvjMFiyFfbrU3xOOEU+OCUaa+M="
+            "rev": "c60e42ef9ad474518d4be859b7c1da2c0c7e1d6f",
+            "hash": "sha256-WCkz7BUgYaI+yRhPmNuOKGJC/GxV+n2aeJVn8vhx0Ng="
         },
-        "version": "unstable-2024-09-25"
+        "version": "unstable-2024-10-19"
     },
     "quicknes": {
         "fetcher": "fetchFromGitHub",
