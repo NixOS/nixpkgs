@@ -147,13 +147,7 @@ lib.makeScope newScope (self: rec {
 
   fbneo = self.callPackage ./cores/fbneo.nix {  };
 
-  fceumm = mkLibretroCore {
-    core = "fceumm";
-    meta = {
-      description = "FCEUmm libretro port";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  fceumm = self.callPackage ./cores/fceumm.nix {  };
 
   flycast = mkLibretroCore {
     core = "flycast";
