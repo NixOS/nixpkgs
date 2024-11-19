@@ -752,16 +752,6 @@ in
     nvimRequireCheck = "competitest";
   };
 
-  compe-tabnine = super.compe-tabnine.overrideAttrs {
-    dependencies = [ self.nvim-compe ];
-    buildInputs = [ tabnine ];
-
-    postFixup = ''
-      mkdir -p $target/binaries/${tabnine.version}
-      ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
-    '';
-  };
-
   compe-zsh = super.compe-zsh.overrideAttrs {
     dependencies = with self; [
       nvim-compe

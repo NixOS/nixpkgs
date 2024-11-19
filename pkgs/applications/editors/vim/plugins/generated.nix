@@ -2561,18 +2561,6 @@ final: prev:
     meta.homepage = "https://github.com/rhysd/committia.vim/";
   };
 
-  compe-tabnine = buildVimPlugin {
-    pname = "compe-tabnine";
-    version = "2021-09-14";
-    src = fetchFromGitHub {
-      owner = "tzachar";
-      repo = "compe-tabnine";
-      rev = "33e4af509c27da9ef2c9c3002c01e3ec031797d4";
-      sha256 = "1lzyia2s66kcxpr6d3db4rcgxlcddfg6gpz8rbg333hdasly383w";
-    };
-    meta.homepage = "https://github.com/tzachar/compe-tabnine/";
-  };
-
   compe-zsh = buildVimPlugin {
     pname = "compe-zsh";
     version = "2021-04-03";
