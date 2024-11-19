@@ -25,4 +25,5 @@ in makeOverridable( {format ? "setuptools", sha256 ? "", hash ? "", ... } @attrs
     url = computeUrl (builtins.removeAttrs attrs ["sha256" "hash"]) ;
   in fetchurl {
     inherit url sha256 hash;
+    passthru = { inherit (attrs) pname version format; };
   })
