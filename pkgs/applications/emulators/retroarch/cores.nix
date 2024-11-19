@@ -141,14 +141,7 @@ lib.makeScope newScope (self: rec {
 
   easyrpg = self.callPackage ./cores/easyrpg.nix {  };
 
-  eightyone = mkLibretroCore {
-    core = "81";
-    repo = "eightyone";
-    meta = {
-      description = "Port of EightyOne to libretro";
-      license = lib.licenses.gpl3Only;
-    };
-  };
+  eightyone = self.callPackage ./cores/eightyone.nix {  };
 
   fbalpha2012 = mkLibretroCore {
     core = "fbalpha2012";
