@@ -95,15 +95,7 @@ lib.makeScope newScope (self: rec {
 
   beetle-pce = self.callPackage ./cores/beetle-pce.nix { };
 
-  beetle-pce-fast = mkLibretroCore {
-    core = "mednafen-pce-fast";
-    repo = "beetle-pce-fast";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of Mednafen's PC Engine fast core to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  beetle-pce-fast = self.callPackage ./cores/beetle-pce-fast.nix { };
 
   beetle-pcfx = mkLibretroCore {
     core = "mednafen-pcfx";
