@@ -5,6 +5,8 @@
 }:
 buildGoModule rec {
   pname = "ocb";
+  # Also update `pkgs/tools/misc/opentelemetry-collector/releases.nix`
+  # whenever that version changes.
   version = "0.114.0";
 
   src = fetchFromGitHub {
