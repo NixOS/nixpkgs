@@ -1,23 +1,24 @@
-{ lib
-, cargo-tauri_1
-, cmake
-, dbus
-, fetchgit
-, fetchYarnDeps
-, freetype
-, gsettings-desktop-schemas
-, gtk3
-, libsoup
-, stdenv
-, yarnConfigHook
-, yarnBuildHook
-, nodejs
-, openssl
-, pkg-config
-, rustPlatform
-, webkitgtk_4_0
-, wrapGAppsHook3
-, sqlite
+{
+  lib,
+  cargo-tauri_1,
+  cmake,
+  dbus,
+  fetchgit,
+  fetchYarnDeps,
+  freetype,
+  gsettings-desktop-schemas,
+  gtk3,
+  libsoup,
+  stdenv,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  webkitgtk_4_0,
+  wrapGAppsHook3,
+  sqlite,
 }:
 
 let
@@ -60,12 +61,8 @@ rustPlatform.buildRustPackage {
   inherit version pname src;
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "fix-path-env-0.0.0" = "sha256-ewE3CwqLC8dvi94UrQsWbp0mjmrzEJIGPDYtdmQ/sGs=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-TI8GSLHD1qJ6zzG4nt0Yz0RHJVaF6hjUwE8N8Y1uHmk=";
 
   env = {
     VERGEN_GIT_DESCRIBE = version;
