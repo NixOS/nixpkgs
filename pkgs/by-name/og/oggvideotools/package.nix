@@ -59,5 +59,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.streamnik.de/oggvideotools.html";
     license = licenses.gpl2Only;
     maintainers = [ ];
+    platforms = platforms.unix;
   };
 }
