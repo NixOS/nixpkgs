@@ -103,16 +103,7 @@ lib.makeScope newScope (self: rec {
 
   beetle-psx-hw = self.beetle-psx.override { withHw = true; };
 
-  beetle-saturn = mkLibretroCore {
-    core = "mednafen-saturn";
-    repo = "beetle-saturn";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of Mednafen's Saturn core to libretro";
-      license = lib.licenses.gpl2Only;
-      platforms = [ "aarch64-linux" "x86_64-linux" ];
-    };
-  };
+  beetle-saturn = self.callPackage ./cores/beetle-saturn.nix { };
 
   beetle-supafaust = mkLibretroCore {
     core = "mednafen-supafaust";
