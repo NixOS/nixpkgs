@@ -10233,6 +10233,8 @@ self: super: with self; {
 
   outlines = callPackage ../development/python-modules/outlines { };
 
+  outlines-core = callPackage ../development/python-modules/outlines-core { };
+
   overly = callPackage ../development/python-modules/overly { };
 
   overpy = callPackage ../development/python-modules/overpy { };
