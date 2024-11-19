@@ -5,17 +5,17 @@
 }:
 buildGoModule rec {
   pname = "ocb";
-  version = "0.112.0";
+  version = "0.114.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "cmd/builder/v${version}";
-    hash = "sha256-0eL9J+PrURiNkL6CzUIlcvjyZor8iS9vKX8j0srLlZ8=";
+    hash = "sha256-zy+TWjh7janUhpxO9fOC8C9vz/tI0mbAyEsCo9zZ1j4=";
   };
 
   sourceRoot = "${src.name}/cmd/builder";
-  vendorHash = "sha256-vZsGSLdzKa4sA/N3RG6Kwn8tMoIIhPJ6uAkM4pheitU=";
+  vendorHash = "sha256-dLNs9Vgn6f10hl5XuPzzE4eFNfvELWSKGsd7FbSiHkU=";
 
   CGO_ENABLED = 0;
   ldflags = [
