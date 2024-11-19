@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitea
-, fetchpatch
-, makeWrapper
-, pkg-config
-, glib
-, libopus
-, vips
-, ffmpeg
-, callPackage
-, darwin
-, testers
-, faircamp
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitea,
+  fetchpatch,
+  makeWrapper,
+  pkg-config,
+  glib,
+  libopus,
+  vips,
+  ffmpeg,
+  callPackage,
+  darwin,
+  testers,
+  faircamp,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,12 +36,8 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "enolib-0.4.2" = "sha256-FJuWKcwjoi/wKfTzxghobNWblhnKRdUvHOejhpCF7kY=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-JbF/upBW1B6q/AK6cM7YERt9aAmmIJ7DCgZcR9b5iR4=";
 
   buildFeatures = [ "libvips" ];
 
@@ -49,13 +46,15 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    glib
-    libopus
-    vips
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
+  buildInputs =
+    [
+      glib
+      libopus
+      vips
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreServices
+    ];
 
   postInstall = ''
     wrapProgram $out/bin/faircamp \
