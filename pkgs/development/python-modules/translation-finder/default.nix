@@ -11,13 +11,14 @@
 
 buildPythonPackage rec {
   pname = "translation-finder";
-  version = "2.16";
+  version = "2.19";
 
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-a1C+j4Zo0DJ9BWDn5Zsu4zAftcUixfPktAWdqiFJpiU=";
+    pname = "translation_finder";
+    inherit version;
+    hash = "sha256-4eTPqI2VBKd5ECJk5mmgrKOaIwLCNhmwCx+jv8G+lwI=";
   };
 
   patches = [ ./fix_tests.patch ];
