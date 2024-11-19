@@ -139,31 +139,7 @@ lib.makeScope newScope (self: rec {
 
   dosbox-pure = self.callPackage ./cores/dosbox-pure.nix {  };
 
-  easyrpg = mkLibretroCore {
-    core = "easyrpg";
-    extraNativeBuildInputs = [ cmake pkg-config ];
-    extraBuildInputs = [ fmt freetype harfbuzz liblcf libpng libsndfile libvorbis libxmp mpg123 opusfile pcre pixman speexdsp ];
-    patches = [
-      # The following patch is shared with easyrpg-player.
-      # Update when new versions of liblcf and easyrpg-player are released.
-      # See pkgs/games/easyrpg-player/default.nix for details.
-      (fetchpatch {
-        name = "0001-Fix-building-with-fmtlib-10.patch";
-        url = "https://github.com/EasyRPG/Player/commit/ab6286f6d01bada649ea52d1f0881dde7db7e0cf.patch";
-        hash = "sha256-GdSdVFEG1OJCdf2ZIzTP+hSrz+ddhTMBvOPjvYQHy54=";
-      })
-    ];
-    cmakeFlags = [
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DPLAYER_TARGET_PLATFORM=libretro"
-      "-DCMAKE_INSTALL_DATADIR=${placeholder "out"}/share"
-    ];
-    makefile = "Makefile";
-    meta = {
-      description = "EasyRPG Player libretro port";
-      license = lib.licenses.gpl3Only;
-    };
-  };
+  easyrpg = self.callPackage ./cores/easyrpg.nix {  };
 
   eightyone = mkLibretroCore {
     core = "81";
