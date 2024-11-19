@@ -4793,7 +4793,7 @@ with pkgs;
 
   update-systemd-resolved = callPackage ../tools/networking/openvpn/update-systemd-resolved.nix { };
 
-  opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector { };
+  opentelemetry-collector = opentelemetry-collector-releases.otelcol;
   opentelemetry-collector-releases = callPackage ../tools/misc/opentelemetry-collector/releases.nix { };
   opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix { };
 
