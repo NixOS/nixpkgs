@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  pkgsCross,
   btrfs-progs,
   buildGoModule,
   fetchFromGitHub,
@@ -69,9 +70,18 @@ buildGoModule rec {
   '';
 
   passthru = {
-    tests = {
-      inherit (nixosTests) docker;
-    } // kubernetes.tests;
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux (
+      {
+        cross =
+          let
+            systemString = if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform";
+          in
+          pkgsCross.${systemString}.containerd;
+
+        inherit (nixosTests) docker;
+      }
+      // kubernetes.tests
+    );
 
     updateScript = nix-update-script { };
   };
