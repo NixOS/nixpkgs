@@ -56,12 +56,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/SteScho/manubulon-snmp/releases/tag/v${version}";
     description = "Set of Icinga/Nagios plugins to check hosts and hardware with the SNMP protocol";
     homepage = "https://github.com/SteScho/manubulon-snmp";
-    license = with licenses; [ gpl2Only ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jwillikers ];
+    license = with lib.licenses; [ gpl2Only ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jwillikers ];
   };
 }
