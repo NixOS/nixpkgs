@@ -27,12 +27,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://rectangleapp.com/pro/versions";
     description = "Move and resize windows in macOS using keyboard shortcuts or snap areas";
     homepage = "https://rectangleapp.com/pro";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.darwin;
   };
 })
