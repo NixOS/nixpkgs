@@ -327,8 +327,6 @@ self = stdenv.mkDerivation {
     license = licenses.lgpl21Plus;
     inherit maintainers;
     platforms = platforms.unix;
-    # Requires refactorings in nixpkgs: https://github.com/NixOS/nixpkgs/pull/356983
-    broken = stdenv.hostPlatform.isDarwin && enableStatic;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
     mainProgram = "nix";
     knownVulnerabilities = lib.optional (!builtins.elem (lib.versions.majorMinor version) unaffectedByFodSandboxEscape && !atLeast221) "CVE-2024-27297";
