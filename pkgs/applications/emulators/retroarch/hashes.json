@@ -855,10 +855,10 @@
         "src": {
             "owner": "libretro",
             "repo": "vbam-libretro",
-            "rev": "b5a4788747fa46afe681080db758f4a827ff7274",
-            "hash": "sha256-R/WaUiVlRbytra/jJyZZvkDbmnZvsO4RLFYYTp5Rcvo="
+            "rev": "379dd97301458a51fb69dd93ba21b64f81e01ef2",
+            "hash": "sha256-UbXSHdKfa91MpcYityo+aILbI0DfkLqZh8YfGcRx/BI="
         },
-        "version": "unstable-2024-06-28"
+        "version": "unstable-2024-10-21"
     },
     "vba-next": {
         "fetcher": "fetchFromGitHub",
