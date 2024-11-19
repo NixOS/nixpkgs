@@ -133,34 +133,7 @@ lib.makeScope newScope (self: rec {
 
   desmume2015 = self.callPackage ./cores/desmume2015.nix {  };
 
-  dolphin = mkLibretroCore {
-    core = "dolphin";
-    extraNativeBuildInputs = [ cmake curl pkg-config ];
-    extraBuildInputs = [
-      libGLU
-      libGL
-      pcre
-      sfml
-      gettext
-      hidapi
-      libevdev
-      udev
-    ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil libXext libXrandr libXinerama libXxf86vm ]);
-    makefile = "Makefile";
-    cmakeFlags = [
-      "-DLIBRETRO=ON"
-      "-DLIBRETRO_STATIC=1"
-      "-DENABLE_QT=OFF"
-      "-DENABLE_LTO=OFF"
-      "-DUSE_UPNP=OFF"
-      "-DUSE_DISCORD_PRESENCE=OFF"
-    ];
-    dontUseCmakeBuildDir = true;
-    meta = {
-      description = "Port of Dolphin to libretro";
-      license = lib.licenses.gpl2Plus;
-    };
-  };
+  dolphin = self.callPackage ./cores/dolphin.nix {  };
 
   dosbox = mkLibretroCore {
     core = "dosbox";
