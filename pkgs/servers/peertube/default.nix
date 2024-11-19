@@ -46,33 +46,33 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "peertube";
-  version = "6.0.4";
+  version = "6.3.3";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
-    rev = "v${version}";
-    hash = "sha256-FxXIvibwdRcv8OaTQEXiM6CvWOIptfQXDQ1/PW910wg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-kPZcCJtnoqE1g0fAuM98IhuDy1E9QBDkFNWrWIpFIDA=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-RJX92EgEIXWB1wNFRl8FvseOqBT+7m6gs+pMyoodruk=";
+    hash = "sha256-I6TC5KO+NQ0NAtoJzYQPLelp8/hYUtIeof+UI45qpdk=";
   };
 
   yarnOfflineCacheClient = fetchYarnDeps {
     yarnLock = "${src}/client/yarn.lock";
-    hash = "sha256-vr9xn5NXwiUS59Kgl8olCtkMgxnI1TKQzibKbb8RNXA=";
+    hash = "sha256-ADck9+5TDZ3OGInZ+NYYpBg9XXHugtiwyxYCYqSIOzM=";
   };
 
   yarnOfflineCacheAppsCli = fetchYarnDeps {
     yarnLock = "${src}/apps/peertube-cli/yarn.lock";
-    hash = "sha256-xsB71bnaPn/9/f1KHyU3TTwx+Q+1dLjWmNK2aVJgoRY=";
+    hash = "sha256-t5MwysPVLbtIfDhvnwWoGocck1ntP8OP9Vf9DF6L7Cg=";
   };
 
   yarnOfflineCacheAppsRunner = fetchYarnDeps {
     yarnLock = "${src}/apps/peertube-runner/yarn.lock";
-    hash = "sha256-9w3aLuiLs7SU00YwuE0ixfiD77gCakXT4YeRpfsgGz0=";
+    hash = "sha256-x5qFCprn8q0xC88HudLV7W53X1Nkbz3F52RMp2PxIu8=";
   };
 
   outputs = [ "out" "cli" "runner" ];
@@ -134,6 +134,7 @@ stdenv.mkDerivation rec {
       ~/packages/models/dist/ \
       ~/packages/node-utils/dist/ \
       ~/packages/server-commands/dist/ \
+      ~/packages/transcription/dist/ \
       ~/packages/typescript-utils/dist/ \
       \( -name '*.d.ts' -o -name '*.d.ts.map' \) -type f -delete
   '';
@@ -144,12 +145,13 @@ stdenv.mkDerivation rec {
     mv ~/node_modules $out/node_modules
     mkdir $out/client
     mv ~/client/{dist,node_modules,package.json,yarn.lock} $out/client
-    mkdir -p $out/packages/{core-utils,ffmpeg,models,node-utils,server-commands,typescript-utils}
+    mkdir -p $out/packages/{core-utils,ffmpeg,models,node-utils,server-commands,transcription,typescript-utils}
     mv ~/packages/core-utils/{dist,package.json} $out/packages/core-utils
     mv ~/packages/ffmpeg/{dist,package.json} $out/packages/ffmpeg
     mv ~/packages/models/{dist,package.json} $out/packages/models
     mv ~/packages/node-utils/{dist,package.json} $out/packages/node-utils
     mv ~/packages/server-commands/{dist,package.json} $out/packages/server-commands
+    mv ~/packages/transcription/{dist,package.json} $out/packages/transcription
     mv ~/packages/typescript-utils/{dist,package.json} $out/packages/typescript-utils
     mv ~/{config,support,CREDITS.md,FAQ.md,LICENSE,README.md,package.json,yarn.lock} $out
 

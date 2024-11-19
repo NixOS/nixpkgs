@@ -355,19 +355,20 @@ in {
           tmp_persistent = lib.mkDefault "/var/lib/peertube/storage/tmp_persistent/";
           bin = lib.mkDefault "/var/lib/peertube/storage/bin/";
           avatars = lib.mkDefault "/var/lib/peertube/storage/avatars/";
+          logs = lib.mkDefault "/var/lib/peertube/storage/logs/";
           web_videos = lib.mkDefault "/var/lib/peertube/storage/web-videos/";
           streaming_playlists = lib.mkDefault "/var/lib/peertube/storage/streaming-playlists/";
+          original_video_files = lib.mkDefault "/var/lib/peertube/storage/original-video-files/";
           redundancy = lib.mkDefault "/var/lib/peertube/storage/redundancy/";
-          logs = lib.mkDefault "/var/lib/peertube/storage/logs/";
-          previews = lib.mkDefault "/var/lib/peertube/storage/previews/";
           thumbnails = lib.mkDefault "/var/lib/peertube/storage/thumbnails/";
           storyboards = lib.mkDefault "/var/lib/peertube/storage/storyboards/";
-          torrents = lib.mkDefault "/var/lib/peertube/storage/torrents/";
+          previews = lib.mkDefault "/var/lib/peertube/storage/previews/";
           captions = lib.mkDefault "/var/lib/peertube/storage/captions/";
+          torrents = lib.mkDefault "/var/lib/peertube/storage/torrents/";
           cache = lib.mkDefault "/var/lib/peertube/storage/cache/";
           plugins = lib.mkDefault "/var/lib/peertube/storage/plugins/";
-          well_known = lib.mkDefault "/var/lib/peertube/storage/well_known/";
           client_overrides = lib.mkDefault "/var/lib/peertube/storage/client-overrides/";
+          well_known = lib.mkDefault "/var/lib/peertube/storage/well_known/";
         };
         import = {
           videos = {
@@ -510,10 +511,20 @@ in {
           '' + nginxCommonHeaders;
         };
 
+        locations."~ ^/api/v1/users/[^/]+/imports/import-resumable$" = {
+          tryFiles = "/dev/null @api";
+          priority = 1130;
+
+          extraConfig = ''
+            client_max_body_size 0;
+            proxy_request_buffering off;
+          '' + nginxCommonHeaders;
+        };
+
         locations."~ ^/api/v1/videos/(upload|([^/]+/studio/edit))$" = {
           tryFiles = "/dev/null @api";
           root = cfg.settings.storage.tmp;
-          priority = 1130;
+          priority = 1140;
 
           extraConfig = ''
             limit_except POST HEAD { deny all; }
@@ -526,7 +537,7 @@ in {
         locations."~ ^/api/v1/runners/jobs/[^/]+/(update|success)$" = {
           tryFiles = "/dev/null @api";
           root = cfg.settings.storage.tmp;
-          priority = 1135;
+          priority = 1150;
 
           extraConfig = ''
             client_max_body_size 12G;
@@ -536,7 +547,7 @@ in {
 
         locations."~ ^/api/v1/(videos|video-playlists|video-channels|users/me)" = {
           tryFiles = "/dev/null @api";
-          priority = 1140;
+          priority = 1160;
 
           extraConfig = ''
             client_max_body_size 6M;
@@ -546,7 +557,7 @@ in {
 
         locations."@api" = {
           proxyPass = "http://peertube";
-          priority = 1150;
+          priority = 1170;
 
           extraConfig = ''
             proxy_set_header Host $host;
@@ -684,8 +695,6 @@ in {
             if ($request_method = 'GET') {
               ${nginxCommonHeaders}
               ${nginxCommonHeadersExtra}
-
-              access_log off;
             }
 
             aio threads;
@@ -721,8 +730,6 @@ in {
             if ($request_method = 'GET') {
               ${nginxCommonHeaders}
               ${nginxCommonHeadersExtra}
-
-              access_log off;
             }
 
             aio threads;
@@ -758,8 +765,6 @@ in {
             if ($request_method = 'GET') {
               ${nginxCommonHeaders}
               ${nginxCommonHeadersExtra}
-
-              access_log off;
             }
 
             aio threads;
@@ -795,8 +800,6 @@ in {
             if ($request_method = 'GET') {
               ${nginxCommonHeaders}
               ${nginxCommonHeadersExtra}
-
-              access_log off;
             }
 
             aio threads;
