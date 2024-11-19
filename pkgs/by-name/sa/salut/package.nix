@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitLab
-, pkg-config
-, fontconfig
-, libxkbcommon
-, wayland
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  pkg-config,
+  fontconfig,
+  libxkbcommon,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {
