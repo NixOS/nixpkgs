@@ -46,5 +46,4 @@ stdenv.mkDerivation {
     mainProgram = "hexdiff";
     platforms = platforms.all;
   };
-
 }
