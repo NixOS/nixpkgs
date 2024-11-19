@@ -885,10 +885,10 @@
         "src": {
             "owner": "libretro",
             "repo": "virtualjaguar-libretro",
-            "rev": "8126e5c504ac7217a638f38e4cd9190822c8abdd",
-            "hash": "sha256-U/qdKApE0OU3jc6ekfgEZ7VCaIqCc2h+Y+IHe7PIRY0="
+            "rev": "48096c1f6f8b98cfff048a5cb4e6a86686631072",
+            "hash": "sha256-DLBQQARHqupGGQS8YznDSSMuxQliyt5apGA4Ku2jlYo="
         },
-        "version": "unstable-2023-06-01"
+        "version": "unstable-2024-10-21"
     },
     "yabause": {
         "fetcher": "fetchFromGitHub",
