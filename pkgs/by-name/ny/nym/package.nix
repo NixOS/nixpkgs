@@ -27,15 +27,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-SBJE0IEgl7Efuu73n3HZQrFxYX+cn5UU5jrL4T5xzNw=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "bls12_381-0.8.0" = "sha256-4+X/ZQ5Z+Nax4Ot1JWWvvLxuIUaucHkfnDB2L+Ak7Ro=";
-      "cosmos-sdk-proto-0.22.0-pre" = "sha256-nRfcAbjFcvAqool+6heYK8joiU5YaSWITnO6S5MRM1E=";
-      "defguard_wireguard_rs-0.4.7" = "sha256-+5m1+XGJ6Fi8v6rgjt0jRmwIruIL+OPP7zq/+166WMw=";
-      "indexed_db_futures-0.4.2" = "sha256-vVqrD40CBdSSEtU+kQeuZUfsgpJdl8ks+os0Fct8Ung=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Y927OgFWdum4bQVMAnkhMyYScRd1CAsHpkPoDV8TZuM=";
 
   env = {
     SWAGGER_UI_DOWNLOAD_URL = "file://${swagger-ui}";
