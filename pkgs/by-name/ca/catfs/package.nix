@@ -1,6 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub
-, fuse
-, pkg-config
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fuse,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
