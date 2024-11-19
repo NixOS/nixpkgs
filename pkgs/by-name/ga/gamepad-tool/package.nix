@@ -31,8 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r usr/share/icons $out/share/icons
     substitute usr/share/applications/gamepad-tool-debian.desktop \
       $out/share/applications/gamepad-tool.desktop \
-      --replace "Exec=gamepad-tool" "Exec=$out/bin/gamepad-tool" \
-      --replace "/usr/share/icons/hicolor/256x256/apps/gamepad-tool.png" "$out/share/icons/hicolor/256x256/apps/gamepad-tool.png"
+      --replace-fail "/usr/share/icons/hicolor/256x256/apps/gamepad-tool.png" "gamepad-tool"
     runHook postInstall
   '';
 
