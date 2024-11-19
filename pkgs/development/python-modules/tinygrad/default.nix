@@ -45,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "tinygrad";
-  version = "0.9.2";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tinygrad";
     repo = "tinygrad";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fCKtJhZtqq6yjc6m41uvikzM9GArUlB8Q7jN/Np8+SM=";
+    hash = "sha256-IIyTb3jDUSEP2IXK6DLsI15E5N34Utt7xv86aTHpXf8=";
   };
 
   patches = [
