@@ -3931,7 +3931,6 @@ with pkgs;
   angryipscanner = ipscan;
 
   isl = isl_0_20;
-  isl_0_17 = callPackage ../development/libraries/isl/0.17.1.nix { };
   isl_0_20 = callPackage ../development/libraries/isl/0.20.0.nix { };
   isl_0_24 = callPackage ../development/libraries/isl/0.24.0.nix { };
 
