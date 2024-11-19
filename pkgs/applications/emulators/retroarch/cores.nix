@@ -111,15 +111,7 @@ lib.makeScope newScope (self: rec {
 
   beetle-vb = self.callPackage ./cores/beetle-vb.nix { };
 
-  beetle-wswan = mkLibretroCore {
-    core = "mednafen-wswan";
-    repo = "beetle-wswan";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of Mednafen's WonderSwan core to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  beetle-wswan = self.callPackage ./cores/beetle-wswan.nix { };
 
   blastem = mkLibretroCore {
     core = "blastem";
