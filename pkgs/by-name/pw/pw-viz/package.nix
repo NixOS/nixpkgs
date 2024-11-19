@@ -1,15 +1,16 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, expat
-, fontconfig
-, freetype
-, libGL
-, libxkbcommon
-, pipewire
-, wayland
-, xorg
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  expat,
+  fontconfig,
+  freetype,
+  libGL,
+  libxkbcommon,
+  pipewire,
+  wayland,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -49,7 +50,13 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     patchelf $out/bin/pw-viz \
-      --add-rpath ${lib.makeLibraryPath [ libGL libxkbcommon wayland ]}
+      --add-rpath ${
+        lib.makeLibraryPath [
+          libGL
+          libxkbcommon
+          wayland
+        ]
+      }
   '';
 
   # enables pipewire API deprecated in 0.3.64
