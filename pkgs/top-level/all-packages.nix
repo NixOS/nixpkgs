@@ -431,9 +431,9 @@ with pkgs;
   dotnet-aspnetcore_7 = dotnetCorePackages.aspnetcore_7_0;
   dotnet-aspnetcore_8 = dotnetCorePackages.aspnetcore_8_0;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
-  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_8_0;
 
   inherit (dotnetCorePackages) buildDotnetModule buildDotnetGlobalTool mkNugetSource mkNugetDeps;
 
@@ -7843,14 +7843,6 @@ with pkgs;
     src = oldAttrs.src.override {
       inherit version;
       hash = "sha256-WeSqQO1azbTvm789BYkY//k/ZqFJNz2BWciilgRBC9o=";
-    };
-  }));
-  ansible_2_15 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.15.9";
-    src = oldAttrs.src.override {
-      inherit version;
-      pname = "ansible-core";
-      hash = "sha256-JfmxtaWvPAmGvTko7QhurduGdSf7XIOv7xoDz60080U=";
     };
   }));
 

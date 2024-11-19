@@ -36,13 +36,14 @@ let
 
     cmakeFlags = [
       "-DCORECLR_DIR=${coreclr-src}/src/coreclr"
-      "-DDOTNET_DIR=${dotnet-sdk}"
+      "-DDOTNET_DIR=${dotnet-sdk.unwrapped}/share/dotnet"
       "-DBUILD_MANAGED=0"
     ];
   };
 
   managed = buildDotnetModule {
     inherit pname version src dotnet-sdk;
+    dotnet-runtime = null;
 
     projectFile = "src/managed/ManagedPart.csproj";
     nugetDeps = ./deps.nix;
