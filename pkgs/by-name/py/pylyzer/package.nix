@@ -23,12 +23,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-jj9r5npClLY9mhDHFI92825RYvwn6m9KlngfFL0bqCw=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "rustpython-ast-0.4.0" = "sha256-RChZlXzdzyLp0Lb/LTLbWfbUzPDhmWkf0uVobflCKRk=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ey+VwqLB2nQfyFv/Jln+PMu0AXQ0TpW2D3T7HPyR9qM=";
 
   nativeBuildInputs = [
     git
