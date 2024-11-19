@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-vmfs";
-  version = "3.9";
+  version = "3.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.vmfs";
     rev = "refs/tags/${version}";
-    hash = "sha256-855Rqz4WuTwopJo1yT8zsSvods3p+7EoB1sAXu3U5QU=";
+    hash = "sha256-/D5EaTNLxdzTMF/9S9esFXAxIwesEp0tdAMUAyeNtSI=";
   };
 
   nativeBuildInputs = [
