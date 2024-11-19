@@ -183,15 +183,7 @@ lib.makeScope newScope (self: rec {
 
   mame2016 = self.callPackage ./cores/mame2016.nix {  };
 
-  melonds = mkLibretroCore {
-    core = "melonds";
-    extraBuildInputs = [ libGL libGLU ];
-    makefile = "Makefile";
-    meta = {
-      description = "Port of MelonDS to libretro";
-      license = lib.licenses.gpl3Only;
-    };
-  };
+  melonds = self.callPackage ./cores/melonds.nix {  };
 
   mesen = mkLibretroCore {
     core = "mesen";
