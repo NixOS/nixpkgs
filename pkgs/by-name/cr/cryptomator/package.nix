@@ -16,18 +16,23 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.14.1";
+  version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    hash = "sha256-so8RINjFLF9H4K9f/60Ym/v/VpcVfxJ/c+JDOAPFgZU=";
+    hash = "sha256-TSE83QYFry8O6MKAoggJBjqonYiGax5GG/a7sm7aHf8=";
   };
+
+  patches = [
+    # https://github.com/cryptomator/cryptomator/pull/3621
+    ./string-template-removal-and-jdk23.patch
+  ];
 
   mvnJdk = jdk;
   mvnParameters = "-Dmaven.test.skip=true -Plinux";
-  mvnHash = "sha256-aB7wgnJAYvCizC0/gG/amcId/WVVWmZndItm398nDfQ=";
+  mvnHash = "sha256-LFD150cGW6OdwkK28GYI9j44GtVE0pwFMaQ8dQqArLo=";
 
   preBuild = ''
     VERSION=${version}
@@ -122,7 +127,5 @@ maven.buildMavenPackage rec {
       fromSource
       binaryBytecode # deps
     ];
-    # Uses abandoned JEP 430 string template preview, removed in JDK 23
-    broken = true;
   };
 }
