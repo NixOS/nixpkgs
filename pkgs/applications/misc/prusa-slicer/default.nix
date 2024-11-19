@@ -49,6 +49,15 @@ let
       sha256 = "sha256-C02P3D363UwF0NM6R4D4c6yE5ZZxCcu5CpUaoTOxh7E=";
     };
   });
+  eigen = eigen.overrideAttrs (old: {
+    name = "eigen-3.3.7";
+    src = fetchurl {
+      url = "https://bitbucket.org/eigen/eigen/get/3.3.7.tar.gz";
+      name = "eigen-3.3.7.tar.gz";
+      sha256 = "1nnh0v82a5xibcjaph51mx06mxbllk77fvihnd5ba0kpl23yz13y";
+    };
+    patches = [ ./include-dir.patch ];
+  });
   wxGTK-prusa = wxGTK32.overrideAttrs (old: rec {
     pname = "wxwidgets-prusa3d-patched";
     version = "3.2.0";
