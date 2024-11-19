@@ -3,9 +3,13 @@
   buildGoModule,
   fetchFromGitHub,
   makeWrapper,
+
+  # for addons
+  buildNpmPackage,
+  zip,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "omnom";
   version = "0-unstable-2024-10-01";
 
@@ -38,6 +42,41 @@ buildGoModule {
       --replace-fail 'connection: "./db.sqlite3"' 'connection: "/tmp/omnom/db.sqlite3"' \
       --replace-fail 'debug: true' 'debug: false'
   '';
+
+  postBuild =
+    let
+      omnom-addons = buildNpmPackage {
+        pname = "omnom-addons";
+        inherit version src;
+
+        npmDepsHash = "sha256-sUn5IvcHWJ/yaqeGz9SGvGx9HHAlrcnS0lJxIxUVS6M=";
+        sourceRoot = "${src.name}/ext";
+        npmPackFlags = [ "--ignore-scripts" ];
+
+        nativeBuildInputs = [ zip ];
+
+        postBuild = ''
+          mkdir -p $out
+
+          zip -r "$out/omnom_ext_src.zip" README.md src utils package* webpack.config.js
+
+          pushd build
+            zip "$out/omnom_ext_chrome.zip" ./* icons/* -x manifest_ff.json
+            zip "$out/omnom_ext_firefox.zip" ./* icons/* -x manifest_ff.json
+          popd
+        '';
+
+        postCheck = ''
+          npm run build-test
+        '';
+      };
+    in
+    ''
+      mkdir -p $out/share/addons
+
+      # Copy Firefox and Chrome addons
+      cp -r ${omnom-addons}/*.zip $out/share/addons
+    '';
 
   postInstall = ''
     mkdir -p $out/share
