@@ -30,5 +30,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/scrapy-plugins/scrapy-splash";
     license = licenses.bsd3;
     maintainers = with maintainers; [ evanjs ];
+    # 2024-11-18: broken on latest scrapy due to calls to a method removed in scrapy 2.12
+    # https://github.com/scrapy-plugins/scrapy-splash/issues/314
+    # https://github.com/scrapy-plugins/scrapy-splash/pull/311
+    broken = true;
   };
 }
