@@ -8,14 +8,14 @@
 
 mkDerivation rec {
   pname = "gitqlient";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "francescmm";
     repo = "gitqlient";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-fHrsDEHEUgQYkZdnSzJ/+gTsV0eX8tOqSlr7vNH6LVs=";
+    hash = "sha256-gfWky5KTSj+5FC++QIVTJbrDOYi/dirTzs6LvTnO74A=";
   };
 
   nativeBuildInputs = [
