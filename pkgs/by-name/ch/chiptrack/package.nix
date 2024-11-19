@@ -64,13 +64,8 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   ] ++ lib.optionals clangStdenv.hostPlatform.isLinux [ alsa-lib ];
 
   # Has git dependencies
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "rboy-0.1.0" = "sha256-2Acgg5phDAVTJht3XIXO7/TV5FxEXyLQJtC5n7cd9Ek=";
-      "wamr-sys-1.2.0" = "sha256-lNpJjHqdaYi/cyoAb8RlsKuLQ9WhuGwlzcSpDM68Kco=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-K1Fio9xu0fxVYZZmZ4IpI5n5gBCogwTEWwUaJPBi35Y=";
 
   env = {
     SKIA_SOURCE_DIR =
