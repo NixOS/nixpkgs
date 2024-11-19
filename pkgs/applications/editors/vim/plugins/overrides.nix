@@ -1991,6 +1991,10 @@ in
     nvimRequireCheck = "ufo";
   };
 
+  nvzone-menu = super.nvzone-menu.overrideAttrs {
+    dependencies = with self; [ nvzone-volt ];
+  };
+
   nvzone-minty = super.nvzone-minty.overrideAttrs {
     dependencies = with self; [ nvzone-volt ];
   };

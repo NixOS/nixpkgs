@@ -818,6 +818,7 @@ https://github.com/roxma/nvim-yarp/,,
 https://github.com/andersevenrud/nvim_context_vt/,,
 https://github.com/neovim/nvimdev.nvim/,,
 https://github.com/zbirenbaum/nvterm/,HEAD,
+https://github.com/nvzone/menu/,HEAD,nvzone-menu
 https://github.com/nvzone/minty/,HEAD,nvzone-minty
 https://github.com/nvzone/volt/,HEAD,nvzone-volt
 https://github.com/epwalsh/obsidian.nvim/,HEAD,
