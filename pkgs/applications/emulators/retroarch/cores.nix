@@ -151,15 +151,7 @@ lib.makeScope newScope (self: rec {
 
   flycast = self.callPackage ./cores/flycast.nix {  };
 
-  fmsx = mkLibretroCore {
-    core = "fmsx";
-    makefile = "Makefile";
-    meta = {
-      description = "FMSX libretro port";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
-    };
-  };
+  fmsx = self.callPackage ./cores/fmsx.nix {  };
 
   freeintv = mkLibretroCore {
     core = "freeintv";
