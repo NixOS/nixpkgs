@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pubnub";
-  version = "9.0.0";
+  version = "9.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "pubnub";
     repo = "python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-v3tFbq2YvQJRvRu9+8yzWLkFo+7AMsJDlqjMK2Q/FAE=";
+    hash = "sha256-aVnhCRTm6lqwec4TRbvHFF4l/XvbBTbclJLxf7oyUak=";
   };
 
   build-system = [ setuptools ];
