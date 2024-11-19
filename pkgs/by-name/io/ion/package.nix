@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitLab
+  fetchFromGitLab,
 }:
 
 rustPlatform.buildRustPackage {
@@ -40,7 +40,10 @@ rustPlatform.buildRustPackage {
     description = "Modern system shell with simple (and powerful) syntax";
     homepage = "https://gitlab.redox-os.org/redox-os/ion";
     license = licenses.mit;
-    maintainers = with maintainers; [dywedir arthsmn];
+    maintainers = with maintainers; [
+      dywedir
+      arthsmn
+    ];
     mainProgram = "ion";
     platforms = platforms.unix;
   };
