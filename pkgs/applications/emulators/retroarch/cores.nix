@@ -145,16 +145,7 @@ lib.makeScope newScope (self: rec {
 
   fbalpha2012 = self.callPackage ./cores/fbalpha2012.nix {  };
 
-  fbneo = mkLibretroCore {
-    core = "fbneo";
-    makefile = "Makefile";
-    preBuild = "cd src/burner/libretro";
-    meta = {
-      description = "Port of FBNeo to libretro";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
-    };
-  };
+  fbneo = self.callPackage ./cores/fbneo.nix {  };
 
   fceumm = mkLibretroCore {
     core = "fceumm";
