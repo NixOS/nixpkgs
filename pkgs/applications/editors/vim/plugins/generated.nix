@@ -8683,18 +8683,6 @@ final: prev:
     meta.homepage = "https://github.com/terrortylor/nvim-comment/";
   };
 
-  nvim-compe = buildVimPlugin {
-    pname = "nvim-compe";
-    version = "2021-10-02";
-    src = fetchFromGitHub {
-      owner = "hrsh7th";
-      repo = "nvim-compe";
-      rev = "d186d739c54823e0b010feb205c6f97792322c08";
-      sha256 = "1cl3c4cazzpjj2wmsi42czrklzngzm82bbb9ivmcsa40rfz2lsk3";
-    };
-    meta.homepage = "https://github.com/hrsh7th/nvim-compe/";
-  };
-
   nvim-completion-manager = buildVimPlugin {
     pname = "nvim-completion-manager";
     version = "2018-07-27";

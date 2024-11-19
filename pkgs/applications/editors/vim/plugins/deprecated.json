@@ -59,6 +59,10 @@
         "date": "2021-08-22",
         "new": "bufferline-nvim"
     },
+    "nvim-compe": {
+        "date": "2024-11-19",
+        "new": "nvim-cmp"
+    },
     "nvim-lsp": {
         "date": "2020-08-31",
         "new": "nvim-lspconfig"

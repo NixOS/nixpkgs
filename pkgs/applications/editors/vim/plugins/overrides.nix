@@ -2579,7 +2579,8 @@ in
   };
 
   tmux-complete-vim = super.tmux-complete-vim.overrideAttrs {
-    dependencies = with self; [ nvim-compe ];
+    # Vim plugin with optional nvim-compe lua module
+    doCheck = false;
   };
 
   todo-comments-nvim = super.todo-comments-nvim.overrideAttrs {
