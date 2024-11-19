@@ -185,15 +185,7 @@ lib.makeScope newScope (self: rec {
 
   melonds = self.callPackage ./cores/melonds.nix {  };
 
-  mesen = mkLibretroCore {
-    core = "mesen";
-    makefile = "Makefile";
-    preBuild = "cd Libretro";
-    meta = {
-      description = "Port of Mesen to libretro";
-      license = lib.licenses.gpl3Only;
-    };
-  };
+  mesen = self.callPackage ./cores/mesen.nix {  };
 
   mesen-s = mkLibretroCore {
     core = "mesen-s";
