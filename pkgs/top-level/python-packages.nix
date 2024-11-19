@@ -16415,6 +16415,8 @@ self: super: with self; {
 
   trove-classifiers = callPackage ../development/python-modules/trove-classifiers { };
 
+  trubar = callPackage ../development/python-modules/trubar { };
+
   trueskill = callPackage ../development/python-modules/trueskill { };
 
   truncnorm = callPackage ../development/python-modules/truncnorm { };
