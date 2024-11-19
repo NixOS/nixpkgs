@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any, TypedDict, cast
 
 import requests
+from requests.adapters import HTTPAdapter, Retry
 
 eprint = functools.partial(print, file=sys.stderr)
 
@@ -21,8 +22,17 @@ def load_toml(path: Path) -> dict[str, Any]:
 
 
 def download_file_with_checksum(url: str, destination_path: Path) -> str:
+    retries = Retry(
+        total=5,
+        backoff_factor=0.5,
+        status_forcelist=[500, 502, 503, 504]
+    )
+    session = requests.Session()
+    session.mount('http://', HTTPAdapter(max_retries=retries))
+    session.mount('https://', HTTPAdapter(max_retries=retries))
+
     sha256_hash = hashlib.sha256()
-    with requests.get(url, stream=True) as response:
+    with session.get(url, stream=True) as response:
         if not response.ok:
             raise Exception(f"Failed to fetch file from {url}. Status code: {response.status_code}")
         with open(destination_path, "wb") as file:
