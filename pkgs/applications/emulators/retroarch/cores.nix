@@ -161,14 +161,7 @@ lib.makeScope newScope (self: rec {
 
   genesis-plus-gx = self.callPackage ./cores/genesis-plus-gx.nix {  };
 
-  gpsp = mkLibretroCore {
-    core = "gpsp";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of gpSP to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  gpsp = self.callPackage ./cores/gpsp.nix {  };
 
   gw = mkLibretroCore {
     core = "gw";
