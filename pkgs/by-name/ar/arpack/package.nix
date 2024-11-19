@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DINTERFACE64=${if blas.isILP64 then "1" else "0"}"
     "-DMPI=${if useMpi then "ON" else "OFF"}"
+    "-DICB=ON"
   ];
 
   preCheck = ''
