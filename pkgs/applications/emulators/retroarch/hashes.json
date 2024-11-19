@@ -398,10 +398,10 @@
         "src": {
             "owner": "libretro",
             "repo": "hatari",
-            "rev": "153887d70df7c91e192192fa7ca34f90e000a7c5",
-            "hash": "sha256-s1VNAIuO0N4mrInb74sRcSTBMwwHwtYw9JnCKNVPNpU="
+            "rev": "7008194d3f951a157997f67a820578f56f7feee0",
+            "hash": "sha256-ZPzwUBaxs2ivE9n9cb5XB5mhixY9b6qIlq7OiVSLbqg="
         },
-        "version": "unstable-2024-10-01"
+        "version": "unstable-2024-10-21"
     },
     "mame": {
         "fetcher": "fetchFromGitHub",
