@@ -8665,6 +8665,10 @@ with pkgs;
     })
   );
 
+  u-config = callPackage ../build-support/pkg-config-wrapper {
+    pkg-config = u-config-unwrapped;
+  };
+
   pnpm-lock-export = callPackage ../development/web/pnpm-lock-export { };
 
   portableService = callPackage ../build-support/portable-service { };
