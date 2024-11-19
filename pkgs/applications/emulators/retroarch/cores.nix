@@ -169,17 +169,7 @@ lib.makeScope newScope (self: rec {
 
   hatari = self.callPackage ./cores/hatari.nix {  };
 
-  mame = mkLibretroCore {
-    core = "mame";
-    extraNativeBuildInputs = [ python3 ];
-    extraBuildInputs = [ alsa-lib libGLU libGL ];
-    # Setting this is breaking compilation of src/3rdparty/genie for some reason
-    makeFlags = [ "ARCH=" ];
-    meta = {
-      description = "Port of MAME to libretro";
-      license = with lib.licenses; [ bsd3 gpl2Plus ];
-    };
-  };
+  mame = self.callPackage ./cores/mame.nix {  };
 
   mame2000 = mkLibretroCore {
     core = "mame2000";
