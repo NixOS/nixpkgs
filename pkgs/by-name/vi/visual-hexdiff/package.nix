@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     hash = "sha256-M1bmkW63pHlfl9zNWEq0EGN1rpVGo+BTUKM9ot4HWqo=";
   };
   postPatch = ''
-  	# Fix compiler error that wants a string literal as format string for `wprintw`
+    # Fix compiler error that wants a string literal as format string for `wprintw`
     substituteInPlace sel_file.c \
       --replace-fail 'wprintw(win, txt_aide_fs[foo]);' 'wprintw(win, "%s", txt_aide_fs[foo]);'
   '';
