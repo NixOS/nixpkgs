@@ -9846,6 +9846,18 @@ final: prev:
     meta.homepage = "https://github.com/zbirenbaum/nvterm/";
   };
 
+  nvzone-volt = buildVimPlugin {
+    pname = "nvzone-volt";
+    version = "2024-11-17";
+    src = fetchFromGitHub {
+      owner = "nvzone";
+      repo = "volt";
+      rev = "41c03a5d6a0a8a997e774a3482d82e5ef820c6ba";
+      sha256 = "0iw3idylw2g63ndc3fidivwb1230l29bg7scy0p0aqw2ddywknhy";
+    };
+    meta.homepage = "https://github.com/nvzone/volt/";
+  };
+
   obsidian-nvim = buildVimPlugin {
     pname = "obsidian.nvim";
     version = "2024-08-01";
