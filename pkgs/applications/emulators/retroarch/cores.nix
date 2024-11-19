@@ -117,14 +117,7 @@ lib.makeScope newScope (self: rec {
 
   bluemsx = self.callPackage ./cores/bluemsx.nix { };
 
-  bsnes = mkLibretroCore {
-    core = "bsnes";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of bsnes to libretro";
-      license = lib.licenses.gpl3Only;
-    };
-  };
+  bsnes = self.callPackage ./cores/bsnes.nix { };
 
   bsnes-hd = mkLibretroCore {
     core = "bsnes-hd-beta";
