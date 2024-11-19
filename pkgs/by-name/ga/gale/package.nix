@@ -18,25 +18,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gale";
-  version = "0.8.11";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "Kesomannen";
     repo = "gale";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-PXK64WD3vb3uVxBFNU+LiGOipUjIAKW9RLWr1o4RigU=";
+    hash = "sha256-yAfQuLfucz522ln0YNMy8nppp2jk6tGJnP/WhK7JdhI=";
   };
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-W0ryt3WH/3SireaOHa9i1vKpuokzIsDlD8R9Fnd0s4k=";
+    hash = "sha256-xKg/ABUdtylFpT3EisXVvyv38++KjucrZ+s3/fFjzmM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) pname version src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
-    hash = "sha256-zXZkjSYN6/qNwBh+xUgJPWQvduIUSMVSt/XGbocKTwg=";
+    hash = "sha256-u7UbC9TyEQwYpcVWt8/NsweDNWbQi6NuD9ay9gmMDjg=";
   };
 
   cargoRoot = "src-tauri";
