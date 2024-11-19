@@ -33,12 +33,14 @@ let
       erlang
       getconf # for getting memory limits
       socat
-      procps
       gnused
       coreutils # used by helper scripts
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ]
-  ); # for systemd unit activation check
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      procps # the built-in macOS version has extra entitlements to read rss
+      systemd # for systemd unit activation check
+    ]
+  );
 in
 
 stdenv.mkDerivation rec {
