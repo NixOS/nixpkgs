@@ -173,15 +173,7 @@ lib.makeScope newScope (self: rec {
 
   mame2000 = self.callPackage ./cores/mame2000.nix {  };
 
-  mame2003 = mkLibretroCore {
-    core = "mame2003";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of MAME ~2003 to libretro, compatible with MAME 0.78 sets";
-      # MAME license, non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
-    };
-  };
+  mame2003 = self.callPackage ./cores/mame2003.nix {  };
 
   mame2003-plus = mkLibretroCore {
     core = "mame2003-plus";
