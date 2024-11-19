@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   testers,
+  nix-update-script,
   pinact,
 }:
 
@@ -23,8 +24,12 @@ buildGoModule {
 
   doCheck = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = pinact;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = pinact;
+    };
+
+    updateScript = nix-update-script { };
   };
 
   ldflags = [
