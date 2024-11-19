@@ -18,12 +18,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./rustc-serialize-fix.patch ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "aw-client-rust-0.1.0" = "sha256-9tlVesnBeTlazKE2UAq6dzivjo42DT7p7XMuWXHHlnU=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pMoWwuOenY/DKItM0fSa5RIdjMHFPHvo5qtKyz8loSQ=";
+
   nativeBuildInputs = [
     pkg-config
   ];
