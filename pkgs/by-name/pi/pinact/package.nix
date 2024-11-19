@@ -25,8 +25,6 @@ buildGoModule {
 
   passthru.tests.version = testers.testVersion {
     package = pinact;
-    command = "pinact --version";
-    version = src.rev;
   };
 
   ldflags = [
