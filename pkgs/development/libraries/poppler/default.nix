@@ -10,6 +10,7 @@
   curl,
   fontconfig,
   freetype,
+  glib,
   lcms,
   libiconv,
   libintl,
@@ -94,6 +95,8 @@ stdenv.mkDerivation (finalAttrs: rec {
     ninja
     pkg-config
     python3
+  ] ++ lib.optionals (!minimal) [
+    glib # for glib-mkenums
   ];
 
   buildInputs =
@@ -190,7 +193,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://poppler.freedesktop.org/";
     changelog = "https://gitlab.freedesktop.org/poppler/poppler/-/blob/poppler-${version}/NEWS";
     description = "PDF rendering library";
@@ -198,8 +201,8 @@ stdenv.mkDerivation (finalAttrs: rec {
       Poppler is a PDF rendering library based on the xpdf-3.0 code base. In
       addition it provides a number of tools that can be installed separately.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ttuegel ] ++ teams.freedesktop.members;
+    license = with lib.licenses; [ gpl2Plus ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ttuegel ] ++ lib.teams.freedesktop.members;
   };
 })
