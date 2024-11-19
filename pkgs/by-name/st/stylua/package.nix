@@ -2,21 +2,21 @@
 , rustPlatform
 , fetchFromGitHub
   # lua54 implies lua52/lua53
-, features ? [ "lua54" "luau" ]
+, features ? [ "lua54" "luajit" "luau" ]
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stylua";
-  version = "0.20.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "johnnymorganz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bqUmLtJLjImWqe06CeIWIU4FP+/Vxszp2yKMosVeyZM=";
+    sha256 = "sha256-/gCg1mJ4BDmgZ+jdWvns9CkhymWP3jdTqS7Z4n4zsO8=";
   };
 
-  cargoHash = "sha256-EMHt9oskPJCeAu/5VG6PaMt/4NTmNOaFTM5TMOy0BV8=";
+  cargoHash = "sha256-A1J1n/KsnZyB9pZFGcMojNU9FFGxk8p6TxlRNW6EwCs=";
 
   # remove cargo config so it can find the linker on aarch64-unknown-linux-gnu
   postPatch = ''
