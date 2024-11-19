@@ -1,5 +1,4 @@
 { lib
-, gcc12Stdenv
 , fetchFromGitHub
 , fetchurl
 , cudaSupport ? opencv.cudaSupport or false
@@ -35,8 +34,6 @@ let
   inherit (lib)
     cmakeBool
   ;
-
-  stdenv = gcc12Stdenv;
 
   # prevent scons from leaking in the default python version
   scons' = scons.override { inherit python3Packages; };
