@@ -113,14 +113,7 @@ lib.makeScope newScope (self: rec {
 
   beetle-wswan = self.callPackage ./cores/beetle-wswan.nix { };
 
-  blastem = mkLibretroCore {
-    core = "blastem";
-    meta = {
-      description = "Port of BlastEm to libretro";
-      license = lib.licenses.gpl3Only;
-      platforms = lib.platforms.x86;
-    };
-  };
+  blastem = self.callPackage ./cores/blastem.nix { };
 
   bluemsx = mkLibretroCore {
     core = "bluemsx";
