@@ -824,10 +824,10 @@
         "src": {
             "owner": "libretro",
             "repo": "tgbdual-libretro",
-            "rev": "fba7d50b136abef0692b434091a9d735f7ad28b2",
-            "hash": "sha256-f6PGtUkIOyUHQbbJdgQiWmw2armjyuP1CTcWfRbx9uE="
+            "rev": "8d305769eebd67266c284558f9d3a30498894d3d",
+            "hash": "sha256-3mlnTgp43qC3yifpr6pvtC4vslddcf6mephKA183vEk="
         },
-        "version": "unstable-2024-07-01"
+        "version": "unstable-2024-10-21"
     },
     "thepowdertoy": {
         "fetcher": "fetchFromGitHub",
