@@ -11,6 +11,10 @@
         "date": "2024-11-19",
         "new": "cmp-conjure"
     },
+    "compe-latex-symbols": {
+        "date": "2024-11-19",
+        "new": "cmp-latex-symbols"
+    },
     "fern-vim": {
         "date": "2024-05-12",
         "new": "vim-fern"

@@ -752,10 +752,6 @@ in
     nvimRequireCheck = "competitest";
   };
 
-  compe-latex-symbols = super.compe-latex-symbols.overrideAttrs {
-    dependencies = [ self.nvim-compe ];
-  };
-
   compe-tabnine = super.compe-tabnine.overrideAttrs {
     dependencies = [ self.nvim-compe ];
     buildInputs = [ tabnine ];
