@@ -15,18 +15,18 @@
   libGL,
 }:
 let
-  version = "1.5.8";
+  version = "1.5.10";
   src =
     let
       inherit (stdenv.hostPlatform) system;
-      selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
+      selectSystem = attrs: attrs.${system};
       suffix = selectSystem {
         x86_64-linux = "amd64";
         aarch64-linux = "arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-zfvvyOZt8PHEkcPad4fHK6IXvn9MKiK+XkmvjZpVXuE=";
-        aarch64-linux = "sha256-aRl6HEwWsNLg3FNha5b61kEDty65VKVTjsS7cBjDMNQ=";
+        x86_64-linux = "sha256-G3EomRE4hb6qSqFd6WctqBttWJVTpprsEq+V+1jIqEc=";
+        aarch64-linux = "sha256-coWnfTYY97Ga38+WdFMihgitg8WTvwpYdF5CUA12d5A=";
       };
     in
     fetchurl {
