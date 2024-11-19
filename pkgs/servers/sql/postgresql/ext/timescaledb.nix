@@ -1,11 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5, nixosTests, enableUnfree ? true, buildPostgresqlExtension }:
+{
+  buildPostgresqlExtension,
+  cmake,
+  enableUnfree ? true,
+  fetchFromGitHub,
+  lib,
+  libkrb5,
+  nixosTests,
+  openssl,
+  postgresql,
+  stdenv,
+}:
 
 buildPostgresqlExtension rec {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
   version = "2.17.2";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ openssl libkrb5 ];
+  buildInputs = [
+    openssl
+    libkrb5
+  ];
 
   src = fetchFromGitHub {
     owner = "timescale";
@@ -14,7 +28,12 @@ buildPostgresqlExtension rec {
     hash = "sha256-gPsAebMUBuAwP6Hoi9/vrc2IFsmTbL0wQH1g6/2k2d4=";
   };
 
-  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DTAP_CHECKS=OFF" ]
+  cmakeFlags =
+    [
+      "-DSEND_TELEMETRY_DEFAULT=OFF"
+      "-DREGRESS_CHECKS=OFF"
+      "-DTAP_CHECKS=OFF"
+    ]
     ++ lib.optionals (!enableUnfree) [ "-DAPACHE_ONLY=ON" ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DLINTER=OFF" ];
 
