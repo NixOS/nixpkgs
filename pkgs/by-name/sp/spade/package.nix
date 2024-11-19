@@ -25,12 +25,8 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "codespan-0.12.0" = "sha256-3F2006BR3hyhxcUTaQiOjzTEuRECKJKjIDyXonS/lrE=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-EbrBomuVYM64myMaWwt9mvK/HCGaaQLwy+tzmg1DT/M=";
 
   # TODO: somehow respect https://nixos.org/manual/nixpkgs/stable/#var-passthru-updateScript-commit
   passthru.updateScript = _experimental-update-script-combinators.sequence [
