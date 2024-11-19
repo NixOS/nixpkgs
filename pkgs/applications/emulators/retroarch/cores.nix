@@ -191,13 +191,7 @@ lib.makeScope newScope (self: rec {
 
   meteor = self.callPackage ./cores/meteor.nix {  };
 
-  mgba = mkLibretroCore {
-    core = "mgba";
-    meta = {
-      description = "Port of mGBA to libretro";
-      license = lib.licenses.mpl20;
-    };
-  };
+  mgba = self.callPackage ./cores/mgba.nix {  };
 
   mrboom = mkLibretroCore {
     core = "mrboom";
