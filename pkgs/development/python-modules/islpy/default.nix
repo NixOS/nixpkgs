@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -13,6 +14,8 @@
 
   # buildInputs
   isl,
+  apple-sdk_11,
+  darwinMinVersionHook,
 
   # tests
   pytestCheckHook,
@@ -44,7 +47,12 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [ isl ];
+  buildInputs =
+    [ isl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_11
+      (darwinMinVersionHook "10.13")
+    ];
 
   dontUseCmakeConfigure = true;
 
