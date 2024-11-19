@@ -131,17 +131,7 @@ lib.makeScope newScope (self: rec {
 
   desmume = self.callPackage ./cores/desmume.nix {  };
 
-  desmume2015 = mkLibretroCore {
-    core = "desmume2015";
-    extraBuildInputs = [ libpcap libGLU libGL xorg.libX11 ];
-    makeFlags = lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
-      ++ lib.optional (!stdenv.hostPlatform.isx86) "DESMUME_JIT=0";
-    preBuild = "cd desmume";
-    meta = {
-      description = "Port of DeSmuME ~2015 to libretro";
-      license = lib.licenses.gpl2Plus;
-    };
-  };
+  desmume2015 = self.callPackage ./cores/desmume2015.nix {  };
 
   dolphin = mkLibretroCore {
     core = "dolphin";
