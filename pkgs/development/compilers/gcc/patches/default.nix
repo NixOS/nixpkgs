@@ -30,14 +30,12 @@ let
   atLeast12 = lib.versionAtLeast version "12";
   atLeast11 = lib.versionAtLeast version "11";
   atLeast10 = lib.versionAtLeast version "10";
-  atLeast9  = lib.versionAtLeast version  "9";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
   is11 = majorVersion == "11";
   is10 = majorVersion == "10";
   is9  = majorVersion == "9";
-  is8  = majorVersion == "8";
   inherit (lib) optionals optional;
 in
 
@@ -68,7 +66,7 @@ in
 ++ optional (atLeast12 && langAda) ./gnat-cflags-11.patch
 ++ optional langFortran (if atLeast12 then ./gcc-12-gfortran-driving.patch else ./gfortran-driving.patch)
 ++ [ ./ppc-musl.patch ]
-++ optional (atLeast9 && langD) ./libphobos.patch
+++ optional langD ./libphobos.patch
 
 
 
@@ -170,7 +168,6 @@ in
 # Work around newer AvailabilityInternal.h when building older versions of GCC.
 ++ optionals (stdenv.hostPlatform.isDarwin) ({
   "9" = [ ../patches/9/AvailabilityInternal.h-fixincludes.patch ];
-  "8" = [ ../patches/8/AvailabilityInternal.h-fixincludes.patch ];
 }.${majorVersion} or [])
 
 
@@ -223,20 +220,3 @@ in
 # Make Darwin bootstrap respect whether the assembler supports `--gstabs`,
 # which is not supported by the clang integrated assembler used by default on Darwin.
 ++ optional (is9 && hostPlatform.isDarwin) ./9/gcc9-darwin-as-gstabs.patch
-
-
-## gcc 8.0 and older ##############################################################################
-
-++ optional (!atLeast9) ./libsanitizer-no-cyclades-9.patch
-++ optional is8 ./9/fix-struct-redefinition-on-glibc-2.36.patch
-
-# Make Darwin bootstrap respect whether the assembler supports `--gstabs`,
-# which is not supported by the clang integrated assembler used by default on Darwin.
-++ optional (is8 && hostPlatform.isDarwin) ./8/gcc8-darwin-as-gstabs.patch
-
-# Make avr-gcc8 build on aarch64-darwin
-# avr-gcc8 is maintained for the `qmk` package
-# https://github.com/osx-cross/homebrew-avr/blob/main/Formula/avr-gcc%408.rb#L69
-++ optional (is8 && targetPlatform.isAvr && hostPlatform.isDarwin && hostPlatform.isAarch64) ./8/avr-gcc-8-darwin.patch
-
-++ optional (is8 && !atLeast9 && targetPlatform.libc == "musl") ./libgomp-dont-force-initial-exec.patch
