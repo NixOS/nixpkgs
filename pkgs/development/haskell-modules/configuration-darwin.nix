@@ -445,6 +445,11 @@ self: super: ({
 
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isx86_64 {  # x86_64-darwin
 
+  # Work around store corruption on one of our Hydra builders
+  # https://github.com/NixOS/nixpkgs/issues/356741
+  filepath-bytestring = triggerRebuild 1 super.filepath-bytestring;
+  magic = triggerRebuild 1 super.magic;
+
   # tests appear to be failing to link or something:
   # https://hydra.nixos.org/build/174540882/nixlog/9
   regex-rure = dontCheck super.regex-rure;
