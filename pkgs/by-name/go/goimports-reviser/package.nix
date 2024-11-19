@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "goimports-reviser";
-  version = "3.6.5";
+  version = "3.7.4";
 
   src = fetchFromGitHub {
     owner = "incu6us";
     repo = "goimports-reviser";
     rev = "v${version}";
-    hash = "sha256-46s6A1sGqoJR3XihaCkVCxTpManl330mMcJ8hv66zDc=";
+    hash = "sha256-1lI8KAzu9Bg1099E/h+NCDdiRINhPP93FZvWm4y6nas=";
   };
   vendorHash = "sha256-z+FeAXPXKi653im2X2WOP1R9gRl/x7UBnndoEXoxdwA=";
 
