@@ -157,13 +157,7 @@ lib.makeScope newScope (self: rec {
 
   fuse = self.callPackage ./cores/fuse.nix {  };
 
-  gambatte = mkLibretroCore {
-    core = "gambatte";
-    meta = {
-      description = "Gambatte libretro port";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  gambatte = self.callPackage ./cores/gambatte.nix {  };
 
   genesis-plus-gx = mkLibretroCore {
     core = "genesis-plus-gx";
