@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://ubuntu/pool/universe/h/hexdiff/hexdiff_${version}.orig.tar.gz";
-    sha256 = "sha256-M1bmkW63pHlfl9zNWEq0EGN1rpVGo+BTUKM9ot4HWqo=";
+    hash = "sha256-M1bmkW63pHlfl9zNWEq0EGN1rpVGo+BTUKM9ot4HWqo=";
   };
   postPatch = ''
   	# Fix compiler error that wants a string literal as format string for `wprintw`
