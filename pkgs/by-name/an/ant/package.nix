@@ -5,6 +5,7 @@
   coreutils,
   makeWrapper,
   gitUpdater,
+  callPackage,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -86,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     home = "${finalAttrs.finalPackage}/share/ant";
+    hook = callPackage ./setup-hook { };
     updateScript = gitUpdater {
       rev-prefix = "rel/";
       url = "https://gitbox.apache.org/repos/asf/ant";
