@@ -752,13 +752,6 @@ in
     nvimRequireCheck = "competitest";
   };
 
-  compe-zsh = super.compe-zsh.overrideAttrs {
-    dependencies = with self; [
-      nvim-compe
-      plenary-nvim
-    ];
-  };
-
   compiler-explorer-nvim = super.compiler-explorer-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
     nvimRequireCheck = "compiler-explorer";

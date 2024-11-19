@@ -19,6 +19,10 @@
         "date": "2024-11-19",
         "new": "cmp-tabnine"
     },
+    "compe-zsh": {
+        "date": "2024-11-19",
+        "new": "cmp-zsh"
+    },
     "fern-vim": {
         "date": "2024-05-12",
         "new": "vim-fern"
