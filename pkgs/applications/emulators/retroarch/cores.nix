@@ -179,21 +179,7 @@ lib.makeScope newScope (self: rec {
 
   mame2010 = self.callPackage ./cores/mame2010.nix {  };
 
-  mame2015 = mkLibretroCore {
-    core = "mame2015";
-    patches = [ ./patches/mame2015-python311.patch ];
-    makeFlags = [ "PYTHON=python3" ];
-    extraNativeBuildInputs = [ python3 ];
-    extraBuildInputs = [ alsa-lib ];
-    makefile = "Makefile";
-    # Build failures when this is set to a bigger number
-    NIX_BUILD_CORES = 8;
-    meta = {
-      description = "Port of MAME ~2015 to libretro, compatible with MAME 0.160 sets";
-      # MAME license, non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
-    };
-  };
+  mame2015 = self.callPackage ./cores/mame2015.nix {  };
 
   mame2016 = mkLibretroCore {
     core = "mame2016";
