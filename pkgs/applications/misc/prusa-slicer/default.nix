@@ -81,13 +81,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.8.0";
+  version = "2.8.1";
   inherit patches;
 
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-A/uxNIEXCchLw3t5erWdhqFAeh6nudcMfASi+RoJkFg=";
+    hash = "sha256-nMLZvvZLIOChCLn8A9sOph1lqWsHb00eTG8z98/l0C8=";
     rev = "version_${finalAttrs.version}";
   };
 
