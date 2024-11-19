@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "millet";
@@ -23,15 +27,24 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config.toml
   '';
 
-  cargoBuildFlags = [ "--package" "millet-ls" ];
+  cargoBuildFlags = [
+    "--package"
+    "millet-ls"
+  ];
 
-  cargoTestFlags = [ "--package" "millet-ls" ];
+  cargoTestFlags = [
+    "--package"
+    "millet-ls"
+  ];
 
   meta = with lib; {
     description = "Language server for Standard ML";
     homepage = "https://github.com/azdavis/millet";
     changelog = "https://github.com/azdavis/millet/blob/v${version}/docs/CHANGELOG.md";
-    license = [ licenses.mit /* or */ licenses.asl20 ];
+    license = [
+      licenses.mit # or
+      licenses.asl20
+    ];
     maintainers = [ ];
     mainProgram = "millet-ls";
   };
