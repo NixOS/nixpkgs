@@ -11,7 +11,7 @@
   libpulseaudio,
   lilv,
   which,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   nixosTests,
 }:
 
@@ -24,14 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FD1+7jV69E9AfTczjD6DOGD+pPlscg4o8A9ADBUM9B4=";
   };
 
-  buildInputs = [
-    which
-  ];
-
   nativeBuildInputs = [
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
+
+  dontWrapGApps = true;
 
   installPhase = ''
     mkdir -p $out/bin
@@ -41,9 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/dist $out/bin/dist
     ln -s $out/lib $out/bin/lib
     ln -s $out/share $out/bin/share
+  '';
 
+  postFixup = ''
     wrapProgram $out/bin/tuxguitar \
-      --set PATH "$PATH:${jre}/bin" \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix PATH : ${lib.makeBinPath[ jre which ]} \
       --prefix LD_LIBRARY_PATH : "$out/lib/:${
         lib.makeLibraryPath [
           swt
