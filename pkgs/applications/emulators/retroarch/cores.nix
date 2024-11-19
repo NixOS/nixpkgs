@@ -163,14 +163,7 @@ lib.makeScope newScope (self: rec {
 
   gpsp = self.callPackage ./cores/gpsp.nix {  };
 
-  gw = mkLibretroCore {
-    core = "gw";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of Game and Watch to libretro";
-      license = lib.licenses.zlib;
-    };
-  };
+  gw = self.callPackage ./cores/gw.nix {  };
 
   handy = mkLibretroCore {
     core = "handy";
