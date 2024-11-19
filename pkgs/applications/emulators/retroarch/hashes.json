@@ -155,10 +155,10 @@
         "src": {
             "owner": "libretro",
             "repo": "bluemsx-libretro",
-            "rev": "7a4a21d1e90a9135f678587cd8aea3f023798edd",
-            "hash": "sha256-emwyVbZHJU2ujHeiqD1mthKFvnP4bXdUDLAv+DFMMN4="
+            "rev": "01ce142ccb85c302420cb962d1b6e6a68a6ce076",
+            "hash": "sha256-h3Zpv+h6CbM1pdSOXsjN0pFUjXLn5T/R5W55VZXpMVM="
         },
-        "version": "unstable-2024-10-01"
+        "version": "unstable-2024-10-22"
     },
     "bsnes": {
         "fetcher": "fetchFromGitHub",
@@ -408,11 +408,11 @@
         "src": {
             "owner": "libretro",
             "repo": "mame",
-            "rev": "6a3d1606e41aaedc94e6b00d68e682a95ac36bec",
-            "hash": "sha256-Fcd906E1I52fDnBWehrdtk6NfYA1yhmHIQ7xZCcbtEU=",
+            "rev": "a67797ad2f7516906ed7acef87569c6f35ca8739",
+            "hash": "sha256-MF6MWQftHBYL1Uv3ZYKFqCH24nd1+M73rhUzkdftMzk=",
             "fetchSubmodules": true
         },
-        "version": "unstable-2024-10-04"
+        "version": "unstable-2024-11-01"
     },
     "mame2000": {
         "fetcher": "fetchFromGitHub",

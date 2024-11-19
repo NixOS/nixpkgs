@@ -40,16 +40,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ut3IWEueNR/hT7NyGfuK5IYtppC6ArSoJdEfFuD/0vE=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ruma-0.10.1" = "sha256-u4C2VwRBmw8iVaPrkSmF/EKi5U3nWJWVktUDFmQcI1E=";
-      "rust-librocksdb-sys-0.25.0+9.5.2" = "sha256-wz6QDLoXtY8+EU2DlPf4MbWC67KJK0hZnRswCeomkLQ=";
-      "rustyline-async-0.4.3" = "sha256-7yYOGZ14SODD4+e9fTGgggUKqTi31479S0lEVKTKLPI=";
-      "tikv-jemalloc-ctl-0.6.0" = "sha256-guiH6Gw/Oeb6A8Ri1SFcB6CW6mt+9XeA6vfwdS72yDQ=";
-      "tracing-0.1.40" = "sha256-J6+8hBC/755SU8n1fTiJwBh17Unluv1SXfd5+dDAEhk=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-L0UvJ5ZyEk/hZobkB21u6cfPCeRwhDl+07aWcQEOgYw=";
 
   nativeBuildInputs = [
     pkg-config
