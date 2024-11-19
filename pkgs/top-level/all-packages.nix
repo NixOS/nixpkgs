@@ -3101,11 +3101,6 @@ with pkgs;
 
   cron = isc-cron;
 
-  cudaPackages_10_0 = callPackage ./cuda-packages.nix { cudaVersion = "10.0"; };
-  cudaPackages_10_1 = callPackage ./cuda-packages.nix { cudaVersion = "10.1"; };
-  cudaPackages_10_2 = callPackage ./cuda-packages.nix { cudaVersion = "10.2"; };
-  cudaPackages_10 = recurseIntoAttrs cudaPackages_10_2;
-
   cudaPackages_11_0 = callPackage ./cuda-packages.nix { cudaVersion = "11.0"; };
   cudaPackages_11_1 = callPackage ./cuda-packages.nix { cudaVersion = "11.1"; };
   cudaPackages_11_2 = callPackage ./cuda-packages.nix { cudaVersion = "11.2"; };
