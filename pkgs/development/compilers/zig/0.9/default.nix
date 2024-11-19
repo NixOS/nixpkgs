@@ -9,6 +9,7 @@
   stdenv,
   testers,
   zlib,
+  targetPlatform,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     # file RPATH_CHANGE could not write new RPATH
     (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
     # ensure determinism in the compiler build
-    (lib.cmakeFeature "ZIG_TARGET_MCPU" "baseline")
+    (lib.cmakeFeature "ZIG_TARGET_MCPU" targetPlatform.cpuModel.zig)
   ];
 
   env.ZIG_GLOBAL_CACHE_DIR = "$TMPDIR/zig-cache";

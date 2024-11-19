@@ -414,8 +414,8 @@ else let
       enableParallelInstalling = attrs.enableParallelInstalling or true;
     } // optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
       NIX_HARDENING_ENABLE = builtins.concatStringsSep " " enabledHardeningOptions;
-    } // optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
-      requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.gcc.arch}" ];
+    } // optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? cpuModel && stdenv.hostPlatform.cpuModel.gnu != "generic") {
+      requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.cpuModel.gnu}" ];
     } // optionalAttrs (stdenv.buildPlatform.isDarwin) (
       let
         allDependencies = concatLists (concatLists dependencies);
