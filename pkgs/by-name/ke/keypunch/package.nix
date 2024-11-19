@@ -58,7 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/bragefuglseth/keypunch";
     license = lib.licenses.gpl3Plus;
     mainProgram = "keypunch";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      getchoo
+    ];
     platforms = lib.platforms.linux;
   };
 })
