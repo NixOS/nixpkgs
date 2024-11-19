@@ -135,14 +135,7 @@ lib.makeScope newScope (self: rec {
 
   dolphin = self.callPackage ./cores/dolphin.nix {  };
 
-  dosbox = mkLibretroCore {
-    core = "dosbox";
-    CXXFLAGS = "-std=gnu++11";
-    meta = {
-      description = "Port of DOSBox to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  dosbox = self.callPackage ./cores/dosbox.nix {  };
 
   dosbox-pure = mkLibretroCore {
     core = "dosbox-pure";
