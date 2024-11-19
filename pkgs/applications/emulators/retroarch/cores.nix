@@ -83,18 +83,9 @@ lib.makeScope newScope (self: rec {
     }@args:
     self.callPackage ./mkLibretroCore.nix ({
       inherit core repo src version;
-      retroarch = self.retroarchBare;
     } // args);
 
-  atari800 = mkLibretroCore {
-    core = "atari800";
-    makefile = "Makefile";
-    makeFlags = [ "GIT_VERSION=" ];
-    meta = {
-      description = "Port of Atari800 to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  atari800 = self.callPackage ./cores/atari800.nix { };
 
   beetle-gba = mkLibretroCore {
     core = "mednafen-gba";
