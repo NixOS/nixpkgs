@@ -9846,6 +9846,18 @@ final: prev:
     meta.homepage = "https://github.com/zbirenbaum/nvterm/";
   };
 
+  nvzone-minty = buildVimPlugin {
+    pname = "nvzone-minty";
+    version = "2024-11-16";
+    src = fetchFromGitHub {
+      owner = "nvzone";
+      repo = "minty";
+      rev = "a3d69bd63fc98f640815f94b797bf978e9193022";
+      sha256 = "1chq2qqa2yps366rh5gdylvlz09q13ilw2k4cr95a2ivp887qcyz";
+    };
+    meta.homepage = "https://github.com/nvzone/minty/";
+  };
+
   nvzone-volt = buildVimPlugin {
     pname = "nvzone-volt";
     version = "2024-11-17";
