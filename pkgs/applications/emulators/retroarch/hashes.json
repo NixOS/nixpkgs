@@ -499,10 +499,10 @@
         "src": {
             "owner": "libretro",
             "repo": "mesen-s",
-            "rev": "32a7adfb4edb029324253cb3632dfc6599ad1aa8",
-            "hash": "sha256-/OOMH7kt9Pmkdmy5m+I8FMvog5mqZHyrZvfjHccz8oo="
+            "rev": "d4fca31a6004041d99b02199688f84c009c55967",
+            "hash": "sha256-mGGTLBRJCsNJg57LWSFndIv/LLzEmVRnv6gNbllkV/Y="
         },
-        "version": "unstable-2022-07-25"
+        "version": "unstable-2024-10-21"
     },
     "meteor": {
         "fetcher": "fetchFromGitHub",
