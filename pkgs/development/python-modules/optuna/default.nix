@@ -37,30 +37,28 @@
   torchvision,
   tqdm,
   wandb,
-  wheel,
   xgboost,
 }:
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "4.0.0";
+  version = "4.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZCK6otX90s8SB91TLkKwJ4net2dGmAKdIESeHXy87K0=";
+    hash = "sha256-wIgYExxJEWFxEadBuCsxEIcW2/J6EVybW1jp83gIMjY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     alembic
     colorlog
     numpy

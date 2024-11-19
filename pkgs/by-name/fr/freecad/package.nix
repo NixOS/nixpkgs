@@ -1,11 +1,11 @@
 { lib
+, callPackage
 , cmake
 , coin3d
 , doxygen
 , eigen
 , fetchFromGitHub
 , fmt
-, freecad
 , gfortran
 , gts
 , hdf5
@@ -22,7 +22,6 @@
 , opencascade-occt_7_6
 , pkg-config
 , python311Packages
-, runCommand  # for passthru.tests
 , spaceNavSupport ? stdenv.hostPlatform.isLinux
 , stdenv
 , swig
@@ -60,8 +59,9 @@ let
     scipy
     shiboken2
     ;
+  freecad-utils = callPackage ./freecad-utils.nix { };
 in
-stdenv.mkDerivation (finalAttrs: {
+freecad-utils.makeCustomizable (stdenv.mkDerivation (finalAttrs: {
   pname = "freecad";
   version = "1.0rc4";
 
@@ -131,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
     ./0002-FreeCad-OndselSolver-pkgconfig.patch
+    ./0003-Gui-take-in-account-module-path-argument.patch
   ];
 
   cmakeFlags = [
@@ -174,22 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin/FreeCADCmd $out/bin/freecadcmd
   '';
 
-  passthru.tests = {
-    # Check that things such as argument parsing still work correctly with
-    # the above PYTHONPATH patch. Previously the patch used above changed
-    # the `PyConfig_InitIsolatedConfig` to `PyConfig_InitPythonConfig`,
-    # which caused the built-in interpreter to attempt (and fail) to doubly
-    # parse argv. This should catch if that ever regresses and also ensures
-    # that PYTHONPATH is still respected enough for the FreeCAD console to
-    # successfully run and check that it was included in `sys.path`.
-    python-path =
-      runCommand "freecad-test-console"
-        {
-          nativeBuildInputs = [ freecad ];
-        } ''
-        HOME="$(mktemp -d)" PYTHONPATH="$(pwd)/test" FreeCADCmd --log-file $out -c "if not '$(pwd)/test' in sys.path: sys.exit(1)" </dev/null
-      '';
-  };
+  passthru.tests = callPackage ./tests {};
 
   meta = {
     homepage = "https://www.freecad.org";
@@ -214,4 +200,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ gebner srounce ];
     platforms = lib.platforms.linux;
   };
-})
+}))

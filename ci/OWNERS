@@ -182,6 +182,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 # Rust
 /pkgs/development/compilers/rust @alyssais @Mic92 @zowoq @winterqt @figsoda
 /pkgs/build-support/rust @zowoq @winterqt @figsoda
+/pkgs/build-support/rust/fetch-cargo-vendor* @TomaSajt
 /doc/languages-frameworks/rust.section.md @zowoq @winterqt @figsoda
 
 # Tcl
