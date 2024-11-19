@@ -40,7 +40,15 @@
 , webkitgtk_4_1
 }:
 let
-  opencascade-occt = opencascade-occt_7_6;
+  opencascade-occt = opencascade-occt_7_6.overrideAttrs (old: {
+    version = "7.6.1";
+    src = fetchFromGitHub {
+      owner = "Open-Cascade-SAS";
+      repo = "OCCT";
+      rev = "V7_6_1";
+      sha256 = "sha256-C02P3D363UwF0NM6R4D4c6yE5ZZxCcu5CpUaoTOxh7E=";
+    };
+  });
   wxGTK-prusa = wxGTK32.overrideAttrs (old: rec {
     pname = "wxwidgets-prusa3d-patched";
     version = "3.2.0";
