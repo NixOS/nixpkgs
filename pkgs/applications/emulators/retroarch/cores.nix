@@ -91,15 +91,7 @@ lib.makeScope newScope (self: rec {
 
   beetle-lynx = self.callPackage ./cores/beetle-lynx.nix { };
 
-  beetle-ngp = mkLibretroCore {
-    core = "mednafen-ngp";
-    repo = "beetle-ngp";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of Mednafen's NeoGeo Pocket core to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  beetle-ngp = self.callPackage ./cores/beetle-ngp.nix { };
 
   beetle-pce = mkLibretroCore {
     core = "mednafen-pce";
