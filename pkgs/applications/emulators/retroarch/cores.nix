@@ -99,28 +99,9 @@ lib.makeScope newScope (self: rec {
 
   beetle-pcfx = self.callPackage ./cores/beetle-pcfx.nix { };
 
-  beetle-psx = mkLibretroCore {
-    core = "mednafen-psx";
-    repo = "beetle-psx";
-    makefile = "Makefile";
-    makeFlags = [ "HAVE_HW=0" "HAVE_LIGHTREC=1" ];
-    meta = {
-      description = "Port of Mednafen's PSX Engine core to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  beetle-psx = self.callPackage ./cores/beetle-psx.nix { };
 
-  beetle-psx-hw = mkLibretroCore {
-    core = "mednafen-psx-hw";
-    repo = "beetle-psx";
-    extraBuildInputs = [ libGL libGLU ];
-    makefile = "Makefile";
-    makeFlags = [ "HAVE_VULKAN=1" "HAVE_OPENGL=1" "HAVE_HW=1" "HAVE_LIGHTREC=1" ];
-    meta = {
-      description = "Port of Mednafen's PSX Engine (with HW accel) core to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  beetle-psx-hw = self.beetle-psx.override { withHw = true; };
 
   beetle-saturn = mkLibretroCore {
     core = "mednafen-saturn";
