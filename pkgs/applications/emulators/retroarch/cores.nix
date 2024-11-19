@@ -121,38 +121,11 @@ lib.makeScope newScope (self: rec {
 
   bsnes-hd = self.callPackage ./cores/bsnes-hd.nix { };
 
-  bsnes-mercury = mkLibretroCore {
-    core = "bsnes-mercury-accuracy";
-    repo = "bsnes-mercury";
-    makefile = "Makefile";
-    makeFlags = [ "PROFILE=accuracy" ];
-    meta = {
-      description = "Fork of bsnes with HLE DSP emulation restored (accuracy profile)";
-      license = lib.licenses.gpl3Only;
-    };
-  };
+  bsnes-mercury = self.callPackage ./cores/bsnes-mercury.nix { };
 
-  bsnes-mercury-balanced = mkLibretroCore {
-    core = "bsnes-mercury-balanced";
-    repo = "bsnes-mercury";
-    makefile = "Makefile";
-    makeFlags = [ "PROFILE=balanced" ];
-    meta = {
-      description = "Fork of bsnes with HLE DSP emulation restored (balanced profile)";
-      license = lib.licenses.gpl3Only;
-    };
-  };
+  bsnes-mercury-balanced = self.bsnes-mercury.override { withProfile = "balanced"; };
 
-  bsnes-mercury-performance = mkLibretroCore {
-    core = "bsnes-mercury-performance";
-    repo = "bsnes-mercury";
-    makefile = "Makefile";
-    makeFlags = [ "PROFILE=performance" ];
-    meta = {
-      description = "Fork of bsnes with HLE DSP emulation restored (performance profile)";
-      license = lib.licenses.gpl3Only;
-    };
-  };
+  bsnes-mercury-performance = self.bsnes-mercury.override { withProfile = "performance"; };
 
   citra = mkLibretroCore rec {
     core = "citra";
