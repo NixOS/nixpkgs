@@ -8,8 +8,7 @@
   curl,
   openssl,
   mandown,
-  zellij,
-  testers,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -49,9 +48,14 @@ rustPlatform.buildRustPackage rec {
     HOME=$TMPDIR
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   # Ensure that we don't vendor curl, but instead link against the libcurl from nixpkgs
-  doInstallCheck = stdenv.hostPlatform.libc == "glibc";
-  installCheckPhase = ''
+  installCheckPhase = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
     runHook preInstallCheck
 
     ldd "$out/bin/zellij" | grep libcurl.so
@@ -71,7 +75,6 @@ rustPlatform.buildRustPackage rec {
         --zsh <($out/bin/zellij setup --generate-completion zsh)
     '';
 
-  passthru.tests.version = testers.testVersion { package = zellij; };
 
   meta = with lib; {
     description = "Terminal workspace with batteries included";
