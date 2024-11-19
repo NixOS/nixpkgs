@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  nix-update-script,
   cargo,
   rustc,
   meson,
@@ -52,6 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [ libadwaita ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Practice your typing skills";
