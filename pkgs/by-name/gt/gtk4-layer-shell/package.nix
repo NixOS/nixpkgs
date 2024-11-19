@@ -45,12 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_43
     vala
     wayland-scanner
-    wayland-protocols
   ];
 
   buildInputs = [
-    wayland
     gtk4
+    wayland
+    wayland-protocols
   ];
 
   mesonFlags = [
