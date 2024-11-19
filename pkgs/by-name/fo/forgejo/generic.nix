@@ -149,7 +149,13 @@ buildGoModule rec {
     '';
 
     tests = if lts then nixosTests.forgejo-lts else nixosTests.forgejo;
-    updateScript = nix-update-script { extraArgs = nixUpdateExtraArgs; };
+
+    updateScript = nix-update-script {
+      extraArgs = nixUpdateExtraArgs ++ [
+        "--version-regex"
+        "v(${lib.versions.major version}\.[0-9.]+)"
+      ];
+    };
   };
 
   meta = {
