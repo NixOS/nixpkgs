@@ -16964,6 +16964,9 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
+  cockpitPlugins = recurseIntoAttrs
+    (callPackage ./cockpit-plugins.nix {} cockpit);
+
   construoBase = lowPrio (callPackage ../games/construo {
     libGL = null;
     libGLU = null;
