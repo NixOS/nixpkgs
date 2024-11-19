@@ -7,6 +7,10 @@
         "date": "2021-12-07",
         "new": "cmp-tmux"
     },
+    "compe-conjure": {
+        "date": "2024-11-19",
+        "new": "cmp-conjure"
+    },
     "fern-vim": {
         "date": "2024-05-12",
         "new": "vim-fern"

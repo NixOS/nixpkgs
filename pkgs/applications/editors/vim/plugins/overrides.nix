@@ -752,10 +752,6 @@ in
     nvimRequireCheck = "competitest";
   };
 
-  compe-conjure = super.compe-conjure.overrideAttrs {
-    dependencies = [ self.conjure ];
-  };
-
   compe-latex-symbols = super.compe-latex-symbols.overrideAttrs {
     dependencies = [ self.nvim-compe ];
   };
