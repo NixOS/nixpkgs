@@ -388,10 +388,10 @@
         "src": {
             "owner": "libretro",
             "repo": "libretro-handy",
-            "rev": "15d3c87e0eba52464ed759d3702d7cb7fdd0d7e0",
-            "hash": "sha256-aebQGTGYF1jlZdSzb3qQ6PIyQZ00hEKfH6W6pYYQUBw="
+            "rev": "4e9e072796e5552a9d57f6ab83b3f85f27b17fb6",
+            "hash": "sha256-ThzFEqLCX2JC06n6GZgkGzX5sFY5CxFDjkeekXRmbXY="
         },
-        "version": "unstable-2024-06-28"
+        "version": "unstable-2024-10-21"
     },
     "hatari": {
         "fetcher": "fetchFromGitHub",
