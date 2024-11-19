@@ -155,13 +155,7 @@ lib.makeScope newScope (self: rec {
 
   freeintv = self.callPackage ./cores/freeintv.nix {  };
 
-  fuse = mkLibretroCore {
-    core = "fuse";
-    meta = {
-      description = "Port of the Fuse Unix Spectrum Emulator to libretro";
-      license = lib.licenses.gpl3Only;
-    };
-  };
+  fuse = self.callPackage ./cores/fuse.nix {  };
 
   gambatte = mkLibretroCore {
     core = "gambatte";
