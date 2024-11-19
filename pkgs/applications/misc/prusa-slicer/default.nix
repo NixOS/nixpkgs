@@ -3,6 +3,7 @@
 , binutils
 , fetchFromGitHub
 , fetchpatch
+, fetchurl
 , cmake
 , pkg-config
 , wrapGAppsHook3
