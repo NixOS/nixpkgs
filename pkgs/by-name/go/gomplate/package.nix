@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "gomplate";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "hairyhenderson";
     repo = "gomplate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-shbG0q86wlSjoCK2K7hNdUCwNPiQp94GWQJ1e71A1T0=";
+    hash = "sha256-PupwL0VzZiWz+96Mv1o6QSmj7iLyvVIQMcdRlGqmpRs=";
   };
 
-  vendorHash = "sha256-UKqSKypAm6gt2JUCZh/DyfWo8uJeMp0M+4FiqwzzHIA=";
+  vendorHash = "sha256-1BOrffMtYz/cEsVaMseZQJlGsAdax+c1CvebwP8jaL4=";
 
   ldflags = [
     "-s"

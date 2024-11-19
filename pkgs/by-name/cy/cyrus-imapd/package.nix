@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
       bison
       libsrs2
     ]
-    ++ lib.optionals stdenv.isLinux [ libcap ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap ]
     ++ lib.optionals (enableHttp || enableCalalarmd || enableJMAP) [
       brotli.dev
       libical.dev
@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
           cyrus_sasl
         ]
         # Darwin doesn't have libuuid, try to build without it
-        ++ lib.optional (!stdenv.isDarwin) libuuid;
+        ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid;
       imapLibs = managesieveLibs ++ [ pcre2 ];
       mkLibsString = lib.strings.concatMapStringsSep " " (l: "-L${lib.getLib l}/lib");
     in

@@ -1,6 +1,7 @@
 { lib
 , importCargoLock
 , fetchCargoTarball
+, fetchCargoVendor
 , stdenv
 , callPackage
 , cargoBuildHook
@@ -36,6 +37,7 @@
 , cargoDepsHook ? ""
 , buildType ? "release"
 , meta ? {}
+, useFetchCargoVendor ? false
 , cargoLock ? null
 , cargoVendorDir ? null
 , checkType ? buildType
@@ -67,6 +69,12 @@ let
   cargoDeps =
     if cargoVendorDir != null then null
     else if cargoLock != null then importCargoLock cargoLock
+    else if useFetchCargoVendor then (fetchCargoVendor {
+      inherit src srcs sourceRoot preUnpack unpackPhase postUnpack;
+      name = cargoDepsName;
+      patches = cargoPatches;
+      hash = args.cargoHash;
+    } // depsExtraArgs)
     else fetchCargoTarball ({
       inherit src srcs sourceRoot preUnpack unpackPhase postUnpack cargoUpdateHook;
       name = cargoDepsName;
@@ -96,7 +104,7 @@ assert useSysroot -> !(args.doCheck or true);
 
 stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "cargoLock" ]) // lib.optionalAttrs useSysroot {
   RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
-} // lib.optionalAttrs (stdenv.isDarwin && buildType == "debug") {
+} // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && buildType == "debug") {
   RUSTFLAGS =
     "-C split-debuginfo=packed "
     + lib.optionalString useSysroot "--sysroot ${sysroot} "
@@ -115,8 +123,6 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
   cargoBuildFeatures = buildFeatures;
 
   cargoCheckFeatures = checkFeatures;
-
-  patchRegistryDeps = ./patch-registry-deps;
 
   nativeBuildInputs = nativeBuildInputs ++ lib.optionals auditable [
     (buildPackages.cargo-auditable-cargo-wrapper.override {

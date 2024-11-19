@@ -14,6 +14,7 @@
   entrypoint2,
   pillow,
   psutil,
+  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   vncdo,
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-CXVbw86263JfsH7KVCX0PyNY078I4A0qm3kqGu3RYVk=";
   };
 
-  patches = lib.optionals stdenv.isLinux [
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
     (substituteAll {
       src = ./paths.patch;
       xauth = lib.getExe xorg.xauth;
@@ -40,20 +41,22 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   nativeCheckInputs = [
     easyprocess
     entrypoint2
     pillow
     psutil
-    pytest-xdist
+    pytest-timeout
     pytestCheckHook
     (vncdo.overridePythonAttrs { doCheck = false; })
     xorg.xorgserver
     xorg.xmessage
     xorg.xvfb
   ];
+
+  pytestFlagsArray = [ "-v" ];
 
   meta = with lib; {
     description = "Python wrapper for Xvfb, Xephyr and Xvnc";

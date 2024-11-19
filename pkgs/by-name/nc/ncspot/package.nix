@@ -2,8 +2,8 @@
   lib,
   stdenv,
   alsa-lib,
+  apple-sdk_11,
   config,
-  darwin,
   dbus,
   fetchFromGitHub,
   libpulseaudio,
@@ -50,8 +50,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ ncurses ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11
     ++ lib.optional stdenv.hostPlatform.isLinux openssl
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa
     ++ lib.optional (withALSA || withRodio) alsa-lib
     ++ lib.optional withClipboard libxcb
     ++ lib.optional withCover ueberzug

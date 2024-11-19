@@ -1,6 +1,13 @@
-{ lib, buildDotnetModule, fetchFromGitHub, fetchpatch, dotnetCorePackages }:
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  fetchpatch,
+  dotnetCorePackages,
+  testers,
+}:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: rec {
   pname = "fsautocomplete";
   version = "0.73.2";
 
@@ -27,13 +34,21 @@ buildDotnetModule rec {
       --replace TargetFrameworks TargetFramework \
   '';
 
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_7_0 sdk_8_0 ];
+  dotnet-sdk =
+    with dotnetCorePackages;
+    combinePackages [
+      sdk_6_0
+      sdk_7_0
+      sdk_8_0
+    ];
   dotnet-runtime = dotnetCorePackages.sdk_8_0;
 
   projectFile = "src/FsAutoComplete/FsAutoComplete.fsproj";
   executables = [ "fsautocomplete" ];
 
   useDotnetFromEnv = true;
+
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = with lib; {
     description = "FsAutoComplete project (FSAC) provides a backend service for rich editing or intellisense features for editors";
@@ -42,6 +57,9 @@ buildDotnetModule rec {
     changelog = "https://github.com/fsharp/FsAutoComplete/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ gbtb mdarocha ];
+    maintainers = with maintainers; [
+      gbtb
+      mdarocha
+    ];
   };
-}
+})

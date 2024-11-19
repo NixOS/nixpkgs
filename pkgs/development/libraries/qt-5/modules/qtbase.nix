@@ -4,10 +4,10 @@
 , coreutils, bison, flex, gdb, gperf, lndir, perl, pkg-config, python3
 , which
   # darwin support
-, apple-sdk_13, darwinMinVersionHook, xcbuild
+, apple-sdk_13, xcbuild
 
 , dbus, fontconfig, freetype, glib, harfbuzz, icu, libdrm, libX11, libXcomposite
-, libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng , libxcb
+, libXcursor, libXext, libXi, libXrender, libjpeg, libpng , libxcb
 , libxkbcommon, libxml2, libxslt, openssl, pcre2, sqlite, udev, xcbutil
 , xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm , zlib, at-spi2-core
 
@@ -15,6 +15,7 @@
 , cups ? null, postgresql ? null
 , withGtk3 ? false, dconf, gtk3
 , withQttranslation ? true, qttranslations ? null
+, withLibinput ? false, libinput
 
   # options
 , libGLSupported ? !stdenv.hostPlatform.isDarwin
@@ -38,13 +39,12 @@ let
     then "linux-generic-g++"
     else throw "Please add a qtPlatformCross entry for ${plat.config}";
 
-  # Per https://doc.qt.io/qt-5/macos.html#supported-versions: deployment target = 10.13, build SDK = 13.x or 14.x.
+  # Per https://doc.qt.io/qt-5/macos.html#supported-versions: build SDK = 13.x or 14.x.
   # Despite advertising support for the macOS 14 SDK, the build system sets the maximum to 13 and complains
   # about 14, so we just use that.
   deploymentTarget = "10.13";
   darwinVersionInputs = [
     apple-sdk_13
-    (darwinMinVersionHook deploymentTarget)
   ];
 in
 
@@ -80,10 +80,10 @@ stdenv.mkDerivation (finalAttrs: ({
   buildInputs = [ python3 at-spi2-core ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin)
     (
-      [ libinput ]
+      lib.optional withLibinput libinput
       ++ lib.optional withGtk3 gtk3
     )
-    ++ lib.optional stdenv.isDarwin darwinVersionInputs
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwinVersionInputs
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysqlSupport) libmysqlclient
@@ -165,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: ({
         --replace-fail 'CONFIG += ' 'CONFIG += no_default_rpath ' \
         --replace-fail \
           'QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13' \
-          'QMAKE_MACOSX_DEPLOYMENT_TARGET = ${deploymentTarget}'
+          "QMAKE_MACOSX_DEPLOYMENT_TARGET = $MACOSX_DEPLOYMENT_TARGET"
     '' else lib.optionalString libGLSupported ''
       sed -i mkspecs/common/linux.conf \
           -e "/^QMAKE_INCDIR_OPENGL/ s|$|${lib.getDev libGL}/include|" \
@@ -234,10 +234,6 @@ stdenv.mkDerivation (finalAttrs: ({
       ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
     ] ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
     ++ lib.optional stdenv.hostPlatform.isLinux "-DUSE_X11"
-    ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
-      # ignore "is only available on macOS 10.12.2 or newer" in obj-c code
-      "-Wno-error=unguarded-availability"
-    ]
     ++ lib.optionals withGtk3 [
       ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
       ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
@@ -352,14 +348,13 @@ stdenv.mkDerivation (finalAttrs: ({
       "-L" "${libXrender.out}/lib"
       "-I" "${libXrender.out}/include"
 
-      "-libinput"
-
       ''-${lib.optionalString (cups == null) "no-"}cups''
       "-dbus-linked"
       "-glib"
     ] ++ [
       "-system-libpng"
     ] ++ lib.optional withGtk3 "-gtk"
+      ++ lib.optional withLibinput "-libinput"
       ++ [
         "-inotify"
     ] ++ lib.optionals (cups != null) [

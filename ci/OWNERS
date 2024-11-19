@@ -105,6 +105,11 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/system/activation/bootspec.nix         @grahamc @cole-h @raitobezarius
 /nixos/modules/system/activation/bootspec.cue         @grahamc @cole-h @raitobezarius
 
+# NixOS Render Docs
+/pkgs/by-name/ni/nixos-render-docs @fricklerhandwerk @GetPsyched @hsjobeki
+/doc/redirects.json                @fricklerhandwerk @GetPsyched @hsjobeki
+/nixos/doc/manual/redirects.json   @fricklerhandwerk @GetPsyched @hsjobeki
+
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
 
@@ -138,6 +143,8 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/tests/amazon-ssm-agent.nix                 @arianvp
 /nixos/modules/system/boot/grow-partition.nix     @arianvp
 
+# nixos-rebuild-ng
+/pkgs/by-name/ni/nixos-rebuild-ng                 @thiagokokada
 
 
 # Updaters

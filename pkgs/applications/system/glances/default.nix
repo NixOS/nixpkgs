@@ -8,6 +8,8 @@
   packaging,
   psutil,
   setuptools,
+  pydantic,
+  nixosTests,
   # Optional dependencies:
   fastapi,
   jinja2,
@@ -68,6 +70,10 @@ buildPythonApplication rec {
     jinja2
     prometheus-client
   ] ++ lib.optional stdenv.hostPlatform.isLinux hddtemp;
+
+  passthru.tests = {
+    service = nixosTests.glances;
+  };
 
   meta = {
     homepage = "https://nicolargo.github.io/glances/";

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Test requires running Jitsi Videobridge and Jicofo which are Linux-only
-  passthru.tests = lib.optionalAttrs stdenv.isLinux {
+  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
     single-host-smoke-test = nixosTests.jitsi-meet;
   };
 

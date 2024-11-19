@@ -293,6 +293,7 @@
       - any-glob-to-any-file:
         - nixos/**/*
         - pkgs/by-name/sw/switch-to-configuration-ng/**/*
+        - pkgs/by-name/ni/nixos-rebuild-ng/**/*
         - pkgs/os-specific/linux/nixos-rebuild/**/*
 
 "6.topic: nixos-container":
@@ -358,8 +359,9 @@
     - changed-files:
       - any-glob-to-any-file:
         - doc/languages-frameworks/php.section.md
+        - nixos/tests/php/**/*
         - pkgs/build-support/php/**/*
-        - pkgs/development/interpreters/php/*
+        - pkgs/development/interpreters/php/**/*
         - pkgs/development/php-packages/**/*
         - pkgs/test/php/default.nix
         - pkgs/top-level/php-packages.nix

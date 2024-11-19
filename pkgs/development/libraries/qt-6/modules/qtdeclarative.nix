@@ -37,6 +37,16 @@ qtModule {
       url = "https://github.com/qt/qtdeclarative/commit/0ae3697cf40bcd3ae1de20621abad17cf6c5f52d.patch";
       hash = "sha256-YuTHqHCWOsqUOATfaAZRxPSwMsFNylxoqnqCeW5kPjs=";
     })
+    # Backport patches to fix SDDM multi-screen issues
+    (fetchpatch2 {
+      url = "https://github.com/qt/qtdeclarative/commit/104b0d6e88ce6781c9d31cf0dd14dfe99988b789.patch";
+      hash = "sha256-fWjFvaSnDcqquqfNkwEIHlp2Cxmf4DmWmQyYhEj9Jbw=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/qt/qtdeclarative/commit/fbdbed919f59cc7b4520f5aab2149f4c99b63e24.patch";
+      excludes = [ "tests/auto/qml/qv4mm/tst_qv4mm.cpp" ];
+      hash = "sha256-YsB81v0apTK+GdzVa3oMe4akcz5sxuI3aUjCLu1bTJ8=";
+    })
   ];
 
   cmakeFlags = [

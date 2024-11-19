@@ -1,10 +1,8 @@
 { lib
-, stdenv
 , fetchCrate
 , rustPlatform
 , pkg-config
 , openssl
-, Security
 }:
 rustPlatform.buildRustPackage rec {
   pname = "gh-cal";
@@ -18,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-73gqk0DjhaLGIEP5VQQlubPomxHQyg4RnY5XTgE7msQ=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  buildInputs = [ openssl ];
 
   meta = with lib; {
     description = "GitHub contributions calender terminal viewer";

@@ -23,7 +23,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       machine.wait_for_x()
       machine.succeed("convert -font DejaVu-Sans +antialias label:'IT WORKS' image.png")
       machine.execute("libresprite image.png >&2 &")
-      machine.wait_for_window("LibreSprite v${pkgs.libresprite.version}")
+      machine.wait_for_window("LibreSprite ${pkgs.libresprite.version}-dev")
       machine.wait_for_text("IT WORKS")
       machine.screenshot("screen")
     '';

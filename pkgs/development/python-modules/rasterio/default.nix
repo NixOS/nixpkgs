@@ -45,12 +45,6 @@ buildPythonPackage rec {
     hash = "sha256-A8o8FYuhlzL6Wl6sfB7D2KRAKZl28E6K2AdUik9zmgs=";
   };
 
-  postPatch = ''
-    # relax numpy dependency
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2" "numpy"
-  '';
-
   nativeBuildInputs = [
     cython
     gdal

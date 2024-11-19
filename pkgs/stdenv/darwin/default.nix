@@ -28,14 +28,7 @@ assert crossSystem == localSystem;
 let
   inherit (localSystem) system;
 
-  sdkMajorVersion =
-    let
-      inherit (localSystem) darwinSdkVersion;
-    in
-    if lib.versionOlder darwinSdkVersion "11" then
-      lib.versions.majorMinor darwinSdkVersion
-    else
-      lib.versions.major darwinSdkVersion;
+  sdkMajorVersion = lib.versions.major localSystem.darwinSdkVersion;
 
   commonImpureHostDeps = [
     "/bin/sh"
@@ -676,8 +669,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           self = self.python3-bootstrap;
           pythonAttr = "python3-bootstrap";
           enableLTO = false;
-          # Workaround for ld64 crashes on x86_64-darwin. Remove after 11.0 is made the default.
-          inherit (prevStage) apple-sdk_11;
         };
 
         scons = super.scons.override { python3Packages = self.python3.pkgs; };
@@ -689,12 +680,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             signingUtils = prevStage.darwin.signingUtils.override { inherit (selfDarwin) sigtool; };
 
             postLinkSignHook = prevStage.darwin.postLinkSignHook.override { inherit (selfDarwin) sigtool; };
-
-            adv_cmds = superDarwin.adv_cmds.override {
-              # Break an infinite recursion between CMake and libtapi. CMake requires adv_cmds.ps, and adv_cmds
-              # requires a newer SDK that requires libtapi to build, which requires CMake.
-              inherit (prevStage) apple-sdk_11;
-            };
 
             # Rewrap binutils with the real libSystem
             binutils = superDarwin.binutils.override {

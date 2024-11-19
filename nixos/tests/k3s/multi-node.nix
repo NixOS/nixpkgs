@@ -116,6 +116,7 @@ import ../make-test-python.nix (
           services.k3s = {
             inherit tokenFile;
             enable = true;
+            package = k3s;
             serverAddr = "https://192.168.1.1:6443";
             clusterInit = false;
             extraFlags = builtins.toString [
@@ -161,6 +162,7 @@ import ../make-test-python.nix (
             inherit tokenFile;
             enable = true;
             role = "agent";
+            package = k3s;
             serverAddr = "https://192.168.1.3:6443";
             extraFlags = lib.concatStringsSep " " [
               "--pause-image"

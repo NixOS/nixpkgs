@@ -85,6 +85,13 @@ buildPythonPackage rec {
       # https://hydra.nixos.org/build/254630990
       substituteInPlace tests/view_tests/tests/test_debug.py \
         --replace-fail "test_files" "dont_test_files"
+    ''
+    + lib.optionalString (pythonAtLeast "3.13") ''
+      # Fixed CommandTypes.test_help_default_options_with_custom_arguments test on Python 3.13+.
+      # https://github.com/django/django/commit/3426a5c33c36266af42128ee9eca4921e68ea876
+      substituteInPlace tests/admin_scripts/tests.py --replace-fail \
+        "test_help_default_options_with_custom_arguments" \
+        "dont_test_help_default_options_with_custom_arguments"
     '';
 
   nativeBuildInputs = [ setuptools ];

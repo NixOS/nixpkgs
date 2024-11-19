@@ -35,7 +35,7 @@
   apple-sdk_15,
   darwinMinVersionHook,
   makeWrapper,
-  nodePackages_latest,
+  nodejs_22,
 
   withGLES ? false,
 }:
@@ -90,13 +90,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "zed-editor";
-  version = "0.160.7";
+  version = "0.161.2";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mbBETOZVXTcfS+yGWPqEh+NEjo6UMTvk3XMghd8+s/s=";
+    hash = "sha256-UEqlOiB7oNQcrLViPrk9ZCg4uUDYhRXjq0cHp/wclYk=";
   };
 
   patches =
@@ -217,9 +217,7 @@ rustPlatform.buildRustPackage rec {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-rpath ${gpu-lib}/lib $out/libexec/*
     patchelf --add-rpath ${wayland}/lib $out/libexec/*
-    wrapProgram $out/libexec/zed-editor --suffix PATH : ${
-      lib.makeBinPath [ nodePackages_latest.nodejs ]
-    }
+    wrapProgram $out/libexec/zed-editor --suffix PATH : ${lib.makeBinPath [ nodejs_22 ]}
   '';
 
   preCheck = ''

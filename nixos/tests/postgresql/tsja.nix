@@ -20,7 +20,8 @@ let
           services.postgresql = {
             inherit package;
             enable = true;
-            extraPlugins =
+            enableJIT = lib.hasInfix "-jit-" package.name;
+            extensions =
               ps: with ps; [
                 tsja
               ];

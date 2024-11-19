@@ -93,7 +93,7 @@ let
         $out/lib/lightworks/ntcardvt
 
       wrapProgram $out/lib/lightworks/ntcardvt \
-        --prefix LD_LIBRARY_PATH : ${fullPath}:$out/lib/lightworks \
+        --prefix LD_LIBRARY_PATH : $out/lib/lightworks:${fullPath} \
         --set FONTCONFIG_FILE $out/lib/lightworks/fonts.conf
 
       cp -r usr/share $out/share

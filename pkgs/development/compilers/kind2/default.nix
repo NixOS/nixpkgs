@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +16,13 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-KzoEh/kMKsHx9K3t1/uQZ7fdsZEM+v8UOft8JjEB1Zw=";
+
+  postPatch = ''
+    substituteInPlace src/main.rs \
+      --replace-fail "#![feature(panic_info_message)]" ""
+    substituteInPlace src/main.rs \
+      --replace-fail "e.message().unwrap()" "e.payload()"
+  '';
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Security

@@ -12,7 +12,6 @@
   setuptools,
 
   # propagates
-  backports-zoneinfo,
   typing-extensions,
 
   # psycopg-c
@@ -153,7 +152,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     psycopg-c
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+  ];
 
   pythonImportsCheck = [
     "psycopg"
@@ -211,8 +210,7 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-o"
-    "cache_dir=$TMPDIR"
+    "-o cache_dir=.cache"
     "-m"
     "'not refcount and not timing and not flakey'"
     # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect

@@ -7,12 +7,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "privatebin";
-  version = "1.7.4";
+  version = "1.7.5";
   src = fetchFromGitHub {
     owner = "PrivateBin";
     repo = "PrivateBin";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-RFP6rhzfBzTmqs4eJXv7LqdniWoeBJpQQ6fLdoGd5Fk=";
+    hash = "sha256-LdTteUED/pq4Z4IOBttLPm3K9gx1xVqP24QQ48uvuyI=";
   };
 
   installPhase = ''

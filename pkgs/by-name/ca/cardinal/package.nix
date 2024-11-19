@@ -72,10 +72,10 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/Cardinal \
-    --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}
+    --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}
 
     wrapProgram $out/bin/CardinalMini \
-    --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}
+    --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}
 
     # this doesn't work and is mainly just a test tool for the developers anyway.
     rm -f $out/bin/CardinalNative

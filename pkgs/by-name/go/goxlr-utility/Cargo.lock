@@ -510,7 +510,7 @@ checksum = "d7ebdfa2ebdab6b1760375fa7d6f382b9f486eac35fc994625a00e89280bdbb7"
 dependencies = [
  "async-task",
  "concurrent-queue",
- "fastrand 2.1.0",
+ "fastrand 2.1.1",
  "futures-lite 2.3.0",
  "slab",
 ]
@@ -1755,9 +1755,9 @@ dependencies = [
 
 [[package]]
 name = "fastrand"
-version = "2.1.0"
+version = "2.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9fc0510504f03c51ada170672ac806f1f105a88aa97a5281117e1ddc3368e51a"
+checksum = "e8c02a5121d4ea3eb16a80748c74f5549a5665e4c21333c6098f283870fbdea6"
 
 [[package]]
 name = "fdeflate"
@@ -1964,7 +1964,7 @@ version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "52527eb5074e35e9339c6b4e8d12600c7128b68fb25dcb9fa9dec18f7c25f3a5"
 dependencies = [
- "fastrand 2.1.0",
+ "fastrand 2.1.1",
  "futures-core",
  "futures-io",
  "parking",
@@ -2059,7 +2059,7 @@ checksum = "d2fabcfbdc87f4758337ca535fb41a6d701b65693ce38287d856d1674551ec9b"
 
 [[package]]
 name = "goxlr-audio"
-version = "1.1.1"
+version = "1.1.4"
 dependencies = [
  "anyhow",
  "cpal",
@@ -2076,7 +2076,7 @@ dependencies = [
 
 [[package]]
 name = "goxlr-client"
-version = "1.1.1"
+version = "1.1.4"
 dependencies = [
  "anyhow",
  "clap 4.5.11",
@@ -2093,7 +2093,7 @@ dependencies = [
 
 [[package]]
 name = "goxlr-daemon"
-version = "1.1.1"
+version = "1.1.4"
 dependencies = [
  "actix",
  "actix-cors",
@@ -2164,7 +2164,7 @@ dependencies = [
 
 [[package]]
 name = "goxlr-defaults"
-version = "1.1.1"
+version = "1.1.4"
 dependencies = [
  "clap 4.5.11",
  "include_dir",
@@ -2172,7 +2172,7 @@ dependencies = [
 
 [[package]]
 name = "goxlr-initialiser"
-version = "1.1.1"
+version = "1.1.4"
 dependencies = [
  "anyhow",
  "block",
@@ -2184,7 +2184,7 @@ dependencies = [
 
 [[package]]
 name = "goxlr-ipc"
-version = "1.1.1"
+version = "1.1.4"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -2205,7 +2205,7 @@ dependencies = [
 
 [[package]]
 name = "goxlr-launcher"
-version = "1.1.1"
+version = "1.1.4"
 dependencies = [
  "anyhow",
  "goxlr-ipc",
@@ -2221,12 +2221,13 @@ dependencies = [
 
 [[package]]
 name = "goxlr-profile-loader"
-version = "1.1.1"
+version = "1.1.4"
 dependencies = [
  "anyhow",
  "byteorder",
  "enum-map",
  "enum-map-derive",
+ "fastrand 2.1.1",
  "log",
  "quick-xml",
  "ritelinked",
@@ -2238,7 +2239,7 @@ dependencies = [
 
 [[package]]
 name = "goxlr-scribbles"
-version = "1.1.1"
+version = "1.1.4"
 dependencies = [
  "ab_glyph",
  "anyhow",
@@ -2249,7 +2250,7 @@ dependencies = [
 
 [[package]]
 name = "goxlr-types"
-version = "1.1.1"
+version = "1.1.4"
 dependencies = [
  "clap 4.5.11",
  "derivative",
@@ -2262,7 +2263,7 @@ dependencies = [
 
 [[package]]
 name = "goxlr-usb"
-version = "1.1.1"
+version = "1.1.4"
 dependencies = [
  "anyhow",
  "byteorder",
@@ -3801,7 +3802,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ae1d5c74c9876f070d3e8fd503d748c7d974c3e48da8f41350fa5222ef9b4391"
 dependencies = [
  "atomic-waker",
- "fastrand 2.1.0",
+ "fastrand 2.1.1",
  "futures-io",
 ]
 
@@ -4989,7 +4990,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "85b77fafb263dd9d05cbeac119526425676db3784113aa9295c88498cbf8bff1"
 dependencies = [
  "cfg-if",
- "fastrand 2.1.0",
+ "fastrand 2.1.1",
  "rustix 0.38.34",
  "windows-sys 0.52.0",
 ]

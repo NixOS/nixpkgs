@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-fast-zlib";
-  version = "0.1.1";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiohttp-fast-zlib";
     rev = "v${version}";
-    hash = "sha256-uPmttfEiWmEtQrBZYwiSjLTMmXhZ0MmaAQJMXTSQj+U=";
+    hash = "sha256-fvZVviKN/CL42Zmmm6k/JNdeAljRoqN63rlduNJVr98=";
   };
 
   postPatch = ''

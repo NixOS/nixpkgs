@@ -54,7 +54,7 @@ buildPostgresqlExtension (finalAttrs: {
     description = "PostgreSQL vector database extension for building AI applications";
     homepage = "https://lantern.dev/";
     changelog = "https://github.com/lanterndata/lantern/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = licenses.bsl11;
+    license = licenses.agpl3Only;
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
     # error: use of undeclared identifier 'aligned_alloc'

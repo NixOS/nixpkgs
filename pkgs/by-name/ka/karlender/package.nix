@@ -11,30 +11,20 @@
   nix-update-script,
   dbus,
   cargo-gra,
-  fetchpatch,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "karlender";
-  version = "0.10.4";
+  version = "0.10.11";
 
   src = fetchFromGitLab {
     owner = "floers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-W+s1RCPwy7ZiK514AaQLwV9y+VJ58oMGlrS5cdoFKIg=";
+    hash = "sha256-PwXSJq4uBtgIA2aQ5AZawEMmHoVS2Z9haVHyJ2oyXUs=";
   };
 
-  cargoPatches = [
-    # https://gitlab.com/floers/calendar-stuff/karlender/-/merge_requests/43
-    # Remove it when it is merged and released.
-    (fetchpatch {
-      url = "https://gitlab.com/floers/calendar-stuff/karlender/-/commit/ce50c68323a834a0ee2cbff88ed285a971dfd91e.patch";
-      hash = "sha256-0hGgJPwnSNGTO/eiooQkQlBJ4brbaWVKRY6MT1PZApg=";
-    })
-  ];
-
-  cargoHash = "sha256-CeHIx6oUtAcr6tBdqmIDTLuYcesaA6G72L3HwHDLY7Y=";
+  cargoHash = "sha256-R/oQvyZCcTImOA8FB5bECTj5VGFElImoQwIRX75PtOs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -79,9 +69,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Mobile-friendly GTK calendar application";
-    mainProgram = "karlender";
     homepage = "https://gitlab.com/floers/karlender";
     license = lib.licenses.gpl3Plus;
+    mainProgram = "karlender";
     maintainers = with lib.maintainers; [
       chuangzhu
       bot-wxt1221

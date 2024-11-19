@@ -20,7 +20,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.22.1";
+  version = "0.22.5";
   pname = "dulwich";
   format = "setuptools";
 
@@ -30,16 +30,8 @@ buildPythonPackage rec {
     owner = "jelmer";
     repo = "dulwich";
     rev = "refs/tags/dulwich-${version}";
-    hash = "sha256-bf3ZUMX4afpdTBpFnx0HMyzCNG6V/p4eOl36djxGbtk=";
+    hash = "sha256-/YqC7y8PU+H2qjPqqzdw6iSSSElK709izLTcs9qbt1I=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "dulwich-geventhttpclient-api-breakage.patch";
-      url = "https://github.com/jelmer/dulwich/commit/5f0497de9c37ac4f4e8f27bed8decce13765d3df.patch";
-      hash = "sha256-0GgDgmYuLCsMc9nRRLNL2W6WYrkZ/1ZnZBQusEAzLKI=";
-    })
-  ];
 
   build-system = [
     setuptools

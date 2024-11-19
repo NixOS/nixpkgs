@@ -63,13 +63,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freecad";
-  version = "1.0rc2";
+  version = "1.0rc4";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
     rev = finalAttrs.version;
-    hash = "sha256-kPmfx/C1fCYwBqh6ZOKZAVNVR9m3VryPmBKu3ksDD5E=";
+    hash = "sha256-b7aeVQkgdsDRdnVIr+5ZNuWAm6GLH7sepa8kFp2Zm2U=";
     fetchSubmodules = true;
   };
 
@@ -131,7 +131,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
     ./0002-FreeCad-OndselSolver-pkgconfig.patch
-    ./0003-freecad-font-issue-10514.patch
   ];
 
   cmakeFlags = [
@@ -212,7 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
       right at home with FreeCAD.
     '';
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ gebner AndersonTorres srounce ];
+    maintainers = with lib.maintainers; [ gebner srounce ];
     platforms = lib.platforms.linux;
   };
 })

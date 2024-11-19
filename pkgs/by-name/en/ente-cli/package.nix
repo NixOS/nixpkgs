@@ -62,7 +62,7 @@ buildGoModule {
 
   passthru = {
     # only works on linux, see comment above about ENTE_CLI_SECRETS_PATH on darwin
-    tests.version = lib.optionalAttrs stdenv.isLinux (
+    tests.version = lib.optionalAttrs stdenv.hostPlatform.isLinux (
       testers.testVersion {
         package = ente-cli;
         command = ''

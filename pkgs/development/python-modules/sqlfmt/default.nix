@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "sqlfmt";
-  version = "0.23.2";
+  version = "0.23.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "sqlfmt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-g2ycfpsBFMh16pYVzCmde0mhQhhvAhH25i3LJTcG7Ac=";
+    hash = "sha256-kbluj29P1HwTaCYv1Myslak9s8FFm2e/eHdGgi3H4i0=";
   };
 
   build-system = [

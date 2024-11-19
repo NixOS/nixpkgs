@@ -167,12 +167,6 @@ let
                   path = ../15;
                 }
               ];
-              "libcxx/0001-darwin-10.12-mbstate_t-fix.patch" = [
-                {
-                  after = "18";
-                  path = ../18;
-                }
-              ];
               "libunwind/gnu-install-dirs.patch" = [
                 {
                   before = "17";
@@ -262,12 +256,6 @@ let
                 {
                   before = "15";
                   path = ../12;
-                }
-              ];
-              "lldb/cpu_subtype_arm64e_replacement.patch" = [
-                {
-                  after = "13";
-                  path = ../13;
                 }
               ];
               "lldb/resource-dir.patch" = [
@@ -540,23 +528,6 @@ let
             # mis-compilation in firefox.
             # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
             (metadata.getVersionFile "clang/revert-malloc-alignment-assumption.patch")
-          # This patch prevents global system header directories from
-          # leaking through on non‐NixOS Linux. However, on macOS, the
-          # SDK path is used as the sysroot, and forcing `-nostdlibinc`
-          # breaks `-isysroot` with an unwrapped compiler. As macOS has
-          # no `/usr/include`, there’s essentially no risk to skipping
-          # the patch there. It’s possible that Homebrew headers in
-          # `/usr/local/include` might leak through to unwrapped
-          # compilers being used without an SDK set or something, but
-          # it hopefully shouldn’t matter.
-          #
-          # TODO: Figure out a better solution to this whole problem so
-          # that we won’t have to choose between breaking unwrapped
-          # compilers breaking libclang when we can do Linux‐to‐Darwin
-          # cross‐compilation again.
-          ++ lib.optional (
-            !args.stdenv.hostPlatform.isDarwin || !args.stdenv.targetPlatform.isDarwin
-          ) ./clang/add-nostdlibinc-flag.patch
           ++ [
             (substituteAll {
               src =
@@ -714,23 +685,7 @@ let
             ++ lib.optional (lib.versionOlder metadata.release_version "14") (
               metadata.getVersionFile "lldb/gnu-install-dirs.patch"
             )
-            ++ lib.optional (lib.versionAtLeast metadata.release_version "14") ./lldb/gnu-install-dirs.patch
-            # This is a stopgap solution if/until the macOS SDK used for x86_64 is
-            # updated.
-            #
-            # The older 10.12 SDK used on x86_64 as of this writing has a `mach/machine.h`
-            # header that does not define `CPU_SUBTYPE_ARM64E` so we replace the one use
-            # of this preprocessor symbol in `lldb` with its expansion.
-            #
-            # See here for some context:
-            # https://github.com/NixOS/nixpkgs/pull/194634#issuecomment-1272129132
-            #
-            # Patch is applied for >= 14 as the versions below are broken anyways.
-            ++ lib.optional (
-              lib.versionAtLeast metadata.release_version "14"
-              && stdenv.targetPlatform.isDarwin
-              && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0"
-            ) (metadata.getVersionFile "lldb/cpu_subtype_arm64e_replacement.patch");
+            ++ lib.optional (lib.versionAtLeast metadata.release_version "14") ./lldb/gnu-install-dirs.patch;
         }
         // lib.optionalAttrs (lib.versions.major metadata.release_version == "16") {
           src = callPackage (
@@ -1006,6 +961,13 @@ let
         ++ [
           (metadata.getVersionFile "compiler-rt/X86-support-extension.patch") # Add support for i486 i586 i686 by reusing i386 config
         ]
+        ++ lib.optional (lib.versions.major metadata.release_version == "12") (fetchpatch {
+          # fixes the parallel build on aarch64 darwin
+          name = "fix-symlink-race-aarch64-darwin.patch";
+          url = "https://github.com/llvm/llvm-project/commit/b31080c596246bc26d2493cfd5e07f053cf9541c.patch";
+          relative = "compiler-rt";
+          hash = "sha256-Cv2NC8402yU7QaTR6TzdH+qyWRy+tTote7KKWtKRWFQ=";
+        })
         ++ lib.optional (
           lib.versions.major metadata.release_version == "12"
           || (
@@ -1115,62 +1077,37 @@ let
 
       libcxx = callPackage ./libcxx (
         {
-          patches =
-            lib.optionals (lib.versionOlder metadata.release_version "16") (
-              lib.optional (lib.versions.major metadata.release_version == "15")
-                # See:
-                #   - https://reviews.llvm.org/D133566
-                #   - https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1429146432
-                # !!! Drop in LLVM 16+
-                (
-                  fetchpatch {
-                    url = "https://github.com/llvm/llvm-project/commit/57c7bb3ec89565c68f858d316504668f9d214d59.patch";
-                    hash = "sha256-B07vHmSjy5BhhkGSj3e1E0XmMv5/9+mvC/k70Z29VwY=";
-                  }
-                )
-              ++ [
-                (substitute {
-                  src = ./libcxxabi/wasm.patch;
-                  substitutions = [
-                    "--replace-fail"
-                    "/cmake/"
-                    "/llvm/cmake/"
-                  ];
-                })
-              ]
-              ++ lib.optional stdenv.hostPlatform.isMusl (substitute {
-                src = ./libcxx/libcxx-0001-musl-hacks.patch;
+          patches = lib.optionals (lib.versionOlder metadata.release_version "16") (
+            lib.optional (lib.versions.major metadata.release_version == "15")
+              # See:
+              #   - https://reviews.llvm.org/D133566
+              #   - https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1429146432
+              # !!! Drop in LLVM 16+
+              (
+                fetchpatch {
+                  url = "https://github.com/llvm/llvm-project/commit/57c7bb3ec89565c68f858d316504668f9d214d59.patch";
+                  hash = "sha256-B07vHmSjy5BhhkGSj3e1E0XmMv5/9+mvC/k70Z29VwY=";
+                }
+              )
+            ++ [
+              (substitute {
+                src = ./libcxxabi/wasm.patch;
                 substitutions = [
                   "--replace-fail"
-                  "/include/"
-                  "/libcxx/include/"
+                  "/cmake/"
+                  "/llvm/cmake/"
                 ];
               })
-            )
-            ++
-              lib.optional
-                (
-                  lib.versions.major metadata.release_version == "17"
-                  && stdenv.hostPlatform.isDarwin
-                  && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13"
-                )
-                # https://github.com/llvm/llvm-project/issues/64226
-                (
-                  fetchpatch {
-                    name = "0042-mbstate_t-not-defined.patch";
-                    url = "https://github.com/macports/macports-ports/raw/acd8acb171f1658596ed1cf25da48d5b932e2d19/lang/llvm-17/files/0042-mbstate_t-not-defined.patch";
-                    hash = "sha256-jo+DYA6zuSv9OH3A0bYwY5TlkWprup4OKQ7rfK1WHBI=";
-                  }
-                )
-            ++
-              lib.optional
-                (
-                  lib.versionAtLeast metadata.release_version "18"
-                  && stdenv.hostPlatform.isDarwin
-                  && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13"
-                )
-                # https://github.com/llvm/llvm-project/issues/64226
-                (metadata.getVersionFile "libcxx/0001-darwin-10.12-mbstate_t-fix.patch");
+            ]
+            ++ lib.optional stdenv.hostPlatform.isMusl (substitute {
+              src = ./libcxx/libcxx-0001-musl-hacks.patch;
+              substitutions = [
+                "--replace-fail"
+                "/include/"
+                "/libcxx/include/"
+              ];
+            })
+          );
           stdenv =
             if stdenv.hostPlatform.isDarwin then
               overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRt

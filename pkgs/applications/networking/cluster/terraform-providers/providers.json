@@ -90,11 +90,11 @@
     "vendorHash": "sha256-detefSJ3hVIk2xXsAB16XiQkaOAiBkGTnaIku7veFQU="
   },
   "auth0": {
-    "hash": "sha256-5drMyf+jymrKb6cxB2eCnvVE9hPo9aDGaloZVlOeRlI=",
+    "hash": "sha256-1Dvqvv/hWZtavEJgBQrvaAgAF3yxruPo26jPVNk2BBE=",
     "homepage": "https://registry.terraform.io/providers/auth0/auth0",
     "owner": "auth0",
     "repo": "terraform-provider-auth0",
-    "rev": "v1.7.1",
+    "rev": "v1.7.3",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-Qjaw43kMlTL2eceQwlZpgaA42YDuxq59F/m2qLqvl8s="
   },
@@ -180,13 +180,13 @@
     "vendorHash": "sha256-oDMKf39uNMO9/kyiZ1IuZlj2yIF1q5Z3wewxEBh3yso="
   },
   "bitwarden": {
-    "hash": "sha256-9YYaZmMFR47drh4dg/Zl85VWWBwAEYzMga6WHY2UgPU=",
+    "hash": "sha256-quiSqpXdqsGCt7ANc2WlFBygUzNIYWstP6Iq6OfLXJw=",
     "homepage": "https://registry.terraform.io/providers/maxlaverse/bitwarden",
     "owner": "maxlaverse",
     "repo": "terraform-provider-bitwarden",
-    "rev": "v0.10.0",
+    "rev": "v0.12.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-TRrVtJdI0ZqBfuIr947cQJh+o663CHOCScAcYDcy048="
+    "vendorHash": "sha256-oORgmuLn2dQzSKba3lXh8zWnk4Z1bdCWPseC2Po1UBA="
   },
   "brightbox": {
     "hash": "sha256-pwFbCP+qDL/4IUfbPRCkddkbsEEeAu7Wp12/mDL0ABA=",
@@ -234,11 +234,11 @@
     "vendorHash": null
   },
   "cloudamqp": {
-    "hash": "sha256-0lqVHIq37CebSVDR5Ni4kFyXeZZ+tOqpj8gN4h7OaA0=",
+    "hash": "sha256-jPiOgAQxQ6HIKJ/L5rh82fyd4rwrPOPgrQN3UMWBQF0=",
     "homepage": "https://registry.terraform.io/providers/cloudamqp/cloudamqp",
     "owner": "cloudamqp",
     "repo": "terraform-provider-cloudamqp",
-    "rev": "v1.32.0",
+    "rev": "v1.32.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-j3qdi19dxJL+R8Xa6MDag6KHMuBnzEZ9lUhuSAEZOAQ="
   },
@@ -723,11 +723,11 @@
     "vendorHash": "sha256-MfXuVZC7aroO83CJTNCh5YfbmMlUG1CiPeGgxhUFjN0="
   },
   "launchdarkly": {
-    "hash": "sha256-ke7o4I6d1JSsk+/6hk0EXUatnyCnXzb8xdgPX/cr4eM=",
+    "hash": "sha256-ca8eXj+eOTNoR00c4nBLoghoPsO2PJ3dYOMOv5cXzO4=",
     "homepage": "https://registry.terraform.io/providers/launchdarkly/launchdarkly",
     "owner": "launchdarkly",
     "repo": "terraform-provider-launchdarkly",
-    "rev": "v2.20.2",
+    "rev": "v2.21.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-v9N7lj7bEgR5HZm1SO0+DSCmQFVnsRvHPMycYMfpYwo="
   },
@@ -849,13 +849,13 @@
     "vendorHash": null
   },
   "newrelic": {
-    "hash": "sha256-KoBCI48Oq/ooyM0XXs9XcT7HELmdAoeDGEZxRB0kNIs=",
+    "hash": "sha256-H13o42CKAJfiG0eD27RU0TlAKgR7nvHtMzvk6TX/VO8=",
     "homepage": "https://registry.terraform.io/providers/newrelic/newrelic",
     "owner": "newrelic",
     "repo": "terraform-provider-newrelic",
-    "rev": "v3.50.0",
+    "rev": "v3.52.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-yVtWjfXxxaIj0JtTKRtILzJwW7QWnRWTVc0VYb9vfdk="
+    "vendorHash": "sha256-UsekZjrioy2F/OvfrvXMVYlZO3I2NU4B+BOZHwP5YSk="
   },
   "nomad": {
     "hash": "sha256-k61iQ9FQG3nscBp5CE/fFCbHpeLawbUAtGPM+IZtfVc=",
@@ -967,11 +967,11 @@
     "vendorHash": null
   },
   "ovh": {
-    "hash": "sha256-SdolwqXtS4SwR8LaSkZKPnuXgaRoCJKJXvaCFdsmvEw=",
+    "hash": "sha256-GabcX9KyUzwXke7h8hDYeDkA69D8S2IxwIK7LQynBlU=",
     "homepage": "https://registry.terraform.io/providers/ovh/ovh",
     "owner": "ovh",
     "repo": "terraform-provider-ovh",
-    "rev": "v0.51.0",
+    "rev": "v1.0.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1246,13 +1246,13 @@
     "vendorHash": "sha256-tb9raTGqEuvqfMO/5s4Oc7x/EAk4qBWWDiOgRMB3uAU="
   },
   "temporalcloud": {
-    "hash": "sha256-UaWz9VKyzYtEjOC0hbRrGSB0yP7H7AFP3uKnXcvASwQ=",
+    "hash": "sha256-PXXjhxB0pU1dZkfFKH+GBma1uYwMpLHTUJk/GUivNhE=",
     "homepage": "https://registry.terraform.io/providers/temporalio/temporalcloud",
     "owner": "temporalio",
     "repo": "terraform-provider-temporalcloud",
-    "rev": "v0.0.13",
+    "rev": "v0.0.14",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-UlR5J1Gk+ATwytBoxp6DBVGOo8MAQeGOWxD2Sgg4qJ4="
+    "vendorHash": "sha256-6dQFkmkjoVz1Z5AoD8bvAF0elsk7V1G8yT5ur1WegWE="
   },
   "tencentcloud": {
     "hash": "sha256-vj6yGrd9Fqd+XQwlXWS0BV0CZY1gcgE+YyEm/rm6o6o=",

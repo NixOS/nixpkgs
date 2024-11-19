@@ -16,6 +16,7 @@
   orjson,
   pytest-xdist,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   pyyaml,
   tomlkit,
@@ -55,12 +56,12 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs =
+  dependencies =
     [ attrs ]
     ++ lib.optionals (pythonOlder "3.11") [
       exceptiongroup
@@ -85,10 +86,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "-l --benchmark-sort=fullname --benchmark-warmup=true --benchmark-warmup-iterations=5  --benchmark-group-by=fullname" ""
+      --replace-fail "-l --benchmark-sort=fullname --benchmark-warmup=true --benchmark-warmup-iterations=5  --benchmark-group-by=fullname" ""
     substituteInPlace tests/test_preconf.py \
-      --replace "from orjson import dumps as orjson_dumps" "" \
-      --replace "from orjson import loads as orjson_loads" ""
+      --replace-fail "from orjson import dumps as orjson_dumps" "" \
+      --replace-fail "from orjson import loads as orjson_loads" ""
   '';
 
   preCheck = ''
@@ -97,21 +98,21 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Don't run benchmarking tests
-    "bench/test_attrs_collections.py"
-    "bench/test_attrs_nested.py"
-    "bench/test_attrs_primitives.py"
-    "bench/test_primitives.py"
+    "bench"
   ];
 
-  disabledTests = [
-    # orjson is not available as it requires Rust nightly features to compile its requirements
-    "test_orjson"
-    # tomlkit is pinned to an older version and newer versions raise InvalidControlChar exception
-    "test_tomlkit"
-    # msgspec causes a segmentation fault for some reason
-    "test_simple_classes"
-    "test_msgspec_json_converter"
-  ];
+  disabledTests =
+    [
+      # orjson is not available as it requires Rust nightly features to compile its requirements
+      "test_orjson"
+      # msgspec causes a segmentation fault for some reason
+      "test_simple_classes"
+      "test_msgspec_json_converter"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # https://github.com/python-attrs/cattrs/pull/543
+      "test_unstructure_deeply_nested_generics_list"
+    ];
 
   pythonImportsCheck = [ "cattr" ];
 

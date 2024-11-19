@@ -16,7 +16,8 @@ let
         services.postgresql = {
           inherit package;
           enable = true;
-          extraPlugins = with package.pkgs; [ wal2json ];
+          enableJIT = lib.hasInfix "-jit-" package.name;
+          extensions = with package.pkgs; [ wal2json ];
           settings = {
             wal_level = "logical";
             max_replication_slots = "10";

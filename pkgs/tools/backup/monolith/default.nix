@@ -6,20 +6,23 @@
 , libiconv
 , Security
 , SystemConfiguration
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "monolith";
-  version = "2.8.1";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "Y2Z";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-qMB4Tok0tYAqj8r9LEkjhBV5ko+hwagFS7MsL8AYJnc=";
+    hash = "sha256-t4FdTFXbKs7Xfw8dKoME7WDn+Fpe/uHPXyr5Wj+AXSA=";
   };
 
-  cargoHash = "sha256-FeD0+s79orFDUVsb205W0pdXgDI+p1UrH3GIfKwUqDQ=";
+  cargoHash = "sha256-lBGcS1+CBYeVIG546aHSBVJ9y96rB3IDDVJPqCFUDZQ=";
+
+  OPENSSL_NO_VENDOR = true;
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
@@ -27,11 +30,15 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [ "--skip=tests::cli" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Bundle any web page into a single HTML file";
     mainProgram = "monolith";
     homepage = "https://github.com/Y2Z/monolith";
-    license = licenses.unlicense;
+    license = licenses.cc0;
+    platforms = lib.platforms.unix;
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

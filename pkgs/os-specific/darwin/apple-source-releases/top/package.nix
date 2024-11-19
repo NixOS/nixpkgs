@@ -1,5 +1,5 @@
 {
-  apple-sdk_11,
+  apple-sdk,
   fetchpatch2,
   libutil,
   mkAppleDerivation,
@@ -8,7 +8,7 @@
 }:
 
 let
-  xnu = apple-sdk_11.sourceRelease "xnu";
+  xnu = apple-sdk.sourceRelease "xnu";
 in
 mkAppleDerivation {
   releaseName = "top";
@@ -33,7 +33,6 @@ mkAppleDerivation {
   '';
 
   buildInputs = [
-    apple-sdk_11
     libutil
     ncurses
   ];

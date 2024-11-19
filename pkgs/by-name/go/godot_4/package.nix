@@ -3,6 +3,7 @@
   autoPatchelfHook,
   buildPackages,
   dbus,
+  dotnet-sdk_6,
   dotnet-sdk_8,
   dotnetCorePackages,
   fetchFromGitHub,
@@ -26,6 +27,7 @@
   scons,
   speechd-minimal,
   stdenv,
+  testers,
   udev,
   vulkan-loader,
   wayland,
@@ -56,7 +58,9 @@ let
 
   suffix = if withMono then "-mono" else "";
 
-  attrs = rec {
+  arch = stdenv.hostPlatform.linuxArch;
+
+  attrs = finalAttrs: rec {
     pname = "godot4${suffix}";
     version = "4.3-stable";
     commitHash = "77dcf97d82cbfe4e4615475fa52ca03da645dbd8";
@@ -97,6 +101,10 @@ let
         echo ${commitHash} > .git/HEAD
       ''
       + lib.optionalString withMono ''
+        # TODO: avoid pulling in dependencies of windows-only project
+        dotnet sln modules/mono/editor/GodotTools/GodotTools.sln \
+          remove modules/mono/editor/GodotTools/GodotTools.OpenVisualStudio/GodotTools.OpenVisualStudio.csproj
+
         dotnet restore modules/mono/glue/GodotSharp/GodotSharp.sln
         dotnet restore modules/mono/editor/GodotTools/GodotTools.sln
         dotnet restore modules/mono/editor/Godot.NET.Sdk/Godot.NET.Sdk.sln
@@ -133,6 +141,8 @@ let
       pkg-config
     ];
 
+    buildInputs = lib.optionals withMono dotnet-sdk_6.packages;
+
     nativeBuildInputs =
       [
         autoPatchelfHook
@@ -149,9 +159,9 @@ let
     postBuild = lib.optionalString withMono ''
       echo "Generating Glue"
       if [[ ${withPrecision} == *double* ]]; then
-          bin/godot.${withPlatform}.${withTarget}.${withPrecision}.x86_64.mono --headless --generate-mono-glue modules/mono/glue
+          bin/godot.${withPlatform}.${withTarget}.${withPrecision}.${arch}.mono --headless --generate-mono-glue modules/mono/glue
       else
-          bin/godot.${withPlatform}.${withTarget}.x86_64.mono --headless --generate-mono-glue modules/mono/glue
+          bin/godot.${withPlatform}.${withTarget}.${arch}.mono --headless --generate-mono-glue modules/mono/glue
       fi
       echo "Building C#/.NET Assemblies"
       python modules/mono/build_scripts/build_assemblies.py --godot-output-dir bin --precision=${withPrecision}
@@ -221,6 +231,18 @@ let
         runHook postInstall
       '';
 
+    passthru.tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        version = lib.replaceStrings [ "-" ] [ "." ] version;
+      };
+    };
+
+    requiredSystemFeatures = [
+      # fixes: No space left on device
+      "big-parallel"
+    ];
+
     meta = {
       changelog = "https://github.com/godotengine/godot/releases/tag/${version}";
       description = "Free and Open Source 2D and 3D game engine";
@@ -240,7 +262,6 @@ let
 
 in
 stdenv.mkDerivation (
-  finalAttrs:
   if withMono then
     dotnetCorePackages.addNuGetDeps {
       nugetDeps = ./deps.nix;
@@ -248,9 +269,9 @@ stdenv.mkDerivation (
         runtimeIds = map (system: dotnetCorePackages.systemToDotnetRid system) old.meta.platforms;
         buildInputs =
           old.buildInputs
-          ++ lib.concatLists (lib.attrValues (lib.getAttrs runtimeIds dotnet-sdk_8.targetPackages));
+          ++ lib.concatLists (lib.attrValues (lib.getAttrs runtimeIds dotnet-sdk_6.targetPackages));
       };
-    } attrs finalAttrs
+    } attrs
   else
     attrs
 )

@@ -221,6 +221,9 @@ buildPythonPackage rec {
 
     # pbcopy not found
     "test_wtf"
+
+    # CommandError: 'git -c diff.ignoreSubmodules=none -c core.quotepath=false ls-files -z -m -d' failed with exitcode 128
+    "test_subsuperdataset_save"
   ];
 
   nativeCheckInputs = [
@@ -229,6 +232,12 @@ buildPythonPackage rec {
     git-annex
     curl
     httpretty
+  ];
+
+  pytestFlagsArray = [
+    # Deprecated in 3.13. Use exc_type_str instead.
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "datalad" ];

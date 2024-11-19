@@ -31,6 +31,7 @@ let
           services.postgresql = {
             inherit package;
             enable = true;
+            enableJIT = lib.hasInfix "-jit-" package.name;
             settings = {
               max_replication_slots = 10;
               max_wal_senders = 10;

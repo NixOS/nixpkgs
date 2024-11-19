@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, jre, runtimeShell }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeDesktopItem,
+  copyDesktopItems,
+  runtimeShell,
+}:
 
 stdenv.mkDerivation rec {
   pname = "zap";
@@ -8,7 +16,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZBDhlrqrRYqSBOKar7V0X8oAOipsA4byxuXAS2diH6c=";
   };
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "zap";
+      exec = "zap";
+      icon = "zap";
+      desktopName = "Zed Attack Proxy";
+      categories = [
+        "Development"
+        "Security"
+        "System"
+      ];
+    })
+  ];
+
   buildInputs = [ jre ];
+
+  nativeBuildInputs = [ copyDesktopItems ];
 
   # From https://github.com/zaproxy/zaproxy/blob/master/zap/src/main/java/org/parosproxy/paros/Constant.java
   version_tag = "20012000";
@@ -16,7 +40,10 @@ stdenv.mkDerivation rec {
   # Copying config and adding version tag before first use to avoid permission
   # issues if zap tries to copy config on it's own.
   installPhase = ''
-    mkdir -p "$out/bin" "$out/share"
+    runHook preInstall
+
+    mkdir -p $out/{bin,share}
+
     cp -pR . "$out/share/${pname}/"
 
     cat >> "$out/bin/${pname}" << EOF
@@ -33,12 +60,17 @@ stdenv.mkDerivation rec {
     EOF
 
     chmod u+x  "$out/bin/${pname}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
     homepage = "https://www.zaproxy.org/";
     description = "Java application for web penetration testing";
-    maintainers = with maintainers; [ mog rafael ];
+    maintainers = with maintainers; [
+      mog
+      rafael
+    ];
     platforms = platforms.linux;
     license = licenses.asl20;
     mainProgram = "zap";

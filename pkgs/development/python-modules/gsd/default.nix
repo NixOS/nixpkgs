@@ -4,7 +4,6 @@
   cython,
   fetchFromGitHub,
   numpy,
-  numpy_2,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -26,7 +25,7 @@ buildPythonPackage rec {
 
   build-system = [
     cython
-    numpy_2
+    numpy
     setuptools
   ];
 

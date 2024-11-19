@@ -16,6 +16,7 @@ from typing import Dict, Final, List, Optional, Set, Union, cast
 from urllib.request import urlopen
 
 from jinja2 import Environment
+from mashumaro.exceptions import MissingField
 from packaging.requirements import Requirement
 
 TEMPLATE = """# Do not edit manually, run ./update-providers.py
@@ -113,7 +114,10 @@ async def get_provider_manifests(version: str = "master") -> List:
         from music_assistant.common.models.provider import ProviderManifest  # type: ignore
 
         for fn in basedir.glob("**/manifest.json"):
-            manifests.append(await ProviderManifest.parse(fn))
+            try:
+                manifests.append(await ProviderManifest.parse(fn))
+            except MissingField as ex:
+                print(f"Error parsing {fn}", ex)
 
     return manifests
 

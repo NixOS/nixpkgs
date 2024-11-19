@@ -44,6 +44,7 @@ python3.pkgs.buildPythonApplication rec {
   preBuild = lib.optionalString withDriver ''
     export CHIPSEC_BUILD_LIB=$(mktemp -d)
     mkdir -p $CHIPSEC_BUILD_LIB/chipsec/helper/linux
+    appendToVar setupPyBuildFlags "--build-lib=$CHIPSEC_BUILD_LIB"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -57,9 +58,7 @@ python3.pkgs.buildPythonApplication rec {
       $out/${python3.pkgs.python.sitePackages}/drivers/linux/chipsec.ko
   '';
 
-  setupPyBuildFlags = [
-    "--build-lib=$CHIPSEC_BUILD_LIB"
-  ] ++ lib.optionals (!withDriver) [
+  setupPyBuildFlags = lib.optionals (!withDriver) [
     "--skip-driver"
   ];
 

@@ -1,22 +1,37 @@
 { stdenv
 , lib
 , fetchurl
+, fetchFromGitHub
 , cmake
 , coreutils
 , curl
 , file
+, git
 , makeWrapper
 , nixosTests
 , protobuf
 , python3
-, sgx-sdk
+, ocaml
+, ocamlPackages
 , which
 , debug ? false
 }:
 stdenv.mkDerivation rec {
-  inherit (sgx-sdk) patches src version versionTag;
   pname = "sgx-psw";
+  # Version as given in se_version.h
+  version = "2.25.100.3";
+  # Version as used in the Git tag
+  versionTag = "2.25";
 
+  src = fetchFromGitHub {
+    owner = "intel";
+    repo = "linux-sgx";
+    rev = "sgx_${versionTag}";
+    hash = "sha256-RR+vFTd9ZM6XUn3KgQeUM+xoj1Ava4zQzFYA/nfXyaw=";
+    fetchSubmodules = true;
+  };
+
+  # Extract Intel-provided, pre-built enclaves and libs.
   postUnpack =
     let
       # Fetch the pre-built, Intel-signed Architectural Enclaves (AE). They help
@@ -24,34 +39,104 @@ stdenv.mkDerivation rec {
       # attestation quotes, and do platform certification.
       ae.prebuilt = fetchurl {
         url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/prebuilt_ae_${versionTag}.tar.gz";
-        hash = "sha256-IGV9VEwY/cQBV4Vz2sps4JgRweWRl/l08ocb9P4SH8Q=";
+        hash = "sha256-Hlh96rYOyml2y50d8ASKz6U97Fl0hbGYECeZiG9nMSQ=";
       };
-      # Also include the Data Center Attestation Primitives (DCAP) platform
-      # enclaves.
+
+      # Pre-built ipp-crypto with mitigations.
+      optlib.prebuilt = fetchurl {
+        url = "https://download.01.org/intel-sgx/sgx-linux/${versionTag}/optimized_libs_${versionTag}.tar.gz";
+        hash = "sha256-7mDTaLtpOQLHQ6Fv+FWJ2k/veJZPXIcuj7kOdRtRqhg=";
+      };
+
+      # Fetch the Data Center Attestation Primitives (DCAP) platform enclaves
+      # and pre-built sgxssl.
       dcap = rec {
-        version = "1.21";
+        version = "1.22";
         filename = "prebuilt_dcap_${version}.tar.gz";
         prebuilt = fetchurl {
           url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
-          hash = "sha256-/PPD2MyNxoCwzNljIFcpkFvItXbyvymsJ7+Uf4IyZuk=";
+          hash = "sha256-RTpJQ6epoAN8YQXSJUjJQ5mPaQIiQpStTWFsnspjjDQ=";
         };
       };
     in
-    sgx-sdk.postUnpack + ''
+    ''
+      # Make sure this is the right version of linux-sgx
+      grep -q '"${version}"' "$src/common/inc/internal/se_version.h" \
+        || (echo "Could not find expected version ${version} in linux-sgx source" >&2 && exit 1)
+
+      tar -xzvf ${ae.prebuilt}     -C $sourceRoot/
+      tar -xzvf ${optlib.prebuilt} -C $sourceRoot/
+
       # Make sure we use the correct version of prebuilt DCAP
       grep -q 'ae_file_name=${dcap.filename}' "$src/external/dcap_source/QuoteGeneration/download_prebuilt.sh" \
         || (echo "Could not find expected prebuilt DCAP ${dcap.filename} in linux-sgx source" >&2 && exit 1)
 
-      tar -zxf ${ae.prebuilt}   -C $sourceRoot/
-      tar -zxf ${dcap.prebuilt} -C $sourceRoot/external/dcap_source/QuoteGeneration/
+      tar -xzvf ${dcap.prebuilt} -C $sourceRoot/external/dcap_source ./prebuilt/
+      tar -xzvf ${dcap.prebuilt} -C $sourceRoot/external/dcap_source/QuoteGeneration ./psw/
+    '';
+
+  patches = [
+    # There's a `make preparation` step that downloads some prebuilt binaries
+    # and applies some patches to the in-repo git submodules. This patch removes
+    # the parts that download things, since we can't do that inside the sandbox.
+    ./disable-downloads.patch
+
+    # This patch disables mtime in bundled zip file for reproducible builds.
+    #
+    # Context: The `aesm_service` binary depends on a vendored library called
+    # `CppMicroServices`. At build time, this lib creates and then bundles
+    # service resources into a zip file and then embeds this zip into the
+    # binary. Without changes, the `aesm_service` will be different after every
+    # build because the embedded zip file contents have different modified times.
+    ./cppmicroservices-no-mtime.patch
+  ];
+
+  postPatch =
+    let
+      # The base directories we want to copy headers from. The exact headers are
+      # parsed from <linux/installer/common/sdk/BOMs/sdk_base.txt>
+      bomDirsToCopyFrom = builtins.concatStringsSep "|" [
+        "common/"
+        "external/dcap_source/"
+        "external/ippcp_internal/"
+        "external/sgx-emm/"
+        "psw/"
+        "sdk/tlibcxx/"
+      ];
+    in
+    ''
+      patchShebangs \
+        external/sgx-emm/create_symlink.sh \
+        linux/installer/bin/build-installpkg.sh \
+        linux/installer/common/psw/createTarball.sh \
+        linux/installer/common/psw/install.sh
+
+      # Run sgx-sdk preparation step
+      make preparation
+
+      # Build a fake SGX_SDK directory. Normally sgx-psw depends on first building
+      # all of sgx-sdk, however we can actually build them independently by just
+      # copying a few header files and building `sgx_edger8r` separately.
+      mkdir .sgxsdk
+      export SGX_SDK="$(readlink -f .sgxsdk)"
+
+      # Parse the BOM for the headers we need, then copy them into SGX_SDK
+      # Each line in the BOM.txt looks like:
+      # <deliverydir>/...\t<installdir>/package/...\t....
+      # TODO(phlip9): hardlink?
+      sed -n -r 's:^<deliverydir>/(${bomDirsToCopyFrom})(\S+)\s<installdir>/package/(\S+)\s.*$:\1\2\n.sgxsdk/\3:p' \
+        < linux/installer/common/sdk/BOMs/sdk_base.txt \
+        | xargs --max-args=2 install -v -D
     '';
 
   nativeBuildInputs = [
     cmake
     file
+    git
     makeWrapper
+    ocaml
+    ocamlPackages.ocamlbuild
     python3
-    sgx-sdk
     which
   ];
 
@@ -60,27 +145,24 @@ stdenv.mkDerivation rec {
     protobuf
   ];
 
-  hardeningDisable = [
-    # causes redefinition of _FORTIFY_SOURCE
-    "fortify3"
-  ] ++ lib.optionals debug [
-    "fortify"
-  ];
-
-  postPatch = ''
-    patchShebangs \
-      linux/installer/bin/build-installpkg.sh \
-      linux/installer/common/psw/createTarball.sh \
-      linux/installer/common/psw/install.sh
-  '';
-
   dontUseCmakeConfigure = true;
 
-  buildFlags = [
-    "psw_install_pkg"
-  ] ++ lib.optionals debug [
-    "DEBUG=1"
-  ];
+  preBuild = ''
+    # Build `sgx_edger8r`, the enclave .edl -> .h file codegen tool.
+    # Then place it in `$SGX_SDK/bin` and `$SGX_SDK/bin/x64`.
+    make -C sdk/edger8r/linux
+    mkdir -p $SGX_SDK/bin/x64
+    sgx_edger8r_bin="$(readlink -f build/linux/sgx_edger8r)"
+    ln -s $sgx_edger8r_bin $SGX_SDK/bin/
+    ln -s $sgx_edger8r_bin $SGX_SDK/bin/x64/
+
+    # Add this so we can link against libsgx_urts.
+    build_dir="$(readlink -f build/linux)"
+    ln -s $build_dir $SGX_SDK/lib
+    ln -s $build_dir $SGX_SDK/lib64
+  '';
+
+  buildFlags = [ "psw_install_pkg" ] ++ lib.optionals debug [ "DEBUG=1" ];
 
   installFlags = [
     "-C linux/installer/common/psw/output"

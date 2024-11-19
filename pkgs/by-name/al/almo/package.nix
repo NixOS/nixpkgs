@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   makeFlags = [ "all" ];
 
   # remove darwin-only linker flag on linux
-  postPatch = lib.optionalString (!stdenv.isDarwin) ''
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace scripts/pybind.sh \
       --replace-fail " -undefined dynamic_lookup" ""
   '';

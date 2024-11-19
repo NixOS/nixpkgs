@@ -36,9 +36,6 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2" "numpy"
-
     substituteInPlace meson.build --replace-fail \
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
       "'${version}',"
@@ -74,10 +71,6 @@ buildPythonPackage rec {
   ];
 
   env.LC_ALL = "en_US.UTF-8";
-
-  preBuild = ''
-    export SKLEARN_BUILD_PARALLEL=$NIX_BUILD_CORES
-  '';
 
   # PermissionError: [Errno 1] Operation not permitted: '/nix/nix-installer'
   doCheck = !stdenv.hostPlatform.isDarwin;

@@ -19,7 +19,8 @@ let
           services.postgresql = {
             inherit package;
             enable = true;
-            extraPlugins = ps: [ ps.anonymizer ];
+            enableJIT = lib.hasInfix "-jit-" package.name;
+            extensions = ps: [ ps.anonymizer ];
             settings.shared_preload_libraries = [ "anon" ];
           };
         };

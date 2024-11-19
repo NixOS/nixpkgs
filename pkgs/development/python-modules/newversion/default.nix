@@ -3,28 +3,32 @@
   buildPythonPackage,
   fetchFromGitHub,
   packaging,
-  poetry-core,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "newversion";
-  version = "2.0.0";
-  format = "pyproject";
+  version = "3.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "vemel";
     repo = "newversion";
     rev = "refs/tags/${version}";
-    hash = "sha256-v9hfk2/hBkWtOobQdaYXNOZTTcEqnMV6JYqtjjoidOs=";
+    hash = "sha256-R26yZQnQN/+e8XD3YKl+3bJKGnZaVzOVoTlGHOyratg=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [ packaging ];
+  propagatedBuildInputs = [
+    packaging
+    typing-extensions
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -32,10 +36,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "PEP 440 version manager";
-    mainProgram = "newversion";
     homepage = "https://github.com/vemel/newversion";
     changelog = "https://github.com/vemel/newversion/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "newversion";
   };
 }

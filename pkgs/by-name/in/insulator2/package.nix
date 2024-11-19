@@ -14,7 +14,7 @@
 , stdenv
 , yarnConfigHook
 , nodejs-slim
-, cargo-tauri
+, cargo-tauri_1
 , cargo
 , rustPlatform
 , rustc
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
     cargo
     rustc
-    cargo-tauri.hook
+    cargo-tauri_1.hook
     yarnConfigHook
     nodejs-slim
     cyrus_sasl

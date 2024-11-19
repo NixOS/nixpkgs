@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "hultenvp";
   domain = "solis";
-  version = "3.7.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "hultenvp";
     repo = "solis-sensor";
     rev = "v${version}";
-    hash = "sha256-bKe8c+gQj9jvZKlqcbLiD6NhPDJVy/2mxRM8jjlOPnI=";
+    hash = "sha256-oJXbDuHT5temcei3ea1cUsqVB70am6WZjHbIehnZs6k=";
   };
 
   dependencies = [ aiofiles ];

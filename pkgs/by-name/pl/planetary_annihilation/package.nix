@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

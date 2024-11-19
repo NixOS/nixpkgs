@@ -2,15 +2,12 @@
   lib,
   fetchFromGitHub,
   git,
-  libiconv,
   ncurses,
   openssl,
   pkg-config,
   rustPlatform,
   sqlite,
   stdenv,
-  Security,
-  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,17 +25,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      ncurses
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      SystemConfiguration
-      libiconv
-    ];
+  buildInputs = [
+    ncurses
+    openssl
+    sqlite
+  ];
 
   postInstall = lib.optionalString (with stdenv; buildPlatform.canExecute hostPlatform) ''
     $out/bin/git-branchless install-man-pages $out/share/man

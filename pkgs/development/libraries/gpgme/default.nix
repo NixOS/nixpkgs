@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Support Python 3.10-3.12, remove distutils, https://dev.gnupg.org/D545
     ./python-310-312-remove-distutils.patch
+    # Support Python 3.13
+    ./python313-support.patch
     # Fix a test after disallowing compressed signatures in gpg (PR #180336)
     ./test_t-verify_double-plaintext.patch
     # Don't use deprecated LFS64 APIs (removed in musl 1.2.4)

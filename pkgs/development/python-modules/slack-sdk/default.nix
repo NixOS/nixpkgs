@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.33.2";
+  version = "3.33.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6Uvp7hVFgHVavJO6Un5L793pOOOBtaT4+eywS3rRWUU=";
+    hash = "sha256-ewNEo8kcxdrd6mVze/UbKdnTIIf59s7OnMP42St1www=";
   };
 
   postPatch = ''

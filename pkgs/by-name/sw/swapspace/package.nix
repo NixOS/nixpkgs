@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "swapspace";
-  version = "1.18";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "Tookmund";
     repo = "Swapspace";
     rev = "v${version}";
-    sha256 = "sha256-tzsw10cpu5hldkm0psWcFnWToWQejout/oGHJais6yw=";
+    sha256 = "sha256-KrPdmF1H7WFI78ZJlLqDyfxbs7fymSUQpXL+7XjN9bI=";
   };
 
   nativeBuildInputs = [

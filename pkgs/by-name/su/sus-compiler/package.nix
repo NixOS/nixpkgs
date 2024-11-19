@@ -7,18 +7,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sus-compiler";
-  version = "0.0.2";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "pc2";
     repo = "sus-compiler";
     rev = "v${version}";
-    hash = "sha256-f93uT6ELW3T2Xd539EfZCf2LSbxcYnEX+smmLzBAxqc=";
+    hash = "sha256-VSoroUultjBn2KxfvyhS923RQ/1v9AXb15k4/MoR+oM=";
     fetchSubmodules = true;
   };
 
   # no lockfile upstream
   cargoLock.lockFile = ./Cargo.lock;
+
+  preBuild = ''
+    export HOME="$TMPDIR";
+  '';
 
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock

@@ -7,11 +7,11 @@ assignees: ''
 
 ---
 
-### Description
+## Description
 
 <!-- Describe what the module should accomplish: -->
 
-### Notify maintainers
+## Notify maintainers
 
 <!-- If applicable, tag the maintainers of the package that corresponds to the module. If the search.nixos.org result shows no maintainers, tag the person that last updated the package. -->
 

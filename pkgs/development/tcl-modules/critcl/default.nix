@@ -7,13 +7,13 @@
 
 mkTclDerivation rec {
   pname = "critcl";
-  version = "3.2";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "andreas-kupries";
     repo = "critcl";
     rev = version;
-    hash = "sha256-IxScn9ZTlqD9mG9VJLG+TtplLFhhahOiFhQCjxp22Uk=";
+    hash = "sha256-LBTAuwTrvwj42vo/TXVSUK8euxHgvSLai23e1jmhMso=";
   };
 
   buildInputs = [

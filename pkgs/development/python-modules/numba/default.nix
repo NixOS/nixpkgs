@@ -8,7 +8,7 @@
   buildPythonPackage,
   setuptools,
   numpy,
-  numpy_2,
+  numpy_1,
   llvmlite,
   libcxx,
   importlib-metadata,
@@ -161,8 +161,8 @@ buildPythonPackage rec {
       doFullCheck = true;
       testsWithoutSandbox = false;
     };
-    numpy_2 = numba.override {
-      numpy = numpy_2;
+    numpy_1 = numba.override {
+      numpy = numpy_1;
     };
   };
 

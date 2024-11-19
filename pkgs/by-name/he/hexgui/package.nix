@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation {
   pname = "hexgui";
-  version = "unstable-2023-1-7";
+  version = "0.10-unstable-2024-11-03";
 
   src = fetchFromGitHub {
     owner = "selinger";
     repo = "hexgui";
-    rev = "62f07ff51db0d4a945ad42f86167cc2f2ce65d90";
-    hash = "sha256-yEdZs9HUt3lcrdNO1OH8M8g71+2Ltf+v1RR1fKRDV0o=";
+    rev = "444408f4411a4f13cbd90ac670f1dd344d35a948";
+    hash = "sha256-W5klRwVsSlrSp3Pw5D4uknIRjaNMv+OTUtXXTmd6P3I=";
   };
 
   nativeBuildInputs = [ ant jdk makeWrapper ];

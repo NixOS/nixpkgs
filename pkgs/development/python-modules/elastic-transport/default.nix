@@ -61,6 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "elastic_transport" ];
 
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   disabledTests = [
     # Tests require network access
     "fingerprint"
