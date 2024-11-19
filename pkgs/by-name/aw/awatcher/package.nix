@@ -21,13 +21,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ];
   doCheck = false;
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-
-    outputHashes = {
-      "aw-client-rust-0.1.0" = "sha256-yliRLPM33GWTPcNBDNuKMOkNOMNfD+TI5nRkh+5YSnw=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-QO6qCQEJesZAN0A0nk2VBxTxElnZy59J7pczX+kBo24=";
 
   meta = with lib; {
     description = "Activity and idle watchers";
