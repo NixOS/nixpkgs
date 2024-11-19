@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   version = "0.0.53";
 
   src = fetchurl {
-    url = "mirror://ubuntu/pool/universe/h/hexdiff/hexdiff_0.0.53.orig.tar.gz";
+    url = "mirror://ubuntu/pool/universe/h/hexdiff/hexdiff_${version}.orig.tar.gz";
     sha256 = "sha256-M1bmkW63pHlfl9zNWEq0EGN1rpVGo+BTUKM9ot4HWqo=";
   };
   postPatch = ''
