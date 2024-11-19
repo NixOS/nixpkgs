@@ -62,7 +62,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ "-sOSVER=26" ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-sOSVER=1013"
-      "-sMACOSX_SDK=${emptyDirectory}"
       "-sLIBC++DIR=${lib.getLib stdenv.cc.libcxx}/lib"
     ];
 
@@ -80,6 +79,10 @@ stdenv.mkDerivation (finalAttrs: rec {
     ++ lib.optionals
       (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0.0"))
       [ "-include" "limits" "-include" "thread" ];
+
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export MACOSX_SDK=$SDKROOT
+  '';
 
   buildPhase = ''
     runHook preBuild
