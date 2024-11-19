@@ -1,0 +1,10 @@
+--- a/src/effect/pictureBlend.cpp	2016-09-05 04:35:14
++++ b/src/effect/pictureBlend.cpp	2024-11-18 21:36:26
+@@ -11,6 +11,7 @@
+ //
+ #include "pictureBlend.h"
+ #include "exception.h"
++#include <string>
+ 
+ PictureBlend::PictureBlend()
+ {

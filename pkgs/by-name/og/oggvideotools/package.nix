@@ -27,12 +27,28 @@ stdenv.mkDerivation rec {
       # svn patch, rely on prefix added by fetchpatch:
       extraPrefix = "";
     })
+
+    # Fixes compilation on Clang:
+    # src/effect/pictureBlend.cpp:28:11: error: no matching conversion for functional-style cast from 'const char[39]' to 'OggException'
+    #
+    # For some reason this is required on Clang but not GCC, most other files have string.h included via other headers anyways.
+    ./fix-clang.patch
   ];
 
   postPatch = ''
     # Don't disable optimisations
     substituteInPlace CMakeLists.txt --replace " -O0 " ""
+
+    # Remove hardcoding of -std= to fix builds on Clang (which doesn't like -std=
+    # being passed when compiling C), because I can't figure out this CMake
+    # (It should be as simple as adding target_compile_features, but no, since they
+    # don't actually define a target?)
+    substituteInPlace CMakeLists.txt --replace-fail " --std=c++0x" ""
   '';
+
+  cmakeFlags = [
+    "-DCMAKE_CXX_FLAGS=-std=c++0x"
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -43,9 +59,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.streamnik.de/oggvideotools.html";
     license = licenses.gpl2Only;
     maintainers = [ ];
-    # Compilation error on Darwin:
-    # error: invalid argument '--std=c++0x' not allowed with 'C'
-    # make[2]: *** [src/libresample/CMakeFiles/resample.dir/build.make:76: src/libresample/CMakeFiles/resample.dir/filterkit.c.o] Error 1
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = platforms.unix;
   };
 }
