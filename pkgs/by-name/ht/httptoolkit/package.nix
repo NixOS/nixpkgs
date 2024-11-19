@@ -12,16 +12,16 @@
 
 buildNpmPackage rec {
   pname = "httptoolkit";
-  version = "1.19.0";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-desktop";
     rev = "refs/tags/v${version}";
-    hash = "sha256-e+ngBZMwMTvwzY1K7IaxlNoRkZUPDdJvKxvxuCsc9pw=";
+    hash = "sha256-OzH+yU43EzcFaeACHWSONuTxqbiKeP2xFXXxXS/frZo=";
   };
 
-  npmDepsHash = "sha256-XgJIs4P1ezCEPPitIIfYpNkX0/3dPdajeIiDwHm7DSU=";
+  npmDepsHash = "sha256-uGSNTtBpPFEndHwu//j3ifU/eZXgiPKNDKBC7no5hQo=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
