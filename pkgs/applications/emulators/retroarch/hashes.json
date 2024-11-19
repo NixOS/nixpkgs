@@ -764,10 +764,10 @@
         "src": {
             "owner": "libretro",
             "repo": "snes9x2002",
-            "rev": "2790d03b2266c58444429b4f7d76ba298e0bde87",
-            "hash": "sha256-kTZrEeZcaFey7gmLbPEG82T6n3cxxZkKminRP543oZA="
+            "rev": "a0709ec7dcd6de2fbebb43106bd757b649e3b7cf",
+            "hash": "sha256-rrMPhXIsQ48fVvjgZgC3xeqm9k9kwe43oZNzs2d/h1Q="
         },
-        "version": "unstable-2024-06-28"
+        "version": "unstable-2024-10-21"
     },
     "snes9x2005": {
         "fetcher": "fetchFromGitHub",
