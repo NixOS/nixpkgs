@@ -167,17 +167,7 @@ lib.makeScope newScope (self: rec {
 
   handy = self.callPackage ./cores/handy.nix {  };
 
-  hatari = mkLibretroCore {
-    core = "hatari";
-    extraNativeBuildInputs = [ which ];
-    dontConfigure = true;
-    # zlib is already included in mkLibretroCore as buildInputs
-    makeFlags = [ "EXTERNAL_ZLIB=1" ];
-    meta = {
-      description = "Port of Hatari to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  hatari = self.callPackage ./cores/hatari.nix {  };
 
   mame = mkLibretroCore {
     core = "mame";
