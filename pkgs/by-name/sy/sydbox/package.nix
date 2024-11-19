@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "seccomp-based application sandbox";
-    homepage = "https://sydbox.exherbo.org/";
+    homepage = "https://gitlab.exherbo.org/sydbox/sydbox";
     changelog = "https://gitlab.exherbo.org/sydbox/sydbox/-/blob/v${version}/ChangeLog.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
