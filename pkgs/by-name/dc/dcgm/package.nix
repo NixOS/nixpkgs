@@ -1,5 +1,5 @@
 { lib
-, gcc11Stdenv
+, stdenv
 , fetchFromGitHub
 , autoAddDriverRunpath
 , catch2
@@ -58,10 +58,7 @@ let
         "${lib.getLib cudaPackages.libcublas}/lib/libcublasLt.so"
       ]))
     ];
-
-# gcc11 is required by DCGM's very particular build system
-# C.f. https://github.com/NVIDIA/DCGM/blob/7e1012302679e4bb7496483b32dcffb56e528c92/dcgmbuild/build.sh#L22
-in gcc11Stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   pname = "dcgm";
   version = "3.3.9"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
 
@@ -73,6 +70,7 @@ in gcc11Stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./fix-includes.patch
     ./dynamic-libs.patch
   ];
 
@@ -100,13 +98,16 @@ in gcc11Stdenv.mkDerivation rec {
     tclap_1_4
 
     fmt_9
-    (yaml-cpp.override { stdenv = gcc11Stdenv; })
+    yaml-cpp
     jsoncpp
     libevent
   ];
 
   # Add our paths to the CMake flags so FindCuda.cmake can find them.
   cmakeFlags = lib.concatMap mkCudaFlags cudaPackageSets;
+
+  # Lots of dodgy C++.
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   disallowedReferences = lib.concatMap getCudaPackages cudaPackageSets;
 
