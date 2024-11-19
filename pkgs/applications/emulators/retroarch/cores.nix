@@ -119,29 +119,7 @@ lib.makeScope newScope (self: rec {
 
   bsnes = self.callPackage ./cores/bsnes.nix { };
 
-  bsnes-hd = mkLibretroCore {
-    core = "bsnes-hd-beta";
-    repo = "bsnes-hd";
-    makefile = "GNUmakefile";
-    makeFlags =
-      let
-        # linux = bsd
-        # https://github.com/DerKoun/bsnes-hd/blob/f0b6cf34e9780d53516977ed2de64137a8bcc3c5/bsnes/GNUmakefile#L37
-        platform = if stdenv.hostPlatform.isDarwin then "macos" else "linux";
-      in
-      [
-        "-C"
-        "bsnes"
-        "target=libretro"
-        "platform=${platform}"
-      ];
-    extraBuildInputs = [ xorg.libX11 xorg.libXext ];
-    postBuild = "cd bsnes/out";
-    meta = {
-      description = "Port of bsnes-hd to libretro";
-      license = lib.licenses.gpl3Only;
-    };
-  };
+  bsnes-hd = self.callPackage ./cores/bsnes-hd.nix { };
 
   bsnes-mercury = mkLibretroCore {
     core = "bsnes-mercury-accuracy";
