@@ -115,13 +115,7 @@ lib.makeScope newScope (self: rec {
 
   blastem = self.callPackage ./cores/blastem.nix { };
 
-  bluemsx = mkLibretroCore {
-    core = "bluemsx";
-    meta = {
-      description = "Port of BlueMSX to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  bluemsx = self.callPackage ./cores/bluemsx.nix { };
 
   bsnes = mkLibretroCore {
     core = "bsnes";
