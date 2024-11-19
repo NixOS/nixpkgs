@@ -29,5 +29,7 @@ stdenv.mkDerivation  rec {
     platforms = platforms.linux;
     # Build uses `-msse` and `-mfpmath=sse`
     badPlatforms = [ "aarch64-linux" ];
+    # `ModuleNotFoundError: No module named 'imp'`
+    broken = true;
   };
 }
