@@ -153,14 +153,7 @@ lib.makeScope newScope (self: rec {
 
   fmsx = self.callPackage ./cores/fmsx.nix {  };
 
-  freeintv = mkLibretroCore {
-    core = "freeintv";
-    makefile = "Makefile";
-    meta = {
-      description = "FreeIntv libretro port";
-      license = lib.licenses.gpl3Only;
-    };
-  };
+  freeintv = self.callPackage ./cores/freeintv.nix {  };
 
   fuse = mkLibretroCore {
     core = "fuse";
