@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "language-data";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "georgkrause";
     repo = "language_data";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TVWyDEDI6NBioc8DqhXzpLS22EFKsZ/nan2vfgFsieQ=";
+    hash = "sha256-qHPie07GtVPKP/PFlP72XVVrl6j+5A8fIO729aPRsrc=";
   };
 
   build-system = [ setuptools-scm ];
