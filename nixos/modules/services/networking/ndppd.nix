@@ -12,6 +12,7 @@ let
     route-ttl ${toString cfg.routeTTL}
     ${render cfg.proxies (proxyInterfaceName: proxy: ''
     proxy ${prefer proxy.interface proxyInterfaceName} {
+      autowire ${boolToString proxy.autowire}
       router ${boolToString proxy.router}
       timeout ${toString proxy.timeout}
       ttl ${toString proxy.ttl}
@@ -32,6 +33,14 @@ let
           Defaults to the name of the attrset.
         '';
         default = null;
+      };
+      autowire = mkOption {
+        type = types.bool;
+        description = ''
+          Controls whether ndppd will automatically create host entries in the routing
+          tables when ndppd receives Neighbor Advertisements on a listening interface.
+        '';
+        default = false;
       };
       router = mkOption {
         type = types.bool;
