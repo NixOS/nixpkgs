@@ -8,18 +8,19 @@
   rfc3987,
   strict-rfc3339,
   pytestCheckHook,
+  fedora-messaging,
 }:
 
 buildPythonPackage rec {
   pname = "weblate-schemas";
-  version = "2024.1";
+  version = "2024.2";
 
   pyproject = true;
 
   src = fetchPypi {
     pname = "weblate_schemas";
     inherit version;
-    hash = "sha256-nYPLD3VDO1Z97HI79J6Yjj3bWp1xKB79FWPCW146iz4=";
+    hash = "sha256-Y7hWqfv1gZ2sT2fNbWLVDzwbVdB/1rT/oND9p/mkYAs=";
   };
 
   build-system = [ setuptools ];
@@ -31,7 +32,10 @@ buildPythonPackage rec {
     strict-rfc3339
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    fedora-messaging
+  ];
 
   pythonImportsCheck = [ "weblate_schemas" ];
 
