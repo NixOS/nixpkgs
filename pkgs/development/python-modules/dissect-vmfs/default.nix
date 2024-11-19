@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "3.10";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
