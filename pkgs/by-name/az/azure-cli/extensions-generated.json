@@ -673,9 +673,9 @@
   },
   "mdp": {
     "pname": "mdp",
-    "version": "1.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/mdp-1.0.0-py3-none-any.whl",
-    "hash": "sha256-wKSuGBcQO1SPHZHX4chVKEFdoBaoPUgxVIWXI7+3jYE=",
+    "version": "1.0.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/mdp-1.0.1-py3-none-any.whl",
+    "hash": "sha256-kjVGMrc9yxtPrAwhr/EdcLxON2mp7UQK5MwMFm8v2ac=",
     "description": "Microsoft Azure Command-Line Tools Mdp Extension"
   },
   "microsoft-fabric": {
