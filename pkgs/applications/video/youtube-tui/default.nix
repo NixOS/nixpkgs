@@ -1,17 +1,18 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, xorg
-, stdenv
-, python3
-, makeBinaryWrapper
-, libsixel
-, mpv
-, CoreFoundation
-, Security
-, AppKit
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  xorg,
+  stdenv,
+  python3,
+  makeBinaryWrapper,
+  libsixel,
+  mpv,
+  CoreFoundation,
+  Security,
+  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,21 +39,23 @@ rustPlatform.buildRustPackage rec {
     makeBinaryWrapper
   ];
 
-  buildInputs = [
-    openssl
-    xorg.libxcb
-    libsixel
-    mpv
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreFoundation
-    Security
-    AppKit
-  ];
+  buildInputs =
+    [
+      openssl
+      xorg.libxcb
+      libsixel
+      mpv
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreFoundation
+      Security
+      AppKit
+    ];
 
   # sixel-sys is dynamically linked to libsixel
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     wrapProgram $out/bin/youtube-tui \
-      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [libsixel]}"
+      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsixel ]}"
   '';
 
   meta = with lib; {
