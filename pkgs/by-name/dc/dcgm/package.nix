@@ -17,8 +17,6 @@
 , symlinkJoin
 , tclap_1_4
 , yaml-cpp
-
-, static ? gcc11Stdenv.hostPlatform.isStatic
 }:
 let
   # DCGM depends on 2 different versions of CUDA at the same time.
@@ -74,6 +72,10 @@ in gcc11Stdenv.mkDerivation rec {
     hash = "sha256-PysxuN5WT7GB0oOvT5ezYeOau6AMVDDWE5HOAcmqw/Y=";
   };
 
+  patches = [
+    ./dynamic-libs.patch
+  ];
+
   hardeningDisable = [ "all" ];
 
   strictDeps = true;
@@ -97,13 +99,10 @@ in gcc11Stdenv.mkDerivation rec {
     plog.dev
     tclap_1_4
 
-    # Dependencies that can be either static or dynamic.
-    (fmt_9.override { enableShared = !static; }) # DCGM's build uses the static outputs regardless of enableShared
-    (yaml-cpp.override { inherit static; stdenv = gcc11Stdenv; })
-
-    # TODO: Dependencies that DCGM's CMake hard-codes to be static-only.
-    (jsoncpp.override { enableStatic = true; })
-    (libevent.override { sslSupport = false; static = true; })
+    fmt_9
+    (yaml-cpp.override { stdenv = gcc11Stdenv; })
+    jsoncpp
+    libevent
   ];
 
   # Add our paths to the CMake flags so FindCuda.cmake can find them.
