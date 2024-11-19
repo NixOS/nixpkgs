@@ -1,5 +1,6 @@
 {
   lib,
+  gitUpdater,
   stdenv,
   baycomp,
   bottleneck,
@@ -17,7 +18,6 @@
   keyrings-alt,
   makeDesktopItem,
   matplotlib,
-  nix-update-script,
   numpy,
   oldest-supported-numpy,
   openpyxl,
@@ -165,7 +165,7 @@ let
     '';
 
     passthru = {
-      updateScript = nix-update-script { };
+      updateScript = gitUpdater { };
       tests.unittests = stdenv.mkDerivation {
         name = "${self.name}-tests";
         inherit (self) src;
@@ -211,12 +211,12 @@ let
       };
     };
 
-    meta = with lib; {
+    meta = {
       description = "Data mining and visualization toolbox for novice and expert alike";
       homepage = "https://orangedatamining.com/";
       changelog = "https://github.com/biolab/orange3/blob/${version}/CHANGELOG.md";
-      license = with licenses; [ gpl3Plus ];
-      maintainers = with maintainers; [ lucasew ];
+      license = [ lib.licenses.gpl3Plus ];
+      maintainers = [ lib.maintainers.lucasew ];
       mainProgram = "orange-canvas";
     };
   };
