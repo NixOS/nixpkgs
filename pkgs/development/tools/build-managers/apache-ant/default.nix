@@ -1,14 +1,14 @@
-{ fetchurl, lib, stdenv, coreutils, makeWrapper }:
+{ fetchurl, lib, stdenv, coreutils, makeWrapper, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "ant";
-  version = "1.10.11";
+  version = "1.10.15";
 
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchurl {
     url = "mirror://apache/ant/binaries/apache-ant-${version}-bin.tar.bz2";
-    sha256 = "19m8xb7h6xm4jykzb79kakbx1pa4awaglw6z31pbfg8m5pmwkipz";
+    hash = "sha256-h/SNGLoRwRVojDfvl1g+xv+J6mAz+J2BimckjaRxDEs=";
   };
 
   contrib = fetchurl {
@@ -77,6 +77,13 @@ stdenv.mkDerivation rec {
 
       chmod +x $out/bin/ant
     ''; # */
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "rel/";
+      url = "https://gitbox.apache.org/repos/asf/ant";
+    };
+  };
 
   meta = {
     homepage = "https://ant.apache.org/";
