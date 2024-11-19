@@ -1,33 +1,36 @@
 {
   lib,
   alsa-lib,
-  fetchfromgithub,
-  mklibretrocore,
+  fetchFromGitHub,
+  mkLibretroCore,
   python3,
 }:
-mklibretrocore {
+mkLibretroCore {
   core = "mame2016";
   version = "unstable-2024-04-06";
 
-        "src": {
-            "owner": "libretro",
-            "repo": "mame2016-libretro",
-            "rev": "01058613a0109424c4e7211e49ed83ac950d3993",
-            "hash": "sha256-IsM7f/zlzvomVOYlinJVqZllUhDfy4NNTeTPtNmdVak="
-        },
+  src = fetchFromGitHub {
+    owner = "libretro";
+    repo = "mame2016-libretro";
+    rev = "01058613a0109424c4e7211e49ed83ac950d3993";
+    hash = "sha256-IsM7f/zlzvomVOYlinJVqZllUhDfy4NNTeTPtNmdVak=";
+  };
 
-  patches = [ ./patches/mame2015-python311.patch ];
-  makeflags = [ "python=python3" ];
-  extranativebuildinputs = [ python3 ];
-  extrabuildinputs = [ alsa-lib ];
-  makefile = "makefile";
-  # build failures when this is set to a bigger number
-  nix_build_cores = 8;
+  patches = [ ./patches/mame2016-python311.patch ];
+  extraNativeBuildInputs = [ python3 ];
+  extraBuildInputs = [ alsa-lib ];
+  makeFlags = [ "PYTHON_EXECUTABLE=python3" ];
+  # Build failures when this is set to a bigger number
+  NIX_BUILD_CORES = 8;
+  # Fix build errors in GCC13
+  NIX_CFLAGS_COMPILE = "-Wno-error -fpermissive";
 
   meta = {
-    description = "port of mame ~2015 to libretro, compatible with mame 0.160 sets";
-    homepage = "https://github.com/libretro/mame2015-libretro";
-    # mame license, non-commercial clause
-    license = lib.licenses.unfreeredistributable;
+    description = "Port of MAME ~2016 to libretro, compatible with MAME 0.174 sets";
+    homepage = "https://github.com/libretro/mame2016-libretro";
+    license = with lib.licenses; [
+      bsd3
+      gpl2Plus
+    ];
   };
 }

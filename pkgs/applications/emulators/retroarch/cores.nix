@@ -181,21 +181,7 @@ lib.makeScope newScope (self: rec {
 
   mame2015 = self.callPackage ./cores/mame2015.nix {  };
 
-  mame2016 = mkLibretroCore {
-    core = "mame2016";
-    patches = [ ./patches/mame2016-python311.patch ];
-    extraNativeBuildInputs = [ python3 ];
-    extraBuildInputs = [ alsa-lib ];
-    makeFlags = [ "PYTHON_EXECUTABLE=python3" ];
-    # Build failures when this is set to a bigger number
-    NIX_BUILD_CORES = 8;
-    # Fix build errors in GCC13
-    NIX_CFLAGS_COMPILE = "-Wno-error -fpermissive";
-    meta = {
-      description = "Port of MAME ~2016 to libretro, compatible with MAME 0.174 sets";
-      license = with lib.licenses; [ bsd3 gpl2Plus ];
-    };
-  };
+  mame2016 = self.callPackage ./cores/mame2016.nix {  };
 
   melonds = mkLibretroCore {
     core = "melonds";
