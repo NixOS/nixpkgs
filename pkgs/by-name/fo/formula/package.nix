@@ -11,6 +11,7 @@ buildDotnetModule rec {
     sha256 = "sha256-2ulv//YV3OqrfFltgUCeDe4rOPC0qqJ+80/D2lIoih8=";
   };
 
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   nugetDeps = ./nuget.nix;
   projectFile = "Src/CommandLine/CommandLine.csproj";
 

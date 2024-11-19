@@ -26,7 +26,7 @@ let
       tarballHash
       depsFile
       ;
-    bootstrapSdk = (buildDotnetSdk bootstrapSdkFile).sdk.overrideAttrs (old: {
+    bootstrapSdk = (buildDotnetSdk bootstrapSdkFile).sdk.unwrapped.overrideAttrs (old: {
       passthru = old.passthru or { } // {
         artifacts = stdenvNoCC.mkDerivation rec {
           name = lib.nameFromURL artifactsUrl ".tar.gz";
