@@ -1,14 +1,14 @@
 {
-  lib,
-  fetchFromGitHub,
   autoPatchelfHook,
+  fetchFromGitHub,
   fuse3,
-  maven,
-  jdk23,
-  makeShellWrapper,
   glib,
-  wrapGAppsHook3,
+  jdk23,
+  lib,
   libayatana-appindicator,
+  makeShellWrapper,
+  maven,
+  wrapGAppsHook3,
 }:
 
 let
@@ -98,28 +98,30 @@ maven.buildMavenPackage rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    jdk
     makeShellWrapper
     wrapGAppsHook3
-    jdk
   ];
   buildInputs = [
     fuse3
-    jdk
     glib
+    jdk
     libayatana-appindicator
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Free client-side encryption for your cloud files";
-    mainProgram = "cryptomator";
     homepage = "https://cryptomator.org";
-    sourceProvenance = with sourceTypes; [
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "cryptomator";
+    maintainers = with lib.maintainers; [
+      bachp
+    ];
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # deps
     ];
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bachp ];
-    platforms = [ "x86_64-linux" ];
     # Uses abandoned JEP 430 string template preview, removed in JDK 23
     broken = true;
   };
