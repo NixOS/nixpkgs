@@ -3,7 +3,7 @@
 , core
 , repo
 , makeWrapper
-, retroarch
+, retroarchBare
 , zlib
 , makefile ? "Makefile.libretro"
 , extraBuildInputs ? [ ]
@@ -63,7 +63,7 @@ stdenv.mkDerivation ({
     runHook preInstall
 
     install -Dt ${coreDir} ${coreFilename}
-    makeWrapper ${retroarch}/bin/retroarch $out/bin/${mainProgram} \
+    makeWrapper ${retroarchBare}/bin/retroarch $out/bin/${mainProgram} \
       --add-flags "-L ${coreDir}/${coreFilename}"
 
     runHook postInstall
@@ -78,7 +78,7 @@ stdenv.mkDerivation ({
 
   meta = with lib; {
     inherit mainProgram;
-    inherit (retroarch.meta) platforms;
+    inherit (retroarchBare.meta) platforms;
     homepage = "https://www.libretro.com/";
     maintainers = with maintainers; teams.libretro.members ++ [ hrdinka ];
   } // (args.meta or { });

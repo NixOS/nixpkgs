@@ -1,4 +1,5 @@
 { lib
+, newScope
 , stdenv
 , gcc12Stdenv
 , alsa-lib
@@ -30,7 +31,6 @@
 , libxml2
 , libxmp
 , libzip
-, makeWrapper
 , mpg123
 , nasm
 , openssl
@@ -40,7 +40,6 @@
 , pkg-config
 , portaudio
 , python3
-, retroarch
 , sfml
 , snappy
 , speexdsp
@@ -49,7 +48,6 @@
 , xorg
 , xxd
 , xz
-, zlib
 }:
 
 let
@@ -67,7 +65,8 @@ let
     fetcherFn src;
 
   getCoreVersion = repo: (getCore repo).version;
-
+in
+lib.makeScope newScope (self: rec {
   mkLibretroCore =
     # Sometimes core name != repo name, so you may need to set them differently
     # when necessary:
@@ -82,12 +81,10 @@ let
     , version ? (getCoreVersion repo)
     , ...
     }@args:
-    import ./mkLibretroCore.nix ({
-      inherit lib stdenv core repo src version makeWrapper retroarch zlib;
+    self.callPackage ./mkLibretroCore.nix ({
+      inherit core repo src version;
+      retroarch = self.retroarchBare;
     } // args);
-in
-{
-  inherit mkLibretroCore;
 
   atari800 = mkLibretroCore {
     core = "atari800";
@@ -1168,4 +1165,4 @@ in
       license = lib.licenses.gpl2Only;
     };
   };
-}
+})

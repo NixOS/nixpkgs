@@ -1480,12 +1480,7 @@ with pkgs;
 
   retroarch-joypad-autoconfig = callPackage ../applications/emulators/retroarch/retroarch-joypad-autoconfig.nix { };
 
-  libretranslate = with python3.pkgs; toPythonApplication libretranslate;
-
-  libretro = recurseIntoAttrs
-    (callPackage ../applications/emulators/retroarch/cores.nix {
-      retroarch = retroarchBare;
-    });
+  libretro = recurseIntoAttrs (callPackage ../applications/emulators/retroarch/cores.nix { });
 
   libretro-core-info = callPackage ../applications/emulators/retroarch/libretro-core-info.nix { };
 
@@ -10019,6 +10014,8 @@ with pkgs;
   librepo = callPackage ../tools/package-management/librepo {
     python = python3;
   };
+
+  libretranslate = with python3.pkgs; toPythonApplication libretranslate;
 
   librsb = callPackage ../development/libraries/librsb {
     # Taken from https://build.opensuse.org/package/view_file/science/librsb/librsb.spec
