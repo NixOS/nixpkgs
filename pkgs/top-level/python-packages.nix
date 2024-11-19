@@ -27,6 +27,8 @@ self: super: with self; {
 
   aafigure = callPackage ../development/python-modules/aafigure { };
 
+  airportsdata = callPackage ../development/python-modules/airportsdata { };
+
   aardwolf = callPackage ../development/python-modules/aardwolf { };
 
   abjad = callPackage ../development/python-modules/abjad { };
