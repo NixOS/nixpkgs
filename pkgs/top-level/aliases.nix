@@ -412,12 +412,15 @@ mapAliases {
   gcc49Stdenv = throw "gcc49Stdenv has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-11
   gcc6 = throw "gcc6 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-13
   gcc6Stdenv = throw "gcc6Stdenv has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-13
+  gcc7 = throw "gcc7 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-11-20
+  gcc7Stdenv = throw "gcc7Stdenv has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-11-20
   gcc10StdenvCompat = if stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11" then gcc10Stdenv else stdenv; # Added 2024-03-21
   gcj = gcj6; # Added 2024-09-13
   gcj6 = throw "gcj6 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-13
   gcolor2 = throw "'gcolor2' has been removed due to lack of maintenance upstream and depending on gtk2. Consider using 'gcolor3' or 'eyedropper' instead"; # Added 2024-09-15
   gfortran48 = throw "'gfortran48' has been removed from nixpkgs"; # Added 2024-09-10
   gfortran49 = throw "'gfortran49' has been removed from nixpkgs"; # Added 2024-09-11
+  gfortran7 = throw "gfortran7 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-11-20
   ghostwriter = libsForQt5.kdeGear.ghostwriter; # Added 2023-03-18
   gmp5 = throw "'gmp5' has been removed as it is unmaintained. Consider using 'gmp' instead"; # Added 2024-10-28
   gmpc = throw "'gmpc' has been removed due to lack of maintenance upstream. Consider using 'plattenalbum' instead"; # Added 2024-09-14
