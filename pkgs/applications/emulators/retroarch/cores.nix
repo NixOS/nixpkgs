@@ -89,15 +89,7 @@ lib.makeScope newScope (self: rec {
 
   beetle-gba = self.callPackage ./cores/beetle-gba.nix { };
 
-  beetle-lynx = mkLibretroCore {
-    core = "mednafen-lynx";
-    repo = "beetle-lynx";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of Mednafen's Lynx core to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  beetle-lynx = self.callPackage ./cores/beetle-lynx.nix { };
 
   beetle-ngp = mkLibretroCore {
     core = "mednafen-ngp";
