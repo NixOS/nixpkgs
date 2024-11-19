@@ -162,7 +162,10 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/mission-center-devs/mission-center";
     changelog = "https://gitlab.com/mission-center-devs/mission-center/-/releases/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      getchoo
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "missioncenter";
   };
