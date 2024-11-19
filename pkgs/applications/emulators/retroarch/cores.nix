@@ -107,15 +107,7 @@ lib.makeScope newScope (self: rec {
 
   beetle-supafaust = self.callPackage ./cores/beetle-supafaust.nix { };
 
-  beetle-supergrafx = mkLibretroCore {
-    core = "mednafen-supergrafx";
-    repo = "beetle-supergrafx";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of Mednafen's SuperGrafx core to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  beetle-supergrafx = self.callPackage ./cores/beetle-supergrafx.nix { };
 
   beetle-vb = mkLibretroCore {
     core = "mednafen-vb";
