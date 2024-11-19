@@ -7162,6 +7162,8 @@ self: super: with self; {
 
   klaus = callPackage ../development/python-modules/klaus { };
 
+  klayout = callPackage ../development/python-modules/klayout { };
+
   klein = callPackage ../development/python-modules/klein { };
 
   kmapper = callPackage ../development/python-modules/kmapper { };
