@@ -37,6 +37,7 @@
 , catch2
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , wxGTK-override ? null
+, webkitgtk_4_1
 }:
 let
   opencascade-occt = opencascade-occt_7_6;
@@ -126,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     libbgcode
     heatshrink
     catch2
+    webkitgtk_4_1
   ] ++ lib.optionals withSystemd [
     systemd
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
