@@ -26,14 +26,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-z0JfHEG01q83iHAQA/Ke/DPhKQYwkWv9HRpeUdXmTxs=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "typst-0.12.0" = "sha256-E2wSVHqY3SymCwKgbLsASJYaWfrbF8acH15B2STEBF8=";
-      "typst-syntax-0.7.0" = "sha256-yrtOmlFAKOqAmhCP7n0HQCOQpU3DWyms5foCdUb9QTg=";
-      "typstfmt_lib-0.2.7" = "sha256-LBYsTCjZ+U+lgd7Z3H1sBcWwseoHsuepPd66bWgfvhI=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-vx6lHXmFVfDYbfk8cIqmbj/R/wvKiwQnDYkZKCpy6Ms=";
 
   nativeBuildInputs = [ pkg-config ];
 
