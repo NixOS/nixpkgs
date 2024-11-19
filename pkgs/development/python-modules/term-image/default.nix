@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   pillow,
   requests,
@@ -34,6 +33,8 @@ buildPythonPackage rec {
   optional-dependencies = {
     urwid = [ urwid ];
   };
+
+  pythonRelaxDeps = [ "pillow" ];
 
   nativeCheckInputs = [
     pytestCheckHook
