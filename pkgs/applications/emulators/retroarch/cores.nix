@@ -137,16 +137,7 @@ lib.makeScope newScope (self: rec {
 
   dosbox = self.callPackage ./cores/dosbox.nix {  };
 
-  dosbox-pure = mkLibretroCore {
-    core = "dosbox-pure";
-    CXXFLAGS = "-std=gnu++11";
-    hardeningDisable = [ "format" ];
-    makefile = "Makefile";
-    meta = {
-      description = "Port of DOSBox to libretro aiming for simplicity and ease of use";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  dosbox-pure = self.callPackage ./cores/dosbox-pure.nix {  };
 
   easyrpg = mkLibretroCore {
     core = "easyrpg";
