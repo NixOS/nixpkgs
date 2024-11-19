@@ -173,7 +173,7 @@ in
         pname = "avante-nvim-lib";
         inherit (oldAttrs) version src;
 
-        cargoHash = "sha256-HPObCCaGMFu+7+zK9sg7hFlTb1CNQ9AV6V1r0WKRSZo=";
+        cargoHash = "sha256-M58LL50uddn2siS3j8WovWSymdPmbJyZg1y6pGudgEo=";
 
         nativeBuildInputs = [
           pkg-config
@@ -241,6 +241,10 @@ in
     nvimRequireCheck = "barbecue";
   };
 
+  base46 = super.base46.overrideAttrs {
+    dependencies = with self; [ nvchad ];
+  };
+
   # The GitHub repository returns 404, which breaks the update script
   bitbake-vim = buildVimPlugin {
     pname = "bitbake.vim";
@@ -255,6 +259,10 @@ in
   };
 
   blink-cmp = callPackage ./blink-cmp { };
+
+  bluloco-nvim = super.bluloco-nvim.overrideAttrs {
+    dependencies = with self; [ lush-nvim ];
+  };
 
   chadtree = super.chadtree.overrideAttrs {
     buildInputs = [
@@ -279,6 +287,10 @@ in
       telescope-nvim
     ];
     nvimRequireCheck = "chatgpt";
+  };
+
+  cheatsheet-nvim = super.cheatsheet-nvim.overrideAttrs {
+    dependencies = with self; [ telescope-nvim ];
   };
 
   clang_complete = super.clang_complete.overrideAttrs {
@@ -327,12 +339,31 @@ in
     nvimRequireCheck = "cmp_ai";
   };
 
+  cmp-async-path = super.cmp-async-path.overrideAttrs {
+    dependencies = [ self.nvim-cmp ];
+  };
+
+  cmp-beancount = super.cmp-beancount.overrideAttrs {
+    dependencies = [ self.nvim-cmp ];
+  };
+
   cmp-clippy = super.cmp-clippy.overrideAttrs {
     dependencies = with self; [
       nvim-cmp
       plenary-nvim
     ];
     nvimRequireCheck = "cmp_clippy";
+  };
+
+  cmp-cmdline = super.cmp-cmdline.overrideAttrs {
+    dependencies = [ self.nvim-cmp ];
+  };
+
+  cmp-conjure = super.cmp-conjure.overrideAttrs {
+    dependencies = with self; [
+      conjure
+      nvim-cmp
+    ];
   };
 
   cmp-copilot = super.cmp-copilot.overrideAttrs {
@@ -396,13 +427,20 @@ in
   };
 
   cmp-greek = super.cmp-greek.overrideAttrs {
-    dependencies = with self; [ nvim-cmp ];
+    dependencies = [ self.nvim-cmp ];
     nvimRequireCheck = "cmp_greek";
   };
 
   cmp-look = super.cmp-look.overrideAttrs {
-    dependencies = with self; [ nvim-cmp ];
+    dependencies = [ self.nvim-cmp ];
     nvimRequireCheck = "cmp_look";
+  };
+
+  cmp_luasnip = super.cmp_luasnip.overrideAttrs {
+    dependencies = with self; [
+      nvim-cmp
+      luasnip
+    ];
   };
 
   cmp-neosnippet = super.cmp-neosnippet.overrideAttrs {
@@ -431,9 +469,17 @@ in
     nvimRequireCheck = "cmp_nvim_lsp_signature_help";
   };
 
+  cmp-nvim-lua = super.cmp-nvim-lua.overrideAttrs {
+    dependencies = [ self.nvim-cmp ];
+  };
+
   cmp-nvim-tags = super.cmp-nvim-tags.overrideAttrs {
     dependencies = with self; [ nvim-cmp ];
     nvimRequireCheck = "cmp_nvim_tags";
+  };
+
+  cmp-nvim-ultisnips = super.cmp-nvim-ultisnips.overrideAttrs {
+    dependencies = [ self.nvim-cmp ];
   };
 
   cmp-pandoc-nvim = super.cmp-pandoc-nvim.overrideAttrs {
@@ -442,6 +488,14 @@ in
       plenary-nvim
     ];
     nvimRequireCheck = "cmp_pandoc";
+  };
+
+  cmp-pandoc-references = super.cmp-pandoc-references.overrideAttrs {
+    dependencies = [ self.nvim-cmp ];
+  };
+
+  cmp-path = super.cmp-path.overrideAttrs {
+    dependencies = [ self.nvim-cmp ];
   };
 
   cmp-rg = super.cmp-rg.overrideAttrs {
@@ -494,6 +548,10 @@ in
       vimwiki
     ];
     nvimRequireCheck = "cmp_vimwiki_tags";
+  };
+
+  cmp-vsnip = super.cmp-vsnip.overrideAttrs {
+    dependencies = [ self.nvim-cmp ];
   };
 
   cmp-zsh = super.cmp-zsh.overrideAttrs {
@@ -694,13 +752,29 @@ in
     nvimRequireCheck = "competitest";
   };
 
+  compe-conjure = super.compe-conjure.overrideAttrs {
+    dependencies = [ self.conjure ];
+  };
+
+  compe-latex-symbols = super.compe-latex-symbols.overrideAttrs {
+    dependencies = [ self.nvim-compe ];
+  };
+
   compe-tabnine = super.compe-tabnine.overrideAttrs {
+    dependencies = [ self.nvim-compe ];
     buildInputs = [ tabnine ];
 
     postFixup = ''
       mkdir -p $target/binaries/${tabnine.version}
       ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
     '';
+  };
+
+  compe-zsh = super.compe-zsh.overrideAttrs {
+    dependencies = with self; [
+      nvim-compe
+      plenary-nvim
+    ];
   };
 
   compiler-explorer-nvim = super.compiler-explorer-nvim.overrideAttrs {
@@ -996,6 +1070,10 @@ in
     nvimRequireCheck = "flit";
   };
 
+  follow-md-links-nvim = super.follow-md-links-nvim.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+  };
+
   forms = super.forms.overrideAttrs {
     dependencies = [ self.self ];
   };
@@ -1202,6 +1280,10 @@ in
     nvimRequireCheck = "image";
   };
 
+  intellitab-nvim = super.intellitab-nvim.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+  };
+
   jedi-vim = super.jedi-vim.overrideAttrs {
     # checking for python3 support in vim would be neat, too, but nobody else seems to care
     buildInputs = [ python3.pkgs.jedi ];
@@ -1336,6 +1418,10 @@ in
     dependencies = with self; [ vim-floaterm ];
   };
 
+  lightline-bufferline = super.lightline-bufferline.overrideAttrs {
+    dependencies = with self; [ nvim-web-devicons ];
+  };
+
   lir-nvim = super.lir-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
     nvimRequireCheck = "lir";
@@ -1346,9 +1432,17 @@ in
     nvimRequireCheck = "lsp-progress";
   };
 
+  lualine-lsp-progress = super.lualine-lsp-progress.overrideAttrs {
+    dependencies = with self; [ lualine-nvim ];
+  };
+
   luasnip = super.luasnip.overrideAttrs {
     dependencies = [ luaPackages.jsregexp ];
     nvimRequireCheck = "luasnip";
+  };
+
+  luasnip-latex-snippets-nvim = super.luasnip-latex-snippets-nvim.overrideAttrs {
+    dependencies = with self; [ luasnip ];
   };
 
   lz-n = neovimUtils.buildNeovimPlugin {
@@ -1411,6 +1505,10 @@ in
         node $out/app/index.js --version
       '';
     };
+
+  markid = super.markid.overrideAttrs {
+    dependencies = with super; [ nvim-treesitter ];
+  };
 
   mason-lspconfig-nvim = super.mason-lspconfig-nvim.overrideAttrs {
     dependencies = with self; [
@@ -1564,9 +1662,44 @@ in
     nvimRequirecheck = "neotest-gradle";
   };
 
+  neotest-golang = super.neotest-golang.overrideAttrs {
+    dependencies = [ self.nvim-dap-go ];
+    nvimRequirecheck = "neotest-golang";
+  };
+
   neotest-gtest = super.neotest-gtest.overrideAttrs {
-    dependencies = [ self.plenary-nvim ];
+    dependencies = with self; [
+      neotest
+      nvim-nio
+      plenary-nvim
+    ];
     nvimRequirecheck = "neotest-gtest";
+  };
+
+  neotest-java = super.neotest-java.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
+      plenary-nvim
+    ];
+    nvimRequirecheck = "neotest-java";
+  };
+
+  neotest-jest = super.neotest-jest.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
+    ];
+    nvimRequirecheck = "neotest-jest";
+  };
+
+  neotest-pest = super.neotest-pest.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
+      plenary-nvim
+    ];
+    nvimRequirecheck = "neotest-pest";
   };
 
   neotest-playwright = super.neotest-playwright.overrideAttrs {
@@ -1574,9 +1707,47 @@ in
     nvimRequirecheck = "neotest-playwright";
   };
 
-  neotest-golang = super.neotest-golang.overrideAttrs {
-    dependencies = [ self.nvim-dap-go ];
-    nvimRequirecheck = "neotest-golang";
+  neotest-plenary = super.neotest-plenary.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
+      plenary-nvim
+    ];
+    nvimRequirecheck = "neotest-plenary";
+  };
+
+  neotest-python = super.neotest-python.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
+      plenary-nvim
+    ];
+    nvimRequirecheck = "neotest-python";
+  };
+
+  neotest-scala = super.neotest-scala.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
+    ];
+    nvimRequirecheck = "neotest-scala";
+  };
+
+  neotest-testthat = super.neotest-testthat.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
+      plenary-nvim
+    ];
+    nvimRequirecheck = "neotest-testthat";
+  };
+
+  neotest-vitest = super.neotest-vitest.overrideAttrs {
+    dependencies = with self; [
+      neotest
+      nvim-nio
+    ];
+    nvimRequirecheck = "neotest-vitest";
   };
 
   neo-tree-nvim = super.neo-tree-nvim.overrideAttrs {
@@ -1585,6 +1756,18 @@ in
       nui-nvim
     ];
     nvimRequirecheck = "neo-tree";
+  };
+
+  neuron-nvim = super.neuron-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
+    nvimRequireCheck = "neuron";
+  };
+
+  noctis-nvim = super.noctis-nvim.overrideAttrs {
+    dependencies = [ self.lush-nvim ];
   };
 
   noice-nvim = super.noice-nvim.overrideAttrs {
@@ -1601,9 +1784,20 @@ in
     nvimRequireCheck = "notebook-navigator";
   };
 
+  nterm-nvim = super.nterm-nvim.overrideAttrs {
+    dependencies = [ self.aniseed ];
+  };
+
   null-ls-nvim = super.null-ls-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
     nvimRequireCheck = "null-ls";
+  };
+
+  nvim-biscuits = super.nvim-biscuits.overrideAttrs {
+    dependencies = with self; [
+      nvim-treesitter
+      plenary-nvim
+    ];
   };
 
   nvim-coverage = super.nvim-coverage.overrideAttrs {
@@ -1643,6 +1837,12 @@ in
     nvimRequireCheck = "genghis";
   };
 
+  nvim-gps = super.nvim-gps.overrideAttrs {
+    dependencies = with self; [
+      nvim-treesitter
+    ];
+  };
+
   nvim-lsputils = super.nvim-lsputils.overrideAttrs {
     dependencies = with self; [ popfix ];
     nvimRequireCheck = "lsputil.codeAction";
@@ -1661,6 +1861,13 @@ in
       nvim-navic
     ];
     nvimRequireCheck = "nvim-navbuddy";
+  };
+
+  nvim-nu = super.nvim-nu.overrideAttrs {
+    dependencies = with self; [
+      nvim-treesitter
+      none-ls-nvim
+    ];
   };
 
   vim-mediawiki-editor = super.vim-mediawiki-editor.overrideAttrs {
@@ -1749,10 +1956,34 @@ in
     callPackage ./nvim-treesitter/overrides.nix { } self super
   );
 
+  nvim-treesitter-endwise = super.nvim-treesitter-endwise.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+  };
+
+  nvim-treesitter-pairs = super.nvim-treesitter-pairs.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+  };
+
   nvim-treesitter-parsers = lib.recurseIntoAttrs self.nvim-treesitter.grammarPlugins;
+
+  nvim-treesitter-pyfold = super.nvim-treesitter-pyfold.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+  };
+
+  nvim-treesitter-refactor = super.nvim-treesitter-refactor.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+  };
 
   nvim-treesitter-sexp = super.nvim-treesitter-sexp.overrideAttrs {
     nvimRequireCheck = "treesitter-sexp";
+  };
+
+  nvim-treesitter-textobjects = super.nvim-treesitter-textobjects.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
+  };
+
+  nvim-treesitter-textsubjects = super.nvim-treesitter-textsubjects.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
   };
 
   nvim-ufo = super.nvim-ufo.overrideAttrs {
@@ -1830,6 +2061,14 @@ in
   };
 
   inherit parinfer-rust;
+
+  parpar-nvim = super.parpar-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-parinfer
+      nvim-paredit
+      nvim-treesitter
+    ];
+  };
 
   phpactor = buildVimPlugin {
     inherit (phpactor)
@@ -2192,9 +2431,32 @@ in
     nvimRequireCheck = "telekasten";
   };
 
+  telescope-asynctasks-nvim = super.telescope-asynctasks-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
+  };
+
   telescope-cheat-nvim = super.telescope-cheat-nvim.overrideAttrs {
     dependencies = with self; [
+      plenary-nvim
       sqlite-lua
+      telescope-nvim
+    ];
+  };
+
+  telescope-coc-nvim = super.telescope-coc-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
+  };
+
+  telescope-dap-nvim = super.telescope-dap-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      nvim-dap
       telescope-nvim
     ];
   };
@@ -2213,7 +2475,10 @@ in
   };
 
   telescope-fzf-writer-nvim = super.telescope-fzf-writer-nvim.overrideAttrs {
-    dependencies = with self; [ telescope-nvim ];
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
   };
 
   telescope-fzy-native-nvim = super.telescope-fzy-native-nvim.overrideAttrs (old: {
@@ -2241,7 +2506,24 @@ in
   });
 
   telescope-git-conflicts-nvim = super.telescope-git-conflicts-nvim.overrideAttrs {
-    dependencies = with self; [ telescope-nvim ];
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
+  };
+
+  telescope-github-nvim = super.telescope-github-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
+  };
+
+  telescope-lsp-handlers-nvim = super.telescope-lsp-handlers-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
   };
 
   telescope-media-files-nvim = super.telescope-media-files-nvim.overrideAttrs {
@@ -2252,20 +2534,52 @@ in
     ];
   };
 
+  telescope-project-nvim = super.telescope-project-nvim.overrideAttrs {
+    dependencies = with self; [ plenary-nvim ];
+  };
+
   telescope-nvim = super.telescope-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
+  };
+
+  telescope-smart-history-nvim = super.telescope-smart-history-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
   };
 
   telescope-symbols-nvim = super.telescope-symbols-nvim.overrideAttrs {
     dependencies = with self; [ telescope-nvim ];
   };
 
+  telescope-ui-select-nvim = super.telescope-ui-select-nvim.overrideAttrs {
+    dependencies = with self; [ telescope-nvim ];
+  };
+
+  telescope-ultisnips-nvim = super.telescope-ultisnips-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
+  };
+
   telescope-undo-nvim = super.telescope-undo-nvim.overrideAttrs {
     dependencies = with self; [ telescope-nvim ];
   };
 
+  telescope-vim-bookmarks-nvim = super.telescope-vim-bookmarks-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
+  };
+
   telescope-z-nvim = super.telescope-z-nvim.overrideAttrs {
-    dependencies = with self; [ telescope-nvim ];
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
   };
 
   quarto-nvim = super.quarto-nvim.overrideAttrs {
@@ -2287,6 +2601,10 @@ in
       substituteInPlace lua/telescope/_extensions/zoxide/config.lua \
         --replace "zoxide query -ls" "${zoxide}/bin/zoxide query -ls"
     '';
+  };
+
+  tmux-complete-vim = super.tmux-complete-vim.overrideAttrs {
+    dependencies = with self; [ nvim-compe ];
   };
 
   todo-comments-nvim = super.todo-comments-nvim.overrideAttrs {
