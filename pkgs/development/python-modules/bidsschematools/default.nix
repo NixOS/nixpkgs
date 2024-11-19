@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "bidsschematools";
-  version = "0.11.3";
+  version = "0.11.3.post3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "bidsschematools";
     inherit version;
-    hash = "sha256-GvR3pOXXmdpjH2xdL+trhLW6ZdsTpEWUdNUlVQ4gFXo=";
+    hash = "sha256-GGMNAEW/gyBaduVuzPN5+9hmHYp+XQJwG8KQBeVkKfc=";
   };
 
   build-system = [
