@@ -1,14 +1,15 @@
 {
   lib,
-  fetchFromGitHub,
-  rustPlatform,
   stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  mandown,
   installShellFiles,
   pkg-config,
   curl,
   openssl,
-  mandown,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,6 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
+    rev = "refs/tags/v${version}";
     hash = "sha256-xdWfaXWmqFJuquE7n3moUjGuFqKB90OE6lqPuC3onOg=";
   };
 
@@ -45,7 +47,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   preCheck = ''
-    HOME=$TMPDIR
+    HOME=$(mktemp -d)
   '';
 
   nativeInstallCheckInputs = [
@@ -75,13 +77,14 @@ rustPlatform.buildRustPackage rec {
         --zsh <($out/bin/zellij setup --generate-completion zsh)
     '';
 
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Terminal workspace with batteries included";
     homepage = "https://zellij.dev/";
     changelog = "https://github.com/zellij-org/zellij/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [
       therealansh
       _0x4A6F
       abbe
