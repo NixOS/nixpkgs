@@ -1,23 +1,23 @@
 { lib
-, buildGo123Module
+, buildGoModule
 , fetchFromGitHub
 , nodejs
 , nix-update-script
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "jfrog-cli";
-  version = "2.71.0";
+  version = "2.71.4";
 
   src = fetchFromGitHub {
     owner = "jfrog";
     repo = "jfrog-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hblOe6YMlfWBVvWD5MKEKvAB55jUx98OMeqFDdgVrmM=";
+    hash = "sha256-pC56OlSo05nMH+Adkg1v0Lba7Vd+bXeHRP4+Phvhlu8=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-px+eXSIOe3v4iNBibXAtcFMROrHq6YYJIHbCC7nhNS4=";
+  vendorHash = "sha256-d1VloSjvXAt10MsZwVJ0Fkg9pN+tcOE5vURy7hatg30=";
 
   postPatch = ''
     # Patch out broken test cleanup.
