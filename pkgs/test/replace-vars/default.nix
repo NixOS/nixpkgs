@@ -71,4 +71,47 @@ in
 
         touch $out
       '';
+
+  replaceVars-succeeds-with-exemption = testEqualContents {
+    assertion = "replaceVars-succeeds-with-exemption";
+    actual = replaceVars ./source.txt {
+      free = "free";
+      "equal in" = "are the same in";
+      brotherhood = null;
+    };
+
+    expected = builtins.toFile "expected" ''
+      All human beings are born free and are the same in dignity and rights.
+      They are endowed with reason and conscience and should act towards
+      one another in a spirit of @brotherhood@.
+
+        -- eroosevelt@humanrights.un.org
+    '';
+  };
+
+  replaceVars-fails-in-check-phase-with-exemption =
+    runCommand "replaceVars-fails-with-exemption"
+      {
+        failed =
+          let
+            src = builtins.toFile "source.txt" ''
+              @a@
+              @b@
+              @c@
+            '';
+          in
+          testBuildFailure (
+            replaceVars src {
+              a = "a";
+              b = null;
+            }
+          );
+      }
+      ''
+        grep -e "unsubstituted Nix identifiers.*source.txt" $failed/testBuildFailure.log
+        grep -F "@c@" $failed/testBuildFailure.log
+        ! grep -F "@b@" $failed/testBuildFailure.log
+
+        touch $out
+      '';
 }
