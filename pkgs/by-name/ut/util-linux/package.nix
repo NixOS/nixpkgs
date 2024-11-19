@@ -53,6 +53,9 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString shadowSupport ''
     substituteInPlace include/pathnames.h \
       --replace "/bin/login" "${shadow}/bin/login"
+  '' + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+    substituteInPlace lib/c_strtod.c --replace-fail __APPLE__ __FreeBSD__
+    sed -E -i -e '/_POSIX_C_SOURCE/d' -e '/_XOPEN_SOURCE/d' misc-utils/hardlink.c
   '';
 
   # !!! It would be better to obtain the path to the mount helpers
@@ -75,6 +78,12 @@ stdenv.mkDerivation rec {
     "SYSCONFSTATICDIR=${placeholder "lib"}/lib"
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "scanf_cv_type_modifier=ms"
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    # These features are all disabled in the freebsd-ports distribution
+    "--disable-nls"
+    "--disable-ipcrm"
+    "--disable-ipcs"
+  ]
   ;
 
   makeFlags = [
