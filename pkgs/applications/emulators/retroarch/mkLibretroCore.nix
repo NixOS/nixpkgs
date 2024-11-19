@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , core
-, repo
+, repo ? null # TODO: remove
 , makeWrapper
 , retroarchBare
 , zlib
@@ -73,8 +73,8 @@ stdenv.mkDerivation ({
 
   passthru = {
     inherit core libretroCore;
-    updateScript = [ ./update_cores.py repo ];
-  };
+    updateScript = lib.mkIf (repo != null) [ ./update_cores.py repo ];
+  } // (args.passthru or { });
 
   meta = with lib; {
     inherit mainProgram;

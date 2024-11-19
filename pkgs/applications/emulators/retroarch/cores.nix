@@ -87,15 +87,7 @@ lib.makeScope newScope (self: rec {
 
   atari800 = self.callPackage ./cores/atari800.nix { };
 
-  beetle-gba = mkLibretroCore {
-    core = "mednafen-gba";
-    repo = "beetle-gba";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of Mednafen's GameBoy Advance core to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  beetle-gba = self.callPackage ./cores/beetle-gba.nix { };
 
   beetle-lynx = mkLibretroCore {
     core = "mednafen-lynx";
