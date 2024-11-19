@@ -129,17 +129,7 @@ lib.makeScope newScope (self: rec {
 
   citra = self.callPackage ./cores/citra.nix {  };
 
-  desmume = mkLibretroCore {
-    core = "desmume";
-    preBuild = "cd desmume/src/frontend/libretro";
-    extraBuildInputs = [ libpcap libGLU libGL xorg.libX11 ];
-    makeFlags = lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
-      ++ lib.optional (!stdenv.hostPlatform.isx86) "DESMUME_JIT=0";
-    meta = {
-      description = "Port of DeSmuME to libretro";
-      license = lib.licenses.gpl2Plus;
-    };
-  };
+  desmume = self.callPackage ./cores/desmume.nix {  };
 
   desmume2015 = mkLibretroCore {
     core = "desmume2015";
