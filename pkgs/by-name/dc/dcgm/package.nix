@@ -4,6 +4,7 @@
 , autoAddDriverRunpath
 , catch2
 , cmake
+, ninja
 , cudaPackages_10_2
 , cudaPackages_11_8
 , cudaPackages_12
@@ -104,6 +105,7 @@ in gcc11Stdenv.mkDerivation rec {
     autoAddDriverRunpath
 
     cmake
+    ninja
     git
     python3
   ];
