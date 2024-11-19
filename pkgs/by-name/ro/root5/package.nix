@@ -1,27 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, cmake
-, pcre
-, pkg-config
-, python3
-, libX11
-, libXpm
-, libXft
-, libXext
-, libGLU
-, libGL
-, zlib
-, libxml2
-, libxcrypt
-, lz4
-, xz
-, gsl
-, xxHash
-, Cocoa
-, OpenGL
-, noSplash ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  pcre,
+  pkg-config,
+  python3,
+  libX11,
+  libXpm,
+  libXft,
+  libXext,
+  libGLU,
+  libGL,
+  zlib,
+  libxml2,
+  libxcrypt,
+  lz4,
+  xz,
+  gsl,
+  xxHash,
+  noSplash ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,11 +32,30 @@ stdenv.mkDerivation rec {
     sha256 = "1ln448lszw4d6jmbdphkr2plwxxlhmjkla48vmmq750xc1lxlfrc";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ pcre python3 zlib libxml2 lz4 xz gsl xxHash libxcrypt ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ Cocoa OpenGL ]
-  ;
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs =
+    [
+      pcre
+      python3
+      zlib
+      libxml2
+      lz4
+      xz
+      gsl
+      xxHash
+      libxcrypt
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      libX11
+      libXpm
+      libXft
+      libXext
+      libGLU
+      libGL
+    ];
 
   patches = [
     ./sw_vers_root5.patch
@@ -72,45 +90,52 @@ stdenv.mkDerivation rec {
   # https://github.com/root-project/root/issues/13216
   hardeningDisable = [ "fortify3" ];
 
-  preConfigure = ''
-    # binutils 2.37 fixes
-    fixupList=(
-      cint/demo/gl/make0
-      cint/demo/exception/Makefile
-      cint/demo/makecint/KRcc/Makefile
-      cint/demo/makecint/Stub2/Make2
-      cint/demo/makecint/Array/Makefile
-      cint/demo/makecint/DArray/Makefile
-      cint/demo/makecint/ReadFile/Makefile
-      cint/demo/makecint/stl/Makefile
-      cint/demo/makecint/Stub2/Make1
-      cint/cint/include/makemat
-      cint/cint/lib/WildCard/Makefile
-      cint/cint/include/make.arc
-      cint/cint/lib/qt/Makefile
-      cint/cint/lib/pthread/Makefile
-      graf2d/asimage/src/libAfterImage/Makefile.in
-    )
-    for toFix in "''${fixupList[@]}"; do
-      substituteInPlace "$toFix" --replace "clq" "cq"
-    done
+  preConfigure =
+    ''
+      # binutils 2.37 fixes
+      fixupList=(
+        cint/demo/gl/make0
+        cint/demo/exception/Makefile
+        cint/demo/makecint/KRcc/Makefile
+        cint/demo/makecint/Stub2/Make2
+        cint/demo/makecint/Array/Makefile
+        cint/demo/makecint/DArray/Makefile
+        cint/demo/makecint/ReadFile/Makefile
+        cint/demo/makecint/stl/Makefile
+        cint/demo/makecint/Stub2/Make1
+        cint/cint/include/makemat
+        cint/cint/lib/WildCard/Makefile
+        cint/cint/include/make.arc
+        cint/cint/lib/qt/Makefile
+        cint/cint/lib/pthread/Makefile
+        graf2d/asimage/src/libAfterImage/Makefile.in
+      )
+      for toFix in "''${fixupList[@]}"; do
+        substituteInPlace "$toFix" --replace "clq" "cq"
+      done
 
-    patchShebangs build/unix/
-    ln -s ${lib.getDev stdenv.cc.libc}/include/AvailabilityMacros.h cint/cint/include/
+      patchShebangs build/unix/
+      ln -s ${lib.getDev stdenv.cc.libc}/include/AvailabilityMacros.h cint/cint/include/
 
-    # __malloc_hook is deprecated
-    substituteInPlace misc/memstat/src/TMemStatHook.cxx \
-      --replace "defined(R__GNU) && (defined(R__LINUX) || defined(__APPLE__))" \
-                "defined(R__GNU) && (defined(__APPLE__))"
-  ''
-  # Fix CINTSYSDIR for "build" version of rootcint
-  # This is probably a bug that breaks out-of-source builds
-  + ''
-    substituteInPlace cint/cint/src/loadfile.cxx\
-      --replace 'env = "cint";' 'env = "'`pwd`'/cint";'
-  '' + lib.optionalString noSplash ''
-    substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
-  '';
+      # __malloc_hook is deprecated
+      substituteInPlace misc/memstat/src/TMemStatHook.cxx \
+        --replace "defined(R__GNU) && (defined(R__LINUX) || defined(__APPLE__))" \
+                  "defined(R__GNU) && (defined(__APPLE__))"
+
+      # python 3.12
+      substituteInPlace bindings/pyroot/src/PyROOT.h \
+        --replace " PyUnicode_GET_SIZE" " PyUnicode_GetLength" \
+        --replace " PyUnicode_GetSize" " PyUnicode_GetLength"
+    ''
+    # Fix CINTSYSDIR for "build" version of rootcint
+    # This is probably a bug that breaks out-of-source builds
+    + ''
+      substituteInPlace cint/cint/src/loadfile.cxx\
+        --replace 'env = "cint";' 'env = "'`pwd`'/cint";'
+    ''
+    + lib.optionalString noSplash ''
+      substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
+    '';
 
   cmakeFlags = [
     "-Drpath=ON"
@@ -147,7 +172,9 @@ stdenv.mkDerivation rec {
     "-Dxml=ON"
     "-Dxrootd=OFF"
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks";
+  ++ lib.optional ((!stdenv.hostPlatform.isDarwin) && (stdenv.cc.libc != null)) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include";
+
+  env.NIX_CFLAGS_COMPILE = "-fpermissive";
 
   setupHook = ./setup-hook.sh;
 
