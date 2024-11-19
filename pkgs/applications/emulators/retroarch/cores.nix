@@ -165,14 +165,7 @@ lib.makeScope newScope (self: rec {
 
   gw = self.callPackage ./cores/gw.nix {  };
 
-  handy = mkLibretroCore {
-    core = "handy";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of Handy to libretro";
-      license = lib.licenses.zlib;
-    };
-  };
+  handy = self.callPackage ./cores/handy.nix {  };
 
   hatari = mkLibretroCore {
     core = "hatari";
