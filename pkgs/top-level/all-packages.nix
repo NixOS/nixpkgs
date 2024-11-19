@@ -4795,7 +4795,7 @@ with pkgs;
 
   opentelemetry-collector = opentelemetry-collector-releases.otelcol;
   opentelemetry-collector-releases = callPackage ../tools/misc/opentelemetry-collector/releases.nix { };
-  opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix { };
+  opentelemetry-collector-contrib = opentelemetry-collector-releases.otelcol-contrib;
 
   openvswitch-dpdk = callPackage ../by-name/op/openvswitch/package.nix { withDPDK = true; };
 
