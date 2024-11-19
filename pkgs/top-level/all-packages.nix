@@ -3666,7 +3666,7 @@ with pkgs;
   };
 
   google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk {
-    python = python3;
+    python = python311;
   };
   google-cloud-sdk-gce = google-cloud-sdk.override {
     python = python3;
