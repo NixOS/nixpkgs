@@ -149,18 +149,7 @@ lib.makeScope newScope (self: rec {
 
   fceumm = self.callPackage ./cores/fceumm.nix {  };
 
-  flycast = mkLibretroCore {
-    core = "flycast";
-    extraNativeBuildInputs = [ cmake ];
-    extraBuildInputs = [ libGL libGLU ];
-    cmakeFlags = [ "-DLIBRETRO=ON" ];
-    makefile = "Makefile";
-    meta = {
-      description = "Flycast libretro port";
-      license = lib.licenses.gpl2Only;
-      platforms = [ "aarch64-linux" "x86_64-linux" ];
-    };
-  };
+  flycast = self.callPackage ./cores/flycast.nix {  };
 
   fmsx = mkLibretroCore {
     core = "fmsx";
