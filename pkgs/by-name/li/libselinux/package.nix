@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, buildPackages, pcre2, pkg-config, libsepol
 , enablePython ? !stdenv.hostPlatform.isStatic
 , swig ? null, python3 ? null, python3Packages
-, fts
+, fts, fetchpatch2
 }:
 
 assert enablePython -> swig != null && python3 != null;
@@ -41,6 +41,13 @@ stdenv.mkDerivation (rec {
     (fetchurl {
       url = "https://git.yoctoproject.org/meta-selinux/plain/recipes-security/selinux/libselinux/0003-libselinux-restore-drop-the-obsolete-LSF-transitiona.patch?id=62b9c816a5000dc01b28e78213bde26b58cbca9d";
       sha256 = "sha256-RiEUibLVzfiRU6N/J187Cs1iPAih87gCZrlyRVI2abU=";
+    })
+    # patch for swig 4.3.0
+    # remove on next update
+    (fetchpatch2 {
+      url = "https://github.com/SELinuxProject/selinux/commit/8e0e718bae53fff30831b92cd784151d475a20da.patch";
+      sha256 = "sha256-4PViLm84HkOzBEflYzc2snc5t84lVNs+ejcSJQwCpDg=";
+      stripLen = 1;
     })
   ];
 
