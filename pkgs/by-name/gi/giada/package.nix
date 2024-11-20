@@ -5,6 +5,7 @@
   cmake,
   pkg-config,
   fltk,
+  fontconfig,
   fmt,
   rtmidi,
   libsamplerate,
@@ -48,24 +49,28 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    rtmidi
-    fltk
-    fmt
-    libmpg123
-    libsndfile
-    libsamplerate
-    nlohmann_json
-    alsa-lib
-    libXpm
-    libpulseaudio
-    jack2
-    flac
-    libogg
-    libvorbis
-    libopus
-    libXrandr
-  ];
+  buildInputs =
+    [
+      rtmidi
+      fltk
+      fmt
+      libmpg123
+      libsndfile
+      libsamplerate
+      nlohmann_json
+      alsa-lib
+      libXpm
+      libpulseaudio
+      jack2
+      flac
+      libogg
+      libvorbis
+      libopus
+      libXrandr
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD) [
+      fontconfig
+    ];
 
   meta = {
     description = "Free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
