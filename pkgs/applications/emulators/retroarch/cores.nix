@@ -211,42 +211,7 @@ lib.makeScope newScope (self: rec {
 
   parallel-n64 = self.callPackage ./cores/parallel-n64.nix {  };
 
-  pcsx2 = mkLibretroCore {
-    core = "pcsx2";
-    extraNativeBuildInputs = [
-      cmake
-      gettext
-      pkg-config
-    ];
-    extraBuildInputs = [
-      libaio
-      libGL
-      libGLU
-      libpcap
-      libpng
-      libxml2
-      xz
-      xxd
-    ];
-    makefile = "Makefile";
-    cmakeFlags = [ "-DLIBRETRO=ON" ];
-    # remove ccache
-    postPatch = ''
-      substituteInPlace CMakeLists.txt --replace "ccache" ""
-    '';
-    postBuild = "cd pcsx2";
-    # causes redefinition of _FORTIFY_SOURCE
-    hardeningDisable = [ "fortify3" ];
-    # FIXME: multiple build errors with GCC13.
-    # Unlikely to be fixed until we switch to libretro/pcsx2 that is a more
-    # up-to-date port (but still WIP).
-    stdenv = gcc12Stdenv;
-    meta = {
-      description = "Port of PCSX2 to libretro";
-      license = lib.licenses.gpl3Plus;
-      platforms = lib.platforms.x86;
-    };
-  };
+  pcsx2 = self.callPackage ./cores/pcsx2.nix {  };
 
   pcsx-rearmed = mkLibretroCore {
     core = "pcsx_rearmed";
