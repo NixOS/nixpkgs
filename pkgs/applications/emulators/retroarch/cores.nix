@@ -256,16 +256,7 @@ lib.makeScope newScope (self: rec {
 
   tgbdual = self.callPackage ./cores/tgbdual.nix {  };
 
-  thepowdertoy = mkLibretroCore {
-    core = "thepowdertoy";
-    extraNativeBuildInputs = [ cmake ];
-    makefile = "Makefile";
-    postBuild = "cd src";
-    meta = {
-      description = "Port of The Powder Toy to libretro";
-      license = lib.licenses.gpl3Only;
-    };
-  };
+  thepowdertoy = self.callPackage ./cores/thepowdertoy.nix {  };
 
   tic80 = mkLibretroCore {
     core = "tic80";
