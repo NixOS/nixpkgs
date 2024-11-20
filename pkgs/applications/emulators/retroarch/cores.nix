@@ -197,14 +197,7 @@ lib.makeScope newScope (self: rec {
 
   mupen64plus = self.callPackage ./cores/mupen64plus.nix {  };
 
-  neocd = mkLibretroCore {
-    core = "neocd";
-    makefile = "Makefile";
-    meta = {
-      description = "NeoCD libretro port";
-      license = lib.licenses.lgpl3Only;
-    };
-  };
+  neocd = self.callPackage ./cores/neocd.nix {  };
 
   nestopia = mkLibretroCore {
     core = "nestopia";
