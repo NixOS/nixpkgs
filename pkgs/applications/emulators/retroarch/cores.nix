@@ -213,14 +213,8 @@ lib.makeScope newScope (self: rec {
 
   pcsx2 = self.callPackage ./cores/pcsx2.nix {  };
 
-  pcsx-rearmed = mkLibretroCore {
-    core = "pcsx_rearmed";
-    dontConfigure = true;
-    meta = {
-      description = "Port of PCSX ReARMed with GNU lightning to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  pcsx-rearmed = self.callPackage ./cores/pcsx-rearmed.nix {  };
+  pcsx_rearmed = lib.lowPrio(self.pcsx-rearmed); # added 2024-11-20
 
   picodrive = mkLibretroCore {
     core = "picodrive";
