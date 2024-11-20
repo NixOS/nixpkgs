@@ -5,7 +5,7 @@
 }:
 mkLibretroCore {
   core = "mednafen-supergrafx";
-  version = "unstable-2024-11-15";
+  version = "0-unstable-2024-11-15";
 
   src = fetchFromGitHub {
     owner = "libretro";

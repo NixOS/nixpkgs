@@ -6,7 +6,7 @@
 }:
 mkLibretroCore {
   core = "swanstation";
-  version = "unstable-2024-07-24";
+  version = "0-unstable-2024-07-24";
 
   src = fetchFromGitHub {
     owner = "libretro";

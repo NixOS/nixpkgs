@@ -17,7 +17,7 @@
 }:
 mkLibretroCore {
   core = "pcsx2";
-  version = "unstable-2023-01-30";
+  version = "0-unstable-2023-01-30";
 
   src = fetchFromGitHub {
     owner = "libretro";

@@ -11,7 +11,7 @@
 }:
 mkLibretroCore {
   core = "mupen64plus-next";
-  version = "unstable-2024-10-29";
+  version = "0-unstable-2024-10-29";
 
   src = fetchFromGitHub {
     owner = "libretro";

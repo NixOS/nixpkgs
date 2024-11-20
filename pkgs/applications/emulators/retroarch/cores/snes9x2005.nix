@@ -6,7 +6,7 @@
 }:
 mkLibretroCore {
   core = "snes9x2005" + lib.optionalString withBlarggAPU "-plus";
-  version = "unstable-2024-10-21";
+  version = "0-unstable-2024-10-21";
 
   src = fetchFromGitHub {
     owner = "libretro";

@@ -12,7 +12,7 @@
 }:
 mkLibretroCore {
   core = "same_cdi";
-  version = "unstable-2023-02-28";
+  version = "0-unstable-2023-02-28";
 
   src = fetchFromGitHub {
     owner = "libretro";

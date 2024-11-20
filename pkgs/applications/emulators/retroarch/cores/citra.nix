@@ -11,7 +11,7 @@
 }:
 mkLibretroCore rec {
   core = "citra";
-  version = "unstable-2024-04-01";
+  version = "0-unstable-2024-04-01";
 
   src = fetchFromGitHub {
     owner = "libretro";

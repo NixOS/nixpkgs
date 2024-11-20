@@ -5,7 +5,7 @@
 }:
 mkLibretroCore {
   core = "bsnes";
-  version = "unstable-2024-09-06";
+  version = "0-unstable-2024-09-06";
 
   src = fetchFromGitHub {
     owner = "libretro";

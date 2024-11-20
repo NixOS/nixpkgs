@@ -5,7 +5,7 @@
 }:
 mkLibretroCore {
   core = "fbneo";
-  version = "unstable-2024-10-03";
+  version = "0-unstable-2024-10-03";
 
   src = fetchFromGitHub {
     owner = "libretro";

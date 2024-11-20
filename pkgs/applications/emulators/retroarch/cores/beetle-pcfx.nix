@@ -5,7 +5,7 @@
 }:
 mkLibretroCore {
   core = "mednafen-pcfx";
-  version = "unstable-2024-10-21";
+  version = "0-unstable-2024-10-21";
 
   src = fetchFromGitHub {
     owner = "libretro";

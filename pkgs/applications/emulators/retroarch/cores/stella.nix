@@ -5,7 +5,7 @@
 }:
 mkLibretroCore {
   core = "stella";
-  version = "unstable-2024-11-17";
+  version = "0-unstable-2024-11-17";
 
   src = fetchFromGitHub {
     owner = "stella-emu";

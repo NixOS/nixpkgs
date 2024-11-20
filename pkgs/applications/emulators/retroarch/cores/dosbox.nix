@@ -5,7 +5,7 @@
 }:
 mkLibretroCore {
   core = "dosbox";
-  version = "unstable-2022-07-18";
+  version = "0-unstable-2022-07-18";
 
   src = fetchFromGitHub {
     owner = "libretro";

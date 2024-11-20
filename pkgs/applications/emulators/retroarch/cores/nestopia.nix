@@ -5,7 +5,7 @@
 }:
 mkLibretroCore {
   core = "nestopia";
-  version = "unstable-2024-10-17";
+  version = "0-unstable-2024-10-17";
 
   src = fetchFromGitHub {
     owner = "libretro";

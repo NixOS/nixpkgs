@@ -10,7 +10,7 @@
 }:
 mkLibretroCore {
   core = "scummvm";
-  version = "unstable-2022-04-06";
+  version = "0-unstable-2022-04-06";
 
   # This is the old source code before they upstreamed the source code,
   # so now the libretro related code lives in the scummvm/scummvm repository.

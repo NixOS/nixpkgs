@@ -5,7 +5,7 @@
 }:
 mkLibretroCore {
   core = "mgba";
-  version = "unstable-2024-11-12";
+  version = "0-unstable-2024-11-12";
 
   src = fetchFromGitHub {
     owner = "libretro";

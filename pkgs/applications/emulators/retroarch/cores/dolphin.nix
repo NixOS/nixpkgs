@@ -17,7 +17,7 @@
 }:
 mkLibretroCore {
   core = "dolphin";
-  version = "unstable-2024-04-19";
+  version = "0-unstable-2024-04-19";
 
   src = fetchFromGitHub {
     owner = "libretro";

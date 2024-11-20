@@ -6,7 +6,7 @@
 }:
 mkLibretroCore {
   core = "thepowdertoy";
-  version = "unstable-2024-10-01";
+  version = "0-unstable-2024-10-01";
 
   src = fetchFromGitHub {
     owner = "libretro";

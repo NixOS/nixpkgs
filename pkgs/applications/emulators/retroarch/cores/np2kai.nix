@@ -5,7 +5,7 @@
 }:
 mkLibretroCore rec {
   core = "np2kai";
-  version = "unstable-2024-11-03";
+  version = "0-unstable-2024-11-03";
 
   src = fetchFromGitHub {
     owner = "AZO234";

@@ -8,7 +8,7 @@
 }:
 mkLibretroCore {
   core = "flycast";
-  version = "unstable-2024-10-05";
+  version = "0-unstable-2024-10-05";
 
   src = fetchFromGitHub {
     owner = "flyinghead";

@@ -6,7 +6,7 @@
 }:
 mkLibretroCore {
   core = "bsnes-hd-beta";
-  version = "unstable-2023-04-26";
+  version = "0-unstable-2023-04-26";
 
   src = fetchFromGitHub {
     owner = "DerKoun";

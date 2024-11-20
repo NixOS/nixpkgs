@@ -5,7 +5,7 @@
 }:
 mkLibretroCore rec {
   core = "mrboom";
-  version = "unstable-2024-07-01";
+  version = "0-unstable-2024-07-01";
 
   src = fetchFromGitHub {
     owner = "Javanaise";
