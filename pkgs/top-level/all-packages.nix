@@ -17951,7 +17951,9 @@ with pkgs;
 
   cups-pk-helper = callPackage ../misc/cups/cups-pk-helper.nix { };
 
-  epsonscan2 = pkgs.libsForQt5.callPackage ../misc/drivers/epsonscan2 { };
+  epsonscan2 = callPackage ../by-name/ep/epsonscan2/package.nix {
+    inherit (qt5) wrapQtAppsHook qtbase;
+  };
 
   foomatic-db-ppds-withNonfreeDb = callPackage ../by-name/fo/foomatic-db-ppds/package.nix { withNonfreeDb = true; };
 
