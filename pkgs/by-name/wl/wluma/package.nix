@@ -16,13 +16,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wluma";
-  version = "4.4.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "maximbaz";
     repo = "wluma";
     rev = version;
-    sha256 = "sha256-Ow3SjeulYiHY9foXrmTtLK3F+B3+DrtDjBUke3bJeDw=";
+    sha256 = "sha256-5uSExmh1a88kZDly4VrHzI8YwfTDB8wm2mMGZyvKsk4=";
   };
 
   postPatch = ''
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
       'ExecStart=/usr/bin/wluma' 'ExecStart=${placeholder "out"}/bin/wluma'
   '';
 
-  cargoHash = "sha256-BwduYAYIRxc40nn9kloHv+Dt8jLSZViweSYGL5e45YM=";
+  cargoHash = "sha256-hKxKEs88tB05AiWC/LuC/0jJ1RxeUnpp35A6UTQK4xw=";
 
   nativeBuildInputs = [
     makeWrapper
