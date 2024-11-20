@@ -258,25 +258,7 @@ lib.makeScope newScope (self: rec {
 
   thepowdertoy = self.callPackage ./cores/thepowdertoy.nix {  };
 
-  tic80 = mkLibretroCore {
-    core = "tic80";
-    extraNativeBuildInputs = [ cmake pkg-config ];
-    makefile = "Makefile";
-    cmakeFlags = [
-      "-DBUILD_LIBRETRO=ON"
-      "-DBUILD_DEMO_CARTS=OFF"
-      "-DBUILD_PRO=OFF"
-      "-DBUILD_PLAYER=OFF"
-      "-DBUILD_SDL=OFF"
-      "-DBUILD_SOKOL=OFF"
-    ];
-    preConfigure = "cd core";
-    postBuild = "cd lib";
-    meta = {
-      description = "Port of TIC-80 to libretro";
-      license = lib.licenses.mit;
-    };
-  };
+  tic80 = self.callPackage ./cores/tic80.nix {  };
 
   twenty-fortyeight = mkLibretroCore {
     core = "2048";
