@@ -240,15 +240,7 @@ lib.makeScope newScope (self: rec {
 
   snes9x = self.callPackage ./cores/snes9x.nix {  };
 
-  snes9x2002 = mkLibretroCore {
-    core = "snes9x2002";
-    makefile = "Makefile";
-    meta = {
-      description = "Optimized port/rewrite of SNES9x 1.39 to Libretro";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
-    };
-  };
+  snes9x2002 = self.callPackage ./cores/snes9x2002.nix {  };
 
   snes9x2005 = mkLibretroCore {
     core = "snes9x2005";
