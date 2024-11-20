@@ -14,6 +14,7 @@
   fetchpatch,
   perl,
   buildPerlPackage,
+  makeWrapper,
   ModuleBuild,
   TextWrapI18N,
   LocaleGettext,
@@ -49,6 +50,7 @@ buildPerlPackage rec {
       libxslt
       docbook_xsl
       docbook_xsl_ns
+      makeWrapper
       ModuleBuild
       docbook_xml_dtd_45
       docbook_sgml_dtd_41
@@ -89,8 +91,10 @@ buildPerlPackage rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
     perl Build.PL --install_base=$out --install_path="lib=$out/${perl.libPrefix}"
     ./Build build
+    runHook postBuild
   '';
 
   # Disabling tests on musl
@@ -103,21 +107,30 @@ buildPerlPackage rec {
   doCheck = (!stdenv.hostPlatform.isMusl) && (!stdenv.hostPlatform.isDarwin);
 
   checkPhase = ''
+    runHook preCheck
     export SGML_CATALOG_FILES=${docbook_sgml_dtd_41}/sgml/dtd/docbook-4.1/docbook.cat
     ./Build test
+    runHook postCheck
   '';
 
   installPhase = ''
+    runHook preInstall
     ./Build install
-    for f in $out/bin/*; do
-      substituteInPlace $f --replace "#! /usr/bin/env perl" "#!${perl}/bin/perl"
-      substituteInPlace $f --replace "exec perl" "exec ${perl}/bin/perl"
+    for f in $out/bin/{msguntypot,po4a,po4a-gettextize,po4a-normalize,po4a-translate,po4a-updatepo}; do
+      substituteInPlace $f --replace-fail "exec perl" "exec ${lib.getExe perl}"
     done
+    runHook postInstall
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/po4a \
+        --prefix PATH : ${lib.makeBinPath [ gettext ]}
   '';
 
   meta = {
     description = "Tools for helping translation of documentation";
     homepage = "https://po4a.org";
     license = with lib.licenses; [ gpl2Plus ];
+    mainProgram = "po4a";
   };
 }
