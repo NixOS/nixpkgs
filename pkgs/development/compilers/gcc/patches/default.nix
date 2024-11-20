@@ -138,13 +138,23 @@ in
 # We only apply this patch when building a native toolchain for aarch64-darwin, as it breaks building
 # a foreign one: https://github.com/iains/gcc-12-branch/issues/18
 ++ optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) ({
-  "14" = [ (fetchpatch {
-    # There are no upstream release tags in https://github.com/iains/gcc-14-branch.
-    # 04696df09633baf97cdbbdd6e9929b9d472161d3 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-14.2.0
-    name = "gcc-14-darwin-aarch64-support.patch";
-    url = "https://github.com/iains/gcc-14-branch/compare/04696df09633baf97cdbbdd6e9929b9d472161d3..gcc-14.2-darwin-r0.diff";
-    hash = "sha256-GEUz7KdGzd2WJ0gjX3Uddq2y9bWKdZpT3E9uZ09qLs4=";
-  }) ];
+  "14" = [
+    (fetchpatch {
+      name = "gcc-14-darwin-aarch64-support.patch";
+      url = "https://raw.githubusercontent.com/Homebrew/formula-patches/41fdb9d5ec21fc8165cd4bee89bd23d0c90572ee/gcc/gcc-14.2.0-r2.diff";
+      # The patch is based on 14.2.0, but we use a GCC snapshot. We
+      # exclude the files with conflicts and apply our own merged patch
+      # to avoid vendoring the entire huge patch in‐tree.
+      excludes = [
+        "gcc/config/aarch64/aarch64-tune.md"
+        "gcc/config/darwin.h"
+        "libgcc/config.host"
+        "libgcc/config/t-darwin-min-11"
+      ];
+      hash = "sha256-E4zEKm4tMhovOJKc1/FXZCLQvA+Jt5SC0O2C6SEvZjI=";
+    })
+    ./14/fixup-gcc-14-darwin-aarch64-support.patch
+  ];
   "13" = [ (fetchpatch {
     name = "gcc-13-darwin-aarch64-support.patch";
     url = "https://raw.githubusercontent.com/Homebrew/formula-patches/bda0faddfbfb392e7b9c9101056b2c5ab2500508/gcc/gcc-13.3.0.diff";
