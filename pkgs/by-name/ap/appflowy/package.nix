@@ -10,6 +10,7 @@
   xdg-user-dirs,
   keybinder3,
   libnotify,
+  unzip,
 }:
 
 let
@@ -38,10 +39,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-    copyDesktopItems
-  ] ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+      copyDesktopItems
+    ]
+    ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ]
+    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ unzip ];
 
   buildInputs = [
     gtk3
@@ -70,6 +74,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
       runHook preInstall
+
+      unzip AppFlowy-${finalAttrs.version}-${dist.urlSuffix}
 
       mkdir -p $out/{Applications,bin}
       cp -r ./AppFlowy.app $out/Applications/
