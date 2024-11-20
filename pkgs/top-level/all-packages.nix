@@ -18102,14 +18102,10 @@ with pkgs;
   ### SCIENCE / MATH
 
   caffe = callPackage ../applications/science/math/caffe ({
-    inherit (config) cudaSupport;
-    cudaPackages = cudaPackages_10_1;
     opencv4 = opencv4WithoutCuda; # Used only for image loading.
     blas = openblas;
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   } // (config.caffe or {}));
-
-  caffeWithCuda = caffe.override { cudaSupport = true; };
 
   gap-minimal = lowPrio (gap.override { packageSet = "minimal"; });
 
