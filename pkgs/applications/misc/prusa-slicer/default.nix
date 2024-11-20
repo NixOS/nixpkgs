@@ -53,9 +53,9 @@ let
   eigen = eigen.overrideAttrs (old: {
     name = "eigen-3.3.7";
     src = fetchurl {
-      url = "https://bitbucket.org/eigen/eigen/get/3.3.7.tar.gz";
+      url = "https://gitlab.com/libeigen/eigen/-/archive/3.3.7/eigen-3.3.7.tar.gz";
       name = "eigen-3.3.7.tar.gz";
-      sha256 = "1nnh0v82a5xibcjaph51mx06mxbllk77fvihnd5ba0kpl23yz13y";
+      sha256 = "sha256-1W+62Vq/mT+K9ghIRynj2H72Ed2FszgKi60dXLw3Olc=";
     };
     patches = [ ./include-dir.patch ];
   });
