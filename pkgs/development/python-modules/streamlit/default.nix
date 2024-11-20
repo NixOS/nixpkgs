@@ -49,6 +49,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "packaging"
+    "pillow"
     "tenacity"
   ];
 
