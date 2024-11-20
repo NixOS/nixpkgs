@@ -50,4 +50,3 @@ Drop a message in [this thread](https://discourse.nixos.org/t/prs-ready-for-revi
 
 [reaction]: https://github.blog/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/
 [pull requests you find important]: https://github.com/NixOS/nixpkgs/pulls?q=is%3Aopen+sort%3Areactions-%2B1-desc
-
