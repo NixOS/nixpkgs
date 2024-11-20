@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
     description = "udev rules that give NixOS permission to communicate with Wooting keyboards";
     platforms = platforms.linux;
     license = "unknown";
-    maintainers = with maintainers; [ davidtwco ];
+    maintainers = with maintainers; [
+      davidtwco
+      returntoreality
+    ];
   };
 }
