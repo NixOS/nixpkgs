@@ -31,6 +31,7 @@ let
     mkOption
     mkPackageOption
     optional
+    optionals
     optionalString
     splitString
     subtractLists
@@ -45,10 +46,22 @@ let
   serverConfigFile = settingsFormat.generate "server.toml" (filterConfig cfg.serverSettings);
   clientConfigFile = settingsFormat.generate "kanidm-config.toml" (filterConfig cfg.clientSettings);
   unixConfigFile = settingsFormat.generate "kanidm-unixd.toml" (filterConfig cfg.unixSettings);
-  certPaths = builtins.map builtins.dirOf [
-    cfg.serverSettings.tls_chain
-    cfg.serverSettings.tls_key
-  ];
+  provisionSecretFiles = filter (x: x != null) (
+    [
+      cfg.provision.idmAdminPasswordFile
+      cfg.provision.adminPasswordFile
+    ]
+    ++ mapAttrsToList (_: x: x.basicSecretFile) cfg.provision.systems.oauth2
+  );
+  secretDirectories = unique (
+    map builtins.dirOf (
+      [
+        cfg.serverSettings.tls_chain
+        cfg.serverSettings.tls_key
+      ]
+      ++ optionals cfg.provision.enable provisionSecretFiles
+    )
+  );
 
   # Merge bind mount paths and remove paths where a prefix is already mounted.
   # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
@@ -817,7 +830,7 @@ in
         (
           defaultServiceConfig
           // {
-            BindReadOnlyPaths = mergePaths (defaultServiceConfig.BindReadOnlyPaths ++ certPaths);
+            BindReadOnlyPaths = mergePaths (defaultServiceConfig.BindReadOnlyPaths ++ secretDirectories);
           }
         )
         {
