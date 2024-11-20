@@ -125,7 +125,7 @@ in
             # user environments (e.g. required for screen sharing and Pinentry prompts):
             exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
             # enable systemd-integration
-            exec "systemctl --user import-environment {,WAYLAND_}DISPLAY SWAYSOCK; systemctl --user start sway-session.target"
+            exec "systemctl --user import-environment {,WAYLAND_}DISPLAY SWAYSOCK NIX_XDG_DESKTOP_PORTAL_DIR; systemctl --user start sway-session.target"
             exec swaymsg -t subscribe '["shutdown"]' && systemctl --user stop sway-session.target
           '';
         } // lib.optionalAttrs (cfg.package != null) {
