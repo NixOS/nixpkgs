@@ -4,6 +4,7 @@
   fetchFromGitHub,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   utilmacros,
   python3,
@@ -88,11 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  passthru.tests = {
-    pkg-config = testers.hasPkgConfigModules {
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
       versionCheck = true;
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {
