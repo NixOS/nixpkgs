@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "anholt";
     repo = "libepoxy";
-    rev = finalAttrs.version;
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-gZiyPOW2PeTMILcPiUTqPUGRNlMM5mI1z9563v4SgEs=";
   };
 
