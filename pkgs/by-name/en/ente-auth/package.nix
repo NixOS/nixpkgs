@@ -13,17 +13,18 @@ let
   # fetch simple-icons directly to avoid cloning with submodules,
   # which would also clone a whole copy of flutter
   simple-icons = fetchFromGitHub (lib.importJSON ./simple-icons.json);
+  desktopId = "io.ente.auth";
 in
 flutter324.buildFlutterApplication rec {
   pname = "ente-auth";
-  version = "4.0.2";
+  version = "4.1.6";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
     sparseCheckout = [ "auth" ];
-    rev = "auth-v${version}";
-    hash = "sha256-me+fT79vwqBBNsRWWo58GdzBf58LNB4Mk+pmCLvn/ik=";
+    tag = "auth-v${version}";
+    hash = "sha256-6LsHKK+IvMgxgih0u04dbpzesyQgwLvkGK0a1NcgpTg=";
   };
 
   sourceRoot = "${src.name}/auth";
@@ -40,7 +41,7 @@ flutter324.buildFlutterApplication rec {
     ente_crypto_dart = "sha256-XBzQ268E0cYljJH6gDS5O0Pmie/GwuhMDlQPfopSqJM=";
     flutter_local_authentication = "sha256-r50jr+81ho+7q2PWHLf4VnvNJmhiARZ3s4HUpThCgc0=";
     flutter_secure_storage_linux = "sha256-x45jrJ7pvVyhZlpqRSy3CbwT4Lna6yi/b2IyAilWckg=";
-    sqflite = "sha256-TdvCtEO7KL1R2oOSwGWllmS5kGCIU5CkvvUqUJf3tUc=";
+    sqflite = "sha256-+XTVtkFJ94VifwnutvUuAqqiyWwrcEiZ3Uz0H4D9zWA=";
   };
 
   nativeBuildInputs = [
@@ -55,12 +56,12 @@ flutter324.buildFlutterApplication rec {
   ];
 
   # Based on https://github.com/ente-io/ente/blob/main/auth/linux/packaging/rpm/make_config.yaml
-  # and https://github.com/ente-io/ente/blob/main/auth/linux/packaging/ente_auth.appdata.xml
+  # and https://github.com/ente-io/ente/blob/main/auth/linux/packaging/enteauth.appdata.xml
   desktopItems = [
     (makeDesktopItem {
-      name = "ente_auth";
-      exec = "ente_auth";
-      icon = "ente-auth";
+      name = desktopId;
+      exec = "enteauth";
+      icon = "enteauth";
       desktopName = "Ente Auth";
       genericName = "Ente Authentication";
       comment = "Open source 2FA authenticator, with end-to-end encrypted backups";
@@ -76,9 +77,15 @@ flutter324.buildFlutterApplication rec {
 
   postInstall = ''
     mkdir -p $out/share/pixmaps
-    ln -s $out/app/ente-auth/data/flutter_assets/assets/icons/auth-icon.png $out/share/pixmaps/ente-auth.png
+    ln -s $out/app/ente-auth/data/flutter_assets/assets/icons/auth-icon.png $out/share/pixmaps/enteauth.png
 
-    install -Dm444 linux/packaging/ente_auth.appdata.xml -t $out/share/metainfo
+    install -Dm444 linux/packaging/enteauth.appdata.xml $out/share/metainfo/${desktopId}.metainfo.xml
+    substituteInPlace $out/share/metainfo/${desktopId}.metainfo.xml \
+      --replace-fail '<id>enteauth</id>' '<id>${desktopId}</id>' \
+      --replace-fail 'enteauth.desktop' '${desktopId}.desktop'
+
+    # For backwards compatibility
+    ln -s $out/bin/enteauth $out/bin/ente_auth
   '';
 
   passthru.updateScript = ./update.sh;
@@ -97,7 +104,7 @@ flutter324.buildFlutterApplication rec {
       zi3m5f
       gepbird
     ];
-    mainProgram = "ente_auth";
+    mainProgram = "enteauth";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
