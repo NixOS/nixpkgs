@@ -474,6 +474,25 @@ let
       bolt = callPackage ./bolt {
       };
     }
+    // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "21") {
+      flang-unwrapped = callPackage ./flang {
+        # The C++ template instantiations in flang frequently cause g++ to be
+        # OOM-killed, so use clang++ instead.
+        stdenv = overrideCC stdenv buildLlvmTools.clang;
+      };
+      flang = wrapCCWith (rec {
+        inherit (buildLlvmTools.clang) libcxx;
+        cc = tools.flang-unwrapped;
+        bintools = bintools';
+        extraPackages = [ targetLlvmLibraries.flang-rt ];
+        extraBuildCommands =
+          mkExtraBuildCommands0 cc
+          + ''
+            ln -s "${targetLlvmLibraries.flang-rt}/lib/clang/${clangVersion}/lib/${stdenv.targetPlatform.config}" "$rsrc"/lib
+            echo -L"$rsrc"/lib >> $out/nix-support/cc-ldflags
+          '';
+      });
+    }
   );
 
   libraries = lib.makeExtensible (
@@ -581,6 +600,9 @@ let
         libc = if stdenv.targetPlatform.libc == "llvm" then libraries.libc-full else libraries.libc-overlay;
       }
     )
+    // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "21") {
+      flang-rt = callPackage ./flang-rt { };
+    }
   );
 
   noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
