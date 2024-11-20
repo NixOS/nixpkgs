@@ -350,6 +350,8 @@ let
         ld = cc.bintools;
         "ld.gold" = cc.bintools;
 
+        windres = cc.bintools;
+
         otool = cc.bintools.bintools;
 
         # GHC needs install_name_tool on all darwin platforms. The same one can
@@ -707,6 +709,10 @@ stdenv.mkDerivation ({
         then toolPath "clang" installCC
         else "${llvmPackages.clang}/bin/${llvmPackages.clang.targetPrefix}clang"
       }"
+  ''
+  + lib.optionalString stdenv.targetPlatform.isWindows ''
+    ghc-settings-edit "$settingsFile" \
+      "windres command" "${toolPath "windres" installCC}"
   ''
   + ''
 
