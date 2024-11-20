@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "febio-studio";
-  version = "2.7";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "febiosoftware";
     repo = "FEBioStudio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ggIzz6bvNjqlI8s31EVnbM0TOspBSc9/myKpWukS3MU=";
+    hash = "sha256-ynKo7WK529146Tk//PO5tMsqvfKM4nq3fgPXMGjWwIk=";
   };
 
   patches = [
