@@ -228,14 +228,7 @@ lib.makeScope newScope (self: rec {
 
   puae = self.callPackage ./cores/puae.nix {  };
 
-  quicknes = mkLibretroCore {
-    core = "quicknes";
-    makefile = "Makefile";
-    meta = {
-      description = "QuickNES libretro port";
-      license = lib.licenses.lgpl21Plus;
-    };
-  };
+  quicknes = self.callPackage ./cores/quicknes.nix {  };
 
   sameboy = mkLibretroCore {
     core = "sameboy";
