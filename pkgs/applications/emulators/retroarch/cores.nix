@@ -266,14 +266,7 @@ lib.makeScope newScope (self: rec {
 
   vba-next = self.callPackage ./cores/vba-next.nix {  };
 
-  vecx = mkLibretroCore {
-    core = "vecx";
-    extraBuildInputs = [ libGL libGLU ];
-    meta = {
-      description = "Port of Vecx to libretro";
-      license = lib.licenses.gpl3Only;
-    };
-  };
+  vecx = self.callPackage ./cores/vecx.nix {  };
 
   virtualjaguar = mkLibretroCore {
     core = "virtualjaguar";
