@@ -230,16 +230,7 @@ lib.makeScope newScope (self: rec {
 
   quicknes = self.callPackage ./cores/quicknes.nix {  };
 
-  sameboy = mkLibretroCore {
-    core = "sameboy";
-    extraNativeBuildInputs = [ which hexdump ];
-    preBuild = "cd libretro";
-    makefile = "Makefile";
-    meta = {
-      description = "SameBoy libretro port";
-      license = lib.licenses.mit;
-    };
-  };
+  sameboy = self.callPackage ./cores/sameboy.nix {  };
 
   same_cdi = mkLibretroCore {
     core = "same_cdi";
