@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-+YdUZj5Edbm+jm6s/0RflQVVQg3enBwlmBwpLrk3534=";
+    hash = "sha256-RhicZSVkaDtIngIOvzyEQ+VMZwdV45wDk7e7bThTIh8=";
   };
 
   pythonRelaxDeps = [
