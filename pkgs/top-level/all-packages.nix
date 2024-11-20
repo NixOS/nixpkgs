@@ -9373,6 +9373,8 @@ with pkgs;
     };
   };
 
+  inherit (callPackage ../applications/blockchains/ledger-live-desktop { }) ledger-live-desktop;
+
   muslCross = musl.override {
     stdenv = stdenvNoLibc;
   };
