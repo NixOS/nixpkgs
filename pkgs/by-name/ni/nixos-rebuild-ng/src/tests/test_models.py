@@ -100,12 +100,34 @@ def test_profile_from_name(mock_mkdir: Any) -> None:
     mock_mkdir.assert_called_once()
 
 
-def test_ssh_from_name(monkeypatch: Any) -> None:
-    assert m.SSH.from_arg("user@localhost", None) == m.SSH("user@localhost", [], False)
-
-    monkeypatch.setenv("SSH_OPTS", "-f foo -b bar")
-    assert m.SSH.from_arg("user@localhost", True) == m.SSH(
+def test_ssh_from_name(monkeypatch: Any, tmpdir: Path) -> None:
+    assert m.SSH.from_arg("user@localhost", None, tmpdir) == m.SSH(
         "user@localhost",
-        ["-f", "foo", "-b", "bar"],
+        [
+            "-o",
+            "ControlMaster=auto",
+            "-o",
+            f"ControlPath={tmpdir / "ssh-%n"}",
+            "-o",
+            "ControlPersist=60",
+        ],
+        False,
+    )
+
+    monkeypatch.setenv("NIX_SSHOPTS", "-f foo -b bar", tmpdir)
+    assert m.SSH.from_arg("user@localhost", True, tmpdir) == m.SSH(
+        "user@localhost",
+        [
+            "-f",
+            "foo",
+            "-b",
+            "bar",
+            "-o",
+            "ControlMaster=auto",
+            "-o",
+            f"ControlPath={tmpdir / "ssh-%n"}",
+            "-o",
+            "ControlPersist=60",
+        ],
         True,
     )

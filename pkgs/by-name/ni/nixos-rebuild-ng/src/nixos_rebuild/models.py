@@ -122,9 +122,16 @@ class SSH:
     tty: bool
 
     @classmethod
-    def from_arg(cls, host: str | None, tty: bool | None) -> Self | None:
+    def from_arg(cls, host: str | None, tty: bool | None, tmp_dir: Path) -> Self | None:
         if host:
-            opts = os.getenv("SSH_OPTS", "").split()
+            opts = os.getenv("NIX_SSHOPTS", "").split() + [
+                "-o",
+                "ControlMaster=auto",
+                "-o",
+                f"ControlPath={tmp_dir / "ssh-%n"}",
+                "-o",
+                "ControlPersist=60",
+            ]
             return cls(host, opts, bool(tty))
         else:
             return None
