@@ -2,7 +2,7 @@
 
 buildPostgresqlExtension rec {
   pname = "cstore_fdw";
-  version = "unstable-2022-03-08";
+  version = "1.7.0-unstable-2021-03-08";
 
   nativeBuildInputs = [ protobufc ];
 

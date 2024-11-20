@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, postgresql, unstableGitUpdater, buildPostgresqlExtension }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, postgresql, buildPostgresqlExtension }:
 
 buildPostgresqlExtension {
   pname = "pg_similarity";
-  version = "1.0-unstable-2021-01-12";
+  version = "pg_similarity_1_0-unstable-2021-01-12";
 
   src = fetchFromGitHub {
     owner = "eulerto";
@@ -22,8 +22,6 @@ buildPostgresqlExtension {
   ];
 
   makeFlags = [ "USE_PGXS=1" ];
-
-  passthru.updateScript = unstableGitUpdater {};
 
   meta = {
     description = "Extension to support similarity queries on PostgreSQL";

@@ -35,9 +35,8 @@
   pango,
   sqlite,
   udev,
-  wayland,
-
   vulkan-loader,
+  wayland,
 
   versionCheckHook,
 }:
@@ -111,18 +110,13 @@ stdenv.mkDerivation rec {
     pango
     sqlite
     udev
+    vulkan-loader
     wayland
   ];
 
   postPatch = ''
     substituteInPlace src/sys_info_v2/gatherer.rs \
       --replace-fail '"missioncenter-gatherer"' '"${placeholder "out"}/bin/missioncenter-gatherer"'
-
-    substituteInPlace $cargoDepsCopy/gl_loader-*/src/glad.c \
-      --replace-fail "libGL.so.1" "${libGL}/lib/libGL.so.1"
-
-    substituteInPlace $cargoDepsCopy/ash-*/src/entry.rs \
-      --replace-fail '"libvulkan.so.1"' '"${vulkan-loader}/lib/libvulkan.so.1"'
 
     SRC_GATHERER=$NIX_BUILD_TOP/source/src/sys_info_v2/gatherer
     SRC_GATHERER_NVTOP=$SRC_GATHERER/3rdparty/nvtop
@@ -151,12 +145,27 @@ stdenv.mkDerivation rec {
   versionCheckProgram = "${builtins.placeholder "out"}/bin/${meta.mainProgram}";
   doInstallCheck = true;
 
+  env = {
+    # Make sure libGL and libvulkan can be found by dlopen()
+    RUSTFLAGS = toString (
+      map (flag: "-C link-arg=" + flag) [
+        "-Wl,--push-state,--no-as-needed"
+        "-lGL"
+        "-lvulkan"
+        "-Wl,--pop-state"
+      ]
+    );
+  };
+
   meta = {
     description = "Monitor your CPU, Memory, Disk, Network and GPU usage";
     homepage = "https://gitlab.com/mission-center-devs/mission-center";
     changelog = "https://gitlab.com/mission-center-devs/mission-center/-/releases/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      getchoo
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "missioncenter";
   };

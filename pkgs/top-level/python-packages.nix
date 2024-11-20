@@ -3433,6 +3433,8 @@ self: super: with self; {
 
   django-filer = callPackage ../development/python-modules/django-filer { };
 
+  django-filingcabinet = callPackage ../development/python-modules/django-filingcabinet { };
+
   django-filter = callPackage ../development/python-modules/django-filter { };
 
   django-formtools = callPackage ../development/python-modules/django-formtools { };
@@ -5406,6 +5408,8 @@ self: super: with self; {
   govee-local-api = callPackage ../development/python-modules/govee-local-api { };
 
   goveelights = callPackage ../development/python-modules/goveelights { };
+
+  gower = callPackage ../development/python-modules/gower { };
 
   gpapi = callPackage ../development/python-modules/gpapi { };
 
@@ -17562,6 +17566,8 @@ self: super: with self; {
   vttlib = callPackage ../development/python-modules/vttlib { };
 
   vulcan-api = callPackage ../development/python-modules/vulcan-api { };
+
+  vulkan = callPackage ../development/python-modules/vulkan { };
 
   vultr = callPackage ../development/python-modules/vultr { };
 

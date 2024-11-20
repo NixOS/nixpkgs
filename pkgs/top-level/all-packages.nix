@@ -18924,7 +18924,7 @@ with pkgs;
   });
 
   inherit (callPackage ../servers/web-apps/wordpress {})
-    wordpress wordpress_6_6;
+    wordpress wordpress_6_7;
 
   wordpressPackages = ( callPackage ../servers/web-apps/wordpress/packages {
     plugins = lib.importJSON ../servers/web-apps/wordpress/packages/plugins.json;

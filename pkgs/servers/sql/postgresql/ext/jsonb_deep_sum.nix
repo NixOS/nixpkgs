@@ -2,7 +2,7 @@
 
 buildPostgresqlExtension rec {
   pname = "jsonb_deep_sum";
-  version = "unstable-2021-12-24";
+  version = "0-unstable-2021-12-24";
 
   src = fetchFromGitHub {
     owner = "furstenheim";

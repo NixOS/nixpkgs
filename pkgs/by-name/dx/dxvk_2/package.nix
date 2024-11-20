@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   pkgsBuildHost,
   glslang,
   meson,
@@ -38,28 +37,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dxvk";
-  version = "2.5";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "doitsujin";
     repo = "dxvk";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JwEKmzYnoDhad0VKadQYEqraMogXn7BFI9kmT9F+Ts0=";
+    hash = "sha256-wmn3ErYl3hhInrDQeY3OZK76yzwW2OJc1f+unMBzJQE=";
     fetchSubmodules = true; # Needed for the DirectX headers and libdisplay-info
   };
-
-  patches = [
-    # Fixes `ERROR: Index 2 out of bounds of array of size 2` error on native builds.
-    (fetchpatch2 {
-      url = "https://github.com/doitsujin/dxvk/commit/e6209d28cd9c51ad371605db4c0de27547c0d28c.patch?full_index=1";
-      hash = "sha256-zKO6YXOUKBnwcijzCldDzmDqXSkf+wWe9KmUlhsaTyM=";
-    })
-    # Fixes missing symbol error when building with GLFW support enabled.
-    (fetchpatch2 {
-      url = "https://github.com/doitsujin/dxvk/commit/62ef4854a6accf2b042f25f44db667abadc0b3fd.patch?full_index=1";
-      hash = "sha256-oXybFqoD68gTLHO1kDHll4XCfpU+s9E+PmaXQFqEy/g=";
-    })
-  ];
 
   postPatch =
     ''

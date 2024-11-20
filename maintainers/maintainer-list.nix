@@ -4186,7 +4186,7 @@
     matrix = "@clot27:matrix.org";
   };
   cloudripper = {
-    email = "other.wing8806@fastmail.com";
+    email = "dev+nixpkgs@cldrpr.com";
     github = "cloudripper";
     githubId = 70971768;
     name = "cloudripper";

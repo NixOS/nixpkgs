@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "5.0.0";
+  version = "5.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "jjjake";
     repo = "internetarchive";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0+tD+CtbR9MdqXH2CXWsXxyr5YM9gToExFnDQZa+gWM=";
+    hash = "sha256-x4EzVm22iZhGysg2iMtuil2tNJn4/8cWYyULLowODGc=";
   };
 
   build-system = [ setuptools ];
