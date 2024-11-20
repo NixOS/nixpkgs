@@ -46,6 +46,8 @@ let
             "zerocallusedregs"
           ] ++ (args.hardeningDisable or [ ]);
 
+          passthru.updateScript.command = ./update.sh;
+
           meta = (args.meta or { }) // {
             description = args.meta.description or "";
             longDescription =
