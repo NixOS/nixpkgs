@@ -5409,6 +5409,8 @@ self: super: with self; {
 
   goveelights = callPackage ../development/python-modules/goveelights { };
 
+  gower = callPackage ../development/python-modules/gower { };
+
   gpapi = callPackage ../development/python-modules/gpapi { };
 
   gpaw = callPackage ../development/python-modules/gpaw { };
@@ -17564,6 +17566,8 @@ self: super: with self; {
   vttlib = callPackage ../development/python-modules/vttlib { };
 
   vulcan-api = callPackage ../development/python-modules/vulcan-api { };
+
+  vulkan = callPackage ../development/python-modules/vulkan { };
 
   vultr = callPackage ../development/python-modules/vultr { };
 
