@@ -69,7 +69,9 @@ stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [ "format" ];
-  makeFlags = lib.optional headless "HEADLESS=true" ++ [ "SYSDEPS=true" "PREFIX=$(out)" ];
+  makeFlags = [ "SYSDEPS=true" "PREFIX=$(out)" ]
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "CROSS_COMPILING=true"
+  ++ lib.optional headless "HEADLESS=true";
 
   postInstall = ''
     wrapProgram $out/bin/Cardinal \
