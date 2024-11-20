@@ -11,6 +11,7 @@ let
     mkEnableOption
     mkIf
     mkOption
+    optionalString
     types
     ;
   inherit (types) str;
@@ -48,8 +49,8 @@ in
 
     programs = {
       bash.interactiveShellInit = initScript "bash";
-      fish.interactiveShellInit = mkIf config.programs.fish.enable initScript "fish";
-      zsh.interactiveShellInit = mkIf config.programs.zsh.enable initScript "zsh";
+      fish.interactiveShellInit = optionalString config.programs.fish.enable (initScript "fish");
+      zsh.interactiveShellInit = optionalString config.programs.zsh.enable (initScript "zsh");
     };
   };
   meta.maintainers = with maintainers; [ sigmasquadron ];

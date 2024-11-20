@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, git
 , grype
 , nix
 , nix-visualize
@@ -9,6 +10,7 @@
   beautifulsoup4
 , colorlog
 , dfdiskcache
+, filelock
 , graphviz
 , numpy
 , packageurl-python
@@ -26,14 +28,14 @@
 
 python.pkgs.buildPythonApplication rec {
   pname = "sbomnix";
-  version = "1.6.1";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiiuae";
     repo = "sbomnix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kPjCK9NEs3D0qFsSSVX6MYGKbwqeij0svTfzz5JC4qM=";
+    hash = "sha256-n5nK9fqgAC10jU9BcO+EEVrSD0YEr/hp6XDcTqVrvP8=";
 
     # Remove documentation as it contains references to nix store
     postFetch = ''
@@ -42,18 +44,16 @@ python.pkgs.buildPythonApplication rec {
     '';
   };
 
-  postInstall = ''
-    wrapProgram $out/bin/sbomnix \
-      --prefix PATH : ${lib.makeBinPath [nix graphviz]}
-    wrapProgram $out/bin/nixgraph \
-      --prefix PATH : ${lib.makeBinPath [nix graphviz]}
-    wrapProgram $out/bin/vulnxscan \
-      --prefix PATH : ${lib.makeBinPath [grype nix vulnix]}
-    wrapProgram $out/bin/nix_outdated \
-      --prefix PATH : ${lib.makeBinPath [nix-visualize]}
-    wrapProgram $out/bin/provenance \
-      --prefix PATH : ${lib.makeBinPath [nix]}
-  '';
+  makeWrapperArgs = [
+    "--prefix PATH : ${lib.makeBinPath [
+      git
+      nix
+      graphviz
+      nix-visualize
+      vulnix
+      grype
+    ]}"
+  ];
 
   nativeBuildInputs = [ setuptools ];
 
@@ -62,6 +62,7 @@ python.pkgs.buildPythonApplication rec {
     colorlog
     dfdiskcache
     graphviz
+    filelock
     numpy
     packageurl-python
     packaging

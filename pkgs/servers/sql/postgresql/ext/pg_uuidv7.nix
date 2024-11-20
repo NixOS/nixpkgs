@@ -7,13 +7,13 @@
 
 buildPostgresqlExtension rec {
   pname = "pg_uuidv7";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "fboulnois";
     repo = "pg_uuidv7";
     rev = "v${version}";
-    hash = "sha256-oVyRtjl3KsD3j96qvQb8bFLMhoWO81OudOL4wVXrjzI=";
+    hash = "sha256-lG6dCnbLALnfQc4uclqXXXfYjK/WXLV0lo5I8l1E5p4=";
   };
 
   meta = with lib; {
