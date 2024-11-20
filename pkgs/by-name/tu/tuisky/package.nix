@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tuisky";
-  version = "0.1.3";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "sugyan";
     repo = "tuisky";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TsxERi+xxWk6SJwIxMgqiYCAUrDLzZXPL1xQCIXtUr0=";
+    hash = "sha256-phadkJgSvizSNPvrVaYu/+y1uAj6fmb9JQLdj0dEQIg=";
   };
 
-  cargoHash = "sha256-p6Yqg4HdkviuOuYMGEPXyySduiS47aPOshr5iXE+f+A=";
+  cargoHash = "sha256-jI4HKn8HalEnBCuFR8/auTqi8M1qt25MS3h/b1pf3BA=";
 
   nativeBuildInputs = [
     pkg-config
