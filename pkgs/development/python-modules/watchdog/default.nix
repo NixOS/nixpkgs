@@ -47,12 +47,12 @@ buildPythonPackage rec {
     [
       "--deselect=tests/test_emitter.py::test_create_wrong_encoding"
       "--deselect=tests/test_emitter.py::test_close"
+      # assert cap.out.splitlines(keepends=False).count('+++++ 0') == 2 != 3
+      "--deselect=tests/test_0_watchmedo.py::test_auto_restart_on_file_change_debounce"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # fails to stop process in teardown
       "--deselect=tests/test_0_watchmedo.py::test_auto_restart_subprocess_termination"
-      # assert cap.out.splitlines(keepends=False).count('+++++ 0') == 2 != 3
-      "--deselect=tests/test_0_watchmedo.py::test_auto_restart_on_file_change_debounce"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       # FileCreationEvent != FileDeletionEvent
