@@ -260,13 +260,7 @@ lib.makeScope newScope (self: rec {
 
   tic80 = self.callPackage ./cores/tic80.nix {  };
 
-  twenty-fortyeight = mkLibretroCore {
-    core = "2048";
-    meta = {
-      description = "Port of 2048 puzzle game to the libretro API";
-      license = lib.licenses.unlicense;
-    };
-  };
+  twenty-fortyeight = self.callPackage ./cores/twenty-fortyeight.nix {  };
 
   vba-m = mkLibretroCore {
     core = "vbam";
