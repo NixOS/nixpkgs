@@ -199,15 +199,7 @@ lib.makeScope newScope (self: rec {
 
   neocd = self.callPackage ./cores/neocd.nix {  };
 
-  nestopia = mkLibretroCore {
-    core = "nestopia";
-    makefile = "Makefile";
-    preBuild = "cd libretro";
-    meta = {
-      description = "Nestopia libretro port";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  nestopia = self.callPackage ./cores/nestopia.nix {  };
 
   nxengine = mkLibretroCore {
     core = "nxengine";
