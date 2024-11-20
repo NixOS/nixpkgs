@@ -109,6 +109,30 @@ in stdenv.mkDerivation rec {
   # Lots of dodgy C++.
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    ctest -j $NIX_BUILD_CORES --output-on-failure --exclude-regex ${
+      lib.escapeShellArg (
+        lib.concatMapStringsSep "|" (test: "^${lib.escapeRegex test}$") [
+          "DcgmModuleSysmon Watches"
+          "DcgmModuleSysmon maxSampleAge"
+          "DcgmModuleSysmon::CalculateCoreUtilization"
+          "DcgmModuleSysmon::ParseProcStatCpuLine"
+          "DcgmModuleSysmon::ParseThermalFileContentsAndStore"
+          "DcgmModuleSysmon::PopulateTemperatureFileMap"
+          "DcgmModuleSysmon::ReadCoreSpeed"
+          "DcgmModuleSysmon::ReadTemperature"
+          "Sysmon: initialize module"
+        ]
+      )
+    }
+
+    runHook postCheck
+  '';
+
   disallowedReferences = lib.concatMap getCudaPackages cudaPackageSets;
 
   meta = with lib; {
