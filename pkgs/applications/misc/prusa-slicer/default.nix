@@ -50,7 +50,7 @@ let
       sha256 = "sha256-C02P3D363UwF0NM6R4D4c6yE5ZZxCcu5CpUaoTOxh7E=";
     };
   });
-  eigen = eigen.overrideAttrs (old: {
+  eigen-prusa = eigen.overrideAttrs (old: {
     name = "eigen-3.3.7";
     src = fetchurl {
       url = "https://gitlab.com/libeigen/eigen/-/archive/3.3.7/eigen-3.3.7.tar.gz";
@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     cgal
     curl
     dbus
-    eigen
+    eigen-prusa
     expat
     glew
     glib
