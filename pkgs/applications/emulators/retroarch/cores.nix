@@ -205,14 +205,7 @@ lib.makeScope newScope (self: rec {
 
   nxengine = self.callPackage ./cores/nxengine.nix {  };
 
-  o2em = mkLibretroCore {
-    core = "o2em";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of O2EM to libretro";
-      license = lib.licenses.artistic1;
-    };
-  };
+  o2em = self.callPackage ./cores/o2em.nix {  };
 
   opera = mkLibretroCore {
     core = "opera";
