@@ -207,16 +207,7 @@ lib.makeScope newScope (self: rec {
 
   o2em = self.callPackage ./cores/o2em.nix {  };
 
-  opera = mkLibretroCore {
-    core = "opera";
-    makefile = "Makefile";
-    makeFlags = [ "CC_PREFIX=${stdenv.cc.targetPrefix}" ];
-    meta = {
-      description = "Opera is a port of 4DO/libfreedo to libretro";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
-    };
-  };
+  opera = self.callPackage ./cores/opera.nix {  };
 
   parallel-n64 = mkLibretroCore {
     core = "parallel-n64";
