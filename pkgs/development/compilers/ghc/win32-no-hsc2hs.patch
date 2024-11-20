@@ -1,0 +1,14 @@
+Submodule libraries/Win32 contains modified content
+diff --git a/libraries/Win32/Win32.cabal b/libraries/Win32/Win32.cabal
+index 8488b7a..268c723 100644
+--- a/libraries/Win32/Win32.cabal
++++ b/libraries/Win32/Win32.cabal
+@@ -43,8 +43,6 @@ Library
+       else
+         build-depends: filepath >= 1.4.100.0 && < 1.5.0.0
+ 
+-    -- Black list hsc2hs 0.68.6 which is horribly broken.
+-    build-tool-depends: hsc2hs:hsc2hs > 0 && < 0.68.6 || > 0.68.6
+     ghc-options:        -Wall -fno-warn-name-shadowing
+     cc-options:         -fno-strict-aliasing
+     exposed-modules:
