@@ -216,15 +216,7 @@ lib.makeScope newScope (self: rec {
   pcsx-rearmed = self.callPackage ./cores/pcsx-rearmed.nix {  };
   pcsx_rearmed = lib.lowPrio(self.pcsx-rearmed); # added 2024-11-20
 
-  picodrive = mkLibretroCore {
-    core = "picodrive";
-    dontConfigure = true;
-    meta = {
-      description = "Fast MegaDrive/MegaCD/32X emulator";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
-    };
-  };
+  picodrive = self.callPackage ./cores/picodrive.nix {  };
 
   play = mkLibretroCore {
     core = "play";
