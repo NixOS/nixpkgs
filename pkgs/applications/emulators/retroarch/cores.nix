@@ -238,16 +238,7 @@ lib.makeScope newScope (self: rec {
 
   smsplus-gx = self.callPackage ./cores/smsplus-gx.nix {  };
 
-  snes9x = mkLibretroCore {
-    core = "snes9x";
-    makefile = "Makefile";
-    preBuild = "cd libretro";
-    meta = {
-      description = "Port of SNES9x git to libretro";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
-    };
-  };
+  snes9x = self.callPackage ./cores/snes9x.nix {  };
 
   snes9x2002 = mkLibretroCore {
     core = "snes9x2002";
