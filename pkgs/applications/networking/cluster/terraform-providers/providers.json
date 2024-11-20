@@ -750,13 +750,13 @@
     "vendorHash": "sha256-UXX7jnphsPq25dSkcVT5McV6/FcD99wEhPzazsgKTTA="
   },
   "linuxbox": {
-    "hash": "sha256-MzasMVtXO7ZeZ+qEx2Z+7881fOIA0SFzSvXVHeEROtg=",
+    "hash": "sha256-+8Wyrb/AjzpfhDK42ze0HBIAdGvtJUFEIpYZs7uOym4=",
     "homepage": "https://registry.terraform.io/providers/numtide/linuxbox",
     "owner": "numtide",
     "repo": "terraform-provider-linuxbox",
-    "rev": "v0.4.3",
+    "rev": "v0.5.6",
     "spdx": "BSD-3-Clause",
-    "vendorHash": "sha256-Jlg3a91pOhMC5SALzL9onajZUZ2H9mXfU5CKvotbCbw="
+    "vendorHash": "sha256-GxMCY/udIy3c7zLeNeghXtfCUw4+Ll83L/40N4/yVh8="
   },
   "local": {
     "hash": "sha256-BwbKkChQFtNHr/UwMNWGD/KU82vxlcXNaRWrsyzYrRg=",
