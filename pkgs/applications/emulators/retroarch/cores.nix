@@ -242,27 +242,9 @@ lib.makeScope newScope (self: rec {
 
   snes9x2002 = self.callPackage ./cores/snes9x2002.nix {  };
 
-  snes9x2005 = mkLibretroCore {
-    core = "snes9x2005";
-    makefile = "Makefile";
-    meta = {
-      description = "Optimized port/rewrite of SNES9x 1.43 to Libretro";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
-    };
-  };
+  snes9x2005 = self.callPackage ./cores/snes9x2005.nix {  };
 
-  snes9x2005-plus = mkLibretroCore {
-    core = "snes9x2005-plus";
-    repo = "snes9x2005";
-    makefile = "Makefile";
-    makeFlags = [ "USE_BLARGG_APU=1" ];
-    meta = {
-      description = "Optimized port/rewrite of SNES9x 1.43 to Libretro, with Blargg's APU";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
-    };
-  };
+  snes9x2005-plus = self.snes9x2005.override { withBlarggAPU = true; };
 
   snes9x2010 = mkLibretroCore {
     core = "snes9x2010";
