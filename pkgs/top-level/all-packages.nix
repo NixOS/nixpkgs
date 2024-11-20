@@ -16135,7 +16135,6 @@ with pkgs;
 
   ungoogled-chromium = callPackage ../applications/networking/browsers/chromium ((config.chromium or {}) // {
     ungoogled = true;
-    channel = "ungoogled-chromium";
   });
 
   unigine-tropics = pkgsi686Linux.callPackage ../applications/graphics/unigine-tropics { };
