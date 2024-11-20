@@ -1,4 +1,4 @@
-# versionCheckHook {#versioncheckhook}
+1# versionCheckHook {#versioncheckhook}
 
 This hook adds a `versionCheckPhase` to the [`preInstallCheckHooks`](#ssec-installCheck-phase) that runs the main program of the derivation with a `--help` or `--version` argument, and verifies if the `${version}` string is found in the output.
 
@@ -61,13 +61,16 @@ The following attributes control `versionCheckHook`:
 
 Note: see also [`testers.testVersion`](#tester-testVersion).
 
-## Comparison between `versionCheckHook` and `testers.testVersion` {#versioncheckhook-comparison-testversion}
+## Comparison between `versionCheckHook` and `testers.testVersion` {#versioncheckhook-testversion-comparison}
 
-The most notable difference between `versionCheckHook` and `testers.testVersion` is that `versionCheckHook` runs as a phase during the build time of the package, while `passthru.tests.versions` executes a whole derivation that depends on the package.
+The most notable difference between `versionCheckHook` and `testers.testVersion` is that `versionCheckHook` runs as a phase during the build time of the package, while `passthru.tests.versions` runs a complete derivation that depends on the package.
 
 Given the current limitations of Nixpkgs's tooling and CI, `versionCheckHook` fits better in most of typical situations.
 
-Below we tabulate the differences between `versionCheckHook` and `testers.testVersion`.
+Below we provide tables comparing `versionCheckHook` and `testers.testVersion`.
+
+
+### General {#versioncheckhook-testversion-comparison-general}
 
 | Item                                      | `versionCheckHook`                                                                                                                                                      | `testers.testVersion` via `passthru.tests.version`                                                                                           |
 |-------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
@@ -78,9 +81,17 @@ Below we tabulate the differences between `versionCheckHook` and `testers.testVe
 | Overhead during package build time        | Negligible. Although executed during the the package build time, `versionCheckHook` is lean and executes few commands.                                                  | Zero, since `tests.version` is a derivation that runs after package build time.                                                              |
 | Failure detection time                    | `versionCheckHook` runs during the package build time, therefore it does not deal with failures happening after that.                                                   | `tests.version` detects failures after package build time, like rewritings and relocations.                                                  |
 | Package breakage awareness                | Loud and clear as soon as `versionCheckHook` is reached during the package build time.                                                                                  | Requires specific commands to be noticed, e.g. `nix-build -A pkg.tests.version`.                                                             |
+
+### OfBorg {#versioncheckhook-testversion-comparison-general}
+
+| Item                                      | `versionCheckHook`                                                                                                                                                      | `testers.testVersion` via `passthru.tests.version`                                                                                           |
+|-------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
 | OfBorg CI                                 | `versionCheckHook` will be executed by OfBorg, since ofBorg automatically executes the packages affected by the pull request (PR).                                      | OfBorg supports automatic execution of `passthru.tests` for _packages directly affected_ by the PR.                                          |
 | OfBorg CI, transitive dependencies        | `versionCheckHook` will executed by OfBorg, since it builds transitive dependencies of a package affected by the PR. (????)                                             | OfBorg does not support automatic execution of `passthru.tests` for transitive dependencies,  requiring extra commands for this.             |
-| `nixpkgs-review`                          | `versionCheckHook` will be executed by `nixpkgs-review`.                                                                                                                | `nixpkgs-review` has no support for executing `passthru.tests` at all. [^1]                                                                  |
-| `nixpkgs-review`, transitive dependencies | `versionCheckHook` will be executed by `nixpkgs-review`, since the tool reaches transitive dependencies automatically.                                                  | `nixpkgs-review` has no support for executing `passthru.tests` at all,  even for transitive dependencies. [^1]                               |
 
-[^1]: There is a [pull request proposal](https://github.com/Mic92/nixpkgs-review/pull/397) against [`nixpkgs-review`](https://github.com/Mic92/nixpkgs-review) for adding support to `passthru.tests` execution.
+### nixpkgs-review {#versioncheckhook-testversion-comparison-nixpkgs-review}
+
+| Item                                      | `versionCheckHook`                                                                                                                                                      | `testers.testVersion` via `passthru.tests.version`                                                                                           |
+|-------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| `nixpkgs-review`                          | `versionCheckHook` will be executed by `nixpkgs-review`.                                                                                                                | `nixpkgs-review` has no support for executing `passthru.tests` at all.                                                                       |
+| `nixpkgs-review`, transitive dependencies | `versionCheckHook` will be executed by `nixpkgs-review`, since the tool reaches transitive dependencies automatically.                                                  | `nixpkgs-review` has no support for executing `passthru.tests` at all,  even for transitive dependencies.                                    |
