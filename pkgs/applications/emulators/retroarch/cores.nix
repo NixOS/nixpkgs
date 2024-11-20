@@ -254,14 +254,7 @@ lib.makeScope newScope (self: rec {
 
   swanstation = self.callPackage ./cores/swanstation.nix {  };
 
-  tgbdual = mkLibretroCore {
-    core = "tgbdual";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of TGBDual to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  tgbdual = self.callPackage ./cores/tgbdual.nix {  };
 
   thepowdertoy = mkLibretroCore {
     core = "thepowdertoy";
