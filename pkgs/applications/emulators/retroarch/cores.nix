@@ -268,14 +268,7 @@ lib.makeScope newScope (self: rec {
 
   vecx = self.callPackage ./cores/vecx.nix {  };
 
-  virtualjaguar = mkLibretroCore {
-    core = "virtualjaguar";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of VirtualJaguar to libretro";
-      license = lib.licenses.gpl3Only;
-    };
-  };
+  virtualjaguar = self.callPackage ./cores/virtualjaguar.nix {  };
 
   yabause = mkLibretroCore {
     core = "yabause";
