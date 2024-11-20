@@ -22,14 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libepoxy";
   version = "1.5.10";
 
-  src =
-    with finalAttrs;
-    fetchFromGitHub {
-      owner = "anholt";
-      repo = pname;
-      rev = version;
-      sha256 = "sha256-gZiyPOW2PeTMILcPiUTqPUGRNlMM5mI1z9563v4SgEs=";
-    };
+  src = fetchFromGitHub {
+    owner = "anholt";
+    repo = "libepoxy";
+    rev = finalAttrs.version;
+    hash = "sha256-gZiyPOW2PeTMILcPiUTqPUGRNlMM5mI1z9563v4SgEs=";
+  };
 
   patches = [ ./libgl-path.patch ];
 
