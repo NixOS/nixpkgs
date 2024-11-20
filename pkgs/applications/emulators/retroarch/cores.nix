@@ -226,14 +226,7 @@ lib.makeScope newScope (self: rec {
 
   prosystem = self.callPackage ./cores/prosystem.nix {  };
 
-  puae = mkLibretroCore {
-    core = "puae";
-    makefile = "Makefile";
-    meta = {
-      description = "Amiga emulator based on WinUAE";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  puae = self.callPackage ./cores/puae.nix {  };
 
   quicknes = mkLibretroCore {
     core = "quicknes";
