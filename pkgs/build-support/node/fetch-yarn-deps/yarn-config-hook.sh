@@ -2,8 +2,8 @@ yarnConfigHook(){
     echo "Executing yarnConfigHook"
 
     # Use a constant HOME directory
-    mkdir -p /tmp/home
-    export HOME=/tmp/home
+    mkdir -p "$TMP/home"
+    export HOME="$TMP/home"
     if [[ -n "$yarnOfflineCache" ]]; then
         offlineCache="$yarnOfflineCache"
     fi
