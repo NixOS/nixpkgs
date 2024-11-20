@@ -250,14 +250,7 @@ lib.makeScope newScope (self: rec {
 
   stella = self.callPackage ./cores/stella.nix {  };
 
-  stella2014 = mkLibretroCore {
-    core = "stella2014";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of Stella ~2014 to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  stella2014 = self.callPackage ./cores/stella2014.nix {  };
 
   swanstation = mkLibretroCore {
     core = "swanstation";
