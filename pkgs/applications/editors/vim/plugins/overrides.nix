@@ -752,31 +752,6 @@ in
     nvimRequireCheck = "competitest";
   };
 
-  compe-conjure = super.compe-conjure.overrideAttrs {
-    dependencies = [ self.conjure ];
-  };
-
-  compe-latex-symbols = super.compe-latex-symbols.overrideAttrs {
-    dependencies = [ self.nvim-compe ];
-  };
-
-  compe-tabnine = super.compe-tabnine.overrideAttrs {
-    dependencies = [ self.nvim-compe ];
-    buildInputs = [ tabnine ];
-
-    postFixup = ''
-      mkdir -p $target/binaries/${tabnine.version}
-      ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
-    '';
-  };
-
-  compe-zsh = super.compe-zsh.overrideAttrs {
-    dependencies = with self; [
-      nvim-compe
-      plenary-nvim
-    ];
-  };
-
   compiler-explorer-nvim = super.compiler-explorer-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
     nvimRequireCheck = "compiler-explorer";
@@ -2618,7 +2593,8 @@ in
   };
 
   tmux-complete-vim = super.tmux-complete-vim.overrideAttrs {
-    dependencies = with self; [ nvim-compe ];
+    # Vim plugin with optional nvim-compe lua module
+    doCheck = false;
   };
 
   todo-comments-nvim = super.todo-comments-nvim.overrideAttrs {
