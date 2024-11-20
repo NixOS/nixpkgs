@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, makeWrapper
-, stripJavaArchivesHook
-, ant
-, attr
-, boost
-, cmake
-, file
-, fuse
-, jdk8
-, openssl
-, python3
-, valgrind
-, which
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  makeWrapper,
+  stripJavaArchivesHook,
+  ant,
+  attr,
+  boost,
+  cmake,
+  file,
+  fuse,
+  jdk8,
+  openssl,
+  python3,
+  valgrind,
+  which,
 }:
 
 stdenv.mkDerivation {
@@ -29,8 +30,15 @@ stdenv.mkDerivation {
     sha256 = "1hjmd32pla27zf98ghzz6r5ml8ry86m9dsryv1z01kxv5l95b3m0";
   };
 
-  nativeBuildInputs = [ makeWrapper python3 stripJavaArchivesHook ];
-  buildInputs = [ which attr ];
+  nativeBuildInputs = [
+    makeWrapper
+    python3
+    stripJavaArchivesHook
+    which
+  ];
+  buildInputs = [
+    attr
+  ];
 
   patches = [
     (fetchpatch {
@@ -74,8 +82,8 @@ stdenv.mkDerivation {
     substituteInPlace cpp/CMakeLists.txt \
       --replace '"/lib64" "/usr/lib64"' '"${attr.out}/lib" "${lib.getLib fuse}/lib"'
 
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${fuse}/include"
-    export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -L${fuse}/lib"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${lib.getDev fuse}/include"
+    export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -L${lib.getLib fuse}/lib"
 
     export DESTDIR=$out
 
@@ -107,7 +115,10 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Distributed filesystem";
-    maintainers = with lib.maintainers; [ raskin matejc ];
+    maintainers = with lib.maintainers; [
+      raskin
+      matejc
+    ];
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
   };
