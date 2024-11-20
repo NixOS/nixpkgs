@@ -24,8 +24,8 @@
   pkgsTargetTarget,
   makeRustPlatform,
   wrapRustcWith,
-  llvmPackages_18,
-  llvm_18,
+  llvmPackages_19,
+  llvm_19,
   wrapCCWith,
   overrideCC,
   fetchpatch,
@@ -33,7 +33,7 @@
 let
   llvmSharedFor =
     pkgSet:
-    pkgSet.llvmPackages_18.libllvm.override (
+    pkgSet.llvmPackages_19.libllvm.override (
       {
         enableSharedLibraries = true;
       }
@@ -41,7 +41,7 @@ let
         # Force LLVM to compile using clang + LLVM libs when targeting pkgsLLVM
         stdenv = pkgSet.stdenv.override {
           allowedRequisites = null;
-          cc = pkgSet.pkgsBuildHost.llvmPackages_18.clangUseLLVM;
+          cc = pkgSet.pkgsBuildHost.llvmPackages_19.clangUseLLVM;
         };
       }
     );
@@ -68,14 +68,14 @@ import ./default.nix
             bootBintools ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintools,
           }:
           let
-            llvmPackages = llvmPackages_18;
+            llvmPackages = llvmPackages_19;
 
             setStdenv =
               pkg:
               pkg.override {
                 stdenv = stdenv.override {
                   allowedRequisites = null;
-                  cc = pkgsBuildHost.llvmPackages_18.clangUseLLVM;
+                  cc = pkgsBuildHost.llvmPackages_19.clangUseLLVM;
                 };
               };
           in
@@ -88,7 +88,7 @@ import ./default.nix
             libcxx = llvmPackages.libcxx.override {
               stdenv = stdenv.override {
                 allowedRequisites = null;
-                cc = pkgsBuildHost.llvmPackages_18.clangNoLibcxx;
+                cc = pkgsBuildHost.llvmPackages_19.clangNoLibcxx;
                 hostPlatform = stdenv.hostPlatform // {
                   useLLVM = !stdenv.hostPlatform.isDarwin;
                 };
@@ -102,7 +102,7 @@ import ./default.nix
           }
         ) { }
       else
-        llvmPackages_18;
+        llvmPackages_19;
 
     # Note: the version MUST be the same version that we are building. Upstream
     # ensures that each released compiler can compile itself:
@@ -139,8 +139,8 @@ import ./default.nix
 
   (
     builtins.removeAttrs args [
-      "llvmPackages_18"
-      "llvm_18"
+      "llvmPackages_19"
+      "llvm_19"
       "wrapCCWith"
       "overrideCC"
       "fetchpatch"

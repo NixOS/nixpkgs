@@ -40,6 +40,15 @@ let
   is9  = majorVersion == "9";
   is8  = majorVersion == "8";
   is7  = majorVersion == "7";
+
+  # We only apply these patches when building a native toolchain for
+  # aarch64-darwin, as it breaks building a foreign one:
+  # https://github.com/iains/gcc-12-branch/issues/18
+  canApplyIainsDarwinPatches = stdenv.hostPlatform.isDarwin
+    && stdenv.hostPlatform.isAarch64
+    && buildPlatform == hostPlatform
+    && hostPlatform == targetPlatform;
+
   inherit (lib) optionals optional;
 in
 
@@ -71,6 +80,8 @@ in
 ++ optional langFortran (if atLeast12 then ./gcc-12-gfortran-driving.patch else ./gfortran-driving.patch)
 ++ [ ./ppc-musl.patch ]
 ++ optional (atLeast9 && langD) ./libphobos.patch
+++ optional (atLeast9 && !atLeast14) ./cfi_startproc-reorder-label-09-1.diff
+++ optional (atLeast14 && !canApplyIainsDarwinPatches) ./cfi_startproc-reorder-label-14-1.diff
 
 
 
@@ -135,9 +146,7 @@ in
   "12" = [ ./gnat-darwin-dylib-install-name.patch ];
 }.${majorVersion} or [])
 
-# We only apply this patch when building a native toolchain for aarch64-darwin, as it breaks building
-# a foreign one: https://github.com/iains/gcc-12-branch/issues/18
-++ optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) ({
+++ optionals canApplyIainsDarwinPatches ({
   "14" = [
     (fetchpatch {
       name = "gcc-14-darwin-aarch64-support.patch";
@@ -159,24 +168,24 @@ in
     name = "gcc-13-darwin-aarch64-support.patch";
     url = "https://raw.githubusercontent.com/Homebrew/formula-patches/bda0faddfbfb392e7b9c9101056b2c5ab2500508/gcc/gcc-13.3.0.diff";
     sha256 = "sha256-RBTCBXIveGwuQGJLzMW/UexpUZdDgdXprp/G2NHkmQo=";
-  }) ];
+  }) ./cfi_startproc-reorder-label-2.diff ];
   "12" = [ (fetchurl {
     name = "gcc-12-darwin-aarch64-support.patch";
     url = "https://raw.githubusercontent.com/Homebrew/formula-patches/1ed9eaea059f1677d27382c62f21462b476b37fe/gcc/gcc-12.4.0.diff";
     sha256 = "sha256-wOjpT79lps4TKG5/E761odhLGCphBIkCbOPiQg/D1Fw=";
-  }) ];
+  }) ./cfi_startproc-reorder-label-2.diff ];
   "11" = [ (fetchpatch {
     # There are no upstream release tags in https://github.com/iains/gcc-11-branch.
     # 5cc4c42a0d4de08715c2eef8715ad5b2e92a23b6 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-11.5.0
     url = "https://github.com/iains/gcc-11-branch/compare/5cc4c42a0d4de08715c2eef8715ad5b2e92a23b6..gcc-11.5-darwin-r0.diff";
     hash = "sha256-7lH+GkgkrE6nOp9PMdIoqlQNWK31s6oW+lDt1LIkadE=";
-  }) ];
+  }) ./cfi_startproc-reorder-label-2.diff ];
   "10" = [ (fetchpatch {
     # There are no upstream release tags in https://github.com/iains/gcc-10-branch.
     # d04fe55 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-10.5.0
     url = "https://github.com/iains/gcc-10-branch/compare/d04fe5541c53cb16d1ca5c80da044b4c7633dbc6...gcc-10-5Dr0-pre-0.diff";
     hash = "sha256-kVUHZKtYqkWIcqxHG7yAOR2B60w4KWLoxzaiFD/FWYk=";
-  }) ];
+  }) ./cfi_startproc-reorder-label-2.diff ];
 }.${majorVersion} or [])
 
 # Work around newer AvailabilityInternal.h when building older versions of GCC.

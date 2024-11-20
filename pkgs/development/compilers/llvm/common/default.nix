@@ -521,6 +521,12 @@ let
             (metadata.getVersionFile "clang/purity.patch")
             # https://reviews.llvm.org/D51899
             (metadata.getVersionFile "clang/gnu-install-dirs.patch")
+
+            # https://github.com/llvm/llvm-project/pull/116476
+            # prevent clang ignoring warnings / errors for unsuppored
+            # options when building & linking a source file with trailing
+            # libraries. eg: `clang -munsupported hello.c -lc`
+            ./clang/clang-unsupported-option.patch
           ]
           ++ lib.optional (lib.versions.major metadata.release_version == "13")
             # Revert of https://reviews.llvm.org/D100879
@@ -974,6 +980,15 @@ let
             lib.versionAtLeast metadata.release_version "14" && lib.versionOlder metadata.release_version "18"
           )
         ) (metadata.getVersionFile "compiler-rt/gnu-install-dirs.patch")
+        ++
+          lib.optional
+            (lib.versionAtLeast metadata.release_version "13" && lib.versionOlder metadata.release_version "18")
+            (fetchpatch {
+              name = "cfi_startproc-after-label.patch";
+              url = "https://github.com/llvm/llvm-project/commit/7939ce39dac0078fef7183d6198598b99c652c88.patch";
+              stripLen = 1;
+              hash = "sha256-tGqXsYvUllFrPa/r/dsKVlwx5IrcJGccuR1WAtUg7/o=";
+            })
         ++ [
           # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
           # extra `/`.

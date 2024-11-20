@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   enableShared ? !stdenv.hostPlatform.isStatic,
 
@@ -39,7 +40,7 @@ let
 
       nativeBuildInputs = [ cmake ];
 
-      cmakeFlags = [ "-DBUILD_SHARED_LIBS=${if enableShared then "ON" else "OFF"}" ];
+      cmakeFlags = [ (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared) ];
 
       doCheck = true;
 
@@ -68,14 +69,16 @@ let
     };
 in
 {
-  fmt_8 = generic {
-    version = "8.1.1";
-    hash = "sha256-leb2800CwdZMJRWF5b1Y9ocK0jXpOX/nwo95icDf308=";
-  };
-
   fmt_9 = generic {
     version = "9.1.0";
     hash = "sha256-rP6ymyRc7LnKxUXwPpzhHOQvpJkpnRFOt2ctvUNlYI0=";
+    patches = [
+      # Fixes the build with Clang ≥ 18.
+      (fetchpatch {
+        url = "https://github.com/fmtlib/fmt/commit/c4283ec471bd3efdb114bc1ab30c7c7c5e5e0ee0.patch";
+        hash = "sha256-YyB5GY/ZqJQIhhGy0ICMPzfP/OUuyLnciiyv8Nscsec=";
+      })
+    ];
   };
 
   fmt_10 = generic {
@@ -86,5 +89,12 @@ in
   fmt_11 = generic {
     version = "11.0.2";
     hash = "sha256-IKNt4xUoVi750zBti5iJJcCk3zivTt7nU12RIf8pM+0=";
+    patches = [
+      (fetchpatch {
+        name = "get-rid-of-std-copy-fix-clang.patch";
+        url = "https://github.com/fmtlib/fmt/commit/6e462b89aa22fd5f737ed162d0150e145ccb1914.patch";
+        hash = "sha256-tRU1y1VCxtQ5J2yvFmwUx+YNcQs8izzLImD37KBiCFk=";
+      })
+    ];
   };
 }

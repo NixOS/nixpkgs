@@ -12,7 +12,7 @@ diff -Naur a/Libraries/xcsdk/Tools/xcrun.cpp b/Libraries/xcsdk/Tools/xcrun.cpp
  using libutil::FSUtil;
  
 +namespace {
-+  const std::vector<const std::string> kSystemDeveloperDirs = {
++  const std::vector<std::string> kSystemDeveloperDirs = {
 +    "/private/var/select/developer_dir",
 +    "/private/var/db/xcode_select_link"
 +  };
