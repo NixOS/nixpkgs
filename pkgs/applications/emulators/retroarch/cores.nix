@@ -209,24 +209,7 @@ lib.makeScope newScope (self: rec {
 
   opera = self.callPackage ./cores/opera.nix {  };
 
-  parallel-n64 = mkLibretroCore {
-    core = "parallel-n64";
-    extraBuildInputs = [ libGLU libGL libpng ];
-    makefile = "Makefile";
-    makeFlags = [
-      "HAVE_PARALLEL=1"
-      "HAVE_PARALLEL_RSP=1"
-      "ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
-    ];
-    postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
-      sed -i -e '1 i\CPUFLAGS += -DARM_FIX -DNO_ASM -DARM_ASM -DDONT_WANT_ARM_OPTIMIZATIONS -DARM64' Makefile \
-      && sed -i -e 's,CPUFLAGS  :=,,g' Makefile
-    '';
-    meta = {
-      description = "Parallel Mupen64plus rewrite for libretro";
-      license = lib.licenses.gpl3Only;
-    };
-  };
+  parallel-n64 = self.callPackage ./cores/parallel-n64.nix {  };
 
   pcsx2 = mkLibretroCore {
     core = "pcsx2";
