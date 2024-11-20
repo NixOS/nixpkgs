@@ -32,17 +32,6 @@ buildGoModule rec {
     "-w"
   ];
 
-  postPatch = ''
-    # For the default config to work, we have to put `static/data` and
-    # `db.sqlite3` in a temporary directory since they need to be writeable.
-    #
-    # NOTE: Currently, `static/data` only holds the snapshots directory.
-    substituteInPlace config.yml_sample \
-      --replace-fail 'root: "./static/data"' 'root: "/tmp/omnom/static/data"' \
-      --replace-fail 'connection: "./db.sqlite3"' 'connection: "/tmp/omnom/db.sqlite3"' \
-      --replace-fail 'debug: true' 'debug: false'
-  '';
-
   postBuild =
     let
       omnom-addons = buildNpmPackage {
@@ -79,12 +68,10 @@ buildGoModule rec {
     '';
 
   postInstall = ''
-    mkdir -p $out/share
-    cp -r config.yml_sample static templates $out/share
+    mkdir -p $out/share/examples
 
-    wrapProgram $out/bin/omnom \
-      --chdir $out/share \
-      --set-default GIN_MODE release
+    cp -r static templates $out/share
+    cp config.yml_sample $out/share/examples/config.yml
   '';
 
   meta = {
