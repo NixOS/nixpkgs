@@ -248,16 +248,7 @@ lib.makeScope newScope (self: rec {
 
   snes9x2010 = self.callPackage ./cores/snes9x2010.nix {  };
 
-  stella = mkLibretroCore {
-    core = "stella";
-    makefile = "Makefile";
-    preBuild = "cd src/os/libretro";
-    dontConfigure = true;
-    meta = {
-      description = "Port of Stella to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  stella = self.callPackage ./cores/stella.nix {  };
 
   stella2014 = mkLibretroCore {
     core = "stella2014";
