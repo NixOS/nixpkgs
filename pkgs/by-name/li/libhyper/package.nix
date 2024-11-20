@@ -1,5 +1,6 @@
 {
   lib,
+  curl,
   fetchFromGitHub,
   nix-update-script,
   rustPlatform,
@@ -66,6 +67,8 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     updateScript = nix-update-script { };
+
+    tests.curl = curl.override { hyperSupport = true; };
   };
 
   meta = {
