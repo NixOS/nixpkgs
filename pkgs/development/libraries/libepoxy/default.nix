@@ -74,10 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   mesonFlags = [
-    "-Degl=${if ((waylandSupport || x11Support) && !stdenv.hostPlatform.isDarwin) then "yes" else "no"}"
-    "-Dglx=${if x11Support then "yes" else "no"}"
-    "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
-    "-Dx11=${lib.boolToString x11Support}"
+    (lib.mesonOption "egl" (if ((waylandSupport || x11Support) && !stdenv.hostPlatform.isDarwin) then "yes" else "no"))
+    (lib.mesonOption "glx" (if x11Support then "yes" else "no"))
+    (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
+    (lib.mesonBool "x11" x11Support)
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
