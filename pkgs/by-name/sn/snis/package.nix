@@ -1,83 +1,32 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  coreutils,
-  portaudio,
-  libbsd,
-  libpng,
-  libvorbis,
-  SDL2,
+  buildEnv,
+  snis-unwrapped,
+  snis-assets,
   makeWrapper,
-  lua5_2,
-  glew,
-  openssl,
-  picotts,
-  alsa-utils,
-  espeak-classic,
-  sox,
-  libopus,
-  openscad,
-  libxcrypt-legacy,
 }:
+buildEnv {
+  name = "snis-${snis-unwrapped.version}";
 
-stdenv.mkDerivation {
-  pname = "snis_launcher";
-  version = "unstable-2024-08-02";
+  nativeBuildInputs = [ makeWrapper ];
 
-  src = fetchFromGitHub {
-    owner = "smcameron";
-    repo = "space-nerds-in-space";
-    rev = "1dadfca31513561cf95f1229af34341bd1a1bb2a";
-    sha256 = "sha256-Qi4lbq1rsayMdRWMAF44K2DNtlZxNUyjnO6kXCW5QhA=";
-  };
+  paths = [
+    snis-unwrapped
+    snis-assets
+  ];
 
-  enableParallelBuilding = true;
+  pathsToLink = [
+    "/"
+    "/bin"
+  ];
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace "OPUSARCHIVE=libopus.a" "OPUSARCHIVE=" \
-      --replace "-I./opus-1.3.1/include" "-I${libopus.dev}/include/opus"
-    substituteInPlace snis_text_to_speech.sh \
-      --replace "pico2wave" "${sox}/bin/pico2wave" \
-      --replace "espeak" "${espeak-classic}/bin/espeak" \
-      --replace "play" "${sox}/bin/play" \
-      --replace "aplay" "${alsa-utils}/bin/aplay" \
-      --replace "/bin/rm" "${coreutils}/bin/rm"
+  postBuild = ''
+    for i in $out/bin/*; do
+      wrapProgram "$i" \
+        --set SNIS_ASSET_DIR "$out/share/snis"
+    done
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    openscad
-    makeWrapper
-  ];
-
-  buildInputs = [
-    coreutils
-    portaudio
-    libbsd
-    libpng
-    libvorbis
-    SDL2
-    lua5_2
-    glew
-    openssl
-    picotts
-    sox
-    alsa-utils
-    libopus
-    libxcrypt-legacy
-  ];
-
-  makeFlags = [ "PREFIX=$(out)" ];
-  buildTargets = [ "models" ];
-
-  meta = with lib; {
-    description = "Space Nerds In Space, a multi-player spaceship bridge simulator";
-    homepage = "https://smcameron.github.io/space-nerds-in-space/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ alyaeanyx ];
-    platforms = platforms.linux;
+  meta = snis-unwrapped // {
+    hydraPlatforms = [ ];
   };
 }
