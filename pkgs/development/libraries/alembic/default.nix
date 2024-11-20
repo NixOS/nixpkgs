@@ -9,7 +9,7 @@ stdenv.mkDerivation rec
     owner = "alembic";
     repo = "alembic";
     rev = version;
-    sha256 = "sha256-PuVN5Ytls58G2BmwCHUHiMQ0rolH98Hlw/pp7cvpiAg=";
+    hash = "sha256-EJZvbaGP9aea/UvcXmFbI3Y2/xTkdqORdzyz5ch931A=";
   };
 
   # note: out is unused (but required for outputDoc anyway)
