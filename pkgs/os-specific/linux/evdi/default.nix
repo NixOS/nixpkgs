@@ -59,8 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
-    broken = kernel.kernelOlder "4.19";
+  meta = {
+    broken = kernel.kernelOlder "4.19" || kernel.kernelAtLeast "6.12";
     changelog = "https://github.com/DisplayLink/evdi/releases/tag/v${finalAttrs.version}";
     description = "Extensible Virtual Display Interface";
     homepage = "https://www.displaylink.com/";
