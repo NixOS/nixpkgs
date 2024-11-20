@@ -2640,6 +2640,23 @@ let
         };
       };
 
+      jetmartin.bats = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "bats";
+          publisher = "jetmartin";
+          version = "0.1.10";
+          hash = "sha256-WD1YTRgzSVElixnNGtg6mMlcLCIaI6IBb+uh4cfzuBs=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/jetmartin.bats/changelog";
+          description = "VSCode extension for full language support for the Bats (Bash Automated Testing System) testing framework";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jetmartin.bats";
+          homepage = "https://github.com/bats-core/bats-vscode";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.dotmobo ];
+        };
+      };
+
       jkillian.custom-local-formatters = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "jkillian";
