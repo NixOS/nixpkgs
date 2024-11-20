@@ -15,6 +15,10 @@ buildGoModule rec {
     hash = "sha256-75RnAROICtRUDn95gSCNO0F6wes4CkJteNfUN38GQIY=";
   };
 
+  patches = [
+    ./CVE-2024-52522.patch
+  ];
+
   vendorHash = "sha256-zGBwgIuabLDqWbutvPHDbPRo5Dd9kNfmgToZXy7KVgI=";
 
   subPackages = [ "." ];
