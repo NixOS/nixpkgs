@@ -270,15 +270,5 @@ lib.makeScope newScope (self: rec {
 
   virtualjaguar = self.callPackage ./cores/virtualjaguar.nix {  };
 
-  yabause = mkLibretroCore {
-    core = "yabause";
-    makefile = "Makefile";
-    # Disable SSE for non-x86. DYNAREC doesn't build on aarch64.
-    makeFlags = lib.optional (!stdenv.hostPlatform.isx86) "HAVE_SSE=0";
-    preBuild = "cd yabause/src/libretro";
-    meta = {
-      description = "Port of Yabause to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  yabause = self.callPackage ./cores/yabause.nix {  };
 })
