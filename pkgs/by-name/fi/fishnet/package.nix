@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, fetchurl
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchurl,
 }:
 
 let
@@ -16,7 +17,8 @@ let
     url = "https://tests.stockfishchess.org/api/nn/${nnueSmallFile}";
     sha256 = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
   };
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "fishnet";
   version = "2.9.3";
 
@@ -41,8 +43,14 @@ in rustPlatform.buildRustPackage rec {
     description = "Distributed Stockfish analysis for lichess.org";
     homepage = "https://github.com/lichess-org/fishnet";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ tu-maurice thibaultd ];
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [
+      tu-maurice
+      thibaultd
+    ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "fishnet";
   };
 }
