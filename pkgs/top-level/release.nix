@@ -321,8 +321,9 @@ let
   # Conflicts usually cause silent job drops like in
   #   https://github.com/NixOS/nixpkgs/pull/182058
   jobs = let
-    packagePlatforms = if attrNamesOnly then id else release-lib.packagePlatforms;
-    packageJobs = {
+    packagePlatforms = release-lib.recursiveMapPackages
+      (if attrNamesOnly then id else release-lib.getPlatforms);
+    packageJobs = packagePlatforms pkgs // {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
       # Build selected packages (HLS) for multiple Haskell compilers to rebuild
@@ -363,8 +364,8 @@ let
     };
     mapTestOn-packages =
       if attrNamesOnly
-      then pkgs // packageJobs
-      else mapTestOn ((packagePlatforms pkgs) // packageJobs);
+      then packageJobs
+      else mapTestOn packageJobs;
   in
     unionOfDisjoint nonPackageJobs mapTestOn-packages;
 
