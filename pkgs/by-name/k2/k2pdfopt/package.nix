@@ -24,7 +24,8 @@
   gocr, # Disabled by default due to crashes
   enableTesseract ? true,
   leptonica,
-  tesseract,
+  tesseract5,
+  opencl-headers,
 }:
 
 # k2pdfopt is a pain to package. It requires modified versions of mupdf,
@@ -171,13 +172,19 @@ stdenv.mkDerivation rec {
           cp ${k2pdfopt_src}/tesseract_mod/openclwrapper.* src/opencl/
         '';
       };
-      tesseract_modded = tesseract.override {
-        tesseractBase = tesseract.tesseractBase.overrideAttrs (
+      tesseract_modded = tesseract5.override {
+        tesseractBase = tesseract5.tesseractBase.overrideAttrs (
           {
             patches ? [ ],
+            buildInputs ? [ ],
             ...
           }:
           {
+            pname = "tesseract-k2pdfopt";
+            version = tesseract_patch.src.rev;
+            src = tesseract_patch.src;
+            # opencl-headers were removed from tesseract in Version 5.4
+            buildInputs = buildInputs ++ [ opencl-headers ];
             patches = patches ++ [ tesseract_patch ];
             # Additional compilation fixes
             postPatch = ''
@@ -218,7 +225,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = lib.optionalString enableTesseract ''
-    wrapProgram $out/bin/k2pdfopt --set-default TESSDATA_PREFIX ${tesseract}/share/tessdata
+    wrapProgram $out/bin/k2pdfopt --set-default TESSDATA_PREFIX ${tesseract5}/share/tessdata
   '';
 
   meta = with lib; {
