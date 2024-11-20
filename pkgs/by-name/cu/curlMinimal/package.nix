@@ -65,6 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/curl/curl/commit/f5c616930b5cf148b1b2632da4f5963ff48bdf88
     # TODO: Remove this patch when 8.11.1/8.12.0 releases
     ./fix-netrc-regression.patch
+
+    # https://github.com/curl/curl/issues/15513
+    # https://github.com/curl/curl/commit/0cdde0fdfbeb8c35420f6d03fa4b77ed73497694
+    ./fix-netrc-regression-2.patch
   ];
 
   # this could be accomplished by updateAutotoolsGnuConfigScriptsHook, but that causes infinite recursion
