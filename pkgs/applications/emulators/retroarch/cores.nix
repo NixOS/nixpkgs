@@ -201,21 +201,9 @@ lib.makeScope newScope (self: rec {
 
   nestopia = self.callPackage ./cores/nestopia.nix {  };
 
-  nxengine = self.callPackage ./cores/nxengine.nix {  };
+  np2kai = self.callPackage ./cores/np2kai.nix {  };
 
-  np2kai = mkLibretroCore rec {
-    core = "np2kai";
-    makeFlags = [
-      # See https://github.com/AZO234/NP2kai/tags
-      "NP2KAI_VERSION=rev.22"
-      "NP2KAI_HASH=${(getCoreSrc core).rev}"
-    ];
-    preBuild = "cd sdl";
-    meta = {
-      description = "Neko Project II kai libretro port";
-      license = lib.licenses.mit;
-    };
-  };
+  nxengine = self.callPackage ./cores/nxengine.nix {  };
 
   o2em = mkLibretroCore {
     core = "o2em";
