@@ -1,5 +1,5 @@
 {
-  fetchurl,
+  fetchFromGitHub,
   lib,
   stdenv,
   perl,
@@ -22,6 +22,10 @@
   jitSupport,
   llvm,
   buildPostgresqlExtension,
+  autoconf,
+  automake,
+  libtool,
+  which,
 }:
 
 let
@@ -36,9 +40,11 @@ buildPostgresqlExtension (finalAttrs: {
     "doc"
   ];
 
-  src = fetchurl {
-    url = "https://download.osgeo.org/postgis/source/postgis-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ymmKIswrKzRnrE4GO0OihBPzAE3dUFvczddMVqZH9RA=";
+  src = fetchFromGitHub {
+    owner = "postgis";
+    repo = "postgis";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-wh7Lav2vnKzGWuSvvMFvAaGV7ynD+KgPsFUgujdtzlA=";
   };
 
   buildInputs = [
@@ -51,8 +57,12 @@ buildPostgresqlExtension (finalAttrs: {
     pcre2.dev
   ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
   nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
     perl
     pkg-config
+    which
   ] ++ lib.optional jitSupport llvm;
   dontDisableStatic = true;
 
@@ -70,7 +80,7 @@ buildPostgresqlExtension (finalAttrs: {
 
   setOutputFlags = false;
   preConfigure = ''
-    sed -i 's@/usr/bin/file@${file}/bin/file@' configure
+    ./autogen.sh
   '';
 
   configureFlags = [

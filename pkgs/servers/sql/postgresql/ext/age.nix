@@ -28,6 +28,7 @@ buildPostgresqlExtension rec {
     "PERL=${perl}/bin/perl"
   ];
 
+  enableUpdateScript = false;
   passthru.tests = stdenv.mkDerivation {
     inherit version src;
 
