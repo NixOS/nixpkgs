@@ -109,6 +109,7 @@
         # they seem to lead to `too many sections` errors when building base for
         # profiling.
         ++ lib.optionals (!stdenv.targetPlatform.isWindows) [ "split_sections" ]
+        ++ lib.optionals stdenv.targetPlatform.isWindows [ "no_split_sections" ]
       ;
     in
       baseFlavour + lib.concatMapStrings (t: "+${t}") transformers
