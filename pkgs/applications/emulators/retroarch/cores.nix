@@ -224,14 +224,7 @@ lib.makeScope newScope (self: rec {
 
   prboom = self.callPackage ./cores/prboom.nix {  };
 
-  prosystem = mkLibretroCore {
-    core = "prosystem";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of ProSystem to libretro";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  prosystem = self.callPackage ./cores/prosystem.nix {  };
 
   puae = mkLibretroCore {
     core = "puae";
