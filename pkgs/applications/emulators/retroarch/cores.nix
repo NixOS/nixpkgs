@@ -246,14 +246,7 @@ lib.makeScope newScope (self: rec {
 
   snes9x2005-plus = self.snes9x2005.override { withBlarggAPU = true; };
 
-  snes9x2010 = mkLibretroCore {
-    core = "snes9x2010";
-    meta = {
-      description = "Optimized port/rewrite of SNES9x 1.52+ to Libretro";
-      # Non-commercial clause
-      license = lib.licenses.unfreeRedistributable;
-    };
-  };
+  snes9x2010 = self.callPackage ./cores/snes9x2010.nix {  };
 
   stella = mkLibretroCore {
     core = "stella";
