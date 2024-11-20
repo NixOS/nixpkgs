@@ -10,6 +10,7 @@ from .models import SSH
 # Not exhaustive, but we can always extend it later.
 class RunKwargs(TypedDict, total=False):
     capture_output: bool
+    input: str | None
     stderr: int | None
     stdin: int | None
     stdout: int | None
@@ -33,7 +34,10 @@ def run_wrapper(
             args = ["env", *extra_env_args, *args]
         if sudo:
             args = ["sudo", *args]
-        args = ["ssh", *remote.opts, remote.host, "--", *args]
+        if remote.tty:
+            args = ["ssh", "-t", *remote.opts, remote.host, "--", *args]
+        else:
+            args = ["ssh", *remote.opts, remote.host, "--", *args]
     else:
         if extra_env:
             env = (env or os.environ) | extra_env

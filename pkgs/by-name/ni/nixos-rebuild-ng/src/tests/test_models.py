@@ -101,9 +101,11 @@ def test_profile_from_name(mock_mkdir: Any) -> None:
 
 
 def test_ssh_from_name(monkeypatch: Any) -> None:
-    assert m.SSH.from_arg("user@localhost") == m.SSH("user@localhost", [])
+    assert m.SSH.from_arg("user@localhost", None) == m.SSH("user@localhost", [], False)
 
     monkeypatch.setenv("SSH_OPTS", "-f foo -b bar")
-    assert m.SSH.from_arg("user@localhost") == m.SSH(
-        "user@localhost", ["-f", "foo", "-b", "bar"]
+    assert m.SSH.from_arg("user@localhost", True) == m.SSH(
+        "user@localhost",
+        ["-f", "foo", "-b", "bar"],
+        True,
     )

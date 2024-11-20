@@ -119,11 +119,12 @@ class Profile:
 class SSH:
     host: str
     opts: list[str]
+    tty: bool
 
     @classmethod
-    def from_arg(cls, host: str | None) -> Self | None:
+    def from_arg(cls, host: str | None, tty: bool | None) -> Self | None:
         if host:
             opts = os.getenv("SSH_OPTS", "").split()
-            return cls(host, opts)
+            return cls(host, opts, bool(tty))
         else:
             return None
