@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  unstableGitUpdater,
   mkLibretroCore,
 }:
 mkLibretroCore {
@@ -16,9 +15,6 @@ mkLibretroCore {
   };
 
   makefile = "Makefile";
-
-  # TODO: move this to mkLibretroCore
-  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Port of Mednafen's GameBoy Advance core to libretro";

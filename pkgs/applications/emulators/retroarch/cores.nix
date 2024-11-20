@@ -1,89 +1,11 @@
-{ lib
-, newScope
-, stdenv
-, gcc12Stdenv
-, alsa-lib
-, boost
-, bzip2
-, cmake
-, curl
-, fetchFromGitHub
-, fetchpatch
-, ffmpeg_6
-, fluidsynth
-, fmt
-, freetype
-, gettext
-, harfbuzz
-, hexdump
-, hidapi
-, icu
-, libaio
-, libevdev
-, libGL
-, libGLU
-, libjpeg
-, liblcf
-, libpcap
-, libpng
-, libsndfile
-, libvorbis
-, libxml2
-, libxmp
-, libzip
-, mpg123
-, nasm
-, openssl
-, opusfile
-, pcre
-, pixman
-, pkg-config
-, portaudio
-, python3
-, sfml
-, snappy
-, speexdsp
-, udev
-, which
-, xorg
-, xxd
-, xz
+{
+  lib,
+  newScope,
+  fetchFromGitHub,
 }:
 
-let
-  hashesFile = lib.importJSON ./hashes.json;
-
-  getCore = repo: (lib.getAttr repo hashesFile);
-
-  getCoreSrc = repo:
-    let
-      inherit (getCore repo) src fetcher;
-      fetcherFn = {
-        inherit fetchFromGitHub;
-      }.${fetcher} or (throw "Unknown fetcher: ${fetcher}");
-    in
-    fetcherFn src;
-
-  getCoreVersion = repo: (getCore repo).version;
-in
-lib.makeScope newScope (self: rec {
-  mkLibretroCore =
-    # Sometimes core name != repo name, so you may need to set them differently
-    # when necessary:
-    # - core: used by the resulting core library name, e.g.:
-    #   `${core}_libretro.so`. Needs to match their respectful core info file
-    #   (see https://github.com/libretro/libretro-core-info/)
-    # - repo: the repository name on GitHub
-    # See `update_cores.py` for instruction on how to add a new core.
-    { core
-    , repo ? core
-    , src ? (getCoreSrc repo)
-    , version ? (getCoreVersion repo)
-    , ...
-    }@args:
-    self.callPackage ./mkLibretroCore.nix ({
-      inherit core repo src version;
-    } // args);
+lib.makeScope newScope (self: {
+  mkLibretroCore = self.callPackage ./mkLibretroCore.nix;
 
   atari800 = self.callPackage ./cores/atari800.nix { };
 
@@ -127,148 +49,148 @@ lib.makeScope newScope (self: rec {
 
   bsnes-mercury-performance = self.bsnes-mercury.override { withProfile = "performance"; };
 
-  citra = self.callPackage ./cores/citra.nix {  };
+  citra = self.callPackage ./cores/citra.nix { };
 
-  desmume = self.callPackage ./cores/desmume.nix {  };
+  desmume = self.callPackage ./cores/desmume.nix { };
 
-  desmume2015 = self.callPackage ./cores/desmume2015.nix {  };
+  desmume2015 = self.callPackage ./cores/desmume2015.nix { };
 
-  dolphin = self.callPackage ./cores/dolphin.nix {  };
+  dolphin = self.callPackage ./cores/dolphin.nix { };
 
-  dosbox = self.callPackage ./cores/dosbox.nix {  };
+  dosbox = self.callPackage ./cores/dosbox.nix { };
 
-  dosbox-pure = self.callPackage ./cores/dosbox-pure.nix {  };
+  dosbox-pure = self.callPackage ./cores/dosbox-pure.nix { };
 
-  easyrpg = self.callPackage ./cores/easyrpg.nix {  };
+  easyrpg = self.callPackage ./cores/easyrpg.nix { };
 
-  eightyone = self.callPackage ./cores/eightyone.nix {  };
+  eightyone = self.callPackage ./cores/eightyone.nix { };
 
-  fbalpha2012 = self.callPackage ./cores/fbalpha2012.nix {  };
+  fbalpha2012 = self.callPackage ./cores/fbalpha2012.nix { };
 
-  fbneo = self.callPackage ./cores/fbneo.nix {  };
+  fbneo = self.callPackage ./cores/fbneo.nix { };
 
-  fceumm = self.callPackage ./cores/fceumm.nix {  };
+  fceumm = self.callPackage ./cores/fceumm.nix { };
 
-  flycast = self.callPackage ./cores/flycast.nix {  };
+  flycast = self.callPackage ./cores/flycast.nix { };
 
-  fmsx = self.callPackage ./cores/fmsx.nix {  };
+  fmsx = self.callPackage ./cores/fmsx.nix { };
 
-  freeintv = self.callPackage ./cores/freeintv.nix {  };
+  freeintv = self.callPackage ./cores/freeintv.nix { };
 
-  fuse = self.callPackage ./cores/fuse.nix {  };
+  fuse = self.callPackage ./cores/fuse.nix { };
 
-  gambatte = self.callPackage ./cores/gambatte.nix {  };
+  gambatte = self.callPackage ./cores/gambatte.nix { };
 
-  genesis-plus-gx = self.callPackage ./cores/genesis-plus-gx.nix {  };
+  genesis-plus-gx = self.callPackage ./cores/genesis-plus-gx.nix { };
 
-  gpsp = self.callPackage ./cores/gpsp.nix {  };
+  gpsp = self.callPackage ./cores/gpsp.nix { };
 
-  gw = self.callPackage ./cores/gw.nix {  };
+  gw = self.callPackage ./cores/gw.nix { };
 
-  handy = self.callPackage ./cores/handy.nix {  };
+  handy = self.callPackage ./cores/handy.nix { };
 
-  hatari = self.callPackage ./cores/hatari.nix {  };
+  hatari = self.callPackage ./cores/hatari.nix { };
 
-  mame = self.callPackage ./cores/mame.nix {  };
+  mame = self.callPackage ./cores/mame.nix { };
 
-  mame2000 = self.callPackage ./cores/mame2000.nix {  };
+  mame2000 = self.callPackage ./cores/mame2000.nix { };
 
-  mame2003 = self.callPackage ./cores/mame2003.nix {  };
+  mame2003 = self.callPackage ./cores/mame2003.nix { };
 
-  mame2003-plus = self.callPackage ./cores/mame2003-plus.nix {  };
+  mame2003-plus = self.callPackage ./cores/mame2003-plus.nix { };
 
-  mame2010 = self.callPackage ./cores/mame2010.nix {  };
+  mame2010 = self.callPackage ./cores/mame2010.nix { };
 
-  mame2015 = self.callPackage ./cores/mame2015.nix {  };
+  mame2015 = self.callPackage ./cores/mame2015.nix { };
 
-  mame2016 = self.callPackage ./cores/mame2016.nix {  };
+  mame2016 = self.callPackage ./cores/mame2016.nix { };
 
-  melonds = self.callPackage ./cores/melonds.nix {  };
+  melonds = self.callPackage ./cores/melonds.nix { };
 
-  mesen = self.callPackage ./cores/mesen.nix {  };
+  mesen = self.callPackage ./cores/mesen.nix { };
 
-  mesen-s = self.callPackage ./cores/mesen-s.nix {  };
+  mesen-s = self.callPackage ./cores/mesen-s.nix { };
 
-  meteor = self.callPackage ./cores/meteor.nix {  };
+  meteor = self.callPackage ./cores/meteor.nix { };
 
-  mgba = self.callPackage ./cores/mgba.nix {  };
+  mgba = self.callPackage ./cores/mgba.nix { };
 
-  mrboom = self.callPackage ./cores/mrboom.nix {  };
+  mrboom = self.callPackage ./cores/mrboom.nix { };
 
-  mupen64plus = self.callPackage ./cores/mupen64plus.nix {  };
+  mupen64plus = self.callPackage ./cores/mupen64plus.nix { };
 
-  neocd = self.callPackage ./cores/neocd.nix {  };
+  neocd = self.callPackage ./cores/neocd.nix { };
 
-  nestopia = self.callPackage ./cores/nestopia.nix {  };
+  nestopia = self.callPackage ./cores/nestopia.nix { };
 
-  np2kai = self.callPackage ./cores/np2kai.nix {  };
+  np2kai = self.callPackage ./cores/np2kai.nix { };
 
-  nxengine = self.callPackage ./cores/nxengine.nix {  };
+  nxengine = self.callPackage ./cores/nxengine.nix { };
 
-  o2em = self.callPackage ./cores/o2em.nix {  };
+  o2em = self.callPackage ./cores/o2em.nix { };
 
-  opera = self.callPackage ./cores/opera.nix {  };
+  opera = self.callPackage ./cores/opera.nix { };
 
-  parallel-n64 = self.callPackage ./cores/parallel-n64.nix {  };
+  parallel-n64 = self.callPackage ./cores/parallel-n64.nix { };
 
-  pcsx2 = self.callPackage ./cores/pcsx2.nix {  };
+  pcsx2 = self.callPackage ./cores/pcsx2.nix { };
 
-  pcsx-rearmed = self.callPackage ./cores/pcsx-rearmed.nix {  };
-  pcsx_rearmed = lib.lowPrio(self.pcsx-rearmed); # added 2024-11-20
+  pcsx-rearmed = self.callPackage ./cores/pcsx-rearmed.nix { };
+  pcsx_rearmed = lib.lowPrio (self.pcsx-rearmed); # added 2024-11-20
 
-  picodrive = self.callPackage ./cores/picodrive.nix {  };
+  picodrive = self.callPackage ./cores/picodrive.nix { };
 
-  play = self.callPackage ./cores/play.nix {  };
+  play = self.callPackage ./cores/play.nix { };
 
-  ppsspp = self.callPackage ./cores/ppsspp.nix {  };
+  ppsspp = self.callPackage ./cores/ppsspp.nix { };
 
-  prboom = self.callPackage ./cores/prboom.nix {  };
+  prboom = self.callPackage ./cores/prboom.nix { };
 
-  prosystem = self.callPackage ./cores/prosystem.nix {  };
+  prosystem = self.callPackage ./cores/prosystem.nix { };
 
-  puae = self.callPackage ./cores/puae.nix {  };
+  puae = self.callPackage ./cores/puae.nix { };
 
-  quicknes = self.callPackage ./cores/quicknes.nix {  };
+  quicknes = self.callPackage ./cores/quicknes.nix { };
 
-  same_cdi = self.callPackage ./cores/same_cdi.nix {  }; # the name is not a typo
+  same_cdi = self.callPackage ./cores/same_cdi.nix { }; # the name is not a typo
 
-  sameboy = self.callPackage ./cores/sameboy.nix {  };
+  sameboy = self.callPackage ./cores/sameboy.nix { };
 
-  scummvm = self.callPackage ./cores/scummvm.nix {  };
+  scummvm = self.callPackage ./cores/scummvm.nix { };
 
-  smsplus-gx = self.callPackage ./cores/smsplus-gx.nix {  };
+  smsplus-gx = self.callPackage ./cores/smsplus-gx.nix { };
 
-  snes9x = self.callPackage ./cores/snes9x.nix {  };
+  snes9x = self.callPackage ./cores/snes9x.nix { };
 
-  snes9x2002 = self.callPackage ./cores/snes9x2002.nix {  };
+  snes9x2002 = self.callPackage ./cores/snes9x2002.nix { };
 
-  snes9x2005 = self.callPackage ./cores/snes9x2005.nix {  };
+  snes9x2005 = self.callPackage ./cores/snes9x2005.nix { };
 
   snes9x2005-plus = self.snes9x2005.override { withBlarggAPU = true; };
 
-  snes9x2010 = self.callPackage ./cores/snes9x2010.nix {  };
+  snes9x2010 = self.callPackage ./cores/snes9x2010.nix { };
 
-  stella = self.callPackage ./cores/stella.nix {  };
+  stella = self.callPackage ./cores/stella.nix { };
 
-  stella2014 = self.callPackage ./cores/stella2014.nix {  };
+  stella2014 = self.callPackage ./cores/stella2014.nix { };
 
-  swanstation = self.callPackage ./cores/swanstation.nix {  };
+  swanstation = self.callPackage ./cores/swanstation.nix { };
 
-  tgbdual = self.callPackage ./cores/tgbdual.nix {  };
+  tgbdual = self.callPackage ./cores/tgbdual.nix { };
 
-  thepowdertoy = self.callPackage ./cores/thepowdertoy.nix {  };
+  thepowdertoy = self.callPackage ./cores/thepowdertoy.nix { };
 
-  tic80 = self.callPackage ./cores/tic80.nix {  };
+  tic80 = self.callPackage ./cores/tic80.nix { };
 
-  twenty-fortyeight = self.callPackage ./cores/twenty-fortyeight.nix {  };
+  twenty-fortyeight = self.callPackage ./cores/twenty-fortyeight.nix { };
 
-  vba-m = self.callPackage ./cores/vba-m.nix {  };
+  vba-m = self.callPackage ./cores/vba-m.nix { };
 
-  vba-next = self.callPackage ./cores/vba-next.nix {  };
+  vba-next = self.callPackage ./cores/vba-next.nix { };
 
-  vecx = self.callPackage ./cores/vecx.nix {  };
+  vecx = self.callPackage ./cores/vecx.nix { };
 
-  virtualjaguar = self.callPackage ./cores/virtualjaguar.nix {  };
+  virtualjaguar = self.callPackage ./cores/virtualjaguar.nix { };
 
-  yabause = self.callPackage ./cores/yabause.nix {  };
+  yabause = self.callPackage ./cores/yabause.nix { };
 })
