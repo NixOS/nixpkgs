@@ -14,6 +14,7 @@
   x11Support ? !stdenv.hostPlatform.isDarwin,
   waylandSupport ? stdenv.hostPlatform.isLinux,
   testers,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     utilmacros
     python3
+    validatePkgConfig
   ];
 
   buildInputs =
@@ -89,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
+      versionCheck = true;
     };
   };
 
