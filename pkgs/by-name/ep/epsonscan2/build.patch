@@ -64,20 +64,20 @@ index 387561e..15448ad 100644
  static const int kMaxBuf = 256;
  
 diff --git a/src/Controller/Src/Scanner/Engine.cpp b/src/Controller/Src/Scanner/Engine.cpp
-index 9489d4b..670bad9 100644
+index 8bd842e..d011329 100755
 --- a/src/Controller/Src/Scanner/Engine.cpp
 +++ b/src/Controller/Src/Scanner/Engine.cpp
-@@ -263,8 +263,8 @@ SDIError Engine::Open()
- 	//kill es2netif
- 	//kill es2intif
- 
--	system("killall -9 -q es2netif > /dev/null");
--	system("killall -9 -q es2intif > /dev/null");
-+	system("@KILLALL@ -9 -q es2netif > /dev/null");
-+	system("@KILLALL@ -9 -q es2intif > /dev/null");
- 
- 	if (engine_) {
- 		return ExchangeError(engine_->Open());
+@@ -210,8 +210,8 @@ bool Engine::InitWithDeviceInfoDict(const char *deviceInfo) {
+ SDIError Engine::Open()
+ {
+  SDI_TRACE_LOG("Enter");
+- system("killall -9 -q es2netif > /dev/null");
+- system("killall -9 -q es2intif > /dev/null");
++ system("@KILLALL@ -9 -q es2netif > /dev/null");
++ system("@KILLALL@ -9 -q es2intif > /dev/null");
+  if (engine_) {
+   return ExchangeError(engine_->Open());
+  }
 diff --git a/src/Standalone/CMakeLists.txt b/src/Standalone/CMakeLists.txt
 index eff3dd3..c2b3803 100644
 --- a/src/Standalone/CMakeLists.txt
