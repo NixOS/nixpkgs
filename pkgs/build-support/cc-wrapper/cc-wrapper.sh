@@ -44,7 +44,7 @@ while (( "$n" < "$nParams" )); do
 
     case "$p" in
         -[cSEM] | -MM) dontLink=1 ;;
-        -cc1) cc1=1 ;;
+        -cc1 | -fc1) cc1=1 ;;
         -nostdinc) cInclude=0 cxxInclude=0 ;;
         -nostdinc++) cxxInclude=0 ;;
         -nostdlib) cxxLibrary=0 ;;
