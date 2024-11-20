@@ -1,0 +1,17 @@
+diff --git a/test/conftest.py b/test/conftest.py
+index 732fb7e..cde5540 100644
+--- a/test/conftest.py
++++ b/test/conftest.py
+@@ -7,12 +7,6 @@
+ import functools
+ import os
+ import pytest
+-import numpy as np
+-from sys import platform
+-
+-# set numpy print options : TODO update tests when all release use modern numpy
+-if platform == "linux":
+-    np.set_printoptions(legacy="1.25")
+ 
+ from ot.backend import get_backend_list, jax, tf
+ 
