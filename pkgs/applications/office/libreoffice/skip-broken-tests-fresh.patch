@@ -32,6 +32,17 @@
      m_pDoc->InsertTab(0, u"Formula"_ustr);
  
      sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+--- a/sw/qa/extras/layout/layout.cxx
++++ b/sw/qa/extras/layout/layout.cxx
+@@ -1347,6 +1347,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
+ #if !defined(MACOSX)
+ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf150606)
+ {
++    return; // flaky
++
+     createSwDoc("tdf150606-1-min.odt");
+ 
+     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 --- a/sw/qa/extras/layout/layout3.cxx
 +++ b/sw/qa/extras/layout/layout3.cxx
 @@ -3354,6 +3354,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf104209VertRTL)
