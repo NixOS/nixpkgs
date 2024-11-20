@@ -38,7 +38,7 @@ for (const attr_path of Object.keys(lockfile)) {
   }
 
   const ungoogled = attr_path === 'ungoogled-chromium'
-  const version_nixpkgs = !ungoogled ? lockfile[attr_path].version : lockfile[attr_path].deps["ungoogled-patches"].rev
+  const version_nixpkgs = !ungoogled ? lockfile[attr_path].version : lockfile[attr_path].deps['ungoogled-patches'].rev
   const version_upstream = !ungoogled ? await get_latest_chromium_release() : await get_latest_ungoogled_release()
 
   console.log(`[${attr_path}] ${chalk.red(version_nixpkgs)} (nixpkgs)`)
@@ -56,7 +56,7 @@ for (const attr_path of Object.keys(lockfile)) {
       deps: {
         depot_tools: {},
         gn: {},
-        "ungoogled-patches": ungoogled ? await fetch_ungoogled(version_upstream) : undefined,
+        'ungoogled-patches': ungoogled ? await fetch_ungoogled(version_upstream) : undefined,
         npmHash: dummy_hash,
       },
       DEPS: {},
@@ -84,18 +84,28 @@ for (const attr_path of Object.keys(lockfile)) {
         value.recompress = true
       }
 
-      const cache = lockfile_initial[attr_path].DEPS[path]
-      const cache_hit =
-        cache !== undefined &&
-        value.url === cache.url &&
-        value.rev === cache.rev &&
-        value.recompress === cache.recompress &&
-        cache.hash !== undefined &&
-        cache.hash !== '' &&
-        cache.hash !== dummy_hash
+      const cache_hit = (() => {
+        for (const attr_path in lockfile_initial) {
+          const cache = lockfile_initial[attr_path].DEPS[path]
+          const hits_cache =
+            cache !== undefined &&
+            value.url === cache.url &&
+            value.rev === cache.rev &&
+            value.recompress === cache.recompress &&
+            cache.hash !== undefined &&
+            cache.hash !== '' &&
+            cache.hash !== dummy_hash
+
+          if (hits_cache) {
+            cache.attr_path = attr_path
+            return cache;
+          }
+        }
+      })();
+
       if (cache_hit) {
-        console.log(`[${chalk.green(path)}] Reusing hash from previous info.json for ${cache.url}@${cache.rev}`)
-        value.hash = cache.hash
+        console.log(`[${chalk.green(path)}] Reusing hash from previous info.json for ${cache_hit.url}@${cache_hit.rev} from ${cache_hit.attr_path}`)
+        value.hash = cache_hit.hash
         continue
       }
 
