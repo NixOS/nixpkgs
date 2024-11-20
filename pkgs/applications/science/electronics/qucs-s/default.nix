@@ -7,6 +7,7 @@
 , qttools
 , qtsvg
 , qtwayland
+, qtcharts
 , wrapQtAppsHook
 , libX11
 , cmake
@@ -18,22 +19,26 @@
 
 stdenv.mkDerivation rec {
   pname = "qucs-s";
-  version = "24.1.0";
+  version = "24.4.1";
 
   src = fetchFromGitHub {
     owner = "ra3xdh";
     repo = "qucs_s";
     rev = version;
-    sha256 = "sha256-ei9CPlJg+Kfjh7vu5VnT6DNLmmnA8wZ2A1jXnm//Fgo=";
+    sha256 = "sha256-ll5P8cqJBzoieExElggn5tRbDcmH7L3yvcbtAQ0BBww=";
   };
 
   nativeBuildInputs = [ flex bison wrapQtAppsHook cmake ];
-  buildInputs = [ qtbase qttools qtsvg qtwayland libX11 gperf adms ] ++ kernels;
+  buildInputs = [ qtbase qttools qtsvg qtwayland libX11 gperf adms qtcharts ] ++ kernels;
 
   # Make custom kernels avaible from qucs-s
   qtWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath kernels) ];
 
   QTDIR = qtbase.dev;
+
+  cmakeFlags = [
+    "-DWITH_QT6=ON"
+  ];
 
   doInstallCheck = true;
   installCheck = ''
