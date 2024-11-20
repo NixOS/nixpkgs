@@ -10,7 +10,6 @@
   xdg-user-dirs,
   keybinder3,
   libnotify,
-  unzip,
 }:
 
 let
@@ -18,11 +17,11 @@ let
     rec {
       x86_64-linux = {
         urlSuffix = "linux-x86_64.tar.gz";
-        hash = "sha256-z22sBq4VVqzbRm1MerhkN0Eegm1oZnZRI/qGlHwXaJo=";
+        hash = "sha256-X+y8TcRXbNtKpCFiOX9iPzJnsCZbXYB3tNdiyQE00Ek=";
       };
       x86_64-darwin = {
         urlSuffix = "macos-universal.zip";
-        hash = "sha256-ojbkNCwWmQOL96jBaUJsJyH2T6ZrOsml/xRuOR1216M=";
+        hash = "sha256-B3CCYWWJoOVFFvjpeYjRqx9i+36+ZR7swyCjitkU3bg=";
       };
       aarch64-darwin = x86_64-darwin;
     }
@@ -31,7 +30,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${finalAttrs.version}/AppFlowy-${finalAttrs.version}-${dist.urlSuffix}";
@@ -39,13 +38,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      copyDesktopItems
-    ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ unzip ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ] ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     gtk3
@@ -74,8 +70,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
       runHook preInstall
-
-      unzip AppFlowy-${finalAttrs.version}-${dist.urlSuffix}
 
       mkdir -p $out/{Applications,bin}
       cp -r ./AppFlowy.app $out/Applications/
