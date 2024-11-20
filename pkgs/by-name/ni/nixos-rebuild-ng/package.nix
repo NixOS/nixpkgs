@@ -5,20 +5,21 @@
   nix,
   nixos-rebuild,
   python3,
+  python3Packages,
   runCommand,
   withNgSuffix ? true,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "nixos-rebuild-ng";
   version = "0.0.0";
   src = ./src;
   pyproject = true;
 
-  build-system = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     tabulate
   ];
 
@@ -54,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
       mv $out/bin/nixos-rebuild $out/bin/nixos-rebuild-ng
     '';
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 
