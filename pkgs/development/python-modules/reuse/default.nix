@@ -13,6 +13,7 @@
   attrs,
   binaryornot,
   boolean-py,
+  click,
   debian,
   jinja2,
   license-expression,
@@ -25,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "reuse";
-  version = "4.0.3";
+  version = "5.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oKtQBT8tuAk4S/Sygp4qxLk4ADWDTG0MbVaL5O2qsuA=";
+    hash = "sha256-MzI3AY5WLNyCLJZM7Q5wUH3ttx+FHPlSgAfngzOgzec=";
   };
 
   outputs = [
@@ -54,6 +55,7 @@ buildPythonPackage rec {
     attrs
     binaryornot
     boolean-py
+    click
     debian
     jinja2
     license-expression
