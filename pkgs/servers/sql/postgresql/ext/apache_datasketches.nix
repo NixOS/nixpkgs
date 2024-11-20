@@ -36,6 +36,7 @@ buildPostgresqlExtension (finalAttrs: {
     runHook postPatch
   '';
 
+  enableUpdateScript = false;
   passthru.tests.extension = postgresqlTestExtension {
     inherit (finalAttrs) finalPackage;
     sql = ''
