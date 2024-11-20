@@ -46,5 +46,8 @@ Reviewing guidelines: https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.m
 
 Add a :+1: [reaction] to [pull requests you find important].
 
+Drop a message in [this thread](https://discourse.nixos.org/t/prs-ready-for-review/) to ask for a review, or in [this one](https://discourse.nixos.org/t/prs-already-reviewed/) if you think this PR is ready to be merged!
+
 [reaction]: https://github.blog/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/
 [pull requests you find important]: https://github.com/NixOS/nixpkgs/pulls?q=is%3Aopen+sort%3Areactions-%2B1-desc
+
