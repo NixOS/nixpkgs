@@ -13,6 +13,7 @@
   gnused,
   file,
   buildEnv,
+  excludeUtils ? [ ],
 }:
 
 let
@@ -189,7 +190,9 @@ utils
   coreboot-utils =
     (buildEnv {
       name = "coreboot-utils-${version}";
-      paths = lib.filter (lib.meta.availableOn stdenv.hostPlatform) (lib.attrValues utils);
+      paths = lib.filter (lib.meta.availableOn stdenv.hostPlatform) (
+        lib.attrValues (builtins.removeAttrs utils excludeUtils)
+      );
       postBuild = "rm -rf $out/sbin";
     })
     // {
