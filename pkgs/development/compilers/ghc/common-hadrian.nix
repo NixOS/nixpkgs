@@ -208,6 +208,10 @@
            then ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
            else ./Cabal-3.12-paths-fix-cycle-aarch64-darwin.patch)
         ]
+        ++ lib.optionals stdenv.targetPlatform.isWindows [
+          # https://gitlab.haskell.org/ghc/ghc/-/issues/23688
+          ./win32-no-hsc2hs.patch
+        ]
         # Prevents passing --hyperlinked-source to haddock. Note that this can
         # be configured via a user defined flavour now. Unfortunately, it is
         # impossible to import an existing flavour in UserSettings, so patching
