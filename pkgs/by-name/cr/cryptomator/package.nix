@@ -121,6 +121,7 @@ maven.buildMavenPackage rec {
     mainProgram = "cryptomator";
     maintainers = with lib.maintainers; [
       bachp
+      gepbird
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [
