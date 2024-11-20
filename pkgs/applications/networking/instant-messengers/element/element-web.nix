@@ -12,8 +12,14 @@
 let
   pinData = import ./pin.nix;
   inherit (pinData.hashes) webSrcHash webYarnHash;
-  noPhoningHome = {
+  extraConfig = {
     disable_guests = true; # disable automatic guest account registration at matrix.org
+    features = {
+      # HACK https://github.com/element-hq/element-web/pull/28491
+      feature_video_rooms = true;
+      feature_group_calls = true;
+      feature_element_call_video_rooms = true;
+    };
   };
 in
 stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
@@ -69,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     cp -R webapp $out
     tar --extract --to-stdout --file ${jitsi-meet.src} jitsi-meet/libs/external_api.min.js > $out/jitsi_external_api.min.js
     echo "${finalAttrs.version}" > "$out/version"
-    jq -s '.[0] * $conf' "config.sample.json" --argjson "conf" '${builtins.toJSON noPhoningHome}' > "$out/config.json"
+    jq -s '.[0] * $conf' "config.sample.json" --argjson "conf" '${builtins.toJSON extraConfig}' > "$out/config.json"
 
     runHook postInstall
   '';
