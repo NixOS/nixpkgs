@@ -262,24 +262,9 @@ lib.makeScope newScope (self: rec {
 
   twenty-fortyeight = self.callPackage ./cores/twenty-fortyeight.nix {  };
 
-  vba-m = mkLibretroCore {
-    core = "vbam";
-    repo = "vba-m";
-    makefile = "Makefile";
-    preBuild = "cd src/libretro";
-    meta = {
-      description = "vanilla VBA-M libretro port";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  vba-m = self.callPackage ./cores/vba-m.nix {  };
 
-  vba-next = mkLibretroCore {
-    core = "vba-next";
-    meta = {
-      description = "VBA-M libretro port with modifications for speed";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  vba-next = self.callPackage ./cores/vba-next.nix {  };
 
   vecx = mkLibretroCore {
     core = "vecx";
