@@ -236,14 +236,7 @@ lib.makeScope newScope (self: rec {
 
   scummvm = self.callPackage ./cores/scummvm.nix {  };
 
-  smsplus-gx = mkLibretroCore {
-    core = "smsplus";
-    repo = "smsplus-gx";
-    meta = {
-      description = "SMS Plus GX libretro port";
-      license = lib.licenses.gpl2Plus;
-    };
-  };
+  smsplus-gx = self.callPackage ./cores/smsplus-gx.nix {  };
 
   snes9x = mkLibretroCore {
     core = "snes9x";
