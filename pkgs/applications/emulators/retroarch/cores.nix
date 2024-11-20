@@ -193,14 +193,7 @@ lib.makeScope newScope (self: rec {
 
   mgba = self.callPackage ./cores/mgba.nix {  };
 
-  mrboom = mkLibretroCore {
-    core = "mrboom";
-    makefile = "Makefile";
-    meta = {
-      description = "Port of Mr.Boom to libretro";
-      license = lib.licenses.mit;
-    };
-  };
+  mrboom = self.callPackage ./cores/mrboom.nix {  };
 
   mupen64plus = mkLibretroCore {
     core = "mupen64plus-next";
