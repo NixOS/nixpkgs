@@ -195,23 +195,7 @@ lib.makeScope newScope (self: rec {
 
   mrboom = self.callPackage ./cores/mrboom.nix {  };
 
-  mupen64plus = mkLibretroCore {
-    core = "mupen64plus-next";
-    repo = "mupen64plus";
-    extraBuildInputs = [ libGLU libGL libpng nasm xorg.libX11 ];
-    makefile = "Makefile";
-    makeFlags = [
-      "HAVE_PARALLEL_RDP=1"
-      "HAVE_PARALLEL_RSP=1"
-      "HAVE_THR_AL=1"
-      "LLE=1"
-      "WITH_DYNAREC=${stdenv.hostPlatform.parsed.cpu.name}"
-    ];
-    meta = {
-      description = "Libretro port of Mupen64 Plus, GL only";
-      license = lib.licenses.gpl3Only;
-    };
-  };
+  mupen64plus = self.callPackage ./cores/mupen64plus.nix {  };
 
   neocd = mkLibretroCore {
     core = "neocd";
