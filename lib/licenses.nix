@@ -310,6 +310,12 @@ lib.mapAttrs mkLicense ({
     free = false;
   };
 
+  cc-by-nc-20 = {
+    spdxId = "CC-BY-NC-2.0";
+    fullName = "Creative Commons Attribution Non Commercial 2.0 Unported";
+    free = false;
+  };
+
   cc-by-nc-30 = {
     spdxId = "CC-BY-NC-3.0";
     fullName = "Creative Commons Attribution Non Commercial 3.0 Unported";
