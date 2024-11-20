@@ -8882,6 +8882,8 @@ with pkgs;
     cudaPackages = cudaPackages_12;
   };
 
+  art-standalone = callPackage ../development/libraries/art-standalone { };
+
   asio_1_10 = callPackage ../development/libraries/asio/1.10.nix { };
   asio = callPackage ../development/libraries/asio { };
 
