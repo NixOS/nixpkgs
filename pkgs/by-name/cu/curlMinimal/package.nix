@@ -24,6 +24,7 @@
 , scpSupport ? zlibSupport && !stdenv.hostPlatform.isSunOS && !stdenv.hostPlatform.isCygwin, libssh2
 , wolfsslSupport ? false, wolfssl
 , rustlsSupport ? false, rustls-ffi
+, hyperSupport ? false, libhyper
 , zlibSupport ? true, zlib
 , zstdSupport ? false, zstd
 
@@ -108,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optional scpSupport libssh2 ++
     lib.optional wolfsslSupport wolfssl ++
     lib.optional rustlsSupport rustls-ffi ++
+    lib.optional hyperSupport libhyper ++
     lib.optional zlibSupport zlib ++
     lib.optional zstdSupport zstd ++
     lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -140,6 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.withFeature http3Support "nghttp3")
       (lib.withFeature http3Support "ngtcp2")
       (lib.withFeature rtmpSupport "librtmp")
+      (lib.withFeatureAs hyperSupport "hyper" (toString libhyper))
       (lib.withFeature rustlsSupport "rustls")
       (lib.withFeature zstdSupport "zstd")
       (lib.withFeature pslSupport "libpsl")
