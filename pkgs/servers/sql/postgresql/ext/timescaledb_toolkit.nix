@@ -3,11 +3,11 @@
 , buildPgrxExtension
 , postgresql
 , nixosTests
-, cargo-pgrx_0_12_0_alpha_1
+, cargo-pgrx_0_12_6
 , nix-update-script
 }:
 
-(buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_12_0_alpha_1; }) rec {
+(buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_12_6; }) rec {
   inherit postgresql;
 
   pname = "timescaledb_toolkit";
