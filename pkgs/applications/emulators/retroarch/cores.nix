@@ -234,16 +234,7 @@ lib.makeScope newScope (self: rec {
 
   sameboy = self.callPackage ./cores/sameboy.nix {  };
 
-  scummvm = mkLibretroCore {
-    core = "scummvm";
-    extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU libGL ];
-    makefile = "Makefile";
-    preConfigure = "cd backends/platform/libretro/build";
-    meta = {
-      description = "Libretro port of ScummVM";
-      license = lib.licenses.gpl2Only;
-    };
-  };
+  scummvm = self.callPackage ./cores/scummvm.nix {  };
 
   smsplus-gx = mkLibretroCore {
     core = "smsplus";
