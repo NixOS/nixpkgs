@@ -6044,6 +6044,12 @@
     githubId = 2025623;
     name = "Luc Chabassier";
   };
+  dwrege = {
+    email = "email@dwrege.de";
+    github = "dominicwrege";
+    githubId = 7389000;
+    name = "Dominic Wrege";
+  };
   dxf = {
     email = "dingxiangfei2009@gmail.com";
     github = "dingxiangfei2009";
@@ -23059,6 +23065,12 @@
     github = "velovix";
     githubId = 2856634;
     name = "Tyler Compton";
+  };
+  venikx = {
+    email = "code@venikx.com";
+    github = "venikx";
+    githubId = 24815061;
+    name = "Kevin De Baerdemaeker";
   };
   veprbl = {
     email = "veprbl@gmail.com";
