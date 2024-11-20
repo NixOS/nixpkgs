@@ -198,6 +198,14 @@
             hash = "sha256-3+CyRBpebEZi8YpS22SsdGQHqi0drR7cCKPtKbR3zyE=";
           })
         ]
+        ++ lib.optionals (lib.versionAtLeast version "9.10" && lib.versionOlder version "9.12") [
+          # https://gitlab.haskell.org/ghc/ghc/-/issues/24945
+          (fetchpatch {
+            name = "rts-cleanup-inlining-logic";
+            url = "https://gitlab.haskell.org/ghc/ghc/-/commit/35a64220c9e47d64635ae732f33795c611eb1fc8.patch";
+            hash = "sha256-cS6z86iPAOkVqGGF/Q9XqSoxCKgKb8Sn5xi1KfIPRso=";
+          })
+        ]
         ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
           # Prevent the paths module from emitting symbols that we don't use
           # when building with separate outputs.
