@@ -181,7 +181,6 @@ in
         set-misc
         vod
       ];
-      recommendedProxySettings = mkDefault true;
       recommendedGzipSettings = mkDefault true;
       mapHashBucketSize = mkDefault 128;
       upstreams = {
@@ -212,6 +211,7 @@ in
           # auth_location.conf
           "/auth" = {
             proxyPass = "http://frigate-api/auth";
+            recommendedProxySettings = true;
             extraConfig = ''
               internal;
 
@@ -316,11 +316,13 @@ in
           };
           "/ws" = {
             proxyPass = "http://frigate-mqtt-ws/";
+            recommendedProxySettings = true;
             proxyWebsockets = true;
             extraConfig = nginxAuthRequest + nginxProxySettings;
           };
           "/live/jsmpeg" = {
             proxyPass = "http://frigate-jsmpeg/";
+            recommendedProxySettings = true;
             proxyWebsockets = true;
             extraConfig = nginxAuthRequest + nginxProxySettings;
           };
@@ -328,6 +330,7 @@ in
           "/live/mse/api/ws" = {
             proxyPass = "http://frigate-go2rtc/api/ws";
             proxyWebsockets = true;
+            recommendedProxySettings = true;
             extraConfig = nginxAuthRequest + nginxProxySettings + ''
               limit_except GET {
                   deny  all;
@@ -337,6 +340,7 @@ in
           "/live/webrtc/api/ws" = {
             proxyPass = "http://frigate-go2rtc/api/ws";
             proxyWebsockets = true;
+            recommendedProxySettings = true;
             extraConfig = nginxAuthRequest + nginxProxySettings + ''
               limit_except GET {
                   deny  all;
@@ -346,6 +350,7 @@ in
           # pass through go2rtc player
           "/live/webrtc/webrtc.html" = {
             proxyPass = "http://frigate-go2rtc/webrtc.html";
+            recommendedProxySettings = true;
             extraConfig = nginxAuthRequest + nginxProxySettings + ''
               limit_except GET {
                   deny  all;
@@ -355,6 +360,7 @@ in
           # frontend uses this to fetch the version
           "/api/go2rtc/api" = {
             proxyPass = "http://frigate-go2rtc/api";
+            recommendedProxySettings = true;
             extraConfig = nginxAuthRequest + nginxProxySettings + ''
               limit_except GET {
                   deny  all;
@@ -365,6 +371,7 @@ in
           "/api/go2rtc/webrtc" = {
             proxyPass = "http://frigate-go2rtc/api/webrtc";
             proxyWebsockets = true;
+            recommendedProxySettings = true;
             extraConfig = nginxAuthRequest + nginxProxySettings + ''
               limit_except GET {
                   deny  all;
@@ -373,12 +380,14 @@ in
           };
           "~* /api/.*\.(jpg|jpeg|png|webp|gif)$" = {
             proxyPass = "http://frigate-api";
+            recommendedProxySettings = true;
             extraConfig = nginxAuthRequest + nginxProxySettings + ''
               rewrite ^/api/(.*)$ $1 break;
             '';
           };
           "/api/" = {
             proxyPass = "http://frigate-api/";
+            recommendedProxySettings = true;
             extraConfig = nginxAuthRequest + nginxProxySettings + ''
               add_header Cache-Control "no-store";
               expires off;
