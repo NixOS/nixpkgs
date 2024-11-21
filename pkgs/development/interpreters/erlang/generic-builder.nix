@@ -22,7 +22,7 @@
 , ex_doc ? null
 , parallelBuild ? false
 , systemd
-, wxSupport ? true
+, wxSupport ? false
 , ex_docSupport ? false
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd # systemd support in epmd
   # updateScript deps
