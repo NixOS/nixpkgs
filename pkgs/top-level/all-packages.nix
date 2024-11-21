@@ -13719,7 +13719,6 @@ with pkgs;
   djview = libsForQt5.callPackage ../applications/graphics/djview { };
   djview4 = djview;
 
-  dmenu = callPackage ../applications/misc/dmenu { };
   dmenu-wayland = callPackage ../applications/misc/dmenu/wayland.nix { };
 
   dmenu-rs-enable-plugins = dmenu-rs.override { enablePlugins = true; };
