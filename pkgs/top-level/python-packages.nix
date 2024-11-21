@@ -9888,6 +9888,8 @@ self: super: with self; {
 
   passlib = callPackage ../development/python-modules/passlib { };
 
+  password-strength = callPackage ../development/python-modules/password-strength { };
+
   paste = callPackage ../development/python-modules/paste { };
 
   pastedeploy = callPackage ../development/python-modules/pastedeploy { };
