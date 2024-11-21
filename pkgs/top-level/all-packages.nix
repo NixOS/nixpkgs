@@ -6986,6 +6986,7 @@ with pkgs;
     cargo-pgrx_0_11_2
     cargo-pgrx_0_11_3
     cargo-pgrx_0_12_0_alpha_1
+    cargo-pgrx_0_12_6
     ;
   cargo-pgrx = cargo-pgrx_0_11_2;
 
@@ -12408,10 +12409,6 @@ with pkgs;
     inherit (pkgs) meson;
   };
 
-  cryptomator = callPackage ../tools/security/cryptomator {
-    jdk = jdk23.override { enableJavaFX = true; };
-  };
-
   # Darwin package set
   #
   # Even though this is a set of packages not single package, use `callPackage`
@@ -16088,7 +16085,6 @@ with pkgs;
 
   ungoogled-chromium = callPackage ../applications/networking/browsers/chromium ((config.chromium or {}) // {
     ungoogled = true;
-    channel = "ungoogled-chromium";
   });
 
   unigine-tropics = pkgsi686Linux.callPackage ../applications/graphics/unigine-tropics { };
@@ -16773,10 +16769,6 @@ with pkgs;
   heroic = callPackage ../games/heroic/fhsenv.nix { };
 
   pmars-x11 = pmars.override { enableXwinGraphics = true; };
-
-  wipeout-rewrite = callPackage ../games/wipeout-rewrite {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
 
   ### GAMES/DOOM-PORTS
 

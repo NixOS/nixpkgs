@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jwm";
-  version = "2.4.5";
+  version = "2.4.6";
 
   src = fetchFromGitHub {
     owner = "joewing";
     repo = "jwm";
     rev = "v${version}";
-    sha256 = "sha256-T0N9UMu+BLRzVWshUB4apiq8H2t1y09n4P1cLT5K/N8=";
+    hash = "sha256-odGqHdm8xnjEcXmpKMy51HEhbjcROLL3hRSdlbmTr2g=";
   };
 
   nativeBuildInputs = [
