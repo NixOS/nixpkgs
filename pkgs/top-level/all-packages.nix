@@ -4895,7 +4895,6 @@ with pkgs;
 
   pdd = python3Packages.callPackage ../tools/misc/pdd { };
 
-  pdfposter = callPackage ../applications/misc/pdfposter { };
 
   pdfminer = with python3Packages; toPythonApplication pdfminer-six;
 
