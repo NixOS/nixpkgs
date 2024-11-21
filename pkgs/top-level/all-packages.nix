@@ -301,7 +301,6 @@ with pkgs;
 
   coldsnap = callPackage ../tools/admin/coldsnap { };
 
-  collision = callPackage ../applications/misc/collision { };
 
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
