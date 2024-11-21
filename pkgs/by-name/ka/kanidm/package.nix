@@ -107,6 +107,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/kanidm/kanidm/releases/tag/v${version}";
     description = "A simple, secure and fast identity management platform";
     homepage = "https://github.com/kanidm/kanidm";
+    knownVulnerabilities = [ "kanidm 1.3.x has reached EOL as of 2024-12-01. In order to upgrade to kanidm 1.4, you will need to upgrade to NixOS 24.11. Before doing so make sure you run the upgrade check and remediate any deprecations. See upgrade guide at https://kanidm.github.io/kanidm/master/server_updates.html" ];
     license = licenses.mpl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ adamcstephens erictapen Flakebi ];
