@@ -107,6 +107,8 @@ self: super: with self; {
 
   aetcd = callPackage ../development/python-modules/aetcd { };
 
+  atheris = callPackage ../development/python-modules/atheris { };
+
   afdko = callPackage ../development/python-modules/afdko { };
 
   affine = callPackage ../development/python-modules/affine { };
@@ -2117,6 +2119,8 @@ self: super: with self; {
   coincurve = callPackage ../development/python-modules/coincurve {
     inherit (pkgs) secp256k1;
   };
+
+  comicapi = callPackage ../development/python-modules/comicapi { };
 
   comicon = callPackage ../development/python-modules/comicon { };
 
@@ -4622,6 +4626,8 @@ self: super: with self; {
 
   flask-cors = callPackage ../development/python-modules/flask-cors { };
 
+  flask-dance = callPackage ../development/python-modules/flask-dance { };
+
   flask-dramatiq = callPackage ../development/python-modules/flask-dramatiq { };
 
   flask-elastic = callPackage ../development/python-modules/flask-elastic { };
@@ -6215,6 +6221,8 @@ self: super: with self; {
   inference-gym = callPackage ../development/python-modules/inference-gym { };
 
   infinity = callPackage ../development/python-modules/infinity { };
+
+  inflate64 = callPackage ../development/python-modules/inflate64 { };
 
   inflect = callPackage ../development/python-modules/inflect { };
 
@@ -8426,6 +8434,8 @@ self: super: with self; {
 
   multidict = callPackage ../development/python-modules/multidict { };
 
+  multivolumefile = callPackage ../development/python-modules/multivolumefile { };
+
   multi-key-dict = callPackage ../development/python-modules/multi-key-dict { };
 
   multimethod = callPackage ../development/python-modules/multimethod { };
@@ -9040,6 +9050,8 @@ self: super: with self; {
   netifaces = callPackage ../development/python-modules/netifaces { };
 
   netifaces2 = callPackage ../development/python-modules/netifaces2 { };
+
+  netifaces-plus = callPackage ../development/python-modules/netifaces-plus { };
 
   netmiko = callPackage ../development/python-modules/netmiko { };
 
@@ -10160,7 +10172,11 @@ self: super: with self; {
 
   pwinput = callPackage ../development/python-modules/pwinput { };
 
+  py7zr = callPackage ../development/python-modules/py7zr { };
+
   pybars3 = callPackage ../development/python-modules/pybars3 { };
+
+  pybcj = callPackage ../development/python-modules/pybcj { };
 
   pymeta3 = callPackage ../development/python-modules/pymeta3 { };
 
@@ -10537,7 +10553,11 @@ self: super: with self; {
 
   pytask = callPackage ../development/python-modules/pytask { };
 
+  pytest-leaks = callPackage ../development/python-modules/pytest-leaks { };
+
   pytest-mockito = callPackage ../development/python-modules/pytest-mockito { };
+
+  pytest-profiling = callPackage ../development/python-modules/pytest-profiling { };
 
   pytest-pudb = callPackage ../development/python-modules/pytest-pudb { };
 
@@ -10655,6 +10675,8 @@ self: super: with self; {
   pyzbar = callPackage ../development/python-modules/pyzbar { };
 
   pyzipper = callPackage ../development/python-modules/pyzipper { };
+
+  pyzstd = callPackage ../development/python-modules/pyzstd { };
 
   plac = callPackage ../development/python-modules/plac { };
 
@@ -12138,6 +12160,8 @@ self: super: with self; {
   pyplatec = callPackage ../development/python-modules/pyplatec { };
 
   pyppeteer = callPackage ../development/python-modules/pyppeteer { };
+
+  pyppmd = callPackage ../development/python-modules/pyppmd { };
 
   pypresence = callPackage ../development/python-modules/pypresence { };
 
@@ -14232,6 +14256,8 @@ self: super: with self; {
 
   schiene = callPackage ../development/python-modules/schiene { };
 
+  scholarly = callPackage ../development/python-modules/scholarly { };
+
   schwifty = callPackage ../development/python-modules/schwifty { };
 
   scienceplots = callPackage ../development/python-modules/scienceplots { };
@@ -14948,6 +14974,8 @@ self: super: with self; {
 
   spinners = callPackage ../development/python-modules/spinners { };
 
+  sphinx-a4doc = callPackage ../development/python-modules/sphinx-a4doc { };
+
   sphinx-automodapi = callPackage ../development/python-modules/sphinx-automodapi {
     graphviz = pkgs.graphviz;
   };
@@ -14981,6 +15009,8 @@ self: super: with self; {
   sphinx-multiversion = callPackage ../development/python-modules/sphinx-multiversion { };
 
   sphinx-notfound-page = callPackage ../development/python-modules/sphinx-notfound-page { };
+
+  sphinx-py3doc-enhanced-theme = callPackage ../development/python-modules/sphinx-py3doc-enhanced-theme { };
 
   sphinx-pytest = callPackage ../development/python-modules/sphinx-pytest { };
 
@@ -15757,6 +15787,8 @@ self: super: with self; {
   testfixtures = callPackage ../development/python-modules/testfixtures { };
 
   texsoup = callPackage ../development/python-modules/texsoup { };
+
+  text2digits = callPackage ../development/python-modules/text2digits { };
 
   textfsm = callPackage ../development/python-modules/textfsm { };
 
@@ -17348,6 +17380,8 @@ self: super: with self; {
 
   urlman = callPackage ../development/python-modules/urlman { };
 
+  urlobject = callPackage ../development/python-modules/urlobject { };
+
   urlpy = callPackage ../development/python-modules/urlpy { };
 
   urwid = callPackage ../development/python-modules/urwid { };
@@ -17825,6 +17859,8 @@ self: super: with self; {
   wordcloud = callPackage ../development/python-modules/wordcloud { };
 
   wordfreq = callPackage ../development/python-modules/wordfreq { };
+
+  wordninja = callPackage ../development/python-modules/wordninja { };
 
   world-bank-data = callPackage ../development/python-modules/world-bank-data { };
 
