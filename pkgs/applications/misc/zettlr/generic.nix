@@ -8,6 +8,8 @@
   makeWrapper,
   # command line arguments which are always set e.g ["--wayland-text-input-version=3"]
   commandLineArgs ? [ ],
+  testers,
+  zettlr,
 }:
 
 # Based on https://gist.github.com/msteen/96cb7df66a359b827497c5269ccbbf94 and joplin-desktop nixpkgs.
@@ -39,6 +41,10 @@ appimageTools.wrapType2 rec {
     substituteInPlace $out/share/applications/Zettlr.desktop \
       --replace-fail 'Exec=AppRun' 'Exec=${pname}'
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = zettlr;
+  };
 
   meta = {
     description = "Markdown editor for writing academic texts and taking notes";
