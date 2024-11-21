@@ -19,7 +19,7 @@ flutter327.buildFlutterApplication rec {
     hash = "sha256-I2p3GIb54r9r/phbKJsz/cFw1ECdwZ2RnCYVxjsHzg0=";
   };
 
-  autoPubspecLock = ./pubspec.lock;
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   nativeBuildInputs = [
     libunwind
