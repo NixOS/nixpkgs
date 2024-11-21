@@ -2145,7 +2145,6 @@ with pkgs;
     sphinx = buildPackages.python3Packages.sphinx;
   };
 
-  cataract          = callPackage ../applications/misc/cataract { };
   cataract-unstable = callPackage ../applications/misc/cataract/unstable.nix { };
 
   catch2 = callPackage ../development/libraries/catch2 { };
