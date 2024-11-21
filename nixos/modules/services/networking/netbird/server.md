@@ -28,6 +28,7 @@ services.netbird.server = {
 
   management = {
     oidcConfigEndpoint = "https://sso.example.selfhosted/oauth2/openid/netbird/.well-known/openid-configuration";
+    settings.Signal.URI = "publicly reachable signal endpoint";
   };
 };
 ```

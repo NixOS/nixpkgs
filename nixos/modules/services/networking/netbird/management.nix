@@ -66,7 +66,6 @@ let
 
     Signal = {
       Proto = "https";
-      URI = "localhost:${builtins.toString cfg.signal.port}";
       Username = "";
       Password = null;
     };
@@ -371,7 +370,7 @@ in
 
     assertions = [
       {
-        assertion = cfg.port != cfg.metricsPort;
+        assertion = cfg.management.port != cfg.management.metricsPort;
         message = "The primary listen port cannot be the same as the listen port for the metrics endpoint";
       }
     ];

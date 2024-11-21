@@ -79,7 +79,6 @@ in
   config = mkIf cfg.enable {
     services.netbird.server.relay.settings = {
       NB_LISTEN_ADDRESS = mkDefault ":${builtins.toString cfg.port}";
-      NB_EXPOSED_ADDRESS = mkDefault "rel://${cfg.domain}:${builtins.toString cfg.port}";
       NB_METRICS_PORT = mkDefault "9092"; # Upstream default is 9090 but this would clash for nixos where all services run on the same host
     };
     systemd.services.netbird-relay = {
@@ -88,7 +87,7 @@ in
       environment = cfg.settings;
 
       script = ''
-        export NB_AUTH_SECRET="(<${cfg.authSecretFile})"
+        export NB_AUTH_SECRET="$(<${cfg.authSecretFile})"
         ${getExe' cfg.package "netbird-relay"}
       '';
       serviceConfig = {

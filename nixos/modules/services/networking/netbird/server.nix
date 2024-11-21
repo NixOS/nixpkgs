@@ -55,9 +55,10 @@ in
         }
         // (optionalAttrs cfg.coturn.enable rec {
           turnDomain = cfg.domain;
-          turnPort = config.services.coturn.tls-listening-port;
+          turnPort = config.services.coturn.listening-port;
           # We cannot merge a list of attrsets so we have to redefine the whole list
           settings = {
+            Signal.URI = mkDefault "${cfg.domain}:${builtins.toString cfg.signal.port}";
             TURNConfig.Turns = mkDefault [
               {
                 Proto = "udp";
@@ -78,7 +79,7 @@ in
       };
 
       relay = {
-        settings.NB_EXPOSED_ADDRESS = "rel://${cfg.domain}/${builtins.toString cfg.relay.port}";
+        settings.NB_EXPOSED_ADDRESS = mkDefault "rel://${cfg.domain}/${builtins.toString cfg.relay.port}";
         enable = mkDefault cfg.enable;
       };
 
