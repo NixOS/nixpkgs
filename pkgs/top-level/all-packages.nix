@@ -746,7 +746,6 @@ with pkgs;
 
   singularity-tools = callPackage ../build-support/singularity-tools { };
 
-
   srcOnly = callPackage ../build-support/src-only { };
 
   substitute = callPackage ../build-support/substitute/substitute.nix { };
@@ -1765,8 +1764,6 @@ with pkgs;
   bitwarden-menu = python3Packages.callPackage ../applications/misc/bitwarden-menu { };
 
   blocksat-cli = with python3Packages; toPythonApplication blocksat-cli;
-
-  botamusique = callPackage ../tools/audio/botamusique { };
 
   bucklespring = bucklespring-x11;
   bucklespring-libinput = callPackage ../applications/audio/bucklespring { };
@@ -4572,7 +4569,6 @@ with pkgs;
     apps = lib.importJSON ../servers/nextcloud/packages/30.json;
   };
 
-
   nextcloud-client = qt6Packages.callPackage ../applications/networking/nextcloud-client { };
 
   nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
@@ -4599,7 +4595,6 @@ with pkgs;
   );
 
   nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
-
 
   mkgmap = callPackage ../applications/misc/mkgmap { };
 
@@ -8648,7 +8643,6 @@ with pkgs;
     inherit (__splicedPackages.haskellPackages) ShellCheck;
   };
 
-
   # Minimal shellcheck executable for package checks.
   # Use shellcheck which does not include docs, as
   # pandoc takes long to build and documentation isn't needed for just running the cli
@@ -9577,7 +9571,6 @@ with pkgs;
   };
 
   gtk4 = callPackage ../development/libraries/gtk/4.x.nix { };
-
 
   # On darwin gtk uses cocoa by default instead of x11.
   gtk3-x11 = gtk3.override {
@@ -11390,7 +11383,6 @@ with pkgs;
   swt_jdk8 = callPackage ../by-name/sw/swt/package.nix {
     jdk = jdk8;
   };
-
 
   ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
 
@@ -13743,7 +13735,6 @@ with pkgs;
   docker-compose = callPackage ../applications/virtualization/docker/compose.nix { };
   docker-sbom = callPackage ../applications/virtualization/docker/sbom.nix { };
 
-
   drawio = callPackage ../applications/graphics/drawio {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
@@ -15277,7 +15268,6 @@ with pkgs;
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     pythonPackages = python3Packages;
   };
-
 
   notmuch-mutt = callPackage ../applications/networking/mailreaders/notmuch/mutt.nix { };
 
@@ -17453,7 +17443,6 @@ with pkgs;
   xonotic-glx-unwrapped = xonotic-glx.xonotic-unwrapped;
   xonotic-dedicated-unwrapped = xonotic-dedicated.xonotic-unwrapped;
 
-
   xpilot-ng = callPackage ../games/xpilot { };
   bloodspilot-server = callPackage ../games/xpilot/bloodspilot-server.nix { };
   bloodspilot-client = callPackage ../games/xpilot/bloodspilot-client.nix { };
@@ -17990,7 +17979,6 @@ with pkgs;
   yices = callPackage ../applications/science/logic/yices {
     gmp-static = gmp.override { withStatic = true; };
   };
-
 
   inherit (callPackages ../applications/science/logic/z3 { python = python3; })
     z3_4_12
@@ -18999,7 +18987,6 @@ with pkgs;
     inherit (pkgs) callPackage fetchurl;
     branch = "development";
   };
-
 
   discord-screenaudio = qt6Packages.callPackage ../applications/networking/instant-messengers/discord-screenaudio { };
 
