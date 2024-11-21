@@ -9,6 +9,8 @@
   alsa-lib,
   libpulseaudio,
   raylib-games,
+  libGLU,
+  libX11,
   platform ? "Desktop", # Note that "Web", "Android" and "Raspberry Pi" do not currently work
   pulseSupport ? stdenv.hostPlatform.isLinux,
   alsaSupport ? false,
@@ -48,7 +50,10 @@ lib.checkListOfEnum "${pname}: platform"
       nativeBuildInputs = [
         cmake
       ] ++ optional (builtins.length finalAttrs.appendRunpaths > 0) autoPatchelfHook;
+
       buildInputs = optional (platform == "Desktop") glfw ++ optional (platform == "SDL") SDL2;
+
+      propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libGLU libX11 ];
 
       # https://github.com/raysan5/raylib/wiki/CMake-Build-Options
       cmakeFlags =
@@ -72,7 +77,7 @@ lib.checkListOfEnum "${pname}: platform"
         description = "Simple and easy-to-use library to enjoy videogames programming";
         homepage = "https://www.raylib.com/";
         license = lib.licenses.zlib;
-        maintainers = [ ];
+        maintainers = [ lib.maintainers.diniamo ];
         platforms = lib.platforms.all;
         changelog = "https://github.com/raysan5/raylib/blob/${finalAttrs.version}/CHANGELOG";
       };
