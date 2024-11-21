@@ -4141,8 +4141,6 @@ with pkgs;
 
   lolcat = callPackage ../tools/misc/lolcat { };
 
-  loudgain = callPackage ../tools/audio/loudgain/default.nix { };
-
   lsyncd = callPackage ../applications/networking/sync/lsyncd {
     lua = lua5_2_compat;
   };
