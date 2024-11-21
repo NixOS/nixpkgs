@@ -423,8 +423,16 @@ mountFS() {
 
     # For bind mounts, busybox has a tendency to ignore options, which can be a
     # security issue (e.g. "nosuid"). Remounting the partition seems to fix the
-    # issue.
-    mount "/mnt-root$mountPoint" -o "remount,$optionsPrefixed"
+    # issue. This should only be done for bind and rbind mountpoints because other
+    # filesystems may have limitations or may not support remount.
+    local IFS=,
+    for opt in $options; do
+        if [[ "$opt" = bind || "$opt" = rbind ]]; then
+            mount "/mnt-root$mountPoint" -o "remount,$optionsPrefixed"
+            break
+        fi
+    done
+    unset IFS
 
     [ "$mountPoint" == "/" ] &&
         [ -f "/mnt-root/etc/NIXOS_LUSTRATE" ] &&
