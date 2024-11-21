@@ -1941,7 +1941,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
-  kjv = callPackage ../applications/misc/kjv { };
 
   lukesmithxyz-bible-kjv = callPackage ../applications/misc/kjv/lukesmithxyz-kjv.nix { };
 
