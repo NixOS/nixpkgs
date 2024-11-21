@@ -11111,6 +11111,8 @@ with pkgs;
 
   tageditor = libsForQt5.callPackage ../applications/audio/tageditor { };
 
+  taglib2 = callPackage ../by-name/ta/taglib/2.x.nix { };
+
   tclap = tclap_1_2;
 
   tclap_1_2 = callPackage ../development/libraries/tclap/1.2.nix { };
@@ -19195,10 +19197,6 @@ with pkgs;
 
   dillo = callPackage ../by-name/di/dillo/package.nix {
     fltk = fltk13;
-  };
-
-  cantata = callPackage ../by-name/ca/cantata/package.nix {
-    ffmpeg = ffmpeg_6;
   };
 
   tree-from-tags = callPackage ../by-name/tr/tree-from-tags/package.nix {
