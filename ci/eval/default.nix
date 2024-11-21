@@ -5,7 +5,7 @@
   linkFarm,
   time,
   procps,
-  nix,
+  nixVersions,
   jq,
   sta,
 }:
@@ -28,6 +28,8 @@ let
         ]
       );
     };
+
+  nix = nixVersions.nix_2_24;
 
   supportedSystems = import ../supportedSystems.nix;
 
