@@ -61,9 +61,9 @@ in
   };
 
   cargo-pgrx_0_11_2 = generic {
-    version = "0.11.2";
-    hash = "sha256-8NlpMDFaltTIA8G4JioYm8LaPJ2RGKH5o6sd6lBHmmM=";
-    cargoHash = "sha256-qTb3JV3u42EilaK2jP9oa5D09mkuHyRbGGRs9Rg4TzI=";
+    version = "0.12.7";
+    hash = "sha256-Ne5Kq39zIOkhsuEYb3V7JVpofXcHWkt5a9Syy1Sv+u0=";
+    cargoHash = "sha256-CTK8YiKiExKB+iue9zO2WIqylIpL9GlAUOOkOy7h2c4=";
   };
 
   cargo-pgrx_0_11_3 = generic {
