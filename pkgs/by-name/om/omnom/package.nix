@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "omnom";
-  version = "0-unstable-2024-10-01";
+  version = "0-unstable-2024-11-20";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "omnom";
-    rev = "5e82dd40a36b38572b12fa8cbee6097bb40b499d";
-    hash = "sha256-IhiiabJZi+UFvtmgfxLBeuUghB64qiaR4zk3Yotld7g=";
+    rev = "dbf40c9c50b74335286faea7c5070bba11dced83";
+    hash = "sha256-dl0jfFwn+Fd8/aQNhXFNEoDIMgMia2MHZntp0EKhimg=";
     fetchSubmodules = true;
   };
 
