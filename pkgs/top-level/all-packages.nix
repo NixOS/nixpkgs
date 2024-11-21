@@ -13885,7 +13885,6 @@ with pkgs;
 
   fdr = libsForQt5.callPackage ../applications/science/programming/fdr { };
 
-  fetchmail = callPackage ../applications/misc/fetchmail { };
   fetchmail_7 = callPackage ../applications/misc/fetchmail/v7.nix { };
 
   finalfrontier = callPackage ../applications/science/machine-learning/finalfrontier {
