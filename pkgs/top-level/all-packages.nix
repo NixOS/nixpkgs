@@ -1658,7 +1658,6 @@ with pkgs;
     };
   };
 
-  ArchiSteamFarm = callPackage ../applications/misc/ArchiSteamFarm { };
 
   arduino = arduino-core.override { withGui = true; };
 
