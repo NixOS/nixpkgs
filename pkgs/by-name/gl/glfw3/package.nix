@@ -90,11 +90,11 @@ stdenv.mkDerivation {
   strictDeps = true;
   __structuredAttrs = true;
 
-  meta = with lib; {
+  meta = {
     description = "Multi-platform library for creating OpenGL contexts and managing input, including keyboard, mouse, joystick and time";
     homepage = "https://www.glfw.org/";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ marcweber Scrumplex twey ];
-    platforms = platforms.unix ++ platforms.windows;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ marcweber Scrumplex twey ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }
