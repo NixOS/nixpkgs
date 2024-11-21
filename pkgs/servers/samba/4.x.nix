@@ -161,6 +161,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--disable-rpath"
+    # otherwise third_party/waf/waflib/Tools/python.py would
+    # get the wrong pythondir from build platform python
+    "--pythondir=${placeholder "out"}/${python.sitePackages}"
     (lib.enableFeature enablePrinting "cups")
   ] ++ optional (!enableDomainController)
     "--without-ad-dc"
