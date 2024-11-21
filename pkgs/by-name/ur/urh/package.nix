@@ -25,6 +25,13 @@ python3Packages.buildPythonApplication rec {
     pyqt5 numpy psutil cython pyzmq pyaudio setuptools
   ];
 
+  # dont double wrap
+  # https://nixos.org/manual/nixpkgs/stable/#ssec-gnome-common-issues-double-wrapped
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   postFixup = ''
     wrapQtApp $out/bin/urh
   '';
