@@ -85,9 +85,11 @@ jobs:
         uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
 
       - name: Evaluate the ${{ matrix.system }} output paths for all derivation attributes
+        env:
+          MATRIX_SYSTEM: ${{ matrix.system }}
         run: |
           nix-build nixpkgs/ci -A eval.singleSystem \
-            --argstr evalSystem ${{ matrix.system }} \
+            --argstr evalSystem "$MATRIX_SYSTEM" \
             --arg attrpathFile ./paths/paths.json \
             --arg chunkSize 10000
           # If it uses too much memory, slightly decrease chunkSize
