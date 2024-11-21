@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "seilfahrt";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "Nerdbergev";
     repo = "seilfahrt";
     rev = "v${version}";
-    hash = "sha256-eQcRS3xyqdtjRki+EPnHIaqUJufniFJCh5qU2Za9kyg=";
+    hash = "sha256-w3r/mNb4en32huHjJbYghqDi/VsPGXinwUAfSMcuc+0=";
   };
 
-  vendorHash = "sha256-JU77EFk8SWgZkN4DEtkKS2MsBH16my4j9X/NJC/r6mI=";
+  vendorHash = "sha256-wYxQHr8AVi5KGMqRJcb2rTtbnJbi5som29YSILlO6Po=";
 
   buildInputs = [ pandoc ];
 

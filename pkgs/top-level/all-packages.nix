@@ -4793,8 +4793,10 @@ with pkgs;
 
   update-systemd-resolved = callPackage ../tools/networking/openvpn/update-systemd-resolved.nix { };
 
-  opentelemetry-collector = callPackage ../tools/misc/opentelemetry-collector { };
-  opentelemetry-collector-contrib = callPackage ../tools/misc/opentelemetry-collector/contrib.nix { };
+  opentelemetry-collector = opentelemetry-collector-releases.otelcol;
+  opentelemetry-collector-builder = callPackage ../tools/misc/opentelemetry-collector/builder.nix { };
+  opentelemetry-collector-contrib = opentelemetry-collector-releases.otelcol-contrib;
+  opentelemetry-collector-releases = callPackage ../tools/misc/opentelemetry-collector/releases.nix { };
 
   openvswitch-dpdk = callPackage ../by-name/op/openvswitch/package.nix { withDPDK = true; };
 
@@ -10522,7 +10524,7 @@ with pkgs;
 
   nvidia-system-monitor-qt = libsForQt5.callPackage ../tools/system/nvidia-system-monitor-qt { };
 
-  nvtopPackages = recurseIntoAttrs (import ../tools/system/nvtop { inherit callPackage; });
+  nvtopPackages = recurseIntoAttrs (import ../tools/system/nvtop { inherit callPackage stdenv; });
 
   inherit (callPackages ../development/libraries/ogre { })
     ogre_13 ogre_14;
@@ -13567,10 +13569,6 @@ with pkgs;
   };
 
   bluejeans-gui = callPackage ../applications/networking/instant-messengers/bluejeans { };
-
-  bottles = callPackage ../applications/misc/bottles/fhsenv.nix { };
-
-  bottles-unwrapped = callPackage ../applications/misc/bottles { };
 
   breezy = with python3Packages; toPythonApplication breezy;
 
