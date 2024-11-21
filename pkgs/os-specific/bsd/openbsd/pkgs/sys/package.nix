@@ -16,6 +16,8 @@
     extraPaths = [ "sys" ];
     noLibc = true;
 
+    patches = [ ./initpath.patch ];
+
     extraNativeBuildInputs = [
       boot-config
     ];
