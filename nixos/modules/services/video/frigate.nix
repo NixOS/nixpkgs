@@ -6,12 +6,17 @@
 
 let
   inherit (lib)
-    literalExpression
+    any
+    attrValues
+    hasPrefix
+    makeLibraryPath
     mkDefault
     mkEnableOption
     mkPackageOption
     mkIf
     mkOption
+    optionalAttrs
+    optionals
     types;
 
   cfg = config.services.frigate;
@@ -94,6 +99,11 @@ let
     proxy_connect_timeout 360;
   '';
 
+  # Discover configured detectors for acceleration support
+  detectors = attrValues cfg.settings.detectors or {};
+  withCoralUSB = any (d: d.type == "edgetpu" && hasPrefix "usb" d.device or "") detectors;
+  withCoralPCI =  any (d: d.type == "edgetpu" && hasPrefix "pci" d.device or "") detectors;
+  withCoral = withCoralPCI || withCoralUSB;
 in
 
 {
@@ -492,6 +502,11 @@ in
       "frigate"
     ];
 
+    hardware.coral = {
+      usb.enable = mkDefault withCoralUSB;
+      pcie.enable = mkDefault withCoralPCI;
+    };
+
     users.users.frigate = {
       isSystemUser = true;
       group = "frigate";
@@ -510,6 +525,8 @@ in
         CONFIG_FILE = format.generate "frigate.yml" filteredConfig;
         HOME = "/var/lib/frigate";
         PYTHONPATH = cfg.package.pythonPath;
+      } // optionalAttrs withCoral {
+        LD_LIBRARY_PATH = makeLibraryPath (with pkgs; [ libedgetpu ]);
       };
       path = with pkgs; [
         # unfree:
@@ -530,6 +547,7 @@ in
 
         User = "frigate";
         Group = "frigate";
+        SupplementaryGroups = optionals withCoral [ "coral" ];
 
         UMask = "0027";
 
