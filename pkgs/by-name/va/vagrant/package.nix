@@ -118,5 +118,6 @@ in buildRubyGem rec {
     license = licenses.bsl11;
     maintainers = with maintainers; [ tylerjl ];
     platforms = with platforms; linux ++ darwin;
+    broken = true; # build fails on darwin and linux
   };
 }
