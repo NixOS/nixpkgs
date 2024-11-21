@@ -7,15 +7,21 @@
 let
   inherit (lib)
     getExe
+    literalExpression
     maintainers
     mkEnableOption
     mkIf
+    mkMerge
     mkOption
     optionalString
     types
     ;
-  inherit (types) str;
+  inherit (types) listOf str;
+
   cfg = config.programs.pay-respects;
+
+  settingsFormat = pkgs.formats.toml { };
+  inherit (settingsFormat) generate type;
 
   initScript =
     shell:
@@ -41,11 +47,49 @@ in
           The default value is `f`, but you can use anything else as well.
         '';
       };
+      runtimeRules = mkOption {
+        type = listOf type;
+        default = [ ];
+        example = literalExpression ''
+          [
+            {
+              command = "xl";
+              match_err = [
+                {
+                  pattern = [
+                    "Permission denied"
+                  ];
+                  suggest = [
+                    '''
+                      #[executable(sudo), !cmd_contains(sudo), err_contains(libxl: error:)]
+                      sudo {{command}}
+                    '''
+                  ];
+                }
+              ];
+            }
+          ];
+        '';
+        description = ''
+          List of rules to be added to `/etc/xdg/pay-respects/rules`.
+          `pay-respects` will read the contents of these generated rules to recommend command corrections.
+          Each rule module should start with the `command` attribute that specifies the command name. See the [upstream documentation](https://codeberg.org/iff/pay-respects/src/branch/main/rules.md) for more information.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.pay-respects ];
+    environment = mkMerge (
+      [
+        {
+          systemPackages = [ pkgs.pay-respects ];
+        }
+      ]
+      ++ map (rule: {
+        etc."xdg/pay-respects/rules/${rule.command}.toml".source = generate "${rule.command}.toml" rule;
+      }) cfg.runtimeRules
+    );
 
     programs = {
       bash.interactiveShellInit = initScript "bash";
