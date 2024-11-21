@@ -20095,6 +20095,12 @@
     githubId = 293035;
     name = "Shawn Dellysse";
   };
+  ShawnToubeau = {
+    name = "Shawn Toubeau";
+    email = "shawntoubeau@gmail.com";
+    github = "ShawnToubeau";
+    githubId = 22332636;
+  };
   shayne = {
     email = "shaynesweeney@gmail.com";
     github = "shayne";
