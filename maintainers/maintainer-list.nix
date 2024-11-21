@@ -5180,6 +5180,7 @@
     email = "deathraymind@gmail.com";
     github = "deathraymind";
     githubId = 	116578035;
+    keys = [ { fingerprint = "7A37 CC92 3266 791A 036C EC19 D909 CCC0 397C E105"; } ];
   };
   declan = {
     name = "Declan Rixon";
