@@ -4478,6 +4478,8 @@ self: super: with self; {
 
   feather-format = callPackage ../development/python-modules/feather-format { };
 
+  fedora-messaging = callPackage ../development/python-modules/fedora-messaging { };
+
   feedfinder2 = callPackage ../development/python-modules/feedfinder2 { };
 
   feedgen = callPackage ../development/python-modules/feedgen { };
