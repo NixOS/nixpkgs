@@ -1274,24 +1274,32 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                 }
               );
             }
-            (lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) (
-              (bintoolsPackages prevStage)
+            # These have to be dropped from the overlay when cross-compiling. Wrappers are obviously target-specific.
+            # darwin.binutils is not yet ready to be target-independent.
+            (
+              lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) (bintoolsPackages prevStage)
               // {
                 inherit (prevStage.llvmPackages) clang;
-                # Need to get rid of these when cross-compiling.
-                "llvmPackages_${lib.versions.major prevStage.llvmPackages.release_version}" =
-                  let
-                    llvmVersion = lib.versions.major prevStage.llvmPackages.release_version;
-                    tools = super."llvmPackages_${llvmVersion}".tools.extend (
-                      _: _: llvmToolsPackages prevStage // { inherit (prevStage.llvmPackages) clang; }
-                    );
-                    libraries = super."llvmPackages_${llvmVersion}".libraries.extend (
-                      _: _: llvmLibrariesPackages prevStage
-                    );
-                  in
-                  super."llvmPackages_${llvmVersion}" // { inherit tools libraries; } // tools // libraries;
               }
-            ))
+            )
+            # Since LLVM should be the same regardless of target platform, overlay it to avoid an unnecessary
+            # rebuild when cross-compiling from Darwin to another platform using clang.
+            {
+
+              "llvmPackages_${lib.versions.major prevStage.llvmPackages.release_version}" =
+                let
+                  llvmVersion = lib.versions.major prevStage.llvmPackages.release_version;
+                  tools = super."llvmPackages_${llvmVersion}".tools.extend (_: _: llvmToolsPackages prevStage);
+                  libraries = super."llvmPackages_${llvmVersion}".libraries.extend (
+                    _: _:
+                    llvmLibrariesPackages prevStage
+                    // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
+                      inherit (prevStage.llvmPackages) clang;
+                    }
+                  );
+                in
+                super."llvmPackages_${llvmVersion}" // { inherit tools libraries; } // tools // libraries;
+            }
           ];
       };
     }
