@@ -1,12 +1,12 @@
 { lib, fetchFromGitHub, stdenv, nodejs, pnpm, buildGoModule, mage, writeShellScriptBin, nixosTests }:
 
 let
-  version = "0.24.4";
+  version = "0.24.5";
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${version}";
-    hash = "sha256-h3Jz28HYQYZC+oWGXNeKv2iNsrU0gbBRfWgOvuKijtw=";
+    hash = "sha256-P5H+NfjE8wTmPD1VOI72hPi2DlDb4pCyq0nphK1VGK0=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -67,7 +67,7 @@ buildGoModule {
     in
     [ fakeGit mage ];
 
-  vendorHash = "sha256-d2BNzsBeWlpZGbU7PkXWO5e9FLJA/Wda5ImXwqh/WV4=";
+  vendorHash = "sha256-OsKejno8QGg7HzRsrftngiWGiWHFc1jDLi5mQ9/NjI4=";
 
   inherit frontend;
 
