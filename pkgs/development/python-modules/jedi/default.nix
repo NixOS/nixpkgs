@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "jedi";
-  version = "0.19.1-unstable-2024-10-17";
+  version = "0.19.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "davidhalter";
     repo = "jedi";
-    rev = "30adf43a8929ade8a9e0abee6921a5043c962215";
-    hash = "sha256-ytpNKpbaisdd+BXsZBpJV09JRCrX1JcKAelDpIW0bR8=";
+    rev = "v${version}";
+    hash = "sha256-2nDQJS6LIaq91PG3Av85OMFfs1ZwId00K/kvog3PGXE=";
     fetchSubmodules = true;
   };
 
