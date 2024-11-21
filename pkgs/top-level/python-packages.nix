@@ -2688,6 +2688,8 @@ self: super: with self; {
 
   criticality-score = callPackage ../development/python-modules/criticality-score { };
 
+  crochet = callPackage ../development/python-modules/crochet { };
+
   crocoddyl = toPythonModule (pkgs.crocoddyl.override {
     pythonSupport = true;
     python3Packages = self;
