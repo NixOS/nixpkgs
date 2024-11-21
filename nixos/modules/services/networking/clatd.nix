@@ -81,7 +81,7 @@ in
       };
     };
 
-    networking.networkmanager.dispatcherScripts = cfg.enableNetworkManagerIntegration [
+    networking.networkmanager.dispatcherScripts = lib.optionals cfg.enableNetworkManagerIntegration [
       {
         type = "basic";
         # https://github.com/toreanderson/clatd/blob/master/scripts/clatd.networkmanager
