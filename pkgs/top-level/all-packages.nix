@@ -6975,7 +6975,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security SystemConfiguration;
   };
   inherit (callPackages ../development/tools/rust/cargo-pgrx { })
-    cargo-pgrx_0_12_0_alpha_1
     cargo-pgrx_0_12_5
     cargo-pgrx_0_12_6
     ;
