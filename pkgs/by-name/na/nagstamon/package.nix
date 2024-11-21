@@ -1,43 +1,67 @@
 {
   lib,
-  fetchurl,
+  fetchFromGitHub,
   python3Packages,
+  qt6Packages,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "nagstamon";
-  version = "3.14.0";
+  version = "3.16.2";
 
-  src = fetchurl {
-    url = "https://github.com/HenriWahl/Nagstamon/archive/refs/tags/v${version}.tar.gz";
-    sha256 = "sha256-9RxQ/rfvoyjSUsY4tmAkBdVQqZYi3X6PBzQYFIeenzA=";
+  src = fetchFromGitHub {
+    owner = "HenriWahl";
+    repo = "Nagstamon";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9w8ux+AeSg0vDhnk28/2eCE2zYLvAjD7mB0pJBMFs2I=";
   };
 
-  # Test assumes darwin
-  doCheck = false;
-
   build-system = with python3Packages; [ setuptools ];
-  dependencies = with python3Packages; [
-    configparser
-    pyqt6
-    psutil
-    requests
-    beautifulsoup4
-    keyring
-    requests-kerberos
-    lxml
-    dbus-python
-    python-dateutil
-    pysocks
+
+  nativeBuildInputs = [ qt6Packages.wrapQtAppsHook ];
+
+  buildInputs = [
+    qt6Packages.qtmultimedia
+    qt6Packages.qtsvg
   ];
 
-  meta = with lib; {
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
+
+  dependencies = with python3Packages; [
+    arrow
+    beautifulsoup4
+    configparser
+    dbus-python
+    keyring
+    lxml
+    psutil
+    pyqt6
+    pysocks
+    python-dateutil
+    requests
+    requests-kerberos
+  ];
+
+  nativeCheckInputs = with python3Packages; [
+    pylint
+    pytestCheckHook
+  ];
+
+  meta = {
     description = "Status monitor for the desktop";
     homepage = "https://nagstamon.de/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/HenriWahl/Nagstamon/releases/tag/v${version}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       pSub
       liberodark
     ];
+    mainProgram = "nagstamon.py";
+    # NameError: name 'bdist_rpm_options' is not defined. Did you mean: 'bdist_mac_options'?
+    badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
   };
 }
