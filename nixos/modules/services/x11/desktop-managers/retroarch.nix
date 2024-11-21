@@ -9,7 +9,7 @@ in {
     enable = mkEnableOption "RetroArch";
 
     package = mkPackageOption pkgs "retroarch" {
-      example = "retroarch-full";
+      example = "retroarchFull";
     };
 
     extraArgs = mkOption {
