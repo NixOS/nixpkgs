@@ -100,8 +100,13 @@ in stdenv.mkDerivation {
       "-DVTK_PYTHON_VERSION:STRING=${pythonMajor}"
     ];
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
+  env = {
+    # Lots of warnings in vendored code…
+    NIX_CFLAGS_COMPILE =
+      if stdenv.cc.isClang then
+        "-Wno-error=incompatible-function-pointer-types"
+      else
+        "-Wno-error=incompatible-pointer-types";
   };
 
   postInstall = optionalString enablePython ''
