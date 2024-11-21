@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ m4 ];
   buildInputs = if stdenv.hostPlatform.isDarwin then [ Carbon IOKit ] else [ acl libcap ];
 
+  env.CFLAGS = toString [
+    "-Wno-error=implicit-int"
+    "-Wno-error=implicit-function-declaration"
+  ];
+
   postPatch = ''
     sed "/\.mk3/d" -i libschily/Targets.man
     substituteInPlace man/Makefile --replace "man4" ""
