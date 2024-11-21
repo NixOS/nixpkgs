@@ -24,7 +24,7 @@ tcl.mkTclDerivation {
   ''
   + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11") ''
     substituteInPlace unix/configure* \
-      --replace " -framework UniformTypeIdentifiers" ""
+      --replace-fail " -weak_framework UniformTypeIdentifiers" ""
   '';
 
   postInstall = ''
