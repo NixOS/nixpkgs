@@ -5179,7 +5179,7 @@
     name = "Bowyn Rosch";
     email = "deathraymind@gmail.com";
     github = "deathraymind";
-    githubId = 	116578035;
+    githubId = 116578035;
   };
   declan = {
     name = "Declan Rixon";
