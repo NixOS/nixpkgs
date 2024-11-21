@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plfit";
-  version = "0.9.6";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "ntamas";
     repo = "plfit";
     rev = finalAttrs.version;
-    hash = "sha256-XRl6poEdgPNorFideQmEJHCU+phs4rIhMYa8iAOtL1A=";
+    hash = "sha256-ur+ai0in7PaoDZcPzuUzQTrZ3nB0H5FDSfPBpl1e9ug=";
   };
 
   postPatch = lib.optionalString (python != null) ''
