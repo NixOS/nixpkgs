@@ -21,7 +21,7 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-ARwvThfATDdzBTjPFr9yjbE/0eYvp/TCZOEGbUupJmU=";
+    hash = "sha256-vYn1dWu87ruEGT/9QVIvxY21LzesVyq1VPaLcTrDKvY=";
   };
 
   nativeBuildInputs = [
