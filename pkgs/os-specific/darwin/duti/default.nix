@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       a Microsoft Word document has a UTI of com.microsoft.word.doc. Using duti, the
       user can change which application acts as the default handler for a given UTI.
     '';
-    maintainers = with maintainers; [matthewbauer];
+    maintainers = with maintainers; [matthewbauer n-hass];
     platforms = platforms.darwin;
     license = licenses.publicDomain;
     homepage = "https://github.com/moretension/duti/";
