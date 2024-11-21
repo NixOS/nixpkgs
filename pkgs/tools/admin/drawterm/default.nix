@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     description = "Connect to Plan 9 CPU servers from other operating systems";
     homepage = "https://drawterm.9front.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ luc65r moody ];
+    maintainers = with maintainers; [ moody ];
     platforms = platforms.linux;
     mainProgram = "drawterm";
   };

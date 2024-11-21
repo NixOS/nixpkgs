@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Converts font for use with FontLibC";
     homepage = "https://github.com/drdnar/convfont";
     license = licenses.wtfpl;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [ clevor ];
     platforms = platforms.all;
     mainProgram = "convfont";
   };
