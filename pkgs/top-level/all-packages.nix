@@ -19081,7 +19081,6 @@ with pkgs;
 
   openbsd = callPackage ../os-specific/bsd/openbsd { };
 
-  doing = callPackage ../applications/misc/doing  { };
 
   alibuild = callPackage ../development/tools/build-managers/alibuild {
     python = python3;
