@@ -4250,9 +4250,7 @@ with pkgs;
     hdf5 = hdf5.override { usev110Api = true; };
   };
 
-  meilisearch = callPackage ../servers/search/meilisearch {
-    inherit (darwin.apple_sdk_11_0.frameworks) Security SystemConfiguration;
-  };
+  meilisearch = callPackage ../servers/search/meilisearch { };
 
   mhonarc = perlPackages.MHonArc;
 
@@ -7850,14 +7848,6 @@ with pkgs;
     src = oldAttrs.src.override {
       inherit version;
       hash = "sha256-WeSqQO1azbTvm789BYkY//k/ZqFJNz2BWciilgRBC9o=";
-    };
-  }));
-  ansible_2_15 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.15.9";
-    src = oldAttrs.src.override {
-      inherit version;
-      pname = "ansible-core";
-      hash = "sha256-JfmxtaWvPAmGvTko7QhurduGdSf7XIOv7xoDz60080U=";
     };
   }));
 

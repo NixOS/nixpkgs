@@ -25,7 +25,7 @@ done
 # To output the schema
 echo ".fullschema" >> $MERGED_COMMANDS
 
-# The schemas may use functions that history-service defines in C which don't affect the generated schema in a meaningful way.
+# The schemas may use functions that lomiri-history-service defines in C which don't affect the generated schema in a meaningful way.
 # sqlite will return an error after processing queries with such function calls, so remove them.
 sed -i -e '/normalizeId(/d' $MERGED_COMMANDS
 

@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vvenc";
-  version = "1.12.0";
+  version = "1.12.1";
 
   outputs = [
     "out"
@@ -21,8 +21,15 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fraunhoferhhi";
     repo = "vvenc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-C7ApayhubunkXBqJ/EqntaFPn6zk8rZ9fUqg7kbhvAk=";
+    hash = "sha256-Et/JmF/2hh6A1EsOzvgzruMN47rd5cPgRke3uPvz298=";
   };
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isGNU [
+      "-Wno-maybe-uninitialized"
+      "-Wno-uninitialized"
+    ]
+  );
 
   nativeBuildInputs = [ cmake ];
 
