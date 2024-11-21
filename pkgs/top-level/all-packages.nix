@@ -3965,8 +3965,6 @@ with pkgs;
 
   jc = with python3Packages; toPythonApplication jc;
 
-  jekyll = callPackage ../applications/misc/jekyll { };
-
   jello = with python3Packages; toPythonApplication jello;
 
   jing = res.jing-trang;
