@@ -5,18 +5,21 @@
   certbot,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "certbot-dns-route53";
-  format = "setuptools";
+  pyproject = true;
 
   inherit (certbot) src version;
   disabled = pythonOlder "3.6";
 
   sourceRoot = "${src.name}/certbot-dns-route53";
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     acme
     boto3
     certbot
