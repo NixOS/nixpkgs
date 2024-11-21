@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libGL
-, vulkan-loader
-, libXrandr
-, libXinerama
-, libXcursor
-, libX11
-, libXi
-, libXext
-, libXxf86vm
-, fixDarwinDylibNames
-, wayland
-, wayland-scanner
-, wayland-protocols
-, libxkbcommon
-, libdecor
-, withMinecraftPatch ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libGL,
+  vulkan-loader,
+  libXrandr,
+  libXinerama,
+  libXcursor,
+  libX11,
+  libXi,
+  libXext,
+  libXxf86vm,
+  fixDarwinDylibNames,
+  wayland,
+  wayland-scanner,
+  wayland-protocols,
+  libxkbcommon,
+  libdecor,
+  withMinecraftPatch ? false,
 }:
 let
   version = "3.4";
@@ -35,15 +36,21 @@ stdenv.mkDerivation {
   };
 
   # Fix linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
-  patches = [
-    ./x11.patch
-  ] ++ lib.optionals withMinecraftPatch [
-    ./0009-Defer-setting-cursor-position-until-the-cursor-is-lo.patch
-  ];
+  patches =
+    [
+      ./x11.patch
+    ]
+    ++ lib.optionals withMinecraftPatch [
+      ./0009-Defer-setting-cursor-position-until-the-cursor-is-lo.patch
+    ];
 
   propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isWindows) [ libGL ];
 
-  nativeBuildInputs = [ cmake pkg-config ]
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland-scanner ];
 
@@ -69,7 +76,6 @@ stdenv.mkDerivation {
       --replace-fail '"libxkbcommon.so.0"' '"${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0"'
   '';
 
-
   cmakeFlags = [
     # Static linking isn't supported
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
@@ -94,7 +100,11 @@ stdenv.mkDerivation {
     description = "Multi-platform library for creating OpenGL contexts and managing input, including keyboard, mouse, joystick and time";
     homepage = "https://www.glfw.org/";
     license = lib.licenses.zlib;
-    maintainers = with lib.maintainers; [ marcweber Scrumplex twey ];
+    maintainers = with lib.maintainers; [
+      marcweber
+      Scrumplex
+      twey
+    ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }
