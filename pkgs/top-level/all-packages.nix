@@ -290,8 +290,6 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  cloak = callPackage ../applications/misc/cloak { };
-
   cotp = callPackage ../applications/misc/cotp { };
 
   cope = callPackage ../by-name/co/cope/package.nix {
