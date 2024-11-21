@@ -18301,6 +18301,8 @@ self: super: with self; {
 
   zxcvbn = callPackage ../development/python-modules/zxcvbn { };
 
+  zxcvbn-rs-py = callPackage ../development/python-modules/zxcvbn-rs-py { };
+
   zxing-cpp = callPackage ../development/python-modules/zxing-cpp {
     libzxing-cpp = pkgs.zxing-cpp;
   };
