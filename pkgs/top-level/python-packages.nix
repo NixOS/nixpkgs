@@ -4600,6 +4600,8 @@ self: super: with self; {
 
   flask-appbuilder = callPackage ../development/python-modules/flask-appbuilder { };
 
+  flask-apscheduler = callPackage ../development/python-modules/flask-apscheduler { };
+
   flask-assets = callPackage ../development/python-modules/flask-assets { };
 
   flask-babel = callPackage ../development/python-modules/flask-babel { };
