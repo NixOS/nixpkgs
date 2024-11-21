@@ -11,6 +11,7 @@
 , libX11
 , libXi
 , libXext
+, libXxf86vm
 , darwin
 , fixDarwinDylibNames
 , wayland
@@ -59,6 +60,7 @@ stdenv.mkDerivation {
       libXcursor
       libXi
       libXext
+      libXxf86vm
     ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
