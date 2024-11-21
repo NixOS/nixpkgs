@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "ufmt";
-  version = "2.7.3";
+  version = "2.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "omnilib";
     repo = "ufmt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hXCOsetw5o3V9NCR0TOfYSFyfBnuOOZDMiUd/6ER9WU=";
+    hash = "sha256-oEvvXUju7qne3pCwnrckplMs0kBJavB669qieXJZPKw=";
   };
 
   build-system = [ flit-core ];
