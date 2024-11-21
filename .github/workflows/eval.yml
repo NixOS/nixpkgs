@@ -38,7 +38,7 @@ jobs:
         # Add this to _all_ subsequent steps to skip them
         if: steps.merged.outputs.mergedSha
         with:
-          ref: ${{ env.mergedSha }}
+          ref: ${{ steps.merged.outputs.mergedSha }}
           path: nixpkgs
 
       - name: Install Nix
@@ -104,7 +104,7 @@ jobs:
   process:
     name: Process
     runs-on: ubuntu-latest
-    needs: outpaths
+    needs: [ outpaths, attrs ]
     steps:
       - name: Download output paths and eval stats for all systems
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
