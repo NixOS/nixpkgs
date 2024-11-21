@@ -557,7 +557,9 @@ in
         intel-gpu-tools
       ];
       serviceConfig = {
-        ExecStartPre = "-rm /var/cache/frigate/*.mp4";
+        ExecStartPre = pkgs.writeShellScript "frigate-clear-cache" ''
+          rm --recursive --force /var/cache/frigate/*
+        '';
         ExecStart = "${cfg.package.python.interpreter} -m frigate";
         Restart = "on-failure";
         SyslogIdentifier = "frigate";
