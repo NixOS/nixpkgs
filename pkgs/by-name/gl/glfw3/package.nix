@@ -12,7 +12,6 @@
 , libXi
 , libXext
 , libXxf86vm
-, darwin
 , fixDarwinDylibNames
 , wayland
 , wayland-scanner
@@ -48,20 +47,18 @@ stdenv.mkDerivation {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland-scanner ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Carbon Cocoa Kernel ])
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-      wayland-protocols
-      libxkbcommon
-      libX11
-      libXrandr
-      libXinerama
-      libXcursor
-      libXi
-      libXext
-      libXxf86vm
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+    wayland-protocols
+    libxkbcommon
+    libX11
+    libXrandr
+    libXinerama
+    libXcursor
+    libXi
+    libXext
+    libXxf86vm
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace src/wl_init.c \
