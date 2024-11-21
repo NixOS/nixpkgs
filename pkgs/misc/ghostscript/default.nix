@@ -140,11 +140,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  # dynamic library name only contains maj.min, eg. '9.53'
-  dylib_version = lib.versions.majorMinor version;
+  # dynamic library name only contains major, eg. '10'
+  dylib_version = lib.versions.major version;
   preFixup = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gs
-    install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gsx
+    install_name_tool -change libgs.$dylib_version.dylib $out/lib/libgs.$dylib_version.dylib $out/bin/gs
+    install_name_tool -change libgs.$dylib_version.dylib $out/lib/libgs.$dylib_version.dylib $out/bin/gsx
   '';
 
   # validate dynamic linkage
