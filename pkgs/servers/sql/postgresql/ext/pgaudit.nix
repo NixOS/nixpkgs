@@ -43,6 +43,8 @@ buildPostgresqlExtension {
 
   makeFlags = [ "USE_PGXS=1" ];
 
+  enableUpdateScript = false;
+
   meta = with lib; {
     description = "Open Source PostgreSQL Audit Logging";
     homepage = "https://github.com/pgaudit/pgaudit";
