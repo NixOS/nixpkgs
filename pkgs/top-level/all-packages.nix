@@ -1772,8 +1772,6 @@ with pkgs;
   buildbotPackages = recurseIntoAttrs (python3.pkgs.callPackage ../development/tools/continuous-integration/buildbot { });
   inherit (buildbotPackages) buildbot buildbot-ui buildbot-full buildbot-plugins buildbot-worker;
 
-  castopod = callPackage ../applications/audio/castopod { };
-
   certipy = with python3Packages; toPythonApplication certipy-ad;
 
   catcli = python3Packages.callPackage ../tools/filesystems/catcli { };
