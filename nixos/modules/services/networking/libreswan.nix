@@ -125,7 +125,9 @@ in
 
     # Install configuration files
     environment.etc = {
-      "ipsec.secrets".source = "${pkgs.libreswan}/etc/ipsec.secrets";
+      "ipsec.secrets".text = ''
+        include ${pkgs.libreswan}/etc/ipsec.secrets
+      '';
       "ipsec.conf".source = "${pkgs.libreswan}/etc/ipsec.conf";
       "ipsec.d/01-nixos.conf".source = configFile;
     } // policyFiles;

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/mateoconlechuga/convbin";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [ clevor ];
     platforms = platforms.all;
     mainProgram = "convbin";
   };
