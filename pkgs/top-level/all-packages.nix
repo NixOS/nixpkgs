@@ -13393,8 +13393,6 @@ with pkgs;
     pdfstudioviewer
     ;
 
-  acpic = callPackage ../applications/misc/acpic/default.nix { };
-
   aeolus = callPackage ../applications/audio/aeolus { };
   aeolus-stops = callPackage ../applications/audio/aeolus/stops.nix { };
 
