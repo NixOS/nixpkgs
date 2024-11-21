@@ -291,7 +291,6 @@ with pkgs;
   };
 
 
-  cotp = callPackage ../applications/misc/cotp { };
 
   cope = callPackage ../by-name/co/cope/package.nix {
     perl = perl538;
