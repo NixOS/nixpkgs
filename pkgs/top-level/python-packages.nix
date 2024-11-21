@@ -8269,6 +8269,8 @@ self: super: with self; {
 
   molbar = callPackage ../development/python-modules/molbar { };
 
+  mo-installer = callPackage ../development/python-modules/mo-installer { };
+
   molecule = callPackage ../development/python-modules/molecule { };
 
   molecule-plugins = callPackage ../development/python-modules/molecule/plugins.nix { };
