@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeWrapper
-, Foundation
-, glew
-, SDL2
-, writeShellScript
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  makeWrapper,
+  glew,
+  SDL2,
+  writeShellScript,
 }:
 
 let
@@ -24,13 +25,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wipeout-rewrite";
-  version = "unstable-2023-08-13";
+  version = "0-unstable-2024-07-07";
 
   src = fetchFromGitHub {
     owner = "phoboslab";
     repo = "wipeout-rewrite";
-    rev = "7a9f757a79d5c6806252cc1268bda5cdef463e23";
-    hash = "sha256-21IG9mZPGgRhVkT087G+Bz/zLkknkHKGmWjSpcLw8vE=";
+    rev = "a372b51f59217da4a5208352123a4acca800783c";
+    hash = "sha256-RJrWOTb5cZ2rSgO/J8qW5ifMJryBaK6MDtYwQZfghS0=";
   };
 
   enableParallelBuilding = true;
@@ -42,9 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glew
     SDL2
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Foundation
   ];
+
+  # Force this to empty, so assets are looked up in CWD instead of $out/bin
+  env.NIX_CFLAGS_COMPILE = "-DPATH_ASSETS=";
 
   installPhase = ''
     runHook preInstall
@@ -60,12 +62,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
     mainProgram = "wipegame";
     description = "Re-implementation of the 1995 PSX game wipEout";
     homepage = "https://github.com/phoboslab/wipeout-rewrite";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
 })

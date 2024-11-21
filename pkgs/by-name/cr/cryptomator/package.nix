@@ -1,24 +1,38 @@
-{ lib, fetchFromGitHub
-, autoPatchelfHook
-, fuse3
-, maven, jdk, makeShellWrapper, glib, wrapGAppsHook3
-, libayatana-appindicator
+{
+  autoPatchelfHook,
+  fetchFromGitHub,
+  fuse3,
+  glib,
+  jdk23,
+  lib,
+  libayatana-appindicator,
+  makeShellWrapper,
+  maven,
+  wrapGAppsHook3,
 }:
 
+let
+  jdk = jdk23.override { enableJavaFX = true; };
+in
 maven.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.14.1";
+  version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    hash = "sha256-so8RINjFLF9H4K9f/60Ym/v/VpcVfxJ/c+JDOAPFgZU=";
+    hash = "sha256-TSE83QYFry8O6MKAoggJBjqonYiGax5GG/a7sm7aHf8=";
   };
+
+  patches = [
+    # https://github.com/cryptomator/cryptomator/pull/3621
+    ./string-template-removal-and-jdk23.patch
+  ];
 
   mvnJdk = jdk;
   mvnParameters = "-Dmaven.test.skip=true -Plinux";
-  mvnHash = "sha256-aB7wgnJAYvCizC0/gG/amcId/WVVWmZndItm398nDfQ=";
+  mvnHash = "sha256-LFD150cGW6OdwkK28GYI9j44GtVE0pwFMaQ8dQqArLo=";
 
   preBuild = ''
     VERSION=${version}
@@ -55,8 +69,18 @@ maven.buildMavenPackage rec {
       --add-flags "-Dcryptomator.disableUpdateCheck=true" \
       --add-flags "-Dcryptomator.integrationsLinux.trayIconsDir='$out/share/icons/hicolor/symbolic/apps'" \
       --add-flags "--module org.cryptomator.desktop/org.cryptomator.launcher.Cryptomator" \
-      --prefix PATH : "$out/share/cryptomator/libs/:${lib.makeBinPath [ jdk glib ]}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fuse3 libayatana-appindicator ]}" \
+      --prefix PATH : "$out/share/cryptomator/libs/:${
+        lib.makeBinPath [
+          jdk
+          glib
+        ]
+      }" \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          fuse3
+          libayatana-appindicator
+        ]
+      }" \
       --set JAVA_HOME "${jdk.home}"
 
     # install desktop entry and icons
@@ -79,24 +103,30 @@ maven.buildMavenPackage rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    jdk
     makeShellWrapper
     wrapGAppsHook3
-    jdk
   ];
-  buildInputs = [ fuse3 jdk glib libayatana-appindicator ];
+  buildInputs = [
+    fuse3
+    glib
+    jdk
+    libayatana-appindicator
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Free client-side encryption for your cloud files";
-    mainProgram = "cryptomator";
     homepage = "https://cryptomator.org";
-    sourceProvenance = with sourceTypes; [
-      fromSource
-      binaryBytecode  # deps
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "cryptomator";
+    maintainers = with lib.maintainers; [
+      bachp
+      gepbird
     ];
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bachp ];
     platforms = [ "x86_64-linux" ];
-    # Uses abandoned JEP 430 string template preview, removed in JDK 23
-    broken = true;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode # deps
+    ];
   };
 }
