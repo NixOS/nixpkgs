@@ -5167,12 +5167,19 @@
     github = "deadbaed";
     githubId = 8809909;
   };
+
   dearrude = {
     name = "Ebrahim Nejati";
     email = "dearrude@tfwno.gf";
     github = "DearRude";
     githubId = 30749142;
     keys = [ { fingerprint = "4E35 F2E5 2132 D654 E815  A672 DB2C BC24 2868 6000"; } ];
+  };
+  deathraymind = {
+    name = "Bowyn Rosch";
+    email = "deathraymind@gmail.com";
+    github = "deathraymind";
+    githubId = 	116578035;
   };
   declan = {
     name = "Declan Rixon";
@@ -5384,12 +5391,6 @@
     email = "detegr@rbx.email";
     github = "Detegr";
     githubId = 724433;
-  };
-  deathraymind = {
-    name = "Bowyn Rosch";
-    email = "deathraymind@gmail.com";
-    github = "deathraymind";
-    githubId = 	116578035;
   };
   detroyejr = {
     name = "Jonathan De Troye";
