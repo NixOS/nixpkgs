@@ -157,5 +157,6 @@ stdenv.mkDerivation rec {
       # https://www.mono-project.com/docs/faq/licensing/
       # https://github.com/mono/mono/blob/main/LICENSE
     ];
+    mainProgram = "mono";
   };
 }
