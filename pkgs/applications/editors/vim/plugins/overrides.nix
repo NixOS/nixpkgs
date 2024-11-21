@@ -1346,6 +1346,11 @@ in
     nvimRequireCheck = "lsp-progress";
   };
 
+  lspecho-nvim = super.lspecho-nvim.overrideAttrs {
+    meta.license = lib.licenses.mit;
+    nvimRequireCheck = "lspecho";
+  };
+
   luasnip = super.luasnip.overrideAttrs {
     dependencies = [ luaPackages.jsregexp ];
     nvimRequireCheck = "luasnip";
