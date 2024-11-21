@@ -47,11 +47,28 @@ buildPythonPackage rec {
 
   preCheck = ''
     PATH=$out/bin:$PATH
-    ${redis-server}/bin/redis-server &
+    # Note for Darwin: unless the output is redirected, the parent process becomes launchd.
+    # In case of a test failure, that prevents killing the Redis process,
+    # hanging the build forever (that would happen before postCheck).
+    ${redis-server}/bin/redis-server >/dev/null 2>&1 &
+    REDIS_PID=$!
+
+    MAX_RETRIES=30
+    RETRY_COUNT=0
+    until ${redis-server}/bin/redis-cli --scan || [ $RETRY_COUNT -eq $MAX_RETRIES ]; do
+      echo waiting for redis to be ready
+      sleep 1
+      RETRY_COUNT=$((RETRY_COUNT + 1))
+    done
+
+    if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+      echo "Redis failed to start after $MAX_RETRIES retries"
+      exit 1
+    fi
   '';
 
   postCheck = ''
-    kill %%
+    kill $REDIS_PID
   '';
 
   __darwinAllowLocalNetworking = true;
