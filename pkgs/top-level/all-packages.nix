@@ -14305,7 +14305,6 @@ with pkgs;
 
   gnunet-gtk = callPackage ../applications/networking/p2p/gnunet/gtk.nix { };
 
-  gphoto2 = callPackage ../applications/misc/gphoto2 { };
 
   gphoto2fs = callPackage ../applications/misc/gphoto2/gphotofs.nix { };
 
