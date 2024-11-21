@@ -1407,6 +1407,11 @@ in
     nvimRequireCheck = "lsp-progress";
   };
 
+  lspecho-nvim = super.lspecho-nvim.overrideAttrs {
+    meta.license = lib.licenses.mit;
+    nvimRequireCheck = "lspecho";
+  };
+
   lualine-lsp-progress = super.lualine-lsp-progress.overrideAttrs {
     dependencies = with self; [ lualine-nvim ];
   };
