@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "mail-parser";
-  version = "4.0.0";
+  version = "4.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SpamScope";
     repo = "mail-parser";
     rev = "refs/tags/${version}";
-    hash = "sha256-WpV1WJFwzAquPXimew86YpEp++dnkIiBe5E4lMBDl7w=";
+    hash = "sha256-AXMfb+9POEaosCc+dv1xenhvBbpVkllMjftMoADUPXE=";
   };
 
   LC_ALL = "en_US.utf-8";
@@ -49,11 +49,11 @@ buildPythonPackage rec {
     cat tests/mails/mail_malformed_3 | ${python.interpreter} -m mailparser -k -j
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mail parser for python 2 and 3";
     mainProgram = "mailparser";
     homepage = "https://github.com/SpamScope/mail-parser";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ psyanticy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }
