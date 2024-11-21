@@ -12746,6 +12746,14 @@
     githubId = 5624721;
     name = "Ben Wolsieffer";
   };
+  lordmzte = {
+    name = "Moritz Thomae";
+    email = "lord@mzte.de";
+    matrix = "@lordmzte:mzte.de";
+    github = "LordMZTE";
+    githubId = 28735087;
+    keys = [ { fingerprint = "AB47 3D70 53D2 74CA DC2C  230C B648 02DC 33A6 4FF6"; } ];
+  };
   lord-valen = {
     name = "Lord Valen";
     matrix = "@lord-valen:matrix.org";
