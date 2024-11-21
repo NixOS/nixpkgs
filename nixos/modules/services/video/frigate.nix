@@ -8,6 +8,9 @@ let
   inherit (lib)
     any
     attrValues
+    converge
+    elem
+    filterAttrsRecursive
     hasPrefix
     makeLibraryPath
     match
@@ -24,7 +27,7 @@ let
 
   format = pkgs.formats.yaml { };
 
-  filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! lib.elem v [ null ])) cfg.settings;
+  filteredConfig = converge (filterAttrsRecursive (_: v: ! elem v [ null ])) cfg.settings;
 
   cameraFormat = with types; submodule {
     freeformType = format.type;
@@ -549,7 +552,7 @@ in
         libva-utils
         procps
         radeontop
-      ] ++ lib.optionals (!stdenv.hostPlatform.isAarch64) [
+      ] ++ optionals (!stdenv.hostPlatform.isAarch64) [
         # not available on aarch64-linux
         intel-gpu-tools
       ];
