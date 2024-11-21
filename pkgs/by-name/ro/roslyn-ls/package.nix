@@ -12,12 +12,20 @@ let
   pname = "roslyn-ls";
   dotnet-sdk =
     with dotnetCorePackages;
-    combinePackages [
-      sdk_6_0
-      sdk_7_0
-      sdk_8_0
-      sdk_9_0
-    ];
+    sdk_9_0
+    // {
+      inherit
+        (combinePackages [
+          sdk_9_0
+          sdk_8_0
+          # NOTE: we should be able to remove net6.0 after upstream removes from here:
+          # https://github.com/dotnet/roslyn/blob/6cc106c0eaa9b0ae070dba3138a23aeab9b50c13/eng/targets/TargetFrameworks.props#L20
+          sdk_6_0
+        ])
+        packages
+        targetPackages
+        ;
+    };
   # need sdk on runtime as well
   dotnet-runtime = dotnetCorePackages.sdk_9_0;
   rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.targetPlatform.system;
@@ -27,18 +35,18 @@ in
 buildDotnetModule rec {
   inherit pname dotnet-sdk dotnet-runtime;
 
-  vsVersion = "2.49.25";
+  vsVersion = "2.59.14";
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "roslyn";
     rev = "VSCode-CSharp-${vsVersion}";
-    hash = "sha256-1amL+K6gf7qJtODxyBtaswhJSLbMrl2LqpmLAArNpW0=";
+    hash = "sha256-tzBIqXBtPGupBBvHTFO93w6f5qCgllWY420xtjf9o3g=";
   };
 
   # versioned independently from vscode-csharp
   # "roslyn" in here:
   # https://github.com/dotnet/vscode-csharp/blob/main/package.json
-  version = "4.12.0-3.24470.4";
+  version = "4.13.0-3.24577.4";
   projectFile = "src/LanguageServer/${project}/${project}.csproj";
   useDotnetFromEnv = true;
   nugetDeps = ./deps.nix;
@@ -52,12 +60,9 @@ buildDotnetModule rec {
   '';
 
   dotnetFlags = [
+    "-p:TargetRid=${rid}"
     # this removes the Microsoft.WindowsDesktop.App.Ref dependency
     "-p:EnableWindowsTargeting=false"
-    # see this comment: https://github.com/NixOS/nixpkgs/pull/318497#issuecomment-2256096471
-    # we can remove below line after https://github.com/dotnet/roslyn/issues/73439 is fixed
-    "-p:UsingToolMicrosoftNetCompilers=false"
-    "-p:TargetRid=${rid}"
   ];
 
   # two problems solved here:
