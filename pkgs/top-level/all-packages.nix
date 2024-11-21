@@ -14323,7 +14323,6 @@ with pkgs;
     inherit (darwin) libobjc;
   };
 
-  gollum = callPackage ../applications/misc/gollum { };
 
   googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
 
