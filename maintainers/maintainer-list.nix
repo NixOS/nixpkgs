@@ -6131,6 +6131,12 @@
     githubId = 424946;
     name = "James Earl Douglas";
   };
+  ear7h = {
+    email = "julio.grillo98@gmail.com";
+    github = "ear7h";
+    githubId = 23175084;
+    name = "Julio Grillo";
+  };
   EBADBEEF = {
     name = "EBADBEEF";
     email = "errno@ebadf.com";
