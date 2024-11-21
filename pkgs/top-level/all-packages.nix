@@ -8798,8 +8798,6 @@ with pkgs;
 
   xxdiff = libsForQt5.callPackage ../development/tools/misc/xxdiff { };
 
-  xxe-pe = callPackage ../applications/editors/xxe-pe { };
-
   xxdiff-tip = xxdiff;
 
   ycmd = callPackage ../by-name/yc/ycmd/package.nix {
