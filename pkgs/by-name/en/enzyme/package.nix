@@ -1,12 +1,11 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   cmake,
   llvmPackages,
   git,
 }:
-stdenv.mkDerivation rec {
+llvmPackages.stdenv.mkDerivation rec {
   pname = "enzyme";
   version = "0.0.165";
 
@@ -24,24 +23,20 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     git
+    llvmPackages.llvm
   ];
 
-  buildInputs = with llvmPackages; [
-    llvm
-    libclang
-  ];
+  cmakeDir = "../enzyme";
 
-  cmakeFlags = [
-    "-S../enzyme"
-    "-DLLVM_DIR=${llvmPackages.llvm.dev}"
-    "-DClang_DIR=${llvmPackages.libclang.dev}"
-  ];
+  cmakeFlags = [ "-DLLVM_DIR=${llvmPackages.llvm.dev}" ];
 
-  meta = with lib; {
+  enableParallelBuilding = true;
+
+  meta = {
     homepage = "https://enzyme.mit.edu/";
-    description = "High-performance automatic differentiation of LLVM and MLIR.";
-    maintainers = with maintainers; [ kiranshila ];
-    platforms = platforms.all;
-    license = licenses.asl20-llvm;
+    description = "High-performance automatic differentiation of LLVM and MLIR";
+    maintainers = with lib.maintainers; [ kiranshila ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.asl20-llvm;
   };
 }
