@@ -290,8 +290,6 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  cotp = callPackage ../applications/misc/cotp { };
-
   cope = callPackage ../by-name/co/cope/package.nix {
     perl = perl538;
     perlPackages = perl538Packages;
