@@ -1,4 +1,9 @@
-{ rustPlatform, fetchFromGitHub, lib, perl }:
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
+  perl,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "color-scheme-generator";
@@ -27,11 +32,13 @@ rustPlatform.buildRustPackage rec {
     '';
     homespage = "https://github.com/nikolaizombie1/color_scheme_generator";
     license = licenses.gpl3;
-    maintainers = [{
-      name = "Fabio J. Matos Nieves";
-      email = "fabio.matos999@gmail.com";
-      githubId = "70602908";
-      github = "nikolaizombie1";
-    }];
+    maintainers = [
+      {
+        name = "Fabio J. Matos Nieves";
+        email = "fabio.matos999@gmail.com";
+        githubId = "70602908";
+        github = "nikolaizombie1";
+      }
+    ];
   };
 }
