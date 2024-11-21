@@ -1,17 +1,19 @@
-{ lib
-, darwin
-, fetchCrate
-, openssl
-, pkg-config
-, rustPlatform
-, stdenv
+{
+  lib,
+  darwin,
+  fetchCrate,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  stdenv,
 }:
 
 let
   generic =
-    { version
-    , hash
-    , cargoHash
+    {
+      version,
+      hash,
+      cargoHash,
     }:
     rustPlatform.buildRustPackage rec {
       pname = "cargo-pgrx";
