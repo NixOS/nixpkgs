@@ -2605,8 +2605,6 @@ with pkgs;
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
 
-  mpdcron = callPackage ../tools/audio/mpdcron { };
-
   mpd-sima = python3Packages.callPackage ../tools/audio/mpd-sima { };
 
   nix-output-monitor = callPackage ../tools/nix/nix-output-monitor { };
