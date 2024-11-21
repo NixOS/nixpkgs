@@ -5385,6 +5385,12 @@
     github = "Detegr";
     githubId = 724433;
   };
+  deathraymind = {
+    name = "Bowyn Rosch";
+    email = "deathraymind@gmail.com";
+    github = "deathraymind";
+    githubId = 	116578035;
+  };
   detroyejr = {
     name = "Jonathan De Troye";
     email = "detroyejr@outlook.com";
