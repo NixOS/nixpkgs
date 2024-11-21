@@ -4258,10 +4258,6 @@ with pkgs;
 
   mx-puppet-discord = callPackage ../servers/mx-puppet-discord { };
 
-  nagstamon = callPackage ../tools/misc/nagstamon {
-    pythonPackages = python3Packages;
-  };
-
   nanoemoji = with python3Packages; toPythonApplication nanoemoji;
 
   nbtscanner = callPackage ../tools/security/nbtscanner {

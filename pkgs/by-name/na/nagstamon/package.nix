@@ -1,6 +1,6 @@
-{ lib, fetchurl, pythonPackages }:
+{ lib, fetchurl, python3Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "nagstamon";
   version = "3.14.0";
 
@@ -12,8 +12,8 @@ pythonPackages.buildPythonApplication rec {
   # Test assumes darwin
   doCheck = false;
 
-  build-system = with pythonPackages; [ setuptools ];
-  dependencies = with pythonPackages; [ configparser pyqt6 psutil requests
+  build-system = with python3Packages; [ setuptools ];
+  dependencies = with python3Packages; [ configparser pyqt6 psutil requests
      beautifulsoup4 keyring requests-kerberos lxml dbus-python python-dateutil pysocks ];
 
   meta = with lib; {
