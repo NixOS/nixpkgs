@@ -9,7 +9,7 @@ $a}
 
   s!^depend frozen/0$!  frozen = false;!p
   s!^depend frozen/1$!  frozen = true;!p
-  s!^depend release/(.*)$!  year = \1;!p
+  s!^depend release/(\d*)$!  year = \1;!p
   s!^depend revision/(.*)$!  revision = \1;!p
 }
 
@@ -64,7 +64,9 @@ $a}
     s/"lppl1\.3"/"lppl13c"/g  # If a work refers to LPPL 1.3 as its license, this is interpreted as the latest version of the 1.3 license (https://www.latex-project.org/lppl/)
     s/"lppl1\.3a"/"lppl13a"/g
     s/"lppl1\.3c"/"lppl13c"/g
+    s/"no(commercial|info|sell)"/"unfreeRedistributable"/g
     s/"other-free"/"free"/g
+    s/"other-nonfree"/"unfreeRedistributable"/g
     s/"opl"/"opubl"/g
     s/"pd"/"publicDomain"/g
 

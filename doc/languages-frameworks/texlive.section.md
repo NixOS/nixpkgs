@@ -26,7 +26,7 @@ Release 23.11 ships with a new interface that will eventually replace `texlive.c
   ])
   ```
 
-- All packages distributed by TeX Live, which contains most of CTAN, are available and can be found under `texlive.pkgs`:
+- All packages distributed by TeX Live, which contains most of CTAN, and by [tlcontrib](https://contrib.texlive.info/) are available and can be found under `texlive.pkgs`:
   ```ShellSession
   $ nix repl
   nix-repl> :l <nixpkgs>
