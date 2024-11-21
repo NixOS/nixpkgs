@@ -61,14 +61,6 @@ stdenv.mkDerivation {
       libXext
     ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isWindows) [
-    "-DCMAKE_C_FLAGS=-D_GLFW_GLX_LIBRARY='\"${lib.getLib libGL}/lib/libGL.so.1\"'"
-    "-DCMAKE_C_FLAGS=-D_GLFW_EGL_LIBRARY='\"${lib.getLib libGL}/lib/libEGL.so.1\"'"
-    "-DCMAKE_C_FLAGS=-D_GLFW_VULKAN_LIBRARY='\"${lib.getLib vulkan-loader}/lib/libvulkan.so.1\"'"
-  ];
-
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace src/wl_init.c \
       --replace-fail "libxkbcommon.so.0" "${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0" \
@@ -82,6 +74,23 @@ stdenv.mkDerivation {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf ''${!outputLib}/lib/libglfw.so --add-rpath ${lib.getLib wayland}/lib
   '';
+
+  cmakeFlags = [
+    # Static linking isn't supported
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+  ];
+
+  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isWindows) {
+    NIX_CFLAGS_COMPILE = toString [
+      "-D_GLFW_GLX_LIBRARY=\"${lib.getLib libGL}/lib/libGLX.so.0\""
+      "-D_GLFW_EGL_LIBRARY=\"${lib.getLib libGL}/lib/libEGL.so.1\""
+      "-D_GLFW_OPENGL_LIBRARY=\"${lib.getLib libGL}/lib/libGL.so.1\""
+      "-D_GLFW_GLESV1_LIBRARY=\"${lib.getLib libGL}/lib/libGLESv1_CM.so.1\""
+      "-D_GLFW_GLESV2_LIBRARY=\"${lib.getLib libGL}/lib/libGLESv2.so.2\""
+      "-D_GLFW_VULKAN_LIBRARY=\"${lib.getLib vulkan-loader}/lib/libvulkan.so.1\""
+      # This currently omits _GLFW_OSMESA_LIBRARY. Is it even used?
+    ];
+  };
 
   meta = with lib; {
     description = "Multi-platform library for creating OpenGL contexts and managing input, including keyboard, mouse, joystick and time";
