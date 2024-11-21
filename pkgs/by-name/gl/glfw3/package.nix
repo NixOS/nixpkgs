@@ -87,6 +87,9 @@ stdenv.mkDerivation {
     ];
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = with lib; {
     description = "Multi-platform library for creating OpenGL contexts and managing input, including keyboard, mouse, joystick and time";
     homepage = "https://www.glfw.org/";
