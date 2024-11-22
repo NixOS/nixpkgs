@@ -290,10 +290,6 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  cloak = callPackage ../applications/misc/cloak { };
-
-  cotp = callPackage ../applications/misc/cotp { };
-
   cope = callPackage ../by-name/co/cope/package.nix {
     perl = perl538;
     perlPackages = perl538Packages;
@@ -749,7 +745,6 @@ with pkgs;
   } ../build-support/setup-hooks/shorten-perl-shebang.sh;
 
   singularity-tools = callPackage ../build-support/singularity-tools { };
-
 
   srcOnly = callPackage ../build-support/src-only { };
 
@@ -1356,8 +1351,6 @@ with pkgs;
 
   cdemu-daemon = callPackage ../applications/emulators/cdemu/daemon.nix { };
 
-  coltrane = callPackage ../applications/misc/coltrane { };
-
   dosbox = callPackage ../applications/emulators/dosbox {
     inherit (darwin.apple_sdk.frameworks ) OpenGL;
     SDL = if stdenv.hostPlatform.isDarwin then SDL else SDL_compat;
@@ -1772,16 +1765,12 @@ with pkgs;
 
   blocksat-cli = with python3Packages; toPythonApplication blocksat-cli;
 
-  botamusique = callPackage ../tools/audio/botamusique { };
-
   bucklespring = bucklespring-x11;
   bucklespring-libinput = callPackage ../applications/audio/bucklespring { };
   bucklespring-x11 = callPackage ../applications/audio/bucklespring { legacy = true; };
 
   buildbotPackages = recurseIntoAttrs (python3.pkgs.callPackage ../development/tools/continuous-integration/buildbot { });
   inherit (buildbotPackages) buildbot buildbot-ui buildbot-full buildbot-plugins buildbot-worker;
-
-  castopod = callPackage ../applications/audio/castopod { };
 
   certipy = with python3Packages; toPythonApplication certipy-ad;
 
@@ -2613,8 +2602,6 @@ with pkgs;
   monado = callPackage ../by-name/mo/monado/package.nix {
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };
-
-  mpdcron = callPackage ../tools/audio/mpdcron { };
 
   mpd-sima = python3Packages.callPackage ../tools/audio/mpd-sima { };
 
@@ -3969,8 +3956,6 @@ with pkgs;
 
   jc = with python3Packages; toPythonApplication jc;
 
-  jekyll = callPackage ../applications/misc/jekyll { };
-
   jello = with python3Packages; toPythonApplication jello;
 
   jing = res.jing-trang;
@@ -4147,8 +4132,6 @@ with pkgs;
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
 
   lolcat = callPackage ../tools/misc/lolcat { };
-
-  loudgain = callPackage ../tools/audio/loudgain/default.nix { };
 
   lsyncd = callPackage ../applications/networking/sync/lsyncd {
     lua = lua5_2_compat;
@@ -4576,7 +4559,6 @@ with pkgs;
     apps = lib.importJSON ../servers/nextcloud/packages/30.json;
   };
 
-
   nextcloud-client = qt6Packages.callPackage ../applications/networking/nextcloud-client { };
 
   nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
@@ -4603,7 +4585,6 @@ with pkgs;
   );
 
   nvfetcher = haskell.lib.compose.justStaticExecutables haskellPackages.nvfetcher;
-
 
   mkgmap = callPackage ../applications/misc/mkgmap { };
 
@@ -4901,8 +4882,6 @@ with pkgs;
   };
 
   pdd = python3Packages.callPackage ../tools/misc/pdd { };
-
-  pdfposter = callPackage ../applications/misc/pdfposter { };
 
   pdfminer = with python3Packages; toPythonApplication pdfminer-six;
 
@@ -8656,7 +8635,6 @@ with pkgs;
     inherit (__splicedPackages.haskellPackages) ShellCheck;
   };
 
-
   # Minimal shellcheck executable for package checks.
   # Use shellcheck which does not include docs, as
   # pandoc takes long to build and documentation isn't needed for just running the cli
@@ -8805,8 +8783,6 @@ with pkgs;
   xcpretty = callPackage ../development/tools/xcpretty { };
 
   xxdiff = libsForQt5.callPackage ../development/tools/misc/xxdiff { };
-
-  xxe-pe = callPackage ../applications/editors/xxe-pe { };
 
   xxdiff-tip = xxdiff;
 
@@ -9587,7 +9563,6 @@ with pkgs;
   };
 
   gtk4 = callPackage ../development/libraries/gtk/4.x.nix { };
-
 
   # On darwin gtk uses cocoa by default instead of x11.
   gtk3-x11 = gtk3.override {
@@ -11400,7 +11375,6 @@ with pkgs;
   swt_jdk8 = callPackage ../by-name/sw/swt/package.nix {
     jdk = jdk8;
   };
-
 
   ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
 
@@ -13395,8 +13369,6 @@ with pkgs;
     pdfstudioviewer
     ;
 
-  acpic = callPackage ../applications/misc/acpic/default.nix { };
-
   aeolus = callPackage ../applications/audio/aeolus { };
   aeolus-stops = callPackage ../applications/audio/aeolus/stops.nix { };
 
@@ -13711,8 +13683,6 @@ with pkgs;
     plugins = [];
   };
 
-  denaro = callPackage ../applications/finance/denaro { };
-
   inherit (callPackage ../development/tools/devpod { }) devpod devpod-desktop;
 
   dfasma = libsForQt5.callPackage ../applications/audio/dfasma { };
@@ -13752,7 +13722,6 @@ with pkgs;
   docker-buildx = callPackage ../applications/virtualization/docker/buildx.nix { };
   docker-compose = callPackage ../applications/virtualization/docker/compose.nix { };
   docker-sbom = callPackage ../applications/virtualization/docker/sbom.nix { };
-
 
   drawio = callPackage ../applications/graphics/drawio {
     inherit (darwin) autoSignDarwinBinariesHook;
@@ -14332,8 +14301,6 @@ with pkgs;
   qrencode = callPackage ../development/libraries/qrencode {
     inherit (darwin) libobjc;
   };
-
-  gollum = callPackage ../applications/misc/gollum { };
 
   googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
 
@@ -15290,7 +15257,6 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-
   notmuch-mutt = callPackage ../applications/networking/mailreaders/notmuch/mutt.nix { };
 
   muchsync = callPackage ../applications/networking/mailreaders/notmuch/muchsync.nix { };
@@ -15867,8 +15833,6 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  psst = callPackage ../applications/audio/psst { };
-
   squeezelite-pulse = callPackage ../by-name/sq/squeezelite/package.nix {
     audioBackend = "pulse";
   };
@@ -15968,8 +15932,6 @@ with pkgs;
 
   teamspeak5_client = callPackage ../applications/networking/instant-messengers/teamspeak/client5.nix { };
   teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
-
-  taskjuggler = callPackage ../applications/misc/taskjuggler { };
 
   telegram-desktop = kdePackages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop {
     stdenv = if stdenv.hostPlatform.isDarwin
@@ -17341,6 +17303,7 @@ with pkgs;
   experienced-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon/experienced-pixel-dungeon { };
   summoning-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon/summoning-pixel-dungeon { };
   shorter-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon/shorter-pixel-dungeon { };
+  tower-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon/tower-pixel-dungeon { };
 
   # get binaries without data built by Hydra
   simutrans_binaries = lowPrio simutrans.binaries;
@@ -17466,7 +17429,6 @@ with pkgs;
   xonotic-sdl-unwrapped = xonotic-sdl.xonotic-unwrapped;
   xonotic-glx-unwrapped = xonotic-glx.xonotic-unwrapped;
   xonotic-dedicated-unwrapped = xonotic-dedicated.xonotic-unwrapped;
-
 
   xpilot-ng = callPackage ../games/xpilot { };
   bloodspilot-server = callPackage ../games/xpilot/bloodspilot-server.nix { };
@@ -18004,7 +17966,6 @@ with pkgs;
   yices = callPackage ../applications/science/logic/yices {
     gmp-static = gmp.override { withStatic = true; };
   };
-
 
   inherit (callPackages ../applications/science/logic/z3 { python = python3; })
     z3_4_12
@@ -18694,8 +18655,6 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreFoundation Security;
   };
 
-  pt = callPackage ../applications/misc/pt { };
-
   pyupgrade = with python3Packages; toPythonApplication pyupgrade;
 
   pwntools = with python3Packages; toPythonApplication pwntools;
@@ -19016,7 +18975,6 @@ with pkgs;
     branch = "development";
   };
 
-
   discord-screenaudio = qt6Packages.callPackage ../applications/networking/instant-messengers/discord-screenaudio { };
 
   discordo = callPackage ../applications/networking/discordo/default.nix { };
@@ -19097,8 +19055,6 @@ with pkgs;
   netbsd = callPackage ../os-specific/bsd/netbsd { };
 
   openbsd = callPackage ../os-specific/bsd/openbsd { };
-
-  doing = callPackage ../applications/misc/doing  { };
 
   alibuild = callPackage ../development/tools/build-managers/alibuild {
     python = python3;
