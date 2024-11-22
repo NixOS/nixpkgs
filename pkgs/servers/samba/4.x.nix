@@ -36,6 +36,7 @@
 , nixosTests
 , libiconv
 , testers
+, pkgsCross
 
 , enableLDAP ? false, openldap
 , enablePrinting ? false, cups
@@ -249,6 +250,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     samba = nixosTests.samba;
+    cross = pkgsCross.aarch64-multiplatform.samba;
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
     };
