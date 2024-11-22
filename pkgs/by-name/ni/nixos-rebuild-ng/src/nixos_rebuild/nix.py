@@ -12,11 +12,34 @@ from .models import (
     GenerationJson,
     NRError,
     Profile,
+    Ssh,
 )
 from .process import run_wrapper
 from .utils import Args, dict_to_flags, info
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
+
+
+def copy_closure(
+    closure: Path,
+    target_host: Ssh | None,
+    **copy_flags: Args,
+) -> None:
+    host = target_host
+    if not host:
+        return
+
+    run_wrapper(
+        [
+            "nix-copy-closure",
+            *(dict_to_flags(copy_flags)),
+            "--to",
+            host.host,
+            closure,
+        ],
+        check=True,
+        extra_env={"NIX_SSHOPTS": " ".join(host.opts)},
+    )
 
 
 def edit(flake: Flake | None, **flake_flags: Args) -> None:
@@ -277,16 +300,25 @@ def rollback_temporary_profile(profile: Profile) -> Path | None:
         return None
 
 
-def set_profile(profile: Profile, path_to_config: Path, sudo: bool) -> None:
+def set_profile(
+    profile: Profile,
+    path_to_config: Path,
+    target_host: Ssh | None,
+    sudo: bool,
+) -> None:
     "Set a path as the current active Nix profile."
     run_wrapper(
-        ["nix-env", "-p", profile.path, "--set", path_to_config], check=True, sudo=sudo
+        ["nix-env", "-p", profile.path, "--set", path_to_config],
+        check=True,
+        remote=target_host,
+        sudo=sudo,
     )
 
 
 def switch_to_configuration(
     path_to_config: Path,
     action: Action,
+    target_host: Ssh | None,
     sudo: bool,
     install_bootloader: bool = False,
     specialisation: str | None = None,
@@ -310,6 +342,7 @@ def switch_to_configuration(
         [path_to_config / "bin/switch-to-configuration", str(action)],
         extra_env={"NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0"},
         check=True,
+        remote=target_host,
         sudo=sudo,
     )
 

@@ -13,6 +13,21 @@ from .helpers import get_qualified_name
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_copy_closure(mock_run: Any) -> None:
+    closure = Path("/path/to/closure")
+    n.copy_closure(closure, None)
+    mock_run.assert_not_called()
+
+    target_host = m.Ssh("user@host", ["--ssh", "opt"], False)
+    n.copy_closure(closure, target_host)
+    mock_run.assert_called_with(
+        ["nix-copy-closure", "--to", "user@host", closure],
+        check=True,
+        extra_env={"NIX_SSHOPTS": "--ssh opt"},
+    )
+
+
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_edit(mock_run: Any, monkeypatch: Any, tmpdir: Any) -> None:
     # Flake
     flake = m.Flake.parse(".#attr")
@@ -290,11 +305,17 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
 def test_set_profile(mock_run: Any) -> None:
     profile_path = Path("/path/to/profile")
     config_path = Path("/path/to/config")
-    n.set_profile(m.Profile("system", profile_path), config_path, sudo=False)
+    n.set_profile(
+        m.Profile("system", profile_path),
+        config_path,
+        target_host=None,
+        sudo=False,
+    )
 
     mock_run.assert_called_with(
         ["nix-env", "-p", profile_path, "--set", config_path],
         check=True,
+        remote=None,
         sudo=False,
     )
 
@@ -311,6 +332,7 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
             profile_path,
             m.Action.SWITCH,
             sudo=False,
+            target_host=None,
             specialisation=None,
             install_bootloader=False,
         )
@@ -319,6 +341,7 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
         extra_env={"NIXOS_INSTALL_BOOTLOADER": "0"},
         check=True,
         sudo=False,
+        remote=None,
     )
 
     with pytest.raises(m.NRError) as e:
@@ -326,6 +349,7 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
             config_path,
             m.Action.BOOT,
             sudo=False,
+            target_host=None,
             specialisation="special",
         )
     assert (
@@ -342,6 +366,7 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
             Path("/path/to/config"),
             m.Action.TEST,
             sudo=True,
+            target_host=m.Ssh("user@localhost", [], False),
             install_bootloader=True,
             specialisation="special",
         )
@@ -353,6 +378,7 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
         extra_env={"NIXOS_INSTALL_BOOTLOADER": "1"},
         check=True,
         sudo=True,
+        remote=m.Ssh("user@localhost", [], False),
     )
 
 

@@ -101,7 +101,8 @@ def test_profile_from_name(mock_mkdir: Any) -> None:
 
 
 def test_ssh_from_name(monkeypatch: Any, tmpdir: Path) -> None:
-    assert m.SSH.from_arg("user@localhost", None, tmpdir) == m.SSH(
+    monkeypatch.setenv("NIX_SSHOPTS", "")
+    assert m.Ssh.from_arg("user@localhost", None, tmpdir) == m.Ssh(
         "user@localhost",
         [
             "-o",
@@ -114,8 +115,8 @@ def test_ssh_from_name(monkeypatch: Any, tmpdir: Path) -> None:
         False,
     )
 
-    monkeypatch.setenv("NIX_SSHOPTS", "-f foo -b bar", tmpdir)
-    assert m.SSH.from_arg("user@localhost", True, tmpdir) == m.SSH(
+    monkeypatch.setenv("NIX_SSHOPTS", "-f foo -b bar")
+    assert m.Ssh.from_arg("user@localhost", True, tmpdir) == m.Ssh(
         "user@localhost",
         [
             "-f",

@@ -41,7 +41,7 @@ def test_run(mock_run: Any) -> None:
     p.run_wrapper(
         ["test", "--with", "flags"],
         check=True,
-        remote=m.SSH("user@localhost", ["--ssh", "opt"], False),
+        remote=m.Ssh("user@localhost", ["--ssh", "opt"], False),
     )
     mock_run.assert_called_with(
         ["ssh", "--ssh", "opt", "user@localhost", "--", "test", "--with", "flags"],
@@ -69,7 +69,7 @@ def test_run(mock_run: Any) -> None:
         check=True,
         sudo=True,
         extra_env={"FOO": "bar"},
-        remote=m.SSH("user@localhost", ["--ssh", "opt"], True),
+        remote=m.Ssh("user@localhost", ["--ssh", "opt"], True),
     )
     mock_run.assert_called_with(
         [
@@ -97,5 +97,5 @@ def test_run(mock_run: Any) -> None:
             ["test", "--with", "flags"],
             check=False,
             env={"foo": "bar"},
-            remote=m.SSH("user@localhost", [], False),
+            remote=m.Ssh("user@localhost", [], False),
         )

@@ -4,7 +4,7 @@ import os
 import subprocess
 from typing import Sequence, TypedDict, Unpack
 
-from .models import SSH
+from .models import Ssh
 
 
 # Not exhaustive, but we can always extend it later.
@@ -22,7 +22,7 @@ def run_wrapper(
     check: bool,  # make it explicit so we always know if the code is handling errors
     env: dict[str, str] | None = None,  # replaces the current environment
     extra_env: dict[str, str] | None = None,  # appends to the current environment
-    remote: SSH | None = None,
+    remote: Ssh | None = None,
     sudo: bool = False,
     **kwargs: Unpack[RunKwargs],
 ) -> subprocess.CompletedProcess[str]:

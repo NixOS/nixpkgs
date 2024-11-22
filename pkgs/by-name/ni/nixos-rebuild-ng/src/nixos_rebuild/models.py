@@ -116,7 +116,7 @@ class Profile:
 
 
 @dataclass(frozen=True)
-class SSH:
+class Ssh:
     host: str
     opts: list[str]
     tty: bool
