@@ -33,7 +33,6 @@ let
       , flex
       , libxslt
       , makeWrapper
-      , perl
       , pkg-config
       , removeReferencesTo
 
@@ -63,6 +62,10 @@ let
       # PAM
       , pamSupport ? stdenv.hostPlatform.isLinux
       , linux-pam
+
+      # PL/Perl
+      , perlSupport ? false
+      , perl
 
       # PL/Python
       , pythonSupport ? false
@@ -141,7 +144,8 @@ let
       ++ lib.optionals systemdSupport [ systemdLibs ]
       ++ lib.optionals pythonSupport [ python3 ]
       ++ lib.optionals gssSupport [ libkrb5 ]
-      ++ lib.optionals pamSupport [ linux-pam ];
+      ++ lib.optionals pamSupport [ linux-pam ]
+      ++ lib.optionals perlSupport [ perl ];
 
     nativeBuildInputs = [
       makeWrapper
@@ -183,7 +187,7 @@ let
       # This could be removed once the upstream issue is resolved:
       # https://postgr.es/m/flat/427c7c25-e8e1-4fc5-a1fb-01ceff185e5b%40technowledgy.de
       ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16") [ "LDFLAGS_EX_BE=-Wl,-export_dynamic" ]
-      ++ lib.optionals (atLeast "17") [ "--without-perl" ];
+      ++ lib.optionals (atLeast "17" && !perlSupport) [ "--without-perl" ];
 
     patches = [
       (if atLeast "16" then ./patches/relative-to-symlinks-16+.patch else ./patches/relative-to-symlinks.patch)
