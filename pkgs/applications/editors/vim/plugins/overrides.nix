@@ -1826,6 +1826,11 @@ in
     ];
   };
 
+  nvim-lsp-file-operations = super.nvim-lsp-file-operations.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    nvimRequireCheck = "lsp-file-operations";
+  };
+
   nvim-lsputils = super.nvim-lsputils.overrideAttrs {
     dependencies = with self; [ popfix ];
     nvimRequireCheck = "lsputil.codeAction";
