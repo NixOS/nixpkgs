@@ -53,6 +53,38 @@ an attempt of the rewrite.
 
 And use `nixos-rebuild-ng` instead of `nixos-rebuild`.
 
+## Development
+
+Run:
+
+```console
+nix-build -A nixos-rebuild-ng.tests.ci
+```
+
+The command above will run the unit tests and linters, and also check if the
+code is formatted. However, sometimes is more convenient to run just a few
+tests to debug, in this case you can run:
+
+```console
+nix-shell -A nixos-rebuild-ng.devShell
+```
+
+The command above should automatically put you inside `src` directory, and you
+can run:
+
+```console
+# run program
+python -m nixos_rebuild
+# run tests
+python -m pytest
+# check types
+mypy .
+# fix lint issues
+ruff check --fix .
+# format code
+ruff format .
+```
+
 ## Current caveats
 
 - For now we will install it in `nixos-rebuild-ng` path by default, to avoid
@@ -96,4 +128,10 @@ And use `nixos-rebuild-ng` instead of `nixos-rebuild`.
 - [ ] Improve documentation
 - [ ] `nixos-rebuild repl` (calling old `nixos-rebuild` for now)
 - [ ] `nix` build/bootstrap
-- [ ] Reduce build closure
+- [ ] Generate tab completion via [`shtab`](https://docs.iterative.ai/shtab/)
+- [x] Reduce build closure
+
+## TODON'T
+
+- Reimplement `systemd-run` logic (will be moved to the new
+  [`apply`](https://github.com/NixOS/nixpkgs/pull/344407) script)

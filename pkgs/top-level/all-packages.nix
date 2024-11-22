@@ -5265,7 +5265,7 @@ with pkgs;
 
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
-  inherit (callPackage ../applications/networking/instant-messengers/signal-desktop {}) signal-desktop signal-desktop-beta;
+  inherit (callPackage ../applications/networking/instant-messengers/signal-desktop {}) signal-desktop;
 
   slither-analyzer = with python3Packages; toPythonApplication slither-analyzer;
 
