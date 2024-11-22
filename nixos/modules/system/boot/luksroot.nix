@@ -1094,6 +1094,7 @@ in
 
     };
     # We do this because we need the udev rules from the package
+    services.lvm.enable = true;
     boot.initrd.services.lvm.enable = true;
 
     boot.initrd.preFailCommands = mkIf (!config.boot.initrd.systemd.enable) postCommands;
