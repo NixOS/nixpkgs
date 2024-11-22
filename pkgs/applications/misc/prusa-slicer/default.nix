@@ -35,6 +35,7 @@
 , libbgcode
 , heatshrink
 , catch2
+, webkitgtk_4_0
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , wxGTK-override ? null
 }:
@@ -144,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
     libbgcode
     heatshrink
     catch2
+    webkitgtk_4_0
   ] ++ lib.optionals withSystemd [
     systemd
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
