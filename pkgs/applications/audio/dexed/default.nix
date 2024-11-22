@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, gitUpdater
 , cmake
 , pkg-config
 , libX11
@@ -11,31 +12,34 @@
 , freetype
 , alsa-lib
 , libjack2
-, Accelerate
-, Cocoa
-, WebKit
-, MetalKit
-, simd
-, DiscRecording
-, CoreAudioKit
+, apple-sdk_11
 }:
 
 stdenv.mkDerivation rec {
   pname = "dexed";
-  version = "unstable-2022-07-09";
+  version = "0.9.8";
 
   src = fetchFromGitHub {
     owner = "asb2m10";
     repo = "dexed";
-    rev = "2c036316bcd512818aa9cc8129767ad9e0ec7132";
+    rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-6buvA72YRlGjHWLPEZMr45lYYG6ZY+IWmylcHruX27g=";
+    hash = "sha256-mXr1KGzA+DF2dEgAJE4lpnefPqO8pqfnKa43vyjSJgU=";
   };
 
   postPatch = ''
-    # needs special setup on Linux, dunno if it can work on Darwin
-    sed -i -e '/juce::juce_recommended_lto_flags/d' Source/CMakeLists.txt
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE INTERNAL "")' '# Not forcing output archs'
+
+    substituteInPlace Source/CMakeLists.txt \
+      --replace-fail 'COPY_PLUGIN_AFTER_BUILD TRUE' 'COPY_PLUGIN_AFTER_BUILD FALSE'
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # LTO needs special setup on Linux
+    substituteInPlace Source/CMakeLists.txt \
+      --replace-fail 'juce::juce_recommended_lto_flags' '# Not forcing LTO'
   '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -52,13 +56,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libjack2
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Accelerate
-    Cocoa
-    WebKit
-    MetalKit
-    simd
-    DiscRecording
-    CoreAudioKit
+    apple-sdk_11
   ];
 
   # JUCE insists on only dlopen'ing these
@@ -96,6 +94,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     description = "DX7 FM multi platform/multi format plugin";
