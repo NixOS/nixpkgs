@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  callPackage,
   fetchurl,
   autoPatchelfHook,
   noto-fonts-color-emoji,
