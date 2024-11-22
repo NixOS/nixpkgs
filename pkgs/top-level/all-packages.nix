@@ -5671,10 +5671,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa AppKit;
   };
 
-  watchman = darwin.apple_sdk_11_0.callPackage ../development/tools/watchman {
-    inherit (darwin.apple_sdk_11_0.frameworks) CoreServices;
-  };
-
   webassemblyjs-cli = nodePackages."@webassemblyjs/cli-1.11.1";
   webassemblyjs-repl = nodePackages."@webassemblyjs/repl-1.11.1";
   wasm-strip = nodePackages."@webassemblyjs/wasm-strip";
@@ -9121,8 +9117,6 @@ with pkgs;
     stdenv = if stdenv.hostPlatform.isDarwin then gccStdenv else stdenv;
   };
 
-  edencommon = darwin.apple_sdk_11_0.callPackage ../development/libraries/edencommon { };
-
   eigen = callPackage ../development/libraries/eigen { };
 
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix { };
@@ -9167,10 +9161,6 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  fbthrift = darwin.apple_sdk_11_0.callPackage ../development/libraries/fbthrift { };
-
-  fb303 = darwin.apple_sdk_11_0.callPackage ../development/libraries/fb303 { };
-
   inherit (callPackage ../development/libraries/ffmpeg { })
     ffmpeg_4
     ffmpeg_4-headless
@@ -9194,8 +9184,6 @@ with pkgs;
     stdenv = gccStdenv;
   };
   fftwMpi = fftw.override { enableMpi = true; };
-
-  fizz = darwin.apple_sdk_11_0.callPackage ../development/libraries/fizz { };
 
   flint = callPackage ../development/libraries/flint { };
 
@@ -9250,8 +9238,6 @@ with pkgs;
   fontconfig = callPackage ../development/libraries/fontconfig {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
   };
-
-  folly = darwin.apple_sdk_11_0.callPackage ../development/libraries/folly { };
 
   makeFontsConf = callPackage ../development/libraries/fontconfig/make-fonts-conf.nix { };
 
@@ -10457,8 +10443,6 @@ with pkgs;
 
   mpich-pmix = mpich.override { pmixSupport = true; withPm = [ ]; };
 
-  mvfst = darwin.apple_sdk_11_0.callPackage ../development/libraries/mvfst { };
-
   mygpoclient = with python3.pkgs; toPythonApplication mygpoclient;
 
   mygui = callPackage ../development/libraries/mygui {
@@ -11212,7 +11196,6 @@ with pkgs;
   vulkan-tools = callPackage ../tools/graphics/vulkan-tools {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
-  wangle = darwin.apple_sdk_11_0.callPackage ../development/libraries/wangle { };
 
   wayland = darwin.apple_sdk_11_0.callPackage ../development/libraries/wayland { };
   wayland-scanner = callPackage ../development/libraries/wayland/scanner.nix { };

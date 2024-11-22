@@ -1,0 +1,18 @@
+diff --git a/configure.ac b/configure.ac
+index 0fdfaf06a5..d08611848c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -453,13 +453,8 @@
+   AC_CHECK_HEADERS([iconv.h],[],[],[#include <stdlib.h>])
+   if test "x$am_cv_func_iconv" = "xyes"; then
+     AC_CHECK_HEADERS([localcharset.h])
+-    am_save_LIBS="$LIBS"
+     LIBS="${LIBS} ${LIBICONV}"
+-    if test -n "$LIBICONV"; then
+-      LIBSREQUIRED="$LIBSREQUIRED${LIBSREQUIRED:+ }iconv"
+-    fi
+     AC_CHECK_FUNCS([locale_charset])
+-    LIBS="${am_save_LIBS}"
+     if test "x$ac_cv_func_locale_charset" != "xyes"; then
+       # If locale_charset() is not in libiconv, we have to find libcharset.
+       AC_CHECK_LIB(charset,locale_charset)
