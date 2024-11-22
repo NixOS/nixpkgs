@@ -12,6 +12,8 @@
   librusty_v8 ? callPackage ./librusty_v8.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
+  makeSetupHook,
+  deno,
 }:
 
 let
@@ -87,6 +89,10 @@ rustPlatform.buildRustPackage rec {
     updateScript = ./update/update.ts;
     tests = callPackage ./tests { };
     fetchDeps = callPackage ./fetch-deps { };
+    setupHook = makeSetupHook {
+      name = "deno-setup-hook";
+      propagatedBuildInputs = [ deno ];
+    } ./hooks/setup-hook.sh;
   };
 
   meta = with lib; {
