@@ -8,11 +8,11 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "gscan2pdf";
-  version = "2.13.3";
+  version = "2.13.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/gscan2pdf/gscan2pdf-${version}.tar.xz";
-    hash = "sha256-QAs6fsQDe9+nKM/OAVZUHB034K72jHsKoA2LY2JQa8Y=";
+    hash = "sha256-4HcTkVJBscBb8AxeN6orMQFVR0w4hFfkGhxQOzP3mWk=";
   };
 
   patches = [
