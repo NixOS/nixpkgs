@@ -1,0 +1,25 @@
+From da6a4651f74625f4c7f3c31f1125cfa4e774780b Mon Sep 17 00:00:00 2001
+From: Yaroslav Bolyukin <iam@lach.pw>
+Date: Mon, 27 Sep 2021 22:45:58 +0300
+Subject: [PATCH] fix: add executable bit
+
+Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
+---
+ src/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 79ff12d..4f3d746 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -2,7 +2,7 @@ file(GLOB_RECURSE SCSS_SOURCES "*.scss")
+ file(GLOB CSS_SOURCES "*.css")
+ file(GLOB_RECURSE GTK2_SOURCES "gtk2/*")
+ 
+-configure_file(build_theme.sh.cmake ${CMAKE_CURRENT_BINARY_DIR}/build_theme.sh @ONLY)
++configure_file(build_theme.sh.cmake ${CMAKE_CURRENT_BINARY_DIR}/build_theme.sh FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE @ONLY)
+ 
+ set(SOURCES
+     ${SCSS_SOURCES}
+-- 
+2.33.0

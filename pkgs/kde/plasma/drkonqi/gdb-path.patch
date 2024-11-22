@@ -1,0 +1,44 @@
+diff --git a/src/debugger.cpp b/src/debugger.cpp
+index 946bdd12..afb69e35 100644
+--- a/src/debugger.cpp
++++ b/src/debugger.cpp
+@@ -36,15 +36,15 @@ QList<Debugger> Debugger::availableInternalDebuggers(const QString &backend)
+         result.push_back(std::make_shared<Data>(
+             Data{.displayName = i18nc("@label the debugger called GDB", "GDB"),
+                  .codeName = u"gdb"_s,
+-                 .tryExec = u"gdb"_s,
++                 .tryExec = u"@gdb@"_s,
+                  .backendData =
+-                     BackendData{.command = u"gdb -nw -n -batch -x %preamblefile -x %tempfile -p %pid %execpath"_s,
++                     BackendData{.command = u"@gdb@ -nw -n -batch -x %preamblefile -x %tempfile -p %pid %execpath"_s,
+                                  .supportsCommandWithSymbolResolution = true,
+                                  .commandWithSymbolResolution =
+-                                     u"gdb -nw -n -batch --init-eval-command='set debuginfod enabled on' -x %preamblefile -x %tempfile -p %pid %execpath"_s,
++                                     u"@gdb@ -nw -n -batch --init-eval-command='set debuginfod enabled on' -x %preamblefile -x %tempfile -p %pid %execpath"_s,
+                                  .backtraceBatchCommands = u"thread\nthread apply all bt"_s,
+                                  .preambleCommands = expandCommand(
+-                                     u"gdb"_s,
++                                     u"@gdb@"_s,
+                                      u"set width 200\nset backtrace limit 128\nsource %drkonqi_datadir/python/gdb_preamble/preamble.py\npy print_preamble()"_s),
+                                  .execInputFile = {}}}));
+ 
+@@ -63,15 +63,15 @@ QList<Debugger> Debugger::availableInternalDebuggers(const QString &backend)
+             Data{
+                 .displayName = i18nc("@label the debugger called GDB", "GDB"),
+                 .codeName = u"gdb"_s,
+-                .tryExec = u"gdb"_s,
++                .tryExec = u"@gdb@"_s,
+                 .backendData = BackendData{
+-                    .command = u"gdb --nw --nx --batch --command=%preamblefile --command=%tempfile --core=%corefile %execpath"_s,
++                    .command = u"@gdb@ --nw --nx --batch --command=%preamblefile --command=%tempfile --core=%corefile %execpath"_s,
+                     .supportsCommandWithSymbolResolution = true,
+                     .commandWithSymbolResolution =
+-                        u"gdb --nw --nx --batch --init-eval-command='set debuginfod enabled on' --command=%preamblefile --command=%tempfile --core=%corefile %execpath"_s,
++                        u"@gdb@ --nw --nx --batch --init-eval-command='set debuginfod enabled on' --command=%preamblefile --command=%tempfile --core=%corefile %execpath"_s,
+                     .backtraceBatchCommands = u"thread\nthread apply all bt"_s,
+                     .preambleCommands = expandCommand(
+-                        u"gdb"_s,
++                        u"@gdb@"_s,
+                         u"set width 200\nset backtrace limit 128\nsource %drkonqi_datadir/python/gdb_preamble/preamble.py\npy print_preamble()"_s),
+                     .execInputFile = {}}}));
+     }

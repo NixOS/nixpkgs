@@ -1,0 +1,13 @@
+diff --git a/premake5.lua b/premake5.lua
+index 997fd79..54a20a0 100644
+--- a/premake5.lua
++++ b/premake5.lua
+@@ -88,7 +90,7 @@ workspace "otfcc"
+ 		flags { "StaticRuntime" }
+ 		includedirs { "dep/polyfill-msvc" }
+ 	filter "action:gmake"
+-		location "build/gmake"
++		location "."
+ 	filter "action:xcode4"
+ 		location "build/xcode"
+ 	filter {}

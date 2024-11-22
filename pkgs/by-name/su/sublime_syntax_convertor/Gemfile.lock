@@ -1,0 +1,19 @@
+GEM
+  specs:
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    plist (3.7.1)
+    sublime_syntax_convertor (0.1.0)
+      plist
+
+PLATFORMS
+  ruby
+  x86_64-linux
+
+DEPENDENCIES
+  sublime_syntax_convertor!
+
+BUNDLED WITH
+   2.5.5

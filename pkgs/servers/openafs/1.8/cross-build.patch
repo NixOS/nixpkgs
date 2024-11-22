@@ -1,0 +1,223 @@
+diff -Nur --unidirectional-new-file openafs-1.8.2/configure.ac openafs-1.8.2.new/configure.ac
+--- openafs-1.8.2/configure.ac	2018-09-11 17:52:48.000000000 +0200
++++ openafs-1.8.2.new/configure.ac	2018-10-16 15:56:36.512277860 +0200
+@@ -23,6 +23,7 @@
+ AFS_LT_INIT
+ 
+ AC_PROG_CC
++AX_PROG_CC_FOR_BUILD
+ 
+ AC_PATH_PROGS([PATH_CPP], [cpp], [${CC-cc} -E], [$PATH:/lib:/usr/ccs/lib])
+ AC_SUBST([PATH_CPP])
+diff -Nur --unidirectional-new-file openafs-1.8.2/src/cf/ax_prog_cc_for_build.m4 openafs-1.8.2.new/src/cf/ax_prog_cc_for_build.m4
+--- openafs-1.8.2/src/cf/ax_prog_cc_for_build.m4	1970-01-01 01:00:00.000000000 +0100
++++ openafs-1.8.2.new/src/cf/ax_prog_cc_for_build.m4	2018-10-16 16:20:40.278641658 +0200
+@@ -0,0 +1,125 @@
++# ===========================================================================
++#   https://www.gnu.org/software/autoconf-archive/ax_prog_cc_for_build.html
++# ===========================================================================
++#
++# SYNOPSIS
++#
++#   AX_PROG_CC_FOR_BUILD
++#
++# DESCRIPTION
++#
++#   This macro searches for a C compiler that generates native executables,
++#   that is a C compiler that surely is not a cross-compiler. This can be
++#   useful if you have to generate source code at compile-time like for
++#   example GCC does.
++#
++#   The macro sets the CC_FOR_BUILD and CPP_FOR_BUILD macros to anything
++#   needed to compile or link (CC_FOR_BUILD) and preprocess (CPP_FOR_BUILD).
++#   The value of these variables can be overridden by the user by specifying
++#   a compiler with an environment variable (like you do for standard CC).
++#
++#   It also sets BUILD_EXEEXT and BUILD_OBJEXT to the executable and object
++#   file extensions for the build platform, and GCC_FOR_BUILD to `yes' if
++#   the compiler we found is GCC. All these variables but GCC_FOR_BUILD are
++#   substituted in the Makefile.
++#
++# LICENSE
++#
++#   Copyright (c) 2008 Paolo Bonzini <bonzini@gnu.org>
++#
++#   Copying and distribution of this file, with or without modification, are
++#   permitted in any medium without royalty provided the copyright notice
++#   and this notice are preserved. This file is offered as-is, without any
++#   warranty.
++
++#serial 9
++
++AU_ALIAS([AC_PROG_CC_FOR_BUILD], [AX_PROG_CC_FOR_BUILD])
++AC_DEFUN([AX_PROG_CC_FOR_BUILD], [dnl
++AC_REQUIRE([AC_PROG_CC])dnl
++AC_REQUIRE([AC_PROG_CPP])dnl
++AC_REQUIRE([AC_EXEEXT])dnl
++AC_REQUIRE([AC_CANONICAL_HOST])dnl
++
++dnl Use the standard macros, but make them use other variable names
++dnl
++pushdef([ac_cv_prog_CPP], ac_cv_build_prog_CPP)dnl
++pushdef([ac_cv_prog_gcc], ac_cv_build_prog_gcc)dnl
++pushdef([ac_cv_prog_cc_works], ac_cv_build_prog_cc_works)dnl
++pushdef([ac_cv_prog_cc_cross], ac_cv_build_prog_cc_cross)dnl
++pushdef([ac_cv_prog_cc_g], ac_cv_build_prog_cc_g)dnl
++pushdef([ac_cv_exeext], ac_cv_build_exeext)dnl
++pushdef([ac_cv_objext], ac_cv_build_objext)dnl
++pushdef([ac_exeext], ac_build_exeext)dnl
++pushdef([ac_objext], ac_build_objext)dnl
++pushdef([CC], CC_FOR_BUILD)dnl
++pushdef([CPP], CPP_FOR_BUILD)dnl
++pushdef([CFLAGS], CFLAGS_FOR_BUILD)dnl
++pushdef([CPPFLAGS], CPPFLAGS_FOR_BUILD)dnl
++pushdef([LDFLAGS], LDFLAGS_FOR_BUILD)dnl
++pushdef([host], build)dnl
++pushdef([host_alias], build_alias)dnl
++pushdef([host_cpu], build_cpu)dnl
++pushdef([host_vendor], build_vendor)dnl
++pushdef([host_os], build_os)dnl
++pushdef([ac_cv_host], ac_cv_build)dnl
++pushdef([ac_cv_host_alias], ac_cv_build_alias)dnl
++pushdef([ac_cv_host_cpu], ac_cv_build_cpu)dnl
++pushdef([ac_cv_host_vendor], ac_cv_build_vendor)dnl
++pushdef([ac_cv_host_os], ac_cv_build_os)dnl
++pushdef([ac_cpp], ac_build_cpp)dnl
++pushdef([ac_compile], ac_build_compile)dnl
++pushdef([ac_link], ac_build_link)dnl
++
++save_cross_compiling=$cross_compiling
++save_ac_tool_prefix=$ac_tool_prefix
++cross_compiling=no
++ac_tool_prefix=
++
++AC_PROG_CC
++AC_PROG_CPP
++AC_EXEEXT
++
++ac_tool_prefix=$save_ac_tool_prefix
++cross_compiling=$save_cross_compiling
++
++dnl Restore the old definitions
++dnl
++popdef([ac_link])dnl
++popdef([ac_compile])dnl
++popdef([ac_cpp])dnl
++popdef([ac_cv_host_os])dnl
++popdef([ac_cv_host_vendor])dnl
++popdef([ac_cv_host_cpu])dnl
++popdef([ac_cv_host_alias])dnl
++popdef([ac_cv_host])dnl
++popdef([host_os])dnl
++popdef([host_vendor])dnl
++popdef([host_cpu])dnl
++popdef([host_alias])dnl
++popdef([host])dnl
++popdef([LDFLAGS])dnl
++popdef([CPPFLAGS])dnl
++popdef([CFLAGS])dnl
++popdef([CPP])dnl
++popdef([CC])dnl
++popdef([ac_objext])dnl
++popdef([ac_exeext])dnl
++popdef([ac_cv_objext])dnl
++popdef([ac_cv_exeext])dnl
++popdef([ac_cv_prog_cc_g])dnl
++popdef([ac_cv_prog_cc_cross])dnl
++popdef([ac_cv_prog_cc_works])dnl
++popdef([ac_cv_prog_gcc])dnl
++popdef([ac_cv_prog_CPP])dnl
++
++dnl Finally, set Makefile variables
++dnl
++BUILD_EXEEXT=$ac_build_exeext
++BUILD_OBJEXT=$ac_build_objext
++AC_SUBST(BUILD_EXEEXT)dnl
++AC_SUBST(BUILD_OBJEXT)dnl
++AC_SUBST([CFLAGS_FOR_BUILD])dnl
++AC_SUBST([CPPFLAGS_FOR_BUILD])dnl
++AC_SUBST([LDFLAGS_FOR_BUILD])dnl
++])
+diff -Nur --unidirectional-new-file openafs-1.8.2/src/comerr/Makefile.in openafs-1.8.2.new/src/comerr/Makefile.in
+--- openafs-1.8.2/src/comerr/Makefile.in	2018-09-11 17:52:48.000000000 +0200
++++ openafs-1.8.2.new/src/comerr/Makefile.in	2018-10-16 15:48:19.678898925 +0200
+@@ -38,11 +38,14 @@
+ compile_et:	compile_et.o error_table.o
+ 	$(Q)case $(SYS_NAME) in \
+ 	*_linux* | *_umlinux* | *_darwin* | rs_aix72 | rs_aix73 ) \
+-	$(LT_LDRULE_static_NOQ) compile_et.o error_table.o -L${TOP_LIBDIR} -lopr $(buildtool_roken) $(MT_LIBS);; \
++	$(LT_LDRULE_static_NOQ) compile_et.o error_table.o -L${TOP_LIBDIR} -lopr_build $(buildtool_roken) $(MT_LIBS);; \
+ 	* ) \
+-	$(LT_LDRULE_static_NOQ) compile_et.o error_table.o -L${TOP_LIBDIR} -lopr -ll $(buildtool_roken) $(MT_LIBS);; \
++	$(LT_LDRULE_static_NOQ) compile_et.o error_table.o -L${TOP_LIBDIR} -lopr_build -ll $(buildtool_roken) $(MT_LIBS);; \
+ 	esac
+ 
++compile_et compile_et.o error_table.o: CC=$(CC_FOR_BUILD)
++compile_et compile_et.o error_table.o: LD=$(CC_FOR_BUILD)
++
+ libafscom_err.a: $(LT_objs)
+ 	$(LT_LDLIB_lwp) $(LT_objs)
+ 
+diff -Nur --unidirectional-new-file openafs-1.8.2/src/config/Makefile.in openafs-1.8.2.new/src/config/Makefile.in
+--- openafs-1.8.2/src/config/Makefile.in	2018-09-11 17:52:48.000000000 +0200
++++ openafs-1.8.2.new/src/config/Makefile.in	2018-10-16 15:48:19.677898926 +0200
+@@ -54,6 +54,8 @@
+ 
+ config.o: config.c AFS_component_version_number.c
+ 
++config mkvers config.o mc.o: CC=$(CC_FOR_BUILD)
++
+ #
+ # Include installation targets
+ #
+diff -Nur --unidirectional-new-file openafs-1.8.2/src/opr/Makefile.in openafs-1.8.2.new/src/opr/Makefile.in
+--- openafs-1.8.2/src/opr/Makefile.in	2018-09-11 17:52:48.000000000 +0200
++++ openafs-1.8.2.new/src/opr/Makefile.in	2018-10-16 15:48:19.678898925 +0200
+@@ -21,7 +21,7 @@
+ 	  $(TOP_INCDIR)/opr/time.h \
+ 	  $(TOP_INCDIR)/opr/uuid.h
+ 
+-all: $(HEADERS) liboafs_opr.la $(TOP_LIBDIR)/libopr_pic.a $(TOP_LIBDIR)/libopr.a
++all: $(HEADERS) liboafs_opr.la $(TOP_LIBDIR)/libopr_pic.a $(TOP_LIBDIR)/libopr.a $(TOP_LIBDIR)/libopr_build.a
+ 
+ liboafs_opr.la: liboafs_opr.la.sym $(LT_objs) $(LT_deps)
+ 	$(LT_LDLIB_shlib) $(LT_objs) $(LT_deps) $(LT_libs)
+@@ -29,12 +29,26 @@
+ libopr.a: $(LT_objs)
+ 	$(LT_LDLIB_static) $(LT_objs)
+ 
++LT_objs_build = $(patsubst %.lo, %_build.lo, $(LT_objs))
++
++%_build.lo: %.c
++	$(LT_CCRULE) $<
++
++libopr_build.a: $(LT_objs_build)
++	$(LT_LDLIB_static) $(LT_objs_build)
++
++libopr_build.a $(LT_objs_build): CC=$(CC_FOR_BUILD)
++libopr_build.a $(LT_objs_build): LD=$(CC_FOR_BUILD)
++
+ libopr_pic.la: $(LT_objs)
+ 	$(LT_LDLIB_pic) $(LT_objs)
+ 
+ $(TOP_LIBDIR)/libopr.a: libopr.a
+ 	$(INSTALL_DATA) libopr.a $@
+ 
++$(TOP_LIBDIR)/libopr_build.a: libopr_build.a
++	$(INSTALL_DATA) libopr_build.a $@
++
+ $(TOP_LIBDIR)/libopr_pic.a: libopr_pic.la
+ 	$(INSTALL_DATA) .libs/libopr_pic.a $@
+ 
+diff -Nur --unidirectional-new-file openafs-1.8.2/src/rxgen/Makefile.in openafs-1.8.2.new/src/rxgen/Makefile.in
+--- openafs-1.8.2/src/rxgen/Makefile.in	2018-09-11 17:52:48.000000000 +0200
++++ openafs-1.8.2.new/src/rxgen/Makefile.in	2018-10-16 15:48:19.677898926 +0200
+@@ -25,6 +25,8 @@
+ 
+ CFLAGS_rpc_main.o= -DPATH_CPP="\"$(PATH_CPP)\""
+ 
++rxgen $(OBJS): CC=$(CC_FOR_BUILD)
++
+ #
+ # Install targets
+ #

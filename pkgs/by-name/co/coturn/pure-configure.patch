@@ -1,0 +1,17 @@
+diff --git a/configure b/configure
+index 28a0625..ea25488 100755
+--- a/configure
++++ b/configure
+@@ -624,12 +624,6 @@ fi
+ 
+ TMPDIR="."
+ 
+-if [ -d /var/tmp ] ; then
+-  TMPDIR="/var/tmp"
+-elif [ -d /tmp ] ; then
+-  TMPDIR=/tmp
+-fi
+-
+ ${ECHO_CMD} Use TMP dir ${TMPDIR}
+ 
+ #########################
