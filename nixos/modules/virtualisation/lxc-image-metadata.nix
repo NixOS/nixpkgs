@@ -46,6 +46,10 @@ let
   else { files = []; properties = {}; };
 
 in {
+  imports = [
+    ../image/file-options.nix
+  ];
+
   meta = {
     maintainers = lib.teams.lxc.members;
   };
@@ -87,7 +91,12 @@ in {
   };
 
   config = {
+    system.nixos.tags = [ "lxc" "metadata" ];
+    image.extension = "tar.xz";
+    image.filePath = "tarball/${config.image.fileName}";
+    system.build.image = config.system.build.metadata;
     system.build.metadata = pkgs.callPackage ../../lib/make-system-tarball.nix {
+      fileName = config.image.baseName;
       contents = [
         {
           source = toYAML "metadata.yaml" {
