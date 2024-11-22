@@ -35,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "aiosonic";
-  version = "0.21.0";
+  version = "0.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     owner = "sonic182";
     repo = "aiosonic";
     rev = "refs/tags/${version}";
-    hash = "sha256-YvqRuxl+Dgnsla/iotvWREdh93jwnXaq+F9py9MGP0o=";
+    hash = "sha256-wBYGiSTSRhi11uqTyGgF1YpnBVoDraCr2GKC8VkQEWc=";
   };
 
   postPatch = ''
