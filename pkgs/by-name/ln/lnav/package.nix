@@ -11,6 +11,7 @@
 , automake
 , curl
 , buildPackages
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +47,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     ./autogen.sh
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/tstack/lnav";
