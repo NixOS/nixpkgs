@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nomacs/nomacs/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "nomacs";
-    maintainers = with lib.maintainers; [ AndersonTorres mindavi ];
+    maintainers = with lib.maintainers; [ mindavi ];
     inherit (libsForQt5.qtbase.meta) platforms;
   };
 })

@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/libarchive/libarchive/releases/tag/v${finalAttrs.version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jcumming AndersonTorres ];
+    maintainers = with maintainers; [ jcumming ];
     platforms = platforms.all;
     inherit (acl.meta) badPlatforms;
   };

@@ -217,7 +217,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor finalAttrs.version}/release/${lib.versions.majorMinor finalAttrs.version}.html";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ttuegel lnl7 AndersonTorres ];
+    maintainers = with lib.maintainers; [ ttuegel lnl7 ];
     platforms = lib.platforms.all;
     mainProgram = "cmake";
     broken = (qt5UI && stdenv.hostPlatform.isDarwin);
