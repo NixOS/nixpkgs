@@ -79,6 +79,10 @@ let
       , tclSupport ? false
       , tcl
 
+      # SELinux
+      , selinuxSupport ? false
+      , libselinux
+
       # Systemd
       , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
       , systemdLibs
@@ -155,7 +159,8 @@ let
       ++ lib.optionals pamSupport [ linux-pam ]
       ++ lib.optionals perlSupport [ perl ]
       ++ lib.optionals ldapSupport [ openldap ]
-      ++ lib.optionals tclSupport [ tcl ];
+      ++ lib.optionals tclSupport [ tcl ]
+      ++ lib.optionals selinuxSupport [ libselinux ];
 
     nativeBuildInputs = [
       makeWrapper
@@ -199,7 +204,8 @@ let
       ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16") [ "LDFLAGS_EX_BE=-Wl,-export_dynamic" ]
       ++ lib.optionals (atLeast "17" && !perlSupport) [ "--without-perl" ]
       ++ lib.optionals ldapSupport [ "--with-ldap" ]
-      ++ lib.optionals tclSupport [ "--with-tcl" ];
+      ++ lib.optionals tclSupport [ "--with-tcl" ]
+      ++ lib.optionals selinuxSupport [ "--with-selinux" ];
 
     patches = [
       (if atLeast "16" then ./patches/relative-to-symlinks-16+.patch else ./patches/relative-to-symlinks.patch)
