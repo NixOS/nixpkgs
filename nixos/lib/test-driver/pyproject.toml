@@ -17,6 +17,7 @@ find = {}
 test_driver = ["py.typed"]
 
 [tool.ruff]
+target-version = "py312"
 line-length = 88
 
 lint.select = ["E", "F", "I", "U", "N"]

@@ -3,10 +3,10 @@ import re
 import signal
 import tempfile
 import threading
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from contextlib import AbstractContextManager, contextmanager
 from pathlib import Path
-from typing import Any, Callable, Optional, Union
+from typing import Any
 
 from colorama import Fore, Style
 
@@ -208,7 +208,7 @@ class Driver:
         self,
         start_command: str | dict,
         *,
-        name: Optional[str] = None,
+        name: str | None = None,
         keep_vm_state: bool = False,
     ) -> Machine:
         # Legacy args handling
@@ -274,11 +274,11 @@ class Driver:
 
     def polling_condition(
         self,
-        fun_: Optional[Callable] = None,
+        fun_: Callable | None = None,
         *,
         seconds_interval: float = 2.0,
-        description: Optional[str] = None,
-    ) -> Union[Callable[[Callable], AbstractContextManager], AbstractContextManager]:
+        description: str | None = None,
+    ) -> Callable[[Callable], AbstractContextManager] | AbstractContextManager:
         driver = self
 
         class Poll:
