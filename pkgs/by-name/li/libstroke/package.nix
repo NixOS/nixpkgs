@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "0bbpqzsqh9zrc6cg62f6vp1p4dzvv37blsd0gdlzdskgwvyzba8d";
   };
 
+  postPatch = ''
+    sed -i 1i'#include <string.h>' libstroke/stroke.c
+  '';
+
   nativeBuildInputs = [ automake autoconf ];
   buildInputs = [ libX11 ];
 
