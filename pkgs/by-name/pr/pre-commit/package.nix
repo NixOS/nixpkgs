@@ -107,12 +107,6 @@ buildPythonApplication rec {
     deactivate
   '';
 
-  # Propagating dependencies leaks them through $PYTHONPATH which causes issues
-  # when used in nix-shell.
-  postFixup = ''
-    rm $out/nix-support/propagated-build-inputs
-  '';
-
   disabledTests = [
     # ERROR: The install method you used for conda--probably either `pip install conda`
     # or `easy_install conda`--is not compatible with using conda as an application.
@@ -182,8 +176,8 @@ buildPythonApplication rec {
     "pre_commit"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = pre-commit;
+  passthru.tests = callPackage ./tests.nix {
+    inherit git pre-commit;
   };
 
   meta = with lib; {
