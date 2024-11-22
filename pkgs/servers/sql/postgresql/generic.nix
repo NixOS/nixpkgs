@@ -75,6 +75,10 @@ let
       , pythonSupport ? false
       , python3
 
+      # PL/Tcl
+      , tclSupport ? false
+      , tcl
+
       # Systemd
       , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
       , systemdLibs
@@ -150,7 +154,8 @@ let
       ++ lib.optionals gssSupport [ libkrb5 ]
       ++ lib.optionals pamSupport [ linux-pam ]
       ++ lib.optionals perlSupport [ perl ]
-      ++ lib.optionals ldapSupport [ openldap ];
+      ++ lib.optionals ldapSupport [ openldap ]
+      ++ lib.optionals tclSupport [ tcl ];
 
     nativeBuildInputs = [
       makeWrapper
@@ -193,7 +198,8 @@ let
       # https://postgr.es/m/flat/427c7c25-e8e1-4fc5-a1fb-01ceff185e5b%40technowledgy.de
       ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16") [ "LDFLAGS_EX_BE=-Wl,-export_dynamic" ]
       ++ lib.optionals (atLeast "17" && !perlSupport) [ "--without-perl" ]
-      ++ lib.optionals ldapSupport [ "--with-ldap" ];
+      ++ lib.optionals ldapSupport [ "--with-ldap" ]
+      ++ lib.optionals tclSupport [ "--with-tcl" ];
 
     patches = [
       (if atLeast "16" then ./patches/relative-to-symlinks-16+.patch else ./patches/relative-to-symlinks.patch)
