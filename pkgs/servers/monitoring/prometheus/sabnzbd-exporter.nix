@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages, nixosTests }:
 
 python3Packages.buildPythonApplication rec {
   pname = "sabnzbd_exporter";
@@ -26,6 +26,8 @@ python3Packages.buildPythonApplication rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) sabnzbd; };
 
   meta = with lib; {
     description = "Prometheus exporter for sabnzbd";
