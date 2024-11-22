@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "4.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "bieniu";
@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "accuweather" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for getting weather data from AccuWeather servers";
     homepage = "https://github.com/bieniu/accuweather";
     changelog = "https://github.com/bieniu/accuweather/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jamiemagee ];
   };
 }

@@ -11,6 +11,7 @@
   nix-update-script,
   versionCheckHook,
   libiconv,
+  nixosTests,
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -76,6 +77,7 @@ python3Packages.buildPythonPackage rec {
   passthru = {
     tests = {
       inherit ruff-lsp;
+      nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
     };
     updateScript = nix-update-script { };
   };

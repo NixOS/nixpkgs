@@ -36,6 +36,6 @@ python3.pkgs.buildPythonApplication {
       readable diffs in those situations.
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres anpryl ];
+    maintainers = with lib.maintainers; [ anpryl ];
   };
 }

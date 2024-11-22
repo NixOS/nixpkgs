@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
     description = "Mesh optimization library that makes meshes smaller and faster to render";
     homepage = "https://github.com/zeux/meshoptimizer";
     license = licenses.mit;
-    maintainers = [ maintainers.lillycham ];
+    maintainers = with maintainers; [ bouk lillycham ];
     platforms = platforms.all;
     mainProgram = "gltfpack";
   };

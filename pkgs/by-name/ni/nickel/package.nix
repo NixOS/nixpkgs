@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     '';
     changelog = "https://github.com/tweag/nickel/blob/${version}/RELEASES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres felschr matthiasbeyer ];
+    maintainers = with maintainers; [ felschr matthiasbeyer ];
     mainProgram = "nickel";
   };
 }
