@@ -8897,7 +8897,7 @@ with pkgs;
     boost186
   ;
 
-  boost = boost181;
+  boost = boost186;
 
   inherit (callPackages ../development/libraries/botan { })
     botan2
