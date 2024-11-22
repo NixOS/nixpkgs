@@ -49,7 +49,7 @@
 , withChromaprint ? withFullDeps # Audio fingerprinting
 , withCodec2 ? withFullDeps # codec2 en/decoding
 , withCuda ? withFullDeps && withNvcodec
-, withCudaLLVM ? withFullDeps
+, withCudaLLVM ? withHeadlessDeps
 , withCudaNVCC ? withFullDeps && withUnfree && config.cudaSupport
 , withCuvid ? withHeadlessDeps && withNvcodec
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
