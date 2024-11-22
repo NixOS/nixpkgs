@@ -101,6 +101,17 @@ mkScxScheduler "c" {
     "stackprotector"
   ];
 
+  # We copy the compiled header files to the dev output
+  # These are needed for the rust schedulers
+  preInstall = ''
+    mkdir -p ${placeholder "dev"}/libbpf
+    mkdir -p ${placeholder "dev"}/bpftool
+    cp -r libbpf/* ${placeholder "dev"}/libbpf/
+    cp -r bpftool/* ${placeholder "dev"}/bpftool/
+  '';
+
+  outputs = [ "bin" "dev" "out" ];
+
   meta = {
     description = "Sched-ext C userspace schedulers";
     longDescription = ''
