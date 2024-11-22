@@ -5340,7 +5340,6 @@ broken-packages:
   - serokell-util # failure in job https://hydra.nixos.org/build/233209952 at 2023-09-02
   - servant-aeson-specs # failure in job https://hydra.nixos.org/build/233202245 at 2023-09-02
   - servant-auth-cookie # failure in job https://hydra.nixos.org/build/233235829 at 2023-09-02
-  - servant-auth-server # failure in job https://hydra.nixos.org/build/233208742 at 2023-09-02
   - servant-avro # failure in job https://hydra.nixos.org/build/233225632 at 2023-09-02
   - servant-benchmark # failure in job https://hydra.nixos.org/build/233203748 at 2023-09-02
   - servant-cassava # failure in job https://hydra.nixos.org/build/252730906 at 2024-03-16

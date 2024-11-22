@@ -382,6 +382,9 @@ self: super: ({
     '';
   }) super.di-core;
 
+  # Requires /usr/bin/security which breaks sandbox
+  servant-auth-server = dontCheck super.servant-auth-server;
+
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {  # aarch64-darwin
 
   # Workarounds for justStaticExecutables on aarch64-darwin. Since dead code
