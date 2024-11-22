@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -51,6 +52,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   #TODO: output doc through zshelldoc
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://github.com/zdharma-continuum/zinit";
