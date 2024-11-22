@@ -13739,8 +13739,6 @@ with pkgs;
 
   droopy = python3Packages.callPackage ../applications/networking/droopy { };
 
-  dexed = callPackage ../applications/audio/dexed { };
-
   dwl = callPackage ../by-name/dw/dwl/package.nix {
     wlroots = wlroots_0_18;
   };
