@@ -25,6 +25,7 @@
   copyDesktopItems,
   makeDesktopItem,
   version ? "8.2.2",
+  packetTracerSource ? null,
 }:
 
 let
@@ -43,11 +44,15 @@ let
     name = "ciscoPacketTracer8-unwrapped";
     inherit version;
 
-    src = requireFile {
-      name = names.${version};
-      hash = hashes.${version};
-      url = "https://www.netacad.com";
-    };
+    src =
+      if (packetTracerSource != null) then
+        packetTracerSource
+      else
+        requireFile {
+          name = names.${version};
+          hash = hashes.${version};
+          url = "https://www.netacad.com";
+        };
 
     buildInputs =
       [
