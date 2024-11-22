@@ -5,6 +5,7 @@
   nodejs,
   python311,
   util-linux,
+  ffmpeg,
   ...
 }:
 stdenv.mkDerivation rec {
@@ -58,6 +59,8 @@ stdenv.mkDerivation rec {
 
     # Skip trying to install it... (less warnings in the log)
     sed  -i '/public function run/areturn ; //skip' recognize/lib/Migration/InstallDeps.php
+
+    ln -s ${ffmpeg}/bin/ffmpeg recognize/node_modules/ffmpeg-static/ffmpeg
   '';
 
   buildInputs = [
