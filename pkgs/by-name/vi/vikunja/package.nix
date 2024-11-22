@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, stdenv, stdenvNoCC,  nodePackages, buildGoModule, jq, mage, writeShellScriptBin, nixosTests, buildNpmPackage, moreutils, cacert }:
+{ lib, fetchFromGitHub, fetchpatch, stdenv, stdenvNoCC,  nodePackages, buildGoModule, jq, mage, writeShellScriptBin, nixosTests, buildNpmPackage, moreutils, cacert }:
 
 let
   version = "0.23.0";
@@ -9,9 +9,23 @@ let
     hash = "sha256-DGdJ/qO86o4LDB2Soio6/zd5S0su6ffrtT+iOn1eQnA=";
   };
 
+  patches = [
+    # security patches from 0.24.5
+    (fetchpatch {
+      name = "security-check-saved-filters-permissions.patch";
+      url = "https://github.com/go-vikunja/vikunja/commit/bbbd936868f73a73e37d0f40313274e9e0ba30ac.patch";
+      hash = "sha256-xEsecgmfxx3M92Bpe/cDYNghP5gvEDN5D0xDZEeETuU=";
+    })
+    (fetchpatch {
+      name = "security-check-saved-filters-permissions.patch";
+      url = "https://github.com/go-vikunja/vikunja/commit/3659b7b58d4405452f3e806e12b0e3dfb4577503.patch";
+      hash = "sha256-1TQFe1N3/gwbamN5ZzKgP04oRbx5x+Tlmrt8H7V/Q2A=";
+    })
+  ];
+
   frontend = stdenv.mkDerivation (finalAttrs: {
     pname = "vikunja-frontend";
-    inherit version src;
+    inherit version src patches;
 
     postPatch = ''
       cd frontend
@@ -103,7 +117,7 @@ let
     '';
 in
 buildGoModule {
-  inherit src version;
+  inherit src version patches;
   pname = "vikunja";
 
   nativeBuildInputs =
