@@ -93,6 +93,11 @@ rustPlatform.buildRustPackage rec {
       name = "deno-setup-hook";
       propagatedBuildInputs = [ deno ];
     } ./hooks/setup-hook.sh;
+    compileHook = makeSetupHook {
+      name = "deno-compile-hook";
+      propagatedBuildInputs = [ deno ];
+      substitutions.deno = deno;
+    } ./hooks/compile-hook.sh;
   };
 
   meta = with lib; {
