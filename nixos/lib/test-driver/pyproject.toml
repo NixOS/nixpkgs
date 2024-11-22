@@ -35,11 +35,6 @@ ignore_missing_imports = true
 module = "junit_xml.*"
 ignore_missing_imports = true
 
-[tool.black]
-line-length = 88
-target-version = ['py39']
-include = '\.pyi?$'
-
 [tool.mypy]
 warn_redundant_casts = true
 disallow_untyped_calls = true

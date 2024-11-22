@@ -66,15 +66,14 @@ python3Packages.buildPythonApplication {
   nativeCheckInputs = with python3Packages; [
     mypy
     ruff
-    black
   ];
 
   checkPhase = ''
     echo -e "\x1b[32m## run mypy\x1b[0m"
     mypy test_driver extract-docstrings.py
-    echo -e "\x1b[32m## run ruff\x1b[0m"
+    echo -e "\x1b[32m## run ruff check\x1b[0m"
     ruff check .
-    echo -e "\x1b[32m## run black\x1b[0m"
-    black --check --diff .
+    echo -e "\x1b[32m## run ruff format\x1b[0m"
+    ruff format --check --diff .
   '';
 }
