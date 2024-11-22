@@ -24,10 +24,10 @@ in
       type = lib.types.package;
       default = pkgs.scx.full;
       defaultText = lib.literalExpression "pkgs.scx.full";
-      example = lib.literalExpression "pkgs.scx.rustland";
+      example = lib.literalExpression "pkgs.scx.rustscheds";
       description = ''
         `scx` package to use. `scx.full`, which includes all schedulers, is the default.
-        You may choose a minimal package, such as `pkgs.scx.rustland`, if only one specific scheduler is needed.
+        You may choose a minimal package, such as `pkgs.scx.rustscheds`.
 
         ::: {.note}
         Overriding this does not change the default scheduler; you should set `services.scx.scheduler` for it.
