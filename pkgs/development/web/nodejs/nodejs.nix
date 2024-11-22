@@ -291,6 +291,7 @@ let
       "FLAKY_TESTS=skip"
       # Skip some tests that are not passing in this context
       "CI_SKIP_TESTS=${lib.concatStringsSep "," ([
+        # Tests don't work in sandbox.
         "test-child-process-exec-env"
         "test-child-process-uid-gid"
         "test-fs-write-stream-eagain"
