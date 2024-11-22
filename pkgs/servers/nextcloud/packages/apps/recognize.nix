@@ -6,7 +6,6 @@
   python311,
   util-linux,
   ffmpeg,
-  ...
 }:
 stdenv.mkDerivation rec {
   pname = "nextcloud-app-recognise";
