@@ -1,0 +1,44 @@
+diff --git a/XOptions/xoptions.cpp b/XOptions/xoptions.cpp
+index 8c887c3..36cdbc3 100755
+--- a/XOptions/xoptions.cpp
++++ b/XOptions/xoptions.cpp
+@@ -1754,14 +1754,7 @@ bool XOptions::checkNative(const QString &sIniFileName)
+ #if defined(Q_OS_MAC)
+     bResult = true;
+ #elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+-    QString sApplicationDirPath = qApp->applicationDirPath();
+-
+-    if ((sApplicationDirPath == "/bin") || (sApplicationDirPath == "/usr/bin") || (sApplicationDirPath == "/usr/local/bin") || (sApplicationDirPath == "/app/bin") ||
+-        (sApplicationDirPath.contains("/usr/local/bin$")) || isAppImage()) {
+-        bResult = true;
+-    } else {
+-        bResult = false;
+-    }
++    bResult = true;
+ #elif defined(Q_OS_WIN)
+     QString sApplicationDirPath = qApp->applicationDirPath();
+ 
+@@ -1788,22 +1781,7 @@ QString XOptions::getApplicationDataPath()
+ #ifdef Q_OS_MAC
+     sResult = sApplicationDirPath + "/../Resources";
+ #elif defined(Q_OS_LINUX)
+-    if (isNative()) {
+-        if (sApplicationDirPath.contains("/usr/local/bin$")) {
+-            QString sPrefix = sApplicationDirPath.section("/usr/local/bin", 0, 0);
+-
+-            sResult += sPrefix + QString("/usr/local/lib/%1").arg(qApp->applicationName());
+-        } else {
+-            if (sApplicationDirPath.contains("/tmp/.mount_"))  // AppImage
+-            {
+-                sResult = sApplicationDirPath.section("/", 0, 2);
+-            }
+-
+-            sResult += QString("/usr/lib/%1").arg(qApp->applicationName());
+-        }
+-    } else {
+-        sResult = sApplicationDirPath;
+-    }
++    sResult = sApplicationDirPath + "/../lib/die";
+ #elif defined(Q_OS_FREEBSD)
+     sResult = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(1) + QDir::separator() + qApp->applicationName();
+ #else

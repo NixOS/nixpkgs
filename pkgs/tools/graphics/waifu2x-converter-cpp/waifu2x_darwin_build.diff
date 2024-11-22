@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8b728b5..dedf8b6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -71,10 +71,6 @@ message(STATUS "System is: ${CMAKE_SYSTEM_NAME} (${LOCAL_SYS_TYPE})")
+ 
+ ### Get binary paths for APPLE users
+ if(APPLE AND CMAKE_CXX_COMPILER_ID MATCHES "^(Apple)?Clang$")
+-	set(CMAKE_C_COMPILER "/usr/local/opt/llvm/bin/clang")
+-	set(CMAKE_CXX_COMPILER "/usr/local/opt/llvm/bin/clang++")
+-	set(CMAKE_EXE_LINKER_FLAGS "-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib")
+-	set(CMAKE_SHARED_LINKER_FLAGS "-L/usr/local/opt/llvm/lib -Wl,-rpath,/usr/local/opt/llvm/lib")
+ 	if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
+ 		set(FILE_SYSTEM_LIB "c++fs")
+ 	endif()

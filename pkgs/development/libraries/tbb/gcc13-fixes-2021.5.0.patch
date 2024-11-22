@@ -1,0 +1,13 @@
+diff --git a/test/common/utils_assert.h b/test/common/utils_assert.h
+index 33bc8ab4..a3d21baf 100644
+--- a/test/common/utils_assert.h
++++ b/test/common/utils_assert.h
+@@ -20,6 +20,8 @@
+ #include "config.h"
+ #include "utils_report.h"
+ 
++#include <cstdlib>
++
+ #define REPORT_FATAL_ERROR REPORT
+ 
+ namespace utils {

@@ -1,0 +1,27 @@
+diff --git a/daemon/service/platform/platform.go b/daemon/service/platform/platform.go
+index 941a99a7..df821c4d 100644
+--- a/daemon/service/platform/platform.go
++++ b/daemon/service/platform/platform.go
+@@ -111,12 +111,6 @@ func Init() (warnings []string, errors []error, logInfo []string) {
+ 	}
+
+ 	// checking file permissions
+-	if err := checkFileAccessRightsStaticConfig("openvpnCaKeyFile", openvpnCaKeyFile); err != nil {
+-		errors = append(errors, err)
+-	}
+-	if err := checkFileAccessRightsStaticConfig("openvpnTaKeyFile", openvpnTaKeyFile); err != nil {
+-		errors = append(errors, err)
+-	}
+
+ 	if len(openvpnUpScript) > 0 {
+ 		if err := checkFileAccessRightsExecutable("openvpnUpScript", openvpnUpScript); err != nil {
+@@ -149,9 +143,6 @@ func Init() (warnings []string, errors []error, logInfo []string) {
+ 	if err := checkFileAccessRightsExecutable("dnscryptproxyBinPath", dnscryptproxyBinPath); err != nil {
+ 		errors = append(errors, err)
+ 	}
+-	if err := checkFileAccessRightsStaticConfig("dnscryptproxyConfigTemplate", dnscryptproxyConfigTemplate); err != nil {
+-		errors = append(errors, err)
+-	}
+
+ 	if len(routeCommand) > 0 {
+ 		routeBinary := strings.Split(routeCommand, " ")[0]

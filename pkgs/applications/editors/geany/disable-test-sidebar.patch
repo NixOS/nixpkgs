@@ -1,0 +1,11 @@
+--- a/tests/Makefile.in	2023-10-19 18:10:06.000000000 +0200
++++ b/tests/Makefile.in	2023-11-10 00:13:09.816498568 +0100
+@@ -86,7 +86,7 @@
+ POST_UNINSTALL = :
+ build_triplet = @build@
+ host_triplet = @host@
+-check_PROGRAMS = test_utils$(EXEEXT) test_sidebar$(EXEEXT)
++check_PROGRAMS = test_utils$(EXEEXT)
+ subdir = tests
+ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+ am__aclocal_m4_deps = $(top_srcdir)/m4/ax_cxx_compile_stdcxx.m4 \

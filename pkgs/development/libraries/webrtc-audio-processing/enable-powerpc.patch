@@ -1,0 +1,37 @@
+This patch was extracted from the Gentoo powerpc64le-qtwebengine
+patchset, referenced here:
+
+  https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-qt/qtwebengine/qtwebengine-5.15.3_p20220406.ebuild
+
+and downloaded from here:
+
+  https://dev.gentoo.org/~asturm/distfiles/${PN}-5.15.3_p20220406-patchset.tar.xz
+
+From 4bbb4482e14ad27cf0bd5032b1b5d4abba29dc99 Mon Sep 17 00:00:00 2001
+From: Georgy Yakovlev <gyakovlev@gentoo.org>
+Date: Fri, 27 Nov 2020 13:05:45 -0800
+Subject: [PATCH] 5.15.2 ppc64le patchet
+
+diff --git a/webrtc/typedefs.h b/webrtc/typedefs.h
+index ce1f3e8..fd39a16 100644
+--- a/webrtc/typedefs.h
++++ b/webrtc/typedefs.h
+@@ -38,6 +38,18 @@
+ #define WEBRTC_ARCH_X86
+ #define WEBRTC_ARCH_32_BITS
+ #define WEBRTC_ARCH_LITTLE_ENDIAN
++#elif defined(__PPC__)
++#define WEBRTC_ARCH_PPC_FAMILY
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
++#define WEBRTC_ARCH_LITTLE_ENDIAN
++#else
++#define WEBRTC_ARCH_BIG_ENDIAN
++#endif
++#if defined(__LP64__)
++#define WEBRTC_ARCH_64_BITS
++#else
++#define WEBRTC_ARCH_32_BITS
++#endif
+ #elif defined(__ARMEL__)
+ // TODO(ajm): We'd prefer to control platform defines here, but this is
+ // currently provided by the Android makefiles. Commented to avoid duplicate

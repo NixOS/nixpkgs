@@ -1,0 +1,39 @@
+commit 433a8b99da9d71e96434bd421c2468cbda29d37c
+Author: Mauricio Collares <mauricio@collares.org>
+Date:   Tue Mar 2 22:07:11 2021 -0300
+
+    trim logfile information from pari 2.13 output
+    
+    Pari (since commit 609fb01faf827d91dfa9136849a647a3bbfe8036) prints
+    extra logfile information such as
+    
+      [logfile is "/tmp/nix-shell.2BquN9/home/.sympow/datafiles/P02HM.txt"]
+    
+    which messes up sympow's parsing. This commit reuses the same trimming
+    mechanism already in sympow to trim this new message.
+
+diff --git a/Configure b/Configure
+index 53b556e..53999ae 100755
+--- a/Configure
++++ b/Configure
+@@ -322,7 +322,7 @@ echo "datafiles/param_data: \$(OTHERb)" >> $FILE
+ echo "	\$(MKDIR) -p datafiles" >> $FILE
+ echo "	\$(TOUCH) datafiles/param_data" >> $FILE
+ echo "	\$(SH) armd.sh" >> $FILE
+-echo "	\$(SED) -i -e '/logfile =/d'  datafiles/*.txt" >> $FILE
++echo "	\$(SED) -i -e '/logfile /d' datafiles/*.txt" >> $FILE
+ echo "	\$(SED) -i -e '/logfile is/d' datafiles/*.txt" >> $FILE
+ echo "sympow.1: sympow" >> $FILE
+ echo "	\$(HELP2MAN) \$(H2MFLAGS) -s 1 -n \"SYMPOW program\" -I sympow.h2m -o \$@ ./\$<" >> $FILE
+diff --git a/generate.c b/generate.c
+index dbb811f..783320c 100644
+--- a/generate.c
++++ b/generate.c
+@@ -148,6 +148,7 @@ static void trimit(char *A)
+    " -e '"
+      "/^\?/d"                           ";"
+      "/^(/d"                            ";"
++	   "/logfile /d"                      ";"
+ 	   "/Warning:/d"                      ";"
+ 	   "/^About to find TOO_BIG/d"        ";"
+ 	   "/^Now working backwards/d"        ";"

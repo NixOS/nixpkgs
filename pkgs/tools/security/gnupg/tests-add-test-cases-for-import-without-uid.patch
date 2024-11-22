@@ -1,0 +1,201 @@
+From: Vincent Breitmoser <look@my.amazin.horse>
+Date: Thu, 13 Jun 2019 21:27:41 +0200
+Subject: tests: add test cases for import without uid
+
+This commit adds a test case that does the following, in order:
+- Import of a primary key plus user id
+- Check that import of a subkey works, without a user id present in the
+imported key
+- Check that import of a subkey revocation works, without a user id or
+subkey binding signature present in the imported key
+- Check that import of a primary key revocation works, without a user id
+present in the imported key
+
+--
+
+Note that this test currently fails.  The following changesets will
+fix gpg so that the tests pass.
+
+GnuPG-Bug-id: 4393
+Signed-Off-By: Daniel Kahn Gillmor <dkg@fifthhorseman.net>
+---
+ tests/openpgp/Makefile.am                          |  1 +
+ tests/openpgp/import-incomplete.scm                | 68 ++++++++++++++++++++++
+ .../import-incomplete/primary+revocation.asc       |  9 +++
+ .../primary+subkey+sub-revocation.asc              | 10 ++++
+ .../import-incomplete/primary+subkey+sub-sig.asc   | 10 ++++
+ .../openpgp/import-incomplete/primary+uid-sig.asc  | 10 ++++
+ tests/openpgp/import-incomplete/primary+uid.asc    | 10 ++++
+ 7 files changed, 118 insertions(+)
+ create mode 100755 tests/openpgp/import-incomplete.scm
+ create mode 100644 tests/openpgp/import-incomplete/primary+revocation.asc
+ create mode 100644 tests/openpgp/import-incomplete/primary+subkey+sub-revocation.asc
+ create mode 100644 tests/openpgp/import-incomplete/primary+subkey+sub-sig.asc
+ create mode 100644 tests/openpgp/import-incomplete/primary+uid-sig.asc
+ create mode 100644 tests/openpgp/import-incomplete/primary+uid.asc
+
+diff --git a/tests/openpgp/Makefile.am b/tests/openpgp/Makefile.am
+index f6014c9..6423da1 100644
+--- a/tests/openpgp/Makefile.am
++++ b/tests/openpgp/Makefile.am
+@@ -78,6 +78,7 @@ XTESTS = \
+ 	gpgv-forged-keyring.scm \
+ 	armor.scm \
+ 	import.scm \
++	import-incomplete.scm \
+ 	import-revocation-certificate.scm \
+ 	ecc.scm \
+ 	4gb-packet.scm \
+diff --git a/tests/openpgp/import-incomplete.scm b/tests/openpgp/import-incomplete.scm
+new file mode 100755
+index 0000000..727a027
+--- /dev/null
++++ b/tests/openpgp/import-incomplete.scm
+@@ -0,0 +1,68 @@
++#!/usr/bin/env gpgscm
++
++;; Copyright (C) 2016 g10 Code GmbH
++;;
++;; This file is part of GnuPG.
++;;
++;; GnuPG is free software; you can redistribute it and/or modify
++;; it under the terms of the GNU General Public License as published by
++;; the Free Software Foundation; either version 3 of the License, or
++;; (at your option) any later version.
++;;
++;; GnuPG is distributed in the hope that it will be useful,
++;; but WITHOUT ANY WARRANTY; without even the implied warranty of
++;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++;; GNU General Public License for more details.
++;;
++;; You should have received a copy of the GNU General Public License
++;; along with this program; if not, see <http://www.gnu.org/licenses/>.
++
++(load (in-srcdir "tests" "openpgp" "defs.scm"))
++(setup-environment)
++
++(call-check `(,(tool 'gpg) --import ,(in-srcdir "tests" "openpgp" "import-incomplete" "primary+uid.asc")))
++
++(info "Test import of new subkey, from a certificate without uid")
++(define keyid "573EA710367356BB")
++(call-check `(,(tool 'gpg) --import ,(in-srcdir "tests" "openpgp" "import-incomplete" "primary+subkey+sub-sig.asc")))
++(tr:do
++ (tr:pipe-do
++  (pipe:gpg `(--list-keys --with-colons ,keyid)))
++ (tr:call-with-content
++  (lambda (c)
++    ;; XXX we do not have a regexp library
++    (unless (any (lambda (line)
++		   (and (string-prefix? line "sub:")
++			(string-contains? line "573EA710367356BB")))
++		 (string-split-newlines c))
++	    (exit 1)))))
++
++(info "Test import of a subkey revocation, from a certificate without uid")
++(define keyid "573EA710367356BB")
++(call-check `(,(tool 'gpg) --import ,(in-srcdir "tests" "openpgp" "import-incomplete" "primary+subkey+sub-revocation.asc")))
++(tr:do
++ (tr:pipe-do
++  (pipe:gpg `(--list-keys --with-colons ,keyid)))
++ (tr:call-with-content
++  (lambda (c)
++    ;; XXX we do not have a regexp library
++    (unless (any (lambda (line)
++		   (and (string-prefix? line "sub:r:")
++			(string-contains? line "573EA710367356BB")))
++		 (string-split-newlines c))
++	    (exit 1)))))
++
++(info "Test import of revocation, from a certificate without uid")
++(call-check `(,(tool 'gpg) --import ,(in-srcdir "tests" "openpgp" "import-incomplete" "primary+revocation.asc")))
++(tr:do
++ (tr:pipe-do
++  (pipe:gpg `(--list-keys --with-colons ,keyid)))
++ (tr:call-with-content
++  (lambda (c)
++    ;; XXX we do not have a regexp library
++    (unless (any (lambda (line)
++		   (and (string-prefix? line "pub:r:")
++			(string-contains? line "0843DA969AA8DAFB")))
++		 (string-split-newlines c))
++	    (exit 1)))))
++
+diff --git a/tests/openpgp/import-incomplete/primary+revocation.asc b/tests/openpgp/import-incomplete/primary+revocation.asc
+new file mode 100644
+index 0000000..6b7b608
+--- /dev/null
++++ b/tests/openpgp/import-incomplete/primary+revocation.asc
+@@ -0,0 +1,9 @@
++-----BEGIN PGP PUBLIC KEY BLOCK-----
++Comment: [E] primary key, revocation signature over primary (no user ID)
++
++mDMEXNmUGRYJKwYBBAHaRw8BAQdA75R8VlchvmEd2Iz/8l07RoKUaUPDB71Ao1zZ
++631VAN2IeAQgFggAIBYhBLRpj5W82H/gSMzKKQhD2paaqNr7BQJc2ZQZAh0AAAoJ
++EAhD2paaqNr7qAwA/2jBUpnN0BxwRO/4CrxvrLIsL+C9aSXJUOTv8XkP4lvtAQD3
++XsDFfFNgEueiTfF7HtOGt5LPmRqVvUpQSMVgJJW6CQ==
++=tM90
++-----END PGP PUBLIC KEY BLOCK-----
+diff --git a/tests/openpgp/import-incomplete/primary+subkey+sub-revocation.asc b/tests/openpgp/import-incomplete/primary+subkey+sub-revocation.asc
+new file mode 100644
+index 0000000..83a51a5
+--- /dev/null
++++ b/tests/openpgp/import-incomplete/primary+subkey+sub-revocation.asc
+@@ -0,0 +1,10 @@
++-----BEGIN PGP PUBLIC KEY BLOCK-----
++Comment: [D] primary key, subkey, subkey revocation (no user ID)
++
++mDMEXNmUGRYJKwYBBAHaRw8BAQdA75R8VlchvmEd2Iz/8l07RoKUaUPDB71Ao1zZ
++631VAN24OARc2ZQhEgorBgEEAZdVAQUBAQdABsd5ha0AWXdXcSmfeiWIfrNcGqQK
++j++lwwWDAOlkVicDAQgHiHgEKBYIACAWIQS0aY+VvNh/4EjMyikIQ9qWmqja+wUC
++XNmnkAIdAgAKCRAIQ9qWmqja+ylaAQDmIKf86BJEq4OpDqU+V9D+wn2cyuxbyWVQ
++3r9LiL9qNwD/QAjyrhSN8L3Mfq+wdTHo5i0yB9ZCCpHLXSbhCqfWZwQ=
++=dwx2
++-----END PGP PUBLIC KEY BLOCK-----
+diff --git a/tests/openpgp/import-incomplete/primary+subkey+sub-sig.asc b/tests/openpgp/import-incomplete/primary+subkey+sub-sig.asc
+new file mode 100644
+index 0000000..dc47a02
+--- /dev/null
++++ b/tests/openpgp/import-incomplete/primary+subkey+sub-sig.asc
+@@ -0,0 +1,10 @@
++-----BEGIN PGP PUBLIC KEY BLOCK-----
++Comment: [B] primary key, subkey, subkey binding sig (no user ID)
++
++mDMEXNmUGRYJKwYBBAHaRw8BAQdA75R8VlchvmEd2Iz/8l07RoKUaUPDB71Ao1zZ
++631VAN24OARc2ZQhEgorBgEEAZdVAQUBAQdABsd5ha0AWXdXcSmfeiWIfrNcGqQK
++j++lwwWDAOlkVicDAQgHiHgEGBYIACAWIQS0aY+VvNh/4EjMyikIQ9qWmqja+wUC
++XNmUIQIbDAAKCRAIQ9qWmqja++vFAP98G1L+1/rWTGbsnxOAV2RocBYIroAvsbkR
++Ly6FdP8YNwEA7jOgT05CoKIe37MstpOz23mM80AK369Ca3JMmKKCQgg=
++=xuDu
++-----END PGP PUBLIC KEY BLOCK-----
+diff --git a/tests/openpgp/import-incomplete/primary+uid-sig.asc b/tests/openpgp/import-incomplete/primary+uid-sig.asc
+new file mode 100644
+index 0000000..134607d
+--- /dev/null
++++ b/tests/openpgp/import-incomplete/primary+uid-sig.asc
+@@ -0,0 +1,10 @@
++-----BEGIN PGP PUBLIC KEY BLOCK-----
++Comment: [C] primary key and self-sig expiring in 2024 (no user ID)
++
++mDMEXNmUGRYJKwYBBAHaRw8BAQdA75R8VlchvmEd2Iz/8l07RoKUaUPDB71Ao1zZ
++631VAN2IlgQTFggAPgIbAwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBLRpj5W8
++2H/gSMzKKQhD2paaqNr7BQJc2ZR1BQkJZgHcAAoJEAhD2paaqNr79soA/0lWkUsu
++3NLwgbni6EzJxnTzgeNMpljqNpipHAwfix9hAP93AVtFdC8g7hdUZxawobl9lnSN
++9ohXOEBWvdJgVv2YAg==
++=KWIK
++-----END PGP PUBLIC KEY BLOCK-----
+diff --git a/tests/openpgp/import-incomplete/primary+uid.asc b/tests/openpgp/import-incomplete/primary+uid.asc
+new file mode 100644
+index 0000000..055f300
+--- /dev/null
++++ b/tests/openpgp/import-incomplete/primary+uid.asc
+@@ -0,0 +1,10 @@
++-----BEGIN PGP PUBLIC KEY BLOCK-----
++Comment: [A] primary key, user ID, and self-sig expiring in 2021
++
++mDMEXNmUGRYJKwYBBAHaRw8BAQdA75R8VlchvmEd2Iz/8l07RoKUaUPDB71Ao1zZ
++631VAN20CHRlc3Qga2V5iJYEExYIAD4WIQS0aY+VvNh/4EjMyikIQ9qWmqja+wUC
++XNmUGQIbAwUJA8JnAAULCQgHAgYVCgkICwIEFgIDAQIeAQIXgAAKCRAIQ9qWmqja
+++0G1AQDdQiwhXxjXLMqoth+D4SigVHTJK8ORwifzsy3UE7mPGwD/aZ67XbAF/lgI
++kv2O1Jo0u9BL9RNNF+L0DM7rAFbfMAs=
++=1eII
++-----END PGP PUBLIC KEY BLOCK-----

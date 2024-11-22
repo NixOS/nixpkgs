@@ -1,0 +1,13 @@
+diff --git a/ulauncher/api/server/ExtensionRunner.py b/ulauncher/api/server/ExtensionRunner.py
+index 22042bf..f7b31c8 100644
+--- a/ulauncher/api/server/ExtensionRunner.py
++++ b/ulauncher/api/server/ExtensionRunner.py
+@@ -79,7 +79,7 @@ class ExtensionRunner:
+         cmd = [sys.executable, os.path.join(self.extensions_dir, extension_id, 'main.py')]
+         env = os.environ.copy()
+         env['ULAUNCHER_WS_API'] = self.extension_server.generate_ws_url(extension_id)
+-        env['PYTHONPATH'] = ':'.join(filter(bool, [ULAUNCHER_APP_DIR, os.getenv('PYTHONPATH')]))
++        env['PYTHONPATH'] = ':'.join([ULAUNCHER_APP_DIR] + sys.path)
+ 
+         if self.verbose:
+             env['VERBOSE'] = '1'

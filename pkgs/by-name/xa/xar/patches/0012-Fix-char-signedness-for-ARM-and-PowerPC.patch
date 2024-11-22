@@ -1,0 +1,46 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ivan Trubach <mr.trubach@icloud.com>
+Date: Sat, 27 Jul 2024 19:26:14 +0300
+Subject: [PATCH 12/19] Fix char signedness for ARM and PowerPC
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Use signed char explicitly for ARM and PowerPC (defaults to unsigned).
+Otherwise -1 integer literal is helpfully converted to char 255…
+
+Derives from https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/xar/files/xar-1.8-arm-ppc.patch?id=cc91eb0f86043ae92c10cce55b326244bed3f061
+---
+ xar/lib/b64.c | 2 +-
+ xar/src/xar.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/xar/lib/b64.c b/xar/lib/b64.c
+index 6361acd..4ffc34c 100644
+--- a/xar/lib/b64.c
++++ b/xar/lib/b64.c
+@@ -59,7 +59,7 @@ typedef enum _B64CommandCodes {
+ 	B64_IgnorableCharacter	= -1
+ } B64CommandCodes;
+ 
+-static char b64revtb[256] = {
++static signed char b64revtb[256] = {
+   -3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, /*0-15*/
+   -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, /*16-31*/
+   -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, -1, 63, /*32-47*/
+diff --git a/xar/src/xar.c b/xar/src/xar.c
+index 9977e8a..1bceb63 100644
+--- a/xar/src/xar.c
++++ b/xar/src/xar.c
+@@ -910,7 +910,7 @@ static void print_version() {
+ int main(int argc, char *argv[]) {
+ 	int ret;
+ 	char *filename = NULL;
+-	char command = 0, c;
++	signed char command = 0, c;
+ 	char **args;
+ 	const char *tocfile = NULL;
+ 	int arglen, i, err;
+-- 
+2.44.1
+
