@@ -77,6 +77,7 @@ let
   wxGTK-override' = if wxGTK-override == null then wxGTK-prusa else wxGTK-override;
 
   patches = [
+    ./281-dependencies.patch
   ];
 in
 stdenv.mkDerivation (finalAttrs: {

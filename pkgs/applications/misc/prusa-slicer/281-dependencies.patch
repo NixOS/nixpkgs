@@ -1,0 +1,70 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 31cb4c0ff..42c38102c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -247,6 +247,8 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+     find_package(Threads REQUIRED)
+ 
+     find_package(DBus REQUIRED)
++    pkg_check_modules(DBUS REQUIRED dbus-1)
++    include_directories(${DBUS_INCLUDE_DIRS})
+ endif()
+ 
+ if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUXX)
+@@ -347,7 +349,7 @@ if(WIN32)
+     add_definitions(-D_USE_MATH_DEFINES -D_WIN32 -D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
+     if(MSVC)
+         # BOOST_ALL_NO_LIB: Avoid the automatic linking of Boost libraries on Windows. Rather rely on explicit linking.
+-        add_definitions(-DBOOST_ALL_NO_LIB -DBOOST_USE_WINAPI_VERSION=0x601 -DBOOST_SYSTEM_USE_UTF8 )
++        add_definitions(-DBOOST_ALL_NO_LIB -DBOOST_USE_WINAPI_VERSION=0x601 -DBOOST_SYSTEM_USE_UTF8 -DBOOST_LOG_DYN_LINK)
+         # Force the source code encoding to UTF-8. See PrusaSlicer GH pull request #5583
+         add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
+         add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+@@ -371,10 +373,13 @@ endif()
+ # boost::process was introduced first in version 1.64.0,
+ # boost::beast::detail::base64 was introduced first in version 1.66.0
+ set(MINIMUM_BOOST_VERSION "1.66.0")
+-set(_boost_components "system;filesystem;thread;log;locale;regex;chrono;atomic;date_time;iostreams;nowide")
++# set(Boost_USE_STATIC_LIBS ON)
++find_package(Boost REQUIRED COMPONENTS log)
++set(_boost_components "system;filesystem;thread;log;log_setup;locale;regex;chrono;atomic;date_time;iostreams;nowide")
+ find_package(Boost ${MINIMUM_BOOST_VERSION} REQUIRED COMPONENTS ${_boost_components})
++include_directories(${BOOST_INCLUDE_DIRS})
+ 
+-find_package(Eigen3 3.3.7 REQUIRED)
++find_package(Eigen3 3.3.7 REQUIRED NO_MODULE)
+ 
+ add_library(boost_libs INTERFACE)
+ add_library(boost_headeronly INTERFACE)
+diff --git a/src/slic3r/CMakeLists.txt b/src/slic3r/CMakeLists.txt
+index 78369233d..1f9c40aaf 100644
+--- a/src/slic3r/CMakeLists.txt
++++ b/src/slic3r/CMakeLists.txt
+@@ -383,6 +383,7 @@ set(SLIC3R_GUI_SOURCES
+ )
+ 
+ find_package(NanoSVG REQUIRED)
++find_package(OpenSSL REQUIRED)
+ 
+ if (APPLE)
+     list(APPEND SLIC3R_GUI_SOURCES
+@@ -438,6 +439,9 @@ target_link_libraries(
+     NanoSVG::nanosvgrast
+     stb_dxt
+     fastfloat
++    Boost::log
++    OpenSSL::SSL
++    OpenSSL::Crypto
+ )
+ 
+ if (MSVC)
+diff --git a/tests/sla_print/CMakeLists.txt b/tests/sla_print/CMakeLists.txt
+index b244e76ac..b23f6d4bc 100644
+--- a/tests/sla_print/CMakeLists.txt
++++ b/tests/sla_print/CMakeLists.txt
+@@ -18,3 +18,5 @@ endif()
+ 
+ # catch_discover_tests(${_TEST_NAME}_tests TEST_PREFIX "${_TEST_NAME}: ")
+ add_test(${_TEST_NAME}_tests ${_TEST_NAME}_tests ${CATCH_EXTRA_ARGS})
++
++add_definitions(-DBOOST_LOG_DYN_LINK)
