@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lnav";
-  version = "0.12.2";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
     rev = "v${version}";
-    sha256 = "sha256-grEW3J50osKJzulNQFN7Gir5+wk1qFPc/YaT+EZMAqs=";
+    sha256 = "sha256-m0r7LAo9pYFpS+oimVCNCipojxPzMMsLLjhjkitEwow=";
   };
 
   enableParallelBuilding = true;
