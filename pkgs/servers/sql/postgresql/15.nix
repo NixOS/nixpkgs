@@ -1,4 +1,4 @@
 import ./generic.nix {
-  version = "15.9";
-  hash = "sha256-dPLUVlA18M9ynssFmUn6rxECy9k3WbNZgi+Y+CGYx4M=";
+  version = "15.10";
+  hash = "sha256-VavnONRB8OWGWLPsb4gJenE7XjtzE59iMNe1xMOJ5XM=";
 }
