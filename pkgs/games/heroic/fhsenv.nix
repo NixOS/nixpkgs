@@ -44,6 +44,7 @@ buildFHSEnv {
     let
       xorgDeps =
         pkgs: with pkgs.xorg; [
+          libICE
           libpthreadstubs
           libSM
           libX11
@@ -53,11 +54,15 @@ buildFHSEnv {
           libXcursor
           libXdmcp
           libXext
+          libXfixes
           libXi
           libXinerama
           libXmu
           libXrandr
           libXrender
+          libXScrnSaver
+          libXt
+          libXtst
           libXv
           libXxf86vm
         ];
