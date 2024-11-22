@@ -1,35 +1,27 @@
 { config, lib, pkgs, ... }:
-let
 
+let
   cfg = config.services.opendkim;
 
   defaultSock = "local:/run/opendkim/opendkim.sock";
 
-  keyFile = "${cfg.keyPath}/${cfg.selector}.private";
-
   args = [ "-f" "-l"
            "-p" cfg.socket
            "-d" cfg.domains
-           "-k" keyFile
+           "-k" "${cfg.keyPath}/${cfg.selector}.private"
            "-s" cfg.selector
          ] ++ lib.optionals (cfg.configFile != null) [ "-x" cfg.configFile ];
 
+  configFile = pkgs.writeText "opendkim.conf"
+    (lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "${name} ${value}") cfg.settings));
 in {
   imports = [
     (lib.mkRenamedOptionModule [ "services" "opendkim" "keyFile" ] [ "services" "opendkim" "keyPath" ])
   ];
 
-  ###### interface
-
   options = {
-
     services.opendkim = {
-
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable the OpenDKIM sender authentication system.";
-      };
+      enable = lib.mkEnableOption "OpenDKIM sender authentication system";
 
       socket = lib.mkOption {
         type = lib.types.str;
@@ -74,21 +66,24 @@ in {
         description = "Selector to use when signing.";
       };
 
+      # TODO: deprecate this?
       configFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        description = "Additional opendkim configuration.";
+        description = "Additional opendkim configuration as a file.";
       };
 
+      settings = lib.mkOption {
+        type = with lib.types; submodule {
+          freeformType = attrsOf str;
+        };
+        default = { };
+        description = "Additional opendkim configuration";
+      };
     };
-
   };
 
-
-  ###### implementation
-
   config = lib.mkIf cfg.enable {
-
     users.users = lib.optionalAttrs (cfg.user == "opendkim") {
       opendkim = {
         group = cfg.group;
@@ -100,7 +95,14 @@ in {
       opendkim.gid = config.ids.gids.opendkim;
     };
 
-    environment.systemPackages = [ pkgs.opendkim ];
+    environment = {
+      etc = lib.mkIf (cfg.settings != { }) {
+        "opendkim/opendkim.conf".source = configFile;
+      };
+      systemPackages = [ pkgs.opendkim ];
+    };
+
+    services.opendkim.configFile = lib.mkIf (cfg.settings != { }) configFile;
 
     systemd.tmpfiles.rules = [
       "d '${cfg.keyPath}' - ${cfg.user} ${cfg.group} - -"
@@ -159,6 +161,5 @@ in {
         UMask = "0077";
       };
     };
-
   };
 }
