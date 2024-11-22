@@ -478,8 +478,8 @@ rec {
       "sha256-D+Ecu2+03ua8vs8C2NdGtDVSUpyM0SozHIb2PbRO2+g=";
 
   mypy-boto3-elasticache =
-    buildMypyBoto3Package "elasticache" "1.35.36"
-      "sha256-pLGZiHH9nyv0jzS4kWUw9BUMjsSR9X/i0VKIUkIeohs=";
+    buildMypyBoto3Package "elasticache" "1.35.67"
+      "sha256-/L1W2gdMBtYGfscuBhY+ib/Hac8Rm9TmMUaNzjmwEPA=";
 
   mypy-boto3-elasticbeanstalk =
     buildMypyBoto3Package "elasticbeanstalk" "1.35.0"
