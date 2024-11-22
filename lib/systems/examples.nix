@@ -334,6 +334,11 @@ rec {
 
   # BSDs
 
+  aarch64-freebsd = {
+    config = "aarch64-unknown-freebsd";
+    useLLVM = true;
+  };
+
   x86_64-freebsd = {
     config = "x86_64-unknown-freebsd";
     useLLVM = true;

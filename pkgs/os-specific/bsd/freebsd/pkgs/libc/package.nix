@@ -106,6 +106,9 @@ mkDerivation {
       "include/paths.h"
 
       "lib/libdl"
+
+      # Used for aarch64-freebsd
+      "contrib/arm-optimized-routines"
     ];
 
   postPatch = ''
