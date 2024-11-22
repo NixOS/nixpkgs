@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage {
   # Enable this when default kernel in nixpkgs is 6.12+
   doCheck = false;
 
-  meta = {
+  meta = scx-common.meta // {
     description = "Sched-ext Rust userspace schedulers";
     longDescription = ''
       This includes Rust based schedulers such as
@@ -68,13 +68,5 @@ rustPlatform.buildRustPackage {
       It is recommended to use the latest kernel for the best compatibility.
       :::
     '';
-
-    inherit (scx-common.meta)
-      homepage
-      changelog
-      license
-      platforms
-      maintainers
-      ;
   };
 }
