@@ -121,7 +121,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   # Enable this when default kernel in nixpkgs is 6.12+
   doCheck = false;
 
-  meta = {
+  meta = scx-common.meta // {
     description = "Sched-ext C userspace schedulers";
     longDescription = ''
       This includes C based schedulers such as scx_central, scx_flatcg,
@@ -132,13 +132,5 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       It is recommended to use the latest kernel for the best compatibility.
       :::
     '';
-
-    inherit (scx-common.meta)
-      homepage
-      changelog
-      license
-      platforms
-      maintainers
-      ;
   };
 })
