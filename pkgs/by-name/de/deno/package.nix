@@ -83,8 +83,11 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = ./update/update.ts;
-  passthru.tests = callPackage ./tests { };
+  passthru = {
+    updateScript = ./update/update.ts;
+    tests = callPackage ./tests { };
+    fetchDeps = callPackage ./fetch-deps { };
+  };
 
   meta = with lib; {
     homepage = "https://deno.land/";
