@@ -17762,6 +17762,8 @@ self: super: with self; {
 
   wget = callPackage ../development/python-modules/wget { };
 
+  wgnlpy = callPackage ../development/python-modules/wgnlpy { };
+
   whatthepatch = callPackage ../development/python-modules/whatthepatch { };
 
   wheel = callPackage ../development/python-modules/wheel { };
