@@ -35,7 +35,8 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  postInstall =
+  postPhases = [ "postPatchelf"];
+  postPatchelf =
     lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
       wrapProgram $out/bin/bun \
         --prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ darwin.ICU ]}
