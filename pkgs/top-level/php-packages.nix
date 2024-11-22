@@ -685,7 +685,7 @@ in {
               hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
             })
           ]
-          ++ lib.optionals (lib.versionAtLeast php.version "8.3") [
+          ++ lib.optionals (lib.versionAtLeast php.version "8.3" && lib.versionOlder php.version "8.4") [
             # https://github.com/php/php-src/pull/16733 (fix soap test)
             (fetchpatch {
               url = "https://github.com/php/php-src/commit/5c308d61db104854e4ff84ab123e3ea56e1b4046.patch";

@@ -3088,11 +3088,6 @@ with pkgs;
 
   cron = isc-cron;
 
-  cudaPackages_10_0 = callPackage ./cuda-packages.nix { cudaVersion = "10.0"; };
-  cudaPackages_10_1 = callPackage ./cuda-packages.nix { cudaVersion = "10.1"; };
-  cudaPackages_10_2 = callPackage ./cuda-packages.nix { cudaVersion = "10.2"; };
-  cudaPackages_10 = recurseIntoAttrs cudaPackages_10_2;
-
   cudaPackages_11_0 = callPackage ./cuda-packages.nix { cudaVersion = "11.0"; };
   cudaPackages_11_1 = callPackage ./cuda-packages.nix { cudaVersion = "11.1"; };
   cudaPackages_11_2 = callPackage ./cuda-packages.nix { cudaVersion = "11.2"; };
@@ -6980,13 +6975,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security SystemConfiguration;
   };
   inherit (callPackages ../development/tools/rust/cargo-pgrx { })
-    cargo-pgrx_0_10_2
-    cargo-pgrx_0_11_2
-    cargo-pgrx_0_11_3
     cargo-pgrx_0_12_0_alpha_1
     cargo-pgrx_0_12_6
     ;
-  cargo-pgrx = cargo-pgrx_0_11_2;
+  cargo-pgrx = cargo-pgrx_0_12_6;
 
   buildPgrxExtension = callPackage ../development/tools/rust/cargo-pgrx/buildPgrxExtension.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -18063,14 +18055,10 @@ with pkgs;
   ### SCIENCE / MATH
 
   caffe = callPackage ../applications/science/math/caffe ({
-    inherit (config) cudaSupport;
-    cudaPackages = cudaPackages_10_1;
     opencv4 = opencv4WithoutCuda; # Used only for image loading.
     blas = openblas;
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   } // (config.caffe or {}));
-
-  caffeWithCuda = caffe.override { cudaSupport = true; };
 
   gap-minimal = lowPrio (gap.override { packageSet = "minimal"; });
 

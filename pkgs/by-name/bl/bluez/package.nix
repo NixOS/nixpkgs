@@ -174,7 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/ChangeLog?h=${finalAttrs.version}";
     license = with lib.licenses; [ bsd2 gpl2Plus lgpl21Plus mit ];
     mainProgram = "btinfo";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })
