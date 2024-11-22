@@ -16810,6 +16810,12 @@
     githubId = 821972;
     name = "Parth Mehrotra";
   };
+  paschoal = {
+    email = "paschoal@gmail.com";
+    github = "paschoal";
+    githubId = 64602;
+    name = "Matheus Paschoal";
+  };
   pashashocky = {
     email = "pashashocky@gmail.com";
     github = "pashashocky";
