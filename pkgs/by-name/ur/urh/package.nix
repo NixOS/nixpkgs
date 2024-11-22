@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication rec {
       exec = "urh";
       icon = "urh";
       desktopName = "Universal Radio Hacker";
-      categories = [ "HamRadio" ];
+      categories = [ "Network" "HamRadio" ];
       comment = meta.description;
     })
   ];
