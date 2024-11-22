@@ -10,6 +10,7 @@ let
   packages = with pkgs; {
     "default" = teleport;
     "15" = teleport_15;
+    "16" = teleport_16;
   };
 
   minimal = package: {
