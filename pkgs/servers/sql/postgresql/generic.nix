@@ -1,34 +1,70 @@
 let
 
   generic =
-      # dependencies
-      { stdenv, lib, fetchurl, fetchpatch, makeWrapper
-      , glibc, zlib, readline, openssl, icu, lz4, zstd, systemdLibs, libuuid
-      , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
-      , linux-pam, bison, flex, perl, docbook_xml_dtd_45, docbook-xsl-nons, libxslt
-
-      , removeReferencesTo, writeShellScriptBin
-
-      , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
-      , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
-
-      # for postgresql.pkgs
-      , self, newScope, buildEnv
-      , stdenvNoCC, postgresqlTestHook
+      # utils
+      { stdenv
+      , fetchpatch
+      , fetchurl
+      , lib
+      , substituteAll
+      , writeShellScriptBin
 
       # source specification
-      , version, hash, muslPatches ? {}
+      , hash
+      , muslPatches ? {}
+      , version
 
-      # for tests
-      , testers, nixosTests
+      # runtime dependencies
+      , darwin
+      , glibc
+      , icu
+      , libuuid
+      , libxml2
+      , linux-pam
+      , lz4
+      , openssl
+      , readline
+      , tzdata
+      , zlib
+      , zstd
+
+      # build dependencies
+      , bison
+      , docbook-xsl-nons
+      , docbook_xml_dtd_45
+      , flex
+      , libxslt
+      , makeWrapper
+      , perl
+      , pkg-config
+      , removeReferencesTo
+
+      # passthru
+      , buildEnv
+      , newScope
+      , nixosTests
+      , postgresqlTestHook
+      , self
+      , stdenvNoCC
+      , testers
+
+      # GSSAPI
+      , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
+      , libkrb5
 
       # JIT
-      , jitSupport
-      , nukeReferences, llvmPackages, overrideCC
+      , jitSupport # not default on purpose, this is set via "_jit or not" attributes
+      , llvmPackages
+      , nukeReferences
+      , overrideCC
 
       # PL/Python
       , pythonSupport ? false
       , python3
+
+      # Systemd
+      , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
+      , systemdLibs
     } @args:
   let
     atLeast = lib.versionAtLeast version;
