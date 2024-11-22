@@ -1,21 +1,28 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  cython_0,
+  oldest-supported-numpy,
+  setuptools,
+
+  # dependencies
+  numpy,
+  packaging,
+  scipy,
+
+  # tests
+  pytestCheckHook,
+  pytest-rerunfailures,
+  python,
+
+  # optional-dependencies
+  matplotlib,
+  ipython,
   cvxopt,
   cvxpy,
-  cython_0,
-  fetchFromGitHub,
-  ipython,
-  matplotlib,
-  numpy,
-  oldest-supported-numpy,
-  packaging,
-  pytest-rerunfailures,
-  pytestCheckHook,
-  python,
-  pythonOlder,
-  scipy,
-  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,11 +30,9 @@ buildPythonPackage rec {
   version = "5.0.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "qutip";
+    repo = "qutip";
     tag = "v${version}";
     hash = "sha256-KT5Mk0w6EKTUZzGRnQ6XQPZfH5ZXVuiD+EwSflNqHNo=";
   };
@@ -38,13 +43,13 @@ buildPythonPackage rec {
       --replace-fail "numpy>=2.0.0" "numpy"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython_0
-    setuptools
     oldest-supported-numpy
+    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     packaging
     scipy
@@ -78,16 +83,21 @@ buildPythonPackage rec {
     graphics = [ matplotlib ];
     ipython = [ ipython ];
     semidefinite = [
-      cvxpy
       cvxopt
+      cvxpy
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source software for simulating the dynamics of closed and open quantum systems";
     homepage = "https://qutip.org/";
-    changelog = "https://github.com/qutip/qutip/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fabiangd ];
+    changelog = "https://github.com/qutip/qutip/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fabiangd ];
+    badPlatforms = [
+      # Tests fail at ~80%
+      # ../tests/test_animation.py::test_result_state Fatal Python error: Aborted
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }
