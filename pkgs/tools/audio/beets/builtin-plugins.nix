@@ -12,9 +12,20 @@
     deprecated = true;
     testPaths = [ ];
   };
+  advancedrewrite = {
+    testPaths = [ ];
+  };
   albumtypes = { };
   aura = {
     propagatedBuildInputs = with python3Packages; [ flask pillow ];
+    testPaths = [ ];
+  };
+  autobpm = {
+    propagatedBuildInputs = with python3Packages; [
+      librosa
+      # An optional dependency of librosa, needed for beets' autobpm
+      resampy
+    ];
     testPaths = [ ];
   };
   badfiles = {
@@ -74,6 +85,10 @@
     propagatedBuildInputs = [ python3Packages.pylast ];
     testPaths = [ ];
   };
+  limit = { };
+  listenbrainz = {
+    testPaths = [ ];
+  };
   loadext = {
     propagatedBuildInputs = [ python3Packages.requests ];
     testPaths = [ ];
@@ -109,6 +124,9 @@
     testPaths = [ ];
   };
   subsonicupdate.propagatedBuildInputs = [ python3Packages.requests ];
+  substitute = {
+    testPaths = [ ];
+  };
   the = { };
   thumbnails = {
     propagatedBuildInputs = with python3Packages; [ pillow pyxdg ];
@@ -118,22 +136,4 @@
   unimported.testPaths = [ ];
   web.propagatedBuildInputs = [ python3Packages.flask ];
   zero = { };
-  limit = { };
-  substitute = {
-    testPaths = [ ];
-  };
-  advancedrewrite = {
-    testPaths = [ ];
-  };
-  autobpm = {
-    propagatedBuildInputs = with python3Packages; [
-      librosa
-      # An optional dependency of librosa, needed for beets' autobpm
-      resampy
-    ];
-    testPaths = [ ];
-  };
-  listenbrainz = {
-    testPaths = [ ];
-  };
 }
