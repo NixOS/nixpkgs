@@ -7,13 +7,17 @@
 let
   cfg = config.services.zapret;
 
-  whitelist = lib.optionalString (
-    cfg.whitelist != null
-  ) "--hostlist ${pkgs.writeText "zapret-whitelist" (lib.concatStringsSep "\n" cfg.whitelist)}";
+  whitelist = 
+    lib.optionalString ( cfg.whitelist != null ) 
+      "--hostlist ${pkgs.writeText "zapret-whitelist" (lib.concatStringsSep "\n" cfg.whitelist)}";
 
   blacklist =
     lib.optionalString (cfg.blacklist != null)
       "--hostlist-exclude ${pkgs.writeText "zapret-blacklist" (lib.concatStringsSep "\n" cfg.blacklist)}";
+
+  iplist = 
+    lib.optionalString (cfg.iplist != null)
+      "--ipset ${pkgs.writeText "zapret-iplist" (lib.concatStringsSep "\n" cfg.iplist)}";
 
   ports = if cfg.httpSupport then "80,443" else "443";
 in
@@ -72,6 +76,18 @@ in
         If neither are specified, then bypass all domains.
       '';
     };
+    iplist = lib.mkOption {
+      default = null;
+      type = with lib.types; nullOr (listOf str);
+      example = ''
+        [
+          "34.0.197.81"
+        ]
+      '';
+      description = ''
+        Specify an ipset include filer
+      '';
+    };
     qnum = lib.mkOption {
       default = 200;
       type = lib.types.int;
@@ -117,7 +133,7 @@ in
           wantedBy = [ "multi-user.target" ];
           after = [ "network.target" ];
           serviceConfig = {
-            ExecStart = "${cfg.package}/bin/nfqws --pidfile=/run/nfqws.pid ${lib.concatStringsSep " " cfg.params} ${whitelist} ${blacklist} --qnum=${toString cfg.qnum}";
+            ExecStart = "${cfg.package}/bin/nfqws --pidfile=/run/nfqws.pid ${lib.concatStringsSep " " cfg.params} ${whitelist} ${blacklist} ${iplist} --qnum=${toString cfg.qnum}";
             Type = "simple";
             PIDFile = "/run/nfqws.pid";
             Restart = "always";
