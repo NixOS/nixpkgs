@@ -104,6 +104,8 @@ stdenv.mkDerivation rec {
     sed "s@^ZLIBDIR=.*@ZLIBDIR=${zlib.dev}/include@" -i configure.ac
 
     autoconf
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export DARWIN_LDFLAGS_SO_PREFIX=$out/lib/
   '';
 
   configureFlags = [
@@ -140,19 +142,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  # dynamic library name only contains maj.min, eg. '9.53'
-  dylib_version = lib.versions.majorMinor version;
-  preFixup = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gs
-    install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gsx
-  '';
-
   # validate dynamic linkage
   doInstallCheck = true;
-  preInstallCheck = if stdenv.hostPlatform.isDarwin then ''
-    DYLD_LIBRARY_PATH=$out/lib
-    export DYLD_LIBRARY_PATH
-  '' else null;
   installCheckPhase = ''
     runHook preInstallCheck
 
