@@ -14,6 +14,8 @@ curl=(
     --location
     --max-redirs 20
     --retry 3
+    --retry-all-errors
+    --continue-at -
     --disable-epsv
     --cookie-jar cookies
     --user-agent "curl/$curlVersion Nixpkgs/$nixpkgsVersion"
