@@ -45,27 +45,11 @@
     linux-x86_64 = [
       {
         version = "8.0.3.4";
-        minCudaVersion = "10.2";
-        maxCudaVersion = "10.2";
-        cudnnVersion = "8.2";
-        filename = "TensorRT-8.0.3.4.Linux.x86_64-gnu.cuda-10.2.cudnn8.2.tar.gz";
-        hash = "sha256-LxcXgwe1OCRfwDsEsNLIkeNsOcx3KuF5Sj+g2dY6WD0=";
-      }
-      {
-        version = "8.0.3.4";
         minCudaVersion = "11.0";
         maxCudaVersion = "11.3";
         cudnnVersion = "8.2";
         filename = "TensorRT-8.0.3.4.Linux.x86_64-gnu.cuda-11.3.cudnn8.2.tar.gz";
         hash = "sha256-MXdDUCT/SqWm26jB7QarEcwOG/O7cS36Y6Q0IvQTE/M=";
-      }
-      {
-        version = "8.2.5.1";
-        minCudaVersion = "10.2";
-        maxCudaVersion = "10.2";
-        cudnnVersion = "8.2";
-        filename = "TensorRT-8.2.5.1.Linux.x86_64-gnu.cuda-10.2.cudnn8.2.tar.gz";
-        hash = "sha256-XV2Bf2LH8OM2GEMjV80MDweb1hSVF/wFUcaW3KP2m8Q=";
       }
       {
         # The docs claim this supports through 11.5 despite the file name indicating 11.4.
@@ -77,14 +61,6 @@
         hash = "sha256-LcNpYvDiT7AavqzK1MRlijo2qDN7jznigeS77US713E=";
       }
       {
-        version = "8.4.3.1";
-        minCudaVersion = "10.2";
-        maxCudaVersion = "10.2";
-        cudnnVersion = "8.4";
-        filename = "TensorRT-8.4.3.1.Linux.x86_64-gnu.cuda-10.2.cudnn8.4.tar.gz";
-        hash = "sha256-2c3Zzt93FBWWQtrSIvpbzzS6BT9s0NzALzdwXGLOZEU=";
-      }
-      {
         # The docs claim this supports through 11.7 despite the file name indicating 11.6.
         version = "8.4.3.1";
         minCudaVersion = "11.0";
@@ -92,14 +68,6 @@
         cudnnVersion = "8.4";
         filename = "TensorRT-8.4.3.1.Linux.x86_64-gnu.cuda-11.6.cudnn8.4.tar.gz";
         hash = "sha256-jXwghcFjncxzh1BIwjWYqFJs4wiRNoduMdkCWOSeT2E=";
-      }
-      {
-        version = "8.5.3.1";
-        minCudaVersion = "10.2";
-        maxCudaVersion = "10.2";
-        cudnnVersion = "8.6";
-        filename = "TensorRT-8.5.3.1.Linux.x86_64-gnu.cuda-10.2.cudnn8.6.tar.gz";
-        hash = "sha256-WCt6yfOmFbrjqdYCj6AE2+s2uFpISwk6urP+2I0BnGQ=";
       }
       {
         version = "8.5.3.1";
