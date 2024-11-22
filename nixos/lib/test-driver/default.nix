@@ -1,17 +1,18 @@
-{ lib
-, python3Packages
-, enableOCR ? false
-, qemu_pkg ? qemu_test
-, coreutils
-, imagemagick_light
-, netpbm
-, qemu_test
-, socat
-, ruff
-, tesseract4
-, vde2
-, extraPythonPackages ? (_ : [])
-, nixosTests
+{
+  lib,
+  python3Packages,
+  enableOCR ? false,
+  qemu_pkg ? qemu_test,
+  coreutils,
+  imagemagick_light,
+  netpbm,
+  qemu_test,
+  socat,
+  ruff,
+  tesseract4,
+  vde2,
+  extraPythonPackages ? (_: [ ]),
+  nixosTests,
 }:
 let
   fs = lib.fileset;
@@ -29,17 +30,21 @@ python3Packages.buildPythonApplication {
   };
   pyproject = true;
 
-  propagatedBuildInputs = [
-    coreutils
-    netpbm
-    python3Packages.colorama
-    python3Packages.junit-xml
-    python3Packages.ptpython
-    qemu_pkg
-    socat
-    vde2
-  ]
-    ++ (lib.optionals enableOCR [ imagemagick_light tesseract4 ])
+  propagatedBuildInputs =
+    [
+      coreutils
+      netpbm
+      python3Packages.colorama
+      python3Packages.junit-xml
+      python3Packages.ptpython
+      qemu_pkg
+      socat
+      vde2
+    ]
+    ++ (lib.optionals enableOCR [
+      imagemagick_light
+      tesseract4
+    ])
     ++ extraPythonPackages python3Packages;
 
   nativeBuildInputs = [
@@ -51,7 +56,11 @@ python3Packages.buildPythonApplication {
   };
 
   doCheck = true;
-  nativeCheckInputs = with python3Packages; [ mypy ruff black ];
+  nativeCheckInputs = with python3Packages; [
+    mypy
+    ruff
+    black
+  ];
   checkPhase = ''
     echo -e "\x1b[32m## run mypy\x1b[0m"
     mypy test_driver extract-docstrings.py
