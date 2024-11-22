@@ -1,0 +1,32 @@
+---
+ hw/xfree86/Makefile.am | 1 -
+ hw/xfree86/Makefile.in | 1 -
+ 2 files changed, 2 deletions(-)
+
+diff --git a/hw/xfree86/Makefile.am b/hw/xfree86/Makefile.am
+index 9aeaea1..dcca3b8 100644
+--- a/hw/xfree86/Makefile.am
++++ b/hw/xfree86/Makefile.am
+@@ -100,7 +100,6 @@ EXTRA_DIST = xorgconf.cpp
+ 
+ # Without logdir, X will post an error on the terminal and will not start
+ install-data-local:
+-	$(AM_V_GEN)$(MKDIR_P) $(DESTDIR)$(logdir)
+ if CYGWIN
+ 	$(INSTALL_DATA) libXorg.exe.a $(DESTDIR)$(libdir)/libXorg.exe.a
+ endif
+diff --git a/hw/xfree86/Makefile.in b/hw/xfree86/Makefile.in
+index c4fceee..74da8f1 100644
+--- a/hw/xfree86/Makefile.in
++++ b/hw/xfree86/Makefile.in
+@@ -1161,7 +1161,6 @@ uninstall-am: uninstall-binPROGRAMS uninstall-local \
+ 
+ # Without logdir, X will post an error on the terminal and will not start
+ install-data-local:
+-	$(AM_V_GEN)$(MKDIR_P) $(DESTDIR)$(logdir)
+ @CYGWIN_TRUE@	$(INSTALL_DATA) libXorg.exe.a $(DESTDIR)$(libdir)/libXorg.exe.a
+ 
+ install-exec-hook:
+-- 
+2.25.4
+
