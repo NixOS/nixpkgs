@@ -45,6 +45,9 @@ let
       , stdenvNoCC
       , testers
 
+      # bonjour
+      , bonjourSupport ? false
+
       # GSSAPI
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
       , libkrb5
@@ -211,7 +214,8 @@ let
       ++ lib.optionals ldapSupport [ "--with-ldap" ]
       ++ lib.optionals tclSupport [ "--with-tcl" ]
       ++ lib.optionals selinuxSupport [ "--with-selinux" ]
-      ++ lib.optionals nlsSupport [ "--enable-nls" ];
+      ++ lib.optionals nlsSupport [ "--enable-nls" ]
+      ++ lib.optionals bonjourSupport [ "--with-bonjour" ];
 
     patches = [
       (if atLeast "16" then ./patches/relative-to-symlinks-16+.patch else ./patches/relative-to-symlinks.patch)
