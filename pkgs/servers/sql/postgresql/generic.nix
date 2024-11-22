@@ -63,6 +63,10 @@ let
       , ldapSupport ? false
       , openldap
 
+      # NLS
+      , nlsSupport ? false
+      , gettext
+
       # PAM
       , pamSupport ? stdenv.hostPlatform.isLinux
       , linux-pam
@@ -160,7 +164,8 @@ let
       ++ lib.optionals perlSupport [ perl ]
       ++ lib.optionals ldapSupport [ openldap ]
       ++ lib.optionals tclSupport [ tcl ]
-      ++ lib.optionals selinuxSupport [ libselinux ];
+      ++ lib.optionals selinuxSupport [ libselinux ]
+      ++ lib.optionals nlsSupport [ gettext ];
 
     nativeBuildInputs = [
       makeWrapper
@@ -205,7 +210,8 @@ let
       ++ lib.optionals (atLeast "17" && !perlSupport) [ "--without-perl" ]
       ++ lib.optionals ldapSupport [ "--with-ldap" ]
       ++ lib.optionals tclSupport [ "--with-tcl" ]
-      ++ lib.optionals selinuxSupport [ "--with-selinux" ];
+      ++ lib.optionals selinuxSupport [ "--with-selinux" ]
+      ++ lib.optionals nlsSupport [ "--enable-nls" ];
 
     patches = [
       (if atLeast "16" then ./patches/relative-to-symlinks-16+.patch else ./patches/relative-to-symlinks.patch)
