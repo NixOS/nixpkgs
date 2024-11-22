@@ -59,6 +59,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       pasqui23
       sei40kr
+      moraxyc
     ];
   };
 })
