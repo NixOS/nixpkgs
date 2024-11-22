@@ -12,6 +12,8 @@ scx.cscheds.overrideAttrs (oldAttrs: {
       cp ${scx.rustscheds}/bin/* ${placeholder "bin"}/bin/
     '';
 
+  passthru.updateScript.command = ./update.sh;
+
   meta = oldAttrs.meta // {
     description = "Sched-ext C and Rust userspace schedulers";
     longDescription = ''
