@@ -17,7 +17,6 @@ let
       # runtime dependencies
       , darwin
       , glibc
-      , icu
       , libuuid
       , libxml2
       , lz4
@@ -50,6 +49,10 @@ let
       # GSSAPI
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
       , libkrb5
+
+      # icu
+      , icuSupport ? true
+      , icu
 
       # JIT
       , jitSupport # not default on purpose, this is set via "_jit or not" attributes
@@ -129,9 +132,9 @@ let
       readline
       openssl
       (libxml2.override {enableHttp = true;})
-      icu
       libuuid
     ]
+      ++ lib.optionals icuSupport [ icu ]
       ++ lib.optionals jitSupport [ llvmPackages.llvm ]
       ++ lib.optionals lz4Enabled [ lz4 ]
       ++ lib.optionals zstdEnabled [ zstd ]
@@ -162,10 +165,10 @@ let
     env.CFLAGS = "-fdata-sections -ffunction-sections"
       + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections");
 
-    configureFlags = [
+    configureFlags = let inherit (lib) withFeature; in [
       "--with-openssl"
       "--with-libxml"
-      "--with-icu"
+      (withFeature icuSupport "icu")
       "--sysconfdir=/etc"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
       "--enable-debug"
