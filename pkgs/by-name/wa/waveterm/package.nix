@@ -36,7 +36,7 @@ let
   inherit (stdenv.hostPlatform) system;
   selectSystem = attrs: attrs.${system};
   pname = "waveterm";
-  version = "0.9.2";
+  version = "0.9.3";
   passthru.updateScript = ./update.sh;
 
   desktopItems = [
@@ -95,8 +95,8 @@ let
           aarch64-linux = "waveterm-linux-arm64";
         };
         hash = selectSystem {
-          x86_64-linux = "sha256-s6s/SfLNVwRN50OgqWTohHT8/rFuu4P3hpxfhA7kPOU=";
-          aarch64-linux = "sha256-dxQbTPvge3QY40rWKAOV/uuTPzHsfNk9USxICoF1CQM=";
+          x86_64-linux = "sha256-zmmWQnZklnmhVrZp0F0dkVHVMW+K/VynSvbF9Zer/RE=";
+          aarch64-linux = "sha256-HRZRRUV6CVqUQYuvXBmnNcAsbZwgNDZiEf+gjdLDaPQ=";
         };
       in
       fetchzip {
@@ -172,8 +172,8 @@ let
           aarch64-darwin = "Wave-darwin-arm64";
         };
         hash = selectSystem {
-          x86_64-darwin = "sha256-5SJMLeAYk/m65hehsgDnlwS0JBLSgUP2Yx4iDtvtLS0=";
-          aarch64-darwin = "sha256-epadZvQKZtqBVUgkD76Aen752GSexYV2LQJOZ8+bcXk=";
+          x86_64-darwin = "sha256-NSpNWUWdRkB2H5l/WnI/Xyv68h0OXX7SIKyDAq0LIJM=";
+          aarch64-darwin = "sha256-QkJMrmqrveFc2StL5gVpE78DlC1OBcEV+tY7p2nJ/6I=";
         };
       in
       fetchurl {
