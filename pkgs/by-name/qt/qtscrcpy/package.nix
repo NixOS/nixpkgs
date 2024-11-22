@@ -7,7 +7,7 @@
   libsForQt5,
   scrcpy,
   android-tools,
-  ffmpeg,
+  ffmpeg_4,
   makeDesktopItem,
   copyDesktopItems,
 }:
@@ -37,11 +37,6 @@ stdenv.mkDerivation rec {
     # remove predefined adb and scrcpy-server path
     # we later set them in wrapper
     ./remove_predefined_paths.patch
-
-    # remove avcodec_close which is deprecated in ffmpeg_7
-    # This doesn't affect functionality because
-    # it's followed by avcodec_free_context
-    ./remove_deprecated_avcodec_free_context.patch
   ];
 
   postPatch = ''
@@ -66,8 +61,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       scrcpy
-      # Upstream vendors ffmpeg_4
-      ffmpeg
+      ffmpeg_4
     ]
     ++ (with libsForQt5; [
       qtbase

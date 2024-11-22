@@ -290,11 +290,11 @@ postgresql_15.pkgs.pg_partman        postgresql_15.pkgs.pgroonga
 ...
 ```
 
-To add plugins via NixOS configuration, set `services.postgresql.extensions`:
+To add plugins via NixOS configuration, set `services.postgresql.extraPlugins`:
 ```nix
 {
   services.postgresql.package = pkgs.postgresql_17;
-  services.postgresql.extensions = ps: with ps; [
+  services.postgresql.extraPlugins = ps: with ps; [
     pg_repack
     postgis
   ];

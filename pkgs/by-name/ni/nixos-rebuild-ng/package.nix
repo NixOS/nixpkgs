@@ -1,26 +1,24 @@
 {
   lib,
   installShellFiles,
-  mkShell,
   nix,
   nixos-rebuild,
   python3,
-  python3Packages,
-  runCommand,
   withNgSuffix ? true,
 }:
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "nixos-rebuild-ng";
   version = "0.0.0";
   src = ./src;
   pyproject = true;
 
-  build-system = with python3Packages; [
+  build-system = with python3.pkgs; [
     setuptools
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = with python3.pkgs; [
     tabulate
+    types-tabulate
   ];
 
   nativeBuildInputs = [
@@ -55,48 +53,22 @@ python3Packages.buildPythonApplication rec {
       mv $out/bin/nixos-rebuild $out/bin/nixos-rebuild-ng
     '';
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
+    mypy
+    ruff
   ];
 
   pytestFlagsArray = [ "-vv" ];
 
-  passthru =
-    let
-      python-with-pkgs = python3.withPackages (
-        ps: with ps; [
-          mypy
-          pytest
-          ruff
-          types-tabulate
-          # dependencies
-          tabulate
-        ]
-      );
-    in
-    {
-      devShell = mkShell {
-        packages = [ python-with-pkgs ];
-        shellHook = ''
-          cd pkgs/by-name/ni/nixos-rebuild-ng/src || true
-        '';
-      };
-
-      # NOTE: this is a passthru test rather than a build-time test because we
-      # want to keep the build closures small
-      tests.ci = runCommand "${pname}-ci" { nativeBuildInputs = [ python-with-pkgs ]; } ''
-        export RUFF_CACHE_DIR="$(mktemp -d)"
-
-        echo -e "\x1b[32m## run mypy\x1b[0m"
-        mypy ${src}
-        echo -e "\x1b[32m## run ruff\x1b[0m"
-        ruff check ${src}
-        echo -e "\x1b[32m## run ruff format\x1b[0m"
-        ruff format --check ${src}
-
-        touch $out
-      '';
-    };
+  postCheck = ''
+    echo -e "\x1b[32m## run mypy\x1b[0m"
+    mypy nixos_rebuild tests
+    echo -e "\x1b[32m## run ruff\x1b[0m"
+    ruff check nixos_rebuild tests
+    echo -e "\x1b[32m## run ruff format\x1b[0m"
+    ruff format --check nixos_rebuild tests
+  '';
 
   meta = {
     description = "Rebuild your NixOS configuration and switch to it, on local hosts and remote";

@@ -28,8 +28,7 @@ buildPythonPackage rec {
     "-o cache_dir=$(mktemp -d)"
 
     # Monitor https://github.com/certbot/certbot/issues/9606 for a solution
-    "-W"
-    "ignore::DeprecationWarning"
+    "-W 'ignore:pkg_resources is deprecated as an API:DeprecationWarning'"
   ];
 
   meta = certbot.meta // {

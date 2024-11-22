@@ -70,6 +70,7 @@ in
           base-url = lib.mkOption {
             type = lib.types.str;
             example = "https://ntfy.example";
+            # CHANGED: Detailed documentation
             description = ''
               Public facing base URL of the service
 
@@ -94,7 +95,7 @@ in
 
       description = ''
         Configuration for ntfy.sh, supported values are documented at
-        <https://ntfy.sh/docs/config/#config-options>
+        https://ntfy.sh/docs/config/#config-options
       '';
     };
   };
@@ -135,7 +136,7 @@ in
           User = cfg.user;
           StateDirectory = "ntfy-sh";
 
-          LoadCredential =
+          LoadCredential = lib.mkIf (cfg.smtpSenderPassFile != null || cfg.webPushPrivateKeyFile != null)
             (lib.optional (cfg.smtpSenderPassFile != null) "smtp_pass:${cfg.smtpSenderPassFile}" ++
               lib.optional (cfg.webPushPrivateKeyFile != null) "webpush_key:${cfg.webPushPrivateKeyFile}");
 

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       converting values.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ AndersonTorres pSub ];
     platforms = platforms.all;
     mainProgram = "udunits2";
   };

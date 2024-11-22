@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [
-      bbarker ehmry ftrvxmtrx kovirobi ylh
+      AndersonTorres bbarker ehmry ftrvxmtrx kovirobi ylh
     ];
     mainProgram = "9";
     platforms = platforms.unix;

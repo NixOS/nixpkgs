@@ -3,7 +3,6 @@
   stdenv,
   bitstring,
   buildPythonPackage,
-  buildPackages,
   cffi,
   fetchPypi,
   pycparser,
@@ -30,10 +29,6 @@ buildPythonPackage rec {
     cffi
     pycparser
   ];
-
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-
-  nativeBuildInputs = [ cffi ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace vex/Makefile-gcc \

@@ -1,6 +1,6 @@
 import time
-from collections.abc import Callable
 from math import isfinite
+from typing import Callable, Optional
 
 from test_driver.logger import AbstractLogger
 
@@ -12,7 +12,7 @@ class PollingConditionError(Exception):
 class PollingCondition:
     condition: Callable[[], bool]
     seconds_interval: float
-    description: str | None
+    description: Optional[str]
     logger: AbstractLogger
 
     last_called: float
@@ -20,10 +20,10 @@ class PollingCondition:
 
     def __init__(
         self,
-        condition: Callable[[], bool | None],
+        condition: Callable[[], Optional[bool]],
         logger: AbstractLogger,
         seconds_interval: float = 2.0,
-        description: str | None = None,
+        description: Optional[str] = None,
     ):
         self.condition = condition  # type: ignore
         self.seconds_interval = seconds_interval

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  setuptools,
   internetarchive,
   fetchPypi,
   yt-dlp,
@@ -11,19 +10,18 @@
 
 buildPythonPackage rec {
   pname = "tubeup";
-  version = "2024.11.13";
-  pyproject = true;
+  version = "2023.9.19";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BPkcz+y90NVDX2jjwOZ/9F/Oedg+LXc34Tee6ZfJ1vQ=";
+    hash = "sha256-Pp4h0MBoYhczmxPq21cLiYpLUeFP+2JoACcFpBl3b0E=";
   };
 
-  build-system = [ setuptools ];
 
-  dependencies = [
+  propagatedBuildInputs = [
     internetarchive
     docopt
     yt-dlp

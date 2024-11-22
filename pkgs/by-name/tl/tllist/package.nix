@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       structs, enums and unions.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ fionera ];
+    maintainers = with maintainers; [ fionera AndersonTorres ];
     platforms = platforms.all;
   };
 })

@@ -30,6 +30,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-8ciA1FoGdnU+GWRcYJc8zU2FpUgGwTZSZynvAi1luYo=";
 
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
+
   meta = with lib; {
     homepage = "https://github.com/akiomik/nostui";
     description = "TUI client for Nostr";

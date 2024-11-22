@@ -1,16 +1,10 @@
 {
   lib,
-  fetchFromGitHub,
   buildNimPackage,
-  nim-2_0,
+  fetchFromGitHub,
 }:
-let
-  buildNimPackage' = buildNimPackage.override {
-    # Do not build with Nim-2.2.x.
-    nim2 = nim-2_0;
-  };
-in
-buildNimPackage' (finalAttrs: {
+
+buildNimPackage (finalAttrs: {
   pname = "nph";
   version = "0.6.0";
 

@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ruff-lsp";
-  version = "0.0.59";
+  version = "0.0.58";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff-lsp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fMw93EmwO0wbIcGMr7csXkMRzgyQJNQzgLDZQqNB8Zc=";
+    hash = "sha256-TB4OcKkaUGYAmiGNJRnfRmiXTyTQL4sFoBrzxT6DWec=";
   };
 
   build-system = with python3Packages; [ hatchling ];

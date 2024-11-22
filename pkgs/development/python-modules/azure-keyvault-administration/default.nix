@@ -11,15 +11,14 @@
 
 buildPythonPackage rec {
   pname = "azure-keyvault-administration";
-  version = "4.5.0";
+  version = "4.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "azure_keyvault_administration";
-    inherit version;
-    hash = "sha256-ZTlnbspwVgrXaruNW9OviuyxcVgX7ZFe5gCGfyZbfpU=";
+    inherit pname version;
+    hash = "sha256-ems2y59UTzV1D/L6lMg7l7PvIMH+G0JOpoAY7ucD8d8=";
   };
 
   nativeBuildInputs = [ setuptools ];

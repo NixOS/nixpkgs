@@ -2,11 +2,13 @@
 
 buildDunePackage rec {
   pname = "merlin-extend";
-  version = "0.6.2";
+  version = "0.6";
+
+  useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/let-def/merlin-extend/releases/download/v${version}/merlin-extend-${version}.tbz";
-    hash = "sha256-R1WOfzC2RGLyucgvt/eHEzrPoNUTJFK2rXhI4LD013k=";
+    url = "https://github.com/let-def/merlin-extend/releases/download/v${version}/merlin-extend-v${version}.tbz";
+    sha256 = "0hvc4mz92x3rl2dxwrhvhzwl4gilnyvvwcqgr45vmdpyjyp3dwn2";
   };
 
   nativeBuildInputs = [ cppo ];

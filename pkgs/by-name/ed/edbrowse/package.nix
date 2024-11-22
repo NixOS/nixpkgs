@@ -92,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       schmitthenner
       equirosa
+      AndersonTorres
     ];
     platforms = lib.platforms.linux;
   };

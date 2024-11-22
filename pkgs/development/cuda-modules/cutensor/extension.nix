@@ -101,7 +101,10 @@ let
     (attrsets.attrByPath [
       pname
       redistArch
-    ] null feature) != null;
+    ] null feature) != null
+
+    # NOTE: This is an ad hoc hack; manifest schemas do not support version constraints yet
+    && !(lib.versionOlder cudaVersion "11.0" && lib.versionAtLeast redistrib.${pname}.version "2.0.2");
 
   # TODO(@connorbaker): With an auxilliary file keeping track of the CUDA versions each release supports,
   # we could filter out releases that don't support our CUDA version.

@@ -107,7 +107,7 @@ jobs:
                   echo "$errors"
                 else
                   # just print in plain text
-                  echo "${errors/::/}"
+                  echo "$errors" | sed 's/^:://'
                   echo # add one empty line
                 fi
                 failedFiles+=("$dest")

@@ -6,7 +6,7 @@
 rustPlatform.buildRustPackage {
   pname = "deltachat-repl";
 
-  inherit (libdeltachat) version src cargoDeps buildInputs;
+  inherit (libdeltachat) version src cargoLock buildInputs;
 
   nativeBuildInputs = [
     pkg-config

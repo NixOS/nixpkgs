@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
       problems that are not already well understood.
     '';
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ raskin synthetica ];
+    maintainers = with maintainers; [ raskin synthetica AndersonTorres ];
     broken = stdenv.hostPlatform.isDarwin;
     platforms = platforms.all;
     mainProgram = "jconsole";

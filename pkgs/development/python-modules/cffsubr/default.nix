@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   afdko,
   buildPythonPackage,
@@ -48,6 +49,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cffsubr" ];
 
   meta = with lib; {
+    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://github.com/adobe-type-tools/cffsubr/releases/tag/v${version}";
     description = "Standalone CFF subroutinizer based on AFDKO tx";
     mainProgram = "cffsubr";

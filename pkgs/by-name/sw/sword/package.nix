@@ -117,6 +117,7 @@ stdenv.mkDerivation (
       '';
       license = lib.licenses.gpl2;
       maintainers = with lib.maintainers; [
+        AndersonTorres
         greg
       ];
       platforms = lib.platforms.all;

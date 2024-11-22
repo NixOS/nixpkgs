@@ -1,24 +1,19 @@
-{
-  cmake,
-  fetchFromGitHub,
-  lib,
-  stdenv,
-}:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "lzfse";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "lzfse";
     repo = "lzfse";
-    rev = "lzfse-${finalAttrs.version}";
-    hash = "sha256-pcGnes966TSdYeIwjJv4F7C++cRzuYorb7rvu4030NU=";
+    rev = "lzfse-${version}";
+    sha256 = "1mfh6y6vpvxsdwmqmfbkqkwvxc0pz2dqqc72c6fk9sbsrxxaghd5";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/lzfse/lzfse";
     description = "Reference C implementation of the LZFSE compressor";
     longDescription = ''
@@ -26,9 +21,9 @@ stdenv.mkDerivation (finalAttrs: {
       LZFSE is a Lempel-Ziv style data compression algorithm using Finite State Entropy coding.
       It targets similar compression rates at higher compression and decompression speed compared to deflate using zlib.
     '';
-    platforms = lib.platforms.unix;
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ KSJ2000 ];
+    platforms = platforms.unix;
+    license = licenses.bsd3;
+    maintainers = [ ];
     mainProgram = "lzfse";
   };
-})
+}

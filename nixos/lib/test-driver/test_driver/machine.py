@@ -12,11 +12,10 @@ import sys
 import tempfile
 import threading
 import time
-from collections.abc import Callable, Iterable
 from contextlib import _GeneratorContextManager, nullcontext
 from pathlib import Path
 from queue import Queue
-from typing import Any
+from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 
 from test_driver.logger import AbstractLogger
 
@@ -92,7 +91,7 @@ def make_command(args: list) -> str:
 
 def _perform_ocr_on_screenshot(
     screenshot_path: str, model_ids: Iterable[int]
-) -> list[str]:
+) -> List[str]:
     if shutil.which("tesseract") is None:
         raise Exception("OCR requested but enableOCR is false")
 
@@ -249,19 +248,19 @@ class Machine:
     start_command: StartCommand
     keep_vm_state: bool
 
-    process: subprocess.Popen | None
-    pid: int | None
-    monitor: socket.socket | None
-    qmp_client: QMPSession | None
-    shell: socket.socket | None
-    serial_thread: threading.Thread | None
+    process: Optional[subprocess.Popen]
+    pid: Optional[int]
+    monitor: Optional[socket.socket]
+    qmp_client: Optional[QMPSession]
+    shell: Optional[socket.socket]
+    serial_thread: Optional[threading.Thread]
 
     booted: bool
     connected: bool
     # Store last serial console lines for use
     # of wait_for_console_text
     last_lines: Queue = Queue()
-    callbacks: list[Callable]
+    callbacks: List[Callable]
 
     def __repr__(self) -> str:
         return f"<Machine '{self.name}'>"
@@ -274,7 +273,7 @@ class Machine:
         logger: AbstractLogger,
         name: str = "machine",
         keep_vm_state: bool = False,
-        callbacks: list[Callable] | None = None,
+        callbacks: Optional[List[Callable]] = None,
     ) -> None:
         self.out_dir = out_dir
         self.tmp_dir = tmp_dir
@@ -315,7 +314,7 @@ class Machine:
     def log_serial(self, msg: str) -> None:
         self.logger.log_serial(msg, self.name)
 
-    def nested(self, msg: str, attrs: dict[str, str] = {}) -> _GeneratorContextManager:
+    def nested(self, msg: str, attrs: Dict[str, str] = {}) -> _GeneratorContextManager:
         my_attrs = {"machine": self.name}
         my_attrs.update(attrs)
         return self.logger.nested(msg, my_attrs)
@@ -344,7 +343,7 @@ class Machine:
         return self.wait_for_monitor_prompt()
 
     def wait_for_unit(
-        self, unit: str, user: str | None = None, timeout: int = 900
+        self, unit: str, user: Optional[str] = None, timeout: int = 900
     ) -> None:
         """
         Wait for a systemd unit to get into "active" state.
@@ -374,7 +373,7 @@ class Machine:
         ):
             retry(check_active, timeout)
 
-    def get_unit_info(self, unit: str, user: str | None = None) -> dict[str, str]:
+    def get_unit_info(self, unit: str, user: Optional[str] = None) -> Dict[str, str]:
         status, lines = self.systemctl(f'--no-pager show "{unit}"', user)
         if status != 0:
             raise Exception(
@@ -385,7 +384,7 @@ class Machine:
 
         line_pattern = re.compile(r"^([^=]+)=(.*)$")
 
-        def tuple_from_line(line: str) -> tuple[str, str]:
+        def tuple_from_line(line: str) -> Tuple[str, str]:
             match = line_pattern.match(line)
             assert match is not None
             return match[1], match[2]
@@ -400,7 +399,7 @@ class Machine:
         self,
         unit: str,
         property: str,
-        user: str | None = None,
+        user: Optional[str] = None,
     ) -> str:
         status, lines = self.systemctl(
             f'--no-pager show "{unit}" --property="{property}"',
@@ -425,7 +424,7 @@ class Machine:
         assert match[1] == property, invalid_output_message
         return match[2]
 
-    def systemctl(self, q: str, user: str | None = None) -> tuple[int, str]:
+    def systemctl(self, q: str, user: Optional[str] = None) -> Tuple[int, str]:
         """
         Runs `systemctl` commands with optional support for
         `systemctl --user`
@@ -481,8 +480,8 @@ class Machine:
         command: str,
         check_return: bool = True,
         check_output: bool = True,
-        timeout: int | None = 900,
-    ) -> tuple[int, str]:
+        timeout: Optional[int] = 900,
+    ) -> Tuple[int, str]:
         """
         Execute a shell command, returning a list `(status, stdout)`.
 
@@ -549,7 +548,7 @@ class Machine:
 
         return (rc, output.decode(errors="replace"))
 
-    def shell_interact(self, address: str | None = None) -> None:
+    def shell_interact(self, address: Optional[str] = None) -> None:
         """
         Allows you to directly interact with the guest shell. This should
         only be used during test development, not in production tests.
@@ -596,7 +595,7 @@ class Machine:
                 break
             self.send_console(char.decode())
 
-    def succeed(self, *commands: str, timeout: int | None = None) -> str:
+    def succeed(self, *commands: str, timeout: Optional[int] = None) -> str:
         """
         Execute a shell command, raising an exception if the exit status is
         not zero, otherwise returning the standard output. Similar to `execute`,
@@ -613,7 +612,7 @@ class Machine:
                 output += out
         return output
 
-    def fail(self, *commands: str, timeout: int | None = None) -> str:
+    def fail(self, *commands: str, timeout: Optional[int] = None) -> str:
         """
         Like `succeed`, but raising an exception if the command returns a zero
         status.
@@ -725,7 +724,7 @@ class Machine:
         with self.nested(f"waiting for {regexp} to appear on tty {tty}"):
             retry(tty_matches, timeout)
 
-    def send_chars(self, chars: str, delay: float | None = 0.01) -> None:
+    def send_chars(self, chars: str, delay: Optional[float] = 0.01) -> None:
         """
         Simulate typing a sequence of characters on the virtual keyboard,
         e.g., `send_chars("foobar\n")` will type the string `foobar`
@@ -799,10 +798,10 @@ class Machine:
         with self.nested(f"waiting for TCP port {port} on {addr} to be closed"):
             retry(port_is_closed, timeout)
 
-    def start_job(self, jobname: str, user: str | None = None) -> tuple[int, str]:
+    def start_job(self, jobname: str, user: Optional[str] = None) -> Tuple[int, str]:
         return self.systemctl(f"start {jobname}", user)
 
-    def stop_job(self, jobname: str, user: str | None = None) -> tuple[int, str]:
+    def stop_job(self, jobname: str, user: Optional[str] = None) -> Tuple[int, str]:
         return self.systemctl(f"stop {jobname}", user)
 
     def wait_for_job(self, jobname: str) -> None:
@@ -943,13 +942,13 @@ class Machine:
         """Debugging: Dump the contents of the TTY<n>"""
         self.execute(f"fold -w 80 /dev/vcs{tty} | systemd-cat")
 
-    def _get_screen_text_variants(self, model_ids: Iterable[int]) -> list[str]:
+    def _get_screen_text_variants(self, model_ids: Iterable[int]) -> List[str]:
         with tempfile.TemporaryDirectory() as tmpdir:
             screenshot_path = os.path.join(tmpdir, "ppm")
             self.send_monitor_command(f"screendump {screenshot_path}")
             return _perform_ocr_on_screenshot(screenshot_path, model_ids)
 
-    def get_screen_text_variants(self) -> list[str]:
+    def get_screen_text_variants(self) -> List[str]:
         """
         Return a list of different interpretations of what is currently
         visible on the machine's screen using optical character
@@ -1029,7 +1028,7 @@ class Machine:
                     pass
 
     def send_key(
-        self, key: str, delay: float | None = 0.01, log: bool | None = True
+        self, key: str, delay: Optional[float] = 0.01, log: Optional[bool] = True
     ) -> None:
         """
         Simulate pressing keys on the virtual keyboard, e.g.,
@@ -1169,7 +1168,7 @@ class Machine:
         with self.nested("waiting for the X11 server"):
             retry(check_x, timeout)
 
-    def get_window_names(self) -> list[str]:
+    def get_window_names(self) -> List[str]:
         return self.succeed(
             r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
         ).splitlines()

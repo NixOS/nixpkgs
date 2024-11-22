@@ -149,7 +149,13 @@ buildPostgresqlExtension (finalAttrs: {
     homepage = "https://postgis.net/";
     changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${finalAttrs.version}/NEWS";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; teams.geospatial.members ++ [ marcweber ];
+    maintainers =
+      with maintainers;
+      teams.geospatial.members
+      ++ [
+        marcweber
+        wolfgangwalther
+      ];
     inherit (postgresql.meta) platforms;
   };
 })

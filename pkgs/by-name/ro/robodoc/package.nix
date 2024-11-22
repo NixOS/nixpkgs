@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       Java -- basically any program in which you can use remarks/comments.
     '';
     license = with licenses; gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.all;
   };
 })

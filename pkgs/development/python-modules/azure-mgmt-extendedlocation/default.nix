@@ -4,23 +4,22 @@
   azure-mgmt-core,
   buildPythonPackage,
   fetchPypi,
-  isodate,
+  msrest,
   pythonOlder,
   setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-extendedlocation";
-  version = "2.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    pname = "azure_mgmt_extendedlocation";
-    inherit version;
-    hash = "sha256-O1wdLwoh8V6bF29EAgbHAqH3f6S5ffHKQAH5kavPfNE=";
+    inherit pname version;
+    extension = "zip";
+    hash = "sha256-jRo6EFP8Dg3i9U8HLfjED9QFfWbdg+X3o9PSf4eus9o=";
   };
 
   build-system = [ setuptools ];
@@ -28,12 +27,8 @@ buildPythonPackage rec {
   dependencies = [
     azure-common
     azure-mgmt-core
-    isodate
-    typing-extensions
+    msrest
   ];
-
-  # Tests are only available in mono repo
-  doCheck = false;
 
   pythonImportsCheck = [ "azure.mgmt.extendedlocation" ];
 

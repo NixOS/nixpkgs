@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       formats.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ lukegb ];
+    maintainers = with lib.maintainers; [ AndersonTorres lukegb ];
     platforms = lib.platforms.unix;
   };
 })

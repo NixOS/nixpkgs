@@ -329,7 +329,6 @@ rec {
   ucrtAarch64 = {
     config = "aarch64-w64-mingw32";
     libc = "ucrt";
-    rust.rustcTarget = "aarch64-pc-windows-gnullvm";
     useLLVM = true;
   };
 

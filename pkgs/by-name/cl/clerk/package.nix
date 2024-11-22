@@ -96,6 +96,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       anderspapitto
       rewine
+      AndersonTorres
     ];
     platforms = lib.platforms.linux;
   };
