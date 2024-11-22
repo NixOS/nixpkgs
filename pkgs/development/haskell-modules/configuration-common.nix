@@ -3007,4 +3007,20 @@ self: super: {
     doJailbreak # https://github.com/testcontainers/testcontainers-hs/pull/58
   ];
 
+  # https://bitbucket.org/echo_rm/hailgun/pull-requests/27
+  hailgun = appendPatches [
+    (fetchpatch {
+      url = "https://bitbucket.org/nh2/hailgun/commits/ac2bc2a3003e4b862625862c4565fece01c0cf57/raw";
+      sha256 = "sha256-MWeK9nzMVP6cQs2GBFkohABgL8iWcT7YzwF+tLOkIjo=";
+    })
+    (fetchpatch {
+      url = "https://bitbucket.org/nh2/hailgun/commits/583daaf87265a7fa67ce5171fe1077e61be9b39c/raw";
+      sha256 = "sha256-6WITonLoONxZzzkS7EI79LwmwSdkt6TCgvHA2Hwy148=";
+    })
+    (fetchpatch {
+      url = "https://bitbucket.org/nh2/hailgun/commits/b9680b82f6d58f807828c1bbb57e26c7af394501/raw";
+      sha256 = "sha256-MnOc51tTNg8+HDu1VS2Ct7Mtu0vuuRd3DjzOAOF+t7Q=";
+    })
+  ] super.hailgun;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
