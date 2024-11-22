@@ -152,7 +152,7 @@ buildNpmPackage' {
     # pg_dumpall fails without database root access
     # see https://github.com/immich-app/immich/issues/13971
     substituteInPlace src/services/backup.service.ts \
-      --replace-fail '`pg_dumpall`' '`pg_dump`'
+      --replace-fail '`/usr/lib/postgresql/''${databaseMajorVersion}/bin/pg_dumpall`' '`pg_dump`'
   '';
 
   nativeBuildInputs = [

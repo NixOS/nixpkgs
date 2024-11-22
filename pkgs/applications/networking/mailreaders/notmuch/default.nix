@@ -11,6 +11,7 @@
 , withEmacs ? true
 , withRuby ? true
 , withSfsexp ? true # also installs notmuch-git, which requires sexp-support
+# TODO upstream: it takes too long ! 800 ms here
 , withVim ? true
 }:
 
@@ -76,7 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   outputs = [ "out" "man" "info" "bindingconfig" ]
-    ++ lib.optional withEmacs "emacs";
+    ++ lib.optional withEmacs "emacs"
+    ++ lib.optional withVim "vim";
 
   # if notmuch is built with s-expression support, the testsuite (T-850.sh) only
   # passes if notmuch-git can be executed, so we need to patch its shebang.
@@ -133,14 +135,14 @@ stdenv.mkDerivation (finalAttrs: {
     cp notmuch-git $out/bin/notmuch-git
     wrapProgram $out/bin/notmuch-git --prefix PATH : $out/bin:${lib.getBin git}/bin
   '' + lib.optionalString withVim ''
-    make -C vim DESTDIR="$out/share/vim-plugins/notmuch" prefix="" install
-    mkdir -p $out/share/nvim
-    ln -s $out/share/vim-plugins/notmuch $out/share/nvim/site
+    make -C vim DESTDIR="$vim/share/vim-plugins/notmuch" prefix="" install
+    mkdir -p $vim/share/nvim
+    ln -s $vim/share/vim-plugins/notmuch $vim/share/nvim/site
   '' + lib.optionalString (withVim && withRuby) ''
-    PLUG=$out/share/vim-plugins/notmuch/plugin/notmuch.vim
+    PLUG=$vim/share/vim-plugins/notmuch/plugin/notmuch.vim
     cat >> $PLUG << EOF
       let \$GEM_PATH=\$GEM_PATH . ":${finalAttrs.passthru.gemEnv}/${ruby.gemPath}"
-      let \$RUBYLIB=\$RUBYLIB . ":$out/${ruby.libPath}/${ruby.system}"
+      let \$RUBYLIB=\$RUBYLIB . ":$vim/${ruby.libPath}/${ruby.system}"
       if has('nvim')
     EOF
     for gem in ${finalAttrs.passthru.gemEnv}/${ruby.gemPath}/gems/*/lib; do

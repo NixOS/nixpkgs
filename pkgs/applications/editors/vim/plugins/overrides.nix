@@ -38,6 +38,7 @@
   languagetool,
   llvmPackages,
   meson,
+  notmuch,
   neovim-unwrapped,
   nim1,
   nodePackages,
@@ -1407,6 +1408,11 @@ in
     nvimRequireCheck = "lsp-progress";
   };
 
+  lspecho-nvim = super.lspecho-nvim.overrideAttrs {
+    meta.license = lib.licenses.mit;
+    nvimRequireCheck = "lspecho";
+  };
+
   lualine-lsp-progress = super.lualine-lsp-progress.overrideAttrs {
     dependencies = with self; [ lualine-nvim ];
   };
@@ -1754,6 +1760,8 @@ in
     dependencies = [ self.plenary-nvim ];
     nvimRequireCheck = "null-ls";
   };
+
+  notmuch-vim = notmuch.vim;
 
   NotebookNavigator-nvim = super.NotebookNavigator-nvim.overrideAttrs {
     nvimRequireCheck = "notebook-navigator";
