@@ -2468,6 +2468,22 @@ let
         };
       };
 
+      ionic.ionic = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "ionic";
+          publisher = "ionic";
+          version = "1.96.0";
+          hash = "sha256-rezlSTzw0x1ugFkWrAUX6tnmbVjiI8sV/488pWkZ/rc=";
+        };
+        meta = {
+          description = "Official VSCode extension for Ionic and Capacitor development";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ionic.ionic";
+          homepage = "https://github.com/ionic-team/vscode-ionic";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ thtrf ];
+        };
+      };
+
       ionide.ionide-fsharp = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Ionide-fsharp";

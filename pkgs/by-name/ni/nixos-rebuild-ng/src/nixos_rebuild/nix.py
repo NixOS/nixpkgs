@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import shutil
 from datetime import datetime
 from pathlib import Path
 from subprocess import PIPE, CalledProcessError, run
@@ -14,7 +15,7 @@ from .models import (
     NRError,
     Profile,
 )
-from .utils import dict_to_flags
+from .utils import dict_to_flags, info
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
 
@@ -46,6 +47,49 @@ def edit(flake: Flake | None, nix_flags: list[str] | None = None) -> None:
             run([os.getenv("EDITOR", "nano"), nixos_config], check=False)
         else:
             raise NRError("cannot find NixOS config file")
+
+
+def find_file(file: str, nix_flags: list[str] | None = None) -> Path | None:
+    "Find classic Nixpkgs location."
+    r = run(
+        ["nix-instantiate", "--find-file", file, *(nix_flags or [])],
+        stdout=PIPE,
+        check=False,
+        text=True,
+    )
+    if r.returncode:
+        return None
+    return Path(r.stdout.strip())
+
+
+def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
+    """Get Nixpkgs path as a Git revision.
+
+    Can be used to generate `.version-suffix` file."""
+    if not nixpkgs_path:
+        return None
+
+    # Git is not included in the closure for nixos-rebuild so we need to check
+    if not shutil.which("git"):
+        info(f"warning: Git not found; cannot figure out revision of '{nixpkgs_path}'")
+        return None
+
+    # Get current revision
+    r = run(
+        ["git", "-C", nixpkgs_path, "rev-parse", "--short", "HEAD"],
+        check=False,
+        stdout=PIPE,
+        text=True,
+    )
+    rev = r.stdout.strip()
+
+    if rev:
+        # Check if repo is dirty
+        if run(["git", "-C", nixpkgs_path, "diff", "--quiet"], check=False).returncode:
+            rev += "M"
+        return f".git.{rev}"
+    else:
+        return None
 
 
 def _parse_generation_from_nix_store(path: Path, profile: Profile) -> Generation:
