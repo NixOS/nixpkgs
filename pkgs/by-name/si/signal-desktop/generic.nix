@@ -271,6 +271,7 @@ stdenv.mkDerivation rec {
       bkchr
       teutat3s
       emily
+      Gliczy
     ];
     mainProgram = pname;
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
