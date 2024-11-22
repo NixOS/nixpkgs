@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   preCheck = ''
     patchShebangs misc/
     patchShebangs test/
-    sed -ie 's|/bin/bash|${bash}/bin/bash|' test/test.pl
+    sed -i -e 's|/bin/bash|${bash}/bin/bash|' test/test.pl
   '';
 
   enableParallelBuilding = true;

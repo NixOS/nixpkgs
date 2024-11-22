@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ texliveMedium ];
 
   patchPhase = ''
-    sed -ie 's|nuweb -r|./nuweb -r|' Makefile
+    sed -i -e 's|nuweb -r|./nuweb -r|' Makefile
   '';
 
   # Workaround build failure on -fno-common toolchains like upstream
