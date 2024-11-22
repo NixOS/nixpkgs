@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    home = "${finalAttrs.finalPackage}/lib/ant";
     updateScript = gitUpdater {
       rev-prefix = "rel/";
       url = "https://gitbox.apache.org/repos/asf/ant";
