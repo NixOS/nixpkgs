@@ -566,7 +566,7 @@ in
 
         User = "frigate";
         Group = "frigate";
-        SupplementaryGroups = optionals withCoral [ "coral" ];
+        SupplementaryGroups = [ "render" ] ++ optionals withCoral [ "coral" ];
 
         UMask = "0027";
 
