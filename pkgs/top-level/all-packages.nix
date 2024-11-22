@@ -3242,9 +3242,7 @@ with pkgs;
 
   kramdown-asciidoc = callPackage ../tools/typesetting/kramdown-asciidoc { };
 
-  lychee = callPackage ../tools/networking/lychee {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
-  };
+  lychee = callPackage ../tools/networking/lychee { };
 
   mozwire = callPackage ../tools/networking/mozwire {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;

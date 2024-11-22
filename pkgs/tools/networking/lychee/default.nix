@@ -1,32 +1,29 @@
-{ callPackage
-, lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, Security
-, SystemConfiguration
-, testers
+{
+  callPackage,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  testers,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lychee";
-  version = "0.16.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = pname;
     rev = "lychee-v${version}";
-    hash = "sha256-H8iNgyLnzgfUPEVPlDosb6l99efrzM+/RIQ7X7nh4Ks=";
+    hash = "sha256-flfKo7rN2//ho6q7Iv8tDK8d+5kjpAYELZZHwwZaV/E=";
   };
 
-  cargoHash = "sha256-cvEAy0Tx892dsd4zeh5D0fy4hoNBaZ2Q++IStbMbUhY=";
+  cargoHash = "sha256-K0B1o27vXCoQPt1FoX1AXLeYUHiNVzYStU/dkpw6+xQ=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
+  buildInputs = [ openssl ];
 
   checkFlags = [
     #  Network errors for all of these tests
@@ -55,12 +52,18 @@ rustPlatform.buildRustPackage rec {
     network = testers.runNixOSTest ./tests/network.nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, async, stream-based link checker written in Rust";
     homepage = "https://github.com/lycheeverse/lychee";
     downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/lychee-v${version}";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ totoroot tuxinaut ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with lib.maintainers; [
+      totoroot
+      tuxinaut
+    ];
     mainProgram = "lychee";
   };
 }
