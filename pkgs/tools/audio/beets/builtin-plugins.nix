@@ -12,8 +12,6 @@
     deprecated = true;
     testPaths = [ ];
   };
-
-  acousticbrainz.propagatedBuildInputs = [ python3Packages.requests ];
   albumtypes = { };
   aura = {
     propagatedBuildInputs = with python3Packages; [ flask pillow ];
