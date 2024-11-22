@@ -11,19 +11,26 @@
   bpftools,
   elfutils,
   zlib,
-  libbpf,
+  zstd,
 }:
 
 let
   versionInfo = lib.importJSON ./version.json;
 
-  # scx needs a specific commit of bpftool
+  # scx needs a specific commit of bpftool and libbpf
   # can be found in meson.build of scx src
   # grep 'bpftool_commit =' ./meson.build
   bpftools_src = fetchFromGitHub {
     owner = "libbpf";
     repo = "bpftool";
     inherit (versionInfo.bpftool) rev hash;
+    fetchSubmodules = true;
+  };
+  # grep 'libbpf_commit = ' ./meson.build
+  libbpf_src = fetchFromGitHub {
+    owner = "libbpf";
+    repo = "libbpf";
+    inherit (versionInfo.libbpf) rev hash;
     fetchSubmodules = true;
   };
 
@@ -34,6 +41,12 @@ let
     cd "$1"
     cp --no-preserve=mode,owner -r "${bpftools_src}/" ./bpftool
   '';
+  fetchLibbpf = writeShellScript "fetch_libbpf" ''
+    [ "$2" == '${libbpf_src.rev}' ] || exit 1
+    cd "$1"
+    cp --no-preserve=mode,owner -r "${libbpf_src}/" ./libbpf
+    mkdir -p ./libbpf/src/usr/include
+  '';
 
   # Fixes a bug with the meson build script where it specifies
   # /bin/bash twice in the script
@@ -42,24 +55,15 @@ let
     exec ${lib.getExe bash} "$@"
   '';
 
-  # Won't build with stable libbpf, so use the latest commit
-  libbpf-git = libbpf.overrideAttrs (oldAttrs: {
-    src = fetchFromGitHub {
-      owner = "libbpf";
-      repo = "libbpf";
-      inherit (versionInfo.libbpf) rev hash;
-      fetchSubmodules = true;
-    };
-  });
-
 in
 mkScxScheduler "c" {
   schedulerName = "scx_cscheds";
 
   postPatch = ''
-    rm meson-scripts/fetch_bpftool
+    rm meson-scripts/fetch_bpftool meson-scripts/fetch_libbpf
     patchShebangs ./meson-scripts
     cp ${fetchBpftool} meson-scripts/fetch_bpftool
+    cp ${fetchLibbpf} meson-scripts/fetch_libbpf
     substituteInPlace meson.build \
       --replace-fail '[build_bpftool' "['${misbehaviorBash}', build_bpftool"
   '';
@@ -73,7 +77,7 @@ mkScxScheduler "c" {
   buildInputs = [
     elfutils
     zlib
-    libbpf-git
+    zstd
   ];
 
   mesonFlags = [
@@ -82,8 +86,6 @@ mkScxScheduler "c" {
       # upstream systemd files are a hassle to patch
       "systemd" = false;
       "openrc" = false;
-      # libbpf is already fetched as FOD
-      "libbpf_a" = false;
       # not for nix
       "libalpm" = false;
     })

@@ -26,7 +26,7 @@ pushd "$tmp/scx"
 bpftoolRev=$(grep 'bpftool_commit =' ./meson.build | awk -F"'" '{print $2}')
 bpftoolHash=$(nix-prefetch-git https://github.com/libbpf/bpftool.git --rev $bpftoolRev --fetch-submodules --quiet | jq -r .hash)
 
-libbpfRev=$(curl -s "https://api.github.com/repos/libbpf/libbpf/commits/master" | jq -r '.sha')
+libbpfRev=$(grep 'libbpf_commit =' ./meson.build | awk -F"'" '{print $2}')
 libbpfHash=$(nix-prefetch-git https://github.com/libbpf/libbpf.git --rev $libbpfRev --fetch-submodules --quiet | jq -r .hash)
 
 jq \
