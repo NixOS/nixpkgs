@@ -20,7 +20,6 @@ let
       , icu
       , libuuid
       , libxml2
-      , linux-pam
       , lz4
       , openssl
       , readline
@@ -57,6 +56,10 @@ let
       , llvmPackages
       , nukeReferences
       , overrideCC
+
+      # PAM
+      , pamSupport ? stdenv.hostPlatform.isLinux
+      , linux-pam
 
       # PL/Python
       , pythonSupport ? false
@@ -135,7 +138,7 @@ let
       ++ lib.optionals systemdSupport [ systemdLibs ]
       ++ lib.optionals pythonSupport [ python3 ]
       ++ lib.optionals gssSupport [ libkrb5 ]
-      ++ lib.optionals stdenv'.hostPlatform.isLinux [ linux-pam ];
+      ++ lib.optionals pamSupport [ linux-pam ];
 
     nativeBuildInputs = [
       makeWrapper
@@ -173,7 +176,7 @@ let
       ++ lib.optionals gssSupport [ "--with-gssapi" ]
       ++ lib.optionals pythonSupport [ "--with-python" ]
       ++ lib.optionals jitSupport [ "--with-llvm" ]
-      ++ lib.optionals stdenv'.hostPlatform.isLinux [ "--with-pam" ]
+      ++ lib.optionals pamSupport [ "--with-pam" ]
       # This could be removed once the upstream issue is resolved:
       # https://postgr.es/m/flat/427c7c25-e8e1-4fc5-a1fb-01ceff185e5b%40technowledgy.de
       ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16") [ "LDFLAGS_EX_BE=-Wl,-export_dynamic" ]
