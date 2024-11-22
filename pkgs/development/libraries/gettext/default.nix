@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" "info" ];
 
-  hardeningDisable = [ "format" ];
-
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
 
   configureFlags = [
