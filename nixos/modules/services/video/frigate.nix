@@ -132,6 +132,27 @@ in
       '';
     };
 
+    vaapiDriver = mkOption {
+      type = nullOr (enum [ "i965" "iHD" "nouveau" "vdpau" "nvidia" "radeonsi" ]);
+      default = null;
+      example = "radeonsi";
+      description = ''
+        Force usage of a particular VA-API driver for video acceleration. Use together with `settings.ffmpeg.hwaccel_args`.
+
+        Setting this *is not required* for VA-API to work, but it can help steer VA-API towards the correct card if you have multiple.
+
+        :::{.note}
+        For VA-API to work you must enable {option}`hardware.graphics.enable` (sufficient for AMDGPU) and pass for example
+        `pkgs.intel-media-driver` (required for Intel 5th Gen. and newer) into {option}`hardware.graphics.extraPackages`.
+        :::
+
+        See also:
+
+        - https://docs.frigate.video/configuration/hardware_acceleration
+        - https://docs.frigate.video/configuration/ffmpeg_presets#hwaccel-presets
+      '';
+    };
+
     settings = mkOption {
       type = submodule {
         freeformType = format.type;
@@ -542,6 +563,8 @@ in
         CONFIG_FILE = format.generate "frigate.yml" filteredConfig;
         HOME = "/var/lib/frigate";
         PYTHONPATH = cfg.package.pythonPath;
+      } // optionalAttrs (cfg.vaapiDriver != null) {
+        LIBVA_DRIVER_NAME = cfg.vaapiDriver;
       } // optionalAttrs withCoral {
         LD_LIBRARY_PATH = makeLibraryPath (with pkgs; [ libedgetpu ]);
       };
@@ -567,6 +590,8 @@ in
         User = "frigate";
         Group = "frigate";
         SupplementaryGroups = [ "render" ] ++ optionals withCoral [ "coral" ];
+
+        AmbientCapabilities = optionals (elem cfg.vaapiDriver [ "i965" "iHD" ]) [ "CAP_PERFMON" ]; # for intel_gpu_top
 
         UMask = "0027";
 
