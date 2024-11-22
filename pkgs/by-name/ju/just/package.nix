@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "1.36.0";
+  version = "1.37.0";
   outputs = [
     "out"
     "man"
@@ -24,10 +24,10 @@ rustPlatform.buildRustPackage rec {
     owner = "casey";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-4p4otR0W/v0DoWwwcNq/UEDa1V8vlZMpdk33B/9A4Bo=";
+    hash = "sha256-WF1kyIZyqnIYfFL/HZWBER97aXH3FSCbTRonOKSwgNg=";
   };
 
-  cargoHash = "sha256-y6wBFjBOeymbXUIeflQ35FxQRMPlDvB0Zeo2bQeZjJ0=";
+  cargoHash = "sha256-/uWxYxczTOlUs2wOCCn5wwbGETHwIqdDI2mb/h4xVxQ=";
 
   nativeBuildInputs = [
     installShellFiles
