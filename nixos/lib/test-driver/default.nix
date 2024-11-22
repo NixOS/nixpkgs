@@ -20,6 +20,8 @@ in
 python3Packages.buildPythonApplication {
   pname = "nixos-test-driver";
   version = "1.1";
+  pyproject = true;
+
   src = fs.toSource {
     root = ./.;
     fileset = fs.unions [
@@ -28,39 +30,45 @@ python3Packages.buildPythonApplication {
       ./extract-docstrings.py
     ];
   };
-  pyproject = true;
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies =
+    with python3Packages;
+    [
+      colorama
+      junit-xml
+      ptpython
+    ]
+    ++ extraPythonPackages python3Packages;
 
   propagatedBuildInputs =
     [
       coreutils
       netpbm
-      python3Packages.colorama
-      python3Packages.junit-xml
-      python3Packages.ptpython
       qemu_pkg
       socat
       vde2
     ]
-    ++ (lib.optionals enableOCR [
+    ++ lib.optionals enableOCR [
       imagemagick_light
       tesseract4
-    ])
-    ++ extraPythonPackages python3Packages;
-
-  nativeBuildInputs = [
-    python3Packages.setuptools
-  ];
+    ];
 
   passthru.tests = {
     inherit (nixosTests.nixos-test-driver) driver-timeout;
   };
 
   doCheck = true;
+
   nativeCheckInputs = with python3Packages; [
     mypy
     ruff
     black
   ];
+
   checkPhase = ''
     echo -e "\x1b[32m## run mypy\x1b[0m"
     mypy test_driver extract-docstrings.py
