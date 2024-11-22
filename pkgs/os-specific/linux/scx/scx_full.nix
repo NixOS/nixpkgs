@@ -1,20 +1,15 @@
 {
-  stdenv,
   lib,
+  stdenv,
+  scx-common,
   scx,
-  mkScxScheduler,
 }:
 scx.cscheds.overrideAttrs (oldAttrs: {
   pname = "scx_full";
   postInstall =
     (oldAttrs.postInstall or "")
     + ''
-      cp ${lib.getExe scx.bpfland} $out/bin/
-      cp ${lib.getExe scx.lavd} $out/bin/
-      cp ${lib.getExe scx.layered} $out/bin/
-      cp ${lib.getExe scx.rlfifo} $out/bin/
-      cp ${lib.getExe scx.rustland} $out/bin/
-      cp ${lib.getExe scx.rusty} $out/bin/
+      cp ${scx.rustscheds}/bin/* ${placeholder "bin"}/bin/
     '';
 
   meta = oldAttrs.meta // {
@@ -23,6 +18,11 @@ scx.cscheds.overrideAttrs (oldAttrs: {
       This includes C based schedulers such as scx_central, scx_flatcg,
       scx_pair, scx_qmap, scx_simple, scx_userland and Rust based schedulers
       like scx_rustland, scx_bpfland, scx_lavd, scx_layered, scx_rlfifo.
+
+      ::: {.note}
+      Sched-ext schedulers are only available on kernels version 6.12 or later.
+      It is recommended to use the latest kernel for the best compatibility.
+      :::
     '';
   };
 })
