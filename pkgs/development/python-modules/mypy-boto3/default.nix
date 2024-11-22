@@ -494,8 +494,8 @@ rec {
       "sha256-fw/vfzKXXQSG7xj9FolkJgzciHBz4ELlFh2MlEJ6wQI=";
 
   mypy-boto3-elbv2 =
-    buildMypyBoto3Package "elbv2" "1.35.66"
-      "sha256-f2o9uGQF2dRZ3xUtAwWcTV+g4VbDphexuW2kn/Ik+9k=";
+    buildMypyBoto3Package "elbv2" "1.35.67"
+      "sha256-S0G/DN8gJUv94kvgfBi6VyY/V2LPe573BZ6tKE/lWQI=";
 
   mypy-boto3-emr =
     buildMypyBoto3Package "emr" "1.35.39"
