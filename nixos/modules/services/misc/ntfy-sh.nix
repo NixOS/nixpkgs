@@ -1,13 +1,13 @@
 { config, lib, pkgs, ... }:
+
 let
   cfg = config.services.ntfy-sh;
-
   settingsFormat = pkgs.formats.yaml { };
 in
 
 {
   options.services.ntfy-sh = {
-    enable = lib.mkEnableOption "[ntfy-sh](https://ntfy.sh), a push notification service";
+    enable = lib.mkEnableOption "ntfy-sh, a push notification service";
 
     package = lib.mkPackageOption pkgs "ntfy-sh" { };
 
@@ -21,6 +21,46 @@ in
       default = "ntfy-sh";
       type = lib.types.str;
       description = "Primary group of ntfy-sh user.";
+    };
+
+    smtpSenderPass = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      description = ''
+        The password for the SMTP sender.
+        For improved security, consider using 'smtpSenderPassFile' instead
+        which keeps credentials out of the Nix store.
+      '';
+    };
+
+    smtpSenderPassFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = ''
+        Path to a file containing the password for the SMTP sender.
+        Uses systemd's LoadCredential feature for secure runtime secret handling,
+        preventing the secret from being written to the Nix store.
+      '';
+    };
+
+    webPushPrivateKey = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      description = ''
+        The private key for web push notifications.
+        For improved security, consider using 'webPushPrivateKeyFile' instead
+        which keeps credentials out of the Nix store.
+      '';
+    };
+
+    webPushPrivateKeyFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = ''
+        Path to a file containing the private key for web push notifications.
+        Uses systemd's LoadCredential feature for secure runtime secret handling,
+        preventing the secret from being written to the Nix store.
+      '';
     };
 
     settings = lib.mkOption {
@@ -53,7 +93,8 @@ in
       '';
 
       description = ''
-        Configuration for ntfy.sh, supported values are [here](https://ntfy.sh/docs/config/#config-options).
+        Configuration for ntfy.sh, supported values are documented at
+        <https://ntfy.sh/docs/config/#config-options>
       '';
     };
   };
@@ -63,7 +104,6 @@ in
       configuration = settingsFormat.generate "server.yml" cfg.settings;
     in
     lib.mkIf cfg.enable {
-      # to configure access control via the cli
       environment = {
         etc."ntfy/server.yml".source = configuration;
         systemPackages = [ cfg.package ];
@@ -82,10 +122,22 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
 
+        environment = lib.mkIf (cfg.smtpSenderPassFile != null || cfg.webPushPrivateKeyFile != null) {
+          CREDENTIALS_DIRECTORY = "%d/credentials";
+          SMTP_SENDER_PASS = lib.mkIf (cfg.smtpSenderPassFile != null)
+            "$(cat $CREDENTIALS_DIRECTORY/smtp_pass)";
+          WEB_PUSH_PRIVATE_KEY = lib.mkIf (cfg.webPushPrivateKeyFile != null)
+            "$(cat $CREDENTIALS_DIRECTORY/webpush_key)";
+        };
+
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/ntfy serve -c ${configuration}";
           User = cfg.user;
           StateDirectory = "ntfy-sh";
+
+          LoadCredential =
+            (lib.optional (cfg.smtpSenderPassFile != null) "smtp_pass:${cfg.smtpSenderPassFile}" ++
+              lib.optional (cfg.webPushPrivateKeyFile != null) "webpush_key:${cfg.webPushPrivateKeyFile}");
 
           DynamicUser = true;
           AmbientCapabilities = "CAP_NET_BIND_SERVICE";
@@ -102,7 +154,6 @@ in
           RestrictNamespaces = true;
           RestrictRealtime = true;
           MemoryDenyWriteExecute = true;
-          # Upstream Recommandation
           LimitNOFILE = 20500;
         };
       };
