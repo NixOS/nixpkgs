@@ -1480,12 +1480,7 @@ with pkgs;
 
   retroarch-joypad-autoconfig = callPackage ../applications/emulators/retroarch/retroarch-joypad-autoconfig.nix { };
 
-  libretranslate = with python3.pkgs; toPythonApplication libretranslate;
-
-  libretro = recurseIntoAttrs
-    (callPackage ../applications/emulators/retroarch/cores.nix {
-      retroarch = retroarchBare;
-    });
+  libretro = recurseIntoAttrs (callPackage ../applications/emulators/retroarch/cores.nix { });
 
   libretro-core-info = callPackage ../applications/emulators/retroarch/libretro-core-info.nix { };
 
@@ -1537,12 +1532,9 @@ with pkgs;
 
   ### APPLICATIONS/TERMINAL-EMULATORS
 
-  contour = qt6.callPackage ../applications/terminal-emulators/contour {
-    inherit (darwin.apple_sdk_11_0.libs) utmp;
-    inherit (darwin) sigtool;
-    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-    catch2 = catch2_3;
-    fmt = fmt_9;
+  contour = callPackage ../by-name/co/contour/package.nix {
+    inherit (darwin) libutil sigtool;
+    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else stdenv;
   };
 
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
@@ -6635,7 +6627,7 @@ with pkgs;
   openjdk = jdk;
   openjdk_headless = jdk_headless;
 
-  graalvmCEPackages = callPackage ../development/compilers/graalvm/community-edition { };
+  graalvmCEPackages = recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition { });
   graalvm-ce = graalvmCEPackages.graalvm-ce;
   buildGraalvmNativeImage = (callPackage ../build-support/build-graalvm-native-image {
     graalvmDrv = graalvm-ce;
@@ -6954,7 +6946,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security SystemConfiguration;
   };
   inherit (callPackages ../development/tools/rust/cargo-pgrx { })
-    cargo-pgrx_0_12_0_alpha_1
+    cargo-pgrx_0_12_5
     cargo-pgrx_0_12_6
     ;
   cargo-pgrx = cargo-pgrx_0_12_6;
@@ -9981,6 +9973,8 @@ with pkgs;
     python = python3;
   };
 
+  libretranslate = with python3.pkgs; toPythonApplication libretranslate;
+
   librsb = callPackage ../development/libraries/librsb {
     # Taken from https://build.opensuse.org/package/view_file/science/librsb/librsb.spec
     memHierarchy = "L3:16/64/8192K,L2:16/64/2048K,L1:8/64/16K";
@@ -10160,9 +10154,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit Security;
   };
 
-  libunicode = callPackage ../development/libraries/libunicode {
-    catch2 = catch2_3;
-    fmt = fmt_9;
+  libunicode = callPackage ../by-name/li/libunicode/package.nix {
+    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else stdenv;
   };
 
   libunwind =
@@ -11047,7 +11040,10 @@ with pkgs;
     harfbuzz = harfbuzzFull;
   };
 
-  termbench-pro = callPackage ../development/libraries/termbench-pro { fmt = fmt_11; };
+  termbench-pro = callPackage ../development/libraries/termbench-pro {
+    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else stdenv;
+    fmt = fmt_8;
+  };
 
   texpresso = callPackage ../tools/typesetting/tex/texpresso {
     texpresso-tectonic = callPackage ../tools/typesetting/tex/texpresso/tectonic.nix { };
@@ -19090,7 +19086,15 @@ with pkgs;
     ffmpeg = ffmpeg_6;
   };
 
+  libkazv = callPackage ../by-name/li/libkazv/package.nix {
+    libcpr = libcpr_1_10_5;
+  };
+
   tree-from-tags = callPackage ../by-name/tr/tree-from-tags/package.nix {
     ruby = ruby_3_1;
+  };
+
+  biblioteca = callPackage ../by-name/bi/biblioteca/package.nix {
+    webkitgtk = webkitgtk_6_0;
   };
 }

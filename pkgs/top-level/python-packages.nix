@@ -6233,6 +6233,8 @@ self: super: with self; {
 
   iniparse = callPackage ../development/python-modules/iniparse { };
 
+  inject = callPackage ../development/python-modules/inject { };
+
   injector = callPackage ../development/python-modules/injector { };
 
   inkbird-ble = callPackage ../development/python-modules/inkbird-ble { };
@@ -7920,8 +7922,6 @@ self: super: with self; {
   mdurl = callPackage ../development/python-modules/mdurl { };
 
   mdutils = callPackage ../development/python-modules/mdutils { };
-
-  mdp = callPackage ../development/python-modules/mdp { };
 
   mean-average-precision = callPackage ../development/python-modules/mean-average-precision { };
 

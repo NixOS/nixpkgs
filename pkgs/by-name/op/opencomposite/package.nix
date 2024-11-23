@@ -11,6 +11,7 @@
   vulkan-headers,
   vulkan-loader,
   xorg,
+  openxr-loader,
 }:
 
 stdenv.mkDerivation {
@@ -61,5 +62,7 @@ stdenv.mkDerivation {
     homepage = "https://gitlab.com/znixian/OpenOVR";
     license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [ Scrumplex ];
+    # This can realistically only work on systems that support OpenXR Loader
+    inherit (openxr-loader.meta) platforms;
   };
 }

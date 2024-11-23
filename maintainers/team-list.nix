@@ -440,7 +440,6 @@ with lib.maintainers;
       hlolli
       glittershark
       ericdallo
-      thiagokokada
     ];
     scope = "Maintain GraalVM Community Edition packages.";
     shortName = "GraalVM-CE";
@@ -576,6 +575,7 @@ with lib.maintainers;
     members = [
       aanderse
       edwtjo
+      hrdinka
       thiagokokada
     ];
     scope = "Maintain Libretro, RetroArch and related packages.";
