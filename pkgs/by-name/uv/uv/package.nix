@@ -14,19 +14,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "uv";
-  version = "0.4.30";
+  version = "0.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     rev = "refs/tags/${version}";
-    hash = "sha256-xy/fgy3+YvSdfq5ngPVbAmRpYyJH27Cft5QxBwFQumU=";
+    hash = "sha256-Kieh76RUrDEwdL04mvCXOqbXHasMMpXRqp0LwMOIHdM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-QINf3D4w96WZC7iiinCyMjKHgWXUiXD9/nTgHu54pI0=";
+    hash = "sha256-ZhHUKotXVDdwJs2kqIxME5I1FitWetx7FrQtluuIUWo=";
   };
 
   nativeBuildInputs = [
