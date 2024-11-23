@@ -34,13 +34,13 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/NETWAYS/check_interfaces/releases/tag/v${version}";
     description = "Icinga check plugin for network hardware interfaces";
     homepage = "https://github.com/NETWAYS/check_interfaces/";
-    license = with licenses; [ gpl2Only ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jwillikers ];
+    license = with lib.licenses; [ gpl2Only ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jwillikers ];
     mainProgram = "check_interfaces";
   };
 }
