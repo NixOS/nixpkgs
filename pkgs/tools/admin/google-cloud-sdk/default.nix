@@ -43,6 +43,8 @@ in stdenv.mkDerivation rec {
     ./gcloud-path.patch
     # Disable checking for updates for the package
     ./gsutil-disable-updates.patch
+    # Revert patch including extended Python version constraint
+    ./gsutil-revert-version-constraint.patch
   ];
 
   installPhase = ''
@@ -120,6 +122,7 @@ in stdenv.mkDerivation rec {
     # Avoid trying to write logs to homeless-shelter
     export HOME=$(mktemp -d)
     $out/bin/gcloud version --format json | jq '."Google Cloud SDK"' | grep "${version}"
+    $out/bin/gsutil version | grep -w "$(cat platform/gsutil/VERSION)"
   '';
 
   passthru = {
