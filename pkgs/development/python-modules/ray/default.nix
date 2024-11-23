@@ -8,55 +8,63 @@
   autoPatchelfHook,
 
   # dependencies
-  aiohttp,
-  aiohttp-cors,
   aiosignal,
-  attrs,
   click,
-  cloudpickle,
-  colorama,
-  colorful,
-  cython,
   filelock,
   frozenlist,
-  gpustat,
-  grpcio,
   jsonschema,
   msgpack,
-  numpy,
-  opencensus,
   packaging,
-  prometheus-client,
-  psutil,
-  pydantic,
-  py-spy,
+  protobuf,
   pyyaml,
   requests,
-  setproctitle,
-  smart-open,
-  virtualenv,
+  watchfiles,
 
   # optional-dependencies
+  # adag
+  cupy,
+  # client
+  grpcio,
+  # data
   fsspec,
+  numpy,
   pandas,
   pyarrow,
+  # default
+  aiohttp,
+  aiohttp-cors,
+  colorful,
+  opencensus,
+  prometheus-client,
+  pydantic,
+  py-spy,
+  smart-open,
+  virtualenv,
+  # observability
+  opentelemetry-api,
+  opentelemetry-sdk,
+  opentelemetry-exporter-otlp,
+  # rllib
   dm-tree,
-  gym,
+  gymnasium,
   lz4,
-  matplotlib,
   scikit-image,
   scipy,
-  aiorwlock,
+  typer,
+  rich,
+  # serve
   fastapi,
   starlette,
   uvicorn,
-  tabulate,
+  # serve-grpc
+  pyopenssl,
+  # tune
   tensorboardx,
 }:
 
 let
   pname = "ray";
-  version = "2.38.0";
+  version = "2.39.0";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -84,68 +92,84 @@ buildPythonPackage rec {
     autoPatchelfHook
   ];
 
-  pythonRelaxDeps = [
-    "click"
-    "grpcio"
-    "protobuf"
-    "virtualenv"
-  ];
-
   dependencies = [
-    aiohttp
-    aiohttp-cors
-    aiosignal
-    attrs
     click
-    cloudpickle
-    colorama
-    colorful
-    cython
+    aiosignal
     filelock
     frozenlist
-    gpustat
-    grpcio
     jsonschema
     msgpack
-    numpy
-    opencensus
     packaging
-    prometheus-client
-    psutil
-    pydantic
-    py-spy
+    protobuf
     pyyaml
     requests
-    setproctitle
-    smart-open
-    virtualenv
+    watchfiles
   ];
 
   optional-dependencies = rec {
-    air-deps = data-deps ++ serve-deps ++ tune-deps ++ rllib-deps;
-    data-deps = [
+    adag = [
+      cupy
+    ];
+    air = lib.unique (data ++ serve ++ tune ++ train);
+    all = lib.flatten (builtins.attrValues optional-dependencies);
+    client = [ grpcio ];
+    data = [
       fsspec
+      numpy
       pandas
       pyarrow
     ];
-    rllib-deps = tune-deps ++ [
+    default = [
+      aiohttp
+      aiohttp-cors
+      colorful
+      grpcio
+      opencensus
+      prometheus-client
+      pydantic
+      py-spy
+      requests
+      smart-open
+      virtualenv
+    ];
+    observability = [
+      opentelemetry-api
+      opentelemetry-sdk
+      opentelemetry-exporter-otlp
+    ];
+    rllib = [
       dm-tree
-      gym
+      gymnasium
       lz4
-      matplotlib
       pyyaml
       scikit-image
       scipy
+      typer
+      rich
     ];
-    serve-deps = [
-      aiorwlock
-      fastapi
+    serve = lib.unique (
+      [
+        fastapi
+        requests
+        starlette
+        uvicorn
+        watchfiles
+      ]
+      ++ default
+    );
+    serve-grpc = lib.unique (
+      [
+        grpcio
+        pyopenssl
+      ]
+      ++ serve
+    );
+    train = tune;
+    tune = [
+      fsspec
       pandas
-      starlette
-      uvicorn
-    ];
-    tune-deps = [
-      tabulate
+      pyarrow
+      requests
       tensorboardx
     ];
   };

@@ -52,6 +52,7 @@
   ./hardware/bladeRF.nix
   ./hardware/brillo.nix
   ./hardware/ckb-next.nix
+  ./hardware/coral.nix
   ./hardware/corectrl.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/amd-sev.nix
