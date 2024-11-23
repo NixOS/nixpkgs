@@ -13,16 +13,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tplay";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "maxcurzi";
     repo = "tplay";
     rev = "v${version}";
-    hash = "sha256-/3ui0VOxf+kYfb0JQXPVbjAyXPph2LOg2xB0DGmAbwc=";
+    hash = "sha256-SRn7kg5FdSimKMFowKNUIan+MrojtNO0apeehIRTzfw=";
   };
 
-  cargoHash = "sha256-zRkIEH37pvxHUbnfg25GW1Z7od9XMkRmP2Qvs64uUjg=";
+  cargoHash = "sha256-ztWs20Vl+fX0enL12pybiM6lhFh0/EFa1aSTRpzz64g=";
   checkFlags = [
     # requires network access
     "--skip=pipeline::image_pipeline::tests::test_process"
