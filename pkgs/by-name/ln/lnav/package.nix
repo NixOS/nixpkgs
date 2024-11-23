@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
+  separateDebugInfo = true;
 
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
