@@ -170,8 +170,20 @@ in
   '';
 
   nvim_with_autoconfigure = pkgs.neovim.overrideAttrs(oa: {
-    plugins = [ vimPlugins.unicode-vim ];
+    plugins = [
+      vimPlugins.unicode-vim
+      vimPlugins.fzf-hoogle-vim
+    ];
     autoconfigure = true;
+    # legacy wrapper sets it to false
+    wrapRc = true;
+  });
+
+  nvim_with_runtimeDeps = pkgs.neovim.overrideAttrs({
+    plugins = [
+      pkgs.vimPlugins.hex-nvim
+    ];
+    autowrapRuntimeDeps = true;
     # legacy wrapper sets it to false
     wrapRc = true;
   });
@@ -334,7 +346,6 @@ in
     ${nvim_with_opt_plugin}/bin/nvim -i NONE +quit! -e
   '';
 
-  inherit nvim-with-luasnip;
 
   autoconfigure = runTest nvim_with_autoconfigure ''
       assertFileContains \
@@ -342,11 +353,18 @@ in
         '${vimPlugins.unicode-vim.passthru.initLua}'
   '';
 
+  autowrap_runtime_deps = runTest nvim_with_runtimeDeps ''
+      assertFileContains \
+        "${nvim_with_runtimeDeps}/bin/nvim" \
+        '${pkgs.xxd}/bin'
+  '';
+
+  inherit nvim-with-luasnip;
   # check that bringing in one plugin with lua deps makes those deps visible from wrapper
   # for instance luasnip has a dependency on jsregexp
   can_require_transitive_deps =
     runTest nvim-with-luasnip ''
-    cat ${nvim-with-luasnip}/bin/nvim
+    cat ${nvim-with-luasnip}/nvim
     ${nvim-with-luasnip}/bin/nvim -i NONE --cmd "lua require'jsregexp'" -e +quitall!
   '';
 
