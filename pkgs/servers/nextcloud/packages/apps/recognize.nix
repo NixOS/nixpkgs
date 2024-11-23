@@ -44,17 +44,18 @@ stdenv.mkDerivation rec {
   '';
 
   patchPhase = ''
-    #hardcode node
+    # Make it clear we are not reading the node in settings
     sed -i "/'node_binary'/s:'""':'Nix Controled':" recognize/lib/Service/SettingsService.php
 
+    # Replace all occurences of node (and check that we actually remved them all)
+    test "$(grep "get[a-zA-Z]*('node_binary'" recognize/lib/**/*.php | wc -l)" -gt 0
     substituteInPlace recognize/lib/**/*.php \
-      --replace-quiet "\$this->settingsService->getSetting('node_binary')" "'${nodejs}/bin/node'"
-
-    substituteInPlace recognize/lib/**/*.php \
-      --replace-quiet "\$this->config->getAppValueString('node_binary', '""')" "'${nodejs}/bin/node'"
-
-    substituteInPlace recognize/lib/**/*.php \
+      --replace-quiet "\$this->settingsService->getSetting('node_binary')" "'${nodejs}/bin/node'" \
+      --replace-quiet "\$this->config->getAppValueString('node_binary', '""')" "'${nodejs}/bin/node'" \
       --replace-quiet "\$this->config->getAppValueString('node_binary')" "'${nodejs}/bin/node'"
+    test "$(grep "get[a-zA-Z]*('node_binary'" recognize/lib/**/*.php | wc -l)" -eq 0
+
+
 
     # Skip trying to install it... (less warnings in the log)
     sed  -i '/public function run/areturn ; //skip' recognize/lib/Migration/InstallDeps.php
