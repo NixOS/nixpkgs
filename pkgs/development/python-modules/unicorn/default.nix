@@ -3,20 +3,20 @@
   stdenv,
   buildPythonPackage,
   setuptools,
-  unicorn-emu,
+  unicorn,
 }:
 
 buildPythonPackage rec {
   pname = "unicorn";
-  version = lib.getVersion unicorn-emu;
+  version = lib.getVersion unicorn;
   pyproject = true;
 
-  src = unicorn-emu.src;
+  src = unicorn.src;
 
   sourceRoot = "${src.name}/bindings/python";
 
   prePatch = ''
-    ln -s ${unicorn-emu}/lib/libunicorn.* prebuilt/
+    ln -s ${unicorn}/lib/libunicorn.* prebuilt/
   '';
 
   # Needed on non-x86 linux
