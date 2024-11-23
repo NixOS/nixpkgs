@@ -16540,10 +16540,6 @@ with pkgs;
 
   qgo = libsForQt5.callPackage ../games/qgo { };
 
-  sm64ex = callPackage ../games/sm64ex {
-    branch = "sm64ex";
-  };
-
   amoeba = callPackage ../games/amoeba { };
   amoeba-data = callPackage ../games/amoeba/data.nix { };
 
