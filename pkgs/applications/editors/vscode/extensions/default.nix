@@ -2797,7 +2797,7 @@ let
           hash = "sha256-sHeaMMr5hmQ0kAFZxxMiRk6f0mfjkg2XMnA4Gf+DHwA=";
         };
         meta = {
-          license = lib.licenses.mit;
+          license = lib.licenses.unfree;
         };
       };
 
