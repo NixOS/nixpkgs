@@ -6,6 +6,7 @@ NR-C1P1-p1_03.j2k-compare2base
 NR-C1P1-p1_04.j2k-compare2base
 NR-C1P1-p1_05.j2k-compare2base
 NR-JP2-file2.jp2-compare2base
+NR-JP2-file3.jp2-compare2base
 NR-RIC-subsampling_1.jp2-compare2base
 NR-RIC-subsampling_2.jp2-compare2base
 NR-RIC-zoo1.jp2-compare2base
@@ -28,6 +29,7 @@ NR-DEC-issue208.jp2-69-decode-md5
 NR-DEC-issue211.jp2-70-decode-md5
 NR-DEC-issue226.j2k-74-decode
 NR-DEC-issue226.j2k-74-decode-md5
+NR-DEC-issue414.jp2-110-decode-md5
 NR-DEC-p1_04.j2k-124-decode-md5
 NR-DEC-p1_04.j2k-125-decode-md5
 NR-DEC-p1_04.j2k-126-decode-md5
@@ -35,6 +37,7 @@ NR-DEC-p1_04.j2k-127-decode-md5
 NR-DEC-p1_04.j2k-128-decode-md5
 NR-DEC-p1_04.j2k-129-decode-md5
 NR-DEC-p1_04.j2k-131-decode-md5
+NR-DEC-p1_04.j2k-134-decode-md5
 NR-DEC-p1_04.j2k-138-decode-md5
 NR-DEC-p1_04.j2k-140-decode-md5
 NR-DEC-p0_04.j2k-166-decode-md5
