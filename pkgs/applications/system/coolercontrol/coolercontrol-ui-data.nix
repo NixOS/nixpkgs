@@ -20,9 +20,7 @@ buildNpmPackage {
     autoPatchelf node_modules/sass-embedded-linux-x64/dart-sass/src/dart
   '';
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   dontAutoPatchelf = true;
 
