@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "rmfakecloud";
-  version = "0.0.21";
+  version = "0.0.23";
 
   src = fetchFromGitHub {
     owner = "ddvk";
-    repo = pname;
+    repo = "rmfakecloud";
     rev = "v${version}";
-    hash = "sha256-Opx39FUo4Kzezi96D9iraA8gkqCPVfMf4LhxtVpsuNQ=";
+    hash = "sha256-XlKqh6GKGreWLPjS8XfEUJCMMxiOw8pP2qX8otD+RCo=";
   };
 
   vendorHash = "sha256-9tfxE03brUvCYusmewiqNpCkKyIS9qePqylrzDWrJLY=";
@@ -25,8 +25,7 @@ buildGoModule rec {
   postPatch =
     if enableWebui then
       ''
-        mkdir -p ui/build
-        cp -r ${ui}/* ui/build
+        cp -a ${ui} ui/dist
       ''
     else
       ''

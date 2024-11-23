@@ -1,37 +1,46 @@
-{ version, src, stdenv, lib, fetchYarnDeps, fixup-yarn-lock, yarn, nodejs }:
+{
+  version,
+  src,
+  stdenv,
+  lib,
+  pnpm_9,
+  nodejs,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit version src;
 
   pname = "rmfakecloud-webui";
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/ui/yarn.lock";
-    hash = "sha256-9//uQ4ZLLTf2N1WSwsOwFjBuDmThuMtMXU4SzMljAMM=";
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    sourceRoot = "${finalAttrs.src.name}/ui";
+    pnpmLock = "${src}/ui/pnpm-lock.yaml";
+    hash = "sha256-VNmCT4um2W2ii8jAm+KjQSjixYEKoZkw7CeRwErff/o=";
   };
-
-  nativeBuildInputs = [ fixup-yarn-lock yarn nodejs ];
+  pnpmRoot = "ui";
 
   buildPhase = ''
-    export HOME=$(mktemp -d)
     cd ui
-    fixup-yarn-lock yarn.lock
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
-    yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
-    patchShebangs node_modules
-    export PATH=$PWD/node_modules/.bin:$PATH
-    ./node_modules/.bin/react-scripts build
-    mkdir -p $out
-    cd ..
+
+    # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
+    rm -r node_modules/sass-embedded node_modules/.pnpm/sass-embedded*
+
+    pnpm build
   '';
 
   installPhase = ''
-    cp -r ui/build/* $out
+    cp -a dist/. $out
   '';
+
+  nativeBuildInputs = [
+    nodejs
+    pnpm_9.configHook
+  ];
 
   meta = with lib; {
     description = "Only the webui files for rmfakecloud";
     homepage = "https://ddvk.github.io/rmfakecloud/";
     license = licenses.agpl3Only;
   };
-}
+})
