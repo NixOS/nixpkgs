@@ -5,7 +5,7 @@
   cmake,
   asciidoc,
   pkg-config,
-  boost179,
+  boost,
   cmark,
   coeurl,
   curl,
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      boost179
+      boost
       cmark
       coeurl
       curl
