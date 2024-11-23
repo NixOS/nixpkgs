@@ -18,7 +18,6 @@ bambu-studio.overrideAttrs (
     patches = [
       # Fix for webkitgtk linking
       ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
-
       ./patches/dont-link-opencv-world-orca.patch
     ];
 
