@@ -1,12 +1,12 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   c-ares,
   cmake,
   cryptopp,
   curl,
   fetchFromGitHub,
+  fetchpatch,
   ffmpeg,
   hicolor-icon-theme,
   icu,
@@ -36,14 +36,28 @@
 }:
 mkDerivation rec {
   pname = "megasync";
-  version = "5.5.0.0";
+  version = "5.6.1.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitHub rec {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    hash = "sha256-f+FZdMMdGZvYvJZ0xTUuO9zk0/VHFAISvM2cW0zwfaE=";
-    fetchSubmodules = true;
+    hash = "sha256-EjXmx+beYH3J60RidkEbZHFS5ZAOpJKmNC+WCIM84RA=";
+    fetchSubmodules = false; # DesignTokensImporter cannot be fetched, see #1010 in github:meganz/megasync
+    leaveDotGit = true;
+    postFetch = ''
+      cd $out
+
+      git remote add origin $url
+      git fetch origin
+      git clean -fdx
+      git checkout ${rev}
+      git submodule update --init src/MEGASync/mega
+
+      cp src/MEGASync/mega/.clang-format .clang-format
+
+      rm -rf .git
+    ''; # Why so complicated, I just want a single submodule
   };
 
   nativeBuildInputs = [
@@ -91,6 +105,7 @@ mkDerivation rec {
       hash = "sha256-11XWctv1veUEguc9Xvz2hMYw26CaCwu6M4hyA+5r81U=";
     })
     ./megasync-fix-cmake-install-bindir.patch
+    ./dont-fetch-clang-format.patch
   ];
 
   postPatch = ''
@@ -103,9 +118,9 @@ mkDerivation rec {
   enableParallelBuilding = true;
 
   cmakeFlags = [
-    "-DCMAKE_MODULE_PATH:PATH=${src}/src/MEGASync/mega/contrib/cmake/modules/packages"
     (lib.cmakeBool "USE_PDFIUM" false) # PDFIUM is not in nixpkgs
     (lib.cmakeBool "USE_FREEIMAGE" false) # freeimage is insecure
+    (lib.cmakeBool "ENABLE_DESIGN_TOKENS_IMPORTER" false) # cannot be fetched
   ];
 
   meta = with lib; {
