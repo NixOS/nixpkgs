@@ -9,7 +9,7 @@
 , file
 , hyperscan
 , jansson
-, libbpf
+, libbpf_0
 , libcap_ng
 , libevent
 , libmaxminddb
@@ -23,7 +23,7 @@
 , lz4
 , nspr
 , pcre2
-, python
+, python3
 , zlib
 , redisSupport ? true, redis, hiredis
 , rustSupport ? true, rustc, cargo
@@ -49,14 +49,14 @@ stdenv.mkDerivation rec {
   ++ lib.optionals rustSupport [ rustc cargo ]
   ;
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     pyyaml
   ];
 
   buildInputs = [
     elfutils
     jansson
-    libbpf
+    libbpf_0
     libcap_ng
     libevent
     libmagic
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     lz4
     nspr
     pcre2
-    python
+    python3
     zlib
   ]
   ++ lib.optional hyperscanSupport hyperscan
