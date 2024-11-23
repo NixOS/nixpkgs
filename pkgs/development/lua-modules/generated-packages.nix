@@ -366,16 +366,16 @@ buildLuarocksPackage {
 cyan = callPackage({ argparse, buildLuarocksPackage, fetchFromGitHub, fetchurl, luafilesystem, luasystem, tl }:
 buildLuarocksPackage {
   pname = "cyan";
-  version = "0.3.1-2";
+  version = "0.4.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/cyan-0.3.1-2.rockspec";
-    sha256 = "1fsz3a05blm45qv690w51fa7scqc7l7f3fcj8s8isax89gjbqvgy";
+    url    = "mirror://luarocks/cyan-0.4.0-1.rockspec";
+    sha256 = "0bdbyxmgias8m1xg042j1fbn9qw3mvllmkksz1b4dv85dglh7c2n";
   }).outPath;
   src = fetchFromGitHub {
     owner = "teal-language";
     repo = "cyan";
-    rev = "v0.3.1";
-    hash = "sha256-cqQoWR4lIvYAWp5o9jivpjiILO1ECFhCyXG1+vc2yIM=";
+    rev = "71eaea271bff489d82a9fb575b823b161b996162";
+    hash = "sha256-3RfUTTPu+E21+Z7sMVLeA/gadYeF8fTE+ZMZw8G+trM=";
   };
 
   propagatedBuildInputs = [ argparse luafilesystem luasystem tl ];
@@ -2443,6 +2443,31 @@ buildLuarocksPackage {
   };
 }) {};
 
+lusc_luv = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl, luaOlder, luv }:
+buildLuarocksPackage {
+  pname = "lusc_luv";
+  version = "4.0.1-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/lusc_luv-4.0.1-1.rockspec";
+    sha256 = "1bgk481ljfy8q7r3w9z1x5ix0dm6v444c7mf9nahlpyrz9skxakp";
+  }).outPath;
+  src = fetchFromGitHub {
+    owner = "svermeulen";
+    repo = "lusc_luv";
+    rev = "838b8f647911b1fcfe160ddce881409ea9b35acf";
+    hash = "sha256-xT3so0QHtzzLRNRb7yqfaRMwkl2bt1MP1xh8BkHKqqo=";
+  };
+
+  disabled = luaOlder "5.1";
+  propagatedBuildInputs = [ luv ];
+
+  meta = {
+    homepage = "https://github.com/svermeulen/lusc_luv";
+    description = "Structured Async/Concurrency for Lua using Luv";
+    license.fullName = "MIT";
+  };
+}) {};
+
 luv = callPackage({ buildLuarocksPackage, cmake, fetchurl, luaOlder }:
 buildLuarocksPackage {
   pname = "luv";
@@ -3280,22 +3305,22 @@ buildLuarocksPackage {
   };
 }) {};
 
-teal-language-server = callPackage({ buildLuarocksPackage, cyan, dkjson, fetchFromGitHub, fetchurl, luafilesystem }:
+teal-language-server = callPackage({ argparse, buildLuarocksPackage, dkjson, fetchFromGitHub, fetchurl, inspect, luafilesystem, lusc_luv, luv, tl }:
 buildLuarocksPackage {
   pname = "teal-language-server";
-  version = "dev-1";
+  version = "0.0.5-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/teal-language-server-dev-1.rockspec";
-    sha256 = "01l44c6bknz7ff9xqgich31hlb0yk4ms5k1hs4rhm3cs95s5vlzc";
+    url    = "mirror://luarocks/teal-language-server-0.0.5-1.rockspec";
+    sha256 = "11ps1hgkgli4sf9gcj7pin4kbc5w0yck0daig1ghqssn2q9m2x5l";
   }).outPath;
   src = fetchFromGitHub {
     owner = "teal-language";
     repo = "teal-language-server";
-    rev = "67b5d7cad60b9df472851a2c61591f2aab97da47";
-    hash = "sha256-fUuOjJrwpLU1YoJm3yn+X15ioRf4GZoi6323On1W2Io=";
+    rev = "6e50c7d907b150b1b2e03fb5d70f0f3c63dec5c3";
+    hash = "sha256-lTCTePaAYW4pqbJznos3BM0I0/Vaw13TNCCatmQjIJo=";
   };
 
-  propagatedBuildInputs = [ cyan dkjson luafilesystem ];
+  propagatedBuildInputs = [ argparse dkjson inspect luafilesystem lusc_luv luv tl ];
 
   meta = {
     homepage = "https://github.com/teal-language/teal-language-server";
@@ -3378,22 +3403,22 @@ buildLuarocksPackage {
   };
 }) {};
 
-tl = callPackage({ argparse, buildLuarocksPackage, compat53, fetchFromGitHub, fetchurl, luafilesystem }:
+tl = callPackage({ argparse, buildLuarocksPackage, compat53, fetchFromGitHub, fetchurl }:
 buildLuarocksPackage {
   pname = "tl";
-  version = "0.15.3-1";
+  version = "0.24.1-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/tl-0.15.3-1.rockspec";
-    sha256 = "15p67r5bjp997pymjq80yn1gyf7r5g2nwkachkwx88100ihblqrc";
+    url    = "mirror://luarocks/tl-0.24.1-1.rockspec";
+    sha256 = "0r9cp5w824mmn3hmcwjcga182sa25hyvnkk81025hn49jfgr2hps";
   }).outPath;
   src = fetchFromGitHub {
     owner = "teal-language";
     repo = "tl";
-    rev = "v0.15.3";
-    hash = "sha256-nkwPYI4uB1rTtcBsZ7TKNPusWXtXViyBDSkiL9UH+Wo=";
+    rev = "refs/tags/v0.24.1";
+    hash = "sha256-7jnkURfY2o/32V5sEYleBfwWjDIeo2q/gGrFIizoHZk=";
   };
 
-  propagatedBuildInputs = [ argparse compat53 luafilesystem ];
+  propagatedBuildInputs = [ argparse compat53 ];
 
   meta = {
     homepage = "https://github.com/teal-language/tl";

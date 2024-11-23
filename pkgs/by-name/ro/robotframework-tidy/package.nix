@@ -18,6 +18,8 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ setuptools ];
 
+  pythonRelaxDeps = [ "rich-click" ];
+
   dependencies = with python3.pkgs; [
     robotframework
     click
