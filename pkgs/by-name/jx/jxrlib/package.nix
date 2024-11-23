@@ -16,9 +16,10 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  env = lib.optionalAttrs stdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-  };
+  env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " (
+    [ "-Wno-error=implicit-function-declaration"]
+    ++ lib.optionals stdenv.cc.isGNU [ "-Wno-error=incompatible-pointer-types" ]
+  );
 
   postPatch = ''
     QUILT_PATCHES=debian/patches quilt push -a
