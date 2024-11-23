@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  boost182,
+  boost,
   gtest,
   llvmPackages,
   meson,
@@ -72,7 +72,7 @@ in
 
       buildInputs = [
         gtest
-        boost182
+        boost
         nlohmann_json
       ];
 
@@ -103,7 +103,7 @@ in
       buildInputs = [
         nix
         gtest
-        boost182
+        boost
       ];
 
       env.CXXFLAGS = "-include ${nix.dev}/include/nix/config.h";
@@ -132,7 +132,7 @@ in
         nixt
         llvmPackages.llvm
         gtest
-        boost182
+        boost
       ];
 
       nativeBuildInputs = common.nativeBuildInputs ++ [ cmake ];
