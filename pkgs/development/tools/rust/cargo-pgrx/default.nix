@@ -54,6 +54,12 @@ let
     };
 in
 {
+  cargo-pgrx_0_12_0_alpha_1 = generic {
+    version = "0.12.0-alpha.1";
+    hash = "sha256-0m9oaqjU42RYyttkTihADDrRMjr2WoK/8sInZALeHws=";
+    cargoHash = "sha256-9XTIcpoCnROP63ZTDgMMMmj0kPggiTazKlKQfCgXKzk=";
+  };
+
   cargo-pgrx_0_12_5 = generic {
     version = "0.12.5";
     hash = "sha256-U2kF+qjQwMTaocv5f4p5y3qmPUsTzdvAp8mz9cn/COw=";
