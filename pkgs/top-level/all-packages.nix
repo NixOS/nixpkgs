@@ -16544,10 +16544,6 @@ with pkgs;
     branch = "sm64ex";
   };
 
-  sm64ex-coop = callPackage ../games/sm64ex {
-    branch = "sm64ex-coop";
-  };
-
   amoeba = callPackage ../games/amoeba { };
   amoeba-data = callPackage ../games/amoeba/data.nix { };
 
