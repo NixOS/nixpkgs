@@ -1,5 +1,5 @@
 { lib, stdenv, fetchgit, fetchurl, fetchpatch, git, cmake, pkg-config
-, openssl, boost, grpc, protobuf, libnsl, rocksdb_6_23, snappy }:
+, openssl, boost, grpc, protobuf_21, libnsl, rocksdb_6_23, snappy }:
 
 let
   sqlite3 = fetchurl rec {
@@ -115,10 +115,20 @@ in stdenv.mkDerivation rec {
   cmakeFlags = ["-Dstatic=OFF" "-DBoost_NO_BOOST_CMAKE=ON" "-DSNAPPY_INCLUDE_DIR=${snappy}/include" ];
 
   nativeBuildInputs = [ pkg-config cmake git ];
-  buildInputs = [ openssl openssl.dev boostSharedStatic grpc protobuf libnsl rocksdb_6_23 snappy ];
+  buildInputs = [ openssl openssl.dev boostSharedStatic grpc protobuf_21 libnsl rocksdb_6_23 snappy ];
 
   preConfigure = ''
     export HOME=$PWD
+
+    git config --global --add safe.directory ${rocksdb}/.git
+    git config --global --add safe.directory ${docca}/.git
+    git config --global --add safe.directory ${lz4}/.git
+    git config --global --add safe.directory ${libarchive}/.git
+    git config --global --add safe.directory ${soci}/.git
+    git config --global --add safe.directory ${nudb}/.git
+    git config --global --add safe.directory ${google-benchmark}/.git
+    git config --global --add safe.directory ${google-test}/.git
+    git config --global --add safe.directory ${date}/.git
 
     git config --global protocol.file.allow always
     git config --global url."file://${rocksdb}".insteadOf "${rocksdb.url}"
