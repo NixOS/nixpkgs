@@ -1454,18 +1454,18 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/RETROARCH
 
-  retroarch-full = wrapRetroArch {
-    cores = builtins.filter
-      # Remove cores not supported on platform
-      (c: c ? libretroCore && (lib.meta.availableOn stdenv.hostPlatform c))
-      (builtins.attrValues libretro);
-  };
+  libretro = recurseIntoAttrs (callPackage ../applications/emulators/retroarch/cores.nix { });
+
+  retroarch = retroarch-bare.wrapper { };
+
+  retroarch-full = retroarch.withCores (
+    cores:
+      builtins.filter
+        (c: (c ? libretroCore) && (lib.meta.availableOn stdenv.hostPlatform c))
+        (builtins.attrValues cores)
+  );
 
   wrapRetroArch = retroarch-bare.wrapper;
-
-  retroarch = retroarch-bare.wrapper;
-
-  libretro = recurseIntoAttrs (callPackage ../applications/emulators/retroarch/cores.nix { });
 
   # Aliases kept here because they are easier to use
   x16-emulator = x16.emulator;

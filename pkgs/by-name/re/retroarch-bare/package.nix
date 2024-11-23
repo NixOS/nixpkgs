@@ -37,6 +37,7 @@
   wayland-scanner,
   zlib,
   # wrapper deps
+  libretro,
   libretro-core-info,
   retroarch-assets,
   retroarch-bare,
@@ -153,6 +154,7 @@ stdenv.mkDerivation rec {
       import ./wrapper.nix {
         inherit
           lib
+          libretro
           makeWrapper
           retroarch-bare
           runCommand

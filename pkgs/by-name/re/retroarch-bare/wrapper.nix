@@ -1,5 +1,6 @@
 {
   lib,
+  libretro,
   makeWrapper,
   retroarch-bare,
   runCommand,
@@ -45,6 +46,7 @@ symlinkJoin {
   passthru = {
     inherit cores;
     unwrapped = retroarch-bare;
+    withCores = coreFun: retroarch-bare.wrapper { cores = (coreFun libretro); };
   };
 
   postBuild = ''
