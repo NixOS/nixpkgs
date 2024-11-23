@@ -7,7 +7,7 @@
   preLibcCrossHeaders,
   libxcrypt,
   substitute,
-  substituteAll,
+  replaceVars,
   fetchFromGitHub,
   fetchpatch,
   fetchpatch2,
@@ -547,14 +547,17 @@ let
             !args.stdenv.hostPlatform.isDarwin || !args.stdenv.targetPlatform.isDarwin
           ) ./clang/add-nostdlibinc-flag.patch
           ++ [
-            (substituteAll {
-              src =
+            (replaceVars
+              (
                 if (lib.versionOlder metadata.release_version "16") then
                   ./clang/clang-11-15-LLVMgold-path.patch
                 else
-                  ./clang/clang-at-least-16-LLVMgold-path.patch;
-              libllvmLibdir = "${tools.libllvm.lib}/lib";
-            })
+                  ./clang/clang-at-least-16-LLVMgold-path.patch
+              )
+              {
+                libllvmLibdir = "${tools.libllvm.lib}/lib";
+              }
+            )
           ]
           # Backport version logic from Clang 16. This is needed by the following patch.
           ++ lib.optional (lib.versions.major metadata.release_version == "15") (fetchpatch {
@@ -662,9 +665,9 @@ let
           patches =
             let
               resourceDirPatch = callPackage (
-                { substituteAll, libclang }:
-                (substituteAll {
-                  src = metadata.getVersionFile "lldb/resource-dir.patch";
+                { replaceVars, libclang }:
+                (replaceVars (metadata.getVersionFile "lldb/resource-dir.patch") {
+
                   clangLibDir = "${lib.getLib libclang}/lib";
                 }).overrideAttrs
                   (_: _: { name = "resource-dir.patch"; })
