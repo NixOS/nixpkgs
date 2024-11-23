@@ -1478,9 +1478,6 @@ with pkgs;
 
   libretro = recurseIntoAttrs (callPackage ../applications/emulators/retroarch/cores.nix { });
 
-  kodi-retroarch-advanced-launchers =
-    callPackage ../applications/emulators/retroarch/kodi-advanced-launchers.nix { };
-
   # Aliases kept here because they are easier to use
   x16-emulator = x16.emulator;
   x16-rom = x16.rom;
