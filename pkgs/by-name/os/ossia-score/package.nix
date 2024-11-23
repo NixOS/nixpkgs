@@ -8,7 +8,7 @@
 , avahi
 , avahi-compat
 , bluez
-, boost185
+, boost
 , fmt
 , ffmpeg
 , fftw
@@ -57,7 +57,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    boost185
+    boost
     avahi
     avahi-compat
     bluez
