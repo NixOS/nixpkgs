@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "google-play";
-  version = "1.5.8";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "3052";
     repo = "google";
     rev = "v${version}";
-    hash = "sha256-viAqy/vFbkzW45oCUd3kvkR/8BzPYe/XdPJEpeSmcY0=";
+    hash = "sha256-Wf7k76TXBr10FIclo/Ny8MLDDSNXu54JTDS0vfw4UXA=";
   };
 
   subPackages = [
@@ -20,7 +20,7 @@ buildGoModule rec {
     "internal/badging"
   ];
 
-  vendorHash = "sha256-C04/LcTcXaVzl74cTJBIZT+1mBw+cmOT8TllWIm4Jt4=";
+  vendorHash = "sha256-NVN5qoGXiL6lOPZejUhK55EuzF7R0KsIT+2oCzK+Qg0=";
 
   meta = {
     description = "CLI app to download APK from Google Play or send API requests";
