@@ -27,6 +27,7 @@
 , zlib
 , redisSupport ? true, redis, hiredis
 , rustSupport ? true, rustc, cargo
+, nixosTests
 }: let
   libmagic = file;
   hyperscanSupport = stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
@@ -152,6 +153,8 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out/etc/suricata/suricata.yaml" \
       --replace "/etc/suricata" "$out/etc/suricata"
   '';
+
+  passthru.tests = { inherit (nixosTests) suricata; };
 
   meta = with lib; {
     description = "Free and open source, mature, fast and robust network threat detection engine";
