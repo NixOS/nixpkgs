@@ -6,7 +6,7 @@
 , ragel
 , util-linux
 , python3
-, boost184
+, boost
 , sqlite
 , pcre
 , enableShared ? !stdenv.hostPlatform.isStatic
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.hostPlatform.isLinux util-linux;
 
   buildInputs = [
-    boost184
+    boost
     sqlite
     pcre
   ];
