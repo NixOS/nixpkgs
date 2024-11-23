@@ -1,9 +1,0 @@
-diff --git a/crates/base/src/lib.rs b/crates/base/src/lib.rs
-index a303bbb..d776e8b 100644
---- a/crates/base/src/lib.rs
-+++ b/crates/base/src/lib.rs
-@@ -1,3 +1,4 @@
-+#![feature(const_float_bits_conv)]
- #![feature(avx512_target_feature)]
- #![cfg_attr(target_arch = "x86_64", feature(stdarch_x86_avx512))]
- #![cfg_attr(target_arch = "x86_64", feature(stdarch_x86_avx512_f16))]

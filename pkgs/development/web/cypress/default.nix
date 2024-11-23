@@ -19,27 +19,31 @@ let
   availableBinaries = {
     x86_64-linux = {
       platform = "linux-x64";
-      checksum = "sha256-zS/yMXNNYlxgYyUDou2HaXuetPotqiOM8kv1Y7JouCo=";
+      hash = "sha256-zS/yMXNNYlxgYyUDou2HaXuetPotqiOM8kv1Y7JouCo=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
-      checksum = "sha256-rB0ak6jYnJMb0aHDLAyhaGoOFK4FXDLEOeofNdW/Wk8=";
+      hash = "sha256-rB0ak6jYnJMb0aHDLAyhaGoOFK4FXDLEOeofNdW/Wk8=";
     };
     aarch64-darwin = {
       platform = "darwin-arm64";
-      checksum = "sha256-L2rhtB/DIK7Qum2YNoWVBn4mf+DA3rbcBUfZEEa/C8c=";
+      hash = "sha256-L2rhtB/DIK7Qum2YNoWVBn4mf+DA3rbcBUfZEEa/C8c=";
+    };
+    x86_64-darwin = {
+      platform = "darwin-x64";
+      hash = "sha256-glJscAp0oHS1pqBt6fsQm0I5anl2HQ5YawIJuPG33II=";
     };
   };
   inherit (stdenv.hostPlatform) system;
   binary = availableBinaries.${system} or (throw "cypress: No binaries available for system ${system}");
-  inherit (binary) platform checksum;
+  inherit (binary) platform hash;
 in stdenv.mkDerivation rec {
   pname = "cypress";
   version = "13.13.2";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";
-    sha256 = checksum;
+    inherit hash;
     stripRoot = !stdenv.hostPlatform.isDarwin;
   };
 
