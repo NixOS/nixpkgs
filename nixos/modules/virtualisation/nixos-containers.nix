@@ -705,7 +705,7 @@ in
             allowedDevices = mkOption {
               type = with types; listOf (submodule allowedDeviceOpts);
               default = [];
-              example = [ { node = "/dev/net/tun"; modifier = "rw"; } ];
+              example = [ { node = "/dev/net/tun"; modifier = "rwm"; } ];
               description = ''
                 A list of device nodes to which the containers has access to.
               '';
@@ -835,7 +835,7 @@ in
             optionalAttrs cfg.enableTun
               {
                 allowedDevices = cfg.allowedDevices
-                  ++ [ { node = "/dev/net/tun"; modifier = "rw"; } ];
+                  ++ [ { node = "/dev/net/tun"; modifier = "rwm"; } ];
                 additionalCapabilities = cfg.additionalCapabilities
                   ++ [ "CAP_NET_ADMIN" ];
               }
