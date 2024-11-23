@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.5.3";
+  version = "1.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "tenable";
     repo = "pyTenable";
     rev = "refs/tags/${version}";
-    hash = "sha256-kau350L2WCyuxwsmnD85iWte6LIIqprSVe0yNn+BikE=";
+    hash = "sha256-I6GlYPQI8qF9eyq8p4Wtkz8UEGth51ZALwA+Mu3TqhQ=";
   };
 
   pythonRelaxDeps = [
