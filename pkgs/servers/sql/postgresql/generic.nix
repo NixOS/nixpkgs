@@ -1,34 +1,98 @@
 let
 
   generic =
-      # dependencies
-      { stdenv, lib, fetchurl, fetchpatch, makeWrapper
-      , glibc, zlib, readline, openssl, icu, lz4, zstd, systemdLibs, libuuid
-      , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
-      , linux-pam, bison, flex, perl, docbook_xml_dtd_45, docbook-xsl-nons, libxslt
-
-      , removeReferencesTo, writeShellScriptBin
-
-      , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
-      , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
-
-      # for postgresql.pkgs
-      , self, newScope, buildEnv
-      , stdenvNoCC, postgresqlTestHook
+      # utils
+      { stdenv
+      , fetchpatch
+      , fetchurl
+      , lib
+      , substituteAll
+      , writeShellScriptBin
 
       # source specification
-      , version, hash, muslPatches ? {}
+      , hash
+      , muslPatches ? {}
+      , version
 
-      # for tests
-      , testers, nixosTests
+      # runtime dependencies
+      , darwin
+      , glibc
+      , libuuid
+      , libxml2
+      , lz4
+      , openssl
+      , readline
+      , tzdata
+      , zlib
+      , zstd
+
+      # build dependencies
+      , bison
+      , docbook-xsl-nons
+      , docbook_xml_dtd_45
+      , flex
+      , libxslt
+      , makeWrapper
+      , pkg-config
+      , removeReferencesTo
+
+      # passthru
+      , buildEnv
+      , newScope
+      , nixosTests
+      , postgresqlTestHook
+      , self
+      , stdenvNoCC
+      , testers
+
+      # bonjour
+      , bonjourSupport ? false
+
+      # GSSAPI
+      , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
+      , libkrb5
+
+      # icu
+      , icuSupport ? true
+      , icu
 
       # JIT
-      , jitSupport
-      , nukeReferences, llvmPackages, overrideCC
+      , jitSupport # not default on purpose, this is set via "_jit or not" attributes
+      , llvmPackages
+      , nukeReferences
+      , overrideCC
+
+      # LDAP
+      , ldapSupport ? false
+      , openldap
+
+      # NLS
+      , nlsSupport ? false
+      , gettext
+
+      # PAM
+      , pamSupport ? stdenv.hostPlatform.isLinux
+      , linux-pam
+
+      # PL/Perl
+      , perlSupport ? false
+      , perl
 
       # PL/Python
       , pythonSupport ? false
       , python3
+
+      # PL/Tcl
+      , tclSupport ? false
+      , tcl
+
+      # SELinux
+      , selinuxSupport ? false
+      , libselinux
+
+      # Systemd
+      , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
+      , systemdLibs
     } @args:
   let
     atLeast = lib.versionAtLeast version;
@@ -90,16 +154,21 @@ let
       readline
       openssl
       (libxml2.override {enableHttp = true;})
-      icu
       libuuid
     ]
+      ++ lib.optionals icuSupport [ icu ]
       ++ lib.optionals jitSupport [ llvmPackages.llvm ]
       ++ lib.optionals lz4Enabled [ lz4 ]
       ++ lib.optionals zstdEnabled [ zstd ]
       ++ lib.optionals systemdSupport [ systemdLibs ]
       ++ lib.optionals pythonSupport [ python3 ]
       ++ lib.optionals gssSupport [ libkrb5 ]
-      ++ lib.optionals stdenv'.hostPlatform.isLinux [ linux-pam ];
+      ++ lib.optionals pamSupport [ linux-pam ]
+      ++ lib.optionals perlSupport [ perl ]
+      ++ lib.optionals ldapSupport [ openldap ]
+      ++ lib.optionals tclSupport [ tcl ]
+      ++ lib.optionals selinuxSupport [ libselinux ]
+      ++ lib.optionals nlsSupport [ gettext ];
 
     nativeBuildInputs = [
       makeWrapper
@@ -123,10 +192,10 @@ let
     env.CFLAGS = "-fdata-sections -ffunction-sections"
       + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections");
 
-    configureFlags = [
+    configureFlags = let inherit (lib) withFeature; in [
       "--with-openssl"
       "--with-libxml"
-      "--with-icu"
+      (withFeature icuSupport "icu")
       "--sysconfdir=/etc"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
       "--enable-debug"
@@ -137,11 +206,16 @@ let
       ++ lib.optionals gssSupport [ "--with-gssapi" ]
       ++ lib.optionals pythonSupport [ "--with-python" ]
       ++ lib.optionals jitSupport [ "--with-llvm" ]
-      ++ lib.optionals stdenv'.hostPlatform.isLinux [ "--with-pam" ]
+      ++ lib.optionals pamSupport [ "--with-pam" ]
       # This could be removed once the upstream issue is resolved:
       # https://postgr.es/m/flat/427c7c25-e8e1-4fc5-a1fb-01ceff185e5b%40technowledgy.de
       ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16") [ "LDFLAGS_EX_BE=-Wl,-export_dynamic" ]
-      ++ lib.optionals (atLeast "17") [ "--without-perl" ];
+      ++ lib.optionals (atLeast "17" && !perlSupport) [ "--without-perl" ]
+      ++ lib.optionals ldapSupport [ "--with-ldap" ]
+      ++ lib.optionals tclSupport [ "--with-tcl" ]
+      ++ lib.optionals selinuxSupport [ "--with-selinux" ]
+      ++ lib.optionals nlsSupport [ "--enable-nls" ]
+      ++ lib.optionals bonjourSupport [ "--with-bonjour" ];
 
     patches = [
       (if atLeast "16" then ./patches/relative-to-symlinks-16+.patch else ./patches/relative-to-symlinks.patch)
