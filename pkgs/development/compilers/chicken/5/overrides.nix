@@ -86,6 +86,13 @@ in
     (addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libinotify-kqueue) old)
     // lib.optionalAttrs stdenv.hostPlatform.isDarwin (addToCscOptions "-L -linotify" old);
   leveldb = addToBuildInputs pkgs.leveldb;
+  lowdown = old: {
+    # For some reason comparse version gets interpreted as 0.0.0
+    postPatch = ''
+      substituteInPlace lowdown.egg \
+        --replace-fail 'comparse "3"' 'comparse "0.0.0"'
+    '';
+  };
   magic = addToBuildInputs pkgs.file;
   mdh = old:
     (addToBuildInputs pkgs.pcre old)
