@@ -1476,8 +1476,6 @@ with pkgs;
     };
   };
 
-  retroarch-joypad-autoconfig = callPackage ../applications/emulators/retroarch/retroarch-joypad-autoconfig.nix { };
-
   libretro = recurseIntoAttrs (callPackage ../applications/emulators/retroarch/cores.nix { });
 
   kodi-retroarch-advanced-launchers =
