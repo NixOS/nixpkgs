@@ -292,9 +292,13 @@ let
         wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
       '';
 
-    doCheck = !stdenv'.hostPlatform.isDarwin;
-    # autodetection doesn't seem to able to find this, but it's there.
-    checkTarget = "check-world";
+    # Running tests as "install check" to work around SIP issue on macOS:
+    # https://www.postgresql.org/message-id/flat/4D8E1BC5-BBCF-4B19-8226-359201EA8305%40gmail.com
+    # Also see <nixpkgs>/doc/stdenv/platform-notes.chapter.md
+    doCheck = false;
+    # Tests just get stuck on macOS 14.x for v13 and v14
+    doInstallCheck = !(stdenv'.hostPlatform.isDarwin && olderThan "15");
+    installCheckTarget = "check-world";
 
     passthru = let
       this = self.callPackage generic args;
