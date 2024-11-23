@@ -154,7 +154,7 @@ buildPythonPackage rec {
       ];
       fairscale = [ fairscale ];
       optuna = [ optuna ];
-      ray = [ ray ] ++ ray.optional-dependencies.tune-deps;
+      ray = [ ray ] ++ ray.optional-dependencies.tune;
       # sigopt = [ sigopt ];
       # integrations = ray ++ optuna ++ sigopt;
       serving = [
