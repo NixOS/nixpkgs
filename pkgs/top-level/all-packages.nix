@@ -16359,11 +16359,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa CoreServices Security;
   };
 
-  vuze = callPackage ../applications/networking/p2p/vuze {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
-
   whispers = with python3Packages; toPythonApplication whispers;
 
   warp = callPackage ../applications/networking/warp {
