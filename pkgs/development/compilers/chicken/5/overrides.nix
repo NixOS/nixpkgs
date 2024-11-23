@@ -95,6 +95,13 @@ in
         "-Wno-error=implicit-int"
       ];
     };
+  medea = old: {
+    # For some reason comparse gets interpreted as comparse 0.0.0
+    postPatch = ''
+      substituteInPlace medea.egg \
+        --replace-fail 'comparse "0.3.0"' 'comparse "0.0.0"'
+    '';
+  };
   # missing dependency in upstream egg
   mistie = addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 ]);
   mosquitto = addToPropagatedBuildInputs ([ pkgs.mosquitto ]);
