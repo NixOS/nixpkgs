@@ -966,8 +966,8 @@ rec {
       "sha256-jHEgFpoHJmep4Lv+ge3DSDthO6d9zt23lWBp0MztcHQ=";
 
   mypy-boto3-omics =
-    buildMypyBoto3Package "omics" "1.35.66"
-      "sha256-BrCTaS8B9svbA5yYkkmWChLmezKlj2sSQLsMz+J3q7M=";
+    buildMypyBoto3Package "omics" "1.35.68"
+      "sha256-/IGDrv1Yyk0eeDfdQTVkxhrANPPCqnfjatSRItkGWRM=";
 
   mypy-boto3-opensearch =
     buildMypyBoto3Package "opensearch" "1.35.58"
