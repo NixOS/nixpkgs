@@ -99,11 +99,24 @@ let
     in
     test;
 
-  plugins = removeAttrs terraform-providers [
-    "override"
-    "overrideDerivation"
-    "recurseForDerivations"
-  ];
+  plugins =
+    lib.mapAttrs
+      (
+        _: provider:
+        # use opentofu plugin registry over terraform's
+        provider.override (oldArgs: {
+          provider-source-address = lib.replaceStrings [ "https://registry.terraform.io/providers" ] [
+            "registry.opentofu.org"
+          ] oldArgs.homepage;
+        })
+      )
+      (
+        removeAttrs terraform-providers [
+          "override"
+          "overrideDerivation"
+          "recurseForDerivations"
+        ]
+      );
 
   withPlugins =
     plugins:
