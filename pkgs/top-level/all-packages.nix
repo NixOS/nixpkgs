@@ -16287,9 +16287,7 @@ with pkgs;
 
   whispers = with python3Packages; toPythonApplication whispers;
 
-  warp = callPackage ../applications/networking/warp {
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  };
+  warp = callPackage ../applications/networking/warp { };
 
   warp-plus = callPackage ../by-name/wa/warp-plus/package.nix {
     buildGoModule = buildGo122Module;
