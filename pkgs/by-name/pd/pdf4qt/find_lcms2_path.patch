@@ -1,0 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 98752ec..aa029b3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -55,7 +55,15 @@ endif()
+ qt_standard_project_setup()
+ 
+ find_package(OpenSSL REQUIRED)
+-find_package(lcms REQUIRED)
++SET(LCMS2_NAMES ${LCMS2_NAMES} lcms2 liblcms2 liblcms2_static)
++FIND_LIBRARY(LCMS2_LIBRARY NAMES ${LCMS2_NAMES} )
++FIND_PATH(LCMS2_INCLUDE_DIR lcms2.h)
++add_library(lcms2::lcms2 UNKNOWN IMPORTED)
++set_target_properties(lcms2::lcms2 PROPERTIES
++    IMPORTED_LOCATION ${LCMS2_LIBRARY}
++    INTERFACE_INCLUDE_DIRECTORIES ${LCMS2_INCLUDE_DIR}
++    INTERFACE_COMPILE_DEFINITIONS "HAVE_LCMS2=1;CMS_NO_REGISTER_KEYWORD=1")
++set_property(GLOBAL APPEND PROPERTY INTERNAL_DEPS_PROP lcms2::lcms2)
+ find_package(ZLIB REQUIRED)
+ find_package(Freetype REQUIRED)
+ find_package(OpenJPEG CONFIG REQUIRED)

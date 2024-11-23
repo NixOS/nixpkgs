@@ -1,0 +1,22 @@
+tree 18207ad257a4c0a9ffc4fd250360a91d0b5240cb
+parent 37963b8ff6945ae8bdbabee658e5e36d0f67b84a
+author Noa Aarts <noa@voorwaarts.nl> Tue Nov 5 13:49:49 2024 +0100
+committer Noa Aarts <noa@voorwaarts.nl> Tue Nov 5 13:49:49 2024 +0100
+
+fix static lifetime for string
+
+This fixes a compiler error without changing functionality
+
+diff --git a/src/config.rs b/src/config.rs
+index f4bca31..a4fc6bf 100644
+--- a/src/config.rs
++++ b/src/config.rs
+@@ -645,7 +645,7 @@ struct Variable<'a> {
+ }
+ 
+ impl<'a> Variable<'a> {
+-    const START_SYMBOL: &str = "$";
++    const START_SYMBOL: &'static str = "$";
+ 
+     fn span(&self) -> std::ops::Range<usize> {
+         self.start..self.start + Self::START_SYMBOL.len() + self.ident.len()

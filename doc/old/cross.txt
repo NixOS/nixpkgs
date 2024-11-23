@@ -1,0 +1,329 @@
+Setting up a cross compiler with Nix
+
+"Cross compilation" means compiling a program on one machine for another
+type of machine. A typical use of cross compilation is to compile programs
+for embedded devices. These devices often don't have the computing power
+and memory to compile programs natively.
+
+For a fully working cross compiler the following are needed:
+
+* cross binutils: assembler, archiver, linker, etcetera that understand
+the format of the target system
+
+* cross compiler: a compiler that can generate binary code and object files
+for the target platform
+
+* cross C library: a library to link object files with to create fully
+functional programs
+
+Cross compilers are difficult to set up. A lot of people report that they
+cannot succeed in building a cross toolchain successfully. The answers
+usually consist of "download this pre-built toolchain", which is equally
+unhelpful.
+
+A toolchain is set up in five steps:
+
+1. build binutils to that can run on the host platform, but generate code
+for the target platform
+
+2. build Linux kernel headers for the target platform
+
+3. build a minimal C only version of GCC, that can run on the host platform
+and generate code for the target platform
+
+4. build a C library for the target platform. This includes the dynamic
+linker, C library, etc.
+
+5. build a full GCC
+
+****
+NB:
+
+Keep in mind that many programs are not very well suited for cross
+compilation. Either they are not intended to run on other platforms,
+because the code is highly platform specific, or the configuration process
+is not written with cross compilation in mind.
+
+Nix will not solve these problems for you!
+***
+
+This document describes to set up a cross compiler to generate code for
+arm-linux with uClibc and runs on i686-linux. The "stdenv" used is the
+default from the standard Nix packages collection.
+
+Step 1: build binutils for arm-linux in the stdenv for i686-linux
+
+---
+{stdenv, fetchurl, noSysDirs}:
+
+stdenv.mkDerivation {
+  name = "binutils-2.16.1-arm";
+  builder = ./builder.sh;
+  src = fetchurl {
+    url = "http://ftp.nluug.nl/gnu/binutils/binutils-2.16.1.tar.bz2";
+    hash = "sha256-14pv+YKrL3NyFwbnv9MoWsZHgEZk5+pHhuZtAfkcVsU=";
+  };
+  inherit noSysDirs;
+  configureFlags = [ "--target=arm-linux" ];
+}
+---
+
+This will compile binutils that will run on i686-linux, but knows the
+format used by arm-linux.
+
+Step 2: build kernel headers for the target architecture
+
+  default.nix for kernel-headers-arm:
+
+---
+{stdenv, fetchurl}:
+
+assert stdenv.buildPlatform.system == "i686-linux";
+
+stdenv.mkDerivation {
+  name = "linux-headers-2.6.13.1-arm";
+  builder = ./builder.sh;
+  src = fetchurl {
+    url = "http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.13.1.tar.bz2";
+    hash = "sha256-qtICDjfiA1HxWBrHqtB5DCv9s9/HyznKV1C6IxCrHYs=";
+  };
+}
+---
+
+  builder.sh for kernel-headers-arm:
+
+---
+source $stdenv/setup
+
+
+buildPhase() {
+    make include/linux/version.h
+}
+
+buildPhase=buildPhase
+
+
+installPhase() {
+    mkdir $out
+    mkdir $out/include
+    #cd $out/include
+    #ln -s asm-arm asm
+    make include/asm ARCH=arm
+    cp -prvd include/linux include/asm include/asm-arm include/asm-generic $out/include
+    echo -n > $out/include/linux/autoconf.h
+}
+
+installPhase=installPhase
+
+
+genericBuild
+---
+
+Step 3: build a minimal GCC
+
+Extra/different parameters include the target platform and the kernel
+headers argument (this needs a major cleanup, as well as the name, it
+needs to be different!). Profiled compilers are disabled. The tarball
+used here is just gcc-core. For some reason it doesn't install nicely
+if the whole tarball is used (or is this some braino on my side? -- AH).
+
+Only C is used, because for other languages (such as C++) extra libraries
+need to be compiled, for which libraries compiled for the target system
+are needed.
+
+There is a bit of evilness going on. The cross compiled utilities need
+to be either copied to or be linked from the output tree of the compiler.
+(Is this really true? Back this up with arguments! -- AH)
+
+Symbolic links are not something we want inside the Nix store.
+
+---
+{ stdenv, fetchurl, noSysDirs
+, langC ? true, langCC ? true, langF77 ? false
+, profiledCompiler ? false
+, binutilsArm
+, kernelHeadersArm
+}:
+
+assert langC;
+
+stdenv.mkDerivation {
+  name = "gcc-4.0.2-arm";
+  builder = ./builder.sh;
+  src = fetchurl {
+    url = "ftp://ftp.nluug.nl/pub/gnu/gcc/gcc-4.0.2/gcc-core-4.0.2.tar.bz2";
+    hash = "sha256-LANmXRS7/fN2zF5JUJVd8OjNA5aCDsGLQKhSpxWA3Qk=";
+  };
+  # !!! apply only if noSysDirs is set
+  patches = [./no-sys-dirs.patch ./gcc-inhibit.patch];
+  inherit noSysDirs langC langCC langF77 profiledCompiler;
+  buildInputs = [binutilsArm];
+  inherit kernelHeadersArm binutilsArm;
+  platform = "arm-linux";
+}
+---
+
+The builder.sh for a cross-compiler. Note that the binutils are prefixed
+with the architecture name, so arm-linux-ld instead of ld, etc. This is
+necessary because when we cross-compile a lot of programs look for these
+tools with these specific names. The standard gcc-wrapper does not take this
+into account yet.
+
+---
+source $stdenv/setup
+
+
+export NIX_FIXINC_DUMMY=$NIX_BUILD_TOP/dummy
+mkdir $NIX_FIXINC_DUMMY
+
+
+if test "$noSysDirs" = "1"; then
+
+    if test "$noSysDirs" = "1"; then
+        # Figure out what extra flags to pass to the gcc compilers
+        # being generated to make sure that they use our glibc.
+        if test -e $NIX_CC/nix-support/orig-glibc; then
+            glibc=$(cat $NIX_CC/nix-support/orig-glibc)
+            # Ugh.  Copied from gcc-wrapper/builder.sh.  We can't just
+            # source in $NIX_CC/nix-support/add-flags, since that
+            # would cause *this* GCC to be linked against the
+            # *previous* GCC.  Need some more modularity there.
+            extraCFlags="-B$glibc/lib -isystem $glibc/include"
+            extraLDFlags="-B$glibc/lib -L$glibc/lib -Wl,-s \
+              -Wl,-dynamic-linker,$glibc/lib/ld-linux.so.2"
+
+            # Oh, what a hack.  I should be shot for this.
+            # In stage 1, we should link against the previous GCC, but
+            # not afterwards.  Otherwise we retain a dependency.
+            # However, ld-wrapper, which adds the linker flags for the
+            # previous GCC, is also used in stage 2/3.  We can prevent
+            # it from adding them by NIX_GLIBC_FLAGS_SET, but then
+            # gcc-wrapper will also not add them, thereby causing
+            # stage 1 to fail.  So we use a trick to only set the
+            # flags in gcc-wrapper.
+            hook=$(pwd)/ld-wrapper-hook
+            echo "NIX_GLIBC_FLAGS_SET=1" > $hook
+            export NIX_LD_WRAPPER_START_HOOK=$hook
+        fi
+
+        export NIX_EXTRA_CFLAGS=$extraCFlags
+        export NIX_EXTRA_LDFLAGS=$extraLDFlags
+        export CFLAGS=$extraCFlags
+        export CXXFLAGS=$extraCFlags
+        export LDFLAGS=$extraLDFlags
+    fi
+
+else
+    patches=""
+fi
+
+
+preConfigure=preConfigure
+preConfigure() {
+
+    # Determine the frontends to build.
+    langs="c"
+    if test -n "$langCC"; then
+        langs="$langs,c++"
+    fi
+    if test -n "$langF77"; then
+        langs="$langs,f77"
+    fi
+
+    # Cross compiler evilness
+    mkdir -p $out
+    mkdir -p $out/arm-linux
+    mkdir -p $out/arm-linux/bin
+    ln -s $binutilsArm/arm-linux/bin/as $out/arm-linux/bin/as
+    ln -s $binutilsArm/arm-linux/bin/ld $out/arm-linux/bin/ld
+    ln -s $binutilsArm/arm-linux/bin/ar $out/arm-linux/bin/ar
+    ln -s $binutilsArm/arm-linux/bin/ranlib $out/arm-linux/bin/ranlib
+
+    # Perform the build in a different directory.
+    mkdir ../build
+    cd ../build
+
+    configureScript=../$sourceRoot/configure
+    configureFlags="--enable-languages=$langs --target=$platform --disable-threads --disable-libmudflap --disable-shared --with-headers=$kernelHeadersArm/include --disable-multilib"
+}
+
+
+postInstall=postInstall
+postInstall() {
+    # Remove precompiled headers for now.  They are very big and
+    # probably not very useful yet.
+    find $out/include -name "*.gch" -exec rm -rf {} \; -prune
+
+    # Remove `fixincl' to prevent a retained dependency on the
+    # previous gcc.
+    rm -rf $out/libexec/gcc/*/*/install-tools
+}
+
+
+#if test -z "$profiledCompiler"; then
+    #makeFlags="bootstrap"
+#else
+    #makeFlags="profiledbootstrap"
+#fi
+
+genericBuild
+---
+
+Step 4: build a C library for the target platform.
+
+The previous steps are enough to compile a C library. In our case we take
+uClibc. It's intended to be a small sized replacement for glibc. It is widely
+used in embedded environments.
+
+...
+
+Step 5: Build a compiler to link with the newly built C library.
+
+...
+
+If we restrict the compiler to just C programs it is relatively easy,
+since we only need to wrap the GCC we built in the previous step with all
+the right tools and the right C library. Successfully compiled programs with
+this compiler and verified to be working on a HP Jornada 820 running Linux
+are "patch", "make" and "wget".
+
+If we want to build C++ programs it gets a lot more difficult. GCC has a
+three step compilation process. In the first step a simple compiler, called
+xgcc, that can compile only C programs is built. With that compiler it
+compiles itself two more times: one time to build a full compiler, and another
+time to build a full compiler once again with the freshly built compiler from
+step 2. In the second and third step support for C++ is compiled, if this
+is configured.
+
+One of the libraries that has to be built for C++ support step is libstdc++.
+This library uses xgcc, even when cross compiling, since libstdc++ has to be
+compiled for arm-linux.
+
+One of the compiler flags that GCC uses for this compiler is called X_CFLAGS.
+This is used by the Nix build process to set the dynamic linker, glibc
+in the case of i686-linux using the default Nix packages collection.
+
+Obviously, since we need to compile libstc++ for arm-linux with uClibc linking
+will not be done correctly: you can't link object files built for arm-linux
+with a glibc built for i686-linux.
+
+Setting X_CFLAGS to use the uClibc libraries and dynamic linker will fail
+too. Earlier on in the build process these flags are used to compile important
+files like libgcc.a by the host system gcc, which does need to be linked
+to glibc. To make this work correctly you will need to carefully juggle
+with compilation flags. This is still work in progress for Nix.
+
+
+---
+
+After successfully completing the whole toolchain you can start building
+packages with the newly built tools. To make everything build correctly
+you will need a stdenv for your target platform. Setting up this platform
+will take some effort. Right now there is a very experimental setup for
+arm-linux, which needs to be cleaned up before it is production ready.
+
+Please note that many packages are not well suited for cross-compilation.
+Even though the package itself might be very well portable often the
+buildscripts are not. One thing that we have seen that causes frequent
+build failures is the use of the LD variable. This is often set to 'ld'
+and not $(CROSS)-ld.
