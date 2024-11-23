@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "app-model";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "app-model";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PvQ9l2sCi1NaF/SWApWqt6a5AHI5A+zmJRo8gR3ng6Y=";
+    hash = "sha256-bIqcbKjAj5TMZD9mZ+7G4q+sR0aRqn6E4hf99srgRIE=";
   };
 
   build-system = [
