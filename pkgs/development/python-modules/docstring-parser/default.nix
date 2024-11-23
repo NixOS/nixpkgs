@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "docstring-parser";
   version = "0.16";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-xwV+mgCOC/MyCqGELkJVqQ3p2g2yw/Ieomc7k0HMXms=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
