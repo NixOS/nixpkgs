@@ -11,10 +11,11 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "controlplaneio";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-4jVRd6XQekL4wMZ+Icoa2DEsTGzBISK2QPO+gu890kA=";
+    repo = "kubesec";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4jVRd6XQekL4wMZ+Icoa2DEsTGzBISK2QPO+gu890kA=";
   };
+
   vendorHash = "sha256-6jXGc9tkqRTjzEiug8lGursPm9049THWlk8xY3pyVgo=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -22,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/controlplaneio/kubesec/v${lib.versions.major version}/cmd.version=v${version}"
+    "-X=github.com/controlplaneio/kubesec/v${lib.versions.major version}/cmd.version=v${version}"
   ];
 
   # Tests wants to download the kubernetes schema for use with kubeval
