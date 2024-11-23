@@ -1,4 +1,5 @@
 {
+  aiohttp,
   appdirs,
   appnope,
   black,
@@ -42,7 +43,7 @@
   pylint,
   pyperclip,
   pyserial,
-  python3,
+  python,
   python-daemon,
   pyyaml,
   requests,
@@ -68,14 +69,14 @@
 
 stdenv.mkDerivation rec {
   pname = "home-assistant-chip-wheels";
-  version = "2024.9.0";
+  version = "2024.11.0";
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "chip-wheels";
     rev = version;
     fetchSubmodules = false;
     leaveDotGit = true;
-    hash = "sha256-T0G6mxb/5wFOxPLL92Ay34oP+9Xvk9w0YV9VSzWJuzw=";
+    hash = "sha256-5sAznU/GdiVTtA46oQKqUpxAaIRr5NeCNlI2IzDLb1c=";
     postFetch = ''
       cd $out
       # Download connectedhomeip.
@@ -85,7 +86,7 @@ stdenv.mkDerivation rec {
 
       # Initialize only necessary submodules.
       cd connectedhomeip
-      ${python3}/bin/python3 scripts/checkout_submodules.py --platform linux --shallow
+      ${python.interpreter} scripts/checkout_submodules.py --platform linux --shallow
 
       # Keep the output deterministic.
       cd $out
@@ -105,7 +106,7 @@ stdenv.mkDerivation rec {
     zap-chip
     # gdbus-codegen
     glib
-    python3
+    python
     # dependencies of build scripts
     click
     jinja2
@@ -169,6 +170,7 @@ stdenv.mkDerivation rec {
   env.PIP_FIND_LINKS =
     let
       dependencies = [
+        aiohttp
         appdirs
         appnope
         black
@@ -254,7 +256,7 @@ stdenv.mkDerivation rec {
     ''chip_config_memory_debug_dmalloc=false''
     ''chip_mdns="minimal"''
     ''chip_minmdns_default_policy="libnl"''
-    ''chip_python_version="${lib.versions.majorMinor python3.version}"''
+    ''chip_python_version="${lib.versions.majorMinor python.version}"''
     ''chip_python_platform_tag="any"''
     ''chip_python_package_prefix="home-assistant-chip"''
     ''custom_toolchain="custom"''
