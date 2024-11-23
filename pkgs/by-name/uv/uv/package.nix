@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  buildPackages,
   cmake,
   fetchFromGitHub,
   installShellFiles,
@@ -42,13 +44,17 @@ python3Packages.buildPythonApplication rec {
     "uv"
   ];
 
-  postInstall = ''
-    export HOME=$TMPDIR
-    installShellCompletion --cmd uv \
-      --bash <($out/bin/uv --generate-shell-completion bash) \
-      --fish <($out/bin/uv --generate-shell-completion fish) \
-      --zsh <($out/bin/uv --generate-shell-completion zsh)
-  '';
+  postInstall =
+    let
+      uv = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/uv";
+    in
+    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      export HOME=$TMPDIR
+      installShellCompletion --cmd uv \
+        --bash <(${uv} --generate-shell-completion bash) \
+        --fish <(${uv} --generate-shell-completion fish) \
+        --zsh <(${uv} --generate-shell-completion zsh)
+    '';
 
   pythonImportsCheck = [ "uv" ];
 
