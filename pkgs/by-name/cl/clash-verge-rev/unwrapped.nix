@@ -3,7 +3,7 @@
   version,
   src,
   libayatana-appindicator,
-  sysproxy-hash,
+  vendor-hash,
   webui,
   pkg-config,
   rustPlatform,
@@ -17,12 +17,8 @@ rustPlatform.buildRustPackage {
   pname = "${pname}-unwrapped";
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoLock = {
-    lockFile = ./Cargo-tauri.lock;
-    outputHashes = {
-      "sysproxy-0.3.0" = sysproxy-hash;
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = vendor-hash;
 
   env = {
     OPENSSL_NO_VENDOR = 1;
