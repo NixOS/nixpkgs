@@ -12,26 +12,20 @@
   fontconfig,
   alsa-lib,
   libXrender,
+  libXinerama,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clanlib";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     repo = "ClanLib";
     owner = "sphair";
-    rev = "v${version}";
-    sha256 = "sha256-SVsLWcTP+PCIGDWLkadMpJPj4coLK9dJrW4sc2+HotE=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-sRHRkT8NiKVfa9YgP6DYV9WzCZoH7f0phHpoYMnCk98=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "clanlib-add-support-for-riscv.patch";
-      url = "https://github.com/sphair/ClanLib/commit/f5f694205054b66dc800135c9b01673f69a7a671.patch";
-      hash = "sha256-/1XLFaTZDQAlT2mG9P6SJzXtTg7IWYGQ18Sx0e9zh0s=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -46,7 +40,10 @@ stdenv.mkDerivation rec {
     fontconfig
     alsa-lib
     libXrender
+    libXinerama
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/sphair/ClanLib";
@@ -55,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nixinator ];
     platforms = with lib.platforms; lib.intersectLists linux (x86 ++ arm ++ aarch64 ++ riscv);
   };
-}
+})
