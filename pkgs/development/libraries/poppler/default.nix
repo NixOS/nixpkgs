@@ -9,6 +9,7 @@
 , curl
 , fontconfig
 , freetype
+, glib
 , lcms
 , libiconv
 , libintl
@@ -76,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     ninja
     pkg-config
     python3
+    glib # for glib-mkenums
   ];
 
   buildInputs = [
