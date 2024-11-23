@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Syllo/nvtop";
     changelog = "https://github.com/Syllo/nvtop/releases/tag/${finalAttrs.version}";
     license = licenses.gpl3Only;
-    platforms = lib.optional (!apple) platforms.linux ++ lib.optional apple platforms.darwin;
+    platforms = if apple then platforms.darwin else platforms.linux;
     maintainers = with maintainers; [
       willibutz
       gbtb
