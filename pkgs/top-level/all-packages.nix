@@ -4957,7 +4957,7 @@ with pkgs;
     beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_17; });
   };
 
-  plfit = callPackage ../tools/misc/plfit {
+  plfit = callPackage ../by-name/pl/plfit/package.nix {
     python = null;
   };
 
