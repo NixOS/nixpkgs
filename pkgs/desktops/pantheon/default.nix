@@ -111,9 +111,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   #### LIBRARIES
 
-  granite = callPackage ./granite { };
+  granite = callPackage ./libraries/granite { };
 
-  granite7 = callPackage ./granite/7 { };
+  granite7 = callPackage ./libraries/granite/7 { };
 
   #### SERVICES
 
