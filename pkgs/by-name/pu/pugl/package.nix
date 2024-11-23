@@ -15,6 +15,7 @@
   sphinx,
   sphinxygen,
   ninja,
+  apple-sdk_11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,16 +45,20 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.sphinx-lv2-theme
   ];
 
-  buildInputs = [
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXrandr
-    libGL
-    vulkan-loader
-    vulkan-headers
-    xorg.libXext
-    cairo
-  ];
+  buildInputs =
+    [
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXrandr
+      libGL
+      vulkan-loader
+      vulkan-headers
+      xorg.libXext
+      cairo
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_11
+    ];
 
   meta = {
     homepage = "https://github.com/lv2/pugl";
