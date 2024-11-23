@@ -23,9 +23,10 @@ stdenv.mkDerivation rec {
       url = "https://github.com/nextcloud/recognize/archive/refs/tags/v${version}.tar.gz";
       hash = "sha256-op1Fdm40d8V6V+rfne0ECr60xRjBYrBPrCD3kaNeFfY=";
     })
-    (fetchurl {
-      inherit version;
-      url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-2.9.1.tar.gz";
+    (fetchurl rec {
+      # For version see LIBTENSORFLOW_VERSION in https://github.com/tensorflow/tfjs/blob/master/tfjs-node/scripts/deps-constants.js
+      version = "2.9.1";
+      url = "https://storage.googleapis.com/tensorflow/libtensorflow/libtensorflow-cpu-linux-x86_64-${version}.tar.gz";
       hash = "sha256-f1ENJUbj214QsdEZRjaJAD1YeEKJKtPJW8pRz4KCAXM=";
     })
 
