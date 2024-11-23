@@ -1482,8 +1482,6 @@ with pkgs;
 
   libretro = recurseIntoAttrs (callPackage ../applications/emulators/retroarch/cores.nix { });
 
-  libretro-core-info = callPackage ../applications/emulators/retroarch/libretro-core-info.nix { };
-
   kodi-retroarch-advanced-launchers =
     callPackage ../applications/emulators/retroarch/kodi-advanced-launchers.nix { };
 
