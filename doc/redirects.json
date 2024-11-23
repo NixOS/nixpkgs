@@ -3195,30 +3195,6 @@
   "stable-maven-plugins": [
     "index.html#stable-maven-plugins"
   ],
-  "maven-mvn2nix": [
-    "index.html#maven-mvn2nix"
-  ],
-  "solving-for-dependencies": [
-    "index.html#solving-for-dependencies"
-  ],
-  "buildmaven-with-nixosmvn2nix-maven-plugin": [
-    "index.html#buildmaven-with-nixosmvn2nix-maven-plugin"
-  ],
-  "double-invocation": [
-    "index.html#double-invocation"
-  ],
-  "building-a-jar": [
-    "index.html#building-a-jar"
-  ],
-  "runnable-jar": [
-    "index.html#runnable-jar"
-  ],
-  "classpath": [
-    "index.html#classpath"
-  ],
-  "manifest-file-via-maven-plugin": [
-    "index.html#manifest-file-via-maven-plugin"
-  ],
   "nim": [
     "index.html#nim"
   ],

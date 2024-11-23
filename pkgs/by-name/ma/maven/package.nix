@@ -35,9 +35,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    buildMaven = callPackage ./build-maven.nix {
-      maven = finalAttrs.finalPackage;
-    };
+    buildMaven = throw "mvn2nix support was removed from Nixpkgs; please use https://github.com/fzakaria/mvn2nix or maven.buildMavenPackage instead"; # Added 2024-11-23
     buildMavenPackage = callPackage ./build-maven-package.nix {
       maven = finalAttrs.finalPackage;
     };
