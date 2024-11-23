@@ -192,7 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.cyrusimap.org";
     description = "Email, contacts and calendar server";
     license = with lib.licenses; [ bsdOriginal ];
-    mainProgram = "cyrus";
+    mainProgram = "cyradm";
     maintainers = with lib.maintainers; [
       moraxyc
       pingiun
