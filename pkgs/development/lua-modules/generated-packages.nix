@@ -3305,22 +3305,22 @@ buildLuarocksPackage {
   };
 }) {};
 
-teal-language-server = callPackage({ buildLuarocksPackage, cyan, dkjson, fetchFromGitHub, fetchurl, luafilesystem }:
+teal-language-server = callPackage({ argparse, buildLuarocksPackage, dkjson, fetchFromGitHub, fetchurl, inspect, luafilesystem, lusc_luv, luv, tl }:
 buildLuarocksPackage {
   pname = "teal-language-server";
-  version = "dev-1";
+  version = "0.0.5-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/teal-language-server-dev-1.rockspec";
-    sha256 = "01l44c6bknz7ff9xqgich31hlb0yk4ms5k1hs4rhm3cs95s5vlzc";
+    url    = "mirror://luarocks/teal-language-server-0.0.5-1.rockspec";
+    sha256 = "11ps1hgkgli4sf9gcj7pin4kbc5w0yck0daig1ghqssn2q9m2x5l";
   }).outPath;
   src = fetchFromGitHub {
     owner = "teal-language";
     repo = "teal-language-server";
-    rev = "67b5d7cad60b9df472851a2c61591f2aab97da47";
-    hash = "sha256-fUuOjJrwpLU1YoJm3yn+X15ioRf4GZoi6323On1W2Io=";
+    rev = "6e50c7d907b150b1b2e03fb5d70f0f3c63dec5c3";
+    hash = "sha256-lTCTePaAYW4pqbJznos3BM0I0/Vaw13TNCCatmQjIJo=";
   };
 
-  propagatedBuildInputs = [ cyan dkjson luafilesystem ];
+  propagatedBuildInputs = [ argparse dkjson inspect luafilesystem lusc_luv luv tl ];
 
   meta = {
     homepage = "https://github.com/teal-language/teal-language-server";
