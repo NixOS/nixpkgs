@@ -375,7 +375,7 @@ in
     };
 
     systemd.services.cups =
-      { wantedBy = optionals (!cfg.startWhenNeeded) [ "multi-user.target" ];
+      { wantedBy = optionals (cfg.startWhenNeeded) [ "printer.target" ];
         wants = [ "network.target" ];
         after = [ "network.target" ];
 
