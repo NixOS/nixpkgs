@@ -30,7 +30,7 @@ let
       BUILD_ID = cfg.version;
       PRETTY_NAME = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
       CPE_NAME = "cpe:/o:${cfg.vendorId}:${cfg.distroId}:${cfg.release}";
-      LOGO = "nix-snowflake";
+      LOGO = optionalString (cfg.logo != null) cfg.logo;
       HOME_URL = optionalString isNixos "https://nixos.org/";
       VENDOR_URL = optionalString isNixos "https://nixos.org/";
       DOCUMENTATION_URL = optionalString isNixos "https://nixos.org/learn.html";
@@ -42,7 +42,7 @@ let
       VARIANT = optionalString (cfg.variantName != null) cfg.variantName;
       VARIANT_ID = optionalString (cfg.variant_id != null) cfg.variant_id;
       DEFAULT_HOSTNAME = config.networking.fqdnOrHostName;
-      SUPPORT_END = "2025-06-30";
+      SUPPORT_END = cfg.supportEnd;
     };
 
   initrdReleaseContents = (removeAttrs osReleaseContents [ "BUILD_ID" ]) // {
@@ -75,7 +75,7 @@ in
       };
 
       release = mkOption {
-        readOnly = true;
+        internal = true;
         type = types.str;
         default = trivial.release;
         description = "The NixOS release (e.g. `16.03`).";
@@ -96,7 +96,7 @@ in
       };
 
       codeName = mkOption {
-        readOnly = true;
+        internal = true;
         type = types.str;
         default = trivial.codeName;
         description = "The NixOS release code name (e.g. `Emu`).";
@@ -142,6 +142,20 @@ in
         type = types.str;
         default = "NixOS";
         description = "The name of the operating system vendor";
+      };
+
+      logo = mkOption {
+        internal = true;
+        type = types.nullOr types.str;
+        default = "nix-snowflake";
+        description = "The name of an icon that can be used by graphical applications to display the operating system's logo";
+      };
+
+      supportEnd = mkOption {
+        internal = true;
+        type = types.strMatching "[0-9]{4}-[0-9]{2}-[0-9]{2}";
+        default = "2025-06-30";
+        description = "The date when support for this OS version ends.";
       };
     };
 
