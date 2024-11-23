@@ -1,0 +1,13 @@
+diff --git a/data/meson.build b/data/meson.build
+index 62a00fe..5319974 100644
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -18,8 +18,6 @@ install_data(join_paths('icons', 'com.github.alexr4535.siglo.svg'),
+   install_dir: join_paths(get_option('datadir'), 'icons')
+ )
+ 
+-install_data('siglo.service', install_dir: '/etc/systemd/user/')
+-
+ appstream_file = i18n.merge_file(
+   input: 'com.github.alexr4535.siglo.appdata.xml.in',
+   output: 'com.github.alexr4535.siglo.appdata.xml',

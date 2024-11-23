@@ -1,0 +1,39 @@
+--- a/Makefile	2024-04-20 10:28:36.697545022 +0300
++++ b/Makefile	2024-04-20 10:37:55.591657540 +0300
+@@ -7,8 +7,10 @@
+ 	shards build --debug -Dpreview_mt
+ 
+ configure:
+-	shards install
+-	./bin/gi-crystal
++	mkdir bin/
++	cd lib/gi-crystal && shards build -Dpreview_mt --release --no-debug
++	cd ../..
++	cp lib/gi-crystal/bin/gi-crystal bin/ && ./bin/gi-crystal
+ 
+ rtfm:
+ 	shards build --release -Dpreview_mt rtfm
+@@ -16,10 +18,10 @@
+ docsets: crystal-docset gtk-docset
+ 
+ crystal-docset:
+-	crystal run src/doc2dash/create_crystal_docset.cr
++	crystal src/doc2dash/create_crystal_docset.cr "@crystal@/share/doc/crystal/api"
+ 
+ gtk-docset:
+-	crystal run src/doc2dash/create_gtk_docset.cr
++	crystal src/doc2dash/create_gtk_docset.cr "gtk-doc/"
+ 
+ test: crystal-docset gtk-docset
+ 	crystal spec
+@@ -28,8 +30,10 @@
+ 	install -D -m 0755 bin/rtfm $(DESTDIR)$(PREFIX)/bin/rtfm
+ 	install -D -m 0644 data/io.github.hugopl.rtfm.desktop $(DESTDIR)$(PREFIX)/share/applications/io.github.hugopl.rtfm.desktop
+ 	install -D -m 0644 data/icons/hicolor/scalable/apps/io.github.hugopl.rtfm.svg $(DESTDIR)$(PREFIX)/share/icons/hicolor/scalable/apps/io.github.hugopl.rtfm.svg
++	gtk4-update-icon-cache --ignore-theme-index $(PREFIX)/share/icons/hicolor
+ 	# Settings schema
+ 	install -D -m644 data/io.github.hugopl.rtfm.gschema.xml $(DESTDIR)$(PREFIX)/share/glib-2.0/schemas/io.github.hugopl.rtfm.gschema.xml
++	glib-compile-schemas $(DESTDIR)$(PREFIX)/share/glib-2.0/schemas
+ 	# docsets
+ 	mkdir -p $(DESTDIR)$(PREFIX)/share/rtfm/docsets/
+ 	cp -r data/Crystal.docset $(DESTDIR)$(PREFIX)/share/rtfm/docsets/

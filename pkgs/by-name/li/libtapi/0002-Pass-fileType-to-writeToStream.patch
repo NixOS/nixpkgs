@@ -1,0 +1,25 @@
+From 77ca537cfc61765f2109c626757f2da8de602ce0 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 5 Apr 2024 23:20:32 -0400
+Subject: [PATCH 2/3] Pass fileType to writeToStream
+
+---
+ lib/Core/JSONReaderWriter.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tapi/lib/Core/JSONReaderWriter.cpp b/tapi/lib/Core/JSONReaderWriter.cpp
+index c040670..c1be85f 100644
+--- a/tapi/lib/Core/JSONReaderWriter.cpp
++++ b/tapi/lib/Core/JSONReaderWriter.cpp
+@@ -57,7 +57,7 @@ Error JSONWriter::writeFile(raw_ostream &os, const InterfaceFile *file,
+   if (file == nullptr)
+     return errorCodeToError(std::make_error_code(std::errc::invalid_argument));
+ 
+-  return TextAPIWriter::writeToStream(os, *file, /*Compact=*/false);
++  return TextAPIWriter::writeToStream(os, *file, fileType, /*Compact=*/false);
+ }
+ 
+ TAPI_NAMESPACE_INTERNAL_END
+-- 
+2.42.0
+

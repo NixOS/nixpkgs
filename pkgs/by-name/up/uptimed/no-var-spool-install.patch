@@ -1,0 +1,15 @@
+diff -rc uptimed-0.3.16/Makefile.am uptimed-0.3.16-new/Makefile.am
+*** uptimed-0.3.16/Makefile.am	2009-01-02 00:46:00.000000000 +0100
+--- uptimed-0.3.16-new/Makefile.am	2009-09-16 09:24:29.952524967 +0200
+***************
+*** 8,16 ****
+  
+  AM_CFLAGS = @CFLAGS@ -DFILE_CONFIG=\"$(sysconfdir)/uptimed.conf\"
+  
+- install-data-local:
+- 	$(INSTALL) -d $(DESTDIR)/var/spool/uptimed
+- 
+  srpm: dist
+  	@(rpmbuild -ts uptimed-$(PACKAGE_VERSION).tar.gz)
+  
+--- 8,13 ----

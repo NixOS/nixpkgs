@@ -1,0 +1,27 @@
+From dc5e3df2fd29a547ef0f9545e190a0ce3a73c95c Mon Sep 17 00:00:00 2001
+From: Tako Marks <me@github.tako.mx>
+Date: Tue, 6 Sep 2022 20:19:26 +0200
+Subject: [PATCH] substitute zfs and zpool commands
+
+---
+ src/storage/storage_backend_zfs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/storage/storage_backend_zfs.c b/src/storage/storage_backend_zfs.c
+index 2a5d74357d..460b3025c4 100644
+--- a/src/storage/storage_backend_zfs.c
++++ b/src/storage/storage_backend_zfs.c
+@@ -33,8 +33,8 @@
+ 
+ VIR_LOG_INIT("storage.storage_backend_zfs");
+ 
+-#define ZFS "zfs"
+-#define ZPOOL "zpool"
++#define ZFS "@zfs@"
++#define ZPOOL "@zpool@"
+ 
+ /*
+  * Some common flags of zfs and zpool commands we use:
+-- 
+2.36.2
+
