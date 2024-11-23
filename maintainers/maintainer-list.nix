@@ -23138,6 +23138,12 @@
     githubId = 11413574;
     name = "Fiona Weber";
   };
+  vieta = {
+    email = "xyzVieta@gmail.com";
+    github = "yVieta";
+    githubId = 94648307;
+    name = "Thanh Viet Nguyen";
+  };
   vifino = {
     email = "vifino@tty.sh";
     github = "vifino";
