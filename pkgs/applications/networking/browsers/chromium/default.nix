@@ -23,7 +23,7 @@
 }:
 
 let
-  stdenv = pkgs.rustc.llvmPackages.stdenv;
+  stdenv = pkgs.rustPackages_1_80.rustc.llvmPackages.stdenv;
 
   # Helper functions for changes that depend on specific versions:
   warnObsoleteVersionConditional = min-version: result:
@@ -60,6 +60,8 @@ let
         hardeningDisable = [ "format" ];
       });
       recompressTarball = callPackage ./recompress-tarball.nix { inherit chromiumVersionAtLeast; };
+      buildPackages = buildPackages // { rustc = buildPackages.rustPackages_1_80.rustc; };
+      pkgsBuildBuild = pkgsBuildBuild // { rustc = pkgsBuildBuild.rustPackages_1_80.rustc; };
     });
 
     browser = callPackage ./browser.nix {
