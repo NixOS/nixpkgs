@@ -1,5 +1,5 @@
-{ lib, stdenv, runtimeShell, pkg-config, gettext, ncurses, CoreFoundation
-, tiles, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, freetype, Cocoa, zlib
+{ lib, stdenv, runtimeShell, pkg-config, gettext, ncurses
+, tiles, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, freetype, zlib
 , debug
 , useXdgDir
 }:
@@ -10,7 +10,7 @@ let
   commonDeps = [
     gettext
     zlib
-  ] ++ optionals stdenv.hostPlatform.isDarwin [ CoreFoundation ];
+  ];
 
   cursesDeps = commonDeps ++ [ ncurses ];
 
@@ -22,8 +22,7 @@ let
       SDL2_mixer
       SDL2_ttf
       freetype
-    ]
-    ++ optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+    ];
 
   patchDesktopFile = ''
     substituteInPlace $out/share/applications/org.cataclysmdda.CataclysmDDA.desktop \
