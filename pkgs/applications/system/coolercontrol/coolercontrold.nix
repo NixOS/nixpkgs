@@ -1,13 +1,15 @@
-{ rustPlatform
-, testers
-, libdrm
-, coolercontrol
-, runtimeShell
+{
+  rustPlatform,
+  testers,
+  libdrm,
+  coolercontrol,
+  runtimeShell,
 }:
 
-{ version
-, src
-, meta
+{
+  version,
+  src,
+  meta,
 }:
 
 rustPlatform.buildRustPackage {
@@ -18,9 +20,7 @@ rustPlatform.buildRustPackage {
   useFetchCargoVendor = true;
   cargoHash = "sha256-ZAjaegUgNkKygXqskyeUkWpcqi1Jt7pE8GtqWlaP6/I=";
 
-  buildInputs = [
-    libdrm
-  ];
+  buildInputs = [ libdrm ];
 
   postPatch = ''
     # copy the frontend static resources to a directory for embedding

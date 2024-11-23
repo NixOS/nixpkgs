@@ -1,20 +1,22 @@
-{ lib
-, rustPlatform
-, dbus
-, freetype
-, gtk3
-, libsoup_3
-, openssl
-, pkg-config
-, webkitgtk_4_1
-, libappindicator
-, makeWrapper
-, coolercontrol
+{
+  lib,
+  rustPlatform,
+  dbus,
+  freetype,
+  gtk3,
+  libsoup_3,
+  openssl,
+  pkg-config,
+  webkitgtk_4_1,
+  libappindicator,
+  makeWrapper,
+  coolercontrol,
 }:
 
-{ version
-, src
-, meta
+{
+  version,
+  src,
+  meta,
 }:
 
 rustPlatform.buildRustPackage {
