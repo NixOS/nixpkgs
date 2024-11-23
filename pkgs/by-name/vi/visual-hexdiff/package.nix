@@ -13,11 +13,6 @@ stdenv.mkDerivation {
     url = "mirror://ubuntu/pool/universe/h/hexdiff/hexdiff_0.0.53.orig.tar.gz";
     hash = "sha256-M1bmkW63pHlfl9zNWEq0EGN1rpVGo+BTUKM9ot4HWqo=";
   };
-  postPatch = ''
-    # Fix compiler error that wants a string literal as format string for `wprintw`
-    substituteInPlace sel_file.c \
-      --replace-fail 'wprintw(win, txt_aide_fs[foo]);' 'wprintw(win, "%s", txt_aide_fs[foo]);'
-  '';
 
   patches = [
     # Some changes the debian/ubuntu developers made over the original source code
@@ -30,6 +25,16 @@ stdenv.mkDerivation {
       stripLen = 1;
     })
   ];
+
+  postPatch = ''
+    # Fix compiler error that wants a string literal as format string for `wprintw`
+    substituteInPlace sel_file.c \
+      --replace-fail 'wprintw(win, txt_aide_fs[foo]);' 'wprintw(win, "%s", txt_aide_fs[foo]);'
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Fix compiler error on Darwin: conflicting types for 'strdup'
+    substituteInPlace sel_file.c \
+      --replace-fail 'char *strdup(char *);' ' '
+  '';
 
   buildInputs = [ ncurses ];
 
