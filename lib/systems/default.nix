@@ -283,7 +283,7 @@ let
           # to an emulator program. That is, if an emulator requires additional
           # arguments, a wrapper should be used.
           if pkgs.stdenv.hostPlatform.canExecute final
-          then pkgs.writeShellScript "exec" ''exec "$@"''
+          then lib.getExe (pkgs.writeShellScriptBin "exec" ''exec "$@"'')
           else if final.isWindows
           then "${wine}/bin/wine${optionalString (final.parsed.cpu.bits == 64) "64"}"
           else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null
