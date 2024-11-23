@@ -34,13 +34,10 @@ stdenv.mkDerivation rec {
   unpackPhase = ''
     # Merge the app and the models from github
     tar -xzpf "${builtins.elemAt srcs 0}" recognize;
-    tar -xzpf "${builtins.elemAt srcs 1}" recognize-${version}/models;
-    mv recognize-${version}/models recognize
+    tar -xzpf "${builtins.elemAt srcs 1}" -C recognize --strip-components=1 recognize-${version}/models
 
     # Place the tensorflow lib at the right place for building
-    cd recognize/node_modules/@tensorflow/tfjs-node/deps
-    tar -xzpf "${builtins.elemAt srcs 2}"
-    cd -
+    tar -xzpf "${builtins.elemAt srcs 2}" -C recognize/node_modules/@tensorflow/tfjs-node/deps
   '';
 
   patchPhase = ''
