@@ -5,6 +5,7 @@
   defusedxml,
   docutils,
   fetchFromGitHub,
+  fetchpatch,
   flit-core,
   jinja2,
   markdown-it-py,
@@ -32,6 +33,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-QbFENC/Msc4pkEOPdDztjyl+2TXtAbMTHPJNAsUB978=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-amsmath-test.patch";
+      url = "https://github.com/executablebooks/MyST-Parser/commit/8ea56455aa87feb2d96bf29c335bca5dc885b77b.patch";
+      hash = "sha256-anlBvZqUSYefs6Hm8MjQUutKYGM0fEVzaiGnsFHv4JQ=";
+    })
+  ];
 
   build-system = [ flit-core ];
 
