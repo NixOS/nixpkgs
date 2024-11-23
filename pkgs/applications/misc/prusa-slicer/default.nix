@@ -77,14 +77,6 @@ let
   wxGTK-override' = if wxGTK-override == null then wxGTK-prusa else wxGTK-override;
 
   patches = [
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/gentoo/gentoo/master/media-gfx/prusaslicer/files/prusaslicer-2.8.0-missing-includes.patch";
-      hash = "sha256-/R9jv9zSP1lDW6IltZ8V06xyLdxfaYrk3zD6JRFUxHg=";
-    })
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/gentoo/gentoo/master/media-gfx/prusaslicer/files/prusaslicer-2.8.0-fixed-linking.patch";
-      hash = "sha256-G1JNdVH+goBelag9aX0NctHFVqtoYFnqjwK/43FVgvM=";
-    })
   ];
 in
 stdenv.mkDerivation (finalAttrs: {
