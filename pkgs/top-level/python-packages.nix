@@ -15139,6 +15139,8 @@ self: super: with self; {
 
   shellingham = callPackage ../development/python-modules/shellingham { };
 
+  shelljob = callPackage ../development/python-modules/shelljob { };
+
   shiboken2 = toPythonModule (callPackage ../development/python-modules/shiboken2 {
     inherit (pkgs) cmake llvmPackages_15 qt5;
   });
