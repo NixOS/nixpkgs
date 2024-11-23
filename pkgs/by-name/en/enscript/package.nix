@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
 
     maintainers = [ ];
     platforms = lib.platforms.all;
+    mainProgram = "enscript";
   };
 }
