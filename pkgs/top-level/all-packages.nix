@@ -5304,10 +5304,7 @@ with pkgs;
 
   spoof-mac = python3Packages.callPackage ../tools/networking/spoof-mac { };
 
-  suricata = callPackage ../applications/networking/ids/suricata {
-    python = python3;
-    libbpf = libbpf_0;
-  };
+  suricata = callPackage ../applications/networking/ids/suricata { };
 
   softhsm = callPackage ../tools/security/softhsm {
     inherit (darwin) libobjc;
