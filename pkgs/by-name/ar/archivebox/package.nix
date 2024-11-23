@@ -10,7 +10,6 @@
 , postlight-parser
 , readability-extractor
 , chromium
-, yt-dlp
 }:
 
 let
@@ -34,6 +33,7 @@ let
             "CVE-2022-28346"
           ];
         };
+        dependencies = (old.dependencies or [ ]) ++ (lib.optionals (python.pythonAtLeast "3.12") [ python.pkgs.distutils ]);
       });
       django-extensions = super.django-extensions.overridePythonAttrs (old: rec {
         version = "3.1.5";
@@ -44,6 +44,8 @@ let
           rev = "e43f383dae3a35237e42f6acfe1207a8e7e7bdf5";
           hash = "sha256-NAMa78KhAuoJfp0Cb0Codz84sRfRQ1JhSLNYRI4GBPM=";
         };
+        patches = [ ];
+        postPatch = null;
 
         # possibly a real issue, but that version is not supported anymore
         doCheck = false;
@@ -62,11 +64,11 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-hdBUEX2tOWN2b11w6aG3x7MP7KQTj4Rwc2w8XvABGf4=";
   };
 
-  nativeBuildInputs = with python.pkgs; [
+  build-system = with python.pkgs; [
     pdm-backend
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python.pkgs; [
     croniter
     dateparser
     django
@@ -87,7 +89,7 @@ python.pkgs.buildPythonApplication rec {
     "--set RIPGREP_BINARY ${lib.meta.getExe ripgrep}"
     "--set WGET_BINARY ${lib.meta.getExe wget}"
     "--set GIT_BINARY ${lib.meta.getExe git}"
-    "--set YOUTUBEDL_BINARY ${lib.meta.getExe yt-dlp}"
+    "--set YOUTUBEDL_BINARY ${lib.meta.getExe python.pkgs.yt-dlp}"
   ] ++ (if (lib.meta.availableOn stdenv.hostPlatform chromium) then [
     "--set CHROME_BINARY ${chromium}/bin/chromium-browser"
   ] else [
