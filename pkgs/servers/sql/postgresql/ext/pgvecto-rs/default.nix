@@ -92,10 +92,9 @@ in
     };
 
     meta = with lib; {
-      # Upstream removed support for PostgreSQL 12 and 13 on 0.3.0: https://github.com/tensorchord/pgvecto.rs/issues/343
+      # Upstream removed support for PostgreSQL 13 on 0.3.0: https://github.com/tensorchord/pgvecto.rs/issues/343
       broken =
-        stdenv.hostPlatform.isDarwin
-        || (versionOlder postgresql.version "14")
+        (versionOlder postgresql.version "14")
         ||
           # PostgreSQL 17 support issue upstream: https://github.com/tensorchord/pgvecto.rs/issues/607
           # Check after next package update.
