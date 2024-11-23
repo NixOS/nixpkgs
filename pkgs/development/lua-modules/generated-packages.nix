@@ -366,16 +366,16 @@ buildLuarocksPackage {
 cyan = callPackage({ argparse, buildLuarocksPackage, fetchFromGitHub, fetchurl, luafilesystem, luasystem, tl }:
 buildLuarocksPackage {
   pname = "cyan";
-  version = "0.3.1-2";
+  version = "0.4.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/cyan-0.3.1-2.rockspec";
-    sha256 = "1fsz3a05blm45qv690w51fa7scqc7l7f3fcj8s8isax89gjbqvgy";
+    url    = "mirror://luarocks/cyan-0.4.0-1.rockspec";
+    sha256 = "0bdbyxmgias8m1xg042j1fbn9qw3mvllmkksz1b4dv85dglh7c2n";
   }).outPath;
   src = fetchFromGitHub {
     owner = "teal-language";
     repo = "cyan";
-    rev = "v0.3.1";
-    hash = "sha256-cqQoWR4lIvYAWp5o9jivpjiILO1ECFhCyXG1+vc2yIM=";
+    rev = "71eaea271bff489d82a9fb575b823b161b996162";
+    hash = "sha256-3RfUTTPu+E21+Z7sMVLeA/gadYeF8fTE+ZMZw8G+trM=";
   };
 
   propagatedBuildInputs = [ argparse luafilesystem luasystem tl ];
