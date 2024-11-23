@@ -612,6 +612,10 @@ in {
     other = {
       system.switch.enable = true;
       users.mutableUsers = true;
+      specialisation.failingCheck.configuration.system.preSwitchChecks.failEveryTime = ''
+        echo this will fail
+        false
+      '';
     };
   };
 
@@ -683,6 +687,11 @@ in {
     )
 
     boot_loader_text = "Warning: do not know how to make this configuration bootable; please enable a boot loader."
+
+    with subtest("pre-switch checks"):
+        machine.succeed("${stderrRunner} ${otherSystem}/bin/switch-to-configuration check")
+        out = switch_to_specialisation("${otherSystem}", "failingCheck", action="check", fail=True)
+        assert_contains(out, "this will fail")
 
     with subtest("actions"):
         # boot action
