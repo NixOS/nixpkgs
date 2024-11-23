@@ -5603,6 +5603,8 @@ self: super: with self; {
 
   google-photos-library-api = callPackage ../development/python-modules/google-photos-library-api { };
 
+  google-play-scraper = callPackage ../development/python-modules/google-play-scraper { };
+
   googlemaps = callPackage ../development/python-modules/googlemaps { };
 
   google-pasta = callPackage ../development/python-modules/google-pasta { };
