@@ -1,8 +1,9 @@
-{ lib
-, clangStdenv
-, fetchurl
-, which
-, gnustep-libobjc
+{
+  lib,
+  clangStdenv,
+  fetchurl,
+  gnustep-libobjc,
+  which,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
@@ -35,11 +36,17 @@ clangStdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    changelog = "https://github.com/gnustep/tools-make/releases/tag/make-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    changelog = "https://github.com/gnustep/tools-make/releases/tag/make-${
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }";
     description = "Build manager for GNUstep";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ ashalkhakov matthewbauer dblsaiko ];
+    maintainers = with lib.maintainers; [
+      ashalkhakov
+      dblsaiko
+      matthewbauer
+    ];
     platforms = lib.platforms.unix;
   };
 })

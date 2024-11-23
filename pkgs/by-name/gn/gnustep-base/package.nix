@@ -1,52 +1,75 @@
-{ lib
-, clangStdenv
-, aspell
-, audiofile
-, gnustep-make
-, wrapGNUstepAppsHook
-, cups
-, fetchzip
-, fetchpatch
-, gmp
-, gnutls
-, libffi
-, binutils-unwrapped
-, libjpeg
-, libtiff
-, libpng
-, giflib
-, libxml2
-, libxslt
-, libiconv
-, gnustep-libobjc
-, libgcrypt
-, icu
-, pkg-config
-, portaudio
-, libiberty
+{
+  lib,
+  clangStdenv,
+  fetchpatch,
+  fetchzip,
+  aspell,
+  audiofile,
+  binutils-unwrapped,
+  cups,
+  giflib,
+  gmp,
+  gnustep-libobjc,
+  gnustep-make,
+  gnutls,
+  icu,
+  libffi,
+  libgcrypt,
+  libiberty,
+  libiconv,
+  libjpeg,
+  libpng,
+  libtiff,
+  libxml2,
+  libxslt,
+  pkg-config,
+  portaudio,
+  wrapGNUstepAppsHook,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "gnustep-base";
   version = "1.29.0";
+
   src = fetchzip {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-base-${finalAttrs.version}.tar.gz";
     hash = "sha256-4fjdsLBsYEDxLOFrq17dKii2sLKvOaFCu0cw3qQtM5U=";
   };
-  outputs = [ "out" "dev" "lib" ];
-  nativeBuildInputs = [ pkg-config gnustep-make wrapGNUstepAppsHook ];
-  propagatedBuildInputs = [
-    aspell audiofile
-    cups
-    gmp gnutls
-    libffi binutils-unwrapped
-    libjpeg libtiff libpng giflib
-    libxml2 libxslt libiconv
-    gnustep-libobjc libgcrypt
-    icu
-    portaudio
-    libiberty
+
+  outputs = [
+    "out"
+    "dev"
+    "lib"
   ];
+
+  nativeBuildInputs = [
+    gnustep-make
+    pkg-config
+    wrapGNUstepAppsHook
+  ];
+
+  propagatedBuildInputs = [
+    aspell
+    audiofile
+    binutils-unwrapped
+    cups
+    giflib
+    gmp
+    gnustep-libobjc
+    gnutls
+    icu
+    libffi
+    libgcrypt
+    libiberty
+    libiconv
+    libjpeg
+    libpng
+    libtiff
+    libxml2
+    libxslt
+    portaudio
+  ];
+
   patches = [
     ./fixup-paths.patch
     # https://github.com/gnustep/libs-base/issues/212 / https://www.sogo.nu/bugs/view.php?id=5416#c15585
@@ -69,11 +92,17 @@ clangStdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://github.com/gnustep/libs-base/releases/tag/base-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    changelog = "https://github.com/gnustep/libs-base/releases/tag/base-${
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }";
     description = "Implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ ashalkhakov matthewbauer dblsaiko ];
+    maintainers = with lib.maintainers; [
+      ashalkhakov
+      dblsaiko
+      matthewbauer
+    ];
     platforms = lib.platforms.linux;
   };
 })

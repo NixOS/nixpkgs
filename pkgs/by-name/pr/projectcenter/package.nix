@@ -1,14 +1,15 @@
-{ lib
-, clangStdenv
-, fetchFromGitHub
-, gnustep-make
-, gnustep-base
-, gnustep-back
-, gnustep-gui
-, gorm
-, gnumake
-, gdb
-, wrapGNUstepAppsHook
+{
+  lib,
+  clangStdenv,
+  fetchFromGitHub,
+  gdb,
+  gnumake,
+  gnustep-back,
+  gnustep-base,
+  gnustep-gui,
+  gnustep-make,
+  gorm,
+  wrapGNUstepAppsHook,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
@@ -22,19 +23,33 @@ clangStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-uXT2UUvMZNc6Fqi2BUXQimbZk8b3IqXzB+A2btBOmms=";
   };
 
-  nativeBuildInputs = [ gnustep-make wrapGNUstepAppsHook ];
+  nativeBuildInputs = [
+    gnustep-make
+    wrapGNUstepAppsHook
+  ];
 
   # NOTE: need a patch for ProjectCenter to help it locate some necessary tools:
   # 1. Framework/PCProjectLauncher.m, locate gdb (say among NIX_GNUSTEP_SYSTEM_TOOLS)
   # 2. Framework/PCProjectBuilder.m, locate gmake (similar)
-  propagatedBuildInputs = [ gnustep-base gnustep-back gnustep-gui gnumake gdb gorm ];
+  propagatedBuildInputs = [
+    gdb
+    gnumake
+    gnustep-back
+    gnustep-base
+    gnustep-gui
+    gorm
+  ];
 
   meta = {
     description = "GNUstep's integrated development environment";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
     mainProgram = "ProjectCenter";
-    maintainers = with lib.maintainers; [ ashalkhakov matthewbauer dblsaiko ];
+    maintainers = with lib.maintainers; [
+      ashalkhakov
+      dblsaiko
+      matthewbauer
+    ];
     platforms = lib.platforms.linux;
   };
 })

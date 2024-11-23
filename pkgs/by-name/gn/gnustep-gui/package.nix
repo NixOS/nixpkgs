@@ -1,9 +1,10 @@
-{ lib
-, clangStdenv
-, gnustep-make
-, wrapGNUstepAppsHook
-, fetchzip
-, gnustep-base
+{
+  lib,
+  clangStdenv,
+  fetchzip,
+  gnustep-base,
+  gnustep-make,
+  wrapGNUstepAppsHook,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
@@ -15,7 +16,11 @@ clangStdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-+4XEJ6PKpantbIbyNroFMaNBTFffkuW/ajSocGQO9Mo=";
   };
 
-  nativeBuildInputs = [ gnustep-make wrapGNUstepAppsHook ];
+  nativeBuildInputs = [
+    gnustep-make
+    wrapGNUstepAppsHook
+  ];
+
   buildInputs = [ gnustep-base ];
 
   patches = [
@@ -23,11 +28,17 @@ clangStdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://github.com/gnustep/libs-gui/releases/tag/gui-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    changelog = "https://github.com/gnustep/libs-gui/releases/tag/gui-${
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }";
     description = "GUI class library of GNUstep";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ ashalkhakov matthewbauer dblsaiko ];
+    maintainers = with lib.maintainers; [
+      ashalkhakov
+      dblsaiko
+      matthewbauer
+    ];
     platforms = lib.platforms.linux;
   };
 })

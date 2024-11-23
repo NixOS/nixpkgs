@@ -1,16 +1,17 @@
-{ lib
-, clangStdenv
-, gnustep-make
-, wrapGNUstepAppsHook
-, cairo
-, fetchzip
-, gnustep-base
-, gnustep-gui
-, fontconfig
-, freetype
-, pkg-config
-, libXft
-, libXmu
+{
+  lib,
+  clangStdenv,
+  fetchzip,
+  cairo,
+  fontconfig,
+  freetype,
+  gnustep-base,
+  gnustep-gui,
+  gnustep-make,
+  libXft,
+  libXmu,
+  pkg-config,
+  wrapGNUstepAppsHook,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
@@ -22,15 +23,32 @@ clangStdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-CjcoXlKiPVPJMOdrBKjxiNauTZvLcId5Lb8DzbgBbBg=";
   };
 
-  nativeBuildInputs = [ gnustep-make pkg-config wrapGNUstepAppsHook ];
-  buildInputs = [ cairo gnustep-base gnustep-gui fontconfig freetype libXft libXmu ];
+  nativeBuildInputs = [
+    gnustep-make
+    pkg-config
+    wrapGNUstepAppsHook
+  ];
+
+  buildInputs = [
+    cairo
+    fontconfig
+    freetype
+    gnustep-base
+    gnustep-gui
+    libXft
+    libXmu
+  ];
 
   meta = {
     description = "Generic backend for GNUstep";
     mainProgram = "gpbs";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ ashalkhakov matthewbauer dblsaiko ];
+    maintainers = with lib.maintainers; [
+      ashalkhakov
+      dblsaiko
+      matthewbauer
+    ];
     platforms = lib.platforms.linux;
   };
 })

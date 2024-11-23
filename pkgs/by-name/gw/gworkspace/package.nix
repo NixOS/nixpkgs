@@ -1,12 +1,13 @@
-{ lib
-, clangStdenv
-, fetchurl
-, gnustep-back
-, gnustep-base
-, gnustep-gui
-, gnustep-make
-, gnustep-systempreferences
-, wrapGNUstepAppsHook
+{
+  lib,
+  clangStdenv,
+  fetchurl,
+  gnustep-back,
+  gnustep-base,
+  gnustep-gui,
+  gnustep-make,
+  gnustep-systempreferences,
+  wrapGNUstepAppsHook,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
@@ -21,8 +22,18 @@ clangStdenv.mkDerivation (finalAttrs: {
   # additional dependencies:
   # - PDFKit framework from http://gap.nongnu.org/
   # - TODO: to --enable-gwmetadata, need libDBKit as well as sqlite!
-  nativeBuildInputs = [ gnustep-make wrapGNUstepAppsHook ];
-  buildInputs = [ gnustep-back gnustep-base gnustep-gui gnustep-systempreferences ];
+  nativeBuildInputs = [
+    gnustep-make
+    wrapGNUstepAppsHook
+  ];
+
+  buildInputs = [
+    gnustep-back
+    gnustep-base
+    gnustep-gui
+    gnustep-systempreferences
+  ];
+
   configureFlags = [ "--with-inotify" ];
 
   meta = {
@@ -30,7 +41,11 @@ clangStdenv.mkDerivation (finalAttrs: {
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
     mainProgram = "GWorkspace";
-    maintainers = with lib.maintainers; [ ashalkhakov matthewbauer dblsaiko ];
+    maintainers = with lib.maintainers; [
+      ashalkhakov
+      dblsaiko
+      matthewbauer
+    ];
     platforms = lib.platforms.linux;
   };
 })
