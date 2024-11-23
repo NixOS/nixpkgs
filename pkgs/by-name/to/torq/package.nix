@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo122Module,
   buildNpmPackage,
   fetchFromGitHub,
 }:
@@ -34,7 +34,7 @@ let
     '';
   };
 in
-buildGoModule rec {
+buildGo122Module rec {
   inherit pname version src;
 
   vendorHash = "sha256-bvisI589Gq9IdyJEqI+uzs3iDPOTUkq95P3n/KoFhF0=";
