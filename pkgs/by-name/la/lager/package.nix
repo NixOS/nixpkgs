@@ -29,7 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-Dlager_BUILD_EXAMPLES=OFF"
   ];
-
+  preConfigure = ''
+    rm BUILD
+  '';
   meta = {
     homepage = "https://github.com/arximboldi/lager";
     description = "C++ library for value-oriented design using the unidirectional data-flow architecture — Redux for C++";
