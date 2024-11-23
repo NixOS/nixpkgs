@@ -191,6 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.cyrusimap.org";
     description = "Email, contacts and calendar server";
+    changelog = "https://www.cyrusimap.org/imap/download/release-notes/${lib.versions.majorMinor finalAttrs.version}/x/${finalAttrs.version}.html";
     license = with lib.licenses; [ bsdOriginal ];
     mainProgram = "cyradm";
     maintainers = with lib.maintainers; [
