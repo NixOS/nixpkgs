@@ -5,6 +5,7 @@
   httpx,
   pillow,
   poetry-core,
+  pydantic,
   pytest-asyncio,
   pytest-httpserver,
   pytestCheckHook,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "ollama";
-  version = "0.3.3";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "ollama";
     repo = "ollama-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-27OJwPvHBxCdaiHk8EQ2s1OeBzgsrzp1MjgKHNgvz+A=";
+    hash = "sha256-ht8ah89IkNeeE7wZannFinY48Zk2bzrHDeYGKB36rWM=";
   };
 
   postPatch = ''
@@ -34,8 +35,10 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
-  dependencies = [ httpx ];
+  dependencies = [
+    httpx
+    pydantic
+  ];
 
   nativeCheckInputs = [
     pillow
