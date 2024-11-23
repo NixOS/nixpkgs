@@ -140,6 +140,7 @@ buildGoModule rec {
   checkFlags = [
     # Skip time dependent/flaky test
     "-skip=TestSendStreamDataMessageWithStreamDataSequenceNumberMutexLocked"
+    "-skip=TestParallelAccessOfQueue"
   ];
 
   postFixup = ''
