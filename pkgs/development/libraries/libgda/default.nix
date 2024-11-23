@@ -20,7 +20,7 @@
   mysqlSupport ? false,
   libmysqlclient,
   postgresSupport ? false,
-  postgresql,
+  libpq,
 }:
 
 stdenv.mkDerivation rec {
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       libmysqlclient
     ]
     ++ lib.optionals postgresSupport [
-      postgresql
+      libpq
     ];
 
   propagatedBuildInputs = [

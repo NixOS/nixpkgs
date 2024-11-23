@@ -7,10 +7,10 @@
   flex,
   gitMinimal,
   lib,
+  libpq,
   libtool,
   libunwind,
   pkg-config,
-  postgresql,
   ripgrep,
   stdenv,
 }:
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     bison
     flex
-    postgresql
+    libpq
   ];
 
   enableParallelBuilding = true;
