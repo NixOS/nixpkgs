@@ -321,7 +321,7 @@ runCommandLocal name
   (
     nameAttrs
     // {
-      inherit nativeBuildInputs meta;
+      inherit nativeBuildInputs;
 
       passthru = passthru // {
         env =
@@ -337,6 +337,10 @@ runCommandLocal name
             '';
         inherit args fhsenv;
       };
+
+      meta = {
+        mainProgram = executableName;
+      } // meta;
     }
   )
   ''
