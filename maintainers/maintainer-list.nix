@@ -23901,6 +23901,12 @@
     githubId = 3992240;
     name = "Elijah Rum";
   };
+  wyzdwdz = {
+    name = "wyzdwdz";
+    email = "wyzdwdz@gmail.com";
+    github = "wyzdwdz";
+    githubId = 12732641;
+  };
   x0ba = {
     name = "x0ba";
     email = "dax@omg.lol";
