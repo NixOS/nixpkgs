@@ -1,0 +1,19 @@
+diff --git a/src/libunicode/CMakeLists.txt b/src/libunicode/CMakeLists.txt
+index bb1a824..166834c 100644
+--- a/src/libunicode/CMakeLists.txt
++++ b/src/libunicode/CMakeLists.txt
+@@ -235,10 +235,10 @@ if(LIBUNICODE_TESTING)
+         # supress conversion warnings for Catch2
+         # https://github.com/catchorg/Catch2/issues/2583
+         # https://github.com/SFML/SFML/blob/e45628e2ebc5843baa3739781276fa85a54d4653/test/CMakeLists.txt#L18-L22
+-        set_target_properties(Catch2 PROPERTIES COMPILE_OPTIONS "" EXPORT_COMPILE_COMMANDS OFF)
+-        set_target_properties(Catch2WithMain PROPERTIES EXPORT_COMPILE_COMMANDS OFF)
+-        get_target_property(CATCH2_INCLUDE_DIRS Catch2 INTERFACE_INCLUDE_DIRECTORIES)
+-        target_include_directories(Catch2 SYSTEM INTERFACE ${CATCH2_INCLUDE_DIRS})
++        # set_target_properties(Catch2 PROPERTIES COMPILE_OPTIONS "" EXPORT_COMPILE_COMMANDS OFF)
++        # set_target_properties(Catch2WithMain PROPERTIES EXPORT_COMPILE_COMMANDS OFF)
++        # get_target_property(CATCH2_INCLUDE_DIRS Catch2 INTERFACE_INCLUDE_DIRECTORIES)
++        # target_include_directories(Catch2 SYSTEM INTERFACE ${CATCH2_INCLUDE_DIRS})
+     endif()
+ 
+     target_link_libraries(unicode_test unicode Catch2::Catch2WithMain)
