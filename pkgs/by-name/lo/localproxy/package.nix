@@ -6,11 +6,11 @@
 , openssl
 , protobuf_21
 , catch2
-, boost181
+, boost
 , icu
 }:
 let
-  boost = boost181.override { enableStatic = true; };
+  boost' = boost.override { enableStatic = true; };
   protobuf = protobuf_21.override { enableShared = false; };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ openssl protobuf catch2 boost icu ];
+  buildInputs = [ openssl protobuf catch2 boost' icu ];
 
   postPatch = ''
     sed -i '/set(OPENSSL_USE_STATIC_LIBS TRUE)/d' CMakeLists.txt
