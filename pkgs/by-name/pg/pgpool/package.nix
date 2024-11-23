@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, postgresql
+, libpq
 , openssl
 , libxcrypt
 , withPam ? stdenv.hostPlatform.isLinux
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    postgresql
+    libpq
     openssl
     libxcrypt
   ] ++ lib.optional withPam pam;

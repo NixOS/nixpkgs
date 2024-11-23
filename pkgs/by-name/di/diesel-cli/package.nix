@@ -6,10 +6,10 @@
   installShellFiles,
   libiconv,
   libmysqlclient,
+  libpq,
   nix-update-script,
   openssl,
   pkg-config,
-  postgresql,
   rustPlatform,
   sqlite,
   testers,
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [ openssl ]
     ++ lib.optional sqliteSupport sqlite
-    ++ lib.optional postgresqlSupport postgresql
+    ++ lib.optional postgresqlSupport libpq
     ++ lib.optionals mysqlSupport [
       libmysqlclient
       zlib

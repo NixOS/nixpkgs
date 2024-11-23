@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   autoreconfHook,
-  postgresql,
+  libpq,
   openssl,
   withLibiodbc ? false,
   libiodbc,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      postgresql
+      libpq
       openssl
     ]
     ++ lib.optional withLibiodbc libiodbc
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     };
 
   configureFlags = [
-    "--with-libpq=${lib.getDev postgresql}/bin/pg_config"
+    "--with-libpq=${lib.getDev libpq}"
   ] ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}";
 
   meta = with lib; {
@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     description = "ODBC driver for PostgreSQL";
     license = licenses.lgpl2;
     platforms = platforms.unix;
-    maintainers = postgresql.meta.maintainers;
+    maintainers = libpq.meta.maintainers;
   };
 }

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
-  postgresql,
+  libpq,
   libgcrypt,
   pam,
   libxcrypt,
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libgcrypt
     pam
-    postgresql
+    libpq
     libxcrypt
   ];
 

@@ -19,7 +19,7 @@
   opencv,
   vigra,
   pdal,
-  postgresql,
+  libpq,
   darwin,
   unixODBC,
   poppler,
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       libharu
       opencv
       vigra
-      postgresql
+      libpq
       libiodbc
       xz
       qhull
