@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tornadoweb";
     repo = "tornado";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-vWiTLKL5gzrf3J6T3u8I1HHg5Ww0sf5ybSbZX6G3UXM=";
   };
 
