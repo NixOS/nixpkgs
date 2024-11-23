@@ -20167,6 +20167,13 @@
     githubId = 251028;
     name = "Shell Turner";
   };
+  shelvacu = {
+    name = "Shelvacu";
+    email = "nix-maint@shelvacu.com";
+    matrix = "@s:consortium.chat";
+    github = "shelvacu";
+    githubId = 1731537;
+  };
   shhht = {
     name = "shhht";
     email = "stp.tjeerd@gmail.com";
