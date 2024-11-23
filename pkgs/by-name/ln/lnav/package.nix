@@ -12,6 +12,9 @@
   automake,
   curl,
   buildPackages,
+  re2c,
+  gpm,
+  libarchive,
   nix-update-script,
 }:
 
@@ -35,6 +38,7 @@ stdenv.mkDerivation rec {
     automake
     zlib
     curl.dev
+    re2c
   ];
   buildInputs = [
     bzip2
@@ -43,6 +47,8 @@ stdenv.mkDerivation rec {
     readline
     sqlite
     curl
+    gpm
+    libarchive
   ];
 
   preConfigure = ''
