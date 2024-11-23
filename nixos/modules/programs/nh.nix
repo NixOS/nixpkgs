@@ -15,10 +15,11 @@ in
     package = lib.mkPackageOption pkgs "nh" { };
 
     flake = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
-        The path that will be used for the `FLAKE` environment variable.
+        Any type of flake refereneces like `github:user/nixos-config` or a path like `/home/user/nixos-config`.
+        The input will be used for the `FLAKE` environment variable.
 
         `FLAKE` is used by nh as the default flake for performing actions, like `nh os switch`.
       '';
