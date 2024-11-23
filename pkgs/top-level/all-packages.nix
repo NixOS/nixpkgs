@@ -1476,8 +1476,6 @@ with pkgs;
     };
   };
 
-  retroarch-assets = callPackage ../applications/emulators/retroarch/retroarch-assets.nix { };
-
   retroarch-joypad-autoconfig = callPackage ../applications/emulators/retroarch/retroarch-joypad-autoconfig.nix { };
 
   libretro = recurseIntoAttrs (callPackage ../applications/emulators/retroarch/cores.nix { });
