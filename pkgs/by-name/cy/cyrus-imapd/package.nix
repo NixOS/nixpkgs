@@ -10,8 +10,6 @@
 
   # fetchers
   fetchFromGitHub,
-  fetchpatch,
-  fetchurl,
 
   # build inputs
   bison,
