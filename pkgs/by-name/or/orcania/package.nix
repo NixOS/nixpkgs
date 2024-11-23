@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DBUILD_ORCANIA_TESTING=on" ];
 
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=constant-conversion"
+    ]
+  );
+
   doCheck = true;
 
   meta = with lib; {
