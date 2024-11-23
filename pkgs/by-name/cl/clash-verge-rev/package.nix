@@ -13,20 +13,20 @@
 }:
 let
   pname = "clash-verge-rev";
-  version = "1.7.7";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-rev";
     rev = "v${version}";
-    hash = "sha256-5sd0CkUCV52wrBPo0IRIa1uqf2QNkjXuZhE33cZW3SY=";
+    hash = "sha256-pvlW5oZWhN1sHauO++dEmAsYp1WeABieM9yJRCZJ9Xc=";
   };
 
   src-service = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-service";
-    rev = "e74e419f004275cbf35a427337d3f8c771408f07"; # no meaningful tags in this repo. The only way is updating manully every time.
-    hash = "sha256-HyRTOqPj4SnV9gktqRegxOYz9c8mQHOX+IrdZlHhYpo=";
+    rev = "8b676086f2770e213cffea08ef31b54b886f8f11"; # no meaningful tags in this repo. The only way is updating manully every time.
+    hash = "sha256-vF26Bp52y2kNHwwtBjy3Of75qJpTriqvul29KmudHww=";
   };
 
   meta-unwrapped = {
@@ -43,7 +43,7 @@ let
     ];
   };
 
-  service-cargo-hash = "sha256-NBeHR6JvdCp06Ug/UEtLY2tu3iCmlsCU0x8umRbJXLU=";
+  service-cargo-hash = "sha256-KzajoblWagleoO4Ns8rbo4Qe/r8regYKxWAG4she74Q=";
 
   service = callPackage ./service.nix {
     inherit
@@ -65,14 +65,14 @@ let
 
   };
 
-  sysproxy-hash = "sha256-TEC51s/viqXUoEH9rJev8LdC2uHqefInNcarxeogePk=";
+  unwrapped-cargo-hash = "sha256-u4U+IZqAM+XYFMLjSAqtoOyHNPskPCt5Mhv30vz6Fso=";
 
   unwrapped = callPackage ./unwrapped.nix {
     inherit
       pname
       version
       src
-      sysproxy-hash
+      unwrapped-cargo-hash
       webui
       ;
     meta = meta-unwrapped;
