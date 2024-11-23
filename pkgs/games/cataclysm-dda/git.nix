@@ -1,5 +1,5 @@
-{ lib, callPackage, CoreFoundation, fetchFromGitHub, fetchpatch, pkgs, wrapCDDA, attachPkgs
-, tiles ? true, Cocoa
+{ lib, callPackage, fetchFromGitHub, fetchpatch, pkgs, wrapCDDA, attachPkgs
+, tiles ? true
 , debug ? false
 , useXdgDir ? false
 , version ? "2024-07-28"
@@ -9,7 +9,7 @@
 
 let
   common = callPackage ./common.nix {
-    inherit CoreFoundation tiles Cocoa debug useXdgDir;
+    inherit tiles debug useXdgDir;
   };
 
   self = common.overrideAttrs (common: rec {
@@ -24,7 +24,7 @@ let
 
     patches = [
       # Unconditionally look for translation files in $out/share/locale
-      ./locale-path-git.patch
+      ./locale-path.patch
     ];
 
     makeFlags = common.makeFlags ++ [
