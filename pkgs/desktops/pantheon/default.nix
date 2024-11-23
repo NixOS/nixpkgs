@@ -115,6 +115,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   granite7 = callPackage ./libraries/granite/7 { };
 
+  pantheon-wayland = callPackage ./libraries/pantheon-wayland { };
+
   #### SERVICES
 
   contractor = callPackage ./services/contractor { };
