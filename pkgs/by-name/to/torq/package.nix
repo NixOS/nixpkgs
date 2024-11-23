@@ -9,6 +9,8 @@ let
   pname = "torq";
   version = "0.18.19";
 
+  # This specific tag doesn't exist anymore on Github and the newer tags don't
+  # contain the source anymore.
   src = fetchFromGitHub {
     owner = "lncapital";
     repo = pname;
