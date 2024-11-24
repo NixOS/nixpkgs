@@ -10,16 +10,16 @@
 
 buildNpmPackage rec {
   pname = "azurite";
-  version = "3.31.0";
+  version = "3.33.0";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "Azurite";
     rev = "v${version}";
-    hash = "sha256-WT1eprN6SBnsfITCopybEHCuxrHvKEhdmVs7xL3cUi0=";
+    hash = "sha256-aH9FAT49y4k87lzerQdgLqi+ZlucORQX4w1NBFtEfMw=";
   };
 
-  npmDepsHash = "sha256-+ptjsz2MDIB/aqu4UxkBLCcehtamFdmswNUsHs23LuE=";
+  npmDepsHash = "sha256-jfa04iWz0aOiFD1YkXn5YEXqQcrY+rIDbVmmUaA5sYc=";
 
   nativeBuildInputs = [ pkg-config python3 ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
