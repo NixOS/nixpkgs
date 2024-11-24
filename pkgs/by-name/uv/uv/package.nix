@@ -12,7 +12,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "uv";
-  version = "0.4.30";
+  version = "0.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
