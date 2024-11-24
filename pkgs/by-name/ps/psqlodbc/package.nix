@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   autoreconfHook,
   postgresql,
   openssl,
@@ -36,10 +37,14 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  passthru = lib.optionalAttrs withUnixODBC {
-    fancyName = "PostgreSQL";
-    driver = "lib/psqlodbcw.so";
-  };
+  passthru =
+    {
+      updateScript = nix-update-script { };
+    }
+    // lib.optionalAttrs withUnixODBC {
+      fancyName = "PostgreSQL";
+      driver = "lib/psqlodbcw.so";
+    };
 
   configureFlags = [
     "--with-libpq=${lib.getDev postgresql}/bin/pg_config"
