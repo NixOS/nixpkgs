@@ -1,10 +1,13 @@
+from __future__ import annotations
+
 import os
 import platform
 import re
+import subprocess
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, ClassVar, Self, TypedDict, override
+from typing import Any, Callable, ClassVar, Self, TypedDict, override
 
 
 class NRError(Exception):
@@ -52,21 +55,41 @@ class Flake:
         return f"{self.path}#{self.attr}"
 
     @classmethod
-    def parse(cls, flake_str: str, hostname: str | None = None) -> Self:
+    def parse(
+        cls,
+        flake_str: str,
+        hostname_fn: Callable[[], str | None] = lambda: None,
+    ) -> Self:
         m = cls._re.match(flake_str)
         assert m is not None, f"got no matches for {flake_str}"
         attr = m.group("attr")
-        nixos_attr = f"nixosConfigurations.{attr or hostname or "default"}"
+        nixos_attr = f"nixosConfigurations.{attr or hostname_fn() or "default"}"
         return cls(Path(m.group("path")), nixos_attr)
 
     @classmethod
-    def from_arg(cls, flake_arg: Any) -> Self | None:
-        hostname = platform.node()
+    def from_arg(cls, flake_arg: Any, target_host: Ssh | None) -> Self | None:
+        def get_hostname() -> str | None:
+            if target_host:
+                from .process import run_wrapper  # circumvent circular import
+
+                try:
+                    return run_wrapper(
+                        ["uname", "-n"],
+                        check=True,
+                        capture_output=True,
+                        allow_tty=False,
+                        remote=target_host,
+                    ).stdout.strip()
+                except (AttributeError, subprocess.CalledProcessError):
+                    return None
+            else:
+                return platform.node()
+
         match flake_arg:
             case str(s):
-                return cls.parse(s, hostname)
+                return cls.parse(s, get_hostname)
             case True:
-                return cls.parse(".", hostname)
+                return cls.parse(".", get_hostname)
             case False:
                 return None
             case _:
@@ -76,7 +99,7 @@ class Flake:
                     # It can be a symlink to the actual flake.
                     if default_path.is_symlink():
                         default_path = default_path.readlink()
-                    return cls.parse(str(default_path.parent), hostname)
+                    return cls.parse(str(default_path.parent), get_hostname)
                 else:
                     return None
 

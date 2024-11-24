@@ -177,8 +177,8 @@ def execute(argv: list[str]) -> None:
     tmpdir_path = Path(tmpdir.name)
 
     profile = Profile.from_name(args.profile_name)
-    flake = Flake.from_arg(args.flake)
     target_host = Ssh.from_arg(args.target_host, not args.no_ssh_tty, tmpdir_path)
+    flake = Flake.from_arg(args.flake, target_host)
 
     if args.upgrade or args.upgrade_all:
         upgrade_channels(bool(args.upgrade_all))
