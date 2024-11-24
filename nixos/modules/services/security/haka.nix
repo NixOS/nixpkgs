@@ -124,7 +124,7 @@ in
       { assertion = cfg.pcap != cfg.nfqueue;
         message = "either pcap or nfqueue can be enabled, not both.";
       }
-      { assertion = cfg.nfqueue -> !dump.enable;
+      { assertion = cfg.nfqueue -> !cfg.dump.enable;
         message = "dump can only be used with nfqueue.";
       }
       { assertion = cfg.interfaces != [];
