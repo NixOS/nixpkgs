@@ -141,6 +141,17 @@ with lib;
         # /etc/NIXOS tag.
         touch /etc/NIXOS
         ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
+
+        # Set password for user nixos if specified on cmdline
+        # Allows using nixos-anywhere in headless environments
+        for o in $(</proc/cmdline); do
+          case "$o" in
+            live.nixos.passwd=*)
+              set -- $(IFS==; echo $o)
+              echo "nixos:$2" | ${pkgs.shadow}/bin/chpasswd
+              ;;
+          esac
+        done
       '';
 
   };
