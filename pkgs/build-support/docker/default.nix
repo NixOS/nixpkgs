@@ -34,9 +34,12 @@
 , writeClosure
 , writeScript
 , writeShellScriptBin
+, writeShellScript
 , writeText
+, writeReferencesGraph
 , writeTextDir
 , writePython3
+, python3
 , zstd
 }:
 
@@ -897,6 +900,36 @@ rec {
 
   buildLayeredImageWithNixDb = args: buildLayeredImage (args // { includeNixDB = true; });
 
+  oldLayeringScript = writeShellScript "layering-script" ''
+    set -euo pipefail
+    referencesGraph=$1
+    unnecessaryDrvsFile=$2
+    availableLayers=$3
+    # Create $maxLayers worth of Docker Layers, one layer per store path
+    # unless there are more paths than $maxLayers. In that case, create
+    # $maxLayers-1 for the most popular layers, and smush the remainaing
+    # store paths in to one final layer.
+    #
+    # The following code is fiddly w.r.t. ensuring every layer is
+    # created, and that no paths are missed. If you change the
+    # following lines, double-check that your code behaves properly
+    # when the number of layers equals:
+    #      maxLayers-1, maxLayers, and maxLayers+1, 0
+    ${python3}/bin/python3 ${../references-by-popularity/closure-graph.py} $1 |
+      { grep -v -F -f $unnecessaryDrvsFile || true; } |
+      jq -sR '
+        rtrimstr("\n") | split("\n")
+          | (.[:$maxLayers-1] | map([.])) + [ .[$maxLayers-1:] ]
+          | map(select(length > 0))
+        ' \
+        --argjson maxLayers "$availableLayers"
+  '';
+
+  defaultLayeringScript = writeScript "layering-script" ''
+    #!${python3}/bin/python3
+    ${builtins.readFile ./layer.py}
+  '';
+
   # Arguments are documented in ../../../doc/build-helpers/images/dockertools.section.md
   streamLayeredImage = lib.makeOverridable (
     {
@@ -919,6 +952,7 @@ rec {
     , includeStorePaths ? true
     , includeNixDB ? false
     , passthru ? {}
+    , layeringScript ? defaultLayeringScript
     ,
     }:
       assert
@@ -1007,6 +1041,8 @@ rec {
         # These derivations are only created as implementation details of docker-tools,
         # so they'll be excluded from the created images.
         unnecessaryDrvs = [ baseJson overallClosure customisationLayer ];
+        referencesGraph = writeReferencesGraph overallClosure;
+        unnecessaryDrvsFile = writeText "unnecessaryDrvs" (lib.concatMapStrings (x: x + "\n") unnecessaryDrvs);
 
         conf = runCommand "${baseName}-conf.json"
           {
@@ -1018,7 +1054,7 @@ rec {
               then tag
               else
                 lib.head (lib.strings.splitString "-" (baseNameOf (builtins.unsafeDiscardStringContext conf.outPath)));
-            paths = buildPackages.referencesByPopularity overallClosure;
+            inherit referencesGraph unnecessaryDrvsFile;
             nativeBuildInputs = [ jq ];
           } ''
           ${if (tag == null) then ''
@@ -1037,12 +1073,6 @@ rec {
           if [[ "$mtime" != "now" ]]; then
               mtime="$(date -Iseconds -d "$mtime")"
           fi
-
-          paths() {
-            cat $paths ${lib.concatMapStringsSep " "
-                           (path: "| (grep -v ${path} || true)")
-                           unnecessaryDrvs}
-          }
 
           # Compute the number of layers that are already used by a potential
           # 'fromImage' as well as the customization layer. Ensure that there is
@@ -1065,23 +1095,7 @@ rec {
           fi
           availableLayers=$(( maxLayers - usedLayers ))
 
-          # Create $maxLayers worth of Docker Layers, one layer per store path
-          # unless there are more paths than $maxLayers. In that case, create
-          # $maxLayers-1 for the most popular layers, and smush the remainaing
-          # store paths in to one final layer.
-          #
-          # The following code is fiddly w.r.t. ensuring every layer is
-          # created, and that no paths are missed. If you change the
-          # following lines, double-check that your code behaves properly
-          # when the number of layers equals:
-          #      maxLayers-1, maxLayers, and maxLayers+1, 0
-          paths |
-            jq -sR '
-              rtrimstr("\n") | split("\n")
-                | (.[:$maxLayers-1] | map([.])) + [ .[$maxLayers-1:] ]
-                | map(select(length > 0))
-              ' \
-              --argjson maxLayers "$availableLayers" > store_layers.json
+          ${layeringScript} $referencesGraph $unnecessaryDrvsFile $availableLayers > store_layers.json
 
           # The index on $store_layers is necessary because the --slurpfile
           # automatically reads the file as an array.

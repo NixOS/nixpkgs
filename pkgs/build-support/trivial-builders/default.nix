@@ -645,6 +645,13 @@ rec {
         substituteAll ${script} $out/nix-support/setup-hook
       '');
 
+  writeReferencesGraph = paths: runCommand "references-graph" {
+    __structuredAttrs = true;
+      exportReferencesGraph.graph = paths;
+      nativeBuildInputs = [ jq ];
+  } ''
+    jq .graph "$NIX_ATTRS_JSON_FILE" > $out
+  '';
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
   # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-writeReferencesToFile

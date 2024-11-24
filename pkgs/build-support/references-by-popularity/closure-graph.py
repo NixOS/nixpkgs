@@ -511,11 +511,10 @@ def package_name(path):
 
 def main():
     filename = sys.argv[1]
-    key = sys.argv[2]
 
     debug("Loading from {}", filename)
     with open(filename) as f:
-        data = json.load(f)
+        graph = json.load(f)
 
     # Data comes in as:
     # [
@@ -535,11 +534,10 @@ def main():
     #   /nix/store/bar,
     #   /nix/store/foo,
     # ]
-    graph = data[key]
 
-    debug("Finding roots from {}", key)
+    debug("Finding roots")
     roots = find_roots(graph);
-    debug("Making lookup for {}", key)
+    debug("Making lookup")
     lookup = make_lookup(graph)
 
     full_graph = {}
