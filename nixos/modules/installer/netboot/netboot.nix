@@ -146,9 +146,13 @@ with lib;
         # Allows using nixos-anywhere in headless environments
         for o in $(</proc/cmdline); do
           case "$o" in
-            live.nixos.passwd=*)
+            live.nixos.passwordHash=*)
               set -- $(IFS==; echo $o)
-              echo "nixos:$2" | ${pkgs.shadow}/bin/chpasswd
+              sed -i "s/nixos::/nixos:$2:/" /etc/shadow
+              ;;
+            live.nixos.password=*)
+              set -- $(IFS==; echo $o)
+              sed -i "s/nixos::/nixos:$(echo $2 | mkpasswd -m sha-512 -s):/" /etc/shadow
               ;;
           esac
         done
