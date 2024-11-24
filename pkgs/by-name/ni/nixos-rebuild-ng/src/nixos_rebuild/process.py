@@ -22,6 +22,7 @@ def run_wrapper(
     check: bool,  # make it explicit so we always know if the code is handling errors
     env: dict[str, str] | None = None,  # replaces the current environment
     extra_env: dict[str, str] | None = None,  # appends to the current environment
+    allow_tty: bool = True,
     remote: Ssh | None = None,
     sudo: bool = False,
     **kwargs: Unpack[RunKwargs],
@@ -34,7 +35,15 @@ def run_wrapper(
             args = ["env", *extra_env_args, *args]
         if sudo:
             args = ["sudo", *args]
-        if remote.tty:
+        if allow_tty:
+            # SSH's TTY will redirect all output to stdout, that may cause
+            # unwanted effects when used
+            assert not kwargs.get(
+                "capture_output"
+            ), "SSH's TTY is incompatible with capture_output"
+            assert not kwargs.get("stderr"), "SSH's TTY is incompatible with stderr"
+            assert not kwargs.get("stdout"), "SSH's TTY is incompatible with stdout"
+        if allow_tty and remote.tty:
             args = ["ssh", "-t", *remote.opts, remote.host, "--", *args]
         else:
             args = ["ssh", *remote.opts, remote.host, "--", *args]
