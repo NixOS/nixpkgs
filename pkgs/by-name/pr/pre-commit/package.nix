@@ -93,7 +93,7 @@ buildPythonApplication rec {
              VIRTUALENV_NO_DOWNLOAD=1 PRE_COMMIT_NO_CONCURRENCY=1 LANG=en_US.UTF-8
 
       # Resolve `.NET location: Not found` errors for dotnet tests
-      export DOTNET_ROOT="${dotnet-sdk.unwrapped}/share/dotnet"
+      export DOTNET_ROOT="${dotnet-sdk}/share/dotnet"
 
       export HOME=$(mktemp -d)
 
