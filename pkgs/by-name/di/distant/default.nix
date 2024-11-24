@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       chipsenkbeil
       westernwontons
+      fe2-Nyxar
     ];
   };
 }
