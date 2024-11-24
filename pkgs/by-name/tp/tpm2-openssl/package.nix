@@ -4,6 +4,7 @@
   autoreconfHook,
   fetchFromGitHub,
   autoconf-archive,
+  nix-update-script,
   pkg-config,
   openssl,
   tpm2-tss,
@@ -35,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     echo ${finalAttrs.version} > VERSION
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "OpenSSL Provider for TPM2 integration";
