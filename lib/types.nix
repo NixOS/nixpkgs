@@ -730,7 +730,7 @@ rec {
             else throw "The option `${showOption loc}` is defined as ${lib.strings.escapeNixIdentifier choice}, but ${lib.strings.escapeNixIdentifier choice} is not among the valid choices (${choicesStr}). Value ${choice} was defined in ${showFiles (getFiles defs)}.";
         nestedTypes = tags;
         functor = defaultFunctor "attrTag" // {
-          type = { tags, ... }: types.attrTag tags;
+          type = { tags }: types.attrTag tags;
           payload = { inherit tags; };
           binOp =
             let
@@ -870,6 +870,69 @@ rec {
           # This also propagates file information to all submodules
           mergedOption = fixupOptionType loc (mergeOptionDecls loc optionModules);
         in mergedOption.type;
+    };
+
+
+    # Adds annotations to the type
+    # Those are stored internally in `functor.payload.annotation`
+    # Merge behavior:
+    # The annotation in itself is not merged in any way.
+    # Both types have exact same annotation -> ok
+    # Only one type has annotation -> ok (the annotation is propagated)
+    # Two differing annotations -> fail
+    annotated = annotation: elemType: mkOptionType {
+      # Inherit all attributes from the original type
+      inherit (elemType)
+        name
+        description
+        descriptionClass
+        check
+        getSubModules
+        substSubModules
+        emptyValue
+        getSubOptions
+        merge
+        nestedTypes
+        deprecationMessage;
+
+      # Add the annotation into the functor
+      functor = (fOrig:
+        let
+          origPayload = if fOrig.payload == null then {} else fOrig.payload;
+
+          # Add the annotation
+          payload = origPayload // {
+            inherit annotation;
+          };
+
+          isTrivial = fOrig.payload == null;
+          origBinOp = if fOrig.payload == null then (a: b: a) else fOrig.binOp;
+          # Wrapp the original binOp with an 'annotation' merging one.
+          binOp = a: b:
+            (
+            let
+              mergedAnnotation = if a.annotation == b.annotation
+              then a.annotation
+              else null;
+              mergedOrigPayload = (origBinOp a b);
+            in mergedOrigPayload // {
+              annotation = mergedAnnotation;
+            });
+
+          finalFunctor = fOrig // {
+            # This function is called by defaultTypeMerge
+            # with the mergedPayload to construct a new type.
+            type = payload:
+              if isTrivial then
+                annotated payload.annotation (types.${elemType.name})
+              else
+                annotated payload.annotation (types.${elemType.name} payload.elemType);
+
+            inherit binOp payload;
+          };
+        in
+          finalFunctor
+      ) elemType.functor;
     };
 
     submoduleWith =
@@ -1047,7 +1110,7 @@ rec {
            then functor.type mt1 mt2
            else null;
       functor = (defaultFunctor name) // {
-        type = { elemType, ... }: types.${name} elemType;
+        type = { elemType }: types.${name} elemType;
         payload = {
           wrapped = deprecatedWrappedAt "Unknown location";
           elemType = [ t1 t2 ];
