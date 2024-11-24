@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   alsa-lib,
-  boost184,
+  boost,
   cmake,
   cryptopp,
   glslang,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    boost184
+    boost
     cryptopp
     glslang
     ffmpeg
