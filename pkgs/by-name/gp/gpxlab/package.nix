@@ -1,8 +1,11 @@
-{ stdenv, mkDerivation, lib, fetchFromGitHub
-, qmake, qttools
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  qt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "gpxlab";
   version = "0.7.0";
 
@@ -13,7 +16,11 @@ mkDerivation rec {
     sha256 = "080vnwcciqblfrbfyz9gjhl2lqw1hkdpbgr5qfrlyglkd4ynjd84";
   };
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [
+    qt5.qmake
+    qt5.qttools
+    qt5.wrapQtAppsHook
+  ];
 
   preConfigure = ''
     lrelease GPXLab/locale/*.ts
