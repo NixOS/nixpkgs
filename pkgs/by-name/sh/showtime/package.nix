@@ -1,40 +1,45 @@
 {
   lib,
-  python3Packages,
-  fetchFromGitLab,
   appstream,
   blueprint-compiler,
   desktop-file-utils,
+  fetchFromGitLab,
   glib,
   gobject-introspection,
   gst_all_1,
+  gtk4,
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
+  python3Packages,
   wrapGAppsHook4,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "showtime";
-  version = "46.3";
+  version = "47.0";
   pyproject = false;
 
   src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
     group = "GNOME";
     owner = "Incubator";
     repo = "showtime";
     rev = "refs/tags/${version}";
-    hash = "sha256-0qT62VoodRcrxYNTtZk+KqxzhflxFU/HPtj2u0wRSH0=";
-    domain = "gitlab.gnome.org";
+    hash = "sha256-Bnz+LFyvwSjkrbePmoVZZqy2pNLqiyJTsZsSuUyDy+E=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     appstream
     blueprint-compiler
     desktop-file-utils
-    glib # for `glib-compile-schemas`
+    glib # For `glib-compile-schemas`
     gobject-introspection
+    gtk4 # For `gtk-update-icon-cache`
     meson
     ninja
     pkg-config
@@ -42,12 +47,12 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gst_all_1.gstreamer
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-rs
     gst_all_1.gst-plugins-ugly
+    gst_all_1.gstreamer
     libadwaita
   ];
 
@@ -57,6 +62,10 @@ python3Packages.buildPythonApplication rec {
   makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
 
   pythonImportsCheck = [ "showtime" ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Watch without distraction";
