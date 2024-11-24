@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ python3 python3.pkgs.wrapPython ];
+  nativeBuildInputs = [
+    python3
+    python3.pkgs.distutils
+    python3.pkgs.wrapPython
+  ];
   buildInputs = [ libsepol ];
   propagatedBuildInputs = [ libselinux libsemanage setools python3.pkgs.ipy ];
 

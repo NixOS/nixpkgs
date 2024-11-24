@@ -1100,6 +1100,7 @@ mapAliases {
   sexp = sexpp; # Added 2023-07-03
   inherit (libsForQt5.mauiPackages) shelf; # added 2022-05-17
   shipyard = jumppad; # Added 2023-06-06
+  signal-desktop-beta = throw "signal-desktop-beta has been removed to make the signal-desktop package easier to maintain";
   shout = nodePackages.shout; # Added unknown; moved 2024-10-19
   sky = throw "'sky' has been removed because its upstream website disappeared"; # Added 2024-07-21
   SkypeExport = skypeexport; # Added 2024-06-12
@@ -1289,6 +1290,7 @@ mapAliases {
   virtscreen = throw "'virtscreen' has been removed, as it was broken and unmaintained"; # Added 2024-10-17
   vkBasalt = vkbasalt; # Added 2022-11-22
   vkdt-wayland = vkdt; # Added 2024-04-19
+  vuze = throw "'vuze' was removed because it is unmaintained upstream and insecure (CVE-2018-13417). BiglyBT is a maintained fork."; # Added 2024-11-22
   inherit (libsForQt5.mauiPackages) vvave; # added 2022-05-17
 
   ### W ###

@@ -49,5 +49,9 @@ rustPlatform.buildRustPackage rec {
       binary-eater
       m1dugh
     ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 }

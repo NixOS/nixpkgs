@@ -2336,7 +2336,6 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_32;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -5293,7 +5292,7 @@ with pkgs;
 
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
-  inherit (callPackage ../applications/networking/instant-messengers/signal-desktop {}) signal-desktop signal-desktop-beta;
+  inherit (callPackage ../applications/networking/instant-messengers/signal-desktop {}) signal-desktop;
 
   slither-analyzer = with python3Packages; toPythonApplication slither-analyzer;
 
@@ -15848,10 +15847,6 @@ with pkgs;
 
   super-slicer-latest = super-slicer.latest;
 
-  bambu-studio = callPackage ../applications/misc/bambu-studio { };
-
-  orca-slicer = callPackage ../applications/misc/bambu-studio/orca-slicer.nix {};
-
   skrooge = libsForQt5.callPackage ../applications/office/skrooge { };
 
   smartdeblur = libsForQt5.callPackage ../applications/graphics/smartdeblur { };
@@ -16335,11 +16330,6 @@ with pkgs;
   code-server = callPackage ../servers/code-server {
     nodejs = nodejs_20;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa CoreServices Security;
-  };
-
-  vuze = callPackage ../applications/networking/p2p/vuze {
-    jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
   whispers = with python3Packages; toPythonApplication whispers;
