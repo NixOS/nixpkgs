@@ -76,7 +76,7 @@ can run:
 # run program
 python -m nixos_rebuild
 # run tests
-python -m pytest
+pytest
 # check types
 mypy .
 # fix lint issues

@@ -46,4 +46,5 @@ extend-select = [
 "tests/" = ["FA102"]
 
 [tool.pytest.ini_options]
+pythonpath = ["."]
 addopts = ["--import-mode=importlib"]
