@@ -11,6 +11,7 @@
 buildGoModule rec {
   pname = "alist";
   version = "3.39.2";
+  webVersion = "3.39.2";
 
   src = fetchFromGitHub {
     owner = "AlistGo";
@@ -29,7 +30,7 @@ buildGoModule rec {
     '';
   };
   web = fetchurl {
-    url = "https://github.com/AlistGo/alist-web/releases/download/${version}/dist.tar.gz";
+    url = "https://github.com/AlistGo/alist-web/releases/download/${webVersion}/dist.tar.gz";
     hash = "sha256-2ZgxWv9VROfXJIIU0Co7BKkjZr8KxQ+0eRsjgz6LVDo=";
   };
 
@@ -45,11 +46,10 @@ buildGoModule rec {
     "-w"
     "-X \"github.com/alist-org/alist/v3/internal/conf.GitAuthor=Xhofe <i@nn.ci>\""
     "-X github.com/alist-org/alist/v3/internal/conf.Version=${version}"
-    "-X github.com/alist-org/alist/v3/internal/conf.WebVersion=${version}"
+    "-X github.com/alist-org/alist/v3/internal/conf.WebVersion=${webVersion}"
   ];
 
   preConfigure = ''
-    # use matched web files
     rm -rf public/dist
     tar -xzf ${web}
     mv -f dist public
