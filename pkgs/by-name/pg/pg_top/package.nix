@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, ncurses, postgresql, cmake, libelf, libbsd }:
+{
+  cmake,
+  fetchurl,
+  lib,
+  libbsd,
+  libelf,
+  ncurses,
+  postgresql,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pg_top";
@@ -9,7 +18,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-WdSiQURJgtBCYoS/maImppcyM8wzUIJzLWmiSZPlx1Q=";
   };
 
-  buildInputs = [ libbsd libelf ncurses postgresql ];
+  buildInputs = [
+    libbsd
+    libelf
+    ncurses
+    postgresql
+  ];
 
   nativeBuildInputs = [ cmake ];
 
