@@ -26,5 +26,8 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = platforms.all;
     maintainers = with maintainers; [ ];
+    knownVulnerabilities = [
+      "CVE-2018-13417"
+    ];
   };
 }
