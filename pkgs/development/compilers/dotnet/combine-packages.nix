@@ -20,7 +20,7 @@ assert lib.assertMsg ((builtins.length dotnetPackages) > 0) ''
          ];`'';
 (buildEnv {
   name = "dotnet-core-combined";
-  paths = map (x: x.unwrapped) dotnetPackages;
+  paths = dotnetPackages;
   pathsToLink = map (x: "/share/dotnet/${x}") [
     "host"
     "packs"
@@ -34,7 +34,7 @@ assert lib.assertMsg ((builtins.length dotnetPackages) > 0) ''
   postBuild =
     ''
       mkdir -p "$out"/share/dotnet
-      cp "${cli.unwrapped}"/share/dotnet/dotnet $out/share/dotnet
+      cp "${cli}"/share/dotnet/dotnet $out/share/dotnet
       cp -R "${cli}"/nix-support "$out"/
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
