@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, nfs-utils, e2fsprogs
 , libxml2, libkrb5, kmod, openldap, sssd, cyrus_sasl, openssl, rpcsvc-proto, pkgconf
-, fetchpatch
+, fetchpatch, libnsl
 }:
 
 stdenv.mkDerivation rec {
@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ linuxHeaders libtirpc libxml2 libkrb5 kmod openldap sssd
-                  openssl cyrus_sasl rpcsvc-proto ];
+                  openssl cyrus_sasl rpcsvc-proto libnsl ];
 
-  nativeBuildInputs = [ flex bison pkgconf ];
+  nativeBuildInputs = [ flex bison pkgconf libnsl.dev ];
 
   meta = {
     description = "Kernel-based automounter";

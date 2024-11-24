@@ -33,12 +33,6 @@ signal-desktop)
     --override-filename "$SCRIPT_DIR/signal-desktop-darwin.nix" \
     signal-desktop
   ;;
-signal-desktop-beta)
-  latestTagBeta=$(curl_github https://api.github.com/repos/signalapp/Signal-Desktop/releases | jq -r ".[0].tag_name")
-  latestVersionBeta="$(expr "$latestTagBeta" : 'v\(.*\)')"
-  echo "Updating signal-desktop-beta for x86_64-linux"
-  nix-update --version "$latestVersionBeta" --system x86_64-linux --override-filename "$SCRIPT_DIR/signal-desktop-beta.nix" signal-desktop-beta
-  ;;
 *)
   echo "Unknown attr path $UPDATE_NIX_ATTR_PATH"
   ;;

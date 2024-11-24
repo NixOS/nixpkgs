@@ -12,13 +12,7 @@
 , attrNamesOnly ? false
 
 # Set this to `null` to build for builtins.currentSystem only
-, systems ? [
-    "aarch64-linux"
-    "aarch64-darwin"
-    #"i686-linux"  # !!!
-    "x86_64-linux"
-    "x86_64-darwin"
-  ]
+, systems ? import ../../ci/supportedSystems.nix
 }:
 let
   lib = import (path + "/lib");

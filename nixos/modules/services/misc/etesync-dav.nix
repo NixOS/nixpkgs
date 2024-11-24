@@ -20,7 +20,7 @@ in
 
       apiUrl = lib.mkOption {
         type = lib.types.str;
-        default = "https://api.etesync.com/";
+        default = "https://api.etebase.com/partner/etesync/";
         description = "The url to the etesync API.";
       };
 

@@ -13060,6 +13060,13 @@
     githubId = 30698906;
     name = "Luna D Dragon";
   };
+  luNeder = {
+    email = "luana@luana.dev.br";
+    matrix = "@luana:catgirl.cloud";
+    github = "LuNeder";
+    githubId = 19750714;
+    name = "Luana Neder";
+  };
   lunik1 = {
     email = "ch.nixpkgs@themaw.xyz";
     matrix = "@lunik1:lunik.one";
