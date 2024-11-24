@@ -4,16 +4,14 @@
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
-  python3Packages,
   rustPlatform,
   versionCheckHook,
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+rustPlatform.buildRustPackage rec {
   pname = "uv";
   version = "0.5.4";
-  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
@@ -22,17 +20,13 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-Kieh76RUrDEwdL04mvCXOqbXHasMMpXRqp0LwMOIHdM=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-ZhHUKotXVDdwJs2kqIxME5I1FitWetx7FrQtluuIUWo=";
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZhHUKotXVDdwJs2kqIxME5I1FitWetx7FrQtluuIUWo=";
 
   nativeBuildInputs = [
     cmake
     installShellFiles
     pkg-config
-    rustPlatform.cargoSetupHook
-    rustPlatform.maturinBuildHook
   ];
 
   dontUseCmakeConfigure = true;
@@ -42,6 +36,8 @@ python3Packages.buildPythonApplication rec {
     "uv"
   ];
 
+  doCheck = false;
+
   postInstall = ''
     export HOME=$TMPDIR
     installShellCompletion --cmd uv \
@@ -49,8 +45,6 @@ python3Packages.buildPythonApplication rec {
       --fish <($out/bin/uv --generate-shell-completion fish) \
       --zsh <($out/bin/uv --generate-shell-completion zsh)
   '';
-
-  pythonImportsCheck = [ "uv" ];
 
   nativeCheckInputs = [
     versionCheckHook
