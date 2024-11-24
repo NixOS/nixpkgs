@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  fetchurl,
+  fetchzip,
   fuse,
   stdenv,
   installShellFiles,
@@ -29,9 +29,9 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  web = fetchurl {
+  web = fetchzip {
     url = "https://github.com/AlistGo/alist-web/releases/download/${webVersion}/dist.tar.gz";
-    hash = "sha256-2ZgxWv9VROfXJIIU0Co7BKkjZr8KxQ+0eRsjgz6LVDo=";
+    hash = "sha256-vc/pwu6TohHVydhMJ5xOXPLogV0WodT/YnGIXtIsLlk=";
   };
 
   proxyVendor = true;
@@ -51,8 +51,7 @@ buildGoModule rec {
 
   preConfigure = ''
     rm -rf public/dist
-    tar -xzf ${web}
-    mv -f dist public
+    cp -r ${web} public/dist
   '';
 
   preBuild = ''
