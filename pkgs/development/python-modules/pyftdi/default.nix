@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pyftdi";
-  version = "0.55.4";
+  version = "0.56.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "eblot";
     repo = "pyftdi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-InJJnbAPYlV071EkEWECJC79HLZ6SWo2VP7PqMgOGow=";
+    hash = "sha256-/MwgBqwN7xmZepdJzyRhZflbCUpGdWEbEGGKkBnKTFI=";
   };
 
   build-system = [ setuptools ];
