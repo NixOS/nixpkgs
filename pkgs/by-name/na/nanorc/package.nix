@@ -37,8 +37,6 @@ in stdenv.mkDerivation rec {
     oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"' | sed 's|\\.|-|g')"
     latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags git@github.com:${owner}/${repo} '*.*.*' | tail --lines=1 | cut --delimiter='/' --fields=3)"
     if [ "$oldVersion" != "$latestTag" ]; then
-      nixpkgs="$(git rev-parse --show-toplevel)"
-      default_nix="$nixpkgs/pkgs/applications/editors/nano/nanorc/default.nix"
       newTag=$(echo $latestTag | sed 's|\.|-|g')
       update-source-version ${pname} "$newTag" --version-key=version --print-changes
     else
