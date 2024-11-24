@@ -1,0 +1,22 @@
+diff --git a/m4/ax_check_gl.m4 b/m4/ax_check_gl.m4
+index 850d407..4c2e4ef 100644
+--- a/m4/ax_check_gl.m4
++++ b/m4/ax_check_gl.m4
+@@ -85,7 +85,7 @@
+ #   modified version of the Autoconf Macro, you may extend this special
+ #   exception to the GPL to apply to your modified version as well.
+ 
+-#serial 23
++#serial 24
+ 
+ # example gl program
+ m4_define([_AX_CHECK_GL_PROGRAM],
+@@ -187,7 +187,7 @@ AC_DEFUN([_AX_CHECK_GL_LINK_CV],
+ AC_DEFUN([_AX_CHECK_GL_MANUAL_LIBS_GENERIC], [
+   AS_IF([test -n "$GL_LIBS"],[], [
+     ax_check_gl_manual_libs_generic_extra_libs="$1"
+-    m4_if($1, [], m4_fatal([$0: argument must not be empty]))
++    m4_if($1, [], [m4_fatal([$0: argument must not be empty])])
+ 
+     _AX_CHECK_GL_SAVE_FLAGS([CFLAGS])
+     AC_SEARCH_LIBS([glBegin],[$ax_check_gl_manual_libs_generic_extra_libs], [

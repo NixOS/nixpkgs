@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs = [ xz ];
+  patches = [
+    ./ax_check_gl.patch
+  ];
 
   meta = with lib; {
     description = "Archive of autoconf m4 macros";
