@@ -22,6 +22,9 @@ mkDerivation rec {
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv GPXLab/GPXLab.app $out/Applications
+
+    mkdir -p $out/bin
+    ln -s $out/Applications/GPXLab.app/Contents/MacOS/GPXLab $out/bin/gpxlab
   '';
 
   meta = with lib; {
