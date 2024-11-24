@@ -1,0 +1,25 @@
+--- a/cmake/Macros/PySideModules.cmake
++++ b/cmake/Macros/PySideModules.cmake
+@@ -176,6 +176,14 @@ macro(create_pyside_module)
+         set(${module_NAME}_glue_dependency ${${module_NAME}_glue})
+     endif()
+ 
++    # Install module doc files.
++    set(${module_NAME}_doc "${CMAKE_CURRENT_SOURCE_DIR}/../doc/${lower_module_name}.rst")
++    set(${module_name}_doc_dependency "")
++    if(EXISTS ${${module_NAME}_doc})
++        install(FILES ${${module_NAME}_doc} DESTINATION share/PySide6${pyside6_SUFFIX}/doc)
++        set(${module_NAME}_doc_dependency ${${module_NAME}_doc})
++    endif()
++
+     # Install standalone glue files into typesystems subfolder, so that the resolved relative
+     # paths remain correct.
+     if (module_GLUE_SOURCES)
+@@ -245,6 +253,7 @@ macro(create_pyside_module)
+                         DEPENDS ${total_type_system_files}
+                                 ${module_GLUE_SOURCES}
+                                 ${${module_NAME}_glue_dependency}
++                                ${${module_NAME}_doc_dependency}
+                         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                         COMMENT "Running generator for ${module_NAME}...")
+ 

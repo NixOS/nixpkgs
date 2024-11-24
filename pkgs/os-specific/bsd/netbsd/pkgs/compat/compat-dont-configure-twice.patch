@@ -1,0 +1,22 @@
+commit f2d0ff85e05b49e9d11735ce4810b242c1dbf5af
+Author: John Ericson <John.Ericson@Obsidian.Systems>
+Date:   Wed Sep 1 15:38:56 2021 +0000
+
+    Make should not hit configure
+
+diff --git a/Makefile b/Makefile
+index b5adb8a5f2e9..1a914ef16739 100644
+--- a/tools/compat/Makefile
++++ b/tools/compat/Makefile
+@@ -76,11 +76,6 @@ _CURDIR:=	${.CURDIR}
+ 
+ SRCS:=		${SRCS:M*.c}
+ 
+-config.cache: include/.stamp configure nbtool_config.h.in defs.mk.in
+-	rm -f ${.TARGET}
+-	CC=${HOST_CC:Q} CFLAGS=${HOST_CFLAGS:Q} LDFLAGS=${HOST_LDFLAGS:Q} \
+-		${HOST_SH} ${.CURDIR}/configure --cache-file=config.cache
+-
+ defs.mk: config.cache
+ 	@touch ${.TARGET}
+ 

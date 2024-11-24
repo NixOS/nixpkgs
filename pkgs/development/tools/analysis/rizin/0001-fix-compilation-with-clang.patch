@@ -1,0 +1,30 @@
+From 93acbc13cf271faf6025e96991eb3ab65062f90f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Sat, 9 Mar 2024 09:35:24 +0100
+Subject: [PATCH] fix compilation with clang
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ librz/analysis/p/analysis_xtensa.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/librz/analysis/p/analysis_xtensa.c b/librz/analysis/p/analysis_xtensa.c
+index 4a32d2037c..f7331ae376 100644
+--- a/librz/analysis/p/analysis_xtensa.c
++++ b/librz/analysis/p/analysis_xtensa.c
+@@ -21,7 +21,8 @@ typedef struct {
+ static bool xtensa_init(void **user) {
+ 	XtensaContext *ctx = RZ_NEW0(XtensaContext);
+ 	rz_return_val_if_fail(ctx, false);
+-	memcpy(ctx->length_table, (int[16]){ 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 8, 8 }, sizeof(ctx->length_table));
++	int temp_length_table[16] = { 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 8, 8 };
++	memcpy(ctx->length_table, temp_length_table, sizeof(ctx->length_table));
+ 	ctx->insn_buffer = NULL;
+ 	ctx->slot_buffer = NULL;
+ 	*user = ctx;
+-- 
+2.43.1
+

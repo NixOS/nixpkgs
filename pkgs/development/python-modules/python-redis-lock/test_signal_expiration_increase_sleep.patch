@@ -1,0 +1,13 @@
+diff --git a/tests/test_redis_lock.py b/tests/test_redis_lock.py
+index ac9e3ef..331ab41 100644
+--- a/tests/test_redis_lock.py
++++ b/tests/test_redis_lock.py
+@@ -552,7 +552,7 @@ def test_signal_expiration(conn, signal_expire, method):
+         lock.release()
+     elif method == 'reset_all':
+         reset_all(conn)
+-    time.sleep(0.5)
++    time.sleep(0.6)
+     assert conn.exists('lock-signal:signal_expiration')
+     time.sleep((signal_expire - 500) / 1000.0)
+     assert conn.llen('lock-signal:signal_expiration') == 0

@@ -1,0 +1,17 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f46144d..aeac3e4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -14,10 +14,10 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
+ option(SUPPORT_SYSTEMD "Support service control via systemd" OFF)
+
+ add_subdirectory(src)
+-install(FILES target-isns.conf DESTINATION /etc/)
++install(FILES target-isns.conf DESTINATION ${CMAKE_INSTALL_PREFIX}/etc/)
+ install(FILES target-isns.8 DESTINATION ${CMAKE_INSTALL_PREFIX}/share/man/man8/)
+ if (SUPPORT_SYSTEMD)
+-  install(FILES target-isns.service DESTINATION /usr/lib/systemd/system/)
++  install(FILES target-isns.service DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/systemd/system/)
+ endif (SUPPORT_SYSTEMD)
+
+ add_subdirectory(tests)

@@ -1,0 +1,21 @@
+diff --git a/lc3sim.c b/lc3sim.c
+index dac7f7a..736fd7c 100644
+--- a/lc3sim.c
++++ b/lc3sim.c
+@@ -665,14 +665,14 @@ init_machine ()
+     bzero (lc3_sym_hash, sizeof (lc3_sym_hash));
+     clear_all_breakpoints ();
+ 
+-    if (read_obj_file (INSTALL_DIR "/lc3os.obj", &os_start, &os_end) == -1) {
++    if (read_obj_file (INSTALL_DIR "/share/lc3tools/lc3os.obj", &os_start, &os_end) == -1) {
+ 	if (gui_mode)
+ 	    puts ("ERR {Failed to read LC-3 OS code.}");
+ 	else
+ 	    puts ("Failed to read LC-3 OS code.");
+ 	show_state_if_stop_visible ();
+     } else {
+-	if (read_sym_file (INSTALL_DIR "/lc3os.sym") == -1) {
++	if (read_sym_file (INSTALL_DIR "/share/lc3tools/lc3os.sym") == -1) {
+ 	    if (gui_mode)
+ 		puts ("ERR {Failed to read LC-3 OS symbols.}");
+ 	    else

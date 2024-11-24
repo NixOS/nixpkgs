@@ -1,0 +1,149 @@
+From 23ddb6ff148ec5c27da050ba0eb7a2e449b8450b Mon Sep 17 00:00:00 2001
+From: Yury Shvedov <yury.shvedov@kaspersky.com>
+Date: Mon, 4 Nov 2024 14:22:22 +0300
+Subject: [PATCH] Gui: take in account module-path argument
+
+Use paths passed with `--module-path` argument to search for preference
+packs
+
+Change-Id: If168dbd99a826757290ee6b918f5b712305fe2bb
+---
+ src/Gui/DlgPreferencePackManagementImp.cpp | 16 +++++----
+ src/Gui/PreferencePackManager.cpp          | 39 +++++++++++++++++-----
+ src/Gui/PreferencePackManager.h            |  5 +++
+ 3 files changed, 44 insertions(+), 16 deletions(-)
+
+diff --git a/src/Gui/DlgPreferencePackManagementImp.cpp b/src/Gui/DlgPreferencePackManagementImp.cpp
+index a1a0dad41a..50f3982f21 100644
+--- a/src/Gui/DlgPreferencePackManagementImp.cpp
++++ b/src/Gui/DlgPreferencePackManagementImp.cpp
+@@ -54,7 +54,7 @@ void DlgPreferencePackManagementImp::showEvent(QShowEvent* event)
+     // but can only disable individual installed packs (though we can completely uninstall the pack's
+     // containing Addon by redirecting to the Addon Manager).
+     auto savedPreferencePacksDirectory = fs::path(App::Application::getUserAppDataDir()) / "SavedPreferencePacks";
+-    auto modDirectory = fs::path(App::Application::getUserAppDataDir()) / "Mod";
++    auto modDirectories = Application::Instance->prefPackManager()->modPaths();
+     auto resourcePath = fs::path(App::Application::getResourceDir()) / "Gui" / "PreferencePacks";
+ 
+     // The displayed tree has two levels: at the toplevel is either "User-Saved Packs" or the name
+@@ -66,12 +66,14 @@ void DlgPreferencePackManagementImp::showEvent(QShowEvent* event)
+     auto builtinPacks = getPacksFromDirectory(resourcePath);
+ 
+     std::map<std::string, std::vector<std::string>> installedPacks;
+-    if (fs::exists(modDirectory) && fs::is_directory(modDirectory)) {
+-        for (const auto& mod : fs::directory_iterator(modDirectory)) {
+-            auto packs = getPacksFromDirectory(mod);
+-            if (!packs.empty()) {
+-                auto modName = mod.path().filename().string();
+-                installedPacks.emplace(modName, packs);
++    for (const auto& modDirectory : modDirectories) {
++        if (fs::exists(modDirectory) && fs::is_directory(modDirectory)) {
++            for (const auto& mod : fs::directory_iterator(modDirectory)) {
++                auto packs = getPacksFromDirectory(mod);
++                if (!packs.empty()) {
++                    auto modName = mod.path().filename().string();
++                    installedPacks.emplace(modName, packs);
++                }
+             }
+         }
+     }
+diff --git a/src/Gui/PreferencePackManager.cpp b/src/Gui/PreferencePackManager.cpp
+index dfc54240c0..83e32fa05e 100644
+--- a/src/Gui/PreferencePackManager.cpp
++++ b/src/Gui/PreferencePackManager.cpp
+@@ -30,6 +30,7 @@
+ #endif
+ 
+ #include <boost/filesystem.hpp>
++#include <boost/algorithm/string.hpp>
+ #include <QDir>
+ 
+ #include "PreferencePackManager.h"
+@@ -134,12 +135,11 @@ void PreferencePack::applyConfigChanges() const
+ }
+ 
+ PreferencePackManager::PreferencePackManager()
++    : _preferencePackPaths(modPaths())
+ {
+-    auto modPath = fs::path(App::Application::getUserAppDataDir()) / "Mod";
+     auto savedPath = fs::path(App::Application::getUserAppDataDir()) / "SavedPreferencePacks";
+     auto resourcePath = fs::path(App::Application::getResourceDir()) / "Gui" / "PreferencePacks";
+-    _preferencePackPaths.push_back(resourcePath);
+-    _preferencePackPaths.push_back(modPath);
++    _preferencePackPaths.insert(_preferencePackPaths.begin(), resourcePath);
+     _preferencePackPaths.push_back(savedPath);
+     rescan();
+ 
+@@ -232,6 +232,26 @@ void Gui::PreferencePackManager::importConfig(const std::string& packName,
+     rescan();
+ }
+ 
++// TODO(Shvedov): Is this suitable place for this method? It is more generic,
++// and maybe more suitable place at Application?
++std::vector<boost::filesystem::path> Gui::PreferencePackManager::modPaths() const
++{
++    auto userModPath = fs::path(App::Application::getUserAppDataDir()) / "Mod";
++
++    auto& config = App::Application::Config();
++    auto additionalModules = config.find("AdditionalModulePaths");
++    std::vector<boost::filesystem::path> result;
++
++    if (additionalModules != config.end()) {
++        boost::split(result,
++                     additionalModules->second,
++                     boost::is_any_of(";"),
++                     boost::token_compress_on);
++    }
++    result.emplace_back(userModPath);
++    return result;
++}
++
+ void Gui::PreferencePackManager::FindPreferencePacksInPackage(const fs::path &mod)
+ {
+     try {
+@@ -528,7 +548,6 @@ std::vector<PreferencePackManager::TemplateFile> PreferencePackManager::template
+     // (alternate spellings are provided for packages using CamelCase and snake_case, and both major English dialects)
+ 
+     auto resourcePath = fs::path(App::Application::getResourceDir()) / "Gui";
+-    auto modPath = fs::path(App::Application::getUserAppDataDir()) / "Mod";
+ 
+     std::string group = "Built-In";
+     if (fs::exists(resourcePath) && fs::is_directory(resourcePath)) {
+@@ -536,11 +555,13 @@ std::vector<PreferencePackManager::TemplateFile> PreferencePackManager::template
+         std::copy(localFiles.begin(), localFiles.end(), std::back_inserter(_templateFiles));
+     }
+ 
+-    if (fs::exists(modPath) && fs::is_directory(modPath)) {
+-        for (const auto& mod : fs::directory_iterator(modPath)) {
+-            group = mod.path().filename().string();
+-            const auto localFiles = scanForTemplateFiles(group, mod);
+-            std::copy(localFiles.begin(), localFiles.end(), std::back_inserter(_templateFiles));
++    for (const auto& modPath : modPaths()) {
++        if (fs::exists(modPath) && fs::is_directory(modPath)) {
++            for (const auto& mod : fs::directory_iterator(modPath)) {
++                group = mod.path().filename().string();
++                const auto localFiles = scanForTemplateFiles(group, mod);
++                std::copy(localFiles.begin(), localFiles.end(), std::back_inserter(_templateFiles));
++            }
+         }
+     }
+ 
+diff --git a/src/Gui/PreferencePackManager.h b/src/Gui/PreferencePackManager.h
+index 301e160df2..e5776e47a0 100644
+--- a/src/Gui/PreferencePackManager.h
++++ b/src/Gui/PreferencePackManager.h
+@@ -191,6 +191,11 @@ namespace Gui {
+          */
+         void importConfig(const std::string &packName, const boost::filesystem::path &path);
+ 
++        /**
++         * Get a list of all mod directories.
++         */
++        std::vector<boost::filesystem::path> modPaths() const;
++
+     private:
+ 
+         void FindPreferencePacksInPackage(const boost::filesystem::path& mod);
+-- 
+2.44.1
+

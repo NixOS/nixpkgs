@@ -1,0 +1,52 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "packages": [
+        "nimtest"
+      ],
+      "path": "/nix/store/5nnqszvrqdmk7pkh5v8kq1i4q056jcss-source",
+      "ref": "v0.1.2",
+      "rev": "17bd3a0f794106428b8592c69832bf48c97b23e2",
+      "sha256": "15bv4vdg55zlbl9drwcp5lqfhfwdgzqlrz5pnfjg321r26rh2q3b",
+      "srcDir": "src",
+      "url": "https://github.com/avahe-kellenberger/nimtest/archive/17bd3a0f794106428b8592c69832bf48c97b23e2.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "parsetoml"
+      ],
+      "path": "/nix/store/nrgl7ks2x3svv6pkdxzr97d6jbd3zhlr-source",
+      "ref": "v0.7.1",
+      "rev": "6e5e16179fa2db60f2f37d8b1af4128aaa9c8aaf",
+      "sha256": "0lsgzbjlgd0h9859yn864y9h9h1v4f5jjk81yvfnlkc9zbwb5kfa",
+      "srcDir": "src",
+      "url": "https://github.com/NimParsers/parsetoml/archive/6e5e16179fa2db60f2f37d8b1af4128aaa9c8aaf.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "safeseq"
+      ],
+      "path": "/nix/store/k04c398bln6yffvajfk8hci47d703cr1-source",
+      "ref": "v1.0.0",
+      "rev": "ee71e961a66db64387e1437ca550d0c8218b099c",
+      "sha256": "01vlih133p3fgfnbiy1i3cq8kipgkpkal0z6jxy975yvz96gcb15",
+      "srcDir": "src",
+      "url": "https://github.com/avahe-kellenberger/safeseq/archive/ee71e961a66db64387e1437ca550d0c8218b099c.tar.gz"
+    },
+    {
+      "method": "fetchzip",
+      "packages": [
+        "x11"
+      ],
+      "path": "/nix/store/8qaywzr8nzsiddjba77nhf75hzmxx0d9-source",
+      "ref": "1.2",
+      "rev": "29aca5e519ebf5d833f63a6a2769e62ec7bfb83a",
+      "sha256": "16npqgmi2qawjxaddj9ax15rfpdc7sqc37i2r5vg23lyr6znq4wc",
+      "srcDir": "",
+      "url": "https://github.com/nim-lang/x11/archive/29aca5e519ebf5d833f63a6a2769e62ec7bfb83a.tar.gz"
+    }
+  ]
+}
