@@ -622,6 +622,11 @@ mapAliases {
   libbencodetools = bencodetools; # Added 2022-07-30
   libbpf_1 = libbpf; # Added 2022-12-06
   libbson = mongoc; # Added 2024-03-11
+  libbitcoin = throw "libbitcoin has been removed as it required an obsolete version of Boost and had no maintainer in Nixpkgs"; # Added 2024-11-24
+  libbitcoin-client = throw "libbitcoin-client has been removed as it required an obsolete version of Boost and had no maintainer in Nixpkgs"; # Added 2024-11-24
+  libbitcoin-explorer = throw "libbitcoin-explorer has been removed as it required an obsolete version of Boost and had no maintainer in Nixpkgs"; # Added 2024-11-24
+  libbitcoin-network = throw "libbitcoin-network has been removed as it required an obsolete version of Boost and had no maintainer in Nixpkgs"; # Added 2024-11-24
+  libbitcoin-protocol = throw "libbitcoin-protocol has been removed as it required an obsolete version of Boost and had no maintainer in Nixpkgs"; # Added 2024-11-24
   libgme = game-music-emu; # Added 2022-07-20
   libgnome-keyring3 = libgnome-keyring; # Added 2024-06-22
   libgpgerror = throw "'libgpgerror' has been renamed to/replaced by 'libgpg-error'"; # Converted to throw 2024-10-17
