@@ -1454,7 +1454,7 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/RETROARCH
 
-  libretro = recurseIntoAttrs (callPackage ../applications/emulators/retroarch/cores.nix { });
+  libretro = recurseIntoAttrs (callPackage ../applications/emulators/libretro { });
 
   retroarch = retroarch-bare.wrapper { };
 
