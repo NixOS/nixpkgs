@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import os
 import subprocess
-from typing import Sequence, TypedDict, Unpack
-
-from .models import Ssh
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Self, Sequence, TypedDict, Unpack
 
 
 # Not exhaustive, but we can always extend it later.
@@ -16,6 +16,28 @@ class RunKwargs(TypedDict, total=False):
     stdout: int | None
 
 
+@dataclass(frozen=True)
+class Remote:
+    host: str
+    opts: list[str]
+    tty: bool
+
+    @classmethod
+    def from_arg(cls, host: str | None, tty: bool | None, tmp_dir: Path) -> Self | None:
+        if host:
+            opts = os.getenv("NIX_SSHOPTS", "").split() + [
+                "-o",
+                "ControlMaster=auto",
+                "-o",
+                f"ControlPath={tmp_dir / "ssh-%n"}",
+                "-o",
+                "ControlPersist=60",
+            ]
+            return cls(host, opts, bool(tty))
+        else:
+            return None
+
+
 def run_wrapper(
     args: Sequence[str | bytes | os.PathLike[str] | os.PathLike[bytes]],
     *,
@@ -23,7 +45,7 @@ def run_wrapper(
     env: dict[str, str] | None = None,  # replaces the current environment
     extra_env: dict[str, str] | None = None,  # appends to the current environment
     allow_tty: bool = True,
-    remote: Ssh | None = None,
+    remote: Remote | None = None,
     sudo: bool = False,
     **kwargs: Unpack[RunKwargs],
 ) -> subprocess.CompletedProcess[str]:

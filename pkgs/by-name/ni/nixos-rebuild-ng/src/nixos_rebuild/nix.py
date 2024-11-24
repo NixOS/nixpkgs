@@ -12,7 +12,7 @@ from .models import (
     GenerationJson,
     NRError,
     Profile,
-    Ssh,
+    Remote,
 )
 from .process import run_wrapper
 from .utils import Args, dict_to_flags, info
@@ -22,7 +22,7 @@ FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
 
 def copy_closure(
     closure: Path,
-    target_host: Ssh | None,
+    target_host: Remote | None,
     **copy_flags: Args,
 ) -> None:
     host = target_host
@@ -303,7 +303,7 @@ def rollback_temporary_profile(profile: Profile) -> Path | None:
 def set_profile(
     profile: Profile,
     path_to_config: Path,
-    target_host: Ssh | None,
+    target_host: Remote | None,
     sudo: bool,
 ) -> None:
     "Set a path as the current active Nix profile."
@@ -318,7 +318,7 @@ def set_profile(
 def switch_to_configuration(
     path_to_config: Path,
     action: Action,
-    target_host: Ssh | None,
+    target_host: Remote | None,
     sudo: bool,
     install_bootloader: bool = False,
     specialisation: str | None = None,

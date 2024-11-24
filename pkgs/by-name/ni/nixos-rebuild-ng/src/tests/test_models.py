@@ -94,9 +94,9 @@ def test_flake_from_arg(mock_node: Any) -> None:
             return_value=subprocess.CompletedProcess([], 0, "remote-hostname\n"),
         ),
     ):
-        assert m.Flake.from_arg("/path/to", m.Ssh("user@host", [], False)) == m.Flake(
-            Path("/path/to"), "nixosConfigurations.remote-hostname"
-        )
+        assert m.Flake.from_arg(
+            "/path/to", m.Remote("user@host", [], False)
+        ) == m.Flake(Path("/path/to"), "nixosConfigurations.remote-hostname")
 
 
 @patch(get_qualified_name(m.Path.mkdir, m), autospec=True)
@@ -113,9 +113,9 @@ def test_profile_from_name(mock_mkdir: Any) -> None:
     mock_mkdir.assert_called_once()
 
 
-def test_ssh_from_name(monkeypatch: Any, tmpdir: Path) -> None:
+def test_remote_from_name(monkeypatch: Any, tmpdir: Path) -> None:
     monkeypatch.setenv("NIX_SSHOPTS", "")
-    assert m.Ssh.from_arg("user@localhost", None, tmpdir) == m.Ssh(
+    assert m.Remote.from_arg("user@localhost", None, tmpdir) == m.Remote(
         "user@localhost",
         [
             "-o",
@@ -129,7 +129,7 @@ def test_ssh_from_name(monkeypatch: Any, tmpdir: Path) -> None:
     )
 
     monkeypatch.setenv("NIX_SSHOPTS", "-f foo -b bar")
-    assert m.Ssh.from_arg("user@localhost", True, tmpdir) == m.Ssh(
+    assert m.Remote.from_arg("user@localhost", True, tmpdir) == m.Remote(
         "user@localhost",
         [
             "-f",

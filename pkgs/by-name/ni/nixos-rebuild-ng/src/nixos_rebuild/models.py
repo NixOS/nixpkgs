@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 import platform
 import re
 import subprocess
@@ -8,6 +7,8 @@ from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Any, Callable, ClassVar, Self, TypedDict, override
+
+from .process import Remote, run_wrapper
 
 
 class NRError(Exception):
@@ -67,11 +68,9 @@ class Flake:
         return cls(Path(m.group("path")), nixos_attr)
 
     @classmethod
-    def from_arg(cls, flake_arg: Any, target_host: Ssh | None) -> Self | None:
+    def from_arg(cls, flake_arg: Any, target_host: Remote | None) -> Self | None:
         def get_hostname() -> str | None:
             if target_host:
-                from .process import run_wrapper  # circumvent circular import
-
                 try:
                     return run_wrapper(
                         ["uname", "-n"],
@@ -136,25 +135,3 @@ class Profile:
                 path = Path("/nix/var/nix/profiles/system-profiles") / name
                 path.parent.mkdir(mode=0o755, parents=True, exist_ok=True)
                 return cls(name, path)
-
-
-@dataclass(frozen=True)
-class Ssh:
-    host: str
-    opts: list[str]
-    tty: bool
-
-    @classmethod
-    def from_arg(cls, host: str | None, tty: bool | None, tmp_dir: Path) -> Self | None:
-        if host:
-            opts = os.getenv("NIX_SSHOPTS", "").split() + [
-                "-o",
-                "ControlMaster=auto",
-                "-o",
-                f"ControlPath={tmp_dir / "ssh-%n"}",
-                "-o",
-                "ControlPersist=60",
-            ]
-            return cls(host, opts, bool(tty))
-        else:
-            return None

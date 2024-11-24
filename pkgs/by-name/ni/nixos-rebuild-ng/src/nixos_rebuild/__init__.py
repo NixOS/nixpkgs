@@ -7,7 +7,7 @@ from subprocess import run
 from tempfile import TemporaryDirectory
 from typing import assert_never
 
-from .models import Action, Flake, NRError, Profile, Ssh
+from .models import Action, Flake, NRError, Profile
 from .nix import (
     copy_closure,
     edit,
@@ -22,6 +22,7 @@ from .nix import (
     switch_to_configuration,
     upgrade_channels,
 )
+from .process import Remote
 from .utils import flags_to_dict, info
 
 VERBOSE = 0
@@ -177,7 +178,7 @@ def execute(argv: list[str]) -> None:
     tmpdir_path = Path(tmpdir.name)
 
     profile = Profile.from_name(args.profile_name)
-    target_host = Ssh.from_arg(args.target_host, not args.no_ssh_tty, tmpdir_path)
+    target_host = Remote.from_arg(args.target_host, not args.no_ssh_tty, tmpdir_path)
     flake = Flake.from_arg(args.flake, target_host)
 
     if args.upgrade or args.upgrade_all:

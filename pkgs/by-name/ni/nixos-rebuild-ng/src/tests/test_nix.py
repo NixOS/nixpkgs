@@ -18,7 +18,7 @@ def test_copy_closure(mock_run: Any) -> None:
     n.copy_closure(closure, None)
     mock_run.assert_not_called()
 
-    target_host = m.Ssh("user@host", ["--ssh", "opt"], False)
+    target_host = m.Remote("user@host", ["--ssh", "opt"], False)
     n.copy_closure(closure, target_host)
     mock_run.assert_called_with(
         ["nix-copy-closure", "--to", "user@host", closure],
@@ -366,7 +366,7 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
             Path("/path/to/config"),
             m.Action.TEST,
             sudo=True,
-            target_host=m.Ssh("user@localhost", [], False),
+            target_host=m.Remote("user@localhost", [], False),
             install_bootloader=True,
             specialisation="special",
         )
@@ -378,7 +378,7 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
         extra_env={"NIXOS_INSTALL_BOOTLOADER": "1"},
         check=True,
         sudo=True,
-        remote=m.Ssh("user@localhost", [], False),
+        remote=m.Remote("user@localhost", [], False),
     )
 
 
