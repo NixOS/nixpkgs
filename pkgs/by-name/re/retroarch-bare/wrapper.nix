@@ -1,7 +1,7 @@
 {
   lib,
   libretro,
-  makeWrapper,
+  makeBinaryWrapper,
   retroarch-bare,
   runCommand,
   symlinkJoin,
@@ -41,7 +41,7 @@ symlinkJoin {
 
   paths = [ retroarch-bare ] ++ cores;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   passthru = {
     inherit cores;

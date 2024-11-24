@@ -21,7 +21,7 @@
   libxkbcommon,
   libxml2,
   libXxf86vm,
-  makeWrapper,
+  makeBinaryWrapper,
   mbedtls_2,
   mesa,
   nixosTests,
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     qt5.wrapQtAppsHook
-  ] ++ lib.optional withWayland wayland ++ lib.optional (runtimeLibs != [ ]) makeWrapper;
+  ] ++ lib.optional withWayland wayland ++ lib.optional (runtimeLibs != [ ]) makeBinaryWrapper;
 
   buildInputs =
     [
@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
         inherit
           lib
           libretro
-          makeWrapper
+          makeBinaryWrapper
           retroarch-bare
           runCommand
           symlinkJoin
