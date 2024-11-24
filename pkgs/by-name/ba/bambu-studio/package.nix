@@ -8,11 +8,12 @@
   wrapGAppsHook3,
   boost180,
   cereal,
-  cgal_5,
+  cgal,
   curl,
   dbus,
   eigen,
   expat,
+  ffmpeg,
   gcc-unwrapped,
   glew,
   glfw,
@@ -55,13 +56,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.09.07.52";
+  version = "01.10.01.50";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-fhH4N29P/ysdHHbZt+FnBl3+QtTNhbVE3j4ZnFJyJH0=";
+    hash = "sha256-7mkrPl2CQSfc1lRjl1ilwxdYcK5iRU//QGKmdCicK30=";
   };
 
   nativeBuildInputs = [
@@ -74,11 +75,12 @@ stdenv.mkDerivation rec {
     binutils
     boost180
     cereal
-    cgal_5
+    cgal
     curl
     dbus
     eigen
     expat
+    ffmpeg
     gcc-unwrapped
     glew
     glfw
@@ -109,8 +111,6 @@ stdenv.mkDerivation rec {
   patches = [
     # Fix for webkitgtk linking
     ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
-    # Fix build with cgal-5.6.1+
-    ./patches/meshboolean-const.patch
     # Fix an issue with
     ./patches/dont-link-opencv-world-bambu.patch
   ];
@@ -148,6 +148,9 @@ stdenv.mkDerivation rec {
     "-DSLIC3R_STATIC=0"
     "-DSLIC3R_FHS=1"
     "-DSLIC3R_GTK=3"
+
+    # Skips installing ffmpeg, since we BYO.
+    "-DFLATPAK=1"
 
     # BambuStudio-specific
     "-DBBL_RELEASE_TO_PUBLIC=1"

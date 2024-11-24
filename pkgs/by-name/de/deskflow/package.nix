@@ -32,13 +32,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "deskflow";
-  version = "1.17.1";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "deskflow";
     repo = "deskflow";
-    rev = "v${version}";
-    hash = "sha256-cEKG9MwENbZqrfRdwiZtRWmIfRndrWUoaZQ5O7YRpBs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CHlvL/MC9clFrMxlfIXaCFoTkcLS7QsYK7MXMFW0188=";
   };
 
   postPatch = ''
@@ -87,22 +87,32 @@ stdenv.mkDerivation rec {
     lerc
   ];
 
-  postInstall = ''
-    substituteInPlace $out/share/applications/deskflow.desktop \
-        --replace-fail "Path=/usr/bin" "Path=$out/bin" \
-        --replace-fail "Exec=/usr/bin/deskflow" "Exec=deskflow"
-  '';
-
   qtWrapperArgs = [
     "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qt6.qtwayland}/${qt6.qtbase.qtPluginPrefix}/platforms"
   ];
+
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+
+    export QT_QPA_PLATFORM=offscreen
+    export HOME=$(mktemp -d)
+    ./bin/unittests
+    ./bin/integtests
+
+    runHook postCheck
+  '';
 
   meta = {
     homepage = "https://github.com/deskflow/deskflow";
     description = "Share one mouse and keyboard between multiple computers on Windows, macOS and Linux";
     mainProgram = "deskflow";
     maintainers = with lib.maintainers; [ aucub ];
-    license = lib.licenses.gpl2Plus;
+    license = with lib; [
+      licenses.gpl2Plus
+      licenses.openssl
+    ];
     platforms = lib.platforms.linux;
   };
 }
