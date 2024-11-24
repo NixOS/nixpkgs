@@ -230,7 +230,9 @@ def execute(argv: list[str]) -> None:
         case Action.TEST | Action.BUILD | Action.DRY_BUILD | Action.DRY_ACTIVATE:
             info("building the system configuration...")
             dry_run = action == Action.DRY_BUILD
-            if args.rollback and action in (Action.TEST, Action.BUILD):
+            if args.rollback:
+                if action not in (Action.TEST, Action.BUILD):
+                    raise NRError(f"--rollback is incompatible with '{action}'")
                 maybe_path_to_config = rollback_temporary_profile(profile)
                 if maybe_path_to_config:  # kinda silly but this makes mypy happy
                     path_to_config = maybe_path_to_config
