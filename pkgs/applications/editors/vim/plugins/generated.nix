@@ -4488,6 +4488,17 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/gitignore.vim/";
   };
 
+  gitlab-vim = buildVimPlugin {
+    pname = "gitlab.vim";
+    version = "2024-11-22";
+    src = fetchgit {
+      url = "https://gitlab.com/gitlab-org/editor-extensions/gitlab.vim";
+      rev = "5e129155341ccb94d4a93b336e6d936f11edb77d";
+      sha256 = "0nhhlcw716qhzhvqzc784xq2c104ahrzwhhzmasadk9c269s9vfd";
+    };
+    meta.homepage = "https://gitlab.com/gitlab-org/editor-extensions/gitlab.vim";
+  };
+
   gitlinker-nvim = buildVimPlugin {
     pname = "gitlinker.nvim";
     version = "2023-02-03";
