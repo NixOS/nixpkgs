@@ -20,13 +20,13 @@
 
 melpaBuild {
   pname = "voicemacs";
-  version = "0-unstable-2024-01-03";
+  version = "0-unstable-2024-10-11";
 
   src = fetchFromGitHub {
     owner = "jcaw";
     repo = "voicemacs";
-    rev = "d93f15d855d61f78827d78c9ca3508766266366c";
-    hash = "sha256-D/5+3SgECEb7A8qQqsAV1TQr+lA8EyOjf6NesnV2gos=";
+    rev = "d8dade06a48994ff04f48e1177eed4e9243cbcb1";
+    hash = "sha256-kCuwjMl3pPWQNoXEl+oK6YoOLpk8kazLb69RwiGltAA=";
   };
 
   patches = [

@@ -57,6 +57,7 @@
   taskwarrior3,
   tmux,
   tup,
+  typescript,
   vim,
   which,
   xkb-switch,
@@ -2608,6 +2609,14 @@ in
   todo-comments-nvim = super.todo-comments-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
     nvimRequireCheck = "todo-comments";
+  };
+
+  tsc-nvim = super.tsc-nvim.overrideAttrs {
+    patches = [ ./patches/tsc.nvim/fix-path.patch ];
+
+    postPatch = ''
+      substituteInPlace lua/tsc/utils.lua --replace '@tsc@' ${typescript}/bin/tsc
+    '';
   };
 
   tssorter-nvim = super.tssorter-nvim.overrideAttrs {

@@ -36,7 +36,8 @@ in
     networking.nftables.enable = true;
   };
 
-  testScript = ''
+  testScript = # python
+  ''
     def instance_is_up(_) -> bool:
         status, _ = machine.execute("incus exec container --disable-stdin --force-interactive /run/current-system/sw/bin/systemctl -- is-system-running")
         return status == 0
@@ -93,6 +94,13 @@ in
             meminfo = machine.succeed("incus exec container grep -- MemTotal /proc/meminfo").strip()
             meminfo_bytes = " ".join(meminfo.split(' ')[-2:])
             assert meminfo_bytes == "125000 kB", f"Wrong amount of memory reported from /proc/meminfo, want: '125000 kB', got: '{meminfo_bytes}'"
+
+    with subtest("virtual tpm can be configured"):
+        machine.succeed("incus config device add container vtpm tpm path=/dev/tpm0 pathrm=/dev/tpmrm0")
+        machine.succeed("incus exec container -- test -e /dev/tpm0")
+        machine.succeed("incus exec container -- test -e /dev/tpmrm0")
+        machine.succeed("incus config device remove container vtpm")
+        machine.fail("incus exec container -- test -e /dev/tpm0")
 
     with subtest("lxc-generator"):
         with subtest("lxc-container generator configures plain container"):

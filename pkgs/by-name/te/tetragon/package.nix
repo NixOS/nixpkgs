@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tetragon";
-  version = "0.11.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "cilium";
@@ -39,6 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     make tetragon-bpf
     runHook postBuild
   '';
+
+  # For BPF compilation
+  hardeningDisable = [
+    "zerocallusedregs"
+  ];
 
   postPatch = ''
     substituteInPlace bpf/Makefile --replace '/bin/bash' '${lib.getExe bash}'

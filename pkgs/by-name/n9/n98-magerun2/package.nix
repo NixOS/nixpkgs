@@ -15,7 +15,7 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-OPvyZ0r7Zt4PC+rmRtBm9EkbaE4PeovnUHrhzXUqT8E=";
   };
 
-  vendorHash = "sha256-E2V5ARNCmGOmGGctfcjpW49cxFBcWyJEodBNjHhKQ+w=";
+  vendorHash = "sha256-604n3Z4R2+zca+NN75Y7afa2Y6Y6ussxE+MEQsDLWsg=";
 
   meta = {
     changelog = "https://magerun.net/category/magerun/";

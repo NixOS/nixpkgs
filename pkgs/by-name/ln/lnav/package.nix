@@ -1,17 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pcre2
-, sqlite
-, ncurses
-, readline
-, zlib
-, bzip2
-, autoconf
-, automake
-, curl
-, buildPackages
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pcre2,
+  sqlite,
+  ncurses,
+  readline,
+  zlib,
+  bzip2,
+  autoconf,
+  automake,
+  curl,
+  buildPackages,
+  re2c,
+  gpm,
+  libarchive,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,6 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
+  separateDebugInfo = true;
 
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -34,6 +39,7 @@ stdenv.mkDerivation rec {
     automake
     zlib
     curl.dev
+    re2c
   ];
   buildInputs = [
     bzip2
@@ -42,6 +48,8 @@ stdenv.mkDerivation rec {
     readline
     sqlite
     curl
+    gpm
+    libarchive
   ];
 
   preConfigure = ''
@@ -64,7 +72,10 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/tstack/lnav/releases";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ dochang ];
+    maintainers = with maintainers; [
+      dochang
+      symphorien
+    ];
     platforms = platforms.unix;
     mainProgram = "lnav";
   };
