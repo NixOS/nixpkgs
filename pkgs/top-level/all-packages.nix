@@ -16626,12 +16626,6 @@ with pkgs;
 
   ledger-agent = with python3Packages; toPythonApplication ledger-agent;
 
-  litecoin  = libsForQt5.callPackage ../applications/blockchains/litecoin {
-    inherit (darwin.apple_sdk.frameworks) AppKit;
-    boost = pkgs.boost177;
-  };
-  litecoind = litecoin.override { withGui = false; };
-
   monero-cli = callPackage ../applications/blockchains/monero-cli {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit;
   };
