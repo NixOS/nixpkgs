@@ -298,7 +298,7 @@
 , libXext
 , libxml2
 , libXv
-, nv-codec-headers
+, nv-codec-headers-9
 , nv-codec-headers-12
 , ocl-icd # OpenCL ICD
 , openal
@@ -757,7 +757,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withDvdnav [ libdvdnav ]
   ++ optionals withDvdread [ libdvdread ]
   ++ optionals withFdkAac [ fdk_aac ]
-  ++ optionals withNvcodec [ (if (lib.versionAtLeast version "6") then nv-codec-headers-12 else nv-codec-headers) ]
+  ++ optionals withNvcodec [ (if (lib.versionAtLeast version "6") then nv-codec-headers-12 else nv-codec-headers-9) ]
   ++ optionals withFlite [ flite ]
   ++ optionals withFontconfig [ fontconfig ]
   ++ optionals withFreetype [ freetype ]
