@@ -534,6 +534,17 @@ let
             # mis-compilation in firefox.
             # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
             (metadata.getVersionFile "clang/revert-malloc-alignment-assumption.patch")
+          ++ lib.optional (lib.versionOlder metadata.release_version "17") (
+            if lib.versionAtLeast metadata.release_version "14" then
+              fetchpatch {
+                name = "ignore-nostd-link.patch";
+                url = "https://github.com/llvm/llvm-project/commit/5b77e752dcd073846b89559d6c0e1a7699e58615.patch";
+                relative = "clang";
+                hash = "sha256-qzSAmoGY+7POkDhcGgQRPaNQ3+7PIcIc9cZuiE/eLkc=";
+              }
+            else
+              ./clang/ignore-nostd-link-13.diff
+          )
           ++ [
             (substituteAll {
               src =
