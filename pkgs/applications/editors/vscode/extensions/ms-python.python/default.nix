@@ -88,6 +88,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     changelog = "https://github.com/microsoft/vscode-python/releases";
     license = lib.licenses.mit;
     platforms = [
+      "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
       "x86_64-darwin"
