@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, sqlite, http-parser, icu, bash
+{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, http-parser, icu, bash
 , ninja, pkgconf, unixtools, runCommand, buildPackages
 , testers
 # for `.pkgs` attribute
@@ -97,15 +97,8 @@ let
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
 
   useSharedHttpParser = !stdenv.hostPlatform.isDarwin && lib.versionOlder "${majorVersion}.${minorVersion}" "11.4";
-  useSharedSQLite = lib.versionAtLeast version "22.5";
 
-  sharedLibDeps = {
-    inherit openssl zlib libuv;
-  } // (lib.optionalAttrs useSharedHttpParser {
-    inherit http-parser;
-  }) // (lib.optionalAttrs useSharedSQLite {
-    inherit sqlite;
-  });
+  sharedLibDeps = { inherit openssl zlib libuv; } // (lib.optionalAttrs useSharedHttpParser { inherit http-parser; });
 
   copyLibHeaders =
     map
@@ -158,8 +151,7 @@ let
     # wrappers over the corresponding JS scripts. There are some packages though
     # that use bash wrappers, e.g. polaris-web.
     buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ApplicationServices ]
-      ++ [ zlib libuv openssl http-parser icu bash ]
-      ++ lib.optionals useSharedSQLite [ sqlite ];
+      ++ [ zlib libuv openssl http-parser icu bash ];
 
     nativeBuildInputs =
       [
