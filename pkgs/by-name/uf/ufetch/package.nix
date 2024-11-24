@@ -9,16 +9,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ufetch";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitLab {
     owner = "jschx";
     repo = "ufetch";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1LtVCJrkdI2AUdF5d/OBCoSqjlbZI810cxtcuOs/YWs=";
+    hash = "sha256-icrf7OjDageBRSBD40wX2ZzCvB6T5n0jgd5aRROGqCA=";
   };
-
-  patches = [ ./0001-optimize-packages-command.patch ];
 
   installPhase = ''
     runHook preInstall
