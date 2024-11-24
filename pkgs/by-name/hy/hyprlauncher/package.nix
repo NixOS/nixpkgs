@@ -6,21 +6,22 @@
   glib,
   pango,
   gtk4,
+  gtk4-layer-shell,
   wrapGAppsHook4,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hyprlauncher";
-  version = "0.1.2";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "hyprutils";
     repo = "hyprlauncher";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SxsCfEHrJpFSi2BEFFqmJLGJIVzkluDU6ogKkTRT9e8=";
+    hash = "sha256-E6/V9p5YIjg3/Svw70GwY1jibkg2xnzdAvmphc0xbQQ=";
   };
 
-  cargoHash = "sha256-MENreS+DXdJIurWUqHbeb0cCJlRnjjW1bmGdg0QoxlQ=";
+  cargoHash = "sha256-gkBpBlBR9Y2dkuqK7X/sxKdS9staFsbHv3Slg9UvP3A=";
 
   strictDeps = true;
 
@@ -32,6 +33,7 @@ rustPlatform.buildRustPackage rec {
     glib
     pango
     gtk4
+    gtk4-layer-shell
   ];
 
   meta = {
