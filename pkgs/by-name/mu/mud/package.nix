@@ -1,25 +1,24 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   python3Packages,
-  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mud";
-  version = "1.0.1";
+  version = "1.0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jasursadikov";
     repo = "mud";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pW4B4+RN7hKtG2enJ33OHBeGsLj8w20ylvjcOL6owAk=";
+    hash = "sha256-UPlAA63iANuChpqWLUDHQrcRjYkHvLcwXW/lVrAfY20=";
   };
 
   build-system = with python3Packages; [
     hatchling
+    setuptools-scm
   ];
 
   dependencies = with python3Packages; [
@@ -28,14 +27,9 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "mud" ];
 
-  # Version checking fails on darwin with:
-  # PermissionError: [Errno 1] Operation not permitted: '/var/empty/.mudsettings'
-  # despite adding `export HOME=$(mktemp -d)` in the `preVersionCheck` phase.
-  # The tool
-  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = [ "--version" ];
+  # Removed versionCheckHook due to conflict with the new release,
+  # a mud config file is required to run the version check command.
+  # Mud can only be initialized in a directory containing git repos.
 
   meta = {
     description = "multi-directory git runner which allows you to run git commands in a multiple repositories";

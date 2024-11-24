@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nu_plugin_skim";
-  version = "0.8.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "idanarye";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3q2qt35lZ07N8E3p4/BoYX1H4B8qcKXJWnZhdJhgpJE=";
+    hash = "sha256-cPM4Z1o2ED8Q5u9AcnwBv+SOvuE2C4NO9xC7PfX+ntk=";
   };
 
-  cargoHash = "sha256-+RYrQsB8LVjxZsQ7dVDK6GT6nXSM4b+qpILOe0Q2SjA=";
+  cargoHash = "sha256-93GSnw/3Ms83bYEyRRc2sguUpR7BIWz8hgqzXdU5CF4=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -50,6 +50,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/idanarye/nu_plugin_skim";
     license = licenses.mit;
     maintainers = with maintainers; [ aftix ];
-    platforms = with platforms; all;
+    platforms = platforms.all;
   };
 }
