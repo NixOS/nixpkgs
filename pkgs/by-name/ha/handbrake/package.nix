@@ -27,7 +27,7 @@
   writeText,
   # Processing, video codecs, containers
   ffmpeg_7-full,
-  nv-codec-headers,
+  nv-codec-headers-9,
   libogg,
   x264,
   x265,
@@ -294,7 +294,7 @@ let
       ]
       # NOTE: 2018-12-27: Handbrake supports nv-codec-headers for Linux only,
       # look at ./make/configure.py search "enable_nvenc"
-      ++ optional stdenv.hostPlatform.isLinux nv-codec-headers;
+      ++ optional stdenv.hostPlatform.isLinux nv-codec-headers-9;
 
     configureFlags =
       [
