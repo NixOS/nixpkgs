@@ -1,7 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, unstableGitUpdater
+, gitUpdater
 }:
 
 # NOTE:
@@ -25,14 +25,14 @@
 #     ];
 # };
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "whitesur-kde";
-  version = "2022-05-01-unstable-2024-11-01";
+  version = "2024-11-18";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = "whitesur-kde";
-    rev = "efba411e11f8f4d3219bffb393d25afae62eacf2";
+    rev = version;
     hash = "sha256-052mKpf8e5pSecMzaWB3McOZ/uAqp/XGJjcVWnlKPLE=";
   };
 
@@ -65,7 +65,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "MacOS big sur like theme for KDE Plasma desktop";
