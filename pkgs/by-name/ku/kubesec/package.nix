@@ -1,27 +1,29 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "kubesec";
-  version = "2.14.1";
+  version = "2.14.2";
 
   src = fetchFromGitHub {
     owner = "controlplaneio";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-FYYMCouZuG0EqvganPLSrLgaDZ+JowUcYXTnKMJ+6Us=";
+    repo = "kubesec";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4jVRd6XQekL4wMZ+Icoa2DEsTGzBISK2QPO+gu890kA=";
   };
-  vendorHash = "sha256-KTmsCbFRHMd1KnBYxwWWuETaTP0G3NYCK/ttgrFy59I=";
+
+  vendorHash = "sha256-6jXGc9tkqRTjzEiug8lGursPm9049THWlk8xY3pyVgo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/controlplaneio/kubesec/v${lib.versions.major version}/cmd.version=v${version}"
+    "-X=github.com/controlplaneio/kubesec/v${lib.versions.major version}/cmd.version=v${version}"
   ];
 
   # Tests wants to download the kubernetes schema for use with kubeval
@@ -50,6 +52,9 @@ buildGoModule rec {
     homepage = "https://github.com/controlplaneio/kubesec";
     changelog = "https://github.com/controlplaneio/kubesec/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab jk ];
+    maintainers = with maintainers; [
+      fab
+      jk
+    ];
   };
 }
