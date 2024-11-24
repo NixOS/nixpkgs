@@ -18132,8 +18132,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  geant4 = libsForQt5.callPackage ../development/libraries/physics/geant4 { };
-
   hepmc3 = callPackage ../development/libraries/physics/hepmc3 {
     python = null;
   };
