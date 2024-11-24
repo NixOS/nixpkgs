@@ -1454,8 +1454,6 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/RETROARCH
 
-  retroarch-bare = qt5.callPackage ../applications/emulators/retroarch { };
-
   retroarch-full = wrapRetroArch {
     cores = builtins.filter
       # Remove cores not supported on platform
