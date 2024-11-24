@@ -158,6 +158,7 @@ mapAliases {
   bloom = throw "'bloom' has been removed because it was unmaintained upstream."; # Added 2024-11-02
   bmap-tools = bmaptool; # Added 2024-08-05
   boost184 = throw "Boost 1.84 has been removed as it is obsolete and no longer used by anything in Nixpkgs"; # Added 2024-11-24
+  boost185 = throw "Boost 1.85 has been removed as it is obsolete and no longer used by anything in Nixpkgs"; # Added 2024-11-24
   boost_process = throw "boost_process has been removed as it is included in regular boost"; # Added 2024-05-01
   bpb = throw "bpb has been removed as it is unmaintained and not compatible with recent Rust versions"; # Added 2024-04-30
   bpftool = throw "'bpftool' has been renamed to/replaced by 'bpftools'"; # Converted to throw 2024-10-17
