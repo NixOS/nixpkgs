@@ -2,6 +2,7 @@
   lib,
   pkgs,
   config,
+  utils,
   ...
 }:
 let
@@ -61,6 +62,7 @@ in
 
     extraArgs = lib.mkOption {
       type = lib.types.listOf lib.types.singleLineStr;
+      default = [ ];
       example = [
         "--slice-us 5000"
         "--verbose"
@@ -90,9 +92,13 @@ in
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${lib.getExe' cfg.package cfg.scheduler} ${lib.concatStringsSep " " cfg.extraArgs}";
+        ExecStart = utils.escapeSystemdExecArgs (
+          [
+            (lib.getExe' cfg.package cfg.scheduler)
+          ]
+          ++ cfg.extraArgs
+        );
         Restart = "on-failure";
-        StandardError = "journal";
       };
 
       wantedBy = [ "multi-user.target" ];
