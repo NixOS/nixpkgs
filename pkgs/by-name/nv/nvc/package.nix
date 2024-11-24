@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, check
-, flex
-, pkg-config
-, which
-, elfutils
-, libffi
-, llvm
-, zlib
-, zstd
-, apple-sdk_11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  check,
+  flex,
+  pkg-config,
+  which,
+  elfutils,
+  libffi,
+  llvm,
+  zlib,
+  zstd,
+  apple-sdk_11,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,16 +34,19 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  buildInputs = [
-    libffi
-    llvm
-    zlib
-    zstd
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
-    elfutils
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
-  ];
+  buildInputs =
+    [
+      libffi
+      llvm
+      zlib
+      zstd
+    ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+      elfutils
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_11
+    ];
 
   preConfigure = ''
     mkdir build
