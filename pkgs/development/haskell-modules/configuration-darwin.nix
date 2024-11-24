@@ -306,6 +306,11 @@ self: super: ({
     __darwinAllowLocalNetworking = true;
   });
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 7fbe1a165877 (haskellPackages.sym: mark broken on darwin)
   # network requires `IP_RECVTOS`, which was added in 10.15.
   network =
     if lib.versionOlder (lib.getVersion pkgs.apple-sdk) "10.15" then
@@ -313,6 +318,15 @@ self: super: ({
     else
       super.network;
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> bc99f0f4d6ac (Merge pull request #269316 from r-ryantm/auto-update/ddns-go)
+=======
+  sym = markBroken super.sym;
+
+>>>>>>> 91e05edae505 (haskellPackages.sym: mark broken on darwin)
+>>>>>>> 7fbe1a165877 (haskellPackages.sym: mark broken on darwin)
   foldl = overrideCabal (drv: {
     postPatch = ''
       # This comment has been inserted, so the derivation hash changes, forcing
