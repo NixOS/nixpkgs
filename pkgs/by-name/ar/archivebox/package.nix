@@ -7,6 +7,7 @@
 , wget
 , git
 , ripgrep
+, single-file-cli
 , postlight-parser
 , readability-extractor
 , chromium
@@ -90,6 +91,7 @@ python.pkgs.buildPythonApplication rec {
     "--set WGET_BINARY ${lib.meta.getExe wget}"
     "--set GIT_BINARY ${lib.meta.getExe git}"
     "--set YOUTUBEDL_BINARY ${lib.meta.getExe python.pkgs.yt-dlp}"
+    "--set SINGLEFILE_BINARY ${lib.meta.getExe single-file-cli}"
   ] ++ (if (lib.meta.availableOn stdenv.hostPlatform chromium) then [
     "--set CHROME_BINARY ${chromium}/bin/chromium-browser"
   ] else [
