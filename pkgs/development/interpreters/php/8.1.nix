@@ -2,35 +2,8 @@
 
 let
   base = callPackage ./generic.nix ((removeAttrs _args [ "fetchpatch" ]) // {
-    version = "8.1.30";
-    hash = "sha256-yxYl5axJuRA3R34+d2e7BiQ0OXGuuZL0eRthivVx0j4=";
-    extraPatches = [
-      # Fix build with libxml2 2.12+.
-      # Patch from https://github.com/php/php-src/commit/0a39890c967aa57225bb6bdf4821aff7a3a3c082
-      (fetchpatch {
-        url = "https://github.com/php/php-src/commit/0a39890c967aa57225bb6bdf4821aff7a3a3c082.patch";
-        hash = "sha256-HvpTL7aXO9gr4glFdhqUWQPrG8TYTlvbNINq33M3zS0=";
-      })
-      # Fix tests with libxml2 2.12
-      (fetchpatch {
-        url = "https://github.com/php/php-src/commit/061058a9b1bbd90d27d97d79aebcf2b5029767b0.patch";
-        hash = "sha256-0hOlAG+pOYp/gUU0MUMZvzWpgr0ncJi5GB8IeNxxyEU=";
-        excludes = [
-          "NEWS"
-        ];
-      })
-      # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
-      # Required for libxml2 2.13 compatibility patch.
-      (fetchpatch {
-        url = "https://github.com/php/php-src/commit/e2d97314ab342d434e778cd00a2f34e4bdb07664.patch";
-        hash = "sha256-w0hyYUgbRGpvIBfWeDTSEUGpiJdyrtNjKy+Fn1vyAO0=";
-      })
-      # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
-      (fetchpatch {
-        url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
-        hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
-      })
-    ];
+    version = "8.1.31";
+    hash = "sha256-CzmCizRRUcrxt5XZ9LkjyYhyMXdsMwdt/J2QpEOQ0Nw=";
   });
 in
 base.withExtensions ({ all, ... }: with all; ([
