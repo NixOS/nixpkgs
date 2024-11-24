@@ -11433,6 +11433,12 @@
     githubId = 15373888;
     name = "Claudius Holeksa";
   };
+  keller00 = {
+    name = "Mark Keller";
+    email = "markooo.keller@gmail.com";
+    github = "keller00";
+    githubId = 8452750;
+  };
   kennyballou = {
     email = "kb@devnulllabs.io";
     github = "kennyballou";
