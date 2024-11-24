@@ -52,6 +52,20 @@ in
           Disable executing the command from dashboard.
         '';
       };
+      disableNat = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Disable NAT penetration.
+        '';
+      };
+      disableSendQuery = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Disable sending TCP/ICMP/HTTP requests.
+        '';
+      };
       skipConnection = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -125,6 +139,8 @@ in
         ]
         ++ lib.optional cfg.debug "--debug"
         ++ lib.optional cfg.disableCommandExecute "--disable-command-execute"
+        ++ lib.optional cfg.disableNat "--disable-nat"
+        ++ lib.optional cfg.disableSendQuery "--disable-send-query"
         ++ lib.optional (cfg.reportDelay != null) "--report-delay ${toString cfg.reportDelay}"
         ++ lib.optional (cfg.server != null) "--server ${cfg.server}"
         ++ lib.optional cfg.skipConnection "--skip-conn"
