@@ -10,14 +10,14 @@
 }:
 buildGoModule rec {
   pname = "alist";
-  version = "3.39.2";
+  version = "3.40.0";
   webVersion = "3.39.2";
 
   src = fetchFromGitHub {
     owner = "AlistGo";
     repo = "alist";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ayIbmoemaDKZu+jYJ33GXq5XORNn6rJ3yOpDgFeXA/4=";
+    hash = "sha256-2cpYe00OoTLvbN2BeB50wiAcfrrXCp3DXb5xCZaVMPA=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
