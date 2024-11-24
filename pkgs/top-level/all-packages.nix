@@ -1461,22 +1461,22 @@ with pkgs;
   # includes only cores for platform with free licenses
   retroarch-free = retroarch.withCores (
     cores:
-      builtins.filter
+      lib.filter
         (c:
           (c ? libretroCore)
           && (lib.meta.availableOn stdenv.hostPlatform c)
           && (!c.meta.unfree))
-        (builtins.attrValues cores)
+        (lib.attrValues cores)
   );
 
   # includes all cores for platform (including ones with non-free licenses)
   retroarch-full = retroarch.withCores (
     cores:
-      builtins.filter
+      lib.filter
         (c:
           (c ? libretroCore)
           && (lib.meta.availableOn stdenv.hostPlatform c))
-        (builtins.attrValues cores)
+        (lib.attrValues cores)
   );
 
   wrapRetroArch = retroarch-bare.wrapper;
