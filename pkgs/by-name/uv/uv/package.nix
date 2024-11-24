@@ -6,6 +6,7 @@
   pkg-config,
   rustPlatform,
   versionCheckHook,
+  python3Packages,
   nix-update-script,
 }:
 
@@ -36,6 +37,7 @@ rustPlatform.buildRustPackage rec {
     "uv"
   ];
 
+  # Tests require python3
   doCheck = false;
 
   postInstall = ''
@@ -46,12 +48,14 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/uv --generate-shell-completion zsh)
   '';
 
-  nativeCheckInputs = [
+  nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru = {
+    tests.uv-python = python3Packages.uv;
     updateScript = nix-update-script { };
   };
 
