@@ -11,6 +11,7 @@ let
     concatLists
     concatMap
     concatStringsSep
+    defaultTypeMerge
     elem
     filter
     foldl'
@@ -749,7 +750,7 @@ let
     foldl' (res: opt:
       let t  = res.type;
           t' = opt.options.type;
-          mergedType = t.typeMerge t'.functor;
+          mergedType = defaultTypeMerge loc t.functor t'.functor;
           typesMergeable = mergedType != null;
           typeSet = if (bothHave "type") && typesMergeable
                        then { type = mergedType; }

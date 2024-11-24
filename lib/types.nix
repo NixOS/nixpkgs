@@ -82,7 +82,7 @@ rec {
 
   # Default type merging function
   # takes two type functors and return the merged type
-  defaultTypeMerge = f: f':
+  defaultTypeMerge = loc: f: f':
     let mergedWrapped = f.wrapped.typeMerge f'.wrapped.functor;
         mergedPayload = f.binOp f.payload f'.payload;
 
@@ -103,6 +103,8 @@ rec {
           Use either `functor.payload` or `functor.wrapped` but not both.
 
           If your code worked before remove `functor.payload` from the type definition.
+
+          Location: ${showOption loc}
         ''
       else
         # Has payload
@@ -182,7 +184,7 @@ rec {
     , # Function that merge type declarations.
       # internal, takes a functor as argument and returns the merged type.
       # returning null means the type is not mergeable
-      typeMerge ? defaultTypeMerge functor
+      typeMerge ? defaultTypeMerge ["unknown location"] functor
     , # The type functor.
       # internal, representation of the type as an attribute set.
       #   name: name of the type
