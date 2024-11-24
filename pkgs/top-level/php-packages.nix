@@ -382,18 +382,6 @@ in {
           configureFlags = [
             "--enable-dom"
           ];
-          # Add a PHP lower version bound constraint to avoid applying the patch on older PHP versions.
-          patches = lib.optionals ((lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.14" && lib.versionAtLeast php.version "8.2.7") || (lib.versions.majorMinor php.version == "8.1" && lib.versionAtLeast php.version "8.1.27")) [
-            # Fix tests with libxml 2.12
-            # Part of 8.3.1RC1+, 8.2.14RC1+
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/061058a9b1bbd90d27d97d79aebcf2b5029767b0.patch";
-              hash = "sha256-0hOlAG+pOYp/gUU0MUMZvzWpgr0ncJi5GB8IeNxxyEU=";
-              excludes = [
-                "NEWS"
-              ];
-            })
-          ];
         }
         {
           name = "enchant";
