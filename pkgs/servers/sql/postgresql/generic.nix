@@ -284,6 +284,12 @@ let
 
         # Stop lib depending on the -dev output of llvm
         remove-references-to -t ${llvmPackages.llvm.dev} "$out/lib/llvmjit${dlSuffix}"
+      '' + lib.optionalString stdenv'.hostPlatform.isDarwin ''
+        # The darwin specific Makefile for PGXS contains a reference to the postgres
+        # binary. Some extensions (here: postgis), which are able to set bindir correctly
+        # to their own output for installation, will then fail to find "postgres" during linking.
+        substituteInPlace "$dev/lib/pgxs/src/Makefile.port" \
+          --replace-fail '-bundle_loader $(bindir)/postgres' "-bundle_loader $out/bin/postgres"
       '';
 
     postFixup = lib.optionalString stdenv'.hostPlatform.isGnu
