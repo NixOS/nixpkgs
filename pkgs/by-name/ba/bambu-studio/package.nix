@@ -7,7 +7,7 @@
   ninja,
   pkg-config,
   wrapGAppsHook3,
-  boost180,
+  boost,
   cereal,
   cgal,
   curl,
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     binutils
-    boost180
+    boost
     cereal
     cgal
     curl
@@ -115,6 +115,12 @@ stdenv.mkDerivation rec {
     ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
     # Fix an issue with
     ./patches/dont-link-opencv-world-bambu.patch
+    # Fix the build with newer Boost versions. All but one commit is
+    # from <https://github.com/bambulab/BambuStudio/pull/3968>.
+    ./0001-Replace-deprecated-boost-filesystem-string_file.hpp-.patch
+    ./0002-Replace-deprecated-Boost-methods-options.patch
+    ./0003-Fix-additional-Boost-upgrade-issues.patch
+    ./0004-Remove-deprecated-Boost-filesystem-header.patch
   ];
 
   doCheck = true;
@@ -128,10 +134,11 @@ stdenv.mkDerivation rec {
   # additionally need to set the path via the NLOPT environment variable.
   NLOPT = nlopt;
 
-  # Disable compiler warnings that clutter the build log.
-  # It seems to be a known issue for Eigen:
-  # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
   NIX_CFLAGS_COMPILE = toString [
+    "-DBOOST_TIMER_ENABLE_DEPRECATED"
+    # Disable compiler warnings that clutter the build log.
+    # It seems to be a known issue for Eigen:
+    # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
     "-Wno-ignored-attributes"
     "-I${opencv.out}/include/opencv4"
   ];
