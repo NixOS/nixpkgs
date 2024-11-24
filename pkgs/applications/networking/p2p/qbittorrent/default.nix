@@ -1,65 +1,60 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
+  apple-sdk_11,
   boost,
   cmake,
-  Cocoa,
-  libtorrent-rasterbar,
-  ninja,
-  qtbase,
-  qtsvg,
-  qttools,
-  wrapGAppsHook3,
-  wrapQtAppsHook,
-
-  guiSupport ? true,
   dbus,
-  qtwayland,
-
-  trackerSearch ? true,
+  fetchFromGitHub,
+  guiSupport ? true,
+  lib,
+  libtorrent-rasterbar,
+  nix-update-script,
+  openssl,
+  pkg-config,
   python3,
-
+  qt6,
+  stdenv,
+  trackerSearch ? true,
   webuiSupport ? true,
+  wrapGAppsHook3,
+  zlib,
 }:
 
-let
-  qtVersion = lib.versions.major qtbase.version;
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qbittorrent" + lib.optionalString (!guiSupport) "-nox";
   version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
-    rev = "release-${version}";
+    rev = "release-${finalAttrs.version}";
     hash = "sha256-JIURzAkVNYjHAx8yY0WaKNK4N/z9ndqjk0EXkJH9AzY=";
   };
 
   nativeBuildInputs = [
     cmake
-    ninja
+    pkg-config
     wrapGAppsHook3
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs =
     [
       boost
       libtorrent-rasterbar
-      qtbase
-      qtsvg
-      qttools
+      openssl
+      qt6.qtbase
+      qt6.qtsvg
+      qt6.qttools
+      zlib
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ]
     ++ lib.optionals guiSupport [ dbus ]
-    ++ lib.optionals (guiSupport && stdenv.hostPlatform.isLinux) [ qtwayland ]
+    ++ lib.optionals (guiSupport && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ]
     ++ lib.optionals trackerSearch [ python3 ];
 
   cmakeFlags =
-    lib.optionals (!guiSupport) [
+    [ "-DVERBOSE_CONFIGURE=ON" ]
+    ++ lib.optionals (!guiSupport) [
       "-DGUI=OFF"
       "-DSYSTEMD=ON"
       "-DSYSTEMD_SERVICES_INSTALL_DIR=${placeholder "out"}/lib/systemd/system"
@@ -73,7 +68,7 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     APP_NAME=qbittorrent${lib.optionalString (!guiSupport) "-nox"}
     mkdir -p $out/{Applications,bin}
-    cp -R $APP_NAME.app $out/Applications
+    mv $out/$APP_NAME.app $out/Applications
     makeWrapper $out/{Applications/$APP_NAME.app/Contents/MacOS,bin}/$APP_NAME
   '';
 
@@ -81,16 +76,21 @@ stdenv.mkDerivation rec {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=release-(.*)" ]; };
+
+  meta = {
     description = "Featureful free software BitTorrent client";
     homepage = "https://www.qbittorrent.org";
-    changelog = "https://github.com/qbittorrent/qBittorrent/blob/release-${version}/Changelog";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/qbittorrent/qBittorrent/blob/release-${finalAttrs.version}/Changelog";
+    license = with lib.licenses; [
+      gpl2Only
+      gpl3Only
+    ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       Anton-Latukha
       kashw2
     ];
     mainProgram = "qbittorrent" + lib.optionalString (!guiSupport) "-nox";
   };
-}
+})
