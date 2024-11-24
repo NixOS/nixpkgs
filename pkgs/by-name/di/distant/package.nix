@@ -31,8 +31,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/chipsenkbeil/distant";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      chipsenkbeil
-      westernwontons
       fe2-Nyxar
     ];
   };
