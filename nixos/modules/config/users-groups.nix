@@ -124,6 +124,16 @@ let
 
     options = {
 
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description = ''
+          If set to false, the user account will not be created. This is useful for when you wish to conditionally
+          disable user accounts.
+        '';
+      };
+
       name = mkOption {
         type = types.passwdEntry types.str;
         apply = x: assert (stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
@@ -557,7 +567,7 @@ let
           autoSubUidGidRange subUidRanges subGidRanges
           initialPassword initialHashedPassword expires;
         shell = utils.toShellPath u.shell;
-      }) cfg.users;
+      }) (filterAttrs (_: u: u.enable) cfg.users);
     groups = attrValues cfg.groups;
   });
 
