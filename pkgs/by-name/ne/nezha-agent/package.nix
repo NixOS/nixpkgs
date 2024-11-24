@@ -4,6 +4,7 @@
   stdenv,
   fetchFromGitHub,
   versionCheckHook,
+  nix-update-script,
 }:
 buildGoModule rec {
   pname = "nezha-agent";
@@ -53,6 +54,10 @@ buildGoModule rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Agent of Nezha Monitoring";
