@@ -1,15 +1,16 @@
-{ stdenv
-, rustPlatform
-, fetchFromGitHub
-, lib
-, darwin
-, glib
-, gtk4
-, libadwaita
-, libX11
-, libXtst
-, pkg-config
-, wrapGAppsHook4
+{
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
+  darwin,
+  glib,
+  gtk4,
+  libadwaita,
+  libX11,
+  libXtst,
+  pkg-config,
+  wrapGAppsHook4,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,8 +36,7 @@ rustPlatform.buildRustPackage rec {
     libadwaita
     libX11
     libXtst
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.CoreGraphics;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.CoreGraphics;
 
   cargoHash = "sha256-pDdpmZPaClU8KjFHO7v3FDQp9D83GQN+SnFg53q2fjs=";
 
