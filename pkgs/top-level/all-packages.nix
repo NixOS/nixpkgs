@@ -1456,7 +1456,7 @@ with pkgs;
 
   libretro = recurseIntoAttrs (callPackage ../applications/emulators/libretro { });
 
-  retroarch = retroarch-bare.wrapper { };
+  retroarch = wrapRetroArch { };
 
   # includes only cores for platform with free licenses
   retroarch-free = retroarch.withCores (
