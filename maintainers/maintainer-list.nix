@@ -3894,6 +3894,12 @@
     githubId = 631802;
     keys = [ { fingerprint = "099E 3F97 FA08 3D47 8C75  EBEC E0EB AD78 F019 0BD9"; } ];
   };
+  chipsenkbeil = {
+    email = "nyxar49@gmail.com";
+    github = "chipsenkbeil";
+    githubId = 2481802;
+    name = "Chip Senkbeil";
+  };
   chiroptical = {
     email = "chiroptical@gmail.com";
     github = "chiroptical";
@@ -7112,6 +7118,11 @@
     github = "fdns";
     githubId = 541748;
     name = "Felipe Espinoza";
+  };
+  fe2-Nyxar = {
+    email = "nyxar49@gmail.com";
+    github = "fe2-Nyxar";
+    githubId = 153492661;
   };
   feathecutie = {
     name = "feathecutie";
@@ -23578,6 +23589,12 @@
     github = "wesnel";
     githubId = 43357387;
     keys = [ { fingerprint = "F844 80B2 0CA9 D6CC C7F5  2479 A776 D2AD 099E 8BC0"; } ];
+  };
+  westernwontons = {
+    email = "nyxar49@gmail.com";
+    github = "westernwontons";
+    githubId = 75550932;
+    name = "Nagy Botond";
   };
   wexder = {
     email = "wexder19@gmail.com";
