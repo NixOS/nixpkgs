@@ -90,7 +90,7 @@ buildNpmPackage rec {
 
       makeWrapper ${lib.getExe electron} $out/bin/jitsi-meet-electron \
           --add-flags $out/share/jitsi-meet-electron/resources/app.asar \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
           --set-default ELECTRON_IS_DEV 0 \
           --inherit-argv0
 

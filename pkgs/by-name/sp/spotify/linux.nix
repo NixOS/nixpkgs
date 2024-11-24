@@ -179,7 +179,7 @@ stdenv.mkDerivation {
         ''} \
         --prefix LD_LIBRARY_PATH : "$librarypath" \
         --prefix PATH : "${zenity}/bin" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime}}"
 
       runHook postFixup
     '';

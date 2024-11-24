@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeShellWrapper "${lib.getExe electron}" "$out/bin/goofcord" \
       --add-flags "$out/share/lib/goofcord/resources/app.asar" \
       "''${gappsWrapperArgs[@]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime}}" \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
 
