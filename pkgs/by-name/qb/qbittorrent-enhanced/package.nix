@@ -6,25 +6,25 @@
 , boost
 , libtorrent-rasterbar
 , openssl
-, qt5
+, qt6
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "qbittorrent-enhanced";
-  version = "4.6.7.10";
+  version = "5.0.2.10";
 
   src = fetchFromGitHub {
     owner = "c0re100";
     repo = "qBittorrent-Enhanced-Edition";
     rev = "release-${version}";
-    hash = "sha256-Mr376nH2pE6NMF9IdDhZULwqkRr7472OZnKO86hb6ZI=";
+    hash = "sha256-9RCG530zWQ+qzP0Y+y69NFlBWVA8GT29dY8aC1cvq7o=";
   };
 
   nativeBuildInputs = [
     pkg-config
     cmake
-    qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -32,8 +32,9 @@ stdenv.mkDerivation rec {
     boost
     zlib
     libtorrent-rasterbar
-    qt5.qtbase
-    qt5.qttools
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qttools
   ];
 
   meta = {
