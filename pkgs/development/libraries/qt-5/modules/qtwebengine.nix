@@ -173,6 +173,7 @@ qtModule ({
           "-march=westmere"
         ] ++ lib.optionals stdenv.cc.isClang [
           "-Wno-elaborated-enum-base"
+          "-Wno-error=cast-function-type-strict"
         ]);
   } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
     NIX_CFLAGS_LINK = "-Wl,--no-warn-search-mismatch";
