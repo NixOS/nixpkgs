@@ -83,45 +83,46 @@ rec {
   # Default type merging function
   # takes two type functors and return the merged type
   defaultTypeMerge = f: f':
-    let mergedWrapped = f.wrapped.typeMerge f'.wrapped.functor;
-        mergedPayload = f.binOp f.payload f'.payload;
-
-        hasPayload = assert (f'.payload != null) == (f.payload != null); f.payload != null;
-        hasWrapped = assert (f'.wrapped != null) == (f.wrapped != null); f.wrapped != null;
+    let
+      mergedPayload = f.binOp f.payload f'.payload;
+      hasPayload = assert (f'.payload != null) == (f.payload != null); f.payload != null;
     in
     # Abort early: cannot merge different types
     if f.name != f'.name
-       then null
+      then null
     else
 
     if hasPayload then
-      if hasWrapped then
-        # Has both wrapped and payload
-        throw ''
-          Type ${f.name} defines both `functor.payload` and `functor.wrapped` at the same time, which is not supported.
-
-          Use either `functor.payload` or `functor.wrapped` but not both.
-
-          If your code worked before remove `functor.payload` from the type definition.
-        ''
-      else
-        # Has payload
-        if mergedPayload == null then null else f.type mergedPayload
+      if mergedPayload == null then null else
+        (f.type mergedPayload) // {
+          functor = f.functor // {
+            # Wrapped is deprecated. This attribute is added to print a meaningful error message.
+            wrapped = throw "oh no";
+          };
+        }
     else
-      if hasWrapped then
-        # Has wrapped
-        # TODO(@hsjobeki): This could also be a warning and removed in the future
-        if mergedWrapped == null then null else f.type mergedWrapped
-      else
-        f.type;
+      f.type;
 
   # Default type functor
   defaultFunctor = name: {
     inherit name;
     type    = types.${name} or null;
-    wrapped = null;
     payload = null;
+    wrapped = throw "oh no";
     binOp   = a: b: null;
+  };
+
+  # Default functor for composed types
+  defaultComposedFunctor = name: elemType: {
+    inherit name;
+    type    = { elemType, ... }: types.${name} elemType;
+    payload = { inherit elemType; };
+    wrapped = throw "oh no";
+    binOp   = a: b:
+      let
+        elemType = a.elemType.typeMerge b.elemType.functor;
+      in
+        if elemType == null then null else { inherit elemType; };
   };
 
   isOptionType = isType "option-type";
@@ -187,7 +188,6 @@ rec {
       # internal, representation of the type as an attribute set.
       #   name: name of the type
       #   type: type function.
-      #   wrapped: the type wrapped in case of compound types.
       #   payload: values of the type, two payloads of the same type must be
       #            combinable with the binOp binary operation.
       #   binOp: binary operation that merge two payloads of the same type.
@@ -570,7 +570,7 @@ rec {
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: listOf (elemType.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = elemType; };
+      functor = defaultComposedFunctor name elemType;
       nestedTypes.elemType = elemType;
     };
 
@@ -597,7 +597,7 @@ rec {
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: attrsOf (elemType.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = elemType; };
+      functor = defaultComposedFunctor name elemType;
       nestedTypes.elemType = elemType;
     };
 
@@ -623,7 +623,7 @@ rec {
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: lazyAttrsOf (elemType.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = elemType; };
+      functor = defaultComposedFunctor name elemType;
       nestedTypes.elemType = elemType;
     };
 
@@ -732,7 +732,7 @@ rec {
 
     uniq = unique { message = ""; };
 
-    unique = { message }: type: mkOptionType rec {
+    unique = { message }: type: mkOptionType {
       name = "unique";
       inherit (type) description descriptionClass check;
       merge = mergeUniqueOption { inherit message; inherit (type) merge; };
@@ -740,7 +740,7 @@ rec {
       getSubOptions = type.getSubOptions;
       getSubModules = type.getSubModules;
       substSubModules = m: uniq (type.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = type; };
+      functor = defaultComposedFunctor "unique" type;
       nestedTypes.elemType = type;
     };
 
@@ -760,7 +760,7 @@ rec {
       getSubOptions = elemType.getSubOptions;
       getSubModules = elemType.getSubModules;
       substSubModules = m: nullOr (elemType.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = elemType; };
+      functor = defaultComposedFunctor name elemType;
       nestedTypes.elemType = elemType;
     };
 
@@ -774,7 +774,7 @@ rec {
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "<function body>" ]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: functionTo (elemType.substSubModules m);
-      functor = (defaultFunctor "functionTo") // { wrapped = elemType; };
+      functor = defaultComposedFunctor "functionTo" elemType;
       nestedTypes.elemType = elemType;
     };
 
@@ -1005,13 +1005,29 @@ rec {
                then t2.merge loc defs
           else mergeOneOption loc defs;
       typeMerge = f':
-        let mt1 = t1.typeMerge (elemAt f'.wrapped 0).functor;
-            mt2 = t2.typeMerge (elemAt f'.wrapped 1).functor;
+        let mt1 = t1.typeMerge (elemAt f'.payload.elemType 0).functor;
+            mt2 = t2.typeMerge (elemAt f'.payload.elemType 1).functor;
         in
            if (name == f'.name) && (mt1 != null) && (mt2 != null)
            then functor.type mt1 mt2
            else null;
-      functor = (defaultFunctor name) // { wrapped = [ t1 t2 ]; };
+      functor = (defaultFunctor name) // {
+        type = { elemType, ... }: types.${name} elemType;
+        payload = {
+          wrapped = throw "oh no";
+          elemType = [ t1 t2 ];
+        };
+        binOp = lhs: rhs:
+          let
+            elemType = lhs.elemType.typeMerge rhs.elemType;
+          in
+            if elemType == null then
+              null
+            else
+            {
+              inherit  elemType;
+            };
+      };
       nestedTypes.left = t1;
       nestedTypes.right = t2;
     };
@@ -1044,7 +1060,7 @@ rec {
         getSubModules = finalType.getSubModules;
         substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
         typeMerge = t: null;
-        functor = (defaultFunctor name) // { wrapped = finalType; };
+        functor = defaultComposedFunctor name finalType;
         nestedTypes.coercedType = coercedType;
         nestedTypes.finalType = finalType;
       };
