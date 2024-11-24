@@ -11,6 +11,7 @@
 , autoPatchelfHook
 , git
 , nix-update-script
+, makeDesktopItem
 }:
 
 stdenv.mkDerivation (finalAttrs:
@@ -21,11 +22,13 @@ let
   suffix = selectSystem {
     x86_64-linux = "linux-x64-${version}.AppImage";
     x86_64-darwin = "darwin-x64-${version}.zip";
+    aarch64-linux = "linux-arm64-${version}.zip";
     aarch64-darwin = "darwin-arm64-${version}.zip";
   };
   hash = selectSystem {
     x86_64-linux = "sha256-XROuY2RlKnGvK1VNvzauHuLJiveXVKrIYPppoz8fCmc=";
     x86_64-darwin = "sha256-0i9ozqBSeV/y8v+YEmQkbY0V6JHOv6tKub4O5Fdx2fQ=";
+    aarch64-linux = "sha256-/pgh1RChk/UEoh0F0T7Uc8ZDzLqdapaDovj5c3IcpLc=";
     aarch64-darwin = "sha256-Uvv96XWxpFj14wPH0DwPT+mlf3Z2dy1g/z8iBt5Te7Q=";
   };
 in
@@ -35,21 +38,21 @@ in
   src = fetchurl {
     inherit hash;
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-${suffix}";
-    name = lib.optionalString stdenv.hostPlatform.isLinux "logseq-${version}.AppImage";
+    name = lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.isx86_64) "logseq-${version}.AppImage";
   };
 
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ unzip ];
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.isAarch64) [ unzip ];
   buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
-  dontUnpack = stdenv.hostPlatform.isLinux;
+  dontUnpack = stdenv.hostPlatform.isLinux && stdenv.isx86_64;
   dontConfigure = true;
   dontBuild = true;
 
   installPhase = ''
     runHook preInstall
-  '' + lib.optionalString stdenv.hostPlatform.isLinux (
+  '' + lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.isx86_64) (
     let
       appimageContents = appimageTools.extract { inherit pname src version; };
     in
@@ -71,7 +74,41 @@ in
         --replace Exec=Logseq Exec=logseq \
         --replace Icon=Logseq Icon=logseq
     ''
-  ) + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  ) + lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.isAarch64) (
+    let
+    desktop = makeDesktopItem {
+      name = "logseq";
+      desktopName = "Logseq";
+      icon = "logseq";
+      tryExec = "my-program";
+      exec = "logseq";
+      terminal = false;
+      categories = [ "Utility" ];
+      startupNotify = false;
+      startupWMClass = "Logseq";
+      prefersNonDefaultGPU = false;
+    };
+    in
+    ''
+      mkdir -p $out/bin $out/share/logseq $out/share/applications
+
+      cp -a {locales,resources} $out/share/logseq
+      cp Logseq $out/bin/logseq
+
+      # remove the `git` in `dugite` because we want the `git` in `nixpkgs`
+      chmod +w -R $out/share/logseq/resources/app/node_modules/dugite/git
+      chmod +w $out/share/logseq/resources/app/node_modules/dugite
+      rm -rf $out/share/logseq/resources/app/node_modules/dugite/git
+      chmod -w $out/share/logseq/resources/app/node_modules/dugite
+
+      mkdir -p $out/share/pixmaps
+      ln -s $out/share/logseq/resources/app/icons/logseq.png $out/share/pixmaps/logseq.png
+
+      cp -r ${desktop}/share $out/
+    ''
+  )
+
+   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications/Logseq.app,bin}
     cp -R . $out/Applications/Logseq.app
     makeWrapper $out/Applications/Logseq.app/Contents/MacOS/Logseq $out/bin/logseq
@@ -96,7 +133,7 @@ in
     license = lib.licenses.agpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ cheeseecake ];
-    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
+    platforms = [ "x86_64-linux" "aarch64-linux" ] ++ lib.platforms.darwin;
     mainProgram = "logseq";
   };
 })
