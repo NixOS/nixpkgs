@@ -516,8 +516,6 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     '' + optionalString stripTests ''
     # Strip tests
     rm -R $out/lib/python*/test $out/lib/python*/**/test{,s}
-    '' + optionalString includeSiteCustomize ''
-
     '' + optionalString stripBytecode ''
     # Determinism: deterministic bytecode
     # First we delete all old bytecode.

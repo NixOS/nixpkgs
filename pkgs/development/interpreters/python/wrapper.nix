@@ -35,8 +35,6 @@ let
       fi
       mkdir -p "$out/bin"
 
-      rm -f $out/bin/.*-wrapped
-
       for path in ${lib.concatStringsSep " " paths}; do
         if [ -d "$path/bin" ]; then
           cd "$path/bin"
@@ -44,9 +42,11 @@ let
             if [ -f "$prg" ]; then
               rm -f "$out/bin/$prg"
               if [ -x "$prg" ]; then
-                if [ -f ".$prg-wrapped" ]; then
-                  echo "#!${pythonExecutable}" > "$out/bin/$prg"
-                  sed -e '1d' -e '3d' ".$prg-wrapped" >> "$out/bin/$prg"
+                if [ -f ".$prg-wrapped" ] && ( cat ".$prg-wrapped" | head -n 1 | grep -q "python" ) ; then
+                  echo "#!${pythonExecutable}" >> "$out/bin/$prg"
+                  echo "import os" >> "$out/bin/$prg"
+                  echo 'os.environ["NIX_PYTHON_IN_ENV"] = "true"' >> "$out/bin/$prg"
+                  cat ".$prg-wrapped" >> "$out/bin/$prg"
                   chmod +x "$out/bin/$prg"
                 else
                   makeWrapper "$path/bin/$prg" "$out/bin/$prg" --inherit-argv0 --resolve-argv0 ${lib.optionalString (!permitUserSite) ''--set PYTHONNOUSERSITE "true"''} ${lib.concatStringsSep " " makeWrapperArgs}
