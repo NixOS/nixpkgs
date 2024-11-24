@@ -83,12 +83,14 @@ lib.makeExtensible (final: {
       result = vmTools.runInLinuxVM (
         runCommand "${projectName}-image-${name}.sif"
           {
+            __structuredAttrs = true;
             nativeBuildInputs = [
               singularity
               e2fsprogs
               util-linux
             ];
             strictDeps = true;
+            inherit contents;
             layerClosure = writeClosure ([ bashInteractive ] ++ runScriptReferences ++ contents);
             preVM = vmTools.createEmptyImage {
               size = diskSize;
@@ -121,12 +123,7 @@ lib.makeExtensible (final: {
               cp -r "$f" "./$f"
             done < "$layerClosure"
 
-            # TODO(@ShamrockLee):
-            # Once vmTools.runInLinuxVMm works with `__structuredAttrs = true` (#334705),
-            # set __structuredAttrs = true and pass contents as an attribute
-            # so that we could loop with `for c in ''${contents[@]}`
-            # instead of expanding all the paths in contents into the Bash string.
-            for c in ${lib.escapeShellArgs contents} ; do
+            for c in "''${contents[@]}"; do
               for f in "$c"/bin/* ; do
                 if [ ! -e "bin/$(basename "$f")" ] ; then
                   ln -s "$f" bin/
