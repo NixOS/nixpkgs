@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   cmake,
-  boost179,
+  boost,
   eigen,
   opencv,
   tbb,
@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cctag";
-  version = "1.0.3";
+  version = "1.0.4";
 
   outputs = [
     "lib"
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "alicevision";
     repo = "CCTag";
     rev = "v${version}";
-    hash = "sha256-foB+e7BCuUucyhN8FsI6BIT3/fsNLTjY6QmjkMWZu6A=";
+    hash = "sha256-M35KGTTmwGwXefsFWB2UKAKveUQyZBW7V8ejgOAJpXk=";
   };
 
   cmakeFlags = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost179
+    boost
     eigen
     opencv.cxxdev
   ];
