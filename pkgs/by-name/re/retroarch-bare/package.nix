@@ -169,19 +169,19 @@ stdenv.mkDerivation rec {
       };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libretro.com";
     description = "Multi-platform emulator frontend for libretro cores";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     changelog = "https://github.com/libretro/RetroArch/blob/v${version}/CHANGES.md";
     maintainers =
-      with maintainers;
-      teams.libretro.members
-      ++ [
+      with lib.maintainers;
+      [
         matthewbauer
         kolbycrouch
-      ];
+      ]
+      ++ lib.teams.libretro.members;
     mainProgram = "retroarch";
     # If you want to (re)-add support for macOS, see:
     # https://docs.libretro.com/development/retroarch/compilation/osx/
