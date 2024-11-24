@@ -9,10 +9,10 @@
   apktool,
   binutils-unwrapped-all-targets,
   bzip2,
-  cbfstool,
   cdrkit,
   colord,
   colordiff,
+  coreboot-utils,
   coreutils,
   cpio,
   db,
@@ -211,7 +211,7 @@ python.pkgs.buildPythonApplication rec {
         apksigcopier
         apksigner
         apktool
-        cbfstool
+        coreboot-utils.cbfstool
         colord
         enjarify
         ffmpeg
