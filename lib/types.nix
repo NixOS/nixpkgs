@@ -71,6 +71,21 @@ let
     let pos = builtins.unsafeGetAttrPos name v; in
     if pos == null then "" else " at ${pos.file}:${toString pos.line}:${toString pos.column}";
 
+  deprecatedWrappedAt = context: throw ''
+    Type attribute functor.wrapped is deprecated.
+
+    Consume `type.nestedTypes` attribute instead.
+
+    For migrating custom option types use `functor.payload.elemType` instead of `functor.wrapped`.
+
+    To help with that the following function can be used within 'mkOptionType'
+
+      mkOptionType {
+        ...
+        functor = defaultComposedFunctor name elemType;
+      };
+  '' + context;
+
   outer_types =
 rec {
   isType = type: x: (x._type or "") == type;
@@ -82,7 +97,7 @@ rec {
 
   # Default type merging function
   # takes two type functors and return the merged type
-  defaultTypeMerge = f: f':
+  defaultTypeMerge = ctx: f: f':
     let
       mergedPayload = f.binOp f.payload f'.payload;
       hasPayload = assert (f'.payload != null) == (f.payload != null); f.payload != null;
@@ -94,12 +109,23 @@ rec {
 
     if hasPayload then
       if mergedPayload == null then null else
-        (f.type mergedPayload) // {
-          functor = f.functor // {
-            # Wrapped is deprecated. This attribute is added to print a meaningful error message.
-            wrapped = throw "oh no";
-          };
-        }
+        if !isAttrs mergedPayload then
+          throw ''
+            Invalid type: `${f.name}`
+
+            `type.functor.payload` must be an attribute set.
+
+            To fix this error update the type implementation.
+          '' + ctx
+        else
+          let
+            mergedType = f.type mergedPayload;
+          in
+            mergedType // {
+              functor = mergedType.functor // {
+                wrapped = deprecatedWrappedAt ctx;
+              };
+            }
     else
       f.type;
 
@@ -108,16 +134,16 @@ rec {
     inherit name;
     type    = types.${name} or null;
     payload = null;
-    wrapped = throw "oh no";
+    wrapped = deprecatedWrappedAt "Unknown location";
     binOp   = a: b: null;
   };
 
   # Default functor for composed types
   defaultComposedFunctor = name: elemType: {
     inherit name;
-    type    = { elemType, ... }: types.${name} elemType;
+    type    = { elemType }: types.${name} elemType;
     payload = { inherit elemType; };
-    wrapped = throw "oh no";
+    wrapped = deprecatedWrappedAt "Unknown location";
     binOp   = a: b:
       let
         elemType = a.elemType.typeMerge b.elemType.functor;
@@ -183,7 +209,7 @@ rec {
     , # Function that merge type declarations.
       # internal, takes a functor as argument and returns the merged type.
       # returning null means the type is not mergeable
-      typeMerge ? defaultTypeMerge functor
+      typeMerge ? defaultTypeMerge "unknown location" functor
     , # The type functor.
       # internal, representation of the type as an attribute set.
       #   name: name of the type
@@ -471,10 +497,13 @@ rec {
       check = isString;
       merge = loc: defs: concatStringsSep sep (getValues defs);
       functor = (defaultFunctor name) // {
-        payload = sep;
-        binOp = sepLhs: sepRhs:
-          if sepLhs == sepRhs then sepLhs
-          else null;
+        payload = { inherit sep; };
+        type = payload: types.${name} payload.sep;
+        binOp = lhs: rhs:
+          if lhs.sep == rhs.sep then
+            { sep = lhs.sep; }
+          else
+            null;
       };
     };
 
@@ -980,7 +1009,13 @@ rec {
           else "conjunction";
         check = flip elem values;
         merge = mergeEqualOption;
-        functor = (defaultFunctor name) // { payload = values; binOp = a: b: unique (a ++ b); };
+        functor = (defaultFunctor name) // {
+          payload = { inherit values; };
+          type = payload: types.${name} payload.values;
+          binOp = a: b: {
+            values = unique (a.values ++ b.values);
+          };
+        };
       };
 
     # Either value of type `t1` or `t2`.
@@ -1014,7 +1049,7 @@ rec {
       functor = (defaultFunctor name) // {
         type = { elemType, ... }: types.${name} elemType;
         payload = {
-          wrapped = throw "oh no";
+          wrapped = deprecatedWrappedAt "Unknown location";
           elemType = [ t1 t2 ];
         };
         binOp = lhs: rhs:
