@@ -471,6 +471,8 @@ self: super: with self; {
 
   aiowebostv = callPackage ../development/python-modules/aiowebostv { };
 
+  aiowmi = callPackage ../development/python-modules/aiowmi { };
+
   aiowinreg = callPackage ../development/python-modules/aiowinreg { };
 
   aiowithings = callPackage ../development/python-modules/aiowithings { };
