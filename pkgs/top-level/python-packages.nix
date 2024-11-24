@@ -14941,6 +14941,8 @@ self: super: with self; {
 
   speaklater3 = callPackage ../development/python-modules/speaklater3 { };
 
+  specfile = callPackage ../development/python-modules/specfile { };
+
   spectral-cube = callPackage ../development/python-modules/spectral-cube { };
 
   speechbrain = callPackage ../development/python-modules/speechbrain { };
