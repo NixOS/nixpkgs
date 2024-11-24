@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
   postgresql,
   openssl,
   withLibiodbc ? false,
@@ -14,11 +15,13 @@ assert lib.xor withLibiodbc withUnixODBC;
 
 stdenv.mkDerivation rec {
   pname = "psqlodbc";
-  version = "16.00.0000";
+  version = "${builtins.replaceStrings [ "_" ] [ "." ] (lib.strings.removePrefix "REL-" src.tag)}";
 
-  src = fetchurl {
-    url = "mirror://postgresql/odbc/versions.old/src/${pname}-${version}.tar.gz";
-    hash = "sha256-r9iS+J0uzujT87IxTxvVvy0CIBhyxuNDHlwxCW7KTIs=";
+  src = fetchFromGitHub {
+    owner = "postgresql-interfaces";
+    repo = "psqlodbc";
+    tag = "REL-17_00_0002";
+    hash = "sha256-zCjoX+Ew8sS5TWkFSgoqUN5ukEF38kq+MdfgCQQGv9w=";
   };
 
   buildInputs =
@@ -28,6 +31,10 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional withLibiodbc libiodbc
     ++ lib.optional withUnixODBC unixODBC;
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   passthru = lib.optionalAttrs withUnixODBC {
     fancyName = "PostgreSQL";
