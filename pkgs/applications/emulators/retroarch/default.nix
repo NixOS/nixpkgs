@@ -1,11 +1,7 @@
 {
   lib,
   stdenv,
-  nixosTests,
-  enableNvidiaCgToolkit ? false,
-  withGamemode ? stdenv.hostPlatform.isLinux,
-  withVulkan ? stdenv.hostPlatform.isLinux,
-  withWayland ? stdenv.hostPlatform.isLinux,
+  # deps
   alsa-lib,
   dbus,
   fetchFromGitHub,
@@ -28,18 +24,30 @@
   makeWrapper,
   mbedtls_2,
   mesa,
+  nixosTests,
   nvidia_cg_toolkit,
   pkg-config,
   python3,
-  qtbase,
+  qt5,
   SDL2,
   spirv-tools,
   udev,
   vulkan-loader,
   wayland,
   wayland-scanner,
-  wrapQtAppsHook,
   zlib,
+  # wrapper deps
+  libretro-core-info,
+  retroarch-assets,
+  retroarch-bare,
+  retroarch-joypad-autoconfig,
+  runCommand,
+  symlinkJoin,
+  # params
+  enableNvidiaCgToolkit ? false,
+  withGamemode ? stdenv.hostPlatform.isLinux,
+  withVulkan ? stdenv.hostPlatform.isLinux,
+  withWayland ? stdenv.hostPlatform.isLinux,
 }:
 
 let
@@ -60,7 +68,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ] ++ lib.optional withWayland wayland ++ lib.optional (runtimeLibs != [ ]) makeWrapper;
 
   buildInputs =
@@ -73,7 +81,7 @@ stdenv.mkDerivation rec {
       libxml2
       mbedtls_2
       python3
-      qtbase
+      qt5.qtbase
       SDL2
       spirv-tools
       zlib
@@ -137,6 +145,26 @@ stdenv.mkDerivation rec {
     updateScript = gitUpdater {
       rev-prefix = "v";
     };
+    wrapper =
+      {
+        cores ? [ ],
+        settings ? { },
+      }:
+      import ./wrapper.nix {
+        inherit
+          lib
+          makeWrapper
+          retroarch-bare
+          runCommand
+          symlinkJoin
+          cores
+          ;
+        settings = {
+          assets_directory = "${retroarch-assets}/share/retroarch/assets";
+          joypad_autoconfig_dir = "${retroarch-joypad-autoconfig}/share/libretro/autoconfig";
+          libretro_info_path = "${libretro-core-info}/share/retroarch/cores";
+        } // settings;
+      };
   };
 
   meta = with lib; {

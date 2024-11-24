@@ -1,9 +1,9 @@
 {
   lib,
   makeWrapper,
-  retroarch,
-  symlinkJoin,
+  retroarch-bare,
   runCommand,
+  symlinkJoin,
   cores ? [ ],
   settings ? { },
 }:
@@ -36,15 +36,15 @@ let
   );
 in
 symlinkJoin {
-  name = "retroarch-with-cores-${lib.getVersion retroarch}";
+  name = "retroarch-with-cores-${lib.getVersion retroarch-bare}";
 
-  paths = [ retroarch ] ++ cores;
+  paths = [ retroarch-bare ] ++ cores;
 
   nativeBuildInputs = [ makeWrapper ];
 
   passthru = {
     inherit cores;
-    unwrapped = retroarch;
+    unwrapped = retroarch-bare;
   };
 
   postBuild = ''
@@ -55,15 +55,17 @@ symlinkJoin {
     wrapProgram $out/bin/retroarch ${wrapperArgs}
   '';
 
-  meta = with retroarch.meta; {
-    inherit
+  meta = {
+    inherit (retroarch-bare.meta)
       changelog
       description
       homepage
       license
+      mainProgram
       maintainers
       platforms
       ;
+
     longDescription =
       ''
         RetroArch is the reference frontend for the libretro API.
@@ -71,6 +73,5 @@ symlinkJoin {
       + lib.optionalString (cores != [ ]) ''
         The following cores are included: ${lib.concatStringsSep ", " (map (c: c.core) cores)}
       '';
-    mainProgram = "retroarch";
   };
 }

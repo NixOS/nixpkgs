@@ -1454,27 +1454,18 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/RETROARCH
 
-  retroarchBare = qt5.callPackage ../applications/emulators/retroarch { };
+  retroarch-bare = qt5.callPackage ../applications/emulators/retroarch { };
 
-  retroarchFull = retroarch.override {
+  retroarch-full = wrapRetroArch {
     cores = builtins.filter
       # Remove cores not supported on platform
       (c: c ? libretroCore && (lib.meta.availableOn stdenv.hostPlatform c))
       (builtins.attrValues libretro);
   };
 
-  wrapRetroArch = { retroarch, settings ? {} }:
-    callPackage ../applications/emulators/retroarch/wrapper.nix
-      { inherit retroarch settings; };
+  wrapRetroArch = retroarch-bare.wrapper;
 
-  retroarch = wrapRetroArch {
-    retroarch = retroarchBare;
-    settings = {
-      assets_directory = "${retroarch-assets}/share/retroarch/assets";
-      joypad_autoconfig_dir = "${retroarch-joypad-autoconfig}/share/libretro/autoconfig";
-      libretro_info_path = "${libretro-core-info}/share/retroarch/cores";
-    };
-  };
+  retroarch = retroarch-bare.wrapper;
 
   libretro = recurseIntoAttrs (callPackage ../applications/emulators/retroarch/cores.nix { });
 
