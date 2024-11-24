@@ -9078,6 +9078,18 @@ final: prev:
     meta.homepage = "https://github.com/mfussenegger/nvim-lint/";
   };
 
+  nvim-lsp-file-operations = buildVimPlugin {
+    pname = "nvim-lsp-file-operations";
+    version = "2024-10-24";
+    src = fetchFromGitHub {
+      owner = "antosha417";
+      repo = "nvim-lsp-file-operations";
+      rev = "9744b738183a5adca0f916527922078a965515ed";
+      sha256 = "0xmcvg5ks9n44aldk6aywvx4jshsdwxrsq44y0wph0wd9v88v7kk";
+    };
+    meta.homepage = "https://github.com/antosha417/nvim-lsp-file-operations/";
+  };
+
   nvim-lsp-notify = buildVimPlugin {
     pname = "nvim-lsp-notify";
     version = "2023-12-07";
