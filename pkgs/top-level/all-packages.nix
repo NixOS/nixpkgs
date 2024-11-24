@@ -19234,6 +19234,10 @@ with pkgs;
     ffmpeg = ffmpeg_6;
   };
 
+  libkazv = callPackage ../by-name/li/libkazv/package.nix {
+    libcpr = libcpr_1_10_5;
+  };
+
   tree-from-tags = callPackage ../by-name/tr/tree-from-tags/package.nix {
     ruby = ruby_3_1;
   };
