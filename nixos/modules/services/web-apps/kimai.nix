@@ -335,7 +335,7 @@ in
 
         (mapAttrs' (
           hostName: cfg:
-          (nameValuePair "phpfpm-kimai-${hostName}.service" {
+          (nameValuePair "phpfpm-kimai-${hostName}" {
             serviceConfig = {
               EnvironmentFile = [ cfg.environmentFile ];
             };
