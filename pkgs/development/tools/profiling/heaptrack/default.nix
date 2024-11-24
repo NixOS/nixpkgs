@@ -1,6 +1,6 @@
 {
   lib, stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, extra-cmake-modules, makeBinaryWrapper,
-  zlib, boost179, libunwind, elfutils, sparsehash, zstd,
+  zlib, boost, libunwind, elfutils, sparsehash, zstd,
   qtbase, kio, kitemmodels, threadweaver, kconfigwidgets, kcoreaddons, kdiagram
 }:
 
@@ -25,7 +25,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake extra-cmake-modules makeBinaryWrapper ];
   buildInputs = [
-    zlib boost179 libunwind sparsehash zstd
+    zlib boost libunwind sparsehash zstd
     qtbase kio kitemmodels threadweaver kconfigwidgets kcoreaddons kdiagram
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     elfutils
