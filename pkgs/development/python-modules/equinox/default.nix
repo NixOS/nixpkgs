@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "equinox";
-  version = "0.11.8";
+  version = "0.11.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "equinox";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lZb2NobSELz8kviPd4Z8PPEEaydaEC5Z6eb9pzC7Ki8=";
+    hash = "sha256-7RVhSdvD96oRUk6cGRS1rET4ztqjBnGfzJObjE+MioU=";
   };
 
   build-system = [ hatchling ];

@@ -67,16 +67,12 @@ let
   atLeast12 = versionAtLeast version "12";
   atLeast11 = versionAtLeast version "11";
   atLeast10 = versionAtLeast version "10";
-  atLeast9  = versionAtLeast version  "9";
-  atLeast8  = versionAtLeast version  "8";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
   is11 = majorVersion == "11";
   is10 = majorVersion == "10";
   is9  = majorVersion == "9";
-  is8  = majorVersion == "8";
-  is7  = majorVersion == "7";
 
     disableBootstrap = atLeast11 && !stdenv.hostPlatform.isDarwin && (atLeast12 -> !profiledCompiler);
 
@@ -166,7 +162,7 @@ assert stdenv.buildPlatform.isDarwin -> gnused != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
-assert (!is7 && !is8) -> (langAda -> gnat-bootstrap != null);
+assert langAda -> gnat-bootstrap != null;
 
 # TODO: fixup D bootstapping, probably by using gdc11 (and maybe other changes).
 #   error: GDC is required to build d
@@ -261,9 +257,7 @@ pipe ((callFile ./common/builder.nix {}) ({
 
   configurePlatforms = [ "build" "host" "target" ];
 
-  configureFlags = (callFile ./common/configure-flags.nix { })
-    ++ optional (is7 && targetPlatform.isAarch64) "--enable-fix-cortex-a53-843419"
-    ++ optional (is7 && targetPlatform.isNetBSD) "--disable-libcilkrts";
+  configureFlags = callFile ./common/configure-flags.nix { };
 
   inherit targetConfig;
 
@@ -319,11 +313,7 @@ pipe ((callFile ./common/builder.nix {}) ({
       EXTRA_FLAGS_FOR_TARGET
       EXTRA_LDFLAGS_FOR_TARGET
       ;
-  } // optionalAttrs is7 {
-    NIX_CFLAGS_COMPILE = optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument"
-      # Downgrade register storage class specifier errors to warnings when building a cross compiler from a clang stdenv.
-      + optionalString (stdenv.cc.isClang && targetPlatform != hostPlatform) " -Wno-register";
-  } // optionalAttrs (!is7 && !atLeast12 && stdenv.cc.isClang && targetPlatform != hostPlatform) {
+  } // optionalAttrs (!atLeast12 && stdenv.cc.isClang && targetPlatform != hostPlatform) {
     NIX_CFLAGS_COMPILE = "-Wno-register";
   });
 
@@ -331,18 +321,14 @@ pipe ((callFile ./common/builder.nix {}) ({
     inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD version;
     isGNU = true;
     hardeningUnsupportedFlags =
-      optional (
-        (targetPlatform.isAarch64 && !atLeast9) || !atLeast8
-      ) "stackclashprotection"
-      ++ optional (!atLeast11) "zerocallusedregs"
+      optional (!atLeast11) "zerocallusedregs"
       ++ optionals (!atLeast12) [ "fortify3" "trivialautovarinit" ]
       ++ optional (!(
-        atLeast8
-        && targetPlatform.isLinux
+        targetPlatform.isLinux
         && targetPlatform.isx86_64
         && targetPlatform.libc == "glibc"
       )) "shadowstack"
-      ++ optional (!(atLeast9 && targetPlatform.isLinux && targetPlatform.isAarch64)) "pacret"
+      ++ optional (!(targetPlatform.isLinux && targetPlatform.isAarch64)) "pacret"
       ++ optionals (langFortran) [ "fortify" "format" ];
   };
 
@@ -359,10 +345,7 @@ pipe ((callFile ./common/builder.nix {}) ({
       maintainers
     ;
   } // optionalAttrs (!atLeast11) {
-    badPlatforms =
-      # avr-gcc8 is maintained for the `qmk` package
-      if (is8 && targetPlatform.isAvr) then []
-      else [ "aarch64-darwin" ];
+    badPlatforms = [ "aarch64-darwin" ];
   } // optionalAttrs is10 {
     badPlatforms = if targetPlatform != hostPlatform then [ "aarch64-darwin" ] else [ ];
   };
@@ -371,8 +354,6 @@ pipe ((callFile ./common/builder.nix {}) ({
   preBuild = ''
     makeFlagsArray+=('STRIP=${getBin cctools}/bin/${stdenv.cc.targetPrefix}strip')
   '';
-} // optionalAttrs (!atLeast8) {
-  doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv
 } // optionalAttrs enableMultilib {
   dontMoveLib64 = true;
 }

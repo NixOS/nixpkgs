@@ -24,6 +24,12 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
+  postInstall = ''
+    install -Dm644 contrib/redlib.service $out/lib/systemd/system/redlib.service
+    substituteInPlace $out/lib/systemd/system/redlib.service \
+      --replace-fail "/usr/bin/redlib" "$out/bin/redlib"
+  '';
+
   checkFlags = [
     # All these test try to connect to Reddit.
     # utils.rs
@@ -68,6 +74,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/redlib-org/redlib";
     license = lib.licenses.agpl3Only;
     mainProgram = "redlib";
-    maintainers = with lib.maintainers; [ soispha ];
+    maintainers = with lib.maintainers; [
+      soispha
+      Guanran928
+    ];
   };
 }
