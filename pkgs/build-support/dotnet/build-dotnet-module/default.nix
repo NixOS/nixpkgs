@@ -17,6 +17,7 @@ let
     finalAttrs:
     {
       enableParallelBuilding ? true,
+      strictDeps ? true,
       # Flags to pass to `makeWrapper`. This is done to avoid double wrapping.
       makeWrapperArgs ? [ ],
 
@@ -127,6 +128,7 @@ let
 
       inherit
         enableParallelBuilding
+        strictDeps
         dotnetRestoreFlags
         dotnetBuildFlags
         dotnetTestFlags
