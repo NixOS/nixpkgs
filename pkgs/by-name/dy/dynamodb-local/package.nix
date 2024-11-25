@@ -26,11 +26,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dynamodb-local";
-  version = "2.5.2";
+  version = "2.5.3";
 
   src = fetchurl {
-    url = "https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_2024-06-20.tar.gz";
-    hash = "sha256-9SlgKNZFuy0/mf7eCjaUWVbrc4YXRDDnXADm+xs0540=";
+    url = "https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_2024-11-06.tar.gz";
+    hash = "sha256-h1yyfceEPQ0kJj8OFSEoD5v98Ovw5p+9G0ywDnyGWOA=";
   };
 
   sourceRoot = ".";
