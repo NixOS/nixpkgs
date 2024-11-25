@@ -1,61 +1,62 @@
-{ stdenv
-, lib
-, callPackage
-, fetchurl
-, autoPatchelfHook
-, noto-fonts-color-emoji
-, dpkg
-, asar
-, rsync
-, python3
-, buildPackages
-, nixosTests
-, gtk3
-, atk
-, at-spi2-atk
-, cairo
-, pango
-, pipewire
-, gdk-pixbuf
-, glib
-, freetype
-, fontconfig
-, dbus
-, libX11
-, xorg
-, libXi
-, libXcursor
-, libXdamage
-, libXrandr
-, libXcomposite
-, libXext
-, libXfixes
-, libXrender
-, libXtst
-, libXScrnSaver
-, nss
-, nspr
-, alsa-lib
-, cups
-, expat
-, libuuid
-, at-spi2-core
-, libappindicator-gtk3
-, mesa
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  noto-fonts-color-emoji,
+  dpkg,
+  asar,
+  rsync,
+  python3,
+  buildPackages,
+  nixosTests,
+  gtk3,
+  atk,
+  at-spi2-atk,
+  cairo,
+  pango,
+  pipewire,
+  gdk-pixbuf,
+  glib,
+  freetype,
+  fontconfig,
+  dbus,
+  libX11,
+  xorg,
+  libXi,
+  libXcursor,
+  libXdamage,
+  libXrandr,
+  libXcomposite,
+  libXext,
+  libXfixes,
+  libXrender,
+  libXtst,
+  libXScrnSaver,
+  nss,
+  nspr,
+  alsa-lib,
+  cups,
+  expat,
+  libuuid,
+  at-spi2-core,
+  libappindicator-gtk3,
+  mesa,
   # Runtime dependencies:
-, systemd
-, libnotify
-, libdbusmenu
-, libpulseaudio
-, xdg-utils
-, wayland
+  systemd,
+  libnotify,
+  libdbusmenu,
+  libpulseaudio,
+  xdg-utils,
+  wayland,
 }:
 
-{ pname
-, dir
-, version
-, hash
-, url
+{
+  pname,
+  dir,
+  version,
+  hash,
+  url,
 }:
 
 let
@@ -98,7 +99,10 @@ stdenv.mkDerivation rec {
     inherit url hash;
     recursiveHash = true;
     downloadToTemp = true;
-    nativeBuildInputs = [ dpkg asar ];
+    nativeBuildInputs = [
+      dpkg
+      asar
+    ];
     # Signal ships the Apple emoji set without a licence via an npm
     # package and upstream does not seem terribly interested in fixing
     # this; see:
@@ -271,9 +275,15 @@ stdenv.mkDerivation rec {
       bkchr
       teutat3s
       emily
+      Gliczy
     ];
     mainProgram = pname;
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

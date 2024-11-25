@@ -1548,12 +1548,9 @@ with pkgs;
 
   ### APPLICATIONS/TERMINAL-EMULATORS
 
-  contour = qt6.callPackage ../applications/terminal-emulators/contour {
-    inherit (darwin.apple_sdk_11_0.libs) utmp;
-    inherit (darwin) sigtool;
-    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-    catch2 = catch2_3;
-    fmt = fmt_9;
+  contour = callPackage ../by-name/co/contour/package.nix {
+    inherit (darwin) libutil sigtool;
+    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else stdenv;
   };
 
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
@@ -5292,8 +5289,6 @@ with pkgs;
 
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
-  inherit (callPackage ../applications/networking/instant-messengers/signal-desktop {}) signal-desktop;
-
   slither-analyzer = with python3Packages; toPythonApplication slither-analyzer;
 
   # aka., pgp-tools
@@ -5349,11 +5344,6 @@ with pkgs;
   spire-server = spire.server;
 
   spoof-mac = python3Packages.callPackage ../tools/networking/spoof-mac { };
-
-  suricata = callPackage ../applications/networking/ids/suricata {
-    python = python3;
-    libbpf = libbpf_0;
-  };
 
   softhsm = callPackage ../tools/security/softhsm {
     inherit (darwin) libobjc;
@@ -10217,9 +10207,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit Security;
   };
 
-  libunicode = callPackage ../development/libraries/libunicode {
-    catch2 = catch2_3;
-    fmt = fmt_9;
+  libunicode = callPackage ../by-name/li/libunicode/package.nix {
+    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else stdenv;
   };
 
   libunwind =
@@ -11116,7 +11105,9 @@ with pkgs;
     harfbuzz = harfbuzzFull;
   };
 
-  termbench-pro = callPackage ../development/libraries/termbench-pro { fmt = fmt_8; };
+  termbench-pro = callPackage ../by-name/te/termbench-pro/package.nix {
+    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else stdenv;
+  };
 
   texpresso = callPackage ../tools/typesetting/tex/texpresso {
     texpresso-tectonic = callPackage ../tools/typesetting/tex/texpresso/tectonic.nix { };
@@ -18919,7 +18910,7 @@ with pkgs;
   });
 
   inherit (callPackage ../servers/web-apps/wordpress {})
-    wordpress wordpress_6_6;
+    wordpress wordpress_6_7;
 
   wordpressPackages = ( callPackage ../servers/web-apps/wordpress/packages {
     plugins = lib.importJSON ../servers/web-apps/wordpress/packages/plugins.json;
@@ -19210,6 +19201,10 @@ with pkgs;
 
   cantata = callPackage ../by-name/ca/cantata/package.nix {
     ffmpeg = ffmpeg_6;
+  };
+
+  libkazv = callPackage ../by-name/li/libkazv/package.nix {
+    libcpr = libcpr_1_10_5;
   };
 
   tree-from-tags = callPackage ../by-name/tr/tree-from-tags/package.nix {

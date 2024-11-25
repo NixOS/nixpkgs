@@ -331,6 +331,7 @@ mapAliases ({
   mask-rcnn = throw "mask-rcnn has been removed as it is unmaintained and its dependency imgaug no longer builds"; # added 2023-07-10
   mac_alias = mac-alias; # added 2024-01-07
   MDP = mdp; # added 2023-02-19
+  mdp = throw "mdp has been removed as it is unmaintained and broken"; # added 2024-11-23
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
   memcached = python-memcached; # added 2022-05-06
   mailman = throw "Please use pkgs.mailman"; # added 2022-04-29
