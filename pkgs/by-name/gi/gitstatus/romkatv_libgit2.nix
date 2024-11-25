@@ -26,4 +26,9 @@ libgit2.overrideAttrs (oldAttrs: {
   doCheck = false;
 
   patches = [ ];
+
+  # Force the rebuild to evict poisoned cache from hydra:
+  #   https://github.com/NixOS/nixpkgs/issues/358116
+  # TODO: remove the hack on gext stdenv rebuild on darwin.
+  TRIGGER_REBUILD = "1";
 })
