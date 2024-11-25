@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall =
     let
       wrapperArgs = ''
-        --prefix PATH : "${lib.makeBinPath finalAttrs.propagatedBuildInputs}"
+        --suffix PATH : "${lib.makeBinPath finalAttrs.propagatedBuildInputs}"
       '';
     in
     ''
