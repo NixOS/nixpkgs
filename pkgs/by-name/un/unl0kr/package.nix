@@ -1,29 +1,32 @@
-{ lib
-, nixosTests
-, stdenv
-, fetchFromGitLab
-, inih
-, libdrm
-, libinput
-, libxkbcommon
-, meson
-, ninja
-, pkg-config
-, scdoc
+{
+  lib,
+  nixosTests,
+  stdenv,
+  fetchFromGitLab,
+  inih,
+  libdrm,
+  libinput,
+  libxkbcommon,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unl0kr";
-  version = "2.0.0";
+  version = "3.2.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
-    owner = "cherrypicker";
-    repo = "unl0kr";
+    owner = "postmarketOS";
+    repo = "buffybox";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-KPP4Ol1GCAWqdQYlNtKQD/jx8A/xuHdvKjcocPMqWa0=";
+    hash = "sha256-nZX7mSY9IBIhVNmOD6mXI1IF2TgyKLc00a8ADAvVLB0=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/unl0kr";
 
   nativeBuildInputs = [
     meson
