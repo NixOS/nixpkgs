@@ -50,6 +50,8 @@ in
 
       enable = lib.mkEnableOption "Monero node daemon";
 
+      package = lib.mkPackageOption pkgs "Monero" { default = [ "monero-cli" ]; };
+
       dataDir = lib.mkOption {
         type = lib.types.str;
         default = "/var/lib/monero";
@@ -220,7 +222,7 @@ in
       serviceConfig = {
         User  = "monero";
         Group = "monero";
-        ExecStart = "${pkgs.monero-cli}/bin/monerod --config-file=${configFile} --non-interactive";
+        ExecStart = "${cfg.package}/bin/monerod --config-file=${configFile} --non-interactive";
         Restart = "always";
         SuccessExitStatus = [ 0 1 ];
       };
