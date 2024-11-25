@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tree";
-  version = "2.1.3";
+  version = "2.2.0";
 
   src = fetchFromGitLab {
     owner = "OldManProgrammer";
     repo = "unix-tree";
     rev = version;
-    hash = "sha256-Adc/BLKIzwjJztNxF4scmnsufoc/++x1F1IaobMn1rc=";
+    hash = "sha256-dRcQ4A5jWNwvxoGZzDIpdi2eAw3yTvz6zXsKciEwU2c=";
   };
 
   preConfigure = ''
@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
     "PREFIX=${placeholder "out"}"
   ];
 
