@@ -8,6 +8,7 @@
   installShellFiles,
   darwin,
   bash,
+  apple-sdk_11,
   # rbw-fzf
   withFzf ? false,
   fzf,
@@ -41,6 +42,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [ bash ] # for git-credential-rbw
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_11 # Needs _NSPasteboardTypeFileURL, can be removed once x86_64-darwin defaults to a higher SDK
       darwin.apple_sdk_11_0.frameworks.Security
       darwin.apple_sdk_11_0.frameworks.AppKit
     ];
