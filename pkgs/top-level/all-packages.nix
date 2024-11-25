@@ -5703,9 +5703,7 @@ with pkgs;
     buildGoModule = buildGo123Module;
   };
 
-  xdp-tools = callPackage ../tools/networking/xdp-tools {
-    llvmPackages = llvmPackages_14;
-  };
+  xdp-tools = callPackage ../tools/networking/xdp-tools { };
 
   ugarit = callPackage ../tools/backup/ugarit {
     inherit (chickenPackages_4) eggDerivation fetchegg;
