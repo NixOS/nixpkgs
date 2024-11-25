@@ -4,6 +4,7 @@
   binutils,
   fetchFromGitHub,
   cmake,
+  ninja,
   pkg-config,
   wrapGAppsHook3,
   boost180,
@@ -67,6 +68,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    ninja
     pkg-config
     wrapGAppsHook3
   ];
