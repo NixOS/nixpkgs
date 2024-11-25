@@ -67,12 +67,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Uniform formatter for simple languages, as part of the Tree-sitter ecosystem";
     mainProgram = "topiary";
     homepage = "https://github.com/tweag/topiary";
     changelog = "https://github.com/tweag/topiary/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }
