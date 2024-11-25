@@ -26,12 +26,14 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     find . \
       -type f \
       -executable \
       -maxdepth 1 \
       -exec install --target-directory=$out/bin/ {} +
+    runHook postInstall
   '';
 
   meta = with lib; {
