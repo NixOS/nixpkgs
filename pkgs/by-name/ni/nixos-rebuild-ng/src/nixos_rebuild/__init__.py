@@ -1,4 +1,5 @@
 import argparse
+import atexit
 import json
 import os
 import sys
@@ -22,7 +23,7 @@ from .nix import (
     switch_to_configuration,
     upgrade_channels,
 )
-from .process import Remote
+from .process import Remote, cleanup_ssh
 from .utils import flags_to_dict, info
 
 VERBOSE = 0
@@ -176,6 +177,7 @@ def execute(argv: list[str]) -> None:
     # Will be cleaned up on exit automatically.
     tmpdir = TemporaryDirectory(prefix="nixos-rebuild.")
     tmpdir_path = Path(tmpdir.name)
+    atexit.register(cleanup_ssh, tmpdir_path)
 
     profile = Profile.from_name(args.profile_name)
     target_host = Remote.from_arg(args.target_host, not args.no_ssh_tty, tmpdir_path)

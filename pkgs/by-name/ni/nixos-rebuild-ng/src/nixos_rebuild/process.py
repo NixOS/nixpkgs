@@ -26,6 +26,7 @@ class Remote:
     def from_arg(cls, host: str | None, tty: bool | None, tmp_dir: Path) -> Self | None:
         if host:
             opts = os.getenv("NIX_SSHOPTS", "").split() + [
+                # SSH ControlMaster flags, allow for faster re-connection
                 "-o",
                 "ControlMaster=auto",
                 "-o",
@@ -36,6 +37,12 @@ class Remote:
             return cls(host, opts, bool(tty))
         else:
             return None
+
+
+def cleanup_ssh(tmp_dir: Path) -> None:
+    "Close SSH ControlMaster connection."
+    for ctrl in tmp_dir.glob("ssh-*"):
+        subprocess.run(["ssh", "-o", f"ControlPath={ctrl}", "exit"], check=False)
 
 
 def run_wrapper(
