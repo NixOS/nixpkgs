@@ -51,6 +51,8 @@ lib.makeOverridable
 
 , passthru ? {}
 , meta ? {}
+, pname ? null
+, version ? null
 }:
 let
   chosenOutputs = map (drv: {
@@ -78,7 +80,7 @@ in runCommand name
   rec {
     inherit manifest ignoreCollisions checkCollisionContents passthru
             meta pathsToLink extraPrefix postBuild
-            nativeBuildInputs buildInputs;
+            nativeBuildInputs buildInputs pname version;
     pkgs = builtins.toJSON chosenOutputs;
     extraPathsFrom = lib.optional includeClosures (writeClosure pathsForClosure);
     preferLocalBuild = true;
