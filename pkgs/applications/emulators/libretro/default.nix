@@ -1,7 +1,6 @@
 {
   lib,
   newScope,
-  fetchFromGitHub,
 }:
 
 lib.makeScope newScope (self: {
