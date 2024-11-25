@@ -8,8 +8,6 @@ from contextlib import AbstractContextManager, contextmanager
 from pathlib import Path
 from typing import Any
 
-from colorama import Fore, Style
-
 from test_driver.logger import AbstractLogger
 from test_driver.machine import Machine, NixStartScript, retry
 from test_driver.polling_condition import PollingCondition
@@ -206,7 +204,7 @@ class Driver:
 
     def create_machine(
         self,
-        start_command: str | dict,
+        start_command: str,
         *,
         name: str | None = None,
         keep_vm_state: bool = False,
