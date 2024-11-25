@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     gnumake
     pkgsCross.avr.buildPackages.binutils
     pkgsCross.avr.buildPackages.binutils.bintools
-    pkgsCross.avr.buildPackages.gcc8
+    pkgsCross.avr.buildPackages.gcc
     pkgsCross.avr.libcCross
   ];
 

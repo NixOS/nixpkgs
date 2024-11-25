@@ -99,7 +99,6 @@ lib.makeExtensible (final: {
             inherit memSize;
           }
           ''
-            rmdir "$out"
             mkdir workspace
             mkfs -t ext3 -b 4096 /dev/${vmTools.hd}
             mount /dev/${vmTools.hd} workspace

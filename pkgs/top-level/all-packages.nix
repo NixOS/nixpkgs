@@ -3918,7 +3918,6 @@ with pkgs;
   angryipscanner = ipscan;
 
   isl = isl_0_20;
-  isl_0_17 = callPackage ../development/libraries/isl/0.17.1.nix { };
   isl_0_20 = callPackage ../development/libraries/isl/0.20.0.nix { };
   isl_0_24 = callPackage ../development/libraries/isl/0.24.0.nix { };
 
@@ -4655,11 +4654,6 @@ with pkgs;
   ombi = callPackage ../servers/ombi { };
 
   ome_zarr = with python3Packages; toPythonApplication ome-zarr;
-
-  onefetch = callPackage ../tools/misc/onefetch {
-    inherit (darwin) libresolv;
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
 
   onlykey = callPackage ../tools/security/onlykey { node_webkit = nwjs; };
 
@@ -6125,8 +6119,6 @@ with pkgs;
       extraBuildInputs = lib.optional stdenv.hostPlatform.isDarwin clang.cc;
     };
 
-  gcc7Stdenv = overrideCC gccStdenv buildPackages.gcc7;
-  gcc8Stdenv = overrideCC gccStdenv buildPackages.gcc8;
   gcc9Stdenv = overrideCC gccStdenv buildPackages.gcc9;
   gcc10Stdenv = overrideCC gccStdenv buildPackages.gcc10;
   gcc11Stdenv = overrideCC gccStdenv buildPackages.gcc11;
@@ -6218,7 +6210,7 @@ with pkgs;
   };
 
   inherit (callPackage ../development/compilers/gcc/all.nix { inherit noSysDirs; })
-    gcc7 gcc8 gcc9 gcc10 gcc11 gcc12 gcc13 gcc14;
+    gcc9 gcc10 gcc11 gcc12 gcc13 gcc14;
 
   gcc_latest = gcc14;
 

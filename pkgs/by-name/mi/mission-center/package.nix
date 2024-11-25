@@ -45,11 +45,10 @@
 # 1) Get the nvtop commit hash (`source-url` in `nvtop.json`):
 #     https://gitlab.com/mission-center-devs/mission-center/-/blob/v<VERSION>/src/sys_info_v2/gatherer/3rdparty/nvtop/nvtop.json?ref_type=tags
 # 2) Update the version of the main derivation
-# 3) Get the main `Cargo.lock` and copy it to `Cargo.lock`:
-#     https://gitlab.com/mission-center-devs/mission-center/-/blob/v<VERSION>/Cargo.lock?ref_type=tags
-# 4) Get the gatherer `Cargo.lock` and copy it to `gatherer-Cargo.lock`:
-#     https://gitlab.com/mission-center-devs/mission-center/-/blob/v<VERSION>/src/sys_info_v2/gatherer/Cargo.lock?ref_type=tags
-# 5) Refresh both the `nvtop` and `src` hashes
+# 3) Refresh all hashes:
+#   - main `src`
+#   - `nvtop` (if needed)
+#   - **both** CargoDeps hashes
 
 let
   nvtop = fetchFromGitHub {
@@ -73,8 +72,15 @@ stdenv.mkDerivation rec {
   cargoDeps = symlinkJoin {
     name = "cargo-vendor-dir";
     paths = [
-      (rustPlatform.importCargoLock { lockFile = ./Cargo.lock; })
-      (rustPlatform.importCargoLock { lockFile = ./gatherer-Cargo.lock; })
+      (rustPlatform.fetchCargoVendor {
+        inherit pname version src;
+        hash = "sha256-Yd6PlsSo8/yHMF4YdYz1Io4uGniAMyIj2RKy3yK4byU=";
+      })
+      (rustPlatform.fetchCargoVendor {
+        inherit pname version src;
+        sourceRoot = "${src.name}/src/sys_info_v2/gatherer";
+        hash = "sha256-oUAPJWNElj08jfmsdXz/o2bgzeBQsbm6nWHC8jGN2n0=";
+      })
     ];
   };
 
