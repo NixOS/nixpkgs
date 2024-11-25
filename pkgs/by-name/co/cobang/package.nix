@@ -11,7 +11,6 @@
 , requests
 , single-version
 , gobject-introspection
-, gst-plugins-good
 , gtk3
 , libhandy
 , librsvg
@@ -49,7 +48,7 @@ buildPythonApplication rec {
 
   buildInputs = [
     # Requires v4l2src
-    gst-plugins-good
+   (gst_all_1.gst-plugins-good.override { gtkSupport = true; });
     # For gobject namespaces
     libhandy
     networkmanager
