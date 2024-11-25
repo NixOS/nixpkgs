@@ -40,7 +40,7 @@ platform_sources () {
 
         [[ -z "$url" || -z "$hash" ]] && continue
 
-        hash=$(nix-hash --to-sri --type sha512 "$hash")
+        hash=$(nix hash convert --to sri --hash-algo sha512 "$hash")
 
         echo "      $rid = {
         url = \"$url\";
@@ -50,20 +50,43 @@ platform_sources () {
     echo "    };"
 }
 
-nuget_url="$(curl -fsSL "https://api.nuget.org/v3/index.json" | jq --raw-output '.resources[] | select(."@type" == "PackageBaseAddress/3.0.0")."@id"')"
+nuget_index="$(curl -fsSL "https://api.nuget.org/v3/index.json")"
+
+get_nuget_resource() {
+    jq -r '.resources[] | select(."@type" == "'"$1"'")."@id"' <<<"$nuget_index"
+}
+
+nuget_package_base_url="$(get_nuget_resource "PackageBaseAddress/3.0.0")"
+nuget_registration_base_url="$(get_nuget_resource "RegistrationsBaseUrl/3.6.0")"
 
 generate_package_list() {
     local version="$1" indent="$2"
     shift 2
-    local pkgs=( "$@" ) pkg url hash
+    local pkgs=( "$@" ) pkg url hash catalog_url catalog hash_algorithm
 
     for pkg in "${pkgs[@]}"; do
-        url=${nuget_url}${pkg,,}/${version,,}/${pkg,,}.${version,,}.nupkg
-        if ! hash=$(nix-prefetch-url "$url"); then
+        url=${nuget_package_base_url}${pkg,,}/${version,,}/${pkg,,}.${version,,}.nupkg
+
+        if hash=$(curl -s --head "$url" -o /dev/null -w '%header{x-ms-meta-sha512}') && [[ -n "$hash" ]]; then
+            # Undocumented fast path for nuget.org
+            # https://github.com/NuGet/NuGetGallery/issues/9433#issuecomment-1472286080
+            hash=$(nix hash convert --to sri --hash-algo sha512 "$hash")
+        elif {
+            catalog_url=$(curl -sL --compressed "${nuget_registration_base_url}${pkg,,}/${version,,}.json" | jq -r ".catalogEntry") && [[ -n "$catalog_url" ]] &&
+            catalog=$(curl -sL "$catalog_url") && [[ -n "$catalog" ]] &&
+            hash_algorithm="$(jq -er '.packageHashAlgorithm' <<<"$catalog")"&& [[ -n "$hash_algorithm" ]] &&
+            hash=$(jq -er '.packageHash' <<<"$catalog") && [[ -n "$hash" ]]
+        }; then
+            # Documented but slower path (requires 2 requests)
+            hash=$(nix hash convert --to sri --hash-algo "${hash_algorithm,,}" "$hash")
+        elif hash=$(nix-prefetch-url "$url" --type sha512); then
+            # Fallback to downloading and hashing locally
+            echo "Failed to fetch hash from nuget for $url, falling back to downloading locally" >&2
+            hash=$(nix hash convert --to sri --hash-algo sha512 "$hash")
+        else
             echo "Failed to fetch hash for $url" >&2
             exit 1
         fi
-        hash=$(nix-hash --to-sri --type sha256 "$hash")
 
         echo "$indent(fetchNupkg { pname = \"${pkg}\"; version = \"${version}\"; hash = \"${hash}\"; })"
     done
@@ -348,6 +371,8 @@ in rec {
     version = \"${sdk_version}\";
     $sdk_sources
     inherit commonPackages hostPackages targetPackages;
+    runtime = runtime_$major_minor_underscore;
+    aspnetcore = aspnetcore_$major_minor_underscore;
   };"
         done
 
