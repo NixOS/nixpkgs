@@ -185,7 +185,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
         mkdir -p ../mingw
         # --with-build-sysroot expects that:
         cp -R $libcCross/include ../mingw
-        configureFlags="$configureFlags --with-build-sysroot=`pwd`/.."
+        appendToVar configureFlags "--with-build-sysroot=`pwd`/.."
     fi
 
     # Perform the build in a different directory.

@@ -478,13 +478,13 @@ stdenv.mkDerivation ({
     for p in "''${pkgsHostHost[@]}" "''${pkgsHostTarget[@]}"; do
       ${buildPkgDb ghc "$packageConfDir"}
       if [ -d "$p/include" ]; then
-        configureFlags+=" --extra-include-dirs=$p/include"
+        appendToVar configureFlags "--extra-include-dirs=$p/include"
       fi
       if [ -d "$p/lib" ]; then
-        configureFlags+=" --extra-lib-dirs=$p/lib"
+        appendToVar configureFlags "--extra-lib-dirs=$p/lib"
       fi
       if [[ -d "$p/Library/Frameworks" ]]; then
-        configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
+        appendToVar configureFlags "--extra-framework-dirs=$p/Library/Frameworks"
       fi
   '' + ''
     done
