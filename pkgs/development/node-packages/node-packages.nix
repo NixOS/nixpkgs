@@ -71306,6 +71306,7 @@ in
     meta = {
       description = "Validate JSON";
       homepage = "http://zaach.github.com/jsonlint/";
+      mainProgram = "jsonlint";
     };
     production = true;
     bypassCache = true;

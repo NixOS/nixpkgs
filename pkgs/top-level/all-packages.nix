@@ -2055,7 +2055,7 @@ with pkgs;
 
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
-  libtensorflow = python3.pkgs.tensorflow.libtensorflow;
+  libtensorflow = python3.pkgs.tensorflow-build.libtensorflow;
 
   libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix { };
 
@@ -16202,10 +16202,6 @@ with pkgs;
 
   whispers = with python3Packages; toPythonApplication whispers;
 
-  warp = callPackage ../applications/networking/warp {
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  };
-
   warp-plus = callPackage ../by-name/wa/warp-plus/package.nix {
     buildGoModule = buildGo122Module;
   };
@@ -16580,12 +16576,6 @@ with pkgs;
   };
 
   ledger-agent = with python3Packages; toPythonApplication ledger-agent;
-
-  litecoin  = libsForQt5.callPackage ../applications/blockchains/litecoin {
-    inherit (darwin.apple_sdk.frameworks) AppKit;
-    boost = pkgs.boost177;
-  };
-  litecoind = litecoin.override { withGui = false; };
 
   monero-cli = callPackage ../applications/blockchains/monero-cli {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit;
