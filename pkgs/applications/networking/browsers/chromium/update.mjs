@@ -50,6 +50,8 @@ for (const attr_path of Object.keys(lockfile)) {
     // unconditionally remove ungoogled-chromium's epoch/sub-version (e.g. 130.0.6723.116-1 -> 130.0.6723.116)
     const version_chromium = version_upstream.split('-')[0]
 
+    const chromium_rev = await chromium_resolve_tag_to_rev(version_chromium)
+
     lockfile[attr_path] = {
       version: version_chromium,
       chromedriver: !ungoogled ? await fetch_chromedriver_binaries(version_chromium) : undefined,
@@ -62,20 +64,20 @@ for (const attr_path of Object.keys(lockfile)) {
       DEPS: {},
     }
 
-    const depot_tools = await fetch_depot_tools(version_chromium, lockfile_initial[attr_path].deps.depot_tools)
+    const depot_tools = await fetch_depot_tools(chromium_rev, lockfile_initial[attr_path].deps.depot_tools)
     lockfile[attr_path].deps.depot_tools = {
       rev: depot_tools.rev,
       hash: depot_tools.hash,
     }
 
-    const gn = await fetch_gn(version_chromium, lockfile_initial[attr_path].deps.gn)
+    const gn = await fetch_gn(chromium_rev, lockfile_initial[attr_path].deps.gn)
     lockfile[attr_path].deps.gn = {
       rev: gn.rev,
       hash: gn.hash,
     }
 
     // DEPS update loop
-    lockfile[attr_path].DEPS = await resolve_DEPS(depot_tools.out, version_chromium)
+    lockfile[attr_path].DEPS = await resolve_DEPS(depot_tools.out, chromium_rev)
     for (const [path, value] of Object.entries(lockfile[attr_path].DEPS)) {
       delete value.fetcher
       delete value.postFetch
@@ -144,6 +146,14 @@ async function fetch_chromedriver_binaries(chromium_version) {
     hash_darwin: await prefetch(url('mac-x64')),
     hash_darwin_aarch64: await prefetch(url('mac-arm64')),
   }
+}
+
+
+async function chromium_resolve_tag_to_rev(tag) {
+  const url = `https://chromium.googlesource.com/chromium/src/+/refs/tags/${tag}?format=json`
+  const response = await (await fetch(url)).text()
+  const json = JSON.parse(response.replace(`)]}'\n`, ''))
+  return json.commit
 }
 
 
