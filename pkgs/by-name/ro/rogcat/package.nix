@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rogcat";
-  version = "0.4.7";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "flxo";
     repo = "rogcat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-l2zfVt2vm5GTrYs6/0D3EesxxPWSmjf2tGS545766iA=";
+    hash = "sha256-kdX/vFfkkPsHCFUSkKm0AToujma0eYoZXxZLXgPxOdM=";
   };
 
-  cargoHash = "sha256-cDAS8mengFgBsq9nTiVAjt7pJhKjj7/F9x8IS6vP2ck=";
+  cargoHash = "sha256-a+B9bMuKhmt3ka9p7a/O6JggiAxMzm9C5PdbFZD1KP0=";
 
   nativeBuildInputs = [
     pkg-config
