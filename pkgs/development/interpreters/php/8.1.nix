@@ -2,16 +2,8 @@
 
 let
   base = callPackage ./generic.nix ((removeAttrs _args [ "fetchpatch" ]) // {
-    version = "8.1.30";
-    hash = "sha256-yxYl5axJuRA3R34+d2e7BiQ0OXGuuZL0eRthivVx0j4=";
-    extraPatches = [
-      # Fix build with libxml 2.12+.
-      # Patch from https://github.com/php/php-src/commit/0a39890c967aa57225bb6bdf4821aff7a3a3c082
-      (fetchpatch {
-        url = "https://github.com/php/php-src/commit/0a39890c967aa57225bb6bdf4821aff7a3a3c082.patch";
-        hash = "sha256-HvpTL7aXO9gr4glFdhqUWQPrG8TYTlvbNINq33M3zS0=";
-      })
-    ];
+    version = "8.1.31";
+    hash = "sha256-CzmCizRRUcrxt5XZ9LkjyYhyMXdsMwdt/J2QpEOQ0Nw=";
   });
 in
 base.withExtensions ({ all, ... }: with all; ([
