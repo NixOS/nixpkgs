@@ -656,6 +656,8 @@ with pkgs;
 
   fetchdeb = callPackage ../build-support/fetchdeb { };
 
+  fetchrpm = callPackage ../build-support/fetchrpm { };
+
   resolveMirrorURLs = {url}: fetchurl {
     showURLs = true;
     inherit url;
