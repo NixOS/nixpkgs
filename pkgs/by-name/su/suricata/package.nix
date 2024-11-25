@@ -9,7 +9,7 @@
 , file
 , hyperscan
 , jansson
-, libbpf
+, libbpf_0
 , libcap_ng
 , libevent
 , libmaxminddb
@@ -23,10 +23,11 @@
 , lz4
 , nspr
 , pcre2
-, python
+, python3
 , zlib
 , redisSupport ? true, redis, hiredis
 , rustSupport ? true, rustc, cargo
+, nixosTests
 }: let
   libmagic = file;
   hyperscanSupport = stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
@@ -49,14 +50,14 @@ stdenv.mkDerivation rec {
   ++ lib.optionals rustSupport [ rustc cargo ]
   ;
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     pyyaml
   ];
 
   buildInputs = [
     elfutils
     jansson
-    libbpf
+    libbpf_0
     libcap_ng
     libevent
     libmagic
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
     lz4
     nspr
     pcre2
-    python
+    python3
     zlib
   ]
   ++ lib.optional hyperscanSupport hyperscan
@@ -152,6 +153,8 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out/etc/suricata/suricata.yaml" \
       --replace "/etc/suricata" "$out/etc/suricata"
   '';
+
+  passthru.tests = { inherit (nixosTests) suricata; };
 
   meta = with lib; {
     description = "Free and open source, mature, fast and robust network threat detection engine";

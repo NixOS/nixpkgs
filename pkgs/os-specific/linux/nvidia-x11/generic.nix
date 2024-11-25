@@ -32,6 +32,8 @@
 
 { lib
 , stdenv
+, runCommandLocal
+, patchutils
 , callPackage
 , pkgs
 , pkgsi686Linux
@@ -68,6 +70,29 @@ assert useFabricmanager -> fabricmanagerSha256 != null;
 assert useFabricmanager -> !useSettings;
 
 let
+  # Rewrites patches meant for the kernel/* folder structure to kernel-open/*
+  rewritePatch =
+    { from, to }:
+    patch:
+    runCommandLocal (builtins.baseNameOf patch)
+      {
+        inherit patch;
+        nativeBuildInputs = [ patchutils ];
+      }
+      ''
+        lsdiff \
+          -p1 -i ${from}/'*' \
+          "$patch" \
+        | sort -u | sed -e 's/[*?]/\\&/g' \
+        | xargs -I{} \
+          filterdiff \
+          --include={} \
+          --strip=2 \
+          --addoldprefix=a/${to}/ \
+          --addnewprefix=b/${to}/ \
+          --clean "$patch" > "$out"
+      '';
+
   nameSuffix = lib.optionalString (!libsOnly) "-${kernel.version}";
   pkgSuffix = lib.optionalString (lib.versionOlder version "304") "-pkg0";
   i686bundled = lib.versionAtLeast version "391" && !disable32Bit;
@@ -144,7 +169,17 @@ let
           }
       else throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
 
-    patches = if libsOnly then null else patches;
+    patches =
+      if libsOnly then
+        null
+      else
+        (
+          patches
+          ++ (builtins.map (rewritePatch {
+            from = "kernel-open";
+            to = "kernel";
+          }) patchesOpen)
+        );
     inherit prePatch postPatch patchFlags;
     inherit preInstall postInstall;
     inherit version useGLVND useProfiles;
@@ -202,7 +237,12 @@ let
           (hash: callPackage ./open.nix {
             inherit hash;
             nvidia_x11 = self;
-            patches = patchesOpen;
+            patches =
+              (builtins.map (rewritePatch {
+                from = "kernel";
+                to = "kernel-open";
+              }) patches)
+              ++ patchesOpen;
             broken = brokenOpen;
           })
           openSha256;
