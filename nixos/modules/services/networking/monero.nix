@@ -195,6 +195,17 @@ in
         '';
       };
 
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [ "--tx-proxy tor,127.0.0.1:9050,10" ];
+        description = ''
+          List of arguments that will be passed when executing monerod.
+          This is useful for configuration that cannot be set via configuration
+          file.
+        '';
+      };
+
     };
 
   };
@@ -222,7 +233,7 @@ in
       serviceConfig = {
         User  = "monero";
         Group = "monero";
-        ExecStart = "${cfg.package}/bin/monerod --config-file=${configFile} --non-interactive";
+        ExecStart = "${cfg.package}/bin/monerod --config-file=${configFile} --non-interactive ${lib.concatStringsSep " " cfg.extraArgs}";
         Restart = "always";
         SuccessExitStatus = [ 0 1 ];
       };
