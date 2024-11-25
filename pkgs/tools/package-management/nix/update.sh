@@ -18,6 +18,8 @@ Usage: $0 subdir [OPTIONS]
 Example:
   $0 2_25
 
+  $0 git
+
 EOF
 }
 
@@ -47,20 +49,32 @@ dir_to_version() {
   echo "${dir//_/.}"
 }
 
+dir_to_ref() {
+  local dir="$1"
+  case "$dir" in
+    git)
+      echo refs/heads/master
+      ;;
+
+    *)
+      echo refs/tags/"$(get_minor_tag "$(dir_to_version "$subdir")")"
+      ;;
+  esac
+}
+
 subdir="$1"
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 nixpkgs="$(realpath ../../../../..)"
 
-tag=$(get_minor_tag "$(dir_to_version "$subdir")")
-ref=refs/tags/$tag
+ref="$(dir_to_ref "$subdir")"
 
 mkdir -p "$subdir"
 cd "$subdir"
 
 nix-prefetch-github \
-  --rev $ref \
+  --rev "$ref" \
   --json \
   > source.json \
   NixOS nix
