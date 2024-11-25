@@ -90,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: ({
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which ]
+    ++ lib.optionals (mysqlSupport) [ libmysqlclient ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
@@ -100,6 +101,8 @@ stdenv.mkDerivation (finalAttrs: ({
   } // {
 
   propagatedNativeBuildInputs = [ lndir ];
+
+  strictDeps = true;
 
   # libQt5Core links calls CoreFoundation APIs that call into the system ICU. Binaries linked
   # against it will crash during build unless they can access `/usr/share/icu/icudtXXl.dat`.

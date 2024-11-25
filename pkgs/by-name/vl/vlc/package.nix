@@ -189,6 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
     systemd
     taglib
     xcbutilkeysyms
+    wayland-scanner # only required for configure script
     zlib
   ]
   ++ optionals (!stdenv.hostPlatform.isAarch && !onlyLibVLC) [ live555 ]
@@ -207,6 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtx11extras
   ])
   ++ optionals (waylandSupport && withQt5) [ libsForQt5.qtwayland ];
+  strictDeps = true;
 
   env = {
     # vlc depends on a c11-gcc wrapper script which we don't have so we need to

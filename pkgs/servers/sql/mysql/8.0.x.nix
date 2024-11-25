@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-At/ZQ/lnQvf5zXiFWzJwjqTfVIycFK+Sc4F/O72dIrI=";
   };
 
-  nativeBuildInputs = [ bison cmake pkg-config ]
+  nativeBuildInputs = [ bison cmake pkg-config protobuf ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
 
   patches = [
@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools CoreServices developer_cmds DarwinTools
   ];
+
+  strictDeps = true;
 
   outputs = [ "out" "static" ];
 
