@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gtk-doc, meson, ninja, pkg-config, python3
+{ lib, stdenv, fetchurl, fetchpatch, gtk-doc, meson, ninja, pkg-config, python3
 , docbook_xsl, fontconfig, freetype, libpng, pixman, zlib
 , x11Support? !stdenv.hostPlatform.isDarwin || true, libXext, libXrender
 , gobjectSupport ? true, glib
@@ -40,6 +40,16 @@ in {
     ApplicationServices
     Carbon
   ]);
+
+  patches = [
+    # Pull upstream fix to fix "out of memory" errors:
+    #   https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/595
+    (fetchpatch {
+      name = "fix-oom.patch";
+      url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/b9eed915f9a67380e7ef9d8746656455c43f67e2.patch";
+      hash = "sha256-iWYxMVeNpseClSTf7BfU9GBe+tJWc+DUJWTWE5MnGh4=";
+    })
+  ];
 
   propagatedBuildInputs = [ fontconfig freetype pixman libpng zlib ]
     ++ optionals x11Support [ libXext libXrender ]
