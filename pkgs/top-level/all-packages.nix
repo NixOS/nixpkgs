@@ -8931,7 +8931,6 @@ with pkgs;
     else callPackage ../os-specific/linux/bionic-prebuilt { };
 
   inherit (callPackage ../development/libraries/boost { inherit (buildPackages) boost-build; })
-    boost175
     boost177
     boost178
     boost179
@@ -13489,22 +13488,6 @@ with pkgs;
 
   schismtracker = callPackage ../applications/audio/schismtracker {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
-  libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
-    boost = boost175; # fatal error: 'boost/interprocess/detail/posix_time_types_wrk.hpp' file not found
-  };
-  libbitcoin-protocol = callPackage ../tools/misc/libbitcoin/libbitcoin-protocol.nix {
-    boost = boost175;
-  };
-  libbitcoin-client   = callPackage ../tools/misc/libbitcoin/libbitcoin-client.nix {
-    boost = boost175;
-  };
-  libbitcoin-network  = callPackage ../tools/misc/libbitcoin/libbitcoin-network.nix {
-    boost = boost175;
-  };
-  libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix {
-    boost = boost175;
   };
 
   ausweisapp = qt6Packages.callPackage ../applications/misc/ausweisapp { };
