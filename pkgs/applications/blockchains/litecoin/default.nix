@@ -70,5 +70,10 @@ mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.mit;
     maintainers = with maintainers; [ offline ];
+    knownVulnerabilities = [
+      "CVE-2023-33297"
+      "CVE-2024-35202"
+      "https://bitcoincore.org/en/2024/10/08/disclose-mutated-blocks-hindering-propagation/"
+    ];
   };
 }
