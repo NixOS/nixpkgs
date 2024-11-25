@@ -2,15 +2,15 @@
   libgit2-thin-packfile,
   ... }:
 let
-  officialRelease = true;
+  officialRelease = false;
   sourceArgs = builtins.fromJSON (builtins.readFile ./source.json);
-  src = fetchFromGitHub sourceArgs;
+  src = fetchFromGitHub sourceArgs // {
+    shortRev = lib.strings.substring 0 7 sourceArgs.rev;
+  };
 
   version =
-    let
-      shortRev = lib.strings.substring 0 7 sourceArgs.rev;
-      baseVersion = lib.strings.trim (builtins.readFile ./.version);
-    in "${baseVersion}pre-${shortRev}";
+    let baseVersion = lib.strings.trim (builtins.readFile ./.version);
+    in "${baseVersion}pre-${src.shortRev}";
 
   # A new scope, so that we can use `callPackage` to inject our own interdependencies
   # without "polluting" the top level "`pkgs`" attrset.
@@ -25,7 +25,7 @@ let
       {
         otherSplices = generateSplicesForMkScope "nixComponents";
         f = import ./packaging/components.nix {
-          inherit lib officialRelease src version;
+          inherit lib officialRelease src;
         };
       };
 

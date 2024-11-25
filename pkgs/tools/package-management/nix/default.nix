@@ -225,16 +225,8 @@ in lib.makeExtensible (self: ({
     inherit libgit2-thin-packfile;
   };
 
-  git = common rec {
-    version = "2.25.0";
-    suffix = "pre20241101_${lib.substring 0 8 src.rev}";
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "2e5759e3778c460efc5f7cfc4cb0b84827b5ffbe";
-      hash = "sha256-E1Sp0JHtbD1CaGO3UbBH6QajCtOGqcrVfPSKL0n63yo=";
-    };
-    self_attribute_name = "git";
+  git = callPackage ./git/default.nix {
+    inherit libgit2-thin-packfile;
   };
 
   latest = self.nix_2_25;
