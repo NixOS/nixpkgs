@@ -17421,8 +17421,6 @@ with pkgs;
     appls = [ prio ];
   };
 
-  cinnamon = recurseIntoAttrs (callPackage ../desktops/cinnamon { });
-
   deepin = recurseIntoAttrs (callPackage ../desktops/deepin { });
 
   enlightenment = recurseIntoAttrs (callPackage ../desktops/enlightenment { });

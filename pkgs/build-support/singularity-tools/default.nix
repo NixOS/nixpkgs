@@ -22,38 +22,6 @@ let
   defaultSingularity = singularity;
 in
 lib.makeExtensible (final: {
-  # TODO(@ShamrockLee): Remove after Nixpkgs 24.11 branch-off.
-  shellScript =
-    lib.warn
-      "`singularity-tools.shellScript` is deprecated. Use `writeScript`, `writeShellScripts` or `writers.writeBash` instead."
-      (
-        name: text:
-        writeScript name ''
-          #!${runtimeShell}
-          set -e
-          ${text}
-        ''
-      );
-
-  # TODO(@ShamrockLee): Remove after Nixpkgs 24.11 branch-off.
-  mkLayer =
-    lib.warn
-      "`singularity-tools.mkLayer` is deprecated, as it is no longer used to implement `singularity-tools.buildImages`."
-      (
-        {
-          name,
-          contents ? [ ],
-          # May be "apptainer" instead of "singularity"
-          projectName ? (singularity.projectName or "singularity"),
-        }:
-        runCommand "${projectName}-layer-${name}" { inherit contents; } ''
-          mkdir $out
-          for f in $contents ; do
-            cp -ra $f $out/
-          done
-        ''
-      );
-
   buildImage =
     {
       name,
@@ -118,7 +86,7 @@ lib.makeExtensible (final: {
             mkdir -p bin ./${builtins.storeDir}
             # Loop over the line-separated paths in $layerClosure
             while IFS= read -r f; do
-              cp -r "$f" "./$f"
+              cp -ar "$f" "./$f"
             done < "$layerClosure"
 
             # TODO(@ShamrockLee):

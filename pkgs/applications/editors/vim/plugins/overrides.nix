@@ -591,6 +591,11 @@ in
     src = "${nodePackages."@yaegassy/coc-nginx"}/lib/node_modules/@yaegassy/coc-nginx";
   };
 
+  codecompanion-nvim = super.codecompanion-nvim.overrideAttrs {
+    dependencies = with self; [ plenary-nvim ];
+    nvimRequireCheck = "codecompanion";
+  };
+
   codeium-nvim =
     let
       # Update according to https://github.com/Exafunction/codeium.nvim/blob/main/lua/codeium/versions.json
