@@ -751,9 +751,32 @@ let
           t' = opt.options.type;
           mergedType = t.typeMerge t'.functor;
           typesMergeable = mergedType != null;
-          typeSet = if (bothHave "type") && typesMergeable
-                       then { type = mergedType; }
-                       else {};
+
+          # TODO: Remove this when all downstream reliances of internals: 'functor.wrapped' are sufficiently migrated.
+          # A function that adds the deprecated wrapped message to a type.
+          addDeprecatedWrapped = t:
+            t // {
+              functor = t.functor // {
+                wrapped = t.functor.wrappedDeprecationMessage {
+                  inherit loc;
+                };
+              };
+            };
+
+          mergedType' =
+            if mergedType ? functor.wrappedDeprecationMessage then
+              addDeprecatedWrapped mergedType
+            else
+              mergedType;
+
+          typeSet =
+            if (bothHave "type") && typesMergeable then
+              { type = mergedType'; }
+            else if opt.options ? type && opt.options.type ? functor.wrappedDeprecationMessage then
+              { type = addDeprecatedWrapped opt.options.type; }
+            else
+              {};
+
           bothHave = k: opt.options ? ${k} && res ? ${k};
       in
       if bothHave "default" ||
