@@ -16,12 +16,19 @@ stdenv.mkDerivation {
     hash = "sha256-HbKu3eidDepCsW2VKPiUyNFdrk4ZC1muzHj1qVEnbqs=";
   };
 
+  postPatch = let
+    isX64Darwin = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
+  in
   # Some gnulib tests fail
   # - on Musl: https://github.com/NixOS/nixpkgs/pull/228714
   # - on x86_64-darwin: https://github.com/NixOS/nixpkgs/pull/228714#issuecomment-1576826330
-  postPatch = if stdenv.hostPlatform.isMusl || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) then ''
+  lib.optionalString (stdenv.hostPlatform.isMusl || isX64Darwin) ''
     sed -i 's:gnulib-tests::g' Makefile.in
-  '' else null;
+  ''
+  # x86_64-darwin: fails 'stack-overflow' tests on Rosetta 2 emulator
+  + lib.optionalString isX64Darwin ''
+    sed -i 1a'exit 0' tests/stack-overflow
+  '';
 
   nativeCheckInputs = [ perl glibcLocales ];
   outputs = [ "out" "info" ]; # the man pages are rather small
@@ -31,8 +38,9 @@ stdenv.mkDerivation {
 
   # cygwin: FAIL: multibyte-white-space
   # freebsd: FAIL mb-non-UTF8-performance
-  # x86_64-darwin: fails 'stack-overflow' tests on Rosetta 2 emulator
-  doCheck = !stdenv.hostPlatform.isCygwin && !stdenv.hostPlatform.isFreeBSD && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) && !stdenv.buildPlatform.isRiscV64;
+  doCheck = !stdenv.hostPlatform.isCygwin
+    && !stdenv.hostPlatform.isFreeBSD
+    && !stdenv.buildPlatform.isRiscV64;
 
   # On macOS, force use of mkdir -p, since Grep's fallback
   # (./install-sh) is broken.
