@@ -11447,6 +11447,18 @@ final: prev:
     meta.homepage = "https://github.com/liuchengxu/space-vim/";
   };
 
+  spaceman-nvim = buildVimPlugin {
+    pname = "spaceman.nvim";
+    version = "2024-11-03";
+    src = fetchFromGitHub {
+      owner = "FireIsGood";
+      repo = "spaceman.nvim";
+      rev = "7910d202073bcc5f567481426f771b3737451dd9";
+      sha256 = "1p2j6yygqsmxbvxns4ssiyspsnpbz12pq29s9vs3n5x2ddxrrwjn";
+    };
+    meta.homepage = "https://github.com/FireIsGood/spaceman.nvim/";
+  };
+
   spacevim = buildVimPlugin {
     pname = "spacevim";
     version = "2018-03-29";
