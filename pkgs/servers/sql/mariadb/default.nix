@@ -26,7 +26,7 @@ let
 
     libExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
-    mytopEnv = buildPackages.perl.withPackages (p: with p; [ DBDmysql DBI TermReadKey ]);
+    mytopEnv = buildPackages.perl.withPackages (p: with p; [ DBDMariaDB DBI TermReadKey ]);
 
     common = rec { # attributes common to both builds
       inherit version;
