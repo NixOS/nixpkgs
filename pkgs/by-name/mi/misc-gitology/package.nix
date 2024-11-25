@@ -8,7 +8,7 @@
 }:
 stdenv.mkDerivation {
   pname = "misc-gitology";
-  version = "unstable-2024-08-26";
+  version = "0-unstable-2024-08-26";
 
   src = fetchFromGitHub {
     owner = "da-x";
