@@ -42,9 +42,9 @@ let
     owner = "DataDog";
     repo = "integrations-core";
     rev = version;
-    sha256 = "sha256-tgY8Jh7N9ot3Xp+JfsA9vEzj62H2OPTEh6b1YzyNGRU=";
+    sha256 = "sha256-p5eoNNHQQl314mfUk2t3qQaerPu02GKA+tKkAY7bojk=";
   };
-  version = "7.50.2";
+  version = "7.56.2";
 
   # Build helper to build a single datadog integration package.
   buildIntegration = { pname, ... }@args:
