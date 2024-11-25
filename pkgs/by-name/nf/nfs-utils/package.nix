@@ -64,21 +64,19 @@ stdenv.mkDerivation rec {
   postPatch =
     ''
       patchShebangs tests
-      sed -i "s,/usr/sbin,$out/bin,g" utils/statd/statd.c
+      substituteInPlace utils/statd/statd.c --replace-fail "/usr/sbin" "$out/bin"
       sed -i "s,^PATH=.*,PATH=$out/bin:${statdPath}," utils/statd/start-statd
 
       configureFlags="--with-start-statd=$out/bin/start-statd $configureFlags"
 
       substituteInPlace systemd/nfs-utils.service \
-        --replace "/bin/true" "${coreutils}/bin/true"
+        --replace-fail "/bin/true" "${coreutils}/bin/true"
 
       substituteInPlace tools/nfsrahead/Makefile.in systemd/Makefile.in \
-        --replace "/usr/lib/udev/rules.d/" "$out/lib/udev/rules.d/"
+        --replace-fail "/usr/lib/udev/rules.d/" "$out/lib/udev/rules.d/"
 
       substituteInPlace utils/mount/Makefile.in \
-        --replace "chmod 4511" "chmod 0511"
-
-      sed '1i#include <stdint.h>' -i support/nsm/rpc.c
+        --replace-fail "chmod 4511" "chmod 0511"
     '';
 
   makeFlags = [
