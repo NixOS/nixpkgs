@@ -25,11 +25,6 @@ in
   version = baseVersion + versionSuffix;
   inherit versionSuffix;
 
-  nix = callPackage ../package.nix {
-    version = fineVersion;
-    versionSuffix = fineVersionSuffix;
-  };
-
   nix-util = callPackage ../src/libutil/package.nix { };
   nix-util-c = callPackage ../src/libutil-c/package.nix { };
   nix-util-test-support = callPackage ../src/libutil-test-support/package.nix { };
@@ -58,7 +53,7 @@ in
 
   nix-cli = callPackage ../src/nix/package.nix { version = fineVersion; };
 
-  nix-functional-tests = callPackage ../src/nix-functional-tests/package.nix { version = fineVersion; };
+  nix-functional-tests = callPackage ../tests/functional/package.nix { version = fineVersion; };
 
   nix-manual = callPackage ../doc/manual/package.nix { version = fineVersion; };
   nix-internal-api-docs = callPackage ../src/internal-api-docs/package.nix { version = fineVersion; };
