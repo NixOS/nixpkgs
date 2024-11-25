@@ -1421,11 +1421,9 @@
   "trivial-builder-symlinkJoin": [
     "index.html#trivial-builder-symlinkJoin"
   ],
-  "trivial-builder-writeReferencesToFile": [
-    "index.html#trivial-builder-writeReferencesToFile"
-  ],
   "trivial-builder-writeClosure": [
-    "index.html#trivial-builder-writeClosure"
+    "index.html#trivial-builder-writeClosure",
+    "index.html#trivial-builder-writeReferencesToFile"
   ],
   "trivial-builder-writeDirectReferencesToFile": [
     "index.html#trivial-builder-writeDirectReferencesToFile"
