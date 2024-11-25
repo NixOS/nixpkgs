@@ -808,6 +808,8 @@ self: super: with self; {
 
   arviz = callPackage ../development/python-modules/arviz { };
 
+  arxiv = callPackage ../development/python-modules/arxiv { };
+
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
 
   asana = callPackage ../development/python-modules/asana { };
@@ -15237,6 +15239,8 @@ self: super: with self; {
   ssg = callPackage ../development/python-modules/ssg { };
 
   ssort = callPackage ../development/python-modules/ssort { };
+
+  stable-baselines3 = callPackage ../development/python-modules/stable-baselines3 { };
 
   stack-data = callPackage ../development/python-modules/stack-data { };
 

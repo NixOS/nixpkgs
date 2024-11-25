@@ -22,9 +22,6 @@
 , withPython ? false
 }:
 
-# Added 2024-09-03. Drop this assertion after 24.11 is released.
-assert lib.assertMsg (config.avahi or {} == {}) "config.avahi has been removed; please use an overlay or services.avahi.package to configure the avahi package.";
-
 stdenv.mkDerivation rec {
   pname = "avahi${lib.optionalString withLibdnssdCompat "-compat"}";
   version = "0.8";

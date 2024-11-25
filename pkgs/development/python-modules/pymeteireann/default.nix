@@ -1,5 +1,6 @@
 {
   lib,
+  setuptools,
   aiohttp,
   async-timeout,
   buildPythonPackage,
@@ -10,21 +11,25 @@
 
 buildPythonPackage rec {
   pname = "pymeteireann";
-  version = "2021.8.0";
-  format = "setuptools";
+  version = "2024.11.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DylanGore";
     repo = "PyMetEireann";
-    rev = version;
-    sha256 = "1xcfb3f2a2q99i8anpdzq8s743jgkk2a3rpar48b2dhs7l15rbsd";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-b59I2h9A3QoXEBUYhbR0vsGGpQpOvFrqhHZnVCS8fLo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    xmltodict
     aiohttp
     async-timeout
     pytz
-    xmltodict
   ];
 
   # Project has no tests
@@ -32,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "meteireann" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to communicate with the Met Éireann Public Weather Forecast API";
     homepage = "https://github.com/DylanGore/PyMetEireann/";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

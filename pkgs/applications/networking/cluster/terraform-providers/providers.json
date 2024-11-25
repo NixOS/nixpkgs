@@ -345,11 +345,11 @@
     "vendorHash": "sha256-quoFrJbB1vjz+MdV+jnr7FPACHuUe5Gx9POLubD2IaM="
   },
   "digitalocean": {
-    "hash": "sha256-sgyAevLDugDoaoeqgCmacqJAUDl35bifEX6euJf74/Y=",
+    "hash": "sha256-hxY0yg6syB7Dym323MOj6y0ZzLM0jCWO08zJmg4AvGk=",
     "homepage": "https://registry.terraform.io/providers/digitalocean/digitalocean",
     "owner": "digitalocean",
     "repo": "terraform-provider-digitalocean",
-    "rev": "v2.42.0",
+    "rev": "v2.44.1",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -372,13 +372,13 @@
     "vendorHash": "sha256-osSB88Xzvt5DTDE0AY2+QuKClfbGIVJNrXuy4Cbk1Tg="
   },
   "dnsimple": {
-    "hash": "sha256-19h4x+kxhFwlNUdTmTLjoLRQB7fNBh0CxxoQDGRPPiQ=",
+    "hash": "sha256-ZKi8+EYLW/Pey0EHTKY0ly7+2Y13mqxMhGia6UUdEtI=",
     "homepage": "https://registry.terraform.io/providers/dnsimple/dnsimple",
     "owner": "dnsimple",
     "repo": "terraform-provider-dnsimple",
-    "rev": "v1.7.0",
+    "rev": "v1.8.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-5445cUKxjNlZcQ6opJKgXgT7I9XUmqbPMB/iKuEBPwg="
+    "vendorHash": "sha256-HBwyjqKSshB4Nl2e/xnMnWgYVolSxvKZHi+bYfM2+Ho="
   },
   "docker": {
     "hash": "sha256-UyHOI8C0eDV5YllAi9clHp/CEldHjIp3FHHMPy1rK58=",

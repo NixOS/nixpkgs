@@ -2417,6 +2417,18 @@ final: prev:
     meta.homepage = "https://github.com/manicmaniac/coconut.vim/";
   };
 
+  codecompanion-nvim = buildVimPlugin {
+    pname = "codecompanion.nvim";
+    version = "2024-11-24";
+    src = fetchFromGitHub {
+      owner = "olimorris";
+      repo = "codecompanion.nvim";
+      rev = "926027bec8d7251730fe696794ced003152033fc";
+      sha256 = "03yn42x9k856hr22j0lnyi9fy6ij4kvh3w44jf4ih181w8pa07j7";
+    };
+    meta.homepage = "https://github.com/olimorris/codecompanion.nvim/";
+  };
+
   codeium-nvim = buildVimPlugin {
     pname = "codeium.nvim";
     version = "2024-10-28";
@@ -4486,6 +4498,17 @@ final: prev:
       sha256 = "0fg36hrkwqb3accqm7ihw1cjs64fxf73zk06gickdkzq0zn4yl8x";
     };
     meta.homepage = "https://github.com/vim-scripts/gitignore.vim/";
+  };
+
+  gitlab-vim = buildVimPlugin {
+    pname = "gitlab.vim";
+    version = "2024-11-22";
+    src = fetchgit {
+      url = "https://gitlab.com/gitlab-org/editor-extensions/gitlab.vim";
+      rev = "5e129155341ccb94d4a93b336e6d936f11edb77d";
+      sha256 = "0nhhlcw716qhzhvqzc784xq2c104ahrzwhhzmasadk9c269s9vfd";
+    };
+    meta.homepage = "https://gitlab.com/gitlab-org/editor-extensions/gitlab.vim";
   };
 
   gitlinker-nvim = buildVimPlugin {
@@ -11445,6 +11468,18 @@ final: prev:
       sha256 = "0i08rvvhgl7k55wgr9rn7vmgcrkl66ifrp1y0n581i71zwrpvw8l";
     };
     meta.homepage = "https://github.com/liuchengxu/space-vim/";
+  };
+
+  spaceman-nvim = buildVimPlugin {
+    pname = "spaceman.nvim";
+    version = "2024-11-03";
+    src = fetchFromGitHub {
+      owner = "FireIsGood";
+      repo = "spaceman.nvim";
+      rev = "7910d202073bcc5f567481426f771b3737451dd9";
+      sha256 = "1p2j6yygqsmxbvxns4ssiyspsnpbz12pq29s9vs3n5x2ddxrrwjn";
+    };
+    meta.homepage = "https://github.com/FireIsGood/spaceman.nvim/";
   };
 
   spacevim = buildVimPlugin {

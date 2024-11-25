@@ -81,12 +81,12 @@ in
       };
     };
 
-    networking.networkmanager.dispatcherScripts = cfg.enableNetworkManagerIntegration [
+    networking.networkmanager.dispatcherScripts = lib.optionals cfg.enableNetworkManagerIntegration [
       {
         type = "basic";
         # https://github.com/toreanderson/clatd/blob/master/scripts/clatd.networkmanager
         source = pkgs.writeShellScript "restart-clatd" ''
-          [ "$DEVICE_IFACE" = "clat" ] && exit 0
+          [ "$DEVICE_IFACE" = "${cfg.settings.clat-dev or "clat"}" ] && exit 0
           [ "$2" != "up" ] && [ "$2" != "down" ] && exit 0
           ${pkgs.systemd}/bin/systemctl restart clatd.service
         '';

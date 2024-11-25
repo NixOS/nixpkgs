@@ -4,11 +4,13 @@
 , autoPatchelfHook
 , unzip
 , installShellFiles
+, makeWrapper
 , openssl
 , writeShellScript
 , curl
 , jq
 , common-updater-scripts
+, darwin
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -18,7 +20,7 @@ stdenvNoCC.mkDerivation rec {
   src = passthru.sources.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
   strictDeps = true;
-  nativeBuildInputs = [ unzip installShellFiles ] ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [ unzip installShellFiles makeWrapper ] ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
   buildInputs = [ openssl ];
 
   dontConfigure = true;
@@ -33,19 +35,34 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  postPhases = lib.optionals (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) [ "postPatchelf" ];
-  postPatchelf = ''
-    completions_dir=$(mktemp -d)
+  postPhases = [ "postPatchelf"];
+  postPatchelf =
+    lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+      wrapProgram $out/bin/bun \
+        --prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ darwin.ICU ]}
+    ''
+    # We currently cannot generate completions for x86_64-darwin because bun requires avx support to run, which is:
+    # 1. Not currently supported by the version of Rosetta on our aarch64 builders
+    # 2. Is not correctly detected even on macOS 15+, where it is available through Rosetta
+    #
+    # The baseline builds are no longer an option because they too now require avx support.
+    + lib.optionalString
+      (
+        stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform
+        && !(stdenvNoCC.hostPlatform.isDarwin && stdenvNoCC.hostPlatform.isx86_64)
+      )
+      ''
+        completions_dir=$(mktemp -d)
 
-    SHELL="bash" $out/bin/bun completions $completions_dir
-    SHELL="zsh" $out/bin/bun completions $completions_dir
-    SHELL="fish" $out/bin/bun completions $completions_dir
+        SHELL="bash" $out/bin/bun completions $completions_dir
+        SHELL="zsh" $out/bin/bun completions $completions_dir
+        SHELL="fish" $out/bin/bun completions $completions_dir
 
-    installShellCompletion --name bun \
-      --bash $completions_dir/bun.completion.bash \
-      --zsh $completions_dir/_bun \
-      --fish $completions_dir/bun.fish
-  '';
+        installShellCompletion --name bun \
+          --bash $completions_dir/bun.completion.bash \
+          --zsh $completions_dir/_bun \
+          --fish $completions_dir/bun.fish
+      '';
 
   passthru = {
     sources = {
