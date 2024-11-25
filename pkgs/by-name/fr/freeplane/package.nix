@@ -5,7 +5,7 @@
   makeBinaryWrapper,
   makeDesktopItem,
   jdk17,
-  gradle_7,
+  gradle_8,
   which,
 }:
 
@@ -14,7 +14,7 @@ let
   version = "1.12.8";
 
   jdk = jdk17;
-  gradle = gradle_7;
+  gradle = gradle_8;
 
   src = fetchFromGitHub {
     owner = "freeplane";
