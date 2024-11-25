@@ -3,7 +3,7 @@
 , autoreconfHook
 , bison
 , coreutils
-, cyrus_sasl
+, cyrus-sasl
 , db
 , fetchFromSavannah
 , flex
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    cyrus_sasl
+    cyrus-sasl
     db
     gdbm
     liblockfile

@@ -1,7 +1,7 @@
 {
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
-  cyrus_sasl, kcoreaddons, ki18n, kio, kmime, kitemmodels
+  cyrus-sasl, kcoreaddons, ki18n, kio, kmime, kitemmodels
 }:
 
 mkDerivation {
@@ -12,7 +12,7 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ ki18n kio ];
-  propagatedBuildInputs = [ cyrus_sasl kcoreaddons kmime kitemmodels ];
+  propagatedBuildInputs = [ cyrus-sasl kcoreaddons kmime kitemmodels ];
   outputs = [ "out" "dev" ];
   postInstall = ''
     # added as an include directory by cmake files and fails to compile if it's missing

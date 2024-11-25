@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , acl
-, cyrus_sasl
+, cyrus-sasl
 , docbook_xsl
 , libepoxy
 , gettext
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    cyrus_sasl
+    cyrus-sasl
     libepoxy
     gtk3
     json-glib

@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   php,
-  cyrus_sasl,
+  cyrus-sasl,
   zlib,
   pkg-config,
   libmemcached,
@@ -29,7 +29,7 @@ buildPecl rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    cyrus_sasl
+    cyrus-sasl
     zlib
   ];
 

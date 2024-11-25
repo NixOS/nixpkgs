@@ -10,7 +10,7 @@
 , gtk3
 , webkitgtk_4_0
 , perl
-, cyrus_sasl
+, cyrus-sasl
 , stdenv
 , yarnConfigHook
 , nodejs-slim
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     cargo-tauri_1.hook
     yarnConfigHook
     nodejs-slim
-    cyrus_sasl
+    cyrus-sasl
     jq
     moreutils # for sponge
   ];

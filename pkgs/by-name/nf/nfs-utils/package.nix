@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, lib, pkg-config, util-linux, libcap, libtirpc, libevent
 , sqlite, libkrb5, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
-, python3, buildPackages, nixosTests, rpcsvc-proto, openldap, cyrus_sasl, libxml2
+, python3, buildPackages, nixosTests, rpcsvc-proto, openldap, cyrus-sasl, libxml2
 , enablePython ? true, enableLdap ? true
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional enablePython python3
   ++ lib.optionals enableLdap [
     openldap
-    cyrus_sasl
+    cyrus-sasl
   ];
 
   enableParallelBuilding = true;

@@ -3,7 +3,7 @@
 , fetchurl
 
 # dependencies
-, cyrus_sasl
+, cyrus-sasl
 , groff
 , libsodium
 , libtool
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (cyrus_sasl.override {
+    (cyrus-sasl.override {
       inherit openssl;
     })
     libsodium

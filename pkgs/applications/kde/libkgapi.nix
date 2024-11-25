@@ -2,7 +2,7 @@
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   qtwebengine, kio, kcalendarcore, kcontacts,
-  cyrus_sasl
+  cyrus-sasl
 }:
 
 mkDerivation {
@@ -12,5 +12,5 @@ mkDerivation {
     maintainers = kdepimTeam;
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ qtwebengine kio kcalendarcore kcontacts cyrus_sasl ];
+  buildInputs = [ qtwebengine kio kcalendarcore kcontacts cyrus-sasl ];
 }

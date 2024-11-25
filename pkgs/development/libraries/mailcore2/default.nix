@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libetpan, icu, cyrus_sasl, libctemplate
+{ stdenv, lib, fetchFromGitHub, cmake, libetpan, icu, cyrus-sasl, libctemplate
 , libuchardet, pkg-config, glib, html-tidy, libxml2, libuuid, openssl
 , darwin
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
-    libetpan cyrus_sasl libctemplate libuchardet
+    libetpan cyrus-sasl libctemplate libuchardet
     html-tidy libxml2 openssl
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     glib

@@ -8,7 +8,7 @@
   which,
   ncurses,
   perl,
-  cyrus_sasl,
+  cyrus-sasl,
   gss,
   gpgme,
   libkrb5,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    cyrus_sasl
+    cyrus-sasl
     gss
     gpgme
     libkrb5

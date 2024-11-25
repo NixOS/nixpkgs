@@ -1,13 +1,13 @@
 {
   mkKdeDerivation,
   qtwebengine,
-  cyrus_sasl,
+  cyrus-sasl,
 }:
 mkKdeDerivation {
   pname = "libksieve";
 
   extraBuildInputs = [
     qtwebengine
-    cyrus_sasl
+    cyrus-sasl
   ];
 }

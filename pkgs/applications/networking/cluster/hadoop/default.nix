@@ -9,7 +9,7 @@
 , coreutils
 , which
 , bzip2
-, cyrus_sasl
+, cyrus-sasl
 , protobuf
 , snappy
 , zlib
@@ -56,7 +56,7 @@ let
         done
 
         # these libraries are loaded at runtime by the JVM
-        ln -s ${lib.getLib cyrus_sasl}/lib/libsasl2.so $out/lib/native/libsasl2.so.2
+        ln -s ${lib.getLib cyrus-sasl}/lib/libsasl2.so $out/lib/native/libsasl2.so.2
         ln -s ${lib.getLib openssl}/lib/libcrypto.so $out/lib/native/
         ln -s ${lib.getLib zlib}/lib/libz.so.1 $out/lib/native/
         ln -s ${lib.getLib zstd}/lib/libzstd.so.1 $out/lib/native/

@@ -3,7 +3,7 @@
 , bdbSupport ? true, db
 , ldapSupport ? !stdenv.hostPlatform.isCygwin, openldap
 , libiconv, libxcrypt
-, cyrus_sasl, autoreconfHook
+, cyrus-sasl, autoreconfHook
 }:
 
 assert sslSupport -> openssl != null;
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional sslSupport openssl
     ++ lib.optional bdbSupport db
     ++ lib.optional ldapSupport openldap
-    ++ lib.optional stdenv.hostPlatform.isFreeBSD cyrus_sasl;
+    ++ lib.optional stdenv.hostPlatform.isFreeBSD cyrus-sasl;
 
   postInstall = ''
     for f in $out/lib/*.la $out/lib/apr-util-1/*.la $dev/bin/apu-1-config; do

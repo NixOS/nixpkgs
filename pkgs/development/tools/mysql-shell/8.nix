@@ -26,7 +26,7 @@
   ncurses,
   libfido2,
   python3,
-  cyrus_sasl,
+  cyrus-sasl,
   openldap,
   antlr,
 }:
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
       re2
       ncurses
       libfido2
-      cyrus_sasl
+      cyrus-sasl
       openldap
       python3
       antlr.runtime.cpp

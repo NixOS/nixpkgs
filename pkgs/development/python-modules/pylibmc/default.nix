@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  cyrus_sasl,
+  cyrus-sasl,
   fetchPypi,
   libmemcached,
   pythonOlder,
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    cyrus_sasl
+    cyrus-sasl
     libmemcached
     zlib
   ];

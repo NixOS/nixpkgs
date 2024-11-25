@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , aml
-, cyrus_sasl
+, cyrus-sasl
 , ffmpeg
 , gnutls
 , libGL
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     aml
-    cyrus_sasl
+    cyrus-sasl
     ffmpeg
     gnutls
     libGL

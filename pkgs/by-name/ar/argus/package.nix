@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libpcap, bison, flex, cyrus_sasl, tcp_wrappers,
+{ lib, stdenv, fetchurl, libpcap, bison, flex, cyrus-sasl, tcp_wrappers,
   pkg-config, procps, which, wget, lsof, net-snmp, perl }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config bison flex ];
-  buildInputs = [ libpcap cyrus_sasl tcp_wrappers ];
+  buildInputs = [ libpcap cyrus-sasl tcp_wrappers ];
   propagatedBuildInputs = [ procps which wget lsof net-snmp ];
 
   patchPhase = ''

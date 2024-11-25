@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libpcap, bison, flex, cyrus_sasl, tcp_wrappers, pkg-config, perl, libtirpc, libnsl }:
+{ lib, stdenv, fetchurl, libpcap, bison, flex, cyrus-sasl, tcp_wrappers, pkg-config, perl, libtirpc, libnsl }:
 
 stdenv.mkDerivation rec {
   pname = "argus-clients";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-perl=${perl}/bin/perl" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libpcap bison cyrus_sasl tcp_wrappers flex libnsl ];
+  buildInputs = [ libpcap bison cyrus-sasl tcp_wrappers flex libnsl ];
 
   meta = with lib; {
     description = "Clients for ARGUS";

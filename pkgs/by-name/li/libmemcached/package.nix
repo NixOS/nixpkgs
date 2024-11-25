@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, cyrus_sasl, libevent }:
+{ lib, stdenv, fetchurl, fetchpatch, cyrus-sasl, libevent }:
 
 stdenv.mkDerivation rec {
   pname = "libmemcached";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.isMusl ./musl-fixes.patch;
 
   buildInputs = [ libevent ];
-  propagatedBuildInputs = [ cyrus_sasl ];
+  propagatedBuildInputs = [ cyrus-sasl ];
 
   env.NIX_CFLAGS_COMPILE = "-fpermissive";
 

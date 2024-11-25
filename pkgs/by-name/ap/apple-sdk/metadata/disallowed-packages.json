@@ -61,7 +61,7 @@
     ]
   },
   {
-    "package": "cyrus_sasl",
+    "package": "cyrus-sasl",
     "headers": [
       "sasl"
     ],

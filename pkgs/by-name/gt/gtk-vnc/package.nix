@@ -8,7 +8,7 @@
 , cairo
 , glib
 , pkg-config
-, cyrus_sasl
+, cyrus-sasl
 , pulseaudioSupport ? stdenv.hostPlatform.isLinux
 , libpulseaudio
 , libgcrypt
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     zlib
     glib
     libgcrypt
-    cyrus_sasl
+    cyrus-sasl
     gtk3
   ] ++ lib.optionals pulseaudioSupport [
     libpulseaudio

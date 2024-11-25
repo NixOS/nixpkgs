@@ -1,13 +1,13 @@
 {
   mkKdeDerivation,
   qt5compat,
-  cyrus_sasl,
+  cyrus-sasl,
 }:
 mkKdeDerivation {
   pname = "ksmtp";
 
   extraBuildInputs = [
     qt5compat
-    cyrus_sasl
+    cyrus-sasl
   ];
 }

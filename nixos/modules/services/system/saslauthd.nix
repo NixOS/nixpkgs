@@ -18,7 +18,7 @@ in
 
       enable = mkEnableOption "saslauthd, the Cyrus SASL authentication daemon";
 
-      package = mkPackageOption pkgs [ "cyrus_sasl" "bin" ] { };
+      package = mkPackageOption pkgs [ "cyrus-sasl" "bin" ] { };
 
       mechanism = mkOption {
         type = types.str;

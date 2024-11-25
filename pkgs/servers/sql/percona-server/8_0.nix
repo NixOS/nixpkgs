@@ -35,7 +35,7 @@
   hostname,
   makeWrapper,
   # Percona-specific deps
-  cyrus_sasl,
+  cyrus-sasl,
   gnumake,
   openldap,
 }:
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       libfido2
       openldap
       perl
-      cyrus_sasl
+      cyrus-sasl
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       numactl

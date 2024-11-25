@@ -13057,7 +13057,7 @@ self: super: with self; {
   python-jsonrpc-server = callPackage ../development/python-modules/python-jsonrpc-server { };
 
   python-ldap = callPackage ../development/python-modules/python-ldap {
-    inherit (pkgs) openldap cyrus_sasl;
+    inherit (pkgs) openldap cyrus-sasl;
   };
 
   python-ldap-test = callPackage ../development/python-modules/python-ldap-test { };

@@ -8,7 +8,7 @@
 , pkg-config
 , bzip2
 , curl
-, cyrus_sasl
+, cyrus-sasl
 , enchant2
 , freetds
 , gd
@@ -448,14 +448,14 @@ in {
         }
         {
           name = "ldap";
-          buildInputs = [ openldap cyrus_sasl ];
+          buildInputs = [ openldap cyrus-sasl ];
           configureFlags = [
             "--with-ldap"
             "LDAP_DIR=${openldap.dev}"
             "LDAP_INCDIR=${openldap.dev}/include"
             "LDAP_LIBDIR=${openldap.out}/lib"
           ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-            "--with-ldap-sasl=${cyrus_sasl.dev}"
+            "--with-ldap-sasl=${cyrus-sasl.dev}"
           ];
           doCheck = false;
         }

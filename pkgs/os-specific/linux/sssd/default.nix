@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, glibc, adcli, augeas, dnsutils, c-ares, curl,
-  cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
+  cyrus-sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
   python3, pam, popt, talloc, tdb, tevent, pkg-config, ldb, openldap,
   pcre2, libkrb5, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
   libuuid, systemd, nspr, check, cmocka, uid_wrapper, p11-kit,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   #   libtool:   error: error: relink '_py3sss.la' with the above command before installing i
   enableParallelInstalling = false;
   nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config doxygen ];
-  buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
+  buildInputs = [ augeas dnsutils c-ares curl cyrus-sasl ding-libs libnl libunistring nss
                   samba nfs-utils p11-kit python3 popt
                   talloc tdb tevent ldb pam openldap pcre2 libkrb5
                   cifs-utils glib keyutils dbus fakeroot libxslt libxml2

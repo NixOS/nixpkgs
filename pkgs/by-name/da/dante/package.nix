@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, autoreconfHook
-, pam, libkrb5, cyrus_sasl, miniupnpc, libxcrypt }:
+, pam, libkrb5, cyrus-sasl, miniupnpc, libxcrypt }:
 
 let
   remove_getaddrinfo_checks = stdenv.hostPlatform.isMips64 || !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ pam libkrb5 cyrus_sasl miniupnpc libxcrypt ];
+  buildInputs = [ pam libkrb5 cyrus-sasl miniupnpc libxcrypt ];
 
   configureFlags = if !stdenv.hostPlatform.isDarwin
     then [ "--with-libc=libc.so.6" ]

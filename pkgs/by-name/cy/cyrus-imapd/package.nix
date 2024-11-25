@@ -16,7 +16,7 @@
   brotli,
   coreutils,
   cunit,
-  cyrus_sasl,
+  cyrus-sasl,
   fig2dev,
   flex,
   icu,
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
       valgrind
       fig2dev
       perl
-      cyrus_sasl.dev
+      cyrus-sasl.dev
       icu
       jansson
       libbsd
@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
       managesieveLibs =
         [
           zlib
-          cyrus_sasl
+          cyrus-sasl
         ]
         # Darwin doesn't have libuuid, try to build without it
         ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid;

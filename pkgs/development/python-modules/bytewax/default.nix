@@ -11,7 +11,7 @@
   rustPlatform,
 
   # native dependencies
-  cyrus_sasl,
+  cyrus-sasl,
   openssl,
   protobuf,
 
@@ -68,7 +68,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     openssl
-    cyrus_sasl
+    cyrus-sasl
     protobuf
   ];
 

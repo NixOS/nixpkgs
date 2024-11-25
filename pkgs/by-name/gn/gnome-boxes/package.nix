@@ -25,7 +25,7 @@
   yajl,
   gmp,
   gdbm,
-  cyrus_sasl,
+  cyrus-sasl,
   gnome,
   adwaita-icon-theme,
   librsvg,
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     acl
-    cyrus_sasl
+    cyrus-sasl
     gdbm
     glib
     glib-networking

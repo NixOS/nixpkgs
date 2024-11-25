@@ -1,5 +1,5 @@
 { lib, rustPlatform, fetchgit
-, pkg-config, pixman, libcap_ng, cyrus_sasl
+, pkg-config, pixman, libcap_ng, cyrus-sasl
 , libpulseaudio, gtk3, libusbgx, alsa-lib
 , linuxHeaders, libseccomp
 }:
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     pixman
     libcap_ng
-    cyrus_sasl
+    cyrus-sasl
     libpulseaudio
     gtk3
     libusbgx

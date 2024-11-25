@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, perl, pkg-config, systemd, openssl
 , bzip2, zlib, lz4, inotify-tools, pam, libcap, coreutils
-, clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
+, clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus-sasl
 , nixosTests
 , fetchpatch
 # Auth modules
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs =
-    [ openssl bzip2 zlib lz4 clucene_core_2 icu openldap libsodium libstemmer cyrus_sasl.dev ]
+    [ openssl bzip2 zlib lz4 clucene_core_2 icu openldap libsodium libstemmer cyrus-sasl.dev ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux) [ systemd pam libcap inotify-tools ]
     ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withPgSQL postgresql

@@ -4,7 +4,7 @@
   pythonOlder,
   fetchFromGitHub,
   setuptools,
-  cyrus_sasl,
+  cyrus-sasl,
   openldap,
   gevent,
   tornado,
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   buildInputs = [
-    cyrus_sasl
+    cyrus-sasl
     openldap
   ];
 

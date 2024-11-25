@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, libtool, automake, cyrus_sasl }:
+{ lib, stdenv, fetchFromGitHub, autoconf, libtool, automake, cyrus-sasl }:
 
 stdenv.mkDerivation rec {
   pname = "cyrus-sasl-xoauth2";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf libtool automake ];
 
-  buildInputs = [ cyrus_sasl ];
+  buildInputs = [ cyrus-sasl ];
 
   preConfigure = "./autogen.sh";
 

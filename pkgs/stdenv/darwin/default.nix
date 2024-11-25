@@ -247,7 +247,7 @@ let
       brotli
       cmake
       cpio
-      cyrus_sasl
+      cyrus-sasl
       ed
       expat
       flex

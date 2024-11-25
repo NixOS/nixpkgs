@@ -2,7 +2,7 @@
 , withPerl ? false, perl
 , withPython ? false, python3
 , withTcl ? false, tcl
-, withCyrus ? true, cyrus_sasl
+, withCyrus ? true, cyrus-sasl
 , withUnicode ? true, icu
 , withZlib ? true, zlib
 , withIPv6 ? true
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withPerl perl
     ++ lib.optional withPython python3
     ++ lib.optional withTcl tcl
-    ++ lib.optional withCyrus cyrus_sasl
+    ++ lib.optional withCyrus cyrus-sasl
     ++ lib.optional withUnicode icu
     ++ lib.optional withZlib zlib;
 

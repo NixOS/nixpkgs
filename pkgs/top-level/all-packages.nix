@@ -9049,7 +9049,7 @@ with pkgs;
     kerberos = krb5.override {
       withVerto = true;
     };
-    sasl = cyrus_sasl;
+    sasl = cyrus-sasl;
     samba = samba4.override {
       enableLDAP = true;
     };
@@ -11826,7 +11826,7 @@ with pkgs;
   mongodb = hiPrio mongodb-7_0;
 
   mongodb-6_0 = darwin.apple_sdk_11_0.callPackage ../servers/nosql/mongodb/6.0.nix {
-    sasl = cyrus_sasl;
+    sasl = cyrus-sasl;
     boost = boost178.override { enableShared = false; };
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
     stdenv = if stdenv.hostPlatform.isDarwin then
@@ -11839,7 +11839,7 @@ with pkgs;
   };
 
   mongodb-7_0 = darwin.apple_sdk_11_0.callPackage ../servers/nosql/mongodb/7.0.nix {
-    sasl = cyrus_sasl;
+    sasl = cyrus-sasl;
     boost = boost179.override { enableShared = false; };
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
     stdenv = if stdenv.hostPlatform.isDarwin then
@@ -15604,7 +15604,7 @@ with pkgs;
     sublime-merge-dev;
 
   inherit (callPackages ../applications/version-management/subversion {
-    sasl = cyrus_sasl;
+    sasl = cyrus-sasl;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   }) subversion;
 

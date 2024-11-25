@@ -7,7 +7,7 @@
 , zlib
 , zstd
 , icu
-, cyrus_sasl
+, cyrus-sasl
 , snappy
 , darwin
 }:
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     zlib
     zstd
     icu
-    cyrus_sasl
+    cyrus-sasl
     snappy
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Security

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , mongoc
 , openssl
-, cyrus_sasl
+, cyrus-sasl
 , cmake
 , validatePkgConfig
 , testers
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     mongoc
     openssl
-    cyrus_sasl
+    cyrus-sasl
   ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
   cmakeFlags = [

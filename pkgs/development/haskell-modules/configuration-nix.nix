@@ -736,7 +736,7 @@ self: super: builtins.intersectAttrs super {
   spatial-rotations = dontCheck super.spatial-rotations;
 
   LDAP = dontCheck (overrideCabal (drv: {
-    librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
+    librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus-sasl.dev ];
   }) super.LDAP);
 
   # Not running the "example" test because it requires a binary from lsps test

@@ -34,7 +34,7 @@
 , plugins        ? []
 , withOpenssl    ? false, openssl
 , withGnutls     ? false , gnutls
-, withCyrus_sasl ? true, cyrus_sasl
+, withCyrus_sasl ? true, cyrus-sasl
 , pidginPackages
 }:
 
@@ -59,7 +59,7 @@ let
     in [
       aspell
       avahi
-      cyrus_sasl
+      cyrus-sasl
       dbus
       dbus-glib
       gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good

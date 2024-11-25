@@ -9,7 +9,6 @@
 , clang
 , coreutils
 , curl
-, cyrus_sasl
 , dbus
 , expat
 , fetchFromGitHub

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, openldap, pam, db, cyrus_sasl, libcap
+{ lib, stdenv, fetchurl, perl, openldap, pam, db, cyrus-sasl, libcap
 , expat, libxml2, openssl, pkg-config, systemd
 , cppunit
 }:
@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    perl openldap db cyrus_sasl expat libxml2 openssl
+    perl openldap db cyrus-sasl expat libxml2 openssl
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap pam systemd ];
 
   enableParallelBuilding = true;

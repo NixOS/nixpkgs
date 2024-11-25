@@ -279,6 +279,7 @@ mapAliases {
   clang-tools_19 = llvmPackages_19.clang-tools; # Added 2024-08-21
 
   cq-editor = throw "cq-editor has been removed, as it use a dependency that was disabled since python 3.8 and was last updated in 2021"; # Added 2024-05-13
+  cyrus_sasl = lib.warn "cyrus_sasl has been renamed to cyrus-sasl" cyrus-sasl; # Added 2024-11-25
 
   ### D ###
 

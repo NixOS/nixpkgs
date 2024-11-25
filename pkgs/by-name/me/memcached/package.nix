@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, cyrus_sasl, libevent, nixosTests }:
+{lib, stdenv, fetchurl, cyrus-sasl, libevent, nixosTests }:
 
 stdenv.mkDerivation rec {
   version = "1.6.31";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
      "ac_cv_c_endian=${if stdenv.hostPlatform.isBigEndian then "big" else "little"}"
   ];
 
-  buildInputs = [cyrus_sasl libevent];
+  buildInputs = [cyrus-sasl libevent];
 
   hardeningEnable = [ "pie" ];
 

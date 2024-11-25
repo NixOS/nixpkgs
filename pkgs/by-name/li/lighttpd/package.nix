@@ -6,7 +6,7 @@
 , enableMysql ? false, libmysqlclient
 , enableLdap ? false, openldap
 , enablePam ? false, linux-pam
-, enableSasl ? false, cyrus_sasl
+, enableSasl ? false, cyrus-sasl
 , enableWebDAV ? false, sqlite, libuuid
 , enableExtendedAttrs ? false
 , perl
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
              ++ lib.optional enableMysql libmysqlclient
              ++ lib.optional enableLdap openldap
              ++ lib.optional enablePam linux-pam
-             ++ lib.optional enableSasl cyrus_sasl
+             ++ lib.optional enableSasl cyrus-sasl
              ++ lib.optional enableWebDAV sqlite
              ++ lib.optional enableWebDAV libuuid;
 

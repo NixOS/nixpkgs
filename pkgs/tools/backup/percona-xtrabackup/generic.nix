@@ -8,7 +8,7 @@
   makeWrapper,
   pkg-config,
   curl,
-  cyrus_sasl,
+  cyrus-sasl,
   libaio,
   libedit,
   libev,
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       (curl.override { inherit openssl; })
-      cyrus_sasl
+      cyrus-sasl
       libaio
       libedit
       libevent

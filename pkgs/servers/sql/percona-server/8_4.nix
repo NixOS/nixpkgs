@@ -36,7 +36,7 @@
   makeWrapper,
   systemd,
   # Percona-specific deps
-  cyrus_sasl,
+  cyrus-sasl,
   gnumake,
   openldap,
   # optional: different malloc implementations
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
       libfido2
       openldap
       perl
-      cyrus_sasl
+      cyrus-sasl
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       numactl

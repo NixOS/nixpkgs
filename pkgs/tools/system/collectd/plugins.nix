@@ -7,7 +7,7 @@
 , libdbi
 , libesmtp
 , libgcrypt
-, libmemcached, cyrus_sasl
+, libmemcached, cyrus-sasl
 , libmodbus
 , libmicrohttpd
 , libmnl
@@ -78,7 +78,7 @@ let
     java.buildInputs = [ jdk libgcrypt libxml2 ];
     log_logstash.buildInputs = [ yajl ];
     lua.buildInputs = [ lua ];
-    memcachec.buildInputs = [ libmemcached cyrus_sasl ];
+    memcachec.buildInputs = [ libmemcached cyrus-sasl ];
     modbus.buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libmodbus ];
     mqtt.buildInputs = [ mosquitto ];
     mysql.buildInputs = lib.optionals (libmysqlclient != null) [

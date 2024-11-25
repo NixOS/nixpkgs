@@ -6,7 +6,7 @@
   libiconv,
   pcre2,
   pkg-config,
-  cyrus_sasl,
+  cyrus-sasl,
   icu64,
   openssl,
   snappy,
@@ -29,7 +29,7 @@ buildPecl rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
     [
-      cyrus_sasl
+      cyrus-sasl
       icu64
       openssl
       snappy

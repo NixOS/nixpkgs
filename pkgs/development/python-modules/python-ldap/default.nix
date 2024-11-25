@@ -11,7 +11,7 @@
 
   # native dependencies
   openldap,
-  cyrus_sasl,
+  cyrus-sasl,
 
   pyasn1,
   pyasn1-modules,
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     openldap
-    cyrus_sasl
+    cyrus-sasl
   ];
 
   dependencies = [

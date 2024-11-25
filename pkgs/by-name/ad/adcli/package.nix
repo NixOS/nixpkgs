@@ -2,7 +2,7 @@
   lib,
   stdenv,
   autoreconfHook,
-  cyrus_sasl,
+  cyrus-sasl,
   docbook_xml_dtd_43,
   docbook_xsl,
   fetchFromGitLab,
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cyrus_sasl
+    cyrus-sasl
     libkrb5
     libxslt
     openldap

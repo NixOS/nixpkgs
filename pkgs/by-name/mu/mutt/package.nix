@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, ncurses, which, perl
 , gdbm
 , openssl
-, cyrus_sasl
+, cyrus-sasl
 , gnupg
 , gpgme
 , libkrb5
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional headerCache  gdbm
     ++ lib.optional sslSupport   openssl
     ++ lib.optional gssSupport   libkrb5
-    ++ lib.optional saslSupport  cyrus_sasl;
+    ++ lib.optional saslSupport  cyrus-sasl;
 
   configureFlags = [
     (lib.enableFeature headerCache  "hcache")

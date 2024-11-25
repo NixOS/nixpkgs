@@ -1,7 +1,7 @@
 {
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
-  kcoreaddons, kio, kmime, cyrus_sasl
+  kcoreaddons, kio, kmime, cyrus-sasl
 }:
 
 mkDerivation {
@@ -12,7 +12,7 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ kcoreaddons kio kmime ];
-  propagatedBuildInputs = [ cyrus_sasl ];
+  propagatedBuildInputs = [ cyrus-sasl ];
   postInstall = ''
     # added as an include directory by cmake files and fails to compile if it's missing
     mkdir -p "$out/include/KF5"

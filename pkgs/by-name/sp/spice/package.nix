@@ -16,7 +16,7 @@
 , spice-protocol
 , python3
 , glib
-, cyrus_sasl
+, cyrus-sasl
 , libcacard
 , lz4
 , libopus
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    cyrus_sasl
+    cyrus-sasl
     glib
     gst_all_1.gst-plugins-base
     libXext

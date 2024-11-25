@@ -1,13 +1,13 @@
 {
   mkKdeDerivation,
-  cyrus_sasl,
+  cyrus-sasl,
   openldap,
 }:
 mkKdeDerivation {
   pname = "kldap";
 
   extraBuildInputs = [
-    cyrus_sasl
+    cyrus-sasl
     openldap
   ];
 }

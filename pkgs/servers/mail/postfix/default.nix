@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, libnsl
+{ stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus-sasl, libnsl
 , coreutils, findutils, gnugrep, gawk, icu, pcre2, m4
 , fetchpatch
 , buildPackages, nixosTests
@@ -10,7 +10,7 @@
 
 let
   ccargs = lib.concatStringsSep " " ([
-    "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl.dev}/include/sasl"
+    "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus-sasl.dev}/include/sasl"
     "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
    ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
      ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${libmysqlclient.dev}/include/mysql" "-L${libmysqlclient}/lib/mysql" ]
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
-  buildInputs = [ db openssl cyrus_sasl icu libnsl pcre2 ]
+  buildInputs = [ db openssl cyrus-sasl icu libnsl pcre2 ]
     ++ lib.optional withPgSQL postgresql
     ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withSQLite sqlite

@@ -5,7 +5,7 @@
   qtnetworkauth,
   qtspeech,
   qtwebengine,
-  cyrus_sasl,
+  cyrus-sasl,
   lib,
   libetebase,
   libkgapi,
@@ -24,14 +24,14 @@ mkKdeDerivation {
     qtnetworkauth
     qtspeech
     qtwebengine
-    cyrus_sasl
+    cyrus-sasl
     libetebase
   ];
 
   qtWrapperArgs = [
     "--prefix SASL_PATH : ${
       lib.makeSearchPath "lib/sasl2" [
-        cyrus_sasl.out
+        cyrus-sasl.out
         libkgapi
       ]
     }"

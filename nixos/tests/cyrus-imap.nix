@@ -110,7 +110,7 @@
     machine.wait_for_open_port(80)
     machine.wait_for_open_port(143)
 
-    machine.succeed("echo 'secret' | ${lib.getExe' pkgs.cyrus_sasl.bin "saslpasswd2"} -p -c cyrus")
+    machine.succeed("echo 'secret' | ${lib.getExe' pkgs.cyrus-sasl.bin "saslpasswd2"} -p -c cyrus")
     machine.succeed("chown cyrus /etc/sasldb2")
 
     machine.succeed("sudo -ucyrus curl --fail --max-time 10 imap://cyrus:secret@localhost:143")

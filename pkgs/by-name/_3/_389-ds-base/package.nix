@@ -19,7 +19,7 @@
   withOpenldap ? true,
   db,
   withBdb ? true,
-  cyrus_sasl,
+  cyrus-sasl,
   icu,
   net-snmp,
   withNetSnmp ? true,
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxcrypt
       nspr
       nss
-      cyrus_sasl
+      cyrus-sasl
       icu
       krb5
       pcre2
