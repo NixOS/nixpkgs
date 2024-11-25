@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  aapt,
   abootimg,
   acl,
   apksigcopier,
@@ -54,6 +55,7 @@
   openssh,
   openssl,
   pdftk,
+  perl,
   pgpdump,
   poppler_utils,
   procyon,
@@ -63,6 +65,7 @@
   sng,
   sqlite,
   squashfsTools,
+  systemdUkify,
   tcpdump,
   ubootTools,
   unzip,
@@ -136,7 +139,6 @@ python.pkgs.buildPythonApplication rec {
   #
   # Still missing these tools:
   # Android-specific tools:
-  # aapt2
   # dexdump
   # Darwin-specific tools:
   # lipo
@@ -204,6 +206,7 @@ python.pkgs.buildPythonApplication rec {
     ])
     ++ lib.optionals enableBloat (
       [
+        aapt
         abootimg
         apksigcopier
         apksigner
@@ -228,10 +231,12 @@ python.pkgs.buildPythonApplication rec {
         odt2txt
         openssh
         pdftk
+        perl
         poppler_utils
         procyon
         qemu
         R
+        systemdUkify
         tcpdump
         ubootTools
         wabt
@@ -240,6 +245,7 @@ python.pkgs.buildPythonApplication rec {
       ]
       ++ (with python.pkgs; [
         androguard
+        black
         guestfs
         h5py
         pdfminer-six
