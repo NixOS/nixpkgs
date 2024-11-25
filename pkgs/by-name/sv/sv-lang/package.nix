@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, boost182
+, boost
 , catch2_3
 , cmake
 , ninja
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     unordered_dense
-    boost182
+    boost
     fmt_9
     # though only used in tests, cmake will complain its absence when configuring
     catch2_3

@@ -1,4 +1,4 @@
-{ autoreconfHook, boost180, cargo, coreutils, curl, cxx-rs, db62, fetchFromGitHub
+{ autoreconfHook, boost, cargo, coreutils, curl, cxx-rs, db62, fetchFromGitHub
 , git, hexdump, lib, libevent, libsodium, makeWrapper, rustPlatform
 , pkg-config, Security, stdenv, testers, tl-expected, utf8cpp, util-linux, zcash, zeromq
 }:
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
   nativeBuildInputs = [ autoreconfHook cargo cxx-rs git hexdump makeWrapper pkg-config ];
 
   buildInputs = [
-    boost180
+    boost
     db62
     libevent
     libsodium
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
 
   configureFlags = [
     "--disable-tests"
-    "--with-boost-libdir=${lib.getLib boost180}/lib"
+    "--with-boost-libdir=${lib.getLib boost}/lib"
     "RUST_TARGET=${stdenv.hostPlatform.rust.rustcTargetSpec}"
   ];
 
