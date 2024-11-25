@@ -114,13 +114,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
-  version = "1.24.7";
+  version = "1.24.9";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-ddUT/AumNfsfOXhtiQtz+6xfS8iP858qn/YvS49CjyI=";
+    hash = "sha256-Nvz3qa8KdTtDuwO5g1JG901y9xJDaeZqHi3HsE9aXKs=";
   };
 
   patches = [
