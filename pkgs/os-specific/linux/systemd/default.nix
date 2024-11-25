@@ -832,6 +832,7 @@ stdenv.mkDerivation (finalAttrs: {
       publicDomain
     ];
     maintainers = with lib.maintainers; [ flokli kloenk ];
+    mainProgram = "systemctl";
     pkgConfigModules = [ "libsystemd" "libudev" "systemd" "udev" ];
     # See src/basic/missing_syscall_def.h
     platforms = with lib.platforms; lib.intersectLists linux
