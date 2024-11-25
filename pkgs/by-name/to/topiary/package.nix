@@ -73,6 +73,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/tweag/topiary";
     changelog = "https://github.com/tweag/topiary/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [
+      figsoda
+      nartsiss
+    ];
   };
 }
