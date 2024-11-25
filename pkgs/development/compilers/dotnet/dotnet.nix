@@ -36,6 +36,8 @@ let
             hash = artifactsHash;
           };
 
+          strictDeps = true;
+
           sourceRoot = ".";
 
           installPhase = ''

@@ -73,8 +73,14 @@ stdenv.mkDerivation rec {
     hash = tarballHash;
   };
 
+  strictDeps = true;
+
   nativeBuildInputs =
     [
+      # this gets copied into the tree, but we still need the sandbox profile
+      bootstrapSdk
+      # the propagated build inputs in llvm.dev break swift compilation
+      llvm.out
       ensureNewerSourcesForZipFilesHook
       jq
       curl.bin
@@ -91,15 +97,14 @@ stdenv.mkDerivation rec {
       nodejs
     ]
     ++ lib.optionals isDarwin [
+      xcbuild
+      swift
       getconf
+      sigtool
     ];
 
   buildInputs =
     [
-      # this gets copied into the tree, but we still need the sandbox profile
-      bootstrapSdk
-      # the propagated build inputs in llvm.dev break swift compilation
-      llvm.out
       zlib
       _icu
       openssl
@@ -111,14 +116,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals isDarwin (
       with apple_sdk.frameworks;
       [
-        xcbuild
-        swift
         (krb5.overrideAttrs (old: {
           # the propagated build inputs break swift compilation
           buildInputs = old.buildInputs ++ old.propagatedBuildInputs;
           propagatedBuildInputs = [ ];
         }))
-        sigtool
         Foundation
         CoreFoundation
         CryptoKit

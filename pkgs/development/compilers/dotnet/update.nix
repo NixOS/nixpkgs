@@ -23,6 +23,8 @@ let
   pkg = stdenvNoCC.mkDerivation {
     name = "update-dotnet-vmr-env";
 
+    strictDeps = true;
+
     nativeBuildInputs = [
       nix
       curl

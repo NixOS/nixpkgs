@@ -35,6 +35,8 @@ lib.makeOverridable (
           ;
       };
 
+      strictDeps = true;
+
       nativeBuildInputs = [
         unzip
         patchNupkgs

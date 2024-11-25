@@ -9,6 +9,8 @@
 stdenvNoCC.mkDerivation (lib.recursiveUpdate {
   inherit name;
 
+  strictDeps = true;
+
   nativeBuildInputs = [ python3 ];
 
   buildCommand = ''

@@ -38,6 +38,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   propagatedSandboxProfile = toString unwrapped.__propagatedSandboxProfile;
 
+  strictDeps = true;
+
   propagatedBuildInputs = lib.optional (type == "sdk") nugetPackageHook;
 
   nativeBuildInputs = [ installShellFiles ];
@@ -81,6 +83,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             template,
             usePackageSource ? false,
             build,
+            nativeBuildInputs ? [ ],
             buildInputs ? [ ],
             runtime ? finalAttrs.finalPackage.runtime,
             runInputs ? [ ],
@@ -91,7 +94,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             sdk = finalAttrs.finalPackage;
             built = stdenv.mkDerivation {
               name = "dotnet-test-${name}";
-              buildInputs = [ sdk ] ++ buildInputs ++ lib.optional (usePackageSource) sdk.packages;
+              strictDeps = true;
+              nativeBuildInputs = [ sdk ] ++ nativeBuildInputs;
+              buildInputs = buildInputs ++ lib.optional (usePackageSource) sdk.packages;
               # make sure ICU works in a sandbox
               propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile;
               unpackPhase = ''
@@ -224,11 +229,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             stdenv = if stdenv.hostPlatform.isDarwin then swiftPackages.stdenv else stdenv;
             template = "console";
             usePackageSource = true;
+            nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin swiftPackages.swift;
             buildInputs =
               [
                 zlib
               ]
-              ++ lib.optional stdenv.hostPlatform.isDarwin (
+              ++ lib.optionals stdenv.hostPlatform.isDarwin (
                 with darwin;
                 with apple_sdk.frameworks;
                 [

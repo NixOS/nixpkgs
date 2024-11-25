@@ -101,14 +101,16 @@ mkWrapper type (
   stdenv.mkDerivation rec {
     inherit pname version;
 
+    strictDeps = true;
+
     # Some of these dependencies are `dlopen()`ed.
     nativeBuildInputs =
       [
         makeWrapper
       ]
+      ++ lib.optional (type == "sdk") xmlstarlet
       ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
       ++ lib.optionals (type == "sdk" && stdenv.hostPlatform.isDarwin) [
-        xmlstarlet
         sigtool
       ];
 
@@ -118,7 +120,6 @@ mkWrapper type (
       icu
       libkrb5
       curl
-      xmlstarlet
     ] ++ lib.optional stdenv.hostPlatform.isLinux lttng-ust_2_12;
 
     src = fetchurl (
