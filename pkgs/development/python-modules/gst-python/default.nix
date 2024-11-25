@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.24.7";
+  version = "1.24.9";
 
   format = "other";
 
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   ];
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/gst-python/${pname}-${version}.tar.xz";
-    hash = "sha256-bD7gKyDICobiQkWwYQLa4A4BdobydAdib0TcA6w8pTo=";
+    url = "https://gstreamer.freedesktop.org/src/gst-python/gst-python-${version}.tar.xz";
+    hash = "sha256-gOYdWHw0y6x55GySe3HPMsS/m7CGjOWqS3REva2D9C4=";
   };
 
   # Python 2.x is not supported.
@@ -57,10 +57,10 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/issues/47390
   installCheckPhase = "meson test --print-errorlogs";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gstreamer.freedesktop.org";
     description = "Python bindings for GStreamer";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     maintainers = [ ];
   };
 }
