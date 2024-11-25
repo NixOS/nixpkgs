@@ -62,25 +62,18 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "digikam";
-  version = "8.4.0";
+  version = "8.5.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "digikam";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GJYlxJkvFEXppVk0yC9ojszylfAGt3eBMAjNUu60XDY=";
+    hash = "sha256-KO6kq0SlYzu7sh6+7JQWhIeHNowy3fx03OFTdDwyR10=";
   };
 
   patches = [
     ./disable-tests-download.patch
-
-    # Fix build with Qt 6.8
-    # FIXME: remove in next update
-    (fetchpatch {
-      url = "https://invent.kde.org/graphics/digikam/-/commit/a8b49ed8df676cae0f48b3369831edde2b74903e.patch";
-      hash = "sha256-93kQ/Dg/A9FR83ChyiUaRwyelE1Iq14eIecUteVbnqI=";
-    })
   ];
 
   strictDeps = true;
