@@ -55,6 +55,12 @@ rec {
     sqlite
   ];
 
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-fpermissive"
+    ];
+  };
+
   CASROOT = opencascade-occt;
 
   meta = {

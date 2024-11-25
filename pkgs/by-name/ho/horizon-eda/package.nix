@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     src
     meta
     CASROOT
+    env
     ;
 
   # provide base for python module
