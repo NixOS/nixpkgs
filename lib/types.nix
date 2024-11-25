@@ -83,11 +83,15 @@ rec {
   # Default type merging function
   # takes two type functors and return the merged type
   defaultTypeMerge = f: f':
-    let mergedWrapped = f.wrapped.typeMerge f'.wrapped.functor;
-        mergedPayload = f.binOp f.payload f'.payload;
+    let
+      mergedWrapped = f.wrapped.typeMerge f'.wrapped.functor;
+      mergedPayload = f.binOp f.payload f'.payload;
 
-        hasPayload = assert (f'.payload != null) == (f.payload != null); f.payload != null;
-        hasWrapped = assert (f'.wrapped != null) == (f.wrapped != null); f.wrapped != null;
+      hasPayload = assert (f'.payload != null) == (f.payload != null); f.payload != null;
+      hasWrapped = assert (f'.wrapped != null) == (f.wrapped != null); f.wrapped != null;
+
+      typeFromPayload = if mergedPayload == null then null else f.type mergedPayload;
+      typeFromWrapped = if mergedWrapped == null then null else f.type mergedWrapped;
     in
     # Abort early: cannot merge different types
     if f.name != f'.name
@@ -95,23 +99,23 @@ rec {
     else
 
     if hasPayload then
-      if hasWrapped then
+      # Just return the payload if returning wrapped is deprecated
+      if f ? wrappedDeprecationMessage then
+        typeFromPayload
+      else if hasWrapped then
         # Has both wrapped and payload
         throw ''
           Type ${f.name} defines both `functor.payload` and `functor.wrapped` at the same time, which is not supported.
 
           Use either `functor.payload` or `functor.wrapped` but not both.
 
-          If your code worked before remove `functor.payload` from the type definition.
+          If your code worked before remove either `functor.wrapped` or `functor.payload` from the type definition.
         ''
       else
-        # Has payload
-        if mergedPayload == null then null else f.type mergedPayload
+        typeFromPayload
     else
       if hasWrapped then
-        # Has wrapped
-        # TODO(@hsjobeki): This could also be a warning and removed in the future
-        if mergedWrapped == null then null else f.type mergedWrapped
+        typeFromWrapped
       else
         f.type;
 
@@ -592,7 +596,8 @@ rec {
     lazyAttrsOf = elemType: attrsWith { inherit elemType; lazy = true; };
 
     # base type for lazyAttrsOf and attrsOf
-    attrsWith = {
+    attrsWith =
+    {
       elemType,
       lazy ? false,
     }:
@@ -630,8 +635,13 @@ rec {
       getSubModules = elemType.getSubModules;
       substSubModules = m: attrsWith { elemType = elemType.substSubModules m; inherit lazy; };
       functor = defaultFunctor "attrsWith" // {
-        # TODO: This breaks stuff
-        # wrapped = elemType;
+        wrappedDeprecationMessage = { loc }: lib.warn ''
+            Using 'functor.wrapped' on option types will be deprecated.
+
+            Use 'nestedTypes.elemType' instead.
+
+            option: '${showOption loc}'
+          '' elemType;
         payload = {
           # Important!: Add new function attributes here in case of future changes
           inherit elemType lazy;
