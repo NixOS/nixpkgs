@@ -1,4 +1,9 @@
-{ fetchFromGitHub, libgit2, ... }:
+{
+  fetchFromGitHub,
+  libgit2,
+  gnugrep,
+  ...
+}:
 
 libgit2.overrideAttrs (oldAttrs: {
   cmakeFlags = oldAttrs.cmakeFlags ++ [
@@ -26,4 +31,8 @@ libgit2.overrideAttrs (oldAttrs: {
   doCheck = false;
 
   patches = [ ];
+
+  # darwin stdenv lasks `grep`: https://github.com/NixOS/nixpkgs/issues/358116
+  # TODO: remove explicit inclusion when `grep` is back.
+  nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ gnugrep ];
 })
