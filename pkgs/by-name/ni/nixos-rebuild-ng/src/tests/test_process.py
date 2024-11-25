@@ -53,19 +53,6 @@ def test_run(mock_run: Any) -> None:
 
     p.run_wrapper(
         ["test", "--with", "flags"],
-        check=False,
-        env={"FOO": "bar"},
-    )
-    mock_run.assert_called_with(
-        ["test", "--with", "flags"],
-        check=False,
-        env={"FOO": "bar"},
-        text=True,
-        errors="surrogateescape",
-    )
-
-    p.run_wrapper(
-        ["test", "--with", "flags"],
         check=True,
         sudo=True,
         extra_env={"FOO": "bar"},
@@ -96,6 +83,7 @@ def test_run(mock_run: Any) -> None:
         p.run_wrapper(
             ["test", "--with", "flags"],
             check=False,
-            env={"foo": "bar"},
+            allow_tty=True,
             remote=m.Remote("user@localhost", [], False),
+            capture_output=True,
         )
