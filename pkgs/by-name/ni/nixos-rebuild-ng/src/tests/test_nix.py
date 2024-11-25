@@ -122,7 +122,7 @@ def test_get_generations_from_nix_store(tmp_path: Path) -> None:
 
     assert n.get_generations(
         m.Profile("system", tmp_path / "system"),
-        lock_profile=False,
+        using_nix_env=False,
     ) == [
         m.Generation(id=1, current=False, timestamp=ANY),
         m.Generation(id=2, current=True, timestamp=ANY),
@@ -147,7 +147,7 @@ def test_get_generations_from_nix_env(mock_run: Any, tmp_path: Path) -> None:
     path = tmp_path / "test"
     path.touch()
 
-    assert n.get_generations(m.Profile("system", path), lock_profile=True) == [
+    assert n.get_generations(m.Profile("system", path), using_nix_env=True) == [
         m.Generation(id=2082, current=False, timestamp="2024-11-07 22:58:56"),
         m.Generation(id=2083, current=False, timestamp="2024-11-07 22:59:41"),
         m.Generation(id=2084, current=True, timestamp="2024-11-07 23:54:17"),
@@ -268,8 +268,28 @@ def test_rollback(mock_run: Any, tmp_path: Path) -> None:
 
     profile = m.Profile("system", path)
 
-    assert n.rollback(profile) == profile.path
-    mock_run.assert_called_with(["nix-env", "--rollback", "-p", path], check=True)
+    assert n.rollback(profile, None, False) == profile.path
+    mock_run.assert_called_with(
+        ["nix-env", "--rollback", "-p", path],
+        check=True,
+        remote=None,
+        sudo=False,
+    )
+
+    assert (
+        n.rollback(
+            profile,
+            m.Remote("user@localhost", [], False),
+            True,
+        )
+        == profile.path
+    )
+    mock_run.assert_called_with(
+        ["nix-env", "--rollback", "-p", path],
+        check=True,
+        remote=m.Remote("user@localhost", [], False),
+        sudo=True,
+    )
 
 
 def test_rollback_temporary_profile(tmp_path: Path) -> None:
@@ -288,17 +308,46 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
                 """),
         )
         assert (
-            n.rollback_temporary_profile(m.Profile("system", path))
+            n.rollback_temporary_profile(m.Profile("system", path), None, False)
             == path.parent / "system-2083-link"
         )
+        mock_run.assert_called_with(
+            [
+                "nix-env",
+                "-p",
+                path,
+                "--list-generations",
+            ],
+            stdout=PIPE,
+            check=True,
+            remote=None,
+            sudo=False,
+        )
+
         assert (
-            n.rollback_temporary_profile(m.Profile("foo", path))
+            n.rollback_temporary_profile(
+                m.Profile("foo", path),
+                m.Remote("user@localhost", [], False),
+                True,
+            )
             == path.parent / "foo-2083-link"
+        )
+        mock_run.assert_called_with(
+            [
+                "nix-env",
+                "-p",
+                path,
+                "--list-generations",
+            ],
+            stdout=PIPE,
+            check=True,
+            remote=m.Remote("user@localhost", [], False),
+            sudo=True,
         )
 
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         mock_run.return_value = CompletedProcess([], 0, stdout="")
-        assert n.rollback_temporary_profile(profile) is None
+        assert n.rollback_temporary_profile(profile, None, False) is None
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)

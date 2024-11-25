@@ -149,7 +149,12 @@ def _parse_generation_from_nix_env(line: str) -> Generation:
     )
 
 
-def get_generations(profile: Profile, lock_profile: bool = False) -> list[Generation]:
+def get_generations(
+    profile: Profile,
+    target_host: Remote | None = None,
+    using_nix_env: bool = False,
+    sudo: bool = False,
+) -> list[Generation]:
     """Get all NixOS generations from profile.
 
     Includes generation ID (e.g.: 1, 2), timestamp (e.g.: when it was created)
@@ -161,7 +166,7 @@ def get_generations(profile: Profile, lock_profile: bool = False) -> list[Genera
         raise NRError(f"no profile '{profile.name}' found")
 
     result = []
-    if lock_profile:
+    if using_nix_env:
         # Using `nix-env --list-generations` needs root to lock the profile
         # TODO: do we actually need to lock profile for e.g.: rollback?
         # https://github.com/NixOS/nix/issues/5144
@@ -169,10 +174,13 @@ def get_generations(profile: Profile, lock_profile: bool = False) -> list[Genera
             ["nix-env", "-p", profile.path, "--list-generations"],
             stdout=PIPE,
             check=True,
+            remote=target_host,
+            sudo=sudo,
         )
         for line in r.stdout.splitlines():
             result.append(_parse_generation_from_nix_env(line))
     else:
+        assert not target_host, "target_host is not supported when using_nix_env=False"
         for p in profile.path.parent.glob("system-*-link"):
             result.append(_parse_generation_from_nix_store(p, profile))
     return sorted(result, key=lambda d: d.id)
@@ -279,16 +287,30 @@ def nixos_build_flake(
     return Path(r.stdout.strip())
 
 
-def rollback(profile: Profile) -> Path:
+def rollback(profile: Profile, target_host: Remote | None, sudo: bool) -> Path:
     "Rollback Nix profile, like one created by `nixos-rebuild switch`."
-    run_wrapper(["nix-env", "--rollback", "-p", profile.path], check=True)
+    run_wrapper(
+        ["nix-env", "--rollback", "-p", profile.path],
+        check=True,
+        remote=target_host,
+        sudo=sudo,
+    )
     # Rollback config PATH is the own profile
     return profile.path
 
 
-def rollback_temporary_profile(profile: Profile) -> Path | None:
+def rollback_temporary_profile(
+    profile: Profile,
+    target_host: Remote | None,
+    sudo: bool,
+) -> Path | None:
     "Rollback a temporary Nix profile, like one created by `nixos-rebuild test`."
-    generations = get_generations(profile, lock_profile=True)
+    generations = get_generations(
+        profile,
+        target_host=target_host,
+        using_nix_env=True,
+        sudo=sudo,
+    )
     previous_gen_id = None
     for generation in generations:
         if not generation.current:

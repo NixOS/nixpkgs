@@ -118,6 +118,16 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     if args.action == Action.EDIT.value and (args.file or args.attr):
         parser.error("--file and --attr are not supported with 'edit'")
 
+    if args.target_host and args.action not in (
+        Action.SWITCH.value,
+        Action.BOOT.value,
+        Action.TEST.value,
+        Action.BUILD.value,
+        Action.DRY_BUILD.value,
+        Action.DRY_ACTIVATE.value,
+    ):
+        parser.error(f"--target-host is not supported with '{args.action}'")
+
     if args.flake and (args.file or args.attr):
         parser.error("--flake cannot be used with --file or --attr")
 
@@ -203,7 +213,7 @@ def execute(argv: list[str]) -> None:
         case Action.SWITCH | Action.BOOT:
             info("building the system configuration...")
             if args.rollback:
-                path_to_config = rollback(profile)
+                path_to_config = rollback(profile, target_host, sudo=args.sudo)
             else:
                 if flake:
                     path_to_config = nixos_build_flake(
@@ -236,7 +246,11 @@ def execute(argv: list[str]) -> None:
             if args.rollback:
                 if action not in (Action.TEST, Action.BUILD):
                     raise NRError(f"--rollback is incompatible with '{action}'")
-                maybe_path_to_config = rollback_temporary_profile(profile)
+                maybe_path_to_config = rollback_temporary_profile(
+                    profile,
+                    target_host,
+                    sudo=args.sudo,
+                )
                 if maybe_path_to_config:  # kinda silly but this makes mypy happy
                     path_to_config = maybe_path_to_config
                 else:
