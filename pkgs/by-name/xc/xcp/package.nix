@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xcp";
-  version = "0.21.3";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "tarka";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-psxA4YgrO1zg1hVL93opxxQ4VgjdmLP7KI2nkhEYmaE=";
+    hash = "sha256-3Y8/zRdWD6GSkhp1UabGyDrU62h1ZADYd4D1saED1ug=";
   };
 
   # no such file or directory errors
   doCheck = false;
 
-  cargoHash = "sha256-o29DesCKOtl4aQysFOVZUm2BghkFbxBOQi02KrUJRGM=";
+  cargoHash = "sha256-08Yw0HOaV8XKwzrODaBcHato6TfKBeVBa55MWzINAE0=";
 
   meta = with lib; {
     description = "Extended cp(1)";

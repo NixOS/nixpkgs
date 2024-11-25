@@ -18,6 +18,8 @@
   packaging,
   rich,
   tensorflow,
+  pythonAtLeast,
+  distutils,
 }:
 
 buildPythonPackage rec {
@@ -48,7 +50,7 @@ buildPythonPackage rec {
     packaging
     rich
     tensorflow
-  ];
+  ] ++ lib.optionals (pythonAtLeast "3.12") [ distutils ];
 
   pythonImportsCheck = [
     "keras"
