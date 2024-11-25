@@ -40,13 +40,13 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
   pname = "surrealist";
-  version = "2.1.6";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealist";
     rev = "surrealist-v${finalAttrs.version}";
-    hash = "sha256-jOjOdrVOcGPenFW5mkkXKA64C6c+/f9KzlvtUmw6vXc=";
+    hash = "sha256-46CXldjhWc7H6wdKfMK2IlmBqfe0QHi/J1uFhbV42HY=";
   };
 
   # HACK: A dependency (surrealist -> tauri -> **reqwest**) contains hyper-tls
@@ -61,14 +61,14 @@ in stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) patches src;
-    sourceRoot = finalAttrs.cargoRoot;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-LtQS0kH+2P4odV7BJYiH6T51+iZHAM9W9mV96rNfNWs=";
+    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
+    hash = "sha256-HmdEcjgxPyRsQqhU0P/C3KVgwZsSvfHjyzj0OHKe5jY";
+    patchFlags = [ "-p2" ];
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Y14wBYiAsctMf4Ljt7G/twGEQP2nCSDQZVG8otImnIE=";
+    hash = "sha256-uBDbBfWC9HxxzY1x4+rNo87D5C1zZa2beFLa5NkLs80=";
   };
 
   nativeBuildInputs = [
