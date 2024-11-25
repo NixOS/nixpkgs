@@ -37,9 +37,7 @@
   pkg-config,
   opusfile,
   pipewire,
-  qtbase,
-  qtmultimedia,
-  qtwayland,
+  qt6,
   soxr,
   vgmstream,
   wavpack,
@@ -97,9 +95,9 @@ stdenv.mkDerivation rec {
     neon
     opusfile
     pipewire
-    qtbase
-    qtmultimedia
-    qtwayland
+    qt6.qtbase
+    qt6.qtmultimedia
+    qt6.qtwayland
     soxr
     wavpack
     libopenmpt
