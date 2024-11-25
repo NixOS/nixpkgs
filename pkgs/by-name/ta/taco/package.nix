@@ -1,11 +1,12 @@
 {
   stdenv,
   lib,
-  fetchgit,
+  fetchFromGitHub,
   cmake,
+  python3,
   llvmPackages,
   enablePython ? false,
-  python ? null,
+  python ? python3,
 }:
 
 let
@@ -13,20 +14,30 @@ let
     p: with p; [
       numpy
       scipy
+      distutils
     ]
   );
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taco";
   version = "unstable-2022-08-02";
 
-  src = fetchgit {
-    url = "https://github.com/tensor-compiler/${pname}.git";
+  src = fetchFromGitHub {
+    owner = "tensor-compiler";
+    repo = "taco";
     rev = "2b8ece4c230a5f0f0a74bc6f48e28edfb6c1c95e";
     fetchSubmodules = true;
     hash = "sha256-PnBocyRLiLALuVS3Gkt/yJeslCMKyK4zdsBI8BFaTSg=";
   };
+
+  src-new-pybind11 = python.pkgs.pybind11.src;
+
+  postPatch = ''
+    rm -rf python_bindings/pybind11/*
+    cp -r ${finalAttrs.src-new-pybind11}/* python_bindings/pybind11
+    find python_bindings/pybind11 -exec chmod +w {} \;
+  '';
 
   # Remove test cases from cmake build as they violate modern C++ expectations
   patches = [ ./taco.patch ];
@@ -60,4 +71,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tensor-compiler/taco";
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})
