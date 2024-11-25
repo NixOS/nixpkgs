@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , alsa-lib
-, audacious
+, audacious-bare
 , curl
 , faad2
 , ffmpeg
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    audacious
+    audacious-bare
     alsa-lib
     curl
     faad2
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     ln -s ${vgmstream.override { buildAudaciousPlugin = true; }}/lib/audacious/Input/* $out/lib/audacious/Input
   '';
 
-  meta = audacious.meta // {
+  meta = audacious-bare.meta // {
     description = "Plugins for Audacious music player";
     downloadPage = "https://github.com/audacious-media-player/audacious-plugins";
   };

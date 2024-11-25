@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config, gtk3
-, audacious, mpg123, ffmpeg, libvorbis, libao, jansson, speex
+, audacious-bare, mpg123, ffmpeg, libvorbis, libao, jansson, speex
 , nix-update-script
 , buildAudaciousPlugin ? false  # only build cli by default, pkgs.audacious-plugins sets this to enable plugin support
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     libao
     jansson
     speex
-  ] ++ lib.optional buildAudaciousPlugin (audacious.override { audacious-plugins = null; });
+  ] ++ lib.optional buildAudaciousPlugin audacious-bare;
 
   preConfigure = ''
     substituteInPlace cmake/dependencies/audacious.cmake \
