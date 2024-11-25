@@ -9,15 +9,15 @@
 
 buildPythonPackage rec {
   pname = "nsapi";
-  version = "3.0.5";
+  version = "3.1.2";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aquatix";
     repo = "ns-api";
-    rev = "v${version}";
-    sha256 = "0i1zkvi4mrhkh1gxzpa54mq8mb76s9nf3jxxhpqia56nkq8f8krb";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-H8qxqzcGZ52W/HbTuKdnfnaYdZFaxzuUhrniS1zsL2w=";
   };
 
   propagatedBuildInputs = [
