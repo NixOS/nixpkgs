@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, nix-update-script, ghq }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  nix-update-script,
+  ghq,
+}:
 
 buildGoModule rec {
   pname = "ghq";
