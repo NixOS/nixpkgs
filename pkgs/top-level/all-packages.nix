@@ -13382,8 +13382,7 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  audacious-bare = audacious.override { audacious-plugins = null; };
-  audacious = qt6Packages.callPackage ../applications/audio/audacious { };
+  audacious = audacious-bare.override { withPlugins = true; };
 
   av-98 = callPackage ../applications/networking/browsers/av-98 { };
 

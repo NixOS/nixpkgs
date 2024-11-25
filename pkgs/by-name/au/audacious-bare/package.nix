@@ -6,10 +6,8 @@
   meson,
   ninja,
   pkg-config,
-  qtbase,
-  qtsvg,
-  qtwayland,
-  wrapQtAppsHook,
+  qt6,
+  withPlugins ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,13 +25,13 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtsvg
-    qtwayland
+    qt6.qtbase
+    qt6.qtsvg
+    qt6.qtwayland
   ];
 
   mesonFlags = [
@@ -41,7 +39,7 @@ stdenv.mkDerivation rec {
     "-Dbuildstamp=NixOS"
   ];
 
-  postInstall = lib.optionalString (audacious-plugins != null) ''
+  postInstall = lib.optionalString withPlugins ''
     ln -s ${audacious-plugins}/lib/audacious $out/lib
     ln -s ${audacious-plugins}/share/audacious/Skins $out/share/audacious/
   '';
