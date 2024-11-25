@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zvbi";
-  version = "0.2.42";
+  version = "0.2.42-unstable-2024-03-21";
 
   src = fetchFromGitHub {
     owner = "zapping-vbi";
     repo = "zvbi";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-IeSGscgz51IndX6Xbu8Kw8GcJ9MLXXFhV+4LvnVkrLE=";
+    rev = "a48ab3a0d72efe9968ebafa34c425c892e4afa50";
+    hash = "sha256-1VTTNfXZ12hJWiW+M1WsE8H/PejrJsT/E2RHZ3OSIC8=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Vertical Blanking Interval (VBI) utilities";
     homepage = "https://github.com/zapping-vbi/zvbi";
-    changelog = "https://github.com/zapping-vbi/zvbi/blob/v${finalAttrs.version}/ChangeLog";
+    changelog = "https://github.com/zapping-vbi/zvbi/blob/${finalAttrs.src.rev}/ChangeLog";
     pkgConfigModules = [ "zvbi-0.2" ];
     license = with lib.licenses; [
       bsd2
