@@ -5,7 +5,7 @@
 , pkg-config
 , openssl
 , nixVersions
-, nixPackage ? nixVersions.nix_2_18
+, nixPackage ? nixVersions.stable
 , darwin
 }:
 
