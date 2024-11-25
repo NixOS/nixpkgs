@@ -43,7 +43,7 @@ fi
 if test -z "$finalPath"; then
     # nix>=2.20 rejects adding symlinked paths to the store, so use realpath
     # to resolve to a physical path. https://github.com/NixOS/nix/issues/11941
-    tmpPath="$(realpath "$(mktemp -d "${TMPDIR:-/tmp}/svn-checkout-tmp-XXXXXXXX")")"
+    tmpPath="$(realpath "$(mktemp -d --tmpdir svn-checkout-tmp-XXXXXXXX)")"
     trap "rm -rf \"$tmpPath\"" EXIT
 
     tmpFile="$tmpPath/$dstFile"
