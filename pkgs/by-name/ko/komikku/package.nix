@@ -23,7 +23,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "komikku";
-  version = "1.63.0";
+  version = "1.64.0";
 
   format = "other";
 
@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "valos";
     repo = "Komikku";
     rev = "v${version}";
-    hash = "sha256-+p5iTB98jpCqodvSEZ9Y8SM9W3M57Lpoh9jAzN3OmRs=";
+    hash = "sha256-EpKLez5gTHCSJYGvDqmzj6YO1dIugZKrEP4zE2G5TxA=";
   };
 
   nativeBuildInputs = [
