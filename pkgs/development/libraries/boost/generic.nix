@@ -64,6 +64,16 @@ let
     "link=${link}"
     "-sEXPAT_INCLUDE=${expat.dev}/include"
     "-sEXPAT_LIBPATH=${expat.out}/lib"
+    (
+      # The stacktrace from exception feature causes memory leaks when built
+      # with libc++. For all other standard library implementations, i.e.
+      # libstdc++, we must aknowledge this or stacktrace refuses to compile.
+      # Issue upstream: https://github.com/boostorg/stacktrace/issues/163
+      if (stdenv.cc.libcxx != null) then
+        "boost.stacktrace.from_exception=off"
+      else
+        "define=BOOST_STACKTRACE_LIBCXX_RUNTIME_MAY_CAUSE_MEMORY_LEAK"
+    )
 
     # TODO: make this unconditional
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform ||
