@@ -2,6 +2,7 @@
   stdenv,
   lib,
   autoPatchelfHook,
+  versionCheckHook,
   copyDesktopItems,
   dbus,
   dpkg,
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
+    versionCheckHook
     makeWrapper
     copyDesktopItems
   ];
@@ -98,6 +100,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/warp-svc --prefix PATH : ${lib.makeBinPath [ nftables ]}
   '';
+
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = [ "--version" ];
 
   meta = with lib; {
     description = "Replaces the connection between your device and the Internet with a modern, optimized, protocol";
