@@ -5,7 +5,7 @@
   stdenv,
 
   autoreconfHook,
-  boost185,
+  boost,
   cairomm,
   cgal,
   expat,
@@ -26,8 +26,7 @@
 }:
 
 let
-  # graph-tool doesn't build against boost181 on Darwin
-  boost = boost185.override {
+  boost' = boost.override {
     enablePython = true;
     inherit python;
   };
@@ -58,7 +57,7 @@ buildPythonPackage rec {
 
   configureFlags = [
     "--with-python-module-path=$(out)/${python.sitePackages}"
-    "--with-boost-libdir=${boost}/lib"
+    "--with-boost-libdir=${boost'}/lib"
     "--with-cgal=${cgal}"
   ];
 
@@ -71,7 +70,7 @@ buildPythonPackage rec {
 
   # https://graph-tool.skewed.de/installation.html#manual-compilation
   dependencies = [
-    boost
+    boost'
     cairomm
     cgal
     expat
