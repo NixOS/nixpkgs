@@ -3,9 +3,9 @@
   fetchgit,
   rustPlatform,
   testers,
-  proxmox-auto-install-assistant,
   pkg-config,
   openssl,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,7 +38,9 @@ rustPlatform.buildRustPackage rec {
     patchelf --remove-needed libssl.so.3 $out/bin/proxmox-auto-install-assistant
   '';
 
-  passthru.tests.version = testers.testVersion { package = proxmox-auto-install-assistant; };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     description = "Tool to prepare a Proxmox installation ISO for automated installations";
