@@ -41,13 +41,8 @@ rustPlatform.buildRustPackage rec {
     jq '.package.version = "${version}" | .tauri.updater.active = false' "$tauri_conf" | sponge "$tauri_conf"
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tauri-plugin-context-menu-0.7.1" = "sha256-vKfq20hrFLmfoXO94D8HwAE3UdGcuqVZf3+tOBhLqj0=";
-      "tauri-plugin-log-0.0.0" = "sha256-gde2RS5NFA0Xap/Xb7XOeVQ/5t2Nw+j+HOwfeJmSNMU=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-oXO4ZuE5qrxc/qZs9M5ODHOTtLnXIXyc246ArHNU09g=";
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
