@@ -2,6 +2,21 @@
 { lib, ... }:
 let
   inherit (lib) types mkOption;
+
+  lazyAttrsOf = mkOption {
+    # Same as lazyAttrsOf
+    type = types.attrsWith {
+      lazy = true;
+      elemType = types.int;
+    };
+  };
+
+  attrsOf = mkOption {
+    # Same as lazyAttrsOf
+    type = types.attrsWith {
+      elemType = types.int;
+    };
+  };
 in
 {
   imports = [
@@ -9,26 +24,18 @@ in
     (
       { ... }:
       {
-        options.mergedLazy = mkOption {
-          # Same as lazyAttrsOf
-          type = types.attrsWith {
-            lazy = true;
-            elemType = types.int;
-          };
-        };
+        options.mergedLazyLazy = lazyAttrsOf;
+        options.mergedLazyNonLazy = lazyAttrsOf;
+        options.mergedNonLazyNonLazy = attrsOf;
       }
     )
     # Module B
     (
       { ... }:
       {
-        options.mergedLazy = lib.mkOption {
-          # Same as lazyAttrsOf
-          type = types.attrsWith {
-            lazy = true;
-            elemType = types.int;
-          };
-        };
+        options.mergedLazyLazy = lazyAttrsOf;
+        options.mergedLazyNonLazy = attrsOf;
+        options.mergedNonLazyNonLazy = attrsOf;
       }
     )
     # Result
@@ -36,9 +43,14 @@ in
       { config, ... }:
       {
         # Can only evaluate if lazy
-        config.mergedLazy.bar = config.mergedLazy.baz + 1;
-        config.mergedLazy.baz = 10;
-        options.result = mkOption { default = config.mergedLazy.bar; };
+        config.mergedLazyLazy.bar = config.mergedLazyLazy.baz + 1;
+        config.mergedLazyLazy.baz = 10;
+        options.lazyResult = mkOption { default = config.mergedLazyLazy.bar; };
+
+        # Can not only evaluate if not lazy
+        config.mergedNonLazyNonLazy.bar = config.mergedNonLazyNonLazy.baz + 1;
+        config.mergedNonLazyNonLazy.baz = 10;
+        options.nonLazyResult = mkOption { default = config.mergedNonLazyNonLazy.bar; };
       }
     )
   ];
