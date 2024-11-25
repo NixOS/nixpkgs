@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "0.56.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "eblot";
@@ -42,6 +42,7 @@ buildPythonPackage rec {
       bridges.
     '';
     homepage = "https://github.com/eblot/pyftdi";
+    changelog = "https://github.com/eblot/pyftdi/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
