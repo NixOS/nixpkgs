@@ -16,6 +16,7 @@ stdenvNoCC.mkDerivation rec {
     install -Dm644 *.otf -t $out/share/fonts/opentype
     install -Dm644 *.bdf -t $out/share/fonts/misc
     install -Dm644 *.otb -t $out/share/fonts/misc
+    install -Dm644 *.psf -t $out/share/fonts/misc
     install -Dm644 *.woff -t $out/share/fonts/woff
     install -Dm644 *.woff2 -t $out/share/fonts/woff2
 
