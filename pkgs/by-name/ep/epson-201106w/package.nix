@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, rpmextract, autoreconfHook, file, libjpeg, cups }:
+{ lib, stdenv, fetchrpm, autoreconfHook, file, libjpeg, cups }:
 
 let
   version = "1.0.1";
@@ -9,28 +9,25 @@ in
     pname = "epson-201106w";
     inherit version;
 
-    src = fetchurl {
+    src = fetchrpm {
       # NOTE: Don't forget to update the webarchive link too!
       urls = [
         "https://download.ebz.epson.net/dsc/op/stable/SRPMS/epson-inkjet-printer-201106w-${version}-1lsb3.2.src.rpm"
         "https://web.archive.org/web/https://download.ebz.epson.net/dsc/op/stable/SRPMS/epson-inkjet-printer-201106w-${version}-1lsb3.2.src.rpm"
       ];
-
-      sha256 = "1yig1xrh1ikblbp7sx706n5nnc237wy4mbch23ymy6akbgqg4aig";
+      hash = "sha256-DxMQ25Aj7F9kO+Mzw3wMIAscVsw3WLClKsAl2w2ditI=";
     };
 
-    nativeBuildInputs = [ rpmextract autoreconfHook file ];
+    nativeBuildInputs = [ autoreconfHook file ];
 
     buildInputs = [ libjpeg cups ];
 
-    unpackPhase = ''
-      rpmextract $src
-      tar -zxf epson-inkjet-printer-201106w-${version}.tar.gz
-      tar -zxf epson-inkjet-printer-filter-${filterVersion}.tar.gz
+    postPatch = ''
       for ppd in epson-inkjet-printer-201106w-${version}/ppds/*; do
         substituteInPlace $ppd --replace "/opt/epson-inkjet-printer-201106w" "$out"
         substituteInPlace $ppd --replace "/cups/lib" "/lib/cups"
       done
+
       cd epson-inkjet-printer-filter-${filterVersion}
     '';
 
