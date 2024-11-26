@@ -5,7 +5,7 @@
 # input plugins
 , libmad, taglib, libvorbis, libogg, flac, libmpcdec, libmodplug, libsndfile
 , libcdio, cdparanoia, libcddb, faad2, ffmpeg, wildmidi, libbs2b, game-music-emu
-, libarchive, opusfile, soxr, wavpack
+, libarchive, opusfile, soxr, wavpack, libxmp, libsidplayfp
 # output plugins
 , alsa-lib, libpulseaudio, pipewire, libjack2
 # effect plugins
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       # input plugins
       libmad taglib libvorbis libogg flac libmpcdec libmodplug libsndfile
       libcdio cdparanoia libcddb faad2 ffmpeg wildmidi libbs2b game-music-emu
-      libarchive opusfile soxr wavpack
+      libarchive opusfile soxr wavpack libxmp libsidplayfp
       # output plugins
       alsa-lib libpulseaudio pipewire libjack2
       # effect plugins

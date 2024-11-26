@@ -1,47 +1,46 @@
-{ stdenv
-, fetchFromGitHub
-, alsa-lib
-, audacious
-, curl
-, faad2
-, ffmpeg
-, flac
-, fluidsynth
-, gdk-pixbuf
-, lame
-, libbs2b
-, libcddb
-, libcdio
-, libcdio-paranoia
-, libcue
-, libjack2
-, libmad
-, libmms
-, libmodplug
-, libmowgli
-, libnotify
-, libogg
-, libopenmpt
-, libpulseaudio
-, libsamplerate
-, libsidplayfp
-, libsndfile
-, libvorbis
-, libxml2
-, lirc
-, meson
-, mpg123
-, neon
-, ninja
-, pkg-config
-, opusfile
-, pipewire
-, qtbase
-, qtmultimedia
-, qtwayland
-, soxr
-, vgmstream
-, wavpack
+{
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  audacious-bare,
+  curl,
+  faad2,
+  ffmpeg,
+  flac,
+  fluidsynth,
+  gdk-pixbuf,
+  lame,
+  libbs2b,
+  libcddb,
+  libcdio,
+  libcdio-paranoia,
+  libcue,
+  libjack2,
+  libmad,
+  libmms,
+  libmodplug,
+  libmowgli,
+  libnotify,
+  libogg,
+  libopenmpt,
+  libpulseaudio,
+  libsamplerate,
+  libsidplayfp,
+  libsndfile,
+  libvorbis,
+  libxml2,
+  lirc,
+  meson,
+  mpg123,
+  neon,
+  ninja,
+  pkg-config,
+  opusfile,
+  pipewire,
+  qt6,
+  soxr,
+  vgmstream,
+  wavpack,
 }:
 
 stdenv.mkDerivation rec {
@@ -64,7 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    audacious
+    audacious-bare
     alsa-lib
     curl
     faad2
@@ -96,9 +95,9 @@ stdenv.mkDerivation rec {
     neon
     opusfile
     pipewire
-    qtbase
-    qtmultimedia
-    qtwayland
+    qt6.qtbase
+    qt6.qtmultimedia
+    qt6.qtwayland
     soxr
     wavpack
     libopenmpt
@@ -111,10 +110,12 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   postInstall = ''
-    ln -s ${vgmstream.override { buildAudaciousPlugin = true; }}/lib/audacious/Input/* $out/lib/audacious/Input
+    ln -s ${
+      vgmstream.override { buildAudaciousPlugin = true; }
+    }/lib/audacious/Input/* $out/lib/audacious/Input
   '';
 
-  meta = audacious.meta // {
+  meta = audacious-bare.meta // {
     description = "Plugins for Audacious music player";
     downloadPage = "https://github.com/audacious-media-player/audacious-plugins";
   };

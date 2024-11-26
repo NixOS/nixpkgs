@@ -139,7 +139,7 @@ let
   # Turn a derivation into its outPath without a string context attached.
   # See the comment at the usage site.
   unsafeDerivationToUntrackedOutpath = drv:
-    if isDerivation drv
+    if isDerivation drv && (!drv.__contentAddressed or false)
     then builtins.unsafeDiscardStringContext drv.outPath
     else drv;
 
