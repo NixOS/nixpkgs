@@ -8,6 +8,7 @@
 
 let
   fhsEnv = {
+    inherit (bottles-unwrapped) version;
     # Many WINE games need 32bit
     multiArch = true;
 
@@ -113,14 +114,14 @@ symlinkJoin {
     (buildFHSEnv (
       fhsEnv
       // {
-        name = "bottles";
+        pname = "bottles";
         runScript = "bottles";
       }
     ))
     (buildFHSEnv (
       fhsEnv
       // {
-        name = "bottles-cli";
+        pname = "bottles-cli";
         runScript = "bottles-cli";
       }
     ))
