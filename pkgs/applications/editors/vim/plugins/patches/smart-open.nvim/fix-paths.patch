@@ -1,0 +1,13 @@
+diff --git a/lua/telescope/_extensions/smart_open/file_scanner.lua b/lua/telescope/_extensions/smart_open/file_scanner.lua
+index 1cba423..cb20ea7 100644
+--- a/lua/telescope/_extensions/smart_open/file_scanner.lua
++++ b/lua/telescope/_extensions/smart_open/file_scanner.lua
+@@ -69,7 +69,7 @@ local function ripgrep_scan(basedir, ignore_patterns, on_insert, on_complete)
+   local stop
+
+   local start_time
+-  stop = spawn("rg", { args = args, cwd = basedir }, {
++  stop = spawn("@rg@", { args = args, cwd = basedir }, {
+     stdout = function(_, chunk)
+       if not start_time then
+         start_time = vim.loop.uptime()

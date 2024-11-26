@@ -2125,6 +2125,11 @@ in
       telescope-nvim
       sqlite-lua
     ];
+
+    patches = [ ./patches/smart-open.nvim/fix-paths.patch ];
+    postPatch = ''
+      substituteInPlace lua/telescope/_extensions/smart_open/file_scanner.lua --replace-fail '@rg@' ${ripgrep}/bin/rg
+    '';
   };
 
   sniprun =
