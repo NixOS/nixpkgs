@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jazzband/prettytable";
     changelog = "https://github.com/jazzband/prettytable/releases/tag/${version}";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
