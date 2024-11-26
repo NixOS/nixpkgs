@@ -124,7 +124,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.0.1";
+  version = "2.0.2";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -142,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-cIkbYoSqVZtEEIh0iTr+Ovu5BWGh6d2NfImTJoc69QU=";
+    hash = "sha256-rmMb109SJVWDGT4z5GOA4V9O0cDMptTpwx0TXdGWjvk=";
   };
 
   patches = [
@@ -163,11 +163,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # EFI capsule is located in fwupd-efi now.
     ./efi-app-path.patch
-
-    (fetchpatch {
-      url = "https://github.com/fwupd/fwupd/pull/7994.diff?full_index=1";
-      hash = "sha256-fRM033aCoj11Q5u9Yfi3BSD/zpm2kIqf5qabs60nEoM=";
-    })
   ];
 
   nativeBuildInputs = [
