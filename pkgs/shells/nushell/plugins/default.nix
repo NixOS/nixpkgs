@@ -11,4 +11,5 @@ lib.makeScope newScope (self: with self; {
   highlight = callPackage ./highlight.nix { inherit IOKit Foundation; };
   dbus = callPackage ./dbus.nix { inherit dbus; nushell_plugin_dbus = self.dbus; };
   skim = callPackage ./skim.nix { inherit IOKit CoreFoundation; };
+  file = callPackage ./file.nix { inherit IOKit CoreFoundation; };
 })
