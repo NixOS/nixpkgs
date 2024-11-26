@@ -62,8 +62,13 @@ let
 
       install -D -t "$out/include/os" \
         '${Libc}/os/assumes.h' \
+        '${Libc}/os/variant_private.h' \
         '${xnu}/libkern/os/base_private.h'
       touch "$out/include/os/feature_private.h"
+
+      substituteInPlace "$out/include/os/variant_private.h" \
+        --replace-fail 'API_UNAVAILABLE(ios, tvos, watchos, bridgeos)' "" \
+        --replace-fail ', bridgeos(4.0)' ""
 
       install -D -t "$out/include/sys" \
         '${xnu}/bsd/sys/csr.h' \
