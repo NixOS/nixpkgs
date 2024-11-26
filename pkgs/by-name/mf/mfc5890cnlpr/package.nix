@@ -1,7 +1,7 @@
 { stdenv
 , a2ps
 , lib
-, fetchurl
+, fetchdeb
 , dpkg
 , makeWrapper
 , coreutils
@@ -16,23 +16,21 @@ stdenv.mkDerivation rec {
   pname = "mfc5890cnlpr";
   version = "1.1.2-2";
 
-  src = fetchurl {
+  src = fetchdeb {
     url = "https://download.brother.com/welcome/dlf006168/${pname}-${version}.i386.deb";
-    sha256 = "119h3s1p9pv83mrfv6cmxpc0v33xf8c9nw5clj9yafv3aizxy6dp";
+    hash = "sha256-8vm1rLqTzcsVVg9JvtQ5T8SiRV9LAccWDGIn0s9QhsE=";
   };
 
-  unpackPhase = ''
-    dpkg-deb -x $src $out
-  '';
-
   nativeBuildInputs = [
-    dpkg
     makeWrapper
   ];
 
   dontBuild = true;
 
   installPhase = ''
+    mkdir -p $out
+    cp -r . $out/.
+
     dir=$out/usr/local/Brother/Printer/mfc5890cn
 
     patchelf --set-interpreter ${pkgsi686Linux.glibc.out}/lib/ld-linux.so.2 $dir/lpd/brmfc5890cnfilter
