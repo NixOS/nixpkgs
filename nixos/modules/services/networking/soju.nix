@@ -132,12 +132,21 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
-        DynamicUser = true;
-        Restart = "always";
         ExecStart = "${cfg.package}/bin/soju -config ${configFile}";
+        Restart = "always";
+        User = "soju";
+        Group = "soju";
         StateDirectory = "soju";
         RuntimeDirectory = "soju";
       };
+    };
+
+    users = {
+      users.soju = {
+        isSystemUser = true;
+        group = "soju";
+      };
+      groups.soju = { };
     };
   };
 
