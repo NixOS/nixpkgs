@@ -22,7 +22,6 @@ def test_copy_closure(mock_run: Any) -> None:
     n.copy_closure(closure, target_host)
     mock_run.assert_called_with(
         ["nix-copy-closure", "--to", "user@host", closure],
-        check=True,
         extra_env={"NIX_SSHOPTS": "--ssh opt"},
     )
 
@@ -220,7 +219,6 @@ def test_nixos_build_flake(mock_run: Any) -> None:
             "--nix-flag",
             "foo",
         ],
-        check=True,
         stdout=PIPE,
     )
 
@@ -234,28 +232,24 @@ def test_nixos_build(mock_run: Any, monkeypatch: Any) -> None:
     assert n.nixos_build("attr", None, None, nix_flag="foo") == Path("/path/to/file")
     mock_run.assert_called_with(
         ["nix-build", "<nixpkgs/nixos>", "--attr", "attr", "--nix-flag", "foo"],
-        check=True,
         stdout=PIPE,
     )
 
     n.nixos_build("attr", "preAttr", "file")
     mock_run.assert_called_with(
         ["nix-build", "file", "--attr", "preAttr.attr"],
-        check=True,
         stdout=PIPE,
     )
 
     n.nixos_build("attr", None, "file", no_out_link=True)
     mock_run.assert_called_with(
         ["nix-build", "file", "--attr", "attr", "--no-out-link"],
-        check=True,
         stdout=PIPE,
     )
 
     n.nixos_build("attr", "preAttr", None, no_out_link=False, keep_going=True)
     mock_run.assert_called_with(
         ["nix-build", "default.nix", "--attr", "preAttr.attr", "--keep-going"],
-        check=True,
         stdout=PIPE,
     )
 
@@ -270,7 +264,6 @@ def test_rollback(mock_run: Any, tmp_path: Path) -> None:
     assert n.rollback(profile, None, False) == profile.path
     mock_run.assert_called_with(
         ["nix-env", "--rollback", "-p", path],
-        check=True,
         remote=None,
         sudo=False,
     )
@@ -279,7 +272,6 @@ def test_rollback(mock_run: Any, tmp_path: Path) -> None:
     assert n.rollback(profile, target_host, True) == profile.path
     mock_run.assert_called_with(
         ["nix-env", "--rollback", "-p", path],
-        check=True,
         remote=target_host,
         sudo=True,
     )
@@ -312,7 +304,6 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
                 "--list-generations",
             ],
             stdout=PIPE,
-            check=True,
             remote=None,
             sudo=False,
         )
@@ -330,7 +321,6 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
                 "--list-generations",
             ],
             stdout=PIPE,
-            check=True,
             remote=target_host,
             sudo=True,
         )
@@ -353,7 +343,6 @@ def test_set_profile(mock_run: Any) -> None:
 
     mock_run.assert_called_with(
         ["nix-env", "-p", profile_path, "--set", config_path],
-        check=True,
         remote=None,
         sudo=False,
     )
@@ -378,7 +367,6 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
     mock_run.assert_called_with(
         [profile_path / "bin/switch-to-configuration", "switch"],
         extra_env={"NIXOS_INSTALL_BOOTLOADER": "0"},
-        check=True,
         sudo=False,
         remote=None,
     )
@@ -416,7 +404,6 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
             "test",
         ],
         extra_env={"NIXOS_INSTALL_BOOTLOADER": "1"},
-        check=True,
         sudo=True,
         remote=target_host,
     )

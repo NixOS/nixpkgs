@@ -8,13 +8,6 @@ from pathlib import Path
 from typing import Self, Sequence, TypedDict, Unpack
 
 
-# Not exhaustive, but we can always extend it later.
-class RunKwargs(TypedDict, total=False):
-    capture_output: bool
-    stderr: int | None
-    stdout: int | None
-
-
 @dataclass(frozen=True)
 class Remote:
     host: str
@@ -46,6 +39,13 @@ class Remote:
             return None
 
 
+# Not exhaustive, but we can always extend it later.
+class RunKwargs(TypedDict, total=False):
+    capture_output: bool
+    stderr: int | None
+    stdout: int | None
+
+
 def cleanup_ssh(tmp_dir: Path) -> None:
     "Close SSH ControlMaster connection."
     for ctrl in tmp_dir.glob("ssh-*"):
@@ -55,7 +55,7 @@ def cleanup_ssh(tmp_dir: Path) -> None:
 def run_wrapper(
     args: Sequence[str | bytes | os.PathLike[str] | os.PathLike[bytes]],
     *,
-    check: bool,  # make it explicit so we always know if the code is handling errors
+    check: bool = True,
     extra_env: dict[str, str] | None = None,
     remote: Remote | None = None,
     sudo: bool = False,

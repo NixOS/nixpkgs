@@ -74,7 +74,6 @@ class Flake:
                 try:
                     return run_wrapper(
                         ["uname", "-n"],
-                        check=True,
                         capture_output=True,
                         remote=target_host,
                     ).stdout.strip()

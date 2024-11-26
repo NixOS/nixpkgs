@@ -36,7 +36,6 @@ def copy_closure(
             host.host,
             closure,
         ],
-        check=True,
         extra_env={"NIX_SSHOPTS": " ".join(host.opts)},
     )
 
@@ -171,7 +170,6 @@ def get_generations(
         r = run_wrapper(
             ["nix-env", "-p", profile.path, "--list-generations"],
             stdout=PIPE,
-            check=True,
             remote=target_host,
             sudo=sudo,
         )
@@ -216,7 +214,6 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
             configuration_revision = run_wrapper(
                 [generation_path / "sw/bin/nixos-version", "--configuration-revision"],
                 capture_output=True,
-                check=True,
             ).stdout.strip()
         except (CalledProcessError, IOError):
             configuration_revision = "Unknown"
@@ -260,7 +257,7 @@ def nixos_build(
     else:
         run_args = ["nix-build", "<nixpkgs/nixos>", "--attr", attr]
     run_args += dict_to_flags(nix_flags)
-    r = run_wrapper(run_args, check=True, stdout=PIPE)
+    r = run_wrapper(run_args, stdout=PIPE)
     return Path(r.stdout.strip())
 
 
@@ -281,7 +278,7 @@ def nixos_build_flake(
         f"{flake}.config.system.build.{attr}",
         *dict_to_flags(flake_flags),
     ]
-    r = run_wrapper(run_args, check=True, stdout=PIPE)
+    r = run_wrapper(run_args, stdout=PIPE)
     return Path(r.stdout.strip())
 
 
@@ -289,7 +286,6 @@ def rollback(profile: Profile, target_host: Remote | None, sudo: bool) -> Path:
     "Rollback Nix profile, like one created by `nixos-rebuild switch`."
     run_wrapper(
         ["nix-env", "--rollback", "-p", profile.path],
-        check=True,
         remote=target_host,
         sudo=sudo,
     )
@@ -329,7 +325,6 @@ def set_profile(
     "Set a path as the current active Nix profile."
     run_wrapper(
         ["nix-env", "-p", profile.path, "--set", path_to_config],
-        check=True,
         remote=target_host,
         sudo=sudo,
     )
@@ -361,7 +356,6 @@ def switch_to_configuration(
     run_wrapper(
         [path_to_config / "bin/switch-to-configuration", str(action)],
         extra_env={"NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0"},
-        check=True,
         remote=target_host,
         sudo=sudo,
     )
