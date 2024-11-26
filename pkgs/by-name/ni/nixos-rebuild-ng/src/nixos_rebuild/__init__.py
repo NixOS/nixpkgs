@@ -8,21 +8,8 @@ from subprocess import run
 from tempfile import TemporaryDirectory
 from typing import assert_never
 
+from . import nix
 from .models import Action, Flake, NRError, Profile
-from .nix import (
-    copy_closure,
-    edit,
-    find_file,
-    get_nixpkgs_rev,
-    list_generations,
-    nixos_build,
-    nixos_build_flake,
-    rollback,
-    rollback_temporary_profile,
-    set_profile,
-    switch_to_configuration,
-    upgrade_channels,
-)
 from .process import Remote, cleanup_ssh
 from .utils import flags_to_dict, info
 
@@ -206,7 +193,7 @@ def execute(argv: list[str]) -> None:
     flake = Flake.from_arg(args.flake, target_host)
 
     if args.upgrade or args.upgrade_all:
-        upgrade_channels(bool(args.upgrade_all))
+        nix.upgrade_channels(bool(args.upgrade_all))
 
     action = Action(args.action)
     # Only run shell scripts from the Nixpkgs tree if the action is
@@ -216,8 +203,8 @@ def execute(argv: list[str]) -> None:
     # untrusted tree.
     can_run = action in (Action.SWITCH, Action.BOOT, Action.TEST)
     if can_run and not flake:
-        nixpkgs_path = find_file("nixpkgs", **build_flags)
-        rev = get_nixpkgs_rev(nixpkgs_path)
+        nixpkgs_path = nix.find_file("nixpkgs", **build_flags)
+        rev = nix.get_nixpkgs_rev(nixpkgs_path)
         if nixpkgs_path and rev:
             (nixpkgs_path / ".version-suffix").write_text(rev)
 
@@ -225,26 +212,26 @@ def execute(argv: list[str]) -> None:
         case Action.SWITCH | Action.BOOT:
             info("building the system configuration...")
             if args.rollback:
-                path_to_config = rollback(profile, target_host, sudo=args.sudo)
+                path_to_config = nix.rollback(profile, target_host, sudo=args.sudo)
             else:
                 if flake:
-                    path_to_config = nixos_build_flake(
+                    path_to_config = nix.nixos_build_flake(
                         "toplevel",
                         flake,
                         no_link=True,
                         **flake_build_flags,
                     )
                 else:
-                    path_to_config = nixos_build(
+                    path_to_config = nix.nixos_build(
                         "system",
                         args.attr,
                         args.file,
                         no_out_link=True,
                         **build_flags,
                     )
-                copy_closure(path_to_config, target_host, **copy_flags)
-                set_profile(profile, path_to_config, target_host, sudo=args.sudo)
-            switch_to_configuration(
+                nix.copy_closure(path_to_config, target_host, **copy_flags)
+                nix.set_profile(profile, path_to_config, target_host, sudo=args.sudo)
+            nix.switch_to_configuration(
                 path_to_config,
                 action,
                 target_host,
@@ -258,7 +245,7 @@ def execute(argv: list[str]) -> None:
             if args.rollback:
                 if action not in (Action.TEST, Action.BUILD):
                     raise NRError(f"--rollback is incompatible with '{action}'")
-                maybe_path_to_config = rollback_temporary_profile(
+                maybe_path_to_config = nix.rollback_temporary_profile(
                     profile,
                     target_host,
                     sudo=args.sudo,
@@ -268,7 +255,7 @@ def execute(argv: list[str]) -> None:
                 else:
                     raise NRError("could not find previous generation")
             elif flake:
-                path_to_config = nixos_build_flake(
+                path_to_config = nix.nixos_build_flake(
                     "toplevel",
                     flake,
                     keep_going=True,
@@ -276,7 +263,7 @@ def execute(argv: list[str]) -> None:
                     **flake_build_flags,
                 )
             else:
-                path_to_config = nixos_build(
+                path_to_config = nix.nixos_build(
                     "system",
                     args.attr,
                     args.file,
@@ -285,7 +272,7 @@ def execute(argv: list[str]) -> None:
                     **build_flags,
                 )
             if action in (Action.TEST, Action.DRY_ACTIVATE):
-                switch_to_configuration(
+                nix.switch_to_configuration(
                     path_to_config,
                     action,
                     target_host,
@@ -296,14 +283,14 @@ def execute(argv: list[str]) -> None:
             info("building the system configuration...")
             attr = "vm" if action == Action.BUILD_VM else "vmWithBootLoader"
             if flake:
-                path_to_config = nixos_build_flake(
+                path_to_config = nix.nixos_build_flake(
                     attr,
                     flake,
                     keep_going=True,
                     **flake_build_flags,
                 )
             else:
-                path_to_config = nixos_build(
+                path_to_config = nix.nixos_build(
                     attr,
                     args.attr,
                     args.file,
@@ -313,11 +300,11 @@ def execute(argv: list[str]) -> None:
             vm_path = next(path_to_config.glob("bin/run-*-vm"), "./result/bin/run-*-vm")
             print(f"Done. The virtual machine can be started by running '{vm_path}'")
         case Action.EDIT:
-            edit(flake, **flake_build_flags)
+            nix.edit(flake, **flake_build_flags)
         case Action.DRY_RUN:
             assert False, "DRY_RUN should be a DRY_BUILD alias"
         case Action.LIST_GENERATIONS:
-            generations = list_generations(profile)
+            generations = nix.list_generations(profile)
             if args.json:
                 print(json.dumps(generations, indent=2))
             else:
