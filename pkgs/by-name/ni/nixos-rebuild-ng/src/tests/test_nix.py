@@ -18,7 +18,7 @@ def test_copy_closure(mock_run: Any) -> None:
     n.copy_closure(closure, None)
     mock_run.assert_not_called()
 
-    target_host = m.Remote("user@host", ["--ssh", "opt"], False)
+    target_host = m.Remote("user@host", ["--ssh", "opt"], None)
     n.copy_closure(closure, target_host)
     mock_run.assert_called_with(
         ["nix-copy-closure", "--to", "user@host", closure],
@@ -276,18 +276,12 @@ def test_rollback(mock_run: Any, tmp_path: Path) -> None:
         sudo=False,
     )
 
-    assert (
-        n.rollback(
-            profile,
-            m.Remote("user@localhost", [], False),
-            True,
-        )
-        == profile.path
-    )
+    target_host = m.Remote("user@localhost", [], None)
+    assert n.rollback(profile, target_host, True) == profile.path
     mock_run.assert_called_with(
         ["nix-env", "--rollback", "-p", path],
         check=True,
-        remote=m.Remote("user@localhost", [], False),
+        remote=target_host,
         sudo=True,
     )
 
@@ -324,12 +318,9 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
             sudo=False,
         )
 
+        target_host = m.Remote("user@localhost", [], None)
         assert (
-            n.rollback_temporary_profile(
-                m.Profile("foo", path),
-                m.Remote("user@localhost", [], False),
-                True,
-            )
+            n.rollback_temporary_profile(m.Profile("foo", path), target_host, True)
             == path.parent / "foo-2083-link"
         )
         mock_run.assert_called_with(
@@ -341,7 +332,7 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
             ],
             stdout=PIPE,
             check=True,
-            remote=m.Remote("user@localhost", [], False),
+            remote=target_host,
             sudo=True,
         )
 
@@ -406,6 +397,7 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
         == "error: '--specialisation' can only be used with 'switch' and 'test'"
     )
 
+    target_host = m.Remote("user@localhost", [], None)
     with monkeypatch.context() as mp:
         mp.setenv("LOCALE_ARCHIVE", "/path/to/locale")
         mp.setenv("PATH", "/path/to/bin")
@@ -415,7 +407,7 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
             Path("/path/to/config"),
             m.Action.TEST,
             sudo=True,
-            target_host=m.Remote("user@localhost", [], False),
+            target_host=target_host,
             install_bootloader=True,
             specialisation="special",
         )
@@ -427,7 +419,7 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
         extra_env={"NIXOS_INSTALL_BOOTLOADER": "1"},
         check=True,
         sudo=True,
-        remote=m.Remote("user@localhost", [], False),
+        remote=target_host,
     )
 
 

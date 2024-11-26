@@ -10,7 +10,12 @@ import nixos_rebuild as nr
 
 from .helpers import get_qualified_name
 
-DEFAULT_RUN_KWARGS = {"text": True, "errors": "surrogateescape", "env": ANY}
+DEFAULT_RUN_KWARGS = {
+    "env": ANY,
+    "input": None,
+    "text": True,
+    "errors": "surrogateescape",
+}
 
 
 def test_parse_args() -> None:
@@ -267,7 +272,6 @@ def test_execute_nix_switch_flake_remote(
             call(
                 [
                     "ssh",
-                    "-t",
                     "-o",
                     "ControlMaster=auto",
                     "-o",
@@ -289,7 +293,6 @@ def test_execute_nix_switch_flake_remote(
             call(
                 [
                     "ssh",
-                    "-t",
                     "-o",
                     "ControlMaster=auto",
                     "-o",

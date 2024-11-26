@@ -94,9 +94,9 @@ def test_flake_from_arg(mock_node: Any) -> None:
             return_value=subprocess.CompletedProcess([], 0, "remote-hostname\n"),
         ),
     ):
-        assert m.Flake.from_arg(
-            "/path/to", m.Remote("user@host", [], False)
-        ) == m.Flake(Path("/path/to"), "nixosConfigurations.remote-hostname")
+        assert m.Flake.from_arg("/path/to", m.Remote("user@host", [], None)) == m.Flake(
+            Path("/path/to"), "nixosConfigurations.remote-hostname"
+        )
 
 
 @patch(get_qualified_name(m.Path.mkdir, m), autospec=True)

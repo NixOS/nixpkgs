@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import subprocess
 from dataclasses import dataclass
+from getpass import getpass
 from pathlib import Path
 from typing import Self, Sequence, TypedDict, Unpack
 
@@ -10,9 +11,7 @@ from typing import Self, Sequence, TypedDict, Unpack
 # Not exhaustive, but we can always extend it later.
 class RunKwargs(TypedDict, total=False):
     capture_output: bool
-    input: str | None
     stderr: int | None
-    stdin: int | None
     stdout: int | None
 
 
@@ -20,10 +19,15 @@ class RunKwargs(TypedDict, total=False):
 class Remote:
     host: str
     opts: list[str]
-    tty: bool
+    sudo_password: str | None
 
     @classmethod
-    def from_arg(cls, host: str | None, tty: bool | None, tmp_dir: Path) -> Self | None:
+    def from_arg(
+        cls,
+        host: str | None,
+        ask_sudo_password: bool | None,
+        tmp_dir: Path,
+    ) -> Self | None:
         if host:
             opts = os.getenv("NIX_SSHOPTS", "").split() + [
                 # SSH ControlMaster flags, allow for faster re-connection
@@ -34,7 +38,10 @@ class Remote:
                 "-o",
                 "ControlPersist=60",
             ]
-            return cls(host, opts, bool(tty))
+            sudo_password = None
+            if ask_sudo_password:
+                sudo_password = getpass(f"[sudo] password for {host}: ")
+            return cls(host, opts, sudo_password)
         else:
             return None
 
@@ -50,31 +57,24 @@ def run_wrapper(
     *,
     check: bool,  # make it explicit so we always know if the code is handling errors
     extra_env: dict[str, str] | None = None,
-    allow_tty: bool = True,
     remote: Remote | None = None,
     sudo: bool = False,
     **kwargs: Unpack[RunKwargs],
 ) -> subprocess.CompletedProcess[str]:
     "Wrapper around `subprocess.run` that supports extra functionality."
-    if remote and allow_tty:
-        # SSH's TTY will redirect all output to stdout, that may cause
-        # unwanted effects when used
-        assert not kwargs.get(
-            "capture_output"
-        ), "SSH's TTY is incompatible with capture_output"
-        assert not kwargs.get("stderr"), "SSH's TTY is incompatible with stderr"
-        assert not kwargs.get("stdout"), "SSH's TTY is incompatible with stdout"
     env = None
+    input = None
     if remote:
         if extra_env:
             extra_env_args = [f"{env}={value}" for env, value in extra_env.items()]
             args = ["env", *extra_env_args, *args]
         if sudo:
-            args = ["sudo", *args]
-        if allow_tty and remote.tty:
-            args = ["ssh", "-t", *remote.opts, remote.host, "--", *args]
-        else:
-            args = ["ssh", *remote.opts, remote.host, "--", *args]
+            if remote.sudo_password:
+                args = ["sudo", "--prompt=", "--stdin", *args]
+                input = remote.sudo_password + "\n"
+            else:
+                args = ["sudo", *args]
+        args = ["ssh", *remote.opts, remote.host, "--", *args]
     else:
         if extra_env:
             env = os.environ | extra_env
@@ -85,6 +85,7 @@ def run_wrapper(
         args,
         check=check,
         env=env,
+        input=input,
         # Hope nobody is using NixOS with non-UTF8 encodings, but "surrogateescape"
         # should still work in those systems.
         text=True,

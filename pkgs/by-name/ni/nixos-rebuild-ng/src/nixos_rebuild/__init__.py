@@ -50,8 +50,9 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--upgrade-all", action="store_true")
     parser.add_argument("--json", action="store_true")
     parser.add_argument("--sudo", action="store_true")
+    parser.add_argument("--ask-sudo-password", action="store_true")
     parser.add_argument("--use-remote-sudo", action="store_true")  # deprecated
-    parser.add_argument("--no-ssh-tty", action="store_true")
+    parser.add_argument("--no-ssh-tty", action="store_true")  # deprecated
     # parser.add_argument("--build-host")  # TODO
     parser.add_argument("--target-host")
     parser.add_argument("--verbose", "-v", action="count", default=0)
@@ -101,6 +102,9 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     if args.action == Action.DRY_RUN.value:
         args.action = Action.DRY_BUILD.value
 
+    if args.ask_sudo_password:
+        args.sudo = True
+
     # TODO: use deprecated=True in Python >=3.13
     if args.install_grub:
         info(
@@ -114,6 +118,12 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
             f"{parser.prog}: warning: --use-remote-sudo deprecated, use --sudo instead"
         )
         args.sudo = True
+
+    # TODO: use deprecated=True in Python >=3.13
+    if args.no_ssh_tty:
+        info(
+            f"{parser.prog}: warning: --no-ssh-tty deprecated, SSH's pseudo-TTY is never used anymore"
+        )
 
     if args.action == Action.EDIT.value and (args.file or args.attr):
         parser.error("--file and --attr are not supported with 'edit'")
@@ -190,7 +200,7 @@ def execute(argv: list[str]) -> None:
     atexit.register(cleanup_ssh, tmpdir_path)
 
     profile = Profile.from_name(args.profile_name)
-    target_host = Remote.from_arg(args.target_host, not args.no_ssh_tty, tmpdir_path)
+    target_host = Remote.from_arg(args.target_host, args.ask_sudo_password, tmpdir_path)
     flake = Flake.from_arg(args.flake, target_host)
 
     if args.upgrade or args.upgrade_all:

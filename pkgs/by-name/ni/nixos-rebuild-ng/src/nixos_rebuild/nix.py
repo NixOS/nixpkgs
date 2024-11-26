@@ -32,7 +32,7 @@ def copy_closure(
     run_wrapper(
         [
             "nix-copy-closure",
-            *(dict_to_flags(copy_flags)),
+            *dict_to_flags(copy_flags),
             "--to",
             host.host,
             closure,
@@ -50,7 +50,7 @@ def edit(flake: Flake | None, **flake_flags: Args) -> None:
                 "nix",
                 *FLAKE_FLAGS,
                 "edit",
-                *(dict_to_flags(flake_flags)),
+                *dict_to_flags(flake_flags),
                 "--",
                 str(flake),
             ],
@@ -281,8 +281,8 @@ def nixos_build_flake(
         "build",
         "--print-out-paths",
         f"{flake}.config.system.build.{attr}",
+        *dict_to_flags(flake_flags),
     ]
-    run_args += dict_to_flags(flake_flags)
     r = run_wrapper(run_args, check=True, stdout=PIPE)
     return Path(r.stdout.strip())
 

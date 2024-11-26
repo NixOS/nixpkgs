@@ -76,7 +76,6 @@ class Flake:
                         ["uname", "-n"],
                         check=True,
                         capture_output=True,
-                        allow_tty=False,
                         remote=target_host,
                     ).stdout.strip()
                 except (AttributeError, subprocess.CalledProcessError):
