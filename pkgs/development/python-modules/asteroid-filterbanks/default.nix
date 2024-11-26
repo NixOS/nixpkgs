@@ -33,12 +33,17 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     black
     coverage
-    librosa
     numpy
     pytest
-    scipy
     torch
   ];
+
+  optional-dependencies = {
+    all = [
+      librosa
+      scipy
+    ];
+  };
 
   pythonImportsCheck = [ "asteroid_filterbanks" ];
 
