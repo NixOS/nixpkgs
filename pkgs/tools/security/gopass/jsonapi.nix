@@ -1,9 +1,10 @@
-{ lib
-, makeWrapper
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, gopass
+{
+  lib,
+  makeWrapper,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  gopass,
 }:
 
 buildGoModule rec {
@@ -21,10 +22,16 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.commit=${src.rev}"
   ];
 
   postFixup = ''
@@ -32,12 +39,12 @@ buildGoModule rec {
       --prefix PATH : "${gopass.wrapperPath}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Enables communication with gopass via JSON messages";
     homepage = "https://github.com/gopasspw/gopass-jsonapi";
     changelog = "https://github.com/gopasspw/gopass-jsonapi/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxhbr ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxhbr ];
     mainProgram = "gopass-jsonapi";
   };
 }
