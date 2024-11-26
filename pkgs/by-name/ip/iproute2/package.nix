@@ -13,6 +13,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-u9FB73tdASfMIVKEO6YfJ03DKBT6Pg8T59B6CAvvU9k=";
   };
 
+  patches = [
+    (fetchurl {
+      name = "musl-endian.patch";
+      url = "https://lore.kernel.org/netdev/20240712191209.31324-1-contact@hacktivis.me/raw";
+      hash = "sha256-MX+P+PSEh6XlhoWgzZEBlOV9aXhJNd20Gi0fJCcSZ5E=";
+    })
+    (fetchurl {
+      name = "musl-basename.patch";
+      url = "https://lore.kernel.org/netdev/20240804161054.942439-1-dilfridge@gentoo.org/raw";
+      hash = "sha256-47obv6mIn/HO47lt47slpTAFDxiQ3U/voHKzIiIGCTM=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace Makefile \
       --replace "CC := gcc" "CC ?= $CC"
