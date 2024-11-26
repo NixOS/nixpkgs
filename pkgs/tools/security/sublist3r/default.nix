@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Fast subdomains enumeration tool for penetration testers";
     homepage = "https://github.com/aboul3la/Sublist3r";
-    license = licenses.gpl2Oss;
-    maintainers = [ maintainers.kpanuragh ];
+    license = lib.licenses.gpl2Oss;
+    maintainers = with lib.maintainers [ kpanuragh ];
   };
 }
