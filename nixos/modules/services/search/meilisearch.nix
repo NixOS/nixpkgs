@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,7 +13,10 @@ let
 in
 {
 
-  meta.maintainers = with maintainers; [ Br1ght0ne happysalada ];
+  meta.maintainers = with maintainers; [
+    Br1ght0ne
+    happysalada
+  ];
   meta.doc = ./meilisearch.md;
 
   ###### interface
@@ -37,7 +45,10 @@ in
     environment = mkOption {
       description = "Defines the running environment of MeiliSearch.";
       default = "development";
-      type = types.enum [ "development" "production" ];
+      type = types.enum [
+        "development"
+        "production"
+      ];
     };
 
     # TODO change this to LoadCredentials once possible
