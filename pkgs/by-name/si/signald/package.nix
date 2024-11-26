@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitLab, jdk17_headless, coreutils, findutils, gnused,
-gradle, git, makeWrapper, jre_minimal
+gradle_8, git, makeWrapper, jre_minimal
 }:
 
 let
@@ -31,6 +31,9 @@ let
       "jdk.unsupported"
     ];
   };
+
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
 
 in stdenv.mkDerivation {
   inherit pname src version;
