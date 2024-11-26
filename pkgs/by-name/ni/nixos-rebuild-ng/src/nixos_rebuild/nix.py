@@ -1,5 +1,4 @@
 import os
-import shutil
 from datetime import datetime
 from pathlib import Path
 from subprocess import PIPE, CalledProcessError
@@ -96,20 +95,19 @@ def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
     if not nixpkgs_path:
         return None
 
-    # Git is not included in the closure for nixos-rebuild so we need to check
-    if not shutil.which("git"):
+    try:
+        # Get current revision
+        r = run_wrapper(
+            ["git", "-C", nixpkgs_path, "rev-parse", "--short", "HEAD"],
+            check=False,
+            stdout=PIPE,
+        )
+    except FileNotFoundError:
+        # Git is not included in the closure so we need to check
         info(f"warning: Git not found; cannot figure out revision of '{nixpkgs_path}'")
         return None
 
-    # Get current revision
-    r = run_wrapper(
-        ["git", "-C", nixpkgs_path, "rev-parse", "--short", "HEAD"],
-        check=False,
-        stdout=PIPE,
-    )
-    rev = r.stdout.strip()
-
-    if rev:
+    if rev := r.stdout.strip():
         # Check if repo is dirty
         if run_wrapper(
             ["git", "-C", nixpkgs_path, "diff", "--quiet"],

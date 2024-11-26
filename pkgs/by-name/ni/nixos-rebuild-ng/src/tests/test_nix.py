@@ -57,8 +57,7 @@ def test_edit(mock_run: Any, monkeypatch: Any, tmpdir: Any) -> None:
         mock_run.assert_called_with(["editor", default_nix], check=False)
 
 
-@patch(get_qualified_name(n.shutil.which), autospec=True, return_value="/bin/git")
-def test_get_nixpkgs_rev(mock_which: Any) -> None:
+def test_get_nixpkgs_rev() -> None:
     assert n.get_nixpkgs_rev(None) is None
 
     path = Path("/path/to/nix")

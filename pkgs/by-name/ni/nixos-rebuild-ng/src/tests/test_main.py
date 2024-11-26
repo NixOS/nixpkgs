@@ -74,8 +74,7 @@ def test_parse_args() -> None:
 
 @patch.dict(nr.process.os.environ, {}, clear=True)
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
-@patch(get_qualified_name(nr.nix.shutil.which), autospec=True, return_value="/bin/git")
-def test_execute_nix_boot(mock_which: Any, mock_run: Any, tmp_path: Path) -> None:
+def test_execute_nix_boot(mock_run: Any, tmp_path: Path) -> None:
     nixpkgs_path = tmp_path / "nixpkgs"
     nixpkgs_path.mkdir()
     config_path = tmp_path / "test"
