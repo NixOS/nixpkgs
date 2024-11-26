@@ -1,7 +1,8 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
   setuptools,
 }:
 
@@ -18,6 +19,8 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jsonformatter" ];
 
