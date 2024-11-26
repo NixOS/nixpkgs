@@ -202,7 +202,7 @@ stdenv.mkDerivation (self: {
   # will fail every other run. There’s a deeper problem here; we might as well
   # disable them entirely so at least the other platforms get to benefit from
   # testing.
-  doCheck = stdenv.hostPlatform.system != "x86_64-darwin";
+  doCheck = !builtins.elem stdenv.hostPlatform.system [ "x86_64-darwin" "aarch64-darwin" ];
 
   # From the INSTALL docs
   checkPhase = ''
