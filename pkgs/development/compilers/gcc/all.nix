@@ -24,6 +24,7 @@ let
         profiledCompiler = false;
         libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then args.libcCross else null;
         threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
+        isl = if stdenv.hostPlatform.isDarwin then null else isl_0_20;
         # do not allow version skew when cross-building gcc
         #
         # When `gcc` is cross-built (`build` != `target` && `host` == `target`)
