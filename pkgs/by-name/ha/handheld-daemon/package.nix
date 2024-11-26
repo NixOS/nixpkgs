@@ -5,17 +5,18 @@
   lib,
   python3,
   toybox,
+  lsof
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "handheld-daemon";
-  version = "3.5.7";
+  version = "3.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hhd-dev";
     repo = "hhd";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nUHEPyTHU7LD6BZg+2cLl4M/ZPb5MQl6xxtJW1iZkEY=";
+    hash = "sha256-IdpSRb66G+WzTv/BC29r2OjO1b4VdWbV6OSzOoiFAO0=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -28,6 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     toybox
     xlib
     pyserial
+    lsof
   ];
 
   # This package doesn't have upstream tests.
