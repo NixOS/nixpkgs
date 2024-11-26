@@ -1,0 +1,341 @@
+From ab430ea4460aba050d97d3e3a712a3b6dd809db9 Mon Sep 17 00:00:00 2001
+From: Emily <hello@emily.moe>
+Date: Mon, 15 Jul 2024 00:41:04 +0100
+Subject: [PATCH 1/4] Fix build with FFmpeg 7
+
+---
+ libmusly/CMakeLists.txt     |   5 --
+ libmusly/decoders/libav.cpp | 136 +++++++++++-------------------------
+ 2 files changed, 42 insertions(+), 99 deletions(-)
+
+diff --git a/libmusly/CMakeLists.txt b/libmusly/CMakeLists.txt
+index d6d3680..98151df 100644
+--- a/libmusly/CMakeLists.txt
++++ b/libmusly/CMakeLists.txt
+@@ -16,11 +16,6 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external")
+         PROPERTIES COMPILE_FLAGS "-DLIBMUSLY_EXTERNAL ${LIBMUSLY_EXTERNAL_FLAGS}")
+ endif()
+ 
+-if(EXISTS "${LIBAV_INCLUDE_DIRS}/libavutil/channel_layout.h")
+-    set_source_files_properties(decoders/libav.cpp
+-        PROPERTIES COMPILE_FLAGS "-DHAVE_AVUTIL_CHANNEL_LAYOUT")
+-endif()
+-
+ if(USE_OPENMP AND OPENMP_FOUND)
+     # disable OpenMP for kiss FFT, it slows things down terribly
+     set_source_files_properties(kissfft/kiss_fft.c
+diff --git a/libmusly/decoders/libav.cpp b/libmusly/decoders/libav.cpp
+index a78b904..90f93ae 100644
+--- a/libmusly/decoders/libav.cpp
++++ b/libmusly/decoders/libav.cpp
+@@ -20,37 +20,13 @@
+ extern "C" {
+     #include <libavcodec/avcodec.h>
+     #include <libavformat/avformat.h>
+-#ifdef HAVE_AVUTIL_CHANNEL_LAYOUT
+     #include <libavutil/channel_layout.h>
+-#endif
+ }
+ 
+ #include "minilog.h"
+ #include "resampler.h"
+ #include "libav.h"
+ 
+-// We define some macros to be compatible to different libav versions
+-// without spreading #if and #else all over the place.
+-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(55, 45, 101)
+-#define AV_FRAME_ALLOC avcodec_alloc_frame
+-#define AV_FRAME_UNREF avcodec_get_frame_defaults
+-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(54, 28, 0)
+-#define AV_FRAME_FREE(X) av_free(*(X))
+-#else
+-#define AV_FRAME_FREE avcodec_free_frame
+-#endif
+-#else
+-#define AV_FRAME_ALLOC av_frame_alloc
+-#define AV_FRAME_UNREF av_frame_unref
+-#define AV_FRAME_FREE av_frame_free
+-#endif
+-
+-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(57, 7, 0)
+-#define AV_PACKET_UNREF av_free_packet
+-#else
+-#define AV_PACKET_UNREF av_packet_unref
+-#endif
+-
+ namespace musly {
+ namespace decoders {
+ 
+@@ -58,12 +34,6 @@ MUSLY_DECODER_REGIMPL(libav, 0);
+ 
+ libav::libav()
+ {
+-#if LIBAVFORMAT_VERSION_INT < AV_VERSION_INT(58, 9, 100)
+-    av_register_all();
+-#endif
+-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58, 9, 100)
+-    avcodec_register_all();
+-#endif
+ }
+ 
+ int
+@@ -177,13 +147,7 @@ libav::decodeto_22050hz_mono_float(
+     AVStream *st = fmtx->streams[audio_stream_idx];
+ 
+     // find a decoder for the stream
+-#if (LIBAVCODEC_VERSION_INT < AV_VERSION_INT(57, 14, 0)) || ((LIBAVCODEC_VERSION_MICRO >= 100) && (LIBAVCODEC_VERSION_INT < AV_VERSION_INT(57, 33, 100)))
+-    // old libav version (libavcodec < 57.14 for libav, < 57.33 for ffmpeg):
+-    // stream has a codec context we can use
+-    AVCodecContext *decx = st->codec;
+-    #define AVCODEC_FREE_CONTEXT(x)
+-#else
+-    // new libav version: need to create codec context for stream
++    // need to create codec context for stream
+     AVCodecParameters *decp = st->codecpar;
+     AVCodecContext *decx = avcodec_alloc_context3(NULL);
+     if (!decx) {
+@@ -200,71 +164,63 @@ libav::decodeto_22050hz_mono_float(
+         avformat_close_input(&fmtx);
+         return std::vector<float>(0);
+     }
+-    #if LIBAVCODEC_VERSION_MICRO >= 100
+-    #if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58,3,102)
+-    // only available in ffmpeg, deprecated after 58
+-    av_codec_set_pkt_timebase(decx, st->time_base);
+-    #endif
+-    #endif
+-    #define AVCODEC_FREE_CONTEXT(x) avcodec_free_context(x)
+-#endif
+-    AVCodec *dec = avcodec_find_decoder(decx->codec_id);
++    const AVCodec *dec = avcodec_find_decoder(decx->codec_id);
+     if (!dec) {
+         MINILOG(logERROR) << "Could not find codec.";
+ 
+-        AVCODEC_FREE_CONTEXT(&decx);
++        avcodec_free_context(&decx);
+         avformat_close_input(&fmtx);
+         return std::vector<float>(0);
+     }
+ 
+     // open the decoder
+     // (kindly ask for stereo downmix and floats, but not all decoders care)
+-    decx->request_channel_layout = AV_CH_LAYOUT_STEREO_DOWNMIX;
+     decx->request_sample_fmt = AV_SAMPLE_FMT_FLT;
+ #ifdef _OPENMP
+     #pragma omp critical
+ #endif
+     {
+-    avret = avcodec_open2(decx, dec, NULL);
++    AVDictionary *options = NULL;
++    av_dict_set(&options, "downmix", "stereo", 0);
++    avret = avcodec_open2(decx, dec, &options);
+     }
+     if (avret < 0) {
+         MINILOG(logERROR) << "Could not open codec.";
+ 
+-        AVCODEC_FREE_CONTEXT(&decx);
++        avcodec_free_context(&decx);
+         avformat_close_input(&fmtx);
+         return std::vector<float>(0);
+     }
+ 
+     // Currently only mono and stereo files are supported.
+-    if ((decx->channels != 1) && (decx->channels != 2)) {
++    if ((decx->ch_layout.nb_channels != 1) && (decx->ch_layout.nb_channels != 2)) {
+         MINILOG(logWARNING) << "Unsupported number of channels: "
+-                << decx->channels;
++                << decx->ch_layout.nb_channels;
+ 
+-        AVCODEC_FREE_CONTEXT(&decx);
++        avcodec_free_context(&decx);
+         avformat_close_input(&fmtx);
+         return std::vector<float>(0);
+     }
+ 
+     // allocate a frame
+-    AVFrame* frame = AV_FRAME_ALLOC();
++    AVFrame* frame = av_frame_alloc();
+     if (!frame) {
+         MINILOG(logWARNING) << "Could not allocate frame";
+ 
+-        AVCODEC_FREE_CONTEXT(&decx);
++        avcodec_free_context(&decx);
+         avformat_close_input(&fmtx);
+         return std::vector<float>(0);
+     }
+ 
+     // allocate and initialize a packet
+-    AVPacket pkt;
+-    av_init_packet(&pkt);
+-    pkt.data = NULL;
+-    pkt.size = 0;
++    AVPacket* pkt = av_packet_alloc();
++    pkt->data = NULL;
++    pkt->size = 0;
+     int got_frame = 0;
+ 
+     // configuration
+     const int input_stride = av_get_bytes_per_sample(decx->sample_fmt);
+-    const int num_planes = av_sample_fmt_is_planar(decx->sample_fmt) ? decx->channels : 1;
++    const int num_planes = av_sample_fmt_is_planar(decx->sample_fmt) ? decx->ch_layout.nb_channels : 1;
+     const int output_stride = sizeof(float) * num_planes;
+     int decode_samples;  // how many samples to decode; zero to decode all
+ 
+@@ -296,7 +252,7 @@ libav::decodeto_22050hz_mono_float(
+         // fault when trying to access frame->data[i] for i > 0 further below)
+         if ((excerpt_start > 0) and (av_seek_frame(fmtx, audio_stream_idx,
+                     excerpt_start * st->time_base.den / st->time_base.num,
+-                    AVSEEK_FLAG_BACKWARD || AVSEEK_FLAG_ANY) >= 0)) {
++                    AVSEEK_FLAG_BACKWARD | AVSEEK_FLAG_ANY) >= 0)) {
+             // skipping went fine: decode only what's needed
+             decode_samples = excerpt_length * decx->sample_rate;
+             excerpt_start = 0;
+@@ -333,7 +289,7 @@ libav::decodeto_22050hz_mono_float(
+     // excerpt_start tells us up to how many seconds to cut from the beginning.
+ 
+     // read packets
+-    const int channels = decx->channels;
++    const int channels = decx->ch_layout.nb_channels;
+     const int sample_rate = decx->sample_rate;
+     float* buffer = NULL;
+     int buffersize = 0;
+@@ -344,35 +300,29 @@ libav::decodeto_22050hz_mono_float(
+     {
+         // skip all frames that are not part of the audio stream, and spurious
+         // frames possibly found after seeking (wrong channels / sample_rate)
+-        while (((avret = av_read_frame(fmtx, &pkt)) >= 0)
+-               && ((pkt.stream_index != audio_stream_idx) ||
+-                   (decx->channels != channels) ||
++        while (((avret = av_read_frame(fmtx, pkt)) >= 0)
++               && ((pkt->stream_index != audio_stream_idx) ||
++                   (decx->ch_layout.nb_channels != channels) ||
+                    (decx->sample_rate != sample_rate)))
+         {
+-            AV_PACKET_UNREF(&pkt);
++            av_packet_unref(pkt);
+             MINILOG(logTRACE) << "Skipping frame...";
+         }
+         if (avret < 0) {
+             // stop decoding if av_read_frame() failed
+-            AV_PACKET_UNREF(&pkt);
++            av_packet_unref(pkt);
+             break;
+         }
+ 
+-        uint8_t* data = pkt.data;
+-        int size = pkt.size;
+-        while (pkt.size > 0) {
++        uint8_t* data = pkt->data;
++        int size = pkt->size;
++        while (pkt->size > 0) {
+ 
+             // try to decode a frame
+-            AV_FRAME_UNREF(frame);
++            av_frame_unref(frame);
+ 
+             int len = 0;
+             got_frame = 0;
+-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(57, 48, 101)
+-            len = avcodec_decode_audio4(decx, frame, &got_frame, &pkt);
+-            if (len < 0) {
+-                avret = AVERROR(EINVAL);
+-            }
+-#else
+             avret = avcodec_receive_frame(decx, frame);
+             if (avret == 0) {
+                 got_frame = 1;
+@@ -381,14 +331,13 @@ libav::decodeto_22050hz_mono_float(
+                 avret = 0;
+             }
+             if (avret == 0) {
+-                avret = avcodec_send_packet(decx, &pkt);
++                avret = avcodec_send_packet(decx, pkt);
+                 if (avret == 0) {
+-                    len = pkt.size;
++                    len = pkt->size;
+                 } else if (avret == AVERROR(EAGAIN)) {
+                     avret = 0;
+                 }
+             }
+-#endif
+             if (avret < 0) {
+                 MINILOG(logWARNING) << "Error decoding an audio frame";
+ 
+@@ -400,8 +349,8 @@ libav::decodeto_22050hz_mono_float(
+ 
+                 // if too many frames failed decoding, abort
+                 MINILOG(logERROR) << "Too many errors, aborting.";
+-                AV_FRAME_FREE(&frame);
+-                AV_PACKET_UNREF(&pkt);
++                av_frame_free(&frame);
++                av_packet_unref(pkt);
+                 avformat_close_input(&fmtx);
+                 if (buffer) {
+                     delete[] buffer;
+@@ -414,7 +363,7 @@ libav::decodeto_22050hz_mono_float(
+             // if we got a frame
+             if (got_frame) {
+                 // do we need to increase the buffer size?
+-                int input_samples = frame->nb_samples*decx->channels;
++                int input_samples = frame->nb_samples*decx->ch_layout.nb_channels;
+                 if (input_samples > buffersize) {
+                     if (buffer) {
+                         delete[] buffer;
+@@ -434,8 +383,8 @@ libav::decodeto_22050hz_mono_float(
+                             input_samples / num_planes) < 0) {
+                         MINILOG(logERROR) << "Strange sample format. Abort.";
+ 
+-                        AV_FRAME_FREE(&frame);
+-                        AV_PACKET_UNREF(&pkt);
++                        av_frame_free(&frame);
++                        av_packet_unref(pkt);
+                         avformat_close_input(&fmtx);
+                         if (buffer) {
+                             delete[] buffer;
+@@ -445,7 +394,7 @@ libav::decodeto_22050hz_mono_float(
+                 }
+ 
+                 // inplace downmix to mono, if required
+-                if (decx->channels == 2) {
++                if (decx->ch_layout.nb_channels == 2) {
+                     for (int i = 0; i < frame->nb_samples; i++) {
+                         buffer[i] = (buffer[i*2] + buffer[i*2+1]) / 2.0f;
+                     }
+@@ -457,13 +406,13 @@ libav::decodeto_22050hz_mono_float(
+             }
+ 
+             // consume the packet
+-            pkt.data += len;
+-            pkt.size -= len;
++            pkt->data += len;
++            pkt->size -= len;
+         }
+-        pkt.data = data;
+-        pkt.size = size;
++        pkt->data = data;
++        pkt->size = size;
+ 
+-        AV_PACKET_UNREF(&pkt);
++        av_packet_unref(pkt);
+     }
+     MINILOG(logTRACE) << "Decoding loop finished.";
+ 
+@@ -514,13 +463,12 @@ libav::decodeto_22050hz_mono_float(
+     if (buffer) {
+         delete[] buffer;
+     }
+-    AV_FRAME_FREE(&frame);
++    av_frame_free(&frame);
+ #ifdef _OPENMP
+     #pragma omp critical
+ #endif
+     {
+-    avcodec_close(decx);
+-    AVCODEC_FREE_CONTEXT(&decx);
++    avcodec_free_context(&decx);
+     avformat_close_input(&fmtx);
+     }
+ 
+-- 
+2.45.2
+

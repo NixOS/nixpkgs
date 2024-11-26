@@ -1,0 +1,34 @@
+From ad3f083de2dca2b2c5189430d33a78acfbd9d694 Mon Sep 17 00:00:00 2001
+From: Lana Black <lanablack@amok.cc>
+Date: Wed, 8 Jun 2022 12:42:31 +0000
+Subject: [PATCH] Disable autostart.
+
+---
+ app/settings/universalsettings.cpp | 11 -----------
+ 1 file changed, 11 deletions(-)
+
+diff --git a/app/settings/universalsettings.cpp b/app/settings/universalsettings.cpp
+index c95371db..4efd3ffe 100644
+--- a/app/settings/universalsettings.cpp
++++ b/app/settings/universalsettings.cpp
+@@ -74,17 +74,6 @@ UniversalSettings::~UniversalSettings()
+ 
+ void UniversalSettings::load()
+ {
+-    //! check if user has set the autostart option
+-    bool autostartUserSet = m_universalGroup.readEntry("userConfiguredAutostart", false);
+-
+-    if (!autostartUserSet && !autostart()) {
+-        //! the first time the application is running and autostart is not set, autostart is enabled
+-        //! and from now own it will not be recreated in the beginning
+-
+-        setAutostart(true);
+-        m_universalGroup.writeEntry("userConfiguredAutostart", true);
+-    }
+-
+     //! init screen scales
+     m_screenScalesGroup = m_universalGroup.group("ScreenScales");
+ 
+-- 
+2.36.1
+

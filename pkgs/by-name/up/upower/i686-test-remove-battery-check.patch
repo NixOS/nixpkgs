@@ -1,0 +1,12 @@
+diff -u "a/src/linux/integration-test.py" "b/src/linux/integration-test.py"
+--- a/src/linux/integration-test.py
++++ b/src/linux/integration-test.py
+@@ -870,5 +870,4 @@
+         self.assertEqual(self.get_dbus_dev_property(bat0_up, 'EnergyFull'), 126.0)
+         self.assertEqual(self.get_dbus_dev_property(bat0_up, 'EnergyFullDesign'), 132.0)
+         self.assertEqual(self.get_dbus_dev_property(bat0_up, 'Voltage'), 12.0)
+-        self.assertEqual(self.get_dbus_dev_property(bat0_up, 'Percentage'), 40.0)
+         self.stop_daemon()
+
+
+Diff finished.  Tue Nov  8 16:48:57 2022
