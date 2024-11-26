@@ -1,7 +1,7 @@
 # Building a NixOS (Live) ISO {#sec-building-image}
 
 Default live installer configurations are available inside `nixos/modules/installer/cd-dvd`.
-For building other system images, [nixos-generators] is a good place to start looking at.
+For building other system images, see [Building Images with `nixos-rebuild build-image`](#sec-image-nixos-rebuild-build-image).
 
 You have two options:
 
@@ -13,8 +13,6 @@ on which they immediately depend in order to work correctly.
 
 However, if you are confident, you can opt to override those
 enforced values with `mkForce`.
-
-[nixos-generators]: https://github.com/nix-community/nixos-generators
 
 ## Practical Instructions {#sec-building-image-instructions}
 
