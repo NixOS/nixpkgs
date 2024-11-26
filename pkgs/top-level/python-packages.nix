@@ -1175,6 +1175,8 @@ self: super: with self; {
 
   azure-kusto-data = callPackage ../development/python-modules/azure-kusto-data { };
 
+  azure-kusto-ingest = callPackage ../development/python-modules/azure-kusto-ingest { };
+
   azure-loganalytics = callPackage ../development/python-modules/azure-loganalytics { };
 
   azure-mgmt-advisor = callPackage ../development/python-modules/azure-mgmt-advisor { };
