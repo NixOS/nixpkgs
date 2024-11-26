@@ -3,20 +3,16 @@
   include,
   libcMinimal,
   libgcc,
+  libkvm,
   csu,
 }:
 
 mkDerivation {
-  path = "lib/libdl";
-  extraPaths = [
-    "libexec/rtld-elf"
-    "lib/libc/gen"
-    "lib/libc/include"
-    "lib/libc/Versions.def"
-  ];
+  path = "lib/libmemstat";
 
   outputs = [
     "out"
+    "man"
     "debug"
   ];
 
@@ -26,6 +22,7 @@ mkDerivation {
     include
     libcMinimal
     libgcc
+    libkvm
   ];
 
   preBuild = ''

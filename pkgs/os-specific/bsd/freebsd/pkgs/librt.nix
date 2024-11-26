@@ -3,15 +3,14 @@
   include,
   libcMinimal,
   libgcc,
+  libthr,
   csu,
 }:
 
 mkDerivation {
-  path = "lib/libdl";
+  path = "lib/librt";
   extraPaths = [
-    "libexec/rtld-elf"
-    "lib/libc/gen"
-    "lib/libc/include"
+    "lib/libc/include" # private headers
     "lib/libc/Versions.def"
   ];
 
@@ -26,9 +25,12 @@ mkDerivation {
     include
     libcMinimal
     libgcc
+    libthr
   ];
 
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
   '';
+
+  env.MK_TESTS = "no";
 }

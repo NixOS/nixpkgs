@@ -7,16 +7,14 @@
 }:
 
 mkDerivation {
-  path = "lib/libdl";
+  path = "lib/msun";
   extraPaths = [
-    "libexec/rtld-elf"
-    "lib/libc/gen"
-    "lib/libc/include"
-    "lib/libc/Versions.def"
+    "lib/libc" # wants arch headers
   ];
 
   outputs = [
     "out"
+    "man"
     "debug"
   ];
 
@@ -31,4 +29,6 @@ mkDerivation {
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
   '';
+
+  env.MK_TESTS = "no";
 }

@@ -174,4 +174,6 @@ mkDerivation {
   # build build-time dependencies for building FreeBSD packages). It is
   # not needed when building for FreeBSD.
   meta.broken = stdenv.hostPlatform.isFreeBSD;
+
+  alwaysKeepStatic = true;
 }
