@@ -158,6 +158,10 @@ in
     nvimRequireCheck = "advanced_git_search.utils";
   };
 
+  astrotheme = super.astrotheme.overrideAttrs {
+    nvimRequireCheck = "astrotheme";
+  };
+
   animation-nvim = super.animation-nvim.overrideAttrs {
     dependencies = [ self.middleclass ];
     nvimRequireCheck = "animation";
@@ -264,6 +268,12 @@ in
 
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
     dependencies = [ self.lush-nvim ];
+  };
+
+  ccc-nvim = super.ccc-nvim.overrideAttrs {
+    # ccc auto-discover requires all pass
+    # but there's a bootstrap module that hangs forever if we dont stop on first success
+    nvimRequireCheck = "ccc";
   };
 
   chadtree = super.chadtree.overrideAttrs {
@@ -1340,6 +1350,16 @@ in
     nvimRequireCheck = "lspecho";
   };
 
+  lspsaga-nvim = super.lspsaga-nvim.overrideAttrs {
+    # Other modules require setup call first
+    nvimRequireCheck = "lspsaga";
+  };
+
+  ltex_extra-nvim = super.ltex_extra-nvim.overrideAttrs {
+    # Other modules require setup call first
+    nvimRequireCheck = "ltex_extra";
+  };
+
   lualine-lsp-progress = super.lualine-lsp-progress.overrideAttrs {
     dependencies = [ self.lualine-nvim ];
   };
@@ -1472,6 +1492,8 @@ in
 
   mkdnflow-nvim = super.mkdnflow-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
+    # Requires setup call and has optional nvim-cmp dependency
+    nvimRequireCheck = "mkdnflow";
   };
 
   moveline-nvim =
