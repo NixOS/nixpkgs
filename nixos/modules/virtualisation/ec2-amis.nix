@@ -241,7 +241,7 @@ let self = {
   "17.09".ap-south-1.hvm-ebs = "ami-4e376021";
 
   # 18.03.132946.1caae7247b8
-  "18.03".eu-west-1.hvm-ebs = "ami-0e7d1823ac80520e6";
+  "18.03".eu-west-1.hvm-ebs = "ami-0d0d3375756fa10a5";
   "18.03".eu-west-2.hvm-ebs = "ami-64f31903";
   "18.03".eu-west-3.hvm-ebs = "ami-5a8d3d27";
   "18.03".eu-central-1.hvm-ebs = "ami-09faf9e2";
