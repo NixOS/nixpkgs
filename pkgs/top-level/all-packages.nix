@@ -9051,10 +9051,6 @@ with pkgs;
 
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix { };
 
-  vapoursynth = callPackage ../by-name/va/vapoursynth/package.nix {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
-  };
-
   vapoursynth-editor = libsForQt5.callPackage ../by-name/va/vapoursynth/editor.nix { };
 
   vmmlib = callPackage ../development/libraries/vmmlib {

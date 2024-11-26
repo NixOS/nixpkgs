@@ -12,9 +12,7 @@
   zimg,
   libass,
   python3,
-  libiconv,
   testers,
-  ApplicationServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,21 +31,16 @@ stdenv.mkDerivation rec {
     autoreconfHook
     makeWrapper
   ];
-  buildInputs =
-    [
-      zimg
-      libass
-      (python3.withPackages (
-        ps: with ps; [
-          sphinx
-          cython
-        ]
-      ))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      ApplicationServices
-    ];
+  buildInputs = [
+    zimg
+    libass
+    (python3.withPackages (
+      ps: with ps; [
+        sphinx
+        cython
+      ]
+    ))
+  ];
 
   enableParallelBuilding = true;
   doInstallCheck = true;
