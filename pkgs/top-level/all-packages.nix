@@ -4488,7 +4488,7 @@ with pkgs;
 
   navilu-font = callPackage ../data/fonts/navilu { stdenv = stdenvNoCC; };
 
-  nerdfonts = callPackage ../data/fonts/nerdfonts { };
+  nerd-fonts = recurseIntoAttrs (callPackage ../data/fonts/nerd-fonts { });
 
   netcdf-mpi = netcdf.override {
     hdf5 = hdf5-mpi.override { usev110Api = true; };
@@ -13001,9 +13001,6 @@ with pkgs;
 
   fira-code = callPackage ../data/fonts/fira-code { };
   fira-code-symbols = callPackage ../data/fonts/fira-code/symbols.nix { };
-  fira-code-nerdfont = nerdfonts.override {
-    fonts = [ "FiraCode" ];
-  };
 
   flat-remix-icon-theme = callPackage ../data/icons/flat-remix-icon-theme {
     inherit (plasma5Packages) breeze-icons;
@@ -13053,10 +13050,6 @@ with pkgs;
   inconsolata = callPackage ../data/fonts/inconsolata { };
 
   inconsolata-lgc = callPackage ../data/fonts/inconsolata/lgc.nix { };
-
-  inconsolata-nerdfont = nerdfonts.override {
-    fonts = [ "Inconsolata" ];
-  };
 
   input-fonts = callPackage ../data/fonts/input-fonts { };
 
@@ -13217,10 +13210,6 @@ with pkgs;
 
   tela-circle-icon-theme = callPackage ../data/icons/tela-circle-icon-theme {
     inherit (libsForQt5) breeze-icons;
-  };
-
-  terminus-nerdfont = nerdfonts.override {
-    fonts = [ "Terminus" ];
   };
 
   tex-gyre = callPackages ../data/fonts/tex-gyre { };
