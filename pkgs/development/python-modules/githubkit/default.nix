@@ -20,7 +20,7 @@ buildPythonPackage rec {
   version = "0.12.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yanyongyu";
@@ -32,7 +32,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "hishel" ];
 
   build-system = [ poetry-core ];
-
 
   dependencies = [
     hishel
