@@ -7348,6 +7348,8 @@ self: super: with self; {
     inherit (pkgs) libusbsio;
   };
 
+  libuuu = callPackage ../development/python-modules/libuuu { };
+
   libversion = callPackage ../development/python-modules/libversion {
     inherit (pkgs) libversion;
   };
