@@ -116,6 +116,10 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    # used to restore dumps
+    environment.systemPackages = [ cfg.package ];
+
     systemd.services.meilisearch = {
       description = "MeiliSearch daemon";
       wantedBy = [ "multi-user.target" ];
