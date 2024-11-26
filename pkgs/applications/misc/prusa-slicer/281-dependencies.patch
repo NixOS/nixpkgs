@@ -11,15 +11,6 @@ index 31cb4c0ff..42c38102c 100644
  endif()
  
  if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUXX)
-@@ -347,7 +349,7 @@ if(WIN32)
-     add_definitions(-D_USE_MATH_DEFINES -D_WIN32 -D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
-     if(MSVC)
-         # BOOST_ALL_NO_LIB: Avoid the automatic linking of Boost libraries on Windows. Rather rely on explicit linking.
--        add_definitions(-DBOOST_ALL_NO_LIB -DBOOST_USE_WINAPI_VERSION=0x601 -DBOOST_SYSTEM_USE_UTF8 )
-+        add_definitions(-DBOOST_ALL_NO_LIB -DBOOST_USE_WINAPI_VERSION=0x601 -DBOOST_SYSTEM_USE_UTF8 -DBOOST_LOG_DYN_LINK)
-         # Force the source code encoding to UTF-8. See PrusaSlicer GH pull request #5583
-         add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
-         add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 @@ -371,10 +373,13 @@ endif()
  # boost::process was introduced first in version 1.64.0,
  # boost::beast::detail::base64 was introduced first in version 1.66.0
