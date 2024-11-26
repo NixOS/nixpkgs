@@ -7625,6 +7625,8 @@ self: super: with self; {
 
   llm = callPackage ../development/python-modules/llm { };
 
+  llm-cmd = callPackage ../development/python-modules/llm-cmd { };
+
   llm-gguf = callPackage ../development/python-modules/llm-gguf { };
 
   llm-ollama = callPackage ../development/python-modules/llm-ollama { };
