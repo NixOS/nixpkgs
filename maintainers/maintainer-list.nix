@@ -13180,6 +13180,13 @@
     githubId = 7910815;
     name = "Alex McGrath";
   };
+  lylythechosenone = {
+    name = "Lysander Mealy";
+    email = "lysander.mealy@gmail.com";
+    github = "lylythechosenone";
+    githubId = 19551513;
+    matrix = "lylythechosenone@matrix.org";
+  };
   lyndeno = {
     name = "Lyndon Sanche";
     email = "lsanche@lyndeno.ca";
