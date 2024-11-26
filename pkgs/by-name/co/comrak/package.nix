@@ -19,6 +19,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kivikakk/comrak";
     changelog = "https://github.com/kivikakk/comrak/blob/${version}/changelog.txt";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda kivikakk ];
   };
 }
