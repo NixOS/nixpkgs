@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchdeb
 , dpkg
 , makeWrapper
 , coreutils
@@ -15,23 +15,21 @@ stdenv.mkDerivation rec {
   pname = "mfc9140cdncupswrapper";
   version = "1.1.4-0";
 
-  src = fetchurl {
+  src = fetchdeb {
     url = "https://download.brother.com/welcome/dlf100407/${pname}-${version}.i386.deb";
-    sha256 = "18aramgqgra1shdhsa75i0090hk9i267gvabildwsk52kq2b96c6";
+    hash = "sha256-ZZPDfIKdfEFBRSzUxOu/wIl5b+hh+b+bFb1wKXLZr3U=";
   };
 
-  unpackPhase = ''
-    dpkg-deb -x $src $out
-  '';
-
   nativeBuildInputs = [
-    dpkg
     makeWrapper
   ];
 
   dontBuild = true;
 
   installPhase = ''
+    mkdir -p $out
+    cp -r . $out/.
+
     lpr=${mfc9140cdnlpr}/opt/brother/Printers/mfc9140cdn
     dir=$out/opt/brother/Printers/mfc9140cdn
 
