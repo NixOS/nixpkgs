@@ -402,8 +402,8 @@ rec {
       "sha256-KOvVP0ttOXBxmDF05GPRNvr2fKUc6+qJz3Pw53oAI+o=";
 
   mypy-boto3-directconnect =
-    buildMypyBoto3Package "directconnect" "1.35.0"
-      "sha256-HCSark4bQG673j5KZ1ZULwNiOBk/cichkGwuH1XNAPk=";
+    buildMypyBoto3Package "directconnect" "1.35.69"
+      "sha256-GD1z4qFr5lhUUM74z3hC9iRFfJUpQkGEEyA/dq3G/1c=";
 
   mypy-boto3-discovery =
     buildMypyBoto3Package "discovery" "1.35.66"
@@ -954,8 +954,8 @@ rec {
       "sha256-i4h13QqDO65bSTlxdt5hN6iXag578jc3Mv7bOHBZkpQ=";
 
   mypy-boto3-networkmanager =
-    buildMypyBoto3Package "networkmanager" "1.35.0"
-      "sha256-z1YOK7DoyTEWnaWJ8x8VKZNETw/7jPXBjmN4ZX7m5E0=";
+    buildMypyBoto3Package "networkmanager" "1.35.69"
+      "sha256-zTWtchusIiyp5CLz2kEeKrLVueg5Par92sufw0EM5mM=";
 
   mypy-boto3-nimble =
     buildMypyBoto3Package "nimble" "1.35.0"
@@ -1162,8 +1162,8 @@ rec {
       "sha256-RwPNNFntNChLqbr86wd1bwp6OqWvs3oj3V+4X71J3Hw=";
 
   mypy-boto3-s3 =
-    buildMypyBoto3Package "s3" "1.35.67"
-      "sha256-rtfS6OOE1A59exAxKTtPma2U7y6qGrx8GqBgqZlu6Zs=";
+    buildMypyBoto3Package "s3" "1.35.69"
+      "sha256-l/eUSoSkpJKCglvvFIOiVoDc3OddpgF3RdcJ0s8qocA=";
 
   mypy-boto3-s3control =
     buildMypyBoto3Package "s3control" "1.35.55"

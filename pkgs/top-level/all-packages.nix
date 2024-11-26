@@ -4488,7 +4488,7 @@ with pkgs;
 
   navilu-font = callPackage ../data/fonts/navilu { stdenv = stdenvNoCC; };
 
-  nerdfonts = callPackage ../data/fonts/nerdfonts { };
+  nerd-fonts = recurseIntoAttrs (callPackage ../data/fonts/nerd-fonts { });
 
   netcdf-mpi = netcdf.override {
     hdf5 = hdf5-mpi.override { usev110Api = true; };
@@ -8177,8 +8177,6 @@ with pkgs;
     # recursion if `targetPackages.stdenv.cc.cc` itself uses `gccForLibs`.
       then targetPackages.stdenv.cc.cc
     else gcc.cc;
-
-  libstdcxx5 = callPackage ../development/libraries/gcc/libstdc++/5.nix { };
 
   libsigrok = callPackage ../development/tools/libsigrok {
     python = python3;
@@ -13001,9 +12999,6 @@ with pkgs;
 
   fira-code = callPackage ../data/fonts/fira-code { };
   fira-code-symbols = callPackage ../data/fonts/fira-code/symbols.nix { };
-  fira-code-nerdfont = nerdfonts.override {
-    fonts = [ "FiraCode" ];
-  };
 
   flat-remix-icon-theme = callPackage ../data/icons/flat-remix-icon-theme {
     inherit (plasma5Packages) breeze-icons;
@@ -13053,10 +13048,6 @@ with pkgs;
   inconsolata = callPackage ../data/fonts/inconsolata { };
 
   inconsolata-lgc = callPackage ../data/fonts/inconsolata/lgc.nix { };
-
-  inconsolata-nerdfont = nerdfonts.override {
-    fonts = [ "Inconsolata" ];
-  };
 
   input-fonts = callPackage ../data/fonts/input-fonts { };
 
@@ -13219,10 +13210,6 @@ with pkgs;
     inherit (libsForQt5) breeze-icons;
   };
 
-  terminus-nerdfont = nerdfonts.override {
-    fonts = [ "Terminus" ];
-  };
-
   tex-gyre = callPackages ../data/fonts/tex-gyre { };
 
   tex-gyre-math = callPackages ../data/fonts/tex-gyre-math { };
@@ -13369,11 +13356,7 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  audacious = qt6Packages.callPackage ../applications/audio/audacious { };
-  audacious-plugins = qt6Packages.callPackage ../applications/audio/audacious/plugins.nix {
-    # Avoid circular dependency
-    audacious = audacious.override { audacious-plugins = null; };
-  };
+  audacious = audacious-bare.override { withPlugins = true; };
 
   av-98 = callPackage ../applications/networking/browsers/av-98 { };
 
@@ -17298,10 +17281,6 @@ with pkgs;
   ultrastar-manager = libsForQt5.callPackage ../tools/misc/ultrastar-manager { };
 
   ue4demos = recurseIntoAttrs (callPackage ../games/ue4demos { });
-
-  ut2004Packages = dontRecurseIntoAttrs (callPackage ../games/ut2004 { });
-
-  ut2004demo = res.ut2004Packages.ut2004 [ res.ut2004Packages.ut2004-demo ];
 
   # To ensure vdrift's code is built on hydra
   vdrift-bin = vdrift.bin;
