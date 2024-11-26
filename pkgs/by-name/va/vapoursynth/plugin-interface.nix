@@ -51,8 +51,13 @@ let
 
   ext = stdenv.hostPlatform.extensions.sharedLibrary;
 in
-if false then
-  vapoursynth
+if stdenv.hostPlatform.isDarwin then
+  vapoursynth.overrideAttrs (previousAttrs: {
+    pname = "vapoursynth-with-plugins";
+    configureFlags = (previousAttrs.configureFlags or [ ]) ++ [
+      "--with-plugindir=${pluginsEnv}/lib/vapoursynth"
+    ];
+  })
 else
   runCommand "${vapoursynth.name}-with-plugins"
     {
