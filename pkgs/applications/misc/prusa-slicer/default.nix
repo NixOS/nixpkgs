@@ -178,6 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSLIC3R_STATIC=0"
     "-DSLIC3R_FHS=1"
     "-DSLIC3R_GTK=3"
+    "-DCMAKE_CXX_FLAGS=-DBOOST_LOG_DYN_LINK"
   ];
 
   postInstall = ''
