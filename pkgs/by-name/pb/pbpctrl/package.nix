@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     description = "Control Google Pixel Buds Pro from the Linux command line";
     homepage = "https://github.com/qzed/pbpctrl";
     license = with licenses; [ asl20 mit ];
-    maintainers = [ maintainers.vanilla ];
+    maintainers = with maintainers; [ vanilla cafkafk ];
     platforms = platforms.linux;
     mainProgram = "pbpctrl";
   };
