@@ -27,8 +27,11 @@ buildPythonPackage rec {
 
   dependencies = [
     editdistance-s
-    pytestCheckHook
     ukkonen
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "identify" ];
