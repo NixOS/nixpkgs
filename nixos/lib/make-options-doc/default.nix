@@ -39,10 +39,6 @@
   }
   ```
 
-  ## optionsDocBook
-
-  deprecated since 23.11 and will be removed in 24.05.
-
   ## optionsAsciiDoc
 
   Documentation rendered as AsciiDoc. This is useful for e.g. man pages.
@@ -111,17 +107,7 @@
 # instead of printing warnings for eg options with missing descriptions (which may be lost
 # by nix build unless -L is given), emit errors instead and fail the build
 , warningsAreErrors ? true
-# allow docbook option docs if `true`. only markdown documentation is allowed when set to
-# `false`, and a different renderer may be used with different bugs and performance
-# characteristics but (hopefully) indistinguishable output.
-# deprecated since 23.11.
-# TODO remove in a while.
-, allowDocBook ? false
-# TODO remove in a while (see https://github.com/NixOS/nixpkgs/issues/300735)
-, markdownByDefault ? true
 }:
-
-assert markdownByDefault && ! allowDocBook;
 
 let
   rawOpts = lib.optionAttrSetToDocList options;
@@ -229,6 +215,4 @@ in rec {
       echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
       echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
     '';
-
-  optionsDocBook = throw "optionsDocBook has been removed in 24.05";
 }

@@ -23,7 +23,7 @@ let
   vmr =
     (mkVMR {
       inherit releaseManifestFile tarballHash;
-      bootstrapSdk = stage0.sdk;
+      bootstrapSdk = stage0.sdk.unwrapped;
     }).overrideAttrs
       (old: {
         passthru = old.passthru or { } // {

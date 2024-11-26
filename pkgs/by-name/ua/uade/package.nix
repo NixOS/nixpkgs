@@ -1,73 +1,64 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, python3
-, pkg-config
-, which
-, makeWrapper
-, libao
-, bencodetools
-, sox
-, lame
-, flac
-, vorbis-tools
-# https://gitlab.com/uade-music-player/uade/-/issues/38
-, withWriteAudio ? !stdenv.hostPlatform.isDarwin
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gitUpdater,
+  bencodetools,
+  flac,
+  lame,
+  libao,
+  libzakalwe,
+  makeWrapper,
+  python3,
+  pkg-config,
+  sox,
+  vorbis-tools,
+  which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uade";
-  version = "3.02";
+  version = "3.05";
 
   src = fetchFromGitLab {
     owner = "uade-music-player";
     repo = "uade";
-    rev = "uade-${version}";
-    hash = "sha256-skPEXBQwyr326zCmZ2jwGxcBoTt3Y/h2hagDeeqbMpw=";
+    rev = "uade-${finalAttrs.version}";
+    hash = "sha256-k6t8EQ/G8PbfRrBMXubn1XfBPvw1qDoMGh5xJKrcX+E=";
   };
 
   postPatch = ''
     patchShebangs configure
-    substituteInPlace configure \
-      --replace 'PYTHON_SETUP_ARGS=""' 'PYTHON_SETUP_ARGS="--prefix=$out"'
+
     substituteInPlace src/frontends/mod2ogg/mod2ogg2.sh.in \
-      --replace '-e stat' '-n stat' \
-      --replace '/usr/local' "$out"
+      --replace-fail '-e stat' '-n stat' \
+      --replace-fail '/usr/local' "$out"
+
     substituteInPlace python/uade/generate_oscilloscope_view.py \
-      --replace "default='uade123'" "default='$out/bin/uade123'"
-    # https://gitlab.com/uade-music-player/uade/-/issues/37
-    substituteInPlace write_audio/Makefile.in \
-      --replace 'g++' '${stdenv.cc.targetPrefix}c++'
+      --replace-fail "default='uade123'" "default='$out/bin/uade123'"
   '';
 
   nativeBuildInputs = [
+    makeWrapper
     pkg-config
     which
-    makeWrapper
-  ] ++ lib.optionals withWriteAudio [
-    python3
   ];
 
   buildInputs = [
-    libao
     bencodetools
-    sox
-    lame
     flac
+    lame
+    libao
+    libzakalwe
+    sox
     vorbis-tools
-  ] ++ lib.optionals withWriteAudio [
-    (python3.withPackages (p: with p; [
-      pillow
-      tqdm
-      more-itertools
-    ]))
   ];
 
   configureFlags = [
     "--bencode-tools-prefix=${bencodetools}"
-    "--with-text-scope"
-  ] ++ lib.optionals (!withWriteAudio) [
-    "--without-write-audio"
+    "--libzakalwe-prefix=${libzakalwe}"
+    (lib.strings.withFeature true "text-scope")
+    (lib.strings.withFeature false "write-audio")
   ];
 
   enableParallelBuilding = true;
@@ -76,24 +67,31 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/mod2ogg2.sh \
-      --prefix PATH : $out/bin:${lib.makeBinPath [ sox lame flac vorbis-tools ]}
+      --prefix PATH : $out/bin:${
+        lib.makeBinPath [
+          flac
+          lame
+          sox
+          vorbis-tools
+        ]
+      }
+
     # This is an old script, don't break expectations by renaming it
     ln -s $out/bin/mod2ogg2{.sh,}
-  '' + lib.optionalString withWriteAudio ''
-    wrapProgram $out/bin/generate_amiga_oscilloscope_view \
-      --prefix PYTHONPATH : "$PYTHONPATH:$out/${python3.sitePackages}"
   '';
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { rev-prefix = "uade-"; };
+
+  meta = {
     description = "Plays old Amiga tunes through UAE emulation and cloned m68k-assembler Eagleplayer API";
     homepage = "https://zakalwe.fi/uade/";
     # It's a mix of licenses. "GPL", Public Domain, "LGPL", GPL2+, BSD, LGPL21+ and source code with unknown licenses. E.g.
     # - hippel-coso player is "[not] under any Open Source certified license"
     # - infogrames player is disassembled from Andi Silvas player, unknown license
     # Let's make it easy and flag the whole package as unfree.
-    license = licenses.unfree;
-    maintainers = with maintainers; [ OPNA2608 ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
     mainProgram = "uade123";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

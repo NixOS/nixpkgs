@@ -8,6 +8,7 @@
 { package ? null
 , maintainer ? null
 , predicate ? null
+, get-script ? pkg: pkg.updateScript or null
 , path ? null
 , max-workers ? null
 , include-overlays ? false
@@ -17,13 +18,13 @@
 }:
 
 let
-  pkgs = import ./../../default.nix (
+  pkgs = import ./../../default.nix ((
     if include-overlays == false then
       { overlays = []; }
     else if include-overlays == true then
       { } # Let Nixpkgs include overlays impurely.
     else { overlays = include-overlays; }
-  );
+  ) // { config.allowAliases = false; });
 
   inherit (pkgs) lib;
 
@@ -56,7 +57,7 @@ let
 
           somewhatUniqueRepresentant =
             { package, attrPath }: {
-              inherit (package) updateScript;
+              updateScript = (get-script package);
               # Some updaters use the same `updateScript` value for all packages.
               # Also compare `meta.description`.
               position = package.meta.position or null;
@@ -89,7 +90,7 @@ let
   /* Recursively find all packages in `pkgs` with updateScript matching given predicate.
    */
   packagesWithUpdateScriptMatchingPredicate = cond:
-    packagesWith (path: pkg: builtins.hasAttr "updateScript" pkg && cond path pkg);
+    packagesWith (path: pkg: (get-script pkg != null) && cond path pkg);
 
   /* Recursively find all packages in `pkgs` with updateScript by given maintainer.
    */
@@ -121,7 +122,7 @@ let
       if pathContent == null then
         builtins.throw "Attribute path `${path}` does not exist."
       else
-        packagesWithPath prefix (path: pkg: builtins.hasAttr "updateScript" pkg)
+        packagesWithPath prefix (path: pkg: (get-script pkg != null))
                        pathContent;
 
   /* Find a package under `path` in `pkgs` and require that it has an updateScript.
@@ -132,7 +133,7 @@ let
     in
       if package == null then
         builtins.throw "Package with an attribute name `${path}` does not exist."
-      else if ! builtins.hasAttr "updateScript" package then
+      else if get-script package == null then
         builtins.throw "Package with an attribute name `${path}` does not have a `passthru.updateScript` attribute defined."
       else
         { attrPath = path; inherit package; };
@@ -193,13 +194,13 @@ let
 
   /* Transform a matched package into an object for update.py.
    */
-  packageData = { package, attrPath }: {
+  packageData = { package, attrPath }: let updateScript = get-script package; in {
     name = package.name;
     pname = lib.getName package;
     oldVersion = lib.getVersion package;
-    updateScript = map builtins.toString (lib.toList (package.updateScript.command or package.updateScript));
-    supportedFeatures = package.updateScript.supportedFeatures or [];
-    attrPath = package.updateScript.attrPath or attrPath;
+    updateScript = map builtins.toString (lib.toList (updateScript.command or updateScript));
+    supportedFeatures = updateScript.supportedFeatures or [];
+    attrPath = updateScript.attrPath or attrPath;
   };
 
   /* JSON file with data for update.py.
@@ -230,4 +231,5 @@ in pkgs.stdenv.mkDerivation {
     unset shellHook # do not contaminate nested shells
     exec ${pkgs.python3.interpreter} ${./update.py} ${builtins.concatStringsSep " " args}
   '';
+  nativeBuildInputs = [ pkgs.git pkgs.nix pkgs.cacert ];
 }

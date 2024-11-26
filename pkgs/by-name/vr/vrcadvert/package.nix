@@ -1,5 +1,6 @@
 {
   buildDotnetModule,
+  dotnetCorePackages,
   fetchFromGitHub,
   lib,
 }:
@@ -14,6 +15,8 @@ buildDotnetModule rec {
     rev = "v${version}";
     hash = "sha256-noIu5LV0yva94Kmdr39zb0kKXDaIrQ8DIplCj3aTIbQ=";
   };
+
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
 
   nugetDeps = ./deps.nix;
 

@@ -1577,6 +1577,10 @@ self: super: with self; {
 
   bencoder = callPackage ../development/python-modules/bencoder { };
 
+  bencodetools = callPackage ../development/python-modules/bencodetools {
+    bencodetools = pkgs.bencodetools;
+  };
+
   beniget = callPackage ../development/python-modules/beniget { };
 
   bentoml = callPackage ../development/python-modules/bentoml { };

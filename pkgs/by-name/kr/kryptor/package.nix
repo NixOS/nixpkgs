@@ -1,6 +1,7 @@
 { lib
 , buildDotnetModule
 , fetchFromGitHub
+, dotnetCorePackages
 }:
 
 buildDotnetModule rec {
@@ -14,6 +15,7 @@ buildDotnetModule rec {
     hash = "sha256-BxUmDzmfvRelQDHb5uLcQ2YPL7ClxZNFGm/gQoDK8t8=";
   };
 
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   projectFile = "src/Kryptor.sln";
   nugetDeps = ./deps.nix;
 
