@@ -435,7 +435,7 @@ self: super: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
   }) super.shell-conduit;
 
-  # https://github.com/serokell/nixfmt/issues/130
+  # https://github.com/NixOS/nixfmt/issues/130
   nixfmt = doJailbreak super.nixfmt;
 
   # Too strict upper bounds on turtle and text

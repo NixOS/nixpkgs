@@ -18497,8 +18497,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration IOKit;
   };
 
-  nixfmt-classic = haskellPackages.nixfmt.bin;
-
   nixpkgs-manual = callPackage ../../doc/doc-support/package.nix { };
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
