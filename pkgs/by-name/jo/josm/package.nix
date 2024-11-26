@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, makeWrapper, unzip, jre, libXxf86vm
+{ lib, stdenv, fetchurl, fetchsvn, makeWrapper, unzip, jre, libXxf86vm
 , extraJavaOpts ? "-Djosm.restart=true -Djava.net.useSystemProxies=true"
 }:
 let
@@ -13,11 +13,10 @@ let
       url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java21.zip";
       hash = "sha256-bcCl+w+pvsR+8QXKjM9bVyTAgzp+wre71tZMp5+VJTA=";
     };
-    pkg = fetchFromGitHub {
-      owner = "JOSM";
-      repo = "josm";
-      rev = "refs/tags/${version}-tested";
-      hash = "sha256-I1mMtNzFkBoU0qcx2rVd9nmDK91ccVyaKwPft72M3r0=";
+    pkg = fetchsvn {
+      url = "https://josm.openstreetmap.de/svn/trunk/native/linux/tested";
+      rev = version;
+      hash = "sha256-usaTD1yAJT/fOWqKiuI9aNjaHt8CoXcbqaPDnggl3ws=";
     };
   };
 
@@ -42,7 +41,7 @@ stdenv.mkDerivation rec {
       ${unzip}/bin/unzip ${srcs.macosx} 'JOSM.app/*' -d $out/Applications
     '' else ''
       install -Dm644 ${srcs.jar} $out/share/josm/josm.jar
-      cp -R ${srcs.pkg}/native/linux/tested/usr/share $out
+      cp -R ${srcs.pkg}/usr/share $out
 
       # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
       makeWrapper ${jre}/bin/java $out/bin/josm \
