@@ -335,233 +335,113 @@ in
 
   cmp-ai = super.cmp-ai.overrideAttrs {
     dependencies = with self; [
-      nvim-cmp
       plenary-nvim
     ];
-    nvimRequireCheck = "cmp_ai";
-  };
-
-  cmp-async-path = super.cmp-async-path.overrideAttrs {
-    dependencies = [ self.nvim-cmp ];
-  };
-
-  cmp-beancount = super.cmp-beancount.overrideAttrs {
-    dependencies = [ self.nvim-cmp ];
   };
 
   cmp-clippy = super.cmp-clippy.overrideAttrs {
     dependencies = with self; [
-      nvim-cmp
       plenary-nvim
     ];
-    nvimRequireCheck = "cmp_clippy";
-  };
-
-  cmp-cmdline = super.cmp-cmdline.overrideAttrs {
-    dependencies = [ self.nvim-cmp ];
   };
 
   cmp-conjure = super.cmp-conjure.overrideAttrs {
     dependencies = with self; [
       conjure
-      nvim-cmp
     ];
   };
 
   cmp-copilot = super.cmp-copilot.overrideAttrs {
     dependencies = with self; [
-      nvim-cmp
       copilot-vim
     ];
-    nvimRequireCheck = "cmp_copilot";
-  };
-
-  cmp-ctags = super.cmp-ctags.overrideAttrs {
-    dependencies = with self; [ nvim-cmp ];
-    nvimRequireCheck = "cmp_ctags";
   };
 
   cmp-dap = super.cmp-dap.overrideAttrs {
     dependencies = with self; [
-      nvim-cmp
       nvim-dap
     ];
-    nvimRequireCheck = "cmp_dap";
-  };
-
-  cmp-dictionary = super.cmp-dictionary.overrideAttrs {
-    dependencies = with self; [ nvim-cmp ];
-    nvimRequireCheck = "cmp_dictionary";
-  };
-
-  cmp-digraphs = super.cmp-digraphs.overrideAttrs {
-    dependencies = with self; [ nvim-cmp ];
-    nvimRequireCheck = "cmp_digraphs";
-  };
-
-  cmp-fish = super.cmp-fish.overrideAttrs {
-    dependencies = with self; [ nvim-cmp ];
-    nvimRequireCheck = "cmp_fish";
   };
 
   cmp-fuzzy-buffer = super.cmp-fuzzy-buffer.overrideAttrs {
     dependencies = with self; [
-      nvim-cmp
       fuzzy-nvim
     ];
-    nvimRequireCheck = "cmp_fuzzy_buffer";
   };
 
   cmp-fuzzy-path = super.cmp-fuzzy-path.overrideAttrs {
     dependencies = with self; [
-      nvim-cmp
       fuzzy-nvim
     ];
-    nvimRequireCheck = "cmp_fuzzy_path";
   };
 
   cmp-git = super.cmp-git.overrideAttrs {
     dependencies = with self; [
-      nvim-cmp
       plenary-nvim
     ];
-    nvimRequireCheck = "cmp_git";
-  };
-
-  cmp-greek = super.cmp-greek.overrideAttrs {
-    dependencies = [ self.nvim-cmp ];
-    nvimRequireCheck = "cmp_greek";
-  };
-
-  cmp-look = super.cmp-look.overrideAttrs {
-    dependencies = [ self.nvim-cmp ];
-    nvimRequireCheck = "cmp_look";
   };
 
   cmp_luasnip = super.cmp_luasnip.overrideAttrs {
     dependencies = with self; [
-      nvim-cmp
       luasnip
     ];
   };
 
   cmp-neosnippet = super.cmp-neosnippet.overrideAttrs {
     dependencies = with self; [
-      nvim-cmp
       neosnippet-vim
     ];
-    nvimRequireCheck = "cmp_neosnippet";
-  };
-
-  cmp-nixpkgs-maintainers = super.cmp-nixpkgs-maintainers.overrideAttrs {
-    dependencies = with self; [ nvim-cmp ];
-    nvimRequireCheck = "cmp_nixpkgs_maintainers";
   };
 
   cmp-npm = super.cmp-npm.overrideAttrs {
     dependencies = with self; [
-      nvim-cmp
       plenary-nvim
     ];
-    nvimRequireCheck = "cmp-npm";
-  };
-
-  cmp-nvim-lsp-signature-help = super.cmp-nvim-lsp-signature-help.overrideAttrs {
-    dependencies = with self; [ nvim-cmp ];
-    nvimRequireCheck = "cmp_nvim_lsp_signature_help";
-  };
-
-  cmp-nvim-lua = super.cmp-nvim-lua.overrideAttrs {
-    dependencies = [ self.nvim-cmp ];
-  };
-
-  cmp-nvim-tags = super.cmp-nvim-tags.overrideAttrs {
-    dependencies = with self; [ nvim-cmp ];
-    nvimRequireCheck = "cmp_nvim_tags";
-  };
-
-  cmp-nvim-ultisnips = super.cmp-nvim-ultisnips.overrideAttrs {
-    dependencies = [ self.nvim-cmp ];
   };
 
   cmp-pandoc-nvim = super.cmp-pandoc-nvim.overrideAttrs {
     dependencies = with self; [
-      nvim-cmp
       plenary-nvim
     ];
-    nvimRequireCheck = "cmp_pandoc";
-  };
-
-  cmp-pandoc-references = super.cmp-pandoc-references.overrideAttrs {
-    dependencies = [ self.nvim-cmp ];
-  };
-
-  cmp-path = super.cmp-path.overrideAttrs {
-    dependencies = [ self.nvim-cmp ];
-  };
-
-  cmp-rg = super.cmp-rg.overrideAttrs {
-    dependencies = with self; [ nvim-cmp ];
-    nvimRequireCheck = "cmp-rg";
   };
 
   cmp-snippy = super.cmp-snippy.overrideAttrs {
     dependencies = with self; [
-      nvim-cmp
       nvim-snippy
     ];
-    nvimRequireCheck = "cmp_snippy";
-  };
-
-  cmp-tabby = super.cmp-tabby.overrideAttrs {
-    dependencies = with self; [ nvim-cmp ];
-    nvimRequireCheck = "cmp_tabby";
   };
 
   cmp-tabnine = super.cmp-tabnine.overrideAttrs {
     buildInputs = [ tabnine ];
-    dependencies = with self; [ nvim-cmp ];
 
     postFixup = ''
       mkdir -p $target/binaries/${tabnine.version}
       ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
     '';
-    nvimRequireCheck = "cmp_tabnine";
   };
 
   cmp-tmux = super.cmp-tmux.overrideAttrs {
-    dependencies = with self; [
-      nvim-cmp
+    dependencies = [
       tmux
     ];
-    nvimRequireCheck = "cmp_tmux";
   };
 
   cmp-vim-lsp = super.cmp-vim-lsp.overrideAttrs {
     dependencies = with self; [
-      nvim-cmp
       vim-lsp
     ];
   };
 
   cmp-vimwiki-tags = super.cmp-vimwiki-tags.overrideAttrs {
     dependencies = with self; [
-      nvim-cmp
       vimwiki
     ];
-    nvimRequireCheck = "cmp_vimwiki_tags";
-  };
-
-  cmp-vsnip = super.cmp-vsnip.overrideAttrs {
-    dependencies = [ self.nvim-cmp ];
   };
 
   cmp-zsh = super.cmp-zsh.overrideAttrs {
-    dependencies = with self; [
-      nvim-cmp
+    dependencies = [
       zsh
     ];
-    nvimRequireCheck = "cmp_zsh";
   };
 
   coc-clangd = buildVimPlugin {
@@ -636,7 +516,6 @@ in
     in
     super.codeium-nvim.overrideAttrs {
       dependencies = with self; [
-        nvim-cmp
         plenary-nvim
       ];
       buildPhase = ''

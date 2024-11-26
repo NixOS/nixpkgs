@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "bitcoinlib";
+  pname = "python-bitcoinlib";
   version = "0.12.2";
   format = "setuptools";
 

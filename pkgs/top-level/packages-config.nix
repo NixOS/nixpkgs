@@ -21,7 +21,6 @@
       rPackages
       roundcubePlugins
       sourceHanPackages
-      ut2004Packages
       zabbix50
       zabbix60
       zeroadPackages
