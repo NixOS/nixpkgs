@@ -417,87 +417,186 @@ in
     nvimRequireCheck = "cmd-parser";
   };
 
-  cmp-ai = super.cmp-ai.overrideAttrs {
-    dependencies = [ self.plenary-nvim ];
-  };
+  cmp-ai = super.cmp-ai.overrideAttrs (oa: {
+    # We dont want to bundle nvim-cmp anymore since blink.nvim can use these sources.
+    # Add to check inputs though to validate plugin
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+    dependencies = with self; [
+      plenary-nvim
+    ];
+  });
 
-  cmp-clippy = super.cmp-clippy.overrideAttrs {
-    dependencies = [ self.plenary-nvim ];
-  };
+  cmp-async-path = super.cmp-async-path.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
 
-  cmp-conjure = super.cmp-conjure.overrideAttrs {
+  cmp-beancount = super.cmp-beancount.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp-clippy = super.cmp-clippy.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+    dependencies = with self; [
+      plenary-nvim
+    ];
+  });
+
+  cmp-cmdline = super.cmp-cmdline.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp-conjure = super.cmp-conjure.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
     dependencies = [ self.conjure ];
-  };
+  });
 
-  cmp-copilot = super.cmp-copilot.overrideAttrs {
+  cmp-copilot = super.cmp-copilot.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
     dependencies = [ self.copilot-vim ];
-  };
+  });
 
-  cmp-dap = super.cmp-dap.overrideAttrs {
+  cmp-ctags = super.cmp-ctags.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp-dap = super.cmp-dap.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
     dependencies = [ self.nvim-dap ];
-  };
+  });
 
-  cmp-fuzzy-buffer = super.cmp-fuzzy-buffer.overrideAttrs {
+  cmp-dictionary = super.cmp-dictionary.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp-digraphs = super.cmp-digraphs.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp-fish = super.cmp-fish.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp-fuzzy-buffer = super.cmp-fuzzy-buffer.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
     dependencies = [ self.fuzzy-nvim ];
-  };
+  });
 
-  cmp-fuzzy-path = super.cmp-fuzzy-path.overrideAttrs {
+  cmp-fuzzy-path = super.cmp-fuzzy-path.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
     dependencies = [ self.fuzzy-nvim ];
-  };
+  });
 
-  cmp-git = super.cmp-git.overrideAttrs {
-    dependencies = [ self.plenary-nvim ];
-  };
+  cmp-git = super.cmp-git.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+    dependencies = with self; [ plenary-nvim ];
+  });
 
-  cmp_luasnip = super.cmp_luasnip.overrideAttrs {
+  cmp-greek = super.cmp-greek.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp-look = super.cmp-look.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp_luasnip = super.cmp_luasnip.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
     dependencies = [ self.luasnip ];
-  };
+  });
 
-  cmp-neosnippet = super.cmp-neosnippet.overrideAttrs {
+  cmp-neosnippet = super.cmp-neosnippet.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
     dependencies = [ self.neosnippet-vim ];
-  };
+  });
 
-  cmp-npm = super.cmp-npm.overrideAttrs {
+  cmp-nixpkgs-maintainers = super.cmp-nixpkgs-maintainers.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp-npm = super.cmp-npm.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
     dependencies = [ self.plenary-nvim ];
-  };
+  });
 
-  cmp-pandoc-nvim = super.cmp-pandoc-nvim.overrideAttrs {
+  cmp-nvim-lsp-signature-help = super.cmp-nvim-lsp-signature-help.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp-nvim-lua = super.cmp-nvim-lua.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp-nvim-tags = super.cmp-nvim-tags.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp-nvim-ultisnips = super.cmp-nvim-ultisnips.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp-pandoc-nvim = super.cmp-pandoc-nvim.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
     dependencies = [ self.plenary-nvim ];
-  };
+  });
 
-  cmp-snippy = super.cmp-snippy.overrideAttrs {
+  cmp-pandoc-references = super.cmp-pandoc-references.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp-path = super.cmp-path.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp-rg = super.cmp-rg.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp-snippy = super.cmp-snippy.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
     dependencies = [ self.nvim-snippy ];
-  };
+  });
 
-  cmp-tabnine = super.cmp-tabnine.overrideAttrs {
+  cmp-tabby = super.cmp-tabby.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp-tabnine = super.cmp-tabnine.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
     buildInputs = [ tabnine ];
 
     postFixup = ''
       mkdir -p $target/binaries/${tabnine.version}
       ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
     '';
-  };
+  });
 
-  cmp-tmux = super.cmp-tmux.overrideAttrs {
+  cmp-tmux = super.cmp-tmux.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
     dependencies = [ tmux ];
-  };
+  });
 
-  cmp-vim-lsp = super.cmp-vim-lsp.overrideAttrs {
+  cmp-vim-lsp = super.cmp-vim-lsp.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
     dependencies = [ self.vim-lsp ];
-  };
+  });
 
-  cmp-vimwiki-tags = super.cmp-vimwiki-tags.overrideAttrs {
+  cmp-vimwiki-tags = super.cmp-vimwiki-tags.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
     dependencies = [ self.vimwiki ];
-  };
+  });
 
-  cmp-vimtex = super.cmp-vimtex.overrideAttrs {
-    # We aren't bundling nvim-cmp
-    nvimSkipModule = "cmp_vimtex.search";
-  };
+  cmp-vsnip = super.cmp-vsnip.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
 
-  cmp-zsh = super.cmp-zsh.overrideAttrs {
+  cmp-vimtex = super.cmp-vimtex.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+  });
+
+  cmp-zsh = super.cmp-zsh.overrideAttrs (oa: {
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
     dependencies = [ zsh ];
-  };
+  });
 
   cobalt2-nvim = super.cobalt2-nvim.overrideAttrs {
     dependencies = with self; [ colorbuddy-nvim ];
