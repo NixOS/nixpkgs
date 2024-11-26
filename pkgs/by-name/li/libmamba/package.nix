@@ -19,9 +19,10 @@
   python3Packages,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmamba";
   version = "2.0.4";
+
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
