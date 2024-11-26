@@ -7112,6 +7112,11 @@
     githubId = 541748;
     name = "Felipe Espinoza";
   };
+  fe2-Nyxar = {
+    email = "nyxar49@gmail.com";
+    github = "fe2-Nyxar";
+    githubId = 153492661;
+  };
   feathecutie = {
     name = "feathecutie";
     github = "feathecutie";
