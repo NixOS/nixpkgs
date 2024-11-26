@@ -6,7 +6,7 @@ let
   safeX11 = stdenv: !(stdenv.isAarch32 || stdenv.isMips || stdenv.hostPlatform.isStatic);
 in
 
-{ lib, stdenv, fetchurl, ncurses, buildEnv, libunwind, fetchpatch
+{ lib, stdenv, fetchurl, ncurses, binutils, buildEnv, libunwind, fetchpatch
 , libX11, xorgproto, useX11 ? safeX11 stdenv && lib.versionOlder version "4.09"
 , aflSupport ? false
 , flambdaSupport ? false
@@ -109,6 +109,7 @@ stdenv.mkDerivation (args // {
     else ["nixpkgs_world"];
   buildInputs = optional (lib.versionOlder version "4.07") ncurses
     ++ optionals useX11 [ libX11 xorgproto ];
+  depsBuildBuild = [ binutils ];
   propagatedBuildInputs = optional spaceTimeSupport libunwind;
   installTargets = [ "install" ] ++ optional useNativeCompilers "installopt";
   preConfigure = optionalString (lib.versionOlder version "4.04") ''
