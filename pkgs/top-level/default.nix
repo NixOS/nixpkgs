@@ -49,6 +49,13 @@ let # Rename the function arguments
 in let
   lib = import ../../lib;
 
+
+  #inherit (lib )callPackage;
+  callPackage = lib.callPackageWith pkgs;
+  ninvaders = callPackage ../by-name/ni/ninvaders/package.nix {};
+
+
+
   inherit (lib) throwIfNot;
 
   checked =
@@ -141,4 +148,4 @@ in let
 
   pkgs = boot stages;
 
-in checked pkgs
+in checked pkgs 
