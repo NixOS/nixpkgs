@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any
 from unittest.mock import patch
 
@@ -87,3 +88,37 @@ def test_run(mock_run: Any) -> None:
             remote=m.Remote("user@localhost", [], False),
             capture_output=True,
         )
+
+
+def test_remote_from_name(monkeypatch: Any, tmpdir: Path) -> None:
+    monkeypatch.setenv("NIX_SSHOPTS", "")
+    assert m.Remote.from_arg("user@localhost", None, tmpdir) == m.Remote(
+        "user@localhost",
+        opts=[
+            "-o",
+            "ControlMaster=auto",
+            "-o",
+            f"ControlPath={tmpdir / "ssh-%n"}",
+            "-o",
+            "ControlPersist=60",
+        ],
+        tty=False,
+    )
+
+    monkeypatch.setenv("NIX_SSHOPTS", "-f foo -b bar")
+    assert m.Remote.from_arg("user@localhost", True, tmpdir) == m.Remote(
+        "user@localhost",
+        opts=[
+            "-f",
+            "foo",
+            "-b",
+            "bar",
+            "-o",
+            "ControlMaster=auto",
+            "-o",
+            f"ControlPath={tmpdir / "ssh-%n"}",
+            "-o",
+            "ControlPersist=60",
+        ],
+        tty=True,
+    )

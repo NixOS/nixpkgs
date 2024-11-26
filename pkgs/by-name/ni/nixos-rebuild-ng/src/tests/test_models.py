@@ -111,37 +111,3 @@ def test_profile_from_name(mock_mkdir: Any) -> None:
         Path("/nix/var/nix/profiles/system-profiles/something"),
     )
     mock_mkdir.assert_called_once()
-
-
-def test_remote_from_name(monkeypatch: Any, tmpdir: Path) -> None:
-    monkeypatch.setenv("NIX_SSHOPTS", "")
-    assert m.Remote.from_arg("user@localhost", None, tmpdir) == m.Remote(
-        "user@localhost",
-        [
-            "-o",
-            "ControlMaster=auto",
-            "-o",
-            f"ControlPath={tmpdir / "ssh-%n"}",
-            "-o",
-            "ControlPersist=60",
-        ],
-        False,
-    )
-
-    monkeypatch.setenv("NIX_SSHOPTS", "-f foo -b bar")
-    assert m.Remote.from_arg("user@localhost", True, tmpdir) == m.Remote(
-        "user@localhost",
-        [
-            "-f",
-            "foo",
-            "-b",
-            "bar",
-            "-o",
-            "ControlMaster=auto",
-            "-o",
-            f"ControlPath={tmpdir / "ssh-%n"}",
-            "-o",
-            "ControlPersist=60",
-        ],
-        True,
-    )

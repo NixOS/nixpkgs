@@ -13,7 +13,7 @@ def dict_to_flags(d: dict[str, Args]) -> list[str]:
         flag = f"--{'-'.join(key.split('_'))}"
         match value:
             case None | False | 0 | []:
-                pass
+                continue
             case True:
                 flags.append(flag)
             case int():
