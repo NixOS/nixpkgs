@@ -24,8 +24,6 @@ let
         makeWrapper
       ];
 
-      unpackPhase = "dpkg-deb -x $src .";
-
       installPhase = ''
         mkdir -p $out/bin
         mv usr/share $out/share

@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "LsZItRkFvpYaj5DwEv4C6tRpmypHadzSVv8/Wto2/68=";
   };
 
-  dontBuild = true;
+  nativeBuildInputs = [ dpkg ];
 
-  unpackCmd = "${dpkg}/bin/dpkg-deb -x $src debcontents";
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall

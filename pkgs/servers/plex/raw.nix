@@ -28,10 +28,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ dpkg ];
 
-  unpackPhase = ''
-    dpkg-deb -R $src .
-  '';
-
   installPhase = ''
     runHook preInstall
     mkdir -p "$out/lib"

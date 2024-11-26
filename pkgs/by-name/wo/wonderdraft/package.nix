@@ -17,8 +17,10 @@ stdenv.mkDerivation rec {
     url = "https://wonderdraft.net/";
     hash = "sha256-3eYnEH6P94z9axFsrkJA4QMcHyg/gNRczqL3h5Sc2Tg=";
   };
-  sourceRoot = ".";
-  unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";
+
+  nativeBuildInputs = [
+    dpkg
+  ];
 
   dontConfigure = true;
   dontBuild = true;

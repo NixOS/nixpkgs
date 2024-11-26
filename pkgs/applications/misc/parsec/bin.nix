@@ -33,14 +33,6 @@ stdenvNoCC.mkDerivation {
     sha256 = "sha256-9F56u+jYj2CClhbnGlLi65FxS1Vq00coxwu7mjVTY1w=";
   };
 
-  unpackPhase = ''
-    runHook preUnpack
-
-    dpkg-deb -x $src .
-
-    runHook postUnpack
-  '';
-
   nativeBuildInputs = [ dpkg autoPatchelfHook makeWrapper ];
 
   buildInputs = [

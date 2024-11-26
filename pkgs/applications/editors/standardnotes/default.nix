@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper dpkg desktop-file-utils asar ];
 
-  unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
-
   installPhase = let
     libPath = lib.makeLibraryPath [
       libsecret

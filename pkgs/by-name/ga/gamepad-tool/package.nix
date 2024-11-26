@@ -11,11 +11,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ dpkg qt5.wrapQtAppsHook autoPatchelfHook ];
 
-  unpackCmd = ''
-    mkdir -p root
-    dpkg-deb -x $curSrc root
-  '';
-
   dontBuild = true;
 
   buildInputs = [

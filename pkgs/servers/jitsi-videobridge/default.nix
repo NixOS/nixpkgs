@@ -13,9 +13,10 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  unpackCmd = "${dpkg}/bin/dpkg-deb -x $src debcontents";
-
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall

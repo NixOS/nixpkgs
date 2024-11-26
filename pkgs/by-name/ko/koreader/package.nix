@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gHn1xqBc7M9wkek1Ja1gry8TKIuUxQP8T45x3z2S4uc=";
   };
 
-  sourceRoot = ".";
   nativeBuildInputs = [ makeWrapper dpkg ];
   buildInputs = [
     glib
@@ -50,7 +49,6 @@ stdenv.mkDerivation rec {
     sdcv
     SDL2
   ];
-  unpackCmd = "dpkg-deb -x ${src} .";
 
   dontConfigure = true;
   dontBuild = true;

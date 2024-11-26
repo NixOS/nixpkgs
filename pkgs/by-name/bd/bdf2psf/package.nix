@@ -14,12 +14,6 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  unpackPhase = ''
-    runHook preUnpack
-    dpkg-deb -x $src .
-    runHook postUnpack
-  '';
-
   installPhase = ''
     runHook preInstall
     substituteInPlace usr/bin/bdf2psf --replace /usr/bin/perl "${perl}/bin/perl"

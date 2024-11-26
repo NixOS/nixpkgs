@@ -32,10 +32,6 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  unpackPhase = ''
-    dpkg-deb -x ${src} ./
-  '';
-
   installPhase = ''
     runHook preInstall
 

@@ -109,14 +109,6 @@ let
       systemd
     ];
 
-    unpackPhase = ''
-      runHook preUnpack
-
-      dpkg-deb -x $src .
-
-      runHook postUnpack
-    '';
-
     installPhase = ''
       runHook preInstall
 

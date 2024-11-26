@@ -21,10 +21,6 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
-  unpackPhase = ''
-    dpkg-deb -x ${src} ./
-  '';
-
   installPhase = ''
     runHook preInstall
 

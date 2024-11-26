@@ -29,8 +29,7 @@ let
       src = fetchurl { inherit (sources.libpicoipp) url sha256; };
       nativeBuildInputs = [ dpkg autoPatchelfHook ];
       buildInputs = [ (lib.getLib stdenv.cc.cc) ];
-      sourceRoot = ".";
-      unpackCmd = "dpkg-deb -x $src .";
+
       installPhase = ''
         runHook preInstall
         mkdir -p $out/lib
@@ -57,8 +56,6 @@ let
       src = fetchurl { inherit url sha256; };
       # picoscope does a signature check, so we can't patchelf these
       nativeBuildInputs = [ dpkg ];
-      sourceRoot = ".";
-      unpackCmd = "dpkg-deb -x $src .";
       installPhase = ''
         runHook preInstall
         mkdir -p $out/lib
@@ -82,8 +79,6 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ dpkg makeWrapper ];
   buildInputs = [ gtk-sharp-3_0 mono glib libusb1 zlib ];
 
-  unpackCmd = "dpkg-deb -x $src .";
-  sourceRoot = ".";
   scopeLibs = lib.attrVals (map (x: "lib${x}") scopes) scopePkgs;
   MONO_PATH = "${gtk-sharp-3_0}/lib/mono/gtk-sharp-3.0:" + (lib.makeLibraryPath
     ([

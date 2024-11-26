@@ -18,15 +18,10 @@ in mkDerivation {
     sha256 = "10027a3ab18efd04ca75aa699ff550eca3bdfe6f7084460d3c00001bffb50070";
   };
 
-  unpackPhase = ''
-    dpkg -x $src oda_unpacked
-    sourceRoot=$PWD/oda_unpacked
-  '';
-
   installPhase = ''
     mkdir -p $out/bin $out/lib
-    cp -vr $sourceRoot/usr/bin/ODAFileConverter_${version} $out/libexec
-    cp -vr $sourceRoot/usr/share $out/share
+    cp -vr usr/bin/ODAFileConverter_${version} $out/libexec
+    cp -vr usr/share $out/share
   '';
 
   dontWrapQtApps = true;

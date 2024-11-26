@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
     glib-networking
   ];
 
-  unpackCmd = "dpkg-deb -x $curSrc source";
-
   installPhase = ''
     mv usr $out
     mv $out/bin/holochain-launcher-${prerelease} $out/bin/holochain-launcher
