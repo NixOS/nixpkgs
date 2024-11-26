@@ -2621,6 +2621,11 @@ in
     nvimRequireCheck = "todo-comments";
   };
 
+  triptych-nvim = super.triptych-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    nvimRequireCheck = "triptych";
+  };
+
   tsc-nvim = super.tsc-nvim.overrideAttrs {
     patches = [ ./patches/tsc.nvim/fix-path.patch ];
 
