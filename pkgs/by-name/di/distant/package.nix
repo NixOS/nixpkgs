@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = {
-    description = "Distant - A fast, secure remote development tool";
+    description = "Fast, secure remote development tool";
     homepage = "https://github.com/chipsenkbeil/distant";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
