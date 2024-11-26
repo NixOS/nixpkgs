@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, writeText
-, pkg-config
-, libX11
-, libXft
-, libXi
-, libXinerama
-, libXtst
-, layout ? "mobile-intl"
-, conf ? null
-, patches ? [ ]
+{
+  lib,
+  stdenv,
+  fetchurl,
+  writeText,
+  pkg-config,
+  libX11,
+  libXft,
+  libXi,
+  libXinerama,
+  libXtst,
+  layout ? "mobile-intl",
+  conf ? null,
+  patches ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,14 +25,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit patches;
 
-  postPatch = let
-    configFile = if lib.isDerivation conf || lib.isPath conf then
-      conf
-    else
-      writeText "config.def.h" conf;
-  in lib.optionalString (conf != null) ''
-    cp ${configFile} config.def.h
-  '';
+  postPatch =
+    let
+      configFile =
+        if lib.isDerivation conf || lib.isPath conf then conf else writeText "config.def.h" conf;
+    in
+    lib.optionalString (conf != null) ''
+      cp ${configFile} config.def.h
+    '';
 
   nativeBuildInputs = [
     pkg-config
@@ -50,12 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
     "LAYOUT=${layout}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple virtual keyboard";
     homepage = "https://tools.suckless.org/x/svkbd/";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "svkbd-${layout}";
   };
 })
