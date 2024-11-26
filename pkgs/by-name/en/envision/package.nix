@@ -4,7 +4,8 @@
 }:
 
 buildFHSEnv {
-  name = "envision";
+  pname = "envision";
+  inherit (envision-unwrapped) version;
 
   extraOutputsToInstall = [ "dev" ];
 
