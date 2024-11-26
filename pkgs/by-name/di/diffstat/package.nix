@@ -1,16 +1,18 @@
-{ fetchurl, lib, stdenv }:
+{ fetchurl, lib, stdenv, zstd }:
 
 stdenv.mkDerivation rec {
   pname = "diffstat";
-  version = "1.66";
+  version = "1.67";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/diffstat/diffstat-${version}.tgz"
       "https://invisible-mirror.net/archives/diffstat/diffstat-${version}.tgz"
     ];
-    sha256 = "sha256-9UUxu+Mujg+kYfAYtB469Ra2MggBcvNh8F5QNn7Ltp4=";
+    hash = "sha256-dg7QyZxtZDI41BuA5gJ4zxaD/7lKKDlUrH7xaMhSdmo=";
   };
+
+  buildInputs = [ zstd ];
 
   meta = with lib; {
     description = "Read output of diff and display a histogram of the changes";
