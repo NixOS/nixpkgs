@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "5.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "containers";
