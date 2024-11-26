@@ -104,7 +104,6 @@ in
         Group = "renovate";
         DynamicUser = true;
         LoadCredential = lib.mapAttrsToList (name: value: "SECRET-${name}:${value}") cfg.credentials;
-        Restart = "on-failure";
         CacheDirectory = "renovate";
         StateDirectory = "renovate";
 
