@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-  doInstallCheck = true;
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = rec {
     # If vapoursynth is added to the build inputs of mpv and then
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  postPatch = ''
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # Export weak symbol nixPluginDir to permit override of default plugin path
     sed -E -i \
       -e 's/(VS_PATH_PLUGINDIR)/(nixPluginDir ? nixPluginDir : \1)/g' \
@@ -103,11 +103,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin; # see https://github.com/NixOS/nixpkgs/pull/189446 for partial fix
     description = "Video processing framework with the future in mind";
     homepage = "http://www.vapoursynth.com/";
     license = licenses.lgpl21;
-    platforms = platforms.x86_64;
+    platforms = platforms.all;
     maintainers = with maintainers; [
       rnhmjoj
       sbruder
