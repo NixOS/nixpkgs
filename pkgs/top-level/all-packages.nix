@@ -13356,11 +13356,7 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  audacious = qt6Packages.callPackage ../applications/audio/audacious { };
-  audacious-plugins = qt6Packages.callPackage ../applications/audio/audacious/plugins.nix {
-    # Avoid circular dependency
-    audacious = audacious.override { audacious-plugins = null; };
-  };
+  audacious = audacious-bare.override { withPlugins = true; };
 
   av-98 = callPackage ../applications/networking/browsers/av-98 { };
 
