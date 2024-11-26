@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, zstd }:
+{ fetchurl, lib, stdenv, zstd, directoryListingUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "diffstat";
@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zstd ];
+
+  passthru.updateScript = directoryListingUpdater {
+    url = "https://invisible-island.net/archives/diffstat/";
+  };
 
   meta = with lib; {
     description = "Read output of diff and display a histogram of the changes";
