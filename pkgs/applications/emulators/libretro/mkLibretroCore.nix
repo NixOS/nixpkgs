@@ -3,7 +3,7 @@
   lib,
   stdenv,
   makeWrapper,
-  retroarchBare,
+  retroarch-bare,
   unstableGitUpdater,
   zlib,
   # Params
@@ -28,7 +28,7 @@ let
     "lib"
     "stdenv"
     "makeWrapper"
-    "retroarchBare"
+    "retroarch-bare"
     "unstableGitUpdater"
     "zlib"
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation (
       runHook preInstall
 
       install -Dt ${coreDir} ${coreFilename}
-      makeWrapper ${retroarchBare}/bin/retroarch $out/bin/${mainProgram} \
+      makeWrapper ${retroarch-bare}/bin/retroarch $out/bin/${mainProgram} \
         --add-flags "-L ${coreDir}/${coreFilename}"
 
       runHook postInstall
@@ -90,7 +90,7 @@ stdenv.mkDerivation (
       with lib;
       {
         inherit mainProgram;
-        inherit (retroarchBare.meta) platforms;
+        inherit (retroarch-bare.meta) platforms;
         homepage = "https://www.libretro.com/";
         maintainers = with maintainers; teams.libretro.members;
       }

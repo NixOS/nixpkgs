@@ -43,5 +43,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "generate-token";
+    broken = versionOlder pydantic.version "2";
   };
 }
