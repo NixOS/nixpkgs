@@ -27,14 +27,18 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    # Trying to use `memset` without declaring it is flagged as an error with clang 16, causing
-    # the `configure` script to incorrectly define `ZMEM`. That causes the build to fail due to
-    # incompatible redeclarations of `memset`, `memcpy`, and `memcmp` in `zip.h`.
-    ./fix-memset-detection.patch
     # Implicit declaration of `closedir` and `opendir` cause dirent detection to fail with clang 16.
     ./fix-implicit-declarations.patch
     # Fixes forward declaration errors with timezone.c
     ./fix-time.h-not-included.patch
+    # Without this patch, we get a runtime failures with GCC 14 when building OpenJDK 8:
+    #
+    #     zip I/O error: No such file or directory
+    #     zip error: Could not create output file (was replacing the original zip file)
+    #     make[2]: *** [CreateJars.gmk:659: /build/source/build/linux-x86_64-normal-server-release/images/src.zip] Error 1
+    #
+    # Source: Debian
+    ./12-fix-build-with-gcc-14.patch
     (fetchpatch {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/zip/files/zip-3.0-pic.patch?id=d37d095fc7a2a9e4a8e904a7bf0f597fe99df85a";
       hash = "sha256-OXgC9KqiOpH/o/bSabt3LqtoT/xifqfkvpLLPfPz+1c=";
