@@ -8178,8 +8178,6 @@ with pkgs;
       then targetPackages.stdenv.cc.cc
     else gcc.cc;
 
-  libstdcxx5 = callPackage ../development/libraries/gcc/libstdc++/5.nix { };
-
   libsigrok = callPackage ../development/tools/libsigrok {
     python = python3;
   };
@@ -17287,10 +17285,6 @@ with pkgs;
   ultrastar-manager = libsForQt5.callPackage ../tools/misc/ultrastar-manager { };
 
   ue4demos = recurseIntoAttrs (callPackage ../games/ue4demos { });
-
-  ut2004Packages = dontRecurseIntoAttrs (callPackage ../games/ut2004 { });
-
-  ut2004demo = res.ut2004Packages.ut2004 [ res.ut2004Packages.ut2004-demo ];
 
   # To ensure vdrift's code is built on hydra
   vdrift-bin = vdrift.bin;
