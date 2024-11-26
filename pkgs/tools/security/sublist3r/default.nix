@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
     hash = "";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     requests
     dnspython
   ];
