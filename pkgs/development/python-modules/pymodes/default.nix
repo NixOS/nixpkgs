@@ -1,35 +1,49 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pytest
-, numpy
-, pyzmq }:
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  hatchling,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  pyzmq,
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = "pymodes";
-  version = "2.11";
+  version = "2.19";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "junzis";
     repo = "pyModeS";
-    rev = "b36540e2a17c49bf36bc824bc1e4488306d1a1a0";
-    sha256 = "1j8brmiz0pqiv9zy2fxg1w65n9pzfnbag54mqkg5yrvz25b93nba";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rVxqtT/sBFQM2Y+GPR2Tc5J2skavvjxwPB7paDBqYRQ=";
   };
 
-  format = "setuptools";
+  build-system = [
+    cython
+    hatchling
+    setuptools
+  ];
 
-  disabled = pythonOlder "3.7";
+  dependencies = [
+    numpy
+    pyzmq
+  ];
 
-  propagatedBuildInputs = [ numpy pyzmq ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = [ pytest ];
-  checkPhase = "pytest";
+  pythonImportsCheck = [ "pyModeS" ];
 
   meta = with lib; {
     description = "Python Mode-S and ADS-B Decoder";
     homepage = "https://github.com/junzis/pyModeS";
+    changelog = "https://github.com/junzis/pyModeS/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ snicket2100 ];
   };
