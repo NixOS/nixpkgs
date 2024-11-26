@@ -2033,8 +2033,6 @@ with pkgs;
 
   biliass = with python3.pkgs; toPythonApplication biliass;
 
-  binwalk = with python3Packages; toPythonApplication binwalk;
-
   birdtray = libsForQt5.callPackage ../applications/misc/birdtray { };
 
   charles = charles4;
