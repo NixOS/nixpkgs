@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, Cocoa }:
+{ stdenv, lib, fetchFromGitHub }:
 
 ## after launching for the first time, grant access for parent application (e.g. Terminal.app)
 ## from 'system preferences >> security & privacy >> accessibility'
@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0aqkp4kkwjlkll91xbqwf8asjww8ylsdgqvdk8d06bwdvg2cgvhg";
   };
-
-  buildInputs = [ Cocoa ];
 
   buildPhase = ''
     cc -std=c99 -O3 -Wall -framework Cocoa -o dc DiscreteScroll/main.m
