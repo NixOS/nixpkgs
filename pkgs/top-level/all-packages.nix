@@ -10272,6 +10272,17 @@ with pkgs;
     ];
   };
 
+  opencascade-occt_7_6_1 = opencascade-occt.overrideAttrs {
+    pname = "opencascade-occt";
+    version = "7.6.1";
+    src = fetchFromGitHub {
+      owner = "Open-Cascade-SAS";
+      repo = "OCCT";
+      rev = "V7_6_1";
+      sha256 = "sha256-C02P3D363UwF0NM6R4D4c6yE5ZZxCcu5CpUaoTOxh7E=";
+    };
+  };
+
   opencsg = callPackage ../development/libraries/opencsg {
     inherit (qt5) qmake;
     inherit (darwin.apple_sdk.frameworks) GLUT;
