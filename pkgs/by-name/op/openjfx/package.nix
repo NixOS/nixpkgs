@@ -7,7 +7,7 @@
 
   fetchpatch2,
 
-  gradle,
+  gradle_8,
   gradle_7,
   perl,
   pkg-config,
@@ -57,7 +57,7 @@ let
   atLeast21 = lib.versionAtLeast featureVersion "21";
   atLeast23 = lib.versionAtLeast featureVersion "23";
 
-  gradle_openjfx = if atLeast23 then gradle else gradle_7;
+  gradle_openjfx = if atLeast23 then gradle_8 else gradle_7;
 in
 
 assert lib.assertMsg (lib.pathExists sourceFile)
