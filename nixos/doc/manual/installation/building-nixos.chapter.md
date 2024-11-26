@@ -30,7 +30,7 @@ $ nix-build -A config.system.build.isoImage -I nixos-config=modules/installer/cd
 To check the content of an ISO image, mount it like so:
 
 ```ShellSession
-# mount -o loop -t iso9660 ./result/iso/cd.iso /mnt/iso
+# mount -o loop -t iso9660 ./result/iso/nixos-image-25.05pre-git-x86_64-linux.iso /mnt/iso
 ```
 
 ## Additional drivers or firmware {#sec-building-image-drivers}
