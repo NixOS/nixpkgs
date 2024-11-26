@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-survival";
-  version = "0.23.0";
+  version = "0.23.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sebp";
     repo = "scikit-survival";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/gHfCZH9VjE5UQ8LWoBNd8xCMln4r9Etq/eCx/F8w7A=";
+    hash = "sha256-6902chXALa73/kTJ5UwV4CrB7/7wn+QXKpp2ej/Dnk8=";
   };
 
   nativeBuildInputs = [
