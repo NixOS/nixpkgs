@@ -29,7 +29,7 @@ from .utils import flags_to_dict, info
 VERBOSE = 0
 
 
-def parse_args(argv: list[str]) -> argparse.Namespace:
+def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="nixos-rebuild",
         description="Reconfigure a NixOS machine",
@@ -92,7 +92,15 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     copy_group = parser.add_argument_group("nix-copy-closure flags")
     copy_group.add_argument("--use-substitutes", "-s", action="store_true")
 
+    return parser
+
+
+def parse_args(argv: list[str]) -> argparse.Namespace:
+    parser = get_parser()
     args = parser.parse_args(argv[1:])
+
+    def parser_warn(msg):
+        info(f"{parser.prog}: warning: {msg}")
 
     global VERBOSE
     # This flag affects both nix and this script
@@ -107,23 +115,17 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     # TODO: use deprecated=True in Python >=3.13
     if args.install_grub:
-        info(
-            f"{parser.prog}: warning: --install-grub deprecated, use --install-bootloader instead"
-        )
+        parser_warn("--install-grub deprecated, use --install-bootloader instead")
         args.install_bootloader = True
 
     # TODO: use deprecated=True in Python >=3.13
     if args.use_remote_sudo:
-        info(
-            f"{parser.prog}: warning: --use-remote-sudo deprecated, use --sudo instead"
-        )
+        parser_warn("--use-remote-sudo deprecated, use --sudo instead")
         args.sudo = True
 
     # TODO: use deprecated=True in Python >=3.13
     if args.no_ssh_tty:
-        info(
-            f"{parser.prog}: warning: --no-ssh-tty deprecated, SSH's pseudo-TTY is never used anymore"
-        )
+        parser_warn("--no-ssh-tty deprecated, SSH's pseudo-TTY is never used anymore")
 
     if args.action == Action.EDIT.value and (args.file or args.attr):
         parser.error("--file and --attr are not supported with 'edit'")
