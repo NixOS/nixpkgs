@@ -8,7 +8,6 @@
   coverage,
   librosa,
   numpy,
-  pre-commit,
   pytest,
   scipy,
   torch,
@@ -36,7 +35,6 @@ buildPythonPackage rec {
     coverage
     librosa
     numpy
-    pre-commit
     pytest
     scipy
     torch
