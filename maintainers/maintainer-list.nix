@@ -18146,6 +18146,13 @@
     matrix = "@qyriad:katesiria.org";
     name = "Qyriad";
   };
+  r17x = {
+    email = "hi@rin.rocks";
+    github = "r17x";
+    githubId = 16365952;
+    name = "Rin";
+    keys = [ { fingerprint = "476A F55D 6378 F878 0709  848A 18F9 F516 1CC0 576C"; } ];
+  };
   r3dl3g = {
     email = "redleg@rothfuss-web.de";
     github = "r3dl3g";
