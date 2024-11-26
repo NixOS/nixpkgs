@@ -31,18 +31,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
-  version = "0.15.6";
+  version = "0.15.7";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.zst";
-    sha256 = "sha256-CtPvxbpq2/qwuANPp9XDJQHlxIbFiaNZJvYZeUx/wyE=";
+    sha256 = "sha256-PjU6Qfn+FTL3vt66mkIAn/uXWMPPlH8iK6B264ekIis=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
     nativeBuildInputs = [ zstd ];
     dontConfigure = true;
-    hash = "sha256-5SheeabI4SqJZ3edAvX2rUEGTdCXHoBTa+rnX7lv9Cg=";
+    hash = "sha256-m21SyGtHwVCz+77pYq48Gjnrf/TLCLCf/IQ7AnZk+fo=";
   };
 
   nativeBuildInputs = [
@@ -115,6 +115,9 @@ stdenv.mkDerivation (finalAttrs: {
       ps:
       with ps;
       [
+        # used for module detection, also recommended at runtime for 3rd party module installation
+        luarocks
+        # modules used at runtime
         cassowary
         cldr
         fluent
