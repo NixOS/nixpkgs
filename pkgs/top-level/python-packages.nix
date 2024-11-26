@@ -5058,6 +5058,14 @@ self: super: with self; {
 
   geoalchemy2 = callPackage ../development/python-modules/geoalchemy2 { };
 
+  geoarrow-c = callPackage ../development/python-modules/geoarrow-c { };
+
+  geoarrow-types = callPackage ../development/python-modules/geoarrow-types { };
+
+  geoarrow-pandas = callPackage ../development/python-modules/geoarrow-pandas { };
+
+  geoarrow-pyarrow = callPackage ../development/python-modules/geoarrow-pyarrow { };
+
   geocachingapi = callPackage ../development/python-modules/geocachingapi { };
 
   geocoder = callPackage ../development/python-modules/geocoder { };
