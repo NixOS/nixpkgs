@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchdeb
 , dpkg
 , makeWrapper
 , coreutils
@@ -15,23 +15,21 @@ stdenv.mkDerivation rec {
   pname = "mfc9140cdnlpr";
   version = "1.1.2-1";
 
-  src = fetchurl {
+  src = fetchdeb {
     url = "https://download.brother.com/welcome/dlf100405/${pname}-${version}.i386.deb";
-    sha256 = "1wqx8njrv078fc3vlq90qyrfg3cw9kr9m6f3qvfnkhq1f95fbslh";
+    hash = "sha256-XkMIY0OCXD2+lXtH1kqNrPS4wmg9GMmKTu9cxr6cwis=";
   };
 
-  unpackPhase = ''
-    dpkg-deb -x $src $out
-  '';
-
   nativeBuildInputs = [
-    dpkg
     makeWrapper
   ];
 
   dontBuild = true;
 
   installPhase = ''
+    mkdir -p $out
+    cp -r . $out/.
+
     dir=$out/opt/brother/Printers/mfc9140cdn
 
     patchelf --set-interpreter ${pkgsi686Linux.glibc.out}/lib/ld-linux.so.2 $dir/lpd/brmfc9140cdnfilter
