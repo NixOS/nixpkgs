@@ -44,7 +44,10 @@ buildGoModule rec {
     homepage = "https://github.com/gopasspw/gopass-jsonapi";
     changelog = "https://github.com/gopasspw/gopass-jsonapi/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ maxhbr ];
+    maintainers = with lib.maintainers; [
+      maxhbr
+      doronbehar
+    ];
     mainProgram = "gopass-jsonapi";
   };
 }
