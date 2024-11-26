@@ -8,18 +8,18 @@
 , libXi
 , libXinerama
 , libXtst
-, layout ? null
+, layout ? "mobile-intl"
 , conf ? null
 , patches ? [ ]
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "svkbd";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchurl {
-    url = "https://dl.suckless.org/tools/svkbd-${version}.tar.gz";
-    sha256 = "sha256-+8Jh/D4dgULhRXtC1tZQg6AK4POh9czyRyrMi0auD1o=";
+    url = "https://dl.suckless.org/tools/svkbd-${finalAttrs.version}.tar.gz";
+    hash = "sha256-bZQyGeMzMUdYY0ZmdKB2CFhZygDc6UDlTU4kdx+UZoA=";
   };
 
   inherit patches;
@@ -47,7 +47,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-  ] ++ lib.optional (layout != null) "LAYOUT=${layout}";
+    "LAYOUT=${layout}"
+  ];
 
   meta = with lib; {
     description = "Simple virtual keyboard";
@@ -55,6 +56,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dotlambda ];
-    mainProgram = "svkbd-mobile-intl";
+    mainProgram = "svkbd-${layout}";
   };
-}
+})
