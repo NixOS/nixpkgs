@@ -16,9 +16,12 @@ buildGoModule rec {
     hash = "sha256-NNrMv4AS7ybuJfTgs+p61btSIxo+iMvzH7Y5ct46Dag=";
   };
 
+  modRoot = "./cli";
   tags = "extension";
-
-  sourceRoot = "${src.name}/cli";
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   CGO_ENABLED = 0;
 
