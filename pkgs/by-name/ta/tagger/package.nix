@@ -31,11 +31,11 @@ buildDotnetModule rec {
 
   nativeBuildInputs = [
     blueprint-compiler
-    libadwaita
   ];
 
   buildInputs = [
     chromaprint
+    libadwaita
   ];
 
   runtimeDeps = [
