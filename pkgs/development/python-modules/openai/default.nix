@@ -27,6 +27,7 @@
   pytestCheckHook,
   dirty-equals,
   inline-snapshot,
+  nest-asyncio,
   pytest-asyncio,
   pytest-mock,
   respx,
@@ -35,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.52.1";
+  version = "1.54.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7.1";
@@ -44,7 +45,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TTbwhs7rXWIJWOU5bC0wGjXZkBpfBAXb4ycOR9xjTpw=";
+    hash = "sha256-bDYGE8bm1+qHvhNfLSHG2bW8Wnm1yOEjD/oCzBG+CPw=";
   };
 
   build-system = [
@@ -77,6 +78,7 @@ buildPythonPackage rec {
     pytestCheckHook
     dirty-equals
     inline-snapshot
+    nest-asyncio
     pytest-asyncio
     pytest-mock
     respx
