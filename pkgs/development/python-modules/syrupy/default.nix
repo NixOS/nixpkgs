@@ -5,12 +5,13 @@
   python,
   poetry-core,
   pytest,
+  pytest-xdist,
   invoke,
 }:
 
 buildPythonPackage rec {
   pname = "syrupy";
-  version = "4.7.2";
+  version = "4.8.0";
   pyproject = true;
 
   disabled = lib.versionOlder python.version "3.8.1";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "syrupy-project";
     repo = "syrupy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-akYUsstepkDrRXqp1DY6wEeXMMlLNcCqitnWpjcAurg=";
+    hash = "sha256-IifGufCUhjbl8Tqvcjm8XF4QPvOsRacPWxI1yT79eNs=";
   };
 
   build-system = [ poetry-core ];
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     invoke
     pytest
+    pytest-xdist
   ];
 
   checkPhase = ''
