@@ -10,9 +10,9 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "dbohdan";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-WzQ793dLb8OujNpEq7UXIgJM+lz0WZEVlbKmwM58klU=";
+    repo = "jsonwatch";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WzQ793dLb8OujNpEq7UXIgJM+lz0WZEVlbKmwM58klU=";
   };
 
   cargoHash = "sha256-76Vvs3OaxYDZE39d9h3T8HhYQfHhY5D17PgQxcPrMyc=";
