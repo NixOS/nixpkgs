@@ -58,13 +58,3 @@ index 78369233d..1f9c40aaf 100644
  )
  
  if (MSVC)
-diff --git a/tests/sla_print/CMakeLists.txt b/tests/sla_print/CMakeLists.txt
-index b244e76ac..b23f6d4bc 100644
---- a/tests/sla_print/CMakeLists.txt
-+++ b/tests/sla_print/CMakeLists.txt
-@@ -18,3 +18,5 @@ endif()
- 
- # catch_discover_tests(${_TEST_NAME}_tests TEST_PREFIX "${_TEST_NAME}: ")
- add_test(${_TEST_NAME}_tests ${_TEST_NAME}_tests ${CATCH_EXTRA_ARGS})
-+
-+add_definitions(-DBOOST_LOG_DYN_LINK)
