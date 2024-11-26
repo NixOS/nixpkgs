@@ -139,6 +139,8 @@ self: super: ({
     '' + (oldAttrs.preCompileBuildDriver or "");
   }) super.llvm-hs;
 
+  sym = markBroken super.sym;
+
   yesod-bin = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.yesod-bin;
 
   yesod-core = super.yesod-core.overrideAttrs (drv: {

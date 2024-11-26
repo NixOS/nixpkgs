@@ -26,8 +26,8 @@ let
   dotnet-sdk =
     with dotnetCorePackages;
     combinePackages [
-      sdk_6_0
       sdk_7_0_1xx
+      runtime_6_0
     ];
 
   npmDepsFile = ./npm-deps.nix;
