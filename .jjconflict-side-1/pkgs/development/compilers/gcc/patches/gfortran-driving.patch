@@ -1,0 +1,20 @@
+This patch fixes interaction with Libtool.
+See <http://thread.gmane.org/gmane.comp.gcc.patches/258777>, for details.
+
+--- a/gcc/fortran/gfortranspec.c
++++ b/gcc/fortran/gfortranspec.c
+@@ -461,8 +461,15 @@ For more information about these matters, see the file named COPYING\n\n"));
+     {
+       fprintf (stderr, _("Driving:"));
+       for (i = 0; i < g77_newargc; i++)
++	{
++	  if (g77_new_decoded_options[i].opt_index == OPT_l)
++	    /* Make sure no white space is inserted after `-l'.  */
++	    fprintf (stderr, " -l%s",
++		     g77_new_decoded_options[i].canonical_option[1]);
++	  else
+ 	fprintf (stderr, " %s",
+ 		 g77_new_decoded_options[i].orig_option_with_args_text);
++	}
+       fprintf (stderr, "\n");
+     }

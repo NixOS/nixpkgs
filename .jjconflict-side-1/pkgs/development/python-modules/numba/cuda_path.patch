@@ -1,0 +1,79 @@
+diff --git a/numba/cuda/cuda_paths.py b/numba/cuda/cuda_paths.py
+index d195bbc29..0699b365b 100644
+--- a/numba/cuda/cuda_paths.py
++++ b/numba/cuda/cuda_paths.py
+@@ -24,11 +24,7 @@ def _find_valid_path(options):
+ 
+ def _get_libdevice_path_decision():
+     options = [
+-        ('Conda environment', get_conda_ctk()),
+-        ('Conda environment (NVIDIA package)', get_nvidia_libdevice_ctk()),
+-        ('CUDA_HOME', get_cuda_home('nvvm', 'libdevice')),
+-        ('System', get_system_ctk('nvvm', 'libdevice')),
+-        ('Debian package', get_debian_pkg_libdevice()),
++        ('Nix store', get_nix_ctk('nvvm', 'libdevice')),
+     ]
+     by, libdir = _find_valid_path(options)
+     return by, libdir
+@@ -36,17 +32,14 @@ def _get_libdevice_path_decision():
+ 
+ def _nvvm_lib_dir():
+     if IS_WIN32:
+-        return 'nvvm', 'bin'
++        return 'bin',
+     else:
+-        return 'nvvm', 'lib64'
++        return 'lib64',
+ 
+ 
+ def _get_nvvm_path_decision():
+     options = [
+-        ('Conda environment', get_conda_ctk()),
+-        ('Conda environment (NVIDIA package)', get_nvidia_nvvm_ctk()),
+-        ('CUDA_HOME', get_cuda_home(*_nvvm_lib_dir())),
+-        ('System', get_system_ctk(*_nvvm_lib_dir())),
++        ('Nix store', get_nix_ctk(*_nvvm_lib_dir())),
+     ]
+     by, path = _find_valid_path(options)
+     return by, path
+@@ -66,7 +59,7 @@ def _cudalib_path():
+     if IS_WIN32:
+         return 'bin'
+     else:
+-        return 'lib64'
++        return 'lib'
+ 
+ 
+ def _cuda_home_static_cudalib_path():
+@@ -78,10 +71,7 @@ def _cuda_home_static_cudalib_path():
+ 
+ def _get_cudalib_dir_path_decision():
+     options = [
+-        ('Conda environment', get_conda_ctk()),
+-        ('Conda environment (NVIDIA package)', get_nvidia_cudalib_ctk()),
+-        ('CUDA_HOME', get_cuda_home(_cudalib_path())),
+-        ('System', get_system_ctk(_cudalib_path())),
++        ('Nix store', get_nix_lib_ctk(_cudalib_path())),
+     ]
+     by, libdir = _find_valid_path(options)
+     return by, libdir
+@@ -239,3 +229,19 @@ def get_debian_pkg_libdevice():
+     if not os.path.exists(pkg_libdevice_location):
+         return None
+     return pkg_libdevice_location
++
++
++def get_nix_ctk(*subdirs):
++    """Return path to nix store cudatoolkit; or, None if it doesn't exist.
++    """
++    base = '@cuda_toolkit_path@'
++    if os.path.exists(base):
++        return os.path.join(base, *subdirs)
++
++
++def get_nix_lib_ctk(*subdirs):
++    """Return path to nix store cudatoolkit-lib; or, None if it doesn't exist.
++    """
++    base = '@cuda_toolkit_lib_path@'
++    if os.path.exists(base):
++        return os.path.join(base, *subdirs)

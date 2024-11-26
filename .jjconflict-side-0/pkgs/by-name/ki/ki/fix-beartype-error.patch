@@ -1,0 +1,38 @@
+From bd765844b40f88547a2afe90d0e09bf74ff0bd61 Mon Sep 17 00:00:00 2001
+From: eljamm <fedi.jamoussi@protonmail.ch>
+Date: Fri, 31 May 2024 16:48:06 +0100
+Subject: [PATCH] Fix beartype Frozenset error
+
+The `copy_note_media` function wrongly returns a `Frozenset` instead of
+a `Set`, which raises an error for the newest beartype version (v0.18.5)
+---
+ ki/__init__.py | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/ki/__init__.py b/ki/__init__.py
+index 3f29c1a..cc65fae 100644
+--- a/ki/__init__.py
++++ b/ki/__init__.py
+@@ -752,9 +752,7 @@ def media_filenames_in_field(col: Collection, s: str) -> Iterable[str]:
+ 
+ @curried
+ @beartype
+-def copy_note_media(
+-    col: Collection, src: Dir, tgt: Dir, row: NoteDBRow
+-) -> FrozenSet[File]:
++def copy_note_media(col: Collection, src: Dir, tgt: Dir, row: NoteDBRow) -> Set[File]:
+     """
+     Copy a single note's media files and return the copies as a set. We do this
+     by first filtering for only 'rootfiles', i.e. excluding media files in
+@@ -769,7 +767,7 @@ def copy_note_media(
+     rootfiles = filter(lambda f: f == os.path.basename(f), files)
+     medias: Iterable[File] = filter(F.isfile, map(lambda f: F.chk(src / f), rootfiles))
+     srcdsts = map(lambda file: (file, F.chk(tgt / file.name)), medias)
+-    return frozenset(starmap(F.copyfile, srcdsts))
++    return set(starmap(F.copyfile, srcdsts))
+ 
+ 
+ @curried
+-- 
+2.44.1
+

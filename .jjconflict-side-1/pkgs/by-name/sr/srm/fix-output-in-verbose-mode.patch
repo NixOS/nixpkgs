@@ -1,0 +1,57 @@
+diff --git a/src/sunlink.c b/src/sunlink.c
+index 7050713..ffcb8d3 100644
+--- a/src/sunlink.c
++++ b/src/sunlink.c
+@@ -468,6 +468,8 @@ static int overwrite_selector(struct srm_target *srm)
+       if(overwrite_byte(srm, 5, 0x00) < 0) return -1;
+       if(overwrite_byte(srm, 6, 0xFF) < 0) return -1;
+       if(overwrite_random(srm, 7, 1) < 0) return -1;
++      if((srm->options&SRM_OPT_V) > 1)
++	printf("\n");
+     }
+   else if(srm->options & SRM_MODE_DOE)
+     {
+@@ -475,6 +477,8 @@ static int overwrite_selector(struct srm_target *srm)
+ 	error("US DoE mode");
+       if(overwrite_random(srm, 1, 2) < 0) return -1;
+       if(overwrite_bytes(srm, 3, 'D', 'o', 'E') < 0) return -1;
++      if((srm->options&SRM_OPT_V) > 1)
++	printf("\n");
+     }
+   else if(srm->options & SRM_MODE_OPENBSD)
+     {
+@@ -483,12 +487,16 @@ static int overwrite_selector(struct srm_target *srm)
+       if(overwrite_byte(srm, 1, 0xFF) < 0) return -1;
+       if(overwrite_byte(srm, 2, 0x00) < 0) return -1;
+       if(overwrite_byte(srm, 3, 0xFF) < 0) return -1;
++      if((srm->options&SRM_OPT_V) > 1)
++	printf("\n");
+     }
+   else if(srm->options & SRM_MODE_SIMPLE)
+     {
+       if((srm->options&SRM_OPT_V) > 1)
+ 	error("Simple mode");
+       if(overwrite_byte(srm, 1, 0x00) < 0) return -1;
++      if((srm->options&SRM_OPT_V) > 1)
++	printf("\n");
+     }
+   else if(srm->options & SRM_MODE_RCMP)
+     {
+@@ -497,6 +505,8 @@ static int overwrite_selector(struct srm_target *srm)
+       if(overwrite_byte(srm, 1, 0x00) < 0) return -1;
+       if(overwrite_byte(srm, 2, 0xFF) < 0) return -1;
+       if(overwrite_string(srm, 3, "RCMP") < 0) return -1;
++      if((srm->options&SRM_OPT_V) > 1)
++	printf("\n");
+     }
+   else
+     {
+@@ -535,6 +545,8 @@ static int overwrite_selector(struct srm_target *srm)
+       if(overwrite_random(srm, 32, 4) < 0) return -1;
+       /* if you want to backup your partition or shrink your vmware image having the file zero-ed gives best compression results. */
+       if(overwrite_byte(srm, 36, 0x00) < 0) return -1;
++      if((srm->options&SRM_OPT_V) > 1)
++	printf("\n");
+     }
+ #if 0
+   if((srm->options & SRM_OPT_V) > 1)
