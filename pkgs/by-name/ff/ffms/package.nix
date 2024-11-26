@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   # https://github.com/FFMS/ffms2#avisynth-and-vapoursynth-plugin
   postInstall = ''
     mkdir $out/lib/vapoursynth
-    ln -s $out/lib/libffms2.so $out/lib/vapoursynth/libffms2.so
+    ln -s $out/lib/libffms2${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/vapoursynth/libffms2${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
 
   meta = with lib; {
