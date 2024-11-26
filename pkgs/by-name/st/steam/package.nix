@@ -12,9 +12,9 @@
   extraEnv ? { }, # Environment variables to pass to Steam
 }:
 let
-  steamEnv = { name, runScript, passthru ? {}, meta ? {} }:
+  steamEnv = { pname, version, runScript, passthru ? {}, meta ? {} }:
   buildFHSEnv {
-    inherit name runScript passthru meta;
+    inherit pname version runScript passthru meta;
 
     multiArch = true;
     includeClosures = true;
@@ -106,14 +106,16 @@ let
     ] ++ extraBwrapArgs;
   };
 in steamEnv {
-  name = "steam";
+  pname = "steam";
+  version = "0.0.0"; # TODO this is not correct
 
   runScript = writeShellScript "steam-wrapped" ''
     exec steam ${extraArgs} "$@"
   '';
 
   passthru.run = steamEnv {
-    name = "steam-run";
+    pname = "steam-run";
+    version = "0.0.0"; # TODO this is not correct
 
     runScript = writeShellScript "steam-run" ''
       if [ $# -eq 0 ]; then
