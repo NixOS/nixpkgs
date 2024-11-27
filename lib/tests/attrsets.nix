@@ -3,6 +3,9 @@ let
 in
 
 lib.runTests {
+  # FIXME there weren't any lib.attrsets tests until I(@Atemu) added
+  # pathOperationsToAttrPaths; the other functions need to be tested too.
+
   testPathOperationsToAttrPaths'Immediate = {
     expr = lib.attrsets.pathOperationsToAttrPaths' [ ] "foo" "from";
     expected = [
