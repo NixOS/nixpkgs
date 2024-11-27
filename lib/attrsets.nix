@@ -517,16 +517,16 @@ rec {
   #
   # In most cases, you'd typically use the non-' version of this function.
   associateWithAttrPath' =
-    previousPath: name: remaining:
+    previousPath: current: remaining:
     let
-      currentPath = previousPath ++ optional (name != null) name; # Null denotes the root
+      currentPath = previousPath ++ optional (current != null) current; # Null denotes the root
     in
     if
       isString remaining # Any string is a terminator
     then
       [ (nameValuePair remaining currentPath) ]
     else
-      concatMap (nextName: associateWithAttrPath' currentPath nextName remaining.${nextName}) (
+      concatMap (next: associateWithAttrPath' currentPath next remaining.${next}) (
         attrNames remaining
       );
 
