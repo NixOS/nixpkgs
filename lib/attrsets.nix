@@ -516,15 +516,19 @@ rec {
   # Each strings can be associated with multiple attribute paths.
   #
   # In most cases, you'd typically use the non-' version of this function.
-  associateWithAttrPath' = previousPath: name: remaining:
+  associateWithAttrPath' =
+    previousPath: name: remaining:
     let
       currentPath = previousPath ++ optional (name != null) name; # Null denotes the root
     in
-    if isString remaining # Any string is a terminator
-    then [ (nameValuePair remaining currentPath) ]
-    else concatMap
-      (nextName: associateWithAttrPath' currentPath nextName remaining.${nextName})
-      (attrNames remaining);
+    if
+      isString remaining # Any string is a terminator
+    then
+      [ (nameValuePair remaining currentPath) ]
+    else
+      concatMap (nextName: associateWithAttrPath' currentPath nextName remaining.${nextName}) (
+        attrNames remaining
+      );
 
   # This function associates arbitrary strings with attribute paths in the form
   # of an attrset.

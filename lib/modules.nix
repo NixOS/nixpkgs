@@ -1344,11 +1344,12 @@ let
       existsInSpec = op: spec != { } && hasAttr attrPaths op;
       getPathForOp =
         op:
-        if existsInSpec op
-        then attrPaths.${op}
-        else if args.${op} != null
-        then args.${op}
-        else abort "You must provide `doRename` with the `${op}` attribute path.";
+        if existsInSpec op then
+          attrPaths.${op}
+        else if args.${op} != null then
+          args.${op}
+        else
+          abort "You must provide `doRename` with the `${op}` attribute path.";
 
       pathTo = getPathForOp "to";
       pathFrom = getPathForOp "from";
