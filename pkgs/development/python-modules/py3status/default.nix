@@ -20,7 +20,10 @@
   requests,
   setuptools,
   tzlocal,
+  wrapGAppsHook3,
   xorg,
+  glib,
+  gobject-introspection,
 }:
 
 buildPythonPackage rec {
@@ -33,7 +36,13 @@ buildPythonPackage rec {
     hash = "sha256-3m/34xfPpe8T4yicbTtQtTqfq5Zz2T0AZl8fCKRg/CE=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  nativeBuildInputs = [
+    hatchling
+    wrapGAppsHook3
+    gobject-introspection
+  ];
+
+  buildInputs = [ glib ];
 
   propagatedBuildInputs = [
     pytz
@@ -59,6 +68,12 @@ buildPythonPackage rec {
     sed -i -e "s|'sensors|'${lm_sensors}/bin/sensors|" py3status/modules/sysdata.py
     sed -i -e "s|'setxkbmap|'${xorg.setxkbmap}/bin/setxkbmap|" py3status/modules/keyboard_layout.py
     sed -i -e "s|'xset|'${xorg.xset}/bin/xset|" py3status/modules/keyboard_layout.py
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   doCheck = false;
