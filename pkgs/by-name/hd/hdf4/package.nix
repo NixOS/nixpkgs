@@ -5,6 +5,7 @@
   fetchurl,
   fixDarwinDylibNames,
   cmake,
+  ninja,
   libjpeg,
   uselibtirpc ? stdenv.hostPlatform.isLinux,
   libtirpc,
@@ -30,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     [
       cmake
+      ninja
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       fixDarwinDylibNames
