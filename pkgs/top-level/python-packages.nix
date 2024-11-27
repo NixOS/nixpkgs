@@ -13830,7 +13830,7 @@ self: super: with self; {
   rdflib = callPackage ../development/python-modules/rdflib { };
 
   rdkit = callPackage ../development/python-modules/rdkit {
-    boost = pkgs.boost182.override {
+    boost = pkgs.boost.override {
       enablePython = true;
       inherit python;
     };
