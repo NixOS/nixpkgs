@@ -10,12 +10,14 @@
   # dependencies
   langchain-core,
   langgraph-checkpoint,
+  langgraph-sdk,
 
   # tests
   aiosqlite,
   dataclasses-json,
   grandalf,
   httpx,
+  langgraph-checkpoint-duckdb,
   langgraph-checkpoint-postgres,
   langgraph-checkpoint-sqlite,
   langsmith,
@@ -29,21 +31,18 @@
   syrupy,
   postgresql,
   postgresqlTestHook,
-
-  # passthru
-  langgraph-sdk,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "0.2.21";
+  version = "0.2.43";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     rev = "refs/tags/${version}";
-    hash = "sha256-1Ch2V85omAKnXK9rMihNtyjIoOvmVUm8Dbdo5GBoik4=";
+    hash = "sha256-8xTjWBq6GSl6X2IId3roS3ZNM/h76EGPitS08YQ4e7Y=";
   };
 
   postgresqlTestSetupPost = ''
@@ -58,6 +57,7 @@ buildPythonPackage rec {
   dependencies = [
     langchain-core
     langgraph-checkpoint
+    langgraph-sdk
   ];
 
   pythonImportsCheck = [ "langgraph" ];
@@ -71,6 +71,7 @@ buildPythonPackage rec {
     dataclasses-json
     grandalf
     httpx
+    langgraph-checkpoint-duckdb
     langgraph-checkpoint-postgres
     langgraph-checkpoint-sqlite
     langsmith
@@ -88,7 +89,10 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_doesnt_warn_valid_schema" # test is flaky due to pydantic error on the exception
+    # test is flaky due to pydantic error on the exception
+    "test_doesnt_warn_valid_schema"
+    "test_tool_node_inject_store"
+
     # Disabling tests that requires to create new random databases
     "test_cancel_graph_astream"
     "test_cancel_graph_astream_events_v2"
@@ -110,9 +114,7 @@ buildPythonPackage rec {
     "tests/test_pregel.py"
   ];
 
-  passthru = {
-    updateScript = langgraph-sdk.updateScript;
-  };
+  passthru.updateScript = langgraph-sdk.updateScript;
 
   meta = {
     description = "Build resilient language agents as graphs";

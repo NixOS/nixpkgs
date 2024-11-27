@@ -24,7 +24,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "$out/${python.sitePackages}" ];
+  preCheck = "pushd $out";
+  postCheck = "popd";
 
   disabledTests = [ "test_make_c_files" ];
 

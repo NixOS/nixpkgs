@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     description = "Classic falling-block game, Tetris";
     mainProgram = "quadrapassel";
     homepage = "https://gitlab.gnome.org/GNOME/quadrapassel";
+    changelog = "https://gitlab.gnome.org/GNOME/quadrapassel/-/blob/${version}/NEWS?ref_type=tags";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

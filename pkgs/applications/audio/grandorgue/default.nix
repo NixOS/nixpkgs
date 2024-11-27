@@ -21,22 +21,17 @@
 
 stdenv.mkDerivation rec {
   pname = "grandorgue";
-  version = "3.15.1-1";
+  version = "3.15.2-1";
 
   src = fetchFromGitHub {
     owner = "GrandOrgue";
     repo = "grandorgue";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-5uAA878OBc04PkUgCwoRtc6lIASivq3YcfFffTae6uM=";
+    hash = "sha256-U0DAWCzhXqdL2klSFQjnLiWp7yTdw/n0dmNUJSAg/5c=";
   };
 
-  postPatch = ''
-    substituteInPlace resources/CMakeLists.txt \
-      --replace \
-        "iconutil -c icns \''${GENERATED_ICONS_DIR}" \
-        "png2icns \''${GENERATED_ICONS_DIR}/../GrandOrgue.icns \''${GENERATED_ICONS_DIR}/*{16,32,128,256,512,1024}.png" \
-  '';
+  patches = [ ./darwin-fixes.patch ];
 
   nativeBuildInputs = [ cmake pkg-config imagemagick libicns makeWrapper ];
 

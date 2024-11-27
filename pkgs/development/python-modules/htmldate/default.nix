@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "htmldate";
-  version = "1.9.0";
+  version = "1.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "adbar";
     repo = "htmldate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sddPlVaYenR8sQG/ronkYIcVH5nyQzcjF8rfeMr5I78=";
+    hash = "sha256-VjOqttpbHp1wQARyHieAZie/yO74+S2mDbBXx00PKWM=";
   };
 
   build-system = [ setuptools ];
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     speed =
       [
         faust-cchardet

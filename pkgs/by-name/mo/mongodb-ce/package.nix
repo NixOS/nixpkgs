@@ -15,24 +15,24 @@
 }:
 
 let
-  version = "7.0.14";
+  version = "8.0.3";
 
   srcs = version: {
     "x86_64-linux" = {
       url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-${version}.tgz";
-      hash = "sha256-tM+MquEIeFE17Mi4atjtbfXW77hLm5WlDsui/CRs4IQ=";
+      hash = "sha256-AFnfK6ADPMBndL3k068IfY4wyD8Aa0/UZhY2g+jS31M=";
     };
     "aarch64-linux" = {
       url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-${version}.tgz";
-      hash = "sha256-4XiHv6JKopZ/3xrXwT+nvQ2OsbkhL79uwBCnOOMaNlc=";
+      hash = "sha256-7FGzHMdr8+1Bkx+3QFmDf/DGw5DxfDFEuzU6yICtOBo=";
     };
     "x86_64-darwin" = {
       url = "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-${version}.tgz";
-      hash = "sha256-mw9w/qz3xBVC7n0JBeL4CQsJ1bhBPwyQeUBsCa/XosA=";
+      hash = "sha256-GUIFG7F/KNyoPu9HGMs0UVw/HyK5T7jwTrSGY55/UUE=";
     };
     "aarch64-darwin" = {
       url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${version}.tgz";
-      hash = "sha256-iAX4szgBzQe5ARjCXlB7DeIcatQms3X75J6Jb/xXXQ4=";
+      hash = "sha256-erTgU4XQ9Jh1ltPKbyyW6zf3hRHAcopGuHCRFw/AH5g=";
     };
   };
 in
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl.dev
     openssl.dev
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   installPhase = ''
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
           text =
             ''
               # Get latest version string from Github
-              NEW_VERSION=$(curl -s "https://api.github.com/repos/mongodb/mongo/tags?per_page=1000" | jq -r 'first(.[] | .name | select(startswith("r7.0")) | select(contains("rc") | not) | .[1:])')
+              NEW_VERSION=$(curl -s "https://api.github.com/repos/mongodb/mongo/tags?per_page=1000" | jq -r 'first(.[] | .name | select(startswith("r8.0")) | select(contains("rc") | not) | .[1:])')
 
               # Check if the new version is available for download, if not, exit
               curl -s https://www.mongodb.com/try/download/community-edition/releases | pup 'h3:not([id]) text{}' | grep "$NEW_VERSION"
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://www.mongodb.com/docs/upcoming/release-notes/7.0/";
+    changelog = "https://www.mongodb.com/docs/upcoming/release-notes/8.0/";
     description = "MongoDB is a general purpose, document-based, distributed database.";
     homepage = "https://www.mongodb.com/";
     license = with lib.licenses; [ sspl ];

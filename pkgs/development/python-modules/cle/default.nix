@@ -5,27 +5,25 @@
   cart,
   cffi,
   fetchFromGitHub,
-  minidump,
   pefile,
   pyelftools,
   pytestCheckHook,
   pythonOlder,
   pyvex,
-  pyxbe,
   setuptools,
   sortedcontainers,
 }:
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.2.119";
+  version = "9.2.129";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
     owner = "angr";
     repo = "binaries";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cIh8ahJGEVzKSylCBVF1RbNftqADjewuiybPiCWfmhw=";
+    hash = "sha256-LP29VvCImJ3jbNrqwBYi829EO75jximrQkR9aj/gNPM=";
   };
 in
 buildPythonPackage rec {
@@ -39,28 +37,22 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "cle";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jOqhwSxdHJsNUZqx/ViPDh09Uk+2hqyxm4p8XwyHZ0k=";
+    hash = "sha256-0CQVnnzK7eeQNCLuUDPibWCkeKp3QEpxfQ+lT1SoMLA=";
   };
 
   build-system = [ setuptools ];
-
-  pythonRelaxDeps = [ "pyvex" ];
 
   dependencies = [
     archinfo
     cart
     cffi
-    minidump
     pefile
     pyelftools
     pyvex
-    pyxbe
     sortedcontainers
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Place test binaries in the right location (location is hard-coded in the tests)
   preCheck = ''

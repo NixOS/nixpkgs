@@ -6,14 +6,13 @@
   makeWrapper,
   stdenvNoCC,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maven";
-  version = "3.9.8";
+  version = "3.9.9";
 
   src = fetchurl {
     url = "mirror://apache/maven/maven-3/${finalAttrs.version}/binaries/apache-maven-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-BnZyYpB1t0Dj0Kko4hAh3WFaUyh6821MzKROh+CB0QI=";
+    hash = "sha256-epzfZ0/BcD1jgvXzMLPREOobUStR8WUoRtnk6KWI12Y=";
   };
 
   sourceRoot = ".";
@@ -34,14 +33,31 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
-    buildMaven = callPackage ./build-maven.nix {
-      maven = finalAttrs.finalPackage;
+  passthru =
+    let
+      makeOverridableMavenPackage =
+        mavenRecipe: mavenArgs:
+        let
+          drv = mavenRecipe mavenArgs;
+          overrideWith =
+            newArgs: mavenArgs // (if lib.isFunction newArgs then newArgs mavenArgs else newArgs);
+        in
+        drv
+        // {
+          overrideMavenAttrs = newArgs: makeOverridableMavenPackage mavenRecipe (overrideWith newArgs);
+        };
+    in
+    {
+      buildMaven = callPackage ./build-maven.nix {
+        maven = finalAttrs.finalPackage;
+      };
+
+      buildMavenPackage = makeOverridableMavenPackage (
+        callPackage ./build-maven-package.nix {
+          maven = finalAttrs.finalPackage;
+        }
+      );
     };
-    buildMavenPackage = callPackage ./build-maven-package.nix {
-      maven = finalAttrs.finalPackage;
-    };
-  };
 
   meta = {
     homepage = "https://maven.apache.org/";
@@ -54,7 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.asl20;
     mainProgram = "mvn";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tricktron ] ++ lib.teams.java.members;
     inherit (jdk_headless.meta) platforms;
   };
 })

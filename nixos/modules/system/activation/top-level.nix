@@ -20,6 +20,12 @@ let
       ''}
 
       ln -s ${config.system.build.etc}/etc $out/etc
+
+      ${lib.optionalString config.system.etc.overlay.enable ''
+        ln -s ${config.system.build.etcMetadataImage} $out/etc-metadata-image
+        ln -s ${config.system.build.etcBasedir} $out/etc-basedir
+      ''}
+
       ln -s ${config.system.path} $out/sw
       ln -s "$systemd" $out/systemd
 
@@ -336,6 +342,7 @@ in
       perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
       # End if legacy environment variables
 
+      preSwitchCheck = config.system.preSwitchChecks.script;
 
       # Not actually used in the builder. `passedChecks` is just here to create
       # the build dependencies. Checks are similar to build dependencies in the

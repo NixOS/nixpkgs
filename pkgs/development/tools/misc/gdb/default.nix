@@ -15,7 +15,7 @@
    # $debugdir:$datadir/auto-load are whitelisted by default by GDB
    "$debugdir" "$datadir/auto-load"
    # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
-   targetPackages.stdenv.cc.cc.lib
+   (lib.getLib targetPackages.stdenv.cc.cc)
   ]
 , writeScript
 }:
@@ -30,11 +30,11 @@ assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
-  version = "15.1";
+  version = "15.2";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    hash = "sha256-OCVOrNRXITS8qcWlqk1MpWTLvTDDadiB9zP7a5AzVPI=";
+    hash = "sha256-gzUMzTW1taDLprM0xBKU6paBWMVzlAkE8AuS92NFMU0=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -117,10 +117,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableDebuginfod "--with-debuginfod=yes"
     ++ lib.optional (!enableSim) "--disable-sim";
 
-  postInstall =
-    '' # Remove Info files already provided by Binutils and other packages.
-       rm -v $out/share/info/bfd.info
-    '';
+  postInstall = ''
+    # Remove Info files already provided by Binutils and other packages.
+    rm -v $out/share/info/bfd.info
+  '';
 
   # TODO: Investigate & fix the test failures.
   doCheck = false;

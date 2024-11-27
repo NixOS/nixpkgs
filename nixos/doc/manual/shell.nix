@@ -6,8 +6,11 @@ let
 
   common = import ./common.nix;
   inherit (common) outputPath indexPath;
+  devmode = pkgs.devmode.override {
+    buildArgs = "../../release.nix -A manualHTML.${builtins.currentSystem}";
+    open = "/${outputPath}/${indexPath}";
+  };
 in
-pkgs.callPackage ../../../pkgs/tools/nix/web-devmode.nix {
-  buildArgs = "../../release.nix -A manualHTML.${builtins.currentSystem}";
-  open = "/${outputPath}/${indexPath}";
+pkgs.mkShellNoCC {
+  packages = [ devmode ];
 }

@@ -8,13 +8,13 @@
 
 mkHyprlandPlugin hyprland {
   pluginName = "hyprspace";
-  version = "0-unstable-2024-08-21";
+  version = "0-unstable-2024-11-02";
 
   src = fetchFromGitHub {
     owner = "KZDKM";
     repo = "hyprspace";
-    rev = "743ec37d02bb2b7261f28de16bf404cebfd96105";
-    hash = "sha256-w0j/3OeSrpx+S8if1M2ONBsZvJQ1hBQkdTQEiMCHy7o=";
+    rev = "260f386075c7f6818033b05466a368d8821cde2d";
+    hash = "sha256-cwbcYg+rPmvHFFtAEie7nw5IaBidrTYe5XsTlhOyoyQ=";
   };
 
   dontUseCmakeConfigure = true;

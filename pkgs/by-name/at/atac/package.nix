@@ -4,8 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   oniguruma,
-  stdenv,
-  darwin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "atac";
@@ -20,19 +18,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-sNgtqvFiwHSYMDf0379i8Yl9NrkCRVLo/ogjbHFgKBY=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      oniguruma
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ oniguruma ];
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
@@ -42,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     description = "Simple API client (postman like) in your terminal";
     homepage = "https://github.com/Julien-cpsn/ATAC";
     license = licenses.mit;
-    maintainers = with maintainers; [vinnymeller];
+    maintainers = with maintainers; [ vinnymeller ];
     mainProgram = "atac";
   };
 }

@@ -120,8 +120,9 @@ stdenv.mkDerivation (
           echo
           echo "ERROR: The Cargo.lock contains git dependencies"
           echo
-          echo "This is currently not supported in the fixed-output derivation fetcher."
-          echo "Use cargoLock.lockFile / importCargoLock instead."
+          echo "This is not supported in the default fixed-output derivation fetcher."
+          echo "Set \`useFetchCargoVendor = true\` / use fetchCargoVendor"
+          echo "or use cargoLock.lockFile / importCargoLock instead."
           echo
 
           exit 1
@@ -136,7 +137,7 @@ stdenv.mkDerivation (
 
       # Packages with git dependencies generate non-default cargo configs, so
       # always install it rather than trying to write a standard default template.
-      install -D $CARGO_CONFIG $name/.cargo/config;
+      install -D $CARGO_CONFIG $name/.cargo/config
 
       runHook postBuild
     '';

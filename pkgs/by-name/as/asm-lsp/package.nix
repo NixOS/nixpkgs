@@ -1,8 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
 }:
 let
   pname = "asm-lsp";
@@ -18,13 +20,9 @@ rustPlatform.buildRustPackage {
     hash = "sha256-0GB3tXZuCu3syh+RG+eXoliZVHMPOhYC3RchSSx4u5w=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
   cargoHash = "sha256-AtCnYOOtViMpg+rz8miuBZg1pENBPaf9kamSPaVUyiw=";
 
@@ -37,8 +35,11 @@ rustPlatform.buildRustPackage {
     description = "Language server for NASM/GAS/GO Assembly";
     homepage = "https://github.com/bergercookie/asm-lsp";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ NotAShelf ];
+    maintainers = with lib.maintainers; [
+      NotAShelf
+      CaiqueFigueiredo
+    ];
     mainProgram = "asm-lsp";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

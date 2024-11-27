@@ -1,11 +1,11 @@
-{ lib, symlinkJoin, brasero-original, cdrtools, libdvdcss, makeWrapper }:
+{ lib, symlinkJoin, brasero-unwrapped, cdrtools, libdvdcss, makeWrapper }:
 
 let
   binPath = lib.makeBinPath [ cdrtools ];
 in symlinkJoin {
-  name = "brasero-${brasero-original.version}";
+  name = "brasero-${brasero-unwrapped.version}";
 
-  paths = [ brasero-original ];
+  paths = [ brasero-unwrapped ];
   nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
@@ -14,5 +14,5 @@ in symlinkJoin {
       --prefix LD_PRELOAD : ${lib.makeLibraryPath [ libdvdcss ]}/libdvdcss.so
   '';
 
-  inherit (brasero-original) meta;
+  inherit (brasero-unwrapped) meta;
 }

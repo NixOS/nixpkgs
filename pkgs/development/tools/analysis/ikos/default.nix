@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ikos";
-  version = "3.3";
+  version = "3.4";
 
   src = fetchFromGitHub {
     owner = "NASA-SW-VnV";
     repo = "ikos";
     rev = "v${version}";
-    hash = "sha256-4/M0fyqvzdr0aBPCUuLiBgqMOrHEmikkIjQMB9KSrdo=";
+    hash = "sha256-xJuSpQHShggDqLVQaj0a0fEPOWUFIrbGmxazu4FKISs=";
   };
 
   nativeBuildInputs = [

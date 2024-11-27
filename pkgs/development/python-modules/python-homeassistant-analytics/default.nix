@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "python-homeassistant-analytics";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "joostlek";
     repo = "python-homeassistant-analytics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HPimk401tRBwszWvkyUEAcuLeYeEu0JUld16PESXkbo=";
+    hash = "sha256-vyJseIYFmbxUYieZB0r3Z3j6/ZHmgs7ONa5YKQTwAXw=";
   };
 
   postPatch = ''

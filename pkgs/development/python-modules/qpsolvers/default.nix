@@ -39,7 +39,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     # FIXME commented out solvers have not been packaged yet
     clarabel = [ clarabel ];
     cvxopt = [ cvxopt ];
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     quadprog = [ quadprog ];
     scs = [ scs ];
     open_source_solvers =
-      with passthru.optional-dependencies;
+      with optional-dependencies;
       lib.flatten [
         clarabel
         cvxopt
@@ -68,7 +68,7 @@ buildPythonPackage rec {
       ];
   };
 
-  nativeCheckInputs = [ unittestCheckHook ] ++ passthru.optional-dependencies.open_source_solvers;
+  nativeCheckInputs = [ unittestCheckHook ] ++ optional-dependencies.open_source_solvers;
 
   meta = with lib; {
     changelog = "https://github.com/qpsolvers/qpsolvers/blob/${src.rev}/CHANGELOG.md";

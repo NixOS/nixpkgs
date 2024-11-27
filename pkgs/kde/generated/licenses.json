@@ -254,6 +254,7 @@
     "GPL-2.0-only",
     "GPL-2.0-or-later",
     "GPL-3.0-only",
+    "LGPL-2.0-or-later",
     "LicenseRef-KDE-Accepted-GPL",
     "MIT"
   ],
@@ -326,6 +327,7 @@
     "GPL-3.0-only",
     "LGPL-2.0-or-later",
     "LGPL-2.1-only",
+    "LGPL-2.1-or-later",
     "LGPL-3.0-only",
     "LGPL-3.0-or-later",
     "LicenseRef-KDE-Accepted-GPL",
@@ -1919,6 +1921,7 @@
     "MIT"
   ],
   "ktexttemplate": [
+    "BSD-2-Clause",
     "CC0-1.0",
     "LGPL-2.0-or-later",
     "LGPL-2.1-or-later"
@@ -2515,6 +2518,19 @@
     "LicenseRef-KDE-Accepted-LGPL",
     "MIT"
   ],
+  "plasma-dialer": [
+    "BSD-3-Clause",
+    "CC0-1.0",
+    "GPL-2.0-only",
+    "GPL-2.0-or-later",
+    "GPL-3.0-only",
+    "LGPL-2.0-or-later",
+    "LGPL-2.1-only",
+    "LGPL-2.1-or-later",
+    "LGPL-3.0-only",
+    "LicenseRef-KDE-Accepted-GPL",
+    "LicenseRef-KDE-Accepted-LGPL"
+  ],
   "plasma-disks": [
     "BSD-3-Clause",
     "CC0-1.0",
@@ -2582,6 +2598,7 @@
     "LicenseRef-KDE-Accepted-LGPL"
   ],
   "plasma-pa": [
+    "BSD-2-Clause",
     "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-only",
@@ -2646,6 +2663,7 @@
     "GPL-2.0-only",
     "GPL-2.0-or-later",
     "GPL-3.0-only",
+    "GPL-3.0-or-later",
     "LGPL-2.0-only",
     "LGPL-2.0-or-later",
     "LGPL-2.1-only",
@@ -2662,6 +2680,7 @@
     "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-or-later",
+    "LGPL-2.0-only",
     "LGPL-2.0-or-later",
     "LGPL-2.1-or-later"
   ],
@@ -2687,18 +2706,21 @@
     "LGPL-2.0-or-later"
   ],
   "powerdevil": [
+    "BSD-2-Clause",
     "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-only",
     "GPL-2.0-or-later",
     "GPL-3.0-only",
+    "GPL-3.0-or-later",
     "LGPL-2.0-only",
     "LGPL-2.0-or-later",
     "LGPL-2.1-only",
     "LGPL-2.1-or-later",
     "LGPL-3.0-only",
     "LicenseRef-KDE-Accepted-GPL",
-    "LicenseRef-KDE-Accepted-LGPL"
+    "LicenseRef-KDE-Accepted-LGPL",
+    "MIT"
   ],
   "poxml": [
     "CC0-1.0"
@@ -2808,6 +2830,15 @@
     "LGPL-2.0-or-later",
     "LGPL-2.1-or-later"
   ],
+  "spacebar": [
+    "BSD-2-Clause",
+    "CC0-1.0",
+    "GPL-2.0-only",
+    "GPL-2.0-or-later",
+    "GPL-3.0-only",
+    "LGPL-2.0-or-later",
+    "LicenseRef-KDE-Accepted-GPL"
+  ],
   "spectacle": [
     "BSD-3-Clause",
     "CC0-1.0",
@@ -2856,13 +2887,15 @@
   ],
   "systemsettings": [
     "BSD-2-Clause",
+    "BSD-3-Clause",
     "CC0-1.0",
     "GPL-2.0-only",
     "GPL-2.0-or-later",
     "GPL-3.0-only",
     "LGPL-2.0-only",
     "LGPL-2.1-or-later",
-    "LicenseRef-KDE-Accepted-GPL"
+    "LicenseRef-KDE-Accepted-GPL",
+    "MIT"
   ],
   "telly-skout": [
     "BSD-2-Clause",

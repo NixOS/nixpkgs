@@ -23,13 +23,13 @@
 }:
 
 let
-  version = "0.18.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "f-koehler";
     repo = "KTailctl";
     rev = "v${version}";
-    hash = "sha256-tZnwn94qZyQ8JAC6Y1dDTmc7Cob+kMZnEaP7+EytbH8=";
+    hash = "sha256-hlpxim4Vm/C37ts+Q/t9swCejKEE97R1QlP+Y2jNWoM=";
   };
 
   goDeps = (buildGo123Module {

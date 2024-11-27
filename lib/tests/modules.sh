@@ -516,6 +516,10 @@ checkConfigError 'The option .theOption.nested. in .other.nix. is already declar
 # Test that types.optionType leaves types untouched as long as they don't need to be merged
 checkConfigOutput 'ok' config.freeformItems.foo.bar ./adhoc-freeformType-survives-type-merge.nix
 
+# Test that specifying both functor.wrapped and functor.payload isn't allowed
+checkConfigError 'Type foo defines both `functor.payload` and `functor.wrapped` at the same time, which is not supported.' config.result ./default-type-merge-both.nix
+
+
 # Anonymous submodules don't get nixed by import resolution/deduplication
 # because of an `extendModules` bug, issue 168767.
 checkConfigOutput '^1$' config.sub.specialisation.value ./extendModules-168767-imports.nix
@@ -534,9 +538,10 @@ checkConfigError 'The module .*/module-class-is-darwin.nix was imported into nix
 checkConfigError 'A submoduleWith option is declared multiple times with conflicting class values "darwin" and "nixos".' config.sub.mergeFail.config ./class-check.nix
 
 # _type check
-checkConfigError 'Could not load a value as a module, because it is of type "flake", in file .*/module-imports-_type-check.nix' config.ok.config ./module-imports-_type-check.nix
-checkConfigOutput '^true$' "$@" config.enable ./declare-enable.nix ./define-enable-with-top-level-mkIf.nix
-checkConfigError 'Could not load a value as a module, because it is of type "configuration", in file .*/import-configuration.nix.*please only import the modules that make up the configuration.*' config ./import-configuration.nix
+checkConfigError 'Expected a module, but found a value of type .*"flake".*, while trying to load a module into .*/module-imports-_type-check.nix' config.ok.config ./module-imports-_type-check.nix
+checkConfigOutput '^true$' config.enable ./declare-enable.nix ./define-enable-with-top-level-mkIf.nix
+checkConfigError 'Expected a module, but found a value of type .*"configuration".*, while trying to load a module into .*/import-configuration.nix.' config ./import-configuration.nix
+checkConfigError 'please only import the modules that make up the configuration' config ./import-configuration.nix
 
 # doRename works when `warnings` does not exist.
 checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix

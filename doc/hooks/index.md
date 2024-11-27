@@ -8,10 +8,12 @@ The stdenv built-in hooks are documented in [](#ssec-setup-hooks).
 autoconf.section.md
 automake.section.md
 autopatchelf.section.md
+aws-c-common.section.md
 bmake.section.md
 breakpoint.section.md
 cernlib.section.md
 cmake.section.md
+desktop-file-utils.section.md
 gdk-pixbuf.section.md
 ghc.section.md
 gnome.section.md
@@ -30,6 +32,7 @@ postgresql-test-hook.section.md
 premake.section.md
 python.section.md
 scons.section.md
+tauri.section.md
 tetex-tex-live.section.md
 unzip.section.md
 validatePkgConfig.section.md
@@ -37,4 +40,5 @@ versionCheckHook.section.md
 waf.section.md
 zig.section.md
 xcbuild.section.md
+xfce4-dev-tools.section.md
 ```

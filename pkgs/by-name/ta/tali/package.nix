@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/tali";
+    changelog = "https://gitlab.gnome.org/GNOME/tali/-/blob/${version}/NEWS?ref_type=tags";
     description = "Sort of poker with dice and less money";
     mainProgram = "tali";
     maintainers = teams.gnome.members;

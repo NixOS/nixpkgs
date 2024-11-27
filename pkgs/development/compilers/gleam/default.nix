@@ -5,6 +5,7 @@
 , git
 , pkg-config
 , openssl
+, erlang
 , Security
 , nix-update-script
 , SystemConfiguration
@@ -12,21 +13,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gleam";
-  version = "1.5.0";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "gleam-lang";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-buMnbBg+/vHXzbBuMPuV8AfdUmYA9J6WTXP7Oqrdo34=";
+    hash = "sha256-r+iN6eLmy6qnrhvHKUQufd/4mvZL9TCVaqLqEPcLu1E=";
   };
 
   nativeBuildInputs = [ git pkg-config ];
 
-  buildInputs = [ openssl ] ++
+  buildInputs = [ openssl erlang ] ++
     lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
 
-  cargoHash = "sha256-0Vtf9UXLPW5HuqNIAGNyqIXCMTITdG7PuFdw4H4v6a4=";
+  cargoHash = "sha256-+kKKdNAvr8sTaFvzCCpY1bVS779DgJbHI9kUUIi4lXE=";
 
   passthru.updateScript = nix-update-script { };
 

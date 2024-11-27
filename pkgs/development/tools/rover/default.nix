@@ -1,7 +1,8 @@
 { lib
 , fetchFromGitHub
-, perl
+, pkg-config
 , rustPlatform
+, openssl
 , darwin
 , stdenv
 }:
@@ -19,15 +20,21 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Rf4kRXYW+WAF1rM7o8PmXBLgp/YyA8y/TqbZL22VOqI=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.CoreServices
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   nativeBuildInputs = [
-    perl
+    pkg-config
   ];
+
+  env = {
+    OPENSSL_NO_VENDOR = true;
+  };
 
   # This test checks whether the plugins specified in the plugins json file are
   # valid by making a network call to the repo that houses their binaries; but, the

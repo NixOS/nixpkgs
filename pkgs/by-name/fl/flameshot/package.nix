@@ -124,6 +124,7 @@ stdenv'.mkDerivation {
   meta = with lib; {
     description = "Powerful yet simple to use screenshot software";
     homepage = "https://github.com/flameshot-org/flameshot";
+    changelog = "https://github.com/flameshot-org/flameshot/releases";
     mainProgram = "flameshot";
     maintainers = with maintainers; [
       scode

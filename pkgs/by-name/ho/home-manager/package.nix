@@ -18,14 +18,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "home-manager";
-  version = "0-unstable-2024-09-21";
+  version = "0-unstable-2024-10-20";
 
   src = fetchFromGitHub {
     name = "home-manager-source";
     owner = "nix-community";
     repo = "home-manager";
-    rev = "14929f7089268481d86b83ed31ffd88713dcd415";
-    hash = "sha256-Gkc7pwTVLKj4HSvRt8tXNvosl8RS9hrBAEhOjAE0Tt4=";
+    rev = "fe56302339bb28e3471632379d733547caec8103";
+    hash = "sha256-Dtmm1OU8Ymiy9hVWn/a2B8DhRYo9Eoyx9veERdOBR4o=";
   };
 
   nativeBuildInputs = [
@@ -93,7 +93,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "home-manager";
-    maintainers = with lib.maintainers; [ AndersonTorres bryango ];
+    maintainers = with lib.maintainers; [ bryango ];
     platforms = lib.platforms.unix;
   };
 })

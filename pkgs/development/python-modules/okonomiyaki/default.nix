@@ -1,64 +1,86 @@
 {
-  buildPythonPackage,
-  stdenv,
-  fetchFromGitHub,
   lib,
+  stdenv,
   attrs,
+  buildPythonPackage,
   distro,
+  fetchFromGitHub,
+  parameterized,
   jsonschema,
-  six,
-  zipfile2,
-  hypothesis,
   mock,
   packaging,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
   testfixtures,
-  pythonAtLeast,
+  zipfile2,
 }:
 
 buildPythonPackage rec {
   pname = "okonomiyaki";
-  version = "1.4.0";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "enthought";
-    repo = pname;
+    repo = "okonomiyaki";
     rev = "refs/tags/${version}";
-    hash = "sha256-MEll1H7l41m8uz2/WK/Ilm7Dubg0uqYwe+ZgakO1aXQ=";
+    hash = "sha256-JQZhw0H4iSdxoyS6ODICJz1vAZsOISQitX7wTgSS1xc=";
   };
 
-  propagatedBuildInputs = [
-    distro
-    attrs
-    jsonschema
-    six
-    zipfile2
-  ];
+  postPatch = ''
+    # Fixed for >= 2.0.0
+    substituteInPlace setup.cfg \
+      --replace-fail "long_description_content_type = rst" "long_description_content_type = text/x-rst"
+  '';
+
+  build-system = [ setuptools ];
+
+  optional-dependencies = {
+    all = [
+      attrs
+      distro
+      jsonschema
+      zipfile2
+    ];
+    platforms = [
+      attrs
+      distro
+    ];
+    formats = [
+      attrs
+      distro
+      jsonschema
+      zipfile2
+    ];
+  };
+
+  nativeCheckInputs = [
+    packaging
+    parameterized
+    pytestCheckHook
+    testfixtures
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck =
     ''
       substituteInPlace okonomiyaki/runtimes/tests/test_runtime.py \
-        --replace 'runtime_info = PythonRuntime.from_running_python()' 'raise unittest.SkipTest() #'
+        --replace-fail 'runtime_info = PythonRuntime.from_running_python()' 'raise unittest.SkipTest() #'
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace okonomiyaki/platforms/tests/test_pep425.py \
-        --replace 'self.assertEqual(platform_tag, self.tag.platform)' 'raise unittest.SkipTest()'
+        --replace-fail 'self.assertEqual(platform_tag, self.tag.platform)' 'raise unittest.SkipTest()'
     '';
-
-  checkInputs = [
-    hypothesis
-    mock
-    packaging
-    testfixtures
-  ];
 
   pythonImportsCheck = [ "okonomiyaki" ];
 
   meta = with lib; {
-    homepage = "https://github.com/enthought/okonomiyaki";
     description = "Experimental library aimed at consolidating a lot of low-level code used for Enthought's eggs";
+    homepage = "https://github.com/enthought/okonomiyaki";
+    changelog = "https://github.com/enthought/okonomiyaki/releases/tag/${version}";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.bsd3;
-    broken = pythonAtLeast "3.12"; # multiple tests are failing
   };
 }

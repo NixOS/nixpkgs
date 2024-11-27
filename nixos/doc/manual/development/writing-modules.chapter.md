@@ -140,7 +140,8 @@ in {
         path  = [ pkgs.su ];
         script =
           ''
-            mkdir -m 0755 -p $(dirname ${toString cfg.output})
+            mkdir -p $(dirname ${toString cfg.output})
+            chmod 0755 $(dirname ${toString cfg.output})
             exec updatedb \
               --localuser=${cfg.localuser} \
               ${optionalString (!cfg.includeStore) "--prunepaths='/nix/store'"} \

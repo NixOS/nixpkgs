@@ -33,7 +33,9 @@ let
     certName = if hostOpts.useACMEHost != null then hostOpts.useACMEHost else hostOpts.hostName;
   }) (filter (hostOpts: hostOpts.enableACME || hostOpts.useACMEHost != null) vhosts);
 
-  dependentCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
+  vhostCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
+  dependentCertNames = filter (cert: certs.${cert}.dnsProvider == null) vhostCertNames; # those that might depend on the HTTP server
+  independentCertNames = filter (cert: certs.${cert}.dnsProvider != null) vhostCertNames; # those that don't depend on the HTTP server
 
   mkListenInfo = hostOpts:
     if hostOpts.listen != [] then
@@ -371,7 +373,7 @@ let
       echo "$options" >> $out
     '';
 
-  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
 in
 
 
@@ -641,10 +643,10 @@ in
         '';
       }
     ] ++ map (name: mkCertOwnershipAssertion {
-      inherit (cfg) group user;
       cert = config.security.acme.certs.${name};
       groups = config.users.groups;
-    }) dependentCertNames;
+      services = [ config.systemd.services.httpd ] ++ lib.optional (vhostCertNames != []) config.systemd.services.httpd-config-reload;
+    }) vhostCertNames;
 
     warnings =
       mapAttrsToList (name: hostOpts: ''
@@ -747,8 +749,10 @@ in
     systemd.services.httpd = {
         description = "Apache HTTPD";
         wantedBy = [ "multi-user.target" ];
-        wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) dependentCertNames);
-        after = [ "network.target" ] ++ map (certName: "acme-selfsigned-${certName}.service") dependentCertNames;
+        wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) vhostCertNames);
+        after = [ "network.target" ]
+          ++ map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
+          ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa
         before = map (certName: "acme-${certName}.service") dependentCertNames;
         restartTriggers = [ cfg.configFile ];
 
@@ -789,9 +793,9 @@ in
     # which allows the acme-finished-$cert.target to signify the successful updating
     # of certs end-to-end.
     systemd.services.httpd-config-reload = let
-      sslServices = map (certName: "acme-${certName}.service") dependentCertNames;
-      sslTargets = map (certName: "acme-finished-${certName}.target") dependentCertNames;
-    in mkIf (sslServices != []) {
+      sslServices = map (certName: "acme-${certName}.service") vhostCertNames;
+      sslTargets = map (certName: "acme-finished-${certName}.target") vhostCertNames;
+    in mkIf (vhostCertNames != []) {
       wantedBy = sslServices ++ [ "multi-user.target" ];
       # Before the finished targets, after the renew services.
       # This service might be needed for HTTP-01 challenges, but we only want to confirm
@@ -801,7 +805,7 @@ in
       restartTriggers = [ cfg.configFile ];
       # Block reloading if not all certs exist yet.
       # Happens when config changes add new vhosts/certs.
-      unitConfig.ConditionPathExists = map (certName: certs.${certName}.directory + "/fullchain.pem") dependentCertNames;
+      unitConfig.ConditionPathExists = map (certName: certs.${certName}.directory + "/fullchain.pem") vhostCertNames;
       serviceConfig = {
         Type = "oneshot";
         TimeoutSec = 60;

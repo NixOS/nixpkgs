@@ -96,15 +96,15 @@ index 102bdab8..bfef4400 100644
          args.extend(['-l', '+'.join(langs)])
      if engine_mode is not None:
 diff --git a/src/ocrmypdf/_exec/unpaper.py b/src/ocrmypdf/_exec/unpaper.py
-index d1165c46..7c732b15 100644
+index a5a92f4c..6cf56eb3 100644
 --- a/src/ocrmypdf/_exec/unpaper.py
 +++ b/src/ocrmypdf/_exec/unpaper.py
 @@ -48,7 +48,7 @@ class UnpaperImageTooLargeError(Exception):
  
  
  def version() -> Version:
--    return Version(get_version('unpaper'))
-+    return Version(get_version('@unpaper@'))
+-    return Version(get_version('unpaper', regex=r'(?m).*?(\d+(\.\d+)(\.\d+)?)'))
++    return Version(get_version('@unpaper@', regex=r'(?m).*?(\d+(\.\d+)(\.\d+)?)'))
  
  
  @contextmanager

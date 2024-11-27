@@ -1,12 +1,12 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
 }:
 let
-  version = "2.12.0";
+  version = "2.12.2";
 in
-buildGo123Module {
+buildGoModule {
   pname = "wakapi";
   inherit version;
 
@@ -14,10 +14,10 @@ buildGo123Module {
     owner = "muety";
     repo = "wakapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-/aacT/VLA5S4PeGcxEGaCpgAw++b3VFD7T0CldZWcQI=";
+    hash = "sha256-6wlFgIof4uzQ3phd7paHZ6Sezp0Dfj8qFzsudFKfNdU=";
   };
 
-  vendorHash = "sha256-Q56Ud0MtkstB/dhn+QyAHTzIqHsmKvHEK+5PAt5lIMM=";
+  vendorHash = "sha256-q5o88fwc1S14ZwGyDS9aFtJMfPZ4pmMjffmeXODhajg=";
 
   # Not a go module required by the project, contains development utilities
   excludedPackages = [ "scripts" ];

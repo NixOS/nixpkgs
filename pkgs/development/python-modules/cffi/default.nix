@@ -19,12 +19,12 @@ if isPyPy then
 else
   buildPythonPackage rec {
     pname = "cffi";
-    version = "1.17.0";
+    version = "1.17.1";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-8xV2JLdVi5FMsDn9Gvc15egEmofIF8whUQmtHId533Y=";
+      hash = "sha256-HDnGAWwyvEjdVFYZUOvWg24WcPKuRhKPZ89J54nFKCQ=";
     };
 
     patches =

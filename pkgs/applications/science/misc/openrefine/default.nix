@@ -10,12 +10,12 @@
 }:
 
 let
-  version = "3.8.2";
+  version = "3.8.5";
   src = fetchFromGitHub {
     owner = "openrefine";
     repo = "openrefine";
     rev = version;
-    hash = "sha256-3KCO9ooYN8PPVirU2wh7wu4feHqugc3JSXWR2aWIanE=";
+    hash = "sha256-8QAnZCvSUMuRj/Rd85j79GXDQxl8HlEaiU4StsXDdpU=";
   };
 
   npmPkg = buildNpmPackage {
@@ -53,7 +53,7 @@ in maven.buildMavenPackage {
 
   mvnJdk = jdk;
   mvnParameters = "-pl !packaging";
-  mvnHash = "sha256-AuZp+uq5bmb4gnzKvqXeTmBrsCT6qmJOrwtJq9iCkRQ=";
+  mvnHash = "sha256-SrEsJfiZrPy2zZ0Vzl7+d+8XUHGd2DOOs+PHBOZrbIU=";
 
   nativeBuildInputs = [ makeWrapper ];
 

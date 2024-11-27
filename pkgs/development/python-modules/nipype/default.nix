@@ -29,7 +29,6 @@
   simplejson,
   traits,
   xvfbwrapper,
-  codecov,
   # other dependencies
   which,
   bash,
@@ -55,7 +54,6 @@ buildPythonPackage rec {
     substituteInPlace nipype/interfaces/base/tests/test_core.py \
       --replace "/usr/bin/env bash" "${bash}/bin/bash"
   '';
-
 
   pythonRelaxDeps = [ "traits" ];
 
@@ -83,7 +81,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pybids
-    codecov
     glibcLocales
     mock
     pytest

@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , autoreconfHook
-# doc: https://github.com/ivmai/bdwgc/blob/v8.2.6/doc/README.macros (LARGE_CONFIG)
+# doc: https://github.com/ivmai/bdwgc/blob/v8.2.8/doc/README.macros (LARGE_CONFIG)
 , enableLargeConfig ? false
 , enableMmap ? true
 , enableStatic ? false
@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "boehm-gc";
-  version = "8.2.6";
+  version = "8.2.8";
 
   src = fetchFromGitHub {
     owner = "ivmai";
     repo = "bdwgc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-y6hU5qU4qO9VvQvKNH9dvReCrf3+Ih2HHbF6IS1V3WQ=";
+    hash = "sha256-UQSLK/05uPal6/m+HMz0QwXVII1leonlmtSZsXjJ+/c=";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   # not fix the problem the test failure will be a reminder to
   # extend the set of versions requiring the workaround).
   makeFlags = lib.optionals (stdenv.hostPlatform.isPower64 &&
-                  finalAttrs.version == "8.2.6")
+                  finalAttrs.version == "8.2.8")
     [
       # do not use /proc primitives to track dirty bits; see:
       # https://github.com/ivmai/bdwgc/issues/479#issuecomment-1279687537
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/ivmai/bdwgc/blob/v${finalAttrs.version}/ChangeLog";
     license = "https://hboehm.info/gc/license.txt"; # non-copyleft, X11-style license
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 })

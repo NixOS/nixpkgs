@@ -42,14 +42,14 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2024.9.0";
+  version = "2024.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IX9c1EhQfFF2Gsn8atxngJ4gpgrwX5SnolUQ3nphhUY=";
+    hash = "sha256-QE+la7CB2xrbbIOUL/HtKRHUOGu19IyfDvjL6oucn7g=";
   };
 
   build-system = [

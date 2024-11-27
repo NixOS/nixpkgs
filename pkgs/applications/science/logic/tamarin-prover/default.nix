@@ -1,20 +1,15 @@
-{ haskellPackages, mkDerivation, fetchFromGitHub, applyPatches, lib, stdenv
+{ haskellPackages, mkDerivation, fetchFromGitHub, lib, stdenv
 # the following are non-haskell dependencies
 , makeWrapper, which, maude, graphviz, glibcLocales
 }:
 
 let
-  version = "1.8.0";
-  src = applyPatches {
-      src = fetchFromGitHub {
-      owner  = "tamarin-prover";
-      repo   = "tamarin-prover";
-      rev    = version;
-      sha256 = "sha256-ujnaUdbjqajmkphOS4Fs4QBCRGX4JZkQ2p1X2jripww=";
-    };
-    patches = [
-      ./tamarin-prover-1.8.0-ghc-9.6.patch
-    ];
+  version = "1.10.0";
+  src = fetchFromGitHub {
+    owner = "tamarin-prover";
+    repo  = "tamarin-prover";
+    rev   = version;
+    hash  = "sha256-v1BruU2p/Sg/g7b9a+QRza46bD7PkMtsGq82qFaNhpI=";
   };
 
 
@@ -41,7 +36,7 @@ let
     postPatch = replaceSymlinks;
     libraryHaskellDepends = with haskellPackages; [
       base64-bytestring blaze-builder list-t
-      dlist exceptions fclabels safe SHA syb
+      dlist exceptions fclabels haskellPackages.graphviz safe SHA split syb
     ];
   });
 
@@ -84,9 +79,7 @@ let
   tamarin-prover-export = mkDerivation (common "tamarin-prover-export" (src + "/lib/export") // {
     postPatch = "cp --remove-destination ${src}/LICENSE .";
     doHaddock = false; # broken
-    libraryHaskellDepends = (with haskellPackages; [
-      HStringTemplate
-    ]) ++ [
+    libraryHaskellDepends = [
       tamarin-prover-utils
       tamarin-prover-term
       tamarin-prover-theory
@@ -125,7 +118,7 @@ mkDerivation (common "tamarin-prover" src // {
 
   executableHaskellDepends = (with haskellPackages; [
     binary-instances binary-orphans blaze-html conduit file-embed
-    gitrev http-types lifted-base monad-control
+    gitrev http-types
     resourcet shakespeare threads wai warp yesod-core yesod-static
   ]) ++ [ tamarin-prover-utils
           tamarin-prover-sapic

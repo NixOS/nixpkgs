@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "junos-czerwonk-exporter";
-  version = "0.12.4";
+  version = "0.12.5";
 
   src = fetchFromGitHub {
     owner = "czerwonk";
     repo = "junos_exporter";
     rev = version;
-    sha256 = "sha256-L6D2gJ6Vt80J6ERJE9I483L9c2mufHzuAbStODaiOy4=";
+    sha256 = "sha256-iNUNZnSaBXGr8QFjHxW4/9Msuqerq8FcSQ74I2l8h7o=";
   };
 
   vendorHash = "sha256-qHs6KuBmJmmkmR23Ae7COadb2F7N8CMUmScx8JFt98Q=";

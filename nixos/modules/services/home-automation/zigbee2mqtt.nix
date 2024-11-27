@@ -10,8 +10,7 @@ in
   meta.maintainers = with lib.maintainers; [ sweber hexa ];
 
   imports = [
-    # Remove warning before the 21.11 release
-    (lib.mkRenamedOptionModule [ "services" "zigbee2mqtt" "config" ] [ "services" "zigbee2mqtt" "settings" ])
+    (lib.mkRemovedOptionModule [ "services" "zigbee2mqtt" "config" ] "The option services.zigbee2mqtt.config was renamed to services.zigbee2mqtt.settings.")
   ];
 
   options.services.zigbee2mqtt = {
@@ -76,9 +75,7 @@ in
 
         # Hardening
         CapabilityBoundingSet = "";
-        DeviceAllow = [
-          config.services.zigbee2mqtt.settings.serial.port
-        ];
+        DeviceAllow = lib.optionals (lib.hasPrefix "/" cfg.settings.serial.port) [ cfg.settings.serial.port ];
         DevicePolicy = "closed";
         LockPersonality = true;
         MemoryDenyWriteExecute = false;

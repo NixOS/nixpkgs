@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "reflex-chakra";
-  version = "0.6.0";
+  version = "0.6.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex-chakra";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5Lins7cbZWQTbJFBwR9qUdgTPHifPxD3BrvaawIKCJE=";
+    hash = "sha256-VMFCaJh7HA/bsOV1ONuPJCzhzpQrcppOnPIcIIpeaSs=";
   };
 
   pythonRemoveDeps = [

@@ -6,7 +6,8 @@
 }:
 
 buildFHSEnv {
-  name = "heroic";
+  pname = "heroic";
+  inherit (heroic-unwrapped) version;
 
   runScript = "heroic";
 
@@ -44,6 +45,7 @@ buildFHSEnv {
     let
       xorgDeps =
         pkgs: with pkgs.xorg; [
+          libICE
           libpthreadstubs
           libSM
           libX11
@@ -53,11 +55,15 @@ buildFHSEnv {
           libXcursor
           libXdmcp
           libXext
+          libXfixes
           libXi
           libXinerama
           libXmu
           libXrandr
           libXrender
+          libXScrnSaver
+          libXt
+          libXtst
           libXv
           libXxf86vm
         ];
@@ -135,7 +141,6 @@ buildFHSEnv {
       udev
       unixODBC
       util-linux
-      v4l-utils
       vulkan-loader
       wayland
       zlib

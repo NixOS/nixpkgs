@@ -2,8 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  glibmm,
   gtk4-layer-shell,
   gtkmm4,
+  libevdev,
   nix-update-script,
   pkg-config,
   wireplumber,
@@ -12,18 +14,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "syshud";
-  version = "0-unstable-2024-08-27";
+  version = "0-unstable-2024-11-12";
 
   src = fetchFromGitHub {
     owner = "System64fumo";
     repo = "syshud";
-    rev = "aa2c153f6aa15962c6b97a77dbe8c45708155fe0";
-    hash = "sha256-SBpufr37K6LC4yc9ircUEBrzuRCKmJzD3C17N34qNGk=";
+    rev = "734d632ca0665a288d1308f883d974462fa2d349";
+    hash = "sha256-Rk0q/veBEJh8BHZZoFcGZ+Beh8mWGGi2OiuGlM0NEgs=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace-fail 'pkg-config' ''${PKG_CONFIG}
+      --replace-fail pkg-config ''${PKG_CONFIG}
+    substituteInPlace src/main.cpp \
+      --replace-fail /usr/share/sys64/hud/config.conf $out/share/sys64/hud/config.conf
+    substituteInPlace src/window.cpp \
+      --replace-fail /usr/share/sys64/hud/style.css $out/share/sys64/hud/style.css
   '';
 
   nativeBuildInputs = [
@@ -32,8 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    glibmm
     gtk4-layer-shell
     gtkmm4
+    libevdev
     wireplumber
   ];
 

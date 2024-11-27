@@ -13,13 +13,13 @@
 , extraPkgs ? [ ]
 }:
 let
-  version = "8.3.7";
+  version = "8.3.18";
 
   cbangSrc = fetchFromGitHub {
     owner = "cauldrondevelopmentllc";
     repo = "cbang";
     rev = "bastet-v${version}";
-    sha256 = "sha256-acAImItdkgo6PBFL6Vu/caIdcnvp/3VEW2lgVDgKy9g=";
+    sha256 = "sha256-BQNomjz6Bhod3FOC5iICwt1rPrZgIxGQ08yspSvAnJc=";
   };
 
   fah-client = stdenv.mkDerivation {
@@ -30,7 +30,7 @@ let
       owner = "FoldingAtHome";
       repo = "fah-client-bastet";
       rev = "v${version}";
-      sha256 = "sha256-d+LY/R4TAko+2e2W76KEBQ8fXj0hzzmBOm+c4tksXMA=";
+      sha256 = "sha256-lqpC1fAMFb8iX02daVre/pE0c7DkwswlFigJS3ZGEjM=";
     };
 
     nativeBuildInputs = [ scons re2 libevent git ];

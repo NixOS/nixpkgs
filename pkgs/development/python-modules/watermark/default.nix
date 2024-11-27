@@ -31,13 +31,13 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     gpu = [ py3nvml ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "watermark" ];
 

@@ -6,14 +6,14 @@ let
     aarch64-linux = "arm64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash = {
-    amd64-linux_hash = "sha256-gx8tDGb2yjwexChZGJ9RdVbgseDByFeW2ZR1RebjlO4=";
-    arm64-linux_hash = "sha256-/qv931J4ufKpAtj7KEqrN6klZ59ueHpbWJXsndBuD90=";
+    amd64-linux_hash = "sha256-Ey2FhekQVSYB0ki4U3HyuKs/URgtZMCl41jkPsZMNrQ=";
+    arm64-linux_hash = "sha256-oiimMFwwkBOwqlCSFoGQSYHsDpcjTQingyuBkYz8fvA=";
   }."${arch}-linux_hash";
 in
 mkFranzDerivation rec {
   pname = "ferdium";
   name = "Ferdium";
-  version = "6.7.6";
+  version = "7.0.0";
   src = fetchurl {
     url = "https://github.com/ferdium/ferdium-app/releases/download/v${version}/Ferdium-linux-${version}-${arch}.deb";
     inherit hash;

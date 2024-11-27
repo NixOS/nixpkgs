@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "latexminted";
-  version = "0.1.0";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-h7M45e8DDfpZix4Ej6fqSMQIP0zEUvCXfthJLzpIY18=";
+    hash = "sha256-bxv7dKSnlJ5njvCgAKjRVJeoE2BluP1nx9QFZ/2JYeg=";
   };
 
   build-system = with python3Packages; [

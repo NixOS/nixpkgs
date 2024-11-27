@@ -40,7 +40,7 @@ buildPythonPackage rec {
     typeguard
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ws = [ websockets ];
   };
 

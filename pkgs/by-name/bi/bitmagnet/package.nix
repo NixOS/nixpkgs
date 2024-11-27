@@ -1,10 +1,10 @@
 { lib
-, buildGoModule
+, buildGo122Module  # builds, but does not start on 1.23
 , fetchFromGitHub
 , nix-update-script
 }:
 
-buildGoModule rec {
+buildGo122Module rec {
   pname = "bitmagnet";
   version = "0.9.5";
 

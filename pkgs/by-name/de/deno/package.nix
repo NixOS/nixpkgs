@@ -7,22 +7,28 @@
   cmake,
   protobuf,
   installShellFiles,
-  libiconv,
-  darwin,
-  librusty_v8 ? callPackage ./librusty_v8.nix { },
+  apple-sdk_11,
+  darwinMinVersionHook,
+  librusty_v8 ? callPackage ./librusty_v8.nix {
+    inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
+  },
 }:
+
+let
+  canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.46.3";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AM6SjcIHo6Koxcnznhkv3cXoKaMy2TEVpiWe/bczDuA=";
+    hash = "sha256-wa8TozLP5j6RgCZUe3i9wk2+ndA3pnqNM+wjzjVXAJY=";
   };
 
-  cargoHash = "sha256-D+CZpb6OTzM5Il0k8GQB7qSONy4myE5yKlaSkLLqHT8=";
+  cargoHash = "sha256-kolDehDolJVX6iFWEIKbrXwTUpvjpHxwI9TmiyXSsWU=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -39,29 +45,20 @@ rustPlatform.buildRustPackage rec {
     protobuf
     installShellFiles
   ];
-  buildInputs = lib.optionals stdenv.isDarwin (
-    [
-      libiconv
-      darwin.libobjc
-    ]
-    ++ (with darwin.apple_sdk_11_0.frameworks; [
-      Security
-      CoreServices
-      Metal
-      MetalPerformanceShaders
-      Foundation
-      QuartzCore
-    ])
-  );
 
-  # work around "error: unknown warning group '-Wunused-but-set-parameter'"
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_11
+    # V8 supports 10.15+; binary references `aligned_alloc` directly
+    (darwinMinVersionHook "10.15")
+  ];
 
   buildAndTestSubdir = "cli";
 
+  # work around "error: unknown warning group '-Wunused-but-set-parameter'"
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
-  RUSTY_V8_ARCHIVE = librusty_v8;
+  env.RUSTY_V8_ARCHIVE = librusty_v8;
 
   # Tests have some inconsistencies between runs with output integration tests
   # Skipping until resolved
@@ -71,15 +68,15 @@ rustPlatform.buildRustPackage rec {
     find ./target -name libswc_common${stdenv.hostPlatform.extensions.sharedLibrary} -delete
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = lib.optionalString (canExecute) ''
     installShellCompletion --cmd deno \
       --bash <($out/bin/deno completions bash) \
       --fish <($out/bin/deno completions fish) \
       --zsh <($out/bin/deno completions zsh)
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
+  doInstallCheck = canExecute;
+  installCheckPhase = lib.optionalString (canExecute) ''
     runHook preInstallCheck
     $out/bin/deno --help
     $out/bin/deno --version | grep "deno ${version}"
@@ -111,8 +108,5 @@ rustPlatform.buildRustPackage rec {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    # NOTE: `aligned_alloc` error on darwin SDK < 10.15. Can't do usual overrideSDK with rust toolchain in current implementation.
-    # Should be fixed with darwin SDK refactor and can be revisited.
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

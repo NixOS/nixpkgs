@@ -1,6 +1,6 @@
 { callPackage,
   lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
-  automake, autoconf, libiconv, libtool, intltool, gettext, python3, perl,
+  automake, autoconf, libiconv, libtool, intltool, gettext, gzip, python3, perl,
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm, netbsd,
   ncompress, updateAutotoolsGnuConfigScriptsHook,
@@ -169,10 +169,11 @@ self: super:
   });
 
   libAppleWM = super.libAppleWM.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ ApplicationServices ];
-    preConfigure = ''
-      substituteInPlace src/Makefile.in --replace -F/System -F${ApplicationServices}
-    '';
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook ];
+    buildInputs =  attrs.buildInputs ++ [ xorg.utilmacros ];
+    meta = attrs.meta // {
+      platforms = lib.platforms.darwin;
+    };
   });
 
   libXau = super.libXau.overrideAttrs (attrs: {
@@ -397,6 +398,8 @@ self: super:
     outputs = [ "bin" "dev" "out" ]; # tiny man in $bin
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
     XPM_PATH_COMPRESS = lib.makeBinPath [ ncompress ];
+    XPM_PATH_GZIP = lib.makeBinPath [ gzip ];
+    XPM_PATH_UNCOMPRESS = lib.makeBinPath [ gzip ];
     meta = attrs.meta // { mainProgram = "sxpm"; };
   });
 
@@ -1121,6 +1124,15 @@ self: super:
   xsetroot = addMainProgram super.xsetroot { };
   xsm = addMainProgram super.xsm { };
   xstdcmap = addMainProgram super.xstdcmap { };
+  xtrans = super.xtrans.overrideAttrs (attrs: {
+    patches = [
+      # https://gitlab.freedesktop.org/xorg/lib/libxtrans/-/merge_requests/22
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/xorg/lib/libxtrans/-/commit/ae99ac32f61e0db92a45179579030a23fe1b5770.patch";
+        hash = "sha256-QnTTcZPd9QaHS5up4Ne7iuNL/OBu+DnzXprovWnW4cw=";
+      })
+    ];
+  });
   xwd = addMainProgram super.xwd { };
   xwininfo = addMainProgram super.xwininfo { };
   xwud = addMainProgram super.xwud { };

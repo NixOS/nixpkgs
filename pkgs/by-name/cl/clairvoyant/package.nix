@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clairvoyant";
-  version = "3.1.7";
+  version = "3.1.8";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "clairvoyant";
     rev = finalAttrs.version;
-    hash = "sha256-p9Lgs5z5oRuMQYRKzWp+aQDi0FnxvbQGLZpBigolHUw=";
+    hash = "sha256-SksJ0hOt2CJwrQj4dz63D53GM/PYx7Q/g+OgCo76dIE=";
   };
 
   nativeBuildInputs = [

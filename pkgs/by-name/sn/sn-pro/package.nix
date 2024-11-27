@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "sn-pro";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "supernotes";
     repo = "sn-pro";
     rev = version;
-    hash = "sha256-7GrCEYgP6kfdlAWjNddmkwJrB/s1mFmugMGPPOM34JA=";
+    hash = "sha256-J2rIBerbkHsuAKi8lRO3D7strL+n2IZlayijz7s6l+k=";
   };
 
   installPhase = ''

@@ -7,11 +7,27 @@
   strip-nondeterminism,
   zip,
   nugetPackageHook,
+  baseName ? "dotnet",
   fallbackTargetPackages ? { },
 }:
 
 let
-  mkCommon = callPackage ./common.nix { };
+  mkWrapper = callPackage ./wrapper.nix { };
+  mkCommon =
+    type: args:
+    mkWrapper type (
+      stdenvNoCC.mkDerivation (
+        args
+        // {
+          outputs = args.outputs or [ "out" ] ++ [ "man" ];
+          postFixup =
+            args.postFixup or ""
+            + ''
+              ln -s ${vmr.man} $man
+            '';
+        }
+      )
+    );
   inherit (vmr) targetRid releaseManifest;
 
   # TODO: do this properly
@@ -75,7 +91,8 @@ let
       (mkPackage "Microsoft.NETCore.DotNetHost" runtime.version)
       (mkPackage "Microsoft.NETCore.DotNetHostPolicy" runtime.version)
       (mkPackage "Microsoft.NETCore.DotNetHostResolver" runtime.version)
-    ];
+    ]
+    ++ targetPackages.${targetRid};
 
   targetPackages = fallbackTargetPackages // {
     ${targetRid} =
@@ -93,7 +110,7 @@ let
   };
 
   sdk = mkCommon "sdk" rec {
-    pname = "dotnet-sdk";
+    pname = "${baseName}-sdk";
     version = releaseManifest.sdkVersion;
 
     src = vmr;
@@ -113,10 +130,11 @@ let
     installPhase = ''
       runHook preInstall
 
-      cp -r "$src"/dotnet-sdk-${version}-${targetRid} "$out"
-      chmod +w "$out"
+      mkdir -p "$out"/share
+      cp -r "$src"/dotnet-sdk-${version}-${targetRid} "$out"/share/dotnet
+      chmod +w "$out"/share/dotnet
       mkdir "$out"/bin
-      ln -s "$out"/dotnet "$out"/bin/dotnet
+      ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
 
       mkdir -p "$artifacts"
       cp -r "$src"/Private.SourceBuilt.Artifacts.*.${targetRid}/* "$artifacts"/
@@ -138,7 +156,12 @@ let
     passthru = {
       inherit (vmr) icu targetRid hasILCompiler;
 
-      inherit packages targetPackages;
+      inherit
+        packages
+        targetPackages
+        runtime
+        aspnetcore
+        ;
     };
 
     meta = vmr.meta // {
@@ -147,21 +170,20 @@ let
   };
 
   runtime = mkCommon "runtime" rec {
-    pname = "dotnet-runtime";
+    pname = "${baseName}-runtime";
     version = releaseManifest.runtimeVersion;
 
     src = vmr;
     dontUnpack = true;
 
-    outputs = [ "out" ];
-
     installPhase = ''
       runHook preInstall
 
-      cp -r "$src/dotnet-runtime-${version}-${targetRid}" "$out"
-      chmod +w "$out"
+      mkdir -p "$out"/share
+      cp -r "$src/dotnet-runtime-${version}-${targetRid}" "$out"/share/dotnet
+      chmod +w "$out"/share/dotnet
       mkdir "$out"/bin
-      ln -s "$out"/dotnet "$out"/bin/dotnet
+      ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
 
       runHook postInstall
     '';
@@ -172,24 +194,23 @@ let
   };
 
   aspnetcore = mkCommon "aspnetcore" rec {
-    pname = "dotnet-aspnetcore-runtime";
+    pname = "${baseName}-aspnetcore-runtime";
     version = releaseManifest.aspNetCoreVersion or releaseManifest.runtimeVersion;
 
     src = vmr;
     dontUnpack = true;
 
-    outputs = [ "out" ];
-
     installPhase = ''
       runHook preInstall
 
-      cp -r "$src/dotnet-runtime-${releaseManifest.runtimeVersion}-${targetRid}" "$out"
-      chmod +w "$out"
+      mkdir -p "$out"/share
+      cp -r "$src/dotnet-runtime-${runtime.version}-${targetRid}" "$out"/share/dotnet
+      chmod +w "$out"/share/dotnet/shared
       mkdir "$out"/bin
-      ln -s "$out"/dotnet "$out"/bin/dotnet
+      ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
 
-      chmod +w "$out"/shared
-      cp -Tr "$src/aspnetcore-runtime-${version}-${targetRid}" "$out"
+      cp -Tr "$src/aspnetcore-runtime-${version}-${targetRid}" "$out"/share/dotnet
+      chmod +w "$out"/share/dotnet/shared
 
       runHook postInstall
     '';

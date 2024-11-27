@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ggshield";
-  version = "1.32.0";
+  version = "1.33.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yqR5kgXhR4YUih46RuSlOmD2CgdN40QpUho6WTha60U=";
+    hash = "sha256-qvvCBJ56wC56p6tOCb5hh+J7Y/Hec/YgDKNmDbbWNig=";
   };
 
   pythonRelaxDeps = true;

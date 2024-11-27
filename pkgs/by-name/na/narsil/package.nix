@@ -14,16 +14,16 @@
 }:
 stdenv.mkDerivation rec {
   pname = "narsil";
-  version = "1.3.0-187-g96d6b3bbd";
+  version = "1.3.0-350-ga51756908";
 
   src = fetchFromGitHub {
     owner = "NickMcConnell";
     repo = "NarSil";
     rev = version;
-    hash = "sha256-vrYkA/kYQRXMcULVIZ9EaQOI0L4aQWVVp1M38Net0Fc=";
+    hash = "sha256-kpfgM+FpvSZLrgu6Smbjlr8QfI400+85wqUR+l0AJkA=";
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=main" ]; };
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs =

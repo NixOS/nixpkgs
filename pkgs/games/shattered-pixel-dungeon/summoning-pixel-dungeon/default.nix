@@ -1,6 +1,6 @@
 { callPackage
 , fetchFromGitHub
-, gradle_6
+, fetchpatch
 , substitute
 }:
 
@@ -16,10 +16,26 @@ callPackage ../generic.nix rec {
     hash = "sha256-VQcWkbGe/0qyt3M5WWgTxczwC5mE3lRHbYidOwRoukI=";
   };
 
-  patches = [(substitute {
-    src = ./disable-git-version.patch;
-    substitutions = [ "--subst-var-by" "version" version ];
-  })];
+  patches = [
+    (substitute {
+      src = ./disable-git-version.patch;
+      substitutions = [ "--subst-var-by" "version" version ];
+    })
+    # FIXME: Remove after next release
+    (fetchpatch {
+      name = "Update-desktop-build-script-for-Gradle-7.0+";
+      url = "https://github.com/TrashboxBobylev/Summoning-Pixel-Dungeon/commit/5610142126e161cbdc78a07c5d5abfbcd6eaf8a6.patch";
+      hash = "sha256-zAiOz/Cu89Y+VmAyLCf7fzq0Mr0sYFZu14sqBZ/XvZU=";
+    })
+  ];
+
+  postPatch = ''
+    # Upstream patched this in https://github.com/TrashboxBobylev/Summoning-Pixel-Dungeon/commit/c8a6fdd57c49fd91bf65be48679ae6a77578ef9f,
+    # but the patch fails to apply cleanly. Manually replace the deprecated option instead.
+    # FIXME: Remove after next release
+    substituteInPlace gradle.properties \
+      --replace-fail "-XX:MaxPermSize" "-XX:MaxMetaspaceSize"
+  '';
 
   desktopName = "Summoning Pixel Dungeon";
 
@@ -28,7 +44,4 @@ callPackage ../generic.nix rec {
     downloadPage = "https://github.com/TrashboxBobylev/Summoning-Pixel-Dungeon/releases";
     description = "A fork of the Shattered Pixel Dungeon roguelike with added summoning mechanics";
   };
-
-  # Probably due to https://github.com/gradle/gradle/issues/17236
-  gradle = gradle_6;
 }

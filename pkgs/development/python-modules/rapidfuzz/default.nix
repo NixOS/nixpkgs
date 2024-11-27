@@ -7,7 +7,7 @@
   cmake,
   cython,
   ninja,
-  scikit-build,
+  scikit-build-core,
   setuptools,
   numpy,
   hypothesis,
@@ -19,21 +19,20 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.9.7";
+  version = "3.10.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hyjzY9ogroUa4nGSG8HOyr5FxifX9d7Hf8ezKq6zxVk=";
+    hash = "sha256-0L8nkjgWdP/w//M69ZRxYk9If3CIEcnAl9mkJKJ4o1g=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "scikit-build~=0.18.0" "scikit-build" \
       --replace-fail "Cython >=3.0.11, <3.1.0" "Cython"
   '';
 
@@ -41,8 +40,7 @@ buildPythonPackage rec {
     cmake
     cython
     ninja
-    scikit-build
-    setuptools
+    scikit-build-core
   ];
 
   dontUseCmakeConfigure = true;
@@ -60,8 +58,8 @@ buildPythonPackage rec {
       export CMAKE_ARGS="-DCMAKE_CXX_COMPILER_AR=$AR -DCMAKE_CXX_COMPILER_RANLIB=$RANLIB"
     '';
 
-  passthru.optional-dependencies = {
-    full = [ numpy ];
+  optional-dependencies = {
+    all = [ numpy ];
   };
 
   preCheck = ''

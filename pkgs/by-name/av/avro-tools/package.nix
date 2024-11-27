@@ -7,14 +7,14 @@
 }:
 let
   pname = "avro-tools";
-  version = "1.11.3";
+  version = "1.12.0";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "mirror://maven/org/apache/avro/avro-tools/${version}/${pname}-${version}.jar";
-    sha256 = "sha256-dPaV1rZxxE+G/gB7hEDyiMI7ZbzkTpNEtexp/Y6hrPI=";
+    sha256 = "sha256-+OTQ2UWFLcL5HDv4j33LjKvADg/ClbuS6JPlSUXggIU=";
   };
 
   dontUnpack = true;

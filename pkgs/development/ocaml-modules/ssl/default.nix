@@ -25,6 +25,7 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ openssl ];
 
+  __darwinAllowLocalNetworking = true;
   doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ alcotest ];
   preCheck = ''

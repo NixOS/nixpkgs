@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "reptor";
-  version = "0.23";
+  version = "0.24";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "Syslifters";
     repo = "reptor";
     rev = "refs/tags/${version}";
-    hash = "sha256-IZjPdfg6q5uWEpvQE3djekvChcB7HWbbPqAv/0tu6fM=";
+    hash = "sha256-OHS9fkJ9BomZNYgnmIv4AVFfLH40LSdvmZskhzdE9II=";
   };
 
   pythonRelaxDeps = true;
@@ -69,14 +69,14 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ghostwriter = [ gql ] ++ gql.optional-dependencies.aiohttp;
     translate = [ deepl ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME=$(mktemp -d)

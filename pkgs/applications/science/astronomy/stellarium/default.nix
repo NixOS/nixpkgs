@@ -22,17 +22,18 @@
 , nlopt
 , testers
 , xvfb-run
+, gitUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellarium";
-  version = "24.2";
+  version = "24.3";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tqyLwlf8hugixZSsFCZPTtchO3VXk3m/nX1kuDoLOAY=";
+    hash = "sha256-shDp2tCOynMiEuTSx4TEK8V9h3EsMDq+kkZFhldrinM=";
   };
 
   patches = [
@@ -95,16 +96,19 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = ''
-      # Create a temporary home directory because stellarium aborts with an
-      # error if it can't write some configuration files.
-      tmpdir=$(mktemp -d)
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = ''
+        # Create a temporary home directory because stellarium aborts with an
+        # error if it can't write some configuration files.
+        tmpdir=$(mktemp -d)
 
-      # stellarium can't be run in headless mode, therefore we need xvfb-run.
-      HOME="$tmpdir" ${xvfb-run}/bin/xvfb-run stellarium --version
-    '';
+        # stellarium can't be run in headless mode, therefore we need xvfb-run.
+        HOME="$tmpdir" ${lib.getExe xvfb-run} stellarium --version
+      '';
+    };
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta =  {

@@ -205,7 +205,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
         };
         postgresql = {
           enable = true;
-          package = pkgs.postgresql_12;
+          package = pkgs.postgresql_13;
         };
         nginx = {
           enable = true;

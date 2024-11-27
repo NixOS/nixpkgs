@@ -20,6 +20,7 @@
   cloudpickle,
   email-validator,
   dirty-equals,
+  jsonschema,
   pytestCheckHook,
   pytest-mock,
   eval-type-backport,
@@ -28,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.8.2";
+  version = "2.9.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pydantic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9Tbm5Y1wSPa3lTdI8y95csYHua7nKUIYAfxSn+3J5zI=";
+    hash = "sha256-Eb/9k9bNizRyGhjbW/LAE/2R0Ino4DIRDy5ZrQuzJ7o=";
   };
 
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
@@ -61,6 +62,7 @@ buildPythonPackage rec {
     [
       cloudpickle
       dirty-equals
+      jsonschema
       pytest-mock
       pytestCheckHook
       rich

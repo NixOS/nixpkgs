@@ -30,5 +30,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           secretsfile.fail("${pkgs.coturn}/bin/turnutils_uclient -W some-very-secret-string 127.0.0.1 -DgX -e 127.0.0.1 -n 1 -c -y")
           # allowed-peer-ip, should succeed:
           secretsfile.succeed("${pkgs.coturn}/bin/turnutils_uclient -W some-very-secret-string 192.168.1.2 -DgX -e 192.168.1.2 -n 1 -c -y")
+
+      default.log(default.execute("systemd-analyze security coturn.service | grep -v '✓'")[1])
     '';
 })

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "mozart-api";
-  version = "3.4.1.8.8";
+  version = "4.1.1.116.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "mozart_api";
     inherit version;
-    hash = "sha256-Lonv9f7/FSEdisKOuL+T1gKbxpog22DcNZTaK9L84Mc=";
+    hash = "sha256-ioM+l+1ab191OTKXE4Ou8OOPafAqZz9XmxO5c82KH8g=";
   };
 
   build-system = [ poetry-core ];

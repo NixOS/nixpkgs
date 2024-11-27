@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     json = [ ujson ];
     PIL = [ pillow ];
     redis = [ redis ];
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     requests
-  ] ++ passthru.optional-dependencies.watchdog ++ passthru.optional-dependencies.aiohttp;
+  ] ++ optional-dependencies.watchdog ++ optional-dependencies.aiohttp;
 
   pythonImportsCheck = [ "telebot" ];
 

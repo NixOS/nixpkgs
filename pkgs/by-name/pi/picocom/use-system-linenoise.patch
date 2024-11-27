@@ -10,8 +10,8 @@ index 8fca24ee38..33b59b5b96 100644
 -OBJS += linenoise-1.0/linenoise.o
 -linenoise-1.0/linenoise.o : linenoise-1.0/linenoise.c linenoise-1.0/linenoise.h
 +	    -DLINENOISE \
-+	    $(shell pkg-config --cflags linenoise)
-+LDFLAGS += $(shell pkg-config --libs linenoise)
++	    $(shell $(PKG_CONFIG) --cflags linenoise)
++LDFLAGS += $(shell $(PKG_CONFIG) --libs linenoise)
  
  ## Comment this in to enable (force) custom baudrate support
  ## even on systems not enabled by default.

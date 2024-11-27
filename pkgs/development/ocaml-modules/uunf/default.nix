@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uutf, cmdliner
 , cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1"
-, version ? if lib.versionAtLeast ocaml.version "4.14" then "15.1.0" else "15.0.0"
+, version ? if lib.versionAtLeast ocaml.version "4.14" then "16.0.0" else "15.0.0"
 }:
 
 let
@@ -8,7 +8,7 @@ let
   webpage = "https://erratique.ch/software/${pname}";
   hash = {
     "15.0.0" = "sha256-B/prPAwfqS8ZPS3fyDDIzXWRbKofwOCyCfwvh9veuug=";
-    "15.1.0" = "sha256-D8yvb7hVWaYxMqMZ5089/5tWDfvyGXKUOjhfU/4zSeQ=";
+    "16.0.0" = "sha256-iQNkT1av6ONJXn3yWbNbEVV8lKGYOKh/nPU0tkUdX64=";
   }."${version}";
 in
 

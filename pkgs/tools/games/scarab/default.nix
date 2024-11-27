@@ -1,13 +1,12 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, glibc
-, zlib
-, gtk3
-, copyDesktopItems
-, icoutils
-, wrapGAppsHook3
-, makeDesktopItem
+{
+  lib,
+  bc,
+  buildDotnetModule,
+  fetchFromGitHub,
+  copyDesktopItems,
+  icoutils,
+  makeDesktopItem,
+  dotnetCorePackages,
 }:
 
 buildDotnetModule rec {
@@ -21,8 +20,10 @@ buildDotnetModule rec {
     sha256 = "sha256-z1hmMrfeoYyjVEPPjWvUfKUKsOS7UsocSWMYrFY+/kI=";
   };
 
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   nugetDeps = ./deps.nix;
-  projectFile = "Scarab.sln";
+  projectFile = "Scarab/Scarab.csproj";
+  testProjectFile = "Scarab.Tests/Scarab.Tests.csproj";
   executables = [ "Scarab" ];
 
   preConfigureNuGet = ''
@@ -32,20 +33,15 @@ buildDotnetModule rec {
   '';
 
   runtimeDeps = [
-    glibc
-    zlib
-    gtk3
-  ];
-
-  buildInputs = [
-    gtk3
+    bc
   ];
 
   nativeBuildInputs = [
     copyDesktopItems
     icoutils
-    wrapGAppsHook3
   ];
+
+  doCheck = true;
 
   postFixup = ''
     # Icons for the desktop file
@@ -56,28 +52,32 @@ buildDotnetModule rec {
       size=''${sizes[$i]}x''${sizes[$i]}
       install -D omegamaggotprime_''$((i+1))_''${size}x32.png $out/share/icons/hicolor/$size/apps/scarab.png
     done
+
+    wrapProgram "$out/bin/Scarab" --run '. ${./scaling-settings.bash}'
   '';
 
-  desktopItems = [(makeDesktopItem {
-    desktopName = "Scarab";
-    name = "scarab";
-    exec = "Scarab";
-    icon = "scarab";
-    comment = meta.description;
-    type = "Application";
-    categories = [ "Game" ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Scarab";
+      name = "scarab";
+      exec = "Scarab";
+      icon = "scarab";
+      comment = meta.description;
+      type = "Application";
+      categories = [ "Game" ];
+    })
+  ];
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Hollow Knight mod installer and manager";
     homepage = "https://github.com/fifty-six/Scarab";
     downloadPage = "https://github.com/fifty-six/Scarab/releases";
     changelog = "https://github.com/fifty-six/Scarab/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ huantian ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ huantian ];
     mainProgram = "Scarab";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

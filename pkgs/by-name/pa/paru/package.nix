@@ -11,34 +11,22 @@
   stdenv,
 }:
 
-let
-  # only libalpm v14.x.x is supported
-  pacman_6 = pacman.overrideAttrs (previousAttrs: {
-    version = "6.1.0";
-    src = previousAttrs.src.overrideAttrs {
-      outputHash = "sha256-uHBq1A//YSqFATlyqjC5ZgmvPkNKqp7sVew+nbmLH78=";
-    };
-    hardeningDisable = [ "fortify3" ];
-  });
-in
 rustPlatform.buildRustPackage rec {
   pname = "paru";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "Morganamilo";
     repo = "paru";
     rev = "v${version}";
-    hash = "sha256-0+N1WkjHd2DREoS1pImXXvlJ3wXoXEBxFBtupjXqyP8=";
+    hash = "sha256-VFIeDsIuPbWGf+vio5i8qGUBB+spP/7SwYwmQkMjtL8=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "alpm-3.0.4" = "sha256-cfIOCUyb+kDAT3Bn50oKuJzIyMyeFyOPBFQMkAgMocI=";
-      "aur-depends-3.0.0" = "sha256-Z/vCd4g3ic29vC0DXFHTT167xFAXYxzO2YQc0XQOerE=";
-    };
-  };
+  cargoPatches = [
+    ./cargo-lock.patch
+  ];
+
+  cargoHash = "sha256-z8hYZu/3RV99hOTpnv4ExgXymhzuITDcGjJhcHLWcH8=";
 
   nativeBuildInputs = [
     gettext
@@ -50,11 +38,13 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libarchive
     openssl
-    pacman_6
+    pacman
   ];
 
-  # https://aur.archlinux.org/packages/paru#comment-961914
-  buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [ "generate" ];
+  # https://github.com/Morganamilo/paru/issues/1154#issuecomment-2002357898
+  buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [
+    "generate"
+  ];
 
   postBuild = ''
     sh ./scripts/mkmo locale/

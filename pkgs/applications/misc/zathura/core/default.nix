@@ -15,6 +15,9 @@
   gtk,
   girara,
   gettext,
+  gnome,
+  libheif,
+  libjxl,
   libxml2,
   check,
   sqlite,
@@ -25,6 +28,7 @@
   file,
   librsvg,
   gtk-mac-integration,
+  webp-pixbuf-loader,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -94,6 +98,16 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
     ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
+
+  # add support for more image formats
+  env.GDK_PIXBUF_MODULE_FILE = gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+    extraLoaders = [
+      libheif.out
+      libjxl
+      librsvg
+      webp-pixbuf-loader
+    ];
+  };
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

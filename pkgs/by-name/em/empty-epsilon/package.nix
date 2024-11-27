@@ -2,8 +2,8 @@
 
 let
   version = {
-    seriousproton = "2024.06.20";
-    emptyepsilon = "2024.06.20";
+    seriousproton = "2024.08.09";
+    emptyepsilon = "2024.08.09";
     basis-universal = "v1_15_update2";
   };
 
@@ -22,7 +22,7 @@ let
       owner = "daid";
       repo = "SeriousProton";
       rev = "EE-${version.seriousproton}";
-      hash = "sha256-byLk4ukpj+s74+3K+1wzRTXhe4pKkH0pOSYeVs94muc=";
+      hash = "sha256-B7BUe5rtN/eABJwkuSyn+h1lIHuV/tZUNcGXTyaWIr4=";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     owner = "daid";
     repo = "EmptyEpsilon";
     rev = "EE-${version.emptyepsilon}";
-    hash = "sha256-YTZliu1o3LFab43DqmSk/cifxRWZMPxdV4gNoNy8LEk=";
+    hash = "sha256-DxaasUyJa8n0ha8RqAfEnqCVELs5Or0zvIOgcK75TnU=";
   };
 
   nativeBuildInputs = [ cmake ];

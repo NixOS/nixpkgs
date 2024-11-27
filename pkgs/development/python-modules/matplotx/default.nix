@@ -30,7 +30,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       networkx
       pypng
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   # Not sure of the details, but we can avoid it by changing the matplotlib backend during testing.
   env.MPLBACKEND = lib.optionalString stdenv.hostPlatform.isDarwin "Agg";
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.all;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.all;
 
   disabledTestPaths = [
     "tests/test_spy.py" # Requires meshzoo (non-free) and pytest-codeblocks (not packaged)

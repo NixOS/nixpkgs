@@ -5,6 +5,8 @@
   lib,
   stdenvNoCC,
   callPackage,
+  devmode,
+  mkShellNoCC,
   documentation-highlighter,
   nixos-render-docs,
   nixpkgs ? { },
@@ -29,6 +31,7 @@ stdenvNoCC.mkDerivation (
         ../anchor-use.js
         ../anchor.min.js
         ../manpage-urls.json
+        ../redirects.json
       ];
     };
 
@@ -60,6 +63,7 @@ stdenvNoCC.mkDerivation (
 
       nixos-render-docs manual html \
         --manpage-urls ./manpage-urls.json \
+        --redirects ./redirects.json \
         --revision ${nixpkgs.rev or "master"} \
         --stylesheet style.css \
         --stylesheet highlightjs/mono-blue.css \
@@ -95,10 +99,14 @@ stdenvNoCC.mkDerivation (
 
       pythonInterpreterTable = callPackage ./python-interpreter-table.nix { };
 
-      shell = callPackage ../../pkgs/tools/nix/web-devmode.nix {
-        buildArgs = "./.";
-        open = "/share/doc/nixpkgs/manual.html";
-      };
+      shell =
+        let
+          devmode' = devmode.override {
+            buildArgs = "./.";
+            open = "/share/doc/nixpkgs/manual.html";
+          };
+        in
+        mkShellNoCC { packages = [ devmode' ]; };
 
       tests.manpage-urls = callPackage ../tests/manpage-urls.nix { };
     };

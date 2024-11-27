@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "py-madvr2";
-  version = "1.6.32";
+  version = "1.6.33";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iloveicedgreentea";
     repo = "py-madvr";
-    rev = "refs/tags/${version}";
-    hash = "sha256-yD8DNhYG9oauEGKnX8Qnh0oSwG/AZa8FIRtHVq4DyTE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-z+PVLz9eApGJ94I/Jp0MyqNpKQwIemk8j+OyqFmIbgI=";
   };
 
   build-system = [ setuptools ];
@@ -28,11 +28,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # https://github.com/iloveicedgreentea/py-madvr/issues/12
-  doCheck = false;
-
   meta = {
-    changelog = "https://github.com/iloveicedgreentea/py-madvr/releases/tag/${version}";
+    changelog = "https://github.com/iloveicedgreentea/py-madvr/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     description = "Control MadVR Envy over IP";
     homepage = "https://github.com/iloveicedgreentea/py-madvr";
     license = lib.licenses.mit;

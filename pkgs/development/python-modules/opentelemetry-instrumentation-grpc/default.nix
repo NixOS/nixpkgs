@@ -42,7 +42,7 @@ buildPythonPackage {
     wrapt
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     instruments = [ grpcio ];
   };
 

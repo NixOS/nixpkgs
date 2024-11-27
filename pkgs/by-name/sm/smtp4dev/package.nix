@@ -9,12 +9,12 @@
   dotnetCorePackages,
 }:
 let
-  version = "3.3.4";
+  version = "3.6.1";
   src = fetchFromGitHub {
     owner = "rnwood";
     repo = "smtp4dev";
     rev = "refs/tags/${version}";
-    hash = "sha256-ARq5OpFJ4o9KdBXvzOx7QLB8GNfmXWjO0RR4jKP8qRI=";
+    hash = "sha256-T6ci7+xbzpOrNr8hpDCwk5qe01L2Ho5V1oM7Hhd8bgg=";
   };
   npmRoot = "Rnwood.Smtp4dev/ClientApp";
 in
@@ -31,7 +31,7 @@ buildDotnetModule {
 
   npmDeps = fetchNpmDeps {
     src = "${src}/${npmRoot}";
-    hash = "sha256-VBcfRKYe/uPf6urWuLI5TrnX9bgiKiZKo+N4zL7O3SM=";
+    hash = "sha256-/Z6sBxA2ReHlEbz0zJjlpn6IwzHDQiXN5ixEV1/iCJI=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;

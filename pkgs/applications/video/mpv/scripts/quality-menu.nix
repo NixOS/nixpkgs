@@ -8,13 +8,13 @@
 
 buildLua rec {
   pname = "mpv-quality-menu";
-  version = "4.1.1";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "christoph-heinrich";
     repo = "mpv-quality-menu";
     rev = "v${version}";
-    hash = "sha256-yrcTxqpLnOI1Tq3khhflO3wzhyeTPuvKifyH5/P57Ns=";
+    hash = "sha256-uaU4W72P7zhHzxmfr59icCAl1mJ3ycLGzkGcYasHllI=";
   };
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 

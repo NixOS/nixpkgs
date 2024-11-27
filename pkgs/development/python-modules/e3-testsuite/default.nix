@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Generic testsuite framework in Python";
-    changelog = "https://github.com/AdaCore/e3-testsuite/releases/tag/${src.rev}";
+    changelog = "https://github.com/AdaCore/e3-testsuite/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     homepage = "https://github.com/AdaCore/e3-testsuite/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ heijligen ];

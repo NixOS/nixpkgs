@@ -14,7 +14,7 @@ in
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
     {
-      hardware.tuxedo-keyboard.enable = true;
+      hardware.tuxedo-drivers.enable = true;
 
       systemd = {
         services.tailord = {

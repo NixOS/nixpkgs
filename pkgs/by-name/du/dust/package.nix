@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, AppKit, installShellFiles }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, apple-sdk_11, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   # Originally, this package was under the attribute `du-dust`, since `dust` was taken.
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   doCheck = false;
 

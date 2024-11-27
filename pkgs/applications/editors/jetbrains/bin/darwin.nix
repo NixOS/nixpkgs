@@ -19,8 +19,10 @@ let
   loname = lib.toLower productShort;
 in
 stdenvNoCC.mkDerivation {
-  inherit pname meta src version plugins;
+  inherit pname src version plugins;
   passthru.buildNumber = buildNumber;
+  passthru.product = product;
+  meta = meta // { mainProgram = loname; };
   desktopName = product;
   dontFixup = true;
   installPhase = ''

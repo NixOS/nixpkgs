@@ -90,7 +90,6 @@ configure_h = custom_target(
 
 incdirs = include_directories(
     'compat',
-    'include',
     'src/abstraction',
     'src/ld',
     'src/ld/code-sign-blobs',

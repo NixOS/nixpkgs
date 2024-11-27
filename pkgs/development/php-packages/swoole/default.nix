@@ -33,5 +33,6 @@ buildPecl {
     homepage = "https://www.swoole.com";
     license = lib.licenses.asl20;
     maintainers = lib.teams.php.members;
+    broken = lib.versionAtLeast php.version "8.4";
   };
 }

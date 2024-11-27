@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , qttools
 
@@ -61,6 +62,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./darwin.patch
+
+    # https://github.com/keepassxreboot/keepassxc/issues/10391
+    (fetchpatch {
+      url = "https://github.com/keepassxreboot/keepassxc/commit/6a9ed210792ac60d9ed35cc702500e5ebbb95622.patch";
+      hash = "sha256-CyaVMfJ0O+5vgvmwI6rYbf0G7ryKFcLv3p4b/D6Pzw8=";
+    })
   ];
 
   cmakeFlags = [
@@ -146,6 +153,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://keepassxc.org/";
     license = licenses.gpl2Plus;
+    mainProgram = "keepassxc";
     maintainers = with maintainers; [ blankparticle ];
     platforms = platforms.linux ++ platforms.darwin;
   };

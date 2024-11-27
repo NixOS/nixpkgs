@@ -7,23 +7,30 @@ assignees: ''
 
 ---
 
+## Package Information
+
+<!-- Search for the package here: https://search.nixos.org/packages?channel=unstable -->
+
 - Package name:
 - Latest released version:
-<!-- Search your package here: https://search.nixos.org/packages?channel=unstable -->
 - Current version on the unstable channel:
 - Current version on the stable/release channel:
+
+## Checklist
+
 <!--
 Type the name of your package and try to find an open pull request for the package
 If you find an open pull request, you can review it!
 There's a high chance that you'll have the new version right away while helping the community!
 -->
+
 - [ ] Checked the [nixpkgs pull requests](https://github.com/NixOS/nixpkgs/pulls)
 
-**Notify maintainers**
+## Notify maintainers
 
 <!-- If the search.nixos.org result shows no maintainers, tag the person that last updated the package. -->
 
------
+---
 
 Note for maintainers: Please tag this issue in your PR.
 

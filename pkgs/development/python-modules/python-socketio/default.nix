@@ -45,7 +45,7 @@ buildPythonPackage rec {
     python-engineio
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     client = [
       requests
       websocket-client
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     pytestCheckHook
     uvicorn
     simple-websocket
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "socketio" ];
 

@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://jsoftware.com/";
+    changelog = "https://code.jsoftware.com/wiki/System/ReleaseNotes";
     description = "J programming language, an ASCII-based APL successor";
     longDescription = ''
       J is a high-level, general-purpose programming language that is
@@ -79,7 +80,7 @@ stdenv.mkDerivation rec {
       problems that are not already well understood.
     '';
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ raskin synthetica AndersonTorres ];
+    maintainers = with maintainers; [ raskin synthetica ];
     broken = stdenv.hostPlatform.isDarwin;
     platforms = platforms.all;
     mainProgram = "jconsole";

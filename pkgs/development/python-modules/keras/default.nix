@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -19,21 +18,20 @@
   packaging,
   rich,
   tensorflow,
-  tf-keras,
+  pythonAtLeast,
+  distutils,
 }:
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.5.0";
+  version = "3.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hp+kKsKI2Jmh30/KeUZ+uBW0MG49+QgsyR5yCS63p08=";
+    hash = "sha256-zbeGa4g2psAofYAVuM7BNWI2gI21e739N5ZtxVfnVUg=";
   };
 
   build-system = [
@@ -52,8 +50,7 @@ buildPythonPackage rec {
     packaging
     rich
     tensorflow
-    tf-keras
-  ];
+  ] ++ lib.optionals (pythonAtLeast "3.12") [ distutils ];
 
   pythonImportsCheck = [
     "keras"
@@ -68,6 +65,6 @@ buildPythonPackage rec {
     homepage = "https://keras.io";
     changelog = "https://github.com/keras-team/keras/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ NikolaMandic ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

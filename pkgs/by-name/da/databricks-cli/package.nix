@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "databricks-cli";
-  version = "0.228.1";
+  version = "0.234.0";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-zQ39PwVjyxOTo6P+RA4F20/28loMbu3Bprd4C3jgu5A=";
+    hash = "sha256-I1S31a1JvXFXWw4EkS40efKEE9wsQlMdjVxEJDRTzA8=";
   };
 
-  vendorHash = "sha256-SOeVIwMbx1eRzBvyfT3aaJOL7BCb745yezn1QYrf5vU=";
+  vendorHash = "sha256-Zih5NftJMbtLYG0Sej1BaErJ8NnU25mwhl3pfqSOSxc=";
 
   excludedPackages = [ "bundle/internal" ];
 
@@ -29,6 +29,7 @@ buildGoModule rec {
     "-skip="
     + (lib.concatStringsSep "|" [
       # Need network
+      "TestConsistentDatabricksSdkVersion"
       "TestTerraformArchiveChecksums"
       "TestExpandPipelineGlobPaths"
       "TestRelativePathTranslationDefault"

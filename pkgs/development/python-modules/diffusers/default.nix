@@ -40,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "diffusers";
-  version = "0.30.0";
+  version = "0.30.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "diffusers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fry16HDAjpuosSHSDDm/Y5dTNkpsGM6S33hOJ3n2x7M=";
+    hash = "sha256-/3lHJdsNblKb6xX03OluSCApMK3EXJbRLboBk8CjobE=";
   };
 
   build-system = [ setuptools ];
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     safetensors
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     flax = [
       flax
       jax
@@ -102,7 +102,7 @@ buildPythonPackage rec {
     sentencepiece
     torchsde
     transformers
-  ] ++ passthru.optional-dependencies.torch;
+  ] ++ optional-dependencies.torch;
 
   preCheck =
     let

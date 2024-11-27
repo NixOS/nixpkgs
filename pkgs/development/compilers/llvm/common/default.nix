@@ -190,6 +190,21 @@ let
                   path = ../12;
                 }
               ];
+              "compiler-rt/armv6-scudo-libatomic.patch" = [
+                {
+                  after = "19";
+                  path = ../19;
+                }
+                {
+                  after = "15";
+                  before = "19";
+                  path = ../15;
+                }
+                {
+                  before = "15";
+                  path = ../14;
+                }
+              ];
               "compiler-rt/armv7l.patch" = [
                 {
                   before = "15";
@@ -279,6 +294,12 @@ let
                   path = ../14;
                 }
               ];
+              "libclc/use-default-paths.patch" = [
+                {
+                  after = "19";
+                  path = ../19;
+                }
+              ];
             };
 
             constraints = patches."${p}" or null;
@@ -325,13 +346,7 @@ let
   tools = lib.makeExtensible (
     tools:
     let
-      callPackage = newScope (
-        tools
-        // args
-        // metadata
-        # Previously monorepoSrc was erroneously not being passed through.
-        // lib.optionalAttrs (lib.versionOlder metadata.release_version "14") { monorepoSrc = null; } # Preserve a bug during #307211, TODO: remove; causes llvm 13 rebuild.
-      );
+      callPackage = newScope (tools // args // metadata);
       clangVersion =
         if (lib.versionOlder metadata.release_version "16") then
           metadata.release_version
@@ -340,7 +355,7 @@ let
       mkExtraBuildCommands0 = cc: ''
         rsrc="$out/resource-root"
         mkdir "$rsrc"
-        ln -s "${cc.lib}/lib/clang/${clangVersion}/include" "$rsrc"
+        ln -s "${lib.getLib cc}/lib/clang/${clangVersion}/include" "$rsrc"
         echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
       '';
       mkExtraBuildCommandsBasicRt =
@@ -480,16 +495,16 @@ let
             })
           ]
           ++
-            lib.optional (lib.versions.major metadata.release_version == "20")
-              # Fix for vt_gen, remove during next git bump
-              # https://github.com/llvm/llvm-project/pull/109817
-              (
-                fetchpatch {
-                  url = "https://github.com/llvm/llvm-project/commit/cace9869775a185793122f845d81a5ff46f15728.patch";
+            lib.optionals
+              (lib.versionAtLeast metadata.release_version "17" && lib.versionOlder metadata.release_version "19")
+              [
+                # Fixes test-suite on glibc 2.40 (https://github.com/llvm/llvm-project/pull/100804)
+                (fetchpatch2 {
+                  url = "https://github.com/llvm/llvm-project/commit/1e8df9e85a1ff213e5868bd822877695f27504ad.patch";
+                  hash = "sha256-EX+PYGicK73lsL/J0kSZ4S5y1/NHIclBddhsnV6NPPI=";
                   stripLen = 1;
-                  hash = "sha256-lt1iQfNIc3ot1+6J7d7dbqULwT0MyLIwR2EZB7RfPp4=";
-                }
-              );
+                })
+              ];
         pollyPatches =
           [ (metadata.getVersionFile "llvm/gnu-install-dirs-polly.patch") ]
           ++ lib.optional (lib.versionAtLeast metadata.release_version "15")
@@ -514,8 +529,24 @@ let
             # mis-compilation in firefox.
             # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
             (metadata.getVersionFile "clang/revert-malloc-alignment-assumption.patch")
+          # This patch prevents global system header directories from
+          # leaking through on non‐NixOS Linux. However, on macOS, the
+          # SDK path is used as the sysroot, and forcing `-nostdlibinc`
+          # breaks `-isysroot` with an unwrapped compiler. As macOS has
+          # no `/usr/include`, there’s essentially no risk to skipping
+          # the patch there. It’s possible that Homebrew headers in
+          # `/usr/local/include` might leak through to unwrapped
+          # compilers being used without an SDK set or something, but
+          # it hopefully shouldn’t matter.
+          #
+          # TODO: Figure out a better solution to this whole problem so
+          # that we won’t have to choose between breaking unwrapped
+          # compilers breaking libclang when we can do Linux‐to‐Darwin
+          # cross‐compilation again.
+          ++ lib.optional (
+            !args.stdenv.hostPlatform.isDarwin || !args.stdenv.targetPlatform.isDarwin
+          ) ./clang/add-nostdlibinc-flag.patch
           ++ [
-            ./clang/add-nostdlibinc-flag.patch
             (substituteAll {
               src =
                 if (lib.versionOlder metadata.release_version "16") then
@@ -525,6 +556,29 @@ let
               libllvmLibdir = "${tools.libllvm.lib}/lib";
             })
           ]
+          # Backport version logic from Clang 16. This is needed by the following patch.
+          ++ lib.optional (lib.versions.major metadata.release_version == "15") (fetchpatch {
+            name = "clang-darwin-Use-consistent-version-define-stringifying-logic.patch";
+            url = "https://github.com/llvm/llvm-project/commit/60a33ded751c86fff9ac1c4bdd2b341fbe4b0649.patch?full_index=1";
+            includes = [ "lib/Basic/Targets/OSTargets.cpp" ];
+            stripLen = 1;
+            hash = "sha256-YVTSg5eZLz3po2AUczPNXCK26JA3CuTh6Iqp7hAAKIs=";
+          })
+          # Backport `__ENVIRONMENT_OS_VERSION_MIN_REQUIRED__` support from Clang 17.
+          # This is needed by newer SDKs (14+).
+          ++
+            lib.optional
+              (
+                lib.versionAtLeast (lib.versions.major metadata.release_version) "15"
+                && lib.versionOlder (lib.versions.major metadata.release_version) "17"
+              )
+              (fetchpatch {
+                name = "clang-darwin-An-OS-version-preprocessor-define.patch";
+                url = "https://github.com/llvm/llvm-project/commit/c8e2dd8c6f490b68e41fe663b44535a8a21dfeab.patch?full_index=1";
+                includes = [ "lib/Basic/Targets/OSTargets.cpp" ];
+                stripLen = 1;
+                hash = "sha256-Vs32kql7N6qtLqc12FtZHURcbenA7+N3E/nRRX3jdig=";
+              })
           ++ lib.optional (lib.versions.major metadata.release_version == "18") (fetchpatch {
             name = "tweak-tryCaptureVariable-for-unevaluated-lambdas.patch";
             url = "https://github.com/llvm/llvm-project/commit/3d361b225fe89ce1d8c93639f27d689082bd8dad.patch";
@@ -611,7 +665,7 @@ let
                 { substituteAll, libclang }:
                 (substituteAll {
                   src = metadata.getVersionFile "lldb/resource-dir.patch";
-                  clangLibDir = "${libclang.lib}/lib";
+                  clangLibDir = "${lib.getLib libclang}/lib";
                 }).overrideAttrs
                   (_: _: { name = "resource-dir.patch"; })
               ) { };
@@ -736,12 +790,9 @@ let
               && stdenv.targetPlatform.useLLVM or false
             ) "-lunwind"
             ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
-          nixSupport.cc-ldflags =
-            lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD)
-              (
-                [ "-L${targetLlvmLibraries.libunwind}/lib" ]
-                ++ lib.optional (lib.versionAtLeast metadata.release_version "17") "--undefined-version"
-              );
+          nixSupport.cc-ldflags = lib.optionals (
+            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
+          ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
         }
       );
 
@@ -752,16 +803,20 @@ let
           bintools = bintools';
           extraPackages =
             [ targetLlvmLibraries.compiler-rt-no-libc ]
-            ++ lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [
-              targetLlvmLibraries.libunwind
-            ];
+            ++ lib.optionals
+              (
+                !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
+              )
+              [
+                targetLlvmLibraries.libunwind
+              ];
           extraBuildCommands =
             lib.optionalString (lib.versions.major metadata.release_version == "13") (
               ''
                 echo "-rtlib=compiler-rt -Wno-unused-command-line-argument" >> $out/nix-support/cc-cflags
                 echo "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib" >> $out/nix-support/cc-cflags
               ''
-              + lib.optionalString (!stdenv.targetPlatform.isWasm) ''
+              + lib.optionalString (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isDarwin) ''
                 echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
                 echo "-L${targetLlvmLibraries.libunwind}/lib" >> $out/nix-support/cc-ldflags
               ''
@@ -782,7 +837,7 @@ let
               "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
             ]
             ++ lib.optional (
-              !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
+              !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
             ) "--unwindlib=libunwind"
             ++ lib.optional (
               !stdenv.targetPlatform.isWasm
@@ -791,7 +846,7 @@ let
             ) "-lunwind"
             ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
           nixSupport.cc-ldflags = lib.optionals (
-            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
+            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
           ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
         }
       );
@@ -908,6 +963,10 @@ let
             url = "https://github.com/llvm/llvm-project/commit/abc2eae68290c453e1899a94eccc4ed5ea3b69c1.patch";
             hash = "sha256-oxCxOjhi5BhNBEraWalEwa1rS3Mx9CuQgRVZ2hrbd7M=";
           })
+          (fetchpatch {
+            url = "https://github.com/llvm/llvm-project/commit/5909979869edca359bcbca74042c2939d900680e.patch";
+            hash = "sha256-l4rQHYbblEADBXaZIdqTG0sZzH4fEQvYiqhLYNZDMa8=";
+          })
         ];
       };
     }
@@ -944,10 +1003,10 @@ let
           lib.optional (lib.versionOlder metadata.release_version "18")
             # Prevent a compilation error on darwin
             (metadata.getVersionFile "compiler-rt/darwin-targetconditionals.patch")
-        ++
-          lib.optional (lib.versionAtLeast metadata.release_version "15")
-            # See: https://github.com/NixOS/nixpkgs/pull/186575
-            ./compiler-rt/darwin-plistbuddy-workaround.patch
+        ++ lib.optionals (lib.versionAtLeast metadata.release_version "15") [
+          # See: https://github.com/NixOS/nixpkgs/pull/186575
+          ./compiler-rt/darwin-plistbuddy-workaround.patch
+        ]
         ++
           lib.optional (lib.versions.major metadata.release_version == "15")
             # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
@@ -958,9 +1017,15 @@ let
           # Fix build on armv6l
           ./compiler-rt/armv6-mcr-dmb.patch
           ./compiler-rt/armv6-sync-ops-no-thumb.patch
-          ./compiler-rt/armv6-no-ldrexd-strexd.patch
+        ]
+        ++ lib.optionals (lib.versionOlder metadata.release_version "18") [
+          # Fix build on armv6l
           ./compiler-rt/armv6-scudo-no-yield.patch
-          ./compiler-rt/armv6-scudo-libatomic.patch
+        ]
+        ++ [
+          # Fix build on armv6l
+          ./compiler-rt/armv6-no-ldrexd-strexd.patch
+          (metadata.getVersionFile "compiler-rt/armv6-scudo-libatomic.patch")
         ]
         ++ lib.optional (lib.versionAtLeast metadata.release_version "19") (fetchpatch {
           url = "https://github.com/llvm/llvm-project/pull/99837/commits/14ae0a660a38e1feb151928a14f35ff0f4487351.patch";
@@ -973,14 +1038,11 @@ let
         let
           # temp rename to avoid infinite recursion
           stdenv =
-            if args.stdenv.hostPlatform.useLLVM or false then
+            # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
+            if args.stdenv.hostPlatform.isDarwin then
+              overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
+            else if args.stdenv.hostPlatform.useLLVM or false then
               overrideCC args.stdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
-            else if
-              lib.versionAtLeast metadata.release_version "16"
-              && args.stdenv.hostPlatform.isDarwin
-              && args.stdenv.hostPlatform.isStatic
-            then
-              overrideCC args.stdenv buildLlvmTools.clangNoCompilerRtWithLibc
             else
               args.stdenv;
         in
@@ -999,10 +1061,10 @@ let
         patches = compiler-rtPatches;
         doFakeLibgcc = stdenv.hostPlatform.useLLVM or false;
         stdenv =
-          if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform then
-            stdenv
+          # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
+          if stdenv.hostPlatform.isDarwin then
+            overrideCC darwin.bootstrapStdenv buildLlvmTools.clangNoLibcNoRt
           else
-            # TODO: make this branch unconditional next rebuild
             overrideCC stdenv buildLlvmTools.clangNoLibcNoRt;
       };
 
@@ -1084,7 +1146,11 @@ let
                 )
                 # https://github.com/llvm/llvm-project/issues/64226
                 (metadata.getVersionFile "libcxx/0001-darwin-10.12-mbstate_t-fix.patch");
-          stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
+          stdenv =
+            if stdenv.hostPlatform.isDarwin then
+              overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRt
+            else
+              overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
         }
         // lib.optionalAttrs (lib.versionOlder metadata.release_version "14") {
           # TODO: remove this, causes LLVM 13 packages rebuild.

@@ -23,11 +23,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "xfce4-weather-plugin";
-  version = "0.11.2";
+  version = "0.11.3";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-ZdQK/3hjVQhYqfnStgVPJ8aaPn5xKZF4WYf5pzu6h2s=";
+    sha256 = "sha256-AC0f5jkG0vOgEvPLWMzv8d+8xGZ1njbHbTsD3QHA3Fc=";
   };
 
   nativeBuildInputs = [

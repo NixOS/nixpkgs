@@ -1,5 +1,5 @@
 { lib
-, cargo-tauri
+, cargo-tauri_1
 , cmake
 , dbus
 , fetchgit
@@ -15,7 +15,7 @@
 , openssl
 , pkg-config
 , rustPlatform
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 , sqlite
 }:
@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     cmake
     pkg-config
-    cargo-tauri
+    cargo-tauri_1
     wrapGAppsHook3
   ];
 
@@ -97,7 +97,7 @@ rustPlatform.buildRustPackage {
     freetype
     libsoup
     gtk3
-    webkitgtk
+    webkitgtk_4_0
     gsettings-desktop-schemas
     sqlite
   ];

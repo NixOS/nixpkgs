@@ -7,7 +7,6 @@
   poetry-core,
 
   # dependencies
-  boto3,
   fastavro,
   httpx,
   httpx-sse,
@@ -22,20 +21,19 @@
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "5.10.0";
+  version = "5.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cohere-ai";
     repo = "cohere-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-9d72JWEz2L8yyZQKkdwQMgwQM3nz4yVHnmVCERaa5C8=";
+    hash = "sha256-0Y/zSw2pdrwsYpBctiV/tVf2xPhf3jG7c18frSjBass=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
-    boto3
     fastavro
     httpx
     httpx-sse

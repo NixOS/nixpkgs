@@ -28,8 +28,8 @@
 , withXfs ? false
 , withExt4 ? false
 , withNtfs ? false
-, withGtk3 ? false
-, withQt5 ? false
+, withGtk3 ? defaultGuiType == "gtk3"
+, withQt5 ? defaultGuiType == "qt5"
 , libsForQt5
 }:
 

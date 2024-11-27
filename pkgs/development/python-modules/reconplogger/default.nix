@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       flask
       requests

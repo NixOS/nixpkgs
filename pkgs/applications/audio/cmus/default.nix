@@ -92,13 +92,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "cmus";
-  version = "2.11.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner  = "cmus";
     repo   = "cmus";
     rev    = "v${version}";
-    hash   = "sha256-kUJC+ORLkYD57mPL/1p5VCm9yiNzVdOZhxp7sVP6oMw=";
+    hash   = "sha256-8hgibGtkiwzenMI9YImIApRmw2EzTwE6RhglALpUkp4=";
   };
 
   nativeBuildInputs = [ pkg-config ];

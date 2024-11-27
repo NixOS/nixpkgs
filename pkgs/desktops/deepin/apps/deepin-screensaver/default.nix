@@ -2,13 +2,8 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  qmake,
-  qttools,
   pkg-config,
-  wrapQtAppsHook,
-  qtbase,
-  qtx11extras,
-  qtdeclarative,
+  libsForQt5,
   dtkwidget,
   dde-qt-dbus-factory,
   xorg,
@@ -39,16 +34,16 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    qmake
-    qttools
+    libsForQt5.qmake
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtx11extras
-    qtdeclarative
+    libsForQt5.qtbase
+    libsForQt5.qtx11extras
+    libsForQt5.qtdeclarative
     dtkwidget
     dde-qt-dbus-factory
     xorg.libXScrnSaver

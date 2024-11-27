@@ -5,9 +5,8 @@
 , fetchurl
 , git
 , cctools
-, DarwinTools
+, darwin
 , makeWrapper
-, CoreServices
 , bison
 , openssl
 , protobuf
@@ -34,8 +33,8 @@
 let
   pythonDeps = with python3.pkgs; [ certifi paramiko pyyaml ];
 
-  mysqlShellVersion = "8.4.1";
-  mysqlServerVersion = "8.4.1";
+  mysqlShellVersion = "8.4.3";
+  mysqlServerVersion = "8.4.3";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell";
@@ -44,11 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
   srcs = [
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
-      hash = "sha256-20Hxl9cXDFTX7cDQyaJzDCJfSvBeztD2S+z5u2wRAT4=";
+      hash = "sha256-eslWTEeAIvcwBf+Ju7QPZ7OB/AbVUYQWvf/sdeYluBg=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-wTwoaoaCrTQqaqgE35Sg8zn8HqjsjQowbtgMZTpkYQU=";
+      hash = "sha256-rO+cAfQzUobMrTLGHRbaXsG+vMcjVTtDoZwmyok+dS4=";
     })
   ];
 
@@ -73,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config cmake git bison makeWrapper ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools DarwinTools ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools darwin.DarwinTools ];
 
   buildInputs = [
     curl
@@ -96,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     antlr.runtime.cpp
   ] ++ pythonDeps
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
 
   preConfigure = ''
     # Build MySQL

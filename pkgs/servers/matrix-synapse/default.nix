@@ -17,20 +17,20 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.115.0";
+  version = "1.119.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-R7TAuAdEGvk/cAttxbrOZkZfsfbrsPujt0zVcp3aDZQ=";
+    hash = "sha256-+3FrxSfQteIga5uiRNzAlV+xNESB9PUX/UkkL6UMETQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-h84Hp+vhGfunbD3nRb1EXPnGhnMXncjk3ASKdRr805Y=";
+    hash = "sha256-c/19RaBmtfKkFFQyDBwH+yqHp4YNQSqCu23WYbpOc98=";
   };
 
   postPatch = ''
@@ -96,7 +96,7 @@ python3.pkgs.buildPythonApplication rec {
   ]
   ++ twisted.optional-dependencies.tls;
 
-  passthru.optional-dependencies = with python3.pkgs; {
+  optional-dependencies = with python3.pkgs; {
     postgres = if isPyPy then [
       psycopg2cffi
     ] else [
@@ -138,7 +138,7 @@ python3.pkgs.buildPythonApplication rec {
     mock
     parameterized
   ])
-  ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

@@ -1,41 +1,45 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   buildPythonPackage,
-  rustPlatform,
-  pkg-config,
-  pcsclite,
-  nettle,
+  fetchFromGitHub,
   httpx,
+  libiconv,
+  nettle,
+  PCSC,
+  pcsclite,
+  pkg-config,
   pytestCheckHook,
   pythonOlder,
+  rustPlatform,
   vcrpy,
-  PCSC,
-  libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "johnnycanencrypt";
-  version = "0.14.1";
+  version = "0.15.0";
+  pyproject = true;
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "kushaldas";
     repo = "johnnycanencrypt";
-    rev = "v${version}";
-    hash = "sha256-13zIC+zH/BebMplUfdtiwEEVODS+jTURC1vudbmQPlA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tbHW3x+vwFz0nqFGWvgxjhw8XH6/YKz1uagU339SZyk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-u3qKli76XGS0Ijg15BQzbFlfLPpBPFKh++EZLfnO9ps=";
+    hash = "sha256-vDlMdzZgmaRkviEk8IjIN+Q5x95gnpQiW5c8fT+dats=";
   };
 
-  format = "pyproject";
-
-  propagatedBuildInputs = [ httpx ];
+  build-system = with rustPlatform; [
+    bindgenHook
+    cargoSetupHook
+    maturinBuildHook
+  ];
 
   nativeBuildInputs =
     [ pkg-config ]
@@ -53,6 +57,8 @@ buildPythonPackage rec {
       libiconv
     ];
 
+  dependencies = [ httpx ];
+
   nativeCheckInputs = [
     pytestCheckHook
     vcrpy
@@ -66,9 +72,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "johnnycanencrypt" ];
 
   meta = with lib; {
+    description = "Python module for OpenPGP written in Rust";
     homepage = "https://github.com/kushaldas/johnnycanencrypt";
     changelog = "https://github.com/kushaldas/johnnycanencrypt/blob/v${version}/changelog.md";
-    description = "Python module for OpenPGP written in Rust";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ _0x4A6F ];
   };

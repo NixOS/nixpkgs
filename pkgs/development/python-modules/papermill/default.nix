@@ -57,7 +57,7 @@ buildPythonPackage rec {
     ansicolors
   ] ++ lib.optionals (pythonAtLeast "3.12") [ aiohttp ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     azure = [
       azure-datalake-store
       azure-identity
@@ -69,16 +69,12 @@ buildPythonPackage rec {
     s3 = [ boto3 ];
   };
 
-  nativeCheckInputs =
-    [
-      ipykernel
-      moto
-      pytest-mock
-      pytestCheckHook
-    ]
-    ++ passthru.optional-dependencies.azure
-    ++ passthru.optional-dependencies.s3
-    ++ passthru.optional-dependencies.gcs;
+  nativeCheckInputs = [
+    ipykernel
+    moto
+    pytest-mock
+    pytestCheckHook
+  ] ++ optional-dependencies.azure ++ optional-dependencies.s3 ++ optional-dependencies.gcs;
 
   preCheck = ''
     export HOME=$(mktemp -d)

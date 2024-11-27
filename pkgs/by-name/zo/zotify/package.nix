@@ -38,6 +38,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Fast and customizable music and podcast downloader";
     homepage = "https://github.com/zotify-dev/zotify";
+    changelog = "https://github.com/zotify-dev/zotify/blob/main/CHANGELOG.md";
     license = lib.licenses.zlib;
     mainProgram = "zotify";
     maintainers = with lib.maintainers; [ bwkam ];

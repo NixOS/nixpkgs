@@ -32,7 +32,7 @@
 let
   dyalogHome = "$out/lib/dyalog";
 
-  makeWrapperArgs = lib.optional dotnetSupport "--set DOTNET_ROOT ${dotnet-sdk_8}";
+  makeWrapperArgs = lib.optional dotnetSupport "--set DOTNET_ROOT ${dotnet-sdk_8.unwrapped}/share/dotnet";
 
   licenseUrl = "https://www.dyalog.com/uploads/documents/Developer_Software_Licence.pdf";
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    stdenv.cc.cc.lib # Used by Conga and .NET Bridge
+    (lib.getLib stdenv.cc.cc) # Used by Conga and .NET Bridge
     ncurses5 # Used by the dyalog binary to correctly display in the terminal
   ]
   ++ lib.optionals htmlRendererSupport [

@@ -9,7 +9,6 @@
   pkg-config,
   gtk4,
   glib,
-  gdk-pixbuf,
   desktop-file-utils,
   appstream-glib,
   wrapGAppsHook4,
@@ -23,11 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-tour";
-  version = "46.0";
+  version = "47.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-tour/${lib.versions.major finalAttrs.version}/gnome-tour-${finalAttrs.version}.tar.xz";
-    hash = "sha256-8yZSqp1+8GQ3YM5jkyCCz9NkHnczt2xCm3jQl4O3xGo=";
+    hash = "sha256-cvqvieAGyJMkp+FXIEaRaWGziuujj21tTMQePT1GaUQ=";
   };
 
   cargoVendorDir = "vendor";
@@ -52,7 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gdk-pixbuf
     glib
     gtk4
     libadwaita
@@ -67,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-tour";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-tour/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "GNOME Greeter & Tour";
     mainProgram = "gnome-tour";
     maintainers = teams.gnome.members;

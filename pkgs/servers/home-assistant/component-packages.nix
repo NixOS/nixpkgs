@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.9.3";
+  version = "2024.11.3";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -145,6 +145,7 @@
       asmog
     ];
     "analytics" = ps: with ps; [
+      aiohasupervisor
       fnv-hash-fast
       psutil-home-assistant
       sqlalchemy
@@ -216,6 +217,8 @@
       aprslib
       geopy
     ];
+    "aps" = ps: with ps; [
+    ];
     "apsystems" = ps: with ps; [
       apsystems-ez1
     ];
@@ -271,12 +274,21 @@
       asyncarve
     ];
     "arwn" = ps: with ps; [
+      aiohasupervisor
       paho-mqtt_1
     ];
     "aseko_pool_live" = ps: with ps; [
       aioaseko
     ];
     "assist_pipeline" = ps: with ps; [
+      ha-ffmpeg
+      hassil
+      home-assistant-intents
+      mutagen
+      pymicro-vad
+      pyspeex-noise
+    ];
+    "assist_satellite" = ps: with ps; [
       ha-ffmpeg
       hassil
       home-assistant-intents
@@ -335,11 +347,15 @@
       botocore
     ];
     "axis" = ps: with ps; [
+      aiohasupervisor
       axis
       paho-mqtt_1
     ];
     "azure_data_explorer" = ps: with ps; [
-    ]; # missing inputs: azure-kusto-data azure-kusto-ingest
+      azure-kusto-data
+      azure-kusto-ingest
+    ]
+    ++ azure-kusto-data.optional-dependencies.aio;
     "azure_devops" = ps: with ps; [
       aioazuredevops
     ];
@@ -394,8 +410,6 @@
     ];
     "blockchain" = ps: with ps; [
     ]; # missing inputs: python-blockchain-api
-    "bloomsky" = ps: with ps; [
-    ];
     "blue_current" = ps: with ps; [
       bluecurrent-api
     ];
@@ -584,6 +598,9 @@
     ];
     "calendar" = ps: with ps; [
     ];
+    "cambridge_audio" = ps: with ps; [
+      aiostreammagic
+    ];
     "camera" = ps: with ps; [
       pyturbojpeg
     ];
@@ -592,6 +609,7 @@
       py-canary
     ];
     "cast" = ps: with ps; [
+      aiohasupervisor
       ha-ffmpeg
       hass-nabucasa
       hassil
@@ -625,6 +643,9 @@
     "cisco_mobility_express" = ps: with ps; [
       ciscomobilityexpress
     ];
+    "cisco_webex_teams" = ps: with ps; [
+      webexpythonsdk
+    ];
     "citybikes" = ps: with ps; [
     ];
     "clementine" = ps: with ps; [
@@ -638,6 +659,7 @@
     "climate" = ps: with ps; [
     ];
     "cloud" = ps: with ps; [
+      aiohasupervisor
       ha-ffmpeg
       hass-nabucasa
       hassil
@@ -739,6 +761,11 @@
     ];
     "ddwrt" = ps: with ps; [
     ];
+    "deako" = ps: with ps; [
+      ifaddr
+      pydeako
+      zeroconf
+    ];
     "debugpy" = ps: with ps; [
       debugpy
     ];
@@ -753,6 +780,7 @@
     "default_config" = ps: with ps; [
       aiodhcpwatcher
       aiodiscover
+      aiohasupervisor
       async-upnp-client
       av
       bleak
@@ -763,6 +791,7 @@
       cached-ipaddress
       dbus-fast
       fnv-hash-fast
+      go2rtc-client
       ha-ffmpeg
       habluetooth
       hass-nabucasa
@@ -917,6 +946,7 @@
       dremel3dpy
     ];
     "drop_connect" = ps: with ps; [
+      aiohasupervisor
       dropmqttapi
       paho-mqtt_1
     ];
@@ -924,6 +954,7 @@
       dsmr-parser
     ];
     "dsmr_reader" = ps: with ps; [
+      aiohasupervisor
       paho-mqtt_1
     ];
     "dte_energy_bridge" = ps: with ps; [
@@ -931,6 +962,12 @@
     "dublin_bus_transport" = ps: with ps; [
     ];
     "duckdns" = ps: with ps; [
+    ];
+    "duke_energy" = ps: with ps; [
+      aiodukeenergy
+      fnv-hash-fast
+      psutil-home-assistant
+      sqlalchemy
     ];
     "dunehd" = ps: with ps; [
       pdunehd
@@ -946,6 +983,7 @@
     "dweet" = ps: with ps; [
     ]; # missing inputs: dweepy
     "dynalite" = ps: with ps; [
+      aiohasupervisor
       dynalite-devices
       dynalite-panel
       home-assistant-frontend
@@ -1327,7 +1365,7 @@
       forecast-solar
     ];
     "forked_daapd" = ps: with ps; [
-      spotipy
+      spotifyaio
     ]; # missing inputs: pyforked-daapd pylibrespot-java
     "fortios" = ps: with ps; [
       fortiosapi
@@ -1365,6 +1403,7 @@
       pyfronius
     ];
     "frontend" = ps: with ps; [
+      aiohasupervisor
       home-assistant-frontend
       pillow
     ];
@@ -1377,6 +1416,7 @@
       ayla-iot-unofficial
     ];
     "fully_kiosk" = ps: with ps; [
+      aiohasupervisor
       paho-mqtt_1
       python-fullykiosk
     ];
@@ -1470,6 +1510,10 @@
     "glances" = ps: with ps; [
       glances-api
     ];
+    "go2rtc" = ps: with ps; [
+      go2rtc-client
+      pyturbojpeg
+    ];
     "goalzero" = ps: with ps; [
       goalzero
     ];
@@ -1485,6 +1529,7 @@
       oauth2client
     ];
     "google_assistant" = ps: with ps; [
+      aiohasupervisor
       python-matter-server
       pyturbojpeg
     ];
@@ -1492,9 +1537,8 @@
       gassist-text
     ];
     "google_cloud" = ps: with ps; [
+      google-cloud-speech
       google-cloud-texttospeech
-    ];
-    "google_domains" = ps: with ps; [
     ];
     "google_generative_ai_conversation" = ps: with ps; [
       google-generativeai
@@ -1510,6 +1554,9 @@
     ];
     "google_maps" = ps: with ps; [
       locationsharinglib
+    ];
+    "google_photos" = ps: with ps; [
+      google-photos-library-api
     ];
     "google_pubsub" = ps: with ps; [
       google-cloud-pubsub
@@ -1590,6 +1637,7 @@
       habitipy
     ];
     "hardkernel" = ps: with ps; [
+      aiohasupervisor
       psutil-home-assistant
     ];
     "hardware" = ps: with ps; [
@@ -1602,6 +1650,7 @@
       aioharmony
     ];
     "hassio" = ps: with ps; [
+      aiohasupervisor
     ];
     "havana_shade" = ps: with ps; [
     ];
@@ -1668,8 +1717,10 @@
     "homeassistant" = ps: with ps; [
     ];
     "homeassistant_alerts" = ps: with ps; [
+      aiohasupervisor
     ];
     "homeassistant_green" = ps: with ps; [
+      aiohasupervisor
       pillow
       psutil-home-assistant
       pyserial
@@ -1678,6 +1729,7 @@
       zha
     ];
     "homeassistant_hardware" = ps: with ps; [
+      aiohasupervisor
       pillow
       pyserial
       pyudev
@@ -1685,6 +1737,7 @@
       zha
     ];
     "homeassistant_sky_connect" = ps: with ps; [
+      aiohasupervisor
       pillow
       psutil-home-assistant
       pyserial
@@ -1693,6 +1746,7 @@
       zha
     ];
     "homeassistant_yellow" = ps: with ps; [
+      aiohasupervisor
       pillow
       psutil-home-assistant
       pyserial
@@ -1782,6 +1836,31 @@
     ];
     "husqvarna_automower" = ps: with ps; [
       aioautomower
+    ];
+    "husqvarna_automower_ble" = ps: with ps; [
+      aioesphomeapi
+      aioruuvigateway
+      aioshelly
+      automower-ble
+      bleak
+      bleak-esphome
+      bleak-retry-connector
+      bluetooth-adapters
+      bluetooth-auto-recovery
+      bluetooth-data-tools
+      dbus-fast
+      esphome-dashboard-api
+      ha-ffmpeg
+      habluetooth
+      hassil
+      home-assistant-intents
+      ifaddr
+      mutagen
+      pymicro-vad
+      pyserial
+      pyspeex-noise
+      pyudev
+      zeroconf
     ];
     "huum" = ps: with ps; [
       huum
@@ -1904,12 +1983,13 @@
       home-assistant-intents
       ifaddr
       mutagen
+      py-improv-ble-client
       pymicro-vad
       pyserial
       pyspeex-noise
       pyudev
       zeroconf
-    ]; # missing inputs: py-improv-ble-client
+    ];
     "incomfort" = ps: with ps; [
       incomfort-client
     ];
@@ -1959,6 +2039,7 @@
     "inspired_shades" = ps: with ps; [
     ];
     "insteon" = ps: with ps; [
+      aiohasupervisor
       home-assistant-frontend
       insteon-frontend-home-assistant
       pillow
@@ -2003,6 +2084,7 @@
     ]; # missing inputs: pyirishrail
     "iron_os" = ps: with ps; [
       aioesphomeapi
+      aiogithubapi
       aioruuvigateway
       aioshelly
       bleak
@@ -2028,6 +2110,9 @@
     ];
     "isal" = ps: with ps; [
       isal
+    ];
+    "iskra" = ps: with ps; [
+      pyiskra
     ];
     "islamic_prayer_times" = ps: with ps; [
       prayer-times-calculator-offline
@@ -2164,6 +2249,7 @@
       knocki
     ];
     "knx" = ps: with ps; [
+      aiohasupervisor
       home-assistant-frontend
       knx-frontend
       pillow
@@ -2243,6 +2329,7 @@
     "lawn_mower" = ps: with ps; [
     ];
     "lcn" = ps: with ps; [
+      aiohasupervisor
       home-assistant-frontend
       lcn-frontend
       pillow
@@ -2290,13 +2377,14 @@
       hassil
       home-assistant-intents
       ifaddr
+      leaone-ble
       mutagen
       pymicro-vad
       pyserial
       pyspeex-noise
       pyudev
       zeroconf
-    ]; # missing inputs: leaone-ble
+    ];
     "led_ble" = ps: with ps; [
       aioesphomeapi
       aioruuvigateway
@@ -2324,12 +2412,18 @@
     ];
     "legrand" = ps: with ps; [
     ];
+    "lektrico" = ps: with ps; [
+      lektricowifi
+    ];
     "lg_netcast" = ps: with ps; [
       ifaddr
       pylgnetcast
     ];
     "lg_soundbar" = ps: with ps; [
       temescal
+    ];
+    "lg_thinq" = ps: with ps; [
+      thinqconnect
     ];
     "lidarr" = ps: with ps; [
       aiopyarr
@@ -2369,7 +2463,8 @@
     "lirc" = ps: with ps; [
     ]; # missing inputs: python-lirc
     "litejet" = ps: with ps; [
-    ]; # missing inputs: pylitejet
+      pylitejet
+    ];
     "litterrobot" = ps: with ps; [
       pylitterbot
     ];
@@ -2394,6 +2489,7 @@
     "lock" = ps: with ps; [
     ];
     "logbook" = ps: with ps; [
+      aiohasupervisor
       fnv-hash-fast
       home-assistant-frontend
       pillow
@@ -2412,6 +2508,7 @@
       aiolookin
     ];
     "loqed" = ps: with ps; [
+      aiohasupervisor
       ha-ffmpeg
       hass-nabucasa
       hassil
@@ -2424,6 +2521,7 @@
       pyturbojpeg
     ];
     "lovelace" = ps: with ps; [
+      aiohasupervisor
       pillow
     ];
     "luci" = ps: with ps; [
@@ -2459,11 +2557,8 @@
     "manual" = ps: with ps; [
     ];
     "manual_mqtt" = ps: with ps; [
+      aiohasupervisor
       paho-mqtt_1
-    ];
-    "map" = ps: with ps; [
-      home-assistant-frontend
-      pillow
     ];
     "marantz" = ps: with ps; [
     ];
@@ -2479,6 +2574,7 @@
       pillow
     ];
     "matter" = ps: with ps; [
+      aiohasupervisor
       python-matter-server
     ];
     "maxcube" = ps: with ps; [
@@ -2518,7 +2614,8 @@
     ]; # missing inputs: medcom-ble
     "media_extractor" = ps: with ps; [
       yt-dlp
-    ];
+    ]
+    ++ yt-dlp.optional-dependencies.default;
     "media_player" = ps: with ps; [
     ];
     "media_source" = ps: with ps; [
@@ -2548,13 +2645,14 @@
       hassil
       home-assistant-intents
       ifaddr
+      melnor-bluetooth
       mutagen
       pymicro-vad
       pyserial
       pyspeex-noise
       pyudev
       zeroconf
-    ]; # missing inputs: melnor-bluetooth
+    ];
     "meraki" = ps: with ps; [
     ];
     "mercury_nz" = ps: with ps; [
@@ -2642,6 +2740,7 @@
       zeroconf
     ];
     "mobile_app" = ps: with ps; [
+      aiohasupervisor
       ha-ffmpeg
       hass-nabucasa
       hassil
@@ -2671,6 +2770,8 @@
     ]; # missing inputs: moehlenhoff-alpha2
     "mold_indicator" = ps: with ps; [
     ];
+    "monarch_money" = ps: with ps; [
+    ]; # missing inputs: typedmonarchmoney
     "monessen" = ps: with ps; [
     ];
     "monoprice" = ps: with ps; [
@@ -2744,18 +2845,23 @@
       mpd2
     ];
     "mqtt" = ps: with ps; [
+      aiohasupervisor
       paho-mqtt_1
     ];
     "mqtt_eventstream" = ps: with ps; [
+      aiohasupervisor
       paho-mqtt_1
     ];
     "mqtt_json" = ps: with ps; [
+      aiohasupervisor
       paho-mqtt_1
     ];
     "mqtt_room" = ps: with ps; [
+      aiohasupervisor
       paho-mqtt_1
     ];
     "mqtt_statestream" = ps: with ps; [
+      aiohasupervisor
       paho-mqtt_1
     ];
     "msteams" = ps: with ps; [
@@ -2768,12 +2874,14 @@
       mutesync
     ];
     "my" = ps: with ps; [
+      aiohasupervisor
       home-assistant-frontend
       pillow
     ];
     "myq" = ps: with ps; [
     ];
     "mysensors" = ps: with ps; [
+      aiohasupervisor
       paho-mqtt_1
       pymysensors
     ];
@@ -2812,6 +2920,7 @@
       ha-ffmpeg
     ];
     "netatmo" = ps: with ps; [
+      aiohasupervisor
       ha-ffmpeg
       hass-nabucasa
       hassil
@@ -2930,6 +3039,8 @@
     "nx584" = ps: with ps; [
       pynx584
     ];
+    "nyt_games" = ps: with ps; [
+    ]; # missing inputs: nyt_games
     "nzbget" = ps: with ps; [
     ]; # missing inputs: pynzbgetapi
     "oasa_telematics" = ps: with ps; [
@@ -2963,6 +3074,7 @@
       omnilogic
     ];
     "onboarding" = ps: with ps; [
+      aiohasupervisor
       pillow
     ];
     "oncue" = ps: with ps; [
@@ -3075,6 +3187,7 @@
     "osramlightify" = ps: with ps; [
     ]; # missing inputs: lightify
     "otbr" = ps: with ps; [
+      aiohasupervisor
       ifaddr
       pillow
       psutil-home-assistant
@@ -3098,6 +3211,7 @@
       ovoenergy
     ];
     "owntracks" = ps: with ps; [
+      aiohasupervisor
       ha-ffmpeg
       hass-nabucasa
       hassil
@@ -3113,6 +3227,9 @@
     "p1_monitor" = ps: with ps; [
       p1monitor
     ];
+    "palazzetti" = ps: with ps; [
+      pypalazzetti
+    ];
     "panasonic_bluray" = ps: with ps; [
       panacotta
     ];
@@ -3123,10 +3240,7 @@
       pexpect
     ];
     "panel_custom" = ps: with ps; [
-      home-assistant-frontend
-      pillow
-    ];
-    "panel_iframe" = ps: with ps; [
+      aiohasupervisor
       home-assistant-frontend
       pillow
     ];
@@ -3180,6 +3294,7 @@
     "pjlink" = ps: with ps; [
     ]; # missing inputs: pypjlink2
     "plaato" = ps: with ps; [
+      aiohasupervisor
       ha-ffmpeg
       hass-nabucasa
       hassil
@@ -3367,6 +3482,7 @@
       zeroconf
     ];
     "rachio" = ps: with ps; [
+      aiohasupervisor
       ha-ffmpeg
       hass-nabucasa
       hassil
@@ -3382,6 +3498,7 @@
       aiopyarr
     ];
     "radio_browser" = ps: with ps; [
+      pycountry
       radios
     ];
     "radiotherm" = ps: with ps; [
@@ -3433,6 +3550,7 @@
       zeroconf
     ];
     "raspberry_pi" = ps: with ps; [
+      aiohasupervisor
       psutil-home-assistant
     ];
     "raspyrfm" = ps: with ps; [
@@ -3451,6 +3569,7 @@
       sqlalchemy
     ];
     "recovery_mode" = ps: with ps; [
+      aiohasupervisor
       ha-ffmpeg
       hass-nabucasa
       hassil
@@ -3517,8 +3636,7 @@
     "ring" = ps: with ps; [
       ha-ffmpeg
       ring-doorbell
-    ]
-    ++ ring-doorbell.optional-dependencies.listen;
+    ];
     "ripple" = ps: with ps; [
     ]; # missing inputs: python-ripple-api
     "risco" = ps: with ps; [
@@ -3764,6 +3882,9 @@
       sensorpush-ble
       zeroconf
     ];
+    "sensoterra" = ps: with ps; [
+      sensoterra
+    ];
     "sentry" = ps: with ps; [
       sentry-sdk
     ];
@@ -3882,6 +4003,7 @@
     "smarther" = ps: with ps; [
     ];
     "smartthings" = ps: with ps; [
+      aiohasupervisor
       ha-ffmpeg
       hass-nabucasa
       hassil
@@ -3897,6 +4019,8 @@
     "smarttub" = ps: with ps; [
       python-smarttub
     ];
+    "smarty" = ps: with ps; [
+    ]; # missing inputs: pysmarty2
     "smhi" = ps: with ps; [
       smhi-pkg
     ];
@@ -3914,6 +4038,7 @@
       snapcast
     ];
     "snips" = ps: with ps; [
+      aiohasupervisor
       paho-mqtt_1
     ];
     "snmp" = ps: with ps; [
@@ -3978,7 +4103,7 @@
       plexwebsocket
       soco
       sonos-websocket
-      spotipy
+      spotifyaio
       zeroconf
     ];
     "sony_projector" = ps: with ps; [
@@ -3996,13 +4121,12 @@
       speedtest-cli
     ];
     "spider" = ps: with ps; [
-      spiderpy
     ];
     "splunk" = ps: with ps; [
       hass-splunk
     ];
     "spotify" = ps: with ps; [
-      spotipy
+      spotifyaio
     ];
     "sql" = ps: with ps; [
       sqlalchemy
@@ -4185,6 +4309,7 @@
     "tapsaff" = ps: with ps; [
     ]; # missing inputs: tapsaff
     "tasmota" = ps: with ps; [
+      aiohasupervisor
       hatasmota
       paho-mqtt_1
     ];
@@ -4236,14 +4361,13 @@
     ];
     "teslemetry" = ps: with ps; [
       tesla-fleet-api
+      teslemetry-stream
     ];
     "tessie" = ps: with ps; [
       tesla-fleet-api
     ]; # missing inputs: tessie-api
     "text" = ps: with ps; [
     ];
-    "tfiac" = ps: with ps; [
-    ]; # missing inputs: pytfiac
     "thermobeacon" = ps: with ps; [
       aioesphomeapi
       aioruuvigateway
@@ -4296,9 +4420,6 @@
       thermopro-ble
       zeroconf
     ];
-    "thermoworks_smoke" = ps: with ps; [
-      stringcase
-    ]; # missing inputs: thermoworks-smoke
     "thethingsnetwork" = ps: with ps; [
       ttn-client
     ];
@@ -4377,6 +4498,7 @@
       pytomorrowio
     ];
     "toon" = ps: with ps; [
+      aiohasupervisor
       ha-ffmpeg
       hass-nabucasa
       hassil
@@ -4449,6 +4571,8 @@
     "trend" = ps: with ps; [
       numpy_1
     ];
+    "triggercmd" = ps: with ps; [
+    ]; # missing inputs: triggercmd
     "tts" = ps: with ps; [
       ha-ffmpeg
       mutagen
@@ -4585,7 +4709,7 @@
     "viaggiatreno" = ps: with ps; [
     ];
     "vicare" = ps: with ps; [
-      pyvicare-neo
+      pyvicare
     ];
     "vilfo" = ps: with ps; [
       vilfo-api-client
@@ -4678,6 +4802,9 @@
     ];
     "websocket_api" = ps: with ps; [
     ];
+    "weheat" = ps: with ps; [
+      weheat
+    ];
     "wemo" = ps: with ps; [
       pywemo
     ];
@@ -4698,6 +4825,7 @@
     "wirelesstag" = ps: with ps; [
     ]; # missing inputs: wirelesstagpy
     "withings" = ps: with ps; [
+      aiohasupervisor
       aiowithings
       ha-ffmpeg
       hass-nabucasa
@@ -4716,6 +4844,8 @@
     "wled" = ps: with ps; [
       wled
     ];
+    "wmspro" = ps: with ps; [
+    ]; # missing inputs: pywmspro
     "wolflink" = ps: with ps; [
     ]; # missing inputs: wolf-comm
     "workday" = ps: with ps; [
@@ -4795,6 +4925,7 @@
     "xs1" = ps: with ps; [
     ]; # missing inputs: xs1-api-client
     "yale" = ps: with ps; [
+      aiohasupervisor
       ha-ffmpeg
       hass-nabucasa
       hassil
@@ -4893,8 +5024,10 @@
       xmltodict
     ];
     "zeversolar" = ps: with ps; [
-    ]; # missing inputs: zeversolar
+      zeversolar
+    ];
     "zha" = ps: with ps; [
+      aiohasupervisor
       pillow
       pyserial
       pyudev
@@ -4915,6 +5048,7 @@
       zm-py
     ];
     "zwave_js" = ps: with ps; [
+      aiohasupervisor
       pyserial
       pyudev
       zwave-js-server-python
@@ -4982,6 +5116,7 @@
     "arve"
     "aseko_pool_live"
     "assist_pipeline"
+    "assist_satellite"
     "asuswrt"
     "atag"
     "august"
@@ -4994,6 +5129,7 @@
     "awair"
     "aws"
     "axis"
+    "azure_data_explorer"
     "azure_devops"
     "azure_event_hub"
     "backup"
@@ -5028,6 +5164,7 @@
     "button"
     "caldav"
     "calendar"
+    "cambridge_audio"
     "camera"
     "canary"
     "cast"
@@ -5057,6 +5194,7 @@
     "datadog"
     "date"
     "datetime"
+    "deako"
     "debugpy"
     "deconz"
     "default_config"
@@ -5089,6 +5227,7 @@
     "dsmr_reader"
     "dte_energy_bridge"
     "duckdns"
+    "duke_energy"
     "dunehd"
     "duotecno"
     "dwd_weather_warnings"
@@ -5192,15 +5331,17 @@
     "gios"
     "github"
     "glances"
+    "go2rtc"
     "goalzero"
     "gogogate2"
     "goodwe"
     "google"
     "google_assistant"
     "google_assistant_sdk"
-    "google_domains"
+    "google_cloud"
     "google_generative_ai_conversation"
     "google_mail"
+    "google_photos"
     "google_pubsub"
     "google_sheets"
     "google_tasks"
@@ -5254,6 +5395,7 @@
     "humidifier"
     "hunterdouglas_powerview"
     "husqvarna_automower"
+    "husqvarna_automower_ble"
     "huum"
     "hvv_departures"
     "hydrawise"
@@ -5270,6 +5412,7 @@
     "image_upload"
     "imap"
     "imgw_pib"
+    "improv_ble"
     "incomfort"
     "influxdb"
     "inkbird"
@@ -5291,6 +5434,7 @@
     "iqvia"
     "iron_os"
     "isal"
+    "iskra"
     "islamic_prayer_times"
     "israel_rail"
     "ista_ecotrend"
@@ -5323,15 +5467,19 @@
     "lawn_mower"
     "lcn"
     "ld2410_ble"
+    "leaone"
     "led_ble"
+    "lektrico"
     "lg_netcast"
     "lg_soundbar"
+    "lg_thinq"
     "lidarr"
     "life360"
     "lifx"
     "light"
     "linear_garage_door"
     "linkplay"
+    "litejet"
     "litterrobot"
     "livisi"
     "local_calendar"
@@ -5356,7 +5504,6 @@
     "mailgun"
     "manual"
     "manual_mqtt"
-    "map"
     "mastodon"
     "matrix"
     "matter"
@@ -5368,6 +5515,7 @@
     "media_player"
     "media_source"
     "melcloud"
+    "melnor"
     "meraki"
     "met"
     "met_eireann"
@@ -5472,9 +5620,9 @@
     "ovo_energy"
     "owntracks"
     "p1_monitor"
+    "palazzetti"
     "panasonic_viera"
     "panel_custom"
-    "panel_iframe"
     "peco"
     "pegel_online"
     "permobil"
@@ -5577,6 +5725,7 @@
     "sensor"
     "sensorpro"
     "sensorpush"
+    "sensoterra"
     "sentry"
     "senz"
     "seventeentrack"
@@ -5770,6 +5919,7 @@
     "webmin"
     "webostv"
     "websocket_api"
+    "weheat"
     "wemo"
     "whirlpool"
     "whois"
@@ -5803,6 +5953,7 @@
     "zamg"
     "zeroconf"
     "zerproc"
+    "zeversolar"
     "zha"
     "zodiac"
     "zone"

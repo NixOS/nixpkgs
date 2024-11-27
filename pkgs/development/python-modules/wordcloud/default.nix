@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "wordcloud";
-  version = "1.9.3";
+  version = "1.9.4";
 
   pyproject = true;
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qapzjWPtZ0pA8Mwxrbg/TKX8GV8Dpq/24BDR9YB9HFg=";
+    hash = "sha256-snPYpd7ZfT6tkEBGtJRk3LcRGe5534dQcqTBBcrdNHo=";
   };
 
   postPatch = ''

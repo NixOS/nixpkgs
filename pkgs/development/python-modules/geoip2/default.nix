@@ -3,15 +3,16 @@
   aiohttp,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
-  setuptools-scm,
+  h11,
   maxminddb,
   mocket,
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
-  requests,
   requests-mock,
+  requests,
+  setuptools-scm,
+  setuptools,
   urllib3,
 }:
 
@@ -40,6 +41,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    h11
     mocket
     requests-mock
     pytestCheckHook

@@ -117,9 +117,10 @@ in stdenv.mkDerivation rec {
   # TODO: Update cmake hook to make it simpler to selectively disable cmake tests: #113829
   checkPhase = let
     disabledTests =
-      # PortChecker test fails when lashSupport is enabled because
-      # zynaddsubfx takes to long to start trying to connect to lash
-      lib.optionals lashSupport [ "PortChecker" ]
+      # PortChecker is non-deterministic. It's fixed in the master
+      # branch, but backporting would require an update to rtosc, so
+      # we'll just disable it until the next release.
+      [ "PortChecker" ]
 
       # Tests fail on aarch64
       ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "MessageTest" "UnisonTest" ];

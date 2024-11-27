@@ -1,4 +1,4 @@
-outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
+outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre2, libxml2, libxslt
 , nginx-doc
 
 , nixosTests
@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     removeReferencesTo
   ] ++ nativeBuildInputs;
 
-  buildInputs = [ openssl zlib pcre libxml2 libxslt perl ]
+  buildInputs = [ openssl zlib pcre2 libxml2 libxslt perl ]
     ++ buildInputs
     ++ mapModules "inputs"
     ++ lib.optional withGeoIP geoip
@@ -129,7 +129,7 @@ stdenv.mkDerivation {
   ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
     # fix build vts module on gcc11
     "-Wno-error=stringop-overread"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-error=deprecated-declarations"
     "-Wno-error=gnu-folding-constant"
     "-Wno-error=unused-but-set-variable"

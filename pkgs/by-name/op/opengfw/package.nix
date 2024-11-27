@@ -5,7 +5,7 @@
 }:
 let
   pname = "opengfw";
-  version = "0.4.0";
+  version = "0.4.1";
 in
 buildGoModule {
   inherit pname version;
@@ -16,7 +16,7 @@ buildGoModule {
     owner = "apernet";
     repo = "opengfw";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kmbG6l5CtZGM/zpvl2pukq5xsOIy28RDyb4sHBsoyOw=";
+    hash = "sha256-6PFfsPfLzzeaImcteX9u/k5pwe3cvSQwT90TCizA3gI=";
   };
 
   meta = {

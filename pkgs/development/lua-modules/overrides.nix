@@ -246,7 +246,7 @@ in
     if luaAtLeast "5.1" && luaOlder "5.2" then {
       version = "20120430.51-1";
       knownRockspec = (fetchurl {
-        url = "https://luarocks.org/lmathx-20120430.51-1.rockspec";
+        url = "mirror://luarocks/lmathx-20120430.51-1.rockspec";
         sha256 = "148vbv2g3z5si2db7rqg5bdily7m4sjyh9w6r3jnx3csvfaxyhp0";
       }).outPath;
       src = fetchurl {
@@ -257,7 +257,7 @@ in
       if luaAtLeast "5.2" && luaOlder "5.3" then {
         version = "20120430.52-1";
         knownRockspec = (fetchurl {
-          url = "https://luarocks.org/lmathx-20120430.52-1.rockspec";
+          url = "mirror://luarocks/lmathx-20120430.52-1.rockspec";
           sha256 = "14rd625sipakm72wg6xqsbbglaxyjba9nsajsfyvhg0sz8qjgdya";
         }).outPath;
         src = fetchurl {
@@ -302,6 +302,12 @@ in
     ];
   });
 
+  luacheck = prev.luacheck.overrideAttrs (oa: {
+    meta = oa.meta // {
+      mainProgram = "luacheck";
+    };
+  });
+
   lua-curl = prev.lua-curl.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
       curl.dev
@@ -343,9 +349,8 @@ in
 
     luarocksConfig = lib.recursiveUpdate oa.luarocksConfig {
       variables = {
-        # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-        MYSQL_INCDIR = "${libmysqlclient.dev}/include/mysql";
-        MYSQL_LIBDIR = "${libmysqlclient}/lib/mysql";
+        MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/";
+        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib/";
       };
     };
     buildInputs = oa.buildInputs ++ [
@@ -356,7 +361,7 @@ in
 
   luadbi-postgresql = prev.luadbi-postgresql.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
-      postgresql
+      (lib.getDev postgresql)
     ];
   });
 
@@ -415,11 +420,17 @@ in
     ];
   });
 
-  luaprompt = prev.luaprompt.overrideAttrs (_: {
+  luaprompt = prev.luaprompt.overrideAttrs (oa: {
     externalDeps = [
       { name = "READLINE"; dep = readline; }
       { name = "HISTORY"; dep = readline; }
     ];
+
+    nativeBuildInputs = oa.nativeBuildInputs ++ [ installShellFiles ];
+
+    postInstall = ''
+      installManPage luap.1
+    '';
   });
 
   # As a nix user, use this derivation instead of "luarocks_bootstrap"
@@ -555,7 +566,7 @@ in
   });
 
   neotest  = prev.neotest.overrideAttrs(oa: {
-    doCheck = stdenv.isLinux;
+    doCheck = stdenv.hostPlatform.isLinux;
     nativeCheckInputs = oa.nativeCheckInputs ++ [
       final.nlua final.busted neovim-unwrapped
     ];
@@ -822,7 +833,7 @@ in
   tiktoken_core = prev.tiktoken_core.overrideAttrs (oa: {
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-YApsOGfAw34zp069lyGR6FGjxty1bE23+Tic07f8zI4=";
+      hash = "sha256-pKqG8aiV8BvvDO6RE6J3HEA/S4E4QunbO4WBpV5jUYk=";
     };
     nativeBuildInputs = oa.nativeBuildInputs ++ [ cargo rustPlatform.cargoSetupHook ];
   });
@@ -831,7 +842,7 @@ in
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-PLihirhJshcUQI3L1eTcnQiZvocDl29eQHhdBwJQRU8=";
+      hash = "sha256-lguGj8fDqztrvqvEYVcJLmiuxPDaCpXU8aztInKjF+E=";
     };
 
     NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin
@@ -853,6 +864,12 @@ in
     in oa.propagatedBuildInputs ++ [
       lua.pkgs.luarocks-build-treesitter-parser-cpp
     ];
+  });
+
+  tl = prev.tl.overrideAttrs ({
+    preConfigure = ''
+      rm luarocks.lock
+    '';
   });
 
   vstruct = prev.vstruct.overrideAttrs (_: {

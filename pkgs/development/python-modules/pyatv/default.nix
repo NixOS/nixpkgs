@@ -25,12 +25,13 @@
   srptools,
   stdenv,
   tabulate,
+  tinytag,
   zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.15.1";
+  version = "0.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +40,7 @@ buildPythonPackage rec {
     owner = "postlund";
     repo = "pyatv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8ODhDuc4jaLtrLZYd1yJlpYygO6KaguyR/yLWb/rMR4=";
+    hash = "sha256-yjPbSTmHoKnVwNArZw5mGf3Eh4Ei1+DkY9y2XRRy4YA=";
   };
 
   postPatch = ''
@@ -77,6 +78,7 @@ buildPythonPackage rec {
     requests
     srptools
     tabulate
+    tinytag
     zeroconf
   ];
 

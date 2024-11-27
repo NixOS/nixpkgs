@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jazz2";
-  version = "2.8.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "deathkiller";
     repo = "jazz2-native";
     rev = finalAttrs.version;
-    hash = "sha256-qJVT7WCw3nfoLbSqLFfZCI5VLOuoD/iSVfC9B+XEhyg=";
+    hash = "sha256-q/08lQ+HW2obWc8YAAEorKkNWy1d2uWeufOC5TVKpN4=";
   };
 
   patches = [ ./nocontent.patch ];

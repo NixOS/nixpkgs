@@ -75,7 +75,7 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
    - GNU cpio: [`pkgs/tools/archivers/cpio/default.nix`](tools/archivers/cpio/default.nix). Also a simple package. The generic builder in `stdenv` does everything for you. It has no dependencies beyond `stdenv`.
 
-   - GNU Multiple Precision arithmetic library (GMP): [`pkgs/development/libraries/gmp/5.1.x.nix`](development/libraries/gmp/5.1.x.nix). Also done by the generic builder, but has a dependency on `m4`.
+   - GNU Multiple Precision arithmetic library (GMP): [`pkgs/development/libraries/gmp`](development/libraries/gmp). Also done by the generic builder, but has a dependency on `m4`.
 
    - Pan, a GTK-based newsreader: [`pkgs/applications/networking/newsreaders/pan/default.nix`](applications/networking/newsreaders/pan/default.nix). Has an optional dependency on `gtkspell`, which is only built if `spellCheck` is `true`.
 
@@ -131,6 +131,8 @@ Now that this is out of the way. To add a package to Nixpkgs:
   * firefox: 54.0.1 -> 55.0
 
     https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
+
+(using "→" instead of "->" is also accepted)
 
 ## Category Hierarchy
 [categories]: #category-hierarchy
@@ -626,8 +628,8 @@ buildGoModule rec {
 }
 ```
 
-Any derivaton can be specified as a test, even if it's in a different file.
-Such a derivaton that implements a test can depend on the package under test, even in the presence of `overrideAttrs`.
+Any derivation can be specified as a test, even if it's in a different file.
+Such a derivation that implements a test can depend on the package under test, even in the presence of `overrideAttrs`.
 
 In the following example, `(my-package.overrideAttrs f).passthru.tests` will work as expected, as long as the definition of `tests` does not rely on the original `my-package` or overrides all occurrences of `my-package`:
 
@@ -745,7 +747,7 @@ stdenv.mkDerivation {
 Nixpkgs periodically tries to update all packages that have a `passthru.updateScript` attribute.
 
 > [!Note]
-> A common pattern is to use the [`nix-update-script`](../pkgs/common-updater/nix-update.nix) attribute provided in Nixpkgs, which runs [`nix-update`](https://github.com/Mic92/nix-update):
+> A common pattern is to use the [`nix-update-script`](../pkgs/by-name/ni/nix-update/nix-update-script.nix) attribute provided in Nixpkgs, which runs [`nix-update`](https://github.com/Mic92/nix-update):
 >
 > ```nix
 > { stdenv, nix-update-script }:
@@ -755,7 +757,7 @@ Nixpkgs periodically tries to update all packages that have a `passthru.updateSc
 > }
 > ```
 >
-> For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://ryantm.github.io/nixpkgs-update) when a new version is released.
+> For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://github.com/nix-community/nixpkgs-update) when a new version is released.
 > The [update bot](https://nix-community.org/update-bot) runs periodically to attempt to automatically update packages, and will run `passthru.updateScript` if set.
 > While not strictly necessary if the project is listed on [Repology](https://repology.org), using `nix-update-script` allows the package to update via many more sources (e.g. GitHub releases).
 

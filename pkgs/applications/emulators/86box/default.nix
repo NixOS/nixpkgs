@@ -1,6 +1,6 @@
 {
   stdenv,
-  darwin,
+  apple-sdk_11,
   lib,
   fetchFromGitHub,
   cmake,
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
     ++ lib.optional enableWayland wayland
     ++ lib.optional enableVncRenderer libvncserver
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk_11_0.libs.xpc;
+    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   cmakeFlags =
     lib.optional stdenv.hostPlatform.isDarwin "-DCMAKE_MACOSX_BUNDLE=OFF"
@@ -139,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Emulator of x86-based machines based on PCem";
     mainProgram = "86Box";
     homepage = "https://86box.net/";
+    changelog = "https://github.com/86Box/86Box/releases/tag/v${finalAttrs.version}";
     license =
       with lib.licenses;
       [ gpl2Only ] ++ lib.optional (unfreeEnableDiscord || unfreeEnableRoms) unfree;

@@ -62,7 +62,7 @@ buildPythonPackage rec {
       importlib-metadata
     ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     postgresql = [ asyncpg ];
     postgres = [ asyncpg ];
     aiopg = [ aiopg ];
@@ -89,7 +89,7 @@ buildPythonPackage rec {
     httpx
     nest-asyncio
     pytest-asyncio
-  ] ++ passthru.optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
   disabledTestPaths = [ "benchmarks/test_benchmark_*.py" ];
 
@@ -145,5 +145,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/collerek/ormar/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ andreasfelix ];
+    broken = true;
   };
 }

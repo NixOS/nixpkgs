@@ -49,10 +49,10 @@ let
   in
     if isString v then toPhpString v
     # NOTE: If any value contains a , (comma) this will not get escaped
-    else if isList v && any lib.strings.isCoercibleToString v then toPhpString (concatMapStringsSep "," toString v)
+    else if isList v && strings.isConvertibleWithToString v then toPhpString (concatMapStringsSep "," toString v)
     else if isInt v then toString v
     else if isBool v then toString (if v then 1 else 0)
-    else if isHasAttr "_file" then "trim(file_get_contents(${toPhpString v._file}))"
+    else if isHasAttr "_file" then "trim(file_get_contents(${toPhpString (toString v._file)}))"
     else if isHasAttr "_raw" then v._raw
     else abort "The dokuwiki localConf value ${lib.generators.toPretty {} v} can not be encoded."
   ;

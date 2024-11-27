@@ -73,6 +73,13 @@ buildPythonPackage rec {
       url = "https://github.com/mweinelt/twisted/commit/e69e652de671aac0abf5c7e6c662fc5172758c5a.patch";
       hash = "sha256-LmvKUTViZoY/TPBmSlx4S9FbJNZfB5cxzn/YcciDmoI=";
     })
+
+    (fetchpatch {
+      name = "python-3.12.6.patch";
+      url = "https://github.com/twisted/twisted/commit/3422f7988e3d42e6e5184acd65f103fd28750648.patch";
+      excludes = [ ".github/workflows/test.yaml" ];
+      hash = "sha256-/UmrHdWaApytkEDZiISjPGzpWv/Yxe/xjvr9GOjMPmQ=";
+    })
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -171,13 +178,13 @@ buildPythonPackage rec {
       hypothesis
       pyhamcrest
     ]
-    ++ passthru.optional-dependencies.conch
-    ++ passthru.optional-dependencies.http2
-    ++ passthru.optional-dependencies.serial
+    ++ optional-dependencies.conch
+    ++ optional-dependencies.http2
+    ++ optional-dependencies.serial
     # not supported on aarch64-darwin: https://github.com/pyca/pyopenssl/issues/873
     ++ lib.optionals (
       !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
-    ) passthru.optional-dependencies.tls;
+    ) optional-dependencies.tls;
 
   checkPhase = ''
     export SOURCE_DATE_EPOCH=315532800
@@ -186,26 +193,26 @@ buildPythonPackage rec {
     ${python.interpreter} -m twisted.trial -j1 twisted
   '';
 
-  passthru = {
-    optional-dependencies = {
-      conch = [
-        appdirs
-        bcrypt
-        cryptography
-        pyasn1
-      ];
-      http2 = [
-        h2
-        priority
-      ];
-      serial = [ pyserial ];
-      tls = [
-        idna
-        pyopenssl
-        service-identity
-      ];
-    };
+  optional-dependencies = {
+    conch = [
+      appdirs
+      bcrypt
+      cryptography
+      pyasn1
+    ];
+    http2 = [
+      h2
+      priority
+    ];
+    serial = [ pyserial ];
+    tls = [
+      idna
+      pyopenssl
+      service-identity
+    ];
+  };
 
+  passthru = {
     tests = {
       inherit
         cassandra-driver

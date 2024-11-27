@@ -19,20 +19,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "video-trimmer";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "YaLTeR";
     repo = "video-trimmer";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-GXFbfebwiESplOeYDWxBH8Q0SCgV0vePYV7rv0qgrHM=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-4B3NNGww+UjI/VbsKL62vWlKye7NYXYPzlJ4TfywJDw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-szxJzBFtyFZ1T5TZb2MDPFJzn+EYETa/JbPdlg6UrTk=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-vtV5TrF81TK4PUwzOF/CuDsKH1vTLO+4PFufyIOp2zk=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  strictDeps = true;
 
   preFixup = ''
     gappsWrapperArgs+=(

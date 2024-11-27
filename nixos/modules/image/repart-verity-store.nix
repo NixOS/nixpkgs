@@ -117,10 +117,6 @@ in
 
               # do not prepare the ESP, this is done in the final image
               systemdRepartFlags = previousAttrs.systemdRepartFlags ++ [ "--defer-partitions=esp" ];
-
-              # the image will be self-contained so we can drop references
-              # to the closure that was used to build it
-              unsafeDiscardReferences.out = true;
             }
           );
 
@@ -163,20 +159,19 @@ in
           createEmpty = false;
         }).overrideAttrs
           (
-            finalAttrs: previousAttrs:
-            let
-              copyUki = "CopyFiles=${config.system.build.uki}/${config.system.boot.loader.ukiFile}:${cfg.ukiPath}";
-            in
-            {
+            finalAttrs: previousAttrs: {
+              # add entry to inject UKI into ESP
+              finalPartitions = lib.recursiveUpdate previousAttrs.finalPartitions {
+                ${cfg.partitionIds.esp}.contents = {
+                  "${cfg.ukiPath}".source = "${config.system.build.uki}/${config.system.boot.loader.ukiFile}";
+                };
+              };
+
               nativeBuildInputs = previousAttrs.nativeBuildInputs ++ [
                 pkgs.systemdUkify
                 verityHashCheck
+                pkgs.jq
               ];
-
-              postPatch = ''
-                # add entry to inject UKI into ESP
-                echo '${copyUki}' >> $finalRepartDefinitions/${cfg.partitionIds.esp}.conf
-              '';
 
               preBuild = ''
                 # check that we build the final image with the same intermediate image for
@@ -194,9 +189,23 @@ in
                 chmod +w ${config.image.repart.imageFileBasename}.raw
               '';
 
-              # the image will be self-contained so we can drop references
-              # to the closure that was used to build it
-              unsafeDiscardReferences.out = true;
+              # replace "TBD" with the original roothash values
+              preInstall = ''
+                mv -v repart-output{.json,_orig.json}
+
+                jq --slurp --indent -1 \
+                  '.[0] as $intermediate | .[1] as $final
+                    | $intermediate | map(select(.roothash != null) | { "uuid":.uuid,"roothash":.roothash }) as $uuids
+                    | $final + $uuids
+                    | group_by(.uuid)
+                    | map(add)
+                    | sort_by(.offset)' \
+                      ${config.system.build.intermediateImage}/repart-output.json \
+                      repart-output_orig.json \
+                  > repart-output.json
+
+                rm -v repart-output_orig.json
+              '';
             }
           );
     };

@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-aws";
-  version = "0.2.0";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
     rev = "refs/tags/v${version}";
-    hash = "sha256-P9CfAVpKh7djhUQc3DyyJTWqs9RbrTeLyynLei0x00o=";
+    hash = "sha256-LHhyEkgu1sjOk4E4WMy4vYGyikqdVD3WvRPjoAP1CfA=";
   };
 
   postPatch = ''
@@ -43,6 +43,11 @@ buildPythonPackage rec {
     boto3
     langchain-core
     numpy
+  ];
+
+  pythonRelaxDeps = [
+    # Boto @ 1.35 has outstripped the version requirement
+    "boto3"
   ];
 
   nativeCheckInputs = [

@@ -31,46 +31,19 @@
 , qtnetworkauth
 , qttools
 , nixosTests
-, darwin
+, apple-sdk_11
 }:
 
-let
-  stdenv' = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-  # portaudio propagates Darwin frameworks. Rebuild it using the 11.0 stdenv
-  # from Qt and the 11.0 SDK frameworks.
-  portaudio' = if stdenv.hostPlatform.isDarwin then portaudio.override {
-    stdenv = stdenv';
-    inherit (darwin.apple_sdk_11_0.frameworks)
-      AudioUnit
-      AudioToolbox
-      CoreAudio
-      CoreServices
-      Carbon
-    ;
-  } else portaudio;
-in stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.4.2";
+  version = "4.4.3";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-wgujiFvaWejSEXTbq/Re/7Ca1jIqso2uZej3Lb3V4I8=";
+    sha256 = "sha256-bHpPhav9JBPkwJA9o+IFHRWbvxWnGkD1wHBHS4XJ/YE=";
   };
-  patches = [
-    # https://github.com/musescore/MuseScore/pull/24326
-    (fetchpatch {
-      name = "fix-menubar-with-qt6.5+.patch";
-      url = "https://github.com/musescore/MuseScore/pull/24326/commits/b274f13311ad0b2bce339634a006ba22fbd3379e.patch";
-      hash = "sha256-ZGmjRa01CBEIxJdJYQMhdg4A9yjWdlgn0pCPmENBTq0=";
-    })
-    (fetchpatch {
-      name = "fix-crash-accessing-uninitialized-properties.patch";
-      url = "https://github.com/musescore/MuseScore/pull/24714.patch";
-      hash = "sha256-ErrCU/U+wyfD7R8kiZTifGIeuCAdKi1q7uxYsoE/OLA=";
-    })
-  ];
 
   cmakeFlags = [
     "-DMUSE_APP_BUILD_MODE=release"
@@ -129,7 +102,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     libpulseaudio
     libsndfile
     libvorbis
-    portaudio'
+    portaudio
     portmidi
     flac
     libopusenc
@@ -145,7 +118,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     alsa-lib
     qtwayland
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Cocoa
+    apple-sdk_11
   ];
 
   postInstall = ''

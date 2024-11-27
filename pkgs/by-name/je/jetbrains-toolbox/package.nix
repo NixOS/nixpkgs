@@ -6,14 +6,16 @@
 , runCommand
 , appimageTools
 , icu
+, genericUpdater
+, writeShellScript
 }:
 let
   pname = "jetbrains-toolbox";
-  version = "2.4.1.32573";
+  version = "2.5.1.34629";
 
   src = fetchzip {
     url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}.tar.gz";
-    hash = "sha256-6sfO9tDIdp/xuNtqZ7UXqzP1SuLd6ZAF7lMTlaF3Z80=";
+    hash = "sha256-YaMlvgktoa738grHarJX2Uh5PZ7qHuASyJBcUhMssEI=";
     stripRoot = false;
   };
 
@@ -57,6 +59,13 @@ stdenv.mkDerivation {
 
   # Disabling the tests, this seems to be very difficult to test this app.
   doCheck = false;
+
+  passthru.updateScript = genericUpdater {
+    versionLister = writeShellScript "jetbrains-toolbox-versionLister" ''
+      curl -Ls 'https://data.services.jetbrains.com/products?code=TBA&release.type=release' \
+        | jq -r '.[] | .releases | flatten[] | .build'
+    '';
+  };
 
   meta = with lib; {
     description = "Jetbrains Toolbox";

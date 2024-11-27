@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libbpf";
-  version = "1.4.5";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "libbpf";
     repo = "libbpf";
     rev = "v${version}";
-    hash = "sha256-GQbx3LaGrFTwEtUsP7V/Y1Keoa4dSmDxhmSTsML+tVk=";
+    hash = "sha256-iknPdJ1vJ5y1ncsHx+nAc6gmvJWbo1Wg6mFTfa2KDBM=";
   };
 
   nativeBuildInputs = [ pkg-config ];

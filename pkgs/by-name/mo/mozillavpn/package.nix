@@ -1,14 +1,17 @@
 {
+  _experimental-update-script-combinators,
   buildGoModule,
   cargo,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   go,
   lib,
   libcap,
   libgcrypt,
   libgpg-error,
   libsecret,
+  nix-update-script,
   pkg-config,
   python3,
   qt6,
@@ -20,27 +23,38 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.24.0";
+  version = "2.24.1";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-iTnwx+KPZ5b8qT0fEMUCGQx1UyGVM4VCzooZqslGWtw=";
+    hash = "sha256-X2rtHAZ9vbWjuOmD3B/uPasUQ1Q+b4SkNqk4MqGMaYo=";
   };
-  patches = [ ];
+  patches = [
+    # Fix build errors from deprecated `QByteArray::count()`, `QVariant::type()`, `QEventPoint::pos()` (#9961)
+    (fetchpatch {
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/b4077b9927d9208118e81694dce490dac2f0e76f.patch";
+      hash = "sha256-Vx7aHEBxubthqsmH37ZZDJDPI9jE9vS/p+JNJP6eUlI=";
+    })
+    # Re:#9966 Fix Crash in MZFlickable
+    (fetchpatch {
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/9984/commits/485a2ad8feab6b1dee7c672ce03736d819fd9d37.patch";
+      includes = [ "nebula/ui/components/MZFlickable.qml" ];
+      hash = "sha256-fnOXBTsuQC3kqAvHgoJ7rRGX5ra0R/MO8M9Ysys/l7Q=";
+    })
+  ];
 
-  netfilterGoModules =
-    (buildGoModule {
-      inherit (finalAttrs)
-        pname
-        version
-        src
-        patches
-        ;
-      modRoot = "linux/netfilter";
-      vendorHash = "sha256-Cmo0wnl0z5r1paaEf1MhCPbInWeoMhGjnxCxGh0cyO8=";
-    }).goModules;
+  netfilter = buildGoModule {
+    pname = "${finalAttrs.pname}-netfilter";
+    inherit (finalAttrs)
+      version
+      src
+      patches
+      ;
+    modRoot = "linux/netfilter";
+    vendorHash = "sha256-Cmo0wnl0z5r1paaEf1MhCPbInWeoMhGjnxCxGh0cyO8=";
+  };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src patches;
@@ -83,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace extension/CMakeLists.txt \
       --replace '/etc' "$out/etc"
 
-    ln -s '${finalAttrs.netfilterGoModules}' linux/netfilter/vendor
+    ln -s '${finalAttrs.netfilter.goModules}' linux/netfilter/vendor
   '';
 
   cmakeFlags = [
@@ -98,6 +112,14 @@ stdenv.mkDerivation (finalAttrs: {
     "PATH"
     ":"
     (lib.makeBinPath [ wireguard-tools ])
+  ];
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script { })
+    (nix-update-script {
+      attrPath = "mozillavpn.netfilter";
+      extraArgs = [ "--version=skip" ];
+    })
   ];
 
   meta = {

@@ -1,5 +1,5 @@
 { lib
-, flutter322
+, flutter327
 , mpv-unwrapped
 , xdg-user-dirs
 , patchelf
@@ -8,16 +8,16 @@
 , makeDesktopItem
 }:
 let
-  version = "0.9.9-beta";
+  version = "0.9.12-beta";
 in
-flutter322.buildFlutterApplication {
+flutter327.buildFlutterApplication {
   inherit version;
   pname = "finamp";
   src = fetchFromGitHub {
     owner = "jmshrv";
     repo = "finamp";
     rev = version;
-    hash = "sha256-cCXDvsXgA/B274pQzyQRzmzz0QvqcFMLQrUjDU/B08Y=";
+    hash = "sha256-hY+1BMQEACrpjKZnVwPqWY5M4m4U/Ys/bcqhGMeCE6U=";
   };
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -33,7 +33,7 @@ flutter322.buildFlutterApplication {
   };
 
   postFixup = ''
-    patchelf $out/app/finamp --add-needed libisar.so --add-needed libmpv.so --add-rpath ${lib.makeLibraryPath [ mpv-unwrapped ]}
+    patchelf $out/app/$pname/finamp --add-needed libisar.so --add-needed libmpv.so --add-rpath ${lib.makeLibraryPath [ mpv-unwrapped ]}
   '';
 
   postInstall = ''

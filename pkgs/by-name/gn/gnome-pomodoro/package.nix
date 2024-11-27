@@ -1,36 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook3
-, desktop-file-utils
-, libcanberra
-, gst_all_1
-, vala
-, gtk3
-, gom
-, sqlite
-, libxml2
-, glib
-, gobject-introspection
-, json-glib
-, libpeas
-, gsettings-desktop-schemas
-, gettext
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
+  desktop-file-utils,
+  libcanberra,
+  gst_all_1,
+  vala,
+  gtk3,
+  gom,
+  sqlite,
+  libxml2,
+  glib,
+  gobject-introspection,
+  json-glib,
+  libpeas,
+  gsettings-desktop-schemas,
+  gettext,
 }:
-
 stdenv.mkDerivation rec {
   pname = "gnome-pomodoro";
-  version = "0.24.1";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-Ml3znMz1Q9593rMgfAST8k9QglxMG9ocFD7W8kaFWCw=";
+    hash = "sha256-icyS/K6H90/DWYvqJ7f7XXTTuIwLea3k+vDDEBYil6o=";
   };
 
   patches = [
@@ -41,6 +41,13 @@ stdenv.mkDerivation rec {
       inherit pname version;
     })
   ];
+
+  # Manually compile schemas for package since meson option
+  # gnome.post_install(glib_compile_schemas) used by package tries to compile in
+  # the wrong dir.
+  preFixup = ''
+    glib-compile-schemas ${glib.makeSchemaPath "$out" "${pname}-${version}"}
+  '';
 
   nativeBuildInputs = [
     meson
@@ -76,7 +83,10 @@ stdenv.mkDerivation rec {
       This GNOME utility helps to manage time according to Pomodoro Technique.
       It intends to improve productivity and focus by taking short breaks.
     '';
-    maintainers = with maintainers; [ aleksana ];
+    maintainers = with maintainers; [
+      aleksana
+      herschenglime
+    ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

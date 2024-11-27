@@ -36,14 +36,14 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "4.4.2";
+      version = "4.4.3";
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
-        hash = "sha256-1N8ompxbygOm1PrgBuUgNwZO8Dutb76VnFOPMZdDTew=";
+        hash = "sha256-KVYS+NwkryjJGCV9MBTrUzQqXQd9Xj2aPq3zA72P6/o=";
       };
 
       # Why is this needed? https://github.com/weechat/weechat/issues/2031

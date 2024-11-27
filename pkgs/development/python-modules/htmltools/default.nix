@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "htmltools";
-  version = "0.5.3";
+  version = "0.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "py-htmltools";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+BSbJdWmqoEQGEJWBgoTVe4bbvlGJiMyfvvj0lAy9ZA=";
+    hash = "sha256-ugtDYs5YaVo7Yy9EodyRrypHQUjmOIPpsyhwNnZkiko=";
   };
 
   build-system = [

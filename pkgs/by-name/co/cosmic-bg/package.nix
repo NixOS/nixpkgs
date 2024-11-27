@@ -11,23 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-bg";
-  version = "1.0.0-alpha.1";
+  version = "1.0.0-alpha.2";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
     rev = "epoch-${version}";
-    hash = "sha256-imGSOPS/ay3EycyrrQcIePDXNEYRk7NTAV+EtUPtEdg=";
+    hash = "sha256-lAFAZBo5FnXgJV3MrZhaYmBxqtH1E7+Huj53ho/hPik=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "cosmic-config-0.1.0" = "sha256-5J9tjpEcZJrUtW7barwXTOTNXNr33TLwYjApKkwDSvc=";
-      "smithay-client-toolkit-0.18.0" = "sha256-2WbDKlSGiyVmi7blNBr2Aih9FfF2dq/bny57hoA4BrE=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-up3yNsKxTC9YrRuTPsGlCHTp9S/woDXPc5HcYcEY9Xc=";
 
   postPatch = ''
     substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"

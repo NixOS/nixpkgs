@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "httpie";
-  version = "3.2.3";
+  version = "3.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "httpie";
     repo = "httpie";
     rev = "refs/tags/${version}";
-    hash = "sha256-ogUqhMVY1fm+hKCMFYqfYsqHX+Gj6y8CMOUsxA3q29g=";
+    hash = "sha256-uZKkUUrPPnLHPHL8YrZgfsyCsSOR0oZ2eFytiV0PIUY=";
   };
 
   pythonRelaxDeps = [

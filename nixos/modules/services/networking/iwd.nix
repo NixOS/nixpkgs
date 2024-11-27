@@ -36,7 +36,7 @@ in
 
       description = ''
         Options passed to iwd.
-        See [here](https://iwd.wiki.kernel.org/networkconfigurationsettings) for supported options.
+        See {manpage}`iwd.config(5)` for supported options.
       '';
     };
   };

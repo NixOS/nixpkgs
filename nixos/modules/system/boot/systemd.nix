@@ -33,6 +33,7 @@ let
       "nss-lookup.target"
       "nss-user-lookup.target"
       "time-sync.target"
+      "first-boot-complete.target"
     ] ++ optionals cfg.package.withCryptsetup [
       "cryptsetup.target"
       "cryptsetup-pre.target"
@@ -159,6 +160,7 @@ let
 
       # Misc.
       "systemd-sysctl.service"
+      "systemd-machine-id-commit.service"
     ] ++ optionals cfg.package.withTimedated [
       "dbus-org.freedesktop.timedate1.service"
       "systemd-timedated.service"
@@ -195,6 +197,8 @@ in
   options.systemd = {
 
     package = mkPackageOption pkgs "systemd" {};
+
+    enableStrictShellChecks = mkEnableOption "" // { description = "Whether to run shellcheck on the generated scripts for systemd units."; };
 
     units = mkOption {
       description = "Definition of systemd units; see {manpage}`systemd.unit(5)`.";
@@ -568,6 +572,15 @@ in
       "systemd/user-generators" = { source = hooks "user-generators" cfg.user.generators; };
       "systemd/system-generators" = { source = hooks "system-generators" cfg.generators; };
       "systemd/system-shutdown" = { source = hooks "system-shutdown" cfg.shutdown; };
+
+      # Ignore all other preset files so systemd doesn't try to enable/disable
+      # units during runtime.
+      "systemd/system-preset/00-nixos.preset".text = ''
+        ignore *
+      '';
+      "systemd/user-preset/00-nixos.preset".text = ''
+        ignore *
+      '';
     });
 
     services.dbus.enable = true;

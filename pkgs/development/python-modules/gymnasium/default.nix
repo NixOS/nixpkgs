@@ -1,48 +1,53 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
-  numpy,
+
+  # dependencies
   cloudpickle,
-  gym-notices,
-  jax-jumpy,
-  typing-extensions,
   farama-notifications,
-  importlib-metadata,
+  numpy,
+  typing-extensions,
   pythonOlder,
-  ffmpeg,
+  importlib-metadata,
+
+  # tests
+  dill,
+  flax,
   jax,
   jaxlib,
   matplotlib,
+  mujoco,
   moviepy,
   opencv4,
   pybox2d,
   pygame,
   pytestCheckHook,
   scipy,
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "gymnasium";
-  version = "0.29.1";
-  format = "pyproject";
+  version = "1.0.0";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "gymnasium";
     rev = "refs/tags/v${version}";
-    hash = "sha256-L7fn9FaJzXwQhjDKwI9hlFpbPuQdwynU+Xjd8bbjxiw=";
+    hash = "sha256-Qchuz08yJ0giVrtKLC9vBgr28JrHQyAOCuoS239ivVw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cloudpickle
     farama-notifications
-    gym-notices
-    jax-jumpy
     numpy
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
@@ -50,11 +55,13 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gymnasium" ];
 
   nativeCheckInputs = [
-    ffmpeg
+    dill
+    flax
     jax
     jaxlib
     matplotlib
     moviepy
+    mujoco
     opencv4
     pybox2d
     pygame
@@ -69,20 +76,30 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTestPaths = [
-    # mujoco is required for those tests but the mujoco python bindings are not packaged in nixpkgs.
+    # Unpackaged `mujoco-py` (Openai's mujoco) is required for these tests.
     "tests/envs/mujoco/test_mujoco_custom_env.py"
+    "tests/envs/mujoco/test_mujoco_rendering.py"
+    "tests/envs/mujoco/test_mujoco_v5.py"
 
-    # Those tests need to write on the filesystem which cause them to fail.
-    "tests/experimental/wrappers/test_record_video.py"
+    # Rendering tests failing in the sandbox
+    "tests/wrappers/vector/test_human_rendering.py"
+
+    # These tests need to write on the filesystem which cause them to fail.
     "tests/utils/test_save_video.py"
     "tests/wrappers/test_record_video.py"
-    "tests/wrappers/test_video_recorder.py"
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Succeeds for most environments but `test_render_modes[Reacher-v4]` fails because it requires
+    # OpenGL access which is not possible inside the sandbox.
+    "test_render_mode"
+  ];
+
+  meta = {
     description = "Standard API for reinforcement learning and a diverse set of reference environments (formerly Gym)";
     homepage = "https://github.com/Farama-Foundation/Gymnasium";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    changelog = "https://github.com/Farama-Foundation/Gymnasium/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

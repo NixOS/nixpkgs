@@ -12,13 +12,13 @@
 
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "4.11.0";
+  version = "4.11.2";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
-    rev = "v${version}";
-    hash = "sha256-SmG8JMHdFTGkxLCTTbD1IhjQgmsRMvxQsB4rluHy6yI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rUMzn+3j+RL8DY8euS6a4MmdoIAVLXxXu9wvKNmK/TU=";
   };
 
   nativeBuildInputs =
@@ -28,7 +28,7 @@ buildNpmPackage rec {
       copyDesktopItems
     ];
 
-  npmDepsHash = "sha256-vbwoKijDt7TbXfU8Il5dwnfyGc2HsbLdAJhQzYuq6eo=";
+  npmDepsHash = "sha256-0hS+AjfYvkdxyM6CtXYgvjt49GmcCvyAdEFWfK8uaHc=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
@@ -93,7 +93,7 @@ buildNpmPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/JannisX11/blockbench/releases/tag/${src.rev}";
+    changelog = "https://github.com/JannisX11/blockbench/releases/tag/v${version}";
     description = "Low-poly 3D modeling and animation software";
     homepage = "https://blockbench.net/";
     license = lib.licenses.gpl3Only;

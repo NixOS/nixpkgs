@@ -22,7 +22,7 @@
 , unicode ? true
 , withMesa ? !stdenv.hostPlatform.isDarwin
 , withWebKit ? true
-, webkitgtk
+, webkitgtk_4_0
 , setfile
 , AGL
 , Carbon
@@ -50,13 +50,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wxwidgets";
-  version = "3.2.5";
+  version = "3.2.6";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    hash = "sha256-ibkXs693xO+z3JuMvlG4b/+A8f4Lf5TYqdDa67fb9ck=";
+    hash = "sha256-7dc7NGiKSonFFaWp3UxLYqDc1Cc6no1Eba0QmtzX5mM=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     xorgproto
   ]
   ++ lib.optional withMesa libGLU
-  ++ lib.optional (withWebKit && stdenv.hostPlatform.isLinux) webkitgtk
+  ++ lib.optional (withWebKit && stdenv.hostPlatform.isLinux) webkitgtk_4_0
   ++ lib.optional (withWebKit && stdenv.hostPlatform.isDarwin) WebKit
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     expat

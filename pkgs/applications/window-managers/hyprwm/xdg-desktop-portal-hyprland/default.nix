@@ -27,13 +27,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-hyprland";
-  version = "1.3.5";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-xTqnMoJsEojuvqJLuM+U7EZ7q71efaj3pbvjutq4TXc=";
+    hash = "sha256-1DGktDtSWIJpnDbVoj/qpvJSH5zg6JbOfuh6xqZMap0=";
   };
 
   depsBuildBuild = [
@@ -91,7 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/hyprwm/xdg-desktop-portal-hyprland/releases/tag/v${finalAttrs.version}";
     mainProgram = "hyprland-share-picker";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fufexan ];
+    maintainers = with lib.maintainers; [
+      fufexan
+      khaneliman
+    ];
     platforms = lib.platforms.linux;
   };
 })

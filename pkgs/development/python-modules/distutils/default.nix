@@ -5,13 +5,18 @@
   setuptools-scm,
   setuptools,
   python,
+  docutils,
+  jaraco-collections,
+  jaraco-functools,
   jaraco-envs,
   jaraco-path,
   jaraco-text,
   more-itertools,
+  packaging,
   path,
   pyfakefs,
   pytestCheckHook,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -22,11 +27,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "distutils";
-    rev = "813ab9868b353991ec7324eb09619ee5beb9183f";
-    hash = "sha256-/YtITDuZlTJRisqsQ6SrgRRUrqLZpj+k3drrouURZlc=";
+    rev = "72837514c2b67081401db556be9aaaa43debe44f"; # correlate commit from setuptools version
+    hash = "sha256-Kx4Iudy9oZ0oQT96Meyq/m0k0BuexPLVxwvpNJehCW0=";
   };
 
   build-system = [ setuptools-scm ];
+
+  dependencies = [
+    jaraco-collections
+    jaraco-functools
+    more-itertools
+    packaging
+  ];
 
   postInstall = ''
     rm -r $out/${python.sitePackages}/distutils
@@ -36,6 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "distutils" ];
 
   nativeCheckInputs = [
+    docutils
     jaraco-envs
     jaraco-path
     jaraco-text
@@ -44,6 +57,9 @@ buildPythonPackage rec {
     pyfakefs
     pytestCheckHook
   ];
+
+  # jaraco-path depends ob pyobjc
+  doCheck = !stdenv.isDarwin;
 
   meta = {
     description = "Distutils as found in cpython";

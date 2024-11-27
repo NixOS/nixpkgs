@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "mesa";
-  version = "2.3.0";
+  version = "2.4.0";
   format = "setuptools";
 
   # According to their docs, this library is for Python 3+.
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "mesa";
     inherit version;
-    hash = "sha256-wXHCyUk05Ez4ye5a1rKXCyKPZMK7bR7xZ5rpD5mEaUw=";
+    hash = "sha256-FlQlyNvtMXRSFT3kMwCEAjAH4b+ZCsxliUiPgbRsSgc=";
   };
 
   propagatedBuildInputs = [

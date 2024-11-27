@@ -1,26 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, Security
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jsonwatch";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "dbohdan";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-TGW04P8t0mAXza7I7qp6QRXA/MDE3m1dlRC7bMf2dSk=";
+    repo = "jsonwatch";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WzQ793dLb8OujNpEq7UXIgJM+lz0WZEVlbKmwM58klU=";
   };
 
-  cargoHash = "sha256-Gjb7v3kz11iOml3Ykxhy43KNxzaprgMbb5DpPNChLTc=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-  ];
+  cargoHash = "sha256-76Vvs3OaxYDZE39d9h3T8HhYQfHhY5D17PgQxcPrMyc=";
 
   meta = with lib; {
     description = "Like watch -d but for JSON";
@@ -34,8 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dbohdan/jsonwatch";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     mainProgram = "jsonwatch";
   };
 }

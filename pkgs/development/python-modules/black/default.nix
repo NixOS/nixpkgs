@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "24.4.2";
+  version = "24.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yHK1MFfwAAhdpmoZxV1o9vjdysJkI5KtOjVYeEBvvU0=";
+    hash = "sha256-JQCUVCC2eEw4ue6IWvA59edHHvKEqwP6Nezd5GiM2D8=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ buildPythonPackage rec {
       typing-extensions
     ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     colorama = [ colorama ];
     d = [ aiohttp ];
     uvloop = [ uvloop ];
@@ -71,7 +71,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     parameterized
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
     "-W"

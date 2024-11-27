@@ -53,7 +53,7 @@ stdenv.mkDerivation ({
   buildPhase = args.buildPhase or ''
     runHook preBuild
 
-    native-image -jar "$jar" $(export -p | sed -n 's/^declare -x \([^=]\+\)=.*$/ -E\1/p' | tr -d \\n) ''${nativeImageBuildArgs[@]}
+    native-image -jar "$jar" ''${nativeImageBuildArgs[@]}
 
     runHook postBuild
   '';

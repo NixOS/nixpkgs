@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wibo";
-  version = "0.4.2";
+  version = "0.6.14";
 
   src = fetchFromGitHub {
     owner = "decompals";
     repo = "wibo";
     rev = version;
-    hash = "sha256-oq/i0Hb2y5pwDEvaqSyC4+6LH1oUbvDZ/62l+V3S7Uk=";
+    hash = "sha256-6YcraHBFWmm8TBfuFHbM9jGvUm9KvTOplJrFSTQkt70=";
   };
 
   nativeBuildInputs = [
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
     gc = srcOnly {
       name = "GC_WII_COMPILERS";
       src = fetchzip {
-        url = "https://cdn.discordapp.com/attachments/727918646525165659/917185027656286218/GC_WII_COMPILERS.zip";
-        hash = "sha256-o+UrmIbCsa74LxtLofT0DKrTRgT0qDK5/V7GsG2Zprc=";
+        url = "https://files.decomp.dev/compilers_20230715.zip";
+        hash = "sha256-IX3byvEUVJB6Rmc+NqO9ZNt1jl95nQpEIqxbHI+uUio=";
         stripRoot = false;
       };
       meta.license = lib.licenses.unfree;

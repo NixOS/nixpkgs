@@ -205,6 +205,7 @@ pythonPackages.buildPythonApplication rec {
     rich
     jsonformatter
     libgravatar
+    setuptools
   ];
 
   passthru.tests = {

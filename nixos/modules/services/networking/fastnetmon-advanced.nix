@@ -160,6 +160,8 @@ in {
         }
       });
     '';
+    # dbus/polkit with DynamicUser is broken with the default implementation
+    services.dbus.implementation = "broker";
 
     # We don't use the existing gobgp NixOS module and package, because the gobgp
     # version might not be compatible with fastnetmon. Also, the service name

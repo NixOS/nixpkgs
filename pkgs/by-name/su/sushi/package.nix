@@ -77,6 +77,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/sushi";
+    changelog = "https://gitlab.gnome.org/GNOME/sushi/-/blob/${version}/NEWS?ref_type=tags";
     description = "Quick previewer for Nautilus";
     mainProgram = "sushi";
     maintainers = teams.gnome.members;

@@ -38,14 +38,11 @@ let
         description = ''
           List of address ranges allowed to query this zone. Instead of the address(es), this may instead
           contain the single string "any".
-
-          NOTE: This overrides the global-level `allow-query` setting, which is set to the contents
-          of `cachenetworks`.
         '';
         default = [ "any" ];
       };
       extraConfig = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.lines;
         description = "Extra zone config to be appended at the end of the zone section.";
         default = "";
       };
@@ -65,7 +62,7 @@ let
       options {
         listen-on { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn} };
         listen-on-v6 { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6} };
-        allow-query { cachenetworks; };
+        allow-query-cache { cachenetworks; };
         blackhole { badnetworks; };
         forward ${cfg.forward};
         forwarders { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };

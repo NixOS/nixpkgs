@@ -18,22 +18,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "remmina";
-  version = "1.4.35";
+  version = "1.4.36";
 
   src = fetchFromGitLab {
     owner = "Remmina";
     repo = "Remmina";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0z2fcBnChCBYPxyFm/xpAW0jHaUGA92NQgjt+lWFUnM=";
+    hash = "sha256-u+ysAFi7I7nXIiAw7VCmHbqgtRoZgkPnRfy/Mnl1b2g=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "add-a-conditional-check-for-darwin-and-NetBSD.patch";
-      url = "https://gitlab.com/Remmina/Remmina/-/commit/3b681398c823e070c7f780166b9d9fc2158e66c1.diff";
-      hash = "sha256-Ovdrsl9bftXiuXV+sqvDP9VGuXQZzC5VKOmkYmBXhNA=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook3 ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];

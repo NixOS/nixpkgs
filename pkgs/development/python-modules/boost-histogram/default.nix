@@ -3,31 +3,46 @@
   fetchPypi,
   buildPythonPackage,
   pythonOlder,
+  cmake,
+  pybind11,
+  nanobind,
+  ninja,
+  setuptools-scm,
   boost,
   numpy,
   pytestCheckHook,
   pytest-benchmark,
-  setuptools-scm,
+  scikit-build-core,
 }:
 
 buildPythonPackage rec {
   pname = "boost-histogram";
-  version = "1.4.1";
-  format = "setuptools";
+  version = "1.5.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "boost_histogram";
     inherit version;
-    hash = "sha256-lxRvc19GfVBpdqBH8/I3zlmECpUv0jH19DH4l/sAbN0=";
+    hash = "sha256-BiPwEObFLl0Bh2dyOVloYJDbB/ww8NHYR1tdZjxd2yw=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [ cmake ];
+
+  dontUseCmakeConfigure = true;
+
+  build-system = [
+    pybind11
+    nanobind
+    ninja
+    scikit-build-core
+    setuptools-scm
+  ];
 
   buildInputs = [ boost ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [
     pytestCheckHook

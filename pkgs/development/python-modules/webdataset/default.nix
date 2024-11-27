@@ -2,34 +2,38 @@
   lib,
   stdenv,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   braceexpand,
+  numpy,
+  pyyaml,
+
+  # tests
   imageio,
   lmdb,
   msgpack,
-  numpy,
   pytestCheckHook,
-  pyyaml,
-  setuptools,
   torch,
   torchvision,
-  wheel,
-  fetchFromGitHub,
 }:
 buildPythonPackage rec {
   pname = "webdataset";
-  version = "0.2.100";
+  version = "0.2.107";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "webdataset";
     repo = "webdataset";
-    rev = "refs/tags/${version}";
-    hash = "sha256-+Rvb4VY4qBcVKM1CUkLZTQdlZklpHcuiMO8r6VNInLc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-L9RUQItmW/7O/eTst2Sl/415EP4Jo662bKWbYA6p5bk=";
   };
 
   build-system = [
     setuptools
-    wheel
   ];
 
   dependencies = [
@@ -39,12 +43,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     imageio
+    lmdb
+    msgpack
+    pytestCheckHook
     torch
     torchvision
-    msgpack
-    lmdb
   ];
 
   pythonImportsCheck = [ "webdataset" ];
@@ -86,10 +90,10 @@ buildPythonPackage rec {
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # AttributeError: <module 'torch.distributed' from /nix/store/...
-    "tests/test_wids.py"
+    "tests/wids/test_wids.py"
 
     # Issue with creating a temp file in the sandbox
-    "tests/test_wids_mmtar.py"
+    "tests/wids/test_wids_mmtar.py"
   ];
 
   meta = {

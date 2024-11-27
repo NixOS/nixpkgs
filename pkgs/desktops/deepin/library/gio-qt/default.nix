@@ -4,11 +4,9 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  wrapQtAppsHook,
+  libsForQt5,
   glibmm,
   doxygen,
-  qttools,
-  qtbase,
   buildDocs ? true,
 }:
 
@@ -34,11 +32,11 @@ stdenv.mkDerivation rec {
     [
       cmake
       pkg-config
-      wrapQtAppsHook
+      libsForQt5.wrapQtAppsHook
     ]
     ++ lib.optionals buildDocs [
       doxygen
-      qttools.dev
+      libsForQt5.qttools
     ];
 
   cmakeFlags = [
@@ -51,7 +49,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # qt.qpa.plugin: Could not find the Qt platform plugin "minimal"
     # A workaround is to set QT_PLUGIN_PATH explicitly
-    export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
+    export QT_PLUGIN_PATH=${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}
   '';
 
   meta = with lib; {

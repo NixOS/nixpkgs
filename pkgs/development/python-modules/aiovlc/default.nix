@@ -8,13 +8,12 @@
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
-  rich,
   typer,
 }:
 
 buildPythonPackage rec {
   pname = "aiovlc";
-  version = "0.5.0";
+  version = "0.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,22 +22,21 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = "aiovlc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-F66HGfbsve/jYyUEapUTVtLxaEIW63r3eNNk7mXOx5Y=";
+    hash = "sha256-tvMd7kydL4fx9JLTFQgCskBQCV0Zs/swDpPBxtSEvyM=";
   };
 
   build-system = [ poetry-core ];
 
-  dependencies = [
-    rich
-    typer
-  ];
+  optional-dependencies = {
+    cli = [ typer ];
+  };
 
   nativeCheckInputs = [
     pytest-asyncio
     pytest-cov-stub
     pytest-timeout
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "aiovlc" ];
 

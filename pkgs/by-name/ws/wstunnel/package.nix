@@ -6,11 +6,10 @@
   nixosTests,
   nix-update-script,
   versionCheckHook,
-  darwin,
 }:
 
 let
-  version = "10.1.1";
+  version = "10.1.6";
 in
 
 rustPlatform.buildRustPackage {
@@ -21,15 +20,17 @@ rustPlatform.buildRustPackage {
     owner = "erebe";
     repo = "wstunnel";
     rev = "v${version}";
-    hash = "sha256-qEWIyQkLRrmTH40S96hj8JXFz/VJChIbg8qEQc938nI=";
+    hash = "sha256-ufssj7m5mly2B33e1DWY2e6AH0zTPh3SozYc663QjJ4=";
   };
 
-  cargoHash = "sha256-3b+pX/qQuhOY1OYr+CfT5wtiJcEJ8CJJsQZ4QOcYv74=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "fastwebsockets-0.8.0" = "sha256-eqtCh9fMOG2uvL/GLUVXNiSB+ovYLc/Apuq9zssn8hU=";
+    };
+  };
 
   nativeBuildInputs = [ versionCheckHook ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
 
   doInstallCheck = true;
 
@@ -52,6 +53,7 @@ rustPlatform.buildRustPackage {
     changelog = "https://github.com/erebe/wstunnel/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      raylas
       rvdp
       neverbehave
     ];

@@ -37,6 +37,6 @@ buildGoModule rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gapcast";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

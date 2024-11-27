@@ -38,6 +38,7 @@
 , util-linux
 , pulseaudioSupport ? true
 , libpulseaudio
+, pulseaudio
 }:
 
 let
@@ -48,23 +49,23 @@ let
   # and often with different versions.  We write them on three lines
   # like this (rather than using {}) so that the updater script can
   # find where to edit them.
-  versions.aarch64-darwin = "6.2.0.40111";
-  versions.x86_64-darwin = "6.2.0.40111";
-  versions.x86_64-linux = "6.2.0.1855";
+  versions.aarch64-darwin = "6.2.10.43047";
+  versions.x86_64-darwin = "6.2.10.43047";
+  versions.x86_64-linux = "6.2.10.4983";
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
-      hash = "sha256-/oi10pi9Xykmfo0UA1cDPzlB4xUQxAr8rkEoUpp1fQM=";
+      hash = "sha256-i6ZO6Gp0PL200oklp7NJ56jGKF/nvuo54EazyfBU0Eo=";
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-CZm0lrBYGHkPpdLu0sE/V+ADwglk/btSNvdzPRaeysI=";
+      hash = "sha256-lqmRjIre20VG9gkd7ISosABwYdLaHQDnSPYFKJZKh4Q=";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-Ej8BRySQso62VE7e4XjXFGsvlB9cEVceha/WVhTBG4E=";
+      hash = "sha256-lPUKxkXI3yB/fCY05kQSJhTGSsU6v+t8nq5H6FLwhrk=";
     };
   };
 
@@ -112,8 +113,9 @@ let
     libkrb5
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
+  binPath = lib.makeBinPath ([ coreutils glib.dev pciutils procps util-linux ] ++ lib.optional pulseaudioSupport pulseaudio);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zoom";
   version = versions.${system} or throwSystem;
 
@@ -151,15 +153,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postFixup =  lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     makeWrapper $out/Applications/zoom.us.app/Contents/MacOS/zoom.us $out/bin/zoom
   '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     # Desktop File
     substituteInPlace $out/share/applications/Zoom.desktop \
         --replace-fail "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"
 
-    for i in aomhost zopen zoom ZoomLauncher; do
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/$i
+    for i in aomhost zopen zoom ZoomLauncher ZoomWebviewHost; do
+      if [ -f $out/opt/zoom/$i ]; then
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/$i
+      fi
     done
 
     # ZoomLauncher sets LD_LIBRARY_PATH before execing zoom
@@ -178,8 +182,16 @@ stdenv.mkDerivation rec {
       --unset QML2_IMPORT_PATH \
       --unset QT_PLUGIN_PATH \
       --unset QT_SCREEN_SCALE_FACTORS \
-      --prefix PATH : ${lib.makeBinPath [ coreutils glib.dev pciutils procps util-linux ]} \
+      --prefix PATH : ${binPath} \
       --prefix LD_LIBRARY_PATH ":" ${libs}
+
+    if [ -f $out/opt/zoom/ZoomWebviewHost ]; then
+      wrapProgram $out/opt/zoom/ZoomWebviewHost \
+        --unset QML2_IMPORT_PATH \
+        --unset QT_PLUGIN_PATH \
+        --unset QT_SCREEN_SCALE_FACTORS \
+        --prefix LD_LIBRARY_PATH ":" ${libs}
+    fi
 
     # Backwards compatibility: we used to call it zoom-us
     ln -s $out/bin/{zoom,zoom-us}
@@ -192,6 +204,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://zoom.us/";
+    changelog = "https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0061222";
     description = "zoom.us video conferencing application";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;

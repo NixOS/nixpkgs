@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "ATSC A/52 stream decoder";
     homepage = "https://liba52.sourceforge.io/";
+    changelog = "https://git.adelielinux.org/community/a52dec/-/blob/v${version}/ChangeLog?ref_type=tags";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ wegank ];
     mainProgram = "a52dec";

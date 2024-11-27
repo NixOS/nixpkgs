@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "templ";
-  version = "0.2.778";
+  version = "0.2.793";
 
   src = fetchFromGitHub {
     owner = "a-h";
     repo = "templ";
     rev = "v${version}";
-    hash = "sha256-lU8aVTw73HX0lNGPyD8Xnvtnr2VFTXv/S6xCVn6Lg74=";
+    hash = "sha256-0KGht5IMbJV8KkXgT5qJxA9bcmWevzXXAVPMQTm0ccw=";
   };
 
   vendorHash = "sha256-ZWY19f11+UI18jeHYIEZjdb9Ii74mD6w+dYRLPkdfBU=";

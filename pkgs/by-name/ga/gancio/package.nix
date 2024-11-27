@@ -12,19 +12,19 @@
 }:
 mkYarnPackage rec {
   inherit (nodePackages) nodejs;
-  version = "1.19.1";
+  version = "1.19.4";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "les";
     repo = "gancio";
     rev = "v${version}";
-    hash = "sha256-V63cnyPY9todiA4V/9aENEBOfO0g0bJZBjsOfTY1O0c=";
+    hash = "sha256-x8s7eBVmHCY3kAjHjACotCncvZq6OBiLPJGF6hvfawE=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-ONPvBvT3zf8IVkIEOmiQgcjI7zPCFwDuQfo+fOvDGzM=";
+    hash = "sha256-LXeAyxZSZOm6GxRuJb5rlHTlQpYa1fdKSENVjwLY4tU=";
   };
 
   packageJSON = ./package.json;

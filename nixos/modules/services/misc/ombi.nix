@@ -12,6 +12,8 @@ in {
         on how to set up a reverse proxy
       '';
 
+      package = lib.mkPackageOption pkgs "ombi" { };
+
       dataDir = lib.mkOption {
         type = lib.types.str;
         default = "/var/lib/ombi";
@@ -58,7 +60,7 @@ in {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.ombi}/bin/Ombi --storage '${cfg.dataDir}' --host 'http://*:${toString cfg.port}'";
+        ExecStart = "${lib.getExe cfg.package} --storage '${cfg.dataDir}' --host 'http://*:${toString cfg.port}'";
         Restart = "on-failure";
       };
     };

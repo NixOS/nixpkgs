@@ -109,6 +109,9 @@ in stdenv.mkDerivation (finalAttrs: {
     "--tools=rustc,rustdoc,rust-analyzer-proc-macro-srv"
     "--enable-rpath"
     "--enable-vendor"
+    # For Nixpkgs it makes more sense to use stdenv's linker than
+    # letting rustc build its own.
+    "--disable-lld"
     "--build=${stdenv.buildPlatform.rust.rustcTargetSpec}"
     "--host=${stdenv.hostPlatform.rust.rustcTargetSpec}"
     # std is built for all platforms in --target.
@@ -169,7 +172,7 @@ in stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # https://github.com/rust-lang/rust/issues/92173
     "--set rust.jemalloc"
-  ] ++ optionals useLLVM [
+  ] ++ optionals (useLLVM && !stdenv.targetPlatform.isFreeBSD) [
     # https://github.com/NixOS/nixpkgs/issues/311930
     "--llvm-libunwind=${if withBundledLLVM then "in-tree" else "system"}"
     "--enable-use-libcxx"
@@ -230,7 +233,7 @@ in stdenv.mkDerivation (finalAttrs: {
     export JEMALLOC_SYS_WITH_LG_VADDR=48
   '' + lib.optionalString (!(finalAttrs.src.passthru.isReleaseTarball or false)) ''
     mkdir .cargo
-    cat > .cargo/config <<\EOF
+    cat > .cargo/config.toml <<\EOF
     [source.crates-io]
     replace-with = "vendored-sources"
     [source.vendored-sources]
@@ -259,7 +262,7 @@ in stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ openssl ]
     ++ optionals stdenv.hostPlatform.isDarwin [ libiconv Security zlib ]
     ++ optional (!withBundledLLVM) llvmShared.lib
-    ++ optional (useLLVM && !withBundledLLVM) [
+    ++ optional (useLLVM && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD) [
       llvmPackages.libunwind
       # Hack which is used upstream https://github.com/gentoo/gentoo/blob/master/dev-lang/rust/rust-1.78.0.ebuild#L284
       (runCommandLocal "libunwind-libgcc" {} ''
@@ -303,6 +306,7 @@ in stdenv.mkDerivation (finalAttrs: {
   passthru = {
     llvm = llvmShared;
     inherit llvmPackages;
+    inherit (rustc) tier1TargetPlatforms targetPlatforms badTargetPlatforms;
     tests = {
       inherit fd ripgrep wezterm;
     } // lib.optionalAttrs stdenv.hostPlatform.isLinux { inherit firefox thunderbird; };
@@ -313,19 +317,9 @@ in stdenv.mkDerivation (finalAttrs: {
     description = "Safe, concurrent, practical language";
     maintainers = with maintainers; [ havvy ] ++ teams.rust.members;
     license = [ licenses.mit licenses.asl20 ];
-    platforms = [
-      # Platforms with host tools from
-      # https://doc.rust-lang.org/nightly/rustc/platform-support.html
-      "x86_64-darwin" "i686-darwin" "aarch64-darwin"
-      "i686-freebsd" "x86_64-freebsd"
-      "x86_64-solaris"
-      "aarch64-linux" "armv6l-linux" "armv7l-linux" "i686-linux"
-      "loongarch64-linux" "powerpc64-linux" "powerpc64le-linux"
-      "riscv64-linux" "s390x-linux" "x86_64-linux"
-      "aarch64-netbsd" "armv7l-netbsd" "i686-netbsd" "powerpc-netbsd"
-      "x86_64-netbsd"
-      "i686-openbsd" "x86_64-openbsd"
-      "i686-windows" "x86_64-windows"
-    ];
+    platforms = rustc.tier1TargetPlatforms;
+    # If rustc can't target a platform, we also can't build rustc for
+    # that platform.
+    badPlatforms = rustc.badTargetPlatforms;
   };
 })

@@ -59,7 +59,7 @@ let
 in
 buildPythonPackage rec {
   pname = "numpy";
-  version = "2.1.1";
+  version = "2.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-0M99VbEFE4eAdAWziY76+oYpl7TLqKpdvmV755Sv6v0=";
+    hash = "sha256-E1MqCIIX+mJMmbhD7rVGQN4js0FLFKpm0COAXrcxBmw=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -140,7 +140,11 @@ buildPythonPackage rec {
   ];
 
   disabledTests =
-    lib.optionals (pythonAtLeast "3.13") [
+    [
+      # Tries to import numpy.distutils.msvccompiler, removed in setuptools 74.0
+      "test_api_importable"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
       # https://github.com/numpy/numpy/issues/26713
       "test_iter_refcount"
     ]

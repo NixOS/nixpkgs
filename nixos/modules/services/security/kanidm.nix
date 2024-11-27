@@ -31,6 +31,7 @@ let
     mkOption
     mkPackageOption
     optional
+    optionals
     optionalString
     splitString
     subtractLists
@@ -45,10 +46,22 @@ let
   serverConfigFile = settingsFormat.generate "server.toml" (filterConfig cfg.serverSettings);
   clientConfigFile = settingsFormat.generate "kanidm-config.toml" (filterConfig cfg.clientSettings);
   unixConfigFile = settingsFormat.generate "kanidm-unixd.toml" (filterConfig cfg.unixSettings);
-  certPaths = builtins.map builtins.dirOf [
-    cfg.serverSettings.tls_chain
-    cfg.serverSettings.tls_key
-  ];
+  provisionSecretFiles = filter (x: x != null) (
+    [
+      cfg.provision.idmAdminPasswordFile
+      cfg.provision.adminPasswordFile
+    ]
+    ++ mapAttrsToList (_: x: x.basicSecretFile) cfg.provision.systems.oauth2
+  );
+  secretDirectories = unique (
+    map builtins.dirOf (
+      [
+        cfg.serverSettings.tls_chain
+        cfg.serverSettings.tls_key
+      ]
+      ++ optionals cfg.provision.enable provisionSecretFiles
+    )
+  );
 
   # Merge bind mount paths and remove paths where a prefix is already mounted.
   # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
@@ -198,16 +211,19 @@ let
   '';
 
   serverPort =
+    let
+      address = cfg.serverSettings.bindaddress;
+    in
     # ipv6:
-    if hasInfix "]:" cfg.serverSettings.bindaddress then
-      last (splitString "]:" cfg.serverSettings.bindaddress)
+    if hasInfix "]:" address then
+      last (splitString "]:" address)
     else
     # ipv4:
-    if hasInfix "." cfg.serverSettings.bindaddress then
-      last (splitString ":" cfg.serverSettings.bindaddress)
+    if hasInfix "." address then
+      last (splitString ":" address)
     # default is 8443
     else
-      "8443";
+      throw "Address not parseable as IPv4 nor IPv6.";
 in
 {
   options.services.kanidm = {
@@ -225,6 +241,7 @@ in
           bindaddress = mkOption {
             description = "Address/port combination the webserver binds to.";
             example = "[::1]:8443";
+            default = "127.0.0.1:8443";
             type = types.str;
           };
           # Should be optional but toml does not accept null
@@ -498,13 +515,13 @@ in
               };
 
               originUrl = mkOption {
-                description = "The origin URL of the service. OAuth2 redirects will only be allowed to sites under this origin. Must end with a slash.";
+                description = "The redirect URL of the service. These need to exactly match the OAuth2 redirect target";
                 type =
                   let
-                    originStrType = types.strMatching ".*://.*/$";
+                    originStrType = types.strMatching ".*://.*$";
                   in
                   types.either originStrType (types.nonEmptyListOf originStrType);
-                example = "https://someservice.example.com/";
+                example = "https://someservice.example.com/auth/login";
               };
 
               originLanding = mkOption {
@@ -813,7 +830,7 @@ in
         (
           defaultServiceConfig
           // {
-            BindReadOnlyPaths = mergePaths (defaultServiceConfig.BindReadOnlyPaths ++ certPaths);
+            BindReadOnlyPaths = mergePaths (defaultServiceConfig.BindReadOnlyPaths ++ secretDirectories);
           }
         )
         {
@@ -979,7 +996,6 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [
-    erictapen
     Flakebi
     oddlama
   ];

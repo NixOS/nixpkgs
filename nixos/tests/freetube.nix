@@ -35,7 +35,7 @@ let
         machine.wait_for_text('Your Subscription list is currently empty')
         machine.screenshot("main.png")
         machine.send_key("ctrl-comma")
-        machine.wait_for_text('Data Settings', timeout=60)
+        machine.wait_for_text('Data', timeout=60)
         machine.screenshot("preferences.png")
       '';
     });

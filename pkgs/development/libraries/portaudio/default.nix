@@ -5,11 +5,7 @@
 , libjack2
 , pkg-config
 , which
-, AudioUnit
-, AudioToolbox
-, CoreAudio
-, CoreServices
-, Carbon }:
+}:
 
 stdenv.mkDerivation rec {
   pname = "portaudio";
@@ -22,13 +18,13 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ pkg-config which ];
-  buildInputs = [ libjack2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ alsa-lib ];
+  buildInputs =
+    [ libjack2 ]
+      ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform alsa-lib) [ alsa-lib ];
 
   configureFlags = [ "--disable-mac-universal" "--enable-cxx" ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=nullability-inferred-on-nested-type -Wno-error=nullability-completeness-on-arrays -Wno-error=implicit-const-int-float-conversion";
-
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ AudioUnit AudioToolbox CoreAudio CoreServices Carbon ];
 
   # Disable parallel build as it fails as:
   #   make: *** No rule to make target '../../../lib/libportaudio.la',
@@ -45,7 +41,7 @@ stdenv.mkDerivation rec {
   # not sure why, but all the headers seem to be installed by the make install
   installPhase = ''
     make install
-  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+  '' + lib.optionalString (lib.meta.availableOn stdenv.hostPlatform alsa-lib) ''
     # fixup .pc file to find alsa library
     sed -i "s|-lasound|-L${alsa-lib.out}/lib -lasound|" "$out/lib/pkgconfig/"*.pc
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''

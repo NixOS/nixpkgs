@@ -3,7 +3,6 @@
 , rustPlatform
 
 , darwin
-, libX11
 , openssl
 , pkg-config
 , stdenv
@@ -11,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "smartcat";
-  version = "1.4.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "efugier";
     repo = "smartcat";
     rev = "refs/tags/${version}";
-    hash = "sha256-/BJdLHK8rb9QVlkLbRCXIPlHiI2eThAZvhIhJWW43Q4=";
+    hash = "sha256-QoMBQ/Xjh/xbsE9HthUKwm5v2tiN1tC2u6I/aOeO6ws=";
   };
 
-  cargoHash = "sha256-mMoLFlY4mExG7MCu2uXPzmG3krKIWOLwcnth8gt40eg=";
+  cargoHash = "sha256-SAv2tgo5jBSsVhLM2FR5S9Sg0yZBghSKKSV9hhUCvCk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -28,7 +27,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-    libX11
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.AppKit

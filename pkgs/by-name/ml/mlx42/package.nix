@@ -4,20 +4,19 @@
   fetchFromGitHub,
   cmake,
   glfw,
-  darwin,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableDebug ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mlx42";
-  version = "2.3.4";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "codam-coding-college";
     repo = "MLX42";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-c4LoTePHhQeZTx33V1K3ZyXmT7vjB6NdkGVAiSuJKfI=";
+    hash = "sha256-jYcBvvx0Xfc/wDWSUROfQeRvn+tWvSS0ymKO1iuzg8w=";
   };
 
   postPatch =
@@ -33,16 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs =
-    [ glfw ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        OpenGL
-        Cocoa
-        IOKit
-      ]
-    );
+  buildInputs = [ glfw ];
 
   cmakeFlags = [ (lib.cmakeBool "DEBUG" enableDebug) ];
 

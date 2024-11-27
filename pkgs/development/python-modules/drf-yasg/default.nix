@@ -2,25 +2,29 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  inflection,
-  ruamel-yaml,
+  setuptools,
   setuptools-scm,
-  six,
-  coreapi,
+  django,
   djangorestframework,
-  pytestCheckHook,
-  pytest-django,
+  inflection,
+  packaging,
+  pytz,
+  pyyaml,
+  uritemplate,
   datadiff,
+  dj-database-url,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "drf-yasg";
-  version = "1.21.7";
-  format = "setuptools";
+  version = "1.21.8";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TDuTBos9/KaWmrERFV5N1vey1oC5h3jej9Rgt4N72w0=";
+    hash = "sha256-y7f4HD0UDyIHOStLxd3mU4TutY4bfuoabWQd7C9zUqk=";
   };
 
   postPatch = ''
@@ -28,23 +32,35 @@ buildPythonPackage rec {
     sed -i "/packaging/d" requirements/base.txt
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
-    six
-    inflection
-    ruamel-yaml
-    coreapi
+  dependencies = [
+    django
     djangorestframework
+    inflection
+    packaging
+    pytz
+    pyyaml
+    uritemplate
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-django
     datadiff
+    dj-database-url
   ];
 
-  # ImportError: No module named 'testproj.settings'
+  env.DJANGO_SETTINGS_MODULE = "testproj.settings.local";
+
+  preCheck = ''
+    cd testproj
+  '';
+
+  # a lot of libraries are missing
   doCheck = false;
 
   pythonImportsCheck = [ "drf_yasg" ];

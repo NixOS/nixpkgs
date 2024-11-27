@@ -22,7 +22,7 @@
   flake8,
   httpx,
   ipython,
-  pytest-cov,
+  pytest-cov-stub,
   requests,
   requests-toolbelt,
   nbdev,
@@ -77,7 +77,7 @@ buildPythonPackage {
     flake8
     httpx
     ipython
-    pytest-cov
+    pytest-cov-stub
     requests
     requests-toolbelt
     nbdev

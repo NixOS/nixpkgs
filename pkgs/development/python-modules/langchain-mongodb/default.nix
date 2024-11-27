@@ -65,6 +65,9 @@ buildPythonPackage rec {
     description = "Integration package connecting MongoDB and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/mongodb";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

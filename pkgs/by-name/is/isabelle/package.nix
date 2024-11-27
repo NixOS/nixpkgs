@@ -151,10 +151,10 @@ in stdenv.mkDerivation (finalAttrs: rec {
     done
     patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/$arch/bash_process
     for d in contrib/kodkodi-*/jni/$arch; do
-      patchelf --set-rpath "${lib.concatStringsSep ":" [ "${java}/lib/openjdk/lib/server" "${stdenv.cc.cc.lib}/lib" ]}" $d/*.so
+      patchelf --set-rpath "${lib.concatStringsSep ":" [ "${java}/lib/openjdk/lib/server" "${lib.getLib stdenv.cc.cc}/lib" ]}" $d/*.so
     done
   '' + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
-    patchelf --set-rpath "${stdenv.cc.cc.lib}/lib" contrib/z3-*/$arch/z3
+    patchelf --set-rpath "${lib.getLib stdenv.cc.cc}/lib" contrib/z3-*/$arch/z3
   '';
 
   buildPhase = ''

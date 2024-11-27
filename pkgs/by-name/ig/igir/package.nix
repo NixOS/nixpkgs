@@ -28,7 +28,7 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
-  buildInputs = [ stdenv.cc.cc.lib ];
+  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
   # from lib/node_modules/igir/node_modules/@node-rs/crc32-linux-x64-musl/crc32.linux-x64-musl.node
   # Irrelevant to our use
@@ -38,6 +38,7 @@ buildNpmPackage rec {
     description = "Video game ROM collection manager to help filter, sort, patch, archive, and report on collections on any OS";
     mainProgram = "igir";
     homepage = "https://igir.io";
+    changelog = "https://github.com/emmercm/igir/releases/tag/${src.rev}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;

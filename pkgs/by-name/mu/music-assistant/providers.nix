@@ -1,12 +1,15 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.2.6";
+  version = "2.3.2";
   providers = {
     airplay = ps: [
     ];
     apple_music = ps: [
     ]; # missing pywidevine
+    bluesound = ps: with ps; [
+      pyblu
+    ];
     builtin = ps: [
     ];
     chromecast = ps: with ps; [
@@ -40,6 +43,8 @@
     opensubsonic = ps: with ps; [
       py-opensonic
     ];
+    player_group = ps: [
+    ];
     plex = ps: with ps; [
       plexapi
     ];
@@ -48,6 +53,8 @@
     radiobrowser = ps: with ps; [
       radios
     ];
+    siriusxm = ps: [
+    ]; # missing sxm
     slimproto = ps: with ps; [
       aioslimproto
     ];
@@ -55,10 +62,11 @@
       bidict
       snapcast
     ];
-    sonos = ps: with ps; [
+    sonos = ps: [
+    ]; # missing aiosonos
+    sonos_s1 = ps: with ps; [
       defusedxml
       soco
-      sonos-websocket
     ];
     soundcloud = ps: [
     ]; # missing soundcloudpy
@@ -75,8 +83,6 @@
       tidalapi
     ];
     tunein = ps: [
-    ];
-    ugp = ps: [
     ];
     ytmusic = ps: with ps; [
       yt-dlp

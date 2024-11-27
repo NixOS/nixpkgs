@@ -4,8 +4,8 @@
 
 { cmdLineToolsVersion ? "13.0"
 , toolsVersion ? "26.1.1"
-, platformToolsVersion ? "35.0.1"
-, buildToolsVersions ? [ "34.0.0" ]
+, platformToolsVersion ? "35.0.2"
+, buildToolsVersions ? [ "35.0.0" ]
 , includeEmulator ? false
 , emulatorVersion ? "35.1.4"
 , platformVersions ? []
@@ -15,7 +15,7 @@
 , abiVersions ? [ "x86" "x86_64" "armeabi-v7a" "arm64-v8a" ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
-, ndkVersion ? "26.3.11579264"
+, ndkVersion ? "27.0.12077973"
 , ndkVersions ? [ndkVersion]
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false

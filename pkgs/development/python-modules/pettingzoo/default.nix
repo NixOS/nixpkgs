@@ -17,7 +17,7 @@
   pre-commit,
   pynput,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-markdown-docs,
   pytest-xdist,
   pytestCheckHook,
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       chess
       # multi-agent-ale-py
@@ -87,7 +87,7 @@ buildPythonPackage rec {
       pre-commit
       pynput
       pytest
-      pytest-cov
+      pytest-cov-stub
       pytest-markdown-docs
       pytest-xdist
     ];

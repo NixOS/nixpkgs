@@ -3,13 +3,13 @@
 
 buildGoModule rec {
   pname = "restic";
-  version = "0.17.1";
+  version = "0.17.3";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    hash = "sha256-/kgZgHmIxZkkmLyR246CcU+8wAekuK8SruY5GBLxJXI=";
+    hash = "sha256-PTy/YcojJGrYQhdp98e3rEMqHIWDMR5jiSC6BdzBT/M=";
   };
 
   patches = [
@@ -25,7 +25,9 @@ buildGoModule rec {
 
   nativeCheckInputs = [ python3 ];
 
-  passthru.tests.restic = nixosTests.restic;
+  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    restic = nixosTests.restic;
+  };
 
   postPatch = ''
     rm cmd/restic/cmd_mount_integration_test.go

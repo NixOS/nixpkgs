@@ -26,6 +26,7 @@
   httpx,
   psutil,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   redis,
   redis-server,
@@ -36,12 +37,12 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.12.8";
+  version = "3.13.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-++zGXLtQ01srmF0EqUFqaxh+mnNzW8IzYG1RzNGTXkw=";
+    hash = "sha256-GFzIDSE+09L4RC5w4h3fqgq9lkyOVjq5JN++ZNbHWc8=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -53,7 +54,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pook = [ pook ];
     speedups = [ xxhash ];
   };
@@ -66,13 +67,14 @@ buildPythonPackage rec {
       httpx
       psutil
       pytest-asyncio
+      pytest-cov-stub
       pytestCheckHook
       redis
       requests
       sure
     ]
     ++ lib.optionals (pythonOlder "3.12") [ aiohttp ]
-    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     ${redis-server}/bin/redis-server &

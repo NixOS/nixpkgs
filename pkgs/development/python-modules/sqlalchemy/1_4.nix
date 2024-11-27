@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ greenlet ];
 
-  passthru.optional-dependencies = lib.fix (self: {
+  optional-dependencies = lib.fix (self: {
     asyncio = [ greenlet ];
     mypy = [ mypy ];
     mssql = [ pyodbc ];

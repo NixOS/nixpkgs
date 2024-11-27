@@ -14,19 +14,19 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.10.2";
+  version = "1.10.7";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rLdUEdAvYy8SDgKWUanZgmMnJ6Dg2dO5tTpGTwlQCrU=";
+    hash = "sha256-/CZzRIXD0shEok9H+Vx7s9BmzXTI6ly957jvS+nU2fI=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname src;
 
-    hash = "sha256-bosCE9gBFCcM3Ww6sJmhps/cl4lovXKMieYpkqAMst8=";
+    hash = "sha256-vVzERis1W3QZB/i6SQR9dQR56yDWadKWvFr+nLTQY9Y=";
   };
 
   nativeBuildInputs = [
@@ -51,8 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       )
     );
     VENCORD_REMOTE = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
-    # TODO: somehow update this automatically
-    VENCORD_HASH = "deadbeef";
+    VENCORD_HASH = "${finalAttrs.version}";
   };
 
   buildPhase = ''
@@ -98,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
       FlafyDev
       NotAShelf
       Scrumplex
+      donteatoreo
     ];
   };
 })

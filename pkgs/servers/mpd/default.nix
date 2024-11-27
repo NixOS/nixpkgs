@@ -2,7 +2,7 @@
 # Darwin inputs
 , AudioToolbox, AudioUnit
 # Inputs
-, curl, libmms, libnfs, liburing, samba
+, curl, libcdio, libcdio-paranoia, libmms, libnfs, liburing, samba
 # Archive support
 , bzip2, zziplib
 # Codecs
@@ -37,6 +37,7 @@ let
     udisks        = [ dbus ];
     webdav        = [ curl expat ];
     # Input plugins
+    cdio_paranoia = [ libcdio libcdio-paranoia ];
     curl          = [ curl ];
     io_uring      = [ liburing ];
     mms           = [ libmms ];

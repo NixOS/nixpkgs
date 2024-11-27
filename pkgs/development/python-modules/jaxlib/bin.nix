@@ -189,7 +189,7 @@ buildPythonPackage {
     lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
     ++ lib.optionals cudaSupport [ autoAddDriverRunpath ];
   # Dynamic link dependencies
-  buildInputs = [ stdenv.cc.cc.lib ];
+  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
   # jaxlib contains shared libraries that open other shared libraries via dlopen
   # and these implicit dependencies are not recognized by ldd or

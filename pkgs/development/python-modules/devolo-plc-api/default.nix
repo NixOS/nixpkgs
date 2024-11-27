@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "protobuf>=4.22.0" "protobuf"
+      --replace-fail "protobuf>=4.22.0" "protobuf"
   '';
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -51,6 +51,11 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     syrupy
+  ];
+
+  disabledTests = [
+    # pytest-httpx compat issue
+    "test_wrong_password_type"
   ];
 
   pythonImportsCheck = [ "devolo_plc_api" ];

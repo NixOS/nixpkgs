@@ -14,6 +14,7 @@
   coloredlogs,
   crc,
   libgpiod,
+  pyserial-asyncio-fast,
   typing-extensions,
   zigpy,
 
@@ -26,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "universal-silabs-flasher";
-  version = "0.0.22";
+  version = "0.0.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "universal-silabs-flasher";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fAz5dhHO5A0pSH6IYcVwNWPxqsNn3urXqnp8GudOrBA=";
+    hash = "sha256-fmm5QrRpZIYmPO4GK/JrP7w0Utlw52pfh524pgESliM=";
   };
 
   postPatch = ''
@@ -56,6 +57,7 @@ buildPythonPackage rec {
     click
     coloredlogs
     crc
+    pyserial-asyncio-fast
     typing-extensions
     zigpy
   ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libgpiod ];

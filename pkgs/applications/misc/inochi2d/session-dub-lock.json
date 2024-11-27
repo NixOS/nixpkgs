@@ -21,8 +21,8 @@
       "sha256": "01dgvlvwbhwz7822gp6z5xn6w3k51q09i6qzns2i4ixmjh45wscs"
     },
     "diet-ng": {
-      "version": "1.8.1",
-      "sha256": "0kh8haw712xkd3f07s5x5g12nmmkv0y1lk2cqh66298fc5mgj4sv"
+      "version": "1.8.2",
+      "sha256": "0hwm8dsyw7xb9d540ks314vzxibn4ri7b4m2gagqbpmzspvd2slv"
     },
     "dportals": {
       "version": "0.1.0",
@@ -33,12 +33,12 @@
       "sha256": "0p9g4h5qanbg6281x1068mdl5p7zvqig4zmmi72a2cay6dxnbvxb"
     },
     "eventcore": {
-      "version": "0.9.30",
-      "sha256": "1n8wdcjhas0y99pf9fvwwsydkmy9g7gvfjhlwpjh158c7pfjwlaq"
+      "version": "0.9.34",
+      "sha256": "0znrcmxdr65gk8bwrknhm530kicznia4xb09h5jv42sxnv3cjkjw"
     },
     "facetrack-d": {
-      "version": "0.7.8",
-      "sha256": "1414wvh0kn1rps5r16ir92sqfj8a7na1gd71ds81jkq8arkm17j0"
+      "version": "0.8.0",
+      "sha256": "0p04yd50sgjb9n9gdp2yjgvlm8kkld2gl5ivz36npjnchj8k5a8i"
     },
     "fghj": {
       "version": "1.0.2",
@@ -61,28 +61,20 @@
       "sha256": "0dl7n4myxp1s3b32v2s975k76gs90wr2nw6ac5jq9hsgzhp1ix0h"
     },
     "inmath": {
-      "version": "1.0.6",
-      "sha256": "0kzk55ilbnl6qypjk60zwd5ibys5n47128hbbr0mbc7bpj9ppfg4"
+      "version": "1.3.0",
+      "sha256": "1bmfsnlpm3lb085cs29h63l4fmfr0xr9iyfd0wrg5i87difshpw6"
     },
     "inochi2d": {
-      "version": "0.8.4",
-      "sha256": "1bj0c6i9kcw1vfm6lf8lyxpf1lhhslg3f182jycdmzms15i3jb3y"
+      "version": "0.8.6",
+      "sha256": "0xhidp1y91cidh3g1cc5v7psb5kfy17ars7k7cplnywhjlcqqk70"
     },
     "inui": {
-      "version": "1.2.1",
-      "sha256": "0pygf8jxnbvib5f23qxf6k24wz8mh6fc0zhrkp83gq33k02ab5cx"
-    },
-    "libasync": {
-      "version": "0.8.6",
-      "sha256": "0hhk5asfdccby8ky77a25qn7dfmfdmwyzkrg3zk064bicmgdwlnj"
+      "version": "1.2.2",
+      "sha256": "1gh7ngva2ijz5gx9hrqn9rzzx5vvpf6l12r98wklzxwb9v5hmj69"
     },
     "lumars": {
       "version": "1.6.1",
       "sha256": "1vzdghqwv2gb41rp75456g43yfsndbl0dy6bnn4x6azwwny22br9"
-    },
-    "memutils": {
-      "version": "1.0.10",
-      "sha256": "0hm31birbw59sw1bi9syjhbcdgwwwyyx6r9jg7ar9i6a74cjr52c"
     },
     "mir-algorithm": {
       "version": "3.22.1",
@@ -96,9 +88,13 @@
       "version": "1.0.1",
       "sha256": "0adyjpcgd65z44iydnrrrpjwbvmrm08a3pkcriqi7npqylfysqn6"
     },
+    "numem": {
+      "version": "0.11.3",
+      "sha256": "00rm3cg5i714ncww8yxsbzf1y1bf6r8d0yx6i38ac2x7090arvjm"
+    },
     "openssl": {
-      "version": "3.3.3",
-      "sha256": "1fwhd5fkvgbqf3y8gwmrnd42kzi4k3mibpxijw5j82jxgfp1rzsf"
+      "version": "3.3.4",
+      "sha256": "17s71yfyhb9jyym2nldj23ikazwbbrmh6ply33mg888rd6dxnhyy"
     },
     "openssl-static": {
       "version": "1.0.5+3.0.8",
@@ -125,8 +121,8 @@
       "sha256": "12mfm49bjnh2pvm51dzna625kzgwznm9kcv6qhazc4il9j0224wd"
     },
     "vibe-core": {
-      "version": "2.8.4",
-      "sha256": "1pik6vympgwxpyxb75g1f8409cd6hw952gbflqvwaj18shz6dwjm"
+      "version": "2.9.3",
+      "sha256": "032q1gkm7l6blj5y3yiwk205m12svp4bv8k743crkd8d1xhlrrvi"
     },
     "vibe-d": {
       "version": "0.9.8",

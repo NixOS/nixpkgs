@@ -657,7 +657,7 @@ in {
 
   config = mkIf (fd_cfg.enable || sd_cfg.enable || dir_cfg.enable) {
     systemd.slices.system-bacula = {
-      description = "Bacula Slice";
+      description = "Bacula Backup System Slice";
       documentation = [ "man:bacula(8)" "https://www.bacula.org/" ];
     };
 

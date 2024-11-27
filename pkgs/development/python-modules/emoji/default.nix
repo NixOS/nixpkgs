@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "emoji";
-  version = "2.13.0";
+  version = "2.13.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "carpedm20";
     repo = "emoji";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FTQTbp5Ud3CyqkAiGvY8hBOKnvFR29CgZPbz4eZp/ik=";
+    hash = "sha256-1oFzuIA2HFoBw50HHYi8bGZTAAeC6fesSnLReuXUZcM=";
   };
 
   build-system = [ setuptools ];

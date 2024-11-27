@@ -11,14 +11,14 @@
   perl,
   pkg-config,
   glib,
-  webkitgtk,
+  webkitgtk_4_0,
   libayatana-appindicator,
   cairo,
   openssl,
 }:
 
 let
-  version = "4.99.2";
+  version = "4.99.16";
   geph-meta = with lib; {
     description = "Modular Internet censorship circumvention system designed specifically to deal with national filtering";
     homepage = "https://geph.io";
@@ -35,10 +35,10 @@ in
       owner = "geph-official";
       repo = pname;
       rev = "v${version}";
-      hash = "sha256-aZFm4+oUQungCPbxs7j1J8hLcCYoIodIEQEiQfjoLUw=";
+      hash = "sha256-6YWPsSRIZpvVCIGZ1z7srobDvVzLr0o2jBcB/7kbK7I=";
     };
 
-    cargoHash = "sha256-ypnjVoscGqVifkjzFh2KE+3EVFWIiyahTNTil3nu/+s=";
+    cargoHash = "sha256-c9Sq3mdotvB/oNIiOLTrAAUnUdkaye7y1l+29Uwjfm8=";
 
     nativeBuildInputs = [ perl ];
 
@@ -54,8 +54,8 @@ in
     src = fetchFromGitHub {
       owner = "geph-official";
       repo = "gephgui-pkg";
-      rev = "3b045e21b8c587c26f9d5f0f2b4bdf0a34bfee80";
-      hash = "sha256-p+AxAOznUsG45Ibm1kczapfmbK+aeex2js463eqZ8gY=";
+      rev = "9f0d5c689c2cae67a4750a68295676f449724a98";
+      hash = "sha256-/aHd1EDrFp1kXen5xRCCl8LVlMVH0pY8buILZri81II=";
       fetchSubmodules = true;
     };
 
@@ -88,7 +88,7 @@ in
 
       buildInputs = [
         glib
-        webkitgtk
+        webkitgtk_4_0
         libayatana-appindicator
         cairo
         openssl

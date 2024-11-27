@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -32,6 +33,8 @@ buildPythonPackage rec {
       typing-extensions
     ];
 
+  # Checks assume to find darwin specific libraries
+  doCheck = stdenv.buildPlatform.isDarwin;
   nativeCheckInputs = [
     unittestCheckHook
   ];
@@ -49,7 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ronaldoussoren/macholib";
     changelog = "https://github.com/ronaldoussoren/macholib/releases/tag/v${version}";
     license = licenses.mit;
-    platforms = platforms.darwin;
     maintainers = with maintainers; [ eveeifyeve ];
   };
 }

@@ -34,8 +34,6 @@ buildPythonPackage rec {
     xapian
   ];
 
-  doCheck = true;
-
   checkPhase = ''
     ${python.interpreter} python${pythonSuffix}/pythontest.py
   '';

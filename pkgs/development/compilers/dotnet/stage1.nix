@@ -13,12 +13,17 @@ let
   mkPackages = callPackage ./packages.nix;
   mkVMR = callPackage ./vmr.nix;
 
-  stage0 = callPackage ./stage0.nix args;
+  stage0 = callPackage ./stage0.nix (
+    args
+    // {
+      baseName = "dotnet-stage0";
+    }
+  );
 
   vmr =
     (mkVMR {
       inherit releaseManifestFile tarballHash;
-      bootstrapSdk = stage0.sdk;
+      bootstrapSdk = stage0.sdk.unwrapped;
     }).overrideAttrs
       (old: {
         passthru = old.passthru or { } // {

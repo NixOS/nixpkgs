@@ -30,7 +30,6 @@ buildPythonPackage rec {
     uharfbuzz
   ];
 
-  doCheck = true;
   nativeCheckInputs = [ unittestCheckHook ];
   unittestFlagsArray = [
     "-s"

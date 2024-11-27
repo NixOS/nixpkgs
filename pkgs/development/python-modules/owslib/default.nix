@@ -2,46 +2,48 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-
   lxml,
-  pyproj,
+  pytest-cov-stub,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
-  pytz,
   pyyaml,
   requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "owslib";
-  version = "0.31.0";
-  format = "setuptools";
+  version = "0.32.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "geopython";
     repo = "OWSLib";
-    rev = version;
-    hash = "sha256-vjJsLavVOqTTrVtYbtA0G+nl0HanKeGtzNFFj92Frw8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-q2O9FNBszNWfL1ekcohSd1RbdLFu8c+zxi+UFeQ7/mk=";
   };
 
   postPatch = ''
     substituteInPlace tox.ini \
-      --replace " --doctest-modules --doctest-glob 'tests/**/*.txt' --cov-report term-missing --cov owslib" ""
+      --replace-fail " --doctest-modules --doctest-glob 'tests/**/*.txt'" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     lxml
-    pyproj
     python-dateutil
-    pytz
     pyyaml
     requests
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "owslib" ];
 
@@ -51,8 +53,13 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    # disable tests which require network access
+    # Disable tests which require network access
     "-m 'not online'"
+  ];
+
+  disabledTestPaths = [
+    # Tests requires network access
+    "tests/test_ogcapi_connectedsystems_osh.py"
   ];
 
   meta = with lib; {

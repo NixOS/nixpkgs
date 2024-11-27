@@ -8,13 +8,13 @@
 python3.pkgs.toPythonModule (
   python3.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2024-06-19";
+    version = "0-unstable-2024-11-17";
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "acf3f109b2a99a5e6f25f5f2975016a36673c6ef";
-      hash = "sha256-NdFnB5JEaWo7gt+RwxKxkVtEL8uGLlc4z0ROHN+zoL4=";
+      rev = "10d3af84b833ab2f2d1095efa3a7ba240ffb32fc";
+      hash = "sha256-dXALuiPCzK0Az64Fj9ygsNFoPKf0oJ2LyZDeg00Bfyo=";
     };
 
     postPatch = ''
@@ -52,10 +52,11 @@ python3.pkgs.toPythonModule (
         brotli
         jinja2
         lxml
+        msgspec
         pygments
-        pytomlpp
         pyyaml
         redis
+        typer
         uvloop
         setproctitle
         httpx

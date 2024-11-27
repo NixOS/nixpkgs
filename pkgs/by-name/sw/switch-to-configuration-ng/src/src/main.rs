@@ -79,6 +79,7 @@ const DRY_RELOAD_BY_ACTIVATION_LIST_FILE: &str = "/run/nixos/dry-activation-relo
 #[derive(Debug, Clone, PartialEq)]
 enum Action {
     Switch,
+    Check,
     Boot,
     Test,
     DryActivate,
@@ -93,6 +94,7 @@ impl std::str::FromStr for Action {
             "boot" => Self::Boot,
             "test" => Self::Test,
             "dry-activate" => Self::DryActivate,
+            "check" => Self::Check,
             _ => bail!("invalid action {s}"),
         })
     }
@@ -105,6 +107,7 @@ impl Into<&'static str> for &Action {
             Action::Boot => "boot",
             Action::Test => "test",
             Action::DryActivate => "dry-activate",
+            Action::Check => "check",
         }
     }
 }
@@ -127,6 +130,28 @@ fn parse_os_release() -> Result<HashMap<String, String>> {
 
             acc
         }))
+}
+
+fn do_pre_switch_check(command: &str, toplevel: &Path) -> Result<()> {
+    let mut cmd_split = command.split_whitespace();
+    let Some(argv0) = cmd_split.next() else {
+        bail!("missing first argument in install bootloader commands");
+    };
+
+    match std::process::Command::new(argv0)
+        .args(cmd_split.collect::<Vec<&str>>())
+        .arg(toplevel)
+        .spawn()
+        .map(|mut child| child.wait())
+    {
+        Ok(Ok(status)) if status.success() => {}
+        _ => {
+            eprintln!("Pre-switch checks failed");
+            die()
+        }
+    }
+
+    Ok(())
 }
 
 fn do_install_bootloader(command: &str, toplevel: &Path) -> Result<()> {
@@ -937,33 +962,29 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     Ok(())
 }
 
-/// Performs switch-to-configuration functionality for the entire system
-fn do_system_switch() -> anyhow::Result<()> {
-    let out = PathBuf::from(required_env("OUT")?);
-    let toplevel = PathBuf::from(required_env("TOPLEVEL")?);
-    let distro_id = required_env("DISTRO_ID")?;
-    let install_bootloader = required_env("INSTALL_BOOTLOADER")?;
-    let locale_archive = required_env("LOCALE_ARCHIVE")?;
-    let new_systemd = PathBuf::from(required_env("SYSTEMD")?);
-
-    let mut args = std::env::args();
-    let argv0 = args.next().ok_or(anyhow!("no argv[0]"))?;
-
-    let Some(Ok(action)) = args.next().map(|a| Action::from_str(&a)) else {
-        eprintln!(
-            r#"Usage: {} [switch|boot|test|dry-activate]
+fn usage(argv0: &str) -> ! {
+    eprintln!(
+        r#"Usage: {} [check|switch|boot|test|dry-activate]
+check:        run pre-switch checks and exit
 switch:       make the configuration the boot default and activate now
 boot:         make the configuration the boot default
 test:         activate the configuration, but don't make it the boot default
 dry-activate: show what would be done if this configuration were activated
 "#,
-            argv0
-                .split(std::path::MAIN_SEPARATOR_STR)
-                .last()
-                .unwrap_or("switch-to-configuration")
-        );
-        std::process::exit(1);
-    };
+        argv0
+    );
+    std::process::exit(1);
+}
+
+/// Performs switch-to-configuration functionality for the entire system
+fn do_system_switch(action: Action) -> anyhow::Result<()> {
+    let out = PathBuf::from(required_env("OUT")?);
+    let toplevel = PathBuf::from(required_env("TOPLEVEL")?);
+    let distro_id = required_env("DISTRO_ID")?;
+    let pre_switch_check = required_env("PRE_SWITCH_CHECK")?;
+    let install_bootloader = required_env("INSTALL_BOOTLOADER")?;
+    let locale_archive = required_env("LOCALE_ARCHIVE")?;
+    let new_systemd = PathBuf::from(required_env("SYSTEMD")?);
 
     let action = ACTION.get_or_init(|| action);
 
@@ -1017,6 +1038,18 @@ dry-activate: show what would be done if this configuration were activated
 
     if syslog::init(Facility::LOG_USER, LevelFilter::Debug, Some("nixos")).is_err() {
         bail!("Failed to initialize logger");
+    }
+
+    if std::env::var("NIXOS_NO_CHECK")
+        .as_deref()
+        .unwrap_or_default()
+        != "1"
+    {
+        do_pre_switch_check(&pre_switch_check, &toplevel)?;
+    }
+
+    if *action == Action::Check {
+        return Ok(());
     }
 
     // Install or update the bootloader.
@@ -1081,22 +1114,6 @@ won't take effect until you reboot the system.
     systemd
         .subscribe()
         .context("Failed to subscribe to systemd dbus messages")?;
-
-    // Wait for the system to have finished booting.
-    loop {
-        let system_state: String = systemd
-            .get("org.freedesktop.systemd1.Manager", "SystemState")
-            .context("Failed to get system state")?;
-
-        match system_state.as_str() {
-            "running" | "degraded" | "maintenance" => break,
-            _ => {
-                _ = dbus_conn
-                    .process(Duration::from_millis(500))
-                    .context("Failed to process dbus messages")?
-            }
-        }
-    }
 
     let _systemd_reload_status = systemd_reload_status.clone();
     let reloading_token = systemd
@@ -1939,13 +1956,26 @@ won't take effect until you reboot the system.
 }
 
 fn main() -> anyhow::Result<()> {
-    match (
-        unsafe { nix::libc::geteuid() },
-        std::env::var("__NIXOS_SWITCH_TO_CONFIGURATION_PARENT_EXE").ok(),
-    ) {
-        (0, None) => do_system_switch(),
-        (1..=u32::MAX, None) => bail!("This program does not support being ran outside of the switch-to-configuration environment"),
-        (_, Some(parent_exe)) => do_user_switch(parent_exe),
+    match std::env::var("__NIXOS_SWITCH_TO_CONFIGURATION_PARENT_EXE").ok() {
+        Some(parent_exe) => do_user_switch(parent_exe),
+        None => {
+            let mut args = std::env::args();
+            let argv0 = args.next().ok_or(anyhow!("no argv[0]"))?;
+            let argv0 = argv0
+                .split(std::path::MAIN_SEPARATOR_STR)
+                .last()
+                .unwrap_or("switch-to-configuration");
+
+            let Some(Ok(action)) = args.next().map(|a| Action::from_str(&a)) else {
+                usage(&argv0);
+            };
+
+            if unsafe { nix::libc::geteuid() } == 0 {
+                do_system_switch(action)
+            } else {
+                bail!("{} must be run as the root user", argv0);
+            }
+        }
     }
 }
 

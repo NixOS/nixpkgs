@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "hcs-utils";
-  version = "2.0";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "hcs_utils";
     inherit version;
-    hash = "sha256-4sKcSgSYz+bFYKdOEQh3UsKrCANqX3RnchRpn2EyuBM=";
+    hash = "sha256-a2xO+hdyJQjgIEcjtmDZLicyz2kzKRjtpEhge5yaa7M=";
   };
 
   postPatch = ''

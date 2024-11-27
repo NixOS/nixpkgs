@@ -2,12 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pyjwt,
-  pythonOlder,
-  requests,
-  requests-toolbelt,
+  future,
   poetry-core,
   poetry-dynamic-versioning,
+  pyjwt,
+  pythonOlder,
+  requests-toolbelt,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    future
     pyjwt
     requests
     requests-toolbelt

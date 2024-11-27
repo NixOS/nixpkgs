@@ -28,15 +28,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "qbittorrent"
-    + lib.optionalString (guiSupport && qtVersion == "5") "-qt5"
     + lib.optionalString (!guiSupport) "-nox";
-  version = "4.6.7";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${version}";
-    hash = "sha256-vUC8YIuyoGnl46FajfJG/XFXG+2lM9EaHWl2Hfo3T7c=";
+    hash = "sha256-BmfTQGftQIkRrlSpJy0yHTh0r3D2CWLIo+tnL0+OeA4=";
   };
 
   nativeBuildInputs = [
@@ -62,9 +61,7 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  cmakeFlags = lib.optionals (qtVersion == "6") [
-    "-DQT6=ON"
-  ] ++ lib.optionals (!guiSupport) [
+  cmakeFlags = lib.optionals (!guiSupport) [
     "-DGUI=OFF"
     "-DSYSTEMD=ON"
     "-DSYSTEMD_SERVICES_INSTALL_DIR=${placeholder "out"}/lib/systemd/system"
@@ -96,5 +93,8 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ Anton-Latukha kashw2 ];
+    mainProgram =
+      "qbittorrent"
+      + lib.optionalString (!guiSupport) "-nox";
   };
 }

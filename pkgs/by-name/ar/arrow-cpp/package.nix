@@ -35,6 +35,7 @@
   nlohmann_json,
   openssl,
   perl,
+  pkg-config,
   protobuf,
   python3,
   rapidjson,
@@ -49,8 +50,8 @@
   zstd,
   testers,
   enableShared ? !stdenv.hostPlatform.isStatic,
-  enableFlight ? true,
-  enableJemalloc ? !stdenv.hostPlatform.isDarwin,
+  enableFlight ? stdenv.buildPlatform == stdenv.hostPlatform,
+  enableJemalloc ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64,
   enableS3 ? true,
   enableGcs ? !stdenv.hostPlatform.isDarwin,
 }:
@@ -65,28 +66,29 @@ let
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "735ae7128d571398dd798d7ff004adebeb342883";
-    hash = "sha256-67KwnSt+EeEDvk+9kxR51tErL2wJqEPRITKb/dN+HMQ=";
+    rev = "4d209492d514c2d3cb2d392681b9aa00e6d8da1c";
+    hash = "sha256-IkiCbuy0bWyClPZ4ZEdkEP7jFYLhM7RCuNLd6Lazd4o=";
   };
 
   parquet-testing = fetchFromGitHub {
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "74278bc4a1122d74945969e6dec405abd1533ec3";
-    hash = "sha256-WbpndtAviph6+I/F2bevuMI9DkfSv4SMPgMaP98k6Qo=";
+    rev = "a7f1d288e693dbb08e3199851c4eb2140ff8dff2";
+    hash = "sha256-zLWJOWcW7OYL32OwBm9VFtHbmG+ibhteRfHlKr9G3CQ=";
   };
 
+  version = "18.0.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
-  version = "17.0.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "arrow";
-    rev = "apache-arrow-17.0.0";
-    hash = "sha256-ZQqi1RFb4Ey0A0UVCThuIxM7DoFfkLwaeRAc2z8u9so=";
+    rev = "apache-arrow-${version}";
+    hash = "sha256-V2lOYOUJwXSvPPk2G17uc1eZO88EATHKwwDnEroBrPw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
@@ -125,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     ninja
     autoconf # for vendored jemalloc
     flatbuffers
@@ -171,7 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     patchShebangs build-support/
     substituteInPlace "src/arrow/vendored/datetime/tz.cpp" \
-      --replace 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
+      --replace-fail 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
   '';
 
   cmakeFlags =
@@ -179,7 +182,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
       "-DARROW_BUILD_SHARED=${if enableShared then "ON" else "OFF"}"
       "-DARROW_BUILD_STATIC=${if enableShared then "OFF" else "ON"}"
-      "-DARROW_BUILD_TESTS=ON"
+      "-DARROW_BUILD_TESTS=${if enableShared then "ON" else "OFF"}"
       "-DARROW_BUILD_INTEGRATION=ON"
       "-DARROW_BUILD_UTILITIES=ON"
       "-DARROW_EXTRA_ERROR_CONTEXT=ON"

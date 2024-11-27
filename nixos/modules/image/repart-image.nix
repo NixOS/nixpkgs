@@ -30,7 +30,7 @@
 , imageFileBasename
 , compression
 , fileSystems
-, partitionsJSON
+, finalPartitions
 , split
 , seed
 , definitionsDirectory
@@ -101,6 +101,11 @@ in
   ) // {
   __structuredAttrs = true;
 
+
+  # the image will be self-contained so we can drop references
+  # to the closure that was used to build it
+  unsafeDiscardReferences.out = true;
+
   nativeBuildInputs = [
     systemd
     fakeroot
@@ -110,7 +115,9 @@ in
 
   env = mkfsEnv;
 
-  inherit partitionsJSON definitionsDirectory;
+  inherit finalPartitions definitionsDirectory;
+
+  partitionsJSON = builtins.toJSON finalAttrs.finalPartitions;
 
   # relative path to the repart definitions that are read by systemd-repart
   finalRepartDefinitions = "repart.d";
@@ -136,7 +143,7 @@ in
   patchPhase = ''
     runHook prePatch
 
-    amendedRepartDefinitionsDir=$(${amendRepartDefinitions} $partitionsJSON $definitionsDirectory)
+    amendedRepartDefinitionsDir=$(${amendRepartDefinitions} <(echo "$partitionsJSON") $definitionsDirectory)
     ln -vs $amendedRepartDefinitionsDir $finalRepartDefinitions
 
     runHook postPatch

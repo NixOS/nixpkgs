@@ -36,21 +36,20 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "3.7.6";
+  version = "3.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9AZcCqxcSLv7L/4ZHVXMszv7AFN2r71MzW1ek0FRTjQ=";
+    hash = "sha256-Szfr0lraQFmw3J4Ik+cN3l34NIUymgaO8EWA5wiSpl0=";
   };
 
   postPatch = ''
-    # thinc version 8.3.0 had no functional changes
-    # also see https://github.com/explosion/spaCy/issues/13607
+    # spaCy is compatible with NumPy v1 and v2
     substituteInPlace pyproject.toml setup.cfg \
-      --replace-fail "thinc>=8.2.2,<8.3.0" "thinc>=8.2.2,<8.4.0"
+      --replace-fail "numpy>=2.0.0,<2.1.0" numpy
   '';
 
   build-system = [
@@ -59,6 +58,10 @@ buildPythonPackage rec {
     murmurhash
     numpy
     thinc
+  ];
+
+  pythonRelaxDeps = [
+    "thinc"
   ];
 
   dependencies = [

@@ -2,6 +2,7 @@
   clangStdenv,
   lib,
   fetchurl,
+  fetchpatch,
   dotnetCorePackages,
   jq,
   curl,
@@ -26,7 +27,9 @@
   callPackage,
   unzip,
   yq,
+  installShellFiles,
 
+  baseName ? "dotnet",
   bootstrapSdk,
   releaseManifestFile,
   tarballHash,
@@ -56,7 +59,7 @@ let
 
 in
 stdenv.mkDerivation rec {
-  pname = "dotnet-vmr";
+  pname = "${baseName}-vmr";
   version = release;
 
   # TODO: fix this in the binary sdk packages
@@ -82,6 +85,7 @@ stdenv.mkDerivation rec {
       xmlstarlet
       unzip
       yq
+      installShellFiles
     ]
     ++ lib.optionals (lib.versionAtLeast version "9") [
       nodejs
@@ -92,7 +96,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      # this gets copied into the tree, but we still want the hooks to run
+      # this gets copied into the tree, but we still need the sandbox profile
       bootstrapSdk
       # the propagated build inputs in llvm.dev break swift compilation
       llvm.out
@@ -138,11 +142,13 @@ stdenv.mkDerivation rec {
                        (global-name "com.apple.system.opendirectoryd.membership"))
   '';
 
-  patches = lib.optionals (lib.versionAtLeast version "9") [
-    ./UpdateNuGetConfigPackageSourcesMappings-don-t-add-em.patch
-  ] ++ lib.optionals (lib.versionOlder version "9") [
-    ./fix-aspnetcore-portable-build.patch
-  ];
+  patches =
+    lib.optionals (lib.versionAtLeast version "9") [
+      ./UpdateNuGetConfigPackageSourcesMappings-don-t-add-em.patch
+    ]
+    ++ lib.optionals (lib.versionOlder version "9") [
+      ./fix-aspnetcore-portable-build.patch
+    ];
 
   postPatch =
     ''
@@ -216,8 +222,7 @@ stdenv.mkDerivation rec {
         -s //Project -t elem -n Import \
         -i \$prev -t attr -n Project -v "${./patch-npm-packages.proj}" \
         src/aspnetcore/eng/DotNetBuild.props
-    ''
-    + lib.optionalString (lib.versionAtLeast version "9") ''
+
       # https://github.com/dotnet/source-build/issues/3131#issuecomment-2030215805
       substituteInPlace \
         src/aspnetcore/eng/Dependencies.props \
@@ -348,9 +353,10 @@ stdenv.mkDerivation rec {
 
       # The build process tries to overwrite some things in the sdk (e.g.
       # SourceBuild.MSBuildSdkResolver.dll), so it needs to be mutable.
-      cp -Tr ${bootstrapSdk} .dotnet
+      cp -Tr ${bootstrapSdk}/share/dotnet .dotnet
       chmod -R +w .dotnet
 
+      export HOME=$(mktemp -d)
       ${prepScript} $prepFlags
 
       runHook postConfigure
@@ -359,6 +365,11 @@ stdenv.mkDerivation rec {
   postConfigure = lib.optionalString (lib.versionAtLeast version "9") ''
     # see patch-npm-packages.proj
     typeset -f isScript patchShebangs > src/aspnetcore/patch-shebangs.sh
+
+    # fix nuget-to-nix failure on package sources which return 401
+    for source in dotnet{7,8,9}-internal{,-transport}; do
+      ./.dotnet/dotnet nuget disable source --configfile src/aspnetcore/NuGet.config $source
+    done
   '';
 
   dontConfigureNuget = true; # NUGET_PACKAGES breaks the build
@@ -405,6 +416,11 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   installPhase =
     let
       assets = if (lib.versionAtLeast version "9") then "assets" else targetArch;
@@ -433,6 +449,8 @@ stdenv.mkDerivation rec {
           mv "$unpacked" "$nupkg"
           # TODO: should we fix executable flags here? see dotnetInstallHook
       done
+
+      installManPage src/sdk/documentation/manpages/sdk/*
 
       runHook postInstall
     '';

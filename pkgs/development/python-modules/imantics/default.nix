@@ -4,7 +4,7 @@
   lib,
   setuptools,
   numpy,
-  opencv4,
+  opencv-python,
   lxml,
   xmljson,
   pytestCheckHook,
@@ -22,13 +22,11 @@ buildPythonPackage rec {
     sha256 = "1zv2gj8cbakhh2fyr2611cbqhfk37a56x973ny9n43y70n26pzm8";
   };
 
-  pythonRemoveDeps = [ "opencv-python" ];
-
   build-system = [ setuptools ];
 
   dependencies = [
     numpy
-    opencv4
+    opencv-python
     lxml
     xmljson
   ];

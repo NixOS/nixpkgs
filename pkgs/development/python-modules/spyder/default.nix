@@ -3,6 +3,11 @@
   buildPythonPackage,
   fetchPypi,
 
+  # nativeBuildInputs
+
+  # build-system
+  setuptools,
+
   # dependencies
   aiohttp,
   asyncssh,
@@ -40,7 +45,6 @@
   rope,
   rtree,
   scipy,
-  setuptools,
   spyder-kernels,
   superqt,
   textdistance,
@@ -51,18 +55,21 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "6.0.1";
+  version = "6.0.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cJeC6ICRWIu+YU3m673ntHVEpNbCJeGZ3lrSK3fYsTA=";
+    hash = "sha256-mPUrAYFn3k5NQrsk7B2aPFnkAxKSKC4I97DnFPK1pvM=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];
 
-  build-system = [
+  nativeBuildInputs = [
     pyqtwebengine.wrapQtAppsHook
+  ];
+
+  build-system = [
     setuptools
   ];
 

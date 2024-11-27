@@ -3,6 +3,7 @@
 , python3Packages
 , installShellFiles
 , scdoc
+, ffmpeg
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -27,6 +28,7 @@ python3Packages.buildPythonApplication rec {
     installShellFiles
     scdoc
   ];
+
 
   propagatedBuildInputs = with python3Packages; [
     click
@@ -58,6 +60,10 @@ python3Packages.buildPythonApplication rec {
     "twitchdl.commands"
   ];
 
+  makeWrapperArgs = [
+    "--prefix" "PATH" ":" (lib.makeBinPath [ ffmpeg ])
+  ];
+
   postInstall = ''
     scdoc < twitch-dl.1.scd > twitch-dl.1
     installManPage twitch-dl.1
@@ -72,7 +78,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/ihabunek/twitch-dl";
     changelog = "https://github.com/ihabunek/twitch-dl/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ pbsds ];
+    maintainers = with maintainers; [ pbsds hausken ];
     mainProgram = "twitch-dl";
   };
 }

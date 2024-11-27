@@ -1,51 +1,38 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libgit2
-, zlib
-, stdenv
-, darwin
-, nix-update-script
-, testers
-, typstyle
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "typstyle";
-  version = "0.11.34";
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "Enter-tainer";
     repo = "typstyle";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6z2jzs5PxsEsCPSm9+sZnBdzh0edLMylaLBvSSPoPNo=";
+    hash = "sha256-PMx7vo0HPknrZUQooehuFYRTfiWSpLYw03zcfVuNNEc=";
   };
 
-  cargoHash = "sha256-MaqsAQvh30nDzoxgnFKu7+wvRZ7WvwLgKYM3Fru8qfg=";
-
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs = [
-    libgit2
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ughfZ9+oR7vjlBW7jl0w99FM8eEUYODh6jJ0no8tNvI=";
 
   # Disabling tests requiring network access
   checkFlags = [
     "--skip=e2e"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = typstyle; };
   };
 
   meta = {

@@ -148,6 +148,20 @@ let
       hash = "sha256-YUyfVkPNB5nfOROV+mu8NklCe7g5cizjsRTTu8GjslA=";
     };
 
+    patches = [
+      # We don’t want to run `/usr/libexec/path_helper` on nix-darwin,
+      # as it pulls in paths not tracked in the system configuration
+      # and messes up the order of `$PATH`. Upstream are unfortunately
+      # unwilling to accept a change for this and have recommended that
+      # it should be a distro‐specific patch instead.
+      #
+      # See:
+      #
+      # * <https://github.com/LnL7/nix-darwin/issues/122>
+      # * <https://github.com/fish-shell/fish-shell/issues/7142>
+      ./nix-darwin-path.patch
+    ];
+
     # Fix FHS paths in tests
     postPatch = ''
       # src/fish_tests.cpp

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "cirrus-cli";
-  version = "0.126.1";
+  version = "0.132.0";
 
   src = fetchFromGitHub {
     owner = "cirruslabs";
-    repo = pname;
+    repo = "cirrus-cli";
     rev = "v${version}";
-    hash = "sha256-A894AUmsJjCCvN6cI2qoTPyOeQx6h2uukzxtlvWZVn8=";
+    hash = "sha256-juDe/Dw8tdVoz5F1bGGQMwZYz9HbQaQ0xZo8LqD03RA=";
   };
 
-  vendorHash = "sha256-PecNBlSoo8WN2FKXN/UpkqpqbsJkOPHKILy76YWgNlw=";
+  vendorHash = "sha256-+OMhaAGA+pmiDUyXDo9UfQ0SFEAN9zuNZjnLkgr7a+0=";
 
   ldflags = [
     "-X github.com/cirruslabs/cirrus-cli/internal/version.Version=v${version}"

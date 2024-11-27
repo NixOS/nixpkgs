@@ -18,7 +18,7 @@ in
 
 buildPythonPackage rec {
   pname = "dnf4";
-  version = "4.21.1";
+  version = "4.22.0";
   format = "other";
 
   outputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "rpm-software-management";
     repo = "dnf";
     rev = version;
-    hash = "sha256-VYQhOlLtEzWesrMZ/d6KW0OlUjz5MvoEmPy71qEUEL4=";
+    hash = "sha256-I79cwK+xPmHS3z8/rKar5G5EbK6IYq0Ypq9KrShJ3sg=";
   };
 
   patches = [ ./fix-python-install-dir.patch ];

@@ -20,6 +20,7 @@
   gspell,
   libxslt,
   gobject-introspection,
+  itstool,
   flatpak,
   fwupd,
   gtk4,
@@ -47,11 +48,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-software";
-  version = "46.4";
+  version = "47.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${lib.versions.major finalAttrs.version}/gnome-software-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ZVTR3gfnxjUtqLBjhP6hPaZJnXHAW1rQANjiHLFT9a8=";
+    hash = "sha256-k8pQA2YxZ0VZTvBfytHAXPQ/Au+PZggMF/fruMo/NL8=";
   };
 
   patches = [
@@ -75,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-doc
     desktop-file-utils
     gobject-introspection
+    itstool
   ];
 
   buildInputs = [

@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lightningcss";
-  version = "1.27.0";
+  version = "1.28.2";
 
   src = fetchFromGitHub {
     owner = "parcel-bundler";
     repo = "lightningcss";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YOTFyIDQIdqnrbXtnnY5U32rk9/fZ+1NcSb3slgkxZU=";
+    hash = "sha256-IwuDJcKCG1CDyRsZbobPQnRzsaUfpJHKFemOWLJNM9c=";
   };
 
-  cargoHash = "sha256-nzRvsdW+PfcS1ocg49JtRQ9RmFJ3iz65plH1ToQXSGU=";
+  cargoHash = "sha256-um8G6QKxqPEcuCWmlFOqZVQLU8GxLwZ3S7z2Na2uzhQ=";
 
   patches = [
     # Backport fix for build error for lightningcss-napi
@@ -47,7 +47,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ johnrtitor toastal ];
     mainProgram = "lightningcss";
-    # never built on aarch64-linux since first introduction in nixpkgs
-    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
+    platforms = lib.platforms.all;
   };
 }

@@ -44,7 +44,7 @@ mkDerivation {
       "contrib/libc-vis"
     ]
     ++ lib.optionals (versionData.major == 13) [ "contrib/tzcode/stdtime" ]
-    ++ lib.optionals (versionData.major == 14) [ "contrib/tzcode" ]
+    ++ lib.optionals (versionData.major >= 14) [ "contrib/tzcode" ]
     ++ [
 
       # libthr
@@ -106,6 +106,9 @@ mkDerivation {
       "include/paths.h"
 
       "lib/libdl"
+
+      # Used for aarch64-freebsd
+      "contrib/arm-optimized-routines"
     ];
 
   postPatch = ''
@@ -114,6 +117,13 @@ mkDerivation {
     substituteInPlace $BSDSRCDIR/include/paths.h \
         --replace '/usr/lib/i18n' '${builtins.placeholder "out"}/lib/i18n' \
         --replace '/usr/share/i18n' '${builtins.placeholder "out"}/share/i18n'
+  '';
+
+  # NIX_CFLAGS_LINK is empty at this point except when building static,
+  # in which case the stdenv adapter adds the `-static` flag.
+  # Building with `-static` set causes linker errors.
+  postConfigure = ''
+    export NIX_CFLAGS_LINK=
   '';
 
   nativeBuildInputs = [
@@ -194,7 +204,7 @@ mkDerivation {
       make -C $BSDSRCDIR/lib/libgcc_eh $makeFlags
       make -C $BSDSRCDIR/lib/libgcc_eh $makeFlags install
 
-      ln -s $BSDSRCDIR/lib/libc/libc.so.7 $BSDSRCDIR/lib/libc/libc.so  # not sure
+      ln -s $BSDSRCDIR/lib/libc/libc.so.7 $BSDSRCDIR/lib/libc/libc.so  # otherwise these dynamic libraries try to link with libc.a
       mkdir $BSDSRCDIR/lib/libgcc_s/i386 $BSDSRCDIR/lib/libgcc_s/cpu_model
       make -C $BSDSRCDIR/lib/libgcc_s $makeFlags
       make -C $BSDSRCDIR/lib/libgcc_s $makeFlags install
@@ -266,6 +276,13 @@ mkDerivation {
       make -C $BSDSRCDIR/libexec/rtld-elf $makeFlags install
       rm -f $out/libexec/ld-elf.so.1
       mv $out/bin/ld-elf.so.1 $out/libexec
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+      mkdir $out/lib/keep_static
+      mv $out/lib/*_nonshared.a $out/lib/libgcc*.a $out/lib/libcompiler_rt.a $out/lib/keep_static
+      rm $out/lib/*.a
+      mv $out/lib/keep_static/* $out/lib
+      rmdir $out/lib/keep_static
     '';
 
   # libc should not be allowed to refer to anything other than itself

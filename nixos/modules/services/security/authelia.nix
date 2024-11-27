@@ -308,7 +308,8 @@ in
         {
           description = "Authelia authentication and authorization server";
           wantedBy = [ "multi-user.target" ];
-          after = [ "network.target" ];
+          after = [ "network-online.target" ]; # Checks SMTP notifier creds during startup
+          wants = [ "network-online.target" ];
           environment =
             (lib.filterAttrs (_: v: v != null) {
               X_AUTHELIA_CONFIG_FILTERS = lib.mkIf (oidcJwksConfigFile != [ ]) "template";

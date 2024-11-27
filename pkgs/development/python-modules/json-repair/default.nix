@@ -8,21 +8,24 @@
 
 buildPythonPackage rec {
   pname = "json-repair";
-  version = "0.27.2";
+  version = "0.30.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mangiucugna";
     repo = "json_repair";
-    rev = "refs/tags/${version}";
-    hash = "sha256-NYY76sIp4XirVifOPOs6iEzP93ERzNIHAvpgU4+fi24=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-RqPeBDhrCas+DI/cd5R1uvNRtLmv14fR50uazVLDSxg=";
   };
 
   build-system = [ setuptools ];
 
   nativeBuildInputs = [ pytestCheckHook ];
 
-  disabledTestPaths = [ "tests/test_performance.py" ];
+  disabledTestPaths = [
+    "tests/test_performance.py"
+    "tests/test_coverage.py"
+  ];
 
   pythonImportsCheck = [ "json_repair" ];
 

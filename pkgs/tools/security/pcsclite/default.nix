@@ -29,7 +29,7 @@ assert systemdSupport -> dbusSupport;
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "2.2.3";
+  version = "2.3.0";
 
   outputs = [ "out" "lib" "dev" "doc" "man" ];
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rousseau";
     repo = "PCSC";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-hKyxXqZaqg8KGFoBWhRHV1/50uoxqiG0RsYtgw2BuQ4=";
+    hash = "sha256-37qeWGEuutF0cOOidoLchKJLQCvJFdVRZXepWzD4pZs=";
   };
 
   # fix build with macOS 11 SDK

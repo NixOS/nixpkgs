@@ -7,13 +7,13 @@
 
 mkHyprlandPlugin hyprland {
   pluginName = "hyprfocus";
-  version = "0-unstable-2024-05-30";
+  version = "0-unstable-2024-10-09";
 
   src = fetchFromGitHub {
     owner = "pyt0xic";
     repo = "hyprfocus";
-    rev = "aa7262d3a4564062f97b9cfdad47fd914cfb80f2";
-    hash = "sha256-R1ZgNhQkoS6ZHRRKB+j5vYgRANfYO//sHbrD7moUTx0=";
+    rev = "bead5b77d80f222c006d1a6c6f44ee8b02021d73";
+    hash = "sha256-qIl7opF7fA1ZmC91TGQ7D12tB7kHc6Sn9DrfUN6sbBY=";
   };
 
   installPhase = ''

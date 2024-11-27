@@ -3,12 +3,15 @@
   callPackage,
   writeText,
   symlinkJoin,
-  targetPlatform,
-  buildPlatform,
   darwin,
   clang,
   llvm,
-  tools ? callPackage ./tools.nix { inherit buildPlatform; },
+  tools ? callPackage ./tools.nix {
+    inherit (stdenv)
+      hostPlatform
+      buildPlatform
+      ;
+  },
   stdenv,
   stdenvNoCC,
   dart,
@@ -53,7 +56,7 @@ let
 
   expandDeps = deps: lib.flatten (map expandSingleDep deps);
 
-  constants = callPackage ./constants.nix { platform = targetPlatform; };
+  constants = callPackage ./constants.nix { platform = stdenv.targetPlatform; };
 
   python3 = if lib.versionAtLeast flutterVersion "3.20" then python312 else python39;
 
@@ -64,8 +67,11 @@ let
       version
       hashes
       url
-      targetPlatform
+      ;
+    inherit (stdenv)
+      hostPlatform
       buildPlatform
+      targetPlatform
       ;
   };
 
@@ -253,7 +259,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--embedder-for-target"
       "--no-goma"
     ]
-    ++ lib.optionals (targetPlatform.isx86_64 == false) [
+    ++ lib.optionals (stdenv.targetPlatform.isx86_64 == false) [
       "--linux"
       "--linux-cpu ${constants.alt-arch}"
     ]
@@ -278,7 +284,7 @@ stdenv.mkDerivation (finalAttrs: {
         --out-dir $out \
         --target-sysroot $toolchain \
         --target-dir $outName \
-        --target-triple ${targetPlatform.config} \
+        --target-triple ${stdenv.targetPlatform.config} \
         --enable-fontconfig
 
       runHook postConfigure

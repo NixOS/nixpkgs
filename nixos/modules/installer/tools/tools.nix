@@ -106,10 +106,11 @@ let
       #   isNormalUser = true;
       #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
       #   packages = with pkgs; [
-      #     firefox
       #     tree
       #   ];
       # };
+
+      # programs.firefox.enable = true;
 
       # List packages installed in system profile. To search, run:
       # \$ nix search wget
@@ -216,8 +217,8 @@ in
   imports = let
     mkToolModule = { name, package ? pkgs.${name} }: { config, ... }: {
       options.system.tools.${name}.enable = lib.mkEnableOption "${name} script" // {
-        default = config.nix.enable;
-        internal = true;
+        default = config.nix.enable && ! config.system.disableInstallerTools;
+        defaultText = "config.nix.enable && !config.system.disableInstallerTools";
       };
 
       config = lib.mkIf config.system.tools.${name}.enable {
@@ -227,34 +228,21 @@ in
   in [
     (mkToolModule { name = "nixos-build-vms"; })
     (mkToolModule { name = "nixos-enter"; })
-    (mkToolModule { name = "nixos-generate-config"; package = nixos-generate-config; })
-    (mkToolModule { name = "nixos-install"; package = nixos-install; })
+    (mkToolModule { name = "nixos-generate-config"; package = config.system.build.nixos-generate-config; })
+    (mkToolModule { name = "nixos-install"; package = config.system.build.nixos-install; })
     (mkToolModule { name = "nixos-option"; })
-    (mkToolModule { name = "nixos-rebuild"; package = nixos-rebuild; })
+    (mkToolModule { name = "nixos-rebuild"; package = config.system.build.nixos-rebuild; })
     (mkToolModule { name = "nixos-version"; package = nixos-version; })
   ];
 
-  config = lib.mkMerge [
-    (lib.mkIf config.system.disableInstallerTools {
-      system.tools = {
-        nixos-build-vms.enable = false;
-        nixos-enter.enable = false;
-        nixos-generate-config.enable = false;
-        nixos-install.enable = false;
-        nixos-option.enable = false;
-        nixos-rebuild.enable = false;
-        nixos-version.enable = false;
-      };
-    })
-    {
-      documentation.man.man-db.skipPackages = [ nixos-version ];
+  config = {
+    documentation.man.man-db.skipPackages = [ nixos-version ];
 
-      # These may be used in auxiliary scripts (ie not part of toplevel), so they are defined unconditionally.
-      system.build = {
-        inherit nixos-generate-config nixos-install nixos-rebuild;
-        nixos-option = lib.warn "Accessing nixos-option through `config.system.build` is deprecated, use `pkgs.nixos-option` instead." pkgs.nixos-option;
-        nixos-enter = lib.warn "Accessing nixos-enter through `config.system.build` is deprecated, use `pkgs.nixos-enter` instead." pkgs.nixos-enter;
-      };
-    }
-  ];
+    # These may be used in auxiliary scripts (ie not part of toplevel), so they are defined unconditionally.
+    system.build = {
+      inherit nixos-generate-config nixos-install nixos-rebuild;
+      nixos-option = lib.warn "Accessing nixos-option through `config.system.build` is deprecated, use `pkgs.nixos-option` instead." pkgs.nixos-option;
+      nixos-enter = lib.warn "Accessing nixos-enter through `config.system.build` is deprecated, use `pkgs.nixos-enter` instead." pkgs.nixos-enter;
+    };
+  };
 }

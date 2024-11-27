@@ -43,6 +43,13 @@ in
     (addToBuildInputsWithPkgConfig pkgs.cairo old)
     // (addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 srfi-13 ]) old);
   cmark = addToBuildInputs pkgs.cmark;
+  comparse = old: {
+    # For some reason lazy-seq 2 gets interpreted as lazy-seq 0.0.0??
+    postPatch = ''
+      substituteInPlace comparse.egg \
+        --replace-fail 'lazy-seq "0.1.0"' 'lazy-seq "0.0.0"'
+    '';
+  };
   epoxy = old:
     (addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy old)
     // lib.optionalAttrs stdenv.cc.isClang {
@@ -79,6 +86,13 @@ in
     (addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libinotify-kqueue) old)
     // lib.optionalAttrs stdenv.hostPlatform.isDarwin (addToCscOptions "-L -linotify" old);
   leveldb = addToBuildInputs pkgs.leveldb;
+  lowdown = old: {
+    # For some reason comparse version gets interpreted as 0.0.0
+    postPatch = ''
+      substituteInPlace lowdown.egg \
+        --replace-fail 'comparse "3"' 'comparse "0.0.0"'
+    '';
+  };
   magic = addToBuildInputs pkgs.file;
   mdh = old:
     (addToBuildInputs pkgs.pcre old)
@@ -88,6 +102,13 @@ in
         "-Wno-error=implicit-int"
       ];
     };
+  medea = old: {
+    # For some reason comparse gets interpreted as comparse 0.0.0
+    postPatch = ''
+      substituteInPlace medea.egg \
+        --replace-fail 'comparse "0.3.0"' 'comparse "0.0.0"'
+    '';
+  };
   # missing dependency in upstream egg
   mistie = addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 ]);
   mosquitto = addToPropagatedBuildInputs ([ pkgs.mosquitto ]);
@@ -132,6 +153,7 @@ in
       addToNativeBuildInputs pkgs.taglib old
     );
   uuid-lib = addToBuildInputs pkgs.libuuid;
+  webview = addToBuildInputsWithPkgConfig pkgs.webkitgtk_4_0;
   ws-client = addToBuildInputs pkgs.zlib;
   xlib = addToPropagatedBuildInputs pkgs.xorg.libX11;
   yaml = addToBuildInputs pkgs.libyaml;
@@ -209,7 +231,6 @@ in
   begin-syntax = broken;
   canvas-draw = broken;
   chicken-doc-admin = broken;
-  comparse = broken;
   coops-utils = broken;
   crypt = broken;
   hypergiant = broken;
@@ -224,7 +245,6 @@ in
   svn-client = broken;
   system = broken;
   tokyocabinet = broken;
-  webview = broken;
 
   # mark broken darwin
 

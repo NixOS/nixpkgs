@@ -1,18 +1,18 @@
 {
   lib,
-  pkgs,
   buildPythonPackage,
   fetchFromGitHub,
+  pkgs,
   pythonOlder,
   redis,
+  setuptools,
   unittestCheckHook,
-  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "walrus";
-  version = "0.9.3";
-  format = "setuptools";
+  version = "0.9.4";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,20 +20,12 @@ buildPythonPackage rec {
     owner = "coleifer";
     repo = "walrus";
     rev = "refs/tags/${version}";
-    hash = "sha256-jinYMGSBAY8HTg92qU/iU5vGIrrDr5SeQG0XjsBVfcc=";
+    hash = "sha256-cvoRiaGGTpZWfSE6DDT6GwDmc/TC/Z/E76Qy9Zzkpsw=";
   };
 
-  patches = [
-    # distutils has been deprecated, this wraps its import inside a try-catch
-    # and fallsback to a fallback import.
-    # Should not be necessary in future versions.
-    (fetchpatch {
-      url = "https://github.com/coleifer/walrus/commit/79e20c89aa4015017ef8a3e0b5c27ca2731dc9b2.patch";
-      hash = "sha256-hCpvki6SV3KYhicjjUMP4VrKMEerMjq2n1BgozXKDO8=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ redis ];
+  dependencies = [ redis ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 

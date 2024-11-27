@@ -9,13 +9,18 @@ stdenv.mkDerivation rec {
     sha256 = "0kvdb897g7nyviaz72arbqijk2g2wa61cmi3l5yh48rzr49r3a3a";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail 'cc' '$(CC)'
+  '';
+
   dontConfigure = true;
 
   postBuild = ''
     $AR rcs libmemstream.a memstream.o
   '';
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   checkPhase = ''
     runHook preCheck
 

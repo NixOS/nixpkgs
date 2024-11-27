@@ -133,9 +133,9 @@ in mkDerivation rec {
     pushd rust
     cargoDeps="$rustDeps" cargoSetupPostUnpackHook
     rustDepsCopy="$cargoDepsCopy"
-    cat .cargo/config >> .cargo/config.toml.in
-    cat .cargo/config >> skim/.cargo/config.toml.in
-    rm .cargo/config
+    cat .cargo/config.toml >> .cargo/config.toml.in
+    cat .cargo/config.toml >> skim/.cargo/config.toml.in
+    rm .cargo/config.toml
     popd
 
     popd
@@ -178,7 +178,8 @@ in mkDerivation rec {
     "-DENABLE_TESTS=OFF"
     "-DCOMPILER_CACHE=disabled"
     "-DENABLE_EMBEDDED_COMPILER=ON"
-  ];
+  ] ++
+  lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) "-DNO_ARMV81_OR_HIGHER=1";
 
   env = {
     NIX_CFLAGS_COMPILE =

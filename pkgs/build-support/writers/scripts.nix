@@ -523,6 +523,97 @@ rec {
   writeFishBin = name: writeFish "/bin/${name}";
 
   /**
+    writeBabashka takes a name, an attrset with babashka interpreter and linting check (both optional)
+    and some babashka source code and returns an executable.
+
+    `pkgs.babashka-unwrapped` is used as default interpreter for small closure size. If dependencies needed, use `pkgs.babashka` instead. Pass empty string to check to disable the default clj-kondo linting.
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeBabashka` with empty arguments
+
+    ```nix
+    writeBabashka "example" { } ''
+      (println "hello world")
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeBabashka` with arguments
+
+    ```nix
+    writeBabashka "example"
+    {
+      makeWrapperArgs = [
+        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+      ];
+    }
+    ''
+      (require '[babashka.tasks :as tasks])
+      (tasks/shell "hello" "-g" "Hello babashka!")
+    ''
+    ```
+    :::
+
+    :::{.note}
+    Babashka needs Java for fetching dependencies. Wrapped babashka contains jdk,
+    pass wrapped version `pkgs.babashka` to babashka if dependencies are required.
+
+    For example:
+
+    ```nix
+    writeBabashka "example"
+    {
+      babashka = pkgs.babashka;
+    }
+    ''
+      (require '[babashka.deps :as deps])
+      (deps/add-deps '{:deps {medley/medley {:mvn/version "1.3.0"}}})
+      (require '[medley.core :as m])
+      (prn (m/index-by :id [{:id 1} {:id 2}]))
+    ''
+    ```
+    :::
+
+    :::{.note}
+    Disable clj-kondo linting:
+
+    ```nix
+    writeBabashka "example"
+    {
+      check = "";
+    }
+    ''
+      (println "hello world")
+    ''
+    ```
+    :::
+  */
+  writeBabashka =
+    name:
+    {
+      makeWrapperArgs ? [ ],
+      babashka ? pkgs.babashka-unwrapped,
+      check ? "${lib.getExe pkgs.clj-kondo} --lint",
+      ...
+    }@args:
+    makeScriptWriter (
+      (builtins.removeAttrs args [
+        "babashka"
+      ])
+      // {
+        interpreter = "${lib.getExe babashka}";
+      }
+    ) name;
+
+  /**
+    writeBabashkaBin takes the same arguments as writeBabashka but outputs a directory
+    (like writeScriptBin)
+  */
+  writeBabashkaBin = name: writeBabashka "/bin/${name}";
+
+  /**
     writeHaskell takes a name, an attrset with libraries and haskell version (both optional)
     and some haskell source code and returns an executable.
 
@@ -567,6 +658,53 @@ rec {
     writeHaskellBin takes the same arguments as writeHaskell but outputs a directory (like writeScriptBin)
   */
   writeHaskellBin = name: writeHaskell "/bin/${name}";
+
+  /**
+    writeNim takes a name, an attrset with an optional Nim compiler, and some
+    Nim source code, returning an executable.
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeNim` usage example
+
+    ```nix
+      writeNim "hello-nim" { nim = pkgs.nim2; } ''
+        echo "hello nim"
+      '';
+    ```
+    :::
+  */
+  writeNim =
+    name:
+    {
+      makeWrapperArgs ? [ ],
+      nim ? pkgs.nim2,
+      nimCompileOptions ? { },
+      strip ? true,
+    }:
+    let
+      nimCompileCmdArgs = lib.cli.toGNUCommandLineShell { optionValueSeparator = ":"; } (
+        {
+          d = "release";
+          nimcache = ".";
+        }
+        // nimCompileOptions
+      );
+    in
+    makeBinWriter {
+      compileScript = ''
+        cp $contentPath tmp.nim
+        ${lib.getExe nim} compile ${nimCompileCmdArgs} tmp.nim
+        mv tmp $out
+      '';
+      inherit makeWrapperArgs strip;
+    } name;
+
+  /**
+    writeNimBin takes the same arguments as writeNim but outputs a directory
+    (like writeScriptBin)
+  */
+  writeNimBin = name: writeNim "/bin/${name}";
 
   /**
     Like writeScript but the first line is a shebang to nu
@@ -1043,11 +1181,17 @@ rec {
       };
 
       fsi = writeBash "fsi" ''
+        set -euo pipefail
         export HOME=$NIX_BUILD_TOP/.home
         export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
         export DOTNET_CLI_TELEMETRY_OPTOUT=1
         export DOTNET_NOLOGO=1
+        export DOTNET_SKIP_WORKLOAD_INTEGRITY_CHECK=1
         script="$1"; shift
+        (
+          ${lib.getExe dotnet-sdk} new nugetconfig
+          ${lib.getExe dotnet-sdk} nuget disable source nuget
+        ) > /dev/null
         ${lib.getExe dotnet-sdk} fsi --quiet --nologo --readline- ${fsi-flags} "$@" < "$script"
       '';
 

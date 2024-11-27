@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "eventlet";
-  version = "0.35.2";
+  version = "0.37.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eventlet";
     repo = "eventlet";
-    rev = "v${version}";
-    hash = "sha256-jMbCxqIn9f9+16rFwpQdkBHj6NwTNkQxnSVV4qQ1fjM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-R/nRHsz4z4phG51YYDwkGqvnXssGoiJxIPexuhAf0BI=";
   };
 
   nativeBuildInputs = [

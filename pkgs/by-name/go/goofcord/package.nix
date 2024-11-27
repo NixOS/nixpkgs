@@ -37,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
     pipewire
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   pnpmDeps = pnpm'.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-8i/ip0ZIo80bLb7UNO/h856CD7i3DV9QaPaNrxhViqE=";
+    hash = "sha256-8dSyU9arSvISc2kDWbg/CP6L4sZjZi/Zv7TZN4ONOjQ=";
   };
 
   env = {

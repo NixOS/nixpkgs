@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   dependencies = [ jsonschema ];
 
-  passthru.optional-dependencies.optionals = [
+  optional-dependencies.optionals = [
     jsonschema
     napalm
   ];

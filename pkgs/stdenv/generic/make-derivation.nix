@@ -139,7 +139,7 @@ let
   # Turn a derivation into its outPath without a string context attached.
   # See the comment at the usage site.
   unsafeDerivationToUntrackedOutpath = drv:
-    if isDerivation drv
+    if isDerivation drv && (!drv.__contentAddressed or false)
     then builtins.unsafeDiscardStringContext drv.outPath
     else drv;
 
@@ -413,7 +413,7 @@ else let
       enableParallelChecking = attrs.enableParallelChecking or true;
       enableParallelInstalling = attrs.enableParallelInstalling or true;
     } // optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
-      NIX_HARDENING_ENABLE = enabledHardeningOptions;
+      NIX_HARDENING_ENABLE = builtins.concatStringsSep " " enabledHardeningOptions;
     } // optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
       requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.gcc.arch}" ];
     } // optionalAttrs (stdenv.buildPlatform.isDarwin) (
