@@ -60,10 +60,7 @@ in rec {
     stdenv = llvm.rocmClangStdenv;
   };
 
-  clang-ocl = callPackage ./clang-ocl {
-    inherit rocmUpdateScript rocm-cmake rocm-device-libs;
-    stdenv = llvm.rocmClangStdenv;
-  };
+  clang-ocl = throw "clang-ocl has been deprecated";
 
   # Unfree
   hsa-amd-aqlprofile-bin = callPackage ./hsa-amd-aqlprofile-bin {
@@ -260,7 +257,7 @@ in rec {
   };
 
   miopen = callPackage ./miopen {
-    inherit rocmUpdateScript rocm-cmake rocblas clang-ocl composable_kernel rocm-comgr clr rocm-docs-core half roctracer;
+    inherit rocmUpdateScript rocm-cmake rocblas composable_kernel rocm-comgr clr rocm-docs-core half roctracer;
     inherit (llvm) clang-tools-extra;
     stdenv = llvm.rocmClangStdenv;
     rocmlir = rocmlir-rock;
