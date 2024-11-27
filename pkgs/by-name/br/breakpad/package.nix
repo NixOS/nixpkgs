@@ -8,12 +8,12 @@ let
 in stdenv.mkDerivation (finalAttrs: {
   pname = "breakpad";
 
-  version = "2023.01.27";
+  version = "2023.06.01";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/breakpad/breakpad";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8msKz0K10r13TwM3oS6GCIlMdf8k8HBKfKJkPmrUrIs=";
+    hash = "sha256-8AkC/8oX4OWAcV21laJ0AeMRB9G04rFc6UJFy7Wus4A=";
   };
 
   buildInputs = [ zlib ];
