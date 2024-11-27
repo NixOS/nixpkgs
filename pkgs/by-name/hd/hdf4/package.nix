@@ -1,8 +1,7 @@
 {
   lib,
   stdenv,
-  fetchpatch,
-  fetchurl,
+  fetchFromGitHub,
   fixDarwinDylibNames,
   cmake,
   libjpeg,
@@ -20,37 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hdf";
-  version = "4.2.15";
+  version = "4.3.0";
 
-  src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF/releases/HDF${finalAttrs.version}/src/hdf-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-veA171oc1f29Cn8fpcF+mLvVmTABiaxNI08W6bt7yxI=";
+  src = fetchFromGitHub {
+    owner = "HDFGroup";
+    repo = "hdf4";
+    rev = "hdf${finalAttrs.version}";
+    hash = "sha256-Q2VKwkp/iroStrOnwHI8d/dtMWkMoJesBVBVChwNa30=";
   };
-
-  patches = [
-    # Note that the PPC, SPARC and s390 patches are only needed so the aarch64 patch applies cleanly
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-ppc.patch";
-      hash = "sha256-AEsj88VzWtyZRk2nFWV/hLD/A2oPje38T/7jvfV1azU=";
-    })
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-4.2.4-sparc.patch";
-      hash = "sha256-EKuUQ1m+/HWTFYmkTormtQATDj0rHlQpI4CoK1m+5EY=";
-    })
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-s390.patch";
-      hash = "sha256-Ix6Ft+enNHADXFeRTDNijqU9XWmSEz/y8CnQoEleOCo=";
-    })
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-arm.patch";
-      hash = "sha256-gytMtvpvR1nzV1NncrYc0yz1ZlBku1AT6sPdubcK85Q=";
-    })
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-aarch64.patch";
-      hash = "sha256-eu+M3UbgI2plJNblAT8hO1xBXbfco6jX8iZMGjXbWoQ=";
-    })
-    ./darwin-aarch64.patch
-  ];
 
   nativeBuildInputs =
     [
@@ -69,17 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional javaSupport jdk
     ++ lib.optional szipSupport szip
     ++ lib.optional uselibtirpc libtirpc;
-
-  preConfigure =
-    lib.optionalString uselibtirpc ''
-      # Make tirpc discovery work with CMAKE_PREFIX_PATH
-      substituteInPlace config/cmake/FindXDR.cmake \
-        --replace-fail 'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATHS "/usr/include" "/usr/include/tirpc")' \
-                       'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATH_SUFFIXES include/tirpc)'
-    ''
-    + lib.optionalString szipSupport ''
-      export SZIP_INSTALL=${szip}
-    '';
 
   cmakeFlags =
     [
