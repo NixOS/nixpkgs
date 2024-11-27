@@ -46,6 +46,14 @@ in
       '';
     };
 
+    label = mkOption {
+      type = types.str;
+      default = "nixos";
+      description = ''
+        NixOS partition label.
+      '';
+    };
+
     vmGeneration = mkOption {
       type =
         with types;
@@ -76,11 +84,36 @@ in
       format = "raw";
 
       bootSize = "${toString cfg.bootSize}M";
-      partitionTableType = if cfg.vmGeneration == "v2" then "efi" else "legacy";
+      partitionTableType = if (cfg.vmGeneration == "v2") then "efi" else "legacy";
 
-      inherit (cfg) contents;
+      inherit (cfg) contents label;
       inherit (config.virtualisation) diskSize;
       inherit config lib pkgs;
+    };
+
+    boot.growPartition = true;
+    boot.loader.grub = rec {
+      efiSupport = (cfg.vmGeneration == "v2");
+      device = if efiSupport then "nodev" else "/dev/sda";
+      efiInstallAsRemovable = efiSupport;
+      extraConfig = ''
+        serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
+        terminal_input --append serial
+        terminal_output --append serial
+      '';
+    };
+
+    fileSystems = {
+      "/" = {
+        device = "/dev/disk/by-label/${cfg.label}";
+        fsType = "ext4";
+        autoResize = true;
+      };
+
+      "/boot" = lib.mkIf (cfg.vmGeneration == "v2") {
+        device = "/dev/disk/by-label/ESP";
+        fsType = "vfat";
+      };
     };
   };
 }
