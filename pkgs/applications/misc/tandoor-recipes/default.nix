@@ -97,9 +97,10 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     psycopg2
     pyppeteer
     python-dotenv
-    pytube
+    pytubefix
     pyyaml
     recipe-scrapers
+    redis
     requests
     six
     uritemplate
