@@ -4,15 +4,15 @@
   # runtime dependencies
   imagemagick, libtiff, djvulibre, poppler_utils, ghostscript, unpaper, pdftk,
   # test dependencies
-  xvfb-run, liberation_ttf, file, tesseract }:
+  xvfb-run, liberation_ttf, file, tesseract3 }:
 
 perlPackages.buildPerlPackage rec {
   pname = "gscan2pdf";
-  version = "2.13.3";
+  version = "2.13.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/gscan2pdf/gscan2pdf-${version}.tar.xz";
-    hash = "sha256-QAs6fsQDe9+nKM/OAVZUHB034K72jHsKoA2LY2JQa8Y=";
+    hash = "sha256-4HcTkVJBscBb8AxeN6orMQFVR0w4hFfkGhxQOzP3mWk=";
   };
 
   patches = [
@@ -99,7 +99,7 @@ perlPackages.buildPerlPackage rec {
 
     xvfb-run
     file
-    tesseract # tests are expecting tesseract 3.x precisely
+    tesseract3 # tests are expecting tesseract 3.x precisely
   ] ++ (with perlPackages; [
     TestPod
   ]);
