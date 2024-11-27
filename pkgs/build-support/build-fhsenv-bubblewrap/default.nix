@@ -96,6 +96,7 @@ let
       "ssl/certs"
       "ca-certificates"
       "pki"
+      "dconf"
     ];
   in map (path: "/etc/${path}") files;
 
