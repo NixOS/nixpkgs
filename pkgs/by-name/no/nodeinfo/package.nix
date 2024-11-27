@@ -16,18 +16,21 @@ buildGoModule rec {
     hash = "sha256-NNrMv4AS7ybuJfTgs+p61btSIxo+iMvzH7Y5ct46Dag=";
   };
 
+  modRoot = "./cli";
   tags = "extension";
-
-  sourceRoot = "${src.name}/cli";
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   CGO_ENABLED = 0;
 
-  meta = with lib; {
+  meta = {
     mainProgram = "nodeinfo";
     description = "Command line tool to query nodeinfo based on a given domain";
     homepage = "https://codeberg.org/thefederationinfo/nodeinfo-go";
     changelog = "https://codeberg.org/thefederationinfo/nodeinfo-go/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ _6543 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers._6543 ];
   };
 }
