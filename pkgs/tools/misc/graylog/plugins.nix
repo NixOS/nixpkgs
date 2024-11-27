@@ -19,6 +19,7 @@ let
   }:
     stdenv.mkDerivation (a // {
       inherit installPhase;
+      pname = pluginName;
       dontUnpack = true;
       nativeBuildInputs = [ unzip ];
       meta = a.meta // {
