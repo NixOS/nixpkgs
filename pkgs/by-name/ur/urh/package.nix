@@ -55,9 +55,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    mkdir -p $out/share/icons/hicolor/{48x48,128x128}/apps
-    convert $src/data/icons/appicon.png -resize 48x48 $out/share/icons/hicolor/48x48/apps/urh.png
-    convert $src/data/icons/appicon.png -resize 128x128 $out/share/icons/hicolor/128x128/apps/urh.png
+    install -Dm644 data/icons/appicon.png $out/share/pixmaps/urh.png
   '';
 
   meta = with lib; {
