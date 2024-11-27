@@ -85,6 +85,7 @@ stdenv.mkDerivation (builtins.removeAttrs args [ "mvnFetchExtraArgs" ] // {
 
   nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
     maven
+    maven.mavenPatchPomHook
   ];
 
   JAVA_HOME = mvnJdk;

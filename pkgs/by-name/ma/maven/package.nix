@@ -5,6 +5,9 @@
   jdk_headless,
   makeWrapper,
   stdenvNoCC,
+  makeSetupHook,
+  substituteAll,
+  xmlstarlet,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -41,6 +44,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     buildMavenPackage = callPackage ./build-maven-package.nix {
       maven = finalAttrs.finalPackage;
     };
+    mavenPatchPomHook = makeSetupHook {
+      name = "maven-patch-pom-hook";
+      substitutions = {
+        xmlstarlet = lib.getExe xmlstarlet;
+      };
+    } ./hooks/patch-pom-hook.sh;
   };
 
   meta = {
