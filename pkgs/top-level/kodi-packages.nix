@@ -213,6 +213,8 @@ let
 
     typing_extensions = callPackage ../applications/video/kodi/addons/typing_extensions { };
 
+    twitch = callPackage ../applications/video/kodi/addons/twitch { };
+
     arrow = callPackage ../applications/video/kodi/addons/arrow { };
 
     trakt-module = callPackage ../applications/video/kodi/addons/trakt-module { };
