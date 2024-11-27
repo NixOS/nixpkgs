@@ -1,34 +1,37 @@
-{ stdenv, lib, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
-## after launching for the first time, grant access for parent application (e.g. Terminal.app)
-## from 'system preferences >> security & privacy >> accessibility'
-## and then launch again
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "discrete-scroll";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "emreyolcu";
     repo = "discrete-scroll";
-    rev = "v${version}";
-    sha256 = "0aqkp4kkwjlkll91xbqwf8asjww8ylsdgqvdk8d06bwdvg2cgvhg";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-D+7HxNuNLwMamm3j1zT1iHOpFXIcrx4SpZNKPie5Eys=";
   };
 
   buildPhase = ''
-    cc -std=c99 -O3 -Wall -framework Cocoa -o dc DiscreteScroll/main.m
+    runHook preBuild
+    $CC -O3 -framework Cocoa DiscreteScroll/main.m
+    runHook postBuild
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp ./dc $out/bin/discretescroll
+    runHook preInstall
+    install -Dm755 a.out $out/bin/discretescroll
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fix for OS X's scroll wheel problem";
     homepage = "https://github.com/emreyolcu/discrete-scroll";
-    platforms = platforms.darwin;
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bb2020 ];
+    platforms = lib.platforms.darwin;
   };
-}
+})
