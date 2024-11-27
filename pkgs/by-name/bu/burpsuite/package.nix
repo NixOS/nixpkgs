@@ -104,7 +104,10 @@ buildFHSEnv {
     license = licenses.unfree;
     platforms = jdk.meta.platforms;
     hydraPlatforms = [ ];
-    maintainers = with maintainers; [ bennofs ];
+    maintainers = with maintainers; [
+      bennofs
+      fab
+    ];
     mainProgram = "burpsuite";
   };
 }
