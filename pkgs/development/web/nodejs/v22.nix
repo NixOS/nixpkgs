@@ -19,6 +19,16 @@ buildNodejs {
     ./use-correct-env-in-tests.patch
     ./bin-sh-node-run-v22.patch
 
+    # Fix for https://github.com/NixOS/nixpkgs/issues/355919
+    # FIXME: remove after a minor point release
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/a094a8166cd772f89e92b5deef168e5e599fa815.patch?full_index=1";
+      hash = "sha256-5FZfozYWRa1ZI/f+e+xpdn974Jg2DbiHbua13XUQP5E=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/f270462c09ddfd770291a7c8a2cd204b2c63d730.patch?full_index=1";
+      hash = "sha256-Err0i5g7WtXcnhykKgrS3ocX7/3oV9UrT0SNeRtMZNU=";
+    })
     # Patch to use the shared version of SQLite instead of the one vendored upstream:
     (fetchpatch2 {
       url = "https://github.com/nodejs/node/commit/32f7d5ad1cf79e7e731e1bb7ac967f4f2a3194cf.patch?full_index=1";
