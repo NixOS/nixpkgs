@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   cmake,
   fetchFromGitHub,
   installShellFiles,
@@ -40,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   # Tests require python3
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     export HOME=$TMPDIR
     installShellCompletion --cmd uv \
       --bash <($out/bin/uv --generate-shell-completion bash) \
