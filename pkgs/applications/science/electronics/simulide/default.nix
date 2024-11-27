@@ -1,12 +1,8 @@
 {
   lib,
+  stdenv,
   fetchbzr,
-  mkDerivation,
-  qmake,
-  qtserialport,
-  qtmultimedia,
-  qttools,
-  qtscript,
+  libsForQt5,
 }:
 
 let
@@ -24,7 +20,7 @@ let
         cp simulide $out/bin/simulide
       '',
     }:
-    mkDerivation {
+    stdenv.mkDerivation {
       pname = "simulide";
       version = "${version}-${release}";
       inherit src;
@@ -48,13 +44,18 @@ let
         cd build_XX
       '';
 
-      nativeBuildInputs = [ qmake ];
+      nativeBuildInputs = with libsForQt5; [
+        qmake
+        wrapQtAppsHook
+      ];
 
-      buildInputs = [
-        qtserialport
-        qtmultimedia
-        qttools
-      ] ++ extraBuildInputs;
+      buildInputs =
+        (with libsForQt5; [
+          qtserialport
+          qtmultimedia
+          qttools
+        ])
+        ++ extraBuildInputs;
 
       installPhase = ''
         runHook preInstall
@@ -104,7 +105,7 @@ in
       sed -i src/gpsim/value.h -e '1i #include <cstdint>'
       sed -i src/gpsim/modules/watchdog.h -e '1i #include <cstdint>'
     '';
-    extraBuildInputs = [ qtscript ];
+    extraBuildInputs = [ libsForQt5.qtscript ];
     iconPath = "resources/icons/hicolor/256x256/simulide.png"; # upstream had a messed up icon path in this release
     installFiles = ''
       cp -r share/simulide/* $out/share/simulide
@@ -121,7 +122,7 @@ in
       sha256 = "sha256-rJWZvnjVzaKXU2ktbde1w8LSNvu0jWkDIk4dq2l7t5g=";
       inherit rev;
     };
-    extraBuildInputs = [ qtscript ];
+    extraBuildInputs = [ libsForQt5.qtscript ];
   };
 
   simulide_1_1_0 = generic rec {
