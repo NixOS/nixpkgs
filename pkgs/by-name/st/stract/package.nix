@@ -5,7 +5,6 @@
   pkg-config,
   openssl,
   curl,
-  fetchurl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-7Skbeeev/xBAhlcyOsYpDJB9LnZpT66D0Fu1I/jIBso=";
 
-  cargoDepsName = pname;
+  cargoDepsName = "stract";
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     openssl
