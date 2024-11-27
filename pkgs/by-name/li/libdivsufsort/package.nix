@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-4p+L1bq9SBgWSHXx+WYWAe60V2g1AN+zlJvC+F367Tk=";
   };
 
+  cmakeFlags = [
+    "-DBUILD_DIVSUFSORT64=YES"
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   meta = {
