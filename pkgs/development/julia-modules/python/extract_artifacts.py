@@ -32,31 +32,7 @@ archive_extensions = [
   ".zip"
   ]
 
-dependencies_path = Path(sys.argv[1])
-closure_yaml_path = Path(sys.argv[2])
-julia_path = Path(sys.argv[3])
-extract_artifacts_script = Path(sys.argv[4])
-extra_libs = json.loads(sys.argv[5])
-out_path = Path(sys.argv[6])
-
-with open(dependencies_path, "r") as f:
-  dependencies = yaml.safe_load(f)
-  dependency_uuids = dependencies.keys()
-
-with open(closure_yaml_path, "r") as f:
-  # Build up a map of UUID -> closure information
-  closure_yaml_list = yaml.safe_load(f) or []
-  closure_yaml = {}
-  for item in closure_yaml_list:
-    closure_yaml[item["uuid"]] = item
-
-  # Build up a dependency graph of UUIDs
-  closure_dependencies_dag = dag.DAG()
-  for uuid, contents in closure_yaml.items():
-    if contents.get("depends_on"):
-      closure_dependencies_dag.add_node(uuid, dependencies=contents["depends_on"].values())
-
-def get_archive_derivation(uuid, artifact_name, url, sha256):
+def get_archive_derivation(uuid, artifact_name, url, sha256, closure_dependencies_dag, dependency_uuids, extra_libs):
   depends_on = set()
   if closure_dependencies_dag.has_node(uuid):
     depends_on = set(closure_dependencies_dag.get_dependencies(uuid)).intersection(dependency_uuids)
@@ -96,44 +72,81 @@ def get_plain_derivation(url, sha256):
         sha256 = "{sha256}";
       }}"""
 
-with open(out_path, "w") as f:
-  f.write("{ lib, fetchurl, glibc, pkgs, stdenv }:\n\n")
-  f.write("rec {\n")
+def process_item(args):
+  item, julia_path, extract_artifacts_script, closure_dependencies_dag, dependency_uuids, extra_libs = args
+  uuid, src = item
+  lines = []
 
-  def process_item(item):
-    uuid, src = item
-    lines = []
-    artifacts = toml.loads(subprocess.check_output([julia_path, extract_artifacts_script, uuid, src]).decode())
-    if not artifacts: return f'  uuid-{uuid} = {{}};\n'
+  artifacts = toml.loads(subprocess.check_output([julia_path, extract_artifacts_script, uuid, src]).decode())
+  if not artifacts:
+    return f'  uuid-{uuid} = {{}};\n'
 
-    lines.append(f'  uuid-{uuid} = {{')
+  lines.append(f'  uuid-{uuid} = {{')
 
-    for artifact_name, details in artifacts.items():
-      if len(details["download"]) == 0: continue
-      download = details["download"][0]
-      url = download["url"]
-      sha256 = download["sha256"]
+  for artifact_name, details in artifacts.items():
+    if len(details["download"]) == 0:
+      continue
+    download = details["download"][0]
+    url = download["url"]
+    sha256 = download["sha256"]
 
-      git_tree_sha1 = details["git-tree-sha1"]
+    git_tree_sha1 = details["git-tree-sha1"]
 
-      parsed_url = urlparse(url)
-      if any(parsed_url.path.endswith(x) for x in archive_extensions):
-        derivation = get_archive_derivation(uuid, artifact_name, url, sha256)
-      else:
-        derivation = get_plain_derivation(url, sha256)
+    parsed_url = urlparse(url)
+    if any(parsed_url.path.endswith(x) for x in archive_extensions):
+      derivation = get_archive_derivation(uuid, artifact_name, url, sha256, closure_dependencies_dag, dependency_uuids, extra_libs)
+    else:
+      derivation = get_plain_derivation(url, sha256)
 
-      lines.append(f"""    "{artifact_name}" = {{
+    lines.append(f"""    "{artifact_name}" = {{
       sha1 = "{git_tree_sha1}";
       path = {derivation};
     }};\n""")
 
-    lines.append('  };\n')
+  lines.append('  };\n')
 
-    return "\n".join(lines)
+  return "\n".join(lines)
 
-  with multiprocessing.Pool(10) as pool:
-    for s in pool.map(process_item, dependencies.items()):
-      f.write(s)
+def main():
+  dependencies_path = Path(sys.argv[1])
+  closure_yaml_path = Path(sys.argv[2])
+  julia_path = Path(sys.argv[3])
+  extract_artifacts_script = Path(sys.argv[4])
+  extra_libs = json.loads(sys.argv[5])
+  out_path = Path(sys.argv[6])
 
-  f.write(f"""
+  with open(dependencies_path, "r") as f:
+    dependencies = yaml.safe_load(f)
+    dependency_uuids = list(dependencies.keys())  # Convert dict_keys to list
+
+  with open(closure_yaml_path, "r") as f:
+    # Build up a map of UUID -> closure information
+    closure_yaml_list = yaml.safe_load(f) or []
+    closure_yaml = {}
+    for item in closure_yaml_list:
+      closure_yaml[item["uuid"]] = item
+
+    # Build up a dependency graph of UUIDs
+    closure_dependencies_dag = dag.DAG()
+    for uuid, contents in closure_yaml.items():
+      if contents.get("depends_on"):
+        closure_dependencies_dag.add_node(uuid, dependencies=contents["depends_on"].values())
+
+  with open(out_path, "w") as f:
+    f.write("{ lib, fetchurl, glibc, pkgs, stdenv }:\n\n")
+    f.write("rec {\n")
+
+    with multiprocessing.Pool(10) as pool:
+      # Create args tuples for each item
+      process_args = [
+        (item, julia_path, extract_artifacts_script, closure_dependencies_dag, dependency_uuids, extra_libs)
+        for item in dependencies.items()
+      ]
+      for s in pool.map(process_item, process_args):
+        f.write(s)
+
+    f.write(f"""
 }}\n""")
+
+if __name__ == "__main__":
+  main()
