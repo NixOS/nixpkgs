@@ -6,4 +6,5 @@
 
 {
   base = import ./base.nix { inherit system pkgs; };
+  kafka = import ./kafka.nix { inherit system pkgs; };
 }
