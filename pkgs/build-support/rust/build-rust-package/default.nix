@@ -38,6 +38,7 @@
 , buildType ? "release"
 , meta ? {}
 , useFetchCargoVendor ? false
+, cargoDeps ? null
 , cargoLock ? null
 , cargoVendorDir ? null
 , checkType ? buildType
@@ -60,16 +61,17 @@
 , buildAndTestSubdir ? null
 , ... } @ args:
 
-assert cargoVendorDir == null && cargoLock == null
+assert cargoVendorDir == null && cargoDeps == null && cargoLock == null
     -> !(args ? cargoSha256 && args.cargoSha256 != null) && !(args ? cargoHash && args.cargoHash != null)
-    -> throw "cargoHash, cargoVendorDir, or cargoLock must be set";
+    -> throw "cargoHash, cargoVendorDir, cargoDeps, or cargoLock must be set";
 
 let
 
-  cargoDeps =
+  cargoDeps' =
     if cargoVendorDir != null then null
+    else if cargoDeps != null then cargoDeps
     else if cargoLock != null then importCargoLock cargoLock
-    else if useFetchCargoVendor then (fetchCargoVendor {
+    else if useFetchCargoVendor then fetchCargoVendor ({
       inherit src srcs sourceRoot preUnpack unpackPhase postUnpack;
       name = cargoDepsName;
       patches = cargoPatches;
@@ -102,7 +104,7 @@ in
 # See https://os.phil-opp.com/testing/ for more information.
 assert useSysroot -> !(args.doCheck or true);
 
-stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "cargoLock" ]) // lib.optionalAttrs useSysroot {
+stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "cargoDeps" "cargoLock" ]) // lib.optionalAttrs useSysroot {
   RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
 } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && buildType == "debug") {
   RUSTFLAGS =
@@ -110,7 +112,8 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
     + lib.optionalString useSysroot "--sysroot ${sysroot} "
     + (args.RUSTFLAGS or "");
 } // {
-  inherit buildAndTestSubdir cargoDeps;
+  cargoDeps = cargoDeps';
+  inherit buildAndTestSubdir;
 
   cargoBuildType = buildType;
 

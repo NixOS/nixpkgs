@@ -11,7 +11,7 @@ def set_prefix(token: Token, ident: str) -> None:
 
 
 def test_auto_id_prefix_simple() -> None:
-    md = HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, 2, 2, Path("")), {}, Redirects({}, ''))
+    md = HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, 2, 2, Path("")), {})
 
     src = f"""
 # title
@@ -32,7 +32,7 @@ def test_auto_id_prefix_simple() -> None:
 
 
 def test_auto_id_prefix_repeated() -> None:
-    md = HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, 2, 2, Path("")), {}, Redirects({}, ''))
+    md = HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, 2, 2, Path("")), {})
 
     src = f"""
 # title
@@ -58,7 +58,7 @@ def test_auto_id_prefix_repeated() -> None:
     ]
 
 def test_auto_id_prefix_maximum_nested() -> None:
-    md = HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, 2, 2, Path("")), {}, Redirects({}, ''))
+    md = HTMLConverter("1.0.0", HTMLParameters("", [], [], 2, 2, 2, Path("")), {})
 
     src = f"""
 # h1

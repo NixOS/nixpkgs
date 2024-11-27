@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "httpdirfs";
-  version = "1.2.6";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "fangfufu";
     repo = "httpdirfs";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-4Tp9DTYWUHElO0YNeINgzmbI0tpXxmKfZ1Jhz5UYn5M=";
+    hash = "sha256-6TGptKWX0hSNL3Z3ioP7puzozWLiMhCybN7hATQdD/k=";
   };
 
   nativeBuildInputs = [

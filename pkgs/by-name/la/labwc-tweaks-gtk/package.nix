@@ -49,6 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "labwc-tweaks-gtk";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ AndersonTorres romildo ];
+    maintainers = with lib.maintainers; [ romildo ];
   };
 })

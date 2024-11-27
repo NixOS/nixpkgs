@@ -255,7 +255,7 @@ self: super: builtins.intersectAttrs super {
   jni = overrideCabal (drv: {
     preConfigure = ''
       local libdir=( "${pkgs.jdk}/lib/openjdk/jre/lib/"*"/server" )
-      configureFlags+=" --extra-lib-dir=''${libdir[0]}"
+      appendToVar configureFlags "--extra-lib-dir=''${libdir[0]}"
     '';
   }) super.jni;
 
@@ -1182,7 +1182,7 @@ self: super: builtins.intersectAttrs super {
   hercules-ci-cnix-store = overrideCabal
     (old: {
       passthru = old.passthru or { } // {
-        nixPackage = pkgs.nixVersions.nix_2_19;
+        nixPackage = pkgs.nixVersions.nix_2_24;
       };
     })
     (super.hercules-ci-cnix-store.override {

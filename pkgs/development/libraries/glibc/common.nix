@@ -224,6 +224,11 @@ stdenv.mkDerivation ({
     inherit sha256;
   };
 
+  makeFlags = lib.optionals (stdenv.cc.libc != null) [
+    "BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib"
+    "OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"
+  ];
+
   # Remove absolute paths from `configure' & co.; build out-of-tree.
   preConfigure = ''
     export PWD_P=$(type -tP pwd)
@@ -237,12 +242,6 @@ stdenv.mkDerivation ({
     cd ../build
 
     configureScript="`pwd`/../$sourceRoot/configure"
-
-    ${lib.optionalString (stdenv.cc.libc != null)
-      ''makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"''
-    }
-
-
   '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
 

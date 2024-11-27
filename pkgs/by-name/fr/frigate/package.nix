@@ -29,6 +29,12 @@ let
     };
   };
 
+  # Tensorflow audio model
+  tflite_audio_model = fetchurl {
+    url = "https://www.kaggle.com/api/v1/models/google/yamnet/tfLite/classification-tflite/1/download";
+    hash = "sha256-G5cbITJ2AnOl+49dxQToZ4OyeFO7MTXVVa4G8eHjZfM=";
+  };
+
   # Tensorflow Lite models
   # https://github.com/blakeblackshear/frigate/blob/v0.13.0/docker/main/Dockerfile#L96-L97
   tflite_cpu_model = fetchurl {
@@ -72,13 +78,21 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace frigate/detectors/detector_config.py \
       --replace-fail "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
 
+    substituteInPlace frigate/output/birdseye.py \
+      --replace-fail "/opt/frigate/" "${placeholder "out"}/${python.sitePackages}/"
+
     # work around onvif-zeep idiosyncrasy
     substituteInPlace frigate/ptz/onvif.py \
       --replace-fail dist-packages site-packages
 
+    # provide default paths for models and maps that are shipped with frigate
     substituteInPlace frigate/config.py \
       --replace-fail "/cpu_model.tflite" "${tflite_cpu_model}" \
       --replace-fail "/edgetpu_model.tflite" "${tflite_edgetpu_model}"
+
+    substituteInPlace frigate/events/audio.py \
+      --replace-fail "/cpu_audio_model.tflite" "${placeholder "out"}/share/frigate/cpu_audio_model.tflite" \
+      --replace-fail "/audio-labelmap.txt" "${placeholder "out"}/share/frigate/audio-labelmap.txt"
 
     substituteInPlace frigate/test/test_config.py \
       --replace-fail "(MODEL_CACHE_DIR" "('/build/model_cache'" \
@@ -131,7 +145,10 @@ python.pkgs.buildPythonApplication rec {
     cp -R frigate/* $out/${python.sitePackages}/frigate/
 
     mkdir -p $out/share/frigate
-    cp -R {migrations,labelmap.txt} $out/share/frigate/
+    cp -R {migrations,labelmap.txt,audio-labelmap.txt} $out/share/frigate/
+
+    tar --extract --gzip --file ${tflite_audio_model}
+    cp --no-preserve=mode ./1.tflite $out/share/frigate/cpu_audio_model.tflite
 
     cp --no-preserve=mode ${openvino_model} $out/share/frigate/coco_91cl_bkgr.txt
     sed -i 's/truck/car/g' $out/share/frigate/coco_91cl_bkgr.txt

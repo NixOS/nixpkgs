@@ -178,7 +178,7 @@ mirror://xorg/individual/lib/libXau-1.0.11.tar.xz
 mirror://xorg/individual/lib/libXaw-1.0.16.tar.xz
 mirror://xorg/individual/lib/libxcb-1.17.0.tar.xz
 mirror://xorg/individual/lib/libXcomposite-0.4.6.tar.xz
-mirror://xorg/individual/lib/libXcursor-1.2.2.tar.xz
+mirror://xorg/individual/lib/libXcursor-1.2.3.tar.xz
 mirror://xorg/individual/lib/libxcvt-0.1.2.tar.xz
 mirror://xorg/individual/lib/libXdamage-1.1.6.tar.xz
 mirror://xorg/individual/lib/libXdmcp-1.1.5.tar.xz

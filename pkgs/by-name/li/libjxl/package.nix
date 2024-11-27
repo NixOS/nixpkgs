@@ -104,6 +104,9 @@ stdenv.mkDerivation rec {
     # Use our version of gtest
     "-DJPEGXL_FORCE_SYSTEM_GTEST=ON"
 
+    "-DJPEGXL_ENABLE_SKCMS=OFF"
+    "-DJPEGXL_FORCE_SYSTEM_LCMS2=ON"
+
     # TODO: Update this package to enable this (overridably via an option):
     # Viewer tools for evaluation.
     # "-DJPEGXL_ENABLE_VIEWERS=ON"
@@ -121,6 +124,13 @@ stdenv.mkDerivation rec {
   # the second substitution fix regex for a2x script
   # https://github.com/libjxl/libjxl/pull/3842
   postPatch = ''
+    # Make sure we do not accidentally build against some of the vendored dependencies
+    # If it asks you to "run deps.sh to fetch the build dependencies", then you are probably missing a JPEGXL_FORCE_SYSTEM_* flag
+    (
+      shopt -s extglob
+      rm -rf third_party/!(sjpeg)/
+    )
+
     substituteInPlace plugins/gdk-pixbuf/jxl.thumbnailer \
       --replace '/usr/bin/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-jxl"
     substituteInPlace CMakeLists.txt \

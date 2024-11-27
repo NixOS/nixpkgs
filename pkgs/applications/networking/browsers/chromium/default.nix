@@ -10,8 +10,7 @@
 
 # package customization
 # Note: enable* flags should not require full rebuilds (i.e. only affect the wrapper)
-, channel ? "stable"
-, upstream-info ? (import ./upstream-info.nix).${channel}
+, upstream-info ? (lib.importJSON ./info.json).${if !ungoogled then "chromium" else "ungoogled-chromium"}
 , proprietaryCodecs ? true
 , enableWideVine ? false
 , ungoogled ? false # Whether to build chromium or ungoogled-chromium
@@ -46,13 +45,14 @@ let
     inherit stdenv upstream-info;
 
     mkChromiumDerivation = callPackage ./common.nix ({
-      inherit channel chromiumVersionAtLeast versionRange;
+      inherit chromiumVersionAtLeast versionRange;
       inherit proprietaryCodecs
               cupsSupport pulseSupport ungoogled;
       gnChromium = buildPackages.gn.overrideAttrs (oldAttrs: {
-        inherit (upstream-info.deps.gn) version;
+        version = if (upstream-info.deps.gn ? "version") then upstream-info.deps.gn.version else "0";
         src = fetchgit {
-          inherit (upstream-info.deps.gn) url rev hash;
+          url = "https://gn.googlesource.com/gn";
+          inherit (upstream-info.deps.gn) rev hash;
         };
       } // lib.optionalAttrs (chromiumVersionAtLeast "127") {
         # Relax hardening as otherwise gn unstable 2024-06-06 and later fail with:
@@ -65,11 +65,10 @@ let
         # As a work around until gn is updated again, we filter specifically that patch out.
         patches = lib.filter (e: lib.getName e != "LFS64.patch") oldAttrs.patches;
       });
-      recompressTarball = callPackage ./recompress-tarball.nix { inherit chromiumVersionAtLeast; };
     });
 
     browser = callPackage ./browser.nix {
-      inherit channel chromiumVersionAtLeast enableWideVine ungoogled;
+      inherit chromiumVersionAtLeast enableWideVine ungoogled;
     };
 
     # ungoogled-chromium is, contrary to its name, not a build of
@@ -79,8 +78,6 @@ let
     # patched into their shebangs.
     ungoogled-chromium = pkgsBuildBuild.callPackage ./ungoogled.nix {};
   };
-
-  suffix = lib.optionalString (channel != "stable" && channel != "ungoogled-chromium") ("-" + channel);
 
   sandboxExecutableName = chromium.browser.passthru.sandboxExecutableName;
 
@@ -99,7 +96,7 @@ let
 
 in stdenv.mkDerivation {
   pname = lib.optionalString ungoogled "ungoogled-"
-    + "chromium${suffix}";
+    + "chromium";
   inherit (chromium.browser) version;
 
   nativeBuildInputs = [

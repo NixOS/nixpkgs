@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: ({
     libxml2 libxslt openssl sqlite zlib
 
     # Text rendering
-    harfbuzz icu
+    freetype harfbuzz icu
 
     # Image formats
     libjpeg libpng
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: ({
       dbus glib udev
 
       # Text rendering
-      fontconfig freetype
+      fontconfig
 
       libdrm
 
@@ -90,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: ({
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which ]
+    ++ lib.optionals (mysqlSupport) [ libmysqlclient ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
@@ -100,6 +101,8 @@ stdenv.mkDerivation (finalAttrs: ({
   } // {
 
   propagatedNativeBuildInputs = [ lndir ];
+
+  strictDeps = true;
 
   # libQt5Core links calls CoreFoundation APIs that call into the system ICU. Binaries linked
   # against it will crash during build unless they can access `/usr/share/icu/icudtXXl.dat`.
@@ -323,6 +326,7 @@ stdenv.mkDerivation (finalAttrs: ({
     "-system-sqlite"
     ''-${if mysqlSupport then "plugin" else "no"}-sql-mysql''
     ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
+    "-system-libpng"
 
     "-make libs"
     "-make tools"
@@ -332,8 +336,6 @@ stdenv.mkDerivation (finalAttrs: ({
     ++ (
       if stdenv.hostPlatform.isDarwin then [
       "-no-fontconfig"
-      "-qt-freetype"
-      "-qt-libpng"
       "-no-framework"
       "-no-rpath"
     ] else [
@@ -351,8 +353,6 @@ stdenv.mkDerivation (finalAttrs: ({
       ''-${lib.optionalString (cups == null) "no-"}cups''
       "-dbus-linked"
       "-glib"
-    ] ++ [
-      "-system-libpng"
     ] ++ lib.optional withGtk3 "-gtk"
       ++ lib.optional withLibinput "-libinput"
       ++ [

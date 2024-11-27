@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hyprwall";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "hyprutils";
     repo = "hyprwall";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dzPd+5cws3hKhdd1CKKEO7EWMS0XW0y1vqxg1XKX+gY=";
+    hash = "sha256-A4lOEO7xKdKCUGv0scrGlwgkM8ekAWErzaN1DdgMMlA=";
   };
 
-  cargoHash = "sha256-gT2ysWHckcUl1yx5tciy6kSvZZ0srrs4OwI1mr/58Pc=";
+  cargoHash = "sha256-ZyVHkQGv+THb2cAHH3V8nb3x9ZmpoSdR8CV7AiWQ8as=";
 
   nativeBuildInputs = [
     pkg-config

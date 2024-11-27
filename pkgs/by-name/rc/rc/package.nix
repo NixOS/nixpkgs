@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Plan 9 shell";
     license = [ lib.licenses.zlib ];
     mainProgram = "rc";
-    maintainers = with lib.maintainers; [ ramkromberg AndersonTorres ];
+    maintainers = with lib.maintainers; [ ramkromberg ];
     platforms = lib.platforms.unix;
   };
 })

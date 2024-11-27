@@ -1,39 +1,43 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, fontconfig
-, freealut
-, libglut
-, gettext
-, libGL
-, libGLU
-, openal
-, quesoglc
-, clanlib
-, libXrender
-, libmikmod
-, alsa-lib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  fontconfig,
+  freealut,
+  libglut,
+  gettext,
+  libGL,
+  libGLU,
+  openal,
+  quesoglc,
+  clanlib,
+  libXrender,
+  libmikmod,
+  alsa-lib,
+  nix-update-script,
+  libXinerama,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs:{
   pname = "methane";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     repo = "methane";
     owner = "rombust";
-    rev = "v${version}";
-    sha256 = "sha256-STS2+wfZ8E1jpr0PYQOBQsztxhJU0Dt3IhWBE3sjdWE=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-rByJqkhYsRuv0gTug+vP2qgkRY8TnX+Qx4/MbAmPTOU=";
   };
 
   nativeBuildInputs = [
     gettext
     pkg-config
   ];
+
   buildInputs = [
     SDL2
     SDL2_image
@@ -47,11 +51,12 @@ stdenv.mkDerivation rec {
     quesoglc
     clanlib
     libXrender
+    libXinerama
     libmikmod
     alsa-lib
   ];
 
-  installPhase  = ''
+  installPhase = ''
     runHook preInstall
     mkdir -p $out/bin/ $out/share/methane/ $out/share/docs/
     cp methane $out/bin
@@ -60,12 +65,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/rombust/methane";
     description = "Clone of Taito's Bubble Bobble arcade game released for Amiga in 1993 by Apache Software";
     mainProgram = "methane";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ nixinator ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ nixinator ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

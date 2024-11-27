@@ -37,13 +37,13 @@ stdenv.mkDerivation rec {
   prefixKey = "PREFIX=";
 
   preConfigure = ''
-    sconsFlags+=" APR=$(echo ${apr.dev}/bin/*-config)"
-    sconsFlags+=" APU=$(echo ${aprutil.dev}/bin/*-config)"
-    sconsFlags+=" CC=$CC"
-    sconsFlags+=" OPENSSL=${openssl}"
-    sconsFlags+=" ZLIB=${zlib}"
+    appendToVar sconsFlags "APR=$(echo ${apr.dev}/bin/*-config)"
+    appendToVar sconsFlags "APU=$(echo ${aprutil.dev}/bin/*-config)"
+    appendToVar sconsFlags "CC=$CC"
+    appendToVar sconsFlags "OPENSSL=${openssl}"
+    appendToVar sconsFlags "ZLIB=${zlib}"
   '' + lib.optionalString (!stdenv.hostPlatform.isCygwin) ''
-    sconsFlags+=" GSSAPI=${libkrb5.dev}"
+    appendToVar sconsFlags "GSSAPI=${libkrb5.dev}"
   '';
 
   enableParallelBuilding = true;

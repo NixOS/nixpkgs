@@ -17,12 +17,9 @@ let
           ++ (map
             (targetPlatform:
               callPackage "${nixpkgsRoot}/pkgs/development/compilers/flutter/engine/source.nix" {
-                stdenv = stdenv.override {
-                  targetPlatform = lib.systems.elaborate targetPlatform;
-                  hostPlatform = lib.systems.elaborate buildPlatform;
-                  buildPlatform = lib.systems.elaborate buildPlatform;
-                };
-
+                targetPlatform = lib.systems.elaborate targetPlatform;
+                hostPlatform = lib.systems.elaborate buildPlatform;
+                buildPlatform = lib.systems.elaborate buildPlatform;
                 flutterVersion = version;
                 version = engineVersion;
                 url = "https://github.com/flutter/engine.git@${engineVersion}";

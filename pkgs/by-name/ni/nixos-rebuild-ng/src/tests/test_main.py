@@ -67,10 +67,17 @@ def test_parse_args() -> None:
 
 
 @patch(get_qualified_name(nr.nix.run, nr.nix), autospec=True)
-def test_execute_nix_boot(mock_run: Any, tmp_path: Path) -> None:
+@patch(get_qualified_name(nr.nix.shutil.which), autospec=True, return_value="/bin/git")
+def test_execute_nix_boot(mock_which: Any, mock_run: Any, tmp_path: Path) -> None:
+    nixpkgs_path = tmp_path / "nixpkgs"
+    nixpkgs_path.mkdir()
     config_path = tmp_path / "test"
     config_path.touch()
     mock_run.side_effect = [
+        # update_nixpkgs_rev
+        CompletedProcess([], 0, str(nixpkgs_path)),
+        CompletedProcess([], 0, "nixpkgs-rev"),
+        CompletedProcess([], 0),
         # nixos_build
         CompletedProcess([], 0, str(config_path)),
         # set_profile
@@ -82,9 +89,25 @@ def test_execute_nix_boot(mock_run: Any, tmp_path: Path) -> None:
     nr.execute(["nixos-rebuild", "boot", "--no-flake", "-vvv"])
 
     assert nr.VERBOSE is True
-    assert mock_run.call_count == 3
+    assert mock_run.call_count == 6
     mock_run.assert_has_calls(
         [
+            call(
+                ["nix-instantiate", "--find-file", "nixpkgs", "-vvv"],
+                stdout=PIPE,
+                check=False,
+                text=True,
+            ),
+            call(
+                ["git", "-C", nixpkgs_path, "rev-parse", "--short", "HEAD"],
+                check=False,
+                stdout=PIPE,
+                text=True,
+            ),
+            call(
+                ["git", "-C", nixpkgs_path, "diff", "--quiet"],
+                check=False,
+            ),
             call(
                 [
                     "nix-build",
@@ -180,11 +203,15 @@ def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
 
 
 @patch(get_qualified_name(nr.nix.run, nr.nix), autospec=True)
-def test_execute_switch_rollback(mock_run: Any) -> None:
+def test_execute_switch_rollback(mock_run: Any, tmp_path: Path) -> None:
+    nixpkgs_path = tmp_path / "nixpkgs"
+    nixpkgs_path.touch()
+
     nr.execute(["nixos-rebuild", "switch", "--rollback", "--install-bootloader"])
 
     assert nr.VERBOSE is False
-    assert mock_run.call_count == 2
+    assert mock_run.call_count == 3
+    # ignoring update_nixpkgs_rev calls
     mock_run.assert_has_calls(
         [
             call(

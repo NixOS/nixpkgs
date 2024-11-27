@@ -103,7 +103,7 @@ buildPythonPackage rec {
 
   # HACK: copy mesonEmulatorHook's flags to the variable used by meson-python
   postConfigure = ''
-    mesonFlags="$mesonFlags ''${mesonFlagsArray[@]}"
+    concatTo mesonFlags mesonFlagsArray
   '';
 
   buildInputs = [

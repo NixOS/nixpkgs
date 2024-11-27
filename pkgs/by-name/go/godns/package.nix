@@ -9,19 +9,19 @@
 
 buildGoModule rec {
   pname = "godns";
-  version = "3.1.8";
+  version = "3.1.9";
 
   src = fetchFromGitHub {
     owner = "TimothyYe";
     repo = "godns";
     rev = "refs/tags/v${version}";
-    hash = "sha256-a8qa8dlFn0+mE2SeDJPZ0OI4EkA/GGFYxkNQE5yKjvM=";
+    hash = "sha256-e39T6pOFD9FrbXVtD/qPN74HQqJcTl3a3enTPVqpsuY=";
   };
 
-  vendorHash = "sha256-ui7GiLR5um8TGrVS+MCXzop1tkeysxBYFrD2Fh0tnBI=";
+  vendorHash = "sha256-zz33xHIZ2jhD2s3v2vum0ELG7GTqe5SsADUrO5yqumw=";
   npmDeps = fetchNpmDeps {
     src = "${src}/web";
-    hash = "sha256-oPE69+R66r1LpryAu3ImKKRVDrzXAiDpeCwdQKRmVj0=";
+    hash = "sha256-Y35CcUubO3QmbEwWBFXoWKLgvE8dp/mFE/szRigJvLo=";
   };
 
   npmRoot = "web";

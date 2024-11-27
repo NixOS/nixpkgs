@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     make -C menu PREFIX=$out all install
     cp -r ${data}/* $out/share/jumpnbump/
     rm $out/share/applications/jumpnbump-menu.desktop
-    sed -ie 's+Exec=jumpnbump+Exec=jumpnbump-menu+' $out/share/applications/jumpnbump.desktop
+    sed -i -e 's+Exec=jumpnbump+Exec=jumpnbump-menu+' $out/share/applications/jumpnbump.desktop
   '';
 
   pythonPath = with python3Packages; [ pygobject3 pillow ];

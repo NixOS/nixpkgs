@@ -42,6 +42,61 @@ def test_edit(mock_run: Any, monkeypatch: Any, tmpdir: Any) -> None:
         mock_run.assert_called_with(["editor", default_nix], check=False)
 
 
+@patch(get_qualified_name(n.shutil.which), autospec=True, return_value="/bin/git")
+def test_get_nixpkgs_rev(mock_which: Any) -> None:
+    assert n.get_nixpkgs_rev(None) is None
+
+    path = Path("/path/to/nix")
+
+    with patch(
+        get_qualified_name(n.run, n),
+        autospec=True,
+        side_effect=[CompletedProcess([], 0, "")],
+    ) as mock_run:
+        assert n.get_nixpkgs_rev(path) is None
+        mock_run.assert_called_with(
+            ["git", "-C", path, "rev-parse", "--short", "HEAD"],
+            check=False,
+            stdout=PIPE,
+            text=True,
+        )
+
+    expected_calls = [
+        call(
+            ["git", "-C", path, "rev-parse", "--short", "HEAD"],
+            check=False,
+            stdout=PIPE,
+            text=True,
+        ),
+        call(
+            ["git", "-C", path, "diff", "--quiet"],
+            check=False,
+        ),
+    ]
+
+    with patch(
+        get_qualified_name(n.run, n),
+        autospec=True,
+        side_effect=[
+            CompletedProcess([], 0, "0f7c82403fd6"),
+            CompletedProcess([], returncode=0),
+        ],
+    ) as mock_run:
+        assert n.get_nixpkgs_rev(path) == ".git.0f7c82403fd6"
+        mock_run.assert_has_calls(expected_calls)
+
+    with patch(
+        get_qualified_name(n.run, n),
+        autospec=True,
+        side_effect=[
+            CompletedProcess([], 0, "0f7c82403fd6"),
+            CompletedProcess([], returncode=1),
+        ],
+    ) as mock_run:
+        assert n.get_nixpkgs_rev(path) == ".git.0f7c82403fd6M"
+        mock_run.assert_has_calls(expected_calls)
+
+
 def test_get_generations_from_nix_store(tmp_path: Path) -> None:
     nixos_path = tmp_path / "nixos-system"
     nixos_path.mkdir()

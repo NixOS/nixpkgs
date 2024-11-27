@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, postgresql, boost182, postgresqlTestExtension, buildPostgresqlExtension }:
+{ stdenv, lib, fetchFromGitHub, postgresql, boost, postgresqlTestExtension, buildPostgresqlExtension }:
 
 let
   version = "1.7.0";
@@ -28,7 +28,7 @@ buildPostgresqlExtension (finalAttrs: {
 
   sourceRoot = main_src.name;
 
-  buildInputs = [ boost182 ];
+  buildInputs = [ boost ];
 
   patchPhase = ''
     runHook prePatch

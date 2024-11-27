@@ -443,6 +443,11 @@ stdenv.mkDerivation (finalAttrs: {
               "-std=gnu++98"
               "-Wno-error"
             ]
+            ++ [
+              # error by default in GCC 14
+              "-Wno-error=int-conversion"
+              "-Wno-error=incompatible-pointer-types"
+            ]
           );
 
       NIX_LDFLAGS = lib.concatStringsSep " " (

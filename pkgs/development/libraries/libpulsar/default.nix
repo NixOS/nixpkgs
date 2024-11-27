@@ -1,7 +1,7 @@
 { lib
 , asioSupport ? true
 , asio
-, boost180
+, boost
 , log4cxxSupport ? false
 , log4cxx
 , snappySupport ? false
@@ -41,7 +41,7 @@ let
     ++ lib.optional zstdSupport zstd
     ++ lib.optional log4cxxSupport log4cxx
     ++ lib.optional asioSupport asio
-    ++ lib.optional (!asioSupport) boost180;
+    ++ lib.optional (!asioSupport) boost;
 
 in
 stdenv.mkDerivation (finalAttrs: rec {

@@ -1,42 +1,34 @@
 {
   lib,
+  stdenv,
   cmake,
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
-  python3Packages,
   rustPlatform,
   versionCheckHook,
+  python3Packages,
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+rustPlatform.buildRustPackage rec {
   pname = "uv";
-  version = "0.5.2";
-  pyproject = true;
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     rev = "refs/tags/${version}";
-    hash = "sha256-riR4VFv407/pLMdQlxTUvTeaErZoxjFFsEX9St+3cr8=";
+    hash = "sha256-Kieh76RUrDEwdL04mvCXOqbXHasMMpXRqp0LwMOIHdM=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "async_zip-0.0.17" = "sha256-VfQg2ZY5F2cFoYQZrtf2DHj0lWgivZtFaFJKZ4oyYdo=";
-      "pubgrub-0.2.1" = "sha256-8TrOQ6fYJrYgFNuqiqnGztnHOqFIEDi2MFZEBA+oks4=";
-      "tl-0.7.8" = "sha256-F06zVeSZA4adT6AzLzz1i9uxpI1b8P1h+05fFfjm3GQ=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZhHUKotXVDdwJs2kqIxME5I1FitWetx7FrQtluuIUWo=";
 
   nativeBuildInputs = [
     cmake
     installShellFiles
     pkg-config
-    rustPlatform.cargoSetupHook
-    rustPlatform.maturinBuildHook
   ];
 
   dontUseCmakeConfigure = true;
@@ -46,7 +38,10 @@ python3Packages.buildPythonApplication rec {
     "uv"
   ];
 
-  postInstall = ''
+  # Tests require python3
+  doCheck = false;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     export HOME=$TMPDIR
     installShellCompletion --cmd uv \
       --bash <($out/bin/uv --generate-shell-completion bash) \
@@ -54,14 +49,14 @@ python3Packages.buildPythonApplication rec {
       --zsh <($out/bin/uv --generate-shell-completion zsh)
   '';
 
-  pythonImportsCheck = [ "uv" ];
-
-  nativeCheckInputs = [
+  nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru = {
+    tests.uv-python = python3Packages.uv;
     updateScript = nix-update-script { };
   };
 

@@ -24,5 +24,10 @@ buildNodejs {
       url = "https://github.com/nodejs/node/commit/32f7d5ad1cf79e7e731e1bb7ac967f4f2a3194cf.patch?full_index=1";
       hash = "sha256-dyUr3caGfetrXgfAl+CLE1LKKetDZCpPwMg4EM98rqI=";
     })
+    # fixes test failure, remove when included in release
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/b6fe731c55eb4cb9d14042a23e5002ed39b7c8b7.patch?full_index=1";
+      hash = "sha256-KoKsQBFKUji0GeEPTR8ixBflCiHBhPqd2cPVPuKyua8=";
+    })
   ];
 }

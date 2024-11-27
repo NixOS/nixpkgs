@@ -46,9 +46,7 @@ class Action(Enum):
 class Flake:
     path: Path
     attr: str
-    _re: ClassVar[re.Pattern[str]] = re.compile(
-        r"^(?P<path>[^\#]*)\#?(?P<attr>[^\#\"]*)$"
-    )
+    _re: ClassVar = re.compile(r"^(?P<path>[^\#]*)\#?(?P<attr>[^\#\"]*)$")
 
     @override
     def __str__(self) -> str:
@@ -59,11 +57,8 @@ class Flake:
         m = cls._re.match(flake_str)
         assert m is not None, f"got no matches for {flake_str}"
         attr = m.group("attr")
-        if not attr:
-            attr = f"nixosConfigurations.{hostname or "default"}"
-        else:
-            attr = f"nixosConfigurations.{attr}"
-        return Flake(Path(m.group("path")), attr)
+        nixos_attr = f"nixosConfigurations.{attr or hostname or "default"}"
+        return Flake(Path(m.group("path")), nixos_attr)
 
     @classmethod
     def from_arg(cls, flake_arg: Any) -> Flake | None:

@@ -9,6 +9,7 @@
 , pkg-config
 , pnpm_9
 , python3
+, rustPlatform
 , stdenv
 , darwin
 , testers
@@ -17,6 +18,20 @@
 }:
 
 let
+  deltachat-rpc-server' = deltachat-rpc-server.overrideAttrs rec {
+    version = "1.148.7";
+    src = fetchFromGitHub {
+      owner = "deltachat";
+      repo = "deltachat-core-rust";
+      rev = "v${version}";
+      hash = "sha256-mTNWSR4ea972tIOvg6RClEc44mKXoHDEWoLZXio8O4k=";
+    };
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      pname = "deltachat-core-rust";
+      inherit version src;
+      hash = "sha256-eDj8DIvvWWj+tfHuzR35WXlKY5klGxW+MixdN++vugk=";
+    };
+  };
   electron = electron_32;
   pnpm = pnpm_9;
 in
@@ -47,9 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  buildInputs = [
-    deltachat-rpc-server
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
 
@@ -63,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     test \
       $(yq -r '.catalogs.default."@deltachat/jsonrpc-client".version' pnpm-lock.yaml) \
-      = ${deltachat-rpc-server.version} \
+      = ${deltachat-rpc-server'.version} \
       || (echo "error: deltachat-rpc-server version does not match jsonrpc-client" && exit 1)
 
     test \
@@ -83,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pushd packages/target-electron/dist/*-unpacked/resources/app.asar.unpacked
     rm node_modules/@deltachat/stdio-rpc-server-*/deltachat-rpc-server
-    ln -s ${lib.getExe deltachat-rpc-server} node_modules/@deltachat/stdio-rpc-server-*
+    ln -s ${lib.getExe deltachat-rpc-server'} node_modules/@deltachat/stdio-rpc-server-*
     popd
 
     runHook postBuild

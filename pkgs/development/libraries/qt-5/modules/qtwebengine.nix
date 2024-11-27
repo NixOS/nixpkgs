@@ -173,6 +173,10 @@ qtModule ({
           "-march=westmere"
         ] ++ lib.optionals stdenv.cc.isClang [
           "-Wno-elaborated-enum-base"
+          # 5.15.17: need to silence these two warnings
+          # https://trac.macports.org/ticket/70850
+          "-Wno-enum-constexpr-conversion"
+          "-Wno-unused-but-set-variable"
         ]);
   } // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
     NIX_CFLAGS_LINK = "-Wl,--no-warn-search-mismatch";

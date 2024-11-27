@@ -1,7 +1,7 @@
-diff --git a/apps/desktop/src/platform/main/biometric/biometric.unix.main.ts b/apps/desktop/src/platform/main/biometric/biometric.unix.main.ts
-index e2428d9d12..de4e9e1e62 100644
---- a/apps/desktop/src/platform/main/biometric/biometric.unix.main.ts
-+++ b/apps/desktop/src/platform/main/biometric/biometric.unix.main.ts
+diff --git a/apps/desktop/src/key-management/biometrics/biometric.unix.main.ts b/apps/desktop/src/key-management/biometrics/biometric.unix.main.ts
+index 8962e7f3ec..a7291420f2 100644
+--- a/apps/desktop/src/key-management/biometrics/biometric.unix.main.ts
++++ b/apps/desktop/src/key-management/biometrics/biometric.unix.main.ts
 @@ -109,7 +109,7 @@ export default class BiometricUnixMain implements OsBiometricService {
      // The user needs to manually set up the polkit policy outside of the sandbox
      // since we allow access to polkit via dbus for the sandboxed clients, the authentication works from

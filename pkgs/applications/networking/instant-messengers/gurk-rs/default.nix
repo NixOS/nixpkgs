@@ -7,6 +7,8 @@
 , pkgsBuildHost
 , openssl
 , pkg-config
+, testers
+, gurk-rs
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -40,6 +42,10 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_NO_VENDOR = true;
 
   useNextest = true;
+
+  passthru.tests.version = testers.testVersion {
+    package = gurk-rs;
+  };
 
   meta = with lib; {
     description = "Signal Messenger client for terminal";

@@ -3,40 +3,19 @@
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
+  technitium-dns-server-library,
   nixosTests,
+  nix-update-script,
 }:
-let
-  technitium-library = buildDotnetModule rec {
-    pname = "TechnitiumLibrary";
-    version = "13.0.2";
-
-    src = fetchFromGitHub {
-      owner = "TechnitiumSoftware";
-      repo = "TechnitiumLibrary";
-      rev = "refs/tags/dns-server-v${version}";
-      hash = "sha256-mMNZZvM/UvQTiyeOgPHXXFxmsiGPe4Jal1aSEMEM5Xc=";
-      name = "${pname}-${version}";
-    };
-
-    dotnet-sdk = dotnetCorePackages.sdk_8_0;
-
-    nugetDeps = ./library-nuget-deps.nix;
-
-    projectFile = [
-      "TechnitiumLibrary.ByteTree/TechnitiumLibrary.ByteTree.csproj"
-      "TechnitiumLibrary.Net/TechnitiumLibrary.Net.csproj"
-    ];
-  };
-in
 buildDotnetModule rec {
   pname = "technitium-dns-server";
-  version = "13.0.2";
+  version = "13.2";
 
   src = fetchFromGitHub {
     owner = "TechnitiumSoftware";
     repo = "DnsServer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2dFjr3f4ZlLBJzuObSYIkSdtcyZ8dC6M7/S1p7WoG0c=";
+    hash = "sha256-oxLMBs+XkzvlfSst6ZD56ZIgiXwm0Px8Tn3Trdd/6H8=";
     name = "${pname}-${version}";
   };
 
@@ -50,7 +29,7 @@ buildDotnetModule rec {
   # move dependencies from TechnitiumLibrary to the expected directory
   preBuild = ''
     mkdir -p ../TechnitiumLibrary/bin
-    cp -r ${technitium-library}/lib/TechnitiumLibrary/* ../TechnitiumLibrary/bin/
+    cp -r ${technitium-dns-server-library}/lib/${technitium-dns-server-library.pname}/* ../TechnitiumLibrary/bin/
   '';
 
   postFixup = ''
@@ -60,6 +39,8 @@ buildDotnetModule rec {
   passthru.tests = {
     inherit (nixosTests) technitium-dns-server;
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/TechnitiumSoftware/DnsServer/blob/master/CHANGELOG.md";

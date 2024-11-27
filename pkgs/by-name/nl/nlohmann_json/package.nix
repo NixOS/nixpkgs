@@ -21,6 +21,12 @@ in stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7F0Jon+1oWL7uqet5i1IgHX0fUw/+z0QwEcA3zs5xHg=";
   };
 
+  patches = lib.optionals stdenv.cc.isClang [
+    # tests fail to compile on clang-19
+    # https://github.com/nlohmann/json/issues/4490
+    ./make-tests-build-clang-19.diff
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [

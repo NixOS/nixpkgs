@@ -39,17 +39,21 @@
 
 buildPythonPackage rec {
   pname = "pyhanko";
-  version = "0.25.1";
+  version = "0.25.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
     rev = "refs/tags/v${version}";
-    hash = "sha256-keWAiqwaMZYh92B0mlR4+jjxBKLOAJ9Kgc0l0GiIQbc=";
+    hash = "sha256-HJkCQ5YDVr17gtY4PW89ep7GwFdP21/ruBEKm7j3+Qo=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "cryptography"
+  ];
 
   dependencies = [
     asn1crypto

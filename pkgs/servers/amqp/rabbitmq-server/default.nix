@@ -20,9 +20,6 @@
   gnused,
   systemd,
   glibcLocales,
-  AppKit,
-  Carbon,
-  Cocoa,
   nixosTests,
   which,
 }:
@@ -64,19 +61,13 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  buildInputs =
-    [
-      erlang
-      elixir
-      libxml2
-      libxslt
-      glibcLocales
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Carbon
-      Cocoa
-    ];
+  buildInputs = [
+    erlang
+    elixir
+    libxml2
+    libxslt
+    glibcLocales
+  ];
 
   outputs = [
     "out"

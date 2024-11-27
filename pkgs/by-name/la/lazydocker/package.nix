@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "lazydocker";
-  version = "0.23.3";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = "lazydocker";
     rev = "v${version}";
-    sha256 = "sha256-1nw0X8sZBtBsxlEUDVYMAinjMEMlIlzjJ4s+WApeE6o=";
+    sha256 = "sha256-cVjDdrxmGt+hj/WWP9B3BT739k9SSr4ryye5qWb3XNM=";
   };
 
   vendorHash = null;

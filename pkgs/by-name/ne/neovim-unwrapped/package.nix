@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  removeReferencesTo,
   cmake,
   gettext,
   msgpack-c,
@@ -163,7 +162,6 @@ stdenv.mkDerivation (
       cmake
       gettext
       pkg-config
-      removeReferencesTo
     ];
 
     # extra programs test via `make functionaltest`
@@ -188,9 +186,6 @@ stdenv.mkDerivation (
         -e "s|\".*/bin/nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
       sed -i src/nvim/po/CMakeLists.txt \
         -e "s|\$<TARGET_FILE:nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
-    '';
-    postInstall = ''
-      find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
     '';
     # check that the above patching actually works
     outputChecks =

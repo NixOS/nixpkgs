@@ -60,14 +60,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "openvino";
-  version = "2024.4.1";
+  version = "2024.5.0";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-v0PPGFUHCGNWdlTff40Ol2NvaYglb/+L/zZAQujk6lk=";
+    hash = "sha256-qRa6vTwTEWiSH57HThT2oGhJqhHwFLIqNsU1eCSLwLs=";
   };
 
   outputs = [
@@ -124,6 +124,7 @@ stdenv.mkDerivation rec {
     (cmakeBool "ENABLE_LTO" true)
     (cmakeBool "ENABLE_ONEDNN_FOR_GPU" false)
     (cmakeBool "ENABLE_OPENCV" true)
+    (cmakeBool "ENABLE_OV_JAX_FRONTEND" false) # auto-patchelf could not satisfy dependency libopenvino_jax_frontend.so.2450
     (cmakeBool "ENABLE_PYTHON" true)
 
     # system libs
@@ -138,6 +139,9 @@ stdenv.mkDerivation rec {
   autoPatchelfIgnoreMissingDeps = [
     "libngraph_backend.so"
   ];
+
+  # src/graph/src/plugins/intel_gpu/src/graph/include/reorder_inst.h:24:8: error: type 'struct typed_program_node' violates the C++ One Definition Rule [-Werror=odr]
+  env.NIX_CFLAGS_COMPILE = "-Wno-odr";
 
   buildInputs = [
     flatbuffers

@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -22,6 +23,8 @@ buildGoModule rec {
     "-w"
     "-X=main.version=${version}"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "RPKI-to-Router server used at Cloudflare";

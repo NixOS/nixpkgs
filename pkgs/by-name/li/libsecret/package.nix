@@ -9,6 +9,7 @@
 , gettext
 , libxslt
 , python3
+, python3Packages
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , libgcrypt
@@ -72,8 +73,8 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     python3
-    python3.pkgs.dbus-python
-    python3.pkgs.pygobject3
+    python3Packages.dbus-python
+    python3Packages.pygobject3
     dbus
     gjs
   ];

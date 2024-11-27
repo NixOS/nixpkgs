@@ -42,11 +42,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kid3";
-  version = "3.9.5";
+  version = "3.9.6";
 
   src = fetchurl {
     url = "mirror://kde/stable/kid3/${finalAttrs.version}/kid3-${finalAttrs.version}.tar.xz";
-    hash = "sha256-pCT+3eNcF247RDNEIqrUOEhBh3LaAgdR0A0IdOXOgUU=";
+    hash = "sha256-zyf/zENpyZQNp7/BL9EN+9pSa4GH5bYmYqvoBp/CbCc=";
   };
 
   nativeBuildInputs = [

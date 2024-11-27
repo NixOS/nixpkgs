@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
       every Emacs user should feel at home.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pSub AndersonTorres ];
+    maintainers = with maintainers; [ pSub ];
     platforms = platforms.unix;
     mainProgram = "zile";
   };

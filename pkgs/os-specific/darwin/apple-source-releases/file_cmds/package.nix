@@ -4,6 +4,7 @@
   bzip2,
   copyfile,
   less,
+  libmd,
   libutil,
   libxo,
   mkAppleDerivation,
@@ -104,6 +105,7 @@ mkAppleDerivation {
   buildInputs = [
     bzip2
     copyfile
+    libmd
     libutil
     libxo
     removefile

@@ -15,6 +15,7 @@ core_foundation = dependency('appleframeworks', modules : 'CoreFoundation')
 
 bzip2 = dependency('bzip2')
 xz = dependency('liblzma')
+libmd = dependency('libmd')
 libxo = dependency('libxo')
 zlib = dependency('zlib')
 
@@ -173,7 +174,7 @@ install_symlink(
 
 executable(
     'install-bin', # Meson reserves the name “install”, so use a different name and rename in install phase.
-    dependencies : [ copyfile ],
+    dependencies : [ copyfile, libmd ],
     install : true,
     sources: [
         'install/xinstall.c',

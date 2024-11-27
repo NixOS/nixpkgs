@@ -30,9 +30,6 @@ in
       memorySize = 1024;
       diskSize = 4096;
 
-      # Provide a TPM to test vTPM support for guests
-      tpm.enable = true;
-
       incus = {
         enable = true;
         package = incus;
@@ -41,7 +38,8 @@ in
     networking.nftables.enable = true;
   };
 
-  testScript = ''
+  testScript = # python
+  ''
     def instance_is_up(_) -> bool:
       status, _ = machine.execute("incus exec ${instance-name} --disable-stdin --force-interactive /run/current-system/sw/bin/systemctl -- is-system-running")
       return status == 0

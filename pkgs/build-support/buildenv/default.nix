@@ -51,6 +51,8 @@ lib.makeOverridable
 
 , passthru ? {}
 , meta ? {}
+, pname ? null
+, version ? null
 }:
 let
   chosenOutputs = map (drv: {
@@ -75,7 +77,7 @@ let
     (lib.remove null)
   ];
 in runCommand name
-  rec {
+  (rec {
     inherit manifest ignoreCollisions checkCollisionContents passthru
             meta pathsToLink extraPrefix postBuild
             nativeBuildInputs buildInputs;
@@ -85,7 +87,11 @@ in runCommand name
     allowSubstitutes = false;
     # XXX: The size is somewhat arbitrary
     passAsFile = if builtins.stringLength pkgs >= 128*1024 then [ "pkgs" ] else [ ];
-  }
+  } // lib.optionalAttrs (pname != null) {
+    inherit pname;
+  } // lib.optionalAttrs (version != null) {
+    inherit version;
+  })
   ''
     ${buildPackages.perl}/bin/perl -w ${builder}
     eval "$postBuild"

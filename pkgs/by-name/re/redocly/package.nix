@@ -37,9 +37,6 @@ buildNpmPackage rec {
       $out/bin/redocly \
       --set-default REDOCLY_TELEMETRY off \
       --set-default REDOCLY_SUPPRESS_UPDATE_NOTICE true
-
-    # Symlink for backwards compatibility. Remove after 24.05.
-    ln -s $out/bin/redocly $out/bin/redocly-cli
   '';
 
   passthru = {

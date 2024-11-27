@@ -3,7 +3,6 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   olm,
   libsignal-ffi,
   versionCheckHook,
@@ -17,22 +16,14 @@
 
 buildGoModule rec {
   pname = "mautrix-signal";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
     rev = "v${version}";
-    hash = "sha256-KGIlLGGVaySRrHt6P2AlnDEew/ERyrDYyN2lOz3318M=";
+    hash = "sha256-VU0VZkh1sjOuSI+/JXZKWQF5pZ3NebBFbDdsOgaocg4=";
   };
-
-  patches = [
-    # fixes broken media uploads, will be included in the next release
-    (fetchpatch {
-      url = "https://github.com/mautrix/signal/commit/b09995a892c9930628e1669532d9c1283a4938c8.patch";
-      hash = "sha256-M8TvCLZG5MbD/Bkpo4cxQf/19dPfbGzMyIPn9utPLco=";
-    })
-  ];
 
   buildInputs =
     (lib.optional (!withGoolm) olm)
@@ -47,7 +38,7 @@ buildGoModule rec {
 
   CGO_LDFLAGS = lib.optional withGoolm [ "-lstdc++" ];
 
-  vendorHash = "sha256-bKQKO5RqgMrWq7NyNF1rj2CLp5SeBP80HWxF8MWnZ1U=";
+  vendorHash = "sha256-fERAigormEy6+240AOkMyrjMDj5/eU0Lo4wD0AuAn+4=";
 
   doCheck = true;
   preCheck =

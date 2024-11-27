@@ -137,5 +137,6 @@ stdenv.mkDerivation {
     maintainers = [ ];
     license = lib.licenses.bsl11;
     platforms = lib.platforms.all;
+    broken = true; # `codon-llvm` build fails on darwin and linux
   };
 }

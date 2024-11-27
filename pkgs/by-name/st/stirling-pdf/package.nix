@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stirling-pdf";
-  version = "0.30.1";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/458O/JJcBlHS66WRVLIUyv9dtuQSW2X3WUpzW1YuFk=";
+    hash = "sha256-Cl2IbFfw6TH904Y63YQnXS/mDEuUB6AdCoRT4G+W0hU=";
   };
 
   patches = [

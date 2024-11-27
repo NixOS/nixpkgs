@@ -176,13 +176,32 @@
   - any:
     - changed-files:
       - any-glob-to-any-file:
-        - nixos/modules/programs/java.nix
+        # Distributions
+        - pkgs/development/compilers/adoptopenjdk-icedtea-web/**/*
+        - pkgs/development/compilers/corretto/**/*
         - pkgs/development/compilers/graalvm/**/*
         - pkgs/development/compilers/openjdk/**/*
+        - pkgs/development/compilers/semeru-bin/**/*
         - pkgs/development/compilers/temurin-bin/**/*
         - pkgs/development/compilers/zulu/**/*
+        # Documentation
+        - doc/languages-frameworks/java.section.md
+        # Gradle
+        - doc/languages-frameworks/gradle.section.md
+        - pkgs/development/tools/build-managers/gradle/**/*
+        - pkgs/by-name/gr/gradle-completion/**/*
+        # Maven
+        - pkgs/by-name/ma/maven/**/*
+        - doc/languages-frameworks/maven.section.md
+        # Ant
+        - pkgs/by-name/ap/apacheAnt/**/*
+        # javaPackages attrset
         - pkgs/development/java-modules/**/*
         - pkgs/top-level/java-packages.nix
+        # Maintainer tooling
+        - pkgs/by-name/ni/nixpkgs-openjdk-updater/**/*
+        # Misc
+        - nixos/modules/programs/java.nix
 
 "6.topic: jitsi":
   - any:

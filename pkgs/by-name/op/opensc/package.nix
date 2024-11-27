@@ -73,7 +73,12 @@ stdenv.mkDerivation rec {
     ) "XSLTPROC=${buildPackages.libxslt}/bin/xsltproc")
   ];
 
-  PCSC_CFLAGS = lib.optionalString withApplePCSC "-I${darwin.apple_sdk.frameworks.PCSC}/Library/Frameworks/PCSC.framework/Headers";
+  PCSC_CFLAGS = lib.concatStringsSep " " (
+    lib.optionals withApplePCSC [
+      "-I${darwin.apple_sdk.frameworks.PCSC}/Library/Frameworks/PCSC.framework/Headers"
+      "-I${lib.getDev pcsclite}/include/PCSC"
+    ]
+  );
 
   installFlags = [
     "sysconfdir=$(out)/etc"

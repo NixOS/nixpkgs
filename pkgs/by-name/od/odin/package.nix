@@ -87,7 +87,6 @@ stdenv.mkDerivation {
     mainProgram = "odin";
     maintainers = with lib.maintainers; [
       astavie
-      luc65r
       znaniye
     ];
     platforms = lib.platforms.unix;

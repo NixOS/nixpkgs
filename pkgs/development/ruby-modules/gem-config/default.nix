@@ -626,6 +626,7 @@ in
   ovirt-engine-sdk = attrs: {
     buildInputs = [ curl libxml2 ];
     dontBuild = false;
+    meta.broken = stdenv.hostPlatform.isDarwin; # At least until releasing https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/17
   };
 
   pango = attrs: {

@@ -8,7 +8,7 @@
 , nodejs
 , fetchYarnDeps
 , jq
-, electron
+, electron_33
 , element-web
 , sqlcipher
 , callPackage
@@ -27,6 +27,7 @@ let
   executableName = "element-desktop";
   keytar = callPackage ./keytar { inherit Security AppKit; };
   seshat = callPackage ./seshat { inherit CoreServices; };
+  electron = electron_33;
 in
 stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   pname = "element-desktop";

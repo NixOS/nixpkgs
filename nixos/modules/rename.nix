@@ -90,7 +90,7 @@ in
     (mkRemovedOptionModule [ "services" "mailpile" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "marathon" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mathics" ] "The Mathics module has been removed")
-    (mkRemovedOptionModule [ "services" "matrix-sliding-sync" ] "The matrix-sliding-sync package has been removed, since matrix-synapse incorporated its functionality")
+    (mkRemovedOptionModule [ "services" "matrix-sliding-sync" ] "The matrix-sliding-sync package has been removed, since matrix-synapse incorporated its functionality. Remove `services.sliding-sync` from your NixOS Configuration, and the `.well-known` record for `org.matrix.msc3575.proxy` from your webserver")
     (mkRemovedOptionModule [ "services" "meguca" ] "Use meguca has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "mesos" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mxisd" ] "The mxisd module has been removed as both mxisd and ma1sd got removed.")

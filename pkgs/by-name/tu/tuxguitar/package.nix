@@ -10,6 +10,8 @@
   fluidsynth,
   libpulseaudio,
   lilv,
+  which,
+  wrapGAppsHook3,
   nixosTests,
 }:
 
@@ -24,7 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeWrapper
+    wrapGAppsHook3
   ];
+
+  dontWrapGApps = true;
 
   installPhase = ''
     mkdir -p $out/bin
@@ -34,9 +39,17 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/dist $out/bin/dist
     ln -s $out/lib $out/bin/lib
     ln -s $out/share $out/bin/share
+  '';
 
+  postFixup = ''
     wrapProgram $out/bin/tuxguitar \
-      --set JAVA "${jre}/bin/java" \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          jre
+          which
+        ]
+      } \
       --prefix LD_LIBRARY_PATH : "$out/lib/:${
         lib.makeLibraryPath [
           swt

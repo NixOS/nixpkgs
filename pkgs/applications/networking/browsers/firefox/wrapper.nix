@@ -19,7 +19,6 @@
 , sndio
 , libjack2
 , speechd-minimal
-, removeReferencesTo
 }:
 
 ## configurability of the wrapper itself
@@ -87,7 +86,10 @@ let
                 else [])
        );
 
-      libs =   lib.optionals stdenv.hostPlatform.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils vulkan-loader ]
+       libs = lib.optionals stdenv.hostPlatform.isLinux (
+            [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils vulkan-loader ]
+            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
+       )
             ++ lib.optional pipewireSupport pipewire
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport libkrb5
@@ -99,7 +101,6 @@ let
             ++ lib.optional sndioSupport sndio
             ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
-            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
             ++ pkcs11Modules
             ++ gtk_modules;
       gtk_modules = [ libcanberra-gtk3 ];
@@ -240,7 +241,7 @@ let
               };
             }));
 
-      nativeBuildInputs = [ makeWrapper lndir jq removeReferencesTo ];
+      nativeBuildInputs = [ makeWrapper lndir jq ];
       buildInputs = [ browser.gtk3 ];
 
 
@@ -415,9 +416,6 @@ let
       passthru = { unwrapped = browser; };
 
       disallowedRequisites = [ stdenv.cc ];
-      postInstall = ''
-        find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
-      '';
       meta = browser.meta // {
         inherit (browser.meta) description;
         mainProgram = launcherName;

@@ -45,6 +45,10 @@ buildPythonPackage rec {
     streamlit
   ];
   pytestFlagsArray = [ "skops" ];
+  disabledTests = [
+    # flaky
+    "test_base_case_works_as_expected"
+  ];
   disabledTestPaths =
     [
       # try to download data from Huggingface Hub:

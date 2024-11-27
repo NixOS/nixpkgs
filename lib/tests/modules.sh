@@ -516,6 +516,10 @@ checkConfigError 'The option .theOption.nested. in .other.nix. is already declar
 # Test that types.optionType leaves types untouched as long as they don't need to be merged
 checkConfigOutput 'ok' config.freeformItems.foo.bar ./adhoc-freeformType-survives-type-merge.nix
 
+# Test that specifying both functor.wrapped and functor.payload isn't allowed
+checkConfigError 'Type foo defines both `functor.payload` and `functor.wrapped` at the same time, which is not supported.' config.result ./default-type-merge-both.nix
+
+
 # Anonymous submodules don't get nixed by import resolution/deduplication
 # because of an `extendModules` bug, issue 168767.
 checkConfigOutput '^1$' config.sub.specialisation.value ./extendModules-168767-imports.nix

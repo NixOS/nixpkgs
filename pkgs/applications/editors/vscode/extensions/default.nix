@@ -903,6 +903,22 @@ let
         };
       };
 
+      chanhx.crabviz = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "crabviz";
+          publisher = "chanhx";
+          version = "0.4.0";
+          hash = "sha256-SOsoSQLDNRqby91Ire4euSz6udRZI6G/RVloVjIvhUM=";
+        };
+        meta = {
+          description = "VSCode extension for generating call graphs based on LSP";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=chanhx.crabviz";
+          homepage = "https://github.com/chanhx/crabviz";
+          license = lib.licenses.asl20;
+          maintainers = with lib.maintainers; [ thtrf ];
+        };
+      };
+
       charliermarsh.ruff = callPackage ./charliermarsh.ruff { };
 
       cameron.vscode-pytest = buildVscodeMarketplaceExtension {
@@ -2468,6 +2484,22 @@ let
         };
       };
 
+      ionic.ionic = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "ionic";
+          publisher = "ionic";
+          version = "1.96.0";
+          hash = "sha256-rezlSTzw0x1ugFkWrAUX6tnmbVjiI8sV/488pWkZ/rc=";
+        };
+        meta = {
+          description = "Official VSCode extension for Ionic and Capacitor development";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ionic.ionic";
+          homepage = "https://github.com/ionic-team/vscode-ionic";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ thtrf ];
+        };
+      };
+
       ionide.ionide-fsharp = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Ionide-fsharp";
@@ -2637,6 +2669,23 @@ let
           homepage = "https://github.com/jellyedwards/gitsweep";
           license = lib.licenses.mit;
           maintainers = [ lib.maintainers.MatthieuBarthel ];
+        };
+      };
+
+      jetmartin.bats = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "bats";
+          publisher = "jetmartin";
+          version = "0.1.10";
+          hash = "sha256-WD1YTRgzSVElixnNGtg6mMlcLCIaI6IBb+uh4cfzuBs=";
+        };
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items/jetmartin.bats/changelog";
+          description = "VSCode extension for full language support for the Bats (Bash Automated Testing System) testing framework";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=jetmartin.bats";
+          homepage = "https://github.com/bats-core/bats-vscode";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.dotmobo ];
         };
       };
 
@@ -3132,7 +3181,7 @@ let
           hash = "sha256-sHeaMMr5hmQ0kAFZxxMiRk6f0mfjkg2XMnA4Gf+DHwA=";
         };
         meta = {
-          license = lib.licenses.mit;
+          license = lib.licenses.unfree;
         };
       };
 

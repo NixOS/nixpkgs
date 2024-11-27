@@ -240,8 +240,7 @@ stdenv.mkDerivation (finalAttrs: {
     export CSOUND_LIB_DIR=${lib.getLib csound}/lib
   '';
 
-  # give meson longer before timing out for tests
-  mesonCheckFlags = [ "--verbose" "--timeout-multiplier" "12" ];
+  mesonCheckFlags = [ "--verbose" ];
 
   doInstallCheck = (lib.elem "webp" selectedPlugins) && !stdenv.hostPlatform.isStatic &&
     stdenv.hostPlatform.isElf;

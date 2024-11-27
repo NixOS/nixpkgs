@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "podman";
-  version = "5.2.0";
+  version = "5.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2NsF00jaW2wl99sTxTQ5xJkqNOYh9RaecmBMcWP3TI8=";
+    hash = "sha256-YER+qTC5+eF3PWtDBPq2WNOm5RzqXy30+1JdPzwyfrk=";
   };
 
   build-system = [ setuptools ];

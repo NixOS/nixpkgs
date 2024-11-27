@@ -93,7 +93,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "home-manager";
-    maintainers = with lib.maintainers; [ AndersonTorres bryango ];
+    maintainers = with lib.maintainers; [ bryango ];
     platforms = lib.platforms.unix;
   };
 })

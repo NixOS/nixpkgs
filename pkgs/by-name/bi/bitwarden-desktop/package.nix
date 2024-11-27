@@ -35,19 +35,20 @@ let
 
 in buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.9.0";
+  version = "2024.11.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-o5nRG2j73qheDOyeFfSga64D8HbTn1EUrCiN0W+Xn0w=";
+    hash = "sha256-4QTQgW8k3EMf07Xqs2B+VXQOUPzoOgaNvoC02x4zvu8=";
   };
 
   patches = [
     ./electron-builder-package-lock.patch
     ./dont-auto-setup-biometrics.patch
     ./set-exe-path.patch # ensures `app.getPath("exe")` returns our wrapper, not ${electron}/bin/electron
+    ./skip-afterpack.diff # this modifies bin/electron etc., but we wrap read-only bin/electron ourselves
   ];
 
   postPatch = ''
@@ -62,7 +63,7 @@ in buildNpmPackage rec {
   makeCacheWritable = true;
   npmFlags = [ "--engine-strict" "--legacy-peer-deps" ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-L7/frKCNlq0xr6T+aSqyEQ44yrIXwcpdU/djrhCJNNk=";
+  npmDepsHash = "sha256-YzhCyNMvfXGmgOpl3qWj1Pqd1hY8CJ9QLwQds5ZMnqg=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
@@ -78,7 +79,7 @@ in buildNpmPackage rec {
       patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-y+6vaESiOeVrFJpZoOJ75onOpldqSsT2kqkMMzTDUmM=";
+    hash = "sha256-aurjpVzWET30O+ysyE4ZzauMe8kHjOL169tfKUR1Vpg=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -102,20 +103,6 @@ in buildNpmPackage rec {
     gtk3
     libsecret
   ];
-
-  # node-argon2 builds with LTO, but that causes missing symbols. So disable it
-  # and rebuild. Then we need to copy it into the build output for
-  # electron-builder, as `apps/desktop/src/package.json` specifies `argon2` as
-  # a dependency and electron-builder will otherwise install a fresh (and
-  # broken) argon2. See https://github.com/ranisalt/node-argon2/pull/415
-  preConfigure = ''
-    pushd node_modules/argon2
-    substituteInPlace binding.gyp --replace-fail '"-flto", ' ""
-    "$npm_config_node_gyp" rebuild
-    popd
-    mkdir -p apps/desktop/build/node_modules
-    cp -r ./{,apps/desktop/build/}node_modules/argon2
-  '';
 
   preBuild = ''
     if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '^[0-9]+') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
@@ -181,7 +168,7 @@ in buildNpmPackage rec {
     # Extract the polkit policy file from the multiline string in the source code.
     # This may break in the future but its better than copy-pasting it manually.
     mkdir -p $out/share/polkit-1/actions/
-    pushd apps/desktop/src/platform/main/biometric
+    pushd apps/desktop/src/key-management/biometrics
     awk '/const polkitPolicy = `/{gsub(/^.*`/, ""); print; str=1; next} str{if (/`;/) str=0; gsub(/`;/, ""); print}' biometric.unix.main.ts > $out/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
     popd
 
