@@ -222,8 +222,8 @@ in
         local cmd="$1" dir="$2"
 
         declare -a flags
-        flags+=(''${tags:+-tags=''${tags// /,}})
-        flags+=(''${ldflags:+-ldflags="$ldflags"})
+        flags+=(''${tags:+-tags=$(concatStringsSep "," tags)})
+        flags+=(''${ldflags:+-ldflags="''${ldflags[*]}"})
         flags+=("-p" "$NIX_BUILD_CORES")
         if (( "''${NIX_DEBUG:-0}" >= 1 )); then
           flags+=(-x)
