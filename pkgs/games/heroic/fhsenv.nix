@@ -6,7 +6,8 @@
 }:
 
 buildFHSEnv {
-  name = "heroic";
+  pname = "heroic";
+  inherit (heroic-unwrapped) version;
 
   runScript = "heroic";
 

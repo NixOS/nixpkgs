@@ -71,7 +71,7 @@ let
     if cargoVendorDir != null then null
     else if cargoDeps != null then cargoDeps
     else if cargoLock != null then importCargoLock cargoLock
-    else if useFetchCargoVendor then (fetchCargoVendor {
+    else if useFetchCargoVendor then fetchCargoVendor ({
       inherit src srcs sourceRoot preUnpack unpackPhase postUnpack;
       name = cargoDepsName;
       patches = cargoPatches;

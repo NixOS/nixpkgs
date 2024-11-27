@@ -41,17 +41,17 @@ assert builtins.elem acceleration [
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-yyUm9kETNQiJjpGeVLPe67G2CrEKYNcrPFixqqq+rH4=";
+    hash = "sha256-4E3eqqJQEQYWVPFVZjnYSiXe4ZWUA0ifCRoHt7s0SL0=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-1+Eb81QQcVANQQ5u1c6is8dLVGYqrXKuFnF2MBkEHms=";
+  vendorHash = "sha256-xz9v91Im6xTLPzmYoVecdF7XiPKBZk3qou1SGokgPXQ=";
 
   validateFallback = lib.warnIf (config.rocmSupport && config.cudaSupport) (lib.concatStrings [
     "both `nixpkgs.config.rocmSupport` and `nixpkgs.config.cudaSupport` are enabled, "
