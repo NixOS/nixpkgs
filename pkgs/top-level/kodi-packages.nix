@@ -185,6 +185,8 @@ let
 
     plugin-cache = callPackage ../applications/video/kodi/addons/plugin-cache { };
 
+    python-twitch = callPackage ../applications/video/kodi/addons/python-twitch { };
+
     requests = callPackage ../applications/video/kodi/addons/requests { };
 
     requests-cache = callPackage ../applications/video/kodi/addons/requests-cache { };
