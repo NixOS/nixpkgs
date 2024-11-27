@@ -1263,13 +1263,66 @@ let
       (opt.highestPrio or defaultOverridePriority)
       (f opt.value);
 
+  # Transforms an expression like
+  # {
+  #   foo = {
+  #     bar = "from";
+  #     baz = "to";
+  #   };
+  # }
+  #
+  # into
+  #
+  # [
+  #   {
+  #     name = "from";
+  #     value = [ "foo" "bar" ];
+  #   }
+  #   {
+  #     name = "to";
+  #     value = [ "foo" "baz" ];
+  #   }
+  # ]
+  #
+  # TODO modulePathSpec
+  processAttr = prefix: name: value: # prefix -> previousPath, value -> next?
+    let
+      # Null means root
+      newPrefix = prefix ++ lib.optional (name != null) name; # currentPath
+    in
+    if lib.isString value # Any string value is a terminator
+    then [ (lib.nameValuePair value newPrefix) ] # TODO alternatively do regular map and check the type later?
+    else
+      let
+        names = lib.attrNames value;
+      in
+        if lib.length names == 1
+        then
+          let
+            name = lib.head names;
+          in processAttr newPrefix name value.${name}
+        else
+          # In theory, you could have more than one "to" or "from" but that
+          # would just be an invalid spec. Checking this is more complexity than
+          # it's woth.
+        lib.concatMap (name: processAttr newPrefix name value.${name}) names;
+
+
+  # {
+  #   foo.bar = "from";
+  #   baz.quux = "to";
+  # }
+  transformRenameSpec = spec: lib.listToAttrs (processAttr [ ] null spec);
+
   /*
     Return a module that help declares an option that has been renamed.
     When a value is defined for the old option, it is forwarded to the `to` option.
    */
   doRename = {
+    # A specification for from and to
+    spec,
     # List of strings representing the attribute path of the old option.
-    from,
+    from, # TODO extract from spec
     # List of strings representing the attribute path of the new option.
     to,
     # Boolean, whether the old option is to be included in documentation.
@@ -1559,6 +1612,8 @@ private //
     defaultOrderPriority
     defaultOverridePriority
     defaultPriority
+    transformRenameSpec
+    processAttr
     doRename
     evalModules
     evalOptionValue  # for use by lib.types
