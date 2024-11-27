@@ -47,6 +47,8 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
+  stdenv = cudaPackages.backendStdenv;
+
   src = fetchFromGitHub {
     owner = "cupy";
     repo = "cupy";
