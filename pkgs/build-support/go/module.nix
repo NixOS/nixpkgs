@@ -40,9 +40,6 @@
   # IE: programs coupled with the compiler.
 , allowGoReference ? false
 
-  # Go env. variable to enable CGO.
-, CGO_ENABLED ? go.CGO_ENABLED
-
   # Meta data for the final derivation.
 , meta ? { }
 
