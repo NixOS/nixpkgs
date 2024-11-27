@@ -9,8 +9,8 @@ import nixos_rebuild.models as m
 from .helpers import get_qualified_name
 
 
-def test_building_attr_from_arg() -> None:
-    assert m.BuildAttr.from_arg(None, None) is None
+def test_build_attr_from_arg() -> None:
+    assert m.BuildAttr.from_arg(None, None) == m.BuildAttr("<nixpkgs/nixos>", None)
     assert m.BuildAttr.from_arg("attr", None) == m.BuildAttr(
         Path("default.nix"), "attr"
     )

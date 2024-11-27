@@ -239,24 +239,20 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
 
 def nixos_build(
     attr: str,
-    build_attr: BuildAttr | None,
+    build_attr: BuildAttr,
     **nix_flags: Args,
 ) -> Path:
     """Build NixOS attribute using classic Nix.
 
     Returns the built attribute as path.
     """
-    run_args: list[str | Path]
-    if build_attr:
-        run_args = [
-            "nix-build",
-            build_attr.path,
-            "--attr",
-            f"{'.'.join(x for x in [build_attr.attr, attr] if x)}",
-        ]
-    else:
-        run_args = ["nix-build", "<nixpkgs/nixos>", "--attr", attr]
-    run_args += dict_to_flags(nix_flags)
+    run_args = [
+        "nix-build",
+        build_attr.path,
+        "--attr",
+        f"{'.'.join(x for x in [build_attr.attr, attr] if x)}",
+        *dict_to_flags(nix_flags),
+    ]
     r = run_wrapper(run_args, stdout=PIPE)
     return Path(r.stdout.strip())
 
@@ -282,15 +278,11 @@ def nixos_build_flake(
     return Path(r.stdout.strip())
 
 
-def repl(attr: str, build_attr: BuildAttr | None, **nix_flags: Args) -> None:
-    run_args: list[str | Path] = ["nix", "repl", "--file"]
-    if build_attr:
-        run_args.append(build_attr.path)
-        if build_attr.attr:
-            run_args.append(build_attr.attr)
-        run_wrapper([*run_args, *dict_to_flags(nix_flags)])
-    else:
-        run_wrapper([*run_args, "<nixpkgs/nixos>", *dict_to_flags(nix_flags)])
+def repl(attr: str, build_attr: BuildAttr, **nix_flags: Args) -> None:
+    run_args = ["nix", "repl", "--file", build_attr.path]
+    if build_attr.attr:
+        run_args.append(build_attr.attr)
+    run_wrapper([*run_args, *dict_to_flags(nix_flags)])
 
 
 def repl_flake(attr: str, flake: Flake, **flake_flags: Args) -> None:

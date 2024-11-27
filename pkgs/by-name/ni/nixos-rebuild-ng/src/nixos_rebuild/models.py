@@ -47,13 +47,13 @@ class Action(Enum):
 
 @dataclass(frozen=True)
 class BuildAttr:
-    path: Path
+    path: str | Path
     attr: str | None
 
     @classmethod
-    def from_arg(cls, attr: str | None, file: str | None) -> Self | None:
+    def from_arg(cls, attr: str | None, file: str | None) -> Self:
         if not (attr or file):
-            return None
+            return cls("<nixpkgs/nixos>", None)
         return cls(Path(file or "default.nix"), attr)
 
 
