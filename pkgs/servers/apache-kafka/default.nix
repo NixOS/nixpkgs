@@ -23,13 +23,6 @@ let
       jre = jdk17_headless;
       nixosTest = nixosTests.kafka.kafka_3_7;
     };
-    "3_6" = {
-      kafkaVersion = "3.6.2";
-      scalaVersion = "2.13";
-      sha256 = "sha256-wxfkf3cUHTFG6VY9nLodZIbIHmcLIR7OasRqn3Lkqqw=";
-      jre = jdk17_headless;
-      nixosTest = nixosTests.kafka.kafka_3_6;
-    };
   };
 
   build = versionInfo: stdenv.mkDerivation rec {

@@ -103,7 +103,6 @@ let
   }) { inherit system; });
 
 in with pkgs; {
-  kafka_3_6 = makeKafkaTest "kafka_3_6" { kafkaPackage = apacheKafka_3_6; };
   kafka_3_7 = makeKafkaTest "kafka_3_7" { kafkaPackage = apacheKafka_3_7; };
   kafka_3_8 = makeKafkaTest "kafka_3_8" { kafkaPackage = apacheKafka_3_8; };
   kafka_3_9 = makeKafkaTest "kafka_3_9" { kafkaPackage = apacheKafka_3_9; };
