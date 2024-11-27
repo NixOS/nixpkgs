@@ -125,6 +125,12 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "LOCAL_INSTALL" true)
     (lib.cmakeBool "enable_mirclient" false)
+    # libexec has binaries that services will run
+    # To reduce size for non-Lomiri situations that pull this package in (i.e. ayatana indicators)
+    # we want only the solib in lib output
+    # But service files have LIBEXECDIR path hardcoded, which would need manual fixing if using moveToOutput in fixup
+    # Just tell it to put libexec stuff into other output
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBEXECDIR" "${placeholder "out"}/libexec")
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -153,7 +159,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     moveToOutput share $out
-    moveToOutput libexec $out
   '';
 
   passthru = {
