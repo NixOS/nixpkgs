@@ -192,7 +192,7 @@ let
                               nixpkgsFun { inherit crossSystem; })
                               lib.systems.examples;
 
-    pkgsLLVM = nixpkgsFun {
+    pkgsLLVM = if stdenv.hostPlatform.isDarwin then self else nixpkgsFun {
       overlays = [
         (self': super': {
           pkgsLLVM = super';
