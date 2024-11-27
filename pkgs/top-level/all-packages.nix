@@ -15669,6 +15669,8 @@ with pkgs;
 
   dropbox-cli = callPackage ../applications/networking/dropbox/cli.nix { };
 
+  filen-cli = callPackage ../applications/networking/filen/cli.nix { };
+
   maestral = with python3Packages; toPythonApplication maestral;
 
   maestral-gui = qt6Packages.callPackage ../applications/networking/maestral-qt { };
