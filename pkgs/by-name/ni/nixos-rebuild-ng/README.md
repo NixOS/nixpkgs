@@ -126,7 +126,7 @@ ruff format .
 - [ ] Change module system to allow easier opt-in, like
   `system.switch.enableNg` for `switch-to-configuration-ng`
 - [ ] Improve documentation
-- [ ] `nixos-rebuild repl` (calling old `nixos-rebuild` for now)
+- [x] `nixos-rebuild repl`
 - [ ] `nix` build/bootstrap
 - [ ] Generate tab completion via [`shtab`](https://docs.iterative.ai/shtab/)
 - [x] Reduce build closure

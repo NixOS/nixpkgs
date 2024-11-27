@@ -17,9 +17,7 @@ def test_building_attr_from_arg() -> None:
     assert m.BuildAttr.from_arg("attr", "file.nix") == m.BuildAttr(
         Path("file.nix"), "attr"
     )
-    assert m.BuildAttr.from_arg(None, "file.nix") == m.BuildAttr(
-        Path("file.nix"), None
-    )
+    assert m.BuildAttr.from_arg(None, "file.nix") == m.BuildAttr(Path("file.nix"), None)
 
 
 def test_flake_parse() -> None:

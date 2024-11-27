@@ -249,6 +249,25 @@ def test_nixos_build(mock_run: Any, monkeypatch: Any) -> None:
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_repl(mock_run: Any) -> None:
+    n.repl("attr", None, nix_flag=True)
+    mock_run.assert_called_with(
+        ["nix", "repl", "--file", "<nixpkgs/nixos>", "--nix-flag"]
+    )
+
+    n.repl("attr", m.BuildAttr(Path("file.nix"), "myAttr"))
+    mock_run.assert_called_with(["nix", "repl", "--file", Path("file.nix"), "myAttr"])
+
+
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_repl_flake(mock_run: Any) -> None:
+    n.repl_flake("attr", m.Flake(Path("flake.nix"), "myAttr"), nix_flag=True)
+    # This method would be really annoying to test, and it is not that important
+    # So just check that we are at least calling it
+    assert mock_run.called
+
+
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_rollback(mock_run: Any, tmp_path: Path) -> None:
     path = tmp_path / "test"
     path.touch()

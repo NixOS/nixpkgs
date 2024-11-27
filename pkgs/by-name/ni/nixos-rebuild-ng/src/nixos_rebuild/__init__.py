@@ -1,7 +1,6 @@
 import argparse
 import atexit
 import json
-import os
 import sys
 from pathlib import Path
 from subprocess import run

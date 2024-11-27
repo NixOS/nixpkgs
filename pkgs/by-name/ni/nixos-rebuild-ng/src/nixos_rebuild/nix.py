@@ -1,6 +1,8 @@
 import os
 from datetime import datetime
+from importlib.resources import files
 from pathlib import Path
+from string import Template
 from subprocess import PIPE, CalledProcessError
 from typing import Final
 
@@ -18,6 +20,7 @@ from .process import run_wrapper
 from .utils import Args, dict_to_flags, info
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
+FLAKE_REPL_TEMPLATE: Final = "repl.template.nix"
 
 
 def copy_closure(
@@ -277,6 +280,41 @@ def nixos_build_flake(
     ]
     r = run_wrapper(run_args, stdout=PIPE)
     return Path(r.stdout.strip())
+
+
+def repl(attr: str, build_attr: BuildAttr | None, **nix_flags: Args) -> None:
+    run_args: list[str | Path] = ["nix", "repl", "--file"]
+    if build_attr:
+        run_args.append(build_attr.path)
+        if build_attr.attr:
+            run_args.append(build_attr.attr)
+        run_wrapper([*run_args, *dict_to_flags(nix_flags)])
+    else:
+        run_wrapper([*run_args, "<nixpkgs/nixos>", *dict_to_flags(nix_flags)])
+
+
+def repl_flake(attr: str, flake: Flake, **flake_flags: Args) -> None:
+    expr = Template(
+        files(__package__).joinpath(FLAKE_REPL_TEMPLATE).read_text()
+    ).substitute(
+        flake_path=flake.path,
+        flake_attr=flake.attr,
+        bold="\033[1m",
+        blue="\033[34;1m",
+        attention="\033[35;1m",
+        reset="\033[0m",
+    )
+    run_wrapper(
+        [
+            "nix",
+            *FLAKE_FLAGS,
+            "repl",
+            "--impure",
+            "--expr",
+            expr,
+            *dict_to_flags(flake_flags),
+        ]
+    )
 
 
 def rollback(profile: Profile, target_host: Remote | None, sudo: bool) -> Path:
