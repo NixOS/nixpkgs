@@ -2,24 +2,39 @@
   lib,
   stdenv,
   fetchgit,
-  curl,
+
+  # build
+  autoreconfHook,
+  makeWrapper,
+  pkg-config,
+
+  # runtime
+  gettext,
   gnunet,
   jansson,
+  jq,
   libgcrypt,
   libmicrohttpd,
   libsodium,
   libunistring,
-  pkg-config,
   postgresql,
-  autoreconfHook,
   python3,
   recutils,
-  wget,
-  jq,
-  gettext,
   texinfo,
-}:
+  which,
 
+  ghostscript_headless,
+  gnumake,
+  groff,
+  pandoc,
+  sphinx,
+  texliveSmall,
+
+  # check
+  curl,
+  wget,
+  callPackage,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-exchange";
   version = "0.13.0";
@@ -35,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
+    makeWrapper
     pkg-config
   ];
 
@@ -49,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     texinfo # Fix 'makeinfo' is missing on your system.
     libunistring
-    python3.pkgs.jinja2
+    (python3.withPackages (p: with p; [ jinja2 ]))
     # jq is necessary for some tests and is checked by configure script
     jq
   ];
@@ -90,6 +106,72 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
+  postPatch = ''
+    # Can only `return` from a function or sourced script
+    for file in taler-exchange-kyc-oauth2-{challenger,nda}.sh; do
+      substituteInPlace src/kyclogic/$file \
+        --replace-fail "return 1" "exit 1"
+    done
+  '';
+
+  postFixup = ''
+    # Wrap scripts with necessary runtime dependencies
+    for file in \
+      taler-config \
+      taler-exchange-helper-measure-test-{form,oauth} \
+      taler-exchange-helper-converter-oauth2-test-full_name \
+      taler-exchange-kyc-aml-pep-trigger.sh \
+      taler-exchange-kyc-kycaid-converter.sh \
+      taler-exchange-kyc-oauth2-{challenger,nda,test-converter}.sh \
+      taler-exchange-kyc-persona-converter.sh \
+      ; do
+        wrapProgram $out/bin/$file \
+          --prefix PATH : ${
+            lib.makeBinPath [
+              gnunet
+              jq
+              wget
+              which
+            ]
+          }
+    done
+
+    # Put scripts with big dependency closures in separate outputs
+    mkdir -p {$auditor,$terms}/bin
+
+    mv $out/bin/taler-auditor $auditor/bin/taler-auditor
+    mv $out/bin/taler-terms-generator $terms/bin/taler-terms-generator
+
+    wrapProgram $terms/bin/taler-terms-generator \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          ghostscript_headless
+          gnumake
+          groff
+          pandoc
+          sphinx
+          which
+          # FIXME:
+          # https://github.com/NixOS/nixpkgs/pull/357535
+          # sphinx-markdown-builder
+          (placeholder "out")
+        ]
+      }
+
+    wrapProgram $auditor/bin/taler-auditor \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          texliveSmall
+          (placeholder "out")
+        ]
+      }
+
+    # This script imperatively sets up Taler components for testing, which not
+    # only needs a considerable amount of dependencies, but is also better
+    # handled by Taler's NixOS module.
+    rm $out/bin/taler-unified-setup.sh
+  '';
+
   enableParallelBuilding = true;
 
   doInstallCheck = true;
@@ -100,6 +182,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   checkTarget = "check";
+
+  outputs = [
+    "out"
+    "auditor"
+    "terms"
+  ];
 
   meta = {
     description = ''
