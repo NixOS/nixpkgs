@@ -267,7 +267,7 @@ in
     '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
       # normalize cross-compiled builds w.r.t. native builds
       (
-        dir=$GOPATH/bin/${go.GOOS}_${go.GOARCH}
+        dir=$GOPATH/bin/''${GOOS}_''${GOARCH}
         if [[ -n "$(shopt -s nullglob; echo $dir/*)" ]]; then
           mv $dir/* $dir/..
         fi
