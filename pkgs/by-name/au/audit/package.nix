@@ -25,6 +25,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1dG11Q7kotDReHW8aua9an1bNNlVfqhHo5+uxTH6qgo=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "static.patch";
+      url = "https://github.com/linux-audit/audit-userspace/commit/a89664b45c30a853a6f80b19730984bd78432142.patch";
+      hash = "sha256-HsaL9Bfo1MQ1JBKIS9ckNTapGk5eshjWWKh4M+e+Y9c=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace bindings/swig/src/auditswig.i \
       --replace-fail "/usr/include/linux/audit.h" \
