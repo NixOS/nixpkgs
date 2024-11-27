@@ -8,6 +8,7 @@
   cinny,
   desktop-file-utils,
   wrapGAppsHook3,
+  makeBinaryWrapper,
   pkg-config,
   openssl,
   dbus,
@@ -47,13 +48,9 @@ rustPlatform.buildRustPackage rec {
     in
     ''
       substituteInPlace tauri.conf.json \
-        --replace '"distDir": "../cinny/dist",' '"distDir": "${cinny'}",'
+        --replace-warn '"distDir": "../cinny/dist",' '"distDir": "${cinny'}",'
       substituteInPlace tauri.conf.json \
-        --replace '"cd cinny && npm run build"' '""'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-        --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+        --replace-warn '"cd cinny && npm run build"' '""'
     '';
 
   postInstall =
@@ -67,12 +64,18 @@ rustPlatform.buildRustPackage rec {
         --set-key="Categories" --set-value="Network;InstantMessaging;" \
         $out/share/applications/cinny.desktop
     '';
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram "$out/bin/cinny" \
+      --inherit-argv0 \
+      --set-default WEBKIT_DISABLE_DMABUF_RENDERER "1"
+  '';
 
   nativeBuildInputs = [
     wrapGAppsHook3
     pkg-config
     cargo-tauri_1.hook
     desktop-file-utils
+    makeBinaryWrapper
   ];
 
   buildInputs =
@@ -83,7 +86,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       glib-networking
-      libayatana-appindicator
       webkitgtk_4_0
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
