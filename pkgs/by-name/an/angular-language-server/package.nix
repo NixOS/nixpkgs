@@ -12,16 +12,12 @@
   unzip,
 }:
 
-let
-  owner = "angular";
-  repo = "vscode-ng-language-service";
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "angular-language-server";
   version = "18.2.0";
   src = fetchurl {
-    name = "${finalAttrs.pname}-${finalAttrs.version}.zip";
-    url = "https://github.com/${owner}/${repo}/releases/download/v${finalAttrs.version}/ng-template.vsix";
+    name = "angular-language-server-${finalAttrs.version}.zip";
+    url = "https://github.com/angular/vscode-ng-language-service/releases/download/v${finalAttrs.version}/ng-template.vsix";
     hash = "sha256-rl04nqSSBMjZfPW8Y+UtFLFLDFd5FSxJs3S937mhDWE=";
   };
 
@@ -56,7 +52,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
 
     updateScript = lib.getExe (writeShellApplication {
-      name = "update-${finalAttrs.pname}";
+      name = "update-angular-language-server";
       runtimeInputs = [
         curl
         common-updater-scripts
@@ -68,9 +64,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
         LATEST_VERSION=$(curl -H "Accept: application/vnd.github+json" \
             ''${GITHUB_TOKEN:+-H "Authorization: bearer $GITHUB_TOKEN"} \
-          -Lsf https://api.github.com/repos/${owner}/${repo}/releases/latest | \
+          -Lsf https://api.github.com/repos/angular/vscode-ng-language-service/releases/latest | \
           jq -r .tag_name | cut -c 2-)
-        update-source-version ${finalAttrs.pname} "$LATEST_VERSION"
+        update-source-version angular-language-server "$LATEST_VERSION"
       '';
     });
   };
