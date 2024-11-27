@@ -6065,8 +6065,6 @@ self: super: with self; {
 
   hydra-core = callPackage ../development/python-modules/hydra-core { };
 
-  hydra-check = callPackage ../development/python-modules/hydra-check { };
-
   hydrawiser = callPackage ../development/python-modules/hydrawiser { };
 
   hydrogram = callPackage ../development/python-modules/hydrogram { };
