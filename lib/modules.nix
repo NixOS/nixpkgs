@@ -20,6 +20,7 @@ let
     head
     id
     imap1
+    hasAttr
     isAttrs
     isBool
     isFunction
@@ -1267,13 +1268,13 @@ let
     Return a module that help declares an option that has been renamed.
     When a value is defined for the old option, it is forwarded to the `to` option.
    */
-  doRename = {
-    # A specification for from and to
-    spec,
+  doRename = args@{
+    # An attribute path operation specification for the "from" and "to" operations
+    spec ? { },
     # List of strings representing the attribute path of the old option.
-    from, # TODO extract from spec
+    from ? null,
     # List of strings representing the attribute path of the new option.
-    to,
+    to ? null,
     # Boolean, whether the old option is to be included in documentation.
     visible,
     # Whether to warn when a value is defined for the old option.
@@ -1339,15 +1340,28 @@ let
   }:
     { config, options, ... }:
     let
-      fromOpt = getAttrFromPath from options;
-      toOf = attrByPath to
-        (abort "Renaming error: option `${showOption to}' does not exist.");
-      toType = let opt = attrByPath to {} options; in opt.type or (types.submodule {});
+      attrPaths = lib.attrsets.pathOperationsToAttrPaths spec;
+      existsInSpec = op: spec != { } && hasAttr attrPaths op;
+      getPathForOp =
+        op:
+        if existsInSpec op
+        then attrPaths.${op}
+        else if args.${op} != null
+        then args.${op}
+        else abort "You must provide `doRename` with the `${op}` attribute path.";
+
+      pathTo = getPathForOp "to";
+      pathFrom = getPathForOp "from";
+
+      fromOpt = getAttrFromPath pathFrom options;
+      toOf = attrByPath pathTo
+        (abort "Renaming error: option `${showOption pathTo}' does not exist.");
+      toType = let opt = attrByPath pathTo {} options; in opt.type or (types.submodule {});
     in
     {
-      options = setAttrByPath from (mkOption {
+      options = setAttrByPath pathFrom (mkOption {
         inherit visible;
-        description = "Alias of {option}`${showOption to}`.";
+        description = "Alias of {option}`${showOption pathTo}`.";
         apply = x: use (toOf config);
       } // optionalAttrs (toType != null) {
         type = toType;
@@ -1355,11 +1369,11 @@ let
       config = mkIf condition (mkMerge [
         (optionalAttrs (options ? warnings) {
           warnings = optional (warn && fromOpt.isDefined)
-            "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
+            "The option `${showOption pathFrom}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption pathTo}'.";
         })
         (if withPriority
-          then mkAliasAndWrapDefsWithPriority (setAttrByPath to) fromOpt
-          else mkAliasAndWrapDefinitions (setAttrByPath to) fromOpt)
+          then mkAliasAndWrapDefsWithPriority (setAttrByPath pathTo) fromOpt
+          else mkAliasAndWrapDefinitions (setAttrByPath pathTo) fromOpt)
       ]);
     };
 
