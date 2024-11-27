@@ -3,7 +3,7 @@ let
 in
 
 lib.runTests {
-  testProcessAttrImmediate = {
+  testPathOperationsToAttrPaths'_Immediate = {
     expr = lib.modules.pathOperationsToAttrPaths' [ ] "foo" "from";
     expected = [
       {
@@ -12,7 +12,7 @@ lib.runTests {
       }
     ];
   };
-  testProcessAttrNested1 = {
+  testPathOperationsToAttrPaths'_Nested1 = {
     expr = lib.modules.pathOperationsToAttrPaths' [ ] "foo" { bar = "from"; };
     expected = [
       {
@@ -24,7 +24,20 @@ lib.runTests {
       }
     ];
   };
-  testProcessAttrNestedInSame = {
+  testPathOperationsToAttrPaths'_Nested2 = {
+    expr = lib.modules.pathOperationsToAttrPaths' [ ] "foo" { bar.baz = "from"; };
+    expected = [
+      {
+        name = "from";
+        value = [
+          "foo"
+          "bar"
+          "baz"
+        ];
+      }
+    ];
+  };
+  testPathOperationsToAttrPaths'_NestedInSame = {
     expr = lib.modules.pathOperationsToAttrPaths' [ ] "foo" {
       bar = "from";
       baz = "to";
@@ -46,7 +59,7 @@ lib.runTests {
       }
     ];
   };
-  testProcessAttrNestedInSameDeeper = {
+  testPathOperationsToAttrPaths'_commonPrefix = {
     expr = lib.modules.pathOperationsToAttrPaths' [ ] "foo" {
       common.prefix.bar = "from";
       common.prefix.baz = "to";
@@ -72,7 +85,7 @@ lib.runTests {
       }
     ];
   };
-  testRenameSpec = {
+  testPathOperationsToAttrPaths = {
     expr = lib.modules.pathOperationsToAttrPaths {
       foo.bar = "from";
       baz.quux = "to";
