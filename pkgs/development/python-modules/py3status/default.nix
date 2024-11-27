@@ -13,7 +13,6 @@
   libnotify,
   lm_sensors,
   procps,
-  pydbus,
   pygobject3,
   pyserial,
   pytz,
@@ -28,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.59";
+  version = "3.60";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3m/34xfPpe8T4yicbTtQtTqfq5Zz2T0AZl8fCKRg/CE=";
+    hash = "sha256-l7qlw3imOXY1nsNiFRB28Z6+uw+YGJGOO4GM7ryr1Q4=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +48,6 @@ buildPythonPackage rec {
     requests
     tzlocal
     i3ipc
-    pydbus
     pygobject3
     pyserial
     setuptools
