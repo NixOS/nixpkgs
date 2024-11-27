@@ -1,5 +1,10 @@
 let
   lib = import ../default.nix;
+
+  inherit (lib.attrsets)
+    pathOperationsToAttrPaths
+    pathOperationsToAttrPaths'
+    ;
 in
 
 lib.runTests {
@@ -7,7 +12,7 @@ lib.runTests {
   # pathOperationsToAttrPaths; the other functions need to be tested too.
 
   testPathOperationsToAttrPaths'Immediate = {
-    expr = lib.attrsets.pathOperationsToAttrPaths' [ ] "foo" "from";
+    expr = pathOperationsToAttrPaths' [ ] "foo" "from";
     expected = [
       {
         name = "from";
@@ -16,7 +21,7 @@ lib.runTests {
     ];
   };
   testPathOperationsToAttrPaths'Nested1 = {
-    expr = lib.attrsets.pathOperationsToAttrPaths' [ ] "foo" { bar = "from"; };
+    expr = pathOperationsToAttrPaths' [ ] "foo" { bar = "from"; };
     expected = [
       {
         name = "from";
@@ -28,7 +33,7 @@ lib.runTests {
     ];
   };
   testPathOperationsToAttrPaths'Nested2 = {
-    expr = lib.attrsets.pathOperationsToAttrPaths' [ ] "foo" { bar.baz = "from"; };
+    expr = pathOperationsToAttrPaths' [ ] "foo" { bar.baz = "from"; };
     expected = [
       {
         name = "from";
@@ -41,7 +46,7 @@ lib.runTests {
     ];
   };
   testPathOperationsToAttrPaths'NestedInSame = {
-    expr = lib.attrsets.pathOperationsToAttrPaths' [ ] "foo" {
+    expr = pathOperationsToAttrPaths' [ ] "foo" {
       bar = "from";
       baz = "to";
     };
@@ -63,7 +68,7 @@ lib.runTests {
     ];
   };
   testPathOperationsToAttrPaths'CommonPrefix = {
-    expr = lib.attrsets.pathOperationsToAttrPaths' [ ] "foo" {
+    expr = pathOperationsToAttrPaths' [ ] "foo" {
       common.prefix.bar = "from";
       common.prefix.baz = "to";
     };
@@ -89,7 +94,7 @@ lib.runTests {
     ];
   };
   testPathOperationsToAttrPaths = {
-    expr = lib.attrsets.pathOperationsToAttrPaths {
+    expr = pathOperationsToAttrPaths {
       foo.bar = "from";
       baz.quux = "to";
     };
