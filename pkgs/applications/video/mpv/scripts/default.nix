@@ -85,10 +85,8 @@ let
     let
       inherit (self) callPackage;
     in
-    lib.mapAttrsRecursiveCond
-      (x: x.recurseForDerivations or false)
-      addTests
-      (lib.recurseIntoAttrs {
+    lib.mapAttrsRecursiveCond (x: x.recurseForDerivations or false) addTests (
+      lib.recurseIntoAttrs {
         inherit (callPackage ./mpv.nix { })
           acompressor
           autocrop
@@ -142,7 +140,8 @@ let
         webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
         youtube-chat = callPackage ./youtube-chat.nix { };
         youtube-upnext = callPackage ./youtube-upnext.nix { };
-      });
+      }
+    );
 
   aliases = {
     youtube-quality = throw "'youtube-quality' is no longer maintained, use 'quality-menu' instead"; # added 2023-07-14
