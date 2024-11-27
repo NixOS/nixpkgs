@@ -701,9 +701,10 @@ in {
     linux_default = packages.linux_6_6;
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_6_12;
-    linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_15;
     linux_rt_latest = packages.linux_rt_6_6;
+  } // lib.optionalAttrs config.allowAliases {
+    linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
   };
 
   manualConfig = callPackage ../os-specific/linux/kernel/manual-config.nix {};
