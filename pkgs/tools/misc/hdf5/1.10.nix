@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , removeReferencesTo
+, cppSupport ? true
 , zlibSupport ? true
 , zlib
 , enableShared ? !stdenv.hostPlatform.isStatic
@@ -28,7 +29,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = optional zlibSupport zlib;
 
   configureFlags = optional enableShared "--enable-shared"
-    ++ optional javaSupport "--enable-java";
+    ++ optional javaSupport "--enable-java"
+    ++ optional cppSupport "--enable-cxx";
 
   patches = [ ];
 
