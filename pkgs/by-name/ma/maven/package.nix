@@ -70,7 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.asl20;
     mainProgram = "mvn";
-    maintainers = [ ] ++ lib.teams.java.members;
+    maintainers = with lib.maintainers; [ tricktron ] ++ lib.teams.java.members;
     inherit (jdk_headless.meta) platforms;
   };
 })
