@@ -41,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas";
-  version = "6.2.2";
+  version = "6.2.4";
 
   outputs = [
     "out"

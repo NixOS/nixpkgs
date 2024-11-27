@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "tensile";
-  version = "6.2.2";
+  version = "6.2.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "Tensile";
     rev = "rocm-${version}";
-    hash = "sha256-tPfZ1kuRXaKRQfvI8qyNfS1JQx7DetQRSEe82u2Fq0s=";
+    hash = "sha256-Vq8+AYbWSRxsVJ+sRfC5RgVRHAAnuXJeys7vN7mKTdE=";
   };
 
   buildInputs = [ setuptools ];

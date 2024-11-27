@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-thunk";
-  version = "6.2.2";
+  version = "6.2.4";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "ROCT-Thunk-Interface";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-IGzBDTr3oh0qnj7i9Vz/ryFWDej6fmyW22fTuTbgyRI=";
+    hash = "sha256-oCLDpEez8EaR5hl5phAQ7DKVz1MQks3CUex8YBCxdfg=";
   };
 
   nativeBuildInputs = [

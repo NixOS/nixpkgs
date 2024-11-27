@@ -40,7 +40,7 @@ let
   ]));
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rdc";
-  version = "6.2.2";
+  version = "6.2.4";
 
   outputs = [
     "out"

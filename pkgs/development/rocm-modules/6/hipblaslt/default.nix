@@ -18,13 +18,13 @@
 # Can also use cuBLAS
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblaslt";
-  version = "6.2.2";
+  version = "6.2.4";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "hipBLAS";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-Fq7o2sMmHlHIv9UKJw+u/h9K/ZhKVJWwosYTdYIsscA=";
+    hash = "sha256-X6I36tBg+ydyvyUKMs69uaQXdh0pe5F7kmdqDG1NGeE=";
   };
 
   nativeBuildInputs = [
