@@ -3190,6 +3190,12 @@
   "maven-buildmavenpackage": [
     "index.html#maven-buildmavenpackage"
   ],
+  "maven-overriding-package-attributes": [
+    "index.html#maven-overriding-package-attributes"
+  ],
+  "maven-offline-build": [
+    "index.html#maven-offline-build"
+  ],
   "stable-maven-plugins": [
     "index.html#stable-maven-plugins"
   ],
