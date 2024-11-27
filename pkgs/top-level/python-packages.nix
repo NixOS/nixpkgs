@@ -4717,6 +4717,8 @@ self: super: with self; {
 
   flatten-dict = callPackage ../development/python-modules/flatten-dict { };
 
+  flatten-json = callPackage ../development/python-modules/flatten-json { };
+
   flax = callPackage ../development/python-modules/flax { };
 
   flaxlib = callPackage ../development/python-modules/flaxlib { };

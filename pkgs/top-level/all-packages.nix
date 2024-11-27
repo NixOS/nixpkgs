@@ -1897,8 +1897,6 @@ with pkgs;
 
   gopass-hibp = callPackage ../tools/security/gopass/hibp.nix { };
 
-  gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix { };
-
   git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix { };
 
   gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix { };
@@ -3035,10 +3033,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  cobang = python311Packages.callPackage ../applications/misc/cobang {
-    gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
-  };
-
   cocoapods = callPackage ../development/tools/cocoapods { };
 
   cocoapods-beta = lowPrio (callPackage ../development/tools/cocoapods { beta = true; });
@@ -3954,9 +3948,7 @@ with pkgs;
 
   json-schema-for-humans = with python3Packages; toPythonApplication json-schema-for-humans;
 
-  jsonwatch = callPackage ../tools/misc/jsonwatch {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  jsonwatch = callPackage ../tools/misc/jsonwatch { };
 
   jupyter = callPackage ../applications/editors/jupyter { };
 

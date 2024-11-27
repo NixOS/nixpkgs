@@ -4103,18 +4103,6 @@ final: prev:
     meta.homepage = "https://github.com/liangxianzhe/floating-input.nvim/";
   };
 
-  floating-nvim = buildVimPlugin {
-    pname = "floating.nvim";
-    version = "2021-07-19";
-    src = fetchFromGitHub {
-      owner = "fhill2";
-      repo = "floating.nvim";
-      rev = "11e75c2a201b9d73f03bd3c2db1fc94021c231eb";
-      sha256 = "172ak3macqmkz4jvic1xcnfpp6wafq33afyvcx4za170qh30sydj";
-    };
-    meta.homepage = "https://github.com/fhill2/floating.nvim/";
-  };
-
   floobits-neovim = buildVimPlugin {
     pname = "floobits-neovim";
     version = "2021-10-18";
