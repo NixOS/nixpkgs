@@ -23,6 +23,10 @@ let
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-mac_x64.dmg";
           hash = "sha256-WwUpFFeZ9NmosHZqrHCbsz673fSbdQvwxhEvz/6JJtw=";
         };
+        aarch64-darwin = {
+          url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-mac_universal.dmg";
+          hash = "sha256-O5b4Z/NJ3Xri6YxHc6gD4qJVOnYtKIjDNw+Wl9pz8Zo=";
+        };
       }
       .${stdenv.system} or (throw "dbgate: ${stdenv.system} is unsupported.");
   meta = {
@@ -36,6 +40,7 @@ let
       "x86_64-linux"
       "x86_64-darwin"
       "aarch64-linux"
+      "aarch64-darwin"
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
