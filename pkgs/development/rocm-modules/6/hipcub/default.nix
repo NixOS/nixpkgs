@@ -16,7 +16,7 @@
 # CUB can also be used as a backend instead of rocPRIM.
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipcub";
-  version = "6.2.2";
+  version = "6.2.4";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "hipCUB";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-7iHA9rwiUWFIcCbUMxDV5itMtexhrw20BJAFWTl3EE4=";
+    hash = "sha256-ejumIeGj5SOovQPGngL2V3BueUNRBx5wd/+FQXVvahI=";
   };
 
   nativeBuildInputs = [
