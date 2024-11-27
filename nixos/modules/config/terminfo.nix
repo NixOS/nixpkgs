@@ -27,9 +27,6 @@
     # This should not contain packages that are broken or can't build, since it
     # will break this expression
     #
-    # Currently broken packages:
-    # - contour
-    #
     # can be generated with:
     # lib.attrNames (lib.filterAttrs
     #  (_: drv: (builtins.tryEval (lib.isDerivation drv && drv ? terminfo)).value)
@@ -39,6 +36,7 @@
         with pkgs.pkgsBuildBuild;
         [
           alacritty
+          contour
           foot
           kitty
           mtm
