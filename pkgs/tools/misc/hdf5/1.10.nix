@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
     license = lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
+    maintainers = with lib.maintainers; [ stephen-huan ];
     homepage = "https://www.hdfgroup.org/HDF5/";
     platforms = lib.platforms.unix;
   };
