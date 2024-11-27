@@ -1,77 +1,89 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, autoreconfHook
-, python3
-, perl
-, libxslt
-, docbook_xsl
-, docbook_xml_dtd_42
-, libseccomp
-, installTests ? true, gnumake, which
-, debugBuild ? false, libunwind
+{
+  lib,
+  fetchFromGitLab,
+  libseccomp,
+  mandoc,
+  nix-update-script,
+  pkg-config,
+  rustPlatform,
+  scdoc,
+  sydbox,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
-  pname = "sydbox-1";
-  version = "2.2.0";
+rustPlatform.buildRustPackage rec {
+  pname = "sydbox";
+  version = "3.28.3";
 
-  outputs = [ "out" "dev" "man" "doc" ]
-    ++ lib.optional installTests "installedTests";
-
-  src = fetchurl {
-    url = "https://git.exherbo.org/${pname}.git/snapshot/${pname}-${version}.tar.xz";
-    sha256 = "0664myrrzbvsw73q5b7cqwgv4hl9a7vkm642s1r96gaxm16jk0z7";
-  };
-
-  nativeBuildInputs = [
-    pkg-config
-    autoreconfHook
-    python3
-    perl
-    libxslt.bin
-    docbook_xsl
-    docbook_xml_dtd_42
+  outputs = [
+    "out"
+    "man"
   ];
 
-  buildInputs = [
-    libseccomp
-  ] ++ lib.optional debugBuild libunwind
-    ++ lib.optionals installTests [
-      gnumake
-      python3
-      perl
-      which
-    ];
+  src = fetchFromGitLab {
+    domain = "gitlab.exherbo.org";
+    owner = "Sydbox";
+    repo = "sydbox";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9IegNFkOWYt+jdpN0rk4S/qyD/NSPaSqmFnMmCl/3Tk=";
+  };
 
-  enableParallelBuilding = true;
+  cargoHash = "sha256-6/D//mkPDRW01SCLmQGWwFCClZ84aJUPhleWGVCJaKM=";
 
-  configureFlags = [ ]
-    ++ lib.optionals installTests [ "--enable-installed-tests"
-      "--libexecdir=${placeholder "installedTests"}/libexec" ]
-    ++ lib.optional debugBuild "--enable-debug";
+  nativeBuildInputs = [
+    mandoc
+    pkg-config
+    scdoc
+  ];
 
-  makeFlags = [ "SYD_INCLUDEDIR=${stdenv.cc.libc.dev}/include" ];
+  buildInputs = [ libseccomp ];
 
-  doCheck = true;
-  checkPhase = ''
-    # Many of the regular test cases in t/ do not work inside the build sandbox
-    make -C syd check
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  checkFlags = [
+    # rm -rf tmpdir: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+    "--skip=fs::tests::test_relative_symlink_resolution"
+    # Failed to write C source file!: Os { code: 13, kind: PermissionDenied, message: "Permission denied" }
+    "--skip=proc::tests::test_proc_set_at_secure_test_32bit_dynamic"
+    # /bin/false: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+    "--skip=syd_test"
+
+    # Endlessly stall. Maybe a sandbox issue?
+    "--skip=caps"
+    "--skip=landlock::compat::Compatible::set_compatibility"
+    "--skip=landlock::fs::PathBeneath"
+    "--skip=landlock::fs::PathFd"
+    "--skip=landlock::fs::path_beneath_rules"
+    "--skip=proc::proc_cmdline"
+    "--skip=proc::proc_comm"
+  ];
+
+  # TODO: Have these directories be created upstream similar to the vim files
+  postInstall = ''
+    mkdir -p $out/share/man/man{1,2,5,7}
+
+    make $makeFlags install-{man,vim}
   '';
 
-  postInstall = if installTests then ''
-    moveToOutput bin/syd-test $installedTests
-  '' else ''
-    # Tests are installed despite --disable-installed-tests
-    rm -r $out/bin/syd-test $out/libexec
-  '';
+  passthru = {
+    tests.version = testers.testVersion {
+      package = sydbox;
+      command = "syd -V";
+    };
 
-  meta = with lib; {
-    homepage = "https://sydbox.exherbo.org/";
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "seccomp-based application sandbox";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mvs ];
+    homepage = "https://gitlab.exherbo.org/sydbox/sydbox";
+    changelog = "https://gitlab.exherbo.org/sydbox/sydbox/-/blob/v${version}/ChangeLog.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      mvs
+      getchoo
+    ];
+    mainProgram = "syd";
+    platforms = lib.platforms.linux;
   };
 }
