@@ -165,7 +165,7 @@ These paths will need to be replaced with relative paths and the xcbuild package
 stdenv.mkDerivation {
   name = "libfoo-1.2.3";
   postPatch = ''
-    subsituteInPlace Makefile \
+    substituteInPlace Makefile \
       --replace-fail '/usr/bin/xcodebuild' 'xcodebuild' \
       --replace-fail '/usr/bin/xcrun' 'xcrun' \
       --replace-fail '/usr/bin/PListBuddy' 'PListBuddy'

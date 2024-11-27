@@ -95,6 +95,6 @@ python3.pkgs.buildPythonApplication rec {
       blur, as well as options to layer quotes and a clock onto the background.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ p3psi AndersonTorres zfnmxt ];
+    maintainers = with maintainers; [ p3psi zfnmxt ];
   };
 }

@@ -169,6 +169,16 @@
       "agpl"
     ]
   },
+  "news": {
+    "hash": "sha256-m2Q+vq7G5oPr9fwIX+65NReaxzcxXehQBQ52T4VrYfw=",
+    "url": "https://github.com/nextcloud/news/releases/download/25.0.0/news.tar.gz",
+    "version": "25.0.0",
+    "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
+    "homepage": "https://github.com/nextcloud/news",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "notes": {
     "hash": "sha256-dpMCehjhPQoOA+MVdLeGc370hmqWzmsMczgV08m/cO4=",
     "url": "https://github.com/nextcloud-releases/notes/releases/download/v4.11.0/notes-v4.11.0.tar.gz",

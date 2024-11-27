@@ -49,17 +49,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2024-11-06";
+  version = "0-unstable-2024-11-21";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "ad1ba30b27ff2802b6e743c6b8970e4bd1309dfc";
-    hash = "sha256-vrRkUTWHm+2GTJ3axO2oPJ0gKyMSH8Reh3TjYYze/Io=";
+    rev = "6dc61f895db424e1ab245a7d4d219c6054a31ce3";
+    hash = "sha256-lEE2cfnQMSBi7+d34dbiuE5lwiGOzW1384/ohC+cf7I=";
   };
 
   postPatch = ''
-    sed -i '/iconutil/d' Ladybird/CMakeLists.txt
+    sed -i '/iconutil/d' UI/CMakeLists.txt
 
     # Don't set absolute paths in RPATH
     substituteInPlace Meta/CMake/lagom_install_options.cmake \

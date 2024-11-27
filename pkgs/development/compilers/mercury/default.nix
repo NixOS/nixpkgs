@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
     changelog   = "https://dl.mercurylang.org/release/release-notes-${version}.html";
     license     = lib.licenses.gpl2Only;
     platforms   = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ vieta ];
   };
 }

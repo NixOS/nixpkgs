@@ -23,7 +23,8 @@ let
   ];
 
 in buildFHSEnv {
-  name = "lutris";
+  pname = "lutris";
+  inherit (lutris-unwrapped) version;
 
   runScript = "lutris";
 

@@ -3,7 +3,8 @@
 }:
 
 buildFHSEnv {
-  name = "sparrow-desktop";
+  pname = "sparrow-desktop";
+  inherit (sparrow-unwrapped) version;
 
   runScript = "${sparrow-unwrapped}/bin/sparrow-desktop";
 

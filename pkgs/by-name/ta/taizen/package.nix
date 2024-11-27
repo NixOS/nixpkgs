@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch2
 , pkg-config
 , ncurses
 , openssl
@@ -19,7 +20,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-pGcD3+3Ds3U8NuNySaDnz0zzAvZlSDte1jRPdM5qrZA=";
   };
 
-  cargoHash = "sha256-2X9ZhqaQ6Y+mwXTMbvBQWLR24+KYYqjIqQy/8XqGi18=";
+  cargoPatches = [
+    # update cargo dependencies upstreamed: https://github.com/oppiliappan/taizen/pull/27
+    (fetchpatch2 {
+      name = "update-cargo-lock.patch";
+      url = "https://github.com/oppiliappan/taizen/commit/104a1663268623e9ded45afaf2fe98c9c42b7b21.patch";
+      hash = "sha256-ujsr7MjZWEu+2mijVH1aqtTJXKZC4m5vl73Jre9XHbU=";
+    })
+  ];
+
+  cargoHash = "sha256-bE7GZOQgAg4XdWCmnicPK4H4Y+T1snISCe/uGjoQATo=";
 
   nativeBuildInputs = [ pkg-config ];
 

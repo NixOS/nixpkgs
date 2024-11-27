@@ -256,6 +256,12 @@ buildPythonPackage rec {
       # Propagate CUPTI to Kineto by overriding the search path with environment variables.
       # https://github.com/pytorch/pytorch/pull/108847
       ./pytorch-pr-108847.patch
+    ]
+    ++ lib.optionals (lib.getName blas.provider == "mkl") [
+      # The CMake install tries to add some hardcoded rpaths, incompatible
+      # with the Nix store, which fails. Simply remove this step to get
+      # rpaths that point to the Nix store.
+      ./disable-cmake-mkl-rpath.patch
     ];
 
   postPatch =

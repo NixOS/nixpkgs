@@ -101,6 +101,7 @@ mapAliases ({
   BTrees = btrees; # added 2023-02-19
   cacheyou = throw "cacheyou has been removed, as it was no longer used for the only consumer pdm"; # added 2023-12-21
   cadquery = throw "cadquery was removed, because it was disabled on all python version since 3.8 and marked as broken"; # added 2024-05-13
+  caffeWithCuda = throw "caffeWithCuda has been removed, as it was broken and required CUDA 10"; # Added 2024-11-20
   can = python-can; # added 2024-08-12
   carrot = throw "carrot has been removed, as its development was discontinued in 2012"; # added 2022-01-18
   case = throw "case has been removed, since it is an unused leaf package with a dependency on the nose test framework"; # added 2024-07-08
@@ -335,6 +336,7 @@ mapAliases ({
   mask-rcnn = throw "mask-rcnn has been removed as it is unmaintained and its dependency imgaug no longer builds"; # added 2023-07-10
   mac_alias = mac-alias; # added 2024-01-07
   MDP = mdp; # added 2023-02-19
+  mdp = throw "mdp has been removed as it is unmaintained and broken"; # added 2024-11-23
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
   memcached = python-memcached; # added 2022-05-06
   mailman = throw "Please use pkgs.mailman"; # added 2022-04-29

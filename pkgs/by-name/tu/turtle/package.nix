@@ -9,15 +9,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "turtle";
-  version = "0.10";
+  version = "0.11";
   pyproject = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "philippun1";
     repo = "turtle";
-    rev = version;
-    hash = "sha256-hWjxNAf0qy/aJ4Y7nLA5m69k3mEn3/1XaJ58aHQrWug=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-st6Y2hIaMiApoAG7IFoyQC9hKXdvothkv+5toXsUdVA=";
   };
 
   postPatch = ''

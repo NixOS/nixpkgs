@@ -1421,11 +1421,9 @@
   "trivial-builder-symlinkJoin": [
     "index.html#trivial-builder-symlinkJoin"
   ],
-  "trivial-builder-writeReferencesToFile": [
-    "index.html#trivial-builder-writeReferencesToFile"
-  ],
   "trivial-builder-writeClosure": [
-    "index.html#trivial-builder-writeClosure"
+    "index.html#trivial-builder-writeClosure",
+    "index.html#trivial-builder-writeReferencesToFile"
   ],
   "trivial-builder-writeDirectReferencesToFile": [
     "index.html#trivial-builder-writeDirectReferencesToFile"
@@ -3191,6 +3189,12 @@
   ],
   "maven-buildmavenpackage": [
     "index.html#maven-buildmavenpackage"
+  ],
+  "maven-overriding-package-attributes": [
+    "index.html#maven-overriding-package-attributes"
+  ],
+  "maven-offline-build": [
+    "index.html#maven-offline-build"
   ],
   "stable-maven-plugins": [
     "index.html#stable-maven-plugins"

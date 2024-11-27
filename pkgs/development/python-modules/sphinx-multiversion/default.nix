@@ -22,7 +22,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
   dependencies = [ sphinx ];
-  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "sphinx_multiversion" ];
 

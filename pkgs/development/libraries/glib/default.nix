@@ -126,7 +126,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     finalAttrs.setupHook
+  ] ++ lib.optionals (!stdenv.hostPlatform.isFreeBSD) [
     libsysprof-capture
+  ] ++ [
     pcre2
   ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
@@ -185,6 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     "-Db_lundef=false"
     "-Dxattr=false"
+    "-Dsysprof=disabled"  # sysprof-capture does not build on FreeBSD
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [

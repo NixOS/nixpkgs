@@ -5,28 +5,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "rabbit";
-  version = "2.2.0";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "natarajan-chidambaram";
     repo = "RABBIT";
     rev = "refs/tags/${version}";
-    hash = "sha256-diy94QhgLHLvkb1kKhGDxiHAyQ43BNJUXjHFYahEDpw=";
+    hash = "sha256-QmP6yfVnlYoNVa4EUtKR9xbCnQW2V6deV0+hN9IGtic=";
   };
 
   pythonRelaxDeps = [
     "numpy"
-    "scikit-learn"
-    "scipy"
-    "tqdm"
-    "pandas"
-    "urllib3"
   ];
 
-  build-system = [
-    python3.pkgs.setuptools
-    python3.pkgs.wheel
+  build-system = with python3.pkgs; [
+    setuptools
   ];
 
   dependencies = with python3.pkgs; [

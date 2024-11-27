@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchzip
+, fetchurl
 , cups
 , autoPatchelfHook
 , python3Packages
@@ -22,18 +22,33 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  src = fetchzip {
+  src = fetchurl {
     # Steps to find the release download URL:
     # 1. Go to https://www.kyoceradocumentsolutions.us/en/support/downloads.html
     # 2. Search for printer model, e.g. "TASKalfa 6053ci"
     # 3. Locate e.g. "Linux Print Driver (9.3)" in the list
+    #
+    # Where there's no version encoded in the vendor URL, prefer a
+    # web.archive.org URL.  That means that if the vendor updates the package
+    # at this URL, the package won't suddenly stop building.
     urls = [
-      "https://dam.kyoceradocumentsolutions.com/content/dam/gdam_dc/dc_global/executables/driver/product_085/KyoceraLinuxPackages-${date}.tar.gz"
+      "https://web.archive.org/web/20241123173620/https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/MA_PA_4500ci_Linux_gz.download.gz"
+      "https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/MA_PA_4500ci_Linux_gz.download.gz"
     ];
     hash = "sha256-pqBtfKiQo/+cF8fG5vsEQvr8UdxjGsSShXI+6bun03c=";
-    extension = "tar.gz";
-    stripRoot = false;
+    recursiveHash = true;
+    downloadToTemp = true;
     postFetch = ''
+      unpackDir="$TMPDIR/unpack"
+      mkdir "$unpackDir"
+      cd "$unpackDir"
+
+      mv "$downloadedFile" "$TMPDIR/source.tar.gz.gz"
+      gunzip "$TMPDIR/source.tar.gz.gz"
+      unpackFile "$TMPDIR/source.tar.gz"
+      chmod -R +w "$unpackDir"
+      mv "$unpackDir" "$out"
+
       # delete redundant Linux package dirs to reduce size in the Nix store; only keep Debian
       rm -r $out/{CentOS,Fedora,OpenSUSE,Redhat,Ubuntu}
     '';

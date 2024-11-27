@@ -38,7 +38,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   dependencies = [
     huggingface-hub
     loguru
@@ -56,7 +55,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fastembed" ];
 
-  pythonRelaxDeps = [ "onnxruntime" ];
+  pythonRelaxDeps = [
+    "onnxruntime"
+    "pillow"
+  ];
 
   # there is one test and it requires network
   doCheck = false;

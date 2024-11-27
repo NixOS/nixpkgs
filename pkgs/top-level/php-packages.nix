@@ -395,29 +395,6 @@ in {
           configureFlags = [
             "--enable-dom"
           ];
-          # Add a PHP lower version bound constraint to avoid applying the patch on older PHP versions.
-          patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
-            # Fix tests with libxml 2.12
-            # Part of 8.3.1RC1+, 8.2.14RC1+
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/061058a9b1bbd90d27d97d79aebcf2b5029767b0.patch";
-              hash = "sha256-0hOlAG+pOYp/gUU0MUMZvzWpgr0ncJi5GB8IeNxxyEU=";
-              excludes = [
-                "NEWS"
-              ];
-            })
-          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.1") [
-            # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/e2d97314ab342d434e778cd00a2f34e4bdb07664.patch";
-              hash = "sha256-w0hyYUgbRGpvIBfWeDTSEUGpiJdyrtNjKy+Fn1vyAO0=";
-            })
-            # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
-              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
-            })
-          ];
         }
         {
           name = "enchant";
@@ -625,27 +602,6 @@ in {
           configureFlags = [
             "--enable-simplexml"
           ];
-          patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
-            # Fix tests with libxml2 2.12
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/061058a9b1bbd90d27d97d79aebcf2b5029767b0.patch";
-              hash = "sha256-0hOlAG+pOYp/gUU0MUMZvzWpgr0ncJi5GB8IeNxxyEU=";
-              excludes = [
-                "NEWS"
-              ];
-            })
-            # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
-            # Required for libxml2 2.13 compatibility patch.
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/e2d97314ab342d434e778cd00a2f34e4bdb07664.patch";
-              hash = "sha256-w0hyYUgbRGpvIBfWeDTSEUGpiJdyrtNjKy+Fn1vyAO0=";
-            })
-            # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
-              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
-            })
-          ];
         }
         {
           name = "snmp";
@@ -664,28 +620,7 @@ in {
           #   Unknown: php_network_getaddresses: getaddrinfo for localhost failed: nodename nor servname provided
           doCheck = !stdenv.hostPlatform.isDarwin && lib.versionOlder php.version "8.4";
           internalDeps = [ php.extensions.session ];
-          patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
-            # Fix tests with libxml2 2.12
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/061058a9b1bbd90d27d97d79aebcf2b5029767b0.patch";
-              hash = "sha256-0hOlAG+pOYp/gUU0MUMZvzWpgr0ncJi5GB8IeNxxyEU=";
-              excludes = [
-                "NEWS"
-              ];
-            })
-            # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
-            # Required for libxml2 2.13 compatibility patch.
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/e2d97314ab342d434e778cd00a2f34e4bdb07664.patch";
-              hash = "sha256-w0hyYUgbRGpvIBfWeDTSEUGpiJdyrtNjKy+Fn1vyAO0=";
-            })
-            # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
-              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
-            })
-          ]
-          ++ lib.optionals (lib.versionAtLeast php.version "8.3") [
+          patches = lib.optionals (lib.versionAtLeast php.version "8.3" && lib.versionOlder php.version "8.4") [
             # https://github.com/php/php-src/pull/16733 (fix soap test)
             (fetchpatch {
               url = "https://github.com/php/php-src/commit/5c308d61db104854e4ff84ab123e3ea56e1b4046.patch";
@@ -724,27 +659,6 @@ in {
             "--enable-xml"
           ];
           doCheck = false;
-          patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
-            # Fix tests with libxml2 2.12
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/061058a9b1bbd90d27d97d79aebcf2b5029767b0.patch";
-              hash = "sha256-0hOlAG+pOYp/gUU0MUMZvzWpgr0ncJi5GB8IeNxxyEU=";
-              excludes = [
-                "NEWS"
-              ];
-            })
-            # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
-            # Required for libxml2 2.13 compatibility patch.
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/e2d97314ab342d434e778cd00a2f34e4bdb07664.patch";
-              hash = "sha256-w0hyYUgbRGpvIBfWeDTSEUGpiJdyrtNjKy+Fn1vyAO0=";
-            })
-            # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
-              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
-            })
-          ];
         }
         {
           name = "xmlreader";
@@ -761,27 +675,6 @@ in {
           buildInputs = [ libxml2 ];
           configureFlags = [
             "--enable-xmlwriter"
-          ];
-          patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
-            # Fix tests with libxml2 2.12
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/061058a9b1bbd90d27d97d79aebcf2b5029767b0.patch";
-              hash = "sha256-0hOlAG+pOYp/gUU0MUMZvzWpgr0ncJi5GB8IeNxxyEU=";
-              excludes = [
-                "NEWS"
-              ];
-            })
-            # Backport of PHP_LIBXML_IGNORE_DEPRECATIONS_START and PHP_LIBXML_IGNORE_DEPRECATIONS_END
-            # Required for libxml2 2.13 compatibility patch.
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/e2d97314ab342d434e778cd00a2f34e4bdb07664.patch";
-              hash = "sha256-w0hyYUgbRGpvIBfWeDTSEUGpiJdyrtNjKy+Fn1vyAO0=";
-            })
-            # Fix build with libxml2 2.13+. Has to be applied after libxml2 2.12 patch.
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.patch";
-              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
-            })
           ];
         }
         {

@@ -14,7 +14,7 @@
 # Processing of this file is implemented in workflows/codeowners-v2.yml
 
 # CI
-/.github/workflows @NixOS/Security @Mic92 @zowoq
+/.github/workflows @NixOS/Security @Mic92 @zowoq @infinisil @azuwis
 /.github/workflows/check-nix-format.yml @infinisil
 /.github/workflows/nixpkgs-vet.yml @infinisil @philiptaron
 /.github/workflows/codeowners-v2.yml @infinisil
@@ -218,6 +218,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /doc/languages-frameworks/java.section.md @NixOS/java
 /doc/languages-frameworks/gradle.section.md @NixOS/java
 /doc/languages-frameworks/maven.section.md @NixOS/java
+/nixos/modules/programs/java.nix @NixOS/java
 /pkgs/top-level/java-packages.nix @NixOS/java
 
 # Jetbrains
@@ -241,6 +242,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # PostgreSQL and related stuff
 /pkgs/servers/sql/postgresql @NixOS/postgres
+/pkgs/development/tools/rust/cargo-pgrx @NixOS/postgres
 /nixos/modules/services/databases/postgresql.md @NixOS/postgres
 /nixos/modules/services/databases/postgresql.nix @NixOS/postgres
 /nixos/tests/postgresql @NixOS/postgres

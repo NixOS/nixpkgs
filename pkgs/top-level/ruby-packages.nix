@@ -2373,10 +2373,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1nc14wls1yiigz593vw7580hb99lf4n485axapiz6sqpg1jnlhcr";
+      sha256 = "0qlfhp9b445g0qp9kkdiylfjlpfzrv6nqvry4ar6y0yacn0zr5y8";
       type = "gem";
     };
-    version = "1.4.10";
+    version = "1.4.11";
   };
   net-http = {
     dependencies = ["uri"];

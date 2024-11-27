@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       systems.
     '';
     license = with lib.licenses; [ publicDomain ];
-    maintainers = with lib.maintainers; [ AndersonTorres cameronnemo ];
+    maintainers = with lib.maintainers; [ cameronnemo ];
     platforms = lib.platforms.linux;
   };
 })

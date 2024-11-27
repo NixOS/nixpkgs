@@ -49,7 +49,6 @@ let
       license = with lib.licenses; [ mit ];
       mainProgram = "duden";
       maintainers = with lib.maintainers; [
-        AndersonTorres
         linuxissuper
       ];
     };

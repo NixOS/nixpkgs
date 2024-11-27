@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.8.2";
+  version = "4.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     rev = "v${version}";
-    hash = "sha256-8OErZ6uKTWE245BoBu9lQyTLA43DfWaYDv3wbPWaufg=";
+    hash = "sha256-pEl9kMdKGGKeca7xrb9KW5hVvjRBqqG7ktYXbJgc4YE=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [

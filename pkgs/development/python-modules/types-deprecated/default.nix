@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-deprecated";
-  version = "1.2.9.20240311";
+  version = "1.2.15.20241117";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types-Deprecated";
     inherit version;
-    hash = "sha256-BoDomYmoFCcH3oED8V0YJEWlM8EEf9m36MVFkQHpuQo=";
+    hash = "sha256-kkACyLf93sUbpJSXiKcCQRouNjbNmyozq9juEZcB134=";
   };
 
   nativeBuildInputs = [ setuptools ];

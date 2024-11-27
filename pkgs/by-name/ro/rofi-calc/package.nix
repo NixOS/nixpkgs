@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "Do live calculations in rofi!";
     homepage = "https://github.com/svenstaro/rofi-calc";
     license = licenses.mit;
-    maintainers = with maintainers; [ luc65r albakham ];
+    maintainers = with maintainers; [ albakham ];
     platforms = with platforms; linux;
   };
 }

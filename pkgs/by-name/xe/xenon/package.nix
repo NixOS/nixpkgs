@@ -5,7 +5,7 @@
 
 let
   pname = "xenon";
-  version = "0.9.1";
+  version = "0.9.3";
 in
 python3.pkgs.buildPythonApplication {
 
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1nRREcPiWLdJpP1CSxuJnZnqGDzqIyNl7i+I/n2AwDs=";
+    hash = "sha256-SnU42LoIql15BV+z4LI5PAvW19FqSrD83vAu8fEKQ/o=";
   };
 
   doCheck = false;
