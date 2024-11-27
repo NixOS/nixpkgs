@@ -31,10 +31,10 @@
 }:
 
 let
-  version = "2.55.0";
+  version = "3.0.0";
   webUiStatic = fetchurl {
     url = "https://github.com/prometheus/prometheus/releases/download/v${version}/prometheus-web-ui-${version}.tar.gz";
-    hash = "sha256-iSiK6JKm78AMANfBydfCQu+aUpw6B1sZ5fGPa0KL7Fs=";
+    hash = "sha256-a3xyStDsutLjYIEm7t3WilmvO36eMHvd4pOtZYYsJCM=";
   };
 in
 buildGoModule rec {
@@ -47,12 +47,12 @@ buildGoModule rec {
     owner = "prometheus";
     repo = "prometheus";
     rev = "v${version}";
-    hash = "sha256-yzAp/YxLCWlpkj5z2aUdsokDaFvRwVnT6ViwL3hivdI=";
+    hash = "sha256-IMYDtAb2ojzZLBqRJkMcB8yFpmmJPwbbyAxFfbCikkA=";
   };
 
-  vendorHash = "sha256-p2PjhFT8KOido+MMmKc7eHPkE175my3VfTp1G8bBZcA=";
+  vendorHash = "sha256-c96YnWPLH/tbGRb2Zlqrl3PXSZvI+NeYTGlef6REAOw=";
 
-  excludedPackages = [ "documentation/prometheus-mixin" ];
+  excludedPackages = [ "documentation/prometheus-mixin" "web/ui/mantine-ui/src/promql/tools" ];
 
   postPatch = ''
     tar -C web/ui -xzf ${webUiStatic}
@@ -112,7 +112,6 @@ buildGoModule rec {
   preInstall = ''
     mkdir -p "$out/share/doc/prometheus" "$out/etc/prometheus"
     cp -a $src/documentation/* $out/share/doc/prometheus
-    cp -a $src/console_libraries $src/consoles $out/etc/prometheus
   '';
 
   postInstall = ''

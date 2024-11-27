@@ -4,13 +4,10 @@
 , enableQt ? false, qtx11extras, qttools, qtdeclarative, qtEnv
 , enablePython ? false, python ? throw "vtk: Python support requested, but no python interpreter was given."
 , enableEgl ? false
-# Darwin support
-, AGL, Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
-, ApplicationServices, CoreText, IOSurface, ImageIO, xpc, libobjc
 }:
 
 let
-  inherit (lib) optionalString optionals optional;
+  inherit (lib) optionalString optionals;
 
   version = "${majorVersion}.${minorVersion}";
   pythonMajor = lib.substring 0 1 python.pythonVersion;
@@ -34,26 +31,10 @@ in stdenv.mkDerivation {
       libGLU
       xorgproto
       libXt
-    ] ++ optionals stdenv.hostPlatform.isDarwin [
-      xpc
-      AGL
-      Cocoa
-      CoreServices
-      DiskArbitration
-      IOKit
-      CFNetwork
-      Security
-      ApplicationServices
-      CoreText
-      IOSurface
-      ImageIO
-      OpenGL
-      GLUT
     ] ++ optionals enablePython [
       python
     ];
-  propagatedBuildInputs = optionals stdenv.hostPlatform.isDarwin [ libobjc ]
-    ++ optionals stdenv.hostPlatform.isLinux [ libX11 libGL ];
+  propagatedBuildInputs = optionals stdenv.hostPlatform.isLinux [ libX11 libGL ];
     # see https://github.com/NixOS/nixpkgs/pull/178367#issuecomment-1238827254
 
   patches = map fetchpatch patchesToFetch;
@@ -94,7 +75,6 @@ in stdenv.mkDerivation {
   ] ++ optionals enableQt [
     "-DVTK_GROUP_ENABLE_Qt:STRING=YES"
   ]
-    ++ optionals stdenv.hostPlatform.isDarwin [ "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ]
     ++ optionals enablePython [
       "-DVTK_WRAP_PYTHON:BOOL=ON"
       "-DVTK_PYTHON_VERSION:STRING=${pythonMajor}"
