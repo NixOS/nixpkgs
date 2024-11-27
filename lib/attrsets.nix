@@ -482,9 +482,9 @@ rec {
   # This function associates arbitrary strings with attribute paths in the form
   # of a list of name-value pairs consumable by `builtins.listToAttrs`.
   #
-  # To declare the attribute path, you simply declare an attrset containing the
-  # path and set its final attribute equal to the string which you want to
-  # associate the path with.
+  # To declare the attribute paths, you simply declare an attrset with
+  # (optionally) nested attributes that describe the paths and set the final
+  # attributes equal to the strings which you want to associate the paths with.
   #
   # This also works with paths that require quoting; simply quote your
   # specification's attributes as usual.
@@ -529,9 +529,9 @@ rec {
   # This function associates arbitrary strings with attribute paths in the form
   # of an attrset.
   #
-  # To declare the attribute path, you simply declare an attrset containing the
-  # path and set its final attribute equal to the string which you want to
-  # associate the path with.
+  # To declare the attribute paths, you simply declare an attrset with
+  # (optionally) nested attributes that describe the paths and set the final
+  # attributes equal to the strings which you want to associate the paths with.
   #
   # This also works with paths that require quoting; simply quote your
   # specification's attributes as usual.
