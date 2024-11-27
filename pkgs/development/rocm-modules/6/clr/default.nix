@@ -49,7 +49,7 @@ in stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "clr";
     rev = "rocm-${finalAttrs.version}";
-    hash = "";
+    hash = "sha256-VFf0kC3mrwiRLY7WWSkCJ/dr9oMNzK2hJocZ55Jwq7o=";
   };
 
   nativeBuildInputs = [
