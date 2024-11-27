@@ -226,8 +226,7 @@ let
   image = (
     pkgs.vmTools.override {
       rootModules =
-        [ "zfs" "9p" "9pnet_virtio" "virtio_pci" "virtio_blk" ] ++
-        (pkgs.lib.optional pkgs.stdenv.hostPlatform.isx86 "rtc_cmos");
+        [ "zfs" "9p" "9pnet_virtio" "virtio_pci" "virtio_blk" ];
       kernel = modulesTree;
     }
   ).runInLinuxVM (
