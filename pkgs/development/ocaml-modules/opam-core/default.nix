@@ -2,7 +2,7 @@
 , jsonm, ocamlgraph, re, sha, swhid_core, uutf
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "opam-core";
 
   inherit (opam) src version;
