@@ -51,6 +51,7 @@
   libappindicator-gtk3,
   libdbusmenu,
   writeScript,
+  pipewire,
   python3,
   runCommand,
   libunity,
@@ -146,6 +147,7 @@ stdenv.mkDerivation rec {
       nspr
       libxcb
       pango
+      pipewire
       libXScrnSaver
       libappindicator-gtk3
       libdbusmenu
