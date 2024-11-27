@@ -484,6 +484,17 @@
       "source": "hosted",
       "version": "2.5.1"
     },
+    "flutter_saf": {
+      "dependency": "direct main",
+      "description": {
+        "path": ".",
+        "ref": "829a566b738a26ea98e523807f49838e21308543",
+        "resolved-ref": "829a566b738a26ea98e523807f49838e21308543",
+        "url": "https://github.com/pkuislm/flutter_saf.git"
+      },
+      "source": "git",
+      "version": "0.0.1"
+    },
     "flutter_test": {
       "dependency": "direct dev",
       "description": "flutter",
@@ -742,11 +753,11 @@
       "dependency": "direct main",
       "description": {
         "name": "mime",
-        "sha256": "801fd0b26f14a4a58ccb09d5892c3fbdeff209594300a542492cf13fba9d247a",
+        "sha256": "41a20518f0cb1256669420fdba0cd90d21561e560ac240f26ef8322e45bb7ed6",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.0.6"
+      "version": "2.0.0"
     },
     "mime_type": {
       "dependency": "transitive",
@@ -954,21 +965,21 @@
       "dependency": "direct main",
       "description": {
         "name": "share_plus",
-        "sha256": "468c43f285207c84bcabf5737f33b914ceb8eb38398b91e5e3ad1698d1b72a52",
+        "sha256": "9c9bafd4060728d7cdb2464c341743adbd79d327cb067ec7afb64583540b47c8",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "10.0.2"
+      "version": "10.1.2"
     },
     "share_plus_platform_interface": {
       "dependency": "transitive",
       "description": {
         "name": "share_plus_platform_interface",
-        "sha256": "6ababf341050edff57da8b6990f11f4e99eaba837865e2e6defe16d039619db5",
+        "sha256": "c57c0bbfec7142e3a0f55633be504b796af72e60e3c791b44d5a017b985f7a48",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "5.0.0"
+      "version": "5.0.1"
     },
     "sky_engine": {
       "dependency": "transitive",

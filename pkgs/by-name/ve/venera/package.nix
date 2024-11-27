@@ -9,13 +9,13 @@
 }:
 flutter.buildFlutterApplication rec {
   pname = "venera";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "venera-app";
     repo = "venera";
     rev = "refs/tags/v${version}";
-    hash = "sha256-W1ZUfXSCEwjVS8bl5kBWJzJiKCzoUwC7Zl1UK6VWAFM=";
+    hash = "sha256-+z0OXWC3Qfyjukv9TT+pHfjRKvSvJKAd0SqMWgaMtZE=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -29,6 +29,7 @@ flutter.buildFlutterApplication rec {
     scrollable_positioned_list = "sha256-6XmBlNxE7DEqY2LsEFtVrshn2Xt55XnmaiTq+tiPInA=";
     zip_flutter = "sha256-104/tGShkLAOYw9dC/yrt/qnm0NZ+Jk7nkbt3lPcYA8=";
     webdav_client = "sha256-Dz/4qW+cYGyNtK8S/abFslwQNroidgrHl7oJw3uXIqM=";
+    flutter_saf = "sha256-O0f+ItlQJyNn5d6tozStrxg7ntQFxU033AI3Aw2x8G0=";
   };
 
   nativeBuildInputs = [
