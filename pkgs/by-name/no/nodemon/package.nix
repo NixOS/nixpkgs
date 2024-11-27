@@ -23,9 +23,9 @@ buildNpmPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Framework for converting Left-To-Right (LTR) Cascading Style Sheets(CSS) to Right-To-Left (RTL)";
-    mainProgram = "rtlcss";
-    homepage = "https://rtlcss.com";
+    description = "Simple monitor script for use during development of a Node.js app";
+    mainProgram = "nodemon";
+    homepage = "https://nodemon.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];
   };
