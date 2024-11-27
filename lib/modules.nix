@@ -1263,12 +1263,11 @@ let
       (opt.highestPrio or defaultOverridePriority)
       (f opt.value);
 
-  # Transforms an expression like
+  # Transforms an attribute path operation specification expression like
+  #
   # {
-  #   foo = {
-  #     bar = "from";
-  #     baz = "to";
-  #   };
+  #   foo.bar = "from";
+  #   foo.baz = "to";
   # }
   #
   # into
@@ -1283,9 +1282,9 @@ let
   #     value = [ "foo" "baz" ];
   #   }
   # ]
-  #
-  # TODO modulePathSpec
-  processAttr = prefix: name: value: # prefix -> previousPath, value -> next?
+  # TODO document arguments
+  # In most cases, you want to use the non-' version of this function.
+  pathOperationsToAttrPaths' = prefix: name: value: # prefix -> previousPath, value -> next?
     let
       # Null means root
       newPrefix = prefix ++ lib.optional (name != null) name; # currentPath
@@ -1300,19 +1299,32 @@ let
         then
           let
             name = lib.head names;
-          in processAttr newPrefix name value.${name}
+          in pathOperationsToAttrPaths' newPrefix name value.${name}
         else
           # In theory, you could have more than one "to" or "from" but that
           # would just be an invalid spec. Checking this is more complexity than
           # it's woth.
-        lib.concatMap (name: processAttr newPrefix name value.${name}) names;
+        lib.concatMap (name: pathOperationsToAttrPaths' newPrefix name value.${name}) names;
 
 
+  # Transforms an attribute path operation specification expression like
+  #
   # {
   #   foo.bar = "from";
-  #   baz.quux = "to";
+  #   foo.baz = "to";
   # }
-  transformRenameSpec = spec: lib.listToAttrs (processAttr [ ] null spec);
+  #
+  # into an attrset where it's the actions are that are associated with the
+  # attribute paths which are now in list form:
+  #
+  # {
+  #   from = [ "foo" "bar" ];
+  #   to = [ "foo" "baz" ];
+  # }
+  #
+  # This also works with paths that require quoting; simply quote your
+  # specification's attributes as usual.
+  pathOperationsToAttrPaths = spec: lib.listToAttrs (pathOperationsToAttrPaths' [ ] null spec);
 
   /*
     Return a module that help declares an option that has been renamed.
@@ -1612,8 +1624,8 @@ private //
     defaultOrderPriority
     defaultOverridePriority
     defaultPriority
-    transformRenameSpec
-    processAttr
+    pathOperationsToAttrPaths'
+    pathOperationsToAttrPaths
     doRename
     evalModules
     evalOptionValue  # for use by lib.types

@@ -4,7 +4,7 @@ in
 
 lib.runTests {
   testProcessAttrImmediate = {
-    expr = lib.modules.processAttr [ ] "foo" "from";
+    expr = lib.modules.pathOperationsToAttrPaths' [ ] "foo" "from";
     expected = [
       {
         name = "from";
@@ -13,7 +13,7 @@ lib.runTests {
     ];
   };
   testProcessAttrNested1 = {
-    expr = lib.modules.processAttr [ ] "foo" { bar = "from"; };
+    expr = lib.modules.pathOperationsToAttrPaths' [ ] "foo" { bar = "from"; };
     expected = [
       {
         name = "from";
@@ -25,7 +25,7 @@ lib.runTests {
     ];
   };
   testProcessAttrNestedInSame = {
-    expr = lib.modules.processAttr [ ] "foo" {
+    expr = lib.modules.pathOperationsToAttrPaths' [ ] "foo" {
       bar = "from";
       baz = "to";
     };
@@ -47,7 +47,7 @@ lib.runTests {
     ];
   };
   testProcessAttrNestedInSameDeeper = {
-    expr = lib.modules.processAttr [ ] "foo" {
+    expr = lib.modules.pathOperationsToAttrPaths' [ ] "foo" {
       common.prefix.bar = "from";
       common.prefix.baz = "to";
     };
@@ -73,7 +73,7 @@ lib.runTests {
     ];
   };
   testRenameSpec = {
-    expr = lib.modules.transformRenameSpec {
+    expr = lib.modules.pathOperationsToAttrPaths {
       foo.bar = "from";
       baz.quux = "to";
     };
