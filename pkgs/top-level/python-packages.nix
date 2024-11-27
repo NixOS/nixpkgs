@@ -7333,6 +7333,7 @@ self: super: with self; {
       p.override {
         enablePython = true;
         python3 = python;
+        python3Packages = pythonPackages;
       })
     (p: p.py)
   ];
