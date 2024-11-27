@@ -15,6 +15,11 @@ buildGoModule rec {
     sha256 = "sha256-gMIpDiA5ncZ50WZ2Y57mScTEXzeObgZxP+nkWe+a8Eo=";
   };
 
+  ldflags = [
+    "-X main.version=${version}"
+    "-X main.commit=nixpkgs-${src.rev}"
+  ];
+
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     installShellCompletion --cmd shiori \
