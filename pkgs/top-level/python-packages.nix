@@ -2524,6 +2524,8 @@ self: super: with self; {
 
   compressai = callPackage ../development/python-modules/compressai { };
 
+  compressed-tensors = callPackage ../development/python-modules/compressed-tensors { };
+
   compressed-rtf = callPackage ../development/python-modules/compressed-rtf { };
 
   concurrent-log-handler = callPackage ../development/python-modules/concurrent-log-handler { };
