@@ -1,0 +1,28 @@
+commit bdaf607ea3cad3aa6188f4f15d9aff7132e5ef73
+Author: Ben Gamari <ben@smart-cactus.org>
+Date:   Wed Nov 27 14:56:15 2024 -0500
+
+    Drop use of lsmod
+
+diff --git a/setup.py b/setup.py
+index b9365898..20d96409 100644
+--- a/setup.py
++++ b/setup.py
+@@ -254,16 +254,7 @@ def _is_hpu() -> bool:
+     try:
+         subprocess.run(["hl-smi"], capture_output=True, check=True)
+     except (FileNotFoundError, PermissionError, subprocess.CalledProcessError):
+-        if not os.path.exists('/dev/accel/accel0') and not os.path.exists(
+-                '/dev/accel/accel_controlD0'):
+-            # last resort...
+-            try:
+-                output = subprocess.check_output(
+-                    'lsmod | grep habanalabs | wc -l', shell=True)
+-                is_hpu_available = int(output) > 0
+-            except (ValueError, FileNotFoundError, PermissionError,
+-                    subprocess.CalledProcessError):
+-                is_hpu_available = False
++        is_hpu_available = False
+     return is_hpu_available or VLLM_TARGET_DEVICE == "hpu"
+ 
+ 
