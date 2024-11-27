@@ -21,9 +21,9 @@ buildGoModule rec {
 
   ldflags = [
     "-s" "-w"
-    "-X" "github.com/openconfig/gnmic/app.version=${version}"
-    "-X" "github.com/openconfig/gnmic/app.commit=${src.rev}"
-    "-X" "github.com/openconfig/gnmic/app.date=1970-01-01T00:00:00Z"
+    "-X" "github.com/openconfig/gnmic/pkg/app.version=${version}"
+    "-X" "github.com/openconfig/gnmic/pkg/app.commit=${src.rev}"
+    "-X" "github.com/openconfig/gnmic/pkg/app.date=1970-01-01T00:00:00Z"
   ];
   subPackages = [ "." ];
 
