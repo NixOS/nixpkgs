@@ -12,14 +12,14 @@
 }:
 mkYarnPackage rec {
   inherit (nodePackages) nodejs;
-  version = "1.19.4";
+  version = "1.20.0";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "les";
     repo = "gancio";
     rev = "v${version}";
-    hash = "sha256-x8s7eBVmHCY3kAjHjACotCncvZq6OBiLPJGF6hvfawE=";
+    hash = "sha256-Hmx1I4H47X6H8TUyvtqSqMPdK17GfM7Fpb+3IXqPs14=";
   };
 
   offlineCache = fetchYarnDeps {
