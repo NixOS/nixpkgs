@@ -34274,8 +34274,6 @@ with pkgs;
 
   factorio-space-age-experimental = factorio.override { releaseType = "expansion"; experimental = true; };
 
-  factorio-mods = callPackage ../by-name/fa/factorio/mods.nix { };
-
   factorio-utils = callPackage ../by-name/fa/factorio/utils.nix { };
 
   fairymax = callPackage ../games/fairymax { };
