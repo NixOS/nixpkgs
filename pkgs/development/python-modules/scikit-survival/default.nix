@@ -2,9 +2,10 @@
   stdenv,
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   cython,
   ecos,
+  eigen,
   joblib,
   numexpr,
   numpy,
@@ -18,12 +19,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-survival";
-  version = "0.23.0";
+  version = "0.23.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-JFI3SDOK74vQdoUOStYlc4e0VHps97KjV3a1NQSN6E0=";
+  src = fetchFromGitHub {
+    owner = "sebp";
+    repo = "scikit-survival";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6902chXALa73/kTJ5UwV4CrB7/7wn+QXKpp2ej/Dnk8=";
   };
 
   nativeBuildInputs = [
@@ -46,9 +49,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # treat numpy versions as lower bounds, same as setuptools build
+  # can remove scikit-learn after 0.23.1
   postPatch = ''
-    sed -i 's/numpy==/numpy>=/' pyproject.toml
+    ln -s ${lib.getInclude eigen}/include/eigen3/Eigen \
+      sksurv/linear_model/src/eigen
+    sed -i -e 's/numpy>=2.0.0/numpy/' \
+       -e 's/scikit-learn~=1.4.0/scikit-learn/' pyproject.toml
   '';
 
   # Hack needed to make pytest + cython work
