@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "art";
-  version = "6.3";
+  version = "6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sepandhaghighi";
     repo = "art";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9kz6uyLdcrQqgWzT9g2qI9a+IituY/OFmbot+HlQsCE=";
+    hash = "sha256-qA1fhqNJbhSOvsPSgbnuRTs40OJsn7tYHWzujN2RVK8=";
   };
 
   build-system = [ setuptools ];
