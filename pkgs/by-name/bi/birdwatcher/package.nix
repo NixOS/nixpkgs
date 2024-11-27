@@ -3,7 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   nixosTests,
-  gitUpdater,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -26,7 +26,7 @@ buildGoModule rec {
       inherit (nixosTests) birdwatcher;
     };
 
-    updateScript = gitUpdater { };
+    updateScript = nix-update-script { };
   };
 
   meta = {

@@ -77,6 +77,14 @@ rustPlatform.buildRustPackage {
     "jj-cli"
   ];
 
+  checkFlags = [
+    # flaky test fixed upstream in 0.24+; the actual feature works reliably,
+    # it's just a false caching issue inside the test. skip it to allow the
+    # binary cache to be populated. https://github.com/martinvonz/jj/issues/4784
+    "--skip"
+    "test_shallow_commits_lack_parents"
+  ];
+
   env = {
     # Disable vendored libraries.
     ZSTD_SYS_USE_PKG_CONFIG = "1";

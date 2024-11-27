@@ -27,6 +27,14 @@ buildGo122Module rec {
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
 
+  postInstall = ''
+    rm -f $out/bin/AndroidNDKBuild
+  '';
+
+  postVersionCheck = ''
+    rm -f $out/bin/pcs_config.json
+  '';
+
   meta = {
     mainProgram = "BaiduPCS-Go";
     maintainers = with lib.maintainers; [ xddxdd ];

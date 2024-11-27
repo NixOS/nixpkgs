@@ -1,31 +1,50 @@
 {
   lib,
-  fetchurl,
-  stdenvNoCC,
+  apple-sdk_14,
+  buildGoModule,
+  darwin,
+  darwinMinVersionHook,
+  fetchFromGitHub,
   testers,
+  vfkit,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+buildGoModule rec {
   pname = "vfkit";
   version = "0.5.1";
 
-  src = fetchurl {
-    url = "https://github.com/crc-org/vfkit/releases/download/v${finalAttrs.version}/vfkit";
-    hash = "sha256-at+KsvsKO359d4VUvcSuio2ej5hM6//U4Mj/jqXwhEc=";
+  src = fetchFromGitHub {
+    owner = "crc-org";
+    repo = "vfkit";
+    rev = "v${version}";
+    hash = "sha256-9iPr9VhN60B6kBikdEIFAs5mMH+VcmnjGhLuIa3A2JU=";
   };
 
-  dontUnpack = true;
+  vendorHash = "sha256-6O1T9aOCymYXGAIR/DQBWfjc2sCyU/nZu9b1bIuXEps=";
 
-  installPhase = ''
-    runHook preInstall
+  subPackages = [ "cmd/vfkit" ];
 
-    install -Dm755 $src $out/bin/vfkit
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/crc-org/vfkit/pkg/cmdline.gitVersion=${src.rev}"
+  ];
 
-    runHook postInstall
+  nativeBuildInputs = [
+    darwin.sigtool
+  ];
+
+  buildInputs = [
+    apple-sdk_14
+    (darwinMinVersionHook "11")
+  ];
+
+  postFixup = ''
+    codesign --entitlements vf.entitlements -f -s - $out/bin/vfkit
   '';
 
   passthru.tests = {
-    version = testers.testVersion { package = finalAttrs.finalPackage; };
+    version = testers.testVersion { package = vfkit; };
   };
 
   meta = {
@@ -34,9 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sarcasticadmin ];
     platforms = lib.platforms.darwin;
-    # Source build will be possible after darwin SDK 12.0 bump
-    # https://github.com/NixOS/nixpkgs/pull/229210
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     mainProgram = "vfkit";
   };
-})
+}

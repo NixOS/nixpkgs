@@ -117,7 +117,7 @@ buildPythonPackage rec {
       "test_save"
     ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Crashes the interpreter
     "Tests/test_imagetk.py"
   ];

@@ -35,7 +35,7 @@ buildGoModule {
   # Notice that due to some legacy/bug in buildGoModule, the build isn't
   # failing even the tests are, as we get a false-positive the output
   # filtering: https://github.com/NixOS/nixpkgs/issues/349468
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   # The tests want to copy /bin/bash and /bin/ls, but we don't have those.
   # As these are interesting e2e tests to check if things work, we substitute

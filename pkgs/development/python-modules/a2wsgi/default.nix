@@ -7,6 +7,8 @@
   pdm-backend,
   pytest-asyncio,
   pytestCheckHook,
+  starlette,
+  baize,
 }:
 
 buildPythonPackage rec {
@@ -28,10 +30,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  dependencies = [
+    starlette
+    baize
+  ];
+
+  meta = {
     description = "Convert WSGI app to ASGI app or ASGI app to WSGI app";
     homepage = "https://github.com/abersheeran/a2wsgi";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

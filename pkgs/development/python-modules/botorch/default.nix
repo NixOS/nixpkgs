@@ -59,7 +59,7 @@ buildPythonPackage rec {
       # stuck tests on hydra
       "test_moo_predictive_entropy_search"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # Numerical error slightly above threshold
       # AssertionError: Tensor-likes are not close!
       "test_model_list_gpytorch_model"

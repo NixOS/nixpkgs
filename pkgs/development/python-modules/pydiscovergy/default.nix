@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = "3.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "jpbede";
@@ -30,6 +30,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i '/addopts =/d' pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
   build-system = [ poetry-core ];

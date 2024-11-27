@@ -33,7 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-yWpOxzIk2n2yK8B+88+qGPi4aQDRhy4pETu87wCToh4=";
   };
 
-  patches = lib.optionals stdenv.isLinux [
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
     (substituteAll {
       src = ./linux-paths.patch;
       x11 = "${xorg.libX11}/lib/libX11.so";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   nativeCheckInputs = [
     lsof

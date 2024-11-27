@@ -7,13 +7,13 @@
 
 melpaBuild {
   pname = "icicles";
-  version = "0-unstable-2023-07-27";
+  version = "0-unstable-2024-10-29";
 
   src = fetchFromGitHub {
     owner = "emacsmirror";
     repo = "icicles";
-    rev = "dfc1d9caf1b5156567292c9548547a2975a841bc";
-    hash = "sha256-Xbt0D9EgmvN1hDTeLbdxq1ARHObj8M4GfH2sbFILRTI=";
+    rev = "1c817db03aa32ef92d99661abc5e83da3188ab56";
+    hash = "sha256-pH4FQuAnYf8eNiwiLl+OOOxzdecrncay6TcHjNG16sk=";
   };
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };

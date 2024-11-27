@@ -62,6 +62,8 @@ lib.makeScope newScope (self: with self; {
 
   sdkman-for-fish = callPackage ./sdkman-for-fish.nix { };
 
+  spark = callPackage ./spark.nix { };
+
   sponge = callPackage ./sponge.nix { };
 
   tide = callPackage ./tide.nix { };

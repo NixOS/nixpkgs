@@ -788,7 +788,7 @@ dependencies = [
 
 [[package]]
 name = "asset-hub-rococo-runtime"
-version = "0.22.1"
+version = "0.22.2"
 dependencies = [
  "asset-test-utils",
  "assets-common",
@@ -920,7 +920,7 @@ dependencies = [
 
 [[package]]
 name = "asset-hub-westend-runtime"
-version = "0.26.1"
+version = "0.26.2"
 dependencies = [
  "asset-test-utils",
  "assets-common",
@@ -1034,7 +1034,7 @@ dependencies = [
 
 [[package]]
 name = "assets-common"
-version = "0.18.0"
+version = "0.18.1"
 dependencies = [
  "cumulus-primitives-core",
  "frame-support",
@@ -5119,7 +5119,7 @@ dependencies = [
 
 [[package]]
 name = "emulated-integration-tests-common"
-version = "14.1.0"
+version = "14.2.0"
 dependencies = [
  "asset-test-utils",
  "bp-messages",
@@ -10846,7 +10846,7 @@ dependencies = [
 
 [[package]]
 name = "pallet-message-queue"
-version = "41.0.1"
+version = "41.0.2"
 dependencies = [
  "environmental",
  "frame-benchmarking",
@@ -11963,7 +11963,7 @@ dependencies = [
 
 [[package]]
 name = "pallet-xcm"
-version = "17.0.0"
+version = "17.0.1"
 dependencies = [
  "bounded-collections",
  "frame-benchmarking",
@@ -11983,6 +11983,7 @@ dependencies = [
  "staging-xcm",
  "staging-xcm-builder",
  "staging-xcm-executor",
+ "tracing",
  "xcm-runtime-apis",
 ]
 
@@ -13454,7 +13455,7 @@ dependencies = [
 
 [[package]]
 name = "polkadot-node-core-prospective-parachains"
-version = "17.0.0"
+version = "17.0.1"
 dependencies = [
  "assert_matches",
  "fatality",
@@ -13697,7 +13698,7 @@ dependencies = [
 
 [[package]]
 name = "polkadot-node-network-protocol"
-version = "18.0.1"
+version = "18.0.2"
 dependencies = [
  "async-channel",
  "async-trait",
@@ -18218,7 +18219,7 @@ dependencies = [
 
 [[package]]
 name = "sc-rpc-server"
-version = "17.0.0"
+version = "17.1.0"
 dependencies = [
  "dyn-clone",
  "forwarded-header-value",
@@ -23458,7 +23459,7 @@ dependencies = [
 
 [[package]]
 name = "westend-runtime"
-version = "18.0.0"
+version = "18.0.1"
 dependencies = [
  "binary-merkle-tree",
  "bitvec",

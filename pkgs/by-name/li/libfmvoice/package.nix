@@ -1,38 +1,49 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, unstableGitUpdater
-, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfmvoice";
-  version = "0-unstable-2024-06-06";
+  version = "0-unstable-2024-11-03";
 
   src = fetchFromGitHub {
     owner = "vampirefrog";
     repo = "libfmvoice";
-    rev = "cd89a6a386b3b17c74b1caca11e297b2748cf90d";
-    hash = "sha256-yak+pKxkrKOX/qgtwpldjd85deE/JB040bVjDD1mo7A=";
+    rev = "c4b069cf633e52d4b7dce6e0b4277a0daa057774";
+    hash = "sha256-ZwqzrQ3kpOAZjJcstovmoNW8bG56w1YXm5ZMYIkjQ9M=";
   };
+
+  outputs = [
+    "out"
+    "bin"
+  ];
 
   strictDeps = true;
 
   enableParallelBuilding = true;
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
 
   buildFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
   installPhase = ''
     runHook preInstall
 
-    for prog in $(grep 'PROGS=' Makefile | cut -d'=' -f2); do
-      install -Dm755 $prog $out/bin/$prog
+    install -Dm644 libfmvoice.a $out/lib/libfmvoice.a
+
+    for header in *.h; do
+      install -Dm644 $header $out/include/$header
+    done
+
+    for prog in $(grep 'PROGS:=' Makefile | cut -d'=' -f2); do
+      install -Dm755 $prog $bin/bin/$prog
     done
 
     runHook postInstall
@@ -42,11 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = unstableGitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C library for loading, saving and converting FM sound chip voice files in various formats";
     homepage = "https://github.com/vampirefrog/libfmvoice";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
 })

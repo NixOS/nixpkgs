@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   # test is flaky on darwin
-  disabledTests = if stdenv.isDarwin then [ "test_function_throttled" ] else null;
+  disabledTests = if stdenv.hostPlatform.isDarwin then [ "test_function_throttled" ] else null;
 
   pythonNamespaces = [ "jaraco" ];
 

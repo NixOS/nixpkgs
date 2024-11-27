@@ -307,6 +307,10 @@ nixBuild() {
             esac
         done
 
+        if [[ -z $buildingAttribute ]]; then
+            instArgs+=("$buildFile")
+        fi
+
         drv="$(runCmd nix-instantiate "${instArgs[@]}" "${extraBuildFlags[@]}")"
         if [ -a "$drv" ]; then
             logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"

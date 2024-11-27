@@ -716,7 +716,7 @@ let
         (assertValueOneOf "EmitLLDP" (boolValues ++ ["nearest-bridge" "non-tpmr-bridge" "customer-bridge"]))
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
         (assertValueOneOf "DNSDefaultRoute" boolValues)
-        (assertRemoved "IPForward" "IPv4Forwarding and IPv6Forwarding in systemd.network(5) and networkd.conf(5)")
+        (assertRemoved "IPForward" "IPv4Forwarding and IPv6Forwarding in systemd.network(5) and networkd.conf(5). Please note that setting these options on multiple interfaces may lead to unintended results, see https://github.com/systemd/systemd/issues/33414 or the relevant sections in systemd.network(5).")
         (assertValueOneOf "IPv4Forwarding" boolValues)
         (assertValueOneOf "IPv6Forwarding" boolValues)
         (assertValueOneOf "IPMasquerade" (boolValues ++ ["ipv4" "ipv6" "both"]))

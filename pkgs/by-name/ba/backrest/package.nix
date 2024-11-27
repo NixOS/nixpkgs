@@ -51,7 +51,7 @@ buildGoModule {
         [
           "TestServeIndex" # Fails with handler returned wrong content encoding
         ]
-        ++ lib.optionals stdenv.isDarwin [
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
           "TestBackup" # relies on ionice
         ];
     in

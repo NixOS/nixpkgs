@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyomo";
-  version = "6.8.0";
+  version = "6.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     repo = "pyomo";
     owner = "pyomo";
     rev = "refs/tags/${version}";
-    hash = "sha256-+r8HyIEFcWB6WHwKbos8IGRAmekRsPDJWbtQ5mVpHrE=";
+    hash = "sha256-iu5Aft3DM/Q59zHIhHAheiEkacNFyIBzlcJ/4kb1+to=";
   };
 
   build-system = [ setuptools ];

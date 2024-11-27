@@ -8,12 +8,14 @@
 
 buildPostgresqlExtension rec {
   pname = "wal2json";
-  version = "2.6";
+  version = "${builtins.replaceStrings [ "_" ] [ "." ] (
+    lib.strings.removePrefix "wal2json_" src.rev
+  )}";
 
   src = fetchFromGitHub {
     owner = "eulerto";
     repo = "wal2json";
-    rev = "wal2json_${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "wal2json_2_6";
     sha256 = "sha256-+QoACPCKiFfuT2lJfSUmgfzC5MXf75KpSoc2PzPxKyM=";
   };
 
@@ -24,7 +26,7 @@ buildPostgresqlExtension rec {
   meta = with lib; {
     description = "PostgreSQL JSON output plugin for changeset extraction";
     homepage = "https://github.com/eulerto/wal2json";
-    changelog = "https://github.com/eulerto/wal2json/releases/tag/wal2json_${version}";
+    changelog = "https://github.com/eulerto/wal2json/releases/tag/${src.rev}";
     maintainers = with maintainers; [ euank ];
     platforms = postgresql.meta.platforms;
     license = licenses.bsd3;

@@ -523,15 +523,17 @@ rec {
   writeFishBin = name: writeFish "/bin/${name}";
 
   /**
-    Like writeScript but the first line is a shebang to babashka
+    writeBabashka takes a name, an attrset with babashka interpreter and linting check (both optional)
+    and some babashka source code and returns an executable.
 
-    Can be called with or without extra arguments.
+    `pkgs.babashka-unwrapped` is used as default interpreter for small closure size. If dependencies needed, use `pkgs.babashka` instead. Pass empty string to check to disable the default clj-kondo linting.
 
+    # Examples
     :::{.example}
-    ## `pkgs.writers.writeBabashka` without arguments
+    ## `pkgs.writers.writeBabashka` with empty arguments
 
     ```nix
-    writeBabashka "example" ''
+    writeBabashka "example" { } ''
       (println "hello world")
     ''
     ```
@@ -553,55 +555,61 @@ rec {
     ''
     ```
     :::
-  */
-  writeBabashka =
-    name: argsOrScript:
-    if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
-      makeScriptWriter (
-        argsOrScript
-        // {
-          interpreter = "${lib.getExe pkgs.babashka}";
-          check = "${lib.getExe pkgs.clj-kondo} --lint";
-        }
-      ) name
-    else
-      makeScriptWriter {
-        interpreter = "${lib.getExe pkgs.babashka}";
-        check = "${lib.getExe pkgs.clj-kondo} --lint";
-      } name argsOrScript;
 
-  /**
-    Like writeScriptBin but the first line is a shebang to babashka
+    :::{.note}
+    Babashka needs Java for fetching dependencies. Wrapped babashka contains jdk,
+    pass wrapped version `pkgs.babashka` to babashka if dependencies are required.
 
-    Can be called with or without extra arguments.
-
-    # Examples
-    :::{.example}
-    ## `pkgs.writers.writeBabashkaBin` without arguments
+    For example:
 
     ```nix
-    writeBabashkaBin "example" ''
+    writeBabashka "example"
+    {
+      babashka = pkgs.babashka;
+    }
+    ''
+      (require '[babashka.deps :as deps])
+      (deps/add-deps '{:deps {medley/medley {:mvn/version "1.3.0"}}})
+      (require '[medley.core :as m])
+      (prn (m/index-by :id [{:id 1} {:id 2}]))
+    ''
+    ```
+    :::
+
+    :::{.note}
+    Disable clj-kondo linting:
+
+    ```nix
+    writeBabashka "example"
+    {
+      check = "";
+    }
+    ''
       (println "hello world")
     ''
     ```
     :::
-
-    :::{.example}
-    ## `pkgs.writers.writeBabashkaBin` with arguments
-
-    ```nix
-    writeBabashkaBin "example"
+  */
+  writeBabashka =
+    name:
     {
-      makeWrapperArgs = [
-        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
-      ];
-    }
-    ''
-      (require '[babashka.tasks :as tasks])
-      (tasks/shell "hello" "-g" "Hello babashka!")
-    ''
-    ```
-    :::
+      makeWrapperArgs ? [ ],
+      babashka ? pkgs.babashka-unwrapped,
+      check ? "${lib.getExe pkgs.clj-kondo} --lint",
+      ...
+    }@args:
+    makeScriptWriter (
+      (builtins.removeAttrs args [
+        "babashka"
+      ])
+      // {
+        interpreter = "${lib.getExe babashka}";
+      }
+    ) name;
+
+  /**
+    writeBabashkaBin takes the same arguments as writeBabashka but outputs a directory
+    (like writeScriptBin)
   */
   writeBabashkaBin = name: writeBabashka "/bin/${name}";
 
@@ -1173,11 +1181,17 @@ rec {
       };
 
       fsi = writeBash "fsi" ''
+        set -euo pipefail
         export HOME=$NIX_BUILD_TOP/.home
         export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
         export DOTNET_CLI_TELEMETRY_OPTOUT=1
         export DOTNET_NOLOGO=1
+        export DOTNET_SKIP_WORKLOAD_INTEGRITY_CHECK=1
         script="$1"; shift
+        (
+          ${lib.getExe dotnet-sdk} new nugetconfig
+          ${lib.getExe dotnet-sdk} nuget disable source nuget
+        ) > /dev/null
         ${lib.getExe dotnet-sdk} fsi --quiet --nologo --readline- ${fsi-flags} "$@" < "$script"
       '';
 

@@ -22,6 +22,8 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-xgwIPHlTtmgCNN4R6/BJsqmI9hbA0wFAiq4YCa+r/UM=";
   };
 
+  pythonRelaxDeps = [ "hishel" ];
+
   nativeBuildInputs = [ installShellFiles ];
 
   build-system = with python3.pkgs; [

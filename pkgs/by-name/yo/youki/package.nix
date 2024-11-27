@@ -44,7 +44,10 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [
     "-p"
     "youki"
+    "--features"
+    "systemd"
   ];
+
   cargoTestFlags = [
     "-p"
     "youki"

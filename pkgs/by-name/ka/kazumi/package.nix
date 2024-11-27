@@ -12,17 +12,18 @@
   at-spi2-atk,
 }:
 let
-  version = "1.4.2";
-  src = fetchFromGitHub {
-    owner = "Predidit";
-    repo = "Kazumi";
-    rev = version;
-    hash = "sha256-irX+BmvJ/WI92RQmaSoBQuUqAEiy3bEstZmKMKHTvPY=";
-  };
+  version = "1.4.4";
 in
 flutter.buildFlutterApplication {
   pname = "kazumi";
-  inherit version src;
+  inherit version;
+
+  src = fetchFromGitHub {
+    owner = "Predidit";
+    repo = "Kazumi";
+    rev = "refs/tags/${version}";
+    hash = "sha256-p5eFabIa04io180tBNCMRs2pX7HU8b+PdyBwZohmKR8=";
+  };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 

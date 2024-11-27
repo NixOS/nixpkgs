@@ -21,6 +21,7 @@ let
   atLeast220 = lib.versionAtLeast version "2.20pre";
   atLeast221 = lib.versionAtLeast version "2.21pre";
   atLeast224 = lib.versionAtLeast version "2.24pre";
+  atLeast225 = lib.versionAtLeast version "2.25pre";
   # Major.minor versions unaffected by CVE-2024-27297
   unaffectedByFodSandboxEscape = [
     "2.3"
@@ -44,6 +45,7 @@ in
 , coreutils
 , curl
 , darwin
+, darwinMinVersionHook
 , docbook_xsl_ns
 , docbook5
 , editline
@@ -68,9 +70,9 @@ in
 , mdbook-linkcheck
 , nlohmann_json
 , nixosTests
-, nixVersions
 , openssl
 , perl
+, python3
 , pkg-config
 , rapidcheck
 , Security
@@ -150,6 +152,8 @@ self = stdenv.mkDerivation {
     libgit2
   ] ++ lib.optionals (atLeast224 || lib.versionAtLeast version "pre20240626") [
     toml11
+  ] ++ lib.optionals (atLeast225 && enableDocumentation) [
+    python3
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ] ++ lib.optionals (stdenv.hostPlatform.isx86_64) [
@@ -162,12 +166,20 @@ self = stdenv.mkDerivation {
     aws-sdk-cpp
   ] ++ lib.optional (atLeast218 && stdenv.hostPlatform.isDarwin) [
     darwin.apple_sdk.libs.sandbox
+  ] ++ lib.optional (atLeast224 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # Fix the following error with the default x86_64-darwin SDK:
+    #
+    #     error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
+    #
+    # Despite the use of the 10.13 deployment target here, the aligned
+    # allocation function Clang uses with this setting actually works
+    # all the way back to 10.6.
+    (darwinMinVersionHook "10.13")
   ];
-
 
   propagatedBuildInputs = [
     boehmgc
-  ] ++ lib.optionals (atLeast27) [
+  ] ++ lib.optionals atLeast27 [
     nlohmann_json
   ];
 
@@ -317,6 +329,8 @@ self = stdenv.mkDerivation {
     license = licenses.lgpl21Plus;
     inherit maintainers;
     platforms = platforms.unix;
+    # Requires refactorings in nixpkgs: https://github.com/NixOS/nixpkgs/pull/356983
+    broken = stdenv.hostPlatform.isDarwin && enableStatic;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
     mainProgram = "nix";
     knownVulnerabilities = lib.optional (!builtins.elem (lib.versions.majorMinor version) unaffectedByFodSandboxEscape && !atLeast221) "CVE-2024-27297";

@@ -9,6 +9,7 @@ let
     setAttr
     hasAttr
     optionals
+    optionalAttrs
     isDerivation
     hasSuffix
     splitString
@@ -252,8 +253,6 @@ let
     nativeLibs = [ pkgs.openblas ];
   };
 
-  cl-glib_dot_gio = throw "cl-glib_dot_gio was replaced by cl-gio";
-
   cl-gtk4 = build-asdf-system {
     pname = "cl-gtk4";
     version = "1.0.0";
@@ -293,8 +292,6 @@ let
       pkgs.libadwaita
     ];
   };
-
-  cl-gtk4_dot_webkit2 = throw "cl-gtk4_dot_webkit2 was replaced by cl-gtk4_dot_webkit";
 
   cl-gtk4_dot_webkit = build-asdf-system {
     pname = "cl-gtk4.webkit";
@@ -471,6 +468,9 @@ let
     };
   });
 
+  } // optionalAttrs pkgs.config.allowAliases {
+    cl-glib_dot_gio = throw "cl-glib_dot_gio was replaced by cl-gio";
+    cl-gtk4_dot_webkit2 = throw "cl-gtk4_dot_webkit2 was replaced by cl-gtk4_dot_webkit";
   });
 
 in packages

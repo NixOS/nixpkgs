@@ -28,7 +28,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       hrdinka
-      tomhoule
     ];
   };
 }

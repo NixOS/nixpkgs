@@ -39,17 +39,21 @@
 
 buildPythonPackage rec {
   pname = "pyhanko";
-  version = "0.25.1";
+  version = "0.25.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
     rev = "refs/tags/v${version}";
-    hash = "sha256-keWAiqwaMZYh92B0mlR4+jjxBKLOAJ9Kgc0l0GiIQbc=";
+    hash = "sha256-HJkCQ5YDVr17gtY4PW89ep7GwFdP21/ruBEKm7j3+Qo=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "cryptography"
+  ];
 
   dependencies = [
     asn1crypto
@@ -128,8 +132,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/v${version}/docs/changelog.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
-    # Most tests fail with:
-    # OSError: One or more parameters passed to a function were not valid.
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

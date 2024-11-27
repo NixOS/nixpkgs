@@ -3,21 +3,22 @@
 , fetchFromGitHub
 , installShellFiles
 , testers
+, nix-update-script
 , go-task
 }:
 
 buildGoModule rec {
   pname = "go-task";
-  version = "3.39.2";
+  version = "3.40.0";
 
   src = fetchFromGitHub {
     owner = "go-task";
     repo = "task";
     rev = "refs/tags/v${version}";
-    hash = "sha256-B5o3oAey7zJg5JBf4GO69cLmVbnkKedkjWP108XRGR8=";
+    hash = "sha256-SOXtzesS+luil8Q0iKlhWv4hqPyRU2V+Um6S/uzChas=";
   };
 
-  vendorHash = "sha256-P9J69WJ2C2xgdU9xydiaY8iSKB7ZfexLNYi7dyHDTIk=";
+  vendorHash = "sha256-5AABVG+MHvw8f8tcphUqQFid/mzXeWjbsD9mHJfyxDw=";
 
   doCheck = false;
 
@@ -46,10 +47,14 @@ buildGoModule rec {
       --replace-fail '#compdef task' '#compdef task go-task'
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = go-task;
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = go-task;
+      };
     };
+
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

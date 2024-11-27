@@ -25,7 +25,7 @@ buildGoModule rec {
 
   nativeCheckInputs = [ python3 ];
 
-  passthru.tests = lib.optionalAttrs stdenv.isLinux {
+  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
     restic = nixosTests.restic;
   };
 

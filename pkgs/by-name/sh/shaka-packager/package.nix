@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shaka-packager";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "shaka-project";
     repo = "shaka-packager";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-5TDfIbguBipYciXusn0rDS0ZQl0+fDFfHYbrnYjxSdE=";
+    hash = "sha256-4ZxBE1jpFR93OigAd7xOpUHXSZ5o9keNBJXuS2pNjpo=";
   };
 
   patches = [

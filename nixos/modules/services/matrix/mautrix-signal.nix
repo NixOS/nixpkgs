@@ -239,7 +239,6 @@ in
           --registration='${registrationFile}'
         '';
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateTmp = true;

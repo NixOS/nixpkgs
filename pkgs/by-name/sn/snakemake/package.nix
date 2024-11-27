@@ -121,7 +121,7 @@ python3Packages.buildPythonApplication rec {
       "test_output_file_cache_storage"
       "test_storage"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Unclear failure:
       # AssertionError: expected successful execution
       # `__darwinAllowLocalNetworking` doesn't help

@@ -21,14 +21,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2024.10.3";
+  version = "2024.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-13hNX9uaQbO/IKUkGaOITKh+REqUCHirbTPRgomzHBU=";
+    hash = "sha256-mjZNwkJgEb9jbndGCoq1b/SggKW/TcZSpjqwg3/hZEQ=";
   };
 
   build-systems = with python.pkgs; [
@@ -56,7 +56,7 @@ python.pkgs.buildPythonApplication rec {
     cat requirements_optional.txt >> requirements.txt
     # relax strict runtime version check
     substituteInPlace esphome/components/font/__init__.py \
-      --replace-fail "10.2.0" "${python.pkgs.pillow.version}"
+      --replace-fail "10.4.0" "${python.pkgs.pillow.version}"
   '';
 
   # Remove esptool and platformio from requirements
@@ -76,7 +76,9 @@ python.pkgs.buildPythonApplication rec {
     colorama
     cryptography
     esphome-dashboard
+    freetype-py
     icmplib
+    glyphsets
     kconfiglib
     packaging
     paho-mqtt

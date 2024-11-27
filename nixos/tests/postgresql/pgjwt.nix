@@ -24,7 +24,7 @@ let
             inherit package;
             enable = true;
             enableJIT = lib.hasInfix "-jit-" package.name;
-            extraPlugins =
+            extensions =
               ps: with ps; [
                 pgjwt
                 pgtap

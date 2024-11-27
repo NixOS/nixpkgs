@@ -18,12 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-xakK4APhlNKuWbCMP6nJXLyOaQ0hFCvzOht3P8CkV/0=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cosmic-protocols-0.1.0" = "sha256-6XM6kcM2CEGAziCkal4uO0EL1nEWOKb3rFs7hFh6r7Y=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-S5zvh/pJA3JMwQ3K5RPPHuHKLQA9g1Ae7NLWgy9b5FA=";
 
   nativeBuildInputs = [ just pkg-config ];
   buildInputs = [ wayland ];

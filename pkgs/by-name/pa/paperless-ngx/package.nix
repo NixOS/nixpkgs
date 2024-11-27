@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch2
 , buildNpmPackage
 , nixosTests
 , gettext
@@ -25,13 +26,13 @@
 }:
 
 let
-  version = "2.13.4";
+  version = "2.13.5";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-db8omhyngvenAgfGGpMAhGkgqGug/sv7AL1G+sniM/c=";
+    hash = "sha256-AVfm5tC2+hTdEv0ildEj0El1M/sF7ftkEn3pUkG1O7Q=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
@@ -140,6 +141,14 @@ python.pkgs.buildPythonApplication rec {
   pyproject = false;
 
   inherit version src;
+
+  patches = [
+    (fetchpatch2 {
+      name = "ocrmypdf-16.6-compat.patch";
+      url = "https://github.com/paperless-ngx/paperless-ngx/commit/d1f255a22ea53712cb9101277ec57ea1976f9c02.patch?full_index=1";
+      hash = "sha256-V2nnNeNCcfSrjOttQ5rgDj7gnxpfpBPVeDDnMea0C3U=";
+    })
+  ];
 
   postPatch = ''
     # pytest-xdist makes the tests flaky

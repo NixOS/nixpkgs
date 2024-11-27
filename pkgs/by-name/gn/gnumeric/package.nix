@@ -38,7 +38,6 @@ in stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "http://projects.gnome.org/gnumeric/";
     platforms = platforms.unix;
-    broken = with stdenv; isDarwin && isAarch64;
     maintainers = [ maintainers.vcunat ];
   };
 }

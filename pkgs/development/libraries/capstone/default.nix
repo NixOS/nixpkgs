@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
-  ] ++ lib.optionals stdenv.isDarwin [ (lib.cmakeBool "CAPSTONE_BUILD_MACOS_THIN" true) ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ (lib.cmakeBool "CAPSTONE_BUILD_MACOS_THIN" true) ];
 
   nativeBuildInputs = [
     cmake

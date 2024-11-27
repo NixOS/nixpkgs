@@ -99,7 +99,7 @@ let
       let
         hash =
           {
-            "linuxarm64" = "sha256-iu8y2r1rd78fV2argulHoZJG+hPMPDKJ9ysnUyIgo5k=";
+            "linuxarm64" = "sha256-2mOh3GWdx0qxsLRKVYXOJnVY0eqz6B3z9/B9A9Xfs/A=";
             "linux64" = "sha256-FFkFMMkTSseLZIDzESFl8+h7wRhv5QGi1Uy5MViYpX8=";
           }
           .${platform};

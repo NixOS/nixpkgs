@@ -7,16 +7,18 @@
 
 stdenv.mkDerivation rec {
   pname = "ipu6-drivers";
-  version = "unstable-2024-10-10";
+  version = "unstable-2024-11-19";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipu6-drivers";
-    rev = "118952d49ec598f56add50d93fa7bc3ac4a05643";
-    hash = "sha256-xdMwINoKrdRHCPMpdZQn86ATi1dAXncMU39LLXS16mc=";
+    rev = "0ad4988248d7e9382498a0b47fc78bb990b29a58";
+    hash = "sha256-UFvwuoAzwk1k4YiUK+4EeMKeTx9nVvBgBN5JKAfqZkQ=";
   };
 
-  patches = [ "${src}/patches/0001-v6.10-IPU6-headers-used-by-PSYS.patch" ];
+  patches = [
+    "${src}/patches/0001-v6.10-IPU6-headers-used-by-PSYS.patch"
+  ];
 
   postPatch = ''
     cp --no-preserve=mode --recursive --verbose \

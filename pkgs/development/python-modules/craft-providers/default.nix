@@ -9,7 +9,6 @@
   pyyaml,
   requests-unixsocket,
   setuptools-scm,
-  urllib3,
   pytest-check,
   pytest-mock,
   pytestCheckHook,
@@ -21,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "craft-providers";
-  version = "2.0.3";
+  version = "2.0.4";
 
   pyproject = true;
 
@@ -29,7 +28,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-providers";
     rev = "refs/tags/${version}";
-    hash = "sha256-DTUXT5vFIDI06oxka3diWJ5E5oqiX6GXB4ivq6+VrDk=";
+    hash = "sha256-f+0AEoVUFL/+v4sRYirc6OD5dYH4dlLk8h7im+CLuhM=";
   };
 
   patches = [
@@ -51,8 +50,7 @@ buildPythonPackage rec {
     # The urllib3 incompat: https://github.com/msabramo/requests-unixsocket/pull/69
     # This is already patched in nixpkgs.
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==73.0.1" "setuptools" \
-      --replace-fail "urllib3<2" "urllib3"
+      --replace-fail "setuptools==73.0.1" "setuptools"
   '';
 
   pythonRelaxDeps = [ "requests" ];
@@ -65,7 +63,6 @@ buildPythonPackage rec {
     pydantic
     pyyaml
     requests-unixsocket
-    urllib3
   ];
 
   pythonImportsCheck = [ "craft_providers" ];

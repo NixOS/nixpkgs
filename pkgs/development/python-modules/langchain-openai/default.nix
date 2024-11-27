@@ -72,17 +72,18 @@ buildPythonPackage rec {
 
   disabledTests = [
     # These tests require network access
+    "test__convert_dict_to_message_tool_call"
     "test__get_encoding_model"
-    "test_get_token_ids"
-    "test_azure_openai_secrets"
     "test_azure_openai_api_key_is_secret_string"
-    "test_get_num_tokens_from_messages"
     "test_azure_openai_api_key_masked_when_passed_from_env"
     "test_azure_openai_api_key_masked_when_passed_via_constructor"
+    "test_azure_openai_secrets"
     "test_azure_openai_uses_actual_secret_value_from_secretstr"
     "test_azure_serialized_secrets"
-    "test_openai_get_num_tokens"
     "test_chat_openai_get_num_tokens"
+    "test_get_num_tokens_from_messages"
+    "test_get_token_ids"
+    "test_openai_get_num_tokens"
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];

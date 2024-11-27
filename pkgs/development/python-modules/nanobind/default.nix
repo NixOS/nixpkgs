@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
+  apple-sdk_11,
   buildPythonPackage,
+  darwinMinVersionHook,
   fetchFromGitHub,
   pythonOlder,
 
@@ -46,6 +48,14 @@ buildPythonPackage rec {
   ];
 
   dependencies = [ eigen ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    # error: aligned deallocation function of type 'void (void *, std::align_val_t) noexcept' is only available on macOS 10.13 or newer
+    (darwinMinVersionHook "10.13")
+
+    apple-sdk_11
+  ];
+
   dontUseCmakeBuildDir = true;
 
   preCheck = ''

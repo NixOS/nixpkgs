@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     ''
       ./autogen.sh
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # std::result_of was removed in c++20 and unusable for clang16
       substituteInPlace ./configure \
         --replace-fail "std=c++20" "std=c++17"

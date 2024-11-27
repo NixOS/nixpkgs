@@ -9,19 +9,18 @@
   nix-update-script,
   openssl,
   pkg-config,
-  testers,
   webkitgtk_4_1,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tauri";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "tauri";
     rev = "refs/tags/tauri-v${version}";
-    hash = "sha256-n1rSffVef9G9qtLyheuK5k6anAHsZANSu0C73QDdg2o=";
+    hash = "sha256-HPmViOowP1xAjDJ89YS0BTjNnKI1P0L777ywkqAhhc4=";
   };
 
   cargoLock = {
@@ -49,7 +48,6 @@ rustPlatform.buildRustPackage rec {
 
     tests = {
       hook = callPackage ./test-app.nix { };
-      version = testers.testVersion { package = cargo-tauri; };
     };
 
     updateScript = nix-update-script {

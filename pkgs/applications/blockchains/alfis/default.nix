@@ -24,14 +24,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-ettStNktSDZnYNN/IWqTB1Ou1g1QEGFabS4EatnDLaE=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ecies-ed25519-ng-0.5.3" = "sha256-sJZ5JCaGNa3DdAaHw7/2qeLYv+HDKEMcY4uHbzfzQBM=";
-      "ureq-2.10.0" = "sha256-XNjY8qTgt2OzlfKu7ECIfgRLkSlprvjpgITsNVMi1uc=";
-      "web-view-0.7.3" = "sha256-eVMcpMRZHwOdWhfV6Z1uGUNOmhB41YZPaiz1tRQvhrI=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-xe0YQCKnDV6M6IKWgljsuJ5ZevkdpxZDnNHAHKJyUec=";
 
   nativeBuildInputs = [
     pkg-config

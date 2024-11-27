@@ -6,48 +6,47 @@
   testers,
   nix-update-script,
   versionCheckHook,
+  glibcLocales,
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "harlequin";
-  version = "1.25.0";
+  version = "1.25.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iRl91GqYigD6t0aVVShBg835yhlPxgfZcQCdAGUoc1k=";
+    hash = "sha256-ov9pMvFzJAMfOM7JeSgnp6dZ424GiRaH7W5OCKin9Jk=";
   };
 
-  build-system = with python3Packages; [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "textual" ];
+
+  build-system = with python3Packages; [ poetry-core ];
+
+  nativeBuildInputs = [ glibcLocales ];
 
   dependencies =
     with python3Packages;
     [
+      click
+      duckdb
+      importlib-metadata
+      numpy
+      packaging
+      platformdirs
+      questionary
+      rich-click
+      sqlfmt
       textual
       textual-fastdatatable
       textual-textarea
-      click
-      rich-click
-      duckdb
-      sqlfmt
-      platformdirs
-      importlib-metadata
       tomlkit
-      questionary
-      numpy
-      packaging
     ]
     ++ lib.optionals withPostgresAdapter [ harlequin-postgres ]
     ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ];
-
-  pythonRelaxDeps = [
-    "textual"
-  ];
 
   pythonImportsCheck = [
     "harlequin"
@@ -60,17 +59,37 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  nativeCheckInputs = [
-    versionCheckHook
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  nativeCheckInputs =
+    [
+      versionCheckHook
+    ]
+    ++ (with python3Packages; [
+      pytest-asyncio
+      pytestCheckHook
+    ]);
+
+  disabledTests = [
+    # Tests require network access
+    "test_connect_extensions"
+    "test_connect_prql"
+  ];
+
+  disabledTestPaths = [
+    # Tests requires more setup
+    "tests/functional_tests/"
   ];
 
   meta = {
     description = "The SQL IDE for Your Terminal";
     homepage = "https://harlequin.sh";
-    mainProgram = "harlequin";
+    changelog = "https://github.com/tconbeer/harlequin/releases/tag/v${version}";
     license = lib.licenses.mit;
+    mainProgram = "harlequin";
     maintainers = with lib.maintainers; [ pcboy ];
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/tconbeer/harlequin/releases/tag/v${version}";
   };
 }

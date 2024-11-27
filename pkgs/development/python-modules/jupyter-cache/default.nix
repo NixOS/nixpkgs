@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-cache";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "jupyter_cache";
-    hash = "sha256-0Pp9dTPNV5gZjYiJMYJpqME4LtOyL2IsCak1ZSH0hoc=";
+    hash = "sha256-FugI6xnj+2eiI9uQbhMepuAfA6on9JpyFM5qX+wYb7k=";
   };
 
   nativeBuildInputs = [ flit-core ];

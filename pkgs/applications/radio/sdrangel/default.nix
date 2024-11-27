@@ -69,48 +69,50 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    airspy
-    airspyhf
-    aptdec
-    boost
-    cm256cc
-    codec2
-    dab_lib
-    dsdcc
-    faad2
-    ffmpeg
-    fftwFloat
-    flac
-    glew
-    hackrf
-    hidapi
-    libbladeRF
-    libiio
-    libopus
-    libpulseaudio
-    libusb1
-    limesuite
-    mbelib
-    opencv4
-    qt5compat
-    qtcharts
-    qtdeclarative
-    qtlocation
-    qtmultimedia
-    qtscxml
-    qtserialport
-    qtspeech
-    qttools
-    qtwebsockets
-    qtwebengine
-    rtl-sdr
-    serialdv
-    sgp4
-    soapysdr-with-plugins
-    uhd
-    zlib
-  ] ++ lib.optionals stdenv.isLinux [ qtwayland ] ++ lib.optionals withSDRplay [ sdrplay ];
+  buildInputs =
+    [
+      airspy
+      airspyhf
+      aptdec
+      boost
+      cm256cc
+      codec2
+      dab_lib
+      dsdcc
+      faad2
+      ffmpeg
+      fftwFloat
+      flac
+      glew
+      hackrf
+      hidapi
+      libbladeRF
+      libiio
+      libopus
+      libpulseaudio
+      libusb1
+      limesuite
+      mbelib
+      opencv4
+      qt5compat
+      qtcharts
+      qtdeclarative
+      qtlocation
+      qtmultimedia
+      qtscxml
+      qtserialport
+      qtspeech
+      qttools
+      qtwebsockets
+      qtwebengine
+      rtl-sdr
+      serialdv
+      sgp4
+      soapysdr-with-plugins
+      uhd
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ] ++ lib.optionals withSDRplay [ sdrplay ];
 
   cmakeFlags = [
     "-DAPT_DIR=${aptdec}"

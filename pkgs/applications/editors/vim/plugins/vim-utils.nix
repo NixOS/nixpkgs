@@ -4,6 +4,7 @@
 , python3
 , callPackage, makeSetupHook
 , linkFarm
+, config
 }:
 
 /*
@@ -358,8 +359,6 @@ rec {
     overrideAttrs = f: makeCustomizable (vim.overrideAttrs f);
   };
 
-  vimWithRC = throw "vimWithRC was removed, please use vim.customize instead";
-
   vimGenDocHook = callPackage ({ vim }:
     makeSetupHook {
       name = "vim-gen-doc-hook";
@@ -430,4 +429,6 @@ rec {
         vimPlugin = true;
       };
     });
+} // lib.optionalAttrs config.allowAliases {
+  vimWithRC = throw "vimWithRC was removed, please use vim.customize instead";
 }

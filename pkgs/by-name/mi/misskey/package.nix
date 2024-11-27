@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm.configHook
     makeWrapper
     python3
-  ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ];
 
   # https://nixos.org/manual/nixpkgs/unstable/#javascript-pnpm
   pnpmDeps = pnpm.fetchDeps {

@@ -24,6 +24,7 @@ buildDotnetModule rec {
   pname = "azure-functions-core-tools";
   inherit src version;
 
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.sdk_6_0;
   nugetDeps = ./deps.nix;
   useDotnetFromEnv = true;

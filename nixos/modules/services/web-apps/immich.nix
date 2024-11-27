@@ -227,7 +227,7 @@ in
           ensureClauses.login = true;
         }
       ];
-      extraPlugins = ps: with ps; [ pgvecto-rs ];
+      extensions = ps: with ps; [ pgvecto-rs ];
       settings = {
         shared_preload_libraries = [ "vectors.so" ];
         search_path = "\"$user\", public, vectors";

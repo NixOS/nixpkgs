@@ -8,6 +8,8 @@
   matrix = callPackage ./matrix { };
   media_kit_libs_linux = callPackage ./media_kit_libs_linux { };
   olm = callPackage ./olm { };
+  pdfrx = callPackage ./pdfrx { };
+  printing = callPackage ./printing { };
   rhttp = callPackage ./rhttp { };
   sqlcipher_flutter_libs = callPackage ./sqlcipher_flutter_libs { };
   sqlite3 = callPackage ./sqlite3 { };

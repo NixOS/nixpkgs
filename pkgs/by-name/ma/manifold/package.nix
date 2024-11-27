@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "manifold";
-  version = "2.5.1-unstable-2024-11-08";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "elalish";
     repo = "manifold";
-    rev = "66bca6e3fdfce0f590ca84edc1a6256502636f4b";
-    hash = "sha256-XgmJtkBf5SOgvtwU2x1cJLjEQKEmKnB40oIaoYrUYEQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-02bZAPA4mnWzS9NYVcSW0JE7BidrwzNKBO2nl7BxiiE=";
   };
 
   nativeBuildInputs = [ cmake ];

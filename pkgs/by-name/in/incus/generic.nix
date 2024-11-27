@@ -1,7 +1,7 @@
 {
   hash,
   lts ? false,
-  patches,
+  patches ? [ ],
   updateScriptArgs ? "",
   vendorHash,
   version,

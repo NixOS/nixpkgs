@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ad";
-  version = "0.1.3";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "sminez";
     repo = "ad";
     rev = "refs/tags/${version}";
-    hash = "sha256-l1SyrJW3lZIvoFZG57Bj134sUcoq60xfeXjzVaZPfzs=";
+    hash = "sha256-c2oSQ81qCZbwUl4TqovDWm8TUqI6RdrQPvoP/FaTI/A=";
   };
 
-  cargoHash = "sha256-wpR9wZA5SGyLI1ScfZwSENuUMI/iX3YS0P/o9drIwoo=";
+  cargoHash = "sha256-VgzaAQy0z1JReMeRcX7LbbgKqrwTmnVecuLd1kyekHA=";
 
   nativeBuildInputs = [ installShellFiles ];
 

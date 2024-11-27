@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ dbus ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
+  buildInputs = [ dbus ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
   meta = with lib; {
     description = "VR Lighthouse power state management";

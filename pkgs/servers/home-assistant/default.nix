@@ -95,7 +95,7 @@ let
             --replace-fail "poetry>=1.0.0b1" "poetry-core" \
             --replace-fail "poetry.masonry" "poetry.core.masonry"
         '';
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
+        propagatedBuildInputs = (oldAttrs.propagatedBuildInputs or []) ++ [
           self.pytz
         ];
       });
@@ -439,7 +439,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.11.1";
+  hassVersion = "2024.11.3";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -457,13 +457,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-t8f0em5EaWPLZlr+fi/Kn3AE0dFEAyy0FpwdjJOYBCI=";
+    hash = "sha256-9b4HPSCPYUUwKxn0JBw5uN6nI97jvgqBHFRUNhDue/k=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-e9RF1oer4FyDEYof7qLTFUkmSxDh71qi+ResNXO6G5o=";
+    hash = "sha256-W7Z6C3kMyEIkY/3zQHm1OMMN7Tuj3ThsubLo6KjVotw=";
   };
 
   build-system = with python.pkgs; [

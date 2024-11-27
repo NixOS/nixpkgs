@@ -4,6 +4,7 @@
   fetchFromGitHub,
   python,
   pythonOlder,
+  pillow,
 }:
 
 buildPythonPackage rec {
@@ -19,6 +20,8 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-tiq8h6s2noWLBIOIWcj8jfSqJFN01ee2uoHN4aFwn7s=";
   };
+
+  dependencies = [ pillow ];
 
   checkPhase = ''
     ${python.interpreter} tests/test_icnsutil.py

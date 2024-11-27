@@ -98,6 +98,7 @@ let
         ;
 
       buildLua = callPackage ./buildLua.nix { };
+      autosub = callPackage ./autosub.nix { };
       autosubsync-mpv = callPackage ./autosubsync-mpv.nix { };
       chapterskip = callPackage ./chapterskip.nix { };
       convert = callPackage ./convert.nix { };
@@ -117,12 +118,14 @@ let
       mpv-osc-tethys = callPackage ./mpv-osc-tethys.nix { };
       mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { };
       mpv-slicing = callPackage ./mpv-slicing.nix { };
+      mpv-subtitle-lines = callPackage ./mpv-subtitle-lines.nix { };
       mpv-webm = callPackage ./mpv-webm.nix { };
       mpvacious = callPackage ./mpvacious.nix { };
       quack = callPackage ./quack.nix { };
       quality-menu = callPackage ./quality-menu.nix { };
       reload = callPackage ./reload.nix { };
       simple-mpv-webui = callPackage ./simple-mpv-webui.nix { };
+      smart-copy-paste-2 = callPackage ./smart-copy-paste-2.nix { };
       smartskip = callPackage ./smartskip.nix { };
       sponsorblock = callPackage ./sponsorblock.nix { };
       sponsorblock-minimal = callPackage ./sponsorblock-minimal.nix { };
@@ -133,6 +136,7 @@ let
       visualizer = callPackage ./visualizer.nix { };
       vr-reversal = callPackage ./vr-reversal.nix { };
       webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
+      youtube-chat = callPackage ./youtube-chat.nix { };
       youtube-upnext = callPackage ./youtube-upnext.nix { };
     };
 

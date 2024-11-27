@@ -38,7 +38,7 @@ jobs:
         nix_path: nixpkgs=https://github.com/NixOS/nixpkgs/archive/c473cc8714710179df205b153f4e9fa007107ff9.tar.gz
     - name: Checking EditorConfig
       run: |
-        cat "$HOME/changed_files" | nix-shell -p editorconfig-checker --run 'xargs -r editorconfig-checker -disable-indent-size'
+        < "$HOME/changed_files" nix-shell -p editorconfig-checker --run 'xargs -r editorconfig-checker -disable-indent-size'
     - if: ${{ failure() }}
       run: |
         echo "::error :: Hey! It looks like your changes don't follow our editorconfig settings. Read https://editorconfig.org/#download to configure your editor so you never see this error again."

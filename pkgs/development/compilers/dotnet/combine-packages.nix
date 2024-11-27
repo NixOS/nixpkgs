@@ -18,24 +18,30 @@ assert lib.assertMsg ((builtins.length dotnetPackages) > 0) ''
         `with dotnetCorePackages; combinePackages [
             sdk_6_0 aspnetcore_7_0
          ];`'';
-buildEnv {
+(buildEnv {
   name = "dotnet-core-combined";
-  paths = dotnetPackages;
-  pathsToLink = [
-    "/host"
-    "/packs"
-    "/sdk"
-    "/sdk-manifests"
-    "/shared"
-    "/templates"
+  paths = map (x: x.unwrapped) dotnetPackages;
+  pathsToLink = map (x: "/share/dotnet/${x}") [
+    "host"
+    "packs"
+    "sdk"
+    "sdk-manifests"
+    "shared"
+    "templates"
   ];
   ignoreCollisions = true;
-  postBuild = ''
-    cp -R ${cli}/{dotnet,share,nix-support} $out/
-
-    mkdir $out/bin
-    ln -s $out/dotnet $out/bin/dotnet
-  '';
+  nativeBuildInputs = [ makeWrapper ];
+  postBuild =
+    ''
+      mkdir -p "$out"/share/dotnet
+      cp "${cli.unwrapped}"/share/dotnet/dotnet $out/share/dotnet
+      cp -R "${cli}"/nix-support "$out"/
+      mkdir "$out"/bin
+      ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
+    ''
+    + lib.optionalString (cli ? man) ''
+      ln -s ${cli.man} $man
+    '';
   passthru = {
     inherit (cli) icu;
 
@@ -47,4 +53,9 @@ buildEnv {
   };
 
   inherit (cli) meta;
-}
+}).overrideAttrs
+  ({
+    outputs = [
+      "out"
+    ] ++ lib.optional (cli ? man) "man";
+  })

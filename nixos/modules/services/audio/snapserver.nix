@@ -297,6 +297,7 @@ in {
         ProtectKernelTunables = true;
         ProtectControlGroups = true;
         ProtectKernelModules = true;
+        Restart = "on-failure";
         RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX AF_NETLINK";
         RestrictNamespaces = true;
         RuntimeDirectory = name;

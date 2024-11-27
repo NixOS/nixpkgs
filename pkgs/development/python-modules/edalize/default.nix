@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "edalize";
-  version = "0.5.4";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "olofk";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-pgyUpbSVRCHioJc82hZwG+JbpnL7t9ZvN4OcPHFsirs=";
+    hash = "sha256-TCMzvRWd2Fx2/7UtUGOwblLhRyTAqPp9s70Oyc3U3r0=";
   };
 
   postPatch = ''

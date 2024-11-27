@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/calo001/fondo";
     description = "Find the most beautiful wallpapers for your desktop";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "com.github.calo001.fondo";
   };

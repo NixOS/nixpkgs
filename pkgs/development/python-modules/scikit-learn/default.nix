@@ -75,10 +75,6 @@ buildPythonPackage rec {
 
   env.LC_ALL = "en_US.UTF-8";
 
-  preBuild = ''
-    export SKLEARN_BUILD_PARALLEL=$NIX_BUILD_CORES
-  '';
-
   # PermissionError: [Errno 1] Operation not permitted: '/nix/nix-installer'
   doCheck = !stdenv.hostPlatform.isDarwin;
 

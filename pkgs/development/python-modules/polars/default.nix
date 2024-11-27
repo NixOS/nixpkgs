@@ -93,7 +93,7 @@ buildPythonPackage {
       polarsMemoryAllocator
       (pkgs.__splicedPackages.zstd or pkgs.zstd)
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.IOKit
       darwin.apple_sdk.frameworks.Security

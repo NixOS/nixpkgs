@@ -515,7 +515,7 @@ in {
           RequiresMountsFor = "/sysroot/nix/store";
           DefaultDependencies = false;
         };
-        before = [ "shutdown.target" ];
+        before = [ "initrd.target" "shutdown.target" ];
         conflicts = [ "shutdown.target" ];
         requiredBy = [ "initrd.target" ];
         serviceConfig = {

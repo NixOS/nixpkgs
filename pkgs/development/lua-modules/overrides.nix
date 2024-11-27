@@ -302,6 +302,12 @@ in
     ];
   });
 
+  luacheck = prev.luacheck.overrideAttrs (oa: {
+    meta = oa.meta // {
+      mainProgram = "luacheck";
+    };
+  });
+
   lua-curl = prev.lua-curl.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
       curl.dev
@@ -343,9 +349,8 @@ in
 
     luarocksConfig = lib.recursiveUpdate oa.luarocksConfig {
       variables = {
-        # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-        MYSQL_INCDIR = "${libmysqlclient.dev}/include/mysql";
-        MYSQL_LIBDIR = "${libmysqlclient}/lib/mysql";
+        MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/";
+        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib/";
       };
     };
     buildInputs = oa.buildInputs ++ [
@@ -561,7 +566,7 @@ in
   });
 
   neotest  = prev.neotest.overrideAttrs(oa: {
-    doCheck = stdenv.isLinux;
+    doCheck = stdenv.hostPlatform.isLinux;
     nativeCheckInputs = oa.nativeCheckInputs ++ [
       final.nlua final.busted neovim-unwrapped
     ];
@@ -859,6 +864,12 @@ in
     in oa.propagatedBuildInputs ++ [
       lua.pkgs.luarocks-build-treesitter-parser-cpp
     ];
+  });
+
+  tl = prev.tl.overrideAttrs ({
+    preConfigure = ''
+      rm luarocks.lock
+    '';
   });
 
   vstruct = prev.vstruct.overrideAttrs (_: {

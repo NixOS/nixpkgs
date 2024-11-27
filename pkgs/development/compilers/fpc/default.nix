@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gawk, fetchpatch, undmg, cpio, xar, darwin, libiconv }:
+{ lib, stdenv, fetchurl, gawk, fetchpatch, undmg, cpio, xar, libiconv }:
 
 let startFPC = import ./binary.nix { inherit stdenv fetchurl undmg cpio xar lib; }; in
 
@@ -11,11 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "85ef993043bb83f999e2212f1bca766eb71f6f973d362e2290475dbaaf50161f";
   };
 
-  buildInputs = [ startFPC gawk ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.CoreFoundation
-    ];
+  buildInputs = [ startFPC gawk ];
 
   glibc = stdenv.cc.libc.out;
 
@@ -46,8 +42,9 @@ stdenv.mkDerivation rec {
       --replace "-no_uuid" ""
   '';
 
-  NIX_LDFLAGS = lib.optionalString
-    stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks");
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    NIX_LDFLAGS="-syslibroot $SDKROOT -L${lib.getLib libiconv}/lib"
+  '';
 
   makeFlags = [ "NOGDB=1" "FPC=${startFPC}/bin/fpc" ];
 

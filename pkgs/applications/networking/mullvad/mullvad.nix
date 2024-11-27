@@ -37,12 +37,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-me0e8Cb1dRrnAeiCmsXiclcDMruVLV3t0eGAM3RU1es=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "udp-over-tcp-0.3.0" = "sha256-5PeaM7/zhux1UdlaKpnQ2yIdmFy1n2weV/ux9lSRha4=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-HCW2brAQK20oJIFKrdqHqRmihnKnxGZfyt5T8Yrt1z8=";
 
   checkFlags = "--skip=version_check";
 

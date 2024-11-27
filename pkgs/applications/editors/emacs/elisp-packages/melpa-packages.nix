@@ -172,7 +172,7 @@ let
 
         dune = dontConfigure super.dune;
 
-        emacsql = super.emacsql.overrideAttrs (old: {
+        emacsql = super.emacsql.overrideAttrs (old: lib.optionalAttrs (lib.versionOlder old.version "20241115.1939") {
           buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
 
           postBuild = ''

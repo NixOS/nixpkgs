@@ -63,5 +63,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "http://www.antigrain.com/";
     platforms = lib.platforms.unix;
+    hydraPlatforms = lib.platforms.linux; # build hangs on both Darwin platforms, needs investigation
   };
 }

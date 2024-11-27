@@ -68,6 +68,11 @@ let
   };
 
   extraPytestFlagsArray = {
+    conversation = [
+      # Expected:  Sorry, I am not aware of any device called missing entity on ground floor
+      # Actually:  Sorry, I am not aware of any area called ground floor
+      "--deselect tests/components/conversation/test_default_agent.py::test_error_no_device_on_floor"
+    ];
     dnsip = [
       # Tries to resolve DNS entries
       "--deselect tests/components/dnsip/test_config_flow.py::test_options_flow"

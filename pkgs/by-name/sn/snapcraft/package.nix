@@ -12,7 +12,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.4.1";
+  version = "8.5.0";
 
   pyproject = true;
 
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     rev = "refs/tags/${version}";
-    hash = "sha256-34LtQ0CV5Ov0RJvN2eNFYEvtccHebpqjaYlhExE/z4c=";
+    hash = "sha256-u5LO29LnAJrU8fafa1EA4ii5g8sO8REfuf/7lzI7x5k=";
   };
 
   patches = [
@@ -103,7 +103,7 @@ python3Packages.buildPythonApplication rec {
     pyyaml
     raven
     requests-toolbelt
-    requests-unixsocket
+    requests-unixsocket2
     simplejson
     snap-helpers
     tabulate

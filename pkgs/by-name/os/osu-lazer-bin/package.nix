@@ -9,23 +9,23 @@
 
 let
   pname = "osu-lazer-bin";
-  version = "2024.1009.1";
+  version = "2024.1115.3";
 
   src =
     {
       aarch64-darwin = fetchzip {
         url = "https://github.com/ppy/osu/releases/download/${version}/osu.app.Apple.Silicon.zip";
-        hash = "sha256-fH7cuk879nS8FDIZ8p29pg2aXLJUT+j6Emb39Y6FXq4=";
+        hash = "sha256-dw+bfuei0Wbk3UNVKZRahZxxsJObTyzJOYEMXYJyUNE=";
         stripRoot = false;
       };
       x86_64-darwin = fetchzip {
         url = "https://github.com/ppy/osu/releases/download/${version}/osu.app.Intel.zip";
-        hash = "sha256-kIH+zlNaqMVbr8FVDiLUh19gfrFUDPGBvMOrZqkMZAE=";
+        hash = "sha256-EQA2HhoN52VdZsvq8IyocV4zRupVRfdyPpXF3nxZ8rM=";
         stripRoot = false;
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/ppy/osu/releases/download/${version}/osu.AppImage";
-        hash = "sha256-2H2SPcUm/H/0D9BqBiTFvaCwd0c14/r+oWhyeZdNpoU=";
+        hash = "sha256-kwZHy0FfOUFIWvyOj0ghlQz05U+Lnzl5TgC4T6bhm7o=";
       };
     }
     .${stdenv.system} or (throw "osu-lazer-bin: ${stdenv.system} is unsupported.");
@@ -42,6 +42,7 @@ let
     maintainers = with lib.maintainers; [
       gepbird
       stepbrobd
+      Guanran928
     ];
     mainProgram = "osu!";
     platforms = [

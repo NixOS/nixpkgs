@@ -101,8 +101,6 @@ stdenv.mkDerivation rec {
     ++ builtins.map (b: backends."${b}") withBackends;
 
   postInstall = ''
-    # fix the executable path and install the desktop item
-    substituteInPlace ../files/imv.desktop --replace "imv %F" "$out/bin/imv %F"
     install -Dm644 ../files/imv.desktop $out/share/applications/
   '';
 
@@ -111,8 +109,8 @@ stdenv.mkDerivation rec {
     # so we have to fix those to the binaries we installed into the /nix/store
 
     substituteInPlace "$out/bin/imv" \
-      --replace "imv-wayland" "$out/bin/imv-wayland" \
-      --replace "imv-x11" "$out/bin/imv-x11"
+      --replace-fail "imv-wayland" "$out/bin/imv-wayland" \
+      --replace-fail "imv-x11" "$out/bin/imv-x11"
   '';
 
   doCheck = true;

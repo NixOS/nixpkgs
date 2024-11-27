@@ -27,6 +27,8 @@ in
         '';
       };
 
+      package = lib.options.mkPackageOption pkgs "shairport-sync" { };
+
       arguments = mkOption {
         type = types.str;
         default = "-v -o pa";
@@ -100,12 +102,12 @@ in
         serviceConfig = {
           User = cfg.user;
           Group = cfg.group;
-          ExecStart = "${pkgs.shairport-sync}/bin/shairport-sync ${cfg.arguments}";
+          ExecStart = "${lib.getExe cfg.package} ${cfg.arguments}";
           RuntimeDirectory = "shairport-sync";
         };
       };
 
-    environment.systemPackages = [ pkgs.shairport-sync ];
+    environment.systemPackages = [ cfg.package ];
 
   };
 

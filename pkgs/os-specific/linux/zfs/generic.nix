@@ -95,11 +95,14 @@ let
       substituteInPlace ./config/zfs-build.m4 \
         --replace-fail "bashcompletiondir=/etc/bash_completion.d" \
           "bashcompletiondir=$out/share/bash-completion/completions"
+
+      substituteInPlace ./cmd/arc_summary --replace-fail "/sbin/modinfo" "modinfo"
     '' + optionalString (!isAtLeast22Series) ''
       substituteInPlace ./etc/zfs/Makefile.am --replace-fail "\$(sysconfdir)/zfs" "$out/etc/zfs"
 
       find ./contrib/initramfs -name Makefile.am -exec sed -i -e 's|/usr/share/initramfs-tools|'$out'/share/initramfs-tools|g' {} \;
 
+      substituteInPlace ./cmd/arc_summary/arc_summary3 --replace-fail "/sbin/modinfo" "modinfo"
       substituteInPlace ./cmd/vdev_id/vdev_id \
         --replace-fail "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
         "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"

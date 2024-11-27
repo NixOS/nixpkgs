@@ -1,31 +1,27 @@
 {
   lib,
   stdenv,
-  overrideSDK,
   fetchFromGitHub,
   fetchpatch2,
   substituteAll,
+  apple-sdk_11,
   cmake,
+  darwinMinVersionHook,
   ninja,
   zlib,
-  darwin,
   mklSupport ? true,
   mkl,
 }:
 
-let
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "FEBio";
-  version = "4.7";
+  version = "4.8";
 
   src = fetchFromGitHub {
     owner = "febiosoftware";
     repo = "FEBio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RRdIOyXg4jYW76ABfJdMfVtCYMLYFdvyOI98nHXCof8=";
+    hash = "sha256-x2QYnMMiGd2x2jvBMLBK7zdJv3yzYHkJ6a+0xes6OOk=";
   };
 
   patches = [
@@ -57,9 +53,8 @@ stdenv'.mkDerivation (finalAttrs: {
     [ zlib ]
     ++ lib.optionals mklSupport [ mkl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreGraphics
-      darwin.apple_sdk.frameworks.CoreVideo
-      darwin.apple_sdk.frameworks.Accelerate
+      apple-sdk_11
+      (darwinMinVersionHook "10.15")
     ];
 
   meta = {

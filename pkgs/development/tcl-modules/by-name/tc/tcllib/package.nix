@@ -7,11 +7,11 @@
 
 mkTclDerivation rec {
   pname = "tcllib";
-  version = "1.21";
+  version = "2.0";
 
   src = fetchzip {
     url = "mirror://sourceforge/tcllib/tcllib-${version}.tar.gz";
-    hash = "sha256-p8thpRpC+9k/LvbBFaSOIpDXuhMlEWhs0qbrjtKcTzQ=";
+    hash = "sha256-LoY6y7p9n1dXk4eSa/HuyA4bIXa0rN7F2OGESk2tROI=";
   };
 
   nativeBuildInputs = lib.optional withCritcl critcl;

@@ -5,7 +5,6 @@
   poetry-core,
   huggingface-hub,
   jsonlines,
-  lxml,
   mean-average-precision,
   numpy,
   opencv-python-headless,
@@ -18,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "docling-ibm-models";
-  version = "2.0.3";
+  version = "2.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DS4SD";
     repo = "docling-ibm-models";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vSEW1+mFTjUvjjUOoX3aGgT/y8iwP3JGIZaPh9RbX5I=";
+    hash = "sha256-QZvkkazxgkGuSQKIYI+YghH7pLlDSEbCGhg89gZsOpk=";
   };
 
   build-system = [
@@ -35,7 +34,6 @@ buildPythonPackage rec {
   dependencies = [
     huggingface-hub
     jsonlines
-    lxml
     mean-average-precision
     numpy
     opencv-python-headless
@@ -46,8 +44,8 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "lxml"
     "mean_average_precision"
+    "pillow"
     "torchvision"
   ];
 

@@ -12,7 +12,6 @@
   setuptools,
 
   # propagates
-  backports-zoneinfo,
   typing-extensions,
 
   # psycopg-c
@@ -153,7 +152,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     psycopg-c
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+  ];
 
   pythonImportsCheck = [
     "psycopg"

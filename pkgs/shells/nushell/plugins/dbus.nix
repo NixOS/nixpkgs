@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nu_plugin_dbus";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "devyn";
     repo = pname;
     rev = version;
-    hash = "sha256-I6FB2Hu/uyA6lBGRlC6Vwxad7jrl2OtlngpmiyhblKs=";
+    hash = "sha256-w+0H0A+wQa4BUzKx9G2isn29IicoZsLlWCDnC3YSzek=";
   };
 
-  cargoHash = "sha256-WwdeDiFVyk8ixxKS1v3P274E1wp+v70qCk+rNEpoce4=";
+  cargoHash = "sha256-NuWwPfAo3qYer4eUNDQ+VR9R+uLp5WAT2mhnr/zayEI=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
   buildInputs = [ dbus ];

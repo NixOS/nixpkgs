@@ -383,7 +383,7 @@ in
           ensureDBOwnership = false;
         }
       ];
-      extraPlugins = ps: with ps; [ postgis ];
+      extensions = ps: with ps; [ postgis ];
     };
 
     # Nginx config taken from support/nginx/mobilizon-release.conf

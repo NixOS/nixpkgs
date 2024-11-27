@@ -22,13 +22,13 @@
 let
 
   pname = "mojave-gtk-theme";
-  version = "2023-08-04";
+  version = "2024-11-15";
 
   main_src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    hash = "sha256-boS/GPjuJV5lZjyHW7tG74T6a3SASQVGnSz++5HkCuw=";
+    hash = "sha256-uL4lO6aWiDfOQkhpTnr/iVx1fI7n/fx7WYr5jDWPfYM=";
   };
 
   wallpapers_src = fetchFromGitHub {
@@ -97,13 +97,13 @@ stdenvNoCC.mkDerivation rec {
     do
       patchShebangs $f
       substituteInPlace $f \
-        --replace /usr/bin/inkscape ${inkscape}/bin/inkscape \
-        --replace /usr/bin/optipng ${optipng}/bin/optipng
+        --replace-fail /usr/bin/inkscape ${inkscape}/bin/inkscape \
+        --replace-fail /usr/bin/optipng ${optipng}/bin/optipng
     done
 
     ${lib.optionalString wallpapers ''
       for f in ../${wallpapers_src.name}/Mojave{,-timed}.xml; do
-        substituteInPlace $f --replace /usr $out
+        substituteInPlace $f --replace-fail /usr $out
       done
     ''}
   '';
@@ -119,6 +119,8 @@ stdenvNoCC.mkDerivation rec {
       ${lib.optionalString (themeVariants != []) "--theme " + builtins.toString themeVariants} \
       --icon nixos \
       --dest $out/share/themes
+
+    rm $out/share/themes/*/COPYING
 
     ${lib.optionalString wallpapers ''
       mkdir -p $out/share/backgrounds/Mojave
@@ -137,11 +139,11 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Mac OSX Mojave like theme for GTK based desktop environments";
     homepage = "https://github.com/vinceliuice/Mojave-gtk-theme";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

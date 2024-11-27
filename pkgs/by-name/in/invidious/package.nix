@@ -1,14 +1,15 @@
-{ lib
-, callPackage
-, crystal
-, fetchFromGitHub
-, librsvg
-, pkg-config
-, libxml2
-, openssl
-, shards
-, sqlite
-, nixosTests
+{
+  lib,
+  callPackage,
+  crystal,
+  fetchFromGitHub,
+  librsvg,
+  pkg-config,
+  libxml2,
+  openssl,
+  shards,
+  sqlite,
+  nixosTests,
 
   # All versions, revisions, and checksums are stored in ./versions.json.
   # The update process is the following:
@@ -19,7 +20,7 @@
   #     but nix's sandboxing does not allow that)
   #   * if shard.lock changed
   #     * recreate shards.nix by running crystal2nix
-, versions ? lib.importJSON ./versions.json
+  versions ? lib.importJSON ./versions.json,
 }:
 let
   # normally video.js is downloaded at build time
@@ -33,7 +34,7 @@ crystal.buildCrystalPackage rec {
     owner = "iv-org";
     repo = "invidious";
     fetchSubmodules = true;
-    rev = versions.invidious.rev or "v${version}";
+    rev = versions.invidious.rev or "refs/tags/v${version}";
     inherit (versions.invidious) hash;
   };
 
@@ -75,8 +76,15 @@ crystal.buildCrystalPackage rec {
           --replace-fail 'Process.run(%(rsvg-convert' 'Process.run(%(${lib.getBin librsvg}/bin/rsvg-convert'
     '';
 
-  nativeBuildInputs = [ pkg-config shards ];
-  buildInputs = [ libxml2 openssl sqlite ];
+  nativeBuildInputs = [
+    pkg-config
+    shards
+  ];
+  buildInputs = [
+    libxml2
+    openssl
+    sqlite
+  ];
 
   format = "crystal";
   shardsFile = ./shards.nix;
@@ -114,16 +122,18 @@ crystal.buildCrystalPackage rec {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) invidious; };
+    tests = {
+      inherit (nixosTests) invidious;
+    };
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source alternative front-end to YouTube";
     mainProgram = "invidious";
     homepage = "https://invidious.io/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       _999eagle
       GaetanLepage
       sbruder

@@ -1274,6 +1274,9 @@
   "fetchgit": [
     "index.html#fetchgit"
   ],
+  "ex-fetchgit-sparseCheckout": [
+    "index.html#ex-fetchgit-sparseCheckout"
+  ],
   "fetchfossil": [
     "index.html#fetchfossil"
   ],
@@ -1418,11 +1421,9 @@
   "trivial-builder-symlinkJoin": [
     "index.html#trivial-builder-symlinkJoin"
   ],
-  "trivial-builder-writeReferencesToFile": [
-    "index.html#trivial-builder-writeReferencesToFile"
-  ],
   "trivial-builder-writeClosure": [
-    "index.html#trivial-builder-writeClosure"
+    "index.html#trivial-builder-writeClosure",
+    "index.html#trivial-builder-writeReferencesToFile"
   ],
   "trivial-builder-writeDirectReferencesToFile": [
     "index.html#trivial-builder-writeDirectReferencesToFile"
@@ -2718,28 +2719,19 @@
     "index.html#ssec-language-go"
   ],
   "buildgomodule-parameters": [
-    "index.html#buildgomodule-parameters"
+    "index.html#buildgomodule-parameters",
+    "index.html#ssec-go-common-attributes"
   ],
   "ex-buildGoModule": [
     "index.html#ex-buildGoModule"
   ],
-  "buildGoModule-vendorHash": [
-    "index.html#buildGoModule-vendorHash"
-  ],
   "buildGoModule-goModules-override": [
     "index.html#buildGoModule-goModules-override"
   ],
-  "ssec-go-legacy": [
-    "index.html#ssec-go-legacy"
-  ],
   "buildGoPackage-migration": [
-    "index.html#buildGoPackage-migration"
-  ],
-  "example-for-buildgopackage": [
+    "index.html#buildGoPackage-migration",
+    "index.html#ssec-go-legacy",
     "index.html#example-for-buildgopackage"
-  ],
-  "ssec-go-common-attributes": [
-    "index.html#ssec-go-common-attributes"
   ],
   "var-go-ldflags": [
     "index.html#var-go-ldflags"
@@ -2756,6 +2748,9 @@
   "var-go-excludedPackages": [
     "index.html#var-go-excludedPackages"
   ],
+  "var-go-proxyVendor": [
+    "index.html#var-go-proxyVendor"
+  ],
   "var-go-CGO_ENABLED": [
     "index.html#var-go-CGO_ENABLED"
   ],
@@ -2764,6 +2759,16 @@
   ],
   "var-go-allowGoReference": [
     "index.html#var-go-allowGoReference"
+  ],
+  "var-go-vendorHash": [
+    "index.html#var-go-vendorHash",
+    "index.html#buildGoModule-vendorHash"
+  ],
+  "var-go-modPostBuild": [
+    "index.html#var-go-modPostBuild"
+  ],
+  "var-go-modRoot": [
+    "index.html#var-go-modRoot"
   ],
   "ssec-go-environment": [
     "index.html#ssec-go-environment"
@@ -3184,6 +3189,12 @@
   ],
   "maven-buildmavenpackage": [
     "index.html#maven-buildmavenpackage"
+  ],
+  "maven-overriding-package-attributes": [
+    "index.html#maven-overriding-package-attributes"
+  ],
+  "maven-offline-build": [
+    "index.html#maven-offline-build"
   ],
   "stable-maven-plugins": [
     "index.html#stable-maven-plugins"

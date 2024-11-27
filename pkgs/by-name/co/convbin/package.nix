@@ -1,16 +1,19 @@
-{ lib, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
   pname = "convbin";
-  version = "3.7";
+  version = "5.1";
 
   src = fetchFromGitHub {
     owner = "mateoconlechuga";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-zCRM62xwaPaN8+cg+CeaqK/9hKpZmSBBeUOQqAvQGYw=";
+    repo = "convbin";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-k0hwBdjOweFoAE6jzhlRFZsMOVDDpi4R4LHA7SwO3os=";
+    fetchSubmodules = true;
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -32,16 +35,16 @@ stdenv.mkDerivation rec {
     install -Dm755 bin/convbin $out/bin/convbin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Converts files to other formats";
     longDescription = ''
       This program is used to convert files to other formats,
       specifically for the TI84+CE and related calculators.
     '';
     homepage = "https://github.com/mateoconlechuga/convbin";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ luc65r ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ clevor ];
+    platforms = lib.platforms.all;
     mainProgram = "convbin";
   };
 }

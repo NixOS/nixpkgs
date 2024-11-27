@@ -20,15 +20,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-AJ+7IUxi5SRRWw0EHh9JmQHkdQU3Mhd1Nmo1peEG2zg=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "async-posthog-0.2.3" = "sha256-V0f9+UKZkqh80p7UjINEbAW9y8cKBmJTRjAJZV3no1M=";
-      "hyper-reverse-proxy-0.5.2-dev" = "sha256-R1ZXGgWvwHWRHmKX823QLqM6ZJW+tzWUXigKkAyI5OE=";
-      "permit-client-rs-2.0.0" = "sha256-MxsgqPbvWDYDOb3oGuD1I6d3cdcGAhfoWsI7cwfhrb4=";
-      "permit-pdp-client-rs-0.2.0" = "sha256-F9wSvo3WzoRXjZb+We0Bvcwx3rRSG1QxXPsvrmtIN38=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-RqPVFovDaD2rW31HyETJfQ0qVwFxoGEvqkIgag3H6KU=";
 
   nativeBuildInputs = [ pkg-config ];
 

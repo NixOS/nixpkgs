@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
       gtk4
       pango
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_11
     ];
 

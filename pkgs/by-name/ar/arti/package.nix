@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "arti";
-  version = "1.2.8";
+  version = "1.3.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -19,17 +19,17 @@ rustPlatform.buildRustPackage rec {
     owner = "core";
     repo = "arti";
     rev = "arti-v${version}";
-    hash = "sha256-vw/hebZ23Pk+hQx3YN9iXsKWq20fqpwp91E2tul8zmA=";
+    hash = "sha256-zGaNA6LdW2jZ6NyySklFCsLm2b5xk44E8ecJDV393c4=";
   };
 
-  cargoHash = "sha256-4F+0KEVoeppNQ26QQ+a2CSIbrklE8NY3+OK11I5JstA=";
+  cargoHash = "sha256-9BvIQdhY/7i0X8w6XJZZeWzxEfqJlquO/qOWvvhCWaA=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   buildInputs =
     [ sqlite ]
-    ++ lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         CoreServices
