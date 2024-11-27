@@ -20,7 +20,6 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook wrapGAppsHook3 copyDesktopItems
-                        imagemagick # for scaling icons
                       ];
   buildInputs = [ hackrf rtl-sdr airspy limesuite libiio libbladeRF ]
     ++ lib.optional USRPSupport uhd
