@@ -96,7 +96,9 @@ in
       efiSupport = (cfg.vmGeneration == "v2");
       device = if efiSupport then "nodev" else "/dev/sda";
       efiInstallAsRemovable = efiSupport;
-      extraConfig = ''
+      font = null;
+      splashImage = null;
+      extraConfig = lib.mkIf (!efiSupport) ''
         serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
         terminal_input --append serial
         terminal_output --append serial
