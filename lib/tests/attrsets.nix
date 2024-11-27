@@ -2,17 +2,18 @@ let
   lib = import ../default.nix;
 
   inherit (lib.attrsets)
-    pathOperationsToAttrPaths
-    pathOperationsToAttrPaths'
+    associateWithAttrPath
+    associateWithAttrPath'
     ;
 in
 
 lib.runTests {
   # FIXME there weren't any lib.attrsets tests until I(@Atemu) added
-  # pathOperationsToAttrPaths; the other functions need to be tested too.
+  # associateWithAttrPath' and pathOperationsToAttrPaths; the other functions
+  # need to be tested too.
 
-  testPathOperationsToAttrPaths'Immediate = {
-    expr = pathOperationsToAttrPaths' [ ] "foo" "from";
+  testAssociateWithAttrPathImmediate = {
+    expr = associateWithAttrPath' [ ] "foo" "from";
     expected = [
       {
         name = "from";
@@ -20,8 +21,8 @@ lib.runTests {
       }
     ];
   };
-  testPathOperationsToAttrPaths'Nested1 = {
-    expr = pathOperationsToAttrPaths' [ ] "foo" { bar = "from"; };
+  testAssociateWithAttrPathNested1 = {
+    expr = associateWithAttrPath' [ ] "foo" { bar = "from"; };
     expected = [
       {
         name = "from";
@@ -32,8 +33,8 @@ lib.runTests {
       }
     ];
   };
-  testPathOperationsToAttrPaths'Nested2 = {
-    expr = pathOperationsToAttrPaths' [ ] "foo" { bar.baz = "from"; };
+  testAssociateWithAttrPathNested2 = {
+    expr = associateWithAttrPath' [ ] "foo" { bar.baz = "from"; };
     expected = [
       {
         name = "from";
@@ -45,8 +46,8 @@ lib.runTests {
       }
     ];
   };
-  testPathOperationsToAttrPaths'NestedInSame = {
-    expr = pathOperationsToAttrPaths' [ ] "foo" {
+  testAssociateWithAttrPathNestedInSame = {
+    expr = associateWithAttrPath' [ ] "foo" {
       bar = "from";
       baz = "to";
     };
@@ -67,8 +68,8 @@ lib.runTests {
       }
     ];
   };
-  testPathOperationsToAttrPaths'CommonPrefix = {
-    expr = pathOperationsToAttrPaths' [ ] "foo" {
+  testAssociateWithAttrPathCommonPrefix = {
+    expr = associateWithAttrPath' [ ] "foo" {
       common.prefix.bar = "from";
       common.prefix.baz = "to";
     };
@@ -94,7 +95,7 @@ lib.runTests {
     ];
   };
   testPathOperationsToAttrPaths = {
-    expr = pathOperationsToAttrPaths {
+    expr = associateWithAttrPath {
       foo.bar = "from";
       baz.quux = "to";
     };

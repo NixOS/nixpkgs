@@ -479,61 +479,81 @@ rec {
 
   in updates: value: go 0 true value updates;
 
-  # Transforms an attribute path operation specification expression like
+  # This function associates arbitrary strings with attribute paths in the form
+  # of a list of name-value pairs consumable by `builtins.listToAttrs`.
+  #
+  # To declare the attribute path, you simply declare an attrset containing the
+  # path and set its final attribute equal to the string which you want to
+  # associate the path with.
+  #
+  # This also works with paths that require quoting; simply quote your
+  # specification's attributes as usual.
   #
   # {
-  #   foo.bar = "from";
-  #   foo.baz = "to";
+  #   foo.bar = "somestring";
+  #   foo.baz = "otherstring";
+  #   any.path."can.be".expressed.here = "otherstring";
   # }
   #
-  # into
+  # results in:
   #
   # [
   #   {
-  #     name = "from";
-  #     remaining = [ "foo" "bar" ];
+  #     name = "somestring";
+  #     value = [ "foo" "bar" ];
   #   }
   #   {
-  #     name = "to";
-  #     remaining = [ "foo" "baz" ];
+  #     name = "otherstring";
+  #     value = [ "foo" "baz" ];
+  #   }
+  #   {
+  #     name = "otherstring";
+  #     value = [ "any" "path" "can.be" "expressed" "here" ];
   #   }
   # ]
   # TODO document arguments
   #
-  # Operations can be given multiple times.
+  # Each strings can be associated with multiple attribute paths.
   #
-  # In most cases, you want to use the non-' version of this function.
-  pathOperationsToAttrPaths' = previousPath: name: remaining:
+  # In most cases, you'd typically use the non-' version of this function.
+  associateWithAttrPath' = previousPath: name: remaining:
     let
       currentPath = previousPath ++ optional (name != null) name; # Null denotes the root
     in
     if isString remaining # Any string is a terminator
     then [ (nameValuePair remaining currentPath) ]
     else concatMap
-      (nextName: pathOperationsToAttrPaths' currentPath nextName remaining.${nextName})
+      (nextName: associateWithAttrPath' currentPath nextName remaining.${nextName})
       (attrNames remaining);
 
-  # Transforms an attribute path operation specification expression like
+  # This function associates arbitrary strings with attribute paths in the form
+  # of an attrset.
   #
-  # {
-  #   foo.bar = "from";
-  #   foo.baz = "to";
-  # }
-  #
-  # into an attrset where it's the actions are that are associated with the
-  # attribute paths which are now in list form:
-  #
-  # {
-  #   from = [ "foo" "bar" ];
-  #   to = [ "foo" "baz" ];
-  # }
+  # To declare the attribute path, you simply declare an attrset containing the
+  # path and set its final attribute equal to the string which you want to
+  # associate the path with.
   #
   # This also works with paths that require quoting; simply quote your
   # specification's attributes as usual.
   #
-  # The same operation can in theory be given multiple times but that results in
-  # undefined behaviour.
-  pathOperationsToAttrPaths = spec: listToAttrs (pathOperationsToAttrPaths' [ ] null spec);
+  # Example:
+  #
+  # {
+  #   foo.bar = "from";
+  #   foo."bar.baz" = "to";
+  # }
+  #
+  # Results in:
+  #
+  # {
+  #   from = [ "foo" "bar" ];
+  #   to = [ "foo" "bar.baz" ];
+  # }
+  #
+  # The same string MUST NOT be associated with multiple attribute paths. This
+  # results in undefined behaviour. Use associateWithAttrPath' instead if you
+  # need to handle multiple instances of the same string.
+  associateWithAttrPath = spec: listToAttrs (associateWithAttrPath' [ ] null spec);
 
   /**
     Return the specified attributes from a set.
