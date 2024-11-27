@@ -112,7 +112,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     # TODO: use deprecated=True in Python >=3.13
     if args.no_ssh_tty:
-        parser_warn("--no-ssh-tty deprecated, SSH's pseudo-TTY is never used anymore")
+        parser_warn("--no-ssh-tty deprecated, SSH's TTY is never used anymore")
 
     if args.action == Action.EDIT.value and (args.file or args.attr):
         parser.error("--file and --attr are not supported with 'edit'")

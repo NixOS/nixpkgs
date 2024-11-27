@@ -7,6 +7,8 @@ from getpass import getpass
 from pathlib import Path
 from typing import Self, Sequence, TypedDict, Unpack
 
+from .utils import info
+
 
 @dataclass(frozen=True)
 class Remote:
@@ -21,22 +23,38 @@ class Remote:
         ask_sudo_password: bool | None,
         tmp_dir: Path,
     ) -> Self | None:
-        if host:
-            opts = os.getenv("NIX_SSHOPTS", "").split() + [
-                # SSH ControlMaster flags, allow for faster re-connection
-                "-o",
-                "ControlMaster=auto",
-                "-o",
-                f"ControlPath={tmp_dir / "ssh-%n"}",
-                "-o",
-                "ControlPersist=60",
-            ]
-            sudo_password = None
-            if ask_sudo_password:
-                sudo_password = getpass(f"[sudo] password for {host}: ")
-            return cls(host, opts, sudo_password)
-        else:
+        if not host:
             return None
+
+        opts = os.getenv("NIX_SSHOPTS", "").split()
+        cls._validate_opts(opts, ask_sudo_password)
+        opts += [
+            # SSH ControlMaster flags, allow for faster re-connection
+            "-o",
+            "ControlMaster=auto",
+            "-o",
+            f"ControlPath={tmp_dir / "ssh-%n"}",
+            "-o",
+            "ControlPersist=60",
+        ]
+        sudo_password = None
+        if ask_sudo_password:
+            sudo_password = getpass(f"[sudo] password for {host}: ")
+        return cls(host, opts, sudo_password)
+
+    @staticmethod
+    def _validate_opts(opts: list[str], ask_sudo_password: bool | None) -> None:
+        for o in opts:
+            if o in ["-t", "-tt", "RequestTTY=yes", "RequestTTY=force"]:
+                info(
+                    f"warning: detected option '{o}' in NIX_SSHOPTS. SSH's TTY "
+                    + "may cause issues, it is recommended to remove this option"
+                )
+                if not ask_sudo_password:
+                    info(
+                        "If you want to prompt for sudo password use "
+                        + "'--ask-sudo-password' option instead"
+                    )
 
 
 # Not exhaustive, but we can always extend it later.
