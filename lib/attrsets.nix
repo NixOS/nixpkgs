@@ -491,36 +491,27 @@ rec {
   # [
   #   {
   #     name = "from";
-  #     value = [ "foo" "bar" ];
+  #     remaining = [ "foo" "bar" ];
   #   }
   #   {
   #     name = "to";
-  #     value = [ "foo" "baz" ];
+  #     remaining = [ "foo" "baz" ];
   #   }
   # ]
   # TODO document arguments
+  #
+  # Operations can be given multiple times.
+  #
   # In most cases, you want to use the non-' version of this function.
-  pathOperationsToAttrPaths' = prefix: name: value: # prefix -> previousPath, value -> next?
+  pathOperationsToAttrPaths' = previousPath: name: remaining:
     let
-      # Null means root
-      newPrefix = prefix ++ optional (name != null) name; # currentPath
+      currentPath = previousPath ++ optional (name != null) name; # Null denotes the root
     in
-    if isString value # Any string value is a terminator
-    then [ (nameValuePair value newPrefix) ] # TODO alternatively do regular map and check the type later?
-    else
-      let
-        names = lib.attrNames value;
-      in
-        if length names == 1
-        then
-          let
-            name = head names;
-          in pathOperationsToAttrPaths' newPrefix name value.${name}
-        else
-          # In theory, you could have more than one "to" or "from" but that
-          # would just be an invalid spec. Checking this is more complexity than
-          # it's woth.
-        concatMap (name: pathOperationsToAttrPaths' newPrefix name value.${name}) names;
+    if isString remaining # Any string is a terminator
+    then [ (nameValuePair remaining currentPath) ]
+    else concatMap
+      (nextName: pathOperationsToAttrPaths' currentPath nextName remaining.${nextName})
+      (attrNames remaining);
 
   # Transforms an attribute path operation specification expression like
   #
@@ -539,6 +530,9 @@ rec {
   #
   # This also works with paths that require quoting; simply quote your
   # specification's attributes as usual.
+  #
+  # The same operation can in theory be given multiple times but that results in
+  # undefined behaviour.
   pathOperationsToAttrPaths = spec: listToAttrs (pathOperationsToAttrPaths' [ ] null spec);
 
   /**
