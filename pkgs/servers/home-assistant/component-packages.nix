@@ -352,7 +352,10 @@
       paho-mqtt_1
     ];
     "azure_data_explorer" = ps: with ps; [
-    ]; # missing inputs: azure-kusto-data azure-kusto-ingest
+      azure-kusto-data
+      azure-kusto-ingest
+    ]
+    ++ azure-kusto-data.optional-dependencies.aio;
     "azure_devops" = ps: with ps; [
       aioazuredevops
     ];
@@ -5125,6 +5128,7 @@
     "awair"
     "aws"
     "axis"
+    "azure_data_explorer"
     "azure_devops"
     "azure_event_hub"
     "backup"
