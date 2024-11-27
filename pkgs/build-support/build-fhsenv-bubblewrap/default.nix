@@ -96,6 +96,7 @@ let
       "ssl/certs"
       "ca-certificates"
       "pki"
+      # Required for programs.dconf.profiles.user.databases to function.
       "dconf"
     ];
   in map (path: "/etc/${path}") files;
