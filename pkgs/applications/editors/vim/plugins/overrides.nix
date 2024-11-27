@@ -1584,7 +1584,8 @@ in
   };
 
   lightline-bufferline = super.lightline-bufferline.overrideAttrs {
-    dependencies = with self; [ nvim-web-devicons ];
+    # Requires web-devicons but mini.icons can mock them up
+    nativeCheckInputs = [ self.nvim-web-devicons ];
   };
 
   lir-nvim = super.lir-nvim.overrideAttrs {
@@ -2349,6 +2350,11 @@ in
       "neoclip.fzf"
       "neoclip.telescope"
     ];
+  };
+
+  nvim-nonicons = super.nvim-nonicons.overrideAttrs {
+    # Requires web-devicons but mini.icons can mock them up
+    nativeCheckInputs = [ self.nvim-web-devicons ];
   };
 
   nvim-nu = super.nvim-nu.overrideAttrs {
