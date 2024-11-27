@@ -229,27 +229,21 @@ def test_nixos_build_flake(mock_run: Any) -> None:
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
 def test_nixos_build(mock_run: Any, monkeypatch: Any) -> None:
-    assert n.nixos_build("attr", None, None, nix_flag="foo") == Path("/path/to/file")
+    assert n.nixos_build("attr", None, nix_flag="foo") == Path("/path/to/file")
     mock_run.assert_called_with(
         ["nix-build", "<nixpkgs/nixos>", "--attr", "attr", "--nix-flag", "foo"],
         stdout=PIPE,
     )
 
-    n.nixos_build("attr", "preAttr", "file")
+    n.nixos_build("attr", m.BuildAttr(Path("file"), "preAttr"))
     mock_run.assert_called_with(
-        ["nix-build", "file", "--attr", "preAttr.attr"],
+        ["nix-build", Path("file"), "--attr", "preAttr.attr"],
         stdout=PIPE,
     )
 
-    n.nixos_build("attr", None, "file", no_out_link=True)
+    n.nixos_build("attr", m.BuildAttr(Path("file"), None))
     mock_run.assert_called_with(
-        ["nix-build", "file", "--attr", "attr", "--no-out-link"],
-        stdout=PIPE,
-    )
-
-    n.nixos_build("attr", "preAttr", None, no_out_link=False, keep_going=True)
-    mock_run.assert_called_with(
-        ["nix-build", "default.nix", "--attr", "preAttr.attr", "--keep-going"],
+        ["nix-build", Path("file"), "--attr", "attr"],
         stdout=PIPE,
     )
 

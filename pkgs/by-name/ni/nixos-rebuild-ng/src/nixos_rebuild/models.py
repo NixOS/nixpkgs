@@ -46,6 +46,18 @@ class Action(Enum):
 
 
 @dataclass(frozen=True)
+class BuildAttr:
+    path: Path
+    attr: str | None
+
+    @classmethod
+    def from_arg(cls, attr: str | None, file: str | None) -> Self | None:
+        if not (attr or file):
+            return None
+        return cls(Path(file or "default.nix"), attr)
+
+
+@dataclass(frozen=True)
 class Flake:
     path: Path
     attr: str

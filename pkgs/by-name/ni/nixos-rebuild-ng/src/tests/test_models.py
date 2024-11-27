@@ -9,6 +9,19 @@ import nixos_rebuild.models as m
 from .helpers import get_qualified_name
 
 
+def test_building_attr_from_arg() -> None:
+    assert m.BuildAttr.from_arg(None, None) is None
+    assert m.BuildAttr.from_arg("attr", None) == m.BuildAttr(
+        Path("default.nix"), "attr"
+    )
+    assert m.BuildAttr.from_arg("attr", "file.nix") == m.BuildAttr(
+        Path("file.nix"), "attr"
+    )
+    assert m.BuildAttr.from_arg(None, "file.nix") == m.BuildAttr(
+        Path("file.nix"), None
+    )
+
+
 def test_flake_parse() -> None:
     assert m.Flake.parse("/path/to/flake#attr") == m.Flake(
         Path("/path/to/flake"), "nixosConfigurations.attr"

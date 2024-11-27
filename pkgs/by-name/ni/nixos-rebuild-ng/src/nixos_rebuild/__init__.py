@@ -9,7 +9,7 @@ from tempfile import TemporaryDirectory
 from typing import assert_never
 
 from . import nix
-from .models import Action, Flake, NRError, Profile
+from .models import Action, BuildAttr, Flake, NRError, Profile
 from .process import Remote, cleanup_ssh
 from .utils import info
 
@@ -170,6 +170,7 @@ def execute(argv: list[str]) -> None:
 
     profile = Profile.from_name(args.profile_name)
     target_host = Remote.from_arg(args.target_host, args.ask_sudo_password, tmpdir_path)
+    build_attr = BuildAttr.from_arg(args.attr, args.file)
     flake = Flake.from_arg(args.flake, target_host)
 
     if args.upgrade or args.upgrade_all:
@@ -204,8 +205,7 @@ def execute(argv: list[str]) -> None:
                 else:
                     path_to_config = nix.nixos_build(
                         "system",
-                        args.attr,
-                        args.file,
+                        build_attr,
                         no_out_link=True,
                         **build_flags,
                     )
@@ -244,8 +244,7 @@ def execute(argv: list[str]) -> None:
             else:
                 path_to_config = nix.nixos_build(
                     "system",
-                    args.attr,
-                    args.file,
+                    build_attr,
                     dry_run=dry_run,
                     **build_flags,
                 )
@@ -269,8 +268,7 @@ def execute(argv: list[str]) -> None:
             else:
                 path_to_config = nix.nixos_build(
                     attr,
-                    args.attr,
-                    args.file,
+                    build_attr,
                     **build_flags,
                 )
             vm_path = next(path_to_config.glob("bin/run-*-vm"), "./result/bin/run-*-vm")
@@ -307,12 +305,10 @@ def execute(argv: list[str]) -> None:
                 )
                 print(table)
         case Action.REPL:
-            # For now just redirect it to `nixos-rebuild` instead of
-            # duplicating the code
-            os.execv(
-                "@nixos_rebuild@",
-                argv,
-            )
+            if flake:
+                nix.repl_flake("toplevel", flake, **flake_build_flags)
+            else:
+                nix.repl("system", build_attr, **build_flags)
         case _:
             assert_never(action)
 

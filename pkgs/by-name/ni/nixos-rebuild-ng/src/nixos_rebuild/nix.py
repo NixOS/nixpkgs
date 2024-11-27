@@ -6,6 +6,7 @@ from typing import Final
 
 from .models import (
     Action,
+    BuildAttr,
     Flake,
     Generation,
     GenerationJson,
@@ -235,24 +236,20 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
 
 def nixos_build(
     attr: str,
-    pre_attr: str | None,
-    file: str | None,
+    build_attr: BuildAttr | None,
     **nix_flags: Args,
 ) -> Path:
     """Build NixOS attribute using classic Nix.
 
-    It will by default build  `<nixpkgs/nixos>` with `attr`, however it
-    optionally supports building from an external file and custom attributes
-    paths.
-
     Returns the built attribute as path.
     """
-    if pre_attr or file:
+    run_args: list[str | Path]
+    if build_attr:
         run_args = [
             "nix-build",
-            file or "default.nix",
+            build_attr.path,
             "--attr",
-            f"{'.'.join(x for x in [pre_attr, attr] if x)}",
+            f"{'.'.join(x for x in [build_attr.attr, attr] if x)}",
         ]
     else:
         run_args = ["nix-build", "<nixpkgs/nixos>", "--attr", attr]
