@@ -5,6 +5,7 @@
 
 callPackage ../base.nix rec {
   inherit stdenv rocmUpdateScript;
+  nameSuffix = "-stage3";
   buildDocs = false; # No documentation to build
   buildMan = false; # No man pages to build
   buildTests = false; # Too many errors

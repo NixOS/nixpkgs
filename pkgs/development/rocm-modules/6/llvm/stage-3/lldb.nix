@@ -12,6 +12,7 @@
 
 callPackage ../base.nix rec {
   inherit stdenv rocmUpdateScript;
+  nameSuffix = "-stage3";
   buildTests = false; # FIXME: Bad pathing for clang executable in tests, using relative path most likely
   targetName = "lldb";
   targetDir = targetName;

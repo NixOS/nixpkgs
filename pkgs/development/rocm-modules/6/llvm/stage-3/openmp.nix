@@ -17,6 +17,7 @@
 
 callPackage ../base.nix rec {
   inherit stdenv rocmUpdateScript;
+  nameSuffix = "-stage3";
   targetName = "openmp";
   targetDir = targetName;
   extraNativeBuildInputs = [ perl ];

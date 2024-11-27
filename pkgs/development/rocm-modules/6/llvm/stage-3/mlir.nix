@@ -11,6 +11,7 @@
 
 callPackage ../base.nix rec {
   inherit stdenv rocmUpdateScript;
+  nameSuffix = "-stage3";
   buildDocs = false; # No decent way to hack this to work
   buildMan = false; # No man pages to build
   targetName = "mlir";

@@ -9,6 +9,7 @@
 
 callPackage ../base.nix rec {
   inherit stdenv rocmUpdateScript;
+  nameSuffix = "-stage3";
   targetName = "flang";
   targetDir = targetName;
 
