@@ -31,7 +31,7 @@ def test_parse_args() -> None:
         nr.parse_args(["nixos-rebuild", "edit", "--attr", "attr"])
     assert e.value.code == 2
 
-    r1 = nr.parse_args(
+    r1, g1 = nr.parse_args(
         [
             "nixos-rebuild",
             "switch",
@@ -50,8 +50,9 @@ def test_parse_args() -> None:
     assert r1.profile_name == "system"
     assert r1.action == "switch"
     assert r1.option == ["foo", "bar"]
+    assert g1["common_flags"].option == ["foo", "bar"]
 
-    r2 = nr.parse_args(
+    r2, g2 = nr.parse_args(
         [
             "nixos-rebuild",
             "dry-run",
@@ -70,6 +71,7 @@ def test_parse_args() -> None:
     assert r2.action == "dry-build"
     assert r2.file == "foo"
     assert r2.attr == "bar"
+    assert g2["common_flags"].verbose == 3
 
 
 @patch.dict(nr.process.os.environ, {}, clear=True)

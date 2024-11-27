@@ -11,82 +11,99 @@ from typing import assert_never
 from . import nix
 from .models import Action, Flake, NRError, Profile
 from .process import Remote, cleanup_ssh
-from .utils import flags_to_dict, info
+from .utils import info
 
 VERBOSE = 0
 
 
-def get_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
+def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentParser]]:
+    common_flags = argparse.ArgumentParser(add_help=False)
+    common_flags.add_argument("--verbose", "-v", action="count", default=0)
+    common_flags.add_argument("--max-jobs", "-j")
+    common_flags.add_argument("--cores")
+    common_flags.add_argument("--log-format")
+    common_flags.add_argument("--keep-going", "-k", action="store_true")
+    common_flags.add_argument("--keep-failed", "-K", action="store_true")
+    common_flags.add_argument("--fallback", action="store_true")
+    common_flags.add_argument("--repair", action="store_true")
+    common_flags.add_argument("--option", nargs=2)
+
+    common_build_flags = argparse.ArgumentParser(add_help=False)
+    common_build_flags.add_argument("--include", "-I")
+    common_build_flags.add_argument("--quiet", action="store_true")
+    common_build_flags.add_argument("--print-build-logs", "-L", action="store_true")
+    common_build_flags.add_argument("--show-trace", action="store_true")
+
+    flake_build_flags = argparse.ArgumentParser(add_help=False)
+    flake_build_flags.add_argument("--accept-flake-config", action="store_true")
+    flake_build_flags.add_argument("--refresh", action="store_true")
+    flake_build_flags.add_argument("--impure", action="store_true")
+    flake_build_flags.add_argument("--offline", action="store_true")
+    flake_build_flags.add_argument("--no-net", action="store_true")
+    flake_build_flags.add_argument("--recreate-lock-file", action="store_true")
+    flake_build_flags.add_argument("--no-update-lock-file", action="store_true")
+    flake_build_flags.add_argument("--no-write-lock-file", action="store_true")
+    flake_build_flags.add_argument("--no-registries", action="store_true")
+    flake_build_flags.add_argument("--commit-lock-file", action="store_true")
+    flake_build_flags.add_argument("--update-input")
+    flake_build_flags.add_argument("--override-input", nargs=2)
+
+    classic_build_flags = argparse.ArgumentParser(add_help=False)
+    classic_build_flags.add_argument("--no-build-output", "-Q", action="store_true")
+
+    copy_flags = argparse.ArgumentParser(add_help=False)
+    copy_flags.add_argument("--use-substitutes", "-s", action="store_true")
+
+    sub_parsers = {
+        "common_flags": common_flags,
+        "common_build_flags": common_build_flags,
+        "flake_build_flags": flake_build_flags,
+        "classic_build_flags": classic_build_flags,
+        "copy_flags": copy_flags,
+    }
+
+    main_parser = argparse.ArgumentParser(
         prog="nixos-rebuild",
+        parents=list(sub_parsers.values()),
         description="Reconfigure a NixOS machine",
         add_help=False,
         allow_abbrev=False,
     )
-    parser.add_argument("--help", "-h", action="store_true")
-    parser.add_argument("--file", "-f")
-    parser.add_argument("--attr", "-A")
-    parser.add_argument("--flake", nargs="?", const=True)
-    parser.add_argument("--no-flake", dest="flake", action="store_false")
-    parser.add_argument("--install-bootloader", action="store_true")
-    parser.add_argument("--install-grub", action="store_true")  # deprecated
-    parser.add_argument("--profile-name", "-p", default="system")
-    parser.add_argument("--specialisation", "-c")
-    parser.add_argument("--rollback", action="store_true")
-    parser.add_argument("--upgrade", action="store_true")
-    parser.add_argument("--upgrade-all", action="store_true")
-    parser.add_argument("--json", action="store_true")
-    parser.add_argument("--sudo", action="store_true")
-    parser.add_argument("--ask-sudo-password", action="store_true")
-    parser.add_argument("--use-remote-sudo", action="store_true")  # deprecated
-    parser.add_argument("--no-ssh-tty", action="store_true")  # deprecated
+    main_parser.add_argument("--help", "-h", action="store_true")
+    main_parser.add_argument("--file", "-f")
+    main_parser.add_argument("--attr", "-A")
+    main_parser.add_argument("--flake", nargs="?", const=True)
+    main_parser.add_argument("--no-flake", dest="flake", action="store_false")
+    main_parser.add_argument("--install-bootloader", action="store_true")
+    main_parser.add_argument("--install-grub", action="store_true")  # deprecated
+    main_parser.add_argument("--profile-name", "-p", default="system")
+    main_parser.add_argument("--specialisation", "-c")
+    main_parser.add_argument("--rollback", action="store_true")
+    main_parser.add_argument("--upgrade", action="store_true")
+    main_parser.add_argument("--upgrade-all", action="store_true")
+    main_parser.add_argument("--json", action="store_true")
+    main_parser.add_argument("--sudo", action="store_true")
+    main_parser.add_argument("--ask-sudo-password", action="store_true")
+    main_parser.add_argument("--use-remote-sudo", action="store_true")  # deprecated
+    main_parser.add_argument("--no-ssh-tty", action="store_true")  # deprecated
     # parser.add_argument("--build-host")  # TODO
-    parser.add_argument("--target-host")
-    parser.add_argument("--verbose", "-v", action="count", default=0)
-    parser.add_argument("action", choices=Action.values(), nargs="?")
+    main_parser.add_argument("--target-host")
+    main_parser.add_argument("action", choices=Action.values(), nargs="?")
 
-    common_group = parser.add_argument_group("nix flags")
-    common_group.add_argument("--include", "-I")
-    common_group.add_argument("--max-jobs", "-j")
-    common_group.add_argument("--cores")
-    common_group.add_argument("--log-format")
-    common_group.add_argument("--quiet", action="store_true")
-    common_group.add_argument("--print-build-logs", "-L", action="store_true")
-    common_group.add_argument("--show-trace", action="store_true")
-    common_group.add_argument("--keep-going", "-k", action="store_true")
-    common_group.add_argument("--keep-failed", "-K", action="store_true")
-    common_group.add_argument("--fallback", action="store_true")
-    common_group.add_argument("--repair", action="store_true")
-    common_group.add_argument("--option", nargs=2)
-
-    nix_group = parser.add_argument_group("nix classic flags")
-    nix_group.add_argument("--no-build-output", "-Q", action="store_true")
-
-    flake_group = parser.add_argument_group("nix flakes flags")
-    flake_group.add_argument("--accept-flake-config", action="store_true")
-    flake_group.add_argument("--refresh", action="store_true")
-    flake_group.add_argument("--impure", action="store_true")
-    flake_group.add_argument("--offline", action="store_true")
-    flake_group.add_argument("--no-net", action="store_true")
-    flake_group.add_argument("--recreate-lock-file", action="store_true")
-    flake_group.add_argument("--no-update-lock-file", action="store_true")
-    flake_group.add_argument("--no-write-lock-file", action="store_true")
-    flake_group.add_argument("--no-registries", action="store_true")
-    flake_group.add_argument("--commit-lock-file", action="store_true")
-    flake_group.add_argument("--update-input")
-    flake_group.add_argument("--override-input", nargs=2)
-
-    copy_group = parser.add_argument_group("nix-copy-closure flags")
-    copy_group.add_argument("--use-substitutes", "-s", action="store_true")
-
-    return parser
+    return main_parser, sub_parsers
 
 
-def parse_args(argv: list[str]) -> argparse.Namespace:
-    parser = get_parser()
+def parse_args(
+    argv: list[str],
+) -> tuple[argparse.Namespace, dict[str, argparse.Namespace]]:
+    parser, sub_parsers = get_parser()
     args = parser.parse_args(argv[1:])
+    args_groups = {
+        group: parser.parse_known_args(argv[1:])[0]
+        for group, parser in sub_parsers.items()
+    }
 
-    def parser_warn(msg):
+    def parser_warn(msg: str) -> None:
         info(f"{parser.prog}: warning: {msg}")
 
     global VERBOSE
@@ -134,54 +151,17 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         r = run(["man", "8", "nixos-rebuild"], check=False)
         parser.exit(r.returncode)
 
-    return args
+    return args, args_groups
 
 
 def execute(argv: list[str]) -> None:
-    args = parse_args(argv)
+    args, args_groups = parse_args(argv)
 
-    common_flags = flags_to_dict(
-        args,
-        [
-            "max_jobs",
-            "cores",
-            "log_format",
-            "keep_going",
-            "keep_failed",
-            "fallback",
-            "repair",
-            "verbose",
-            "option",
-        ],
-    )
-    common_build_flags = common_flags | flags_to_dict(
-        args,
-        [
-            "include",
-            "quiet",
-            "print_build_logs",
-            "show_trace",
-        ],
-    )
-    build_flags = common_build_flags | flags_to_dict(args, ["no_build_output"])
-    flake_build_flags = common_build_flags | flags_to_dict(
-        args,
-        [
-            "accept_flake_config",
-            "refresh",
-            "impure",
-            "offline",
-            "no_net",
-            "recreate_lock_file",
-            "no_update_lock_file",
-            "no_write_lock_file",
-            "no_registries",
-            "commit_lock_file",
-            "update_input",
-            "override_input",
-        ],
-    )
-    copy_flags = common_flags | flags_to_dict(args, ["use_substitutes"])
+    common_flags = vars(args_groups["common_flags"])
+    common_build_flags = common_flags | vars(args_groups["common_build_flags"])
+    build_flags = common_build_flags | vars(args_groups["classic_build_flags"])
+    flake_build_flags = common_build_flags | vars(args_groups["flake_build_flags"])
+    copy_flags = common_flags | vars(args_groups["copy_flags"])
 
     # Will be cleaned up on exit automatically.
     tmpdir = TemporaryDirectory(prefix="nixos-rebuild.")

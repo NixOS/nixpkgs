@@ -1,4 +1,3 @@
-import argparse
 import sys
 from functools import partial
 from typing import TypeAlias
@@ -26,8 +25,3 @@ def dict_to_flags(d: dict[str, Args]) -> list[str]:
                 for v in value:
                     flags.append(v)
     return flags
-
-
-def flags_to_dict(args: argparse.Namespace, keys: list[str]) -> dict[str, Args]:
-    d = vars(args)
-    return {k: d[k] for k in keys}
