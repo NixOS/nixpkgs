@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ce-programming.github.io/CEmu";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ clevor ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    broken = stdenv.hostPlatform.isDarwin || (stdenv.system == "x86_64-linux");
   };
 })

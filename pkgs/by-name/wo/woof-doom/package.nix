@@ -10,18 +10,19 @@
   fluidsynth,
   alsa-lib,
   libxmp,
+  libebur128,
   python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "woof-doom";
-  version = "14.5.0";
+  version = "15.0.0";
 
   src = fetchFromGitHub {
     owner = "fabiangreffrath";
     repo = "woof";
     rev = "woof_${finalAttrs.version}";
-    hash = "sha256-LA4blTlee0+nRK066hj19Zm/FL2qhaZ9Y5JMfMj3IRU=";
+    hash = "sha256-YLkQ2Hv+lO5wqFBqwmj0jwd/XHN3tj6fMh6x7c1PpMw=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     fluidsynth
     libsndfile
     libxmp
+    libebur128
     openal
   ];
 

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "facedancer";
-  version = "3.0.4";
+  version = "3.0.5";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "greatscottgadgets";
     repo = "facedancer";
     rev = "refs/tags/${version}";
-    hash = "sha256-Cl6cohelJkpr2Nokfwwm7GQIg7ZipPL3v44JVWsHUNI=";
+    hash = "sha256-fI40HHtLrjvx/AClTgKzmaLJifD/KUme5BL2AKThnds=";
   };
 
   postPatch = ''

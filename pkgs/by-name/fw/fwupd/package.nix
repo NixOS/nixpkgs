@@ -1,6 +1,7 @@
 # Updating? Keep $out/etc synchronized with passthru keys
 
 {
+  pkgsBuildBuild,
   stdenv,
   lib,
   fetchFromGitHub,
@@ -22,6 +23,7 @@
   elfutils,
   valgrind,
   meson,
+  mesonEmulatorHook,
   libuuid,
   ninja,
   gnutls,
@@ -57,14 +59,6 @@
 }:
 
 let
-  python = python3.withPackages (
-    p: with p; [
-      jinja2
-      pygobject3
-      setuptools
-    ]
-  );
-
   isx86 = stdenv.hostPlatform.isx86;
 
   # Dell isn't supported on Aarch64
@@ -124,7 +118,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.0.1";
+  version = "2.0.2";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -142,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-cIkbYoSqVZtEEIh0iTr+Ovu5BWGh6d2NfImTJoc69QU=";
+    hash = "sha256-rmMb109SJVWDGT4z5GOA4V9O0cDMptTpwx0TXdGWjvk=";
   };
 
   patches = [
@@ -163,37 +157,41 @@ stdenv.mkDerivation (finalAttrs: {
 
     # EFI capsule is located in fwupd-efi now.
     ./efi-app-path.patch
-
-    (fetchpatch {
-      url = "https://github.com/fwupd/fwupd/pull/7994.diff?full_index=1";
-      hash = "sha256-fRM033aCoj11Q5u9Yfi3BSD/zpm2kIqf5qabs60nEoM=";
-    })
   ];
 
-  nativeBuildInputs = [
-    # required for firmware zipping
-    ensureNewerSourcesForZipFilesHook
-    meson
-    ninja
-    gi-docgen
-    pkg-config
-    gobject-introspection
-    gettext
-    shared-mime-info
-    valgrind
-    gnutls
-    protobufc # for protoc
-    python
-    wrapGAppsNoGuiHook
-    vala
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config # for finding build-time dependencies
+    (pkgsBuildBuild.callPackage ./build-time-python.nix { })
   ];
 
   propagatedBuildInputs = [
     json-glib
   ];
 
+  nativeBuildInputs =
+    [
+      ensureNewerSourcesForZipFilesHook # required for firmware zipping
+      meson
+      ninja
+      pkg-config
+      gettext
+      shared-mime-info
+      valgrind
+      protobufc # for protoc
+      wrapGAppsNoGuiHook
+      vala
+      gobject-introspection
+      gi-docgen
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
+
   buildInputs =
     [
+      gnutls
       polkit
       libxmlb
       gusb

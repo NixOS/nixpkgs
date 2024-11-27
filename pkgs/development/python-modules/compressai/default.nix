@@ -88,6 +88,9 @@ buildPythonPackage rec {
     "test_eval_model_pretrained"
     "test_cheng2020_anchor"
     "test_pretrained"
+
+    # Flaky (AssertionError: assert 0.08889999999999998 < 0.064445)
+    "test_find_close"
   ];
 
   meta = {

@@ -362,7 +362,8 @@ stdenv.mkDerivation (finalAttrs: {
         ln -s $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
       done
       # Translation
-      ln -sv $libexec/nls "$out/share/virtualbox"
+      mkdir -p "$out/share/virtualbox"
+      ln -sv $libexec/nls "$out/share/virtualbox/nls"
     ''}
 
     ${optionalString withModsrc ''

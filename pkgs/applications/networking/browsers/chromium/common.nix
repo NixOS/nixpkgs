@@ -379,7 +379,7 @@ let
     postPatch =  lib.optionalString (!isElectron) ''
       ln -s ${./files/gclient_args.gni} build/config/gclient_args.gni
 
-      echo 'LASTCHANGE=${upstream-info.DEPS."src".rev}-refs/heads/master@{#0}' > build/util/LASTCHANGE
+      echo 'LASTCHANGE=${upstream-info.DEPS."src".rev}-refs/tags/${version}@{#0}' > build/util/LASTCHANGE
       echo "$SOURCE_DATE_EPOCH" > build/util/LASTCHANGE.committime
 
       cat << EOF > gpu/config/gpu_lists_version.h

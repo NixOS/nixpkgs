@@ -176,10 +176,6 @@ rec {
     fi
     source $stdenv/setup
 
-    # Set the system time from the hardware clock.  Works around an
-    # apparent KVM > 1.5.2 bug.
-    ${util-linux}/bin/hwclock -s
-
     export NIX_STORE=${storeDir}
     export NIX_BUILD_TOP=/tmp
     export TMPDIR=/tmp

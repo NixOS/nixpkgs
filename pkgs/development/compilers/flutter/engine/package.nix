@@ -6,7 +6,12 @@
   darwin,
   clang,
   llvm,
-  tools ? callPackage ./tools.nix { },
+  tools ? callPackage ./tools.nix {
+    inherit (stdenv)
+      hostPlatform
+      buildPlatform
+      ;
+  },
   stdenv,
   stdenvNoCC,
   dart,
@@ -62,6 +67,11 @@ let
       version
       hashes
       url
+      ;
+    inherit (stdenv)
+      hostPlatform
+      buildPlatform
+      targetPlatform
       ;
   };
 

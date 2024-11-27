@@ -1,33 +1,13 @@
-commit 27ddb6910ec9027f8f502f5240fb33cddd9fd16b
+commit 2fa1d39bb54d448ffe59bf6a8358c01f786a1cce
 Author: r-vdp <ramses@well-founded.dev>
 Date:   Tue Oct 15 14:49:53 2024 +0200
 
     Add output for installed tests
 
-diff --git a/data/device-tests/meson.build b/data/device-tests/meson.build
-index 4f3a5f2da..b0d21c8bd 100644
---- a/data/device-tests/meson.build
-+++ b/data/device-tests/meson.build
-@@ -67,5 +67,5 @@ install_data([
-     'wacom-intuos-bt-s.json',
-     'wistron-dock-40b7.json',
-   ],
--  install_dir: join_paths(datadir, 'fwupd', 'device-tests'),
-+  install_dir: join_paths(get_option('installed_test_prefix'), 'etc', 'fwupd', 'device-tests'),
- )
 diff --git a/data/tests/meson.build b/data/tests/meson.build
-index 3da184010..8606c9280 100644
+index a22a989f3..cbd135cfa 100644
 --- a/data/tests/meson.build
 +++ b/data/tests/meson.build
-@@ -2,7 +2,7 @@ con2 = configuration_data()
- con2.set('installedtestsdir', installed_test_datadir)
- con2.set('installedtestsbindir', installed_test_bindir)
- con2.set('installedtestsdatadir', installed_test_datadir)
--con2.set('devicetestdir', join_paths(datadir, 'fwupd', 'device-tests'))
-+con2.set('devicetestdir', join_paths(installed_test_datadir, 'fwupd', 'device-tests'))
- con2.set('bindir', bindir)
- con2.set('libexecdir', libexecdir)
- 
 @@ -105,7 +105,7 @@ configure_file(
    output: 'fwupd-tests.conf',
    configuration: con2,
@@ -38,7 +18,7 @@ index 3da184010..8606c9280 100644
  
  if umockdev_integration_tests.allowed()
 diff --git a/meson.build b/meson.build
-index 62c127c35..2ceaf531c 100644
+index 5a35cfda1..40ef142f0 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -194,8 +194,8 @@ else
@@ -52,7 +32,7 @@ index 62c127c35..2ceaf531c 100644
    daemon_dir = join_paths(libexecdir, 'fwupd')
  endif
  mandir = join_paths(prefix, get_option('mandir'))
-@@ -541,6 +541,7 @@ gnome = import('gnome')
+@@ -545,6 +545,7 @@ gnome = import('gnome')
  i18n = import('i18n')
  
  conf.set_quoted('FWUPD_PREFIX', prefix)
@@ -61,12 +41,12 @@ index 62c127c35..2ceaf531c 100644
  conf.set_quoted('FWUPD_LIBDIR', libdir)
  conf.set_quoted('FWUPD_LIBEXECDIR', libexecdir)
 diff --git a/meson_options.txt b/meson_options.txt
-index 769a5b655..a4a211fbb 100644
+index e04bb37c9..b1060ddb8 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -328,6 +328,10 @@ option('systemd_unit_user',
-   value: 'fwupd-refresh',
-   description: 'User account to use for fwupd-refresh.service (empty for DynamicUser)',
+@@ -333,6 +333,10 @@ option('systemd_syscall_filter',
+   value: 'true',
+   description: 'Enable systemd syscall filter',
  )
 +option('installed_test_prefix',
 +  type: 'string',

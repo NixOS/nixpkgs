@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "python-socks";
-  version = "2.5.2";
+  version = "2.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6.2";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "romis2012";
     repo = "python-socks";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8qh7ohErK10RlVh4Zi1jBVmafWkGmLcGZsTDqE3dldY=";
+    hash = "sha256-KpL3MAPbeKQh/NZyXlAAB6O7ljx1bVMBRO8fGJT2Zvo=";
   };
 
   build-system = [ setuptools ];

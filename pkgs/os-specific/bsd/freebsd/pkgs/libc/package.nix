@@ -44,7 +44,7 @@ mkDerivation {
       "contrib/libc-vis"
     ]
     ++ lib.optionals (versionData.major == 13) [ "contrib/tzcode/stdtime" ]
-    ++ lib.optionals (versionData.major == 14) [ "contrib/tzcode" ]
+    ++ lib.optionals (versionData.major >= 14) [ "contrib/tzcode" ]
     ++ [
 
       # libthr
@@ -106,6 +106,9 @@ mkDerivation {
       "include/paths.h"
 
       "lib/libdl"
+
+      # Used for aarch64-freebsd
+      "contrib/arm-optimized-routines"
     ];
 
   postPatch = ''

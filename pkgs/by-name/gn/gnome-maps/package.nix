@@ -25,6 +25,7 @@
   libadwaita,
   geocode-glib_2,
   tzdata,
+  writeText,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -66,6 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
     librest_1_0
     libsecret
     libsoup_3
+  ];
+
+  mesonFlags = [
+    "--cross-file=${writeText "crossfile.ini" ''
+      [binaries]
+      gjs = '${lib.getExe gjs}'
+    ''}"
   ];
 
   preCheck = ''

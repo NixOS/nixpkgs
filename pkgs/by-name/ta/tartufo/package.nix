@@ -16,7 +16,10 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-s7gqGvOnie7lGlpW3wfd8igWfowxwg9mftRjiHnvedc=";
   };
 
-  pythonRelaxDeps = [ "tomlkit" ];
+  pythonRelaxDeps = [
+    "cached-property"
+    "tomlkit"
+  ];
 
   build-system = with python3.pkgs; [ poetry-core ];
 

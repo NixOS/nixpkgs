@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 let
-  version = "0.5.1";
+  version = "0.5.3";
 in
 rustPlatform.buildRustPackage {
   pname = "git-prole";
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage {
     owner = "9999years";
     repo = "git-prole";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jJEskahZRCpM2WEH4myTLfowQxEJ4WCNXbTwGkwBHnY=";
+    hash = "sha256-QwLkByC8gdAnt6geZS285ErdH8nfV3vsWjMF4hTzq9Y=";
   };
 
-  cargoHash = "sha256-u4UJH+dIDI+I6fEQTRe3RRufYZwxBENxnwULSSCOZF8=";
+  cargoHash = "sha256-K4gIvK0qxMJh9SXF9JZFacDKv6TwvDQe8JVX2rtq/hU=";
 
   nativeCheckInputs = [
     git

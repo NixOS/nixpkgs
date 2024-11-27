@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , stdenv
 # for passthru.plugins
 , pkgs
@@ -31,6 +32,14 @@ let cutter = stdenv.mkDerivation rec {
     hash = "sha256-TSEi1mXVvvaGo4koo3EnN/veXPUHF747g+gifnl4IDQ=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # https://github.com/rizinorg/cutter/issues/3384
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/rz-cutter/-/raw/f736a5709c0b4711760f8242fa77eeaf178c0302/pyside-6.8.patch";
+      hash = "sha256-k1Bn6tCNkbE9r5QLfJTBg1zZZU9R7fG1tyfPgSJyQgg=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

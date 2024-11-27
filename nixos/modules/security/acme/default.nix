@@ -967,6 +967,7 @@ in {
 
       users.users.acme = {
         home = "/var/lib/acme";
+        homeMode = "755";
         group = "acme";
         isSystemUser = true;
       };

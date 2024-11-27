@@ -19,7 +19,7 @@
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "131.0.6778.85",
+        "rev": "3d81e41b6f3ac8bcae63b32e8145c9eb0cd60a2d",
         "hash": "sha256-fREToEHVbTD0IVGx/sn7csSju4BYajWZ+LDCiKWV4cI=",
         "recompress": true
       },
@@ -785,7 +785,7 @@
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "131.0.6778.85",
+        "rev": "3d81e41b6f3ac8bcae63b32e8145c9eb0cd60a2d",
         "hash": "sha256-fREToEHVbTD0IVGx/sn7csSju4BYajWZ+LDCiKWV4cI=",
         "recompress": true
       },

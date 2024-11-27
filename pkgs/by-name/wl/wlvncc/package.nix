@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation {
   pname = "wlvncc";
-  version = "unstable-2023-01-05";
+  version = "unstable-2024-11-23";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = "wlvncc";
-    rev = "2b9a886edd38204ef36e9f9f65dd32aaa3784530";
-    hash = "sha256-0HbZEtDaLjr966RS+2GHc7N4nsivPIv57T/+AJliwUI=";
+    rev = "0489e29fba374a08be8ba4a64d492a3c74018f41";
+    hash = "sha256-jFP4O6zo1fYULOVX9+nuTNAy4NuBKsDKOy+WUQRUjdI=";
   };
 
   nativeBuildInputs = [

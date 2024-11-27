@@ -229,6 +229,15 @@ mkWrapper type (
         binaryBytecode
         binaryNativeCode
       ];
+      knownVulnerabilities =
+        lib.optionals
+          (lib.elem (lib.head (lib.splitVersion version)) [
+            "6"
+            "7"
+          ])
+          [
+            "Dotnet SDK ${version} is EOL, please use 8.0 (LTS) or 9.0 (Current)"
+          ];
     };
   }
 )

@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cloudflare-warp";
-  version = "2024.9.346";
+  version = "2024.11.309";
 
   suffix = {
     aarch64-linux = "arm64";
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}.0_${suffix}.deb";
     hash = {
-      aarch64-linux = "sha256-dgu/OiQPT7bkPnhrDArQg2lDAcOyhzZ5nJrjS2dqpFo=";
-      x86_64-linux = "sha256-KwxLF7LWB49M+kZPJ9M4OcDSF1f3MX4S0dTtTkzQVRQ=";
+      aarch64-linux = "sha256-pdCPN4NxaQqWNRPZY1CN03KnTdzl62vJ3JNfxGozI4k=";
+      x86_64-linux = "sha256-THxXETyy08rBmvghrc8HIQ2cBSLeNVl8SkD43CVY/tE=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 

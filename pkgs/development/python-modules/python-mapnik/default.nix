@@ -132,5 +132,6 @@ buildPythonPackage rec {
     maintainers = [ ];
     homepage = "https://mapnik.org";
     license = licenses.lgpl21Plus;
+    broken = true; # At 2024-11-13, test_raster_warping fails.
   };
 }

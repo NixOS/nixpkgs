@@ -72,6 +72,7 @@
   xz,
   zip,
   zstd,
+  binwalk,
   # updater only
   writeScript,
 }:
@@ -235,10 +236,10 @@ python.pkgs.buildPythonApplication rec {
         ubootTools
         wabt
         xmlbeans
+        binwalk
       ]
       ++ (with python.pkgs; [
         androguard
-        binwalk
         guestfs
         h5py
         pdfminer-six

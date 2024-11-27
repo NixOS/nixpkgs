@@ -37,7 +37,7 @@ let
     {shortName, fullName, ...}@args:
 
     stdenv.mkDerivation ({
-      name = "aspell-dict-${shortName}";
+      pname = "aspell-dict-${shortName}";
 
       strictDeps = true;
 
@@ -59,7 +59,7 @@ let
   buildOfficialDict =
     {language, version, filename, fullName, sha256, ...}@args:
     let buildArgs = {
-      shortName = "${language}-${version}";
+      shortName = "${language}";
 
       src = fetchurl {
         url = "mirror://gnu/aspell/dict/${language}/${filename}-${language}-${version}.tar.bz2";
@@ -1041,6 +1041,7 @@ in rec {
   en-computers = buildTxtDict {
     shortName = "en-computers";
     fullName = "English Computer Jargon";
+    version = "0";
 
     src = fetchurl {
       url = "https://mrsatterly.com/computer.dic";
@@ -1065,6 +1066,7 @@ in rec {
   en-science = buildTxtDict {
     shortName = "en-science";
     fullName = "English Scientific Jargon";
+    version = "0-unstable-2015-07-27";
 
     src1 = fetchurl {
       url = "https://web.archive.org/web/20180806094650if_/http://jpetrie.net/wp-content/uploads/custom_scientific_US.txt";

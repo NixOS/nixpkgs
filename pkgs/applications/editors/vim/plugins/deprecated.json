@@ -3,10 +3,6 @@
         "date": "2022-07-27",
         "new": "true-zen-nvim"
     },
-    "compe-tmux": {
-        "date": "2021-12-07",
-        "new": "cmp-tmux"
-    },
     "compe-conjure": {
         "date": "2024-11-19",
         "new": "cmp-conjure"
@@ -18,6 +14,10 @@
     "compe-tabnine": {
         "date": "2024-11-19",
         "new": "cmp-tabnine"
+    },
+    "compe-tmux": {
+        "date": "2021-12-07",
+        "new": "cmp-tmux"
     },
     "compe-zsh": {
         "date": "2024-11-19",

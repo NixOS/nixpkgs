@@ -2,7 +2,7 @@
 , harfbuzz, fontconfig, pkg-config, ncurses, imagemagick
 , libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
 , libxkbcommon, libXi, libXext, wayland-protocols, wayland, xxHash
-, nerdfonts
+, nerd-fonts
 , lcms2
 , librsync
 , openssl
@@ -144,7 +144,7 @@ buildPythonApplication rec {
 
     # Add the font by hand because fontconfig does not finds it in darwin
     mkdir ./fonts/
-    cp "${(nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})}/share/fonts/truetype/NerdFonts/SymbolsNerdFontMono-Regular.ttf" ./fonts/
+    cp "${nerd-fonts.symbols-only}/share/fonts/truetype/NerdFonts/Symbols/SymbolsNerdFontMono-Regular.ttf" ./fonts/
 
     ${ lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "export MACOSX_DEPLOYMENT_TARGET=11" }
     ${if stdenv.hostPlatform.isDarwin then ''

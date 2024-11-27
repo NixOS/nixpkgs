@@ -74,6 +74,7 @@ mkDerivation {
       + lib.concatMapStringsSep "\n" (fname: ''
         sed -E -i -e "s|${fname}|${lib.last (lib.splitString "/" fname)}|g" \
           ${scriptPaths}'') bins
+      + "\n"
     );
 
   skipIncludesPhase = true;

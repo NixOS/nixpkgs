@@ -7,19 +7,19 @@
 }:
 let
   pname = "open-webui";
-  version = "0.4.4";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KbU8g9iqz7ow2Yxl5EizcYckMOHGGsEK5HkkchSXxQo=";
+    hash = "sha256-Zzytv2OLy3RENNWzRjjDh7xnJyX+H9/dh1Xj2HIsn6I=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-MdftLgmFL5zkScC4XFfjKooQa4PX3il65P9BjfU5mXk=";
+    npmDepsHash = "sha256-36GdyqKcqhOYi1kRwXe0YTOtwbVUcEvLPPYy/A0IgE0=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -63,6 +63,7 @@ python312.pkgs.buildPythonApplication rec {
 
   dependencies = with python312.pkgs; [
     aiocache
+    aiofiles
     aiohttp
     alembic
     anthropic

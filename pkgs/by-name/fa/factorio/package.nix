@@ -201,15 +201,7 @@ let
         $out/bin/factorio
     '';
 
-    passthru.updateScript =
-      if (username != "" && token != "") then
-        [
-          ./update.py
-          "--username=${username}"
-          "--token=${token}"
-        ]
-      else
-        null;
+    passthru.updateScript = ./update.py;
 
     meta = {
       description = "Game in which you build and maintain factories";

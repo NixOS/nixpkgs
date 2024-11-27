@@ -1,26 +1,47 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, testers
-, bison
-, cadical
-, cbmc
-, cmake
-, flex
-, makeWrapper
-, perl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  testers,
+  bison,
+  cadical,
+  cbmc,
+  cmake,
+  flex,
+  makeWrapper,
+  perl,
+  substituteAll,
+  substitute,
+  cudd,
+  fetchurl,
+  nix-update-script,
+  apple-sdk,
+  apple-sdk_10_15,
+  darwinMinVersionHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cbmc";
-  version = "6.0.1";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "diffblue";
-    repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "sha256-7syRpCNL7TRZoJaNrmAdahNy7IyovyniYyOwD/lzhuw=";
+    repo = "cbmc";
+    rev = "refs/tags/cbmc-${finalAttrs.version}";
+    hash = "sha256-PZZnseOE3nodE0zwyG+82gm55BO4rsCcP4T+fZq7L6I=";
   };
+
+  srcglucose = fetchFromGitHub {
+    owner = "brunodutertre";
+    repo = "glucose-syrup";
+    rev = "0bb2afd3b9baace6981cbb8b4a1c7683c44968b7";
+    hash = "sha256-+KrnXEJe7ApSuj936T615DaXOV+C2LlRxc213fQI+Q4=";
+  };
+
+  srccadical =
+    (cadical.override {
+      version = "2.0.0";
+    }).src;
 
   nativeBuildInputs = [
     bison
@@ -30,26 +51,46 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [ cadical ];
+  buildInputs =
+    [ cadical ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      (darwinMinVersionHook "10.15")
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionOlder apple-sdk.version "10.15") [
+      apple-sdk_10_15
+    ];
 
   # do not download sources
   # link existing cadical instead
   patches = [
-    ./0001-Do-not-download-sources-in-cmake.patch
+    (substituteAll {
+      src = ./0001-Do-not-download-sources-in-cmake.patch;
+      inherit cudd;
+    })
+    ./0002-Do-not-download-sources-in-cmake.patch
   ];
 
-  postPatch = ''
-    # do not hardcode gcc
-    substituteInPlace "scripts/bash-autocomplete/extract_switches.sh" \
-      --replace "gcc" "$CC" \
-      --replace "g++" "$CXX"
-    # fix library_check.sh interpreter error
-    patchShebangs .
-  '' + lib.optionalString (!stdenv.cc.isGNU) ''
-    # goto-gcc rely on gcc
-    substituteInPlace "regression/CMakeLists.txt" \
-      --replace "add_subdirectory(goto-gcc)" ""
-  '';
+  postPatch =
+    ''
+      # fix library_check.sh interpreter error
+      patchShebangs .
+
+      mkdir -p srccadical
+      cp -r ${finalAttrs.srccadical}/* srccadical
+
+      mkdir -p srcglucose
+      cp -r ${finalAttrs.srcglucose}/* srcglucose
+      find -exec chmod +w {} \;
+
+      substituteInPlace src/solvers/CMakeLists.txt \
+       --replace-fail "@srccadical@" "$PWD/srccadical" \
+       --replace-fail "@srcglucose@" "$PWD/srcglucose"
+    ''
+    + lib.optionalString (!stdenv.cc.isGNU) ''
+      # goto-gcc rely on gcc
+      substituteInPlace "regression/CMakeLists.txt" \
+        --replace-fail "add_subdirectory(goto-gcc)" ""
+    '';
 
   postInstall = ''
     # goto-cc expects ls_parse.py in PATH
@@ -60,29 +101,36 @@ stdenv.mkDerivation rec {
       --prefix PATH : "$out/share/cbmc" \
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
-    # Needed with GCC 12 but breaks on darwin (with clang)
-    "-Wno-error=maybe-uninitialized"
-  ] ++ lib.optionals stdenv.cc.isClang [
-    # fix "argument unused during compilation"
-    "-Wno-unused-command-line-argument"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isGNU [
+      # Needed with GCC 12 but breaks on darwin (with clang)
+      "-Wno-error=maybe-uninitialized"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      # fix "argument unused during compilation"
+      "-Wno-unused-command-line-argument"
+    ]
+  );
 
   # TODO: add jbmc support
-  cmakeFlags = [ "-DWITH_JBMC=OFF" "-Dsat_impl=cadical" "-Dcadical_INCLUDE_DIR=${cadical.dev}/include" ];
+  cmakeFlags = [
+    "-DWITH_JBMC=OFF"
+    "-Dsat_impl=cadical"
+    "-Dcadical_INCLUDE_DIR=${cadical.dev}/include"
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = cbmc;
     command = "cbmc --version";
   };
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "CBMC is a Bounded Model Checker for C and C++ programs";
     homepage = "http://www.cprover.org/cbmc/";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ jiegec ];
-    platforms = platforms.unix;
-    # error: no member named 'aligned_alloc' in the global namespace
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ jiegec ];
+    platforms = lib.platforms.unix;
   };
-}
+})

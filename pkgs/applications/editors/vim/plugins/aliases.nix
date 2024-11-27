@@ -69,6 +69,7 @@ mapAliases (with prev; {
   eighties            = vim-eighties;
   extradite           = vim-extradite;
   fugitive            = vim-fugitive;
+  floating-nvim       = throw "floating.nvim has been removed: abandoned by upstream. Use popup-nvim or nui-nvim"; # Added 2024-11-26
   ghc-mod-vim         = ghcmod-vim;
   ghcmod              = ghcmod-vim;
   goyo                = goyo-vim;

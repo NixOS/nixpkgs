@@ -6,7 +6,6 @@
   makeWrapper,
   stdenvNoCC,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "maven";
   version = "3.9.9";
@@ -34,14 +33,31 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
-    buildMaven = callPackage ./build-maven.nix {
-      maven = finalAttrs.finalPackage;
+  passthru =
+    let
+      makeOverridableMavenPackage =
+        mavenRecipe: mavenArgs:
+        let
+          drv = mavenRecipe mavenArgs;
+          overrideWith =
+            newArgs: mavenArgs // (if lib.isFunction newArgs then newArgs mavenArgs else newArgs);
+        in
+        drv
+        // {
+          overrideMavenAttrs = newArgs: makeOverridableMavenPackage mavenRecipe (overrideWith newArgs);
+        };
+    in
+    {
+      buildMaven = callPackage ./build-maven.nix {
+        maven = finalAttrs.finalPackage;
+      };
+
+      buildMavenPackage = makeOverridableMavenPackage (
+        callPackage ./build-maven-package.nix {
+          maven = finalAttrs.finalPackage;
+        }
+      );
     };
-    buildMavenPackage = callPackage ./build-maven-package.nix {
-      maven = finalAttrs.finalPackage;
-    };
-  };
 
   meta = {
     homepage = "https://maven.apache.org/";
@@ -54,7 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.asl20;
     mainProgram = "mvn";
-    maintainers = [ ] ++ lib.teams.java.members;
+    maintainers = with lib.maintainers; [ tricktron ] ++ lib.teams.java.members;
     inherit (jdk_headless.meta) platforms;
   };
 })

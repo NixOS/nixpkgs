@@ -44,5 +44,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/sequoia-pgp/sequoia-chameleon-gnupg";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nickcao ];
+    mainProgram = "gpg-sq";
   };
 }

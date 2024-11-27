@@ -27,9 +27,13 @@ stdenv.mkDerivation rec {
     # 1. Go to https://www.kyoceradocumentsolutions.us/en/support/downloads.html
     # 2. Search for printer model, e.g. "TASKalfa 6053ci"
     # 3. Locate e.g. "Linux Print Driver (9.3)" in the list
+    #
+    # Where there's no version encoded in the vendor URL, prefer a
+    # web.archive.org URL.  That means that if the vendor updates the package
+    # at this URL, the package won't suddenly stop building.
     urls = [
-      "https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/MA_PA_4500ci_Linux_gz.download.gz"
       "https://web.archive.org/web/20241123173620/https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/MA_PA_4500ci_Linux_gz.download.gz"
+      "https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/MA_PA_4500ci_Linux_gz.download.gz"
     ];
     hash = "sha256-pqBtfKiQo/+cF8fG5vsEQvr8UdxjGsSShXI+6bun03c=";
     recursiveHash = true;
