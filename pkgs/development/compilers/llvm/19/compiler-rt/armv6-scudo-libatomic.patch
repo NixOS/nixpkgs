@@ -1,0 +1,62 @@
+From a56bb19a9dc303a50ef12d83cd24c2395bf81076 Mon Sep 17 00:00:00 2001
+From: Ben Wolsieffer <benwolsieffer@gmail.com>
+Date: Wed, 7 Dec 2022 21:25:46 -0500
+Subject: [PATCH] [scudo][standalone] Use CheckAtomic to decide to link to
+ libatomic
+
+Standalone scudo uses the atomic operation builtin functions, which require
+linking to libatomic on some platforms. Currently, this is done in an ad-hoc
+manner. MIPS platforms always link to libatomic, and the tests are always linked
+to it as well. libatomic is required on base ARMv6 (but not ARMv6K), but it is
+currently not linked, causing the build to fail.
+
+This patch replaces this ad-hoc logic with the CheckAtomic CMake module already
+used in other parts of LLVM. The CheckAtomic module checks whether std::atomic
+requires libatomic, which is not strictly the same as checking the atomic
+builtins, but should have the same results as far as I know. If this is
+problematic, a custom version of CheckAtomic could be used to specifically test
+the builtins.
+---
+ compiler-rt/lib/scudo/standalone/CMakeLists.txt       | 7 +++++++
+ compiler-rt/lib/scudo/standalone/tests/CMakeLists.txt | 4 +---
+ 2 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/lib/scudo/standalone/CMakeLists.txt b/lib/scudo/standalone/CMakeLists.txt
+index dc700cec9bec..671dc7046604 100644
+--- a/lib/scudo/standalone/CMakeLists.txt
++++ b/lib/scudo/standalone/CMakeLists.txt
+@@ -1,5 +1,8 @@
+ add_compiler_rt_component(scudo_standalone)
+ 
++include(DetermineGCCCompatible)
++include(CheckAtomic)
++
+ include_directories(../.. include)
+ 
+ set(SCUDO_CFLAGS)
+@@ -39,6 +42,10 @@ list(APPEND SCUDO_LINK_FLAGS -Wl,-z,defs,-z,now,-z,relro)
+ 
+ list(APPEND SCUDO_LINK_FLAGS -ffunction-sections -fdata-sections -Wl,--gc-sections)
+ 
++if(HAVE_CXX_ATOMICS_WITH_LIB OR HAVE_CXX_ATOMICS64_WITH_LIB)
++  list(APPEND SCUDO_LINK_FLAGS -latomic)
++endif()
++
+ # We don't use the C++ standard library, so avoid including it by mistake.
+ append_list_if(COMPILER_RT_HAS_NOSTDLIBXX_FLAG -nostdlib++ SCUDO_LINK_FLAGS)
+ append_list_if(CXX_SUPPORTS_UNWINDLIB_NONE_FLAG --unwindlib=none SCUDO_LINK_FLAGS)
+diff --git a/lib/scudo/standalone/tests/CMakeLists.txt b/lib/scudo/standalone/tests/CMakeLists.txt
+index a85eb737dba0..a23cf4d494f6 100644
+--- a/lib/scudo/standalone/tests/CMakeLists.txt
++++ b/lib/scudo/standalone/tests/CMakeLists.txt
+@@ -47,7 +47,7 @@ set(SCUDO_UNITTEST_LINK_FLAGS
+   ${SANITIZER_TEST_CXX_LIBRARIES})
+ list(APPEND SCUDO_UNITTEST_LINK_FLAGS -pthread -no-pie)
+ 
+-append_list_if(COMPILER_RT_HAS_LIBATOMIC -latomic SCUDO_UNITTEST_LINK_FLAGS)
++append_list_if((HAVE_CXX_ATOMICS_WITH_LIB OR HAVE_CXX_ATOMICS64_WITH_LIB) -latomic SCUDO_UNITTEST_LINK_FLAGS)
+ 
+ set(SCUDO_TEST_HEADERS
+   scudo_unit_test.h
+2.38.1
+

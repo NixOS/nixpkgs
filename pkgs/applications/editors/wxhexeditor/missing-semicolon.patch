@@ -1,0 +1,35 @@
+diff --git a/src/HexDialogs.cpp b/src/HexDialogs.cpp
+index 091a6f9..12e6a78 100644
+--- a/src/HexDialogs.cpp
++++ b/src/HexDialogs.cpp
+@@ -420,7 +420,7 @@ void FindDialog::OnChar( wxKeyEvent& event ){
+ 	}
+
+ void FindDialog::EventHandler( wxCommandEvent& event ){
+-	WX_CLEAR_ARRAY(parent->HighlightArray )
++	WX_CLEAR_ARRAY(parent->HighlightArray );
+ 	parent->HighlightArray.Shrink();
+
+ 	if( event.GetId() == btnFind->GetId())
+diff --git a/src/HexEditorCtrl/HexEditorCtrl.cpp b/src/HexEditorCtrl/HexEditorCtrl.cpp
+index 7a3b0e2..f12097f 100644
+--- a/src/HexEditorCtrl/HexEditorCtrl.cpp
++++ b/src/HexEditorCtrl/HexEditorCtrl.cpp
+@@ -64,9 +64,9 @@ HexEditorCtrl::~HexEditorCtrl( void ){
+ 	Dynamic_Disconnector();
+ 	Clear();
+
+-	WX_CLEAR_ARRAY(MainTagArray)
+-	WX_CLEAR_ARRAY(HighlightArray)
+-   WX_CLEAR_ARRAY(CompareArray)
++	WX_CLEAR_ARRAY(MainTagArray);
++	WX_CLEAR_ARRAY(HighlightArray);
++   WX_CLEAR_ARRAY(CompareArray);
+
+    MainTagArray.Shrink();
+    HighlightArray.Shrink();
+@@ -1224,4 +1224,3 @@ void wxHugeScrollBar::OnOffsetScroll( wxScrollEvent& event ){
+ #endif
+ 	event.Skip();
+ 	}
+-
