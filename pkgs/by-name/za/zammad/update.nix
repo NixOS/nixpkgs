@@ -1,4 +1,4 @@
-{ stdenv
+{ stdenvNoCC
 , lib
 , makeWrapper
 , bundix
@@ -10,7 +10,7 @@
 , yarn2nix
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   name = "zammad-update-script";
   installPhase = ''
     mkdir -p $out/bin

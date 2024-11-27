@@ -1,4 +1,4 @@
-{ stdenv
+{ stdenvNoCC
 , lib
 , nixosTests
 , fetchFromGitHub
@@ -78,7 +78,7 @@ let
   };
 
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   inherit pname version src;
 
   buildInputs = [
