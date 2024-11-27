@@ -9196,6 +9196,8 @@ self: super: with self; {
 
   noise = callPackage ../development/python-modules/noise { };
 
+  noisereduce = callPackage ../development/python-modules/noisereduce { };
+
   noiseprotocol = callPackage ../development/python-modules/noiseprotocol { };
 
   norfair = callPackage ../development/python-modules/norfair { };
