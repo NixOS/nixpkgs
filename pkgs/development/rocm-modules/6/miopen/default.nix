@@ -11,7 +11,6 @@
 , rocmlir
 , clr
 , clang-tools-extra
-, clang-ocl
 , composable_kernel
 , frugally-deep
 , rocm-docs-core
@@ -142,7 +141,6 @@ in stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     rocblas
     rocmlir
-    clang-ocl
     composable_kernel
     half
     boost
