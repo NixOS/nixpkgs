@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2024.9.0";
+  version = "2024.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
