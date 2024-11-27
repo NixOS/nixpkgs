@@ -4,10 +4,10 @@
 { lib }:
 
 let
-  inherit (builtins) head length;
+  inherit (builtins) head length isString;
   inherit (lib.trivial) oldestSupportedReleaseIsAtLeast mergeAttrs warn warnIf;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
-  inherit (lib.lists) filter foldr foldl' concatMap elemAt all partition groupBy take foldl;
+  inherit (lib.lists) filter foldr foldl' concatMap elemAt all partition groupBy take foldl optional;
 in
 
 rec {
@@ -478,6 +478,68 @@ rec {
       in foldl (acc: el: el.update acc) withNestedMods split.right;
 
   in updates: value: go 0 true value updates;
+
+  # Transforms an attribute path operation specification expression like
+  #
+  # {
+  #   foo.bar = "from";
+  #   foo.baz = "to";
+  # }
+  #
+  # into
+  #
+  # [
+  #   {
+  #     name = "from";
+  #     value = [ "foo" "bar" ];
+  #   }
+  #   {
+  #     name = "to";
+  #     value = [ "foo" "baz" ];
+  #   }
+  # ]
+  # TODO document arguments
+  # In most cases, you want to use the non-' version of this function.
+  pathOperationsToAttrPaths' = prefix: name: value: # prefix -> previousPath, value -> next?
+    let
+      # Null means root
+      newPrefix = prefix ++ optional (name != null) name; # currentPath
+    in
+    if isString value # Any string value is a terminator
+    then [ (nameValuePair value newPrefix) ] # TODO alternatively do regular map and check the type later?
+    else
+      let
+        names = lib.attrNames value;
+      in
+        if length names == 1
+        then
+          let
+            name = head names;
+          in pathOperationsToAttrPaths' newPrefix name value.${name}
+        else
+          # In theory, you could have more than one "to" or "from" but that
+          # would just be an invalid spec. Checking this is more complexity than
+          # it's woth.
+        concatMap (name: pathOperationsToAttrPaths' newPrefix name value.${name}) names;
+
+  # Transforms an attribute path operation specification expression like
+  #
+  # {
+  #   foo.bar = "from";
+  #   foo.baz = "to";
+  # }
+  #
+  # into an attrset where it's the actions are that are associated with the
+  # attribute paths which are now in list form:
+  #
+  # {
+  #   from = [ "foo" "bar" ];
+  #   to = [ "foo" "baz" ];
+  # }
+  #
+  # This also works with paths that require quoting; simply quote your
+  # specification's attributes as usual.
+  pathOperationsToAttrPaths = spec: listToAttrs (pathOperationsToAttrPaths' [ ] null spec);
 
   /**
     Return the specified attributes from a set.

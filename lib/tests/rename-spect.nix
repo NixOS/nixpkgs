@@ -3,8 +3,8 @@ let
 in
 
 lib.runTests {
-  testPathOperationsToAttrPaths'_Immediate = {
-    expr = lib.modules.pathOperationsToAttrPaths' [ ] "foo" "from";
+  testPathOperationsToAttrPaths'Immediate = {
+    expr = lib.attrsets.pathOperationsToAttrPaths' [ ] "foo" "from";
     expected = [
       {
         name = "from";
@@ -12,8 +12,8 @@ lib.runTests {
       }
     ];
   };
-  testPathOperationsToAttrPaths'_Nested1 = {
-    expr = lib.modules.pathOperationsToAttrPaths' [ ] "foo" { bar = "from"; };
+  testPathOperationsToAttrPaths'Nested1 = {
+    expr = lib.attrsets.pathOperationsToAttrPaths' [ ] "foo" { bar = "from"; };
     expected = [
       {
         name = "from";
@@ -24,8 +24,8 @@ lib.runTests {
       }
     ];
   };
-  testPathOperationsToAttrPaths'_Nested2 = {
-    expr = lib.modules.pathOperationsToAttrPaths' [ ] "foo" { bar.baz = "from"; };
+  testPathOperationsToAttrPaths'Nested2 = {
+    expr = lib.attrsets.pathOperationsToAttrPaths' [ ] "foo" { bar.baz = "from"; };
     expected = [
       {
         name = "from";
@@ -37,8 +37,8 @@ lib.runTests {
       }
     ];
   };
-  testPathOperationsToAttrPaths'_NestedInSame = {
-    expr = lib.modules.pathOperationsToAttrPaths' [ ] "foo" {
+  testPathOperationsToAttrPaths'NestedInSame = {
+    expr = lib.attrsets.pathOperationsToAttrPaths' [ ] "foo" {
       bar = "from";
       baz = "to";
     };
@@ -59,8 +59,8 @@ lib.runTests {
       }
     ];
   };
-  testPathOperationsToAttrPaths'_commonPrefix = {
-    expr = lib.modules.pathOperationsToAttrPaths' [ ] "foo" {
+  testPathOperationsToAttrPaths'CommonPrefix = {
+    expr = lib.attrsets.pathOperationsToAttrPaths' [ ] "foo" {
       common.prefix.bar = "from";
       common.prefix.baz = "to";
     };
@@ -86,7 +86,7 @@ lib.runTests {
     ];
   };
   testPathOperationsToAttrPaths = {
-    expr = lib.modules.pathOperationsToAttrPaths {
+    expr = lib.attrsets.pathOperationsToAttrPaths {
       foo.bar = "from";
       baz.quux = "to";
     };
