@@ -3228,7 +3228,8 @@
       p1monitor
     ];
     "palazzetti" = ps: with ps; [
-    ]; # missing inputs: pypalazzetti
+      pypalazzetti
+    ];
     "panasonic_bluray" = ps: with ps; [
       panacotta
     ];
@@ -5619,6 +5620,7 @@
     "ovo_energy"
     "owntracks"
     "p1_monitor"
+    "palazzetti"
     "panasonic_viera"
     "panel_custom"
     "peco"

@@ -12104,6 +12104,8 @@ self: super: with self; {
     inherit python;
   });
 
+  pypalazzetti = callPackage ../development/python-modules/pypalazzetti { };
+
   pypandoc = callPackage ../development/python-modules/pypandoc { };
 
   pyparser = callPackage ../development/python-modules/pyparser { };
