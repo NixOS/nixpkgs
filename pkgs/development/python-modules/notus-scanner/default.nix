@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "notus-scanner";
-  version = "22.6.4";
+  version = "22.6.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = "notus-scanner";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DcFIypfdrz8pM7qAMVpof6xKWYp/bSRUswngxa5EQFk=";
+    hash = "sha256-PPwQjZIKSQ1OmyYJ8ErkqdbHZfH4iHPMiDdKZ3imBwo=";
   };
 
   pythonRelaxDeps = [
