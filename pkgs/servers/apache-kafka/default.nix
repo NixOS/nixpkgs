@@ -2,6 +2,13 @@
 
 let
   versionMap = {
+    "3_9" = {
+      kafkaVersion = "3.9.0";
+      scalaVersion = "2.13";
+      sha256 = "sha256-q8REAt3xA+OPGbDktE5l2pqDG6nlj9dyUEGxqhaO6NE=";
+      jre = jdk17_headless;
+      nixosTest = nixosTests.kafka.kafka_3_9;
+    };
     "3_8" = {
       kafkaVersion = "3.8.1";
       scalaVersion = "2.13";
