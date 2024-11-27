@@ -111,13 +111,13 @@ def test_flake_from_arg(mock_node: Any) -> None:
 
 
 @patch(get_qualified_name(m.Path.mkdir, m), autospec=True)
-def test_profile_from_name(mock_mkdir: Any) -> None:
-    assert m.Profile.from_name("system") == m.Profile(
+def test_profile_from_arg(mock_mkdir: Any) -> None:
+    assert m.Profile.from_arg("system") == m.Profile(
         "system",
         Path("/nix/var/nix/profiles/system"),
     )
 
-    assert m.Profile.from_name("something") == m.Profile(
+    assert m.Profile.from_arg("something") == m.Profile(
         "something",
         Path("/nix/var/nix/profiles/system-profiles/something"),
     )

@@ -137,7 +137,7 @@ class Profile:
     path: Path
 
     @classmethod
-    def from_name(cls, name: str = "system") -> Self:
+    def from_arg(cls, name: str) -> Self:
         match name:
             case "system":
                 return cls(name, Path("/nix/var/nix/profiles/system"))

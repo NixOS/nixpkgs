@@ -167,7 +167,7 @@ def execute(argv: list[str]) -> None:
     tmpdir_path = Path(tmpdir.name)
     atexit.register(cleanup_ssh, tmpdir_path)
 
-    profile = Profile.from_name(args.profile_name)
+    profile = Profile.from_arg(args.profile_name)
     target_host = Remote.from_arg(args.target_host, args.ask_sudo_password, tmpdir_path)
     build_attr = BuildAttr.from_arg(args.attr, args.file)
     flake = Flake.from_arg(args.flake, target_host)
