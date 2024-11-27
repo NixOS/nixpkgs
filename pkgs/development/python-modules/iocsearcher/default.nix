@@ -1,27 +1,28 @@
 {
   lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitHub,
   base58,
+  beautifulsoup4,
   bech32,
+  buildPythonPackage,
   cashaddress,
   cbor,
+  docx2python,
   eth-hash,
+  fetchFromGitHub,
   intervaltree,
   langdetect,
   lxml,
   pdfminer-six,
   phonenumbers,
   python-magic,
-  readabilipy,
   pythonOlder,
+  readabilipy,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "iocsearcher";
-  version = "1.0.0";
+  version = "2.4.3-unstable-2024-10-08";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,18 +30,20 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "malicialab";
     repo = "iocsearcher";
-    rev = "5f7b87761f2195eb358006f3492f0beac7ecc4b0";
-    hash = "sha256-SYh0+JEZa95iBznNzXut/9Vwof6VFeSlt0/g+XmMPC0=";
+    # https://github.com/malicialab/iocsearcher/issues/6
+    rev = "be29cb4090284155b49a358e7fe2d24371b6a981";
+    hash = "sha256-LMpFK1Z1KaKUCm/X9Sh+Gp9GNKrGWp7N4UjAOVkhmSU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     base58
     beautifulsoup4
     bech32
     cashaddress
     cbor
+    docx2python
     eth-hash
     intervaltree
     langdetect
@@ -58,10 +61,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library and command line tool for extracting indicators of compromise (IOCs)";
-    mainProgram = "iocsearcher";
     homepage = "https://github.com/malicialab/iocsearcher";
     changelog = "https://github.com/malicialab/iocsearcher/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "iocsearcher";
   };
 }
