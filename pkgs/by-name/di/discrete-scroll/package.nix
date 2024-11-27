@@ -6,18 +6,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "discrete-scroll";
-  version = "0.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "emreyolcu";
     repo = "discrete-scroll";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-D+7HxNuNLwMamm3j1zT1iHOpFXIcrx4SpZNKPie5Eys=";
+    hash = "sha256-FYYtJUl1tvMu9yMK5VpHmMeM6otDIpoOvSGTjYNPBr0=";
   };
 
   buildPhase = ''
     runHook preBuild
-    $CC -O3 -framework Cocoa DiscreteScroll/main.m
+    $CC -O3 -framework ApplicationServices DiscreteScroll/main.c
     runHook postBuild
   '';
 
