@@ -1,17 +1,15 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   rustPlatform,
   SDL2,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pyxel";
   version = "2.1.6";
   pyproject = true;
-
-  disabled = python3.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kitao";
@@ -20,7 +18,12 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-6S+fl6J1JN785HxG8i0oYlwoTsqa3Gm1DpCd4swUPZ8=";
   };
 
-  patches = [ ./never-bundle-sdl2.patch ];
+  patches = [
+    ./never-bundle-sdl2.patch
+
+    # See https://github.com/PyO3/maturin/issues/2290 and https://github.com/kitao/pyxel/pull/583
+    ./maturin-path-resolution-workaround.patch
+  ];
 
   postPatch = ''
     cp ${./Cargo.lock} rust/Cargo.lock
@@ -51,6 +54,7 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [
     "pyxel"
     "pyxel.pyxel_wrapper"
+    "pyxel.cli"
   ];
 
   meta = {

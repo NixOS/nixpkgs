@@ -1,0 +1,12 @@
+diff --git a/python/pyproject.toml b/python/pyproject.toml
+index 5751510..774d959 100644
+--- a/python/pyproject.toml
++++ b/python/pyproject.toml
+@@ -35,7 +35,6 @@ pyxel = "pyxel.cli:cli"
+ [tool.maturin]
+ manifest-path = "../rust/pyxel-wrapper/Cargo.toml"
+ module-name = "pyxel.pyxel_wrapper"
+-python-source = "../python"
+ 
+ [tool.maturin.target."x86_64-apple-darwin"]
+ macos-deployment-target = "10.12"
