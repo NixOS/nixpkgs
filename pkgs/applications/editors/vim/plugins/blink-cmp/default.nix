@@ -6,12 +6,12 @@
   vimUtils,
 }:
 let
-  version = "0.5.1";
+  version = "0.6.2";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LWA3rPvqq+zeK+8zS1kM1BaQ+uaBmlHJy4o7IaT1zsg=";
+    hash = "sha256-uAIO8Q9jQvZ36Ngz9dURH7Jo7+WX/swauhj3ltIkZ5c=";
   };
   libExt = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
@@ -21,12 +21,8 @@ let
       # TODO: remove this if plugin stops using nightly rust
       RUSTC_BOOTSTRAP = true;
     };
-    cargoLock = {
-      lockFile = ./Cargo.lock;
-      outputHashes = {
-        "frizbee-0.1.0" = "sha256-eYth+xOIqwGPkH39OxNCMA9zE+5CTNpsuX8Ue/mySIA=";
-      };
-    };
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-XXI2jEoD6XbFNk3O8B6+aLzl1ZcJq1VinQXb+AOw8Rw=";
   };
 in
 vimUtils.buildVimPlugin {
