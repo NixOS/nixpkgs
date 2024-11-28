@@ -210,5 +210,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ julm ];
+  meta.maintainers = with lib.maintainers; [ julm grimmauld ];
 }
