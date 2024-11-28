@@ -1,15 +1,11 @@
 {
   rustPlatform,
-  rustc,
-  cargo,
-  corrosion,
   lib,
   stdenv,
   fetchFromGitHub,
   cmake,
   libuuid,
   nixosTests,
-  python3,
   xdg-utils,
   installShellFiles,
 }:
@@ -36,18 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "xdg-open" "${lib.getBin xdg-utils}/bin/xdg-open"
   '';
 
-  preConfigure = ''
-    export CMAKE_PREFIX_PATH="${corrosion}:$CMAKE_PREFIX_PATH"
-  '';
-
   strictDeps = true;
   nativeBuildInputs = [
     cmake
-    python3
     installShellFiles
-    corrosion
-    cargo
-    rustc
     rustPlatform.cargoSetupHook
   ];
 
