@@ -58,6 +58,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/markokr/rarfile";
     changelog = "https://github.com/markokr/rarfile/releases/tag/v${version}";
     license = licenses.isc;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

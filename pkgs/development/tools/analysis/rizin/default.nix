@@ -60,6 +60,8 @@ let rizin = stdenv.mkDerivation rec {
     ./librz-wrapper-support.patch
 
     ./0001-fix-compilation-with-clang.patch
+    # Can be dropped when upstream fixes this: https://github.com/NixOS/nixpkgs/issues/300056
+    ./0002-disable-pcre2-jit.patch
   ];
 
 
@@ -83,7 +85,7 @@ let rizin = stdenv.mkDerivation rec {
       fi
     done
     export LIBRARY_PATH
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace binrz/rizin/macos_sign.sh \
       --replace 'codesign' '# codesign'
   '';

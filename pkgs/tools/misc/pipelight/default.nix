@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
     homepage = "http://pipelight.net/";
     license = with lib.licenses; [ mpl11 gpl2Only lgpl21 ];
     description = "Wrapper for using Windows plugins in Linux browsers";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" "i686-linux" ];
     mainProgram = "pipelight-plugin";
   };

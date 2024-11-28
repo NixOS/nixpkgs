@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   # freshfetch depends on rust nightly features
   RUSTC_BOOTSTRAP = 1;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     CoreFoundation
     DiskArbitration

@@ -20,7 +20,7 @@
 , lsof
 , coreutils
 , gsettings-desktop-schemas
-, speechd
+, speechd-minimal
 , brltty
 , liblouis
 , gst_all_1
@@ -28,13 +28,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "orca";
-  version = "46.2";
+  version = "47.1";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-j2MpmxpPnDCFfCKfapzhbyxD6u6pD7+QkxTKi7c+/V4=";
+    hash = "sha256-0H16zehWVUaXOp8pcwcy8xcmq2vJ3Mzq0uEgTX2ARO0=";
   };
 
   patches = [
@@ -65,7 +65,7 @@ python3.pkgs.buildPythonApplication rec {
     brltty
     liblouis
     psutil
-    speechd
+    speechd-minimal
     gst-python
     setproctitle
   ];
@@ -98,6 +98,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://orca.gnome.org/";
+    changelog = "https://gitlab.gnome.org/GNOME/orca/-/blob/main/NEWS";
     description = "Screen reader";
     mainProgram = "orca";
     longDescription = ''

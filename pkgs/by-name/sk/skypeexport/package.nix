@@ -8,14 +8,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Temptin";
     repo = "SkypeExport";
     rev = "v${finalAttrs.version}";
-    sha256 = "1ilkh0s3dz5cp83wwgmscnfmnyck5qcwqg1yxp9zv6s356dxnbak";
+    hash = "sha256-Uy3bmylDm/3T7T48zBkuk3lbnWW6Ps4Huqz8NjSAk8Y=";
   };
 
   patches = [
     (fetchpatch {
       name = "boost167.patch";
       url = "https://github.com/Temptin/SkypeExport/commit/ef60f2e4fc9e4a5764c8d083a73b585457bc10b1.patch";
-      sha256 = "sha256-t+/v7c66OULmQCD/sNt+iDJeQ/6UG0CJ8uQY2PVSFQo=";
+      hash = "sha256-t+/v7c66OULmQCD/sNt+iDJeQ/6UG0CJ8uQY2PVSFQo=";
     })
   ];
 
@@ -31,6 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Temptin/SkypeExport";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ yana ];
+    maintainers = [ ];
   };
 })

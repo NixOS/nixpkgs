@@ -20,13 +20,14 @@
   google-auth-oauthlib,
   hatchling,
   imapclient,
-  kafka-python,
+  kafka-python-ng,
   lxml,
   mailsuite,
   msgraph-core,
   nixosTests,
   opensearch-py,
   publicsuffixlist,
+  pygelf,
   pythonOlder,
   requests,
   tqdm,
@@ -41,14 +42,14 @@ let
 in
 buildPythonPackage rec {
   pname = "parsedmarc";
-  version = "8.12.0";
+  version = "8.15.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mscc3TRMYuaTqrrxGPCVVKa2fg5sXwK/BglpbvLXbLc=";
+    hash = "sha256-lxW92jlSWgGVxOO+CwIZi5sKHqoZuR5VQCnDVORXmXU=";
   };
 
   nativeBuildInputs = [
@@ -77,11 +78,12 @@ buildPythonPackage rec {
     google-auth-httplib2
     google-auth-oauthlib
     imapclient
-    kafka-python
+    kafka-python-ng
     lxml
     mailsuite
     msgraph-core
     publicsuffixlist
+    pygelf
     requests
     tqdm
     xmltodict

@@ -7,9 +7,13 @@
   libGL,
   libxkbcommon,
   hyprlang,
+  hyprutils,
   pam,
+  sdbus-cpp_2,
+  systemdLibs,
   wayland,
   wayland-protocols,
+  wayland-scanner,
   cairo,
   file,
   libjpeg,
@@ -17,19 +21,18 @@
   pango,
   libdrm,
   mesa,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlock";
-  version = "0.3.0-unstable-2024-04-24";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlock";
-    # FIXME: Change to a stable release once available
-    rev = "415262065fff0a04b229cd00165f346a86a0a73a";
-    hash = "sha256-jla5Wo0Qt3NEnD0OjNj85BGw0pR4Zlz5uy8AqHH7tuE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-sUIsjWpZLplSJXWyJcDZdvDweksXLH5r9GSkwg0kgBw=";
   };
 
   strictDeps = true;
@@ -37,12 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [
     cairo
     file
     hyprlang
+    hyprutils
     libdrm
     libGL
     libjpeg
@@ -51,23 +56,23 @@ stdenv.mkDerivation (finalAttrs: {
     mesa
     pam
     pango
+    sdbus-cpp_2
+    systemdLibs
     wayland
     wayland-protocols
   ];
 
-  passthru.updateScript = unstableGitUpdater {
-    tagPrefix = "v";
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Hyprland's GPU-accelerated screen locking utility";
     homepage = "https://github.com/hyprwm/hyprlock";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
-    mainProgram = "hyprlock";
-    platforms = [
-      "aarch64-linux"
-      "x86_64-linux"
+    maintainers = with lib.maintainers; [
+      iynaix
+      johnrtitor
     ];
+    mainProgram = "hyprlock";
+    platforms = lib.platforms.linux;
   };
 })

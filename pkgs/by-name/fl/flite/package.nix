@@ -5,6 +5,7 @@
   fetchpatch,
   alsa-lib,
   libpulseaudio,
+  nix-update-script,
   testers,
   audioBackend ? "pulseaudio",
 }:
@@ -40,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  buildInputs = lib.optional stdenv.isLinux (
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux (
     {
       alsa = alsa-lib;
       pulseaudio = libpulseaudio;
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--enable-shared"
-  ] ++ lib.optionals stdenv.isLinux [ "--with-audio=${audioBackend}" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "--with-audio=${audioBackend}" ];
 
   # main/Makefile creates and removes 'flite_voice_list.c' from multiple targets:
   # make[1]: *** No rule to make target 'flite_voice_list.c', needed by 'all'.  Stop
@@ -62,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
       command = "flite --help";
       package = finalAttrs.finalPackage;
     };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {

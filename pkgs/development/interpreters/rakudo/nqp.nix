@@ -4,6 +4,7 @@ stdenv.mkDerivation rec {
   pname = "nqp";
   version = "2024.06";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "raku";
     repo = "nqp";
@@ -37,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Raku/nqp";
     license = licenses.artistic2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
+    maintainers = with maintainers; [ thoughtpolice sgo ];
   };
 }

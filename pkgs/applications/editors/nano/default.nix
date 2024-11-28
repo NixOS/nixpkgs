@@ -10,16 +10,16 @@ let
     owner = "seitz";
     repo = "nanonix";
     rev = "bf8d898efaa10dce3f7972ff765b58c353b4b4ab";
-    sha256 = "0773s5iz8aw9npgyasb0r2ybp6gvy2s9sq51az8w7h52bzn5blnn";
+    hash = "sha256-1tJV7F+iwMPRV6FgnbTw+5m7vMhgaeXftYkr9GPR4xw=";
   };
 
 in stdenv.mkDerivation rec {
   pname = "nano";
-  version = "8.0";
+  version = "8.2";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${pname}-${version}.tar.xz";
-    sha256 = "wX9D/A43M2sz7lCiCccB1b64CK3C2fCJyoMbQFOcmsQ=";
+    hash = "sha256-1a0H3YYvrK4DBRxUxlNeVMftdAcxh4P8rRrS1wdv/+s=";
   };
 
   nativeBuildInputs = [ texinfo ] ++ lib.optional enableNls gettext;

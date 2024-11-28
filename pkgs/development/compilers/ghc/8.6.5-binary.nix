@@ -26,7 +26,7 @@ let
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
     + "LD_LIBRARY_PATH";
 
-  glibcDynLinker = assert stdenv.isLinux;
+  glibcDynLinker = assert stdenv.hostPlatform.isLinux;
     if stdenv.hostPlatform.libc == "glibc" then
        # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
        ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   postUnpack =
     # GHC has dtrace probes, which causes ld to try to open /usr/lib/libdtrace.dylib
     # during linking
-    lib.optionalString stdenv.isDarwin ''
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
       export NIX_LDFLAGS+=" -no_dtrace_dof"
       # not enough room in the object files for the full path to libiconv :(
       for exe in $(find . -type f -executable); do
@@ -110,15 +110,15 @@ stdenv.mkDerivation rec {
     ''
       find . -name integer-gmp.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${gmp.out}/lib@" {} \;
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       find . -name base.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${libiconv}/lib@" {} \;
     '' +
     # Rename needed libraries and binaries, fix interpreter
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       find . -type f -perm -0100 \
           -exec patchelf \
-          --replace-needed libncurses${lib.optionalString stdenv.is64bit "w"}.so.5 libncurses.so \
+          --replace-needed libncurses${lib.optionalString stdenv.hostPlatform.is64bit "w"}.so.5 libncurses.so \
           ${ # This isn't required for x86_64-linux where we use ncurses6
              lib.optionalString (!useNcurses6) "--replace-needed libtinfo.so libtinfo.so.5"
            } \
@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
     "--with-gmp-includes=${lib.getDev gmp}/include"
     # Note `--with-gmp-libraries` does nothing for GHC bindists:
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6124
-  ] ++ lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
   # No building is necessary, but calling make without flags ironically
@@ -160,14 +160,14 @@ stdenv.mkDerivation rec {
 
   # On Linux, use patchelf to modify the executables so that they can
   # find editline/gmp.
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     for p in $(find "$out" -type f -executable); do
       if isELF "$p"; then
         echo "Patchelfing $p"
         patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $p)" $p
       fi
     done
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # not enough room in the object files for the full path to libiconv :(
     for exe in $(find "$out" -type f -executable); do
       isScript $exe && continue

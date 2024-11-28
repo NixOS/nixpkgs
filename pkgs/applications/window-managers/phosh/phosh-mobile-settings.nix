@@ -1,11 +1,12 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitLab
 , nixosTests
 , directoryListingUpdater
 , meson
 , ninja
 , pkg-config
+, wayland-scanner
 , wrapGAppsHook4
 , desktop-file-utils
 , feedbackd
@@ -17,16 +18,20 @@
 , wayland-protocols
 , json-glib
 , gsound
+, gmobile
 }:
 
 stdenv.mkDerivation rec {
   pname = "phosh-mobile-settings";
-  version = "0.38.0";
+  version = "0.41.0";
 
-  src = fetchurl {
-    # This tarball includes the meson wrapped subproject 'gmobile'.
-    url = "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-WDqgVsJx5y6IlWII9fRBsAeWn/tB8BaXRtlPvA0wmMk=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "Phosh";
+    repo = "phosh-mobile-settings";
+    rev = "v${version}";
+    hash = "sha256-t5qngjQcjPltUGbcZ+CF5FbZtZkV/cD3xUhuApQbKHo=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +39,7 @@ stdenv.mkDerivation rec {
     ninja
     phosh
     pkg-config
+    wayland-scanner
     wrapGAppsHook4
   ];
 
@@ -47,6 +53,7 @@ stdenv.mkDerivation rec {
     wayland-protocols
     json-glib
     gsound
+    gmobile
   ];
 
   postPatch = ''

@@ -3,7 +3,7 @@
   hwdata,
   pkg-config,
   lxc,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   acl,
   libcap,
@@ -16,19 +16,19 @@
   nix-update-script,
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "lxd-unwrapped-lts";
   # major/minor are used in updateScript to pin to LTS
-  version = "5.21.1";
+  version = "5.21.2";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "lxd";
     rev = "refs/tags/lxd-${version}";
-    hash = "sha256-6php6dThpyADOY+2PZ38WxK2jPKd61D0OCwTKjAhAUg=";
+    hash = "sha256-3C5pLvO7oABWFhFiWtBr5ohFFWm20Gg36WBfVVJgKdc=";
   };
 
-  vendorHash = "sha256-iGW2FQjuqANadFuMHa+2VXiUgoU0VFBJYUyh0pMIdWY=";
+  vendorHash = "sha256-W7+Z2o5cw3u0DbTZA+a3pRXt9zRggUUjFTUTtQ7B22A=";
 
   postPatch = ''
     substituteInPlace shared/usbid/load.go \
@@ -108,7 +108,7 @@ buildGo122Module rec {
       asl20
       agpl3Plus
     ];
-    maintainers = teams.lxc.members;
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

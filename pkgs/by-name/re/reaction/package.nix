@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitLab,
 }:
@@ -15,7 +14,7 @@ in buildGoModule {
     owner = "ppom";
     repo = "reaction";
     rev = "v${version}";
-    sha256 = "sha256-UL3ck+gejZAu/mZS3ZiZ78a2/I+OesaSRZUhHirgu9o=";
+    hash = "sha256-UL3ck+gejZAu/mZS3ZiZ78a2/I+OesaSRZUhHirgu9o=";
   };
 
   vendorHash = "sha256-THUIoWFzkqaTofwH4clBgsmtUlLS9WIB2xjqW7vkhpg=";

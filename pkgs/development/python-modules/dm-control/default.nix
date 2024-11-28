@@ -1,13 +1,15 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   absl-py,
   mujoco,
   pyparsing,
   setuptools,
-  wheel,
+
+  # dependencies
   dm-env,
   dm-tree,
   fsspec,
@@ -15,8 +17,6 @@
   h5py,
   lxml,
   mock,
-  nose,
-  nose-xunitmp,
   numpy,
   pillow,
   protobuf,
@@ -29,16 +29,14 @@
 
 buildPythonPackage rec {
   pname = "dm-control";
-  version = "1.0.20";
+  version = "1.0.25";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "dm_control";
     rev = "refs/tags/${version}";
-    hash = "sha256-huXvfQz7E+OCqRrhLC5dUaG/A2PQXrPBzseIFx7ZIeE=";
+    hash = "sha256-eP85aKECvIu8nxPcSjc3PcCR9sWeTmaVJ7gBtVis0PY=";
   };
 
   build-system = [
@@ -46,7 +44,6 @@ buildPythonPackage rec {
     mujoco
     pyparsing
     setuptools
-    wheel
   ];
 
   pythonRemoveDeps = [
@@ -64,8 +61,6 @@ buildPythonPackage rec {
     lxml
     mock
     mujoco
-    nose
-    nose-xunitmp
     numpy
     pillow
     protobuf

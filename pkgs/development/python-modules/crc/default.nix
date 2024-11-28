@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "crc";
-  version = "7.0.0";
+  version = "7.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Nicoretti";
     repo = "crc";
     rev = "refs/tags/${version}";
-    hash = "sha256-y30tnGG+G9dWBO8MUFYm2IGHiGIPbv4kB2VwhV0/C74=";
+    hash = "sha256-Oa2VSzNT+8O/rWZurIr7RnP8m3xAEVOQLs+ObT4xIa0=";
   };
 
   build-system = [ poetry-core ];

@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Provide enhanced HTTPS support for httplib and urllib2 using PyOpenSSL";
     mainProgram = "ndg_httpclient";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

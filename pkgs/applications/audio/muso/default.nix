@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
-  buildInputs = lib.optional stdenv.isDarwin CoreServices;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin CoreServices;
 
   preConfigure = ''
     substituteInPlace lib/utils.rs \
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-+UVUejKCfjC6zdW315wmu7f3A5GmnoQ3rIk8SK6LIRI=";
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Automatic music sorter (based on ID3 tags)";
     mainProgram = "muso";
     homepage = "https://github.com/quebin31/muso";

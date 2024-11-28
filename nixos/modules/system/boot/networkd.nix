@@ -18,12 +18,18 @@ let
           "ManageForeignRoutes"
           "RouteTable"
           "IPv6PrivacyExtensions"
+          "IPv4Forwarding"
+          "IPv6Forwarding"
+          "UseDomains"
         ])
         (assertValueOneOf "SpeedMeter" boolValues)
         (assertInt "SpeedMeterIntervalSec")
         (assertValueOneOf "ManageForeignRoutingPolicyRules" boolValues)
         (assertValueOneOf "ManageForeignRoutes" boolValues)
         (assertValueOneOf "IPv6PrivacyExtensions" (boolValues ++ ["prefer-public" "kernel"]))
+        (assertValueOneOf "IPv4Forwarding" boolValues)
+        (assertValueOneOf "IPv6Forwarding" boolValues)
+        (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
       ];
 
       sectionDHCPv4 = checkUnitConfig "DHCPv4" [
@@ -405,11 +411,14 @@ let
         (assertValueOneOf "Layer2SpecificHeader" [ "none" "default" ])
       ];
 
-      # NOTE The PrivateKey directive is missing on purpose here, please
-      # do not add it to this list. The nix store is world-readable let's
-      # refrain ourselves from providing a footgun.
+      # NOTE Check whether the key starts with an @, in which case it is
+      # interpreted as the name of the credential from which the actual key
+      # shall be read by systemd-creds.
+      # Do not remove this check as the nix store is world-readable.
       sectionWireGuard = checkUnitConfig "WireGuard" [
+        (assertKeyIsSystemdCredential "PrivateKey")
         (assertOnlyFields [
+          "PrivateKey"
           "PrivateKeyFile"
           "ListenPort"
           "FirewallMark"
@@ -420,12 +429,15 @@ let
         (assertRange "FirewallMark" 1 4294967295)
       ];
 
-      # NOTE The PresharedKey directive is missing on purpose here, please
-      # do not add it to this list. The nix store is world-readable,let's
-      # refrain ourselves from providing a footgun.
+      # NOTE Check whether the key starts with an @, in which case it is
+      # interpreted as the name of the credential from which the actual key
+      # shall be read by systemd-creds.
+      # Do not remove this check as the nix store is world-readable.
       sectionWireGuardPeer = checkUnitConfigWithLegacyKey "wireguardPeerConfig" "WireGuardPeer" [
+        (assertKeyIsSystemdCredential "PresharedKey")
         (assertOnlyFields [
           "PublicKey"
+          "PresharedKey"
           "PresharedKeyFile"
           "AllowedIPs"
           "Endpoint"
@@ -648,10 +660,13 @@ let
           "Address"
           "Gateway"
           "DNS"
+          "UseDomains"
           "Domains"
           "DNSDefaultRoute"
           "NTP"
           "IPForward"
+          "IPv4Forwarding"
+          "IPv6Forwarding"
           "IPMasquerade"
           "IPv6PrivacyExtensions"
           "IPv6AcceptRA"
@@ -699,8 +714,11 @@ let
         (assertValueOneOf "DNSSEC" (boolValues ++ ["allow-downgrade"]))
         (assertValueOneOf "LLDP" (boolValues ++ ["routers-only"]))
         (assertValueOneOf "EmitLLDP" (boolValues ++ ["nearest-bridge" "non-tpmr-bridge" "customer-bridge"]))
+        (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
         (assertValueOneOf "DNSDefaultRoute" boolValues)
-        (assertValueOneOf "IPForward" (boolValues ++ ["ipv4" "ipv6"]))
+        (assertRemoved "IPForward" "IPv4Forwarding and IPv6Forwarding in systemd.network(5) and networkd.conf(5). Please note that setting these options on multiple interfaces may lead to unintended results, see https://github.com/systemd/systemd/issues/33414 or the relevant sections in systemd.network(5).")
+        (assertValueOneOf "IPv4Forwarding" boolValues)
+        (assertValueOneOf "IPv6Forwarding" boolValues)
         (assertValueOneOf "IPMasquerade" (boolValues ++ ["ipv4" "ipv6" "both"]))
         (assertValueOneOf "IPv6PrivacyExtensions" (boolValues ++ ["prefer-public" "kernel"]))
         (assertValueOneOf "IPv6AcceptRA" boolValues)
@@ -770,8 +788,7 @@ let
         ])
         (assertInt "TypeOfService")
         (assertRange "TypeOfService" 0 255)
-        (assertInt "FirewallMark")
-        (assertRange "FirewallMark" 1 4294967295)
+        (assertRangeWithOptionalMask "FirewallMark" 1 4294967295)
         (assertInt "Priority")
         (assertPortOrPortRange "SourcePort")
         (assertPortOrPortRange "DestinationPort")
@@ -844,6 +861,7 @@ let
           "UseGateway"
           "UseRoutes"
           "UseTimezone"
+          "IPv6OnlyMode"
           "ClientIdentifier"
           "VendorClassIdentifier"
           "UserClass"
@@ -877,6 +895,7 @@ let
         (assertValueOneOf "UseGateway" boolValues)
         (assertValueOneOf "UseRoutes" boolValues)
         (assertValueOneOf "UseTimezone" boolValues)
+        (assertValueOneOf "IPv6OnlyMode" boolValues)
         (assertValueOneOf "ClientIdentifier" ["mac" "duid" "duid-only"])
         (assertInt "IAID")
         (assertValueOneOf "RequestBroadcast" boolValues)
@@ -896,7 +915,9 @@ let
           "UseAddress"
           "UseDNS"
           "UseNTP"
+          "SendHostname"
           "UseHostname"
+          "Hostname"
           "UseDomains"
           "RouteMetric"
           "RapidCommit"
@@ -917,6 +938,7 @@ let
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
+        (assertValueOneOf "SendHostname" boolValues)
         (assertValueOneOf "UseHostname" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
         (assertInt "RouteMetric")
@@ -1010,6 +1032,7 @@ let
           "BootServerAddress"
           "BootServerName"
           "BootFilename"
+          "IPv6OnlyPreferredSec"
         ])
         (assertInt "PoolOffset")
         (assertMinimum "PoolOffset" 0)
@@ -1031,19 +1054,27 @@ let
           "Managed"
           "OtherInformation"
           "RouterLifetimeSec"
+          "RetransmitSec"
           "RouterPreference"
+          "HopLimit"
           "UplinkInterface"
           "EmitDNS"
           "DNS"
           "EmitDomains"
           "Domains"
           "DNSLifetimeSec"
+          "HomeAgent"
+          "HomeAgentLifetimeSec"
+          "HomeAgentPreference"
         ])
         (assertValueOneOf "Managed" boolValues)
         (assertValueOneOf "OtherInformation" boolValues)
         (assertValueOneOf "RouterPreference" ["high" "medium" "low" "normal" "default"])
+        (assertInt "HopLimit")
         (assertValueOneOf "EmitDNS" boolValues)
         (assertValueOneOf "EmitDomains" boolValues)
+        (assertValueOneOf "HomeAgent" boolValues)
+        (assertInt "HomeAgentPreference")
       ];
 
       sectionIPv6PREF64Prefix = checkUnitConfigWithLegacyKey "ipv6PREF64PrefixConfig" "IPv6PREF64Prefix" [
@@ -2835,6 +2866,7 @@ let
         "systemd-networkd-wait-online.service"
         "systemd-networkd.service"
         "systemd-networkd.socket"
+        "systemd-networkd-persistent-storage.service"
       ];
 
       environment.etc."systemd/networkd.conf" = renderConfig cfg.config;

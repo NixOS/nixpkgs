@@ -1,39 +1,36 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.davmail;
 
-  configType = with types;
+  configType = with lib.types;
     oneOf [ (attrsOf configType) str int bool ] // {
       description = "davmail config type (str, int, bool or attribute set thereof)";
     };
 
-  toStr = val: if isBool val then boolToString val else toString val;
+  toStr = val: if lib.isBool val then lib.boolToString val else toString val;
 
-  linesForAttrs = attrs: concatMap (name: let value = attrs.${name}; in
-    if isAttrs value
+  linesForAttrs = attrs: lib.concatMap (name: let value = attrs.${name}; in
+    if lib.isAttrs value
       then map (line: name + "." + line) (linesForAttrs value)
       else [ "${name}=${toStr value}" ]
-  ) (attrNames attrs);
+  ) (lib.attrNames attrs);
 
-  configFile = pkgs.writeText "davmail.properties" (concatStringsSep "\n" (linesForAttrs cfg.config));
+  configFile = pkgs.writeText "davmail.properties" (lib.concatStringsSep "\n" (linesForAttrs cfg.config));
 
 in
 
   {
     options.services.davmail = {
-      enable = mkEnableOption "davmail, an MS Exchange gateway";
+      enable = lib.mkEnableOption "davmail, an MS Exchange gateway";
 
-      url = mkOption {
-        type = types.str;
+      url = lib.mkOption {
+        type = lib.types.str;
         description = "Outlook Web Access URL to access the exchange server, i.e. the base webmail URL.";
         example = "https://outlook.office365.com/EWS/Exchange.asmx";
       };
 
-      config = mkOption {
+      config = lib.mkOption {
         type = configType;
         default = {};
         description = ''
@@ -42,7 +39,7 @@ in
           and <http://davmail.sourceforge.net/advanced.html>
           for details on supported values.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             davmail.allowRemote = true;
             davmail.imapPort = 55555;
@@ -56,10 +53,10 @@ in
       };
     };
 
-    config = mkIf cfg.enable {
+    config = lib.mkIf cfg.enable {
 
       services.davmail.config = {
-        davmail = mapAttrs (name: mkDefault) {
+        davmail = lib.mapAttrs (name: lib.mkDefault) {
           server = true;
           disableUpdateCheck = true;
           logFilePath = "/var/log/davmail/davmail.log";
@@ -73,10 +70,10 @@ in
           smtpPort = 1025;
         };
         log4j = {
-          logger.davmail = mkDefault "WARN";
-          logger.httpclient.wire = mkDefault "WARN";
-          logger.org.apache.commons.httpclient = mkDefault "WARN";
-          rootLogger = mkDefault "WARN";
+          logger.davmail = lib.mkDefault "WARN";
+          logger.httpclient.wire = lib.mkDefault "WARN";
+          logger.org.apache.commons.httpclient = lib.mkDefault "WARN";
+          rootLogger = lib.mkDefault "WARN";
         };
       };
 

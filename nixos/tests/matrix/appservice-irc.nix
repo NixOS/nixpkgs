@@ -1,4 +1,4 @@
-import ../make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
   let
     homeserverUrl = "http://homeserver:8008";
   in
@@ -9,7 +9,7 @@ import ../make-test-python.nix ({ pkgs, ... }:
     };
 
     nodes = {
-      homeserver = { pkgs, ... }: {
+      homeserver = {
         # We'll switch to this once the config is copied into place
         specialisation.running.configuration = {
           services.matrix-synapse = {
@@ -46,7 +46,7 @@ import ../make-test-python.nix ({ pkgs, ... }:
         };
       };
 
-      ircd = { pkgs, ... }: {
+      ircd = {
         services.ngircd = {
           enable = true;
           config = ''
@@ -75,12 +75,18 @@ import ../make-test-python.nix ({ pkgs, ... }:
             homeserver.url = homeserverUrl;
             homeserver.domain = "homeserver";
 
-            ircService.servers."ircd" = {
-              name = "IRCd";
-              port = 6667;
-              dynamicChannels = {
-                enabled = true;
-                aliasTemplate = "#irc_$CHANNEL";
+            ircService = {
+              servers."ircd" = {
+                name = "IRCd";
+                port = 6667;
+                dynamicChannels = {
+                  enabled = true;
+                  aliasTemplate = "#irc_$CHANNEL";
+                };
+              };
+              mediaProxy = {
+                publicUrl = "http://localhost:11111/media";
+                ttl = 0;
               };
             };
           };
@@ -203,6 +209,8 @@ import ../make-test-python.nix ({ pkgs, ... }:
       with subtest("start the appservice"):
           appservice.wait_for_unit("matrix-appservice-irc.service")
           appservice.wait_for_open_port(8009)
+          appservice.wait_for_file("/var/lib/matrix-appservice-irc/media-signingkey.jwk")
+          appservice.wait_for_open_port(11111)
 
       with subtest("copy the registration file"):
           appservice.copy_from_vm("/var/lib/matrix-appservice-irc/registration.yml")
@@ -222,4 +230,4 @@ import ../make-test-python.nix ({ pkgs, ... }:
       with subtest("ensure messages can be exchanged"):
           client.succeed("do_test ${homeserverUrl} >&2")
     '';
-  })
+  }

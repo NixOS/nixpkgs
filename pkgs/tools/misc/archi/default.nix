@@ -4,7 +4,8 @@
 , makeWrapper
 , jdk
 , libsecret
-, webkitgtk
+, glib
+, webkitgtk_4_0
 , wrapGAppsHook3
 , _7zz
 , nixosTests
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
   ];
 
-  sourceRoot = if stdenv.isDarwin then "." else null;
+  sourceRoot = if stdenv.hostPlatform.isDarwin then "." else null;
 
   installPhase =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
 
         install -D -m755 Archi $out/libexec/Archi
         makeWrapper $out/libexec/Archi $out/bin/Archi \
-          --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ webkitgtk ])} \
+          --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib webkitgtk_4_0 ])} \
           --set WEBKIT_DISABLE_DMABUF_RENDERER 1 \
           --prefix PATH : ${jdk}/bin
       ''

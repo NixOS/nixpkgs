@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
       url = "https://github.com/thestinger/termite/commit/7e9a93b421b9596f8980645a46ac2ad5468dac06.patch";
       sha256 = "0vph2m5919f7w1xnc8i6z0j44clsm1chxkfg7l71nahxyfw5yh4j";
     })
-  ] ++ lib.optional stdenv.isDarwin ./remove_ldflags_macos.patch;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin ./remove_ldflags_macos.patch;
 
   makeFlags = [ "VERSION=v${version}" "PREFIX=" "DESTDIR=$(out)" ];
 

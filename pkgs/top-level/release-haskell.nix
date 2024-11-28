@@ -4,12 +4,12 @@
   https://hydra.nixos.org/jobset/nixpkgs/haskell-updates.
 
   To debug this expression you can use `hydra-eval-jobs` from
-  `pkgs.hydra_unstable` which prints the jobset description
+  `pkgs.hydra` which prints the jobset description
   to `stdout`:
 
   $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
 */
-{ supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ] }:
+{ supportedSystems ? import ../../ci/supportedSystems.nix }:
 
 let
 
@@ -72,8 +72,10 @@ let
     ghc963
     ghc964
     ghc965
+    ghc966
     ghc981
     ghc982
+    ghc983
     ghc9101
   ];
 
@@ -326,7 +328,6 @@ let
         lambdabot
         lhs2tex
         madlang
-        mailctl
         matterhorn
         mkjson
         mueval
@@ -344,8 +345,9 @@ let
         nixfmt-rfc-style
         nota
         nvfetcher
+        oama
         ormolu
-        # pakcs broken by set-extra on 2024-03-15
+        pakcs
         pandoc
         place-cursor-at
         pinboard-notes-backup
@@ -365,7 +367,6 @@ let
         stylish-haskell
         taffybar
         tamarin-prover
-        taskell
         termonad
         tldr-hs
         tweet-hs
@@ -378,6 +379,7 @@ let
         xmobar
         xmonadctl
         xmonad-with-packages
+        yi
         zsh-git-prompt
         ;
 
@@ -392,19 +394,7 @@ let
       };
 
       # GHCs linked to musl.
-      pkgsMusl.haskell.compiler = lib.recursiveUpdate
-        (packagePlatforms pkgs.pkgsMusl.haskell.compiler)
-        {
-          # remove musl ghc865Binary since it is known to be broken and
-          # causes an evaluation error on darwin.
-          ghc865Binary = {};
-
-          ghcjs = {};
-          ghcjs810 = {};
-        };
-
-      # Get some cache going for MUSL-enabled GHC.
-      pkgsMusl.haskellPackages =
+      pkgsMusl =
         removePlatforms
           [
             # pkgsMusl is compiled natively with musl.  It is not
@@ -418,11 +408,26 @@ let
             "aarch64-darwin"
           ]
           {
-            inherit (packagePlatforms pkgs.pkgsMusl.haskellPackages)
-              hello
-              lens
-              random
-              ;
+            haskell.compiler = lib.recursiveUpdate
+              (packagePlatforms pkgs.pkgsMusl.haskell.compiler)
+              {
+                # remove musl ghc865Binary since it is known to be broken and
+                # causes an evaluation error on darwin.
+                ghc865Binary = {};
+
+                ghcjs = {};
+                ghcjs810 = {};
+              };
+
+            # Get some cache going for MUSL-enabled GHC.
+            haskellPackages =
+              {
+                inherit (packagePlatforms pkgs.pkgsMusl.haskellPackages)
+                  hello
+                  lens
+                  random
+                ;
+              };
           };
 
       # Test some statically linked packages to catch regressions
@@ -461,8 +466,8 @@ let
               ;
             };
 
-            haskell.packages.native-bignum.ghc982 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc982)
+            haskell.packages.native-bignum.ghc983 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc983)
                 hello
                 random
                 QuickCheck
@@ -471,37 +476,65 @@ let
             };
           };
 
-      pkgsCross.ghcjs =
-        removePlatforms
-          [
-            # Hydra output size of 3GB is exceeded
-            "aarch64-linux"
-          ]
-          {
-            haskellPackages = {
-              inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
-                ghc
-                hello
-                microlens
-              ;
+      pkgsCross = {
+        ghcjs =
+          removePlatforms
+            [
+              # Hydra output size of 3GB is exceeded
+              "aarch64-linux"
+            ]
+            {
+              haskellPackages = {
+                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
+                  ghc
+                  hello
+                  microlens
+                ;
+              };
+
+              haskell.packages.ghc98 = {
+                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghc98)
+                  ghc
+                  hello
+                  microlens
+                ;
+              };
+
+              haskell.packages.ghcHEAD = {
+                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghcHEAD)
+                  ghc
+                  hello
+                  microlens
+                ;
+              };
             };
 
-            haskell.packages.ghc98 = {
-              inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghc98)
-                ghc
-                hello
-                microlens
+        riscv64 = {
+          # Cross compilation of GHC
+          haskell.compiler = {
+            inherit (packagePlatforms pkgs.pkgsCross.riscv64.haskell.compiler)
+              # Our oldest GHC which still uses its own expression. 8.10.7 can
+              # theoretically be used to chain bootstrap all GHCs on riscv64
+              # which doesn't have official bindists.
+              ghc8107
+              # Latest GHC we are able to cross-compile.
+              ghc948
               ;
-            };
-
-            haskell.packages.ghcHEAD = {
-              inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghcHEAD)
-                ghc
-                hello
-                microlens
-              ;
-            };
           };
+        };
+
+        aarch64-multiplatform = {
+          # Cross compilation of GHC
+          haskell.compiler = {
+            inherit (packagePlatforms pkgs.pkgsCross.aarch64-multiplatform.haskell.compiler)
+              # Uses a separate expression and LLVM backend for aarch64.
+              ghc8107
+              # Latest GHC we are able to cross-compile. Uses NCG backend.
+              ghc948
+              ;
+          };
+        };
+      };
     })
     (versionedCompilerJobs {
       # Packages which should be checked on more than the
@@ -511,14 +544,25 @@ let
       # package sets (like Cabal, jailbreak-cabal) are
       # working as expected.
       cabal-install = lib.subtractLists [
+        # It is recommended to use pkgs.cabal-install instead of cabal-install
+        # from the package sets. Due to (transitively) requiring recent versions
+        # of core packages, it is not always reasonable to get cabal-install to
+        # work with older compilers.
+        compilerNames.ghc8107
+        compilerNames.ghc902
+        compilerNames.ghc925
+        compilerNames.ghc926
+        compilerNames.ghc927
+        compilerNames.ghc928
+        compilerNames.ghc945
+        compilerNames.ghc946
+        compilerNames.ghc947
+        compilerNames.ghc948
         compilerNames.ghc9101
       ] released;
-      Cabal_3_10_3_0 = lib.subtractLists [
-        compilerNames.ghc9101
-      ] released;
-      Cabal-syntax_3_10_3_0 = lib.subtractLists [
-        compilerNames.ghc9101
-      ] released;
+      Cabal_3_10_3_0 = released;
+      Cabal_3_12_1_0 = released;
+      Cabal_3_14_0_0 = released;
       cabal2nix = lib.subtractLists [
         compilerNames.ghc9101
       ] released;
@@ -531,11 +575,8 @@ let
         compilerNames.ghc8107
         # Support ceased as of 2.5.0.0
         compilerNames.ghc902
-        # No support yet (2024-05-12)
-        compilerNames.ghc9101
       ] released;
       hoogle = lib.subtractLists [
-        compilerNames.ghc9101
       ] released;
       hlint = lib.subtractLists [
         compilerNames.ghc902
@@ -549,9 +590,6 @@ let
       language-nix = lib.subtractLists [
         compilerNames.ghc9101
       ] released;
-      large-hashable = [
-        compilerNames.ghc928
-      ];
       nix-paths = released;
       titlecase = lib.subtractLists [
         compilerNames.ghc9101
@@ -683,7 +721,7 @@ let
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskell.packages.native-bignum.ghc948 # non-hadrian
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc982
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc983
         ];
       };
     }

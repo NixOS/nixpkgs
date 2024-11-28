@@ -52,6 +52,6 @@ mkDerivation {
     mainProgram = "spacebar";
     homepage = "https://invent.kde.org/plasma-mobile/spacebar";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

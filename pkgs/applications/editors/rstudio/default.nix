@@ -2,7 +2,6 @@
 , stdenv
 , mkDerivation
 , fetchurl
-, fetchpatch
 , fetchFromGitHub
 , makeDesktopItem
 , copyDesktopItems
@@ -147,8 +146,8 @@ in
         --replace-fail '@node@' ${nodejs}
 
       substituteInPlace src/cpp/core/libclang/LibClang.cpp \
-        --replace-fail '@libclang@' ${llvmPackages.libclang.lib} \
-        --replace-fail '@libclang.so@' ${llvmPackages.libclang.lib}/lib/libclang.so
+        --replace-fail '@libclang@' ${lib.getLib llvmPackages.libclang} \
+        --replace-fail '@libclang.so@' ${lib.getLib llvmPackages.libclang}/lib/libclang.so
 
       substituteInPlace src/cpp/session/CMakeLists.txt \
         --replace-fail '@pandoc@' ${pandoc} \
@@ -159,13 +158,13 @@ in
         --replace-fail '@quarto@' ${quarto}
     '';
 
-    hunspellDictionaries = with lib; filter isDerivation (unique (attrValues hunspellDicts));
+    hunspellDictionaries = lib.filter lib.isDerivation (lib.unique (lib.attrValues hunspellDicts));
     # These dicts contain identically-named dict files, so we only keep the
     # -large versions in case of clashes
-    largeDicts = with lib; filter (d: hasInfix "-large-wordlist" d.name) hunspellDictionaries;
-    otherDicts = with lib; filter
-      (d: !(hasAttr "dictFileName" d &&
-        elem d.dictFileName (map (d: d.dictFileName) largeDicts)))
+    largeDicts = lib.filter (d: lib.hasInfix "-large-wordlist" d.name) hunspellDictionaries;
+    otherDicts = lib.filter
+      (d: !(lib.hasAttr "dictFileName" d &&
+        lib.elem d.dictFileName (map (d: d.dictFileName) largeDicts)))
       hunspellDictionaries;
     dictionaries = largeDicts ++ otherDicts;
 
@@ -213,7 +212,7 @@ in
     '';
 
     meta = {
-      broken = (stdenv.isLinux && stdenv.isAarch64);
+      broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
       inherit description;
       homepage = "https://www.rstudio.com/";
       license = lib.licenses.agpl3Only;

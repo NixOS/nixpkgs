@@ -1,14 +1,11 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.fireqos;
   fireqosConfig = pkgs.writeText "fireqos.conf" "${cfg.config}";
 in {
   options.services.fireqos = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         If enabled, FireQOS will be launched with the specified
@@ -16,8 +13,8 @@ in {
       '';
     };
 
-    config = mkOption {
-      type = types.str;
+    config = lib.mkOption {
+      type = lib.types.str;
       default = "";
       example = ''
         interface wlp3s0 world-in input rate 10mbit ethernet
@@ -34,7 +31,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.fireqos = {
       description = "FireQOS";
       after = [ "network.target" ];

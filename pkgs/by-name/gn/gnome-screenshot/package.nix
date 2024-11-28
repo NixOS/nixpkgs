@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   version = "41.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "Stt97JJkKPdCY9V5ZnPPFC5HILbnaPVGio0JM/mMlZc=";
+    url = "mirror://gnome/sources/gnome-screenshot/${lib.versions.major version}/gnome-screenshot-${version}.tar.xz";
+    hash = "sha256-Stt97JJkKPdCY9V5ZnPPFC5HILbnaPVGio0JM/mMlZc=";
   };
 
   patches = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     # https://gitlab.gnome.org/GNOME/gnome-screenshot/-/issues/186
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-screenshot/-/commit/b60dad3c2536c17bd201f74ad8e40eb74385ed9f.patch";
-      sha256 = "Js83h/3xxcw2hsgjzGa5lAYFXVrt6MPhXOTh5dZTx/w=";
+      hash = "sha256-Js83h/3xxcw2hsgjzGa5lAYFXVrt6MPhXOTh5dZTx/w=";
     })
   ];
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnome-screenshot";
     };
   };
 

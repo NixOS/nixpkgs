@@ -2,7 +2,6 @@
   lib,
   async-timeout,
   buildPythonPackage,
-  curio,
   fetchFromGitHub,
   flask,
   httpcore,
@@ -14,7 +13,6 @@
   python-socks,
   pythonOlder,
   setuptools,
-  sniffio,
   starlette,
   tiny-proxy,
   trio,
@@ -24,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "httpx-socks";
-  version = "0.9.1";
+  version = "0.9.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -33,18 +31,18 @@ buildPythonPackage rec {
     owner = "romis2012";
     repo = "httpx-socks";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9v5DfxEtM7jq+b8wR0M1klTSnSdFjQ4aDl8ZSZWxbFA=";
+    hash = "sha256-PUiciSuDCO4r49st6ye5xPLCyvYMKfZY+yHAkp5j3ZI=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     httpcore
     python-socks
-  ];
+  ] ++ python-socks.optional-dependencies.asyncio;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     asyncio = [ async-timeout ];
     trio = [ trio ];
   };

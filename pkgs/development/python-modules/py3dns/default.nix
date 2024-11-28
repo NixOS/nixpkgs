@@ -2,24 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  flit-core,
 }:
 
 buildPythonPackage rec {
   pname = "py3dns";
-  version = "3.2.1";
-  format = "setuptools";
+  version = "4.0.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1r25f0ys5p37bhld7m7n4gb0lrysaym3w318w2f8bncq7r3d81qz";
+    hash = "sha256-mGUugOzsFDxg948OazQWMcqadWDt2N3fyGTAKQJhijk=";
   };
 
-  preConfigure = ''
-    sed -i \
-      -e '/import DNS/d' \
-      -e 's/DNS.__version__/"${version}"/g' \
-      setup.py
-  '';
+  build-system = [ flit-core ];
 
   doCheck = false;
 

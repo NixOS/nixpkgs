@@ -1,16 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, dtkwidget
-, cmake
-, qttools
-, pkg-config
-, wrapQtAppsHook
-, opencv
-, freeimage
-, libmediainfo
-, ffmpegthumbnailer
-, pcre
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dtkwidget,
+  cmake,
+  libsForQt5,
+  pkg-config,
+  opencv,
+  freeimage,
+  libmediainfo,
+  ffmpegthumbnailer,
+  pcre,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,12 @@ stdenv.mkDerivation rec {
     substituteInPlace libimagevisualresult/CMakeLists.txt --replace '/usr' '$out'
   '';
 
-  nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
+  ];
 
   buildInputs = [
     dtkwidget
@@ -40,9 +45,7 @@ stdenv.mkDerivation rec {
     pcre
   ];
 
-  cmakeFlags = [
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-  ];
+  cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
 
   meta = with lib; {
     description = "Image editor lib for dtk";

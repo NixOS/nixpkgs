@@ -1,5 +1,4 @@
 {
-  stdenv,
   buildPythonPackage,
   lib,
   fetchPypi,

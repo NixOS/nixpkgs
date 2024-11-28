@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-executable";
-  version = "1.6";
+  version = "1.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.executable";
     rev = "refs/tags/${version}";
-    hash = "sha256-b8xPOIUMn6JdYlvuoV5UeBdyISh6CC2Gh6E6U5ZZ7qY=";
+    hash = "sha256-qr8t+k0m9VoF2hLNilCLJ9BfATLRlZupF2C9l+6OMDo=";
   };
 
   build-system = [

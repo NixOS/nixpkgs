@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     qtbase
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     xorg.libxcb
   ] ++ lib.optionals (!useQt6) [
     qt5.qtx11extras
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     description = "Style to bend Qt applications to look like they belong into GNOME Shell";
     homepage = "https://github.com/FedoraQt/adwaita-qt";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

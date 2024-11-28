@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildGoModule
 , fetchFromSourcehut
 , makeWrapper
@@ -13,16 +12,16 @@
 
 buildGoModule rec {
   pname = "snippetexpanderd";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromSourcehut {
     owner = "~ianmjones";
     repo = "snippetexpander";
     rev = "v${version}";
-    hash = "sha256-iEoBri+NuFfLkARUBA+D/Fe9xk6PPV62N/YRqPv9C/A=";
+    hash = "sha256-NIMuACrq8RodtjeBbBY42VJ8xqj7fZvdQ2w/5QsjjJI=";
   };
 
-  vendorHash = "sha256-W9NkENdZRzqSAONI9QS2EI5aERK+AaPqwYwITKLwXQE=";
+  vendorHash = "sha256-2nLO/b6XQC88VXE+SewhgKpkRtIHsva+fDudgKpvZiY=";
 
   proxyVendor = true;
 
@@ -62,7 +61,7 @@ buildGoModule rec {
     description = "Your little expandable text snippet helper daemon";
     homepage = "https://snippetexpander.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ianmjones ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
     mainProgram = "snippetexpanderd";
   };

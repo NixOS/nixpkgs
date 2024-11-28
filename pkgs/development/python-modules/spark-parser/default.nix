@@ -2,23 +2,29 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nose,
+  unittestCheckHook,
   click,
 }:
 
 buildPythonPackage rec {
   pname = "spark-parser";
-  version = "1.8.9";
+  version = "1.9.0";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "spark_parser";
     inherit version;
-    sha256 = "0np2y4jcir4a4j18wws7yzkz2zj6nqhdhn41rpq8pyskg6wrgfx7";
+    sha256 = "sha256-3GbUjEJlxBM9tBqcX+nBxQKzsgFn3xWKDyNM0xcSz2Q=";
   };
 
-  buildInputs = [ nose ];
   propagatedBuildInputs = [ click ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
+  unittestFlagsArray = [
+    "-s"
+    "test"
+    "-v"
+  ];
 
   meta = with lib; {
     description = "Early-Algorithm Context-free grammar Parser";

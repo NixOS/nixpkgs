@@ -66,7 +66,7 @@ buildPythonPackage rec {
     xmlschema
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     s2repoze = [
       paste
       repoze-who
@@ -96,6 +96,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/IdentityPython/pysaml2";
     changelog = "https://github.com/IdentityPython/pysaml2/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -4,8 +4,6 @@
   django,
   fetchFromGitHub,
   icalendar,
-  pytest,
-  pytest-django,
   python,
   python-dateutil,
   pythonOlder,

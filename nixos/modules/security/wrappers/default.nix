@@ -165,6 +165,10 @@ in
   ###### interface
 
   options = {
+    security.enableWrappers = lib.mkEnableOption "SUID/SGID wrappers" // {
+      default = true;
+    };
+
     security.wrappers = lib.mkOption {
       type = lib.types.attrsOf wrapperType;
       default = {};
@@ -227,7 +231,7 @@ in
   };
 
   ###### implementation
-  config = {
+  config = lib.mkIf config.security.enableWrappers {
 
     assertions = lib.mapAttrsToList
       (name: opts:
@@ -249,16 +253,11 @@ in
           };
       in
       { # These are mount related wrappers that require the +s permission.
-        fusermount  = mkSetuidRoot "${pkgs.fuse}/bin/fusermount";
-        fusermount3 = mkSetuidRoot "${pkgs.fuse3}/bin/fusermount3";
+        fusermount  = mkSetuidRoot "${lib.getBin pkgs.fuse}/bin/fusermount";
+        fusermount3 = mkSetuidRoot "${lib.getBin pkgs.fuse3}/bin/fusermount3";
         mount  = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/mount";
         umount = mkSetuidRoot "${lib.getBin pkgs.util-linux}/bin/umount";
       };
-
-    boot.specialFileSystems.${parentWrapperDir} = {
-      fsType = "tmpfs";
-      options = [ "nodev" "mode=755" "size=${config.security.wrapperDirSize}" ];
-    };
 
     # Make sure our wrapperDir exports to the PATH env variable when
     # initializing the shell
@@ -274,6 +273,17 @@ in
       ]}"
       mrpx ${wrap.source},
     '') wrappers;
+
+    systemd.mounts = [{
+      where = parentWrapperDir;
+      what = "tmpfs";
+      type = "tmpfs";
+      options = lib.concatStringsSep "," ([
+        "nodev"
+        "mode=755"
+        "size=${config.security.wrapperDirSize}"
+      ]);
+    }];
 
     systemd.services.suid-sgid-wrappers = {
       description = "Create SUID/SGID Wrappers";

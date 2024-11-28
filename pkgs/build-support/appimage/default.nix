@@ -27,7 +27,8 @@ rec {
   };
 
   extract = args@{ name ? "${args.pname}-${args.version}", postExtract ? "", src, ... }: pkgs.runCommand "${name}-extracted" {
-      buildInputs = [ appimage-exec ];
+      nativeBuildInputs = [ appimage-exec ];
+      strictDeps = true;
     } ''
       appimage-exec.sh -x $out ${src}
       ${postExtract}
@@ -205,6 +206,8 @@ rec {
       at-spi2-core
       pciutils # for FreeCAD
       pipewire # immersed-vr wayland support
+
+      libsecret # For bitwarden
     ];
   };
 }

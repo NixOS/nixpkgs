@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
     libticables2
     xz
     bzip2
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     acl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libobjc
   ];
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "This library is part of the TiLP framework";
     homepage = "http://lpg.ticalc.org/prj_tilp/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ siraben luc65r ];
+    maintainers = with maintainers; [ siraben clevor ];
     platforms = with platforms; linux ++ darwin;
   };
 }

@@ -10,13 +10,13 @@
 
 buildNpmPackage rec {
   pname = "lanraragi";
-  version = "0.9.10";
+  version = "0.9.21";
 
   src = fetchFromGitHub {
     owner = "Difegue";
     repo = "LANraragi";
     rev = "v.${version}";
-    hash = "sha256-mW2cVd+SPbjc/+b0KY3je1eqw5ZT/GKFruE4Y/eFdD4=";
+    hash = "sha256-2YdQeBW1MQiUs5nliloISaxG0yhFJ6ulkU/Urx8PN3Y=";
   };
 
   patches = [
@@ -61,7 +61,7 @@ buildNpmPackage rec {
     TimeLocal
     YAMLPP
     StringSimilarity
-  ] ++ lib.optionals stdenv.isLinux [ LinuxInotify2 ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ LinuxInotify2 ];
 
   buildPhase = ''
     runHook preBuild

@@ -48,6 +48,7 @@ in
         type = lib.types.package;
 
         # `yabar-stable` segfaults under certain conditions.
+        # remember to update yabar.passthru.tests if nixos switches back to it!
         apply = x: if x == pkgs.yabar-unstable then x else lib.flip lib.warn x ''
           It's not recommended to use `yabar' with `programs.yabar', the (old) stable release
           tends to segfault under certain circumstances:
@@ -63,8 +64,8 @@ in
         description = ''
           The package which contains the `yabar` binary.
 
-          Nixpkgs provides the `yabar` and `yabar-unstable`
-          derivations since 18.03, so it's possible to choose.
+          Nixpkgs provides the `yabar` and `yabar-unstable`,
+          so it's possible to choose.
         '';
       };
 

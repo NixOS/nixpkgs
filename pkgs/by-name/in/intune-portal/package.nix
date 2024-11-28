@@ -7,7 +7,7 @@
 , curlMinimal
 , openssl
 , libsecret
-, webkitgtk
+, webkitgtk_4_0
 , libsoup
 , gtk3
 , atk
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   version = "1.2405.17-jammy";
 
   src = fetchurl {
-    url = "https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/i/${pname}/${pname}_${version}_amd64.deb";
+    url = "https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/i/intune-portal/intune-portal_${version}_amd64.deb";
     hash = "sha256-WpVPWzh8jN092MaY2rMXhLfpVXsflMl9hOY9nNGJlLk=";
   };
 
@@ -36,13 +36,13 @@ stdenv.mkDerivation rec {
     let
       libPath = {
         intune = lib.makeLibraryPath [
-          stdenv.cc.cc.lib
+          stdenv.cc.cc
           libuuid
           xorg.libX11
           curlMinimal
           openssl
           libsecret
-          webkitgtk
+          webkitgtk_4_0
           libsoup
           gtk3
           atk
@@ -109,5 +109,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ rhysmdnz ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

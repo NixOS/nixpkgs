@@ -12,7 +12,7 @@ python3Packages.buildPythonPackage rec {
     owner = "lagmoellertim";
     repo = "unsilence";
     rev = version;
-    sha256 = "sha256-M4Ek1JZwtr7vIg14aTa8h4otIZnPQfKNH4pZE4GpiBQ=";
+    hash = "sha256-M4Ek1JZwtr7vIg14aTa8h4otIZnPQfKNH4pZE4GpiBQ=";
   };
 
   nativeBuildInputs = with python3Packages; [

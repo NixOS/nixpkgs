@@ -1,29 +1,33 @@
 {
-  appdirs,
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # dependencies
+  appdirs,
   keras,
-  lib,
   mhcgnomes,
-  nose,
   pandas,
-  pytestCheckHook,
   pyyaml,
   scikit-learn,
   tensorflow,
+  tf-keras,
   tqdm,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mhcflurry";
-  version = "2.1.1";
+  version = "2.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openvax";
     repo = "mhcflurry";
     rev = "refs/tags/v${version}";
-    hash = "sha256-absIKvcFo6I1Uu0t+l8OLOU/AQ4kD295P4+KVwMAWMc=";
+    hash = "sha256-dxCGCPnk1IFKg8ZVqMJsojQL0KlNirKlHJoaaOYIzMU=";
   };
 
   # keras and tensorflow are not in the official setup.py requirements but are required for the CLI utilities to run.
@@ -35,11 +39,13 @@ buildPythonPackage rec {
     pyyaml
     scikit-learn
     tensorflow
+    tf-keras
     tqdm
   ];
 
+  # Tests currently depend on nose; see
+  # <https://github.com/openvax/mhcflurry/pull/244>.
   nativeCheckInputs = [
-    nose
     pytestCheckHook
   ];
 
@@ -88,7 +94,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/openvax/mhcflurry/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ samuela ];
-    # ModuleNotFoundError: No module named 'keras.api._v2' as tensorflow is too outdated
-    broken = true;
+    # Requires a recent version of tensorflow
+    broken = lib.versionOlder tensorflow.version "2.15.0";
   };
 }

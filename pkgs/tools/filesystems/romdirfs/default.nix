@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mlafeldt/romdirfs";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "romdirfs";
   };
 }

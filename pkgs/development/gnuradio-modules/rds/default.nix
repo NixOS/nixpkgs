@@ -4,7 +4,7 @@
 , gnuradio
 , cmake
 , pkg-config
-, swig
+, swig3
 , python
 , logLib
 , mpir
@@ -50,7 +50,7 @@ in mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
-    swig
+    swig3
     python
   ];
 

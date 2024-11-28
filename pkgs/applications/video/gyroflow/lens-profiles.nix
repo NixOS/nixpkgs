@@ -2,12 +2,12 @@
 
 fetchFromGitHub {
   pname = "gyroflow-lens-profiles";
-  version = "2023-12-01";
+  version = "2024-09-08";
 
   owner = "gyroflow";
   repo = "lens_profiles";
-  rev = "3e72169ae6b8601260497d7216d5fcbbc8b67194";
-  hash = "sha256-18KtunSxTsJhBge+uOGBcNZRG3W26M/Osyxllu+N0UI=";
+  rev = "a100b233a1df242d5bf1be06df2888a5852febf3";
+  hash = "sha256-z994k2lozakaKNKcdrJKzTiMGeL9oJ70jFnEYgbutq4=";
 
   meta = with lib; {
     description = "Lens profile database for Gyroflow";

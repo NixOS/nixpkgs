@@ -59,6 +59,13 @@ in {
       description = "Port number anki-sync-server listens to.";
     };
 
+    baseDirectory = mkOption {
+      type = types.str;
+      default = "%S/%N";
+      description = "Base directory where user(s) synchronized data will be stored.";
+    };
+
+
     openFirewall = mkOption {
       default = false;
       type = types.bool;
@@ -114,7 +121,7 @@ in {
       wantedBy = ["multi-user.target"];
       path = [cfg.package];
       environment = {
-        SYNC_BASE = "%S/%N";
+        SYNC_BASE = cfg.baseDirectory;
         SYNC_HOST = specEscape cfg.address;
         SYNC_PORT = toString cfg.port;
       };

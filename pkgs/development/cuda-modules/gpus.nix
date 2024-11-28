@@ -28,23 +28,6 @@
 # https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
 [
   {
-    # GeForce 700, GT-730
-    archName = "Kepler";
-    computeCapability = "3.0";
-    isJetson = false;
-    minCudaVersion = "10.0";
-    dontDefaultAfter = "10.2";
-    maxCudaVersion = "10.2";
-  }
-  {
-    archName = "Kepler";
-    computeCapability = "3.2";
-    isJetson = false;
-    minCudaVersion = "10.0";
-    dontDefaultAfter = "10.2";
-    maxCudaVersion = "10.2";
-  }
-  {
     # Tesla K40
     archName = "Kepler";
     computeCapability = "3.5";

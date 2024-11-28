@@ -5,10 +5,9 @@
   six,
   eventlet,
   gevent,
-  pynose,
   mock,
   coverage,
-  pkgs,
+  openjdk8_headless,
 }:
 
 buildPythonPackage rec {
@@ -25,10 +24,9 @@ buildPythonPackage rec {
   buildInputs = [
     eventlet
     gevent
-    pynose
     mock
     coverage
-    pkgs.openjdk8
+    openjdk8_headless
   ];
 
   # not really needed
@@ -48,5 +46,6 @@ buildPythonPackage rec {
     homepage = "https://kazoo.readthedocs.org";
     description = "Higher Level Zookeeper Client";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

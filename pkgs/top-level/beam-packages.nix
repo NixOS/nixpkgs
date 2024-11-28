@@ -1,9 +1,11 @@
 { lib
 , beam
+, beam_nodocs
 , callPackage
 , wxGTK32
 , buildPackages
 , stdenv
+, ex_docSupport ? true
 , wxSupport ? true
 , systemd
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
@@ -30,9 +32,8 @@ in
       wxGTK = wxGTK32;
       parallelBuild = true;
       autoconf = buildPackages.autoconf269;
-      exdocSupport = true;
-      exdoc = self.packages.erlang_26.ex_doc;
-      inherit wxSupport systemdSupport;
+      inherit (beam_nodocs.packages.erlang_27) ex_doc;
+      inherit ex_docSupport wxSupport systemdSupport;
     };
 
     erlang_26 = self.beamLib.callErlang ../development/interpreters/erlang/26.nix {

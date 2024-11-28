@@ -19,7 +19,6 @@
 , libintl
 , libpng
 , librsvg
-, libstroke
 , libxslt
 , perl
 , pkg-config
@@ -65,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
     libpng
     librsvg
-    libstroke
     libxslt
     perl
     python3Packages.python

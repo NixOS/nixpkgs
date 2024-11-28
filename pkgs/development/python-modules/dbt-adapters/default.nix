@@ -1,30 +1,35 @@
 {
   lib,
+  agate,
   buildPythonPackage,
+  dbt-common,
   fetchFromGitHub,
   hatchling,
-  agate,
-  dbt-common,
   mashumaro,
   protobuf,
+  pytestCheckHook,
+  pythonOlder,
   pytz,
   typing-extensions,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-adapters";
-  version = "1.3.2";
+  version = "1.7.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-adapters";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Erx/j1x+I4ypPqBFzJRZk3ILr3ZG97Hvk4vXe2p6cDc=";
+    hash = "sha256-I3A3rIMpT+MAq+ebid9RMr6I3W1l4ir78UmfeEr5U3U=";
   };
 
   build-system = [ hatchling ];
+
+  pythonRelaxDeps = [ "protobuf" ];
 
   dependencies = [
     agate
@@ -47,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dbt-labs/dbt-adapters";
     changelog = "https://github.com/dbt-labs/dbt-adapters/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

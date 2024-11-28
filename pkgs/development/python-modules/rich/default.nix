@@ -19,6 +19,7 @@
   attrs,
   pytestCheckHook,
   setuptools,
+  which,
 
   # for passthru.tests
   enrich,
@@ -29,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "13.7.1";
+  version = "13.8.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -38,7 +39,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-7LvmPrCpHfPEfJ1r8IFnQhYkBstvtIrWYhGwcchlc0s=";
+    hash = "sha256-k+a64GDGzRDprvJz7s9Sm4z8jDV5TZ+CZLMgXKXXonM=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -48,7 +49,7 @@ buildPythonPackage rec {
     pygments
   ] ++ lib.optionals (pythonOlder "3.9") [ typing-extensions ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     jupyter = [ ipywidgets ];
   };
 
@@ -56,6 +57,7 @@ buildPythonPackage rec {
     attrs
     pytestCheckHook
     setuptools
+    which
   ];
 
   disabledTests = [
@@ -88,9 +90,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Textualize/rich";
     changelog = "https://github.com/Textualize/rich/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      ris
-      joelkoen
-    ];
+    maintainers = with maintainers; [ ris ];
   };
 }

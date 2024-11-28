@@ -1,33 +1,44 @@
-{ lib
-, git
-, gnupg1
-, python3Packages
-, fetchPypi
+{
+  lib,
+  fetchPypi,
+  git,
+  gnupg1,
+  python3Packages,
 }:
 
-with python3Packages; buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "reno";
-  version = "3.1.0";
+  version = "4.1.0";
+  pyproject = true;
 
   # Must be built from python sdist because of versioning quirks
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2510e3aae4874674187f88f22f854e6b0ea1881b77039808a68ac1a5e8ee69b6";
+    hash = "sha256-+ZLx/b0WIV7J3kevCBMdU6KDDJ54Q561Y86Nan9iU3A=";
   };
 
-  propagatedBuildInputs = [
+  # remove b/c doesn't list all dependencies, and requires a few packages not in nixpkgs
+  postPatch = ''
+    rm test-requirements.txt
+  '';
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     dulwich
     pbr
     pyyaml
     setuptools  # required for finding pkg_resources at runtime
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     # Python packages
-    pytestCheckHook
     docutils
     fixtures
     sphinx
+    stestr
     testtools
     testscenarios
 
@@ -36,17 +47,30 @@ with python3Packages; buildPythonApplication rec {
     gnupg1
   ];
 
-  # remove b/c doesn't list all dependencies, and requires a few packages not in nixpkgs
-  postPatch = ''
-    rm test-requirements.txt
+  checkPhase = ''
+    runHook preCheck
+    export HOME=$TMPDIR
+    stestr run -e <(echo "
+      # Expects to be run from a git repository
+      reno.tests.test_cache.TestCache.test_build_cache_db
+      reno.tests.test_semver.TestSemVer.test_major_post_release
+      reno.tests.test_semver.TestSemVer.test_major_working_and_post_release
+      reno.tests.test_semver.TestSemVer.test_major_working_copy
+      reno.tests.test_semver.TestSemVer.test_minor_post_release
+      reno.tests.test_semver.TestSemVer.test_minor_working_and_post_release
+      reno.tests.test_semver.TestSemVer.test_minor_working_copy
+      reno.tests.test_semver.TestSemVer.test_patch_post_release
+      reno.tests.test_semver.TestSemVer.test_patch_working_and_post_release
+      reno.tests.test_semver.TestSemVer.test_patch_working_copy
+      reno.tests.test_semver.TestSemVer.test_same
+      reno.tests.test_semver.TestSemVer.test_same_with_note
+    ")
+    runHook postCheck
   '';
 
-  disabledTests = [
-    "test_build_cache_db" # expects to be run from a git repository
-  ];
+  pythonImportsCheck = [ "reno" ];
 
-  # verify executable
-  postCheck = ''
+  postInstallCheck = ''
     $out/bin/reno -h
   '';
 
@@ -55,6 +79,6 @@ with python3Packages; buildPythonApplication rec {
     mainProgram = "reno";
     homepage = "https://docs.openstack.org/reno/latest";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger guillaumekoenig ];
+    maintainers = teams.openstack.members ++ (with maintainers; [ drewrisinger guillaumekoenig ]);
   };
 }

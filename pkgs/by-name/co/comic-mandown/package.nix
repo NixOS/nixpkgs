@@ -4,8 +4,8 @@
 , withGUI ? true
 }:
 let
-  mandown' = python3Packages.mandown.overrideAttrs (prev: {
-    propagatedBuildInputs = prev.propagatedBuildInputs ++ lib.optionals withGUI prev.passthru.optional-dependencies.gui;
+  mandown' = python3Packages.mandown.overridePythonAttrs (prev: {
+    propagatedBuildInputs = prev.propagatedBuildInputs ++ lib.optionals withGUI prev.optional-dependencies.gui;
   });
   mandownApp = python3Packages.toPythonApplication mandown';
 in

@@ -6,6 +6,6 @@
 mkKdeDerivation {
   pname = "kdnssd";
 
-  extraNativeBuildInputs = [qttools];
-  extraBuildInputs = [avahi];
+  extraNativeBuildInputs = [ qttools ];
+  extraBuildInputs = [ avahi ];
 }

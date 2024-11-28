@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "fipy";
-  version = "3.4.4";
+  version = "3.4.5";
   format = "setuptools";
 
   # Python 3.12 is not yet supported.
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "usnistgov";
     repo = "fipy";
     rev = "refs/tags/${version}";
-    hash = "sha256-XZpm+gzysR2OXBcxWUEjP1PlaLuOL2NpmeKMCH+OEb4=";
+    hash = "sha256-345YrGQgHNq0FULjJjLqHksyfm/EHl+KyGfxwS6xK9U=";
   };
 
   propagatedBuildInputs = [
@@ -45,9 +45,9 @@ buildPythonPackage rec {
     future
     scikit-fmm
     openssh
-  ] ++ lib.optionals (!stdenv.isDarwin) [ gmsh ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ gmsh ];
 
-  nativeCheckInputs = lib.optionals (!stdenv.isDarwin) [ gmsh ];
+  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ gmsh ];
 
   # NOTE: Two of the doctests in fipy.matrices.scipyMatrix._ScipyMatrix.CSR fail, and there is no
   # clean way to disable them.

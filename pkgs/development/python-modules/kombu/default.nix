@@ -4,10 +4,8 @@
   azure-identity,
   azure-servicebus,
   azure-storage-queue,
-  backports-zoneinfo,
   boto3,
   buildPythonPackage,
-  case,
   confluent-kafka,
   fetchPypi,
   hypothesis,
@@ -16,37 +14,39 @@
   pycurl,
   pymongo,
   #, pyro4
-  pytest7CheckHook,
+  pytestCheckHook,
   pythonOlder,
   pyyaml,
   redis,
+  setuptools,
   sqlalchemy,
   typing-extensions,
+  tzdata,
   urllib3,
   vine,
 }:
 
 buildPythonPackage rec {
   pname = "kombu";
-  version = "5.3.7";
-  format = "setuptools";
+  version = "5.4.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ARxM2aNVwUod6NNdJXMUodJFbVK3FAOIVhrKw88al78=";
+    hash = "sha256-7vVy3S/Z/GFLN1gOPK6v3Vr0bB7/Mef7qJE4zbQG8s8=";
   };
 
-  propagatedBuildInputs =
-    [
-      amqp
-      vine
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ]
-    ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+  build-system = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  propagatedBuildInputs = [
+    amqp
+    tzdata
+    vine
+  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+
+  optional-dependencies = {
     msgpack = [ msgpack ];
     yaml = [ pyyaml ];
     redis = [ redis ];
@@ -71,16 +71,17 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    case
     hypothesis
-    pytest7CheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "kombu" ];
 
   disabledTests = [
     # Disable pyro4 test
     "test_driver_version"
+    # AssertionError: assert [call('WATCH'..., 'test-tag')] ==...
+    "test_global_keyprefix_transaction"
   ];
 
   meta = with lib; {

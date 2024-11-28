@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-posthocs";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maximtrp";
     repo = "scikit-posthocs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sRop5DKakrZEBswzTvumn68wKqU15zM5aCLfZ/PdsFg=";
+    hash = "sha256-ssaTd+A7lzd4tlKHGkgKixi3XjZLQBcPs6UOEzX/hrk=";
   };
 
   nativeBuildInputs = [

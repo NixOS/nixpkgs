@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, gtk3, Cocoa }:
 
 let
-  backend   = if stdenv.isDarwin then "darwin" else "unix";
+  backend   = if stdenv.hostPlatform.isDarwin then "darwin" else "unix";
 in
 
 stdenv.mkDerivation rec {
@@ -15,20 +15,20 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  propagatedBuildInputs = lib.optional stdenv.isLinux gtk3
-    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux gtk3
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i 's/set(CMAKE_OSX_DEPLOYMENT_TARGET "10.8")//' ./CMakeLists.txt
   '';
 
   installPhase = ''
     mkdir -p $out/{include,lib}
     mkdir -p $out/lib/pkgconfig
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     mv ./out/libui.so.0 $out/lib/
     ln -s $out/lib/libui.so.0 $out/lib/libui.so
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mv ./out/libui.A.dylib $out/lib/
     ln -s $out/lib/libui.A.dylib $out/lib/libui.dylib
   '' + ''
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       --subst-var-by out $out \
       --subst-var-by version "${version}"
   '';
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id $out/lib/libui.A.dylib $out/lib/libui.A.dylib
   '';
 

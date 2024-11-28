@@ -23,7 +23,6 @@
 buildDunePackage rec {
   pname = "opium";
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   inherit (rock) src version;
 
@@ -57,5 +56,6 @@ buildDunePackage rec {
     homepage = "https://github.com/rgrinberg/opium";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.pmahoney ];
+    broken = true; # Not compatible with mirage-crypto ≥ 1.0
   };
 }

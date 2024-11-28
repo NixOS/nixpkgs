@@ -32,7 +32,7 @@
 , sqlite
 , stdenv
 , util-linuxMinimal
-, webkitgtk
+, webkitgtk_4_0
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Chowdhury-DSP";
     repo = "ChowKick";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-YYcNiJGGw21aVY03tyQLu3wHCJhxYiDNJZ+LWNbQdj4=";
+    hash = "sha256-YYcNiJGGw21aVY03tyQLu3wHCJhxYiDNJZ+LWNbQdj4=";
     fetchSubmodules = true;
   };
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     sqlite
     util-linuxMinimal
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   cmakeFlags = [

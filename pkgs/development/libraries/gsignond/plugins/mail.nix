@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Plugin for the Accounts-SSO gSignOn daemon that handles E-Mail credentials";
     homepage = "https://gitlab.com/accounts-sso/gsignond-plugin-mail";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

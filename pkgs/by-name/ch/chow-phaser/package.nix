@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "ChowPhaser";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-9wo7ZFMruG3QNvlpILSvrFh/Sx6J1qnlWc8+aQyS4tQ=";
+    hash = "sha256-9wo7ZFMruG3QNvlpILSvrFh/Sx6J1qnlWc8+aQyS4tQ=";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];

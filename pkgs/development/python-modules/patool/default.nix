@@ -38,15 +38,15 @@ let
 in
 buildPythonPackage rec {
   pname = "patool";
-  version = "2.1.1";
+  version = "2.4.0";
   format = "setuptools";
 
   #pypi doesn't have test data
   src = fetchFromGitHub {
     owner = "wummel";
     repo = pname;
-    rev = "upstream/${version}";
-    hash = "sha256-B2P6JldMOAxr4WS+wST+kRVvEm41zH3Nh5LLKoFOws4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-dWyC8uTVUb06liNcJaG4oK9wqIDmwAl6i6cg4XRRRdQ=";
   };
 
   postPatch = ''
@@ -61,7 +61,7 @@ buildPythonPackage rec {
     "test_unzip_file"
     "test_zip"
     "test_zip_file"
-  ] ++ lib.optionals stdenv.isDarwin [ "test_ar" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_ar" ];
 
   meta = with lib; {
     description = "portable archive file manager";

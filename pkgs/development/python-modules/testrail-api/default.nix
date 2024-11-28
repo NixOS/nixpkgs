@@ -6,12 +6,13 @@
   pythonOlder,
   requests,
   responses,
+  setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "testrail-api";
-  version = "1.13.0";
+  version = "1.13.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,17 +21,15 @@ buildPythonPackage rec {
     owner = "tolstislon";
     repo = "testrail-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-NGdNpNJ9ejwneSacNmifGJ8TMUuBqMu9tHTyLxTB5Uk=";
+    hash = "sha256-GR1yhky33XZZFcPEO2WRvVUkmekG9HoM00doVgTCD+0=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "setuptools_scm==7.1.0" "setuptools_scm"
-  '';
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = [ requests ];
+  dependencies = [ requests ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -39,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "testrail_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper of the TestRail API";
     homepage = "https://github.com/tolstislon/testrail-api";
-    changelog = "https://github.com/tolstislon/ytestrail-api/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ aanderse ];
+    changelog = "https://github.com/tolstislon/testrail-api/releases/tag/${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ aanderse ];
   };
 }

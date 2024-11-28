@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "types-beautifulsoup4";
-  version = "4.12.0.20240511";
+  version = "4.12.0.20241020";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AE9glv3YOxnNv2yxDk6uV7ECBezMNl0Kadd9qDYBLig=";
+    hash = "sha256-FYNw0I0M1Ei9EbEypQ/1J5I3pdS1g3vroHTeFSpRMFk=";
   };
 
   build-system = [ setuptools ];

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
   pythonOlder,
   matplotlib,
   numpy,
@@ -52,7 +51,7 @@ buildPythonPackage rec {
     "pytest_regressions.plugin"
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     dataframe = [
       pandas
       numpy
@@ -77,6 +76,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/ESSS/pytest-regressions";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
   };
 }

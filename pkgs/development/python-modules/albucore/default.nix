@@ -2,42 +2,36 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  pythonRelaxDepsHook,
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
   numpy,
-  opencv4,
-  tomli,
-  typing-extensions,
+  opencv-python,
+  stringzilla,
 }:
 
 buildPythonPackage rec {
   pname = "albucore";
-  version = "0.0.11";
+  version = "0.0.19";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "albumentations-team";
     repo = "albucore";
     rev = "refs/tags/${version}";
-    hash = "sha256-ahW1dRbAFfJQ0B0Nfb+Lco03Ymd/IL6hLGvVox3S8/c=";
+    hash = "sha256-GwT7Py7pKbpHxx4avj37/hRjSJXdH5uBU11nCITysVw=";
   };
 
-  pythonRemoveDeps = [ "opencv-python" ];
+  pythonRelaxDeps = [ "opencv-python" ];
 
-  build-system = [
-    setuptools
-    pythonRelaxDepsHook
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     numpy
-    opencv4
-    tomli
-    typing-extensions
+    opencv-python
+    stringzilla
   ];
 
   pythonImportsCheck = [ "albucore" ];

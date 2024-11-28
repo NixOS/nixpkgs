@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, ocaml, findlib
 , lambda-term, cppo, makeWrapper, buildDunePackage
-, xdg, zed, logs, lwt, react, lwt_react
+, xdg, zed, logs
 }:
 
 buildDunePackage rec {

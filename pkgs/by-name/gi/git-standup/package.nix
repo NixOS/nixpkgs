@@ -8,7 +8,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kamranahmedse";
     repo = "git-standup";
     rev = finalAttrs.version;
-    sha256 = "1xnn0jjha56v7l2vj45zzxncl6m5x2hq6nkffgc1bcikhp1pidn7";
+    hash = "sha256-x7Z4w4UzshXYc25ag6HopRrKbP+/ELkFPdsUBaUE1vY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Recall what you did on the last working day";
     homepage = "https://github.com/kamranahmedse/git-standup";
+    changelog = "https://github.com/kamranahmedse/git-standup/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.all;

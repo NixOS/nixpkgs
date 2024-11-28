@@ -1,4 +1,8 @@
-{ stdenv, runCommand, ruby, lib, rsync
+{ stdenv
+, lib
+, buildPackages
+, runCommand
+, ruby
 , defaultGemConfig, buildRubyGem, buildEnv
 , makeBinaryWrapper
 , bundler
@@ -7,6 +11,7 @@
 {
   name ? null
 , pname ? null
+, version ? null
 , mainGemName ? null
 , gemdir ? null
 , gemfile ? null
@@ -61,14 +66,16 @@ let
 
   gems = lib.flip lib.mapAttrs configuredGemset (name: attrs: buildGem name attrs);
 
+  version' = if version != null then
+    version
+  else if pname != null then
+    gems.${pname}.suffix
+  else null;
+
   name' = if name != null then
     name
   else
-    let
-      gem = gems.${pname};
-      suffix = gem.suffix;
-    in
-      "${pname}-${suffix}";
+    "${pname}-${version'}";
 
   pname' = if pname != null then
     pname
@@ -113,9 +120,10 @@ let
 
 
   basicEnvArgs = {
-    inherit nativeBuildInputs buildInputs ignoreCollisions;
+    inherit nativeBuildInputs buildInputs ignoreCollisions pname;
 
     name = name';
+    version = version';
 
     paths = envPaths;
     pathsToLink = [ "/lib" ];
@@ -191,7 +199,7 @@ let
       runCommand name' basicEnvArgs ''
         mkdir -p $out
         for i in $paths; do
-          ${rsync}/bin/rsync -a $i/lib $out/
+          ${buildPackages.rsync}/bin/rsync -a $i/lib $out/
         done
         eval "$postBuild"
       ''

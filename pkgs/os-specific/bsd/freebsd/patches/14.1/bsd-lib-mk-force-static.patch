@@ -1,0 +1,81 @@
+From 197b10de54b53a089ad549f2e00787b4fa719210 Mon Sep 17 00:00:00 2001
+From: Artemis Tosini <me@artem.ist>
+Date: Sat, 2 Nov 2024 07:50:13 +0000
+Subject: [PATCH] HACK: bsd.lib.mk: Treat empty SHLIB_NAME as nonexistant
+
+Unsetting SHLIB_NAME in nix package definitions is a pain
+but we can easily set it to be empty. This is useful when
+building static libraries without unneeded static libraries.
+---
+ share/mk/bsd.lib.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/share/mk/bsd.lib.mk b/share/mk/bsd.lib.mk
+index 5f328d5378ca..89d16dc6fa41 100644
+--- a/share/mk/bsd.lib.mk
++++ b/share/mk/bsd.lib.mk
+@@ -242,7 +242,7 @@ PO_FLAG=-pg
+ _LIBDIR:=${LIBDIR}
+ _SHLIBDIR:=${SHLIBDIR}
+ 
+-.if defined(SHLIB_NAME)
++.if defined(SHLIB_NAME) && !empty(SHLIB_NAME)
+ .if ${MK_DEBUG_FILES} != "no"
+ SHLIB_NAME_FULL=${SHLIB_NAME}.full
+ # Use ${DEBUGDIR} for base system debug files, else .debug subdirectory
+@@ -277,7 +277,7 @@ LDFLAGS+=	-Wl,--undefined-version
+ .endif
+ .endif
+ 
+-.if defined(LIB) && !empty(LIB) || defined(SHLIB_NAME)
++.if defined(LIB) && !empty(LIB) || (defined(SHLIB_NAME) && !empty(SHLIB_NAME))
+ OBJS+=		${SRCS:N*.h:${OBJS_SRCS_FILTER:ts:}:S/$/.o/}
+ BCOBJS+=	${SRCS:N*.[hsS]:N*.asm:${OBJS_SRCS_FILTER:ts:}:S/$/.bco/g}
+ LLOBJS+=	${SRCS:N*.[hsS]:N*.asm:${OBJS_SRCS_FILTER:ts:}:S/$/.llo/g}
+@@ -320,14 +320,14 @@ lib${LIB_PRIVATE}${LIB}.ll: ${LLOBJS}
+ CLEANFILES+=	lib${LIB_PRIVATE}${LIB}.bc lib${LIB_PRIVATE}${LIB}.ll
+ .endif
+ 
+-.if defined(SHLIB_NAME) || \
++.if (defined(SHLIB_NAME) && !empty(SHLIB_NAME)) || \
+     defined(INSTALL_PIC_ARCHIVE) && defined(LIB) && !empty(LIB)
+ SOBJS+=		${OBJS:.o=.pico}
+ DEPENDOBJS+=	${SOBJS}
+ CLEANFILES+=	${SOBJS}
+ .endif
+ 
+-.if defined(SHLIB_NAME)
++.if defined(SHLIB_NAME) && !empty(SHLIB_NAME)
+ _LIBS+=		${SHLIB_NAME}
+ 
+ SOLINKOPTS+=	-shared -Wl,-x
+@@ -435,7 +435,7 @@ all: all-man
+ CLEANFILES+=	${_LIBS}
+ 
+ _EXTRADEPEND:
+-.if !defined(NO_EXTRADEPEND) && defined(SHLIB_NAME)
++.if !defined(NO_EXTRADEPEND) && defined(SHLIB_NAME) && !empty(SHLIB_NAME)
+ .if defined(DPADD) && !empty(DPADD)
+ 	echo ${SHLIB_NAME_FULL}: ${DPADD} >> ${DEPENDFILE}
+ .endif
+@@ -501,7 +501,7 @@ _libinstall:
+ 	    ${_INSTALLFLAGS} lib${LIB_PRIVATE}${LIB}_p.a ${DESTDIR}${_LIBDIR}/
+ .endif
+ .endif
+-.if defined(SHLIB_NAME)
++.if defined(SHLIB_NAME) && !empty(SHLIB_NAME)
+ 	${INSTALL} ${TAG_ARGS} ${STRIP} -o ${LIBOWN} -g ${LIBGRP} -m ${LIBMODE} \
+ 	    ${_INSTALLFLAGS} ${_SHLINSTALLFLAGS} \
+ 	    ${SHLIB_NAME} ${DESTDIR}${_SHLIBDIR}/
+@@ -588,7 +588,7 @@ OBJS_DEPEND_GUESS+= ${SRCS:M*.h}
+ OBJS_DEPEND_GUESS.${_S:${OBJS_SRCS_FILTER:ts:}}.po+=	${_S}
+ .endfor
+ .endif
+-.if defined(SHLIB_NAME) || \
++.if (defined(SHLIB_NAME) && !empty(SHLIB_NAME)) || \
+     defined(INSTALL_PIC_ARCHIVE) && defined(LIB) && !empty(LIB)
+ .for _S in ${SRCS:N*.[hly]}
+ OBJS_DEPEND_GUESS.${_S:${OBJS_SRCS_FILTER:ts:}}.pico+=	${_S}
+-- 
+2.46.1
+

@@ -1,12 +1,11 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }:
   let
-    lualibs = [
+    luaLibs = [
       pkgs.lua.pkgs.markdown
     ];
 
-    getPath = lib: type: "${lib}/share/lua/${pkgs.lua.luaversion}/?.${type}";
-    getLuaPath = lib: getPath lib "lua";
-    luaPath = lib.concatStringsSep ";" (map getLuaPath lualibs);
+    getLuaPath = lib: "${lib}/share/lua/${pkgs.lua.luaversion}/?.lua";
+    luaPath = lib.concatStringsSep ";" (map getLuaPath luaLibs);
   in
   {
     name = "openresty-lua";

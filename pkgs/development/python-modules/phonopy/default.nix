@@ -11,21 +11,35 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  scikit-build-core,
+  cmake,
+  setuptools-scm,
+  ninja,
+  pkg-config,
+  nanobind,
 }:
 
 buildPythonPackage rec {
   pname = "phonopy";
-  version = "2.24.3";
+  version = "2.29.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VHtifCC28GKIE+0oz1wMgmZ9G6+rT8nF0PG6tYkhjG8=";
+    hash = "sha256-MabBtEOyM82R0NbdVaY+2f9GT8rT44xjOi/o38GSRp8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+    scikit-build-core
+    nanobind
+    setuptools-scm
+    ninja
+    cmake
+  ];
+  dontUseCmakeConfigure = true;
 
   propagatedBuildInputs = [
     h5py

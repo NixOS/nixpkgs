@@ -7,20 +7,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "photini";
-  version = "2024.5.0";
+  version = "2024.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jim-easterbrook";
     repo = "Photini";
     rev = "refs/tags/${version}";
-    hash = "sha256-iTaFyQpC585QPInLvFzgk65+Znvb1kTTsrzEQvy1quY=";
+    hash = "sha256-0jr1mNejCF0yW9LkrrsOTcE4ZPGZrMU9Pnt0eXD+3YQ=";
   };
 
   build-system = with python3Packages; [ setuptools-scm ];
   dependencies = with python3Packages; [
-    pyqt6
-    pyqt6-webengine
+    pyside6
     cachetools
     appdirs
     chardet
@@ -33,6 +32,7 @@ python3Packages.buildPythonApplication rec {
     gpxpy
     keyring
     pillow
+    toml
   ];
 
   passthru.updateScript = gitUpdater { };

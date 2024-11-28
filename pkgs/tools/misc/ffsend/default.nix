@@ -2,13 +2,13 @@
 , installShellFiles
 , Security, AppKit
 
-, x11Support ? stdenv.isLinux || stdenv.hostPlatform.isBSD
+, x11Support ? stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isBSD
 , xclip ? null, xsel ? null
 , preferXsel ? false # if true and xsel is non-null, use it instead of xclip
 }:
 
 let
-  usesX11 = stdenv.isLinux || stdenv.isBSD;
+  usesX11 = stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isBSD;
 in
 
 assert (x11Support && usesX11) -> xclip != null || xsel != null;
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     owner = "timvisee";
     repo = "ffsend";
     rev = "v${version}";
-    sha256 = "sha256-L1j1lXPxy9nWMeED9uzQHV5y7XTE6+DB57rDnXa4kMo=";
+    hash = "sha256-L1j1lXPxy9nWMeED9uzQHV5y7XTE6+DB57rDnXa4kMo=";
   };
 
   cargoHash = "sha256-r1yIPV2sW/EpHJpdaJyi6pzE+rtNkBIxSUJF+XA8kbA=";
@@ -58,9 +58,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   nativeBuildInputs = [ installShellFiles ]
-    ++ lib.optionals stdenv.isLinux [ pkg-config ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
   buildInputs =
-    if stdenv.isDarwin then [ Security AppKit ]
+    if stdenv.hostPlatform.isDarwin then [ Security AppKit ]
     else [ openssl ];
 
   preBuild = lib.optionalString (x11Support && usesX11) (

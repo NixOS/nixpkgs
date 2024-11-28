@@ -76,17 +76,10 @@ let
     scope = true;
     pkgs = true;
     test-pkgs = true;
-
-    buildHaskellPackages = true;
-    buildPackages = true;
-    buildFreebsd = true;
-    generateOptparseApplicativeCompletions = true;
-
     callPackage = true;
     mkDerivation = true;
     overrideDerivation = true;
     overrideScope = true;
-    overrideScope' = true;
 
     # Special case: lib/types.nix leaks into a lot of nixos-related
     # derivations, and does not eval deeply.

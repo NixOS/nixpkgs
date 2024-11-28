@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tpnote";
-  version = "1.24.4";
+  version = "1.24.9";
 
   src = fetchFromGitHub {
     owner = "getreu";
     repo = "tp-note";
     rev = "v${version}";
-    hash = "sha256-otV00Lq3xen2kf90EonTbI4SPUob9M+el+5VaHeDPCw=";
+    hash = "sha256-KXkriFFn1GapoVimcK7Hqv1mUTZ2EbnnZPyX2izI2oo=";
   };
 
-  cargoHash = "sha256-zkq1yho9K4WUyGbf8zsb5abP4jJPv1+RZi2kAlp9BCU=";
+  cargoHash = "sha256-MCnQJ1cJeWUJ8L+u09px4COG7XUAVOOgBg8nUi37J90=";
 
   nativeBuildInputs = [
     cmake
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     oniguruma
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
      AppKit
      CoreServices
      SystemConfiguration

@@ -129,9 +129,6 @@ in
       services.changedetection-io = {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        preStart = ''
-          mkdir -p ${cfg.datastorePath}
-        '';
         serviceConfig = {
           User = cfg.user;
           Group = cfg.group;
@@ -153,7 +150,7 @@ in
           Restart = "on-failure";
         };
       };
-      tmpfiles.rules = mkIf defaultStateDir [
+      tmpfiles.rules = mkIf (!defaultStateDir) [
         "d ${cfg.datastorePath} 0750 ${cfg.user} ${cfg.group} - -"
       ];
     };

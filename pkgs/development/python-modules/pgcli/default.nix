@@ -56,7 +56,7 @@ buildPythonPackage rec {
   disabledTests = [
     # requires running postgres
     "test_application_name_in_env"
-  ] ++ lib.optionals stdenv.isDarwin [ "test_application_name_db_uri" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_application_name_db_uri" ];
 
   meta = with lib; {
     description = "Command-line interface for PostgreSQL";

@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     qtbase
     libXt
   ]
-  ++ lib.optionals stdenv.isDarwin [ Cocoa AGL ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa AGL ];
 
   propagatedBuildInputs = [
     boost
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     vtk
   ];
 
-  cmakeFlags = lib.optionals stdenv.isDarwin [
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
   ] ++ lib.optionals cudaSupport [ "-DWITH_CUDA=true" ];
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     homepage = "https://pointclouds.org/";
     description = "Open project for 2D/3D image and point cloud processing";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ viric ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
   };
 }

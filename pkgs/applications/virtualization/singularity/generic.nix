@@ -76,14 +76,6 @@ in
   # inside the upstream source code.
   # Include "/run/wrappers/bin" by default for the convenience of NixOS users.
   systemBinPaths ? [ "/run/wrappers/bin" ],
-  # Path to SUID-ed newuidmap executable
-  # Deprecated in favour of systemBinPaths
-  # TODO(@ShamrockLee): Remove after Nixpkgs 24.05 branch-off
-  newuidmapPath ? null,
-  # Path to SUID-ed newgidmap executable
-  # Deprecated in favour of systemBinPaths
-  # TODO(@ShamrockLee): Remove after Nixpkgs 24.05 branch-off
-  newgidmapPath ? null,
   # External LOCALSTATEDIR
   externalLocalStateDir ? null,
   # Remove the symlinks to `singularity*` when projectName != "singularity"
@@ -110,28 +102,6 @@ in
 }@args:
 
 let
-  # Backward compatibility for privileged-un-utils.
-  # TODO(@ShamrockLee): Remove after Nixpkgs 24.05 branch-off.
-  privileged-un-utils =
-    if ((newuidmapPath == null) && (newgidmapPath == null)) then
-      null
-    else
-      lib.warn
-        "${pname}: arguments newuidmapPath and newgidmapPath is deprecated in favour of systemBinPaths."
-        (
-          runCommandLocal "privileged-un-utils" { } ''
-            mkdir -p "$out/bin"
-            ln -s ${lib.escapeShellArg newuidmapPath} "$out/bin/newuidmap"
-            ln -s ${lib.escapeShellArg newgidmapPath} "$out/bin/newgidmap"
-          ''
-        );
-
-  # Backward compatibility for privileged-un-utils.
-  # TODO(@ShamrockLee): Remove after Nixpkgs 24.05 branch-off.
-  systemBinPaths =
-    lib.optional (privileged-un-utils != null) (lib.makeBinPath [ privileged-un-utils ])
-    ++ args.systemBinPaths or [ "/run/wrappers/bin" ];
-
   concatMapStringAttrsSep =
     sep: f: attrs:
     lib.concatMapStringsSep sep (name: f name attrs.${name}) (lib.attrNames attrs);
@@ -326,26 +296,23 @@ in
     ''}
   '';
 
-  meta =
-    with lib;
-    {
-      description = "Application containers for linux" + extraDescription;
-      longDescription = ''
-        Singularity (the upstream) renamed themselves to Apptainer
-        to distinguish themselves from a fork made by Sylabs Inc.. See
+  meta = {
+    description = "Application containers for linux" + extraDescription;
+    longDescription = ''
+      Singularity (the upstream) renamed themselves to Apptainer
+      to distinguish themselves from a fork made by Sylabs Inc.. See
 
-        https://sylabs.io/2021/05/singularity-community-edition
-        https://apptainer.org/news/community-announcement-20211130
-      '';
-      license = licenses.bsd3;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [
-        jbedo
-        ShamrockLee
-      ];
-      mainProgram = projectName;
-    }
-    // extraMeta;
+      https://sylabs.io/2021/05/singularity-community-edition
+      https://apptainer.org/news/community-announcement-20211130
+    '';
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      jbedo
+      ShamrockLee
+    ];
+    mainProgram = projectName;
+  } // extraMeta;
 }).overrideAttrs
   (
     finalAttrs: prevAttrs: {

@@ -90,7 +90,7 @@ lib.fix (
     checkPhase = ''
       runHook preCheck
 
-      meson test -C _meson-build --no-rebuild --print-errorlogs
+      meson test -C _meson-build --no-rebuild --print-errorlogs --timeout-multiplier 0
 
       runHook postCheck
     '';
@@ -100,7 +100,7 @@ lib.fix (
       homepage = "https://gitlab.freedesktop.org/dbus/dbus-python";
       license = licenses.mit;
       platforms = dbus.meta.platforms;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   }
 )

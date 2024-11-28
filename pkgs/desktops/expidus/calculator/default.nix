@@ -23,16 +23,16 @@ flutter.buildFlutterApplication rec {
 
   postInstall = ''
     rm $out/bin/calculator
-    ln -s $out/app/calculator $out/bin/expidus-calculator
+    ln -s $out/app/$pname/calculator $out/bin/expidus-calculator
 
     mkdir -p $out/share/applications
-    mv $out/app/data/com.expidusos.calculator.desktop $out/share/applications
+    mv $out/app/$pname/data/com.expidusos.calculator.desktop $out/share/applications
 
     mkdir -p $out/share/icons
-    mv $out/app/data/com.expidusos.calculator.png $out/share/icons
+    mv $out/app/$pname/data/com.expidusos.calculator.png $out/share/icons
 
     mkdir -p $out/share/metainfo
-    mv $out/app/data/com.expidusos.calculator.metainfo.xml $out/share/metainfo
+    mv $out/app/$pname/data/com.expidusos.calculator.metainfo.xml $out/share/metainfo
 
     substituteInPlace "$out/share/applications/com.expidusos.calculator.desktop" \
       --replace "Exec=calculator" "Exec=$out/bin/expidus-calculator" \

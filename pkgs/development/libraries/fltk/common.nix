@@ -85,6 +85,8 @@ stdenv.mkDerivation rec {
     libGLU
   ] ++ lib.optionals (withExamples && withGL) [
     glew
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    fontconfig
   ];
 
   propagatedBuildInputs = [
@@ -93,7 +95,6 @@ stdenv.mkDerivation rec {
     libpng
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     freetype
-    fontconfig
     libX11
     libXext
     libXinerama

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gVYDvda+6ZJkShJXUxUEVxq4enkRrhdvlTTxYWq4Aho=";
   };
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
   buildInputs = [ gettext libtool texinfo ];
 
   enableParallelBuilding = true;

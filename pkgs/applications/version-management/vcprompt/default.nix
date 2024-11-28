@@ -14,8 +14,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     autoconf
-    makeFlags="$makeFlags PREFIX=$out"
   '';
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
   meta = with lib; {
     description = ''
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
       about the current working directory for various version control systems
     '';
     homepage    = "http://hg.gerg.ca/vcprompt";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms   = with platforms; linux ++ darwin;
     license = licenses.gpl2Plus;
     mainProgram = "vcprompt";

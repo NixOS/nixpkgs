@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-keyring";
-  version = "46.1";
+  version = "46.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-keyring/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-sdOukTL/L4s/JaGQeQiSlo49Cs+VKkh+QPZEqFUM4/Y=";
+    url = "mirror://gnome/sources/gnome-keyring/${lib.versions.major version}/gnome-keyring-${version}.tar.xz";
+    hash = "sha256-vybJZriot/MoXsyLs+RnucIPlTW5TcRRycVZ3c/2GSU=";
   };
 
   nativeBuildInputs = [
@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Collection of components in GNOME that store secrets, passwords, keys, certificates and make them available to applications";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-keyring";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-keyring/-/blob/${version}/NEWS?ref_type=tags";
     license = licenses.gpl2;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

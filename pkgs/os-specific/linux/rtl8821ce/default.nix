@@ -45,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       defelo
     ];
     broken =
-      stdenv.isAarch64 || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
+      stdenv.hostPlatform.isAarch64
+      || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
   };
 })

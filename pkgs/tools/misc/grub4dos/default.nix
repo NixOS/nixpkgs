@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, nasm }:
 
 let arch =
-  if stdenv.isi686 then "i386"
-  else if stdenv.isx86_64 then "x86_64"
+  if stdenv.hostPlatform.isi686 then "i386"
+  else if stdenv.hostPlatform.isx86_64 then "x86_64"
   else throw "Unknown architecture";
 in stdenv.mkDerivation {
   pname = "grub4dos";

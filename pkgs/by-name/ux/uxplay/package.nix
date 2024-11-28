@@ -3,37 +3,36 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  openssl,
-  libplist,
   pkg-config,
   wrapGAppsHook3,
   avahi,
   avahi-compat,
   gst_all_1,
+  libplist,
+  openssl,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uxplay";
-  version = "1.68.3";
+  version = "1.70";
 
   src = fetchFromGitHub {
     owner = "FDH2";
     repo = "UxPlay";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Ev+VXI37zLRQ3yqllJVo1JZK/U82HeB65Hi9+c0O8Ks=";
+    hash = "sha256-5nKkQxoLe7g+fw65uVG0kiJHAEBB5B562bT3Smck1iA=";
   };
 
   postPatch = ''
     substituteInPlace lib/CMakeLists.txt \
+      --replace "APPLE" "FALSE" \
       --replace ".a" "${stdenv.hostPlatform.extensions.sharedLibrary}"
-    sed -i '/PKG_CONFIG_EXECUTABLE/d' renderers/CMakeLists.txt
+    sed -i -e '/PKG_CONFIG_EXECUTABLE/d' -e '/PKG_CONFIG_PATH/d' renderers/CMakeLists.txt
   '';
 
   nativeBuildInputs = [
     cmake
-    openssl
-    libplist
     pkg-config
     wrapGAppsHook3
   ];
@@ -47,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
+    libplist
+    openssl
   ];
 
   passthru.updateScript = nix-update-script { };

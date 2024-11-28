@@ -1,13 +1,15 @@
 {
   lib,
   mkDerivation,
+  writeText,
   stdenv,
   buildPackages,
   freebsd-lib,
-  patches,
+  patchesRoot,
   filterSource,
   applyPatches,
   baseConfig ? "GENERIC",
+  extraConfig ? null,
   extraFlags ? { },
   bsdSetupHook,
   mandoc,
@@ -21,8 +23,16 @@
   file2c,
   bintrans,
   xargs-j,
+  kldxref,
 }:
 let
+  baseConfigFile =
+    if (extraConfig == null) then
+      null
+    else if (lib.isDerivation extraConfig) || (lib.isPath extraConfig) then
+      extraConfig
+    else
+      writeText "extraConfig" extraConfig;
   hostArchBsd = freebsd-lib.mkBsdArch stdenv;
   filteredSource = filterSource {
     pname = "sys";
@@ -31,23 +41,27 @@ let
   };
   patchedSource = applyPatches {
     src = filteredSource;
-    patches = freebsd-lib.filterPatches patches [
+    patches = freebsd-lib.filterPatches patchesRoot [
       "sys"
       "include"
     ];
-    postPatch = ''
-      for f in sys/conf/kmod.mk sys/contrib/dev/acpica/acpica_prep.sh; do
-        substituteInPlace "$f" --replace-warn 'xargs -J' 'xargs-j '
-      done
+    postPatch =
+      ''
+        for f in sys/conf/kmod.mk sys/contrib/dev/acpica/acpica_prep.sh; do
+          substituteInPlace "$f" --replace-warn 'xargs -J' 'xargs-j '
+        done
 
-      for f in sys/conf/*.mk; do
-        substituteInPlace "$f" --replace-quiet 'KERN_DEBUGDIR}''${' 'KERN_DEBUGDIR_'
-      done
+        for f in sys/conf/*.mk; do
+          substituteInPlace "$f" --replace-quiet 'KERN_DEBUGDIR}''${' 'KERN_DEBUGDIR_'
+        done
 
-      sed -i sys/${hostArchBsd}/conf/${baseConfig} \
-        -e 's/WITH_CTF=1/WITH_CTF=0/' \
-        -e '/KDTRACE/d'
-    '';
+        sed -i sys/${hostArchBsd}/conf/${baseConfig} \
+          -e 's/WITH_CTF=1/WITH_CTF=0/' \
+          -e '/KDTRACE/d'
+      ''
+      + lib.optionalString (baseConfigFile != null) ''
+        cat ${baseConfigFile} >>sys/${hostArchBsd}/conf/${baseConfig}
+      '';
   };
 
   # Kernel modules need this for kern.opts.mk
@@ -83,6 +97,7 @@ mkDerivation rec {
     file2c
     bintrans
     xargs-j
+    kldxref
   ];
 
   # --dynamic-linker /red/herring is used when building the kernel.
@@ -98,7 +113,10 @@ mkDerivation rec {
   ];
 
   # hardeningDisable = stackprotector doesn't seem to be enough, put it in cflags too
-  NIX_CFLAGS_COMPILE = "-fno-stack-protector";
+  NIX_CFLAGS_COMPILE = [
+    "-fno-stack-protector"
+    "-Wno-unneeded-internal-declaration" # some openzfs code trips this
+  ];
 
   inherit env;
   passthru.env = env;

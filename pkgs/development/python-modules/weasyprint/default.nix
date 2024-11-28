@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  cairosvg,
   cffi,
   cssselect2,
   fetchPypi,
@@ -25,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "62.2";
+  version = "62.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -33,7 +32,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    hash = "sha256-oIrEAOEZGdmW12vsqjMWDXwaxVuhYGKMQs51hldMGlE=";
+    hash = "sha256-jYaA1zL3+g/LxYdpKlpcsJXDUlYnBmkY1uIDy/Qrf80=";
   };
 
   patches = [

@@ -1,31 +1,40 @@
 {
   lib,
+  stdenv,
+  apple-sdk_11,
   buildPythonPackage,
-  pythonOlder,
+  darwinMinVersionHook,
   fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
   cmake,
-  eigen,
   ninja,
-  scikit-build,
+  pathspec,
+  scikit-build-core,
+
+  # dependencies
+  eigen,
+
+  # tests
   pytestCheckHook,
   numpy,
   scipy,
   torch,
+  tensorflow-bin,
   jax,
   jaxlib,
-  tensorflow,
-  setuptools,
 }:
 buildPythonPackage rec {
   pname = "nanobind";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wjakob";
     repo = "nanobind";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yDFrhSIWywWw7ri5aHRPigi9ujDeazpJa4AVrkLx5BI=";
+    hash = "sha256-AO/EHx2TlXidalhPb+xuUchaek4ki7fDExu2foBgUp0=";
     fetchSubmodules = true;
   };
 
@@ -34,11 +43,19 @@ buildPythonPackage rec {
   build-system = [
     cmake
     ninja
-    scikit-build
-    setuptools
+    pathspec
+    scikit-build-core
   ];
 
-  buildInputs = [ eigen ];
+  dependencies = [ eigen ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    # error: aligned deallocation function of type 'void (void *, std::align_val_t) noexcept' is only available on macOS 10.13 or newer
+    (darwinMinVersionHook "10.13")
+
+    apple-sdk_11
+  ];
+
   dontUseCmakeBuildDir = true;
 
   preCheck = ''
@@ -46,15 +63,18 @@ buildPythonPackage rec {
     make -j $NIX_BUILD_CORES
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    numpy
-    scipy
-    torch
-    tensorflow
-    jax
-    jaxlib
-  ];
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+      numpy
+      scipy
+      torch
+    ]
+    ++ lib.optionals (!(builtins.elem stdenv.hostPlatform.system tensorflow-bin.meta.badPlatforms)) [
+      tensorflow-bin
+      jax
+      jaxlib
+    ];
 
   meta = {
     homepage = "https://github.com/wjakob/nanobind";

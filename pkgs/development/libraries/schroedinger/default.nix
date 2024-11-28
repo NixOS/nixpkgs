@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ orc ];
 
-  doCheck = (!stdenv.isDarwin);
+  doCheck = (!stdenv.hostPlatform.isDarwin);
 
   patchFlags = [ "-p0" ];
   patches = [

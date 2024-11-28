@@ -7,17 +7,17 @@ rustPlatform.buildRustPackage rec {
   src = fetchCrate {
     inherit version;
     crateName = "graphql_client_cli";
-    sha256 = "sha256-eQ+7Ru3au/rDQZtwFDXYyybqC5uFtNBs6cEzX2QSFI4=";
+    hash = "sha256-eQ+7Ru3au/rDQZtwFDXYyybqC5uFtNBs6cEzX2QSFI4=";
   };
 
-  cargoSha256 = "sha256-fEjt7ax818hlIq2+UrIG6EismQUGdaq7/C3xN+Nrw2s=";
+  cargoHash = "sha256-fEjt7ax818hlIq2+UrIG6EismQUGdaq7/C3xN+Nrw2s=";
 
   nativeBuildInputs = [
     pkg-config
   ];
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   meta = with lib; {
     description = "GraphQL tool for Rust projects";

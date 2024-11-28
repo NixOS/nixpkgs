@@ -33,7 +33,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     execnet = [ execnet ];
     sqlalchemy = [ sqlalchemy ];
     redis = [ redis ];
@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
@@ -69,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://logbook.readthedocs.io/";
     changelog = "https://github.com/getlogbook/logbook/blob/${version}/CHANGES";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -226,25 +226,51 @@ Some plugins require overrides in order to function properly. Overrides are plac
 }
 ```
 
-Sometimes plugins require an override that must be changed when the plugin is updated. This can cause issues when Vim plugins are auto-updated but the associated override isn't updated. For these plugins, the override should be written so that it specifies all information required to install the plugin, and running `./update.py` doesn't change the derivation for the plugin. Manually updating the override is required to update these types of plugins. An example of such a plugin is `LanguageClient-neovim`.
+Sometimes plugins require an override that must be changed when the plugin is updated. This can cause issues when Vim plugins are auto-updated but the associated override isn't updated. For these plugins, the override should be written so that it specifies all information required to install the plugin, and running `nix-shell -p vimPluginsUpdater --run vim-plugins-updater` doesn't change the derivation for the plugin. Manually updating the override is required to update these types of plugins. An example of such a plugin is `LanguageClient-neovim`.
 
-To add a new plugin, run `./update.py add "[owner]/[name]"`. **NOTE**: This script automatically commits to your git repository. Be sure to check out a fresh branch before running.
+To add a new plugin, run `nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater add "[owner]/[name]"'`. **NOTE**: This script automatically commits to your git repository. Be sure to check out a fresh branch before running.
 
-Finally, there are some plugins that are also packaged in nodePackages because they have Javascript-related build steps, such as running webpack. Those plugins are not listed in `vim-plugin-names` or managed by `update.py` at all, and are included separately in `overrides.nix`. Currently, all these plugins are related to the `coc.nvim` ecosystem of the Language Server Protocol integration with Vim/Neovim.
+Finally, there are some plugins that are also packaged in nodePackages because they have Javascript-related build steps, such as running webpack. Those plugins are not listed in `vim-plugin-names` or managed by `vimPluginsUpdater` at all, and are included separately in `overrides.nix`. Currently, all these plugins are related to the `coc.nvim` ecosystem of the Language Server Protocol integration with Vim/Neovim.
+
+### Testing Neovim plugins {#testing-neovim-plugins}
+
+`nvimRequireCheck=MODULE` is a simple test which checks if Neovim can requires the lua module `MODULE` without errors. This is often enough to catch missing dependencies.
+
+This can be manually added through plugin definition overrides in the [overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/overrides.nix).
+
+```nix
+  gitsigns-nvim = super.gitsigns-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    nvimRequireCheck = "gitsigns";
+  };
+```
+
+### Plugin optional configuration {#vim-plugin-required-snippet}
+
+Some plugins require specific configuration to work. We choose not to
+patch those plugins but expose the necessary configuration under
+`PLUGIN.passthru.initLua` for neovim plugins. For instance, the `unicode-vim` plugin
+needs the path towards a unicode database so we expose the following snippet `vim.g.Unicode_data_directory="${self.unicode-vim}/autoload/unicode"` under `vimPlugins.unicode-vim.passthru.initLua`.
+
 
 ## Updating plugins in nixpkgs {#updating-plugins-in-nixpkgs}
 
 Run the update script with a GitHub API token that has at least `public_repo` access. Running the script without the token is likely to result in rate-limiting (429 errors). For steps on creating an API token, please refer to [GitHub's token documentation](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token).
 
 ```sh
-GITHUB_API_TOKEN=my_token ./pkgs/applications/editors/vim/plugins/update.py
+nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater --github-token=mytoken' # or set GITHUB_API_TOKEN environment variable
 ```
 
 Alternatively, set the number of processes to a lower count to avoid rate-limiting.
 
 ```sh
-
 nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater --proc 1'
+```
+
+If you want to update only certain plugins, you can specify them after the `update` command. Note that you must use the same plugin names as the `pkgs/applications/editors/vim/plugins/vim-plugin-names` file.
+
+```sh
+nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater update "nvim-treesitter" "LazyVim"'
 ```
 
 ## How to maintain an out-of-tree overlay of vim plugins ? {#vim-out-of-tree-overlays}

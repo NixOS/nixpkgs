@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "elementary-icon-theme";
-  version = "8.0.0";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "icons";
     rev = version;
-    sha256 = "sha256-EPmQgE33+HBI78SlCBV3WlyLCP6AggvqsQa7gZuOMRM=";
+    sha256 = "sha256-WltMfWMcfUqpnfuGa6NzfxSeTais0MLsiu82ybaOcvs=";
   };
 
   nativeBuildInputs = [

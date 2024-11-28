@@ -331,7 +331,7 @@ in {
       APP_CONFIG_CACHE = "/run/snipe-it/cache/config.php";
       APP_ROUTES_CACHE = "/run/snipe-it/cache/routes-v7.php";
       APP_EVENTS_CACHE = "/run/snipe-it/cache/events.php";
-      SESSION_SECURE_COOKIE = tlsEnabled;
+      SECURE_COOKIES = tlsEnabled;
     };
 
     services.mysql = mkIf db.createLocally {

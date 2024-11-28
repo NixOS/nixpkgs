@@ -35,10 +35,10 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  cargoSha256 = "sha256-CeGLSseKUe2XudRqZm5Y7o7ZLDtDBg/MFunOGqxFZGM=";
+  cargoHash = "sha256-CeGLSseKUe2XudRqZm5Y7o7ZLDtDBg/MFunOGqxFZGM=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   passthru.tests.version =
     testers.testVersion { package = gbl; };

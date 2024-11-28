@@ -53,7 +53,7 @@ let
       owner = "shogun-toolbox";
       repo = "shogun";
       rev =  "shogun_${version}";
-      sha256 = "sha256-38aULxK50wQ2+/ERosSpRyBmssmYSGv5aaWfWSlrSRc=";
+      hash = "sha256-38aULxK50wQ2+/ERosSpRyBmssmYSGv5aaWfWSlrSRc=";
       fetchSubmodules = true;
     };
 

@@ -14,8 +14,11 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     sed -i 's|"/usr/include"|"${stdenv.cc.libc.dev}/include"|' pre-process.c
     sed -i 's|qx(\$ccom -print-file-name=)|"${GCC_BASE}"|' cgcc
-    makeFlags+=" PREFIX=$out"
   '';
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk3 libxml2 llvm perl sqlite ];

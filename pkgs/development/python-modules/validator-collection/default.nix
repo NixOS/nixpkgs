@@ -3,14 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  wheel,
   alabaster,
   attrs,
   babel,
   certifi,
   cffi,
   chardet,
-  codecov,
   colorama,
   coverage,
   docutils,
@@ -36,7 +34,7 @@
   pyparsing,
   pytest,
   pytest-benchmark,
-  pytest-cov,
+  pytest-cov-stub,
   pytz,
   readme-renderer,
   requests,
@@ -83,7 +81,6 @@ buildPythonPackage rec {
     certifi
     cffi
     chardet
-    codecov
     colorama
     coverage
     docutils
@@ -109,7 +106,7 @@ buildPythonPackage rec {
     pyparsing
     pytest
     pytest-benchmark
-    pytest-cov
+    pytest-cov-stub
     pytz
     readme-renderer
     requests

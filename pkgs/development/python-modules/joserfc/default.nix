@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Implementations of JOSE RFCs in Python";
     homepage = "https://github.com/authlib/joserfc";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -122,6 +122,7 @@ in {
       };
       passthru.tests = import ./python-catch-conflicts-hook-tests.nix {
         inherit pythonOnBuildForHost runCommand;
+        inherit lib;
         inherit (pkgs) coreutils gnugrep writeShellScript;
       };
     } ./python-catch-conflicts-hook.sh) {};
@@ -200,14 +201,7 @@ in {
       };
     } ./setuptools-build-hook.sh) {};
 
-  setuptoolsCheckHook = callPackage ({ makePythonHook, setuptools }:
-    makePythonHook {
-      name = "setuptools-check-hook";
-      propagatedBuildInputs = [ setuptools ];
-      substitutions = {
-        inherit pythonCheckInterpreter setuppy;
-      };
-    } ./setuptools-check-hook.sh) {};
+  setuptoolsCheckHook = throw "The setuptoolsCheckHook has been removed, since the test command has been removed in setuptools 72.0";
 
     setuptoolsRustBuildHook = callPackage ({ makePythonHook, setuptools-rust }:
       makePythonHook {

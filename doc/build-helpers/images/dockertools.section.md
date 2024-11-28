@@ -50,6 +50,10 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
   If specified, the layer created by `buildImage` will be appended to the layers defined in the base image, resulting in an image with at least two layers (one or more layers from the base image, and the layer created by `buildImage`).
   Otherwise, the resulting image with contain the single layer created by `buildImage`.
 
+  :::{.note}
+  Only **Env** configuration is inherited from the base image.
+  :::
+
   _Default value:_ `null`.
 
 `fromImageName` (String or Null; _optional_)
@@ -184,6 +188,19 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 
   _Default value:_ `"gz"`.\
   _Possible values:_ `"none"`, `"gz"`, `"zstd"`.
+
+`includeNixDB` (Boolean; _optional_)
+
+: Populate the nix database in the image with the dependencies of `copyToRoot`.
+  The main purpose is to be able to use nix commands in the container.
+
+  :::{.caution}
+  Be careful since this doesn't work well in combination with `fromImage`. In particular, in a multi-layered image, only the Nix paths from the lower image will be in the database.
+
+  This also neglects to register the store paths that are pulled into the image as a dependency of one of the other values, but aren't a dependency of `copyToRoot`.
+  :::
+
+  _Default value:_ `false`.
 
 `contents` **DEPRECATED**
 
@@ -436,7 +453,7 @@ See [](#ex-dockerTools-streamLayeredImage-exploringlayers) to understand how the
 `streamLayeredImage` allows scripts to be run when creating the additional layer with symlinks, allowing custom behaviour to affect the final results of the image (see the documentation of the `extraCommands` and `fakeRootCommands` attributes).
 
 The resulting repository tarball will list a single image as specified by the `name` and `tag` attributes.
-By default, that image will use a static creation date (see documentation for the `created` attribute).
+By default, that image will use a static creation date (see documentation for the `created` and `mtime` attributes).
 This allows the function to produce reproducible images.
 
 ### Inputs {#ssec-pkgs-dockerTools-streamLayeredImage-inputs}
@@ -499,10 +516,23 @@ This allows the function to produce reproducible images.
 `created` (String; _optional_)
 
 : Specifies the time of creation of the generated image.
+  This date will be used for the image metadata.
   This should be either a date and time formatted according to [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) or `"now"`, in which case the current date will be used.
 
   :::{.caution}
   Using `"now"` means that the generated image will not be reproducible anymore (because the date will always change whenever it's built).
+  :::
+
+  _Default value:_ `"1970-01-01T00:00:01Z"`.
+
+`mtime` (String; _optional_)
+
+: Specifies the time used for the modification timestamp of files within the layers of the generated image.
+  This should be either a date and time formatted according to [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) or `"now"`, in which case the current date will be used.
+
+  :::{.caution}
+  Using a non-constant date will cause built layers to have a different hash each time, preventing deduplication.
+  Using `"now"` also means that the generated image will not be reproducible anymore (because the date will always change whenever it's built).
   :::
 
   _Default value:_ `"1970-01-01T00:00:01Z"`.
@@ -573,6 +603,19 @@ This allows the function to produce reproducible images.
   See [](#ex-dockerTools-streamLayeredImage-exploringlayers) to understand the impact of setting `includeStorePaths` to `false`.
 
   _Default value:_ `true`
+
+`includeNixDB` (Boolean; _optional_)
+
+: Populate the nix database in the image with the dependencies of `copyToRoot`.
+  The main purpose is to be able to use nix commands in the container.
+
+  :::{.caution}
+  Be careful since this doesn't work well in combination with `fromImage`. In particular, in a multi-layered image, only the Nix paths from the lower image will be in the database.
+
+  This also neglects to register the store paths that are pulled into the image as a dependency of one of the other values, but aren't a dependency of `copyToRoot`.
+  :::
+
+  _Default value:_ `false`.
 
 `passthru` (Attribute Set; _optional_)
 

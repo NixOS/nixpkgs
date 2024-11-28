@@ -2,6 +2,8 @@
 , bash
 , coreutils
 , fetchFromGitHub
+, gnused
+, gnugrep
 , gawk
 , makeWrapper
 , pulseaudio
@@ -28,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm755 pulseaudio-control.bash $out/bin/pulseaudio-control
     wrapProgram "$out/bin/pulseaudio-control" \
-      --prefix PATH : "${lib.makeBinPath [ bash coreutils gawk pulseaudio ]}"
+      --prefix PATH : "${lib.makeBinPath [ bash coreutils gnused gnugrep gawk pulseaudio ]}"
 
     runHook postInstall
   '';
@@ -39,6 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/marioortizmanero/polybar-pulseaudio-control";
     platforms = platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ benlemasurier ];
+    maintainers = with maintainers; [ benlemasurier wesleyjrz ];
   };
 })

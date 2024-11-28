@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "RealTimeGenomics";
     repo = "rtg-tools";
     rev = version;
-    sha256 = "sha256-fMrrjrgaGxBVxn6qMq2g0oFv6qtfhZcQlkvv1E9Os6Y=";
+    hash = "sha256-fMrrjrgaGxBVxn6qMq2g0oFv6qtfhZcQlkvv1E9Os6Y=";
   };
 
   nativeBuildInputs = [

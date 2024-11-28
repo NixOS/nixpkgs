@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , fetchurl
 , buildDunePackage
-, ocaml
 , gen
 , ppxlib
 , uchar

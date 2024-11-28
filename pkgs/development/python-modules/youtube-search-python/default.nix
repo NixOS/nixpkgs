@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Search for YouTube videos, channels & playlists & get video information using link without YouTube Data API";
     homepage = "https://github.com/alexmercerind/youtube-search-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

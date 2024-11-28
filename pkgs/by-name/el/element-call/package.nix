@@ -1,52 +1,45 @@
 { lib
 , stdenv
-, mkYarnPackage
 , fetchFromGitHub
 , fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, yarnInstallHook
+, nodejs
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
   offlineCacheHash = {
-    x86_64-linux = "sha256-mZCnvX6hzkdi/zjPiefcmbyC2kGemjS4w7WTVkyq8W0=";
-    aarch64-linux = "sha256-mZCnvX6hzkdi/zjPiefcmbyC2kGemjS4w7WTVkyq8W0=";
-    x86_64-darwin = "sha256-G4doEnZORJqcl3bWaKZPuQmBeXNXud06nLO12Afr9kM=";
-    aarch64-darwin = "sha256-G4doEnZORJqcl3bWaKZPuQmBeXNXud06nLO12Afr9kM=";
+    x86_64-linux = "sha256-g4PWB1EstNB7gd/yZyrXf+U8Py8OLeea0gDlEXhInhU=";
+    aarch64-linux = "sha256-g4PWB1EstNB7gd/yZyrXf+U8Py8OLeea0gDlEXhInhU=";
+    x86_64-darwin = "sha256-g4PWB1EstNB7gd/yZyrXf+U8Py8OLeea0gDlEXhInhU=";
+    aarch64-darwin = "sha256-g4PWB1EstNB7gd/yZyrXf+U8Py8OLeea0gDlEXhInhU=";
   }.${system} or throwSystem;
 in
-mkYarnPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "element-call";
-  version = "0.5.16";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-call";
-    rev = "v${version}";
-    hash = "sha256-GTHM27i716RZk+kDELMg/lYy355/SZoQLXGPQ90M4xg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-PyxqUhnlWfcACsoFYrppO7g5e74jI4/xxXBi6oWyWsg=";
   };
 
-  packageJSON = ./package.json;
-
-  patches = [ ./name.patch ];
-
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = offlineCacheHash;
   };
 
-  buildPhase = ''
-    runHook preBuild
-    yarn --offline run build
-    runHook postBuild
-  '';
-
-  preInstall = ''
-    mkdir $out
-    cp -R ./deps/element-call/dist $out
-  '';
-
-  doDist = false;
+  nativeBuildInputs = [
+    yarnConfigHook
+    yarnBuildHook
+    yarnInstallHook
+    nodejs
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/element-hq/element-call";
@@ -55,4 +48,4 @@ mkYarnPackage rec {
     maintainers = with maintainers; [ kilimnik ];
     mainProgram = "element-call";
   };
-}
+})

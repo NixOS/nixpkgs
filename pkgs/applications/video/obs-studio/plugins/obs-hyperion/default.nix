@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+  patches = [ ./check-state-changed.patch ];
+
   cmakeFlags = [
     "-DOBS_SOURCE=${obs-studio.src}"
     "-DGLOBAL_INSTALLATION=ON"

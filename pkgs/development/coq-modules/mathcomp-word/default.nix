@@ -3,9 +3,12 @@
 let
   namePrefix = [ "coq" "mathcomp" ];
   pname = "word";
-  fetcher = { domain, owner, repo, rev, sha256, ...}:
+  fetcher = { domain, owner, repo, rev, sha256 ? null, ...}:
+    let prefix = "https://${domain}/${owner}/${repo}/"; in
+    if sha256 == null then
+      fetchTarball { url = "${prefix}archive/refs/heads/${rev}.tar.gz"; } else
   fetchurl {
-    url = "https://${domain}/${owner}/${repo}/releases/download/${rev}/${lib.concatStringsSep "-" (namePrefix ++ [ pname ])}-${rev}.tbz";
+    url = "${prefix}releases/download/${rev}/${lib.concatStringsSep "-" (namePrefix ++ [ pname ])}-${rev}.tbz";
     inherit sha256;
   };
 in

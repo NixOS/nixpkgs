@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   inherit (pkgs) htpdate;
 
@@ -16,32 +13,32 @@ in
 
     services.htpdate = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable htpdate daemon.
         '';
       };
 
-      extraOptions = mkOption {
-        type = types.str;
+      extraOptions = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Additional command line arguments to pass to htpdate.
         '';
       };
 
-      servers = mkOption {
-        type = types.listOf types.str;
+      servers = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "www.google.com" ];
         description = ''
           HTTP servers to use for time synchronization.
         '';
       };
 
-      proxy = mkOption {
-        type = types.str;
+      proxy = lib.mkOption {
+        type = lib.types.str;
         default = "";
         example = "127.0.0.1:8118";
         description = ''
@@ -55,7 +52,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.htpdate = {
       description = "htpdate daemon";
@@ -63,14 +60,14 @@ in
       serviceConfig = {
         Type = "forking";
         PIDFile = "/run/htpdate.pid";
-        ExecStart = concatStringsSep " " [
+        ExecStart = lib.concatStringsSep " " [
           "${htpdate}/bin/htpdate"
           "-D -u nobody"
           "-a -s"
           "-l"
-          "${optionalString (cfg.proxy != "") "-P ${cfg.proxy}"}"
+          "${lib.optionalString (cfg.proxy != "") "-P ${cfg.proxy}"}"
           "${cfg.extraOptions}"
-          "${concatStringsSep " " cfg.servers}"
+          "${lib.concatStringsSep " " cfg.servers}"
         ];
       };
     };

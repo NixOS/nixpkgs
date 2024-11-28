@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sqlite_orm";
-  version = "1.8.2";
+  version = "1.9";
 
   src = fetchFromGitHub {
     owner = "fnc12";
     repo = "sqlite_orm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KqphGFcnR1Y11KqL7sxODSv7lEvcURdF6kLd3cg84kc=";
+    hash = "sha256-jgRCYOtCyXj2E5J3iYBffX2AyBwvhune+i4Pb2eCBrA=";
   };
 
   nativeBuildInputs = [

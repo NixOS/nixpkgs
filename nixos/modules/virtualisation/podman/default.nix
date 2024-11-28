@@ -5,18 +5,23 @@ let
 
   inherit (lib) mkOption types;
 
-  podmanPackage = (pkgs.podman.override {
+  podmanPackage = pkgs.podman.override {
     extraPackages = cfg.extraPackages
       # setuid shadow
       ++ [ "/run/wrappers" ]
       ++ lib.optional (config.boot.supportedFilesystems.zfs or false) config.boot.zfs.package;
-  });
+    extraRuntimes = [ pkgs.runc ]
+      ++ lib.optionals (config.virtualisation.containers.containersConf.settings.network.default_rootless_network_cmd or "" == "slirp4netns") (with pkgs; [
+      slirp4netns
+    ]);
+  };
 
   # Provides a fake "docker" binary mapping to podman
   dockerCompat = pkgs.runCommand "${podmanPackage.pname}-docker-compat-${podmanPackage.version}"
     {
       outputs = [ "out" "man" ];
       inherit (podmanPackage) meta;
+      preferLocalBuild = true;
     } ''
     mkdir -p $out/bin
     ln -s ${podmanPackage}/bin/podman $out/bin/docker
@@ -82,9 +87,9 @@ in
       type = types.bool;
       default = false;
       description = ''
-        **Deprecated**, please use virtualisation.containers.cdi.dynamic.nvidia.enable instead.
+        **Deprecated**, please use hardware.nvidia-container-toolkit.enable instead.
 
-        Enable use of NVidia GPUs from within podman containers.
+        Enable use of Nvidia GPUs from within podman containers.
       '';
     };
 
@@ -170,7 +175,7 @@ in
     lib.mkIf cfg.enable {
       warnings = lib.optionals cfg.enableNvidia [
         ''
-          You have set virtualisation.podman.enableNvidia. This option is deprecated, please set virtualisation.containers.cdi.dynamic.nvidia.enable instead.
+          You have set virtualisation.podman.enableNvidia. This option is deprecated, please set hardware.nvidia-container-toolkit.enable instead.
         ''
       ];
 
@@ -189,11 +194,6 @@ in
         enable = true; # Enable common /etc/containers configuration
         containersConf.settings = {
           network.network_backend = "netavark";
-        } // lib.optionalAttrs cfg.enableNvidia {
-          engine = {
-            conmon_env_vars = [ "PATH=${lib.makeBinPath [ pkgs.nvidia-podman ]}" ];
-            runtimes.nvidia = [ "${pkgs.nvidia-podman}/bin/nvidia-container-runtime" ];
-          };
         };
       };
 
@@ -236,7 +236,10 @@ in
       systemd.tmpfiles.packages = [
         # The /run/podman rule interferes with our podman group, so we remove
         # it and let the systemd socket logic take care of it.
-        (pkgs.runCommand "podman-tmpfiles-nixos" { package = cfg.package; } ''
+        (pkgs.runCommand "podman-tmpfiles-nixos" {
+          package = cfg.package;
+          preferLocalBuild = true;
+        } ''
           mkdir -p $out/lib/tmpfiles.d/
           grep -v 'D! /run/podman 0700 root root' \
             <$package/lib/tmpfiles.d/podman.conf \

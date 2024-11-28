@@ -20,9 +20,10 @@
 , blas
 
 , pkg-config
-, metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
+, metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport
 , vulkanSupport ? false
 , rpcSupport ? false
+, shaderc
 , vulkan-headers
 , vulkan-loader
 , ninja
@@ -61,19 +62,20 @@ let
   ];
 
   vulkanBuildInputs = [
+    shaderc
     vulkan-headers
     vulkan-loader
   ];
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "3260";
+  version = "4154";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-0KVwSzxfGinpv5KkDCgF2J+1ijDv87PlDrC+ldscP6s=";
+    hash = "sha256-rttgk8mF9s3R53+TN5+PdDtkTG5cohn/9wz9Z5gRpdM=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -82,8 +84,16 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace ./ggml/src/ggml-metal.m \
-      --replace-fail '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
+    # Workaround for local-ai package which overrides this package to an older llama-cpp
+    if [ -f ./ggml/src/ggml-metal.m ]; then
+      substituteInPlace ./ggml/src/ggml-metal.m \
+        --replace-fail '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
+    fi
+
+    if [ -f ./ggml/src/ggml-metal/ggml-metal.m ]; then
+      substituteInPlace ./ggml/src/ggml-metal/ggml-metal.m \
+        --replace-fail '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
+    fi
 
     substituteInPlace ./scripts/build-info.sh \
       --replace-fail 'build_number="0"' 'build_number="${finalAttrs.version}"' \
@@ -96,7 +106,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     autoAddDriverRunpath
   ];
 
-  buildInputs = optionals effectiveStdenv.isDarwin darwinBuildInputs
+  buildInputs = optionals effectiveStdenv.hostPlatform.isDarwin darwinBuildInputs
     ++ optionals cudaSupport cudaBuildInputs
     ++ optionals openclSupport [ clblast ]
     ++ optionals rocmSupport rocmBuildInputs
@@ -154,13 +164,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "Port of Facebook's LLaMA model in C/C++";
+    description = "Inference of Meta's LLaMA model (and others) in pure C/C++";
     homepage = "https://github.com/ggerganov/llama.cpp/";
     license = licenses.mit;
     mainProgram = "llama";
-    maintainers = with maintainers; [ dit7ya elohmeier philiptaron ];
+    maintainers = with maintainers; [ dit7ya elohmeier philiptaron xddxdd ];
     platforms = platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;
-    broken = (metalSupport && !effectiveStdenv.isDarwin);
+    broken = (metalSupport && !effectiveStdenv.hostPlatform.isDarwin);
   };
 })

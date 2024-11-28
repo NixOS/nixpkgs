@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-panel";
-  version = "1.28.2";
+  version = "1.28.4";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Z4pD6DeqJxhJQgT93xm7kGzwfl2A/S4d3nRfJtKtujM=";
+    hash = "sha256-AvCesDFMKsGXtvCJlQpXHNujm/0D1sOguP13JSqWiHQ=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     glib
     gtk3
-    # See https://github.com/mate-desktop/mate-panel/issues/1402
+    # Optionally for the ca.desrt.dconf-editor.Settings schema
     # This is propagated for mate_panel_applet_settings_new and applet's wrapGAppsHook3
     dconf-editor
   ];

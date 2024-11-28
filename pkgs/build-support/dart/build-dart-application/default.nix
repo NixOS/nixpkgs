@@ -60,7 +60,25 @@ let
   generators = callPackage ./generators.nix { inherit dart; } { buildDrvArgs = args; };
 
   pubspecLockFile = builtins.toJSON pubspecLock;
-  pubspecLockData = pub2nix.readPubspecLock { inherit src packageRoot pubspecLock gitHashes sdkSourceBuilders customSourceBuilders; };
+  pubspecLockData = pub2nix.readPubspecLock {
+    inherit src packageRoot pubspecLock gitHashes customSourceBuilders;
+    sdkSourceBuilders  = {
+      # https://github.com/dart-lang/pub/blob/e1fbda73d1ac597474b82882ee0bf6ecea5df108/lib/src/sdk/dart.dart#L80
+      "dart" = name: runCommand "dart-sdk-${name}" { passthru.packageRoot = "."; } ''
+        for path in '${dart}/pkg/${name}'; do
+          if [ -d "$path" ]; then
+            ln -s "$path" "$out"
+            break
+          fi
+        done
+
+        if [ ! -e "$out" ]; then
+          echo 1>&2 'The Dart SDK does not contain the requested package: ${name}!'
+          exit 1
+        fi
+      '';
+    } // sdkSourceBuilders;
+  };
   packageConfig = generators.linkPackageConfig {
     packageConfig = pub2nix.generatePackageConfig {
       pname = if args.pname != null then "${args.pname}-${args.version}" else null;
@@ -104,7 +122,7 @@ let
       dartFixupHook
       makeWrapper
       jq
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.sigtool
     ] ++
       # Ensure that we inherit the propagated build inputs from the dependencies.

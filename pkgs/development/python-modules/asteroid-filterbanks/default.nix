@@ -5,7 +5,6 @@
   setuptools,
   wheel,
   black,
-  codecov,
   coverage,
   librosa,
   numpy,
@@ -34,7 +33,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     black
-    codecov
     coverage
     librosa
     numpy

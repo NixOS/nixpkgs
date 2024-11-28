@@ -8,7 +8,7 @@ python3Packages.buildPythonApplication {
     owner = "wavexx";
     repo = "connman-notify";
     rev = "24b10a51721b54d932f4cd61ef2756423768c015";
-    sha256 = "1k5b5y6114yna2cm0cq82xilicran63hrhlklgv7k3p89057xh8j";
+    hash = "sha256-EsF+Ckjojnn2o5PCDIexKrNIYxcIM1CZUNaTEIwvq8w=";
   };
 
   format = "other";

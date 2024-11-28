@@ -2,13 +2,13 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
 
   # build-system
   setuptools,
 
   # native dependencies
-  pkgs,
+  taskwarrior2,
+  distutils,
 
   # dependencies
   kitchen,
@@ -24,9 +24,6 @@ buildPythonPackage rec {
   version = "2.0.0";
   pyproject = true;
 
-  # ModuleNotFoundError: No module named 'distutils'
-  disabled = pythonAtLeast "3.12";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-EQm9+b3nqbMqUAejAsh4MD/2UYi2QiWsdKMomkxUi90=";
@@ -39,12 +36,15 @@ buildPythonPackage rec {
   ];
   postPatch = ''
     substituteInPlace taskw/warrior.py \
-      --replace '@@taskwarrior@@' '${pkgs.taskwarrior}'
+      --replace '@@taskwarrior@@' '${taskwarrior2}'
   '';
 
   build-system = [ setuptools ];
 
-  buildInputs = [ pkgs.taskwarrior ];
+  buildInputs = [
+    taskwarrior2
+    distutils
+  ];
 
   dependencies = [
     kitchen

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -53,7 +52,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "iopath" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aws = [ boto3 ];
   };
 

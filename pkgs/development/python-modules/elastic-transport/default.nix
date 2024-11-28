@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "elastic-transport";
-  version = "8.13.1";
+  version = "8.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "elastic-transport-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zxx5BvqQf5ipaOANKpThWUTsfhDkNMJqUejAWH68wpo=";
+    hash = "sha256-5bNsJd0td3aQR+PvDBHg0/f+qPyt/ckWmeDrQJzxhYY=";
   };
 
   postPatch = ''
@@ -61,6 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "elastic_transport" ];
 
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   disabledTests = [
     # Tests require network access
     "fingerprint"
@@ -77,6 +82,7 @@ buildPythonPackage rec {
     "test_debug_logging_no_body"
     "test_httpbin"
     "test_sniffed_nodes_added_to_pool"
+    "test_async_transport_httpbin"
   ];
 
   meta = with lib; {

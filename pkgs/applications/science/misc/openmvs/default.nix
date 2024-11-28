@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     owner = "cdcseacave";
     repo = "openmvs";
     rev = "v${version}";
-    sha256 = "sha256-j/tGkR73skZiU+bP4j6aZ5CxkbIcHtqKcaUTgNvj0C8=";
+    hash = "sha256-j/tGkR73skZiU+bP4j6aZ5CxkbIcHtqKcaUTgNvj0C8=";
     fetchSubmodules = true;
   };
 
   # SSE is enabled by default
-  cmakeFlags = lib.optional (!stdenv.isx86_64) "-DOpenMVS_USE_SSE=OFF";
+  cmakeFlags = lib.optional (!stdenv.hostPlatform.isx86_64) "-DOpenMVS_USE_SSE=OFF";
 
   buildInputs = [
     boostWithZstd

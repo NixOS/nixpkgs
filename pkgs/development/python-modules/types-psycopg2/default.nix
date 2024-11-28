@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "types-psycopg2";
-  version = "2.9.21.20240417";
+  version = "2.9.21.20240819";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Bdslb0pFn7IaQmuOf8oGVsNTkQX/Agjq9r2vQGo4cIc=";
+    hash = "sha256-Tta0dGTWN0+mTl47I0zqD3EOchI6RZbWerULdBWoRmY=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Typing stubs for psycopg2";
     homepage = "https://github.com/python/typeshed";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

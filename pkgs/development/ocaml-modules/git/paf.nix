@@ -1,4 +1,4 @@
-{ lib, buildDunePackage
+{ buildDunePackage
 , git
 , mimic
 , paf
@@ -9,7 +9,6 @@
 , lwt
 , mirage-clock
 , mirage-time
-, result
 , rresult
 , tls
 , uri
@@ -34,7 +33,6 @@ buildDunePackage {
     ca-certs-nss
     fmt
     lwt
-    result
     rresult
     ipaddr
     logs

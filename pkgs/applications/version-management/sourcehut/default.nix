@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , python3
 , callPackage
 , recurseIntoAttrs
@@ -14,6 +13,7 @@
 # https://github.com/NixOS/nixpkgs/pull/54425#discussion_r250688781
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       srht = self.callPackage ./core.nix { };
 
@@ -45,6 +45,7 @@ let
           flask
           sqlalchemy
         ];
+        disabledTests = [ "test_persist_selectable" ];
       });
 
       # flask-sqlalchemy 2.x requires flask 2.x
@@ -72,6 +73,7 @@ let
             hash = "sha256-83doVvfdpymlAB0EbfrHmuoKE5B2LJbFq+AY2xGpnl4=";
           })
         ];
+        nativeCheckInputs = oldAttrs.nativeCheckInputs or [] ++ [ self.pytest-xprocess ];
       });
 
       # sourcehut is not (yet) compatible with factory-boy 3.x

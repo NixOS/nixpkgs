@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-themes-extra/${lib.versions.majorMinor version}/gnome-themes-extra-${version}.tar.xz";
-    sha256 = "06aqg9asq2vqi9wr29bs4v8z2bf4manhbhfghf4nvw01y2zs0jvw";
+    hash = "sha256-fEugv/AB8G2Jg8/BBa2qxC3x0SZ6JZF5ingLrFV6WBk=";
   };
 
   passthru = {

@@ -2,11 +2,8 @@
 
 lib.makeScope pkgs.newScope (self:
   let
-    gconf = pkgs.gnome2.GConf;
     inherit (self) callPackage;
     inheritedArgs = {
-      inherit gconf;
-
       inherit (pkgs.darwin) sigtool;
       inherit (pkgs.darwin.apple_sdk.frameworks)
         Accelerate AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit
@@ -22,10 +19,6 @@ lib.makeScope pkgs.newScope (self:
     };
 
     emacs28 = callPackage (self.sources.emacs28) inheritedArgs;
-
-    emacs28-gtk2 = self.emacs28.override {
-      withGTK2 = true;
-    };
 
     emacs28-gtk3 = self.emacs28.override {
       withGTK3 = true;
@@ -46,6 +39,20 @@ lib.makeScope pkgs.newScope (self:
     };
 
     emacs29-pgtk = self.emacs29.override {
+      withPgtk = true;
+    };
+
+    emacs30 = callPackage (self.sources.emacs30) inheritedArgs;
+
+    emacs30-gtk3 = self.emacs30.override {
+      withGTK3 = true;
+    };
+
+    emacs30-nox = self.emacs30.override {
+      noGui = true;
+    };
+
+    emacs30-pgtk = self.emacs30.override {
       withPgtk = true;
     };
 

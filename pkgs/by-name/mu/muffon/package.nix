@@ -7,18 +7,19 @@
 
 let
   pname = "muffon";
-  version = "2.0.3";
+  version = "2.1.0";
   src = fetchurl {
     url = "https://github.com/staniel359/muffon/releases/download/v${version}/muffon-${version}-linux-x86_64.AppImage";
-    hash = "sha256-2eLe/xvdWcOcUSE0D+pMOcOYCfFVEyKO13LiaJiZgX0=";
+    hash = "sha256-GT91MLjBWsbk9P5fsIxlYUNziAPsdvMSPq9bLL3rKDw=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname src version; };
 in
 appimageTools.wrapType2 {
   inherit pname src version;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraInstallCommands = ''
-    source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram $out/bin/muffon \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
     install -m 444 -D ${appimageContents}/muffon.desktop -t $out/share/applications

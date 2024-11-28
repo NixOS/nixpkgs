@@ -7,6 +7,7 @@
 , nasm
 , libopenmpt
 , game-music-emu
+, libGLU
 , libpng
 , SDL2
 , SDL2_mixer
@@ -79,6 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./cmake.patch
     ./thirdparty.patch
   ];
+
+  postPatch = ''
+    substituteInPlace ./src/sdl/ogl_sdl.c \
+      --replace libGLU.so.1 ${libGLU}/lib/libGLU.so.1
+  '';
 
   desktopItems = [
     (makeDesktopItem rec {

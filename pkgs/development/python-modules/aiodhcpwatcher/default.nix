@@ -39,6 +39,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
+
   pythonImportsCheck = [ "aiodhcpwatcher" ];
 
   meta = with lib; {

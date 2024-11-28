@@ -176,6 +176,8 @@ rec {
   markBrokenVersion = compose.markBrokenVersion;
   markUnbroken = compose.markUnbroken;
 
+  disableParallelBuilding = compose.disableParallelBuilding;
+
   enableLibraryProfiling = compose.enableLibraryProfiling;
   disableLibraryProfiling = compose.disableLibraryProfiling;
 

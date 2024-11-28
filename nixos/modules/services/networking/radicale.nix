@@ -52,7 +52,7 @@ in {
       default = { };
       description = ''
         Configuration for Radicale. See
-        <https://radicale.org/3.0.html#documentation/configuration>.
+        <https://radicale.org/v3.html#configuration>.
         This option is mutually exclusive with {option}`config`.
       '';
       example = literalExpression ''
@@ -74,7 +74,7 @@ in {
       type = format.type;
       description = ''
         Configuration for Radicale's rights file. See
-        <https://radicale.org/3.0.html#documentation/authentication-and-rights>.
+        <https://radicale.org/v3.html#authentication-and-rights>.
         This option only works in conjunction with {option}`settings`.
         Setting this will also set {option}`settings.rights.type` and
         {option}`settings.rights.file` to appropriate values.

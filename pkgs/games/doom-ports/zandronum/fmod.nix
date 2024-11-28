@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "4.44.64";
   shortVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
-  src = fetchurl (if stdenv.isLinux then {
+  src = fetchurl (if stdenv.hostPlatform.isLinux then {
     url = "https://zdoom.org/files/fmod/fmodapi${shortVersion}linux.tar.gz";
     sha256 = "047hk92xapwwqj281f4zwl0ih821rrliya70gfj82sdfjh9lz8i1";
   } else {
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontBuild = true;
 
-  installPhase = lib.optionalString stdenv.isLinux ''
+  installPhase = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm755 api/lib/libfmodex${bits}-${version}.so $out/lib/libfmodex-${version}.so
     ln -s libfmodex-${version}.so $out/lib/libfmodex.so
     patchelf --set-rpath ${libPath} $out/lib/libfmodex.so
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install -D api/lib/libfmodex.dylib $out/lib/libfmodex.dylib
     install -D api/lib/libfmodexL.dylib $out/lib/libfmodexL.dylib
   '' + ''

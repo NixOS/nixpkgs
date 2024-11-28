@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
     docutils
     wrapGAppsHook3
-  ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     gst_all_1.gst-plugins-base
@@ -54,7 +54,7 @@ python3.pkgs.buildPythonApplication rec {
     gsettings-desktop-schemas libosinfo gtksourceview4
   ] ++ lib.optional spiceSupport spice-gtk;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     pygobject3 libvirt libxml2 requests cdrtools
   ];
 
@@ -74,7 +74,7 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     glib-compile-schemas $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
 
-    gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
+    gappsWrapperArgs+=(--set PYTHONPATH "${python3.pkgs.makePythonPath dependencies}")
     # these are called from virt-install in initrdinject.py
     gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ cpio e2fsprogs file findutils gzip ]}")
 
@@ -97,6 +97,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_misc_nonpredicatble_generate"
     "test_disk_dir_searchable"  # does something strange with permissions
     "testCLI0001virt_install_many_devices"  # expects /var to exist
+    "testCLI0263virt_xml"  # depends on a specific libvirt version
   ];
 
   preCheck = ''

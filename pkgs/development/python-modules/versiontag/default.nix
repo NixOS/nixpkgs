@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   git,
 }:
 
 buildPythonPackage rec {
   pname = "versiontag";
   version = "1.2.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thelabnyc";
@@ -19,8 +20,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "get_version(pypi=True)" '"${version}"'
+      --replace-fail "get_version(pypi=True)" '"${version}"'
   '';
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ git ];
 

@@ -50,6 +50,10 @@ let
     version = "8.06.13";
     sha256 = "sha256-Vpf13g3DEWlUI5aypiowGp2fkQPK0cOGv2XiRUY/Ip4=";
   };
+  "5.2" = mkNewParam {
+    version = "8.06.14";
+    sha256 = "sha256-eVSQetk+i3KObjHfsvnD615cIsq3aZ7IxycX42cuPIU=";
+  };
  };
  param = params . ${lib.versions.majorMinor ocaml.version}
    or (throw "labltk is not available for OCaml ${ocaml.version}");
@@ -62,7 +66,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [ ocaml findlib makeWrapper ];
-  buildInputs = [ tcl tk ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ tcl tk ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   configureFlags = [ "--use-findlib" "--installbindir" "$(out)/bin" ];
   dontAddPrefix = true;

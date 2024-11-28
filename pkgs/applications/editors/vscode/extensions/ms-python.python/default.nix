@@ -21,8 +21,8 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "python";
     publisher = "ms-python";
-    version = "2024.5.11021008";
-    hash = "sha256-UnI0leRKqCtFLBdGS/UvLuCcxQhibyY0ChmzQ9uytoY=";
+    version = "2024.15.2024091301";
+    hash = "sha256-MB8Vq2rjO37yW3Zh+f8ek/yz0qT+ZYHn/JnF5ZA6CXQ=";
   };
 
   buildInputs = [ icu ];
@@ -88,6 +88,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     changelog = "https://github.com/microsoft/vscode-python/releases";
     license = lib.licenses.mit;
     platforms = [
+      "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
       "x86_64-darwin"

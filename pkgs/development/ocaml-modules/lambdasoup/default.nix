@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "lambdasoup";
-  version = "1.0.0";
+  version = "1.1.1";
 
   minimalOCamlVersion = "4.03";
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "aantron";
     repo = pname;
     rev = version;
-    hash = "sha256-PZkhN5vkkLu8A3gYrh5O+nq9wFtig0Q4qD8zLGUGTRI=";
+    hash = "sha256-+d1JPU7OyQgt8pDTlwZraqPHH+OBQD1ycsELKpHT95Y=";
   };
 
   propagatedBuildInputs = [ camlp-streams markup ];

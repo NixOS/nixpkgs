@@ -2,30 +2,33 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
   pythonOlder,
+  requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "py-nextbusnext";
-  version = "1.0.2";
+  version = "2.0.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ViViDboarder";
     repo = "py_nextbus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5zD8AKb4/4x4cVA922OlzSOXlg3F6QCcr16agEQkUWM=";
+    hash = "sha256-/pzlxYGXqWix11G7DsHgwkCrSQFT/N1boKcBJ1YpE0A=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  dependencies = [ requests ];
 
   pythonImportsCheck = [ "py_nextbus" ];
+
+  # upstream has no tests
+  doCheck = false;
 
   meta = with lib; {
     description = "Minimalistic Python client for the NextBus public API";

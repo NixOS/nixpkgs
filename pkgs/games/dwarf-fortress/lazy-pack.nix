@@ -9,7 +9,7 @@
   # This package should, at any given time, provide an opinionated "optimal"
   # DF experience. It's the equivalent of the Lazy Newbie Pack, that is, and
   # should contain every utility available unless you disable them.
-, enableDFHack ? stdenvNoCC.isLinux
+, enableDFHack ? stdenvNoCC.hostPlatform.isLinux
 , enableTWBT ? enableDFHack
 , enableSoundSense ? true
 , enableStoneSense ? true

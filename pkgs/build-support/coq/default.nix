@@ -1,4 +1,4 @@
-{ lib, stdenv, coqPackages, coq, which, fetchzip }@args:
+{ lib, stdenv, coqPackages, coq, which, fetchzip, fetchurl }@args:
 
 let
   lib = import ./extra-lib.nix {
@@ -71,7 +71,7 @@ let
     "extraInstallFlags" "setCOQBIN" "mlPlugin"
     "dropAttrs" "dropDerivationAttrs" "keepAttrs" ] ++ dropAttrs) keepAttrs;
   fetch = import ../coq/meta-fetch/default.nix
-    { inherit lib stdenv fetchzip; } ({
+    { inherit lib stdenv fetchzip fetchurl; } ({
       inherit release releaseRev;
       location = { inherit domain owner repo; };
     } // optionalAttrs (args?fetcher) {inherit fetcher;});
@@ -146,7 +146,7 @@ stdenv.mkDerivation (removeAttrs ({
 })
 // (optionalAttrs (args?useMelquiondRemake) rec {
   COQUSERCONTRIB = "$out/lib/coq/${coq.coq-version}/user-contrib";
-  preConfigurePhases = "autoconf";
+  preConfigurePhases = [ "autoconf" ];
   configureFlags = [ "--libdir=${COQUSERCONTRIB}/${useMelquiondRemake.logpath or ""}" ];
   buildPhase = "./remake -j$NIX_BUILD_CORES";
   installPhase = "./remake install";

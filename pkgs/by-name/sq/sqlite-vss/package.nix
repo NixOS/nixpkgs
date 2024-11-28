@@ -25,8 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ nlohmann_json faiss sqlite ]
-    ++ lib.optional stdenv.isLinux gomp
-    ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
+    ++ lib.optional stdenv.hostPlatform.isLinux gomp
+    ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   SQLITE_VSS_CMAKE_VERSION = finalAttrs.version;
 
@@ -43,6 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib;{
+    # Low maintenance mode, doesn't support up-to-date faiss
+    # https://github.com/NixOS/nixpkgs/pull/330191#issuecomment-2252965866
+    broken = lib.versionAtLeast faiss.version "1.8.0";
     description = "SQLite extension for efficient vector search based on Faiss";
     homepage = "https://github.com/asg017/sqlite-vss";
     changelog = "https://github.com/asg017/sqlite-vss/releases/tag/v${finalAttrs.version}";

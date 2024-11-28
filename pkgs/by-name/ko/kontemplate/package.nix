@@ -8,7 +8,7 @@ buildGoModule {
 
   src = fetchgit {
     url = "https://code.tvl.fyi/depot.git";
-    sha256 = "sha256-Cv/y1Tj+hUKP0gi9ceS1Gml1WRYbUGSeWfJfXyX6dLA=";
+    hash = "sha256-Cv/y1Tj+hUKP0gi9ceS1Gml1WRYbUGSeWfJfXyX6dLA=";
     rev = "b16ddb54b0327606cec2df220eaabb1328e18e3e";
   };
 

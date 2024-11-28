@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools-scm,
-  pytest-runner,
   pytest,
   decopatch,
   makefun,
@@ -34,11 +33,14 @@ buildPythonPackage rec {
   # we disable this file creation as it touches internet
   postPatch = ''
     echo "version = '${version}'" > pytest_harvest/_version.py
+
+    substituteInPlace pytest_harvest/tests/test_lazy_and_harvest.py \
+      --replace-fail "from distutils.version import LooseVersion" "from packaging.version import parse" \
+      --replace-fail "LooseVersion" "parse"
   '';
 
   nativeBuildInputs = [
     setuptools-scm
-    pytest-runner
   ];
 
   buildInputs = [ pytest ];
@@ -62,7 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Store data created during your `pytest` tests execution, and retrieve it at the end of the session, e.g. for applicative benchmarking purposes";
     homepage = "https://github.com/smarie/python-pytest-harvest";
-    changelog = "https://github.com/smarie/python-pytest-harvest/releases/tag/${src.rev}";
+    changelog = "https://github.com/smarie/python-pytest-harvest/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mbalatsko ];
   };

@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  verilog,
+  iverilog,
   ghdl,
   pytest,
   pytest-xdist,
@@ -24,13 +24,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest
     pytest-xdist
-    verilog
+    iverilog
     ghdl
   ];
   passthru = {
     # If using myhdl as a dependency, use these if needed and not ghdl and
     # verlog from all-packages.nix
-    inherit ghdl verilog;
+    inherit ghdl iverilog;
   };
   checkPhase = ''
     runHook preCheck

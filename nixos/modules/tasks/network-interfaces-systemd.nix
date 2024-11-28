@@ -45,25 +45,14 @@ let
 
   genericDhcpNetworks = initrd: mkIf cfg.useDHCP {
     networks."99-ethernet-default-dhcp" = {
-      # We want to match physical ethernet interfaces as commonly
-      # found on laptops, desktops and servers, to provide an
-      # "out-of-the-box" setup that works for common cases.  This
-      # heuristic isn't perfect (it could match interfaces with
-      # custom names that _happen_ to start with en or eth), but
-      # should be good enough to make the common case easy and can
-      # be overridden on a case-by-case basis using
-      # higher-priority networks or by disabling useDHCP.
-
-      # Type=ether matches veth interfaces as well, and this is
-      # more likely to result in interfaces being configured to
-      # use DHCP when they shouldn't.
-
-      matchConfig.Name = ["en*" "eth*"];
+      matchConfig = {
+        Type = "ether";
+        Kind = "!*"; # physical interfaces have no kind
+      };
       DHCP = "yes";
       networkConfig.IPv6PrivacyExtensions = "kernel";
     };
     networks."99-wireless-client-dhcp" = {
-      # Like above, but this is much more likely to be correct.
       matchConfig.WLANInterfaceType = "station";
       DHCP = "yes";
       networkConfig.IPv6PrivacyExtensions = "kernel";

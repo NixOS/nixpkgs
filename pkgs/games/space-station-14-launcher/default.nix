@@ -14,7 +14,8 @@ let
   '';
 in
 buildFHSEnv rec {
-  name = "space-station-14-launcher-wrapped";
+  pname = "space-station-14-launcher-wrapped";
+  inherit (space-station-14-launcher) version;
 
   targetPkgs = pkgs: [
     space-station-14-launcher
@@ -35,6 +36,6 @@ buildFHSEnv rec {
     unwrapped = space-station-14-launcher;
   };
   meta = space-station-14-launcher.meta // {
-    mainProgram = name;
+    mainProgram = pname;
   };
 }

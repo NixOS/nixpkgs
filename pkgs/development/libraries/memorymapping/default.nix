@@ -40,6 +40,6 @@ stdenv.mkDerivation {
     # Uses BSD-style funopen() to implement glibc-style fmemopen().
     # Add more BSDs if you need to.
     platforms = platforms.darwin;
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

@@ -14,10 +14,7 @@
 , gnused
 }:
 
-let
-  mavenJdk17 = maven.override { jdk = jdk17; };
-in
-mavenJdk17.buildMavenPackage rec {
+maven.buildMavenPackage rec {
   pname = "sonarlint-ls";
   version = "3.5.1.75119";
 
@@ -28,6 +25,7 @@ mavenJdk17.buildMavenPackage rec {
     hash = "sha256-6tbuX0wUpqbTyM44e7PqZHL0/XjN8hTFCgfzV+qc1m0=";
   };
 
+  mvnJdk = jdk17;
   manualMvnArtifacts = [
     "org.apache.maven.surefire:surefire-junit-platform:3.1.2"
     "org.junit.platform:junit-platform-launcher:1.8.2"
@@ -94,14 +92,14 @@ mavenJdk17.buildMavenPackage rec {
           LATEST_TAG=$(curl https://api.github.com/repos/${src.owner}/${src.repo}/tags | \
             jq -r '[.[] | select(.name | test("^[0-9]"))] | sort_by(.name | split(".") |
             map(tonumber)) | reverse | .[0].name')
-          update-source-version ${pname} "$LATEST_TAG"
+          update-source-version sonarlint-ls "$LATEST_TAG"
           sed -i '0,/mvnHash *= *"[^"]*"/{s/mvnHash = "[^"]*"/mvnHash = ""/}' ${pkgFile}
 
           echo -e "\nFetching all mvn dependencies to calculate the mvnHash. This may take a while ..."
-          nix-build -A ${pname}.fetchedMavenDeps 2> ${pname}-stderr.log || true
+          nix-build -A sonarlint-ls.fetchedMavenDeps 2> sonarlint-ls-stderr.log || true
 
-          NEW_MVN_HASH=$(grep "got:" ${pname}-stderr.log | awk '{print ''$2}')
-          rm ${pname}-stderr.log
+          NEW_MVN_HASH=$(grep "got:" sonarlint-ls-stderr.log | awk '{print ''$2}')
+          rm sonarlint-ls-stderr.log
           # escaping double quotes looks ugly but is needed for variable substitution
           # use # instead of / as separator because the sha256 might contain the / character
           sed -i "0,/mvnHash *= *\"[^\"]*\"/{s#mvnHash = \"[^\"]*\"#mvnHash = \"$NEW_MVN_HASH\"#}" ${pkgFile}

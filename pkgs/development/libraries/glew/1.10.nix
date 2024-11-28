@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, libGLU, libXmu, libXi, libXext
 , AGL, OpenGL
 , testers
+, mesa
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -8,12 +9,12 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.10.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/glew/${finalAttrs.pname}-${finalAttrs.version}.tgz";
+    url = "mirror://sourceforge/glew/glew-${finalAttrs.version}.tgz";
     sha256 = "01zki46dr5khzlyywr3cg615bcal32dazfazkf360s1znqh17i4r";
   };
 
-  buildInputs = if stdenv.isDarwin then [ AGL ] else [ libXmu libXi libXext ];
-  propagatedBuildInputs = if stdenv.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
+  buildInputs = if stdenv.hostPlatform.isDarwin then [ AGL ] else [ libXmu libXi libXext ];
+  propagatedBuildInputs = if stdenv.hostPlatform.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
 
   outputs = [ "out" "dev" ];
 
@@ -52,6 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.free; # different files under different licenses
       #["BSD" "GLX" "SGI-B" "GPL2"]
     pkgConfigModules = [ "glew" ];
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
   };
 })

@@ -6,16 +6,16 @@ final: prev:
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute
   # set to appear while listing all the packages available.
-  removeRecurseForDerivations = alias: with lib;
+  removeRecurseForDerivations = alias:
     if alias.recurseForDerivations or false then
-      removeAttrs alias ["recurseForDerivations"]
+      lib.removeAttrs alias ["recurseForDerivations"]
     else alias;
 
   # Disabling distribution prevents top-level aliases for non-recursed package
   # sets from building on Hydra.
-  removeDistribute = alias: with lib;
-    if isDerivation alias then
-      dontDistribute alias
+  removeDistribute = alias:
+    if lib.isDerivation alias then
+      lib.dontDistribute alias
     else alias;
 
   # Make sure that we are not shadowing something from
@@ -45,6 +45,8 @@ mapAliases (with prev; {
   coffeeScript        = vim-coffee-script; # backwards compat, added 2014-10-18
   Solarized           = vim-colors-solarized;
   solarized           = vim-colors-solarized;
+  spacevim            = throw "this distribution was unmaintained for the last 6 years, please use top-level 'spacevim'"; # added 2024-11-27
+  SpaceVim            = throw "this distribution didn't work properly in vimPlugins, please use top-level 'spacevim' instead"; # added 2024-11-27
   colors-solarized    = vim-colors-solarized;
   caw                 = caw-vim;
   chad                = chadtree;
@@ -69,6 +71,7 @@ mapAliases (with prev; {
   eighties            = vim-eighties;
   extradite           = vim-extradite;
   fugitive            = vim-fugitive;
+  floating-nvim       = throw "floating.nvim has been removed: abandoned by upstream. Use popup-nvim or nui-nvim"; # Added 2024-11-26
   ghc-mod-vim         = ghcmod-vim;
   ghcmod              = ghcmod-vim;
   goyo                = goyo-vim;
@@ -99,6 +102,7 @@ mapAliases (with prev; {
   The_NERD_tree       = nerdtree;
   open-browser        = open-browser-vim;
   pathogen            = vim-pathogen;
+  peskcolor-vim       = throw "peskcolor-vim has been removed: abandoned by upstream"; # Added 2024-08-23
   polyglot            = vim-polyglot;
   prettyprint         = vim-prettyprint;
   quickrun            = vim-quickrun;

@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.leaps;
   stateDir = "/var/lib/leaps/";
@@ -9,27 +6,27 @@ in
 {
   options = {
     services.leaps = {
-      enable = mkEnableOption "leaps, a pair programming service";
-      port = mkOption {
-        type = types.port;
+      enable = lib.mkEnableOption "leaps, a pair programming service";
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8080;
         description = "A port where leaps listens for incoming http requests";
       };
-      address = mkOption {
+      address = lib.mkOption {
         default = "";
-        type = types.str;
+        type = lib.types.str;
         example = "127.0.0.1";
         description = "Hostname or IP-address to listen to. By default it will listen on all interfaces.";
       };
-      path = mkOption {
+      path = lib.mkOption {
         default = "/";
-        type = types.path;
+        type = lib.types.path;
         description = "Subdirectory used for reverse proxy setups";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users = {
       users.leaps = {
         uid             = config.ids.uids.leaps;

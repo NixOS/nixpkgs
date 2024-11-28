@@ -5,55 +5,64 @@
   colorlog,
   fetchFromGitHub,
   hatchling,
-  importlib-metadata,
   jinja2,
   packaging,
   pytestCheckHook,
   pythonOlder,
+  tomli,
   tox,
-  typing-extensions,
+  uv,
   virtualenv,
 }:
 
 buildPythonPackage rec {
   pname = "nox";
-  version = "2024.04.15";
-  format = "pyproject";
+  version = "2024.10.09";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "wntrblm";
-    repo = pname;
+    repo = "nox";
     rev = "refs/tags/${version}";
-    hash = "sha256-PagZR2IdS1gS/ukl4b0Al9sdEsFnFwP8oy0eOGKJHMs=";
+    hash = "sha256-GdNz34A8IKwPG/270sY5t3SoggGCZMWfDq/Wyhk0ez8=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs =
+  dependencies =
     [
       argcomplete
       colorlog
       packaging
       virtualenv
     ]
-    ++ lib.optionals (pythonOlder "3.8") [
-      typing-extensions
-      importlib-metadata
+    ++ lib.optionals (pythonOlder "3.11") [
+      tomli
     ];
 
-  nativeCheckInputs = [
-    jinja2
-    tox
-    pytestCheckHook
-  ];
+  optional-dependencies = {
+    tox_to_nox = [
+      jinja2
+      tox
+    ];
+    uv = [ uv ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   pythonImportsCheck = [ "nox" ];
 
   disabledTests = [
     # our conda is not available on 3.11
     "test__create_venv_options"
+    # Assertion errors
+    "test_uv"
   ];
 
   disabledTestPaths = [

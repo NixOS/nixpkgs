@@ -42,7 +42,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/datadriventests/ddt/releases/tag/${version}";
     description = "Data-Driven/Decorated Tests, a library to multiply test cases";
     homepage = "https://github.com/txels/ddt";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     wxGTK32
     libX11
     readline
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
   ];
 

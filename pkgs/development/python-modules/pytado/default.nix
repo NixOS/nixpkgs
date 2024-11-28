@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pytado";
-  version = "0.17.6";
+  version = "0.17.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "wmalgadey";
     repo = "PyTado";
     rev = "refs/tags/${version}";
-    hash = "sha256-KcYxUKQuO7TLS4YPg2mrBjP+DMnvZeJokGzwmeM/CvE=";
+    hash = "sha256-WpGznYNVpis1pM9PRXHnQVev3JW6baUT5J9iPxwd0Uk=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/wmalgadey/PyTado";
     changelog = "https://github.com/wmalgadey/PyTado/releases/tag/${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,17 +1,14 @@
 # Options that can be used for creating a jupyter kernel.
 { lib, pkgs }:
-
-with lib;
-
 {
   freeformType = (pkgs.formats.json { }).type;
 
   options = {
 
-    displayName = mkOption {
-      type = types.str;
+    displayName = lib.mkOption {
+      type = lib.types.str;
       default = "";
-      example = literalExpression ''
+      example = lib.literalExpression ''
         "Python 3"
         "Python 3 for Data Science"
       '';
@@ -20,8 +17,8 @@ with lib;
       '';
     };
 
-    argv = mkOption {
-      type = types.listOf types.str;
+    argv = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       example = [
         "{customEnv.interpreter}"
         "-m"
@@ -34,16 +31,16 @@ with lib;
       '';
     };
 
-    language = mkOption {
-      type = types.str;
+    language = lib.mkOption {
+      type = lib.types.str;
       example = "python";
       description = ''
         Language of the environment. Typically the name of the binary.
       '';
     };
 
-    env = mkOption {
-      type = types.attrsOf types.str;
+    env = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
       default = { };
       example = { OMP_NUM_THREADS = "1"; };
       description = ''
@@ -51,27 +48,27 @@ with lib;
       '';
     };
 
-    logo32 = mkOption {
-      type = types.nullOr types.path;
+    logo32 = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
-      example = literalExpression ''"''${env.sitePackages}/ipykernel/resources/logo-32x32.png"'';
+      example = lib.literalExpression ''"''${env.sitePackages}/ipykernel/resources/logo-32x32.png"'';
       description = ''
         Path to 32x32 logo png.
       '';
     };
-    logo64 = mkOption {
-      type = types.nullOr types.path;
+    logo64 = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
-      example = literalExpression ''"''${env.sitePackages}/ipykernel/resources/logo-64x64.png"'';
+      example = lib.literalExpression ''"''${env.sitePackages}/ipykernel/resources/logo-64x64.png"'';
       description = ''
         Path to 64x64 logo png.
       '';
     };
 
-    extraPaths = mkOption {
-      type = types.attrsOf types.path;
+    extraPaths = lib.mkOption {
+      type = lib.types.attrsOf lib.types.path;
       default = { };
-      example = literalExpression ''"{ examples = ''${env.sitePack}/IRkernel/kernelspec/kernel.js"; }'';
+      example = lib.literalExpression ''"{ examples = ''${env.sitePack}/IRkernel/kernelspec/kernel.js"; }'';
       description = ''
         Extra paths to link in kernel directory
       '';

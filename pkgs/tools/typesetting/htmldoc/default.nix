@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "htmldoc";
-  version = "1.9.18";
+  version = "1.9.19";
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = "htmldoc";
     rev = "v${version}";
-    sha256 = "sha256-fibk58X0YtQ8vh8Lyqp9ZAsC79BjCptiqUA5t5Hiisg=";
+    sha256 = "sha256-JNZoPAXriaYpeiwO9GaxGPwiGohwIK1skhq/Ot/UUvI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ zlib cups libpng libjpeg ]
-    ++ lib.optionals stdenv.isDarwin [ Foundation SystemConfiguration ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation SystemConfiguration ];
 
   # do not generate universal binary on Darwin
   # because it is not supported by Nix's clang
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://michaelrsweet.github.io/htmldoc";
     changelog   = "https://github.com/michaelrsweet/htmldoc/releases/tag/v${version}";
     license     = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms   = platforms.unix;
 
     longDescription = ''

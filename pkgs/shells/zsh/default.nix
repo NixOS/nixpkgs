@@ -39,11 +39,24 @@ stdenv.mkDerivation {
       hash = "sha256-nXB4w7qqjZJC7/+CDxnNy6wu9qNwmS3ezjj/xK7JfeU=";
       excludes = [ "ChangeLog" ];
     })
+    # Fixes compatibility with texinfo 7.1. This patch can be dropped with the next release of zsh.
+    (fetchpatch {
+      url = "https://github.com/zsh-users/zsh/commit/ecd3f9c9506c7720dc6c0833dc5d5eb00e4459c4.patch";
+      hash = "sha256-oA8GC8LmuqNKGuPqGfiQVhL5nWb7ArLWGUI6wjpsIW8=";
+      excludes = [ "ChangeLog" ];
+    })
+  ] ++ lib.optionals stdenv.cc.isGNU [
+    # Fixes compilation with gcc >= 14.
+    (fetchpatch {
+      url = "https://github.com/zsh-users/zsh/commit/4c89849c98172c951a9def3690e8647dae76308f.patch";
+      hash = "sha256-l5IHQuIXo0N6ynLlZoQA7wJd/C7KrW3G7nMzfjQINkw=";
+      excludes = [ "ChangeLog" ];
+    })
   ];
 
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook perl groff texinfo pkg-config ]
-                      ++ lib.optionals stdenv.isLinux [ util-linux yodl ];
+                      ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux yodl ];
 
   buildInputs = [ ncurses pcre ];
 

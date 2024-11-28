@@ -32,7 +32,7 @@ in {
 
   config = {
     assertions = [
-      { assertion = isNull config.environment.ldso32 || pkgs.stdenv.isx86_64;
+      { assertion = isNull config.environment.ldso32 || pkgs.stdenv.hostPlatform.isx86_64;
         message = "Option environment.ldso32 currently only works on x86_64.";
       }
     ];
@@ -44,7 +44,7 @@ in {
         "d /${libDir} 0755 root root - -"
         "L+ /${libDir}/${ldsoBasename} - - - - ${config.environment.ldso}"
       ]
-    ) ++ optionals pkgs.stdenv.isx86_64 (
+    ) ++ optionals pkgs.stdenv.hostPlatform.isx86_64 (
       if isNull config.environment.ldso32 then [
         "r /${libDir32}/${ldsoBasename32} - - - - -"
       ] else [

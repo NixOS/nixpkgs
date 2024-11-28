@@ -6,7 +6,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.coin-or.org/download/source/CoinMP/CoinMP-${finalAttrs.version}.tgz";
-    sha256 = "13d3j1sdcjzpijp4qks3n0zibk649ac3hhv88hkk8ffxrc6gnn9l";
+    hash = "sha256-NFn7DMvdOTQnRGhDOJhKxMwVP7BDT0yujPdL1nSQo40=";
   };
 
   patches = [

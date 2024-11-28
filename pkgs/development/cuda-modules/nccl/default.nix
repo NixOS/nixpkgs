@@ -29,7 +29,7 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
-    repo = finalAttrs.pname;
+    repo = "nccl";
     rev = "v${finalAttrs.version}";
     hash = "sha256-IF2tILwW8XnzSmfn7N1CO7jXL95gUp02guIW5n1eaig=";
   };
@@ -69,7 +69,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     patchShebangs ./src/device/generate.py
   '';
 
-  makeFlagsArray =
+  makeFlags =
     [
       "PREFIX=$(out)"
       "NVCC_GENCODE=${cudaFlags.gencodeString}"

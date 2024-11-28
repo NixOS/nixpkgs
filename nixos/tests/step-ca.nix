@@ -16,7 +16,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
           { config, pkgs, ... }: {
             services.step-ca = {
               enable = true;
-              address = "0.0.0.0";
+              address = "[::]";
               port = 8443;
               openFirewall = true;
               intermediatePasswordFile = "${test-certificates}/intermediate-password-file";

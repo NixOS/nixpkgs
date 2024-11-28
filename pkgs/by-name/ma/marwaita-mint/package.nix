@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "marwaita-mint";
-  version = "20.2-unstable-2024-07-01";
+  version = "22.2";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = "marwaita-mint";
-    rev = "ecdb79b45937466b7d8377d294838da3e8f4e61a";
-    hash = "sha256-57oZgacQQF6nZney0AxSbGfv45eeBLjXHBK6wp1251U=";
+    rev = finalAttrs.version;
+    hash = "sha256-hKpiEq2Xofp64p5HbznNc4biDALsIN1M98px1sTluFA=";
   };
 
   buildInputs = [

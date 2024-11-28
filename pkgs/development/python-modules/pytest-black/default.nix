@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Pytest plugin to enable format checking with black";
     homepage = "https://github.com/shopkeep/pytest-black";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

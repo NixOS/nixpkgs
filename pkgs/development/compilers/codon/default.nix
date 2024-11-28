@@ -125,7 +125,7 @@ stdenv.mkDerivation {
     "-DLLVM_USE_LINKER=lld"
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ln -s $out/lib/codon/*.dylib $out/lib/
   '';
 
@@ -137,5 +137,6 @@ stdenv.mkDerivation {
     maintainers = [ ];
     license = lib.licenses.bsl11;
     platforms = lib.platforms.all;
+    broken = true; # `codon-llvm` build fails on darwin and linux
   };
 }

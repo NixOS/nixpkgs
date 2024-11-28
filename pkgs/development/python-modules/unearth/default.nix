@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "unearth";
-  version = "0.16.0";
+  version = "0.17.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fbqR8SCat+n4pn8HoVveSa4tobikb9rYsCIroYuRAhI=";
+    hash = "sha256-C4oq/TR28athVfxXlQGsR//+Q1R9iKcOWlt2p/5sqiw=";
   };
 
   build-system = [ pdm-backend ];

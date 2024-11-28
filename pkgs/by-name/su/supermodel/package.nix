@@ -7,15 +7,15 @@
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "supermodel";
-  version = "0-unstable-2024-04-05";
+  version = "0-unstable-2024-11-07";
 
   src = fetchFromGitHub {
     owner = "trzy";
     repo = "supermodel";
-    rev = "250f84e78eba381adf8cd731ce20b1b9be43c8c8";
-    hash = "sha256-3sDtNMW5R5Eq9GXJzKs0mQdiLUIWl6+4+rzKg8xpqEY=";
+    rev = "4e7356ab2c077aa3bc3d75fb6e164a1c943fe4c1";
+    hash = "sha256-ajRbgs6oMFF+dYHPsKM7FU16vuZcSovaNk2thdsUWtk=";
   };
 
   buildInputs = [

@@ -29,6 +29,7 @@ let
    rx
    gtk3
    reactivex
+   setuptools
  ]);
 in stdenv.mkDerivation rec {
   pname = "gwe";
@@ -38,7 +39,7 @@ in stdenv.mkDerivation rec {
     owner = "leinardi";
     repo = pname;
     rev = version;
-    sha256 = "sha256-agq967QN1nsAOn+1Ce64+id7UlSS/K3XGsUUihWOztk=";
+    hash = "sha256-agq967QN1nsAOn+1Ce64+id7UlSS/K3XGsUUihWOztk=";
   };
 
   prePatch = ''

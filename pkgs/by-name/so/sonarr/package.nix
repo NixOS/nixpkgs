@@ -1,4 +1,5 @@
 { lib
+, stdenvNoCC
 , fetchFromGitHub
 , buildDotnetModule
 , dotnetCorePackages
@@ -17,13 +18,14 @@
 , prefetch-yarn-deps
 }:
 let
-  version = "4.0.5.1710";
+  version = "4.0.10.2544";
   src = fetchFromGitHub {
     owner = "Sonarr";
     repo = "Sonarr";
     rev = "v${version}";
-    hash = "sha256-9mrt5/6v8odPv1rwJoT6laXGlh3blgZAL97tsllj7MY=";
+    hash = "sha256-5mP+fleZDYL/XU23r+dGDeAbNfFz7eVrvYW+vJ6KVV8=";
   };
+  rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
 in
 buildDotnetModule {
   pname = "sonarr";
@@ -38,7 +40,7 @@ buildDotnetModule {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-dSZBifvUGJx5lj7C+Sj+kJprK8JG6SE5vg6+X6QdCZ8=";
+    hash = "sha256-7jHx7TW/oLQuYVmjd4rPMqW2sZbC/AiEUqeEd19LoWk=";
   };
 
   ffprobe = lib.optionalDrvAttr withFFmpeg (lib.getExe' ffmpeg "ffprobe");
@@ -100,6 +102,7 @@ buildDotnetModule {
     "--property:Copyright=Copyright 2014-2024 sonarr.tv (GNU General Public v3)"
     "--property:AssemblyVersion=${version}"
     "--property:AssemblyConfiguration=main"
+    "--property:RuntimeIdentifier=${rid}"
   ];
 
   # Skip manual, integration, automation and platform-dependent tests.

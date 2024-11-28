@@ -1,27 +1,25 @@
 { config, pkgs, lib, ... }:
-
-with lib;
 let
   cfg = config.services.zrepl;
   format = pkgs.formats.yaml { };
   configFile = format.generate "zrepl.yml" cfg.settings;
 in
 {
-  meta.maintainers = with maintainers; [ cole-h ];
+  meta.maintainers = with lib.maintainers; [ cole-h ];
 
   options = {
     services.zrepl = {
-      enable = mkEnableOption "zrepl";
+      enable = lib.mkEnableOption "zrepl";
 
-      package = mkPackageOption pkgs "zrepl" { };
+      package = lib.mkPackageOption pkgs "zrepl" { };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         default = { };
         description = ''
           Configuration for zrepl. See <https://zrepl.github.io/configuration.html>
           for more information.
         '';
-        type = types.submodule {
+        type = lib.types.submodule {
           freeformType = format.type;
         };
       };
@@ -30,7 +28,7 @@ in
 
   ### Implementation ###
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
     # zrepl looks for its config in this location by default. This

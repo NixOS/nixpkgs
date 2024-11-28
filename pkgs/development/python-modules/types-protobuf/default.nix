@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "types-protobuf";
-  version = "5.26.0.20240422";
+  version = "5.28.0.20240924";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5gdBeBCfl+/p8LIKA1umHXw7A+hn60fSVNKyq2qAXjY=";
+    hash = "sha256-0YGviiVuWpHOjVrbU0luiA79kUTH1USD42UzMrYClvA=";
   };
 
   propagatedBuildInputs = [ types-futures ];

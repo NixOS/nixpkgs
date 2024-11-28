@@ -39,6 +39,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.fail("curl --fail --max-time 10 --proxy socks5://user:supervillain@localhost:7890 http://localhost")
 
     # Web UI
-    machine.succeed("curl --fail http://localhost:9090") == '{"hello":"clash"}'
+    result = machine.succeed("curl --fail http://localhost:9090")
+    target = '{"hello":"mihomo"}\n'
+    assert result == target, f"{result!r} != {target!r}"
   '';
 })

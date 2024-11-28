@@ -61,11 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs meson_post_install.py
   '';
 
-  preFixup = ''
-    substituteInPlace $out/share/applications/com.gexperts.Tilix.desktop \
-      --replace "Exec=tilix" "Exec=$out/bin/tilix"
-  '';
-
   passthru.tests.test = nixosTests.terminal-emulators.tilix;
 
   meta = with lib; {

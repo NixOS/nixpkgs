@@ -5,7 +5,7 @@
 }:
 let
   pname = "tparse";
-  version = "0.14.0";
+  version = "0.16.0";
 in
 buildGoModule {
   inherit pname version;
@@ -14,10 +14,16 @@ buildGoModule {
     owner = "mfridman";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-siw9GihPo6f+OWKvSx0kqC919BuL/YoUI2dUBwTF19U=";
+    hash = "sha256-fljSjch09kQCpnZerI/h4SRCyxUydfFZGyOXsxmgYOk=";
   };
 
-  vendorHash = "sha256-j+1B2zWONjFEGoyesX0EW964kD33Jy3O1aB1WEwlESA=";
+  vendorHash = "sha256-gGmPQ8YaTk7xG5B8UPK7vOui5YFeEnkuGrAsf0eylXQ=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   meta = {
     description = "CLI tool for summarizing go test output. Pipe friendly. CI/CD friendly";

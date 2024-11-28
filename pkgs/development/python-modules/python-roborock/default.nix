@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "2.5.0";
+  version = "2.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "humbertogontijo";
     repo = "python-roborock";
     rev = "refs/tags/v${version}";
-    hash = "sha256-W+xq6FwBZNjrqivAWv821h5Pak0wGaksQoYN5EULSnA=";
+    hash = "sha256-sPG3AqVrv+BiB+copgaghWDT/Rb/WU0R+Y8Z2J6l+7E=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     dacite
     paho-mqtt
     pycryptodome
-  ] ++ lib.optionals stdenv.isDarwin [ pycryptodomex ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pycryptodomex ];
 
   nativeCheckInputs = [
     pytest-asyncio

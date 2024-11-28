@@ -5,7 +5,7 @@
   stdenv,
 
   autoreconfHook,
-  boost185,
+  boost,
   cairomm,
   cgal,
   expat,
@@ -26,20 +26,19 @@
 }:
 
 let
-  # graph-tool doesn't build against boost181 on Darwin
-  boost = boost185.override {
+  boost' = boost.override {
     enablePython = true;
     inherit python;
   };
 in
 buildPythonPackage rec {
   pname = "graph-tool";
-  version = "2.71";
+  version = "2.78";
   format = "other";
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    hash = "sha256-MVeEEAxvc6fEmQatlTn9XGCOTNkcCv8ouNbYqL69A8U=";
+    hash = "sha256-gG9TWKRJISOowRIXI1/ROTIwrVwhxFtMOextXqN6KiU=";
   };
 
   # Remove error messages about tput during build process without adding ncurses,
@@ -58,7 +57,7 @@ buildPythonPackage rec {
 
   configureFlags = [
     "--with-python-module-path=$(out)/${python.sitePackages}"
-    "--with-boost-libdir=${boost}/lib"
+    "--with-boost-libdir=${boost'}/lib"
     "--with-cgal=${cgal}"
   ];
 
@@ -71,7 +70,7 @@ buildPythonPackage rec {
 
   # https://graph-tool.skewed.de/installation.html#manual-compilation
   dependencies = [
-    boost
+    boost'
     cairomm
     cgal
     expat
@@ -99,6 +98,6 @@ buildPythonPackage rec {
     homepage = "https://graph-tool.skewed.de";
     changelog = "https://git.skewed.de/count0/graph-tool/commits/release-${version}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.mjoerg ];
   };
 }

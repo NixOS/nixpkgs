@@ -12,7 +12,7 @@ buildGoModule rec {
 
   pname = "snippetexpander";
 
-  vendorHash = "sha256-W9NkENdZRzqSAONI9QS2EI5aERK+AaPqwYwITKLwXQE=";
+  vendorHash = "sha256-2nLO/b6XQC88VXE+SewhgKpkRtIHsva+fDudgKpvZiY=";
 
   proxyVendor = true;
 
@@ -50,7 +50,7 @@ buildGoModule rec {
     description = "Your little expandable text snippet helper CLI";
     homepage = "https://snippetexpander.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ianmjones ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
     mainProgram = "snippetexpander";
   };

@@ -127,6 +127,9 @@ in {
         })
         {
           systemd.targets.multi-user.wants = [ "machines.target" ];
+          systemd.services."systemd-nspawn@".environment = {
+            SYSTEMD_NSPAWN_UNIFIED_HIERARCHY = mkDefault "1";
+          };
         }
       ];
 }

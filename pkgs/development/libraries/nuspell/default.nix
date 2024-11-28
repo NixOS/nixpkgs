@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, icu, catch2_3 }:
+{ lib, stdenv, fetchFromGitHub, cmake, pandoc, pkg-config, icu, catch2_3 }:
 
 stdenv.mkDerivation rec {
   pname = "nuspell";
-  version = "5.1.5";
+  version = "5.1.6";
 
   src = fetchFromGitHub {
     owner = "nuspell";
     repo = "nuspell";
     rev = "v${version}";
-    hash = "sha256-uE5OkjXawYf9O/SUA/SUaIhDydwGcD460+xO5Yoqa0w=";
+    hash = "sha256-U/lHSxpKsBnamf4ikE2aIjEPSU5fxjtuSmhZR0jxMAI=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pandoc pkg-config ];
   buildInputs = [ catch2_3 ];
   propagatedBuildInputs = [ icu ];
 

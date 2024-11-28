@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # this test failed on macos
     # https://github.com/novnc/websockify/issues/552
     "test_socket_set_keepalive_options"
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kanaka/websockify";
     changelog = "https://github.com/novnc/websockify/releases/tag/v${version}";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

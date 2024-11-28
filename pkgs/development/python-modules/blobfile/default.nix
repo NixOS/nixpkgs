@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "blobfile";
-  version = "2.1.0";
+  version = "3.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "christopher-hesse";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-VBh1JMP+8FEqD0uXpxA5RRMFH9XIUb4FUgsPq3vZWHM=";
+    hash = "sha256-/v48rLvlN4lsfWKJvXRNuIO6jdsCgRcSPlJzdOfl3xk=";
   };
 
   propagatedBuildInputs = [

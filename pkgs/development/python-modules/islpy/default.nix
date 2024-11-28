@@ -2,31 +2,32 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
-  setuptools,
+  # build-system
   cmake,
   nanobind,
   ninja,
   pcpp,
   scikit-build,
+  setuptools,
+
+  # buildInputs
   isl,
 
+  # tests
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "islpy";
-  version = "2024.1";
+  version = "2024.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "islpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-N5XI6V3BvNobCh7NAvtzVejtDMnlcb31S5gseyab1T0=";
+    hash = "sha256-ixw9U4WqcXBW6KGBOsUImjsxmvG5XKCv4jCbTjJ4pjg=";
   };
 
   postPatch = ''
@@ -35,12 +36,12 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    setuptools
     cmake
     nanobind
     ninja
     pcpp
     scikit-build
+    setuptools
   ];
 
   buildInputs = [ isl ];

@@ -1,20 +1,20 @@
 { lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, chromaprint, makeWrapper, icu, dotnet-runtime, openssl, nixosTests, zlib }:
 
 let
-  os = if stdenv.isDarwin then "osx" else "linux";
+  os = if stdenv.hostPlatform.isDarwin then "osx" else "linux";
   arch = {
     x86_64-linux = "x64";
     aarch64-linux = "arm64";
     x86_64-darwin = "x64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash = {
-    x64-linux_hash = "sha256-ulWg9BhDr/RFE4sfXGf+i9W0KpOYKjtk49qBeIwI9dU=";
-    arm64-linux_hash = "sha256-iSXXx89I7Pj2nAuapHwJtIblj+TDrd/k9OiBK8QExSg=";
-    x64-osx_hash = "sha256-xjnDePaxQWRNo1VmH1sbp0Xtvbac3nu0+fiMg0wMddg=";
+    x64-linux_hash = "sha256-JVT07j14K37VQ9F+Rmnriz4p9taPow5nawUnqmi0Tx4=";
+    arm64-linux_hash = "sha256-Fc5nAm0hyQ8VhiQ2UVKEYbhVlg9DN8NEC/DNA8x8xKk=";
+    x64-osx_hash = "sha256-m2Wu3eLBbsRl+1n+FE3UTs/a001FF3iWyp1+pEG6u5Q=";
   }."${arch}-${os}_hash";
 in stdenv.mkDerivation rec {
   pname = "lidarr";
-  version = "2.3.3.4204";
+  version = "2.6.4.4402";
 
   src = fetchurl {
     url = "https://github.com/lidarr/Lidarr/releases/download/v${version}/Lidarr.master.${version}.${os}-core-${arch}.tar.gz";

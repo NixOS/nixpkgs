@@ -43,7 +43,7 @@ lib.throwIf (attrs ? name) "buildPerlPackage: `name` (\"${attrs.name}\") is depr
     builder = ./builder.sh;
 
     buildInputs = buildInputs ++ [ perl ];
-    nativeBuildInputs = nativeBuildInputs ++ (if stdenv.buildPlatform != stdenv.hostPlatform then [ perl.mini ] else [ perl ]);
+    nativeBuildInputs = nativeBuildInputs ++ (if !(stdenv.buildPlatform.canExecute stdenv.hostPlatform) then [ perl.mini ] else [ perl ]);
 
     inherit outputs src doCheck checkTarget enableParallelBuilding;
     env = {

@@ -1,13 +1,11 @@
 { buildDunePackage
-, lib
 , fetchFromGitHub
-, ocaml
 , hpack
 , angstrom
 , faraday
 , base64
 , psq
-, httpaf
+, httpun-types
 , alcotest
 , yojson
 , hex
@@ -36,7 +34,7 @@ buildDunePackage rec {
     base64
     psq
     hpack
-    httpaf
+    httpun-types
   ];
 
   doCheck = true;

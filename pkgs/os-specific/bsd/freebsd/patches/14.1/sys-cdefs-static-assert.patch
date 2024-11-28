@@ -1,0 +1,41 @@
+From 22cdafe197ac960c5ce839ef6ec699b59f4b0080 Mon Sep 17 00:00:00 2001
+From: Warner Losh <imp@FreeBSD.org>
+Date: Sat, 20 Jul 2024 09:57:53 -0600
+Subject: cdefs.h: Don't define fallback for _Static_assert
+
+Remove pre 4.6 code to define _Static_assert in terms of _COUNTER.  We
+no longer need to support compilers this old (in fact support for all
+pre gcc 10 compilers has been removed in -current). This is a partial
+MFC of that work because removing this fixes a bug that's oft reported
+with -pedantic-errors and C++98 compilations.
+
+PR: 280382, 276738
+Sponsored by:		Netflix
+
+This is a direct commit to stable/14.
+---
+ sys/sys/cdefs.h | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/sys/sys/cdefs.h b/sys/sys/cdefs.h
+index 19b7d8fe427d..a52864c5db9d 100644
+--- a/sys/sys/cdefs.h
++++ b/sys/sys/cdefs.h
+@@ -277,15 +277,6 @@
+ #if (defined(__cplusplus) && __cplusplus >= 201103L) || \
+     __has_extension(cxx_static_assert)
+ #define	_Static_assert(x, y)	static_assert(x, y)
+-#elif __GNUC_PREREQ__(4,6) && !defined(__cplusplus)
+-/* Nothing, gcc 4.6 and higher has _Static_assert built-in */
+-#elif defined(__COUNTER__)
+-#define	_Static_assert(x, y)	__Static_assert(x, __COUNTER__)
+-#define	__Static_assert(x, y)	___Static_assert(x, y)
+-#define	___Static_assert(x, y)	typedef char __assert_ ## y[(x) ? 1 : -1] \
+-				__unused
+-#else
+-#define	_Static_assert(x, y)	struct __hack
+ #endif
+ #endif
+ 
+-- 
+cgit v1.2.3

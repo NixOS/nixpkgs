@@ -31,7 +31,7 @@ buildFishPlugin rec {
     # Disable tests that are failing, because there is not 'rev' command
     rm tests/preview_file/custom_file_preview.fish
   '' + (
-    if stdenv.isDarwin then ''script /dev/null fish -c "fishtape tests/*/*.fish"''
+    if stdenv.hostPlatform.isDarwin then ''script /dev/null fish -c "fishtape tests/*/*.fish"''
     else ''script -c 'fish -c "fishtape tests/*/*.fish"' ''
   );
 

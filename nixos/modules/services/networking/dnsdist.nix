@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.dnsdist;
 
@@ -80,38 +77,38 @@ let
 in {
   options = {
     services.dnsdist = {
-      enable = mkEnableOption "dnsdist domain name server";
+      enable = lib.mkEnableOption "dnsdist domain name server";
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         description = "Listen IP address";
         default = "0.0.0.0";
       };
-      listenPort = mkOption {
-        type = types.port;
+      listenPort = lib.mkOption {
+        type = lib.types.port;
         description = "Listen port";
         default = 53;
       };
 
       dnscrypt = {
-        enable = mkEnableOption "a DNSCrypt endpoint to dnsdist";
+        enable = lib.mkEnableOption "a DNSCrypt endpoint to dnsdist";
 
-        listenAddress = mkOption {
-          type = types.str;
+        listenAddress = lib.mkOption {
+          type = lib.types.str;
           description = "Listen IP address of the endpoint";
           default = "0.0.0.0";
         };
 
-        listenPort = mkOption {
-          type = types.port;
+        listenPort = lib.mkOption {
+          type = lib.types.port;
           description = "Listen port of the endpoint";
           default = 443;
         };
 
-        providerName = mkOption {
-          type = types.str;
+        providerName = lib.mkOption {
+          type = lib.types.str;
           default = "2.dnscrypt-cert.${config.networking.hostName}";
-          defaultText = literalExpression "2.dnscrypt-cert.\${config.networking.hostName}";
+          defaultText = lib.literalExpression "2.dnscrypt-cert.\${config.networking.hostName}";
           example = "2.dnscrypt-cert.myresolver";
           description = ''
             The name that will be given to this DNSCrypt resolver.
@@ -122,8 +119,8 @@ in {
           '';
         };
 
-        providerKey = mkOption {
-          type = types.nullOr types.path;
+        providerKey = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = null;
           description = ''
             The filepath to the provider secret key.
@@ -136,8 +133,8 @@ in {
           '';
         };
 
-        certLifetime = mkOption {
-          type = types.ints.positive;
+        certLifetime = lib.mkOption {
+          type = lib.types.ints.positive;
           default = 15;
           description = ''
             The lifetime (in minutes) of the resolver certificate.
@@ -147,8 +144,8 @@ in {
 
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Extra lines to be added verbatim to dnsdist.conf.
@@ -157,7 +154,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.dnsdist = {
       description = "dnsdist daemons user";
       isSystemUser = true;

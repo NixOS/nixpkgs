@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   pythonOlder,
   buildPythonPackage,
   fetchFromGitHub,
@@ -19,8 +18,8 @@
 
 buildPythonPackage rec {
   pname = "pygmt";
-  version = "0.11.0";
-  format = "pyproject";
+  version = "0.13.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
@@ -28,12 +27,12 @@ buildPythonPackage rec {
     owner = "GenericMappingTools";
     repo = "pygmt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DbewB/lP44bpNSQ4ht7n0coS2Ml7qmEU4CP91p5YtZg=";
+    hash = "sha256-DO9KUlmt5EV+ioOSQ/BOcx4pP409f94dzmFwqK2MwMY=";
   };
 
   postPatch = ''
     substituteInPlace pygmt/clib/loading.py \
-      --replace "env.get(\"GMT_LIBRARY_PATH\", \"\")" "env.get(\"GMT_LIBRARY_PATH\", \"${gmt}/lib\")"
+      --replace-fail "env.get(\"GMT_LIBRARY_PATH\")" "env.get(\"GMT_LIBRARY_PATH\", \"${gmt}/lib\")"
   '';
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -67,8 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/GenericMappingTools/pygmt";
     license = licenses.bsd3;
     changelog = "https://github.com/GenericMappingTools/pygmt/releases/tag/v${version}";
-    # pygmt.exceptions.GMTCLibNotFoundError: Error loading the GMT shared library '/nix/store/r3xnnqgl89vrnq0kzxx0bmjwzks45mz8-gmt-6.1.1/lib/libgmt.dylib'
-    broken = stdenv.isDarwin;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = with maintainers; teams.geospatial.members;
   };
 }

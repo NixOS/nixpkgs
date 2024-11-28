@@ -1,23 +1,22 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, fetchpatch
-, buildDotnetModule
-, buildNpmPackage
-, dotnetCorePackages
-, nixosTests
-, substituteAll
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  buildDotnetModule,
+  buildNpmPackage,
+  dotnetCorePackages,
+  nixosTests,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kavita";
-  version = "0.8.1";
+  version = "0.8.3.2";
 
   src = fetchFromGitHub {
     owner = "kareadita";
     repo = "kavita";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Z8bGVF6h//37zz/J+PDlJhm7c9AUs2pgKhYY/4ELMhQ=";
+    hash = "sha256-8ZE3zlWX8DxLYUFj3AA04cIJTUWYgnNM+5FZhGmlRz8=";
   };
 
   backend = buildDotnetModule {
@@ -25,13 +24,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version src;
 
     patches = [
-      # Fix wrongly bumped version 0.8.0.10 -> 0.8.1
-      # Remove on next release
-      (fetchpatch {
-        name = "fix-0.8.1-version.patch";
-        url = "https://github.com/Kareadita/Kavita/commit/3c9565468ad5494aef11dace62ba4b18b0c7d7f3.patch";
-        hash = "sha256-/dPHYrCeS6M82rw0lQ8K6C4jfXEvVVmjA85RKyVaxcE=";
-      })
       # The webroot is hardcoded as ./wwwroot
       ./change-webroot.diff
       # Upstream removes database migrations between versions
@@ -56,7 +48,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
   };
 
-  frontend =  buildNpmPackage {
+  frontend = buildNpmPackage {
     pname = "kavita-frontend";
     inherit (finalAttrs) version src;
 
@@ -65,7 +57,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     npmBuildScript = "prod";
     npmFlags = [ "--legacy-peer-deps" ];
     npmRebuildFlags = [ "--ignore-scripts" ]; # Prevent playwright from trying to install browsers
-    npmDepsHash = "sha256-+RJ9mX/cIainO2xS/hIrIOShPVbHkhkCq6q2bP8dGKM=";
+    npmDepsHash = "sha256-EB4B6BHiRi6A4nhj2dR+3q1MZKcfcYUuo4ls4WMJEUI=";
   };
 
   dontBuild = true;
@@ -82,7 +74,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) kavita; };
+    tests = {
+      inherit (nixosTests) kavita;
+    };
     updateScript = ./update.sh;
   };
 
@@ -92,7 +86,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://github.com/kareadita/kavita/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ misterio77 nevivurn ];
+    maintainers = with lib.maintainers; [
+      misterio77
+      nevivurn
+    ];
     mainProgram = "kavita";
   };
 })

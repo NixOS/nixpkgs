@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub
-, cmake, which, m4, python3, bison, flex, llvmPackages, ncurses, xcode, tbb
+, cmake, which, m4, python3, bison, flex, llvmPackages, ncurses, tbb
   # the default test target is sse4, but that is not supported by all Hydra agents
-, testedTargets ? if stdenv.isAarch64 || stdenv.isAarch32 then [ "neon-i32x4" ] else [ "sse2-i32x4" ]
+, testedTargets ? if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32 then [ "neon-i32x4" ] else [ "sse2-i32x4" ]
 }:
 
 stdenv.mkDerivation rec {
   pname   = "ispc";
-  version = "1.24.0";
+  version = "1.25.3";
 
   dontFixCmake = true; # https://github.com/NixOS/nixpkgs/pull/232522#issuecomment-2133803566
 
@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-1Ns8w34fXgYrSu3XE89uowjaVoW3MOgKYV1Jb/XRj1Q=";
+    sha256 = "sha256-baTJNfhOSYfJJnrutkW06AIMXpVP3eBpEes0GSI1yGY=";
   };
 
-  nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev tbb ] ++ lib.lists.optionals stdenv.isDarwin [ xcode ];
+  nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev tbb ];
 
   buildInputs = with llvmPackages; [
     libllvm libclang openmp ncurses
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       echo "================================"
       echo
       (cd ../
-       PATH=${llvmPackages.clang}/bin:$PATH python run_tests.py -t $target --non-interactive --verbose --file=test_output.log
+       PATH=${llvmPackages.clang}/bin:$PATH python scripts/run_tests.py -t $target --non-interactive --verbose --file=test_output.log
        fgrep -q "No new fails"  test_output.log || exit 1)
     done
   '';
@@ -61,10 +61,8 @@ stdenv.mkDerivation rec {
     "-DCLANGPP_EXECUTABLE=${llvmPackages.clang}/bin/clang++"
     "-DISPC_INCLUDE_EXAMPLES=OFF"
     "-DISPC_INCLUDE_UTILS=OFF"
-    ("-DARM_ENABLED=" + (if stdenv.isAarch64 || stdenv.isAarch32 then "TRUE" else "FALSE"))
-    ("-DX86_ENABLED=" + (if stdenv.isx86_64 || stdenv.isx86_32 then "TRUE" else "FALSE"))
-  ] ++ lib.lists.optionals stdenv.isDarwin [
-    "-DISPC_MACOS_SDK_PATH=${xcode}/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+    ("-DARM_ENABLED=" + (if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32 then "TRUE" else "FALSE"))
+    ("-DX86_ENABLED=" + (if stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isx86_32 then "TRUE" else "FALSE"))
   ];
 
   meta = with lib; {

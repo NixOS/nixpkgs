@@ -1,4 +1,4 @@
-{ nano, expect, runCommand, writeScriptBin, runtimeShell }:
+{ nano, expect, runCommand, writeScriptBin }:
 
 let expect-script = writeScriptBin "expect-script" ''
   #!${expect}/bin/expect -f

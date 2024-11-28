@@ -1,10 +1,7 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
-  im = config.i18n.inputMethod;
-  cfg = im.fcitx5;
+  imcfg = config.i18n.inputMethod;
+  cfg = imcfg.fcitx5;
   fcitx5Package =
     if cfg.plasma6Support
     then pkgs.qt6Packages.fcitx5-with-addons.override { inherit (cfg) addons; }
@@ -14,35 +11,35 @@ in
 {
   options = {
     i18n.inputMethod.fcitx5 = {
-      addons = mkOption {
-        type = with types; listOf package;
+      addons = lib.mkOption {
+        type = with lib.types; listOf package;
         default = [ ];
-        example = literalExpression "with pkgs; [ fcitx5-rime ]";
+        example = lib.literalExpression "with pkgs; [ fcitx5-rime ]";
         description = ''
           Enabled Fcitx5 addons.
         '';
       };
-      waylandFrontend = mkOption {
-        type = types.bool;
+      waylandFrontend = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Use the Wayland input method frontend.
           See [Using Fcitx 5 on Wayland](https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland).
         '';
       };
-      plasma6Support = mkOption {
-        type = types.bool;
+      plasma6Support = lib.mkOption {
+        type = lib.types.bool;
         default = config.services.desktopManager.plasma6.enable;
-        defaultText = literalExpression "config.services.desktopManager.plasma6.enable";
+        defaultText = lib.literalExpression "config.services.desktopManager.plasma6.enable";
         description = ''
           Use qt6 versions of fcitx5 packages.
           Required for configuring fcitx5 in KDE System Settings.
         '';
       };
-      quickPhrase = mkOption {
-        type = with types; attrsOf str;
+      quickPhrase = lib.mkOption {
+        type = with lib.types; attrsOf str;
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             smile = "（・∀・）";
             angry = "(￣ー￣)";
@@ -50,10 +47,10 @@ in
         '';
         description = "Quick phrases.";
       };
-      quickPhraseFiles = mkOption {
-        type = with types; attrsOf path;
+      quickPhraseFiles = lib.mkOption {
+        type = with lib.types; attrsOf path;
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             words = ./words.mb;
             numbers = ./numbers.mb;
@@ -87,7 +84,7 @@ in
             The addon configures in `conf` folder in ini format with global sections.
             Each item is written to the corresponding file.
           '';
-          example = literalExpression "{ pinyin.globalSection.EmojiEnabled = \"True\"; }";
+          example = lib.literalExpression "{ pinyin.globalSection.EmojiEnabled = \"True\"; }";
         };
       };
       ignoreUserConfig = lib.mkOption {
@@ -103,12 +100,12 @@ in
   };
 
   imports = [
-    (mkRemovedOptionModule [ "i18n" "inputMethod" "fcitx5" "enableRimeData" ] ''
+    (lib.mkRemovedOptionModule [ "i18n" "inputMethod" "fcitx5" "enableRimeData" ] ''
       RIME data is now included in `fcitx5-rime` by default, and can be customized using `fcitx5-rime.override { rimeDataPkgs = ...; }`
     '')
   ];
 
-  config = mkIf (im.enabled == "fcitx5") {
+  config = lib.mkIf (imcfg.enable && imcfg.type == "fcitx5") {
     i18n.inputMethod.package = fcitx5Package;
 
     i18n.inputMethod.fcitx5.addons = lib.optionals (cfg.quickPhrase != { }) [

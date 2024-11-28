@@ -2,7 +2,7 @@
 
 let
   cfg = config.programs.gamemode;
-  settingsFormat = pkgs.formats.ini { };
+  settingsFormat = pkgs.formats.ini { listsAsDuplicateKeys = true; };
   configFile = settingsFormat.generate "gamemode.ini" cfg.settings;
 in
 {

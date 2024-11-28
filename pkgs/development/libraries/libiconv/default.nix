@@ -1,4 +1,5 @@
 { fetchurl, stdenv, lib
+, updateAutotoolsGnuConfigScriptsHook
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableDarwinABICompat ? false
@@ -16,6 +17,13 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
+
+  # necessary to build on FreeBSD native pending inclusion of
+  # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+
+  # https://github.com/NixOS/nixpkgs/pull/192630#discussion_r978985593
+  hardeningDisable = lib.optional (stdenv.hostPlatform.libc == "bionic") "fortify";
 
   setupHooks = [
     ../../../build-support/setup-hooks/role.bash
@@ -61,7 +69,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableShared "shared")
-  ] ++ lib.optional stdenv.isFreeBSD "--with-pic";
+  ] ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
 
   passthru = { inherit setupHooks; };
 

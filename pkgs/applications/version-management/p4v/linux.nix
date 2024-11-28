@@ -17,8 +17,12 @@
 , libxcb
 , libxkbcommon
 , nss
+, qtbase
+, qtmultimedia
+, qtsvg
 , qttools
 , qtwebengine
+, qtwebview
 , xcbutilimage
 , xcbutilkeysyms
 , xcbutilrenderutil
@@ -50,8 +54,12 @@ let
       libxcb
       libxkbcommon
       nss
+      qtbase
+      qtmultimedia
+      qtsvg
       qttools
       qtwebengine
+      qtwebview
       xcbutilimage
       xcbutilkeysyms
       xcbutilrenderutil
@@ -63,10 +71,19 @@ let
     # Don't wrap the Qt apps; upstream has its own wrapper scripts.
     dontWrapQtApps = true;
 
+    postPatch = ''
+      rm -r lib/plugins lib/libQt6* lib/libssl* lib/libicu* lib/libcrypto*
+    '';
+
     installPhase = ''
       mkdir -p $out
       cp -r bin lib $out
       addAutoPatchelfSearchPath $out/lib
+      ln -s "${qtbase}/${qtbase.qtPluginPrefix}" $out/lib/plugins
+    '';
+
+    preFixup = ''
+      patchelf --clear-symbol-version close $out/bin/p4{v,admin}.bin
     '';
   };
 in

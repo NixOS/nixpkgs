@@ -50,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    busybox # for start-stop-daemon
     coreutils
     dbus
     gettext

@@ -15,7 +15,6 @@
     usb = "off";
     usbehci = "off";
   };
-  sound.enable = false;
   documentation.man.enable = false;
   documentation.nixos.enable = false;
 

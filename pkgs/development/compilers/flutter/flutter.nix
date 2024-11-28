@@ -55,9 +55,9 @@ let
       name = "flutter-${version}-unwrapped";
       inherit src patches version;
 
-      buildInputs = [ git ];
-      nativeBuildInputs = [ makeWrapper jq ]
+      nativeBuildInputs = [ makeWrapper jq git ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+      strictDeps = true;
 
       preConfigure = ''
         if [ "$(< bin/internal/engine.version)" != '${engineVersion}' ]; then
@@ -158,7 +158,7 @@ let
         # When other derivations wrap this one, any unmodified files
         # found here should be included as-is, for tooling compatibility.
         sdk = unwrapped;
-      } // lib.optionalAttrs (engine != null && engine.meta.available) {
+      } // lib.optionalAttrs (engine != null) {
         inherit engine;
       };
 

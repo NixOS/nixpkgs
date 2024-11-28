@@ -6,15 +6,15 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-cmiCOykORue0Cg2uUUWa/nXviX1ddbGNC5gRKe+1kYs=";
+    hash = "sha256-cmiCOykORue0Cg2uUUWa/nXviX1ddbGNC5gRKe+1kYs=";
   };
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = lib.optional stdenv.isLinux udev
-    ++ lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux udev
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CoreFoundation
       DiskArbitration
       Foundation

@@ -121,7 +121,6 @@ let
         pahole
         perl
         elfutils
-        hexdump
         # module makefiles often run uname commands to find out the kernel version
         (buildPackages.deterministic-uname.override { inherit modDirVersion; })
       ]
@@ -158,11 +157,16 @@ let
         zstd
         python3Minimal
         kmod
+        hexdump
       ] ++ optional  needsUbootTools ubootTools
         ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
         ++ optionals withRust [ rustc rust-bindgen ];
 
       RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
+
+      # avoid leaking Rust source file names into the final binary, which adds
+      # a false dependency on rust-lib-src on targets with uncompressed kernels
+      KRUSTFLAGS = lib.optionalString withRust "--remap-path-prefix ${rustPlatform.rustLibSrc}=/";
 
       patches =
         map (p: p.patch) kernelPatches
@@ -207,6 +211,10 @@ let
         for i in $(find arch -name install.sh); do
             patchShebangs "$i"
         done
+
+        # unset $src because the build system tries to use it and spams a bunch of warnings
+        # see: https://github.com/torvalds/linux/commit/b1992c3772e69a6fd0e3fc81cd4d2820c8b6eca0
+        unset src
       '';
 
       configurePhase = ''
@@ -392,6 +400,9 @@ let
       requiredSystemFeatures = [ "big-parallel" ];
 
       meta = {
+        # https://github.com/NixOS/nixpkgs/pull/345534#issuecomment-2391238381
+        broken = withRust && lib.versionOlder version "6.12";
+
         description =
           "The Linux kernel" +
           (if kernelPatches == [] then "" else

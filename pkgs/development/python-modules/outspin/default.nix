@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/trag1c/outspin/blob/${src.rev}/CHANGELOG.md";
     description = "Conveniently read single char inputs in the console";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sigmanificient ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

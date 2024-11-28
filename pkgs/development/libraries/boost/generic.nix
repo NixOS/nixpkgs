@@ -1,4 +1,6 @@
 { lib, stdenv, icu, expat, zlib, bzip2, zstd, xz, python ? null, fixDarwinDylibNames, libiconv, libxcrypt
+, makePkgconfigItem
+, copyPkgconfigItems
 , boost-build
 , fetchpatch
 , which
@@ -50,7 +52,7 @@ let
   # To avoid library name collisions
   layout = if taggedLayout then "tagged" else "system";
 
-  needUserConfig = stdenv.hostPlatform != stdenv.buildPlatform || useMpi || (stdenv.isDarwin && enableShared);
+  needUserConfig = stdenv.hostPlatform != stdenv.buildPlatform || useMpi || (stdenv.hostPlatform.isDarwin && enableShared);
 
   b2Args = lib.concatStringsSep " " ([
     "--includedir=$dev/include"
@@ -62,6 +64,16 @@ let
     "link=${link}"
     "-sEXPAT_INCLUDE=${expat.dev}/include"
     "-sEXPAT_LIBPATH=${expat.out}/lib"
+    (
+      # The stacktrace from exception feature causes memory leaks when built
+      # with libc++. For all other standard library implementations, i.e.
+      # libstdc++, we must aknowledge this or stacktrace refuses to compile.
+      # Issue upstream: https://github.com/boostorg/stacktrace/issues/163
+      if (stdenv.cc.libcxx != null) then
+        "boost.stacktrace.from_exception=off"
+      else
+        "define=BOOST_STACKTRACE_LIBCXX_RUNTIME_MAY_CAUSE_MEMORY_LEAK"
+    )
 
     # TODO: make this unconditional
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform ||
@@ -70,7 +82,7 @@ let
     "address-model=${toString stdenv.hostPlatform.parsed.cpu.bits}"
     "architecture=${if stdenv.hostPlatform.isMips64
                     then if lib.versionOlder version "1.78" then "mips1" else "mips"
-                    else if stdenv.hostPlatform.parsed.cpu.name == "s390x" then "s390x"
+                    else if stdenv.hostPlatform.isS390 then "s390x"
                     else toString stdenv.hostPlatform.parsed.cpu.family}"
     # env in host triplet for Mach-O is "macho", but boost binary format for Mach-O is "mach-o"
     "binary-format=${if stdenv.hostPlatform.isMacho then "mach-o"
@@ -105,7 +117,7 @@ stdenv.mkDerivation {
   patchFlags = [];
 
   patches = patches
-  ++ lib.optional stdenv.isDarwin ./darwin-no-system-python.patch
+  ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin-no-system-python.patch
   ++ [ ./cmake-paths-173.patch ]
   ++ lib.optional (version == "1.77.0") (fetchpatch {
     url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
@@ -148,6 +160,17 @@ stdenv.mkDerivation {
       stripLen = 1;
       extraPrefix = "libs/python/";
     })
+  ]
+  ++ lib.optional (lib.versionAtLeast version "1.81" && stdenv.cc.isClang) ./fix-clang-target.patch
+  ++ lib.optional (lib.versionAtLeast version "1.86") [
+    # Backport fix for NumPy 2 support.
+    (fetchpatch {
+      name = "boost-numpy-2-compatibility.patch";
+      url = "https://github.com/boostorg/python/commit/0474de0f6cc9c6e7230aeb7164af2f7e4ccf74bf.patch";
+      stripLen = 1;
+      extraPrefix = "libs/python/";
+      hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
+    })
   ];
 
   meta = with lib; {
@@ -160,6 +183,10 @@ stdenv.mkDerivation {
     # a very cryptic error message.
     badPlatforms = [ lib.systems.inspect.patterns.isMips64n32 ];
     maintainers = with maintainers; [ hjones2199 ];
+    broken =
+      enableNumpy
+      && lib.versionOlder version "1.86"
+      && lib.versionAtLeast python.pkgs.numpy.version "2";
   };
 
   passthru = {
@@ -174,10 +201,12 @@ stdenv.mkDerivation {
   # On darwin we need to add the `$out/lib` to the libraries' rpath explicitly,
   # otherwise the dynamic linker is unable to resolve the reference to @rpath
   # when the boost libraries want to load each other at runtime.
-  + lib.optionalString (stdenv.isDarwin && enableShared) ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && enableShared) ''
     cat << EOF >> user-config.jam
     using clang-darwin : : ${stdenv.cc.targetPrefix}c++
       : <linkflags>"-rpath $out/lib/"
+        <archiver>$AR
+        <ranlib>$RANLIB
       ;
     EOF
   ''
@@ -210,12 +239,28 @@ stdenv.mkDerivation {
     EOF
   '';
 
-  NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin
-                      "-headerpad_max_install_names";
+  env = {
+    NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
+    # copyPkgconfigItems will substitute these in the pkg-config file
+    includedir = "${placeholder "dev"}/include";
+    libdir = "${placeholder "out"}/lib";
+  };
+
+  pkgconfigItems = [
+    (makePkgconfigItem {
+      name = "boost";
+      inherit version;
+      # Exclude other variables not needed by meson
+      variables = {
+        includedir = "@includedir@";
+        libdir = "@libdir@";
+      };
+    })
+  ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ which boost-build ]
+  nativeBuildInputs = [ which boost-build copyPkgconfigItems ]
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ expat zlib bzip2 libiconv ]
     ++ lib.optional (lib.versionAtLeast version "1.69") zstd

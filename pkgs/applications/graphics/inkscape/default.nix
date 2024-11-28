@@ -101,6 +101,15 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/inkscape/inkscape/-/commit/694d8ae43d06efff21adebf377ce614d660b24cd.patch";
       hash = "sha256-9IXJzpZbNU5fnt7XKgqCzUDrwr08qxGwo8TqnL+xc6E=";
     })
+
+    # Improve distribute along path precision
+    # https://gitlab.com/inkscape/extensions/-/issues/580
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/extensions/-/commit/c576043c195cd044bdfc975e6367afb9b655eb14.patch";
+      extraPrefix = "share/extensions/";
+      stripLen = 1;
+      hash = "sha256-D9HxBx8RNkD7hHuExJqdu3oqlrXX6IOUw9m9Gx6+Dr8=";
+    })
   ];
 
   postPatch = ''
@@ -125,7 +134,7 @@ stdenv.mkDerivation rec {
   ] ++ (with perlPackages; [
     perl
     XMLParser
-  ]) ++ lib.optionals stdenv.isDarwin [
+  ]) ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
   ];
 
@@ -159,15 +168,15 @@ stdenv.mkDerivation rec {
     python3Env
     zlib
     libepoxy
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     gspell
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cairo
     gtk-mac-integration
   ];
 
   # Make sure PyXML modules can be found at run-time.
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for f in $out/lib/inkscape/*.dylib; do
       ln -s $f $out/lib/$(basename $f)
     done

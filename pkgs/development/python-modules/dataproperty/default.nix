@@ -31,7 +31,7 @@ buildPythonPackage rec {
     tcolorpy
   ] ++ typepy.optional-dependencies.datetime;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     logging = [ loguru ];
   };
 

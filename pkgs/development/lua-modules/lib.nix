@@ -1,9 +1,9 @@
 { pkgs, lib, lua }:
 let
   inherit (lib.generators) toLua;
-  requiredLuaModules = drvs: with lib; let
-    modules =  filter hasLuaModule drvs;
-  in unique ([lua] ++ modules ++ concatLists (catAttrs "requiredLuaModules" modules));
+  requiredLuaModules = drvs: let
+    modules = lib.filter hasLuaModule drvs;
+  in lib.unique ([lua] ++ modules ++ lib.concatLists (lib.catAttrs "requiredLuaModules" modules));
   # Check whether a derivation provides a lua module.
   hasLuaModule = drv: drv ? luaModule;
 
@@ -93,7 +93,6 @@ rec {
       externalDeps ? []
     # a list of lua derivations
     , requiredLuaRocks ? []
-    , rocksSubdir ? "rocks-subdir"
     , ...
     }@args: let
       rocksTrees = lib.imap0
@@ -125,9 +124,6 @@ rec {
 
       generatedConfig = ({
 
-        # To prevent collisions when creating environments, we install the rock
-        # files into per-package subdirectories
-        rocks_subdir = rocksSubdir;
 
         # first tree is the default target where new rocks are installed,
         # any other trees in the list are treated as additional sources of installed rocks for matching dependencies.

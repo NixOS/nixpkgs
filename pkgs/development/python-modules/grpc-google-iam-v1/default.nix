@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "grpc-google-iam-v1";
-  version = "0.13.0";
+  version = "0.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-grpc-google-iam-v1";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pmwHDzOaXrgqXZiaxIn01CtiAG+XRBGr8BgzbG/F1uw=";
+    hash = "sha256-FLDx2zbM0qqLa+k/7xexyv5/YHlSOdikrbU2eYbxDM0=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-grpc-google-iam-v1";
     changelog = "https://github.com/googleapis/python-grpc-google-iam-v1/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

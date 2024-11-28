@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libasn1c";
-  version = "0.9.36";
+  version = "0.9.37";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libasn1c";
     rev = version;
-    hash = "sha256-Qh4QVssHS6XDfHJBR+y8J5tUhT/6tDg+aF9nX6UAGV8=";
+    hash = "sha256-st5KbAUhNFSJ0DmPFYOnNvDQ8xtTNi4t8DNYvEjt9Ns=";
   };
 
   postPatch = ''
@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/osmocom/libasn1c/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

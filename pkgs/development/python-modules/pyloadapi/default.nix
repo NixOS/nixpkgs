@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pyloadapi";
-  version = "1.2.0";
+  version = "1.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "tr4nt0r";
     repo = "pyloadapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uOgqc1RqmEk0Lqz/ixlChKTZva7+0v4V8KutLSgPKEE=";
+    hash = "sha256-USSTXHHhtUc8QF9U3t3rARXn5Iqo6KOGBa3VAfRMbiQ=";
   };
 
   postPatch = ''
@@ -46,6 +46,11 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "pyloadapi" ];
+
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/test_cli.py"
+  ];
 
   meta = with lib; {
     description = "Simple wrapper for pyLoad's API";

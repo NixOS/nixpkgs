@@ -12,22 +12,6 @@
 , libXinerama
 , libXext
 , libXcursor
-, Foundation
-, Cocoa
-, Carbon
-, CoreServices
-, ApplicationServices
-, CoreAudio
-, CoreMIDI
-, AudioToolbox
-, Accelerate
-, CoreImage
-, IOKit
-, AudioUnit
-, QuartzCore
-, WebKit
-, DiscRecording
-, CoreAudioKit
 
   # Enabling JACK requires a JACK server at runtime, no fallback mechanism
 , withJack ? false, jack
@@ -61,11 +45,6 @@ stdenv.mkDerivation rec {
     "-DADLplug_Jack=${if withJack then "ON" else "OFF"}"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
-    # "fp.h" file not found
-    "-isystem ${CoreServices}/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/Headers"
-  ]);
-
   NIX_LDFLAGS = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     # Framework that JUCE needs which don't get linked properly
     "-framework CoreAudioKit"
@@ -96,23 +75,6 @@ stdenv.mkDerivation rec {
     libXinerama
     libXext
     libXcursor
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Foundation
-    Cocoa
-    Carbon
-    CoreServices
-    ApplicationServices
-    CoreAudio
-    CoreMIDI
-    AudioToolbox
-    Accelerate
-    CoreImage
-    IOKit
-    AudioUnit
-    QuartzCore
-    WebKit
-    DiscRecording
-    CoreAudioKit
   ] ++ lib.optional withJack jack;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

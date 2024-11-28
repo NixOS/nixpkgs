@@ -27,6 +27,7 @@ kubernetes.overrideAttrs (_: rec {
   meta = kubernetes.meta // {
     description = "Kubernetes CLI";
     homepage = "https://github.com/kubernetes/kubectl";
+    mainProgram = "kubectl";
     platforms = lib.platforms.unix;
   };
 })

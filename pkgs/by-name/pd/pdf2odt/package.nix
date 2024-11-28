@@ -28,7 +28,7 @@ resholve.mkDerivation rec {
     runHook preInstall
 
     install -Dm0555 pdf2odt           -t $out/bin
-    install -Dm0444 README.md LICENSE -t $out/share/doc/${pname}
+    install -Dm0444 README.md LICENSE -t $out/share/doc/pdf2odt
 
     ln -rs $out/bin/pdf2odt $out/bin/pdf2ods
 
@@ -48,6 +48,10 @@ resholve.mkDerivation rec {
       gnused
       imagemagick
       zip
+    ];
+    execer = [
+      # zip can exec; confirmed 2 invocations in pdf2odt don't
+      "cannot:${zip}/bin/zip"
     ];
   };
 

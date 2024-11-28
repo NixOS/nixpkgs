@@ -1,18 +1,9 @@
 {
   lib,
-  dotnet-sdk,
-  stdenv,
-  substituteAll,
-
   buildDotnetModule,
   fetchFromGitHub,
 
   dotnetCorePackages,
-
-  libX11,
-  libICE,
-  libSM,
-  fontconfig,
 
   xdg-utils,
 }:
@@ -25,7 +16,7 @@ buildDotnetModule rec {
     owner = "affederaffe";
     repo = "BeatSaberModManager";
     rev = "v${version}";
-    sha256 = "sha256-HHWC+MAwJ+AMCuBzSuR7FbW3k+wLri0B9J1DftyfNEU=";
+    hash = "sha256-HHWC+MAwJ+AMCuBzSuR7FbW3k+wLri0B9J1DftyfNEU=";
     fetchSubmodules = true; # It vendors BSIPA-Linux
   };
 
@@ -42,12 +33,11 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.nix;
 
-  runtimeDeps = [
-    libX11
-    libICE
-    libSM
-    fontconfig
-  ];
+  preConfigureNuGet = ''
+    # This should really be in the upstream nuget.config
+    dotnet nuget add source https://api.nuget.org/v3/index.json \
+      -n nuget.org --configfile nuget.config
+  '';
 
   # Required for OneClick
   makeWrapperArgs = [

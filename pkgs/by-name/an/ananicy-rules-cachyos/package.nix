@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "ananicy-rules-cachyos";
-  version = "0-unstable-2024-07-03";
+  version = "0-unstable-2024-10-25";
 
   src = fetchFromGitHub {
     owner = "CachyOS";
     repo = "ananicy-rules";
-    rev = "3f76b3f497e590c4b6a4f9316b212c627631399b";
-    hash = "sha256-qwyqOgv4djIrJn9MlHO/I8zC741b4ORxDMgYZ+Da2eM=";
+    rev = "707b16506be2c54028546181461ebf47cfe72d83";
+    hash = "sha256-189eHlSLGgSgT2KIkj+c5pKpPZ34vacZzlYOFGfwEFM=";
   };
 
   dontConfigure = true;
@@ -38,7 +38,6 @@ stdenvNoCC.mkDerivation {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       artturin
-      diniamo
       johnrtitor
     ];
   };

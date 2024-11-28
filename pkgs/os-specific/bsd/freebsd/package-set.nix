@@ -18,10 +18,11 @@ lib.packagesFromDirectoryRecursive {
 }
 // {
   inherit sourceData patchesRoot versionData;
-  patches = ./patches + "/${self.versionData.revision}";
 
   # Keep the crawled portion of Nixpkgs finite.
-  buildFreebsd = lib.dontRecurseIntoAttrs buildFreebsd;
+  buildFreebsd = lib.dontRecurseIntoAttrs buildFreebsd // {
+    __attrsFailEvaluation = true;
+  };
 
   ports = fetchzip {
     url = "https://cgit.freebsd.org/ports/snapshot/ports-dde3b2b456c3a4bdd217d0bf3684231cc3724a0a.tar.gz";

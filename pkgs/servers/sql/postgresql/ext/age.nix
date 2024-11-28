@@ -1,7 +1,9 @@
-{ lib, stdenv, bison, fetchFromGitHub, flex, perl, postgresql }:
+{ lib, stdenv, bison, fetchFromGitHub, flex, perl, postgresql, buildPostgresqlExtension }:
 
 let
   hashes = {
+    # Issue tracking PostgreSQL 17 support: https://github.com/apache/age/issues/2111
+    # "17" = "";
     "16" = "sha256-sXh/vmGyYj00ALfFVdeql2DZ6nCJQDNKyNgzlOZnPAw=";
     "15" = "sha256-webZWgWZGnSoXwTpk816tjbtHV1UIlXkogpBDAEL4gM=";
     "14" = "sha256-jZXhcYBubpjIJ8M5JHXKV5f6VK/2BkypH3P7nLxZz3E=";
@@ -9,7 +11,7 @@ let
     "12" = "sha256-JFNk17ESsIt20dwXrfBkQ5E6DbZzN/Q9eS6+WjCXGd4=";
   };
 in
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "age";
   version = "1.5.0-rc0";
 
@@ -20,20 +22,13 @@ stdenv.mkDerivation rec {
     hash = hashes.${lib.versions.major postgresql.version} or (throw "Source for Age is not available for ${postgresql.version}");
   };
 
-  buildInputs = [ postgresql ];
-
   makeFlags = [
     "BISON=${bison}/bin/bison"
     "FLEX=${flex}/bin/flex"
     "PERL=${perl}/bin/perl"
   ];
 
-  installPhase = ''
-    install -D -t $out/lib *${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension *.sql
-    install -D -t $out/share/postgresql/extension *.control
-  '';
-
+  enableUpdateScript = false;
   passthru.tests = stdenv.mkDerivation {
     inherit version src;
 
@@ -48,7 +43,7 @@ stdenv.mkDerivation rec {
       echo -e "include Makefile\nfiles:\n\t@echo \$(REGRESS)" > Makefile.regress
       REGRESS_TESTS=$(make -f Makefile.regress files)
 
-      ${postgresql}/lib/pgxs/src/test/regress/pg_regress \
+      ${lib.getDev postgresql}/lib/pgxs/src/test/regress/pg_regress \
         --inputdir=./ \
         --bindir='${postgresqlAge}/bin' \
         --encoding=UTF-8 \
@@ -68,7 +63,7 @@ stdenv.mkDerivation rec {
     description = "Graph database extension for PostgreSQL";
     homepage = "https://age.apache.org/";
     changelog = "https://github.com/apache/age/raw/v${src.rev}/RELEASE";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = licenses.asl20;
   };

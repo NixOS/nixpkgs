@@ -41,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/rec/runs";
     changelog = "https://github.com/rec/runs/blob/${src.rev}/CHANGELOG";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

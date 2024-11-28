@@ -164,7 +164,7 @@ let
       nativeBuildInputs = [
         python3
         stdenv.cc.cc
-      ] ++ lib.optionals stdenv.isLinux [
+      ] ++ lib.optionals stdenv.hostPlatform.isLinux [
         autoPatchelfHook
       ];
       buildInputs = [

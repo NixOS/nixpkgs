@@ -1,9 +1,11 @@
 {
   lib,
   buildPythonPackage,
+  setuptools,
   fake-useragent,
   faker,
   fetchFromGitHub,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
@@ -13,7 +15,7 @@
 buildPythonPackage rec {
   pname = "scrapy-fake-useragent";
   version = "1.4.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,15 +29,18 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace " --cov=scrapy_fake_useragent --cov-report=term --cov-report=html --fulltrace" ""
+      --replace-fail " --fulltrace" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     fake-useragent
     faker
   ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
     scrapy
@@ -53,6 +58,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/alecxe/scrapy-fake-useragent";
     changelog = "https://github.com/alecxe/scrapy-fake-useragent/blob/master/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

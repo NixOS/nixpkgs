@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  callPackage,
   fetchFromGitHub,
   flit-core,
   unittestCheckHook,

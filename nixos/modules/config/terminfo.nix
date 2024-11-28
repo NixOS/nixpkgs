@@ -1,23 +1,20 @@
 # This module manages the terminfo database
 # and its integration in the system.
 { config, lib, pkgs, ... }:
-
-with lib;
-
 {
 
   options = with lib; {
-    environment.enableAllTerminfo = mkOption {
+    environment.enableAllTerminfo = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Whether to install all terminfo outputs
       '';
     };
 
-    security.sudo.keepTerminfo = mkOption {
+    security.sudo.keepTerminfo = lib.mkOption {
       default = true;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Whether to preserve the `TERMINFO` and `TERMINFO_DIRS`
         environment variables, for `root` and the `wheel` group.
@@ -27,25 +24,35 @@ with lib;
 
   config = {
 
+    # This should not contain packages that are broken or can't build, since it
+    # will break this expression
+    #
+    # Currently broken packages:
+    # - contour
+    #
     # can be generated with:
-    # attrNames (filterAttrs
-    #  (_: drv: (builtins.tryEval (isDerivation drv && drv ? terminfo)).value)
+    # lib.attrNames (lib.filterAttrs
+    #  (_: drv: (builtins.tryEval (lib.isDerivation drv && drv ? terminfo)).value)
     #  pkgs)
-    environment.systemPackages = mkIf config.environment.enableAllTerminfo (map (x: x.terminfo) (with pkgs.pkgsBuildBuild; [
-      alacritty
-      contour
-      foot
-      kitty
-      mtm
-      rio
-      rxvt-unicode-unwrapped
-      rxvt-unicode-unwrapped-emoji
-      st
-      termite
-      tmux
-      wezterm
-      yaft
-    ]));
+    environment.systemPackages = lib.mkIf config.environment.enableAllTerminfo (
+      map (x: x.terminfo) (
+        with pkgs.pkgsBuildBuild;
+        [
+          alacritty
+          foot
+          kitty
+          mtm
+          rio
+          rxvt-unicode-unwrapped
+          rxvt-unicode-unwrapped-emoji
+          st
+          termite
+          tmux
+          wezterm
+          yaft
+        ]
+      )
+    );
 
     environment.pathsToLink = [
       "/share/terminfo"
@@ -65,7 +72,7 @@ with lib;
       export TERM=$TERM
     '';
 
-    security.sudo.extraConfig = mkIf config.security.sudo.keepTerminfo ''
+    security.sudo.extraConfig = lib.mkIf config.security.sudo.keepTerminfo ''
 
       # Keep terminfo database for root and %wheel.
       Defaults:root,%wheel env_keep+=TERMINFO_DIRS

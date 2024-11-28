@@ -51,9 +51,7 @@ let
     lib.pipe attrs [
       (lib.mapAttrsToList renderFunc)
       (builtins.filter (v: v != ""))
-      (builtins.concatStringsSep "\n")
-      (section: ''${section}
-      '')
+      (lib.concatLines)
     ];
 
   variablesSectionRendered = renderSomething renderVariable variables;

@@ -31,12 +31,12 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ which pkg-config avrgcc ]
-    ++ lib.optional stdenv.isDarwin setupHookDarwin;
+    ++ lib.optional stdenv.hostPlatform.isDarwin setupHookDarwin;
   buildInputs = [ libelf libglut libGLU libGL ]
-    ++ lib.optional stdenv.isDarwin GLUT;
+    ++ lib.optional stdenv.hostPlatform.isDarwin GLUT;
 
   # remove forbidden references to $TMPDIR
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out"/bin/*
   '';
 

@@ -89,7 +89,7 @@ in
   memory.propagatedBuildInputs = [ pkgs.gnome-system-monitor ];
   messagereceiver = { };
   mocp.propagatedBuildInputs = [ pkgs.moc ];
-  mpd.propagatedBuildInputs = [ pkgs.mpc-cli ];
+  mpd.propagatedBuildInputs = [ pkgs.mpc ];
   network.propagatedBuildInputs = [ py.netifaces pkgs.iw ];
   network_traffic.propagatedBuildInputs = [ py.netifaces ];
   nic.propagatedBuildInputs = [ py.netifaces pkgs.iw ];

@@ -17,20 +17,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "eza";
-  version = "0.18.21";
+  version = "0.20.9";
 
   src = fetchFromGitHub {
     owner = "eza-community";
     repo = "eza";
     rev = "v${version}";
-    hash = "sha256-d1xY0yu28a+TfIMUlQN/v3UgfhVVmQL9jGLJVc8o/Xc=";
+    hash = "sha256-iWANQD5+cn/vUYdy6MXBYIEl5BOiG6WPuYYsOyWzUuM=";
   };
 
-  cargoHash = "sha256-w8xAk4eBXAOD93IIjD5MIDerPMSvw2IN9QTOKc04DK4=";
+  cargoHash = "sha256-gagCf81TT+6LsxypHoMZXHU0ux4f8wytwDMGyaDbXyg=";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
   buildInputs = [ zlib ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = lib.optional gitSupport "git";
@@ -38,9 +38,10 @@ rustPlatform.buildRustPackage rec {
   outputs = [ "out" "man" ];
 
   postInstall = ''
-    pandoc --standalone -f markdown -t man man/eza.1.md > man/eza.1
-    pandoc --standalone -f markdown -t man man/eza_colors.5.md > man/eza_colors.5
-    pandoc --standalone -f markdown -t man man/eza_colors-explanation.5.md > man/eza_colors-explanation.5
+    for page in eza.1 eza_colors.5 eza_colors-explanation.5; do
+      sed "s/\$version/v${version}/g" "man/$page.md" |
+        pandoc --standalone -f markdown -t man >"man/$page"
+    done
     installManPage man/eza.1 man/eza_colors.5 man/eza_colors-explanation.5
     installShellCompletion \
       --bash completions/bash/eza \
@@ -62,7 +63,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/eza-community/eza";
     changelog = "https://github.com/eza-community/eza/releases/tag/v${version}";
-    license = licenses.mit;
+    license = licenses.eupl12;
     mainProgram = "eza";
     maintainers = with maintainers; [ cafkafk _9glenda ];
     platforms = platforms.unix ++ platforms.windows;

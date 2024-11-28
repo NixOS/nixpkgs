@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  stdenv,
   buildPythonPackage,
   nix-update-script,
   fetchFromGitHub,
@@ -53,6 +54,11 @@ buildPythonPackage rec {
     "test_process_event_text_ctrl_v_select_range"
     "test_process_event_text_ctrl_a"
     "test_process_event_text_ctrl_x"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fails to determine "/" as an existing path
+    # https://github.com/MyreMylar/pygame_gui/issues/644
+    "test_process_event"
   ];
 
   disabledTestPaths = [ "tests/test_performance/test_text_performance.py" ];

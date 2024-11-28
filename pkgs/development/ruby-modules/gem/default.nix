@@ -107,7 +107,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
   buildInputs = [
     ruby
-  ] ++ lib.optionals stdenv.isDarwin [ libobjc ]
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc ]
     ++ buildInputs;
 
   #name = builtins.trace (attrs.name or "no attr.name" ) "${namePrefix}${gemName}-${version}";
@@ -250,6 +250,14 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
         -execdir mkdir -p $mandir \; -execdir cp '{}' $mandir \;
     done
     ''}
+
+    # For Ruby-generated binstubs, shebang paths are already in Nix store but for
+    # ruby used to build the package. Update them to match the host system. Note
+    # that patchShebangsAuto ignores scripts where shebang line is already in Nix
+    # store.
+    if [[ -d $GEM_HOME/bin ]]; then
+      patchShebangs --update --host -- "$GEM_HOME"/bin
+    fi
 
     runHook postInstall
   '';

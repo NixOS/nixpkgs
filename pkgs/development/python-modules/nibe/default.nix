@@ -1,6 +1,5 @@
 {
   lib,
-  aiohttp,
   aresponses,
   async-modbus,
   async-timeout,
@@ -20,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "nibe";
-  version = "2.10.1";
+  version = "2.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +28,7 @@ buildPythonPackage rec {
     owner = "yozik04";
     repo = "nibe";
     rev = "refs/tags/${version}";
-    hash = "sha256-rm0SV48vo68aiiFcvuSSGwCvQEsagIMh2EQXXmUU5dc=";
+    hash = "sha256-azAVvVAlG74wgH/96+sc6S9XQLRFZgR4aU6d4gy43PQ=";
   };
 
   build-system = [ setuptools ];
@@ -42,7 +41,7 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     convert = [
       pandas
       python-slugify
@@ -54,7 +53,7 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "nibe" ];
 

@@ -10,7 +10,7 @@
 , nix-output-monitor
 }:
 let
-  version = "3.5.17";
+  version = "3.6.0";
   runtimeDeps = [ nvd nix-output-monitor ];
 in
 rustPlatform.buildRustPackage {
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
     owner = "viperML";
     repo = "nh";
     rev = "refs/tags/v${version}";
-    hash = "sha256-o4K6QHBjXrmcYkX9MIw9gZ+DHM3OaEVswswHRX9h8Is=";
+    hash = "sha256-k8rz5RF1qi7RXzQYWGbw5pJRNRFIdX85SIYN+IHiVL4=";
   };
 
   strictDeps = true;
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage {
     makeBinaryWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   preFixup = ''
     mkdir completions
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage {
       --prefix PATH : ${lib.makeBinPath runtimeDeps}
   '';
 
-  cargoHash = "sha256-6Y5vpXEuHZXe9HKk6KomujlibzwtZJbtn6YgOqbmInk=";
+  cargoHash = "sha256-HfPzoAai6wK5IqNQY7yFVXatMcia9z0I84QNmNzHRoc=";
 
   passthru.updateScript = nix-update-script { };
 

@@ -1,6 +1,7 @@
 { system ? builtins.currentSystem
 , config ? { }
 , pkgs ? import ../.. { inherit system config; }
+, forgejoPackage ? pkgs.forgejo
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -53,6 +54,7 @@ let
         virtualisation.memorySize = 2047;
         services.forgejo = {
           enable = true;
+          package = forgejoPackage;
           database = { inherit type; };
           settings.service.DISABLE_REGISTRATION = true;
           settings."repository.signing".SIGNING_KEY = signingPrivateKeyId;
@@ -145,7 +147,7 @@ let
         assert "BEGIN PGP PUBLIC KEY BLOCK" in server.succeed("curl http://localhost:3000/api/v1/signing-key.gpg")
 
         api_version = json.loads(server.succeed("curl http://localhost:3000/api/forgejo/v1/version")).get("version")
-        assert "development" != api_version and "${pkgs.forgejo.version}+gitea-" in api_version, (
+        assert "development" != api_version and "${forgejoPackage.version}+gitea-" in api_version, (
             "/api/forgejo/v1/version should not return 'development' "
             + f"but should contain a forgejo+gitea compatibility version string. Got '{api_version}' instead."
         )
@@ -186,7 +188,7 @@ let
         assert "hello world" == client.succeed("cat /tmp/repo-clone/testfile").strip()
 
         with subtest("Testing git protocol version=2 over ssh"):
-            git_protocol = client.succeed("GIT_TRACE2_EVENT=true git -C /tmp/repo-clone fetch |& grep negotiated-version")
+            git_protocol = client.succeed("GIT_TRACE2_EVENT=true GIT_TRACE2_EVENT_NESTING=3 git -C /tmp/repo-clone fetch |& grep negotiated-version")
             version = json.loads(git_protocol).get("value")
             assert version == "2", f"git did not negotiate protocol version 2, but version {version} instead."
 

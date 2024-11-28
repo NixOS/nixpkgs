@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake perl pkg-config copyDesktopItems ];
   buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
     gtk3 ncurses
-  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.libs.utmp;
   enableParallelBuilding = true;
 
   desktopItems = [

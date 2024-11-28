@@ -23,10 +23,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-J+ka7/B37WzVPPE2Krkd/TIiVwuKfI2QYWmT0JHgBGQ=";
   };
 
-  cargoSha256 = "sha256-y3Y5PnZ51Zc3LmVTijUGnb0KaGm28sWOSYxjuM3A1Zk=";
+  cargoHash = "sha256-y3Y5PnZ51Zc3LmVTijUGnb0KaGm28sWOSYxjuM3A1Zk=";
 
   nativeBuildInputs = [ installShellFiles pkg-config scdoc which ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = ''
     make manual

@@ -35,7 +35,7 @@ bundlerApp {
           procps
           util-linux
         ]
-        ++ lib.optionals stdenv.isLinux [
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
           iproute2
           virt-what
           zfs

@@ -2,20 +2,21 @@
   lib,
   fetchFromGitHub,
   php,
+  nixosTests,
 }:
 
 php.buildComposerProject (finalAttrs: {
   pname = "davis";
-  version = "4.4.3";
+  version = "4.4.4";
 
   src = fetchFromGitHub {
     owner = "tchapi";
     repo = "davis";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0Km4bLQVfbkr5BL8XY5tM147Sje8hcFOjhCRnXq+4d4=";
+    hash = "sha256-nQkyNs718Zrc2BiTNXSXPY23aiviJKoBJeuoSm5ISOI=";
   };
 
-  vendorHash = "sha256-NOb6rc9jVsf+/RVOW7SLBAJk9SihcRxoepUEGBGLi2w=";
+  vendorHash = "sha256-zZlDonCwb9tJyckounv96eF4cx6Z/LBoAdB/r600HM4=";
 
   postInstall = ''
     # Only include the files needed for runtime in the derivation
@@ -24,6 +25,10 @@ php.buildComposerProject (finalAttrs: {
     mv $out/share/php/${finalAttrs.pname}/.env $out/env-upstream
     rm -rf "$out/share"
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) davis;
+  };
 
   meta = {
     changelog = "https://github.com/tchapi/davis/releases/tag/v${finalAttrs.version}";

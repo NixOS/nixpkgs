@@ -62,12 +62,14 @@ stdenv.mkDerivation {
     }
   '';
 
+  #passthru.tests = { inherit (nixosTests) yabar; }; # nixos currently uses yabar-unstable
+
   meta = with lib; {
     description = "Modern and lightweight status bar for X window managers";
     homepage    = "https://github.com/geommer/yabar";
     license     = licenses.mit;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "yabar";
   };
 }

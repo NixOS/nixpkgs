@@ -1,11 +1,6 @@
 {
-  stdenv,
   buildPythonPackage,
   fetchPypi,
-  pyparsing,
-  six,
-  pytest,
-  pretend,
   lib,
 }:
 

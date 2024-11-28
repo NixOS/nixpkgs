@@ -62,17 +62,14 @@ let
     let
       enableFeaturePinentry =
         f: lib.enableFeature (lib.elem f buildFlavors) ("pinentry-" + flavorInfo.${f}.flag);
-
-      pinentryMkDerivation =
-        if (lib.elem "qt5" buildFlavors) then libsForQt5.mkDerivation else stdenv.mkDerivation;
     in
-    pinentryMkDerivation rec {
+    stdenv.mkDerivation rec {
       pname = "pinentry-${pinentryExtraPname}";
-      version = "1.3.0";
+      version = "1.3.1";
 
       src = fetchurl {
         url = "mirror://gnupg/pinentry/pinentry-${version}.tar.bz2";
-        hash = "sha256-mzzVIm51l/L97TmaO8ZZkjNRU2VZ6dsIJpgbyjFklN4=";
+        hash = "sha256-vHLuJ8cjkAerGJbDwvrlOwduLJvSSD3CdpoWkCvOjAQ=";
       };
 
       nativeBuildInputs = [

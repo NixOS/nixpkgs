@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-lxqt";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-zXZ0Un56uz1hKoPvZitJgQpJ7ko0LrSSFxl+agiqZ4A=";
+    hash = "sha256-uII6elLoREc/AO6NSe9QsT+jYARd2hgKSa84NCDza10=";
   };
 
   nativeBuildInputs = [

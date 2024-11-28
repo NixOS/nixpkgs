@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch2,
   pythonOlder,
 
   # build-system
@@ -27,6 +28,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-95XZ29otYXdIQOfjL1Nm9FdS0a3Bt0yTYq/QFylsfuE=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/pnuckowski/aioresponses/pull/262
+      name = "aiohttp-3.11.0-compat.patch";
+      url = "https://github.com/pnuckowski/aioresponses/commit/e909123c5a70180a54443899d26b44ada511cd39.patch";
+      hash = "sha256-i/2rPtX64buVrVDSdB06NMOJCTdgENsxZDyphXWRwJI=";
+    })
+  ];
 
   nativeBuildInputs = [
     pbr

@@ -7,7 +7,6 @@
 , fmt
 , jsoncons
 , pugixml
-, sqlite
 , sqlite_orm
 , stdenv
 }:

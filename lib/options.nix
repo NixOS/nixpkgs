@@ -399,13 +399,6 @@ rec {
 
   literalExample = lib.warn "lib.literalExample is deprecated, use lib.literalExpression instead, or use lib.literalMD for a non-Nix description." literalExpression;
 
-  /* Transition marker for documentation that's already migrated to markdown
-     syntax. Has been a no-op for some while and been removed from nixpkgs.
-     Kept here to alert downstream users who may not be aware of the migration's
-     completion that it should be removed from modules.
-  */
-  mdDoc = lib.warn "lib.mdDoc will be removed from nixpkgs in 24.11. Option descriptions are now in Markdown by default; you can remove any remaining uses of lib.mdDoc.";
-
   /* For use in the `defaultText` and `example` option attributes. Causes the
      given MD text to be inserted verbatim in the documentation, for when
      a `literalExpression` would be too hard to read.

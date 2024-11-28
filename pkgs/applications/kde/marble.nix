@@ -18,7 +18,7 @@ mkDerivation {
     protobuf_21 qtscript qtsvg qtquickcontrols qtwebengine shared-mime-info krunner kparts
     knewstuff gpsd
   ];
-  preConfigure = ''
-    cmakeFlags+=" -DINCLUDE_INSTALL_DIR=''${!outputDev}/include"
-  '';
+  cmakeFlags = [
+    "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
+  ];
 }

@@ -8,7 +8,6 @@
   doit,
   feedparser,
   fetchPypi,
-  fetchpatch2,
   freezegun,
   ghp-import,
   hsluv,
@@ -54,14 +53,6 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-IfJB2Rl3c1MyEiuyNpT3udfpM480VvFD8zosJFDHr7k=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "nikola-pytest8-compat.patch";
-      url = "https://github.com/getnikola/nikola/commit/5f1003f91cd59f62622d379efe9be5fb19a1ed3e.patch";
-      hash = "sha256-2H3125RUnwvN/XgwgfRe1139rhAz/9viMEcUYRGQMPs=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace setup.cfg \

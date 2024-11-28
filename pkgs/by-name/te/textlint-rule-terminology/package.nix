@@ -29,7 +29,7 @@ buildNpmPackage rec {
   meta = {
     description = "Textlint rule to check correct terms spelling";
     homepage = "https://github.com/sapegin/textlint-rule-terminology";
-    changelog = "https://github.com/sapegin/textlint-rule-terminology/releases/tag/${src.rev}";
+    changelog = "https://github.com/sapegin/textlint-rule-terminology/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

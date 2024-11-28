@@ -3,11 +3,10 @@ import re
 import signal
 import tempfile
 import threading
-from contextlib import contextmanager
+from collections.abc import Callable, Iterator
+from contextlib import AbstractContextManager, contextmanager
 from pathlib import Path
-from typing import Any, Callable, ContextManager, Dict, Iterator, List, Optional, Union
-
-from colorama import Fore, Style
+from typing import Any
 
 from test_driver.logger import AbstractLogger
 from test_driver.machine import Machine, NixStartScript, retry
@@ -44,17 +43,17 @@ class Driver:
     and runs the tests"""
 
     tests: str
-    vlans: List[VLan]
-    machines: List[Machine]
-    polling_conditions: List[PollingCondition]
+    vlans: list[VLan]
+    machines: list[Machine]
+    polling_conditions: list[PollingCondition]
     global_timeout: int
     race_timer: threading.Timer
     logger: AbstractLogger
 
     def __init__(
         self,
-        start_scripts: List[str],
-        vlans: List[int],
+        start_scripts: list[str],
+        vlans: list[int],
         tests: str,
         out_dir: Path,
         logger: AbstractLogger,
@@ -73,7 +72,7 @@ class Driver:
             vlans = list(set(vlans))
             self.vlans = [VLan(nr, tmp_dir, self.logger) for nr in vlans]
 
-        def cmd(scripts: List[str]) -> Iterator[NixStartScript]:
+        def cmd(scripts: list[str]) -> Iterator[NixStartScript]:
             for s in scripts:
                 yield NixStartScript(s)
 
@@ -99,7 +98,16 @@ class Driver:
         with self.logger.nested("cleanup"):
             self.race_timer.cancel()
             for machine in self.machines:
-                machine.release()
+                try:
+                    machine.release()
+                except Exception as e:
+                    self.logger.error(f"Error during cleanup of {machine.name}: {e}")
+
+            for vlan in self.vlans:
+                try:
+                    vlan.stop()
+                except Exception as e:
+                    self.logger.error(f"Error during cleanup of vlan{vlan.nr}: {e}")
 
     def subtest(self, name: str) -> Iterator[None]:
         """Group logs under a given test name"""
@@ -110,7 +118,7 @@ class Driver:
                 self.logger.error(f'Test "{name}" failed with error: "{e}"')
                 raise e
 
-    def test_symbols(self) -> Dict[str, Any]:
+    def test_symbols(self) -> dict[str, Any]:
         @contextmanager
         def subtest(name: str) -> Iterator[None]:
             return self.subtest(name)
@@ -196,48 +204,11 @@ class Driver:
 
     def create_machine(
         self,
-        start_command: str | dict,
+        start_command: str,
         *,
-        name: Optional[str] = None,
+        name: str | None = None,
         keep_vm_state: bool = False,
     ) -> Machine:
-        # Legacy args handling
-        # FIXME: remove after 24.05
-        if isinstance(start_command, dict):
-            if name is not None or keep_vm_state:
-                raise TypeError(
-                    "Dictionary passed to create_machine must be the only argument"
-                )
-
-            args = start_command
-            start_command = args.pop("startCommand", SENTINEL)
-
-            if start_command is SENTINEL:
-                raise TypeError(
-                    "Dictionary passed to create_machine must contain startCommand"
-                )
-
-            if not isinstance(start_command, str):
-                raise TypeError(
-                    f"startCommand must be a string, got: {repr(start_command)}"
-                )
-
-            name = args.pop("name", None)
-            keep_vm_state = args.pop("keep_vm_state", False)
-
-            if args:
-                raise TypeError(
-                    f"Unsupported arguments passed to create_machine: {args}"
-                )
-
-            self.logger.warning(
-                Fore.YELLOW
-                + Style.BRIGHT
-                + "WARNING: Using create_machine with a single dictionary argument is deprecated and will be removed in NixOS 24.11"
-                + Style.RESET_ALL
-            )
-        # End legacy args handling
-
         tmp_dir = get_tmp_dir()
 
         cmd = NixStartScript(start_command)
@@ -264,11 +235,11 @@ class Driver:
 
     def polling_condition(
         self,
-        fun_: Optional[Callable] = None,
+        fun_: Callable | None = None,
         *,
         seconds_interval: float = 2.0,
-        description: Optional[str] = None,
-    ) -> Union[Callable[[Callable], ContextManager], ContextManager]:
+        description: str | None = None,
+    ) -> Callable[[Callable], AbstractContextManager] | AbstractContextManager:
         driver = self
 
         class Poll:

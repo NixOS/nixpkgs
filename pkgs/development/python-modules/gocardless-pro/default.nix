@@ -4,22 +4,24 @@
   fetchFromGitHub,
   requests,
   six,
+  setuptools,
   pytestCheckHook,
   responses,
-  nose,
 }:
 
 buildPythonPackage rec {
   pname = "gocardless-pro";
-  version = "1.52.0";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gocardless";
     repo = "gocardless-pro-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Oi68s4x/rS8ahvJ9TsniYfDidCxtvcvsMwYhJirYlP0=";
+    hash = "sha256-RHvGrBIDtjnLax2x7FPu0S5vizUW7dQMaQsyGPXqEh4=";
   };
+
+  build-system = [ setuptools ];
 
   propagatedBuildInputs = [
     requests
@@ -31,7 +33,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     responses
-    nose
   ];
 
   meta = with lib; {

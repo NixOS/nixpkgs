@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "rgerganov";
     repo = "footswitch";
     rev = "b7493170ecc956ac87df2c36183253c945be2dcf";
-    sha256 = "sha256-vwjeWjIXQiFJ0o/wgEBrKP3hQi8Xa/azVS1IE/Q/MyY=";
+    hash = "sha256-vwjeWjIXQiFJ0o/wgEBrKP3hQi8Xa/azVS1IE/Q/MyY=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "path";
-  version = "16.14.0";
+  version = "16.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-26qn79RgL9a6jYKJDceCPWnl3nQKboQtmRmw+q8rao4=";
+    hash = "sha256-pqbZFskQ3Bfg3ciDNYdWxaM9G2299dbehlVPOZBTr1g=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/path";
     changelog = "https://github.com/jaraco/path/blob/v${version}/NEWS.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

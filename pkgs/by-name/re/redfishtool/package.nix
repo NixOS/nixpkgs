@@ -21,6 +21,7 @@ python3.pkgs.buildPythonApplication {
   meta = with lib; {
     description = "Python34 program that implements a command line tool for accessing the Redfish API";
     homepage = "https://github.com/DMTF/Redfishtool";
+    changelog = "https://github.com/DMTF/Redfishtool/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jfvillablanca ];
     mainProgram = "redfishtool";

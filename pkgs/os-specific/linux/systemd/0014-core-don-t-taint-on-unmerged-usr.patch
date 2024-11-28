@@ -13,20 +13,25 @@ so showing the taint isn't really helpful.
 
 See also: https://github.com/systemd/systemd/issues/24191
 ---
- src/core/manager.c | 3 ---
- 1 file changed, 3 deletions(-)
+ src/core/taint.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/src/core/manager.c b/src/core/manager.c
-index 5dc7d4504f..6208c9aa31 100644
---- a/src/core/manager.c
-+++ b/src/core/manager.c
-@@ -4800,9 +4800,6 @@ char* manager_taint_string(const Manager *m) {
-         const char* stage[12] = {};
-         size_t n = 0;
+diff --git a/src/core/taint.c b/src/core/taint.c
+index 969b37f209..de64e8f1f9 100644
+--- a/src/core/taint.c
++++ b/src/core/taint.c
+@@ -41,14 +41,6 @@ char* taint_string(void) {
  
--        _cleanup_free_ char *usrbin = NULL;
--        if (readlink_malloc("/bin", &usrbin) < 0 || !PATH_IN_SET(usrbin, "usr/bin", "/usr/bin"))
+         _cleanup_free_ char *bin = NULL, *usr_sbin = NULL, *var_run = NULL;
+ 
+-        if (readlink_malloc("/bin", &bin) < 0 || !PATH_IN_SET(bin, "usr/bin", "/usr/bin"))
 -                stage[n++] = "unmerged-usr";
+-
+-        /* Note that the check is different from default_PATH(), as we want to taint on uncanonical symlinks
+-         * too. */
+-        if (readlink_malloc("/usr/sbin", &usr_sbin) < 0 || !PATH_IN_SET(usr_sbin, "bin", "/usr/bin"))
+-                stage[n++] = "unmerged-bin";
+-
+         if (readlink_malloc("/var/run", &var_run) < 0 || !PATH_IN_SET(var_run, "../run", "/run"))
+                 stage[n++] = "var-run-bad";
  
-         if (access("/proc/cgroups", F_OK) < 0)
-                 stage[n++] = "cgroups-missing";

@@ -1,7 +1,8 @@
 {
   lib,
-  crossLibcStdenv,
+  stdenvNoLibc,
   mkDerivation,
+  fetchpatch,
   bsdSetupHook,
   openbsdSetupHook,
   makeMinimal,
@@ -9,13 +10,11 @@
   flex,
   byacc,
   gencat,
+  lorder,
+  tsort,
   rpcgen,
   csu,
   include,
-  ctags,
-  tsort,
-  llvmPackages,
-  fetchpatch,
 }:
 
 mkDerivation {
@@ -35,9 +34,11 @@ mkDerivation {
   patches = [
     ./netbsd-make-to-lower.patch
     ./disable-librebuild.patch
+    # Do not produce ctags, can do that separately.
     (fetchpatch {
+      name = "skip-tags.patch";
       url = "https://marc.info/?l=openbsd-tech&m=171575286706032&q=raw";
-      sha256 = "sha256-2fqabJZLUvXUIWe5WZ4NrTOwgQCXqH49Wo0hAPu5lu0=";
+      hash = "sha256-2fqabJZLUvXUIWe5WZ4NrTOwgQCXqH49Wo0hAPu5lu0=";
     })
   ];
 
@@ -47,6 +48,7 @@ mkDerivation {
     makeMinimal
     install
     tsort
+    lorder
     gencat
   ];
 
@@ -63,7 +65,7 @@ mkDerivation {
   # Suppress lld >= 16 undefined version errors
   # https://github.com/freebsd/freebsd-src/commit/2ba84b4bcdd6012e8cfbf8a0d060a4438623a638
   env.NIX_LDFLAGS = lib.optionalString (
-    crossLibcStdenv.hostPlatform.linker == "lld"
+    stdenvNoLibc.hostPlatform.linker == "lld"
   ) "--undefined-version";
 
   makeFlags = [

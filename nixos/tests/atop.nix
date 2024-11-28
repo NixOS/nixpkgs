@@ -24,7 +24,7 @@ let assertions = rec {
 
     with subtest("binary should report the correct version"):
         pkgver = "${pkgs.atop.version}"
-        ver = re.sub(r'(?s)^Version: (\d\.\d\.\d).*', r'\1', machine.succeed("atop -V"))
+        ver = re.sub(r'(?s)^Version: (\d+\.\d+\.\d+).*', r'\1', machine.succeed("atop -V"))
         assert ver == pkgver, f"Version is `{ver}`, expected `{pkgver}`"
   '';
   atoprc = contents:
@@ -103,6 +103,9 @@ let assertions = rec {
           machine.fail("type -p atopgpud")
     '';
 };
+meta = {
+  timeout = 600;
+};
 in
 {
   justThePackage = makeTest {
@@ -120,6 +123,7 @@ in
       (netatop false)
       (atopgpu false)
     ];
+    inherit meta;
   };
   defaults = makeTest {
     name = "atop-defaults";
@@ -138,6 +142,7 @@ in
       (netatop false)
       (atopgpu false)
     ];
+    inherit meta;
   };
   minimal = makeTest {
     name = "atop-minimal";
@@ -159,6 +164,7 @@ in
       (netatop false)
       (atopgpu false)
     ];
+    inherit meta;
   };
   netatop = makeTest {
     name = "atop-netatop";
@@ -178,6 +184,7 @@ in
       (netatop true)
       (atopgpu false)
     ];
+    inherit meta;
   };
   atopgpu = makeTest {
     name = "atop-atopgpu";
@@ -197,6 +204,7 @@ in
       (netatop false)
       (atopgpu true)
     ];
+    inherit meta;
   };
   everything = makeTest {
     name = "atop-everything";
@@ -222,5 +230,6 @@ in
       (netatop true)
       (atopgpu true)
     ];
+    inherit meta;
   };
 }

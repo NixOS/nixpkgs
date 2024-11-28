@@ -7,7 +7,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://savannah/lzip/plzip/plzip-${finalAttrs.version}.tar.lz";
-    sha256 = "51f48d33df659bb3e1e7e418275e922ad752615a5bc984139da08f1e6d7d10fd";
+    hash = "sha256-UfSNM99lm7Ph5+QYJ16SKtdSYVpbyYQTnaCPHm19EP0=";
     # hash from release email
   };
 

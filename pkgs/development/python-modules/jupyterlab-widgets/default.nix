@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-widgets";
-  version = "3.0.11";
+  version = "3.0.13";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyterlab_widgets";
     inherit version;
-    hash = "sha256-3VrGeVk8lprynJvtBUwk8mhCuqUTUhFHNnVrwDXe7ic=";
+    hash = "sha256-opZtOFMowZQraDqM2WuJuN2CyLj4HdqQK7K8BtRvW+0=";
   };
 
   # jupyterlab is required to build from source but we use the pre-build package
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Jupyter Widgets JupyterLab Extension";
     homepage = "https://github.com/jupyter-widgets/ipywidgets";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

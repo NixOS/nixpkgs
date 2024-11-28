@@ -28,24 +28,15 @@ mkDerivation rec {
     substituteInPlace fmit.pro --replace '$$FMITVERSIONGITPRO' '${version}'
   '';
 
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags \
-      CONFIG+=${lib.optionalString alsaSupport "acs_alsa"} \
-      CONFIG+=${lib.optionalString jackSupport "acs_jack"} \
-      CONFIG+=${lib.optionalString portaudioSupport "acs_portaudio"} \
-      PREFIXSHORTCUT=$out"
-  '';
-
-  postInstall = ''
-    mkdir -p $out/share/applications
-    ln -s $out/fmit.desktop $out/share/applications/fmit.desktop
-
-    mkdir -p $out/share/icons/hicolor/128x128/apps
-    ln -s $out/fmit.png $out/share/icons/hicolor/128x128/apps/fmit.png
-
-    mkdir -p $out/share/icons/hicolor/scalable/apps
-    ln -s $out/fmit.svg $out/share/icons/hicolor/scalable/apps/fmit.svg
-  '';
+  qmakeFlags = [
+    "PREFIXSHORTCUT=${placeholder "out"}"
+  ] ++ lib.optionals alsaSupport [
+    "CONFIG+=acs_alsa"
+  ] ++ lib.optionals jackSupport [
+    "CONFIG+=acs_jack"
+  ] ++ lib.optionals portaudioSupport [
+    "CONFIG+=acs_portaudio"
+  ];
 
   meta = with lib; {
     description = "Free Musical Instrument Tuner";
@@ -55,6 +46,7 @@ mkDerivation rec {
     '';
     homepage = "http://gillesdegottex.github.io/fmit/";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;
   };
 }

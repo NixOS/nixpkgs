@@ -66,7 +66,7 @@ in
     services.forgejo = {
       enable = mkEnableOption "Forgejo, a software forge";
 
-      package = mkPackageOption pkgs "forgejo" { };
+      package = mkPackageOption pkgs "forgejo-lts" { };
 
       useWizard = mkOption {
         default = false;

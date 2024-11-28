@@ -7,7 +7,6 @@
 , gtk3
 , gobject-introspection
 , wrapGAppsHook3
-, python
 }:
 
 buildPythonPackage rec {

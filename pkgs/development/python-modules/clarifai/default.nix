@@ -4,13 +4,9 @@
   clarifai-grpc,
   fetchFromGitHub,
   inquirerpy,
-  llama-index-core,
   numpy,
-  opencv4,
-  pandas,
   pillow,
   pycocotools,
-  pypdf,
   pytestCheckHook,
   pythonOlder,
   pyyaml,
@@ -24,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "clarifai";
-  version = "10.5.2";
+  version = "10.8.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +29,7 @@ buildPythonPackage rec {
     owner = "Clarifai";
     repo = "clarifai-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-zAjGVICrYgai6GFpcJyigKxn7kNEZKclggR5ktzrCQ0=";
+    hash = "sha256-/fHNRFtxyNa9VdEi5wQ+YA+9mFv3ZpRFJQnWkuxQd5I=";
   };
 
   pythonRelaxDeps = [
@@ -56,7 +52,7 @@ buildPythonPackage rec {
     tritonclient
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [ pycocotools ];
   };
 

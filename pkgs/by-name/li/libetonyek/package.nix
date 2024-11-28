@@ -3,8 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
-# fails on older Boost due to https://github.com/boostorg/phoenix/issues/111
-, boost184
+, boost
 , cppunit
 , glm
 , gperf
@@ -12,6 +11,7 @@
 , librevenge
 , libxml2
 , mdds
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost184
+    boost
     cppunit
     glm
     gperf
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     librevenge
     libxml2
     mdds
+    zlib
   ];
 
   configureFlags = ["--with-mdds=2.1"];

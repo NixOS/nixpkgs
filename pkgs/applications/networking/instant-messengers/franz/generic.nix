@@ -69,9 +69,7 @@ in stdenv.mkDerivation (rec {
     expat
     stdenv.cc.cc
   ];
-  runtimeDependencies = [ libglvnd stdenv.cc.cc.lib (lib.getLib udev) libnotify libappindicator-gtk3 ];
-
-  unpackPhase = "dpkg-deb -x $src .";
+  runtimeDependencies = [ libglvnd (lib.getLib stdenv.cc.cc) (lib.getLib udev) libnotify libappindicator-gtk3 ];
 
   installPhase = ''
     mkdir -p $out/bin

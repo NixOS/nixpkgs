@@ -5,6 +5,7 @@
   fetchFromGitHub,
   setuptools,
   glfw,
+  mesa,
   moderngl,
   numpy,
   pillow,
@@ -33,13 +34,15 @@ buildPythonPackage rec {
     hash = "sha256-zTygSXU/vQZaFCuHbRBpO9/BYYA2UOid+wvhyc2bWMI=";
   };
 
-  pythonRelaxDeps = [ "pillow" ];
+  pythonRelaxDeps = [
+    "numpy" # https://github.com/moderngl/moderngl-window/issues/193
+  ];
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     moderngl
     pyglet
@@ -47,7 +50,7 @@ buildPythonPackage rec {
     pyrr
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     trimesh = [
       trimesh
       scipy
@@ -70,7 +73,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/moderngl/moderngl-window/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ c0deaddict ];
-    platforms = platforms.mesaPlatforms;
-    broken = stdenv.isDarwin;
+    inherit (mesa.meta) platforms;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

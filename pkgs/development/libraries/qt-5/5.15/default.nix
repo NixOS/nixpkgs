@@ -23,20 +23,12 @@ Check for any minor version changes.
 
 let
 
-  srcs = import ./srcs.nix { inherit lib fetchgit fetchFromGitHub; } // { __attrsFailEvaluation = true; };
+  srcs = import ./srcs.nix { inherit lib fetchgit fetchFromGitHub; };
 
   qtCompatVersion = srcs.qtbase.version;
 
   patches = {
-    qtbase = lib.optionals stdenv.isDarwin [
-      ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
-
-      # Patch framework detection to support X.framework/X.tbd,
-      # extending the current support for X.framework/X.
-      ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
-
-      ./qtbase.patch.d/0014-aarch64-darwin.patch
-    ] ++ [
+    qtbase = [
       ./qtbase.patch.d/0003-qtbase-mkspecs.patch
       ./qtbase.patch.d/0004-qtbase-replace-libdir.patch
       ./qtbase.patch.d/0005-qtbase-cmake.patch
@@ -63,7 +55,7 @@ let
         hash = "sha256-UEvIXzn387f9BAeBdhheStD/4M7en+rmqX8C6gstl6k=";
       })
     ];
-    qtmultimedia = lib.optionals stdenv.isDarwin [
+    qtmultimedia = lib.optionals stdenv.hostPlatform.isDarwin [
       # build patch for qtmultimedia with xcode 15
       (fetchpatch {
         url = "https://raw.githubusercontent.com/Homebrew/formula-patches/3f509180/qt5/qt5-qtmultimedia-xcode15.patch";
@@ -184,7 +176,16 @@ let
       # See: https://bugreports.qt.io/browse/QTBUG-124375
       # Backport of: https://code.qt.io/cgit/qt/qtwebengine-chromium.git/commit/?id=a766045f65f934df3b5f1aa63bc86fbb3e003a09
       ./qtwebengine-ninja-1.12.patch
-    ] ++ lib.optionals stdenv.isDarwin [
+      # 5.15.17: Fixes 'converts to incompatible function type [-Werror,-Wcast-function-type-strict]'
+      # in chromium harfbuzz dependency. This may be removed again if harfbuzz is updated
+      # to include the upstream fixes: https://github.com/harfbuzz/harfbuzz/commit/d88269c827895b38f99f7cf741fa60210d4d5169
+      # See https://trac.macports.org/ticket/70850
+      (fetchpatch {
+        url = "https://github.com/macports/macports-ports/raw/dd7bc40d8de48c762bf9757ce0a0672840c5d8c2/aqua/qt5/files/patch-qtwebengine_hb-ft.cc_error.diff";
+        sha256 = "sha256-8/CYjGM5n2eJ6sG+ODTa8fPaxZSDVyKuInpc3IlZuyc=";
+        extraPrefix = "";
+      })
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
       ./qtwebengine-darwin-checks.patch
@@ -218,7 +219,7 @@ let
       ./qtwebkit.patch
       ./qtwebkit-icu68.patch
       ./qtwebkit-cstdint.patch
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       ./qtwebkit-darwin-no-readline.patch
       ./qtwebkit-darwin-no-qos-classes.patch
     ];
@@ -248,25 +249,17 @@ let
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
         inherit bison cups harfbuzz libGL;
-        withGtk3 = !stdenv.isDarwin; inherit dconf gtk3;
+        withGtk3 = !stdenv.hostPlatform.isDarwin; inherit dconf gtk3;
         inherit developerBuild decryptSslTraffic;
-        inherit (darwin.apple_sdk_11_0.frameworks) AGL AppKit ApplicationServices AVFoundation Carbon Cocoa CoreAudio CoreBluetooth
-          CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
-        libobjc = darwin.apple_sdk_11_0.objc4;
-        xcbuild = darwin.apple_sdk_11_0.xcodebuild;
       };
 
       qt3d = callPackage ../modules/qt3d.nix {};
       qtcharts = callPackage ../modules/qtcharts.nix {};
-      qtconnectivity = callPackage ../modules/qtconnectivity.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) IOBluetooth;
-      };
+      qtconnectivity = callPackage ../modules/qtconnectivity.nix { };
       qtdatavis3d = callPackage ../modules/qtdatavis3d.nix {};
       qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
       qtdoc = callPackage ../modules/qtdoc.nix {};
-      qtgamepad = callPackage ../modules/qtgamepad.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) GameController;
-      };
+      qtgamepad = callPackage ../modules/qtgamepad.nix { };
       qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
       qtimageformats = callPackage ../modules/qtimageformats.nix {};
       qtlocation = callPackage ../modules/qtlocation.nix {};
@@ -278,9 +271,7 @@ let
       qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
       qtpim = callPackage ../modules/qtpim.nix {};
       qtpositioning = callPackage ../modules/qtpositioning.nix {};
-      qtpurchasing = callPackage ../modules/qtpurchasing.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) Foundation StoreKit;
-      };
+      qtpurchasing = callPackage ../modules/qtpurchasing.nix { };
       qtquick1 = null;
       qtquick3d = callPackage ../modules/qtquick3d.nix { };
       qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
@@ -309,28 +300,15 @@ let
         #   starting with clang 16. Patches are available upstream that can be backported.
         # Because the first error is non-trivial to fix and suppressing it risks future breakage,
         # clang is pinned to clang 15. That also makes fixing the second set of errors unnecessary.
-        stdenv =
-          let stdenv' = if stdenv.cc.isClang then overrideLibcxx llvmPackages_15.stdenv else stdenv;
-          in if stdenv'.isDarwin then overrideSDK stdenv' "11.0" else stdenv';
+        stdenv = if stdenv.cc.isClang then overrideLibcxx llvmPackages_15.stdenv else stdenv;
         inherit (srcs.qtwebengine) version;
+        inherit (darwin) bootstrap_cmds;
         python = python3;
-        inherit (darwin) cctools xnu;
-        inherit (darwin.apple_sdk_11_0) libpm libunwind;
-        inherit (darwin.apple_sdk_11_0.libs) sandbox;
-        inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit
-          ImageCaptureCore CoreBluetooth IOBluetooth CoreWLAN Quartz Cocoa LocalAuthentication
-          MediaPlayer MediaAccessibility SecurityInterface Vision CoreML OpenDirectory Accelerate;
-        libobjc = darwin.apple_sdk_11_0.objc4;
       };
       qtwebglplugin = callPackage ../modules/qtwebglplugin.nix {};
-      qtwebkit = callPackage ../modules/qtwebkit.nix {
-        inherit (darwin) ICU;
-        inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
-      };
+      qtwebkit = callPackage ../modules/qtwebkit.nix { };
       qtwebsockets = callPackage ../modules/qtwebsockets.nix {};
-      qtwebview = callPackage ../modules/qtwebview.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation WebKit;
-      };
+      qtwebview = callPackage ../modules/qtwebview.nix { };
       qtx11extras = callPackage ../modules/qtx11extras.nix {};
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
 
@@ -343,8 +321,8 @@ let
         qtscript qtsensors qtserialport qtsvg qttools qttranslations
         qtvirtualkeyboard qtwebchannel qtwebengine qtwebsockets
         qtwebview qtx11extras qtxmlpatterns qtlottie qtdatavis3d
-      ] ++ lib.optional (!stdenv.isDarwin) qtwayland
-        ++ lib.optional (stdenv.isDarwin) qtmacextras);
+      ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) qtwayland
+        ++ lib.optional (stdenv.hostPlatform.isDarwin) qtmacextras);
 
       qmake = callPackage ({ qtbase }: makeSetupHook {
         name = "qmake-hook";
@@ -360,7 +338,7 @@ let
       wrapQtAppsHook = callPackage ({ makeBinaryWrapper, qtbase, qtwayland }: makeSetupHook {
         name = "wrap-qt5-apps-hook";
         propagatedBuildInputs = [ qtbase.dev makeBinaryWrapper ]
-          ++ lib.optional stdenv.isLinux qtwayland.dev;
+          ++ lib.optional stdenv.hostPlatform.isLinux qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh) { };
     };
 

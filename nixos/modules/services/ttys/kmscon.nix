@@ -105,7 +105,7 @@ in {
           ));
         render = optionals cfg.hwRender [ "drm" "hwaccel" ];
         fonts = optional (cfg.fonts != null) "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}";
-      in lib.concatStringsSep "\n" (xkb ++ render ++ fonts);
+      in lib.concatLines (xkb ++ render ++ fonts);
 
     hardware.graphics.enable = mkIf cfg.hwRender true;
 

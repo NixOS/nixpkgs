@@ -1,10 +1,7 @@
 { lib
-, callPackage
 , clangStdenv
 , cmake
 , fetchFromGitHub
-, gcc
-, git
 , llvmPackages_13
 # Libraries
 , argparse
@@ -71,9 +68,7 @@ clangStdenv.mkDerivation rec {
     zlib
   ];
 
-  cmakeFlags = lib.optionals debug [
-    "-DCMAKE_BUILD_TYPE=Debug"
-  ];
+  cmakeBuildType = if debug then "Debug" else "Release";
 
   postPatch = ''
     substituteInPlace src/xmagics/executable.cpp \

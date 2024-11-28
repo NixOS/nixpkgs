@@ -5,7 +5,7 @@
 mkKdeDerivation {
   pname = "rocs";
 
-  extraBuildInputs = [boost];
+  extraBuildInputs = [ boost ];
   # FIXME(qt5)
   meta.broken = true;
 }

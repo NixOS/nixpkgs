@@ -28,7 +28,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cython
     setuptools
-  ] ++ lib.optionals stdenv.isDarwin [ gcc ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gcc ];
 
   nativeCheckInputs = [
     click

@@ -23,12 +23,17 @@ pname = "warp-terminal";
 versions = lib.importJSON ./versions.json;
 passthru.updateScript = ./update.sh;
 
+linux_arch =
+  if stdenv.hostPlatform.system == "x86_64-linux"
+    then "x86_64"
+    else "aarch64";
+
 linux = stdenv.mkDerivation (finalAttrs:  {
   inherit pname meta passthru;
-  inherit (versions.linux) version;
+  inherit (versions."linux_${linux_arch}") version;
   src = fetchurl {
-    inherit (versions.linux) hash;
-    url = "https://releases.warp.dev/stable/v${finalAttrs.version}/warp-terminal-v${finalAttrs.version}-1-x86_64.pkg.tar.zst";
+    inherit (versions."linux_${linux_arch}") hash;
+    url = "https://releases.warp.dev/stable/v${finalAttrs.version}/warp-terminal-v${finalAttrs.version}-1-${linux_arch}.pkg.tar.zst";
   };
 
   sourceRoot = ".";
@@ -43,7 +48,7 @@ linux = stdenv.mkDerivation (finalAttrs:  {
   buildInputs = [
     curl
     fontconfig
-    stdenv.cc.cc.lib # libstdc++.so libgcc_s.so
+    (lib.getLib stdenv.cc.cc) # libstdc++.so libgcc_s.so
     zlib
   ];
 
@@ -99,11 +104,11 @@ meta = with lib; {
   homepage = "https://www.warp.dev";
   license = licenses.unfree;
   sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-  maintainers = with maintainers; [ emilytrau Enzime imadnyc donteatoreo ];
-  platforms = platforms.darwin ++ [ "x86_64-linux" ];
+  maintainers = with maintainers; [ emilytrau imadnyc donteatoreo johnrtitor ];
+  platforms = platforms.darwin ++ [ "x86_64-linux" "aarch64-linux" ];
 };
 
 in
-if stdenvNoCC.isDarwin
+if stdenvNoCC.hostPlatform.isDarwin
 then darwin
 else linux

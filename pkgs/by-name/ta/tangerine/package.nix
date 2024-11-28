@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Aeva/tangerine";
     license = licenses.asl20;
     maintainers = [ maintainers.viraptor ];
-    broken = stdenv.isDarwin; # third_party/naive-surface-nets doesn't find std::execution
+    broken = stdenv.hostPlatform.isDarwin; # third_party/naive-surface-nets doesn't find std::execution
   };
 }
 

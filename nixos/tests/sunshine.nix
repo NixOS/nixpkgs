@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "sunshine";
   meta = {
     # test is flaky on aarch64
-    broken = pkgs.stdenv.isAarch64;
+    broken = pkgs.stdenv.hostPlatform.isAarch64;
     maintainers = [ lib.maintainers.devusb ];
   };
 

@@ -31,7 +31,7 @@ buildPythonPackage rec {
     reportlab
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     testing = [
       pillow
       pytest

@@ -2,14 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  awkward,
-  cramjam,
+
+  # build-system
   hatch-vcs,
   hatchling,
+
+  # dependencies
+  awkward,
+  cramjam,
   numpy,
   fsspec,
   packaging,
+
+  # checks
+  awkward-pandas,
   pandas,
   pytestCheckHook,
   pytest-timeout,
@@ -20,16 +26,14 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.3.9";
+  version = "5.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "uproot5";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iwT7P1KNQVrLzgKgoVO4G5wwg3f86D6/0I0FP8xD0rk=";
+    hash = "sha256-letdC246I9LDqEnLCOTz51cBnQGbkrsR/i7UN6EMcDA=";
   };
 
   build-system = [
@@ -43,15 +47,16 @@ buildPythonPackage rec {
     numpy
     fsspec
     packaging
+    xxhash
   ];
 
   nativeCheckInputs = [
+    awkward-pandas
     pandas
     pytestCheckHook
     pytest-timeout
     rangehttpserver
     scikit-hep-testdata
-    xxhash
   ];
 
   preCheck = ''
@@ -87,6 +92,7 @@ buildPythonPackage rec {
     # Cyclic dependency with dask-awkward
     "test_dask_duplicated_keys"
     "test_decompression_executor_for_dask"
+    "test_decompression_threadpool_executor_for_dask"
   ];
 
   disabledTestPaths = [
@@ -94,9 +100,6 @@ buildPythonPackage rec {
     "tests/test_0066_fix_http_fallback_freeze.py"
     "tests/test_0088_read_with_http.py"
     "tests/test_0220_contiguous_byte_ranges_in_http.py"
-
-    # FileNotFoundError: uproot-issue-1043.root
-    "tests/test_1043_const_std_string.py"
   ];
 
   pythonImportsCheck = [ "uproot" ];

@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , pkg-config
 , wayland
 , withNativeLibs ? false
@@ -8,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wl-clipboard-rs";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "wl-clipboard-rs";
     rev = "v${version}";
-    hash = "sha256-qwlR/PJivCgQTXe027zuQxq0iVJ3/BLg6LAD3w5tb9Y=";
+    hash = "sha256-jGTWcVR6atkEeEUunystJ4B6I3GzYiCOMs0MC6pvPfI=";
   };
 
-  cargoHash = "sha256-C3vhZq5IHtbfg2mYYdQRqaLSA0iSER8zRaKi72FCd+E=";
+  cargoHash = "sha256-P0WLYHNLN8ZqoDRszsgfQTiWeVpfBpFHiEWpQMBjNJM=";
 
   cargoBuildFlags = [
     "--package=wl-clipboard-rs"
@@ -26,11 +27,15 @@ rustPlatform.buildRustPackage rec {
     "--features=native_lib"
   ];
 
-  nativeBuildInputs = lib.optionals withNativeLibs [
+  nativeBuildInputs = [
+    installShellFiles
+  ] ++ lib.optionals withNativeLibs [
     pkg-config
   ];
 
-  buildInputs = lib.optionals withNativeLibs [
+  buildInputs = [
+    installShellFiles
+  ]++ lib.optionals withNativeLibs [
     wayland
   ];
 
@@ -46,6 +51,21 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::copy::copy_randomized"
     "--skip=tests::copy::copy_test"
   ];
+
+  postInstall = ''
+    installManPage target/man/wl-copy.1
+    installManPage target/man/wl-paste.1
+
+    installShellCompletion --cmd wl-copy \
+      --bash target/completions/wl-copy.bash \
+      --fish target/completions/wl-copy.fish \
+      --zsh target/completions/_wl-copy
+
+    installShellCompletion --cmd wl-paste \
+      --bash target/completions/wl-paste.bash \
+      --fish target/completions/wl-paste.fish \
+      --zsh target/completions/_wl-paste
+  '';
 
   meta = with lib; {
     description = "Command-line copy/paste utilities for Wayland, written in Rust";

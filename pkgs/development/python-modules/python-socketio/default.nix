@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "5.11.3";
+  version = "5.11.4";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "miguelgrinberg";
     repo = "python-socketio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8LpTrDxugZS6skSRCcDK4+sbSYV9ZBRSma4QfIXFJT8=";
+    hash = "sha256-iWe9IwUR+nq9SAmHzFZYUJpVOOEbc1ZdiMAjaBjQrVs=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     python-engineio
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     client = [
       requests
       websocket-client
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     pytestCheckHook
     uvicorn
     simple-websocket
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "socketio" ];
 

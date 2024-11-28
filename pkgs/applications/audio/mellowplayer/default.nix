@@ -21,7 +21,7 @@ mkDerivation rec {
     owner = "ColinDuquesnoy";
     repo = "MellowPlayer";
     rev = version;
-    sha256 = "sha256-rsF2xQet7U8d4oGU/HgghvE3vvmkxjlGXPBlLD9mWTk=";
+    hash = "sha256-rsF2xQet7U8d4oGU/HgghvE3vvmkxjlGXPBlLD9mWTk=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -62,7 +62,7 @@ mkDerivation rec {
 
   meta = with lib; {
     inherit (qtbase.meta) platforms;
-    broken = stdenv.isDarwin; # test build fails, but the project is not maintained anymore
+    broken = stdenv.hostPlatform.isDarwin; # test build fails, but the project is not maintained anymore
 
     description = "Cloud music integration for your desktop";
     mainProgram = "MellowPlayer";

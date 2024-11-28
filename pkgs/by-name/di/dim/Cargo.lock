@@ -643,7 +643,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3cd91cf61412820176e137621345ee43b3f4423e589e7ae4e50d601d93e35ef8"
 dependencies = [
  "percent-encoding",
- "time 0.3.30",
+ "time 0.3.36",
  "version_check",
 ]
 
@@ -979,7 +979,7 @@ dependencies = [
  "tracing-appender",
  "tracing-subscriber",
  "url",
- "uuid 1.5.0",
+ "uuid 1.10.0",
  "xmlwriter",
  "xtra",
  "zip",
@@ -1079,7 +1079,7 @@ dependencies = [
  "tracing",
  "tracing-appender",
  "tracing-subscriber",
- "uuid 1.5.0",
+ "uuid 1.10.0",
 ]
 
 [[package]]
@@ -2049,14 +2049,14 @@ dependencies = [
 [[package]]
 name = "nightfall"
 version = "0.3.12-rc4"
-source = "git+https://github.com/Dusk-Labs/nightfall?tag=0.3.12-rc4#147ea96146b4cae6f666741020cef0622a90d46c"
+source = "git+https://github.com/Dusk-Labs/nightfall?rev=878f07edd5d2c71261c5ae02fe3a6db7cda18be7#878f07edd5d2c71261c5ae02fe3a6db7cda18be7"
 dependencies = [
  "async-trait",
  "cfg-if",
  "err-derive",
  "lazy_static",
  "mp4",
- "nix 0.20.0",
+ "nix 0.27.1",
  "ntapi",
  "once_cell",
  "psutil",
@@ -2067,22 +2067,10 @@ dependencies = [
  "tokio",
  "tokio-stream",
  "tracing",
- "uuid 0.8.2",
+ "uuid 1.10.0",
  "winapi",
  "xtra",
  "xtra_proc",
-]
-
-[[package]]
-name = "nix"
-version = "0.20.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fa9b4819da1bc61c0ea48b63b7bc8604064dd43013e7cc325df098d49cd7c18a"
-dependencies = [
- "bitflags 1.3.2",
- "cc",
- "cfg-if",
- "libc",
 ]
 
 [[package]]
@@ -2096,6 +2084,17 @@ dependencies = [
  "cfg-if",
  "libc",
  "memoffset 0.6.5",
+]
+
+[[package]]
+name = "nix"
+version = "0.27.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2eb04e9c688eff1c89d72b407f168cf79bb9e867a9d3323ed6c01519eb9cc053"
+dependencies = [
+ "bitflags 2.4.1",
+ "cfg-if",
+ "libc",
 ]
 
 [[package]]
@@ -2140,9 +2139,9 @@ dependencies = [
 
 [[package]]
 name = "ntapi"
-version = "0.3.7"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c28774a7fd2fbb4f0babd8237ce554b73af68021b5f695a3cebd6c59bac0980f"
+checksum = "e8a3895c6391c39d7fe7ebc444a87eb2991b2a0bc718fdabd071eec617fc68e4"
 dependencies = [
  "winapi",
 ]
@@ -2156,6 +2155,12 @@ dependencies = [
  "overload",
  "winapi",
 ]
+
+[[package]]
+name = "num-conv"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "51d515d32fb182ee37cda2ccdcb92950d6a3c2893aa280e540671c2cd0f3b1d9"
 
 [[package]]
 name = "num-integer"
@@ -3301,12 +3306,13 @@ dependencies = [
 
 [[package]]
 name = "time"
-version = "0.3.30"
+version = "0.3.36"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c4a34ab300f2dee6e562c10a046fc05e358b29f9bf92277f30c3c8d82275f6f5"
+checksum = "5dfd88e563464686c916c7e46e623e520ddc6d79fa6641390f2e3fa86e83e885"
 dependencies = [
  "deranged",
  "itoa",
+ "num-conv",
  "powerfmt",
  "serde",
  "time-core",
@@ -3321,10 +3327,11 @@ checksum = "ef927ca75afb808a4d64dd374f00a2adf8d0fcff8e7b184af886c3c87ec4a3f3"
 
 [[package]]
 name = "time-macros"
-version = "0.2.15"
+version = "0.2.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4ad70d68dba9e1f8aceda7aa6711965dfec1cac869f311a51bd08b3a2ccbce20"
+checksum = "3f252a68540fde3a3877aeea552b832b40ab9a69e318efd078774a01ddee1ccf"
 dependencies = [
+ "num-conv",
  "time-core",
 ]
 
@@ -3505,7 +3512,7 @@ dependencies = [
  "tower-layer",
  "tower-service",
  "tracing",
- "uuid 1.5.0",
+ "uuid 1.10.0",
 ]
 
 [[package]]
@@ -3539,7 +3546,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "09d48f71a791638519505cefafe162606f706c25592e4bde4d97600c0195312e"
 dependencies = [
  "crossbeam-channel",
- "time 0.3.30",
+ "time 0.3.36",
  "tracing-subscriber",
 ]
 
@@ -3747,9 +3754,9 @@ dependencies = [
 
 [[package]]
 name = "uuid"
-version = "1.5.0"
+version = "1.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "88ad59a7560b41a70d191093a945f0b87bc1deeda46fb237479708a1d6b6cdfc"
+checksum = "81dfa00651efa65069b0b6b651f4aaa31ba9e3c3ce0137aaad053604ee7e0314"
 dependencies = [
  "getrandom",
 ]

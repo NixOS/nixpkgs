@@ -104,31 +104,18 @@ with lib;
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        mkdir -p -m 700 /etc/xl2tpd
+        install -m 700 -d /etc/xl2tpd/ppp
 
-        pushd /etc/xl2tpd > /dev/null
-
-        mkdir -p -m 700 ppp
-
-        [ -f ppp/chap-secrets ] || cat > ppp/chap-secrets << EOF
+        [ -f /etc/xl2tpd/ppp/chap-secrets ] || install -m 600 -o root -g root /dev/stdin /etc/xl2tpd/ppp/chap-secrets <<EOF
         # Secrets for authentication using CHAP
         # client	server	secret		IP addresses
         #username	xl2tpd	password	*
         EOF
 
-        chown root:root ppp/chap-secrets
-        chmod 600 ppp/chap-secrets
-
         # The documentation says this file should be present but doesn't explain why and things work even if not there:
-        [ -f l2tp-secrets ] || (echo -n "* * "; ${pkgs.apg}/bin/apg -n 1 -m 32 -x 32 -a 1 -M LCN) > l2tp-secrets
-        chown root:root l2tp-secrets
-        chmod 600 l2tp-secrets
+        [ -f /etc/xl2tpd/l2tp-secrets ] || install -m 600 -o root -g root <(echo -n "* * "; ${pkgs.apg}/bin/apg -n 1 -m 32 -x 32 -a 1 -M LCN) /etc/xl2tpd/l2tp-secrets
 
-        popd > /dev/null
-
-        mkdir -p /run/xl2tpd
-        chown root:root /run/xl2tpd
-        chmod 700       /run/xl2tpd
+        install -m 701 -o root -g root -d /run/xl2tpd
       '';
 
       serviceConfig = {

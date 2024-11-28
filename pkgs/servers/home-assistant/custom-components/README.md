@@ -20,7 +20,7 @@ versions into the Python environment.
 
 ```nix
 { lib
-, buildHomeAssistantcomponent
+, buildHomeAssistantComponent
 , fetchFromGitHub
 }:
 

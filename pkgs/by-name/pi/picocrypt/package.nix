@@ -3,7 +3,6 @@
   buildGoModule,
   fetchFromGitHub,
   stdenv,
-  darwin,
   copyDesktopItems,
   makeDesktopItem,
 
@@ -16,18 +15,18 @@
 
 buildGoModule rec {
   pname = "picocrypt";
-  version = "1.35";
+  version = "1.44";
 
   src = fetchFromGitHub {
     owner = "Picocrypt";
     repo = "Picocrypt";
-    rev = version;
-    hash = "sha256-0dzJtwJ588c0ldf97u/J2zHkxWr176p6/FLCzMXgjQ0=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+0co9JwXGJVXStyQSggJACQlQYwQ3dQtLsTAeCavLa8=";
   };
 
   sourceRoot = "${src.name}/src";
 
-  vendorHash = "sha256-W982HiosXvDadMJJ0wP6AsalQ/uxklSbbmFp26XQEhM=";
+  vendorHash = "sha256-zJDPIRRckrlbmEpxXXMxeguxdcwVS9beHbM1dr5eMz8=";
 
   ldflags = [
     "-s"
@@ -38,7 +37,7 @@ buildGoModule rec {
     # Depends on a vendored, patched GLFW.
     glfw.buildInputs or [ ]
     ++ glfw.propagatedBuildInputs or [ ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       gtk3
       xorg.libXxf86vm
     ];

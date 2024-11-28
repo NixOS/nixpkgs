@@ -15,10 +15,10 @@
 , mesa # firefox wants gbm for drm+dmabuf
 , cups
 , pciutils
+, vulkan-loader
 , sndio
 , libjack2
-, speechd
-, removeReferencesTo
+, speechd-minimal
 }:
 
 ## configurability of the wrapper itself
@@ -50,7 +50,7 @@ let
     # https://mozilla.github.io/policy-templates/
     , extraPolicies ? {}
     , extraPoliciesFiles ? []
-    , libName ? browser.libName or "firefox" # Important for tor package or the like
+    , libName ? browser.libName or applicationName # Important for tor package or the like
     , nixExtensions ? null
     }:
 
@@ -86,7 +86,10 @@ let
                 else [])
        );
 
-      libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
+       libs = lib.optionals stdenv.hostPlatform.isLinux (
+            [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils vulkan-loader ]
+            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
+       )
             ++ lib.optional pipewireSupport pipewire
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport libkrb5
@@ -98,7 +101,6 @@ let
             ++ lib.optional sndioSupport sndio
             ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
-            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd
             ++ pkcs11Modules
             ++ gtk_modules;
       gtk_modules = [ libcanberra-gtk3 ];
@@ -239,7 +241,7 @@ let
               };
             }));
 
-      nativeBuildInputs = [ makeWrapper lndir jq removeReferencesTo ];
+      nativeBuildInputs = [ makeWrapper lndir jq ];
       buildInputs = [ browser.gtk3 ];
 
 
@@ -414,14 +416,11 @@ let
       passthru = { unwrapped = browser; };
 
       disallowedRequisites = [ stdenv.cc ];
-      postInstall = ''
-        find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
-      '';
       meta = browser.meta // {
         inherit (browser.meta) description;
         mainProgram = launcherName;
         hydraPlatforms = [];
-        priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
+        priority = (browser.meta.priority or lib.meta.defaultPriority) - 1; # prefer wrapper over the package
       };
     };
 in lib.makeOverridable wrapper

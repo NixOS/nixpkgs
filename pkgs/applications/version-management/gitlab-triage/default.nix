@@ -11,7 +11,7 @@ bundlerApp {
     description = "GitLab's issues and merge requests triage, automated!";
     homepage = "https://gitlab.com/gitlab-org/gitlab-triage";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "gitlab-triage";
   };
 }

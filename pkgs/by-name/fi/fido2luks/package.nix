@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     owner = "shimunn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-bXwaFiRHURvS5KtTqIj+3GlGNbEulDgMDP51ZiO1w9o=";
+    hash = "sha256-bXwaFiRHURvS5KtTqIj+3GlGNbEulDgMDP51ZiO1w9o=";
   };
 
   cargoPatches = [

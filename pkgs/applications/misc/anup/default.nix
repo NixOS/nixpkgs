@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     sqlite
     xdg-utils
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 

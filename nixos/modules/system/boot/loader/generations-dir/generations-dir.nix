@@ -42,7 +42,7 @@ in
         default = false;
         type = types.bool;
         description = ''
-          Whether copy the necessary boot files into /boot, so
+          Whether to copy the necessary boot files into /boot, so
           /nix/store is not needed by the boot loader.
         '';
       };

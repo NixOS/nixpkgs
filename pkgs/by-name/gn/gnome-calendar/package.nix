@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calendar";
-  version = "46.1";
+  version = "47.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-mGH/e4q9W3sgaQulXrdULH7FNLVmJp4ptbHoWMFhCJc=";
+    url = "mirror://gnome/sources/gnome-calendar/${lib.versions.major version}/gnome-calendar-${version}.tar.xz";
+    hash = "sha256-OwMxPxxNEtyCHgfiCdFZbVPq+iVdSS0s5av5LtG1HnY=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gnome-calendar";
     };
   };
 

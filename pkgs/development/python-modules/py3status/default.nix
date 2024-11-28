@@ -25,12 +25,12 @@
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.58";
+  version = "3.59";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SJScEz9WsqB0jRAHmUHpmnAbuqnRnHUUgc1rDN0tScw=";
+    hash = "sha256-3m/34xfPpe8T4yicbTtQtTqfq5Zz2T0AZl8fCKRg/CE=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -68,6 +68,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ultrabug/py3status";
     changelog = "https://github.com/ultrabug/py3status/blob/${version}/CHANGELOG";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

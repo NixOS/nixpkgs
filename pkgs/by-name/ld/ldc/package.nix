@@ -3,18 +3,17 @@
 , fetchFromGitHub
 , cmake
 , ninja
-, llvm_17
+, llvm_18
 , curl
 , tzdata
-, libconfig
 , lit
 , gdb
 , unzip
 , darwin
-, bash
 , callPackage
 , makeWrapper
 , runCommand
+, writeText
 , targetPackages
 
 , ldcBootstrap ? callPackage ./bootstrap.nix { }
@@ -63,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    cmake ldcBootstrap lit lit.python llvm_17.dev makeWrapper ninja unzip
+    cmake ldcBootstrap lit lit.python llvm_18.dev makeWrapper ninja unzip
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -73,8 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ curl tzdata ];
 
+  outputs = [ "out" "include" ];
+  outputInclude = "include";
+
   cmakeFlags = [
     "-DD_FLAGS=-d-version=TZDatabaseDir;-d-version=LibcurlPath;-J${pathConfig}"
+    "-DINCLUDE_INSTALL_DIR=${placeholder "include"}/include/d"
   ];
 
   postConfigure = ''
@@ -141,5 +144,37 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ldc2";
     maintainers = with maintainers; [ lionello jtbx ];
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+  };
+
+  passthru.ldcBootstrap = ldcBootstrap;
+  passthru.tests = let
+    ldc = finalAttrs.finalPackage;
+    helloWorld = stdenv.mkDerivation (finalAttrs: {
+      name = "ldc-hello-world";
+      src = writeText "hello_world.d" ''
+        module hello_world;
+        import std.stdio;
+        void main() {
+          writeln("Hello, world!");
+        }
+      '';
+      dontUnpack = true;
+      buildInputs = [ ldc ];
+      dFlags = [];
+      buildPhase = ''
+        ldc2 ${lib.escapeShellArgs finalAttrs.dFlags} -of=test $src
+      '';
+      installPhase = ''
+        mkdir -p $out/bin
+        mv test $out/bin
+      '';
+    });
+  in {
+    # Without -shared, built binaries should not contain
+    # references to the compiler binaries.
+    no-references-to-compiler = helloWorld.overrideAttrs {
+      disallowedReferences = [ ldc ];
+      dFlags = ["-g"];
+    };
   };
 })

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "zope-proxy";
-  version = "5.2";
+  version = "5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "zope.proxy";
     inherit version;
-    hash = "sha256-93fVbCqy/PQNAmraHmfx45z2MY497rmhzVCH/MsfKG4=";
+    hash = "sha256-rSTSjrxq3p++vgzEvcTsUNHe5BpFPjMa/SoSYL6Wdgg=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Generic Transparent Proxies";
     changelog = "https://github.com/zopefoundation/zope.proxy/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

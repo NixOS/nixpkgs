@@ -8,6 +8,7 @@
 , alsa-lib
 , faac
 , faad2
+, fetchpatch
 , ffmpeg
 , glib
 , openh264
@@ -64,7 +65,7 @@ let
       dir = "libfreerdp/crypto/test";
       file = "Test_x509_cert_info.c";
     }
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     {
       dir = "winpr/libwinpr/sysinfo/test";
       file = "TestGetComputerName.c";
@@ -84,6 +85,22 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-w+xyMNFmKylSheK0yAGl8J6MXly/HUjjAfR9Qq3s/kA=";
   };
+
+  patches = [
+    # GCC 14 compatibility
+    (fetchpatch {
+      url = "https://github.com/FreeRDP/FreeRDP/commit/5b14b7cbdd36414f1838047f21502654bd32ebb1.patch";
+      hash = "sha256-EWLfmjGJGWA/sY2E2DnFKhPbzhOVbXZPCrV8i1XuSeY=";
+    })
+    (fetchpatch {
+      url = "https://github.com/FreeRDP/FreeRDP/commit/efa899d3deb8595a29fabb2a2251722f9d7e0d7f.patch";
+      hash = "sha256-hjqNexYq+3iO2L2L9wT2tWbHz0BEtl/y7jgQT4kpNIM=";
+    })
+    (fetchpatch {
+      url = "https://github.com/FreeRDP/FreeRDP/commit/0c20fac8f1deeeca3df93a6619542e5d9176f0f0.patch";
+      hash = "sha256-cEzNPteucoI5KoGEM3C6mg2kW9uWImPebZEV6nssexY=";
+    })
+  ];
 
   postPatch = ''
     export HOME=$TMP
@@ -140,11 +157,11 @@ stdenv.mkDerivation rec {
     pcre2
     pcsclite
     zlib
-  ] ++ optionals stdenv.isLinux [
+  ] ++ optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     systemd
     wayland
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
     AudioToolbox
     AVFoundation
     Carbon
@@ -167,7 +184,6 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DDOCBOOKXSL_DIR=${docbook-xsl-nons}/xml/xsl/docbook"
-    "-DWAYLAND_SCANNER=${buildPackages.wayland-scanner}/bin/wayland-scanner"
   ]
   ++ lib.mapAttrsToList (k: v: "-D${k}=${cmFlag v}") {
     BUILD_TESTING = false; # false is recommended by upstream
@@ -186,7 +202,7 @@ stdenv.mkDerivation rec {
     WITH_X11 = true;
   };
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     "-DTARGET_OS_IPHONE=0"
     "-DTARGET_OS_WATCH=0"
     "-include AudioToolbox/AudioToolbox.h"
@@ -194,7 +210,7 @@ stdenv.mkDerivation rec {
     "-Wno-error=incompatible-function-pointer-types"
   ]);
 
-  NIX_LDFLAGS = lib.optionals stdenv.isDarwin [
+  NIX_LDFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [
     "-framework AudioToolbox"
   ];
 

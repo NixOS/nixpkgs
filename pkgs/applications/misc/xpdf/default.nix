@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   # Fix "No known features for CXX compiler", see
   # https://cmake.org/pipermail/cmake/2016-December/064733.html and the note at
   # https://cmake.org/cmake/help/v3.10/command/cmake_minimum_required.html
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt --replace \
         'cmake_minimum_required(VERSION 2.8.12)' 'cmake_minimum_required(VERSION 3.1.0)'
     '';
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     categories = [ "Office" ];
   };
 
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     install -Dm644 ${desktopItem}/share/applications/xpdf.desktop -t $out/share/applications
     install -Dm644 $src/xpdf-qt/xpdf-icon.svg $out/share/pixmaps/xpdf.svg
   '';
@@ -76,26 +76,14 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ sikmir ];
     knownVulnerabilities = [
-      "CVE-2019-9587: loop in PDF objects"
-      "CVE-2019-9588: loop in PDF objects"
-      "CVE-2019-16088: loop in PDF objects"
-      "CVE-2022-38334"
-      "CVE-2022-38928"
-      "CVE-2022-41842"
-      "CVE-2022-41843"
-      "CVE-2022-43071"
-      "CVE-2022-43295"
-      "CVE-2022-45586"
-      "CVE-2022-45587"
       "CVE-2023-26930"
-      "CVE-2023-26931"
-      "CVE-2023-26934"
-      "CVE-2023-26935"
-      "CVE-2023-26936"
-      "CVE-2023-26937"
-      "CVE-2023-26938"
-      "CVE-2023-27655"
-      "CVE-2023-31557"
+      "CVE-2024-2971"
+      "CVE-2024-3247"
+      "CVE-2024-3248"
+      "CVE-2024-3900"
+      "CVE-2024-4141"
+      "CVE-2024-4568"
+      "CVE-2024-4976"
     ];
   };
 }

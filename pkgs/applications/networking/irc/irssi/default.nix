@@ -5,7 +5,6 @@
 , libgcrypt
 , libintl
 , libotr
-, libtool
 , meson
 , ncurses
 , ninja

@@ -5,40 +5,43 @@
   gnunet,
   qrencode,
   taler-exchange,
+  taler-wallet-core,
   libtool,
   pkg-config,
   autoreconfHook,
+  makeWrapper,
   jq,
 }:
 
-let
-  version = "0.11.3";
-
-  taler-wallet-core = fetchgit {
-    url = "https://git.taler.net/wallet-core.git";
-    # https://taler.net/fr/news/2024-11.html
-    rev = "v0.11.2";
-    hash = "sha256-GtR87XqmunYubh9EiY3bJIqXiXrT+re3KqWypYK3NCo=";
-  };
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taler-merchant";
-  inherit version;
+  version = "0.13.0";
 
   src = fetchgit {
     url = "https://git.taler.net/merchant.git";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Rak6p8cuCHPZxrXqrv3YUU3pFFw4GWf8bcd3Ur+o7Wg=";
+    hash = "sha256-N3atOOE21OEks3G1LPOM5qo/kq0D5D9gmTfURCBZx6M=";
   };
 
   postUnpack = ''
     ln -s ${taler-wallet-core}/spa.html $sourceRoot/contrib/
   '';
 
+  # Use an absolute path for `templates` and `spa` directories, else a relative
+  # path to the `taler-exchange` package is used.
+  postPatch = ''
+    substituteInPlace src/backend/taler-merchant-httpd.c \
+      --replace-fail 'TALER_TEMPLATING_init ("merchant");' "TALER_TEMPLATING_init_path (\"merchant\", \"$out/share/taler\");"
+
+    substituteInPlace src/backend/taler-merchant-httpd_spa.c \
+      --replace-fail 'GNUNET_DISK_directory_scan (dn,' "GNUNET_DISK_directory_scan (\"$out/share/taler/merchant/spa/\","
+  '';
+
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+    makeWrapper
   ];
 
   buildInputs = taler-exchange.buildInputs ++ [
@@ -59,10 +62,14 @@ stdenv.mkDerivation {
     popd
   '';
 
-  configureFlags = [
-    "--with-gnunet=${gnunet}"
-    "--with-exchange=${taler-exchange}"
-  ];
+  # NOTE: The executables that need database access fail to detect the
+  # postgresql library in `$out/lib/taler`, so we need to wrap them.
+  postInstall = ''
+    for exec in dbinit httpd webhook wirewatch depositcheck exchange; do
+      wrapProgram $out/bin/taler-merchant-$exec \
+        --prefix LD_LIBRARY_PATH : "$out/lib/taler"
+    done
+  '';
 
   enableParallelBuilding = true;
 
@@ -72,7 +79,7 @@ stdenv.mkDerivation {
 
   checkTarget = "check";
 
-  meta = with lib; {
+  meta = {
     description = ''
       This is the GNU Taler merchant backend. It provides the logic that should run
       at every GNU Taler merchant.  The GNU Taler merchant is a RESTful backend that
@@ -82,8 +89,9 @@ stdenv.mkDerivation {
       to know the customer's physical address.
     '';
     homepage = "https://taler.net/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ astro ];
-    platforms = platforms.linux;
+    changelog = "https://git.taler.net/merchant.git/tree/ChangeLog";
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ astro ];
+    platforms = lib.platforms.linux;
   };
-}
+})

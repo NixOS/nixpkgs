@@ -18,19 +18,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fretboard";
-  version = "7.0";
+  version = "8.0";
 
   src = fetchFromGitHub {
     owner = "bragefuglseth";
     repo = "fretboard";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8AfIvmL6ttmsH95KRMSv+1RaYYU2h+nVaZozLfxLWXc=";
+    hash = "sha256-8xINlVhWgg73DrRi8S5rhNc1sbG4DbWOsiEBjU8NSXo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = finalAttrs.src;
     name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-kFV3zd7xp2hBMAdIXZAJhH/BSTKy6DgnFqz7h0yNWgs=";
+    hash = "sha256-LSL7VvRgA8MaFXn/vi5Zf1sY4cqv0a9PNnZ3JlDNIaE=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk4
     libadwaita
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 
@@ -65,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "fretboard";
     maintainers = with maintainers; [ michaelgrahamevans ];
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

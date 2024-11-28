@@ -1,39 +1,36 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, libX11, IOKit }:
-
-stdenv.mkDerivation rec {
-  version = "0.8";
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libXext,
+  libX11,
+  IOKit,
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "spacenavd";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "FreeSpacenav";
     repo = "spacenavd";
-    rev = "v${version}";
-    sha256 = "1zz0cm5cgvp9s5n4nzksl8rb11c7sw214bdafzra74smvqfjcjcf";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-26geQYOXjMZZ/FpPpav7zfql0davTBwB4Ir+X1oep9Q=";
   };
 
-  patches = [
-    # Fixes Darwin: https://github.com/FreeSpacenav/spacenavd/pull/38
-    (fetchpatch {
-      url = "https://github.com/FreeSpacenav/spacenavd/commit/d6a25d5c3f49b9676d039775efc8bf854737c43c.patch";
-      sha256 = "02pdgcvaqc20qf9hi3r73nb9ds7yk2ps9nnxaj0x9p50xjnhfg5c";
-    })
-    # Changes the socket path from /run/spnav.sock to $XDG_RUNTIME_DIR/spnav.sock
-    # to allow for a user service
-    ./configure-socket-path.patch
-    # Changes the pidfile path from /run/spnavd.pid to $XDG_RUNTIME_DIR/spnavd.pid
-    # to allow for a user service
-    ./configure-pidfile-path.patch
-    # Changes the config file path from /etc/spnavrc to $XDG_CONFIG_HOME/spnavrc or $HOME/.config/spnavrc
-    # to allow for a user service
-    ./configure-cfgfile-path.patch
-  ];
-
-  buildInputs = [ libX11 ]
-    ++ lib.optional stdenv.isDarwin IOKit;
+  buildInputs = [
+    libX11
+    libXext
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin IOKit;
 
   configureFlags = [ "--disable-debug" ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
+  postInstall = ''
+    install -Dm644 $src/contrib/systemd/spacenavd.service -t $out/lib/systemd/system
+    substituteInPlace $out/lib/systemd/system/spacenavd.service \
+      --replace-fail "/usr/local/bin/spacenavd" "$out/bin/spacenavd"
+  '';
 
   meta = with lib; {
     homepage = "https://spacenav.sourceforge.net/";
@@ -43,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ sohalt ];
   };
-}
+})

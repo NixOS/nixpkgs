@@ -24,6 +24,8 @@ ocamlPackages.buildDunePackage rec {
     fetchSubmodules = true;
   };
 
+  patches = [ ./make-compatible-with-linol-0_6.patch ];
+
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
 
@@ -111,7 +113,7 @@ ocamlPackages.buildDunePackage rec {
     seqes
     stdint
     tezt
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -129,7 +131,6 @@ ocamlPackages.buildDunePackage rec {
     mainProgram = "ligo";
     license = licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
-    broken = stdenv.isLinux && stdenv.isAarch64;
     maintainers = with maintainers; [ ulrikstrid ];
   };
 }

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   substituteAll,
   cmdstan,
   setuptools,
@@ -32,11 +31,6 @@ buildPythonPackage rec {
       src = ./use-nix-cmdstan-path.patch;
       cmdstan = "${cmdstan}/opt/cmdstan";
     })
-    # Fix seed-dependent tests
-    (fetchpatch {
-      url = "https://github.com/stan-dev/cmdstanpy/commit/c72acd0b8123c02b47d5d583bdd7d8408b04562c.patch";
-      hash = "sha256-cliyDDko4spYa62DMwWBavy5pePkofJo4Kf8I0RzueM=";
-    })
   ];
 
   postPatch = ''
@@ -55,7 +49,7 @@ buildPythonPackage rec {
     stanio
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [ xarray ];
   };
 
@@ -65,7 +59,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.all;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.all;
 
   disabledTestPaths = [
     # No need to test these when using Nix
@@ -83,7 +77,7 @@ buildPythonPackage rec {
       "test_pathfinder_threads"
       "test_save_profile"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_init_types" # CmdStan error: error during processing Operation not permitted
     ];
 

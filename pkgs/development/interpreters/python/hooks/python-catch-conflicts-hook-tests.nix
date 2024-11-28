@@ -1,4 +1,4 @@
-{ pythonOnBuildForHost, runCommand, writeShellScript, coreutils, gnugrep }: let
+{ lib, pythonOnBuildForHost, runCommand, writeShellScript, coreutils, gnugrep }: let
 
   pythonPkgs = pythonOnBuildForHost.pkgs;
 
@@ -38,7 +38,7 @@
   );
 
   # in order to test for a failing build, wrap it in a shell script
-  expectFailure = build: errorMsg: build.overrideDerivation (old: {
+  expectFailure = build: errorMsg: lib.overrideDerivation build (old: {
     builder = writeShellScript "test-for-failure" ''
       export PATH=${coreutils}/bin:${gnugrep}/bin:$PATH
       ${old.builder} "$@" > ./log 2>&1
@@ -83,7 +83,7 @@ in {
     generatePythonPackage {
       pname = "cyclic-dependencies";
       preFixup = ''
-        propagatedBuildInputs+=("$out")
+        appendToVar propagatedBuildInputs "$out"
       '';
     };
 

@@ -1,0 +1,5127 @@
+commit 6daa77104520ca992a9369bd01cccd4d98c82984
+Author: Andreas K. Hüttel <dilfridge@gentoo.org>
+Date:   Sun Jul 21 19:02:10 2024 +0200
+
+    Replace advisories directory
+    
+    Signed-off-by: Andreas K. Hüttel <dilfridge@gentoo.org>
+
+diff --git a/advisories/GLIBC-SA-2023-0001 b/advisories/GLIBC-SA-2023-0001
+deleted file mode 100644
+index 3d19c91b6a..0000000000
+--- a/advisories/GLIBC-SA-2023-0001
++++ /dev/null
+@@ -1,14 +0,0 @@
+-printf: incorrect output for integers with thousands separator and width field
+-
+-When the printf family of functions is called with a format specifier
+-that uses an <apostrophe> (enable grouping) and a minimum width
+-specifier, the resulting output could be larger than reasonably expected
+-by a caller that computed a tight bound on the buffer size.  The
+-resulting larger than expected output could result in a buffer overflow
+-in the printf family of functions.
+-
+-CVE-Id: CVE-2023-25139
+-Public-Date: 2023-02-02
+-Vulnerable-Commit: e88b9f0e5cc50cab57a299dc7efe1a4eb385161d (2.37)
+-Fix-Commit: c980549cc6a1c03c23cc2fe3e7b0fe626a0364b0 (2.38)
+-Fix-Commit: 07b9521fc6369d000216b96562ff7c0ed32a16c4 (2.37-4)
+diff --git a/advisories/GLIBC-SA-2023-0002 b/advisories/GLIBC-SA-2023-0002
+deleted file mode 100644
+index 5122669a64..0000000000
+--- a/advisories/GLIBC-SA-2023-0002
++++ /dev/null
+@@ -1,15 +0,0 @@
+-getaddrinfo: Stack read overflow in no-aaaa mode
+-
+-If the system is configured in no-aaaa mode via /etc/resolv.conf,
+-getaddrinfo is called for the AF_UNSPEC address family, and a DNS
+-response is received over TCP that is larger than 2048 bytes,
+-getaddrinfo may potentially disclose stack contents via the returned
+-address data, or crash.
+-
+-CVE-Id: CVE-2023-4527
+-Public-Date: 2023-09-12
+-Vulnerable-Commit: f282cdbe7f436c75864e5640a409a10485e9abb2 (2.36)
+-Fix-Commit: bd77dd7e73e3530203be1c52c8a29d08270cb25d (2.39)
+-Fix-Commit: 4ea972b7edd7e36610e8cde18bf7a8149d7bac4f (2.36-113)
+-Fix-Commit: b7529346025a130fee483d42178b5c118da971bb (2.37-38)
+-Fix-Commit: b25508dd774b617f99419bdc3cf2ace4560cd2d6 (2.38-19)
+diff --git a/advisories/GLIBC-SA-2023-0003 b/advisories/GLIBC-SA-2023-0003
+deleted file mode 100644
+index d3aef80348..0000000000
+--- a/advisories/GLIBC-SA-2023-0003
++++ /dev/null
+@@ -1,15 +0,0 @@
+-getaddrinfo: Potential use-after-free
+-
+-When an NSS plugin only implements the _gethostbyname2_r and
+-_getcanonname_r callbacks, getaddrinfo could use memory that was freed
+-during buffer resizing, potentially causing a crash or read or write to
+-arbitrary memory.
+-
+-CVE-Id: CVE-2023-4806
+-Public-Date: 2023-09-12
+-Fix-Commit: 973fe93a5675c42798b2161c6f29c01b0e243994 (2.39)
+-Fix-Commit: e09ee267c03e3150c2c9ba28625ab130705a485e (2.34-420)
+-Fix-Commit: e3ccb230a961b4797510e6a1f5f21fd9021853e7 (2.35-270)
+-Fix-Commit: a9728f798ec7f05454c95637ee6581afaa9b487d (2.36-115)
+-Fix-Commit: 6529a7466c935f36e9006b854d6f4e1d4876f942 (2.37-39)
+-Fix-Commit: 00ae4f10b504bc4564e9f22f00907093f1ab9338 (2.38-20)
+diff --git a/advisories/GLIBC-SA-2023-0004 b/advisories/GLIBC-SA-2023-0004
+deleted file mode 100644
+index 5286a7aa54..0000000000
+--- a/advisories/GLIBC-SA-2023-0004
++++ /dev/null
+@@ -1,16 +0,0 @@
+-tunables: local privilege escalation through buffer overflow
+-
+-If a tunable of the form NAME=NAME=VAL is passed in the environment of a
+-setuid program and NAME is valid, it may result in a buffer overflow,
+-which could be exploited to achieve escalated privileges.  This flaw was
+-introduced in glibc 2.34.
+-
+-CVE-Id: CVE-2023-4911
+-Public-Date: 2023-10-03
+-Vulnerable-Commit: 2ed18c5b534d9e92fc006202a5af0df6b72e7aca (2.34)
+-Fix-Commit: 1056e5b4c3f2d90ed2b4a55f96add28da2f4c8fa (2.39)
+-Fix-Commit: dcc367f148bc92e7f3778a125f7a416b093964d9 (2.34-423)
+-Fix-Commit: c84018a05aec80f5ee6f682db0da1130b0196aef (2.35-274)
+-Fix-Commit: 22955ad85186ee05834e47e665056148ca07699c (2.36-118)
+-Fix-Commit: b4e23c75aea756b4bddc4abcf27a1c6dca8b6bd3 (2.37-45)
+-Fix-Commit: 750a45a783906a19591fb8ff6b7841470f1f5701 (2.38-27)
+diff --git a/advisories/GLIBC-SA-2023-0005 b/advisories/GLIBC-SA-2023-0005
+deleted file mode 100644
+index cc4eb90b82..0000000000
+--- a/advisories/GLIBC-SA-2023-0005
++++ /dev/null
+@@ -1,18 +0,0 @@
+-getaddrinfo: DoS due to memory leak
+-
+-The fix for CVE-2023-4806 introduced a memory leak when an application
+-calls getaddrinfo for AF_INET6 with AI_CANONNAME, AI_ALL and AI_V4MAPPED
+-flags set.
+-
+-CVE-Id: CVE-2023-5156
+-Public-Date: 2023-09-25
+-Vulnerable-Commit: e09ee267c03e3150c2c9ba28625ab130705a485e (2.34-420)
+-Vulnerable-Commit: e3ccb230a961b4797510e6a1f5f21fd9021853e7 (2.35-270)
+-Vulnerable-Commit: a9728f798ec7f05454c95637ee6581afaa9b487d (2.36-115)
+-Vulnerable-Commit: 6529a7466c935f36e9006b854d6f4e1d4876f942 (2.37-39)
+-Vulnerable-Commit: 00ae4f10b504bc4564e9f22f00907093f1ab9338 (2.38-20)
+-Fix-Commit: 8006457ab7e1cd556b919f477348a96fe88f2e49 (2.34-421)
+-Fix-Commit: 17092c0311f954e6f3c010f73ce3a78c24ac279a (2.35-272)
+-Fix-Commit: 856bac55f98dc840e7c27cfa82262b933385de90 (2.36-116)
+-Fix-Commit: 4473d1b87d04b25cdd0e0354814eeaa421328268 (2.37-42)
+-Fix-Commit: 5ee59ca371b99984232d7584fe2b1a758b4421d3 (2.38-24)
+diff --git a/advisories/GLIBC-SA-2024-0001 b/advisories/GLIBC-SA-2024-0001
+deleted file mode 100644
+index 28931c75ae..0000000000
+--- a/advisories/GLIBC-SA-2024-0001
++++ /dev/null
+@@ -1,15 +0,0 @@
+-syslog: Heap buffer overflow in __vsyslog_internal
+-
+-__vsyslog_internal did not handle a case where printing a SYSLOG_HEADER
+-containing a long program name failed to update the required buffer
+-size, leading to the allocation and overflow of a too-small buffer on
+-the heap.
+-
+-CVE-Id: CVE-2023-6246
+-Public-Date: 2024-01-30
+-Vulnerable-Commit: 52a5be0df411ef3ff45c10c7c308cb92993d15b1 (2.37)
+-Fix-Commit: 6bd0e4efcc78f3c0115e5ea9739a1642807450da (2.39)
+-Fix-Commit: 23514c72b780f3da097ecf33a793b7ba9c2070d2 (2.38-42)
+-Fix-Commit: 97a4292aa4a2642e251472b878d0ec4c46a0e59a (2.37-57)
+-Vulnerable-Commit: b0e7888d1fa2dbd2d9e1645ec8c796abf78880b9 (2.36-16)
+-Fix-Commit: d1a83b6767f68b3cb5b4b4ea2617254acd040c82 (2.36-126)
+diff --git a/advisories/GLIBC-SA-2024-0002 b/advisories/GLIBC-SA-2024-0002
+deleted file mode 100644
+index 940bfcf2fc..0000000000
+--- a/advisories/GLIBC-SA-2024-0002
++++ /dev/null
+@@ -1,15 +0,0 @@
+-syslog: Heap buffer overflow in __vsyslog_internal
+-
+-__vsyslog_internal used the return value of snprintf/vsnprintf to
+-calculate buffer sizes for memory allocation.  If these functions (for
+-any reason) failed and returned -1, the resulting buffer would be too
+-small to hold output.
+-
+-CVE-Id: CVE-2023-6779
+-Public-Date: 2024-01-30
+-Vulnerable-Commit: 52a5be0df411ef3ff45c10c7c308cb92993d15b1 (2.37)
+-Fix-Commit: 7e5a0c286da33159d47d0122007aac016f3e02cd (2.39)
+-Fix-Commit: d0338312aace5bbfef85e03055e1212dd0e49578 (2.38-43)
+-Fix-Commit: 67062eccd9a65d7fda9976a56aeaaf6c25a80214 (2.37-58)
+-Vulnerable-Commit: b0e7888d1fa2dbd2d9e1645ec8c796abf78880b9 (2.36-16)
+-Fix-Commit: 2bc9d7c002bdac38b5c2a3f11b78e309d7765b83 (2.36-127)
+diff --git a/advisories/GLIBC-SA-2024-0003 b/advisories/GLIBC-SA-2024-0003
+deleted file mode 100644
+index b43a5150ab..0000000000
+--- a/advisories/GLIBC-SA-2024-0003
++++ /dev/null
+@@ -1,13 +0,0 @@
+-syslog: Integer overflow in __vsyslog_internal
+-
+-__vsyslog_internal calculated a buffer size by adding two integers, but
+-did not first check if the addition would overflow.
+-
+-CVE-Id: CVE-2023-6780
+-Public-Date: 2024-01-30
+-Vulnerable-Commit: 52a5be0df411ef3ff45c10c7c308cb92993d15b1 (2.37)
+-Fix-Commit: ddf542da94caf97ff43cc2875c88749880b7259b (2.39)
+-Fix-Commit: d37c2b20a4787463d192b32041c3406c2bd91de0 (2.38-44)
+-Fix-Commit: 2b58cba076e912961ceaa5fa58588e4b10f791c0 (2.37-59)
+-Vulnerable-Commit: b0e7888d1fa2dbd2d9e1645ec8c796abf78880b9 (2.36-16)
+-Fix-Commit: b9b7d6a27aa0632f334352fa400771115b3c69b7 (2.36-128)
+diff --git a/advisories/GLIBC-SA-2024-0004 b/advisories/GLIBC-SA-2024-0004
+deleted file mode 100644
+index 08df2b3118..0000000000
+--- a/advisories/GLIBC-SA-2024-0004
++++ /dev/null
+@@ -1,28 +0,0 @@
+-ISO-2022-CN-EXT: fix out-of-bound writes when writing escape sequence
+-
+-The iconv() function in the GNU C Library versions 2.39 and older may 
+-overflow the output buffer passed to it by up to 4 bytes when converting 
+-strings to the ISO-2022-CN-EXT character set, which may be used to 
+-crash an application or overwrite a neighbouring variable.
+-
+-ISO-2022-CN-EXT uses escape sequences to indicate character set changes
+-(as specified by RFC 1922).  While the SOdesignation has the expected
+-bounds checks, neither SS2designation nor SS3designation have its;
+-allowing a write overflow of 1, 2, or 3 bytes with fixed values:
+-'$+I', '$+J', '$+K', '$+L', '$+M', or '$*H'.
+-
+-CVE-Id: CVE-2024-2961
+-Public-Date: 2024-04-17
+-Vulnerable-Commit: 755104edc75c53f4a0e7440334e944ad3c6b32fc (2.1.93-169)
+-Fix-Commit: f9dc609e06b1136bb0408be9605ce7973a767ada (2.40)
+-Fix-Commit: 31da30f23cddd36db29d5b6a1c7619361b271fb4 (2.39-31)
+-Fix-Commit: e1135387deded5d73924f6ca20c72a35dc8e1bda (2.38-66)
+-Fix-Commit: 89ce64b269a897a7780e4c73a7412016381c6ecf (2.37-89)
+-Fix-Commit: 4ed98540a7fd19f458287e783ae59c41e64df7b5 (2.36-164)
+-Fix-Commit: 36280d1ce5e245aabefb877fe4d3c6cff95dabfa (2.35-315)
+-Fix-Commit: a8b0561db4b9847ebfbfec20075697d5492a363c (2.34-459)
+-Fix-Commit: ed4f16ff6bed3037266f1fa682ebd32a18fce29c (2.33-263)
+-Fix-Commit: 682ad4c8623e611a971839990ceef00346289cc9 (2.32-140)
+-Fix-Commit: 3703c32a8d304c1ee12126134ce69be965f38000 (2.31-154)
+-
+-Reported-By: Charles Fol
+diff --git a/advisories/GLIBC-SA-2024-0005 b/advisories/GLIBC-SA-2024-0005
+deleted file mode 100644
+index a59596610a..0000000000
+--- a/advisories/GLIBC-SA-2024-0005
++++ /dev/null
+@@ -1,22 +0,0 @@
+-nscd: Stack-based buffer overflow in netgroup cache
+-
+-If the Name Service Cache Daemon's (nscd) fixed size cache is exhausted
+-by client requests then a subsequent client request for netgroup data
+-may result in a stack-based buffer overflow.  This flaw was introduced
+-in glibc 2.15 when the cache was added to nscd.
+-
+-This vulnerability is only present in the nscd binary.
+-
+-CVE-Id: CVE-2024-33599
+-Public-Date: 2024-04-23
+-Vulnerable-Commit: 684ae515993269277448150a1ca70db3b94aa5bd (2.15)
+-Fix-Commit: 69c58d5ef9f584ea198bd00f7964d364d0e6b921 (2.31-155)
+-Fix-Commit: a77064893bfe8a701770e2f53a4d33805bc47a5a (2.32-141)
+-Fix-Commit: 5c75001a96abcd50cbdb74df24c3f013188d076e (2.33-264)
+-Fix-Commit: 52f73e5c4e29b14e79167272297977f360ae1e97 (2.34-460)
+-Fix-Commit: 7a95873543ce225376faf13bb71c43dea6d24f86 (2.35-316)
+-Fix-Commit: caa3151ca460bdd9330adeedd68c3112d97bffe4 (2.36-165)
+-Fix-Commit: f75c298e747b2b8b41b1c2f551c011a52c41bfd1 (2.37-91)
+-Fix-Commit: 5968aebb86164034b8f8421b4abab2f837a5bdaf (2.38-72)
+-Fix-Commit: 1263d583d2e28afb8be53f8d6922f0842036f35d (2.39-35)
+-Fix-Commit: 87801a8fd06db1d654eea3e4f7626ff476a9bdaa (2.40)
+diff --git a/advisories/GLIBC-SA-2024-0006 b/advisories/GLIBC-SA-2024-0006
+deleted file mode 100644
+index d44148d3d9..0000000000
+--- a/advisories/GLIBC-SA-2024-0006
++++ /dev/null
+@@ -1,32 +0,0 @@
+-nscd: Null pointer crash after notfound response
+-
+-If the Name Service Cache Daemon's (nscd) cache fails to add a not-found
+-netgroup response to the cache, the client request can result in a null
+-pointer dereference.  This flaw was introduced in glibc 2.15 when the
+-cache was added to nscd.
+-
+-This vulnerability is only present in the nscd binary.
+-
+-CVE-Id: CVE-2024-33600
+-Public-Date: 2024-04-24
+-Vulnerable-Commit: 684ae515993269277448150a1ca70db3b94aa5bd (2.15)
+-Fix-Commit: b048a482f088e53144d26a61c390bed0210f49f2 (2.40)
+-Fix-Commit: 7835b00dbce53c3c87bbbb1754a95fb5e58187aa (2.40)
+-Fix-Commit: c99f886de54446cd4447db6b44be93dabbdc2f8b (2.39-37)
+-Fix-Commit: 5a508e0b508c8ad53bd0d2fb48fd71b242626341 (2.39-36)
+-Fix-Commit: 2ae9446c1b7a3064743b4a51c0bbae668ee43e4c (2.38-74)
+-Fix-Commit: 541ea5172aa658c4bd5c6c6d6fd13903c3d5bb0a (2.38-73)
+-Fix-Commit: a8070b31043c7585c36ba68a74298c4f7af075c3 (2.37-93)
+-Fix-Commit: 5eea50c4402e39588de98aa1d4469a79774703d4 (2.37-92)
+-Fix-Commit: f205b3af56740e3b014915b1bd3b162afe3407ef (2.36-167)
+-Fix-Commit: c34f470a615b136170abd16142da5dd0c024f7d1 (2.36-166)
+-Fix-Commit: bafadc589fbe21ae330e8c2af74db9da44a17660 (2.35-318)
+-Fix-Commit: 4370bef52b0f3f3652c6aa13d7a9bb3ac079746d (2.35-317)
+-Fix-Commit: 1f94122289a9bf7dba573f5d60327aaa2b85cf2e (2.34-462)
+-Fix-Commit: 966d6ac9e40222b84bb21674cc4f83c8d72a5a26 (2.34-461)
+-Fix-Commit: e3eef1b8fbdd3a7917af466ca9c4b7477251ca79 (2.33-266)
+-Fix-Commit: f20a8d696b13c6261b52a6434899121f8b19d5a7 (2.33-265)
+-Fix-Commit: be602180146de37582a3da3a0caa4b719645de9c (2.32-143)
+-Fix-Commit: 394eae338199078b7961b051c191539870742d7b (2.32-142)
+-Fix-Commit: 8d7949183760170c61e55def723c1d8050187874 (2.31-157)
+-Fix-Commit: 304ce5fe466c4762b21b36c26926a4657b59b53e (2.31-156)
+diff --git a/advisories/GLIBC-SA-2024-0007 b/advisories/GLIBC-SA-2024-0007
+deleted file mode 100644
+index b6928fa27a..0000000000
+--- a/advisories/GLIBC-SA-2024-0007
++++ /dev/null
+@@ -1,28 +0,0 @@
+-nscd: netgroup cache may terminate daemon on memory allocation failure
+-
+-The Name Service Cache Daemon's (nscd) netgroup cache uses xmalloc or
+-xrealloc and these functions may terminate the process due to a memory
+-allocation failure resulting in a denial of service to the clients.  The
+-flaw was introduced in glibc 2.15 when the cache was added to nscd.
+-
+-This vulnerability is only present in the nscd binary.
+-
+-Subsequent refactoring of the netgroup cache only added more uses of
+-xmalloc and xrealloc. Uses of xmalloc and xrealloc in other parts of
+-nscd only occur during startup of the daemon and so are not affected by
+-client requests that could trigger an out of memory followed by
+-termination.
+-
+-CVE-Id: CVE-2024-33601
+-Public-Date: 2024-04-24
+-Vulnerable-Commit: 684ae515993269277448150a1ca70db3b94aa5bd (2.15)
+-Fix-Commit: c04a21e050d64a1193a6daab872bca2528bda44b (2.40)
+-Fix-Commit: a9a8d3eebb145779a18d90e3966009a1daa63cd8 (2.39-38)
+-Fix-Commit: 71af8ca864345d39b746d5cee84b94b430fad5db (2.38-75)
+-Fix-Commit: 6e106dc214d6a033a4e945d1c6cf58061f1c5f1f (2.37-94)
+-Fix-Commit: b6742463694b1dfdd5120b91ee21cf05d15ec2e2 (2.36-168)
+-Fix-Commit: 7a5864cac60e06000394128a5a2817b03542f5a3 (2.35-319)
+-Fix-Commit: 86f1d5f4129c373ac6fb6df5bcf38273838843cb (2.34-463)
+-Fix-Commit: 4d27d4b9a188786fc6a56745506cec2acfc51f83 (2.33-267)
+-Fix-Commit: 3ed195a8ec89da281e3c4bf887a13d281b72d8f4 (2.32-144)
+-Fix-Commit: bbf5a58ccb55679217f94de706164d15372fbbc0 (2.31-158)
+diff --git a/advisories/GLIBC-SA-2024-0008 b/advisories/GLIBC-SA-2024-0008
+deleted file mode 100644
+index d93e2a6f0b..0000000000
+--- a/advisories/GLIBC-SA-2024-0008
++++ /dev/null
+@@ -1,26 +0,0 @@
+-nscd: netgroup cache assumes NSS callback uses in-buffer strings
+-
+-The Name Service Cache Daemon's (nscd) netgroup cache can corrupt memory
+-when the NSS callback does not store all strings in the provided buffer.
+-The flaw was introduced in glibc 2.15 when the cache was added to nscd.
+-
+-This vulnerability is only present in the nscd binary.
+-
+-There is no guarantee from the NSS callback API that the returned
+-strings are all within the buffer. However, the netgroup cache code
+-assumes that the NSS callback uses in-buffer strings and if it doesn't
+-the buffer resizing logic could lead to potential memory corruption.
+-
+-CVE-Id: CVE-2024-33602
+-Public-Date: 2024-04-24
+-Vulnerable-Commit: 684ae515993269277448150a1ca70db3b94aa5bd (2.15)
+-Fix-Commit: c04a21e050d64a1193a6daab872bca2528bda44b (2.40)
+-Fix-Commit: a9a8d3eebb145779a18d90e3966009a1daa63cd8 (2.39-38)
+-Fix-Commit: 71af8ca864345d39b746d5cee84b94b430fad5db (2.38-75)
+-Fix-Commit: 6e106dc214d6a033a4e945d1c6cf58061f1c5f1f (2.37-94)
+-Fix-Commit: b6742463694b1dfdd5120b91ee21cf05d15ec2e2 (2.36-168)
+-Fix-Commit: 7a5864cac60e06000394128a5a2817b03542f5a3 (2.35-319)
+-Fix-Commit: 86f1d5f4129c373ac6fb6df5bcf38273838843cb (2.34-463)
+-Fix-Commit: 4d27d4b9a188786fc6a56745506cec2acfc51f83 (2.33-267)
+-Fix-Commit: 3ed195a8ec89da281e3c4bf887a13d281b72d8f4 (2.32-144)
+-Fix-Commit: bbf5a58ccb55679217f94de706164d15372fbbc0 (2.31-158)
+diff --git a/advisories/README b/advisories/README
+deleted file mode 100644
+index b8f8a829ca..0000000000
+--- a/advisories/README
++++ /dev/null
+@@ -1,77 +0,0 @@
+-GNU C Library Security Advisory Format
+-======================================
+-
+-Security advisories in this directory follow a simple git commit log
+-format, with a heading and free-format description augmented with tags
+-to allow parsing key information.  References to code changes are
+-specific to the glibc repository and follow a specific format:
+-
+-  Tag-name: <commit-ref> (release-version)
+-
+-The <commit-ref> indicates a specific commit in the repository.  The
+-release-version indicates the publicly consumable release in which this
+-commit is known to exist.  The release-version is derived from the
+-git-describe format, (i.e. stripped out from glibc-2.34.NNN-gxxxx) and
+-is of the form 2.34-NNN.  If the -NNN suffix is absent, it means that
+-the change is in that release tarball, otherwise the change is on the
+-release/2.YY/master branch and not in any released tarball.
+-
+-The following tags are currently being used:
+-
+-CVE-Id:
+-This is the CVE-Id assigned under the CVE Program
+-(https://www.cve.org/).
+-
+-Public-Date:
+-The date this issue became publicly known.
+-
+-Vulnerable-Commit:
+-The commit that introduced this vulnerability.  There could be multiple
+-entries, one for each release branch in the glibc repository; the
+-release-version portion of this tag should tell you which branch this is
+-on.
+-
+-Fix-Commit:
+-The commit that fixed this vulnerability.  There could be multiple
+-entries for each release branch in the glibc repository, indicating that
+-all of those commits contributed to fixing that issue in each of those
+-branches.
+-
+-Reported-By:
+-The entity that reported this issue. There could be multiple entries, one for
+-each reporter.
+-
+-Adding an Advisory
+-------------------
+-
+-An advisory for a CVE needs to be added on the master branch in two steps:
+-
+-1. Add the text of the advisory without any Fix-Commit tags along with
+-   the fix for the CVE.  Add the Vulnerable-Commit tag, if applicable.
+-   The advisories directory does not exist in release branches, so keep
+-   the advisory text commit distinct from the code changes, to ease
+-   backports.  Ask for the GLIBC-SA advisory number from the security
+-   team.
+-
+-2. Finish all backports on release branches and then back on the msater
+-   branch, add all commit refs to the advisory using the Fix-Commit
+-   tags.  Don't bother adding the release-version subscript since the
+-   next step will overwrite it.
+-
+-3. Run the process-advisories.sh script in the scripts directory on the
+-   advisory:
+-
+-     scripts/process-advisories.sh update GLIBC-SA-YYYY-NNNN
+-
+-   (replace YYYY-NNNN with the actual advisory number).
+-
+-4. Verify the updated advisory and push the result.
+-
+-Getting a NEWS snippet from advisories
+---------------------------------------
+-
+-Run:
+-
+-  scripts/process-advisories.sh news
+-
+-and copy the content into the NEWS file.
+
+commit 8bbb8d7b16cae777eed06bc9d2e059fc00be24e9
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Wed Jul 24 12:06:47 2024 +0200
+
+    resolv: Allow short error responses to match any query (bug 31890)
+    
+    Reviewed-by: DJ Delorie <dj@redhat.com>
+    (cherry picked from commit 691a3b2e9bfaba842e46a5ccb7f5e6ea144c3ade)
+
+diff --git a/NEWS b/NEWS
+index 31281ac408..66b755ed34 100644
+--- a/NEWS
++++ b/NEWS
+@@ -5,6 +5,12 @@ See the end for copying conditions.
+ Please send GNU C library bug reports via <https://sourceware.org/bugzilla/>
+ using `glibc' in the "product" field.
+ 
++Version 2.41
++
++The following bugs are resolved with this release:
++
++  [31890] resolv: Allow short error responses to match any DNS query
++
+ Version 2.40
+ 
+ Major new features:
+diff --git a/resolv/Makefile b/resolv/Makefile
+index 5f44f5896b..d927e337d9 100644
+--- a/resolv/Makefile
++++ b/resolv/Makefile
+@@ -106,6 +106,7 @@ tests += \
+   tst-resolv-nondecimal \
+   tst-resolv-res_init-multi \
+   tst-resolv-search \
++  tst-resolv-short-response \
+   tst-resolv-trailing \
+ 
+ # This test calls __res_context_send directly, which is not exported
+@@ -299,6 +300,8 @@ $(objpfx)tst-resolv-nondecimal: $(objpfx)libresolv.so $(shared-thread-library)
+ $(objpfx)tst-resolv-qtypes: $(objpfx)libresolv.so $(shared-thread-library)
+ $(objpfx)tst-resolv-rotate: $(objpfx)libresolv.so $(shared-thread-library)
+ $(objpfx)tst-resolv-search: $(objpfx)libresolv.so $(shared-thread-library)
++$(objpfx)tst-resolv-short-response: $(objpfx)libresolv.so \
++  $(shared-thread-library)
+ $(objpfx)tst-resolv-trailing: $(objpfx)libresolv.so $(shared-thread-library)
+ $(objpfx)tst-resolv-threads: $(objpfx)libresolv.so $(shared-thread-library)
+ $(objpfx)tst-resolv-txnid-collision: $(objpfx)libresolv.a \
+diff --git a/resolv/res_send.c b/resolv/res_send.c
+index ea7cf192b2..572e72c32f 100644
+--- a/resolv/res_send.c
++++ b/resolv/res_send.c
+@@ -1199,19 +1199,30 @@ send_dg(res_state statp,
+ 		}
+ 
+ 		/* Check for the correct header layout and a matching
+-		   question.  */
++		   question.  Some recursive resolvers send REFUSED
++		   without copying back the question section
++		   (producing a response that is only HFIXEDSZ bytes
++		   long).  Skip query matching in this case.  */
++		bool thisansp_error = (anhp->rcode == SERVFAIL ||
++				       anhp->rcode == NOTIMP ||
++				       anhp->rcode == REFUSED);
++		bool skip_query_match = (*thisresplenp == HFIXEDSZ
++					 && ntohs (anhp->qdcount) == 0
++					 && thisansp_error);
+ 		int matching_query = 0; /* Default to no matching query.  */
+ 		if (!recvresp1
+ 		    && anhp->id == hp->id
+-		    && __libc_res_queriesmatch (buf, buf + buflen,
+-						*thisansp,
+-						*thisansp + *thisanssizp))
++		    && (skip_query_match
++			|| __libc_res_queriesmatch (buf, buf + buflen,
++						    *thisansp,
++						    *thisansp + *thisanssizp)))
+ 		  matching_query = 1;
+ 		if (!recvresp2
+ 		    && anhp->id == hp2->id
+-		    && __libc_res_queriesmatch (buf2, buf2 + buflen2,
+-						*thisansp,
+-						*thisansp + *thisanssizp))
++		    && (skip_query_match
++			|| __libc_res_queriesmatch (buf2, buf2 + buflen2,
++						    *thisansp,
++						    *thisansp + *thisanssizp)))
+ 		  matching_query = 2;
+ 		if (matching_query == 0)
+ 		  /* Spurious UDP packet.  Drop it and continue
+@@ -1221,9 +1232,7 @@ send_dg(res_state statp,
+ 		    goto wait;
+ 		  }
+ 
+-		if (anhp->rcode == SERVFAIL ||
+-		    anhp->rcode == NOTIMP ||
+-		    anhp->rcode == REFUSED) {
++		if (thisansp_error) {
+ 		next_ns:
+ 			if (recvresp1 || (buf2 != NULL && recvresp2)) {
+ 			  *resplen2 = 0;
+diff --git a/resolv/tst-resolv-short-response.c b/resolv/tst-resolv-short-response.c
+new file mode 100644
+index 0000000000..cf1e39876f
+--- /dev/null
++++ b/resolv/tst-resolv-short-response.c
+@@ -0,0 +1,112 @@
++/* Test for spurious timeouts with short 12-byte responses (bug 31890).
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <resolv.h>
++#include <support/check.h>
++#include <support/resolv_test.h>
++#include <support/check_nss.h>
++
++/* The rcode in the initial response.  */
++static volatile int rcode;
++
++static void
++response (const struct resolv_response_context *ctx,
++          struct resolv_response_builder *b,
++          const char *qname, uint16_t qclass, uint16_t qtype)
++{
++  switch (ctx->server_index)
++    {
++    case 0:
++      /* First server times out.  */
++      struct resolv_response_flags flags = {.rcode = rcode};
++      resolv_response_init (b, flags);
++      break;
++    case 1:
++      /* Second server sends reply.  */
++      resolv_response_init (b, (struct resolv_response_flags) {});
++      resolv_response_add_question (b, qname, qclass, qtype);
++      resolv_response_section (b, ns_s_an);
++      resolv_response_open_record (b, qname, qclass, qtype, 0);
++      switch (qtype)
++        {
++        case T_A:
++          {
++            char ipv4[4] = {192, 0, 2, 17};
++            resolv_response_add_data (b, &ipv4, sizeof (ipv4));
++          }
++          break;
++        case T_AAAA:
++          {
++            char ipv6[16]
++              = {0x20, 0x01, 0xd, 0xb8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
++            resolv_response_add_data (b, &ipv6, sizeof (ipv6));
++          }
++          break;
++        default:
++          FAIL_EXIT1 ("unexpected TYPE%d query", qtype);
++        }
++      resolv_response_close_record (b);
++      break;
++    default:
++      FAIL_EXIT1 ("unexpected query to server %d", ctx->server_index);
++    }
++}
++
++static void
++check_one (void)
++{
++
++  /* The buggy 1-second query timeout results in 30 seconds of delay,
++     which triggers a test timeout failure.  */
++  for (int i = 0;  i < 10; ++i)
++    {
++      check_hostent ("www.example", gethostbyname ("www.example"),
++                     "name: www.example\n"
++                     "address: 192.0.2.17\n");
++      check_hostent ("www.example", gethostbyname2 ("www.example", AF_INET6),
++                     "name: www.example\n"
++                     "address: 2001:db8::1\n");
++    }
++}
++
++static int
++do_test (void)
++{
++  struct resolv_test *aux = resolv_test_start
++    ((struct resolv_redirect_config)
++     {
++       .response_callback = response,
++     });
++
++  _res.options |= RES_SNGLKUP;
++
++  rcode = 2; /* SERVFAIL.  */
++  check_one ();
++
++  rcode = 4; /* NOTIMP.  */
++  check_one ();
++
++  rcode = 5; /* REFUSED.  */
++  check_one ();
++
++  resolv_test_end (aux);
++
++  return 0;
++}
++
++#include <support/test-driver.c>
+
+commit ef141426630da0946f0af8732eddce9b9a52b2d3
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Wed Jul 24 12:06:47 2024 +0200
+
+    resolv: Do not wait for non-existing second DNS response after error (bug 30081)
+    
+    In single-request mode, there is no second response after an error
+    because the second query has not been sent yet.  Waiting for it
+    introduces an unnecessary timeout.
+    
+    Reviewed-by: DJ Delorie <dj@redhat.com>
+    (cherry picked from commit af625987d619388a100b153520d3ee308bda9889)
+
+diff --git a/NEWS b/NEWS
+index 66b755ed34..4d7100b21c 100644
+--- a/NEWS
++++ b/NEWS
+@@ -9,6 +9,7 @@ Version 2.41
+ 
+ The following bugs are resolved with this release:
+ 
++  [30081] resolv: Do not wait for non-existing second DNS response after error
+   [31890] resolv: Allow short error responses to match any DNS query
+ 
+ Version 2.40
+diff --git a/resolv/Makefile b/resolv/Makefile
+index d927e337d9..abff7fc007 100644
+--- a/resolv/Makefile
++++ b/resolv/Makefile
+@@ -106,6 +106,7 @@ tests += \
+   tst-resolv-nondecimal \
+   tst-resolv-res_init-multi \
+   tst-resolv-search \
++  tst-resolv-semi-failure \
+   tst-resolv-short-response \
+   tst-resolv-trailing \
+ 
+@@ -300,6 +301,8 @@ $(objpfx)tst-resolv-nondecimal: $(objpfx)libresolv.so $(shared-thread-library)
+ $(objpfx)tst-resolv-qtypes: $(objpfx)libresolv.so $(shared-thread-library)
+ $(objpfx)tst-resolv-rotate: $(objpfx)libresolv.so $(shared-thread-library)
+ $(objpfx)tst-resolv-search: $(objpfx)libresolv.so $(shared-thread-library)
++$(objpfx)tst-resolv-semi-failure: $(objpfx)libresolv.so \
++  $(shared-thread-library)
+ $(objpfx)tst-resolv-short-response: $(objpfx)libresolv.so \
+   $(shared-thread-library)
+ $(objpfx)tst-resolv-trailing: $(objpfx)libresolv.so $(shared-thread-library)
+diff --git a/resolv/res_send.c b/resolv/res_send.c
+index 572e72c32f..9c77613f37 100644
+--- a/resolv/res_send.c
++++ b/resolv/res_send.c
+@@ -1238,7 +1238,7 @@ send_dg(res_state statp,
+ 			  *resplen2 = 0;
+ 			  return resplen;
+ 			}
+-			if (buf2 != NULL)
++			if (buf2 != NULL && !single_request)
+ 			  {
+ 			    /* No data from the first reply.  */
+ 			    resplen = 0;
+diff --git a/resolv/tst-resolv-semi-failure.c b/resolv/tst-resolv-semi-failure.c
+new file mode 100644
+index 0000000000..aa9798b5a7
+--- /dev/null
++++ b/resolv/tst-resolv-semi-failure.c
+@@ -0,0 +1,133 @@
++/* Test parallel failure/success responses (bug 30081).
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <resolv.h>
++#include <support/check.h>
++#include <support/resolv_test.h>
++#include <support/check_nss.h>
++
++/* The rcode in the initial response.  */
++static volatile int rcode;
++
++/* Whether to fail the initial A query (!fail_aaaa) or the initial
++   AAAA query (fail_aaaa).  */
++static volatile bool fail_aaaa;
++
++static void
++response (const struct resolv_response_context *ctx,
++          struct resolv_response_builder *b,
++          const char *qname, uint16_t qclass, uint16_t qtype)
++{
++  /* Handle the failing query.  */
++  if ((fail_aaaa && qtype == T_AAAA) && ctx->server_index == 0)
++    {
++      struct resolv_response_flags flags = {.rcode = rcode};
++      resolv_response_init (b, flags);
++      return;
++    }
++
++  /* Otherwise produce a response.  */
++  resolv_response_init (b, (struct resolv_response_flags) {});
++  resolv_response_add_question (b, qname, qclass, qtype);
++  resolv_response_section (b, ns_s_an);
++  resolv_response_open_record (b, qname, qclass, qtype, 0);
++  switch (qtype)
++    {
++    case T_A:
++      {
++        char ipv4[4] = {192, 0, 2, 17};
++        resolv_response_add_data (b, &ipv4, sizeof (ipv4));
++      }
++      break;
++    case T_AAAA:
++      {
++        char ipv6[16]
++          = {0x20, 0x01, 0xd, 0xb8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
++        resolv_response_add_data (b, &ipv6, sizeof (ipv6));
++      }
++      break;
++    default:
++      FAIL_EXIT1 ("unexpected TYPE%d query", qtype);
++    }
++  resolv_response_close_record (b);
++}
++
++static void
++check_one (void)
++{
++
++  /* The buggy 1-second query timeout results in 30 seconds of delay,
++     which triggers are test timeout failure.  */
++  for (int i = 0;  i < 30; ++i)
++    {
++      static const struct addrinfo hints =
++        {
++          .ai_family = AF_UNSPEC,
++          .ai_socktype = SOCK_STREAM,
++        };
++      struct addrinfo *ai;
++      int ret = getaddrinfo ("www.example", "80", &hints, &ai);
++      const char *expected;
++      if (ret == 0 && ai->ai_next != NULL)
++        expected = ("address: STREAM/TCP 192.0.2.17 80\n"
++                    "address: STREAM/TCP 2001:db8::1 80\n");
++      else
++        /* Only one response because the AAAA lookup failure is
++           treated as an ignoreable error.  */
++        expected = "address: STREAM/TCP 192.0.2.17 80\n";
++      check_addrinfo ("www.example", ai, ret, expected);
++      if (ret == 0)
++        freeaddrinfo (ai);
++    }
++}
++
++static int
++do_test (void)
++{
++  for (int do_single_lookup = 0; do_single_lookup < 2; ++do_single_lookup)
++    {
++      struct resolv_test *aux = resolv_test_start
++        ((struct resolv_redirect_config)
++         {
++           .response_callback = response,
++         });
++
++      if (do_single_lookup)
++        _res.options |= RES_SNGLKUP;
++
++      for (int do_fail_aaaa = 0; do_fail_aaaa < 2; ++do_fail_aaaa)
++        {
++          fail_aaaa = do_fail_aaaa;
++
++          rcode = 2; /* SERVFAIL.  */
++          check_one ();
++
++          rcode = 4; /* NOTIMP.  */
++          check_one ();
++
++          rcode = 5; /* REFUSED.  */
++          check_one ();
++        }
++
++      resolv_test_end (aux);
++    }
++
++  return 0;
++}
++
++#include <support/test-driver.c>
+diff --git a/resolv/tst-resolv-short-response.c b/resolv/tst-resolv-short-response.c
+index cf1e39876f..be354ae1c7 100644
+--- a/resolv/tst-resolv-short-response.c
++++ b/resolv/tst-resolv-short-response.c
+@@ -81,6 +81,18 @@ check_one (void)
+       check_hostent ("www.example", gethostbyname2 ("www.example", AF_INET6),
+                      "name: www.example\n"
+                      "address: 2001:db8::1\n");
++      static const struct addrinfo hints =
++        {
++          .ai_family = AF_UNSPEC,
++          .ai_socktype = SOCK_STREAM,
++        };
++      struct addrinfo *ai;
++      int ret = getaddrinfo ("www.example", "80", &hints, &ai);
++      check_addrinfo ("www.example", ai, ret,
++                      "address: STREAM/TCP 192.0.2.17 80\n"
++                      "address: STREAM/TCP 2001:db8::1 80\n");
++      if (ret == 0)
++        freeaddrinfo (ai);
+     }
+ }
+ 
+
+commit b6aeba2de157ba0cdc8fb0aed67b632b3490f383
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Wed Jul 24 12:50:17 2024 +0200
+
+    manual: Do not mention STATIC_TLS in dynamic linker hardening recommendations
+    
+    The current toolchain does not consistently generate it, and
+    glibc does not use it.
+    
+    Reviewed-by: Szabolcs Nagy <szabolcs.nagy@arm.com>
+    (cherry picked from commit 90842d3980064ef410b998b22170ad409b76b9fd)
+
+diff --git a/manual/dynlink.texi b/manual/dynlink.texi
+index 03565d4fb0..1500a53de6 100644
+--- a/manual/dynlink.texi
++++ b/manual/dynlink.texi
+@@ -993,21 +993,21 @@ The dynamic segment should also mention @code{BIND_NOW} on the
+ enough).
+ 
+ @item
+-For shared objects (not main programs), if the program header has a
+-@code{PT_TLS} segment, the dynamic segment (as shown by @samp{readelf
+--dW}) should contain the @code{STATIC_TLS} flag on the @code{FLAGS}
+-line.
+-
+-If @code{STATIC_TLS} is missing in shared objects, ensure that the
+-appropriate relocations for GNU2 TLS descriptors are used (for example,
++Ensure that only static TLS relocations (thread-pointer relative offset
++locations) are used, for example @code{R_AARCH64_TLS_TPREL} and
++@code{X86_64_TPOFF64}.  As the second-best option, and only if
++compatibility with non-hardened applications using @code{dlopen} is
++needed, GNU2 TLS descriptor relocations can be used (for example,
+ @code{R_AARCH64_TLSDESC} or @code{R_X86_64_TLSDESC}).
+ 
+ @item
+-There should not be a reference to the symbols @code{__tls_get_addr},
+-@code{__tls_get_offset}, @code{__tls_get_addr_opt} in the dynamic symbol
+-table (in the @samp{readelf -sDW} output).  Thread-local storage must be
+-accessed using the initial-exec (static) model, or using GNU2 TLS
+-descriptors.
++There should not be references to the traditional TLS function symbols
++@code{__tls_get_addr}, @code{__tls_get_offset},
++@code{__tls_get_addr_opt} in the dynamic symbol table (in the
++@samp{readelf -sDW} output).  Supporting global dynamic TLS relocations
++(such as @code{R_AARCH64_TLS_DTPMOD}, @code{R_AARCH64_TLS_DTPREL},
++@code{R_X86_64_DTPMOD64}, @code{R_X86_64_DTPOFF64}) should not be used,
++either.
+ 
+ @item
+ Likewise, the functions @code{dlopen}, @code{dlmopen}, @code{dlclose}
+
+commit 145b5886379c8de4f0a1bca3556a4c3d7b6c24b2
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Wed Jul 24 13:42:16 2024 +0200
+
+    Fix version number in NEWS file
+
+diff --git a/NEWS b/NEWS
+index 4d7100b21c..6b62f55658 100644
+--- a/NEWS
++++ b/NEWS
+@@ -5,7 +5,7 @@ See the end for copying conditions.
+ Please send GNU C library bug reports via <https://sourceware.org/bugzilla/>
+ using `glibc' in the "product" field.
+ 
+-Version 2.41
++Version 2.40.1
+ 
+ The following bugs are resolved with this release:
+ 
+
+commit 2aebac5e158277d852b87b0cbd4af2b2d10ac387
+Author: Miguel Martín <mmartinv@redhat.com>
+Date:   Tue Jul 16 17:14:56 2024 +0200
+
+    malloc: avoid global locks in tst-aligned_alloc-lib.c
+    
+    Make sure the DSO used by aligned_alloc/calloc/malloc tests does not get
+    a global lock on multithreaded tests.
+    Reviewed-by: Arjun Shankar <arjun@redhat.com>
+    
+    (cherry picked from commit 9a27b566b2048f599048f2f4afe1cce06c4ef43d)
+
+diff --git a/malloc/tst-aligned_alloc-lib.c b/malloc/tst-aligned_alloc-lib.c
+index 0205df5acf..9ef1f839c1 100644
+--- a/malloc/tst-aligned_alloc-lib.c
++++ b/malloc/tst-aligned_alloc-lib.c
+@@ -17,37 +17,38 @@
+    License along with the GNU C Library; see the file COPYING.LIB.  If
+    not, see <https://www.gnu.org/licenses/>.  */
+ 
+-#include <array_length.h>
+ #include <libc-symbols.h>
+ #include <stdlib.h>
++#include <time.h>
+ 
+ extern void *__libc_malloc (size_t size);
+ extern void *__libc_calloc (size_t n, size_t size);
+ 
++__thread unsigned int seed = 0;
++
+ int aligned_alloc_count = 0;
+ int libc_malloc_count = 0;
+ int libc_calloc_count = 0;
+ 
+-/* Get a random alignment value.  Biased towards the smaller values.  Must be
+-   a power of 2. */
+-static size_t get_random_alignment (void)
+-{
+-  size_t aligns[] = {
+-    1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384
+-  };
+-
+-  return aligns[random () % array_length (aligns)];
+-}
+-
+-static void *get_random_alloc (size_t size)
++static void *
++get_random_alloc (size_t size)
+ {
+   void *retval;
+   size_t align;
++  struct timespec tp;
++
++  if (seed == 0)
++    {
++      clock_gettime (CLOCK_REALTIME, &tp);
++      seed = tp.tv_nsec;
++    }
+ 
+-  switch (random() % 3)
+-  {
++  switch (rand_r (&seed) % 3)
++    {
+     case 1:
+-      align = get_random_alignment ();
++      /* Get a random alignment value.  Biased towards the smaller
++       * values up to 16384. Must be a power of 2. */
++      align = 1 << rand_r (&seed) % 15;
+       retval = aligned_alloc (align, size);
+       aligned_alloc_count++;
+       break;
+@@ -59,13 +60,13 @@ static void *get_random_alloc (size_t size)
+       retval = __libc_malloc (size);
+       libc_malloc_count++;
+       break;
+-  }
++    }
+ 
+   return retval;
+ }
+ 
+-
+-void * __random_malloc (size_t size)
++void *
++__random_malloc (size_t size)
+ {
+   return get_random_alloc (size);
+ }
+
+commit 5d2a931a8167a288374c3a38dc10fe0492ab5ffe
+Author: Miguel Martín <mmartinv@redhat.com>
+Date:   Tue Jul 16 17:14:57 2024 +0200
+
+    malloc: add multi-threaded tests for aligned_alloc/calloc/malloc
+    
+    Improve aligned_alloc/calloc/malloc test coverage by adding
+    multi-threaded tests with random memory allocations and with/without
+    cross-thread memory deallocations.
+    
+    Perform a number of memory allocation calls with random sizes limited
+    to 0xffff.
+    
+    Use the existing DSO ('malloc/tst-aligned_alloc-lib.c') to randomize
+    allocator selection.
+    
+    The multi-threaded allocation/deallocation is staged as described below:
+    
+    - Stage 1: Half of the threads will be allocating memory and the
+      other half will be waiting for them to finish the allocation.
+    - Stage 2: Half of the threads will be allocating memory and the
+      other half will be deallocating memory.
+    - Stage 3: Half of the threads will be deallocating memory and the
+      second half waiting on them to finish.
+    
+    Add 'malloc/tst-aligned-alloc-random-thread.c' where each thread will
+    deallocate only the memory that was previously allocated by itself.
+    
+    Add 'malloc/tst-aligned-alloc-random-thread-cross.c' where each thread
+    will deallocate memory that was previously allocated by another thread.
+    
+    The intention is to be able to utilize existing malloc testing to ensure
+    that similar allocation APIs are also exposed to the same rigors.
+    Reviewed-by: Arjun Shankar <arjun@redhat.com>
+    
+    (cherry picked from commit b0fbcb7d0051a68baf26b2aed51a8a31c34d68e5)
+
+diff --git a/malloc/Makefile b/malloc/Makefile
+index 02aff1bd1d..98d507a6eb 100644
+--- a/malloc/Makefile
++++ b/malloc/Makefile
+@@ -28,6 +28,8 @@ tests := \
+   mallocbug \
+   tst-aligned-alloc \
+   tst-aligned-alloc-random \
++  tst-aligned-alloc-random-thread \
++  tst-aligned-alloc-random-thread-cross \
+   tst-alloc_buffer \
+   tst-calloc \
+   tst-free-errno \
+@@ -151,6 +153,8 @@ ifeq ($(have-GLIBC_2.23)$(build-shared),yesyes)
+ # the tests expect specific internal behavior that is changed due to linking to
+ # libmcheck.a.
+ tests-exclude-mcheck = \
++  tst-aligned-alloc-random-thread \
++  tst-aligned-alloc-random-thread-cross \
+   tst-compathooks-off \
+   tst-compathooks-on \
+   tst-malloc-backtrace \
+@@ -415,7 +419,11 @@ $(objpfx)tst-mallocstate: $(objpfx)libc_malloc_debug.so
+ $(objpfx)tst-mallocstate-malloc-check: $(objpfx)libc_malloc_debug.so
+ 
+ $(objpfx)tst-aligned-alloc-random.out: $(objpfx)tst-aligned_alloc-lib.so
++$(objpfx)tst-aligned-alloc-random-thread.out: $(objpfx)tst-aligned_alloc-lib.so
++$(objpfx)tst-aligned-alloc-random-thread-cross.out: $(objpfx)tst-aligned_alloc-lib.so
+ $(objpfx)tst-malloc-random.out: $(objpfx)tst-aligned_alloc-lib.so
+ 
+ tst-aligned-alloc-random-ENV = LD_PRELOAD=$(objpfx)tst-aligned_alloc-lib.so
++tst-aligned-alloc-random-thread-ENV = LD_PRELOAD=$(objpfx)tst-aligned_alloc-lib.so
++tst-aligned-alloc-random-thread-cross-ENV = LD_PRELOAD=$(objpfx)tst-aligned_alloc-lib.so
+ tst-malloc-random-ENV = LD_PRELOAD=$(objpfx)tst-aligned_alloc-lib.so
+diff --git a/malloc/tst-aligned-alloc-random-thread-cross.c b/malloc/tst-aligned-alloc-random-thread-cross.c
+new file mode 100644
+index 0000000000..360ecc56ee
+--- /dev/null
++++ b/malloc/tst-aligned-alloc-random-thread-cross.c
+@@ -0,0 +1,19 @@
++/* multi-threaded memory allocation and cross-thread deallocation test.
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public License as
++   published by the Free Software Foundation; either version 2.1 of the
++   License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; see the file COPYING.LIB.  If
++   not, see <https://www.gnu.org/licenses/>.  */
++#define CROSS_THREAD_DEALLOC
++#include "tst-aligned-alloc-random-thread.c"
+diff --git a/malloc/tst-aligned-alloc-random-thread.c b/malloc/tst-aligned-alloc-random-thread.c
+new file mode 100644
+index 0000000000..e95f79250a
+--- /dev/null
++++ b/malloc/tst-aligned-alloc-random-thread.c
+@@ -0,0 +1,145 @@
++/* multi-threaded memory allocation/deallocation test.
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public License as
++   published by the Free Software Foundation; either version 2.1 of the
++   License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; see the file COPYING.LIB.  If
++   not, see <https://www.gnu.org/licenses/>.  */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <support/check.h>
++#include <support/support.h>
++#include <support/xthread.h>
++#include <support/test-driver.h>
++#include <sys/sysinfo.h>
++#include <unistd.h>
++
++#ifndef ITERATIONS
++#  define ITERATIONS 16
++#endif
++
++#ifndef NUM_THREADS
++#  define NUM_THREADS 8
++#endif
++
++#ifndef NUM_ALLOCATIONS
++#  define NUM_ALLOCATIONS 2048
++#endif
++
++static pthread_barrier_t barrier;
++
++__thread unsigned int seed;
++
++typedef struct
++{
++  int id;
++  pthread_t thread;
++} thread;
++
++thread threads[NUM_THREADS];
++
++void *allocations[NUM_THREADS][NUM_ALLOCATIONS];
++
++void
++run_thread_dealloc (int id)
++{
++  for (int i = 0; i < NUM_ALLOCATIONS; i++)
++    {
++      free (allocations[id][i]);
++      allocations[id][i] = NULL;
++    }
++}
++
++void
++run_thread_alloc (int id)
++{
++  size_t msb, size;
++  for (int i = 0; i < NUM_ALLOCATIONS; i++)
++    {
++      msb = 1 << rand_r (&seed) % 16;
++      size = msb + rand_r (&seed) % msb;
++      allocations[id][i] = malloc (size);
++      TEST_VERIFY_EXIT (allocations[id][i] != NULL);
++    }
++}
++
++void *
++run_allocations (void *arg)
++{
++  int id = *((int *) arg);
++  seed = time (NULL) + id;
++
++  /* Stage 1: First half o the threads allocating memory and the second
++   * half waiting for them to finish
++   */
++  if (id < NUM_THREADS / 2)
++    run_thread_alloc (id);
++
++  xpthread_barrier_wait (&barrier);
++
++  /* Stage 2: Half of the threads allocationg memory and the other
++   * half deallocating:
++   * - In the non cross-thread dealloc scenario the first half will be
++   *   deallocating the memory allocated by themselves in stage 1 and the
++   *   second half will be allocating memory.
++   * - In the cross-thread dealloc scenario the first half will continue
++   *   to allocate memory and the second half will deallocate the memory
++   *   allocated by the first half in stage 1.
++   */
++  if (id < NUM_THREADS / 2)
++#ifndef CROSS_THREAD_DEALLOC
++    run_thread_dealloc (id);
++#else
++    run_thread_alloc (id + NUM_THREADS / 2);
++#endif
++  else
++#ifndef CROSS_THREAD_DEALLOC
++    run_thread_alloc (id);
++#else
++    run_thread_dealloc (id - NUM_THREADS / 2);
++#endif
++
++  xpthread_barrier_wait (&barrier);
++
++  // Stage 3: Second half of the threads deallocating and the first half
++  // waiting for them to finish.
++  if (id >= NUM_THREADS / 2)
++    run_thread_dealloc (id);
++
++  return NULL;
++}
++
++static int
++do_test (void)
++{
++  xpthread_barrier_init (&barrier, NULL, NUM_THREADS);
++
++  for (int i = 0; i < ITERATIONS; i++)
++    {
++      for (int t = 0; t < NUM_THREADS; t++)
++	{
++	  threads[t].id = t;
++	  threads[t].thread
++	      = xpthread_create (NULL, run_allocations, &threads[t].id);
++	}
++
++      for (int t = 0; t < NUM_THREADS; t++)
++	xpthread_join (threads[t].thread);
++    }
++
++  return 0;
++}
++
++#include <support/test-driver.c>
+
+commit 65fbcfe58991194301a7e4fb9c53ab936573e711
+Author: Arjun Shankar <arjun@redhat.com>
+Date:   Mon Jul 29 14:30:59 2024 +0200
+
+    manual/stdio: Clarify putc and putwc
+    
+    The manual entry for `putc' described what "most systems" do instead of
+    describing the glibc implementation and its guarantees.  This commit
+    fixes that by warning that putc may be implemented as a macro that
+    double-evaluates `stream', and removing the performance claim.
+    
+    Even though the current `putc' implementation does not double-evaluate
+    `stream', offering this obscure guarantee as an extension to what
+    POSIX allows does not seem very useful.
+    
+    The entry for `putwc' is also edited to bring it in line with `putc'.
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    
+    (cherry picked from commit 10de4a47ef3f481592e3c62eb07bcda23e9fde4d)
+
+diff --git a/manual/stdio.texi b/manual/stdio.texi
+index f5e289d58a..f9529a098d 100644
+--- a/manual/stdio.texi
++++ b/manual/stdio.texi
+@@ -903,21 +903,21 @@ This function is a GNU extension.
+ @deftypefun int putc (int @var{c}, FILE *@var{stream})
+ @standards{ISO, stdio.h}
+ @safety{@prelim{}@mtsafe{}@asunsafe{@asucorrupt{}}@acunsafe{@acucorrupt{} @aculock{}}}
+-This is just like @code{fputc}, except that most systems implement it as
++This is just like @code{fputc}, except that it may be implemented as
+ a macro, making it faster.  One consequence is that it may evaluate the
+ @var{stream} argument more than once, which is an exception to the
+-general rule for macros.  @code{putc} is usually the best function to
+-use for writing a single character.
++general rule for macros.  Therefore, @var{stream} should never be an
++expression with side-effects.
+ @end deftypefun
+ 
+ @deftypefun wint_t putwc (wchar_t @var{wc}, FILE *@var{stream})
+ @standards{ISO, wchar.h}
+ @safety{@prelim{}@mtsafe{}@asunsafe{@asucorrupt{}}@acunsafe{@acucorrupt{} @aculock{}}}
+-This is just like @code{fputwc}, except that it can be implement as
++This is just like @code{fputwc}, except that it may be implemented as
+ a macro, making it faster.  One consequence is that it may evaluate the
+ @var{stream} argument more than once, which is an exception to the
+-general rule for macros.  @code{putwc} is usually the best function to
+-use for writing a single wide character.
++general rule for macros.  Therefore, @var{stream} should never be an
++expression with side-effects.
+ @end deftypefun
+ 
+ @deftypefun int putc_unlocked (int @var{c}, FILE *@var{stream})
+
+commit 132a72f93cb4ad9f16b8469dc061de5f75f6a44e
+Author: Lukas Bulwahn <lukas.bulwahn@redhat.com>
+Date:   Mon Jul 29 11:08:17 2024 +0200
+
+    manual: make setrlimit() description less ambiguous
+    
+    The existing description for setrlimit() has some ambiguity. It could be
+    understood to have the semantics of getrlimit(), i.e., the limits from the
+    process are stored in the provided rlp pointer.
+    
+    Make the description more explicit that rlp are the input values, and that
+    the limits of the process is changed with this function.
+    
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    (cherry picked from commit aedbf08891069fc029ed021e4dba933eb877b394)
+
+diff --git a/manual/resource.texi b/manual/resource.texi
+index c9b21dedeb..25966bcb64 100644
+--- a/manual/resource.texi
++++ b/manual/resource.texi
+@@ -192,8 +192,8 @@ If the sources are compiled with @code{_FILE_OFFSET_BITS == 64} on a
+ @standards{BSD, sys/resource.h}
+ @safety{@prelim{}@mtsafe{}@assafe{}@acsafe{}}
+ @c Direct syscall on most systems; lock-taking critical section on HURD.
+-Store the current and maximum limits for the resource @var{resource}
+-in @code{*@var{rlp}}.
++Change the current and maximum limits of the process for the resource
++@var{resource} to the values provided in @code{*@var{rlp}}.
+ 
+ The return value is @code{0} on success and @code{-1} on failure.  The
+ following @code{errno} error condition is possible:
+
+commit 509166c9a53ad81217a28cc67ba2a688f02fc477
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Wed Jun 26 11:27:54 2024 +0200
+
+    Enhance test coverage for strnlen, wcsnlen
+    
+    This commit adds string/test-strnlen-nonarray and
+    wcsmbs/test-wcsnlen-nonarray.
+    
+    Reviewed-by: Noah Goldstein <goldstein.w.n@gmail.com>
+    (cherry picked from commit 783d4c0b81889c39a9ddf13b60d0fde4040fb1c0)
+
+diff --git a/string/Makefile b/string/Makefile
+index 8f31fa49e6..2e20fc00fd 100644
+--- a/string/Makefile
++++ b/string/Makefile
+@@ -184,6 +184,7 @@ tests := \
+   test-strncpy \
+   test-strndup \
+   test-strnlen \
++  test-strnlen-nonarray \
+   test-strpbrk \
+   test-strrchr \
+   test-strspn \
+diff --git a/string/test-Xnlen-nonarray.c b/string/test-Xnlen-nonarray.c
+new file mode 100644
+index 0000000000..499bef2041
+--- /dev/null
++++ b/string/test-Xnlen-nonarray.c
+@@ -0,0 +1,133 @@
++/* Test non-array inputs to string length functions.
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++/* This skeleton file is included from string/test-strnlen-nonarray.c
++   and wcsmbs/test-wcsnlen-nonarray.c to test that reading of the array
++   stops at the first null character.
++
++   TEST_IDENTIFIER must be the test function identifier.  TEST_NAME is
++   the same as a string.
++
++   CHAR must be defined as the character type.  */
++
++#include <array_length.h>
++#include <string.h>
++#include <support/check.h>
++#include <support/next_to_fault.h>
++#include <support/test-driver.h>
++#include <sys/param.h>
++#include <unistd.h>
++
++typedef __typeof (TEST_IDENTIFIER) *proto_t;
++
++#define TEST_MAIN
++#include "test-string.h"
++
++IMPL (TEST_IDENTIFIER, 1)
++
++static int
++test_main (void)
++{
++  enum { buffer_length = 256 };
++  TEST_VERIFY_EXIT (sysconf (_SC_PAGESIZE) >= buffer_length);
++
++  test_init ();
++
++  /* Buffer layout: There are a_count 'A' character followed by
++     zero_count null character, for a total of buffer_length
++     character:
++
++     AAAAA...AAAAA 00000 ... 00000 (unmapped page follows)
++     \           / \             /
++       (a_count)     (zero_count)
++       \___ (buffer_length) ___/
++          ^
++          |
++          start_offset
++
++    The buffer length does not change, but a_count (and thus _zero)
++    and start_offset vary.
++
++    If start_offset == buffer_length, only 0 is a valid length
++    argument.  The result is 0.
++
++    Otherwwise, if zero_count > 0 (if there a null characters in the
++    buffer), then any length argument is valid.  If start_offset <
++    a_count (i.e., there is a non-null character at start_offset), the
++    result is the minimum of a_count - start_offset and the length
++    argument.  Otherwise the result is 0.
++
++    Otherwise, there are no null characters before the unmapped page.
++    The length argument must not be greater than buffer_length -
++    start_offset, and the result is the length argument.  */
++
++  struct support_next_to_fault ntf
++    = support_next_to_fault_allocate (buffer_length * sizeof (CHAR));
++  CHAR *buffer = (CHAR *) ntf.buffer;
++
++  FOR_EACH_IMPL (impl, 0)
++    {
++      printf ("info: testing %s\n", impl->name);
++      for (size_t i = 0; i < buffer_length; ++i)
++        buffer[i] = 'A';
++
++      for (int zero_count = 0; zero_count <= buffer_length; ++zero_count)
++        {
++          if (zero_count > 0)
++            buffer[buffer_length - zero_count] = 0;
++          int a_count = buffer_length - zero_count;
++          for (int start_offset = 0; start_offset <= buffer_length;
++               ++start_offset)
++            {
++              CHAR *start_pointer = buffer + start_offset;
++              if (start_offset == buffer_length)
++                TEST_COMPARE (CALL (impl, buffer + start_offset, 0), 0);
++              else if (zero_count > 0)
++                for (int length_argument = 0;
++                     length_argument <= 2 * buffer_length;
++                     ++length_argument)
++                  {
++                    if (test_verbose)
++                      printf ("zero_count=%d a_count=%d start_offset=%d"
++                              " length_argument=%d\n",
++                              zero_count, a_count, start_offset,
++                              length_argument);
++                    if (start_offset < a_count)
++                      TEST_COMPARE (CALL (impl, start_pointer, length_argument),
++                                    MIN (a_count - start_offset,
++                                         length_argument));
++                    else
++                      TEST_COMPARE (CALL (impl, start_pointer, length_argument),
++                                    0);
++                  }
++              else
++                for (int length_argument = 0;
++                     length_argument <= buffer_length - start_offset;
++                     ++length_argument)
++                  TEST_COMPARE (CALL (impl, start_pointer, length_argument),
++                                length_argument);
++            }
++        }
++    }
++
++  support_next_to_fault_free (&ntf);
++
++  return 0;
++}
++
++#include <support/test-driver.c>
+diff --git a/string/test-strnlen-nonarray.c b/string/test-strnlen-nonarray.c
+new file mode 100644
+index 0000000000..0ad05756d9
+--- /dev/null
++++ b/string/test-strnlen-nonarray.c
+@@ -0,0 +1,4 @@
++#define TEST_IDENTIFIER strnlen
++#define TEST_NAME "strnlen"
++typedef char CHAR;
++#include "test-Xnlen-nonarray.c"
+diff --git a/wcsmbs/Makefile b/wcsmbs/Makefile
+index 1cddd8cc6d..c51c9b4f1f 100644
+--- a/wcsmbs/Makefile
++++ b/wcsmbs/Makefile
+@@ -160,6 +160,7 @@ tests := \
+   test-wcsncmp \
+   test-wcsncpy \
+   test-wcsnlen \
++  test-wcsnlen-nonarray \
+   test-wcspbrk \
+   test-wcsrchr \
+   test-wcsspn \
+diff --git a/wcsmbs/test-wcsnlen-nonarray.c b/wcsmbs/test-wcsnlen-nonarray.c
+new file mode 100644
+index 0000000000..a4b21fecd3
+--- /dev/null
++++ b/wcsmbs/test-wcsnlen-nonarray.c
+@@ -0,0 +1,5 @@
++#include <wchar.h>
++#define TEST_IDENTIFIER wcsnlen
++#define TEST_NAME "wcsnlen"
++typedef wchar_t CHAR;
++#include "../string/test-Xnlen-nonarray.c"
+
+commit 46f19b234244f4654b9e3898ac1c27de86068222
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Thu Jun 27 16:26:56 2024 +0200
+
+    Enhanced test coverage for strncmp, wcsncmp
+    
+    Add string/test-strncmp-nonarray and
+    wcsmbs/test-wcsncmp-nonarray.
+    
+    This is the test that uncovered bug 31934.  Test run time
+    is more than one minute on a fairly current system, so turn
+    these into xtests that do not run automatically.
+    
+    Reviewed-by: Noah Goldstein <goldstein.w.n@gmail.com>
+    (cherry picked from commit 54252394c25ddf0062e288d4a6ab7a885f8ae009)
+
+diff --git a/string/Makefile b/string/Makefile
+index 2e20fc00fd..1dff405c27 100644
+--- a/string/Makefile
++++ b/string/Makefile
+@@ -236,7 +236,10 @@ tests-unsupported += $(tests-translation)
+ endif
+ 
+ # This test allocates a lot of memory and can run for a long time.
+-xtests = tst-strcoll-overflow
++xtests += tst-strcoll-overflow
++
++# This test runs for a long time.
++xtests += test-strncmp-nonarray
+ 
+ # This test needs libdl.
+ ifeq (yes,$(build-shared))
+diff --git a/string/test-Xncmp-nonarray.c b/string/test-Xncmp-nonarray.c
+new file mode 100644
+index 0000000000..9f3a3ca75d
+--- /dev/null
++++ b/string/test-Xncmp-nonarray.c
+@@ -0,0 +1,183 @@
++/* Test non-array inputs to string comparison functions.
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++/* This skeleton file is included from string/test-strncmp-nonarray.c and
++   wcsmbs/test-wcsncmp-nonarray.c to test that reading of the arrays stops
++   at the first null character.
++
++   TEST_IDENTIFIER must be the test function identifier.  TEST_NAME is
++   the same as a string.
++
++   CHAR must be defined as the character type.  */
++
++#include <array_length.h>
++#include <string.h>
++#include <support/check.h>
++#include <support/next_to_fault.h>
++#include <support/test-driver.h>
++#include <sys/param.h>
++#include <unistd.h>
++
++/* Much shorter than test-Xnlen-nonarray.c because of deeply nested loops.  */
++enum { buffer_length = 80 };
++
++/* The test buffer layout follows what is described test-Xnlen-nonarray.c,
++   except that there two buffers, left and right.  The variables
++   a_count, zero_count, start_offset are all duplicated.  */
++
++/* Return the maximum string length for a string that starts at
++   start_offset.  */
++static int
++string_length (int a_count, int start_offset)
++{
++  if (start_offset == buffer_length || start_offset >= a_count)
++    return 0;
++  else
++    return a_count - start_offset;
++}
++
++/* This is the valid maximum length argument computation for
++   strnlen/wcsnlen.  See text-Xnlen-nonarray.c.  */
++static int
++maximum_length (int start_offset, int zero_count)
++{
++  if (start_offset == buffer_length)
++    return 0;
++  else if (zero_count > 0)
++    /* Effectively unbounded, but we need to stop fairly low,
++       otherwise testing takes too long.  */
++    return buffer_length + 32;
++  else
++    return buffer_length - start_offset;
++}
++
++typedef __typeof (TEST_IDENTIFIER) *proto_t;
++
++#define TEST_MAIN
++#include "test-string.h"
++
++IMPL (TEST_IDENTIFIER, 1)
++
++static int
++test_main (void)
++{
++  TEST_VERIFY_EXIT (sysconf (_SC_PAGESIZE) >= buffer_length);
++  test_init ();
++
++  struct support_next_to_fault left_ntf
++    = support_next_to_fault_allocate (buffer_length * sizeof (CHAR));
++  CHAR *left_buffer = (CHAR *) left_ntf.buffer;
++  struct support_next_to_fault right_ntf
++    = support_next_to_fault_allocate (buffer_length * sizeof (CHAR));
++  CHAR *right_buffer = (CHAR *) right_ntf.buffer;
++
++  FOR_EACH_IMPL (impl, 0)
++    {
++      printf ("info: testing %s\n", impl->name);
++      for (size_t i = 0; i < buffer_length; ++i)
++        left_buffer[i] = 'A';
++
++      for (int left_zero_count = 0; left_zero_count <= buffer_length;
++           ++left_zero_count)
++        {
++          if (left_zero_count > 0)
++            left_buffer[buffer_length - left_zero_count] = 0;
++          int left_a_count = buffer_length - left_zero_count;
++          for (size_t i = 0; i < buffer_length; ++i)
++            right_buffer[i] = 'A';
++          for (int right_zero_count = 0; right_zero_count <= buffer_length;
++               ++right_zero_count)
++            {
++              if (right_zero_count > 0)
++                right_buffer[buffer_length - right_zero_count] = 0;
++              int right_a_count = buffer_length - right_zero_count;
++              for (int left_start_offset = 0;
++                   left_start_offset <= buffer_length;
++                   ++left_start_offset)
++                {
++                  CHAR *left_start_pointer = left_buffer + left_start_offset;
++                  int left_maxlen
++                    = maximum_length (left_start_offset, left_zero_count);
++                  int left_length
++                    = string_length (left_a_count, left_start_offset);
++                  for (int right_start_offset = 0;
++                       right_start_offset <= buffer_length;
++                       ++right_start_offset)
++                    {
++                      CHAR *right_start_pointer
++                        = right_buffer + right_start_offset;
++                      int right_maxlen
++                        = maximum_length (right_start_offset, right_zero_count);
++                      int right_length
++                        = string_length (right_a_count, right_start_offset);
++
++                      /* Maximum length is modelled after strnlen/wcsnlen,
++                         and must be valid for both pointer arguments at
++                         the same time.  */
++                      int maxlen = MIN (left_maxlen, right_maxlen);
++
++                      for (int length_argument = 0; length_argument <= maxlen;
++                           ++length_argument)
++                        {
++                          if (test_verbose)
++                            {
++                              printf ("left: zero_count=%d"
++                                      " a_count=%d start_offset=%d\n",
++                                      left_zero_count, left_a_count,
++                                      left_start_offset);
++                              printf ("right: zero_count=%d"
++                                      " a_count=%d start_offset=%d\n",
++                                      right_zero_count, right_a_count,
++                                      right_start_offset);
++                              printf ("length argument: %d\n",
++                                      length_argument);
++                            }
++
++                          /* Effective lengths bounded by length argument.
++                             The effective length determines the
++                             outcome of the comparison.  */
++                          int left_effective
++                            = MIN (left_length, length_argument);
++                          int right_effective
++                            = MIN (right_length, length_argument);
++                          if (left_effective == right_effective)
++                            TEST_COMPARE (CALL (impl,
++                                                left_start_pointer,
++                                                right_start_pointer,
++                                                length_argument), 0);
++                          else if (left_effective < right_effective)
++                            TEST_COMPARE (CALL (impl,
++                                                left_start_pointer,
++                                                right_start_pointer,
++                                                length_argument) < 0, 1);
++                          else
++                            TEST_COMPARE (CALL (impl,
++                                                left_start_pointer,
++                                                right_start_pointer,
++                                                length_argument) > 0, 1);
++                        }
++                    }
++                }
++            }
++        }
++    }
++
++  return 0;
++}
++
++#include <support/test-driver.c>
+diff --git a/string/test-strncmp-nonarray.c b/string/test-strncmp-nonarray.c
+new file mode 100644
+index 0000000000..581e52d01b
+--- /dev/null
++++ b/string/test-strncmp-nonarray.c
+@@ -0,0 +1,4 @@
++#define TEST_IDENTIFIER strncmp
++#define TEST_NAME "strncmp"
++typedef char CHAR;
++#include "test-Xncmp-nonarray.c"
+diff --git a/wcsmbs/Makefile b/wcsmbs/Makefile
+index c51c9b4f1f..63adf0e8ef 100644
+--- a/wcsmbs/Makefile
++++ b/wcsmbs/Makefile
+@@ -206,6 +206,10 @@ tests := \
+   wcsmbs-tst1 \
+   # tests
+ 
++# This test runs for a long time.
++xtests += test-wcsncmp-nonarray
++
++
+ include ../Rules
+ 
+ ifeq ($(run-built-tests),yes)
+diff --git a/wcsmbs/test-wcsncmp-nonarray.c b/wcsmbs/test-wcsncmp-nonarray.c
+new file mode 100644
+index 0000000000..1ad9ebd8fd
+--- /dev/null
++++ b/wcsmbs/test-wcsncmp-nonarray.c
+@@ -0,0 +1,5 @@
++#include <wchar.h>
++#define TEST_IDENTIFIER wcsncmp
++#define TEST_NAME "wcsncmp"
++typedef wchar_t CHAR;
++#include "../string/test-Xncmp-nonarray.c"
+
+commit 3433a358428bcec2d203fa408b85f442c9a465ca
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Wed Jul 24 14:05:13 2024 -0700
+
+    linux: Update the mremap C implementation [BZ #31968]
+    
+    Update the mremap C implementation to support the optional argument for
+    MREMAP_DONTUNMAP added in Linux 5.7 since it may not always be correct
+    to implement a variadic function as a non-variadic function on all Linux
+    targets.  Return MAP_FAILED and set errno to EINVAL for unknown flag bits.
+    This fixes BZ #31968.
+    
+    Note: A test must be added when a new flag bit is introduced.
+    
+    Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 6c40cb0e9f893d49dc7caee580a055de53562206)
+
+diff --git a/NEWS b/NEWS
+index 6b62f55658..5948704ef9 100644
+--- a/NEWS
++++ b/NEWS
+@@ -11,6 +11,7 @@ The following bugs are resolved with this release:
+ 
+   [30081] resolv: Do not wait for non-existing second DNS response after error
+   [31890] resolv: Allow short error responses to match any DNS query
++  [31968] mremap implementation in C does not handle arguments correctly
+ 
+ Version 2.40
+ 
+diff --git a/sysdeps/unix/sysv/linux/mremap.c b/sysdeps/unix/sysv/linux/mremap.c
+index 4f770799c4..1ada5c1f40 100644
+--- a/sysdeps/unix/sysv/linux/mremap.c
++++ b/sysdeps/unix/sysv/linux/mremap.c
+@@ -20,6 +20,12 @@
+ #include <sysdep.h>
+ #include <stdarg.h>
+ #include <stddef.h>
++#include <errno.h>
++
++#define MREMAP_KNOWN_BITS \
++  (MREMAP_MAYMOVE \
++   | MREMAP_FIXED \
++   | MREMAP_DONTUNMAP)
+ 
+ void *
+ __mremap (void *addr, size_t old_len, size_t new_len, int flags, ...)
+@@ -27,7 +33,13 @@ __mremap (void *addr, size_t old_len, size_t new_len, int flags, ...)
+   va_list va;
+   void *new_addr = NULL;
+ 
+-  if (flags & MREMAP_FIXED)
++  if (flags & ~(MREMAP_KNOWN_BITS))
++    {
++      __set_errno (EINVAL);
++      return MAP_FAILED;
++    }
++
++  if (flags & (MREMAP_FIXED | MREMAP_DONTUNMAP))
+     {
+       va_start (va, flags);
+       new_addr = va_arg (va, void *);
+
+commit 2eb2d78ca75d7432bd1d11d227f4c899554ea02e
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Wed Jul 24 14:05:14 2024 -0700
+
+    mremap: Update manual entry
+    
+    Update mremap manual entry:
+    
+    1. Change mremap to variadic.
+    2. Document MREMAP_FIXED and MREMAP_DONTUNMAP.
+    
+    Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit cb2dee4eccf46642eef588bee64f9c875c408f1c)
+
+diff --git a/NEWS b/NEWS
+index 5948704ef9..8da0408ad9 100644
+--- a/NEWS
++++ b/NEWS
+@@ -10,6 +10,7 @@ Version 2.40.1
+ The following bugs are resolved with this release:
+ 
+   [30081] resolv: Do not wait for non-existing second DNS response after error
++  [31968] mremap implementation in C does not handle arguments correctly
+   [31890] resolv: Allow short error responses to match any DNS query
+   [31968] mremap implementation in C does not handle arguments correctly
+ 
+diff --git a/manual/llio.texi b/manual/llio.texi
+index 6f0a48609b..ea84196abd 100644
+--- a/manual/llio.texi
++++ b/manual/llio.texi
+@@ -1892,7 +1892,7 @@ There is no existing mapping in at least part of the given region.
+ 
+ @end deftypefun
+ 
+-@deftypefun {void *} mremap (void *@var{address}, size_t @var{length}, size_t @var{new_length}, int @var{flag})
++@deftypefun {void *} mremap (void *@var{address}, size_t @var{length}, size_t @var{new_length}, int @var{flag}, ... /* void *@var{new_address} */)
+ @standards{GNU, sys/mman.h}
+ @safety{@prelim{}@mtsafe{}@assafe{}@acsafe{}}
+ 
+@@ -1901,12 +1901,40 @@ area. @var{address} and @var{length} must cover a region entirely mapped
+ in the same @code{mmap} statement.  A new mapping with the same
+ characteristics will be returned with the length @var{new_length}.
+ 
+-One option is possible, @code{MREMAP_MAYMOVE}.  If it is given in
+-@var{flags}, the system may remove the existing mapping and create a new
+-one of the desired length in another location.
++Possible flags are
+ 
+-The address of the resulting mapping is returned, or @math{-1}.  Possible
+-error codes include:
++@table @code
++
++@item MREMAP_MAYMOVE
++If it is given in @var{flags}, the system may remove the existing mapping
++and create a new one of the desired length in another location.
++
++@item MREMAP_FIXED
++If it is given in @var{flags}, @code{mremap} accepts a fifth argument,
++@code{void *new_address}, which specifies a page-aligned address to
++which the mapping must be moved.  Any previous mapping at the address
++range specified by @var{new_address} and @var{new_size} is unmapped.
++
++@code{MREMAP_FIXED} must be used together with @code{MREMAP_MAYMOVE}.
++
++@item MREMAP_DONTUNMAP
++If it is given in @var{flags}, @code{mremap} accepts a fifth argument,
++@code{void *new_address}, which specifies a page-aligned address.  Any
++previous mapping at the address range specified by @var{new_address} and
++@var{new_size} is unmapped.  If @var{new_address} is @code{NULL}, the
++kernel chooses the page-aligned address at which to create the mapping.
++Otherwise, the kernel takes it as a hint about where to place the mapping.
++The mapping at the address range specified by @var{old_address} and
++@var{old_size} isn't unmapped.
++
++@code{MREMAP_DONTUNMAP} must be used together with @code{MREMAP_MAYMOVE}.
++@var{old_size} must be the same as @var{new_size}.  This flag bit is
++Linux-specific.
++
++@end table
++
++The address of the resulting mapping is returned, or @code{MAP_FAILED}.
++Possible error codes include:
+ 
+ @table @code
+ 
+@@ -1915,7 +1943,7 @@ There is no existing mapping in at least part of the original region, or
+ the region covers two or more distinct mappings.
+ 
+ @item EINVAL
+-The address given is misaligned or inappropriate.
++Any arguments are inappropriate, including unknown @var{flags} values.
+ 
+ @item EAGAIN
+ The region has pages locked, and if extended it would exceed the
+
+commit ca53bc68ab92ab413a7d53e951227d380a85ebd8
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Wed Jul 24 14:05:15 2024 -0700
+
+    Add mremap tests
+    
+    Add tests for MREMAP_MAYMOVE and MREMAP_FIXED.  On Linux, also test
+    MREMAP_DONTUNMAP.
+    
+    Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit ff0320bec2810192d453c579623482fab87bfa01)
+
+diff --git a/misc/Makefile b/misc/Makefile
+index 5d17c562fe..7b7f8351bf 100644
+--- a/misc/Makefile
++++ b/misc/Makefile
+@@ -257,6 +257,8 @@ tests := \
+   tst-mntent-blank-passno \
+   tst-mntent-escape \
+   tst-mntent2 \
++  tst-mremap1 \
++  tst-mremap2 \
+   tst-preadvwritev \
+   tst-preadvwritev2 \
+   tst-preadvwritev64 \
+diff --git a/misc/tst-mremap1.c b/misc/tst-mremap1.c
+new file mode 100644
+index 0000000000..0469991a6c
+--- /dev/null
++++ b/misc/tst-mremap1.c
+@@ -0,0 +1,46 @@
++/* Test mremap with MREMAP_MAYMOVE.
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <errno.h>
++#include <sys/mman.h>
++#include <support/xstdlib.h>
++#include <support/xunistd.h>
++#include <support/check.h>
++#include <support/test-driver.h>
++
++static int
++do_test (void)
++{
++  size_t old_size = getpagesize ();
++  char *old_addr = xmmap (NULL, old_size, PROT_READ | PROT_WRITE,
++			  MAP_PRIVATE | MAP_ANONYMOUS, -1);
++  old_addr[0] = 1;
++  old_addr[old_size - 1] = 2;
++
++  /* Test MREMAP_MAYMOVE.  */
++  size_t new_size = old_size + old_size;
++  char *new_addr = mremap (old_addr, old_size, new_size, MREMAP_MAYMOVE);
++  TEST_VERIFY_EXIT (new_addr != MAP_FAILED);
++  new_addr[0] = 1;
++  new_addr[new_size - 1] = 2;
++  xmunmap (new_addr, new_size);
++
++  return 0;
++}
++
++#include <support/test-driver.c>
+diff --git a/misc/tst-mremap2.c b/misc/tst-mremap2.c
+new file mode 100644
+index 0000000000..45be7f0369
+--- /dev/null
++++ b/misc/tst-mremap2.c
+@@ -0,0 +1,54 @@
++/* Test mremap with MREMAP_FIXED.
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <errno.h>
++#include <sys/mman.h>
++#include <support/xstdlib.h>
++#include <support/xunistd.h>
++#include <support/test-driver.h>
++#include <mremap-failure.h>
++
++static int
++do_test (void)
++{
++  size_t old_size = getpagesize ();
++  size_t new_size = old_size + old_size;
++  char *old_addr = xmmap (NULL, old_size, PROT_READ | PROT_WRITE,
++			  MAP_PRIVATE | MAP_ANONYMOUS, -1);
++  old_addr[0] = 1;
++  old_addr[old_size - 1] = 2;
++
++  char *fixed_addr = xmmap (NULL, new_size, PROT_READ | PROT_WRITE,
++			    MAP_PRIVATE | MAP_ANONYMOUS, -1);
++  fixed_addr[0] = 1;
++  fixed_addr[new_size - 1] = 2;
++
++  /* Test MREMAP_FIXED.  */
++  char *new_addr = mremap (old_addr, old_size, new_size,
++			   MREMAP_FIXED | MREMAP_MAYMOVE,
++			   fixed_addr);
++  if (new_addr == MAP_FAILED)
++    return mremap_failure_exit (errno);
++  new_addr[0] = 1;
++  new_addr[new_size - 1] = 2;
++  xmunmap (new_addr, new_size);
++
++  return 0;
++}
++
++#include <support/test-driver.c>
+diff --git a/sysdeps/generic/mremap-failure.h b/sysdeps/generic/mremap-failure.h
+new file mode 100644
+index 0000000000..bc0d476368
+--- /dev/null
++++ b/sysdeps/generic/mremap-failure.h
+@@ -0,0 +1,25 @@
++/* mremap failure handling.  Generic version.
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++/* Return exit value on mremap failure with errno ERR.  */
++
++static int
++mremap_failure_exit (int err)
++{
++  return EXIT_FAILURE;
++}
+diff --git a/sysdeps/unix/sysv/linux/Makefile b/sysdeps/unix/sysv/linux/Makefile
+index 097b5a26fc..59998c7af4 100644
+--- a/sysdeps/unix/sysv/linux/Makefile
++++ b/sysdeps/unix/sysv/linux/Makefile
+@@ -206,6 +206,7 @@ tests += \
+   tst-getauxval \
+   tst-gettid \
+   tst-gettid-kill \
++  tst-linux-mremap1 \
+   tst-memfd_create \
+   tst-misalign-clone \
+   tst-mlock2 \
+diff --git a/sysdeps/unix/sysv/linux/mremap-failure.h b/sysdeps/unix/sysv/linux/mremap-failure.h
+new file mode 100644
+index 0000000000..c99ab30ca9
+--- /dev/null
++++ b/sysdeps/unix/sysv/linux/mremap-failure.h
+@@ -0,0 +1,30 @@
++/* mremap failure handling.  Linux version.
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <support/check.h>
++
++/* Return exit value on mremap failure with errno ERR.  */
++
++static int
++mremap_failure_exit (int err)
++{
++  if (err != EINVAL)
++    return EXIT_FAILURE;
++
++  return EXIT_UNSUPPORTED;
++}
+diff --git a/sysdeps/unix/sysv/linux/tst-linux-mremap1.c b/sysdeps/unix/sysv/linux/tst-linux-mremap1.c
+new file mode 100644
+index 0000000000..408e8af2ab
+--- /dev/null
++++ b/sysdeps/unix/sysv/linux/tst-linux-mremap1.c
+@@ -0,0 +1,63 @@
++/* Test mremap with MREMAP_DONTUNMAP.
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <errno.h>
++#include <sys/mman.h>
++#include <support/xstdlib.h>
++#include <support/xunistd.h>
++#include <support/check.h>
++#include <support/test-driver.h>
++#include <mremap-failure.h>
++
++static int
++do_test (void)
++{
++  size_t old_size = getpagesize ();
++  size_t new_size = old_size;
++  char *old_addr = xmmap (NULL, old_size, PROT_READ | PROT_WRITE,
++			  MAP_PRIVATE | MAP_ANONYMOUS, -1);
++  old_addr[0] = 1;
++  old_addr[old_size - 1] = 2;
++
++  /* Create an available 64-page mmap region.  */
++  size_t fixed_size = old_size * 64;
++  char *fixed_addr = xmmap (NULL, fixed_size, PROT_READ | PROT_WRITE,
++			    MAP_PRIVATE | MAP_ANONYMOUS, -1);
++  xmunmap (fixed_addr, fixed_size);
++
++  /* Add 3 * pagesize.  */
++  fixed_size += 3 * old_size;
++
++  /* Test MREMAP_DONTUNMAP.  It should return FIXED_ADDR created above.  */
++  char *new_addr = mremap (old_addr, old_size, new_size,
++			   MREMAP_DONTUNMAP | MREMAP_MAYMOVE,
++			   fixed_addr);
++  if (new_addr == MAP_FAILED)
++    return mremap_failure_exit (errno);
++  TEST_VERIFY_EXIT (fixed_addr == new_addr);
++  old_addr[0] = 3;
++  old_addr[old_size - 1] = 4;
++  new_addr[0] = 1;
++  new_addr[new_size - 1] = 2;
++  xmunmap (new_addr, new_size);
++  xmunmap (old_addr, old_size);
++
++  return 0;
++}
++
++#include <support/test-driver.c>
+
+commit 928769737c8f0cbb51dfa2a02de0594c2395d802
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Thu Aug 1 10:46:10 2024 +0200
+
+    resolv: Fix tst-resolv-short-response for older GCC (bug 32042)
+    
+    Previous GCC versions do not support the C23 change that
+    allows labels on declarations.
+    
+    Reviewed-by: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+    (cherry picked from commit ec119972cb2598c04ec7d4219e20506006836f64)
+
+diff --git a/resolv/tst-resolv-short-response.c b/resolv/tst-resolv-short-response.c
+index be354ae1c7..9b06b0c176 100644
+--- a/resolv/tst-resolv-short-response.c
++++ b/resolv/tst-resolv-short-response.c
+@@ -33,8 +33,10 @@ response (const struct resolv_response_context *ctx,
+     {
+     case 0:
+       /* First server times out.  */
+-      struct resolv_response_flags flags = {.rcode = rcode};
+-      resolv_response_init (b, flags);
++      {
++        struct resolv_response_flags flags = {.rcode = rcode};
++        resolv_response_init (b, flags);
++      }
+       break;
+     case 1:
+       /* Second server sends reply.  */
+
+commit aa533d58ff12e27771d9c960a727d74992a3f2a3
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Aug 2 15:22:14 2024 +0200
+
+    x86: Tunables may incorrectly set Prefer_PMINUB_for_stringop (bug 32047)
+    
+    Fixes commit 5bcf6265f215326d14dfacdce8532792c2c7f8f8 ("x86:
+    Disable non-temporal memset on Skylake Server").
+    
+    Reviewed-by: Noah Goldstein <goldstein.w.n@gmail.com>
+    (cherry picked from commit 7a630f7d3392ca391a399486ce2846f9e4b4ee63)
+
+diff --git a/sysdeps/x86/cpu-tunables.c b/sysdeps/x86/cpu-tunables.c
+index ae9dcd6180..ccc6b64dc2 100644
+--- a/sysdeps/x86/cpu-tunables.c
++++ b/sysdeps/x86/cpu-tunables.c
+@@ -248,6 +248,7 @@ TUNABLE_CALLBACK (set_hwcaps) (tunable_val_t *valp)
+ 	    CHECK_GLIBC_IFUNC_PREFERRED_BOTH (n, cpu_features,
+ 					      Avoid_Non_Temporal_Memset, 25);
+ 	  }
++	  break;
+ 	case 26:
+ 	    {
+ 	      CHECK_GLIBC_IFUNC_PREFERRED_NEED_BOTH
+
+commit 6a97e2ba144a554809161d488f25e4bae07c9405
+Author: Andreas Schwab <schwab@suse.de>
+Date:   Mon Aug 5 10:55:51 2024 +0200
+
+    Fix name space violation in fortify wrappers (bug 32052)
+    
+    Rename the identifier sz to __sz everywhere.
+    
+    Fixes: a643f60c53 ("Make sure that the fortified function conditionals are constant")
+    (cherry picked from commit 39ca997ab378990d5ac1aadbaa52aaf1db6d526f)
+
+diff --git a/NEWS b/NEWS
+index 8da0408ad9..b9eb4a558b 100644
+--- a/NEWS
++++ b/NEWS
+@@ -13,6 +13,7 @@ The following bugs are resolved with this release:
+   [31968] mremap implementation in C does not handle arguments correctly
+   [31890] resolv: Allow short error responses to match any DNS query
+   [31968] mremap implementation in C does not handle arguments correctly
++  [32052] Name space violation in fortify wrappers
+ 
+ Version 2.40
+ 
+diff --git a/libio/bits/stdio2.h b/libio/bits/stdio2.h
+index 91a80dd7c6..4b8bc35bdf 100644
+--- a/libio/bits/stdio2.h
++++ b/libio/bits/stdio2.h
+@@ -308,14 +308,14 @@ fgets (__fortify_clang_overload_arg (char *, __restrict, __s), int __n,
+ 			      "fgets called with bigger size than length of "
+ 			      "destination buffer")
+ {
+-  size_t sz = __glibc_objsize (__s);
+-  if (__glibc_safe_or_unknown_len (__n, sizeof (char), sz))
++  size_t __sz = __glibc_objsize (__s);
++  if (__glibc_safe_or_unknown_len (__n, sizeof (char), __sz))
+     return __fgets_alias (__s, __n, __stream);
+ #if !__fortify_use_clang
+-  if (__glibc_unsafe_len (__n, sizeof (char), sz))
+-    return __fgets_chk_warn (__s, sz, __n, __stream);
++  if (__glibc_unsafe_len (__n, sizeof (char), __sz))
++    return __fgets_chk_warn (__s, __sz, __n, __stream);
+ #endif
+-  return __fgets_chk (__s, sz, __n, __stream);
++  return __fgets_chk (__s, __sz, __n, __stream);
+ }
+ 
+ __fortify_function __wur __nonnull ((4)) __attribute_overloadable__ size_t
+@@ -326,14 +326,14 @@ fread (__fortify_clang_overload_arg (void *, __restrict, __ptr),
+ 			      "fread called with bigger size * n than length "
+ 			      "of destination buffer")
+ {
+-  size_t sz = __glibc_objsize0 (__ptr);
+-  if (__glibc_safe_or_unknown_len (__n, __size, sz))
++  size_t __sz = __glibc_objsize0 (__ptr);
++  if (__glibc_safe_or_unknown_len (__n, __size, __sz))
+     return __fread_alias (__ptr, __size, __n, __stream);
+ #if !__fortify_use_clang
+-  if (__glibc_unsafe_len (__n, __size, sz))
+-    return __fread_chk_warn (__ptr, sz, __size, __n, __stream);
++  if (__glibc_unsafe_len (__n, __size, __sz))
++    return __fread_chk_warn (__ptr, __sz, __size, __n, __stream);
+ #endif
+-  return __fread_chk (__ptr, sz, __size, __n, __stream);
++  return __fread_chk (__ptr, __sz, __size, __n, __stream);
+ }
+ 
+ #ifdef __USE_GNU
+@@ -345,14 +345,14 @@ fgets_unlocked (__fortify_clang_overload_arg (char *, __restrict, __s),
+ 			      "fgets called with bigger size than length of "
+ 			      "destination buffer")
+ {
+-  size_t sz = __glibc_objsize (__s);
+-  if (__glibc_safe_or_unknown_len (__n, sizeof (char), sz))
++  size_t __sz = __glibc_objsize (__s);
++  if (__glibc_safe_or_unknown_len (__n, sizeof (char), __sz))
+     return __fgets_unlocked_alias (__s, __n, __stream);
+ #if !__fortify_use_clang
+-  if (__glibc_unsafe_len (__n, sizeof (char), sz))
+-    return __fgets_unlocked_chk_warn (__s, sz, __n, __stream);
++  if (__glibc_unsafe_len (__n, sizeof (char), __sz))
++    return __fgets_unlocked_chk_warn (__s, __sz, __n, __stream);
+ #endif
+-  return __fgets_unlocked_chk (__s, sz, __n, __stream);
++  return __fgets_unlocked_chk (__s, __sz, __n, __stream);
+ }
+ #endif
+ 
+@@ -366,8 +366,8 @@ fread_unlocked (__fortify_clang_overload_arg0 (void *, __restrict, __ptr),
+ 			      "fread_unlocked called with bigger size * n than "
+ 			      "length of destination buffer")
+ {
+-  size_t sz = __glibc_objsize0 (__ptr);
+-  if (__glibc_safe_or_unknown_len (__n, __size, sz))
++  size_t __sz = __glibc_objsize0 (__ptr);
++  if (__glibc_safe_or_unknown_len (__n, __size, __sz))
+     {
+ # ifdef __USE_EXTERN_INLINES
+       if (__builtin_constant_p (__size)
+@@ -393,10 +393,10 @@ fread_unlocked (__fortify_clang_overload_arg0 (void *, __restrict, __ptr),
+       return __fread_unlocked_alias (__ptr, __size, __n, __stream);
+     }
+ # if !__fortify_use_clang
+-  if (__glibc_unsafe_len (__n, __size, sz))
+-    return __fread_unlocked_chk_warn (__ptr, sz, __size, __n, __stream);
++  if (__glibc_unsafe_len (__n, __size, __sz))
++    return __fread_unlocked_chk_warn (__ptr, __sz, __size, __n, __stream);
+ # endif
+-  return __fread_unlocked_chk (__ptr, sz, __size, __n, __stream);
++  return __fread_unlocked_chk (__ptr, __sz, __size, __n, __stream);
+ 
+ }
+ #endif
+diff --git a/socket/bits/socket2.h b/socket/bits/socket2.h
+index 04780f320e..bd91647f37 100644
+--- a/socket/bits/socket2.h
++++ b/socket/bits/socket2.h
+@@ -37,14 +37,14 @@ recv (int __fd, __fortify_clang_overload_arg0 (void *, ,__buf), size_t __n,
+ 					      "recv called with bigger length than "
+ 					      "size of destination buffer")
+ {
+-  size_t sz = __glibc_objsize0 (__buf);
+-  if (__glibc_safe_or_unknown_len (__n, sizeof (char), sz))
++  size_t __sz = __glibc_objsize0 (__buf);
++  if (__glibc_safe_or_unknown_len (__n, sizeof (char), __sz))
+     return __recv_alias (__fd, __buf, __n, __flags);
+ #if !__fortify_use_clang
+-  if (__glibc_unsafe_len (__n, sizeof (char), sz))
+-    return __recv_chk_warn (__fd, __buf, __n, sz, __flags);
++  if (__glibc_unsafe_len (__n, sizeof (char), __sz))
++    return __recv_chk_warn (__fd, __buf, __n, __sz, __flags);
+ #endif
+-  return __recv_chk (__fd, __buf, __n, sz, __flags);
++  return __recv_chk (__fd, __buf, __n, __sz, __flags);
+ }
+ 
+ extern ssize_t __recvfrom_chk (int __fd, void *__restrict __buf, size_t __n,
+@@ -71,13 +71,13 @@ recvfrom (int __fd, __fortify_clang_overload_arg0 (void *, __restrict, __buf),
+ 					      "recvfrom called with bigger length "
+ 					      "than size of destination buffer")
+ {
+-  size_t sz = __glibc_objsize0 (__buf);
+-  if (__glibc_safe_or_unknown_len (__n, sizeof (char), sz))
++  size_t __sz = __glibc_objsize0 (__buf);
++  if (__glibc_safe_or_unknown_len (__n, sizeof (char), __sz))
+     return __recvfrom_alias (__fd, __buf, __n, __flags, __addr, __addr_len);
+ #if !__fortify_use_clang
+-  if (__glibc_unsafe_len (__n, sizeof (char), sz))
+-    return __recvfrom_chk_warn (__fd, __buf, __n, sz, __flags, __addr,
++  if (__glibc_unsafe_len (__n, sizeof (char), __sz))
++    return __recvfrom_chk_warn (__fd, __buf, __n, __sz, __flags, __addr,
+ 				__addr_len);
+ #endif
+-  return __recvfrom_chk (__fd, __buf, __n, sz, __flags, __addr, __addr_len);
++  return __recvfrom_chk (__fd, __buf, __n, __sz, __flags, __addr, __addr_len);
+ }
+diff --git a/stdlib/bits/stdlib.h b/stdlib/bits/stdlib.h
+index 1557b862b1..9c78ecf458 100644
+--- a/stdlib/bits/stdlib.h
++++ b/stdlib/bits/stdlib.h
+@@ -43,16 +43,16 @@ __NTH (realpath (const char *__restrict __name,
+ 					     "bytes long buffer")
+ #endif
+ {
+-  size_t sz = __glibc_objsize (__resolved);
++  size_t __sz = __glibc_objsize (__resolved);
+ 
+-  if (sz == (size_t) -1)
++  if (__sz == (size_t) -1)
+     return __realpath_alias (__name, __resolved);
+ 
+ #if !__fortify_use_clang && defined _LIBC_LIMITS_H_ && defined PATH_MAX
+-  if (__glibc_unsafe_len (PATH_MAX, sizeof (char), sz))
+-    return __realpath_chk_warn (__name, __resolved, sz);
++  if (__glibc_unsafe_len (PATH_MAX, sizeof (char), __sz))
++    return __realpath_chk_warn (__name, __resolved, __sz);
+ #endif
+-  return __realpath_chk (__name, __resolved, sz);
++  return __realpath_chk (__name, __resolved, __sz);
+ }
+ 
+ 
+diff --git a/wcsmbs/bits/wchar2.h b/wcsmbs/bits/wchar2.h
+index 9fdff47ee2..43c6b63027 100644
+--- a/wcsmbs/bits/wchar2.h
++++ b/wcsmbs/bits/wchar2.h
+@@ -74,9 +74,9 @@ __fortify_function __attribute_overloadable__ wchar_t *
+ __NTH (wcscpy (__fortify_clang_overload_arg (wchar_t *, __restrict, __dest),
+ 	       const wchar_t *__restrict __src))
+ {
+-  size_t sz = __glibc_objsize (__dest);
+-  if (sz != (size_t) -1)
+-    return __wcscpy_chk (__dest, __src, sz / sizeof (wchar_t));
++  size_t __sz = __glibc_objsize (__dest);
++  if (__sz != (size_t) -1)
++    return __wcscpy_chk (__dest, __src, __sz / sizeof (wchar_t));
+   return __wcscpy_alias (__dest, __src);
+ }
+ 
+@@ -84,9 +84,9 @@ __fortify_function __attribute_overloadable__ wchar_t *
+ __NTH (wcpcpy (__fortify_clang_overload_arg (wchar_t *, __restrict, __dest),
+ 	       const wchar_t *__restrict __src))
+ {
+-  size_t sz = __glibc_objsize (__dest);
+-  if (sz != (size_t) -1)
+-    return __wcpcpy_chk (__dest, __src, sz / sizeof (wchar_t));
++  size_t __sz = __glibc_objsize (__dest);
++  if (__sz != (size_t) -1)
++    return __wcpcpy_chk (__dest, __src, __sz / sizeof (wchar_t));
+   return __wcpcpy_alias (__dest, __src);
+ }
+ 
+@@ -118,9 +118,9 @@ __fortify_function __attribute_overloadable__ wchar_t *
+ __NTH (wcscat (__fortify_clang_overload_arg (wchar_t *, __restrict, __dest),
+ 	       const wchar_t *__restrict __src))
+ {
+-  size_t sz = __glibc_objsize (__dest);
+-  if (sz != (size_t) -1)
+-    return __wcscat_chk (__dest, __src, sz / sizeof (wchar_t));
++  size_t __sz = __glibc_objsize (__dest);
++  if (__sz != (size_t) -1)
++    return __wcscat_chk (__dest, __src, __sz / sizeof (wchar_t));
+   return __wcscat_alias (__dest, __src);
+ }
+ 
+@@ -128,9 +128,9 @@ __fortify_function __attribute_overloadable__ wchar_t *
+ __NTH (wcsncat (__fortify_clang_overload_arg (wchar_t *, __restrict, __dest),
+ 	       const wchar_t *__restrict __src, size_t __n))
+ {
+-  size_t sz = __glibc_objsize (__dest);
+-  if (sz != (size_t) -1)
+-    return __wcsncat_chk (__dest, __src, __n, sz / sizeof (wchar_t));
++  size_t __sz = __glibc_objsize (__dest);
++  if (__sz != (size_t) -1)
++    return __wcsncat_chk (__dest, __src, __n, __sz / sizeof (wchar_t));
+   return __wcsncat_alias (__dest, __src, __n);
+ }
+ 
+@@ -170,10 +170,10 @@ __fortify_function int
+ __NTH (swprintf (wchar_t *__restrict __s, size_t __n,
+ 		 const wchar_t *__restrict __fmt, ...))
+ {
+-  size_t sz = __glibc_objsize (__s);
+-  if (sz != (size_t) -1 || __USE_FORTIFY_LEVEL > 1)
++  size_t __sz = __glibc_objsize (__s);
++  if (__sz != (size_t) -1 || __USE_FORTIFY_LEVEL > 1)
+     return __swprintf_chk (__s, __n, __USE_FORTIFY_LEVEL - 1,
+-			   sz / sizeof (wchar_t), __fmt, __va_arg_pack ());
++			   __sz / sizeof (wchar_t), __fmt, __va_arg_pack ());
+   return __swprintf_alias (__s, __n, __fmt, __va_arg_pack ());
+ }
+ #elif __fortify_use_clang
+@@ -206,10 +206,10 @@ __fortify_function int
+ __NTH (vswprintf (wchar_t *__restrict __s, size_t __n,
+ 		  const wchar_t *__restrict __fmt, __gnuc_va_list __ap))
+ {
+-  size_t sz = __glibc_objsize (__s);
+-  if (sz != (size_t) -1 || __USE_FORTIFY_LEVEL > 1)
++  size_t __sz = __glibc_objsize (__s);
++  if (__sz != (size_t) -1 || __USE_FORTIFY_LEVEL > 1)
+     return __vswprintf_chk (__s, __n,  __USE_FORTIFY_LEVEL - 1,
+-			    sz / sizeof (wchar_t), __fmt, __ap);
++			    __sz / sizeof (wchar_t), __fmt, __ap);
+   return __vswprintf_alias (__s, __n, __fmt, __ap);
+ }
+ 
+@@ -257,14 +257,14 @@ fgetws (__fortify_clang_overload_arg (wchar_t *, __restrict, __s), int __n,
+ 					      "fgetws called with length bigger "
+ 					      "than size of destination buffer")
+ {
+-  size_t sz = __glibc_objsize (__s);
+-  if (__glibc_safe_or_unknown_len (__n, sizeof (wchar_t), sz))
++  size_t __sz = __glibc_objsize (__s);
++  if (__glibc_safe_or_unknown_len (__n, sizeof (wchar_t), __sz))
+     return __fgetws_alias (__s, __n, __stream);
+ #if !__fortify_use_clang
+-  if (__glibc_unsafe_len (__n, sizeof (wchar_t), sz))
+-    return __fgetws_chk_warn (__s, sz / sizeof (wchar_t), __n, __stream);
++  if (__glibc_unsafe_len (__n, sizeof (wchar_t), __sz))
++    return __fgetws_chk_warn (__s, __sz / sizeof (wchar_t), __n, __stream);
+ #endif
+-  return __fgetws_chk (__s, sz / sizeof (wchar_t), __n, __stream);
++  return __fgetws_chk (__s, __sz / sizeof (wchar_t), __n, __stream);
+ }
+ 
+ #ifdef __USE_GNU
+@@ -275,15 +275,15 @@ fgetws_unlocked (__fortify_clang_overload_arg (wchar_t *, __restrict, __s),
+ 					      "fgetws_unlocked called with length bigger "
+ 					      "than size of destination buffer")
+ {
+-  size_t sz = __glibc_objsize (__s);
+-  if (__glibc_safe_or_unknown_len (__n, sizeof (wchar_t), sz))
++  size_t __sz = __glibc_objsize (__s);
++  if (__glibc_safe_or_unknown_len (__n, sizeof (wchar_t), __sz))
+     return __fgetws_unlocked_alias (__s, __n, __stream);
+ # if !__fortify_use_clang
+-  if (__glibc_unsafe_len (__n, sizeof (wchar_t), sz))
+-    return __fgetws_unlocked_chk_warn (__s, sz / sizeof (wchar_t), __n,
++  if (__glibc_unsafe_len (__n, sizeof (wchar_t), __sz))
++    return __fgetws_unlocked_chk_warn (__s, __sz / sizeof (wchar_t), __n,
+ 				       __stream);
+ # endif
+-  return __fgetws_unlocked_chk (__s, sz / sizeof (wchar_t), __n, __stream);
++  return __fgetws_unlocked_chk (__s, __sz / sizeof (wchar_t), __n, __stream);
+ }
+ #endif
+ 
+
+commit 5641780762723156b0d20a0b9f7df1d76831bab0
+Author: Arjun Shankar <arjun@redhat.com>
+Date:   Tue Jul 30 11:37:57 2024 +0200
+
+    manual/stdio: Further clarify putc, putwc, getc, and getwc
+    
+    This is a follow-up to 10de4a47ef3f481592e3c62eb07bcda23e9fde4d that
+    reworded the manual entries for putc and putwc and removed any
+    performance claims.
+    
+    This commit further clarifies these entries and brings getc and getwc in
+    line with the descriptions of putc and putwc, removing any performance
+    claims from them as well.
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    
+    (cherry picked from commit 942670c81dc8071dd75d6213e771daa5d2084cb6)
+
+diff --git a/manual/stdio.texi b/manual/stdio.texi
+index f9529a098d..8517653507 100644
+--- a/manual/stdio.texi
++++ b/manual/stdio.texi
+@@ -904,20 +904,16 @@ This function is a GNU extension.
+ @standards{ISO, stdio.h}
+ @safety{@prelim{}@mtsafe{}@asunsafe{@asucorrupt{}}@acunsafe{@acucorrupt{} @aculock{}}}
+ This is just like @code{fputc}, except that it may be implemented as
+-a macro, making it faster.  One consequence is that it may evaluate the
+-@var{stream} argument more than once, which is an exception to the
+-general rule for macros.  Therefore, @var{stream} should never be an
+-expression with side-effects.
++a macro and may evaluate the @var{stream} argument more than once.
++Therefore, @var{stream} should never be an expression with side-effects.
+ @end deftypefun
+ 
+ @deftypefun wint_t putwc (wchar_t @var{wc}, FILE *@var{stream})
+ @standards{ISO, wchar.h}
+ @safety{@prelim{}@mtsafe{}@asunsafe{@asucorrupt{}}@acunsafe{@acucorrupt{} @aculock{}}}
+ This is just like @code{fputwc}, except that it may be implemented as
+-a macro, making it faster.  One consequence is that it may evaluate the
+-@var{stream} argument more than once, which is an exception to the
+-general rule for macros.  Therefore, @var{stream} should never be an
+-expression with side-effects.
++a macro and may evaluate the @var{stream} argument more than once.
++Therefore, @var{stream} should never be an expression with side-effects.
+ @end deftypefun
+ 
+ @deftypefun int putc_unlocked (int @var{c}, FILE *@var{stream})
+@@ -1110,20 +1106,17 @@ This function is a GNU extension.
+ @deftypefun int getc (FILE *@var{stream})
+ @standards{ISO, stdio.h}
+ @safety{@prelim{}@mtsafe{}@asunsafe{@asucorrupt{}}@acunsafe{@aculock{} @acucorrupt{}}}
+-This is just like @code{fgetc}, except that it is permissible (and
+-typical) for it to be implemented as a macro that evaluates the
+-@var{stream} argument more than once.  @code{getc} is often highly
+-optimized, so it is usually the best function to use to read a single
+-character.
++This is just like @code{fgetc}, except that it may be implemented as
++a macro and may evaluate the @var{stream} argument more than once.
++Therefore, @var{stream} should never be an expression with side-effects.
+ @end deftypefun
+ 
+ @deftypefun wint_t getwc (FILE *@var{stream})
+ @standards{ISO, wchar.h}
+ @safety{@prelim{}@mtsafe{}@asunsafe{@asucorrupt{}}@acunsafe{@aculock{} @acucorrupt{}}}
+-This is just like @code{fgetwc}, except that it is permissible for it to
+-be implemented as a macro that evaluates the @var{stream} argument more
+-than once.  @code{getwc} can be highly optimized, so it is usually the
+-best function to use to read a single wide character.
++This is just like @code{fgetwc}, except that it may be implemented as
++a macro and may evaluate the @var{stream} argument more than once.
++Therefore, @var{stream} should never be an expression with side-effects.
+ @end deftypefun
+ 
+ @deftypefun int getc_unlocked (FILE *@var{stream})
+
+commit 39ee60a719eb6ffde76ccc232d79273c473d7a93
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Aug 9 17:01:17 2024 +0200
+
+    support: Add options list terminator to the test driver
+    
+    This avoids crashes if a test is passed unknown options.
+    
+    Reviewed-by: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+    (cherry picked from commit c2a474f4617ede7a8bf56b7257acb37dc757b2d1)
+
+diff --git a/support/test-driver.c b/support/test-driver.c
+index f4c3e4d666..04ceebc08f 100644
+--- a/support/test-driver.c
++++ b/support/test-driver.c
+@@ -155,6 +155,7 @@ main (int argc, char **argv)
+     {
+       CMDLINE_OPTIONS
+       TEST_DEFAULT_OPTIONS
++      { 0, }
+     };
+   test_config.options = &options;
+ #endif
+
+commit e3556937c2402b8acf2e586bf53168e9f482ba91
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Mon Jul 22 17:47:21 2024 -0700
+
+    x86-64: Remove sysdeps/x86_64/x32/dl-machine.h
+    
+    Remove sysdeps/x86_64/x32/dl-machine.h by folding x32 ARCH_LA_PLTENTER,
+    ARCH_LA_PLTEXIT and RTLD_START into sysdeps/x86_64/dl-machine.h.  There
+    are no regressions on x86-64 nor x32.  There are no changes in x86-64
+    _dl_start_user.  On x32, _dl_start_user changes are
+    
+     <_dl_start_user>:
+            mov    %eax,%r12d
+    +       mov    %esp,%r13d
+            mov    (%rsp),%edx
+            mov    %edx,%esi
+    -       mov    %esp,%r13d
+            and    $0xfffffff0,%esp
+            mov    0x0(%rip),%edi        # <_dl_start_user+0x14>
+            lea    0x8(%r13,%rdx,4),%ecx
+    
+    Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Noah Goldstein <goldstein.w.n@gmail.com>
+    (cherry picked from commit 652c6cf26927352fc0e37e4e60c6fc98ddf6d3b4)
+
+diff --git a/sysdeps/x86_64/dl-machine.h b/sysdeps/x86_64/dl-machine.h
+index a6de3793e4..4f12955875 100644
+--- a/sysdeps/x86_64/dl-machine.h
++++ b/sysdeps/x86_64/dl-machine.h
+@@ -139,37 +139,37 @@ elf_machine_runtime_setup (struct link_map *l, struct r_scope_elem *scope[],
+ .globl _start\n\
+ .globl _dl_start_user\n\
+ _start:\n\
+-	movq %rsp, %rdi\n\
++	mov %" RSP_LP ", %" RDI_LP "\n\
+ 	call _dl_start\n\
+ _dl_start_user:\n\
+ 	# Save the user entry point address in %r12.\n\
+-	movq %rax, %r12\n\
++	mov %" RAX_LP ", %" R12_LP "\n\
+ 	# Save %rsp value in %r13.\n\
+-	movq %rsp, %r13\n\
++	mov %" RSP_LP ", % " R13_LP "\n\
+ "\
+ 	RTLD_START_ENABLE_X86_FEATURES \
+ "\
+ 	# Read the original argument count.\n\
+-	movq (%rsp), %rdx\n\
++	mov (%rsp), %" RDX_LP "\n\
+ 	# Call _dl_init (struct link_map *main_map, int argc, char **argv, char **env)\n\
+ 	# argc -> rsi\n\
+-	movq %rdx, %rsi\n\
++	mov %" RDX_LP ", %" RSI_LP "\n\
+ 	# And align stack for the _dl_init call. \n\
+-	andq $-16, %rsp\n\
++	and $-16, %" RSP_LP "\n\
+ 	# _dl_loaded -> rdi\n\
+-	movq _rtld_local(%rip), %rdi\n\
++	mov _rtld_local(%rip), %" RDI_LP "\n\
+ 	# env -> rcx\n\
+-	leaq 16(%r13,%rdx,8), %rcx\n\
++	lea 2*" LP_SIZE "(%r13,%rdx," LP_SIZE "), %" RCX_LP "\n\
+ 	# argv -> rdx\n\
+-	leaq 8(%r13), %rdx\n\
++	lea " LP_SIZE "(%r13), %" RDX_LP "\n\
+ 	# Clear %rbp to mark outermost frame obviously even for constructors.\n\
+ 	xorl %ebp, %ebp\n\
+ 	# Call the function to run the initializers.\n\
+ 	call _dl_init\n\
+ 	# Pass our finalizer function to the user in %rdx, as per ELF ABI.\n\
+-	leaq _dl_fini(%rip), %rdx\n\
++	lea _dl_fini(%rip), %" RDX_LP "\n\
+ 	# And make sure %rsp points to argc stored on the stack.\n\
+-	movq %r13, %rsp\n\
++	mov %" R13_LP ", %" RSP_LP "\n\
+ 	# Jump to the user's entry point.\n\
+ 	jmp *%r12\n\
+ .previous\n\
+@@ -234,8 +234,13 @@ elf_machine_plt_value (struct link_map *map, const ElfW(Rela) *reloc,
+ 
+ 
+ /* Names of the architecture-specific auditing callback functions.  */
++#ifdef __LP64__
+ #define ARCH_LA_PLTENTER x86_64_gnu_pltenter
+ #define ARCH_LA_PLTEXIT x86_64_gnu_pltexit
++#else
++#define ARCH_LA_PLTENTER x32_gnu_pltenter
++#define ARCH_LA_PLTEXIT x32_gnu_pltexit
++#endif
+ 
+ #endif /* !dl_machine_h */
+ 
+diff --git a/sysdeps/x86_64/x32/dl-machine.h b/sysdeps/x86_64/x32/dl-machine.h
+deleted file mode 100644
+index c35cee9261..0000000000
+--- a/sysdeps/x86_64/x32/dl-machine.h
++++ /dev/null
+@@ -1,76 +0,0 @@
+-/* Machine-dependent ELF dynamic relocation inline functions.  x32 version.
+-   Copyright (C) 2012-2024 Free Software Foundation, Inc.
+-   This file is part of the GNU C Library.
+-
+-   The GNU C Library is free software; you can redistribute it and/or
+-   modify it under the terms of the GNU Lesser General Public
+-   License as published by the Free Software Foundation; either
+-   version 2.1 of the License, or (at your option) any later version.
+-
+-   The GNU C Library is distributed in the hope that it will be useful,
+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-   Lesser General Public License for more details.
+-
+-   You should have received a copy of the GNU Lesser General Public
+-   License along with the GNU C Library; if not, see
+-   <https://www.gnu.org/licenses/>.  */
+-
+-/* Must allow <sysdeps/x86_64/dl-machine.h> to be included more than once.
+-   See #ifdef RESOLVE_MAP in sysdeps/x86_64/dl-machine.h.  */
+-#include <sysdeps/x86_64/dl-machine.h>
+-
+-#ifndef _X32_DL_MACHINE_H
+-#define _X32_DL_MACHINE_H
+-
+-#undef ARCH_LA_PLTENTER
+-#undef ARCH_LA_PLTEXIT
+-#undef RTLD_START
+-
+-/* Names of the architecture-specific auditing callback functions.  */
+-#define ARCH_LA_PLTENTER x32_gnu_pltenter
+-#define ARCH_LA_PLTEXIT x32_gnu_pltexit
+-
+-/* Initial entry point code for the dynamic linker.
+-   The C function `_dl_start' is the real entry point;
+-   its return value is the user program's entry point.  */
+-#define RTLD_START asm ("\n\
+-.text\n\
+-	.p2align 4\n\
+-.globl _start\n\
+-.globl _dl_start_user\n\
+-_start:\n\
+-	movl %esp, %edi\n\
+-	call _dl_start\n\
+-_dl_start_user:\n\
+-	# Save the user entry point address in %r12.\n\
+-	movl %eax, %r12d\n\
+-	# Read the original argument count.\n\
+-	movl (%rsp), %edx\n\
+-	# Call _dl_init (struct link_map *main_map, int argc, char **argv, char **env)\n\
+-	# argc -> rsi\n\
+-	movl %edx, %esi\n\
+-	# Save %rsp value in %r13.\n\
+-	movl %esp, %r13d\n\
+-	# And align stack for the _dl_init call.\n\
+-	and $-16, %esp\n\
+-	# _dl_loaded -> rdi\n\
+-	movl _rtld_local(%rip), %edi\n\
+-	# env -> rcx\n\
+-	lea 8(%r13,%rdx,4), %ecx\n\
+-	# argv -> rdx\n\
+-	lea 4(%r13), %edx\n\
+-	# Clear %rbp to mark outermost frame obviously even for constructors.\n\
+-	xorl %ebp, %ebp\n\
+-	# Call the function to run the initializers.\n\
+-	call _dl_init\n\
+-	# Pass our finalizer function to the user in %rdx, as per ELF ABI.\n\
+-	lea _dl_fini(%rip), %edx\n\
+-	# And make sure %rsp points to argc stored on the stack.\n\
+-	movl %r13d, %esp\n\
+-	# Jump to the user's entry point.\n\
+-	jmp *%r12\n\
+-.previous\n\
+-");
+-
+-#endif /* !_X32_DL_MACHINE_H */
+
+commit 898f25e0b1026be5701d05715600be646e9d0714
+Author: H.J. Lu <hjl.tools@gmail.com>
+Date:   Mon Jul 22 17:47:22 2024 -0700
+
+    x32/cet: Support shadow stack during startup for Linux 6.10
+    
+    Use RXX_LP in RTLD_START_ENABLE_X86_FEATURES.  Support shadow stack during
+    startup for Linux 6.10:
+    
+    commit 2883f01ec37dd8668e7222dfdb5980c86fdfe277
+    Author: H.J. Lu <hjl.tools@gmail.com>
+    Date:   Fri Mar 15 07:04:33 2024 -0700
+    
+        x86/shstk: Enable shadow stacks for x32
+    
+        1. Add shadow stack support to x32 signal.
+        2. Use the 64-bit map_shadow_stack syscall for x32.
+        3. Set up shadow stack for x32.
+    
+    Add the map_shadow_stack system call to <fixup-asm-unistd.h> and regenerate
+    arch-syscall.h.  Tested on Intel Tiger Lake with CET enabled x32.  There
+    are no regressions with CET enabled x86-64.  There are no changes in CET
+    enabled x86-64 _dl_start_user.
+    
+    Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+    Reviewed-by: Noah Goldstein <goldstein.w.n@gmail.com>
+    (cherry picked from commit 8344c1f5514b1b5b1c8c6e48f4b802653bd23b71)
+
+diff --git a/sysdeps/unix/sysv/linux/x86_64/dl-cet.h b/sysdeps/unix/sysv/linux/x86_64/dl-cet.h
+index 1fe3133406..b4f7e6c9cd 100644
+--- a/sysdeps/unix/sysv/linux/x86_64/dl-cet.h
++++ b/sysdeps/unix/sysv/linux/x86_64/dl-cet.h
+@@ -92,9 +92,9 @@ dl_cet_ibt_enabled (void)
+ 	# Pass GL(dl_x86_feature_1) to _dl_cet_setup_features.\n\
+ 	movl %edx, %edi\n\
+ 	# Align stack for the _dl_cet_setup_features call.\n\
+-	andq $-16, %rsp\n\
++	and $-16, %" RSP_LP "\n\
+ 	call _dl_cet_setup_features\n\
+ 	# Restore %rax and %rsp from %r12 and %r13.\n\
+-	movq %r12, %rax\n\
+-	movq %r13, %rsp\n\
++	mov %" R12_LP ", %" RAX_LP "\n\
++	mov %" R13_LP ", %" RSP_LP "\n\
+ "
+diff --git a/sysdeps/unix/sysv/linux/x86_64/x32/arch-syscall.h b/sysdeps/unix/sysv/linux/x86_64/x32/arch-syscall.h
+index 3040a47d72..df3e22236d 100644
+--- a/sysdeps/unix/sysv/linux/x86_64/x32/arch-syscall.h
++++ b/sysdeps/unix/sysv/linux/x86_64/x32/arch-syscall.h
+@@ -155,6 +155,7 @@
+ #define __NR_lsm_set_self_attr 1073742284
+ #define __NR_lstat 1073741830
+ #define __NR_madvise 1073741852
++#define __NR_map_shadow_stack 1073742277
+ #define __NR_mbind 1073742061
+ #define __NR_membarrier 1073742148
+ #define __NR_memfd_create 1073742143
+diff --git a/sysdeps/unix/sysv/linux/x86_64/x32/fixup-asm-unistd.h b/sysdeps/unix/sysv/linux/x86_64/x32/fixup-asm-unistd.h
+index 98124169e6..47fa8af4ce 100644
+--- a/sysdeps/unix/sysv/linux/x86_64/x32/fixup-asm-unistd.h
++++ b/sysdeps/unix/sysv/linux/x86_64/x32/fixup-asm-unistd.h
+@@ -15,6 +15,10 @@
+    License along with the GNU C Library; if not, see
+    <http://www.gnu.org/licenses/>.  */
+ 
++#ifndef __NR_map_shadow_stack
++# define __NR_map_shadow_stack 1073742277
++#endif
++
+ /* X32 uses the same 64-bit syscall interface for set_thread_area.   */
+ #ifndef __NR_set_thread_area
+ # define __NR_set_thread_area 1073742029
+
+commit c0af0c2ba016030c778bc22c55f5f9498f96b8b9
+Author: Noah Goldstein <goldstein.w.n@gmail.com>
+Date:   Tue Aug 13 23:29:14 2024 +0800
+
+    x86: Fix bug in strchrnul-evex512 [BZ #32078]
+    
+    Issue was we were expecting not matches with CHAR before the start of
+    the string in the page cross case.
+    
+    The check code in the page cross case:
+    ```
+        and    $0xffffffffffffffc0,%rax
+        vmovdqa64 (%rax),%zmm17
+        vpcmpneqb %zmm17,%zmm16,%k1
+        vptestmb %zmm17,%zmm17,%k0{%k1}
+        kmovq  %k0,%rax
+        inc    %rax
+        shr    %cl,%rax
+        je     L(continue)
+    ```
+    
+    expects that all characters that neither match null nor CHAR will be
+    1s in `rax` prior to the `inc`. Then the `inc` will overflow all of
+    the 1s where no relevant match was found.
+    
+    This is incorrect in the page-cross case, as the
+    `vmovdqa64 (%rax),%zmm17` loads from before the start of the input
+    string.
+    
+    If there are matches with CHAR before the start of the string, `rax`
+    won't properly overflow.
+    
+    The fix is quite simple. Just replace:
+    
+    ```
+        inc    %rax
+        shr    %cl,%rax
+    ```
+    With:
+    ```
+        sar    %cl,%rax
+        inc    %rax
+    ```
+    
+    The arithmetic shift will clear any matches prior to the start of the
+    string while maintaining the signbit so the 1s can properly overflow
+    to zero in the case of no matches.
+    Reviewed-by: H.J. Lu <hjl.tools@gmail.com>
+    
+    (cherry picked from commit 7da08862471dfec6fdae731c2a5f351ad485c71f)
+
+diff --git a/string/test-strchr.c b/string/test-strchr.c
+index c795eac6fa..72b17af687 100644
+--- a/string/test-strchr.c
++++ b/string/test-strchr.c
+@@ -255,6 +255,69 @@ check1 (void)
+     check_result (impl, s, c, exp_result);
+ }
+ 
++static void
++check2 (void)
++{
++  CHAR *s = (CHAR *) (buf1 + getpagesize () - 4 * sizeof (CHAR));
++  CHAR *s_begin = (CHAR *) (buf1 + getpagesize () - 64);
++#ifndef USE_FOR_STRCHRNUL
++  CHAR *exp_result = NULL;
++#else
++  CHAR *exp_result = s + 1;
++#endif
++  CHAR val = 0x12;
++  for (; s_begin != s; ++s_begin)
++    *s_begin = val;
++
++  s[0] = val + 1;
++  s[1] = 0;
++  s[2] = val + 1;
++  s[3] = val + 1;
++
++  {
++    FOR_EACH_IMPL (impl, 0)
++      check_result (impl, s, val, exp_result);
++  }
++  s[3] = val;
++  {
++    FOR_EACH_IMPL (impl, 0)
++      check_result (impl, s, val, exp_result);
++  }
++  exp_result = s;
++  s[0] = val;
++  {
++    FOR_EACH_IMPL (impl, 0)
++      check_result (impl, s, val, exp_result);
++  }
++
++  s[3] = val + 1;
++  {
++    FOR_EACH_IMPL (impl, 0)
++      check_result (impl, s, val, exp_result);
++  }
++
++  s[0] = val + 1;
++  s[1] = val + 1;
++  s[2] = val + 1;
++  s[3] = val + 1;
++  s[4] = val;
++  exp_result = s + 4;
++  {
++    FOR_EACH_IMPL (impl, 0)
++      check_result (impl, s, val, exp_result);
++  }
++  s[4] = 0;
++#ifndef USE_FOR_STRCHRNUL
++  exp_result = NULL;
++#else
++  exp_result = s + 4;
++#endif
++  {
++    FOR_EACH_IMPL (impl, 0)
++      check_result (impl, s, val, exp_result);
++  }
++}
++
+ int
+ test_main (void)
+ {
+@@ -263,7 +326,7 @@ test_main (void)
+   test_init ();
+ 
+   check1 ();
+-
++  check2 ();
+   printf ("%20s", "");
+   FOR_EACH_IMPL (impl, 0)
+     printf ("\t%s", impl->name);
+diff --git a/sysdeps/x86_64/multiarch/strchr-evex-base.S b/sysdeps/x86_64/multiarch/strchr-evex-base.S
+index 04e2c0e79e..3a0b7c9d64 100644
+--- a/sysdeps/x86_64/multiarch/strchr-evex-base.S
++++ b/sysdeps/x86_64/multiarch/strchr-evex-base.S
+@@ -124,13 +124,13 @@ L(page_cross):
+ 	VPCMPNE	%VMM(1), %VMM(0), %k1
+ 	VPTEST	%VMM(1), %VMM(1), %k0{%k1}
+ 	KMOV	%k0, %VRAX
+-# ifdef USE_AS_WCSCHR
++	sar	%cl, %VRAX
++#ifdef USE_AS_WCSCHR
+ 	sub	$VEC_MATCH_MASK, %VRAX
+-# else
++#else
+ 	inc	%VRAX
+-# endif
++#endif
+ 	/* Ignore number of character for alignment adjustment.  */
+-	shr	%cl, %VRAX
+ 	jz	L(align_more)
+ 
+ 	bsf	%VRAX, %VRAX
+
+commit 586e4cd8c67df95ebb0bfecea3d007bff618d6d9
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Aug 9 16:17:14 2024 +0200
+
+    Define __libc_initial for the static libc
+    
+    Reviewed-by: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+    (cherry picked from commit eb0e50e9a1cf80a2ba6f33f990a08ef37a3267fb)
+
+diff --git a/include/libc-internal.h b/include/libc-internal.h
+index 87ac591835..1ef43ffe67 100644
+--- a/include/libc-internal.h
++++ b/include/libc-internal.h
+@@ -53,6 +53,9 @@ extern __typeof (__profile_frequency) __profile_frequency attribute_hidden;
+    is not for an audit module, not loaded via dlmopen, and not loaded
+    via static dlopen either).  */
+ extern _Bool __libc_initial attribute_hidden;
++#else
++/* The static libc is always the initial namespace.  */
++# define __libc_initial ((_Bool) 1)
+ #endif
+ 
+ #endif /* _LIBC_INTERNAL  */
+
+commit 709319f9de6f976f9feceb623cb2c96769e9d78b
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Mon Aug 19 15:48:03 2024 +0200
+
+    string: strerror, strsignal cannot use buffer after dlmopen (bug 32026)
+    
+    Secondary namespaces have a different malloc.  Allocating the
+    buffer in one namespace and freeing it another results in
+    heap corruption.  Fix this by using a static string (potentially
+    translated) in secondary namespaces.  It would also be possible
+    to use the malloc from the initial namespace to manage the
+    buffer, but these functions would still not be safe to use in
+    auditors etc. because a call to strerror could still free a
+    buffer while it is used by the application.  Another approach
+    could use proper initial-exec TLS, duplicated in secondary
+    namespaces, but that would need a callback interface for freeing
+    libc resources in namespaces on thread exit, which does not exist
+    today.
+    
+    Reviewed-by: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+    (cherry picked from commit 25a5eb4010df94b412c67db9e346029de316d06b)
+
+diff --git a/NEWS b/NEWS
+index b9eb4a558b..10a125bc66 100644
+--- a/NEWS
++++ b/NEWS
+@@ -13,6 +13,7 @@ The following bugs are resolved with this release:
+   [31968] mremap implementation in C does not handle arguments correctly
+   [31890] resolv: Allow short error responses to match any DNS query
+   [31968] mremap implementation in C does not handle arguments correctly
++  [32026] strerror/strsignal TLS not handled correctly for secondary namespaces
+   [32052] Name space violation in fortify wrappers
+ 
+ Version 2.40
+diff --git a/string/strerror_l.c b/string/strerror_l.c
+index 15cce261e6..70456e5bb4 100644
+--- a/string/strerror_l.c
++++ b/string/strerror_l.c
+@@ -20,7 +20,7 @@
+ #include <stdio.h>
+ #include <string.h>
+ #include <tls-internal.h>
+-
++#include <libc-internal.h>
+ 
+ static const char *
+ translate (const char *str, locale_t loc)
+@@ -31,6 +31,12 @@ translate (const char *str, locale_t loc)
+   return res;
+ }
+ 
++static char *
++unknown_error (locale_t loc)
++{
++  return (char *) translate ("Unknown error", loc);
++}
++
+ 
+ /* Return a string describing the errno code in ERRNUM.  */
+ char *
+@@ -40,18 +46,25 @@ __strerror_l (int errnum, locale_t loc)
+   char *err = (char *) __get_errlist (errnum);
+   if (__glibc_unlikely (err == NULL))
+     {
+-      struct tls_internal_t *tls_internal = __glibc_tls_internal ();
+-      free (tls_internal->strerror_l_buf);
+-      if (__asprintf (&tls_internal->strerror_l_buf, "%s%d",
+-		      translate ("Unknown error ", loc), errnum) > 0)
+-	err = tls_internal->strerror_l_buf;
+-      else
++      if (__libc_initial)
+ 	{
+-	  /* The memory was freed above.  */
+-	  tls_internal->strerror_l_buf = NULL;
+-	  /* Provide a fallback translation.  */
+-	  err = (char *) translate ("Unknown error", loc);
++	  struct tls_internal_t *tls_internal = __glibc_tls_internal ();
++	  free (tls_internal->strerror_l_buf);
++	  if (__asprintf (&tls_internal->strerror_l_buf, "%s%d",
++			  translate ("Unknown error ", loc), errnum) > 0)
++	    err = tls_internal->strerror_l_buf;
++	  else
++	    {
++	      /* The memory was freed above.  */
++	      tls_internal->strerror_l_buf = NULL;
++	      /* Provide a fallback translation.  */
++	      err = unknown_error (loc);
++	    }
+ 	}
++      else
++	/* Secondary namespaces use a different malloc, so cannot
++	   participate in the buffer management.  */
++	err = unknown_error (loc);
+     }
+   else
+     err = (char *) translate (err, loc);
+diff --git a/string/strsignal.c b/string/strsignal.c
+index 3114601564..d9b0365468 100644
+--- a/string/strsignal.c
++++ b/string/strsignal.c
+@@ -21,6 +21,7 @@
+ #include <string.h>
+ #include <libintl.h>
+ #include <tls-internal.h>
++#include <libc-internal.h>
+ 
+ /* Return a string describing the meaning of the signal number SIGNUM.  */
+ char *
+@@ -30,21 +31,28 @@ strsignal (int signum)
+   if (desc != NULL)
+     return _(desc);
+ 
+-  struct tls_internal_t *tls_internal = __glibc_tls_internal ();
+-  free (tls_internal->strsignal_buf);
++  if (__libc_initial)
++    {
++      struct tls_internal_t *tls_internal = __glibc_tls_internal ();
++      free (tls_internal->strsignal_buf);
+ 
+-  int r;
++      int r;
+ #ifdef SIGRTMIN
+-  if (signum >= SIGRTMIN && signum <= SIGRTMAX)
+-    r = __asprintf (&tls_internal->strsignal_buf, _("Real-time signal %d"),
+-		    signum - SIGRTMIN);
+-  else
++      if (signum >= SIGRTMIN && signum <= SIGRTMAX)
++	r = __asprintf (&tls_internal->strsignal_buf, _("Real-time signal %d"),
++			signum - SIGRTMIN);
++      else
+ #endif
+-    r = __asprintf (&tls_internal->strsignal_buf, _("Unknown signal %d"),
+-		    signum);
+-
+-  if (r == -1)
+-    tls_internal->strsignal_buf = NULL;
+-
+-  return tls_internal->strsignal_buf;
++	r = __asprintf (&tls_internal->strsignal_buf, _("Unknown signal %d"),
++			signum);
++
++      if (r >= 0)
++	return tls_internal->strsignal_buf;
++      else
++	tls_internal->strsignal_buf = NULL;
++    }
++  /* Fall through on asprintf error, and for !__libc_initial:
++     secondary namespaces use a different malloc and cannot
++     participate in the buffer management.  */
++  return _("Unknown signal");
+ }
+
+commit bc240ba7c86a74bc64d4234feadb49bb8e36e1c9
+Author: Maciej W. Rozycki <macro@redhat.com>
+Date:   Fri Jul 26 13:21:34 2024 +0100
+
+    support: Add FAIL test failure helper
+    
+    Add a FAIL test failure helper analogous to FAIL_RET, that does not
+    cause the current function to return, providing a standardized way to
+    report a test failure with a message supplied while permitting the
+    caller to continue executing, for further reporting, cleaning up, etc.
+    
+    Update existing test cases that provide a conflicting definition of FAIL
+    by removing the local FAIL definition and then as follows:
+    
+    - tst-fortify-syslog: provide a meaningful message in addition to the
+      file name already added by <support/check.h>; 'support_record_failure'
+      is already called by 'support_print_failure_impl' invoked by the new
+      FAIL test failure helper.
+    
+    - tst-ctype: no update to FAIL calls required, with the name of the file
+      and the line number within of the failure site additionally included
+      by the new FAIL test failure helper, and error counting plus count
+      reporting upon test program termination also already provided by
+      'support_record_failure' and 'support_report_failure' respectively,
+      called by 'support_print_failure_impl' and 'adjust_exit_status' also
+      respectively.  However in a number of places 'printf' is called and
+      the error count adjusted by hand, so update these places to make use
+      of FAIL instead.  And last but not least adjust the final summary just
+      to report completion, with any error count following as reported by
+      the test driver.
+    
+    - test-tgmath2: no update to FAIL calls required, with the name of the
+      file of the failure site additionally included by the new FAIL test
+      failure helper.  Also there is no need to track the return status by
+      hand as any call to FAIL will eventually cause the test case to return
+      an unsuccesful exit status regardless of the return status from the
+      test function, via a call to 'adjust_exit_status' made by the test
+      driver.
+    
+    Reviewed-by: DJ Delorie <dj@redhat.com>
+    (cherry picked from commit 1b97a9f23bf605ca608162089c94187573fb2a9e)
+
+diff --git a/debug/tst-fortify-syslog.c b/debug/tst-fortify-syslog.c
+index a7ddbf7c6b..2712acf689 100644
+--- a/debug/tst-fortify-syslog.c
++++ b/debug/tst-fortify-syslog.c
+@@ -22,7 +22,6 @@
+ #include <syslog.h>
+ #include <string.h>
+ #include <unistd.h>
+-#include <stdio.h>
+ 
+ #include <support/check.h>
+ #include <support/support.h>
+@@ -46,18 +45,13 @@ handler (int sig)
+     _exit (127);
+ }
+ 
+-#define FAIL()						\
+-  do {							\
+-      printf ("Failure on line %d\n", __LINE__);	\
+-      support_record_failure ();			\
+-  } while (0)
+ #define CHK_FAIL_START					\
+   chk_fail_ok = 1;					\
+   if (! setjmp (chk_fail_buf))				\
+     {
+ #define CHK_FAIL_END					\
+       chk_fail_ok = 0;					\
+-      FAIL ();						\
++      FAIL ("not supposed to reach here");		\
+     }
+ 
+ static void
+diff --git a/localedata/tst-ctype.c b/localedata/tst-ctype.c
+index 9de979a2d7..a23689719c 100644
+--- a/localedata/tst-ctype.c
++++ b/localedata/tst-ctype.c
+@@ -21,6 +21,8 @@
+ #include <stdio.h>
+ #include <string.h>
+ 
++#include <support/check.h>
++
+ 
+ static const char lower[] = "abcdefghijklmnopqrstuvwxyz";
+ static const char upper[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+@@ -53,19 +55,11 @@ static struct classes
+ #define nclasses (sizeof (classes) / sizeof (classes[0]))
+ 
+ 
+-#define FAIL(str, args...) \
+-  {									      \
+-    printf ("      " str "\n", ##args);					      \
+-    ++errors;								      \
+-  }
+-
+-
+ static int
+ do_test (void)
+ {
+   const char *cp;
+   const char *cp2;
+-  int errors = 0;
+   char *inpline = NULL;
+   size_t inplinelen = 0;
+   char *resline = NULL;
+@@ -394,11 +388,8 @@ punct = %04x  alnum = %04x\n",
+ 	    {
+ 	      if (((__ctype_b[(unsigned int) *inp] & classes[n].mask) != 0)
+ 		  != (*resp != '0'))
+-		{
+-		  printf ("    is%s('%c' = '\\x%02x') %s true\n", inpline,
+-			  *inp, *inp, *resp == '1' ? "not" : "is");
+-		  ++errors;
+-		}
++		FAIL ("    is%s('%c' = '\\x%02x') %s true\n", inpline,
++		      *inp, *inp, *resp == '1' ? "not" : "is");
+ 	      ++inp;
+ 	      ++resp;
+ 	    }
+@@ -408,11 +399,8 @@ punct = %04x  alnum = %04x\n",
+ 	  while (*inp != '\0')
+ 	    {
+ 	      if (tolower (*inp) != *resp)
+-		{
+-		  printf ("    tolower('%c' = '\\x%02x') != '%c'\n",
+-			  *inp, *inp, *resp);
+-		  ++errors;
+-		}
++		FAIL ("    tolower('%c' = '\\x%02x') != '%c'\n",
++		      *inp, *inp, *resp);
+ 	      ++inp;
+ 	      ++resp;
+ 	    }
+@@ -422,11 +410,8 @@ punct = %04x  alnum = %04x\n",
+ 	  while (*inp != '\0')
+ 	    {
+ 	      if (toupper (*inp) != *resp)
+-		{
+-		  printf ("    toupper('%c' = '\\x%02x') != '%c'\n",
+-			  *inp, *inp, *resp);
+-		  ++errors;
+-		}
++		FAIL ("    toupper('%c' = '\\x%02x') != '%c'\n",
++		      *inp, *inp, *resp);
+ 	      ++inp;
+ 	      ++resp;
+ 	    }
+@@ -436,14 +421,7 @@ punct = %04x  alnum = %04x\n",
+     }
+ 
+ 
+-  if (errors != 0)
+-    {
+-      printf ("  %d error%s for `%s' locale\n\n\n", errors,
+-	      errors == 1 ? "" : "s", setlocale (LC_ALL, NULL));
+-      return 1;
+-    }
+-
+-  printf ("  No errors for `%s' locale\n\n\n", setlocale (LC_ALL, NULL));
++  printf ("Completed testing for `%s' locale\n\n\n", setlocale (LC_ALL, NULL));
+   return 0;
+ }
+ 
+diff --git a/math/test-tgmath2.c b/math/test-tgmath2.c
+index 37afa8a08a..4aeb877b8e 100644
+--- a/math/test-tgmath2.c
++++ b/math/test-tgmath2.c
+@@ -24,6 +24,8 @@
+ #include <string.h>
+ #include <tgmath.h>
+ 
++#include <support/check.h>
++
+ //#define DEBUG
+ 
+ typedef complex float cfloat;
+@@ -87,13 +89,6 @@ enum
+ int count;
+ int counts[Tlast][C_last];
+ 
+-#define FAIL(str) \
+-  do								\
+-    {								\
+-      printf ("%s failure on line %d\n", (str), __LINE__);	\
+-      result = 1;						\
+-    }								\
+-  while (0)
+ #define TEST_TYPE_ONLY(expr, rettype) \
+   do								\
+     {								\
+@@ -133,8 +128,6 @@ int counts[Tlast][C_last];
+ int
+ test_cos (const int Vint4, const long long int Vllong4)
+ {
+-  int result = 0;
+-
+   TEST (cos (vfloat1), float, cos);
+   TEST (cos (vdouble1), double, cos);
+   TEST (cos (vldouble1), ldouble, cos);
+@@ -152,7 +145,7 @@ test_cos (const int Vint4, const long long int Vllong4)
+   TEST (cos (Vcdouble1), cdouble, cos);
+   TEST (cos (Vcldouble1), cldouble, cos);
+ 
+-  return result;
++  return 0;
+ }
+ 
+ int
+diff --git a/support/check.h b/support/check.h
+index 711f34b83b..7ea22c7a2c 100644
+--- a/support/check.h
++++ b/support/check.h
+@@ -24,6 +24,11 @@
+ 
+ __BEGIN_DECLS
+ 
++/* Record a test failure, print the failure message to standard output
++   and pass the result of 1 through.  */
++#define FAIL(...) \
++  support_print_failure_impl (__FILE__, __LINE__, __VA_ARGS__)
++
+ /* Record a test failure, print the failure message to standard output
+    and return 1.  */
+ #define FAIL_RET(...) \
+
+commit 27fb563bfee521239316142fa4968282bffa86a6
+Author: Maciej W. Rozycki <macro@redhat.com>
+Date:   Fri Jul 26 13:21:34 2024 +0100
+
+    stdio-common: Add test for vfscanf with matches longer than INT_MAX [BZ #27650]
+    
+    Complement commit b03e4d7bd25b ("stdio: fix vfscanf with matches longer
+    than INT_MAX (bug 27650)") and add a test case for the issue, inspired
+    by the reproducer provided with the bug report.
+    
+    This has been verified to succeed as from the commit referred and fail
+    beforehand.
+    
+    As the test requires 2GiB of data to be passed around its performance
+    has been evaluated using a choice of systems and the execution time
+    determined to be respectively in the range of 9s for POWER9@2.166GHz,
+    24s for FU740@1.2GHz, and 40s for 74Kf@950MHz.  As this is on the verge
+    of and beyond the default timeout it has been increased by the factor of
+    8.  Regardless, following recent practice the test has been added to the
+    standard rather than extended set.
+    
+    Reviewed-by: DJ Delorie <dj@redhat.com>
+    (cherry picked from commit 89cddc8a7096f3d9225868304d2bc0a1aaf07d63)
+
+diff --git a/stdio-common/Makefile b/stdio-common/Makefile
+index a63c05a120..e4f0146d2c 100644
+--- a/stdio-common/Makefile
++++ b/stdio-common/Makefile
+@@ -240,6 +240,7 @@ tests := \
+   tst-scanf-binary-c23 \
+   tst-scanf-binary-gnu11 \
+   tst-scanf-binary-gnu89 \
++  tst-scanf-bz27650 \
+   tst-scanf-intn \
+   tst-scanf-round \
+   tst-scanf-to_inpunct \
+@@ -328,6 +329,7 @@ generated += \
+   tst-printf-fp-free.mtrace \
+   tst-printf-fp-leak-mem.out \
+   tst-printf-fp-leak.mtrace \
++  tst-scanf-bz27650.mtrace \
+   tst-vfprintf-width-prec-mem.out \
+   tst-vfprintf-width-prec.mtrace \
+   # generated
+@@ -419,6 +421,9 @@ tst-printf-fp-free-ENV = \
+ tst-printf-fp-leak-ENV = \
+   MALLOC_TRACE=$(objpfx)tst-printf-fp-leak.mtrace \
+   LD_PRELOAD=$(common-objpfx)/malloc/libc_malloc_debug.so
++tst-scanf-bz27650-ENV = \
++  MALLOC_TRACE=$(objpfx)tst-scanf-bz27650.mtrace \
++  LD_PRELOAD=$(common-objpfx)malloc/libc_malloc_debug.so
+ 
+ $(objpfx)tst-unbputc.out: tst-unbputc.sh $(objpfx)tst-unbputc
+ 	$(SHELL) $< $(common-objpfx) '$(test-program-prefix)'; \
+diff --git a/stdio-common/tst-scanf-bz27650.c b/stdio-common/tst-scanf-bz27650.c
+new file mode 100644
+index 0000000000..3a742bc865
+--- /dev/null
++++ b/stdio-common/tst-scanf-bz27650.c
+@@ -0,0 +1,108 @@
++/* Test for BZ #27650, formatted input matching beyond INT_MAX.
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <error.h>
++#include <errno.h>
++#include <limits.h>
++#include <mcheck.h>
++#include <stddef.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++
++#include <sys/types.h>
++
++#include <support/check.h>
++#include <support/test-driver.h>
++
++/* Produce a stream of more than INT_MAX characters via buffer BUF of
++   size SIZE according to bookkeeping in COOKIE and then return EOF.  */
++
++static ssize_t
++io_read (void *cookie, char *buf, size_t size)
++{
++  unsigned int *written = cookie;
++  unsigned int w = *written;
++
++  if (w > INT_MAX)
++    return 0;
++
++  memset (buf, 'a', size);
++  *written = w + size;
++  return size;
++}
++
++/* Consume a stream of more than INT_MAX characters from an artificial
++   input stream of which none is the new line character.  The call to
++   fscanf is supposed to complete upon the EOF condition of input,
++   however in the presence of BZ #27650 it will terminate prematurely
++   with characters still outstanding in input.  Diagnose the condition
++   and return status accordingly.  */
++
++int
++do_test (void)
++{
++  static cookie_io_functions_t io_funcs = { .read = io_read };
++  unsigned int written = 0;
++  FILE *in;
++  int v;
++
++  mtrace ();
++
++  in = fopencookie (&written, "r", io_funcs);
++  if (in == NULL)
++    {
++      FAIL ("fopencookie: %m");
++      goto out;
++    }
++
++  v = fscanf (in, "%*[^\n]");
++  if (ferror (in))
++    {
++      FAIL ("fscanf: input failure, at %u: %m", written);
++      goto out_close;
++    }
++  else if (v == EOF)
++    {
++      FAIL ("fscanf: unexpected end of file, at %u", written);
++      goto out_close;
++    }
++
++  if (!feof (in))
++    {
++      v = fgetc (in);
++      if (ferror (in))
++	FAIL ("fgetc: input failure: %m");
++      else if (v == EOF)
++	FAIL ("fgetc: unexpected end of file after missing end of file");
++      else if (v == '\n')
++	FAIL ("unexpected new line character received");
++      else
++	FAIL ("character received after end of file expected: \\x%02x", v);
++    }
++
++out_close:
++  if (fclose (in) != 0)
++    FAIL ("fclose: %m");
++
++out:
++  return EXIT_SUCCESS;
++}
++
++#define TIMEOUT (DEFAULT_TIMEOUT * 8)
++#include <support/test-driver.c>
+
+commit 2f749d2b15cbc82268d7f8735f21ae1e3b68754f
+Author: Siddhesh Poyarekar <siddhesh@sourceware.org>
+Date:   Wed Aug 14 19:20:04 2024 -0400
+
+    Make tst-ungetc use libsupport
+    
+    Signed-off-by: Siddhesh Poyarekar <siddhesh@sourceware.org>
+    Reviewed-by: Carlos O'Donell <carlos@redhat.com>
+    (cherry picked from commit 3f7df7e757f4efec38e45d4068e5492efcac4856)
+
+diff --git a/stdio-common/tst-ungetc.c b/stdio-common/tst-ungetc.c
+index 1344b2b591..5c808f0734 100644
+--- a/stdio-common/tst-ungetc.c
++++ b/stdio-common/tst-ungetc.c
+@@ -1,70 +1,72 @@
+-/* Test for ungetc bugs.  */
++/* Test for ungetc bugs.
++   Copyright (C) 1996-2024 Free Software Foundation, Inc.
++   Copyright The GNU Toolchain Authors.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
+-#include <unistd.h>
+-
+-#undef assert
+-#define assert(x) \
+-  if (!(x)) \
+-    { \
+-      fputs ("test failed: " #x "\n", stderr); \
+-      retval = 1; \
+-      goto the_end; \
+-    }
++#include <support/check.h>
++#include <support/support.h>
++#include <support/temp_file.h>
++#include <support/xstdio.h>
++#include <support/xunistd.h>
+ 
+-int
+-main (int argc, char *argv[])
++static int
++do_test (void)
+ {
+-  char name[] = "/tmp/tst-ungetc.XXXXXX";
++  char *name = NULL;
+   FILE *fp = NULL;
+-  int retval = 0;
+   int c;
+   char buffer[64];
+ 
+-  int fd = mkstemp (name);
++  int fd = create_temp_file ("tst-ungetc.", &name);
+   if (fd == -1)
+-    {
+-      printf ("mkstemp failed: %m\n");
+-      return 1;
+-    }
+-  close (fd);
+-  fp = fopen (name, "w");
+-  assert (fp != NULL)
+-  fputs ("bla", fp);
+-  fclose (fp);
+-  fp = NULL;
++    FAIL_EXIT1 ("cannot create temporary file: %m");
++  xclose (fd);
+ 
+-  fp = fopen (name, "r");
+-  assert (fp != NULL);
+-  assert (ungetc ('z', fp) == 'z');
+-  assert (getc (fp) == 'z');
+-  assert (getc (fp) == 'b');
+-  assert (getc (fp) == 'l');
+-  assert (ungetc ('m', fp) == 'm');
+-  assert (getc (fp) == 'm');
+-  assert ((c = getc (fp)) == 'a');
+-  assert (getc (fp) == EOF);
+-  assert (ungetc (c, fp) == c);
+-  assert (feof (fp) == 0);
+-  assert (getc (fp) == c);
+-  assert (getc (fp) == EOF);
+-  fclose (fp);
+-  fp = NULL;
++  fp = xfopen (name, "w");
++  fputs ("bla", fp);
++  xfclose (fp);
+ 
+-  fp = fopen (name, "r");
+-  assert (fp != NULL);
+-  assert (getc (fp) == 'b');
+-  assert (getc (fp) == 'l');
+-  assert (ungetc ('b', fp) == 'b');
+-  assert (fread (buffer, 1, 64, fp) == 2);
+-  assert (buffer[0] == 'b');
+-  assert (buffer[1] == 'a');
++  fp = xfopen (name, "r");
++  TEST_VERIFY_EXIT (ungetc ('z', fp) == 'z');
++  TEST_VERIFY_EXIT (getc (fp) == 'z');
++  TEST_VERIFY_EXIT (getc (fp) == 'b');
++  TEST_VERIFY_EXIT (getc (fp) == 'l');
++  TEST_VERIFY_EXIT (ungetc ('m', fp) == 'm');
++  TEST_VERIFY_EXIT (getc (fp) == 'm');
++  TEST_VERIFY_EXIT ((c = getc (fp)) == 'a');
++  TEST_VERIFY_EXIT (getc (fp) == EOF);
++  TEST_VERIFY_EXIT (ungetc (c, fp) == c);
++  TEST_VERIFY_EXIT (feof (fp) == 0);
++  TEST_VERIFY_EXIT (getc (fp) == c);
++  TEST_VERIFY_EXIT (getc (fp) == EOF);
++  xfclose (fp);
+ 
+-the_end:
+-  if (fp != NULL)
+-    fclose (fp);
+-  unlink (name);
++  fp = xfopen (name, "r");
++  TEST_VERIFY_EXIT (getc (fp) == 'b');
++  TEST_VERIFY_EXIT (getc (fp) == 'l');
++  TEST_VERIFY_EXIT (ungetc ('b', fp) == 'b');
++  TEST_VERIFY_EXIT (fread (buffer, 1, 64, fp) == 2);
++  TEST_VERIFY_EXIT (buffer[0] == 'b');
++  TEST_VERIFY_EXIT (buffer[1] == 'a');
++  xfclose (fp);
+ 
+-  return retval;
++  return 0;
+ }
++
++#include <support/test-driver.c>
+
+commit dac7a0694b5e853f08be518cd5a133ac5804666d
+Author: Siddhesh Poyarekar <siddhesh@sourceware.org>
+Date:   Tue Aug 13 21:00:06 2024 -0400
+
+    ungetc: Fix uninitialized read when putting into unused streams [BZ #27821]
+    
+    When ungetc is called on an unused stream, the backup buffer is
+    allocated without the main get area being present.  This results in
+    every subsequent ungetc (as the stream remains in the backup area)
+    checking uninitialized memory in the backup buffer when trying to put a
+    character back into the stream.
+    
+    Avoid comparing the input character with buffer contents when in backup
+    to avoid this uninitialized read.  The uninitialized read is harmless in
+    this context since the location is promptly overwritten with the input
+    character, thus fulfilling ungetc functionality.
+    
+    Also adjust wording in the manual to drop the paragraph that says glibc
+    cannot do multiple ungetc back to back since with this change, ungetc
+    can actually do this.
+    
+    Signed-off-by: Siddhesh Poyarekar <siddhesh@sourceware.org>
+    Reviewed-by: Carlos O'Donell <carlos@redhat.com>
+    (cherry picked from commit cdf0f88f97b0aaceb894cc02b21159d148d7065c)
+
+diff --git a/libio/genops.c b/libio/genops.c
+index 99f5e80f20..b012fa33d2 100644
+--- a/libio/genops.c
++++ b/libio/genops.c
+@@ -662,7 +662,7 @@ _IO_sputbackc (FILE *fp, int c)
+ {
+   int result;
+ 
+-  if (fp->_IO_read_ptr > fp->_IO_read_base
++  if (fp->_IO_read_ptr > fp->_IO_read_base && !_IO_in_backup (fp)
+       && (unsigned char)fp->_IO_read_ptr[-1] == (unsigned char)c)
+     {
+       fp->_IO_read_ptr--;
+diff --git a/manual/stdio.texi b/manual/stdio.texi
+index 8517653507..92614775fa 100644
+--- a/manual/stdio.texi
++++ b/manual/stdio.texi
+@@ -1467,11 +1467,9 @@ program; usually @code{ungetc} is used only to unread a character that
+ was just read from the same stream.  @Theglibc{} supports this
+ even on files opened in binary mode, but other systems might not.
+ 
+-@Theglibc{} only supports one character of pushback---in other
+-words, it does not work to call @code{ungetc} twice without doing input
+-in between.  Other systems might let you push back multiple characters;
+-then reading from the stream retrieves the characters in the reverse
+-order that they were pushed.
++@Theglibc{} supports pushing back multiple characters; subsequently
++reading from the stream retrieves the characters in the reverse order
++that they were pushed.
+ 
+ Pushing back characters doesn't alter the file; only the internal
+ buffering for the stream is affected.  If a file positioning function
+diff --git a/stdio-common/tst-ungetc.c b/stdio-common/tst-ungetc.c
+index 5c808f0734..388b202493 100644
+--- a/stdio-common/tst-ungetc.c
++++ b/stdio-common/tst-ungetc.c
+@@ -48,6 +48,8 @@ do_test (void)
+   TEST_VERIFY_EXIT (getc (fp) == 'b');
+   TEST_VERIFY_EXIT (getc (fp) == 'l');
+   TEST_VERIFY_EXIT (ungetc ('m', fp) == 'm');
++  TEST_VERIFY_EXIT (ungetc ('n', fp) == 'n');
++  TEST_VERIFY_EXIT (getc (fp) == 'n');
+   TEST_VERIFY_EXIT (getc (fp) == 'm');
+   TEST_VERIFY_EXIT ((c = getc (fp)) == 'a');
+   TEST_VERIFY_EXIT (getc (fp) == EOF);
+
+commit e24902f409994f226dbc6fde2476009df452a18f
+Author: Siddhesh Poyarekar <siddhesh@sourceware.org>
+Date:   Tue Aug 13 21:08:49 2024 -0400
+
+    ungetc: Fix backup buffer leak on program exit [BZ #27821]
+    
+    If a file descriptor is left unclosed and is cleaned up by _IO_cleanup
+    on exit, its backup buffer remains unfreed, registering as a leak in
+    valgrind.  This is not strictly an issue since (1) the program should
+    ideally be closing the stream once it's not in use and (2) the program
+    is about to exit anyway, so keeping the backup buffer around a wee bit
+    longer isn't a real problem.  Free it anyway to keep valgrind happy
+    when the streams in question are the standard ones, i.e. stdout, stdin
+    or stderr.
+    
+    Also, the _IO_have_backup macro checks for _IO_save_base,
+    which is a roundabout way to check for a backup buffer instead of
+    directly looking for _IO_backup_base.  The roundabout check breaks when
+    the main get area has not been used and user pushes a char into the
+    backup buffer with ungetc.  Fix this to use the _IO_backup_base
+    directly.
+    
+    Signed-off-by: Siddhesh Poyarekar <siddhesh@sourceware.org>
+    Reviewed-by: Carlos O'Donell <carlos@redhat.com>
+    (cherry picked from commit 3e1d8d1d1dca24ae90df2ea826a8916896fc7e77)
+
+diff --git a/libio/genops.c b/libio/genops.c
+index b012fa33d2..35d8b30710 100644
+--- a/libio/genops.c
++++ b/libio/genops.c
+@@ -816,6 +816,12 @@ _IO_unbuffer_all (void)
+ 	legacy = 1;
+ #endif
+ 
++      /* Free up the backup area if it was ever allocated.  */
++      if (_IO_have_backup (fp))
++	_IO_free_backup_area (fp);
++      if (fp->_mode > 0 && _IO_have_wbackup (fp))
++	_IO_free_wbackup_area (fp);
++
+       if (! (fp->_flags & _IO_UNBUFFERED)
+ 	  /* Iff stream is un-orientated, it wasn't used. */
+ 	  && (legacy || fp->_mode != 0))
+diff --git a/libio/libioP.h b/libio/libioP.h
+index 1af287b19f..616253fcd0 100644
+--- a/libio/libioP.h
++++ b/libio/libioP.h
+@@ -577,8 +577,8 @@ extern void _IO_old_init (FILE *fp, int flags) __THROW;
+        ((__fp)->_wide_data->_IO_write_base \
+ 	= (__fp)->_wide_data->_IO_write_ptr = __p, \
+ 	(__fp)->_wide_data->_IO_write_end = (__ep))
+-#define _IO_have_backup(fp) ((fp)->_IO_save_base != NULL)
+-#define _IO_have_wbackup(fp) ((fp)->_wide_data->_IO_save_base != NULL)
++#define _IO_have_backup(fp) ((fp)->_IO_backup_base != NULL)
++#define _IO_have_wbackup(fp) ((fp)->_wide_data->_IO_backup_base != NULL)
+ #define _IO_in_backup(fp) ((fp)->_flags & _IO_IN_BACKUP)
+ #define _IO_have_markers(fp) ((fp)->_markers != NULL)
+ #define _IO_blen(fp) ((fp)->_IO_buf_end - (fp)->_IO_buf_base)
+diff --git a/stdio-common/Makefile b/stdio-common/Makefile
+index e4f0146d2c..a91754f52d 100644
+--- a/stdio-common/Makefile
++++ b/stdio-common/Makefile
+@@ -254,6 +254,7 @@ tests := \
+   tst-swscanf \
+   tst-tmpnam \
+   tst-ungetc \
++  tst-ungetc-leak \
+   tst-unlockedio \
+   tst-vfprintf-mbs-prec \
+   tst-vfprintf-user-type \
+@@ -316,6 +317,7 @@ tests-special += \
+   $(objpfx)tst-printf-bz25691-mem.out \
+   $(objpfx)tst-printf-fp-free-mem.out \
+   $(objpfx)tst-printf-fp-leak-mem.out \
++  $(objpfx)tst-ungetc-leak-mem.out \
+   $(objpfx)tst-vfprintf-width-prec-mem.out \
+   # tests-special
+ 
+@@ -330,6 +332,8 @@ generated += \
+   tst-printf-fp-leak-mem.out \
+   tst-printf-fp-leak.mtrace \
+   tst-scanf-bz27650.mtrace \
++  tst-ungetc-leak-mem.out \
++  tst-ungetc-leak.mtrace \
+   tst-vfprintf-width-prec-mem.out \
+   tst-vfprintf-width-prec.mtrace \
+   # generated
+@@ -424,6 +428,9 @@ tst-printf-fp-leak-ENV = \
+ tst-scanf-bz27650-ENV = \
+   MALLOC_TRACE=$(objpfx)tst-scanf-bz27650.mtrace \
+   LD_PRELOAD=$(common-objpfx)malloc/libc_malloc_debug.so
++tst-ungetc-leak-ENV = \
++  MALLOC_TRACE=$(objpfx)tst-ungetc-leak.mtrace \
++  LD_PRELOAD=$(common-objpfx)malloc/libc_malloc_debug.so
+ 
+ $(objpfx)tst-unbputc.out: tst-unbputc.sh $(objpfx)tst-unbputc
+ 	$(SHELL) $< $(common-objpfx) '$(test-program-prefix)'; \
+diff --git a/stdio-common/tst-ungetc-leak.c b/stdio-common/tst-ungetc-leak.c
+new file mode 100644
+index 0000000000..6c5152b43f
+--- /dev/null
++++ b/stdio-common/tst-ungetc-leak.c
+@@ -0,0 +1,32 @@
++/* Test for memory leak with ungetc when stream is unused.
++   Copyright The GNU Toolchain Authors.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <stdio.h>
++#include <mcheck.h>
++#include <support/check.h>
++#include <support/support.h>
++
++static int
++do_test (void)
++{
++  mtrace ();
++  TEST_COMPARE (ungetc('y', stdin), 'y');
++  return 0;
++}
++
++#include <support/test-driver.c>
+
+commit 3b3350d7baa8de70b71c02e964d5b8343749ebf8
+Author: Maciej W. Rozycki <macro@redhat.com>
+Date:   Fri Jul 26 13:21:34 2024 +0100
+
+    posix: Use <support/check.h> facilities in tst-truncate and tst-truncate64
+    
+    Remove local FAIL macro in favor to FAIL_RET from <support/check.h>,
+    which provides equivalent reporting, with the name of the file of the
+    failure site additionally included, for the tst-truncate-common core
+    shared between the tst-truncate and tst-truncate64 tests.
+    
+    Reviewed-by: DJ Delorie <dj@redhat.com>
+    (cherry picked from commit fe47595504a55e7bb992f8928533df154b510383)
+
+diff --git a/posix/tst-truncate-common.c b/posix/tst-truncate-common.c
+index b774fa46b8..b8c561ffdb 100644
+--- a/posix/tst-truncate-common.c
++++ b/posix/tst-truncate-common.c
+@@ -21,6 +21,8 @@
+ #include <sys/stat.h>
+ #include <unistd.h>
+ 
++#include <support/check.h>
++
+ static void do_prepare (void);
+ #define PREPARE(argc, argv)     do_prepare ()
+ static int do_test (void);
+@@ -42,9 +44,6 @@ do_prepare (void)
+     }
+ }
+ 
+-#define FAIL(str) \
+-  do { printf ("error: %s (line %d)\n", str, __LINE__); return 1; } while (0)
+-
+ static int
+ do_test_with_offset (off_t offset)
+ {
+@@ -54,35 +53,35 @@ do_test_with_offset (off_t offset)
+   memset (buf, 0xcf, sizeof (buf));
+ 
+   if (pwrite (temp_fd, buf, sizeof (buf), offset) != sizeof (buf))
+-    FAIL ("write failed");
++    FAIL_RET ("write failed");
+   if (fstat (temp_fd, &st) < 0 || st.st_size != (offset + sizeof (buf)))
+-    FAIL ("initial size wrong");
++    FAIL_RET ("initial size wrong");
+ 
+   if (ftruncate (temp_fd, offset + 800) < 0)
+-    FAIL ("size reduction with ftruncate failed");
++    FAIL_RET ("size reduction with ftruncate failed");
+   if (fstat (temp_fd, &st) < 0 || st.st_size != (offset + 800))
+-    FAIL ("size after reduction with ftruncate is incorrect");
++    FAIL_RET ("size after reduction with ftruncate is incorrect");
+ 
+   /* The following test covers more than POSIX.  POSIX does not require
+      that ftruncate() can increase the file size.  But we are testing
+      Unix systems.  */
+   if (ftruncate (temp_fd, offset + 1200) < 0)
+-    FAIL ("size increate with ftruncate failed");
++    FAIL_RET ("size increate with ftruncate failed");
+   if (fstat (temp_fd, &st) < 0 || st.st_size != (offset + 1200))
+-    FAIL ("size after increase is incorrect");
++    FAIL_RET ("size after increase is incorrect");
+ 
+   if (truncate (temp_filename, offset + 800) < 0)
+-    FAIL ("size reduction with truncate failed");
++    FAIL_RET ("size reduction with truncate failed");
+   if (fstat (temp_fd, &st) < 0 || st.st_size != (offset + 800))
+-    FAIL ("size after reduction with truncate incorrect");
++    FAIL_RET ("size after reduction with truncate incorrect");
+ 
+   /* The following test covers more than POSIX.  POSIX does not require
+      that truncate() can increase the file size.  But we are testing
+      Unix systems.  */
+   if (truncate (temp_filename, (offset + 1200)) < 0)
+-    FAIL ("size increase with truncate failed");
++    FAIL_RET ("size increase with truncate failed");
+   if (fstat (temp_fd, &st) < 0 || st.st_size != (offset + 1200))
+-    FAIL ("size increase with truncate is incorrect");
++    FAIL_RET ("size increase with truncate is incorrect");
+ 
+   return 0;
+ }
+
+commit 3414b17e9db16c3bc0de5b49555c4f94f155ffc8
+Author: Maciej W. Rozycki <macro@redhat.com>
+Date:   Fri Jul 26 13:21:34 2024 +0100
+
+    nptl: Use <support/check.h> facilities in tst-setuid3
+    
+    Remove local FAIL macro in favor to FAIL_EXIT1 from <support/check.h>,
+    which provides equivalent reporting, with the name of the file and the
+    line number within of the failure site additionally included.  Remove
+    FAIL_ERR altogether and include ": %m" explicitly with the format string
+    supplied to FAIL_EXIT1 as there seems little value to have a separate
+    macro just for this.
+    
+    Reviewed-by: DJ Delorie <dj@redhat.com>
+    (cherry picked from commit 8c98195af6e6f1ce21743fc26c723e0f7e45bcf2)
+
+diff --git a/sysdeps/pthread/tst-setuid3.c b/sysdeps/pthread/tst-setuid3.c
+index 83f42a0ae5..3845ab03d3 100644
+--- a/sysdeps/pthread/tst-setuid3.c
++++ b/sysdeps/pthread/tst-setuid3.c
+@@ -15,24 +15,19 @@
+    License along with the GNU C Library; if not, see
+    <https://www.gnu.org/licenses/>.  */
+ 
+-#include <stdio.h>
+ #include <errno.h>
+ #include <pthread.h>
+ #include <stdbool.h>
+ #include <unistd.h>
+ 
++#include <support/check.h>
++
+ /* The test must run under a non-privileged user ID.  */
+ static const uid_t test_uid = 1;
+ 
+ static pthread_barrier_t barrier1;
+ static pthread_barrier_t barrier2;
+ 
+-#define FAIL(fmt, ...) \
+-  do { printf ("FAIL: " fmt "\n", __VA_ARGS__); _exit (1); } while (0)
+-
+-#define FAIL_ERR(fmt, ...) \
+-  do { printf ("FAIL: " fmt ": %m\n", __VA_ARGS__); _exit (1); } while (0)
+-
+ /* True if x is not a successful return code from pthread_barrier_wait.  */
+ static inline bool
+ is_invalid_barrier_ret (int x)
+@@ -45,10 +40,10 @@ thread_func (void *ctx __attribute__ ((unused)))
+ {
+   int ret = pthread_barrier_wait (&barrier1);
+   if (is_invalid_barrier_ret (ret))
+-    FAIL ("pthread_barrier_wait (barrier1) (on thread): %d", ret);
++    FAIL_EXIT1 ("pthread_barrier_wait (barrier1) (on thread): %d", ret);
+   ret = pthread_barrier_wait (&barrier2);
+   if (is_invalid_barrier_ret (ret))
+-    FAIL ("pthread_barrier_wait (barrier2) (on thread): %d", ret);
++    FAIL_EXIT1 ("pthread_barrier_wait (barrier2) (on thread): %d", ret);
+   return NULL;
+ }
+ 
+@@ -59,13 +54,13 @@ setuid_failure (int phase)
+   switch (ret)
+     {
+     case 0:
+-      FAIL ("setuid succeeded unexpectedly in phase %d", phase);
++      FAIL_EXIT1 ("setuid succeeded unexpectedly in phase %d", phase);
+     case -1:
+       if (errno != EPERM)
+-	FAIL_ERR ("setuid phase %d", phase);
++	FAIL_EXIT1 ("setuid phase %d: %m", phase);
+       break;
+     default:
+-      FAIL ("invalid setuid return value in phase %d: %d", phase, ret);
++      FAIL_EXIT1 ("invalid setuid return value in phase %d: %d", phase, ret);
+     }
+ }
+ 
+@@ -74,42 +69,42 @@ do_test (void)
+ {
+   if (getuid () == 0)
+     if (setuid (test_uid) != 0)
+-      FAIL_ERR ("setuid (%u)", (unsigned) test_uid);
++      FAIL_EXIT1 ("setuid (%u): %m", (unsigned) test_uid);
+   if (setuid (getuid ()))
+-    FAIL_ERR ("setuid (%s)", "getuid ()");
++    FAIL_EXIT1 ("setuid (%s): %m", "getuid ()");
+   setuid_failure (1);
+ 
+   int ret = pthread_barrier_init (&barrier1, NULL, 2);
+   if (ret != 0)
+-    FAIL ("pthread_barrier_init (barrier1): %d", ret);
++    FAIL_EXIT1 ("pthread_barrier_init (barrier1): %d", ret);
+   ret = pthread_barrier_init (&barrier2, NULL, 2);
+   if (ret != 0)
+-    FAIL ("pthread_barrier_init (barrier2): %d", ret);
++    FAIL_EXIT1 ("pthread_barrier_init (barrier2): %d", ret);
+ 
+   pthread_t thread;
+   ret = pthread_create (&thread, NULL, thread_func, NULL);
+   if (ret != 0)
+-    FAIL ("pthread_create: %d", ret);
++    FAIL_EXIT1 ("pthread_create: %d", ret);
+ 
+   /* Ensure that the thread is running properly.  */
+   ret = pthread_barrier_wait (&barrier1);
+   if (is_invalid_barrier_ret (ret))
+-    FAIL ("pthread_barrier_wait (barrier1): %d", ret);
++    FAIL_EXIT1 ("pthread_barrier_wait (barrier1): %d", ret);
+ 
+   setuid_failure (2);
+ 
+   /* Check success case. */
+   if (setuid (getuid ()) != 0)
+-    FAIL_ERR ("setuid (%s)", "getuid ()");
++    FAIL_EXIT1 ("setuid (%s): %m", "getuid ()");
+ 
+   /* Shutdown.  */
+   ret = pthread_barrier_wait (&barrier2);
+   if (is_invalid_barrier_ret (ret))
+-    FAIL ("pthread_barrier_wait (barrier2): %d", ret);
++    FAIL_EXIT1 ("pthread_barrier_wait (barrier2): %d", ret);
+ 
+   ret = pthread_join (thread, NULL);
+   if (ret != 0)
+-    FAIL ("pthread_join: %d", ret);
++    FAIL_EXIT1 ("pthread_join: %d", ret);
+ 
+   return 0;
+ }
+
+commit b7edcfa0f41ccfaeb665a661d3a6a594c8d95848
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Thu Aug 1 23:31:23 2024 +0200
+
+    elf: Clarify and invert second argument of _dl_allocate_tls_init
+    
+    Also remove an outdated comment: _dl_allocate_tls_init is
+    called as part of pthread_create.
+    
+    Reviewed-by: Carlos O'Donell <carlos@redhat.com>
+    (cherry picked from commit fe06fb313bddf7e4530056897d4a706606e49377)
+
+diff --git a/elf/dl-tls.c b/elf/dl-tls.c
+index 3d221273f1..ecb966d282 100644
+--- a/elf/dl-tls.c
++++ b/elf/dl-tls.c
+@@ -552,9 +552,14 @@ _dl_resize_dtv (dtv_t *dtv, size_t max_modid)
+ /* Allocate initial TLS.  RESULT should be a non-NULL pointer to storage
+    for the TLS space.  The DTV may be resized, and so this function may
+    call malloc to allocate that space.  The loader's GL(dl_load_tls_lock)
+-   is taken when manipulating global TLS-related data in the loader.  */
++   is taken when manipulating global TLS-related data in the loader.
++
++   If MAIN_THREAD, this is the first call during process
++   initialization.  In this case, TLS initialization for secondary
++   (audit) namespaces is skipped because that has already been handled
++   by dlopen.  */
+ void *
+-_dl_allocate_tls_init (void *result, bool init_tls)
++_dl_allocate_tls_init (void *result, bool main_thread)
+ {
+   if (result == NULL)
+     /* The memory allocation failed.  */
+@@ -633,7 +638,7 @@ _dl_allocate_tls_init (void *result, bool init_tls)
+ 	     because it would already be set by the audit setup.  However,
+ 	     subsequent thread creation would need to follow the default
+ 	     behaviour.   */
+-	  if (map->l_ns != LM_ID_BASE && !init_tls)
++	  if (map->l_ns != LM_ID_BASE && main_thread)
+ 	    continue;
+ 	  memset (__mempcpy (dest, map->l_tls_initimage,
+ 			     map->l_tls_initimage_size), '\0',
+@@ -661,7 +666,7 @@ _dl_allocate_tls (void *mem)
+ {
+   return _dl_allocate_tls_init (mem == NULL
+ 				? _dl_allocate_tls_storage ()
+-				: allocate_dtv (mem), true);
++				: allocate_dtv (mem), false);
+ }
+ rtld_hidden_def (_dl_allocate_tls)
+ 
+diff --git a/elf/rtld.c b/elf/rtld.c
+index bfdf632e77..09b9c9993b 100644
+--- a/elf/rtld.c
++++ b/elf/rtld.c
+@@ -2338,7 +2338,7 @@ dl_main (const ElfW(Phdr) *phdr,
+      into the main thread's TLS area, which we allocated above.
+      Note: thread-local variables must only be accessed after completing
+      the next step.  */
+-  _dl_allocate_tls_init (tcbp, false);
++  _dl_allocate_tls_init (tcbp, true);
+ 
+   /* And finally install it for the main thread.  */
+   if (! __rtld_tls_init_tp_called)
+diff --git a/nptl/allocatestack.c b/nptl/allocatestack.c
+index f35a8369bd..2cb562f8ea 100644
+--- a/nptl/allocatestack.c
++++ b/nptl/allocatestack.c
+@@ -139,7 +139,7 @@ get_cached_stack (size_t *sizep, void **memp)
+   memset (dtv, '\0', (dtv[-1].counter + 1) * sizeof (dtv_t));
+ 
+   /* Re-initialize the TLS.  */
+-  _dl_allocate_tls_init (TLS_TPADJ (result), true);
++  _dl_allocate_tls_init (TLS_TPADJ (result), false);
+ 
+   return result;
+ }
+diff --git a/sysdeps/generic/ldsodefs.h b/sysdeps/generic/ldsodefs.h
+index 656e8a3fa0..154efb0e19 100644
+--- a/sysdeps/generic/ldsodefs.h
++++ b/sysdeps/generic/ldsodefs.h
+@@ -1200,10 +1200,8 @@ extern void _dl_get_tls_static_info (size_t *sizep, size_t *alignp);
+ 
+ extern void _dl_allocate_static_tls (struct link_map *map) attribute_hidden;
+ 
+-/* These are internal entry points to the two halves of _dl_allocate_tls,
+-   only used within rtld.c itself at startup time.  */
+ extern void *_dl_allocate_tls_storage (void) attribute_hidden;
+-extern void *_dl_allocate_tls_init (void *, bool);
++extern void *_dl_allocate_tls_init (void *result, bool main_thread);
+ rtld_hidden_proto (_dl_allocate_tls_init)
+ 
+ /* True if the TCB has been set up.  */
+
+commit f496b750f135e57da921e975835c44bd199246dd
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Thu Aug 1 23:31:30 2024 +0200
+
+    elf: Avoid re-initializing already allocated TLS in dlopen (bug 31717)
+    
+    The old code used l_init_called as an indicator for whether TLS
+    initialization was complete.  However, it is possible that
+    TLS for an object is initialized, written to, and then dlopen
+    for this object is called again, and l_init_called is not true at
+    this point.  Previously, this resulted in TLS being initialized
+    twice, discarding any interim writes (technically introducing a
+    use-after-free bug even).
+    
+    This commit introduces an explicit per-object flag, l_tls_in_slotinfo.
+    It indicates whether _dl_add_to_slotinfo has been called for this
+    object.  This flag is used to avoid double-initialization of TLS.
+    In update_tls_slotinfo, the first_static_tls micro-optimization
+    is removed because preserving the initalization flag for subsequent
+    use by the second loop for static TLS is a bit complicated, and
+    another per-object flag does not seem to be worth it.  Furthermore,
+    the l_init_called flag is dropped from the second loop (for static
+    TLS initialization) because l_need_tls_init on its own prevents
+    double-initialization.
+    
+    The remaining l_init_called usage in resize_scopes and update_scopes
+    is just an optimization due to the use of scope_has_map, so it is
+    not changed in this commit.
+    
+    The isupper check ensures that libc.so.6 is TLS is not reverted.
+    Such a revert happens if l_need_tls_init is not cleared in
+    _dl_allocate_tls_init for the main_thread case, now that
+    l_init_called is not checked anymore in update_tls_slotinfo
+    in elf/dl-open.c.
+    
+    Reported-by: Jonathon Anderson <janderson@rice.edu>
+    Reviewed-by: Carlos O'Donell <carlos@redhat.com>
+    (cherry picked from commit 5097cd344fd243fb8deb6dec96e8073753f962f9)
+
+diff --git a/NEWS b/NEWS
+index 10a125bc66..5b20efbf6c 100644
+--- a/NEWS
++++ b/NEWS
+@@ -10,7 +10,7 @@ Version 2.40.1
+ The following bugs are resolved with this release:
+ 
+   [30081] resolv: Do not wait for non-existing second DNS response after error
+-  [31968] mremap implementation in C does not handle arguments correctly
++  [31717] elf: Avoid re-initializing already allocated TLS in dlopen
+   [31890] resolv: Allow short error responses to match any DNS query
+   [31968] mremap implementation in C does not handle arguments correctly
+   [32026] strerror/strsignal TLS not handled correctly for secondary namespaces
+diff --git a/elf/Makefile b/elf/Makefile
+index a3475f3fb5..a03c6520d8 100644
+--- a/elf/Makefile
++++ b/elf/Makefile
+@@ -416,6 +416,10 @@ tests += \
+   tst-dlmopen4 \
+   tst-dlopen-self \
+   tst-dlopen-tlsmodid \
++  tst-dlopen-tlsreinit1 \
++  tst-dlopen-tlsreinit2 \
++  tst-dlopen-tlsreinit3 \
++  tst-dlopen-tlsreinit4 \
+   tst-dlopenfail \
+   tst-dlopenfail-2 \
+   tst-dlopenrpath \
+@@ -853,6 +857,9 @@ modules-names += \
+   tst-dlmopen-twice-mod1 \
+   tst-dlmopen-twice-mod2 \
+   tst-dlmopen1mod \
++  tst-dlopen-tlsreinitmod1 \
++  tst-dlopen-tlsreinitmod2 \
++  tst-dlopen-tlsreinitmod3 \
+   tst-dlopenfaillinkmod \
+   tst-dlopenfailmod1 \
+   tst-dlopenfailmod2 \
+@@ -3118,3 +3125,26 @@ $(objpfx)tst-recursive-tls.out: \
+     0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15)
+ $(objpfx)tst-recursive-tlsmod%.os: tst-recursive-tlsmodN.c
+ 	$(compile-command.c) -DVAR=thread_$* -DFUNC=get_threadvar_$*
++
++# Order matters here.  The test needs the constructor for
++# tst-dlopen-tlsreinitmod2.so to be called first.
++LDFLAGS-tst-dlopen-tlsreinitmod1.so = -Wl,--no-as-needed
++$(objpfx)tst-dlopen-tlsreinitmod1.so: \
++  $(objpfx)tst-dlopen-tlsreinitmod3.so $(objpfx)tst-dlopen-tlsreinitmod2.so
++LDFLAGS-tst-dlopen-tlsreinit2 = -Wl,--no-as-needed
++$(objpfx)tst-dlopen-tlsreinit2: \
++  $(objpfx)tst-dlopen-tlsreinitmod3.so $(objpfx)tst-dlopen-tlsreinitmod2.so
++LDFLAGS-tst-dlopen-tlsreinit4 = -Wl,--no-as-needed
++$(objpfx)tst-dlopen-tlsreinit4: \
++  $(objpfx)tst-dlopen-tlsreinitmod3.so $(objpfx)tst-dlopen-tlsreinitmod2.so
++# tst-dlopen-tlsreinitmod2.so is underlinked and refers to
++# tst-dlopen-tlsreinitmod3.so.  The dependency is provided via
++# $(objpfx)tst-dlopen-tlsreinitmod1.so.
++tst-dlopen-tlsreinitmod2.so-no-z-defs = yes
++$(objpfx)tst-dlopen-tlsreinit.out: $(objpfx)tst-dlopen-tlsreinitmod1.so \
++  $(objpfx)tst-dlopen-tlsreinitmod2.so $(objpfx)tst-dlopen-tlsreinitmod3.so
++# Reuse an audit module which provides ample debug logging.
++$(objpfx)tst-dlopen-tlsreinit3.out: $(objpfx)tst-auditmod1.so
++tst-dlopen-tlsreinit3-ENV = LD_AUDIT=$(objpfx)tst-auditmod1.so
++$(objpfx)tst-dlopen-tlsreinit4.out: $(objpfx)tst-auditmod1.so
++tst-dlopen-tlsreinit4-ENV = LD_AUDIT=$(objpfx)tst-auditmod1.so
+diff --git a/elf/dl-open.c b/elf/dl-open.c
+index c378da16c0..8556e7bd2f 100644
+--- a/elf/dl-open.c
++++ b/elf/dl-open.c
+@@ -363,17 +363,8 @@ resize_tls_slotinfo (struct link_map *new)
+ {
+   bool any_tls = false;
+   for (unsigned int i = 0; i < new->l_searchlist.r_nlist; ++i)
+-    {
+-      struct link_map *imap = new->l_searchlist.r_list[i];
+-
+-      /* Only add TLS memory if this object is loaded now and
+-	 therefore is not yet initialized.  */
+-      if (! imap->l_init_called && imap->l_tls_blocksize > 0)
+-	{
+-	  _dl_add_to_slotinfo (imap, false);
+-	  any_tls = true;
+-	}
+-    }
++    if (_dl_add_to_slotinfo (new->l_searchlist.r_list[i], false))
++      any_tls = true;
+   return any_tls;
+ }
+ 
+@@ -383,22 +374,8 @@ resize_tls_slotinfo (struct link_map *new)
+ static void
+ update_tls_slotinfo (struct link_map *new)
+ {
+-  unsigned int first_static_tls = new->l_searchlist.r_nlist;
+   for (unsigned int i = 0; i < new->l_searchlist.r_nlist; ++i)
+-    {
+-      struct link_map *imap = new->l_searchlist.r_list[i];
+-
+-      /* Only add TLS memory if this object is loaded now and
+-	 therefore is not yet initialized.  */
+-      if (! imap->l_init_called && imap->l_tls_blocksize > 0)
+-	{
+-	  _dl_add_to_slotinfo (imap, true);
+-
+-	  if (imap->l_need_tls_init
+-	      && first_static_tls == new->l_searchlist.r_nlist)
+-	    first_static_tls = i;
+-	}
+-    }
++    _dl_add_to_slotinfo (new->l_searchlist.r_list[i], true);
+ 
+   size_t newgen = GL(dl_tls_generation) + 1;
+   if (__glibc_unlikely (newgen == 0))
+@@ -410,13 +387,11 @@ TLS generation counter wrapped!  Please report this."));
+   /* We need a second pass for static tls data, because
+      _dl_update_slotinfo must not be run while calls to
+      _dl_add_to_slotinfo are still pending.  */
+-  for (unsigned int i = first_static_tls; i < new->l_searchlist.r_nlist; ++i)
++  for (unsigned int i = 0; i < new->l_searchlist.r_nlist; ++i)
+     {
+       struct link_map *imap = new->l_searchlist.r_list[i];
+ 
+-      if (imap->l_need_tls_init
+-	  && ! imap->l_init_called
+-	  && imap->l_tls_blocksize > 0)
++      if (imap->l_need_tls_init && imap->l_tls_blocksize > 0)
+ 	{
+ 	  /* For static TLS we have to allocate the memory here and
+ 	     now, but we can delay updating the DTV.  */
+diff --git a/elf/dl-tls.c b/elf/dl-tls.c
+index ecb966d282..3d529b722c 100644
+--- a/elf/dl-tls.c
++++ b/elf/dl-tls.c
+@@ -632,17 +632,21 @@ _dl_allocate_tls_init (void *result, bool main_thread)
+ 	     some platforms use in static programs requires it.  */
+ 	  dtv[map->l_tls_modid].pointer.val = dest;
+ 
+-	  /* Copy the initialization image and clear the BSS part.  For
+-	     audit modules or dependencies with initial-exec TLS, we can not
+-	     set the initial TLS image on default loader initialization
+-	     because it would already be set by the audit setup.  However,
+-	     subsequent thread creation would need to follow the default
+-	     behaviour.   */
++	  /* Copy the initialization image and clear the BSS part.
++	     For audit modules or dependencies with initial-exec TLS,
++	     we can not set the initial TLS image on default loader
++	     initialization because it would already be set by the
++	     audit setup, which uses the dlopen code and already
++	     clears l_need_tls_init.  Calls with !main_thread from
++	     pthread_create need to initialze TLS for the current
++	     thread regardless of namespace.  */
+ 	  if (map->l_ns != LM_ID_BASE && main_thread)
+ 	    continue;
+ 	  memset (__mempcpy (dest, map->l_tls_initimage,
+ 			     map->l_tls_initimage_size), '\0',
+ 		  map->l_tls_blocksize - map->l_tls_initimage_size);
++	  if (main_thread)
++	    map->l_need_tls_init = 0;
+ 	}
+ 
+       total += cnt;
+@@ -1099,9 +1103,32 @@ _dl_tls_initial_modid_limit_setup (void)
+ }
+ 
+ 
+-void
++/* Add module to slot information data.  If DO_ADD is false, only the
++   required memory is allocated.  Must be called with
++   GL (dl_load_tls_lock) acquired.  If the function has already been
++   called for the link map L with !DO_ADD, then this function will not
++   raise an exception, otherwise it is possible that it encounters a
++   memory allocation failure.
++
++   Return false if L has already been added to the slotinfo data, or
++   if L has no TLS data.  If the returned value is true, L has been
++   added with this call (DO_ADD), or has been added in a previous call
++   (!DO_ADD).
++
++   The expected usage is as follows: Call _dl_add_to_slotinfo for
++   several link maps with DO_ADD set to false, and record if any calls
++   result in a true result.  If there was a true result, call
++   _dl_add_to_slotinfo again, this time with DO_ADD set to true.  (For
++   simplicity, it's possible to call the function for link maps where
++   the previous result was false.)  The return value from the second
++   round of calls can be ignored.  If there was true result initially,
++   call _dl_update_slotinfo to update the TLS generation counter.  */
++bool
+ _dl_add_to_slotinfo (struct link_map *l, bool do_add)
+ {
++  if (l->l_tls_blocksize == 0 || l->l_tls_in_slotinfo)
++    return false;
++
+   /* Now that we know the object is loaded successfully add
+      modules containing TLS data to the dtv info table.  We
+      might have to increase its size.  */
+@@ -1157,7 +1184,10 @@ cannot create TLS data structures"));
+       atomic_store_relaxed (&listp->slotinfo[idx].map, l);
+       atomic_store_relaxed (&listp->slotinfo[idx].gen,
+ 			    GL(dl_tls_generation) + 1);
++      l->l_tls_in_slotinfo = true;
+     }
++
++  return true;
+ }
+ 
+ #if PTHREAD_IN_LIBC
+diff --git a/elf/tst-dlopen-tlsreinit1.c b/elf/tst-dlopen-tlsreinit1.c
+new file mode 100644
+index 0000000000..2016b9b0c6
+--- /dev/null
++++ b/elf/tst-dlopen-tlsreinit1.c
+@@ -0,0 +1,40 @@
++/* Test that dlopen preserves already accessed TLS (bug 31717).
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <stdbool.h>
++#include <support/check.h>
++#include <support/xdlfcn.h>
++#include <ctype.h>
++
++static int
++do_test (void)
++{
++  void *handle = xdlopen ("tst-dlopen-tlsreinitmod1.so", RTLD_NOW);
++
++  bool *tlsreinitmod3_tested = xdlsym (handle, "tlsreinitmod3_tested");
++  TEST_VERIFY (*tlsreinitmod3_tested);
++
++  xdlclose (handle);
++
++  /* This crashes if the libc.so.6 TLS image has been reverted.  */
++  TEST_VERIFY (!isupper ('@'));
++
++  return 0;
++}
++
++#include <support/test-driver.c>
+diff --git a/elf/tst-dlopen-tlsreinit2.c b/elf/tst-dlopen-tlsreinit2.c
+new file mode 100644
+index 0000000000..90ad2c7713
+--- /dev/null
++++ b/elf/tst-dlopen-tlsreinit2.c
+@@ -0,0 +1,39 @@
++/* Test that dlopen preserves already accessed TLS (bug 31717).
++   Variant with initially-linked modules.
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <ctype.h>
++#include <stdbool.h>
++#include <support/check.h>
++#include <support/xdlfcn.h>
++
++
++static int
++do_test (void)
++{
++  /* Defined in tst-dlopen-tlsreinitmod3.so.  */
++  extern bool tlsreinitmod3_tested;
++  TEST_VERIFY (tlsreinitmod3_tested);
++
++  /* This crashes if the libc.so.6 TLS image has been reverted.  */
++  TEST_VERIFY (!isupper ('@'));
++
++  return 0;
++}
++
++#include <support/test-driver.c>
+diff --git a/elf/tst-dlopen-tlsreinit3.c b/elf/tst-dlopen-tlsreinit3.c
+new file mode 100644
+index 0000000000..79bd585aff
+--- /dev/null
++++ b/elf/tst-dlopen-tlsreinit3.c
+@@ -0,0 +1,2 @@
++/* Same code, but run with LD_AUDIT=tst-auditmod1.so.  */
++#include "tst-dlopen-tlsreinit1.c"
+diff --git a/elf/tst-dlopen-tlsreinit4.c b/elf/tst-dlopen-tlsreinit4.c
+new file mode 100644
+index 0000000000..344c9211ab
+--- /dev/null
++++ b/elf/tst-dlopen-tlsreinit4.c
+@@ -0,0 +1,2 @@
++/* Same code, but run with LD_AUDIT=tst-auditmod1.so.  */
++#include "tst-dlopen-tlsreinit2.c"
+diff --git a/elf/tst-dlopen-tlsreinitmod1.c b/elf/tst-dlopen-tlsreinitmod1.c
+new file mode 100644
+index 0000000000..354cc3de51
+--- /dev/null
++++ b/elf/tst-dlopen-tlsreinitmod1.c
+@@ -0,0 +1,20 @@
++/* Test that dlopen preserves already accessed TLS (bug 31717), module 1.
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++/* This module triggers loading of tst-dlopen-tlsreinitmod2.so and
++   tst-dlopen-tlsreinitmod3.so.  */
+diff --git a/elf/tst-dlopen-tlsreinitmod2.c b/elf/tst-dlopen-tlsreinitmod2.c
+new file mode 100644
+index 0000000000..677e69bd35
+--- /dev/null
++++ b/elf/tst-dlopen-tlsreinitmod2.c
+@@ -0,0 +1,30 @@
++/* Test that dlopen preserves already accessed TLS (bug 31717), module 2.
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <stdio.h>
++
++/* Defined in tst-dlopen-tlsreinitmod3.so.  This an underlinked symbol
++   dependency.  */
++extern void call_tlsreinitmod3 (void);
++
++static void __attribute__ ((constructor))
++tlsreinitmod2_init (void)
++{
++  puts ("info: constructor of tst-dlopen-tlsreinitmod2.so invoked");
++  call_tlsreinitmod3 ();
++}
+diff --git a/elf/tst-dlopen-tlsreinitmod3.c b/elf/tst-dlopen-tlsreinitmod3.c
+new file mode 100644
+index 0000000000..ef769c5131
+--- /dev/null
++++ b/elf/tst-dlopen-tlsreinitmod3.c
+@@ -0,0 +1,102 @@
++/* Test that dlopen preserves already accessed TLS (bug 31717), module 3.
++   Copyright (C) 2024 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <dlfcn.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <unistd.h>
++
++/* Used to verify from the main program that the test ran.  */
++bool tlsreinitmod3_tested;
++
++/* This TLS variable must not revert back to the initial state after
++   dlopen.  */
++static __thread int tlsreinitmod3_state = 1;
++
++/* Set from the ELF constructor during dlopen.  */
++static bool tlsreinitmod3_constructed;
++
++/* Second half of test, behind a compiler barrier.  The compiler
++   barrier is necessary to prevent carrying over TLS address
++   information from call_tlsreinitmod3 to call_tlsreinitmod3_tail.  */
++void call_tlsreinitmod3_tail (void *self) __attribute__ ((weak));
++
++/* Called from tst-dlopen-tlsreinitmod2.so.  */
++void
++call_tlsreinitmod3 (void)
++{
++  printf ("info: call_tlsreinitmod3 invoked (state=%d)\n",
++          tlsreinitmod3_state);
++
++  if (tlsreinitmod3_constructed)
++    {
++      puts ("error: call_tlsreinitmod3 called after ELF constructor");
++      fflush (stdout);
++      /* Cannot rely on test harness due to dynamic linking.  */
++      _exit (1);
++    }
++
++  tlsreinitmod3_state = 2;
++
++  /* Self-dlopen.  This will run the ELF constructor.   */
++  void *self = dlopen ("tst-dlopen-tlsreinitmod3.so", RTLD_NOW);
++  if (self == NULL)
++    {
++      printf ("error: dlopen: %s\n", dlerror ());
++      fflush (stdout);
++      /* Cannot rely on test harness due to dynamic linking.  */
++      _exit (1);
++    }
++
++  call_tlsreinitmod3_tail (self);
++}
++
++void
++call_tlsreinitmod3_tail (void *self)
++{
++  printf ("info: dlopen returned in tlsreinitmod3 (state=%d)\n",
++          tlsreinitmod3_state);
++
++  if (!tlsreinitmod3_constructed)
++    {
++      puts ("error: dlopen did not call tlsreinitmod3 ELF constructor");
++      fflush (stdout);
++      /* Cannot rely on test harness due to dynamic linking.  */
++      _exit (1);
++    }
++
++  if (tlsreinitmod3_state != 2)
++    {
++      puts ("error: TLS state reverted in tlsreinitmod3");
++      fflush (stdout);
++      /* Cannot rely on test harness due to dynamic linking.  */
++      _exit (1);
++    }
++
++  dlclose (self);
++
++  /* Signal test completion to the main program.  */
++  tlsreinitmod3_tested = true;
++}
++
++static void __attribute__ ((constructor))
++tlsreinitmod3_init (void)
++{
++  puts ("info: constructor of tst-dlopen-tlsreinitmod3.so invoked");
++  tlsreinitmod3_constructed = true;
++}
+diff --git a/include/link.h b/include/link.h
+index cb0d7d8e2f..5ed445d5a6 100644
+--- a/include/link.h
++++ b/include/link.h
+@@ -212,6 +212,7 @@ struct link_map
+     unsigned int l_find_object_processed:1; /* Zero if _dl_find_object_update
+ 					       needs to process this
+ 					       lt_library map.  */
++    unsigned int l_tls_in_slotinfo:1; /* TLS slotinfo updated in dlopen.  */
+ 
+     /* NODELETE status of the map.  Only valid for maps of type
+        lt_loaded.  Lazy binding sets l_nodelete_active directly,
+diff --git a/sysdeps/generic/ldsodefs.h b/sysdeps/generic/ldsodefs.h
+index 154efb0e19..259ce2e7d6 100644
+--- a/sysdeps/generic/ldsodefs.h
++++ b/sysdeps/generic/ldsodefs.h
+@@ -1239,13 +1239,7 @@ extern void *_dl_open (const char *name, int mode, const void *caller,
+ extern int _dl_scope_free (void *) attribute_hidden;
+ 
+ 
+-/* Add module to slot information data.  If DO_ADD is false, only the
+-   required memory is allocated.  Must be called with GL
+-   (dl_load_tls_lock) acquired.  If the function has already been called
+-   for the link map L with !do_add, then this function will not raise
+-   an exception, otherwise it is possible that it encounters a memory
+-   allocation failure.  */
+-extern void _dl_add_to_slotinfo (struct link_map *l, bool do_add)
++extern bool _dl_add_to_slotinfo (struct link_map *l, bool do_add)
+   attribute_hidden;
+ 
+ /* Update slot information data for at least the generation of the
+
+commit f4a9b6e97bf05cf5a41907e55901f7e9afaafd4d
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Mon Sep 9 21:10:23 2024 +0200
+
+    elf: Fix tst-dlopen-tlsreinit1.out test dependency
+    
+    Fixes commit 5097cd344fd243fb8deb6dec96e8073753f962f9
+    ("elf: Avoid re-initializing already allocated TLS in dlopen
+    (bug 31717)").
+    
+    Reported-by: Patsy Griffin <patsy@redhat.com>
+    Reviewed-by: Patsy Griffin <patsy@redhat.com>
+    (cherry picked from commit e82a7cb1622bff08d8e3a144d7c5516a088f1cbc)
+
+diff --git a/elf/Makefile b/elf/Makefile
+index a03c6520d8..dc686c3bff 100644
+--- a/elf/Makefile
++++ b/elf/Makefile
+@@ -3141,7 +3141,7 @@ $(objpfx)tst-dlopen-tlsreinit4: \
+ # tst-dlopen-tlsreinitmod3.so.  The dependency is provided via
+ # $(objpfx)tst-dlopen-tlsreinitmod1.so.
+ tst-dlopen-tlsreinitmod2.so-no-z-defs = yes
+-$(objpfx)tst-dlopen-tlsreinit.out: $(objpfx)tst-dlopen-tlsreinitmod1.so \
++$(objpfx)tst-dlopen-tlsreinit1.out: $(objpfx)tst-dlopen-tlsreinitmod1.so \
+   $(objpfx)tst-dlopen-tlsreinitmod2.so $(objpfx)tst-dlopen-tlsreinitmod3.so
+ # Reuse an audit module which provides ample debug logging.
+ $(objpfx)tst-dlopen-tlsreinit3.out: $(objpfx)tst-auditmod1.so
+
+commit adfb14e71f240a6bc2a4cbd6e6c50cc3fa1bcc3b
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Tue Sep 10 12:40:27 2024 +0200
+
+    debug: Fix read error handling in pcprofiledump
+    
+    The reading loops did not check for read failures.  Addresses
+    a static analysis report.
+    
+    Manually tested by compiling a program with the GCC's
+    -finstrument-functions option, running it with
+    “LD_PRELOAD=debug/libpcprofile.so PCPROFILE_OUTPUT=output-file”,
+    and reviewing the output of “debug/pcprofiledump output-file”.
+    
+    (cherry picked from commit 89b088bf70c651c231bf27e644270d093b8f144a)
+
+diff --git a/debug/pcprofiledump.c b/debug/pcprofiledump.c
+index 049a9c2744..94530f0cf9 100644
+--- a/debug/pcprofiledump.c
++++ b/debug/pcprofiledump.c
+@@ -75,6 +75,44 @@ static struct argp argp =
+   options, parse_opt, args_doc, doc, NULL, more_help
+ };
+ 
++/* Try to read SIZE bytes from FD and store them on BUF.  Terminate
++   the process upon read error.  Also terminate the process if less
++   than SIZE bytes are remaining in the file.  If !IN_HEADER, do not
++   terminate the process if the end of the file is encountered
++   immediately, before any bytes are read.
++
++   Returns true if SIZE bytes have been read, and false if no bytes
++   have been read due to an end-of-file condition.  */
++static bool
++read_exactly (int fd, void *buffer, size_t size, bool in_header)
++{
++  char *p = buffer;
++  char *end = p + size;
++  while (p < end)
++    {
++      ssize_t ret = TEMP_FAILURE_RETRY (read (fd, p, end - p));
++      if (ret < 0)
++	{
++	  if (in_header)
++	    error (EXIT_FAILURE, errno, _("cannot read header"));
++	  else
++	    error (EXIT_FAILURE, errno,  _("cannot read pointer pair"));
++	}
++      if (ret == 0)
++	{
++	  if (p == buffer && !in_header)
++	    /* Nothing has been read.  */
++	    return false;
++	  if (in_header)
++	    error (EXIT_FAILURE, 0, _("unexpected end of file in header"));
++	  else
++	    error (EXIT_FAILURE, 0,
++		   _("unexpected end of file in pointer pair"));
++	}
++      p += ret;
++    }
++  return true;
++}
+ 
+ int
+ main (int argc, char *argv[])
+@@ -110,8 +148,7 @@ main (int argc, char *argv[])
+   /* Read the first 4-byte word.  It contains the information about
+      the word size and the endianness.  */
+   uint32_t word;
+-  if (TEMP_FAILURE_RETRY (read (fd, &word, 4)) != 4)
+-    error (EXIT_FAILURE, errno, _("cannot read header"));
++  read_exactly (fd, &word, sizeof (word), true);
+ 
+   /* Check whether we have to swap the byte order.  */
+   int must_swap = (word & 0x0fffffff) == bswap_32 (0xdeb00000);
+@@ -121,56 +158,30 @@ main (int argc, char *argv[])
+   /* We have two loops, one for 32 bit pointers, one for 64 bit pointers.  */
+   if (word == 0xdeb00004)
+     {
+-      union
+-      {
+-	uint32_t ptrs[2];
+-	char bytes[8];
+-      } pair;
++      uint32_t ptrs[2];
+ 
+       while (1)
+ 	{
+-	  size_t len = sizeof (pair);
+-	  size_t n;
+-
+-	  while (len > 0
+-		 && (n = TEMP_FAILURE_RETRY (read (fd, &pair.bytes[8 - len],
+-						   len))) != 0)
+-	    len -= n;
+-
+-	  if (len != 0)
+-	    /* Nothing to read.  */
++	  if (!read_exactly (fd, ptrs, sizeof (ptrs), false))
+ 	    break;
+ 
+ 	  printf ("this = %#010" PRIx32 ", caller = %#010" PRIx32 "\n",
+-		  must_swap ? bswap_32 (pair.ptrs[0]) : pair.ptrs[0],
+-		  must_swap ? bswap_32 (pair.ptrs[1]) : pair.ptrs[1]);
++		  must_swap ? bswap_32 (ptrs[0]) : ptrs[0],
++		  must_swap ? bswap_32 (ptrs[1]) : ptrs[1]);
+ 	}
+     }
+   else if (word == 0xdeb00008)
+     {
+-      union
+-      {
+-	uint64_t ptrs[2];
+-	char bytes[16];
+-      } pair;
++      uint64_t ptrs[2];
+ 
+       while (1)
+ 	{
+-	  size_t len = sizeof (pair);
+-	  size_t n;
+-
+-	  while (len > 0
+-		 && (n = TEMP_FAILURE_RETRY (read (fd, &pair.bytes[8 - len],
+-						   len))) != 0)
+-	    len -= n;
+-
+-	  if (len != 0)
+-	    /* Nothing to read.  */
++	  if (!read_exactly (fd, ptrs, sizeof (ptrs), false))
+ 	    break;
+ 
+ 	  printf ("this = %#018" PRIx64 ", caller = %#018" PRIx64 "\n",
+-		  must_swap ? bswap_64 (pair.ptrs[0]) : pair.ptrs[0],
+-		  must_swap ? bswap_64 (pair.ptrs[1]) : pair.ptrs[1]);
++		  must_swap ? bswap_64 (ptrs[0]) : ptrs[0],
++		  must_swap ? bswap_64 (ptrs[1]) : ptrs[1]);
+ 	}
+     }
+   else
+
+commit 7073164add3b874cf0c19ca0fb84236f6bb0985d
+Author: Siddhesh Poyarekar <siddhesh@sourceware.org>
+Date:   Tue Sep 3 14:58:33 2024 -0400
+
+    libio: Attempt wide backup free only for non-legacy code
+    
+    _wide_data and _mode are not available in legacy code, so do not attempt
+    to free the wide backup buffer in legacy code.
+    
+    Resolves: BZ #32137 and BZ #27821
+    
+    Signed-off-by: Siddhesh Poyarekar <siddhesh@sourceware.org>
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    (cherry picked from commit ae4d44b1d501421ad9a3af95279b8f4d1546f1ce)
+
+diff --git a/NEWS b/NEWS
+index 5b20efbf6c..9033335db1 100644
+--- a/NEWS
++++ b/NEWS
+@@ -9,12 +9,14 @@ Version 2.40.1
+ 
+ The following bugs are resolved with this release:
+ 
++  [27821] ungetc: Fix backup buffer leak on program exit
+   [30081] resolv: Do not wait for non-existing second DNS response after error
+   [31717] elf: Avoid re-initializing already allocated TLS in dlopen
+   [31890] resolv: Allow short error responses to match any DNS query
+   [31968] mremap implementation in C does not handle arguments correctly
+   [32026] strerror/strsignal TLS not handled correctly for secondary namespaces
+   [32052] Name space violation in fortify wrappers
++  [32137] libio: Attempt wide backup free only for non-legacy code
+ 
+ Version 2.40
+ 
+diff --git a/libio/genops.c b/libio/genops.c
+index 35d8b30710..6f20d49669 100644
+--- a/libio/genops.c
++++ b/libio/genops.c
+@@ -819,7 +819,7 @@ _IO_unbuffer_all (void)
+       /* Free up the backup area if it was ever allocated.  */
+       if (_IO_have_backup (fp))
+ 	_IO_free_backup_area (fp);
+-      if (fp->_mode > 0 && _IO_have_wbackup (fp))
++      if (!legacy && fp->_mode > 0 && _IO_have_wbackup (fp))
+ 	_IO_free_wbackup_area (fp);
+ 
+       if (! (fp->_flags & _IO_UNBUFFERED)

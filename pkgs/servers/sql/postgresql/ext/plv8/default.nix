@@ -5,6 +5,7 @@
 , perl
 , postgresql
 , jitSupport
+, buildPostgresqlExtension
 # For test
 , runCommand
 , coreutils
@@ -13,15 +14,15 @@
 
 let
   libv8 = nodejs_20.libv8;
-in stdenv.mkDerivation (finalAttrs: {
+in buildPostgresqlExtension (finalAttrs: {
   pname = "plv8";
-  version = "3.2.2";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "plv8";
     repo = "plv8";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-azO33v22EF+/sTNmwswxyDR0PhrvWfTENuLu6JgSGJ0=";
+    hash = "sha256-ivQZJSNn5giWF351fqZ7mBZoJkGtby5T7beK45g3Zqs=";
   };
 
   patches = [
@@ -36,7 +37,6 @@ in stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libv8
-    postgresql
   ];
 
   buildFlags = [ "all" ];
@@ -48,24 +48,11 @@ in stdenv.mkDerivation (finalAttrs: {
     "V8_OUTDIR=${libv8}/lib"
   ];
 
-  installFlags = [
-    # PGXS only supports installing to postgresql prefix so we need to redirect this
-    "DESTDIR=${placeholder "out"}"
-  ];
-
   # No configure script.
   dontConfigure = true;
 
   postPatch = ''
     patchShebangs ./generate_upgrade.sh
-  '';
-
-  postInstall = ''
-    # Move the redirected to proper directory.
-    # There appear to be no references to the install directories
-    # so changing them does not cause issues.
-    mv "$out/nix/store"/*/* "$out"
-    rmdir "$out/nix/store"/* "$out/nix/store" "$out/nix"
   '';
 
   passthru = {
@@ -112,7 +99,7 @@ in stdenv.mkDerivation (finalAttrs: {
             echo -e "include Makefile\nprint_regress_files:\n\t@echo \$(REGRESS)" > Makefile.regress
             REGRESS_TESTS=$(make -f Makefile.regress print_regress_files)
 
-            ${postgresql}/lib/pgxs/src/test/regress/pg_regress \
+            ${lib.getDev postgresql}/lib/pgxs/src/test/regress/pg_regress \
               --bindir='${postgresqlWithSelf}/bin' \
               --temp-instance=regress-instance \
               --dbname=contrib_regression \
@@ -135,7 +122,8 @@ in stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
     homepage = "https://plv8.github.io/";
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/plv8/plv8/blob/r${finalAttrs.version}/Changes";
+    maintainers = [ ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     license = licenses.postgresql;
     broken = jitSupport;

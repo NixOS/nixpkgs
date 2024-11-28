@@ -27,14 +27,14 @@ buildPythonPackage rec {
     google-api-core
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     grpc = [ grpcio ];
   };
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.grpc;
+  ] ++ optional-dependencies.grpc;
 
   # prevent google directory from shadowing google imports
   preCheck = ''
@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-cloud-core";
     changelog = "https://github.com/googleapis/python-cloud-core/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

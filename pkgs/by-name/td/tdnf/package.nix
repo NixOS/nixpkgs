@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch2
 , cmake
 , curl
 , gpgme
@@ -14,14 +15,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tdnf";
-  version = "3.5.7";
+  version = "3.5.9";
 
   src = fetchFromGitHub {
     owner = "vmware";
     repo = "tdnf";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+oVmIZqWi1JdiOv40C4dS2a9VqK3hzGl+PQ7sk1l11o=";
+    hash = "sha256-p9g+b7Fqq8V6QSaikEQMMHWqBf4UtRA9a/VtH+s5JUM=";
   };
+
+  patches = [
+    # Support for rpm >= 4.19
+    (fetchpatch2 {
+      url = "https://patch-diff.githubusercontent.com/raw/vmware/tdnf/pull/410.patch";
+      hash = "sha256-p/ix5O1J/lj2fw7qJokT+wPN4ROoulnVqByfxgFvuEo=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

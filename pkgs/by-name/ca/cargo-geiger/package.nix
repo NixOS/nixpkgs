@@ -20,17 +20,23 @@ rustPlatform.buildRustPackage rec {
     rev = "cargo-geiger@v${version}";
     hash = "sha256-/5yuayqneZV6aVQ6YFgqNS2XY3W6yETRQ0kE5ovc7p8=";
   };
-  cargoHash = "sha256-lhojo3dhsM9y1SxpVMH93yv+JeNfTL7VLsbTp9ErgIQ=";
+
+  cargoPatches = [
+    # https://github.com/geiger-rs/cargo-geiger/pull/528
+    ./fix-build-with-rust-1.80.patch
+  ];
+
+  cargoHash = "sha256-511KeTykHw3xbnsuwIt2QmBK3mG9yK23z0yrS3eIY74=";
 
   patches = [
     ./allow-warnings.patch
   ];
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation Security libiconv curl ]);
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation Security libiconv curl ]);
   nativeBuildInputs = [ pkg-config ]
     # curl-sys wants to run curl-config on darwin
-    ++ lib.optionals stdenv.isDarwin [ curl.dev ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl.dev ];
 
   # skip tests with networking or other failures
   checkFlags = [

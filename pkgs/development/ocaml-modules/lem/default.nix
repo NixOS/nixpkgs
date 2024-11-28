@@ -1,7 +1,6 @@
 { stdenv
 , fetchFromGitHub
 , lib
-, ncurses
 , makeWrapper
 , ocamlbuild
 , findlib

@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rippkgs";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "replit";
     repo = "rippkgs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qQZnD9meczfsQv1R68IiUfPq730I2IyesurrOhtA3es=";
+    hash = "sha256-k50q78ycjrFVFTDstTdOLF8aJjsUpQ3lFRbFD1nL8xM=";
   };
 
-  cargoHash = "sha256-hGSHgJ2HVCNqTBsTQIZlSE89FKqdMifuJyAGl3utF2I=";
+  cargoHash = "sha256-EQvIJXIQ6UrevNkhqMZddUde+6iNBcBTOaanimZNkaA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     description = "CLI for indexing and searching packages in Nix expressions";
     homepage = "https://github.com/replit/rippkgs";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ eclairevoyant cdmistman ];
+    maintainers = with lib.maintainers; [ cdmistman ];
     mainProgram = "rippkgs";
   };
 }

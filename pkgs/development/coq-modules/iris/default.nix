@@ -6,6 +6,7 @@ mkCoqDerivation rec {
   owner = "iris";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
+    { case = range "8.19" "8.20"; out = "4.3.0"; }
     { case = range "8.18" "8.19"; out = "4.2.0"; }
     { case = range "8.16" "8.18"; out = "4.1.0"; }
     { case = range "8.13" "8.17"; out = "4.0.0"; }
@@ -13,6 +14,7 @@ mkCoqDerivation rec {
     { case = range "8.11" "8.13"; out = "3.4.0"; }
     { case = range "8.9"  "8.10"; out = "3.3.0"; }
   ] null;
+  release."4.3.0".sha256 = "sha256-3qhjiFI+A3I3fD8rFfJL5Hek77wScfn/FNNbDyGqA1k=";
   release."4.2.0".sha256 = "sha256-HuiHIe+5letgr1NN1biZZFq0qlWUbFmoVI7Q91+UIfM=";
   release."4.1.0".sha256 = "sha256-nTZUeZOXiH7HsfGbMKDE7vGrNVCkbMaWxdMWUcTUNlo=";
   release."4.0.0".sha256 = "sha256-Jc9TmgGvkiDaz9IOoExyeryU1E+Q37GN24NIM397/Gg=";

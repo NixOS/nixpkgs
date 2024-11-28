@@ -8,19 +8,19 @@
 
 buildPythonPackage rec {
   pname = "krakenex";
-  version = "2.2.1";
+  version = "2.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "veox";
     repo = "python3-krakenex";
     rev = "v${version}";
-    hash = "sha256-aWALkM79VOm2/EQdp2rD1sm0NxhLKZOXzAs8m+t7M0s=";
+    hash = "sha256-htldEds3vf9bjFkJAew0e0fHDLD15OTcVYybSmIp3DI=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ requests ];
+  dependencies = [ requests ];
 
   # no tests implemented
   doCheck = false;

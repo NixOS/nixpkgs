@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [ "full" ];
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   checkFlags = [
     # requires network access
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_words_delete"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ltrs \
       --bash <($out/bin/ltrs completions bash) \
       --fish <($out/bin/ltrs completions fish) \

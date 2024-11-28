@@ -69,9 +69,11 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
           machine.wait_until_tty_matches("1", "Change")
           machine.send_chars("O\n")
           machine.wait_until_tty_matches("1", "Please enter")
-          machine.send_chars("pgp_p4ssphrase\n")
-          machine.wait_until_tty_matches("1", "Please re-enter")
-          machine.send_chars("pgp_p4ssphrase\n")
+          machine.send_chars("pgp_p4ssphrase")
+          machine.send_key("tab")
+          machine.send_chars("pgp_p4ssphrase")
+          machine.wait_until_tty_matches("1", "Passphrases match")
+          machine.send_chars("\n")
           machine.wait_until_tty_matches("1", "public and secret key created")
 
       with subtest("Confirm the key is in the keyring"):
@@ -90,9 +92,11 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
           machine.wait_until_tty_matches("1", "Enter passphrase")
           machine.send_chars("ssh_p4ssphrase\n")
           machine.wait_until_tty_matches("1", "Please enter")
-          machine.send_chars("ssh_agent_p4ssphrase\n")
-          machine.wait_until_tty_matches("1", "Please re-enter")
-          machine.send_chars("ssh_agent_p4ssphrase\n")
+          machine.send_chars("ssh_agent_p4ssphrase")
+          machine.send_key("tab")
+          machine.send_chars("ssh_agent_p4ssphrase")
+          machine.wait_until_tty_matches("1", "Passphrases match")
+          machine.send_chars("\n")
 
       with subtest("Confirm the SSH key has been registered"):
           machine.wait_until_succeeds(as_alice("ssh-add -l | grep -q alice@machine"))

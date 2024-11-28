@@ -1,6 +1,5 @@
 { lib
-, fetchurl
-, substituteAll
+, fetchFromGitHub
 , pkg-config
 , runCommand
 , writeText
@@ -38,6 +37,7 @@
 , xdg-utils
 , xorg
 , xorgserver
+, xxHash
 }:
 
 let
@@ -70,25 +70,22 @@ let
   '';
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "4.4.6";
+  version = "6.2.1";
 
-  src = fetchurl {
-    url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    hash = "sha256-BWf3nypfSrYCzpJ0OfBkecoHGbG1lEgu5jLZhfkIejQ=";
+  src = fetchFromGitHub {
+    owner = "Xpra-org";
+    repo = "xpra";
+    rev = "v${version}";
+    hash = "sha256-TdRQcl0o9L37JXWxoWkAw9sAH5eWpynWkCwo1tBwa9s=";
   };
 
   patches = [
-    (substituteAll {  # correct hardcoded paths
-      src = ./fix-paths.patch;
-      inherit libfakeXinerama;
-    })
     ./fix-41106.patch  # https://github.com/NixOS/nixpkgs/issues/41106
     ./fix-122159.patch # https://github.com/NixOS/nixpkgs/issues/122159
   ];
 
-  # Note: xposix is renamed to posix in v5.
-  postPatch = lib.optionalString stdenv.isLinux ''
-    substituteInPlace xpra/platform/xposix/features.py \
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace xpra/platform/posix/features.py \
       --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
   '';
 
@@ -136,6 +133,7 @@ in buildPythonApplication rec {
     pango
     x264
     x265
+    xxHash
   ] ++ lib.optional withNvenc nvencHeaders;
 
   propagatedBuildInputs = with python3.pkgs; ([

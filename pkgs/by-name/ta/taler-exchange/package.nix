@@ -20,19 +20,18 @@
   texinfo,
 }:
 
-let
-  version = "0.11.2";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taler-exchange";
-  inherit version;
+  version = "0.13.0";
 
   src = fetchgit {
     url = "https://git.taler.net/exchange.git";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-DflUfXAe310LRhZmaHgF1ZpCi+hHF30lpzAIpI1HZvM=";
+    hash = "sha256-elVZUuiIMLOG058n+Egpy9oD9T2sLDC4TUCYZTCi0bw=";
   };
+
+  patches = [ ./0001-add-TALER_TEMPLATING_init_path.patch ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -61,9 +60,33 @@ stdenv.mkDerivation {
   preAutoreconf = ''
     ./contrib/gana-generate.sh
     pushd contrib
-    find wallet-core/aml-backoffice/ -type f -printf '  %p \\\n' | sort > Makefile.am.ext
+    rm -f Makefile.am
+    {
+      echo 'dist_amlspapkgdata_DATA = \'
+      find wallet-core/aml-backoffice/ -type f | sort | awk '{print "  " $1 " \\" }'
+    }  >> Makefile.am.ext
+    # Remove extra '\' at the end of the file
     truncate -s -2 Makefile.am.ext
+
+    {
+      echo ""
+      echo 'dist_kycspapkgdata_DATA = \'
+      find wallet-core/kyc/ -type f | sort | awk '{print "  " $1 " \\" }'
+    }  >> Makefile.am.ext
+    # Remove extra '\' at the end of the file
+    truncate -s -2 Makefile.am.ext
+
+    {
+      echo ""
+      echo 'dist_auditorspapkgdata_DATA = \'
+      find wallet-core/auditor-backoffice/ -type f | sort | awk '{print "  " $1 " \\" }'
+    }  >> Makefile.am.ext
+    # Remove extra '\' at the end of the file
+    truncate -s -2 Makefile.am.ext
+
     cat Makefile.am.in Makefile.am.ext >> Makefile.am
+    # Prevent accidental editing of the generated Makefile.am
+    chmod -w Makefile.am
     popd
   '';
 
@@ -78,7 +101,7 @@ stdenv.mkDerivation {
 
   checkTarget = "check";
 
-  meta = with lib; {
+  meta = {
     description = ''
       Taler is an electronic payment system providing the ability to pay
       anonymously using digital cash.  Taler consists of a network protocol
@@ -90,8 +113,9 @@ stdenv.mkDerivation {
       payment system.
     '';
     homepage = "https://taler.net/";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ astro ];
-    platforms = platforms.linux;
+    changelog = "https://git.taler.net/exchange.git/tree/ChangeLog";
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ astro ];
+    platforms = lib.platforms.linux;
   };
-}
+})

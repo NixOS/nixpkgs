@@ -50,12 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     lua -e "" || {
         luajit -e "" && {
             export LUA_SUFFIX=jit
-            configureFlags="$configureFlags --lua-suffix=$LUA_SUFFIX"
+            appendToVar configureFlags "--lua-suffix=$LUA_SUFFIX"
         }
     }
     lua_inc="$(echo "${lua}/include"/*/)"
     if test -n "$lua_inc"; then
-        configureFlags="$configureFlags --with-lua-include=$lua_inc"
+        appendToVar configureFlags "--with-lua-include=$lua_inc"
     fi
   '';
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
     substituteInPlace $out/etc/luarocks/* \
-     --replace-fail '${lua.luaOnBuild}' '${lua}'
+     --replace-quiet '${lua.luaOnBuild}' '${lua}'
    ''
     + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd luarocks \

@@ -22,7 +22,7 @@ mkDerivation rec {
     description = "Graphical frontend to LinuxSampler";
     mainProgram = "qsampler";
     license = licenses.gpl2;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -67,7 +67,7 @@ in stdenv.mkDerivation (finalAttrs: {
     openblas
   ] ++ lib.optionals buildBenchmarks [
     clblast
-    python3Packages.openai-triton
+    python3Packages.triton
   ];
 
   cmakeFlags = [

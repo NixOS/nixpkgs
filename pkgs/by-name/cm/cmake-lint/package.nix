@@ -18,18 +18,14 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-/OuWwerBlJynEibaYo+jkLpHt4x9GZrqMRJNxgrDBlM=";
   };
 
-  nativeBuildInputs = [ python3Packages.setuptools ];
+  build-system = [ python3Packages.setuptools ];
 
   pythonImportsCheck = [ "cmakelint" ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-    nose
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+    python3Packages.pytest-cov-stub
   ];
-
-  checkPhase = ''
-    nosetests
-  '';
 
   passthru.tests = {
     version = testers.testVersion { package = cmake-lint; };

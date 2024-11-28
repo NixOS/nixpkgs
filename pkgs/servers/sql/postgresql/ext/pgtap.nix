@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, buildPostgresqlExtension
 , fetchFromGitHub
 , perl
 , perlPackages
@@ -8,7 +9,7 @@
 , which
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildPostgresqlExtension (finalAttrs: {
   pname = "pgtap";
   version = "1.3.3";
 
@@ -20,10 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ postgresql perl perlPackages.TAPParserSourceHandlerpgTAP which ];
-
-  installPhase = ''
-    install -D {sql/pgtap--${finalAttrs.version}.sql,pgtap.control} -t $out/share/postgresql/extension
-  '';
 
   passthru.tests.extension = stdenv.mkDerivation {
     name = "pgtap-test";

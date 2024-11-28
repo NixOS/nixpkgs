@@ -1,40 +1,49 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 let
-  inherit (lib) mkDefault mkEnableOption mkIf mkOption types mkPackageOption;
+  inherit (lib)
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkOption
+    mkPackageOption
+    mkRenamedOptionModule
+    types
+  ;
+
   cfg = config.services.engelsystem;
 in {
-  options = {
-    services.engelsystem = {
-      enable = mkOption {
-        default = false;
-        example = true;
-        description = ''
-          Whether to enable engelsystem, an online tool for coordinating volunteers
-          and shifts on large events.
-        '';
-        type = lib.types.bool;
-      };
+  imports = [
+    (mkRenamedOptionModule [ "services" "engelsystem" "config" ] [ "services" "engelsystem" "settings" ])
+  ];
 
-      domain = mkOption {
-        type = types.str;
-        example = "engelsystem.example.com";
-        description = "Domain to serve on.";
-      };
+  options.services.engelsystem = {
+    enable = mkEnableOption "engelsystem, an online tool for coordinating volunteers and shifts on large events";
 
-      package = mkPackageOption pkgs "engelsystem" { };
+    package = mkPackageOption pkgs "engelsystem" { };
 
-      createDatabase = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to create a local database automatically.
-          This will override every database setting in {option}`services.engelsystem.config`.
-        '';
-      };
+    domain = mkOption {
+      type = types.str;
+      example = "engelsystem.example.com";
+      description = "Domain to serve on.";
     };
 
-    services.engelsystem.config = mkOption {
+    createDatabase = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to create a local database automatically.
+        This will override every database setting in {option}`services.engelsystem.config`.
+      '';
+    };
+
+    settings = mkOption {
       type = types.attrs;
       default = {
         database = {
@@ -144,7 +153,7 @@ in {
       script =
         let
           genConfigScript = pkgs.writeScript "engelsystem-gen-config.sh"
-            (utils.genJqSecretsReplacementSnippet cfg.config "config.json");
+            (utils.genJqSecretsReplacementSnippet cfg.settings "config.json");
         in ''
           umask 077
           mkdir -p /var/lib/engelsystem/storage/app
@@ -163,7 +172,17 @@ in {
         Group = "engelsystem";
       };
       script = ''
-        ${cfg.package}/bin/migrate
+        versionFile="/var/lib/engelsystem/.version"
+        version=$(cat "$versionFile" 2>/dev/null || echo 0)
+
+        if [[ $version != ${cfg.package.version} ]]; then
+          # prune template cache between releases
+          rm -rfv /var/lib/engelsystem/storage/cache/*
+
+          ${cfg.package}/bin/migrate
+
+          echo ${cfg.package.version} > "$versionFile"
+        fi
       '';
       after = [ "engelsystem-init.service" "mysql.service" ];
     };

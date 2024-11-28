@@ -11,7 +11,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "XStatic-Font-Awesome";
     inherit version;
-    sha256 = "sha256-8HWHEJYShjjy4VOQINgid1TD2IXdaOfubemgEjUHaCg=";
+    hash = "sha256-8HWHEJYShjjy4VOQINgid1TD2IXdaOfubemgEjUHaCg=";
   };
 
   # no tests implemented

@@ -6,7 +6,7 @@
   wrapQtAppsHook,
   pkg-config,
   qtbase,
-  qwt,
+  qwt6_1,
   fftwFloat,
   libsamplerate,
   portaudio,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qtbase
-    qwt
+    qwt6_1
     fftwFloat
     libsamplerate
     portaudio

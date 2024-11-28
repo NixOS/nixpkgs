@@ -4,17 +4,20 @@
   lib,
   runCommand,
   nixfmt-rfc-style,
-  fetchpatch,
 }:
 let
   inherit (haskell.lib.compose) overrideCabal justStaticExecutables;
 
-  overrides = {
+  overrides = rec {
     version = "unstable-${lib.fileContents ./date.txt}";
 
     passthru.updateScript = ./update.sh;
 
     maintainers = lib.teams.formatter.members;
+
+    preBuild = ''
+      echo -n 'nixpkgs-${version}' > .version
+    '';
 
     # These tests can be run with the following command.
     #

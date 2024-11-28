@@ -349,8 +349,8 @@ let
     nodePackages.prettier
   ];
 
-  inputs = basePackages ++ lib.optionals stdenv.isLinux [ inotify-tools ]
-    ++ lib.optionals stdenv.isDarwin
+  inputs = basePackages ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin
     (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices ]);
 
   # define shell startup command

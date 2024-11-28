@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchurl
 , cmake
 , pkg-config
 , openssl
@@ -40,13 +39,15 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "transmission";
     repo = "transmission";
     rev = finalAttrs.version;
-    sha256 = "0ccg0km54f700x9p0jsnncnwvfnxfnxf7kcm7pcx1cj0vw78924z";
+    hash = "sha256-n4iEDt9AstDZPZXN47p13brNLbNWS3BTB+A4UuoEjzE=";
     fetchSubmodules = true;
   };
 
   patches = [
     # fix build with openssl 3.0
     ./transmission-3.00-openssl-3.patch
+    # fix build with miniupnpc 2.2.8
+    ./transmission-3.00-miniupnpc-2.2.8.patch
   ];
 
   outputs = [ "out" "apparmor" ];
@@ -87,8 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableQt [ qt5.qttools qt5.qtbase ]
   ++ lib.optionals enableGTK3 [ gtk3 xorg.libpthreadstubs ]
   ++ lib.optionals enableSystemd [ systemd ]
-  ++ lib.optionals stdenv.isLinux [ inotify-tools ]
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   postInstall = ''
     mkdir $apparmor
@@ -101,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
       include "${apparmorRulesFromClosure { name = "transmission-daemon"; } ([
         curl libevent openssl pcre zlib libnatpmp miniupnpc
       ] ++ lib.optionals enableSystemd [ systemd ]
-        ++ lib.optionals stdenv.isLinux [ inotify-tools ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
       )}"
       r @{PROC}/sys/kernel/random/uuid,
       r @{PROC}/sys/vm/overcommit_memory,

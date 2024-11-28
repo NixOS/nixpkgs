@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch2
 , cmake
 , pkg-config
 , python3
@@ -54,7 +55,7 @@ let
     zlib
   ]
   ++ optionals enableSystemd [ systemd ]
-  ++ optionals stdenv.isLinux [ inotify-tools ]);
+  ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ]);
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -69,6 +70,20 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/transmission/transmission/commit/febfe49ca3ecab1a7142ecb34012c1f0b2bcdee8.patch?full_index=1";
+      hash = "sha256-Ge0+AXf/ilfMieGBAdvvImY7JOb0gGIdeKprC37AROs=";
+      excludes = [
+        # The submodule that we don't use (we use our miniupnp)
+        "third-party/miniupnp"
+        # Hunk fails for this one, but we don't care because we don't rely upon
+        # xcode definitions even for the Darwin build.
+        "Transmission.xcodeproj/project.pbxproj"
+      ];
+    })
+  ];
+
   outputs = [ "out" "apparmor" ];
 
   cmakeFlags = [
@@ -78,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_MAC" false) # requires xcodebuild
     (cmakeBool "ENABLE_QT" (enableQt5 || enableQt6))
     (cmakeBool "INSTALL_LIB" installLib)
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
     # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
   ];
@@ -98,6 +113,10 @@ stdenv.mkDerivation (finalAttrs: {
       cmake/FindUtfCpp.cmake
     # Upstream uses different config file name.
     substituteInPlace CMakeLists.txt --replace 'find_package(UtfCpp)' 'find_package(utf8cpp)'
+
+    # Use gettext even on Darwin
+    substituteInPlace libtransmission/utils.h \
+      --replace-fail '#if defined(HAVE_GETTEXT) && !defined(__APPLE__)' '#if defined(HAVE_GETTEXT)'
   '';
 
   nativeBuildInputs = [
@@ -130,8 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals enableQt6 (with qt6Packages; [ qttools qtbase qtsvg ])
   ++ optionals enableGTK3 [ gtkmm3 xorg.libpthreadstubs ]
   ++ optionals enableSystemd [ systemd ]
-  ++ optionals stdenv.isLinux [ inotify-tools ]
-  ++ optionals stdenv.isDarwin [ libiconv Foundation ];
+  ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ];
 
   postInstall = ''
     mkdir $apparmor

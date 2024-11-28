@@ -8,13 +8,14 @@
   pkg-config,
   scdoc,
   wayland,
+  wayland-scanner,
   wayland-protocols,
-  zig_0_12,
+  zig_0_13,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waylock";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
@@ -22,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "waylock";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-U8xJucLpmeLdmSUc+AVSH/mlv6UOXsxotJPTMK7lnkA=";
+    hash = "sha256-jfMSar+Y3inu1Cly6rIDw+akBJIQ6huL0smAstgQmEo=";
   };
 
   deps = callPackage ./build.zig.zon.nix { };
@@ -30,11 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     scdoc
-    wayland
-    zig_0_12.hook
+    wayland-scanner
+    zig_0_13.hook
   ];
 
   buildInputs = [
+    wayland
     wayland-protocols
     libxkbcommon
     pam
@@ -50,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace pam.d/waylock --replace-fail "system-auth" "login"
   '';
 
-  passthru.updateScript = ./update.nu;
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://codeberg.org/ifreund/waylock";

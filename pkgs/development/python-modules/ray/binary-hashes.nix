@@ -1,11 +1,11 @@
 {
   cp310 = {
-    hash = "sha256-iSKDUwJTakE1nStvaMvJ5RwS7+a9JiurOe8wcRjs7Ik=";
+    hash = "sha256-Ypj7mBzQ+oYH8ZF96yeSWrit1IxgulvQ9s9A1MxdrOQ=";
   };
   cp311 = {
-    hash = "sha256-SQ7tIqb+XWqWqUYxAT8PTT9SBnl1us6soJiy9zLHJQI=";
+    hash = "sha256-Ia7hJ64anPYZMAGrQdJVG8yBMxujtxltAA8W0Q8VxwU=";
   };
   cp312 = {
-    hash = "sha256-ri2m867sokJjB3wB7yOEEQczRzMglzbCJ0vOomJDhGI=";
+    hash = "sha256-AWkw5rp0uRtAEXpksk97//SKangPI9KwZKej9DvE4aI=";
   };
 }

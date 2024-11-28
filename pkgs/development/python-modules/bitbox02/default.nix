@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/digitalbitbox/bitbox02-firmware/";
     changelog = "https://github.com/digitalbitbox/bitbox02-firmware/blob/py-bitbox02-${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -2,6 +2,7 @@
 , Foundation
 , bazelTest
 , callPackage
+, cctools
 , darwin
 , distDir
 , extraBazelArgs ? ""
@@ -97,8 +98,8 @@ let
     #! ${runtimeShell}
 
     export CXX='${stdenv.cc}/bin/clang++'
-    export LD='${darwin.cctools}/bin/ld'
-    export LIBTOOL='${darwin.cctools}/bin/libtool'
+    export LD='${cctools}/bin/ld'
+    export LIBTOOL='${cctools}/bin/libtool'
     export CC='${stdenv.cc}/bin/clang'
 
     # XXX: hack for macosX, this flags disable bazel usage of xcode
@@ -121,7 +122,7 @@ let
     cp ${personProto} $out/person/person.proto
     cp ${personBUILD} $out/person/BUILD.bazel
   ''
-  + (lib.optionalString stdenv.isDarwin ''
+  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
     echo 'tools bazel created'
     mkdir $out/tools
     install ${toolsBazel} $out/tools/bazel
@@ -154,7 +155,7 @@ let
         --host_javabase='@local_jdk//:jdk' \
         --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
         --javabase='@local_jdk//:jdk' \
-    '' + lib.optionalString (stdenv.isDarwin) ''
+    '' + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
         --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
     '' + ''
 

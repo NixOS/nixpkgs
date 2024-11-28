@@ -1,26 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libpulseaudio
-, lxqt-build-tools
-, pkg-config
-, qtbase
-, qttools
-, qtwayland
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libpulseaudio,
+  lxqt-build-tools,
+  pkg-config,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pavucontrol-qt";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-dhFVVqJIX40oiHCcnG1166RsllXtfaO7MqM6ZNizjQQ=";
+    hash = "sha256-V3VYwDlTRd7q7EJhC4zHcX56AbUYJdfumqXaKlkLEfg=";
   };
 
   nativeBuildInputs = [
@@ -34,17 +36,18 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libpulseaudio
     qtbase
+    qtsvg
     qtwayland
   ];
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/pavucontrol-qt";
     description = "Pulseaudio mixer in Qt (port of pavucontrol)";
     mainProgram = "pavucontrol-qt";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; linux;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux;
+    maintainers = lib.teams.lxqt.members;
   };
 }

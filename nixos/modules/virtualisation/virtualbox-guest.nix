@@ -1,9 +1,10 @@
 # Module for VirtualBox guests.
-
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.virtualisation.virtualbox.guest;
   kernel = config.boot.kernelPackages;
@@ -32,67 +33,82 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "virtualisation" "virtualbox" "guest" "draganddrop" ] [ "virtualisation" "virtualbox" "guest" "dragAndDrop" ])
+    (lib.mkRenamedOptionModule
+      [
+        "virtualisation"
+        "virtualbox"
+        "guest"
+        "draganddrop"
+      ]
+      [
+        "virtualisation"
+        "virtualbox"
+        "guest"
+        "dragAndDrop"
+      ]
+    )
   ];
 
   options.virtualisation.virtualbox.guest = {
-    enable = mkOption {
+    enable = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = "Whether to enable the VirtualBox service and other guest additions.";
     };
 
-    clipboard = mkOption {
+    clipboard = lib.mkOption {
       default = true;
-      type = types.bool;
+      type = lib.types.bool;
       description = "Whether to enable clipboard support.";
     };
 
-    seamless = mkOption {
+    seamless = lib.mkOption {
       default = true;
-      type = types.bool;
+      type = lib.types.bool;
       description = "Whether to enable seamless mode. When activated windows from the guest appear next to the windows of the host.";
     };
 
-    dragAndDrop = mkOption {
+    dragAndDrop = lib.mkOption {
       default = true;
-      type = types.bool;
+      type = lib.types.bool;
       description = "Whether to enable drag and drop support.";
     };
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable (mkMerge [
-    {
-      assertions = [{
-        assertion = pkgs.stdenv.hostPlatform.isx86;
-        message = "Virtualbox not currently supported on ${pkgs.stdenv.hostPlatform.system}";
-      }];
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        assertions = [
+          {
+            assertion = pkgs.stdenv.hostPlatform.isx86;
+            message = "Virtualbox not currently supported on ${pkgs.stdenv.hostPlatform.system}";
+          }
+        ];
 
-      environment.systemPackages = [ kernel.virtualboxGuestAdditions ];
+        environment.systemPackages = [ kernel.virtualboxGuestAdditions ];
 
-      boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
+        boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
 
-      boot.supportedFilesystems = [ "vboxsf" ];
-      boot.initrd.supportedFilesystems = [ "vboxsf" ];
+        boot.supportedFilesystems = [ "vboxsf" ];
+        boot.initrd.supportedFilesystems = [ "vboxsf" ];
 
-      users.groups.vboxsf.gid = config.ids.gids.vboxsf;
+        users.groups.vboxsf.gid = config.ids.gids.vboxsf;
 
-      systemd.services.virtualbox = {
-        description = "VirtualBox Guest Services";
+        systemd.services.virtualbox = {
+          description = "VirtualBox Guest Services";
 
-        wantedBy = [ "multi-user.target" ];
-        requires = [ "dev-vboxguest.device" ];
-        after = [ "dev-vboxguest.device" ];
+          wantedBy = [ "multi-user.target" ];
+          requires = [ "dev-vboxguest.device" ];
+          after = [ "dev-vboxguest.device" ];
 
-        unitConfig.ConditionVirtualization = "oracle";
+          unitConfig.ConditionVirtualization = "oracle";
 
-        serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/bin/VBoxService VBoxService --foreground";
-      };
+          serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/bin/VBoxService VBoxService --foreground";
+        };
 
-      services.udev.extraRules =
-        ''
+        services.udev.extraRules = ''
           # /dev/vboxuser is necessary for VBoxClient to work.  Maybe we
           # should restrict this to logged-in users.
           KERNEL=="vboxuser",  OWNER="root", GROUP="root", MODE="0666"
@@ -101,22 +117,17 @@ in
           SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
         '';
 
-      systemd.user.services.virtualboxClientVmsvga = mkVirtualBoxUserService "--vmsvga-session";
-    }
-    (
-      mkIf cfg.clipboard {
+        systemd.user.services.virtualboxClientVmsvga = mkVirtualBoxUserService "--vmsvga-session";
+      }
+      (lib.mkIf cfg.clipboard {
         systemd.user.services.virtualboxClientClipboard = mkVirtualBoxUserService "--clipboard";
-      }
-    )
-    (
-      mkIf cfg.seamless {
+      })
+      (lib.mkIf cfg.seamless {
         systemd.user.services.virtualboxClientSeamless = mkVirtualBoxUserService "--seamless";
-      }
-    )
-    (
-      mkIf cfg.dragAndDrop {
+      })
+      (lib.mkIf cfg.dragAndDrop {
         systemd.user.services.virtualboxClientDragAndDrop = mkVirtualBoxUserService "--draganddrop";
-      }
-    )
-  ]);
+      })
+    ]
+  );
 }

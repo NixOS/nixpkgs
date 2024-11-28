@@ -41,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/xenova/chat-downloader";
     changelog = "https://github.com/xenova/chat-downloader/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

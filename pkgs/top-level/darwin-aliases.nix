@@ -47,9 +47,21 @@ let
 in
 
 mapAliases ({
+  ### A ###
+
+  apple_sdk_10_12 = throw "darwin.apple_sdk_10_12 was removed as Nixpkgs no longer supports macOS 10.12; see the 25.05 release notes"; # Added 2024-10-27
+
   ### B ###
 
   builder = throw "'darwin.builder' has been changed and renamed to 'darwin.linux-builder'. The default ssh port is now 31022. Please update your configuration or override the port back to 22. See https://nixos.org/manual/nixpkgs/unstable/#sec-darwin-builder"; # added 2023-07-06
+  bsdmake = pkgs.bmake; # added 2024-10-03
+
+  ### C ###
+
+  cctools = pkgs.cctools; # added 2024-07-17
+  cctools-apple = pkgs.cctools; # added 2024-07-01
+  cctools-llvm = pkgs.cctools; # added 2024-07-01
+  cctools-port = pkgs.cctools; # added 2024-07-17
 
   ### I ###
 
@@ -58,7 +70,11 @@ mapAliases ({
   ### L ###
 
   libauto = throw "'darwin.libauto' has been removed, as it was broken and unmaintained"; # added 2024-05-10
-  libiconv = pkgs.libiconv; # 2024-03-27
+  libtapi = pkgs.libtapi; # 2024-08-16
+
+  ### M ###
+
+  moltenvk = pkgs.moltenvk; # 2024-10-06
 
   ### O ###
 

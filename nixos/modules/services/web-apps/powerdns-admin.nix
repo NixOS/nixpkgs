@@ -87,7 +87,6 @@ in
         User = "powerdnsadmin";
         Group = "powerdnsadmin";
 
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         BindReadOnlyPaths = [
           "/nix/store"
           "-/etc/resolv.conf"
@@ -97,7 +96,6 @@ in
         ]
         ++ (optional (cfg.secretKeyFile != null) cfg.secretKeyFile)
         ++ (optional (cfg.saltFile != null) cfg.saltFile);
-        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         # ProtectClock= adds DeviceAllow=char-rtc r
         DeviceAllow = "";
         # Implies ProtectSystem=strict, which re-mounts all paths

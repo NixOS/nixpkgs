@@ -11,8 +11,8 @@ let
     extra;
   };
 
-  container-image-metadata = releases.lxdContainerMeta.${pkgs.stdenv.hostPlatform.system};
-  container-image-rootfs = releases.lxdContainerImage.${pkgs.stdenv.hostPlatform.system};
+  container-image-metadata = "${releases.incusContainerMeta.${pkgs.stdenv.hostPlatform.system}}/tarball/nixos-system-${pkgs.stdenv.hostPlatform.system}.tar.xz";
+  container-image-rootfs = "${releases.incusContainerImage.${pkgs.stdenv.hostPlatform.system}}/nixos-lxc-image-${pkgs.stdenv.hostPlatform.system}.squashfs";
 in
 {
   inherit name;
@@ -36,7 +36,8 @@ in
     networking.nftables.enable = true;
   };
 
-  testScript = ''
+  testScript = # python
+  ''
     def instance_is_up(_) -> bool:
         status, _ = machine.execute("incus exec container --disable-stdin --force-interactive /run/current-system/sw/bin/systemctl -- is-system-running")
         return status == 0
@@ -61,7 +62,7 @@ in
     machine.succeed("incus admin init --minimal")
 
     with subtest("Container image can be imported"):
-        machine.succeed("incus image import ${container-image-metadata}/*/*.tar.xz ${container-image-rootfs}/*/*.tar.xz --alias nixos")
+        machine.succeed("incus image import ${container-image-metadata} ${container-image-rootfs} --alias nixos")
 
     with subtest("Container can be launched and managed"):
         machine.succeed("incus launch nixos container")
@@ -93,6 +94,13 @@ in
             meminfo = machine.succeed("incus exec container grep -- MemTotal /proc/meminfo").strip()
             meminfo_bytes = " ".join(meminfo.split(' ')[-2:])
             assert meminfo_bytes == "125000 kB", f"Wrong amount of memory reported from /proc/meminfo, want: '125000 kB', got: '{meminfo_bytes}'"
+
+    with subtest("virtual tpm can be configured"):
+        machine.succeed("incus config device add container vtpm tpm path=/dev/tpm0 pathrm=/dev/tpmrm0")
+        machine.succeed("incus exec container -- test -e /dev/tpm0")
+        machine.succeed("incus exec container -- test -e /dev/tpmrm0")
+        machine.succeed("incus config device remove container vtpm")
+        machine.fail("incus exec container -- test -e /dev/tpm0")
 
     with subtest("lxc-generator"):
         with subtest("lxc-container generator configures plain container"):

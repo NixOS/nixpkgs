@@ -13,6 +13,11 @@ mkKdeDerivation {
     "-DQtWaylandScanner_EXECUTABLE=${qtwayland}/libexec/qtwaylandscanner"
   ];
 
-  extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [qtwayland libvncserver pipewire xorg.libXdamage];
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [
+    qtwayland
+    libvncserver
+    pipewire
+    xorg.libXdamage
+  ];
 }

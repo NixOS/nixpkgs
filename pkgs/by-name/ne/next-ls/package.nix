@@ -12,13 +12,13 @@ in
 
 beamPackages.mixRelease rec {
   pname = "next-ls";
-  version = "0.23.0";
+  version = "0.23.2";
 
   src = fetchFromGitHub {
     owner = "elixir-tools";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-wTEf0pxVIT7qmPufAN9vGR9rY31kWjNabYZwKe/hkVU=";
+    hash = "sha256-2KzBOzrfoQQIqjEtYufvhT9bBibfEjNDiC+d3l5eaUc=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {

@@ -24,7 +24,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "$out/${python.sitePackages}" ];
+  preCheck = "pushd $out";
+  postCheck = "popd";
 
   disabledTests = [ "test_make_c_files" ];
 
@@ -34,6 +35,6 @@ buildPythonPackage rec {
     description = "Fast NumPy array functions";
     homepage = "https://github.com/pydata/bottleneck";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -529,7 +529,7 @@ let
             # Note: On darwin (which defaults to clang) we have to add
             # `-undefined dynamic_lookup` as otherwise the compilation fails.
             $CC -shared \
-              ${lib.optionalString stdenv.isDarwin "-undefined dynamic_lookup"} \
+              ${lib.optionalString stdenv.hostPlatform.isDarwin "-undefined dynamic_lookup"} \
               -o $out/lib/${name}${stdenv.hostPlatform.extensions.library} ${src}
           '';
           b = compile "libb" ''
@@ -626,7 +626,7 @@ let
       };
       expectedFiles = [
         "./bin/test_binary1"
-      ] ++ lib.optionals stdenv.isDarwin [
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # On Darwin, the debug symbols are in a separate directory.
         "./bin/test_binary1.dSYM/Contents/Info.plist"
         "./bin/test_binary1.dSYM/Contents/Resources/DWARF/test_binary1"

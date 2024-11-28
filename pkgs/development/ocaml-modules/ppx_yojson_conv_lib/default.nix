@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "ppx_yojson_conv_lib";
-  version = "0.16.0";
+  version = "0.17.0";
 
   minimalOCamlVersion = "4.02.3";
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "janestreet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-TOf6DKyvc+RsSWsLi//LXW+J0sd5uJtF/HFQllcL7No=";
+    hash = "sha256-XGgpcAEemBNEagblBjpK+BiL0OUsU2JPqOq+heHbqVk=";
   };
 
   propagatedBuildInputs = [ yojson ];

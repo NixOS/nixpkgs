@@ -27,14 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "boinc";
-  version = "8.0.2";
+  version = "8.0.4";
 
   src = fetchFromGitHub {
     name = "${pname}-${version}-src";
     owner = "BOINC";
     repo = "boinc";
     rev = "client_release/${lib.versions.majorMinor version}/${version}";
-    hash = "sha256-e0zEdiN3QQHj6MNGd1pfaZf3o9rOpCTmuNSJQb3sss4=";
+    hash = "sha256-dp0zRMIG0PGXhth+Cc8FDhzl5X/4ud3GFCdE7wqPL/c=";
   };
 
   nativeBuildInputs = [ libtool automake autoconf m4 pkg-config ];
@@ -63,12 +63,14 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     ./_autosetup
-    configureFlags="$configureFlags --sysconfdir=$out/etc"
   '';
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "--disable-server" ] ++ lib.optionals headless [ "--disable-manager" ];
+  configureFlags = [
+    "--disable-server"
+    "--sysconfdir=${placeholder "out"}/etc"
+  ] ++ lib.optionals headless [ "--disable-manager" ];
 
   postInstall = ''
     install --mode=444 -D 'client/scripts/boinc-client.service' "$out/etc/systemd/system/boinc.service"

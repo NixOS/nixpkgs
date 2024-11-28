@@ -76,8 +76,8 @@ rec {
     # The makefile tries to link to `-llua<luaversion>`
     LUA_LIBS = "-llua";
 
-    buildInputs = lib.optionals stdenv.isLinux [linux-pam]
-      ++ lib.optionals stdenv.isDarwin [openpam];
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [linux-pam]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [openpam];
 
     installPhase = ''
       runHook preInstall
@@ -115,7 +115,7 @@ rec {
       description = "New FFI-based API for lua-nginx-module";
       homepage = "https://github.com/openresty/lua-resty-core";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   }) {};
 
@@ -134,7 +134,7 @@ rec {
       description = "Lua-land LRU Cache based on LuaJIT FFI";
       homepage = "https://github.com/openresty/lua-resty-lrucache";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   }) {};
 
@@ -163,7 +163,7 @@ rec {
     '';
 
     meta = with lib; {
-      broken = stdenv.isDarwin;
+      broken = stdenv.hostPlatform.isDarwin;
       description = "Lightweight UNIX I/O and POSIX binding for Lua";
       homepage = "https://www.gitano.org.uk/luxio/";
       license = licenses.mit;

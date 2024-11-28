@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "stats";
-  version = "2.10.19";
+  version = "2.11.18";
 
   src = fetchurl {
     url = "https://github.com/exelban/stats/releases/download/v${finalAttrs.version}/Stats.dmg";
-    hash = "sha256-1mmKpcJJdEiX/KZkE/VnL/xMrNzlq1LSAr5z3CdoPMI=";
+    hash = "sha256-xEU897PE8LniQJijp83oSbHllck3pyediMqz/bzgFyE=";
   };
 
   sourceRoot = ".";
@@ -22,8 +22,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/Applications
-    cp -r *.app $out/Applications
+    mkdir -p "$out/Applications"
+    cp -r *.app "$out/Applications"
 
     runHook postInstall
   '';
@@ -37,7 +37,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       donteatoreo
       emilytrau
-      Enzime
     ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

@@ -1,17 +1,21 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.system.autoUpgrade;
 
-with lib;
-
-let cfg = config.system.autoUpgrade;
-
-in {
+in
+{
 
   options = {
 
     system.autoUpgrade = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to periodically upgrade NixOS to the latest
@@ -21,8 +25,11 @@ in {
         '';
       };
 
-      operation = mkOption {
-        type = types.enum ["switch" "boot"];
+      operation = lib.mkOption {
+        type = lib.types.enum [
+          "switch"
+          "boot"
+        ];
         default = "switch";
         example = "boot";
         description = ''
@@ -32,8 +39,8 @@ in {
         '';
       };
 
-      flake = mkOption {
-        type = types.nullOr types.str;
+      flake = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "github:kloenk/nix";
         description = ''
@@ -42,8 +49,8 @@ in {
         '';
       };
 
-      channel = mkOption {
-        type = types.nullOr types.str;
+      channel = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "https://nixos.org/channels/nixos-14.12-small";
         description = ''
@@ -54,8 +61,8 @@ in {
         '';
       };
 
-      flags = mkOption {
-        type = types.listOf types.str;
+      flags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [
           "-I"
@@ -73,8 +80,8 @@ in {
         '';
       };
 
-      dates = mkOption {
-        type = types.str;
+      dates = lib.mkOption {
+        type = lib.types.str;
         default = "04:40";
         example = "daily";
         description = ''
@@ -86,9 +93,9 @@ in {
         '';
       };
 
-      allowReboot = mkOption {
+      allowReboot = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Reboot the system into the new generation instead of a switch
           if the new generation uses a different kernel, kernel modules
@@ -97,9 +104,9 @@ in {
         '';
       };
 
-      randomizedDelaySec = mkOption {
+      randomizedDelaySec = lib.mkOption {
         default = "0";
-        type = types.str;
+        type = lib.types.str;
         example = "45min";
         description = ''
           Add a randomized delay before each automatic upgrade.
@@ -109,9 +116,9 @@ in {
         '';
       };
 
-      fixedRandomDelay = mkOption {
+      fixedRandomDelay = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         example = true;
         description = ''
           Make the randomized delay consistent between runs.
@@ -120,7 +127,7 @@ in {
         '';
       };
 
-      rebootWindow = mkOption {
+      rebootWindow = lib.mkOption {
         description = ''
           Define a lower and upper time value (in HH:MM format) which
           constitute a time window during which reboots are allowed after an upgrade.
@@ -128,27 +135,32 @@ in {
           The default value of `null` means that reboots are allowed at any time.
         '';
         default = null;
-        example = { lower = "01:00"; upper = "05:00"; };
-        type = with types; nullOr (submodule {
-          options = {
-            lower = mkOption {
-              description = "Lower limit of the reboot window";
-              type = types.strMatching "[[:digit:]]{2}:[[:digit:]]{2}";
-              example = "01:00";
-            };
+        example = {
+          lower = "01:00";
+          upper = "05:00";
+        };
+        type =
+          with lib.types;
+          nullOr (submodule {
+            options = {
+              lower = lib.mkOption {
+                description = "Lower limit of the reboot window";
+                type = lib.types.strMatching "[[:digit:]]{2}:[[:digit:]]{2}";
+                example = "01:00";
+              };
 
-            upper = mkOption {
-              description = "Upper limit of the reboot window";
-              type = types.strMatching "[[:digit:]]{2}:[[:digit:]]{2}";
-              example = "05:00";
+              upper = lib.mkOption {
+                description = "Upper limit of the reboot window";
+                type = lib.types.strMatching "[[:digit:]]{2}:[[:digit:]]{2}";
+                example = "05:00";
+              };
             };
-          };
-        });
+          });
       };
 
-      persistent = mkOption {
+      persistent = lib.mkOption {
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
         example = false;
         description = ''
           Takes a boolean argument. If true, the time when the service
@@ -168,20 +180,28 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-    assertions = [{
-      assertion = !((cfg.channel != null) && (cfg.flake != null));
-      message = ''
-        The options 'system.autoUpgrade.channels' and 'system.autoUpgrade.flake' cannot both be set.
-      '';
-    }];
+    assertions = [
+      {
+        assertion = !((cfg.channel != null) && (cfg.flake != null));
+        message = ''
+          The options 'system.autoUpgrade.channel' and 'system.autoUpgrade.flake' cannot both be set.
+        '';
+      }
+    ];
 
-    system.autoUpgrade.flags = (if cfg.flake == null then
-        [ "--no-build-output" ] ++ optionals (cfg.channel != null) [
+    system.autoUpgrade.flags = (
+      if cfg.flake == null then
+        [ "--no-build-output" ]
+        ++ lib.optionals (cfg.channel != null) [
           "-I"
           "nixpkgs=${cfg.channel}/nixexprs.tar.xz"
         ]
       else
-        [ "--flake ${cfg.flake}" ]);
+        [
+          "--refresh"
+          "--flake ${cfg.flake}"
+        ]
+    );
 
     systemd.services.nixos-upgrade = {
       description = "NixOS Upgrade";
@@ -191,10 +211,13 @@ in {
 
       serviceConfig.Type = "oneshot";
 
-      environment = config.nix.envVars // {
-        inherit (config.environment.sessionVariables) NIX_PATH;
-        HOME = "/root";
-      } // config.networking.proxy.envVars;
+      environment =
+        config.nix.envVars
+        // {
+          inherit (config.environment.sessionVariables) NIX_PATH;
+          HOME = "/root";
+        }
+        // config.networking.proxy.envVars;
 
       path = with pkgs; [
         coreutils
@@ -206,54 +229,59 @@ in {
         config.programs.ssh.package
       ];
 
-      script = let
-        nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
-        date     = "${pkgs.coreutils}/bin/date";
-        readlink = "${pkgs.coreutils}/bin/readlink";
-        shutdown = "${config.systemd.package}/bin/shutdown";
-        upgradeFlag = optional (cfg.channel == null) "--upgrade";
-      in if cfg.allowReboot then ''
-        ${nixos-rebuild} boot ${toString (cfg.flags ++ upgradeFlag)}
-        booted="$(${readlink} /run/booted-system/{initrd,kernel,kernel-modules})"
-        built="$(${readlink} /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
+      script =
+        let
+          nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
+          date = "${pkgs.coreutils}/bin/date";
+          readlink = "${pkgs.coreutils}/bin/readlink";
+          shutdown = "${config.systemd.package}/bin/shutdown";
+          upgradeFlag = lib.optional (cfg.channel == null) "--upgrade";
+        in
+        if cfg.allowReboot then
+          ''
+            ${nixos-rebuild} boot ${toString (cfg.flags ++ upgradeFlag)}
+            booted="$(${readlink} /run/booted-system/{initrd,kernel,kernel-modules})"
+            built="$(${readlink} /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
 
-        ${optionalString (cfg.rebootWindow != null) ''
-          current_time="$(${date} +%H:%M)"
+            ${lib.optionalString (cfg.rebootWindow != null) ''
+              current_time="$(${date} +%H:%M)"
 
-          lower="${cfg.rebootWindow.lower}"
-          upper="${cfg.rebootWindow.upper}"
+              lower="${cfg.rebootWindow.lower}"
+              upper="${cfg.rebootWindow.upper}"
 
-          if [[ "''${lower}" < "''${upper}" ]]; then
-            if [[ "''${current_time}" > "''${lower}" ]] && \
-               [[ "''${current_time}" < "''${upper}" ]]; then
-              do_reboot="true"
+              if [[ "''${lower}" < "''${upper}" ]]; then
+                if [[ "''${current_time}" > "''${lower}" ]] && \
+                   [[ "''${current_time}" < "''${upper}" ]]; then
+                  do_reboot="true"
+                else
+                  do_reboot="false"
+                fi
+              else
+                # lower > upper, so we are crossing midnight (e.g. lower=23h, upper=6h)
+                # we want to reboot if cur > 23h or cur < 6h
+                if [[ "''${current_time}" < "''${upper}" ]] || \
+                   [[ "''${current_time}" > "''${lower}" ]]; then
+                  do_reboot="true"
+                else
+                  do_reboot="false"
+                fi
+              fi
+            ''}
+
+            if [ "''${booted}" = "''${built}" ]; then
+              ${nixos-rebuild} ${cfg.operation} ${toString cfg.flags}
+            ${lib.optionalString (cfg.rebootWindow != null) ''
+              elif [ "''${do_reboot}" != true ]; then
+                echo "Outside of configured reboot window, skipping."
+            ''}
             else
-              do_reboot="false"
+              ${shutdown} -r +1
             fi
-          else
-            # lower > upper, so we are crossing midnight (e.g. lower=23h, upper=6h)
-            # we want to reboot if cur > 23h or cur < 6h
-            if [[ "''${current_time}" < "''${upper}" ]] || \
-               [[ "''${current_time}" > "''${lower}" ]]; then
-              do_reboot="true"
-            else
-              do_reboot="false"
-            fi
-          fi
-        ''}
-
-        if [ "''${booted}" = "''${built}" ]; then
-          ${nixos-rebuild} ${cfg.operation} ${toString cfg.flags}
-        ${optionalString (cfg.rebootWindow != null) ''
-          elif [ "''${do_reboot}" != true ]; then
-            echo "Outside of configured reboot window, skipping."
-        ''}
+          ''
         else
-          ${shutdown} -r +1
-        fi
-      '' else ''
-        ${nixos-rebuild} ${cfg.operation} ${toString (cfg.flags ++ upgradeFlag)}
-      '';
+          ''
+            ${nixos-rebuild} ${cfg.operation} ${toString (cfg.flags ++ upgradeFlag)}
+          '';
 
       startAt = cfg.dates;
 
@@ -271,4 +299,3 @@ in {
   };
 
 }
-

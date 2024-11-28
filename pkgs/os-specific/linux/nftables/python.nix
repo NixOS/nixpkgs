@@ -1,5 +1,4 @@
-{ lib
-, buildPythonPackage
+{ buildPythonPackage
 , setuptools
 , nftables
 }:

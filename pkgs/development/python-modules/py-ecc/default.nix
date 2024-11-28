@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "ECC pairing and bn_128 and bls12_381 curve operations";
     homepage = "https://github.com/ethereum/py_ecc";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

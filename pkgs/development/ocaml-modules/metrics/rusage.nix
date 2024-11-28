@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, metrics
+{ buildDunePackage, metrics
 , fmt, logs
 }:
 

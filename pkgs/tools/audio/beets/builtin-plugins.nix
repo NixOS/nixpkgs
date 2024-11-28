@@ -1,14 +1,11 @@
-{ stdenv
-, aacgain
+{ aacgain
 , ffmpeg
 , flac
 , imagemagick
 , keyfinder-cli
-, lib
 , mp3gain
 , mp3val
 , python3Packages
-, version
 , ...
 }: {
   absubmit = {
@@ -131,6 +128,11 @@
     testPaths = [ ];
   };
   autobpm = {
+    propagatedBuildInputs = with python3Packages; [
+      librosa
+      # An optional dependency of librosa, needed for beets' autobpm
+      resampy
+    ];
     testPaths = [ ];
   };
   listenbrainz = {

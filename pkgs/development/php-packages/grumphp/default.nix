@@ -4,7 +4,7 @@
   php,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "grumphp";
   version = "2.6.0";
 
@@ -15,7 +15,7 @@ php.buildComposerProject (finalAttrs: {
     hash = "sha256-W4LNzdgWxXDPL46/C8SX99lpRMp/xL5q5v6vX3H80XU=";
   };
 
-  vendorHash = "sha256-bpIG3P1BdsYNI59xANaihmjsT7WDKiss3mhi/brA0Mc=";
+  vendorHash = "sha256-9oInSBlN6hDe9Bj/ISP/7O9Q1xp4tXRm99XhsrJog0E=";
 
   meta = {
     changelog = "https://github.com/phpro/grumphp/releases/tag/v${finalAttrs.version}";

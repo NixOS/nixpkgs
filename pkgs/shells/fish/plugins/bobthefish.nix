@@ -5,7 +5,7 @@
 }:
 buildFishPlugin {
   pname = "bobthefish";
-  version = "unstable-2023-06-16";
+  version = "0-unstable-2023-06-16";
 
   src = fetchFromGitHub {
     owner = "oh-my-fish";

@@ -8,19 +8,26 @@ let
 in
 buildNodejs {
   inherit enableNpm;
-  version = "22.3.0";
-  sha256 = "0k0h4s9s2y0ms3g6xhynsqsrkl9hz001dmj6j0gpc5x5vk8mpf5z";
+  version = "22.11.0";
+  sha256 = "bbf0297761d53aefda9d7855c57c7d2c272b83a7b5bad4fea9cb29006d8e1d35";
   patches = [
+    ./configure-emulator.patch
+    ./configure-armv6-vfpv2.patch
     ./disable-darwin-v8-system-instrumentation-node19.patch
     ./bypass-darwin-xcrun-node16.patch
     ./node-npm-build-npm-package-logic.patch
     ./use-correct-env-in-tests.patch
     ./bin-sh-node-run-v22.patch
+
+    # Patch to use the shared version of SQLite instead of the one vendored upstream:
     (fetchpatch2 {
-      # Fixes OpenSSL 3.0.14 compatibility in tests.
-      # See https://github.com/nodejs/node/pull/53373
-      url = "https://github.com/nodejs/node/commit/14863e80584e579fd48c55f6373878c821c7ff7e.patch";
-      hash = "sha256-I7Wjc7DE059a/ZyXAvAqEGvDudPjxQqtkBafckHCFzo=";
+      url = "https://github.com/nodejs/node/commit/32f7d5ad1cf79e7e731e1bb7ac967f4f2a3194cf.patch?full_index=1";
+      hash = "sha256-dyUr3caGfetrXgfAl+CLE1LKKetDZCpPwMg4EM98rqI=";
+    })
+    # fixes test failure, remove when included in release
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/b6fe731c55eb4cb9d14042a23e5002ed39b7c8b7.patch?full_index=1";
+      hash = "sha256-KoKsQBFKUji0GeEPTR8ixBflCiHBhPqd2cPVPuKyua8=";
     })
   ];
 }

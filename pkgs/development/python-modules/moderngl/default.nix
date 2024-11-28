@@ -4,28 +4,31 @@
   fetchPypi,
   libGL,
   libX11,
+  setuptools,
   glcontext,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "moderngl";
-  version = "5.10.0";
-  format = "setuptools";
+  version = "5.11.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EZyNNk3ePNjRwJ8jftSRZhe6dZlUoZUt9GlOUe5PZRE=";
+    hash = "sha256-rEVNXqhDHy9/DJXijaIEPb0wNTjChH/uBXA55AfdGRE=";
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [
     libGL
     libX11
   ];
 
-  propagatedBuildInputs = [ glcontext ];
+  dependencies = [ glcontext ];
 
   # Tests need a display to run.
   doCheck = false;
@@ -38,7 +41,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/moderngl/moderngl/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ c0deaddict ];
-    # should be mesaPlatforms, darwin build breaks.
+    # should be mesa.meta.platforms, darwin build breaks.
     platforms = platforms.linux;
   };
 }

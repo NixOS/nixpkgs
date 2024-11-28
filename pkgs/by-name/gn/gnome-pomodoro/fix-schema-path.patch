@@ -1,29 +1,3 @@
-diff --git a/data/meson.build b/data/meson.build
-index 5e4ce69..982b3c9 100644
---- a/data/meson.build
-+++ b/data/meson.build
-@@ -31,7 +31,7 @@ i18n.merge_file(
- 
- install_data(
-   'org.gnome.pomodoro.gschema.xml',
--  install_dir: get_option('datadir') / 'glib-2.0' / 'schemas',
-+  install_dir: gschema_dir,
- )
- 
- subdir('icons')
-diff --git a/meson-post-install.sh b/meson-post-install.sh
-index bf4013a..c87fba4 100644
---- a/meson-post-install.sh
-+++ b/meson-post-install.sh
-@@ -7,7 +7,7 @@ datadir="${prefix}/$1"
- # want/need us to do the below
- if [ -z "${DESTDIR}" ]; then
-     echo "Compiling GSchema..."
--    glib-compile-schemas "${datadir}/glib-2.0/schemas"
-+    glib-compile-schemas "${datadir}/gsettings-schemas/@pname@-@version@/glib-2.0/schemas"
- 
-     echo "Updating icon cache..."
-     gtk-update-icon-cache -f -t "${datadir}/icons/hicolor"
 diff --git a/meson.build b/meson.build
 index 09857a1..a07d27c 100644
 --- a/meson.build
@@ -38,3 +12,12 @@ index 09857a1..a07d27c 100644
  plugin_libdir = get_option('prefix') / get_option('libdir') / meson.project_name() / 'plugins'
  extension_dir = get_option('prefix') / get_option('datadir') / 'gnome-shell' / 'extensions' / 'pomodoro@arun.codito.in'
  
+@@ -134,7 +135,7 @@
+ subdir('tests')
+ 
+ gnome.post_install(
+-  glib_compile_schemas: true,
++  glib_compile_schemas: false,
+   gtk_update_icon_cache: true,
+   update_desktop_database: true,
+ )

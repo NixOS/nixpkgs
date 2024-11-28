@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , fetchpatch
 , buildPythonApplication
@@ -42,6 +41,11 @@ buildPythonApplication rec {
     (fetchpatch {
       url = "https://github.com/vagnum08/cpupower-gui/commit/97f8ac02fe33e412b59d3f3968c16a217753e74b.patch";
       sha256 = "XYnpm03kq8JLMjAT73BMCJWlzz40IAuHESm715VV6G0=";
+    })
+    # Fixes https://github.com/vagnum08/cpupower-gui/issues/86
+    (fetchpatch {
+      url = "https://github.com/vagnum08/cpupower-gui/commit/22ea668aa4ecf848149ea4c150aa840a25dc6ff8.patch";
+      sha256 = "sha256-Mri7Af1Y79lt2pvZl4DQSvrqSLIJLIjzyXwMPFEbGVI=";
     })
   ];
 

@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Library to generate entity fingerprints";
     homepage = "https://github.com/alephdata/fingerprints";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

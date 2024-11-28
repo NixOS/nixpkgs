@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Pytest external process plugin";
     homepage = "https://github.com/pytest-dev";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

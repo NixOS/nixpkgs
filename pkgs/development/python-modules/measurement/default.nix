@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "measurement";
-  version = "3.2.2";
+  version = "4.0a8";
   format = "pyproject";
 
   disabled = !isPy3k;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "coddingtonbear";
     repo = "python-measurement";
     rev = "refs/tags/${version}";
-    hash = "sha256-ULId0W10FaAtSgVY5ctQL3FPETVr+oq6TKWd/W53viM=";
+    hash = "sha256-QxXxx9Jbx7ykQFaw/3S6ANPUmw3mhvSa4np6crsfVtE=";
   };
 
   nativeBuildInputs = [
@@ -39,11 +39,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Use and manipulate unit-aware measurement objects in Python";
     homepage = "https://github.com/coddingtonbear/python-measurement";
     changelog = "https://github.com/coddingtonbear/python-measurement/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bhipple ];
   };
 }

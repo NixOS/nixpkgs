@@ -5,35 +5,40 @@
 , docutils
 , ell
 , enableExperimental ? false
+, fetchpatch
 , fetchurl
 , glib
 , json_c
 , libical
 , pkg-config
-, python3
+, python3Packages
 , readline
 , systemdMinimal
 , udev
+# Test gobject-introspection instead of pygobject because the latter
+# causes an infinite recursion.
+, gobject-introspection
+, buildPackages
+, installTests ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, gitUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez";
-  version = "5.75";
+  version = "5.79";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/bluez-${finalAttrs.version}.tar.xz";
-    hash = "sha256-mIyzxFUfbjpmdwilePXKn5P8iWUI+Y8IcJvk+KsDPC8=";
+    hash = "sha256-QWSlMDqfcccPSMA/9gvjQjG1aNk6mtXnmSjTTmqg6oo=";
   };
 
-  patches =
-    # Disable one failing test with musl libc, also seen by alpine
-    # https://github.com/bluez/bluez/issues/726
-    lib.optional (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_64)
-      (fetchurl {
-        url = "https://git.alpinelinux.org/aports/plain/main/bluez/disable_aics_unit_testcases.patch?id=8e96f7faf01a45f0ad8449c1cd825db63a8dfd48";
-        hash = "sha256-1PJkipqBO3qxxOqRFQKfpWlne1kzTCgtnTFYI1cFQt4=";
-      })
-  ;
+  patches = [
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=9d69dba21f1e46b34cdd8ae27fec11d0803907ee";
+      hash = "sha256-yMXPRPK8aT+luVoXNxx9zIa4c6E0BKYKS55DCfr8EQ0=";
+    })
+  ];
 
   buildInputs = [
     alsa-lib
@@ -42,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     json_c
     libical
-    python3
+    python3Packages.python
     readline
     udev
   ];
@@ -50,15 +55,17 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     docutils
     pkg-config
-    python3.pkgs.wrapPython
+    python3Packages.pygments
+    python3Packages.wrapPython
   ];
 
-  outputs = [ "out" "dev" "test" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optional installTests "test";
 
   postPatch = ''
     substituteInPlace tools/hid2hci.rules \
-      --replace /sbin/udevadm ${systemdMinimal}/bin/udevadm \
-      --replace "hid2hci " "$out/lib/udev/hid2hci "
+      --replace-fail /sbin/udevadm ${systemdMinimal}/bin/udevadm \
+      --replace-fail "hid2hci " "$out/lib/udev/hid2hci "
   '' +
   # Disable some tests:
   # - test-mesh-crypto depends on the following kernel settings:
@@ -109,28 +116,12 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.hostPlatform.isx86_64;
 
   postInstall = let
-    pythonPath = with python3.pkgs; [
+    pythonPath = with python3Packages; [
       dbus-python
       pygobject3
     ];
   in
   ''
-    mkdir -p $test/{bin,test}
-    cp -a test $test
-    pushd $test/test
-    for t in \
-            list-devices \
-            monitor-bluetooth \
-            simple-agent \
-            test-adapter \
-            test-device \
-            test-thermometer \
-            ; do
-      ln -s ../test/$t $test/bin/bluez-$t
-    done
-    popd
-    wrapPythonProgramsIn $test/test "$test/test ${toString pythonPath}"
-
     # for bluez4 compatibility for NixOS
     mkdir $out/sbin
     ln -s ../libexec/bluetooth/bluetoothd $out/sbin/bluetoothd
@@ -150,9 +141,29 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm755 tools/$filename $out/bin/$filename
     done
     install -Dm755 attrib/gatttool $out/bin/gatttool
+  '' + lib.optionalString installTests ''
+    mkdir -p $test/{bin,test}
+    cp -a test $test
+    pushd $test/test
+    for t in \
+            list-devices \
+            monitor-bluetooth \
+            simple-agent \
+            test-adapter \
+            test-device \
+            test-thermometer \
+            ; do
+      ln -s ../test/$t $test/bin/bluez-$t
+    done
+    popd
+    wrapPythonProgramsIn $test/test "$test/test ${toString pythonPath}"
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater {
+    url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git";
+  };
 
   meta = {
     homepage = "https://www.bluez.org/";
@@ -160,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/ChangeLog?h=${finalAttrs.version}";
     license = with lib.licenses; [ bsd2 gpl2Plus lgpl21Plus mit ];
     mainProgram = "btinfo";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

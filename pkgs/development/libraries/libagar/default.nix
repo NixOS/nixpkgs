@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, libtool, perl, bsdbuild, gettext, mandoc
-, libpng, libjpeg, libXinerama, freetype, SDL, libGLU, libGL
+, libpng, libjpeg, libXinerama, freetype, SDL, libGL
 , libsndfile, portaudio, libmysqlclient, fontconfig
 }:
 

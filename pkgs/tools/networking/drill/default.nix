@@ -20,16 +20,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-96eUCg0mzgUFLOKxpwRfzj1jH2Z+aDohBTztvRVWln0=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
 
   OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
   OPENSSL_DIR="${lib.getDev openssl}";
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 

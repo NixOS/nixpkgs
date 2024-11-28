@@ -1,35 +1,38 @@
-{ lib
-, fetchFromGitHub
-, smassh
-, python3
-, testers
+{
+  lib,
+  fetchFromGitHub,
+  smassh,
+  python311,
+  testers,
 }:
 
+let
+  python3 = python311;
+in
 python3.pkgs.buildPythonApplication rec {
   pname = "smassh";
-  version = "3.1.3";
+  version = "3.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kraanzu";
     repo = "smassh";
     rev = "v${version}";
-    hash = "sha256-QE7TFf/5hdd2W2EsVbn3gV/FundhJNxHqv0JWV5dYDc=";
+    hash = "sha256-P0fZHSsaKIwJspEBxM5MEK3Z4kemXJWlIOQI9cmvlF4=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  nativeBuildInputs = with python3.pkgs; [ poetry-core ];
 
   pythonRelaxDeps = [
+    "platformdirs"
     "textual"
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    textual
-    appdirs
     click
+    platformdirs
     requests
+    textual
   ];
 
   # No tests available
@@ -38,6 +41,7 @@ python3.pkgs.buildPythonApplication rec {
   passthru.tests.version = testers.testVersion {
     package = smassh;
     command = "HOME=$(mktemp -d) smassh --version";
+    version = "smassh - v${version}";
   };
 
   meta = with lib; {
@@ -45,7 +49,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/kraanzu/smassh";
     changelog = "https://github.com/kraanzu/smassh/blob/main/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aimpizza ];
+    maintainers = with maintainers; [
+      aimpizza
+      kraanzu
+    ];
     mainProgram = "smassh";
   };
 }

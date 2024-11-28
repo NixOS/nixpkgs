@@ -42,7 +42,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     quantity = [ pint ];
     pyside2 = [ pyside2 ];
     pyside6 = [ pyside6 ];

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   libmilter,
   berkeleydb,
-  pydns,
+  py3dns,
   iana-etc,
   libredirect,
   pyasyncore,
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pyasyncore ];
   dependencies = [
     berkeleydb
-    pydns
+    py3dns
   ];
 
   preBuild = ''

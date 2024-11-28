@@ -28,7 +28,6 @@
 , lib
 , config
 , fetchurl
-, gconf
 , gsettings-desktop-schemas
 }:
 
@@ -62,7 +61,7 @@ let
                   postHooks+=("source @dev@/nix-support/setup-hook")
               else
                   # Propagate $${out} output
-                  propagatedUserEnvPkgs+=" @${out}@"
+                  appendToVar propagatedUserEnvPkgs "@${out}@"
 
                   if [ -z "$outputDev" ]; then
                       echo "error: \$outputDev is unset!" >&2
@@ -72,7 +71,7 @@ let
                   # Propagate $dev so that this setup hook is propagated
                   # But only if there is a separate $dev output
                   if [ "$outputDev" != out ]; then
-                      propagatedBuildInputs+=" @dev@"
+                      appendToVar propagatedBuildInputs "@dev@"
                   fi
               fi
             '';
@@ -156,7 +155,7 @@ let
       plasma-mobile = callPackage ./plasma-mobile { };
       plasma-nano = callPackage ./plasma-nano { };
       plasma-nm = callPackage ./plasma-nm { };
-      plasma-pa = callPackage ./plasma-pa.nix { inherit gconf; };
+      plasma-pa = callPackage ./plasma-pa.nix { };
       plasma-remotecontrollers = callPackage ./plasma-remotecontrollers.nix { };
       plasma-sdk = callPackage ./plasma-sdk.nix { };
       plasma-systemmonitor = callPackage ./plasma-systemmonitor.nix { };
@@ -184,7 +183,6 @@ let
         kzones = callPackage ./3rdparty/kwin/scripts/kzones.nix { };
         lightly = callPackage ./3rdparty/lightly { };
         parachute = callPackage ./3rdparty/kwin/scripts/parachute.nix { };
-        polonium = callPackage ./3rdparty/addons/polonium.nix { };
       };
 
     } // lib.optionalAttrs config.allowAliases {

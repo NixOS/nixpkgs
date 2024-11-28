@@ -83,23 +83,37 @@ rec {
   # Default type merging function
   # takes two type functors and return the merged type
   defaultTypeMerge = f: f':
-    let wrapped = f.wrapped.typeMerge f'.wrapped.functor;
-        payload = f.binOp f.payload f'.payload;
+    let mergedWrapped = f.wrapped.typeMerge f'.wrapped.functor;
+        mergedPayload = f.binOp f.payload f'.payload;
+
+        hasPayload = assert (f'.payload != null) == (f.payload != null); f.payload != null;
+        hasWrapped = assert (f'.wrapped != null) == (f.wrapped != null); f.wrapped != null;
     in
-    # cannot merge different types
+    # Abort early: cannot merge different types
     if f.name != f'.name
        then null
-    # simple types
-    else if    (f.wrapped == null && f'.wrapped == null)
-            && (f.payload == null && f'.payload == null)
-       then f.type
-    # composed types
-    else if (f.wrapped != null && f'.wrapped != null) && (wrapped != null)
-       then f.type wrapped
-    # value types
-    else if (f.payload != null && f'.payload != null) && (payload != null)
-       then f.type payload
-    else null;
+    else
+
+    if hasPayload then
+      if hasWrapped then
+        # Has both wrapped and payload
+        throw ''
+          Type ${f.name} defines both `functor.payload` and `functor.wrapped` at the same time, which is not supported.
+
+          Use either `functor.payload` or `functor.wrapped` but not both.
+
+          If your code worked before remove `functor.payload` from the type definition.
+        ''
+      else
+        # Has payload
+        if mergedPayload == null then null else f.type mergedPayload
+    else
+      if hasWrapped then
+        # Has wrapped
+        # TODO(@hsjobeki): This could also be a warning and removed in the future
+        if mergedWrapped == null then null else f.type mergedWrapped
+      else
+        f.type;
 
   # Default type functor
   defaultFunctor = name: {
@@ -219,7 +233,7 @@ rec {
     else "(${t.description})";
 
   # When adding new types don't forget to document them in
-  # nixos/doc/manual/development/option-types.xml!
+  # nixos/doc/manual/development/option-types.section.md!
   types = rec {
 
     raw = mkOptionType {
@@ -253,12 +267,6 @@ rec {
           mergeFunction = {
             # Recursively merge attribute sets
             set = (attrsOf anything).merge;
-            # Safe and deterministic behavior for lists is to only accept one definition
-            # listOf only used to apply mkIf and co.
-            list =
-              if length defs > 1
-              then throw "The option `${showOption loc}' has conflicting definitions, in ${showFiles (getFiles defs)}."
-              else (listOf anything).merge;
             # This is the type of packages, only accept a single definition
             stringCoercibleSet = mergeOneOption;
             lambda = loc: defs: arg: anything.merge
@@ -1035,7 +1043,7 @@ rec {
         getSubOptions = finalType.getSubOptions;
         getSubModules = finalType.getSubModules;
         substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
-        typeMerge = t1: t2: null;
+        typeMerge = t: null;
         functor = (defaultFunctor name) // { wrapped = finalType; };
         nestedTypes.coercedType = coercedType;
         nestedTypes.finalType = finalType;

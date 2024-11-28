@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "clamav";
-  version = "1.3.1";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
-    hash = "sha256-EqMDW/JvVfceMQalGl+o17dEVy35imOSCpz/h2p9zOQ=";
+    hash = "sha256-oxjngKw5prPWxGlxOC+W7d6Xzki442HrgOY0Fe1Batg=";
   };
 
   patches = [
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config rustc rust-bindgen rustfmt cargo python3 ];
   buildInputs = [
     zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre2 libmspack json_c check
-  ] ++ lib.optional stdenv.isLinux systemd
-    ++ lib.optional stdenv.isDarwin Foundation;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux systemd
+    ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
 
   cmakeFlags = [
     "-DSYSTEMD_UNIT_DIR=${placeholder "out"}/lib/systemd"
@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  checkInputs = [
+    python3.pkgs.pytest
+  ];
 
   meta = with lib; {
     homepage = "https://www.clamav.net";

@@ -37,8 +37,6 @@ in {
       extraPackages32 = [ cfg.support32Bit.package ];
     };
 
-    services.xserver.videoDrivers = [ "amdgpu" ];
-
     environment.sessionVariables = lib.mkIf cfg.supportExperimental.enable {
       AMDVLK_ENABLE_DEVELOPING_EXT = "all";
     };

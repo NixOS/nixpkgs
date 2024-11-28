@@ -17,23 +17,21 @@
 
 buildPythonPackage rec {
   pname = "pysilero-vad";
-  version = "1.0.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pysilero-vad";
-    rev = "fc1e3f74e6282249c1fd67ab0f65832ad1ce9cc5";
-    hash = "sha256-5jS2xZEtvzXO/ffZzseTTUHfE528W9FvKB0AKG6T62k=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-p0pPhQo/raZhlHettmoc7FwnlZH9n2NI4tYHvikJ8i4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   pythonRelaxDeps = [ "numpy" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     onnxruntime
   ];
@@ -44,7 +42,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     # what():  /build/source/include/onnxruntime/core/common/logging/logging.h:294 static const onnxruntime::logging::Logger& onnxruntime::logging::LoggingManager::DefaultLogger() Attempt to use DefaultLogger but none has been registered.
-    broken = stdenv.isAarch64 && stdenv.isLinux;
+    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
     description = "Pre-packaged voice activity detector using silero-vad";
     homepage = "https://github.com/rhasspy/pysilero-vad";
     changelog = "https://github.com/rhasspy/pysilero-vad/blob/${src.rev}/CHANGELOG.md";

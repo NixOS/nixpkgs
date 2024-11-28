@@ -1,28 +1,26 @@
-{ pkgs
-, stdenv
+{ stdenv
 , lib
 , fetchFromGitHub
 , buildDotnetModule
 , dotnetCorePackages
 , openssl
 , zlib
-, hostPlatform
 , nix-update-script
 }:
 
 buildDotnetModule rec {
   pname = "pupdate";
-  version = "3.10.3";
+  version = "3.19.0";
 
   src = fetchFromGitHub {
     owner = "mattpannella";
-    repo = "${pname}";
+    repo = "pupdate";
     rev = "${version}";
-    hash = "sha256-xaoOfylDf8KBGjS5RxPH156PRfEBFk+sRZ4QTCMSQbY=";
+    hash = "sha256-ogQ7pYLfeyoxg0p7nxUvYhmgDw5xtd7qkFM08B4FDBU=";
   };
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     zlib
     openssl
   ];
@@ -31,7 +29,7 @@ buildDotnetModule rec {
   patches = [ ./add-runtime-identifier.patch ];
   postPatch = ''
     substituteInPlace pupdate.csproj \
-      --replace @RuntimeIdentifier@ "${dotnetCorePackages.systemToDotnetRid hostPlatform.system}"
+      --replace @RuntimeIdentifier@ "${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
   '';
 
   projectFile = "pupdate.csproj";
@@ -55,7 +53,7 @@ buildDotnetModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/mattpannella/pupdate";
-    description = "Pupdate - A thing for updating your Analogue Pocket ";
+    description = "Pupdate - A thing for updating your Analogue Pocket";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ p-rintz ];

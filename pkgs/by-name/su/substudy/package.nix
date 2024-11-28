@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "emk";
     repo = "subtitles-rs";
-    rev = "${pname}_v${version}";
+    rev = "substudy_v${version}";
     hash = "sha256-ACYbSQKaOJ2hS8NbOAppfKo+Mk3CKg0OAwb56AH42Zs=";
   };
 

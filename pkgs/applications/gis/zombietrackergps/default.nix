@@ -18,7 +18,7 @@ mkDerivation rec {
     # latest revision is not tagged upstream, use commit sha in the meantime
     #rev = "v_${version}";
     rev = "cc75d5744965cc6973323f5bb77f00b0b0153dce";
-    sha256 = "sha256-z/LFNRFdQQFxEWyAjcuGezRbTsv8z6Q6fK8NLjP4HNM=";
+    hash = "sha256-z/LFNRFdQQFxEWyAjcuGezRbTsv8z6Q6fK8NLjP4HNM=";
   };
 
   buildInputs =

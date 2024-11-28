@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 4b2b789..48d9be0 100644
+index 54e2012..a9b6b0e 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -92,6 +92,7 @@ find_package(pugixml REQUIRED)
+@@ -149,6 +149,7 @@ find_package(pugixml REQUIRED)
  find_package(RapidJSON REQUIRED)
  find_package(Boost COMPONENTS program_options filesystem nowide REQUIRED)
  find_package(libzip REQUIRED)

@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fim-rs";
-  version = "0.4.10";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Achiefs";
     repo = "fim";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NrxjiJY+qgPfsNY2Xlm0KRArIDH3+u9uA5gSPem+9uc=";
+    hash = "sha256-V9BzgVcDTnYSy7N5fCo38vQmXRDXLjY6wvnSkIpuDGg=";
   };
 
   cargoLock = {
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     bzip2
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.CoreServices
     darwin.apple_sdk.frameworks.Security

@@ -8,7 +8,6 @@
   hatchling,
   publicsuffixlist,
   pyleri,
-  iana-etc,
   pytestCheckHook,
   pythonOlder,
   requests,
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "checkdmarc";
-  version = "4.8.4";
+  version = "5.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +25,7 @@ buildPythonPackage rec {
     owner = "domainaware";
     repo = "checkdmarc";
     rev = "refs/tags/${version}";
-    hash = "sha256-NNB5dYQzzdNapjP4mtpCW08BzfZ+FFRESUtpxCOzrdk=";
+    hash = "sha256-skQqLWBEmfyiW2DsRRbj3Lfj52QZca0zKenFC7LltjM=";
   };
 
   nativeBuildInputs = [ hatchling ];

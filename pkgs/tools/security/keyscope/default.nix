@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-SrBtgirg52q7gM3GZsJsV8ASACvb4sYv5HDbyItpjbk=";
   };
 
-  cargoSha256 = "sha256-MFP3AqlfaclmZxRwaWFw6hsZwCQMRKJEyFEyUN+QLqo=";
+  cargoHash = "sha256-MFP3AqlfaclmZxRwaWFw6hsZwCQMRKJEyFEyUN+QLqo=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     DiskArbitration
     Foundation
     IOKit

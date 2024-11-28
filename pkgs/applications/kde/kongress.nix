@@ -31,6 +31,6 @@ mkDerivation {
     description = "Companion application for conferences";
     homepage = "https://apps.kde.org/kongress/";
     license = lib.licenses.gpl3;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

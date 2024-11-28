@@ -16,12 +16,12 @@
   ###### implementation
   config = lib.mkIf config.services.gnome.gnome-remote-desktop.enable {
     services.pipewire.enable = true;
-    services.dbus.packages = [ pkgs.gnome.gnome-remote-desktop ];
+    services.dbus.packages = [ pkgs.gnome-remote-desktop ];
 
-    environment.systemPackages = [ pkgs.gnome.gnome-remote-desktop ];
+    environment.systemPackages = [ pkgs.gnome-remote-desktop ];
 
-    systemd.packages = [ pkgs.gnome.gnome-remote-desktop ];
-    systemd.tmpfiles.packages = [ pkgs.gnome.gnome-remote-desktop ];
+    systemd.packages = [ pkgs.gnome-remote-desktop ];
+    systemd.tmpfiles.packages = [ pkgs.gnome-remote-desktop ];
 
     # TODO: if possible, switch to using provided g-r-d sysusers.d
     users = {

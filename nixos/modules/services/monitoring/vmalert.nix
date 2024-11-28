@@ -20,7 +20,15 @@ in
 {
   # interface
   options.services.vmalert = {
-    enable = mkEnableOption "vmalert";
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Wether to enable VictoriaMetrics's `vmalert`.
+
+        `vmalert` evaluates alerting and recording rules against a data source, sends notifications via Alertmanager.
+      '';
+    };
 
     package = mkPackageOption pkgs "victoriametrics" { };
 

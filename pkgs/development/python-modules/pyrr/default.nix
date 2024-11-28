@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
   multipledispatch,
   numpy,
 }:

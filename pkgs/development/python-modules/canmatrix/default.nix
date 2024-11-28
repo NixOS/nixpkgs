@@ -49,7 +49,7 @@ buildPythonPackage rec {
     six
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     arxml = [ lxml ];
     fibex = [ lxml ];
     kcd = [ lxml ];
@@ -65,7 +65,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [
     # long_envvar_name_imports requires stable key value pair ordering

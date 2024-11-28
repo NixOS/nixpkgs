@@ -22,7 +22,7 @@ buildPecl {
     hash = "sha256-WTsntvauiooj081mOoFcK6CVpnCCR/cEQtJbsOIJ/wo=";
   };
 
-  buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [ valgrind ];
+  buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ valgrind ];
 
   # tests require internet access
   doCheck = false;
@@ -33,5 +33,6 @@ buildPecl {
     homepage = "https://www.swoole.com";
     license = lib.licenses.asl20;
     maintainers = lib.teams.php.members;
+    broken = lib.versionAtLeast php.version "8.4";
   };
 }

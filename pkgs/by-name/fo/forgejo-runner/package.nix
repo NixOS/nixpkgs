@@ -8,17 +8,17 @@
 
 buildGoModule rec {
   pname = "forgejo-runner";
-  version = "3.5.0";
+  version = "4.0.1";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-omp62KJVPSl3DqZxB1WJFd5secYIAc/6n6Ke5xzICQo=";
+    hash = "sha256-hG8gCohf+U8T9A9Abqey9upErJklbCp8HuzHQKFcu3E=";
   };
 
-  vendorHash = "sha256-FCCQZdAYRtJR3DGQIEvUzv+1kqvxVTGkwJwZSohq28s=";
+  vendorHash = "sha256-yRXI9/LVj4f7qFdScqfpL5WCsK+lJXa6yQmdbUhfrKY=";
 
   ldflags = [
     "-s"

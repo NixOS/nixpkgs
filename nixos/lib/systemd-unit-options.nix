@@ -17,6 +17,7 @@ let
     concatMap
     filterOverrides
     isList
+    literalExpression
     mergeEqualOption
     mkIf
     mkMerge
@@ -357,6 +358,14 @@ in rec {
         '';
       };
 
+      enableStrictShellChecks = mkOption {
+        type = types.bool;
+        description = "Enable running shellcheck on the generated scripts for this unit.";
+        # The default gets set in systemd-lib.nix because we don't have access to
+        # the full NixOS config here.
+        defaultText = literalExpression "config.systemd.enableStrictShellChecks";
+      };
+
       script = mkOption {
         type = types.lines;
         default = "";
@@ -428,27 +437,51 @@ in rec {
 
     config = mkMerge [
       (mkIf (config.preStart != "") rec {
-        jobScripts = makeJobScript "${name}-pre-start" config.preStart;
+        jobScripts = makeJobScript {
+          name = "${name}-pre-start";
+          text = config.preStart;
+          inherit (config) enableStrictShellChecks;
+        };
         serviceConfig.ExecStartPre = [ jobScripts ];
       })
       (mkIf (config.script != "") rec {
-        jobScripts = makeJobScript "${name}-start" config.script;
+        jobScripts = makeJobScript {
+          name = "${name}-start";
+          text = config.script;
+          inherit (config) enableStrictShellChecks;
+        };
         serviceConfig.ExecStart = jobScripts + " " + config.scriptArgs;
       })
       (mkIf (config.postStart != "") rec {
-        jobScripts = (makeJobScript "${name}-post-start" config.postStart);
+        jobScripts = makeJobScript {
+          name = "${name}-post-start";
+          text = config.postStart;
+          inherit (config) enableStrictShellChecks;
+        };
         serviceConfig.ExecStartPost = [ jobScripts ];
       })
       (mkIf (config.reload != "") rec {
-        jobScripts = makeJobScript "${name}-reload" config.reload;
+        jobScripts = makeJobScript {
+          name = "${name}-reload";
+          text = config.reload;
+          inherit (config) enableStrictShellChecks;
+        };
         serviceConfig.ExecReload = jobScripts;
       })
       (mkIf (config.preStop != "") rec {
-        jobScripts = makeJobScript "${name}-pre-stop" config.preStop;
+        jobScripts = makeJobScript {
+          name = "${name}-pre-stop";
+          text = config.preStop;
+          inherit (config) enableStrictShellChecks;
+        };
         serviceConfig.ExecStop = jobScripts;
       })
       (mkIf (config.postStop != "") rec {
-        jobScripts = makeJobScript "${name}-post-stop" config.postStop;
+        jobScripts = makeJobScript {
+          name = "${name}-post-stop";
+          text = config.postStop;
+          inherit (config) enableStrictShellChecks;
+        };
         serviceConfig.ExecStopPost = jobScripts;
       })
     ];

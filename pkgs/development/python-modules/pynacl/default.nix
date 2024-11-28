@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
@@ -49,6 +48,6 @@ buildPythonPackage rec {
     description = "Python binding to the Networking and Cryptography (NaCl) library";
     homepage = "https://github.com/pyca/pynacl/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

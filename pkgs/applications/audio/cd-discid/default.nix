@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" "INSTALL=install" ];
 
   buildInputs = []
-    ++ lib.optional stdenv.isDarwin IOKit;
+    ++ lib.optional stdenv.hostPlatform.isDarwin IOKit;
 
   meta = with lib; {
     homepage = "http://linukz.org/cd-discid.shtml";

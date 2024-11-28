@@ -104,7 +104,7 @@ let
         }
         ${# Note https://github.com/bazelbuild/bazel/issues/5763#issuecomment-456374609
           # about why to create a subdir for the workspace.
-          '' cp -r ${workspaceDir} wd && chmod ug+rw -R wd && cd wd ''
+          ''cp -r ${workspaceDir} wd && chmod ug+rw -R wd && cd wd''
         }
         ${# run the actual test snippet
           bazelScript

@@ -1,3 +1,4 @@
+# Tests K3s with Etcd backend
 import ../make-test-python.nix (
   {
     pkgs,
@@ -49,20 +50,14 @@ import ../make-test-python.nix (
           services.k3s = {
             enable = true;
             role = "server";
-            extraFlags = builtins.toString [
+            extraFlags = [
               "--datastore-endpoint=\"http://192.168.1.1:2379\""
-              "--disable"
-              "coredns"
-              "--disable"
-              "local-storage"
-              "--disable"
-              "metrics-server"
-              "--disable"
-              "servicelb"
-              "--disable"
-              "traefik"
-              "--node-ip"
-              "192.168.1.2"
+              "--disable coredns"
+              "--disable local-storage"
+              "--disable metrics-server"
+              "--disable servicelb"
+              "--disable traefik"
+              "--node-ip 192.168.1.2"
             ];
           };
 
@@ -95,6 +90,9 @@ import ../make-test-python.nix (
       with subtest("should wait for etcdctl endpoint status to succeed"):
           etcd.wait_until_succeeds("etcdctl endpoint status")
 
+      with subtest("should wait for etcdctl endpoint health to succeed"):
+          etcd.wait_until_succeeds("etcdctl endpoint health")
+
       with subtest("should start k3s"):
           k3s.start()
           k3s.wait_for_unit("k3s")
@@ -125,6 +123,6 @@ import ../make-test-python.nix (
           etcd.shutdown()
     '';
 
-    meta.maintainers = etcd.meta.maintainers ++ k3s.meta.maintainers;
+    meta.maintainers = etcd.meta.maintainers ++ lib.teams.k3s.members;
   }
 )

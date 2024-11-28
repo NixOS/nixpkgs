@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.virtualisation.docker.rootless;
@@ -15,8 +12,8 @@ in
   ###### interface
 
   options.virtualisation.docker.rootless = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         This option enables docker in a rootless mode, a daemon that manages
@@ -25,8 +22,8 @@ in
       '';
     };
 
-    setSocketVariable = mkOption {
-      type = types.bool;
+    setSocketVariable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Point {command}`DOCKER_HOST` to rootless Docker instance for
@@ -34,7 +31,7 @@ in
       '';
     };
 
-    daemon.settings = mkOption {
+    daemon.settings = lib.mkOption {
       type = settingsFormat.type;
       default = { };
       example = {
@@ -47,15 +44,15 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "docker" { };
+    package = lib.mkPackageOption pkgs "docker" { };
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    environment.extraInit = optionalString cfg.setSocketVariable ''
+    environment.extraInit = lib.optionalString cfg.setSocketVariable ''
       if [ -z "$DOCKER_HOST" -a -n "$XDG_RUNTIME_DIR" ]; then
         export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/docker.sock"
       fi

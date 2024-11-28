@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "setuptools-dso";
-  version = "2.10";
+  version = "2.11";
   pyproject = true;
 
   src = fetchPypi {
     pname = "setuptools_dso";
     inherit version;
-    hash = "sha256-sjAZ9enOw3vF3zqXNbhu45SM5/sv2kIwfKC6SWJdG0Q=";
+    hash = "sha256-lT5mp0TiHbvkrXPiK5/uLke65znya8Y6s3RzpFuXVFY=";
   };
 
   build-system = [ setuptools ];

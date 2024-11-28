@@ -196,6 +196,12 @@ in
       description = "Internal port of the management server.";
     };
 
+    metricsPort = mkOption {
+      type = port;
+      default = 9090;
+      description = "Internal port of the metrics server.";
+    };
+
     extraOptions = mkOption {
       type = listOf str;
       default = [ ];
@@ -360,6 +366,13 @@ in
           }
         ];
 
+    assertions = [
+      {
+        assertion = cfg.port != cfg.metricsPort;
+        message = "The primary listen port cannot be the same as the listen port for the metrics endpoint";
+      }
+    ];
+
     systemd.services.netbird-management = {
       description = "The management server for Netbird, a wireguard VPN";
       documentation = [ "https://netbird.io/docs/" ];
@@ -387,6 +400,9 @@ in
             # Port to listen on
             "--port"
             cfg.port
+            # Port the internal prometheus server listens on
+            "--metrics-port"
+            cfg.metricsPort
             # Log to stdout
             "--log-file"
             "console"

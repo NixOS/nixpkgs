@@ -1,18 +1,15 @@
 diff --git a/pahole.c b/pahole.c
-index 6fc4ed6..a4e306f 100644
+index 954498d2ad4f..2b010658330c 100644
 --- a/pahole.c
 +++ b/pahole.c
-@@ -1687,8 +1687,11 @@ static error_t pahole__options_parser(int key, char *arg,
- 		  class_name = arg;			break;
- 	case 'j':
- #if _ELFUTILS_PREREQ(0, 178)
--		  conf_load.nr_jobs = arg ? atoi(arg) :
--					    sysconf(_SC_NPROCESSORS_ONLN) * 1.1;
-+		  // Force single thread if reproducibility is desirable.
-+		  if (!getenv("SOURCE_DATE_EPOCH")) {
-+			  conf_load.nr_jobs = arg ? atoi(arg) :
-+						    sysconf(_SC_NPROCESSORS_ONLN) * 1.1;
-+		  }
- #else
- 		  fputs("pahole: Multithreading requires elfutils >= 0.178. Continuing with a single thread...\n", stderr);
- #endif
+@@ -3705,6 +3705,10 @@ int main(int argc, char *argv[])
+ 		goto out;
+ 	}
+ 
++	/* This being set means whoever called us tries to do a reproducible build */
++	if (getenv("SOURCE_DATE_EPOCH"))
++		conf_load.reproducible_build = true;
++
+ 	if (languages.str && parse_languages())
+ 		return rc;
+ 

@@ -13,20 +13,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cyme";
-  version = "1.7.0";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "tuna-f1sh";
     repo = "cyme";
     rev = "v${version}";
-    hash = "sha256-iDwH4gSpt1XkwMBj0Ut26c9PpsHcxFrRE6VuBNhpIHk=";
+    hash = "sha256-5433lq3u+s4LiC9089Ul7wGJiouQdVDoM3RT0QSiAnU=";
   };
 
-  cargoHash = "sha256-bzOqk0nXhqq4WX9razPo1q6BkEl4VZ5QMPiNEwHO/eM=";
+  cargoHash = "sha256-EW4M072qWCghg4UlhjMBR6DVzKsu/foE+j4MOSiHqNk=";
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.DarwinTools
   ];
 
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # doctest that requires access outside sandbox
     "--skip=udev::hwdb::get"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # system_profiler is not available in the sandbox
     "--skip=test_run"
   ];
@@ -51,6 +51,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/tuna-f1sh/cyme";
+    changelog = "https://github.com/tuna-f1sh/cyme/releases/tag/${src.rev}";
     description = "Modern cross-platform lsusb";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ h7x4 ];

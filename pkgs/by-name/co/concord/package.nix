@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "concord";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "Cogmasters";
     repo = "concord";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-8k/W6007U1/s3vx03i1929a5RKZtpW/jOr4JDwmzwp8=";
+    hash = "sha256-yTFGRnhDzxU+dPeZbCWlm52gsmEgD2el+46c8XQBQng=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

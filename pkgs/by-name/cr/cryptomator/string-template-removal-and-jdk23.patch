@@ -1,0 +1,135 @@
+diff --git a/src/main/java/org/cryptomator/common/mount/Mounter.java b/src/main/java/org/cryptomator/common/mount/Mounter.java
+index 6ca067305b..89f8fb7822 100644
+--- a/src/main/java/org/cryptomator/common/mount/Mounter.java
++++ b/src/main/java/org/cryptomator/common/mount/Mounter.java
+@@ -160,7 +160,7 @@ public MountHandle mount(VaultSettings vaultSettings, Path cryptoFsRoot) throws
+ 		var mountService = mountProviders.stream().filter(s -> s.getClass().getName().equals(vaultSettings.mountService.getValue())).findFirst().orElse(defaultMountService.getValue());
+ 
+ 		if (isConflictingMountService(mountService)) {
+-			var msg = STR."\{mountService.getClass()} unavailable due to conflict with either of \{CONFLICTING_MOUNT_SERVICES.get(mountService.getClass().getName())}";
++			var msg = mountService.getClass() + " unavailable due to conflict with either of " + CONFLICTING_MOUNT_SERVICES.get(mountService.getClass().getName());
+ 			throw new ConflictingMountServiceException(msg);
+ 		}
+ 
+diff --git a/src/main/java/org/cryptomator/ui/keyloading/hub/HubConfig.java b/src/main/java/org/cryptomator/ui/keyloading/hub/HubConfig.java
+index eefad55a2f..0e7a6cc3ab 100644
+--- a/src/main/java/org/cryptomator/ui/keyloading/hub/HubConfig.java
++++ b/src/main/java/org/cryptomator/ui/keyloading/hub/HubConfig.java
+@@ -20,7 +20,7 @@ public class HubConfig {
+ 	public String devicesResourceUrl;
+ 
+ 	/**
+-	 * A collection of String template processors to construct URIs related to this Hub instance.
++	 * A collection of functions to construct URIs related to this Hub instance.
+ 	 */
+ 	@JsonIgnore
+ 	public final URIProcessors URIs = new URIProcessors();
+@@ -52,8 +52,7 @@ public class URIProcessors {
+ 		/**
+ 		 * Resolves paths relative to the <code>/api/</code> endpoint of this Hub instance.
+ 		 */
+-		public final StringTemplate.Processor<URI, RuntimeException> API = template -> {
+-			var path = template.interpolate();
++		public URI getApi(String path) {
+ 			var relPath = path.startsWith("/") ? path.substring(1) : path;
+ 			return getApiBaseUrl().resolve(relPath);
+ 		};
+diff --git a/src/main/java/org/cryptomator/ui/keyloading/hub/ReceiveKeyController.java b/src/main/java/org/cryptomator/ui/keyloading/hub/ReceiveKeyController.java
+index 3bfb4ec8ea..3353d78dd6 100644
+--- a/src/main/java/org/cryptomator/ui/keyloading/hub/ReceiveKeyController.java
++++ b/src/main/java/org/cryptomator/ui/keyloading/hub/ReceiveKeyController.java
+@@ -88,7 +88,7 @@ public void receiveKey() {
+ 	 * STEP 0 (Request): GET /api/config
+ 	 */
+ 	private void requestApiConfig() {
+-		var configUri = hubConfig.URIs.API."config";
++		var configUri = hubConfig.URIs.getApi("config");
+ 		var request = HttpRequest.newBuilder(configUri) //
+ 				.GET() //
+ 				.timeout(REQ_TIMEOUT) //
+@@ -122,7 +122,7 @@ private void receivedApiConfig(HttpResponse<String> response) {
+ 	 * STEP 1 (Request): GET user key for this device
+ 	 */
+ 	private void requestDeviceData() {
+-		var deviceUri = hubConfig.URIs.API."devices/\{deviceId}";
++		var deviceUri = hubConfig.URIs.getApi("devices/" + deviceId);
+ 		var request = HttpRequest.newBuilder(deviceUri) //
+ 				.header("Authorization", "Bearer " + bearerToken) //
+ 				.GET() //
+@@ -162,7 +162,7 @@ private void needsDeviceRegistration() {
+ 	 * STEP 2 (Request): GET vault key for this user
+ 	 */
+ 	private void requestVaultMasterkey(String encryptedUserKey) {
+-		var vaultKeyUri = hubConfig.URIs.API."vaults/\{vaultId}/access-token";
++		var vaultKeyUri = hubConfig.URIs.getApi("vaults/" + vaultId + "/access-token");
+ 		var request = HttpRequest.newBuilder(vaultKeyUri) //
+ 				.header("Authorization", "Bearer " + bearerToken) //
+ 				.GET() //
+@@ -205,7 +205,7 @@ private void receivedBothEncryptedKeys(String encryptedVaultKey, String encrypte
+ 	 */
+ 	@Deprecated
+ 	private void requestLegacyAccessToken() {
+-		var legacyAccessTokenUri = hubConfig.URIs.API."vaults/\{vaultId}/keys/\{deviceId}";
++		var legacyAccessTokenUri = hubConfig.URIs.getApi("vaults/" + vaultId + "/keys/" + deviceId);
+ 		var request = HttpRequest.newBuilder(legacyAccessTokenUri) //
+ 				.header("Authorization", "Bearer " + bearerToken) //
+ 				.GET() //
+diff --git a/src/main/java/org/cryptomator/ui/keyloading/hub/RegisterDeviceController.java b/src/main/java/org/cryptomator/ui/keyloading/hub/RegisterDeviceController.java
+index b00d49874e..d711ff86ef 100644
+--- a/src/main/java/org/cryptomator/ui/keyloading/hub/RegisterDeviceController.java
++++ b/src/main/java/org/cryptomator/ui/keyloading/hub/RegisterDeviceController.java
+@@ -115,7 +115,7 @@ public void register() {
+ 		workInProgress.set(true);
+ 
+ 
+-		var userReq = HttpRequest.newBuilder(hubConfig.URIs.API."users/me") //
++		var userReq = HttpRequest.newBuilder(hubConfig.URIs.getApi("users/me")) //
+ 				.GET() //
+ 				.timeout(REQ_TIMEOUT) //
+ 				.header("Authorization", "Bearer " + bearerToken) //
+@@ -143,7 +143,7 @@ public void register() {
+ 					var now = Instant.now().toString();
+ 					var dto = new CreateDeviceDto(deviceId, deviceNameField.getText(), BaseEncoding.base64().encode(deviceKeyPair.getPublic().getEncoded()), "DESKTOP", jwe.serialize(), now);
+ 					var json = toJson(dto);
+-					var deviceUri = hubConfig.URIs.API."devices/\{deviceId}";
++					var deviceUri = hubConfig.URIs.getApi("devices/" + deviceId);
+ 					var putDeviceReq = HttpRequest.newBuilder(deviceUri) //
+ 							.PUT(HttpRequest.BodyPublishers.ofString(json, StandardCharsets.UTF_8)) //
+ 							.timeout(REQ_TIMEOUT) //
+@@ -164,7 +164,7 @@ public void register() {
+ 	private void migrateLegacyDevices(ECPublicKey userPublicKey) {
+ 		try {
+ 			// GET legacy access tokens
+-			var getUri = hubConfig.URIs.API."devices/\{deviceId}/legacy-access-tokens";
++			var getUri = hubConfig.URIs.getApi("devices/" + deviceId + "/legacy-access-tokens");
+ 			var getReq = HttpRequest.newBuilder(getUri).GET().timeout(REQ_TIMEOUT).header("Authorization", "Bearer " + bearerToken).build();
+ 			var getRes = httpClient.send(getReq, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+ 			if (getRes.statusCode() != 200) {
+@@ -185,12 +185,12 @@ private void migrateLegacyDevices(ECPublicKey userPublicKey) {
+ 					LOG.warn("Failed to decrypt legacy access token for vault {}. Skipping migration.", entry.getKey());
+ 				}
+ 			}).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+-			var postUri = hubConfig.URIs.API."users/me/access-tokens";
++			var postUri = hubConfig.URIs.getApi("users/me/access-tokens");
+ 			var postBody = JSON.writer().writeValueAsString(newAccessTokens);
+ 			var postReq = HttpRequest.newBuilder(postUri).POST(HttpRequest.BodyPublishers.ofString(postBody)).timeout(REQ_TIMEOUT).header("Authorization", "Bearer " + bearerToken).build();
+ 			var postRes = httpClient.send(postReq, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+ 			if (postRes.statusCode() != 200) {
+-				throw new IOException(STR."Unexpected response from POST \{postUri}: \{postRes.statusCode()}");
++				throw new IOException("Unexpected response from POST " + postUri + ": " + postRes.statusCode());
+ 			}
+ 		} catch (IOException e) {
+ 			// log and ignore: this is merely a best-effort attempt of migrating legacy devices. Failure is uncritical as this is merely a convenience feature.
+diff --git a/pom.xml b/pom.xml
+index 3290b3121d..0812419af1 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -26,7 +26,7 @@
+ 
+ 	<properties>
+ 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+-		<project.jdk.version>22</project.jdk.version>
++		<project.jdk.version>23</project.jdk.version>
+ 
+ 		<!-- Group IDs of jars that need to stay on the class path for now -->
+ 		<!-- remove them, as soon they got modularized or support is dropped (i.e., WebDAV) -->

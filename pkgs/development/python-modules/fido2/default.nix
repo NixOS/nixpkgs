@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   dependencies = [ cryptography ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pcsc = [ pyscard ];
   };
 

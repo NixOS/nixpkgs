@@ -14,7 +14,7 @@
 , thrift
 , fftwFloat
 , python
-, swig
+, swig3
 , uhd
 , icu
 , airspy
@@ -71,7 +71,7 @@ in mkDerivation {
   ] ++ lib.optionals (gnuradio.hasFeature "python-support") [
       python.pkgs.numpy
       python.pkgs.pybind11
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.IOKit
     darwin.apple_sdk.frameworks.Security
   ];
@@ -85,7 +85,7 @@ in mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
-    swig
+    swig3
   ] ++ lib.optionals (gnuradio.hasFeature "python-support") [
       (if (gnuradio.versionAttr.major == "3.7") then
         python.pkgs.cheetah

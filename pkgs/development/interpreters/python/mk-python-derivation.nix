@@ -22,7 +22,6 @@
 , pythonRemoveTestsDirHook
 , pythonRuntimeDepsCheckHook
 , setuptoolsBuildHook
-, setuptoolsCheckHook
 , wheelUnpackHook
 , eggUnpackHook
 , eggBuildHook
@@ -62,7 +61,7 @@ let
 
   cleanAttrs = lib.flip removeAttrs [
     "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "pyproject" "format"
-    "disabledTestPaths" "outputs" "stdenv"
+    "disabledTestPaths" "disabledTests" "pytestFlagsArray" "unittestFlagsArray" "outputs" "stdenv"
     "dependencies" "optional-dependencies" "build-system"
   ];
 
@@ -216,23 +215,6 @@ let
 
   isSetuptoolsDependency = isSetuptoolsDependency' (attrs.pname or null);
 
-  passthru =
-    attrs.passthru or { }
-    // {
-      updateScript = let
-        filename = head (splitString ":" self.meta.position);
-      in attrs.passthru.updateScript or [ update-python-libraries filename ];
-    }
-    // optionalAttrs (dependencies != []) {
-      inherit dependencies;
-    }
-    // optionalAttrs (optional-dependencies != {}) {
-      inherit optional-dependencies;
-    }
-    // optionalAttrs (build-system != []) {
-      inherit build-system;
-    };
-
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (stdenv.mkDerivation ((cleanAttrs attrs) // {
 
@@ -308,18 +290,12 @@ let
 
     inherit strictDeps;
 
-    LANG = "${if python.stdenv.isDarwin then "en_US" else "C"}.UTF-8";
+    LANG = "${if python.stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8";
 
     # Python packages don't have a checkPhase, only an installCheckPhase
     doCheck = false;
     doInstallCheck = attrs.doCheck or true;
-    nativeInstallCheckInputs = [
-    ] ++ optionals (format' == "setuptools") [
-      # Longer-term we should get rid of this and require
-      # users of this function to set the `installCheckPhase` or
-      # pass in a hook that sets it.
-      setuptoolsCheckHook
-    ] ++ nativeCheckInputs;
+    nativeInstallCheckInputs = nativeCheckInputs;
     installCheckInputs = checkInputs;
 
     postFixup = optionalString (!dontWrapPythonPrograms) ''
@@ -331,7 +307,21 @@ let
 
     outputs = outputs ++ optional withDistOutput "dist";
 
-    inherit passthru;
+    passthru = attrs.passthru or { }
+    // {
+      updateScript = let
+        filename = head (splitString ":" self.meta.position);
+      in attrs.passthru.updateScript or [ update-python-libraries filename ];
+    }
+    // optionalAttrs (dependencies != []) {
+      inherit dependencies;
+    }
+    // optionalAttrs (optional-dependencies != {}) {
+      inherit optional-dependencies;
+    }
+    // optionalAttrs (build-system != []) {
+      inherit build-system;
+    };
 
     meta = {
       # default to python's platforms
@@ -342,11 +332,21 @@ let
     # If given use the specified checkPhase, otherwise use the setup hook.
     # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
     installCheckPhase = attrs.checkPhase;
-  } //  optionalAttrs (disabledTestPaths != []) {
+  } // optionalAttrs (attrs.doCheck or true) (
+    optionalAttrs (disabledTestPaths != []) {
       disabledTestPaths = escapeShellArgs disabledTestPaths;
-  }));
+    } // optionalAttrs (attrs ? disabledTests) {
+      # `escapeShellArgs` should be used as well as `disabledTestPaths`,
+      # but some packages rely on existing raw strings.
+      disabledTests = attrs.disabledTests;
+    } // optionalAttrs (attrs ? pytestFlagsArray) {
+      pytestFlagsArray = attrs.pytestFlagsArray;
+    } // optionalAttrs (attrs ? unittestFlagsArray) {
+      unittestFlagsArray = attrs.unittestFlagsArray;
+    }
+  )));
 
 in extendDerivation
   (disabled -> throw "${name} not supported for interpreter ${python.executable}")
-  passthru
+  { }
   self

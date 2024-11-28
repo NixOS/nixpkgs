@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ wrapQtAppsHook cmake qttools pkg-config xxd ];
   buildInputs = [ qtbase qtmultimedia zlib bzip2 ];
 
-  hardeningDisable = lib.optional stdenv.isDarwin "format";
+  hardeningDisable = lib.optional stdenv.hostPlatform.isDarwin "format";
 
   # Doomseeker looks for the engines in the program directory
   postInstall = ''

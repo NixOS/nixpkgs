@@ -14,13 +14,13 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsndfile ]
-    ++ optionals stdenv.isDarwin [ ApplicationServices CoreServices ];
+    ++ optionals stdenv.hostPlatform.isDarwin [ ApplicationServices CoreServices ];
 
   configureFlags = [ "--disable-fftw" ];
 
   outputs = [ "dev" "out" ];
 
-  postConfigure = optionalString stdenv.isDarwin ''
+  postConfigure = optionalString stdenv.hostPlatform.isDarwin ''
     # need headers from the Carbon.framework in /System/Library/Frameworks to
     # compile this on darwin -- not sure how to handle
     NIX_CFLAGS_COMPILE+=" -I${Carbon}/Library/Frameworks/Carbon.framework/Headers"
@@ -32,5 +32,7 @@ in stdenv.mkDerivation rec {
     license     = licenses.bsd2;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.all;
+    # Linker is unhappy with the `.def` file.
+    broken      = stdenv.hostPlatform.isMinGW;
   };
 }

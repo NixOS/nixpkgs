@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.gitweb;
 
@@ -10,18 +7,18 @@ in
 
   options.services.gitweb = {
 
-    projectroot = mkOption {
+    projectroot = lib.mkOption {
       default = "/srv/git";
-      type = types.path;
+      type = lib.types.path;
       description = ''
         Path to git projects (bare repositories) that should be served by
         gitweb. Must not end with a slash.
       '';
     };
 
-    extraConfig = mkOption {
+    extraConfig = lib.mkOption {
       default = "";
-      type = types.lines;
+      type = lib.types.lines;
       description = ''
         Verbatim configuration text appended to the generated gitweb.conf file.
       '';
@@ -32,29 +29,29 @@ in
       '';
     };
 
-    gitwebTheme = mkOption {
+    gitwebTheme = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Use an alternative theme for gitweb, strongly inspired by GitHub.
       '';
     };
 
-    gitwebConfigFile = mkOption {
+    gitwebConfigFile = lib.mkOption {
       default = pkgs.writeText "gitweb.conf" ''
         # path to git projects (<project>.git)
         $projectroot = "${cfg.projectroot}";
         $highlight_bin = "${pkgs.highlight}/bin/highlight";
         ${cfg.extraConfig}
       '';
-      defaultText = literalMD "generated config file";
-      type = types.path;
+      defaultText = lib.literalMD "generated config file";
+      type = lib.types.path;
       readOnly = true;
       internal = true;
     };
 
   };
 
-  meta.maintainers = with maintainers; [ ];
+  meta.maintainers = [ ];
 
 }

@@ -1,4 +1,5 @@
 {
+  lib,
   mkDerivation,
   writeShellScript,
   mtree,
@@ -10,7 +11,7 @@
   groff,
   compatIfNeeded,
   fts,
-
+  stdenv,
 }:
 
 # HACK: to ensure parent directories exist. This emulates GNU

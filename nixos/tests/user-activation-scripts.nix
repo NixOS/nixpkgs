@@ -3,6 +3,7 @@ import ./make-test-python.nix ({ lib, ... }: {
   meta = with lib.maintainers; { maintainers = [ chkno ]; };
 
   nodes.machine = {
+    system.switch.enable = true;
     system.userActivationScripts.foo = "mktemp ~/user-activation-ran.XXXXXX";
     users.users.alice = {
       initialPassword = "pass1";

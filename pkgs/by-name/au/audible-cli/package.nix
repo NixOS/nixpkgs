@@ -51,7 +51,9 @@ python3Packages.buildPythonApplication rec {
     "audible_cli"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "[0-9.]+" ];
+  };
 
   meta = with lib; {
     description = "Command line interface for audible package. With the cli you can download your Audible books, cover, chapter files";

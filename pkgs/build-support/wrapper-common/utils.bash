@@ -118,6 +118,21 @@ badPath() {
         "${p#"${TEMPDIR:-/tmp}"}" = "$p"
 }
 
+# Like `badPath`, but handles paths that may be interpreted relative to
+# `$SDKROOT` on Darwin. For example, `-L/usr/lib/swift` is interpreted
+# as `-L$SDKROOT/usr/lib/swift` when `$SDKROOT` is set and
+# `$SDKROOT/usr/lib/swift` exists.
+badPathWithDarwinSdk() {
+    path=$1
+    if [[ "@darwinMinVersion@" ]]; then
+        sdkPath=$SDKROOT/$path
+        if [[ -e $sdkPath ]]; then
+            path=$sdkPath
+        fi
+    fi
+    badPath "$path"
+}
+
 expandResponseParams() {
     declare -ga params=("$@")
     local arg

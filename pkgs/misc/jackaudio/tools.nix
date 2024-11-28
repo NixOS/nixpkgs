@@ -16,7 +16,7 @@
 , zita-alsa-pcmi
 , zita-resampler
 
-, enableAlsa ? stdenv.isLinux
+, enableAlsa ? stdenv.hostPlatform.isLinux
 }:
 
 stdenv.mkDerivation (final: {
@@ -60,6 +60,6 @@ stdenv.mkDerivation (final: {
     homepage = "https://jackaudio.org";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 })

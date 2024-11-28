@@ -6,6 +6,7 @@
   buildPythonPackage,
   defusedxml,
   fetchFromGitHub,
+  fetchpatch2,
   ftfy,
   httpx,
   netifaces,
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "denonavr";
-  version = "0.11.6";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,14 +29,22 @@ buildPythonPackage rec {
     owner = "ol-iver";
     repo = "denonavr";
     rev = "refs/tags/${version}";
-    hash = "sha256-VxoRK1qeGrIunsiCzeZJUHxW/sxk+PFpntInL+G/yI8=";
+    hash = "sha256-/K2pz3B4H205grDeuMWZmEeA4wJqKhP0XdpmbqFguTM=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "pytest-httpx-compat.patch";
+      url = "https://github.com/ol-iver/denonavr/commit/5320aadae91135a8c208c83d82688ddf26eb6498.patch";
+      hash = "sha256-F9R5GJ1XK3lHWLY+OgzKu3+xCosK3nX4EII9J1jhlys=";
+    })
+  ];
 
   pythonRelaxDeps = [ "defusedxml" ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asyncstdlib
     attrs
     defusedxml
@@ -57,7 +66,7 @@ buildPythonPackage rec {
     description = "Automation Library for Denon AVR receivers";
     homepage = "https://github.com/ol-iver/denonavr";
     changelog = "https://github.com/ol-iver/denonavr/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ colemickens ];
   };
 }

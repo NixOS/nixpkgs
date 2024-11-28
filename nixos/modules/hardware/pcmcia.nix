@@ -1,53 +1,45 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
-
   pcmciaUtils = pkgs.pcmciaUtils.passthru.function {
     inherit (config.hardware.pcmcia) firmware config;
   };
-
 in
-
 
 {
   ###### interface
-
   options = {
 
     hardware.pcmcia = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable this option to support PCMCIA card.
         '';
       };
 
-      firmware = mkOption {
-        type = types.listOf types.path;
+      firmware = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [];
         description = ''
           List of firmware used to handle specific PCMCIA card.
         '';
       };
 
-      config = mkOption {
+      config = lib.mkOption {
         default = null;
-        type = types.nullOr types.path;
+        type = lib.types.nullOr lib.types.path;
         description = ''
           Path to the configuration file which maps the memory, IRQs
           and ports used by the PCMCIA hardware.
         '';
       };
     };
-
   };
 
   ###### implementation
 
-  config = mkIf config.hardware.pcmcia.enable {
+  config = lib.mkIf config.hardware.pcmcia.enable {
 
     boot.kernelModules = [ "pcmcia" ];
 

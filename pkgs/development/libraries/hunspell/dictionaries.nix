@@ -980,7 +980,7 @@ rec {
     readmeFile = "README";
 
     src = fetchurl {
-      url = "https://downloads.sourceforge.net/rospell/${fileName}";
+      url = "mirror://sourceforge/rospell/${fileName}";
       hash = "sha256-fxKNZOoGyeZxHDCxGMCv7vsBTY8zyS2szfRVq6LQRRk=";
     };
 
@@ -1020,5 +1020,16 @@ rec {
       maintainers = with maintainers; [ samemrecebi ];
       platforms = platforms.all;
     };
+  };
+
+  /* GREEK */
+
+  el_GR = el-gr;
+  el-gr = mkDictFromLibreOffice {
+    shortName = "el-gr";
+    dictFileName = "el_GR";
+    shortDescription = "Greek (Greece)";
+    readmeFile = "README_el_GR.txt";
+    license = with lib.licenses; [ mpl11 gpl2 lgpl21 ];
   };
 }

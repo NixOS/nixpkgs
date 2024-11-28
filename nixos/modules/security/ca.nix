@@ -24,7 +24,8 @@ in
       internal = true;
     };
 
-    security.pki.useCompatibleBundle = mkEnableOption ''usage of a compatibility bundle.
+    security.pki.useCompatibleBundle = mkEnableOption ''
+      usage of a compatibility bundle.
 
       Such a bundle consists exclusively of `BEGIN CERTIFICATE` and no `BEGIN TRUSTED CERTIFICATE`,
       which is an OpenSSL specific PEM format.

@@ -24,8 +24,6 @@ import ./make-test-python.nix ({ lib, ... }: {
           "01-eth1" = {
             name = "eth1";
             networkConfig = {
-              # IPForward prevents dynamic address configuration
-              IPForward = true;
               DHCPServer = true;
               Address = "10.0.0.1/24";
             };

@@ -4,11 +4,12 @@
 , desktop-file-utils
 , glib
 , gobject-introspection
-, gtk4
 , meson
 , ninja
 , wrapGAppsHook4
 , libadwaita
+, xdotool
+, wl-clipboard
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -45,7 +46,13 @@ python3.pkgs.buildPythonApplication rec {
   dontWrapGApps = true;
 
   preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      --prefix PATH : ${lib.makeBinPath [
+        xdotool
+        wl-clipboard
+      ]}
+    )
   '';
 
   meta = {

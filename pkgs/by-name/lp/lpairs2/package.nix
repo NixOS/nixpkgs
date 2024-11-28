@@ -37,6 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "lpairs2";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

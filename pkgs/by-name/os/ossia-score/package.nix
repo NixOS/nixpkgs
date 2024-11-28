@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchFromGitHub
 , cmake
 , ninja
@@ -9,7 +8,7 @@
 , avahi
 , avahi-compat
 , bluez
-, boost185
+, boost
 , fmt
 , ffmpeg
 , fftw
@@ -42,15 +41,15 @@
 # TODO: figure out LLVM jit
 # assert lib.versionAtLeast llvm.version "15";
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "ossia-score";
-  version = "3.2.3-3";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "ossia";
     repo = "score";
-    rev = "v3.2.3-3";
-    hash = "sha256-xRqsMKwuejbl+5ljYMFhQv/j1MfnFH5MGIn9rCQG/ro=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RMPsZIUZNWnnezxdZhW9oA0Cprb89NQhpwX9THHYN4M=";
     fetchSubmodules = true;
   };
 
@@ -58,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    boost185
+    boost
     avahi
     avahi-compat
     bluez
@@ -112,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSuil_INCLUDE_DIR=${suil}/include/suil-0"
   ];
 
-  # Needed for libraries that get dlopen'd
+  # Needed for libraries that get dlopen'd
   env.NIX_LDFLAGS = toString [
     "-lasound"
     "-llilv-0"
@@ -152,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
       the creation of interactive shows, museum installations, intermedia
       digital artworks, interactive music and more in an intuitive user interface.
     '';
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ jcelerier minijackson ];
   };

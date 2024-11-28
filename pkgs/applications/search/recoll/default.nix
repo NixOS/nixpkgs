@@ -22,6 +22,8 @@
 , libxslt
 , lyx
 , makeWrapper
+, meson
+, ninja
 , perl
 , perlPackages
 , pkg-config
@@ -66,35 +68,36 @@ let filters = {
       perl = perl.passthru.withPackages (p: [ p.ImageExifTool ]);
     };
     filterPath = lib.makeBinPath (map lib.getBin (builtins.attrValues filters));
+    useInotify = if stdenv.hostPlatform.isLinux then "true" else "false";
 in
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.37.5";
+  version = "1.39.1";
 
   src = fetchurl {
-    url = "https://www.lesbonscomptes.com/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-vv2AMt6ufrfxRX2yF28X3E500MYP9hnGfDb3I9RdMVU=";
+    url = "https://www.recoll.org/${pname}-${version}.tar.gz";
+    hash = "sha256-Eeadj/AnuztCb7VIYEy4hKbduH3CzK53tADvI9+PWmQ=";
   };
 
-  configureFlags = [
-    "--enable-recollq"
-    "--disable-webkit"
-    "--without-systemd"
+  mesonFlags = [
+    "-Drecollq=true"
+    "-Dwebkit=false"
+    "-Dsystemd=false"
 
     # this leaks into the final `librecoll-*.so` binary, so we need
     # to be sure it is taken from `pkgs.file` rather than `stdenv`,
     # especially when cross-compiling
-    "--with-file-command=${file}/bin/file"
+    "-Dfile-command=${file}/bin/file"
 
   ] ++ lib.optionals (!withPython) [
-    "--disable-python-module"
-    "--disable-python-chm"
+    "-Dpython-module=false"
+    "-Dpython-chm=false"
   ] ++ lib.optionals (!withGui) [
-    "--disable-qtgui"
-    "--disable-x11mon"
+    "-Dqtgui=false"
+    "-Dx11mon=false"
   ] ++ [
-    (lib.withFeature stdenv.isLinux "inotify")
+    "-Dinotify=${useInotify}"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -111,6 +114,8 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
+    meson
+    ninja
     pkg-config
     which
   ] ++ lib.optionals withGui [
@@ -133,7 +138,7 @@ mkDerivation rec {
     file
   ] ++ lib.optionals withGui [
     qtbase
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
@@ -162,19 +167,19 @@ mkDerivation rec {
       --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
     wrapProgram $out/share/recoll/filters/rclimg \
       --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ ImageExifTool ]}"
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace  $f --replace '"lyx"' '"${lib.getBin lyx}/bin/lyx"'
-  '' + lib.optionalString (stdenv.isDarwin && withGui) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && withGui) ''
     mkdir $out/Applications
     mv $out/bin/recoll.app $out/Applications
   '';
 
   # create symlink after fixup to prevent double wrapping of recoll
-  postFixup = lib.optionalString (stdenv.isDarwin && withGui) ''
+  postFixup = lib.optionalString (stdenv.hostPlatform.isDarwin && withGui) ''
     ln -s ../Applications/recoll.app/Contents/MacOS/recoll $out/bin/recoll
   '';
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false; # XXX: -j44 tried linking befoire librecoll had been created
 
   meta = with lib; {
     description = "Full-text search tool";
@@ -182,8 +187,8 @@ mkDerivation rec {
       Recoll is an Xapian frontend that can search through files, archive
       members, email attachments.
     '';
-    homepage = "https://www.lesbonscomptes.com/recoll/";
-    changelog = "https://www.lesbonscomptes.com/recoll/pages/release-${versions.majorMinor version}.html";
+    homepage = "https://www.recoll.org";
+    changelog = "https://www.recoll.org/pages/release-history.html";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ jcumming ehmry ];

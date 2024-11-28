@@ -33,8 +33,6 @@ buildDotnetModule rec {
     ./0001-display-the-message-of-caught-exceptions.patch
   ];
 
-  postInstall = "rm $out/lib/torrentstream/NuGet.config"; # reduce closure size
-
   meta = {
     homepage = "https://github.com/trueromanus/TorrentStream";
     description = "Simple web server for streaming torrent files in video players";

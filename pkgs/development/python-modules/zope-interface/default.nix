@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Zope.Interface";
     homepage = "https://github.com/zopefoundation/zope.interface";
     license = licenses.zpl20;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
   };
 }

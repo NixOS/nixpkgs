@@ -1,24 +1,28 @@
-{ lib
-, fetchFromGitLab
-, callPackage
+{
+  lib,
+  fetchFromGitLab,
+  callPackage,
 }:
 
 let
-  version = "1.3.0";
+  version = "1.4.4";
 
   src = fetchFromGitLab {
     owner = "coolercontrol";
     repo = "coolercontrol";
     rev = version;
-    hash = "sha256-0NYDPJNX0kWIBHv+b4GuK6efgHCBNDu3rBXaQ/iSxFk=";
+    hash = "sha256-9l10X4uDv3KJz582QQMhqh38bwDtQVHm9HdAVNC6Kfg=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Monitor and control your cooling devices";
     homepage = "https://gitlab.com/coolercontrol/coolercontrol";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ codifryed OPNA2608 ];
+    maintainers = with lib.maintainers; [
+      codifryed
+      OPNA2608
+    ];
   };
 
   applySharedDetails = drv: drv { inherit version src meta; };

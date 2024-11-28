@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
   pythonOlder,
 
@@ -22,15 +23,15 @@
 
 buildPythonPackage rec {
   pname = "rio-tiler";
-  version = "6.6.1";
+  version = "7.0.1";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cogeotiff";
     repo = "rio-tiler";
-    rev = version;
-    hash = "sha256-MR6kyoGM3uXt6JiIEfGcsmTmxqlLxUF9Wn+CFuK5LtQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-E8gKXPj1n9HZ+zvQPcG28+2Vuif4B6NBhtuS009x6rU=";
   };
 
   build-system = [ hatchling ];

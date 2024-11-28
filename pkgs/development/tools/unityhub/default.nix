@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unityhub";
-  version = "3.8.0";
+  version = "3.10.0";
 
   src = fetchurl {
     url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/unityhub-amd64-${version}.deb";
-    sha256 = "sha256-TjuOsF4LFqQGx4j5j/Er97MNhVm72qlvGYZvA5vuXs8=";
+    sha256 = "sha256-9dm6tVQ5nsDC8X2clrT4cAl8jg4wLwcihE4bnFgdU+A=";
   };
 
   nativeBuildInputs = [
@@ -97,6 +97,9 @@ stdenv.mkDerivation rec {
       xorg.libXrender
       gnome2.GConf
       libcap
+
+      # Unity Editor 6000 specific dependencies
+      harfbuzz
     ] ++ extraLibs pkgs;
   };
 

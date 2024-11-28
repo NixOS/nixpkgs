@@ -1,6 +1,8 @@
 { lib, buildDunePackage, ocaml
 , saturn_lockfree
+, domain_shims
 , dscheck
+, multicore-bench
 , qcheck, qcheck-alcotest, qcheck-stm
 }:
 
@@ -12,7 +14,14 @@ buildDunePackage rec {
   propagatedBuildInputs = [ saturn_lockfree ];
 
   doCheck = lib.versionAtLeast ocaml.version "5.0";
-  checkInputs = [ dscheck qcheck qcheck-alcotest qcheck-stm ];
+  checkInputs = [
+    domain_shims
+    dscheck
+    multicore-bench
+    qcheck
+    qcheck-alcotest
+    qcheck-stm
+  ];
 
   meta = saturn_lockfree.meta // {
     description = "Parallelism-safe data structures for multicore OCaml";

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     openssl
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     SystemConfiguration
   ];
 

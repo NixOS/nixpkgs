@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace data/biometryd.pc.in \
       --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
       --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}' \
-  '' + lib.optionalString (!finalAttrs.doCheck) ''
+  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
   '';
 

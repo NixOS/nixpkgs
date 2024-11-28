@@ -33,17 +33,13 @@ stdenv.mkDerivation rec {
     yaml-cpp
     ncurses
     accelergy
-   ] ++ lib.optionals stdenv.isLinux [ gpm ];
+   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ gpm ];
 
   preConfigure = ''
     cp -r ./pat-public/src/pat ./src/pat
   '';
 
   enableParallelBuilding = true;
-
-  #link-time optimization fails on darwin
-  #see https://github.com/NixOS/nixpkgs/issues/19098
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-lto";
 
   postPatch = ''
     # Fix gcc-13 build failure due to missing includes:
@@ -54,7 +50,7 @@ stdenv.mkDerivation rec {
     substituteInPlace ./SConstruct \
       --replace-fail "env.Replace(AR = \"gcc-ar\")" "pass" \
       --replace-fail "env.Replace(RANLIB = \"gcc-ranlib\")" "pass"
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # prevent clang from dying on errors that gcc is fine with
     substituteInPlace ./src/SConscript --replace "-Werror" "-Wno-inconsistent-missing-override"
 
@@ -80,7 +76,7 @@ stdenv.mkDerivation rec {
   sconsFlags =
     # will fail on clang/darwin on link without --static due to undefined extern
     # however, will fail with static on linux as nixpkgs deps aren't static
-    lib.optional stdenv.isDarwin "--static"
+    lib.optional stdenv.hostPlatform.isDarwin "--static"
     ++ lib.optional enableAccelergy "--accelergy"
     ++ lib.optional enableISL "--with-isl";
 

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter";
-  version = "0.22.3";
+  version = "0.23.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "tree-sitter";
     repo = "py-tree-sitter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4lxE8oDFE0X7YAnB72PKIaHIqovWSM5QnFo0grPAtKU=";
+    hash = "sha256-RWnt1g7WN5CDbgWY5YSTuPFZomoxtRgDaSLkG9y2B6w=";
     fetchSubmodules = true;
   };
 
