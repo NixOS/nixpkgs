@@ -8,14 +8,18 @@
 
 stdenv.mkDerivation rec {
   pname = "opensc";
-  version = "0.25.1";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "OpenSC";
     rev = version;
-    sha256 = "sha256-Ktvp/9Hca87qWmDlQhFzvWsr7TvNpIAvOFS+4zTZbB8=";
+    sha256 = "sha256-EIQ9YpIGwckg/JjpK0S2ZYdFf/0YC4KaWcLXRNRMuzA=";
   };
+
+  patches = [
+    ./0001-Revert-Desctivate-driver-for-MICARDO.patch
+  ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
