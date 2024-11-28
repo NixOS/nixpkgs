@@ -19,7 +19,6 @@
   libiconv,
   stylua,
   typos,
-  darwin,
   # FONTCONFIG_FILE
   makeFontsConf,
   gentium,
@@ -54,19 +53,15 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
   ];
 
-  buildInputs =
-    [
-      finalAttrs.finalPackage.passthru.luaEnv
-      harfbuzz
-      icu
-      fontconfig
-      libiconv
-      stylua
-      typos
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-    ];
+  buildInputs = [
+    finalAttrs.finalPackage.passthru.luaEnv
+    harfbuzz
+    icu
+    fontconfig
+    libiconv
+    stylua
+    typos
+  ];
 
   configureFlags =
     [
