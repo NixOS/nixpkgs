@@ -1,6 +1,6 @@
 { lib, buildDunePackage, opam, opam-repository, spdx_licenses }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "opam-state";
 
   inherit (opam) src version;
