@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, meek
-, obfs4
-, python3
-, qt5
-, snowflake
-, substituteAll
-, tor
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  meek,
+  obfs4,
+  python3,
+  qt5,
+  snowflake,
+  substituteAll,
+  tor,
 }:
 
 let
@@ -55,7 +56,12 @@ rec {
       # hardcode store paths of dependencies
       (substituteAll {
         src = ./fix-paths.patch;
-        inherit tor meek obfs4 snowflake;
+        inherit
+          tor
+          meek
+          obfs4
+          snowflake
+          ;
         inherit (tor) geoip;
       })
 
@@ -68,26 +74,29 @@ rec {
         hash = "sha256-4XkqaEhMhvj6PyMssnLfXRazdP4k+c9mMDveho7pWg8=";
       })
     ];
-    dependencies = with python3.pkgs; [
-      colorama
-      flask
-      flask-compress
-      flask-socketio
-      gevent-websocket
-      packaging
-      psutil
-      pycrypto
-      pynacl
-      pyside6
-      pysocks
-      qrcode
-      requests
-      setuptools
-      stem
-      unidecode
-      waitress
-      werkzeug
-    ] ++ requests.optional-dependencies.socks;
+    dependencies =
+      with python3.pkgs;
+      [
+        colorama
+        flask
+        flask-compress
+        flask-socketio
+        gevent-websocket
+        packaging
+        psutil
+        pycrypto
+        pynacl
+        pyside6
+        pysocks
+        qrcode
+        requests
+        setuptools
+        stem
+        unidecode
+        waitress
+        werkzeug
+      ]
+      ++ requests.optional-dependencies.socks;
 
     buildInputs = [
       obfs4
@@ -103,16 +112,18 @@ rec {
       export HOME="$(mktemp -d)"
     '';
 
-    disabledTests = lib.optionals stdenv.hostPlatform.isLinux [
-      "test_get_tor_paths_linux"  # expects /usr instead of /nix/store
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # requires meek-client which is not packaged
-      "test_get_tor_paths_darwin"
-      # on darwin (and only on darwin) onionshare attempts to discover
-      # user's *real* homedir via /etc/passwd, making it more painful
-      # to fake
-      "test_receive_mode_webhook"
-    ];
+    disabledTests =
+      lib.optionals stdenv.hostPlatform.isLinux [
+        "test_get_tor_paths_linux" # expects /usr instead of /nix/store
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # requires meek-client which is not packaged
+        "test_get_tor_paths_darwin"
+        # on darwin (and only on darwin) onionshare attempts to discover
+        # user's *real* homedir via /etc/passwd, making it more painful
+        # to fake
+        "test_receive_mode_webhook"
+      ];
 
     meta = meta // {
       mainProgram = "onionshare-cli";
@@ -127,7 +138,12 @@ rec {
       # hardcode store paths of dependencies
       (substituteAll {
         src = ./fix-paths-gui.patch;
-        inherit tor meek obfs4 snowflake;
+        inherit
+          tor
+          meek
+          obfs4
+          snowflake
+          ;
         inherit (tor) geoip;
       })
 
