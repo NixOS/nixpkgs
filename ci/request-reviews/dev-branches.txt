@@ -5,3 +5,4 @@ staging
 release-*
 staging-*
 haskell-updates
+python-updates

@@ -59,7 +59,7 @@
 }@args':
 
 let
-  args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" ];
+  args = removeAttrs args' [ "overrideModAttrs" ];
 
   GO111MODULE = "on";
   GOTOOLCHAIN = "local";
