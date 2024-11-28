@@ -2559,7 +2559,7 @@ runTests {
   testPackagesFromDirectoryRecursive = {
     expr = packagesFromDirectoryRecursive {
       callPackage = path: overrides: import path overrides;
-      directory = ./packages-from-directory;
+      directory = ./packages-from-directory/plain;
     };
     expected = {
       a = "a";
@@ -2584,7 +2584,7 @@ runTests {
   testPackagesFromDirectoryRecursiveTopLevelPackageNix = {
     expr = packagesFromDirectoryRecursive {
       callPackage = path: overrides: import path overrides;
-      directory = ./packages-from-directory/c;
+      directory = ./packages-from-directory/plain/c;
     };
     expected = "c";
   };
