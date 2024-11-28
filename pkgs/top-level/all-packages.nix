@@ -18470,6 +18470,8 @@ with pkgs;
 
   pgmodeler = qt6Packages.callPackage ../applications/misc/pgmodeler { };
 
+  philipstv = with python3Packages; toPythonApplication philipstv;
+
   pjsip = darwin.apple_sdk_11_0.callPackage ../applications/networking/pjsip {
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreFoundation Security;
   };

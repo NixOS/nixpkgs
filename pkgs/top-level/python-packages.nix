@@ -10141,6 +10141,8 @@ self: super: with self; {
 
   phik = callPackage ../development/python-modules/phik { };
 
+  philipstv = callPackage ../development/python-modules/philipstv { };
+
   phone-modem = callPackage ../development/python-modules/phone-modem { };
 
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
