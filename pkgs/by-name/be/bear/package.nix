@@ -74,8 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     # Build system and generated files concatenate install prefix and
     # CMAKE_INSTALL_{BIN,LIB}DIR, which breaks if these are absolute paths.
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeBool "ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ENABLE_FUNC_TESTS" finalAttrs.finalPackage.doCheck)
   ];
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Functional tests use loopback networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool that generates a compilation database for clang tooling";
     mainProgram = "bear";
     longDescription = ''
@@ -119,8 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
       and run `bear make`.  It's not perfect, but it gets a long way.
     '';
     homepage = "https://github.com/rizsotto/Bear";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ DieracDelta ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ DieracDelta ];
   };
 })
