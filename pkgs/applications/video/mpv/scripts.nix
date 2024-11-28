@@ -95,7 +95,7 @@ let
       ];
 
   mkAliases = self: {
-    inherit (self.mpv)
+    inherit (self.builtins)
       acompressor
       autocrop
       autodeint
