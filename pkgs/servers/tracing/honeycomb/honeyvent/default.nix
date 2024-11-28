@@ -16,7 +16,6 @@ import ./versions.nix (
       rev = "v${version}";
       hash = sha256;
     };
-    inherit (buildGoModule.go) GOOS GOARCH;
 
     meta = with lib; {
       description = "CLI for sending individual events to honeycomb.io";

@@ -62,7 +62,6 @@ buildGo123Module {
   ];
 
   CGO_ENABLED = 0;
-  GOOS = "linux";
   doCheck = false;
 
   ldflags = [

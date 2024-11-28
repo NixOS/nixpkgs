@@ -16,7 +16,6 @@ import ./versions.nix (
       rev = "v${version}";
       hash = sha256;
     };
-    inherit (buildGoModule.go) GOOS GOARCH;
 
     meta = with lib; {
       description = "provides a simple CRUD interface for dealing with per-dataset markers on honeycomb.io";
