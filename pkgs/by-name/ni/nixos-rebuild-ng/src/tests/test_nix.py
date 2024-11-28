@@ -306,7 +306,15 @@ def test_nixos_remote_build_flake(mock_run: Any) -> None:
                 remote=None,
             ),
             call(
-                ["nix-store", "--realise", Path("/path/to/file"), "--build"],
+                [
+                    "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
+                    "build",
+                    "/path/to/file^*",
+                    "--print-out-paths",
+                    "--build",
+                ],
                 remote=build_host,
                 stdout=PIPE,
             ),

@@ -40,12 +40,12 @@ def test_run(mock_run: Any) -> None:
     )
 
     p.run_wrapper(
-        ["test", "--with", "flags"],
+        ["test", "--with", "some flags"],
         check=True,
         remote=m.Remote("user@localhost", ["--ssh", "opt"], "password"),
     )
     mock_run.assert_called_with(
-        ["ssh", "--ssh", "opt", "user@localhost", "--", "test", "--with", "flags"],
+        ["ssh", "--ssh", "opt", "user@localhost", "--", "test --with 'some flags'"],
         check=True,
         text=True,
         errors="surrogateescape",
@@ -67,14 +67,7 @@ def test_run(mock_run: Any) -> None:
             "opt",
             "user@localhost",
             "--",
-            "sudo",
-            "--prompt=",
-            "--stdin",
-            "env",
-            "FOO=bar",
-            "test",
-            "--with",
-            "flags",
+            "sudo --prompt= --stdin env FOO=bar test --with flags",
         ],
         check=True,
         env=None,

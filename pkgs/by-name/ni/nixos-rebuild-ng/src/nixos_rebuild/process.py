@@ -1,5 +1,6 @@
 import logging
 import os
+import shlex
 import subprocess
 from dataclasses import dataclass
 from getpass import getpass
@@ -91,7 +92,16 @@ def run_wrapper(
                 input = remote.sudo_password + "\n"
             else:
                 args = ["sudo", *args]
-        args = ["ssh", *remote.opts, remote.host, "--", *args]
+        args = [
+            "ssh",
+            *remote.opts,
+            remote.host,
+            "--",
+            # sadly SSH just join all remaining parameters, expanding glob and
+            # ignoring quotes
+            # so we need to use shlex.join() to safely join the arguments
+            shlex.join(str(a) for a in args),
+        ]
     else:
         if extra_env:
             env = os.environ | extra_env

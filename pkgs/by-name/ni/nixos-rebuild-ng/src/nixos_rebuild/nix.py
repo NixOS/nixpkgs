@@ -333,7 +333,14 @@ def nixos_remote_build_flake(
     drv = Path(r.stdout.strip())
     copy_closure(drv, to_host=build_host, from_host=None, **(copy_flags or {}))
     r = run_wrapper(
-        ["nix-store", "--realise", drv, *dict_to_flags(build_flags or {})],
+        [
+            "nix",
+            *FLAKE_FLAGS,
+            "build",
+            f"{drv}^*",
+            "--print-out-paths",
+            *dict_to_flags(build_flags or {}),
+        ],
         remote=build_host,
         stdout=PIPE,
     )
