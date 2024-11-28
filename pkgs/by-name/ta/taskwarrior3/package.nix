@@ -36,6 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "xdg-open" "${lib.getBin xdg-utils}/bin/xdg-open"
   '';
 
+  preConfigure = ''
+    export CMAKE_PREFIX_PATH="${corrosion}:$CMAKE_PREFIX_PATH"
+  '';
+
   nativeBuildInputs = [
     cmake
     libuuid
@@ -49,10 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
   checkTarget = "build_tests";
-
-  preConfigure = ''
-    export CMAKE_PREFIX_PATH="${corrosion}:$CMAKE_PREFIX_PATH"
-  '';
 
   postInstall = ''
     # ZSH is installed automatically from some reason, only bash and fish need
