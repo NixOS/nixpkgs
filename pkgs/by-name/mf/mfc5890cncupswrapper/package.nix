@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchdeb
 , dpkg
 , makeWrapper
 , coreutils
@@ -15,23 +15,21 @@ stdenv.mkDerivation rec {
   pname = "mfc5890cncupswrapper";
   version = "1.1.2-2";
 
-  src = fetchurl {
+  src = fetchdeb {
     url = "https://download.brother.com/welcome/dlf006170/${pname}-${version}.i386.deb";
-    hash = "sha256-UOCwzB09/a1/2rliY+hTrslSvO5ztVj51auisPx7OIQ=";
+    hash = "sha256-phXfjaN8vFZiL4yNtjdd1D8p/TVvaYC6/nCK6OgSJFM=";
   };
 
-  unpackPhase = ''
-    dpkg-deb -x $src $out
-  '';
-
   nativeBuildInputs = [
-    dpkg
     makeWrapper
   ];
 
   dontBuild = true;
 
   installPhase = ''
+    mkdir -p $out
+    cp -r . $out/.
+
     lpr=${mfc5890cnlpr}/usr/local/Brother/Printer/mfc5890cn
     dir=$out/usr/local/Brother/Printer/mfc5890cn
 

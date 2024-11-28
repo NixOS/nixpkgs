@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchdeb
 , dpkg
 , makeWrapper
 , coreutils
@@ -15,23 +15,21 @@ stdenv.mkDerivation rec {
   pname = "mfc465cncupswrapper";
   version = "1.0.1-1";
 
-  src = fetchurl {
+  src = fetchdeb {
     url = "https://download.brother.com/welcome/dlf006134/${pname}-${version}.i386.deb";
-    sha256 = "59a62ed3cf10f1565c08ace55832bd48bd5034f7067662870edf7ff3bf0cb76a";
+    hash = "sha256-xkqpHFGnoStXIHScSZG7ssM4V8mD6GsE/h95H1bDfc8=";
   };
 
-  unpackPhase = ''
-    dpkg-deb -x $src $out
-  '';
-
   nativeBuildInputs = [
-    dpkg
     makeWrapper
   ];
 
   dontBuild = true;
 
   installPhase = ''
+    mkdir -p $out
+    cp -r . $out/.
+
     lpr=${mfc465cnlpr}/usr/local/Brother/Printer/mfc465cn
     dir=$out/usr/local/Brother/Printer/mfc465cn
     interpreter=${pkgsi686Linux.glibc.out}/lib/ld-linux.so.2

@@ -654,6 +654,10 @@ with pkgs;
 
   fetchPypiLegacy = callPackage ../build-support/fetchpypilegacy { };
 
+  fetchdeb = callPackage ../build-support/fetchdeb { };
+
+  fetchrpm = callPackage ../build-support/fetchrpm { };
+
   resolveMirrorURLs = {url}: fetchurl {
     showURLs = true;
     inherit url;

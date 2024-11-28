@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsa-lib, cairo, dpkg, freetype
+{ stdenv, fetchdeb, alsa-lib, cairo, dpkg, freetype
 , gdk-pixbuf, glib, gtk3, lib, xorg
 , libglvnd, libjack2, ffmpeg
 , libxkbcommon, xdg-utils, zlib, pulseaudio
@@ -8,17 +8,12 @@ stdenv.mkDerivation rec {
   pname = "bitwig-studio";
   version = "3.3.11";
 
-  src = fetchurl {
+  src = fetchdeb {
     url = "https://downloads.bitwig.com/stable/${version}/${pname}-${version}.deb";
-    sha256 = "sha256-cF8gVPjM0KUcKOW09uFccp4/lzbUmZcBkVOwr/A/8Yw=";
+    hash = "sha256-MilqXb3v/bKbjUamv1TfPT+2qwQyP3xLekz0vQTIb+s=";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook3 ];
-
-  unpackCmd = ''
-    mkdir -p root
-    dpkg-deb -x $curSrc root
-  '';
 
   dontBuild = true;
   dontWrapGApps = true; # we only want $gappsWrapperArgs here

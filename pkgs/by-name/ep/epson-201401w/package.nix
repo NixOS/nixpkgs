@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, rpmextract, autoreconfHook, file, libjpeg, cups }:
+{ lib, stdenv, fetchrpm, autoreconfHook, file, libjpeg, cups }:
 
 let
   version = "1.0.0";
@@ -7,30 +7,35 @@ in stdenv.mkDerivation {
   pname = "epson-201401w";
   inherit version;
 
-  src = fetchurl {
+  src = fetchrpm {
     # NOTE: Don't forget to update the webarchive link too!
     urls = [
       "https://download3.ebz.epson.net/dsc/f/03/00/03/45/41/92e9c9254f0ee4230a069545ba27ec2858a2c457/epson-inkjet-printer-201401w-1.0.0-1lsb3.2.src.rpm"
       "https://web.archive.org/web/20200725175832/https://download3.ebz.epson.net/dsc/f/03/00/03/45/41/92e9c9254f0ee4230a069545ba27ec2858a2c457/epson-inkjet-printer-201401w-1.0.0-1lsb3.2.src.rpm"
     ];
-    sha256 = "0c60m1sd59s4sda38dc5nniwa7dh1b0kv1maajr0x9d38gqlyk3x";
+    hash = "sha256-UvUC035D2ZHMCTulEeWjh1EkKMx6vj1gNpb5gOn6mEI=";
   };
+
+  prePatch = ''
+    pushd epson-inkjet-printer-filter-${filterVersion}
+  '';
+
   patches = [ ./fixbuild.patch ];
 
-  nativeBuildInputs = [ rpmextract autoreconfHook file ];
+  postPatch = ''
+    popd
 
-  buildInputs = [ libjpeg cups ];
-
-  unpackPhase = ''
-    rpmextract $src
-    tar -zxf epson-inkjet-printer-201401w-${version}.tar.gz
-    tar -zxf epson-inkjet-printer-filter-${filterVersion}.tar.gz
     for ppd in epson-inkjet-printer-201401w-${version}/ppds/*; do
       substituteInPlace $ppd --replace "/opt/epson-inkjet-printer-201401w" "$out"
       substituteInPlace $ppd --replace "/cups/lib" "/lib/cups"
     done
+
     cd epson-inkjet-printer-filter-${filterVersion}
   '';
+
+  nativeBuildInputs = [ autoreconfHook file ];
+
+  buildInputs = [ libjpeg cups ];
 
   preConfigure = ''
     chmod +x configure
