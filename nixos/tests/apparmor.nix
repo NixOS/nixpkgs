@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, lib, ... } : {
   name = "apparmor";
-  meta.maintainers = with lib.maintainers; [ julm ];
+  meta.maintainers = with lib.maintainers; [ julm grimmauld ];
 
   nodes.machine =
     { lib, pkgs, config, ... }:
