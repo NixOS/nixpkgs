@@ -1,28 +1,17 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, brotlicffi
-, gst-python
-, kiss-headers
-, logbook
-, pillow
-, pygobject3
-, python-zbar
-, requests
-, single-version
-, gobject-introspection
-, gst-plugins-good
-, gtk3
-, libhandy
-, librsvg
-, networkmanager
-, setuptools
-, python
-, pytestCheckHook
-, wrapGAppsHook3
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  gst_all_1,
+  gobject-introspection,
+  gtk3,
+  libhandy,
+  librsvg,
+  networkmanager,
+  wrapGAppsHook3,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "cobang";
   version = "0.14.1";
   pyproject = true;
@@ -40,22 +29,22 @@ buildPythonApplication rec {
     sed -i '$ a\packages = ["cobang"]' pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     # Needed to recognize gobject namespaces
     gobject-introspection
     wrapGAppsHook3
     setuptools
   ];
 
-  buildInputs = [
+  buildInputs = with python3Packages; [
     # Requires v4l2src
-    gst-plugins-good
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
     # For gobject namespaces
     libhandy
     networkmanager
   ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     brotlicffi
     kiss-headers
     logbook
@@ -69,8 +58,12 @@ buildPythonApplication rec {
     gst-python
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
+  ];
+
+  pythonRelaxDeps = [
+    "Pillow"
   ];
 
   # Wrapping this manually for SVG recognition
@@ -78,12 +71,12 @@ buildPythonApplication rec {
 
   postInstall = ''
     # Needed by the application
-    cp -R data $out/${python.sitePackages}/
+    cp -R data $out/${python3Packages.python.sitePackages}/
 
     # Icons and applications
-    install -Dm 644 $out/${python.sitePackages}/data/vn.hoabinh.quan.CoBang.svg -t $out/share/pixmaps/
-    install -Dm 644 $out/${python.sitePackages}/data/vn.hoabinh.quan.CoBang.desktop.in -t $out/share/applications/
-    mv $out/${python.sitePackages}/data/vn.hoabinh.quan.CoBang.desktop{.in,}
+    install -Dm 644 $out/${python3Packages.python.sitePackages}/data/vn.hoabinh.quan.CoBang.svg -t $out/share/pixmaps/
+    install -Dm 644 $out/${python3Packages.python.sitePackages}/data/vn.hoabinh.quan.CoBang.desktop.in -t $out/share/applications/
+    mv $out/${python3Packages.python.sitePackages}/data/vn.hoabinh.quan.CoBang.desktop{.in,}
   '';
 
   preFixup = ''
@@ -93,11 +86,14 @@ buildPythonApplication rec {
       --set GDK_PIXBUF_MODULE_FILE "${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "QR code scanner desktop app for Linux";
     homepage = "https://github.com/hongquan/CoBang";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ aleksana dvaerum ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      aleksana
+      dvaerum
+    ];
     mainProgram = "cobang";
     platforms = lib.platforms.linux;
   };
