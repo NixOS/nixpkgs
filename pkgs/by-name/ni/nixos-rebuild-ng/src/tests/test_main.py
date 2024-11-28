@@ -1,3 +1,4 @@
+import logging
 import textwrap
 from pathlib import Path
 from subprocess import PIPE, CompletedProcess
@@ -43,7 +44,7 @@ def test_parse_args() -> None:
             "bar",
         ]
     )
-    assert nr.VERBOSE == 0
+    assert nr.logger.level == logging.INFO
     assert r1.flake == "/etc/nixos"
     assert r1.install_bootloader is True
     assert r1.install_grub is True
@@ -65,7 +66,7 @@ def test_parse_args() -> None:
             "-vvv",
         ]
     )
-    assert nr.VERBOSE == 3
+    assert nr.logger.level == logging.DEBUG
     assert r2.verbose == 3
     assert r2.flake is False
     assert r2.action == "dry-build"

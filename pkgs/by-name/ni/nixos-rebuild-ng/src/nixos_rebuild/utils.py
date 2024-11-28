@@ -1,9 +1,21 @@
-import sys
-from functools import partial
-from typing import TypeAlias
+import logging
+from typing import TypeAlias, override
 
-info = partial(print, file=sys.stderr)
 Args: TypeAlias = bool | str | list[str] | int | None
+
+
+class LogFormatter(logging.Formatter):
+    @override
+    def format(self, record: logging.LogRecord) -> str:
+        record.levelname = record.levelname.lower()
+        match record.levelno:
+            case logging.INFO:
+                self._style._fmt = "%(message)s"
+            case logging.DEBUG:
+                self._style._fmt = "%(levelname)s: %(name)s: %(message)s"
+            case _:
+                self._style._fmt = "%(levelname)s: %(message)s"
+        return super().format(record)
 
 
 def dict_to_flags(d: dict[str, Args]) -> list[str]:

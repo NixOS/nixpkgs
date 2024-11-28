@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import os
 import subprocess
 from dataclasses import dataclass
@@ -7,7 +8,7 @@ from getpass import getpass
 from pathlib import Path
 from typing import Self, Sequence, TypedDict, Unpack
 
-from .utils import info
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -46,13 +47,13 @@ class Remote:
     def _validate_opts(opts: list[str], ask_sudo_password: bool | None) -> None:
         for o in opts:
             if o in ["-t", "-tt", "RequestTTY=yes", "RequestTTY=force"]:
-                info(
-                    f"warning: detected option '{o}' in NIX_SSHOPTS. SSH's TTY "
-                    + "may cause issues, it is recommended to remove this option"
+                logger.warning(
+                    f"detected option '{o}' in NIX_SSHOPTS. SSH's TTY may "
+                    + "cause issues, it is recommended to remove this option"
                 )
                 if not ask_sudo_password:
-                    info(
-                        "If you want to prompt for sudo password use "
+                    logger.warning(
+                        "if you want to prompt for sudo password use "
                         + "'--ask-sudo-password' option instead"
                     )
 
@@ -98,6 +99,8 @@ def run_wrapper(
             env = os.environ | extra_env
         if sudo:
             args = ["sudo", *args]
+
+    logger.debug("calling run with args=%s, extra_env=%s", args, extra_env)
 
     return subprocess.run(
         args,

@@ -1,3 +1,4 @@
+import logging
 import os
 from datetime import datetime
 from importlib.resources import files
@@ -17,10 +18,11 @@ from .models import (
     Remote,
 )
 from .process import run_wrapper
-from .utils import Args, dict_to_flags, info
+from .utils import Args, dict_to_flags
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
 FLAKE_REPL_TEMPLATE: Final = "repl.template.nix"
+logger = logging.getLogger(__name__)
 
 
 def copy_closure(
@@ -107,7 +109,7 @@ def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
         )
     except FileNotFoundError:
         # Git is not included in the closure so we need to check
-        info(f"warning: Git not found; cannot figure out revision of '{nixpkgs_path}'")
+        logger.warning(f"Git not found; cannot figure out revision of '{nixpkgs_path}'")
         return None
 
     if rev := r.stdout.strip():
@@ -203,13 +205,15 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
         )
         try:
             nixos_version = (generation_path / "nixos-version").read_text().strip()
-        except IOError:
+        except IOError as ex:
+            logger.debug("could not get nixos-version: %s", ex)
             nixos_version = "Unknown"
         try:
             kernel_version = next(
                 (generation_path / "kernel-modules/lib/modules").iterdir()
             ).name
-        except IOError:
+        except IOError as ex:
+            logger.debug("could not get kernel version: %s", ex)
             kernel_version = "Unknown"
         specialisations = [
             s.name for s in (generation_path / "specialisation").glob("*") if s.is_dir()
@@ -219,7 +223,8 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
                 [generation_path / "sw/bin/nixos-version", "--configuration-revision"],
                 capture_output=True,
             ).stdout.strip()
-        except (CalledProcessError, IOError):
+        except (CalledProcessError, IOError) as ex:
+            logger.debug("could not get configuration revision: %s", ex)
             configuration_revision = "Unknown"
 
         result.append(

@@ -1,6 +1,7 @@
 import argparse
 import atexit
 import json
+import logging
 import sys
 from pathlib import Path
 from subprocess import run
@@ -10,9 +11,10 @@ from typing import assert_never
 from . import nix
 from .models import Action, BuildAttr, Flake, NRError, Profile
 from .process import Remote, cleanup_ssh
-from .utils import info
+from .utils import LogFormatter
 
-VERBOSE = 0
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
 def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentParser]]:
@@ -103,11 +105,11 @@ def parse_args(
     }
 
     def parser_warn(msg: str) -> None:
-        info(f"{parser.prog}: warning: {msg}")
+        print(f"{parser.prog}: warning: {msg}", file=sys.stderr)
 
-    global VERBOSE
     # This flag affects both nix and this script
-    VERBOSE = args.verbose
+    if args.verbose:
+        logger.setLevel(logging.DEBUG)
 
     # https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/nixos-rebuild/nixos-rebuild.sh#L56
     if args.action == Action.DRY_RUN.value:
@@ -190,7 +192,7 @@ def execute(argv: list[str]) -> None:
 
     match action:
         case Action.SWITCH | Action.BOOT:
-            info("building the system configuration...")
+            logger.info("building the system configuration...")
             if args.rollback:
                 path_to_config = nix.rollback(profile, target_host, sudo=args.sudo)
             else:
@@ -219,7 +221,7 @@ def execute(argv: list[str]) -> None:
                 install_bootloader=args.install_bootloader,
             )
         case Action.TEST | Action.BUILD | Action.DRY_BUILD | Action.DRY_ACTIVATE:
-            info("building the system configuration...")
+            logger.info("building the system configuration...")
             dry_run = action == Action.DRY_BUILD
             if args.rollback:
                 if action not in (Action.TEST, Action.BUILD):
@@ -256,7 +258,7 @@ def execute(argv: list[str]) -> None:
                     specialisation=args.specialisation,
                 )
         case Action.BUILD_VM | Action.BUILD_VM_WITH_BOOTLOADER:
-            info("building the system configuration...")
+            logger.info("building the system configuration...")
             attr = "vm" if action == Action.BUILD_VM else "vmWithBootLoader"
             if flake:
                 path_to_config = nix.nixos_build_flake(
@@ -313,10 +315,14 @@ def execute(argv: list[str]) -> None:
 
 
 def main() -> None:
+    ch = logging.StreamHandler()
+    ch.setFormatter(LogFormatter("%(levelname)s: %(message)s"))
+    logger.addHandler(ch)
+
     try:
         execute(sys.argv)
     except (Exception, KeyboardInterrupt) as ex:
-        if VERBOSE:
+        if logger.level == logging.DEBUG:
             raise ex
         else:
             sys.exit(str(ex))
