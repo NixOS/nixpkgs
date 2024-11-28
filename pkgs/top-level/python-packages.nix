@@ -7950,6 +7950,8 @@ self: super: with self; {
 
   melnor-bluetooth = callPackage ../development/python-modules/melnor-bluetooth { };
 
+  mem0ai = callPackage ../development/python-modules/mem0ai { };
+
   memestra = callPackage ../development/python-modules/memestra { };
 
   memory-allocator = callPackage ../development/python-modules/memory-allocator { };
