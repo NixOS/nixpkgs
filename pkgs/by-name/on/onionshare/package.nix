@@ -117,6 +117,8 @@ python3Packages.buildPythonApplication rec {
       "test_receive_mode_webhook"
     ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Securely and anonymously send and receive files";
     longDescription = ''
