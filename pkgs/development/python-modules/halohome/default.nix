@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "halohome";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "nayaverdier";
     repo = "halohome";
     rev = "refs/tags/${version}";
-    hash = "sha256-oGwg9frE5LaUxmXjwaD0ZtY6D8D7f8tH0knZDaSm+XI=";
+    hash = "sha256-JOQ2q5lbdVTerXPt6QHBiTG9PzN9LiuLcN+XnOoyYjA=";
   };
 
   build-system = [ setuptools ];
