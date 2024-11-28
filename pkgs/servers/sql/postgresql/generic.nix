@@ -218,9 +218,8 @@ let
       ++ lib.optionals pythonSupport [ "--with-python" ]
       ++ lib.optionals jitSupport [ "--with-llvm" ]
       ++ lib.optionals pamSupport [ "--with-pam" ]
-      # This could be removed once the upstream issue is resolved:
-      # https://postgr.es/m/flat/427c7c25-e8e1-4fc5-a1fb-01ceff185e5b%40technowledgy.de
-      ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16") [ "LDFLAGS_EX_BE=-Wl,-export_dynamic" ]
+      # This can be removed once v17 is removed. v18+ ships with it.
+      ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16" && olderThan "18") [ "LDFLAGS_EX_BE=-Wl,-export_dynamic" ]
       ++ lib.optionals (atLeast "17" && !perlSupport) [ "--without-perl" ]
       ++ lib.optionals ldapSupport [ "--with-ldap" ]
       ++ lib.optionals tclSupport [ "--with-tcl" ]
