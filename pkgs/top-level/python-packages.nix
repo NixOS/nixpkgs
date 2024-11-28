@@ -4370,6 +4370,8 @@ self: super: with self; {
 
   face-recognition-models = callPackage ../development/python-modules/face-recognition/models.nix { };
 
+  factorio-rcon-py = callPackage ../development/python-modules/factorio-rcon-py { };
+
   factory-boy = callPackage ../development/python-modules/factory-boy { };
 
   fairscale = callPackage ../development/python-modules/fairscale { };
@@ -7840,6 +7842,8 @@ self: super: with self; {
   marshmallow-polyfield = callPackage ../development/python-modules/marshmallow-polyfield { };
 
   marshmallow-sqlalchemy = callPackage ../development/python-modules/marshmallow-sqlalchemy { };
+
+  maseya-z3pr = callPackage ../development/python-modules/maseya-z3pr { };
 
   mashumaro = callPackage ../development/python-modules/mashumaro { };
 
@@ -11522,6 +11526,8 @@ self: super: with self; {
 
   pyerfa = callPackage ../development/python-modules/pyerfa { };
 
+  pyevermizer = callPackage ../development/python-modules/pyevermizer { };
+
   pyevmasm = callPackage ../development/python-modules/pyevmasm { };
 
   pyevilgenius = callPackage ../development/python-modules/pyevilgenius { };
@@ -11921,6 +11927,8 @@ self: super: with self; {
   pymeeus = callPackage ../development/python-modules/pymeeus { };
 
   pymelcloud = callPackage ../development/python-modules/pymelcloud { };
+
+  pymem = callPackage ../development/python-modules/pymem { };
 
   pymemcache = callPackage ../development/python-modules/pymemcache { };
 
@@ -18064,6 +18072,8 @@ self: super: with self; {
 
   xdxf2html = callPackage ../development/python-modules/xdxf2html { };
 
+  xxtea = callPackage ../development/python-modules/xxtea { };
+
   xyzservices = callPackage ../development/python-modules/xyzservices { };
 
   y-py = callPackage ../development/python-modules/y-py { };
@@ -18257,6 +18267,8 @@ self: super: with self; {
   zigpy-zigate = callPackage ../development/python-modules/zigpy-zigate { };
 
   zigpy-znp = callPackage ../development/python-modules/zigpy-znp { };
+
+  zilliandomizer = callPackage ../development/python-modules/zilliandomizer { };
 
   zimports = callPackage ../development/python-modules/zimports { };
 

@@ -219,7 +219,7 @@ with pkgs;
 
   aocd = with python3Packages; toPythonApplication aocd;
 
-  archipelago-minecraft = callPackage ../by-name/ar/archipelago/package.nix { extraPackages = [jdk17]; };
+  archipelago-minecraft = callPackage ../by-name/ar/archipelago/package.nix { extraPackages = [jdk21]; };
 
   asitop = pkgs.python3Packages.callPackage ../os-specific/darwin/asitop { };
 

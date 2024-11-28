@@ -1,0 +1,12 @@
+diff --git a/ModuleUpdate.py b/ModuleUpdate.py
+index ed041bef..d58525c9 100644
+--- a/ModuleUpdate.py
++++ b/ModuleUpdate.py
+@@ -71,6 +71,7 @@ def install_pkg_resources(yes=False):
+ 
+ 
+ def update(yes: bool = False, force: bool = False) -> None:
++    return
+     global update_ran
+     if not update_ran:
+         update_ran = True
