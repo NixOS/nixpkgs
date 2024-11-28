@@ -3350,6 +3350,8 @@ self: super: with self; {
 
   django-app-helper = callPackage ../development/python-modules/django-app-helper { };
 
+  django-apscheduler = callPackage ../development/python-modules/django-apscheduler { };
+
   django-auditlog = callPackage ../development/python-modules/django-auditlog { };
 
   django-auth-ldap = callPackage ../development/python-modules/django-auth-ldap { };
