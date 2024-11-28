@@ -1,38 +1,37 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, unzip
-, makeWrapper
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  makeWrapper,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "keka";
-  version = "1.3.2";
+  version = "1.4.6";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/aonez/Keka/releases/download/v${finalAttrs.version}/Keka-${finalAttrs.version}.zip";
-    sha256 = "0id8j639kba5yc0z34lgvadzgv9z9s2573nn6dx9m6gd8qpnk2x7";
+    hash = "sha256-IgPnXHVtAaSOsaAYvo0ELRqvXpF2qAnJ/1QZ+FHzqn4=";
   };
-  dontUnpack = true;
 
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/Applications $out/bin
-    unzip -d $out/Applications $src
+    cp -r . $out/Applications/Keka.app
     makeWrapper $out/Applications/Keka.app/Contents/MacOS/Keka $out/bin/keka \
       --add-flags "--cli"
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "macOS file archiver";
     homepage = "https://www.keka.io";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.darwin;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.darwin;
   };
 })
