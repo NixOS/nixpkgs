@@ -35,12 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ wrapGAppsHook3 dpkg ];
   buildInputs = [ glib hicolor-icon-theme ];
 
-  unpackPhase = ''
-    mkdir pkg
-    dpkg-deb -x $src pkg
-    sourceRoot=pkg
-  '';
-
   installPhase = ''
     mkdir -p $out/bin
     mv opt $out

@@ -411,18 +411,6 @@ final: prev:
     meta.homepage = "https://github.com/jaredgorski/SpaceCamp/";
   };
 
-  SpaceVim = buildVimPlugin {
-    pname = "SpaceVim";
-    version = "2024-11-05";
-    src = fetchFromGitHub {
-      owner = "SpaceVim";
-      repo = "SpaceVim";
-      rev = "08719ccab2073b4c12f2c6b318eba63b87e35180";
-      sha256 = "0fr7vhs5gi054nn9z3hqcgf4y3w7nx00d94f7nd9g2jg7x2zzfyp";
-    };
-    meta.homepage = "https://github.com/SpaceVim/SpaceVim/";
-  };
-
   SudoEdit-vim = buildVimPlugin {
     pname = "SudoEdit.vim";
     version = "2023-04-25";
@@ -11468,18 +11456,6 @@ final: prev:
       sha256 = "1p2j6yygqsmxbvxns4ssiyspsnpbz12pq29s9vs3n5x2ddxrrwjn";
     };
     meta.homepage = "https://github.com/FireIsGood/spaceman.nvim/";
-  };
-
-  spacevim = buildVimPlugin {
-    pname = "spacevim";
-    version = "2018-03-29";
-    src = fetchFromGitHub {
-      owner = "ctjhoa";
-      repo = "spacevim";
-      rev = "30142a518ba77feb22791b5cb2387d88b70c58f2";
-      sha256 = "0m389cnpg17ca8s7vb9yrs40sxb56zg32lcpilnd63zfi7awgscg";
-    };
-    meta.homepage = "https://github.com/ctjhoa/spacevim/";
   };
 
   sparkup = buildVimPlugin {

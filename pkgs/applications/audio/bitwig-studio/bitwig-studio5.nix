@@ -32,16 +32,12 @@ stdenv.mkDerivation rec {
   version = "5.2.5";
 
   src = fetchurl {
+    name = "bitwig-studio-${version}.deb";
     url = "https://www.bitwig.com/dl/Bitwig%20Studio/${version}/installer_linux/";
     hash = "sha256-x6Uw6o+a3nArMm1Ev5ytGtLDGQ3r872WqlC022zT8Hk=";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook3 ];
-
-  unpackCmd = ''
-    mkdir -p root
-    dpkg-deb -x $curSrc root
-  '';
 
   dontBuild = true;
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
