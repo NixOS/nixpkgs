@@ -6,7 +6,7 @@
 
 , openssl
 , pkg-config
-, protobuf
+, buildPackages
 }:
 
 rustPlatform.buildRustPackage {
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage {
     "--skip=scheduler::answering::test::state_application"
   ];
 
-  nativeBuildInputs = [ protobuf pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     openssl
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage {
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
-  env.PROTOC = lib.getExe protobuf;
+  env.PROTOC = lib.getExe buildPackages.protobuf;
 
   meta = with lib; {
     description = "Standalone official anki sync server";
