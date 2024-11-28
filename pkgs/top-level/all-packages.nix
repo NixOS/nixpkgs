@@ -11731,6 +11731,10 @@ with pkgs;
 
   jitsi-videobridge = callPackage ../servers/jitsi-videobridge { };
 
+  kanidmWithSecretProvisioning = callPackage ../by-name/ka/kanidm/package.nix {
+    enableSecretProvisioning = true;
+  };
+
   knot-resolver = callPackage ../servers/dns/knot-resolver {
     systemd = systemdMinimal; # in closure already anyway
   };
