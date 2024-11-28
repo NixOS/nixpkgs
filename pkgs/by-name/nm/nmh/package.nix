@@ -60,8 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "New MH Mail Handling System";
     homepage = "https://nmh.nongnu.org/";
-    downloadPage = "http://download.savannah.nongnu.org/releases/nmh/";
-    changelog = "http://savannah.nongnu.org/news/?group=nmh";
+    downloadPage = "https://download.savannah.nongnu.org/releases/nmh/";
+    changelog = "https://savannah.nongnu.org/news/?group=nmh";
     license = [ lib.licenses.bsd3 ];
     longDescription = ''
       This is the nmh mail user agent (reader/sender), a command-line based

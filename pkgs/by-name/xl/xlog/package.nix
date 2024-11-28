@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "2.0.25";
 
   src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/xlog/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
     sha256 = "sha256-NYC3LgoLXnJQURcZTc2xHOzOleotrWtOETMBgadf2qU=";
   };
 
