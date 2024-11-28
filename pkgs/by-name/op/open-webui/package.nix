@@ -30,6 +30,7 @@ let
 
     env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
     env.ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
+    env.NODE_OPTIONS = "--max-old-space-size=8192";
 
     installPhase = ''
       runHook preInstall
