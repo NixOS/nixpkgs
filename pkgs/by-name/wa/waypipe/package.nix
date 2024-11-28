@@ -1,26 +1,29 @@
 { lib, stdenv, fetchFromGitLab
 , meson, ninja, pkg-config, scdoc
 , mesa, lz4, zstd, ffmpeg, libva
+, wayland, wayland-scanner
 }:
 
 stdenv.mkDerivation rec {
   pname = "waypipe";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mstoeckl";
     repo = "waypipe";
     rev = "v${version}";
-    hash = "sha256-4I8ohllhIA3/LNgFAKH5GwwHKO5QKNex0+Be0OOgR14=";
+    hash = "sha256-DW+WWwuav0lxnoV55L8RrX0enRURRnHMljtwEC0+9t4=";
   };
 
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
   buildInputs = [
     # Optional dependencies:
     mesa lz4 zstd ffmpeg libva
+
+    wayland
   ];
 
   meta = with lib; {
