@@ -1,8 +1,11 @@
 {
   lib,
+  apple-sdk_11,
   buildPythonPackage,
+  darwinMinVersionHook,
   fetchFromGitHub,
   pythonOlder,
+  stdenv,
 
   # build-system
   cmake,
@@ -60,7 +63,13 @@ buildPythonPackage rec {
       typing-extensions
     ];
 
-  buildInputs = [ libsoxr ];
+  buildInputs =
+    [ libsoxr ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # error: aligned deallocation function of type 'void (void *, std::align_val_t) noexcept' is only available on macOS 10.13 or newer
+      (darwinMinVersionHook "10.13")
+      apple-sdk_11
+    ];
 
   dependencies = [ numpy ];
 
