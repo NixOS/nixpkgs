@@ -56,19 +56,10 @@ let
       (lib.getLib libpng)
     ];
 
-    unpackPhase = ''
-      runHook preUnpack
-
-      mkdir pkg
-      dpkg-deb -x $src pkg
-
-      runHook postUnpack
-    '';
-
     installPhase = ''
       runHook preInstall
 
-      cp -r pkg/usr/local $out
+      cp -r usr/local $out
 
       runHook postInstall
     '';

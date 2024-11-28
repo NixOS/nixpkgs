@@ -99,8 +99,6 @@ stdenv.mkDerivation {
   dontBuild = true;
   dontConfigure = true;
 
-  unpackPhase = "dpkg-deb -x $src .";
-
   runtimeDependencies = [ (lib.getLib systemd) libGL libnotify libappindicator wayland ];
 
   installPhase = ''
