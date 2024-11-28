@@ -3,6 +3,7 @@
   python3,
   fetchFromGitHub,
   imagemagick,
+  installShellFiles,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -19,10 +20,16 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = [ python3.pkgs.setuptools ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   nativeCheckInputs = [
     python3.pkgs.pytestCheckHook
     imagemagick
   ];
+
+  postInstall = ''
+    installManPage data/man/man1/wal.1
+  '';
 
   preCheck = ''
     export HOME=$(mktemp -d)
