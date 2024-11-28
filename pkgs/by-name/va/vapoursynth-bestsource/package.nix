@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vapoursynth-bestsource";
-  version = "6";
+  version = "10";
 
   outputs = [
     "out"
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vapoursynth";
     repo = "bestsource";
     tag = "R${finalAttrs.version}";
-    hash = "sha256-ICkdIomlkHUdK6kMeui45fvUn4OMxSrP8svB2IN+GCg=";
+    hash = "sha256-zqQsyfB2POa+9IekwxJWdLToX2wY7ZR/hoENhGRuvhI=";
   };
 
   nativeBuildInputs = [
