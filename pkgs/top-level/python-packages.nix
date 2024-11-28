@@ -4070,6 +4070,8 @@ self: super: with self; {
 
   email-validator = callPackage ../development/python-modules/email-validator { };
 
+  embedchain = callPackage ../development/python-modules/embedchain { };
+
   embedding-reader = callPackage ../development/python-modules/embedding-reader { };
 
   embrace = callPackage ../development/python-modules/embrace { };
