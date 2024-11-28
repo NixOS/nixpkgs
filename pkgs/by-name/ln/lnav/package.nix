@@ -47,15 +47,19 @@ stdenv.mkDerivation rec {
     rustPlatform.cargoSetupHook
     rustc
   ];
-  buildInputs = [
-    bzip2
-    ncurses
-    pcre2
-    readline
-    sqlite
-    curl
-    libarchive
-  ];
+  buildInputs =
+    [
+      bzip2
+      ncurses
+      pcre2
+      readline
+      sqlite
+      curl
+      libarchive
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      gpm
+    ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     src = "${src}/src/third-party/prqlc-c";
