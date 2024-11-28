@@ -5683,9 +5683,7 @@ with pkgs;
     buildGoModule = buildGo123Module;
   };
 
-  xdp-tools = callPackage ../tools/networking/xdp-tools {
-    llvmPackages = llvmPackages_14;
-  };
+  xdp-tools = callPackage ../tools/networking/xdp-tools { };
 
   ugarit = callPackage ../tools/backup/ugarit {
     inherit (chickenPackages_4) eggDerivation fetchegg;
@@ -5939,7 +5937,7 @@ with pkgs;
   };
 
   codon = callPackage ../development/compilers/codon {
-    inherit (llvmPackages_14) lld stdenv;
+    inherit (llvmPackages) lld stdenv;
   };
 
   colmap = libsForQt5.callPackage ../applications/science/misc/colmap { inherit (config) cudaSupport; };
@@ -5980,8 +5978,7 @@ with pkgs;
   };
 
   clazy = callPackage ../development/tools/analysis/clazy {
-    llvmPackages = llvmPackages_14;
-    stdenv = llvmPackages_14.stdenv;
+    stdenv = llvmPackages.stdenv;
   };
 
   #Use this instead of stdenv to build with clang
@@ -7776,9 +7773,7 @@ with pkgs;
 
   ### DEVELOPMENT / TOOLS / LANGUAGE-SERVERS
 
-  ccls = callPackage ../development/tools/language-servers/ccls {
-    llvmPackages = llvmPackages_14;
-  };
+  ccls = callPackage ../development/tools/language-servers/ccls { };
 
   fortls = python3.pkgs.callPackage ../development/tools/language-servers/fortls { };
 
@@ -8144,7 +8139,7 @@ with pkgs;
 
   cvise = python3Packages.callPackage ../development/tools/misc/cvise {
     # cvise keeps up with fresh llvm releases and supports wide version range
-    inherit (llvmPackages_14) llvm libclang;
+    inherit (llvmPackages) llvm libclang;
   };
 
   dbt = with python3Packages; toPythonApplication dbt-core;
@@ -16598,7 +16593,7 @@ with pkgs;
 
   zcash = callPackage ../applications/blockchains/zcash {
     inherit (darwin.apple_sdk.frameworks) Security;
-    stdenv = llvmPackages_14.stdenv;
+    stdenv = llvmPackages.stdenv;
   };
 
   polkadot = callPackage ../applications/blockchains/polkadot {
