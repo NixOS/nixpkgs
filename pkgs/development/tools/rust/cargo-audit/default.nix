@@ -22,11 +22,10 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-      zlib
-    ];
+  buildInputs = [
+    openssl
+    zlib
+  ];
 
   buildFeatures = [ "fix" ];
 
