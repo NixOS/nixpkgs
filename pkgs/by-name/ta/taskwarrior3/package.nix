@@ -40,15 +40,19 @@ stdenv.mkDerivation (finalAttrs: {
     export CMAKE_PREFIX_PATH="${corrosion}:$CMAKE_PREFIX_PATH"
   '';
 
+  strictDeps = true;
   nativeBuildInputs = [
     cmake
-    libuuid
     python3
     installShellFiles
     corrosion
     cargo
     rustc
     rustPlatform.cargoSetupHook
+  ];
+
+  buildInputs = [
+    libuuid
   ];
 
   doCheck = true;
