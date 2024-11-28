@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, boost
-, gfortran
-, lhapdf
-, ncurses
-, perl
-, python ? null
-, swig
-, yoda
-, zlib
-, withPython ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  gfortran,
+  lhapdf,
+  ncurses,
+  perl,
+  python ? null,
+  swig,
+  yoda,
+  zlib,
+  withPython ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,8 +34,7 @@ stdenv.mkDerivation rec {
     gfortran.cc.lib
     lhapdf
     yoda
-  ] ++ lib.optional withPython python
-    ++ lib.optional (withPython && python.isPy3k) ncurses;
+  ] ++ lib.optional withPython python ++ lib.optional (withPython && python.isPy3k) ncurses;
 
   propagatedBuildInputs = [
     zlib
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   # None of our currently packaged versions of swig are C++17-friendly
   # Use a workaround from https://github.com/swig/swig/issues/1538
-  env.CXXFLAGS="-D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES";
+  env.CXXFLAGS = "-D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES";
 
   meta = with lib; {
     homepage = "http://fastnlo.hepforge.org";
