@@ -87,12 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
               --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
               --suffix LUA_CPATH ";" "$(echo "$out"/lib/lua/*/)?.so" \
               --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
-              --suffix PATH : ${lib.makeBinPath finalAttrs.propagatedBuildInputs}
+              --suffix PATH : ${lib.makeBinPath finalAttrs.propagatedNativeBuildInputs}
         }
     done
   '';
 
-  propagatedBuildInputs = [ zip unzip cmake ];
+  propagatedNativeBuildInputs = [ zip unzip cmake ];
 
   # unpack hook for src.rock and rockspec files
   setupHook = ./setup-hook.sh;
