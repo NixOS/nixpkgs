@@ -86,6 +86,18 @@ let
     command).
   '';
 
+  initialHashedPasswordDescription = ''
+    Specifies the initial hashed password for the user, i.e. the
+    hashed password assigned if the user does not already
+    exist. If {option}`users.mutableUsers` is true, the
+    password can be changed subsequently using the
+    {command}`passwd` command. Otherwise, it's
+    equivalent to setting the {option}`hashedPassword` option.
+
+    Note that the {option}`hashedPassword` option will override
+    this option if both are set.
+  '';
+
   userOpts = { name, config, ... }: {
 
     options = {
@@ -322,17 +334,21 @@ let
         type = with types; nullOr (passwdEntry str);
         default = null;
         description = ''
-          Specifies the initial hashed password for the user, i.e. the
-          hashed password assigned if the user does not already
-          exist. If {option}`users.mutableUsers` is true, the
-          password can be changed subsequently using the
-          {command}`passwd` command. Otherwise, it's
-          equivalent to setting the {option}`hashedPassword` option.
-
-          Note that the {option}`hashedPassword` option will override
-          this option if both are set.
-
+          ${initialHashedPasswordDescription}
           ${hashedPasswordDescription}
+        '';
+      };
+
+      initialHashedPasswordFile = mkOption {
+        type = with types; nullOr (passwdEntry str);
+        default = null;
+        description = ''
+          The full path to a file that contains the hash of a user's
+          initial password. The file should contain exactly one line, which
+          should be the password in an encrypted form that is suitable for the
+          `chpasswd -e` command.
+
+          ${initialHashedPasswordDescription}
         '';
       };
 
@@ -413,6 +429,9 @@ let
         })
         (mkIf (!cfg.mutableUsers && config.initialHashedPassword != null) {
           hashedPassword = mkDefault config.initialHashedPassword;
+        })
+        (mkIf (!cfg.mutableUsers && config.initialHashedPasswordFile != null) {
+          hashedPasswordFile = mkDefault config.initialHashedPasswordFile;
         })
         (mkIf (config.isNormalUser && config.subUidRanges == [] && config.subGidRanges == []) {
           autoSubUidGidRange = mkDefault true;
