@@ -3,7 +3,6 @@
 , audiofile
 , config
 , darwin
-, fetchpatch
 , fetchFromGitHub
 , libGL
 , libGLU
@@ -41,14 +40,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL";
-  version = "1.2.15-unstable-2023-12-08";
+  version = "1.2.15-unstable-2024-10-27";
 
   # 1.2.15 was released in 2013, 1.2.16 is not yet tagged
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL-1.2";
-    rev = "d5088e5db1bcf174f53379d543ff49093a9d6d72";
-    hash = "sha256-TA8sclOcy+3oaKMimTrXH7YLNXhNmRqXI1V4Q97JrM4=";
+    rev = "0237f339e6bec39c56e1364787fabdb0245d478f";
+    hash = "sha256-SotMz2BATJn5dpD8l3bINH639Q1Ux0AGRWn+JQeiRFg=";
   };
 
   outputs = [ "out" "dev" ];
@@ -81,14 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./find-headers.patch
-
-    # Workaround X11 bug to allow changing gamma
-    # Ticket: https://bugs.freedesktop.org/show_bug.cgi?id=27222
-    (fetchpatch {
-      name = "SDL_SetGamma.patch";
-      url = "https://src.fedoraproject.org/rpms/SDL/raw/7a07323e5cec08bea6f390526f86a1ce5341596d/f/SDL-1.2.15-x11-Bypass-SetGammaRamp-when-changing-gamma.patch";
-      hash = "sha256-m7ZQ5GnfGlMkKJkrBSB3GrLz8MT6njgI9jROJAbRonQ=";
-    })
   ];
 
   enableParallelBuilding = true;
