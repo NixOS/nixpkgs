@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, ruby
-, bundlerEnv
-, testers
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  ruby,
+  bundlerEnv,
+  testers,
+  python3,
 }:
 
 let
@@ -14,7 +15,8 @@ let
     name = "metasploit-bundler-env";
     gemdir = ./.;
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "metasploit-framework";
   version = "6.4.37";
 
@@ -58,8 +60,7 @@ in stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${env}/bin/bundle $out/bin/msf-pattern_offset \
       --add-flags "exec ${ruby}/bin/ruby $out/share/msf/tools/exploit/pattern_offset.rb"
 
-
-    runHook postInstall 
+    runHook postInstall
   '';
 
   passthru.tests = {
@@ -77,7 +78,10 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://docs.metasploit.com/";
     platforms = platforms.unix;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fab makefu ];
+    maintainers = with maintainers; [
+      fab
+      makefu
+    ];
     mainProgram = "msfconsole";
   };
 })
