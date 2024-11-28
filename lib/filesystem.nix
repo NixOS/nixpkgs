@@ -328,7 +328,7 @@ in
 
     # Examples
     :::{.example}
-    ## `lib.filesystem.packagesFromDirectoryRecursive` usage example
+    ## Basic use of `lib.packagesFromDirectoryRecursive`
 
     ```nix
     packagesFromDirectoryRecursive {
@@ -336,17 +336,48 @@ in
       directory = ./my-packages;
     }
     => { ... }
+    ```
 
+    In this case, `callPackage` will only search `pkgs` for a file's input parameters.
+    In other words, a file cannot refer to another file in the directory in its input parameters.
+    :::
+
+    ::::{.example}
+    ## Create a scope for the nix files found in a directory
+    ```nix
     lib.makeScope pkgs.newScope (
       self: packagesFromDirectoryRecursive {
-        callPackage = self.callPackage;
+        inherit (self) callPackage;
         directory = ./my-packages;
       }
     )
     => { ... }
     ```
 
+    For example, take the following directory structure:
+    ```
+    my-packages
+    ├── a.nix    → { b }: assert b ? b1; ...
+    └── b
+       ├── b1.nix  → { a }: ...
+       └── b2.nix
+    ```
+
+    Here, `b1.nix` can specify `{ a }` as a parameter, which `callPackage` will resolve as expected.
+    Likewise, `a.nix` receive an attrset corresponding to the contents of the `b` directory.
+
+    :::{.note}
+    `a.nix` cannot directly take as inputs packages defined in a child directory, such as `b1`.
     :::
+
+    :::{.warning}
+    As of now, `lib.packagesFromDirectoryRecursive` cannot create nested scopes for sub-directories.
+
+    In particular, files under `b/` can only require (as inputs) other files under `my-packages`,
+    but not to those in the same directory, nor those in a parent directory; e.g, `b2.nix` cannot directly
+    require `b1`.
+    :::
+    ::::
   */
   packagesFromDirectoryRecursive =
     {
