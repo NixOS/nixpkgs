@@ -1,41 +1,42 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, alsa-lib
-, boost
-, chromaprint
-, fftw
-, gnutls
-, libcdio
-, libebur128
-, libmtp
-, libpthreadstubs
-, libtasn1
-, libXdmcp
-, ninja
-, pcre
-, protobuf
-, sqlite
-, taglib
-, libgpod
-, libidn2
-, libpulseaudio
-, libselinux
-, libsepol
-, p11-kit
-, util-linux
-, qtbase
-, qtx11extras ? null # doesn't exist in qt6
-, qttools
-, withGstreamer ? true
-, glib-networking
-, gst_all_1
-, withVlc ? true
-, libvlc
-, nix-update-script
+{
+  alsa-lib,
+  boost,
+  chromaprint,
+  cmake,
+  fetchFromGitHub,
+  fftw,
+  glib-networking,
+  gnutls,
+  gst_all_1,
+  lib,
+  libXdmcp,
+  libcdio,
+  libebur128,
+  libgpod,
+  libidn2,
+  libmtp,
+  libpthreadstubs,
+  libpulseaudio,
+  libselinux,
+  libsepol,
+  libtasn1,
+  libvlc,
+  ninja,
+  nix-update-script,
+  p11-kit,
+  pcre,
+  pkg-config,
+  protobuf,
+  qtbase,
+  qttools,
+  qtx11extras ? null, # doesn't exist in qt6
+  sqlite,
+  stdenv,
+  taglib,
+  util-linux,
+  withGstreamer ? true,
+  withVlc ? true,
+  wrapQtAppsHook,
 }:
 
 let
@@ -60,50 +61,59 @@ stdenv.mkDerivation rec {
       --replace pictures/strawberry.png pictures/strawberry-grey.png
   '';
 
-  buildInputs = [
-    alsa-lib
-    boost
-    chromaprint
-    fftw
-    gnutls
-    libcdio
-    libebur128
-    libidn2
-    libmtp
-    libpthreadstubs
-    libtasn1
-    libXdmcp
-    pcre
-    protobuf
-    sqlite
-    taglib
-    qtbase
-    qtx11extras
-  ] ++ optionals stdenv.hostPlatform.isLinux [
-    libgpod
-    libpulseaudio
-    libselinux
-    libsepol
-    p11-kit
-  ] ++ optionals withGstreamer (with gst_all_1; [
-    glib-networking
-    gstreamer
-    gst-libav
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-  ]) ++ optionals withVlc [ libvlc ];
+  buildInputs =
+    [
+      alsa-lib
+      boost
+      chromaprint
+      fftw
+      gnutls
+      libXdmcp
+      libcdio
+      libebur128
+      libidn2
+      libmtp
+      libpthreadstubs
+      libtasn1
+      pcre
+      protobuf
+      qtbase
+      qtx11extras
+      sqlite
+      taglib
+    ]
+    ++ optionals stdenv.hostPlatform.isLinux [
+      libgpod
+      libpulseaudio
+      libselinux
+      libsepol
+      p11-kit
+    ]
+    ++ optionals withGstreamer (
+      with gst_all_1;
+      [
+        glib-networking
+        gst-libav
+        gst-plugins-bad
+        gst-plugins-base
+        gst-plugins-good
+        gst-plugins-ugly
+        gstreamer
+      ]
+    )
+    ++ optionals withVlc [ libvlc ];
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    pkg-config
-    qttools
-    wrapQtAppsHook
-  ] ++ optionals stdenv.hostPlatform.isLinux [
-    util-linux
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      ninja
+      pkg-config
+      qttools
+      wrapQtAppsHook
+    ]
+    ++ optionals stdenv.hostPlatform.isLinux [
+      util-linux
+    ];
 
   postInstall = optionalString withGstreamer ''
     qtWrapperArgs+=(
