@@ -69,13 +69,7 @@ def edit(flake: Flake | None, **flake_flags: Args) -> None:
         if flake_flags:
             raise NRError("'edit' does not support extra Nix flags")
         nixos_config = Path(
-            os.getenv("NIXOS_CONFIG")
-            or run_wrapper(
-                ["nix-instantiate", "--find-file", "nixos-config"],
-                stdout=PIPE,
-                check=False,
-            ).stdout.strip()
-            or "/etc/nixos/default.nix"
+            os.getenv("NIXOS_CONFIG") or find_file("nixos-config") or "/etc/nixos"
         )
         if nixos_config.is_dir():
             nixos_config /= "default.nix"
@@ -87,7 +81,7 @@ def edit(flake: Flake | None, **flake_flags: Args) -> None:
 
 
 def find_file(file: str, **nix_flags: Args) -> Path | None:
-    "Find classic Nixpkgs location."
+    "Find classic Nix file location."
     r = run_wrapper(
         ["nix-instantiate", "--find-file", file, *dict_to_flags(nix_flags)],
         stdout=PIPE,
