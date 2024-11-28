@@ -8,30 +8,30 @@
   glib,
   gtk3,
   lib,
+  libclang,
   makeDesktopItem,
   nix-update-script,
   pango,
   pkg-config,
   rustPlatform,
+  stdenv,
 }:
 
 let
   desktopItem = makeDesktopItem {
-    name = "Psst";
-    exec = "psst-gui";
-    comment = "Fast and multi-platform Spotify client with native GUI";
-    desktopName = "Psst";
-    type = "Application";
     categories = [
       "Audio"
       "AudioVideo"
     ];
+    comment = "Spotify client with native GUI written in Rust, without Electron";
+    desktopName = "Psst";
+    exec = "psst-gui %U";
     icon = "psst";
-    terminal = false;
+    name = "Psst";
     startupWMClass = "psst-gui";
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "psst";
   version = "0-unstable-2025-02-22";
 
@@ -48,18 +48,25 @@ rustPlatform.buildRustPackage rec {
   # specify the subdirectory of the binary crate to build from the workspace
   buildAndTestSubdir = "psst-gui";
 
+  env = {
+    LIBCLANG_PATH = "${lib.getLib libclang}/lib";
+  };
+
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    alsa-lib
-    atk
-    cairo
-    dbus
-    gdk-pixbuf
-    glib
-    gtk3
-    pango
-  ];
+  buildInputs =
+    [
+      atk
+      cairo
+      gdk-pixbuf
+      glib
+      gtk3
+      pango
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      dbus
+    ];
 
   patches = [
     # Use a fixed build time, hard-code upstream URL instead of trying to read `.git`
@@ -67,17 +74,18 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    install -Dm444 psst-gui/assets/logo_512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
-    install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*
+    install -Dm644 psst-gui/assets/logo_512.png -t $out/share/icons/hicolor/512x512/apps/psst.png
+    install -Dm644 ${desktopItem}/share/applications/* -t $out/share/applications
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = with lib; {
-    description = "Fast and multi-platform Spotify client with native GUI";
+  meta = {
+    description = "Spotify client with native GUI written in Rust, without Electron";
     homepage = "https://github.com/jpochyla/psst";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       vbrandl
       peterhoeg
     ];
