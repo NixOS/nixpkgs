@@ -239,8 +239,6 @@ impure-cmds // apple-source-packages // apple-source-headers // stubs // {
 
   ios-deploy = callPackage ../os-specific/darwin/ios-deploy {};
 
-  discrete-scroll = callPackage ../os-specific/darwin/discrete-scroll { };
-
   # See doc/packages/darwin-builder.section.md
   linux-builder = lib.makeOverridable ({ modules }:
     let
