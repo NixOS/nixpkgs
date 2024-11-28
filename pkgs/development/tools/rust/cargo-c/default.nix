@@ -6,9 +6,6 @@
   curl,
   openssl,
   stdenv,
-  CoreFoundation,
-  libiconv,
-  Security,
   rav1e,
 }:
 
@@ -30,16 +27,10 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     (lib.getDev curl)
   ];
-  buildInputs =
-    [
-      openssl
-      curl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreFoundation
-      libiconv
-      Security
-    ];
+  buildInputs = [
+    openssl
+    curl
+  ];
 
   # Ensure that we are avoiding build of the curl vendored in curl-sys
   doInstallCheck = stdenv.hostPlatform.libc == "glibc";

@@ -6562,9 +6562,7 @@ with pkgs;
 
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
-  cargo-c = callPackage ../development/tools/rust/cargo-c {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
+  cargo-c = callPackage ../development/tools/rust/cargo-c { };
   cargo-clone = callPackage ../development/tools/rust/cargo-clone {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
