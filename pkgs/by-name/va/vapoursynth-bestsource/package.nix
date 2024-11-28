@@ -4,7 +4,6 @@
   fetchFromGitHub,
   meson,
   ninja,
-  cmake,
   pkg-config,
   vapoursynth,
   ffmpeg,
@@ -31,7 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     ninja
-    cmake
     pkg-config
   ];
 
