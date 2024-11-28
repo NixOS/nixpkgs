@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
+, bash
 , ronn
 , systemd
 , kmod
@@ -11,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zram-generator";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-n+ZOWU+sPq9DcHgzQWTxxfMmiz239qdetXypqdy33cM=";
+    hash = "sha256-NcMqMCYk5IhNwohceBT8ySefkzMxnQ5Xv5USenFV0bk=";
   };
 
   # RFE: Include Cargo.lock in sources
@@ -31,6 +32,8 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace src/generator.rs \
       --replace 'Command::new("systemd-detect-virt")' 'Command::new("${systemd}/bin/systemd-detect-virt")' \
       --replace 'Command::new("modprobe")' 'Command::new("${kmod}/bin/modprobe")'
+    substituteInPlace src/config.rs \
+      --replace-fail 'Command::new("/bin/sh")' 'Command::new("${bash}/bin/sh")'
   '';
 
   nativeBuildInputs = [
@@ -44,7 +47,7 @@ rustPlatform.buildRustPackage rec {
 
   preBuild = ''
     # embedded into the binary at build time
-    # https://github.com/systemd/zram-generator/blob/v1.1.2/Makefile#LL11-L11C56
+    # https://github.com/systemd/zram-generator/blob/v1.2.0/Makefile#LL11-L11C56
     export SYSTEMD_UTIL_DIR=$($PKG_CONFIG --variable=systemdutildir systemd)
   '';
 
