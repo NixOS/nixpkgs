@@ -79,11 +79,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zrythm";
-  version = "1.0.0-rc.2";
+  version = "1.0.0";
 
   src = fetchzip {
     url = "https://www.zrythm.org/releases/zrythm-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-Da//nY0yXSbDPEg6t9jgL32NoT8dFYSQ4Kzc/KbHGSk=";
+    sha256 = "sha256-qI1UEIeIJdYQcOWMjJa55DaWjDIabx56dSwjhm64ROM=";
   };
 
   passthru.updateScript = writeScript "update-zrythm" ''
