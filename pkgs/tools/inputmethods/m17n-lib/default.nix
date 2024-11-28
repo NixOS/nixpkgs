@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.8.4";
 
   src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/m17n/m17n-lib-${version}.tar.gz";
+    url = "mirror://savannah/m17n/${pname}-${version}.tar.gz";
     hash = "sha256-xqJYLG5PKowueihE+lx+s2Oq0lOLBS8gPHEGSd1CHMg=";
   };
 
