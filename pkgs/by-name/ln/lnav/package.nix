@@ -91,6 +91,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       dochang
       symphorien
+      pcasaretto
     ];
     platforms = platforms.unix;
     mainProgram = "lnav";
