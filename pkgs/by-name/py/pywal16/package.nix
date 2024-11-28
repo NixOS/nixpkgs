@@ -4,6 +4,7 @@
   fetchFromGitHub,
   imagemagick,
   installShellFiles,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -49,6 +50,8 @@ python3.pkgs.buildPythonApplication rec {
       haishoku
     ];
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "16 colors fork of pywal";
