@@ -98,7 +98,12 @@ def run_wrapper(
         if sudo:
             args = ["sudo", *args]
 
-    logger.debug("calling run with args=%s, extra_env=%s", args, extra_env)
+    logger.debug(
+        "calling run with args=%s, kwargs=%s, extra_env=%s",
+        args,
+        kwargs,
+        extra_env,
+    )
 
     try:
         return subprocess.run(

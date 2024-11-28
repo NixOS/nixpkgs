@@ -244,7 +244,7 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
 def nixos_build(
     attr: str,
     build_attr: BuildAttr,
-    **nix_flags: Args,
+    **build_flags: Args,
 ) -> Path:
     """Build NixOS attribute using classic Nix.
 
@@ -255,7 +255,7 @@ def nixos_build(
         build_attr.path,
         "--attr",
         f"{'.'.join(x for x in [build_attr.attr, attr] if x)}",
-        *dict_to_flags(nix_flags),
+        *dict_to_flags(build_flags),
     ]
     r = run_wrapper(run_args, stdout=PIPE)
     return Path(r.stdout.strip())
@@ -264,7 +264,7 @@ def nixos_build(
 def nixos_build_flake(
     attr: str,
     flake: Flake,
-    **flake_flags: Args,
+    **flake_build_flags: Args,
 ) -> Path:
     """Build NixOS attribute using Flakes.
 
@@ -276,9 +276,67 @@ def nixos_build_flake(
         "build",
         "--print-out-paths",
         f"{flake}.config.system.build.{attr}",
-        *dict_to_flags(flake_flags),
+        *dict_to_flags(flake_build_flags),
     ]
     r = run_wrapper(run_args, stdout=PIPE)
+    return Path(r.stdout.strip())
+
+
+def nixos_remote_build(
+    attr: str,
+    build_attr: BuildAttr,
+    build_host: Remote | None,
+    build_flags: dict[str, Args] | None = None,
+    instantiate_flags: dict[str, Args] | None = None,
+    copy_flags: dict[str, Args] | None = None,
+) -> Path:
+    r = run_wrapper(
+        [
+            "nix-instantiate",
+            "--raw",
+            build_attr.path,
+            "--attr",
+            f"{'.'.join(x for x in [build_attr.attr, attr] if x)}",
+            *dict_to_flags(instantiate_flags or {}),
+        ],
+        stdout=PIPE,
+    )
+    drv = Path(r.stdout.strip())
+    copy_closure(drv, to_host=build_host, from_host=None, **(copy_flags or {}))
+    r = run_wrapper(
+        ["nix-store", "--realise", drv, *dict_to_flags(build_flags or {})],
+        remote=build_host,
+        stdout=PIPE,
+    )
+    return Path(r.stdout.strip())
+
+
+def nixos_remote_build_flake(
+    attr: str,
+    flake: Flake,
+    build_host: Remote,
+    flake_build_flags: dict[str, Args] | None = None,
+    copy_flags: dict[str, Args] | None = None,
+    build_flags: dict[str, Args] | None = None,
+) -> Path:
+    r = run_wrapper(
+        [
+            "nix",
+            *FLAKE_FLAGS,
+            "eval",
+            "--raw",
+            f"{flake}.config.system.build.{attr}.drvPath",
+            *dict_to_flags(flake_build_flags or {}),
+        ],
+        stdout=PIPE,
+    )
+    drv = Path(r.stdout.strip())
+    copy_closure(drv, to_host=build_host, from_host=None, **(copy_flags or {}))
+    r = run_wrapper(
+        ["nix-store", "--realise", drv, *dict_to_flags(build_flags or {})],
+        remote=build_host,
+        stdout=PIPE,
+    )
     return Path(r.stdout.strip())
 
 

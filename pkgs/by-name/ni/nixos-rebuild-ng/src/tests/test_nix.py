@@ -254,10 +254,111 @@ def test_nixos_build(mock_run: Any, monkeypatch: Any) -> None:
         stdout=PIPE,
     )
 
-    n.nixos_build("attr", m.BuildAttr(Path("file"), "preAttr"))
+    assert n.nixos_build("attr", m.BuildAttr(Path("file"), "preAttr")) == Path(
+        "/path/to/file"
+    )
     mock_run.assert_called_with(
         ["nix-build", Path("file"), "--attr", "preAttr.attr"],
         stdout=PIPE,
+    )
+
+
+@patch(
+    get_qualified_name(n.run_wrapper, n),
+    autospec=True,
+    return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
+)
+def test_nixos_remote_build_flake(mock_run: Any) -> None:
+    flake = m.Flake.parse(".#hostname")
+    build_host = m.Remote("user@host", ["--ssh", "opts"], None)
+
+    assert n.nixos_remote_build_flake(
+        "toplevel",
+        flake,
+        build_host,
+        flake_build_flags={"flake": True},
+        copy_flags={"copy": True},
+        build_flags={"build": True},
+    ) == Path("/path/to/file")
+    mock_run.assert_has_calls(
+        [
+            call(
+                [
+                    "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
+                    "eval",
+                    "--raw",
+                    ".#nixosConfigurations.hostname.config.system.build.toplevel.drvPath",
+                    "--flake",
+                ],
+                stdout=PIPE,
+            ),
+            call(
+                [
+                    "nix-copy-closure",
+                    "--copy",
+                    "--to",
+                    "user@host",
+                    Path("/path/to/file"),
+                ],
+                extra_env={"NIX_SSHOPTS": "--ssh opts"},
+                remote=None,
+            ),
+            call(
+                ["nix-store", "--realise", Path("/path/to/file"), "--build"],
+                remote=build_host,
+                stdout=PIPE,
+            ),
+        ]
+    )
+
+
+@patch(
+    get_qualified_name(n.run_wrapper, n),
+    autospec=True,
+    return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
+)
+def test_nixos_remote_build(mock_run: Any, monkeypatch: Any) -> None:
+    build_host = m.Remote("user@host", ["--ssh", "opts"], None)
+    assert n.nixos_remote_build(
+        "attr",
+        m.BuildAttr("<nixpkgs/nixos>", None),
+        build_host,
+        build_flags={"build": True},
+        instantiate_flags={"inst": True},
+        copy_flags={"copy": True},
+    ) == Path("/path/to/file")
+    mock_run.assert_has_calls(
+        [
+            call(
+                [
+                    "nix-instantiate",
+                    "--raw",
+                    "<nixpkgs/nixos>",
+                    "--attr",
+                    "attr",
+                    "--inst",
+                ],
+                stdout=PIPE,
+            ),
+            call(
+                [
+                    "nix-copy-closure",
+                    "--copy",
+                    "--to",
+                    "user@host",
+                    Path("/path/to/file"),
+                ],
+                extra_env={"NIX_SSHOPTS": "--ssh opts"},
+                remote=None,
+            ),
+            call(
+                ["nix-store", "--realise", Path("/path/to/file"), "--build"],
+                remote=build_host,
+                stdout=PIPE,
+            ),
+        ]
     )
 
 

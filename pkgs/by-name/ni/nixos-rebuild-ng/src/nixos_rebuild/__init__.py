@@ -87,7 +87,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     main_parser.add_argument("--ask-sudo-password", action="store_true")
     main_parser.add_argument("--use-remote-sudo", action="store_true")  # deprecated
     main_parser.add_argument("--no-ssh-tty", action="store_true")  # deprecated
-    # parser.add_argument("--build-host")  # TODO
+    main_parser.add_argument("--build-host")
     main_parser.add_argument("--target-host")
     main_parser.add_argument("action", choices=Action.values(), nargs="?")
 
@@ -135,15 +135,11 @@ def parse_args(
     if args.action == Action.EDIT.value and (args.file or args.attr):
         parser.error("--file and --attr are not supported with 'edit'")
 
-    if args.target_host and args.action not in (
+    if (args.target_host or args.build_host) and args.action not in (
         Action.SWITCH.value,
         Action.BOOT.value,
-        Action.TEST.value,
-        Action.BUILD.value,
-        Action.DRY_BUILD.value,
-        Action.DRY_ACTIVATE.value,
     ):
-        parser.error(f"--target-host is not supported with '{args.action}'")
+        parser.error(f"--target-host/--build-host is not supported with '{args.action}'")
 
     if args.flake and (args.file or args.attr):
         parser.error("--flake cannot be used with --file or --attr")
@@ -170,6 +166,7 @@ def execute(argv: list[str]) -> None:
     atexit.register(cleanup_ssh, tmpdir_path)
 
     profile = Profile.from_arg(args.profile_name)
+    build_host = Remote.from_arg(args.build_host, False, tmpdir_path)
     target_host = Remote.from_arg(args.target_host, args.ask_sudo_password, tmpdir_path)
     build_attr = BuildAttr.from_arg(args.attr, args.file)
     flake = Flake.from_arg(args.flake, target_host)
@@ -197,25 +194,55 @@ def execute(argv: list[str]) -> None:
                 path_to_config = nix.rollback(profile, target_host, sudo=args.sudo)
             else:
                 if flake:
-                    path_to_config = nix.nixos_build_flake(
-                        "toplevel",
-                        flake,
-                        no_link=True,
-                        **flake_build_flags,
-                    )
+                    if build_host:
+                        path_to_config = nix.nixos_remote_build_flake(
+                            "toplevel",
+                            flake,
+                            build_host,
+                            flake_build_flags=flake_build_flags,
+                            copy_flags=copy_flags,
+                            build_flags=build_flags,
+                        )
+                    else:
+                        path_to_config = nix.nixos_build_flake(
+                            "toplevel",
+                            flake,
+                            no_link=True,
+                            **flake_build_flags,
+                        )
                 else:
-                    path_to_config = nix.nixos_build(
-                        "system",
-                        build_attr,
-                        no_out_link=True,
-                        **build_flags,
-                    )
-                nix.copy_closure(path_to_config, target_host, None, **copy_flags)
-                nix.set_profile(profile, path_to_config, target_host, sudo=args.sudo)
+                    if build_host:
+                        path_to_config = nix.nixos_remote_build(
+                            "system",
+                            build_attr,
+                            build_host,
+                            instantiate_flags=common_flags,
+                            copy_flags=copy_flags,
+                            build_flags=build_flags,
+                        )
+                    else:
+                        path_to_config = nix.nixos_build(
+                            "system",
+                            build_attr,
+                            no_out_link=True,
+                            **build_flags,
+                        )
+                nix.copy_closure(
+                    path_to_config,
+                    to_host=target_host,
+                    from_host=None,
+                    **copy_flags,
+                )
+                nix.set_profile(
+                    profile,
+                    path_to_config,
+                    target_host=target_host,
+                    sudo=args.sudo,
+                )
             nix.switch_to_configuration(
                 path_to_config,
                 action,
-                target_host,
+                target_host=target_host,
                 sudo=args.sudo,
                 specialisation=args.specialisation,
                 install_bootloader=args.install_bootloader,

@@ -218,7 +218,7 @@ def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
 @patch.dict(nr.process.os.environ, {}, clear=True)
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
 @patch(get_qualified_name(nr.TemporaryDirectory, nr))  # can't autospec
-def test_execute_nix_switch_flake_remote(
+def test_execute_nix_switch_flake_target_host(
     mock_tmpdir: Any,
     mock_run: Any,
     tmp_path: Path,
@@ -309,6 +309,103 @@ def test_execute_nix_switch_flake_remote(
                     config_path / "bin/switch-to-configuration",
                     "switch",
                 ],
+                check=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+        ]
+    )
+
+
+@patch.dict(nr.process.os.environ, {}, clear=True)
+@patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
+@patch(get_qualified_name(nr.TemporaryDirectory, nr))  # can't autospec
+def test_execute_nix_switch_flake_build_host(
+    mock_tmpdir: Any,
+    mock_run: Any,
+    tmp_path: Path,
+) -> None:
+    config_path = tmp_path / "test"
+    config_path.touch()
+    mock_run.side_effect = [
+        # nixos_build_flake
+        CompletedProcess([], 0, str(config_path)),
+        CompletedProcess([], 0),
+        CompletedProcess([], 0, str(config_path)),
+        # set_profile
+        CompletedProcess([], 0),
+        # copy_closure
+        CompletedProcess([], 0),
+        # switch_to_configuration
+        CompletedProcess([], 0),
+    ]
+    mock_tmpdir.return_value.name = "/tmp/test"
+
+    nr.execute(
+        [
+            "nixos-rebuild",
+            "switch",
+            "--flake",
+            "/path/to/config#hostname",
+            "--use-remote-sudo",
+            "--build-host",
+            "user@localhost",
+        ]
+    )
+
+    assert mock_run.call_count == 5
+    mock_run.assert_has_calls(
+        [
+            call(
+                [
+                    "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
+                    "eval",
+                    "--raw",
+                    "/path/to/config#nixosConfigurations.hostname.config.system.build.toplevel.drvPath",
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                ["nix-copy-closure", "--to", "user@localhost", config_path],
+                check=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "ssh",
+                    "-o",
+                    "ControlMaster=auto",
+                    "-o",
+                    "ControlPath=/tmp/test/ssh-%n",
+                    "-o",
+                    "ControlPersist=60",
+                    "user@localhost",
+                    "--",
+                    "nix-store",
+                    "--realise",
+                    config_path,
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "sudo",
+                    "nix-env",
+                    "-p",
+                    Path("/nix/var/nix/profiles/system"),
+                    "--set",
+                    config_path,
+                ],
+                check=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                ["sudo", config_path / "bin/switch-to-configuration", "switch"],
                 check=True,
                 **DEFAULT_RUN_KWARGS,
             ),
