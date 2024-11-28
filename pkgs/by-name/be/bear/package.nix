@@ -31,10 +31,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-pwdjytP+kmTwozRl1Gd0jUqRs3wfvcYPqiQvVwa6s9c=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
+    grpc
+    protobuf
   ];
 
   buildInputs = [
@@ -72,8 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     # CMAKE_INSTALL_{BIN,LIB}DIR, which breaks if these are absolute paths.
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
-    (lib.cmakeBool "ENABLE_UNIT_TESTS" finalAttrs.doCheck)
-    (lib.cmakeBool "ENABLE_FUNC_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "ENABLE_FUNC_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   checkTarget = lib.concatStringsSep " " [
