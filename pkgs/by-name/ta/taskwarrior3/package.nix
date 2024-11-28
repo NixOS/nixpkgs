@@ -1,13 +1,19 @@
 {
-  rustPlatform,
   lib,
   stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   cmake,
-  libuuid,
-  nixosTests,
-  xdg-utils,
+  rustPlatform,
   installShellFiles,
+
+  # buildInputs
+  libuuid,
+  xdg-utils,
+
+  # passthru.tests
+  nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taskwarrior";
@@ -35,8 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   nativeBuildInputs = [
     cmake
-    installShellFiles
     rustPlatform.cargoSetupHook
+    installShellFiles
   ];
 
   buildInputs = [
