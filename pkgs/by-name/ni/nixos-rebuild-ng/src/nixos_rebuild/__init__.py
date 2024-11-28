@@ -210,7 +210,7 @@ def execute(argv: list[str]) -> None:
                         no_out_link=True,
                         **build_flags,
                     )
-                nix.copy_closure(path_to_config, target_host, **copy_flags)
+                nix.copy_closure(path_to_config, target_host, None, **copy_flags)
                 nix.set_profile(profile, path_to_config, target_host, sudo=args.sudo)
             nix.switch_to_configuration(
                 path_to_config,
@@ -253,7 +253,7 @@ def execute(argv: list[str]) -> None:
                 nix.switch_to_configuration(
                     path_to_config,
                     action,
-                    target_host,
+                    target_host=None,
                     sudo=args.sudo,
                     specialisation=args.specialisation,
                 )

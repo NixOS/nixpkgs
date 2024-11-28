@@ -27,10 +27,14 @@ logger = logging.getLogger(__name__)
 
 def copy_closure(
     closure: Path,
-    target_host: Remote | None,
+    to_host: Remote | None,
+    from_host: Remote | None = None,
     **copy_flags: Args,
 ) -> None:
-    host = target_host
+    """Copy a nix closure to or from host to localhost.
+
+    Also supports copying a closure from a remote to another remote."""
+    host = to_host or from_host
     if not host:
         return
 
@@ -38,11 +42,12 @@ def copy_closure(
         [
             "nix-copy-closure",
             *dict_to_flags(copy_flags),
-            "--to",
+            "--to" if to_host else "--from",
             host.host,
             closure,
         ],
         extra_env={"NIX_SSHOPTS": " ".join(host.opts)},
+        remote=from_host if to_host else None,
     )
 
 

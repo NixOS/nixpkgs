@@ -18,11 +18,28 @@ def test_copy_closure(mock_run: Any) -> None:
     n.copy_closure(closure, None)
     mock_run.assert_not_called()
 
-    target_host = m.Remote("user@host", ["--ssh", "opt"], None)
+    target_host = m.Remote("user@target.host", ["--ssh", "target-opt"], None)
+    build_host = m.Remote("user@build.host", ["--ssh", "build-opt"], None)
+
     n.copy_closure(closure, target_host)
     mock_run.assert_called_with(
-        ["nix-copy-closure", "--to", "user@host", closure],
-        extra_env={"NIX_SSHOPTS": "--ssh opt"},
+        ["nix-copy-closure", "--to", "user@target.host", closure],
+        extra_env={"NIX_SSHOPTS": "--ssh target-opt"},
+        remote=None,
+    )
+
+    n.copy_closure(closure, None, build_host)
+    mock_run.assert_called_with(
+        ["nix-copy-closure", "--from", "user@build.host", closure],
+        extra_env={"NIX_SSHOPTS": "--ssh build-opt"},
+        remote=None,
+    )
+
+    n.copy_closure(closure, target_host, build_host)
+    mock_run.assert_called_with(
+        ["nix-copy-closure", "--to", "user@target.host", closure],
+        extra_env={"NIX_SSHOPTS": "--ssh target-opt"},
+        remote=build_host,
     )
 
 
