@@ -5265,6 +5265,8 @@ self: super: with self; {
 
   google-cloud-access-context-manager = callPackage ../development/python-modules/google-cloud-access-context-manager { };
 
+  google-cloud-aiplatform = callPackage ../development/python-modules/google-cloud-aiplatform { };
+
   google-cloud-appengine-logging = callPackage ../development/python-modules/google-cloud-appengine-logging { };
 
   google-cloud-artifact-registry = callPackage ../development/python-modules/google-cloud-artifact-registry { };
