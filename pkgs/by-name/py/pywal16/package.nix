@@ -37,6 +37,19 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "pywal" ];
 
+  optional-dependencies = with python3.pkgs; {
+    colorthief = [ colorthief ];
+    colorz = [ colorz ];
+    fast-colorthief = [ fast-colorthief ];
+    haishoku = [ haishoku ];
+    all = [
+      colorthief
+      colorz
+      ast-colorthief
+      haishoku
+    ];
+  };
+
   meta = {
     description = "16 colors fork of pywal";
     homepage = "https://github.com/eylles/pywal16";
