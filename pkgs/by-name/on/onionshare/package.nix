@@ -13,6 +13,8 @@
 
   fetchpatch,
   versionCheckHook,
+  gitUpdater,
+  onionshare-gui,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "onionshare-cli";
@@ -118,6 +120,13 @@ python3Packages.buildPythonApplication rec {
     ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      inherit onionshare-gui;
+    };
+  };
 
   meta = {
     description = "Securely and anonymously send and receive files";
