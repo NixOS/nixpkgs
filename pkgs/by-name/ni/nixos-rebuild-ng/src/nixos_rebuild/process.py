@@ -22,12 +22,14 @@ class Remote:
         host: str | None,
         ask_sudo_password: bool | None,
         tmp_dir: Path,
+        validate_opts: bool = True,
     ) -> Self | None:
         if not host:
             return None
 
         opts = os.getenv("NIX_SSHOPTS", "").split()
-        cls._validate_opts(opts, ask_sudo_password)
+        if validate_opts:
+            cls._validate_opts(opts, ask_sudo_password)
         opts += [
             # SSH ControlMaster flags, allow for faster re-connection
             "-o",

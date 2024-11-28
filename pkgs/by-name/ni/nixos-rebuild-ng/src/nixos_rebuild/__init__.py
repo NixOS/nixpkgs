@@ -139,7 +139,9 @@ def parse_args(
         Action.SWITCH.value,
         Action.BOOT.value,
     ):
-        parser.error(f"--target-host/--build-host is not supported with '{args.action}'")
+        parser.error(
+            f"--target-host/--build-host is not supported with '{args.action}'"
+        )
 
     if args.flake and (args.file or args.attr):
         parser.error("--flake cannot be used with --file or --attr")
@@ -166,7 +168,9 @@ def execute(argv: list[str]) -> None:
     atexit.register(cleanup_ssh, tmpdir_path)
 
     profile = Profile.from_arg(args.profile_name)
-    build_host = Remote.from_arg(args.build_host, False, tmpdir_path)
+    build_host = Remote.from_arg(
+        args.build_host, False, tmpdir_path, validate_opts=False
+    )
     target_host = Remote.from_arg(args.target_host, args.ask_sudo_password, tmpdir_path)
     build_attr = BuildAttr.from_arg(args.attr, args.file)
     flake = Flake.from_arg(args.flake, target_host)
