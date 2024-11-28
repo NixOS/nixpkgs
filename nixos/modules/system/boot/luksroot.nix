@@ -180,6 +180,7 @@ let
         while true; do
             echo -n "Passphrase for ${dev.device}: "
             passphrase=
+            ${lib.optionalString (dev.timeout != null) "time_passed=0"}
             while true; do
                 if [ -e /crypt-ramfs/passphrase ]; then
                     echo "reused"
@@ -201,6 +202,13 @@ let
                        echo
                        break
                     fi
+                    ${lib.optionalString (dev.timeout != null) ''
+                      time_passed=$((time_passed + 1))
+                      if [ $time_passed -ge ${builtins.toString dev.timeout} ]; then
+                        echo "Timeout reached"
+                        poweroff -f
+                      fi
+                    ''}
                 fi
             done
             echo -n "Verifying passphrase for ${dev.device}..."
@@ -290,6 +298,7 @@ let
             ${optionalString dev.yubikey.twoFactor ''
             echo -n "Enter two-factor passphrase: "
             k_user=
+            ${lib.optionalString (dev.timeout != null) "time_passed=0"}
             while true; do
                 if [ -e /crypt-ramfs/passphrase ]; then
                     echo "reused"
@@ -308,6 +317,13 @@ let
                        echo
                        break
                     fi
+                    ${lib.optionalString (dev.timeout != null) ''
+                      time_passed=$((time_passed + 1))
+                      if [ $time_passed -ge ${builtins.toString dev.timeout} ]; then
+                        echo "Timeout reached"
+                        poweroff -f
+                      fi
+                    ''}
                 fi
             done
             ''}
@@ -404,6 +420,7 @@ let
         for try in $(seq 3); do
             echo -n "PIN for GPG Card associated with device ${dev.device}: "
             pin=
+            ${lib.optionalString (dev.timeout != null) "time_passed=0"}
             while true; do
                 if [ -e /crypt-ramfs/passphrase ]; then
                     echo "reused"
@@ -422,6 +439,13 @@ let
                        echo
                        break
                     fi
+                    ${lib.optionalString (dev.timeout != null) ''
+                      time_passed=$((time_passed + 1))
+                      if [ $time_passed -ge ${builtins.toString dev.timeout} ]; then
+                        echo "Timeout reached"
+                        poweroff -f
+                      fi
+                    ''}
                 fi
             done
             echo -n "Verifying passphrase for ${dev.device}..."
@@ -462,8 +486,22 @@ let
         ${if dev.fido2.passwordLess then ''
           export passphrase=""
         '' else ''
-          read -rsp "FIDO2 salt for ${dev.device}: " passphrase
-          echo
+          ${lib.optionalString (dev.timeout != null) "time_passed=0"}
+          echo -n "FIDO2 salt for ${dev.device}: "
+          while true; do
+            IFS= read -t 1 -rs passphrase
+            if [ -n "$passphrase" ]; then
+              echo
+              break
+            fi
+            ${lib.optionalString (dev.timeout != null) ''
+              time_passed=$((time_passed + 1))
+              if [ $time_passed -ge ${builtins.toString dev.timeout} ]; then
+                echo "Timeout reached"
+                poweroff -f
+              fi
+            ''}
+          done
         ''}
         ${optionalString (lib.versionOlder kernelPackages.kernel.version "5.4") ''
           echo "On systems with Linux Kernel < 5.4, it might take a while to initialize the CRNG, you might want to use linuxPackages_latest."
@@ -491,18 +529,44 @@ let
     ${dev.postOpenCommands}
   '';
 
-  askPass = pkgs.writeScriptBin "cryptsetup-askpass" ''
+  askPass = let
+    configHasTimeouts = lib.any (dev: dev.timeout != null) (lib.attrValues luks.devices);
+  in pkgs.writeScriptBin "cryptsetup-askpass" ''
     #!/bin/sh
 
     ${commonFunctions}
 
+    get_timeout_for_device() {
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: dev: ''
+          if [ "$1" = "${lib.escapeShellArg dev.device}" ]; then
+              echo "${toString dev.timeout}"
+              return
+          fi
+        '') luks.devices)}
+        echo "0"
+    }
+
     while true; do
         wait_target "luks" /crypt-ramfs/device 10 "LUKS to request a passphrase" || die "Passphrase is not requested now"
         device=$(cat /crypt-ramfs/device)
+        ${lib.optionalString configHasTimeouts "time_passed=0"}
+        timeout=$(get_timeout_for_device $device)
 
         echo -n "Passphrase for $device: "
-        IFS= read -rs passphrase
-        echo
+        while true; do
+            IFS= read -t 1 -r passphrase
+            if [ -n "$passphrase" ]; then
+                echo
+                break
+            fi
+            ${lib.optionalString configHasTimeouts ''
+              time_passed=$((time_passed + 1))
+              if [ $timeout -gt 0 && $time_passed -ge $timeout ]; then
+                  echo "Timeout reached"
+                  poweroff -f
+              fi
+            ''}
+        done
 
         rm /crypt-ramfs/device
         echo -n "$passphrase" > /crypt-ramfs/passphrase
@@ -893,6 +957,15 @@ in
               Only used with systemd stage 1.
 
               Extra options to append to the last column of the generated crypttab file.
+            '';
+          };
+
+          timeout = mkOption {
+            type = types.nullOr types.ints.positive;
+            default = null;
+            description = ''
+              The amount of time in seconds to wait on the passphrase prompt.
+              If the timeout is reached, the system will power off.
             '';
           };
         };
