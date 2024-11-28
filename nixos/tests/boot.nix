@@ -85,11 +85,19 @@ let
     let
       config = (import ../lib/eval-config.nix {
           inherit system;
-          modules =
-            [ ../modules/installer/netboot/netboot.nix
-              ../modules/testing/test-instrumentation.nix
-              { key = "serial"; }
-            ];
+          modules = [
+            ../modules/installer/netboot/netboot.nix
+            ../modules/testing/test-instrumentation.nix
+            {
+              boot.kernelParams = [
+                "serial"
+                "live.nixos.passwordHash=$6$jnwR50SkbLYEq/Vp$wmggwioAkfmwuYqd5hIfatZWS/bO6hewzNIwIrWcgdh7k/fhUzZT29Vil3ioMo94sdji/nipbzwEpxecLZw0d0" # "password"
+              ];
+            }
+            {
+              key = "serial";
+            }
+          ];
         }).config;
       ipxeBootDir = pkgs.symlinkJoin {
         name = "ipxeBootDir";
