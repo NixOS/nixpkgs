@@ -95,8 +95,8 @@ import ./make-test-python.nix (
               groups.service1-admin = { };
               systems.oauth2.service1 = {
                 displayName = "Service One";
-                originUrl = "https://one.example.com/";
-                originLanding = "https://one.example.com/landing";
+                redirectUri = "https://one.example.com/";
+                landingUrl = "https://one.example.com/landing";
                 basicSecretFile = pkgs.writeText "bs-service1" "very-strong-secret-for-service1";
                 scopeMaps.service1-access = [
                   "openid"
@@ -111,8 +111,8 @@ import ./make-test-python.nix (
 
               systems.oauth2.service2 = {
                 displayName = "Service Two";
-                originUrl = "https://two.example.com/";
-                originLanding = "https://landing2.example.com/";
+                redirectUri = "https://two.example.com/";
+                landingUrl = "https://landing2.example.com/";
                 # Test not setting secret
                 # basicSecretFile =
                 allowInsecureClientDisablePkce = true;
@@ -159,11 +159,11 @@ import ./make-test-python.nix (
               systems.oauth2.service1 = {
                 displayName = "Service One (changed)";
                 # multiple origin urls
-                originUrl = [
+                redirectUri = [
                   "https://changed-one.example.com/"
                   "https://changed-one.example.org/"
                 ];
-                originLanding = "https://changed-one.example.com/landing-changed";
+                landingUrl = "https://changed-one.example.com/landing-changed";
                 basicSecretFile = pkgs.writeText "bs-service1" "changed-very-strong-secret-for-service1";
                 scopeMaps.service1-access = [
                   "openid"
@@ -178,8 +178,8 @@ import ./make-test-python.nix (
 
               systems.oauth2.service2 = {
                 displayName = "Service Two (changed)";
-                originUrl = "https://changed-two.example.com/";
-                originLanding = "https://changed-landing2.example.com/";
+                redirectUri = "https://changed-two.example.com/";
+                landingUrl = "https://changed-landing2.example.com/";
                 # Test not setting secret
                 # basicSecretFile =
                 allowInsecureClientDisablePkce = false;
@@ -210,8 +210,8 @@ import ./make-test-python.nix (
               groups.service1-admin = { };
               systems.oauth2.service1 = {
                 displayName = "Service One (changed)";
-                originUrl = "https://changed-one.example.com/";
-                originLanding = "https://changed-one.example.com/landing-changed";
+                redirectUri = "https://changed-one.example.com/";
+                landingUrl = "https://changed-one.example.com/landing-changed";
                 basicSecretFile = pkgs.writeText "bs-service1" "changed-very-strong-secret-for-service1";
                 # Removing maps requires setting them to the empty list
                 scopeMaps.service1-access = [ ];
@@ -220,8 +220,8 @@ import ./make-test-python.nix (
 
               systems.oauth2.service2 = {
                 displayName = "Service Two (changed)";
-                originUrl = "https://changed-two.example.com/";
-                originLanding = "https://changed-landing2.example.com/";
+                redirectUri = "https://changed-two.example.com/";
+                landingUrl = "https://changed-landing2.example.com/";
               };
             };
           };
