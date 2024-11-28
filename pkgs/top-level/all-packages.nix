@@ -16427,8 +16427,6 @@ with pkgs;
 
   yuview = libsForQt5.yuview;
 
-  zammad = callPackage ../applications/networking/misc/zammad { };
-
   zathuraPkgs = callPackage ../applications/misc/zathura { };
   zathura = zathuraPkgs.zathuraWrapper;
 
