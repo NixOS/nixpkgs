@@ -318,18 +318,12 @@ in
 
     # Inputs
 
-    Structured function argument
+    `callPackage`
+    : The function used to convert a Nix file's path into a leaf of the attribute set.
+      It is typically the `callPackage` function, taken from either `pkgs` or a new scope corresponding to the `directory`.
 
-    : Attribute set containing the following attributes.
-      Additional attributes are ignored.
-
-      `callPackage`
-
-      : `pkgs.callPackage`
-
-      `directory`
-
-      : The directory to read package files from
+    `directory`
+    : The directory to read package files from.
 
 
     # Examples
