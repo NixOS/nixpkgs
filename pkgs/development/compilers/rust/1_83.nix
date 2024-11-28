@@ -28,7 +28,6 @@
   llvm_19,
   wrapCCWith,
   overrideCC,
-  fetchpatch,
 }@args:
 let
   llvmSharedFor =
@@ -48,8 +47,8 @@ let
 in
 import ./default.nix
   {
-    rustcVersion = "1.82.0";
-    rustcSha256 = "fFP0UJ7aGE4XTvprp9XutYZYVobOjt78eBorEafPUSo=";
+    rustcVersion = "1.83.0";
+    rustcSha256 = "ci13O9Tqstgo1901tZ8LAX3fmpfuK0bBt/f6xciEHG4=";
 
     llvmSharedForBuild = llvmSharedFor pkgsBuildBuild;
     llvmSharedForHost = llvmSharedFor pkgsBuildHost;
@@ -107,34 +106,26 @@ import ./default.nix
     # Note: the version MUST be the same version that we are building. Upstream
     # ensures that each released compiler can compile itself:
     # https://github.com/NixOS/nixpkgs/pull/351028#issuecomment-2438244363
-    bootstrapVersion = "1.82.0";
+    bootstrapVersion = "1.83.0";
 
     # fetch hashes by running `print-hashes.sh ${bootstrapVersion}`
     bootstrapHashes = {
-      i686-unknown-linux-gnu = "77b261fb3d9efa7fe39e87c024987495e03b647b6cb23a66b8e69aeb12a8be61";
-      x86_64-unknown-linux-gnu = "0265c08ae997c4de965048a244605fb1f24a600bbe35047b811c638b8fcf676b";
-      x86_64-unknown-linux-musl = "9dd781c64f71c1d3f854b0937eb751f19e8ebac1110e68e08b94223ad9b022ba";
-      arm-unknown-linux-gnueabihf = "d6a2857d0ab8880c3bc691607b10b68fb2750eae35144e035a9a5eeef820b740";
-      armv7-unknown-linux-gnueabihf = "eff9939c4b98c6ad91a759fa1a2ebdd81b4d05e47ac523218bf9d7093226589b";
-      aarch64-unknown-linux-gnu = "d7db04fce65b5f73282941f3f1df5893be9810af17eb7c65b2e614461fe31a48";
-      aarch64-unknown-linux-musl = "f061eabf0324805637c1e89e7d936365f705be1359699efbda59b637dbe9715f";
-      x86_64-apple-darwin = "b1a289cabc523f259f65116a41374ac159d72fbbf6c373bd5e545c8e835ceb6a";
-      aarch64-apple-darwin = "49b6d36b308addcfd21ae56c94957688338ba7b8985bff57fc626c8e1b32f62c";
-      powerpc64le-unknown-linux-gnu = "44f3a1e70be33f91927ae8d89a11843a79b8b6124d62a9ddd9030a5275ebc923";
-      riscv64gc-unknown-linux-gnu = "a72e8aa3fff374061ff90ada317a8d170c2a15eb079ddc828c97189179d3eebd";
-      s390x-unknown-linux-gnu = "63760886a9b2de6cb38f75a236db358939d904e205e1e2bc9d96cec69e00ae83";
-      x86_64-unknown-freebsd = "f7b51943dbed0af3387e3269c1767fee916fb22b8e7897b3594bf5e422403137";
+      i686-unknown-linux-gnu = "cb4763e8e04a302486e06195917921f917b485d1138823b9ebae1e23abf55a99";
+      x86_64-unknown-linux-gnu = "bd9d53d09d4b60826288336de19fb9c5c7592081e4e4520d6de2f65ee8d79087";
+      x86_64-unknown-linux-musl = "d1d379e8bb545466f53f8a5821dfbc7129e8cab046c44c0a9ea089eeff1616e1";
+      arm-unknown-linux-gnueabihf = "1ac6ebcb610226c7d81d52ef5158571567d5385a62a41ba73775e52c25666220";
+      armv7-unknown-linux-gnueabihf = "747c685a4858f2814a7e493e5d2552ff4234ad41e724560c75738340947cf425";
+      aarch64-unknown-linux-gnu = "ec70c500e2744f0db55bd495ef90534a31fd9c0d5f5a2d752182a59e439ddee3";
+      aarch64-unknown-linux-musl = "b7aabedc3d6109e2b46e02e2925aafd8d0aa2d319390a257c170b6750ba683ce";
+      x86_64-apple-darwin = "d878d4508e0bf2d699e4c8b9b8b9ccd30787859f60149c0934371c53a0fdf013";
+      aarch64-apple-darwin = "a605f4e3732eb472dac524861ca8c7456a923e4b4c883b0c8ebfba7550238f41";
+      powerpc64le-unknown-linux-gnu = "0bf705a288994d47975e10bd2a709d00e4caf6cc53b02a8847ad607cbc77e24a";
+      riscv64gc-unknown-linux-gnu = "f4cb563530ad12daba059373a354cf0dcb53a88e5a5d24928778d2736a0e8c65";
+      s390x-unknown-linux-gnu = "502010d6f40b1385c4b99cf74ff0436102efd155ec1e49bca4c02e8c68a4b142";
+      x86_64-unknown-freebsd = "3b55ed8afe27032128622b14e4f4b59d66b3cc7ff64e6df7a06d5e224b3de2a1";
     };
 
-    selectRustPackage = pkgs: pkgs.rust_1_82;
-
-    rustcPatches = [
-      (fetchpatch {
-        name = "fix-fastCross.patch";
-        url = "https://github.com/rust-lang/rust/commit/c15469a7fec811d1a4f69ff26e18c6f383df41d2.patch";
-        hash = "sha256-lFc48AMoGf4LCP65IsXS5rEB9eYacTP8ADftQkj8zkg=";
-      })
-    ];
+    selectRustPackage = pkgs: pkgs.rust_1_83;
   }
 
   (
@@ -143,7 +134,6 @@ import ./default.nix
       "llvm_19"
       "wrapCCWith"
       "overrideCC"
-      "fetchpatch"
       "pkgsHostTarget"
     ]
   )
