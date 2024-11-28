@@ -27,7 +27,6 @@
 , zlib
 , which
 , sysctl
-, buildLlvmTools
 , debugVersion ? false
 , doCheck ? !stdenv.hostPlatform.isAarch32 && (if lib.versionOlder release_version "15" then stdenv.hostPlatform.isLinux else true)
   && (!stdenv.hostPlatform.isx86_32 /* TODO: why */) && (!stdenv.hostPlatform.isMusl)
@@ -382,7 +381,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCAN_TARGET_i386=false"
   ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
     "-DCMAKE_CROSSCOMPILING=True"
-    "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
     (
       let
         nativeCC = pkgsBuildBuild.targetPackages.stdenv.cc;

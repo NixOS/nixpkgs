@@ -13,7 +13,6 @@
 , release_version
 , version
 , python3
-, buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
 , clang-tools-extra_src ? null
@@ -63,16 +62,7 @@ let
       "-DSPHINX_OUTPUT_MAN=ON"
       "-DSPHINX_OUTPUT_HTML=OFF"
       "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
-      "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
-      "-DCLANG_TABLEGEN=${buildLlvmTools.libclang.dev}/bin/clang-tblgen"
-    ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
-      # Added in LLVM15:
-      # `clang-tidy-confusable-chars-gen`: https://github.com/llvm/llvm-project/commit/c3574ef739fbfcc59d405985a3a4fa6f4619ecdb
-      # `clang-pseudo-gen`: https://github.com/llvm/llvm-project/commit/cd2292ef824591cc34cc299910a3098545c840c7
-      "-DCLANG_TIDY_CONFUSABLE_CHARS_GEN=${buildLlvmTools.libclang.dev}/bin/clang-tidy-confusable-chars-gen"
-      "-DCLANG_PSEUDO_GEN=${buildLlvmTools.libclang.dev}/bin/clang-pseudo-gen"
-    ]) ++ lib.optional (lib.versionAtLeast release_version "20") "-DLLVM_DIR=${libllvm.dev}/lib/cmake/llvm"
+    ] ++ lib.optional (lib.versionAtLeast release_version "20") "-DLLVM_DIR=${libllvm.dev}/lib/cmake/llvm"
       ++ devExtraCmakeFlags;
 
     postPatch = ''
