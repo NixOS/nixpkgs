@@ -1,0 +1,51 @@
+From 862900febaec4a2c70257a39374b81138ee9f168 Mon Sep 17 00:00:00 2001
+From: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>
+Date: Tue, 15 Oct 2024 16:06:33 -0400
+Subject: [PATCH] Link tests with libresolv
+
+---
+ lib/gssapi/Makefile.am | 1 +
+ lib/krb5/Makefile.am   | 2 ++
+ lib/roken/Makefile.am  | 1 +
+ 3 files changed, 4 insertions(+)
+
+diff --git a/lib/gssapi/Makefile.am b/lib/gssapi/Makefile.am
+index 3254866dc..db967e586 100644
+--- a/lib/gssapi/Makefile.am
++++ b/lib/gssapi/Makefile.am
+@@ -403,6 +403,7 @@ LDADD = libgssapi.la \
+ 	$(top_builddir)/lib/krb5/libkrb5.la \
+ 	$(LIB_roken)
+ 
++test_names_LDFLAGS = -lresolv
+ test_names_LDADD = $(LDADD) $(top_builddir)/lib/asn1/libasn1.la
+ test_context_LDADD = $(LDADD) $(top_builddir)/lib/asn1/libasn1.la $(top_builddir)/lib/wind/libwind.la
+ 
+diff --git a/lib/krb5/Makefile.am b/lib/krb5/Makefile.am
+index ecce461dd..e22cfe87c 100644
+--- a/lib/krb5/Makefile.am
++++ b/lib/krb5/Makefile.am
+@@ -330,6 +330,8 @@ test_rfc3961_LDADD = 				\
+ 	$(LIB_hcrypto)				\
+ 	$(LIB_roken)
+ 
++test_plugin_LDFLAGS = -lresolv
++
+ if DEVELOPER_MODE
+ headerdeps = $(dist_libkrb5_la_SOURCES)
+ endif
+diff --git a/lib/roken/Makefile.am b/lib/roken/Makefile.am
+index 1f530c7ae..8350d7034 100644
+--- a/lib/roken/Makefile.am
++++ b/lib/roken/Makefile.am
+@@ -54,6 +54,7 @@ libtest_la_CFLAGS = -DTEST_SNPRINTF -DTEST_STRPFTIME
+ 
+ parse_reply_test_SOURCES = parse_reply-test.c resolve.c
+ parse_reply_test_CFLAGS  = -DTEST_RESOLVE
++parse_reply_test_LDFLAGS = -lresolv
+ 
+ test_readenv_SOURCES = test-readenv.c test-mem.c
+ test_auxval_SOURCES = test-auxval.c
+-- 
+2.46.0
+

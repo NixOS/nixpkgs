@@ -1,0 +1,26 @@
+diff --git i/src/perl/ps2eps w/src/perl/ps2eps
+index 1122a81..31d6a9a 100755
+--- i/src/perl/ps2eps
++++ w/src/perl/ps2eps
+@@ -43,19 +43,13 @@ Getopt::Long::Configure("no_ignore_case");
+ 
+ $prgname= "ps2eps";
+ 
+-if (! -d "/usr/bin")
+-{ # we assume that we are running under native windows
+-  $ghostscriptname = "gswin32c";
+-  $NULLDEV = "nul";
+-} 
+-else 
+ { # Unix or cygwin
+-  $ghostscriptname = "gs";
++  $ghostscriptname = "@gs@";
+   $NULLDEV = "/dev/null 2>&1";
+ }
+ 
+ $bboxver=`bbox >$NULLDEV -V`;
+-$bboxname= ($?== -1) ? "" : "bbox";
++$bboxname= ($?== -1) ? "" : "@bbox@";
+ $version= '$Id: ps2eps,v 1.70 2018-01-09 18:00:00 bless Exp $'; #'
+ $insertPScode= 1;     # Insert surrounding Postscript code
+ $infhandle = STDIN;   # Standard input is the default input file

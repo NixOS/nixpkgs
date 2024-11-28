@@ -1,0 +1,14 @@
+--- source.org/tools/deadlock.py	1980-01-02 00:00:00.000000000 +0000
++++ source/tools/deadlock.py	2018-05-29 13:57:11.807126673 +0100
+@@ -44,9 +44,8 @@
+ #
+ # 01-Feb-2017   Kenny Yu   Created this.
+ 
+-from __future__ import (
+-    absolute_import, division, unicode_literals, print_function
+-)
++from __future__ import absolute_import, division, unicode_literals, print_function
++
+ from bcc import BPF
+ from collections import defaultdict
+ import argparse

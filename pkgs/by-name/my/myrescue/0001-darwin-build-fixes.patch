@@ -1,0 +1,79 @@
+From c8f75fec1e558d1f6d5bbcdd89ac14b10fa370de Mon Sep 17 00:00:00 2001
+From: annalee <150648636+a-n-n-a-l-e-e@users.noreply.github.com>
+Date: Sun, 18 Feb 2024 09:08:12 +0000
+Subject: [PATCH] darwin build fixes
+
+---
+ compat.h              | 9 +++++++++
+ myrescue-bitmap2ppm.c | 1 +
+ myrescue-stat.c       | 1 +
+ myrescue.c            | 5 +++++
+ 4 files changed, 16 insertions(+)
+ create mode 100644 src/compat.h
+
+diff --git a/compat.h b/compat.h
+new file mode 100644
+index 0000000..99b7239
+--- /dev/null
++++ b/compat.h
+@@ -0,0 +1,9 @@
++#pragma once
++
++#ifdef __APPLE__
++#include <unistd.h>
++#include <fcntl.h>
++_Static_assert(sizeof(off_t) == 8, "off_t must be 8 bytes");
++#define lseek64 lseek
++#define open64 open
++#endif
+diff --git a/myrescue-bitmap2ppm.c b/myrescue-bitmap2ppm.c
+index 68ecc29..eb2dd9e 100644
+--- a/myrescue-bitmap2ppm.c
++++ b/myrescue-bitmap2ppm.c
+@@ -25,6 +25,7 @@
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <fcntl.h>
++#include "compat.h"
+ 
+ int main(int argc, char** argv)
+ {
+diff --git a/myrescue-stat.c b/myrescue-stat.c
+index c7a115f..264bd55 100644
+--- a/myrescue-stat.c
++++ b/myrescue-stat.c
+@@ -25,6 +25,7 @@
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <fcntl.h>
++#include "compat.h"
+ 
+ #define BUFFER_SIZE 4096
+ 
+diff --git a/myrescue.c b/myrescue.c
+index 0b119c5..f9b052c 100644
+--- a/myrescue.c
++++ b/myrescue.c
+@@ -21,7 +21,11 @@
+ #define __USE_LARGEFILE64   1
+ #define _LARGEFILE_SOURCE   1
+ #define _LARGEFILE64_SOURCE 1
++#ifdef __linux__
+ #define HAVE_USBRESET       1
++#else
++#define HAVE_USBRESET       0
++#endif
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
+@@ -37,6 +41,7 @@
+ #include <signal.h>
+ 
+ #include "permute.h"
++#include "compat.h"
+ 
+ #define LONG_TIME 3
+ #define SLEEP_AFTER_USBRESET 5
+-- 
+2.43.0
+

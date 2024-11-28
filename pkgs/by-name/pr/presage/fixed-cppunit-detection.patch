@@ -1,0 +1,46 @@
+From 5624aa156c551ab2b81bb86279844397ed690653 Mon Sep 17 00:00:00 2001
+From: Matteo Vescovi <matteo.vescovi@yahoo.co.uk>
+Date: Sun, 21 Jan 2018 17:17:12 +0000
+Subject: [PATCH] Fixed cppunit detection.
+
+---
+ configure.ac | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index a02e9f1..1538a51 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -204,10 +204,16 @@ AM_CONDITIONAL([USE_SQLITE], [test "x$use_sqlite" = "xyes"])
+ dnl ==================
+ dnl Checks for CppUnit
+ dnl ==================
+-AM_PATH_CPPUNIT([1.9.6],
+-                [],
+-                [AC_MSG_WARN([CppUnit not found. Unit tests will not be built. CppUnit can be obtained from http://cppunit.sourceforge.net.])])
+-AM_CONDITIONAL([HAVE_CPPUNIT], [test "$CPPUNIT_LIBS"])
++PKG_CHECK_MODULES([CPPUNIT],
++                  [cppunit >= 1.9],
++                  [have_cppunit=yes],
++                  [AM_PATH_CPPUNIT([1.9],
++                                   [have_cppunit=yes],
++                                   [AC_MSG_WARN([CppUnit not found. Unit tests will not be built. CppUnit can be obtained from http://cppunit.sourceforge.net.])])
++                  ])
++AC_SUBST([CPPUNIT_CFLAGS])
++AC_SUBST([CPPUNIT_LIBS])
++AM_CONDITIONAL([HAVE_CPPUNIT], [test "x$have_cppunit" = "xyes"])
+ 
+ 
+ dnl ============================
+@@ -592,7 +598,7 @@ then
+ else
+     build_demo_application="no"
+ fi
+-if test "$CPPUNIT_LIBS"
++if test "x$have_cppunit" = "xyes"
+ then
+     build_unit_tests="yes"
+ else
+-- 
+2.31.1
+

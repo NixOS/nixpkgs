@@ -1,0 +1,97 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index cccafd9..75d2a85 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1655,7 +1655,8 @@ dependencies = [
+ [[package]]
+ name = "librespot"
+ version = "0.4.2"
+-source = "git+ssh://git@github.com/oSumAtrIX/free-librespot.git#f28fa264528dc85f8f325c18e8461b0f2b43dca1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "ea4c9952ef48968f8184a4a87f8576982426ebe623342d5a28f7d9c4978e4a44"
+ dependencies = [
+  "base64 0.13.1",
+  "env_logger",
+@@ -1681,7 +1682,8 @@ dependencies = [
+ [[package]]
+ name = "librespot-audio"
+ version = "0.4.2"
+-source = "git+ssh://git@github.com/oSumAtrIX/free-librespot.git#f28fa264528dc85f8f325c18e8461b0f2b43dca1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "c176a31355e1ea8e0b9c4ced19df4947bfe4770661c25c142b6fba2365940d9d"
+ dependencies = [
+  "aes-ctr",
+  "byteorder",
+@@ -1696,7 +1698,8 @@ dependencies = [
+ [[package]]
+ name = "librespot-connect"
+ version = "0.4.2"
+-source = "git+ssh://git@github.com/oSumAtrIX/free-librespot.git#f28fa264528dc85f8f325c18e8461b0f2b43dca1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "4ffafb6a443e9445ccb3d5d591573b5b1da3c89a9b8846c63ba2c3710210d3ec"
+ dependencies = [
+  "form_urlencoded",
+  "futures-util",
+@@ -1716,7 +1719,8 @@ dependencies = [
+ [[package]]
+ name = "librespot-core"
+ version = "0.4.2"
+-source = "git+ssh://git@github.com/oSumAtrIX/free-librespot.git#f28fa264528dc85f8f325c18e8461b0f2b43dca1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "046349f25888e644bf02d9c5de0164b2a493d29aa4ce18e1ad0b756da9b55d6d"
+ dependencies = [
+  "aes",
+  "base64 0.13.1",
+@@ -1756,7 +1760,8 @@ dependencies = [
+ [[package]]
+ name = "librespot-discovery"
+ version = "0.4.2"
+-source = "git+ssh://git@github.com/oSumAtrIX/free-librespot.git#f28fa264528dc85f8f325c18e8461b0f2b43dca1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "2aa877d18f6150364012cb4be5682d62d7c712c88bae2d0d01720fd7c15e2f06"
+ dependencies = [
+  "aes-ctr",
+  "base64 0.13.1",
+@@ -1777,7 +1782,8 @@ dependencies = [
+ [[package]]
+ name = "librespot-metadata"
+ version = "0.4.2"
+-source = "git+ssh://git@github.com/oSumAtrIX/free-librespot.git#f28fa264528dc85f8f325c18e8461b0f2b43dca1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "6b80361fcbcb5092056fd47c08c34d5d51b08385d8efb6941c0d3e46d032c21c"
+ dependencies = [
+  "async-trait",
+  "byteorder",
+@@ -1790,7 +1796,8 @@ dependencies = [
+ [[package]]
+ name = "librespot-playback"
+ version = "0.4.2"
+-source = "git+ssh://git@github.com/oSumAtrIX/free-librespot.git#f28fa264528dc85f8f325c18e8461b0f2b43dca1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "5190a0b9bcc7f70ee4196a6b4a1c731d405ca130d4a6fcd4c561cfdde8b7cfb7"
+ dependencies = [
+  "byteorder",
+  "cpal",
+@@ -1815,7 +1822,8 @@ dependencies = [
+ [[package]]
+ name = "librespot-protocol"
+ version = "0.4.2"
+-source = "git+ssh://git@github.com/oSumAtrIX/free-librespot.git#f28fa264528dc85f8f325c18e8461b0f2b43dca1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "5d6d3ac6196ac0ea67bbe039f56d6730a5d8b31502ef9bce0f504ed729dcb39f"
+ dependencies = [
+  "glob",
+  "protobuf 2.28.0",
+diff --git a/Cargo.toml b/Cargo.toml
+index c7e2fe2..28e895a 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -30,7 +30,7 @@ reqwest = "0"
+ colored = "2"
+ lame = "0"
+ aspotify = "0"
+-librespot = { git = "ssh://git@github.com/oSumAtrIX/free-librespot.git" }
++librespot = "0.4.2"
+ async-std = { version = "1", features = ["attributes", "tokio1"] }
+ serde_json = "1"
+ async-stream = "0"

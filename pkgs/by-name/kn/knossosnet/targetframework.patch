@@ -1,0 +1,12 @@
+diff -Naur Knossos.NET-0.1.4/IonKiwi.lz4/IonKiwi.lz4.csproj Knossos.NET-0.1.4.new/IonKiwi.lz4/IonKiwi.lz4.csproj
+--- Knossos.NET-0.1.4/IonKiwi.lz4/IonKiwi.lz4.csproj	2023-10-18 15:17:20.000000000 -0400
++++ Knossos.NET-0.1.4.new/IonKiwi.lz4/IonKiwi.lz4.csproj	2024-01-03 17:39:56.809971086 -0500
+@@ -1,7 +1,7 @@
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+ 
+ 	<PropertyGroup>
+-		<TargetFrameworks>net60</TargetFrameworks>
++		<TargetFramework>net6.0</TargetFramework>
+ 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+ 		<PackageId>IonKiwi.lz4.managed</PackageId>
+ 		<Version>1.0.7</Version>

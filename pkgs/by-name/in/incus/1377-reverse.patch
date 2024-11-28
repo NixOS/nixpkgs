@@ -1,0 +1,77 @@
+--- b/internal/server/device/tpm.go
++++ a/internal/server/device/tpm.go
+@@ -202,13 +202,11 @@
+ 		},
+ 	}
+ 
++	proc, err := subprocess.NewProcess("swtpm", []string{"socket", "--tpm2", "--tpmstate", fmt.Sprintf("dir=%s", tpmDevPath), "--ctrl", fmt.Sprintf("type=unixio,path=%s", socketPath)}, "", "")
+-	proc, err := subprocess.NewProcess("swtpm", []string{"socket", "--tpm2", "--tpmstate", fmt.Sprintf("dir=%s", tpmDevPath), "--ctrl", fmt.Sprintf("type=unixio,path=swtpm-%s.sock", d.name)}, "", "")
+ 	if err != nil {
+ 		return nil, err
+ 	}
+ 
+-	proc.Cwd = tpmDevPath
+-
+ 	// Start the TPM emulator.
+ 	err = proc.Start(context.Background())
+ 	if err != nil {
+--- b/internal/server/instance/drivers/driver_qemu.go
++++ a/internal/server/instance/drivers/driver_qemu.go
+@@ -3668,7 +3668,7 @@
+ 
+ 		// Add TPM device.
+ 		if len(runConf.TPMDevice) > 0 {
++			err = d.addTPMDeviceConfig(&cfg, runConf.TPMDevice)
+-			err = d.addTPMDeviceConfig(&cfg, runConf.TPMDevice, fdFiles)
+ 			if err != nil {
+ 				return "", nil, err
+ 			}
+@@ -4852,7 +4852,7 @@
+ 	return monHook, nil
+ }
+ 
++func (d *qemu) addTPMDeviceConfig(cfg *[]cfgSection, tpmConfig []deviceConfig.RunConfigItem) error {
+-func (d *qemu) addTPMDeviceConfig(cfg *[]cfgSection, tpmConfig []deviceConfig.RunConfigItem, fdFiles *[]*os.File) error {
+ 	var devName, socketPath string
+ 
+ 	for _, tpmItem := range tpmConfig {
+@@ -4863,16 +4863,9 @@
+ 		}
+ 	}
+ 
+-	fd, err := unix.Open(socketPath, unix.O_PATH, 0)
+-	if err != nil {
+-		return err
+-	}
+-
+-	tpmFD := d.addFileDescriptor(fdFiles, os.NewFile(uintptr(fd), socketPath))
+-
+ 	tpmOpts := qemuTPMOpts{
+ 		devName: devName,
++		path:    socketPath,
+-		path:    fmt.Sprintf("/proc/self/fd/%d", tpmFD),
+ 	}
+ 	*cfg = append(*cfg, qemuTPM(&tpmOpts)...)
+ 
+--- b/shared/subprocess/proc.go
++++ a/shared/subprocess/proc.go
+@@ -27,7 +27,6 @@
+ 	Name     string         `yaml:"name"`
+ 	Args     []string       `yaml:"args,flow"`
+ 	Apparmor string         `yaml:"apparmor"`
+-	Cwd      string         `yaml:"cwd"`
+ 	PID      int64          `yaml:"pid"`
+ 	Stdin    io.ReadCloser  `yaml:"-"`
+ 	Stdout   io.WriteCloser `yaml:"-"`
+@@ -154,11 +153,6 @@
+ 	cmd.Stderr = p.Stderr
+ 	cmd.Stdin = p.Stdin
+ 	cmd.SysProcAttr = p.SysProcAttr
+-
+-	if p.Cwd != "" {
+-		cmd.Dir = p.Cwd
+-	}
+-
+ 	if cmd.SysProcAttr == nil {
+ 		cmd.SysProcAttr = &syscall.SysProcAttr{}
+ 	}

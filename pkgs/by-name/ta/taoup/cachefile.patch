@@ -1,0 +1,35 @@
+--- a/taoup-fortune	2021-09-05 12:16:23.408295791 +0800
++++ b/taoup-fortune	2021-09-05 13:02:52.286440200 +0800
+@@ -5,31 +5,9 @@
+ #        - https://github.com/matheuss/parrotsay
+ #        - https://github.com/busyloop/lolcat
+ #        - https://github.com/sckott/cowsay (enhanced version)
+-dir=`dirname "${BASH_SOURCE[0]}"`
+-
+-# USER ALERT!!! @ronjouch complained about execution speed at https://github.com/globalcitizen/taoup/issues/11 
+-#  ... therefore we add caching ... therefore first ensure we have an up to date cache via one of ...
+-# md5sum
+-if [ `which md5sum 2>/dev/null` ]; then
+- MD5SUM=`md5sum ${dir}/taoup | cut -d ' ' -f1`
+-# md5
+-elif [ `which md5 2>/dev/null` ]; then
+- MD5SUM=`md5 -q ${dir}/taoup | cut -d ' ' -f1`
+-# openssl
+-elif [ `which openssl 2>/dev/null` ]; then
+- MD5SUM=`cat ${dir}/taoup | openssl md5 | grep -o '[[:xdigit:]][[:xdigit:]]*$' |cut -d '=' -f2- |cut -c 2-`
+-# ruby
+-elif [ `which ruby 2>/dev/null` ]; then
+- MD5SUM=`ruby -rdigest/md5 -e"puts Digest::MD5.file'${dir}/taoup'"`
+-fi
+ 
+ # determine cachefile name
+-cachefile=${dir}/.taoup-fortune.cache.${MD5SUM}
+-
+-# create if necessary
+-if [ ! -r $cachefile ]; then
+- ${dir}/taoup $@ >${cachefile}
+-fi
++cachefile=@out@/lib/taoup/cache
+ 
+ # handle all classes of society
+ if [ `which cowsay 2>/dev/null` ]; then

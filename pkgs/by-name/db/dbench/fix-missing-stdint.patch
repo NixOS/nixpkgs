@@ -1,0 +1,10 @@
+--- dbench-65b1987.org/libnfs.c	2017-11-08 12:25:39.652147989 +0000
++++ dbench-65b1987/libnfs.c	2017-11-08 12:26:20.269897054 +0000
+@@ -23,6 +23,7 @@
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <fcntl.h>
++#include <stdint.h>
+ 
+ #define discard_const(ptr) ((void *)((intptr_t)(ptr)))
+ 

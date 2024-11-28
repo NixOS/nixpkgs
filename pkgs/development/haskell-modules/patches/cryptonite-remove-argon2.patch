@@ -1,0 +1,69 @@
+diff --git a/Crypto/KDF/Argon2.hs b/Crypto/KDF/Argon2.hs
+index 044ba00..31dc6f1 100644
+--- a/Crypto/KDF/Argon2.hs
++++ b/Crypto/KDF/Argon2.hs
+@@ -12,6 +12,7 @@
+ -- File started from Argon2.hs, from Oliver Charles
+ -- at https://github.com/ocharles/argon2
+ --
++{-# LANGUAGE DataKinds #-}
+ module Crypto.KDF.Argon2
+     (
+       Options(..)
+@@ -32,6 +33,7 @@ import           Control.Monad (when)
+ import           Data.Word
+ import           Foreign.C
+ import           Foreign.Ptr
++import           Data.Proxy
+ 
+ -- | Which variant of Argon2 to use. You should choose the variant that is most
+ -- applicable to your intention to hash inputs.
+@@ -100,33 +102,12 @@ defaultOptions =
+             }
+ 
+ hash :: (ByteArrayAccess password, ByteArrayAccess salt, ByteArray out)
+-     => Options
++     => [Proxy "cryptonite:Crypto.KDF.Argon2.hash is known to be broken on this architecture. See https://github.com/haskell-crypto/cryptonite/issues/360"]
+      -> password
+      -> salt
+      -> Int
+      -> CryptoFailable out
+-hash options password salt outLen
+-    | saltLen < saltMinLength  = CryptoFailed CryptoError_SaltTooSmall
+-    | outLen < outputMinLength = CryptoFailed CryptoError_OutputLengthTooSmall
+-    | outLen > outputMaxLength = CryptoFailed CryptoError_OutputLengthTooBig
+-    | otherwise                = CryptoPassed $ B.allocAndFreeze outLen $ \out -> do
+-        res <- B.withByteArray password $ \pPass ->
+-               B.withByteArray salt     $ \pSalt ->
+-                    argon2_hash (iterations options)
+-                                (memory options)
+-                                (parallelism options)
+-                                pPass
+-                                (csizeOfInt passwordLen)
+-                                pSalt
+-                                (csizeOfInt saltLen)
+-                                out
+-                                (csizeOfInt outLen)
+-                                (cOfVariant $ variant options)
+-                                (cOfVersion $ version options)
+-        when (res /= 0) $ error "argon2: hash: internal error"
+-  where
+-    saltLen = B.length salt
+-    passwordLen = B.length password
++hash options password salt outLen = error "cryptonite:Crypto.KDF.Argon2.hash is known to be broken on this architecture. See https://github.com/haskell-crypto/cryptonite/issues/360"
+ 
+ data Pass
+ data Salt
+diff --git a/tests/KAT_Argon2.hs b/tests/KAT_Argon2.hs
+index a347fc5..fdba079 100644
+--- a/tests/KAT_Argon2.hs
++++ b/tests/KAT_Argon2.hs
+@@ -32,7 +32,7 @@ kdfTests = zipWith toKDFTest is vectors
+   where
+     toKDFTest i v =
+         testCase (show i)
+-            (CryptoPassed (kdfResult v) @=? Argon2.hash (kdfOptions v) (kdfPass v) (kdfSalt v) (B.length $ kdfResult v))
++            (pure ())
+ 
+     is :: [Int]
+     is = [1..]

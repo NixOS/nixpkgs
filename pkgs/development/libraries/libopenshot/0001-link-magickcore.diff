@@ -1,0 +1,12 @@
+diff -Naur source/src/CMakeLists.txt source-new/src/CMakeLists.txt
+--- source/src/CMakeLists.txt	1969-12-31 21:00:01.000000000 -0300
++++ source-new/src/CMakeLists.txt	2023-11-30 09:39:45.442332463 -0300
+@@ -231,7 +231,7 @@
+     target_compile_definitions(openshot PUBLIC USE_IMAGEMAGICK=1)
+ 
+     # Link with ImageMagick library
+-    target_link_libraries(openshot PUBLIC ImageMagick::Magick++)
++    target_link_libraries(openshot PUBLIC ImageMagick::Magick++ ImageMagick::MagickCore)
+ 
+     set(HAVE_IMAGEMAGICK TRUE CACHE BOOL "Building with ImageMagick support" FORCE)
+     mark_as_advanced(HAVE_IMAGEMAGICK)

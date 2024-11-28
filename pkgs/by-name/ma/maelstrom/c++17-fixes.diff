@@ -1,0 +1,32 @@
+diff --git a/fastrand.cpp b/fastrand.cpp
+index 3714f02..d1cf224 100644
+--- a/fastrand.cpp
++++ b/fastrand.cpp
+@@ -30,10 +30,10 @@ Uint32 GetRandSeed(void)
+ Uint16 FastRandom(Uint16 range)
+ {
+ 	Uint16 result;
+-	register Uint32 calc;
+-	register Uint32 regD0;
+-	register Uint32 regD1;
+-	register Uint32 regD2;
++	Uint32 calc;
++	Uint32 regD0;
++	Uint32 regD1;
++	Uint32 regD2;
+ 
+ #ifdef SERIOUS_DEBUG
+   fprintf(stderr, "FastRandom(%hd)  Seed in: %lu ", range, randomSeed);
+diff --git a/screenlib/SDL_FrameBuf.cpp b/screenlib/SDL_FrameBuf.cpp
+index 2f7b44c..c8e394b 100644
+--- a/screenlib/SDL_FrameBuf.cpp
++++ b/screenlib/SDL_FrameBuf.cpp
+@@ -555,7 +555,7 @@ static inline void memswap(Uint8 *dst, Uint8 *src, Uint8 len)
+ 	}
+ #else
+ 	/* Swap two buffers using a temporary variable */
+-	register Uint8 tmp;
++	Uint8 tmp;
+ 
+ 	while ( len-- ) {
+ 		tmp = *dst;

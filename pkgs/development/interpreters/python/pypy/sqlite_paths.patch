@@ -1,0 +1,12 @@
+diff -ur a/lib_pypy/_sqlite3_build.py b/lib_pypy/_sqlite3_build.py
+--- a/lib_pypy/_sqlite3_build.py	2021-04-12 01:11:48.000000000 -0400
++++ b/lib_pypy/_sqlite3_build.py	2021-07-14 18:08:33.000000000 -0400
+@@ -301,6 +301,8 @@
+ else:
+     extra_args = dict(
+         libraries=libraries,
++        include_dirs=['@dev@/include'],
++        library_dirs=['@out@/lib']
+     )
+ 
+ SOURCE = """

@@ -1,0 +1,37 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: oxalica <oxalicc@pm.me>
+Date: Tue, 4 Oct 2022 09:18:07 +0800
+Subject: [PATCH] core: don't taint on unmerged /usr
+
+NixOS has very different approach towards /bin and /sbin - they don't
+really exist (except for /bin/sh and /usr/bin/env, because these are used
+heavily in shebangs around the world). The concept of merged or unmerged
+usr doesn't really apply here at all, it's neither of the two.
+Users don't execute things from /bin or /sbin, there's nothing else in
+there. In all cases, systemd doesn't look things up from /usr/bin or /bin,
+so showing the taint isn't really helpful.
+
+See also: https://github.com/systemd/systemd/issues/24191
+---
+ src/core/taint.c | 8 --------
+ 1 file changed, 8 deletions(-)
+
+diff --git a/src/core/taint.c b/src/core/taint.c
+index 969b37f209..de64e8f1f9 100644
+--- a/src/core/taint.c
++++ b/src/core/taint.c
+@@ -41,14 +41,6 @@ char* taint_string(void) {
+ 
+         _cleanup_free_ char *bin = NULL, *usr_sbin = NULL, *var_run = NULL;
+ 
+-        if (readlink_malloc("/bin", &bin) < 0 || !PATH_IN_SET(bin, "usr/bin", "/usr/bin"))
+-                stage[n++] = "unmerged-usr";
+-
+-        /* Note that the check is different from default_PATH(), as we want to taint on uncanonical symlinks
+-         * too. */
+-        if (readlink_malloc("/usr/sbin", &usr_sbin) < 0 || !PATH_IN_SET(usr_sbin, "bin", "/usr/bin"))
+-                stage[n++] = "unmerged-bin";
+-
+         if (readlink_malloc("/var/run", &var_run) < 0 || !PATH_IN_SET(var_run, "../run", "/run"))
+                 stage[n++] = "var-run-bad";
+ 

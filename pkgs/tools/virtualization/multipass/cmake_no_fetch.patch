@@ -1,0 +1,13 @@
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 52bd407f..a1100112 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -28,7 +28,7 @@ FetchContent_Declare(googletest
+ )
+ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+ set(INSTALL_GTEST OFF CACHE BOOL "")
+-FetchContent_MakeAvailable(googletest)
++# FetchContent_MakeAvailable(googletest)
+ 
+ add_executable(multipass_tests
+   blueprint_test_lambdas.cpp
