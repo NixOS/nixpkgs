@@ -102,14 +102,22 @@ def run_wrapper(
 
     logger.debug("calling run with args=%s, extra_env=%s", args, extra_env)
 
-    return subprocess.run(
-        args,
-        check=check,
-        env=env,
-        input=input,
-        # Hope nobody is using NixOS with non-UTF8 encodings, but "surrogateescape"
-        # should still work in those systems.
-        text=True,
-        errors="surrogateescape",
-        **kwargs,
-    )
+    try:
+        return subprocess.run(
+            args,
+            check=check,
+            env=env,
+            input=input,
+            # Hope nobody is using NixOS with non-UTF8 encodings, but "surrogateescape"
+            # should still work in those systems.
+            text=True,
+            errors="surrogateescape",
+            **kwargs,
+        )
+    except subprocess.CalledProcessError as ex:
+        if sudo and remote:
+            logger.error(
+                "while running command with remote sudo, did you forget to use "
+                + "--ask-sudo-password?"
+            )
+        raise ex
