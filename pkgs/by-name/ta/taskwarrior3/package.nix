@@ -6,6 +6,8 @@
   # nativeBuildInputs
   cmake,
   rustPlatform,
+  rustc,
+  cargo,
   installShellFiles,
 
   # buildInputs
@@ -14,34 +16,61 @@
 
   # passthru.tests
   nixosTests,
+
+  # nativeCheckInputs
+  python3,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taskwarrior";
-  version = "3.1.0";
+  version = "3.2.0-unstable-2024-12-17";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-iKpOExj1xM9rU/rIcOLLKMrZrAfz7y9X2kt2CjfMOOQ=";
+    rev = "cc505e488184e958bcaedad6fed86f91d128e6bd";
+    hash = "sha256-M9pRoilxTHppX/efvppBI+QiPYXBEkvWxiEnodjqryk=";
     fetchSubmodules = true;
   };
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${finalAttrs.pname}-${finalAttrs.version}-cargo-deps";
     inherit (finalAttrs) src;
-    sourceRoot = finalAttrs.src.name;
-    hash = "sha256-L+hYYKXSOG4XYdexLMG3wdA7st+A9Wk9muzipSNjxrA=";
+    hash = "sha256-QPnW+FWbsjvjQr5CRuOGLIaUWSGItlFDwLEtZfRbihA="; # For fetchCargoTarball with name arguments
   };
-  cargoRoot = "./";
 
   postPatch = ''
     substituteInPlace src/commands/CmdNews.cpp \
       --replace-fail "xdg-open" "${lib.getBin xdg-utils}/bin/xdg-open"
+  '';
+  # The CMakeLists files used by upstream issue a `cargo install` command to
+  # install a rust tool (cxxbridge-cmd) that is supposed to be included in the Cargo.toml's and
+  # `Cargo.lock` files of upstream. Setting CARGO_HOME like that helps `cargo
+  # install` find the dependencies we prefetched. See also:
+  # https://github.com/GothenburgBitFactory/taskwarrior/issues/3705
+  postUnpack = ''
+    export CARGO_HOME=$PWD/.cargo
+  '';
+  # Test failures, see:
+  # https://github.com/GothenburgBitFactory/taskwarrior/issues/3727
+  failingTests = [
+    "bash_completion.test.py"
+    "hooks.env.test.py"
+    "hooks.on-add.test.py"
+    "hooks.on-launch.test.py"
+    "hooks.on-modify.test.py"
+    "hooks.on-exit.test.py"
+  ];
+  preConfigure = ''
+    substituteInPlace test/CMakeLists.txt \
+      ${lib.concatMapStringsSep "\\\n  " (t: "--replace-fail ${t} '' ") finalAttrs.failingTests}
   '';
 
   strictDeps = true;
   nativeBuildInputs = [
     cmake
     rustPlatform.cargoSetupHook
+    # To install cxxbridge-cmd before configurePhase, see above linked upstream
+    # issue.
+    rustc
+    cargo
     installShellFiles
   ];
 
@@ -50,7 +79,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
-  checkTarget = "build_tests";
+  preCheck = ''
+    # See:
+    # https://github.com/GothenburgBitFactory/taskwarrior/blob/v3.2.0/doc/devel/contrib/development.md#run-the-test-suite
+    make test_runner
+    # Otherwise all '/usr/bin/env python' shebangs are not found by ctest
+    patchShebangs test/*.py test/*/*.py
+  '';
+  nativeCheckInputs = [
+    python3
+  ];
 
   postInstall = ''
     # ZSH is installed automatically from some reason, only bash and fish need
