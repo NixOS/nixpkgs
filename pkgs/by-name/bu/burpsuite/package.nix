@@ -100,11 +100,17 @@ buildFHSEnv {
       exploiting security vulnerabilities.
     '';
     homepage = "https://portswigger.net/burp/";
+    changelog =
+      "https://portswigger.net/burp/releases/professional-community-"
+      + replaceStrings [ "." ] [ "-" ] version;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
     platforms = jdk.meta.platforms;
     hydraPlatforms = [ ];
-    maintainers = with maintainers; [ bennofs ];
+    maintainers = with maintainers; [
+      bennofs
+      fab
+    ];
     mainProgram = "burpsuite";
   };
 }

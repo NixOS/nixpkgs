@@ -151,6 +151,8 @@ self: super: with self; {
 
   aio-pika = callPackage ../development/python-modules/aio-pika { };
 
+  aioacaia = callPackage ../development/python-modules/aioacaia { };
+
   aioairzone = callPackage ../development/python-modules/aioairzone { };
 
   aioairzone-cloud = callPackage ../development/python-modules/aioairzone-cloud { };
@@ -3349,6 +3351,8 @@ self: super: with self; {
   django-appconf = callPackage ../development/python-modules/django-appconf { };
 
   django-app-helper = callPackage ../development/python-modules/django-app-helper { };
+
+  django-apscheduler = callPackage ../development/python-modules/django-apscheduler { };
 
   django-auditlog = callPackage ../development/python-modules/django-auditlog { };
 
@@ -11559,6 +11563,8 @@ self: super: with self; {
 
   pyflume = callPackage ../development/python-modules/pyflume { };
 
+  pyflipper = callPackage ../development/python-modules/pyflipper { };
+
   pyfma = callPackage ../development/python-modules/pyfma { };
 
   pyfribidi = callPackage ../development/python-modules/pyfribidi { };
@@ -13229,6 +13235,8 @@ self: super: with self; {
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
 
   pyinfra = callPackage ../development/python-modules/pyinfra { };
+
+  pymodes = callPackage ../development/python-modules/pymodes { };
 
   pytibber = callPackage ../development/python-modules/pytibber { };
 
@@ -16295,6 +16303,8 @@ self: super: with self; {
   tubeup = callPackage ../development/python-modules/tubeup { };
 
   turnt = callPackage ../development/python-modules/turnt { };
+
+  turrishw = callPackage ../development/python-modules/turrishw { };
 
   tuya-device-sharing-sdk = callPackage ../development/python-modules/tuya-device-sharing-sdk { };
 

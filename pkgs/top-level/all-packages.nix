@@ -2406,9 +2406,7 @@ with pkgs;
     inherit (darwin) libobjc libresolv;
   };
 
-  gping = callPackage ../tools/networking/gping {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  gping = callPackage ../tools/networking/gping { };
 
   greg = callPackage ../applications/audio/greg {
     pythonPackages = python3Packages;
@@ -5675,9 +5673,7 @@ with pkgs;
     buildGoModule = buildGo123Module;
   };
 
-  xdp-tools = callPackage ../tools/networking/xdp-tools {
-    llvmPackages = llvmPackages_14;
-  };
+  xdp-tools = callPackage ../tools/networking/xdp-tools { };
 
   ugarit = callPackage ../tools/backup/ugarit {
     inherit (chickenPackages_4) eggDerivation fetchegg;
@@ -5931,7 +5927,7 @@ with pkgs;
   };
 
   codon = callPackage ../development/compilers/codon {
-    inherit (llvmPackages_14) lld stdenv;
+    inherit (llvmPackages) lld stdenv;
   };
 
   colmap = libsForQt5.callPackage ../applications/science/misc/colmap { inherit (config) cudaSupport; };
@@ -5972,8 +5968,7 @@ with pkgs;
   };
 
   clazy = callPackage ../development/tools/analysis/clazy {
-    llvmPackages = llvmPackages_14;
-    stdenv = llvmPackages_14.stdenv;
+    stdenv = llvmPackages.stdenv;
   };
 
   #Use this instead of stdenv to build with clang
@@ -7752,9 +7747,7 @@ with pkgs;
 
   ### DEVELOPMENT / TOOLS / LANGUAGE-SERVERS
 
-  ccls = callPackage ../development/tools/language-servers/ccls {
-    llvmPackages = llvmPackages_14;
-  };
+  ccls = callPackage ../development/tools/language-servers/ccls { };
 
   fortls = python3.pkgs.callPackage ../development/tools/language-servers/fortls { };
 
@@ -8120,7 +8113,7 @@ with pkgs;
 
   cvise = python3Packages.callPackage ../development/tools/misc/cvise {
     # cvise keeps up with fresh llvm releases and supports wide version range
-    inherit (llvmPackages_14) llvm libclang;
+    inherit (llvmPackages) llvm libclang;
   };
 
   dbt = with python3Packages; toPythonApplication dbt-core;
@@ -10598,6 +10591,7 @@ with pkgs;
 
   inherit
     ({
+      protobuf_29 = callPackage ../development/libraries/protobuf/29.nix { };
       protobuf_28 = callPackage ../development/libraries/protobuf/28.nix { };
       protobuf_27 = callPackage ../development/libraries/protobuf/27.nix { };
       protobuf_26 = callPackage ../development/libraries/protobuf/26.nix { };
@@ -10610,6 +10604,7 @@ with pkgs;
         abseil-cpp = abseil-cpp_202103;
       };
     })
+    protobuf_29
     protobuf_28
     protobuf_27
     protobuf_26
@@ -13581,11 +13576,6 @@ with pkgs;
 
   droopy = python3Packages.callPackage ../applications/networking/droopy { };
 
-  dexed = darwin.apple_sdk_11_0.callPackage ../applications/audio/dexed {
-    inherit (darwin.apple_sdk_11_0.frameworks) Accelerate Cocoa WebKit MetalKit DiscRecording CoreAudioKit;
-    inherit (darwin.apple_sdk_11_0.libs) simd;
-  };
-
   dwl = callPackage ../by-name/dw/dwl/package.nix {
     wlroots = wlroots_0_18;
   };
@@ -13899,11 +13889,6 @@ with pkgs;
 
   filezilla = darwin.apple_sdk_11_0.callPackage ../applications/networking/ftp/filezilla {
     inherit (darwin.apple_sdk_11_0.frameworks) CoreServices Security;
-  };
-
-  fire = darwin.apple_sdk_11_0.callPackage ../applications/audio/fire {
-    inherit (darwin.apple_sdk_11_0.frameworks) Accelerate Cocoa WebKit CoreServices DiscRecording CoreAudioKit MetalKit;
-    inherit (darwin.apple_sdk_11_0.libs) simd;
   };
 
   buildMozillaMach = opts: callPackage (import ../applications/networking/browsers/firefox/common.nix opts) { };
@@ -16383,8 +16368,6 @@ with pkgs;
 
   yuview = libsForQt5.yuview;
 
-  zammad = callPackage ../applications/networking/misc/zammad { };
-
   zathuraPkgs = callPackage ../applications/misc/zathura { };
   zathura = zathuraPkgs.zathuraWrapper;
 
@@ -16539,7 +16522,7 @@ with pkgs;
 
   zcash = callPackage ../applications/blockchains/zcash {
     inherit (darwin.apple_sdk.frameworks) Security;
-    stdenv = llvmPackages_14.stdenv;
+    stdenv = llvmPackages.stdenv;
   };
 
   polkadot = callPackage ../applications/blockchains/polkadot {

@@ -161,6 +161,14 @@ self: super: {
   # 2024-07-09: rhine 1.4.* needs newer monad-schedule than stackage (and is only consumer)
   monad-schedule = assert super.monad-schedule.version == "0.1.2.2"; doDistribute self.monad-schedule_0_2_0_1;
 
+  # Test suite hangs on 32bit. Unclear if this is a bug or not, but if so, then
+  # it has been present in past versions as well.
+  # https://github.com/haskell-unordered-containers/unordered-containers/issues/491
+  unordered-containers =
+    if pkgs.stdenv.hostPlatform.is32bit
+    then dontCheck super.unordered-containers
+    else super.unordered-containers;
+
   aeson =
     # aeson's test suite includes some tests with big numbers that fail on 32bit
     # https://github.com/haskell/aeson/issues/1060
