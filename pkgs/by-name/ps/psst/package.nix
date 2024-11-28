@@ -9,6 +9,7 @@
   gtk3,
   lib,
   makeDesktopItem,
+  nix-update-script,
   pango,
   pkg-config,
   rustPlatform,
@@ -33,23 +34,18 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "psst";
-  version = "unstable-2024-10-24";
+  version = "0-unstable-2024-11-12";
 
   src = fetchFromGitHub {
     owner = "jpochyla";
     repo = pname;
-    rev = "02923198ba0e27b2b6271340cf57dd8ce109049b";
-    hash = "sha256-gEK0yf37eREsI6kCIYTBlkkM6Fnjy0KGnd0XqcawGjU=";
+    rev = "69314f9fe8e86d57a678ab333b08ab3ffcf2a3bb";
+    hash = "sha256-11h6rheDjuwj3AgjGL5CrQWeXSYpVjI21N5yHjtcKz8=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cubeb-0.13.0" = "sha256-l1JkKlq2qvvLwNLJ2DrIpAFYcRQyd6F8pAflmtnaXhU=";
-      "druid-0.8.3" = "sha256-hTB9PQf2TAhcLr64VjjQIr18mczwcNogDSRSN5dQULA=";
-      "druid-enums-0.1.0" = "sha256-KJvAgKxicx/g+4QRZq3iHt6MGVQbfOpyN+EhS6CyDZk=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Ldi9t3dG/BxL/Y9HL2G9PtCk5LGOjK5xvn85N2s5kMc=";
+
   # specify the subdirectory of the binary crate to build from the workspace
   buildAndTestSubdir = "psst-gui";
 
@@ -76,9 +72,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*
   '';
 
-  passthru = {
-    updateScript = ./update.sh;
-  };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = with lib; {
     description = "Fast and multi-platform Spotify client with native GUI";
