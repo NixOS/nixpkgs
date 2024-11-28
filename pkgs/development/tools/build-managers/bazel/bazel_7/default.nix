@@ -44,10 +44,11 @@
   # Allow to independently override the jdks used to build and run respectively
   buildJdk,
   runJdk,
+  # Toggle for hacks for running bazel under buildBazelPackage:
   # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
   enableNixHacks ? false,
-  version ? "7.4.0",
+  version ? "7.4.1",
 }:
 
 let
@@ -55,7 +56,7 @@ let
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-GY1wu3O5O7K2MMJv6wjE+DLnUgwjkHdmcqhT1o9G9Cg=";
+    hash = "sha256-gzhmGLxIn02jYmbvJiDsZKUmxobPBwQTMsr/fJU6+vU=";
   };
 
   defaultShellUtils =
@@ -112,23 +113,23 @@ let
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-x86_64";
-          hash = "sha256-0glQLNAU0aT7+3Hzv0+IzgvJlfs7y8wflEwFssIvnkk=";
+          hash = "sha256-CYL1paAtzTbfl7TfsqwJry/dkoTO/yZdHrX0NSA1+Ig=";
         }
       else if stdenv.hostPlatform.system == "aarch64-linux" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-arm64";
-          hash = "sha256-736PrTFckHyChRh0Uv8zNtCppQYhfZWECl9+44cs6Qo=";
+          hash = "sha256-6DzTEx218/Qq38eMWvXOX/t9VJDyPczz6Edh4eHdOfg=";
         }
       else if stdenv.hostPlatform.system == "x86_64-darwin" then
         fetchurl {
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-x86_64";
-          hash = "sha256-FX7ZKKG7uoteEvx0fBqpsoB3Gj0aJNaC2IXgJ2ffgz4=";
+          hash = "sha256-Ut00wXzJezqlvf49RcTjk4Im8j3Qv7R77t1iWpU/HwU=";
         }
       else
         fetchurl {
           # stdenv.hostPlatform.system == "aarch64-darwin"
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-arm64";
-          hash = "sha256-+EP+HssT4aISUZwLKkSuuXjGQm9lheNJDr7WZw1v0pU=";
+          hash = "sha256-ArEXuX0JIa5NT04R0n4sCTA4HfQW43NDXV0EGcaibyQ=";
         };
 
     nativeBuildInputs = defaultShellUtils;
@@ -392,7 +393,7 @@ stdenv.mkDerivation rec {
       })
     ]
     # See enableNixHacks argument above.
-    ++ lib.optional enableNixHacks ./nix-hacks.patch;
+    ++ lib.optional enableNixHacks ./nix-build-bazel-package-hacks.patch;
 
   postPatch =
     let

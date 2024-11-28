@@ -7,7 +7,7 @@ let
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
       , linux-pam, bison, flex, perl, docbook_xml_dtd_45, docbook-xsl-nons, libxslt
 
-      , removeReferencesTo, writeShellApplication
+      , removeReferencesTo, writeShellScriptBin
 
       , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
       , gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic
@@ -49,10 +49,7 @@ let
       else
         stdenv;
 
-    pg_config = writeShellApplication {
-      name = "pg_config";
-      text = builtins.readFile ./pg_config.sh;
-    };
+    pg_config = writeShellScriptBin "pg_config" (builtins.readFile ./pg_config.sh);
   in stdenv'.mkDerivation (finalAttrs: {
     inherit version;
     pname = pname + lib.optionalString jitSupport "-jit";
@@ -157,13 +154,6 @@ let
         src = ./patches/locale-binary-path.patch;
         locale = "${if stdenv.hostPlatform.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
       })
-    ] ++ lib.optionals (olderThan "17" && atLeast "16") [
-      # TODO: Remove this with the next set of minor releases
-      (fetchpatch ({
-          url = "https://github.com/postgres/postgres/commit/b27622c90869aab63cfe22159a459c57768b0fa4.patch";
-          hash = "sha256-7G+BkJULhyx6nlMEjClcr2PJg6awgymZHr2JgGhXanA=";
-          excludes = [ "doc/*" ];
-        }))
     ] ++ lib.optionals stdenv'.hostPlatform.isMusl (
       # Using fetchurl instead of fetchpatch on purpose: https://github.com/NixOS/nixpkgs/issues/240141
       map fetchurl (lib.attrValues muslPatches)

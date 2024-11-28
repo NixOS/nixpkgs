@@ -7,8 +7,6 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Callable, ContextManager, Dict, Iterator, List, Optional, Union
 
-from colorama import Fore, Style
-
 from test_driver.logger import AbstractLogger
 from test_driver.machine import Machine, NixStartScript, retry
 from test_driver.polling_condition import PollingCondition
@@ -205,48 +203,11 @@ class Driver:
 
     def create_machine(
         self,
-        start_command: str | dict,
+        start_command: str,
         *,
         name: Optional[str] = None,
         keep_vm_state: bool = False,
     ) -> Machine:
-        # Legacy args handling
-        # FIXME: remove after 24.05
-        if isinstance(start_command, dict):
-            if name is not None or keep_vm_state:
-                raise TypeError(
-                    "Dictionary passed to create_machine must be the only argument"
-                )
-
-            args = start_command
-            start_command = args.pop("startCommand", SENTINEL)
-
-            if start_command is SENTINEL:
-                raise TypeError(
-                    "Dictionary passed to create_machine must contain startCommand"
-                )
-
-            if not isinstance(start_command, str):
-                raise TypeError(
-                    f"startCommand must be a string, got: {repr(start_command)}"
-                )
-
-            name = args.pop("name", None)
-            keep_vm_state = args.pop("keep_vm_state", False)
-
-            if args:
-                raise TypeError(
-                    f"Unsupported arguments passed to create_machine: {args}"
-                )
-
-            self.logger.warning(
-                Fore.YELLOW
-                + Style.BRIGHT
-                + "WARNING: Using create_machine with a single dictionary argument is deprecated and will be removed in NixOS 24.11"
-                + Style.RESET_ALL
-            )
-        # End legacy args handling
-
         tmp_dir = get_tmp_dir()
 
         cmd = NixStartScript(start_command)
