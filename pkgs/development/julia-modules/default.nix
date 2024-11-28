@@ -134,11 +134,16 @@ let
       "${juliaWrapped}/bin/julia" \
       "${if lib.versionAtLeast julia.version "1.7" then ./extract_artifacts.jl else ./extract_artifacts_16.jl}" \
       '${lib.generators.toJSON {} (import ./extra-libs.nix)}' \
+      '${lib.generators.toJSON {} (stdenv.hostPlatform.isDarwin)}' \
       "$out"
   '';
 
   # Import the artifacts Nix to build Overrides.toml (IFD)
-  artifacts = import artifactsNix { inherit lib fetchurl pkgs glibc stdenv; };
+  artifacts = import artifactsNix ({
+    inherit lib fetchurl pkgs stdenv;
+  } // lib.optionalAttrs (!stdenv.targetPlatform.isDarwin) {
+    inherit glibc;
+  });
   overridesJson = writeTextFile {
     name = "Overrides.json";
     text = lib.generators.toJSON {} artifacts;
