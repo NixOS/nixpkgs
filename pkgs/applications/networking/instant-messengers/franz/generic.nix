@@ -71,8 +71,6 @@ in stdenv.mkDerivation (rec {
   ];
   runtimeDependencies = [ libglvnd (lib.getLib stdenv.cc.cc) (lib.getLib udev) libnotify libappindicator-gtk3 ];
 
-  unpackPhase = "dpkg-deb -x $src .";
-
   installPhase = ''
     mkdir -p $out/bin
     cp -r opt $out

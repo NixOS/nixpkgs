@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uwsm";
-  version = "0.20.4";
+  version = "0.20.5";
 
   src = fetchFromGitHub {
     owner = "Vladimir-csp";
     repo = "uwsm";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-cvIkjDtGEEYCGFFfN7HhOFzUajLcDgt8CWqFyuJlvK4=";
+    hash = "sha256-RHxA0X3cqHtp4NZl7qlqBYkqOJay8IPoaj12bdouVkc=";
   };
 
   nativeBuildInputs = [
