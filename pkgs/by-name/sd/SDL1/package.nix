@@ -15,6 +15,7 @@
 , libpulseaudio
 , pkg-config
 , stdenv
+, unstableGitUpdater
 # Boolean flags
 , alsaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid
 , libGLSupported ? lib.meta.availableOn stdenv.hostPlatform libGL
@@ -109,7 +110,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = ./setup-hook.sh;
 
-  passthru = { inherit openglSupport; };
+  passthru = {
+    inherit openglSupport;
+
+    updateScript = unstableGitUpdater {
+      tagPrefix = "release-";
+    };
+  };
 
   meta = {
     homepage = "http://www.libsdl.org/";
