@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mlange-42/git-graph";
     license = licenses.mit;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [ cafkafk ];
+    maintainers = with maintainers; [ cafkafk matthiasbeyer ];
     mainProgram = "git-graph";
   };
 }
