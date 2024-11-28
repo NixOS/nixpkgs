@@ -11,8 +11,10 @@
   makeDesktopItem,
   nix-update-script,
   pango,
+  pkgs,
   pkg-config,
   rustPlatform,
+  stdenv,
 }:
 
 let
@@ -49,18 +51,25 @@ rustPlatform.buildRustPackage rec {
   # specify the subdirectory of the binary crate to build from the workspace
   buildAndTestSubdir = "psst-gui";
 
+  env = {
+    LIBCLANG_PATH = "${pkgs.llvmPackages_18.libclang.lib}/lib";
+  };
+
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    alsa-lib
-    atk
-    cairo
-    dbus
-    gdk-pixbuf
-    glib
-    gtk3
-    pango
-  ];
+  buildInputs =
+    [
+      atk
+      cairo
+      gdk-pixbuf
+      glib
+      gtk3
+      pango
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      dbus
+    ];
 
   patches = [
     # Use a fixed build time, hard-code upstream URL instead of trying to read `.git`
@@ -74,11 +83,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
-  meta = with lib; {
-    description = "Fast and multi-platform Spotify client with native GUI";
+  meta = {
+    description = "Spotify client with native GUI written in Rust, without Electron";
     homepage = "https://github.com/jpochyla/psst";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       vbrandl
       peterhoeg
     ];
