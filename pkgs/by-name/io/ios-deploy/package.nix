@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, darwin
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  darwin,
+  testers,
 }:
 
 let
