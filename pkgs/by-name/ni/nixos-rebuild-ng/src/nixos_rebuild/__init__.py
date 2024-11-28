@@ -230,7 +230,7 @@ def execute(argv: list[str]) -> None:
                 nix.copy_closure(
                     path_to_config,
                     to_host=target_host,
-                    from_host=None,
+                    from_host=build_host,
                     **copy_flags,
                 )
                 nix.set_profile(

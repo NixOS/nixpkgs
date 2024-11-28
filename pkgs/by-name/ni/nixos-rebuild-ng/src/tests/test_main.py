@@ -342,7 +342,7 @@ def test_execute_nix_switch_flake_build_host(
         ]
     )
 
-    assert mock_run.call_count == 5
+    assert mock_run.call_count == 6
     mock_run.assert_has_calls(
         [
             call(
@@ -378,6 +378,16 @@ def test_execute_nix_switch_flake_build_host(
                 ],
                 check=True,
                 stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [
+                    "nix-copy-closure",
+                    "--from",
+                    "user@localhost",
+                    config_path,
+                ],
+                check=True,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
