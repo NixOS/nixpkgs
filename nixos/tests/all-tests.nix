@@ -499,6 +499,7 @@ in {
   gotenberg = handleTest ./gotenberg.nix {};
   gotify-server = handleTest ./gotify-server.nix {};
   gotosocial = runTest ./web-apps/gotosocial.nix;
+  gphoto2 = runTest ./gphoto2.nix;
   grafana = handleTest ./grafana {};
   grafana-agent = handleTest ./grafana-agent.nix {};
   graphite = handleTest ./graphite.nix {};
