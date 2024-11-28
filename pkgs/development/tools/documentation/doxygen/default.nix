@@ -55,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   cmakeFlags = [
-    "-DICONV_INCLUDE_DIR=${libiconv}/include"
     "-Duse_sys_spdlog=ON"
     "-Duse_sys_sqlite3=ON"
   ] ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
