@@ -37,9 +37,11 @@ let
 
   arch = if stdenv.hostPlatform.isx86_64
     then "x86_64"
-    else if stdenv.hostPlatform.isx86_32
-      then "i386"
-      else null;
+  else if stdenv.hostPlatform.isx86_32
+    then "i386"
+  else if stdenv.hostPlatform.isAarch64
+    then "aarch64"
+  else null;
 
 in
 stdenv.mkDerivation rec {
