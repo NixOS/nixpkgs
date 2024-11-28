@@ -4640,6 +4640,8 @@ self: super: with self; {
 
   flake8-debugger = callPackage ../development/python-modules/flake8-debugger { };
 
+  flake8-deprecated = callPackage ../development/python-modules/flake8-deprecated { };
+
   flake8-docstrings = callPackage ../development/python-modules/flake8-docstrings { };
 
   flake8-future-import = callPackage ../development/python-modules/flake8-future-import { };
