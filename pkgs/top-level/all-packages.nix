@@ -11672,6 +11672,10 @@ with pkgs;
 
   jitsi-videobridge = callPackage ../servers/jitsi-videobridge { };
 
+  kanidmWithSecretProvisioning = callPackage ../by-name/ka/kanidm/package.nix {
+    enableSecretProvisioning = true;
+  };
+
   knot-resolver = callPackage ../servers/dns/knot-resolver {
     systemd = systemdMinimal; # in closure already anyway
   };
@@ -16805,8 +16809,6 @@ with pkgs;
   factorio-space-age = factorio.override { releaseType = "expansion"; };
 
   factorio-space-age-experimental = factorio.override { releaseType = "expansion"; experimental = true; };
-
-  factorio-mods = callPackage ../by-name/fa/factorio/mods.nix { };
 
   factorio-utils = callPackage ../by-name/fa/factorio/utils.nix { };
 

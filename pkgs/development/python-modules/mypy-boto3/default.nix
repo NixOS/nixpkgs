@@ -334,12 +334,12 @@ rec {
       "sha256-Iwi1LaWrIytRxtW38kVnYVIXihIy5ZFhRGaGHa9X+VM=";
 
   mypy-boto3-config =
-    buildMypyBoto3Package "config" "1.35.0"
-      "sha256-1pS2EkJapoNVi5lUEftaxbdoN4fd7XSFjWyLXH1noL0=";
+    buildMypyBoto3Package "config" "1.35.71"
+      "sha256-qycjnRcrEJ2P3dpciMVFPno1wz3tEJ6pa6z8TlLwTME=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.35.68"
-      "sha256-GYoIg5r8ZvIbf1R/ED9FqN2GVyrtNNWF4Jxd8seFFds=";
+    buildMypyBoto3Package "connect" "1.35.70"
+      "sha256-oq3BEKupaGgOJd3zlXSaglG4SaPfRuU++XEai2N8vRs=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.35.0"
@@ -446,8 +446,8 @@ rec {
       "sha256-wBJ7PnAlsi88AZIRPoNgbzOhPwUAJBegtwk+tw1lOwU=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.35.67"
-      "sha256-lcm+V2h0cVogSktbLJd1duPUYaHvDTVKVFJIhfbbZrc=";
+    buildMypyBoto3Package "ec2" "1.35.70"
+      "sha256-k/ndrawwPWPzTNTApgpoLACNZV07LPp00SNPvemgtAE=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.35.0"
@@ -558,8 +558,8 @@ rec {
       "sha256-dUbtx84rCJ5zRHxmdpGFAychNH/F98eviwdwqmslPLk=";
 
   mypy-boto3-fsx =
-    buildMypyBoto3Package "fsx" "1.35.27"
-      "sha256-rPVWNk0+Xt9kMAl8xD0xM/EIbiYPSUL8Yc8b+2RcD4o=";
+    buildMypyBoto3Package "fsx" "1.35.71"
+      "sha256-niDZs6XFOHHFSVxFNNbHqTeEiFqIpAYrOSd/A0I/FbI=";
 
   mypy-boto3-gamelift =
     buildMypyBoto3Package "gamelift" "1.35.59"

@@ -13663,6 +13663,8 @@ self: super: with self; {
 
   rawkit = callPackage ../development/python-modules/rawkit { };
 
+  rawpy = callPackage ../development/python-modules/rawpy { };
+
   ray = callPackage ../development/python-modules/ray { };
 
   raylib-python-cffi = callPackage ../development/python-modules/raylib-python-cffi {};

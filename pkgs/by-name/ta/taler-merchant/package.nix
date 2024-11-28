@@ -80,7 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
   checkTarget = "check";
 
   meta = {
-    description = ''
+    description = "Merchant component for the GNU Taler electronic payment system";
+    longDescription = ''
       This is the GNU Taler merchant backend. It provides the logic that should run
       at every GNU Taler merchant.  The GNU Taler merchant is a RESTful backend that
       can be used to setup orders and process payments.  This component allows
