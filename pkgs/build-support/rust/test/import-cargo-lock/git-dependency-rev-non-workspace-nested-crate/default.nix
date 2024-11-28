@@ -2,6 +2,7 @@
   rustPlatform,
   pkg-config,
   openssl,
+  zlib,
   lib,
   darwin,
   stdenv,
@@ -29,6 +30,7 @@ rustPlatform.buildRustPackage {
   buildInputs =
     [
       openssl
+      zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
