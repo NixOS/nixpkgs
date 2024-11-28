@@ -4,6 +4,7 @@
 , makeWrapper
 , ruby
 , bundlerEnv
+, testers
 , python3
 }:
 
@@ -13,14 +14,14 @@ let
     name = "metasploit-bundler-env";
     gemdir = ./.;
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "metasploit-framework";
   version = "6.4.37";
 
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
-    rev = "refs/tags/${version}";
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-/c0F/5bbuQYkNB2tzjK2NGoTr3OD4fAUUEjiJVybKFM=";
   };
 
@@ -35,6 +36,8 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true; # stay away from exploit executables
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/msf}
 
     cp -r * $out/share/msf
@@ -54,7 +57,17 @@ in stdenv.mkDerivation rec {
 
     makeWrapper ${env}/bin/bundle $out/bin/msf-pattern_offset \
       --add-flags "exec ${ruby}/bin/ruby $out/share/msf/tools/exploit/pattern_offset.rb"
+
+
+    runHook postInstall 
   '';
+
+  passthru.tests = {
+    msfconsole-version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "HOME=/tmp msfconsole -q -x 'version;exit'";
+    };
+  };
 
   # run with: nix-shell maintainers/scripts/update.nix --argstr path metasploit
   passthru.updateScript = ./update.sh;
@@ -67,4 +80,4 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fab makefu ];
     mainProgram = "msfconsole";
   };
-}
+})
