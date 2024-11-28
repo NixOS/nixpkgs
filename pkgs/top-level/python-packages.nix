@@ -16303,6 +16303,8 @@ self: super: with self; {
 
   turnt = callPackage ../development/python-modules/turnt { };
 
+  turrishw = callPackage ../development/python-modules/turrishw { };
+
   tuya-device-sharing-sdk = callPackage ../development/python-modules/tuya-device-sharing-sdk { };
 
   tuya-iot-py-sdk = callPackage ../development/python-modules/tuya-iot-py-sdk { };
