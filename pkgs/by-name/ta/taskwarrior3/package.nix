@@ -23,6 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-iKpOExj1xM9rU/rIcOLLKMrZrAfz7y9X2kt2CjfMOOQ=";
     fetchSubmodules = true;
   };
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-cargo-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = finalAttrs.src.name;
+    hash = "sha256-L+hYYKXSOG4XYdexLMG3wdA7st+A9Wk9muzipSNjxrA=";
+  };
+  cargoRoot = "./";
 
   postPatch = ''
     substituteInPlace src/commands/CmdNews.cpp \
@@ -43,13 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   checkTarget = "build_tests";
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-cargo-deps";
-    inherit (finalAttrs) src;
-    sourceRoot = finalAttrs.src.name;
-    hash = "sha256-L+hYYKXSOG4XYdexLMG3wdA7st+A9Wk9muzipSNjxrA=";
-  };
-  cargoRoot = "./";
   preConfigure = ''
     export CMAKE_PREFIX_PATH="${corrosion}:$CMAKE_PREFIX_PATH"
   '';
