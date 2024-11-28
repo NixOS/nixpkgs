@@ -13950,11 +13950,6 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) CoreServices Security;
   };
 
-  fire = darwin.apple_sdk_11_0.callPackage ../applications/audio/fire {
-    inherit (darwin.apple_sdk_11_0.frameworks) Accelerate Cocoa WebKit CoreServices DiscRecording CoreAudioKit MetalKit;
-    inherit (darwin.apple_sdk_11_0.libs) simd;
-  };
-
   buildMozillaMach = opts: callPackage (import ../applications/networking/browsers/firefox/common.nix opts) { };
 
   firefox-unwrapped = import ../applications/networking/browsers/firefox/packages/firefox.nix {
