@@ -12,7 +12,6 @@
   python3,
   xdg-utils,
   installShellFiles,
-  darwin,
 }:
 stdenv.mkDerivation rec {
   pname = "taskwarrior";
@@ -30,22 +29,16 @@ stdenv.mkDerivation rec {
       --replace "xdg-open" "${lib.getBin xdg-utils}/bin/xdg-open"
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      libuuid
-      python3
-      installShellFiles
-      corrosion
-      cargo
-      rustc
-      rustPlatform.cargoSetupHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # darwin dependencies
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  nativeBuildInputs = [
+    cmake
+    libuuid
+    python3
+    installShellFiles
+    corrosion
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
+  ];
 
   doCheck = true;
   checkTarget = "build_tests";
