@@ -20,8 +20,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://fastnlo.hepforge.org/code/v25/fastnlo_toolkit-${version}.tar.gz";
-    sha256 = "sha256-7aIMYCOkHC/17CHYiEfrxvtSJxTDivrS7BQ32cGiEy0=";
+    hash = "sha256-7aIMYCOkHC/17CHYiEfrxvtSJxTDivrS7BQ32cGiEy0=";
   };
+
+  postPatch = ''
+    substituteInPlace py-compile \
+      --replace-fail "import sys, os, py_compile, imp" "import sys, os, py_compile, importlib" \
+      --replace-fail "imp." "importlib." \
+      --replace-fail "hasattr(imp" "hasattr(importlib"
+  '';
 
   patches = [
     # Compatibility with YODA 2.x
@@ -36,9 +43,14 @@ stdenv.mkDerivation rec {
     yoda
   ] ++ lib.optional withPython python ++ lib.optional (withPython && python.isPy3k) ncurses;
 
-  propagatedBuildInputs = [
-    zlib
-  ] ++ lib.optional withPython swig;
+  propagatedBuildInputs =
+    [
+      zlib
+    ]
+    ++ lib.optional withPython [
+      swig
+      python.pkgs.distutils
+    ];
 
   preConfigure = ''
     substituteInPlace ./fastnlotoolkit/Makefile.in \
