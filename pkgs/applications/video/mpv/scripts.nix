@@ -82,69 +82,24 @@ let
 
   scope =
     self:
-    let
-      inherit (self) callPackage;
-    in
     lib.mapAttrsRecursiveCond (x: x.recurseForDerivations or false) addTests (
-      lib.recurseIntoAttrs {
-        inherit (callPackage ./mpv.nix { })
-          acompressor
-          autocrop
-          autodeint
-          autoload
-          ;
-        inherit (callPackage ./occivink.nix { })
-          blacklistExtensions
-          crop
-          encode
-          seekTo
-          ;
-
-        buildLua = callPackage ./buildLua.nix { };
-        autosub = callPackage ./autosub.nix { };
-        autosubsync-mpv = callPackage ./autosubsync-mpv.nix { };
-        chapterskip = callPackage ./chapterskip.nix { };
-        convert = callPackage ./convert.nix { };
-        cutter = callPackage ./cutter.nix { };
-        dynamic-crop = callPackage ./dynamic-crop.nix { };
-        evafast = callPackage ./evafast.nix { };
-        inhibit-gnome = callPackage ./inhibit-gnome.nix { };
-        memo = callPackage ./memo.nix { };
-        manga-reader = callPackage ./manga-reader.nix { };
-        modernx = callPackage ./modernx.nix { };
-        modernx-zydezu = callPackage ./modernx-zydezu.nix { };
-        mpris = callPackage ./mpris.nix { };
-        mpv-cheatsheet = callPackage ./mpv-cheatsheet.nix { };
-        mpv-discord = callPackage ./mpv-discord.nix { };
-        mpv-notify-send = callPackage ./mpv-notify-send.nix { };
-        mpv-osc-modern = callPackage ./mpv-osc-modern.nix { };
-        mpv-osc-tethys = callPackage ./mpv-osc-tethys.nix { };
-        mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { };
-        mpv-slicing = callPackage ./mpv-slicing.nix { };
-        mpv-subtitle-lines = callPackage ./mpv-subtitle-lines.nix { };
-        mpv-webm = callPackage ./mpv-webm.nix { };
-        mpvacious = callPackage ./mpvacious.nix { };
-        quack = callPackage ./quack.nix { };
-        quality-menu = callPackage ./quality-menu.nix { };
-        reload = callPackage ./reload.nix { };
-        simple-mpv-webui = callPackage ./simple-mpv-webui.nix { };
-        smart-copy-paste-2 = callPackage ./smart-copy-paste-2.nix { };
-        smartskip = callPackage ./smartskip.nix { };
-        sponsorblock = callPackage ./sponsorblock.nix { };
-        sponsorblock-minimal = callPackage ./sponsorblock-minimal.nix { };
-        thumbfast = callPackage ./thumbfast.nix { };
-        thumbnail = callPackage ./thumbnail.nix { };
-        uosc = callPackage ./uosc.nix { };
-        videoclip = callPackage ./videoclip.nix { };
-        visualizer = callPackage ./visualizer.nix { };
-        vr-reversal = callPackage ./vr-reversal.nix { };
-        webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
-        youtube-chat = callPackage ./youtube-chat.nix { };
-        youtube-upnext = callPackage ./youtube-upnext.nix { };
-      }
+      lib.recurseIntoAttrs (
+        lib.filesystem.packagesFromDirectoryRecursive {
+          inherit (self) callPackage;
+          directory = ./scripts;
+        }
+      )
     );
 
-  aliases = {
+  aliases = self: {
+    acompressor = self.mpv.acompressor; # added 2024-11-28
+    autocrop = self.mpv.autocrop; # added 2024-11-28
+    autodeint = self.mpv.autodeint; # added 2024-11-28
+    autoload = self.mpv.autoload; # added 2024-11-28
+    blacklistExtensions = self.occivink.blacklistExtensions; # added 2024-11-28
+    crop = self.occivink.crop; # added 2024-11-28
+    encode = self.occivink.encode; # added 2024-11-28
+    seekTo = self.occivink.seekTo; # added 2024-11-28
     youtube-quality = throw "'youtube-quality' is no longer maintained, use 'quality-menu' instead"; # added 2023-07-14
   };
 in
@@ -153,7 +108,7 @@ lib.pipe scope [
   (lib.makeScope newScope)
   (
     self:
-    assert builtins.intersectAttrs self aliases == { };
-    self // lib.optionalAttrs config.allowAliases aliases
+    assert builtins.intersectAttrs self (aliases self) == { };
+    self // lib.optionalAttrs config.allowAliases (aliases self)
   )
 ]
