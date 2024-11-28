@@ -7,17 +7,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pywal16";
-  version = "3.6.0";
+  version = "3.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eylles";
     repo = "pywal16";
     rev = "refs/tags/${version}";
-    hash = "sha256-YKHOH1bEsZHTgYm8AYpfA6C8RtWxAqNQ+GHMcdaj/JU=";
+    hash = "sha256-XDOmpeONPW6b1ZEGk272wwraTLR8PjjniIXm0M9BGU4=";
   };
 
-  nativeBuildInputs = [ python3.pkgs.setuptools ];
+  build-system = [ python3.pkgs.setuptools ];
 
   nativeCheckInputs = [
     python3.pkgs.pytestCheckHook
