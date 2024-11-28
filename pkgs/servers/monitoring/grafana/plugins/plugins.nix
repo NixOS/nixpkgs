@@ -8,6 +8,7 @@
   grafadruid-druid-datasource = callPackage ./grafadruid-druid-datasource { };
   grafana-clickhouse-datasource = callPackage ./grafana-clickhouse-datasource { };
   grafana-clock-panel = callPackage ./grafana-clock-panel { };
+  grafana-github-datasource = callPackage ./grafana-github-datasource { };
   grafana-oncall-app = callPackage ./grafana-oncall-app { };
   grafana-piechart-panel = callPackage ./grafana-piechart-panel { };
   grafana-polystat-panel = callPackage ./grafana-polystat-panel { };
