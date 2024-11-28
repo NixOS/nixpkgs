@@ -6,6 +6,7 @@ stdenv.mkDerivation rec {
   version = "3.5.9";
 
   src = fetchurl {
+    name = "morgen-${version}.deb";
     url = "https://dl.todesktop.com/210203cqcj00tw1/versions/${version}/linux/deb";
     hash = "sha256-ZKlj/QuQnrqQepsJY6KCROC2fXK/4Py5tmI/FVnRi9w=";
   };
@@ -18,10 +19,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ alsa-lib gtk3 libxshmfence mesa nss ];
-
-  unpackCmd = ''
-    dpkg-deb -x ${src} ./morgen-${pname}
-  '';
 
   installPhase = ''
     runHook preInstall

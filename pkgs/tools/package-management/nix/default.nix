@@ -6,7 +6,6 @@
 , libgit2
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , fetchpatch2
 , runCommand
 , buildPackages
@@ -177,12 +176,6 @@ in lib.makeExtensible (self: ({
     version = "2.18.9";
     hash = "sha256-RrOFlDGmRXcVRV2p2HqHGqvzGNyWoD0Dado/BNlJ1SI=";
     self_attribute_name = "nix_2_18";
-  };
-
-  nix_2_19 = common {
-    version = "2.19.7";
-    hash = "sha256-CkT1SNwRYYQdN2X4cTt1WX3YZfKZFWf7O1YTEo1APfc=";
-    self_attribute_name = "nix_2_19";
   };
 
   nix_2_24 = common {

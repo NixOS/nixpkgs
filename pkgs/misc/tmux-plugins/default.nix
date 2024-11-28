@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , pkgs
 , stdenv
+, config
 }:
 
 let
@@ -49,8 +50,6 @@ let
 
 in rec {
   inherit mkTmuxPlugin;
-
-  mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
 
   battery = mkTmuxPlugin {
     pluginName = "battery";
@@ -911,4 +910,6 @@ in rec {
       maintainers = with maintainers; [ o0th ];
     };
   };
+} // lib.optionalAttrs config.allowAliases {
+  mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
 }

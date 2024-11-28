@@ -26,7 +26,7 @@ buildEnv {
     done
   '';
 
-  meta = snis-unwrapped // {
+  meta = snis-unwrapped.meta // {
     hydraPlatforms = [ ];
   };
 }

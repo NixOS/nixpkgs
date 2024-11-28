@@ -12,7 +12,7 @@ let
     fetchurl
       {
         x86_64-darwin = {
-          url = "https://github.com/Future-Scholars/peperlib/releases/download/release-electron-${version}/Paperlib_${version}.dmg";
+          url = "https://github.com/Future-Scholars/paperlib/releases/download/release-electron-${version}/Paperlib_${version}.dmg";
           hash = "sha256-d9vEFx59K15PO7DJYJQ2fjiagqa8oJLtoawILDF9IKc=";
         };
         x86_64-linux = {
@@ -48,6 +48,8 @@ if stdenv.hostPlatform.isDarwin then
       meta
       passthru
       ;
+
+    sourceRoot = ".";
 
     nativeBuildInputs = [ undmg ];
 

@@ -813,13 +813,13 @@
     "vendorHash": "sha256-cFt/fbgJsLATi9aolKl9ra1xAz9zp3JjWk+a5aWs88o="
   },
   "minio": {
-    "hash": "sha256-h2zGfU4Ud5sZ2zjcsWGnaVpGRPTpWVJYTIUvWMrF7AQ=",
+    "hash": "sha256-aSEzsncqNLWfVnnGfz/fDpRw9w2muGnybX8WYd1tP/Y=",
     "homepage": "https://registry.terraform.io/providers/aminueza/minio",
     "owner": "aminueza",
     "repo": "terraform-provider-minio",
-    "rev": "v2.5.1",
+    "rev": "v3.2.1",
     "spdx": "AGPL-3.0",
-    "vendorHash": "sha256-Gn4P4NIksv8S4DmnuYArxdSQDQsyCeayJJAIkmm/I6A="
+    "vendorHash": "sha256-a9v1nVG3NiuyHwJGhIKKKXFDp4/Cb533EJxrfqK9h/A="
   },
   "mongodbatlas": {
     "hash": "sha256-ztdzVTCQDPOgXVv/39SDfaNM4wR/zh5ReikEGz4S8Jw=",
@@ -1264,13 +1264,13 @@
     "vendorHash": null
   },
   "tfe": {
-    "hash": "sha256-v5DHEp/O0y4TrOpqOfkBtv4IWTvXV2WPypsRUj3XgOw=",
+    "hash": "sha256-gCgbov6Psb884CJjYBIQM0180gwEQIt3yjXlZpgODao=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/tfe",
     "owner": "hashicorp",
     "repo": "terraform-provider-tfe",
-    "rev": "v0.59.0",
+    "rev": "v0.60.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-LgTSyu1TzGT+SV2y9Xoqxv2F828nSTIJp03yMV9OkjM="
+    "vendorHash": "sha256-8k2t5oUBzA9qMtmkJiq4wNpKpUT+Y83vx/TiUDs+B68="
   },
   "thunder": {
     "hash": "sha256-2i1DSOSt/vbFs0QCPogEBvADhLJFKbrQzwZ20ChCQMk=",
