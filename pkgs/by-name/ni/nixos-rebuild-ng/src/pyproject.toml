@@ -43,6 +43,8 @@ extend-select = [
     "I",
     # require `check` argument for `subprocess.run`
     "PLW1510",
+    # check for needless exception names in raise statements
+    "TRY201",
 ]
 
 [tool.ruff.lint.per-file-ignores]

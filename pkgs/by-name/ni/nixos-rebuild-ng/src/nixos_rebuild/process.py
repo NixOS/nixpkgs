@@ -114,10 +114,10 @@ def run_wrapper(
             errors="surrogateescape",
             **kwargs,
         )
-    except subprocess.CalledProcessError as ex:
+    except subprocess.CalledProcessError:
         if sudo and remote:
             logger.error(
                 "while running command with remote sudo, did you forget to use "
                 + "--ask-sudo-password?"
             )
-        raise ex
+        raise

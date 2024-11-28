@@ -323,6 +323,6 @@ def main() -> None:
         execute(sys.argv)
     except (Exception, KeyboardInterrupt) as ex:
         if logger.level == logging.DEBUG:
-            raise ex
+            raise
         else:
             sys.exit(str(ex))
