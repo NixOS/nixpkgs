@@ -5,6 +5,7 @@
   pkg-config,
   openssl,
   zlib,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,10 +23,13 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-    zlib
-  ];
+  buildInputs =
+    [
+      zlib
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      openssl
+    ];
 
   buildFeatures = [ "fix" ];
 
