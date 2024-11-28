@@ -14,6 +14,9 @@ let
     simple_top_level_attr = "1.0";
     nested.attrset.has.a.integer.value = 100;
     some_floaty = 29.95;
+    ## dashes in key names
+    top-level-dash = "pass";
+    nested.level-dash = "pass";
     ## Same syntax here on these two, but they should get serialized differently:
     # > A list may have zero or more elements, each of which can be a scalar value, an array, a group, or another list.
     list1d = libconfig.lib.mkList [ 1 "mixed!" 5 2 ];
