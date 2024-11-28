@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zram-generator";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-NcMqMCYk5IhNwohceBT8ySefkzMxnQ5Xv5USenFV0bk=";
+    hash = "sha256-aGBvvjGKZ5biruwmJ0ITakqPhTWs9hspRIE9QirqstA=";
   };
 
   # RFE: Include Cargo.lock in sources
