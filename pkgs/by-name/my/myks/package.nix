@@ -32,7 +32,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   passthru.tests.version = testers.testVersion { package = myks; };
 

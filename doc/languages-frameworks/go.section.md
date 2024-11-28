@@ -182,7 +182,7 @@ When set to `0`, the [cgo](https://pkg.go.dev/cmd/cgo) command is disabled. As c
 program can't link against C libraries anymore, and the resulting binary is statically linked.
 
 When building with CGO enabled, Go will likely link some packages from the Go standard library against C libraries,
-even when the target code does not explicitly call into C dependencies. With `CGO_ENABLED = 0;`, Go
+even when the target code does not explicitly call into C dependencies. With `env.CGO_ENABLED = 0;`, Go
 will always use the Go native implementation of these internal packages. For reference see
 [net](https://pkg.go.dev/net#hdr-Name_Resolution) and [os/user](https://pkg.go.dev/os/user#pkg-overview) packages.
 Notice that the decision whether these packages should use native Go implementation or not can also be controlled

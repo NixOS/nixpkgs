@@ -19,7 +19,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   ldflags = [
     "-s"

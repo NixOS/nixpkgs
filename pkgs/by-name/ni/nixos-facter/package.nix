@@ -35,7 +35,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-qDzd+aq08PN9kl1YkvNLGvWaFVh7xFXJhGdx/ELwYGY=";
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   buildInputs = [
     libusb1

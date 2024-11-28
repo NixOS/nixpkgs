@@ -17,7 +17,7 @@ buildGoModule rec {
     rm get_e2e_test.go get_e2e_utils_test.go
   '';
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [ "-s" "-w" ];
 

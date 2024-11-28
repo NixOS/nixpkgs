@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   tags = [ "containers_image_openpgp" "remote" ]
     ++ lib.optional stdenv.hostPlatform.isDarwin "darwin";

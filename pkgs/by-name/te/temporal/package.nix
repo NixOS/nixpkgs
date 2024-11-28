@@ -15,7 +15,7 @@ buildGoModule rec {
 
   excludedPackages = [ "./build" ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [ "-s" "-w" ];
 

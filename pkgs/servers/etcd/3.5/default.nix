@@ -21,7 +21,7 @@ let
     hash = etcdSrcHash;
   };
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   meta = with lib; {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";

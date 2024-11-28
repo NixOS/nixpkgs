@@ -15,7 +15,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/kapp" ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-X carvel.dev/kapp/pkg/kapp/version.Version=${version}"

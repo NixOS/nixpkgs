@@ -21,7 +21,7 @@ buildGoModule rec {
     "-X" "github.com/vektra/mockery/v2/pkg/logging.SemVer=v${version}"
   ];
 
-  CGO_ENABLED = false;
+  env.CGO_ENABLED = false;
 
   proxyVendor = true;
   vendorHash = "sha256-z1ceS+LO6d7T264pw2BLadw804aGRISyrKW/dr4fZHA=";

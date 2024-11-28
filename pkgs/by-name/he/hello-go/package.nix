@@ -10,7 +10,7 @@ buildGoModule {
 
   vendorHash = null;
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   # go installs binary into $out/bin/$GOOS_$GOARCH/hello-go in cross compilation
   postInstall = ''

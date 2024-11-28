@@ -20,7 +20,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-xoc7NSdg5bn3aXgcrolJwv8jyrv2HEXFmiCtRXBVwVg=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   subPackages = [
     "cmd/webmesh-node"

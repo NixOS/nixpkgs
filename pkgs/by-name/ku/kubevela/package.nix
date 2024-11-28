@@ -28,7 +28,7 @@ buildGoModule rec {
 
   subPackages = [ "references/cmd/cli" ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   # Workaround for permission issue in shell completion
   HOME = "$TMPDIR";

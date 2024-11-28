@@ -28,7 +28,7 @@ buildGoModule rec {
     "-X github.com/ethersphere/bee/v2/pkg/postage/listener.batchFactorOverridePublic=5"
   ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   postInstall = ''
     mkdir -p $out/lib/systemd/system

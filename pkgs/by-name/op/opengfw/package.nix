@@ -9,7 +9,7 @@ let
 in
 buildGoModule {
   inherit pname version;
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
   vendorHash = "sha256-F8jTvgxOhOGVtl6B8u0xAIvjNwVjBtvAhApzjIgykpY=";
 
   src = fetchFromGitHub {

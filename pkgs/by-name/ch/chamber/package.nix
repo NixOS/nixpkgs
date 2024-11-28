@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-1ySOlP0sFk3+IRt/zstZK6lEE2pzoVSiZz3wFxdesgc=";
   };
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   vendorHash = "sha256-KlouLjW9hVKFi9uz34XHd4CzNOiyO245QNygkB338YQ=";
 

@@ -3,5 +3,5 @@
 grafana-loki.overrideAttrs (o: {
   pname = "promtail";
   subPackages = [ "clients/cmd/promtail" ];
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 })

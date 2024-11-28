@@ -19,7 +19,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/imgpkg" ];
 
-  CGO_ENABLED = "0";
+  env.CGO_ENABLED = "0";
   ldflags = [ "-X=carvel.dev/imgpkg/pkg/imgpkg/cmd.Version=${version}" ];
 
   meta = {

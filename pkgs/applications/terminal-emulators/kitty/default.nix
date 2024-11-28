@@ -120,7 +120,7 @@ buildPythonApplication rec {
     "fortify3"
   ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
   GOFLAGS = "-trimpath";
 
   configurePhase = ''
