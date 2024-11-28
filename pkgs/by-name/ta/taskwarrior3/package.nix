@@ -13,13 +13,13 @@
   xdg-utils,
   installShellFiles,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "taskwarrior";
   version = "3.1.0";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-iKpOExj1xM9rU/rIcOLLKMrZrAfz7y9X2kt2CjfMOOQ=";
     fetchSubmodules = true;
   };
@@ -44,9 +44,9 @@ stdenv.mkDerivation rec {
   checkTarget = "build_tests";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${pname}-${version}-cargo-deps";
-    inherit src;
-    sourceRoot = src.name;
+    name = "${finalAttrs.pname}-${finalAttrs.version}-cargo-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = finalAttrs.src.name;
     hash = "sha256-L+hYYKXSOG4XYdexLMG3wdA7st+A9Wk9muzipSNjxrA=";
   };
   cargoRoot = "./";
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   passthru.tests.nixos = nixosTests.taskchampion-sync-server;
 
   meta = {
-    changelog = "https://github.com/GothenburgBitFactory/taskwarrior/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/GothenburgBitFactory/taskwarrior/blob/${finalAttrs.src.rev}/ChangeLog";
     description = "Highly flexible command-line tool to manage TODO lists";
     homepage = "https://taskwarrior.org";
     license = lib.licenses.mit;
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     mainProgram = "task";
     platforms = lib.platforms.unix;
   };
-}
+})
