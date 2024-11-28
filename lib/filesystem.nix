@@ -306,6 +306,16 @@ in
         As a result, directories with no `.nix` files (including empty
         directories) will be transformed into empty attribute sets.
 
+    # Type
+
+    ```
+    packagesFromDirectoryRecursive :: {
+      callPackage :: Path -> {} -> a,
+      directory :: Path,
+      ...
+    } -> AttrSet
+    ```
+
     # Inputs
 
     Structured function argument
@@ -317,20 +327,10 @@ in
 
       : `pkgs.callPackage`
 
-        Type: `Path -> AttrSet -> a`
-
       `directory`
 
       : The directory to read package files from
 
-        Type: `Path`
-
-
-    # Type
-
-    ```
-    packagesFromDirectoryRecursive :: AttrSet -> AttrSet
-    ```
 
     # Examples
     :::{.example}
