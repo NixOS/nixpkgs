@@ -1,4 +1,4 @@
-outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib-ng, pcre2, libxml2, libxslt
+outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib-ng, pcre, libxml2, libxslt
 , nginx-doc
 
 , nixosTests
@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     removeReferencesTo
   ] ++ nativeBuildInputs;
 
-  buildInputs = [ openssl zlib-ng pcre2 libxml2 libxslt perl ]
+  buildInputs = [ openssl zlib-ng pcre libxml2 libxslt perl ]
     ++ buildInputs
     ++ mapModules "inputs"
     ++ lib.optional withGeoIP geoip
