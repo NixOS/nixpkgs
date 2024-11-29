@@ -6,7 +6,9 @@ let
 
   extension-env = pkgs.buildEnv {
     name = "freshrss-extensions";
-    paths = cfg.extensions;
+    paths = cfg.extensions ++ [ (pkgs.runCommandLocal "mkdir-freshrss-extensions" {} ''
+        mkdir -p $out/share/freshrss/extensions/
+      '') ];
   };
   env-vars = {
     DATA_PATH = cfg.dataDir;
