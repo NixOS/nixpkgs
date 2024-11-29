@@ -46,8 +46,11 @@ buildDotnetModule rec {
     mv $out/bin/WalletWasabi.Backend $out/bin/WasabiBackend
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) wasabibackend;
+  passthru = {
+    updateScript = ./update.sh;
+    tests = {
+      inherit (nixosTests) wasabibackend;
+    };
   };
 
   meta = {
