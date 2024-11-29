@@ -13,7 +13,7 @@ from .helpers import get_qualified_name
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-def test_copy_closure(mock_run: Any) -> None:
+def test_copy_closure(mock_run: Any, monkeypatch: Any) -> None:
     closure = Path("/path/to/closure")
     n.copy_closure(closure, None)
     mock_run.assert_not_called()
@@ -35,11 +35,12 @@ def test_copy_closure(mock_run: Any) -> None:
         remote=None,
     )
 
+    monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-target-opt")
     n.copy_closure(closure, target_host, build_host)
     mock_run.assert_called_with(
         ["nix-copy-closure", "--to", "user@target.host", closure],
-        extra_env={"NIX_SSHOPTS": "--ssh target-opt"},
         remote=build_host,
+        extra_env={"NIX_SSHOPTS": "--ssh build-target-opt"},
     )
 
 

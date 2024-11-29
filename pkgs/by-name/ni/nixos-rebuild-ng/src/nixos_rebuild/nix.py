@@ -46,7 +46,14 @@ def copy_closure(
             host.host,
             closure,
         ],
-        extra_env={"NIX_SSHOPTS": " ".join(host.opts)},
+        extra_env={
+            # for the remote to remote case, we can't use host.opts because it
+            # includes the ControlPane opts that will not work in the remote,
+            # because the temporary directory that we created will not exist
+            "NIX_SSHOPTS": os.environ.get("NIX_SSHOPTS", "")
+            if from_host and to_host
+            else " ".join(host.opts)
+        },
         remote=from_host if to_host else None,
     )
 
