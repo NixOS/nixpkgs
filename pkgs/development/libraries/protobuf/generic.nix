@@ -13,6 +13,7 @@
   zlib,
   version,
   hash,
+  versionCheckHook,
 
   # downstream dependencies
   python3,
@@ -31,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     inherit hash;
   };
 
@@ -93,6 +94,13 @@ stdenv.mkDerivation (finalAttrs: {
     # Also AnyTest.TestPackFromSerializationExceedsSizeLimit fails on 32-bit platforms
     # https://github.com/protocolbuffers/protobuf/issues/8460
     && !stdenv.hostPlatform.is32bit;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = [ "${placeholder "out"}/bin/protoc" ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru = {
     tests = {
