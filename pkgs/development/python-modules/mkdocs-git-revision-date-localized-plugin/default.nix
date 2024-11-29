@@ -8,12 +8,14 @@
   mkdocs,
   pytz,
   pytestCheckHook,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-git-revision-date-localized-plugin";
-  version = "1.2.9";
-  format = "setuptools";
+  version = "1.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,8 +23,14 @@ buildPythonPackage rec {
     owner = "timvink";
     repo = "mkdocs-git-revision-date-localized-plugin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1SuENREPkU9W5ldMIXDCALLMx0AiTs4dNYJYjrkaegc=";
+    hash = "sha256-Z0a/V8wyo15E7bTumLRM+0QxMGXlxVc1Sx9uXlDbg+8=";
   };
+
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     babel
