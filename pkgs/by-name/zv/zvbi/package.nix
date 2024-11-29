@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zvbi";
-  version = "0.2.42-unstable-2024-03-21";
+  version = "0.2.42-unstable-2024-11-29";
 
   src = fetchFromGitHub {
     owner = "zapping-vbi";
     repo = "zvbi";
-    rev = "a48ab3a0d72efe9968ebafa34c425c892e4afa50";
-    hash = "sha256-1VTTNfXZ12hJWiW+M1WsE8H/PejrJsT/E2RHZ3OSIC8=";
+    rev = "f3aca6cb9eaf2b4f1fd28e94563db4773b98dfca";
+    hash = "sha256-SG+MXauK4bZ1IMxklVt5R2y864Zs3MjGtpfN4np7xiE=";
   };
 
   nativeBuildInputs = [
