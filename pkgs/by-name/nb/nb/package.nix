@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, installShellFiles }:
+{ stdenv, lib, fetchFromGitHub, installShellFiles, testers, nix-update-script, nb }:
 
 stdenv.mkDerivation rec {
   pname = "nb";
@@ -24,6 +24,15 @@ stdenv.mkDerivation rec {
   postInstall = ''
     installShellCompletion --cmd nb etc/nb-completion.{bash,zsh,fish}
   '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = nb;
+      # Setting EDITOR to avoid: "Command line text editor not found"
+      command = "EDITOR=nano nb --version";
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Command line note-taking, bookmarking, archiving, and knowledge base application";
