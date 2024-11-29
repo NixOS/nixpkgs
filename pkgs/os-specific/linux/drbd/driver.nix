@@ -1,12 +1,21 @@
-{ stdenv, lib, fetchurl, kernel, nixosTests, flex, coccinelle, python3 }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  kernel,
+  nixosTests,
+  flex,
+  coccinelle,
+  python3,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drbd";
-  version = "9.2.9";
+  version = "9.2.12";
 
   src = fetchurl {
     url = "https://pkg.linbit.com//downloads/drbd/9/drbd-${finalAttrs.version}.tar.gz";
-    hash = "sha256-MLG0hGvAjjkNxhszbpnb8fkzWUQC1zPhkeOaU0V5x3g=";
+    hash = "sha256-amdcyPTynGTaaZh558Q3KnGuGyyLJKnsY+NBCO26Jq0=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -17,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     coccinelle
     python3
   ];
+
+  enableParallelBuilding = true;
 
   makeFlags = kernel.makeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
