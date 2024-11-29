@@ -6,7 +6,6 @@ import os
 import sys
 from pathlib import Path
 from subprocess import run
-from tempfile import TemporaryDirectory
 from typing import assert_never
 
 from . import nix
@@ -164,16 +163,11 @@ def execute(argv: list[str]) -> None:
     flake_build_flags = common_build_flags | vars(args_groups["flake_build_flags"])
     copy_flags = common_flags | vars(args_groups["copy_flags"])
 
-    # Will be cleaned up on exit automatically.
-    tmpdir = TemporaryDirectory(prefix="nixos-rebuild.")
-    tmpdir_path = Path(tmpdir.name)
-    atexit.register(cleanup_ssh, tmpdir_path)
+    atexit.register(cleanup_ssh)
 
     profile = Profile.from_arg(args.profile_name)
-    build_host = Remote.from_arg(
-        args.build_host, False, tmpdir_path, validate_opts=False
-    )
-    target_host = Remote.from_arg(args.target_host, args.ask_sudo_password, tmpdir_path)
+    build_host = Remote.from_arg(args.build_host, False, validate_opts=False)
+    target_host = Remote.from_arg(args.target_host, args.ask_sudo_password)
     build_attr = BuildAttr.from_arg(args.attr, args.file)
     flake = Flake.from_arg(args.flake, target_host)
     action = Action(args.action)
@@ -200,8 +194,7 @@ def execute(argv: list[str]) -> None:
                 argv[0],
                 new,
             )
-            cleanup_ssh(tmpdir_path)
-            tmpdir.cleanup()
+            cleanup_ssh()
             os.execve(new, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
 
     if args.upgrade or args.upgrade_all:

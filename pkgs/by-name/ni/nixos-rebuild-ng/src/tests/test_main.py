@@ -218,9 +218,9 @@ def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
 
 @patch.dict(nr.process.os.environ, {}, clear=True)
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
-@patch(get_qualified_name(nr.TemporaryDirectory, nr))  # can't autospec
+@patch(get_qualified_name(nr.cleanup_ssh, nr), autospec=True)
 def test_execute_nix_switch_flake_target_host(
-    mock_tmpdir: Any,
+    mock_cleanup_ssh: Any,
     mock_run: Any,
     tmp_path: Path,
 ) -> None:
@@ -236,7 +236,6 @@ def test_execute_nix_switch_flake_target_host(
         # switch_to_configuration
         CompletedProcess([], 0),
     ]
-    mock_tmpdir.return_value.name = "/tmp/test"
 
     nr.execute(
         [
@@ -276,12 +275,7 @@ def test_execute_nix_switch_flake_target_host(
             call(
                 [
                     "ssh",
-                    "-o",
-                    "ControlMaster=auto",
-                    "-o",
-                    "ControlPath=/tmp/test/ssh-%n",
-                    "-o",
-                    "ControlPersist=60",
+                    *nr.process.SSH_DEFAULT_OPTS,
                     "user@localhost",
                     "--",
                     f"sudo nix-env -p /nix/var/nix/profiles/system --set {config_path}",
@@ -292,12 +286,7 @@ def test_execute_nix_switch_flake_target_host(
             call(
                 [
                     "ssh",
-                    "-o",
-                    "ControlMaster=auto",
-                    "-o",
-                    "ControlPath=/tmp/test/ssh-%n",
-                    "-o",
-                    "ControlPersist=60",
+                    *nr.process.SSH_DEFAULT_OPTS,
                     "user@localhost",
                     "--",
                     f"sudo env NIXOS_INSTALL_BOOTLOADER=0 {config_path / 'bin/switch-to-configuration'} switch",
@@ -311,9 +300,9 @@ def test_execute_nix_switch_flake_target_host(
 
 @patch.dict(nr.process.os.environ, {}, clear=True)
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
-@patch(get_qualified_name(nr.TemporaryDirectory, nr))  # can't autospec
+@patch(get_qualified_name(nr.cleanup_ssh, nr), autospec=True)
 def test_execute_nix_switch_flake_build_host(
-    mock_tmpdir: Any,
+    mock_cleanup_ssh: Any,
     mock_run: Any,
     tmp_path: Path,
 ) -> None:
@@ -331,7 +320,6 @@ def test_execute_nix_switch_flake_build_host(
         # switch_to_configuration
         CompletedProcess([], 0),
     ]
-    mock_tmpdir.return_value.name = "/tmp/test"
 
     nr.execute(
         [
@@ -369,12 +357,7 @@ def test_execute_nix_switch_flake_build_host(
             call(
                 [
                     "ssh",
-                    "-o",
-                    "ControlMaster=auto",
-                    "-o",
-                    "ControlPath=/tmp/test/ssh-%n",
-                    "-o",
-                    "ControlPersist=60",
+                    *nr.process.SSH_DEFAULT_OPTS,
                     "user@localhost",
                     "--",
                     f"nix --extra-experimental-features 'nix-command flakes' build '{config_path}^*' --print-out-paths",

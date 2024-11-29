@@ -1,6 +1,5 @@
-from pathlib import Path
 from typing import Any
-from unittest.mock import call, patch
+from unittest.mock import patch
 
 import nixos_rebuild.models as m
 import nixos_rebuild.process as p
@@ -8,29 +7,7 @@ import nixos_rebuild.process as p
 from .helpers import get_qualified_name
 
 
-@patch(get_qualified_name(p.subprocess.run))
-def test_cleanup_ssh(mock_run: Any, tmp_path: Path) -> None:
-    (tmp_path / "ssh-conn").touch()
-
-    p.cleanup_ssh(tmp_path)
-    mock_run.assert_has_calls(
-        [
-            call(
-                [
-                    "ssh",
-                    "-o",
-                    f"ControlPath={tmp_path}/ssh-conn",
-                    "-O",
-                    "exit",
-                    "dummyhost",
-                ],
-                check=False,
-            )
-        ]
-    )
-
-
-@patch(get_qualified_name(p.subprocess.run))
+@patch(get_qualified_name(p.subprocess.run), autospec=True)
 def test_run(mock_run: Any) -> None:
     p.run_wrapper(["test", "--with", "flags"], check=True)
     mock_run.assert_called_with(
@@ -67,7 +44,15 @@ def test_run(mock_run: Any) -> None:
         remote=m.Remote("user@localhost", ["--ssh", "opt"], "password"),
     )
     mock_run.assert_called_with(
-        ["ssh", "--ssh", "opt", "user@localhost", "--", "test --with 'some flags'"],
+        [
+            "ssh",
+            "--ssh",
+            "opt",
+            *p.SSH_DEFAULT_OPTS,
+            "user@localhost",
+            "--",
+            "test --with 'some flags'",
+        ],
         check=True,
         text=True,
         errors="surrogateescape",
@@ -87,6 +72,7 @@ def test_run(mock_run: Any) -> None:
             "ssh",
             "--ssh",
             "opt",
+            *p.SSH_DEFAULT_OPTS,
             "user@localhost",
             "--",
             "sudo --prompt= --stdin env FOO=bar test --with flags",
@@ -99,38 +85,20 @@ def test_run(mock_run: Any) -> None:
     )
 
 
-def test_remote_from_name(monkeypatch: Any, tmpdir: Path) -> None:
+def test_remote_from_name(monkeypatch: Any) -> None:
     monkeypatch.setenv("NIX_SSHOPTS", "")
-    assert m.Remote.from_arg("user@localhost", None, tmpdir) == m.Remote(
+    assert m.Remote.from_arg("user@localhost", None, False) == m.Remote(
         "user@localhost",
-        opts=[
-            "-o",
-            "ControlMaster=auto",
-            "-o",
-            f"ControlPath={tmpdir / "ssh-%n"}",
-            "-o",
-            "ControlPersist=60",
-        ],
+        opts=[],
         sudo_password=None,
     )
 
     # get_qualified_name doesn't work because getpass is aliased to another
     # function
     with patch(f"{p.__name__}.getpass", return_value="password"):
-        monkeypatch.setenv("NIX_SSHOPTS", "-f foo -b bar")
-        assert m.Remote.from_arg("user@localhost", True, tmpdir) == m.Remote(
+        monkeypatch.setenv("NIX_SSHOPTS", "-f foo -b bar -t")
+        assert m.Remote.from_arg("user@localhost", True, True) == m.Remote(
             "user@localhost",
-            opts=[
-                "-f",
-                "foo",
-                "-b",
-                "bar",
-                "-o",
-                "ControlMaster=auto",
-                "-o",
-                f"ControlPath={tmpdir / "ssh-%n"}",
-                "-o",
-                "ControlPersist=60",
-            ],
+            opts=["-f", "foo", "-b", "bar", "-t"],
             sudo_password="password",
         )

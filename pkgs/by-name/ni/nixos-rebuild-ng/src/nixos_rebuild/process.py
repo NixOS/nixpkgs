@@ -5,9 +5,21 @@ import subprocess
 from dataclasses import dataclass
 from getpass import getpass
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import Self, Sequence, TypedDict, Unpack
 
 logger = logging.getLogger(__name__)
+
+TMPDIR = TemporaryDirectory(prefix="nixos-rebuild.")
+TMPDIR_PATH = Path(TMPDIR.name)
+SSH_DEFAULT_OPTS = [
+    "-o",
+    "ControlMaster=auto",
+    "-o",
+    f"ControlPath={TMPDIR_PATH / "ssh-%n"}",
+    "-o",
+    "ControlPersist=60",
+]
 
 
 @dataclass(frozen=True)
@@ -21,7 +33,6 @@ class Remote:
         cls,
         host: str | None,
         ask_sudo_password: bool | None,
-        tmp_dir: Path,
         validate_opts: bool = True,
     ) -> Self | None:
         if not host:
@@ -30,15 +41,6 @@ class Remote:
         opts = os.getenv("NIX_SSHOPTS", "").split()
         if validate_opts:
             cls._validate_opts(opts, ask_sudo_password)
-        opts += [
-            # SSH ControlMaster flags, allow for faster re-connection
-            "-o",
-            "ControlMaster=auto",
-            "-o",
-            f"ControlPath={tmp_dir / "ssh-%n"}",
-            "-o",
-            "ControlPersist=60",
-        ]
         sudo_password = None
         if ask_sudo_password:
             sudo_password = getpass(f"[sudo] password for {host}: ")
@@ -66,12 +68,13 @@ class RunKwargs(TypedDict, total=False):
     stdout: int | None
 
 
-def cleanup_ssh(tmp_dir: Path) -> None:
+def cleanup_ssh() -> None:
     "Close SSH ControlMaster connection."
-    for ctrl in tmp_dir.glob("ssh-*"):
+    for ctrl in TMPDIR_PATH.glob("ssh-*"):
         subprocess.run(
             ["ssh", "-o", f"ControlPath={ctrl}", "-O", "exit", "dummyhost"], check=False
         )
+    TMPDIR.cleanup()
 
 
 def run_wrapper(
@@ -99,6 +102,7 @@ def run_wrapper(
         args = [
             "ssh",
             *remote.opts,
+            *SSH_DEFAULT_OPTS,
             remote.host,
             "--",
             # sadly SSH just join all remaining parameters, expanding glob and
