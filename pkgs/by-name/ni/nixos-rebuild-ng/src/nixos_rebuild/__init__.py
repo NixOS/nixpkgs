@@ -11,7 +11,7 @@ from typing import assert_never
 from . import nix
 from .models import Action, BuildAttr, Flake, NRError, Profile
 from .process import Remote, cleanup_ssh
-from .utils import LogFormatter
+from .utils import Args, LogFormatter
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -161,8 +161,50 @@ def parse_args(
     return args, args_groups
 
 
+def reexec(
+    argv: list[str],
+    args: argparse.Namespace,
+    build_flags: dict[str, Args],
+    flake_build_flags: dict[str, Args],
+) -> None:
+    drv = None
+    try:
+        # Need to set target_host=None, to avoid connecting to remote
+        if flake := Flake.from_arg(args.flake, None):
+            drv = nix.build_flake(
+                "pkgs.nixos-rebuild-ng",
+                flake,
+                **flake_build_flags,
+                no_link=True,
+            )
+        else:
+            drv = nix.build(
+                "pkgs.nixos-rebuild-ng",
+                BuildAttr.from_arg(args.attr, args.file),
+                **build_flags,
+                no_out_link=True,
+            )
+    except CalledProcessError:
+        logger.warning("could not find a newer version of nixos-rebuild")
+
+    if drv:
+        new = drv / "bin/nixos-rebuild-ng"
+        current = Path(argv[0])
+        # Disable re-exec during development
+        if current.name != "__main__.py" and new != current:
+            logging.debug(
+                "detected newer version of script, re-exec'ing, current=%s, new=%s",
+                argv[0],
+                new,
+            )
+            cleanup_ssh()
+            os.execve(new, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
+
+
 def execute(argv: list[str]) -> None:
     args, args_groups = parse_args(argv)
+
+    atexit.register(cleanup_ssh)
 
     common_flags = vars(args_groups["common_flags"])
     common_build_flags = common_flags | vars(args_groups["common_build_flags"])
@@ -170,13 +212,9 @@ def execute(argv: list[str]) -> None:
     flake_build_flags = common_build_flags | vars(args_groups["flake_build_flags"])
     copy_flags = common_flags | vars(args_groups["copy_flags"])
 
-    atexit.register(cleanup_ssh)
+    if args.upgrade or args.upgrade_all:
+        nix.upgrade_channels(bool(args.upgrade_all))
 
-    profile = Profile.from_arg(args.profile_name)
-    build_host = Remote.from_arg(args.build_host, False, validate_opts=False)
-    target_host = Remote.from_arg(args.target_host, args.ask_sudo_password)
-    build_attr = BuildAttr.from_arg(args.attr, args.file)
-    flake = Flake.from_arg(args.flake, target_host)
     action = Action(args.action)
     # Only run shell scripts from the Nixpkgs tree if the action is
     # "switch", "boot", or "test". With other actions (such as "build"),
@@ -185,32 +223,16 @@ def execute(argv: list[str]) -> None:
     # untrusted tree.
     can_run = action in (Action.SWITCH, Action.BOOT, Action.TEST)
 
-    if args.upgrade or args.upgrade_all:
-        nix.upgrade_channels(bool(args.upgrade_all))
-
     # Re-exec to a newer version of the script before building to ensure we get
     # the latest fixes
     if can_run and not args.fast and not os.environ.get("_NIXOS_REBUILD_REEXEC"):
-        try:
-            if flake:
-                drv = nix.build_flake(
-                    "pkgs.nixos-rebuild-ng", flake, **flake_build_flags
-                )
-            else:
-                drv = nix.build("pkgs.nixos-rebuild-ng", build_attr, **build_flags)
-            new = drv / "bin/nixos-rebuild-ng"
-            current = Path(argv[0])
-            # Disable re-exec during development
-            if current.name != "__main__.py" and new != current:
-                logging.debug(
-                    "detected newer version of script, re-exec'ing, current=%s, new=%s",
-                    argv[0],
-                    new,
-                )
-                cleanup_ssh()
-                os.execve(new, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
-        except CalledProcessError:
-            logger.warning("could not find a newer version of nixos-rebuild")
+        reexec(argv, args, build_flags, flake_build_flags)
+
+    profile = Profile.from_arg(args.profile_name)
+    target_host = Remote.from_arg(args.target_host, args.ask_sudo_password)
+    build_host = Remote.from_arg(args.build_host, False, validate_opts=False)
+    build_attr = BuildAttr.from_arg(args.attr, args.file)
+    flake = Flake.from_arg(args.flake, target_host)
 
     if can_run and not flake:
         nixpkgs_path = nix.find_file("nixpkgs", **build_flags)
