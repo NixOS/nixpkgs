@@ -75,7 +75,7 @@ wrapPythonProgramsIn() {
                                     --prefix PATH ':' "$program_PATH"
                                     )
 
-                    if [ -z "$permitUserSite" ]; then
+                    if [ -n "$permitUserSite" ]; then
                         wrap_args+=(--set PYTHONNOUSERSITE "true")
                     fi
 
