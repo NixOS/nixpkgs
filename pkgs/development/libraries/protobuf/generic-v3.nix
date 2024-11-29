@@ -52,6 +52,7 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
     license = lib.licenses.bsd3;
     mainProgram = "protoc";
     platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ yoctocell ];
   };
 };
 in mkProtobufDerivation(if (stdenv.buildPlatform != stdenv.hostPlatform)
