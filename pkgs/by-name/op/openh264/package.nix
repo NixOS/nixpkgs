@@ -26,8 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/cisco/openh264/pull/3773
     (fetchpatch2 {
       name = "openh264-riscv64.patch";
-      url = "https://github.com/cisco/openh264/commit/cea886eda8fae7ba42c4819e6388ce8fc633ebf6.patch";
-      hash = "sha256-ncXuGgogXA7JcCOjGk+kBprmOErFohrYjYzZYzAbbDQ=";
+      url = "https://github.com/cisco/openh264/commit/cea886eda8fae7ba42c4819e6388ce8fc633ebf6.patch?full_index=1";
+      hash = "sha256-p7euFEdoJs/em7VYYO7/aSeRFJhySKVPFaB5rDN7SG4=";
     })
   ];
 
