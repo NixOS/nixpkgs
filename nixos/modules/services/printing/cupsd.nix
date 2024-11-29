@@ -384,6 +384,7 @@ in
         preStart = lib.optionalString cfg.stateless ''
           rm -rf /var/cache/cups /var/lib/cups /var/spool/cups
         '' + ''
+            (umask 022 && mkdir -p /var/cache /var/lib /var/spool)
             (umask 077 && mkdir -p /var/cache/cups /var/spool/cups)
             (umask 022 && mkdir -p ${cfg.tempDir} /var/lib/cups)
             # While cups will automatically create self-signed certificates if accessed via TLS,
