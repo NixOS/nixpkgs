@@ -15167,8 +15167,6 @@ with pkgs;
 
   omegat = callPackage ../applications/misc/omegat.nix { };
 
-  inherit (callPackage ../applications/networking/onionshare { }) onionshare onionshare-gui;
-
   openambit = qt5.callPackage ../applications/misc/openambit { };
 
   openbox-menu = callPackage ../applications/misc/openbox-menu {
