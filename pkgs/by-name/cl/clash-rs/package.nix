@@ -34,8 +34,12 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false; # test failed
 
-  doInstallCheck = true;
+  postInstall = ''
+    # Align with upstream
+    ln -s "$out/bin/clash-rs" "$out/bin/clash"
+  '';
 
+  doInstallCheck = true;
   versionCheckProgramArg = "--version";
 
   nativeInstallCheckInputs = [
@@ -45,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Custom protocol, rule based network proxy software";
     homepage = "https://github.com/Watfaq/clash-rs";
-    mainProgram = "clash-rs";
+    mainProgram = "clash";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aucub ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
