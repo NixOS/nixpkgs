@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "spade";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitLab {
     owner = "spade-lang";
     repo = "spade";
     rev = "v${version}";
-    hash = "sha256-IAb9Vj5KwyXpARD2SIgYRXhz1ihwcgCTwx3zbgoN6dE=";
+    hash = "sha256-JqKcW6xrb9XBHuwR0/EytZmYUV++N69R7wBNoHv9xJU=";
     # only needed for vatch, which contains test data
     fetchSubmodules = true;
   };
