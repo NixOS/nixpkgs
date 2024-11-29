@@ -1,0 +1,33 @@
+From 6b576118c02241c7e366696be2f16850460fac35 Mon Sep 17 00:00:00 2001
+From: Michael Adler <therisen06@gmail.com>
+Date: Wed, 27 Nov 2024 09:23:04 +0100
+Subject: [PATCH] Revert "Desctivate driver for MICARDO"
+
+This reverts commit 13951f633b5f1df14d5c49310cd397a42a467f36.
+---
+ src/libopensc/ctx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/libopensc/ctx.c b/src/libopensc/ctx.c
+index 6fbab389c..2316209ee 100644
+--- a/src/libopensc/ctx.c
++++ b/src/libopensc/ctx.c
+@@ -148,6 +148,7 @@ static const struct _sc_driver_entry internal_card_drivers[] = {
+ 	 * put the muscle driver first to cope with this bug. */
+ 	{ "muscle",	(void *(*)(void)) sc_get_muscle_driver },
+ 	{ "sc-hsm",	(void *(*)(void)) sc_get_sc_hsm_driver },
++	{ "mcrd",	(void *(*)(void)) sc_get_mcrd_driver },
+ 	{ "setcos",	(void *(*)(void)) sc_get_setcos_driver },
+ 	{ "PIV-II",	(void *(*)(void)) sc_get_piv_driver },
+ 	{ "cac",	(void *(*)(void)) sc_get_cac_driver },
+@@ -175,7 +176,6 @@ static const struct _sc_driver_entry old_card_drivers[] = {
+ 	{ "atrust-acos",(void *(*)(void)) sc_get_atrust_acos_driver },
+ 	{ "cyberflex",	(void *(*)(void)) sc_get_cyberflex_driver },
+ 	{ "flex",       (void *(*)(void)) sc_get_cryptoflex_driver },
+-	{ "mcrd",       (void *(*)(void)) sc_get_mcrd_driver },
+ 	{ NULL, NULL }
+ };
+ // clang-format on
+-- 
+2.47.1
+
