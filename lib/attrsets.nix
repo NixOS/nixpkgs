@@ -561,7 +561,7 @@ rec {
   # results in undefined behaviour. Use associateWithAttrPath' instead if you
   # need to handle multiple instances of the same string.
   associateWithAttrPath = associateWithAttrPath' (name: path: { ${name} = path; }) (
-    recursor: remaining: concatMapAttrs (name: value: recursor name value) remaining
+    recursor: remaining: concatMapAttrs recursor remaining
   ) [ ] null;
 
   /**
