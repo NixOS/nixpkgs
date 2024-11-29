@@ -209,3 +209,6 @@ ce21e97a1f20dee15da85c084f9d1148d84f853b
 
 # treewide: migrate packages to pkgs/by-name, take 1
 571c71e6f73af34a229414f51585738894211408
+
+# format files with nixfmt (#347275)
+adb9714bd909df283c66bbd641bd631ff50a4260

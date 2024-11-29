@@ -20,6 +20,7 @@ in
   imports = [
     ./linode-config.nix
     ./disk-size-option.nix
+    ../image/file-options.nix
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2411;
       from = [
@@ -57,13 +58,17 @@ in
   };
 
   config = {
+    system.nixos.tags = [ "linode" ];
+    image.extension = "img.gz";
+    system.build.image = config.system.build.linodeImage;
     system.build.linodeImage = import ../../lib/make-disk-image.nix {
       name = "linode-image";
+      baseName = config.image.baseName;
       # NOTE: Linode specifically requires images to be `gzip`-ed prior to upload
       # See: https://www.linode.com/docs/products/tools/images/guides/upload-an-image/#requirements-and-considerations
       postVM = ''
         ${pkgs.gzip}/bin/gzip -${toString cfg.compressionLevel} -c -- $diskImage > \
-        $out/nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.img.gz
+        $out/${config.image.fileName}
         rm $diskImage
       '';
       format = "raw";
