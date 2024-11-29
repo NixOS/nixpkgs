@@ -31,6 +31,22 @@
         ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
       '';
 
+    # supplement 99-ethernet-default-dhcp which excludes veth
+    systemd.network = lib.mkIf config.networking.useDHCP {
+      networks."99-lxc-veth-default-dhcp" = {
+        matchConfig = {
+          Type = "ether";
+          Kind = "veth";
+          Name = [
+            "en*"
+            "eth*"
+          ];
+        };
+        DHCP = "yes";
+        networkConfig.IPv6PrivacyExtensions = "kernel";
+      };
+    };
+
     system.build.tarball = pkgs.callPackage ../../lib/make-system-tarball.nix {
       extraArgs = "--owner=0";
 
