@@ -12777,6 +12777,13 @@
     githubId = 1202012;
     name = "Ignat Loskutov";
   };
+  lostmsu = {
+    email = "lostfreeman@gmail.com";
+    github = "lostmsu";
+    githubId = 239520;
+    matrix = "@lostmsu:matrix.org";
+    name = "Victor Nova";
+  };
   lostnet = {
     email = "lost.networking@gmail.com";
     github = "lostnet";
