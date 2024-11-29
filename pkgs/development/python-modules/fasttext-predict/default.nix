@@ -8,12 +8,13 @@
 
 buildPythonPackage rec {
   pname = "fasttext-predict";
-  version = "0.9.2.2";
+  version = "0.9.2.4";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rMbf09pCHvVYI9g/aq74+PcsuU2LezpmDz4b/w9vRyc=";
+    pname = "fasttext_predict";
+    inherit version;
+    hash = "sha256-GKb7DXTH35KA2x+Wy3XZkL/QBPqdZpST6j3T1U+E28c=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
