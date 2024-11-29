@@ -3,7 +3,7 @@
   flattenReferencesGraph,
   lib,
   jq,
-  stdenvNoCC,
+  runCommand,
 }:
 {
   closureRoots,
@@ -16,17 +16,21 @@
 if closureRoots == [ ] then
   builtins.toFile "docker-layers-empty" "[]"
 else
-  stdenvNoCC.mkDerivation {
-    name = "docker-layers";
-    __structuredAttrs = true;
-    # graph, exclude_paths and pipeline are expected by the
-    # flatten_references_graph executable.
-    exportReferencesGraph.graph = closureRoots;
-    exclude_paths = excludePaths;
-    inherit pipeline;
-    # builder cannot refer to derivation outputs
-    PATH = "${coreutils}/bin:${flattenReferencesGraph}/bin:${jq}/bin";
-    builder = builtins.toFile "docker-make-layers-builder" ''
+  runCommand "docker-layers"
+    {
+      __structuredAttrs = true;
+      # graph, exclude_paths and pipeline are expected by the
+      # flatten_references_graph executable.
+      exportReferencesGraph.graph = closureRoots;
+      exclude_paths = excludePaths;
+      inherit pipeline;
+      nativeBuildInputs = [
+        coreutils
+        flattenReferencesGraph
+        jq
+      ];
+    }
+    ''
       . .attrs.sh
 
       flatten_references_graph_arg=.attrs.json
@@ -43,5 +47,4 @@ else
 
       ${lib.optionalString debug "export DEBUG=True"}
       flatten_references_graph "$flatten_references_graph_arg" > ''${outputs[out]}
-    '';
-  }
+    ''
