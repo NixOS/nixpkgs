@@ -1,7 +1,7 @@
 {
   lib,
   mkKdeDerivation,
-  fetchurl,
+  fetchFromGitLab,
   qttools,
   libvlc,
 }:
@@ -9,9 +9,12 @@ mkKdeDerivation rec {
   pname = "phonon-vlc";
   version = "0.12.0";
 
-  src = fetchurl {
-    url = "mirror://kde/stable/phonon/phonon-backend-vlc/${version}/phonon-backend-vlc-${version}.tar.xz";
-    hash = "sha256-M4R53EUeS5SzyltXje90Hc+C9cYmooB9NiNb4tznyaU=";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "libraries";
+    repo = "phonon-vlc";
+    rev = "v${version}";
+    hash = "sha256-voaPjz+rrJfNoFYYytS0PgwpJN7Ui19LxWxDSOpMbko=";
   };
 
   extraNativeBuildInputs = [ qttools ];
