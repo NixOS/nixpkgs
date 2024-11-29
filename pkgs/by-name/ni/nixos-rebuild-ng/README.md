@@ -91,14 +91,6 @@ ruff format .
   conflicting with the current `nixos-rebuild`. This means you can keep both in
   your system at the same time, but it also means that a few things like bash
   completion are broken right now (since it looks at `nixos-rebuild` binary)
-- `_NIXOS_REBUILD_EXEC` is **not** implemented yet, so different from
-  `nixos-rebuild`, this will use the current version of `nixos-rebuild-ng` in
-  your `PATH` to build/set profile/switch, while `nixos-rebuild` builds the new
-  version (the one that will be switched) and re-exec to it instead. This means
-  that in case of bugs in `nixos-rebuild-ng`, the only way that you will get
-  them fixed is **after** you switch to a new version
-- Ignore any performance advantages of the rewrite right now, because of the 2
-  caveats above
 - Bugs in the profile manipulation can cause corruption of your profile that
   may be difficult to fix, so right now I only recommend using
   `nixos-rebuild-ng` if you are testing in a VM or in a filesystem with
@@ -111,7 +103,7 @@ ruff format .
 - [x] Remote host/builders (via SSH)
 - [x] Improve nix arguments handling (e.g.: `nixFlags` vs `copyFlags` in the
   old `nixos-rebuild`)
-- [ ] `_NIXOS_REBUILD_EXEC`
+- [x] `_NIXOS_REBUILD_REEXEC`
 - [ ] Port `nixos-rebuild.passthru.tests`
 - [ ] Change module system to allow easier opt-in, like
   `system.switch.enableNg` for `switch-to-configuration-ng`

@@ -95,7 +95,7 @@ def test_execute_nix_boot(mock_run: Any, tmp_path: Path) -> None:
         CompletedProcess([], 0),
     ]
 
-    nr.execute(["nixos-rebuild", "boot", "--no-flake", "-vvv"])
+    nr.execute(["nixos-rebuild", "boot", "--no-flake", "-vvv", "--fast"])
 
     assert mock_run.call_count == 6
     mock_run.assert_has_calls(
@@ -173,6 +173,7 @@ def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
             "--install-bootloader",
             "--sudo",
             "--verbose",
+            "--fast",
         ]
     )
 
@@ -246,6 +247,7 @@ def test_execute_nix_switch_flake_target_host(
             "--use-remote-sudo",
             "--target-host",
             "user@localhost",
+            "--fast",
         ]
     )
 
@@ -339,6 +341,7 @@ def test_execute_nix_switch_flake_build_host(
             "/path/to/config#hostname",
             "--build-host",
             "user@localhost",
+            "--fast",
         ]
     )
 
@@ -415,7 +418,9 @@ def test_execute_switch_rollback(mock_run: Any, tmp_path: Path) -> None:
     nixpkgs_path = tmp_path / "nixpkgs"
     nixpkgs_path.touch()
 
-    nr.execute(["nixos-rebuild", "switch", "--rollback", "--install-bootloader"])
+    nr.execute(
+        ["nixos-rebuild", "switch", "--rollback", "--install-bootloader", "--fast"]
+    )
 
     assert mock_run.call_count >= 2
     # ignoring update_nixpkgs_rev calls
@@ -467,13 +472,7 @@ def test_execute_test_rollback(
     ]
 
     nr.execute(
-        [
-            "nixos-rebuild",
-            "test",
-            "--rollback",
-            "--profile-name",
-            "foo",
-        ]
+        ["nixos-rebuild", "test", "--rollback", "--profile-name", "foo", "--fast"]
     )
 
     assert mock_run.call_count == 2

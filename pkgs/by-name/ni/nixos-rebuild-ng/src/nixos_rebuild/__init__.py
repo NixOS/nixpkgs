@@ -2,6 +2,7 @@ import argparse
 import atexit
 import json
 import logging
+import os
 import sys
 from pathlib import Path
 from subprocess import run
@@ -87,6 +88,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     main_parser.add_argument("--ask-sudo-password", action="store_true")
     main_parser.add_argument("--use-remote-sudo", action="store_true")  # deprecated
     main_parser.add_argument("--no-ssh-tty", action="store_true")  # deprecated
+    main_parser.add_argument("--fast", action="store_true")
     main_parser.add_argument("--build-host")
     main_parser.add_argument("--target-host")
     main_parser.add_argument("action", choices=Action.values(), nargs="?")
@@ -174,10 +176,6 @@ def execute(argv: list[str]) -> None:
     target_host = Remote.from_arg(args.target_host, args.ask_sudo_password, tmpdir_path)
     build_attr = BuildAttr.from_arg(args.attr, args.file)
     flake = Flake.from_arg(args.flake, target_host)
-
-    if args.upgrade or args.upgrade_all:
-        nix.upgrade_channels(bool(args.upgrade_all))
-
     action = Action(args.action)
     # Only run shell scripts from the Nixpkgs tree if the action is
     # "switch", "boot", or "test". With other actions (such as "build"),
@@ -185,6 +183,30 @@ def execute(argv: list[str]) -> None:
     # executed, so it's safe to run nixos-rebuild against a potentially
     # untrusted tree.
     can_run = action in (Action.SWITCH, Action.BOOT, Action.TEST)
+
+    # Re-exec to a newer version of the script before building to ensure we get
+    # the latest fixes
+    if can_run and not args.fast and not os.environ.get("_NIXOS_REBUILD_REEXEC"):
+        if flake:
+            drv = nix.build_flake("pkgs.nixos-rebuild-ng", flake, **flake_build_flags)
+        else:
+            drv = nix.build("pkgs.nixos-rebuild-ng", build_attr, **build_flags)
+        new = drv / "bin/nixos-rebuild-ng"
+        current = Path(argv[0])
+        # Disable re-exec during development
+        if current.name != "__main__.py" and new != current:
+            logging.debug(
+                "detected newer version of script, re-exec'ing, current=%s, new=%s",
+                argv[0],
+                new,
+            )
+            cleanup_ssh(tmpdir_path)
+            tmpdir.cleanup()
+            os.execve(new, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
+
+    if args.upgrade or args.upgrade_all:
+        nix.upgrade_channels(bool(args.upgrade_all))
+
     if can_run and not flake:
         nixpkgs_path = nix.find_file("nixpkgs", **build_flags)
         rev = nix.get_nixpkgs_rev(nixpkgs_path)
