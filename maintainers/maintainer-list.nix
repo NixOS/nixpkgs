@@ -1313,7 +1313,6 @@
     name = "Wroclaw";
   };
   amuckstot30 = {
-    email = "amuckstot30@tutanota.com";
     github = "amuckstot30";
     githubId = 157274630;
     name = "amuckstot30";
