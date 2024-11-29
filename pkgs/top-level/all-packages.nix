@@ -7808,8 +7808,6 @@ with pkgs;
 
   antlr = antlr4;
 
-  ant = apacheAnt;
-
   inherit (callPackages ../servers/apache-kafka { })
     apacheKafka_3_6
     apacheKafka_3_7
