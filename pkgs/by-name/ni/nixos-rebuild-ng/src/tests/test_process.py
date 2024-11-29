@@ -1,11 +1,33 @@
 from pathlib import Path
 from typing import Any
-from unittest.mock import patch
+from unittest.mock import call, patch
 
 import nixos_rebuild.models as m
 import nixos_rebuild.process as p
 
 from .helpers import get_qualified_name
+
+
+@patch(get_qualified_name(p.subprocess.run))
+def test_cleanup_ssh(mock_run: Any, tmp_path: Path) -> None:
+    (tmp_path / "ssh-conn").touch()
+
+    p.cleanup_ssh(tmp_path)
+    mock_run.assert_has_calls(
+        [
+            call(
+                [
+                    "ssh",
+                    "-o",
+                    f"ControlPath={tmp_path}/ssh-conn",
+                    "-O",
+                    "exit",
+                    "dummyhost",
+                ],
+                check=False,
+            )
+        ]
+    )
 
 
 @patch(get_qualified_name(p.subprocess.run))
