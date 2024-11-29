@@ -561,7 +561,8 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
         Path("/nix/var/nix/profiles/per-user/root/channels/home-manager"),
     ],
 )
-def test_upgrade_channels(mock_glob: Any) -> None:
+@patch(get_qualified_name(n.Path.is_dir, n), autospec=True, return_value=True)
+def test_upgrade_channels(mock_is_dir: Any, mock_glob: Any) -> None:
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.upgrade_channels(False)
     mock_run.assert_called_with(["nix-channel", "--update", "nixos"], check=False)

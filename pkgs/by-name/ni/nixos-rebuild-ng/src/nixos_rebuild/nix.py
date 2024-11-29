@@ -471,7 +471,7 @@ def upgrade_channels(all: bool = False) -> None:
     that has a `.update-on-nixos-rebuild` file) or all.
     """
     for channel_path in Path("/nix/var/nix/profiles/per-user/root/channels/").glob("*"):
-        if (
+        if channel_path.is_dir() and (
             all
             or channel_path.name == "nixos"
             or (channel_path / ".update-on-nixos-rebuild").exists()
