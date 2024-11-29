@@ -17241,6 +17241,8 @@ self: super: with self; {
 
   ua-parser-builtins = callPackage ../development/python-modules/ua-parser-builtins { };
 
+  ua-parser-rs = callPackage ../development/python-modules/ua-parser-rs { };
+
   uarray = callPackage ../development/python-modules/uarray { };
 
   uart-devices = callPackage ../development/python-modules/uart-devices { };
