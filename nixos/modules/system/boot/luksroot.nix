@@ -612,15 +612,19 @@ let
       ${commonFunctions}
 
       get_timeout_for_device() {
-          ${lib.concatStringsSep "\n" (
-            lib.mapAttrsToList (name: dev: ''
-              if [ "$1" = "${lib.escapeShellArg dev.device}" ]; then
-                  echo "${toString dev.timeout}"
-                  return
-              fi
-            '') luks.devices
-          )}
-          echo "0"
+          ${lib.pipe luks.devices [
+            (lib.filterAttrs (name: dev: dev.timeout != luks.timeout))
+            (lib.mapAttrsToList (
+              name: dev: ''
+                if [ "$1" = "${lib.escapeShellArg dev.device}" ]; then
+                    echo "${toString dev.timeout}"
+                    return
+                fi
+              ''
+            ))
+            (lib.concatStringsSep "\n")
+          ]}
+          echo "${builtins.toString luks.timeout}"
       }
 
       while true; do
@@ -1078,7 +1082,8 @@ in
 
                 timeout = mkOption {
                   type = types.nullOr types.ints.positive;
-                  default = null;
+                  default = luks.timeout;
+                  defaultText = "{option}`boot.initrd.luks.timeout`";
                   description = ''
                     The amount of time in seconds to wait on the passphrase prompt.
                     If the timeout is reached, the system will power off.
@@ -1126,6 +1131,15 @@ in
       type = types.bool;
       description = ''
         Enables support for authenticating with FIDO2 devices.
+      '';
+    };
+
+    boot.initrd.luks.timeout = mkOption {
+      type = types.nullOr types.ints.positive;
+      default = null;
+      description = ''
+        The amount of time in seconds to wait on the passphrase prompt.
+        If the timeout is reached, the system will power off.
       '';
     };
 
