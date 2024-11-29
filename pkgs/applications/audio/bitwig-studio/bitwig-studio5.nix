@@ -28,7 +28,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "bitwig-studio";
+  pname = "bitwig-studio-unwrapped";
   version = "5.2.7";
 
   src = fetchurl {
