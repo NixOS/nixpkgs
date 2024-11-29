@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.20.4";
 
   src = fetchurl {
-    url = "mirror://samba/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
+    url = "https://download.samba.org/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
     hash = "sha256-OpLpfq6zRbazIjL1A+FNNPA6eqZMRR/owlihG72pCOU=";
   };
 
