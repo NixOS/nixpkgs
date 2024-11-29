@@ -1,0 +1,16 @@
+diff --git a/gedit/meson.build b/gedit/meson.build
+index bc689e5..e3b90d8 100644
+--- a/gedit/meson.build
++++ b/gedit/meson.build
+@@ -165,9 +165,9 @@ libgedit_private_headers += 'gedit-enum-types-private.h'
+ subdir('resources')
+ 
+ if host_machine.system() == 'windows'
+-  libgedit_shared_lib_install_dir = get_option('libdir')
++  libgedit_shared_lib_install_dir = get_option('prefix') / get_option('libdir')
+ else
+-  libgedit_shared_lib_install_dir = get_option('libdir') / 'gedit'
++  libgedit_shared_lib_install_dir = get_option('prefix') / get_option('libdir') / 'gedit'
+ endif
+ 
+ libgedit_shared_lib = shared_library(

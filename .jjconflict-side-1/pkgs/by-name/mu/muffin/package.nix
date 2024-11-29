@@ -1,0 +1,125 @@
+{ stdenv
+, lib
+, fetchFromGitHub
+, substituteAll
+, cairo
+, cinnamon-desktop
+, dbus
+, desktop-file-utils
+, egl-wayland
+, glib
+, gobject-introspection
+, graphene
+, gtk3
+, json-glib
+, libcanberra
+, libdrm
+, libgnomekbd
+, libgudev
+, libinput
+, libstartup_notification
+, libwacom
+, libxcvt
+, libXdamage
+, libxkbcommon
+, libXtst
+, mesa
+, meson
+, ninja
+, pipewire
+, pkg-config
+, python3
+, udev
+, wayland
+, wayland-protocols
+, wayland-scanner
+, wrapGAppsHook3
+, xorgserver
+, xwayland
+, zenity
+}:
+
+stdenv.mkDerivation rec {
+  pname = "muffin";
+  version = "6.2.0";
+
+  outputs = [ "out" "dev" "man" ];
+
+  src = fetchFromGitHub {
+    owner = "linuxmint";
+    repo = pname;
+    rev = version;
+    hash = "sha256-k8hUYA4/OzL2TB8s5DJpa2nFXV2U9eY09TLkqBDq9WE=";
+  };
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit zenity;
+    })
+  ];
+
+  nativeBuildInputs = [
+    desktop-file-utils
+    mesa # needed for gbm
+    meson
+    ninja
+    pkg-config
+    python3
+    wrapGAppsHook3
+    xorgserver # for cvt command
+    gobject-introspection
+    wayland-scanner
+  ];
+
+  buildInputs = [
+    cairo
+    cinnamon-desktop
+    dbus
+    egl-wayland
+    glib
+    gtk3
+    libcanberra
+    libdrm
+    libgnomekbd
+    libgudev
+    libinput
+    libstartup_notification
+    libwacom
+    libxcvt
+    libXdamage
+    libxkbcommon
+    pipewire
+    udev
+    wayland
+    wayland-protocols
+    xwayland
+  ];
+
+  propagatedBuildInputs = [
+    # required for pkg-config to detect muffin-clutter
+    json-glib
+    libXtst
+    graphene
+  ];
+
+  mesonFlags = [
+    # Based on Mint's debian/rules.
+    "-Degl_device=true"
+    "-Dwayland_eglstream=true"
+    "-Dxwayland_path=${lib.getExe xwayland}"
+  ];
+
+  postPatch = ''
+    patchShebangs src/backends/native/gen-default-modes.py
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/linuxmint/muffin";
+    description = "Window management library for the Cinnamon desktop (libmuffin) and its sample WM binary (muffin)";
+    mainProgram = "muffin";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = teams.cinnamon.members;
+  };
+}

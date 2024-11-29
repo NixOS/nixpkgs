@@ -1,0 +1,33 @@
+From f8c26751c51c1618278689d8b3ce94496c579064 Mon Sep 17 00:00:00 2001
+From: Christoph Heiss <christoph@c8h4.io>
+Date: Fri, 10 Feb 2023 23:54:41 +0100
+Subject: [PATCH] docs: Add target path fixup variable
+
+Signed-off-by: Christoph Heiss <christoph@c8h4.io>
+---
+ docs/Makefile | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/docs/Makefile b/docs/Makefile
+index 94130228..f4766a64 100644
+--- a/docs/Makefile
++++ b/docs/Makefile
+@@ -67,12 +67,13 @@ API_VIEWER_FILES :=							\
+ SPHINXOPTS    =
+ SPHINXBUILD   = sphinx-build
+ BUILDDIR      = output
++RUSTC_TARGET ?=
+ 
+ ifeq ($(BUILD_MODE), release)
+-COMPILEDIR := ../target/release
++COMPILEDIR := ../target/$(RUSTC_TARGET)/release
+ SPHINXOPTS    += -t release
+ else
+-COMPILEDIR := ../target/debug
++COMPILEDIR := ../target/$(RUSTC_TARGET)/debug
+ SPHINXOPTS    += -t devbuild
+ endif
+ 
+-- 
+2.40.0
+

@@ -1,0 +1,12 @@
+diff --git a/app/models/global_setting.rb b/app/models/global_setting.rb
+index 6e06e18039..b2bef31fe2 100644
+--- a/app/models/global_setting.rb
++++ b/app/models/global_setting.rb
+@@ -255,6 +255,7 @@ class GlobalSetting
+         domain: GlobalSetting.smtp_domain,
+         user_name: GlobalSetting.smtp_user_name,
+         password: GlobalSetting.smtp_password,
++        ca_file: "/etc/ssl/certs/ca-certificates.crt",
+         enable_starttls_auto: GlobalSetting.smtp_enable_start_tls,
+         open_timeout: GlobalSetting.smtp_open_timeout,
+         read_timeout: GlobalSetting.smtp_read_timeout,

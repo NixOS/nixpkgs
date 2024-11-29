@@ -1,0 +1,37 @@
+From 6ee128b95bacaff20746538dc97c2b8e2b9fcc29 Mon Sep 17 00:00:00 2001
+From: Mike Gilbert <floppym@gentoo.org>
+Date: Sun, 15 May 2022 10:54:38 -0400
+Subject: [PATCH] openssl: load "legacy" provider for RC4
+
+---
+ libtransmission/crypto-utils-openssl.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/libtransmission/crypto-utils-openssl.c b/libtransmission/crypto-utils-openssl.c
+index 45fd71913..14d680654 100644
+--- a/libtransmission/crypto-utils-openssl.c
++++ b/libtransmission/crypto-utils-openssl.c
+@@ -20,6 +20,9 @@
+ #include <openssl/rand.h>
+ #include <openssl/ssl.h>
+ #include <openssl/x509.h>
++#if OPENSSL_VERSION_MAJOR >= 3
++#include <openssl/provider.h>
++#endif
+ 
+ #include "transmission.h"
+ #include "crypto-utils.h"
+@@ -184,6 +187,10 @@ static void openssl_evp_cipher_context_free(EVP_CIPHER_CTX* handle)
+ 
+ tr_rc4_ctx_t tr_rc4_new(void)
+ {
++#if OPENSSL_VERSION_MAJOR >= 3
++    OSSL_PROVIDER_load(NULL, "default");
++    OSSL_PROVIDER_load(NULL, "legacy");
++#endif
+     EVP_CIPHER_CTX* handle = EVP_CIPHER_CTX_new();
+ 
+     if (check_result(EVP_CipherInit_ex(handle, EVP_rc4(), NULL, NULL, NULL, -1)))
+-- 
+2.35.1
+

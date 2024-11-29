@@ -1,0 +1,13 @@
+diff --git a/setup/main.py b/setup/main.py
+index 8d581cd..2ac47b9 100644
+--- a/setup/main.py
++++ b/setup/main.py
+@@ -37,7 +37,7 @@
+ 
+ def get_hangul_keyboard_list():
+     from ctypes import CDLL, c_int, c_char_p
+-    libhangul = CDLL('libhangul.so.1')
++    libhangul = CDLL('@libhangul@')
+     libhangul.hangul_ic_get_n_keyboards.argtypes = []
+     libhangul.hangul_ic_get_n_keyboards.restype = c_int
+     libhangul.hangul_ic_get_keyboard_id.argtypes = [c_int]

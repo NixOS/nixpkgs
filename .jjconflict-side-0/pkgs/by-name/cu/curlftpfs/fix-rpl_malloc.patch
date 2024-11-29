@@ -1,0 +1,13 @@
+diff -Naur a/configure.ac b/configure.ac
+--- a/configure.ac	2008-04-23 20:37:42.000000000 +0900
++++ b/configure.ac	2021-05-16 01:28:24.000000000 +0900
+@@ -46,9 +46,7 @@
+ 
+ # Checks for library functions.
+ AC_FUNC_CHOWN
+-AC_FUNC_MALLOC
+ AC_FUNC_MKTIME
+-AC_FUNC_REALLOC
+ AC_FUNC_SELECT_ARGTYPES
+ AC_FUNC_STRFTIME
+ AC_FUNC_UTIME_NULL

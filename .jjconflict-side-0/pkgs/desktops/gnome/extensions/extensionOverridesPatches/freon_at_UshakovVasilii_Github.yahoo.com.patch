@@ -1,0 +1,85 @@
+diff --git a/hddtempUtil.js b/hddtempUtil.js
+index e52fbc2..f5138bb 100644
+--- a/hddtempUtil.js
++++ b/hddtempUtil.js
+@@ -10,7 +10,7 @@ export default class HddtempUtil extends CommandLineUtil {
+ 
+     constructor() {
+         super();
+-        let hddtempArgv = GLib.find_program_in_path('hddtemp');
++        let hddtempArgv = '@hddtemp@/bin/hddtemp';
+         if(hddtempArgv) {
+             // check if this user can run hddtemp directly.
+             if(!GLib.spawn_command_line_sync(hddtempArgv)[3]){
+@@ -22,8 +22,8 @@ export default class HddtempUtil extends CommandLineUtil {
+         // doesn't seem to be the case… is it running as a daemon?
+         // Check first for systemd
+         let systemctl = GLib.find_program_in_path('systemctl');
+-        let pidof = GLib.find_program_in_path('pidof');
+-        let nc = GLib.find_program_in_path('nc');
++        let pidof = '@procps@/bin/pidof';
++        let nc = '@netcat@/bin/nc';
+         let pid = undefined;
+ 
+         if(systemctl) {
+@@ -38,7 +38,7 @@ export default class HddtempUtil extends CommandLineUtil {
+ 
+         // systemd isn't used on this system, try sysvinit instead
+         if(!pid && pidof) {
+-            let output = run_command("pidof hddtemp");
++            let output = run_command("@procps@/bin/pidof hddtemp");
+             if(output.length)
+                 pid = Number(output.trim());
+         }
+diff --git a/liquidctlUtil.js b/liquidctlUtil.js
+index a2f3015..215707a 100644
+--- a/liquidctlUtil.js
++++ b/liquidctlUtil.js
+@@ -7,7 +7,7 @@ export default class LiquidctlUtil extends CommandLineUtil {
+ 
+     constructor() {
+         super();
+-        const path = GLib.find_program_in_path('liquidctl');
++        const path = '@liquidctl@/bin/liquidctl';
+         this._argv = path ? [path, 'status', '--json'] : null;
+     }
+ 
+diff --git a/nvmecliUtil.js b/nvmecliUtil.js
+index 2b12d2d..70609f7 100644
+--- a/nvmecliUtil.js
++++ b/nvmecliUtil.js
+@@ -1,7 +1,7 @@
+ import GLib from 'gi://GLib';
+ 
+ function getNvmeData (argv){
+-    const nvme = GLib.find_program_in_path('nvme')
++    const nvme = '@nvmecli@/bin/nvme'
+     return JSON.parse(new TextDecoder().decode(GLib.spawn_command_line_sync(`${nvme} ${argv} -o json`)[1]))
+ }
+ 
+diff --git a/sensorsUtil.js b/sensorsUtil.js
+index 90c6ca9..5788635 100644
+--- a/sensorsUtil.js
++++ b/sensorsUtil.js
+@@ -6,7 +6,7 @@ export default class SensorsUtil extends CommandLineUtil {
+ 
+     constructor() {
+         super();
+-        let path = GLib.find_program_in_path('sensors');
++        let path = '@lm_sensors@/bin/sensors';
+         // -A: Do not show adapter -j: JSON output
+         this._argv = path ? [path, '-A', '-j'] : null;
+     }
+diff --git a/smartctlUtil.js b/smartctlUtil.js
+index f58d194..b9cb9ca 100644
+--- a/smartctlUtil.js
++++ b/smartctlUtil.js
+@@ -1,7 +1,7 @@
+ import GLib from 'gi://GLib';
+ 
+ function getSmartData (argv){
+-    const smartctl = GLib.find_program_in_path('smartctl')
++    const smartctl = '@smartmontools@/bin/smartctl'
+     return JSON.parse(new TextDecoder().decode( GLib.spawn_command_line_sync(`'${smartctl}' ${argv} -j`)[1] ))
+ }
+ 

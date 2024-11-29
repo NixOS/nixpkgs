@@ -1,0 +1,41 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0342181e9..d6d850a30 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -818,16 +818,14 @@ endif()
+ if(APPLE)
+     # generating a macOS icns file (see https://stackoverflow.com/a/20703594)
+     add_custom_command(OUTPUT ${PROJECT_SOURCE_DIR}/res/augustus.icns
+-        COMMAND mkdir -p augustus.iconset
+-        COMMAND sips -z 16 16    augustus_256.png --out augustus.iconset/icon_16x16.png
+-        COMMAND sips -z 32 32    augustus_256.png --out augustus.iconset/icon_16x16@2x.png
+-        COMMAND sips -z 32 32    augustus_256.png --out augustus.iconset/icon_32x32.png
+-        COMMAND sips -z 64 64    augustus_256.png --out augustus.iconset/icon_32x32@2x.png
+-        COMMAND sips -z 128 128  augustus_256.png --out augustus.iconset/icon_128x128.png
+-        COMMAND sips -z 256 256  augustus_256.png --out augustus.iconset/icon_128x128@2x.png
+-        COMMAND sips -z 256 256  augustus_256.png --out augustus.iconset/icon_256x256.png
+-        COMMAND sips -z 512 512  augustus_512.png --out augustus.iconset/icon_256x256@2x.png
+-        COMMAND iconutil -c icns augustus.iconset
++        COMMAND mkdir augustus.iconset
++        COMMAND convert augustus_256.png -resize 16x16 augustus.iconset/icon_16.png
++        COMMAND convert augustus_256.png -resize 32x32 augustus.iconset/icon_32.png
++        COMMAND convert augustus_256.png -resize 64x64 augustus.iconset/icon_64.png
++        COMMAND convert augustus_256.png -resize 128x128 augustus.iconset/icon_128.png
++        COMMAND cp augustus_256.png augustus.iconset/icon_256.png
++        COMMAND cp augustus_512.png augustus.iconset/icon_512.png
++        COMMAND png2icns augustus.icns augustus.iconset/icon_{16,32,64,128,256,512}.png
+         COMMAND rm -R augustus.iconset
+         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/res)
+     set_source_files_properties(${PROJECT_SOURCE_DIR}/res/augustus.icns PROPERTIES
+diff --git a/cmake/FindSDL2_mixer.cmake b/cmake/FindSDL2_mixer.cmake
+index c3d0b84fe..3e9115dd5 100644
+--- a/cmake/FindSDL2_mixer.cmake
++++ b/cmake/FindSDL2_mixer.cmake
+@@ -75,7 +75,6 @@ ELSE()
+         PATH_SUFFIXES include include/SDL2
+         PATHS ${SDL2_SEARCH_PATHS}
+       )
+-      set(SDL2_MIXER_INCLUDE_DIR "${SDL2_MIXER_INCLUDE_DIR}/Headers")
+     endif()
+ 
+     if(NOT APPLE OR NOT EXISTS "${SDL2_MIXER_INCLUDE_DIR}/SDL_mixer.h")

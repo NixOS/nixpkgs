@@ -1,0 +1,174 @@
+diff --git a/NetworkMiner/NetworkMinerForm.cs b/NetworkMiner/NetworkMinerForm.cs
+index 06c808b..6495b73 100644
+--- a/NetworkMiner/NetworkMinerForm.cs
++++ b/NetworkMiner/NetworkMinerForm.cs
+@@ -1,4 +1,4 @@
+-//  Copyright: Erik Hjelmvik, NETRESEC
++ï»¿//  Copyright: Erik Hjelmvik, NETRESEC
+ //
+ //  NetworkMiner is free software; you can redistribute it and/or modify it
+ //  under the terms of the GNU General Public License
+@@ -419,7 +419,7 @@ namespace NetworkMiner {
+             }
+             try {
+                 //require FileIOPermission to be PermissionState.Unrestricted
+-                string path = System.IO.Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath) + System.IO.Path.DirectorySeparatorChar + PacketParser.FileTransfer.FileStreamAssembler.ASSMEBLED_FILES_DIRECTORY;
++                string path = System.IO.Path.GetDirectoryName(SharedUtils.XdgDirectories.GetOrCreateXdgDataHome()) + System.IO.Path.DirectorySeparatorChar + PacketParser.FileTransfer.FileStreamAssembler.ASSMEBLED_FILES_DIRECTORY;
+                 System.Security.Permissions.FileIOPermission fileIOPerm = new System.Security.Permissions.FileIOPermission(System.Security.Permissions.FileIOPermissionAccess.AllAccess, path);
+                 fileIOPerm.Demand();
+             }
+@@ -1023,13 +1023,13 @@ namespace NetworkMiner {
+         public void CreateNewPacketHandlerWrapper(System.IO.DirectoryInfo outputDirectory) {
+             //make sure that folders exists
+             try {
+-                System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(outputDirectory.FullName + System.IO.Path.DirectorySeparatorChar + PacketParser.FileTransfer.FileStreamAssembler.ASSMEBLED_FILES_DIRECTORY);
++                System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(SharedUtils.XdgDirectories.GetOrCreateXdgDataHome() + System.IO.Path.DirectorySeparatorChar + PacketParser.FileTransfer.FileStreamAssembler.ASSMEBLED_FILES_DIRECTORY);
+                 if (!di.Exists)
+                     di.Create();
+-                di = new System.IO.DirectoryInfo(outputDirectory.FullName + System.IO.Path.DirectorySeparatorChar + PacketParser.FileTransfer.FileStreamAssembler.ASSMEBLED_FILES_DIRECTORY + System.IO.Path.DirectorySeparatorChar + "cache");
++                di = new System.IO.DirectoryInfo(SharedUtils.XdgDirectories.GetOrCreateXdgDataHome() + System.IO.Path.DirectorySeparatorChar + PacketParser.FileTransfer.FileStreamAssembler.ASSMEBLED_FILES_DIRECTORY + System.IO.Path.DirectorySeparatorChar + "cache");
+                 if (!di.Exists)
+                     di.Create();
+-                di = new System.IO.DirectoryInfo(outputDirectory.FullName + System.IO.Path.DirectorySeparatorChar + "Captures");
++                di = new System.IO.DirectoryInfo(SharedUtils.XdgDirectories.GetOrCreateXdgDataHome() + System.IO.Path.DirectorySeparatorChar + "Captures");
+                 if (!di.Exists)
+                     di.Create();
+             }
+@@ -1962,7 +1962,7 @@ namespace NetworkMiner {
+             string filename = Tools.GenerateCaptureFileName(DateTime.Now);
+             //string filename="NM_"+DateTime.Now.ToString("s", System.Globalization.DateTimeFormatInfo.InvariantInfo).Replace(':','-')+".pcap";
+ 
+-            string fileFullPath = this.OutputDirectory.FullName + "Captures" + System.IO.Path.DirectorySeparatorChar + filename;
++            string fileFullPath = SharedUtils.XdgDirectories.GetOrCreateXdgDataHome() + System.IO.Path.DirectorySeparatorChar + "Captures" + System.IO.Path.DirectorySeparatorChar + filename;
+             //string fileFullPath = System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(System.Windows.Forms.Application.ExecutablePath)) + System.IO.Path.DirectorySeparatorChar + "Captures" + System.IO.Path.DirectorySeparatorChar + filename;
+ 
+             //make sure to get the right datalink type
+@@ -2534,7 +2534,7 @@ namespace NetworkMiner {
+ 
+             if (removeCapturedFiles) {
+                 PacketParser.FileTransfer.FileStreamAssemblerList.RemoveTempFiles();
+-                string capturesDirectory = System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(System.Windows.Forms.Application.ExecutablePath)) + System.IO.Path.DirectorySeparatorChar + "Captures";
++                string capturesDirectory = System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(SharedUtils.XdgDirectories.GetOrCreateXdgDataHome())) + System.IO.Path.DirectorySeparatorChar + "Captures";
+                 if (System.IO.Directory.Exists(capturesDirectory)) {
+                     foreach (string pcapFile in System.IO.Directory.GetFiles(capturesDirectory))
+                         try {
+@@ -2545,7 +2545,7 @@ namespace NetworkMiner {
+                             //this.ShowAnomaly("Error deleting file \"" + pcapFile + "\"", DateTime.Now);
+                         }
+                 }
+-                capturesDirectory = this.packetHandlerWrapper.PacketHandler.OutputDirectory + "Captures";
++                capturesDirectory = SharedUtils.XdgDirectories.GetOrCreateXdgDataHome() + System.IO.Path.DirectorySeparatorChar + "Captures";
+                 if (System.IO.Directory.Exists(capturesDirectory)) {
+                     foreach (string pcapFile in System.IO.Directory.GetFiles(capturesDirectory))
+                         try {
+@@ -2635,7 +2635,7 @@ namespace NetworkMiner {
+                     try {
+                         PacketParser.Utils.ByteConverter.ToByteArrayFromHexString(keyword);//to force valid hex
+                         this.keywordListBox.Items.Add(keyword);
+-                        //Lägg till keywordet till PacketHandler.PacketHandler!!!
++                        //Lï¿½gg till keywordet till PacketHandler.PacketHandler!!!
+                     }
+                     catch (Exception ex) {
+                         errorMessage = ex.Message;
+@@ -2720,7 +2720,7 @@ namespace NetworkMiner {
+ #endregion
+ 
+         private void hostSortOrderComboBox_SelectedIndexChanged(object sender, EventArgs e) {
+-            //HÄR SKA detailsHeader LIGGA Enabled MASSA OLIKA SORTERINGSORDNINGAR:
++            //Hï¿½R SKA detailsHeader LIGGA Enabled MASSA OLIKA SORTERINGSORDNINGAR:
+             //IP, HOTSNAME, SENT PACKETS, RECEIVED PACKETS, MAC ADDRESS
+             this.RebuildHostsTree(sender, e);
+         }
+@@ -2754,7 +2754,7 @@ namespace NetworkMiner {
+             foreach (string p in paths) {
+                 if (!p.Contains(PacketParser.FileTransfer.FileStreamAssembler.ASSMEBLED_FILES_DIRECTORY))
+                     return false;
+-                if (!this.IsSubDirectoryOf(new System.IO.DirectoryInfo(p), new System.IO.DirectoryInfo(this.packetHandlerWrapper.PacketHandler.OutputDirectory + PacketParser.FileTransfer.FileStreamAssembler.ASSMEBLED_FILES_DIRECTORY)))
++                if (!this.IsSubDirectoryOf(new System.IO.DirectoryInfo(p), new System.IO.DirectoryInfo(SharedUtils.XdgDirectories.GetOrCreateXdgDataHome() + System.IO.Path.DirectorySeparatorChar + PacketParser.FileTransfer.FileStreamAssembler.ASSMEBLED_FILES_DIRECTORY)))
+                     return false;
+             }
+             return true;
+@@ -3976,7 +3976,7 @@ finally {
+         }
+ 
+         private void closeToolStripMenuItem_Click(object sender, EventArgs e) {
+-            DialogResult yesOrNo = MessageBox.Show("Would you like to delete all extracted files from:" + Environment.NewLine + this.OutputDirectory.FullName + PacketParser.FileTransfer.FileStreamAssembler.ASSMEBLED_FILES_DIRECTORY + System.IO.Path.DirectorySeparatorChar, "Delete extracted files?", MessageBoxButtons.YesNo);
++            DialogResult yesOrNo = MessageBox.Show("Would you like to delete all extracted files from:" + Environment.NewLine + SharedUtils.XdgDirectories.GetOrCreateXdgDataHome() + System.IO.Path.DirectorySeparatorChar + PacketParser.FileTransfer.FileStreamAssembler.ASSMEBLED_FILES_DIRECTORY + System.IO.Path.DirectorySeparatorChar, "Delete extracted files?", MessageBoxButtons.YesNo);
+             this.ResetCapturedData(false, yesOrNo == DialogResult.Yes, true);
+         }
+ 
+diff --git a/NetworkMiner/PcapOverIP/ReceivePcapOverTcpForm.cs b/NetworkMiner/PcapOverIP/ReceivePcapOverTcpForm.cs
+index 9bae5f0..72586d4 100644
+--- a/NetworkMiner/PcapOverIP/ReceivePcapOverTcpForm.cs
++++ b/NetworkMiner/PcapOverIP/ReceivePcapOverTcpForm.cs
+@@ -162,7 +162,7 @@ namespace NetworkMiner.PcapOverIP {
+             DateTime lastFrameTimestamp = DateTime.MinValue;
+ 
+             string filename = Tools.GenerateCaptureFileName(DateTime.Now);
+-            string fileFullPath = this.packetHandler.OutputDirectory + "Captures" + System.IO.Path.DirectorySeparatorChar + filename;
++            string fileFullPath = SharedUtils.XdgDirectories.GetOrCreateXdgDataHome() + System.IO.Path.DirectorySeparatorChar + "Captures" + System.IO.Path.DirectorySeparatorChar + filename;
+             //string fileFullPath = System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(System.Windows.Forms.Application.ExecutablePath)) + System.IO.Path.DirectorySeparatorChar + "Captures" + System.IO.Path.DirectorySeparatorChar + filename;
+ 
+             PcapFileWriter pcapFileWriter = new PcapFileWriter(fileFullPath, this.pcapStreamReader.FileDataLinkType[0]);
+diff --git a/PacketParser/FileTransfer/FileStreamAssemblerList.cs b/PacketParser/FileTransfer/FileStreamAssemblerList.cs
+index 4a6a4dd..129d48b 100644
+--- a/PacketParser/FileTransfer/FileStreamAssemblerList.cs
++++ b/PacketParser/FileTransfer/FileStreamAssemblerList.cs
+@@ -191,7 +191,7 @@ namespace PacketParser.FileTransfer {
+             if (removeExtractedFilesFromDisk) {
+                 //remove all files
+                 foreach (string subDirectory in System.IO.Directory.GetDirectories(this.FileOutputDirectory)) {
+-                    if (subDirectory == this.FileOutputDirectory + System.IO.Path.DirectorySeparatorChar + "cache") {
++                    if (subDirectory == SharedUtils.XdgDirectories.GetOrCreateXdgDataHome() + System.IO.Path.DirectorySeparatorChar + "cache") {
+                         foreach (string cacheFile in System.IO.Directory.GetFiles(subDirectory))
+                             try {
+                                 System.IO.File.Delete(cacheFile);
+diff --git a/PacketParser/PacketHandler.cs b/PacketParser/PacketHandler.cs
+index a600200..cb78071 100644
+--- a/PacketParser/PacketHandler.cs
++++ b/PacketParser/PacketHandler.cs
+@@ -1,4 +1,4 @@
+-//  Copyright: Erik Hjelmvik, NETRESEC
++ï»¿//  Copyright: Erik Hjelmvik, NETRESEC
+ //
+ //  NetworkMiner is free software; you can redistribute it and/or modify it
+ //  under the terms of the GNU General Public License
+@@ -228,7 +228,7 @@ namespace PacketParser {
+             //this.networkTcpSessionDictionary=new Dictionary<int, NetworkTcpSession>();
+             this.networkTcpSessionList=new PopularityList<int, NetworkTcpSession>(200);
+             this.networkTcpSessionList.PopularityLost+=new PopularityList<int, NetworkTcpSession>.PopularityLostEventHandler(networkTcpSessionList_PopularityLost);
+-            this.FileStreamAssemblerList = new FileTransfer.FileStreamAssemblerList(this, 100, this.OutputDirectory + PacketParser.FileTransfer.FileStreamAssembler.ASSMEBLED_FILES_DIRECTORY + System.IO.Path.DirectorySeparatorChar);
++            this.FileStreamAssemblerList = new FileTransfer.FileStreamAssemblerList(this, 100, SharedUtils.XdgDirectories.GetOrCreateXdgDataHome() + System.IO.Path.DirectorySeparatorChar + PacketParser.FileTransfer.FileStreamAssembler.ASSMEBLED_FILES_DIRECTORY + System.IO.Path.DirectorySeparatorChar);
+             this.FileStreamAssemblerList.PopularityLost += this.FileStreamAssemblerList_PopularityLost;
+             this.ReconstructedFileList=new List<FileTransfer.ReconstructedFile>();
+             this.credentialList=new SortedList<string, NetworkCredential>();
+@@ -874,7 +874,7 @@ namespace PacketParser {
+ 
+                     //check the frame content for keywords
+                     foreach (byte[] keyword in this.keywordList) {
+-                        //jAG SLUTADE HÄR. FUNKAR EJ VID RELOAD
++                        //jAG SLUTADE Hï¿½R. FUNKAR EJ VID RELOAD
+                         int keyIndex = receivedFrame.IndexOf(keyword);
+                         if (keyIndex >= 0) {
+                             if (networkPacket != null)
+diff --git a/SharedUtils/XdgDirectories.cs b/SharedUtils/XdgDirectories.cs
+new file mode 100644
+index 0000000..80c09e3
+--- /dev/null
++++ b/SharedUtils/XdgDirectories.cs
+@@ -0,0 +1,15 @@
++ï»¿using System;
++using System.IO;
++
++namespace SharedUtils {
++    public class XdgDirectories {
++        public static string GetOrCreateXdgDataHome() {
++            string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
++            string data = Environment.GetEnvironmentVariable("XDG_DATA_HOME") ?? home + System.IO.Path.DirectorySeparatorChar + ".local" + System.IO.Path.DirectorySeparatorChar + "share";
++            string dir = data + System.IO.Path.DirectorySeparatorChar + "NetworkMiner";
++            // Directory.CreateDirectory(dir);
++            return dir;
++        }
++
++    }
++}

@@ -1,0 +1,12 @@
+diff --git a/paperwork-backend/tests/docimport/tests_converted.py b/paperwork-backend/tests/docimport/tests_converted.py
+index 1d1ae39b..bda63fce 100644
+--- a/paperwork-backend/tests/docimport/tests_converted.py
++++ b/paperwork-backend/tests/docimport/tests_converted.py
+@@ -102,6 +102,7 @@ class TestConvertedImport(unittest.TestCase):
+                 )
+             )
+ 
++    @unittest.skip("flaky test: https://gitlab.gnome.org/World/OpenPaperwork/paperwork/-/issues/1035#note_1493700")
+     def test_import_duplicated_docx(self):
+         with tempfile.TemporaryDirectory() as tmp_dir:
+             self.config.settings = {

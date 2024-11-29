@@ -1,0 +1,12 @@
+diff --git a/AniLibria.pro b/AniLibria.pro
+index 3eb7213..3d39ec9 100644
+--- a/AniLibria.pro
++++ b/AniLibria.pro
+@@ -174,7 +174,6 @@ unix {
+ DEFINES += QT_DEPRECATED_WARNINGS
+ 
+ # If you need not check version remove or comment this line
+-DEFINES += USE_VERSION_CHECK
+ 
+ # You can also make your code fail to compile if it uses deprecated APIs.
+ # In order to do so, uncomment the following line.

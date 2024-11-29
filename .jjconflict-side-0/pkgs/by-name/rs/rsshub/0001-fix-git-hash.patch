@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Guanran Wang <guanran928@outlook.com>
+Date: Tue, 9 Jul 2024 16:49:41 +0800
+Subject: [PATCH] fix git hash
+
+---
+ lib/utils/git-hash.ts | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
+
+diff --git a/lib/utils/git-hash.ts b/lib/utils/git-hash.ts
+index 9a8131696..f1f568fb4 100644
+--- a/lib/utils/git-hash.ts
++++ b/lib/utils/git-hash.ts
+@@ -1,14 +1,6 @@
+ import { execSync } from 'child_process';
+
+-let gitHash = process.env.HEROKU_SLUG_COMMIT?.slice(0, 8) || process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 8);
+-let gitDate: Date | undefined;
+-if (!gitHash) {
+-    try {
+-        gitHash = execSync('git rev-parse HEAD').toString().trim().slice(0, 8);
+-        gitDate = new Date(execSync('git log -1 --format=%cd').toString().trim());
+-    } catch {
+-        gitHash = 'unknown';
+-    }
+-}
++let gitHash = '@GIT_HASH@'.slice(0, 8);
++let gitDate = new Date('Thu Jan 1 00:00:00 1970 +0000');
+
+ export { gitHash, gitDate };

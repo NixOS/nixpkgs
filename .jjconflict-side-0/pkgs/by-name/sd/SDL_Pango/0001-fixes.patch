@@ -1,0 +1,148 @@
+diff --git a/SDL_Pango.pc.in b/SDL_Pango.pc.in
+index 750d091..3af38ff 100644
+--- a/SDL_Pango.pc.in
++++ b/SDL_Pango.pc.in
+@@ -6,6 +6,6 @@ includedir=@includedir@
+ Name: SDL_Pango
+ Description: SDL library for internationalized text rendering
+ Version: @VERSION@
+-Requires: pango
++Requires: pango pangoft2
+ Libs: -L${libdir} -lSDL_Pango
+ Cflags: -I${includedir}
+\ No newline at end of file
+diff --git a/src/SDL_Pango.c b/src/SDL_Pango.c
+index b969bc1..cc2c3f5 100644
+--- a/src/SDL_Pango.c
++++ b/src/SDL_Pango.c
+@@ -231,6 +231,41 @@
+ 
+ #include "SDL_Pango.h"
+ 
++const SDLPango_Matrix _MATRIX_WHITE_BACK
++    = {255, 0, 0, 0,
++       255, 0, 0, 0,
++       255, 0, 0, 0,
++       255, 255, 0, 0,};
++const SDLPango_Matrix *MATRIX_WHITE_BACK = &_MATRIX_WHITE_BACK;
++
++const SDLPango_Matrix _MATRIX_BLACK_BACK
++    = {0, 255, 0, 0,
++       0, 255, 0, 0,
++       0, 255, 0, 0,
++       255, 255, 0, 0,};
++const SDLPango_Matrix *MATRIX_BLACK_BACK = &_MATRIX_BLACK_BACK;
++
++const SDLPango_Matrix _MATRIX_TRANSPARENT_BACK_BLACK_LETTER
++    = {0, 0, 0, 0,
++       0, 0, 0, 0,
++       0, 0, 0, 0,
++       0, 255, 0, 0,};
++const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_BLACK_LETTER = &_MATRIX_TRANSPARENT_BACK_BLACK_LETTER;
++
++const SDLPango_Matrix _MATRIX_TRANSPARENT_BACK_WHITE_LETTER
++    = {255, 255, 0, 0,
++       255, 255, 0, 0,
++       255, 255, 0, 0,
++       0, 255, 0, 0,};
++const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_WHITE_LETTER = &_MATRIX_TRANSPARENT_BACK_WHITE_LETTER;
++
++const SDLPango_Matrix _MATRIX_TRANSPARENT_BACK_TRANSPARENT_LETTER
++    = {255, 255, 0, 0,
++       255, 255, 0, 0,
++       255, 255, 0, 0,
++       0, 0, 0, 0,};
++const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_TRANSPARENT_LETTER = &_MATRIX_TRANSPARENT_BACK_TRANSPARENT_LETTER;
++
+ //! non-zero if initialized
+ static int IS_INITIALIZED = 0;
+ 
+diff --git a/src/SDL_Pango.h b/src/SDL_Pango.h
+index 6ebdf78..b7e5e58 100644
+--- a/src/SDL_Pango.h
++++ b/src/SDL_Pango.h
+@@ -47,57 +47,32 @@ typedef struct _SDLPango_Matrix {
+     Uint8 m[4][4];  /*! Matrix variables */
+ } SDLPango_Matrix;
+ 
+-const SDLPango_Matrix _MATRIX_WHITE_BACK
+-    = {255, 0, 0, 0,
+-       255, 0, 0, 0,
+-       255, 0, 0, 0,
+-       255, 255, 0, 0,};
+ 
+ /*!
+     Specifies white back and black letter.
+ */
+-const SDLPango_Matrix *MATRIX_WHITE_BACK = &_MATRIX_WHITE_BACK;
++extern const SDLPango_Matrix *MATRIX_WHITE_BACK;
+ 
+-const SDLPango_Matrix _MATRIX_BLACK_BACK
+-    = {0, 255, 0, 0,
+-       0, 255, 0, 0,
+-       0, 255, 0, 0,
+-       255, 255, 0, 0,};
+ /*!
+     Specifies black back and white letter.
+ */
+-const SDLPango_Matrix *MATRIX_BLACK_BACK = &_MATRIX_BLACK_BACK;
++extern const SDLPango_Matrix *MATRIX_BLACK_BACK;
+ 
+-const SDLPango_Matrix _MATRIX_TRANSPARENT_BACK_BLACK_LETTER
+-    = {0, 0, 0, 0,
+-       0, 0, 0, 0,
+-       0, 0, 0, 0,
+-       0, 255, 0, 0,};
+ /*!
+     Specifies transparent back and black letter.
+ */
+-const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_BLACK_LETTER = &_MATRIX_TRANSPARENT_BACK_BLACK_LETTER;
++extern const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_BLACK_LETTER;
+ 
+-const SDLPango_Matrix _MATRIX_TRANSPARENT_BACK_WHITE_LETTER
+-    = {255, 255, 0, 0,
+-       255, 255, 0, 0,
+-       255, 255, 0, 0,
+-       0, 255, 0, 0,};
+ /*!
+     Specifies transparent back and white letter.
+ */
+-const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_WHITE_LETTER = &_MATRIX_TRANSPARENT_BACK_WHITE_LETTER;
++extern const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_WHITE_LETTER;
+ 
+-const SDLPango_Matrix _MATRIX_TRANSPARENT_BACK_TRANSPARENT_LETTER
+-    = {255, 255, 0, 0,
+-       255, 255, 0, 0,
+-       255, 255, 0, 0,
+-       0, 0, 0, 0,};
+ /*!
+     Specifies transparent back and transparent letter.
+     This is useful for KARAOKE like rendering.
+ */
+-const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_TRANSPARENT_LETTER = &_MATRIX_TRANSPARENT_BACK_TRANSPARENT_LETTER;
++extern const SDLPango_Matrix *MATRIX_TRANSPARENT_BACK_TRANSPARENT_LETTER;
+ 
+ /*!
+     Specifies direction of text. See Pango reference for detail
+@@ -186,7 +161,8 @@ extern DECLSPEC void SDLCALL SDLPango_SetBaseDirection(
+     SDLPango_Direction direction);
+ 
+ 
+-#ifdef __FT2_BUILD_UNIX_H__
++
++#ifdef __PANGO_H__
+ 
+ extern DECLSPEC void SDLCALL SDLPango_CopyFTBitmapToSurface(
+     const FT_Bitmap *bitmap,
+@@ -194,11 +170,8 @@ extern DECLSPEC void SDLCALL SDLPango_CopyFTBitmapToSurface(
+     const SDLPango_Matrix *matrix,
+     SDL_Rect *rect);
+ 
+-#endif	/* __FT2_BUILD_UNIX_H__ */
+ 
+ 
+-#ifdef __PANGO_H__
+-
+ extern DECLSPEC PangoFontMap* SDLCALL SDLPango_GetPangoFontMap(
+     SDLPango_Context *context);
+ 

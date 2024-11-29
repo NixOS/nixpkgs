@@ -1,0 +1,25 @@
+From b36a5bd502fbf6b8ad31b6bc35c7bab4aff24313 Mon Sep 17 00:00:00 2001
+From: Stefan Vigerske <svigerske@gams.com>
+Date: Mon, 20 Jul 2020 18:39:20 +0200
+Subject: [PATCH] use static_cast for static cast, fixes #319
+
+---
+ Cbc/src/CbcModel.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Cbc/src/CbcModel.cpp b/Cbc/src/CbcModel.cpp
+index 8603942b..239bf0b4 100644
+--- a/Cbc/src/CbcModel.cpp
++++ b/Cbc/src/CbcModel.cpp
+@@ -5357,7 +5357,7 @@ void CbcModel::branchAndBound(int doStatistics)
+         OsiClpSolverInterface * clpSolver
+         = dynamic_cast<OsiClpSolverInterface *> (solver_);
+         if (clpSolver)
+-            clpSolver->setFakeObjective(reinterpret_cast<double *> (NULL));
++            clpSolver->setFakeObjective(static_cast<double *> (NULL));
+     }
+ #endif
+     moreSpecialOptions_ = saveMoreSpecialOptions;
+-- 
+2.37.3
+
