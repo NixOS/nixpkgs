@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pylint-django";
-  version = "2.6.0";
+  version = "2.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = "pylint-django";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Rnty8ryKd5PxFFVYcvB8p9VS3qlHCprxR8+/ySY5qC8=";
+    hash = "sha256-9b0Sbo6E036UmUmP/CVPrS9cxxKtkMMZtqJsI53g4sU=";
   };
 
   build-system = [ poetry-core ];

@@ -194,7 +194,7 @@
         - pkgs/by-name/ma/maven/**/*
         - doc/languages-frameworks/maven.section.md
         # Ant
-        - pkgs/by-name/ap/apacheAnt/**/*
+        - pkgs/by-name/an/ant/**/*
         # javaPackages attrset
         - pkgs/development/java-modules/**/*
         - pkgs/top-level/java-packages.nix
