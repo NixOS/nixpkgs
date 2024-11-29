@@ -1,0 +1,112 @@
+From b2ae30bab412472f1d2ff90439134a8a465fdf9a Mon Sep 17 00:00:00 2001
+From: Kenny Levinsen <kl@kl.wtf>
+Date: Mon, 2 May 2022 11:21:47 +0200
+Subject: [PATCH 2/2] Update fontconfig
+
+---
+ Cargo.lock | 38 +++++++++++++++++++++++++++++---------
+ Cargo.toml |  2 +-
+ 2 files changed, 30 insertions(+), 10 deletions(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 1ad4a86..6821181 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -137,7 +137,16 @@ version = "0.4.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "b11f15d1e3268f140f68d390637d5e76d849782d971ae7063e0da69fe9709a76"
+ dependencies = [
+- "libloading",
++ "libloading 0.6.7",
++]
++
++[[package]]
++name = "dlib"
++version = "0.5.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "ac1b7517328c04c2aa68422fc60a41b92208182142ed04a25879c26c8f878794"
++dependencies = [
++ "libloading 0.7.3",
+ ]
+ 
+ [[package]]
+@@ -166,9 +175,9 @@ checksum = "e88a8acf291dafb59c2d96e8f59828f3838bb1a70398823ade51a84de6a6deed"
+ 
+ [[package]]
+ name = "fontconfig"
+-version = "0.2.0"
++version = "0.5.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "a5570e7ce35ffb621b31934530c4b3b8ce9fdd8bf8436e98f9c7ebadff2ef259"
++checksum = "a25320ad784a9578ada0b395dd7dcd2321109404bbb341ec27e64b01a1e49b47"
+ dependencies = [
+  "yeslogic-fontconfig-sys",
+ ]
+@@ -237,6 +246,16 @@ dependencies = [
+  "winapi",
+ ]
+ 
++[[package]]
++name = "libloading"
++version = "0.7.3"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "efbc0f03f9a775e9f6aed295c6a1ba2253c5757a9e03d55c6caa46a681abcddd"
++dependencies = [
++ "cfg-if 1.0.0",
++ "winapi",
++]
++
+ [[package]]
+ name = "libpulse-binding"
+ version = "2.23.0"
+@@ -398,9 +417,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "once_cell"
+-version = "1.5.2"
++version = "1.10.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "13bd41f508810a131401606d54ac32a467c97172d74ba7662562ebba5ad07fa0"
++checksum = "87f3e037eac156d1775da914196f0f37741a274155e34a0b7e427c35d2a2ecb9"
+ 
+ [[package]]
+ name = "opaque-debug"
+@@ -803,7 +822,7 @@ dependencies = [
+  "byteorder",
+  "chrono",
+  "dbus",
+- "dlib",
++ "dlib 0.4.2",
+  "fontconfig",
+  "fuzzy-matcher",
+  "itertools",
+@@ -843,11 +862,12 @@ dependencies = [
+ 
+ [[package]]
+ name = "yeslogic-fontconfig-sys"
+-version = "2.11.1"
++version = "3.0.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "e194a0c5cd1b5c87215eed9d26aca9799fa1b599fe2e178977d6f8ccc812e3d3"
++checksum = "cb3f5a91c31bef6650d3a1b69192b4217fd88e4cfedc8101813e4dc3394ecbb8"
+ dependencies = [
+  "const-cstr",
+- "libc",
++ "dlib 0.5.0",
++ "once_cell",
+  "pkg-config",
+ ]
+diff --git a/Cargo.toml b/Cargo.toml
+index abb3807..691daa7 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -46,5 +46,5 @@ serde_yaml = { version = "0.8", optional = true }
+ 
+ libpulse-binding = { version = "2.22", optional = true }
+ alsa = { version = "0.4.0", optional = true }
+-fontconfig = "0.2.0"
++fontconfig = "0.5.0"
+ unicode-segmentation = "1.6.0"
+-- 
+2.44.0
+

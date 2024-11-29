@@ -1,0 +1,26 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index d045458f..efa9161d 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -16,7 +16,7 @@ dependencies = [
+   "img2pdf>=0.5",
+   "packaging>=20",
+   "pdfminer.six>=20220319",
+-  "pi-heif",                # Heif image format - maintainers: if this is removed, it will NOT break
++  "pillow-heif",                # Heif image format - maintainers: if this is removed, it will NOT break
+   "pikepdf>=8.10.1",
+   "Pillow>=10.0.1",
+   "pluggy>=1",
+diff --git a/src/ocrmypdf/_pipeline.py b/src/ocrmypdf/_pipeline.py
+index 043a78a0..522197b1 100644
+--- a/src/ocrmypdf/_pipeline.py
++++ b/src/ocrmypdf/_pipeline.py
+@@ -42,7 +42,7 @@ from ocrmypdf.pdfinfo import Colorspace, Encoding, PageInfo, PdfInfo
+ from ocrmypdf.pluginspec import OrientationConfidence
+ 
+ try:
+-    from pi_heif import register_heif_opener
++    from pillow_heif import register_heif_opener
+ except ImportError:
+ 
+     def register_heif_opener():

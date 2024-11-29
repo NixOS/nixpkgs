@@ -1,0 +1,44 @@
+.Dd $Mdocdate$
+.Dt MIRAKURUN 1
+.Os
+.Sh NAME
+.Nm mirakurun
+.Nd @DESCRIPTION@
+.Sh SYNOPSIS
+.Nm
+.Bk -words
+.Op Ar command Op Ar args
+.Ek
+.Sh DESCRIPTION
+.Nm
+is a wrapper command for Mirakurun provided by Nix. It's actually a thin
+wrapper around the
+.Xr npm 1
+command line tool which you can use to invoke npm commands from the Mirakurun
+project directory. The command line arguments are simply passed as-is to
+.Xr npm 1 .
+.Pp
+On NixOS, it is strongly recommended that you enable the mirakurun module
+instead of invoking this command directly to launch Mirakurun. On other
+platforms, run
+.Pp
+.Dl $ mirakurun start
+.Pp
+to start Mirakurun.
+.Sh FILES
+.Bl -tag -width Ds -compact
+.It Pa /etc/mirakurun
+.Nm
+configuration directory.
+.El
+.Sh EXAMPLES
+Start Mirakurun.
+.Pp
+.Dl $ mirakurun start
+.Pp
+Start Mirakurun in development mode.
+.Pp
+.Dl $ mirakurun run debug
+.Pp
+.Sh SEE ALSO
+.Xr npm 1

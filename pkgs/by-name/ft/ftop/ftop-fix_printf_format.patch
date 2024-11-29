@@ -1,0 +1,20 @@
+--- src/ftop.c.orig	2010-06-15 23:14:50.000000000 +0200
++++ src/ftop.c	2010-06-15 23:15:52.000000000 +0200
+@@ -222,7 +222,7 @@
+     p_eol(p, part);
+ 
+     cols = snprintf(tmp_buf, sizeof(tmp_buf),
+-                    "Processes:  %u total, %u unreadable",
++                    "Processes:  %zu total, %zu unreadable",
+                     s->num_processes + s->num_unreadable_processes,
+                     s->num_unreadable_processes);
+ 
+@@ -244,7 +244,7 @@
+     p_eol(p, part);
+ 
+     snprintf(tmp_buf, sizeof(tmp_buf),
+-             "Open Files: %u regular, %u dir, %u chr, %u blk, %u pipe, %u sock, %u misc",
++             "Open Files: %zu regular, %zu dir, %zu chr, %zu blk, %zu pipe, %zu sock, %zu misc",
+              s->num_reg, s->num_dir, s->num_chr, s->num_blk, s->num_pipe,
+              s->num_sock, s->num_misc);
+ 
