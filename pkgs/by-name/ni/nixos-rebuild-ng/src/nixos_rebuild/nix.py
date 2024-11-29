@@ -261,7 +261,7 @@ def nixos_build(
         "nix-build",
         build_attr.path,
         "--attr",
-        f"{build_attr.attr + '.' if build_attr.attr else ''}config.system.build.{attr}",
+        build_attr.to_attr("config", "system", "build", attr),
         *dict_to_flags(build_flags),
     ]
     r = run_wrapper(run_args, stdout=PIPE)
@@ -282,7 +282,7 @@ def nixos_build_flake(
         *FLAKE_FLAGS,
         "build",
         "--print-out-paths",
-        f"{flake}.config.system.build.{attr}",
+        flake.to_attr("config", "system", "build", attr),
         *dict_to_flags(flake_build_flags),
     ]
     r = run_wrapper(run_args, stdout=PIPE)
@@ -303,7 +303,7 @@ def nixos_remote_build(
             "--raw",
             build_attr.path,
             "--attr",
-            f"{build_attr.attr + '.' if build_attr.attr else ''}config.system.build.{attr}",
+            build_attr.to_attr("config", "system", "build", attr),
             *dict_to_flags(instantiate_flags or {}),
         ],
         stdout=PIPE,
@@ -332,7 +332,7 @@ def nixos_remote_build_flake(
             *FLAKE_FLAGS,
             "eval",
             "--raw",
-            f"{flake}.config.system.build.{attr}.drvPath",
+            flake.to_attr("config", "system", "build", attr, "drvPath"),
             *dict_to_flags(flake_build_flags or {}),
         ],
         stdout=PIPE,

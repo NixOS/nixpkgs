@@ -48,6 +48,9 @@ class BuildAttr:
     path: str | Path
     attr: str | None
 
+    def to_attr(self, *attrs: str) -> str:
+        return f"{self.attr + '.' if self.attr else ''}{".".join(attrs)}"
+
     @classmethod
     def from_arg(cls, attr: str | None, file: str | None) -> Self:
         if not (attr or file):
@@ -60,6 +63,9 @@ class Flake:
     path: Path
     attr: str
     _re: ClassVar = re.compile(r"^(?P<path>[^\#]*)\#?(?P<attr>[^\#\"]*)$")
+
+    def to_attr(self, *attrs: str) -> str:
+        return f"{self}.{".".join(attrs)}"
 
     @override
     def __str__(self) -> str:
