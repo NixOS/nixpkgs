@@ -46,7 +46,7 @@ buildNpmPackage rec {
 
       makeWrapper ${lib.getExe electron} $out/bin/caprine \
           --add-flags $out/share/caprine/resources/app.asar \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
           --set-default ELECTRON_IS_DEV 0 \
           --inherit-argv0
 

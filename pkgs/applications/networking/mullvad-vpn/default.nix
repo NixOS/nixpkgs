@@ -121,7 +121,7 @@ stdenv.mkDerivation {
         --set-default MULLVAD_RESOURCE_DIR "$out/share/mullvad/resources"
 
     wrapProgram $out/bin/mullvad-gui \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime}}"
 
     sed -i "s|Exec.*$|Exec=$out/bin/mullvad-vpn $U|" $out/share/applications/mullvad-vpn.desktop
 

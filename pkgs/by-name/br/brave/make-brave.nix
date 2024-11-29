@@ -262,7 +262,7 @@ stdenv.mkDerivation {
       }
       ${
         optionalString (enableFeatures != [ ]) ''
-          --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+,WaylandWindowDecorations}}"
+          --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+,WaylandWindowDecorations --enable-wayland-ime}}"
         ''
       }
       ${
