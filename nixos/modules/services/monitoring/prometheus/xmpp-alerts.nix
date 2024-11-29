@@ -10,8 +10,9 @@ in
 {
   imports = [
     (mkRenamedOptionModule
-      [ "services" "prometheus" "xmpp-alerts" "configuration" ]
-      [ "services" "prometheus" "xmpp-alerts" "settings" ])
+      { services.prometheus.xmpp-alerts.configuration = null; }
+      { services.prometheus.xmpp-alerts.settings = null; }
+    )
   ];
 
   options.services.prometheus.xmpp-alerts = {

@@ -4,7 +4,7 @@
 { lib }:
 
 let
-  inherit (builtins) head length;
+  inherit (builtins) head length typeOf;
   inherit (lib.trivial) oldestSupportedReleaseIsAtLeast mergeAttrs warn warnIf;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
   inherit (lib.lists) filter foldr foldl' concatMap elemAt all partition groupBy take foldl;
@@ -81,6 +81,34 @@ rec {
     in
       attrByPath' 0 set;
 
+  attrByPathSet =
+    let
+      errorSuffix = "but should be either null (to end the path) or an single-valued attribute set (for another path element)";
+    in
+    attrPath:
+    default:
+    set:
+    let
+      recurse = path: p: s:
+        if isAttrs p then
+          let
+            names = attrNames p;
+            name = head names;
+          in
+          if lib.length names != 1 then
+            throw "lib.attrsets.attrByPathSet: Path at ${showAttrPath path} is an attribute set with ${toString (length names)} attributes, ${errorSuffix}"
+          else if s ? ${name} then
+            recurse (path ++ [ name ]) p.${name} s.${name}
+          else
+            default
+        else if isNull p then
+          s
+        else
+          throw "lib.attrsets.attrByPathSet: Path at ${showAttrPath path} is a ${typeOf p}, ${errorSuffix}"
+        ;
+    in
+      recurse [] attrPath set;
+
   /**
     Return if an attribute from nested attribute set exists.
 
@@ -146,6 +174,33 @@ rec {
       );
     in
       hasAttrByPath' 0 e;
+
+  hasAttrByPathSet =
+    let
+      errorSuffix = "but should be either null (to end the path) or an single-valued attribute set (for another path element)";
+    in
+    attrPath:
+    set:
+    let
+      recurse = path: p: s:
+        if isAttrs p then
+          let
+            names = attrNames p;
+            name = head names;
+          in
+          if lib.length names != 1 then
+            throw "lib.attrsets.hasAttrByPathSet: Path at ${showAttrPath path} is an attribute set with ${toString (length names)} attributes, ${errorSuffix}"
+          else if s ? ${name} then
+            recurse (path ++ [ name ]) p.${name} s.${name}
+          else
+            false
+        else if isNull p then
+          true
+        else
+          throw "lib.attrsets.hasAttrByPathSet: Path at ${showAttrPath path} is a ${typeOf p}, ${errorSuffix}"
+        ;
+    in
+      recurse [] attrPath set;
 
   /**
     Return the longest prefix of an attribute path that refers to an existing attribute in a nesting of attribute sets.
@@ -273,6 +328,26 @@ rec {
         else { ${elemAt attrPath n} = atDepth (n + 1); };
     in atDepth 0;
 
+  setAttrByPathSet =
+    let
+      errorSuffix = "but should be either null (to end the path) or an single-valued attribute set (for another path element)";
+    in
+    attrPath:
+    value:
+    if isAttrs attrPath then
+      let
+        names = attrNames attrPath;
+        name = head names;
+      in
+      if lib.length names != 1 then
+        throw "lib.attrsets.setAttrByPathSet: Path at ${showAttrPath attrPath} is an attribute set with ${toString (length names)} attributes, ${errorSuffix}"
+      else
+        { ${name} = setAttrByPathSet attrPath.${name} value; }
+    else if isNull attrPath then
+      value
+    else
+      throw "lib.attrsets.setAttrByPathSet: Path at ${showAttrPath attrPath} is a ${typeOf attrPath}, ${errorSuffix}";
+
   /**
     Like `attrByPath`, but without a default value. If it doesn't find the
     path it will throw an error.
@@ -320,6 +395,11 @@ rec {
     attrPath:
     set:
     attrByPath attrPath (abort ("cannot find attribute `" + concatStringsSep "." attrPath + "'")) set;
+
+  getAttrFromPathSet =
+    attrPath:
+    set:
+    attrByPathSet attrPath (abort ("cannot find attribute `" + concatStringsSep "." attrPath + "'")) set;
 
   /**
     Map each attribute in the given set and merge them into a new attribute set.

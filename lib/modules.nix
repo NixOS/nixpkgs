@@ -6,6 +6,7 @@ let
     all
     any
     attrByPath
+    attrByPathSet
     attrNames
     catAttrs
     concatLists
@@ -16,6 +17,7 @@ let
     foldl'
     functionArgs
     getAttrFromPath
+    getAttrFromPathSet
     genericClosure
     head
     id
@@ -38,6 +40,7 @@ let
     reverseList sort
     seq
     setAttrByPath
+    setAttrByPathSet
     substring
     throwIfNot
     trace
@@ -1335,17 +1338,39 @@ let
     # ```
     condition ? true
   }:
+    let
+      get = p:
+        if isAttrs p then
+          getAttrFromPathSet p
+        else
+          getAttrFromPath p;
+      get' = p:
+        if isAttrs p then
+          attrByPathSet p
+        else
+          attrByPath p;
+      set = p:
+        if isAttrs p then
+          setAttrByPathSet p
+        else
+          setAttrByPath p;
+      show = p:
+        if isAttrs p then
+          showOptionPathSet
+        else
+          showOption;
+    in
     { config, options, ... }:
     let
-      fromOpt = getAttrFromPath from options;
-      toOf = attrByPath to
-        (abort "Renaming error: option `${showOption to}' does not exist.");
-      toType = let opt = attrByPath to {} options; in opt.type or (types.submodule {});
+      fromOpt = get from options;
+      toOf = get' to
+        (abort "Renaming error: option `${show to}' does not exist.");
+      toType = let opt = get' to {} options; in opt.type or (types.submodule {});
     in
     {
-      options = setAttrByPath from (mkOption {
+      options = set from (mkOption {
         inherit visible;
-        description = "Alias of {option}`${showOption to}`.";
+        description = "Alias of {option}`${show to}`.";
         apply = x: use (toOf config);
       } // optionalAttrs (toType != null) {
         type = toType;
@@ -1353,11 +1378,11 @@ let
       config = mkIf condition (mkMerge [
         (optionalAttrs (options ? warnings) {
           warnings = optional (warn && fromOpt.isDefined)
-            "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
+            "The option `${show from}' defined in ${showFiles fromOpt.files} has been renamed to `${show to}'.";
         })
         (if withPriority
-          then mkAliasAndWrapDefsWithPriority (setAttrByPath to) fromOpt
-          else mkAliasAndWrapDefinitions (setAttrByPath to) fromOpt)
+          then mkAliasAndWrapDefsWithPriority (set to) fromOpt
+          else mkAliasAndWrapDefinitions (set to) fromOpt)
       ]);
     };
 

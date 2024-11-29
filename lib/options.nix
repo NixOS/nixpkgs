@@ -435,6 +435,11 @@ rec {
          then part
          else lib.strings.escapeNixIdentifier part;
     in (concatStringsSep ".") (map escapeOptionPart parts);
+
+  showOptionPathSet =
+    set:
+    "TODO";
+
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
 
   showDefs = defs: concatMapStrings (def:
