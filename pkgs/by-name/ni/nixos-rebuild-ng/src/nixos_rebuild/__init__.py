@@ -53,7 +53,9 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     classic_build_flags.add_argument("--no-build-output", "-Q", action="store_true")
 
     copy_flags = argparse.ArgumentParser(add_help=False)
-    copy_flags.add_argument("--use-substitutes", "-s", action="store_true")
+    copy_flags.add_argument(
+        "--use-substitutes", "--substitute-on-destination", "-s", action="store_true"
+    )
 
     sub_parsers = {
         "common_flags": common_flags,
@@ -90,6 +92,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     main_parser.add_argument("--fast", action="store_true")
     main_parser.add_argument("--build-host")
     main_parser.add_argument("--target-host")
+    main_parser.add_argument("--no-build-nix", action="store_true")  # deprecated
     main_parser.add_argument("action", choices=Action.values(), nargs="?")
 
     return main_parser, sub_parsers
@@ -132,6 +135,10 @@ def parse_args(
     # TODO: use deprecated=True in Python >=3.13
     if args.no_ssh_tty:
         parser_warn("--no-ssh-tty deprecated, SSH's TTY is never used anymore")
+
+    # TODO: use deprecated=True in Python >=3.13
+    if args.no_build_nix:
+        parser_warn("--no-build-nix deprecated, we do not build nix anymore")
 
     if args.action == Action.EDIT.value and (args.file or args.attr):
         parser.error("--file and --attr are not supported with 'edit'")
