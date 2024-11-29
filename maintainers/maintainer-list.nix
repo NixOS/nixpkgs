@@ -7208,6 +7208,12 @@
       { fingerprint = "7E08 6842 0934 AA1D 6821  1F2A 671E 39E6 744C 807D"; }
     ];
   };
+  femiagbabiaka = {
+    email = "femi@femiagbabiaka.xyz";
+    github = "femiagbabiaka";
+    githubId = 5712318;
+    name = "Femi Agbabiaka";
+  };
   fernsehmuell = {
     email = "fernsehmuel@googlemail.com";
     matrix = "@fernsehmuell:matrix.org";
