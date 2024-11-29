@@ -122,7 +122,7 @@ def test_execute_nix_boot(mock_run: Any, tmp_path: Path) -> None:
                     "nix-build",
                     "<nixpkgs/nixos>",
                     "--attr",
-                    "system",
+                    "config.system.build.toplevel",
                     "--no-out-link",
                     "-vvv",
                 ],

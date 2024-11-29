@@ -217,7 +217,7 @@ def execute(argv: list[str]) -> None:
                 else:
                     if build_host:
                         path_to_config = nix.nixos_remote_build(
-                            "system",
+                            "toplevel",
                             build_attr,
                             build_host,
                             instantiate_flags=common_flags,
@@ -226,7 +226,7 @@ def execute(argv: list[str]) -> None:
                         )
                     else:
                         path_to_config = nix.nixos_build(
-                            "system",
+                            "toplevel",
                             build_attr,
                             no_out_link=True,
                             **build_flags,
@@ -275,7 +275,7 @@ def execute(argv: list[str]) -> None:
                 )
             else:
                 path_to_config = nix.nixos_build(
-                    "system",
+                    "toplevel",
                     build_attr,
                     dry_run=dry_run,
                     **build_flags,

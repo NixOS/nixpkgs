@@ -251,7 +251,14 @@ def test_nixos_build(mock_run: Any, monkeypatch: Any) -> None:
         "attr", m.BuildAttr("<nixpkgs/nixos>", None), nix_flag="foo"
     ) == Path("/path/to/file")
     mock_run.assert_called_with(
-        ["nix-build", "<nixpkgs/nixos>", "--attr", "attr", "--nix-flag", "foo"],
+        [
+            "nix-build",
+            "<nixpkgs/nixos>",
+            "--attr",
+            "config.system.build.attr",
+            "--nix-flag",
+            "foo",
+        ],
         stdout=PIPE,
     )
 
@@ -259,7 +266,7 @@ def test_nixos_build(mock_run: Any, monkeypatch: Any) -> None:
         "/path/to/file"
     )
     mock_run.assert_called_with(
-        ["nix-build", Path("file"), "--attr", "preAttr.attr"],
+        ["nix-build", Path("file"), "--attr", "preAttr.config.system.build.attr"],
         stdout=PIPE,
     )
 
@@ -332,7 +339,7 @@ def test_nixos_remote_build(mock_run: Any, monkeypatch: Any) -> None:
     build_host = m.Remote("user@host", ["--ssh", "opts"], None)
     assert n.nixos_remote_build(
         "attr",
-        m.BuildAttr("<nixpkgs/nixos>", None),
+        m.BuildAttr("<nixpkgs/nixos>", "preAttr"),
         build_host,
         build_flags={"build": True},
         instantiate_flags={"inst": True},
@@ -346,7 +353,7 @@ def test_nixos_remote_build(mock_run: Any, monkeypatch: Any) -> None:
                     "--raw",
                     "<nixpkgs/nixos>",
                     "--attr",
-                    "attr",
+                    "preAttr.config.system.build.attr",
                     "--inst",
                 ],
                 stdout=PIPE,

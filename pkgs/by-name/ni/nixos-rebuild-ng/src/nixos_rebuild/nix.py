@@ -261,7 +261,7 @@ def nixos_build(
         "nix-build",
         build_attr.path,
         "--attr",
-        f"{'.'.join(x for x in [build_attr.attr, attr] if x)}",
+        f"{build_attr.attr + '.' if build_attr.attr else ''}config.system.build.{attr}",
         *dict_to_flags(build_flags),
     ]
     r = run_wrapper(run_args, stdout=PIPE)
@@ -303,7 +303,7 @@ def nixos_remote_build(
             "--raw",
             build_attr.path,
             "--attr",
-            f"{'.'.join(x for x in [build_attr.attr, attr] if x)}",
+            f"{build_attr.attr + '.' if build_attr.attr else ''}config.system.build.{attr}",
             *dict_to_flags(instantiate_flags or {}),
         ],
         stdout=PIPE,
