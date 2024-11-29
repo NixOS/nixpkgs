@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
       to the world. API currently supports C++, Python, and Ruby.
     '';
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })
