@@ -23,8 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags = [
-    "PREFIX=$(out)"
-    "MANPREFIX=$(out)"
+    "PREFIX=${placeholder "out"}"
+    "MANPREFIX=${placeholder "out"}"
   ];
 
   meta = {
