@@ -560,7 +560,9 @@ rec {
   # The same string MUST NOT be associated with multiple attribute paths. This
   # results in undefined behaviour. Use associateWithAttrPath' instead if you
   # need to handle multiple instances of the same string.
-  associateWithAttrPath = spec: listToAttrs (associateWithAttrPathMultiple [ ] null spec);
+  associateWithAttrPath = associateWithAttrPath' (name: path: { ${name} = path; }) (
+    recursor: remaining: concatMapAttrs (name: value: recursor name value) remaining
+  ) [ ] null;
 
   /**
     Return the specified attributes from a set.
