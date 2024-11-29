@@ -3,20 +3,19 @@
   include,
   libcMinimal,
   libgcc,
+  libelf,
   csu,
 }:
 
 mkDerivation {
-  path = "lib/libdl";
+  path = "lib/libkvm";
   extraPaths = [
-    "libexec/rtld-elf"
-    "lib/libc/gen"
-    "lib/libc/include"
-    "lib/libc/Versions.def"
+    "sys" # wants sys/${arch}
   ];
 
   outputs = [
     "out"
+    "man"
     "debug"
   ];
 
@@ -26,9 +25,12 @@ mkDerivation {
     include
     libcMinimal
     libgcc
+    libelf
   ];
 
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
   '';
+
+  env.MK_TESTS = "no";
 }

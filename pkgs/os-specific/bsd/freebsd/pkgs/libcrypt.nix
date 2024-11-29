@@ -7,16 +7,17 @@
 }:
 
 mkDerivation {
-  path = "lib/libdl";
+  path = "lib/libcrypt";
   extraPaths = [
-    "libexec/rtld-elf"
-    "lib/libc/gen"
-    "lib/libc/include"
-    "lib/libc/Versions.def"
+    "sys/kern"
+    "sys/crypto"
+    "lib/libmd"
+    "secure/lib/libcrypt"
   ];
 
   outputs = [
     "out"
+    "man"
     "debug"
   ];
 
@@ -31,4 +32,6 @@ mkDerivation {
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
   '';
+
+  env.MK_TESTS = "no";
 }

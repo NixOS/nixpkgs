@@ -7,12 +7,9 @@
 }:
 
 mkDerivation {
-  path = "lib/libdl";
+  path = "lib/libiconv_modules";
   extraPaths = [
-    "libexec/rtld-elf"
-    "lib/libc/gen"
-    "lib/libc/include"
-    "lib/libc/Versions.def"
+    "lib/libc/iconv"
   ];
 
   outputs = [
@@ -30,5 +27,6 @@ mkDerivation {
 
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
+    export makeFlags="$makeFlags SHLIBDIR=$out/lib/i18n"
   '';
 }
