@@ -6,6 +6,7 @@
   dotnetCorePackages,
   zlib,
   openssl,
+  nix-update-script,
   nixosTests,
 }:
 buildDotnetModule rec {
@@ -45,8 +46,11 @@ buildDotnetModule rec {
     mv $out/bin/WalletWasabi.Backend $out/bin/WasabiBackend
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) wasabibackend;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) wasabibackend;
+    };
   };
 
   meta = {
