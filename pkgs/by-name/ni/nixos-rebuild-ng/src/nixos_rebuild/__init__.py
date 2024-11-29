@@ -194,13 +194,14 @@ def execute(argv: list[str]) -> None:
     match action:
         case Action.SWITCH | Action.BOOT:
             logger.info("building the system configuration...")
+            attr = "config.system.build.toplevel"
             if args.rollback:
                 path_to_config = nix.rollback(profile, target_host, sudo=args.sudo)
             else:
                 if flake:
                     if build_host:
-                        path_to_config = nix.nixos_remote_build_flake(
-                            "toplevel",
+                        path_to_config = nix.remote_build_flake(
+                            attr,
                             flake,
                             build_host,
                             flake_build_flags=flake_build_flags,
@@ -208,16 +209,16 @@ def execute(argv: list[str]) -> None:
                             build_flags=build_flags,
                         )
                     else:
-                        path_to_config = nix.nixos_build_flake(
-                            "toplevel",
+                        path_to_config = nix.build_flake(
+                            attr,
                             flake,
                             no_link=True,
                             **flake_build_flags,
                         )
                 else:
                     if build_host:
-                        path_to_config = nix.nixos_remote_build(
-                            "toplevel",
+                        path_to_config = nix.remote_build(
+                            attr,
                             build_attr,
                             build_host,
                             instantiate_flags=common_flags,
@@ -225,8 +226,8 @@ def execute(argv: list[str]) -> None:
                             build_flags=build_flags,
                         )
                     else:
-                        path_to_config = nix.nixos_build(
-                            "toplevel",
+                        path_to_config = nix.build(
+                            attr,
                             build_attr,
                             no_out_link=True,
                             **build_flags,
@@ -253,6 +254,7 @@ def execute(argv: list[str]) -> None:
             )
         case Action.TEST | Action.BUILD | Action.DRY_BUILD | Action.DRY_ACTIVATE:
             logger.info("building the system configuration...")
+            attr = "config.system.build.toplevel"
             dry_run = action == Action.DRY_BUILD
             if args.rollback:
                 if action not in (Action.TEST, Action.BUILD):
@@ -267,15 +269,15 @@ def execute(argv: list[str]) -> None:
                 else:
                     raise NRError("could not find previous generation")
             elif flake:
-                path_to_config = nix.nixos_build_flake(
-                    "toplevel",
+                path_to_config = nix.build_flake(
+                    attr,
                     flake,
                     dry_run=dry_run,
                     **flake_build_flags,
                 )
             else:
-                path_to_config = nix.nixos_build(
-                    "toplevel",
+                path_to_config = nix.build(
+                    attr,
                     build_attr,
                     dry_run=dry_run,
                     **build_flags,
@@ -292,14 +294,14 @@ def execute(argv: list[str]) -> None:
             logger.info("building the system configuration...")
             attr = "vm" if action == Action.BUILD_VM else "vmWithBootLoader"
             if flake:
-                path_to_config = nix.nixos_build_flake(
-                    attr,
+                path_to_config = nix.build_flake(
+                    f"config.system.build.{attr}",
                     flake,
                     **flake_build_flags,
                 )
             else:
-                path_to_config = nix.nixos_build(
-                    attr,
+                path_to_config = nix.build(
+                    f"config.system.build.{attr}",
                     build_attr,
                     **build_flags,
                 )
