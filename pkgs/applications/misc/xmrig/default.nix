@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
   ];
+  cmakeFlags = [
+    "-DWITH_CUDA=ON"
+    "-DWITH_NVML=ON"
+  ];
 
   buildInputs = [
     libuv

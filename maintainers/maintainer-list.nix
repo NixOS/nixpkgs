@@ -14956,6 +14956,12 @@
     githubId = 254443;
     name = "Mathieu Rene";
   };
+  mrfoxpro = {
+    email = "tuningiposadka@gmail.com";
+    github = "MrFoxPro";
+    name = "Dmitriy Nikiforov";
+    githubId = 17229619;
+  };
   mrfreezeex = {
     email = "arthur@cri.epita.fr";
     github = "MrFreezeex";
