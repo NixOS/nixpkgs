@@ -21,7 +21,7 @@ from .process import run_wrapper
 from .utils import Args, dict_to_flags
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
-FLAKE_REPL_TEMPLATE: Final = "repl.template.nix"
+FLAKE_REPL_TEMPLATE: Final = "repl.nix.template"
 logger = logging.getLogger(__name__)
 
 

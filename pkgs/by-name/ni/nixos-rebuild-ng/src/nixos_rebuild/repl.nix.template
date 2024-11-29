@@ -1,3 +1,4 @@
+# vim: set syntax=nix:
 let
   flake = builtins.getFlake ''${flake_path}'';
   configuration = flake.${flake_attr};
