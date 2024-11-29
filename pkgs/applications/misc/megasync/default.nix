@@ -54,8 +54,6 @@ mkDerivation rec {
       git checkout ${rev}
       git submodule update --init src/MEGASync/mega
 
-      cp src/MEGASync/mega/.clang-format .clang-format
-
       rm -rf .git
     ''; # Why so complicated, I just want a single submodule
   };
