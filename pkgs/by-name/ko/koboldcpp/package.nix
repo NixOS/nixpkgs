@@ -5,11 +5,10 @@
   makeWrapper,
   gitUpdater,
   python3Packages,
-  python311Packages ? null, # Ignored. Kept for compatibility with the release
   tk,
   addDriverRunpath,
 
-  darwin,
+  apple-sdk_12,
 
   koboldLiteSupport ? true,
 
@@ -30,10 +29,8 @@
 
   vulkanSupport ? true,
   vulkan-loader,
-
-  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
-  march ? "",
-  mtune ? "",
+  metalSupport ? stdenv.hostPlatform.isDarwin,
+  nix-update-script,
 }:
 
 let
@@ -42,12 +39,6 @@ let
   libraryPathWrapperArgs = lib.optionalString config.cudaSupport ''
     --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}"
   '';
-
-  darwinFrameworks =
-    if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) then
-      darwin.apple_sdk.frameworks
-    else
-      darwin.apple_sdk_11_0.frameworks;
 
   effectiveStdenv = if cublasSupport then cudaPackages.backendStdenv else stdenv;
 in
@@ -74,17 +65,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [ tk ]
     ++ finalAttrs.pythonInputs
-    ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
-      darwinFrameworks.Accelerate
-      darwinFrameworks.CoreVideo
-      darwinFrameworks.CoreGraphics
-      darwinFrameworks.CoreServices
-    ]
-    ++ lib.optionals metalSupport [
-      darwinFrameworks.MetalKit
-      darwinFrameworks.Foundation
-      darwinFrameworks.MetalPerformanceShaders
-    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
     ++ lib.optionals openblasSupport [ openblas ]
     ++ lib.optionals cublasSupport [
       cudaPackages.libcublas
@@ -99,29 +80,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals vulkanSupport [ vulkan-loader ];
 
   pythonPath = finalAttrs.pythonInputs;
-
-  darwinLdFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-F${darwinFrameworks.CoreServices}/Library/Frameworks"
-    "-F${darwinFrameworks.Accelerate}/Library/Frameworks"
-    "-framework CoreServices"
-    "-framework Accelerate"
-  ];
-  metalLdFlags = lib.optionals metalSupport [
-    "-F${darwinFrameworks.Foundation}/Library/Frameworks"
-    "-F${darwinFrameworks.Metal}/Library/Frameworks"
-    "-framework Foundation"
-    "-framework Metal"
-  ];
-
-  env.NIX_LDFLAGS = lib.concatStringsSep " " (finalAttrs.darwinLdFlags ++ finalAttrs.metalLdFlags);
-
-  env.NIX_CFLAGS_COMPILE =
-    lib.optionalString (march != "") (
-      lib.warn "koboldcpp: the march argument is only kept for compatibility; use overrideAttrs intead" "-march=${march}"
-    )
-    + lib.optionalString (mtune != "") (
-      lib.warn "koboldcpp: the mtune argument is only kept for compatibility; use overrideAttrs intead" "-mtune=${mtune}"
-    );
 
   makeFlags = [
     (makeBool "LLAMA_OPENBLAS" openblasSupport)
@@ -153,19 +111,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # Remove an unused argument, mainly intended for Darwin to reduce warnings
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace-warn " -s " " "
-  '';
-
   postFixup = ''
     wrapPythonProgramsIn "$out/bin" "$pythonPath"
     makeWrapper "$out/bin/koboldcpp.unwrapped" "$out/bin/koboldcpp" \
       --prefix PATH : ${lib.makeBinPath [ tk ]} ${libraryPathWrapperArgs}
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/LostRuins/koboldcpp/releases/tag/v${finalAttrs.version}";

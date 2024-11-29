@@ -18,7 +18,7 @@ in
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
         options = {
-          dns.enable = mkOption {
+          dns.enabled = mkOption {
             type = types.bool;
             default = true;
             description = ''

@@ -26,8 +26,7 @@ in lib.recursiveUpdate orig rec {
   #### overrides of texlive.tlpdb
 
   #### nonstandard script folders
-  context.scriptsFolder = "context/stubs-mkiv/unix";
-  context-legacy.scriptsFolder = "context/stubs/unix";
+  context-texlive.scriptsFolder = "context-texlive/stubs-mkiv/unix";
   cyrillic-bin.scriptsFolder = "texlive-extra";
   fontinst.scriptsFolder = "texlive-extra";
   mptopdf.scriptsFolder = "context/perl";
@@ -53,10 +52,13 @@ in lib.recursiveUpdate orig rec {
   latex-git-log.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ IPCSystemSimple ])) ];
   latexindent.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ FileHomeDir LogDispatch LogLog4perl UnicodeLineBreak YAMLTiny ])) ];
   pax.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ FileWhich ])) ];
+  pdflatexpicscale.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ GD ImageExifTool ])) ];
   ptex-fontmaps.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ Tk ])) ];
   purifyeps.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ FileWhich ])) ];
+  sqltex.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ DBI ])) ];
   svn-multi.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ TimeDate ])) ];
   texdoctk.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ Tk ])) ];
+  typog.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ IPCSystemSimple ])) ];
   ulqda.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ DigestSHA1 ])) ];
 
   #### python packages
@@ -67,8 +69,6 @@ in lib.recursiveUpdate orig rec {
   bibexport.extraBuildInputs = [ gnugrep ];
   checklistings.extraBuildInputs = [ coreutils ];
   cjk-gs-integrate.extraBuildInputs = [ ghostscript_headless ];
-  context.extraBuildInputs = [ coreutils ];
-  context-legacy.extraBuildInputs = [ ruby ];
   cyrillic-bin.extraBuildInputs = [ coreutils gnused ];
   dtxgen.extraBuildInputs = [ coreutils getopt gnumake zip ];
   dviljk.extraBuildInputs = [ coreutils ];
@@ -126,6 +126,11 @@ in lib.recursiveUpdate orig rec {
     "mtxrun.lua" = tl.context.tex + "/scripts/context/lua/mtxrun.lua";
   };
 
+  context-legacy.binlinks = {
+    texexec = tl.context-legacy.tex + "/scripts/context/ruby/texexec.rb";
+    texmfstart = tl.context-legacy.tex + "/scripts/context/ruby/texmfstart.rb";
+  };
+
   epstopdf.binlinks.repstopdf = "epstopdf";
   pdfcrop.binlinks.rpdfcrop = "pdfcrop";
 
@@ -168,14 +173,6 @@ in lib.recursiveUpdate orig rec {
 
   cjk-gs-integrate.postFixup = ''
     sed -i '2i$ENV{PATH}='"'"'${lib.makeBinPath cjk-gs-integrate.extraBuildInputs}'"'"' . ($ENV{PATH} ? ":$ENV{PATH}" : '"'''"');' "$out"/bin/cjk-gs-integrate
-  '';
-
-  context.postFixup = ''
-    sed -i '2iPATH="${lib.makeBinPath context.extraBuildInputs}''${PATH:+:$PATH}"' "$out"/bin/{contextjit,mtxrunjit}
-  '';
-
-  context-legacy.postFixup = ''
-    sed -i '2iPATH="${lib.makeBinPath context-legacy.extraBuildInputs}''${PATH:+:$PATH}"' "$out"/bin/texexec
   '';
 
   cyrillic-bin.postFixup = ''
@@ -308,6 +305,11 @@ in lib.recursiveUpdate orig rec {
     substituteInPlace "$out"/bin/latexindent --replace-fail 'use FindBin;' "BEGIN { \$0 = '$scriptsFolder' . '/latexindent.pl'; }; use FindBin;"
   '';
 
+  # find files in script directory, not in binary directory
+  minted.postFixup = ''
+    substituteInPlace "$out"/bin/latexminted --replace-fail "__file__" "\"$scriptsFolder/latexminted.py\""
+  '';
+
   # flag lua dependency
   texblend.scriptExts = [ "lua" ];
 
@@ -337,7 +339,9 @@ in lib.recursiveUpdate orig rec {
 
   #### dependency changes
   # it seems to need it to transform fonts
-  xdvi.deps = (orig.xdvi.deps or []) ++  [ "metafont" ];
+  xdvi.deps = (orig.xdvi.deps or [ ]) ++ [ "metafont" ];
+
+  mltex.deps = (orig.mltex.deps or [ ]) ++ [ "pdftex" ];
 
   # remove dependency-heavy packages from the basic collections
   collection-basic.deps = lib.subtractLists [ "metafont" "xdvi" ] orig.collection-basic.deps;
@@ -353,8 +357,8 @@ in lib.recursiveUpdate orig rec {
     (!(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) && !stdenv.hostPlatform.isRiscV)
     orig.luajittex.binfiles;
 
-  # tlpdb lists license as "unknown", but the README says lppl13: http://mirrors.ctan.org/language/arabic/arabi-add/README
-  arabi-add.license = [  "lppl13c" ];
+  # osda is unfree. Hence, we can't include it by default
+  collection-publishers.deps = builtins.filter (dep: dep != "osda") orig.collection-publishers.deps;
 
   texdoc = {
     extraRevision = "-tlpdb${toString tlpdbVersion.revision}";

@@ -1,17 +1,21 @@
-{ lib, buildGo123Module, fetchFromGitHub }:
-
+{
+  lib,
+  buildGo123Module,
+  fetchFromGitHub,
+}:
 buildGo123Module rec {
+
   pname = "gotemplate";
-  version = "3.9.2";
+  version = "3.10.1";
 
   src = fetchFromGitHub {
     owner = "coveooss";
-    repo = pname;
+    repo = "gotemplate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7FJejArGpnmkAzbN+2BOcewLdlcsh8QblOOZjFu+uSA=";
+    hash = "sha256-Q/Bqb0wgKzR0WPUHge/hqIvib/TbGxv6s+eEpDLxqPY=";
   };
 
-  vendorHash = "sha256-378oodyQG50l7qkTO5Ryt1NjFBbYW2n9by+ALNfTggI=";
+  vendorHash = "sha256-buRCG9I5zltIMTu5SLE98/pQAs3Vlfw4oz2BZXQxUAc=";
 
   # This is the value reported when running `gotemplate --version`,
   # see https://github.com/coveooss/gotemplate/issues/262
@@ -24,4 +28,5 @@ buildGo123Module rec {
     license = licenses.mit;
     maintainers = with maintainers; [ giorgiga ];
   };
+
 }

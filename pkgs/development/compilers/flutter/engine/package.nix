@@ -6,7 +6,12 @@
   darwin,
   clang,
   llvm,
-  tools ? callPackage ./tools.nix { },
+  tools ? callPackage ./tools.nix {
+    inherit (stdenv)
+      hostPlatform
+      buildPlatform
+      ;
+  },
   stdenv,
   stdenvNoCC,
   dart,
@@ -62,6 +67,11 @@ let
       version
       hashes
       url
+      ;
+    inherit (stdenv)
+      hostPlatform
+      buildPlatform
+      targetPlatform
       ;
   };
 
@@ -302,7 +312,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    rm -rf $out/out/$outName/{obj,gen,exe.unstripped,lib.unstripped,zip_archives}
+    rm -rf $out/out/$outName/{obj,exe.unstripped,lib.unstripped,zip_archives}
     rm $out/out/$outName/{args.gn,build.ninja,build.ninja.d,compile_commands.json,toolchain.ninja}
     find $out/out/$outName -name '*_unittests' -delete
     find $out/out/$outName -name '*_benchmarks' -delete

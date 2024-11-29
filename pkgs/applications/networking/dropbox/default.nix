@@ -29,7 +29,8 @@ let
 in
 
 buildFHSEnv {
-  name = "dropbox";
+  inherit version;
+  pname = "dropbox";
 
   # The dropbox-cli command `dropbox start` starts the dropbox daemon in a
   # separate session, and wants the daemon to outlive the launcher.  Enabling

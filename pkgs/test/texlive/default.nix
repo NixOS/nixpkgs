@@ -381,12 +381,12 @@ rec {
       shortVersion = [ "devnag" "diadia" "pmxchords" "ptex2pdf" "simpdftex" "ttf2afm" ];
       # (1) binaries requiring --help or -h
       help = [ "arlatex" "bundledoc" "cachepic" "checklistings" "dvipos" "extractres" "fig4latex" "fragmaster"
-        "kpsewhere" "latex-git-log" "ltxfileinfo" "mendex" "perltex" "pn2pdf" "psbook" "psnup" "psresize" "purifyeps"
+        "kpsewhere" "latex-git-log" "ltxfileinfo" "mendex" "pdflatexpicscale" "perltex" "pn2pdf" "psbook" "psnup" "psresize" "purifyeps"
         "simpdftex" "tex2xindy" "texluac" "texluajitc" "upmendex" "urlbst" "yplan" ];
-      shortHelp = [ "adhocfilelist" "authorindex" "bbl2bib" "bibdoiadd" "bibmradd" "biburl2doi" "bibzbladd" "ctanupload"
+      shortHelp = [ "adhocfilelist" "authorindex" "bbl2bib" "bibdoiadd" "bibmradd" "biburl2doi" "bibzbladd" "bookshelf-listallfonts" "bookshelf-mkfontsel" "ctanupload"
         "disdvi" "dvibook" "dviconcat" "getmapdl" "latex2man" "listings-ext.sh" "pygmentex" ];
       # (2) binaries that return non-zero exit code even if correctly asked for help
-      ignoreExitCode = [ "authorindex" "dvibook" "dviconcat" "dvipos" "extractres" "fig4latex" "fragmaster" "latex2man"
+      ignoreExitCode = [ "authorindex" "bookshelf-listallfonts" "bookshelf-mkfontsel" "dvibook" "dviconcat" "dvipos" "extractres" "fig4latex" "fragmaster" "latex2man"
         "latex-git-log" "listings-ext.sh" "psbook" "psnup" "psresize" "purifyeps" "tex2xindy"  "texluac"
         "texluajitc" ];
       # (2) binaries that print help on no argument, returning non-zero exit code

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   cmark,
-  darwin,
+  apple-sdk_11,
   extra-cmake-modules,
   gamemode,
   ghc_filesystem,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       tomlplusplus
       zlib
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ]
     ++ lib.optional gamemodeSupport gamemode;
 
   hardeningEnable = lib.optionals stdenv.hostPlatform.isLinux [ "pie" ];

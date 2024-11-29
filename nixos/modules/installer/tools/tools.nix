@@ -218,7 +218,7 @@ in
     mkToolModule = { name, package ? pkgs.${name} }: { config, ... }: {
       options.system.tools.${name}.enable = lib.mkEnableOption "${name} script" // {
         default = config.nix.enable && ! config.system.disableInstallerTools;
-        internal = true;
+        defaultText = "config.nix.enable && !config.system.disableInstallerTools";
       };
 
       config = lib.mkIf config.system.tools.${name}.enable {

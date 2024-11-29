@@ -173,5 +173,6 @@ rustPlatform.buildRustPackage rec {
       techknowlogick
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    broken = true; # build fails on darwin and linux
   };
 }

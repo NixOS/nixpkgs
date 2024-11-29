@@ -1,33 +1,24 @@
-{ lib, stdenv, fetchurl, fetchpatch, gettext, pkg-config, perlPackages
+{ lib, stdenv, fetchurl, gettext, pkg-config, perlPackages
 , libidn2, zlib, pcre, libuuid, libiconv, libintl
-, python3, lzip, darwin
+, nukeReferences, python3, lzip, darwin
 , withLibpsl ? false, libpsl
 , withOpenssl ? true, openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "wget";
-  version = "1.24.5";
+  version = "1.25.0";
 
   src = fetchurl {
     url = "mirror://gnu/wget/wget-${version}.tar.lz";
-    hash = "sha256-V6EHFR5O+U/flK/+z6xZiWPzcvEyk+2cdAMhBTkLNu4=";
+    hash = "sha256-GSJcx1awoIj8gRSNxqQKDI8ymvf9hIPxx7L+UPTgih8=";
   };
-
-  patches = [
-    ./remove-runtime-dep-on-openssl-headers.patch
-    (fetchpatch {
-      name = "CVE-2024-38428.patch";
-      url = "https://git.savannah.gnu.org/cgit/wget.git/patch/?id=ed0c7c7e0e8f7298352646b2fd6e06a11e242ace";
-      hash = "sha256-4ZVPufgG/h0UkxF9hQBAtF6QAG4GEz9hHeqEsD47q4U=";
-    })
-  ];
 
   preConfigure = ''
     patchShebangs doc
   '';
 
-  nativeBuildInputs = [ gettext pkg-config perlPackages.perl lzip libiconv libintl ];
+  nativeBuildInputs = [ gettext pkg-config perlPackages.perl lzip libiconv libintl nukeReferences ];
   buildInputs = [ libidn2 zlib pcre libuuid ]
     ++ lib.optional withOpenssl openssl
     ++ lib.optional withLibpsl libpsl
@@ -39,6 +30,14 @@ stdenv.mkDerivation rec {
     # https://lists.gnu.org/archive/html/bug-wget/2021-01/msg00076.html
     "--without-included-regex"
   ];
+
+  preBuild = ''
+    # avoid runtime references to build-only depends
+    make -C src version.c
+    nuke-refs src/version.c
+  '';
+
+  enableParallelBuilding = true;
 
   __darwinAllowLocalNetworking = true;
   doCheck = true;

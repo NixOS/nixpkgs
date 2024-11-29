@@ -23,13 +23,13 @@ assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
 
 buildDotnetModule rec {
   pname = "github-runner";
-  version = "2.320.0";
+  version = "2.321.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-mVi/Z89R2nbxQAyEkpbcaU3Pc3wK6989QojHew9ad4g=";
+    hash = "sha256-KZ072v5kYlD78RGQl13Aj05DGzj2+r2akzyZ1aJn93A=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -80,19 +80,16 @@ buildDotnetModule rec {
       url = "https://github.com/actions/runner/commit/5ff0ce1.patch";
       hash = "sha256-2Vg3cKZK3cE/OcPDZkdN2Ro2WgvduYTTwvNGxwCfXas=";
     })
+    # Fix source path discovery in tests
+    ./patches/test-getsrcpath.patch
   ];
 
-  postPatch =
-    ''
-      # Ignore changes to src/Runner.Sdk/BuildConstants.cs
-      substituteInPlace src/dir.proj \
-        --replace 'git update-index --assume-unchanged ./Runner.Sdk/BuildConstants.cs' \
-                  'true'
-    ''
-    + lib.optionalString (nodeRuntimes == [ "node20" ]) ''
-      substituteInPlace src/Runner.Common/Util/NodeUtil.cs \
-        --replace-fail '_defaultNodeVersion = "node16"' '_defaultNodeVersion = "node20"'
-    '';
+  postPatch = ''
+    # Ignore changes to src/Runner.Sdk/BuildConstants.cs
+    substituteInPlace src/dir.proj \
+      --replace-fail 'git update-index --assume-unchanged ./Runner.Sdk/BuildConstants.cs' \
+                     'true'
+  '';
 
   DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
   LOCALE_ARCHIVE = lib.optionalString (
@@ -121,8 +118,8 @@ buildDotnetModule rec {
 
   buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   dotnetFlags = [
     "-p:PackageRuntime=${dotnetCorePackages.systemToDotnetRid stdenv.hostPlatform.system}"
@@ -206,8 +203,6 @@ buildDotnetModule rec {
       "GitHub.Runner.Common.Tests.Worker.VariablesL0.Constructor_SetsOrdinalIgnoreCaseComparer"
       "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchCancellation"
       "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchRunNewJob"
-    ]
-    ++ lib.optionals (!lib.elem "node16" nodeRuntimes) [
       "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
     ];
 

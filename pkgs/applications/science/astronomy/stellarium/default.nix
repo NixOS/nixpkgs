@@ -22,6 +22,7 @@
 , nlopt
 , testers
 , xvfb-run
+, gitUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -95,16 +96,19 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = ''
-      # Create a temporary home directory because stellarium aborts with an
-      # error if it can't write some configuration files.
-      tmpdir=$(mktemp -d)
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = ''
+        # Create a temporary home directory because stellarium aborts with an
+        # error if it can't write some configuration files.
+        tmpdir=$(mktemp -d)
 
-      # stellarium can't be run in headless mode, therefore we need xvfb-run.
-      HOME="$tmpdir" ${xvfb-run}/bin/xvfb-run stellarium --version
-    '';
+        # stellarium can't be run in headless mode, therefore we need xvfb-run.
+        HOME="$tmpdir" ${lib.getExe xvfb-run} stellarium --version
+      '';
+    };
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta =  {

@@ -189,12 +189,6 @@ stdenv.mkDerivation {
     adwaita-icon-theme
   ];
 
-  unpackPhase =
-    if stdenv.hostPlatform.isLinux then
-      "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner"
-    else
-      "unzip $src";
-
   installPhase =
     lib.optionalString stdenv.hostPlatform.isLinux ''
       runHook preInstall
@@ -268,7 +262,7 @@ stdenv.mkDerivation {
       }
       ${
         optionalString (enableFeatures != [ ]) ''
-          --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+,WaylandWindowDecorations}}"
+          --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+,WaylandWindowDecorations --enable-wayland-ime}}"
         ''
       }
       ${

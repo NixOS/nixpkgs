@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.6.3";
+  version = "1.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
     rev = "refs/tags/${version}";
-    hash = "sha256-L/7oErXu0U2G20pFfEReSKAK3P1BseybnPHazA7w6cM=";
+    hash = "sha256-iPTZFXypcpO+PkcJHTdpkpiIU589XPcy+aNO/JqASCQ=";
   };
 
   pythonRelaxDeps = [

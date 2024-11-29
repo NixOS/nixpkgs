@@ -9,13 +9,13 @@
 
 buildPostgresqlExtension rec {
   pname = "citus";
-  version = "12.1.2";
+  version = "12.1.6";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = "citus";
     rev = "v${version}";
-    hash = "sha256-0uYNMLAYigtGlDRvOEkQeC5i58QfXcdSVjTQwWVFX+8=";
+    hash = "sha256-PYABH4e5Wp5hMvEQMRHjPL7gDVu8Wud6d+BzrBBMjIQ=";
   };
 
   buildInputs = [
@@ -30,7 +30,7 @@ buildPostgresqlExtension rec {
     broken = versionOlder postgresql.version "14" ||
       # PostgreSQL 17 support issue upstream: https://github.com/citusdata/citus/issues/7708
       # Check after next package update.
-      (versionAtLeast postgresql.version "17" && version == "12.1.2");
+      (versionAtLeast postgresql.version "17" && version == "12.1.6");
     description = "Distributed PostgreSQL as an extension";
     homepage = "https://www.citusdata.com/";
     changelog = "https://github.com/citusdata/citus/blob/${src.rev}/CHANGELOG.md";

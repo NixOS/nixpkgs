@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "knockpy";
-  version = "7.0.1";
+  version = "7.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "guelfoweb";
     repo = "knock";
     rev = "refs/tags/${version}";
-    hash = "sha256-ALsSpygJlqYW/7Z44PZmBcIxfrtOPPrvuuMIOyFE5kE=";
+    hash = "sha256-tJNosM8zGzH0uMvVawoBl2d+8xkVzTIjycnHHjnMzSo=";
   };
 
   pythonRelaxDeps = [

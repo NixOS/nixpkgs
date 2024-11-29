@@ -349,16 +349,14 @@ dependencies = [
 
 [[package]]
 name = "bindgen"
-version = "0.68.1"
+version = "0.70.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "726e4313eb6ec35d2730258ad4e15b547ee75d6afaa1361a922e78e59b7d8078"
+checksum = "f49d8fed880d473ea71efb9bf597651e77201bdd4893efe54c9e5d65ae04ce6f"
 dependencies = [
  "bitflags",
  "cexpr",
  "clang-sys",
- "lazy_static",
- "lazycell",
- "peeking_take_while",
+ "itertools 0.13.0",
  "proc-macro2",
  "quote",
  "regex",
@@ -424,7 +422,7 @@ dependencies = [
 [[package]]
 name = "boring"
 version = "4.9.0"
-source = "git+https://github.com/signalapp/boring?tag=signal-v4.9.0#59883d7e23599f6631f9e5087db4b797f2953feb"
+source = "git+https://github.com/signalapp/boring?tag=signal-v4.9.0b#3d4180b232d332a86ee3b41d1a622b0f1c1c6037"
 dependencies = [
  "bitflags",
  "boring-sys",
@@ -436,8 +434,9 @@ dependencies = [
 [[package]]
 name = "boring-sys"
 version = "4.9.0"
-source = "git+https://github.com/signalapp/boring?tag=signal-v4.9.0#59883d7e23599f6631f9e5087db4b797f2953feb"
+source = "git+https://github.com/signalapp/boring?tag=signal-v4.9.0b#3d4180b232d332a86ee3b41d1a622b0f1c1c6037"
 dependencies = [
+ "autocfg",
  "bindgen",
  "cmake",
  "fs_extra",
@@ -1957,12 +1956,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
 
 [[package]]
-name = "lazycell"
-version = "1.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "830d08ce1d1d941e6b30645f1a0eb5643013d835ce3779a5fc208261dbe10f55"
-
-[[package]]
 name = "libc"
 version = "0.2.158"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2024,6 +2017,29 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4ec2a862134d2a7d32d7983ddcdd1c4923530833c9f2ea1a44fc5fa473989058"
 
 [[package]]
+name = "libsignal-account-keys"
+version = "0.1.0"
+dependencies = [
+ "argon2",
+ "assert_matches",
+ "criterion",
+ "displaydoc",
+ "hex-literal",
+ "hkdf",
+ "hmac",
+ "libsignal-core",
+ "libsignal-protocol",
+ "partial-default",
+ "proptest",
+ "rand",
+ "rand_core",
+ "serde",
+ "sha2",
+ "static_assertions",
+ "thiserror",
+]
+
+[[package]]
 name = "libsignal-bridge"
 version = "0.1.0"
 dependencies = [
@@ -2038,9 +2054,11 @@ dependencies = [
  "hmac",
  "http 1.1.0",
  "jni 0.21.1",
+ "libsignal-account-keys",
  "libsignal-bridge-macros",
  "libsignal-bridge-types",
  "libsignal-core",
+ "libsignal-keytrans",
  "libsignal-message-backup",
  "libsignal-net",
  "libsignal-protocol",
@@ -2055,7 +2073,6 @@ dependencies = [
  "sha2",
  "signal-crypto",
  "signal-media",
- "signal-pin",
  "static_assertions",
  "strum",
  "subtle",
@@ -2083,12 +2100,15 @@ name = "libsignal-bridge-testing"
 version = "0.1.0"
 dependencies = [
  "attest",
+ "const-str",
  "futures-util",
+ "hex-literal",
  "http 1.1.0",
  "jni 0.21.1",
  "libsignal-bridge-macros",
  "libsignal-bridge-types",
  "libsignal-core",
+ "libsignal-keytrans",
  "libsignal-message-backup",
  "libsignal-net",
  "libsignal-protocol",
@@ -2119,6 +2139,7 @@ dependencies = [
  "hmac",
  "http 1.1.0",
  "jni 0.21.1",
+ "libsignal-account-keys",
  "libsignal-core",
  "libsignal-message-backup",
  "libsignal-net",
@@ -2138,7 +2159,6 @@ dependencies = [
  "signal-crypto",
  "signal-media",
  "signal-neon-futures",
- "signal-pin",
  "static_assertions",
  "strum",
  "subtle",
@@ -2165,7 +2185,7 @@ dependencies = [
 
 [[package]]
 name = "libsignal-ffi"
-version = "0.58.3"
+version = "0.62.0"
 dependencies = [
  "cpufeatures",
  "futures-util",
@@ -2180,7 +2200,7 @@ dependencies = [
 
 [[package]]
 name = "libsignal-jni"
-version = "0.58.3"
+version = "0.62.0"
 dependencies = [
  "cfg-if",
  "cpufeatures",
@@ -2196,7 +2216,7 @@ dependencies = [
 
 [[package]]
 name = "libsignal-jni-testing"
-version = "0.58.3"
+version = "0.62.0"
 dependencies = [
  "jni 0.21.1",
  "libsignal-bridge-testing",
@@ -2209,9 +2229,11 @@ name = "libsignal-keytrans"
 version = "0.0.1"
 dependencies = [
  "assert_matches",
+ "criterion",
  "curve25519-dalek",
  "displaydoc",
  "ed25519-dalek",
+ "hex",
  "hex-literal",
  "hmac",
  "proptest",
@@ -2219,6 +2241,7 @@ dependencies = [
  "prost-build",
  "sha2",
  "test-case",
+ "uuid",
 ]
 
 [[package]]
@@ -2246,9 +2269,11 @@ dependencies = [
  "hmac",
  "itertools 0.13.0",
  "json5",
+ "libsignal-account-keys",
  "libsignal-core",
  "libsignal-message-backup",
  "libsignal-message-backup-macros",
+ "libsignal-protocol",
  "log",
  "macro_rules_attribute",
  "mediasan-common",
@@ -2268,7 +2293,6 @@ dependencies = [
  "subtle",
  "test-case",
  "test-log",
- "testing_logger",
  "thiserror",
  "usernames",
  "uuid",
@@ -2310,19 +2334,25 @@ dependencies = [
  "hmac",
  "http 1.1.0",
  "itertools 0.13.0",
+ "lazy_static",
  "libsignal-core",
+ "libsignal-keytrans",
  "libsignal-net-infra",
  "libsignal-protocol",
  "libsignal-svr3",
  "log",
  "nonzero_ext",
  "num_enum",
+ "pin-project",
  "proptest",
  "proptest-state-machine",
  "prost",
  "prost-build",
  "rand",
  "rand_core",
+ "rustls 0.23.13",
+ "rustls-platform-verifier",
+ "scopeguard",
  "serde",
  "serde_json",
  "sha2",
@@ -2369,9 +2399,12 @@ dependencies = [
  "lazy_static",
  "log",
  "nonzero_ext",
+ "once_cell",
  "pin-project",
  "pretty_assertions",
+ "proptest",
  "prost",
+ "rangemap",
  "rcgen",
  "rustls 0.23.13",
  "rustls-platform-verifier",
@@ -2394,7 +2427,7 @@ dependencies = [
 
 [[package]]
 name = "libsignal-node"
-version = "0.58.3"
+version = "0.62.0"
 dependencies = [
  "cmake",
  "futures",
@@ -2963,12 +2996,6 @@ name = "paste"
 version = "1.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "57c0d7b74b563b49d38dae00a0c37d4d6de9b432382b2892f0574ddcae73fd0a"
-
-[[package]]
-name = "peeking_take_while"
-version = "0.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "19b17cddbe7ec3f8bc800887bab5e717348c95ea2ca0b1bf0837fb964dc67099"
 
 [[package]]
 name = "pem"
@@ -3550,6 +3577,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "rangemap"
+version = "1.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f60fcc7d6849342eff22c4350c8b9a989ee8ceabc4b481253e8946b9fe83d684"
+
+[[package]]
 name = "rayon"
 version = "1.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3960,6 +3993,16 @@ dependencies = [
  "cfg-if",
  "cpufeatures",
  "digest",
+ "sha2-asm",
+]
+
+[[package]]
+name = "sha2-asm"
+version = "0.6.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b845214d6175804686b2bd482bcffe96651bb2d1200742b712003504a2dac1ab"
+dependencies = [
+ "cc",
 ]
 
 [[package]]
@@ -4026,24 +4069,6 @@ dependencies = [
  "futures-util",
  "neon",
  "signal-neon-futures",
-]
-
-[[package]]
-name = "signal-pin"
-version = "0.1.0"
-dependencies = [
- "argon2",
- "criterion",
- "displaydoc",
- "hex-literal",
- "hkdf",
- "hmac",
- "proptest",
- "rand",
- "rand_core",
- "sha2",
- "static_assertions",
- "thiserror",
 ]
 
 [[package]]
@@ -4433,7 +4458,7 @@ dependencies = [
 [[package]]
 name = "tokio-boring"
 version = "4.9.0"
-source = "git+https://github.com/signalapp/boring?tag=signal-v4.9.0#59883d7e23599f6631f9e5087db4b797f2953feb"
+source = "git+https://github.com/signalapp/boring?tag=signal-v4.9.0b#3d4180b232d332a86ee3b41d1a622b0f1c1c6037"
 dependencies = [
  "boring",
  "boring-sys",
@@ -5312,6 +5337,7 @@ name = "zkgroup"
 version = "0.9.0"
 dependencies = [
  "aes-gcm-siv",
+ "assert_matches",
  "base64 0.22.1",
  "bincode",
  "criterion",
@@ -5322,6 +5348,7 @@ dependencies = [
  "hex-literal",
  "hkdf",
  "lazy_static",
+ "libsignal-account-keys",
  "libsignal-core",
  "num_enum",
  "partial-default",

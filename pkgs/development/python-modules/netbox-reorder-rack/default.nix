@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "netbox-reorder-rack";
-  version = "1.1.2";
+  version = "1.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-reorder-rack";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0572pj1OA08Zxl4vhMmFHvQA/K24hG/GhKEbo+hbW5Q=";
+    hash = "sha256-G1WGmEsKfz9HT6D6cCWJADm7pFaIV/jKYkYudEmUWJk=";
   };
 
   build-system = [
@@ -32,10 +32,10 @@ buildPythonPackage rec {
   dontUsePythonImportsCheck = python.pythonVersion != netbox.python.pythonVersion;
   pythonImportsCheck = [ "netbox_reorder_rack" ];
 
-  meta = with lib; {
+  meta = {
     description = "NetBox plugin to allow users to reorder devices within a rack using a drag and drop UI";
-    homepage = "https://github.com/minitriga/netbox-reorder-rack/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ minijackson ];
+    homepage = "https://github.com/netbox-community/netbox-reorder-rack";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ minijackson ];
   };
 }

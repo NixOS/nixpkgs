@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.jemarch.net/poke";
     changelog = "https://git.savannah.gnu.org/cgit/poke.git/plain/ChangeLog?h=releases/poke-${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres kira-bruneau ];
+    maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = lib.platforms.unix;
     hydraPlatforms = lib.platforms.linux; # build hangs on Darwin platforms, needs investigation
   };

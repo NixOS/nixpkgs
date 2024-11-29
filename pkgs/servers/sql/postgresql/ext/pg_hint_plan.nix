@@ -44,6 +44,8 @@ buildPostgresqlExtension {
     substituteInPlace Makefile --replace "LDFLAGS+=-Wl,--build-id" ""
   '';
 
+  enableUpdateScript = false;
+
   meta = with lib; {
     description = "Extension to tweak PostgreSQL execution plans using so-called 'hints' in SQL comments";
     homepage = "https://github.com/ossc-db/pg_hint_plan";

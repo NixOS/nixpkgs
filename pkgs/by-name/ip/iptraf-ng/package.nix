@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.1";
+  version = "1.2.2";
   pname = "iptraf-ng";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1f91w1bjaayr6ld95z2q55ny983bb0m05k1jrw2bcddvcihaiqb1";
+    sha256 = "sha256-SM1cJYNnZlGl3eWaYd8DlPrV4AL9nck1tjdOn0CHVUw=";
   };
 
   buildInputs = [ ncurses ];

@@ -1,19 +1,38 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, ncurses, pcre }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoconf,
+  ncurses,
+  pcre2,
+  quilt,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ccze";
-  version = "0.2.1-2";
+  version = "0.2.1-8";
 
-  src = fetchFromGitHub {
-    owner = "madhouse";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "debian";
     repo = "ccze";
-    rev = "ccze-${version}";
-    hash = "sha256-LVwmbrq78mZcAEuAqjXTqLE5we83H9mcMPtxQx2Tn/c=";
+    rev = "debian/${finalAttrs.version}";
+    hash = "sha256-sESbs+HTDRX9w7c+LYnzQoemPIxAtqk27IVSTtiAGEk=";
   };
 
-  nativeBuildInputs = [ autoconf ];
+  postPatch = ''
+    QUILT_PATCHES=debian/patches quilt push -a
+  '';
 
-  buildInputs = [ ncurses pcre ];
+  nativeBuildInputs = [
+    autoconf
+    quilt
+  ];
+
+  buildInputs = [
+    ncurses
+    pcre2
+  ];
 
   preConfigure = ''
     autoheader
@@ -21,14 +40,19 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    mainProgram = "ccze";
     description = "Fast, modular log colorizer";
+    homepage = "https://salsa.debian.org/debian/ccze";
+    changelog = "https://salsa.debian.org/debian/ccze/-/raw/master/debian/changelog?ref_type=heads";
     longDescription = ''
-      Fast log colorizer written in C, intended to be a drop-in replacement
-      for the Perl colorize tool.  Includes plugins for a variety of log
-      formats (Apache, Postfix, Procmail, etc.).
+      Fast log colorizer written in C, intended to be a drop-in replacement for the Perl colorize tool.
+      Includes plugins for a variety of log formats (Apache, Postfix, Procmail, etc.).
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ malyn ];
+    maintainers = with maintainers; [
+      malyn
+      philiptaron
+    ];
     platforms = platforms.linux;
   };
-}
+})

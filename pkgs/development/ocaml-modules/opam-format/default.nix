@@ -1,6 +1,6 @@
 { lib, buildDunePackage, opam-core, opam-file-format }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "opam-format";
 
   inherit (opam-core) src version;

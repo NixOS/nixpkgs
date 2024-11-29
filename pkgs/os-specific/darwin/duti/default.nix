@@ -1,4 +1,9 @@
-{stdenv, lib, fetchFromGitHub, autoreconfHook, ApplicationServices}:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "duti";
@@ -10,15 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "1pg4i6ghpib2gy1sqpml7dbnhr1vbr43fs2pqkd09i4w3nmgpic9";
   };
 
-  nativeBuildInputs = [autoreconfHook];
-  buildInputs = [ApplicationServices];
-  configureFlags = [
-    "--with-macosx-sdk=/homeless-shelter"
-
-    # needed to prevent duti from trying to guess our sdk
-    # NOTE: this is different than stdenv.hostPlatform.config!
-    "--host=x86_64-apple-darwin18"
+  patches = [
+    ./buildConfigure.patch
   ];
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
     description = "Command-line tool to select default applications for document types and URL schemes on Mac OS X";
@@ -29,7 +30,10 @@ stdenv.mkDerivation rec {
       a Microsoft Word document has a UTI of com.microsoft.word.doc. Using duti, the
       user can change which application acts as the default handler for a given UTI.
     '';
-    maintainers = with maintainers; [matthewbauer];
+    maintainers = with maintainers; [
+      matthewbauer
+      n-hass
+    ];
     platforms = platforms.darwin;
     license = licenses.publicDomain;
     homepage = "https://github.com/moretension/duti/";

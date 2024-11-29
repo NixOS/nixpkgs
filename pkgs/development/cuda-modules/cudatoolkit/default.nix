@@ -69,26 +69,18 @@ backendStdenv.mkDerivation rec {
     "doc"
   ];
 
-  nativeBuildInputs =
-    [
-      perl
-      makeWrapper
-      rsync
-      addDriverRunpath
-      autoPatchelfHook
-      autoAddDriverRunpath
-      markForCudatoolkitRootHook
-    ]
-    ++ lib.optionals (lib.versionOlder version "11") [ libsForQt5.wrapQtAppsHook ]
-    ++ lib.optionals (lib.versionAtLeast version "11.8") [ qt6Packages.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    perl
+    makeWrapper
+    rsync
+    addDriverRunpath
+    autoPatchelfHook
+    autoAddDriverRunpath
+    markForCudatoolkitRootHook
+  ] ++ lib.optionals (lib.versionAtLeast version "11.8") [ qt6Packages.wrapQtAppsHook ];
   propagatedBuildInputs = [ setupCudaHook ];
   buildInputs =
-    lib.optionals (lib.versionOlder version "11") [
-      libsForQt5.qt5.qtwebengine
-      libglut
-      libGLU
-    ]
-    ++ [
+    [
       # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
       gdk-pixbuf
 
@@ -168,105 +160,58 @@ backendStdenv.mkDerivation rec {
     "${placeholder "out"}/nvvm/lib64"
   ];
 
-  autoPatchelfIgnoreMissingDeps =
-    [
-      # This is the hardware-dependent userspace driver that comes from
-      # nvidia_x11 package. It must be deployed at runtime in
-      # /run/opengl-driver/lib or pointed at by LD_LIBRARY_PATH variable, rather
-      # than pinned in runpath
-      "libcuda.so.1"
+  autoPatchelfIgnoreMissingDeps = [
+    # This is the hardware-dependent userspace driver that comes from
+    # nvidia_x11 package. It must be deployed at runtime in
+    # /run/opengl-driver/lib or pointed at by LD_LIBRARY_PATH variable, rather
+    # than pinned in runpath
+    "libcuda.so.1"
 
-      # The krb5 expression ships libcom_err.so.3 but cudatoolkit asks for the
-      # older
-      # This dependency is asked for by target-linux-x64/CollectX/RedHat/x86_64/libssl.so.10
-      # - do we even want to use nvidia-shipped libssl?
-      "libcom_err.so.2"
-    ]
-    ++ lib.optionals (lib.versionOlder version "10.1") [
-      # For Cuda 10.0, nVidia also shipped a jre implementation which needed
-      # two old versions of ffmpeg which are not available in nixpkgs
-      "libavcodec.so.54"
-      "libavcodec.so.53"
-      "libavformat.so.54"
-      "libavformat.so.53"
-    ];
+    # The krb5 expression ships libcom_err.so.3 but cudatoolkit asks for the
+    # older
+    # This dependency is asked for by target-linux-x64/CollectX/RedHat/x86_64/libssl.so.10
+    # - do we even want to use nvidia-shipped libssl?
+    "libcom_err.so.2"
+  ];
 
-  preFixup =
-    if (lib.versionAtLeast version "10.1" && lib.versionOlder version "11") then
-      ''
-        ${lib.getExe' patchelf "patchelf"} $out/targets/*/lib/libnvrtc.so --add-needed libnvrtc-builtins.so
-      ''
-    else
-      ''
-        ${lib.getExe' patchelf "patchelf"} $out/lib64/libnvrtc.so --add-needed libnvrtc-builtins.so
-      '';
+  preFixup = ''
+    ${lib.getExe' patchelf "patchelf"} $out/lib64/libnvrtc.so --add-needed libnvrtc-builtins.so
+  '';
 
   unpackPhase = ''
     sh $src --keep --noexec
-
-    ${lib.optionalString (lib.versionOlder version "10.1") ''
-      cd pkg/run_files
-      sh cuda-linux*.run --keep --noexec
-      sh cuda-samples*.run --keep --noexec
-      mv pkg ../../$(basename $src)
-      cd ../..
-      rm -rf pkg
-
-      for patch in $runPatches; do
-        sh $patch --keep --noexec
-        mv pkg $(basename $patch)
-      done
-    ''}
   '';
 
   installPhase =
     ''
       runHook preInstall
       mkdir $out
-      ${lib.optionalString (lib.versionOlder version "10.1") ''
-        cd $(basename $src)
-        export PERL5LIB=.
-        perl ./install-linux.pl --prefix="$out"
-        cd ..
-        for patch in $runPatches; do
-          cd $(basename $patch)
-          perl ./install_patch.pl --silent --accept-eula --installdir="$out"
-          cd ..
-        done
-      ''}
-      ${lib.optionalString (lib.versionAtLeast version "10.1" && lib.versionOlder version "11") ''
-        cd pkg/builds/cuda-toolkit
-        mv * $out/
-        rm -f $out/nsight-systems-*/host-linux-x64/libstdc++.so*
-      ''}
-      ${lib.optionalString (lib.versionAtLeast version "11") ''
-        mkdir -p $out/bin $out/lib64 $out/include $doc
-        for dir in pkg/builds/* pkg/builds/cuda_nvcc/nvvm pkg/builds/cuda_cupti/extras/CUPTI; do
-          if [ -d $dir/bin ]; then
-            mv $dir/bin/* $out/bin
-          fi
-          if [ -d $dir/doc ]; then
-            (cd $dir/doc && find . -type d -exec mkdir -p $doc/\{} \;)
-            (cd $dir/doc && find . \( -type f -o -type l \) -exec mv \{} $doc/\{} \;)
-          fi
-          if [ -L $dir/include ] || [ -d $dir/include ]; then
-            (cd $dir/include && find . -type d -exec mkdir -p $out/include/\{} \;)
-            (cd $dir/include && find . \( -type f -o -type l \) -exec mv \{} $out/include/\{} \;)
-          fi
-          if [ -L $dir/lib64 ] || [ -d $dir/lib64 ]; then
-            (cd $dir/lib64 && find . -type d -exec mkdir -p $out/lib64/\{} \;)
-            (cd $dir/lib64 && find . \( -type f -o -type l \) -exec mv \{} $out/lib64/\{} \;)
-          fi
-        done
-        mv pkg/builds/cuda_nvcc/nvvm $out/nvvm
+      mkdir -p $out/bin $out/lib64 $out/include $doc
+      for dir in pkg/builds/* pkg/builds/cuda_nvcc/nvvm pkg/builds/cuda_cupti/extras/CUPTI; do
+        if [ -d $dir/bin ]; then
+          mv $dir/bin/* $out/bin
+        fi
+        if [ -d $dir/doc ]; then
+          (cd $dir/doc && find . -type d -exec mkdir -p $doc/\{} \;)
+          (cd $dir/doc && find . \( -type f -o -type l \) -exec mv \{} $doc/\{} \;)
+        fi
+        if [ -L $dir/include ] || [ -d $dir/include ]; then
+          (cd $dir/include && find . -type d -exec mkdir -p $out/include/\{} \;)
+          (cd $dir/include && find . \( -type f -o -type l \) -exec mv \{} $out/include/\{} \;)
+        fi
+        if [ -L $dir/lib64 ] || [ -d $dir/lib64 ]; then
+          (cd $dir/lib64 && find . -type d -exec mkdir -p $out/lib64/\{} \;)
+          (cd $dir/lib64 && find . \( -type f -o -type l \) -exec mv \{} $out/lib64/\{} \;)
+        fi
+      done
+      mv pkg/builds/cuda_nvcc/nvvm $out/nvvm
 
-        mv pkg/builds/cuda_sanitizer_api $out/cuda_sanitizer_api
-        ln -s $out/cuda_sanitizer_api/compute-sanitizer/compute-sanitizer $out/bin/compute-sanitizer
+      mv pkg/builds/cuda_sanitizer_api $out/cuda_sanitizer_api
+      ln -s $out/cuda_sanitizer_api/compute-sanitizer/compute-sanitizer $out/bin/compute-sanitizer
 
-        mv pkg/builds/nsight_systems/target-linux-x64 $out/target-linux-x64
-        mv pkg/builds/nsight_systems/host-linux-x64 $out/host-linux-x64
-        rm $out/host-linux-x64/libstdc++.so*
-      ''}
+      mv pkg/builds/nsight_systems/target-linux-x64 $out/target-linux-x64
+      mv pkg/builds/nsight_systems/host-linux-x64 $out/host-linux-x64
+      rm $out/host-linux-x64/libstdc++.so*
         ${
           lib.optionalString (lib.versionAtLeast version "11.8" && lib.versionOlder version "12")
             # error: auto-patchelf could not satisfy dependency libtiff.so.5 wanted by /nix/store/.......-cudatoolkit-12.0.1/host-linux-x64/Plugins/imageformats/libqtiff.so
@@ -301,19 +246,9 @@ backendStdenv.mkDerivation rec {
 
       rm -f $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?
 
-      ${lib.optionalString (lib.versionOlder version "10.1") ''
-        # let's remove the 32-bit libraries, they confuse the lib64->lib mover
-        rm -rf $out/lib
-      ''}
-
       ${lib.optionalString (lib.versionAtLeast version "12.0") ''
         rm $out/host-linux-x64/libQt6*
       ''}
-
-      # Remove some cruft.
-      ${lib.optionalString (
-        (lib.versionAtLeast version "7.0") && (lib.versionOlder version "10.1")
-      ) "rm $out/bin/uninstall*"}
 
       # Fixup path to samples (needed for cuda 6.5 or else nsight will not find them)
       if [ -d "$out"/cuda-samples ]; then
@@ -343,19 +278,11 @@ backendStdenv.mkDerivation rec {
 
         # Remove OpenCL libraries as they are provided by ocl-icd and driver.
         rm -f $out/lib64/libOpenCL*
-        ${lib.optionalString (lib.versionAtLeast version "10.1" && (lib.versionOlder version "11")) ''
-          mv $out/lib64 $out/lib
-          mv $out/extras/CUPTI/lib64/libcupti* $out/lib
-        ''}
 
         # nvprof do not find any program to profile if LD_LIBRARY_PATH is not set
         wrapProgram $out/bin/nvprof \
           --prefix LD_LIBRARY_PATH : $out/lib
       ''
-    + lib.optionalString (lib.versionOlder version "8.0") ''
-      # Hack to fix building against recent Glibc/GCC.
-      echo "NIX_CFLAGS_COMPILE+=' -D_FORCE_INLINES'" >> $out/nix-support/setup-hook
-    ''
     # 11.8 includes a broken symlink, include/include, pointing to targets/x86_64-linux/include
     + lib.optionalString (lib.versions.majorMinor version == "11.8") ''
       rm $out/include/include
@@ -365,7 +292,7 @@ backendStdenv.mkDerivation rec {
     '';
 
   postInstall = ''
-    for b in nvvp ${lib.optionalString (lib.versionOlder version "11") "nsight"}; do
+    for b in nvvp; do
       wrapProgram "$out/bin/$b" \
         --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
     done

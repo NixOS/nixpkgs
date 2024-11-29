@@ -6,7 +6,9 @@
   craft-cli,
   craft-grammar,
   craft-parts,
+  craft-platforms,
   craft-providers,
+  jinja2,
   fetchFromGitHub,
   git,
   hypothesis,
@@ -23,11 +25,12 @@
   responses,
   setuptools-scm,
   snap-helpers,
+  freezegun,
 }:
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "4.2.5";
+  version = "4.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -36,12 +39,12 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-application";
     rev = "refs/tags/${version}";
-    hash = "sha256-Y/Eci0ByE1HxUcxWhpQq0F2Ef1xkXZMBDGmUSIyPKII=";
+    hash = "sha256-Sb7/p5g03stipnvfE5FceXv6xDA4c45qnxllBUWhmY8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==74.1.1" "setuptools"
+      --replace-fail "setuptools==75.2.0" "setuptools"
   '';
 
   build-system = [ setuptools-scm ];
@@ -56,7 +59,9 @@ buildPythonPackage rec {
     craft-cli
     craft-grammar
     craft-parts
+    craft-platforms
     craft-providers
+    jinja2
     license-expression
     pygit2
     pyyaml
@@ -64,6 +69,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    freezegun
     git
     hypothesis
     pyfakefs

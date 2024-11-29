@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     wireshark-cli # for tshark
   ];
 
+  hardeningDisable = [ "zerocallusedregs" ];
   # When building BPF, the default CC wrapper is interfering a bit too much.
   BPF_CFLAGS = "-fno-stack-protector -Wno-error=unused-command-line-argument";
 

@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chez-scheme";
-  version = "10.0.0";
+  version = "10.1.0";
 
   src = fetchurl {
     url = "https://github.com/cisco/ChezScheme/releases/download/v${finalAttrs.version}/csv${finalAttrs.version}.tar.gz";
-    hash = "sha256-03GZASte0ZhcQGnWqH/xjl4fWi3yfkApkfr0XcTyIyw=";
+    hash = "sha256-kYGmyMSrXl0y2Hn/FZ0zWlDU+LOIYRriKiY+kyw1OYs=";
   };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [

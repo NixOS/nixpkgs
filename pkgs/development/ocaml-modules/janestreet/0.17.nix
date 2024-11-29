@@ -1869,7 +1869,8 @@ with self;
 
   typerep = janePackage {
     pname = "typerep";
-    hash = "sha256-0KwJdWtibgjxghFmOYKyPrcOAfoLpxYGBZm2KpH8tgA=";
+    version = "0.17.1";
+    hash = "sha256-hw03erwLx9IAbkBibyhZxofA5jIi12rFJOHNEVYpLSk=";
     meta.description = "Typerep is a library for runtime types";
     propagatedBuildInputs = [ base ];
   };

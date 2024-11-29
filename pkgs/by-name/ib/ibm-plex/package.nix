@@ -1,21 +1,41 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  families ? [ ],
+}:
+let
+  version = import ./version.nix;
+  availableFamilies = import ./hashes.nix;
 
-stdenvNoCC.mkDerivation rec {
+  availableFamilyNames = builtins.attrNames availableFamilies;
+  selectedFamilies = if (families == [ ]) then availableFamilyNames else families;
+
+  unknownFamilies = lib.subtractLists availableFamilyNames families;
+in
+assert lib.assertMsg (unknownFamilies == [ ]) "Unknown font(s): ${toString unknownFamilies}";
+stdenvNoCC.mkDerivation {
   pname = "ibm-plex";
-  version = "6.4.0";
+  inherit version;
 
-  src = fetchzip {
-    url = "https://github.com/IBM/plex/releases/download/v${version}/OpenType.zip";
-    hash = "sha256-/aR3bu03VxenSPed6EqrGoPjWCcKT//MVtb9OC8tSRs=";
-  };
+  srcs = builtins.map (
+    family:
+    fetchzip {
+      url = "https://github.com/IBM/plex/releases/download/%40ibm%2Fplex-${family}%40${version}/ibm-plex-${family}.zip";
+      hash = availableFamilies.${family};
+    }
+  ) selectedFamilies;
+
+  dontUnpack = true;
+  sourceRoot = ".";
 
   installPhase = ''
     runHook preInstall
-
-    install -Dm644 */*.otf IBM-Plex-Sans-JP/unhinted/* -t $out/share/fonts/opentype
-
+    find $srcs -type f -name '*.otf' -exec install -Dm644 {} -t $out/share/fonts/opentype \;
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "IBM Plex Typeface";
@@ -23,6 +43,9 @@ stdenvNoCC.mkDerivation rec {
     changelog = "https://github.com/IBM/plex/raw/v${version}/CHANGELOG.md";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [ maintainers.romildo ];
+    maintainers = with maintainers; [
+      romildo
+      ryanccn
+    ];
   };
 }

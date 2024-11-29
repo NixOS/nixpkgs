@@ -79,6 +79,12 @@ stdenv.mkDerivation (finalAttrs: {
       # I observe this test failing with some regularity on ARMv7:
       # https://github.com/libuv/libuv/issues/1871
       "shutdown_close_pipe"
+    ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      # EOPNOTSUPP when performed in jailed build env
+      "tcp_reuseport" "udp_reuseport"
+      # Fails when built on non-nix FreeBSD
+      # https://github.com/libuv/libuv/issues/4606
+      "fs_event_watch_delete_dir"
     ];
     tdRegexp = lib.concatStringsSep "\\|" toDisable;
     in lib.optionalString (finalAttrs.finalPackage.doCheck) ''

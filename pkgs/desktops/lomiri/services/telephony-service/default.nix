@@ -15,11 +15,11 @@
   gettext,
   glib,
   gnome-keyring,
-  history-service,
   libnotify,
   libphonenumber,
   libpulseaudio,
   libusermetrics,
+  lomiri-history-service,
   lomiri-url-dispatcher,
   makeWrapper,
   pkg-config,
@@ -66,6 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/commit/18e0ba8e025b097eef1217d97d98ef4a4940fe84.patch";
       hash = "sha256-vOIy+B/OQeccsVn4pXsnr8LYyEapqbebW1I6dBg5u2c=";
     })
+
+    # Remove when version > 0.5.3
+    (fetchpatch {
+      name = "0003-lomiri-telephony-service-Handle-renamed-history-service.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/commit/3a387670ed13041db069068292b1f41229e79583.patch";
+      hash = "sha256-b7gxzr6Mmtogclq3hR7a/zl+816H2wmJqv3oHjUJggw=";
+    })
   ];
 
   postPatch =
@@ -104,11 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
     dconf
     gettext
     glib
-    history-service
     libnotify
     libphonenumber
     libpulseaudio
     libusermetrics
+    lomiri-history-service
     lomiri-url-dispatcher
     protobuf
     (python3.withPackages (

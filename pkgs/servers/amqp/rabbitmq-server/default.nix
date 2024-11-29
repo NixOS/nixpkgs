@@ -20,9 +20,6 @@
   gnused,
   systemd,
   glibcLocales,
-  AppKit,
-  Carbon,
-  Cocoa,
   nixosTests,
   which,
 }:
@@ -33,12 +30,14 @@ let
       erlang
       getconf # for getting memory limits
       socat
-      procps
       gnused
       coreutils # used by helper scripts
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ]
-  ); # for systemd unit activation check
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      procps # the built-in macOS version has extra entitlements to read rss
+      systemd # for systemd unit activation check
+    ]
+  );
 in
 
 stdenv.mkDerivation rec {
@@ -62,19 +61,13 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  buildInputs =
-    [
-      erlang
-      elixir
-      libxml2
-      libxslt
-      glibcLocales
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Carbon
-      Cocoa
-    ];
+  buildInputs = [
+    erlang
+    elixir
+    libxml2
+    libxslt
+    glibcLocales
+  ];
 
   outputs = [
     "out"

@@ -32,7 +32,7 @@ from functools import wraps
 from multiprocessing.dummy import Pool
 from pathlib import Path
 from tempfile import NamedTemporaryFile
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable
 from urllib.parse import urljoin, urlparse
 
 import git
@@ -94,7 +94,7 @@ def make_request(url: str, token=None) -> urllib.request.Request:
 
 
 # a dictionary of plugins and their new repositories
-Redirects = Dict["PluginDesc", "Repo"]
+Redirects = dict["PluginDesc", "Repo"]
 
 
 class Repo:
@@ -103,7 +103,7 @@ class Repo:
         """Url to the repo"""
         self._branch = branch
         # Redirect is the new Repo to use
-        self.redirect: Optional["Repo"] = None
+        self.redirect: "Repo | None" = None
         self.token = "dummy_token"
 
     @property
@@ -125,14 +125,14 @@ class Repo:
         return True
 
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
-    def latest_commit(self) -> Tuple[str, datetime]:
+    def latest_commit(self) -> tuple[str, datetime]:
         log.debug("Latest commit")
         loaded = self._prefetch(None)
         updated = datetime.strptime(loaded["date"], "%Y-%m-%dT%H:%M:%S%z")
 
         return loaded["rev"], updated
 
-    def _prefetch(self, ref: Optional[str]):
+    def _prefetch(self, ref: str | None):
         cmd = ["nix-prefetch-git", "--quiet", "--fetch-submodules", self.uri]
         if ref is not None:
             cmd.append(ref)
@@ -141,7 +141,7 @@ class Repo:
         loaded = json.loads(data)
         return loaded
 
-    def prefetch(self, ref: Optional[str]) -> str:
+    def prefetch(self, ref: str | None) -> str:
         log.info("Prefetching %s", self.uri)
         loaded = self._prefetch(ref)
         return loaded["sha256"]
@@ -186,7 +186,7 @@ class RepoGitHub(Repo):
         return True
 
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
-    def latest_commit(self) -> Tuple[str, datetime]:
+    def latest_commit(self) -> tuple[str, datetime]:
         commit_url = self.url(f"commits/{self.branch}.atom")
         log.debug("Sending request to %s", commit_url)
         commit_req = make_request(commit_url, self.token)
@@ -252,14 +252,14 @@ class RepoGitHub(Repo):
 class PluginDesc:
     repo: Repo
     branch: str
-    alias: Optional[str]
+    alias: str | None
 
     @property
     def name(self):
         return self.alias or self.repo.name
 
     @staticmethod
-    def load_from_csv(config: FetchConfig, row: Dict[str, str]) -> "PluginDesc":
+    def load_from_csv(config: FetchConfig, row: dict[str, str]) -> "PluginDesc":
         log.debug("Loading row %s", row)
         branch = row["branch"]
         repo = make_repo(row["repo"], branch.strip())
@@ -292,7 +292,7 @@ class Plugin:
     commit: str
     has_submodules: bool
     sha256: str
-    date: Optional[datetime] = None
+    date: datetime | None = None
 
     @property
     def normalized_name(self) -> str:
@@ -303,7 +303,7 @@ class Plugin:
         assert self.date is not None
         return self.date.strftime("%Y-%m-%d")
 
-    def as_json(self) -> Dict[str, str]:
+    def as_json(self) -> dict[str, str]:
         copy = self.__dict__.copy()
         del copy["date"]
         return copy
@@ -312,7 +312,7 @@ class Plugin:
 def load_plugins_from_csv(
     config: FetchConfig,
     input_file: Path,
-) -> List[PluginDesc]:
+) -> list[PluginDesc]:
     log.debug("Load plugins from csv %s", input_file)
     plugins = []
     with open(input_file, newline="") as csvfile:
@@ -359,10 +359,10 @@ class Editor:
         name: str,
         root: Path,
         get_plugins: str,
-        default_in: Optional[Path] = None,
-        default_out: Optional[Path] = None,
-        deprecated: Optional[Path] = None,
-        cache_file: Optional[str] = None,
+        default_in: Path | None = None,
+        default_out: Path | None = None,
+        deprecated: Path | None = None,
+        cache_file: str | None = None,
     ):
         log.debug("get_plugins:", get_plugins)
         self.name = name
@@ -388,6 +388,19 @@ class Editor:
                 fetch_config, args.input_file, editor.deprecated, append=append
             )
             plugin, _ = prefetch_plugin(pdesc)
+
+            if (  # lua updater doesn't support updating individual plugin
+                self.name != "lua"
+            ):
+                # update generated.nix
+                update = self.get_update(
+                    args.input_file,
+                    args.outfile,
+                    fetch_config,
+                    [plugin.normalized_name],
+                )
+                update()
+
             autocommit = not args.no_commit
             if autocommit:
                 commit(
@@ -404,16 +417,35 @@ class Editor:
         """CSV spec"""
         print("the update member function should be overridden in subclasses")
 
-    def get_current_plugins(self, nixpkgs: str) -> List[Plugin]:
+    def get_current_plugins(
+        self, config: FetchConfig, nixpkgs: str
+    ) -> list[tuple[PluginDesc, Plugin]]:
         """To fill the cache"""
         data = run_nix_expr(self.get_plugins, nixpkgs)
         plugins = []
         for name, attr in data.items():
-            p = Plugin(name, attr["rev"], attr["submodules"], attr["sha256"])
-            plugins.append(p)
+            checksum = attr["checksum"]
+
+            # https://github.com/NixOS/nixpkgs/blob/8a335419/pkgs/applications/editors/neovim/build-neovim-plugin.nix#L36
+            # https://github.com/NixOS/nixpkgs/pull/344478#discussion_r1786646055
+            version = re.search(r"\d\d\d\d-\d\d?-\d\d?", attr["version"])
+            if version is None:
+                raise ValueError(f"Cannot parse version: {attr['version']}")
+            date = datetime.strptime(version.group(), "%Y-%m-%d")
+
+            pdesc = PluginDesc.load_from_string(config, f'{attr["homePage"]} as {name}')
+            p = Plugin(
+                attr["pname"],
+                checksum["rev"],
+                checksum["submodules"],
+                checksum["sha256"],
+                date,
+            )
+
+            plugins.append((pdesc, p))
         return plugins
 
-    def load_plugin_spec(self, config: FetchConfig, plugin_file) -> List[PluginDesc]:
+    def load_plugin_spec(self, config: FetchConfig, plugin_file) -> list[PluginDesc]:
         """CSV spec"""
         return load_plugins_from_csv(config, plugin_file)
 
@@ -421,27 +453,114 @@ class Editor:
         """Returns nothing for now, writes directly to outfile"""
         raise NotImplementedError()
 
-    def get_update(self, input_file: str, outfile: str, config: FetchConfig):
-        cache: Cache = Cache(self.get_current_plugins(self.nixpkgs), self.cache_file)
+    def filter_plugins_to_update(
+        self, plugin: PluginDesc, to_update: list[str]
+    ) -> bool:
+        """Function for filtering out plugins, that user doesn't want to update.
+
+        It is mainly used for updating only specific plugins, not all of them.
+        By default it filters out plugins not present in `to_update`,
+        assuming `to_update` is a list of plugin names (the same as in the
+        result expression).
+
+        This function is never called if `to_update` is empty.
+        Feel free to override this function in derived classes.
+
+        Note:
+            Known bug: you have to use a deprecated name, instead of new one.
+            This is because we resolve deprecations later and can't get new
+            plugin URL before we request info about it.
+
+            Although, we could parse deprecated.json, but it's a whole bunch
+            of spaghetti code, which I don't want to write.
+
+        Arguments:
+            plugin: Plugin on which you decide whether to ignore or not.
+            to_update:
+                List of strings passed to via the `--update` command line parameter.
+                By default, we assume it is a list of URIs identical to what
+                is in the input file.
+
+        Returns:
+            True if we should update plugin and False if not.
+        """
+        return plugin.name.replace(".", "-") in to_update
+
+    def get_update(
+        self,
+        input_file: str,
+        output_file: str,
+        config: FetchConfig,
+        to_update: list[str] | None,
+    ):
+        if to_update is None:
+            to_update = []
+
+        current_plugins = self.get_current_plugins(config, self.nixpkgs)
+        current_plugin_specs = self.load_plugin_spec(config, input_file)
+
+        cache: Cache = Cache(
+            [plugin for _description, plugin in current_plugins], self.cache_file
+        )
         _prefetch = functools.partial(prefetch, cache=cache)
 
-        def update() -> dict:
-            plugins = self.load_plugin_spec(config, input_file)
+        plugins_to_update = (
+            current_plugin_specs
+            if len(to_update) == 0
+            else [
+                description
+                for description in current_plugin_specs
+                if self.filter_plugins_to_update(description, to_update)
+            ]
+        )
+
+        def update() -> Redirects:
+            if len(plugins_to_update) == 0:
+                log.error(
+                    "\n\n\n\nIt seems like you provided some arguments to `--update`:\n"
+                    + ", ".join(to_update)
+                    + "\nBut after filtering, the result list of plugins is empty\n"
+                    "\n"
+                    "Are you sure you provided the same URIs as in your input file?\n"
+                    "(" + str(input_file) + ")\n\n"
+                )
+                return {}
 
             try:
                 pool = Pool(processes=config.proc)
-                results = pool.map(_prefetch, plugins)
+                results = pool.map(_prefetch, plugins_to_update)
             finally:
                 cache.store()
 
+            print(f"{len(results)} of {len(current_plugins)} were checked")
+            # Do only partial update of out file
+            if len(results) != len(current_plugins):
+                results = self.merge_results(current_plugins, results)
             plugins, redirects = check_results(results)
 
             plugins = sorted(plugins, key=lambda v: v[1].normalized_name)
-            self.generate_nix(plugins, outfile)
+            self.generate_nix(plugins, output_file)
 
             return redirects
 
         return update
+
+    def merge_results(
+        self,
+        current: list[tuple[PluginDesc, Plugin]],
+        fetched: list[tuple[PluginDesc, Exception | Plugin, Repo | None]],
+    ) -> list[tuple[PluginDesc, Exception | Plugin, Repo | None]]:
+        # transforming this to dict, so lookup is O(1) instead of O(n) (n is len(current))
+        result: dict[str, tuple[PluginDesc, Exception | Plugin, Repo | None]] = {
+            # also adding redirect (third item in the result tuple)
+            pl.normalized_name: (pdesc, pl, None)
+            for pdesc, pl in current
+        }
+
+        for plugin_desc, plugin, redirect in fetched:
+            result[plugin.normalized_name] = (plugin_desc, plugin, redirect)
+
+        return list(result.values())
 
     @property
     def attr_path(self):
@@ -544,6 +663,12 @@ class Editor:
             description="Update all or a subset of existing plugins",
             add_help=False,
         )
+        pupdate.add_argument(
+            "update_only",
+            default=None,
+            nargs="*",
+            help="Plugin URLs to update (must be the same as in the input file)",
+        )
         pupdate.set_defaults(func=self.update)
         return main
 
@@ -587,8 +712,8 @@ class CleanEnvironment(object):
 
 def prefetch_plugin(
     p: PluginDesc,
-    cache: "Optional[Cache]" = None,
-) -> Tuple[Plugin, Optional[Repo]]:
+    cache: "Cache | None" = None,
+) -> tuple[Plugin, Repo | None]:
     commit = None
     log.info(f"Fetching last commit for plugin {p.name} from {p.repo.uri}@{p.branch}")
     commit, date = p.repo.latest_commit()
@@ -621,10 +746,10 @@ def print_download_error(plugin: PluginDesc, ex: Exception):
 
 
 def check_results(
-    results: List[Tuple[PluginDesc, Union[Exception, Plugin], Optional[Repo]]],
-) -> Tuple[List[Tuple[PluginDesc, Plugin]], Redirects]:
+    results: list[tuple[PluginDesc, Exception | Plugin, Repo | None]],
+) -> tuple[list[tuple[PluginDesc, Plugin]], Redirects]:
     """ """
-    failures: List[Tuple[PluginDesc, Exception]] = []
+    failures: list[tuple[PluginDesc, Exception]] = []
     plugins = []
     redirects: Redirects = {}
     for pdesc, result, redirect in results:
@@ -637,11 +762,10 @@ def check_results(
                 new_pdesc = PluginDesc(redirect, pdesc.branch, pdesc.alias)
             plugins.append((new_pdesc, result))
 
-    print(f"{len(results) - len(failures)} plugins were checked", end="")
     if len(failures) == 0:
         return plugins, redirects
     else:
-        log.error(f", {len(failures)} plugin(s) could not be downloaded:\n")
+        log.error(f"{len(failures)} plugin(s) could not be downloaded:\n")
 
         for plugin, exception in failures:
             print_download_error(plugin, exception)
@@ -661,7 +785,7 @@ def make_repo(uri: str, branch) -> Repo:
     return repo
 
 
-def get_cache_path(cache_file_name: str) -> Optional[Path]:
+def get_cache_path(cache_file_name: str) -> Path | None:
     xdg_cache = os.environ.get("XDG_CACHE_HOME", None)
     if xdg_cache is None:
         home = os.environ.get("HOME", None)
@@ -673,7 +797,7 @@ def get_cache_path(cache_file_name: str) -> Optional[Path]:
 
 
 class Cache:
-    def __init__(self, initial_plugins: List[Plugin], cache_file_name: str) -> None:
+    def __init__(self, initial_plugins: list[Plugin], cache_file_name: str) -> None:
         self.cache_file = get_cache_path(cache_file_name)
 
         downloads = {}
@@ -682,11 +806,11 @@ class Cache:
         downloads.update(self.load())
         self.downloads = downloads
 
-    def load(self) -> Dict[str, Plugin]:
+    def load(self) -> dict[str, Plugin]:
         if self.cache_file is None or not self.cache_file.exists():
             return {}
 
-        downloads: Dict[str, Plugin] = {}
+        downloads: dict[str, Plugin] = {}
         with open(self.cache_file) as f:
             data = json.load(f)
             for attr in data.values():
@@ -707,7 +831,7 @@ class Cache:
                 data[name] = attr.as_json()
             json.dump(data, f, indent=4, sort_keys=True)
 
-    def __getitem__(self, key: str) -> Optional[Plugin]:
+    def __getitem__(self, key: str) -> Plugin | None:
         return self.downloads.get(key, None)
 
     def __setitem__(self, key: str, value: Plugin) -> None:
@@ -716,7 +840,7 @@ class Cache:
 
 def prefetch(
     pluginDesc: PluginDesc, cache: Cache
-) -> Tuple[PluginDesc, Union[Exception, Plugin], Optional[Repo]]:
+) -> tuple[PluginDesc, Exception | Plugin, Repo | None]:
     try:
         plugin, redirect = prefetch_plugin(pluginDesc, cache)
         cache[plugin.commit] = plugin
@@ -731,7 +855,7 @@ def rewrite_input(
     deprecated: Path,
     # old pluginDesc and the new
     redirects: Redirects = {},
-    append: List[PluginDesc] = [],
+    append: list[PluginDesc] = [],
 ):
     log.info("Rewriting input file %s", input_file)
     plugins = load_plugins_from_csv(config, input_file)
@@ -779,7 +903,7 @@ def rewrite_input(
             writer.writerow(asdict(plugin))
 
 
-def commit(repo: git.Repo, message: str, files: List[Path]) -> None:
+def commit(repo: git.Repo, message: str, files: list[Path]) -> None:
     repo.index.add([str(f.resolve()) for f in files])
 
     if repo.index.diff("HEAD"):
@@ -802,7 +926,14 @@ def update_plugins(editor: Editor, args):
         )
 
     fetch_config = FetchConfig(args.proc, args.github_token)
-    update = editor.get_update(args.input_file, args.outfile, fetch_config)
+    update = editor.get_update(
+        input_file=args.input_file,
+        output_file=args.outfile,
+        config=fetch_config,
+        to_update=getattr(  # if script was called without arguments
+            args, "update_only", None
+        ),
+    )
 
     start_time = time.time()
     redirects = update()

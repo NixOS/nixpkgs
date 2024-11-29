@@ -200,9 +200,6 @@ stdenv.mkDerivation (finalAttrs: {
       # WM keyboard shortcuts
       --prefix XDG_DATA_DIRS : "${mutter}/share"
     )
-    for i in $out/share/applications/*; do
-      substituteInPlace $i --replace "Exec=gnome-control-center" "Exec=$out/bin/gnome-control-center"
-    done
   '';
 
   separateDebugInfo = true;

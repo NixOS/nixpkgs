@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "2.7.0";
+  version = "2.8.0";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     rev = "refs/tags/${version}";
-    hash = "sha256-gEQUVSNf8u92qIg0+5fsLIOPgIASdYdlTRDpzl61P+Q=";
+    hash = "sha256-Wk7a5/fO87yl/TolzoonSRLkc2TGEZKgVCgXcUuhjQI=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +52,7 @@ python3Packages.buildPythonApplication rec {
     pytube
     html2text
     youtube-transcript-api
+    pydbus
   ];
 
   dontWrapGApps = true;

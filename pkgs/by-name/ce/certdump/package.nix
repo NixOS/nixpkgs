@@ -35,5 +35,6 @@ buildDotnetModule rec {
     '';
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.baloo ];
+    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin;
   };
 }

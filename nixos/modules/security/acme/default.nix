@@ -87,6 +87,8 @@ let
     RestrictAddressFamilies = [
       "AF_INET"
       "AF_INET6"
+      "AF_UNIX"
+      "AF_NETLINK"
     ];
     RestrictNamespaces = true;
     RestrictRealtime = true;
@@ -965,6 +967,7 @@ in {
 
       users.users.acme = {
         home = "/var/lib/acme";
+        homeMode = "755";
         group = "acme";
         isSystemUser = true;
       };

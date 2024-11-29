@@ -1,14 +1,22 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+  testers,
+  bfg-repo-cleaner,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bfg-repo-cleaner";
-  version = "1.13.0";
+  version = "1.14.0";
 
   jarName = "bfg-${version}.jar";
 
   src = fetchurl {
     url = "mirror://maven/com/madgag/bfg/${version}/${jarName}";
-    sha256 = "1kn84rsvms1v5l1j2xgrk7dc7mnsmxkc6sqd94mnim22vnwvl8mz";
+    hash = "sha256-GnXpOQVB9LVdnAElazYbgVweCiY+L7PQcrVcKRHq0Lc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -22,6 +30,10 @@ stdenv.mkDerivation rec {
     cp $src $out/share/java/$jarName
     makeWrapper "${jre}/bin/java" $out/bin/bfg --add-flags "-cp $out/share/java/$jarName com.madgag.git.bfg.cli.Main"
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = bfg-repo-cleaner;
+  };
 
   meta = with lib; {
     homepage = "https://rtyley.github.io/bfg-repo-cleaner/";

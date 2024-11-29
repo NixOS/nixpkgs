@@ -30,6 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "duet" ];
 
+  disabledTests = [
+    # test fails because builder is too busy and cannot finish quickly enough
+    "test_repeated_sleep"
+  ];
+
   meta = with lib; {
     description = "Simple future-based async library for python";
     homepage = "https://github.com/google/duet";

@@ -72,10 +72,13 @@
   python3Packages, # must use instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
   rocmPackages, # comes with a significantly larger closure size
   runCommand,
+  shaderc,
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
   sse2neon,
   stdenv,
   tbb,
+  vulkan-headers,
+  vulkan-loader,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -90,6 +93,7 @@ let
   openImageDenoiseSupport =
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   openUsdSupport = !stdenv.hostPlatform.isDarwin;
+  vulkanSupport = !stdenv.hostPlatform.isDarwin;
 
   python3 = python3Packages.python;
   pyPkgsOpenusd = python3Packages.openusd.override { withOsl = false; };
@@ -108,20 +112,20 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.2.3";
+  version = "4.3.0";
 
   srcs = [
     (fetchzip {
       name = "source";
       url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-      hash = "sha256-58wgduTHGfuYohaPjNuAnLFrpXOosEYOk5gJvbxTlQk=";
+      hash = "sha256-eB67wn5TXiB1+yS3ZF40uzliO/jcm55anffdJT++O24=";
     })
     (fetchgit {
       name = "assets";
       url = "https://projects.blender.org/blender/blender-assets.git";
       rev = "v${finalAttrs.version}";
       fetchLFS = true;
-      hash = "sha256-vepK0inPMuleAJBSipwoI99nMBBiFaK/eSMHDetEtjY=";
+      hash = "sha256-3w/SHhbwXkHp8UlCGjxvm1znT1yfuZSnXSWWRTe/C0s=";
     })
   ];
 
@@ -325,7 +329,12 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional colladaSupport opencollada
     ++ lib.optional jackaudioSupport libjack2
-    ++ lib.optional spaceNavSupport libspnav;
+    ++ lib.optional spaceNavSupport libspnav
+    ++ lib.optionals vulkanSupport [
+      shaderc
+      vulkan-headers
+      vulkan-loader
+    ];
 
   pythonPath =
     let

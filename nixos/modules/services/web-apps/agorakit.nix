@@ -325,7 +325,7 @@ in
 
     services.mysql = mkIf db.createLocally {
       enable = true;
-      package = mkDefault pkgs.mysql;
+      package = mkDefault pkgs.mariadb;
       ensureDatabases = [ db.name ];
       ensureUsers = [
         {

@@ -10,8 +10,8 @@
       "x86_64-linux": "sha256-xEUUengFzRbQhFB7jxTBd8eTMWUhyBTTKyT/ObuyD/o="
     },
     "x86_64-linux": {
-      "aarch64-linux": "sha256-xEUUengFzRbQhFB7jxTBd8eTMWUhyBTTKyT/ObuyD/o=",
-      "x86_64-linux": "sha256-xEUUengFzRbQhFB7jxTBd8eTMWUhyBTTKyT/ObuyD/o="
+      "aarch64-linux": "sha256-YFmK7eSt9lK/iEMPC5jxp5Vf2pnDjUDyPVoHzgxc8mA=",
+      "x86_64-linux": "sha256-YFmK7eSt9lK/iEMPC5jxp5Vf2pnDjUDyPVoHzgxc8mA="
     }
   },
   "dartVersion": "3.6.0-334.3.beta",

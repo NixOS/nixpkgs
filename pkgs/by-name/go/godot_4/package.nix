@@ -3,6 +3,7 @@
   autoPatchelfHook,
   buildPackages,
   dbus,
+  dotnet-sdk_6,
   dotnet-sdk_8,
   dotnetCorePackages,
   fetchFromGitHub,
@@ -100,6 +101,10 @@ let
         echo ${commitHash} > .git/HEAD
       ''
       + lib.optionalString withMono ''
+        # TODO: avoid pulling in dependencies of windows-only project
+        dotnet sln modules/mono/editor/GodotTools/GodotTools.sln \
+          remove modules/mono/editor/GodotTools/GodotTools.OpenVisualStudio/GodotTools.OpenVisualStudio.csproj
+
         dotnet restore modules/mono/glue/GodotSharp/GodotSharp.sln
         dotnet restore modules/mono/editor/GodotTools/GodotTools.sln
         dotnet restore modules/mono/editor/Godot.NET.Sdk/Godot.NET.Sdk.sln
@@ -135,6 +140,8 @@ let
       buildPackages.stdenv.cc
       pkg-config
     ];
+
+    buildInputs = lib.optionals withMono dotnet-sdk_6.packages;
 
     nativeBuildInputs =
       [
@@ -262,7 +269,7 @@ stdenv.mkDerivation (
         runtimeIds = map (system: dotnetCorePackages.systemToDotnetRid system) old.meta.platforms;
         buildInputs =
           old.buildInputs
-          ++ lib.concatLists (lib.attrValues (lib.getAttrs runtimeIds dotnet-sdk_8.targetPackages));
+          ++ lib.concatLists (lib.attrValues (lib.getAttrs runtimeIds dotnet-sdk_6.targetPackages));
       };
     } attrs
   else

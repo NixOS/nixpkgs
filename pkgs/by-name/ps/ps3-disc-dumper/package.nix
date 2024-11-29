@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , zlib
 , openssl
+, dotnetCorePackages
 }:
 
 buildDotnetModule rec {
@@ -18,6 +19,7 @@ buildDotnetModule rec {
 
   selfContainedBuild = true;
 
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   projectFile = "UI.Console/UI.Console.csproj";
   nugetDeps = ./deps.nix;
 

@@ -1,4 +1,10 @@
-{ lib, buildDotnetModule, fetchFromGitHub, z3 }:
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  z3,
+  dotnetCorePackages,
+}:
 
 buildDotnetModule rec {
   pname = "Boogie";
@@ -11,6 +17,7 @@ buildDotnetModule rec {
     hash = "sha256-36aGVJEzaAwQgR11NI+v8c4cXm24iiXtiwjW6qd3qsE=";
   };
 
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   projectFile = [ "Source/Boogie.sln" ];
   nugetDeps = ./deps.nix;
 
@@ -24,18 +31,18 @@ buildDotnetModule rec {
   ];
 
   postInstall = ''
-      # so that this derivation can be used as a vim plugin to install syntax highlighting
-      vimdir=$out/share/vim-plugins/boogie
-      install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
-      mkdir $vimdir/ftdetect
-      echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
-      mkdir -p $out/share/nvim
-      ln -s $out/share/vim-plugins/boogie $out/share/nvim/site
+    # so that this derivation can be used as a vim plugin to install syntax highlighting
+    vimdir=$out/share/vim-plugins/boogie
+    install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
+    mkdir $vimdir/ftdetect
+    echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
+    mkdir -p $out/share/nvim
+    ln -s $out/share/vim-plugins/boogie $out/share/nvim/site
   '';
 
   postFixup = ''
-      ln -s "$out/bin/BoogieDriver" "$out/bin/boogie"
-      rm -f $out/bin/{Microsoft,NUnit3,System}.* "$out/bin"/*Tests
+    ln -s "$out/bin/BoogieDriver" "$out/bin/boogie"
+    rm -f $out/bin/{Microsoft,NUnit3,System}.* "$out/bin"/*Tests
   '';
 
   doInstallCheck = true;

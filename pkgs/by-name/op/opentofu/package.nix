@@ -1,30 +1,36 @@
-{ stdenv
-, lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, coreutils
-, runCommand
-, runtimeShell
-, writeText
-, terraform-providers
-, installShellFiles
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+  runCommand,
+  runtimeShell,
+  writeText,
+  terraform-providers,
+  installShellFiles,
 }:
 
 let
-  package =  buildGoModule rec {
+  package = buildGoModule rec {
     pname = "opentofu";
-    version = "1.8.5";
+    version = "1.8.6";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
       rev = "v${version}";
-      hash = "sha256-sZGKM6Dxz0bZkHIITujojSsKtRD4E+q1uReWRg5EfC8=";
+      hash = "sha256-yJCUWRAntye3Dx2a+s/gNVa+XuCQak24TnFjSY+/3zc=";
     };
 
-    vendorHash = "sha256-cM2DSP2ss3vleUhPBIdyxKeWJxtHpdjL5b5HVS/iC6o=";
-    ldflags = [ "-s" "-w" "-X" "github.com/opentofu/opentofu/version.dev=no" ];
+    vendorHash = "sha256-MHdEY2nlUGTKybMPran5mTXlAlTFilfrY5K2sMlPe5U=";
+    ldflags = [
+      "-s"
+      "-w"
+      "-X"
+      "github.com/opentofu/opentofu/version.dev=no"
+    ];
 
     postConfigure = ''
       # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
@@ -37,7 +43,9 @@ let
 
     passthru = {
       inherit full plugins withPlugins;
-      tests = { inherit opentofu_plugins_test; };
+      tests = {
+        inherit opentofu_plugins_test;
+      };
     };
 
     # https://github.com/posener/complete/blob/9a4745ac49b29530e07dc2581745a218b646b7a3/cmd/install/bash.go#L8
@@ -67,49 +75,61 @@ let
 
   full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p.actualProviders));
 
-  opentofu_plugins_test = let
-    mainTf = writeText "main.tf" ''
-      terraform {
-        required_providers {
-          random = {
-            source  = "registry.terraform.io/hashicorp/random"
+  opentofu_plugins_test =
+    let
+      mainTf = writeText "main.tf" ''
+        terraform {
+          required_providers {
+            random = {
+              source  = "registry.terraform.io/hashicorp/random"
+            }
           }
         }
-      }
 
-      resource "random_id" "test" {}
-    '';
-    opentofu = package.withPlugins (p: [ p.random ]);
-    test = runCommand "opentofu-plugin-test" {
-      buildInputs = [ opentofu ];
-    } ''
-      # make it fail outside of sandbox
-      export HTTP_PROXY=http://127.0.0.1:0 HTTPS_PROXY=https://127.0.0.1:0
-      cp ${mainTf} main.tf
-      tofu init
-      touch $out
-    '';
-  in
+        resource "random_id" "test" {}
+      '';
+      opentofu = package.withPlugins (p: [ p.random ]);
+      test = runCommand "opentofu-plugin-test" { buildInputs = [ opentofu ]; } ''
+        # make it fail outside of sandbox
+        export HTTP_PROXY=http://127.0.0.1:0 HTTPS_PROXY=https://127.0.0.1:0
+        cp ${mainTf} main.tf
+        tofu init
+        touch $out
+      '';
+    in
     test;
 
-  plugins = removeAttrs terraform-providers [
-    "override"
-    "overrideDerivation"
-    "recurseForDerivations"
-  ];
+  plugins =
+    lib.mapAttrs
+      (
+        _: provider:
+        # use opentofu plugin registry over terraform's
+        provider.override (oldArgs: {
+          provider-source-address = lib.replaceStrings [ "https://registry.terraform.io/providers" ] [
+            "registry.opentofu.org"
+          ] oldArgs.homepage;
+        })
+      )
+      (
+        removeAttrs terraform-providers [
+          "override"
+          "overrideDerivation"
+          "recurseForDerivations"
+        ]
+      );
 
-  withPlugins = plugins:
+  withPlugins =
+    plugins:
     let
       actualPlugins = plugins package.plugins;
 
       # Wrap PATH of plugins propagatedBuildInputs, plugins may have runtime dependencies on external binaries
-      wrapperInputs = lib.unique (lib.flatten
-        (lib.catAttrs "propagatedBuildInputs"
-          (builtins.filter (x: x != null) actualPlugins)));
+      wrapperInputs = lib.unique (
+        lib.flatten (lib.catAttrs "propagatedBuildInputs" (builtins.filter (x: x != null) actualPlugins))
+      );
 
       passthru = {
-        withPlugins = newplugins:
-          withPlugins (x: newplugins x ++ actualPlugins);
+        withPlugins = newplugins: withPlugins (x: newplugins x ++ actualPlugins);
 
         # Expose wrappers around the override* functions of the terraform
         # derivation.
@@ -131,21 +151,20 @@ let
         # 3. Specifying overrides on the wrapper is unsupported.
         #
         # See nixpkgs#158620 for details.
-        overrideDerivation = f:
-          (package.overrideDerivation f).withPlugins plugins;
-        overrideAttrs = f:
-          (package.overrideAttrs f).withPlugins plugins;
-        override = x:
-          (package.override x).withPlugins plugins;
+        overrideDerivation = f: (package.overrideDerivation f).withPlugins plugins;
+        overrideAttrs = f: (package.overrideAttrs f).withPlugins plugins;
+        override = x: (package.override x).withPlugins plugins;
       };
-      # Don't bother wrapping unless we actually have plugins, since the wrapper will stop automatic downloading
-      # of plugins, which might be counterintuitive if someone just wants a vanilla Terraform.
     in
-      if actualPlugins == [ ] then
-        package.overrideAttrs
-          (orig: { passthru = orig.passthru // passthru; })
-      else
-        lib.appendToName "with-plugins" (stdenv.mkDerivation {
+    # Don't bother wrapping unless we actually have plugins, since the wrapper will stop automatic downloading
+    # of plugins, which might be counterintuitive if someone just wants a vanilla Terraform.
+    if actualPlugins == [ ] then
+      package.overrideAttrs (orig: {
+        passthru = orig.passthru // passthru;
+      })
+    else
+      lib.appendToName "with-plugins" (
+        stdenv.mkDerivation {
           inherit (package) meta pname version;
           nativeBuildInputs = [ makeWrapper ];
 
@@ -178,6 +197,7 @@ let
               --set NIX_TERRAFORM_PLUGIN_DIR $out/libexec/terraform-providers \
               --prefix PATH : "${lib.makeBinPath wrapperInputs}"
           '';
-        });
+        }
+      );
 in
 package

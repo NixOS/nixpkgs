@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "spotifyaio";
-  version = "0.8.8";
+  version = "0.8.10";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "joostlek";
     repo = "python-spotify";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4u6YVkFeUF8jHrReFLnQGeC5qxfVyL8tuSHR8Ta74Hw=";
+    hash = "sha256-+DsJAhSY9gkW5wcVPlwiheDmZYT09y/YkU6Z470nKz0=";
   };
 
   build-system = [ poetry-core ];

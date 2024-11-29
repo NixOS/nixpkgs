@@ -1,11 +1,8 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.nebula;
-  enabledNetworks = filterAttrs (n: v: v.enable) cfg.networks;
+  enabledNetworks = lib.filterAttrs (n: v: v.enable) cfg.networks;
 
   format = pkgs.formats.yaml {};
 
@@ -25,39 +22,39 @@ in
 
   options = {
     services.nebula = {
-      networks = mkOption {
+      networks = lib.mkOption {
         description = "Nebula network definitions.";
         default = {};
-        type = types.attrsOf (types.submodule {
+        type = lib.types.attrsOf (lib.types.submodule {
           options = {
-            enable = mkOption {
-              type = types.bool;
+            enable = lib.mkOption {
+              type = lib.types.bool;
               default = true;
               description = "Enable or disable this network.";
             };
 
-            package = mkPackageOption pkgs "nebula" { };
+            package = lib.mkPackageOption pkgs "nebula" { };
 
-            ca = mkOption {
-              type = types.path;
+            ca = lib.mkOption {
+              type = lib.types.path;
               description = "Path to the certificate authority certificate.";
               example = "/etc/nebula/ca.crt";
             };
 
-            cert = mkOption {
-              type = types.path;
+            cert = lib.mkOption {
+              type = lib.types.path;
               description = "Path to the host certificate.";
               example = "/etc/nebula/host.crt";
             };
 
-            key = mkOption {
-              type = types.oneOf [types.nonEmptyStr types.path];
+            key = lib.mkOption {
+              type = lib.types.oneOf [lib.types.nonEmptyStr lib.types.path];
               description = "Path or reference to the host key.";
               example = "/etc/nebula/host.key";
             };
 
-            staticHostMap = mkOption {
-              type = types.attrsOf (types.listOf (types.str));
+            staticHostMap = lib.mkOption {
+              type = lib.types.attrsOf (lib.types.listOf (lib.types.str));
               default = {};
               description = ''
                 The static host map defines a set of hosts with fixed IP addresses on the internet (or any network).
@@ -66,20 +63,20 @@ in
               example = { "192.168.100.1" = [ "100.64.22.11:4242" ]; };
             };
 
-            isLighthouse = mkOption {
-              type = types.bool;
+            isLighthouse = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = "Whether this node is a lighthouse.";
             };
 
-            isRelay = mkOption {
-              type = types.bool;
+            isRelay = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = "Whether this node is a relay.";
             };
 
-            lighthouses = mkOption {
-              type = types.listOf types.str;
+            lighthouses = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               default = [];
               description = ''
                 List of IPs of lighthouse hosts this node should report to and query from. This should be empty on lighthouse
@@ -88,8 +85,8 @@ in
               example = [ "192.168.100.1" ];
             };
 
-            relays = mkOption {
-              type = types.listOf types.str;
+            relays = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               default = [];
               description = ''
                 List of IPs of relays that this node should allow traffic from.
@@ -97,14 +94,14 @@ in
               example = [ "192.168.100.1" ];
             };
 
-            listen.host = mkOption {
-              type = types.str;
+            listen.host = lib.mkOption {
+              type = lib.types.str;
               default = "0.0.0.0";
               description = "IP address to listen on.";
             };
 
-            listen.port = mkOption {
-              type = types.nullOr types.port;
+            listen.port = lib.mkOption {
+              type = lib.types.nullOr lib.types.port;
               default = null;
               defaultText = lib.literalExpression ''
                 if (config.services.nebula.networks.''${name}.isLighthouse ||
@@ -116,35 +113,35 @@ in
               description = "Port number to listen on.";
             };
 
-            tun.disable = mkOption {
-              type = types.bool;
+            tun.disable = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 When tun is disabled, a lighthouse can be started without a local tun interface (and therefore without root).
               '';
             };
 
-            tun.device = mkOption {
-              type = types.nullOr types.str;
+            tun.device = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = null;
               description = "Name of the tun device. Defaults to nebula.\${networkName}.";
             };
 
-            firewall.outbound = mkOption {
-              type = types.listOf types.attrs;
+            firewall.outbound = lib.mkOption {
+              type = lib.types.listOf lib.types.attrs;
               default = [];
               description = "Firewall rules for outbound traffic.";
               example = [ { port = "any"; proto = "any"; host = "any"; } ];
             };
 
-            firewall.inbound = mkOption {
-              type = types.listOf types.attrs;
+            firewall.inbound = lib.mkOption {
+              type = lib.types.listOf lib.types.attrs;
               default = [];
               description = "Firewall rules for inbound traffic.";
               example = [ { port = "any"; proto = "any"; host = "any"; } ];
             };
 
-            settings = mkOption {
+            settings = lib.mkOption {
               type = format.type;
               default = {};
               description = ''
@@ -152,7 +149,7 @@ in
                 <https://github.com/slackhq/nebula/blob/master/examples/config.yml>
                 for details on supported values.
               '';
-              example = literalExpression ''
+              example = lib.literalExpression ''
                 {
                   lighthouse.dns = {
                     host = "0.0.0.0";
@@ -168,11 +165,11 @@ in
   };
 
   # Implementation
-  config = mkIf (enabledNetworks != {}) {
-    systemd.services = mkMerge (mapAttrsToList (netName: netCfg:
+  config = lib.mkIf (enabledNetworks != {}) {
+    systemd.services = lib.mkMerge (lib.mapAttrsToList (netName: netCfg:
       let
         networkId = nameToId netName;
-        settings = recursiveUpdate {
+        settings = lib.recursiveUpdate {
           pki = {
             ca = netCfg.ca;
             cert = netCfg.cert;
@@ -202,7 +199,7 @@ in
           };
         } netCfg.settings;
         configFile = format.generate "nebula-config-${netName}.yml" (
-          warnIf
+          lib.warnIf
             ((settings.lighthouse.am_lighthouse || settings.relay.am_relay) && settings.listen.port == 0)
             ''
               Nebula network '${netName}' is configured as a lighthouse or relay, and its port is ${builtins.toString settings.listen.port}.
@@ -253,10 +250,10 @@ in
 
     # Open the chosen ports for UDP.
     networking.firewall.allowedUDPPorts =
-      unique (filter (port: port > 0) (mapAttrsToList (netName: netCfg: resolveFinalPort netCfg) enabledNetworks));
+      lib.unique (lib.filter (port: port > 0) (lib.mapAttrsToList (netName: netCfg: resolveFinalPort netCfg) enabledNetworks));
 
     # Create the service users and groups.
-    users.users = mkMerge (mapAttrsToList (netName: netCfg:
+    users.users = lib.mkMerge (lib.mapAttrsToList (netName: netCfg:
       {
         ${nameToId netName} = {
           group = nameToId netName;
@@ -265,10 +262,10 @@ in
         };
       }) enabledNetworks);
 
-    users.groups = mkMerge (mapAttrsToList (netName: netCfg: {
+    users.groups = lib.mkMerge (lib.mapAttrsToList (netName: netCfg: {
       ${nameToId netName} = {};
     }) enabledNetworks);
   };
 
-  meta.maintainers = with maintainers; [ numinit ];
+  meta.maintainers = with lib.maintainers; [ numinit ];
 }

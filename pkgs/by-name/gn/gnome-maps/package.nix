@@ -25,6 +25,7 @@
   libadwaita,
   geocode-glib_2,
   tzdata,
+  writeText,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -68,15 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup_3
   ];
 
-  postPatch = ''
-    # The .service file isn't wrapped with the correct environment
-    # so misses GIR files when started. By re-pointing from the gjs
-    # entry point to the wrapped binary we get back to a wrapped
-    # binary.
-    substituteInPlace "data/org.gnome.Maps.service.in" \
-      --replace-fail "Exec=@pkgdatadir@/@app-id@" \
-                     "Exec=$out/bin/gnome-maps"
-  '';
+  mesonFlags = [
+    "--cross-file=${writeText "crossfile.ini" ''
+      [binaries]
+      gjs = '${lib.getExe gjs}'
+    ''}"
+  ];
 
   preCheck = ''
     # “time.js” included by “timeTest” and “translationsTest” depends on “org.gnome.desktop.interface” schema.

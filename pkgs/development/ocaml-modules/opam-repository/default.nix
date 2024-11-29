@@ -1,6 +1,6 @@
 { lib, buildDunePackage, opam-format, curl }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "opam-repository";
 
   inherit (opam-format) src version;

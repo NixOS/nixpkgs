@@ -58,8 +58,8 @@ let
       biometryd = callPackage ./services/biometryd { };
       lomiri-content-hub = callPackage ./services/lomiri-content-hub { };
       hfd-service = callPackage ./services/hfd-service { };
-      history-service = callPackage ./services/history-service { };
       lomiri-download-manager = callPackage ./services/lomiri-download-manager { };
+      lomiri-history-service = callPackage ./services/lomiri-history-service { };
       lomiri-indicator-network = callPackage ./services/lomiri-indicator-network { };
       lomiri-polkit-agent = callPackage ./services/lomiri-polkit-agent { };
       lomiri-thumbnailer = callPackage ./services/lomiri-thumbnailer { };
@@ -71,5 +71,6 @@ in
 lib.makeScope libsForQt5.newScope packages
 // lib.optionalAttrs config.allowAliases {
   content-hub = lib.warn "`content-hub` was renamed to `lomiri-content-hub`." pkgs.lomiri.lomiri-content-hub; # Added on 2024-09-11
+  history-service = lib.warn "`history-service` was renamed to `lomiri-history-service`." pkgs.lomiri.lomiri-history-service; # Added on 2024-11-11
   lomiri-system-settings-security-privacy = lib.warn "`lomiri-system-settings-security-privacy` upstream was merged into `lomiri-system-settings`. Please use `pkgs.lomiri.lomiri-system-settings-unwrapped` if you need to directly access the plugins that belonged to this project." pkgs.lomiri.lomiri-system-settings-unwrapped; # Added on 2024-08-08
 }

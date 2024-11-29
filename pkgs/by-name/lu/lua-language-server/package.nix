@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lua-language-server";
-  version = "3.13.0";
+  version = "3.13.2";
 
   src = fetchFromGitHub {
     owner = "luals";
     repo = "lua-language-server";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-V8iqMmf9uVwWvFqEYPlc7WhPnPmKMlJuhve81kf3yQg=";
+    hash = "sha256-JOIlEBNEXzYFO2gC3s9R2Y5aK0av6Kl0gQDWN7Kw7uk=";
     fetchSubmodules = true;
   };
 

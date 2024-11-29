@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "1.9.1";
+  version = "1.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "narwhals-dev";
     repo = "narwhals";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KUtmkDaHPaJ917/hVhJrt+x64JJYm06fyDfCV2nSa3s=";
+    hash = "sha256-wE+jLB2O9GqeO8+XwbiIu4lermMBRYNi8GQmbxkYkkc=";
   };
 
   build-system = [

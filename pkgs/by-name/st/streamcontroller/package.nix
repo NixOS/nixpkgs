@@ -17,12 +17,15 @@ stdenv.mkDerivation rec {
   pname = "streamcontroller";
 
   version = "1.5.0-beta.7";
+  # We have to hardcode revision because upstream often create multiple releases for the same version number.
+  # This is the commit hash that maps to 1.5.0-beta.7 released on 2024-11-20
+  rev = "45b5bc72f617c5aea306450d6592da66ade53568";
 
   src = fetchFromGitHub {
     repo = "StreamController";
     owner = "StreamController";
-    rev = version;
-    hash = "sha256-UBcsA9pAo7fONhk4vYXQU4EgSVKm1D7/7nvL9BaNIgo=";
+    inherit rev;
+    hash = "sha256-tgbqURtqp1KbzOfXo4b4Dp3N8Sg8xcUSTwdEFXq+f6w=";
   };
 
   # The installation method documented upstream

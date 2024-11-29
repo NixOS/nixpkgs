@@ -37,7 +37,7 @@ let
     , hash ? null
     , extraPatches ? [ ]
     , packageOverrides ? (final: prev: { })
-    , phpAttrsOverrides ? (attrs: { })
+    , phpAttrsOverrides ? (final: prev: { })
     , pearInstallPhar ? (callPackage ./install-pear-nozlib-phar.nix { })
 
       # Sapi flags
@@ -63,16 +63,6 @@ let
     }@args:
 
     let
-      # Compose two functions of the type expected by 'overrideAttrs'
-      # into one where changes made in the first are available to the second.
-      composeOverrides =
-        f: g: attrs:
-        let
-          fApplied = f attrs;
-          attrs' = attrs // fApplied;
-        in
-        fApplied // g attrs';
-
       # buildEnv wraps php to provide additional extensions and
       # configuration. Its usage is documented in
       # doc/languages-frameworks/php.section.md.
@@ -153,7 +143,8 @@ let
               overrideAttrs =
                 f:
                 let
-                  newPhpAttrsOverrides = composeOverrides (filteredArgs.phpAttrsOverrides or (attrs: { })) f;
+                  phpAttrsOverrides = filteredArgs.phpAttrsOverrides or (final: prev: { });
+                  newPhpAttrsOverrides = lib.composeExtensions (lib.toExtension phpAttrsOverrides) (lib.toExtension f);
                   php = generic (filteredArgs // { phpAttrsOverrides = newPhpAttrsOverrides; });
                 in
                 php.buildEnv { inherit extensions extraConfig; };
@@ -342,7 +333,7 @@ let
             overrideAttrs =
               f:
               let
-                newPhpAttrsOverrides = composeOverrides phpAttrsOverrides f;
+                newPhpAttrsOverrides = lib.composeExtensions (lib.toExtension phpAttrsOverrides) (lib.toExtension f);
                 php = generic (args // { phpAttrsOverrides = newPhpAttrsOverrides; });
               in
               php;
@@ -359,8 +350,9 @@ let
             outputsToInstall = [ "out" "dev" ];
           };
         };
+        final = attrs // (lib.toExtension phpAttrsOverrides) final attrs;
       in
-      attrs // phpAttrsOverrides attrs
+      final
     );
 in
 generic

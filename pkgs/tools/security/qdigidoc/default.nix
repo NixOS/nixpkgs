@@ -31,20 +31,14 @@ mkDerivation rec {
       url = "https://github.com/open-eid/DigiDoc4-Client/commit/bb324d18f0452c2ab1b360ff6c42bb7f11ea60d7.patch";
       hash = "sha256-JpaU9inupSDsZKhHk+sp5g+oUynVFxR7lshjTXoFIbU=";
     })
+
+    # Regularly update this with what's on https://src.fedoraproject.org/rpms/qdigidoc/blob/rawhide/f/sandbox.patch
+    # This prevents attempts to download TSL lists inside the build sandbox.
+    # The list files are regularly updated (get new signatures), though this also happens at application runtime.
+    ./sandbox.patch
   ];
 
-  # Check https://dss.nowina.lu/tl-info, "Pivots loaded" section
-  tsl = fetchurl {
-    url = "https://ec.europa.eu/tools/lotl/eu-lotl-pivot-341.xml";
-    hash = "sha256-/TI8qYxXzourjGFPBpsQzi9Depi7lLQ2JaV+FyP0FtE=";
-  };
-
   nativeBuildInputs = [ cmake gettext pkg-config qttools ];
-
-  postPatch = ''
-    substituteInPlace client/CMakeLists.txt \
-      --replace $\{TSL_URL} file://${tsl}
-  '';
 
   buildInputs = [
     flatbuffers

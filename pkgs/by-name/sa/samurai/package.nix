@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/michaelforney/samurai";
     license = with licenses; [ mit asl20 ]; # see LICENSE
-    maintainers = with maintainers; [ dtzWill AndersonTorres ];
+    maintainers = with maintainers; [ dtzWill ];
     mainProgram = "samu";
     platforms = platforms.all;
   };

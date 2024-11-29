@@ -5,12 +5,13 @@
   pytest-xdist,
   pytest7CheckHook,
   pythonOlder,
-  setuptools,
+  poetry-core,
+  toml,
 }:
 
 buildPythonPackage rec {
   pname = "librouteros";
-  version = "3.2.1";
+  version = "3.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,10 +20,12 @@ buildPythonPackage rec {
     owner = "luqasz";
     repo = "librouteros";
     rev = "refs/tags/${version}";
-    hash = "sha256-VwpZ1RY6Sul7xvWY7ZoOxZ7KgbRmKRwcVdF9e2b3f6Q=";
+    hash = "sha256-dbeKJ3iG0eEW+sJJoZmQXyUad6mPhIlCAdJyQZT+CCQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ poetry-core ];
+
+  dependencies = [ toml ];
 
   nativeCheckInputs = [
     pytest-xdist
@@ -47,7 +50,7 @@ buildPythonPackage rec {
     description = "Python implementation of the MikroTik RouterOS API";
     homepage = "https://librouteros.readthedocs.io/";
     changelog = "https://github.com/luqasz/librouteros/blob/${version}/CHANGELOG.rst";
-    license = with licenses; [ gpl2Only ];
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
   };
 }

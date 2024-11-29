@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch2
 , buildNpmPackage
 , nixosTests
 , gettext
@@ -140,6 +141,14 @@ python.pkgs.buildPythonApplication rec {
   pyproject = false;
 
   inherit version src;
+
+  patches = [
+    (fetchpatch2 {
+      name = "ocrmypdf-16.6-compat.patch";
+      url = "https://github.com/paperless-ngx/paperless-ngx/commit/d1f255a22ea53712cb9101277ec57ea1976f9c02.patch?full_index=1";
+      hash = "sha256-V2nnNeNCcfSrjOttQ5rgDj7gnxpfpBPVeDDnMea0C3U=";
+    })
+  ];
 
   postPatch = ''
     # pytest-xdist makes the tests flaky
