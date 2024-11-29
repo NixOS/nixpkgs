@@ -744,6 +744,10 @@ with pkgs;
     propagatedBuildInputs = [ dieHook ];
   } ../build-support/setup-hooks/shorten-perl-shebang.sh;
 
+  sile = callPackage ../by-name/si/sile/package.nix {
+    lua = luajit;
+  };
+
   singularity-tools = callPackage ../build-support/singularity-tools { };
 
   srcOnly = callPackage ../build-support/src-only { };
