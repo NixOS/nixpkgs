@@ -3238,6 +3238,8 @@ with pkgs;
 
   schleuder-cli = callPackage ../tools/security/schleuder/cli { };
 
+  tango-controls = callPackage ../applications/science/engineering/tango-controls { };
+
   tealdeer = callPackage ../tools/misc/tealdeer {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
