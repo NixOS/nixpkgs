@@ -138,7 +138,8 @@ stdenv.mkDerivation {
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = platforms.unix ;
+    badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
     maintainers = with maintainers; [ Br1ght0ne ymarkus ataraxiasjel ];
   };
 
