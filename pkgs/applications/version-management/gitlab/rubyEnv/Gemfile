@@ -63,7 +63,7 @@ gem 'responders', '~> 3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'sprockets', '~> 3.7.0' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'sprockets-rails', '~>  3.5.1' # rubocop:todo Gemfile/MissingFeatureCategory
 
-gem 'view_component', '~> 3.14.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'view_component', '~> 3.20.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Supported DBs
 gem 'pg', '~> 1.5.6', feature_category: :database
@@ -83,7 +83,7 @@ gem 'marginalia', '~> 1.11.1' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'declarative_policy', '~> 1.1.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # For source code paths mapping
-gem 'coverband', '6.1.2', require: false, feature_category: :shared
+gem 'coverband', '6.1.4', require: false, feature_category: :shared
 
 # Authentication libraries
 gem 'devise', '~> 4.9.3', feature_category: :system_access
@@ -112,7 +112,7 @@ gem 'openid_connect', '~> 2.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'omniauth-salesforce', '~> 1.0.5', path: 'vendor/gems/omniauth-salesforce' # See gem README.md # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'omniauth-atlassian-oauth2', '~> 0.2.0' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'rack-oauth2', '~> 2.2.1' # rubocop:todo Gemfile/MissingFeatureCategory
-gem 'jwt', '~> 2.5' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'jwt', '~> 2.9.3' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Kerberos authentication. EE-only
 gem 'gssapi', '~> 1.3.1', group: :kerberos # rubocop:todo Gemfile/MissingFeatureCategory
@@ -159,9 +159,8 @@ gem 'grape-path-helpers', '~> 2.0.1', feature_category: :api
 gem 'rack-cors', '~> 2.0.1', require: 'rack/cors' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # GraphQL API
-gem 'graphql', '~> 2.3.14', feature_category: :api
+gem 'graphql', '~> 2.4.1', feature_category: :api
 gem 'graphql-docs', '~> 5.0.0', group: [:development, :test], feature_category: :api
-gem 'graphiql-rails', '~> 1.10', feature_category: :api
 gem 'apollo_upload_server', '~> 2.1.6', feature_category: :api
 gem 'graphlient', '~> 0.8.0', feature_category: :importers # Used by BulkImport feature (group::import)
 
@@ -235,9 +234,9 @@ gem 'seed-fu', '~> 2.3.7' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'elasticsearch-model', '~> 7.2', feature_category: :global_search
 gem 'elasticsearch-rails', '~> 7.2', require: 'elasticsearch/rails/instrumentation', feature_category: :global_search
 gem 'elasticsearch-api', '7.17.11', feature_category: :global_search
-gem 'aws-sdk-core', '~> 3.206.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'aws-sdk-core', '~> 3.211.0' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'aws-sdk-cloudformation', '~> 1' # rubocop:todo Gemfile/MissingFeatureCategory
-gem 'aws-sdk-s3', '~> 1.163.0' # rubocop:todo Gemfile/MissingFeatureCategory
+gem 'aws-sdk-s3', '~> 1.169.0' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'faraday-typhoeus', '~> 1.1', feature_category: :global_search
 gem 'faraday_middleware-aws-sigv4', '~> 1.0.1', feature_category: :global_search
 # Used with Elasticsearch to support http keep-alive connections
@@ -248,7 +247,7 @@ gem 'html-pipeline', '~> 2.14.3', feature_category: :markdown
 gem 'deckar01-task_list', '2.3.4', feature_category: :markdown
 gem 'gitlab-markup', '~> 1.9.0', require: 'github/markup', feature_category: :markdown
 gem 'commonmarker', '~> 0.23.10', feature_category: :markdown
-gem 'kramdown', '~> 2.3.1', feature_category: :markdown
+gem 'kramdown', '~> 2.4.0', feature_category: :markdown
 gem 'RedCloth', '~> 4.3.3', feature_category: :markdown
 gem 'org-ruby', '~> 0.9.12', feature_category: :markdown
 gem 'creole', '~> 0.5.0', feature_category: :markdown
@@ -257,10 +256,12 @@ gem 'asciidoctor', '~> 2.0.18', feature_category: :markdown
 gem 'asciidoctor-include-ext', '~> 0.4.0', require: false, feature_category: :markdown
 gem 'asciidoctor-plantuml', '~> 0.0.16', feature_category: :markdown
 gem 'asciidoctor-kroki', '~> 0.10.0', require: false, feature_category: :markdown
-gem 'rouge', '~> 4.3.0', feature_category: :shared
+gem 'rouge', '~> 4.4.0', feature_category: :shared
 gem 'truncato', '~> 0.7.12', feature_category: :team_planning
 gem 'nokogiri', '~> 1.16', feature_category: :shared
 gem 'gitlab-glfm-markdown', '~> 0.0.21', feature_category: :markdown
+gem 'tanuki_emoji', '~> 0.13', feature_category: :markdown
+gem 'unicode-emoji', '~> 4.0', feature_category: :markdown
 
 # Calendar rendering
 gem 'icalendar', '~> 2.10.1', feature_category: :system_access
@@ -376,20 +377,18 @@ gem 'terser', '1.0.2' # rubocop:todo Gemfile/MissingFeatureCategory
 
 gem 'click_house-client', path: 'gems/click_house-client', require: 'click_house/client' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'addressable', '~> 2.8' # rubocop:todo Gemfile/MissingFeatureCategory
-gem 'tanuki_emoji', '~> 0.9' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'gon', '~> 6.4.0' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'request_store', '~> 1.5.1' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'base32', '~> 0.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
-
 gem 'gitlab-license', '~> 2.5', feature_category: :shared
 
 # Protect against bruteforcing
 gem 'rack-attack', '~> 6.7.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Sentry integration
-gem 'sentry-ruby', '~> 5.19.0', feature_category: :observability
-gem 'sentry-rails', '~> 5.19.0', feature_category: :observability
-gem 'sentry-sidekiq', '~> 5.19.0', feature_category: :observability
+gem 'sentry-ruby', '~> 5.21.0', feature_category: :observability
+gem 'sentry-rails', '~> 5.21.0', feature_category: :observability
+gem 'sentry-sidekiq', '~> 5.21.0', feature_category: :observability
 
 # PostgreSQL query parsing
 #
@@ -437,31 +436,31 @@ gem 'gitlab-security_report_schemas', '0.1.2.min15.0.0.max15.2.1', feature_categ
 # OpenTelemetry
 group :opentelemetry do
   # Core OpenTelemetry gems
-  gem 'opentelemetry-sdk', feature_category: :tooling
-  gem 'opentelemetry-exporter-otlp', feature_category: :tooling
+  gem 'opentelemetry-sdk', feature_category: :observability
+  gem 'opentelemetry-exporter-otlp', feature_category: :observability
 
   # OpenTelemetry gems selected from full set in `opentelemetry-instrumentation-all` metagem
-  gem 'opentelemetry-instrumentation-active_support', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-action_pack', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-active_job', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-active_record', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-action_view', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-aws_sdk', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-http', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-concurrent_ruby', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-ethon', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-excon', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-faraday', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-grape', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-graphql', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-http_client', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-net_http', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-pg', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-rack', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-rails', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-rake', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-redis', feature_category: :tooling
-  gem 'opentelemetry-instrumentation-sidekiq', feature_category: :tooling
+  gem 'opentelemetry-instrumentation-active_support', feature_category: :observability
+  gem 'opentelemetry-instrumentation-action_pack', feature_category: :observability
+  gem 'opentelemetry-instrumentation-active_job', feature_category: :observability
+  gem 'opentelemetry-instrumentation-active_record', feature_category: :observability
+  gem 'opentelemetry-instrumentation-action_view', feature_category: :observability
+  gem 'opentelemetry-instrumentation-aws_sdk', feature_category: :observability
+  gem 'opentelemetry-instrumentation-http', feature_category: :observability
+  gem 'opentelemetry-instrumentation-concurrent_ruby', feature_category: :observability
+  gem 'opentelemetry-instrumentation-ethon', feature_category: :observability
+  gem 'opentelemetry-instrumentation-excon', feature_category: :observability
+  gem 'opentelemetry-instrumentation-faraday', feature_category: :observability
+  gem 'opentelemetry-instrumentation-grape', feature_category: :observability
+  gem 'opentelemetry-instrumentation-graphql', feature_category: :observability
+  gem 'opentelemetry-instrumentation-http_client', feature_category: :observability
+  gem 'opentelemetry-instrumentation-net_http', feature_category: :observability
+  gem 'opentelemetry-instrumentation-pg', feature_category: :observability
+  gem 'opentelemetry-instrumentation-rack', feature_category: :observability
+  gem 'opentelemetry-instrumentation-rails', feature_category: :observability
+  gem 'opentelemetry-instrumentation-rake', feature_category: :observability
+  gem 'opentelemetry-instrumentation-redis', feature_category: :observability
+  gem 'opentelemetry-instrumentation-sidekiq', feature_category: :observability
 end
 
 gem 'warning', '~> 1.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
@@ -493,7 +492,7 @@ end
 group :development, :test do
   gem 'deprecation_toolkit', '~> 1.5.1', require: false # rubocop:todo Gemfile/MissingFeatureCategory
   gem 'bullet', '~> 7.1.2' # rubocop:todo Gemfile/MissingFeatureCategory
-  gem 'parser', '= 3.3.3.0', feature_category: :shared
+  gem 'parser', '= 3.3.6.0', feature_category: :shared
   gem 'pry-byebug' # rubocop:todo Gemfile/MissingFeatureCategory
   gem 'pry-rails', '~> 0.3.9' # rubocop:todo Gemfile/MissingFeatureCategory
   gem 'pry-shell', '~> 0.6.4' # rubocop:todo Gemfile/MissingFeatureCategory
@@ -510,7 +509,7 @@ group :development, :test do
   gem 'spring', '~> 4.1.0' # rubocop:todo Gemfile/MissingFeatureCategory
   gem 'spring-commands-rspec', '~> 1.0.4' # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'gitlab-styles', '~> 12.0.1', feature_category: :tooling
+  gem 'gitlab-styles', '~> 13.0.1', feature_category: :tooling
   gem 'haml_lint', '~> 0.58', feature_category: :tooling
 
   gem 'bundler-audit', '~> 0.9.1', require: false # rubocop:todo Gemfile/MissingFeatureCategory
@@ -582,7 +581,7 @@ group :test do
 
   gem 'shoulda-matchers', '~> 5.1.0', require: false # rubocop:todo Gemfile/MissingFeatureCategory
   gem 'email_spec', '~> 2.2.0' # rubocop:todo Gemfile/MissingFeatureCategory
-  gem 'webmock', '~> 3.23.0', feature_category: :shared
+  gem 'webmock', '~> 3.24.0', feature_category: :shared
   gem 'rails-controller-testing' # rubocop:todo Gemfile/MissingFeatureCategory
   gem 'concurrent-ruby', '~> 1.1' # rubocop:todo Gemfile/MissingFeatureCategory
   gem 'test-prof', '~> 1.4.0', feature_category: :tooling
@@ -593,7 +592,7 @@ group :test do
   # Moved in `test` because https://gitlab.com/gitlab-org/gitlab/-/issues/217527
   gem 'derailed_benchmarks', require: false # rubocop:todo Gemfile/MissingFeatureCategory
 
-  gem 'gitlab_quality-test_tooling', '~> 1.39.0', require: false, feature_category: :tooling
+  gem 'gitlab_quality-test_tooling', '~> 2.1.0', require: false, feature_category: :tooling
 end
 
 gem 'octokit', '~> 9.0', feature_category: :importers
@@ -630,10 +629,10 @@ gem 'ssh_data', '~> 1.3' # rubocop:todo Gemfile/MissingFeatureCategory
 gem 'spamcheck', '~> 1.3.0' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 17.4.0.pre.rc1', feature_category: :gitaly
+gem 'gitaly', '~> 17.5.0.pre.rc1', feature_category: :gitaly
 
 # KAS GRPC protocol definitions
-gem 'gitlab-kas-grpc', '~> 17.4.0.pre.rc1', feature_category: :deployment_management
+gem 'gitlab-kas-grpc', '~> 17.5.0', feature_category: :deployment_management
 
 # Lock the version before issues below are resolved:
 # https://gitlab.com/gitlab-org/gitlab/-/issues/473169#note_2028352939
@@ -716,7 +715,7 @@ gem 'cvss-suite', '~> 3.0.1', require: 'cvss_suite' # rubocop:todo Gemfile/Missi
 gem 'arr-pm', '~> 0.0.12' # rubocop:todo Gemfile/MissingFeatureCategory
 
 # Remote Development
-gem 'devfile', '~> 0.0.28.pre.alpha1', feature_category: :workspaces
+gem 'devfile', '~> 0.1.0', feature_category: :workspaces
 
 # Apple plist parsing
 gem 'CFPropertyList', '~> 3.0.0' # rubocop:todo Gemfile/MissingFeatureCategory
