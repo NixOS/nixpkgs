@@ -460,6 +460,16 @@ in {
       ignoreCollisions = true;
       postBuild = ''
         find $out/bin/ -mindepth 1 -not -name "mailman*" -delete
+      '' + lib.optionalString config.security.sudo.enable ''
+        mv $out/bin/mailman $out/bin/.mailman-wrapped
+        echo '#!${pkgs.runtimeShell}
+        sudo=exec
+        if [[ "$USER" != mailman ]]; then
+          sudo="exec /run/wrappers/bin/sudo -u mailman"
+        fi
+        $sudo ${placeholder "out"}/bin/.mailman-wrapped "$@"
+        ' > $out/bin/mailman
+        chmod +x $out/bin/mailman
       '';
     }) ];
 

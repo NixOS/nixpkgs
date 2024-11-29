@@ -131,6 +131,7 @@ let
       mtac2 = callPackage ../development/coq-modules/mtac2 {};
       multinomials = callPackage ../development/coq-modules/multinomials {};
       odd-order = callPackage ../development/coq-modules/odd-order { };
+      Ordinal = callPackage ../development/coq-modules/Ordinal {};
       paco = callPackage ../development/coq-modules/paco {};
       paramcoq = callPackage ../development/coq-modules/paramcoq {};
       parsec = callPackage ../development/coq-modules/parsec {};
