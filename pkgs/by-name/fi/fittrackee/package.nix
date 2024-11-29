@@ -50,6 +50,7 @@ python.pkgs.buildPythonApplication rec {
     "pyopenssl"
     "pytz"
     "sqlalchemy"
+    "ua-parser"
   ];
 
   dependencies =
