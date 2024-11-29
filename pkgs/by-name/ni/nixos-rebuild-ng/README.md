@@ -76,7 +76,7 @@ can run:
 # run program
 python -m nixos_rebuild
 # run tests
-python -m pytest
+pytest
 # check types
 mypy .
 # fix lint issues
@@ -119,7 +119,7 @@ ruff format .
 ## TODO
 
 - [ ] Remote host/builders (via SSH)
-- [ ] Improve nix arguments handling (e.g.: `nixFlags` vs `copyFlags` in the
+- [x] Improve nix arguments handling (e.g.: `nixFlags` vs `copyFlags` in the
   old `nixos-rebuild`)
 - [ ] `_NIXOS_REBUILD_EXEC`
 - [ ] Port `nixos-rebuild.passthru.tests`
