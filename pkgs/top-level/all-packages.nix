@@ -13427,8 +13427,6 @@ with pkgs;
     gtk = gtk3;
   };
 
-  bluejeans-gui = callPackage ../applications/networking/instant-messengers/bluejeans { };
-
   breezy = with python3Packages; toPythonApplication breezy;
 
   cage = callPackage ../applications/window-managers/cage {
