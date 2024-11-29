@@ -2,9 +2,11 @@
   lib,
   darwin,
   fetchFromGitHub,
+  testers,
   nix-update-script,
   rustPlatform,
   stdenv,
+  rainfrog,
 }:
 let
   version = "0.2.10";
@@ -31,7 +33,17 @@ rustPlatform.buildRustPackage {
     ]
   );
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.version = testers.testVersion {
+      package = rainfrog;
+
+      command = ''
+        RAINFROG_DATA="$(mktemp -d)" rainfrog --version
+      '';
+    };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/achristmascarl/rainfrog/releases/tag/v${version}";

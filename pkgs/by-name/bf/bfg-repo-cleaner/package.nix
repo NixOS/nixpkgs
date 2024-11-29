@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+  testers,
+  bfg-repo-cleaner,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bfg-repo-cleaner";
@@ -22,6 +30,10 @@ stdenv.mkDerivation rec {
     cp $src $out/share/java/$jarName
     makeWrapper "${jre}/bin/java" $out/bin/bfg --add-flags "-cp $out/share/java/$jarName com.madgag.git.bfg.cli.Main"
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = bfg-repo-cleaner;
+  };
 
   meta = with lib; {
     homepage = "https://rtyley.github.io/bfg-repo-cleaner/";

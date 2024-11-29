@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  buildInput = [ pytest ];
+  buildInputs = [ pytest ];
 
   dependencies = [
     cffi
