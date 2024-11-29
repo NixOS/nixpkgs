@@ -7,14 +7,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ant";
   version = "1.10.15";
 
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchurl {
-    url = "mirror://apache/ant/binaries/apache-ant-${version}-bin.tar.bz2";
+    url = "mirror://apache/ant/binaries/apache-ant-${finalAttrs.version}-bin.tar.bz2";
     hash = "sha256-h/SNGLoRwRVojDfvl1g+xv+J6mAz+J2BimckjaRxDEs=";
   };
 
@@ -122,4 +122,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ] ++ lib.teams.java.members;
     platforms = lib.platforms.all;
   };
-}
+})
