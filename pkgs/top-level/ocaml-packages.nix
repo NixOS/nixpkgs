@@ -1070,6 +1070,8 @@ let
 
     mec = callPackage ../development/ocaml-modules/mec { };
 
+    melange = callPackage ../development/tools/ocaml/melange { };
+
     memprof-limits = callPackage ../development/ocaml-modules/memprof-limits { };
 
     memtrace = callPackage ../development/ocaml-modules/memtrace { };

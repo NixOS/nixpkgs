@@ -744,6 +744,10 @@ with pkgs;
     propagatedBuildInputs = [ dieHook ];
   } ../build-support/setup-hooks/shorten-perl-shebang.sh;
 
+  sile = callPackage ../by-name/si/sile/package.nix {
+    lua = luajit;
+  };
+
   singularity-tools = callPackage ../build-support/singularity-tools { };
 
   srcOnly = callPackage ../build-support/src-only { };
@@ -9003,10 +9007,6 @@ with pkgs;
 
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix { };
 
-  vapoursynth = callPackage ../by-name/va/vapoursynth/package.nix {
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
-  };
-
   vapoursynth-editor = libsForQt5.callPackage ../by-name/va/vapoursynth/editor.nix { };
 
   vmmlib = callPackage ../development/libraries/vmmlib {
@@ -13374,13 +13374,6 @@ with pkgs;
     gtk = gtk3;
   };
 
-  bluej = callPackage ../applications/editors/bluej {
-    openjdk = openjdk17.override {
-      enableJavaFX = true;
-      openjfx_jdk = openjfx17.override { withWebKit = true; };
-    };
-  };
-
   bluejeans-gui = callPackage ../applications/networking/instant-messengers/bluejeans { };
 
   breezy = with python3Packages; toPythonApplication breezy;
@@ -14942,11 +14935,7 @@ with pkgs;
       speechdSupport = config.mumble.speechdSupport or false;
     }).mumble;
 
-  mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {
-    mumble_i686 = if stdenv.hostPlatform.system == "x86_64-linux"
-      then pkgsi686Linux.mumble
-      else null;
-  };
+  mumble_overlay = (callPackages ../applications/networking/mumble {}).overlay;
 
   mup = callPackage ../applications/audio/mup {
     autoreconfHook = buildPackages.autoreconfHook269;
@@ -15111,8 +15100,6 @@ with pkgs;
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix { };
 
   omegat = callPackage ../applications/misc/omegat.nix { };
-
-  inherit (callPackage ../applications/networking/onionshare { }) onionshare onionshare-gui;
 
   openambit = qt5.callPackage ../applications/misc/openambit { };
 
