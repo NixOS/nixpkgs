@@ -47,23 +47,49 @@ The first element of an identifier's redirects list must denote its current loca
 
     If you moved content, add its new location as the first element of the redirects mapping.
     Please update doc/redirects.json or nixos/doc/manual/redirects.json!
-""") # TODO: automatically detect if you just missed adding a new location, and make a tool to do that for you
+""")
         if self.identifiers_without_redirects:
             error_messages.append(f"""
 Identifiers present in the source must have a mapping in the redirects file.
     - {"\n    - ".join(self.identifiers_without_redirects)}
 
     This can happen when an identifier was added or renamed.
-    Please update doc/redirects.json or nixos/doc/manual/redirects.json!
-""") # TODO: add tooling in the development shell to do that automatically and point to that command
+
+    Added new content?
+        redirects add-content ❬identifier❭ ❬path❭
+
+    Moved existing content to a different output path?
+        redirects move-content ❬identifier❭ ❬path❭
+
+    Renamed existing identifiers?
+        redirects rename-identifier ❬old-identifier❭ ❬new-identifier❭
+
+    Removed content? Redirect to alternatives or relevant release notes.
+        redirects remove-and-redirect ❬identifier❭ ❬target-identifier❭
+
+    Note that you need to run `nix-shell doc` or `nix-shell nixos/doc/manual` to be able to run this command.
+""")
         if self.orphan_identifiers:
             error_messages.append(f"""
 Keys of the redirects mapping must correspond to some identifier in the source.
     - {"\n    - ".join(self.orphan_identifiers)}
 
     This can happen when an identifier was removed or renamed.
-    Please update doc/redirects.json or nixos/doc/manual/redirects.json!
-""") # TODO: add tooling in the development shell to do that automatically and point to that command
+
+    Added new content?
+        redirects add-content ❬identifier❭ ❬path❭
+
+    Moved existing content to a different output path?
+        redirects move-content ❬identifier❭ ❬path❭
+
+    Renamed existing identifiers?
+        redirects rename-identifier ❬old-identifier❭ ❬new-identifier❭
+
+    Removed content? (good for redirecting deprecations to new content or release notes)
+        redirects remove-and-redirect ❬identifier❭ ❬target-identifier❭
+
+    Note that you need to run `nix-shell doc` or `nix-shell nixos/doc/manual` to be able to run this command.
+""")
 
         error_messages.append("NOTE: If your Manual build passes locally and you see this message in CI, you probably need a rebase.")
         return "\n".join(error_messages)
