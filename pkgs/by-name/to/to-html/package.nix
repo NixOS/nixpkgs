@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, installShellFiles
 , rustPlatform
 }:
 
@@ -18,6 +19,14 @@ rustPlatform.buildRustPackage rec {
 
   # Requires external resources
   doCheck = false;
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion \
+      $releaseDir/build/to-html-*/out/to-html.{bash,fish} \
+      --zsh $releaseDir/build/to-html-*/out/_to-html
+  '';
 
   meta = {
     description = "Terminal wrapper for rendering a terminal on a website by converting ANSI escape sequences to HTML";
