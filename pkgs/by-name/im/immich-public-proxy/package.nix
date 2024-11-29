@@ -3,6 +3,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
   nodejs,
 }:
 buildNpmPackage rec {
@@ -32,6 +33,9 @@ buildNpmPackage rec {
   '';
 
   passthru = {
+    tests = {
+      inherit (nixosTests) immich-public-proxy;
+    };
     updateScript = nix-update-script { };
   };
 
