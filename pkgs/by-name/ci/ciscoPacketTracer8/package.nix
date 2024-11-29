@@ -111,7 +111,9 @@ stdenvNoCC.mkDerivation (args: {
     homepage = "https://www.netacad.com/courses/packet-tracer";
     license = lib.licenses.unfree;
     mainProgram = "packettracer8";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [
+      gepbird
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
