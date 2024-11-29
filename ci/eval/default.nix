@@ -50,8 +50,12 @@ let
         export GC_INITIAL_HEAP_SIZE=4g
         command time -v \
           nix-instantiate --eval --strict --json --show-trace \
-          $src/pkgs/top-level/release-attrpaths-superset.nix -A paths \
-          --arg enableWarnings false > $out/paths.json
+            "$src/pkgs/top-level/release-attrpaths-superset.nix" \
+            -A paths \
+            -I "$src" \
+            --option restrict-eval true \
+            --option allow-import-from-derivation false \
+            --arg enableWarnings false > $out/paths.json
         mv "$supportedSystemsPath" $out/systems.json
       '';
 
@@ -84,6 +88,8 @@ let
         set +e
         command time -f "Chunk $myChunk on $system done [%MKB max resident, %Es elapsed] %C" \
           nix-env -f "${nixpkgs}/pkgs/top-level/release-attrpaths-parallel.nix" \
+          --option restrict-eval true \
+          --option allow-import-from-derivation false \
           --query --available \
           --no-name --attr-path --out-path \
           --show-trace \
@@ -93,6 +99,8 @@ let
           --arg systems "[ \"$system\" ]" \
           --arg checkMeta ${lib.boolToString checkMeta} \
           --arg includeBroken ${lib.boolToString includeBroken} \
+          -I ${nixpkgs} \
+          -I ${attrpathFile} \
           > "$outputDir/result/$myChunk"
         exitCode=$?
         set -e
