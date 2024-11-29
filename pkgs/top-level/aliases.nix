@@ -764,8 +764,8 @@ mapAliases {
   lsh = throw "lsh has been removed as it had no maintainer in Nixpkgs and hasn't seen an upstream release in over a decade"; # Added 2024-08-14
   luna-icons = throw "luna-icons has been removed as it was removed upstream"; # Added 2024-10-29
   lv_img_conv = throw "'lv_img_conv' has been removed from nixpkgs as it is broken"; # Added 2024-06-18
-  lxd = lib.warn "lxd has been renamed to lxd-lts" lxd-lts; # Added 2024-04-01
-  lxd-unwrapped = lib.warn "lxd-unwrapped has been renamed to lxd-unwrapped-lts" lxd-unwrapped-lts; # Added 2024-04-01
+  lxd = throw "'lxd' has been removed"; # Converted to throw 2024-11-28
+  lxd-unwrapped = throw "'lxd-unwrapped' has been removed"; # Converted to throw 2024-11-28
   lzma = throw "'lzma' has been renamed to/replaced by 'xz'"; # Converted to throw 2024-10-17
 
   ### M ###
@@ -869,7 +869,7 @@ mapAliases {
   nixStable = nixVersions.stable; # Added 2022-01-24
   nixUnstable = throw "nixUnstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest."; # Converted to throw 2024-04-22
   nix_2_3 = nixVersions.nix_2_3;
-  nixfmt = lib.warn "nixfmt was renamed to nixfmt-classic. The nixfmt attribute may be used for the new RFC 166-style formatter in the future, which is currently available as nixfmt-rfc-style" nixfmt-classic; # Added 2024-03-31
+  nixfmt = throw "'nixfmt' has been removed"; # Converted to throw 2024-11-28
 
   # When the nixops_unstable alias is removed, nixops_unstable_minimal can be renamed to nixops_unstable.
 
@@ -884,11 +884,11 @@ mapAliases {
   nushellFull = lib.warn "`nushellFull` has has been replaced by `nushell` as it's features no longer exist" nushell; # Added 2024-05-30
   nvidia-podman = throw "podman should use the Container Device Interface (CDI) instead. See https://web.archive.org/web/20240729183805/https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#configuring-podman"; # Added 2024-08-02
   nvidia-thrust = throw "nvidia-thrust has been removed because the project was deprecated; use cudaPackages.cuda_cccl";
-  nvtop = lib.warn "nvtop has been renamed to nvtopPackages.full" nvtopPackages.full; # Added 2024-02-25
-  nvtop-amd = lib.warn "nvtop-amd has been renamed to nvtopPackages.amd" nvtopPackages.amd; # Added 2024-02-25
-  nvtop-nvidia = lib.warn "nvtop-nvidia has been renamed to nvtopPackages.nvidia" nvtopPackages.nvidia; # Added 2024-02-25
-  nvtop-intel = lib.warn "nvtop-intel has been renamed to nvtopPackages.intel" nvtopPackages.intel; # Added 2024-02-25
-  nvtop-msm = lib.warn "nvtop-msm has been renamed to nvtopPackages.msm" nvtopPackages.msm; # Added 2024-02-25
+  nvtop = throw "'nvtop' has been removed"; # Converted to throw 2024-11-28
+  nvtop-amd = throw "'nvtop-amd' has been removed"; # Converted to throw 2024-11-28
+  nvtop-nvidia = throw "'nvtop-nvidia' has been removed"; # Converted to throw 2024-11-28
+  nvtop-intel = throw "'nvtop-intel' has been removed"; # Converted to throw 2024-11-28
+  nvtop-msm = throw "'nvtop-msm' has been removed"; # Converted to throw 2024-11-28
 
   ### O ###
 
