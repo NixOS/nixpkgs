@@ -1,7 +1,6 @@
 {
   callPackage,
   lib,
-  nix-gitignore,
   python3Packages,
 }:
 let
@@ -15,7 +14,11 @@ pythonPackages.buildPythonApplication {
 
   src = fileset.toSource {
     root = ./src;
-    fileset = fileset.difference ./src (fileset.maybeMissing ./src/__pycache__);
+    fileset = fileset.unions [
+      ./src/.flake8
+      ./src/flatten_references_graph
+      ./src/setup.py
+    ];
   };
 
   propagatedBuildInputs = with pythonPackages; [
