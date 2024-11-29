@@ -2,13 +2,38 @@ declare -a hardeningCFlagsAfter=()
 declare -a hardeningCFlagsBefore=()
 
 declare -A hardeningEnableMap=()
+declare -a hardeningUnsupportedFlags=(@hardening_unsupported_flags@)
 
 # Intentionally word-split in case 'NIX_HARDENING_ENABLE' is defined in Nix. The
 # array expansion also prevents undefined variables from causing trouble with
 # `set -u`.
-for flag in ${NIX_HARDENING_ENABLE_@suffixSalt@-}; do
-  hardeningEnableMap["$flag"]=1
-done
+if (( @isClang@ )); then
+  declare target=@defaultTarget@
+  declare target32=@target32@
+  declare target64=@target64@
+
+  for p in "${params[@]}"; do
+    case "$p" in
+    --target=*) target=${p#--target=*} ;;
+    esac
+  done
+
+  if [[ $(echo "\${target%*-${target#*-}}") == $(echo "\${target32%*-${target32#*-}}") ]]; then
+    hardeningUnsupportedFlags=(@hardening_unsupported_flags32@)
+    for flag in ${NIX_HARDENING_ENABLE_@target32@-}; do
+      hardeningEnableMap["$flag"]=1
+    done
+  elif [[ $(echo "\${target%*-${target#*-}}") == $(echo "\${target64%*-${target64#*-}}") ]]; then
+    hardeningUnsupportedFlags=(@hardening_unsupported_flags64@)
+    for flag in ${NIX_HARDENING_ENABLE_@target64@-}; do
+      hardeningEnableMap["$flag"]=1
+    done
+  fi
+else
+  for flag in ${NIX_HARDENING_ENABLE_@suffixSalt@-}; do
+    hardeningEnableMap["$flag"]=1
+  done
+fi
 
 # fortify3 implies fortify enablement - make explicit before
 # we filter unsupported flags because unsupporting fortify3
@@ -18,7 +43,7 @@ if [[ -n "${hardeningEnableMap[fortify3]-}" ]]; then
 fi
 
 # Remove unsupported flags.
-for flag in @hardening_unsupported_flags@; do
+for flag in "${hardeningUnsupportedFlags[@]}"; do
   unset -v "hardeningEnableMap[$flag]"
   # fortify being unsupported implies fortify3 is unsupported
   if [[ "$flag" = 'fortify' ]] ; then
