@@ -114,7 +114,7 @@ def subcomponent_multi(graph, vertices, mode="out"):
 
 
 @curry
-def egdes_for_reference_graph_node(path_to_size_dict, reference_graph_node):
+def edges_for_reference_graph_node(path_to_size_dict, reference_graph_node):
     source = reference_graph_node["path"]
     return map(
         lambda x: {"source": source, "target": x},
@@ -170,7 +170,7 @@ def references_graph_to_igraph(references_graph):
     return igraph.Graph.DictList(
         map(vertex_from_reference_graph_node, references_graph),
         unnest_iterable(map(
-            egdes_for_reference_graph_node(path_to_size_dict),
+            edges_for_reference_graph_node(path_to_size_dict),
             references_graph
         )),
         directed=True
