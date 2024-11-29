@@ -5,7 +5,7 @@ import logging
 import os
 import sys
 from pathlib import Path
-from subprocess import run
+from subprocess import CalledProcessError, run
 from typing import assert_never
 
 from . import nix
@@ -185,27 +185,32 @@ def execute(argv: list[str]) -> None:
     # untrusted tree.
     can_run = action in (Action.SWITCH, Action.BOOT, Action.TEST)
 
+    if args.upgrade or args.upgrade_all:
+        nix.upgrade_channels(bool(args.upgrade_all))
+
     # Re-exec to a newer version of the script before building to ensure we get
     # the latest fixes
     if can_run and not args.fast and not os.environ.get("_NIXOS_REBUILD_REEXEC"):
-        if flake:
-            drv = nix.build_flake("pkgs.nixos-rebuild-ng", flake, **flake_build_flags)
-        else:
-            drv = nix.build("pkgs.nixos-rebuild-ng", build_attr, **build_flags)
-        new = drv / "bin/nixos-rebuild-ng"
-        current = Path(argv[0])
-        # Disable re-exec during development
-        if current.name != "__main__.py" and new != current:
-            logging.debug(
-                "detected newer version of script, re-exec'ing, current=%s, new=%s",
-                argv[0],
-                new,
-            )
-            cleanup_ssh()
-            os.execve(new, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
-
-    if args.upgrade or args.upgrade_all:
-        nix.upgrade_channels(bool(args.upgrade_all))
+        try:
+            if flake:
+                drv = nix.build_flake(
+                    "pkgs.nixos-rebuild-ng", flake, **flake_build_flags
+                )
+            else:
+                drv = nix.build("pkgs.nixos-rebuild-ng", build_attr, **build_flags)
+            new = drv / "bin/nixos-rebuild-ng"
+            current = Path(argv[0])
+            # Disable re-exec during development
+            if current.name != "__main__.py" and new != current:
+                logging.debug(
+                    "detected newer version of script, re-exec'ing, current=%s, new=%s",
+                    argv[0],
+                    new,
+                )
+                cleanup_ssh()
+                os.execve(new, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
+        except CalledProcessError:
+            logger.warning("could not find a newer version of nixos-rebuild")
 
     if can_run and not flake:
         nixpkgs_path = nix.find_file("nixpkgs", **build_flags)
