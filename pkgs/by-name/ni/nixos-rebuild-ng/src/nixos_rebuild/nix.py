@@ -1,10 +1,7 @@
-from __future__ import annotations
-
 import os
-import shutil
 from datetime import datetime
 from pathlib import Path
-from subprocess import PIPE, CalledProcessError, run
+from subprocess import PIPE, CalledProcessError
 from typing import Final
 
 from .models import (
@@ -14,27 +11,56 @@ from .models import (
     GenerationJson,
     NRError,
     Profile,
+    Remote,
 )
-from .utils import dict_to_flags, info
+from .process import run_wrapper
+from .utils import Args, dict_to_flags, info
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
 
 
-def edit(flake: Flake | None, nix_flags: list[str] | None = None) -> None:
+def copy_closure(
+    closure: Path,
+    target_host: Remote | None,
+    **copy_flags: Args,
+) -> None:
+    host = target_host
+    if not host:
+        return
+
+    run_wrapper(
+        [
+            "nix-copy-closure",
+            *dict_to_flags(copy_flags),
+            "--to",
+            host.host,
+            closure,
+        ],
+        extra_env={"NIX_SSHOPTS": " ".join(host.opts)},
+    )
+
+
+def edit(flake: Flake | None, **flake_flags: Args) -> None:
     "Try to find and open NixOS configuration file in editor."
     if flake:
-        run(
-            ["nix", *FLAKE_FLAGS, "edit", *(nix_flags or []), "--", str(flake)],
+        run_wrapper(
+            [
+                "nix",
+                *FLAKE_FLAGS,
+                "edit",
+                *dict_to_flags(flake_flags),
+                "--",
+                str(flake),
+            ],
             check=False,
         )
     else:
-        if nix_flags:
+        if flake_flags:
             raise NRError("'edit' does not support extra Nix flags")
         nixos_config = Path(
             os.getenv("NIXOS_CONFIG")
-            or run(
+            or run_wrapper(
                 ["nix-instantiate", "--find-file", "nixos-config"],
-                text=True,
                 stdout=PIPE,
                 check=False,
             ).stdout.strip()
@@ -44,18 +70,17 @@ def edit(flake: Flake | None, nix_flags: list[str] | None = None) -> None:
             nixos_config /= "default.nix"
 
         if nixos_config.exists():
-            run([os.getenv("EDITOR", "nano"), nixos_config], check=False)
+            run_wrapper([os.getenv("EDITOR", "nano"), nixos_config], check=False)
         else:
             raise NRError("cannot find NixOS config file")
 
 
-def find_file(file: str, nix_flags: list[str] | None = None) -> Path | None:
+def find_file(file: str, **nix_flags: Args) -> Path | None:
     "Find classic Nixpkgs location."
-    r = run(
-        ["nix-instantiate", "--find-file", file, *(nix_flags or [])],
+    r = run_wrapper(
+        ["nix-instantiate", "--find-file", file, *dict_to_flags(nix_flags)],
         stdout=PIPE,
         check=False,
-        text=True,
     )
     if r.returncode:
         return None
@@ -69,23 +94,24 @@ def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
     if not nixpkgs_path:
         return None
 
-    # Git is not included in the closure for nixos-rebuild so we need to check
-    if not shutil.which("git"):
+    try:
+        # Get current revision
+        r = run_wrapper(
+            ["git", "-C", nixpkgs_path, "rev-parse", "--short", "HEAD"],
+            check=False,
+            stdout=PIPE,
+        )
+    except FileNotFoundError:
+        # Git is not included in the closure so we need to check
         info(f"warning: Git not found; cannot figure out revision of '{nixpkgs_path}'")
         return None
 
-    # Get current revision
-    r = run(
-        ["git", "-C", nixpkgs_path, "rev-parse", "--short", "HEAD"],
-        check=False,
-        stdout=PIPE,
-        text=True,
-    )
-    rev = r.stdout.strip()
-
-    if rev:
+    if rev := r.stdout.strip():
         # Check if repo is dirty
-        if run(["git", "-C", nixpkgs_path, "diff", "--quiet"], check=False).returncode:
+        if run_wrapper(
+            ["git", "-C", nixpkgs_path, "diff", "--quiet"],
+            check=False,
+        ).returncode:
             rev += "M"
         return f".git.{rev}"
     else:
@@ -120,7 +146,12 @@ def _parse_generation_from_nix_env(line: str) -> Generation:
     )
 
 
-def get_generations(profile: Profile, lock_profile: bool = False) -> list[Generation]:
+def get_generations(
+    profile: Profile,
+    target_host: Remote | None = None,
+    using_nix_env: bool = False,
+    sudo: bool = False,
+) -> list[Generation]:
     """Get all NixOS generations from profile.
 
     Includes generation ID (e.g.: 1, 2), timestamp (e.g.: when it was created)
@@ -132,19 +163,20 @@ def get_generations(profile: Profile, lock_profile: bool = False) -> list[Genera
         raise NRError(f"no profile '{profile.name}' found")
 
     result = []
-    if lock_profile:
+    if using_nix_env:
         # Using `nix-env --list-generations` needs root to lock the profile
         # TODO: do we actually need to lock profile for e.g.: rollback?
         # https://github.com/NixOS/nix/issues/5144
-        r = run(
+        r = run_wrapper(
             ["nix-env", "-p", profile.path, "--list-generations"],
-            text=True,
-            stdout=True,
-            check=True,
+            stdout=PIPE,
+            remote=target_host,
+            sudo=sudo,
         )
         for line in r.stdout.splitlines():
             result.append(_parse_generation_from_nix_env(line))
     else:
+        assert not target_host, "target_host is not supported when using_nix_env=False"
         for p in profile.path.parent.glob("system-*-link"):
             result.append(_parse_generation_from_nix_store(p, profile))
     return sorted(result, key=lambda d: d.id)
@@ -179,11 +211,9 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
             s.name for s in (generation_path / "specialisation").glob("*") if s.is_dir()
         ]
         try:
-            configuration_revision = run(
+            configuration_revision = run_wrapper(
                 [generation_path / "sw/bin/nixos-version", "--configuration-revision"],
                 capture_output=True,
-                check=True,
-                text=True,
             ).stdout.strip()
         except (CalledProcessError, IOError):
             configuration_revision = "Unknown"
@@ -207,8 +237,7 @@ def nixos_build(
     attr: str,
     pre_attr: str | None,
     file: str | None,
-    nix_flags: list[str] | None = None,
-    **kwargs: bool | str,
+    **nix_flags: Args,
 ) -> Path:
     """Build NixOS attribute using classic Nix.
 
@@ -227,16 +256,15 @@ def nixos_build(
         ]
     else:
         run_args = ["nix-build", "<nixpkgs/nixos>", "--attr", attr]
-    run_args += dict_to_flags(kwargs) + (nix_flags or [])
-    r = run(run_args, check=True, text=True, stdout=PIPE)
+    run_args += dict_to_flags(nix_flags)
+    r = run_wrapper(run_args, stdout=PIPE)
     return Path(r.stdout.strip())
 
 
 def nixos_build_flake(
     attr: str,
     flake: Flake,
-    nix_flags: list[str] | None = None,
-    **kwargs: bool | str,
+    **flake_flags: Args,
 ) -> Path:
     """Build NixOS attribute using Flakes.
 
@@ -248,22 +276,35 @@ def nixos_build_flake(
         "build",
         "--print-out-paths",
         f"{flake}.config.system.build.{attr}",
+        *dict_to_flags(flake_flags),
     ]
-    run_args += dict_to_flags(kwargs) + (nix_flags or [])
-    r = run(run_args, check=True, text=True, stdout=PIPE)
+    r = run_wrapper(run_args, stdout=PIPE)
     return Path(r.stdout.strip())
 
 
-def rollback(profile: Profile) -> Path:
+def rollback(profile: Profile, target_host: Remote | None, sudo: bool) -> Path:
     "Rollback Nix profile, like one created by `nixos-rebuild switch`."
-    run(["nix-env", "--rollback", "-p", profile.path], check=True)
+    run_wrapper(
+        ["nix-env", "--rollback", "-p", profile.path],
+        remote=target_host,
+        sudo=sudo,
+    )
     # Rollback config PATH is the own profile
     return profile.path
 
 
-def rollback_temporary_profile(profile: Profile) -> Path | None:
+def rollback_temporary_profile(
+    profile: Profile,
+    target_host: Remote | None,
+    sudo: bool,
+) -> Path | None:
     "Rollback a temporary Nix profile, like one created by `nixos-rebuild test`."
-    generations = get_generations(profile, lock_profile=True)
+    generations = get_generations(
+        profile,
+        target_host=target_host,
+        using_nix_env=True,
+        sudo=sudo,
+    )
     previous_gen_id = None
     for generation in generations:
         if not generation.current:
@@ -275,14 +316,25 @@ def rollback_temporary_profile(profile: Profile) -> Path | None:
         return None
 
 
-def set_profile(profile: Profile, path_to_config: Path) -> None:
+def set_profile(
+    profile: Profile,
+    path_to_config: Path,
+    target_host: Remote | None,
+    sudo: bool,
+) -> None:
     "Set a path as the current active Nix profile."
-    run(["nix-env", "-p", profile.path, "--set", path_to_config], check=True)
+    run_wrapper(
+        ["nix-env", "-p", profile.path, "--set", path_to_config],
+        remote=target_host,
+        sudo=sudo,
+    )
 
 
 def switch_to_configuration(
     path_to_config: Path,
     action: Action,
+    target_host: Remote | None,
+    sudo: bool,
     install_bootloader: bool = False,
     specialisation: str | None = None,
 ) -> None:
@@ -301,13 +353,11 @@ def switch_to_configuration(
         if not path_to_config.exists():
             raise NRError(f"specialisation not found: {specialisation}")
 
-    run(
+    run_wrapper(
         [path_to_config / "bin/switch-to-configuration", str(action)],
-        env={
-            "NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0",
-            "LOCALE_ARCHIVE": os.getenv("LOCALE_ARCHIVE", ""),
-        },
-        check=True,
+        extra_env={"NIXOS_INSTALL_BOOTLOADER": "1" if install_bootloader else "0"},
+        remote=target_host,
+        sudo=sudo,
     )
 
 
@@ -323,4 +373,4 @@ def upgrade_channels(all: bool = False) -> None:
             or channel_path.name == "nixos"
             or (channel_path / ".update-on-nixos-rebuild").exists()
         ):
-            run(["nix-channel", "--update", channel_path.name], check=False)
+            run_wrapper(["nix-channel", "--update", channel_path.name], check=False)
