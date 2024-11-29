@@ -2,18 +2,18 @@ let
   lib = import ../default.nix;
 
   inherit (lib.attrsets)
-    associateWithAttrPath
     associateWithAttrPath'
+    associateWithAttrPath
+    associateWithAttrPathMultiple
     ;
 in
 
 lib.runTests {
   # FIXME there weren't any lib.attrsets tests until I(@Atemu) added
-  # associateWithAttrPath' and pathOperationsToAttrPaths; the other functions
-  # need to be tested too.
+  # associateWithAttrPath; the other functions need to be tested too.
 
   testAssociateWithAttrPathImmediate = {
-    expr = associateWithAttrPath' [ ] "foo" "from";
+    expr = associateWithAttrPathMultiple [ ] "foo" "from";
     expected = [
       {
         name = "from";
@@ -22,7 +22,7 @@ lib.runTests {
     ];
   };
   testAssociateWithAttrPathNested1 = {
-    expr = associateWithAttrPath' [ ] "foo" { bar = "from"; };
+    expr = associateWithAttrPathMultiple [ ] "foo" { bar = "from"; };
     expected = [
       {
         name = "from";
@@ -34,7 +34,7 @@ lib.runTests {
     ];
   };
   testAssociateWithAttrPathNested2 = {
-    expr = associateWithAttrPath' [ ] "foo" { bar.baz = "from"; };
+    expr = associateWithAttrPathMultiple [ ] "foo" { bar.baz = "from"; };
     expected = [
       {
         name = "from";
@@ -47,7 +47,7 @@ lib.runTests {
     ];
   };
   testAssociateWithAttrPathNestedInSame = {
-    expr = associateWithAttrPath' [ ] "foo" {
+    expr = associateWithAttrPathMultiple [ ] "foo" {
       bar = "from";
       baz = "to";
     };
@@ -69,7 +69,7 @@ lib.runTests {
     ];
   };
   testAssociateWithAttrPathCommonPrefix = {
-    expr = associateWithAttrPath' [ ] "foo" {
+    expr = associateWithAttrPathMultiple [ ] "foo" {
       common.prefix.bar = "from";
       common.prefix.baz = "to";
     };

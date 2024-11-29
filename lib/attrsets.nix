@@ -479,6 +479,19 @@ rec {
 
   in updates: value: go 0 true value updates;
 
+  # TODO document
+  associateWithAttrPath' =
+    pack: combine: previousPath: current: remaining:
+    let
+      currentPath = previousPath ++ optional (current != null) current; # Null denotes the root
+    in
+    if
+      isString remaining # Any string is a terminator
+    then
+      pack remaining currentPath
+    else
+      combine (associateWithAttrPath' pack combine currentPath) remaining;
+
   # This function associates arbitrary strings with attribute paths in the form
   # of a list of name-value pairs consumable by `builtins.listToAttrs`.
   #
@@ -516,19 +529,9 @@ rec {
   # Each strings can be associated with multiple attribute paths.
   #
   # In most cases, you'd typically use the non-' version of this function.
-  associateWithAttrPath' =
-    previousPath: current: remaining:
-    let
-      currentPath = previousPath ++ optional (current != null) current; # Null denotes the root
-    in
-    if
-      isString remaining # Any string is a terminator
-    then
-      [ (nameValuePair remaining currentPath) ]
-    else
-      concatMap (next: associateWithAttrPath' currentPath next remaining.${next}) (
-        attrNames remaining
-      );
+  associateWithAttrPathMultiple = associateWithAttrPath' (name: path: [ (nameValuePair name path) ]) (
+    recursor: remaining: concatMap (next: recursor next remaining.${next}) (attrNames remaining)
+  );
 
   # This function associates arbitrary strings with attribute paths in the form
   # of an attrset.
@@ -557,7 +560,7 @@ rec {
   # The same string MUST NOT be associated with multiple attribute paths. This
   # results in undefined behaviour. Use associateWithAttrPath' instead if you
   # need to handle multiple instances of the same string.
-  associateWithAttrPath = spec: listToAttrs (associateWithAttrPath' [ ] null spec);
+  associateWithAttrPath = spec: listToAttrs (associateWithAttrPathMultiple [ ] null spec);
 
   /**
     Return the specified attributes from a set.
