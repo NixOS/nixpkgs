@@ -23359,6 +23359,12 @@
     github = "wilhelmines";
     githubId = 71409721;
   };
+  willbou1 = {
+    name = "William Boulanger";
+    email = "willbou2@gmail.com";
+    github = "willbou1";
+    githubId = 6372967;
+  };
   willbush = {
     email = "git@willbush.dev";
     matrix = "@willbush:matrix.org";
