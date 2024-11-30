@@ -249,6 +249,9 @@ def execute(argv: list[str]) -> None:
                     dry_run=dry_run,
                     **build_flags,
                 )
+            # If we are rolling back, the generation that we roll back to, should already be present on the remote
+            if not args.rollback:
+                nix.copy_closure(path_to_config, target_host, **copy_flags)
             if action in (Action.TEST, Action.DRY_ACTIVATE):
                 nix.switch_to_configuration(
                     path_to_config,
