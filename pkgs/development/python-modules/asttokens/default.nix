@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "asttokens";
-  version = "2.4.1";
+  version = "3.0.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sDhpcYuppusCfhNL/fafOKI21oHIPBYNUQdorxElS6A=";
+    hash = "sha256-Dc2Lqo1isMHRGLOZst26PEr/Jx0Nep4NTBaBx5A1u8c=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
