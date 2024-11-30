@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = homepage;
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ anpin ];
-    mainProgram = "codeium";
+    mainProgram = "codeium_language_server";
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
