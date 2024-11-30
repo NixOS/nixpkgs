@@ -6,6 +6,13 @@
 , nixosTests
 }:
 
+let
+  # tests which assume network access in some form
+  disabledTests = [
+    "Test_runCreateRunnerFile"
+    "Test_ping"
+  ];
+in
 buildGoModule rec {
   pname = "forgejo-runner";
   version = "5.0.3";
@@ -26,7 +33,9 @@ buildGoModule rec {
     "-X gitea.com/gitea/act_runner/internal/pkg/ver.version=${src.rev}"
   ];
 
-  doCheck = false; # Test try to lookup code.forgejo.org.
+  checkFlags = [
+    "-skip ${lib.concatStringsSep "|" disabledTests}"
+  ];
 
   passthru.tests = {
     inherit (nixosTests.forgejo) sqlite3;
