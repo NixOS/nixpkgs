@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, ecl, coreutils, fetchurl, strace, texinfo, which, writeText, zstd
+{ lib, stdenv, callPackage, ecl, coreutils, fetchurl, ps, strace, texinfo, which, writeText, zstd
 , version
   # Set this to a lisp binary to use a custom bootstrap lisp compiler for SBCL.
   # Leave as null to use the default.  This is useful for local development of
@@ -80,6 +80,8 @@ stdenv.mkDerivation (self: {
       which
     ] ++ lib.optionals (builtins.elem stdenv.system strace.meta.platforms) [
       strace
+    ] ++ lib.optionals (lib.versionOlder "2.4.10" self.version) [
+      ps
     ]
   );
   buildInputs = lib.optionals self.coreCompression (
