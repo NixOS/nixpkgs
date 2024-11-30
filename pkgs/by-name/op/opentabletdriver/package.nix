@@ -115,7 +115,7 @@ buildDotnetModule rec {
       name = "OpenTabletDriver";
       exec = "otd-gui";
       icon = "otd";
-      comment = meta.description;
+      comment = "Open source, cross-platform, user-mode tablet driver";
       categories = [ "Utility" ];
     })
   ];
@@ -127,11 +127,11 @@ buildDotnetModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source, cross-platform, user-mode tablet driver";
     homepage = "https://github.com/OpenTabletDriver/OpenTabletDriver";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
       gepbird
       thiagokokada
     ];
