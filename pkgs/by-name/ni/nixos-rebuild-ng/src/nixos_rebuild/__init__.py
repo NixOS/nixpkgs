@@ -238,7 +238,6 @@ def execute(argv: list[str]) -> None:
                 path_to_config = nix.nixos_build_flake(
                     "toplevel",
                     flake,
-                    keep_going=True,
                     dry_run=dry_run,
                     **flake_build_flags,
                 )
@@ -247,7 +246,6 @@ def execute(argv: list[str]) -> None:
                     "system",
                     args.attr,
                     args.file,
-                    keep_going=True,
                     dry_run=dry_run,
                     **build_flags,
                 )
@@ -266,7 +264,6 @@ def execute(argv: list[str]) -> None:
                 path_to_config = nix.nixos_build_flake(
                     attr,
                     flake,
-                    keep_going=True,
                     **flake_build_flags,
                 )
             else:
@@ -274,7 +271,6 @@ def execute(argv: list[str]) -> None:
                     attr,
                     args.attr,
                     args.file,
-                    keep_going=True,
                     **build_flags,
                 )
             vm_path = next(path_to_config.glob("bin/run-*-vm"), "./result/bin/run-*-vm")

@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "opensearch-py";
-  version = "2.7.1";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opensearch-project";
     repo = "opensearch-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GC0waXxHRiXVXjhTGbet3HvDKmUBKzoufu/J4fmrM+k=";
+    hash = "sha256-rPHpGKEIINAEUu2UkJwAM60i0hTzXd1ec6WD50RrgL8=";
   };
 
   nativeBuildInputs = [ setuptools ];
