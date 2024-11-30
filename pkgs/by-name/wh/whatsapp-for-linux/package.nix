@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "whatsapp-for-linux";
-  version = "1.6.5";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "eneshecan";
     repo = "whatsapp-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hUIyn6BhAPoszBTHKa4qSj6IRa+8cUS0Gis/qjDDnyk=";
+    hash = "sha256-h07Qf34unwtyc1VDtCCkukgBDJIvYNgESwAylbsjVsQ=";
   };
 
   nativeBuildInputs = [
