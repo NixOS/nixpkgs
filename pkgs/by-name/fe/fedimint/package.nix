@@ -40,6 +40,7 @@ buildRustPackage rec {
     pkg-config
     clang
     (lib.getLib libclang)
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
@@ -79,7 +80,6 @@ buildRustPackage rec {
   PROTOC = "${buildPackages.protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
   OPENSSL_DIR = openssl.dev;
-  LIBCLANG_PATH = "${lib.getLib libclang}/lib";
 
   FEDIMINT_BUILD_FORCE_GIT_HASH = "0000000000000000000000000000000000000000";
 
