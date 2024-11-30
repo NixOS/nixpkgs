@@ -12,13 +12,13 @@ assert blas.isILP64 == lapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "mopac";
-  version = "23.0.0";
+  version = "23.0.2";
 
   src = fetchFromGitHub {
     owner = "openmopac";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5Ybhnq99609mb1BCf7SfBOu14VfG54aF1bEf96yhbVI=";
+    hash = "sha256-FHJ8R8s82qSt4l6IawODkHhk2jitcxjUXCgZOU9iXDM=";
   };
 
   nativeBuildInputs = [ gfortran cmake ];
