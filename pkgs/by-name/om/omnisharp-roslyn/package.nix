@@ -3,13 +3,12 @@
   dotnetCorePackages,
   fetchFromGitHub,
   lib,
-  stdenv,
   runCommand,
   expect,
 }:
 
 let
-  inherit (dotnetCorePackages) sdk_8_0 runtime_6_0;
+  inherit (dotnetCorePackages) sdk_8_0 sdk_9_0 runtime_8_0;
 in
 let
   finalPackage = buildDotnetModule rec {
@@ -26,17 +25,12 @@ let
     projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
     nugetDeps = ./deps.nix;
 
-    dotnet-sdk =
-      with dotnetCorePackages;
-      combinePackages [
-        sdk_6_0
-        sdk_8_0
-      ];
+    dotnet-sdk = sdk_8_0;
     dotnet-runtime = sdk_8_0;
 
-    dotnetInstallFlags = [ "--framework net6.0" ];
+    dotnetInstallFlags = [ "--framework net8.0" ];
     dotnetBuildFlags = [
-      "--framework net6.0"
+      "--framework net8.0"
       "--no-self-contained"
     ];
     dotnetFlags = [
@@ -45,7 +39,7 @@ let
       "-property:AssemblyVersion=${version}.0"
       "-property:FileVersion=${version}.0"
       "-property:InformationalVersion=${version}"
-      "-property:RuntimeFrameworkVersion=${runtime_6_0.version}"
+      "-property:RuntimeFrameworkVersion=${runtime_8_0.version}"
       "-property:RollForward=LatestMajor"
     ];
 
@@ -56,8 +50,11 @@ let
       # Patch the project files so we can compile them properly
       for project in src/OmniSharp.Http.Driver/OmniSharp.Http.Driver.csproj src/OmniSharp.LanguageServerProtocol/OmniSharp.LanguageServerProtocol.csproj src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj; do
         substituteInPlace $project \
-          --replace '<RuntimeIdentifiers>win7-x64;win7-x86;win10-arm64</RuntimeIdentifiers>' '<RuntimeIdentifiers>linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>'
+          --replace-fail '<RuntimeIdentifiers>win7-x64;win7-x86;win10-arm64</RuntimeIdentifiers>' '<RuntimeIdentifiers>linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>'
       done
+      substituteInPlace src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj \
+        --replace-fail 'net6.0' 'net8.0' \
+        --replace-fail '<RuntimeFrameworkVersion>6.0.0-preview.7.21317.1</RuntimeFrameworkVersion>' ""
     '';
 
     useDotnetFromEnv = true;
@@ -96,8 +93,8 @@ let
       in
       {
         # Make sure we can run OmniSharp with any supported SDK version, as well as without
-        with-net6-sdk = with-sdk dotnetCorePackages.sdk_6_0;
-        with-net8-sdk = with-sdk dotnetCorePackages.sdk_8_0;
+        with-net8-sdk = with-sdk sdk_8_0;
+        with-net9-sdk = with-sdk sdk_9_0;
         no-sdk = with-sdk null;
       };
 
