@@ -38,6 +38,7 @@
     else "check-all"
   )
 )]
+, expectedFailLitTests ? [ ]
 , extraInstallTargets ? [ ]
 , extraPostInstall ? ""
 , hardeningDisable ? [ ]
@@ -164,6 +165,8 @@ in stdenv.mkDerivation (finalAttrs: {
   postInstall = lib.optionalString buildMan ''
     mkdir -p $info
   '' + extraPostInstall;
+
+  env.LIT_XFAIL = lib.strings.concatStringsSep ";" expectedFailLitTests;
 
   passthru = {
     isLLVM = targetDir == "llvm";
