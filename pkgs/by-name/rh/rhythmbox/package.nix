@@ -35,11 +35,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rhythmbox";
-  version = "3.4.7";
+  version = "3.4.8";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "L21WwT/BpkxTT1AHiPtIKTbOVHs0PtkMZ94fK84M+n4=";
+    sha256 = "IBaoqNKpWcB6RnrJaCxu1gW6iIP7dgQQ1otoq4ON+fI=";
   };
 
   nativeBuildInputs = [
