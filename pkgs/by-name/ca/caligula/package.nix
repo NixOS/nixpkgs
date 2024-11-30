@@ -1,9 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, llvmPackages
-, stdenv
-, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,15 +19,6 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks; [
-      Cocoa
-      IOKit
-      Foundation
-      DiskArbitration
-    ]
-  );
 
   RUSTFLAGS = "--cfg tracing_unstable";
 
