@@ -74,6 +74,10 @@ stdenvNoCC.mkDerivation rec {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
         hash = "sha256-Owj9CzH3RVCeH+2caQyA0aMu8rPI0FlYP2Q/aWY5vSE=";
       };
+      "aarch64-linux-musl" = fetchurl {
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64-musl.zip";
+        hash = "sha256-iK9MGuAC+lo/zcuHWxUfPjpODCs5OdkfjWQqBuTP3Q8=";
+      };
       "x86_64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64-baseline.zip";
         hash = "sha256-7lzgdES6OfY1RKUUEloV6AfuFyAkcvzG3uRnE0z5DoA=";
@@ -81,6 +85,10 @@ stdenvNoCC.mkDerivation rec {
       "x86_64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
         hash = "sha256-ph2lNX4o1Jd/zNSFH+1i/02j6jOFMAXH3ZPayAvFOTI=";
+      };
+      "x86_64-linux-musl" = fetchurl {
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64-musl.zip";
+        hash = "sha256-WBDsC946FYyypBfNbxI3EurJDqLhg6ZML5f8t6QNJJU=";
       };
     };
     updateScript = writeShellScript "update-bun" ''
@@ -111,9 +119,6 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "bun";
     maintainers = with maintainers; [ DAlperin jk thilobillerbeck cdmistman coffeeispower diogomdp imide ];
     platforms = builtins.attrNames passthru.sources;
-    # Broken for Musl at 2024-01-13, tracking issue:
-    # https://github.com/NixOS/nixpkgs/issues/280716
-    broken = stdenvNoCC.hostPlatform.isMusl;
 
     # Hangs when run via Rosetta 2 on Apple Silicon
     hydraPlatforms = lib.lists.remove "x86_64-darwin" lib.platforms.all;
