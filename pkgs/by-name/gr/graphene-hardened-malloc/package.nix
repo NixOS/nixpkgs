@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
+    updateScript = ./update.sh;
     ld-preload-tests = stdenv.mkDerivation {
       name = "${finalAttrs.pname}-ld-preload-tests";
       inherit (finalAttrs) src;
