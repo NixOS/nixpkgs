@@ -33,5 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ jceb ];
     mainProgram = "xautocfg";
+    platforms = lib.platforms.linux;
   };
 })
