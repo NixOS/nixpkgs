@@ -11,7 +11,6 @@
   makeWrapper,
   perl,
   substituteAll,
-  substitute,
   cudd,
   fetchurl,
   nix-update-script,
