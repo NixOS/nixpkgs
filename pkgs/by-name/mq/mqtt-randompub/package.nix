@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mqtt-randompub";
-  version = "0.2.2";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabaff";
     repo = "mqtt-randompub";
     rev = "refs/tags/${version}";
-    hash = "sha256-vAFEVlw9reRP+4Qwywv+cP27SU1c3seL3Z+b/YfUdl8=";
+    hash = "sha256-X9gITmzyUNtYW8IMTcBiubPscBEO5OGjdxot9wRD/BY=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
