@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "sapi-python-client";
-  version = "0.9.1";
+  version = "0.9.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "keboola";
     repo = "sapi-python-client";
     rev = "refs/tags/${version}";
-    hash = "sha256-4ykOwSQ1tM0ZviETkjU0ydg7FWjkGNysHQe+f9MS0MM=";
+    hash = "sha256-30bAw5pYEUj0jeZWiJxzZ7lDs/+63tlcoLaHrUmYCs8=";
   };
 
   postPatch = ''
