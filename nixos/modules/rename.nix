@@ -33,6 +33,10 @@ in
       systemd-logind API). Instead of using the module you can now
       simply add the brightnessctl package to environment.systemPackages.
     '')
+    (mkRemovedOptionModule [ "hardware" "gkraken" "enable" ] ''
+      gkraken was deprecated by coolercontrol and thus removed from nixpkgs.
+      Consider using programs.coolercontrol instead.
+    '')
     (mkRemovedOptionModule [ "hardware" "u2f" ] ''
       The U2F modules module was removed, as all it did was adding the
       udev rules from libu2f-host to the system. Udev gained native support
