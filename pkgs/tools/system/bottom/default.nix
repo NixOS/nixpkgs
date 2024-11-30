@@ -4,7 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
-  darwin,
+  apple-sdk_11,
   bottom,
   testers,
 }:
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Foundation
+    apple-sdk_11
   ];
 
   doCheck = false;
