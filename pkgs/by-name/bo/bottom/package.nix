@@ -49,15 +49,15 @@ rustPlatform.buildRustPackage rec {
     package = bottom;
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/ClementTsang/bottom/blob/${version}/CHANGELOG.md";
     description = "Cross-platform graphical process/system monitor with a customizable interface";
     homepage = "https://github.com/ClementTsang/bottom";
-    changelog = "https://github.com/ClementTsang/bottom/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    mainProgram = "btm";
+    maintainers = with lib.maintainers; [
       berbiche
       figsoda
     ];
-    mainProgram = "btm";
   };
 }
