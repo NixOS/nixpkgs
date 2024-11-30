@@ -169,7 +169,6 @@ rec {
     if [ -f "''${NIX_ATTRS_SH_FILE-}" ]; then
       source "$NIX_ATTRS_SH_FILE"
     fi
-    source $stdenv/setup
 
     export NIX_STORE=${storeDir}
     export NIX_BUILD_TOP=/tmp
@@ -177,6 +176,7 @@ rec {
     export PATH=/empty
     cd "$NIX_BUILD_TOP"
 
+    source $stdenv/setup
     if ! test -e /bin/sh; then
       ${coreutils}/bin/mkdir -p /bin
       ${coreutils}/bin/ln -s ${bash}/bin/sh /bin/sh
