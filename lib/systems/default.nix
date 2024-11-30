@@ -6,9 +6,9 @@ let
     filterAttrs
     foldl
     hasInfix
+    isAttrs
     isFunction
     isList
-    isString
     mapAttrs
     optional
     optionalAttrs
@@ -55,24 +55,34 @@ let
   */
   flakeExposed = import ./flake-systems.nix { };
 
+  # Turn localSystem or crossSystem, which could be system-string or attrset, into
+  # attrset.
+  systemToAttrs = systemOrArgs:
+    if isAttrs systemOrArgs then systemOrArgs else { system = systemOrArgs; };
+
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
   #
   # `parsed` is inferred from args, both because there are two options with one
   # clearly preferred, and to prevent cycles. A simpler fixed point where the RHS
   # always just used `final.*` would fail on both counts.
-  elaborate = args': let
-    args = if isString args' then { system = args'; }
-           else args';
+  elaborate = systemOrArgs: let
+    allArgs = systemToAttrs systemOrArgs;
+
+    # Those two will always be derived from "config", if given, so they should NOT
+    # be overridden further down with "// args".
+    args = builtins.removeAttrs allArgs [ "parsed" "system" ];
 
     # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
     rust = args.rust or args.rustc or {};
 
     final = {
       # Prefer to parse `config` as it is strictly more informative.
-      parsed = parse.mkSystemFromString (if args ? config then args.config else args.system);
-      # Either of these can be losslessly-extracted from `parsed` iff parsing succeeds.
+      parsed = parse.mkSystemFromString (args.config or allArgs.system);
+      # This can be losslessly-extracted from `parsed` iff parsing succeeds.
       system = parse.doubleFromSystem final.parsed;
+      # TODO: This currently can't be losslessly-extracted from `parsed`, for example
+      # because of -mingw32.
       config = parse.tripleFromSystem final.parsed;
       # Determine whether we can execute binaries built for the provided platform.
       canExecute = platform:
@@ -435,5 +445,6 @@ in
     inspect
     parse
     platforms
+    systemToAttrs
     ;
 }
