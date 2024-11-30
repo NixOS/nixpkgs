@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  stdenv,
 
   # build-system
   hatchling,
@@ -76,12 +75,26 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.12") [ aiohttp ]
     ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
-    ${redis-server}/bin/redis-server &
+  preCheck = ''
+    # Note for Darwin: unless the output is redirected, the parent process becomes launchd.
+    # In case of a test failure, that prevents killing the Redis process,
+    # hanging the build forever (that would happen before postCheck).
+    ${redis-server}/bin/redis-server >/dev/null 2>&1 &
     REDIS_PID=$!
+    MAX_RETRIES=30
+    RETRY_COUNT=0
+    until ${redis-server}/bin/redis-cli --scan || [ $RETRY_COUNT -eq $MAX_RETRIES ]; do
+      echo "Waiting for redis to be ready"
+      sleep 1
+      RETRY_COUNT=$((RETRY_COUNT + 1))
+    done
+    if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+      echo "Redis failed to start after $MAX_RETRIES retries"
+      exit 1
+    fi
   '';
 
-  postCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
+  postCheck = ''
     kill $REDIS_PID
   '';
 
@@ -99,8 +112,6 @@ buildPythonPackage rec {
     # httpx read failure
     "test_no_dangling_fds"
   ];
-
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/main/test_redis.py" ];
 
   pythonImportsCheck = [ "mocket" ];
 
