@@ -168,7 +168,7 @@ jobs:
         run: |
           # Get the latest eval.yml workflow run for the PR's base commit
           if ! run=$(gh api --method GET /repos/"$REPOSITORY"/actions/workflows/eval.yml/runs \
-            -f head_sha="$BASE_SHA" \
+            -f head_sha="$BASE_SHA" -f event=push \
             --jq '.workflow_runs | sort_by(.run_started_at) | .[-1]') \
             || [[ -z "$run" ]]; then
             echo "Could not find an eval.yml workflow run for $BASE_SHA, cannot make comparison"
