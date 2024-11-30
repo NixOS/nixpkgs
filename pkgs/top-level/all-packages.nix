@@ -2345,10 +2345,6 @@ with pkgs;
 
   fdroidcl = pkgs.callPackage ../development/mobile/fdroidcl { };
 
-  fedimint = callPackage ../by-name/fe/fedimint/package.nix {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
-  };
-
   flowgger = callPackage ../tools/misc/flowgger {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };

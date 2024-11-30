@@ -4,10 +4,9 @@
   fetchFromGitHub,
   rustPlatform,
   apple-sdk_11,
-  llvmPackages,
   nix-update-script,
-  ...
 }:
+
 rustPlatform.buildRustPackage {
   pname = "nufmt";
   version = "0-unstable-2024-11-21";
@@ -19,11 +18,13 @@ rustPlatform.buildRustPackage {
     hash = "sha256-ideILLOawU6BNawmr4lqt2LGkf29wvlwQe9gqgdYRiI=";
   };
 
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+  ];
+
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_11
   ];
-
-  env.LIBCLANG_PATH = lib.optionalString stdenv.cc.isClang "${lib.getLib llvmPackages.libclang}/lib";
 
   cargoHash = "sha256-MHZlXmHAYIiaB6Isutqjrh45jppRzTZRSE3VqzpFBBA=";
 
