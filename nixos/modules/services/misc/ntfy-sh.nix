@@ -7,7 +7,7 @@ in
 
 {
   options.services.ntfy-sh = {
-    enable = lib.mkEnableOption "ntfy-sh, a push notification service";
+    enable = lib.mkEnableOption "[ntfy-sh](https://ntfy.sh), a push notification service";
 
     package = lib.mkPackageOption pkgs "ntfy-sh" { };
 
@@ -73,8 +73,7 @@ in
       '';
 
       description = ''
-        Configuration for ntfy.sh, supported values are documented at
-        <https://ntfy.sh/docs/config/#config-options>
+        Configuration for ntfy.sh, supported values are [here](https://ntfy.sh/docs/config/#config-options).
       '';
     };
   };
@@ -84,6 +83,7 @@ in
       configuration = settingsFormat.generate "server.yml" cfg.settings;
     in
     lib.mkIf cfg.enable {
+      # to configure access control via the cli
       environment = {
         etc."ntfy/server.yml".source = configuration;
         systemPackages = [ cfg.package ];
@@ -134,6 +134,7 @@ in
           RestrictNamespaces = true;
           RestrictRealtime = true;
           MemoryDenyWriteExecute = true;
+          # Upstream Recommandation
           LimitNOFILE = 20500;
         };
       };
