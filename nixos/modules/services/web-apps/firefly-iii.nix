@@ -182,7 +182,7 @@ in {
           DB_PORT = 3306;
           DB_DATABASE = "firefly";
           DB_USERNAME = "firefly";
-          DB_PASSWORD_FILE = "/var/secrets/firefly-iii-mysql-password.txt;
+          DB_PASSWORD_FILE = "/var/secrets/firefly-iii-mysql-password.txt";
         }
       '';
       type = submodule {
