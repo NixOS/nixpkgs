@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchurl
-, dpkg
-, openjdk11
-, jnr-posix
-, makeWrapper
-, openjfx17
-, zip
-, nixosTests
-, bash
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  openjdk11,
+  jnr-posix,
+  makeWrapper,
+  openjfx17,
+  zip,
+  nixosTests,
+  bash,
 }:
 stdenv.mkDerivation rec {
   pname = "microsoft-identity-broker";
@@ -19,7 +20,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-I4Q6ucT6ps8/QGiQTNbMXcKxq6UMcuwJ0Prcqvov56M=";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper openjdk11 zip ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+    openjdk11
+    zip
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -93,11 +99,11 @@ stdenv.mkDerivation rec {
     tests = { inherit (nixosTests) intune; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Authentication Broker for Linux";
     homepage = "https://www.microsoft.com/";
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ rhysmdnz ];
   };
