@@ -14,6 +14,7 @@ in
 
   imports = [
     ./disk-size-option.nix
+    ../image/file-options.nix
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2411;
       from = [
@@ -23,6 +24,18 @@ in
       to = [
         "virtualisation"
         "diskSize"
+      ];
+    })
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2505;
+      from = [
+        "virtualisation"
+        "hyperv"
+        "vmFileName"
+      ];
+      to = [
+        "image"
+        "fileName"
       ];
     })
   ];
@@ -36,13 +49,6 @@ in
           The name of the derivation for the hyper-v appliance.
         '';
       };
-      vmFileName = mkOption {
-        type = types.str;
-        default = "nixos-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.vhdx";
-        description = ''
-          The file name of the hyper-v appliance.
-        '';
-      };
     };
   };
 
@@ -51,10 +57,14 @@ in
     # to avoid breaking existing configs using that.
     virtualisation.diskSize = lib.mkOverride 1490 (4 * 1024);
 
+    system.nixos.tags = [ "hyperv" ];
+    image.extension = "vhdx";
+    system.build.image = config.system.build.hypervImage;
     system.build.hypervImage = import ../../lib/make-disk-image.nix {
       name = cfg.vmDerivationName;
+      baseName = config.image.baseName;
       postVM = ''
-        ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o subformat=dynamic -O vhdx $diskImage $out/${cfg.vmFileName}
+        ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o subformat=dynamic -O vhdx $diskImage $out/${config.image.fileName}
         rm $diskImage
       '';
       format = "raw";

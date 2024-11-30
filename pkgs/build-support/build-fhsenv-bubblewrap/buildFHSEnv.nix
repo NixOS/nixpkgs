@@ -174,7 +174,7 @@ let
 
   allPaths = paths ++ paths32;
 
-  rootfs-builder = pkgs.rustPlatform.buildRustPackage {
+  rootfs-builder = pkgs.buildPackages.rustPlatform.buildRustPackage {
     name = "fhs-rootfs-bulder";
     src = ./rootfs-builder;
     cargoLock.lockFile = ./rootfs-builder/Cargo.lock;

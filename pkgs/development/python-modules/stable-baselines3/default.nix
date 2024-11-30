@@ -1,65 +1,53 @@
 {
   lib,
-  ale-py,
   buildPythonPackage,
-  cloudpickle,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  cloudpickle,
   gymnasium,
   matplotlib,
   numpy,
-  opencv4,
   pandas,
-  pillow,
-  psutil,
-  pygame,
-  pytestCheckHook,
-  pythonOlder,
-  rich,
-  setuptools,
-  tensorboard,
   torch,
+
+  # tests
+  ale-py,
+  pytestCheckHook,
+  rich,
   tqdm,
 }:
 buildPythonPackage rec {
   pname = "stable-baselines3";
-  version = "2.3.2-unstable-2024-11-04";
+  version = "2.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "DLR-RM";
     repo = "stable-baselines3";
-    # commit with updated dependencies since gymnasium is not compatible with the latest release:
-    # https://github.com/DLR-RM/stable-baselines3/pull/1837
-    rev = "8f0b488bc5a897f1ac2b95f493bcb6b7e92d311c";
-    hash = "sha256-zhmNZ86lowFJKes3i/TBBBsO8ZMuUUQsphQ98IsmHd4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-OFmjAkUS0wrns5CkWjqR7zTjKLVPI/NrpVIKJhLAwYM=";
   };
-
-  pythonRelaxDeps = true;
 
   build-system = [ setuptools ];
 
   dependencies = [
-    ale-py
     cloudpickle
     gymnasium
     matplotlib
     numpy
-    opencv4
     pandas
-    pillow
-    psutil
-    pygame
-    rich
-    tensorboard
     torch
-    tqdm
   ];
 
   nativeCheckInputs = [
+    ale-py
     pytestCheckHook
-    torch
+    rich
+    tqdm
   ];
 
   pythonImportsCheck = [ "stable_baselines3" ];
@@ -81,7 +69,7 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch version of Stable Baselines, reliable implementations of reinforcement learning algorithms";
     homepage = "https://github.com/DLR-RM/stable-baselines3";
-    # changelog = "https://github.com/DLR-RM/stable-baselines3/releases/tag/v${version}";
+    changelog = "https://github.com/DLR-RM/stable-baselines3/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ derdennisop ];
   };

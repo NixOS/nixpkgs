@@ -208,7 +208,8 @@ let
   # (e.g. `mksdcard`) have `/lib/ld-linux.so.2` set as the interpreter. An FHS
   # environment is used as a work around for that.
   fhsEnv = buildFHSEnv {
-    name = "${drvName}-fhs-env";
+    pname = "${drvName}-fhs-env";
+    inherit version;
     multiPkgs = pkgs: [
       ncurses5
 

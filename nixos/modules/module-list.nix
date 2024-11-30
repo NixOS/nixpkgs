@@ -65,7 +65,6 @@
   ./hardware/digitalbitbox.nix
   ./hardware/flipperzero.nix
   ./hardware/flirc.nix
-  ./hardware/gkraken.nix
   ./hardware/glasgow.nix
   ./hardware/gpgsmartcards.nix
   ./hardware/graphics.nix
@@ -813,6 +812,7 @@
   ./services/misc/octoprint.nix
   ./services/misc/ollama.nix
   ./services/misc/ombi.nix
+  ./services/misc/omnom.nix
   ./services/misc/open-webui.nix
   ./services/misc/osrm.nix
   ./services/misc/owncast.nix

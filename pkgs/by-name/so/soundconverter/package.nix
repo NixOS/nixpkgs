@@ -17,13 +17,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "soundconverter";
-  version = "4.0.5";
+  version = "4.0.6";
 
   src = fetchFromGitHub {
     owner = "kassoulet";
     repo = "soundconverter";
-    rev = version;
-    hash = "sha256-sno5EOh8HHfBTIE67VA8mheYp5wUMFRCbcS2EtKES3c=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-qa8VBPpB27hw+mYXGi6I35dxjJAOucH/SevxqKeu6o0=";
   };
 
   buildInputs = [

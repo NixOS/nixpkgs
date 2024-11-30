@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchurl
-, dpkg
-, openjdk11
-, jnr-posix
-, makeWrapper
-, openjfx17
-, zip
-, nixosTests
-, bash
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  openjdk11,
+  jnr-posix,
+  makeWrapper,
+  openjfx17,
+  zip,
+  nixosTests,
+  bash,
 }:
 stdenv.mkDerivation rec {
   pname = "microsoft-identity-broker";
@@ -16,10 +17,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/m/microsoft-identity-broker/microsoft-identity-broker_${version}_amd64.deb";
-    hash = "sha256-I4Q6ucT6ps8/QGiQTNbMXcKxq6UMcuwJ0Prcqvov56M=";
+    hash = "sha256-v/FxtdvRaUHYqvFSkJIZyicIdcyxQ8lPpY5rb9smnqA=";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper openjdk11 zip ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+    openjdk11
+    zip
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -93,11 +99,11 @@ stdenv.mkDerivation rec {
     tests = { inherit (nixosTests) intune; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Authentication Broker for Linux";
     homepage = "https://www.microsoft.com/";
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ rhysmdnz ];
   };

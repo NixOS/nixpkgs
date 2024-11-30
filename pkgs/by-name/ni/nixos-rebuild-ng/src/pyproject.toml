@@ -38,8 +38,6 @@ ignore_missing_imports = true
 extend-select = [
     # ensure imports are sorted
     "I",
-    # require 'from __future__ import annotations'
-    "FA102",
     # require `check` argument for `subprocess.run`
     "PLW1510",
 ]
@@ -48,4 +46,5 @@ extend-select = [
 "tests/" = ["FA102"]
 
 [tool.pytest.ini_options]
+pythonpath = ["."]
 addopts = ["--import-mode=importlib"]

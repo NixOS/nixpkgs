@@ -32,6 +32,10 @@ in
 , xorg
 , libGL
 
+, libICE
+, libSM
+, libX11
+
 , vmopts ? null
 }:
 
@@ -217,7 +221,13 @@ rec {
         libxml2
         xz
       ];
-
+      extraLdPath = lib.optionals (stdenv.hostPlatform.isLinux) [
+        # Avalonia dependencies needed for dotMemory
+        libICE
+        libSM
+        libX11
+        libGL
+      ];
     }).overrideAttrs (attrs: {
       postInstall = (attrs.postInstall or "") + lib.optionalString (stdenv.hostPlatform.isLinux) ''
         (
@@ -231,7 +241,7 @@ rec {
 
           for dir in lib/ReSharperHost/linux-*; do
             rm -rf $dir/dotnet
-            ln -s ${dotnet-sdk_7} $dir/dotnet
+            ln -s ${dotnet-sdk_7.unwrapped}/share/dotnet $dir/dotnet
           done
         )
       '';
