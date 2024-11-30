@@ -150,6 +150,10 @@ def parse_args(
     if (args.target_host or args.build_host) and args.action not in (
         Action.SWITCH.value,
         Action.BOOT.value,
+        Action.TEST.value,
+        Action.BUILD.value,
+        Action.DRY_BUILD.value,
+        Action.DRY_ACTIVATE.value,
     ):
         parser.error(
             f"--target-host/--build-host is not supported with '{args.action}'"
@@ -318,27 +322,53 @@ def execute(argv: list[str]) -> None:
                 else:
                     raise NRError("could not find previous generation")
             elif flake:
-                path_to_config = nix.build_flake(
-                    attr,
-                    flake,
-                    dry_run=dry_run,
-                    **flake_build_flags,
-                )
+                if build_host:
+                    path_to_config = nix.remote_build_flake(
+                        attr,
+                        flake,
+                        build_host,
+                        flake_build_flags=flake_build_flags,
+                        copy_flags=copy_flags,
+                        build_flags=build_flags,
+                    )
+                else:
+                    path_to_config = nix.build_flake(
+                        attr,
+                        flake,
+                        dry_run=dry_run,
+                        **flake_build_flags,
+                    )
             else:
-                path_to_config = nix.build(
-                    attr,
-                    build_attr,
-                    dry_run=dry_run,
-                    **build_flags,
-                )
-            # If we are rolling back, the generation that we roll back to, should already be present on the remote
+                if build_host:
+                    path_to_config = nix.remote_build(
+                        attr,
+                        build_attr,
+                        build_host,
+                        instantiate_flags=common_flags,
+                        copy_flags=copy_flags,
+                        build_flags=build_flags,
+                    )
+                else:
+                    path_to_config = nix.build(
+                        attr,
+                        build_attr,
+                        dry_run=dry_run,
+                        **build_flags,
+                    )
+            # If we are rolling back, the generation that we roll back to,
+            # should already be present on the remote
             if not args.rollback:
-                nix.copy_closure(path_to_config, target_host, **copy_flags)
+                nix.copy_closure(
+                    path_to_config,
+                    to_host=target_host,
+                    from_host=build_host,
+                    **copy_flags,
+                )
             if action in (Action.TEST, Action.DRY_ACTIVATE):
                 nix.switch_to_configuration(
                     path_to_config,
                     action,
-                    target_host=None,
+                    target_host=target_host,
                     sudo=args.sudo,
                     specialisation=args.specialisation,
                 )
