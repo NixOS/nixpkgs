@@ -4,6 +4,7 @@
   fetchurl,
   gzip,
   autoPatchelfHook,
+  versionCheckHook,
 }:
 let
 
@@ -54,6 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x ${bin}
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/codeium_language_server";
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru.updateScript = ./update.sh;
 
