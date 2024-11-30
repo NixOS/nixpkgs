@@ -6,7 +6,6 @@
 , alsa-lib
 , wayland
 , makeWrapper
-, llvmPackages
 , libxkbcommon
 , vulkan-loader
 , xorg
@@ -33,7 +32,6 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [
     pkg-config
-    llvmPackages.clang
     makeWrapper
     rustPlatform.bindgenHook
   ];
