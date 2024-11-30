@@ -110,6 +110,7 @@ rustPlatform.buildRustPackage {
     perl
     pkg-config
     python3
+    rustPlatform.bindgenHook
     taplo
     which
     yasm
@@ -141,8 +142,6 @@ rustPlatform.buildRustPackage {
     wrapProgram $out/bin/servo \
       --prefix LD_LIBRARY_PATH : ${runtimePaths}
   '';
-
-  LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
 
   meta = {
     description = "The embeddable, independent, memory-safe, modular, parallel web rendering engine";
