@@ -12137,8 +12137,9 @@ with pkgs;
 
   qremotecontrol-server = libsForQt5.callPackage ../servers/misc/qremotecontrol-server { };
 
-  rabbitmq-server = callPackage ../servers/amqp/rabbitmq-server {
-    erlang = erlang_26;
+  rabbitmq-server = callPackage ../by-name/ra/rabbitmq-server/package.nix rec {
+    erlang = erlang_27;
+    elixir = pkgs.elixir.override { inherit erlang; };
   };
 
   radicale2 = callPackage ../servers/radicale/2.x.nix { };
