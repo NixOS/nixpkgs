@@ -22,11 +22,11 @@ let
     {
       x86_64-linux = {
         name = "BombSquad_Linux_x86_64";
-        hash = "sha256-jrExsqaM6uhnKMGPkJJTsKt2Imek+YDI2soSP/kfPj0=";
+        hash = "sha256-aujLYzFcKaW0ff7sRdyJ6SvSQowafWVbmwycQfDQUYY=";
       };
       aarch-64-linux = {
         name = "BombSquad_Linux_Arm64";
-        hash = "sha256-o1Yg0C5k07NZzc9jQrHXR+kkQl8HZ55U9/fqcpe3Iyw=";
+        hash = "sha256-pPP7QZzToTOQtSxzF7Q3ZzlDjUjQWMBM/y79d6Yf38I=";
       };
     }
     .${stdenv.targetPlatform.system} or (throw "${stdenv.targetPlatform.system} is unsupported.");
