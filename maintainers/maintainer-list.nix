@@ -13743,7 +13743,6 @@
     github = "matthewpi";
     githubId = 26559841;
     name = "Matthew Penner";
-    keys = [ { fingerprint = "5118 F1CC B7B0 6C17 4DD1  5267 3131 1906 AD4C F6D6"; } ];
   };
   matthiasbenaets = {
     email = "matthias.benaets@gmail.com";
@@ -21202,12 +21201,6 @@
     github = "stites";
     githubId = 1694705;
     name = "Sam Stites";
-  };
-  stnley = {
-    email = "michael@stnley.io";
-    github = "stnley";
-    githubId = 64174376;
-    name = "Michael Stanley";
   };
   strager = {
     email = "strager.nds@gmail.com";
