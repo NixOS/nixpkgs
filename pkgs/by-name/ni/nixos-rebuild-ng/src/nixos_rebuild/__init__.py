@@ -245,11 +245,35 @@ def execute(argv: list[str]) -> None:
             (nixpkgs_path / ".version-suffix").write_text(rev)
 
     match action:
-        case Action.SWITCH | Action.BOOT:
+        case (
+            Action.SWITCH
+            | Action.BOOT
+            | Action.TEST
+            | Action.BUILD
+            | Action.DRY_BUILD
+            | Action.DRY_ACTIVATE
+        ):
             logger.info("building the system configuration...")
+
             attr = "config.system.build.toplevel"
+            dry_run = action == Action.DRY_BUILD
+            no_link = action in (Action.SWITCH, Action.BOOT)
+
             if args.rollback:
-                path_to_config = nix.rollback(profile, target_host, sudo=args.sudo)
+                if action in (Action.SWITCH, Action.BOOT):
+                    path_to_config = nix.rollback(profile, target_host, sudo=args.sudo)
+                elif action in (Action.TEST, Action.BUILD):
+                    maybe_path_to_config = nix.rollback_temporary_profile(
+                        profile,
+                        target_host,
+                        sudo=args.sudo,
+                    )
+                    if maybe_path_to_config:  # kinda silly but this makes mypy happy
+                        path_to_config = maybe_path_to_config
+                    else:
+                        raise NRError("could not find previous generation")
+                else:
+                    raise NRError(f"--rollback is incompatible with '{action}'")
             else:
                 if flake:
                     if build_host:
@@ -265,7 +289,8 @@ def execute(argv: list[str]) -> None:
                         path_to_config = nix.build_flake(
                             attr,
                             flake,
-                            no_link=True,
+                            no_link=no_link,
+                            dry_run=dry_run,
                             **flake_build_flags,
                         )
                 else:
@@ -282,7 +307,8 @@ def execute(argv: list[str]) -> None:
                         path_to_config = nix.build(
                             attr,
                             build_attr,
-                            no_out_link=True,
+                            no_out_link=no_link,
+                            dry_run=dry_run,
                             **build_flags,
                         )
                 nix.copy_closure(
@@ -297,80 +323,14 @@ def execute(argv: list[str]) -> None:
                     target_host=target_host,
                     sudo=args.sudo,
                 )
-            nix.switch_to_configuration(
-                path_to_config,
-                action,
-                target_host=target_host,
-                sudo=args.sudo,
-                specialisation=args.specialisation,
-                install_bootloader=args.install_bootloader,
-            )
-        case Action.TEST | Action.BUILD | Action.DRY_BUILD | Action.DRY_ACTIVATE:
-            logger.info("building the system configuration...")
-            attr = "config.system.build.toplevel"
-            dry_run = action == Action.DRY_BUILD
-            if args.rollback:
-                if action not in (Action.TEST, Action.BUILD):
-                    raise NRError(f"--rollback is incompatible with '{action}'")
-                maybe_path_to_config = nix.rollback_temporary_profile(
-                    profile,
-                    target_host,
-                    sudo=args.sudo,
-                )
-                if maybe_path_to_config:  # kinda silly but this makes mypy happy
-                    path_to_config = maybe_path_to_config
-                else:
-                    raise NRError("could not find previous generation")
-            elif flake:
-                if build_host:
-                    path_to_config = nix.remote_build_flake(
-                        attr,
-                        flake,
-                        build_host,
-                        flake_build_flags=flake_build_flags,
-                        copy_flags=copy_flags,
-                        build_flags=build_flags,
-                    )
-                else:
-                    path_to_config = nix.build_flake(
-                        attr,
-                        flake,
-                        dry_run=dry_run,
-                        **flake_build_flags,
-                    )
-            else:
-                if build_host:
-                    path_to_config = nix.remote_build(
-                        attr,
-                        build_attr,
-                        build_host,
-                        instantiate_flags=common_flags,
-                        copy_flags=copy_flags,
-                        build_flags=build_flags,
-                    )
-                else:
-                    path_to_config = nix.build(
-                        attr,
-                        build_attr,
-                        dry_run=dry_run,
-                        **build_flags,
-                    )
-            # If we are rolling back, the generation that we roll back to,
-            # should already be present on the remote
-            if not args.rollback:
-                nix.copy_closure(
-                    path_to_config,
-                    to_host=target_host,
-                    from_host=build_host,
-                    **copy_flags,
-                )
-            if action in (Action.TEST, Action.DRY_ACTIVATE):
+            if action in (Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE):
                 nix.switch_to_configuration(
                     path_to_config,
                     action,
                     target_host=target_host,
                     sudo=args.sudo,
                     specialisation=args.specialisation,
+                    install_bootloader=args.install_bootloader,
                 )
         case Action.BUILD_VM | Action.BUILD_VM_WITH_BOOTLOADER:
             logger.info("building the system configuration...")
