@@ -7,7 +7,7 @@
   lib,
 }:
 let
-  version = "0.8.0";
+  version = "0.9.0";
   rev = "a1e92b4bcdaf81d5b5e8f3edab60e33549e9009b";
 
   src = fetchFromGitHub {
