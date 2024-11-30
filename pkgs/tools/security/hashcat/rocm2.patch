@@ -1,0 +1,23 @@
+From 992f1c13ba85c73fd4497b0c7cdeac85a7c01821 Mon Sep 17 00:00:00 2001
+From: Mayank <mayankmalik012@gmail.com>
+Date: Fri, 9 Feb 2024 23:15:54 +0530
+Subject: [PATCH] Removed -nocudalib from hiprtc_options to fix LLVMBitcode
+ compilation error when using HIP Backend
+
+---
+ src/backend.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/backend.c b/src/backend.c
+index f7c916e1db..d4cf54be45 100644
+--- a/src/backend.c
++++ b/src/backend.c
+@@ -8755,7 +8755,7 @@ static bool load_kernel (hashcat_ctx_t *hashcat_ctx, hc_device_param_t *device_p
+       */
+ 
+       hiprtc_options[1] = "-nocudainc";
+-      hiprtc_options[2] = "-nocudalib";
++      hiprtc_options[2] = "";
+       hiprtc_options[3] = "";
+       hiprtc_options[4] = "";
+ 
