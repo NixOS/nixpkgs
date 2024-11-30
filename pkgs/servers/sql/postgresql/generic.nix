@@ -132,21 +132,19 @@ let
       disallowedReferences = [ "dev" "doc" "man" ];
       disallowedRequisites = [
         stdenv'.cc
+        llvmPackages.llvm.out
       ] ++ (
         map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs)
-      ) ++ lib.optionals jitSupport [
-        llvmPackages.llvm.out
-      ];
+      );
     };
     outputChecks.lib = {
       disallowedReferences = [ "out" "dev" "doc" "man" ];
       disallowedRequisites = [
         stdenv'.cc
+        llvmPackages.llvm.out
       ] ++ (
         map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs)
-      ) ++ lib.optionals jitSupport [
-        llvmPackages.llvm.out
-      ];
+      );
     };
 
     buildInputs = [

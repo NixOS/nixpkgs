@@ -188,18 +188,7 @@ stdenv.mkDerivation (
         -e "s|\$<TARGET_FILE:nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
     '';
     # check that the above patching actually works
-    outputChecks =
-      let
-        disallowedRequisites = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
-      in
-      {
-        out = {
-          inherit disallowedRequisites;
-        };
-        debug = {
-          inherit disallowedRequisites;
-        };
-      };
+    disallowedRequisites = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
 
     cmakeFlags =
       [
