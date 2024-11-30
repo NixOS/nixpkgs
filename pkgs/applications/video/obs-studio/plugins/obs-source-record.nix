@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-source-record";
-  version = "0.3.5";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-source-record";
     rev = version;
-    sha256 = "sha256-RodZjab3DKiJwYuspdpCsF0ah4u5JtDDYoZPUGk36H4=";
+    sha256 = "sha256-fbIWbn5AfQxdXO5+YLfqPSWv4rdYyxJ7U0QnZgFexh4=";
   };
 
   nativeBuildInputs = [ cmake ];
