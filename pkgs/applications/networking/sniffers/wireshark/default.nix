@@ -44,7 +44,7 @@
 , speexdsp
 , SystemConfiguration
 , wrapGAppsHook3
-, zlib
+, zlib-ng
 , zstd
 
 , withQt ? true
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     snappy
     spandsp3
     speexdsp
-    zlib
+    zlib-ng
     zstd
   ] ++ lib.optionals withQt (with qt6; [
     qt5compat
