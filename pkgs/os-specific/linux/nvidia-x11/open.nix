@@ -18,6 +18,7 @@ stdenv.mkDerivation ({
     rev = nvidia_x11.version;
     inherit hash;
   };
+  outputs = [ "out" "dev" ];
 
   inherit patches;
 
@@ -32,6 +33,11 @@ stdenv.mkDerivation ({
       x86_64-linux = "TARGET_ARCH=x86_64";
     }.${stdenv.hostPlatform.system}
   ];
+
+  postInstall = ''
+    mkdir -p $dev/lib/modules/${kernel.modDirVersion}/build
+    cp kernel-open/Module.symvers $dev/lib/modules/${kernel.modDirVersion}/build
+  '';
 
   installTargets = [ "modules_install" ];
   enableParallelBuilding = true;
