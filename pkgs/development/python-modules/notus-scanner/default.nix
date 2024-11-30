@@ -17,7 +17,7 @@ buildPythonPackage rec {
   version = "22.6.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
