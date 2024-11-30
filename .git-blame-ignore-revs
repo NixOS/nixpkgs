@@ -212,3 +212,6 @@ ce21e97a1f20dee15da85c084f9d1148d84f853b
 
 # format files with nixfmt (#347275)
 adb9714bd909df283c66bbd641bd631ff50a4260
+
+# treewide: incus packages
+9ab59bb5fb943ad6740f64f5a79eae9642fb8211
