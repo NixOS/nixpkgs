@@ -10,12 +10,12 @@ let
     let
       self = {
         inherit pname;
-        version = "0-unstable-2023-03-03";
+        version = "0-unstable-2024-11-23";
         src = fetchFromGitHub {
           owner = "occivink";
           repo = "mpv-image-viewer";
-          rev = "efc82147cba4809f22e9afae6ed7a41ad9794ffd";
-          hash = "sha256-H7uBwrIb5uNEr3m+rHED/hO2CHypGu7hbcRpC30am2Q=";
+          rev = "128b498e3e57a14deea5ca9bbf662f8c1ca79e8d";
+          hash = "sha256-VwIL1529CW9MLK4N9jHHddSSZD5RsJ5bWGWqGJ751C0=";
         };
 
         sourceRoot = "source/scripts";
