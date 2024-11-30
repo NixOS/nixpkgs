@@ -141,13 +141,22 @@ py.pkgs.buildPythonPackage rec {
   ] ++ py.pkgs.uvicorn.optional-dependencies.standard;
 
   preCheck = ''
-    redis-server &
+    # Note for Darwin: unless the output is redirected, the parent process becomes launchd.
+    # In case of a test failure, that prevents killing the Redis process,
+    # hanging the build forever (that would happen before postCheck).
+    ${redis}/bin/redis-server >/dev/null 2>&1 &
     REDIS_PID=$!
-
-    while ! redis-cli --scan ; do
-      echo waiting for redis
+    MAX_RETRIES=30
+    RETRY_COUNT=0
+    until ${redis}/bin/redis-cli --scan || [ $RETRY_COUNT -eq $MAX_RETRIES ]; do
+      echo waiting for redis to be ready
       sleep 1
+      RETRY_COUNT=$((RETRY_COUNT + 1))
     done
+    if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+      echo "Redis failed to start after $MAX_RETRIES retries"
+      exit 1
+    fi
 
     export SMTPD_HOST=127.0.0.1
     export IRRD_DATABASE_URL="postgres:///$PGDATABASE"
