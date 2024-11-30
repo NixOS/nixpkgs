@@ -62,5 +62,8 @@ buildPythonPackage rec {
     homepage = "https://cogeotiff.github.io/rio-tiler/";
     license = licenses.bsd3;
     maintainers = lib.teams.geospatial.members;
+    # Tests broken with gdal 3.10
+    # https://github.com/cogeotiff/rio-tiler/issues/769
+    broken = true;
   };
 }
