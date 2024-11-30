@@ -230,15 +230,14 @@ rec {
 
 
   vmRunCommand = qemuCommand: writeText "vm-run" ''
-    export > saved-env
+    ${coreutils}/bin/mkdir xchg
+    export > xchg/saved-env
+    PATH=${coreutils}/bin
+
     if [ -f "''${NIX_ATTRS_SH_FILE-}" ]; then
       source "$NIX_ATTRS_SH_FILE"
     fi
     source $stdenv/setup
-
-    PATH=${coreutils}/bin
-    mkdir xchg
-    mv saved-env xchg/
 
     eval "$preVM"
 
