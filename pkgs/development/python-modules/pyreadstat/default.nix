@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyreadstat";
-  version = "1.2.7";
+  version = "1.2.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "Roche";
     repo = "pyreadstat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XuLFLpZbaCj/MHq0+l6GoNqR5nAldAlEJhoO5ioWYTA=";
+    hash = "sha256-9uDmkEp9CXUCcM09CaVaaG856Q1rY3sKYOkQkGRzakE=";
   };
 
   build-system = [
