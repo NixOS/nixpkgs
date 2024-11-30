@@ -261,6 +261,11 @@ let
           --slurpfile after ${afterResultDir}/outpaths.json \
           > $out/changed-paths.json
 
+        jq -r '
+        "## Added\n" + (.attrdiff.added | map("- \(. )") | join("\n")) + "\n" +
+        "## Removed\n" + (.attrdiff.removed | map("- \(. )") | join("\n")) + "\n" +
+        "## Changed\n" + (.attrdiff.changed | map("- \(. )") | join("\n")) + "\n"
+        ' < $out/changed-paths.json > $out/step-summary.md
         # TODO: Compare eval stats
       '';
 

@@ -210,7 +210,7 @@ jobs:
             --arg beforeResultDir ./baseResult \
             --arg afterResultDir ./prResult \
             -o comparison
-
+          cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
           # TODO: Request reviews from maintainers for packages whose files are modified in the PR
 
       - name: Upload the combined results
