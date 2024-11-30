@@ -7,6 +7,7 @@
 , postgresql
 , postgresqlTestHook
 , redis
+, redisTestHook
 }:
 
 let
@@ -85,6 +86,7 @@ py.pkgs.buildPythonPackage rec {
   nativeCheckInputs = [
     git
     redis
+    redisTestHook
     postgresql
     postgresqlTestHook
   ] ++ (with py.pkgs; [
@@ -141,14 +143,6 @@ py.pkgs.buildPythonPackage rec {
   ] ++ py.pkgs.uvicorn.optional-dependencies.standard;
 
   preCheck = ''
-    redis-server &
-    REDIS_PID=$!
-
-    while ! redis-cli --scan ; do
-      echo waiting for redis
-      sleep 1
-    done
-
     export SMTPD_HOST=127.0.0.1
     export IRRD_DATABASE_URL="postgres:///$PGDATABASE"
     export IRRD_REDIS_URL="redis://localhost/1"
