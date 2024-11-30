@@ -12136,9 +12136,6 @@ with pkgs;
     elixir = pkgs.elixir.override { inherit erlang; };
   };
 
-  radicale2 = callPackage ../servers/radicale/2.x.nix { };
-  radicale3 = radicale;
-
   qcal = callPackage ../tools/networking/qcal/default.nix { };
 
   rake = callPackage ../development/tools/build-managers/rake { };
