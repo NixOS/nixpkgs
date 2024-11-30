@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     (lib.enableFeature enableOpenSSL "openssl")
     (lib.enableFeature enableXXHash "xxhash")
     (lib.enableFeature enableZstd "zstd")
+    (lib.enableFeature true "ipv6")
     "--with-nobody-group=nogroup"
 
     # disable the included zlib explicitly as it otherwise still compiles and
