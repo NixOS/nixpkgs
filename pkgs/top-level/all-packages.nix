@@ -18810,8 +18810,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  bottom = callPackage ../tools/system/bottom { };
-
   cagebreak = callPackage ../applications/window-managers/cagebreak {
     wlroots = wlroots_0_17;
   };
