@@ -33,16 +33,6 @@ in
       '';
     };
 
-    webPushPrivateKey = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      description = ''
-        The private key for web push notifications.
-        For improved security, consider using 'webPushPrivateKeyFile' instead
-        which keeps credentials out of the Nix store.
-      '';
-    };
-
     webPushPrivateKeyFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
