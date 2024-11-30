@@ -88,10 +88,6 @@ rec {
           set -- $(IFS==; echo $o)
           command=$2
           ;;
-        out=*)
-          set -- $(IFS==; echo $o)
-          export out=$2
-          ;;
       esac
     done
 
@@ -153,7 +149,7 @@ rec {
     fi
 
     echo "starting stage 2 ($command)"
-    exec switch_root /fs $command $out
+    exec switch_root /fs $command
   '';
 
 
@@ -225,7 +221,6 @@ rec {
       -device virtio-rng-pci \
       -virtfs local,path=${storeDir},security_model=none,mount_tag=store \
       -virtfs local,path=/build,security_model=none,mount_tag=sa \
-      -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
       ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report} \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
@@ -261,8 +256,6 @@ rec {
     cat > ./run-vm <<EOF
     #! ${bash}/bin/sh
     ''${diskImage:+diskImage=$diskImage}
-    TMPDIR=$TMPDIR
-    cd $TMPDIR
     ${qemuCommand}
     EOF
 
