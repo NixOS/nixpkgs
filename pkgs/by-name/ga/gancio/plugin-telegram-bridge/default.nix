@@ -6,6 +6,7 @@
   yarnConfigHook,
   yarnInstallHook,
   nodejs,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit nodejs;
+    updateScript = nix-update-script { };
   };
 
   meta = {

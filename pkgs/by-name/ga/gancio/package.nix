@@ -14,6 +14,7 @@
   sqlite,
 
   nixosTests,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -69,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit (nixosTests) gancio;
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {
