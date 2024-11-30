@@ -479,11 +479,67 @@ rec {
 
   in updates: value: go 0 true value updates;
 
-  # TODO document
+  /**
+
+    The abstract version of `lib.attrsets.associateWithAttrPath` which can
+    return arbitrary data formats through use of custom packing and combining
+    functions.
+
+    # Inputs
+
+    `pack`
+
+    : A function which takes a name and a value as its arguments. It's expected
+      to pack the arguments into your desired representation of one terminating
+      string + attrpath pair.
+
+    `combine`
+
+    : A function which takes the recursive function and the remaining subtree as
+      arguments. It's expected to call the function with all names and values of
+      the remaining subtree. It then needs to combine the results of those calls
+      into your desired representation of multiple string + attrpath pairs.
+
+    `pathPrefix`
+
+    : The attrpath prefix of the current iteration. This will be prepended to
+      the resulting attrpath. Pass the empty list (`[ ]`) for no prefix.
+      Recursive calls pass this attrpath with the current attribute name
+      appended.
+
+    `current`
+
+    : The name of the current attribute that will be appended to the resulting
+      path in this iteration of the recursive call. Pass `null` to signify the
+      root directory; it will not be appended.
+
+    `remaining`
+
+    : The value of the current attribute. This can either be an attrset
+      containing the rest of the attrpath declaration or a string which
+      terminates the attrpath declaration.
+
+    # Type
+
+    ```
+    TODO
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.associateWithAttrPath'` usage example
+
+    ```nix
+    attrValues {c = 3; a = 1; b = 2;}
+    => [1 2 3]
+    ```
+
+    :::
+  */
   associateWithAttrPath' =
-    pack: combine: previousPath: current: remaining:
+    pack: combine: pathPrefix: current: remaining:
     let
-      currentPath = previousPath ++ optional (current != null) current; # Null denotes the root
+      currentPath = pathPrefix ++ optional (current != null) current; # Null denotes the root
     in
     if
       isString remaining # Any string is a terminator
@@ -528,7 +584,7 @@ rec {
   #
   # Each strings can be associated with multiple attribute paths.
   #
-  # In most cases, you'd typically use the non-' version of this function.
+  # In most cases, you'd typically use the singular variant of this function.
   associateWithAttrPathMultiple = associateWithAttrPath' (name: path: [ (nameValuePair name path) ]) (
     recursor: remaining: concatMap (next: recursor next remaining.${next}) (attrNames remaining)
   );
