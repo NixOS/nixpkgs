@@ -1,0 +1,51 @@
+diff -ruN a/Makefile b/Makefile
+--- a/Makefile	2020-06-03 16:10:18.000000000 -0700
++++ b/Makefile	2020-07-21 18:03:12.464121056 -0700
+@@ -42,7 +42,7 @@
+ 
+ PLATFORM := $(shell uname -s)
+ ifeq ($(PLATFORM),Linux)
+-	CXX:= g++
++	CXX?= g++
+ 	
+ 	STATICOUTPUT := linux64
+ 
+@@ -68,7 +68,7 @@
+ 
+ 	HIDOBJ := $(LIBTHIRD)/hid-libusb.o
+ else
+-	CXX:= clang++
++	CXX?= clang++
+ 
+ 	OUTPUT := libmsp430.dylib
+ 	STATICOUTPUT := mac64
+@@ -134,7 +134,7 @@
+ 	$(CXX) -c -o $@ $< $(USE_PCH) $(CXXFLAGS) $(INCLUDES) $(DEFINES)
+ 
+ $(BSLLIB):
+-	$(MAKE) -C ./ThirdParty/BSL430_DLL
++	$(MAKE) -C ./ThirdParty/BSL430_DLL OUTPUT=../../$(BSLLIB)
+ 
+ install:
+ 	cp $(OUTPUT) /usr/local/lib/
+diff -ruN a/ThirdParty/BSL430_DLL/Makefile b/ThirdParty/BSL430_DLL/Makefile
+--- a/ThirdParty/BSL430_DLL/Makefile	2019-11-18 13:16:00.000000000 -0800
++++ b/ThirdParty/BSL430_DLL/Makefile	2020-07-21 18:02:55.987782494 -0700
+@@ -36,7 +36,7 @@
+ 
+ PLATFORM := $(shell uname -s)
+ ifeq ($(PLATFORM),Linux)
+-	CXX:= g++
++	CXX?= g++
+ 
+ 	ifdef BIT32
+ 	CXXFLAGS += -m32
+@@ -47,7 +47,7 @@
+ 	INCLUDES += -I$(BOOST_DIR)
+ 	endif
+ else
+-	CXX:= clang++
++	CXX?= clang++
+ 
+ 	ifdef BOOST_DIR
+ 	INCLUDES += -I$(BOOST_DIR)/include

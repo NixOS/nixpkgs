@@ -1,0 +1,37 @@
+From: Christian Tismer <tismer@stackless.com>
+Date: Tue, 14 Feb 2023 14:46:22 +0100
+Subject: Python 3.12: Fix the structure of class property
+
+There is a PySide bug in Python 3.10 already: The structure for
+classproperty derives from the property structure. This was extended
+in Python 3.10, already, but the type generation check was made more
+exhaustive in Python 3.12 and recognized that.
+
+This change is only for making the compiler/C API happy.
+In order to use the extension field, it is necessary to do a runtime
+check because of the Limited API.
+
+Task-number: PYSIDE-2230
+Change-Id: I88dcaa11589ff41852f08fa2defa5200a0dd4eb6
+Reviewed-by: Adrian Herrmann <adrian.herrmann@qt.io>
+Reviewed-by: Friedemann Kleint <Friedemann.Kleint@qt.io>
+(cherry picked from commit edfd9a5ad174a48f8d7da511dc6a1c69e931a418)
+---
+ sources/pyside2/libpyside/feature_select.cpp | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/sources/pyside2/libpyside/feature_select.cpp b/sources/pyside2/libpyside/feature_select.cpp
+index 3011b35..b9e1470 100644
+--- a/sources/pyside2/libpyside/feature_select.cpp
++++ b/sources/pyside2/libpyside/feature_select.cpp
+@@ -671,6 +671,11 @@ typedef struct {
+     PyObject *prop_set;
+     PyObject *prop_del;
+     PyObject *prop_doc;
++#if PY_VERSION_HEX >= 0x030A0000
++    // Note: This is a problem with Limited API: We have no direct access.
++    //       You need to pick it from runtime info.
++    PyObject *prop_name;
++#endif
+     int getter_doc;
+ } propertyobject;
