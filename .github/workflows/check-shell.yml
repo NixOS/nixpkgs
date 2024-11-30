@@ -4,7 +4,7 @@ on:
   pull_request_target:
     paths:
       - 'shell.nix'
-      - './ci/**'
+      - 'ci/**'
 
 permissions: {}
 
