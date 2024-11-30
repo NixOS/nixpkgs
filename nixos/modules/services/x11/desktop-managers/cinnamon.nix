@@ -111,6 +111,7 @@ in
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
+      services.power-profiles-daemon.enable = mkDefault true;
       services.switcherooControl.enable = mkDefault true; # xapp-gpu-offload-helper
       services.touchegg.enable = mkDefault true;
       services.udisks2.enable = true;
