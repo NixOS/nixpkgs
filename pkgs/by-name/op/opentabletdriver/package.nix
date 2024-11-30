@@ -20,22 +20,20 @@
 
 buildDotnetModule rec {
   pname = "OpenTabletDriver";
-  version = "0.6.4.0";
+  version = "0.6.4.0-unstable-2024-11-25";
 
   src = fetchFromGitHub {
     owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
-    rev = "v${version}";
-    hash = "sha256-zK+feU96JOXjmkTndM9VyUid3z+MZFxJGH+MXaB6kzk=";
+    rev = "8b88b8bdc5144391f10eb61ee77803ba0ee83718"; # 0.6.x branch
+    hash = "sha256-5JKkSqV9owkHgWXfjiyv5QRh86apDCPzpA6qha1i4D4=";
   };
 
-  patches = [
-    ./remove-git-from-generate-rules.patch
-  ];
+  dotnetInstallFlags = [ "--framework=net8.0" ];
 
-  dotnetInstallFlags = [ "--framework=net6.0" ];
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   projectFile = [
     "OpenTabletDriver.Console"
     "OpenTabletDriver.Daemon"
@@ -105,6 +103,8 @@ buildDotnetModule rec {
 
     install -Dm644 $src/OpenTabletDriver.UX/Assets/otd.png -t $out/share/pixmaps
 
+    # Generate udev rules from source
+    export OTD_CONFIGURATIONS="$src/OpenTabletDriver.Configurations/Configurations"
     mkdir -p $out/lib/udev/rules.d
     ./generate-rules.sh > $out/lib/udev/rules.d/70-opentabletdriver.rules
   '';
