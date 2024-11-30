@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dunst";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "dunst-project";
     repo = "dunst";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-eiFvvavXGNcHZnEGwlTLxRqFNdkvEZMwNIkVyDn1V6o=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-rnR/AErsjsaOMM/aF8VXZHV8b8OiUMRCi8IFLT4/8Vo=";
   };
 
   nativeBuildInputs = [
@@ -95,7 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }"
 
-    substituteInPlace $out/share/zsh/site-functions/_dunstctl $out/share/fish/vendor_completions.d/{dunstctl,dunstify} \
+    substituteInPlace \
+      $out/share/zsh/site-functions/_dunstctl \
+      $out/share/bash-completion/completions/dunstctl \
+      $out/share/fish/vendor_completions.d/{dunstctl,dunstify}.fish \
       --replace-fail "jq" "${lib.getExe jq}"
   '';
 
