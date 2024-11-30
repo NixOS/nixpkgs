@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "moderngl-window";
-  version = "3.0.0";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "moderngl";
     repo = "moderngl_window";
     rev = "refs/tags/${version}";
-    hash = "sha256-V6QQCQcSSEt11+Xv6HtWZSH+/nPFRZZK1ThQJipIT0M=";
+    hash = "sha256-J7vcEuJC0fVYyalSm9jDT44mLThoMw78Xmj5Ap3Q9ME=";
   };
 
   pythonRelaxDeps = [ "pillow" ];
