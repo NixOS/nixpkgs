@@ -473,6 +473,8 @@ self: super: with self; {
 
   aiowebostv = callPackage ../development/python-modules/aiowebostv { };
 
+  aiowmi = callPackage ../development/python-modules/aiowmi { };
+
   aiowinreg = callPackage ../development/python-modules/aiowinreg { };
 
   aiowithings = callPackage ../development/python-modules/aiowithings { };
@@ -6563,6 +6565,8 @@ self: super: with self; {
   jenkinsapi = callPackage ../development/python-modules/jenkinsapi { };
 
   jenkins-job-builder = callPackage ../development/python-modules/jenkins-job-builder { };
+
+  jh2 = callPackage ../development/python-modules/jh2 { };
 
   jianpu-ly = callPackage ../development/python-modules/jianpu-ly { };
 
