@@ -733,7 +733,7 @@ let
         (assertValueOneOf "IPv4AcceptLocal" boolValues)
         (assertValueOneOf "IPv4RouteLocalnet" boolValues)
         (assertValueOneOf "IPv4ProxyARP" boolValues)
-        (assertValueOneof "IPv4ProxyARPPrivateVLAN" boolValues)
+        (assertValueOneOf "IPv4ProxyARPPrivateVLAN" boolValues)
         (assertValueOneOf "IPv6ProxyNDP" boolValues)
         (assertValueOneOf "IPv6SendRA" boolValues)
         (assertValueOneOf "DHCPPrefixDelegation" boolValues)
