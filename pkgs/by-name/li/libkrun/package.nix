@@ -11,7 +11,6 @@
 , pipewire
 , virglrenderer
 , libkrunfw
-, llvmPackages
 , rustc
 , withGpu ? false
 , withSound ? false
@@ -38,7 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    llvmPackages.clang
     rustPlatform.cargoSetupHook
     rustPlatform.bindgenHook
     cargo
