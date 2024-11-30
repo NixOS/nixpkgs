@@ -230,11 +230,11 @@ rec {
 
 
   vmRunCommand = qemuCommand: writeText "vm-run" ''
+    export > saved-env
     if [ -f "''${NIX_ATTRS_SH_FILE-}" ]; then
       source "$NIX_ATTRS_SH_FILE"
     fi
     source $stdenv/setup
-    export > saved-env
 
     PATH=${coreutils}/bin
     mkdir xchg
