@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     llvmPackages.clang
     rustPlatform.cargoSetupHook
+    rustPlatform.bindgenHook
     cargo
     rustc
   ] ++ lib.optional (sevVariant || withGpu) pkg-config;
@@ -51,8 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals withGpu [ libepoxy libdrm virglrenderer ]
     ++ lib.optional withSound pipewire
     ++ lib.optional sevVariant openssl;
-
-  env.LIBCLANG_PATH = "${lib.getLib llvmPackages.clang-unwrapped}/lib/libclang.so";
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
