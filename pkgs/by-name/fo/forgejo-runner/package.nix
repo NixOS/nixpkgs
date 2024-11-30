@@ -1,9 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitea
-, testers
-, forgejo-runner
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitea,
+  nixosTests,
+  versionCheckHook,
 }:
 
 let
@@ -37,12 +37,13 @@ buildGoModule rec {
     "-skip ${lib.concatStringsSep "|" disabledTests}"
   ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = [ "--version" ];
+
   passthru.tests = {
     inherit (nixosTests.forgejo) sqlite3;
-    version = testers.testVersion {
-      package = forgejo-runner;
-      version = src.rev;
-    };
   };
 
   meta = with lib; {
