@@ -7,6 +7,7 @@
   stdenv,
   apple-sdk_11,
   bottom,
+  nix-update-script,
   testers,
 }:
 
@@ -45,8 +46,11 @@ rustPlatform.buildRustPackage rec {
 
   BTM_GENERATE = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = bottom;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = bottom;
+    };
   };
 
   meta = {
