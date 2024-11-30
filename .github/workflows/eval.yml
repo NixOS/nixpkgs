@@ -237,9 +237,33 @@ jobs:
 
       - name: Tagging pull request
         run: |
+          # Get all currently set rebuild labels
           gh api \
-            --method POST \
-            /repos/${{ github.repository }}/issues/${{ github.event.number }}/labels \
-            --input <(jq -c '{ labels: .labels }' comparison/changed-paths.json)
+            /repos/"$REPOSITORY"/issues/"$NUMBER"/labels \
+            --jq '.[].name | select(startswith("10.rebuild"))' \
+            | sort > before
+
+          # And the labels that should be there
+          jq -r '.labels[]' comparison/changed-paths.json \
+            | sort > after
+
+          # Remove the ones not needed anymore
+          while read -r toRemove; do
+            echo "Removing label $toRemove"
+            gh api \
+              --method DELETE \
+              /repos/"$REPOSITORY"/issues/"$NUMBER"/labels/"$toRemove"
+          done < <(comm -23 before after)
+
+          # And add the ones that aren't set already
+          while read -r toAdd; do
+            echo "Adding label $toAdd"
+            gh api \
+              --method POST \
+              /repos/"$REPOSITORY"/issues/"$NUMBER"/labels \
+              -f "labels[]=$toAdd"
+          done < <(comm -13 before after)
         env:
           GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          NUMBER: ${{ github.event.number }}
