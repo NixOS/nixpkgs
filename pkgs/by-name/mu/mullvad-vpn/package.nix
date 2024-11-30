@@ -28,6 +28,8 @@
   makeWrapper,
   coreutils,
   gnugrep,
+
+  versionCheckHook,
 }:
 
 let
@@ -142,17 +144,23 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mullvad/mullvadvpn-app";
     description = "Client for Mullvad VPN";
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
     badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       ymarkus
       ataraxiasjel
