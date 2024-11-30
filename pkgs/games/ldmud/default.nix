@@ -7,7 +7,7 @@
 , libiconv
 , pcre
 , libgcrypt
-, libxcrypt
+, libxcrypt-legacy
 , json_c
 , libxml2
 , ipv6Support ? false
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs =
     [ autoreconfHook pkg-config bison ];
-  buildInputs = [ libgcrypt libxcrypt pcre json_c libxml2 ]
+  buildInputs = [ libgcrypt libxcrypt-legacy pcre json_c libxml2 ]
     ++ lib.optional mccpSupport zlib ++ lib.optional mysqlSupport libmysqlclient
     ++ lib.optional postgresSupport libpq
     ++ lib.optional sqliteSupport sqlite ++ lib.optional tlsSupport openssl
