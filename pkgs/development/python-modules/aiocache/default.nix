@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   marshmallow,
+  memcachedTestHook,
   msgpack,
   pkgs,
   pytest-asyncio,
@@ -14,6 +15,7 @@
   pythonAtLeast,
   pythonOlder,
   redis,
+  redisTestHook,
   setuptools,
 }:
 
@@ -42,10 +44,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aiohttp
     marshmallow
+    memcachedTestHook
     pytest-asyncio
     pytest-cov-stub
     pytest-mock
     pytestCheckHook
+    redisTestHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
@@ -69,19 +73,6 @@ buildPythonPackage rec {
     # Benchmark and performance tests are not relevant for Nixpkgs
     "tests/performance/"
   ];
-
-  preCheck = ''
-    ${lib.getBin pkgs.redis}/bin/redis-server &
-    REDIS_PID=$!
-
-    ${lib.getBin pkgs.memcached}/bin/memcached &
-    MEMCACHED_PID=$!
-  '';
-
-  postCheck = ''
-    kill $REDIS_PID
-    kill $MEMCACHED_PID
-  '';
 
   __darwinAllowLocalNetworking = true;
 
