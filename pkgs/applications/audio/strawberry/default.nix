@@ -24,7 +24,6 @@
   ninja,
   nix-update-script,
   p11-kit,
-  pcre,
   pkg-config,
   qtbase,
   qttools,
@@ -71,7 +70,6 @@ stdenv.mkDerivation rec {
       libmtp
       libpthreadstubs
       libtasn1
-      pcre
       qtbase
       sqlite
       taglib
