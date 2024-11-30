@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -18,21 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "goodvibes";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KflLEc6BFA3pBY9HukEm5NluGi2igFNP6joOMdmZ0Ds=";
+    hash = "sha256-zqJbtCqdwKXy13WWoAwSRYVhAOJsHqOF0DriSDEigbI=";
   };
-  patches = [
-    # Fixes a compilation error
-    (fetchpatch {
-      url = "https://gitlab.com/goodvibes/goodvibes/-/commit/e332f831b91ee068a1a58846d7607b30ab010116.patch";
-      hash = "sha256-PzbTltbD0xWJAytCGg1TAwBLrICP+9QZbCbG1QQ8Qmw=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
