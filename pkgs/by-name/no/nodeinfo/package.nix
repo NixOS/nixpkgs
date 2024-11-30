@@ -17,7 +17,7 @@ buildGoModule rec {
   };
 
   modRoot = "./cli";
-  tags = "extension";
+  tags = [ "extension" ];
   ldflags = [
     "-s"
     "-w"
