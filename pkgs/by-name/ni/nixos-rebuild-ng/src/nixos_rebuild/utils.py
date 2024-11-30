@@ -5,17 +5,17 @@ Args: TypeAlias = bool | str | list[str] | int | None
 
 
 class LogFormatter(logging.Formatter):
+    formatters = {
+        logging.INFO: logging.Formatter("%(message)s"),
+        logging.DEBUG: logging.Formatter("%(levelname)s: %(name)s: %(message)s"),
+        "DEFAULT": logging.Formatter("%(levelname)s: %(message)s"),
+    }
+
     @override
     def format(self, record: logging.LogRecord) -> str:
         record.levelname = record.levelname.lower()
-        match record.levelno:
-            case logging.INFO:
-                self._style._fmt = "%(message)s"
-            case logging.DEBUG:
-                self._style._fmt = "%(levelname)s: %(name)s: %(message)s"
-            case _:
-                self._style._fmt = "%(levelname)s: %(message)s"
-        return super().format(record)
+        formatter = self.formatters.get(record.levelno, self.formatters["DEFAULT"])
+        return formatter.format(record)
 
 
 def dict_to_flags(d: dict[str, Args]) -> list[str]:

@@ -391,7 +391,7 @@ def execute(argv: list[str]) -> None:
 
 def main() -> None:
     ch = logging.StreamHandler()
-    ch.setFormatter(LogFormatter("%(levelname)s: %(message)s"))
+    ch.setFormatter(LogFormatter())
     logger.addHandler(ch)
 
     try:
