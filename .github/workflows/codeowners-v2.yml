@@ -35,6 +35,7 @@ env:
 
 jobs:
   get-merge-commit:
+    if: github.repository_owner == 'NixOS'
     uses: ./.github/workflows/get-merge-commit.yml
 
   # Check that code owners is valid
@@ -42,12 +43,11 @@ jobs:
     name: Check
     runs-on: ubuntu-24.04
     needs: get-merge-commit
-    if: needs.get-merge-commit.outputs.mergedSha
+    if: github.repository_owner == 'NixOS' && needs.get-merge-commit.outputs.mergedSha
     steps:
       - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
 
       - uses: cachix/cachix-action@ad2ddac53f961de1989924296a1f236fcfbaa4fc # v15
-        if: github.repository_owner == 'NixOS'
         with:
           # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
           name: nixpkgs-ci
@@ -88,6 +88,7 @@ jobs:
   request:
     name: Request
     runs-on: ubuntu-24.04
+    if: github.repository_owner == 'NixOS'
     steps:
       - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
 
