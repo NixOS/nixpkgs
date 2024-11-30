@@ -1974,6 +1974,8 @@ self: super: with self; {
 
   bz2file = callPackage ../development/python-modules/bz2file { };
 
+  cache = callPackage ../development/python-modules/cache { };
+
   cachecontrol = callPackage ../development/python-modules/cachecontrol { };
 
   cached-ipaddress = callPackage ../development/python-modules/cached-ipaddress { };
