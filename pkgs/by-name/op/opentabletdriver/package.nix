@@ -1,21 +1,21 @@
 {
   lib,
   buildDotnetModule,
+  copyDesktopItems,
+  coreutils,
+  dotnetCorePackages,
   fetchFromGitHub,
   gtk3,
-  libX11,
-  libXrandr,
+  jq,
   libappindicator,
   libevdev,
   libnotify,
-  udev,
-  copyDesktopItems,
+  libX11,
+  libXrandr,
   makeDesktopItem,
   nixosTests,
+  udev,
   wrapGAppsHook3,
-  jq,
-  coreutils,
-  dotnetCorePackages,
 }:
 
 buildDotnetModule rec {
@@ -58,11 +58,11 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     gtk3
-    libX11
-    libXrandr
     libappindicator
     libevdev
     libnotify
+    libX11
+    libXrandr
     udev
   ];
 
