@@ -24,6 +24,7 @@
   xorgproto,
   librsvg,
   testers,
+  nix-update-script,
   withX11 ? true,
   withWayland ? true,
 }:
@@ -98,7 +99,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "jq" "${lib.getExe jq}"
   '';
 
-  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Lightweight and customizable notification daemon";
