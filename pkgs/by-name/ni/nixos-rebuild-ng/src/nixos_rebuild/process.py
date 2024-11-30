@@ -38,7 +38,7 @@ class Remote:
         if not host:
             return None
 
-        opts = os.getenv("NIX_SSHOPTS", "").split()
+        opts = shlex.split(os.getenv("NIX_SSHOPTS", ""))
         if validate_opts:
             cls._validate_opts(opts, ask_sudo_password)
         sudo_password = None

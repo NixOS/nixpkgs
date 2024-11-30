@@ -1,5 +1,6 @@
 import logging
 import os
+import shlex
 from datetime import datetime
 from importlib.resources import files
 from pathlib import Path
@@ -17,7 +18,7 @@ from .models import (
     Profile,
     Remote,
 )
-from .process import run_wrapper
+from .process import SSH_DEFAULT_OPTS, run_wrapper
 from .utils import Args, dict_to_flags
 
 FLAKE_FLAGS: Final = ["--extra-experimental-features", "nix-command flakes"]
@@ -153,12 +154,13 @@ def copy_closure(
             closure,
         ],
         extra_env={
-            # for the remote to remote case, we can't use host.opts because it
-            # includes the ControlPane opts that will not work in the remote,
-            # because the temporary directory that we created will not exist
-            "NIX_SSHOPTS": os.environ.get("NIX_SSHOPTS", "")
+            # for the remote to remote case, we can't add SSH_DEFAULT_OPTS to
+            # host.opts because it includes the ControlPane opts that will not
+            # work in the remote, because the temporary directory that we
+            # created will not exist
+            "NIX_SSHOPTS": shlex.join(host.opts)
             if from_host and to_host
-            else " ".join(host.opts)
+            else shlex.join(SSH_DEFAULT_OPTS + host.opts)
         },
         remote=from_host if to_host else None,
     )

@@ -8,6 +8,7 @@ import pytest
 
 import nixos_rebuild.models as m
 import nixos_rebuild.nix as n
+import nixos_rebuild.process as p
 
 from .helpers import get_qualified_name
 
@@ -108,7 +109,9 @@ def test_remote_build(mock_run: Any, monkeypatch: Any) -> None:
                     "user@host",
                     Path("/path/to/file"),
                 ],
-                extra_env={"NIX_SSHOPTS": "--ssh opts"},
+                extra_env={
+                    "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh opts"])
+                },
                 remote=None,
             ),
             call(
@@ -159,7 +162,9 @@ def test_remote_build_flake(mock_run: Any) -> None:
                     "user@host",
                     Path("/path/to/file"),
                 ],
-                extra_env={"NIX_SSHOPTS": "--ssh opts"},
+                extra_env={
+                    "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh opts"])
+                },
                 remote=None,
             ),
             call(
@@ -191,23 +196,22 @@ def test_copy_closure(mock_run: Any, monkeypatch: Any) -> None:
     n.copy_closure(closure, target_host)
     mock_run.assert_called_with(
         ["nix-copy-closure", "--to", "user@target.host", closure],
-        extra_env={"NIX_SSHOPTS": "--ssh target-opt"},
+        extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh target-opt"])},
         remote=None,
     )
 
     n.copy_closure(closure, None, build_host)
     mock_run.assert_called_with(
         ["nix-copy-closure", "--from", "user@build.host", closure],
-        extra_env={"NIX_SSHOPTS": "--ssh build-opt"},
+        extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-opt"])},
         remote=None,
     )
 
-    monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-target-opt")
     n.copy_closure(closure, target_host, build_host)
     mock_run.assert_called_with(
         ["nix-copy-closure", "--to", "user@target.host", closure],
         remote=build_host,
-        extra_env={"NIX_SSHOPTS": "--ssh build-target-opt"},
+        extra_env={"NIX_SSHOPTS": "--ssh target-opt"},
     )
 
 
