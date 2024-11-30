@@ -23,16 +23,6 @@ in
       description = "Primary group of ntfy-sh user.";
     };
 
-    smtpSenderPass = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      description = ''
-        The password for the SMTP sender.
-        For improved security, consider using 'smtpSenderPassFile' instead
-        which keeps credentials out of the Nix store.
-      '';
-    };
-
     smtpSenderPassFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       default = null;
