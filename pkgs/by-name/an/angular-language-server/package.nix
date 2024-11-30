@@ -9,16 +9,17 @@
   writeShellApplication,
   curl,
   common-updater-scripts,
+  jq,
   unzip,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "angular-language-server";
-  version = "18.2.0";
+  version = "19.0.3";
   src = fetchurl {
     name = "angular-language-server-${finalAttrs.version}.zip";
     url = "https://github.com/angular/vscode-ng-language-service/releases/download/v${finalAttrs.version}/ng-template.vsix";
-    hash = "sha256-rl04nqSSBMjZfPW8Y+UtFLFLDFd5FSxJs3S937mhDWE=";
+    hash = "sha256-QVvXwzSaj5wMYEwMMXGJwRwg7v6HdB0JKLkQiUNR0y4=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +57,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       runtimeInputs = [
         curl
         common-updater-scripts
+        jq
       ];
       text = ''
         if [ -z "''${GITHUB_TOKEN:-}" ]; then
