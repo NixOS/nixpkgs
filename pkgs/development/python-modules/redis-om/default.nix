@@ -12,9 +12,9 @@
   pydantic,
   python-ulid,
   redis,
+  redisTestHook,
   types-redis,
   typing-extensions,
-  pkgs,
   pytest-asyncio,
   pytestCheckHook,
 }:
@@ -61,16 +61,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    redisTestHook
   ];
-
-  preCheck = ''
-    ${pkgs.redis}/bin/redis-server &
-    REDIS_PID=$!
-  '';
-
-  postCheck = ''
-    kill $REDIS_PID
-  '';
 
   # probably require redisearch
   # https://github.com/redis/redis-om-python/issues/532
