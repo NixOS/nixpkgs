@@ -11800,8 +11800,6 @@ with pkgs;
   inherit (callPackage ../applications/networking/mullvad { })
     mullvad;
 
-  mullvad-vpn = callPackage ../applications/networking/mullvad-vpn { };
-
   mullvad-closest = with python3Packages; toPythonApplication mullvad-closest;
 
   napalm = with python3Packages; toPythonApplication (
