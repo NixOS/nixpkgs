@@ -236,6 +236,24 @@ let
           jq -s from_entries > $out/stats.json
       '';
 
+  compare =
+    { beforeResultDir, afterResultDir }:
+    runCommand "compare"
+      {
+        nativeBuildInputs = [
+          jq
+        ];
+      }
+      ''
+        mkdir $out
+        jq -n -f ${./compare.jq} \
+          --slurpfile before ${beforeResultDir}/outpaths.json \
+          --slurpfile after ${afterResultDir}/outpaths.json \
+          > $out/changed-paths.json
+
+        # TODO: Compare eval stats
+      '';
+
   full =
     {
       # Whether to evaluate just a single system, by default all are evaluated
@@ -266,6 +284,7 @@ in
     attrpathsSuperset
     singleSystem
     combine
+    compare
     # The above three are used by separate VMs in a GitHub workflow,
     # while the below is intended for testing on a single local machine
     full
