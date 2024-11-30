@@ -1,4 +1,4 @@
-{ lib, stdenv, appimageTools, fetchurl, makeWrapper, _7zz }:
+{ lib, stdenv, appimageTools, fetchurl, makeWrapper, undmg }:
 
 let
   pname = "joplin-desktop";
@@ -64,7 +64,7 @@ let
   darwin = stdenv.mkDerivation {
     inherit pname version src meta;
 
-    nativeBuildInputs = [ _7zz ];
+    nativeBuildInputs = [ undmg ];
 
     sourceRoot = "Joplin.app";
 
