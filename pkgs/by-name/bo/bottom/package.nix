@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  autoAddDriverRunpath,
   installShellFiles,
   stdenv,
   apple-sdk_11,
@@ -22,7 +23,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-FQbJx6ijX8kE4qxT7OQ7FwxLKJB5/moTKhBK0bfvBas=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    autoAddDriverRunpath
+    installShellFiles
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_11
