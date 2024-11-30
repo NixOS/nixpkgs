@@ -88,10 +88,6 @@ rec {
           set -- $(IFS==; echo $o)
           command=$2
           ;;
-        out=*)
-          set -- $(IFS==; echo $o)
-          export out=$2
-          ;;
       esac
     done
 
@@ -129,14 +125,14 @@ rec {
     mkdir -p /fs${storeDir}
     mount -t 9p store /fs${storeDir} -o trans=virtio,version=9p2000.L,cache=loose,msize=131072
 
-    echo "mounting host's build directory..."
-    mkdir -p /fs/build
-    mount -t 9p sa /fs/build -o trans=virtio,version=9p2000.L,cache=loose,msize=131072
-
     mkdir -p /fs/tmp /fs/run /fs/var
     mount -t tmpfs -o "mode=1777" none /fs/tmp
     mount -t tmpfs -o "mode=755" none /fs/run
     ln -sfn /run /fs/var/run
+
+    echo "mounting host's temporary directory..."
+    mkdir -p /fs/tmp/xchg
+    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L,msize=131072
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
@@ -153,7 +149,7 @@ rec {
     fi
 
     echo "starting stage 2 ($command)"
-    exec switch_root /fs $command $out
+    exec switch_root /fs $command
   '';
 
 
@@ -169,17 +165,20 @@ rec {
   stage2Init = writeScript "vm-run-stage2" ''
     #! ${bash}/bin/sh
     set -euo pipefail
-    source /build/xchg/saved-env
-    if [ -f "''${NIX_ATTRS_SH_FILE-}" ]; then
-      source "$NIX_ATTRS_SH_FILE"
+    source /tmp/xchg/saved-env
+    if [ -f /tmp/xchg/.attrs.sh ]; then
+      source /tmp/xchg/.attrs.sh
+      export NIX_ATTRS_JSON_FILE=/tmp/xchg/.attrs.json
+      export NIX_ATTRS_SH_FILE=/tmp/xchg/.attrs.sh
     fi
-    source $stdenv/setup
 
     export NIX_STORE=${storeDir}
     export NIX_BUILD_TOP=/tmp
     export TMPDIR=/tmp
     export PATH=/empty
     cd "$NIX_BUILD_TOP"
+
+    source $stdenv/setup
 
     if ! test -e /bin/sh; then
       ${coreutils}/bin/mkdir -p /bin
@@ -205,7 +204,7 @@ rec {
       declare -a argsArray=()
       concatTo argsArray origArgs
       "$origBuilder" "''${argsArray[@]}"
-      echo $? > /build/xchg/in-vm-exit
+      echo $? > /tmp/xchg/in-vm-exit
 
       ${busybox}/bin/mount -o remount,ro dummy /
 
@@ -224,8 +223,7 @@ rec {
       -nographic -no-reboot \
       -device virtio-rng-pci \
       -virtfs local,path=${storeDir},security_model=none,mount_tag=store \
-      -virtfs local,path=/build,security_model=none,mount_tag=sa \
-      -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
+      -virtfs local,path=xchg,security_model=none,mount_tag=xchg \
       ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report} \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
@@ -235,15 +233,15 @@ rec {
 
 
   vmRunCommand = qemuCommand: writeText "vm-run" ''
+    ${coreutils}/bin/mkdir xchg
+    export > xchg/saved-env
+    PATH=${coreutils}/bin
+
     if [ -f "''${NIX_ATTRS_SH_FILE-}" ]; then
+      cp $NIX_ATTRS_JSON_FILE $NIX_ATTRS_SH_FILE xchg
       source "$NIX_ATTRS_SH_FILE"
     fi
     source $stdenv/setup
-    export > saved-env
-
-    PATH=${coreutils}/bin
-    mkdir xchg
-    mv saved-env xchg/
 
     eval "$preVM"
 
@@ -261,8 +259,6 @@ rec {
     cat > ./run-vm <<EOF
     #! ${bash}/bin/sh
     ''${diskImage:+diskImage=$diskImage}
-    TMPDIR=$TMPDIR
-    cd $TMPDIR
     ${qemuCommand}
     EOF
 
