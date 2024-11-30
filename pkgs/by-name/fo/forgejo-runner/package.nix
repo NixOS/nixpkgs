@@ -4,6 +4,7 @@
   fetchFromGitea,
   nixosTests,
   versionCheckHook,
+  nix-update-script,
 }:
 
 let
@@ -42,8 +43,9 @@ buildGoModule rec {
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
   versionCheckProgramArg = [ "--version" ];
 
-  passthru.tests = {
-    inherit (nixosTests.forgejo) sqlite3;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.sqlite3 = nixosTests.forgejo.sqlite3;
   };
 
   meta = with lib; {
