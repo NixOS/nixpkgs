@@ -122,6 +122,10 @@ def parse_args(
     if args.ask_sudo_password:
         args.sudo = True
 
+    if args.help or args.action is None:
+        r = run(["man", "8", "nixos-rebuild"], check=False)
+        parser.exit(r.returncode)
+
     # TODO: use deprecated=True in Python >=3.13
     if args.install_grub:
         parser_warn("--install-grub deprecated, use --install-bootloader instead")
@@ -153,10 +157,6 @@ def parse_args(
 
     if args.flake and (args.file or args.attr):
         parser.error("--flake cannot be used with --file or --attr")
-
-    if args.help or args.action is None:
-        r = run(["man", "8", "nixos-rebuild"], check=False)
-        parser.exit(r.returncode)
 
     return args, args_groups
 
