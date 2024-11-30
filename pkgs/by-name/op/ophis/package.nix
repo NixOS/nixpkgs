@@ -35,7 +35,7 @@ let
       '';
       license = lib.licenses.mit;
       mainProgram = "ophis";
-      maintainers = with lib.maintainers; [ AndersonTorres ];
+      maintainers = with lib.maintainers; [ ];
     };
   };
 in
