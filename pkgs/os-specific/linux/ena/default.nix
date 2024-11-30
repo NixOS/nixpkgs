@@ -2,17 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  gitUpdater,
   kernel,
 }:
-
-stdenv.mkDerivation rec {
+let
+  rev-prefix = "ena_linux_";
   version = "2.13.0";
+in
+stdenv.mkDerivation {
+  inherit version;
   name = "ena-${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "amzn";
     repo = "amzn-drivers";
-    rev = "ena_linux_${version}";
+    rev = "${rev-prefix}${version}";
     hash = "sha256-uYWKu9M/5PcHV4WdMSi0f29S7KnQft67dgjdN0AS1d8=";
   };
 
@@ -39,6 +43,10 @@ stdenv.mkDerivation rec {
     xz $dest/ena.ko
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {
+    inherit rev-prefix;
+  };
 
   meta = with lib; {
     description = "Amazon Elastic Network Adapter (ENA) driver for Linux";
