@@ -33,8 +33,6 @@ rustPlatform.buildRustPackage rec {
     apple-sdk_11
   ];
 
-  doCheck = false;
-
   postInstall = ''
     installManPage target/tmp/bottom/manpage/btm.1
     installShellCompletion \
@@ -42,6 +40,10 @@ rustPlatform.buildRustPackage rec {
       --zsh target/tmp/bottom/completion/_btm
 
     install -Dm444 desktop/bottom.desktop -t $out/share/applications
+  '';
+
+  preCheck = ''
+    HOME=$(mktemp -d)
   '';
 
   BTM_GENERATE = true;
