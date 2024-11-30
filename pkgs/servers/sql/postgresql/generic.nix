@@ -149,6 +149,8 @@ let
       ];
     };
 
+    strictDeps = true;
+
     buildInputs = [
       zlib
       readline
@@ -171,6 +173,7 @@ let
       ++ lib.optionals nlsSupport [ gettext ];
 
     nativeBuildInputs = [
+      libxml2
       makeWrapper
       pkg-config
       removeReferencesTo
