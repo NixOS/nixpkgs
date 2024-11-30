@@ -1,20 +1,21 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, gtk3
-, libX11
-, libXrandr
-, libappindicator
-, libevdev
-, libnotify
-, udev
-, copyDesktopItems
-, makeDesktopItem
-, nixosTests
-, wrapGAppsHook3
-, jq
-, coreutils
-, dotnetCorePackages
+{
+  lib,
+  buildDotnetModule,
+  copyDesktopItems,
+  coreutils,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  gtk3,
+  jq,
+  libappindicator,
+  libevdev,
+  libnotify,
+  libX11,
+  libXrandr,
+  makeDesktopItem,
+  nixosTests,
+  udev,
+  wrapGAppsHook3,
 }:
 
 buildDotnetModule rec {
@@ -35,10 +36,18 @@ buildDotnetModule rec {
   dotnetInstallFlags = [ "--framework=net6.0" ];
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  projectFile = [ "OpenTabletDriver.Console" "OpenTabletDriver.Daemon" "OpenTabletDriver.UX.Gtk" ];
+  projectFile = [
+    "OpenTabletDriver.Console"
+    "OpenTabletDriver.Daemon"
+    "OpenTabletDriver.UX.Gtk"
+  ];
   nugetDeps = ./deps.nix;
 
-  executables = [ "OpenTabletDriver.Console" "OpenTabletDriver.Daemon" "OpenTabletDriver.UX.Gtk" ];
+  executables = [
+    "OpenTabletDriver.Console"
+    "OpenTabletDriver.Daemon"
+    "OpenTabletDriver.UX.Gtk"
+  ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -49,11 +58,11 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     gtk3
-    libX11
-    libXrandr
     libappindicator
     libevdev
     libnotify
+    libX11
+    libXrandr
     udev
   ];
 
@@ -122,8 +131,14 @@ buildDotnetModule rec {
     description = "Open source, cross-platform, user-mode tablet driver";
     homepage = "https://github.com/OpenTabletDriver/OpenTabletDriver";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ gepbird thiagokokada ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [
+      gepbird
+      thiagokokada
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "otd";
   };
 }
