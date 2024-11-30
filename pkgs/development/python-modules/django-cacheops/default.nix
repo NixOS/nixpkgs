@@ -19,14 +19,16 @@
 
 buildPythonPackage rec {
   pname = "django-cacheops";
-  version = "7.0.2";
+  version = "7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-d6N8c9f6z8cpk2XtZqEr56SH3XRd2GwdM8ouv9OzKHg=";
+    # package name used to be django-cacheops before version 7.1, this might be a one-time mistake
+    pname = "django_cacheops";
+    inherit version;
+    hash = "sha256-7Aeau5aFVzIe4gjGJ0ggIxgg+YymN33alx8EmBvCq1I=";
   };
 
   pythonRelaxDeps = [ "funcy" ];
