@@ -23,7 +23,7 @@ let
     '';
     homepage = "https://www.ej-technologies.com/products/jprofiler/overview.html";
     license = licenses.unfree;
-    maintainers = with maintainers; [ catap ];
+    maintainers = with maintainers; [ ];
   };
 
   src = if stdenv.hostPlatform.isLinux then fetchurl {
