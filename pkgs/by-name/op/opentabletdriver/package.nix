@@ -93,6 +93,8 @@ buildDotnetModule rec {
 
   preBuild = ''
     patchShebangs generate-rules.sh
+    substituteInPlace generate-rules.sh \
+      --replace-fail '/usr/bin/env rm' '${lib.getExe' coreutils "rm"}'
   '';
 
   postFixup = ''
@@ -104,9 +106,7 @@ buildDotnetModule rec {
     install -Dm644 $src/OpenTabletDriver.UX/Assets/otd.png -t $out/share/pixmaps
 
     mkdir -p $out/lib/udev/rules.d
-    ./generate-rules.sh \
-      | sed 's@/usr/bin/env rm@${lib.getExe' coreutils "rm"}@' \
-      > $out/lib/udev/rules.d/70-opentabletdriver.rules
+    ./generate-rules.sh > $out/lib/udev/rules.d/70-opentabletdriver.rules
   '';
 
   desktopItems = [
