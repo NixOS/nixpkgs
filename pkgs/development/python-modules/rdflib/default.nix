@@ -12,9 +12,6 @@
   isodate,
   pyparsing,
 
-  # propagates <3.8
-  importlib-metadata,
-
   # extras: networkx
   networkx,
 
@@ -30,25 +27,23 @@
 
 buildPythonPackage rec {
   pname = "rdflib";
-  version = "7.0.0";
-  format = "pyproject";
+  version = "7.1.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "RDFLib";
-    repo = pname;
+    repo = "rdflib";
     rev = "refs/tags/${version}";
-    hash = "sha256-VCjvgXMun1Hs+gPeqjzLXbIX1NBQ5aMLz0aWlwsm0iY=";
+    hash = "sha256-/jRUV7H6JBWBv/gphjLjjifbEwMSxWke5STqkeSzwoE=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    isodate
-    html5lib
+  dependencies = [
     pyparsing
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ isodate ];
 
   optional-dependencies = {
     html = [ html5lib ];
