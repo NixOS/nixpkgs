@@ -5110,9 +5110,7 @@ with pkgs;
 
   ruby-lsp = rubyPackages.ruby-lsp;
 
-  ruplacer = callPackage ../tools/text/ruplacer {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  ruplacer = callPackage ../tools/text/ruplacer { };
 
   rust-motd = callPackage ../tools/misc/rust-motd {
     inherit (darwin.apple_sdk.frameworks) Security;
