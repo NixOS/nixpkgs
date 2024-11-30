@@ -48,9 +48,8 @@ stdenv.mkDerivation rec {
     readline
     sqlite
     curl
-    gpm
     libarchive
-  ];
+  ] ++ lib.optional (!stdenv.isDarwin) gpm;
 
   preConfigure = ''
     ./autogen.sh
