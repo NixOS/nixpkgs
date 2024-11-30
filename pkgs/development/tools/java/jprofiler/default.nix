@@ -11,8 +11,7 @@
 
 let
   pname = "jprofiler";
-
-  version = "13.0.6";
+  version = "14.0.5";
   nameApp = "JProfiler";
 
   meta = {
@@ -29,23 +28,18 @@ let
   src =
     if stdenv.hostPlatform.isLinux then
       fetchurl {
-        url = "https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_${
+        url = "https://download.ej-technologies.com/jprofiler/jprofiler_linux_${
           lib.replaceStrings [ "." ] [ "_" ] version
         }.tar.gz";
-        hash = "sha256-orjBSaC7NvKcak+RSEa9V05oL3EZIBnp7TyaX/8XFyg=";
+        hash = "sha256-S7e2WurDJ0ePzpMg0YK94Mn0eHfb8/jNmf0kYts2Y0M=";
       }
     else
       fetchurl {
         url = "https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_macos_${
           lib.replaceStrings [ "." ] [ "_" ] version
         }.dmg";
-        hash = "sha256-OI6NSPqYws5Rv25U5jIPzkyJtB8LF04qHB3NPR9XBWg=";
+        hash = "sha256-HPGh+dRfLuQprpgnu8oFboHUB1xvFqPblJcowqgZ5KA=";
       };
-
-  srcIcon = fetchurl {
-    url = "https://www.ej-technologies.com/assets/content/header-product-jprofiler@2x-24bc4d84bd2a4eb641a5c8531758ff7c.png";
-    hash = "sha256-4T0j2ctHmgWOSCmFG2PZCLJS57nIa5MxmJBpMYzy9FI=";
-  };
 
   desktopItems = [
     (makeDesktopItem {
@@ -86,7 +80,7 @@ let
         wrapProgram $f --set JAVA_HOME "${jdk.home}"
       done
 
-      install -Dm644 "${srcIcon}" \
+      install -Dm644 "./.install4j/i4j_extf_7_1u09tly_16qtnph.png" \
         "$out/share/icons/hicolor/scalable/apps/jprofiler.png"
 
       runHook postInstall
