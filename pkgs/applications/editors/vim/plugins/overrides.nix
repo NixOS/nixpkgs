@@ -1860,6 +1860,10 @@ in
     dependencies = [ self.nvim-fzf ];
   };
 
+  nvim-dap-lldb = super.nvim-dap-lldb.overrideAttrs {
+    dependencies = [ self.nvim-dap ];
+  };
+
   nvim-dap-python = super.nvim-dap-python.overrideAttrs {
     dependencies = [ self.nvim-dap ];
     nvimRequireCheck = "dap-python";
