@@ -1058,6 +1058,8 @@ self: super: with self; {
 
   autoslot = callPackage ../development/python-modules/autoslot { };
 
+  autotiktokenizer = callPackage ../development/python-modules/autotiktokenizer { };
+
   avahi = toPythonModule (pkgs.avahi.override {
     inherit python;
     withPython = true;
