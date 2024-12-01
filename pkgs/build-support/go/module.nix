@@ -167,12 +167,24 @@ in
 
     inherit (go) GOOS GOARCH;
 
-    GOFLAGS = GOFLAGS
-      ++ lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS) "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
-        (lib.optional (!finalAttrs.proxyVendor) "-mod=vendor")
-      ++ lib.warnIf (builtins.elem "-trimpath" GOFLAGS) "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
-        (lib.optional (!allowGoReference) "-trimpath");
     inherit CGO_ENABLED enableParallelBuilding GO111MODULE GOTOOLCHAIN;
+
+    goFlags =
+      let
+        # Compatibility layers for direct specification of the GOFLAGS environment variable
+        goFlags =
+          lib.optionals (args?GOFLAGS) (
+            if lib.isString args.GOFLAGS then
+              lib.splitString args.GOFLAGS
+            else args.GOFLAGS
+          ) ++ args.goFlags or [ ];
+      in
+      goFlags
+      ++ lib.warnIf (lib.any (lib.hasPrefix "-mod=") goFlags) "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in goFlags"
+        (lib.optional (!finalAttrs.proxyVendor) "-mod=vendor")
+      ++ lib.warnIf (builtins.elem "-trimpath" goFlags) "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
+        (lib.optional (!allowGoReference) "-trimpath");
+
 
     # If not set to an explicit value, set the buildid empty for reproducibility.
     ldflags = ldflags ++ lib.optional (!lib.any (lib.hasPrefix "-buildid=") ldflags) "-buildid=";
@@ -197,7 +209,7 @@ in
       # currently pie is only enabled by default in pkgsMusl
       # this will respect the `hardening{Disable,Enable}` flags if set
       if [[ $NIX_HARDENING_ENABLE =~ "pie" ]]; then
-        export GOFLAGS="-buildmode=pie $GOFLAGS"
+        prependToVar goFlags -buildmode=pie
       fi
 
       runHook postConfigure
@@ -208,6 +220,8 @@ in
         "`-buildid=` is set by default as ldflag by buildGoModule"
     ''
       runHook preBuild
+
+      export GOFLAGS="''${goFlags[*]}"
 
       exclude='\(/_\|examples\|Godeps\|testdata'
       if [[ -n "$excludedPackages" ]]; then
@@ -283,7 +297,8 @@ in
     checkPhase = args.checkPhase or ''
       runHook preCheck
       # We do not set trimpath for tests, in case they reference test assets
-      export GOFLAGS=''${GOFLAGS//-trimpath/}
+      removeAllPrefixedFromVar goFlags -trimpath
+      export GOFLAGS="''${goFlags[*]}"
 
       for pkg in $(getGoDirs test); do
         buildGoDir test "$pkg"
