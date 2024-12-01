@@ -3127,10 +3127,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "sha256-CQioY4HZ+XOCRoDfTgp1QidmJy8DscDknbfnnCPbETU=";
+      sha256 = "0428ady49qssmnmwnafzrjvyba8mzbridsgblv7c7kmd0vqgfn99";
       type = "gem";
     };
-    version = "3.2.8";
+    version = "3.3.0";
   };
   rmagick = {
     dependencies = ["observer" "pkg-config"];
