@@ -21,6 +21,8 @@ buildPythonPackage rec {
     hash = "sha256-6+czVEcPi2Bh1flhse5QcW1Uly7ylfslPj68OT1bNss=";
   };
 
+  pythonRelaxDeps = [ "ollama" ];
+
   build-system = [ poetry-core ];
 
   dependencies = [
