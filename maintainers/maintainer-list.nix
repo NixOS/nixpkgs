@@ -23183,6 +23183,12 @@
     githubId = 8597964;
     name = "Anton Shkurenko";
   };
+  Toomoch = {
+    email = "vallsfustearnau@gmail.com";
+    github = "Toomoch";
+    githubId = 14185777;
+    name = "Arnau Valls";
+  };
   toonn = {
     email = "nixpkgs@toonn.io";
     matrix = "@toonn:matrix.org";
