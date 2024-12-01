@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-llms-openai";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_llms_openai";
     inherit version;
-    hash = "sha256-Uav9wN9sBS3aU4FPsz63ryRcgZgsApcs4n4pLT1CeD0=";
+    hash = "sha256-ikQ6Vk59EneanwMMuC/jJDgD4hfXJBB2SsEW3UNVT+U=";
   };
 
   pythonRemoveDeps = [
