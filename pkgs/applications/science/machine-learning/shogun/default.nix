@@ -62,6 +62,7 @@ let
       url = "https://github.com/Reactive-Extensions/RxCpp/archive/v${rxcppVersion}.tar.gz";
       sha256 = "sha256-UOc5WrG8KgAA3xJsaSCjbdPE7gSnFJay9MEK31DWUXg=";
     };
+
     gtest = fetchurl {
       url = "https://github.com/google/googletest/archive/release-${gtestVersion}.tar.gz";
       sha256 = "sha256-WKb0J3yivIVlIis7vVihd2CenEiOinJkk1m6UUUNt9g=";
@@ -69,7 +70,7 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   outputs = [ "out" "dev" "doc" ];
@@ -132,7 +133,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional opencvSupport opencv;
 
   cmakeFlags = let
-    enableIf = cond: if cond then "ON" else "OFF";
     excludeTestsRegex = lib.concatStringsSep "|" [
       # sporadic segfault
       "TrainedModelSerialization"
@@ -144,20 +144,20 @@ stdenv.mkDerivation rec {
       "modelselection_grid_search"
     ];
   in [
-    "-DBUILD_META_EXAMPLES=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_ARPACK=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_ARPREC=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_CPLEX=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_Mosek=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_TFLogger=ON"
-    "-DCMAKE_DISABLE_FIND_PACKAGE_ViennaCL=ON"
-    "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;'${excludeTestsRegex}'"
-    "-DENABLE_TESTING=${enableIf doCheck}"
-    "-DDISABLE_META_INTEGRATION_TESTS=ON"
-    "-DTRAVIS_DISABLE_META_CPP=ON"
-    "-DINTERFACE_PYTHON=${enableIf pythonSupport}"
-    "-DOpenCV=${enableIf opencvSupport}"
-    "-DUSE_SVMLIGHT=${enableIf withSvmLight}"
+    (lib.cmakeBool "BUILD_META_EXAMPLES" true)
+    (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_ARPACK" true)
+    (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_ARPREC" true)
+    (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_CPLEX" true)
+    (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_Mosek" true)
+    (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_TFLogger" true)
+    (lib.cmakeBool "CMAKE_DISABLE_FIND_PACKAGE_ViennaCL" true)
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'${excludeTestsRegex}'")
+    (lib.cmakeBool "ENABLE_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "DISABLE_META_INTEGRATION_TESTS" true)
+    (lib.cmakeBool "TRAVIS_DISABLE_META_CPP" true)
+    (lib.cmakeBool "INTERFACE_PYTHON" pythonSupport)
+    (lib.cmakeBool "OpenCV" opencvSupport)
+    (lib.cmakeBool "USE_SVMLIGHT" withSvmLight)
   ];
 
   CXXFLAGS = "-faligned-new";
@@ -196,7 +196,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # CMake incorrectly calculates library path from dev prefix
     substituteInPlace $dev/lib/cmake/shogun/ShogunTargets-release.cmake \
-      --replace "\''${_IMPORT_PREFIX}/lib/" "$out/lib/"
+      --replace-fail "\''${_IMPORT_PREFIX}/lib/" "$out/lib/"
   '';
 
   meta = with lib; {
@@ -205,4 +205,4 @@ stdenv.mkDerivation rec {
     license = if withSvmLight then licenses.unfree else licenses.gpl3Plus;
     maintainers = with maintainers; [ edwtjo smancill ];
   };
-}
+})
