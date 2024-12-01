@@ -41,4 +41,4 @@ if [ "$extendcpath" = true ]; then
                                                                                         $(<@clang@/nix-support/libc-cflags))
 fi
 
-exec -a "$0" @unwrapped@/bin/$(basename $0) "$@"
+@out@/bin/$(basename $0).unwrapped "$@"

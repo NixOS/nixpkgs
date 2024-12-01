@@ -15,20 +15,7 @@
 
 let
   clang-tools = stdenv.mkDerivation {
-    # clang-unwrapped extracts headers outside the main derivation, into
-    # clang-unwrapped.lib - this is at odds with clangd's header auto-detection
-    # logic, which assumes it'll have them at <prefix>/lib.
-    #
-    # For simplicity, instead of working around this with the `CPATH` and
-    # `CPLUS_INCLUDE_PATH` envs, let's just reconstruct the directory structure
-    # expected by clangd - this avoids extra logic within the wrapper script.
-    unwrapped = runCommand "clang-unwrapped-with-lib" { } ''
-      mkdir $out
-      mkdir $out/bin
-
-      cp -a ${clang-unwrapped}/bin/clangd $out/bin/clangd
-      ln -s ${clang-unwrapped.lib}/lib $out/lib
-    '';
+    unwrapped = clang-unwrapped;
 
     pname = "clang-tools";
     version = lib.getVersion clang-unwrapped;
@@ -38,33 +25,37 @@ let
     installPhase = ''
       runHook preInstall
 
+      function wrapTool {
+        local tool="$1"
+        local toolName="$2"
+
+        cp $tool $out/bin/$toolName.unwrapped
+        substituteAll ${./wrapper} $out/bin/$toolName
+        chmod +x $out/bin/$toolName
+      }
+
       mkdir -p $out/bin
+      wrapTool ${clang-unwrapped}/bin/clangd clangd
 
       for tool in ${clang-unwrapped}/bin/clang-*; do
-        tool=$(basename "$tool")
+        toolName=$(basename "$tool")
 
         # Compilers have their own derivation, no need to include them here:
-        if [[ $tool == "clang-cl" || $tool == "clang-cpp" ]]; then
+        if [[ $toolName == "clang-cl" || $toolName == "clang-cpp" ]]; then
           continue
         fi
 
         # Clang's derivation produces a lot of binaries, but the tools we are
         # interested in follow the `clang-something` naming convention - except
         # for clang-$version (e.g. clang-13), which is the compiler again:
-        if [[ ! $tool =~ ^clang\-[a-zA-Z_\-]+$ ]]; then
+        if [[ ! $toolName =~ ^clang\-[a-zA-Z_\-]+$ ]]; then
           continue
         fi
 
-        ln -s $out/bin/clangd $out/bin/$tool
+        wrapTool $tool $toolName
       done
 
-      if [[ -z "$(ls -A $out/bin)" ]]; then
-        echo "Found no binaries - maybe their location or naming convention changed?"
-        exit 1
-      fi
-
-      substituteAll ${./wrapper} $out/bin/clangd
-      chmod +x $out/bin/clangd
+      ln -s ${clang-unwrapped.lib}/lib $out/lib
 
       runHook postInstall
     '';
