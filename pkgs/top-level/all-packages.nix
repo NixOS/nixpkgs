@@ -36520,7 +36520,7 @@ with pkgs;
 
   kicadAddons = recurseIntoAttrs (callPackage ../applications/science/electronics/kicad/addons {});
 
-  librepcb = libsForQt5.callPackage ../applications/science/electronics/librepcb { };
+  librepcb = qt6Packages.callPackage ../applications/science/electronics/librepcb { };
 
   ngspice = libngspice.override {
     withNgshared = false;
