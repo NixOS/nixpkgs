@@ -8,6 +8,18 @@ let
   opt = options.networking.wireguard;
 
   kernel = config.boot.kernelPackages;
+  modulePackages = {
+    wireguard = optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
+    amneziawg = [ kernel.amneziawg ];
+  }.${cfg.type};
+  wgTools = {
+    wireguard = pkgs.wireguard-tools;
+    amneziawg = pkgs.amneziawg-tools;
+  }.${cfg.type};
+  wgBin = {
+    wireguard = "wg";
+    amneziawg = "awg";
+  }.${cfg.type};
 
   # interface options
 
@@ -182,6 +194,21 @@ let
           Set the metric of routes related to this Wireguard interface.
         '';
       };
+
+      extraOptions = mkOption {
+        type = with types; attrsOf (oneOf [ str int ]);
+        default = { };
+        example = {
+          jc = 5;
+          jmin = 10;
+          jmax = 42;
+          s1 = 60;
+          s2 = 90;
+        };
+        description = ''
+          Extra options to add.
+        '';
+      };
     };
 
   };
@@ -309,7 +336,6 @@ let
         NAT, the interface might benefit from having a persistent keepalive
         interval of 25 seconds; however, most users will not need this.'';
       };
-
     };
 
   };
@@ -322,7 +348,7 @@ let
         wantedBy = [ "wireguard-${name}.service" ];
         requiredBy = [ "wireguard-${name}.service" ];
         before = [ "wireguard-${name}.service" ];
-        path = with pkgs; [ wireguard-tools ];
+        path = [ wgTools ];
 
         serviceConfig = {
           Type = "oneshot";
@@ -338,7 +364,7 @@ let
 
           if [ ! -f "${values.privateKeyFile}" ]; then
             # Write private key file with atomically-correct permissions.
-            (set -e; umask 077; wg genkey > "${values.privateKeyFile}")
+            (set -e; umask 077; ${wgBin} genkey > "${values.privateKeyFile}")
           fi
         '';
       };
@@ -358,7 +384,7 @@ let
       src = interfaceCfg.socketNamespace;
       dst = interfaceCfg.interfaceNamespace;
       ip = nsWrap "ip" src dst;
-      wg = nsWrap "wg" src dst;
+      wg = nsWrap wgBin src dst;
       dynamicRefreshEnabled = peer.dynamicEndpointRefreshSeconds != 0;
       # We generate a different name (a `-refresh` suffix) when `dynamicEndpointRefreshSeconds`
       # to avoid that the same service switches `Type` (`oneshot` vs `simple`),
@@ -374,7 +400,7 @@ let
         wantedBy = [ "wireguard-${interfaceName}.service" ];
         environment.DEVICE = interfaceName;
         environment.WG_ENDPOINT_RESOLUTION_RETRIES = "infinity";
-        path = with pkgs; [ iproute2 wireguard-tools ];
+        path = [ pkgs.iproute2 wgTools ];
 
         serviceConfig =
           if !dynamicRefreshEnabled
@@ -463,7 +489,7 @@ let
         dst = values.interfaceNamespace;
         ipPreMove  = nsWrap "ip" src null;
         ipPostMove = nsWrap "ip" src dst;
-        wg = nsWrap "wg" src dst;
+        wg = nsWrap wgBin src dst;
         ns = if dst == "init" then "1" else dst;
 
     in
@@ -474,7 +500,7 @@ let
         wants = [ "network.target" ];
         before = [ "network.target" ];
         environment.DEVICE = name;
-        path = with pkgs; [ kmod iproute2 wireguard-tools ];
+        path = [ pkgs.kmod pkgs.iproute2 wgTools ];
 
         serviceConfig = {
           Type = "oneshot";
@@ -482,10 +508,10 @@ let
         };
 
         script = concatStringsSep "\n" (
-          optional (!config.boot.isContainer) "modprobe wireguard || true"
+          optional (!config.boot.isContainer) "modprobe ${cfg.type} || true"
           ++ [
             values.preSetup
-            ''${ipPreMove} link add dev "${name}" type wireguard''
+            ''${ipPreMove} link add dev "${name}" type ${cfg.type}''
           ]
           ++ optional (values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace) ''${ipPreMove} link set "${name}" netns "${ns}"''
           ++ optional (values.mtu != null) ''${ipPostMove} link set "${name}" mtu ${toString values.mtu}''
@@ -497,6 +523,7 @@ let
             [ ''${wg} set "${name}" private-key "${privKey}"'' ]
             ++ optional (values.listenPort != null) ''listen-port "${toString values.listenPort}"''
             ++ optional (values.fwMark != null) ''fwmark "${values.fwMark}"''
+            ++ mapAttrsToList (k: v: ''${k} "${toString v}"'') values.extraOptions
             ))
             ''${ipPostMove} link set up dev "${name}"''
             values.postSetup
@@ -539,6 +566,16 @@ in
         default = cfg.interfaces != {};
         defaultText = literalExpression "config.${opt.interfaces} != { }";
         example = true;
+      };
+
+      type = mkOption {
+        example = "amneziawg";
+        default = "wireguard";
+        type = types.enum ["wireguard" "amneziawg"];
+        description = ''
+          The type of the interface. AmneziaWG is a censor-resistant fork of WireGuard.
+          You should reboot system to make amneziawg kernel module load if you use it.
+        '';
       };
 
       interfaces = mkOption {
@@ -593,9 +630,9 @@ in
           message = "networking.wireguard.interfaces.${interfaceName} peer «${peer.publicKey}» has both presharedKey and presharedKeyFile set, but only one can be used.";
         }) all_peers;
 
-    boot.extraModulePackages = optional (versionOlder kernel.kernel.version "5.6") kernel.wireguard;
-    boot.kernelModules = [ "wireguard" ];
-    environment.systemPackages = [ pkgs.wireguard-tools ];
+    boot.extraModulePackages = modulePackages;
+    boot.kernelModules = [ cfg.type ];
+    environment.systemPackages = [ wgTools ];
 
     systemd.services =
       (mapAttrs' generateInterfaceUnit cfg.interfaces)
@@ -606,5 +643,4 @@ in
       systemd.targets = mapAttrs' generateInterfaceTarget cfg.interfaces;
     }
   );
-
 }

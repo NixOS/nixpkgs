@@ -10,9 +10,11 @@ with pkgs.lib;
 let
   tests = let callTest = p: args: import p ({ inherit system pkgs; } // args); in {
     basic = callTest ./basic.nix;
+    basic-amneziawg = callTest ./basic-amneziawg.nix;
     namespaces = callTest ./namespaces.nix;
     wg-quick = callTest ./wg-quick.nix;
     wg-quick-nftables = args: callTest ./wg-quick.nix ({ nftables = true; } // args);
+    wg-quick-amneziawg = callTest ./wg-quick-amneziawg.nix;
     generated = callTest ./generated.nix;
   };
 in
