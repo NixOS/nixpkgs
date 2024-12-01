@@ -32,7 +32,7 @@ appimageTools.wrapType2 {
     changelog = "https://chatboxai.app/en/help-center/changelog";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = [ ];
+    maintainers = with maintainers; [ c31io ];
     mainProgram = "chatbox";
 
     # Help porting to other platforms :)
