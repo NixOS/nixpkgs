@@ -10,6 +10,7 @@
   libSM,
   imagemagick,
   darwin,
+  wrapGAppsHook3,
 }:
 
 let
@@ -27,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    wrapGAppsHook3
   ];
 
   buildInputs = [
