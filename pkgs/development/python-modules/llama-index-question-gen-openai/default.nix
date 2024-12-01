@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-question-gen-openai";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_question_gen_openai";
     inherit version;
-    hash = "sha256-Pd4c7L1lEABjnCADHX6iMzQnaquxgcrED/Qk814QRl4=";
+    hash = "sha256-79O0aCMoCOnTR0ZwquqwDkG5D3X1LQyb+/ESB+CWPWI=";
   };
 
   build-system = [ poetry-core ];
