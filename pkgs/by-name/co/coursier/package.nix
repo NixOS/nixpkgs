@@ -8,11 +8,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "coursier";
-  version = "2.1.14";
+  version = "2.1.19";
 
   src = fetchurl {
     url = "https://github.com/coursier/coursier/releases/download/v${version}/coursier";
-    hash = "sha256-yAWU0ruaNAlYTPujPOjmoXgH0iVmYnZeIqn3+fN2P60=";
+    hash = "sha256-E6LEi2m/BMCT9T5UYzMbIcoj42MKP2OIc27XGDMUI7w=";
   };
 
   dontUnpack = true;
