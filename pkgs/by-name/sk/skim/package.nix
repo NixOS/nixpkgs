@@ -6,6 +6,8 @@
   nix-update-script,
   runtimeShell,
   rustPlatform,
+  skim,
+  testers,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -56,6 +58,7 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = lib.optional stdenv.hostPlatform.isAarch64 "--all-targets";
 
   passthru = {
+    tests.version = testers.testVersion { package = skim; };
     updateScript = nix-update-script { };
   };
 
