@@ -26,7 +26,9 @@ rec {
     ];
   };
 
-  extract = args@{ name ? "${args.pname}-${args.version}", postExtract ? "", src, ... }: pkgs.runCommand "${name}-extracted" {
+  extract = args@{ pname, version, name ? null, postExtract ? "", src, ... }:
+    assert lib.assertMsg (name == null) "The `name` argument is deprecated. Use `pname` and `version` instead to construct the name.";
+    pkgs.runCommand "${pname}-${version}-extracted" {
       buildInputs = [ appimage-exec ];
     } ''
       appimage-exec.sh -x $out ${src}
@@ -58,7 +60,7 @@ rec {
   wrapType2 = args@{ src, extraPkgs ? pkgs: [ ], ... }: wrapAppImage
     (args // {
       inherit extraPkgs;
-      src = extract (lib.filterAttrs (key: value: builtins.elem key [ "name" "pname" "version" "src" ]) args);
+      src = extract (lib.filterAttrs (key: value: builtins.elem key [ "pname" "version" "src" ]) args);
 
       # passthru src to make nix-update work
       # hack to keep the origin position (unsafeGetAttrPos)
