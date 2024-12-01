@@ -42,6 +42,14 @@ stdenv.mkDerivation rec {
     unixtools.getopt
   ];
 
+  strictDeps = true;
+
+  configureFlags = [
+    # configure only looks in $PATH by default,
+    # which does not include buildInputs if strictDeps is true
+    "--with-perl=${lib.getExe perl}"
+  ];
+
   postInstall = ''
     wrapProgram $out/bin/quilt --prefix PATH : ${lib.makeBinPath buildInputs}
   '';
