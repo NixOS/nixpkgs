@@ -9,7 +9,6 @@
 mkDerivation rec {
   pname = "soulseekqt";
   version = "2018-1-30";
-  name="${pname}-${version}";
 
   src = fetchzip {
       url = "https://www.slsknet.org/SoulseekQt/Linux/SoulseekQt-${version}-64bit-appimage.tgz";
@@ -17,7 +16,7 @@ mkDerivation rec {
   };
 
   appextracted = appimageTools.extractType2 {
-    inherit name;
+    inherit pname version;
     src="${src}/SoulseekQt-2018-1-30-64bit.AppImage";
   };
 

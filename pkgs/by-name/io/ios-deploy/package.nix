@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, darwin
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  testers,
 }:
 
 let
@@ -18,10 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-TVGC+f+1ow3b93CK3PhIL70le5SZxxb2ug5OkIg8XCA=";
   };
-
-  buildInputs = [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
 
   buildPhase = ''
     runHook preBuild

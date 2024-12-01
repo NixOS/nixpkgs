@@ -18,17 +18,15 @@ let
   appimageContents = appimageTools.extract {
     inherit pname version src;
     postExtract = ''
-      substituteInPlace $out/${name}.desktop --replace 'Exec=AppRun' 'Exec=cables'
+      substituteInPlace $out/${pname}-${version}.desktop --replace 'Exec=AppRun' 'Exec=cables'
     '';
   };
 
 in
 appimageTools.wrapType2 {
-  inherit name src;
+  inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/cables
-
     install -m 444 -D ${appimageContents}/${name}.desktop $out/share/applications/cables.desktop
     install -m 444 -D ${appimageContents}/${name}.png $out/share/icons/hicolor/512x512/apps/cables.png
   '';
