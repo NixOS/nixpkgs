@@ -1,0 +1,10 @@
+--- a/src/doc2dash/docset_builder.cr	2024-04-20 10:45:32.000673168 +0300
++++ b/src/doc2dash/docset_builder.cr	2024-04-20 10:45:56.072895349 +0300
+@@ -44,6 +44,7 @@
+       real_dest = @html_dest.join(dest || source)
+       Dir.mkdir_p(Path.new(real_dest).dirname)
+       File.copy(original, real_dest)
++      File.chmod(real_dest, 0o600)
+       dest || source
+     end
+ 

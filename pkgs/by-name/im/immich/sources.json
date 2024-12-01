@@ -1,0 +1,22 @@
+{
+  "version": "1.121.0",
+  "hash": "sha256-3Rk/0LtbRIrtnPBhG6TzYFcPlZqlkZoyO01jIL4gzC8=",
+  "components": {
+    "cli": {
+      "npmDepsHash": "sha256-LsStgf6iJMpqCYZoZoP7cNnHbuzawTQ02wvJ5q/2RyU=",
+      "version": "2.2.32"
+    },
+    "server": {
+      "npmDepsHash": "sha256-9xyl+8YItzHSHcgUi1X9MwNtmZpdDGtg4DUa2YZv08I=",
+      "version": "1.121.0"
+    },
+    "web": {
+      "npmDepsHash": "sha256-vHmiNWVLl4len6SnJ/NmiRVLLc4uUUWF/25LiOMnvf0=",
+      "version": "1.121.0"
+    },
+    "open-api/typescript-sdk": {
+      "npmDepsHash": "sha256-jiwUoWrMH/mDO+GPi13Q+Z87NAtDx95h6igI0NuPhnc=",
+      "version": "1.121.0"
+    }
+  }
+}

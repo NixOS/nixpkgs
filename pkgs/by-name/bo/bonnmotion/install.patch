@@ -1,0 +1,75 @@
+diff --git a/install b/install
+index 95afa2c..70c5fca 100755
+--- a/install
++++ b/install
+@@ -1,4 +1,4 @@
+-#!/bin/bash
++#!@bash@/bin/bash
+ 
+ echo "BonnMotion - a mobility scenario generation and analysis tool"
+ echo "Copyright (C) 2002-2012 University of Bonn"
+@@ -19,28 +19,11 @@ echo "along with this program; if not, write to the Free Software"
+ echo "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
+ echo
+ 
+-OS=`uname -s | tr A-Z a-z | sed -e s/_.\*//`
+-
+ PACKAGE=edu.bonn.cs.iv.bonnmotion
+-JAVAPATH=`which java 2> /dev/null`
+-if [ ! "$JAVAPATH" = "" ]
+-then
+-	JAVAPATH=`dirname ${JAVAPATH}`
+-fi
+-echo -n Please enter your Java binary path \[$JAVAPATH\]:\ 
+-read KBDENTRY
+-if [ ! "$KBDENTRY" = "" ]
+-then
+-	JAVAPATH=$KBDENTRY
+-fi
++JAVAPATH="@jre@/bin"
+ if [ -x "${JAVAPATH}/java" ]
+ then
+-	cd `dirname $0`
+-	BONNMOTION=`pwd`
+-
+-	cd "${JAVAPATH}"
+-	JAVAPATH=`pwd`
+-	cd "${BONNMOTION}"
++  BONNMOTION="$(realpath .)"
+ 
+ 	CLASSPATH="${BONNMOTION}/classes"
+ 	DOCPATH="${BONNMOTION}/javadoc"
+@@ -52,14 +35,7 @@ then
+ 	then
+ 		mkdir "${DOCPATH}"
+ 	fi
+-	if [ $OS = "cygwin" ]
+-	then
+-		cd "${CLASSPATH}"
+-		CLASSPATH=`cmd.exe /c cd`
+-		cd "${DOCPATH}"
+-		DOCPATH=`cmd.exe /c cd`
+-	fi
+-	
++
+ 	for l in $BONNMOTION/lib/*.jar
+ 	do
+ 		LIBRARYPATH=$LIBRARYPATH:$l
+@@ -69,7 +45,7 @@ then
+ 	APPS=`ls`
+ 	cd "${BONNMOTION}/bin"
+ 
+-	echo \#\!/bin/bash > .head
++	echo \#\!@bash@/bin/bash > .head
+ 	echo >> .head
+ 	echo BONNMOTION=\"$BONNMOTION\" >> .head
+ 	echo PACKAGE=\"$PACKAGE\" >> .head
+@@ -103,8 +79,6 @@ then
+ 	fi
+ 	echo "done."
+ 	echo
+-	echo "$ ./bin/bm -h"
+-	./bm
+ else
+ 	echo No executable \"$JAVAPATH/java\", aborting.
+ fi
