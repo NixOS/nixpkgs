@@ -24,7 +24,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "meli";
-  version = "0.8.8";
+  version = "0.8.9";
 
   src = fetchzip {
     urls = [
@@ -32,20 +32,10 @@ rustPlatform.buildRustPackage rec {
       "https://codeberg.org/meli/meli/archive/v${version}.tar.gz"
       "https://github.com/meli/meli/archive/refs/tags/v${version}.tar.gz"
     ];
-    hash = "sha256-XOUOIlFKxI7eL7KEEfLyYTsNqc2lc9sJNt9RqPavuW8=";
+    hash = "sha256-zFsKL9F6PGoYjxFfFs2Bkdm2ZCeJtnTygkgCL7AXl9o=";
   };
 
-    cargoPatches = [
-    (fetchpatch {
-      # https://git.meli-email.org/meli/meli/issues/522
-      # https://git.meli-email.org/meli/meli/issues/524
-      name = "fix test_fd_locks() on platforms without OFD support";
-      url = "https://git.meli-email.org/meli/meli/commit/b7e215f9c238f8364e2a1f0d10ac668d0cfe91ad.patch";
-      hash = "sha256-227vnFuxhQ0Hh5A/J8y7Ei89AxbNXReMn3c3EVRN4Tc=";
-    })
-  ];
-
-  cargoHash = "sha256-SMvpmWEHUWo0snR/DiUmfZJnXy1QtVOowO8CErM9Xjg=";
+  cargoHash = "sha256-us/jlsRbg0Y6FwznbRZeqK1TwwgL1uBwBdyneyvdI6Q=";
 
   # Needed to get openssl-sys to use pkg-config
   OPENSSL_NO_VENDOR=1;

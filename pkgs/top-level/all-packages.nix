@@ -1926,8 +1926,8 @@ with pkgs;
   lukesmithxyz-bible-kjv = callPackage ../applications/misc/kjv/lukesmithxyz-kjv.nix { };
 
   plausible = callPackage ../servers/web-apps/plausible {
-    elixir = elixir_1_14;
-    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_14; });
+    elixir = elixir_1_17;
+    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_17; });
   };
 
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace { };
