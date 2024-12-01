@@ -343,6 +343,25 @@ utils = rec {
     in
       filter (x: !(elem (getName x) namesToRemove)) packages;
 
+  /* Returns false if a package with the same name as the `package` is present in `packagesToDisable`.
+
+     Type:
+       disablePackageByName :: package -> [package] -> bool
+
+     Example:
+       disablePackageByName file-roller [ file-roller totem ]
+       => false
+
+     Example:
+       disablePackageByName nautilus [ file-roller totem ]
+       => true
+  */
+  disablePackageByName = package: packagesToDisable:
+    let
+      namesToDisable = map getName packagesToDisable;
+    in
+      !elem (getName package) namesToDisable;
+
   systemdUtils = {
     lib = import ./systemd-lib.nix { inherit lib config pkgs utils; };
     unitOptions = import ./systemd-unit-options.nix { inherit lib systemdUtils; };
