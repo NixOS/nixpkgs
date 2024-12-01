@@ -1,13 +1,14 @@
-{ fetchFromGitHub
-, gst_all_1
-, lib
-, libX11
-, pipewire
-, pkg-config
-, pulseaudio
-, qt6
-, stdenv
-, wayland
+{
+  fetchFromGitHub,
+  gst_all_1,
+  lib,
+  libX11,
+  pipewire,
+  pkg-config,
+  pulseaudio,
+  qt6,
+  stdenv,
+  wayland,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,12 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "src/vokoscreenNG.pro" ];
 
-  nativeBuildInputs = [ qt6.qttools pkg-config qt6.qmake qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qt6.qttools
+    pkg-config
+    qt6.qmake
+    qt6.wrapQtAppsHook
+  ];
   buildInputs = [
     gst_all_1.gstreamer
     libX11
@@ -60,7 +66,10 @@ stdenv.mkDerivation rec {
     description = "User friendly Open Source screencaster for Linux and Windows";
     license = licenses.gpl2Plus;
     homepage = "https://github.com/vkohaupt/vokoscreenNG";
-    maintainers = with maintainers; [ shamilton dietmarw ];
+    maintainers = with maintainers; [
+      shamilton
+      dietmarw
+    ];
     platforms = platforms.linux;
     mainProgram = "vokoscreenNG";
   };
