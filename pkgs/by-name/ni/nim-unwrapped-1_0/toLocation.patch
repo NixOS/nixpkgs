@@ -1,0 +1,16 @@
+diff --git a/lib/std/private/miscdollars.nim b/lib/std/private/miscdollars.nim
+index 840fedf54..6c3436308 100644
+--- a/lib/std/private/miscdollars.nim
++++ b/lib/std/private/miscdollars.nim
+@@ -6,9 +6,8 @@ template toLocation*(result: var string, file: string | cstring, line: int, col:
+   # it can be done in a single place.
+   result.add file
+   if line > 0:
+-    result.add "("
++    result.add ":"
+     addInt(result, line)
+     if col > 0:
+-      result.add ", "
++      result.add ":"
+       addInt(result, col)
+-    result.add ")"
