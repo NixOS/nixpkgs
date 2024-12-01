@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildGoModule,
   fetchFromGitea,
@@ -45,7 +46,9 @@ buildGoModule rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.sqlite3 = nixosTests.forgejo.sqlite3;
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      sqlite3 = nixosTests.forgejo.sqlite3;
+    };
   };
 
   meta = with lib; {
