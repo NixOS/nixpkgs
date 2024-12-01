@@ -385,6 +385,25 @@ appendToVar() {
     fi
 }
 
+removeAllPrefixedFromVar() {
+    local varName="$1"
+    local -n nameref="$varName"
+    shift
+    if ! [[ -z "${nameref[*]-}" ]] || (("$#" == 0)); then
+        return
+    fi
+    if [[ "$(declare -p "$varName")" =~ "declare -a" ]]; then
+        for prefix in "$@"; do
+            nameref=("${nameref[@]/$prefix}")
+        done
+    else
+        local _arr=()
+        read -ra _arr <<<"$nameref"
+        removeAllPrefixedFromVar _arr "$@"
+        nameref="${_arr[*]}"
+    fi
+}
+
 # Accumulate flags from the named variables $2+ into the indexed array $1.
 #
 # Arrays are simply concatenated, strings are split on whitespace.
