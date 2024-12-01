@@ -267,3 +267,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
           NUMBER: ${{ github.event.number }}
+
+      - name: Adding comments
+        if: ${{ github.event_name == 'pull_request_target' }}
+        run: |
+          # Add the step summary as a comment
+          gh pr comment "$NUMBER" --body-file comparison/step-summary.md
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.number }}
