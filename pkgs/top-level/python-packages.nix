@@ -2257,6 +2257,8 @@ self: super: with self; {
 
   chispa = callPackage ../development/python-modules/chispa { };
 
+  chonkie = callPackage ../development/python-modules/chonkie { };
+
   chroma-hnswlib = callPackage ../development/python-modules/chroma-hnswlib { };
 
   chromadb = callPackage ../development/python-modules/chromadb { };
