@@ -18551,6 +18551,18 @@ final: prev:
     meta.homepage = "https://github.com/mattn/webapi-vim/";
   };
 
+  wezterm-nvim = buildVimPlugin {
+    pname = "wezterm.nvim";
+    version = "2024-09-26";
+    src = fetchFromGitHub {
+      owner = "willothy";
+      repo = "wezterm.nvim";
+      rev = "032c33b621b96cc7228955b4352b48141c482098";
+      sha256 = "16a3x84yh6p9i4h3fic59q29cbb6cwmqfx3051g9lxhh3r9dk0xb";
+    };
+    meta.homepage = "https://github.com/willothy/wezterm.nvim/";
+  };
+
   wgsl-vim = buildVimPlugin {
     pname = "wgsl.vim";
     version = "2023-04-29";
