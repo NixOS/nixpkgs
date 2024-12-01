@@ -10,7 +10,7 @@
 , avahi
 , gnutls
 , libuuid
-, libsoup
+, libsoup_2_4
 , gtk3
 , gnome
 }:
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     avahi
     gnutls
-    libsoup
+    libsoup_2_4
   ];
 
   enableParallelBuilding = true;

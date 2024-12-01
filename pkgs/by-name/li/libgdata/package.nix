@@ -16,7 +16,7 @@
 , p11-kit
 , openssl
 , uhttpmock
-, libsoup
+, libsoup_2_4
 }:
 
 stdenv.mkDerivation rec {
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     glib
-    libsoup
+    libsoup_2_4
     libxml2
     gnome-online-accounts
     json-glib

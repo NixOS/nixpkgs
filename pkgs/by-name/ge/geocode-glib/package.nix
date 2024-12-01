@@ -10,7 +10,7 @@
 , docbook-xsl-nons
 , gobject-introspection
 , gnome
-, libsoup
+, libsoup_2_4
 , json-glib
 , glib
 , nixosTests
@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libsoup
+    libsoup_2_4
     json-glib
   ];
 
   mesonFlags = [
-    "-Dsoup2=${lib.boolToString (lib.versionOlder libsoup.version "2.99")}"
+    "-Dsoup2=${lib.boolToString (lib.versionOlder libsoup_2_4.version "2.99")}"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 

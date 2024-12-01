@@ -44,7 +44,7 @@
 , isocodes
 , libpsl
 , libepoxy
-, libsoup
+, libsoup_2_4
 , exiv2
 , libXtst
 , libthai
@@ -138,7 +138,7 @@ stdenv.mkDerivation {
     libsecret
     libselinux
     libsepol
-    libsoup
+    libsoup_2_4
     libsysprof-capture
     libthai
     libwebp

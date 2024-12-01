@@ -5,7 +5,7 @@
 , fetchYarnDeps
 , freetype
 , gtk3
-, libsoup
+, libsoup_2_4
 , stdenvNoCC
 , yarnConfigHook
 , yarnBuildHook
@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage {
   '';
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ dbus openssl freetype libsoup gtk3 webkitgtk_4_0 ];
+  buildInputs = [ dbus openssl freetype libsoup_2_4 gtk3 webkitgtk_4_0 ];
 
   checkFlags = [
     # tries to mutate the parent directory

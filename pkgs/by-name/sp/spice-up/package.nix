@@ -14,7 +14,7 @@
 , libevdev
 , libgee
 , libgudev
-, libsoup
+, libsoup_2_4
 , pantheon
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libevdev
     libgee
     libgudev
-    libsoup
+    libsoup_2_4
     pantheon.granite
   ];
 

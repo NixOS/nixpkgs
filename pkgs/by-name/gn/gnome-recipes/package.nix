@@ -11,7 +11,7 @@
 , wrapGAppsHook3
 , gtk3
 , glib
-, libsoup
+, libsoup_2_4
 , gnome-online-accounts
 , librest
 , json-glib
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     glib
-    libsoup
+    libsoup_2_4
     gnome-online-accounts
     librest
     json-glib

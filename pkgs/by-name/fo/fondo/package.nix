@@ -13,7 +13,7 @@
 , gtk3
 , libgee
 , libhandy
-, libsoup
+, libsoup_2_4
 , json-glib
 , glib-networking
 , desktop-file-utils
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     libhandy
-    libsoup
+    libsoup_2_4
     pantheon.granite
   ];
 

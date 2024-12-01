@@ -6,7 +6,7 @@
 , openssl
 , pkg-config
 , freetype
-, libsoup
+, libsoup_2_4
 , gtk3
 , webkitgtk_4_0
 , perl
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     dbus
     openssl.out
     freetype
-    libsoup
+    libsoup_2_4
     gtk3
     webkitgtk_4_0
   ];

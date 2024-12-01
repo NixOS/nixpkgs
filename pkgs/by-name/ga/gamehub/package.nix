@@ -10,7 +10,7 @@
 , gtk3
 , glib-networking
 , libgee
-, libsoup
+, libsoup_2_4
 , json-glib
 , sqlite
 , webkitgtk_4_0
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     libmanette
-    libsoup
+    libsoup_2_4
     libXtst
     sqlite
     webkitgtk_4_0

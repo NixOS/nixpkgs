@@ -9,7 +9,7 @@
 , vala
 , gi-docgen
 , python3
-, libsoup
+, libsoup_2_4
 , glib
 , gnome
 , gssdp-tools
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libsoup
+    libsoup_2_4
   ];
 
   propagatedBuildInputs = [

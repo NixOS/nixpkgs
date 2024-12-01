@@ -12,7 +12,7 @@
 , systemd
 , xz
 , e2fsprogs
-, libsoup
+, libsoup_2_4
 , glib-networking
 , wrapGAppsNoGuiHook
 , gpgme
@@ -72,7 +72,7 @@ in stdenv.mkDerivation rec {
     glib
     systemd
     e2fsprogs
-    libsoup
+    libsoup_2_4
     glib-networking
     gpgme
     fuse3

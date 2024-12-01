@@ -42,7 +42,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   pangomm = throw "gnome2.pangomm has been removed, please use top-level pangomm";
   gtkmm2 = throw "gnome2.gtkmm2 has been removed, please use top-level gtkmm2";
   libcanberra-gtk2 = throw "gnome2.libcanberra-gtk2 has been removed, please use top-level libcanberra-gtk2";
-  libsoup = throw "gnome2.libsoup has been removed, please use top-level libsoup";
+  libsoup = throw "gnome2.libsoup has been removed, please use top-level libsoup_2_4";
   libwnck2 = throw "gnome2.libwnck2 has been removed, please use top-level libwnck2";
   gtk-doc = throw "gnome2.gtk-doc has been removed, please use top-level gtk-doc";
   gnome-doc-utils = throw "gnome2.gnome-doc-utils has been removed, please use top-level gnome-doc-utils";

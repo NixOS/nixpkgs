@@ -27,7 +27,7 @@
 , openresolv
 , libndp
 , newt
-, libsoup
+, libsoup_2_4
 , ethtool
 , gnused
 , iputils
@@ -152,7 +152,7 @@ stdenv.mkDerivation rec {
     modemmanager
     readline
     newt
-    libsoup
+    libsoup_2_4
     jansson
     dbus # used to get directory paths with pkg-config during configuration
   ];

@@ -16,7 +16,7 @@
 , gupnp-dlna
 , gst_all_1
 , libgee
-, libsoup
+, libsoup_2_4
 , gtk3
 , libmediaart
 , sqlite
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     gupnp-av
     gupnp-dlna
     libgee
-    libsoup
+    libsoup_2_4
     gtk3
     libmediaart
     sqlite

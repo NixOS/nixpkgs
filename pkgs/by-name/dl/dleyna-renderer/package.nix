@@ -11,7 +11,7 @@
 , gupnp
 , gupnp-av
 , gupnp-dlna
-, libsoup
+, libsoup_2_4
 , makeWrapper
 , docbook-xsl-nons
 , libxslt
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     gupnp
     gupnp-av
     gupnp-dlna
-    libsoup
+    libsoup_2_4
   ];
 
   preFixup = ''

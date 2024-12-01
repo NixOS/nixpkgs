@@ -12,7 +12,7 @@
 , libtiff
 , gst_all_1
 , libraw
-, libsoup
+, libsoup_2_4
 , libsecret
 , glib
 , gtk3
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     libraw
     librsvg
     libsecret
-    libsoup
+    libsoup_2_4
     libtiff
     libwebp
     libX11

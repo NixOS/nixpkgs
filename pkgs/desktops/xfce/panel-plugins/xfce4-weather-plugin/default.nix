@@ -7,7 +7,7 @@
 , gtk3
 , json_c
 , libxml2
-, libsoup
+, libsoup_2_4
 , upower
 , libxfce4ui
 , libxfce4util
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     gtk3
     json_c
     libxml2
-    libsoup
+    libsoup_2_4
     upower
     libxfce4ui
     libxfce4util

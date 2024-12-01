@@ -6,7 +6,7 @@
 , makeDesktopItem
 , pkg-config
 , gtk3
-, libsoup
+, libsoup_2_4
 , webkitgtk_4_0
 }:
 
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     gtk3
-    libsoup
+    libsoup_2_4
     webkitgtk_4_0
   ];
 

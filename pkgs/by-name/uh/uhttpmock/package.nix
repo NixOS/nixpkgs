@@ -10,7 +10,7 @@
 , gtk-doc
 , docbook-xsl-nons
 , glib
-, libsoup
+, libsoup_2_4
 }:
 
 stdenv.mkDerivation rec {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libsoup
+    libsoup_2_4
   ];
 
   meta = with lib; {

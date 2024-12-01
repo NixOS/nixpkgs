@@ -12,7 +12,7 @@
 , gupnp
 , gupnp-av
 , gupnp-dlna
-, libsoup
+, libsoup_2_4
 }:
 
 stdenv.mkDerivation rec {
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     gupnp
     gupnp-av
     gupnp-dlna
-    libsoup
+    libsoup_2_4
   ];
 
   preFixup = ''

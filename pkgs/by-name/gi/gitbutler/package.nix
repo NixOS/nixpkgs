@@ -15,7 +15,7 @@
   jq,
   nodejs,
   pkg-config,
-  libsoup,
+  libsoup_2_4,
   moreutils,
   openssl,
   rust,
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       glib-networking
-      libsoup
+      libsoup_2_4
       webkitgtk_4_0
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
