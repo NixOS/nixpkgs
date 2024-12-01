@@ -64,7 +64,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lotabout/skim";
     changelog = "https://github.com/skim-rs/skim/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dywedir ];
+    maintainers = with lib.maintainers; [
+      dywedir
+      getchoo
+    ];
     mainProgram = "sk";
   };
 }
