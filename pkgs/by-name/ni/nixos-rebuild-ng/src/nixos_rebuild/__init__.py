@@ -229,7 +229,12 @@ def execute(argv: list[str]) -> None:
 
     # Re-exec to a newer version of the script before building to ensure we get
     # the latest fixes
-    if can_run and not args.fast and not os.environ.get("_NIXOS_REBUILD_REEXEC"):
+    if (
+        False  # disabled until we introduce `config.system.build.nixos-rebuild-ng`
+        and can_run
+        and not args.fast
+        and not os.environ.get("_NIXOS_REBUILD_REEXEC")
+    ):
         reexec(argv, args, build_flags, flake_build_flags)
 
     profile = Profile.from_arg(args.profile_name)
