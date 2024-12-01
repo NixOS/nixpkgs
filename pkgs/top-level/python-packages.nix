@@ -8292,6 +8292,8 @@ self: super: with self; {
 
   model-checker = callPackage ../development/python-modules/model-checker { };
 
+  model2vec = callPackage ../development/python-modules/model2vec { };
+
   modelcif = callPackage ../development/python-modules/modelcif { };
 
   modeled = callPackage ../development/python-modules/modeled { };
