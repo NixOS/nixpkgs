@@ -2234,6 +2234,14 @@ in
     nvimRequireCheck = "refactoring";
   };
 
+  remote-nvim-nvim = super.remote-nvim-nvim.overrideAttrs {
+    dependencies = with self; [
+      nui-nvim
+      plenary-nvim
+    ];
+    nvimSkipModule = "repro";
+  };
+
   renamer-nvim = super.renamer-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
   };
