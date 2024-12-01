@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "dxx-rebirth";
-  version = "0.60.0-beta2-unstable-2024-08-11";
+  version = "0.60.0-beta2-unstable-2024-11-16";
 
   src = fetchFromGitHub {
     owner = "dxx-rebirth";
     repo = "dxx-rebirth";
-    rev = "bd3c033bdf1faa4606086dcae0436531fb2e7e5c";
-    hash = "sha256-imNHJ55Wp3YueMsNVvb7Z51EyESZnPdtzAOp2TWfdqc=";
+    rev = "ebe4aceb721894ff614481e97c50df0fd7e3e814";
+    hash = "sha256-b6N/qkydI56bkCPhTJ5SwB8OdLqEFJhK9WPA4ELB1BI=";
   };
 
   nativeBuildInputs = [ pkg-config scons ];
