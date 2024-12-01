@@ -71,8 +71,10 @@ class RunKwargs(TypedDict, total=False):
 def cleanup_ssh() -> None:
     "Close SSH ControlMaster connection."
     for ctrl in TMPDIR_PATH.glob("ssh-*"):
-        subprocess.run(
-            ["ssh", "-o", f"ControlPath={ctrl}", "-O", "exit", "dummyhost"], check=False
+        run_wrapper(
+            ["ssh", "-o", f"ControlPath={ctrl}", "-O", "exit", "dummyhost"],
+            check=False,
+            capture_output=True,
         )
     TMPDIR.cleanup()
 
