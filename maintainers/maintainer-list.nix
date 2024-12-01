@@ -5829,6 +5829,12 @@
     githubId = 129093;
     name = "Desmond O. Chang";
   };
+  dod-101 = {
+    email = "david.thievon@proton.me";
+    github = "DOD-101";
+    githubId = 131907205;
+    name = "David Thievon";
+  };
   domenkozar = {
     email = "domen@dev.si";
     github = "domenkozar";
