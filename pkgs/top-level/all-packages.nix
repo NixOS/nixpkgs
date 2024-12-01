@@ -9105,7 +9105,7 @@ with pkgs;
   geoclue2-with-demo-agent = geoclue2.override { withDemoAgent = true; };
 
   geocode-glib_2 = geocode-glib.override {
-    libsoup = libsoup_3;
+    libsoup_2_4 = libsoup_3;
   };
 
   geoipWithDatabase = makeOverridable (callPackage ../development/libraries/geoip) {
@@ -10006,7 +10006,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon AudioToolbox;
   };
 
-  libsoup = callPackage ../development/libraries/libsoup { };
+  libsoup_2_4 = callPackage ../development/libraries/libsoup { };
 
   libsoup_3 = callPackage ../development/libraries/libsoup/3.x.nix { };
 
@@ -11035,6 +11035,7 @@ with pkgs;
 
   webkitgtk_4_0 = callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzzFull;
+    libsoup = libsoup_2_4;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
     inherit (darwin) apple_sdk;
   };
