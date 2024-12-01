@@ -884,6 +884,13 @@ in
       '';
   });
 
+  dotnet-nvim = super.dotnet-nvim.overrideAttrs {
+    dependencies = with self; [
+      telescope-nvim
+      plenary-nvim
+    ];
+  };
+
   efmls-configs-nvim = super.efmls-configs-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };
@@ -1851,6 +1858,10 @@ in
 
   nvim-fzf-commands = super.nvim-fzf-commands.overrideAttrs {
     dependencies = [ self.nvim-fzf ];
+  };
+
+  nvim-dap-lldb = super.nvim-dap-lldb.overrideAttrs {
+    dependencies = [ self.nvim-dap ];
   };
 
   nvim-dap-python = super.nvim-dap-python.overrideAttrs {

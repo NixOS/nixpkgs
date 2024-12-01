@@ -1,44 +1,51 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, gtk3
-, libX11
-, libXrandr
-, libappindicator
-, libevdev
-, libnotify
-, udev
-, copyDesktopItems
-, makeDesktopItem
-, nixosTests
-, wrapGAppsHook3
-, jq
-, coreutils
-, dotnetCorePackages
+{
+  lib,
+  buildDotnetModule,
+  copyDesktopItems,
+  coreutils,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  gtk3,
+  jq,
+  libappindicator,
+  libevdev,
+  libnotify,
+  libX11,
+  libXrandr,
+  makeDesktopItem,
+  nixosTests,
+  udev,
+  wrapGAppsHook3,
 }:
 
 buildDotnetModule rec {
   pname = "OpenTabletDriver";
-  version = "0.6.4.0";
+  version = "0.6.4.0-unstable-2024-11-25";
 
   src = fetchFromGitHub {
     owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
-    rev = "v${version}";
-    hash = "sha256-zK+feU96JOXjmkTndM9VyUid3z+MZFxJGH+MXaB6kzk=";
+    rev = "8b88b8bdc5144391f10eb61ee77803ba0ee83718"; # 0.6.x branch
+    hash = "sha256-5JKkSqV9owkHgWXfjiyv5QRh86apDCPzpA6qha1i4D4=";
   };
 
-  patches = [
-    ./remove-git-from-generate-rules.patch
+  dotnetInstallFlags = [ "--framework=net8.0" ];
+
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+
+  projectFile = [
+    "OpenTabletDriver.Console"
+    "OpenTabletDriver.Daemon"
+    "OpenTabletDriver.UX.Gtk"
   ];
-
-  dotnetInstallFlags = [ "--framework=net6.0" ];
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  projectFile = [ "OpenTabletDriver.Console" "OpenTabletDriver.Daemon" "OpenTabletDriver.UX.Gtk" ];
   nugetDeps = ./deps.nix;
 
-  executables = [ "OpenTabletDriver.Console" "OpenTabletDriver.Daemon" "OpenTabletDriver.UX.Gtk" ];
+  executables = [
+    "OpenTabletDriver.Console"
+    "OpenTabletDriver.Daemon"
+    "OpenTabletDriver.UX.Gtk"
+  ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -49,11 +56,11 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     gtk3
-    libX11
-    libXrandr
     libappindicator
     libevdev
     libnotify
+    libX11
+    libXrandr
     udev
   ];
 
@@ -84,6 +91,8 @@ buildDotnetModule rec {
 
   preBuild = ''
     patchShebangs generate-rules.sh
+    substituteInPlace generate-rules.sh \
+      --replace-fail '/usr/bin/env rm' '${lib.getExe' coreutils "rm"}'
   '';
 
   postFixup = ''
@@ -94,10 +103,10 @@ buildDotnetModule rec {
 
     install -Dm644 $src/OpenTabletDriver.UX/Assets/otd.png -t $out/share/pixmaps
 
+    # Generate udev rules from source
+    export OTD_CONFIGURATIONS="$src/OpenTabletDriver.Configurations/Configurations"
     mkdir -p $out/lib/udev/rules.d
-    ./generate-rules.sh \
-      | sed 's@/usr/bin/env rm@${lib.getExe' coreutils "rm"}@' \
-      > $out/lib/udev/rules.d/70-opentabletdriver.rules
+    ./generate-rules.sh > $out/lib/udev/rules.d/70-opentabletdriver.rules
   '';
 
   desktopItems = [
@@ -106,7 +115,7 @@ buildDotnetModule rec {
       name = "OpenTabletDriver";
       exec = "otd-gui";
       icon = "otd";
-      comment = meta.description;
+      comment = "Open source, cross-platform, user-mode tablet driver";
       categories = [ "Utility" ];
     })
   ];
@@ -118,12 +127,18 @@ buildDotnetModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source, cross-platform, user-mode tablet driver";
     homepage = "https://github.com/OpenTabletDriver/OpenTabletDriver";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ gepbird thiagokokada ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
+      gepbird
+      thiagokokada
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "otd";
   };
 }

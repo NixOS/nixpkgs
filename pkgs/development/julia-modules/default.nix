@@ -165,21 +165,23 @@ in
 runCommand "julia-${julia.version}-env" {
   nativeBuildInputs = [makeWrapper];
 
-  inherit julia;
-  inherit juliaWrapped;
-  meta = julia.meta;
+  passthru = {
+    inherit julia;
+    inherit juliaWrapped;
+    inherit (julia) pname version meta;
 
-  # Expose the steps we used along the way in case the user wants to use them, for example to build
-  # expressions and build them separately to avoid IFD.
-  inherit dependencies;
-  inherit closureYaml;
-  inherit dependencyUuidToInfoYaml;
-  inherit dependencyUuidToRepoYaml;
-  inherit minimalRegistry;
-  inherit artifactsNix;
-  inherit overridesJson;
-  inherit overridesToml;
-  inherit projectAndDepot;
+    # Expose the steps we used along the way in case the user wants to use them, for example to build
+    # expressions and build them separately to avoid IFD.
+    inherit dependencies;
+    inherit closureYaml;
+    inherit dependencyUuidToInfoYaml;
+    inherit dependencyUuidToRepoYaml;
+    inherit minimalRegistry;
+    inherit artifactsNix;
+    inherit overridesJson;
+    inherit overridesToml;
+    inherit projectAndDepot;
+  };
 } (''
   mkdir -p $out/bin
   makeWrapper ${juliaWrapped}/bin/julia $out/bin/julia \
