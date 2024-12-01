@@ -8,11 +8,11 @@
 let
 
   pname = "golden-cheetah";
-  version = "3.6";
+  version = "3.7-DEV2410";
 
   src = fetchurl {
-    url = "https://github.com/GoldenCheetah/GoldenCheetah/releases/download/v${version}/GoldenCheetah_v${version}_x64.AppImage";
-    hash = "sha256-PMRUDQSQxbECbF9SPOo03t4Xxj1OtYJAPXEMyyy6EVY=";
+    url = "https://github.com/GoldenCheetah/GoldenCheetah/releases/download/v${version}/GoldenCheetah_v${builtins.substring 0 7 version}_x64.AppImage";
+    hash = "sha256-S1YDg7opoYflL/3h+lP1SNwXpJHaN3+iE3waSjWtN6o=";
   };
 
   appimageContents = appimageTools.extract { inherit pname src version; };
@@ -46,6 +46,5 @@ appimageTools.wrapType2 {
     ];
     license = lib.licenses.gpl2Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    knownVulnerabilities = [ "Vendors libwebp vulnerable to CVE-2023-4863" ];
   };
 }
