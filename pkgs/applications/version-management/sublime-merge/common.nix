@@ -152,6 +152,7 @@ stdenv.mkDerivation (rec {
 
   installPhase =
     ''
+      runHook preInstall
       mkdir -p "$out/bin"
       makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
     ''
@@ -171,6 +172,7 @@ stdenv.mkDerivation (rec {
         mkdir -p "$out/share/icons/hicolor/$size/apps"
         ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
       done
+      runHook postInstall
     '';
 
   passthru = {
@@ -205,12 +207,13 @@ stdenv.mkDerivation (rec {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Git client from the makers of Sublime Text";
     homepage = "https://www.sublimemerge.com";
-    maintainers = with maintainers; [ zookatron ];
+    mainProgram = "sublime_merge";
+    maintainers = with lib.maintainers; [ zookatron ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
