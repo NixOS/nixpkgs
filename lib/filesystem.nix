@@ -308,6 +308,7 @@ in
     ```
     packagesFromDirectoryRecursive :: (args :: {
       callPackage :: Path -> {} -> a,
+      newScope? :: AttrSet -> scope,
       directory :: Path,
       recurseIntoDirectory? :: (args -> AttrSet) -> args -> AttrSet,
       ...
@@ -320,6 +321,12 @@ in
     : The function used to convert a Nix file's path into a leaf of the attribute set.
       It is typically the `callPackage` function, taken from either `pkgs` or a new scope corresponding to the `directory`.
 
+    `newScope`
+    : If present, this function is used by the default `recurseIntoDirectory` to generate a new scope.
+      The arguments are updated with the scope's `callPackage` and `newScope` functions, so packages can require
+      anything in their scope, or in an ancestor of their scope.
+      This argument has no effect when `recurseIntoDirectory` is provided.
+
     `directory`
     : The directory to read package files from.
 
@@ -327,6 +334,20 @@ in
     : This argument is applied to the function which processes directories.
     : Equivalently, this function takes `processDir` and `args`, and can modify arguments passed to `processDir`
       (same as above) before calling it, as well as modify its output (which is then returned by `recurseIntoDirectory`).
+
+      :::{.note}
+      When `newScope` is set, the default `recurseIntoDirectory` is equivalent to:
+      ```nix
+      processDir: { newScope, ... }@args:
+        # create a new scope and mark it `recurseForDerivations`
+        lib.recurseIntoAttrs (lib.makeScope newScope (self:
+          # generate the attrset representing the directory, using the new scope's `callPackage` and `newScope`
+          processDir (args // {
+            inherit (self) callPackage newScope;
+          })
+        ))
+      ```
+      :::
 
     # Examples
     :::{.example}
@@ -349,12 +370,6 @@ in
     ```nix
     packagesFromDirectoryRecursive {
       inherit (pkgs) callPackage newScope;
-      recurseIntoDirectory = f: { newScope, ... }@args:
-        lib.recurseIntoAttrset (lib.makeScope newScope (self:
-          f (args // {
-            inherit (self) callPackage newScope;
-          })
-        ));
       directory = ./my-packages;
     }
     => { ... }
@@ -378,22 +393,43 @@ in
     ::::
   */
   packagesFromDirectoryRecursive =
+    let
+      inherit (lib) concatMapAttrs id makeScope recurseIntoAttrs removeSuffix;
+      inherit (lib.path) append;
+    in
     {
       callPackage,
       directory,
-      recurseIntoDirectory ? lib.id,
+      # recurseIntoDirectory can modify the function used when processing directory entries; see nixdoc above
+      recurseIntoDirectory ?
+        if args ? newScope then
+          # `processDir` is the same function as defined below,
+          # `args` are the arguments passed to (this recursive call of) `packagesFromDirectoryRecursive`
+          processDir: { newScope, ... }@args:
+            # Create a new scope and mark it `recurseForDerivations`.
+            # This lets the packages refer to each other.
+            # See:
+            #  [lib.makeScope](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope) and
+            #  [lib.recurseIntoAttrs](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope)
+            recurseIntoAttrs (makeScope newScope (self:
+              # generate the attrset representing the directory, using the new scope's `callPackage` and `newScope`
+              processDir (args // {
+                inherit (self) callPackage newScope;
+              })
+            ))
+        else
+          # otherwise, no modification is necessary
+          id,
       ...
     }@args:
     let
-      inherit (lib) concatMapAttrs removeSuffix;
-      inherit (lib.path) append;
       defaultPath = append directory "package.nix";
     in
     if pathExists defaultPath then
       # if `${directory}/package.nix` exists, call it directly
       callPackage defaultPath {}
     else let
-      f = { callPackage, ... }@newArgs:
+      processDir = { callPackage, ... }@newArgs:
         concatMapAttrs (name: type:
           # otherwise, for each directory entry
           let path = append directory name; in
@@ -412,5 +448,5 @@ in
           ''
         ) (builtins.readDir directory);
       in
-        recurseIntoDirectory f args;
+        recurseIntoDirectory processDir args;
 }
