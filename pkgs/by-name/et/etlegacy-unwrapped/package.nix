@@ -22,7 +22,7 @@
 , zlib
 }:
 let
-  version = "2.82.1";
+  version = "2.83.1";
   fakeGit = writeShellApplication {
     name = "git";
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     owner = "etlegacy";
     repo = "etlegacy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DA5tudbehXIU+4hX3ggcxWZ7AAOa8LUkIvUHbgMgDY8=";
+    hash = "sha256-k1H3irA9UVOICY3keKGVJMtBczW/b5ObyNvB7fGAcFA=";
   };
 
   nativeBuildInputs = [
