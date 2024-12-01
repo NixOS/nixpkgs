@@ -51,7 +51,10 @@ stdenv.mkDerivation rec {
       NarSil attempts to be an almost-faithful recreation of Sil 1.3.0,
       but based on the codebase of modern Angband.
     '';
-    maintainers = with lib.maintainers; [ nanotwerp x123 ];
+    maintainers = with lib.maintainers; [
+      nanotwerp
+      x123
+    ];
     license = lib.licenses.gpl2;
   };
 }
