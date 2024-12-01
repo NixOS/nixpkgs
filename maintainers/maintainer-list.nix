@@ -19700,6 +19700,12 @@
     githubId = 2347889;
     name = "Sauyon Lee";
   };
+  savalet = {
+    email = "savinien.petitjean@gmail.com";
+    github = "savalet";
+    githubId = 73446695;
+    name = "savalet";
+  };
   savannidgerinel = {
     email = "savanni@luminescent-dreams.com";
     github = "savannidgerinel";
