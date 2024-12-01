@@ -105,10 +105,11 @@ def run_wrapper(
             *SSH_DEFAULT_OPTS,
             remote.host,
             "--",
-            # sadly SSH just join all remaining parameters, expanding glob and
-            # ignoring quotes
-            # so we need to use shlex.join() to safely join the arguments
-            shlex.join(str(a) for a in args),
+            # SSH will join the parameters here and pass it to the shell, so we
+            # need to quote it to avoid issues.
+            # We can't use `shlex.join`, otherwise we will hit MAX_ARG_STRLEN
+            # limits when the command becomes too big.
+            *[shlex.quote(str(a)) for a in args],
         ]
     else:
         if extra_env:
