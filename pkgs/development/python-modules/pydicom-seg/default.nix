@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, pytestCheckHook
-, pythonRelaxDepsHook
-, poetry-core
-, jsonschema
-, numpy
-, pydicom
-, simpleitk
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  pytest7CheckHook,
+  poetry-core,
+  jsonschema,
+  numpy,
+  pydicom,
+  simpleitk,
 }:
 
 buildPythonPackage rec {
   pname = "pydicom-seg";
   version = "0.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -36,29 +36,20 @@ buildPythonPackage rec {
     })
   ];
 
-  pythonRelaxDeps = [
-    "jsonschema"
-  ];
+  pythonRelaxDeps = [ "jsonschema" ];
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jsonschema
     numpy
     pydicom
     simpleitk
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytest7CheckHook ];
 
-  pythonImportsCheck = [
-    "pydicom_seg"
-  ];
+  pythonImportsCheck = [ "pydicom_seg" ];
 
   meta = with lib; {
     description = "Medical segmentation file reading and writing";

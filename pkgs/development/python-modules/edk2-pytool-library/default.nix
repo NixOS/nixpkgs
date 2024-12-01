@@ -1,31 +1,32 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pyasn1
-, pyasn1-modules
-, cryptography
-, joblib
-, gitpython
-, sqlalchemy
-, pygount
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pyasn1,
+  pyasn1-modules,
+  cryptography,
+  joblib,
+  gitpython,
+  sqlalchemy,
+  pygount,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "edk2-pytool-library";
-  version = "0.21.5";
+  version = "0.22.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2-pytool-library";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4Sb8Lu/nYUXgGt9gVv+j32cwW7TjXfH8z+fwzKaOeM8=";
+    hash = "sha256-N2ATC/GALKd8JUrkvlvHe9JPzwzbB5GPTBavo17DW5Y=";
   };
 
   build-system = [
@@ -43,18 +44,14 @@ buildPythonPackage rec {
     pygount
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # requires network access
     "test_basic_parse"
   ];
 
-  pythonImportsCheck = [
-    "edk2toollib"
-  ];
+  pythonImportsCheck = [ "edk2toollib" ];
 
   meta = with lib; {
     description = "Python library package that supports UEFI development";

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -24,10 +25,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A really thin ASGI web framework";
+    description = "Really thin ASGI web framework";
     license = licenses.bsd2;
     homepage = "https://asgineer.readthedocs.io";
     maintainers = [ maintainers.matthiasbeyer ];
   };
 }
-

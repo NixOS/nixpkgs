@@ -1,25 +1,25 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, persistent
-, zope-interface
-, transaction
-, zope-testrunner
-, python
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  persistent,
+  zope-interface,
+  transaction,
+  zope-testrunner,
+  python,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "btrees";
-  version = "5.2";
+  version = "6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "BTrees";
-    inherit version;
-    hash = "sha256-bkoK8BpLvslan5Mbr1xUWXn0NBoTp2Yf+KSXr089g4E=";
+    inherit pname version;
+    hash = "sha256-4YdG+GQYaaIPRTKMm1+X3GxxoRlZYDVq72O3X1yNRF8=";
   };
 
   propagatedBuildInputs = [
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Scalable persistent components";
     homepage = "http://packages.python.org/BTrees";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

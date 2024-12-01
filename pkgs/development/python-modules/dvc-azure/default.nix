@@ -1,12 +1,12 @@
-{ lib
-, adlfs
-, azure-identity
-, buildPythonPackage
-, dvc-objects
-, fetchPypi
-, knack
-, pythonRelaxDepsHook
-, setuptools-scm
+{
+  lib,
+  adlfs,
+  azure-identity,
+  buildPythonPackage,
+  dvc-objects,
+  fetchPypi,
+  knack,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -20,13 +20,10 @@ buildPythonPackage rec {
   };
 
   # Prevent circular dependency
-  pythonRemoveDeps = [
-    "dvc"
-  ];
+  pythonRemoveDeps = [ "dvc" ];
 
   nativeBuildInputs = [
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

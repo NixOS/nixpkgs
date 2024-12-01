@@ -21,23 +21,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvpn";
-  version = "2.6.10";
+  version = "2.6.12";
 
   src = fetchurl {
     url = "https://swupdate.openvpn.net/community/releases/openvpn-${finalAttrs.version}.tar.gz";
-    hash = "sha256-GZO7t7nttDBibqokVz+IH9PfZC9Cf8uCSxrtH8obzJs=";
+    hash = "sha256-HGEP3etobjTxNnw0fgJ+QY4HUjoQ9NjOSiwq8vYaGSk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ lz4 lzo openssl ]
-    ++ optionals stdenv.isLinux [ libcap_ng libnl pam ]
+    ++ optionals stdenv.hostPlatform.isLinux [ libcap_ng libnl pam ]
     ++ optional useSystemd systemd
     ++ optional pkcs11Support pkcs11helper;
 
   configureFlags = optional useSystemd "--enable-systemd"
     ++ optional pkcs11Support "--enable-pkcs11"
-    ++ optional stdenv.isDarwin "--disable-plugin-auth-pam";
+    ++ optional stdenv.hostPlatform.isDarwin "--disable-plugin-auth-pam";
 
   # We used to vendor the update-systemd-resolved script inside libexec,
   # but a separate package was made, that uses libexec/openvpn. Copy it
@@ -57,11 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A robust and highly flexible tunneling application";
+    description = "Robust and highly flexible tunneling application";
     downloadPage = "https://openvpn.net/community-downloads/";
     homepage = "https://openvpn.net/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ viric peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
     mainProgram = "openvpn";
   };

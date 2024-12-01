@@ -1,31 +1,35 @@
-{ lib
-, arviz
-, buildPythonPackage
-, cachetools
-, cloudpickle
-, fetchFromGitHub
-, numpy
-, pandas
-, pytensor
-, pythonOlder
-, rich
-, scipy
-, setuptools
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  versioneer,
+
+  # dependencies
+  arviz,
+  cachetools,
+  cloudpickle,
+  numpy,
+  pandas,
+  pytensor,
+  rich,
+  scipy,
+  threadpoolctl,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "5.15.0";
+  version = "5.18.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KJXQz7LES3AqLkq5FPnaECraYSM4vfuDyfRJSclz1RQ=";
+    hash = "sha256-JA5xBoqNC6F97Obs+0ig/ALw1rkUVX7A0bStKHS+uv4=";
   };
 
   postPatch = ''
@@ -35,6 +39,7 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
+    versioneer
   ];
 
   dependencies = [
@@ -46,6 +51,7 @@ buildPythonPackage rec {
     pytensor
     rich
     scipy
+    threadpoolctl
     typing-extensions
   ];
 
@@ -53,15 +59,16 @@ buildPythonPackage rec {
   # indicative for package usability hence tests are disabled by default.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pymc"
-  ];
+  pythonImportsCheck = [ "pymc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bayesian estimation, particularly using Markov chain Monte Carlo (MCMC)";
     homepage = "https://github.com/pymc-devs/pymc";
     changelog = "https://github.com/pymc-devs/pymc/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nidabdella ferrine ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      nidabdella
+      ferrine
+    ];
   };
 }

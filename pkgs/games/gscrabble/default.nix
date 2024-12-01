@@ -1,6 +1,6 @@
 { lib, buildPythonApplication, fetchFromGitHub
 , gtk3, wrapGAppsHook3, gst_all_1, gobject-introspection
-, python3Packages, gnome }:
+, python3Packages, adwaita-icon-theme }:
 
 buildPythonApplication {
   pname = "gscrabble";
@@ -19,7 +19,7 @@ buildPythonApplication {
 
   buildInputs = with gst_all_1; [
     gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad
-    gnome.adwaita-icon-theme gtk3
+    adwaita-icon-theme gtk3
   ];
 
   propagatedBuildInputs = with python3Packages; [ gst-python pygobject3 ];

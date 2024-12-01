@@ -5,12 +5,12 @@
   callPackage,
 }:
 let
-  version = "1.50.0";
+  version = "1.58.0";
   rescript-editor-analysis = callPackage ./rescript-editor-analysis.nix { inherit version; };
   arch =
-    if stdenv.isLinux then
+    if stdenv.hostPlatform.isLinux then
       "linux"
-    else if stdenv.isDarwin then
+    else if stdenv.hostPlatform.isDarwin then
       "darwin"
     else
       throw "Unsupported system: ${stdenv.system}";
@@ -21,7 +21,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     name = "rescript-vscode";
     publisher = "chenglou92";
     inherit version;
-    hash = "sha256-Dt7mqZQ/vEUFyUD5SsY6RGzg9kq19/Amksrwtfv0TuE=";
+    hash = "sha256-EuEBbtdCaS4l8ykkxyLLMjEnUMs0IsXoc994a8Pw1Ws=";
   };
   postPatch = ''
     rm -r ${analysisDir}
@@ -29,7 +29,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   '';
 
   meta = {
-    description = "The official VSCode plugin for ReScript";
+    description = "Official VSCode plugin for ReScript";
     homepage = "https://github.com/rescript-lang/rescript-vscode";
     maintainers = [
       lib.maintainers.dlip

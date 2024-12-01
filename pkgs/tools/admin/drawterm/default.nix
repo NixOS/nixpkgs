@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation {
   pname = "drawterm";
-  version = "0-unstable-2024-04-23";
+  version = "0-unstable-2024-10-04";
 
   src = fetchFrom9Front {
     owner = "plan9front";
     repo = "drawterm";
-    rev = "c0951f2a3182d8b70ffe579bfd9da24c2b86e232";
-    hash = "sha256-7y2Mte6R4yeayxdFSFGb9Q5M/GQwqyFb+AW/BFsQeZc=";
+    rev = "d7620e8d528a87a3d6cf7285a839d52d4f705771";
+    hash = "sha256-v84kvlLKUGR6SY+DPD9fVUivkE56txrMU0dlph2c7bM=";
   };
 
   enableParallelBuilding = true;
@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     description = "Connect to Plan 9 CPU servers from other operating systems";
     homepage = "https://drawterm.9front.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ luc65r moody ];
+    maintainers = with maintainers; [ moody ];
     platforms = platforms.linux;
     mainProgram = "drawterm";
   };

@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "audiness";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "audiusGmbH";
     repo = "audiness";
     rev = "refs/tags/${version}";
-    hash = "sha256-UJe4ZawjAuUoSKEdIgjh8zZu/amYLZ8rpUDahSHokKA=";
+    hash = "sha256-+5NDea4p/JWEk305EhAtab3to36a74KR50eosw6c5qI=";
   };
 
   pythonRelaxDeps = [
@@ -23,7 +23,6 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ poetry-core ];
 
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   dependencies =
     with python3.pkgs;
@@ -31,8 +30,7 @@ python3.pkgs.buildPythonApplication rec {
       pytenable
       typer
       validators
-    ]
-    ++ typer.optional-dependencies.all;
+    ];
 
   pythonImportsCheck = [ "audiness" ];
 

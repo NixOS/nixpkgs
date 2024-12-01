@@ -30,9 +30,15 @@ python3.pkgs.buildPythonApplication rec {
     pycairo
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = with lib; {
     homepage = "http://johncheetham.com/projects/gshogi/";
-    description = "A graphical implementation of the Shogi board game, also known as Japanese Chess";
+    description = "Graphical implementation of the Shogi board game, also known as Japanese Chess";
     mainProgram = "gshogi";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

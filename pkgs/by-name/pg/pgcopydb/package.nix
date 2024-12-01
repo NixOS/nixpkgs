@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     sqlite
     zlib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     pam
   ];
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/dimitri/pgcopydb";
     changelog = "https://github.com/dimitri/pgcopydb/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.postgresql;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "pgcopydb";
     platforms = platforms.all;
   };

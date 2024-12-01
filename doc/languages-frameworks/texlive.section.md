@@ -1,6 +1,6 @@
 # TeX Live {#sec-language-texlive}
 
-Since release 15.09 there is a new TeX Live packaging that lives entirely under attribute `texlive`.
+There is a TeX Live packaging that lives entirely under attribute `texlive`.
 
 ## User's guide (experimental new interface) {#sec-language-texlive-user-guide-experimental}
 
@@ -83,12 +83,13 @@ Release 23.11 ships with a new interface that will eventually replace `texlive.c
   ```nix
   stdenvNoCC.mkDerivation rec {
     src = texlive.pkgs.iwona;
+    dontUnpack = true;
 
     inherit (src) pname version;
 
     installPhase = ''
       runHook preInstall
-      install -Dm644 fonts/opentype/nowacki/iwona/*.otf -t $out/share/fonts/opentype
+      install -Dm644 $src/fonts/opentype/nowacki/iwona/*.otf -t $out/share/fonts/opentype
       runHook postInstall
     '';
   }
@@ -182,7 +183,7 @@ let
     '';
 
     meta = {
-      description = "A LaTeX2e class for overhead transparencies";
+      description = "LaTeX2e class for overhead transparencies";
       license = lib.licenses.unfreeRedistributable;
       maintainers = with lib.maintainers; [ veprbl ];
       platforms = lib.platforms.all;

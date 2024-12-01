@@ -1,9 +1,11 @@
-outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
+outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib-ng, pcre2, libxml2, libxslt
 , nginx-doc
 
 , nixosTests
 , installShellFiles, substituteAll, removeReferencesTo, gd, geoip, perl
 , withDebug ? false
+, withGeoIP ? false
+, withImageFilter ? false
 , withKTLS ? true
 , withStream ? true
 , withMail ? false
@@ -64,9 +66,11 @@ stdenv.mkDerivation {
     removeReferencesTo
   ] ++ nativeBuildInputs;
 
-  buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip perl ]
+  buildInputs = [ openssl zlib-ng pcre2 libxml2 libxslt perl ]
     ++ buildInputs
-    ++ mapModules "inputs";
+    ++ mapModules "inputs"
+    ++ lib.optional withGeoIP geoip
+    ++ lib.optional withImageFilter gd;
 
   configureFlags = [
     "--sbin-path=bin/nginx"
@@ -112,10 +116,9 @@ stdenv.mkDerivation {
     "--with-http_perl_module"
     "--with-perl=${perl}/bin/perl"
     "--with-perl_modules_path=lib/perl5"
-  ] ++ lib.optional withSlice "--with-http_slice_module"
-    ++ lib.optional (gd != null) "--with-http_image_filter_module"
-    ++ lib.optional (geoip != null) "--with-http_geoip_module"
-    ++ lib.optional (withStream && geoip != null) "--with-stream_geoip_module"
+  ] ++ lib.optional withImageFilter "--with-http_image_filter_module"
+    ++ lib.optional withSlice "--with-http_slice_module"
+    ++ lib.optionals withGeoIP ([ "--with-http_geoip_module" ] ++ lib.optional withStream "--with-stream_geoip_module")
     ++ lib.optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ configureFlags
     ++ map (mod: "--add-module=${mod.src}") modules;
@@ -123,13 +126,23 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = toString ([
     "-I${libxml2.dev}/include/libxml2"
     "-Wno-error=implicit-fallthrough"
+    (
+      # zlig-ng patch needs this
+      if stdenv.cc.isGNU then
+        "-Wno-error=discarded-qualifiers"
+      else
+        "-Wno-error=incompatible-pointer-types-discards-qualifiers"
+    )
   ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
     # fix build vts module on gcc11
     "-Wno-error=stringop-overread"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-error=deprecated-declarations"
     "-Wno-error=gnu-folding-constant"
     "-Wno-error=unused-but-set-variable"
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    # fix sys/cdefs.h is deprecated
+    "-Wno-error=cpp"
   ]);
 
   configurePlatforms = [];
@@ -149,6 +162,13 @@ stdenv.mkDerivation {
       '';
     })
     ./nix-skip-check-logs-path.patch
+  ] ++ lib.optionals (pname != "openresty") [
+    # https://github.com/NixOS/nixpkgs/issues/357522
+    # https://github.com/zlib-ng/patches/blob/5a036c0a00120c75ee573b27f4f44ade80d82ff2/nginx/README.md
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/zlib-ng/patches/38756e6325a5d2cc32709b8e9549984c63a78815/nginx/1.26.2-zlib-ng.patch";
+      hash = "sha256-LX5kP6jFiqgt4ApKw5eqOAFJNkc5QI6kX8ZRvBYTi9k=";
+    })
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/102-sizeof_test_fix.patch";
@@ -167,7 +187,7 @@ stdenv.mkDerivation {
 
   inherit postPatch;
 
-  hardeningEnable = lib.optional (!stdenv.isDarwin) "pie";
+  hardeningEnable = lib.optional (!stdenv.hostPlatform.isDarwin) "pie";
 
   enableParallelBuilding = true;
 
@@ -199,12 +219,12 @@ stdenv.mkDerivation {
   };
 
   meta = if meta != null then meta else with lib; {
-    description = "A reverse proxy and lightweight webserver";
+    description = "Reverse proxy and lightweight webserver";
     mainProgram = "nginx";
     homepage    = "http://nginx.org";
     license     = [ licenses.bsd2 ]
       ++ concatMap (m: m.meta.license) modules;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ fpletz raitobezarius ] ++ teams.helsinki-systems.members;
+    maintainers = with maintainers; [ fpletz raitobezarius ] ++ teams.helsinki-systems.members ++ teams.stridtech.members;
   };
 }

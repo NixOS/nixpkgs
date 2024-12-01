@@ -1,19 +1,20 @@
-{ lib
-, astroid
-, buildPythonPackage
-, deal-solver
-, docstring-parser
-, fetchFromGitHub
-, flit-core
-, hypothesis
-, marshmallow
-, pygments
-, pytestCheckHook
-, pythonOlder
-, sphinx
-, typeguard
-, urllib3
-, vaa
+{
+  lib,
+  astroid,
+  buildPythonPackage,
+  deal-solver,
+  docstring-parser,
+  fetchFromGitHub,
+  flit-core,
+  hypothesis,
+  marshmallow,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
+  sphinx,
+  typeguard,
+  urllib3,
+  vaa,
 }:
 
 buildPythonPackage rec {
@@ -39,9 +40,7 @@ buildPythonPackage rec {
       --replace-fail '"--cov-report=term-missing:skip-covered",' ""
   '';
 
-  build-system = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
   dependencies = [
     astroid
@@ -89,9 +88,7 @@ buildPythonPackage rec {
     "tests/test_testing.py"
   ];
 
-  pythonImportsCheck = [
-    "deal"
-  ];
+  pythonImportsCheck = [ "deal" ];
 
   meta = with lib; {
     description = "Library for design by contract (DbC) and checking values, exceptions, and side-effects";

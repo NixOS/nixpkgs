@@ -1,12 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pydantic
-, requests
-, pytestCheckHook
-, pytest-asyncio
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage {
@@ -22,13 +19,9 @@ buildPythonPackage {
     hash = "sha256-/icVexc2S8sbJqn4ioeIhYxyDFIENuCfsFhl0uAHa9g=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "smpp.pdu" ];
 
@@ -36,6 +29,6 @@ buildPythonPackage {
     description = "Library for parsing Protocol Data Units (PDUs) in SMPP protocol";
     homepage = "https://github.com/hologram-io/smpp.pdu";
     license = licenses.asl20;
-    maintainers = with maintainers; [ flokli janik ];
+    maintainers = with maintainers; [ flokli ];
   };
 }

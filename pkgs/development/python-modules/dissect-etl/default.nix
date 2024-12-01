@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  defusedxml,
   dissect-cstruct,
   dissect-util,
   fetchFromGitHub,
@@ -12,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-etl";
-  version = "3.9";
+  version = "3.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.etl";
     rev = "refs/tags/${version}";
-    hash = "sha256-gLxBVHhtQS4Ep64H4jvndGyjUW1cQ68f346utVI9eC4=";
+    hash = "sha256-c8qbh0LSTAV23J//Kx76eeIjptW1cVcxBSqO22okRkU=";
   };
 
   build-system = [
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    defusedxml
     dissect-cstruct
     dissect-util
   ];

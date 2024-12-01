@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-JCdGmZk2vRn3X1BDxOJaY3Aw8dr0ODVzi0oY20ZWfRs=";
       excludes = [ "NEWS" ];
     })
+
+    # switch to pep517 build tools
+    ./pep517.patch
   ];
 
   buildInputs = [
@@ -44,7 +47,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config gettext libtool autoconf-archive
     xmlto libxml2 docbook_xml_dtd_412 docbook_xsl desktop-file-utils
-    python3Packages.wrapPython
+    python3Packages.wrapPython python3Packages.build python3Packages.installer
+    python3Packages.setuptools python3Packages.wheel
     wrapGAppsHook3 autoreconfHook gobject-introspection
   ];
 

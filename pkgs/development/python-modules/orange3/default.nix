@@ -1,57 +1,58 @@
-{ lib
-, stdenv
-, baycomp
-, bottleneck
-, buildPythonPackage
-, chardet
-, copyDesktopItems
-, pythonRelaxDepsHook
-, cython
-, catboost
-, xgboost
-, fetchFromGitHub
-, fetchurl
-, httpx
-, joblib
-, keyring
-, keyrings-alt
-, makeDesktopItem
-, matplotlib
-, nix-update-script
-, numpy
-, oldest-supported-numpy
-, openpyxl
-, opentsne
-, orange-canvas-core
-, orange-widget-base
-, pandas
-, pytestCheckHook
-, pytest-qt
-, pyqtgraph
-, pyqtwebengine
-, python
-, python-louvain
-, pythonOlder
-, pyyaml
-, pip
-, qt5
-, qtconsole
-, recommonmark
-, requests
-, scikit-learn
-, scipy
-, serverfiles
-, setuptools
-, sphinx
-, wheel
-, xlrd
-, xlsxwriter
+{
+  lib,
+  stdenv,
+  baycomp,
+  bottleneck,
+  buildPythonPackage,
+  chardet,
+  copyDesktopItems,
+  cython,
+  catboost,
+  xgboost,
+  fetchFromGitHub,
+  fetchurl,
+  httpx,
+  joblib,
+  keyring,
+  keyrings-alt,
+  makeDesktopItem,
+  matplotlib,
+  nix-update-script,
+  numpy,
+  oldest-supported-numpy,
+  openpyxl,
+  opentsne,
+  orange-canvas-core,
+  orange-widget-base,
+  pandas,
+  pytestCheckHook,
+  pytest-qt,
+  pyqtgraph,
+  pyqt5,
+  pyqtwebengine,
+  python,
+  python-louvain,
+  pythonOlder,
+  pyyaml,
+  pip,
+  qt5,
+  qtconsole,
+  recommonmark,
+  requests,
+  scikit-learn,
+  scipy,
+  serverfiles,
+  setuptools,
+  sphinx,
+  wheel,
+  xlrd,
+  xlsxwriter,
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "orange3";
-    version = "3.36.2";
+    version = "3.37.0";
     pyproject = true;
 
     disabled = pythonOlder "3.7";
@@ -60,7 +61,7 @@ let
       owner = "biolab";
       repo = "orange3";
       rev = "refs/tags/${version}";
-      hash = "sha256-v9lk5vGhBaR2PHZ+Jq0hy1WaCsbeLe+vZlTaHBkfacU=";
+      hash = "sha256-3PybiHXH6oIYJb78/a7LnQA6cYUicDx4Mf65QhIhT4w=";
     };
 
     postPatch = ''
@@ -73,7 +74,6 @@ let
 
     nativeBuildInputs = [
       copyDesktopItems
-      pythonRelaxDepsHook
       oldest-supported-numpy
       cython
       qt5.wrapQtAppsHook
@@ -112,6 +112,7 @@ let
       xlsxwriter
       httpx
       pyqtgraph
+      pyqt5
       orange-widget-base
       keyrings-alt
       pyyaml
@@ -125,7 +126,10 @@ let
     # FIXME: pythonRelaxDeps is not relaxing the scikit-learn version constraint, had to disable this
     dontCheckRuntimeDeps = true;
 
-    pythonImportsCheck = [ "Orange" "Orange.data._variable" ];
+    pythonImportsCheck = [
+      "Orange"
+      "Orange.data._variable"
+    ];
 
     desktopItems = [
       (makeDesktopItem {
@@ -136,8 +140,19 @@ let
         comment = "Explore, analyze, and visualize your data";
         icon = "orange-canvas";
         mimeTypes = [ "application/x-extension-ows" ];
-        categories = [ "Science" "Education" "ArtificialIntelligence" "DataVisualization" "NumericalAnalysis" "Qt" ];
-        keywords = [ "Machine Learning" "Scientific Visualization" "Statistical Analysis" ];
+        categories = [
+          "Science"
+          "Education"
+          "ArtificialIntelligence"
+          "DataVisualization"
+          "NumericalAnalysis"
+          "Qt"
+        ];
+        keywords = [
+          "Machine Learning"
+          "Scientific Visualization"
+          "Statistical Analysis"
+        ];
       })
     ];
 
@@ -180,7 +195,10 @@ let
 
         '';
 
-        nativeBuildInputs = [ pytestCheckHook pytest-qt ];
+        nativeBuildInputs = [
+          pytestCheckHook
+          pytest-qt
+        ];
 
         postCheck = ''
           touch $out

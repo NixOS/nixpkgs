@@ -11,14 +11,18 @@ let
 
   configFile = format.generate "pretalx.cfg" cfg.settings;
 
-  extras = cfg.package.optional-dependencies.redis
-    ++ lib.optionals (cfg.settings.database.backend == "mysql") cfg.package.optional-dependencies.mysql
-    ++ lib.optionals (cfg.settings.database.backend == "postgresql") cfg.package.optional-dependencies.postgres;
+  finalPackage = cfg.package.override {
+    inherit (cfg) plugins;
+  };
 
-  pythonEnv = cfg.package.python.buildEnv.override {
-    extraLibs = [ (cfg.package.python.pkgs.toPythonModule cfg.package) ]
-      ++ (with cfg.package.python.pkgs; [ gunicorn ]
-      ++ lib.optional cfg.celery.enable celery) ++ extras;
+  pythonEnv = finalPackage.python.buildEnv.override {
+    extraLibs = with finalPackage.python.pkgs; [
+      (toPythonModule finalPackage)
+      gunicorn
+    ]
+    ++ finalPackage.optional-dependencies.redis
+    ++ lib.optionals cfg.celery.enable [ celery ]
+    ++ lib.optionals (cfg.settings.database.backend == "postgresql") finalPackage.optional-dependencies.postgres;
   };
 in
 
@@ -30,7 +34,7 @@ in
   options.services.pretalx = {
     enable = lib.mkEnableOption "pretalx";
 
-    package = lib.mkPackageOptionMD pkgs "pretalx" {};
+    package = lib.mkPackageOption pkgs "pretalx" {};
 
     group = lib.mkOption {
       type = lib.types.str;
@@ -42,6 +46,20 @@ in
       type = lib.types.str;
       default = "pretalx";
       description = "User under which pretalx should run.";
+    };
+
+    plugins = lib.mkOption {
+      type = with lib.types; listOf package;
+      default = [];
+      example = lib.literalExpression ''
+        with config.services.pretalx.package.plugins; [
+          pages
+          youtube
+        ];
+      '';
+      description = ''
+        Pretalx plugins to install into the Python environment.
+      '';
     };
 
     gunicorn.extraArgs = lib.mkOption {
@@ -165,6 +183,17 @@ in
             };
           };
 
+          files = {
+            upload_limit = lib.mkOption {
+              type = lib.types.ints.positive;
+              default = 10;
+              example = 50;
+              description = ''
+                Maximum file upload size in MiB.
+              '';
+            };
+          };
+
           filesystem = {
             data = lib.mkOption {
               type = lib.types.path;
@@ -274,6 +303,15 @@ in
         $sudo ${lib.getExe' pythonEnv "pretalx-manage"} "$@"
       '')
     ];
+
+    services.logrotate.settings.pretalx = {
+      files = "${cfg.settings.filesystem.logs}/*.log";
+      su = "${cfg.user} ${cfg.group}";
+      frequency = "weekly";
+      rotate = "12";
+      copytruncate = true;
+      compress = true;
+    };
 
     services = {
       nginx = lib.mkIf cfg.nginx.enable {

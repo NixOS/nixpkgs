@@ -1,10 +1,7 @@
 import ./make-test-python.nix ({ lib, ... }:
-
-with lib;
-
 {
   name = "audiobookshelf";
-  meta.maintainers = with maintainers; [ wietsedv ];
+  meta.maintainers = with lib.maintainers; [ wietsedv ];
 
   nodes.machine =
     { pkgs, ... }:

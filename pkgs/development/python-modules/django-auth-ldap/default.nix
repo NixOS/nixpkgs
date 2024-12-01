@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
 
-# buildtime
-, setuptools-scm
+  # buildtime
+  setuptools-scm,
 
-# runtime
-, django
-, python-ldap
+  # runtime
+  django,
+  python-ldap,
 
-# tests
-, python
-, pkgs
+  # tests
+  python,
+  pkgs,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-YEJQk43cn9phnyR8elmwsvBuU6fT9GoVbyiqMN1xpzg=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     django
@@ -53,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/django-auth-ldap/django-auth-ldap";
     license = licenses.bsd2;
     maintainers = with maintainers; [ mmai ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

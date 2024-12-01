@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nix-update-script
-, launchpadlib
-, lazr-restfulclient
-, overrides
-, pydantic_1
-, setuptools
-, setuptools-scm
-, tabulate
-, pytest-check
-, pytest-mock
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  launchpadlib,
+  lazr-restfulclient,
+  overrides,
+  pydantic,
+  setuptools,
+  setuptools-scm,
+  tabulate,
+  pytest-check,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "craft-archives";
-  version = "1.1.3";
+  version = "2.0.0";
 
   pyproject = true;
 
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-archives";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZUqMjbOsHwzZyn0NsSTlZTljzagYEirWKEGatXVL43g=";
+    hash = "sha256-BrKyOdfbwt9qU5Bt/kX/+GgxH7LCFmmFg4mevBWVp2I=";
   };
 
   postPatch = ''
@@ -35,22 +36,17 @@ buildPythonPackage rec {
       --replace-fail "setuptools==67.7.2" "setuptools"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     launchpadlib
     lazr-restfulclient
     overrides
-    pydantic_1
+    pydantic
     tabulate
   ];
 
-  pythonImportsCheck = [
-    "craft_archives"
-  ];
+  pythonImportsCheck = [ "craft_archives" ];
 
   nativeCheckInputs = [
     pytest-check
@@ -63,7 +59,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A library for handling archives/repositories in Canonical craft applications";
+    description = "Library for handling archives/repositories in Canonical craft applications";
     homepage = "https://github.com/canonical/craft-archives";
     changelog = "https://github.com/canonical/craft-archives/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;
@@ -71,4 +67,3 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
   };
 }
-

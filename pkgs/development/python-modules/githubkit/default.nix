@@ -8,6 +8,7 @@
   poetry-core,
   pydantic,
   pyjwt,
+  pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
@@ -16,22 +17,19 @@
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.11.4";
+  version = "0.12.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "yanyongyu";
     repo = "githubkit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uxXRDavp5c3e1MOZR2B4wUxEHh6K81avTeaIVsOdup8=";
+    hash = "sha256-GejPudg3tc0r7jKKGgZ6zERzH8wT3utGb05pfW1lQyw=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=githubkit --cov-append --cov-report=term-missing" ""
-  '';
+  pythonRelaxDeps = [ "hishel" ];
 
   build-system = [ poetry-core ];
 
@@ -42,7 +40,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       anyio
       pyjwt
@@ -58,8 +56,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pytest-xdist
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "githubkit" ];
 

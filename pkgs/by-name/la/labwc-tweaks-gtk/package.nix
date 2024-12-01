@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc-tweaks-gtk";
-  version = "0-unstable-2024-04-07";
+  version = "0-unstable-2024-10-20";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc-tweaks-gtk";
-    rev = "67adbedd610a1b44e7ba667ae72a5c9b07105119";
-    hash = "sha256-RGPm+hvyTWxkd3z841Y8ozXrDD1ZgHCZjimyRdRNrCs=";
+    rev = "c3f83aabb6dca20fd3c2304db15da2e68d027d3e";
+    hash = "sha256-1gzo9KMDHg5ZFMo5CpP36A5tomr2DFoU8UEwx7ik5F8=";
   };
 
   nativeBuildInputs = [
@@ -46,9 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/labwc/labwc-tweaks-gtk";
     description = "Configuration gui app for labwc; gtk fork";
-    mainProgram = "labwc-tweaks";
+    mainProgram = "labwc-tweaks-gtk";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ AndersonTorres romildo ];
+    maintainers = with lib.maintainers; [ romildo ];
   };
 })

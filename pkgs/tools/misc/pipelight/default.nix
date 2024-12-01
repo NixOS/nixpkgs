@@ -60,8 +60,8 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = "http://pipelight.net/";
     license = with lib.licenses; [ mpl11 gpl2Only lgpl21 ];
-    description = "A wrapper for using Windows plugins in Linux browsers";
-    maintainers = with lib.maintainers; [ ];
+    description = "Wrapper for using Windows plugins in Linux browsers";
+    maintainers = [ ];
     platforms = [ "x86_64-linux" "i686-linux" ];
     mainProgram = "pipelight-plugin";
   };

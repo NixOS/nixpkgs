@@ -1,16 +1,17 @@
-{ lib
-, beautifulsoup4
-, buildPythonPackage
-, fetchPypi
-, hatchling
-, hatch-vcs
-, hatch-fancy-pypi-readme
-, filelock
-, requests
-, tqdm
-, setuptools
-, six
-, pythonOlder
+{
+  lib,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  hatch-vcs,
+  hatch-fancy-pypi-readme,
+  filelock,
+  requests,
+  tqdm,
+  setuptools,
+  six,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -44,12 +45,10 @@ buildPythonPackage rec {
     $out/bin/gdown --help > /dev/null
   '';
 
-  pythonImportsCheck = [
-    "gdown"
-  ];
+  pythonImportsCheck = [ "gdown" ];
 
   meta = with lib; {
-    description = "A CLI tool for downloading large files from Google Drive";
+    description = "CLI tool for downloading large files from Google Drive";
     mainProgram = "gdown";
     homepage = "https://github.com/wkentaro/gdown";
     changelog = "https://github.com/wkentaro/gdown/releases/tag/v${version}";

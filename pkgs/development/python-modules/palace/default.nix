@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromSourcehut
-, pythonOlder
-, cmake
-, cython_0
-, setuptools
-, alure2
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromSourcehut,
+  pythonOlder,
+  cmake,
+  cython_0,
+  setuptools,
+  alure2,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +37,7 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [
-    alure2
-  ];
+  propagatedBuildInputs = [ alure2 ];
 
   doCheck = false; # FIXME: tests need an audio device
 

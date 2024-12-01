@@ -1,11 +1,11 @@
 {
-  lib,
   buildPythonPackage,
   fetchFromGitHub,
+  lib,
   mock,
+  packaging,
   ply,
   pytestCheckHook,
-  pythonAtLeast,
   pythonOlder,
   setuptools,
   six,
@@ -13,17 +13,16 @@
 
 buildPythonPackage rec {
   pname = "stone";
-  version = "3.3.3";
+  version = "3.3.8";
   pyproject = true;
 
-  # distutils removal, https://github.com/dropbox/stone/issues/323
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dropbox";
     repo = "stone";
     rev = "refs/tags/v${version}";
-    hash = "sha256-l86j2fd6x57bKt/TFGiyg+ZFjZFFCo43rE48MoPvXWc=";
+    hash = "sha256-W+wRVWPaAzhdHMVE54GEJC/YJqYZVJhwFDWWSMKUPdw=";
   };
 
   postPatch = ''
@@ -36,6 +35,7 @@ buildPythonPackage rec {
   dependencies = [
     ply
     six
+    packaging
   ];
 
   nativeCheckInputs = [
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/dropbox/stone";
     changelog = "https://github.com/dropbox/stone/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
     mainProgram = "stone";
   };
 }

@@ -8,17 +8,17 @@
 
 buildGoModule rec {
   pname = "forgejo-runner";
-  version = "3.4.1";
+  version = "4.0.1";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-c8heIHt+EJ6LnZT4/6TTWd7v85VRHjH72bdje12un4M=";
+    hash = "sha256-hG8gCohf+U8T9A9Abqey9upErJklbCp8HuzHQKFcu3E=";
   };
 
-  vendorHash = "sha256-FCCQZdAYRtJR3DGQIEvUzv+1kqvxVTGkwJwZSohq28s=";
+  vendorHash = "sha256-yRXI9/LVj4f7qFdScqfpL5WCsK+lJXa6yQmdbUhfrKY=";
 
   ldflags = [
     "-s"
@@ -37,7 +37,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A runner for Forgejo based on act";
+    description = "Runner for Forgejo based on act";
     homepage = "https://code.forgejo.org/forgejo/runner";
     changelog = "https://code.forgejo.org/forgejo/runner/src/tag/${src.rev}/RELEASE-NOTES.md";
     license = licenses.mit;

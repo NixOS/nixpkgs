@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-0jI/mbXaXanY6ay2zn+dPWGvsqWRcF8aYHRvfGVsObE=";
   };
   deskreenUnwrapped = appimageTools.wrapType2 {
-    name = "deskreen";
+    inherit (finalAttrs) pname version;
     src = finalAttrs.src;
   };
 

@@ -20,7 +20,7 @@ buildDunePackage rec {
   };
 
   # ./configure: cannot execute: required file not found
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchShebangs configure
   '';
 
@@ -33,7 +33,7 @@ buildDunePackage rec {
   ];
 
   meta = with lib; {
-    description = "A synchronous language with ODEs";
+    description = "Synchronous language with ODEs";
     homepage = "https://zelus.di.ens.fr";
     license = licenses.inria-zelus;
     mainProgram = "zeluc";

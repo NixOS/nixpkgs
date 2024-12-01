@@ -1,43 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  stdenv,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, attrs
-, exceptiongroup
-, idna
-, outcome
-, sniffio
-, sortedcontainers
+  # dependencies
+  attrs,
+  exceptiongroup,
+  idna,
+  outcome,
+  sniffio,
+  sortedcontainers,
 
-# tests
-, astor
-, coreutils
-, jedi
-, pyopenssl
-, pytestCheckHook
-, pytest-trio
-, trustme
-, yapf
+  # tests
+  astor,
+  coreutils,
+  jedi,
+  pyopenssl,
+  pytestCheckHook,
+  pytest-trio,
+  trustme,
+  yapf,
 }:
 
 let
   # escape infinite recursion with pytest-trio
-  pytest-trio' = (pytest-trio.override {
-    trio = null;
-  }).overrideAttrs {
+  pytest-trio' = (pytest-trio.override { trio = null; }).overrideAttrs {
     doCheck = false;
-    pythonImportsCheck = [];
+    pythonImportsCheck = [ ];
   };
 in
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.25.0";
+  version = "0.26.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -46,12 +45,10 @@ buildPythonPackage rec {
     owner = "python-trio";
     repo = "trio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JQ493U4WINOG6ob4IzfNQt5Lgs3DmEM2BDwbae7Bvsw=";
+    hash = "sha256-Vlm6lEMKKfwmhbeefPjxm3vz1zFRUEGOCHXLcZKQcIo=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     attrs
@@ -59,12 +56,10 @@ buildPythonPackage rec {
     outcome
     sniffio
     sortedcontainers
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
 
   # tests are failing on Darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     astor
@@ -102,9 +97,12 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/python-trio/trio/blob/v${version}/docs/source/history.rst";
-    description = "An async/await-native I/O library for humans and snake people";
+    description = "Async/await-native I/O library for humans and snake people";
     homepage = "https://github.com/python-trio/trio";
-    license = with lib.licenses; [ mit asl20 ];
+    license = with lib.licenses; [
+      mit
+      asl20
+    ];
     maintainers = with lib.maintainers; [ catern ];
   };
 }

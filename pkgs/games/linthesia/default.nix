@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A game of playing music using a MIDI keyboard following a MIDI file";
+    description = "Game of playing music using a MIDI keyboard following a MIDI file";
     mainProgram = "linthesia";
     inherit (src.meta) homepage;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ckie ];
+    maintainers = [ ];
   };
 }

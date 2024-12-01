@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, wheel
-, gymnasium
-, numpy
-, chess
-, pillow
-, pybox2d
-, pygame
-, pymunk
-, rlcard
-, scipy
-, pre-commit
-, pynput
-, pytest
-, pytest-cov
-, pytest-markdown-docs
-, pytest-xdist
-, pytestCheckHook
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  wheel,
+  gymnasium,
+  numpy,
+  chess,
+  pillow,
+  pybox2d,
+  pygame,
+  pymunk,
+  rlcard,
+  scipy,
+  pre-commit,
+  pynput,
+  pytest,
+  pytest-cov-stub,
+  pytest-markdown-docs,
+  pytest-xdist,
+  pytestCheckHook,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -47,7 +48,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       chess
       # multi-agent-ale-py
@@ -73,12 +74,8 @@ buildPythonPackage rec {
       rlcard
       # shimmy
     ];
-    mpe = [
-      pygame
-    ];
-    other = [
-      pillow
-    ];
+    mpe = [ pygame ];
+    other = [ pillow ];
     sisl = [
       pybox2d
       pygame
@@ -90,15 +87,13 @@ buildPythonPackage rec {
       pre-commit
       pynput
       pytest
-      pytest-cov
+      pytest-cov-stub
       pytest-markdown-docs
       pytest-xdist
     ];
   };
 
-  pythonImportsCheck = [
-    "pettingzoo"
-  ];
+  pythonImportsCheck = [ "pettingzoo" ];
 
   nativeCheckInputs = [
     chess
@@ -117,16 +112,18 @@ buildPythonPackage rec {
     "test/unwrapped_test.py"
   ];
 
-  disabledTests = [
-    # ImportError: cannot import name 'pytest_plugins' from 'pettingzoo.classic'
-    "test_chess"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Crashes on darwin: `Fatal Python error: Aborted`
-    "test_multi_episode_parallel_env_wrapper"
-  ];
+  disabledTests =
+    [
+      # ImportError: cannot import name 'pytest_plugins' from 'pettingzoo.classic'
+      "test_chess"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Crashes on darwin: `Fatal Python error: Aborted`
+      "test_multi_episode_parallel_env_wrapper"
+    ];
 
   meta = with lib; {
-    description = "An API standard for multi-agent reinforcement learning environments, with popular reference environments and related utilities";
+    description = "API standard for multi-agent reinforcement learning environments, with popular reference environments and related utilities";
     homepage = "https://github.com/Farama-Foundation/PettingZoo";
     changelog = "https://github.com/Farama-Foundation/PettingZoo/releases/tag/${version}";
     license = licenses.mit;

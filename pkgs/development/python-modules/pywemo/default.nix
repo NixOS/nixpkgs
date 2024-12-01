@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hypothesis
-, ifaddr
-, lxml
-, poetry-core
-, pytest-vcr
-, pytestCheckHook
-, pythonOlder
-, requests
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hypothesis,
+  ifaddr,
+  lxml,
+  poetry-core,
+  pytest-vcr,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-XpCRrCJYHv1so5/aHoGrtkgp3RX1NUKPUawJqK/FaG0=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     ifaddr
@@ -45,9 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pywemo"
-  ];
+  pythonImportsCheck = [ "pywemo" ];
 
   meta = with lib; {
     description = "Python module to discover and control WeMo devices";

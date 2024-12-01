@@ -1,24 +1,20 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , rustPlatform
-, Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "awsbck";
-  version = "0.3.8";
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "beeb";
     repo = "awsbck";
     rev = "v${version}";
-    hash = "sha256-dUBuuFl6PVTsPnrH9OU3N/GwgTC2/QtH6yKtv3QgBsA=";
+    hash = "sha256-KHbAmx2CsRqatGt5zTvqZSq8fwcClRZkeMHucLAr8bY=";
   };
 
-  cargoHash = "sha256-X5lYplBej+ZBLnNoHQTGu63pwouGfbVtSH4bgdoxqUo=";
-
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  cargoHash = "sha256-dMXaIFc0e6PMYiQrokQoUc1xAVCccE92WzM2fl7tOBQ=";
 
   # tests run in CI on the source repo
   doCheck = false;

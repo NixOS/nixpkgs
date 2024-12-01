@@ -1,49 +1,45 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, fetchpatch2
-, hatch-fancy-pypi-readme
-, hatch-vcs
-, hatchling
-, distro
-, packaging
-, setuptools
-, wheel
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  fetchpatch2,
+  hatch-fancy-pypi-readme,
+  hatch-vcs,
+  hatchling,
+  distro,
+  packaging,
+  setuptools,
+  wheel,
+  tomli,
   # Test Inputs
-, cmake
-, cython
-, git
-, pytestCheckHook
-, pytest-mock
-, requests
-, virtualenv
+  cmake,
+  cython,
+  git,
+  pytestCheckHook,
+  pytest-mock,
+  requests,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-build";
-  version = "0.17.6";
-  format = "pyproject";
+  version = "0.18.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "scikit_build";
     inherit version;
-    hash = "sha256-tRpRo2s3xCZQmUtQR5EvWbIuMhCyPjIfKHYR+e9uXJ0=";
+    hash = "sha256-pBUqxaCE1JnCineXvgYo2DZsM24vsOGgY+sy5V78uOc=";
   };
 
   patches = [
-    # https://github.com/scikit-build/scikit-build/pull/1032
-    # https://github.com/scikit-build/scikit-build/issues/1047
-    ./python312-compatibility.patch
-
     (fetchpatch2 {
-      # https://github.com/scikit-build/scikit-build/pull/1073
-      name = "skbuild-suppress-permissionerror.patch";
-      url = "https://github.com/scikit-build/scikit-build/commit/41183413e4f5ef29cf3d21e470a2cfa2305733f8.patch";
-      hash = "sha256-M5Sbt4CBuiAeGgN0D/toglVi1V2GlA9hPIOMzcqOwdo=";
+      name = "setuptools-75.0-compat.patch";
+      url = "https://github.com/scikit-build/scikit-build/commit/3992485c67331097553ec8f54233c4c295943f70.patch";
+      hash = "sha256-U34UY+m6RE3c3UN/jGHuR+sRUqTGmG7dT52NWCY7nIE=";
     })
   ];
 
@@ -53,20 +49,18 @@ buildPythonPackage rec {
     sed -i "/'error',/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     distro
     packaging
     setuptools
     wheel
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     cmake
@@ -104,7 +98,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/scikit-build/scikit-build/blob/${version}/CHANGES.rst";
     description = "Improved build system generator for CPython C/C++/Fortran/Cython extensions";
     homepage = "https://github.com/scikit-build/scikit-build";
-    license = with licenses; [ mit bsd2 ]; # BSD due to reuses of PyNE code
+    license = with licenses; [
+      mit
+      bsd2
+    ]; # BSD due to reuses of PyNE code
     maintainers = with maintainers; [ FlorianFranzen ];
   };
 }

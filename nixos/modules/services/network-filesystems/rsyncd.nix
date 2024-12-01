@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.rsyncd;
   settingsFormat = pkgs.formats.ini { };
@@ -10,15 +7,15 @@ in {
   options = {
     services.rsyncd = {
 
-      enable = mkEnableOption "the rsync daemon";
+      enable = lib.mkEnableOption "the rsync daemon";
 
-      port = mkOption {
+      port = lib.mkOption {
         default = 873;
-        type = types.port;
+        type = lib.types.port;
         description = "TCP port the daemon will listen on.";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         inherit (settingsFormat) type;
         default = { };
         example = {
@@ -45,9 +42,9 @@ in {
         '';
       };
 
-      socketActivated = mkOption {
+      socketActivated = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "If enabled Rsync will be socket-activated rather than run persistently.";
       };
 
@@ -55,7 +52,7 @@ in {
   };
 
   imports = (map (option:
-    mkRemovedOptionModule [ "services" "rsyncd" option ]
+    lib.mkRemovedOptionModule [ "services" "rsyncd" option ]
     "This option was removed in favor of `services.rsyncd.settings`.") [
       "address"
       "extraConfig"
@@ -64,7 +61,7 @@ in {
       "group"
     ]);
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.rsyncd.settings.global.port = toString cfg.port;
 

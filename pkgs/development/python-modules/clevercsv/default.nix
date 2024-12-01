@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# propagates
-, chardet
-, regex
-, packaging
+  # propagates
+  chardet,
+  regex,
+  packaging,
 
-# optionals
-, faust-cchardet
-, pandas
-, tabview
-# TODO: , wilderness
+  # optionals
+  faust-cchardet,
+  pandas,
+  tabview,
+  # TODO: , wilderness
 
-# tests
-, python
-, pytestCheckHook
+  # tests
+  python,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -36,7 +37,7 @@ buildPythonPackage rec {
     packaging
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [
       faust-cchardet
       pandas
@@ -45,9 +46,7 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.full;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
 
   pythonImportsCheck = [
     "clevercsv"
@@ -61,9 +60,7 @@ buildPythonPackage rec {
   '';
 
   # their ci only runs unit tests, there are also integration and fuzzing tests
-  pytestFlagsArray = [
-    "./tests/test_unit"
-  ];
+  pytestFlagsArray = [ "./tests/test_unit" ];
 
   disabledTestPaths = [
     # ModuleNotFoundError: No module named 'wilderness'

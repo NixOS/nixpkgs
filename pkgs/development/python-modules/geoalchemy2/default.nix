@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, packaging
-, setuptools
-, setuptools-scm
-, shapely
-, sqlalchemy
-, alembic
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  packaging,
+  setuptools,
+  setuptools-scm,
+  shapely,
+  sqlalchemy,
+  alembic,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "geoalchemy2";
-  version = "0.15.1";
+  version = "0.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "geoalchemy";
     repo = "geoalchemy2";
     rev = "refs/tags/${version}";
-    hash = "sha256-EMsaB6VDDDvXg9LKa9ms0+AfzX1rG+yeR898EK59DDs=";
+    hash = "sha256-LjfCPSpKwcyjmGReTC4M58890ow3hbxlwl1f7iC9i6Y=";
   };
 
   build-system = [
@@ -56,9 +57,7 @@ buildPythonPackage rec {
     "tests/test_pickle.py"
   ];
 
-  pythonImportsCheck = [
-    "geoalchemy2"
-  ];
+  pythonImportsCheck = [ "geoalchemy2" ];
 
   optional-dependencies = {
     shapely = [ shapely ];

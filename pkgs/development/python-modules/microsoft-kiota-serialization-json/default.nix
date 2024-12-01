@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-serialization-json";
-  version = "1.2.0";
+  version = "1.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "kiota-serialization-json-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/Bar1tQ3w8kfC53OuKxTlS+Dq4sX47lev7fjJeo6JJ0=";
+    hash = "sha256-J+wX2vF1LZHq88RDhda6NDeYioZzAz2BxovVFz2xxfw=";
   };
 
   build-system = [ flit-core ];

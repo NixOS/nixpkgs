@@ -44,6 +44,8 @@ in {
       # test loading custom components
       customComponents = with pkgs.home-assistant-custom-components; [
         prometheus_sensor
+        # tests loading multiple components from a single package
+        spook
       ];
 
       # test loading lovelace modules
@@ -179,7 +181,8 @@ in {
 
     with subtest("Check that custom components get installed"):
         hass.succeed("test -f ${configDir}/custom_components/prometheus_sensor/manifest.json")
-        hass.wait_until_succeeds("journalctl -u home-assistant.service | grep -q 'We found a custom integration prometheus_sensor which has not been tested by Home Assistant'")
+        for integration in ("prometheus_sensor", "spook", "spook_inverse"):
+            hass.wait_until_succeeds(f"journalctl -u home-assistant.service | grep -q 'We found a custom integration {integration} which has not been tested by Home Assistant'")
 
     with subtest("Check that lovelace modules are referenced and fetchable"):
         hass.succeed("grep -q 'mini-graph-card-bundle.js' '${configDir}/configuration.yaml'")
@@ -228,7 +231,8 @@ in {
         cursor = get_journal_cursor()
         hass.succeed("${system}/specialisation/removeCustomThings/bin/switch-to-configuration test")
         hass.fail("grep -q 'mini-graph-card-bundle.js' '${configDir}/ui-lovelace.yaml'")
-        hass.fail("test -f ${configDir}/custom_components/prometheus_sensor/manifest.json")
+        for integration in ("prometheus_sensor", "spook", "spook_inverse"):
+            hass.fail(f"test -f ${configDir}/custom_components/{integration}/manifest.json")
         wait_for_homeassistant(cursor)
 
     with subtest("Check that no errors were logged"):

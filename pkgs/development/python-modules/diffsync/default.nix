@@ -1,30 +1,29 @@
-{ lib
-, buildPythonPackage
-, colorama
-, fetchFromGitHub
-, packaging
-, poetry-core
-, pydantic
-, pythonRelaxDepsHook
-, redis
-, structlog
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  fetchFromGitHub,
+  packaging,
+  poetry-core,
+  pydantic,
+  redis,
+  structlog,
 }:
 
 buildPythonPackage rec {
   pname = "diffsync";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "diffsync";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4LS18FPrnGE1tM0pFzAw0+ajDaw9g7MCgIwS2ptrX9c=";
+    hash = "sha256-T3kcZcRm28WeXZTXBBCpaMxjgB0KmqvWO4gdILH5hCA=";
   };
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -40,9 +39,7 @@ buildPythonPackage rec {
     structlog
   ];
 
-  pythonImportsCheck = [
-    "diffsync"
-  ];
+  pythonImportsCheck = [ "diffsync" ];
 
   meta = with lib; {
     description = "Utility library for comparing and synchronizing different datasets";

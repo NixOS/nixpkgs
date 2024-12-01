@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
   future,
   psutil,
   pytest,
@@ -13,12 +12,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pytest-server-fixtures";
-  inherit (pytest-fixture-config) version src;
+  inherit (pytest-fixture-config) version src patches;
   pyproject = true;
 
-  sourceRoot = "${src.name}/pytest-server-fixtures";
+  postPatch = ''
+    cd pytest-server-fixtures
+  '';
 
   build-system = [ setuptools ];
 
@@ -41,6 +42,6 @@ buildPythonPackage rec {
     description = "Extensible server fixures for py.test";
     homepage = "https://github.com/manahl/pytest-plugins";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

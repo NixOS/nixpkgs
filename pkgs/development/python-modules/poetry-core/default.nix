@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, build
-, git
-, pytest-mock
-, pytestCheckHook
-, setuptools
-, tomli-w
-, virtualenv
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  build,
+  git,
+  pytest-mock,
+  pytestCheckHook,
+  setuptools,
+  tomli-w,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "1.9.0";
-  format = "pyproject";
+  version = "1.9.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
-    repo = pname;
-    rev = version;
-    hash = "sha256-vvwKbzGlvv2LTbXfJxQVM3nUXFGntgJxsku6cbRxCzw=";
+    repo = "poetry-core";
+    rev = "refs/tags/${version}";
+    hash = "sha256-L8lR9sUdRYqjkDCQ0XHXZm5X6xD40t1gxlGiovvb/+8=";
   };
 
   nativeCheckInputs = [
@@ -42,14 +43,10 @@ buildPythonPackage rec {
     "default_src_with_excluded_data"
   ];
 
-  pythonImportsCheck = [
-    "poetry.core"
-  ];
+  pythonImportsCheck = [ "poetry.core" ];
 
   # Allow for package to use pep420's native namespaces
-  pythonNamespaces = [
-    "poetry"
-  ];
+  pythonNamespaces = [ "poetry" ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion";
 
@@ -58,6 +55,6 @@ buildPythonPackage rec {
     description = "Core utilities for Poetry";
     homepage = "https://github.com/python-poetry/poetry-core/";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

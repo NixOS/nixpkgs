@@ -17,7 +17,7 @@ in {
 
       baseUrl = mkOption {
         description = ''
-          URL to be used for the HTML <base> element on all HTML routes.
+          URL to be used for the HTML \<base\> element on all HTML routes.
         '';
         type = types.str;
         default = "http://localhost:41678/";
@@ -36,7 +36,7 @@ in {
 
   config = mkIf cfg.enable {
     systemd.services.meme-bingo-web = {
-      description = "A web app for playing meme bingos.";
+      description = "A web app for playing meme bingos";
       wantedBy = [ "multi-user.target" ];
 
       environment = {
@@ -59,6 +59,7 @@ in {
         # Hardening
         CapabilityBoundingSet = [ "" ];
         DeviceAllow = [ "/dev/random" ];
+        InaccessiblePaths = [ "/dev/shm" "/sys" ];
         LockPersonality = true;
         PrivateDevices = true;
         PrivateUsers = true;
@@ -73,6 +74,7 @@ in {
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictFilesystems = [ "@basic-api" "~sysfs" ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";

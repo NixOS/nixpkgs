@@ -157,6 +157,12 @@ Here are security considerations for this scenario:
 
   In more concrete terms, if you use any other hash, the [`--insecure` flag](https://curl.se/docs/manpage.html#-k) will be passed to the underlying call to `curl` when downloading content.
 
+## Proxy usage {#sec-pkgs-fetchers-proxy}
+
+Nixpkgs fetchers can make use of a http(s) proxy. Each fetcher will automatically inherit proxy-related environment variables (`http_proxy`, `https_proxy`, etc) via [impureEnvVars](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-impureEnvVars).
+
+The environment variable `NIX_SSL_CERT_FILE` is also inherited in fetchers, and can be used to provide a custom certificate bundle to fetchers. This is usually required for a https proxy to work without certificate validation errors.
+
 []{#fetchurl}
 ## `fetchurl` {#sec-pkgs-fetchers-fetchurl}
 
@@ -365,8 +371,8 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
   _Default value:_ `{}`.
 
 `passthru` (Attribute Set; _optional_)
-: Specifies any extra [passthru](#var-stdenv-passthru) attributes for the derivation returned by `fetchurl`.
-  Note that `fetchurl` defines [passthru attributes of its own](#ssec-pkgs-fetchers-fetchurl-passthru-outputs).
+: Specifies any extra [`passthru`](#chap-passthru) attributes for the derivation returned by `fetchurl`.
+  Note that `fetchurl` defines [`passthru` attributes of its own](#ssec-pkgs-fetchers-fetchurl-passthru-outputs).
   Attributes specified in `passthru` can override the default attributes returned by `fetchurl`.
 
   _Default value:_ `{}`.
@@ -387,7 +393,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
 ### Passthru outputs {#ssec-pkgs-fetchers-fetchurl-passthru-outputs}
 
-`fetchurl` also defines its own [`passthru`](#var-stdenv-passthru) attributes:
+`fetchurl` also defines its own [`passthru`](#chap-passthru) attributes:
 
 `url` (String)
 
@@ -749,25 +755,63 @@ Used with Subversion. Expects `url` to a Subversion directory, `rev`, and `hash`
 
 Used with Git. Expects `url` to a Git repo, `rev`, and `hash`. `rev` in this case can be full the git commit id (SHA1 hash) or a tag name like `refs/tags/v1.0`.
 
-Additionally, the following optional arguments can be given: `fetchSubmodules = true` makes `fetchgit` also fetch the submodules of a repository. If `deepClone` is set to true, the entire repository is cloned as opposing to just creating a shallow clone. `deepClone = true` also implies `leaveDotGit = true` which means that the `.git` directory of the clone won't be removed after checkout.
+Additionally, the following optional arguments can be given:
 
-If only parts of the repository are needed, `sparseCheckout` can be used. This will prevent git from fetching unnecessary blobs from server, see [git sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) for more information:
+*`fetchSubmodules`* (Boolean)
 
-```nix
-{ stdenv, fetchgit }:
+: Whether to also fetch the submodules of a repository.
 
-stdenv.mkDerivation {
-  name = "hello";
-  src = fetchgit {
-    url = "https://...";
-    sparseCheckout = [
-      "directory/to/be/included"
-      "another/directory"
-    ];
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-  };
-}
-```
+*`fetchLFS`* (Boolean)
+
+: Whether to fetch LFS objects.
+
+*`postFetch`* (String)
+
+: Shell code executed after the file has been fetched successfully.
+  This can do things like check or transform the file.
+
+*`leaveDotGit`* (Boolean)
+
+: Whether the `.git` directory of the clone should *not* be removed after checkout.
+
+  Be warned though that the git repository format is not stable and this flag is therefore not suitable for actual use by itself.
+  Only use this for testing purposes or in conjunction with removing the `.git` directory in `postFetch`.
+
+*`deepClone`* (Boolean)
+
+: Clone the entire repository as opposing to just creating a shallow clone.
+  This implies `leaveDotGit`.
+
+*`sparseCheckout`* (List of String)
+
+: Prevent git from fetching unnecessary blobs from server.
+  This is useful if only parts of the repository are needed.
+
+  ::: {.example #ex-fetchgit-sparseCheckout}
+
+  # Use `sparseCheckout` to only include some directories:
+
+  ```nix
+  { stdenv, fetchgit }:
+
+  stdenv.mkDerivation {
+    name = "hello";
+    src = fetchgit {
+      url = "https://...";
+      sparseCheckout = [
+        "directory/to/be/included"
+        "another/directory"
+      ];
+      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    };
+  }
+  ```
+  :::
+
+  See [git sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) for more information.
+
+Some additional parameters for niche use-cases can be found listed in the function parameters in the declaration of `fetchgit`: `pkgs/build-support/fetchgit/default.nix`.
+Future parameters additions might also happen without immediately being documented here.
 
 ## `fetchfossil` {#fetchfossil}
 
@@ -869,7 +913,7 @@ It produces packages that cannot be built automatically.
 fetchtorrent {
   config = { peer-limit-global = 100; };
   url = "magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c";
-  sha256 = "";
+  hash = "";
 }
 ```
 

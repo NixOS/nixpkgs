@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-Wno-dev"
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
   ];
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       # https://github.com/facebook/wangle/issues/206
       "SSLContextManagerTest.TestSessionContextCertRemoval"
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # flaky
       "BroadcastPoolTest.ThreadLocalPool"
       "Bootstrap.UDPClientServerTest"
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "An open-source C++ networking library";
+    description = "Open-source C++ networking library";
     longDescription = ''
       Wangle is a framework providing a set of common client/server
       abstractions for building services in a consistent, modular, and

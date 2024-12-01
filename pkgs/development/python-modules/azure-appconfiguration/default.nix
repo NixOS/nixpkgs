@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "azure-appconfiguration";
-  version = "1.6.0";
+  version = "1.7.1";
   pyporject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-z2KKPh6mZDR5ZDzSRt2kZO3Eq3hXQzOaao/oCbwTf+w=";
+    hash = "sha256-Pr5B6b4/SubKYeXbxCxLfMAHoBBUqFBlAaJt/Bmf0+w=";
   };
 
   build-system = [ setuptools ];
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/master/sdk/appconfiguration/azure-appconfiguration";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-appconfiguration_${version}/sdk/appconfiguration/azure-appconfiguration/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

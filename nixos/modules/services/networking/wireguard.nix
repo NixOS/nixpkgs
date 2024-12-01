@@ -80,6 +80,15 @@ let
         description = "Commands called at the end of the interface setup.";
       };
 
+      preShutdown = mkOption {
+        example = literalExpression ''"''${pkgs.iproute2}/bin/ip netns del foo"'';
+        default = "";
+        type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
+        description = ''
+          Commands called before shutting down the interface.
+        '';
+      };
+
       postShutdown = mkOption {
         example = literalExpression ''"''${pkgs.openresolv}/bin/resolvconf -d wg0"'';
         default = "";
@@ -472,31 +481,30 @@ let
           RemainAfterExit = true;
         };
 
-        script = ''
-          ${optionalString (!config.boot.isContainer) "modprobe wireguard || true"}
-
-          ${values.preSetup}
-
-          ${ipPreMove} link add dev "${name}" type wireguard
-          ${optionalString (values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace) ''${ipPreMove} link set "${name}" netns "${ns}"''}
-          ${optionalString (values.mtu != null) ''${ipPostMove} link set "${name}" mtu ${toString values.mtu}''}
-
-          ${concatMapStringsSep "\n" (ip:
+        script = concatStringsSep "\n" (
+          optional (!config.boot.isContainer) "modprobe wireguard || true"
+          ++ [
+            values.preSetup
+            ''${ipPreMove} link add dev "${name}" type wireguard''
+          ]
+          ++ optional (values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace) ''${ipPreMove} link set "${name}" netns "${ns}"''
+          ++ optional (values.mtu != null) ''${ipPostMove} link set "${name}" mtu ${toString values.mtu}''
+          ++ (map (ip:
             ''${ipPostMove} address add "${ip}" dev "${name}"''
-          ) values.ips}
-
-          ${concatStringsSep " " (
+          ) values.ips)
+          ++ [
+            (concatStringsSep " " (
             [ ''${wg} set "${name}" private-key "${privKey}"'' ]
             ++ optional (values.listenPort != null) ''listen-port "${toString values.listenPort}"''
             ++ optional (values.fwMark != null) ''fwmark "${values.fwMark}"''
-          )}
-
-          ${ipPostMove} link set up dev "${name}"
-
-          ${values.postSetup}
-        '';
+            ))
+            ''${ipPostMove} link set up dev "${name}"''
+            values.postSetup
+          ]
+          );
 
         postStop = ''
+          ${values.preShutdown}
           ${ipPostMove} link del dev "${name}"
           ${values.postShutdown}
         '';

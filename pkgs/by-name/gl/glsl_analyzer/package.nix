@@ -1,25 +1,29 @@
 { lib
-, pkgs
+, stdenv
 , fetchFromGitHub
-, zig_0_12
-, darwin
+, zig_0_13
+, apple-sdk_11
 }:
-
-let stdenv = if pkgs.stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else pkgs.stdenv; in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glsl_analyzer";
-  version = "1.4.5";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "nolanderc";
     repo = "glsl_analyzer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+eYBw/F1RzI5waAkLgbV0J/Td91hbNcAtHcisQaL82k=";
+    hash = "sha256-AIzk05T8JZn8HWSI6JDFUIYl4sutd3HR3Zb+xmJll0g=";
   };
 
   nativeBuildInputs = [
-    zig_0_12.hook
+    zig_0_13.hook
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    # The package failed to build on x86_64-darwin because the default was the 10.12 SDK
+    # Once the default on all platforms has been raised to the 11.0 SDK or higher, this can be removed.
+    apple-sdk_11
   ];
 
   postPatch = ''

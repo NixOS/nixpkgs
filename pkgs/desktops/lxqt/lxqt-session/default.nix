@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-session";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-IgpGtIVTcSs0O3jEniIuyIAyKBSkwN/jpGL6yZg3AVo=";
+    hash = "sha256-t3odaG9znMohROutoEquJ7JYsvPQPjPxOik+WD8WGSA=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-session";
-    description = "An alternative session manager ported from the original razor-session";
+    description = "Alternative session manager ported from the original razor-session";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = teams.lxqt.members;

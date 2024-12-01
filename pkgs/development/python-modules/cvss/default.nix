@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jsonschema
-, unittestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonschema,
+  unittestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cvss";
-  version = "3.1";
+  version = "3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,21 +19,17 @@ buildPythonPackage rec {
     owner = "RedHatProductSecurity";
     repo = "cvss";
     rev = "refs/tags/v${version}";
-    hash = "sha256-e/zwOfbt3YLlRiLFObjps3tFFk6BAWBKdanio6sus8c=";
+    hash = "sha256-+8aKNPcHFPcDyBvOO9QCVb1OIbpQHAEeJgt8fob0+lM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     jsonschema
     unittestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "cvss"
-  ];
+  pythonImportsCheck = [ "cvss" ];
 
   preCheck = ''
     cd tests
@@ -40,10 +37,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for CVSS2/3/4";
-    mainProgram = "cvss_calculator";
     homepage = "https://github.com/RedHatProductSecurity/cvss";
     changelog = "https://github.com/RedHatProductSecurity/cvss/releases/tag/v${version}";
-    license = with licenses; [ lgpl3Plus ];
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "cvss_calculator";
   };
 }

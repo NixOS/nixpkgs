@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchzip
+, fetchpatch
 , rustPlatform
 
 # native build inputs
@@ -17,12 +18,13 @@
 , sqlite
 
 # runtime deps
+, gpgme
 , gnum4
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "meli";
-  version = "0.8.5";
+  version = "0.8.9";
 
   src = fetchzip {
     urls = [
@@ -30,10 +32,10 @@ rustPlatform.buildRustPackage rec {
       "https://codeberg.org/meli/meli/archive/v${version}.tar.gz"
       "https://github.com/meli/meli/archive/refs/tags/v${version}.tar.gz"
     ];
-    hash = "sha256-xfc4DZGKQi/n87JcjTl+s2UFJ20v+6JmzSL36pZlSc0=";
+    hash = "sha256-zFsKL9F6PGoYjxFfFs2Bkdm2ZCeJtnTygkgCL7AXl9o=";
   };
 
-  cargoHash = "sha256-7ax3VQ+McmzxdG8TeKnMnD0uJmM0pi9Sskfdl2SZkz4=";
+  cargoHash = "sha256-us/jlsRbg0Y6FwznbRZeqK1TwwgL1uBwBdyneyvdI6Q=";
 
   # Needed to get openssl-sys to use pkg-config
   OPENSSL_NO_VENDOR=1;
@@ -54,12 +56,14 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [
     file
+    gnum4
   ];
 
   postInstall = ''
     installManPage meli/docs/*.{1,5,7}
 
     wrapProgram $out/bin/meli \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gpgme ]} \
       --prefix PATH : ${lib.makeBinPath [ gnum4 ]}
   '';
 
@@ -68,19 +72,16 @@ rustPlatform.buildRustPackage rec {
   '';
 
   checkFlags = [
-    "--skip=conf::test_config_parse"        # panicking due to sandbox
-    "--skip=smtp::test::test_smtp"          # requiring network
-    "--skip=utils::xdg::query_default_app"  # doesn't build
-    "--skip=utils::xdg::query_mime_info"    # doesn't build
+    "--skip=test_cli_subcommands" # panicking due to sandbox
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Terminal e-mail client and e-mail client library";
     mainProgram = "meli";
     homepage = "https://meli.delivery";
     license = licenses.gpl3;
     maintainers = with maintainers; [ _0x4A6F matthiasbeyer ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

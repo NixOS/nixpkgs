@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "py-radix-sr";
-  version = "1.0.1";
+  version = "1.0.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "SEKOIA-IO";
     repo = "py-radix";
-    rev = "v${version}";
-    hash = "sha256-aHV+NvPR4Gyk6bEpCftgBylis9rU7BWLpBMatjP4QmE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-HeXWHdPeW3m0FMtqyHhZGhgCc706Y2xiN8hn9MFt/RM=";
   };
 
   postPatch = ''
@@ -38,7 +39,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python radix tree for IPv4 and IPv6 prefix matching";
     homepage = "https://github.com/SEKOIA-IO/py-radix";
-    license = with licenses; [ isc bsdOriginal ];
+    license = with licenses; [
+      isc
+      bsdOriginal
+    ];
     maintainers = teams.wdz.members;
   };
 }

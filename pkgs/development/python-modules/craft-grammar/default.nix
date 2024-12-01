@@ -1,19 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nix-update-script
-, overrides
-, setuptools
-, pytest-check
-, pytest-mock
-, pytestCheckHook
-, pydantic_1
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  overrides,
+  setuptools-scm,
+  pytestCheckHook,
+  pydantic,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "craft-grammar";
-  version = "1.2.0";
+  version = "2.0.1";
 
   pyproject = true;
 
@@ -21,23 +20,17 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-grammar";
     rev = "refs/tags/${version}";
-    hash = "sha256-YQpxgdmUxYLkhAXDLlkLAK6VpjIEycLFY3nsE/M4o2g=";
+    hash = "sha256-xex+7rCXqRegnws470VtVltM49fx7fSHzWDZawRmOdM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    overrides
-  ];
+  dependencies = [ overrides ];
 
-  pythonImportsCheck = [
-    "craft_grammar"
-  ];
+  pythonImportsCheck = [ "craft_grammar" ];
 
   nativeCheckInputs = [
-    pydantic_1
+    pydantic
     pytestCheckHook
     pyyaml
   ];
@@ -55,4 +48,3 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
   };
 }
-

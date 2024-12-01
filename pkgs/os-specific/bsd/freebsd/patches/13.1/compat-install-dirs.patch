@@ -2,12 +2,11 @@ diff --git a/tools/build/Makefile b/tools/build/Makefile
 index 948a5f9dfdb..592af84eeae 100644
 --- a/tools/build/Makefile
 +++ b/tools/build/Makefile
-@@ -327,15 +327,15 @@ host-symlinks:
+@@ -327,14 +327,14 @@ host-symlinks:
  # and cross-tools stages. We do this here using mkdir since mtree may not exist
  # yet (this happens if we are crossbuilding from Linux/Mac).
  INSTALLDIR_LIST= \
 -	bin \
--	lib/casper \
 -	lib/geom \
 -	usr/include/casper \
 -	usr/include/private/ucl \
@@ -16,7 +15,6 @@ index 948a5f9dfdb..592af84eeae 100644
 -	usr/libdata/pkgconfig \
 -	usr/libexec
 +	${BINDIR} \
-+	${LIBDIR}/casper \
 +	${LIBDIR}/geom \
 +	${INCLUDEDIR}/casper \
 +	${INCLUDEDIR}/private/ucl \

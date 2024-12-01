@@ -2,7 +2,7 @@
 , bazelTest
 , bazel-examples
 , stdenv
-, darwin
+, cctools
 , extraBazelArgs ? ""
 , lib
 , openjdk8
@@ -20,8 +20,8 @@ let
     #! ${runtimeShell}
 
     export CXX='${stdenv.cc}/bin/clang++'
-    export LD='${darwin.cctools}/bin/ld'
-    export LIBTOOL='${darwin.cctools}/bin/libtool'
+    export LD='${cctools}/bin/ld'
+    export LIBTOOL='${cctools}/bin/libtool'
     export CC='${stdenv.cc}/bin/clang'
 
     # XXX: hack for macosX, this flags disable bazel usage of xcode
@@ -35,7 +35,7 @@ let
     cp -r ${bazel-examples}/java-tutorial $out
     find $out -type d -exec chmod 755 {} \;
   ''
-  + (lib.optionalString stdenv.isDarwin ''
+  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/tools
     cp ${toolsBazel} $out/tools/bazel
   ''));

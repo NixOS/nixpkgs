@@ -24,7 +24,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A screen capture utility from the C Suite";
+    description = "Screen capture utility from the C Suite";
     mainProgram = "coreshot";
     homepage = "https://gitlab.com/cubocore/coreapps/coreshot";
     license = licenses.gpl3Plus;

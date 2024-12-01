@@ -8,6 +8,7 @@
 , toml
 , watchdog
 , pytestCheckHook
+, pytest-cov-stub
 , rsync
 }:
 
@@ -44,11 +45,6 @@ buildPythonApplication rec {
     watchdog
   ];
 
-  # disable pytest --cov
-  preCheck = ''
-    rm setup.cfg
-  '';
-
   doCheck = true;
 
   nativeCheckInputs = [
@@ -57,9 +53,10 @@ buildPythonApplication rec {
 
   checkInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # `watchdog` dependency does not correctly detect fsevents on darwin.
     # this only affects `remote --stream-changes`
     "test/test_file_changes.py"

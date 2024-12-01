@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "apycula";
-  version = "0.12";
+  version = "0.15";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,14 +17,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Apycula";
-    hash = "sha256-aF/JVm4d6c631y+RdsCk3pAVSroRBY+lW2wBRvgcQH8=";
+    hash = "sha256-Bg5nHvUaW+cHZEzmZ08YuXwecVx6R8tys8ZBuqUEhTg=";
   };
 
   build-system = [ setuptools-scm ];
 
-  dependencies = [
-    crc
-  ];
+  dependencies = [ crc ];
 
   # Tests require a physical FPGA
   doCheck = false;

@@ -1,19 +1,27 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  nixosTests,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "sabnzbd_exporter";
-  version = "0.1.70";
+  version = "0.1.78";
 
   format = "other";
 
   src = fetchFromGitHub {
     owner = "msroest";
     repo = pname;
-    rev = version;
-    hash = "sha256-FkZAWIIlGX2VxRL3WS5J9lBgToQGbEQUqvf0xcdvynk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BLqG2I7D/bqRj6+/LUKOimmTRTH/kRdukkGdOJT3+PA=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ prometheus-client requests ];
+  propagatedBuildInputs = with python3Packages; [
+    prometheus-client
+    requests
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -26,6 +34,10 @@ python3Packages.buildPythonApplication rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests.prometheus-exporters) sabnzbd;
+  };
 
   meta = with lib; {
     description = "Prometheus exporter for sabnzbd";

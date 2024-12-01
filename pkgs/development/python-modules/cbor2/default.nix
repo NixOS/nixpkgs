@@ -1,46 +1,41 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# tests
-, hypothesis
-, pytestCheckHook
+  # tests
+  hypothesis,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "cbor2";
-  version = "5.6.3";
+  version = "5.6.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5vCuJ1HC0zOpYOCAfAYRSU6xJFYxoWeWWsvBAFCUVdM=";
+    hash = "sha256-HFM8UN3oa+8caVBgIFSg/6PDduiw4gx7j1sQh5P2mD4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov" ""
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  pythonImportsCheck = [
-    "cbor2"
-  ];
+  pythonImportsCheck = [ "cbor2" ];
 
   nativeCheckInputs = [
     hypothesis
+    pytest-cov-stub
     pytestCheckHook
   ];
 
@@ -50,6 +45,6 @@ buildPythonPackage rec {
     mainProgram = "cbor2";
     homepage = "https://github.com/agronholm/cbor2";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

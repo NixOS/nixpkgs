@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchFromGitHub, dateutil, requests, routing, vfs-libarchive, archive_tool, youtube }:
+{ lib, buildKodiAddon, fetchFromGitHub, dateutil, requests, routing, vfs-libarchive, archive_tool, youtube, infotagger }:
 
 buildKodiAddon rec {
   pname = "iagl";
@@ -19,6 +19,7 @@ buildKodiAddon rec {
     vfs-libarchive
     archive_tool
     youtube
+    infotagger
   ];
 
   meta = with lib; {

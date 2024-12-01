@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, dde-api
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dde-api,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +37,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "deepin-wallpapers provides wallpapers of dde";
     homepage = "https://github.com/linuxdeepin/deepin-wallpapers";
-    license = with licenses; [ gpl3Plus cc-by-sa-30 ];
+    license = with licenses; [
+      gpl3Plus
+      cc-by-sa-30
+    ];
     platforms = platforms.linux;
     maintainers = teams.deepin.members;
   };

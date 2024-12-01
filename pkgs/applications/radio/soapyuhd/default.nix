@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ uhd boost soapysdr ]
-    ++ lib.optionals stdenv.isDarwin [ libobjc IOKit Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc IOKit Security ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 

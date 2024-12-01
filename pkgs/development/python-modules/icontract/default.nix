@@ -1,21 +1,22 @@
-{ lib
-, astor
-, asttokens
-, asyncstdlib
-, buildPythonPackage
-, deal
-, dpcontracts
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  astor,
+  asttokens,
+  asyncstdlib,
+  buildPythonPackage,
+  deal,
+  dpcontracts,
+  fetchFromGitHub,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "icontract";
-  version = "2.6.6";
+  version = "2.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "Parquery";
     repo = "icontract";
     rev = "refs/tags/v${version}";
-    hash = "sha256-R5/FBfuTvXItfTlNZMSnO18Q+etnHbQyXFWpaOpOLes=";
+    hash = "sha256-7mRQ1g2mllHIaZh0jEd/iCgaDja1KJXuRnamhDo/Pbo=";
   };
 
   preCheck = ''
@@ -34,9 +35,7 @@ buildPythonPackage rec {
     export ICONTRACT_SLOW=1
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     asttokens
@@ -67,18 +66,20 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     # RuntimeWarning: coroutine '*' was never awaited
-    "-W" "ignore::RuntimeWarning"
+    "-W"
+    "ignore::RuntimeWarning"
   ];
 
-  pythonImportsCheck = [
-    "icontract"
-  ];
+  pythonImportsCheck = [ "icontract" ];
 
   meta = with lib; {
     description = "Provide design-by-contract with informative violation messages";
     homepage = "https://github.com/Parquery/icontract";
     changelog = "https://github.com/Parquery/icontract/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ gador thiagokokada ];
+    maintainers = with maintainers; [
+      gador
+      thiagokokada
+    ];
   };
 }

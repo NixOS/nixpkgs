@@ -9,22 +9,40 @@ pkgs.makeSetupHook {
   name = "something-hook";
   propagatedBuildInputs = [ pkgs.commandsomething ];
   depsTargetTargetPropagated = [ pkgs.libsomething ];
-} ./script.sh
+} ./script.sh;
 ```
 
 ### setup hook that depends on the hello package and runs hello and @shell@ is substituted with path to bash {#sec-pkgs.makeSetupHook-usage-example}
 
 ```nix
-pkgs.makeSetupHook {
+pkgs.makeSetupHook
+  {
     name = "run-hello-hook";
-    propagatedBuildInputs = [ pkgs.hello ];
-    substitutions = { shell = "${pkgs.bash}/bin/bash"; };
-    passthru.tests.greeting = callPackage ./test { };
-    meta.platforms = lib.platforms.linux;
-} (writeScript "run-hello-hook.sh" ''
-    #!@shell@
-    hello
-'')
+    # Put dependencies here if they have hooks or necessary dependencies propagated
+    # otherwise prefer direct paths to executables.
+    propagatedBuildInputs = [
+      pkgs.hello
+      pkgs.cowsay
+    ];
+    substitutions = {
+      shell = "${pkgs.bash}/bin/bash";
+      cowsay = "${pkgs.cowsay}/bin/cowsay";
+    };
+  }
+  (
+    writeScript "run-hello-hook.sh" ''
+      #!@shell@
+      # the direct path to the executable has to be here because
+      # this will be run when the file is sourced
+      # at which point '$PATH' has not yet been populated with inputs
+      @cowsay@ cow
+
+      _printHelloHook() {
+        hello
+      }
+      preConfigureHooks+=(_printHelloHook)
+    ''
+  );
 ```
 
 ## Attributes {#sec-pkgs.makeSetupHook-attributes}

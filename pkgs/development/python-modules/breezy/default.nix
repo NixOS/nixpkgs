@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, cargo
-, configobj
-, cython
-, dulwich
-, fastbencode
-, fastimport
-, pygithub
-, libiconv
-, merge3
-, patiencediff
-, pyyaml
-, tzlocal
-, urllib3
-, breezy
-, launchpadlib
-, testtools
-, pythonOlder
-, installShellFiles
-, rustPlatform
-, rustc
-, setuptools-gettext
-, setuptools-rust
-, testers
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cargo,
+  configobj,
+  cython,
+  dulwich,
+  fastbencode,
+  fastimport,
+  pygithub,
+  libiconv,
+  merge3,
+  patiencediff,
+  pyyaml,
+  tzlocal,
+  urllib3,
+  breezy,
+  launchpadlib,
+  testtools,
+  pythonOlder,
+  installShellFiles,
+  rustPlatform,
+  rustc,
+  setuptools-gettext,
+  setuptools-rust,
+  testers,
 }:
 
 buildPythonPackage rec {
@@ -41,9 +42,7 @@ buildPythonPackage rec {
     hash = "sha256-NSfMUyx6a/vb1vTNn/fFfNktrFdB2N940m0TR6EhB9k=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-  };
+  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
   postPatch = ''
     ln -s ${./Cargo.lock} Cargo.lock
@@ -59,24 +58,30 @@ buildPythonPackage rec {
     setuptools-rust
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  propagatedBuildInputs = [
-    configobj
-    dulwich
-    fastbencode
-    merge3
-    patiencediff
-    pyyaml
-    tzlocal
-    urllib3
-  ] ++ passthru.optional-dependencies.launchpad
-    ++ passthru.optional-dependencies.fastimport
-    ++ passthru.optional-dependencies.github;
+  propagatedBuildInputs =
+    [
+      configobj
+      dulwich
+      fastbencode
+      merge3
+      patiencediff
+      pyyaml
+      tzlocal
+      urllib3
+    ]
+    ++ optional-dependencies.launchpad
+    ++ optional-dependencies.fastimport
+    ++ optional-dependencies.github;
 
-  nativeCheckInputs = [
-    testtools
-  ];
+  optional-dependencies = {
+    launchpad = [ launchpadlib ];
+    fastimport = [ fastimport ];
+    github = [ pygithub ];
+  };
+
+  nativeCheckInputs = [ testtools ];
 
   # multiple failures on sandbox
   doCheck = false;
@@ -107,17 +112,6 @@ buildPythonPackage rec {
     tests.version = testers.testVersion {
       package = breezy;
       command = "HOME=$TMPDIR brz --version";
-    };
-    optional-dependencies = {
-      launchpad = [
-        launchpadlib
-      ];
-      fastimport = [
-        fastimport
-      ];
-      github = [
-        pygithub
-      ];
     };
   };
 

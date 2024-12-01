@@ -1,53 +1,49 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, absl-py
-, mujoco
-, pyparsing
-, pythonRelaxDepsHook
-, setuptools
-, wheel
-, dm-env
-, dm-tree
-, fsspec
-, glfw
-, h5py
-, lxml
-, mock
-, nose
-, nose-xunitmp
-, numpy
-, pillow
-, protobuf
-, pyopengl
-, requests
-, scipy
-, tqdm
-, etils
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  absl-py,
+  mujoco,
+  pyparsing,
+  setuptools,
+
+  # dependencies
+  dm-env,
+  dm-tree,
+  fsspec,
+  glfw,
+  h5py,
+  lxml,
+  mock,
+  numpy,
+  pillow,
+  protobuf,
+  pyopengl,
+  requests,
+  scipy,
+  tqdm,
+  etils,
 }:
 
 buildPythonPackage rec {
   pname = "dm-control";
-  version = "1.0.19";
+  version = "1.0.25";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "dm_control";
     rev = "refs/tags/${version}";
-    hash = "sha256-q9hY/icvc1tPI0xBYxExc2a+gv0i6utaB4GBnJwQPCw=";
+    hash = "sha256-eP85aKECvIu8nxPcSjc3PcCR9sWeTmaVJ7gBtVis0PY=";
   };
 
   build-system = [
     absl-py
     mujoco
     pyparsing
-    pythonRelaxDepsHook
     setuptools
-    wheel
   ];
 
   pythonRemoveDeps = [
@@ -65,8 +61,6 @@ buildPythonPackage rec {
     lxml
     mock
     mujoco
-    nose
-    nose-xunitmp
     numpy
     pillow
     protobuf
@@ -78,9 +72,7 @@ buildPythonPackage rec {
     tqdm
   ] ++ etils.optional-dependencies.epath;
 
-  pythonImportsCheck = [
-    "dm_control"
-  ];
+  pythonImportsCheck = [ "dm_control" ];
 
   # The installed library clashes with the `dm_control` directory remaining in the source path.
   # Usually, we get around this by `rm -rf` the python source files to ensure that the installed package is used.

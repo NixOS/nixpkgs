@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     homepage = "https://valent.andyholmes.ca/";
     changelog = "https://github.com/andyholmes/gnome-shell-extension-valent/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

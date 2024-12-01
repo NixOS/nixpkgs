@@ -1,13 +1,13 @@
-{ lib
-, buildPythonPackage
-, dos2unix
-, fetchpatch
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, pandas
-, torch
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  dos2unix,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  pandas,
+  torch,
+  scipy,
 }:
 
 buildPythonPackage rec {
@@ -25,11 +25,14 @@ buildPythonPackage rec {
     dos2unix slicer/*
   '';
 
-  nativeBuildInputs = [
-    dos2unix
-  ];
+  nativeBuildInputs = [ dos2unix ];
 
-  nativeCheckInputs = [ pytestCheckHook pandas torch scipy ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pandas
+    torch
+    scipy
+  ];
 
   meta = with lib; {
     description = "Wraps tensor-like objects and provides a uniform slicing interface via __getitem__";

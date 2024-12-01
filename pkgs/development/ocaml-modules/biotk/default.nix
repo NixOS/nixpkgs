@@ -6,11 +6,11 @@
 , ocaml-crunch
 , camlzip
 , core_kernel
-, core_unix
-, csvfields
+, core_unix ? null
+, csvfields ? null
 , fmt
 , gsl
-, ppx_csv_conv
+, ppx_csv_conv ? null
 , ppx_deriving
 , rresult
 , tyxml
@@ -20,13 +20,13 @@
 
 buildDunePackage rec {
   pname = "biotk";
-  version = "0.2.0";
+  version = "0.3";
 
   minimalOCamlVersion = "4.13";
 
   src = fetchurl {
     url = "https://github.com/pveber/biotk/releases/download/v${version}/biotk-${version}.tbz";
-    hash = "sha256-FQvbVj5MmraSN6AmOckKgJ/LB14E/pCsPvPvNppcv7A=";
+    hash = "sha256-9eRd3qYteUxu/xNEUER/DHodr6cTCuPtSKr38x32gig=";
   };
 
   nativeBuildInputs = [ ocaml-crunch ];

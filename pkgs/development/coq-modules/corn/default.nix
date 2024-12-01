@@ -4,7 +4,7 @@ mkCoqDerivation rec {
   pname = "corn";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = (range "8.17" "8.19"); out = "8.19.0"; }
+    { case = (range "8.17" "8.20"); out = "8.19.0"; }
     { case = (range "8.14" "8.18"); out = "8.18.0"; }
     { case = (range "8.11" "8.17"); out = "8.16.0"; }
     { case = (range "8.7"  "8.15"); out = "8.13.0"; }
@@ -27,7 +27,7 @@ mkCoqDerivation rec {
   meta =  with lib; {
     homepage = "http://c-corn.github.io/";
     license = licenses.gpl2;
-    description = "A Coq library for constructive analysis";
+    description = "Coq library for constructive analysis";
     maintainers = [ maintainers.vbgl ];
   };
 }

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "rosa";
-  version = "1.2.38";
+  version = "1.2.46";
 
   src = fetchFromGitHub {
     owner = "openshift";
     repo = "rosa";
     rev = "v${version}";
-    hash = "sha256-eS9mK5iK/fXWMpgA/RF7wYybcJtPDW/pIWo9Iw0I+K8=";
+    hash = "sha256-XRoHapuH0MJNrtu+Rk/yxJqeqjNIbdGYqDB84q05rdA=";
   };
   vendorHash = null;
 

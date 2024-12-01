@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, flit-core
-, defusedxml
-, pytestCheckHook
-, sphinx
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  flit-core,
+  defusedxml,
+  pytestCheckHook,
+  sphinx,
 }:
 
 buildPythonPackage rec {
@@ -34,18 +35,17 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  pythonImportsCheck = [
-    "sphinxcontrib.jquery"
+  pythonImportsCheck = [ "sphinxcontrib.jquery" ];
+
+  dependencies = [
+    sphinx
   ];
 
   nativeCheckInputs = [
     defusedxml
     pytestCheckHook
-    sphinx
   ];
 
   pythonNamespaces = [ "sphinxcontrib" ];

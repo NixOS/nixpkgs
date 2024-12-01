@@ -5,6 +5,7 @@
 , cmake
 , wrapQtAppsHook
 , qtbase
+, qtsvg
 , bluez
 , ffmpeg
 , libao
@@ -48,20 +49,20 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu-primehack";
-  version = "1.0.6a";
+  version = "1.0.7a";
 
   src = fetchFromGitHub {
     owner = "shiiion";
     repo = "dolphin";
     rev = version;
-    sha256 = "sha256-gc4+ofoLKR+cvm+SaWEnGaKrSjWMKq7pF6pEIi75Rtk=";
+    hash = "sha256-vuTSXQHnR4HxAGGiPg5tUzfiXROU3+E9kyjH+T6zVmc=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     pkg-config
     cmake
-  ] ++ lib.optional stdenv.isLinux wrapQtAppsHook;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux wrapQtAppsHook;
 
   buildInputs = [
     curl
@@ -93,13 +94,14 @@ stdenv.mkDerivation rec {
     fmt
     xz
     qtbase
-  ] ++ lib.optionals stdenv.isLinux [
+    qtsvg
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     bluez
     udev
     libevdev
     alsa-lib
     vulkan-loader
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreBluetooth
     OpenGL
     ForceFeedback
@@ -109,11 +111,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DUSE_SHARED_ENET=ON"
     "-DENABLE_LTO=ON"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
   ];
 
-  qtWrapperArgs = lib.optionals stdenv.isLinux [
+  qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
     "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
     # https://bugs.dolphin-emu.org/issues/11807
     # The .desktop file should already set this, but Dolphin may be launched in other ways
@@ -123,7 +125,7 @@ stdenv.mkDerivation rec {
   # - Allow Dolphin to use nix-provided libraries instead of building them
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace 'DISTRIBUTOR "None"' 'DISTRIBUTOR "NixOS"'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt --replace 'if(NOT APPLE)' 'if(true)'
     substituteInPlace CMakeLists.txt --replace 'if(LIBUSB_FOUND AND NOT APPLE)' 'if(LIBUSB_FOUND)'
   '';
@@ -143,8 +145,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/shiiion/dolphin";
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ashkitten Madouura ];
-    broken = stdenv.isDarwin;
+    maintainers = with maintainers; [ Madouura ];
+    broken = stdenv.hostPlatform.isDarwin;
     platforms = platforms.unix;
   };
 }

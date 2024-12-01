@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     url = "http://jedi.ks.uiuc.edu/~johns/tachyon/files/${version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-CSA8ECMRFJ9d9cw2dAn5bHJXQmZtGcJNtbqZTVqBpvU=";
   };
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Carbon
   ] ++ lib.optionals withJpegSupport [
     libjpeg
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     cp -r scenes "$out/share/tachyon/scenes"
   '';
   meta = {
-    description = "A Parallel / Multiprocessor Ray Tracing System";
+    description = "Parallel / Multiprocessor Ray Tracing System";
     mainProgram = "tachyon";
     license = lib.licenses.bsd3;
     maintainers = [lib.maintainers.raskin];

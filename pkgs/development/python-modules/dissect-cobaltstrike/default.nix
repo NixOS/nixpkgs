@@ -5,6 +5,8 @@
   dissect-util,
   fetchFromGitHub,
   flow-record,
+  hatch-vcs,
+  hatchling,
   httpx,
   lark,
   pycryptodome,
@@ -13,13 +15,11 @@
   pytestCheckHook,
   pythonOlder,
   rich,
-  setuptools,
-  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-cobaltstrike";
-  version = "1.0.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,12 +28,12 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.cobaltstrike";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CS50c3r7sdxp3CRS6XJ4QUmUFtmhFg6rSdKfYzJSOV4=";
+    hash = "sha256-GMpMTsI4mepaOGhw7/cSymkcxzn4mlNS1ZKYGYut+LM=";
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     lark
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     c2 = [
       flow-record
       httpx
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-httpserver
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "dissect.cobaltstrike" ];
 

@@ -49,10 +49,6 @@ import ./make-test-python.nix ({ lib, ... }:
   testScript = ''
     start_all()
 
-    # Wait for InfluxDB to be available
-    machine.wait_for_unit("influxdb2")
-    machine.wait_for_open_port(8086)
-
     # Wait for Scrutiny to be available
     machine.wait_for_unit("scrutiny")
     machine.wait_for_open_port(8080)

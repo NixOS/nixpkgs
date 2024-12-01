@@ -1,14 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, configobj
-, mock
-, pytestCheckHook
-, pygments
-, tabulate
-, terminaltables
-, wcwidth
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  configobj,
+  mock,
+  pytestCheckHook,
+  pygments,
+  tabulate,
 }:
 
 buildPythonPackage rec {
@@ -29,14 +28,14 @@ buildPythonPackage rec {
     tabulate
   ] ++ tabulate.optional-dependencies.widechars;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     styles = [ pygments ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     mock
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   meta = with lib; {
     description = "Python helpers for common CLI tasks";
@@ -61,7 +60,7 @@ buildPythonPackage rec {
       Read the documentation at http://cli-helpers.rtfd.io
     '';
     homepage = "https://cli-helpers.readthedocs.io/en/stable/";
-    license = licenses.bsd3 ;
+    license = licenses.bsd3;
     maintainers = [ maintainers.kalbasit ];
   };
 }

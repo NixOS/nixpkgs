@@ -1,30 +1,31 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
-, bash
-, coreutils
-, eventlet
-, fasteners
-, fixtures
-, iana-etc
-, libredirect
-, oslo-config
-, oslo-utils
-, oslotest
-, pbr
-, stestr
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  bash,
+  coreutils,
+  eventlet,
+  fasteners,
+  fixtures,
+  iana-etc,
+  libredirect,
+  oslo-config,
+  oslo-utils,
+  oslotest,
+  pbr,
+  setuptools,
+  stestr,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-concurrency";
-  version = "6.0.0";
-  format = "setuptools";
+  version = "6.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "oslo.concurrency";
     inherit version;
-    hash = "sha256-tS8CtORvXydLkfuOG/xcv5pBjfzUqDvggDRUlePSboo=";
+    hash = "sha256-tWSuCvLuV3DztuYw3yakuGdsf+Qih/GIPiWaUard8Jc=";
   };
 
   postPatch = ''
@@ -33,13 +34,15 @@ buildPythonPackage rec {
     rm test-requirements.txt
 
     substituteInPlace oslo_concurrency/tests/unit/test_processutils.py \
-      --replace "/bin/bash" "${bash}/bin/bash" \
-      --replace "/bin/true" "${coreutils}/bin/true" \
-      --replace "/usr/bin/env" "${coreutils}/bin/env" \
-      --replace "/usr/bin/true" "${coreutils}/bin/true"
+      --replace-fail "/bin/bash" "${bash}/bin/bash" \
+      --replace-fail "/usr/bin/true" "${coreutils}/bin/true" \
+      --replace-fail "/bin/true" "${coreutils}/bin/true" \
+      --replace-fail "/usr/bin/env" "${coreutils}/bin/env"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     fasteners
     oslo-config
     oslo-utils
@@ -70,7 +73,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "oslo_concurrency" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Oslo Concurrency library";
     mainProgram = "lockutils-wrapper";
     homepage = "https://github.com/openstack/oslo.concurrency";

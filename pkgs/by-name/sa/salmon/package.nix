@@ -1,7 +1,5 @@
 { lib
 , stdenv
-, autoreconfHook
-, bash
 , boost
 , bzip2
 , cereal_1_3_2
@@ -54,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     tbb_2021_11
     xz
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 

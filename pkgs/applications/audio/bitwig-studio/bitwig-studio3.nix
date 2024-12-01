@@ -15,16 +15,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook3 ];
 
-  unpackCmd = ''
-    mkdir -p root
-    dpkg-deb -x $curSrc root
-  '';
-
   dontBuild = true;
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
 
   buildInputs = with xorg; [
-    alsa-lib cairo freetype gdk-pixbuf glib gtk3 libxcb xcbutil xcbutilwm zlib libXtst libxkbcommon pulseaudio libjack2 libX11 libglvnd libXcursor stdenv.cc.cc.lib
+    alsa-lib cairo freetype gdk-pixbuf glib gtk3 libxcb xcbutil xcbutilwm zlib libXtst libxkbcommon pulseaudio libjack2 libX11 libglvnd libXcursor (lib.getLib stdenv.cc.cc)
   ];
 
   ldLibraryPath = lib.strings.makeLibraryPath buildInputs;
@@ -60,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A digital audio workstation";
+    description = "Digital audio workstation";
     longDescription = ''
       Bitwig Studio is a multi-platform music-creation system for
       production, performance and DJing, with a focus on flexible
@@ -70,5 +65,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ bfortz michalrus mrVanDalo ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

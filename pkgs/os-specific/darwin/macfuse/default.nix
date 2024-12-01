@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "macfuse-stubs";
-  version = "4.4.1";
+  version = "4.8.0";
 
   src = fetchurl {
     url = "https://github.com/osxfuse/osxfuse/releases/download/macfuse-${version}/macfuse-${version}.dmg";
-    sha256 = "2a2d0f37ec5fcff547c5efa7d08539103a0b46bc16080c2b41a7e749f6e65c61";
+    hash = "sha256-ucTzO2qdN4QkowMVvC3+4pjEVjbwMsB0xFk+bvQxwtQ=";
   };
 
   nativeBuildInputs = [ cpio xar undmg libtapi ];

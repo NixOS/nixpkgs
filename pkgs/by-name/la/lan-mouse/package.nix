@@ -1,30 +1,40 @@
-{ stdenv
-, rustPlatform
-, fetchFromGitHub
-, lib
-, darwin
-, glib
-, gtk4
-, libadwaita
-, libX11
-, libXtst
-, pkg-config
-, wrapGAppsHook4
+{
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
+  glib,
+  gtk4,
+  libadwaita,
+  libX11,
+  libXtst,
+  pkg-config,
+  wrapGAppsHook4,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lan-mouse";
-  version = "0.7.3";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "feschber";
     repo = "lan-mouse";
     rev = "v${version}";
-    hash = "sha256-W4TCA8umcr2hCIc50GFdvDVZaJGSNRNi7iDe8DJ5PHs=";
+    hash = "sha256-ofiNgJbmf35pfRvZB3ZmMkCJuM7yYgNL+Dd5mZZqyNk=";
+  };
+
+  # lan-mouse uses `git` to determine the version at build time and
+  # has Cargo set the `GIT_DESCRIBE` environment variable. To improve
+  # build reproducibility, we define the variable based on the package
+  # version instead.
+  prePatch = ''
+    rm build.rs
+  '';
+  env = {
+    GIT_DESCRIBE = "${version}-nixpkgs";
   };
 
   nativeBuildInputs = [
-    glib # needed in both {b,nativeB}uildInptus
     pkg-config
     wrapGAppsHook4
   ];
@@ -35,15 +45,12 @@ rustPlatform.buildRustPackage rec {
     libadwaita
     libX11
     libXtst
-  ]
-  ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.CoreGraphics;
+  ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-RP3Jw0b2h8KJlVdd8X/AkkmGdRlIfG2tkPtUKohDxvA=";
 
   meta = {
-    description = "A software KVM switch for sharing a mouse and keyboard with multiple hosts through the network";
+    description = "Software KVM switch for sharing a mouse and keyboard with multiple hosts through the network";
     homepage = "https://github.com/feschber/lan-mouse";
     changelog = "https://github.com/feschber/lan-mouse/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;

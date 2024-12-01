@@ -1,23 +1,23 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, cmake
-, setuptools
-, setuptools-scm
-, pybind11
+  # build-system
+  cmake,
+  setuptools,
+  setuptools-scm,
+  pybind11,
 
-# dependencies
-, cffi
-, numpy
+  # dependencies
+  cffi,
+  numpy,
 
-# native dependencies
-, libsamplerate
+  # native dependencies
+  libsamplerate,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -48,22 +48,16 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = [
-    libsamplerate
-  ];
+  buildInputs = [ libsamplerate ];
 
   propagatedBuildInputs = [
     cffi
     numpy
   ];
 
-  pythonImportsCheck = [
-    "samplerate"
-  ];
+  pythonImportsCheck = [ "samplerate" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     rm -rf samplerate

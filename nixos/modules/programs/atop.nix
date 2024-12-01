@@ -120,8 +120,8 @@ in
               wantedBy = [ (if type == "services" then "multi-user.target" else if type == "timers" then "timers.target" else null) ];
             };
           };
-          mkService = lib.mkSystemd "services";
-          mkTimer = lib.mkSystemd "timers";
+          mkService = mkSystemd "services";
+          mkTimer = mkSystemd "timers";
         in
         {
           packages = [ atop (lib.mkIf cfg.netatop.enable cfg.netatop.package) ];

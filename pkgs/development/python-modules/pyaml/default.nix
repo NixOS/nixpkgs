@@ -1,32 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, pyyaml
-, unidecode
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pyyaml,
+  unidecode,
 }:
 
 buildPythonPackage rec {
   pname = "pyaml";
-  version = "24.4.0";
+  version = "24.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Dkg9kokBDnR6Ml3EMXG8w51lYt0d1HGejMfnyWyZ/OY=";
+    hash = "sha256-543uiw1P7Va7n6EainhY5vreHscKmhIs7mc276w+abU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pyyaml
-  ];
+  propagatedBuildInputs = [ pyyaml ];
 
-  nativeCheckInputs = [
-    unidecode
-  ];
+  nativeCheckInputs = [ unidecode ];
 
   pythonImportsCheck = [ "pyaml" ];
 
@@ -35,6 +30,6 @@ buildPythonPackage rec {
     mainProgram = "pyaml";
     homepage = "https://github.com/mk-fg/pretty-yaml";
     license = licenses.wtfpl;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

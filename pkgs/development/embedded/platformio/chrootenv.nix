@@ -11,6 +11,7 @@ let
       git
       xdg-user-dirs
       ncurses
+      udev
     ]) ++ (with python.pkgs; [
       python
       setuptools
@@ -20,14 +21,15 @@ let
 
 in
 buildFHSEnv {
-  name = "platformio";
+  pname = "platformio";
+  inherit (platformio-core) version;
 
   targetPkgs = pio-pkgs;
   # disabled temporarily because fastdiff no longer support 32bit
   # multiPkgs = pio-pkgs;
 
   meta = with lib; {
-    description = "An open source ecosystem for IoT development";
+    description = "Open source ecosystem for IoT development";
     homepage = "https://platformio.org";
     maintainers = with maintainers; [ mog ];
     license = licenses.asl20;

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, certifi
-, click
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  certifi,
+  click,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -22,13 +23,11 @@ buildPythonPackage rec {
     requests
   ];
 
-  pythonImportsCheck = [
-    "gistyc"
-  ];
+  pythonImportsCheck = [ "gistyc" ];
 
   meta = with lib; {
     homepage = "https://github.com/ThomasAlbin/gistyc";
-    description = "A Python based GitHub GIST management tool";
+    description = "Python based GitHub GIST management tool";
     longDescription = ''
       gistyc is a Python-based library that enables developers to create, update
       and delete their GitHub GISTs. CLI capabilities allow you to execute the
@@ -38,6 +37,6 @@ buildPythonPackage rec {
       blocks.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
   };
 }

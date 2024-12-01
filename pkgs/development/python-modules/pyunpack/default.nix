@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, easyprocess
-, entrypoint2
-, patool
-, cabextract
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  easyprocess,
+  entrypoint2,
+  patool,
+  cabextract,
 }:
 
 buildPythonPackage rec {

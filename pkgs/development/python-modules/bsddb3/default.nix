@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, pkgs
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  python,
+  fetchPypi,
+  setuptools,
+  pkgs,
 }:
 
 buildPythonPackage rec {
@@ -17,17 +18,13 @@ buildPythonPackage rec {
     sha256 = "70d05ec8dc568f42e70fc919a442e0daadc2a905a1cfb7ca77f549d49d6e7801";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   buildInputs = [ pkgs.db ];
 
-  doCheck = pythonOlder "3.12"; # distutils usage
-
-  checkPhase = ''
-    ${python.interpreter} test.py
-  '';
+  # See : https://github.com/NixOS/nixpkgs/pull/311198#discussion_r1599257522
+  # More details here : https://www.jcea.es/programacion/pybsddb.htm
+  disabled = pythonAtLeast "3.10";
 
   # Path to database need to be set.
   # Somehow the setup.py flag is not propagated.
@@ -37,11 +34,20 @@ buildPythonPackage rec {
     export BERKELEYDB_DIR=${pkgs.db.dev};
   '';
 
+  postPatch = ''
+    substituteInPlace test3.py \
+      --replace-fail "from distutils.util import get_platform" "from sysconfig import get_platform" \
+      --replace-fail "sys.config[0:3]" "sys.implementation.cache_tag"
+  '';
+
+  checkPhase = ''
+    ${python.interpreter} test.py
+  '';
+
   meta = with lib; {
     description = "Python bindings for Oracle Berkeley DB";
     homepage = "https://www.jcea.es/programacion/pybsddb.htm";
     license = with licenses; [ agpl3Only ]; # License changed from bsd3 to agpl3 since 6.x
     maintainers = [ ];
   };
-
 }

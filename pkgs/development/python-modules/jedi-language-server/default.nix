@@ -1,38 +1,45 @@
-{ lib
-, buildPythonPackage
-, docstring-to-markdown
-, fetchFromGitHub
-, jedi
-, lsprotocol
-, poetry-core
-, pygls
-, pydantic
-, pyhamcrest
-, pytestCheckHook
-, python-lsp-jsonrpc
-, pythonOlder
-, stdenv
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  docstring-to-markdown,
+  jedi,
+  lsprotocol,
+  pydantic,
+  pygls,
+
+  # tests
+  pytestCheckHook,
+  pyhamcrest,
+  python-lsp-jsonrpc,
 }:
 
 buildPythonPackage rec {
   pname = "jedi-language-server";
-  version = "0.41.4";
-  format = "pyproject";
+  version = "0.42.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pappasam";
-    repo = pname;
+    repo = "jedi-language-server";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RDLwL9AZ3G8CzVwDtWqFFZNH/ulpHeFBhglbWNv/ZIk=";
+    hash = "sha256-KWkKIKiaRR26CctDFrHJAITM+nmRKGxLeC5HHwVZz4s=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docstring-to-markdown
     jedi
     lsprotocol
@@ -50,22 +57,20 @@ buildPythonPackage rec {
     HOME="$(mktemp -d)"
   '';
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # https://github.com/pappasam/jedi-language-server/issues/313
     "test_publish_diagnostics_on_change"
     "test_publish_diagnostics_on_save"
   ];
 
-  pythonImportsCheck = [
-    "jedi_language_server"
-  ];
+  pythonImportsCheck = [ "jedi_language_server" ];
 
-  meta = with lib; {
-    description = "A Language Server for the latest version(s) of Jedi";
+  meta = {
+    description = "Language Server for the latest version(s) of Jedi";
     mainProgram = "jedi-language-server";
     homepage = "https://github.com/pappasam/jedi-language-server";
-    changelog = "https://github.com/pappasam/jedi-language-server/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    changelog = "https://github.com/pappasam/jedi-language-server/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

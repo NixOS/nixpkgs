@@ -1,32 +1,30 @@
-{ lib
-, bleach
-, buildPythonPackage
-, cmarkgfm
-, docutils
-, fetchPypi
-, nh3
-, pygments
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cmarkgfm,
+  docutils,
+  fetchPypi,
+  nh3,
+  pygments,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "readme-renderer";
-  version = "43.0";
+  version = "44.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "readme_renderer";
     inherit version;
-    hash = "sha256-GBjdKBQIE1Ce7tjWJof3zU97rZDU21hgAcXcCdT94xE=";
+    hash = "sha256-hxIDTqu/poBcrPFAK07rKnMCj3LRFm1vXLf5wEfF0eE=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     docutils
@@ -34,23 +32,16 @@ buildPythonPackage rec {
     pygments
   ];
 
-  optional-dependencies.md = [
-    cmarkgfm
-  ];
+  optional-dependencies.md = [ cmarkgfm ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ]
-  ++ optional-dependencies.md;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.md;
 
   disabledTests = [
     "test_rst_fixtures"
     "test_rst_008.rst"
   ];
 
-  pythonImportsCheck = [
-    "readme_renderer"
-  ];
+  pythonImportsCheck = [ "readme_renderer" ];
 
   meta = with lib; {
     description = "Python library for rendering readme descriptions";

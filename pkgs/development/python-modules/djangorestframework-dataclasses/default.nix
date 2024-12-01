@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, djangorestframework
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  djangorestframework,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -17,20 +18,16 @@ buildPythonPackage rec {
     hash = "sha256-12EdSaGpsX0qDXgJ2QWYj6qAUbsrITQjWowk+gJFwwY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   postPatch = ''
     patchShebangs manage.py
   '';
 
-  propagatedBuildInputs = [
-    djangorestframework
-  ];
+  propagatedBuildInputs = [ djangorestframework ];
 
   checkPhase = ''
-   ./manage.py test
+    ./manage.py test
   '';
 
   pythonImportsCheck = [ "rest_framework_dataclasses" ];
@@ -39,6 +36,6 @@ buildPythonPackage rec {
     description = " Dataclasses serializer for Django REST framework";
     homepage = "https://github.com/oxan/djangorestframework-dataclasses";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

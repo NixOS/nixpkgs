@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# dependencies
-, django
+  # dependencies
+  django,
 
-# tests
-, beautifulsoup4
-, pillow
-, pytest-django
-, pytestCheckHook
+  # tests
+  beautifulsoup4,
+  pillow,
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -53,9 +54,7 @@ buildPythonPackage rec {
     "test_get_bootstrap_setting"
   ];
 
-  pythonImportsCheck = [
-    "django_bootstrap5"
-  ];
+  pythonImportsCheck = [ "django_bootstrap5" ];
 
   meta = with lib; {
     description = "Bootstrap 5 integration with Django";

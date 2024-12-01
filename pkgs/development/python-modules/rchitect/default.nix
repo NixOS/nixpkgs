@@ -1,28 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, cffi
-, pytestCheckHook
-, pytest-mock
-, pythonOlder
-, R
-, rPackages
-, six
-, packaging
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cffi,
+  packaging,
+  pytestCheckHook,
+  pytest-mock,
+  pythonOlder,
+  R,
+  rPackages,
+  setuptools,
+  setuptools-scm,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "rchitect";
-  version = "0.4.6";
-  format = "setuptools";
+  version = "0.4.7";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-IVyYzf433m03RRfL5SmUOdaXFy0NHf/QuAdtUeUjIz0=";
+    hash = "sha256-M7OWDo3mEEOYtjIpzPIpzPMBtv2TZJKJkSfHczZYS8Y=";
   };
 
   postPatch = ''
@@ -30,13 +33,16 @@ buildPythonPackage rec {
       --replace '"pytest-runner"' ""
   '';
 
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = [
     cffi
     six
     packaging
-  ] ++ (with rPackages; [
-    reticulate
-  ]);
+  ] ++ (with rPackages; [ reticulate ]);
 
   nativeCheckInputs = [
     pytestCheckHook

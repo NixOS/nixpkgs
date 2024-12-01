@@ -17,6 +17,6 @@ mkDerivation {
     mainProgram = "kmahjongg";
     homepage = "https://apps.kde.org/kmahjongg/";
     license = with lib.licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -3,32 +3,122 @@
 Nixpkgs provides a variety of wrapper functions that help build commonly useful derivations.
 Like [`stdenv.mkDerivation`](#sec-using-stdenv), each of these build helpers creates a derivation, but the arguments passed are different (usually simpler) from those required by `stdenv.mkDerivation`.
 
-## `runCommand` {#trivial-builder-runCommand}
 
-`runCommand :: String -> AttrSet -> String -> Derivation`
+## `runCommandWith` {#trivial-builder-runCommandWith}
 
-The result of `runCommand name drvAttrs buildCommand` is a derivation that is built by running the specified shell commands.
+The function `runCommandWith` returns a derivation built using the specified command(s), in a specified environment.
 
-By default `runCommand` runs in a stdenv with no compiler environment, whereas [`runCommandCC`](#trivial-builder-runCommandCC) uses the default stdenv, `pkgs.stdenv`.
+It is the underlying base function of  all [`runCommand*` variants].
+The general behavior is controlled via a single attribute set passed
+as the first argument, and allows specifying `stdenv` freely.
 
-`name :: String`
-:   The name that Nix will append to the store path in the same way that `stdenv.mkDerivation` uses its `name` attribute.
+The following [`runCommand*` variants] exist: `runCommand`, `runCommandCC`, and `runCommandLocal`.
 
-`drvAttr :: AttrSet`
-:   Attributes to pass to the underlying call to [`stdenv.mkDerivation`](#chap-stdenv).
+[`runCommand*` variants]: #trivial-builder-runCommand
 
-`buildCommand :: String`
+### Type {#trivial-builder-runCommandWith-Type}
+
+```
+runCommandWith :: {
+  name :: name;
+  stdenv? :: Derivation;
+  runLocal? :: Bool;
+  derivationArgs? :: { ... };
+} -> String -> Derivation
+```
+
+### Inputs {#trivial-builder-runCommandWith-Inputs}
+
+`name` (String)
+:   The derivation's name, which Nix will append to the store path; see [`mkDerivation`](#sec-using-stdenv).
+
+`runLocal` (Boolean)
+:   If set to `true` this forces the derivation to be built locally, not using [substitutes] nor remote builds.
+    This is intended for very cheap commands (<1s execution time) which can be sped up by avoiding the network round-trip(s).
+    Its effect is to set [`preferLocalBuild = true`][preferLocalBuild] and [`allowSubstitutes = false`][allowSubstitutes].
+
+   ::: {.note}
+   This prevents the use of [substituters][substituter], so only set `runLocal` (or use `runCommandLocal`) when certain the user will
+   always have a builder for the `system` of the derivation. This should be true for most trivial use cases
+   (e.g., just copying some files to a different location or adding symlinks) because there the `system`
+   is usually the same as `builtins.currentSystem`.
+   :::
+
+`stdenv` (Derivation)
+:   The [standard environment](#chap-stdenv) to use, defaulting to `pkgs.stdenv`
+
+`derivationArgs` (Attribute set)
+:   Additional arguments for [`mkDerivation`](#sec-using-stdenv).
+
+`buildCommand` (String)
 :   Shell commands to run in the derivation builder.
 
     ::: {.note}
     You have to create a file or directory `$out` for Nix to be able to run the builder successfully.
     :::
 
+[allowSubstitutes]: https://nixos.org/nix/manual/#adv-attr-allowSubstitutes
+[preferLocalBuild]: https://nixos.org/nix/manual/#adv-attr-preferLocalBuild
+[substituter]: https://nix.dev/manual/nix/latest/glossary#gloss-substituter
+[substitutes]: https://nix.dev/manual/nix/2.23/glossary#gloss-substitute
+
+::: {.example #ex-runcommandwith}
+# Invocation of `runCommandWith`
+
+```nix
+runCommandWith {
+  name = "example";
+  derivationArgs.nativeBuildInputs = [ cowsay ];
+} ''
+  cowsay > $out <<EOMOO
+  'runCommandWith' is a bit cumbersome,
+  so we have more ergonomic wrappers.
+  EOMOO
+''
+```
+
+:::
+
+
+## `runCommand` and `runCommandCC` {#trivial-builder-runCommand}
+
+The function `runCommand` returns a derivation built using the specified command(s), in the `stdenvNoCC` environment.
+
+`runCommandCC` is similar but uses the default compiler environment. To minimize dependencies, `runCommandCC`
+should only be used when the build command needs a C compiler.
+
+`runCommandLocal` is also similar to `runCommand`, but forces the derivation to be built locally.
+See the note on [`runCommandWith`] about `runLocal`.
+
+[`runCommandWith`]: #trivial-builder-runCommandWith
+
+### Type {#trivial-builder-runCommand-Type}
+
+```
+runCommand      :: String -> AttrSet -> String -> Derivation
+runCommandCC    :: String -> AttrSet -> String -> Derivation
+runCommandLocal :: String -> AttrSet -> String -> Derivation
+```
+
+### Input {#trivial-builder-runCommand-Input}
+
+While the type signature(s) differ from [`runCommandWith`], individual arguments with the same name will have the same type and meaning:
+
+`name` (String)
+:   The derivation's name
+
+`derivationArgs` (Attribute set)
+:   Additional parameters passed to [`mkDerivation`]
+
+`buildCommand` (String)
+:   The command(s) run to build the derivation.
+
+
 ::: {.example #ex-runcommand-simple}
 # Invocation of `runCommand`
 
 ```nix
-(import <nixpkgs> {}).runCommand "my-example" {} ''
+runCommand "my-example" {} ''
   echo My example command is running
 
   mkdir $out
@@ -49,17 +139,23 @@ By default `runCommand` runs in a stdenv with no compiler environment, whereas [
 ```
 :::
 
-## `runCommandCC` {#trivial-builder-runCommandCC}
-
-This works just like `runCommand`. The only difference is that it also provides a C compiler in `buildCommand`'s environment. To minimize your dependencies, you should only use this if you are sure you will need a C compiler as part of running your command.
-
-## `runCommandLocal` {#trivial-builder-runCommandLocal}
-
-Variant of `runCommand` that forces the derivation to be built locally, it is not substituted. This is intended for very cheap commands (<1s execution time). It saves on the network round-trip and can speed up a build.
-
 ::: {.note}
-This sets [`allowSubstitutes` to `false`](https://nixos.org/nix/manual/#adv-attr-allowSubstitutes), so only use `runCommandLocal` if you are certain the user will always have a builder for the `system` of the derivation. This should be true for most trivial use cases (e.g., just copying some files to a different location or adding symlinks) because there the `system` is usually the same as `builtins.currentSystem`.
+`runCommand name derivationArgs buildCommand` is equivalent to
+```nix
+runCommandWith {
+  inherit name derivationArgs;
+  stdenv = stdenvNoCC;
+} buildCommand
+```
+
+Likewise, `runCommandCC name derivationArgs buildCommand` is equivalent to
+```nix
+runCommandWith {
+  inherit name derivationArgs;
+} buildCommand
+```
 :::
+
 
 ## Writing text files {#trivial-builder-text-writing}
 
@@ -241,7 +337,7 @@ Write a text file to the Nix store.
 `allowSubstitutes` (Bool, _optional_)
 
 : Whether to allow substituting from a binary cache.
-  Passed through to [`allowSubsitutes`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-allowSubstitutes) of the underlying call to `builtins.derivation`.
+  Passed through to [`allowSubstitutes`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-allowSubstitutes) of the underlying call to `builtins.derivation`.
 
   It defaults to `false`, as running the derivation's simple `builder` executable locally is assumed to be faster than network operations.
   Set it to true if the `checkPhase` step is expensive.
@@ -405,7 +501,7 @@ writeTextFile {
   text = ''
     Contents of File
   '';
-  destination = "share/my-file";
+  destination = "/share/my-file";
 }
 ```
 
@@ -437,7 +533,6 @@ writeScript "my-file"
   Contents of File
   ''
 ```
-:::
 
 This is equivalent to:
 
@@ -450,10 +545,11 @@ writeTextFile {
   executable = true;
 }
 ```
+:::
 
 ### `writeScriptBin` {#trivial-builder-writeScriptBin}
 
-Write a script within a `bin` subirectory of a directory in the Nix store.
+Write a script within a `bin` subdirectory of a directory in the Nix store.
 This is for consistency with the convention of software packages placing executables under `bin`.
 
 `writeScriptBin` takes the following arguments:
@@ -468,7 +564,7 @@ This is for consistency with the convention of software packages placing executa
 
 The created file is marked as executable.
 The file's contents will be put into `/nix/store/<store path>/bin/<name>`.
-The store path will include the the name, and it will be a directory.
+The store path will include the name, and it will be a directory.
 
 ::: {.example #ex-writeScriptBin}
 # Usage of `writeScriptBin`
@@ -490,7 +586,7 @@ writeTextFile {
     echo "hi"
   '';
   executable = true;
-  destination = "bin/my-script";
+  destination = "/bin/my-script";
 }
 ```
 
@@ -578,7 +674,7 @@ writeTextFile {
     echo "hi"
   '';
   executable = true;
-  destination = "bin/my-script";
+  destination = "/bin/my-script";
 }
 ```
 
@@ -636,7 +732,7 @@ writeShellApplication {
 
 ## `symlinkJoin` {#trivial-builder-symlinkJoin}
 
-This can be used to put many derivations into the same directory structure. It works by creating a new derivation and adding symlinks to each of the paths listed. It expects two arguments, `name`, and `paths`. `name` is the name used in the Nix store path for the created derivation. `paths` is a list of paths that will be symlinked. These paths can be to Nix store derivations or any other subdirectory contained within.
+This can be used to put many derivations into the same directory structure. It works by creating a new derivation and adding symlinks to each of the paths listed. It expects two arguments, `name`, and `paths`. `name` (or alternatively `pname` and `version`) is the name used in the Nix store path for the created derivation. `paths` is a list of paths that will be symlinked. These paths can be to Nix store derivations or any other subdirectory contained within.
 Here is an example:
 ```nix
 # adds symlinks of hello and stack to current build and prints "links added"
@@ -657,10 +753,6 @@ This creates a derivation with a directory structure like the following:
     |       `-- stack.fish -> /nix/store/6lzdpxshx78281vy056lbk553ijsdr44-stack-2.1.3.1/share/fish/vendor_completions.d/stack.fish
 ...
 ```
-
-## `writeReferencesToFile` {#trivial-builder-writeReferencesToFile}
-
-Deprecated. Use [`writeClosure`](#trivial-builder-writeClosure) instead.
 
 ## `writeClosure` {#trivial-builder-writeClosure}
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XPUJzALti7QXTmgtuwVDhCA2luWz7zfykWEsJmpHzA4=";
+    hash = "sha256-XPUJzALti7QXTmgtuwVDhCA2luWz7zfykWEsJmpHzA4=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/apimanagement/azure-mgmt-apimanagement";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-apimanagement_${version}/sdk/apimanagement/azure-mgmt-apimanagement/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

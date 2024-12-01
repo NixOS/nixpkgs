@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://mb.srb2.org/threads/srb2kart.25868/";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric donovanglover ];
+    maintainers = with maintainers; [ donovanglover ];
     mainProgram = "srb2kart";
   };
 })

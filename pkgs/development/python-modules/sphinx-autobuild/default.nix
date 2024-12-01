@@ -1,40 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, flit-core
+  # build-system
+  flit-core,
 
-# dependencies
-, colorama
-, sphinx
-, starlette
-, uvicorn
-, watchfiles
-, websockets
+  # dependencies
+  colorama,
+  httpx,
+  sphinx,
+  starlette,
+  uvicorn,
+  watchfiles,
+  websockets,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-autobuild";
-  version = "2024.04.16";
+  version = "2024.09.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = "sphinx-autobuild";
     rev = "refs/tags/${version}";
-    hash = "sha256-5HgRqt2ZTGcQ6X2sZN0gRfahmwlqpDbae5gOnGa02L0=";
+    hash = "sha256-azSQ524iXWeW7D1NgpWErFL4K0TBZ8ib6lRr1J246h4=";
   };
 
-  build-system = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
   dependencies = [
     colorama
+    httpx
     sphinx
     starlette
     uvicorn
@@ -42,9 +43,7 @@ buildPythonPackage rec {
     websockets
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "sphinx_autobuild" ];
 
@@ -53,6 +52,6 @@ buildPythonPackage rec {
     mainProgram = "sphinx-autobuild";
     homepage = "https://github.com/sphinx-doc/sphinx-autobuild";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [holgerpeters];
+    maintainers = with maintainers; [ holgerpeters ];
   };
 }

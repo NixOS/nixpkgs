@@ -9,6 +9,7 @@
 , fb303
 , fbthrift
 , fetchFromGitHub
+, fetchpatch
 , fizz
 , fmt_8
 , folly
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_EDEN_SUPPORT=NO" # requires sapling (formerly known as eden), which is not packaged in nixpkgs
     "-DWATCHMAN_STATE_DIR=${stateDir}"
     "-DWATCHMAN_VERSION_OVERRIDE=${version}"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
   ];
 
@@ -83,13 +84,21 @@ stdenv.mkDerivation rec {
     lz4
     zstd
     libiconv
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   cargoRoot = "watchman/cli";
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
   };
+
+  patches = [
+    # fix build with rustc >=1.79
+    (fetchpatch {
+      url = "https://github.com/facebook/watchman/commit/c3536143cab534cdd9696eb3e2d03c4ac1e2f883.patch";
+      hash = "sha256-lpGr5H28gfVXkWNdfDo4SCbF/p5jB4SNlHj6km/rfw4=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs .

@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchFromGitHub
-, click
-, h11
-, httptools
-, python-dotenv
-, pyyaml
-, typing-extensions
-, uvloop
-, watchfiles
-, websockets
-, hatchling
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchFromGitHub,
+  click,
+  h11,
+  httptools,
+  python-dotenv,
+  pyyaml,
+  typing-extensions,
+  uvloop,
+  watchfiles,
+  websockets,
+  hatchling,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.29.0";
+  version = "0.32.0";
   disabled = pythonOlder "3.8";
 
   pyproject = true;
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = "uvicorn";
     rev = "refs/tags/${version}";
-    hash = "sha256-D0FdZxaDB+9N/7p73GF8qw0UwbXTQrKc1WOgy9UltxA=";
+    hash = "sha256-LTioJNDq1zsy/FO6lBgRW8Ow5qyxUD8NjNCj4nIrVDM=";
   };
 
   outputs = [
@@ -39,11 +40,9 @@ buildPythonPackage rec {
   dependencies = [
     click
     h11
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
-  passthru.optional-dependencies.standard = [
+  optional-dependencies.standard = [
     httptools
     python-dotenv
     pyyaml
@@ -57,9 +56,7 @@ buildPythonPackage rec {
     cp -R tests $testsout/tests
   '';
 
-  pythonImportsCheck = [
-    "uvicorn"
-  ];
+  pythonImportsCheck = [ "uvicorn" ];
 
   # check in passthru.tests.pytest to escape infinite recursion with httpx/httpcore
   doCheck = false;
@@ -71,7 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://www.uvicorn.org/";
     changelog = "https://github.com/encode/uvicorn/blob/${src.rev}/CHANGELOG.md";
-    description = "The lightning-fast ASGI server";
+    description = "Lightning-fast ASGI server";
     mainProgram = "uvicorn";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];

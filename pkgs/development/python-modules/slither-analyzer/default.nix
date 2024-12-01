@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, crytic-compile
-, fetchFromGitHub
-, makeWrapper
-, packaging
-, prettytable
-, pythonOlder
-, setuptools-scm
-, solc
-, web3
-, withSolc ? false
-, testers
-, slither-analyzer
+{
+  lib,
+  nix-update-script,
+  buildPythonPackage,
+  crytic-compile,
+  fetchFromGitHub,
+  makeWrapper,
+  packaging,
+  prettytable,
+  pythonOlder,
+  setuptools-scm,
+  solc,
+  web3,
+  withSolc ? false,
+  testers,
+  slither-analyzer,
 }:
 
 buildPythonPackage rec {
   pname = "slither-analyzer";
-  version = "0.10.2";
+  version = "0.10.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "crytic";
     repo = "slither";
     rev = "refs/tags/${version}";
-    hash = "sha256-KmbmljtmMtrJxgSMJjQ8fdk6RpEXcAVBuo24EsyMV8k=";
+    hash = "sha256-KWLv0tpd1FHZ9apipVPWw6VjtfYpngsH7XDQQ3luBZA=";
   };
 
   nativeBuildInputs = [
@@ -83,6 +84,8 @@ buildPythonPackage rec {
     version = "${version}";
   };
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Static Analyzer for Solidity";
     longDescription = ''
@@ -94,6 +97,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/crytic/slither/releases/tag/${version}";
     license = licenses.agpl3Plus;
     mainProgram = "slither";
-    maintainers = with maintainers; [ arturcygan fab hellwolf ];
+    maintainers = with maintainers; [
+      arturcygan
+      fab
+      hellwolf
+    ];
   };
 }

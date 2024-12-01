@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nix-unit";
-  version = "2.18.0";
+  version = "2.24.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-unit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9wq14p+85oW4HlD42NJ0jyA++z3nEYjFQ6uT40xdfbc=";
+    hash = "sha256-PcT0jtv2QFaht5eSs1Vq4XGDqtMLdPC49ao9uwGYclE=";
   };
 
   buildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     # We pin the nix version to a known working one here as upgrades can likely break the build.
     # Since the nix language is rather stable we don't always need to have the latest and greatest for unit tests
     # On each update of nix unit we should re-evaluate what version we need.
-    nixVersions.nix_2_18
+    nixVersions.nix_2_24
     boost
   ];
 

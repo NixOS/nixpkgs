@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qlog";
-  version = "0.35.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "foldynl";
     repo = "QLog";
     rev = "v${version}";
-    hash = "sha256-f+H1NglsNhUTbH0JOWmvERrEQEwDAIRkJCD4ELC4oA8=";
+    hash = "sha256-mG2OUw1sB2bd4XiEXP5CblfpeZZNVqQ7310wepCZqbI=";
     fetchSubmodules = true;
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     qtwebchannel
     hamlib
     qtkeychain
-  ] ++ (lib.optionals stdenv.isDarwin [
+  ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [
     cups
   ]);
 

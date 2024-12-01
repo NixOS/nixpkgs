@@ -1,16 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# tested using
-, pytestCheckHook
+  # build-system
+  setuptools,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "hiredis";
-  version = "2.3.2";
-  format = "setuptools";
+  version = "2.4.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -19,16 +23,14 @@ buildPythonPackage rec {
     repo = "hiredis-py";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-7hTGXHNECy+dSsop0ULsNZvGFecCIEv+q46s7t/K7k8=";
+    hash = "sha256-PnCSf7ZEPNtweQEnWTHCCVCvg5QGxGeBSAZCFHOziDQ=";
   };
 
-  pythonImportsCheck = [
-    "hiredis"
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  pythonImportsCheck = [ "hiredis" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     rm -rf hiredis
@@ -42,4 +44,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ mmai ];
   };
 }
-

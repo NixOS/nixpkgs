@@ -15,8 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-6/7oCKBMEcQeJ8PaFP15Xef9sQRYCpigtzINv2M6GUY=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
+  build-system = with python3.pkgs; [
     wheel
   ];
 
@@ -29,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     lxml
     mpv
     python-vlc
-  ];
+  ] ++ requests.optional-dependencies.socks;
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
@@ -39,9 +38,15 @@ python3.pkgs.buildPythonApplication rec {
     "tests"
   ];
 
-  disabledTests = [ "test_datafile_download" ];
+  # Disable tests that are problematic with pytest
+  # Check NixOS/nixpkgs#333019 for more info about these
+  disabledTests = [
+    "test_datafile_download"
+    "test_display_get_input_str"
+    "test_display_get_y_n"
+  ];
 
-  pythonImportCheck = [
+  pythonImportsCheck = [
     "castero"
   ];
 

@@ -1,9 +1,7 @@
-{ lib, fetchurl, yojson, csexp, findlib, buildDunePackage, merlin-lib, merlin, result }:
+{ lib, yojson, csexp, findlib, buildDunePackage, merlin-lib, merlin, result }:
 
 buildDunePackage rec {
   pname = "dot-merlin-reader";
-
-  duneVersion = "3";
 
   inherit (merlin) version src;
 

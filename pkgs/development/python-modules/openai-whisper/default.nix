@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, substituteAll
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  substituteAll,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# runtime
-, ffmpeg-headless
+  # runtime
+  ffmpeg-headless,
 
-# propagates
-, more-itertools
-, numba
-, numpy
-, openai-triton
-, tiktoken
-, torch
-, tqdm
+  # propagates
+  more-itertools,
+  numba,
+  numpy,
+  triton,
+  tiktoken,
+  torch,
+  tqdm,
 
-# tests
-, pytestCheckHook
-, scipy
+  # tests
+  pytestCheckHook,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "20231117";
+  version = "20240930";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-MJ1XjB/GuYUiECCuuHS0NWHvvs+ko0oTvLuDI7zLNiY=";
+    hash = "sha256-6wfHJM2pg+y1qUfVF1VRG86G3CtQ+UNIwMXR8pPi2k4=";
   };
 
   patches = [
@@ -43,9 +44,7 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     more-itertools
@@ -54,9 +53,7 @@ buildPythonPackage rec {
     tiktoken
     torch
     tqdm
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform openai-triton) [
-    openai-triton
-  ];
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform triton) [ triton ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -81,6 +78,9 @@ buildPythonPackage rec {
     mainProgram = "whisper";
     homepage = "https://github.com/openai/whisper";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa MayNiklas ];
+    maintainers = with maintainers; [
+      hexa
+      MayNiklas
+    ];
   };
 }

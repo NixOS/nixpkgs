@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "makejinja";
-  version = "2.6.0";
+  version = "2.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mirkolenz";
     repo = "makejinja";
-    rev = "v${version}";
-    hash = "sha256-sH4m+rcHA6nW21xEJon10lS7e5QiFwUyvV49NZ3UY+s=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xrXyXFmh9df04I/zcSvQXsyUPrAvbOyyrhx8RNS3Ojs=";
   };
 
   build-system = with python3Packages; [ poetry-core ];
@@ -31,12 +31,10 @@ python3Packages.buildPythonApplication rec {
     ++ typed-settings.optional-dependencies.cattrs
     ++ typed-settings.optional-dependencies.click;
 
-  preCheck = ''
-    substituteInPlace pyproject.toml \
-        --replace-fail "--cov makejinja --cov-report term-missing" ""
-  '';
-
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   meta = {
     description = "Generate entire directory structures using Jinja templates with support for external data and custom plugins";

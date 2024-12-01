@@ -10,8 +10,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "plantuml";
     publisher = "jebbs";
-    version = "2.17.4";
-    hash = "sha256-fnz6ubB73i7rJcv+paYyNV1r4cReuyFPjgPM0HO40ug=";
+    version = "2.18.1";
+    hash = "sha256-o4FN/vUEK53ZLz5vAniUcnKDjWaKKH0oPZMbXVarDng=";
   };
   nativeBuildInputs = [
     jq
@@ -23,11 +23,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
   '';
 
   meta = {
-    description = "A Visual Studio Code extension for supporting Rich PlantUML";
+    description = "Visual Studio Code extension for supporting Rich PlantUML";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=jebbs.plantuml";
     homepage = "https://github.com/qjebbs/vscode-plantuml";
     changelog = "https://marketplace.visualstudio.com/items/jebbs.plantuml/changelog";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.victormignot ];
+    maintainers = [ ];
   };
 }

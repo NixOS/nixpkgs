@@ -6,6 +6,7 @@
 , xorg
 , gaugePlugins
 , plugins ? []
+, runCommand
 }:
 
 stdenvNoCC.mkDerivation {
@@ -53,6 +54,8 @@ stdenvNoCC.mkDerivation {
         requiredPlugins = with manifest; [ Language ] ++ Plugins;
         manifestPlugins = plugins: map (name: plugins.${name} or (throw "Gauge plugin ${name} is not available!")) requiredPlugins;
       in gauge.withPlugins manifestPlugins;
+    # Builds gauge with all plugins and checks for successful installation
+    tests.allPlugins = gaugePlugins.testGaugePlugins { plugins = lib.filter lib.isDerivation (lib.attrValues gaugePlugins); };
   };
 
   inherit (gauge-unwrapped) meta;

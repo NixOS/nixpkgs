@@ -1,36 +1,37 @@
-{ stdenv
-, lib
-, substituteAll
-, fetchpatch
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
+{
+  stdenv,
+  lib,
+  substituteAll,
+  fetchpatch,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
 
-# build-system
-, cython
-, setuptools
-, pkg-config
+  # build-system
+  cython,
+  setuptools,
+  pkg-config,
 
-# native dependencies
-, AppKit
-, fontconfig
-, freetype
-, libjpeg
-, libpng
-, libX11
-, portmidi
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, SDL2_ttf
+  # native dependencies
+  AppKit,
+  fontconfig,
+  freetype,
+  libjpeg,
+  libpng,
+  libX11,
+  portmidi,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
 
-# tests
-, python
+  # tests
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "pygame";
-  version = "2.5.2";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -42,7 +43,7 @@ buildPythonPackage rec {
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The documentation
     # has such files and will be removed.
-    hash = "sha256-+gRv3Rim+2aL2uhPPGfVD0QDgB013lTf6wPx8rOwgXg=";
+    hash = "sha256-wNXcmH0IIuAOoomIdmhAPxe4TiEzes3Kq+Vth2r4/IA=";
     postFetch = "rm -rf $out/docs/reST";
   };
 
@@ -50,25 +51,23 @@ buildPythonPackage rec {
     # Patch pygame's dependency resolution to let it find build inputs
     (substituteAll {
       src = ./fix-dependency-finding.patch;
-      buildinputs_include = builtins.toJSON (builtins.concatMap (dep: [
-        "${lib.getDev dep}/"
-        "${lib.getDev dep}/include"
-        "${lib.getDev dep}/include/SDL2"
-      ]) buildInputs);
-      buildinputs_lib = builtins.toJSON (builtins.concatMap (dep: [
-        "${lib.getLib dep}/"
-        "${lib.getLib dep}/lib"
-      ]) buildInputs);
+      buildinputs_include = builtins.toJSON (
+        builtins.concatMap (dep: [
+          "${lib.getDev dep}/"
+          "${lib.getDev dep}/include"
+          "${lib.getDev dep}/include/SDL2"
+        ]) buildInputs
+      );
+      buildinputs_lib = builtins.toJSON (
+        builtins.concatMap (dep: [
+          "${lib.getLib dep}/"
+          "${lib.getLib dep}/lib"
+        ]) buildInputs
+      );
     })
-    # Skip tests that should be disabled without video driver
-    ./skip-surface-tests.patch
 
-    # removes distutils unbreaking py312, part of https://github.com/pygame/pygame/pull/4211
-    (fetchpatch {
-      name = "remove-distutils.patch";
-      url = "https://github.com/pygame/pygame/commit/6038e7d6583a7a25fcc6e15387cf6240e427e5a7.patch";
-      hash = "sha256-HxcYjjhsu/Y9HiK9xDvY4X5dgWPP4XFLxdYGXC6tdWM=";
-    })
+    # mixer queue test returns busy queue when it shouldn't
+    ./skip-mixer-test.patch
   ];
 
   postPatch = ''
@@ -94,9 +93,7 @@ buildPythonPackage rec {
     SDL2_image
     SDL2_mixer
     SDL2_ttf
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
   preConfigure = ''
     ${python.pythonOnBuildForHost.interpreter} buildconfig/config.py

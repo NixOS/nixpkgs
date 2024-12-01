@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, glfw
-, darwin
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableDebug ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  glfw,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableDebug ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mlx42";
-  version = "2.3.3";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "codam-coding-college";
     repo = "MLX42";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-igkTeOnqGYBISzmtDGlDx9cGJjoQ8fzXtVSR9hU4F5E=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-/HCP6F7N+J97n4orlLxg/4agEoq4+rJdpeW/3q+DI1I=";
   };
 
-  postPatch = ''
-    patchShebangs ./tools
-  ''
-  + lib.optionalString enableShared ''
-    substituteInPlace CMakeLists.txt \
-        --replace "mlx42 STATIC" "mlx42 SHARED"
-  '';
+  postPatch =
+    ''
+      patchShebangs --build ./tools
+    ''
+    + lib.optionalString enableShared ''
+      substituteInPlace CMakeLists.txt \
+          --replace-fail "mlx42 STATIC" "mlx42 SHARED"
+    '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ glfw ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ OpenGL Cocoa IOKit ]);
+  buildInputs = [ glfw ];
 
-  cmakeFlags = [ "-DDEBUG=${toString enableDebug}" ];
+  cmakeFlags = [ (lib.cmakeBool "DEBUG" enableDebug) ];
 
   postInstall = ''
     mkdir -p $out/lib/pkgconfig
@@ -41,8 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    changelog = "https://github.com/codam-coding-college/MLX42/releases/tag/${finalAttrs.src.rev}";
-    description = "A simple cross-platform graphics library that uses GLFW and OpenGL";
+    changelog = "https://github.com/codam-coding-college/MLX42/releases/tag/v${finalAttrs.version}";
+    description = "Simple cross-platform graphics library that uses GLFW and OpenGL";
     homepage = "https://github.com/codam-coding-college/MLX42";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ tomasajt ];

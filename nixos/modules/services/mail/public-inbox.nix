@@ -7,7 +7,7 @@ let
   stateDir = "/var/lib/public-inbox";
 
   gitIni = pkgs.formats.gitIni { listsAsDuplicateKeys = true; };
-  iniAtom = elemAt gitIni.type/*attrsOf*/.functor.wrapped/*attrsOf*/.functor.wrapped/*either*/.functor.wrapped 0;
+  iniAtom = gitIni.lib.types.atom;
 
   useSpamAssassin = cfg.settings.publicinboxmda.spamcheck == "spamc" ||
                     cfg.settings.publicinboxwatch.spamcheck == "spamc";
@@ -455,7 +455,7 @@ in
           after = [ "public-inbox-init.service" "public-inbox-watch.service" ];
           requires = [ "public-inbox-init.service" ];
           serviceConfig = {
-            BindPathsReadOnly =
+            BindReadOnlyPaths =
               map (c: c.dir) (lib.attrValues cfg.settings.coderepo);
             ExecStart = escapeShellArgs (
               [ "${cfg.package}/bin/public-inbox-httpd" ] ++

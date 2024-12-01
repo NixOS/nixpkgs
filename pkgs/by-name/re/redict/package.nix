@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitea, fetchurl, fetchpatch, lua, jemalloc, pkg-config, nixosTests
+{ lib, stdenv, fetchFromGitea, fetchurl, lua, jemalloc, pkg-config, nixosTests
 , tcl, which, ps, getconf
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 # dependency ordering is broken at the moment when building with openssl
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withSystemd systemd
     ++ lib.optionals tlsSupport [ openssl ];
 
-  preBuild = lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/Makefile --replace "-flto" ""
   '';
 
@@ -49,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  hardeningEnable = lib.optionals (!stdenv.isDarwin) [ "pie" ];
+  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [ "-std=c11" ]);
 
   # darwin currently lacks a pure `pgrep` which is extensively used here
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   nativeCheckInputs = [ which tcl ps ] ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
   checkPhase = ''
     runHook preCheck
@@ -84,11 +84,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://redict.io";
-    description = "A distributed key/value store";
+    description = "Distributed key/value store";
     license = licenses.lgpl3Only;
     platforms = platforms.all;
     changelog = "https://codeberg.org/redict/redict/releases/tag/${finalAttrs.version}";
-    maintainers = with maintainers; [ yuka gmemstr ];
+    maintainers = with maintainers; [ yuka ];
     mainProgram = "redict-cli";
   };
 })

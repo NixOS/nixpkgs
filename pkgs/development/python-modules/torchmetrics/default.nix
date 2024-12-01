@@ -1,39 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, numpy
-, lightning-utilities
-, cloudpickle
-, scikit-learn
-, scikit-image
-, packaging
-, pretty-errors
-, psutil
-, py-deprecate
-, torch
-, pytestCheckHook
-, torchmetrics
-, pytorch-lightning
-, pytest-doctestplus
-, pytest-xdist
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # dependencies
+  numpy,
+  lightning-utilities,
+  packaging,
+  pretty-errors,
+
+  # buildInputs
+  torch,
+
+  # tests
+  cloudpickle,
+  psutil,
+  pytestCheckHook,
+  pytest-doctestplus,
+  pytest-xdist,
+  pytorch-lightning,
+  scikit-image,
+  scikit-learn,
+
+  # passthru
+  torchmetrics,
 }:
 
 let
   pname = "torchmetrics";
-  version = "1.4.0";
+  version = "1.4.3";
 in
 buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "torchmetrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5ANEpUdd5eyzBhhAEHrvHNHMOQuXhkkKuL1t3dJLhdE=";
+    hash = "sha256-527cHPFdFw/JajHe7Kkz7+zl4EfePaLx77I2OTjjxaA=";
   };
 
   dependencies = [
@@ -41,23 +46,20 @@ buildPythonPackage {
     lightning-utilities
     packaging
     pretty-errors
-    py-deprecate
   ];
 
   # Let the user bring their own instance
-  buildInputs = [
-    torch
-  ];
+  buildInputs = [ torch ];
 
   nativeCheckInputs = [
-    pytorch-lightning
-    scikit-learn
-    scikit-image
     cloudpickle
     psutil
     pytestCheckHook
     pytest-doctestplus
     pytest-xdist
+    pytorch-lightning
+    scikit-image
+    scikit-learn
   ];
 
   # A cyclic dependency in: integrations/test_lightning.py
@@ -85,17 +87,13 @@ buildPythonPackage {
     "src/torchmetrics"
   ];
 
-  pythonImportsCheck = [
-    "torchmetrics"
-  ];
+  pythonImportsCheck = [ "torchmetrics" ];
 
-  meta = with lib; {
+  meta = {
     description = "Machine learning metrics for distributed, scalable PyTorch applications (used in pytorch-lightning)";
     homepage = "https://lightning.ai/docs/torchmetrics/";
     changelog = "https://github.com/Lightning-AI/torchmetrics/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      SomeoneSerge
-    ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

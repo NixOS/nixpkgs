@@ -9,7 +9,6 @@
 , glib
 , libxml2
 , sqlite
-, zlib
 , sg3_utils
 , gdk-pixbuf
 , taglib
@@ -67,6 +66,13 @@ stdenv.mkDerivation rec {
     glib
     libimobiledevice
   ];
+
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-int"
+      "-Wno-error=incompatible-pointer-types"
+    ];
+  };
 
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/gtkpod/";

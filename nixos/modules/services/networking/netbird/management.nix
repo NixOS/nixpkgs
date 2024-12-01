@@ -137,7 +137,7 @@ in
 
 {
   options.services.netbird.server.management = {
-    enable = mkEnableOption "Netbird Management Service.";
+    enable = mkEnableOption "Netbird Management Service";
 
     package = mkPackageOption pkgs "netbird" { };
 
@@ -194,6 +194,12 @@ in
       type = port;
       default = 8011;
       description = "Internal port of the management server.";
+    };
+
+    metricsPort = mkOption {
+      type = port;
+      default = 9090;
+      description = "Internal port of the metrics server.";
     };
 
     extraOptions = mkOption {
@@ -335,7 +341,7 @@ in
       description = "Log level of the netbird services.";
     };
 
-    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird management service.";
+    enableNginx = mkEnableOption "Nginx reverse-proxy for the netbird management service";
   };
 
   config = mkIf cfg.enable {
@@ -359,6 +365,13 @@ in
             name = "A Turn configuration's password";
           }
         ];
+
+    assertions = [
+      {
+        assertion = cfg.port != cfg.metricsPort;
+        message = "The primary listen port cannot be the same as the listen port for the metrics endpoint";
+      }
+    ];
 
     systemd.services.netbird-management = {
       description = "The management server for Netbird, a wireguard VPN";
@@ -387,6 +400,9 @@ in
             # Port to listen on
             "--port"
             cfg.port
+            # Port the internal prometheus server listens on
+            "--metrics-port"
+            cfg.metricsPort
             # Log to stdout
             "--log-file"
             "console"

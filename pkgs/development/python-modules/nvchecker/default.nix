@@ -1,27 +1,28 @@
-{ lib
-, platformdirs
-, buildPythonPackage
-, docutils
-, fetchFromGitHub
-, flaky
-, installShellFiles
-, pycurl
-, pytest-asyncio
-, pytest-httpbin
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, structlog
-, tomli
-, tornado
-, awesomeversion
-, packaging
-, lxml
+{
+  lib,
+  platformdirs,
+  buildPythonPackage,
+  docutils,
+  fetchFromGitHub,
+  flaky,
+  installShellFiles,
+  pycurl,
+  pytest-asyncio,
+  pytest-httpbin,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  structlog,
+  tomli,
+  tornado,
+  awesomeversion,
+  packaging,
+  lxml,
 }:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.14.1";
+  version = "2.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "lilydjwg";
     repo = "nvchecker";
     rev = "v${version}";
-    hash = "sha256-V2lTGeaiwUsh8IONbZ5GQrqevJMhjeuFLTDF8UdWg8Q=";
+    hash = "sha256-dK3rZCoSukCzPOFVectQiF6qplUuDBh9qyN8JL0+j20=";
   };
 
   nativeBuildInputs = [
@@ -44,9 +45,7 @@ buildPythonPackage rec {
     platformdirs
     tornado
     pycurl
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -66,13 +65,9 @@ buildPythonPackage rec {
     installManPage docs/_build/man/nvchecker.1
   '';
 
-  pythonImportsCheck = [
-    "nvchecker"
-  ];
+  pythonImportsCheck = [ "nvchecker" ];
 
-  pytestFlagsArray = [
-    "-m 'not needs_net'"
-  ];
+  pytestFlagsArray = [ "-m 'not needs_net'" ];
 
   optional-dependencies = {
     # vercmp = [ pyalpm ];
@@ -86,6 +81,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/lilydjwg/nvchecker";
     changelog = "https://github.com/lilydjwg/nvchecker/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

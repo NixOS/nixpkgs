@@ -5,6 +5,7 @@
 , pkg-config
 , rustPlatform
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,8 +34,9 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
+    SystemConfiguration
   ];
 
   # Tests require network access

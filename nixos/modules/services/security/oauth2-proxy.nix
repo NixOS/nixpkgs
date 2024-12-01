@@ -62,7 +62,7 @@ let
   } // lib.optionalAttrs (cfg.passBasicAuth) {
     basic-auth-password = cfg.basicAuthPassword;
   } // lib.optionalAttrs (cfg.htpasswd.file != null) {
-    display-htpasswd-file = cfg.htpasswd.displayForm;
+    display-htpasswd-form = cfg.htpasswd.displayForm;
   } // lib.optionalAttrs tls.enable {
     tls-cert-file = tls.certificate;
     tls-key-file = tls.key;
@@ -577,20 +577,22 @@ in
 
     users.groups.oauth2-proxy = {};
 
-    systemd.services.oauth2-proxy = {
-      description = "OAuth2 Proxy";
-      path = [ cfg.package ];
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ];
-      after = [ "network-online.target" ];
-
-      serviceConfig = {
-        User = "oauth2-proxy";
-        Restart = "always";
-        ExecStart = "${cfg.package}/bin/oauth2-proxy ${configString}";
-        EnvironmentFile = lib.mkIf (cfg.keyFile != null) cfg.keyFile;
+    systemd.services.oauth2-proxy =
+      let needsKeycloak = lib.elem cfg.provider ["keycloak" "keycloak-oidc"]
+                          && config.services.keycloak.enable;
+      in {
+        description = "OAuth2 Proxy";
+        path = [ cfg.package ];
+        wantedBy = [ "multi-user.target" ];
+        wants = [ "network-online.target" ] ++ lib.optionals needsKeycloak [ "keycloak.service" ];
+        after = [ "network-online.target" ] ++ lib.optionals needsKeycloak [ "keycloak.service" ];
+        restartTriggers = [ cfg.keyFile ];
+        serviceConfig = {
+          User = "oauth2-proxy";
+          Restart = "always";
+          ExecStart = "${lib.getExe cfg.package} ${configString}";
+          EnvironmentFile = lib.mkIf (cfg.keyFile != null) cfg.keyFile;
+        };
       };
-    };
-
   };
 }

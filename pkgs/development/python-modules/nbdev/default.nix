@@ -1,41 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, setuptools
-, ipywidgets
-, fastcore
-, astunparse
-, watchdog
-, execnb
-, ghapi
-, pyyaml
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  ipywidgets,
+  fastcore,
+  astunparse,
+  watchdog,
+  execnb,
+  ghapi,
+  pyyaml,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nbdev";
-  version = "2.3.20";
+  version = "2.3.32";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tBrWdG8njNQzQ3kc0ATeu3ToP34gdmOBKj2jcB0X8+8=";
+    hash = "sha256-pyPUmITUIM2uwm9F7xm+yorXMwMsHctVc4936+J76a0=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
-  pythonRelaxDeps = [
-    "ipywidgets"
-  ];
+  pythonRelaxDeps = [ "ipywidgets" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     astunparse
@@ -50,9 +43,7 @@ buildPythonPackage rec {
   # no real tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "nbdev"
-  ];
+  pythonImportsCheck = [ "nbdev" ];
 
   meta = with lib; {
     homepage = "https://github.com/fastai/nbdev";

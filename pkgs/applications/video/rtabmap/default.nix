@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , cmake
 , opencv
@@ -12,11 +11,9 @@
 , qtbase
 , g2o
 , ceres-solver
-, libpointmatcher
 , octomap
 , freenect
 , libdc1394
-, librealsense
 , libGL
 , libGLU
 , vtkWithQt5
@@ -69,7 +66,7 @@ stdenv.mkDerivation rec {
     description = "Real-Time Appearance-Based 3D Mapping";
     homepage = "https://introlab.github.io/rtabmap/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ckie ];
+    maintainers = [ ];
     platforms = with platforms; linux;
   };
 }

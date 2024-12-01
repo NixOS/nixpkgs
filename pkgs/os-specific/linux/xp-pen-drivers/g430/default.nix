@@ -19,7 +19,7 @@ mkDerivation rec {
     libXtst
     qtbase
     libglvnd
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   installPhase = ''
@@ -34,6 +34,6 @@ mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ ivar ];
+    maintainers = [ ];
   };
 }

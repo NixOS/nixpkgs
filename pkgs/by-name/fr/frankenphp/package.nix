@@ -6,6 +6,7 @@
 , brotli
 , testers
 , frankenphp
+, cctools
 , darwin
 , libiconv
 , pkg-config
@@ -18,22 +19,22 @@ let
   phpEmbedWithZts = php.override {
     embedSupport = true;
     ztsSupport = true;
-    staticSupport = stdenv.isDarwin;
+    staticSupport = stdenv.hostPlatform.isDarwin;
     zendSignalsSupport = false;
-    zendMaxExecutionTimersSupport = stdenv.isLinux;
+    zendMaxExecutionTimersSupport = stdenv.hostPlatform.isLinux;
   };
   phpUnwrapped = phpEmbedWithZts.unwrapped;
   phpConfig = "${phpUnwrapped.dev}/bin/php-config";
   pieBuild = stdenv.hostPlatform.isMusl;
 in buildGoModule rec {
   pname = "frankenphp";
-  version = "1.1.5";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "frankenphp";
     rev = "v${version}";
-    hash = "sha256-W+9p/9qT7v1jq6m/gRgfw4AmnPRZVY3UixXaypUVn4E=";
+    hash = "sha256-X6lWbxgqj0wis/cljoNSh7AsH1zY30GTjSOAGXzUIek=";
   };
 
   sourceRoot = "${src.name}/caddy";
@@ -41,10 +42,10 @@ in buildGoModule rec {
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-eNW03oBaON2X5X2ZbM3Ly5T+bJzSDhEYajY5LaZhwdQ=";
+  vendorHash = "sha256-U2B0ok6TgqUPMwlnkzpPkJLG22S3VpoU80bWwZAeaJo=";
 
   buildInputs = [ phpUnwrapped brotli ] ++ phpUnwrapped.buildInputs;
-  nativeBuildInputs = [ makeBinaryWrapper ] ++ lib.optionals stdenv.isDarwin [ pkg-config darwin.cctools darwin.autoSignDarwinBinariesHook ];
+  nativeBuildInputs = [ makeBinaryWrapper ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkg-config cctools darwin.autoSignDarwinBinariesHook ];
 
   subPackages = [ "frankenphp" ];
 
@@ -54,7 +55,7 @@ in buildGoModule rec {
     "-s"
     "-w"
     "-X 'github.com/caddyserver/caddy/v2.CustomVersion=FrankenPHP ${version} PHP ${phpUnwrapped.version} Caddy'"
-    # pie mode is only available with pkgsMusl, it also automaticaly add -buildmode=pie to $GOFLAGS
+    # pie mode is only available with pkgsMusl, it also automatically add -buildmode=pie to $GOFLAGS
   ]  ++ (lib.optional pieBuild [ "-static-pie" ]);
 
   preBuild = ''
@@ -62,7 +63,7 @@ in buildGoModule rec {
     export CGO_LDFLAGS="-DFRANKENPHP_VERSION=${version} \
       $(${phpConfig} --ldflags) \
       $(${phpConfig} --libs)"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # replace hard-code homebrew path
     substituteInPlace ../frankenphp.go \
       --replace "-L/opt/homebrew/opt/libiconv/lib" "-L${libiconv}/lib"
@@ -96,13 +97,13 @@ in buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/dunglas/frankenphp/releases/tag/v${version}";
-    description = "The modern PHP app server";
+    description = "Modern PHP app server";
     homepage = "https://github.com/dunglas/frankenphp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "frankenphp";
-    maintainers = with maintainers; [ gaelreyrol shyim ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with lib.maintainers; [ gaelreyrol shyim ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

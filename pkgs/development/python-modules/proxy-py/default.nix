@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   bash,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   gnumake,
   h2,
   hpack,
@@ -13,6 +11,7 @@
   openssl,
   paramiko,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
@@ -24,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "proxy-py";
-  version = "2.4.4";
+  version = "2.4.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -33,16 +32,12 @@ buildPythonPackage rec {
     owner = "abhinavsingh";
     repo = "proxy.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QWwIbNt2MtRfQaX7uZJzYmS++2MH+gTjWO0aEKYSETI=";
+    hash = "sha256-VQjK4wNOuUk3KhlvSlDbyclC+RUjeEIVvPN+bKq0fFc=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
     --replace "SHELL := /bin/bash" "SHELL := ${bash}/bin/bash"
-    substituteInPlace pytest.ini \
-      --replace-fail "-p pytest_cov" "" \
-      --replace-fail "--no-cov-on-fail" ""
-    sed -i "/--cov/d" pytest.ini
   '';
 
   build-system = [ setuptools-scm ];
@@ -60,11 +55,14 @@ buildPythonPackage rec {
     hyperframe
     openssl
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytest-xdist
     pytestCheckHook
     requests
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -78,8 +76,11 @@ buildPythonPackage rec {
     "web_server"
     # Location is not writable
     "test_gen_csr"
+    "test_gen_public_key"
     # Tests run into a timeout
     "integration"
+    # Crashes
+    "test_grout"
   ];
 
   pythonImportsCheck = [ "proxy" ];
@@ -90,6 +91,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/abhinavsingh/proxy.py/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
   };
 }

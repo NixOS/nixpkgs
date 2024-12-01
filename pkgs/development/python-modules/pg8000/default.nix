@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, importlib-metadata
-, passlib
-, python-dateutil
-, pythonOlder
-, scramp
-, hatchling
-, versioningit
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  importlib-metadata,
+  passlib,
+  python-dateutil,
+  pythonOlder,
+  scramp,
+  hatchling,
+  versioningit,
 }:
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.31.1";
+  version = "1.31.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sREw1MYV3TBi6o/tgUMGSnl4t/5tRPFLciYdQ8jicIc=";
+    hash = "sha256-HqRs8J2Oygf+fqre/XlR43vuf6vmdd8WTxpXL/swCHY=";
   };
 
   build-system = [
@@ -31,16 +32,12 @@ buildPythonPackage rec {
     passlib
     python-dateutil
     scramp
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # Tests require a running PostgreSQL instance
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pg8000"
-  ];
+  pythonImportsCheck = [ "pg8000" ];
 
   meta = with lib; {
     description = "Python driver for PostgreSQL";

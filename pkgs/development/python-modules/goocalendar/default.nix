@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, gobject-introspection
-, goocanvas2
-, gtk3
-, pkg-config
-, pygobject3
-, pythonOlder
- }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  gobject-introspection,
+  goocanvas2,
+  gtk3,
+  pkg-config,
+  pygobject3,
+  pythonOlder,
+}:
 
 buildPythonPackage rec {
   pname = "goocalendar";
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     gobject-introspection
   ];
 
-  propagatedBuildInputs = [
-    pygobject3
-  ];
+  propagatedBuildInputs = [ pygobject3 ];
 
   buildInputs = [
     gtk3
@@ -39,12 +38,10 @@ buildPythonPackage rec {
   # No upstream tests available
   doCheck = false;
 
-  pythonImportsCheck = [
-    "goocalendar"
-  ];
+  pythonImportsCheck = [ "goocalendar" ];
 
   meta = with lib; {
-    description = "A calendar widget for GTK using PyGoocanvas";
+    description = "Calendar widget for GTK using PyGoocanvas";
     homepage = "https://goocalendar.tryton.org/";
     changelog = "https://foss.heptapod.net/tryton/goocalendar/-/blob/${version}/CHANGELOG";
     license = licenses.gpl2Only;

@@ -1,12 +1,13 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
-, setuptools
-, setuptools-scm
-, glibcLocales
-, isPy3k
-, pytestCheckHook
-, curio
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  glibcLocales,
+  isPy3k,
+  pytestCheckHook,
+  curio,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [
-    glibcLocales
-  ];
+  buildInputs = [ glibcLocales ];
 
   nativeCheckInputs = [
     curio

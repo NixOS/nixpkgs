@@ -1,76 +1,72 @@
-declare -a projectFile testProjectFile
-
-# Inherit arguments from derivation
-dotnetFlags=( ${dotnetFlags[@]-} )
-dotnetRestoreFlags=( ${dotnetRestoreFlags[@]-} )
-
 dotnetConfigureHook() {
     echo "Executing dotnetConfigureHook"
 
     runHook preConfigure
 
-    if [ -z "${enableParallelBuilding-}" ]; then
+    local -r dynamicLinker=@dynamicLinker@
+    local -r libPath=@libPath@
+
+    if [[ -n $__structuredAttrs ]]; then
+        local dotnetProjectFilesArray=( "${dotnetProjectFiles[@]}" )
+        local dotnetTestProjectFilesArray=( "${dotnetTestProjectFiles[@]}" )
+        local dotnetFlagsArray=( "${dotnetFlags[@]}" )
+        local dotnetRestoreFlagsArray=( "${dotnetRestoreFlags[@]}" )
+        local dotnetRuntimeIdsArray=( "${dotnetRuntimeIds[@]}" )
+    else
+        local dotnetProjectFilesArray=($dotnetProjectFiles)
+        local dotnetTestProjectFilesArray=($dotnetTestProjectFiles)
+        local dotnetFlagsArray=($dotnetFlags)
+        local dotnetRestoreFlagsArray=($dotnetRestoreFlags)
+        local dotnetRuntimeIdsArray=($dotnetRuntimeIds)
+    fi
+
+    if [[ -z ${enableParallelBuilding-} ]]; then
         local -r parallelFlag="--disable-parallel"
     fi
 
+    if [[ -v dotnetSelfContainedBuild ]]; then
+        if [[ -n $dotnetSelfContainedBuild ]]; then
+            dotnetRestoreFlagsArray+=("-p:SelfContained=true")
+        else
+            dotnetRestoreFlagsArray+=("-p:SelfContained=false")
+        fi
+    fi
+
     dotnetRestore() {
-        local -r project="${1-}"
-        env dotnet restore ${project-} \
-            -p:ContinuousIntegrationBuild=true \
-            -p:Deterministic=true \
-            --runtime "@runtimeId@" \
-            --source "@nugetSource@/lib" \
-            ${parallelFlag-} \
-            ${dotnetRestoreFlags[@]} \
-            ${dotnetFlags[@]}
+        local -r projectFile="${1-}"
+        for runtimeId in "${dotnetRuntimeIdsArray[@]}"; do
+            dotnet restore ${1+"$projectFile"} \
+                -p:ContinuousIntegrationBuild=true \
+                -p:Deterministic=true \
+                -p:NuGetAudit=false \
+                --runtime "$runtimeId" \
+                ${parallelFlag-} \
+                "${dotnetRestoreFlagsArray[@]}" \
+                "${dotnetFlagsArray[@]}"
+        done
     }
 
-    # Generate a NuGet.config file to make sure everything,
-    # including things like <Sdk /> dependencies, is restored from the proper source
-cat <<EOF > "./NuGet.config"
-<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-  <packageSources>
-    <clear />
-    <add key="nugetSource" value="@nugetSource@/lib" />
-  </packageSources>
-</configuration>
-EOF
+    if [[ -f .config/dotnet-tools.json || -f dotnet-tools.json ]]; then
+        dotnet tool restore
+    fi
 
-    # Patch paket.dependencies and paket.lock (if found) to use the proper source. This ensures
-    # paket restore works correctly
-    # We use + instead of / in sed to avoid problems with slashes
-    find -name paket.dependencies -exec sed -i 's+source .*+source @nugetSource@/lib+g' {} \;
-    find -name paket.lock -exec sed -i 's+remote:.*+remote: @nugetSource@/lib+g' {} \;
-
-    env dotnet tool restore --add-source "@nugetSource@/lib"
-
-    (( "${#projectFile[@]}" == 0 )) && dotnetRestore
-
-    for project in ${projectFile[@]} ${testProjectFile[@]-}; do
-        dotnetRestore "$project"
-    done
-
-    echo "Fixing up native binaries..."
-    # Find all native binaries and nuget libraries, and fix them up,
-    # by setting the proper interpreter and rpath to some commonly used libraries
-    for binary in $(find "$HOME/.nuget/packages/" -type f -executable); do
-        if patchelf --print-interpreter "$binary" >/dev/null 2>/dev/null; then
-            echo "Found binary: $binary, fixing it up..."
-            patchelf --set-interpreter "$(cat "@dynamicLinker@")" "$binary"
-
-            # This makes sure that if the binary requires some specific runtime dependencies, it can find it.
-            # This fixes dotnet-built binaries like crossgen2
-            patchelf \
-                --add-needed libicui18n.so \
-                --add-needed libicuuc.so \
-                --add-needed libz.so \
-                --add-needed libssl.so \
-                "$binary"
-
-            patchelf --set-rpath "@libPath@" "$binary"
+    # dotnetGlobalTool is set in buildDotnetGlobalTool to patch dependencies but
+    # avoid other project-specific logic. This is a hack, but the old behavior
+    # is worse as it relied on a bug: setting projectFile to an empty string
+    # made the hooks actually skip all project-specific logic. It’s hard to keep
+    # backwards compatibility with this odd behavior now since we are using
+    # arrays, so instead we just pass a variable to indicate that we don’t have
+    # projects.
+    if [[ -z ${dotnetGlobalTool-} ]]; then
+        if (( ${#dotnetProjectFilesArray[@]} == 0 )); then
+            dotnetRestore
         fi
-    done
+
+        local projectFile
+        for projectFile in "${dotnetProjectFilesArray[@]}" "${dotnetTestProjectFilesArray[@]}"; do
+            dotnetRestore "$projectFile"
+        done
+    fi
 
     runHook postConfigure
 

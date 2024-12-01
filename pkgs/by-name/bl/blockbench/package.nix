@@ -1,62 +1,79 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, fetchFromGitHub
-, imagemagick
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, electron_28
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  imagemagick,
+  copyDesktopItems,
+  makeDesktopItem,
+  electron,
 }:
 
-let
-  electron = electron_28;
-in
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "4.10.0";
+  version = "4.11.2";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
-    rev = "v${version}";
-    hash = "sha256-pycRC+ZpN2P5Z66/aGA4gykLF7IwdeToRadaJSA1L9w=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rUMzn+3j+RL8DY8euS6a4MmdoIAVLXxXu9wvKNmK/TU=";
   };
 
-  nativeBuildInputs = [
-    imagemagick # for icon resizing
-    makeWrapper
-    copyDesktopItems
-  ];
+  nativeBuildInputs =
+    [ makeWrapper ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      imagemagick # for icon resizing
+      copyDesktopItems
+    ];
 
-  npmDepsHash = "sha256-CHZdCiewkmToDHhTTvOqQfWrphOw1oGLgwSRRH3YFWE=";
+  npmDepsHash = "sha256-0hS+AjfYvkdxyM6CtXYgvjt49GmcCvyAdEFWfK8uaHc=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+
+  # disable code signing on Darwin
+  postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export CSC_IDENTITY_AUTO_DISCOVERY=false
+    sed -i "/afterSign/d" package.json
+  '';
 
   npmBuildScript = "bundle";
 
   postBuild = ''
+    # electronDist needs to be modifiable on Darwin
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+
     npm exec electron-builder -- \
         --dir \
-        -c.electronDist=${electron}/libexec/electron \
+        -c.electronDist=electron-dist \
         -c.electronVersion=${electron.version}
   '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/blockbench
-    cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/blockbench
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications
+      cp -r dist/mac*/Blockbench.app $out/Applications
+      makeWrapper $out/Applications/Blockbench.app/Contents/MacOS/Blockbench $out/bin/blockbench
+    ''}
 
-    for size in 16 32 48 64 128 256 512; do
-      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      convert -resize "$size"x"$size" icon.png $out/share/icons/hicolor/"$size"x"$size"/apps/blockbench.png
-    done
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      mkdir -p $out/share/blockbench
+      cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/blockbench
 
-    makeWrapper ${lib.getExe electron} $out/bin/blockbench \
-        --add-flags $out/share/blockbench/resources/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-        --inherit-argv0
+      for size in 16 32 48 64 128 256 512; do
+        mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+        magick convert -resize "$size"x"$size" icon.png $out/share/icons/hicolor/"$size"x"$size"/apps/blockbench.png
+      done
+
+      makeWrapper ${lib.getExe electron} $out/bin/blockbench \
+          --add-flags $out/share/blockbench/resources/app.asar \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
+          --inherit-argv0
+    ''}
 
     runHook postInstall
   '';
@@ -76,12 +93,11 @@ buildNpmPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/JannisX11/blockbench/releases/tag/${src.rev}";
+    changelog = "https://github.com/JannisX11/blockbench/releases/tag/v${version}";
     description = "Low-poly 3D modeling and animation software";
     homepage = "https://blockbench.net/";
     license = lib.licenses.gpl3Only;
     mainProgram = "blockbench";
-    maintainers = with lib.maintainers; [ ckie tomasajt ];
-    broken = stdenv.isDarwin;
+    maintainers = with lib.maintainers; [ tomasajt ];
   };
 }

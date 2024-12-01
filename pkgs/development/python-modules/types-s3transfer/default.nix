@@ -1,30 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "types-s3transfer";
-  version = "0.10.1";
+  version = "0.10.2";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "types_s3transfer";
     inherit version;
-    hash = "sha256-AhVMzkZSgoetdq0aAVOEDgSSI5oIh+iDNGbsz4S5jaA=";
+    hash = "sha256-YBZ6O/tcU27GzbWBj3+aKO3KncPgtf+FrjdFJvxeV24=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ setuptools ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "s3transfer-stubs"
-  ];
+  pythonImportsCheck = [ "s3transfer-stubs" ];
 
   meta = with lib; {
     description = "Type annotations and code completion for s3transfer";

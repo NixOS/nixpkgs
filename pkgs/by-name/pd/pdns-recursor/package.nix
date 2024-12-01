@@ -8,17 +8,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns-recursor";
-  version = "5.0.4";
+  version = "5.1.2";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-recursor-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-1SqrEIoK2ei+HeIXmmk7uF6ZXGpNlYpQcC3Pee7I7yg=";
+    hash = "sha256-s6N+uyAoWrmsu7DhNw5iO7OY7TCH8OZ48j/6OwBjmD0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
     sourceRoot = "pdns-recursor-${finalAttrs.version}/settings/rust";
-    hash = "sha256-XHzuYkO91TJNU2DYqMlafqrc2zR1WvIrNLjFHL2FcwA=";
+    hash = "sha256-1CHhnW8s4AA06HAgW+A/mx1jGTynj4CvIc/I7n0h+VY";
   };
 
   cargoRoot = "settings/rust";
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A recursive DNS server";
+    description = "Recursive DNS server";
     homepage = "https://www.powerdns.com/";
     platforms = platforms.linux;
     badPlatforms = [

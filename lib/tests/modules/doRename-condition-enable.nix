@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, ... }:
 {
   config = {
     services.foo.enable = true;

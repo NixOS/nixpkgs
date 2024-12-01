@@ -1,26 +1,27 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, packaging
-, setuptools
-, pkgconfig
-, freetype
-, pytest
-, python
-, pillow
-, numpy
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  packaging,
+  setuptools,
+  pkgconfig,
+  freetype,
+  pytest,
+  python,
+  pillow,
+  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "aggdraw";
-  version = "1.3.18";
+  version = "1.3.19";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pytroll";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dM6yLR6xsZerpqY+BMxIjrJ3fQty9CFUWhxl2zkTgRA=";
+    hash = "sha256-J9+mxlUxOoRBFdz+p8me2T93jaov5rNvKbAZ2YX/VhA=";
   };
 
   nativeBuildInputs = [
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     pkgconfig
   ];
 
-  buildInputs = [
-    freetype
-  ];
+  buildInputs = [ freetype ];
 
   nativeCheckInputs = [
     numpy

@@ -1,9 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, cmake
 , coin-utils
-, CoinMP
+, coinmp
 , gfortran
 , libtool
 , glpk
@@ -21,10 +20,10 @@ stdenv.mkDerivation rec {
     owner = "coin-or";
     repo = "SYMPHONY";
     rev = "releases/${version}";
-    sha256 = "sha256-OdTUMG3iVhjhw5uKtUnsLCZ4DfMjYHm8+/ozfmw7J6c=";
+    hash = "sha256-OdTUMG3iVhjhw5uKtUnsLCZ4DfMjYHm8+/ozfmw7J6c=";
   };
 
-  nativeBuildInputs = [ libtool pkg-config glpk gfortran CoinMP osi coin-utils ];
+  nativeBuildInputs = [ libtool pkg-config glpk gfortran coinmp osi coin-utils ];
 
   meta = {
     description = "SYMPHONY is an open-source solver, callable library, and development framework for mixed-integer linear programs (MILPs) written in C with a number of unique features";

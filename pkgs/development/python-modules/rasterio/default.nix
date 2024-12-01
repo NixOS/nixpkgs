@@ -1,37 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, stdenv
-, testers
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  stdenv,
+  testers,
 
-, affine
-, attrs
-, boto3
-, certifi
-, click
-, click-plugins
-, cligj
-, cython
-, gdal
-, hypothesis
-, ipython
-, matplotlib
-, numpy
-, packaging
-, pytest-randomly
-, setuptools
-, shapely
-, snuggs
-, wheel
+  affine,
+  attrs,
+  boto3,
+  certifi,
+  click,
+  click-plugins,
+  cligj,
+  cython,
+  fsspec,
+  gdal,
+  hypothesis,
+  ipython,
+  matplotlib,
+  numpy,
+  packaging,
+  pytest-randomly,
+  setuptools,
+  shapely,
+  snuggs,
+  wheel,
 
-, rasterio  # required to run version test
+  rasterio, # required to run version test
 }:
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.3.10";
+  version = "1.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -40,18 +42,14 @@ buildPythonPackage rec {
     owner = "rasterio";
     repo = "rasterio";
     rev = "refs/tags/${version}";
-    hash = "sha256-FidUaSpbTR8X1/Cqy/IwApkOOl2RRtPqYJaSISRPThI=";
+    hash = "sha256-YGSd0IG6TWnHmDiVEE3F2KNQ4dXJhkPqAJsIrWyuHos=";
   };
 
   postPatch = ''
-    # remove useless import statement requiring distutils to be present at the runtime
-    substituteInPlace rasterio/rio/calc.py \
-      --replace-fail "from distutils.version import LooseVersion" ""
-
-    # relax dependency on yet non-packaged, RC version of numpy
+    # relax numpy dependency
     substituteInPlace pyproject.toml \
-      --replace-fail "numpy==2.0.0rc1" "numpy"
-    '';
+      --replace-fail "numpy>=2" "numpy"
+  '';
 
   nativeBuildInputs = [
     cython
@@ -72,20 +70,15 @@ buildPythonPackage rec {
     snuggs
   ];
 
-  passthru.optional-dependencies = {
-    ipython = [
-      ipython
-    ];
-    plot = [
-      matplotlib
-    ];
-    s3 = [
-      boto3
-    ];
+  optional-dependencies = {
+    ipython = [ ipython ];
+    plot = [ matplotlib ];
+    s3 = [ boto3 ];
   };
 
   nativeCheckInputs = [
     boto3
+    fsspec
     hypothesis
     packaging
     pytestCheckHook
@@ -93,26 +86,22 @@ buildPythonPackage rec {
     shapely
   ];
 
-  doCheck = true;
-
   preCheck = ''
     rm -r rasterio # prevent importing local rasterio
   '';
 
-  pytestFlagsArray = [
-    "-m 'not network'"
-  ];
+  pytestFlagsArray = [ "-m 'not network'" ];
 
   disabledTests = [
     # flaky
     "test_outer_boundless_pixel_fidelity"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_reproject_error_propagation"
-  ];
+    # network access
+    "test_issue1982"
+    "test_opener_fsspec_http_fs"
+    "test_fsspec_http_msk_sidecar"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_reproject_error_propagation" ];
 
-  pythonImportsCheck = [
-    "rasterio"
-  ];
+  pythonImportsCheck = [ "rasterio" ];
 
   passthru.tests.version = testers.testVersion {
     package = rasterio;

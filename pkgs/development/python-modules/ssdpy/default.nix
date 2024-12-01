@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, pytest-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  pytest-mock,
 }:
 
 buildPythonPackage rec {
@@ -40,7 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/MoshiBin/ssdpy/releases/tag/${version}";
-    description = "A lightweight, compatible SSDP library for Python";
+    description = "Lightweight, compatible SSDP library for Python";
     homepage = "https://github.com/MoshiBin/ssdpy";
     license = licenses.mit;
     maintainers = with maintainers; [ mjm ];

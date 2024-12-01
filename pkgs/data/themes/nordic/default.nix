@@ -1,79 +1,79 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, gtk-engine-murrine
 , breeze-icons
+, gtk-engine-murrine
+, jdupes
 , plasma-framework
 , plasma-workspace
-, jdupes
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "nordic";
-  version = "2.2.0-unstable-2024-02-20";
+  version = "2.2.0-unstable-2024-06-25";
 
   srcs = [
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "58d5a8e10ae068b98a63e6de2791e289f417842d";
-      hash = "sha256-Z3e7DoakK6f+UMBr78gZ+NJPb5vuJCfDgPRYywFDYeg=";
+      rev = "8f7bcdb597778b7233c97423f19c936e6c5d4abf";
+      hash = "sha256-fNPrBpdJS164DezKEnLixGUQxCW5RQ97Oj6BNI3Dr34=";
       name = "Nordic";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "cb7d95bd5438728f30f361a888dfb33b7f6ad28c";
-      hash = "sha256-ZWGmDiXjEt0UuALyw7cjTYgdw9kdJJKc0vkclbZkBvo=";
+      rev = "ae071e635055e8401e120d652602a183110bb91d";
+      hash = "sha256-YOfy2TNxq5FKB311C9t26WtrWefSdVdMNAq458BO5bQ=";
       name = "Nordic-standard-buttons";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "37b86a30ad3e048f87a689f2813aa28644035fa8";
-      hash = "sha256-+O8+30H6humVQTwgFL3uQkeo5gPYrokpAKbT56PX6YQ=";
+      rev = "07e62d14347ae233a857ed77b72d8c8e7a108a6e";
+      hash = "sha256-7S+d9oQjewtVgIlr8OxCNU0OdZyoPNELtV6LtMhkoQ8=";
       name = "Nordic-darker";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "926b215d14394ff043f2d2969e730759af7acd86";
-      hash = "sha256-yR0DfmUW1rr38Zbwtr7TUYL6z8vTNyoj0vEhphbZieU=";
+      rev = "3a7a56656a50d65e85bea58c649088a5aaa30690";
+      hash = "sha256-WYaFsGqBNf5K5uAqnC8I5o7NC7MRNqGFJ0hLkB24RxU=";
       name = "Nordic-darker-standard-buttons";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "1ae59d40ba8342fc14f3a55a2fb37446a8d10880";
-      hash = "sha256-tFIXPP5Ohw8atNIqvMtB7sLka+/tw+aSbjMdzKfI9r0=";
+      rev = "db4fd3af7e2af0ff962296b2881a94b14fa73e66";
+      hash = "sha256-U6o99D62H2BIvUV/xHc+wtbIFDdxxPxQWu5/f8NWhQ0=";
       name = "Nordic-bluish-accent";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = pname;
-      rev = "aaaa5dab0517f182a85a75d457da70d22e577b26";
-      hash = "sha256-J/nti2jxQ0VfTbp5WfrE0CN6Pvfg1edplL6/QPKUBzc=";
+      rev = "f75e18799b804d17b97eead583548b9415faddb6";
+      hash = "sha256-O0vad/gWUQ2B/2hz2uoSyRa1gM6N3ZbtOLyDJTNhIQo=";
       name = "Nordic-bluish-accent-standard-buttons";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = "${pname}-polar";
-      rev = "733d5ea57c6ecd8209ec0a928029e28b3f54f83d";
-      hash = "sha256-y3ge0DF0SdKFjH+mZdHDpK3YG7Ng3rN0y0Er2WBC6Sc=";
+      rev = "9f109cad906cb47c188557b8f3d324dad394a008";
+      hash = "sha256-+buFwFhk10qwsfS6DwUQzE0/F67BcoS+zXGk8wKn1Bc=";
       name = "Nordic-Polar";
     })
 
     (fetchFromGitHub {
       owner = "EliverLara";
       repo = "${pname}-polar";
-      rev = "667dfe4f6e8157f30a4e0ea5dc1d17438520d6cf";
-      hash = "sha256-p7bY1r8Ik+jsIyjR75UFHw8XuiGz5LmT09txBLyZpx4=";
+      rev = "60f63d9d54d93bda0529b8a6fae32427d00ae73c";
+      hash = "sha256-565iCxMX5Jms+nN0nRFp25YJ/sfKt13sAoIrEgoXGtg=";
       name = "Nordic-Polar-standard-buttons";
     })
   ];
@@ -151,11 +151,11 @@ stdenvNoCC.mkDerivation rec {
       >> $sddm/nix-support/propagated-user-env-packages
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Gtk and KDE themes using the Nord color pallete";
     homepage = "https://github.com/EliverLara/Nordic";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

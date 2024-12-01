@@ -1,28 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, transifex-cli
-, babel
-, click
-, setuptools
-, sphinx
-, pytestCheckHook
-, mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  transifex-cli,
+  babel,
+  click,
+  setuptools,
+  sphinx,
+  pytestCheckHook,
+  mock,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-intl";
-  version = "2.2.0";
-  format = "pyproject";
+  version = "2.3.0";
+  pyproject = true;
 
- src = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "sphinx-doc";
-    repo = pname;
-    rev = version;
-    hash = "sha256-4sFKrUSk8DqPbEM+Q3cRijXyxRSIdkIEAI/mAmB0wB0=";
+    repo = "sphinx-intl";
+    rev = "refs/tags/${version}";
+    hash = "sha256-j14iZdFBSOHqopJcMYMcQdf3zggRUCzTwcquImhhVpE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     babel
     click
     setuptools

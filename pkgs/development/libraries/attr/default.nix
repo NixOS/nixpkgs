@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext ];
 
+  patches = [ ./musl.patch ];
+
   postPatch = ''
     for script in install-sh include/install-sh; do
       patchShebangs $script
@@ -28,6 +30,7 @@ stdenv.mkDerivation rec {
     homepage = "https://savannah.nongnu.org/projects/attr/";
     description = "Library and tools for manipulating extended attributes";
     platforms = platforms.linux;
+    badPlatforms = platforms.microblaze;
     license = licenses.gpl2Plus;
   };
 }

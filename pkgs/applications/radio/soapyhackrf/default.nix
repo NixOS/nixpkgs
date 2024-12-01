@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ hackrf soapysdr ]
-    ++ lib.optionals stdenv.isDarwin [ libobjc IOKit Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc IOKit Security ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 

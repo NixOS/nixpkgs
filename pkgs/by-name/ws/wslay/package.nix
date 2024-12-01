@@ -39,13 +39,13 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ cunit ];
 
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH=$(pwd)/lib/.libs
   '';
 
   meta = with lib; {
     homepage = "https://tatsuhiro-t.github.io/wslay/";
-    description = "The WebSocket library in C";
+    description = "WebSocket library in C";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ pingiun ];
     platforms = platforms.unix;

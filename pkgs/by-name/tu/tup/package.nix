@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fuse3, macfuse-stubs, pkg-config, sqlite, pcre2 }:
 
 let
-  fuse = if stdenv.isDarwin then macfuse-stubs else fuse3;
+  fuse = if stdenv.hostPlatform.isDarwin then macfuse-stubs else fuse3;
 in stdenv.mkDerivation rec {
   pname = "tup";
   version = "0.8";
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
-    description = "A fast, file-based build system";
+    description = "Fast, file-based build system";
     mainProgram = "tup";
     longDescription = ''
       Tup is a file-based build system for Linux, OSX, and Windows. It inputs a list
@@ -71,6 +71,6 @@ in stdenv.mkDerivation rec {
     # ../../../../os-specific/darwin/apple-sdk/default.nix
     #
     # https://github.com/gittup/tup/commit/3697c74
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

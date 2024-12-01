@@ -58,13 +58,12 @@ let
     # resolve dependencies of the packages that affect the runtime
     all =
       let
-        # order of packages is irrelevant
-        packages = builtins.sort (a: b: a.pname < b.pname) (ensurePkgSets (requiredTeXPackages tl));
+        packages = ensurePkgSets (requiredTeXPackages tl);
         runtime = builtins.partition
           (p: p.outputSpecified or false -> builtins.elem (p.tlOutputName or p.outputName) [ "out" "tex" "tlpkg" ])
           packages;
         keySet = p: {
-          key = ((p.name or "${p.pname}-${p.version}") + "-" + p.tlOutputName or p.outputName or "");
+          key = p.pname or p.name + lib.optionalString (p.outputSpecified or false) ("-" + p.tlOutputName or p.outputName or "");
           inherit p;
           tlDeps = if p ? tlDeps then ensurePkgSets p.tlDeps else (p.requiredTeXPackages or (_: [ ]) tl);
         };
@@ -204,14 +203,14 @@ let
     # This is set primarily to help find-tarballs.nix to do its job
     requiredTeXPackages = builtins.filter lib.isDerivation (pkgList.bin ++ pkgList.nonbin
       ++ lib.optionals (! __fromCombineWrapper)
-        (lib.concatMap (n: (pkgList.otherOutputs.${n} or [ ] ++ pkgList.specifiedOutputs.${n} or [ ]))) pkgList.nonEnvOutputs);
+        (lib.concatMap (n: (pkgList.otherOutputs.${n} or [ ] ++ pkgList.specifiedOutputs.${n} or [ ])) pkgList.nonEnvOutputs));
     # useful for inclusion in the `fonts.packages` nixos option or for use in devshells
     fonts = "${texmfroot}/texmf-dist/fonts";
     # support variants attrs, (prev: attrs)
     __overrideTeXConfig = newArgs:
       let appliedArgs = if builtins.isFunction newArgs then newArgs args else newArgs; in
         self (args // { __fromCombineWrapper = false; } // appliedArgs);
-    withPackages = reqs: self (args // { requiredTeXPackages = ps: requiredTeXPackages ps ++ reqs ps; __fromCombineWrapper = false; });
+    withPackages = reqs: self (args // { requiredTeXPackages = ps: reqs ps ++ requiredTeXPackages ps; __fromCombineWrapper = false; });
   };
 
   # TeXLive::TLOBJ::fmtutil_cnf_lines
@@ -308,6 +307,9 @@ buildEnv' {
   postBuild = ''
     . "${./build-tex-env.sh}"
   '';
+
+  allowSubstitutes = true;
+  preferLocalBuild = false;
 };
   # outputsToInstall must be set *after* overrideAttrs (used in buildEnv') or it fails the checkMeta tests
 in if __combine || __formatsOf != null then out else lib.addMetaAttrs { inherit (pkgList) outputsToInstall; } out)

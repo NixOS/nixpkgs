@@ -1,30 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, wheel
-, aiofiles
-, aiohttp
-, dataclass-factory
-, numpy
-, pydantic
-, pydub
-, ffmpeg
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  wheel,
+  aiofiles,
+  aiohttp,
+  dataclass-factory,
+  numpy,
+  pydantic,
+  pydub,
+  ffmpeg,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "shazamio";
-  version = "0.5.1";
+  version = "0.6.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dotX12";
     repo = "ShazamIO";
     rev = "refs/tags/${version}";
-    hash = "sha256-nzKvEoh1DrZegoRNqOCh9Qm+7B7uQ9dEH75mVueGxZI=";
+    hash = "sha256-PYA7HUm++4r4kwezyPi3mWRRGF47qHjz2nHUZmVYk/I=";
   };
 
   patches = [
@@ -67,9 +68,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "shazamio" ];
 
   meta = with lib; {
-    description = "A free asynchronous library from reverse engineered Shazam API";
+    description = "Free asynchronous library from reverse engineered Shazam API";
     homepage = "https://github.com/dotX12/ShazamIO";
-    changelog = "https://github.com/dotX12/ShazamIO/releases/tag/${src.rev}";
+    changelog = "https://github.com/dotX12/ShazamIO/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     # https://github.com/shazamio/ShazamIO/issues/80

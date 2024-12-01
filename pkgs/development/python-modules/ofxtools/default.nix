@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nose
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,11 +21,11 @@ buildPythonPackage rec {
     hash = "sha256-NsImnD+erhpakQnl1neuHfSKiV6ipNBMPGKMDM0gwWc=";
   };
 
-  nativeCheckInputs = [ nose ];
+  nativeCheckInputs = [ pytestCheckHook ];
   # override $HOME directory:
   #   error: [Errno 13] Permission denied: '/homeless-shelter'
-  checkPhase = ''
-    HOME=$TMPDIR nosetests tests/*.py
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
 
   meta = with lib; {

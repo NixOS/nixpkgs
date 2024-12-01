@@ -1,29 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hypothesis
-, pyutil
-, setuptools
-, twisted
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hypothesis,
+  pyutil,
+  setuptools,
+  twisted,
 }:
 
 buildPythonPackage rec {
   pname = "zfec";
-  version = "1.5.7.4";
+  version = "1.6.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EGmFchj4ur5AhEOXEnIIA6Ef6RsU8gvHepak5vThER8=";
+    hash = "sha256-xaGGHCU7USaYwuczrk2D9eLW6myIG32+ETNLaU51WgA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pyutil
-  ];
+  propagatedBuildInputs = [ pyutil ];
 
   nativeCheckInputs = [
     hypothesis
@@ -34,9 +31,7 @@ buildPythonPackage rec {
     trial zfec
   '';
 
-  pythonImportsCheck = [
-    "zfec"
-  ];
+  pythonImportsCheck = [ "zfec" ];
 
   meta = with lib; {
     homepage = "https://github.com/tahoe-lafs/zfec";
@@ -52,5 +47,4 @@ buildPythonPackage rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ prusnak ];
   };
-
 }

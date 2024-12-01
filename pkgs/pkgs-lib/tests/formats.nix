@@ -118,7 +118,7 @@ in runBuildTests {
     '';
   };
 
-  yamlAtoms = shouldPass {
+  yaml_1_1Atoms = shouldPass {
     format = formats.yaml {};
     input = {
       null = null;
@@ -129,6 +129,8 @@ in runBuildTests {
       attrs.foo = null;
       list = [ null null ];
       path = ./formats.nix;
+      no = "no";
+      time = "22:30:00";
     };
     expected = ''
       attrs:
@@ -138,9 +140,11 @@ in runBuildTests {
       list:
       - null
       - null
+      'no': 'no'
       'null': null
       path: ${./formats.nix}
       str: foo
+      time: '22:30:00'
       'true': true
     '';
   };
@@ -220,6 +224,67 @@ in runBuildTests {
       baz=false
       qux=qux
     '';
+  };
+
+  iniCoercedDuplicateKeys = shouldPass rec {
+    format = formats.ini {
+      listsAsDuplicateKeys = true;
+      atomsCoercedToLists = true;
+    };
+    input = format.type.merge [ ] [
+      {
+        file = "format-test-inner-iniCoercedDuplicateKeys";
+        value = { foo = { bar = 1; }; };
+      }
+      {
+        file = "format-test-inner-iniCoercedDuplicateKeys";
+        value = { foo = { bar = 2; }; };
+      }
+    ];
+    expected = ''
+      [foo]
+      bar=1
+      bar=2
+    '';
+  };
+
+  iniCoercedListToValue = shouldPass rec {
+    format = formats.ini {
+      listToValue = lib.concatMapStringsSep ", " (lib.generators.mkValueStringDefault { });
+      atomsCoercedToLists = true;
+    };
+    input = format.type.merge [ ] [
+      {
+        file = "format-test-inner-iniCoercedListToValue";
+        value = { foo = { bar = 1; }; };
+      }
+      {
+        file = "format-test-inner-iniCoercedListToValue";
+        value = { foo = { bar = 2; }; };
+      }
+    ];
+    expected = ''
+      [foo]
+      bar=1, 2
+    '';
+  };
+
+  iniCoercedNoLists = shouldFail {
+    format = formats.ini { atomsCoercedToLists = true; };
+    input = {
+      foo = {
+        bar = 1;
+      };
+    };
+  };
+
+  iniNoCoercedNoLists = shouldFail {
+    format = formats.ini { atomsCoercedToLists = false; };
+    input = {
+      foo = {
+        bar = 1;
+      };
+    };
   };
 
   iniWithGlobalNoSections = shouldPass {
@@ -315,6 +380,82 @@ in runBuildTests {
       baz=false
       qux=qux
     '';
+  };
+
+  iniWithGlobalCoercedDuplicateKeys = shouldPass rec {
+    format = formats.iniWithGlobalSection {
+      listsAsDuplicateKeys = true;
+      atomsCoercedToLists = true;
+    };
+    input = format.type.merge [ ] [
+      {
+        file = "format-test-inner-iniWithGlobalCoercedDuplicateKeys";
+        value = {
+          globalSection = { baz = 4; };
+          sections = { foo = { bar = 1; }; };
+        };
+      }
+      {
+        file = "format-test-inner-iniWithGlobalCoercedDuplicateKeys";
+        value = {
+          globalSection = { baz = 3; };
+          sections = { foo = { bar = 2; }; };
+        };
+      }
+    ];
+    expected = ''
+      baz=3
+      baz=4
+
+      [foo]
+      bar=2
+      bar=1
+    '';
+  };
+
+  iniWithGlobalCoercedListToValue = shouldPass rec {
+    format = formats.iniWithGlobalSection {
+      listToValue = lib.concatMapStringsSep ", " (lib.generators.mkValueStringDefault { });
+      atomsCoercedToLists = true;
+    };
+    input = format.type.merge [ ] [
+      {
+        file = "format-test-inner-iniWithGlobalCoercedListToValue";
+        value = {
+          globalSection = { baz = 4; };
+          sections = { foo = { bar = 1; }; };
+        };
+      }
+      {
+        file = "format-test-inner-iniWithGlobalCoercedListToValue";
+        value = {
+          globalSection = { baz = 3; };
+          sections = { foo = { bar = 2; }; };
+        };
+      }
+    ];
+    expected = ''
+      baz=3, 4
+
+      [foo]
+      bar=2, 1
+    '';
+  };
+
+  iniWithGlobalCoercedNoLists = shouldFail {
+    format = formats.iniWithGlobalSection { atomsCoercedToLists = true; };
+    input = {
+      globalSection = { baz = 4; };
+      foo = { bar = 1; };
+    };
+  };
+
+  iniWithGlobalNoCoercedNoLists = shouldFail {
+    format = formats.iniWithGlobalSection { atomsCoercedToLists = false; };
+    input = {
+      globalSection = { baz = 4; };
+      foo = { bar = 1; };
+    };
   };
 
   keyValueAtoms = shouldPass {
@@ -425,4 +566,48 @@ in runBuildTests {
       \u0627\u0644\u062c\u0628\u0631 = \u0623\u0643\u062b\u0631 \u0645\u0646 \u0645\u062c\u0631\u062f \u0623\u0631\u0642\u0627\u0645
     '';
   };
+
+  phpAtoms = shouldPass rec {
+    format = formats.php { finalVariable = "config"; };
+    input = {
+      null = null;
+      false = false;
+      true = true;
+      int = 10;
+      float = 3.141;
+      str = "foo";
+      str_special = "foo\ntesthello'''";
+      attrs.foo = null;
+      list = [ null null ];
+      mixed = format.lib.mkMixedArray [ 10 3.141 ] {
+        str = "foo";
+        attrs.foo = null;
+      };
+      raw = format.lib.mkRaw "random_function()";
+    };
+    expected = ''
+      <?php
+      declare(strict_types=1);
+      $config = ['attrs' => ['foo' => null], 'false' => false, 'float' => 3.141000, 'int' => 10, 'list' => [null, null], 'mixed' => [10, 3.141000, 'attrs' => ['foo' => null], 'str' => 'foo'], 'null' => null, 'raw' => random_function(), 'str' => 'foo', 'str_special' => 'foo
+      testhello\'\'\'${"'"}, 'true' => true];
+    '';
+  };
+
+  phpReturn = shouldPass {
+    format = formats.php { };
+    input = {
+      int = 10;
+      float = 3.141;
+      str = "foo";
+      str_special = "foo\ntesthello'''";
+      attrs.foo = null;
+    };
+    expected = ''
+      <?php
+      declare(strict_types=1);
+      return ['attrs' => ['foo' => null], 'float' => 3.141000, 'int' => 10, 'str' => 'foo', 'str_special' => 'foo
+      testhello\'\'\'${"'"}];
+    '';
+  };
+
 }

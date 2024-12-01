@@ -41,18 +41,19 @@
 , jq
 , moreutils
 , terser
+, uglify-js
 
 , plugins ? []
 }@args:
 
 let
-  version = "3.1.0";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-Iv7VSnK8nZDpmIwIRPedSWlftABKuMOQ4MXDGpjuWrY=";
+    sha256 = "sha256-FaPcUta5z/8oasw+9zGBRZnUVYD8eCo1t/XwwsFoSM8=";
   };
 
   ruby = ruby_3_2;
@@ -65,6 +66,7 @@ let
     gnutar
     git
     brotli
+    nodejs_18
 
     # Misc required system utils
     which
@@ -201,24 +203,22 @@ let
     inherit version src;
 
     yarnOfflineCache = fetchYarnDeps {
-      yarnLock = src + "/app/assets/javascripts/yarn.lock";
-      sha256 = "0sclrv3303dgg3r08dwhd1yvi3pvlnvnikn300vjsh6c71fnzhnj";
+      yarnLock = src + "/yarn.lock";
+      hash = "sha256-cSQofaULCmPuWGxS+hK4KlRq9lSkCPiYvhax9X6Dor8=";
     };
 
     nativeBuildInputs = runtimeDeps ++ [
       postgresql
       redis
-      nodePackages.uglify-js
+      uglify-js
       terser
-      nodePackages.patch-package
       yarn
-      nodejs_18
       jq
       moreutils
       fixup-yarn-lock
     ];
 
-    outputs = [ "out" "javascripts" ];
+    outputs = [ "out" "javascripts" "node_modules" ];
 
     patches = [
       # Use the Ruby API version in the plugin gem path, to match the
@@ -234,12 +234,13 @@ let
       # assets precompilation task.
       ./assets_rake_command.patch
 
-      # `app/assets/javascripts/discourse/package.json`'s postinstall
-      # hook tries to call `../node_modules/.bin/patch-package`, which
-      # hasn't been `patchShebangs`-ed yet. So instead we just use
-      # `patch-package` from `nativeBuildInputs`.
-      ./asserts_patch-package_from_path.patch
+      # Little does he know, so he decided there is no need to generate the
+      # theme-transpiler over and over again. Which at the same time allows the removal
+      # of javascript devDependencies from the runtime environment.
+      ./prebuild-theme-transpiler.patch
     ];
+
+    env.RAILS_ENV = "production";
 
     # We have to set up an environment that is close enough to
     # production ready or the assets:precompile task refuses to
@@ -249,26 +250,29 @@ let
       # Yarn wants a real home directory to write cache, config, etc to
       export HOME=$NIX_BUILD_TOP/fake_home
 
-      # Make yarn install packages from our offline cache, not the registry
-      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
+      yarn_install() {
+        local offlineCache=$1 yarnLock=$2
 
-      # Fixup "resolved"-entries in yarn.lock to match our offline cache
-      fixup-yarn-lock app/assets/javascripts/yarn.lock
+        # Make yarn install packages from our offline cache, not the registry
+        yarn config --offline set yarn-offline-mirror $offlineCache
 
+        # Fixup "resolved"-entries in yarn.lock to match our offline cache
+        fixup-yarn-lock $yarnLock
+
+        # Install while ignoring hook scripts
+        yarn --offline --ignore-scripts --cwd $(dirname $yarnLock) install
+      }
+
+      # Install runtime and devDependencies.
+      # The dev deps are necessary for generating the theme-transpiler executed as dependent task
+      # assets:precompile:theme_transpiler before db:migrate and unfortunately also in the runtime
+      yarn_install $yarnOfflineCache yarn.lock
+
+      # Patch before running postinstall hook script
+      patchShebangs node_modules/
+      patchShebangs --build app/assets/javascripts
+      yarn --offline --cwd app/assets/javascripts run postinstall
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-
-      find app/assets/javascripts -name package.json -print0 \
-        | xargs -0 -I {} bash -c "jq 'del(.scripts.postinstall)' -r <{} | sponge {}"
-      yarn install --offline --cwd app/assets/javascripts/discourse
-
-      patchShebangs app/assets/javascripts/node_modules/
-
-      # Run `patch-package` AFTER the corresponding shebang inside `.bin/patch-package`
-      # got patched. Otherwise this will fail with
-      #     /bin/sh: line 1: /build/source/app/assets/javascripts/node_modules/.bin/patch-package: cannot execute: required file not found
-      pushd app/assets/javascripts &>/dev/null
-        yarn run patch-package
-      popd &>/dev/null
 
       redis-server >/dev/null &
 
@@ -286,13 +290,7 @@ let
       psql 'discourse' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
       psql 'discourse' -tAc "CREATE EXTENSION IF NOT EXISTS hstore"
 
-      # Create a temporary home dir to stop bundler from complaining
-      mkdir $NIX_BUILD_TOP/tmp_home
-      export HOME=$NIX_BUILD_TOP/tmp_home
-
       ${lib.concatMapStringsSep "\n" (p: "ln -sf ${p} plugins/${p.pluginName or ""}") plugins}
-
-      export RAILS_ENV=production
 
       bundle exec rake db:migrate >/dev/null
       chmod -R +w tmp
@@ -310,6 +308,8 @@ let
       runHook preInstall
 
       mv public/assets $out
+
+      mv node_modules $node_modules
 
       rm -r app/assets/javascripts/plugins
       mv app/assets/javascripts $javascripts
@@ -352,6 +352,11 @@ let
 
       # Make sure the notification email setting applies
       ./notification_email.patch
+
+      # Little does he know, so he decided there is no need to generate the
+      # theme-transpiler over and over again. Which at the same time allows the removal
+      # of javascript devDependencies from the runtime environment.
+      ./prebuild-theme-transpiler.patch
     ];
 
     postPatch = ''
@@ -384,6 +389,9 @@ let
       ln -sf /var/lib/discourse/tmp $out/share/discourse/tmp
       ln -sf /run/discourse/config $out/share/discourse/config
       ln -sf /run/discourse/public $out/share/discourse/public
+      # This needs to be copied because of symlinks in node_modules
+      # Also this needs to be full node_modules (including dev deps) because without loader.js it just throws 500
+      cp -r ${assets.node_modules} $out/share/discourse/node_modules
       ln -sf ${assets} $out/share/discourse/public.dist/assets
       rm -r $out/share/discourse/app/assets/javascripts
       ln -sf ${assets.javascripts} $out/share/discourse/app/assets/javascripts
@@ -402,6 +410,9 @@ let
 
     passthru = {
       inherit rubyEnv runtimeEnv runtimeDeps rake mkDiscoursePlugin assets;
+      inherit (pkgs)
+        discourseAllPlugins
+      ;
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;

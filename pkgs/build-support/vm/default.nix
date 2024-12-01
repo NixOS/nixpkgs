@@ -1,11 +1,11 @@
 { lib
 , pkgs
+, customQemu ? null
 , kernel ? pkgs.linux
 , img ? pkgs.stdenv.hostPlatform.linux-kernel.target
 , storeDir ? builtins.storeDir
 , rootModules ?
     [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "crc32c_generic" ]
-      ++ pkgs.lib.optional pkgs.stdenv.hostPlatform.isx86 "rtc_cmos"
 }:
 
 let
@@ -88,10 +88,6 @@ rec {
           set -- $(IFS==; echo $o)
           command=$2
           ;;
-        out=*)
-          set -- $(IFS==; echo $o)
-          export out=$2
-          ;;
       esac
     done
 
@@ -153,7 +149,7 @@ rec {
     fi
 
     echo "starting stage 2 ($command)"
-    exec switch_root /fs $command $out
+    exec switch_root /fs $command
   '';
 
 
@@ -168,18 +164,21 @@ rec {
 
   stage2Init = writeScript "vm-run-stage2" ''
     #! ${bash}/bin/sh
+    set -euo pipefail
     source /tmp/xchg/saved-env
-
-    # Set the system time from the hardware clock.  Works around an
-    # apparent KVM > 1.5.2 bug.
-    ${util-linux}/bin/hwclock -s
+    if [ -f /tmp/xchg/.attrs.sh ]; then
+      source /tmp/xchg/.attrs.sh
+      export NIX_ATTRS_JSON_FILE=/tmp/xchg/.attrs.json
+      export NIX_ATTRS_SH_FILE=/tmp/xchg/.attrs.sh
+    fi
 
     export NIX_STORE=${storeDir}
     export NIX_BUILD_TOP=/tmp
     export TMPDIR=/tmp
     export PATH=/empty
-    out="$1"
     cd "$NIX_BUILD_TOP"
+
+    source $stdenv/setup
 
     if ! test -e /bin/sh; then
       ${coreutils}/bin/mkdir -p /bin
@@ -202,7 +201,9 @@ rec {
     if test -n "$origBuilder" -a ! -e /.debug; then
       exec < /dev/null
       ${coreutils}/bin/touch /.debug
-      $origBuilder $origArgs
+      declare -a argsArray=()
+      concatTo argsArray origArgs
+      "$origBuilder" "''${argsArray[@]}"
       echo $? > /tmp/xchg/in-vm-exit
 
       ${busybox}/bin/mount -o remount,ro dummy /
@@ -218,25 +219,29 @@ rec {
 
 
   qemuCommandLinux = ''
-    ${qemu-common.qemuBinary qemu} \
+    ${if (customQemu != null) then customQemu else (qemu-common.qemuBinary qemu)} \
       -nographic -no-reboot \
       -device virtio-rng-pci \
       -virtfs local,path=${storeDir},security_model=none,mount_tag=store \
-      -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
+      -virtfs local,path=xchg,security_model=none,mount_tag=xchg \
       ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report} \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
-      -append "console=${qemu-common.qemuSerialDevice} panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
+      -append "console=${qemu-common.qemuSerialDevice} panic=1 command=${stage2Init} mountDisk=$mountDisk loglevel=4" \
       $QEMU_OPTS
   '';
 
 
   vmRunCommand = qemuCommand: writeText "vm-run" ''
-    export > saved-env
-
+    ${coreutils}/bin/mkdir xchg
+    export > xchg/saved-env
     PATH=${coreutils}/bin
-    mkdir xchg
-    mv saved-env xchg/
+
+    if [ -f "''${NIX_ATTRS_SH_FILE-}" ]; then
+      cp $NIX_ATTRS_JSON_FILE $NIX_ATTRS_SH_FILE xchg
+      source "$NIX_ATTRS_SH_FILE"
+    fi
+    source $stdenv/setup
 
     eval "$preVM"
 
@@ -254,12 +259,8 @@ rec {
     cat > ./run-vm <<EOF
     #! ${bash}/bin/sh
     ''${diskImage:+diskImage=$diskImage}
-    TMPDIR=$TMPDIR
-    cd $TMPDIR
     ${qemuCommand}
     EOF
-
-    mkdir -p -m 0700 $out
 
     chmod +x ./run-vm
     source ./run-vm

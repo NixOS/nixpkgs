@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
     mainProgram = "whatweb";
     homepage = "https://github.com/urbanadventurer/whatweb";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

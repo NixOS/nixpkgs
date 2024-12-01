@@ -20,7 +20,7 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://www.typerex.org/ocp-index.html";
-    description = "A simple and light-weight documentation extractor for OCaml";
+    description = "Simple and light-weight documentation extractor for OCaml";
     changelog = "https://github.com/OCamlPro/ocp-index/raw/${version}/CHANGES.md";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ vbgl ];

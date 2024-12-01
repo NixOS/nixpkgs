@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy3k
-, pytestCheckHook
-, pyyaml
-, requests
-, requests-mock
-, sqlite-utils
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  isPy3k,
+  pytestCheckHook,
+  pyyaml,
+  requests,
+  requests-mock,
+  sqlite-utils,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  disabledTests = [
-    "test_scrape_dependents"
-  ];
+  disabledTests = [ "test_scrape_dependents" ];
 
   meta = with lib; {
     description = "Save data from GitHub to a SQLite database";

@@ -164,9 +164,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # TODO: drop with 24.11
-    services.archisteamfarm.dataDir = lib.mkIf (lib.versionAtLeast config.system.stateVersion "24.05") (lib.mkDefault "/var/lib/asf");
-
     users = {
       users.archisteamfarm = {
         home = cfg.dataDir;
@@ -193,7 +190,7 @@ in
             Group = "archisteamfarm";
             WorkingDirectory = cfg.dataDir;
             Type = "simple";
-            ExecStart = "${lib.getExe cfg.package} --no-restart --process-required --service --system-required --path ${cfg.dataDir}";
+            ExecStart = "${lib.getExe cfg.package} --no-restart --service --system-required --path ${cfg.dataDir}";
             Restart = "always";
 
             # copied from the default systemd service at

@@ -1,26 +1,26 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  fetchFromGitHub,
 
-# propagates
-, pyyaml
+  # propagates
+  pyyaml,
 
-# optionals
-, boto3
-, botocore
-, google-cloud-dataproc
-, google-cloud-logging
-, google-cloud-storage
-, python-rapidjson
-, simplejson
-, ujson
+  # optionals
+  boto3,
+  botocore,
+  google-cloud-dataproc,
+  google-cloud-logging,
+  google-cloud-storage,
+  python-rapidjson,
+  simplejson,
+  ujson,
 
-
-# tests
-, pyspark
-, unittestCheckHook
-, warcio
+  # tests
+  pyspark,
+  unittestCheckHook,
+  warcio,
 }:
 
 buildPythonPackage rec {
@@ -37,11 +37,9 @@ buildPythonPackage rec {
     hash = "sha256-Yp4yUx6tkyGB622I9y+AWK2AkIDVGKQPMM+LtB/M3uo=";
   };
 
-  propagatedBuildInputs = [
-    pyyaml
-  ];
+  propagatedBuildInputs = [ pyyaml ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aws = [
       boto3
       botocore
@@ -51,15 +49,9 @@ buildPythonPackage rec {
       google-cloud-logging
       google-cloud-storage
     ];
-    rapidjson = [
-      python-rapidjson
-    ];
-    simplejson = [
-      simplejson
-    ];
-    ujson = [
-      ujson
-    ];
+    rapidjson = [ python-rapidjson ];
+    simplejson = [ simplejson ];
+    ujson = [ ujson ];
   };
 
   doCheck = false; # failing tests
@@ -68,17 +60,15 @@ buildPythonPackage rec {
     pyspark
     unittestCheckHook
     warcio
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  unittestFlagsArray = [
-    "-v"
-  ];
+  unittestFlagsArray = [ "-v" ];
 
   meta = with lib; {
     changelog = "https://github.com/Yelp/mrjob/blob/v${version}/CHANGES.txt";
     description = "Run MapReduce jobs on Hadoop or Amazon Web Services";
     homepage = "https://github.com/Yelp/mrjob";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

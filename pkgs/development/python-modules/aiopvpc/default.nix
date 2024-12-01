@@ -1,15 +1,15 @@
-{ lib
-, aiohttp
-, async-timeout
-, backports-zoneinfo
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, python-dotenv
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  python-dotenv,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   version = "4.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "azogue";
@@ -31,15 +31,11 @@ buildPythonPackage rec {
       --replace-fail " --cov --cov-report term --cov-report html" ""
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
     async-timeout
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
   ];
 
   nativeCheckInputs = [
@@ -49,9 +45,7 @@ buildPythonPackage rec {
     python-dotenv
   ];
 
-  pythonImportsCheck = [
-    "aiopvpc"
-  ];
+  pythonImportsCheck = [ "aiopvpc" ];
 
   meta = with lib; {
     description = "Python module to download Spanish electricity hourly prices (PVPC)";

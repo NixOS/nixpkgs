@@ -1,37 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  substituteAll,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
+  versioningit,
 
-# native dependencies
-, isa-l
+  # native dependencies
+  isa-l,
 
-# tests
-, pytest-timeout
-, pytestCheckHook
+  # tests
+  pytest-timeout,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "isal";
-  version = "1.6.1";
+  version = "1.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycompression";
     repo = "python-isal";
     rev = "v${version}";
-    hash = "sha256-EhdKT2ftyU2zevFg9Yi3q2FVx0FmKwJMzszsK1NS3Qg=";
+    hash = "sha256-KLnSE7QLM3q8DdoWnCEN6dOxsMr8eSH9k3FqFquZFlE=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./version.patch;
+      inherit version;
+    })
+  ];
 
   build-system = [
     setuptools
+    versioningit
   ];
 
-  buildInputs = [
-    isa-l
-  ];
+  buildInputs = [ isa-l ];
 
   env.PYTHON_ISAL_LINK_DYNAMIC = true;
 
@@ -40,11 +49,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "tests"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
-   disabledTests = [
+  disabledTests = [
     # calls `python -m isal` and fails on import
     "test_compress_fast_best_are_exclusive"
     "test_compress_infile_outfile"
@@ -53,9 +60,7 @@ buildPythonPackage rec {
     "test_decompress_infile_outfile_error"
   ];
 
-  pythonImportsCheck = [
-    "isal"
-  ];
+  pythonImportsCheck = [ "isal" ];
 
   meta = with lib; {
     changelog = "https://github.com/pycompression/python-isal/blob/${src.rev}/CHANGELOG.rst";

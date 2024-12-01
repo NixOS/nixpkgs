@@ -1,5 +1,5 @@
 # Version can be selected with the 'version' argument, see generic.nix.
-{ lib, fetchurl, buildDunePackage, ocaml, csexp, sexplib0, callPackage, ... }@args:
+{ lib, buildDunePackage, ocaml, csexp, sexplib0, callPackage, ... }@args:
 
 let
   # for compat with ocaml-lsp

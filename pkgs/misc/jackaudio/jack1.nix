@@ -35,10 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "JACK audio connection kit";
     homepage = "https://jackaudio.org";
-    license = with licenses; [ gpl2 lgpl21 ];
+    license = with licenses; [ gpl2Plus lgpl21 ];
     pkgConfigModules = [ "jack" ];
     platforms = platforms.unix;
   };

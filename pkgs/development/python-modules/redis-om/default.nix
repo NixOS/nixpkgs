@@ -1,27 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonRelaxDepsHook
-, unasync
-, poetry-core
-, python
-, click
-, hiredis
-, more-itertools
-, pydantic
-, python-ulid
-, redis
-, types-redis
-, typing-extensions
-, pkgs
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  unasync,
+  poetry-core,
+  python,
+  click,
+  hiredis,
+  more-itertools,
+  pydantic,
+  python-ulid,
+  redis,
+  types-redis,
+  typing-extensions,
+  pkgs,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "redis-om";
-  version = "0.3.1";
+  version = "0.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,11 +30,10 @@ buildPythonPackage rec {
     owner = "redis";
     repo = "redis-om-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jwFtRnj/jhH+AKjExdOCgUfgEWweFCXVuz6F3qQRcs0=";
+    hash = "sha256-Pp404HaFpYEPie9xknoabotFrqcI2ibDlPTM+MmnMbg=";
   };
 
   build-system = [
-    pythonRelaxDepsHook
     unasync
     poetry-core
   ];
@@ -86,7 +85,7 @@ buildPythonPackage rec {
     description = "Object mapping, and more, for Redis and Python";
     mainProgram = "migrate";
     homepage = "https://github.com/redis/redis-om-python";
-    changelog = "https://github.com/redis/redis-om-python/releases/tag/${src.rev}";
+    changelog = "https://github.com/redis/redis-om-python/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

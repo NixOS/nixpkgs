@@ -1,31 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-
-# build-system
-, setuptools
-
-# dependencies
-, cryptography
-, requests
-, colorama
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  cryptography,
+  fetchFromGitHub,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tinytuya";
-  version = "1.13.2";
+  version = "1.15.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jasonacox";
     repo = "tinytuya";
     rev = "refs/tags/v${version}";
-    hash = "sha256-44x5P+Ej/d6B5n53iDuLDBzkeZZvArpcgzXLJBcIJe0=";
+    hash = "sha256-T7bT4be/h67iPIH/7hjNCYsUDP+4o4HLV523sBIjGVs=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     cryptography
@@ -36,9 +34,7 @@ buildPythonPackage rec {
   # Tests require real network resources
   doCheck = false;
 
-  pythonImportsCheck = [
-    "tinytuya"
-  ];
+  pythonImportsCheck = [ "tinytuya" ];
 
   meta = with lib; {
     description = "Python API for Tuya WiFi smart devices using a direct local area network (LAN) connection or the cloud (TuyaCloud API)";

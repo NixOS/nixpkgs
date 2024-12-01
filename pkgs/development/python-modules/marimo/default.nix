@@ -1,66 +1,84 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, click
-, jedi
-, markdown
-, pymdown-extensions
-, pygments
-, tomlkit
-, uvicorn
-, starlette
-, websockets
-, docutils
-, black
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  click,
+  docutils,
+  itsdangerous,
+  jedi,
+  markdown,
+  narwhals,
+  packaging,
+  psutil,
+  pygments,
+  pymdown-extensions,
+  ruff,
+  starlette,
+  tomlkit,
+  uvicorn,
+  websockets,
+  pyyaml,
+
+  # tests
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.4.10";
+  version = "0.9.14";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
+  # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F6Hf8KPIkXuRhO/1mVHE1wfU6//vbUK1ghoqANmZjag=";
+    hash = "sha256-Q3dnRuAS8B4cWvF04GGg5OOZtmAJPKa2fHwnoO2DXDs=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ hatchling ];
+
+  pythonRelaxDeps = [ "websockets" ];
 
   dependencies = [
     click
+    docutils
+    itsdangerous
     jedi
     markdown
-    pymdown-extensions
+    narwhals
+    packaging
+    psutil
     pygments
+    pymdown-extensions
+    ruff
+    starlette
     tomlkit
     uvicorn
-    starlette
     websockets
-    docutils
-    black
+    pyyaml
   ];
 
+  pythonImportsCheck = [ "marimo" ];
+
+  # The pypi archive does not contain tests so we do not use `pytestCheckHook`
   nativeCheckInputs = [
-    pytestCheckHook
+    versionCheckHook
   ];
+  versionCheckProgramArg = [ "--version" ];
 
-  pythonImportsCheck = [
-    "marimo"
-  ];
-
-  meta = with lib; {
-    description = "A reactive Python notebook that's reproducible, git-friendly, and deployable as scripts or apps";
+  meta = {
+    description = "Reactive Python notebook that's reproducible, git-friendly, and deployable as scripts or apps";
     homepage = "https://github.com/marimo-team/marimo";
     changelog = "https://github.com/marimo-team/marimo/releases/tag/${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "marimo";
-    maintainers = with maintainers; [ akshayka dmadisetti ];
+    maintainers = with lib.maintainers; [
+      akshayka
+      dmadisetti
+    ];
   };
 }

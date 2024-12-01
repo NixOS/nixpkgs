@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, requests
-, pyyaml
-, jsonlines
-, pythonOlder
-, pytestCheckHook
-, pytz
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  requests,
+  pyyaml,
+  jsonlines,
+  pythonOlder,
+  pytestCheckHook,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-Rq78Od+qI2XWObQjzsLNU1CuERU8ckfT6zVFvc8Bpoo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     requests
@@ -35,9 +34,7 @@ buildPythonPackage rec {
   # tests require networking
   doCheck = false;
 
-  pythonImportsCheck = [
-    "CloudFlare"
-  ];
+  pythonImportsCheck = [ "CloudFlare" ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -50,6 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/cloudflare/python-cloudflare/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     mainProgram = "cli4";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

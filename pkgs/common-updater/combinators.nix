@@ -89,7 +89,7 @@ let
     in
     [
       "sh"
-      "-c"
+      "-ec"
       (lib.concatMapStringsSep ";" escapeShellArgs' extracted.commands)
       # We need paths as separate arguments so that update.nix can ensure they refer to the local directory
       # rather than a store path.
@@ -120,21 +120,33 @@ rec {
     let
       scripts = scriptsNormalized;
       hasCommitSupport = lib.findSingle ({ supportedFeatures, ... }: supportedFeatures == [ "commit" ]) null null scripts != null;
+      hasSilentSupport = lib.findFirst ({ supportedFeatures, ... }: supportedFeatures == [ "silent" ]) null scripts != null;
+      # Supported features currently only describe the format of the standard output of the update script.
+      # Here we ensure that the standard output of the combined update script is well formed.
       validateFeatures =
         if hasCommitSupport then
+          # Exactly one update script declares only “commit” feature and all the rest declare only “silent” feature.
           ({ supportedFeatures, ... }: supportedFeatures == [ "commit" ] || supportedFeatures == [ "silent" ])
+        else if hasSilentSupport then
+          # All update scripts declare only “silent” feature.
+          ({ supportedFeatures, ... }: supportedFeatures == [ "silent" ])
         else
+          # No update script declares any supported feature to fail loudly on unknown features rather than silently discard them.
           ({ supportedFeatures, ... }: supportedFeatures == [ ]);
     in
 
-    assert lib.assertMsg (lib.all validateFeatures scripts) "Combining update scripts with features enabled (other than a single script with “commit” and all other with “silent”) is currently unsupported.";
+    assert lib.assertMsg (lib.all validateFeatures scripts) "Combining update scripts with features enabled (other than “silent” scripts and an optional single script with “commit”) is currently unsupported.";
     assert lib.assertMsg (builtins.length (lib.unique (builtins.map ({ attrPath ? null, ... }: attrPath) scripts)) == 1) "Combining update scripts with different attr paths is currently unsupported.";
 
     {
       command = commandsToShellInvocation (builtins.map ({ command, ... }: command) scripts);
-      supportedFeatures = lib.optionals hasCommitSupport [
-        "commit"
-      ];
+      supportedFeatures =
+        if hasCommitSupport then
+          [ "commit" ]
+        else if hasSilentSupport then
+          [ "silent" ]
+        else
+          [ ];
     };
 
   /*

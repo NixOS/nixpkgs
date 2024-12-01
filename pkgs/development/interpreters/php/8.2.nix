@@ -2,8 +2,8 @@
 
 let
   base = callPackage ./generic.nix (_args // {
-    version = "8.2.19";
-    hash = "sha256-PBj3zlG3x7JreX4flwedOGswNH6wToF/XmyOmydeKmo=";
+    version = "8.2.26";
+    hash = "sha256-vlfDR9RRyQW8tDNoMqhk2ZKN0OIJibhycF/qC6ZHbGs=";
   });
 in
 base.withExtensions ({ all, ... }: with all; ([

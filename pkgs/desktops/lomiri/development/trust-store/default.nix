@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace src/core/trust/terminal_agent.h \
       --replace-fail '/bin/whiptail' '${lib.getExe' newt "whiptail"}'
-  '' + lib.optionalString (!finalAttrs.doCheck) ''
+  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'add_subdirectory(tests)' ""
   '';

@@ -40,9 +40,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/jesec/libtorrent";
-    description = "A BitTorrent library written in C++ for *nix, with focus on high performance and good code (jesec's fork)";
+    description = "BitTorrent library written in C++ for *nix, with focus on high performance and good code (jesec's fork)";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ winter AndersonTorres ];
+    maintainers = with maintainers; [ winter ];
     platforms = platforms.linux;
   };
 }

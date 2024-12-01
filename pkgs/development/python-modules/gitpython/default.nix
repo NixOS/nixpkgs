@@ -1,12 +1,12 @@
-{ lib
-, buildPythonPackage
-, ddt
-, fetchFromGitHub
-, gitdb
-, pkgs
-, pythonOlder
-, substituteAll
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  ddt,
+  fetchFromGitHub,
+  gitdb,
+  pkgs,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +27,7 @@ buildPythonPackage rec {
     ddt
     gitdb
     pkgs.gitMinimal
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   postPatch = ''
     substituteInPlace git/cmd.py \
@@ -39,9 +37,7 @@ buildPythonPackage rec {
   # Tests require a git repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "git"
-  ];
+  pythonImportsCheck = [ "git" ];
 
   meta = with lib; {
     description = "Python Git Library";

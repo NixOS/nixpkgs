@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     jsoncpp
     libGL
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Foundation
   ];
@@ -60,8 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    broken = stdenv.isDarwin;
-    description = "An API and runtime that allows access to VR hardware from multiple vendors without requiring that applications have specific knowledge of the hardware they are targeting";
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "API and runtime that allows access to VR hardware from multiple vendors without requiring that applications have specific knowledge of the hardware they are targeting";
     homepage = "https://github.com/ValveSoftware/openvr";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ Scrumplex ];

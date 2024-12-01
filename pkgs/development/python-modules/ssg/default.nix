@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
 
-  python3,
+  python,
   unittestCheckHook,
   setuptools,
 
@@ -45,7 +45,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "ssg" ];
 
-  postInstall = "rm -rf $out/${python3.sitePackages}/scripts";
+  postInstall = "rm -rf $out/${python.sitePackages}/scripts";
 
   meta = with lib; {
     description = "TCRF syllable segmenter for Thai";

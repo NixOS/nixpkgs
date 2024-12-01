@@ -1,7 +1,6 @@
 { lib, stdenv, fetchurl
 , ncurses
 , libX11, xorgproto, buildEnv
-, fetchpatch
 , useX11 ? stdenv.hostPlatform.isx86
 }:
 
@@ -83,7 +82,7 @@ stdenv.mkDerivation rec {
 
     branch          = baseOcamlBranch;
     platforms       = with platforms; linux ++ darwin;
-    broken          = stdenv.isAarch64 || stdenv.isMips;
+    broken          = stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isMips;
 
     longDescription = ''
       A simple extension of OCaml with the primitive type of code values, and

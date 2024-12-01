@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchpatch
-, python-dateutil
-, docopt
-, fetchPypi
-, pytestCheckHook
-, ruamel-yaml
-, testfixtures
+{
+  lib,
+  buildPythonPackage,
+  fetchpatch,
+  python-dateutil,
+  docopt,
+  fetchPypi,
+  pytestCheckHook,
+  ruamel-yaml,
+  testfixtures,
 }:
 
 buildPythonPackage rec {

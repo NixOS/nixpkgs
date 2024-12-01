@@ -1,20 +1,21 @@
-{ lib
-, aspectlib
-, buildPythonPackage
-, elasticsearch
-, elastic-transport
-, fetchFromGitHub
-, fetchpatch
-, freezegun
-, git
-, mercurial
-, py-cpuinfo
-, pygal
-, pytest
-, pytestCheckHook
-, pytest-xdist
-, pythonOlder
-, setuptools
+{
+  lib,
+  aspectlib,
+  buildPythonPackage,
+  elasticsearch,
+  elastic-transport,
+  fetchFromGitHub,
+  fetchpatch,
+  freezegun,
+  git,
+  mercurial,
+  py-cpuinfo,
+  pygal,
+  pytest,
+  pytestCheckHook,
+  pytest-xdist,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -23,7 +24,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   disabled = pythonOlder "3.7";
-
 
   src = fetchFromGitHub {
     owner = "ionelmc";
@@ -49,27 +49,19 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    py-cpuinfo
-  ];
+  propagatedBuildInputs = [ py-cpuinfo ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aspect = [ aspectlib ];
     histogram = [ pygal ];
     elasticsearch = [ elasticsearch ];
   };
 
-  pythonImportsCheck = [
-    "pytest_benchmark"
-  ];
+  pythonImportsCheck = [ "pytest_benchmark" ];
 
   nativeCheckInputs = [
     elastic-transport
@@ -78,10 +70,11 @@ buildPythonPackage rec {
     mercurial
     pytestCheckHook
     pytest-xdist
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   preCheck = ''

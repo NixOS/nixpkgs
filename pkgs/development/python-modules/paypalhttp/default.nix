@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# propagates
-, pyopenssl
-, requests
-, six
+  # propagates
+  pyopenssl,
+  requests,
+  six,
 
-# tests
-, pytestCheckHook
-, responses
+  # tests
+  pytestCheckHook,
+  responses,
 }:
 
 buildPythonPackage rec {

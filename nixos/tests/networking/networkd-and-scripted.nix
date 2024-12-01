@@ -132,6 +132,14 @@ let
               client.wait_until_succeeds("ip addr show dev enp2s0 | grep -q '192.168.2'")
               client.wait_until_succeeds("ip addr show dev enp2s0 | grep -q 'fd00:1234:5678:2:'")
 
+          with subtest("Wait until we have received the nameservers"):
+            if "${builtins.toJSON networkd}" == "true":
+              client.wait_until_succeeds("resolvectl status enp2s0 | grep -q 2001:db8::1")
+              client.wait_until_succeeds("resolvectl status enp2s0 | grep -q 192.168.2.1")
+            else:
+              client.wait_until_succeeds("resolvconf -l | grep -q 2001:db8::1")
+              client.wait_until_succeeds("resolvconf -l | grep -q 192.168.2.1")
+
           with subtest("Test vlan 1"):
               client.wait_until_succeeds("ping -c 1 192.168.1.1")
               client.wait_until_succeeds("ping -c 1 fd00:1234:5678:1::1")
@@ -454,6 +462,7 @@ let
               };
               bridges.bridge.interfaces = [ "greTunnel" "eth1" ];
               interfaces.eth1.ipv4.addresses = lib.mkOverride 0 [];
+              interfaces.eth1.ipv6.addresses = lib.mkOverride 0 [];
               interfaces.bridge.ipv4.addresses = lib.mkOverride 0 [
                 { address = "192.168.1.1"; prefixLength = 24; }
               ];
@@ -490,6 +499,7 @@ let
               };
               bridges.bridge.interfaces = [ "greTunnel" "eth2" ];
               interfaces.eth2.ipv4.addresses = lib.mkOverride 0 [];
+              interfaces.eth2.ipv6.addresses = lib.mkOverride 0 [];
               interfaces.bridge.ipv4.addresses = lib.mkOverride 0 [
                 { address = "192.168.1.2"; prefixLength = 24; }
               ];

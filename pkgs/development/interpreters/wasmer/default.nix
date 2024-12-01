@@ -1,29 +1,26 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, llvmPackages
-, libffi
-, libxml2
-, CoreFoundation
-, SystemConfiguration
-, Security
-, withLLVM ? !stdenv.isDarwin
-, withSinglepass ? !(stdenv.isDarwin && stdenv.isx86_64)
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  llvmPackages,
+  libffi,
+  libxml2,
+  withLLVM ? true,
+  withSinglepass ? true,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "4.2.7";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-jyA1DUouODq9giAWeGOw7VMGwA+FbyqpEU77jtCb5v4=";
+    hash = "sha256-u7O+EAhq1h96yWwQVY74vNKKaB+2r5nqhuD9Pktgqu0=";
   };
 
-  cargoHash = "sha256-EpHM8YaT2Ty9IBX/gXEa9n8006A9Y5/fq/ueODxHlnc=";
+  cargoHash = "sha256-FLMGDD/o+gSPqX2dlHQP7zDx89B/MpjdWVpke9EPsBI=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -33,10 +30,6 @@ rustPlatform.buildRustPackage rec {
     llvmPackages.llvm
     libffi
     libxml2
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    SystemConfiguration
-    Security
   ];
 
   # check references to `compiler_features` in Makefile on update
@@ -46,19 +39,22 @@ rustPlatform.buildRustPackage rec {
     "static-artifact-create"
     "wasmer-artifact-load"
     "static-artifact-load"
-  ]
-  ++ lib.optional withLLVM "llvm"
-  ++ lib.optional withSinglepass "singlepass";
+  ] ++ lib.optional withLLVM "llvm" ++ lib.optional withSinglepass "singlepass";
 
-  cargoBuildFlags = [ "--manifest-path" "lib/cli/Cargo.toml" "--bin" "wasmer" ];
+  cargoBuildFlags = [
+    "--manifest-path"
+    "lib/cli/Cargo.toml"
+    "--bin"
+    "wasmer"
+  ];
 
-  env.LLVM_SYS_150_PREFIX = lib.optionalString withLLVM llvmPackages.llvm.dev;
+  env.LLVM_SYS_180_PREFIX = lib.optionalString withLLVM llvmPackages.llvm.dev;
 
   # Tests are failing due to `Cannot allocate memory` and other reasons
   doCheck = false;
 
-  meta = with lib; {
-    description = "The Universal WebAssembly Runtime";
+  meta = {
+    description = "Universal WebAssembly Runtime";
     mainProgram = "wasmer";
     longDescription = ''
       Wasmer is a standalone WebAssembly runtime for running WebAssembly outside
@@ -67,7 +63,12 @@ rustPlatform.buildRustPackage rec {
       x86 and ARM devices.
     '';
     homepage = "https://wasmer.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne shamilton nickcao ];
+    license = lib.licenses.mit;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
+      Br1ght0ne
+      shamilton
+      nickcao
+    ];
   };
 }

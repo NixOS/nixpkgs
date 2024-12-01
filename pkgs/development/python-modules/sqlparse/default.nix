@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatchling
-, installShellFiles
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  installShellFiles,
+  pytestCheckHook,
+  pythonOlder,
 
-# for passthru.tests
-, django
-, django_4
-, django-silk
-, pgadmin4
+  # for passthru.tests
+  django,
+  django_4,
+  django-silk,
+  pgadmin4,
 }:
 
 buildPythonPackage rec {
   pname = "sqlparse";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cU0KSTLAWdFhifWO9UEewih6Q2DxfN0O3S0J1MUIfJM=";
+    hash = "sha256-u2tN9GVlXvMyVI4k8I4gWvyBuauGyxxFZXp/8XOjoA4=";
   };
 
   build-system = [ hatchling ];
@@ -36,7 +37,12 @@ buildPythonPackage rec {
   '';
 
   passthru.tests = {
-    inherit django django_4 django-silk pgadmin4;
+    inherit
+      django
+      django_4
+      django-silk
+      pgadmin4
+      ;
   };
 
   meta = with lib; {

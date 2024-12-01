@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, mock
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, sybil
-, twisted
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  sybil,
+  twisted,
 }:
 
 buildPythonPackage rec {
   pname = "testfixtures";
-  version = "8.1.0";
+  version = "8.3.0";
   pyproject = true;
   # DO NOT CONTACT upstream.
   # https://github.com/simplistix/ is only concerned with internal CI process.
@@ -24,12 +25,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gISJkDBIWcOito3+S8r3e25kJaOSUEe8JaUnVSd7+m0=";
+    hash = "sha256-1MC4SvLyZ2EPkIAJtQ1vmDpOWK3iLGe6tnh7WkAtWcA=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     mock
@@ -43,13 +42,9 @@ buildPythonPackage rec {
     "testfixtures/tests/test_django"
   ];
 
-  pytestFlagsArray = [
-    "testfixtures/tests"
-  ];
+  pytestFlagsArray = [ "testfixtures/tests" ];
 
-  pythonImportsCheck = [
-    "testfixtures"
-  ];
+  pythonImportsCheck = [ "testfixtures" ];
 
   meta = with lib; {
     description = "Collection of helpers and mock objects for unit tests and doc tests";

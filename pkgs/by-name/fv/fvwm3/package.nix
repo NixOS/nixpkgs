@@ -19,7 +19,6 @@
 , libintl
 , libpng
 , librsvg
-, libstroke
 , libxslt
 , perl
 , pkg-config
@@ -65,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
     libpng
     librsvg
-    libstroke
     libxslt
     perl
     python3Packages.python
@@ -91,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://fvwm.org";
-    description = "A multiple large virtual desktop window manager - Version 3";
+    description = "Multiple large virtual desktop window manager - Version 3";
     longDescription = ''
       Fvwm is a virtual window manager for the X windows system. It was
       originally a feeble fork of TWM by Robert Nation in 1993 (fvwm history),

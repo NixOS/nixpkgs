@@ -1,25 +1,29 @@
 { lib }:
+let
+  inherit (lib) optionalAttrs;
 
-lib.mapAttrs (lname: lset: let
-  defaultLicense = {
-    shortName = lname;
-    free = true; # Most of our licenses are Free, explicitly declare unfree additions as such!
-    deprecated = false;
+  mkLicense = lname: {
+    shortName ? lname,
+    # Most of our licenses are Free, explicitly declare unfree additions as such!
+    free ? true,
+    deprecated ? false,
+    spdxId ? null,
+    url ? null,
+    fullName ? null,
+    redistributable ? free
+  }@attrs: {
+    inherit shortName free deprecated redistributable;
+  } // optionalAttrs (attrs ? spdxId) {
+    inherit spdxId;
+    url = "https://spdx.org/licenses/${spdxId}.html";
+  } // optionalAttrs (attrs ? url) {
+    inherit url;
+  } // optionalAttrs (attrs ? fullName) {
+    inherit fullName;
   };
 
-  mkLicense = licenseDeclaration: let
-    applyDefaults = license: defaultLicense // license;
-    applySpdx = license:
-      if license ? spdxId
-      then license // { url = "https://spdx.org/licenses/${license.spdxId}.html"; }
-      else license;
-    applyRedistributable = license: { redistributable = license.free; } // license;
-  in lib.pipe licenseDeclaration [
-    applyDefaults
-    applySpdx
-    applyRedistributable
-  ];
-in mkLicense lset) ({
+in
+lib.mapAttrs mkLicense ({
   /* License identifiers from spdx.org where possible.
    * If you cannot find your license here, then look for a similar license or
    * add it to this list. The URL mentioned above is a good source for inspiration.
@@ -88,6 +92,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  ampas = {
+    spdxId = "AMPAS";
+    fullName = "Academy of Motion Picture Arts and Sciences BSD";
+  };
+
   aom = {
     fullName = "Alliance for Open Media Patent License 1.0";
     url = "https://aomedia.org/license/patent-license/";
@@ -106,7 +115,6 @@ in mkLicense lset) ({
   arphicpl = {
     spdxId = "Arphic-1999";
     fullName = "Arphic Public License";
-    url = "https://www.freedesktop.org/wiki/Arphic_Public_License/";
   };
 
   artistic1 = {
@@ -204,6 +212,11 @@ in mkLicense lset) ({
     fullName = "BSD 3-Clause Clear License";
   };
 
+  bsd3Lbnl = {
+    spdxId = "BSD-3-Clause-LBNL";
+    fullName = "Lawrence Berkeley National Labs BSD variant license";
+  };
+
   bsdOriginal = {
     spdxId = "BSD-4-Clause";
     fullName = ''BSD 4-clause "Original" or "Old" License'';
@@ -225,8 +238,8 @@ in mkLicense lset) ({
   };
 
   bsl11 = {
+    spdxId = "BUSL-1.1";
     fullName = "Business Source License 1.1";
-    url = "https://mariadb.com/bsl11";
     free = false;
     redistributable = true;
   };
@@ -239,13 +252,11 @@ in mkLicense lset) ({
   cal10 = {
     spdxId = "CAL-1.0";
     fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";
-    url = "https://opensource.org/licenses/CAL-1.0";
   };
 
   caldera = {
     spdxId = "Caldera";
     fullName = "Caldera License";
-    url = "http://www.lemis.com/grog/UNIX/ancient-source-all.pdf";
   };
 
   capec = {
@@ -317,6 +328,12 @@ in mkLicense lset) ({
     free = false;
   };
 
+  cc-by-nd-40 = {
+    spdxId = "CC-BY-ND-4.0";
+    fullName = "Creative Commons Attribution-No Derivative Works v4.0";
+    free = false;
+  };
+
   cc-by-sa-10 = {
     spdxId = "CC-BY-SA-1.0";
     fullName = "Creative Commons Attribution Share Alike 1.0";
@@ -362,6 +379,12 @@ in mkLicense lset) ({
     fullName = "Creative Commons Attribution Share Alike 4.0";
   };
 
+  cc-sa-10 = {
+    shortName = "CC-SA-1.0";
+    fullName = "Creative Commons Share Alike 1.0";
+    url = "https://creativecommons.org/licenses/sa/1.0";
+  };
+
   cddl = {
     spdxId = "CDDL-1.0";
     fullName = "Common Development and Distribution License 1.0";
@@ -385,6 +408,12 @@ in mkLicense lset) ({
   cecill-c = {
     spdxId = "CECILL-C";
     fullName  = "CeCILL-C Free Software License Agreement";
+  };
+
+  cockroachdb-community-license = {
+    fullName = "CockroachDB Community License Agreement";
+    url = "https://www.cockroachlabs.com/cockroachdb-community-license/";
+    free = false;
   };
 
   cpal10 = {
@@ -431,7 +460,6 @@ in mkLicense lset) ({
 
   ecl20 = {
     fullName = "Educational Community License, Version 2.0";
-    url = "https://opensource.org/licenses/ECL-2.0";
     shortName = "ECL 2.0";
     spdxId = "ECL-2.0";
   };
@@ -449,7 +477,6 @@ in mkLicense lset) ({
   elastic20 = {
     spdxId = "Elastic-2.0";
     fullName = "Elastic License 2.0";
-    url = "https://github.com/elastic/elasticsearch/blob/main/licenses/ELASTIC-LICENSE-2.0.txt";
     free = false;
   };
 
@@ -522,6 +549,20 @@ in mkLicense lset) ({
 
   free = {
     fullName = "Unspecified free software license";
+  };
+
+  fsl11Mit = {
+    fullName = "Functional Source License, Version 1.1, MIT Future License";
+    url = "https://fsl.software/FSL-1.1-MIT.template.md";
+    free = false;
+    redistributable = true;
+  };
+
+  fsl11Asl20 = {
+    fullName = "Functional Source License, Version 1.1, Apache 2.0 Future License";
+    url = "https://fsl.software/FSL-1.1-Apache-2.0.template.md";
+    free = false;
+    redistributable = true;
   };
 
   ftl = {
@@ -628,8 +669,7 @@ in mkLicense lset) ({
   # Intel's license, seems free
   iasl = {
     spdxId = "Intel-ACPI";
-    fullName = "iASL";
-    url = "https://old.calculate-linux.org/packages/licenses/iASL";
+    fullName = "Intel ACPI Software License Agreement";
   };
 
   icu = {
@@ -655,7 +695,6 @@ in mkLicense lset) ({
   info-zip = {
     spdxId = "Info-ZIP";
     fullName = "Info-ZIP License";
-    url = "https://infozip.sourceforge.net/license.html";
   };
 
   inria-compcert = {
@@ -691,10 +730,9 @@ in mkLicense lset) ({
     fullName = "ISC License";
   };
 
-  # Proprietary binaries; free to redistribute without modification.
   databricks = {
-    fullName = "Databricks Proprietary License";
-    url = "https://pypi.org/project/databricks-connect";
+    fullName = "Databricks License";
+    url = "https://www.databricks.com/legal/db-license";
     free = false;
   };
 
@@ -703,6 +741,12 @@ in mkLicense lset) ({
     url = "https://github.com/databrickslabs/dbx/blob/743b579a4ac44531f764c6e522dbe5a81a7dc0e4/LICENSE";
     free = false;
     redistributable = false;
+  };
+
+  databricks-license = {
+    fullName = "Databricks License";
+    url = "https://www.databricks.com/legal/db-license";
+    free = false;
   };
 
   fair = {
@@ -797,11 +841,6 @@ in mkLicense lset) ({
     fullName = "PNG Reference Library version 2";
   };
 
-  libssh2 = {
-    fullName = "libssh2 License";
-    url = "https://www.libssh2.org/license.html";
-  };
-
   libtiff = {
     spdxId = "libtiff";
     fullName = "libtiff License";
@@ -840,19 +879,27 @@ in mkLicense lset) ({
   miros = {
     spdxId = "MirOS";
     fullName = "MirOS License";
-    url = "https://opensource.org/licenses/MirOS";
   };
 
-  # spdx.org does not (yet) differentiate between the X11 and Expat versions
-  # for details see https://en.wikipedia.org/wiki/MIT_License#Various_versions
   mit = {
     spdxId = "MIT";
     fullName = "MIT License";
   };
-  # https://spdx.org/licenses/MIT-feh.html
+
+  mit-cmu = {
+    spdxId = "MIT-CMU";
+    fullName = "CMU License";
+  };
+
   mit-feh = {
     spdxId = "MIT-feh";
     fullName = "feh License";
+  };
+
+  mit-modern = {
+    # Also known as Zsh license
+    spdxId = "MIT-Modern-Variant";
+    fullName = "MIT License Modern Variant";
   };
 
   mitAdvertising = {
@@ -893,13 +940,28 @@ in mkLicense lset) ({
   mulan-psl2 = {
     spdxId = "MulanPSL-2.0";
     fullName = "Mulan Permissive Software License, Version 2";
-    url = "https://license.coscl.org.cn/MulanPSL2";
+  };
+
+  naist-2003 = {
+    spdxId = "NAIST-2003";
+    fullName = "Nara Institute of Science and Technology License (2003)";
   };
 
   nasa13 = {
     spdxId = "NASA-1.3";
     fullName = "NASA Open Source Agreement 1.3";
     free = false;
+  };
+
+  ncbiPd = {
+    spdxId = "NCBI-PD";
+    fullName = "NCBI Public Domain Notice";
+    # Due to United States copyright law, anything with this "license" does not have a copyright in the
+    # jurisdiction of the United States. However, other jurisdictions may assign the United States
+    # government copyright to the work, and the license explicitly states that in such a case, no license
+    # is granted. This is nonfree and nonredistributable in most jurisdictions other than the United States.
+    free = false;
+    redistributable = false;
   };
 
   ncsa = {
@@ -912,7 +974,6 @@ in mkLicense lset) ({
     fullName = "Netdata Cloud UI License v1.0";
     free = false;
     redistributable = true; # Only if used in Netdata products.
-    url = "https://raw.githubusercontent.com/netdata/netdata/master/web/gui/v2/LICENSE.md";
   };
 
   nistSoftware = {
@@ -1010,7 +1071,6 @@ in mkLicense lset) ({
   parity70 = {
     spdxId = "Parity-7.0.0";
     fullName = "Parity Public License 7.0.0";
-    url = "https://paritylicense.com/versions/7.0.0.html";
   };
 
   php301 = {
@@ -1032,7 +1092,6 @@ in mkLicense lset) ({
   psfl = {
     spdxId = "Python-2.0";
     fullName = "Python Software Foundation License version 2";
-    url = "https://docs.python.org/license.html";
   };
 
   publicDomain = {
@@ -1040,7 +1099,7 @@ in mkLicense lset) ({
   };
 
   purdueBsd = {
-    fullName = " Purdue BSD-Style License"; # also know as lsof license
+    fullName = "Purdue BSD-Style License"; # also known as lsof license
     url = "https://enterprise.dejacode.com/licenses/public/purdue-bsd";
   };
 
@@ -1063,6 +1122,11 @@ in mkLicense lset) ({
   qwt = {
     fullName = "Qwt License, Version 1.0";
     url = "https://qwt.sourceforge.io/qwtlicense.html";
+  };
+
+  radiance = {
+    fullName = "The Radiance Software License, Version 2.0";
+    url = "https://github.com/LBNL-ETA/Radiance/blob/master/License.txt";
   };
 
   ruby = {
@@ -1137,12 +1201,17 @@ in mkLicense lset) ({
     shortName = "TSL";
     fullName = "Timescale License Agreegment";
     url = "https://github.com/timescale/timescaledb/blob/main/tsl/LICENSE-TIMESCALE";
-    unfree = true;
+    free = false;
   };
 
   tcltk = {
     spdxId = "TCL";
     fullName = "TCL/TK License";
+  };
+
+  tost = {
+    fullName = "Tomorrow Open Source Technology License 1.0";
+    url = "https://github.com/PixarAnimationStudios/OpenUSD/blob/release/LICENSE.txt";
   };
 
   ucd = {
@@ -1151,8 +1220,8 @@ in mkLicense lset) ({
   };
 
   ufl = {
+    spdxId = "Ubuntu-font-1.0";
     fullName = "Ubuntu Font License 1.0";
-    url = "https://ubuntu.com/legal/font-licence";
   };
 
   unfree = {
@@ -1196,7 +1265,6 @@ in mkLicense lset) ({
   upl = {
     spdxId = "UPL-1.0";
     fullName = "Universal Permissive License";
-    url = "https://oss.oracle.com/licenses/upl/";
   };
 
   vim = {
@@ -1223,6 +1291,15 @@ in mkLicense lset) ({
   watcom = {
     spdxId = "Watcom-1.0";
     fullName = "Sybase Open Watcom Public License 1.0";
+    # Despite being OSI‐approved, this licence is not considered FOSS
+    # by Debian, Fedora, or the FSF, due to an onerous restriction that
+    # requires publication of even privately‐deployed modifications.
+    # This violates the FSF’s freedom 3 and Debian’s “desert island
+    # test” and “dissident test”.
+    #
+    # See: <https://en.wikipedia.org/wiki/Sybase_Open_Watcom_Public_License>
+    free = false;
+    redistributable = true;
   };
 
   w3c = {
@@ -1253,12 +1330,16 @@ in mkLicense lset) ({
   xfig = {
     spdxId = "Xfig";
     fullName = "xfig";
-    url = "https://mcj.sourceforge.net/authors.html#xfig";
   };
 
   xinetd = {
     spdxId = "xinetd";
     fullName = "xinetd License";
+  };
+
+  xskat = {
+    spdxId = "XSkat";
+    fullName = "XSkat License";
   };
 
   zlib = {
@@ -1276,10 +1357,6 @@ in mkLicense lset) ({
     fullName = "Zope Public License 2.1";
   };
 
-  xskat = {
-    spdxId = "XSkat";
-    fullName = "XSkat License";
-  };
 } // {
   # TODO: remove legacy aliases
   apsl10 = {

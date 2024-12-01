@@ -40,13 +40,13 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "http://kassiopeia.juls.savba.sk/~garabik/software/grc.html";
-    description = "A generic text colouriser";
+    description = "Generic text colouriser";
     longDescription = ''
       Generic Colouriser is yet another colouriser (written in Python) for
       beautifying your logfiles or output of commands.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ azahi lovek323 AndersonTorres peterhoeg ];
+    maintainers = with maintainers; [ azahi lovek323 peterhoeg ];
     platforms = platforms.unix;
     mainProgram = "grc";
   };

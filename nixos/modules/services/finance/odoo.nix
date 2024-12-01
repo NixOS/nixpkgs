@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.odoo;
   format = pkgs.formats.ini {};
@@ -9,24 +6,35 @@ in
 {
   options = {
     services.odoo = {
-      enable = mkEnableOption "odoo, an open source ERP and CRM system";
+      enable = lib.mkEnableOption "odoo, an open source ERP and CRM system";
 
-      package = mkPackageOption pkgs "odoo" { };
+      package = lib.mkPackageOption pkgs "odoo" { };
 
-      addons = mkOption {
-        type = with types; listOf package;
+      addons = lib.mkOption {
+        type = with lib.types; listOf package;
         default = [];
-        example = literalExpression "[ pkgs.odoo_enterprise ]";
+        example = lib.literalExpression "[ pkgs.odoo_enterprise ]";
         description = "Odoo addons.";
       };
 
-      settings = mkOption {
+      autoInit = lib.mkEnableOption "automatically initialize the DB";
+
+      autoInitExtraFlags = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = [ ];
+        example = lib.literalExpression /*nix*/ ''
+          [ "--without-demo=all" ]
+        '';
+        description = "Extra flags passed to odoo when run for the first time by autoInit";
+      };
+
+      settings = lib.mkOption {
         type = format.type;
         default = {};
         description = ''
           Odoo configuration settings. For more details see <https://www.odoo.com/documentation/15.0/administration/install/deploy.html>
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           options = {
             db_user = "odoo";
             db_password="odoo";
@@ -34,18 +42,18 @@ in
         '';
       };
 
-      domain = mkOption {
-        type = with types; nullOr str;
+      domain = lib.mkOption {
+        type = with lib.types; nullOr str;
         description = "Domain to host Odoo with nginx";
         default = null;
       };
     };
   };
 
-  config = mkIf (cfg.enable) (let
+  config = lib.mkIf (cfg.enable) (let
     cfgFile = format.generate "odoo.cfg" cfg.settings;
   in {
-    services.nginx = mkIf (cfg.domain != null) {
+    services.nginx = lib.mkIf (cfg.domain != null) {
       upstreams = {
         odoo.servers = {
           "127.0.0.1:8069" = {};
@@ -84,8 +92,11 @@ in
     };
 
     services.odoo.settings.options = {
+      data_dir = "/var/lib/private/odoo/data";
       proxy_mode = cfg.domain != null;
-    };
+    } // (lib.optionalAttrs (cfg.addons != []) {
+      addons_path = lib.concatMapStringsSep "," lib.escapeShellArg cfg.addons;
+    });
 
     users.users.odoo = {
       isSystemUser = true;
@@ -101,12 +112,40 @@ in
       path = [ config.services.postgresql.package ];
 
       requires = [ "postgresql.service" ];
-      script = "HOME=$STATE_DIRECTORY ${cfg.package}/bin/odoo ${optionalString (cfg.addons != []) "--addons-path=${concatMapStringsSep "," escapeShellArg cfg.addons}"} -c ${cfgFile}";
 
       serviceConfig = {
+        ExecStart = "${cfg.package}/bin/odoo";
+        ExecStartPre = pkgs.writeShellScript "odoo-start-pre.sh" (
+          ''
+          set -euo pipefail
+
+          cd "$STATE_DIRECTORY"
+
+          # Auto-migrate old deployments
+          if [[ -d .local/share/Odoo ]]; then
+            echo "pre-start: migrating state directory from $STATE_DIRECTORY/.local/share/Odoo to $STATE_DIRECTORY/data"
+            mv .local/share/Odoo ./data
+            rmdir .local/share
+            rmdir .local
+          fi
+          ''
+          + (lib.optionalString cfg.autoInit
+          ''
+          echo "pre-start: auto-init"
+          INITIALIZED="${cfg.settings.options.data_dir}/.odoo.initialized"
+          if [ ! -e "$INITIALIZED" ]; then
+            ${cfg.package}/bin/odoo  --init=INIT --database=odoo --db_user=odoo --stop-after-init ${lib.concatStringsSep " " cfg.autoInitExtraFlags}
+            touch "$INITIALIZED"
+          fi
+          '')
+          + "echo pre-start: OK"
+        );
         DynamicUser = true;
         User = "odoo";
         StateDirectory = "odoo";
+        Environment = [
+          "ODOO_RC=${cfgFile}"
+        ];
       };
     };
 

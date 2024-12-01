@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, poetry-core
-, textfsm
-, invoke
-, pytestCheckHook
-, ruamel-yaml
-, toml
-, yamllint
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  poetry-core,
+  textfsm,
+  invoke,
+  pytestCheckHook,
+  ruamel-yaml,
+  toml,
+  yamllint,
 }:
 
 buildPythonPackage rec {
   pname = "ntc-templates";
-  version = "4.4.0";
+  version = "6.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,16 +23,12 @@ buildPythonPackage rec {
     owner = "networktocode";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-8Lzh6ku2TUQFatqbOb5JIc/WkRPegx/gNnT53DErMuk=";
+    hash = "sha256-E8n4ZcCH8xxU5XXVxQUl8844RnRpnbHy/LnjHlz7Eeg=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    textfsm
-  ];
+  propagatedBuildInputs = [ textfsm ];
 
   nativeCheckInputs = [
     invoke
@@ -52,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/networktocode/ntc-templates";
     changelog = "https://github.com/networktocode/ntc-templates/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

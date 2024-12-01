@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, copyDesktopItems
-, fontconfig
-, freetype
-, libX11
-, libXext
-, libXft
-, libXinerama
-, makeDesktopItem
-, pkg-config
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  copyDesktopItems,
+  fontconfig,
+  freetype,
+  libX11,
+  libXext,
+  libXft,
+  libXinerama,
+  makeDesktopItem,
+  pkg-config,
+  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     which
   ];
 
-  buildInputs =[
+  buildInputs = [
     libX11
     libXext
     libXft
@@ -39,7 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 
@@ -50,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     patchShebangs configure
   '';
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-D_C99_SOURCE";
 
   desktopItems = [
     (makeDesktopItem {
@@ -64,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://berrywm.org/";
-    description = "A healthy, bite-sized window manager";
+    description = "Healthy, bite-sized window manager";
     longDescription = ''
       berry is a healthy, bite-sized window manager written in C for unix
       systems. Its main features include:

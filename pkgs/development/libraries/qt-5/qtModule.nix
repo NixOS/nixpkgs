@@ -2,6 +2,8 @@
 , stdenv
 , buildPackages
 , mkDerivation
+, apple-sdk_13
+, darwinMinVersionHook
 , perl
 , qmake
 , patches
@@ -22,6 +24,14 @@ in
 mkDerivation (args // {
   inherit pname version src;
   patches = (args.patches or []) ++ (patches.${pname} or []);
+
+  buildInputs =
+    args.buildInputs or [ ]
+    # Per https://doc.qt.io/qt-5/macos.html#supported-versions
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_13
+      (darwinMinVersionHook "10.13")
+    ];
 
   nativeBuildInputs =
     (args.nativeBuildInputs or []) ++ [
@@ -86,7 +96,7 @@ mkDerivation (args // {
 
   meta = {
     homepage = "https://www.qt.io";
-    description = "A cross-platform application framework for C++";
+    description = "Cross-platform application framework for C++";
     license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;

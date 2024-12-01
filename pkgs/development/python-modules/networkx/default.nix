@@ -1,27 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# optional-dependencies
-, lxml
-, matplotlib
-, numpy
-, pandas
-, pydot
-, pygraphviz
-, scipy
-, sympy
+  # optional-dependencies
+  lxml,
+  matplotlib,
+  numpy,
+  pandas,
+  pydot,
+  pygraphviz,
+  scipy,
+  sympy,
 
-# tests
-, pytest-xdist
-, pytestCheckHook
+  # tests
+  pytest-xdist,
+  pytestCheckHook,
 
-# reverse dependency
-, sage
+  # reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
@@ -37,11 +38,9 @@ buildPythonPackage rec {
     hash = "sha256-DBJ9iy9IZfWa6cuKr81gtccPMkHr1m997618SrkBJsk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     default = [
       numpy
       scipy
@@ -56,7 +55,9 @@ buildPythonPackage rec {
     ];
   };
 
-  passthru.tests = { inherit sage; };
+  passthru.tests = {
+    inherit sage;
+  };
 
   nativeCheckInputs = [
     pytest-xdist

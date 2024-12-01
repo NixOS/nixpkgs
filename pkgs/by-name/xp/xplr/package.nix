@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xplr";
-  version = "0.21.8";
+  version = "0.21.9";
 
   src = fetchFromGitHub {
     owner = "sayanarijit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GpGYCGXSCQhFEPDUnHaOdz0LZ0jjRcCRnRCyOrulDVs=";
+    hash = "sha256-0c2QJUEQwKEzzDBDP5XdX7xe1rivazsoZtepB4Dxp/c=";
   };
 
-  cargoHash = "sha256-eCIoUUWHpFk+O5ipswwiQxf1H1ygkj07Sjyj4L8Ui6I=";
+  cargoHash = "sha256-RZgdWhVBZozYxbbNslCBLhN6EnogpyVXvht6GbzLnPs=";
 
   # fixes `thread 'main' panicked at 'cannot find strip'` on x86_64-darwin
-  env = lib.optionalAttrs (stdenv.isx86_64 && stdenv.isDarwin) {
+  env = lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin) {
     TARGET_STRIP = "${stdenv.cc.targetPrefix}strip";
   };
 
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A hackable, minimal, fast TUI file explorer";
+    description = "Hackable, minimal, fast TUI file explorer";
     mainProgram = "xplr";
     homepage = "https://xplr.dev";
     changelog = "https://github.com/sayanarijit/xplr/releases/tag/${src.rev}";

@@ -190,7 +190,7 @@ rec {
 
   texdoc = runCommand "texlive-test-texdoc" {
     nativeBuildInputs = [
-      (texlive.withPackages (ps: with ps; [ luatex ps.texdoc ps.texdoc.texdoc ]))
+      (texlive.withPackages (ps: [ ps.luatex ps.texdoc ps.texdoc.texdoc ]))
     ];
   } ''
     texdoc --version
@@ -375,18 +375,18 @@ rec {
 
         # 'Error initialising QuantumRenderer: no suitable pipeline found'
         "tlcockpit"
-      ] ++ lib.optional stdenv.isDarwin "epspdftk";  # wish shebang is a script, not a binary!
+      ] ++ lib.optional stdenv.hostPlatform.isDarwin "epspdftk";  # wish shebang is a script, not a binary!
 
       # (1) binaries requiring -v
       shortVersion = [ "devnag" "diadia" "pmxchords" "ptex2pdf" "simpdftex" "ttf2afm" ];
       # (1) binaries requiring --help or -h
       help = [ "arlatex" "bundledoc" "cachepic" "checklistings" "dvipos" "extractres" "fig4latex" "fragmaster"
-        "kpsewhere" "latex-git-log" "ltxfileinfo" "mendex" "perltex" "pn2pdf" "psbook" "psnup" "psresize" "purifyeps"
+        "kpsewhere" "latex-git-log" "ltxfileinfo" "mendex" "pdflatexpicscale" "perltex" "pn2pdf" "psbook" "psnup" "psresize" "purifyeps"
         "simpdftex" "tex2xindy" "texluac" "texluajitc" "upmendex" "urlbst" "yplan" ];
-      shortHelp = [ "adhocfilelist" "authorindex" "bbl2bib" "bibdoiadd" "bibmradd" "biburl2doi" "bibzbladd" "ctanupload"
+      shortHelp = [ "adhocfilelist" "authorindex" "bbl2bib" "bibdoiadd" "bibmradd" "biburl2doi" "bibzbladd" "bookshelf-listallfonts" "bookshelf-mkfontsel" "ctanupload"
         "disdvi" "dvibook" "dviconcat" "getmapdl" "latex2man" "listings-ext.sh" "pygmentex" ];
       # (2) binaries that return non-zero exit code even if correctly asked for help
-      ignoreExitCode = [ "authorindex" "dvibook" "dviconcat" "dvipos" "extractres" "fig4latex" "fragmaster" "latex2man"
+      ignoreExitCode = [ "authorindex" "bookshelf-listallfonts" "bookshelf-mkfontsel" "dvibook" "dviconcat" "dvipos" "extractres" "fig4latex" "fragmaster" "latex2man"
         "latex-git-log" "listings-ext.sh" "psbook" "psnup" "psresize" "purifyeps" "tex2xindy"  "texluac"
         "texluajitc" ];
       # (2) binaries that print help on no argument, returning non-zero exit code
@@ -668,14 +668,14 @@ rec {
   # verify that all fixed hashes are present
   # this is effectively an eval-time assertion, converted into a derivation for
   # ease of testing
-  fixedHashes = with lib; let
+  fixedHashes = let
     fods = lib.concatMap
-      (p: lib.optional (p ? tex && isDerivation p.tex) p.tex
+      (p: lib.optional (p ? tex && lib.isDerivation p.tex) p.tex
         ++ lib.optional (p ? texdoc) p.texdoc
         ++ lib.optional (p ? texsource) p.texsource
         ++ lib.optional (p ? tlpkg) p.tlpkg)
-      (attrValues texlive.pkgs);
-    errorText = concatMapStrings (p: optionalString (! p ? outputHash) "${p.pname}-${p.tlOutputName} does not have a fixed output hash\n") fods;
+      (lib.attrValues texlive.pkgs);
+    errorText = lib.concatMapStrings (p: lib.optionalString (! p ? outputHash) "${p.pname}-${p.tlOutputName} does not have a fixed output hash\n") fods;
   in runCommand "texlive-test-fixed-hashes" {
     inherit errorText;
     passAsFile = [ "errorText" ];

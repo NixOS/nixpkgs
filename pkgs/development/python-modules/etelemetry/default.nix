@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, ci-info
-, ci-py
-, requests
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  ci-info,
+  ci-py,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -44,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sensein/etelemetry-client";
     changelog = "https://github.com/sensein/etelemetry-client/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

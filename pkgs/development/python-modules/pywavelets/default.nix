@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, meson-python
-, cython
-, pytestCheckHook
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  meson-python,
+  cython,
+  pytestCheckHook,
+  numpy,
 }:
 
 buildPythonPackage rec {
   pname = "pywavelets";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,12 +20,12 @@ buildPythonPackage rec {
     owner = "PyWavelets";
     repo = "pywt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Dr6LWGVlYGDD21l1RQ7elScovcen5uuFdJJXe3deB5o=";
+    hash = "sha256-oWAF8YDvb0SdlRzSjG2BNEekBkvR3U6KQ+e2FoIs+tw=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"numpy>=2.0.0rc1,<2.3",' ""
+      --replace-fail "numpy>=2.0.0" "numpy"
   '';
 
   build-system = [
@@ -56,5 +57,4 @@ buildPythonPackage rec {
     changelog = "https://github.com/PyWavelets/pywt/releases/tag/v${version}";
     license = licenses.mit;
   };
-
 }

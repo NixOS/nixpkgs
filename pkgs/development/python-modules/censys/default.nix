@@ -1,24 +1,24 @@
-{ lib
-, argcomplete
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, parameterized
-, poetry-core
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
-, requests-mock
-, responses
-, rich
+{
+  lib,
+  argcomplete,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  importlib-metadata,
+  parameterized,
+  poetry-core,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
+  responses,
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.2.12";
+  version = "2.2.16";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "censys";
     repo = "censys-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Gw3JbAdg/ObWdD6vl8Wuct6VCcP4GAZbiesXSSnW1Mg=";
+    hash = "sha256-OP7+jSt4xS71Kcjy5hFzeZ5rlTPtDx22rPr3UwjI5dk=";
   };
 
   postPatch = ''
@@ -37,7 +37,6 @@ buildPythonPackage rec {
 
   build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   dependencies = [
@@ -68,9 +67,7 @@ buildPythonPackage rec {
     mkdir -p $HOME
   '';
 
-  pythonImportsCheck = [
-    "censys"
-  ];
+  pythonImportsCheck = [ "censys" ];
 
   meta = with lib; {
     description = "Python API wrapper for the Censys Search Engine (censys.io)";

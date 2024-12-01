@@ -95,6 +95,7 @@ let
       "--prefix" "XDG_DATA_DIRS" ":" "${unwrapped.gtk}/share"
       "--prefix" "XDG_DATA_DIRS" ":" "${unwrapped.gtk}/share/gsettings-schemas/${unwrapped.gtk.name}"
       "--prefix" "GI_TYPELIB_PATH" ":" "${lib.makeSearchPath "lib/girepository-1.0" [
+        (lib.getLib glib)
         unwrapped.gtk
         gsettings-desktop-schemas
         atk
@@ -126,7 +127,7 @@ let
             unwrapped.qt.qtbase.qtPluginPrefix
             (builtins.map lib.getBin ([
               unwrapped.qt.qtbase
-            ] ++ lib.optionals stdenv.isLinux [
+            ] ++ lib.optionals stdenv.hostPlatform.isLinux [
               unwrapped.qt.qtwayland
             ]))
           }"
@@ -136,7 +137,7 @@ let
             unwrapped.qt.qtbase.qtQmlPrefix
             (builtins.map lib.getBin ([
               unwrapped.qt.qtbase
-            ] ++ lib.optionals stdenv.isLinux [
+            ] ++ lib.optionals stdenv.hostPlatform.isLinux [
               unwrapped.qt.qtwayland
             ]))
           }"

@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "tabula-py";
-  version = "2.9.1";
+  version = "2.10.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "chezou";
     repo = "tabula-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-C06du4mhpnF2qxcEMZxp5O/8xpNaj9Jp8LFaxBkGF/Q=";
+    hash = "sha256-PQbwm9ho3XtpmZ7N7ASkrV8gk9Jom+yQKlt2fUa948s=";
   };
 
   postPatch = ''

@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pbr
-, httpx
-, pillow
-, pycryptodome
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, python
-, respx
-, setuptools
-, time-machine
-, tzdata
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pbr,
+  httpx,
+  pillow,
+  pycryptodome,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  python,
+  respx,
+  setuptools,
+  time-machine,
+  tzdata,
 }:
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.15.2";
+  version = "0.16.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
     rev = "refs/tags/${version}";
-    hash = "sha256-UCzPD+3v74eB32q0/blsyHAsN0yNskGky5nrBKzFFaE=";
+    hash = "sha256-1Ef+8G30LdMtmOKOPoN3Xa7yhlHLBQvwoiPHJazu3c4=";
   };
 
   build-system = [
@@ -43,10 +44,8 @@ buildPythonPackage rec {
     pyjwt
   ];
 
-  passthru.optional-dependencies = {
-    china = [
-      pillow
-    ];
+  optional-dependencies = {
+    china = [ pillow ];
   };
 
   postInstall = ''
@@ -58,7 +57,7 @@ buildPythonPackage rec {
     pytestCheckHook
     respx
     time-machine
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # presumably regressed in pytest-asyncio 0.23.0
@@ -67,11 +66,10 @@ buildPythonPackage rec {
 
   preCheck = ''
     export TZDIR=${tzdata}/${python.sitePackages}/tzdata/zoneinfo
+    export PATH=$out/bin:$PATH
   '';
 
-  pythonImportsCheck = [
-    "bimmer_connected"
-  ];
+  pythonImportsCheck = [ "bimmer_connected" ];
 
   meta = with lib; {
     changelog = "https://github.com/bimmerconnected/bimmer_connected/releases/tag/${version}";

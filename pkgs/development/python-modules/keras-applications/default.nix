@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, numpy, h5py }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  h5py,
+}:
 
 buildPythonPackage rec {
   pname = "keras-applications";
@@ -18,7 +24,10 @@ buildPythonPackage rec {
   # No tests in PyPI tarball
   doCheck = false;
 
-  propagatedBuildInputs = [ numpy h5py ];
+  propagatedBuildInputs = [
+    numpy
+    h5py
+  ];
 
   meta = with lib; {
     description = "Reference implementations of popular deep learning models";

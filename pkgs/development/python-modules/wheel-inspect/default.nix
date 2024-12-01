@@ -1,18 +1,19 @@
-{ lib
-, attrs
-, buildPythonPackage
-, entry-points-txt
-, fetchFromGitHub
-, hatchling
-, headerparser
-, jsonschema
-, pythonRelaxDepsHook
-, packaging
-, pytestCheckHook
-, pythonOlder
-, readme-renderer
-, setuptools
-, wheel-filename
+{
+  lib,
+  attrs,
+  buildPythonPackage,
+  entry-points-txt,
+  fetchFromGitHub,
+  hatchling,
+  headerparser,
+  jsonschema,
+  packaging,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pythonOlder,
+  readme-renderer,
+  setuptools,
+  wheel-filename,
 }:
 
 buildPythonPackage rec {
@@ -29,11 +30,6 @@ buildPythonPackage rec {
     hash = "sha256-pB9Rh+A7GlxnYuka2mTSBoxpoyYCzoaMPVgsHDlpos0=";
   };
 
-  postPatch = ''
-    substituteInPlace tox.ini \
-      --replace-fail "--cov=wheel_inspect --no-cov-on-fail" ""
-  '';
-
   pythonRelaxDeps = [
     "entry-points-txt"
     "headerparser"
@@ -41,7 +37,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -55,6 +50,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   checkInputs = [
@@ -62,9 +58,7 @@ buildPythonPackage rec {
     jsonschema
   ];
 
-  pythonImportsCheck = [
-    "wheel_inspect"
-  ];
+  pythonImportsCheck = [ "wheel_inspect" ];
 
   pytestFlagsArray = [
     "-W"

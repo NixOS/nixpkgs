@@ -66,7 +66,7 @@ let
   ];
 
   meta = with lib; {
-    description = "A good-looking third-party netease cloud music player";
+    description = "Good-looking third-party netease cloud music player";
     mainProgram = "yesplaymusic";
     homepage = "https://github.com/qier222/YesPlayMusic/";
     license = licenses.mit;
@@ -74,7 +74,7 @@ let
     platforms = builtins.attrNames srcs;
   };
 in
-if stdenv.isDarwin
+if stdenv.hostPlatform.isDarwin
 then stdenv.mkDerivation {
   inherit pname version src meta;
 
@@ -100,6 +100,7 @@ else stdenv.mkDerivation {
     autoPatchelfHook
     wrapGAppsHook3
     makeWrapper
+    dpkg
   ];
 
   buildInputs = libraries;
@@ -107,10 +108,6 @@ else stdenv.mkDerivation {
   runtimeDependencies = [
     (lib.getLib systemd)
   ];
-
-  unpackPhase = ''
-    ${dpkg}/bin/dpkg-deb -x $src .
-  '';
 
   installPhase = ''
     runHook preInstall

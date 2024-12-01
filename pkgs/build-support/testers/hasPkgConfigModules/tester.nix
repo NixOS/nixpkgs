@@ -14,7 +14,7 @@ runCommand testName {
     buildInputs = [ package ];
     inherit moduleNames version versionCheck;
     meta = {
-      description = "Test whether ${package.name} exposes pkg-config modules ${lib.concatStringsSep ", " moduleNames}.";
+      description = "Test whether ${package.name} exposes pkg-config modules ${lib.concatStringsSep ", " moduleNames}";
     }
     # Make sure licensing info etc is preserved, as this is a concern for e.g. cache.nixos.org,
     # as hydra can't check this meta info in dependencies.
@@ -45,7 +45,7 @@ runCommand testName {
         if [[ "$moduleVersion" == "$version" ]]; then
           echo "✅ pkg-config module $moduleName exists and has version $moduleVersion"
         else
-          echo "❌ pkg-config module $moduleName exists and has version $moduleVersion when $version was expected"
+          echo "${if versionCheck then "❌" else "ℹ️"} pkg-config module $moduleName exists at version $moduleVersion != $version (drv version)"
           ((versionMismatch+=1))
         fi
         printf '%s\t%s\n' "$moduleName" "$version" >> "$out"
@@ -55,7 +55,7 @@ runCommand testName {
       fi
     done
 
-    if [[ $notFound -eq 0 ]] && ([[ $versionMismatch -eq 0 ]] || [[ "$versionCheck" == false ]]); then
+    if [[ $notFound -eq 0 ]] && ([[ $versionMismatch -eq 0 ]] || [[ -z "$versionCheck" ]]); then
       exit 0
     fi
     if [[ $notFound -ne 0 ]]; then

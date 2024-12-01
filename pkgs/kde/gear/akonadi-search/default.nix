@@ -7,7 +7,7 @@
   cargo,
   rustc,
   # provided as callPackage input to enable easier overrides through overlays
-  cargoHash ? "sha256-fY0mQiYS/CMThOVsWp8NgxpWfUph2dZ7hj7W5JUJ2J4=",
+  cargoHash ? "sha256-9cwNQSw0ueWyyL/qgWXXqIRsi4Lk/DX48CIbvQFNgP8=",
 }:
 mkKdeDerivation rec {
   pname = "akonadi-search";
@@ -29,5 +29,8 @@ mkKdeDerivation rec {
     rustc
   ];
 
-  extraBuildInputs = [corrosion xapian];
+  extraBuildInputs = [
+    corrosion
+    xapian
+  ];
 }

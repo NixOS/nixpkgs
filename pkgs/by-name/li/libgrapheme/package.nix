@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-pou93edr1Vul1kEWzl5CoT3wRcgcCFLemrYIlqoUMSU=";
   };
 
+  postPatch = ''
+    substituteInPlace configure \
+      --replace-fail "uname" "echo ${stdenv.hostPlatform.uname.system}"
+  '';
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   makeFlags = [ "AR:=$(AR)" "CC:=$(CC)" "RANLIB:=$(RANLIB)" "BUILD_CC=$(CC_FOR_BUILD)" ];

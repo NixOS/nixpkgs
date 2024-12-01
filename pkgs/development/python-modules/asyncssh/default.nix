@@ -1,33 +1,34 @@
-{ lib
-, bcrypt
-, buildPythonPackage
-, cryptography
-, fetchPypi
-, fido2
-, gssapi
-, libnacl
-, libsodium
-, nettle
-, openssh
-, openssl
-, pyopenssl
-, pytestCheckHook
-, python-pkcs11
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  bcrypt,
+  buildPythonPackage,
+  cryptography,
+  fetchPypi,
+  fido2,
+  gssapi,
+  libnacl,
+  libsodium,
+  nettle,
+  openssh,
+  openssl,
+  pyopenssl,
+  pytestCheckHook,
+  python-pkcs11,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "2.14.2";
+  version = "2.17.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6Va/iYjQega6MwX2YE4mH0ygFMSiMvCHPxx2kvvjz8I=";
+    hash = "sha256-OxWcEFqjiMHiJFxPr0g/VArajK2ZQCKBEZEAFm5e2zw=";
   };
 
   build-system = [ setuptools ];
@@ -38,29 +39,15 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  buildInputs = [
-    libsodium
-  ];
+  buildInputs = [ libsodium ];
 
   optional-dependencies = {
-    bcrypt = [
-      bcrypt
-    ];
-    fido2 = [
-      fido2
-    ];
-    gssapi = [
-      gssapi
-    ];
-    libnacl = [
-      libnacl
-    ];
-    pkcs11 = [
-      python-pkcs11
-    ];
-    pyOpenSSL = [
-      pyopenssl
-    ];
+    bcrypt = [ bcrypt ];
+    fido2 = [ fido2 ];
+    gssapi = [ gssapi ];
+    libnacl = [ libnacl ];
+    pkcs11 = [ python-pkcs11 ];
+    pyOpenSSL = [ pyopenssl ];
   };
 
   __darwinAllowLocalNetworking = true;
@@ -95,15 +82,13 @@ buildPythonPackage rec {
     "test_forward_remote"
   ];
 
-  pythonImportsCheck = [
-    "asyncssh"
-  ];
+  pythonImportsCheck = [ "asyncssh" ];
 
   meta = with lib; {
     description = "Asynchronous SSHv2 Python client and server library";
     homepage = "https://asyncssh.readthedocs.io/";
     changelog = "https://github.com/ronf/asyncssh/blob/v${version}/docs/changes.rst";
     license = licenses.epl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

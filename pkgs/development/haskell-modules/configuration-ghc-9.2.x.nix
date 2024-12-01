@@ -69,20 +69,12 @@ self: super: {
   haskell-language-server = lib.pipe super.haskell-language-server [
     (disableCabalFlag "fourmolu")
     (disableCabalFlag "ormolu")
+    (disableCabalFlag "cabal")
     (disableCabalFlag "stylishHaskell")
-    (overrideCabal (drv: {
-      # Disabling the build flags isn't enough: `Setup configure` still configures
-      # every component for building and complains about missing dependencies.
-      # Thus we have to mark the undesired components as non-buildable.
-      postPatch = drv.postPatch or "" + ''
-        for lib in hls-ormolu-plugin hls-fourmolu-plugin; do
-          sed -i "/^library $lib/a\  buildable: False" haskell-language-server.cabal
-        done
-      '';
-    }))
     (d: d.override {
       ormolu = null;
       fourmolu = null;
+      stan = null;
     })
   ];
 
@@ -100,9 +92,6 @@ self: super: {
   # https://github.com/haskell-infra/hackage-trustees/issues/347
   # https://mail.haskell.org/pipermail/haskell-cafe/2022-October/135613.html
   language-javascript_0_7_0_0 = dontCheck super.language-javascript_0_7_0_0;
-
-  # Tests depend on `parseTime` which is no longer available
-  hourglass = dontCheck super.hourglass;
 
   # Needs to match ghc version
   ghc-tags = doDistribute self.ghc-tags_1_5;

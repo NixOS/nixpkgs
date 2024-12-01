@@ -1,36 +1,51 @@
 { lib
 , stdenv
-, mkYarnPackage
 , fetchFromGitHub
 , fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, yarnInstallHook
+, nodejs
 }:
 
-mkYarnPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "postlight-parser";
   version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "postlight";
     repo = "parser";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-k6m95FHeJ+iiWSeY++1zds/bo1RtNXbnv2spaY/M+L0=";
   };
 
-  packageJSON = ./package.json;
-
-  doDist = false;
-
   offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-Vs8bfkhEbPv33ew//HBeDnpQcyWveByHi1gUsdl2CNI=";
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/postlight/parser/blob/${src.rev}/CHANGELOG.md";
+  nativeBuildInputs = [
+    yarnConfigHook
+    yarnBuildHook
+    yarnInstallHook
+    nodejs
+  ];
+  # Upstream doesn't include a script in package.json that only builds without
+  # testing, and tests fail because they need to access online websites. Hence
+  # we use the builtin interface of yarnBuildHook to lint, and in `postBuild`
+  # we run the rest of commands needed to create the js files eventually
+  # distributed and wrapped by npmHooks.npmInstallHook
+  yarnBuildScript = "lint";
+  postBuild = ''
+    yarn --offline run rollup -c
+  '';
+
+  meta = {
+    changelog = "https://github.com/postlight/parser/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     homepage = "https://reader.postlight.com";
     description = "Extracts the bits that humans care about from any URL you give it";
-    license = licenses.mit;
-    maintainers = with maintainers; [ viraptor ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ viraptor ];
     mainProgram = "postlight-parser";
   };
-}
+})

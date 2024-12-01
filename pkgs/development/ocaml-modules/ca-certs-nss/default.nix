@@ -7,20 +7,19 @@
 , logs
 , fmt
 , bos
-, astring
 , cmdliner
 , alcotest
 }:
 
 buildDunePackage rec {
   pname = "ca-certs-nss";
-  version = "3.98";
+  version = "3.103";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/ca-certs-nss/releases/download/v${version}/ca-certs-nss-${version}.tbz";
-    hash = "sha256-N1/cz8e3KB3pBd5+ZV/JbuW6FaaVijNhok7QyMB7ppc=";
+    hash = "sha256-ZBwPBUwYuBBuzukgocEHBoqorotLmzHkjUYCmWRqYAw=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +32,6 @@ buildDunePackage rec {
     logs
     fmt
     bos
-    astring
     cmdliner
   ];
 

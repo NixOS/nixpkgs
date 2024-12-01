@@ -37,7 +37,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/martynets/dialogbox/";
     description = "Qt-based scriptable engine providing GUI dialog boxes";
     license = licenses.gpl3Plus;

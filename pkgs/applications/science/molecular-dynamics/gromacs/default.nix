@@ -24,7 +24,7 @@
 assert enableCuda -> singlePrec;
 
 let
-  inherit (cudaPackages.cudaFlags) cudaCapabilities dropDot;
+  inherit (cudaPackages.flags) cmakeCudaArchitecturesString;
 
   # Select reasonable defaults for all major platforms
   # The possible values are defined in CMakeLists.txt:
@@ -40,13 +40,13 @@ let
   source =
     if enablePlumed then
       {
-        version = "2023";
-        hash = "sha256-rJLG2nL7vMpBT9io2Xnlbs8XxMHNq+0tpc+05yd7e6g=";
+        version = "2024.2";
+        hash = "sha256-gCp+M18uiVdw9XsVnk7DaOuw/yzm2sz3BsboAlw2hSs=";
       }
     else
       {
-        version = "2024.1";
-        hash = "sha256-k32PEqNv/78q963XGtu1qlxVN4ktRsmnavvsqxqgqsc=";
+        version = "2024.4";
+        hash = "sha256-rGGOzi5Yr6hrU2xaLE/Lk38HYDGPEtGPEDRra969hqg=";
       };
 
 in stdenv.mkDerivation rec {
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
   patches = [ ./pkgconfig.patch ];
 
   postPatch = lib.optionalString enablePlumed ''
-    plumed patch -p -e gromacs-2023
+    plumed patch -p -e gromacs-${source.version}
   '';
 
   outputs = [ "out" "dev" "man" ];
@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
     cudaPackages.cuda_cudart
     cudaPackages.libcufft
     cudaPackages.cuda_profiler_api
-  ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   propagatedBuildInputs = lib.optional enableMpi mpi;
   propagatedUserEnvPkgs = lib.optional enableMpi mpi;
@@ -111,10 +111,10 @@ in stdenv.mkDerivation rec {
      ]
   ) ++ lib.optionals enableCuda [
     "-DGMX_GPU=CUDA"
-    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" (builtins.concatStringsSep ";" (map dropDot cudaCapabilities)))
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cmakeCudaArchitecturesString)
 
     # Gromacs seems to ignore and override the normal variables, so we add this ad hoc:
-    (lib.cmakeFeature "GMX_CUDA_TARGET_COMPUTE" (builtins.concatStringsSep ";" (map dropDot cudaCapabilities)))
+    (lib.cmakeFeature "GMX_CUDA_TARGET_COMPUTE" cmakeCudaArchitecturesString)
   ];
 
   postInstall = ''

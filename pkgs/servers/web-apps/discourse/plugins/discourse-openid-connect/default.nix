@@ -6,14 +6,14 @@ mkDiscoursePlugin {
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-openid-connect";
-    rev = "b1df541ad29f6f6098a1008b83393b2d400986ed";
-    sha256 = "sha256-afRd/9M0nQGkS14Q8BJhcJwMCkOku3Fr0uHxcRl44vQ=";
+    rev = "07e30e59bf5ca3925328e936359a5564d7f5b0af";
+    sha256 = "sha256-uqxwUjbkS2o9r9pvnTgv+3jzFhUOb8KmorT3ody2d3o=";
   };
   meta = with lib; {
     homepage = "https://github.com/discourse/discourse-openid-connect";
     maintainers = with maintainers; [ mkg20001 ];
     license = licenses.mit;
-    description = "Discourse plugin to integrate Discourse with an openid-connect login provider.";
+    description = "Discourse plugin to integrate Discourse with an openid-connect login provider";
   };
 }
 

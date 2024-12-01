@@ -1,33 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyyaml
-, semantic-version
-, defusedxml
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  semantic-version,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "lib4sbom";
-  version = "0.7.1";
-  format = "setuptools";
+  version = "0.7.5";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "anthonyharrison";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-UQZZYTRDbUqSH6F8hjhp9L70025cRO3zXQ8Aoznotg4=";
+    repo = "lib4sbom";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-NWrHz4G5Ps5GoZUcx0LiSQzbTZlU4eGYgli6znG+NSs=";
   };
 
+  build-system = [ setuptools ];
+
   dependencies = [
+    defusedxml
     pyyaml
     semantic-version
-    defusedxml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # stub tests that always fail
@@ -55,6 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to ingest and generate SBOMs";
     homepage = "https://github.com/anthonyharrison/lib4sbom";
+    changelog = "https://github.com/anthonyharrison/lib4sbom/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ teatwig ];
   };

@@ -3,47 +3,83 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  sphinxHook,
+  furo,
+  myst-parser,
+  pbr,
+  sphinxcontrib-apidoc,
+
+  # dependencies
+  attrs,
   binaryornot,
   boolean-py,
   debian,
   jinja2,
   license-expression,
+  tomlkit,
+
+  # test dependencies
+  freezegun,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "reuse";
-  version = "3.0.2";
+  version = "4.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZYmQtJ503HDmu+Cd6IxOrCcOVH+CcFnFe3oe6PqvcE0=";
+    hash = "sha256-oKtQBT8tuAk4S/Sygp4qxLk4ADWDTG0MbVaL5O2qsuA=";
   };
 
-  build-system = [ poetry-core ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
+  build-system = [
+    poetry-core
+    sphinxHook
+    furo
+    myst-parser
+    pbr
+    sphinxcontrib-apidoc
+  ];
 
   dependencies = [
+    attrs
     binaryornot
     boolean-py
     debian
     jinja2
     license-expression
+    tomlkit
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    freezegun
+  ];
 
   disabledTestPaths = [
     # pytest wants to execute the actual source files for some reason, which fails with ImportPathMismatchError()
     "src/reuse"
   ];
 
+  sphinxBuilders = [
+    "html"
+    "man"
+  ];
+  sphinxRoot = "docs";
+
   pythonImportsCheck = [ "reuse" ];
 
   meta = with lib; {
-    description = "A tool for compliance with the REUSE Initiative recommendations";
+    description = "Tool for compliance with the REUSE Initiative recommendations";
     homepage = "https://github.com/fsfe/reuse-tool";
     changelog = "https://github.com/fsfe/reuse-tool/blob/v${version}/CHANGELOG.md";
     license = with licenses; [

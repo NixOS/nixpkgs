@@ -3,24 +3,22 @@
 , lib
 , libX11
 , stdenv
-, darwin
 }:
 
 buildGoModule rec {
   pname = "netclient";
-  version = "0.24.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "gravitl";
     repo = "netclient";
     rev = "v${version}";
-    hash = "sha256-p7cPOPmD/13Mvp0aHRDj3MXfkiaimqrTeg9D7bRU3AM=";
+    hash = "sha256-vGiOVAulqngodUSOmpqMs5ZNHtUhx5TGhpihSaAo164=";
   };
 
-  vendorHash = "sha256-mxDhjvNrV4oMHKHQHaxg35Tn30czmjGD3MTRh/Dexv4=";
+  vendorHash = "sha256-ENrBJ0XbCfLfzTVZEVtDBjGxupdiLI7USGVImkYWDdY=";
 
-  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa
-    ++ lib.optional stdenv.isLinux libX11;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux libX11;
 
   hardeningEnabled = [ "pie" ];
 

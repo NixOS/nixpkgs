@@ -1,13 +1,14 @@
 { stdenv
 , lib
 , buildDotnetModule
+, dotnetCorePackages
 , callPackage
 , fetchFromGitHub
 , ffmpeg
 , glfw
+, libglvnd
 , libogg
 , libvorbis
-, makeWrapper
 , openal
 , portaudio
 , rtmidi
@@ -22,13 +23,13 @@ let
 in
 buildDotnetModule rec {
   pname = "famistudio";
-  version = "4.1.3";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "BleuBleu";
     repo = "FamiStudio";
     rev = "refs/tags/${version}";
-    hash = "sha256-bryxhminkrTVe5qhGeMStZp3NTHBREXrsUlyQkfPkao=";
+    hash = "sha256-WYy/6cWQg3Ayok/eAdnvlWAvdcuhy/sdlWOVvaYcPkc=";
   };
 
   postPatch = let
@@ -85,6 +86,12 @@ buildDotnetModule rec {
 
   projectFile = "FamiStudio/${csprojName}.csproj";
   nugetDeps = ./deps.nix;
+  dotnet-sdk = dotnetCorePackages.sdk_7_0;
+  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+
+  runtimeDeps = lib.optionals stdenv.hostPlatform.isLinux [
+    libglvnd
+  ];
 
   executables = [ "FamiStudio" ];
 

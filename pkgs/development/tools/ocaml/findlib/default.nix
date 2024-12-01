@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-findlib";
-  version = "1.9.6";
+  version = "1.9.8";
 
   src = fetchurl {
     url = "http://download.camlcity.org/download/findlib-${version}.tar.gz";
-    sha256 = "sha256-LfmWJ5rha2Bttf9Yefk9v63giY258aPoL3+EX6opMKI=";
+    hash = "sha256-ZiyRD3dOn+46GcTgV/OAWBqy/E7lLaR2EwSsnDG4hp0=";
   };
 
   nativeBuildInputs = [ ocaml ];

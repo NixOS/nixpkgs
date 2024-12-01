@@ -58,12 +58,12 @@ buildDotnetModule rec {
   '';
 
   meta = with lib; {
-    description = "An Ansi/Ascii text and RIPscrip vector graphic art editor/viewer with multi-user capabilities";
+    description = "Ansi/Ascii text and RIPscrip vector graphic art editor/viewer with multi-user capabilities";
     homepage = "https://picoe.ca/products/pablodraw";
     license = licenses.mit;
     mainProgram = "PabloDraw";
     maintainers = with maintainers; [ aleksana kip93 ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # Eto.Platform.Mac64 not found in nugetSource
+    broken = stdenv.hostPlatform.isDarwin; # Eto.Platform.Mac64 not found in nugetSource
   };
 }

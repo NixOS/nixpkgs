@@ -91,11 +91,11 @@ mkDerivation rec {
   '';
 
   meta = {
-    description = "A system for processing and editing 3D triangular meshes";
+    description = "System for processing and editing 3D triangular meshes";
     mainProgram = "meshlab";
     homepage = "https://www.meshlab.net/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ viric ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

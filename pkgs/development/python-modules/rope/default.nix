@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytoolconfig
-, pytest-timeout
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytoolconfig,
+  pytest-timeout,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,13 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-g/fta5gW/xPs3VaVuLtikfLhqCKyy1AKRnOcOXjQ8bA=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    pytoolconfig
-  ] ++ pytoolconfig.optional-dependencies.global;
+  dependencies = [ pytoolconfig ] ++ pytoolconfig.optional-dependencies.global;
 
   __darwinAllowLocalNetworking = true;
 
@@ -48,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-rope/rope";
     changelog = "https://github.com/python-rope/rope/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

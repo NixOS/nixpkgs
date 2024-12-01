@@ -12,13 +12,13 @@
 
 buildDotnetModule rec {
   pname = "naps2";
-  version = "7.4.0";
+  version = "7.4.3";
 
   src = fetchFromGitHub {
     owner = "cyanfish";
     repo = "naps2";
     rev = "v${version}";
-    hash = "sha256-zU6VjHNtuX8JHC03CmaDnTAAei+mEhA/oMs9p42EgtA=";
+    hash = "sha256-/qSfxGHcCSoNp516LFYWgEL4csf8EKgtSffBt1C02uE=";
   };
 
   projectFile = "NAPS2.App.Gtk/NAPS2.App.Gtk.csproj";
@@ -48,14 +48,14 @@ buildDotnetModule rec {
   '';
 
   meta = {
-    description = "Scan documents to PDF and more, as simply as possible.";
+    description = "Scan documents to PDF and more, as simply as possible";
     homepage = "https://www.naps2.com";
     changelog = "https://github.com/cyanfish/naps2/blob/master/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ eliandoran ];
     platforms = lib.platforms.linux;
     mainProgram = "naps2";
-    broken = stdenv.isAarch64;  # Google.Protobuf.Tools dependency fails to build.
+    broken = stdenv.hostPlatform.isAarch64;  # Google.Protobuf.Tools dependency fails to build.
   };
 
 }

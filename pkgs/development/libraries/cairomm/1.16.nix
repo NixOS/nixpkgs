@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost # for tests
     fontconfig
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ApplicationServices
   ];
 
@@ -44,13 +44,8 @@ stdenv.mkDerivation rec {
     "-Dbuild-tests=true"
   ];
 
-  # Meson is no longer able to pick up Boost automatically.
-  # https://github.com/NixOS/nixpkgs/issues/86131
-  BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
-  BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
-
   # Tests fail on Darwin, possibly because of sandboxing.
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "C++ bindings for the Cairo vector graphics library";

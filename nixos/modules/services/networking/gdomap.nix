@@ -1,21 +1,18 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 {
   #
   # interface
   #
   options = {
     services.gdomap = {
-      enable = mkEnableOption "GNUstep Distributed Objects name server";
+      enable = lib.mkEnableOption "GNUstep Distributed Objects name server";
    };
   };
 
   #
   # implementation
   #
-  config = mkIf config.services.gdomap.enable {
+  config = lib.mkIf config.services.gdomap.enable {
     # NOTE: gdomap runs as root
     # TODO: extra user for gdomap?
     systemd.services.gdomap = {

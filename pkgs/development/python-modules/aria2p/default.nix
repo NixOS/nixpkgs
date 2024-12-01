@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pdm-backend
-, appdirs
-, loguru
-, requests
-, setuptools
-, toml
-, websocket-client
-, asciimatics
-, pyperclip
-, aria2
-, fastapi
-, psutil
-, pytest-xdist
-, pytestCheckHook
-, responses
-, uvicorn
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pdm-backend,
+  appdirs,
+  loguru,
+  requests,
+  setuptools,
+  toml,
+  websocket-client,
+  asciimatics,
+  pyperclip,
+  aria2,
+  fastapi,
+  psutil,
+  pytest-xdist,
+  pytestCheckHook,
+  responses,
+  uvicorn,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
     hash = "sha256-WlbZP2+qUSyfmeFFiuarXI3VaNZvD9cnOef/WM+J0OE=";
   };
 
-  nativeBuildInputs = [
-    pdm-backend
-  ];
+  nativeBuildInputs = [ pdm-backend ];
 
   propagatedBuildInputs = [
     appdirs
@@ -46,8 +45,11 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  passthru.optional-dependencies = {
-    tui = [ asciimatics pyperclip ];
+  optional-dependencies = {
+    tui = [
+      asciimatics
+      pyperclip
+    ];
   };
 
   preCheck = ''
@@ -62,7 +64,7 @@ buildPythonPackage rec {
     responses
     psutil
     uvicorn
-  ] ++ passthru.optional-dependencies.tui;
+  ] ++ optional-dependencies.tui;
 
   disabledTests = [
     # require a running display server

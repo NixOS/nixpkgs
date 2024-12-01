@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     questionary
     typer
-  ] ++ typer.optional-dependencies.all;
+  ];
 
   build-system = [ python3Packages.poetry-core ];
 

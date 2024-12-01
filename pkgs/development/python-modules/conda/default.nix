@@ -1,8 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  pythonRelaxDepsHook,
-  hostPlatform,
+  stdenv,
   fetchFromGitHub,
   # build dependencies
   hatchling,
@@ -12,6 +11,7 @@
   conda-libmamba-solver,
   conda-package-handling,
   distro,
+  frozendict,
   jsonpatch,
   packaging,
   platformdirs,
@@ -27,7 +27,7 @@
 }:
 buildPythonPackage rec {
   pname = "conda";
-  version = "24.4.0";
+  version = "24.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -35,10 +35,9 @@ buildPythonPackage rec {
     owner = "conda";
     repo = "conda";
     rev = "refs/tags/${version}";
-    hash = "sha256-LdoBlR5EFYd2mQIjOgp1MH3w6osfRfurPq+N5Y1iaFw=";
+    hash = "sha256-e+C+tSUdSGyotuZzkOuV0e0hOj+MZRuq1fHzsu3LERQ=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [
     hatchling
@@ -50,6 +49,7 @@ buildPythonPackage rec {
     conda-libmamba-solver
     conda-package-handling
     distro
+    frozendict
     jsonpatch
     packaging
     platformdirs
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "conda" ];
 
   # menuinst is currently not packaged
-  pythonRemoveDeps = lib.optionals (!hostPlatform.isWindows) [ "menuinst" ];
+  pythonRemoveDeps = lib.optionals (!stdenv.hostPlatform.isWindows) [ "menuinst" ];
 
   meta = {
     description = "OS-agnostic, system-level binary package manager";

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPy27
-, pytestCheckHook
-, pytest-cov
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  pytestCheckHook,
+  pytest-cov-stub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,13 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-63LNym8xOaFdyA+cldPBD4pUoLqIHu744uxbQtPuOpU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
   ];
 
   checkPhase = ''
@@ -33,7 +32,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A library for deferring decorator actions";
+    description = "Library for deferring decorator actions";
     homepage = "https://pylonsproject.org/";
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];

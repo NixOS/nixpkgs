@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchPypi
-, ipython
-, mock
-, pytestCheckHook
-, pythonOlder
-, sh
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchPypi,
+  ipython,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  sh,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
     sh
   ];
 
-  disabledTests = [
-    "cli"
-  ];
+  disabledTests = [ "cli" ];
 
   pythonImportsCheck = [ "dotenv" ];
 

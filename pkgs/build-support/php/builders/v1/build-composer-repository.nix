@@ -1,5 +1,4 @@
 {
-  callPackage,
   stdenvNoCC,
   lib,
   php,
@@ -23,8 +22,7 @@ let
 
     let
       phpDrv = finalAttrs.php or php;
-      composer = finalAttrs.composer or phpDrv.packages.composer;
-      composer-local-repo-plugin = callPackage ../../pkgs/composer-local-repo-plugin.nix { };
+      composer = finalAttrs.composer or phpDrv.packages.composer-local-repo-plugin;
     in
     assert (lib.assertMsg (previousAttrs ? src) "mkComposerRepository expects src argument.");
     assert (
@@ -51,14 +49,13 @@ let
       composerNoScripts = previousAttrs.composerNoScripts or true;
       composerStrictValidation = previousAttrs.composerStrictValidation or true;
 
-      name = "${previousAttrs.pname}-${previousAttrs.version}-composer-repository";
+      name = "${previousAttrs.pname}-composer-repository-${previousAttrs.version}";
 
       # See https://github.com/NixOS/nix/issues/6660
       dontPatchShebangs = previousAttrs.dontPatchShebangs or true;
 
       nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [
         composer
-        composer-local-repo-plugin
         phpDrv
         phpDrv.composerHooks.composerRepositoryHook
       ];
@@ -104,13 +101,6 @@ let
 
           runHook postInstallCheck
         '';
-
-      env = {
-        COMPOSER_CACHE_DIR = "/dev/null";
-        COMPOSER_MIRROR_PATH_REPOS = "1";
-        COMPOSER_HTACCESS_PROTECT = "0";
-        COMPOSER_DISABLE_NETWORK = "0";
-      };
 
       outputHashMode = "recursive";
       outputHashAlgo =

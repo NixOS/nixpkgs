@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
-    description = "A simple multi-page document viewer for the MATE desktop";
+    description = "Simple multi-page document viewer for the MATE desktop";
     homepage = "https://mate-desktop.org";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

@@ -11,7 +11,7 @@ let
   environment = {
     PYTHONPATH = pkg.pythonPath;
     STATIC_ROOT = cfg.dataDir + "/static";
-  } // cfg.settings;
+  } // lib.filterAttrs (_: v: !builtins.isNull v) cfg.settings;
 
   environmentFile = pkgs.writeText "healthchecks-environment" (lib.generators.toKeyValue { } environment);
 
@@ -21,6 +21,7 @@ let
       sudo='exec /run/wrappers/bin/sudo -u ${cfg.user} --preserve-env --preserve-env=PYTHONPATH'
     fi
     export $(cat ${environmentFile} | xargs)
+    ${lib.optionalString (cfg.settingsFile != null) "export $(cat ${cfg.settingsFile} | xargs)"}
     $sudo ${pkg}/opt/healthchecks/manage.py "$@"
   '';
 in
@@ -89,6 +90,12 @@ in
       '';
     };
 
+    settingsFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = opt.settings.description;
+    };
+
     settings = lib.mkOption {
       description = ''
         Environment variables which are read by healthchecks `(local)_settings.py`.
@@ -109,6 +116,8 @@ in
           have support for a `_FILE` variant, run:
           - `nix-instantiate --eval --expr '(import <nixpkgs> {}).healthchecks.secrets'`
           - or `nix eval 'nixpkgs#healthchecks.secrets'` if the flake support has been enabled.
+
+        If the same variable is set in both `settings` and `settingsFile` the value from `settingsFile` has priority.
       '';
       type = types.submodule (settings: {
         freeformType = types.attrsOf types.str;
@@ -121,8 +130,9 @@ in
           };
 
           SECRET_KEY_FILE = mkOption {
-            type = types.path;
+            type = types.nullOr types.path;
             description = "Path to a file containing the secret key.";
+            default = null;
           };
 
           DEBUG = mkOption {
@@ -186,7 +196,9 @@ in
           WorkingDirectory = cfg.dataDir;
           User = cfg.user;
           Group = cfg.group;
-          EnvironmentFile = [ environmentFile ];
+          EnvironmentFile = [
+            environmentFile
+          ] ++ lib.optional (cfg.settingsFile != null) cfg.settingsFile;
           StateDirectory = mkIf (cfg.dataDir == "/var/lib/healthchecks") "healthchecks";
           StateDirectoryMode = mkIf (cfg.dataDir == "/var/lib/healthchecks") "0750";
         };

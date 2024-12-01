@@ -1,12 +1,11 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
-  inherit (lib) optionalString mkDefault mkIf mkOption mkEnableOption literalExpression;
-  inherit (lib.types) nullOr attrsOf oneOf str int bool path package enum submodule;
-  inherit (lib.strings) concatMapStringsSep removePrefix toShellVars removeSuffix hasSuffix;
-  inherit (lib.attrsets) attrValues genAttrs filterAttrs mapAttrs' nameValuePair;
-  inherit (builtins) isInt isString toString typeOf;
-
   cfg = config.services.firefly-iii;
 
   user = cfg.user;
@@ -17,46 +16,36 @@ let
 
   artisan = "${cfg.package}/artisan";
 
-  env-file-values = mapAttrs' (n: v: nameValuePair (removeSuffix "_FILE" n) v)
-    (filterAttrs (n: v: hasSuffix "_FILE" n) cfg.settings);
-  env-nonfile-values = filterAttrs (n: v: ! hasSuffix "_FILE" n) cfg.settings;
-
-  envfile = pkgs.writeText "firefly-iii-env" ''
-    ${toShellVars env-file-values}
-    ${toShellVars env-nonfile-values}
-  '';
-
-  fileenv-func = ''
-    cp --no-preserve=mode ${envfile} /tmp/firefly-iii-env
-    ${concatMapStringsSep "\n"
-      (n: "${pkgs.replace-secret}/bin/replace-secret ${n} ${n} /tmp/firefly-iii-env")
-      (attrValues env-file-values)}
-    set -a
-    . /tmp/firefly-iii-env
-    set +a
-  '';
+  env-file-values = lib.attrsets.mapAttrs' (
+    n: v: lib.attrsets.nameValuePair (lib.strings.removeSuffix "_FILE" n) v
+  ) (lib.attrsets.filterAttrs (n: v: lib.strings.hasSuffix "_FILE" n) cfg.settings);
+  env-nonfile-values = lib.attrsets.filterAttrs (n: v: !lib.strings.hasSuffix "_FILE" n) cfg.settings;
 
   firefly-iii-maintenance = pkgs.writeShellScript "firefly-iii-maintenance.sh" ''
-    ${fileenv-func}
-
-    ${optionalString (cfg.settings.DB_CONNECTION == "sqlite")
-      "touch ${cfg.dataDir}/storage/database/database.sqlite"}
-    ${artisan} migrate --seed --no-interaction --force
-    ${artisan} firefly-iii:decrypt-all
+    set -a
+    ${lib.strings.toShellVars env-nonfile-values}
+    ${lib.strings.concatLines (
+      lib.attrsets.mapAttrsToList (n: v: "${n}=\"$(< ${v})\"") env-file-values
+    )}
+    set +a
+    ${lib.optionalString (
+      cfg.settings.DB_CONNECTION == "sqlite"
+    ) "touch ${cfg.dataDir}/storage/database/database.sqlite"}
+    rm ${cfg.dataDir}/cache/*.php
+    ${artisan} package:discover
     ${artisan} firefly-iii:upgrade-database
-    ${artisan} firefly-iii:correct-database
-    ${artisan} firefly-iii:report-integrity
     ${artisan} firefly-iii:laravel-passport-keys
-    ${artisan} cache:clear
-
-    mv /tmp/firefly-iii-env /run/phpfpm/firefly-iii-env
+    ${artisan} view:cache
+    ${artisan} route:cache
+    ${artisan} config:cache
   '';
 
   commonServiceConfig = {
     Type = "oneshot";
     User = user;
     Group = group;
-    StateDirectory = "${removePrefix "/var/lib/" cfg.dataDir}";
+    StateDirectory = "firefly-iii";
+    ReadWritePaths = [ cfg.dataDir ];
     WorkingDirectory = cfg.package;
     PrivateTmp = true;
     PrivateDevices = true;
@@ -88,20 +77,21 @@ let
     PrivateUsers = true;
   };
 
-in {
+in
+{
 
   options.services.firefly-iii = {
 
-    enable = mkEnableOption "Firefly III: A free and open source personal finance manager";
+    enable = lib.mkEnableOption "Firefly III: A free and open source personal finance manager";
 
-    user = mkOption {
-      type = str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = defaultUser;
       description = "User account under which firefly-iii runs.";
     };
 
-    group = mkOption {
-      type = str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = if cfg.enableNginx then "nginx" else defaultGroup;
       defaultText = "If `services.firefly-iii.enableNginx` is true then `nginx` else ${defaultGroup}";
       description = ''
@@ -110,31 +100,26 @@ in {
       '';
     };
 
-    dataDir = mkOption {
-      type = path;
+    dataDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/firefly-iii";
       description = ''
         The place where firefly-iii stores its state.
       '';
     };
 
-    package = mkOption {
-      type = package;
-      default = pkgs.firefly-iii;
-      defaultText = literalExpression "pkgs.firefly-iii";
-      description = ''
-        The firefly-iii package served by php-fpm and the webserver of choice.
-        This option can be used to point the webserver to the correct root. It
-        may also be used to set the package to a different version, say a
-        development version.
-      '';
-      apply = firefly-iii : firefly-iii.override (prev: {
-        dataDir = cfg.dataDir;
-      });
-    };
+    package =
+      lib.mkPackageOption pkgs "firefly-iii" { }
+      // lib.mkOption {
+        apply =
+          firefly-iii:
+          firefly-iii.override (prev: {
+            dataDir = cfg.dataDir;
+          });
+      };
 
-    enableNginx = mkOption {
-      type = bool;
+    enableNginx = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable nginx or not. If enabled, an nginx virtual host will
@@ -144,8 +129,9 @@ in {
       '';
     };
 
-    virtualHost = mkOption {
-      type = str;
+    virtualHost = lib.mkOption {
+      type = lib.types.str;
+      default = "localhost";
       description = ''
         The hostname at which you wish firefly-iii to be served. If you have
         enabled nginx using `services.firefly-iii.enableNginx` then this will
@@ -153,33 +139,43 @@ in {
       '';
     };
 
-    poolConfig = mkOption {
-      type = attrsOf (oneOf [ str int bool ]);
-      default = {
-        "pm" = "dynamic";
-        "pm.max_children" = 32;
-        "pm.start_servers" = 2;
-        "pm.min_spare_servers" = 2;
-        "pm.max_spare_servers" = 4;
-        "pm.max_requests" = 500;
-      };
+    poolConfig = lib.mkOption {
+      type = lib.types.attrsOf (
+        lib.types.oneOf [
+          lib.types.str
+          lib.types.int
+          lib.types.bool
+        ]
+      );
+      default = { };
+      defaultText = ''
+        {
+          "pm" = "dynamic";
+          "pm.max_children" = 32;
+          "pm.start_servers" = 2;
+          "pm.min_spare_servers" = 2;
+          "pm.max_spare_servers" = 4;
+          "pm.max_requests" = 500;
+        }
+      '';
       description = ''
         Options for the Firefly III PHP pool. See the documentation on <literal>php-fpm.conf</literal>
         for details on configuration directives.
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
+      default = { };
       description = ''
         Options for firefly-iii configuration. Refer to
         <https://github.com/firefly-iii/firefly-iii/blob/main/.env.example> for
         details on supported values. All <option>_FILE values supported by
         upstream are supported here.
 
-        APP_URL will be set by `services.firefly-iii.virtualHost`, do not
-        redefine it here.
+        APP_URL will be the same as `services.firefly-iii.virtualHost` if the
+        former is unset in `services.firefly-iii.settings`.
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           APP_ENV = "production";
           APP_KEY_FILE = "/var/secrets/firefly-iii-app-key.txt";
@@ -192,12 +188,21 @@ in {
           DB_PASSWORD_FILE = "/var/secrets/firefly-iii-mysql-password.txt;
         }
       '';
-      default = {};
-      type = submodule {
-        freeformType = attrsOf (oneOf [str int bool]);
+      type = lib.types.submodule {
+        freeformType = lib.types.attrsOf (
+          lib.types.oneOf [
+            lib.types.str
+            lib.types.int
+            lib.types.bool
+          ]
+        );
         options = {
-          DB_CONNECTION = mkOption {
-            type = enum [ "sqlite" "pgsql" "mysql" ];
+          DB_CONNECTION = lib.mkOption {
+            type = lib.types.enum [
+              "sqlite"
+              "pgsql"
+              "mysql"
+            ];
             default = "sqlite";
             example = "pgsql";
             description = ''
@@ -205,8 +210,12 @@ in {
               "mysql" or "pgsql".
             '';
           };
-          APP_ENV = mkOption {
-            type = enum [ "local" "production" "testing" ];
+          APP_ENV = lib.mkOption {
+            type = lib.types.enum [
+              "local"
+              "production"
+              "testing"
+            ];
             default = "local";
             example = "production";
             description = ''
@@ -214,11 +223,15 @@ in {
               Possible values are "local", "production" and "testing"
             '';
           };
-          DB_PORT = mkOption {
-            type = nullOr int;
-            default = if cfg.settings.DB_CONNECTION == "sqlite" then null
-                      else if cfg.settings.DB_CONNECTION == "mysql" then 3306
-                      else 5432;
+          DB_PORT = lib.mkOption {
+            type = lib.types.nullOr lib.types.int;
+            default =
+              if cfg.settings.DB_CONNECTION == "pgsql" then
+                5432
+              else if cfg.settings.DB_CONNECTION == "mysql" then
+                3306
+              else
+                null;
             defaultText = ''
               `null` if DB_CONNECTION is "sqlite", `3306` if "mysql", `5432` if "pgsql"
             '';
@@ -227,12 +240,43 @@ in {
               this value to be filled.
             '';
           };
-          APP_KEY_FILE = mkOption {
-            type = path;
+          DB_HOST = lib.mkOption {
+            type = lib.types.str;
+            default = if cfg.settings.DB_CONNECTION == "pgsql" then "/run/postgresql" else "localhost";
+            defaultText = ''
+              "localhost" if DB_CONNECTION is "sqlite" or "mysql", "/run/postgresql" if "pgsql".
+            '';
+            description = ''
+              The machine which hosts your database. This is left at the
+              default value for "mysql" because we use the "DB_SOCKET" option
+              to connect to a unix socket instead. "pgsql" requires that the
+              unix socket location be specified here instead of at "DB_SOCKET".
+              This option does not affect "sqlite".
+            '';
+          };
+          APP_KEY_FILE = lib.mkOption {
+            type = lib.types.path;
             description = ''
               The path to your appkey. The file should contain a 32 character
               random app key. This may be set using `echo "base64:$(head -c 32
               /dev/urandom | base64)" > /path/to/key-file`.
+            '';
+          };
+          APP_URL = lib.mkOption {
+            type = lib.types.str;
+            default =
+              if cfg.virtualHost == "localhost" then
+                "http://${cfg.virtualHost}"
+              else
+                "https://${cfg.virtualHost}";
+            defaultText = ''
+              http(s)://''${config.services.firefly-iii.virtualHost}
+            '';
+            description = ''
+              The APP_URL used by firefly-iii internally. Please make sure this
+              URL matches the external URL of your Firefly III installation. It
+              is used to validate specific requests and to generate URLs in
+              emails.
             '';
           };
         };
@@ -240,13 +284,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-
-    services.firefly-iii = {
-      settings = {
-        APP_URL = cfg.virtualHost;
-      };
-    };
+  config = lib.mkIf cfg.enable {
 
     services.phpfpm.pools.firefly-iii = {
       inherit user group;
@@ -255,36 +293,44 @@ in {
         log_errors = on
       '';
       settings = {
-        "listen.mode" = "0660";
-        "listen.owner" = user;
-        "listen.group" = group;
-        "clear_env" = "no";
+        "listen.mode" = lib.mkDefault "0660";
+        "listen.owner" = lib.mkDefault user;
+        "listen.group" = lib.mkDefault group;
+        "pm" = lib.mkDefault "dynamic";
+        "pm.max_children" = lib.mkDefault 32;
+        "pm.start_servers" = lib.mkDefault 2;
+        "pm.min_spare_servers" = lib.mkDefault 2;
+        "pm.max_spare_servers" = lib.mkDefault 4;
+        "pm.max_requests" = lib.mkDefault 500;
       } // cfg.poolConfig;
     };
 
-    systemd.services.phpfpm-firefly-iii.serviceConfig = {
-      EnvironmentFile = "/run/phpfpm/firefly-iii-env";
-      ExecStartPost = "${pkgs.coreutils}/bin/rm /run/phpfpm/firefly-iii-env";
-    };
-
     systemd.services.firefly-iii-setup = {
+      after = [
+        "postgresql.service"
+        "mysql.service"
+      ];
       requiredBy = [ "phpfpm-firefly-iii.service" ];
       before = [ "phpfpm-firefly-iii.service" ];
       serviceConfig = {
         ExecStart = firefly-iii-maintenance;
-        RuntimeDirectory = "phpfpm";
-        RuntimeDirectoryPreserve = true;
+        RemainAfterExit = true;
       } // commonServiceConfig;
       unitConfig.JoinsNamespaceOf = "phpfpm-firefly-iii.service";
+      restartTriggers = [ cfg.package ];
     };
 
     systemd.services.firefly-iii-cron = {
+      after = [
+        "firefly-iii-setup.service"
+        "postgresql.service"
+        "mysql.service"
+      ];
+      wants = [ "firefly-iii-setup.service" ];
       description = "Daily Firefly III cron job";
-      script = ''
-        ${fileenv-func}
-        ${artisan} firefly-iii:cron
-      '';
-      serviceConfig = commonServiceConfig;
+      serviceConfig = {
+        ExecStart = "${artisan} firefly-iii:cron";
+      } // commonServiceConfig;
     };
 
     systemd.timers.firefly-iii-cron = {
@@ -295,13 +341,14 @@ in {
         Persistent = true;
       };
       wantedBy = [ "timers.target" ];
+      restartTriggers = [ cfg.package ];
     };
 
-    services.nginx = mkIf cfg.enableNginx {
+    services.nginx = lib.mkIf cfg.enableNginx {
       enable = true;
-      recommendedTlsSettings = mkDefault true;
-      recommendedOptimisation = mkDefault true;
-      recommendedGzipSettings = mkDefault true;
+      recommendedTlsSettings = lib.mkDefault true;
+      recommendedOptimisation = lib.mkDefault true;
+      recommendedGzipSettings = lib.mkDefault true;
       virtualHosts.${cfg.virtualHost} = {
         root = "${cfg.package}/public";
         locations = {
@@ -324,34 +371,38 @@ in {
       };
     };
 
-    systemd.tmpfiles.settings."10-firefly-iii" = genAttrs [
-      "${cfg.dataDir}/storage"
-      "${cfg.dataDir}/storage/app"
-      "${cfg.dataDir}/storage/database"
-      "${cfg.dataDir}/storage/export"
-      "${cfg.dataDir}/storage/framework"
-      "${cfg.dataDir}/storage/framework/cache"
-      "${cfg.dataDir}/storage/framework/sessions"
-      "${cfg.dataDir}/storage/framework/views"
-      "${cfg.dataDir}/storage/logs"
-      "${cfg.dataDir}/storage/upload"
-      "${cfg.dataDir}/cache"
-    ] (n: {
-      d = {
-        group = group;
-        mode = "0700";
-        user = user;
+    systemd.tmpfiles.settings."10-firefly-iii" =
+      lib.attrsets.genAttrs
+        [
+          "${cfg.dataDir}/storage"
+          "${cfg.dataDir}/storage/app"
+          "${cfg.dataDir}/storage/database"
+          "${cfg.dataDir}/storage/export"
+          "${cfg.dataDir}/storage/framework"
+          "${cfg.dataDir}/storage/framework/cache"
+          "${cfg.dataDir}/storage/framework/sessions"
+          "${cfg.dataDir}/storage/framework/views"
+          "${cfg.dataDir}/storage/logs"
+          "${cfg.dataDir}/storage/upload"
+          "${cfg.dataDir}/cache"
+        ]
+        (n: {
+          d = {
+            group = group;
+            mode = "0700";
+            user = user;
+          };
+        })
+      // {
+        "${cfg.dataDir}".d = {
+          group = group;
+          mode = "0710";
+          user = user;
+        };
       };
-    }) // {
-      "${cfg.dataDir}".d = {
-        group = group;
-        mode = "0710";
-        user = user;
-      };
-    };
 
     users = {
-      users = mkIf (user == defaultUser) {
+      users = lib.mkIf (user == defaultUser) {
         ${defaultUser} = {
           description = "Firefly-iii service user";
           inherit group;
@@ -359,9 +410,7 @@ in {
           home = cfg.dataDir;
         };
       };
-      groups = mkIf (group == defaultGroup) {
-        ${defaultGroup} = {};
-      };
+      groups = lib.mkIf (group == defaultGroup) { ${defaultGroup} = { }; };
     };
   };
 }

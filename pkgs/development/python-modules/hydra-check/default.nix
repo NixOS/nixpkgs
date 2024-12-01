@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, requests
-, beautifulsoup4
-, colorama
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  requests,
+  beautifulsoup4,
+  colorama,
 }:
 
 buildPythonPackage rec {
@@ -36,6 +37,9 @@ buildPythonPackage rec {
     mainProgram = "hydra-check";
     homepage = "https://github.com/nix-community/hydra-check";
     license = licenses.mit;
-    maintainers = with maintainers; [ makefu artturin ];
+    maintainers = with maintainers; [
+      makefu
+      artturin
+    ];
   };
 }

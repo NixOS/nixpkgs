@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, requests
-, toml
-, werkzeug
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  toml,
+  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-httpserver";
-  version = "1.0.10";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,16 +21,12 @@ buildPythonPackage rec {
     owner = "csernazs";
     repo = "pytest-httpserver";
     rev = "refs/tags/${version}";
-    hash = "sha256-KCsZs4MGENByF/wB+aj3yvMp7lssHNVKx8jLhDQ1u4k=";
+    hash = "sha256-BkdbCrpZKjHYikZk1mL4iSGe5gRjWUVN/w222QkmFLQ=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    werkzeug
-  ];
+  propagatedBuildInputs = [ werkzeug ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -43,9 +40,7 @@ buildPythonPackage rec {
     "test_wait_raise_assertion_false" # racy
   ];
 
-  pythonImportsCheck = [
-    "pytest_httpserver"
-  ];
+  pythonImportsCheck = [ "pytest_httpserver" ];
 
   meta = with lib; {
     description = "HTTP server for pytest to test HTTP clients";

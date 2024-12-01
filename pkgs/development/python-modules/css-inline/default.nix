@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, rustPlatform
+  # build-system
+  rustPlatform,
 
-# native darwin dependencies
-, libiconv
-, Security
-, SystemConfiguration
+  # native darwin dependencies
+  libiconv,
+  Security,
+  SystemConfiguration,
 
-# tests
-, pytestCheckHook
-, hypothesis
+  # tests
+  pytestCheckHook,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
@@ -50,29 +51,29 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     Security
     SystemConfiguration
   ];
 
-  pythonImportsCheck = [
-    "css_inline"
-  ];
+  pythonImportsCheck = [ "css_inline" ];
 
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # fails to connect to local server
-    "test_cache"
-    "test_remote_stylesheet"
-  ] ++ lib.optionals (stdenv.isDarwin) [
-    # pyo3_runtime.PanicException: event loop thread panicked
-    "test_invalid_href"
-  ];
+  disabledTests =
+    [
+      # fails to connect to local server
+      "test_cache"
+      "test_remote_stylesheet"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      # pyo3_runtime.PanicException: event loop thread panicked
+      "test_invalid_href"
+    ];
 
   meta = with lib; {
     description = "Inline CSS into style attributes";

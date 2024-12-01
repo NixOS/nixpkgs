@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, unittestCheckHook
-, boost
-, numpy
-, scipy
-, simpleitk
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  unittestCheckHook,
+  boost,
+  numpy,
+  scipy,
+  simpleitk,
 }:
 
 buildPythonPackage rec {
   pname = "medpy";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -21,12 +22,10 @@ buildPythonPackage rec {
     owner = "loli";
     repo = "medpy";
     rev = "refs/tags/${version}";
-    hash = "sha256-kzOTYBcXAAEYoe/m/BjWNaQX4ljG17NxndevAt5KxjQ=";
+    hash = "sha256-M46d8qiR3+ioiuRhzIaU5bV1dnfDm819pjn78RYlcG0=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     boost
@@ -35,9 +34,7 @@ buildPythonPackage rec {
     simpleitk
   ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   preCheck = ''
     rm -r medpy/  # prevent importing from build directory at test time

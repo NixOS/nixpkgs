@@ -1,37 +1,40 @@
-{ alsa-lib
-, buildPythonPackage
-, cargo
-, fetchPypi
-, glib
-, lib
-, libpcap
-, meson
-, ninja
-, openal
-, pkg-config
-, range-typed-integers
-, rustc
-, rustPlatform
-, SDL2
-, setuptools
-, setuptools-rust
-, soundtouch
-, zlib
+{
+  alsa-lib,
+  buildPythonPackage,
+  cargo,
+  fetchFromGitHub,
+  glib,
+  lib,
+  libpcap,
+  meson,
+  ninja,
+  openal,
+  pkg-config,
+  range-typed-integers,
+  rustc,
+  rustPlatform,
+  SDL2,
+  setuptools,
+  setuptools-rust,
+  soundtouch,
+  zlib,
 }:
 buildPythonPackage rec {
   pname = "skytemple-ssb-emulator";
-  version = "1.6.4";
+  version = "1.8.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-qGRfX7Bwr19KJnIdhwuSVBZzXxMJyEgyBuy91aLhEj4=";
+  src = fetchFromGitHub {
+    owner = "SkyTemple";
+    repo = pname;
+    rev = version;
+    hash = "sha256-9xD9Q/oYsi9tuxTOJ6ItLbWkqAjG78uzXYZXOiITDEA=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "skytemple_rust-1.6.4" = "sha256-t7P3F1zes7bgDu2JGqb5DgxlDCiztWtmViy4QY9CzT0=";
+      "skytemple_rust-1.8.1" = "sha256-KtMqgUOlyF02msQRouE4NpvCHqahY+aRiRV9P32ASqg=";
     };
   };
 
@@ -56,18 +59,12 @@ buildPythonPackage rec {
     setuptools-rust
   ];
 
-  propagatedBuildInputs = [
-    range-typed-integers
-  ];
+  propagatedBuildInputs = [ range-typed-integers ];
 
-  hardeningDisable = [
-    "format"
-  ];
+  hardeningDisable = [ "format" ];
 
   doCheck = false; # there are no tests
-  pythonImportsCheck = [
-    "skytemple_ssb_emulator"
-  ];
+  pythonImportsCheck = [ "skytemple_ssb_emulator" ];
 
   meta = with lib; {
     description = "SkyTemple Script Engine Debugger Emulator Backend";

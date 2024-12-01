@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "A high-capacity 2D color bar code (${subproject})";
+    description = "High-capacity 2D color bar code (${subproject})";
     longDescription = "JAB Code (Just Another Bar Code) is a high-capacity 2D color bar code, which can encode more data than traditional black/white (QR) codes. This is the ${subproject} part.";
     homepage = "https://jabcode.org/";
     license = licenses.lgpl21;
     maintainers = [ maintainers.xaverdh ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/jabcode.x86_64-darwin
+    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/jabcode.x86_64-darwin
   };
 }

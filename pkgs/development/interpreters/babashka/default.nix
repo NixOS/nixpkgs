@@ -9,11 +9,11 @@
 let
   babashka-unwrapped = buildGraalvmNativeImage rec {
     pname = "babashka-unwrapped";
-    version = "1.3.190";
+    version = "1.12.194";
 
     src = fetchurl {
       url = "https://github.com/babashka/babashka/releases/download/v${version}/babashka-${version}-standalone.jar";
-      sha256 = "sha256-zGWUuFyCOZXrcAOJ2sGvzvfJbFti1IlDS1gx9Oye9fg=";
+      sha256 = "sha256-Dx3AANMpmCPH8Zaz8/9FRNRRhcEPnZHXQje47udwwRQ=";
     };
 
     graalvmDrv = graalvmCEPackages.graalvm-ce;
@@ -37,6 +37,7 @@ let
       $out/bin/bb '(vec (dedupe *input*))' <<< '[1 1 1 1 2]' | fgrep '[1 2]'
       $out/bin/bb '(prn "bépo àê")' | fgrep 'bépo àê'
       $out/bin/bb '(:out (babashka.process/sh "echo" "ä"))' | fgrep 'ä'
+      $out/bin/bb '(into-array [:f])'
     '';
 
     postInstall = ''
@@ -73,7 +74,7 @@ let
     '';
 
     meta = with lib; {
-      description = "A Clojure babushka for the grey areas of Bash";
+      description = "Clojure babushka for the grey areas of Bash";
       longDescription = ''
         The main idea behind babashka is to leverage Clojure in places where you
         would be using bash otherwise.
@@ -107,7 +108,6 @@ let
         bhougland
         DerGuteMoritz
         jlesquembre
-        thiagokokada
       ];
     };
   };

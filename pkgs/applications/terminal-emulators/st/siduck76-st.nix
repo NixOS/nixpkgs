@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/siduck76/st";
-    description = "A fork of st with many add-ons";
+    description = "Fork of st with many add-ons";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

@@ -6,13 +6,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "git-up";
-  version = "2.2.0";
+  version = "2.3.0";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "git_up";
     inherit version;
-    hash = "sha256-GTX2IWLQ48yWfPnmtEa9HJ5umQLttqgTlgZQlaWgeE4=";
+    hash = "sha256-SncbnK6LxsleKRa/sSCm/8dsgPw/XJGvYfkcIeWYDy4=";
   };
 
   nativeBuildInputs = with pythonPackages; [
@@ -48,7 +48,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/msiemens/PyGitUp";
-    description = "A git pull replacement that rebases all local branches when pulling";
+    description = "Git pull replacement that rebases all local branches when pulling";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;

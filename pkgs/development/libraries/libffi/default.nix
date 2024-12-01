@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoreconfHook
+{ lib, stdenv, fetchurl
 
   # test suite depends on dejagnu which cannot be used during bootstrapping
   # dejagnu also requires tcl which can't be built statically at the moment
@@ -23,6 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
   # cgit) that are needed here should be included directly in Nixpkgs as
   # files.
   patches = [
+    # https://github.com/libffi/libffi/pull/857
+    # function label needs to come before .cfi_startproc
+    ./label-before-cfi_startproc.patch
   ];
 
   strictDeps = true;
@@ -59,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A foreign function call interface library";
+    description = "Foreign function call interface library";
     longDescription = ''
       The libffi library provides a portable, high level programming
       interface to various calling conventions.  This allows a

@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "redocly";
-  version = "1.12.0";
+  version = "1.25.9";
 
   src = fetchFromGitHub {
     owner = "Redocly";
     repo = "redocly-cli";
     rev = "@redocly/cli@${version}";
-    hash = "sha256-KfNwBRGDFNMsba+yjwUHiiO2BJbIl4pW1b3cvLBe+lk=";
+    hash = "sha256-QOD1EqigHa/daanwajoiQAy0fJRi8yWJKj41k0SZyJo=";
   };
 
-  npmDepsHash = "sha256-I3cxMw9zOZb9sfP8UUoHc1UJ0RpDqVn9D29arSdNob4=";
+  npmDepsHash = "sha256-Bo8Zdft+AfjSXDnxXvKq+AEpU4vtB+XBkmzqLRuHLrw=";
 
   npmBuildScript = "prepare";
 
@@ -36,10 +36,7 @@ buildNpmPackage rec {
     makeWrapper $out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli/bin/cli.js \
       $out/bin/redocly \
       --set-default REDOCLY_TELEMETRY off \
-      --set-default CI true # Silence update messages
-
-    # Symlink for backwards compatibility. Remove after 24.05.
-    ln -s $out/bin/redocly $out/bin/redocly-cli
+      --set-default REDOCLY_SUPPRESS_UPDATE_NOTICE true
   '';
 
   passthru = {
@@ -49,6 +46,7 @@ buildNpmPackage rec {
   };
 
   meta = {
+    changelog = "https://redocly.com/docs/cli/changelog/";
     description = "Makes OpenAPI easy. Lint/validate to any standard, generate beautiful docs, and more";
     homepage = "https://github.com/Redocly/redocly-cli";
     license = lib.licenses.mit;

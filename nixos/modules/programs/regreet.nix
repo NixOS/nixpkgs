@@ -27,7 +27,7 @@ in
     package = lib.mkPackageOption pkgs [ "greetd" "regreet" ] { };
 
     settings = lib.mkOption {
-      type = lib.types.either lib.types.path settingsFormat.type;
+      type = settingsFormat.type;
       default = { };
       description = ''
         ReGreet configuration file. Refer
@@ -58,9 +58,96 @@ in
         modifiable properties.
       '';
     };
+
+    theme = {
+      package = lib.mkPackageOption pkgs "gnome-themes-extra" { } // {
+        description = ''
+          The package that provides the theme given in the name option.
+        '';
+      };
+
+      name = lib.mkOption {
+        type = lib.types.str;
+        default = "Adwaita";
+        description = ''
+          Name of the theme to use for regreet.
+        '';
+      };
+    };
+
+    iconTheme = {
+      package = lib.mkPackageOption pkgs "adwaita-icon-theme" { } // {
+        description = ''
+          The package that provides the icon theme given in the name option.
+        '';
+      };
+
+      name = lib.mkOption {
+        type = lib.types.str;
+        default = "Adwaita";
+        description = ''
+          Name of the icon theme to use for regreet.
+        '';
+      };
+    };
+
+    font = {
+      package = lib.mkPackageOption pkgs "cantarell-fonts" { } // {
+        description = ''
+          The package that provides the font given in the name option.
+        '';
+      };
+
+      name = lib.mkOption {
+        type = lib.types.str;
+        default = "Cantarell";
+        description = ''
+          Name of the font to use for regreet.
+        '';
+      };
+
+      size = lib.mkOption {
+        type = lib.types.ints.positive;
+        default = 16;
+        description = ''
+          Size of the font to use for regreet.
+        '';
+      };
+    };
+
+    cursorTheme = {
+      package = lib.mkPackageOption pkgs "adwaita-icon-theme" { } // {
+        description = ''
+          The package that provides the cursor theme given in the name option.
+        '';
+      };
+
+      name = lib.mkOption {
+        type = lib.types.str;
+        default = "Adwaita";
+        description = ''
+          Name of the cursor theme to use for regreet.
+        '';
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      cfg.theme.package
+      cfg.iconTheme.package
+      cfg.cursorTheme.package
+    ];
+
+    fonts.packages = [ cfg.font.package ];
+
+    programs.regreet.settings.GTK = {
+      cursor_theme_name = cfg.cursorTheme.name;
+      font_name = "${cfg.font.name} ${toString cfg.font.size}";
+      icon_theme_name = cfg.iconTheme.name;
+      theme_name = cfg.theme.name;
+    };
+
     services.greetd = {
       enable = lib.mkDefault true;
       settings.default_session.command = lib.mkDefault "${pkgs.dbus}/bin/dbus-run-session ${lib.getExe pkgs.cage} ${lib.escapeShellArgs cfg.cageArgs} -- ${lib.getExe cfg.package}";
@@ -73,9 +160,7 @@ in
         else {text = cfg.extraCss;};
 
       "greetd/regreet.toml".source =
-        if lib.isPath cfg.settings
-        then cfg.settings
-        else settingsFormat.generate "regreet.toml" cfg.settings;
+        settingsFormat.generate "regreet.toml" cfg.settings;
     };
 
     systemd.tmpfiles.settings."10-regreet" = let

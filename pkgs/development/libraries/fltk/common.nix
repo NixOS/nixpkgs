@@ -85,6 +85,8 @@ stdenv.mkDerivation rec {
     libGLU
   ] ++ lib.optionals (withExamples && withGL) [
     glew
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    fontconfig
   ];
 
   propagatedBuildInputs = [
@@ -93,7 +95,6 @@ stdenv.mkDerivation rec {
     libpng
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     freetype
-    fontconfig
     libX11
     libXext
     libXinerama
@@ -192,7 +193,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A C++ cross-platform lightweight GUI library";
+    description = "C++ cross-platform lightweight GUI library";
     homepage = "https://www.fltk.org";
     platforms = platforms.unix;
     # LGPL2 with static linking exception

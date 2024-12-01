@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "dnkl";
     repo = "wbg";
     rev = version;
-    sha256 = "sha256-zd5OWC0r/75IaeKy5xjV+pQefRy48IcFTxx93iy0a0Q=";
+    hash = "sha256-zd5OWC0r/75IaeKy5xjV+pQefRy48IcFTxx93iy0a0Q=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     homepage = "https://codeberg.org/dnkl/wbg";
     changelog = "https://codeberg.org/dnkl/wbg/releases/tag/${version}";
     license = licenses.isc;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
     mainProgram = "wbg";
   };

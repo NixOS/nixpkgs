@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jax
-, jaxlib
-, keras
-, numpy
-, parameterized
-, pillow
-, pytestCheckHook
-, pythonOlder
-, scipy
-, setuptools
-, tensorboard
-, tensorflow
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jax,
+  jaxlib,
+  keras,
+  numpy,
+  parameterized,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  setuptools,
+  tensorboard,
+  tensorflow,
 }:
 
 buildPythonPackage rec {
@@ -34,15 +35,11 @@ buildPythonPackage rec {
     ./replace-deprecated-device_buffers.patch
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # Avoid propagating the dependency on `jaxlib`, see
   # https://github.com/NixOS/nixpkgs/issues/156767
-  buildInputs = [
-    jaxlib
-  ];
+  buildInputs = [ jaxlib ];
 
   dependencies = [
     jax
@@ -53,9 +50,7 @@ buildPythonPackage rec {
     tensorboard
   ];
 
-  pythonImportsCheck = [
-    "objax"
-  ];
+  pythonImportsCheck = [ "objax" ];
 
   # This is necessay to ignore the presence of two protobufs version (tensorflow is bringing an
   # older version).
@@ -67,9 +62,7 @@ buildPythonPackage rec {
     tensorflow
   ];
 
-  pytestFlagsArray = [
-    "tests/*.py"
-  ];
+  pytestFlagsArray = [ "tests/*.py" ];
 
   disabledTests = [
     # Test requires internet access for prefetching some weights
@@ -84,5 +77,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/google/objax/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
+    # Tests test_syncbn_{0,1,2}d and other tests from tests/parallel.py fail
+    broken = true;
   };
 }

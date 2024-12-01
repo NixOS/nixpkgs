@@ -1,44 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, bdffont
-, pytestCheckHook
-, nix-update-script
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pytestCheckHook,
+  nix-update-script,
+  hatchling,
+  bdffont,
 }:
 
 buildPythonPackage rec {
   pname = "pcffont";
-  version = "0.0.11";
+  version = "0.0.15";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "TakWolf";
-    repo = "pcffont";
-    rev = "refs/tags/${version}";
-    hash = "sha256-gu9niWxYTw3rcA++z8B+MdKp5XaqAGjmvd+PdSDosfg=";
+  disabled = pythonOlder "3.10";
+
+  src = fetchPypi {
+    pname = "pcffont";
+    inherit version;
+    hash = "sha256-sJWopdjZ0vM0BrdBgc6XZsDGFN7/NCCBqrCyYCRhT3M=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  dependencies = [
-    bdffont
-  ];
+  dependencies = [ bdffont ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pcffont" ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Library for manipulating Portable Compiled Format (PCF) fonts";
     homepage = "https://github.com/TakWolf/pcffont";
+    description = "A library for manipulating Portable Compiled Format (PCF) Fonts";
+    platforms = lib.platforms.all;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [
+      TakWolf
+      h7x4
+    ];
   };
 }

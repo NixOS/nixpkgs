@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch2
-, cython_0
-, zfs
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  cython_0,
+  zfs,
 }:
 
 buildPythonPackage rec {
@@ -26,16 +27,16 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ cython_0 ];
+  build-system = [ cython_0 ];
   buildInputs = [ zfs ];
 
   # Passing CFLAGS in configureFlags does not work, see https://github.com/truenas/py-libzfs/issues/107
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace configure \
-      --replace \
+      --replace-fail \
         'CFLAGS="-DCYTHON_FALLTHROUGH"' \
         'CFLAGS="-DCYTHON_FALLTHROUGH -I${zfs.dev}/include/libzfs -I${zfs.dev}/include/libspl"' \
-      --replace 'zof=false' 'zof=true'
+      --replace-fail 'zof=false' 'zof=true'
   '';
 
   pythonImportsCheck = [ "libzfs" ];
@@ -50,4 +51,3 @@ buildPythonPackage rec {
     platforms = platforms.linux;
   };
 }
-

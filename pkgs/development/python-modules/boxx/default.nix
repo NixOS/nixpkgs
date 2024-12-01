@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python
-, xvfb-run
-, matplotlib
-, scikit-image
-, numpy
-, pandas
-, imageio
-, snakeviz
-, fn
-, pyopengl
-, seaborn
-, torch
-, pythonOlder
-, torchvision
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  python,
+  xvfb-run,
+  matplotlib,
+  scikit-image,
+  numpy,
+  pandas,
+  imageio,
+  snakeviz,
+  fn,
+  pyopengl,
+  seaborn,
+  torch,
+  pythonOlder,
+  torchvision,
 }:
 
 buildPythonPackage rec {
@@ -47,9 +48,7 @@ buildPythonPackage rec {
     torchvision
   ];
 
-  pythonImportsCheck = [
-    "boxx"
-  ];
+  pythonImportsCheck = [ "boxx" ];
 
   checkPhase = ''
     xvfb-run ${python.interpreter} -m unittest

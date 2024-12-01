@@ -4,23 +4,24 @@
 
 # See `python3Packages.jax.passthru` for CUDA tests.
 
-{ absl-py
-, autoAddDriverRunpath
-, autoPatchelfHook
-, buildPythonPackage
-, config
-, fetchPypi
-, fetchurl
-, flatbuffers
-, jaxlib-build
-, lib
-, ml-dtypes
-, python
-, scipy
-, stdenv
+{
+  absl-py,
+  autoAddDriverRunpath,
+  autoPatchelfHook,
+  buildPythonPackage,
+  config,
+  fetchPypi,
+  fetchurl,
+  flatbuffers,
+  jaxlib-build,
+  lib,
+  ml-dtypes,
+  python,
+  scipy,
+  stdenv,
   # Options:
-, cudaSupport ? config.cudaSupport
-, cudaPackages
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
 }:
 
 let
@@ -30,27 +31,41 @@ let
 
   inherit (python) pythonVersion;
 
-  cudaLibPath = lib.makeLibraryPath (with cudaPackages; [
-    cuda_cudart.lib # libcudart.so
-    cuda_cupti.lib # libcupti.so
-    cudnn.lib # libcudnn.so
-    libcufft.lib # libcufft.so
-    libcusolver.lib # libcusolver.so
-    libcusparse.lib # libcusparse.so
-  ]);
+  cudaLibPath = lib.makeLibraryPath (
+    with cudaPackages;
+    [
+      (lib.getLib cuda_cudart) # libcudart.so
+      (lib.getLib cuda_cupti) # libcupti.so
+      (lib.getLib cudnn) # libcudnn.so
+      (lib.getLib libcufft) # libcufft.so
+      (lib.getLib libcusolver) # libcusolver.so
+      (lib.getLib libcusparse) # libcusparse.so
+    ]
+  );
 
   # As of 2023-06-06, google/jax upstream is no longer publishing CPU-only wheels to their GCS bucket. Instead the
   # official instructions recommend installing CPU-only versions via PyPI.
   cpuSrcs =
     let
-      getSrcFromPypi = { platform, dist, hash }: fetchPypi {
-        inherit version platform dist hash;
-        pname = "jaxlib";
-        format = "wheel";
-        # See the `disabled` attr comment below.
-        python = dist;
-        abi = dist;
-      };
+      getSrcFromPypi =
+        {
+          platform,
+          dist,
+          hash,
+        }:
+        fetchPypi {
+          inherit
+            version
+            platform
+            dist
+            hash
+            ;
+          pname = "jaxlib";
+          format = "wheel";
+          # See the `disabled` attr comment below.
+          python = dist;
+          abi = dist;
+        };
     in
     {
       "3.9-x86_64-linux" = getSrcFromPypi {
@@ -145,29 +160,36 @@ let
       hash = "sha256-ixWMaIChy4Ammsn23/3cCoala0lFibuUxyUr3tjfFKU=";
     };
   };
-
 in
 buildPythonPackage {
   pname = "jaxlib";
   inherit version;
   format = "wheel";
 
-  disabled = !(pythonVersion == "3.9" || pythonVersion == "3.10" || pythonVersion == "3.11" || pythonVersion == "3.12");
+  disabled =
+    !(
+      pythonVersion == "3.9"
+      || pythonVersion == "3.10"
+      || pythonVersion == "3.11"
+      || pythonVersion == "3.12"
+    );
 
   # See https://discourse.nixos.org/t/ofborg-does-not-respect-meta-platforms/27019/6.
   src =
     if !cudaSupport then
-      (
-        cpuSrcs."${pythonVersion}-${stdenv.hostPlatform.system}"
-          or (throw "jaxlib-bin is not supported on ${stdenv.hostPlatform.system}")
-      ) else gpuSrcs."${gpuSrcVersionString}";
+      (cpuSrcs."${pythonVersion}-${stdenv.hostPlatform.system}"
+        or (throw "jaxlib-bin is not supported on ${stdenv.hostPlatform.system}")
+      )
+    else
+      gpuSrcs."${gpuSrcVersionString}" or (throw "jaxlib-bin: No gpuSrc for ${gpuSrcVersionString}");
 
   # Prebuilt wheels are dynamically linked against things that nix can't find.
   # Run `autoPatchelfHook` to automagically fix them.
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ]
+  nativeBuildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
     ++ lib.optionals cudaSupport [ autoAddDriverRunpath ];
   # Dynamic link dependencies
-  buildInputs = [ stdenv.cc.cc.lib ];
+  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
   # jaxlib contains shared libraries that open other shared libraries via dlopen
   # and these implicit dependencies are not recognized by ldd or
@@ -203,21 +225,25 @@ buildPythonPackage {
   inherit (jaxlib-build) pythonImportsCheck;
 
   meta = with lib; {
-    description = "XLA library for JAX";
+    description = "Prebuilt jaxlib backend from PyPi";
     homepage = "https://github.com/google/jax";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ samuela ];
-    platforms = [ "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "aarch64-darwin"
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     broken =
       !(cudaSupport -> lib.versionAtLeast cudaVersion "11.1")
       || !(cudaSupport -> lib.versionAtLeast cudaPackages.cudnn.version "8.2")
-      || !(cudaSupport -> stdenv.isLinux)
+      || !(cudaSupport -> stdenv.hostPlatform.isLinux)
       || !(cudaSupport -> (gpuSrcs ? "cuda${cudaVersion}-${pythonVersion}"))
       # Fails at pythonImportsCheckPhase:
       # ...-python-imports-check-hook.sh/nix-support/setup-hook: line 10: 28017 Illegal instruction: 4
       # /nix/store/5qpssbvkzfh73xih07xgmpkj5r565975-python3-3.11.9/bin/python3.11 -c
       # 'import os; import importlib; list(map(lambda mod: importlib.import_module(mod), os.environ["pythonImportsCheck"].split()))'
-      || (stdenv.isDarwin && stdenv.isx86_64);
+      || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
   };
 }

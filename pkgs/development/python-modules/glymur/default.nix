@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, substituteAll
-, glibc
-, libtiff
-, openjpeg
-, fetchFromGitHub
-, lxml
-, numpy
-, pytestCheckHook
-, pythonOlder
-, scikit-image
-, setuptools
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  substituteAll,
+  glibc,
+  libtiff,
+  openjpeg,
+  fetchFromGitHub,
+  lxml,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  scikit-image,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "glymur";
-  version = "0.13.2";
+  version = "0.13.4";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "quintusdias";
     repo = "glymur";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GUqe9mdMm2O/cbZw8Reohh4X1kO+xOMWHb83PjNvdu8=";
+    hash = "sha256-RzRZuSNvlUrB+J93a1ob7dDMacZB082JwVHQ9Fce2JA=";
   };
 
   patches = [
@@ -36,16 +37,14 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = lib.optionalString (!stdenv.isDarwin) ''
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace glymur/lib/tiff.py \
         --replace-fail "glymur_config('c')" "ctypes.CDLL('${lib.getLib glibc}/lib/libc.so.6')"
   '';
 
-  __propagatedImpureHostDeps = lib.optional stdenv.isDarwin "/usr/lib/libc.dylib";
+  __propagatedImpureHostDeps = lib.optional stdenv.hostPlatform.isDarwin "/usr/lib/libc.dylib";
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     lxml
@@ -67,14 +66,12 @@ buildPythonPackage rec {
     "tests/test_config.py"
   ];
 
-  pythonImportsCheck = [
-    "glymur"
-  ];
+  pythonImportsCheck = [ "glymur" ];
 
   meta = {
     description = "Tools for accessing JPEG2000 files";
     homepage = "https://github.com/quintusdias/glymur";
-    changelog = "https://github.com/quintusdias/glymur/blob/v${version}/CHANGES.txt";
+    changelog = "https://github.com/quintusdias/glymur/blob/${src.rev}/CHANGES.txt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
   };

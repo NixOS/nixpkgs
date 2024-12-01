@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A graphical front end to the diff program";
+    description = "Graphical front end to the diff program";
     homepage = "https://tkdiff.sourceforge.io/";
     license = lib.licenses.gpl2Plus;
     longDescription = ''

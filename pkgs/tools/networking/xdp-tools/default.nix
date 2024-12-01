@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "xdp-tools";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "xdp-project";
     repo = "xdp-tools";
     rev = "v${version}";
-    hash = "sha256-kWgjt7mYwHtf8I4sXPzzrQJkWQyC8AC85ulGOWmQNZI=";
+    hash = "sha256-eI4sqzTaA4iRmhEY3SgySxWiCzGJ7nVebC2RVlk7OHk=";
   };
 
   outputs = [ "out" "lib" ];
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     wireshark-cli # for tshark
   ];
 
+  hardeningDisable = [ "zerocallusedregs" ];
   # When building BPF, the default CC wrapper is interfering a bit too much.
   BPF_CFLAGS = "-fno-stack-protector -Wno-error=unused-command-line-argument";
 

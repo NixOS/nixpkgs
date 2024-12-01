@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fwup";
-  version = "1.10.2";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "fhunleth";
     repo = "fwup";
     rev = "v${version}";
-    sha256 = "sha256-SuagtYfLD8yXFpLHNl1J0m5/iapYU+Si6tJl0paStTY=";
+    sha256 = "sha256-XdWEvIM+gNQVmNPwtcka+lZwmNIWpxAIMGBjY0b9QNM=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     libsodium
     xz
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     DiskArbitration
   ];
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     xdelta
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Configurable embedded Linux firmware update creator and runner";

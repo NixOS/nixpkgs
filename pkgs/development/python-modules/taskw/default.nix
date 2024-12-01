@@ -1,20 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# native dependencies
-, pkgs
+  # native dependencies
+  taskwarrior2,
+  distutils,
 
-# dependencies
-, kitchen
-, python-dateutil
-, pytz
+  # dependencies
+  kitchen,
+  python-dateutil,
+  pytz,
 
-# tests
-, pytest7CheckHook
+  # tests
+  pytest7CheckHook,
 }:
 
 buildPythonPackage rec {
@@ -34,14 +36,15 @@ buildPythonPackage rec {
   ];
   postPatch = ''
     substituteInPlace taskw/warrior.py \
-      --replace '@@taskwarrior@@' '${pkgs.taskwarrior}'
+      --replace '@@taskwarrior@@' '${taskwarrior2}'
   '';
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  buildInputs = [ pkgs.taskwarrior ];
+  buildInputs = [
+    taskwarrior2
+    distutils
+  ];
 
   dependencies = [
     kitchen
@@ -52,7 +55,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytest7CheckHook ];
 
   meta = with lib; {
-    homepage =  "https://github.com/ralphbean/taskw";
+    homepage = "https://github.com/ralphbean/taskw";
     description = "Python bindings for your taskwarrior database";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pierron ];

@@ -301,6 +301,27 @@ in
       '';
     };
 
+    shutdownTimeout = mkOption {
+      type = types.ints.unsigned;
+      default = 300;
+      description = ''
+        Number of seconds we're willing to wait for a guest to shut down.
+        If parallel shutdown is enabled, this timeout applies as a timeout
+        for shutting down all guests on a single URI defined in the variable URIS.
+        If this is 0, then there is no time out (use with caution, as guests might not
+        respond to a shutdown request).
+      '';
+    };
+
+    startDelay = mkOption {
+      type = types.ints.unsigned;
+      default = 0;
+      description = ''
+        Number of seconds to wait between each guest start.
+        If set to 0, all guests will start up in parallel.
+      '';
+    };
+
     allowedBridges = mkOption {
       type = types.listOf types.str;
       default = [ "virbr0" ];
@@ -330,6 +351,14 @@ in
       default = { };
       description = ''
         libvirt NSS module options.
+      '';
+    };
+
+    sshProxy = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Weither to configure OpenSSH to use the [SSH Proxy](https://libvirt.org/ssh-proxy.html).
       '';
     };
   };
@@ -382,6 +411,10 @@ in
       source = "${cfg.qemu.package}/libexec/qemu-bridge-helper";
     };
 
+    programs.ssh.extraConfig = mkIf cfg.sshProxy ''
+      Include ${cfg.package}/etc/ssh/ssh_config.d/30-libvirt-ssh-proxy.conf
+    '';
+
     systemd.packages = [ cfg.package ];
 
     systemd.services.libvirtd-config = {
@@ -393,9 +426,11 @@ in
             libvirt/qemu/networks/*.xml \
             libvirt/nwfilter/*.xml );
         do
-            mkdir -p /var/lib/$(dirname $i) -m 755
-            if [ ! -e /var/lib/$i ]; then
-              cp -pd ${cfg.package}/var/lib/$i /var/lib/$i
+            # Intended behavior
+            # shellcheck disable=SC2174
+            mkdir -p "/var/lib/$(dirname "$i")" -m 755
+            if [ ! -e "/var/lib/$i" ]; then
+              cp -pd "${cfg.package}/var/lib/$i" "/var/lib/$i"
             fi
         done
 
@@ -407,9 +442,7 @@ in
           ln -s --force "$emulator" /run/${dirName}/nix-emulators/
         done
 
-        for helper in bin/qemu-pr-helper; do
-          ln -s --force ${cfg.qemu.package}/$helper /run/${dirName}/nix-helpers/
-        done
+        ln -s --force ${cfg.qemu.package}/bin/qemu-pr-helper /run/${dirName}/nix-helpers/
 
         ${optionalString cfg.qemu.ovmf.enable (let
           ovmfpackage = pkgs.buildEnv {
@@ -483,6 +516,8 @@ in
       environment.ON_BOOT = "${cfg.onBoot}";
       environment.ON_SHUTDOWN = "${cfg.onShutdown}";
       environment.PARALLEL_SHUTDOWN = "${toString cfg.parallelShutdown}";
+      environment.SHUTDOWN_TIMEOUT = "${toString cfg.shutdownTimeout}";
+      environment.START_DELAY = "${toString cfg.startDelay}";
     };
 
     systemd.sockets.virtlogd = {
@@ -533,9 +568,10 @@ in
     };
 
     system.nssModules = optional (cfg.nss.enable or cfg.nss.enableGuest) cfg.package;
-    system.nssDatabases.hosts = builtins.concatLists [
-      (optional cfg.nss.enable "libvirt")
-      (optional cfg.nss.enableGuest "libvirt_guest")
+    system.nssDatabases.hosts = mkMerge [
+      # ensure that the NSS modules come between mymachines (which is 400) and resolve (which is 501)
+      (mkIf cfg.nss.enable (mkOrder 430 [ "libvirt" ]))
+      (mkIf cfg.nss.enableGuest (mkOrder 432 [ "libvirt_guest" ]))
     ];
   };
 }

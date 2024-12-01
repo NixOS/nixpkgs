@@ -1,6 +1,7 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -16,9 +17,7 @@ buildPythonPackage rec {
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "typed_ast-stubs"
-  ];
+  pythonImportsCheck = [ "typed_ast-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for typed-ast";

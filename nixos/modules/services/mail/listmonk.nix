@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   cfg = config.services.listmonk;
   tomlFormat = pkgs.formats.toml { };
@@ -11,7 +9,7 @@ let
       lib.replaceStrings [ "'" ] [ "''" ] (builtins.toJSON value)
     }' WHERE key = '${key}';";
   updateDatabaseConfigSQL = pkgs.writeText "update-database-config.sql"
-    (concatStringsSep "\n" (mapAttrsToList setDatabaseOption
+    (lib.concatStringsSep "\n" (lib.mapAttrsToList setDatabaseOption
       (if (cfg.database.settings != null) then
         cfg.database.settings
       else
@@ -27,53 +25,53 @@ let
         "${pkgs.postgresql}/bin/psql -d listmonk -f ${updateDatabaseConfigSQL}"}
     '';
 
-  databaseSettingsOpts = with types; {
+  databaseSettingsOpts = with lib.types; {
     freeformType =
       oneOf [ (listOf str) (listOf (attrsOf anything)) str int bool ];
 
     options = {
-      "app.notify_emails" = mkOption {
+      "app.notify_emails" = lib.mkOption {
         type = listOf str;
         default = [ ];
         description = "Administrator emails for system notifications";
       };
 
-      "privacy.exportable" = mkOption {
+      "privacy.exportable" = lib.mkOption {
         type = listOf str;
         default = [ "profile" "subscriptions" "campaign_views" "link_clicks" ];
         description =
           "List of fields which can be exported through an automatic export request";
       };
 
-      "privacy.domain_blocklist" = mkOption {
+      "privacy.domain_blocklist" = lib.mkOption {
         type = listOf str;
         default = [ ];
         description =
           "E-mail addresses with these domains are disallowed from subscribing.";
       };
 
-      smtp = mkOption {
+      smtp = lib.mkOption {
         type = listOf (submodule {
-          freeformType = with types; attrsOf anything;
+          freeformType = with lib.types; attrsOf anything;
 
           options = {
-            enabled = mkEnableOption "this SMTP server for listmonk";
-            host = mkOption {
-              type = types.str;
+            enabled = lib.mkEnableOption "this SMTP server for listmonk";
+            host = lib.mkOption {
+              type = lib.types.str;
               description = "Hostname for the SMTP server";
             };
-            port = mkOption {
-              type = types.port;
+            port = lib.mkOption {
+              type = lib.types.port;
               description = "Port for the SMTP server";
             };
-            max_conns = mkOption {
-              type = types.int;
+            max_conns = lib.mkOption {
+              type = lib.types.int;
               description =
                 "Maximum number of simultaneous connections, defaults to 1";
               default = 1;
             };
-            tls_type = mkOption {
-              type = types.enum [ "none" "STARTTLS" "TLS" ];
+            tls_type = lib.mkOption {
+              type = lib.types.enum [ "none" "STARTTLS" "TLS" ];
               description = "Type of TLS authentication with the SMTP server";
             };
           };
@@ -83,14 +81,14 @@ let
       };
 
       # TODO: refine this type based on the smtp one.
-      "bounce.mailboxes" = mkOption {
+      "bounce.mailboxes" = lib.mkOption {
         type = listOf
-          (submodule { freeformType = with types; listOf (attrsOf anything); });
+          (submodule { freeformType = with lib.types; listOf (attrsOf anything); });
         default = [ ];
         description = "List of bounce mailboxes";
       };
 
-      messengers = mkOption {
+      messengers = lib.mkOption {
         type = listOf str;
         default = [ ];
         description =
@@ -102,23 +100,23 @@ in {
   ###### interface
   options = {
     services.listmonk = {
-      enable = mkEnableOption "Listmonk, this module assumes a reverse proxy to be set";
+      enable = lib.mkEnableOption "Listmonk, this module assumes a reverse proxy to be set";
       database = {
-        createLocally = mkOption {
-          type = types.bool;
+        createLocally = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description =
             "Create the PostgreSQL database and database user locally.";
         };
 
-        settings = mkOption {
+        settings = lib.mkOption {
           default = null;
-          type = with types; nullOr (submodule databaseSettingsOpts);
+          type = with lib.types; nullOr (submodule databaseSettingsOpts);
           description =
             "Dynamic settings in the PostgreSQL database, set by a SQL script, see <https://github.com/knadh/listmonk/blob/master/schema.sql#L177-L230> for details.";
         };
-        mutableSettings = mkOption {
-          type = types.bool;
+        mutableSettings = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = ''
             Database settings will be reset to the value set in this module if this is not enabled.
@@ -126,16 +124,16 @@ in {
           '';
         };
       };
-      package = mkPackageOption pkgs "listmonk" {};
-      settings = mkOption {
-        type = types.submodule { freeformType = tomlFormat.type; };
+      package = lib.mkPackageOption pkgs "listmonk" {};
+      settings = lib.mkOption {
+        type = lib.types.submodule { freeformType = tomlFormat.type; };
         description = ''
           Static settings set in the config.toml, see <https://github.com/knadh/listmonk/blob/master/config.toml.sample> for details.
           You can set secrets using the secretFile option with environment variables following <https://listmonk.app/docs/configuration/#environment-variables>.
         '';
       };
-      secretFile = mkOption {
-        type = types.nullOr types.str;
+      secretFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description =
           "A file containing secrets as environment variables. See <https://listmonk.app/docs/configuration/#environment-variables> for details on supported values.";
@@ -144,24 +142,24 @@ in {
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # Default parameters from https://github.com/knadh/listmonk/blob/master/config.toml.sample
-    services.listmonk.settings."app".address = mkDefault "localhost:9000";
-    services.listmonk.settings."db" = mkMerge [
+    services.listmonk.settings."app".address = lib.mkDefault "localhost:9000";
+    services.listmonk.settings."db" = lib.mkMerge [
       ({
-        max_open = mkDefault 25;
-        max_idle = mkDefault 25;
-        max_lifetime = mkDefault "300s";
+        max_open = lib.mkDefault 25;
+        max_idle = lib.mkDefault 25;
+        max_lifetime = lib.mkDefault "300s";
       })
-      (mkIf cfg.database.createLocally {
-        host = mkDefault "/run/postgresql";
-        port = mkDefault 5432;
-        user = mkDefault "listmonk";
-        database = mkDefault "listmonk";
+      (lib.mkIf cfg.database.createLocally {
+        host = lib.mkDefault "/run/postgresql";
+        port = lib.mkDefault 5432;
+        user = lib.mkDefault "listmonk";
+        database = lib.mkDefault "listmonk";
       })
     ];
 
-    services.postgresql = mkIf cfg.database.createLocally {
+    services.postgresql = lib.mkIf cfg.database.createLocally {
       enable = true;
 
       ensureUsers = [{
@@ -175,11 +173,11 @@ in {
     systemd.services.listmonk = {
       description = "Listmonk - newsletter and mailing list manager";
       after = [ "network.target" ]
-        ++ optional cfg.database.createLocally "postgresql.service";
+        ++ lib.optional cfg.database.createLocally "postgresql.service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "exec";
-        EnvironmentFile = mkIf (cfg.secretFile != null) [ cfg.secretFile ];
+        EnvironmentFile = lib.mkIf (cfg.secretFile != null) [ cfg.secretFile ];
         ExecStartPre = [
           # StateDirectory cannot be used when DynamicUser = true is set this way.
           # Indeed, it will try to create all the folders and realize one of them already exist.

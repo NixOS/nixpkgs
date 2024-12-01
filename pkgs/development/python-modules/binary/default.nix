@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,12 +23,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "binary" "binary.core" ];
+  pythonImportsCheck = [
+    "binary"
+    "binary.core"
+  ];
 
   meta = with lib; {
     description = "Easily convert between binary and SI units (kibibyte, kilobyte, etc.)";
     homepage = "https://github.com/ofek/binary";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = [ ];
   };
 }

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchPypi
 , python3
 , openssl
 , libiconv
@@ -13,39 +12,25 @@
 }:
 
 let
-  python = python3.override {
-    packageOverrides = self: super: {
-      netaddr = super.netaddr.overridePythonAttrs (oldAttrs: rec {
-        version = "1.0.0";
-
-        src = fetchPypi {
-          pname = "netaddr";
-          inherit version;
-          hash = "sha256-6wRrVTVOelv4AcBJAq6SO9aZGQJC2JsJnolvmycktNM=";
-        };
-      });
-    };
-  };
-
-  plugins = python.pkgs.callPackage ./plugins { };
+  plugins = python3.pkgs.callPackage ./plugins { };
   tools = callPackage ./tools { };
 in
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.106.0";
+  version = "1.120.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-FnWYfFlzl6+K5dLhJ+mdphC6E6cA+HewGTUXakRHKEo=";
+    hash = "sha256-3gPeit2r3q1WF72WUINS7gD8X9/DGQBmZYlUnaU7mvc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-7X0lXiD+7irex8A3Tnfq65P6BinMje4Bc1MuCI3dSyg=";
+    hash = "sha256-ceIRDYHKpkw/H+ts5dXb5s4Eb8btbt/yHqOYqepWG/s=";
   };
 
   postPatch = ''
@@ -63,7 +48,7 @@ python.pkgs.buildPythonApplication rec {
     sed -i 's/Pillow = ".*"/Pillow = ">=5.4.0"/' pyproject.toml
   '';
 
-  nativeBuildInputs = with python.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
     poetry-core
     rustPlatform.cargoSetupHook
     setuptools-rust
@@ -73,11 +58,11 @@ python.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     attrs
     bcrypt
     bleach
@@ -89,6 +74,7 @@ python.pkgs.buildPythonApplication rec {
     jsonschema
     matrix-common
     msgpack
+    python-multipart
     netaddr
     packaging
     phonenumbers
@@ -110,7 +96,7 @@ python.pkgs.buildPythonApplication rec {
   ]
   ++ twisted.optional-dependencies.tls;
 
-  passthru.optional-dependencies = with python.pkgs; {
+  optional-dependencies = with python3.pkgs; {
     postgres = if isPyPy then [
       psycopg2cffi
     ] else [
@@ -148,13 +134,13 @@ python.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = [
     openssl
-  ] ++ (with python.pkgs; [
+  ] ++ (with python3.pkgs; [
     mock
     parameterized
   ])
-  ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkPhase = ''
     runHook preCheck
@@ -169,14 +155,15 @@ python.pkgs.buildPythonApplication rec {
       NIX_BUILD_CORES=4
     fi
 
-    PYTHONPATH=".:$PYTHONPATH" ${python.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tests
+    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tests
 
     runHook postCheck
   '';
 
   passthru = {
     tests = { inherit (nixosTests) matrix-synapse matrix-synapse-workers; };
-    inherit plugins tools python;
+    inherit plugins tools;
+    python = python3;
   };
 
   meta = with lib; {

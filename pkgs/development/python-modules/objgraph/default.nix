@@ -1,18 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, graphviz
-, graphvizPkgs
-, isPyPy
-, python
-, pythonOlder
-, substituteAll
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  graphviz,
+  graphvizPkgs,
+  isPyPy,
+  python,
+  pythonOlder,
+  substituteAll,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "objgraph";
   version = "3.6.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7" || isPyPy;
 
@@ -28,15 +30,15 @@ buildPythonPackage rec {
     })
   ];
 
-  passthru.optional-dependencies = {
-    ipython = [
-      graphviz
-    ];
+  build-system = [
+    setuptools
+  ];
+
+  optional-dependencies = {
+    ipython = [ graphviz ];
   };
 
-  pythonImportsCheck = [
-    "objgraph"
-  ];
+  pythonImportsCheck = [ "objgraph" ];
 
   checkPhase = ''
     runHook preCheck

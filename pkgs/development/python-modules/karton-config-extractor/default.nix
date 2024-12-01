@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, karton-core
-, malduck
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  karton-core,
+  malduck,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -33,9 +34,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "karton.config_extractor"
-  ];
+  pythonImportsCheck = [ "karton.config_extractor" ];
 
   meta = with lib; {
     description = "Static configuration extractor for the Karton framework";

@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.6.8";
+  version = "3.7.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "pymodbus-dev";
     repo = "pymodbus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6Rt5fbuaeAgbW5KKse1zZIJyq/p2P2MjXGwA7q0C7wA=";
+    hash = "sha256-DaUpLIGvE8541208zY5vu6dkEjRhlVeH9pikP8OeUFo=";
   };
 
   postPatch = ''
@@ -39,14 +39,14 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     repl = [
       aiohttp
       typer
       prompt-toolkit
       pygments
       click
-    ] ++ typer.optional-dependencies.all;
+    ];
     serial = [ pyserial ];
   };
 
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     redis
     sqlalchemy
     twisted
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     pushd test

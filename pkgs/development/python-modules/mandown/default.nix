@@ -1,37 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pythonRelaxDepsHook
-, beautifulsoup4
-, comicon
-, feedparser
-, filetype
-, lxml
-, natsort
-, nix-update-script
-, pillow
-, python-slugify
-, requests
-, typer
-, pyside6
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  beautifulsoup4,
+  comicon,
+  feedparser,
+  filetype,
+  lxml,
+  natsort,
+  nix-update-script,
+  pillow,
+  python-slugify,
+  requests,
+  typer,
+  pyside6,
 }:
 
 buildPythonPackage rec {
   pname = "mandown";
-  version = "1.8.0";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "potatoeggy";
     repo = "mandown";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vzvidtfBwbIV6cIUjQQIezN12VfxsBOKODoSChz2VDA=";
+    hash = "sha256-eMZXXOGe9jKf9bXEinIIu6w3i4SOkLnDWnxmT5G0RWA=";
   };
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -53,10 +52,8 @@ buildPythonPackage rec {
     typer
   ];
 
-  passthru.optional-dependencies = {
-    gui = [
-      pyside6
-    ];
+  optional-dependencies = {
+    gui = [ pyside6 ];
     updateScript = nix-update-script { };
   };
 

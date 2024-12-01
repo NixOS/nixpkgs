@@ -3,46 +3,37 @@
     {
       "method": "fetchzip",
       "packages": [
-        "atlas"
+        "nimble"
       ],
-      "path": "/nix/store/v015scfifr10ialyimn7xxm0rdg4dha2-source",
-      "rev": "60681b93af4c8914afbd8eae9fc9820ba4d198a0",
-      "sha256": "1kc47w20ipbdh31s1gcblcikzlvlagmmha1qw3by70fc7mgazrxf",
+      "path": "/nix/store/iz0s3zshxhsxkjkv73d7ynmajlmbph7m-source",
+      "rev": "f8bd7b5fa6ea7a583b411b5959b06e6b5eb23667",
+      "sha256": "1p6k00rsncyczbj5m06xx9zc2jrbdylavj3jnl7ybh7sq2wxl439",
       "srcDir": "src",
-      "url": "https://github.com/nim-lang/atlas/archive/60681b93af4c8914afbd8eae9fc9820ba4d198a0.tar.gz"
+      "url": "https://github.com/nim-lang/nimble/archive/f8bd7b5fa6ea7a583b411b5959b06e6b5eb23667.tar.gz"
     },
     {
       "method": "fetchzip",
       "packages": [
-        "bigints"
+        "sat"
       ],
-      "path": "/nix/store/jvrm392g8adfsgf36prgwkbyd7vh5jsw-source",
-      "rev": "86ea14d31eea9275e1408ca34e6bfe9c99989a96",
-      "sha256": "15pcpmnk1bnw3k8769rjzcpg00nahyrypwbxs88jnwr4aczp99j4",
+      "path": "/nix/store/wc1m76bsnnd5965jqzqzq3b3r8xx5ky7-source",
+      "ref": "pr_init",
+      "rev": "d6d992bc2717054cbb99e31df57ab071a4772d35",
+      "sha256": "07sr6zbf7a68qc32561pf98ir60078cakjcg5vd4xr6sdz7gv8j7",
       "srcDir": "src",
-      "url": "https://github.com/ehmry/nim-bigints/archive/86ea14d31eea9275e1408ca34e6bfe9c99989a96.tar.gz"
+      "url": "https://github.com/nim-lang/sat/archive/d6d992bc2717054cbb99e31df57ab071a4772d35.tar.gz"
     },
     {
       "method": "fetchzip",
       "packages": [
-        "npeg"
+        "checksums"
       ],
-      "path": "/nix/store/ffkxmjmigfs7zhhiiqm0iw2c34smyciy-source",
-      "rev": "26d62fdc40feb84c6533956dc11d5ee9ea9b6c09",
-      "sha256": "0xpzifjkfp49w76qmaylan8q181bs45anmp46l4bwr3lkrr7bpwh",
+      "path": "/nix/store/z6799507gzbw46lzbi1i8mwm0nbvrvnx-source",
+      "ref": "v0.1.0",
+      "rev": "7ff0b762332d2591bbeb65df9bb86d52ea44ec01",
+      "sha256": "11612prr2wwbx414ip0zjh1fv638dgfvzxfd6v2f432n0wfwhjhj",
       "srcDir": "src",
-      "url": "https://github.com/zevv/npeg/archive/26d62fdc40feb84c6533956dc11d5ee9ea9b6c09.tar.gz"
-    },
-    {
-      "method": "fetchzip",
-      "packages": [
-        "preserves"
-      ],
-      "path": "/nix/store/6nnn5di5vip1vladlb7z56rbw18d1y7j-source",
-      "rev": "2825bceecf33a15b9b7942db5331a32cbc39b281",
-      "sha256": "145vf46fy3wc52j6vs509fm9bi5lx7c53gskbkpcfbkv82l86dgk",
-      "srcDir": "src",
-      "url": "https://git.syndicate-lang.org/ehmry/preserves-nim/archive/2825bceecf33a15b9b7942db5331a32cbc39b281.tar.gz"
+      "url": "https://github.com/nim-lang/checksums/archive/7ff0b762332d2591bbeb65df9bb86d52ea44ec01.tar.gz"
     }
   ]
 }

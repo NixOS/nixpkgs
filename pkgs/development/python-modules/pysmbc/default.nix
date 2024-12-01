@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, samba
-, pkg-config
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  samba,
+  pkg-config,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -18,20 +19,14 @@ buildPythonPackage rec {
     hash = "sha256-IvFxXfglif2cxCU/6rOQtO8Lq/FPZFE82NB7N4mWMiY=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    samba
-  ];
+  buildInputs = [ samba ];
 
   # Tests would require a local SMB server
   doCheck = false;
 
-  pythonImportsCheck = [
-    "smbc"
-  ];
+  pythonImportsCheck = [ "smbc" ];
 
   meta = with lib; {
     description = "libsmbclient binding for Python";

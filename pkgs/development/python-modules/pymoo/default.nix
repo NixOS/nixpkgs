@@ -1,33 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, writeText
-, autograd
-, cma
-, cython
-, deprecated
-, dill
-, matplotlib
-, nbformat
-, notebook
-, numba
-, numpy
-, pandas
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  writeText,
+  autograd,
+  cma,
+  cython,
+  deprecated,
+  dill,
+  matplotlib,
+  nbformat,
+  notebook,
+  numba,
+  numpy,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "pymoo";
-  version = "0.6.0.1";
-  format = "setuptools";
+  version = "0.6.1.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anyoptimization";
     repo = "pymoo";
-    rev = version;
-    hash = "sha256-+qtW7hfSo266n1SRzAgHIu99W5Sl+NYbKOHXv/JI9IA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-CbeJwv51lu4cABgGieqy/8DCDJCb8wOPPVqUHk8Jb7E=";
   };
 
   pymoo_data = fetchFromGitHub {
@@ -37,29 +37,21 @@ buildPythonPackage rec {
     hash = "sha256-iGWPepZw3kJzw5HKV09CvemVvkvFQ38GVP+BAryBSs0=";
   };
 
-  patches = [
-    # https://github.com/anyoptimization/pymoo/pull/407
-    (fetchpatch {
-      url = "https://github.com/anyoptimization/pymoo/commit/be57ece64275469daece1e8ef12b2b6ee05362c9.diff";
-      hash = "sha256-BLPrUqNbAsAecfYahESEJF6LD+kehUYmkTvl/nvyqII=";
-    })
-  ];
+  pythonRelaxDeps = [ "cma" ];
+  pythonRemoveDeps = [ "alive-progress" ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "cma==3.2.2" "cma" \
-      --replace "'alive-progress'," ""
-
     substituteInPlace pymoo/util/display/display.py \
-      --replace "from pymoo.util.display.progress import ProgressBar" "" \
-      --replace "ProgressBar() if progress else None" \
+      --replace-fail "from pymoo.util.display.progress import ProgressBar" "" \
+      --replace-fail "ProgressBar() if progress else None" \
                 "print('Missing alive_progress needed for progress=True!') if progress else None"
   '';
 
-  nativeBuildInputs = [
+  build-system = [
+    setuptools
     cython
   ];
-  propagatedBuildInputs = [
+  dependencies = [
     autograd
     cma
     deprecated
@@ -69,11 +61,14 @@ buildPythonPackage rec {
     scipy
   ];
 
-  doCheck = true;
   preCheck = ''
     substituteInPlace pymoo/config.py \
-      --replace "https://raw.githubusercontent.com/anyoptimization/pymoo-data/main/" \
+      --replace-fail "https://raw.githubusercontent.com/anyoptimization/pymoo-data/main/" \
                 "file://$pymoo_data/"
+
+    # Some tests require a grad backend to be configured, this is a hacky way to do so.
+    # The choice must be either "jax.numpy" or "autograd.numpy"
+    echo 'from pymoo.gradient import activate; activate("autograd.numpy")' >> tests/conftest.py
   '';
   nativeCheckInputs = [
     pytestCheckHook
@@ -82,16 +77,22 @@ buildPythonPackage rec {
     numba
   ];
   # Select some lightweight tests
-  pytestFlagsArray = [
-    "-m 'not long'"
-  ];
+  pytestFlagsArray = [ "-m 'not long'" ];
   disabledTests = [
     # ModuleNotFoundError: No module named 'pymoo.cython.non_dominated_sorting'
     "test_fast_non_dominated_sorting"
     "test_efficient_non_dominated_sort"
+    "test_dominance_degree_non_dominated_sort"
+
+    # sensitive to float precision
+    "test_cd_and_pcd"
+  ];
+  disabledTestPaths = [
+    # sensitive to float precision
+    "tests/algorithms/test_no_modfication.py"
   ];
   # Avoid crashing sandboxed build on macOS
-  MATPLOTLIBRC=writeText "" ''
+  MATPLOTLIBRC = writeText "" ''
     backend: Agg
   '';
 

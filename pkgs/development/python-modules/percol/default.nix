@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, cmigemo }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cmigemo,
+}:
 
 buildPythonPackage rec {
   pname = "percol";

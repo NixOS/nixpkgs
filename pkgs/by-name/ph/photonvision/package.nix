@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     install -D $src $out/lib/photonvision.jar
 
     makeWrapper ${temurin-jre-bin-11}/bin/java $out/bin/photonvision \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc.lib suitesparse ]} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc suitesparse ]} \
       --prefix PATH : ${lib.makeBinPath [ temurin-jre-bin-11 bash.out ]} \
       --add-flags "-jar $out/lib/photonvision.jar"
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The free, fast, and easy-to-use computer vision solution for the FIRST Robotics Competition";
+    description = "Free, fast, and easy-to-use computer vision solution for the FIRST Robotics Competition";
     homepage = "https://photonvision.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ max-niederman ];

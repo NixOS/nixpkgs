@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, mpmath
-, numpy
-, pybind11
-, pyfma
-, eigen
-, importlib-metadata
-, pytestCheckHook
-, matplotlib
-, dufte
-, perfplot
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  mpmath,
+  numpy,
+  pybind11,
+  pyfma,
+  eigen,
+  importlib-metadata,
+  pytestCheckHook,
+  matplotlib,
+  dufte,
+  perfplot,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     pybind11
   ];
 
-  buildInputs = [
-    eigen
-  ];
+  buildInputs = [ eigen ];
 
   dependencies = [
     mpmath
@@ -53,8 +52,8 @@ buildPythonPackage rec {
   ];
 
   postConfigure = ''
-   substituteInPlace setup.py \
-     --replace-fail "/usr/include/eigen3/" "${eigen}/include/eigen3/"
+    substituteInPlace setup.py \
+      --replace-fail "/usr/include/eigen3/" "${eigen}/include/eigen3/"
   '';
 
   preBuild = ''
@@ -63,7 +62,7 @@ buildPythonPackage rec {
 
   # This variable is needed to suppress the "Trace/BPT trap: 5" error in Darwin's checkPhase.
   # Not sure of the details, but we can avoid it by changing the matplotlib backend during testing.
-  env.MPLBACKEND = lib.optionalString stdenv.isDarwin "Agg";
+  env.MPLBACKEND = lib.optionalString stdenv.hostPlatform.isDarwin "Agg";
 
   # performance tests aren't useful to us and disabling them allows us to
   # decouple ourselves from an unnecessary build dep
@@ -73,7 +72,10 @@ buildPythonPackage rec {
     done
   '';
 
-  disabledTests = [ "test_speed_comparison1" "test_speed_comparison2" ];
+  disabledTests = [
+    "test_speed_comparison1"
+    "test_speed_comparison2"
+  ];
 
   pythonImportsCheck = [ "accupy" ];
 

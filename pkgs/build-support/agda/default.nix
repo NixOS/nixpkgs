@@ -19,14 +19,17 @@ let
     optionalString
     ;
 
+  mkLibraryFile = pkgs: let
+    pkgs' = if isList pkgs then pkgs else pkgs self;
+  in writeText "libraries" ''
+    ${(concatMapStringsSep "\n" (p: "${p}/${p.libraryFile}") pkgs')}
+  '';
+
   withPackages' = {
     pkgs,
     ghc ? ghcWithPackages (p: with p; [ ieee754 ])
   }: let
-    pkgs' = if isList pkgs then pkgs else pkgs self;
-    library-file = writeText "libraries" ''
-      ${(concatMapStringsSep "\n" (p: "${p}/${p.libraryFile}") pkgs')}
-    '';
+    library-file = mkLibraryFile pkgs;
     pname = "agdaWithPackages";
     version = Agda.version;
   in runCommand "${pname}-${version}" {
@@ -106,7 +109,7 @@ let
         # darwin, it seems that there is no standard such locale; luckily,
         # the referenced issue doesn't seem to surface on darwin. Hence let's
         # set this only on non-darwin.
-        LC_ALL = optionalString (!stdenv.isDarwin) "C.UTF-8";
+        LC_ALL = optionalString (!stdenv.hostPlatform.isDarwin) "C.UTF-8";
 
         meta = if meta.broken or false then meta // { hydraPlatforms = platforms.none; } else meta;
 
@@ -118,5 +121,5 @@ in
 {
   mkDerivation = args: stdenv.mkDerivation (args // defaults args);
 
-  inherit withPackages withPackages';
+  inherit mkLibraryFile withPackages withPackages';
 }

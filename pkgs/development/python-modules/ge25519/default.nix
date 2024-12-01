@@ -1,14 +1,15 @@
-{ lib
-, bitlist
-, buildPythonPackage
-, fe25519
-, fetchPypi
-, fountains
-, parts
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  bitlist,
+  buildPythonPackage,
+  fe25519,
+  fetchPypi,
+  fountains,
+  parts,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -35,18 +36,14 @@ buildPythonPackage rec {
     fountains
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--doctest-modules --ignore=docs --cov=ge25519 --cov-report term-missing" ""
   '';
 
-  pythonImportsCheck = [
-    "ge25519"
-  ];
+  pythonImportsCheck = [ "ge25519" ];
 
   meta = with lib; {
     description = "Python implementation of Ed25519 group elements and operations";

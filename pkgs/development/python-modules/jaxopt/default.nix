@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, pytest-xdist
-, pytestCheckHook
-, setuptools
-, absl-py
-, cvxpy
-, jax
-, jaxlib
-, matplotlib
-, numpy
-, optax
-, scipy
-, scikit-learn
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch,
+  pytest-xdist,
+  pytestCheckHook,
+  setuptools,
+  absl-py,
+  cvxpy,
+  jax,
+  jaxlib,
+  matplotlib,
+  numpy,
+  optax,
+  scipy,
+  scikit-learn,
 }:
 
 buildPythonPackage rec {
@@ -42,9 +43,7 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     absl-py
@@ -71,27 +70,37 @@ buildPythonPackage rec {
     "jaxopt.tree_util"
   ];
 
-  disabledTests = [
-    # https://github.com/google/jaxopt/issues/592
-    "test_solve_sparse"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
-    # https://github.com/google/jaxopt/issues/577
-    "test_binary_logit_log_likelihood"
-    "test_solve_sparse"
-    "test_logreg_with_intercept_manual_loop3"
+  disabledTests =
+    [
+      # https://github.com/google/jaxopt/issues/592
+      "test_solve_sparse"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # https://github.com/google/jaxopt/issues/577
+      "test_binary_logit_log_likelihood"
+      "test_solve_sparse"
+      "test_logreg_with_intercept_manual_loop3"
 
-    # https://github.com/google/jaxopt/issues/593
-    # Makes the test suite crash
-    "test_dtype_consistency"
-    # AssertionError: Array(0.01411963, dtype=float32) not less than or equal to 0.01
-    "test_multiclass_logreg6"
-  ];
+      # https://github.com/google/jaxopt/issues/593
+      # Makes the test suite crash
+      "test_dtype_consistency"
+      # AssertionError: Array(0.01411963, dtype=float32) not less than or equal to 0.01
+      "test_multiclass_logreg6"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Fatal Python error: Aborted
+      "test_dtype_consistency"
 
-  meta = with lib; {
+      # AssertionError (flaky numerical tests)
+      "test_logreg_with_intercept_manual_loop3"
+      "test_binary_logit_log_likelihood"
+    ];
+
+  meta = {
     homepage = "https://jaxopt.github.io";
     description = "Hardware accelerated, batchable and differentiable optimizers in JAX";
     changelog = "https://github.com/google/jaxopt/releases/tag/jaxopt-v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

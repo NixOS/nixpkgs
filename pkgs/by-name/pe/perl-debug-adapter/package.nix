@@ -1,8 +1,6 @@
 { lib
 , buildNpmPackage
 , fetchFromGitHub
-, fetchpatch
-, makeWrapper
 , perl
 # Needed if you want to use it for a perl script with dependencies.
 , extraPerlPackages ? []

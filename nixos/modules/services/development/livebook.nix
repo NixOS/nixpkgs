@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   cfg = config.services.livebook;
 in
@@ -10,12 +8,12 @@ in
     # either has access to all the data or none at all), the decision
     # was made to run this as a user service.  If that changes in the
     # future, this can be changed to a system service.
-    enableUserService = mkEnableOption "a user service for Livebook";
+    enableUserService = lib.mkEnableOption "a user service for Livebook";
 
-    package = mkPackageOption pkgs "livebook" { };
+    package = lib.mkPackageOption pkgs "livebook" { };
 
-    environment = mkOption {
-      type = with types; attrsOf (nullOr (oneOf [ bool int str ]));
+    environment = lib.mkOption {
+      type = with lib.types; attrsOf (nullOr (oneOf [ bool int str ]));
       default = { };
       description = ''
         Environment variables to set.
@@ -37,18 +35,18 @@ in
         variables specified in this option.
       '';
 
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           LIVEBOOK_PORT = 8080;
         }
       '';
     };
 
-    environmentFile = mkOption {
-      type = with types; nullOr types.path;
+    environmentFile = lib.mkOption {
+      type = with lib.types; nullOr lib.types.path;
       default = null;
       description = ''
-        Additional dnvironment file as defined in {manpage}`systemd.exec(5)`.
+        Additional environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets like {env}`LIVEBOOK_PASSWORD` (which is used to specify the
         password needed to access the livebook site) or {env}`LIVEBOOK_COOKIE`
@@ -72,31 +70,41 @@ in
       example = "/var/lib/livebook.env";
     };
 
-    extraPackages = mkOption {
-      type = with types; listOf package;
+    extraPackages = lib.mkOption {
+      type = with lib.types; listOf package;
       default = [ ];
       description = ''
         Extra packages to make available to the Livebook service.
       '';
-      example = literalExpression "with pkgs; [ gcc gnumake ]";
+      example = lib.literalExpression "with pkgs; [ gcc gnumake ]";
     };
   };
 
-  config = mkIf cfg.enableUserService {
+  config = lib.mkIf cfg.enableUserService {
     systemd.user.services.livebook = {
       serviceConfig = {
         Restart = "always";
         EnvironmentFile = cfg.environmentFile;
         ExecStart = "${cfg.package}/bin/livebook start";
         KillMode = "mixed";
+
+        # Fix for the issue described here:
+        # https://github.com/livebook-dev/livebook/issues/2691
+        #
+        # Without this, the livebook service fails to start and gets
+        # stuck running a `cat /dev/urandom | tr | fold` pipeline.
+        IgnoreSIGPIPE = false;
       };
-      environment = mapAttrs (name: value:
-        if isBool value then boolToString value else toString value)
+      environment = lib.mapAttrs (name: value:
+        if lib.isBool value then lib.boolToString value else toString value)
         cfg.environment;
       path = [ pkgs.bash ] ++ cfg.extraPackages;
       wantedBy = [ "default.target" ];
     };
   };
 
-  meta.doc = ./livebook.md;
+  meta = {
+    doc = ./livebook.md;
+    maintainers = with lib.maintainers; [ munksgaard scvalex ];
+  };
 }

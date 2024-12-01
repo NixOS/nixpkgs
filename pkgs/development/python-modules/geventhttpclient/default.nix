@@ -1,17 +1,16 @@
-{ lib
-, brotli
-, buildPythonPackage
-, certifi
-, dpkt
-, fetchFromGitHub
-, gevent
-, llhttp
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, six
-, stdenv
-, urllib3
+{
+  lib,
+  brotli,
+  buildPythonPackage,
+  certifi,
+  dpkt,
+  fetchFromGitHub,
+  gevent,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  stdenv,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-uOGnwPbvTam14SFTUT0UrwxHfP4a5cn3a7EhLoGBUrA=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     brotli
@@ -47,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   # lots of: [Errno 48] Address already in use: ('127.0.0.1', 54323)
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   __darwinAllowLocalNetworking = true;
 
@@ -55,13 +52,9 @@ buildPythonPackage rec {
     rm -rf geventhttpclient
   '';
 
-  pytestFlagsArray = [
-    "-m 'not network'"
-  ];
+  pytestFlagsArray = [ "-m 'not network'" ];
 
-  pythonImportsCheck = [
-    "geventhttpclient"
-  ];
+  pythonImportsCheck = [ "geventhttpclient" ];
 
   meta = with lib; {
     homepage = "https://github.com/geventhttpclient/geventhttpclient";

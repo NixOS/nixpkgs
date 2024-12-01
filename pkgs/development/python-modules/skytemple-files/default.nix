@@ -1,72 +1,69 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, appdirs
-, dungeon-eos
-, explorerscript
-, ndspy
-, pillow
-, setuptools
-, skytemple-rust
-, tilequant
-, pyyaml
-, pmdsky-debug-py
-, range-typed-integers
-, importlib-resources
-, typing-extensions
-, pythonOlder
-, # optional dependancies for SpriteCollab
-  aiohttp
-, lru-dict
-, graphql-core
-, gql
-, armips
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  appdirs,
+  dungeon-eos,
+  explorerscript,
+  ndspy,
+  pillow,
+  setuptools,
+  skytemple-rust,
+  pyyaml,
+  pmdsky-debug-py,
+  range-typed-integers,
+  pythonOlder,
+  # optional dependancies for SpriteCollab
+  aiohttp,
+  lru-dict,
+  graphql-core,
+  gql,
+  armips,
   # tests
-, pytestCheckHook
-, parameterized
-, xmldiff
+  pytestCheckHook,
+  parameterized,
+  xmldiff,
 }:
 
 buildPythonPackage rec {
   pname = "skytemple-files";
-  version = "1.6.5";
+  version = "1.8.3";
   pyproject = true;
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
+    repo = "skytemple-files";
     rev = version;
-    hash = "sha256-y6VHRfwQNoehp06BoZXuprYtsiGgoNL4rztJw40P4FI=";
+    hash = "sha256-4ENuYq074j/VdzLyrGVCGaZhoStwlgJWTqGbrt20A3Q=";
     # Most patches are in submodules
     fetchSubmodules = true;
   };
 
   postPatch = ''
     substituteInPlace skytemple_files/patch/arm_patcher.py skytemple_files/data/data_cd/armips_importer.py \
-      --replace "exec_name = os.getenv(\"SKYTEMPLE_ARMIPS_EXEC\", f\"{prefix}armips\")" "exec_name = \"${armips}/bin/armips\""
+      --replace-fail "exec_name = os.getenv(\"SKYTEMPLE_ARMIPS_EXEC\", f\"{prefix}armips\")" "exec_name = \"${armips}/bin/armips\""
   '';
+
+  build-system = [ setuptools ];
 
   buildInputs = [ armips ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     appdirs
     dungeon-eos
     explorerscript
     ndspy
     pillow
-    setuptools
     skytemple-rust
-    tilequant
     pyyaml
     pmdsky-debug-py
     range-typed-integers
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-    typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     spritecollab = [
       aiohttp
       gql
@@ -75,11 +72,18 @@ buildPythonPackage rec {
     ] ++ gql.optional-dependencies.aiohttp;
   };
 
-  checkInputs = [ pytestCheckHook parameterized xmldiff ] ++ passthru.optional-dependencies.spritecollab;
-  pytestFlagsArray = [ "test/" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    parameterized
+    xmldiff
+  ] ++ optional-dependencies.spritecollab;
+
+  preCheck = "pushd test";
+  postCheck = "popd";
+
   disabledTestPaths = [
-    "test/skytemple_files_test/common/spritecollab/sc_online_test.py"
-    "test/skytemple_files_test/compression_container/atupx/atupx_test.py" # Particularly long test
+    "skytemple_files_test/common/spritecollab/sc_online_test.py"
+    "skytemple_files_test/compression_container/atupx/atupx_test.py" # Particularly long test
   ];
 
   pythonImportsCheck = [ "skytemple_files" ];
@@ -90,6 +94,6 @@ buildPythonPackage rec {
     mainProgram = "skytemple_export_maps";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ marius851000 ];
-    broken = stdenv.isDarwin; # pyobjc is missing
+    broken = stdenv.hostPlatform.isDarwin; # pyobjc is missing
   };
 }

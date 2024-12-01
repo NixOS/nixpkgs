@@ -1,8 +1,9 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
-, attrs
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
+  attrs,
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "aiorpcX";
-    sha256 = "sha256-WyMALxpNXTCF4xVVoHUZxe+NTEAHHrSZVW/9qBFIYKI=";
+    hash = "sha256-WyMALxpNXTCF4xVVoHUZxe+NTEAHHrSZVW/9qBFIYKI=";
   };
 
   propagatedBuildInputs = [ attrs ];

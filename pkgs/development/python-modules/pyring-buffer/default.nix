@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -18,16 +19,12 @@ buildPythonPackage rec {
     hash = "sha256-bHhcBU4tjFAyZ3/GjaP/hDXz2N73mCChTNYHsZyBCSM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = [
-    "pyring_buffer"
-  ];
+  pythonImportsCheck = [ "pyring_buffer" ];
 
   meta = with lib; {
-    description = "A pure Python ring buffer for bytes";
+    description = "Pure Python ring buffer for bytes";
     homepage = "https://github.com/rhasspy/pyring-buffer";
     changelog = "https://github.com/rhasspy/pyring-buffer/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;

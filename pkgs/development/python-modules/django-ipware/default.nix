@@ -1,8 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
+  python-ipware,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-2exD0r983yFv7Y1JSghN61dhpUhgpTsudDRqTzhM/0c=";
   };
 
-  propagatedBuildInputs = [ django ];
+  propagatedBuildInputs = [ django python-ipware ];
 
   # django.core.exceptions.ImproperlyConfigured: Requested setting IPWARE_TRUSTED_PROXY_LIST, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings.
   doCheck = false;
@@ -26,10 +28,10 @@ buildPythonPackage rec {
   # django.core.exceptions.ImproperlyConfigured: Requested setting IPWARE_META_PRECEDENCE_ORDER, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings.
 
   meta = with lib; {
-    description = "A Django application to retrieve user's IP address";
+    description = "Django application to retrieve user's IP address";
     homepage = "https://github.com/un33k/django-ipware";
     changelog = "https://github.com/un33k/django-ipware/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

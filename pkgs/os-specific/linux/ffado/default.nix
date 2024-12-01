@@ -1,77 +1,79 @@
-{ lib
-, stdenv
-, mkDerivation
-, argp-standalone
-, dbus
-, dbus_cplusplus
-, desktop-file-utils
-, fetchurl
-, fetchpatch
-, glibmm
-, libavc1394
-, libconfig
-, libiec61883
-, libraw1394
-, libxmlxx3
-, pkg-config
-, python3
-, scons
-, which
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  argp-standalone,
+  dbus,
+  dbus_cplusplus,
+  fetchurl,
+  glibmm,
+  libavc1394,
+  libconfig,
+  libiec61883,
+  libraw1394,
+  libxmlxx3,
+  pkg-config,
+  python311,
+  scons,
+  which,
+  withMixer ? false,
+  qt5,
 }:
 
 let
-  python = python3.withPackages (pkgs: with pkgs; [ pyqt5 dbus-python ]);
+  python =
+    if withMixer then
+      python311.withPackages (
+        pkgs: with pkgs; [
+          pyqt5
+          dbus-python
+        ]
+      )
+    else
+      python311;
 in
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ffado";
-  version = "2.4.8";
+  version = "2.4.9";
+
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "http://www.ffado.org/files/libffado-${version}.tgz";
-    hash = "sha256-f0x561ehKw6uMSri0RZip+v1JHZuhixtywl0PVU/N44=";
+    hash = "sha256-xELFL60Ryv1VE7tOhGyFHxAchIT4karFRe0ZDo/U0Q8=";
   };
-
-  sourceRoot = "libffado-${version}/libffado";
 
   prePatch = ''
     substituteInPlace ./support/tools/ffado-diag.in \
       --replace /lib/modules/ "/run/booted-system/kernel-modules/lib/modules/"
   '';
 
-  patches = [
-    # fix installing metainfo file
-    ./fix-build.patch
-
-    (fetchpatch {
-      name = "musl.patch";
-      url = "http://subversion.ffado.org/changeset?format=diff&new=2846&old=2845";
-      stripLen = 2;
-      hash = "sha256-iWeYnb5J69Uvo1lftc7MWg7WrLa+CGZyOwJPOe8/PKg=";
-    })
-  ];
-
-  outputs = [ "out" "bin" "dev" ];
-
-  nativeBuildInputs = [
-    desktop-file-utils
-    scons
-    pkg-config
-    which
-    python
-    python3.pkgs.pyqt5
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs =
+    [
+      (scons.override {
+        # SConstruct script depends on distutils removed in Python 3.12
+        python3Packages = python311.pkgs;
+      })
+      pkg-config
+      which
+    ]
+    ++ lib.optionals withMixer [
+      python
+      python.pkgs.pyqt5
+      qt5.wrapQtAppsHook
+    ];
 
   prefixKey = "PREFIX=";
   sconsFlags = [
     "DEBUG=False"
     "ENABLE_ALL=True"
     "BUILD_TESTS=True"
-    "WILL_DEAL_WITH_XDG_MYSELF=True"
-    "BUILD_MIXER=True"
+    "BUILD_MIXER=${if withMixer then "True" else "False"}"
     "UDEVDIR=${placeholder "out"}/lib/udev/rules.d"
-    "PYPKGDIR=${placeholder "out"}/${python3.sitePackages}"
+    "PYPKGDIR=${placeholder "out"}/${python.sitePackages}"
     "BINDIR=${placeholder "bin"}/bin"
     "INCLUDEDIR=${placeholder "dev"}/include"
     "PYTHON_INTERPRETER=${python.interpreter}"
@@ -97,26 +99,21 @@ mkDerivation rec {
   dontWrapQtApps = true;
 
   postInstall = ''
-    desktop="$bin/share/applications/ffado-mixer.desktop"
-    install -DT -m 444 support/xdg/ffado.org-ffadomixer.desktop $desktop
-    substituteInPlace "$desktop" \
-      --replace Exec=ffado-mixer "Exec=$bin/bin/ffado-mixer" \
-      --replace hi64-apps-ffado ffado-mixer
-    install -DT -m 444 support/xdg/hi64-apps-ffado.png "$bin/share/icons/hicolor/64x64/apps/ffado-mixer.png"
-
     # prevent build tools from leaking into closure
     echo 'See `nix-store --query --tree ${placeholder "out"}`.' > $out/lib/libffado/static_info.txt
   '';
 
-  preFixup = ''
-    wrapQtApp $bin/bin/ffado-mixer
+  preFixup = lib.optionalString withMixer ''
+    wrapQtApp "$bin/bin/ffado-mixer"
   '';
 
   meta = with lib; {
     homepage = "http://www.ffado.org";
     description = "FireWire audio drivers";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ goibhniu michojel ];
+    maintainers = with maintainers; [
+      michojel
+    ];
     platforms = platforms.linux;
   };
 }

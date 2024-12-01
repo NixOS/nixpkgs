@@ -8,7 +8,7 @@
 , boost
 , logLib
 , python
-, swig
+, swig3
 , mpir
 , gmp
 , doxygen
@@ -78,7 +78,7 @@ mkDerivation {
     pybind11
     numpy
   ] else [
-    swig
+    swig3
     thrift
     python.pkgs.thrift
   ]);

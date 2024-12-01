@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, coreutils
-, jinja2
-, pandas
-, pyparsing
-, pytestCheckHook
-, pythonOlder
-, which
-, yosys
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  coreutils,
+  jinja2,
+  pandas,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
+  which,
+  yosys,
 }:
 
 buildPythonPackage rec {
   pname = "edalize";
-  version = "0.5.4";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "olofk";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-pgyUpbSVRCHioJc82hZwG+JbpnL7t9ZvN4OcPHFsirs=";
+    hash = "sha256-TCMzvRWd2Fx2/7UtUGOwblLhRyTAqPp9s70Oyc3U3r0=";
   };
 
   postPatch = ''
@@ -38,11 +39,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    jinja2
-  ];
+  propagatedBuildInputs = [ jinja2 ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     reporting = [
       pandas
       pyparsing
@@ -53,11 +52,9 @@ buildPythonPackage rec {
     pytestCheckHook
     which
     yosys
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "edalize"
-  ];
+  pythonImportsCheck = [ "edalize" ];
 
   disabledTests = [
     # disable failures related to pandas 2.1.0 apply(...,errors="ignore")

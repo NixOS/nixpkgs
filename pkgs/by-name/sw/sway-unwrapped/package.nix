@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sway-unwrapped";
-  version = "1.9";
+  version = "1.10";
 
   inherit enableXWayland isNixOS systemdSupport trayEnabled;
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = finalAttrs.version;
-    hash = "sha256-/6+iDkQfdLcL/pTJaqNc6QdP4SRVOYLjfOItEu/bZtg=";
+    hash = "sha256-PzeU/niUdqI6sf2TCG19G2vNgAZJE5JCyoTwtO9uFTk=";
   };
 
   patches = [
@@ -71,14 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
     sd-bus-provider =  if systemdSupport then "libsystemd" else "basu";
     in [
       (mesonOption "sd-bus-provider" sd-bus-provider)
-      (mesonEnable "xwayland" finalAttrs.enableXWayland)
       (mesonEnable "tray" finalAttrs.trayEnabled)
     ];
 
   passthru.tests.basic = nixosTests.sway;
 
   meta = {
-    description = "An i3-compatible tiling Wayland compositor";
+    description = "I3-compatible tiling Wayland compositor";
     longDescription = ''
       Sway is a tiling Wayland compositor and a drop-in replacement for the i3
       window manager for X11. It works with your existing i3 configuration and

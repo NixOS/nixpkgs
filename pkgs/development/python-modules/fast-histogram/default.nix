@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, pytestCheckHook
-, fetchFromGitHub
-, python
-, pythonOlder
-, setuptools
-, setuptools-scm
-, numpy
-, wheel
-, hypothesis
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  pytestCheckHook,
+  fetchFromGitHub,
+  python,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  numpy,
+  wheel,
+  hypothesis,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -37,7 +38,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     hypothesis
-    pytest-cov
+    pytest-cov-stub
   ];
 
   pytestFlagsArray = [ "${builtins.placeholder "out"}/${python.sitePackages}" ];

@@ -46,9 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     changelog = "https://github.com/github/gh-copilot/releases/tag/v${finalAttrs.version}";
-    description = "Ask for assistance right in your terminal.";
+    description = "Ask for assistance right in your terminal";
     homepage = "https://github.com/github/gh-copilot";
     license = lib.licenses.unfree;
     mainProgram = "gh-copilot";

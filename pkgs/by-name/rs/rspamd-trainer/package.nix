@@ -2,10 +2,9 @@
 , python3
 , python3Packages
 , fetchFromGitLab
-, makeWrapper
-, stdenv
 , fetchpatch
 , rspamd
+, nixosTests
 }:
 
 python3Packages.buildPythonApplication {
@@ -49,6 +48,8 @@ python3Packages.buildPythonApplication {
     python-dotenv
     imapclient
   ];
+
+  passthru.tests = { inherit (nixosTests) rspamd-trainer; };
 
   meta = {
     homepage = "https://gitlab.com/onlime/rspamd-trainer";

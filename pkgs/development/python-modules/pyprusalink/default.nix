@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,23 +21,17 @@ buildPythonPackage rec {
     hash = "sha256-Opip696hXV1gqFC1cWfrSCkrsldl7M7XZAqUaVkDy7M=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    httpx
-  ];
+  propagatedBuildInputs = [ httpx ];
 
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyprusalink"
-  ];
+  pythonImportsCheck = [ "pyprusalink" ];
 
   meta = with lib; {
-    description = "Library to communicate with PrusaLink ";
+    description = "Library to communicate with PrusaLink";
     homepage = "https://github.com/home-assistant-libs/pyprusalink";
     changelog = "https://github.com/home-assistant-libs/pyprusalink/releases/tag/${version}";
     license = with licenses; [ asl20 ];

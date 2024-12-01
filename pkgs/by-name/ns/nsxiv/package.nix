@@ -30,13 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
     libXft
     libexif
     libwebp
-  ] ++ lib.optional stdenv.isDarwin libinotify-kqueue;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin libinotify-kqueue;
 
   postPatch = lib.optionalString (conf != null) ''
     cp ${(builtins.toFile "config.def.h" conf)} config.def.h
   '';
 
-  env.NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-linotify";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-linotify";
 
   makeFlags = [ "CC:=$(CC)" ];
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://codeberg.org/nsxiv/nsxiv/src/tag/${finalAttrs.src.rev}/etc/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres sikmir ];
+    maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
   };
 })

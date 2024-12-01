@@ -96,12 +96,17 @@ in
                 {option}`documentation.man.mandoc.manPath` to an empty list (`[]`).
               '';
             };
-            output.fragment = lib.mkEnableOption ''
-              Omit the <!DOCTYPE> declaration and the <html>, <head>, and <body>
-              elements and only emit the subtree below the <body> element in HTML
-              output of {manpage}`mandoc(1)`. The style argument will be ignored.
-              This is useful when embedding manual content within existing documents.
-            '';
+            output.fragment = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              example = true;
+              description = ''
+                Whether to omit the <!DOCTYPE> declaration and the <html>, <head>, and <body>
+                elements and only emit the subtree below the <body> element in HTML
+                output of {manpage}`mandoc(1)`. The style argument will be ignored.
+                This is useful when embedding manual content within existing documents.
+              '';
+            };
             output.includes = lib.mkOption {
               type = with lib.types; nullOr str;
               default = null;
@@ -160,9 +165,9 @@ in
               '';
             };
             output.toc = lib.mkEnableOption ''
-              In HTML output of {manpage}`mandoc(1)`, If an input file contains
-              at least two non-standard sections, print a table of contents near
-              the beginning of the output.
+              printing a table of contents near the beginning of the HTML output
+              of {manpage}`mandoc(1)` if an input file contains at least two
+              non-standard sections
             '';
             output.width = lib.mkOption {
               type = with lib.types; nullOr int;

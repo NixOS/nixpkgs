@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     - Aimo
     '';
     maintainers = with lib.maintainers; [ daniel-fahey ];
-    platforms = with lib; [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

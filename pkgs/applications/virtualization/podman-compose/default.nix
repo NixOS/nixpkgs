@@ -1,7 +1,7 @@
-{ lib, buildPythonApplication, fetchFromGitHub, python-dotenv, pyyaml, setuptools, pipBuildHook, pypaBuildHook }:
+{ lib, buildPythonApplication, fetchFromGitHub, python-dotenv, pyyaml, setuptools, pypaBuildHook }:
 
 buildPythonApplication rec {
-  version = "1.1.0";
+  version = "1.2.0";
   pname = "podman-compose";
   pyproject = true;
 
@@ -9,9 +9,8 @@ buildPythonApplication rec {
     repo = "podman-compose";
     owner = "containers";
     rev = "v${version}";
-    sha256 = "sha256-uNgzdLrnDIABtt0L2pvsil14esRzl0XcWohgf7Oksr8=";
+    hash = "sha256-40RatexY/6eRfCodaiBeJpyt1sDUj2STSPL0gBECdRs=";
   };
-
 
   build-system = [
     setuptools
@@ -21,7 +20,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ pypaBuildHook ];
 
   meta = {
-    description = "An implementation of docker-compose with podman backend";
+    description = "Implementation of docker-compose with podman backend";
     homepage = "https://github.com/containers/podman-compose";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, boto3
-, diskcache
-, packaging
-, numpy
-, requests
-, scikit-image
-, six
-, pytestCheckHook
-, tifffile
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  boto3,
+  diskcache,
+  packaging,
+  numpy,
+  requests,
+  scikit-image,
+  six,
+  pytestCheckHook,
+  tifffile,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,7 @@ buildPythonPackage rec {
     tifffile
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Ignore tests which require setup, check again if disabledTestFiles can be used
   pytestFlagsArray = [ "--ignore tests/io_" ];

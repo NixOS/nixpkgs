@@ -1,18 +1,15 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.clipmenu;
 in {
 
   options.services.clipmenu = {
-    enable = mkEnableOption "clipmenu, the clipboard management daemon";
+    enable = lib.mkEnableOption "clipmenu, the clipboard management daemon";
 
-    package = mkPackageOption pkgs "clipmenu" { };
+    package = lib.mkPackageOption pkgs "clipmenu" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.user.services.clipmenu = {
       enable      = true;
       description = "Clipboard management daemon";

@@ -1,5 +1,5 @@
 { lib, stdenv
-, addOpenGLRunpath
+, addDriverRunpath
 , config
 , cudaPackages ? {}
 , cudaSupport ? config.cudaSupport
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     makeWrapper
   ] ++ lib.optionals cudaSupport [
-    addOpenGLRunpath
+    addDriverRunpath
   ];
 
   buildInputs = [ opencl-headers xxHash ]
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString cudaSupport ''
     for program in $out/bin/hashcat $out/bin/.hashcat-wrapped; do
       isELF "$program" || continue
-      addOpenGLRunpath "$program"
+      addDriverRunpath "$program"
     done
   '';
 
@@ -81,6 +81,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://hashcat.net/hashcat/";
     license     = licenses.mit;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ felixalbrigtsen kierdavis zimbatm ];
+    maintainers = with maintainers; [ felixalbrigtsen zimbatm ];
   };
 }

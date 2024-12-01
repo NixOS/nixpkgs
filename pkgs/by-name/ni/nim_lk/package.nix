@@ -14,13 +14,13 @@ let
 in
 buildNimPackage (finalAttrs: {
   pname = "nim_lk";
-  version = "20240510";
+  version = "20240527";
 
   src = fetchFromSourcehut {
     owner = "~ehmry";
     repo = "nim_lk";
     rev = finalAttrs.version;
-    hash = "sha256-fwoGyYkbGstWG0qw15dOq1gmr3GyIn6ZEBeBmEivHlA=";
+    hash = "sha256-r8K9HRGEgqlFZJPdDeOYienmfzfNOeCdqMhshjr72Ok=";
   };
 
   lockFile = ./lock.json;

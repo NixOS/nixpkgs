@@ -1,28 +1,32 @@
-{ lib
-, stdenv
-, fetchzip
+{
+  lib,
+  stdenv,
+  fetchzip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unrar";
-  version = "7.0.8";
+  version = "7.1.1";
 
   src = fetchzip {
     url = "https://www.rarlab.com/rar/unrarsrc-${finalAttrs.version}.tar.gz";
     stripRoot = false;
-    hash = "sha256-oyLU4LkjzqjpiPLMpsTJWqaF9Tr4Tg441vXo3JiORDo=";
+    hash = "sha256-dGF5xCZRHnaMVj/OGIIFbytN7Jnj39gq7ym6hq/EZsk=";
   };
 
   sourceRoot = finalAttrs.src.name;
 
   postPatch = ''
     substituteInPlace unrar/makefile \
-      --replace "CXX=" "#CXX=" \
-      --replace "STRIP=" "#STRIP=" \
-      --replace "AR=" "#AR="
+      --replace-fail "CXX=" "#CXX=" \
+      --replace-fail "STRIP=" "#STRIP=" \
+      --replace-fail "AR=" "#AR="
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   # `make {unrar,lib}` call `make clean` implicitly
   # separate build into different dirs to avoid deleting them

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "treesheets";
-  version = "0-unstable-2024-05-04";
+  version = "0-unstable-2024-09-08";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "treesheets";
-    rev = "f29512886514410fa68d2debdb9389a8f81f3aaa";
-    hash = "sha256-Uq8G2lSVTj1JmiLnn5FZd/WKS+wjZxoaliOyghVZg34=";
+    rev = "8db448f67710194d64211ac467ffd2d456854432";
+    hash = "sha256-SM62ymN5HXRiyXayoWQaGXLCGEDbHcKMJdPLXDv5dv8=";
   };
 
   nativeBuildInputs = [
@@ -30,13 +30,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     wxGTK
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${builtins.replaceStrings [ "unstable-" ] [ "" ] version}\"";
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     shopt -s extglob
     mkdir -p $out/{share/treesheets,bin}
     mv $out/!(share) $out/share/treesheets

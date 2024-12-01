@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, python-memcached
-, typing-extensions
+  # dependencies
+  python-memcached,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -23,21 +24,13 @@ buildPythonPackage rec {
     hash = "sha256-+rlKHDop0kNxJ0HoXROs/oyI4zE3MDyxXXhWZtVDMj4=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    python-memcached
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
-  ];
+  dependencies = [ python-memcached ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   doCheck = false; # executes memcached in docker
 
-  pythonImportsCheck = [
-    "aiomcache"
-  ];
+  pythonImportsCheck = [ "aiomcache" ];
 
   meta = with lib; {
     changelog = "https://github.com/aio-libs/aiomcache/blob/${src.rev}/CHANGES.rst";

@@ -1,37 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ddt
-, debtcollector
-, eventlet
-, fixtures
-, iso8601
-, netaddr
-, netifaces
-, oslo-i18n
-, oslotest
-, packaging
-, pbr
-, pyparsing
-, pytz
-, setuptools
-, stestr
-, testscenarios
-, tzdata
-, pyyaml
-, iana-etc
-, libredirect
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ddt,
+  debtcollector,
+  eventlet,
+  fixtures,
+  iso8601,
+  netaddr,
+  netifaces,
+  oslo-i18n,
+  oslotest,
+  packaging,
+  pbr,
+  pyparsing,
+  pytz,
+  qemu-utils,
+  setuptools,
+  stestr,
+  testscenarios,
+  tzdata,
+  pyyaml,
+  iana-etc,
+  libredirect,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-utils";
-  version = "7.1.0";
+  version = "7.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo.utils";
     inherit version;
-    hash = "sha256-XkLzOU0fH5duiZSsSgkYlm0vfq98dzgN1hLEpBSN2Y4=";
+    hash = "sha256-WaXT5Oe7x42AHM68K4I+QptiTBK7bjtudvccKfK/Id8=";
   };
 
   postPatch = ''
@@ -62,6 +64,7 @@ buildPythonPackage rec {
     eventlet
     fixtures
     oslotest
+    qemu-utils
     stestr
     testscenarios
     pyyaml
@@ -70,7 +73,7 @@ buildPythonPackage rec {
   # disabled tests:
   # https://bugs.launchpad.net/oslo.utils/+bug/2054134
   # netaddr default behaviour changed to be stricter
-  checkPhase =''
+  checkPhase = ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
     export LD_PRELOAD=${libredirect}/lib/libredirect.so

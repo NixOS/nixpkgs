@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/baskerville/sxhkd";
     license = lib.licenses.bsd2;
     mainProgram = "sxhkd";
-    maintainers = with lib.maintainers; [ vyp AndersonTorres ncfavier ];
+    maintainers = with lib.maintainers; [ vyp ncfavier ];
     inherit (libxcb.meta) platforms;
   };
 })

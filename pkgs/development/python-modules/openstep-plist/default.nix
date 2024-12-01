@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cython
-, setuptools
-, setuptools-scm
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cython,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "openstep-plist";
-  version = "0.3.1";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "openstep_plist";
     inherit version;
-    hash = "sha256-Au6taO+57Ost4slTlwc86A/ImFXZerZRab2S/ENo5PI=";
+    hash = "sha256-RTpWzfU0xvQtJJNNLtf5W8d8PRqKy8GIGkqgYafWAaI=";
   };
 
   build-system = [
@@ -24,13 +25,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "openstep_plist"
-  ];
+  pythonImportsCheck = [ "openstep_plist" ];
 
   meta = {
     changelog = "https://github.com/fonttools/openstep-plist/releases/tag/v${version}";

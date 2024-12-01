@@ -1,36 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, protobuf
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, setuptools
-, setuptools-scm
-, uharfbuzz
-, youseedee
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  protobuf,
+  pytestCheckHook,
+  pythonOlder,
+  regex,
+  setuptools,
+  setuptools-scm,
+  uharfbuzz,
+  youseedee,
 }:
 
 buildPythonPackage rec {
   pname = "gflanguages";
-  version = "0.6.0";
+  version = "0.6.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kaJZ0STN2U/4vQ7g5VbpPGv64czryK8jXmIJ97bkItA=";
+    hash = "sha256-wMhRVWdjKiEfzswnAWqKfzHrpJj0U4q8tzDBGshNryo=";
   };
-
-  pyproject = true;
 
   # Relax the dependency on protobuf 3. Other packages in the Google Fonts
   # ecosystem have begun upgrading from protobuf 3 to protobuf 4,
   # so we need to use protobuf 4 here as well to avoid a conflict
   # in the closure of fontbakery. It seems to be compatible enough.
-  pythonRelaxDeps = [
-    "protobuf"
-  ];
+  pythonRelaxDeps = [ "protobuf" ];
+
+  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
   build-system = [
     setuptools
@@ -39,13 +39,22 @@ buildPythonPackage rec {
 
   dependencies = [
     protobuf
+    regex
   ];
 
   nativeCheckInputs = [
-    pythonRelaxDepsHook
     pytestCheckHook
+    regex
     uharfbuzz
     youseedee
+  ];
+
+  pythonImportsCheck = [ "gflanguages" ];
+
+  disabledTests = [
+    # AssertionError
+    "test_exemplars_are_in_script"
+    "test_sample_texts_are_in_script"
   ];
 
   meta = with lib; {

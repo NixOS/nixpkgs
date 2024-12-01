@@ -1,24 +1,27 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, elfutils
-, zlib
-, libbpf
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  elfutils,
+  zlib,
+  libbpf,
+  clangStdenv,
 }:
-
-rustPlatform.buildRustPackage rec {
+let
   pname = "bpftop";
-  version = "0.4.2";
-
+  version = "0.5.2";
+in
+rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
+  inherit pname version;
   src = fetchFromGitHub {
     owner = "Netflix";
     repo = "bpftop";
-    rev = "v${version}";
-    hash = "sha256-zYCv3L+xDFAJ4Wo9xwfHJrqPQUv5KiFDbhCdC1Z6qNo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WH/oCnkBcvoouBbkAcyawfAuNR3VsTl5+ZATLpi9d4w=";
   };
 
-  cargoHash = "sha256-6uPfMxjSrSGrAgJcvzTY/i1ckoW/wIi7D5noOafCvZE=";
+  cargoHash = "sha256-H9HapuIyJJOSQIR9IvFZaQ+Nz9M0MH12JwbY8r2l+JY=";
 
   buildInputs = [
     elfutils
@@ -26,16 +29,19 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  nativeBuildInputs = [
-    pkg-config
+  nativeBuildInputs = [ pkg-config ];
+
+  hardeningDisable = [
+    "zerocallusedregs"
   ];
 
   meta = {
-    description = "A dynamic real-time view of running eBPF programs";
+    description = "Dynamic real-time view of running eBPF programs";
     homepage = "https://github.com/Netflix/bpftop";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       _0x4A6F
+      luftmensch-luftmensch
       mfrw
     ];
     mainProgram = "bpftop";

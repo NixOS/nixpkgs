@@ -4,21 +4,16 @@
 , copyDesktopItems
 , makeDesktopItem
 , lib
-, fontconfig
-, libX11
-, libXcursor
-, libICE
-, libSM
 , runCommandLocal
 }:
 let
-  version = "6.4.8";
+  version = "6.6";
 
   src = fetchFromGitHub {
     owner = "retrospy";
     repo = "RetroSpy";
     rev = "v${version}";
-    hash = "sha256-0rdLdud78gnBX8CIdG81caJ1IRoIjGzb7coP4huEPDA=";
+    hash = "sha256-vYhFpmP9CmZz/lqNwNAvpf7pQnhKR/pdetPJqorUtMY=";
   };
 
   executables = [
@@ -43,14 +38,6 @@ buildDotnetModule {
     copyDesktopItems
   ];
 
-  runtimeDeps = [
-    fontconfig
-    libX11
-    libICE
-    libXcursor
-    libSM
-  ];
-
   projectFile = [
     "RetroSpyX/RetroSpyX.csproj"
     "GBPemuX/GBPemuX.csproj"
@@ -58,8 +45,8 @@ buildDotnetModule {
     "UsbUpdaterX2/UsbUpdaterX2.csproj"
   ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
   nugetDeps = ./deps.nix;
 
@@ -81,6 +68,7 @@ buildDotnetModule {
   meta = {
     description = "Live controller viewer for Nintendo consoles as well as many other retro consoles and computers";
     homepage = "https://retro-spy.com/";
+    changelog = "https://github.com/retrospy/RetroSpy/releases/tag/${src.rev}";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.naxdy ];
     platforms = lib.platforms.linux;

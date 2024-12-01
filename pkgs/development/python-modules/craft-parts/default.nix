@@ -1,32 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nix-update-script
-, overrides
-, pydantic_1
-, pydantic-yaml-0
-, pyxdg
-, pyyaml
-, requests
-, requests-unixsocket
-, types-pyyaml
-, urllib3
-, pytestCheckHook
-, pytest-check
-, pytest-mock
-, pytest-subprocess
-, requests-mock
-, hypothesis
-, git
-, squashfsTools
-, setuptools
-, setuptools-scm
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  overrides,
+  pydantic,
+  pyxdg,
+  pyyaml,
+  requests,
+  requests-unixsocket,
+  urllib3,
+  pytestCheckHook,
+  pytest-check,
+  pytest-mock,
+  pytest-subprocess,
+  requests-mock,
+  hypothesis,
+  jsonschema,
+  git,
+  squashfsTools,
+  setuptools-scm,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "1.29.0";
+  version = "2.1.3";
 
   pyproject = true;
 
@@ -34,43 +33,35 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-parts";
     rev = "refs/tags/${version}";
-    hash = "sha256-3AWiuRGUGj6q6ZEnShc64DSL1S6kTsry4Z1IYMelvzg=";
+    hash = "sha256-ouvl4mIDIWHWp84E1I41g/XnP22kCV55CqsVLit5yb4=";
   };
 
-  patches = [
-    ./bash-path.patch
+  patches = [ ./bash-path.patch ];
+
+  build-system = [ setuptools-scm ];
+
+  pythonRelaxDeps = [
+    "requests"
+    "urllib3"
+    "pydantic"
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "pydantic-yaml[pyyaml]>=0.11.0,<1.0.0" "pydantic-yaml[pyyaml]" \
-      --replace-fail "urllib3<2" "urllib3"
-  '';
-
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     overrides
-    pydantic_1
-    pydantic-yaml-0
+    pydantic
     pyxdg
     pyyaml
     requests
     requests-unixsocket
-    types-pyyaml
     urllib3
   ];
 
-  pythonImportsCheck = [
-    "craft_parts"
-  ];
+  pythonImportsCheck = [ "craft_parts" ];
 
   nativeCheckInputs = [
     git
     hypothesis
+    jsonschema
     pytest-check
     pytest-mock
     pytest-subprocess
@@ -93,22 +84,24 @@ buildPythonPackage rec {
     "test_get_build_packages"
   ];
 
-  disabledTestPaths = [
-    # Relies upon filesystem extended attributes, and suid/guid bits
-    "tests/unit/sources/test_base.py"
-    "tests/unit/packages/test_base.py"
-    "tests/unit/state_manager"
-    "tests/unit/test_xattrs.py"
-    "tests/unit/packages/test_normalize.py"
-    # Relies upon presence of apt/dpkg.
-    "tests/unit/packages/test_apt_cache.py"
-    "tests/unit/packages/test_deb.py"
-    "tests/unit/packages/test_chisel.py"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    # These tests have hardcoded "amd64" strings which fail on aarch64
-    "tests/unit/executor/test_environment.py"
-    "tests/unit/features/overlay/test_executor_environment.py"
-  ];
+  disabledTestPaths =
+    [
+      # Relies upon filesystem extended attributes, and suid/guid bits
+      "tests/unit/sources/test_base.py"
+      "tests/unit/packages/test_base.py"
+      "tests/unit/state_manager"
+      "tests/unit/test_xattrs.py"
+      "tests/unit/packages/test_normalize.py"
+      # Relies upon presence of apt/dpkg.
+      "tests/unit/packages/test_apt_cache.py"
+      "tests/unit/packages/test_deb.py"
+      "tests/unit/packages/test_chisel.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+      # These tests have hardcoded "amd64" strings which fail on aarch64
+      "tests/unit/executor/test_environment.py"
+      "tests/unit/features/overlay/test_executor_environment.py"
+    ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -121,4 +114,3 @@ buildPythonPackage rec {
     platforms = lib.platforms.linux;
   };
 }
-

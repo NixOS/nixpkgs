@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-, pythonOlder
+  pythonOlder,
 
-, poetry-core
+  poetry-core,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     --replace-fail "poetry>=" "poetry-core>="
   '';
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   # no unit tests in source distribution...
   doCheck = false;

@@ -131,6 +131,7 @@ let
 
       # Copy udev.
       copy_bin_and_libs ${udev}/bin/udevadm
+      cp ${lib.getLib udev.kmod}/lib/libkmod.so* $out/lib
       copy_bin_and_libs ${udev}/lib/systemd/systemd-sysctl
       for BIN in ${udev}/lib/udev/*_id; do
         copy_bin_and_libs $BIN
@@ -326,7 +327,7 @@ let
 
     setHostId = optionalString (config.networking.hostId != null) ''
       hi="${config.networking.hostId}"
-      ${if pkgs.stdenv.isBigEndian then ''
+      ${if pkgs.stdenv.hostPlatform.isBigEndian then ''
         echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > /etc/hostid
       '' else ''
         echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > /etc/hostid
@@ -348,13 +349,7 @@ let
         { object = "${modulesClosure}/lib";
           symlink = "/lib";
         }
-        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
-              src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
-              preferLocalBuild = true;
-            } ''
-              target=$out
-              ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
-            '';
+        { object = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
           symlink = "/etc/modprobe.d/ubuntu.conf";
         }
         { object = config.environment.etc."modprobe.d/nixos.conf".source;
@@ -410,7 +405,7 @@ let
         ${lib.optionalString (config.boot.initrd.secrets == {})
             "exit 0"}
 
-        export PATH=${pkgs.coreutils}/bin:${pkgs.libarchive}/bin:${pkgs.gzip}/bin:${pkgs.findutils}/bin
+        export PATH=${pkgs.coreutils}/bin:${pkgs.cpio}/bin:${pkgs.gzip}/bin:${pkgs.findutils}/bin
 
         function cleanup {
           if [ -n "$tmp" -a -d "$tmp" ]; then
@@ -431,7 +426,7 @@ let
          }
 
         # mindepth 1 so that we don't change the mode of /
-        (cd "$tmp" && find . -mindepth 1 | xargs touch -amt 197001010000 && find . -mindepth 1 -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @-) | \
+        (cd "$tmp" && find . -mindepth 1 | xargs touch -amt 197001010000 && find . -mindepth 1 -print0 | sort -z | cpio --quiet -o -H newc -R +0:+0 --reproducible --null) | \
           ${compressorExe} ${lib.escapeShellArgs initialRamdisk.compressorArgs} >> "$1"
       '';
 

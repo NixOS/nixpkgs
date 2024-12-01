@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, wheel
-, qrcode
-, reportlab
-, pillow
-, pytest
-, pyzbar
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  wheel,
+  qrcode,
+  reportlab,
+  pillow,
+  pytest,
+  pyzbar,
 }:
 
 buildPythonPackage rec {
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     reportlab
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     testing = [
       pillow
       pytest

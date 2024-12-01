@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kpeople";
 
-  extraBuildInputs = [qtdeclarative];
+  extraBuildInputs = [ qtdeclarative ];
 }

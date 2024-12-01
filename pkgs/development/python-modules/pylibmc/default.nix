@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, cyrus_sasl
-, fetchPypi
-, libmemcached
-, pythonOlder
-, zlib
+{
+  lib,
+  buildPythonPackage,
+  cyrus_sasl,
+  fetchPypi,
+  libmemcached,
+  pythonOlder,
+  zlib,
 }:
 
 buildPythonPackage rec {
@@ -25,21 +26,17 @@ buildPythonPackage rec {
     zlib
   ];
 
-  setupPyBuildFlags = [
-    "--with-sasl2"
-  ];
+  setupPyBuildFlags = [ "--with-sasl2" ];
 
   # Requires an external memcached server running
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pylibmc"
-  ];
+  pythonImportsCheck = [ "pylibmc" ];
 
   meta = with lib; {
     description = "Quick and small memcached client for Python";
     homepage = "http://sendapatch.se/projects/pylibmc/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

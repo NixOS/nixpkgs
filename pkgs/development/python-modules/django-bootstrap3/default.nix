@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
-, setuptools-scm
+  # build-system
+  setuptools,
+  setuptools-scm,
 
-# non-propagates
-, django
+  # non-propagates
+  django,
 
-# tests
-, pytest-django
-, pytestCheckHook
+  # tests
+  pytest-django,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-bootstrap3";
-  version = "24.2";
+  version = "24.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap3";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5nBJ5vfsoGoaG1s3K1hCHcSnGf51ZirYYg+uJGsBmG8=";
+    hash = "sha256-7aHGTa98NaHg6C+fxuQsrPk/8XjHB3awp+gAWysOhAw=";
   };
 
   nativeBuildInputs = [
@@ -31,13 +32,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [
-    django
-  ];
+  buildInputs = [ django ];
 
-  pythonImportsCheck = [
-    "bootstrap3"
-  ];
+  pythonImportsCheck = [ "bootstrap3" ];
 
   nativeCheckInputs = [
     pytest-django
@@ -54,5 +51,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ hexa ];
   };
 }
-
-

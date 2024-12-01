@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "clipse";
-  version = "0.0.71";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "savedra1";
     repo = "clipse";
     rev = "v${version}";
-    hash = "sha256-88GuYGJO5AgWae6LyMO/TpGqtk2yS7pDPS0MkgmJUQ4=";
+    hash = "sha256-yUkHT7SZT7Eudvk1n43V+WGWqUKtXaV+p4ySMK/XzQw=";
   };
 
-  vendorHash = "sha256-GIUEx4h3xvLySjBAQKajby2cdH8ioHkv8aPskHN0V+w=";
+  vendorHash = "sha256-+9uoB/1g4qucdM8RJRs+fSc5hpcgaCK0GrUOFgHWeKo=";
 
   meta = {
     description = "Useful clipboard manager TUI for Unix";

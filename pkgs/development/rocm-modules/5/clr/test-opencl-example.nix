@@ -6,7 +6,7 @@
 , cmake
 , pkg-config
 , glew
-, freeglut
+, libglut
 , opencl-headers
 , ocl-icd
 }:
@@ -26,7 +26,7 @@ let
 
     nativeBuildInputs = [ cmake pkg-config ];
 
-    buildInputs = [ glew freeglut opencl-headers ocl-icd ];
+    buildInputs = [ glew libglut opencl-headers ocl-icd ];
 
     installPhase = ''
       runHook preInstall
@@ -41,7 +41,7 @@ let
     cmakeFlags = [ "-DBUILD_CPP_CL=OFF" ];
 
     meta = with lib; {
-      description = "Samples from the AMD APP SDK (with OpenCRun support) ";
+      description = "Samples from the AMD APP SDK (with OpenCRun support)";
       homepage    = "https://github.com/OpenCL/AMD_APP_samples";
       license     = licenses.bsd2;
       platforms   = platforms.linux;

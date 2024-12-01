@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-# Python deps
-, six
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  # Python deps
+  six,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "mando";
-  version = "0.7.1";
+  version = "0.8.2";
 
   pyproject = true;
 
@@ -17,24 +18,16 @@ buildPythonPackage rec {
     owner = "rubik";
     repo = "mando";
     rev = "v${version}";
-    hash = "sha256-Ylrrfo57jqGuWEqCa5RyTT9AagBpUvAfviHkyJPFv08=";
+    hash = "sha256-FuQZ53ojrQO++0TN0C3hk0LXH+mcfRqtGq8VvfYDufg=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  propagatedBuildInputs = [
-    six
-  ];
+  propagatedBuildInputs = [ six ];
 
-  pythonImportsCheck = [
-    "mando"
-  ];
+  pythonImportsCheck = [ "mando" ];
 
   meta = with lib; {
     description = "Create Python CLI apps with little to no effort at all";

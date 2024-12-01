@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-bamboo";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-bamboo";
     rev = finalAttrs.version;
-    hash = "sha256-vEc9z7lFqk+LPP5sTzOYgV7u+/mQY2OsaRsTrtcI/EI=";
+    hash = "sha256-lWWSk5HxWFJKoE3Rf2s4sYhTSLKDnmPCzYGR/NscqFY=";
     fetchSubmodules = true;
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Vietnamese input method engine support for Fcitx";
     homepage = "https://github.com/fcitx/fcitx5-bamboo";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
   };
 })

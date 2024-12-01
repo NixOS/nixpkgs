@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, pytestCheckHook
-, cython
-, setuptools
-, toolz
-, python
-, isPy27
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPyPy,
+  pytestCheckHook,
+  cython,
+  setuptools,
+  toolz,
+  python,
+  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "cytoolz";
-  version = "0.12.3";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = isPy27 || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RQPcWfTO1TpUZDJyxh3DBdHbv719a98paUjenzTDooI=";
+    hash = "sha256-60U7MBghUvmRelGJt9mQRrbOkM34rrD+/0smg+YA3v0=";
   };
 
   nativeBuildInputs = [

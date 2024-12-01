@@ -1,32 +1,32 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch,
 
-# Native build inputs
-, cython
-, pythonRelaxDepsHook
-, which
+  # Native build inputs
+  cython,
+  which,
 
-# Propagated build inputs
-, cffi
-, hydra-core
-, omegaconf
-, sacrebleu
-, numpy
-, regex
-, torch
-, tqdm
-, bitarray
-, torchaudio
-, scikit-learn
-, packaging
+  # Propagated build inputs
+  cffi,
+  hydra-core,
+  omegaconf,
+  sacrebleu,
+  numpy,
+  regex,
+  torch,
+  tqdm,
+  bitarray,
+  torchaudio,
+  scikit-learn,
+  packaging,
 
-# Check inputs
-, expecttest
-, hypothesis
-, pytestCheckHook
+  # Check inputs
+  expecttest,
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -52,13 +52,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython
-    pythonRelaxDepsHook
     which
   ];
 
   pythonRelaxDeps = [
     "hydra-core"
     "omegaconf"
+    "torchaudio"
   ];
 
   propagatedBuildInputs = [
@@ -89,9 +89,7 @@ buildPythonPackage rec {
     cd tests
   '';
 
-  pytestFlagsArray = [
-    "--import-mode append"
-  ];
+  pytestFlagsArray = [ "--import-mode append" ];
 
   disabledTests = [
     # this test requires xformers
@@ -120,7 +118,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytorch/fairseq";
     license = licenses.mit;
     platforms = platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     maintainers = with maintainers; [ happysalada ];
   };
 }

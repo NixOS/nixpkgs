@@ -1,26 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pyyaml
-, jinja2
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pyyaml,
+  jinja2,
 }:
 
 buildPythonPackage rec {
   pname = "hiyapyco";
-  version = "0.5.5";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zerwes";
     repo = pname;
     rev = "refs/tags/release-${version}";
-    hash = "sha256-LuENNwVB/1GyPLsfMRwHjz87c7+3/7U82m1MnHfRHdU=";
+    hash = "sha256-uF5DblAg4q8L1tZKopcjJ14NIQVQF5flNHdZ/jnw71M=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     pyyaml

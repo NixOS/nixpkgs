@@ -1,24 +1,24 @@
-{ cmake, extra-cmake-modules, fetchFromGitLab, lib, libsForQt5 }:
+{ stdenv, cmake, extra-cmake-modules, fetchFromGitLab, lib, libsForQt5 }:
 
-libsForQt5.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "kgeotag";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     repo = "kgeotag";
     owner = "graphics";
     rev = "v${version}";
-    hash = "sha256-G9SyGvoSOL6nsWnMuSIUSFHFUwZUzExBJBkKN46o8GI=";
+    hash = "sha256-lUfU6SHRCglC81BTcVFFOp/psWXsUFOTEPUrZutrJaY=";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [ cmake extra-cmake-modules libsForQt5.wrapQtAppsHook ];
 
   buildInputs = [ libsForQt5.libkexiv2 libsForQt5.marble ];
 
   meta = with lib; {
     homepage = "https://kgeotag.kde.org/";
-    description = "A stand-alone photo geotagging program";
+    description = "Stand-alone photo geotagging program";
     changelog = "https://invent.kde.org/graphics/kgeotag/-/blob/master/CHANGELOG.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cimm ];

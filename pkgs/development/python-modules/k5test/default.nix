@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, substituteAll
-, findutils
-, krb5
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  findutils,
+  krb5-c,
+  pythonOlder,
+  setuptools,
+  substituteAll,
 }:
 
 buildPythonPackage rec {
@@ -24,29 +24,25 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit findutils krb5;
+      inherit findutils;
+      krb5 = krb5-c;
       # krb5-config is in dev output
-      krb5Dev = krb5.dev;
+      krb5Dev = krb5-c.dev;
     })
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # No tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "k5test"
-  ];
+  pythonImportsCheck = [ "k5test" ];
 
   meta = with lib; {
     description = "Library for setting up self-contained Kerberos 5 environment";
     homepage = "https://github.com/pythongssapi/k5test";
     changelog = "https://github.com/pythongssapi/k5test/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    broken = stdenv.isDarwin;
+    maintainers = [ ];
   };
 }

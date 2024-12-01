@@ -10,10 +10,12 @@
   fastapi,
   fetchFromGitHub,
   grpcio,
+  httpx,
   hypothesis,
   importlib-resources,
   kubernetes,
   mmh3,
+  nixosTests,
   numpy,
   onnxruntime,
   openssl,
@@ -26,19 +28,19 @@
   pkg-config,
   posthog,
   protobuf,
+  psutil,
   pulsar-client,
   pydantic,
   pypika,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
   rustc,
   rustPlatform,
-  setuptools,
   setuptools-scm,
+  setuptools,
   tenacity,
   tokenizers,
   tqdm,
@@ -50,7 +52,7 @@
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "0.5.0";
+  version = "0.5.18";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -59,39 +61,45 @@ buildPythonPackage rec {
     owner = "chroma-core";
     repo = "chroma";
     rev = "refs/tags/${version}";
-    hash = "sha256-gM+fexjwifF3evR8jZvMbIDz655RFKPUizrsB2q5tbw=";
+    hash = "sha256-kJzBwUaA46HenwTn24AMy0xfgVmBtubJUujDS5/kYXs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-zyiFv/gswGupm7Y8BhviklqJzM914v0QyUsRwbGKZ48=";
+    hash = "sha256-iW68C3Vp9C1gR7hF2x4VhBIKWX9wlnT8jPj+zMRUC7w=";
   };
 
-  pythonRelaxDeps = [ "orjson" ];
+  pythonRelaxDeps = [
+    "chroma-hnswlib"
+    "orjson"
+  ];
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeBuildInputs = [
     cargo
     pkg-config
     protobuf
-    pythonRelaxDepsHook
     rustc
     rustPlatform.cargoSetupHook
-    setuptools
-    setuptools-scm
   ];
 
   buildInputs = [
     openssl
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bcrypt
     build
     chroma-hnswlib
     fastapi
     grpcio
+    httpx
     importlib-resources
     kubernetes
     mmh3
@@ -119,6 +127,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
+    psutil
     pytest-asyncio
     pytestCheckHook
   ];
@@ -136,24 +145,38 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
+  disabledTests = [
+    # Tests are laky / timing sensitive
+    "test_fastapi_server_token_authn_allows_when_it_should_allow"
+    "test_fastapi_server_token_authn_rejects_when_it_should_reject"
+    # Issue with event loop
+    "test_http_client_bw_compatibility"
+  ];
+
   disabledTestPaths = [
     # Tests require network access
-    "chromadb/test/property/test_cross_version_persist.py"
     "chromadb/test/auth/test_simple_rbac_authz.py"
+    "chromadb/test/db/test_system.py"
     "chromadb/test/ef/test_default_ef.py"
-    "chromadb/test/test_api.py"
     "chromadb/test/property/"
+    "chromadb/test/property/test_cross_version_persist.py"
     "chromadb/test/stress/"
+    "chromadb/test/test_api.py"
   ];
 
   __darwinAllowLocalNetworking = true;
 
+  passthru.tests = {
+    inherit (nixosTests) chromadb;
+  };
+
   meta = with lib; {
-    description = "The AI-native open-source embedding database";
-    mainProgram = "chroma";
+    description = "AI-native open-source embedding database";
     homepage = "https://github.com/chroma-core/chroma";
     changelog = "https://github.com/chroma-core/chroma/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "chroma";
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 }

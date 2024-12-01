@@ -1,15 +1,15 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, deprecated
-, googleapis-common-protos
-, grpcio
-, hatchling
-, opentelemetry-api
-, opentelemetry-exporter-otlp-proto-common
-, opentelemetry-proto
-, opentelemetry-test-utils
-, pytestCheckHook
+{
+  buildPythonPackage,
+  pythonOlder,
+  deprecated,
+  googleapis-common-protos,
+  grpcio,
+  hatchling,
+  opentelemetry-api,
+  opentelemetry-exporter-otlp-proto-common,
+  opentelemetry-proto,
+  opentelemetry-test-utils,
+  pytestCheckHook,
 }:
 
 buildPythonPackage {
@@ -21,9 +21,7 @@ buildPythonPackage {
 
   sourceRoot = "${opentelemetry-api.src.name}/exporter/opentelemetry-exporter-otlp-proto-grpc";
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     deprecated
@@ -39,9 +37,7 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    "tests/performance/benchmarks/"
-  ];
+  pytestFlagsArray = [ "tests" ];
 
   pythonImportsCheck = [ "opentelemetry.exporter.otlp.proto.grpc" ];
 

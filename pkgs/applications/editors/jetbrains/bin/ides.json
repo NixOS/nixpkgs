@@ -1,4 +1,15 @@
 {
+  "aqua": {
+    "product": "Aqua",
+    "wmClass": "jetbrains-aqua",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Test automation IDE from JetBrains",
+      "maintainers": [ "remcoschrijver" ],
+      "longDescription": "Aqua is a test automation IDE from jetbrains that can deal with many languages and frameworks to improve your test workflows. Has support for popular testing frameworks like Selenium, Cypress, and Playwright.",
+      "homepage": "https://www.jetbrains.com/aqua/"
+    }
+  },
   "clion": {
     "product": "CLion",
     "wmClass": "jetbrains-clion",

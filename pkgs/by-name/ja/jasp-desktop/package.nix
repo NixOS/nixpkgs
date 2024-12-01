@@ -1,36 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, callPackage
-, buildEnv
-, linkFarm
-, substituteAll
-, R
-, rPackages
-, cmake
-, ninja
-, pkg-config
-, boost
-, libarchive
-, readstat
-, qt6
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  buildEnv,
+  linkFarm,
+  replaceVars,
+  R,
+  rPackages,
+  cmake,
+  ninja,
+  pkg-config,
+  boost,
+  libarchive,
+  readstat,
+  qt6,
 }:
 
 let
-  version = "0.18.3";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "jasp-stats";
     repo = "jasp-desktop";
     rev = "v${version}";
-    hash = "sha256-eKBxCIamNhUig+0vUEqXYbPjiaOsZk6QnOw8cnpjKFY=";
+    hash = "sha256-SACGyNVxa6rFjloRQrEVtUgujEEF7WYL8Qhw6ZqLwdQ=";
     fetchSubmodules = true;
   };
 
-  inherit (callPackage ./modules.nix {
+  moduleSet = import ./modules.nix {
+    inherit fetchFromGitHub rPackages;
     jasp-src = src;
     jasp-version = version;
-  }) engine modules;
+  };
+
+  inherit (moduleSet) engine modules;
 
   # Merges ${R}/lib/R with all used R packages (even propagated ones)
   customREnv = buildEnv {
@@ -42,8 +46,12 @@ let
     ] ++ lib.attrValues modules;
   };
 
-  modulesDir = linkFarm "jasp-${version}-modules"
-    (lib.mapAttrsToList (name: drv: { name = name; path = "${drv}/library"; }) modules);
+  modulesDir = linkFarm "jasp-${version}-modules" (
+    lib.mapAttrsToList (name: drv: {
+      name = name;
+      path = "${drv}/library";
+    }) modules
+  );
 in
 stdenv.mkDerivation {
   pname = "jasp-desktop";
@@ -51,9 +59,14 @@ stdenv.mkDerivation {
 
   patches = [
     # remove unused cmake deps, ensure boost is dynamically linked, patch readstat path
-    (substituteAll {
-      src = ./cmake.patch;
+    (replaceVars ./cmake.patch {
       inherit readstat;
+    })
+
+    (fetchpatch {
+      name = "fix-qt-6.8-crash.patch";
+      url = "https://github.com/jasp-stats/jasp-desktop/commit/d96a35d262312f72081ac3f96ae8c2ae7c796b0.patch";
+      hash = "sha256-KcsFy1ImPTHwDKN5Umfoa9CbtQn7B3FNu/Srr0dEJGA=";
     })
   ];
 
@@ -78,13 +91,12 @@ stdenv.mkDerivation {
     boost
     libarchive
     readstat
-  ] ++ (with qt6; [
-    qtbase
-    qtdeclarative
-    qtwebengine
-    qtsvg
-    qt5compat
-  ]);
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtwebengine
+    qt6.qtsvg
+    qt6.qt5compat
+  ];
 
   env.NIX_LDFLAGS = "-L${rPackages.RInside}/library/RInside/lib";
 
@@ -95,7 +107,7 @@ stdenv.mkDerivation {
     # Remove flatpak proxy script
     rm $out/bin/org.jaspstats.JASP
     substituteInPlace $out/share/applications/org.jaspstats.JASP.desktop \
-        --replace "Exec=org.jaspstats.JASP" "Exec=JASP"
+        --replace-fail "Exec=org.jaspstats.JASP" "Exec=JASP"
 
     # symlink modules from the store
     ln -s ${modulesDir} $out/Modules
@@ -108,7 +120,7 @@ stdenv.mkDerivation {
 
   meta = {
     changelog = "https://jasp-stats.org/release-notes";
-    description = "A complete statistical package for both Bayesian and Frequentist statistical methods";
+    description = "Complete statistical package for both Bayesian and Frequentist statistical methods";
     homepage = "https://github.com/jasp-stats/jasp-desktop";
     license = lib.licenses.agpl3Plus;
     mainProgram = "JASP";
@@ -118,4 +130,3 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
   };
 }
-

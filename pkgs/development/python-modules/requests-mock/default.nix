@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fixtures
-, purl
-, pytestCheckHook
-, requests
-, requests-futures
-, setuptools
-, setuptools-scm
-, testtools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fixtures,
+  purl,
+  pytestCheckHook,
+  requests,
+  requests-futures,
+  setuptools,
+  setuptools-scm,
+  testtools,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [
-    requests
-  ];
+  dependencies = [ requests ];
 
   nativeCheckInputs = [
     fixtures

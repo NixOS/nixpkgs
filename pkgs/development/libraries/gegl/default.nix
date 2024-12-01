@@ -31,6 +31,7 @@
 , openexr
 , OpenCL
 , suitesparse
+, withLuaJIT ? lib.meta.availableOn stdenv.hostPlatform luajit
 }:
 
 stdenv.mkDerivation rec {
@@ -71,13 +72,14 @@ stdenv.mkDerivation rec {
     libraw
     libwebp
     gexiv2
-    luajit
     openexr
     suitesparse
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     OpenCL
   ] ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
+  ] ++ lib.optionals withLuaJIT [
+    luajit
   ];
 
   # for gegl-4.0.pc
@@ -97,6 +99,8 @@ stdenv.mkDerivation rec {
     # Disabled due to multiple vulnerabilities, see
     # https://github.com/NixOS/nixpkgs/pull/73586
     "-Djasper=disabled"
+  ] ++ lib.optionals (!withLuaJIT) [
+    "-Dlua=disabled"
   ];
 
   postPatch = ''
@@ -110,7 +114,7 @@ stdenv.mkDerivation rec {
   '';
 
   # tests fail to connect to the com.apple.fonts daemon in sandboxed mode
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Graph-based image processing framework";

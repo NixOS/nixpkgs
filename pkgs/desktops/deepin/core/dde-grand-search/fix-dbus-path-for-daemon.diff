@@ -1,0 +1,9 @@
+diff --git a/src/grand-search-daemon/data/com.deepin.dde.daemon.GrandSearch.service b/src/grand-search-daemon/data/com.deepin.dde.daemon.GrandSearch.service
+index 14823cb..33dd51e 100644
+--- a/src/grand-search-daemon/data/com.deepin.dde.daemon.GrandSearch.service
++++ b/src/grand-search-daemon/data/com.deepin.dde.daemon.GrandSearch.service
+@@ -1,3 +1,3 @@
+ [D-BUS Service]
+ Name=com.deepin.dde.daemon.GrandSearch
+-Exec=/usr/bin/dbus-send --print-reply --session --dest=com.deepin.SessionManager /com/deepin/StartManager com.deepin.StartManager.Launch string:/usr/share/applications/dde-grand-search-daemon.desktop
++Exec=@out@/bin/dde-grand-search-daemon

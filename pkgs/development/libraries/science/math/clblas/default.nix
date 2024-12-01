@@ -42,20 +42,19 @@ stdenv.mkDerivation rec {
      "-DBUILD_TEST=OFF"
   ];
 
-  nativeBuildInputs = [ cmake gfortran ];
+  nativeBuildInputs = [ cmake gfortran python3 ];
   buildInputs = [
     blas
-    python3
     boost
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     ocl-icd
     opencl-headers
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Accelerate
     CoreGraphics
     CoreVideo
   ];
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin [
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     OpenCL
   ];
 
@@ -63,7 +62,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/clMathLibraries/clBLAS";
-    description = "A software library containing BLAS functions written in OpenCL";
+    description = "Software library containing BLAS functions written in OpenCL";
     longDescription = ''
       This package contains a library of BLAS functions on top of OpenCL.
     '';

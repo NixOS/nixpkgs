@@ -19,7 +19,9 @@ import ./make-test-python.nix ({ ... }:
     services.snapper.filters = "/nix";
   };
 
-  testScript = ''
+  testScript = { nodes, ... }: let
+    inherit (nodes.machine.services.snapper) snapshotRootOnBoot;
+  in ''
     machine.succeed("btrfs subvolume create /home/.snapshots")
     machine.succeed("snapper -c home list")
     machine.succeed("snapper -c home create --description empty")
@@ -31,5 +33,6 @@ import ./make-test-python.nix ({ ... }:
     machine.succeed("snapper -c home delete 2")
     machine.succeed("systemctl --wait start snapper-timeline.service")
     machine.succeed("systemctl --wait start snapper-cleanup.service")
+    machine.${if snapshotRootOnBoot then "succeed" else "fail"}("systemctl cat snapper-boot.service")
   '';
 })

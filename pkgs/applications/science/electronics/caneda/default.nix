@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "caneda";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "Caneda";
     repo = "Caneda";
     rev = version;
-    sha256 = "0hx8qid50j9xvg2kpbpqmbdyakgyjn6m373m1cvhp70v2gp1v8l2";
+    sha256 = "sha256-oE0cdOwufc7CHEFr3YU8stjg1hBGs4bemhXpNTCTpDQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -19,7 +19,7 @@ mkDerivation rec {
     mainProgram = "caneda";
     homepage = "http://caneda.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

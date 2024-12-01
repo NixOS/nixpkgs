@@ -1,11 +1,5 @@
 { lib
-, pkgs
-, symlinkJoin
-, fetchzip
-, melpaBuild
 , stdenv
-, fetchFromGitHub
-, writeText
 , melpaStablePackages
 , runCommand
 , tree-sitter-grammars

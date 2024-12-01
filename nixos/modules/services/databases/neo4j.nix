@@ -1,34 +1,31 @@
 { config, options, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.neo4j;
   opt = options.services.neo4j;
   certDirOpt = options.services.neo4j.directories.certificates;
-  isDefaultPathOption = opt: isOption opt && opt.type == types.path && opt.highestPrio >= 1500;
+  isDefaultPathOption = opt: lib.isOption opt && opt.type == lib.types.path && opt.highestPrio >= 1500;
 
-  sslPolicies = mapAttrsToList (
+  sslPolicies = lib.mapAttrsToList (
     name: conf: ''
-      dbms.ssl.policy.${name}.allow_key_generation=${boolToString conf.allowKeyGeneration}
+      dbms.ssl.policy.${name}.allow_key_generation=${lib.boolToString conf.allowKeyGeneration}
       dbms.ssl.policy.${name}.base_directory=${conf.baseDirectory}
-      ${optionalString (conf.ciphers != null) ''
-        dbms.ssl.policy.${name}.ciphers=${concatStringsSep "," conf.ciphers}
+      ${lib.optionalString (conf.ciphers != null) ''
+        dbms.ssl.policy.${name}.ciphers=${lib.concatStringsSep "," conf.ciphers}
       ''}
       dbms.ssl.policy.${name}.client_auth=${conf.clientAuth}
-      ${if length (splitString "/" conf.privateKey) > 1 then
+      ${if lib.length (lib.splitString "/" conf.privateKey) > 1 then
         "dbms.ssl.policy.${name}.private_key=${conf.privateKey}"
       else
         "dbms.ssl.policy.${name}.private_key=${conf.baseDirectory}/${conf.privateKey}"
       }
-      ${if length (splitString "/" conf.privateKey) > 1 then
+      ${if lib.length (lib.splitString "/" conf.privateKey) > 1 then
         "dbms.ssl.policy.${name}.public_certificate=${conf.publicCertificate}"
       else
         "dbms.ssl.policy.${name}.public_certificate=${conf.baseDirectory}/${conf.publicCertificate}"
       }
       dbms.ssl.policy.${name}.revoked_dir=${conf.revokedDir}
-      dbms.ssl.policy.${name}.tls_versions=${concatStringsSep "," conf.tlsVersions}
-      dbms.ssl.policy.${name}.trust_all=${boolToString conf.trustAll}
+      dbms.ssl.policy.${name}.tls_versions=${lib.concatStringsSep "," conf.tlsVersions}
+      dbms.ssl.policy.${name}.trust_all=${lib.boolToString conf.trustAll}
       dbms.ssl.policy.${name}.trusted_dir=${conf.trustedDir}
     ''
   ) cfg.ssl.policies;
@@ -36,8 +33,8 @@ let
   serverConfig = pkgs.writeText "neo4j.conf" ''
     # General
     server.default_listen_address=${cfg.defaultListenAddress}
-    server.databases.default_to_read_only=${boolToString cfg.readOnly}
-    ${optionalString (cfg.workerCount > 0) ''
+    server.databases.default_to_read_only=${lib.boolToString cfg.readOnly}
+    ${lib.optionalString (cfg.workerCount > 0) ''
       dbms.threads.worker_count=${toString cfg.workerCount}
     ''}
 
@@ -45,7 +42,7 @@ let
     # dbms.directories.certificates=${cfg.directories.certificates}
     server.directories.plugins=${cfg.directories.plugins}
     server.directories.lib=${cfg.package}/share/neo4j/lib
-    ${optionalString (cfg.constrainLoadCsv) ''
+    ${lib.optionalString (cfg.constrainLoadCsv) ''
       server.directories.import=${cfg.directories.imports}
    ''}
 
@@ -55,25 +52,23 @@ let
     server.directories.run=${cfg.directories.home}/run
 
     # HTTP Connector
-    ${optionalString (cfg.http.enable) ''
-      server.http.enabled=${boolToString cfg.http.enable}
-      server.http.listen_address=${cfg.http.listenAddress}
-      server.http.advertised_address=${cfg.http.listenAddress}
-    ''}
+    server.http.enabled=${lib.boolToString cfg.http.enable}
+    server.http.listen_address=${cfg.http.listenAddress}
+    server.http.advertised_address=${cfg.http.listenAddress}
 
     # HTTPS Connector
-    server.https.enabled=${boolToString cfg.https.enable}
+    server.https.enabled=${lib.boolToString cfg.https.enable}
     server.https.listen_address=${cfg.https.listenAddress}
     server.https.advertised_address=${cfg.https.listenAddress}
 
     # BOLT Connector
-    server.bolt.enabled=${boolToString cfg.bolt.enable}
+    server.bolt.enabled=${lib.boolToString cfg.bolt.enable}
     server.bolt.listen_address=${cfg.bolt.listenAddress}
     server.bolt.advertised_address=${cfg.bolt.listenAddress}
     server.bolt.tls_level=${cfg.bolt.tlsLevel}
 
     # SSL Policies
-    ${concatStringsSep "\n" sslPolicies}
+    ${lib.concatStringsSep "\n" sslPolicies}
 
     # Default retention policy from neo4j.conf
     db.tx_log.rotation.retention_policy=1 days
@@ -101,33 +96,33 @@ let
 in {
 
   imports = [
-    (mkRenamedOptionModule [ "services" "neo4j" "host" ] [ "services" "neo4j" "defaultListenAddress" ])
-    (mkRenamedOptionModule [ "services" "neo4j" "listenAddress" ] [ "services" "neo4j" "defaultListenAddress" ])
-    (mkRenamedOptionModule [ "services" "neo4j" "enableBolt" ] [ "services" "neo4j" "bolt" "enable" ])
-    (mkRenamedOptionModule [ "services" "neo4j" "enableHttps" ] [ "services" "neo4j" "https" "enable" ])
-    (mkRenamedOptionModule [ "services" "neo4j" "certDir" ] [ "services" "neo4j" "directories" "certificates" ])
-    (mkRenamedOptionModule [ "services" "neo4j" "dataDir" ] [ "services" "neo4j" "directories" "home" ])
-    (mkRemovedOptionModule [ "services" "neo4j" "port" ] "Use services.neo4j.http.listenAddress instead.")
-    (mkRemovedOptionModule [ "services" "neo4j" "boltPort" ] "Use services.neo4j.bolt.listenAddress instead.")
-    (mkRemovedOptionModule [ "services" "neo4j" "httpsPort" ] "Use services.neo4j.https.listenAddress instead.")
-    (mkRemovedOptionModule [ "services" "neo4j" "shell" "enabled" ] "shell.enabled was removed upstream")
-    (mkRemovedOptionModule [ "services" "neo4j" "udc" "enabled" ] "udc.enabled was removed upstream")
+    (lib.mkRenamedOptionModule [ "services" "neo4j" "host" ] [ "services" "neo4j" "defaultListenAddress" ])
+    (lib.mkRenamedOptionModule [ "services" "neo4j" "listenAddress" ] [ "services" "neo4j" "defaultListenAddress" ])
+    (lib.mkRenamedOptionModule [ "services" "neo4j" "enableBolt" ] [ "services" "neo4j" "bolt" "enable" ])
+    (lib.mkRenamedOptionModule [ "services" "neo4j" "enableHttps" ] [ "services" "neo4j" "https" "enable" ])
+    (lib.mkRenamedOptionModule [ "services" "neo4j" "certDir" ] [ "services" "neo4j" "directories" "certificates" ])
+    (lib.mkRenamedOptionModule [ "services" "neo4j" "dataDir" ] [ "services" "neo4j" "directories" "home" ])
+    (lib.mkRemovedOptionModule [ "services" "neo4j" "port" ] "Use services.neo4j.http.listenAddress instead.")
+    (lib.mkRemovedOptionModule [ "services" "neo4j" "boltPort" ] "Use services.neo4j.bolt.listenAddress instead.")
+    (lib.mkRemovedOptionModule [ "services" "neo4j" "httpsPort" ] "Use services.neo4j.https.listenAddress instead.")
+    (lib.mkRemovedOptionModule [ "services" "neo4j" "shell" "enabled" ] "shell.enabled was removed upstream")
+    (lib.mkRemovedOptionModule [ "services" "neo4j" "udc" "enabled" ] "udc.enabled was removed upstream")
   ];
 
   ###### interface
 
   options.services.neo4j = {
 
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable Neo4j Community Edition.
       '';
     };
 
-    constrainLoadCsv = mkOption {
-      type = types.bool;
+    constrainLoadCsv = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Sets the root directory for file URLs used with the Cypher
@@ -141,8 +136,8 @@ in {
       '';
     };
 
-    defaultListenAddress = mkOption {
-      type = types.str;
+    defaultListenAddress = lib.mkOption {
+      type = lib.types.str;
       default = "127.0.0.1";
       description = ''
         Default network interface to listen for incoming connections. To
@@ -155,8 +150,8 @@ in {
       '';
     };
 
-    extraServerConfig = mkOption {
-      type = types.lines;
+    extraServerConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = ''
         Extra configuration for Neo4j Community server. Refer to the
@@ -165,18 +160,18 @@ in {
       '';
     };
 
-    package = mkPackageOption pkgs "neo4j" { };
+    package = lib.mkPackageOption pkgs "neo4j" { };
 
-    readOnly = mkOption {
-      type = types.bool;
+    readOnly = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Only allow read operations from this Neo4j instance.
       '';
     };
 
-    workerCount = mkOption {
-      type = types.ints.between 0 44738;
+    workerCount = lib.mkOption {
+      type = lib.types.ints.between 0 44738;
       default = 0;
       description = ''
         Number of Neo4j worker threads, where the default of
@@ -186,8 +181,8 @@ in {
     };
 
     bolt = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Enable the BOLT connector for Neo4j. Setting this option to
@@ -196,8 +191,8 @@ in {
         '';
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = ":7687";
         description = ''
           Neo4j listen address for BOLT traffic. The listen address is
@@ -205,8 +200,8 @@ in {
         '';
       };
 
-      sslPolicy = mkOption {
-        type = types.str;
+      sslPolicy = lib.mkOption {
+        type = lib.types.str;
         default = "legacy";
         description = ''
           Neo4j SSL policy for BOLT traffic.
@@ -223,8 +218,8 @@ in {
         '';
       };
 
-      tlsLevel = mkOption {
-        type = types.enum [ "REQUIRED" "OPTIONAL" "DISABLED" ];
+      tlsLevel = lib.mkOption {
+        type = lib.types.enum [ "REQUIRED" "OPTIONAL" "DISABLED" ];
         default = "OPTIONAL";
         description = ''
           SSL/TSL requirement level for BOLT traffic.
@@ -233,10 +228,10 @@ in {
     };
 
     directories = {
-      certificates = mkOption {
-        type = types.path;
+      certificates = lib.mkOption {
+        type = lib.types.path;
         default = "${cfg.directories.home}/certificates";
-        defaultText = literalExpression ''"''${config.${opt.directories.home}}/certificates"'';
+        defaultText = lib.literalExpression ''"''${config.${opt.directories.home}}/certificates"'';
         description = ''
           Directory for storing certificates to be used by Neo4j for
           TLS connections.
@@ -256,10 +251,10 @@ in {
         '';
       };
 
-      data = mkOption {
-        type = types.path;
+      data = lib.mkOption {
+        type = lib.types.path;
         default = "${cfg.directories.home}/data";
-        defaultText = literalExpression ''"''${config.${opt.directories.home}}/data"'';
+        defaultText = lib.literalExpression ''"''${config.${opt.directories.home}}/data"'';
         description = ''
           Path of the data directory. You must not configure more than one
           Neo4j installation to use the same data directory.
@@ -270,8 +265,8 @@ in {
         '';
       };
 
-      home = mkOption {
-        type = types.path;
+      home = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/neo4j";
         description = ''
           Path of the Neo4j home directory. Other default directories are
@@ -281,10 +276,10 @@ in {
         '';
       };
 
-      imports = mkOption {
-        type = types.path;
+      imports = lib.mkOption {
+        type = lib.types.path;
         default = "${cfg.directories.home}/import";
-        defaultText = literalExpression ''"''${config.${opt.directories.home}}/import"'';
+        defaultText = lib.literalExpression ''"''${config.${opt.directories.home}}/import"'';
         description = ''
           The root directory for file URLs used with the Cypher
           `LOAD CSV` clause. Only meaningful when
@@ -297,10 +292,10 @@ in {
         '';
       };
 
-      plugins = mkOption {
-        type = types.path;
+      plugins = lib.mkOption {
+        type = lib.types.path;
         default = "${cfg.directories.home}/plugins";
-        defaultText = literalExpression ''"''${config.${opt.directories.home}}/plugins"'';
+        defaultText = lib.literalExpression ''"''${config.${opt.directories.home}}/plugins"'';
         description = ''
           Path of the database plugin directory. Compiled Java JAR files that
           contain database procedures will be loaded if they are placed in
@@ -314,8 +309,8 @@ in {
     };
 
     http = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Enable the HTTP connector for Neo4j. Setting this option to
@@ -324,8 +319,8 @@ in {
         '';
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = ":7474";
         description = ''
           Neo4j listen address for HTTP traffic. The listen address is
@@ -335,8 +330,8 @@ in {
     };
 
     https = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Enable the HTTPS connector for Neo4j. Setting this option to
@@ -345,8 +340,8 @@ in {
         '';
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = ":7473";
         description = ''
           Neo4j listen address for HTTPS traffic. The listen address is
@@ -354,8 +349,8 @@ in {
         '';
       };
 
-      sslPolicy = mkOption {
-        type = types.str;
+      sslPolicy = lib.mkOption {
+        type = lib.types.str;
         default = "legacy";
         description = ''
           Neo4j SSL policy for HTTPS traffic.
@@ -370,8 +365,8 @@ in {
     };
 
     shell = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable a remote shell server which Neo4j Shell clients can log in to.
@@ -380,12 +375,12 @@ in {
       };
     };
 
-    ssl.policies = mkOption {
-      type = with types; attrsOf (submodule ({ name, config, options, ... }: {
+    ssl.policies = lib.mkOption {
+      type = with lib.types; attrsOf (submodule ({ name, config, options, ... }: {
         options = {
 
-          allowKeyGeneration = mkOption {
-            type = types.bool;
+          allowKeyGeneration = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             description = ''
               Allows the generation of a private key and associated self-signed
@@ -402,10 +397,10 @@ in {
             '';
           };
 
-          baseDirectory = mkOption {
-            type = types.path;
+          baseDirectory = lib.mkOption {
+            type = lib.types.path;
             default = "${cfg.directories.certificates}/${name}";
-            defaultText = literalExpression ''"''${config.${opt.directories.certificates}}/''${name}"'';
+            defaultText = lib.literalExpression ''"''${config.${opt.directories.certificates}}/''${name}"'';
             description = ''
               The mandatory base directory for cryptographic objects of this
               policy. This path is only automatically generated when this
@@ -420,8 +415,8 @@ in {
             '';
           };
 
-          ciphers = mkOption {
-            type = types.nullOr (types.listOf types.str);
+          ciphers = lib.mkOption {
+            type = lib.types.nullOr (lib.types.listOf lib.types.str);
             default = null;
             description = ''
               Restrict the allowed ciphers of this policy to those defined
@@ -429,16 +424,16 @@ in {
             '';
           };
 
-          clientAuth = mkOption {
-            type = types.enum [ "NONE" "OPTIONAL" "REQUIRE" ];
+          clientAuth = lib.mkOption {
+            type = lib.types.enum [ "NONE" "OPTIONAL" "REQUIRE" ];
             default = "REQUIRE";
             description = ''
               The client authentication stance for this policy.
             '';
           };
 
-          privateKey = mkOption {
-            type = types.str;
+          privateKey = lib.mkOption {
+            type = lib.types.str;
             default = "private.key";
             description = ''
               The name of private PKCS #8 key file for this policy to be found
@@ -447,8 +442,8 @@ in {
             '';
           };
 
-          publicCertificate = mkOption {
-            type = types.str;
+          publicCertificate = lib.mkOption {
+            type = lib.types.str;
             default = "public.crt";
             description = ''
               The name of public X.509 certificate (chain) file in PEM format
@@ -462,10 +457,10 @@ in {
             '';
           };
 
-          revokedDir = mkOption {
-            type = types.path;
+          revokedDir = lib.mkOption {
+            type = lib.types.path;
             default = "${config.baseDirectory}/revoked";
-            defaultText = literalExpression ''"''${config.${options.baseDirectory}}/revoked"'';
+            defaultText = lib.literalExpression ''"''${config.${options.baseDirectory}}/revoked"'';
             description = ''
               Path to directory of CRLs (Certificate Revocation Lists) in
               PEM format. Must be an absolute path. The existence of this
@@ -478,8 +473,8 @@ in {
             '';
           };
 
-          tlsVersions = mkOption {
-            type = types.listOf types.str;
+          tlsVersions = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
             default = [ "TLSv1.2" ];
             description = ''
               Restrict the TLS protocol versions of this policy to those
@@ -487,8 +482,8 @@ in {
             '';
           };
 
-          trustAll = mkOption {
-            type = types.bool;
+          trustAll = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             description = ''
               Makes this policy trust all remote parties. Enabling this is not
@@ -498,10 +493,10 @@ in {
             '';
           };
 
-          trustedDir = mkOption {
-            type = types.path;
+          trustedDir = lib.mkOption {
+            type = lib.types.path;
             default = "${config.baseDirectory}/trusted";
-            defaultText = literalExpression ''"''${config.${options.baseDirectory}}/trusted"'';
+            defaultText = lib.literalExpression ''"''${config.${options.baseDirectory}}/trusted"'';
             description = ''
               Path to directory of X.509 certificates in PEM format for
               trusted parties. Must be an absolute path. The existence of this
@@ -518,8 +513,8 @@ in {
             '';
           };
 
-          directoriesToCreate = mkOption {
-            type = types.listOf types.path;
+          directoriesToCreate = lib.mkOption {
+            type = lib.types.listOf lib.types.path;
             internal = true;
             readOnly = true;
             description = ''
@@ -532,9 +527,9 @@ in {
 
         };
 
-        config.directoriesToCreate = optionals
+        config.directoriesToCreate = lib.optionals
           (certDirOpt.highestPrio >= 1500 && options.baseDirectory.highestPrio >= 1500)
-          (map (opt: opt.value) (filter isDefaultPathOption (attrValues options)));
+          (map (opt: opt.value) (lib.filter isDefaultPathOption (lib.attrValues options)));
 
       }));
       default = {};
@@ -555,22 +550,22 @@ in {
   config =
     let
       # Assertion helpers
-      policyNameList = attrNames cfg.ssl.policies;
+      policyNameList = lib.attrNames cfg.ssl.policies;
       validPolicyNameList = [ "legacy" ] ++ policyNameList;
-      validPolicyNameString = concatStringsSep ", " validPolicyNameList;
+      validPolicyNameString = lib.concatStringsSep ", " validPolicyNameList;
 
       # Capture various directories left at their default so they can be created.
-      defaultDirectoriesToCreate = map (opt: opt.value) (filter isDefaultPathOption (attrValues options.services.neo4j.directories));
-      policyDirectoriesToCreate = concatMap (pol: pol.directoriesToCreate) (attrValues cfg.ssl.policies);
+      defaultDirectoriesToCreate = map (opt: opt.value) (lib.filter isDefaultPathOption (lib.attrValues options.services.neo4j.directories));
+      policyDirectoriesToCreate = lib.concatMap (pol: pol.directoriesToCreate) (lib.attrValues cfg.ssl.policies);
     in
 
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       assertions = [
-        { assertion = !elem "legacy" policyNameList;
+        { assertion = !lib.elem "legacy" policyNameList;
           message = "The policy 'legacy' is special to Neo4j, and its name is reserved."; }
-        { assertion = elem cfg.bolt.sslPolicy validPolicyNameList;
+        { assertion = lib.elem cfg.bolt.sslPolicy validPolicyNameList;
           message = "Invalid policy assigned: `services.neo4j.bolt.sslPolicy = \"${cfg.bolt.sslPolicy}\"`, defined policies are: ${validPolicyNameString}"; }
-        { assertion = elem cfg.https.sslPolicy validPolicyNameList;
+        { assertion = lib.elem cfg.https.sslPolicy validPolicyNameList;
           message = "Invalid policy assigned: `services.neo4j.https.sslPolicy = \"${cfg.https.sslPolicy}\"`, defined policies are: ${validPolicyNameString}"; }
       ];
 
@@ -595,7 +590,7 @@ in {
           mkdir -m 0700 -p ${cfg.directories.home}/{conf,logs}
 
           #   Create other sub-directories and policy directories that have been left at their default.
-          ${concatMapStringsSep "\n" (
+          ${lib.concatMapStringsSep "\n" (
             dir: ''
               mkdir -m 0700 -p ${dir}
           '') (defaultDirectoriesToCreate ++ policyDirectoriesToCreate)}
@@ -620,6 +615,6 @@ in {
     };
 
   meta = {
-    maintainers = with lib.maintainers; [ patternspandemic jonringer ];
+    maintainers = with lib.maintainers; [ patternspandemic ];
   };
 }

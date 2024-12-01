@@ -12,6 +12,12 @@ import ./make-test-python.nix ({ lib, ... }: {
       isNormalUser = true;
       homeMode = "750";
     };
+    users.users.carol = {
+      initialPassword = "pass3";
+      isNormalUser = true;
+      createHome = true;
+      home = "/users/carol";
+    };
   };
 
   testScript = ''
@@ -23,5 +29,7 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.send_chars("pass1\n")
     machine.succeed('[ "$(stat -c %a /home/alice)" == "700" ]')
     machine.succeed('[ "$(stat -c %a /home/bob)" == "750" ]')
+    machine.succeed('[ "$(stat -c %a /users)" == "755" ]')
+    machine.succeed('[ "$(stat -c %a /users/carol)" == "700" ]')
   '';
 })

@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake python3 ]
-    ++ lib.optionals stdenv.isDarwin [ cctools ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ autoSignDarwinBinariesHook ];
 
   postInstall = ''
     moveToOutput "lib/*.a" $static
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A collection of tools, libraries and tests for shader compilation";
+    description = "Collection of tools, libraries and tests for shader compilation";
     platforms = platforms.all;
     license = [ licenses.asl20 ];
   };

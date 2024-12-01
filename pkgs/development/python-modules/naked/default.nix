@@ -1,13 +1,15 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, requests
-, pyyaml
-, setuptools
-, wheel
-, nodejs
-, ruby
-, pytestCheckHook
+{
+  buildPythonPackage,
+  python,
+  fetchFromGitHub,
+  lib,
+  requests,
+  pyyaml,
+  setuptools,
+  wheel,
+  nodejs,
+  ruby,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,20 +26,29 @@ buildPythonPackage rec {
 
   postPatch = ''
     # fix hardcoded absolute paths
-    substituteInPlace **/*.* \
-      --replace /Users/ces/Desktop/code/naked /build/source
+    substituteInPlace tests/test_SYSTEM*.py \
+      --replace-fail /Users/ces/Desktop/code/naked/tests/ "$PWD"/tests/
+    substituteInPlace lib/Naked/toolshed/c/*.c \
+      --replace-fail /Users/ces/Desktop/code/naked/lib/ $out/${python.sitePackages}/
   '';
 
-  nativeBuildInputs = [ wheel setuptools ];
+  nativeBuildInputs = [
+    wheel
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests
     pyyaml
   ];
 
-  nativeCheckInputs = [ pytestCheckHook nodejs ruby ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    nodejs
+    ruby
+  ];
 
-  preCheck =''
+  preCheck = ''
     cd tests
 
     PATH=$PATH:$out/bin
@@ -94,7 +105,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "Naked" ];
 
   meta = with lib; {
-    description = "A Python command line application framework";
+    description = "Python command line application framework";
     homepage = "https://github.com/chrissimpkins/naked";
     downloadPage = "https://github.com/chrissimpkins/naked/tags";
     license = licenses.mit;

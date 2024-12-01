@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, csv, lwt }:
+{ buildDunePackage, csv, lwt }:
 
 buildDunePackage {
   pname = "csv-lwt";

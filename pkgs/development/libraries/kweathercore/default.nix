@@ -29,7 +29,7 @@ mkDerivation rec {
 
   meta = with lib; {
     license = [ licenses.cc0 ];
-    maintainers = [ maintainers.samueldr ];
+    maintainers = [ ];
     description = ''
       Library to facilitate retrieval of weather information including forecasts and alerts
     '';

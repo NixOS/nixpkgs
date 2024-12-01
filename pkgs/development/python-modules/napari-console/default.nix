@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  imageio,
   ipykernel,
   ipython,
-  napari-plugin-engine,
   pythonOlder,
   qtconsole,
   qtpy,
@@ -41,7 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "napari_console" ];
 
   meta = with lib; {
-    description = "A plugin that adds a console to napari";
+    description = "Plugin that adds a console to napari";
     homepage = "https://github.com/napari/napari-console";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SomeoneSerge ];

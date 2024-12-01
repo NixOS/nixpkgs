@@ -35,10 +35,7 @@ let
   cfg = config.services.netbird;
 in
 {
-  meta.maintainers = with maintainers; [
-    misuzu
-    thubrecht
-  ];
+  meta.maintainers = with maintainers; [ ];
   meta.doc = ./netbird.md;
 
   options.services.netbird = {

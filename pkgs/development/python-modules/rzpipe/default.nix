@@ -1,27 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "rzpipe";
-  version = "0.6.0";
-  format = "setuptools";
+  version = "0.6.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-py4oiNp+WUcOGHn2AdHyIpgV8BsI8A1gtJi2joi1Wxc=";
+    hash = "sha256-KKqPFMGgsmiYZ0tXTIhhvhLDfm/iV8JcYeVc4akezYc=";
   };
+
+  build-system = [ setuptools ];
 
   # No native rz_core library
   doCheck = false;
 
-  pythonImportsCheck = [
-    "rzpipe"
-  ];
+  pythonImportsCheck = [ "rzpipe" ];
 
   meta = with lib; {
     description = "Python interface for rizin";

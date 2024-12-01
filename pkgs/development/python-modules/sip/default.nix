@@ -1,39 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, packaging
-, ply
-, toml
-, tomli
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  packaging,
+  tomli,
 
-# tests
-, poppler-qt5
-, qgis
-, qgis-ltr
+  # tests
+  poppler-qt5,
+  qgis,
+  qgis-ltr,
 }:
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.8.3";
+  version = "6.8.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iIVHsBi7JMNq3tUZ6T0+UT1MaqC6VbfMGv+9Rc8Qdiw=";
+    hash = "sha256-f8lZ5I5uxdWvi9Am9p9eJNCLPLirs0IXb1q4AwzAfXo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     setuptools
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   # There aren't tests
   doCheck = false;
@@ -47,8 +46,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
-    homepage    = "https://riverbankcomputing.com/";
-    license     = licenses.gpl3Only;
+    homepage = "https://riverbankcomputing.com/";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ nrdxp ];
   };
 }

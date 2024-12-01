@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,6 @@ buildPythonPackage rec {
     description = "Pattern matching and various utilities for file systems paths";
     homepage = "https://github.com/gorakhargosh/pathtools";
     license = licenses.mit;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
-
 }

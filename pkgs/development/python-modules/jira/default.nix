@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, defusedxml
-, flaky
-, ipython
-, keyring
-, packaging
-, pillow
-, pyjwt
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-futures
-, requests-mock
-, requests-oauthlib
-, requests-toolbelt
-, setuptools
-, setuptools-scm
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  defusedxml,
+  flaky,
+  ipython,
+  keyring,
+  packaging,
+  pillow,
+  pyjwt,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-futures,
+  requests-mock,
+  requests-oauthlib,
+  requests-toolbelt,
+  setuptools,
+  setuptools-scm,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -49,7 +50,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [
       ipython
       keyring
@@ -60,9 +61,7 @@ buildPythonPackage rec {
       # requests-jwt
       # requests-keyberos
     ];
-    async = [
-      requests-futures
-    ];
+    async = [ requests-futures ];
   };
 
   nativeCheckInputs = [
@@ -76,9 +75,7 @@ buildPythonPackage rec {
       --replace "--cov-report=xml --cov jira" ""
   '';
 
-  pythonImportsCheck = [
-    "jira"
-  ];
+  pythonImportsCheck = [ "jira" ];
 
   # impure tests because of connectivity attempts to jira servers
   doCheck = false;
@@ -88,7 +85,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pycontribs/jira";
     changelog = "https://github.com/pycontribs/jira/releases/tag/${version}";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "jirashell";
   };
 }

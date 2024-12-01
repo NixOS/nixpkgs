@@ -431,6 +431,11 @@ div.appendix .informaltable td {
     padding: 0.5rem;
 }
 
+div.book .variablelist .term,
+div.appendix .variablelist .term {
+    font-weight: 500;
+}
+
 /*
   This relies on highlight.js applying certain classes on the prompts.
   For more details, see https://highlightjs.readthedocs.io/en/latest/css-classes-reference.html#stylable-scopes

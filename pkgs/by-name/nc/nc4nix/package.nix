@@ -1,28 +1,31 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 buildGoModule {
   pname = "nc4nix";
-  version = "0-unstable-2024-03-01";
+  version = "0-unstable-2024-09-28";
 
   src = fetchFromGitHub {
     owner = "helsinki-systems";
     repo = "nc4nix";
-    rev = "ba37674c0dddf93e0a011dace92ec7f0ec834765";
-    hash = "sha256-k12eeP2gojLCsJH1GGuiTmxz3ViPc0+oFBuptyh42Bw=";
+    rev = "9bdda09dacf31d7b33a1b53f17b9a8ad212f0271";
+    hash = "sha256-imu8R9nbpUuXZvqKvJsy1phAgvBz4tHac5fwkb5igYo=";
   };
 
-  vendorHash = "sha256-ZXl4kMDY9ADkHUcLsl3uNpyErMzbgS+J65+uUeIXpSE=";
+  vendorHash = "sha256-qntRsv3KvAbV3lENjAHKkQOqh3uTo3gacfwase489tQ=";
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
     description = "Packaging helper for Nextcloud apps";
     mainProgram = "nc4nix";
     homepage = "https://github.com/helsinki-systems/nc4nix";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
+    platforms = lib.platforms.linux;
   };
 }
-

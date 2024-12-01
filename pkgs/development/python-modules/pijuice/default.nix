@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, smbus-cffi
-, urwid
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  smbus-cffi,
+  urwid,
 }:
 
 buildPythonPackage rec {
@@ -35,7 +36,10 @@ buildPythonPackage rec {
     cd Software/Source
   '';
 
-  propagatedBuildInputs = [ smbus-cffi urwid ];
+  propagatedBuildInputs = [
+    smbus-cffi
+    urwid
+  ];
 
   # Remove the following files from the package:
   #

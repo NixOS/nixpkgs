@@ -1,24 +1,24 @@
-{ lib
-, buildPythonPackage
-, flet-client-flutter
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  flet-client-flutter,
 
-# build-system
-, poetry-core
+  # build-system
+  poetry-core,
 
-# propagates
-, fastapi
-, flet-core
-, flet-runtime
-, httpx
-, oauthlib
-, packaging
-, qrcode
-, cookiecutter
-, uvicorn
-, watchdog
-, websocket-client
-, websockets
+  # propagates
+  fastapi,
+  flet-core,
+  flet-runtime,
+  httpx,
+  oauthlib,
+  packaging,
+  qrcode,
+  cookiecutter,
+  uvicorn,
+  watchdog,
+  websocket-client,
+  websockets,
 
 }:
 
@@ -32,12 +32,16 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
+  ];
+
+  makeWrapperArgs = [
+    "--prefix" "PYTHONPATH" ":" "$PYTHONPATH"
   ];
 
   pythonRelaxDeps = [
     "cookiecutter"
     "packaging"
+    "qrcode"
     "watchdog"
     "websockets"
   ];
@@ -61,16 +65,17 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  pythonImportsCheck = [
-    "flet"
-  ];
+  pythonImportsCheck = [ "flet" ];
 
   meta = {
-    description = "A framework that enables you to easily build realtime web, mobile, and desktop apps in Python";
+    description = "Framework that enables you to easily build realtime web, mobile, and desktop apps in Python";
     homepage = "https://flet.dev/";
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ heyimnova lucasew ];
+    maintainers = with lib.maintainers; [
+      heyimnova
+      lucasew
+    ];
     mainProgram = "flet";
   };
 }

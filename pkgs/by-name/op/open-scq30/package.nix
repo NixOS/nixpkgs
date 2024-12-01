@@ -42,8 +42,9 @@ rustPlatform.buildRustPackage rec {
     gtk4
     libadwaita
     pango
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
+    darwin.apple_sdk.frameworks.CoreBluetooth
     darwin.apple_sdk.frameworks.CoreGraphics
     darwin.apple_sdk.frameworks.Foundation
   ];
@@ -64,7 +65,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "Cross platform application for controlling settings of Soundcore headphones.";
+    description = "Cross platform application for controlling settings of Soundcore headphones";
     homepage = "https://github.com/Oppzippy/OpenSCQ30";
     changelog = "https://github.com/Oppzippy/OpenSCQ30/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Only;

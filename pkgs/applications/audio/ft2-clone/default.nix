@@ -13,19 +13,19 @@
 
 stdenv.mkDerivation rec {
   pname = "ft2-clone";
-  version = "1.83";
+  version = "1.88";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "ft2-clone";
     rev = "v${version}";
-    hash = "sha256-JMHLB/a86rfxTxl3GXU+lhYtliR8WOAzWilbWei0K2A=";
+    hash = "sha256-3ylzroIp3d5u6meP7guu+NlYGTqy9UUjIi9box7NbXI=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 ]
-    ++ lib.optional stdenv.isLinux alsa-lib
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
          libiconv
          CoreAudio
          CoreMIDI
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A highly accurate clone of the classic Fasttracker II software for MS-DOS";
+    description = "Highly accurate clone of the classic Fasttracker II software for MS-DOS";
     homepage = "https://16-bits.org/ft2.php";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fgaz ];

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, click
-, ecdsa
-, hidapi
-, fetchPypi
-, pyaes
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  click,
+  ecdsa,
+  hidapi,
+  fetchPypi,
+  pyaes,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ckcc"
-  ];
+  pythonImportsCheck = [ "ckcc" ];
 
   meta = with lib; {
     description = "Communicate with your Coldcard using Python";

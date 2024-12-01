@@ -1,5 +1,6 @@
 { config, pkgs, lib, generators, ... }:
-let imcfg = config.i18n.inputMethod;
+let
+  imcfg = config.i18n.inputMethod;
 in {
   imports = [
     (lib.mkRemovedOptionModule [ "i18n" "inputMethod" "kime" "config" ] "Use i18n.inputMethod.kime.* instead")
@@ -31,7 +32,7 @@ in {
     };
   };
 
-  config = lib.mkIf (imcfg.enabled == "kime") {
+  config = lib.mkIf (imcfg.enable && imcfg.type == "kime") {
     i18n.inputMethod.package = pkgs.kime;
 
     environment.variables = {

@@ -1,6 +1,7 @@
-{ lib,
+{
+  lib,
   buildPythonPackage,
-  fetchFromGitHub
+  fetchFromGitHub,
 }:
 buildPythonPackage rec {
   pname = "anitopy";
@@ -15,7 +16,6 @@ buildPythonPackage rec {
   };
 
   pythonImportsCheck = [ "anitopy" ];
-  doCheck = true;
 
   meta = with lib; {
     description = "Python library for parsing anime video filenames";

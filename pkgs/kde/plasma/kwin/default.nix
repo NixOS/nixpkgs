@@ -8,10 +8,12 @@
   qtwayland,
   libinput,
   xorg,
+  xwayland,
+  libcanberra,
   libdisplay-info,
+  libei,
   mesa,
   lcms2,
-  libcap,
   pipewire,
   krunner,
   python3,
@@ -33,7 +35,16 @@ mkKdeDerivation {
     patchShebangs src/plugins/strip-effect-metadata.py
   '';
 
-  extraNativeBuildInputs = [pkg-config python3];
+  # TZDIR may be unset when running through the kwin_wayland wrapper,
+  # but we need it for the lockscreen clock to render
+  qtWrapperArgs = [
+    "--set-default TZDIR /etc/zoneinfo"
+  ];
+
+  extraNativeBuildInputs = [
+    pkg-config
+    python3
+  ];
   extraBuildInputs = [
     qtquick3d
     qtsensors
@@ -45,11 +56,14 @@ mkKdeDerivation {
 
     mesa # libgbm
     lcms2
-    libcap
+    libcanberra
     libdisplay-info
+    libei
     libinput
     pipewire
 
     xorg.libxcvt
+    # we need to provide this so it knows our xwayland supports new features
+    xwayland
   ];
 }

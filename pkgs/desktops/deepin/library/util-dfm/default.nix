@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qtbase
-, libmediainfo
-, libsecret
-, libisoburn
-, libuuid
-, udisks
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  libmediainfo,
+  libsecret,
+  libisoburn,
+  libuuid,
+  udisks,
 }:
 
 stdenv.mkDerivation rec {
   pname = "util-dfm";
-  version = "1.2.21";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-EqNca3heIUUV5joMskpriCY+7NwjUc/vmQwomDkru80=";
+    hash = "sha256-ngDjjdwuYqvyhaUcMNV5PRmGKC3lmY/nJQGOQgRMIQE=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     libmediainfo
     libsecret
     libuuid
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A Toolkits of libdfm-io,libdfm-mount and libdfm-burn";
+    description = "Toolkits of libdfm-io,libdfm-mount and libdfm-burn";
     homepage = "https://github.com/linuxdeepin/util-dfm";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

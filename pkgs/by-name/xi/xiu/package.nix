@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xiu";
-  version = "0.12.6";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "harlanc";
     repo = "xiu";
     rev = "v${version}";
-    hash = "sha256-53fVb5c9uS92/rPvZDWXxZX42p4cHqumGe6Dw+/hLvk=";
+    hash = "sha256-EjyvCwqcPkOe69YnDiAExtBNPhsqqGa95ao+bn6wcyA=";
   };
 
-  cargoHash = "sha256-ICZQ+UJ4LPNSeT9SjdcCUXgam40hMAOrJmLIwPEfqs4=";
+  cargoHash = "sha256-pW1VvnK7WDRvSVFOMUibtsPn+dhcFp64EpTW5beaJ+s=";
 
   nativeBuildInputs = [
     cmake
@@ -29,16 +29,16 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libopus
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   OPENSSL_NO_VENDOR = 1;
 
   meta = with lib; {
-    description = "A simple, high performance and secure live media server in pure Rust (RTMP[cluster]/RTSP/WebRTC[whip/whep]/HTTP-FLV/HLS";
+    description = "Simple, high performance and secure live media server in pure Rust (RTMP[cluster]/RTSP/WebRTC[whip/whep]/HTTP-FLV/HLS";
     homepage = "https://github.com/harlanc/xiu";
     changelog = "https://github.com/harlanc/xiu/releases/tag/v${version}";
     license = licenses.mit;

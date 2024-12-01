@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, importlib-metadata
-, pyyaml
-, setuptools
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  importlib-metadata,
+  pyyaml,
+  setuptools,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "markdown";
-  version = "3.6";
+  version = "3.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,16 +20,12 @@ buildPythonPackage rec {
     owner = "Python-Markdown";
     repo = "markdown";
     rev = "refs/tags/${version}";
-    hash = "sha256-jGo9/ZS2EhMDl/o1ref7Owqckuc7am578Ojmcz2aWIE=";
+    hash = "sha256-bIBen693MC56k4LZ+8vhbvP+E3myFXoaXpNHOlnIdG8=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  dependencies = lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   nativeCheckInputs = [
     unittestCheckHook

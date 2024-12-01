@@ -1,22 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-, pytestCheckHook
+  pytestCheckHook,
 
-, pythonOlder
+  pythonOlder,
 
-, setuptools
-, cython
+  setuptools,
+  cython,
 
-, symspellpy
-, numpy
-, editdistpy
+  symspellpy,
+  numpy,
+  editdistpy,
 }:
 
 buildPythonPackage rec {
   pname = "editdistpy";
-  version = "0.1.4";
+  version = "0.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "mammothb";
     repo = "editdistpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OSJXiuJtZ4w1IiRaZQZH2DDxA0AGoRHp0BKXdysff0Y=";
+    hash = "sha256-kTaJkx1fdd2Rl4uhzxdZAFP/ArsM0qTPweJ1jlUcjxQ=";
   };
 
   build-system = [
@@ -47,23 +48,18 @@ buildPythonPackage rec {
   '';
 
   passthru.tests = {
-    check = editdistpy.overridePythonAttrs (
-      _: {
-        doCheck = true;
-      }
-    );
+    check = editdistpy.overridePythonAttrs (_: {
+      doCheck = true;
+    });
   };
 
-  pythonImportsCheck = [
-    "editdistpy"
-  ];
+  pythonImportsCheck = [ "editdistpy" ];
 
-  meta = with lib;
-    {
-      description = "Fast Levenshtein and Damerau optimal string alignment algorithms";
-      homepage = "https://github.com/mammothb/editdistpy";
-      changelog = "https://github.com/mammothb/editdistpy/releases/tag/v${version}";
-      license = licenses.mit;
-      maintainers = with maintainers; [ vizid ];
-    };
+  meta = with lib; {
+    description = "Fast Levenshtein and Damerau optimal string alignment algorithms";
+    homepage = "https://github.com/mammothb/editdistpy";
+    changelog = "https://github.com/mammothb/editdistpy/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vizid ];
+  };
 }

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "f4rih";
     repo = "websploit";
     rev = "refs/tags/${version}";
-    sha256 = "LpDfJmH2FbL37Fk86CAC/bxFqM035DBN6c6FPfGpaIw=";
+    hash = "sha256-LpDfJmH2FbL37Fk86CAC/bxFqM035DBN6c6FPfGpaIw=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A high level MITM framework";
+    description = "High level MITM framework";
     homepage = "https://github.com/f4rih/websploit";
     changelog = "https://github.com/f4rih/websploit/releases/tag/${version}";
     license = licenses.mit;

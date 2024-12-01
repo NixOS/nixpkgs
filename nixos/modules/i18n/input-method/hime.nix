@@ -1,8 +1,9 @@
 { config, pkgs, lib, ... }:
-
-with lib;
+let
+  imcfg = config.i18n.inputMethod;
+in
 {
-  config = mkIf (config.i18n.inputMethod.enabled == "hime") {
+  config = lib.mkIf (imcfg.enable && imcfg.type == "hime") {
     i18n.inputMethod.package = pkgs.hime;
     environment.variables = {
       GTK_IM_MODULE = "hime";

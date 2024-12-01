@@ -1,23 +1,17 @@
 # AccountsService daemon.
-
 { config, lib, pkgs, ... }:
-
-with lib;
-
 {
-
   meta = {
-    maintainers = teams.freedesktop.members;
+    maintainers = lib.teams.freedesktop.members;
   };
 
   ###### interface
-
   options = {
 
     services.accounts-daemon = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable AccountsService, a DBus service for accessing
@@ -29,10 +23,8 @@ with lib;
 
   };
 
-
   ###### implementation
-
-  config = mkIf config.services.accounts-daemon.enable {
+  config = lib.mkIf config.services.accounts-daemon.enable {
 
     environment.systemPackages = [ pkgs.accountsservice ];
 
@@ -43,14 +35,14 @@ with lib;
 
     systemd.packages = [ pkgs.accountsservice ];
 
-    systemd.services.accounts-daemon = recursiveUpdate {
+    systemd.services.accounts-daemon = lib.recursiveUpdate {
 
       wantedBy = [ "graphical.target" ];
 
       # Accounts daemon looks for dbus interfaces in $XDG_DATA_DIRS/accountsservice
       environment.XDG_DATA_DIRS = "${config.system.path}/share";
 
-    } (optionalAttrs (!config.users.mutableUsers) {
+    } (lib.optionalAttrs (!config.users.mutableUsers) {
       environment.NIXOS_USERS_PURE = "true";
     });
   };

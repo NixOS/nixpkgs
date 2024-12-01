@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
     # Fixup build with newer Linux headers: https://github.com/lkl/linux/pull/484
     sed '1i#include <linux/sockios.h>' -i tools/lkl/lib/hijack/xlate.c
-  '' + lib.optionalString stdenv.isi686 ''
+  '' + lib.optionalString stdenv.hostPlatform.isi686 ''
     echo CONFIG_KALLSYMS=n >> arch/lkl/configs/defconfig
     echo CONFIG_KALLSYMS_BASE_RELATIVE=n >> arch/lkl/configs/defconfig
   '' + lib.optionalString firewallSupport ''
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "The Linux kernel as a library";
+    description = "Linux kernel as a library";
     longDescription = ''
       LKL (Linux Kernel Library) aims to allow reusing the Linux kernel code as
       extensively as possible with minimal effort and reduced maintenance

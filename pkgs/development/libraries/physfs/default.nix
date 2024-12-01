@@ -16,7 +16,7 @@ let
     nativeBuildInputs = [ cmake doxygen ];
 
     buildInputs = [ zlib ]
-      ++ lib.optionals stdenv.isDarwin [ Foundation ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
 
     doInstallCheck = true;
 

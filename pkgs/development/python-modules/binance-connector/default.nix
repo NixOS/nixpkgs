@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pycryptodome
-, pythonOlder
-, requests
-, websocket-client
-# dependencies for tests
-, pytest-cov
-, pytest
-, sure
-, responses
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pycryptodome,
+  pythonOlder,
+  requests,
+  websocket-client,
+  # dependencies for tests
+  pytest-cov-stub,
+  pytest,
+  sure,
+  responses,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "binance-connector";
-  version = "3.7.0";
+  version = "3.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "binance";
     repo = "${pname}-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hmn8WKr+krzOzHNJ/aynXAbf+rHxDfyKDgycdQQU3xk=";
+    hash = "sha256-i0dJ7UO7HZ9bWhWtWBZ5OwloRBUiZgUKRXab4sm2w/o=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-cov
+    pytest-cov-stub
     pytest
     sure
     responses
@@ -43,9 +44,7 @@ buildPythonPackage rec {
 
   # pytestCheckHook attempts to run examples directory, which requires
   # network access
-  disabledTestPaths = [
-    "examples/"
-  ];
+  disabledTestPaths = [ "examples/" ];
 
   pythonImportsCheck = [
     "binance.spot"

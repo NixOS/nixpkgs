@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 
-, cython_0
-, geos
-, numpy
-, oldest-supported-numpy
-, setuptools
-, wheel
+  cython_0,
+  geos,
+  numpy,
+  oldest-supported-numpy,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "shapely";
-  version = "2.0.4";
+  version = "2.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xcc2En+scACbjTCaDut08+CJeeUwz3AX8vUH72Lmz7g=";
+    hash = "sha256-mX9hWbFIQFnsI5ysqlNGf9i1Vk2r4YbNhKwpRGY7C/Y=";
   };
 
   nativeBuildInputs = [
@@ -33,17 +34,11 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = [
-    geos
-  ];
+  buildInputs = [ geos ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Fix a ModuleNotFoundError. Investigated at:
   # https://github.com/NixOS/nixpkgs/issues/255262
@@ -51,7 +46,7 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # FIXME(lf-): these logging tests are broken, which is definitely our
     # fault. I've tried figuring out the cause and failed.
     #

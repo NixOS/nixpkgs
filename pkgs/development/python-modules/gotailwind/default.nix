@@ -1,25 +1,26 @@
-{ lib
-, aiohttp
-, aresponses
-, awesomeversion
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, mashumaro
-, orjson
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, syrupy
-, typer
-, yarl
-, zeroconf
+{
+  lib,
+  aiohttp,
+  aresponses,
+  awesomeversion,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mashumaro,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  syrupy,
+  typer,
+  yarl,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "gotailwind";
-  version = "0.2.2";
+  version = "0.2.4";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -28,21 +29,19 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-gotailwind";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JtMBud3iON4xLc9dQdXniv51EBqs7zkat8cYm3q0uEE=";
+    hash = "sha256-g4wYjMJXSm7cjb5Zck1O0A+ETfqMTmiI8In26mcGhNw=";
   };
 
   postPatch = ''
     # Upstream doesn't set a version for the pyproject.toml
     substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
+      --replace-fail "0.0.0" "${version}" \
+      --replace-fail "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     awesomeversion
     backoff
@@ -52,10 +51,8 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  passthru.optional-dependencies = {
-    cli = [
-      typer
-    ];
+  optional-dependencies = {
+    cli = [ typer ];
   };
 
   nativeCheckInputs = [
@@ -65,16 +62,14 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "gotailwind"
-  ];
+  pythonImportsCheck = [ "gotailwind" ];
 
   meta = with lib; {
     description = "Modul to communicate with Tailwind garage door openers";
-    mainProgram = "tailwind";
     homepage = "https://github.com/frenck/python-gotailwind";
     changelog = "https://github.com/frenck/python-gotailwind/releases/tag/v$version";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "tailwind";
   };
 }

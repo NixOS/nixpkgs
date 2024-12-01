@@ -8,13 +8,15 @@
 }:
 
 let
-  version = "2024.3.1";
+  version = "2024.6.2c";
+
+  suffix = lib.head (lib.match "[0-9.]*([a-z]*)" version);
 
   bw_web_builds = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "bw_web_builds";
     rev = "v${version}";
-    hash = "sha256-oi0H8TIQwtpzxKoQGnKaOY0bcWu7avTtrY+NgNRiq8k=";
+    hash = "sha256-Gd8yQx9j6ieUvaM6IPSELNRy83y0cBkBwLYMqk8OIjU=";
   };
 
 in buildNpmPackage rec {
@@ -24,11 +26,11 @@ in buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
-    rev = "web-v${lib.removeSuffix "b" version}";
-    hash = "sha256-JBEP4dNGL4rYKl2qNyhB2y/wZunikaGFltGVXLxgMWI=";
+    rev = "web-v${lib.removeSuffix suffix version}";
+    hash = "sha256-HMQ0oQ04WkLlUgsYt6ZpcziDq05mnSA0+VnJCpteceg=";
   };
 
-  npmDepsHash = "sha256-vNudSHIMmF7oXGz+ZymQahyHebs/CBDc6Oy1g0A5nqA=";
+  npmDepsHash = "sha256-zMzQEM5mV14gewzYhy1F2bNEugXjZSOviYwYVV2Cb8c=";
 
   postPatch = ''
     ln -s ${bw_web_builds}/{patches,resources} ..
@@ -37,7 +39,7 @@ in buildNpmPackage rec {
   '';
 
   nativeBuildInputs = [
-    python3
+    (python3.withPackages (ps: [ ps.setuptools ]))
   ];
 
   makeCacheWritable = true;

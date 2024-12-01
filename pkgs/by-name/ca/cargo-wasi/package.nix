@@ -14,15 +14,15 @@ rustPlatform.buildRustPackage rec {
   src = fetchCrate {
     inherit version;
     pname = "cargo-wasi-src";
-    sha256 = "sha256-fmQ23BtcBUPNcgZgvNq85iqdY6WRUhqwAp4aIobqMIw=";
+    hash = "sha256-fmQ23BtcBUPNcgZgvNq85iqdY6WRUhqwAp4aIobqMIw=";
   };
 
   cargoHash = "sha256-yXtxznUp2gECq2CvRByiFzbTjYtWvTheDjGoynJWb+o=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Security ]);
 
   # Checks need to be disabled here because the current test suite makes assumptions
   # about the surrounding environment that aren't Nix friendly. See these lines for specifics:
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A lightweight Cargo subcommand to build code for the wasm32-wasi target";
+    description = "Lightweight Cargo subcommand to build code for the wasm32-wasi target";
     mainProgram = "cargo-wasi";
     homepage = "https://bytecodealliance.github.io/cargo-wasi";
     license = licenses.asl20;

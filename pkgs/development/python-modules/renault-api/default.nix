@@ -19,33 +19,28 @@
 
 buildPythonPackage rec {
   pname = "renault-api";
-  version = "0.2.2";
-  format = "pyproject";
+  version = "0.2.7";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "renault-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FZ1VNO8gEH7HJRu9EVuKIwSQbceG720tCVqAPqHwISQ=";
+    hash = "sha256-tke2bE+djV1N70meMOytYmbPmYDN8fU+Da81Mf6nNAI=";
   };
 
   build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     cryptography
     marshmallow-dataclass
     pyjwt
   ];
 
-  dependencies = [
-    aioresponses
-    pytest-asyncio
-  ];
-
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [
       click
       dateparser
@@ -54,11 +49,11 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
     pytestCheckHook
     typeguard
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
-
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "renault_api" ];
 

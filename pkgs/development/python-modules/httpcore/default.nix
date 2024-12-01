@@ -1,29 +1,30 @@
-{ lib
-, anyio
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, hatchling
-, hatch-fancy-pypi-readme
-, h11
-, h2
-, pproxy
-, pytest-asyncio
-, pytest-httpbin
-, pytest-trio
-, pytestCheckHook
-, pythonOlder
-, socksio
-, trio
-# for passthru.tests
-, httpx
-, httpx-socks
-, respx
+{
+  lib,
+  anyio,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  hatchling,
+  hatch-fancy-pypi-readme,
+  h11,
+  h2,
+  pproxy,
+  pytest-asyncio,
+  pytest-httpbin,
+  pytest-trio,
+  pytestCheckHook,
+  pythonOlder,
+  socksio,
+  trio,
+  # for passthru.tests
+  httpx,
+  httpx-socks,
+  respx,
 }:
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "1.0.5";
+  version = "1.0.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,32 +33,24 @@ buildPythonPackage rec {
     owner = "encode";
     repo = "httpcore";
     rev = "refs/tags/${version}";
-    hash = "sha256-05jYLrBiPRg1qQEz8mRvYJKHFsfneh7z9yHIXuYYa5o=";
+    hash = "sha256-sF/ymIoEnqWRX9b8knojIw+ySci/obXSttaNJLb+/nE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-fancy-pypi-readme
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     certifi
     h11
   ];
 
-  passthru.optional-dependencies = {
-    asyncio = [
-      anyio
-    ];
-    http2 = [
-      h2
-    ];
-    socks = [
-      socksio
-    ];
-    trio = [
-      trio
-    ];
+  optional-dependencies = {
+    asyncio = [ anyio ];
+    http2 = [ h2 ];
+    socks = [ socksio ];
+    trio = [ trio ];
   };
 
   nativeCheckInputs = [
@@ -66,11 +59,9 @@ buildPythonPackage rec {
     pytest-httpbin
     pytest-trio
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "httpcore"
-  ];
+  pythonImportsCheck = [ "httpcore" ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -80,7 +71,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/encode/httpcore/blob/${version}/CHANGELOG.md";
-    description = "A minimal low-level HTTP client";
+    description = "Minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ris ];

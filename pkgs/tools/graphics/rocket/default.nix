@@ -22,7 +22,7 @@ mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A tool for synchronizing music and visuals in demoscene productions";
+    description = "Tool for synchronizing music and visuals in demoscene productions";
     mainProgram = "editor";
     homepage = "https://github.com/rocket/rocket";
     license = licenses.zlib;

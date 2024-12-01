@@ -6,7 +6,7 @@ let
   cfg = config.services.sslmate-agent;
 
 in {
-  meta.maintainers = with maintainers; [ wolfangaukang ];
+  meta.maintainers = [ ];
 
   options = {
     services.sslmate-agent = {
