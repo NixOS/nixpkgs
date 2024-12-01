@@ -25,14 +25,14 @@ appimageTools.wrapType2 {
       --replace-fail 'Icon=xyz.chatboxapp.app' 'Icon=${pname}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Chatbox AI is an AI client application and smart assistant.";
     homepage = "https://chatboxai.app";
     downloadPage = "https://chatboxai.app/en#download";
     changelog = "https://chatboxai.app/en/help-center/changelog";
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ c31io ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ c31io ];
     mainProgram = "chatbox";
 
     # Help porting to other platforms :)
