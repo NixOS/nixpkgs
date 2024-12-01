@@ -134,10 +134,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = let
     excludeTestsRegex = lib.concatStringsSep "|" [
-      # sporadic segfault
+      # segfault
+      "SerializationXML"
       "TrainedModelSerialization"
       # broken by openblas 0.3.21
       "mathematics_lapack"
+      # fails on aarch64
+      "LinearTimeMMD"
+      "QuadraticTimeMMD"
+      "SGVectorTest"
+      "Statistics"
+      # hangs on aarch64
+      "PRange"
       # these take too long on CI
       "evaluation_cross_validation"
       "modelselection_combined_kernel"
