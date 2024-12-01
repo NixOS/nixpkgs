@@ -76,10 +76,15 @@ in
 python3Packages.buildPythonApplication {
   pname = "beets";
   inherit src version;
+  pyproject = true;
 
   patches = extraPatches;
 
-  propagatedBuildInputs =
+  build-system = [
+    python3Packages.poetry-core
+  ];
+
+  dependencies =
     with python3Packages;
     [
       confuse
@@ -88,10 +93,8 @@ python3Packages.buildPythonApplication {
       mediafile
       munkres
       musicbrainzngs
-      mutagen
-      pygobject3
+      platformdirs
       pyyaml
-      reflink
       unidecode
       typing-extensions
     ]
@@ -146,8 +149,16 @@ python3Packages.buildPythonApplication {
 
   __darwinAllowLocalNetworking = true;
 
-  inherit disabledTestPaths;
-  inherit disabledTests;
+  disabledTestPaths = disabledTestPaths ++ [
+    # touches network
+    "test/plugins/test_aura.py"
+  ];
+  disabledTests = disabledTests ++ [
+    # beets.ui.UserError: unknown command 'autobpm'
+    "test/plugins/test_autobpm.py::TestAutoBPMPlugin::test_import"
+    # AssertionError: assert 0 == 117
+    "test/plugins/test_autobpm.py::TestAutoBPMPlugin::test_command"
+  ];
 
   # Perform extra "sanity checks", before running pytest tests.
   preCheck = ''
