@@ -1,13 +1,15 @@
-{ aacgain
-, ffmpeg
-, flac
-, imagemagick
-, keyfinder-cli
-, mp3gain
-, mp3val
-, python3Packages
-, ...
-}: {
+{
+  aacgain,
+  ffmpeg,
+  flac,
+  imagemagick,
+  keyfinder-cli,
+  mp3gain,
+  mp3val,
+  python3Packages,
+  ...
+}:
+{
   absubmit = {
     deprecated = true;
     testPaths = [ ];
@@ -17,7 +19,10 @@
   };
   albumtypes = { };
   aura = {
-    propagatedBuildInputs = with python3Packages; [ flask pillow ];
+    propagatedBuildInputs = with python3Packages; [
+      flask
+      pillow
+    ];
     testPaths = [ ];
   };
   autobpm = {
@@ -30,7 +35,10 @@
   };
   badfiles = {
     testPaths = [ ];
-    wrapperBins = [ mp3val flac ];
+    wrapperBins = [
+      mp3val
+      flac
+    ];
   };
   bareasc = { };
   beatport.propagatedBuildInputs = [ python3Packages.requests-oauthlib ];
@@ -48,7 +56,10 @@
     propagatedBuildInputs = [ python3Packages.requests ];
     testPaths = [ ];
   };
-  discogs.propagatedBuildInputs = with python3Packages; [ discogs-client requests ];
+  discogs.propagatedBuildInputs = with python3Packages; [
+    discogs-client
+    requests
+  ];
   duplicates.testPaths = [ ];
   edit = { };
   embedart = {
@@ -58,7 +69,10 @@
   embyupdate.propagatedBuildInputs = [ python3Packages.requests ];
   export = { };
   fetchart = {
-    propagatedBuildInputs = with python3Packages; [ requests pillow ];
+    propagatedBuildInputs = with python3Packages; [
+      requests
+      pillow
+    ];
     wrapperBins = [ imagemagick ];
   };
   filefilter = { };
@@ -110,8 +124,12 @@
   playlist.propagatedBuildInputs = [ python3Packages.requests ];
   plexupdate = { };
   random = { };
-  replaygain.wrapperBins = [ aacgain ffmpeg mp3gain ];
-  rewrite.testPaths= [ ];
+  replaygain.wrapperBins = [
+    aacgain
+    ffmpeg
+    mp3gain
+  ];
+  rewrite.testPaths = [ ];
   scrub.testPaths = [ ];
   smartplaylist = { };
   sonosupdate = {
@@ -129,7 +147,10 @@
   };
   the = { };
   thumbnails = {
-    propagatedBuildInputs = with python3Packages; [ pillow pyxdg ];
+    propagatedBuildInputs = with python3Packages; [
+      pillow
+      pyxdg
+    ];
     wrapperBins = [ imagemagick ];
   };
   types.testPaths = [ "test/plugins/test_types_plugin.py" ];
