@@ -118,14 +118,14 @@ def run_wrapper(
             args = ["sudo", *args]
 
     logger.debug(
-        "calling run with args=%s, kwargs=%s, extra_env=%s",
+        "calling run with args=%r, kwargs=%r, extra_env=%r",
         args,
         kwargs,
         extra_env,
     )
 
     try:
-        return subprocess.run(
+        r = subprocess.run(
             args,
             check=check,
             env=env,
@@ -136,6 +136,11 @@ def run_wrapper(
             errors="surrogateescape",
             **kwargs,
         )
+
+        if kwargs.get("capture_output") or kwargs.get("stderr") or kwargs.get("stdout"):
+            logger.debug("captured output stdout=%r, stderr=%r", r.stdout, r.stderr)
+
+        return r
     except subprocess.CalledProcessError:
         if sudo and remote:
             logger.error(
