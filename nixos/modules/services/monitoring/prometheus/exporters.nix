@@ -89,7 +89,6 @@ let
     "surfboard"
     "systemd"
     "unbound"
-    "unifi"
     "unpoller"
     "v2ray"
     "varnish"

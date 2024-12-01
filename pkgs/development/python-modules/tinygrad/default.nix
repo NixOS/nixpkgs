@@ -15,9 +15,8 @@
   # build-system
   setuptools,
 
-  # dependencies
+  # optional-dependencies
   llvmlite,
-  numpy,
   triton,
   unicorn,
 
@@ -29,6 +28,7 @@
   hypothesis,
   librosa,
   networkx,
+  numpy,
   onnx,
   pillow,
   pytest-xdist,
@@ -45,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "tinygrad";
-  version = "0.9.2";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tinygrad";
     repo = "tinygrad";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fCKtJhZtqq6yjc6m41uvikzM9GArUlB8Q7jN/Np8+SM=";
+    hash = "sha256-IIyTb3jDUSEP2IXK6DLsI15E5N34Utt7xv86aTHpXf8=";
   };
 
   patches = [
@@ -68,14 +68,14 @@ buildPythonPackage rec {
   ];
 
   postPatch =
-    ''
-      substituteInPlace tinygrad/runtime/autogen/opencl.py \
-        --replace-fail "ctypes.util.find_library('OpenCL')" "'${ocl-icd}/lib/libOpenCL.so'"
-    ''
     # Patch `clang` directly in the source file
-    + ''
+    ''
       substituteInPlace tinygrad/runtime/ops_clang.py \
         --replace-fail "'clang'" "'${lib.getExe clang}'"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace tinygrad/runtime/autogen/opencl.py \
+        --replace-fail "ctypes.util.find_library('OpenCL')" "'${ocl-icd}/lib/libOpenCL.so'"
     ''
     # `cuda_fp16.h` and co. are needed at runtime to compile kernels
     + lib.optionalString cudaSupport ''
@@ -94,15 +94,6 @@ buildPythonPackage rec {
     '';
 
   build-system = [ setuptools ];
-
-  dependencies =
-    [
-      numpy
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # pyobjc-framework-libdispatch
-      # pyobjc-framework-metal
-    ];
 
   optional-dependencies = {
     llvm = [ llvmlite ];
@@ -126,6 +117,7 @@ buildPythonPackage rec {
     hypothesis
     librosa
     networkx
+    numpy
     onnx
     pillow
     pytest-xdist
@@ -144,9 +136,9 @@ buildPythonPackage rec {
 
   disabledTests =
     [
-      # flaky: https://github.com/tinygrad/tinygrad/issues/6542
-      # TODO: re-enable when https://github.com/tinygrad/tinygrad/pull/6560 gets merged
-      "test_broadcastdot"
+      # Fixed in https://github.com/tinygrad/tinygrad/pull/7792
+      # TODO: re-enable at next release
+      "test_kernel_cache_in_action"
 
       # Require internet access
       "test_benchmark_openpilot_model"
@@ -181,8 +173,12 @@ buildPythonPackage rec {
       "test_transcribe_long_no_batch"
       "test_vgg7"
     ]
-    # Fail on aarch64-linux with AssertionError
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+      # Fixed in https://github.com/tinygrad/tinygrad/pull/7796
+      # TODO: re-enable at next release
+      "test_interpolate_bilinear"
+
+      # Fail with AssertionError
       "test_casts_from"
       "test_casts_to"
       "test_int8"
@@ -209,7 +205,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/tinygrad/tinygrad/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    # Requires unpackaged pyobjc-framework-libdispatch and pyobjc-framework-metal
-    broken = stdenv.hostPlatform.isDarwin;
+    # Tests segfault on darwin
+    badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
   };
 }

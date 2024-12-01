@@ -25,13 +25,13 @@ in
 
   stdenv.mkDerivation {
     pname = "magnetic-${lib.toLower pname}";
-    version = "0-unstable-2024-06-27";
+    version = "0-unstable-2024-11-06";
 
     src = fetchFromGitHub {
       owner = "Fausto-Korpsvart";
       repo = "Catppuccin-GTK-Theme";
-      rev = "0bd2869e7f0fdb36c720a4fb873d4fed361b0606";
-      hash = "sha256-oFVsYrJ27hYGY+x9+Z4SxVCp3w6PiLYTZaxmGhnpVHQ=";
+      rev = "be79b8289200aa1a17620f84dde3fe4c3b9c5998";
+      hash = "sha256-QItHmYZpe7BiPC+2CtFwiRXyMTG7+ex0sJTs63xmkAo=";
     };
 
     nativeBuildInputs = [jdupes sassc];

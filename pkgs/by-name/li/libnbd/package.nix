@@ -88,7 +88,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; lgpl21Plus;
     maintainers = with maintainers; [
-      AndersonTorres
       humancalico
     ];
     platforms = with platforms; linux;

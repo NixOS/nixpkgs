@@ -10,13 +10,13 @@
 }:
 let
   pname = "flclash";
-  version = "0.8.66";
+  version = "0.8.68";
   src =
     (fetchFromGitHub {
       owner = "chen08209";
       repo = "FlClash";
       rev = "v${version}";
-      hash = "sha256-LkaAALJcP3DGXBMZ3QWLUiyT9Kr4yTxKIRqYhrW1WOw=";
+      hash = "sha256-0S3sNmOxM5SpRLpYzi4br5/PJnxDklFHsEAKiHd0vOM=";
       fetchSubmodules = true;
     }).overrideAttrs
       (_: {
@@ -27,13 +27,23 @@ let
   libclash = buildGoModule {
     inherit pname version src;
     modRoot = "./core";
-    vendorHash = "sha256-K+PrLFvDHyaxf1NKzcqf0qmfQwT8rctScv1CN+TxY0M=";
+    vendorHash = "sha256-BpZB+0r7x7Ntldimo/nHXIu98jwhcA53l3kMav9lHkA=";
     buildPhase = ''
       runHook preBuild
+
       mkdir -p $out/lib
       go build -ldflags="-w -s" -tags=with_gvisor -buildmode=c-shared -o $out/lib/libclash.so
+
       runHook postBuild
     '';
+
+    meta = {
+      description = "Multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free";
+      homepage = "https://github.com/chen08209/FlClash";
+      license = with lib.licenses; [ gpl3Plus ];
+      maintainers = with lib.maintainers; [ aucub ];
+      platforms = lib.platforms.linux;
+    };
   };
 in
 flutter.buildFlutterApplication {
@@ -58,10 +68,9 @@ flutter.buildFlutterApplication {
     })
   ];
 
-  patchPhase = ''
-    runHook prePatch
-    substituteInPlace lib/clash/core.dart --replace-fail 'DynamicLibrary.open("libclash.so")' 'DynamicLibrary.open("${libclash}/lib/libclash.so")'
-    runHook postPatch
+  postPatch = ''
+    substituteInPlace lib/clash/core.dart \
+      --replace-fail 'DynamicLibrary.open("libclash.so")' 'DynamicLibrary.open("${libclash}/lib/libclash.so")'
   '';
 
   preBuild = ''

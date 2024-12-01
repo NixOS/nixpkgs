@@ -30,8 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     urls = [
       "https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
       # Upstream removes downloads of older versions, please save bumped versions to archive.org
-      # FIXME At the time of writing, archive.org is still recovering from the recent attacks and has not yet re-opened the page saving functionality
-      # https://blog.archive.org/2024/10/21/internet-archive-services-update-2024-10-21/
+      "https://web.archive.org/web/20241121002213/https://www.warmplace.ru/soft/sunvox/sunvox-${finalAttrs.version}.zip"
     ];
     hash = "sha256-7DZyoOz3jDYsuGqbs0PRs6jdWCxBhSDUKk8KVJQm/3o=";
   };

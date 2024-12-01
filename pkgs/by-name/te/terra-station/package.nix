@@ -30,14 +30,10 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ makeWrapper asar ];
+  nativeBuildInputs = [ makeWrapper asar dpkg ];
 
   dontConfigure = true;
   dontBuild = true;
-
-  unpackPhase = ''
-    ${dpkg}/bin/dpkg-deb -x $src .
-  '';
 
   installPhase = ''
     runHook preInstall

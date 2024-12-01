@@ -1,20 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5, nixosTests, enableUnfree ? true, buildPostgresqlExtension }:
+{
+  buildPostgresqlExtension,
+  cmake,
+  enableUnfree ? true,
+  fetchFromGitHub,
+  lib,
+  libkrb5,
+  nixosTests,
+  openssl,
+  postgresql,
+  stdenv,
+}:
 
 buildPostgresqlExtension rec {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
-  version = "2.14.2";
+  version = "2.17.2";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ openssl libkrb5 ];
+  buildInputs = [
+    openssl
+    libkrb5
+  ];
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = "timescaledb";
     rev = version;
-    hash = "sha256-gJViEWHtIczvIiQKuvvuwCfWJMxAYoBhCHhD75no6r0=";
+    hash = "sha256-gPsAebMUBuAwP6Hoi9/vrc2IFsmTbL0wQH1g6/2k2d4=";
   };
 
-  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DTAP_CHECKS=OFF" ]
+  cmakeFlags =
+    [
+      "-DSEND_TELEMETRY_DEFAULT=OFF"
+      "-DREGRESS_CHECKS=OFF"
+      "-DTAP_CHECKS=OFF"
+    ]
     ++ lib.optionals (!enableUnfree) [ "-DAPACHE_ONLY=ON" ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DLINTER=OFF" ];
 
@@ -38,14 +57,9 @@ buildPostgresqlExtension rec {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
     homepage = "https://www.timescale.com/";
     changelog = "https://github.com/timescale/timescaledb/blob/${version}/CHANGELOG.md";
-    maintainers = [ ];
+    maintainers = [ maintainers.kirillrdy ];
     platforms = postgresql.meta.platforms;
     license = with licenses; if enableUnfree then tsl else asl20;
-    broken = versionOlder postgresql.version "13" ||
-      # timescaledb supports PostgreSQL 17 from 2.17.0 on:
-      # https://github.com/timescale/timescaledb/releases/tag/2.17.0
-      # We can't upgrade to it, yet, because this would imply dropping support for
-      # PostgreSQL 13, which is a breaking change.
-      (versionAtLeast postgresql.version "17" && version == "2.14.2");
+    broken = versionOlder postgresql.version "14";
   };
 }

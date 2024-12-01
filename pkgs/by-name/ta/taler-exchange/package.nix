@@ -102,10 +102,11 @@ stdenv.mkDerivation (finalAttrs: {
   checkTarget = "check";
 
   meta = {
-    description = ''
+    description = "Exchange component for the GNU Taler electronic payment system";
+    longDescription = ''
       Taler is an electronic payment system providing the ability to pay
       anonymously using digital cash.  Taler consists of a network protocol
-      definition (using a RESTful API over HTTP), a Exchange (which creates
+      definition (using a RESTful API over HTTP), an Exchange (which creates
       digital coins), a Wallet (which allows customers to manage, store and
       spend digital coins), and a Merchant website which allows customers to
       spend their digital coins.  Naturally, each Merchant is different, but

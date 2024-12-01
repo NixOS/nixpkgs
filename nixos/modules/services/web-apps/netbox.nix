@@ -298,13 +298,13 @@ in {
           # This mostly correspond to upstream NetBox's 'upgrade.sh' script.
           versionFile="${cfg.dataDir}/version"
 
-          if [[ -e "$versionFile" && "$(cat "$versionFile")" == "${cfg.package.version}" ]]; then
+          if [[ -h "$versionFile" && "$(readlink -- "$versionFile")" == "${cfg.package}" ]]; then
             exit 0
           fi
 
           ${pkg}/bin/netbox migrate
           ${pkg}/bin/netbox trace_paths --no-input
-          ${pkg}/bin/netbox collectstatic --no-input
+          ${pkg}/bin/netbox collectstatic --clear --no-input
           ${pkg}/bin/netbox remove_stale_contenttypes --no-input
           ${pkg}/bin/netbox reindex --lazy
           ${pkg}/bin/netbox clearsessions
@@ -314,7 +314,7 @@ in {
             (lib.versionOlder cfg.package.version "3.7.0")
             "${pkg}/bin/netbox clearcache"}
 
-          echo "${cfg.package.version}" > "$versionFile"
+          ln -sfn "${cfg.package}" "$versionFile"
         '';
 
         serviceConfig = defaultServiceConfig // {

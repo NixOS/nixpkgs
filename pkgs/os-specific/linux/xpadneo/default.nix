@@ -22,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     export sourceRoot=$(pwd)/${finalAttrs.src.name}/hid-xpadneo/src
   '';
 
+  patches = [ ./xpadneo-0.9.6-kernel-6.12.patch ];
+
   nativeBuildInputs = kernel.moduleBuildDependencies;
   buildInputs = [ bluez ];
 

@@ -88,13 +88,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = lib.optionals (pythonSupport && casadiSupport) [ python3Packages.matplotlib ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
-    (lib.cmakeBool "BUILD_WITH_LIBPYTHON" pythonSupport)
-    (lib.cmakeBool "BUILD_WITH_CASADI_SUPPORT" casadiSupport)
-    (lib.cmakeBool "BUILD_WITH_COLLISION_SUPPORT" collisionSupport)
-    (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+      (lib.cmakeBool "BUILD_WITH_LIBPYTHON" pythonSupport)
+      (lib.cmakeBool "BUILD_WITH_CASADI_SUPPORT" casadiSupport)
+      (lib.cmakeBool "BUILD_WITH_COLLISION_SUPPORT" collisionSupport)
+      (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
+      # Disable test that fails on darwin
+      # https://github.com/stack-of-tasks/pinocchio/blob/42306ed023b301aafef91e2e76cb070c5e9c3f7d/flake.nix#L24C1-L27C17
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;pinocchio-example-py-casadi-quadrotor-ocp")
+    ];
 
   doCheck = true;
   pythonImportsCheck = [ "pinocchio" ];

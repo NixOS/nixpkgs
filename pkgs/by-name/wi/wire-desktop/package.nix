@@ -109,14 +109,6 @@ let
       systemd
     ];
 
-    unpackPhase = ''
-      runHook preUnpack
-
-      dpkg-deb -x $src .
-
-      runHook postUnpack
-    '';
-
     installPhase = ''
       runHook preInstall
 
@@ -138,7 +130,7 @@ let
     ];
 
     preFixup = ''
-      gappsWrapperArgs+=(--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}")
+      gappsWrapperArgs+=(--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}")
     '';
 
     postFixup = ''

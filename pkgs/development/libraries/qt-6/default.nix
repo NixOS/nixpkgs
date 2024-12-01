@@ -208,9 +208,6 @@ let
             };
           } ./hooks/qmake-hook.sh)
         { };
-    } // lib.optionalAttrs config.allowAliases {
-      # Remove completely before 24.11
-      overrideScope' = builtins.throw "qt6 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\".";
     };
 
   baseScope = makeScopeWithSplicing' {

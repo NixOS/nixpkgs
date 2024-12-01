@@ -56,7 +56,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/c3lang/c3c";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [
-      luc65r
       anas
     ];
     platforms = platforms.all;

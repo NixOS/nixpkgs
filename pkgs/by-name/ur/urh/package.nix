@@ -2,6 +2,7 @@
 , hackrf, rtl-sdr, airspy, limesuite, libiio
 , libbladeRF
 , qt5
+, wrapGAppsHook3
 , USRPSupport ? false, uhd }:
 
 python3Packages.buildPythonApplication rec {
@@ -15,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-4Fe2+BUdnVdNQHqZeftXLabn/vTzgyynOtqy0rAb0Rk=";
   };
 
-  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook wrapGAppsHook3 ];
   buildInputs = [ hackrf rtl-sdr airspy limesuite libiio libbladeRF ]
     ++ lib.optional USRPSupport uhd
     ++ lib.optional stdenv.hostPlatform.isLinux qt5.qtwayland;

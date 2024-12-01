@@ -163,18 +163,25 @@ let
     (addMetaAttrs { maintainers = crossMaintainers; });
 
 
-  /* Recursively map a (nested) set of derivations to an isomorphic
-     set of meta.platforms values. */
-  packagePlatforms = mapAttrs (name: value:
+  /* Recursive for packages and apply a function to them */
+  recursiveMapPackages = f: mapAttrs (name: value:
       if isDerivation value then
-        value.meta.hydraPlatforms
-          or (subtractLists (value.meta.badPlatforms or [])
-               (value.meta.platforms or supportedSystems))
+        f value
       else if value.recurseForDerivations or false || value.recurseForRelease or false then
-        packagePlatforms value
+        recursiveMapPackages f value
       else
         []
     );
+
+  /* Gets the list of Hydra platforms for a derivation */
+  getPlatforms = drv:
+    drv.meta.hydraPlatforms
+      or (subtractLists (drv.meta.badPlatforms or [])
+           (drv.meta.platforms or supportedSystems));
+
+  /* Recursively map a (nested) set of derivations to an isomorphic
+     set of meta.platforms values. */
+  packagePlatforms = recursiveMapPackages getPlatforms;
 
 in {
   /* Common platform groups on which to test packages. */
@@ -188,6 +195,8 @@ in {
     lib
     mapTestOn
     mapTestOnCross
+    recursiveMapPackages
+    getPlatforms
     packagePlatforms
     pkgs
     pkgsFor

@@ -8,7 +8,6 @@
   click,
   fetchPypi,
   gitpython,
-  importlib-metadata,
   numpy,
   packaging,
   pandas,
@@ -16,8 +15,6 @@
   protobuf,
   pyarrow,
   pydeck,
-  pympler,
-  python-dateutil,
   pythonOlder,
   setuptools,
   requests,
@@ -26,30 +23,23 @@
   toml,
   tornado,
   typing-extensions,
-  tzlocal,
-  validators,
   watchdog,
 }:
 
 buildPythonPackage rec {
   pname = "streamlit";
-  version = "1.39.0";
+  version = "1.40.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/vneeYPE7mXAjoVgfX/8y1awBIKxBB+mL5DkgV053zo=";
+    hash = "sha256-HysJ8Etq02aix7TUgQRpfRyLwz9Ivfftk5zATBLTrsY=";
   };
 
   build-system = [
     setuptools
-  ];
-
-  pythonRelaxDeps = [
-    "packaging"
-    "tenacity"
   ];
 
   dependencies = [
@@ -57,25 +47,20 @@ buildPythonPackage rec {
     blinker
     cachetools
     click
-    gitpython
-    importlib-metadata
     numpy
     packaging
     pandas
     pillow
     protobuf
     pyarrow
-    pydeck
-    pympler
-    python-dateutil
     requests
     rich
     tenacity
     toml
-    tornado
     typing-extensions
-    tzlocal
-    validators
+    gitpython
+    pydeck
+    tornado
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
 
   # pypi package does not include the tests, but cannot be built with fetchFromGitHub

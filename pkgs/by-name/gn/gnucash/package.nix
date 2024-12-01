@@ -163,7 +163,7 @@ stdenv.mkDerivation rec {
       - Financial Calculations
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ domenkozar AndersonTorres rski nevivurn ];
+    maintainers = with maintainers; [ domenkozar rski nevivurn ];
     platforms = platforms.unix;
     mainProgram = "gnucash";
   };

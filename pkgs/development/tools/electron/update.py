@@ -396,7 +396,7 @@ def repo_from_dep(dep: dict) -> Optional[Repo]:
         if search_object:
             return GitHubRepo(search_object.group(1), search_object.group(2), rev)
 
-        if re.match(r"https://.+.googlesource.com", url):
+        if re.match(r"https://.+\.googlesource.com", url):
             return GitilesRepo(url, rev)
 
         return GitRepo(url, rev)

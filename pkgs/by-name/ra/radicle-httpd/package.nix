@@ -13,19 +13,19 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "radicle-httpd";
-  version = "0.17.0";
+  version = "0.17.1";
   env.RADICLE_VERSION = version;
 
   # You must update the radicle-explorer source hash when changing this.
   src = fetchgit {
     url = "https://seed.radicle.xyz/z4V1sjrXqjvFdnCUbxPFqd5p4DtH5.git";
     rev = "refs/namespaces/z6MkkfM3tPXNPrPevKr3uSiQtHPuwnNhu2yUVjgd2jXVsVz5/refs/tags/v${version}";
-    hash = "sha256-nstyb1rSll3Sl0DlA9JAAwvr6JN8okJ03WoQnE4dXEk=";
+    hash = "sha256-AhiIpNVDL4XYIQ89aYu8Cp2nKhIPYCzyrcG5hw9xsmE=";
     sparseCheckout = [ "radicle-httpd" ];
   };
 
   sourceRoot = "${src.name}/radicle-httpd";
-  cargoHash = "sha256-M4tDtUXS99/Zb1Z71CTdW9gMgRR30rbwA6wK7nlwblQ=";
+  cargoHash = "sha256-TwK2QsoKVWYXn4mZEERQCnMOY4F9+wzjLBtvhH69wAs=";
 
   nativeBuildInputs = [
     asciidoctor

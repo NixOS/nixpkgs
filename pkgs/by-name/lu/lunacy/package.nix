@@ -27,11 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-roD/bKv1N2sru/tZ6Zl1J2AyY1mgj2ssB2a42kwBNHM=";
   };
 
-  unpackCmd = ''
-    mkdir -p root
-    dpkg-deb -x $src root
-  '';
-
   buildInputs = [
     zlib
     libgcc

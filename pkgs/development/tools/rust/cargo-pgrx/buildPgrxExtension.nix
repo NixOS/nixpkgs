@@ -85,15 +85,21 @@ let
 
   pgrxPostgresMajor = lib.versions.major postgresql.version;
   preBuildAndTest = ''
-    export PGRX_HOME=$(mktemp -d)
+    export PGRX_HOME="$(mktemp -d)"
     export PGDATA="$PGRX_HOME/data-${pgrxPostgresMajor}/"
     cargo-pgrx pgrx init "--pg${pgrxPostgresMajor}" ${lib.getDev postgresql}/bin/pg_config
-    echo "unix_socket_directories = '$(mktemp -d)'" > "$PGDATA/postgresql.conf"
+
+    # unix sockets work in sandbox, too.
+    export PGHOST="$(mktemp -d)"
+    cat > "$PGDATA/postgresql.conf" <<EOF
+    listen_addresses = ''\''
+    unix_socket_directories = '$PGHOST'
+    EOF
 
     # This is primarily for Mac or other Nix systems that don't use the nixbld user.
     export USER="$(whoami)"
     pg_ctl start
-    createuser -h localhost --superuser --createdb "$USER" || true
+    createuser --superuser --createdb "$USER" || true
     pg_ctl stop
   '';
 

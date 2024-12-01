@@ -12,7 +12,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "adwsteamgtk";
-  version = "0.7.1";
+  version = "0.7.2";
   # built with meson, not a python format
   format = "other";
 
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     owner = "Foldex";
     repo = "AdwSteamGtk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/1fiiQBmQ9rvJ6KyImFkdxOjqfCZ/0nO3iRpggzNocs=";
+    hash = "sha256-DI5WK8CtoyH8hSogQx5/oDCrGoLxE06cy63ubU+e3bQ=";
   };
 
   buildInputs = [

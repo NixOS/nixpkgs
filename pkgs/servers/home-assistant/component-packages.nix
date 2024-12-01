@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.11.2";
+  version = "2024.11.3";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -352,7 +352,10 @@
       paho-mqtt_1
     ];
     "azure_data_explorer" = ps: with ps; [
-    ]; # missing inputs: azure-kusto-data azure-kusto-ingest
+      azure-kusto-data
+      azure-kusto-ingest
+    ]
+    ++ azure-kusto-data.optional-dependencies.aio;
     "azure_devops" = ps: with ps; [
       aioazuredevops
     ];
@@ -3225,7 +3228,8 @@
       p1monitor
     ];
     "palazzetti" = ps: with ps; [
-    ]; # missing inputs: pypalazzetti
+      pypalazzetti
+    ];
     "panasonic_bluray" = ps: with ps; [
       panacotta
     ];
@@ -5125,6 +5129,7 @@
     "awair"
     "aws"
     "axis"
+    "azure_data_explorer"
     "azure_devops"
     "azure_event_hub"
     "backup"
@@ -5615,6 +5620,7 @@
     "ovo_energy"
     "owntracks"
     "p1_monitor"
+    "palazzetti"
     "panasonic_viera"
     "panel_custom"
     "peco"

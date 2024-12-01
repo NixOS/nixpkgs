@@ -11,7 +11,6 @@
 , pipewire
 , virglrenderer
 , libkrunfw
-, llvmPackages
 , rustc
 , withGpu ? false
 , withSound ? false
@@ -21,25 +20,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrun";
-  version = "1.9.6";
+  version = "1.9.8";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libkrun";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-bseyOHgteLEUz93gL5G2zR0ssijMd86zmlvm02a7FSY=";
+    hash = "sha256-a5ot5ad8boANK3achn6PJ52k/xmxawbTM0/hEEC/fss=";
   };
 
   outputs = [ "out" "dev" ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
-    hash = "sha256-OerD2SEJquv7bHEZw4jdxmrQn8SuIUJiYPu9E1u439o=";
+    hash = "sha256-oa3M/HL0hWoXlqY0Wxy9jf6hIvMqevtpuYiTCrS1Q74=";
   };
 
   nativeBuildInputs = [
-    llvmPackages.clang
     rustPlatform.cargoSetupHook
+    rustPlatform.bindgenHook
     cargo
     rustc
   ] ++ lib.optional (sevVariant || withGpu) pkg-config;
@@ -51,8 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals withGpu [ libepoxy libdrm virglrenderer ]
     ++ lib.optional withSound pipewire
     ++ lib.optional sevVariant openssl;
-
-  env.LIBCLANG_PATH = "${lib.getLib llvmPackages.clang-unwrapped}/lib/libclang.so";
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

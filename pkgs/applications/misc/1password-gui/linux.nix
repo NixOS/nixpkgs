@@ -151,6 +151,6 @@ stdenv.mkDerivation {
       # See: https://github.com/NixOS/nixpkgs/pull/232718#issuecomment-1582123406
       # Remove this comment when upstream fixes:
       # https://1password.community/discussion/comment/624011/#Comment_624011
-      #--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      #--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
   '';
 }

@@ -7,6 +7,7 @@
 , flac
 , libogg
 , libvorbis
+, stdenv_32bit
 , iceSupport ? true, zeroc-ice
 , jackSupport ? false, libjack2
 , pipewireSupport ? true, pipewire
@@ -15,7 +16,7 @@
 }:
 
 let
-  generic = overrides: source: stdenv.mkDerivation (source // overrides // {
+  generic = overrides: source: (overrides.stdenv or stdenv).mkDerivation (source // overrides // {
     pname = overrides.type;
     version = source.version;
 
@@ -95,6 +96,17 @@ let
       ++ lib.optional iceSupport zeroc-ice;
   } source;
 
+  overlay = source: generic {
+    stdenv = stdenv_32bit;
+    type = "mumble-overlay";
+
+    configureFlags = [
+      "-D server=OFF"
+      "-D client=OFF"
+      "-D overlay=ON"
+    ];
+  } source;
+
   source = rec {
     version = "1.5.634";
 
@@ -118,4 +130,5 @@ let
 in {
   mumble  = lib.recursiveUpdate (client source) {meta.mainProgram = "mumble";};
   murmur  = lib.recursiveUpdate (server source) {meta.mainProgram = "mumble-server";};
+  overlay = overlay source;
 }

@@ -1,4 +1,4 @@
-outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre2, libxml2, libxslt
+outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib-ng, pcre2, libxml2, libxslt
 , nginx-doc
 
 , nixosTests
@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     removeReferencesTo
   ] ++ nativeBuildInputs;
 
-  buildInputs = [ openssl zlib pcre2 libxml2 libxslt perl ]
+  buildInputs = [ openssl zlib-ng pcre2 libxml2 libxslt perl ]
     ++ buildInputs
     ++ mapModules "inputs"
     ++ lib.optional withGeoIP geoip
@@ -126,10 +126,17 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = toString ([
     "-I${libxml2.dev}/include/libxml2"
     "-Wno-error=implicit-fallthrough"
+    (
+      # zlig-ng patch needs this
+      if stdenv.cc.isGNU then
+        "-Wno-error=discarded-qualifiers"
+      else
+        "-Wno-error=incompatible-pointer-types-discards-qualifiers"
+    )
   ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [
     # fix build vts module on gcc11
     "-Wno-error=stringop-overread"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-error=deprecated-declarations"
     "-Wno-error=gnu-folding-constant"
     "-Wno-error=unused-but-set-variable"
@@ -155,6 +162,13 @@ stdenv.mkDerivation {
       '';
     })
     ./nix-skip-check-logs-path.patch
+  ] ++ lib.optionals (pname != "openresty") [
+    # https://github.com/NixOS/nixpkgs/issues/357522
+    # https://github.com/zlib-ng/patches/blob/5a036c0a00120c75ee573b27f4f44ade80d82ff2/nginx/README.md
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/zlib-ng/patches/38756e6325a5d2cc32709b8e9549984c63a78815/nginx/1.26.2-zlib-ng.patch";
+      hash = "sha256-LX5kP6jFiqgt4ApKw5eqOAFJNkc5QI6kX8ZRvBYTi9k=";
+    })
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/102-sizeof_test_fix.patch";

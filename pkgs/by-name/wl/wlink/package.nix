@@ -36,17 +36,17 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "WCH-Link flash tool for WCH's RISC-V MCUs(CH32V, CH56X, CH57X, CH58X, CH59X, CH32L103, CH32X035, CH641, CH643)";
     homepage = "https://github.com/ch32-rs/wlink";
     changelog = "https://github.com/ch32-rs/wlink/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    platforms = with platforms; linux ++ darwin ++ windows;
+    platforms = with lib.platforms; linux ++ darwin ++ windows;
     broken = !stdenv.hostPlatform.isLinux;
-    maintainers = with maintainers; [ jwillikers ];
+    maintainers = with lib.maintainers; [ jwillikers ];
     mainProgram = "wlink";
   };
 }

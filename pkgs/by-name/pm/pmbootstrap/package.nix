@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , git
+, multipath-tools
 , openssl
 , ps
 , fetchFromGitLab
@@ -11,14 +12,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "2.3.1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitLab {
-    owner = "postmarketos";
+    owner = "postmarketOS";
     repo = pname;
     rev = version;
-    hash = "sha256-0hC84Gyfr1FOpZGAc7pAhz/QBSTA5A/Lu/ZJdzlEcX4=";
+    hash = "sha256-hUrWMU4V7tf/qVR4geR5FsCQ+BZA+zCPTdCZGN1PMKk=";
+    domain = "gitlab.postmarketos.org";
   };
 
   pmb_test = "${src}/test";
@@ -89,6 +91,7 @@ python3Packages.buildPythonApplication rec {
     "test_newapkbuild"
     "test_package"
     "test_package_from_aports"
+    "test_pkgrepo_pmaports"
     "test_pkgrel_bump"
     "test_pmbootstrap_status"
     "test_print_checks_git_repo"
@@ -110,7 +113,7 @@ python3Packages.buildPythonApplication rec {
     "test_version"
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ git openssl ]}" ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ git openssl multipath-tools ]}" ];
 
   passthru.updateScript = gitUpdater { };
 

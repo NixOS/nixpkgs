@@ -10,16 +10,16 @@ let
 in
 rustPlatform.buildRustPackage {
   pname = "lspce-module";
-  version = "1.1.0-unstable-2024-09-07";
+  version = "1.1.0-unstable-2024-10-07";
 
   src = fetchFromGitHub {
     owner = "zbelial";
     repo = "lspce";
-    rev = "4bf1fa9d3d8b17eb6ae628e93018ee8f020565ba";
-    hash = "sha256-OeDUQXqVBUfKjYt5oSmfl2N/19PFYIbPXfFqloai0LQ=";
+    rev = "2a06232033478757dc5770dc7ba658848073de42";
+    hash = "sha256-iCge/m1z4Tl3dDvbN4FGsINWE5GEtLxTlvBBu8Zxhzs=";
   };
 
-  cargoHash = "sha256-VMGdB4dF3Ccxl6DifdXFH4+XVT7RoeqI/l/AR/epg4o=";
+  cargoHash = "sha256-I3NxV0uIwQ/Vg9Txfx+ouA6FXOYyLQ2kKdhnAdkNfdE=";
 
   checkFlags = [
     # flaky test

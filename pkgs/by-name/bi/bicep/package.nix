@@ -9,13 +9,13 @@
 
 buildDotnetModule rec {
   pname = "bicep";
-  version = "0.30.23";
+  version = "0.31.92";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "bicep";
     rev = "v${version}";
-    hash = "sha256-EQMSqEvBdOEnntv2glVp19LsjC4Zvh5U0zx0h3n8Okc=";
+    hash = "sha256-NBWZ/URykZxkupMI+xOWB/sJ0hJojkJKvEnrmQg6CCk=";
   };
 
   postPatch = ''

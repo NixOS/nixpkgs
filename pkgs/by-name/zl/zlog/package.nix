@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeFlagsArray+=(CFLAGS="-Wno-pointer-to-int-cast -Wno-newline-eof")
+  '';
+
+
   meta = with lib; {
     description= "Reliable, high-performance, thread safe, flexible, clear-model, pure C logging library";
     homepage = "https://hardysimpson.github.io/zlog/";

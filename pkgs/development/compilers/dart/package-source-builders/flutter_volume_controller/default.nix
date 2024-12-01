@@ -1,11 +1,10 @@
 {
   stdenv,
-  mdk-sdk,
 }:
 
 { version, src, ... }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "flutter_volume_controller";
   inherit version src;
   inherit (src) passthru;
@@ -18,8 +17,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     mkdir $out
     cp -r ./* $out/
+
     runHook postInstall
   '';
 }

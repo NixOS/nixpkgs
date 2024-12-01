@@ -192,8 +192,10 @@ in
                 "/ip6/::/tcp/4001"
                 "/ip4/0.0.0.0/udp/4001/quic-v1"
                 "/ip4/0.0.0.0/udp/4001/quic-v1/webtransport"
+                "/ip4/0.0.0.0/udp/4001/webrtc-direct"
                 "/ip6/::/udp/4001/quic-v1"
                 "/ip6/::/udp/4001/quic-v1/webtransport"
+                "/ip6/::/udp/4001/webrtc-direct"
               ];
               description = "Where Kubo listens for incoming p2p connections";
             };
@@ -339,7 +341,7 @@ in
           # After an unclean shutdown this file may exist which will cause the config command to attempt to talk to the daemon. This will hang forever if systemd is holding our sockets open.
           rm -vf "$IPFS_PATH/api"
       '' + lib.optionalString cfg.autoMigrate ''
-        ${pkgs.kubo-migrator}/bin/fs-repo-migrations -to '${cfg.package.repoVersion}' -y
+        '${lib.getExe pkgs.kubo-migrator}' -to '${cfg.package.repoVersion}' -y
       '' + ''
         fi
         ipfs --offline config show |

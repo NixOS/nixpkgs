@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -31,6 +32,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-6b6nuOp4pEufHEmTraSfKpbtPuO3Z9hQJfvKuuyy7as=";
   };
+
+  patches = [
+    # Fix build with fwupd 2.0.0
+    # https://github.com/elementary/switchboard-plug-about/pull/343
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-about/commit/6f8ba61cb3d82229e19358ede81b77f66dbb06a2.patch";
+      hash = "sha256-E9itq/KGzw36S1dAFoCowa/A2/f6Shx9F379nEIM2qI=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

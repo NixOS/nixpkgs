@@ -9,7 +9,7 @@
 (
   (buildMozillaMach rec {
     pname = "floorp";
-    packageVersion = "11.20.0";
+    packageVersion = "11.21.0";
     applicationName = "Floorp";
     binaryName = "floorp";
     branding = "browser/branding/official";
@@ -24,7 +24,7 @@
       repo = "Floorp";
       fetchSubmodules = true;
       rev = "v${packageVersion}";
-      hash = "sha256-+FVnG8CKEQdFN9bO8rUZadp+d8keCB98T7qt9OBfLDA=";
+      hash = "sha256-gb190h7BAt0biE/RQayyzwSFCDEMe4F8YT6Re2mK9r4=";
     };
 
     extraConfigureFlags = [
@@ -50,7 +50,6 @@
       homepage = "https://floorp.app/";
       maintainers = with lib.maintainers; [ christoph-heiss ];
       platforms = lib.platforms.unix;
-      badPlatforms = lib.platforms.darwin;
       broken = stdenv.buildPlatform.is32bit;
       # since Firefox 60, build on 32-bit platforms fails with "out of memory".
       # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
@@ -75,12 +74,4 @@
   (prev: {
     MOZ_DATA_REPORTING = "";
     MOZ_TELEMETRY_REPORTING = "";
-
-    # Upstream already includes some of the bugfix patches that are applied by
-    # `buildMozillaMach`. Pick out only the relevant ones for Floorp and override
-    # the list here.
-    patches = [
-      ../firefox/env_var_for_system_dir-ff111.patch
-      ../firefox/no-buildconfig-ffx121.patch
-    ];
   })

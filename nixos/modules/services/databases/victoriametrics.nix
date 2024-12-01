@@ -31,7 +31,15 @@ let
 in
 {
   options.services.victoriametrics = {
-    enable = mkEnableOption "VictoriaMetrics is a fast, cost-effective and scalable monitoring solution and time series database.";
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to enable VictoriaMetrics in single-node mode.
+
+        VictoriaMetrics is a fast, cost-effective and scalable monitoring solution and time series database.
+      '';
+    };
     package = mkPackageOption pkgs "victoriametrics" { };
 
     listenAddress = mkOption {
