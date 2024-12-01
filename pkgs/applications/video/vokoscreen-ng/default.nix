@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vokoscreen-ng";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "vkohaupt";
     repo = "vokoscreenNG";
-    rev = version;
-    hash = "sha256-PLgKOdSx0Kdobex5KaeCxWcindHEN9p4+xaVN/gr7Pk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-efgvq/jl/ecjtINy5BdqtYRp2gxEvOsMzQVyCZ3ig+Q=";
   };
 
   qmakeFlags = [ "src/vokoscreenNG.pro" ];
@@ -42,11 +42,6 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
   ];
-
-  postPatch = ''
-    substituteInPlace src/vokoscreenNG.pro \
-      --replace lrelease-qt5 lrelease
-  '';
 
   preBuild = ''
     lrelease src/language/*.ts
