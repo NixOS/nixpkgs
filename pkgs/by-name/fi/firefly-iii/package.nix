@@ -10,31 +10,25 @@
 , dataDir ? "/var/lib/firefly-iii"
 }:
 
-let
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "firefly-iii";
-  version = "6.1.21";
-  phpPackage = php83;
-  npmDepsHash = "sha256-N4o7FKdya6bGakNKNq2QUV8HKRfuov5ahvbjR/rsimU=";
+  version = "6.1.24";
 
   src = fetchFromGitHub {
     owner = "firefly-iii";
     repo = "firefly-iii";
-    rev = "v${version}";
-    hash = "sha256-jadxzUhOb3G/DwJk8IV4IcwjmxgrrriVMVwj1cYFHEA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ZB0yaGHL1AI67i2ixUzuWyiBjXJNlDV4APBahDuNObI=";
   };
-in
 
-stdenvNoCC.mkDerivation (finalAttrs: {
-  inherit pname src version;
-
-  buildInputs = [ phpPackage ];
+  buildInputs = [ php83 ];
 
   nativeBuildInputs = [
     nodejs
     nodejs.python
     buildPackages.npmHooks.npmConfigHook
-    phpPackage.composerHooks.composerInstallHook
-    phpPackage.packages.composer-local-repo-plugin
+    php83.composerHooks.composerInstallHook
+    php83.packages.composer-local-repo-plugin
   ];
 
   composerNoDev = true;
@@ -43,15 +37,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   composerStrictValidation = true;
   strictDeps = true;
 
-  vendorHash = "sha256-d5WwrVOVG9ZRZEsG2iKcbp2fk27laHvcJPJUwY3YgDg=";
+  vendorHash = "sha256-6sOmW+CFuNEBVHpZwh/wjrIINPdcPJUvosmdLaCvZlw=";
 
   npmDeps = fetchNpmDeps {
-    inherit src;
-    name = "${pname}-npm-deps";
-    hash = npmDepsHash;
+    inherit (finalAttrs) src;
+    name = "${finalAttrs.pname}-npm-deps";
+    hash = "sha256-W3lV0LbmOPfIwStNf4IwBVorSFHIlpyuIk+17/V/Y2Y=";
   };
 
-  composerRepository = phpPackage.mkComposerRepository {
+  composerRepository = php83.mkComposerRepository {
     inherit (finalAttrs)
       pname
       src
@@ -70,7 +64,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit phpPackage;
+    phpPackage = php83;
     tests = nixosTests.firefly-iii;
     updateScript = nix-update-script { };
   };
@@ -83,7 +77,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    changelog = "https://github.com/firefly-iii/firefly-iii/releases/tag/v${version}";
+    changelog = "https://github.com/firefly-iii/firefly-iii/releases/tag/v${finalAttrs.version}";
     description = "Firefly III: a personal finances manager";
     homepage = "https://github.com/firefly-iii/firefly-iii";
     license = lib.licenses.agpl3Only;
