@@ -28,10 +28,14 @@ appimageTools.wrapType2 {
   meta = with lib; {
     description = "Chatbox AI is an AI client application and smart assistant.";
     homepage = "https://chatboxai.app";
+    downloadPage = "https://chatboxai.app/en#download";
+    changelog = "https://chatboxai.app/en/help-center/changelog";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = [ ];
     mainProgram = "chatbox";
+
+    # Help porting to other platforms :)
     platforms = [ "x86_64-linux" ];
   };
 }
