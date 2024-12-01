@@ -263,6 +263,15 @@ in {
       serve = {
         enable = lib.mkEnableOption "automatic nginx and uwsgi setup for mailman-web";
 
+        uwsgiSettings = lib.mkOption {
+          default = { };
+          example = { uwsgi.buffer-size = 8192; };
+          inherit (pkgs.formats.json {}) type;
+          description = ''
+            Extra configuration to merge into uwsgi config.
+          '';
+        };
+
         virtualRoot = lib.mkOption {
           default = "/";
           example = lib.literalExpression "/lists";
@@ -580,18 +589,20 @@ in {
       };
 
       mailman-uwsgi = lib.mkIf cfg.serve.enable (let
-        uwsgiConfig.uwsgi = {
-          type = "normal";
-          plugins = ["python3"];
-          home = webEnv;
-          http = "127.0.0.1:18507";
-        }
-        // (if cfg.serve.virtualRoot == "/"
-          then { module = "mailman_web.wsgi:application"; }
-          else {
-            mount = "${cfg.serve.virtualRoot}=mailman_web.wsgi:application";
-            manage-script-name = true;
+        uwsgiConfig = lib.recursiveUpdate {
+          uwsgi = {
+            type = "normal";
+            plugins = ["python3"];
+            home = webEnv;
+            http = "127.0.0.1:18507";
+          }
+          // (if cfg.serve.virtualRoot == "/"
+            then { module = "mailman_web.wsgi:application"; }
+            else {
+              mount = "${cfg.serve.virtualRoot}=mailman_web.wsgi:application";
+              manage-script-name = true;
           });
+        } cfg.serve.uwsgiSettings;
         uwsgiConfigFile = pkgs.writeText "uwsgi-mailman.json" (builtins.toJSON uwsgiConfig);
       in {
         wantedBy = ["multi-user.target"];
