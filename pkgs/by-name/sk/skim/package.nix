@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchCrate,
+  fetchFromGitHub,
   installShellFiles,
   nix-update-script,
   runtimeShell,
@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "skim";
-  version = "0.10.4";
+  version = "0.15.0";
 
   outputs = [
     "out"
@@ -18,16 +18,18 @@ rustPlatform.buildRustPackage rec {
     "vim"
   ];
 
-  src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-C2yK+SO8Tpw3BxXXu1jeDzYJ2548RZa7NFWaE0SdNJ0=";
+  src = fetchFromGitHub {
+    owner = "skim-rs";
+    repo = "skim";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Y/MVjwpNyYXjQWB3s8WRblCukBr0z81k3gf3bf58KGE=";
   };
 
   postPatch = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
   '';
 
-  cargoHash = "sha256-jBcgoWbmBOgU7M71lr4OXOe2S6NAXl+I8D+ZtT45Vos=";
+  cargoHash = "sha256-llpNnZdIFHCmyyVla+tZOgpMTavu/m3ZGFZaS5EbiVo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
