@@ -50,6 +50,7 @@ lib:
   iproute2,
   ipset,
   iptables,
+  nftables,
   kmod,
   lib,
   libseccomp,
@@ -362,6 +363,7 @@ buildGoModule rec {
     kmod
     socat
     iptables
+    nftables
     iproute2
     ipset
     bridge-utils
