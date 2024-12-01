@@ -2898,6 +2898,18 @@ final: prev:
     meta.homepage = "https://github.com/chrisbra/csv.vim/";
   };
 
+  csvview-nvim = buildVimPlugin {
+    pname = "csvview.nvim";
+    version = "2024-11-18";
+    src = fetchFromGitHub {
+      owner = "hat0uma";
+      repo = "csvview.nvim";
+      rev = "63b6585fc22bba2060e6dd4600bd2dd0b77dd446";
+      sha256 = "0615vjdiwij5j6qxa5hfvylq9swp0z6lm5xc38yk6yxhjrkcdvyg";
+    };
+    meta.homepage = "https://github.com/hat0uma/csvview.nvim/";
+  };
+
   ctrlp-cmatcher = buildVimPlugin {
     pname = "ctrlp-cmatcher";
     version = "2015-10-15";
