@@ -237,8 +237,6 @@ impure-cmds // apple-source-packages // apple-source-headers // stubs // {
   # As the name says, this is broken, but I don't want to lose it since it's a direction we want to go in
   # libdispatch-broken = callPackage ../os-specific/darwin/swift-corelibs/libdispatch.nix { };
 
-  ios-deploy = callPackage ../os-specific/darwin/ios-deploy {};
-
   # See doc/packages/darwin-builder.section.md
   linux-builder = lib.makeOverridable ({ modules }:
     let
