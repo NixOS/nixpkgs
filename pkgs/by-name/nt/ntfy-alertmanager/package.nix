@@ -16,12 +16,14 @@ buildGoModule rec {
   vendorHash = "sha256-WKImEc7FvZm/6noC2+Lz4g+ASFEuRBE8nzTEDbXaWic=";
 
   meta = with lib; {
-    description = "A bridge between ntfy and Alertmanager.";
+    description = "A bridge between ntfy and Alertmanager";
     homepage = "https://git.xenrox.net/~xenrox/ntfy-alertmanager";
     license = licenses.agpl3Only;
+    mainProgram = "ntfy-alertmanager";
     maintainers = with maintainers; [
       bleetube
       fpletz
     ];
+    platforms = platforms.linux;
   };
 }
