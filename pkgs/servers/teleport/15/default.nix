@@ -1,7 +1,7 @@
 { wasm-bindgen-cli, ... }@args:
 import ../generic.nix (args // {
-  version = "15.4.21";
-  hash = "sha256-n5dAJ5ilq5nHo3neQzCUFnDRwLhArwleMSho4/g0MT4=";
+  version = "15.4.22";
+  hash = "sha256-CgHu45r2IHydPoaI/chPQ6WoWITcOKzJoAApdXACa28=";
   vendorHash = "sha256-bW8ztNeSzxUNtbuBtxIya9TeGfktC+/fz9iXB0GL0Mg=";
   yarnHash = "sha256-ZaLLrcwAeq6TQ1SaA2few4s0HqktOZEpxCTcNGloGfk=";
   cargoLock = {
