@@ -99,6 +99,7 @@ let
       system = if use64bitGuest then "x86_64-linux" else "i686-linux";
       modules = [
         (testVMConfig vmName vmScript)
+        { nixpkgs.pkgs = pkgs; }
       ];
     }).config;
   in pkgs.vmTools.runInLinuxVM (pkgs.runCommand "virtualbox-image" {

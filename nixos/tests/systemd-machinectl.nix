@@ -21,6 +21,7 @@ let
 
   containerSystem = (import ../lib/eval-config.nix {
     inherit (pkgs) system;
+    inherit pkgs;
     modules = [ container ];
   }).config.system.build.toplevel;
 
