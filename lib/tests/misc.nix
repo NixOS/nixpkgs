@@ -2696,12 +2696,6 @@ runTests {
   in {
     expr = lib.filterAttrsRecursive (name: value: !lib.elem name [ "callPackage" "newScope" "overrideScope" "packages" ]) (packagesFromDirectoryRecursive {
       inherit (emptyScope) callPackage newScope;
-      recurseIntoDirectory = f: { newScope, ... }@args:
-        recurseIntoAttrs (makeScope newScope (self:
-          f (args // {
-            inherit (self) callPackage newScope;
-          })
-        ));
       directory = ./packages-from-directory/scope;
     });
     expected = lib.recurseIntoAttrs {
