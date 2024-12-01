@@ -41,10 +41,6 @@ use Fcntl ':flock';
 my $out = "@out@";
 # System closure path to switch to
 my $toplevel = "@toplevel@";
-# Path to the directory containing systemd tools of the old system
-my $cur_systemd = abs_path("/run/current-system/sw/bin");
-# Path to the systemd store path of the new system
-my $new_systemd = "@systemd@";
 
 # To be robust against interruption, record what units need to be started etc.
 # We read these files again every time this script starts to make sure we continue
@@ -129,6 +125,12 @@ if (($ENV{"NIXOS_NO_SYNC"} // "") ne "1") {
 if ($action eq "boot") {
     exit(0);
 }
+
+# Path to the directory containing systemd tools of the old system
+# Needs to be after the "boot" action exits, as this directory will not exist when doing a NIXOS_LUSTRATE install
+my $cur_systemd = abs_path("/run/current-system/sw/bin");
+# Path to the systemd store path of the new system
+my $new_systemd = "@systemd@";
 
 # Check if we can activate the new configuration.
 my $cur_init_interface_version = read_file("/run/current-system/init-interface-version", err_mode => "quiet") // "";
