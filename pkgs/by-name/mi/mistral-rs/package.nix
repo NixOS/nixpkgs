@@ -83,17 +83,17 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "mistral-rs";
-  version = "0.3.2";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aflzpJZ48AFBqNTssZl2KxkspQb662nGkEU6COIluxk=";
+    hash = "sha256-45Y1nUtMhlQWMUtu2GnUDt8bramfEcoPrfzrOhvP2yo=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-USp8siEXVjtkPoCHfQjDYPtgLfNHcy02LSUNdwDbxgs=";
+  cargoHash = "sha256-ezSpmD7ybIdWyWnMeIGCDV9qCNM+TkZd3BZxk7wLAJ0=";
 
   nativeBuildInputs = [
     pkg-config
