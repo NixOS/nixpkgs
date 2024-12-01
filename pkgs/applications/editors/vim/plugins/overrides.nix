@@ -884,6 +884,13 @@ in
       '';
   });
 
+  dotnet-nvim = super.dotnet-nvim.overrideAttrs {
+    dependencies = with self; [
+      telescope-nvim
+      plenary-nvim
+    ];
+  };
+
   efmls-configs-nvim = super.efmls-configs-nvim.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
   };
