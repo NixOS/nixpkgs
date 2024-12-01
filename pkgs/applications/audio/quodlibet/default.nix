@@ -20,7 +20,7 @@
   libappindicator-gtk3,
   libmodplug,
   librsvg,
-  libsoup,
+  libsoup_3,
   webkitgtk_4_0,
 
   # optional features
@@ -89,7 +89,7 @@ python3.pkgs.buildPythonApplication {
       keybinder3
       libappindicator-gtk3
       libmodplug
-      libsoup
+      libsoup_3
       webkitgtk_4_0
     ]
     ++ lib.optionals (withXineBackend) [ xine-lib ]
