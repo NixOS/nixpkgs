@@ -19460,6 +19460,13 @@
     name = "Maxwell Beck";
     keys = [ { fingerprint = "D260 79E3 C2BC 2E43 905B  D057 BB3E FA30 3760 A0DB"; } ];
   };
+  rytswd = {
+    email = "rytswd@gmail.com";
+    github = "rytswd";
+    githubId = 23435099;
+    name = "Ryota";
+    keys = [ { fingerprint = "537E 712F 0EC3 91C2 B47F  56E2 EB5D 1A84 5333 43BB"; } ];
+  };
   ryze = {
     name = "Ryze";
     github = "ryze312";

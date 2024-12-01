@@ -4645,8 +4645,6 @@ with pkgs;
 
   ophcrack-cli = ophcrack.override { enableGui = false; };
 
-  ophis = python3Packages.callPackage ../development/compilers/ophis { };
-
   open-interpreter = with python3Packages; toPythonApplication open-interpreter;
 
   openhantek6022 = libsForQt5.callPackage ../applications/science/electronics/openhantek6022 { };
@@ -13371,8 +13369,12 @@ with pkgs;
   bitwig-studio4 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio4.nix {
     libjpeg = libjpeg8;
   };
-  bitwig-studio5 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio5.nix {
+  bitwig-studio5-unwrapped =  callPackage ../applications/audio/bitwig-studio/bitwig-studio5.nix {
     libjpeg = libjpeg8;
+  };
+
+  bitwig-studio5 = callPackage ../applications/audio/bitwig-studio/bitwig-wrapper.nix {
+    bitwig-studio-unwrapped = bitwig-studio5-unwrapped;
   };
 
   bitwig-studio = bitwig-studio5;

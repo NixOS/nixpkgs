@@ -1,17 +1,20 @@
 {
   lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  python-dateutil,
-  requests,
-  azure-identity,
-  msal,
-  ijson,
-  azure-core,
-  asgiref,
   aiohttp,
+  asgiref,
+  azure-core,
+  azure-identity,
+  buildPythonPackage,
+  fetchFromGitHub,
+  ijson,
+  msal,
   pandas,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,40 +22,54 @@ buildPythonPackage rec {
   version = "4.6.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tfOnb6rFjTzg4af26gK5gk1185mejAiaDvetE/r4L0Q=";
+  disabled = pythonOlder "3.10";
+
+  src = fetchFromGitHub {
+    owner = "Azure";
+    repo = "azure-kusto-python";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rm8G3/WAUlK1/80uk3uiTqDA5hUIr+VVZEmPe0mYBjI=";
   };
+
+  sourceRoot = "${src.name}/${pname}";
 
   build-system = [ setuptools ];
 
   dependencies = [
+    azure-core
+    azure-identity
+    ijson
+    msal
     python-dateutil
     requests
-    azure-identity
-    msal
-    ijson
-    azure-core
   ];
 
   optional-dependencies = {
-    pandas = [ pandas ];
     aio = [
       aiohttp
       asgiref
     ];
+    pandas = [ pandas ];
   };
 
-  # Tests require secret connection strings
-  # and a network connection.
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "azure.kusto.data" ];
 
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/aio/test_async_token_providers.py"
+    "tests/test_token_providers.py"
+    "tests/test_e2e_data.py"
+  ];
+
   meta = {
-    changelog = "https://github.com/Azure/azure-kusto-python/releases/tag/v${version}";
     description = "Kusto Data Client";
-    homepage = "https://github.com/Azure/azure-kusto-python";
+    homepage = "https://pypi.org/project/azure-kusto-data/";
+    changelog = "https://github.com/Azure/azure-kusto-python/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];
   };
