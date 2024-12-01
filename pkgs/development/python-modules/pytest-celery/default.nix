@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-celery";
-  version = "1.1.1";
+  version = "1.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "celery";
     repo = "pytest-celery";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LLbT2GjKvG8RisAgsCxI3iybJLLjbESZ9tCBKub8bj8=";
+    hash = "sha256-TUtKfGOxvVkiMhsUqyNDK08OTuzzKHrBiPU4JCKsIKM=";
   };
 
   postPatch = ''
