@@ -43,17 +43,22 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-ugly
   ];
 
+  # TODO: translations don't get built by the qmake project
   preBuild = ''
     lrelease src/language/*.ts
   '';
 
-  postInstall = ''
-    mkdir -p $out/bin $out/share/applications $out/share/icons
-    cp ./vokoscreenNG $out/bin/
-    cp ./src/applications/vokoscreenNG.desktop $out/share/applications/
-    cp ./src/applications/vokoscreenNG.png $out/share/icons/
+  # upstream doesn't provide an install target
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 -t $out/bin vokoscreenNG
+    install -Dm644 -t $out/share/applications src/applications/vokoscreenNG.desktop
+    install -Dm644 -t $out/share/icons src/applications/vokoscreenNG.png
+
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
-    wrapQtApp $out/bin/vokoscreenNG
+
+    runHook postInstall
   '';
 
   meta = with lib; {
