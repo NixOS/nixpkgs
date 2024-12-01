@@ -1,6 +1,5 @@
 import logging
 import os
-import shlex
 from datetime import datetime
 from importlib.resources import files
 from pathlib import Path
@@ -145,6 +144,7 @@ def copy_closure(
     if not host:
         return
 
+    sshopts = os.getenv("NIX_SSHOPTS", "")
     run_wrapper(
         [
             "nix-copy-closure",
@@ -154,13 +154,13 @@ def copy_closure(
             closure,
         ],
         extra_env={
-            # for the remote to remote case, we can't add SSH_DEFAULT_OPTS to
-            # host.opts because it includes the ControlPane opts that will not
-            # work in the remote, because the temporary directory that we
-            # created will not exist
-            "NIX_SSHOPTS": shlex.join(host.opts)
+            # Using raw NIX_SSHOPTS here to avoid messing up with the passed
+            # parameters, and we do not add the SSH_DEFAULT_OPTS in the remote
+            # to remote case, otherwise it will fail because of ControlPath
+            # will not exist in remote
+            "NIX_SSHOPTS": sshopts
             if from_host and to_host
-            else shlex.join(SSH_DEFAULT_OPTS + host.opts)
+            else " ".join(filter(lambda x: x, [*SSH_DEFAULT_OPTS, sshopts]))
         },
         remote=from_host if to_host else None,
     )

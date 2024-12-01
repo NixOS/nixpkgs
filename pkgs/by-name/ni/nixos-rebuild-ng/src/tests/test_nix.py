@@ -79,7 +79,8 @@ def test_build_flake(mock_run: Any) -> None:
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
 def test_remote_build(mock_run: Any, monkeypatch: Any) -> None:
-    build_host = m.Remote("user@host", ["--ssh", "opts"], None)
+    build_host = m.Remote("user@host", [], None)
+    monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
     assert n.remote_build(
         "config.system.build.toplevel",
         m.BuildAttr("<nixpkgs/nixos>", "preAttr"),
@@ -128,9 +129,10 @@ def test_remote_build(mock_run: Any, monkeypatch: Any) -> None:
     autospec=True,
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
-def test_remote_build_flake(mock_run: Any) -> None:
+def test_remote_build_flake(mock_run: Any, monkeypatch: Any) -> None:
     flake = m.Flake.parse(".#hostname")
-    build_host = m.Remote("user@host", ["--ssh", "opts"], None)
+    build_host = m.Remote("user@host", [], None)
+    monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
     assert n.remote_build_flake(
         "config.system.build.toplevel",
@@ -190,16 +192,17 @@ def test_copy_closure(mock_run: Any, monkeypatch: Any) -> None:
     n.copy_closure(closure, None)
     mock_run.assert_not_called()
 
-    target_host = m.Remote("user@target.host", ["--ssh", "target-opt"], None)
-    build_host = m.Remote("user@build.host", ["--ssh", "build-opt"], None)
+    target_host = m.Remote("user@target.host", [], None)
+    build_host = m.Remote("user@build.host", [], None)
 
     n.copy_closure(closure, target_host)
     mock_run.assert_called_with(
         ["nix-copy-closure", "--to", "user@target.host", closure],
-        extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh target-opt"])},
+        extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
         remote=None,
     )
 
+    monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-opt")
     n.copy_closure(closure, None, build_host)
     mock_run.assert_called_with(
         ["nix-copy-closure", "--from", "user@build.host", closure],
@@ -207,11 +210,12 @@ def test_copy_closure(mock_run: Any, monkeypatch: Any) -> None:
         remote=None,
     )
 
+    monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-target-opt")
     n.copy_closure(closure, target_host, build_host)
     mock_run.assert_called_with(
         ["nix-copy-closure", "--to", "user@target.host", closure],
         remote=build_host,
-        extra_env={"NIX_SSHOPTS": "--ssh target-opt"},
+        extra_env={"NIX_SSHOPTS": "--ssh build-target-opt"},
     )
 
 
