@@ -12,7 +12,7 @@ let
     extraGSettingsOverrides = cfg.extraGSettingsOverrides;
   };
 
-  notExcluded = pkg: (!(lib.elem (lib.getName pkg) (map lib.getName config.environment.cinnamon.excludePackages)));
+  notExcluded = pkg: utils.disablePackageByName pkg config.environment.cinnamon.excludePackages;
 in
 
 {
