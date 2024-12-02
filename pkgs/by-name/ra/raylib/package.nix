@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "raylib";
-  version = "5.0";
+  version = "5.5";
 
   src = fetchFromGitHub {
     owner = "raysan5";
     repo = "raylib";
     rev = finalAttrs.version;
-    hash = "sha256-gEstNs3huQ1uikVXOW4uoYnIDr5l8O9jgZRTX1mkRww=";
+    hash = "sha256-J99i4z4JF7d6mJNuJIB0rHNDhXJ5AEkG0eBvvuBLHrY=";
   };
 
   nativeBuildInputs = [
@@ -57,17 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional sharedLib "-DBUILD_SHARED_LIBS=ON";
 
   passthru.tests = { inherit raylib-games; };
-
-  patches = [
-    # Patch version in CMakeLists.txt to 5.0.0
-    # The library author doesn't use cmake, so when updating this package please
-    # check that the resulting library extension matches the package version
-    # and remove/update this patch
-    (fetchpatch {
-      url = "https://github.com/raysan5/raylib/commit/032cc497ca5aaca862dc926a93c2a45ed8017737.patch";
-      hash = "sha256-qsX5AwyQaGoRsbdszOO7tUF9dR+AkEFi4ebNkBVHNEY=";
-    })
-  ];
 
   # fix libasound.so/libpulse.so not being found
   appendRunpaths = lib.optionals stdenv.hostPlatform.isLinux [
