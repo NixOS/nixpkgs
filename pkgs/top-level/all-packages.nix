@@ -535,6 +535,36 @@ with pkgs;
 
   fetchs3 = callPackage ../build-support/fetchs3 { };
 
+  fetchSteam = callPackage ../build-support/fetchsteam {
+    # Latest depotdownloader has bug:
+    #
+    # > Logging anonymously into Steam3...Unhandled exception. System.IO.DirectoryNotFoundException: Could not find a part of the path '/sys/class/net'.
+    # >    at System.IO.Enumeration.FileSystemEnumerator`1.CreateDirectoryHandle(String path, Boolean ignoreNotFound)
+    # >    at System.IO.Enumeration.FileSystemEnumerator`1.Init()
+    # >    at System.IO.Enumeration.FileSystemEnumerable`1..ctor(String directory, FindTransform transform, EnumerationOptions options, Boolean isNormalized)
+    # >    at System.IO.Enumeration.FileSystemEnumerableFactory.UserDirectories(String directory, String expression, EnumerationOptions options)
+    # >    at System.IO.Directory.InternalEnumeratePaths(String path, String searchPattern, SearchTarget searchTarget, EnumerationOptions options)
+    # >    at System.IO.Directory.GetDirectories(String path, String searchPattern, EnumerationOptions enumerationOptions)
+    # >    at SteamKit2.LinuxMachineInfoProvider.GetMacAddresses(Boolean checkForPhysicalDevice)
+    # >    at SteamKit2.LinuxMachineInfoProvider.GetMacAddress()
+    # >    at SteamKit2.HardwareUtils.GenerateMachineID(Object state)
+    # >    at System.Threading.Tasks.Task`1.InnerInvoke()
+    # >    at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)
+    # > --- End of stack trace from previous location ---
+    # >    at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)
+    # >    at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+    # > --- End of stack trace from previous location ---
+    # >    at SteamKit2.HardwareUtils.GetMachineID(IMachineInfoProvider machineInfoProvider)
+    # >    at SteamKit2.SteamUser.LogOnAnonymous(AnonymousLogOnDetails details)
+    # >    at SteamKit2.SteamUser.LogOnAnonymous()
+    # >    at DepotDownloader.Steam3Session.ConnectedCallback(ConnectedCallback connected) in /build/source/DepotDownloader/Steam3Session.cs:line 478
+    # >    at System.Threading.Tasks.Task.<>c.<ThrowAsync>b__128_1(Object state)
+    # >    at System.Threading.ThreadPoolWorkQueue.Dispatch()
+    # >    at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+    # > /build/.attr-0l2nkwhif96f51f4amnlf414lhl4rv9vh8iffyp431v6s28gsr90: line 14:     8 Aborted                 (core dumped) DepotDownloader -app "250820" -depot "250824" -manifest "5862217504045387455" -loginid 101619330 -dir $out
+    depotdownloader = callPackage ../build-support/fetchsteam/depotdownloader_2_5_0/default.nix { };
+  };
+
   fetchtorrent = callPackage ../build-support/fetchtorrent { };
 
   fetchsvn = if stdenv.buildPlatform != stdenv.hostPlatform
@@ -10726,6 +10756,8 @@ with pkgs;
   };
 
   readline = readline82;
+
+  readline63 = callPackage ../development/libraries/readline/6.3.nix { };
 
   readline70 = callPackage ../development/libraries/readline/7.0.nix { };
 

@@ -926,3 +926,31 @@ fetchtorrent {
 - `config`: When using `transmission` as the `backend`, a json configuration can
   be supplied to transmission. Refer to the [upstream documentation](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md) for information on how to configure.
 
+## `fetchSteam` ${#fetchsteam}
+
+`fetchSteam` expects at least three arguments: `app`, `depot`, and `manifest`. Use [SteamDB](https://steamdb.info/) to find these values. `fetchSteam` only supports anonymous accounts.
+
+```nix
+{ fetchSteam }:
+
+fetchSteam {
+  name = "steamvr-linux-depot";
+  app = 250820;
+  depot = 250823;
+  manifest = 5747149350848671194;
+  hash = "sha256-q3jasX/prYhs+Vs7Ofru2N3WVxf/0tGlqTd5SvKRm10=";
+}
+```
+
+### Parameters {#fetchsteam-parameters}
+
+- `name` (string): The name of the resulting derivation. Defaults to `"${app}-${depot}-${manifest}-depot"`.
+- `app` (integer): The Steam app ID
+- `depot` (integer): The Steam depot ID
+- `manifest` (integer): The Steam manifest ID
+- `branch` (string): Optional. The branch to download from. Cannot require a password. Defaults to none.
+- `language` (string): Optional. The language for which to download the game. Defaults to DepotDownloader's default (english).
+- `lowViolence` (boolean): Optional. Whether to download low-violence variations. Defaults to `false`.
+- `fileList` (list of string): Optional. A list of files to download. Defaults to all files.
+- `fileListRegex` (boolean): Optional. Whether `fileList` should be treated as a list of regular expressions to match the paths of the files. Defaults to `false`.
+- `debug` (boolean): Optional. Prints additional debug information. Defaults to `false`.
