@@ -101,6 +101,21 @@ stdenv.mkDerivation rec {
 
     rm -r $out/Uninstall
 
+    bins=(
+      $out/bin/*
+      $out/cplex/bin/x86-64_linux/cplex
+      $out/cplex/bin/x86-64_linux/cplexamp
+      $out/cpoptimizer/bin/x86-64_linux/cpoptimizer
+      $out/opl/bin/x86-64_linux/oplrun
+      $out/opl/bin/x86-64_linux/oplrunjava
+      $out/opl/oplide/jre/bin/*
+      $out/opl/oplide/oplide
+    )
+
+    find $out -type d -exec chmod 755 {} \;
+    find $out -type f -exec chmod 644 {} \;
+    chmod +111 "''${bins[@]}"
+
     runHook postFixup
   '';
 
