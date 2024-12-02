@@ -1,4 +1,4 @@
-{ lib, stdenv, makeDesktopItem, copyDesktopItems, makeWrapper, openjdk, gtk2, xorg, glibcLocales, releasePath ? null }:
+{ lib, stdenv, autoPatchelfHook, makeDesktopItem, copyDesktopItems, makeWrapper, alsa-lib, openjdk, sqlite, unixODBC, gtk2, xorg, glibcLocales, releasePath ? null }:
 
 # To use this package, you need to download your own cplex installer from IBM
 # and override the releasePath attribute to point to the location of the file.
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
     else
       releasePath;
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper openjdk ];
-  buildInputs = [ gtk2 xorg.libXtst glibcLocales ];
+  nativeBuildInputs = [ autoPatchelfHook copyDesktopItems makeWrapper openjdk ];
+  buildInputs = [ alsa-lib gtk2 sqlite unixODBC xorg.libXtst glibcLocales ];
 
   unpackPhase = "cp $src $name";
 
@@ -86,22 +86,11 @@ stdenv.mkDerivation rec {
 
     rm -r $out/Uninstall
 
-    interpreter=${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2
-
     for pgm in $out/opl/bin/x86-64_linux/oplrun $out/opl/bin/x86-64_linux/oplrunjava $out/opl/oplide/oplide;
     do
-      patchelf --set-interpreter "$interpreter" $pgm;
       wrapProgram $pgm \
         --prefix LD_LIBRARY_PATH : $out/opl/bin/x86-64_linux:${libraryPath} \
         --set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive;
-    done
-
-    for pgm in $out/cplex/bin/x86-64_linux/cplex $out/cpoptimizer/bin/x86-64_linux/cpoptimizer $out/opl/oplide/jre/bin/*;
-    do
-      if grep ELF $pgm > /dev/null;
-      then
-        patchelf --set-interpreter "$interpreter" $pgm;
-      fi
     done
 
     runHook postFixup
