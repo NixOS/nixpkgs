@@ -71,7 +71,7 @@ The exact schema these fields follow is a bit ill-defined due to a long and conv
 
 : This is, quite frankly, a dumping ground of ad-hoc settings (it's an attribute set). See `lib.systems.platforms` for examples—there's hopefully one in there that will work verbatim for each platform that is working. Please help us triage these flags and give them better homes!
 
-Using these attributes, the build process of a package can change depending on the situation, for instance, when cross-compiling, one may want to apply specific patches or disable tests.
+Using these attributes, the build process of a package can change depending on the situation.
 
 ### Theory of dependency categorization {#ssec-cross-dependency-categorization}
 
