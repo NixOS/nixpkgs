@@ -73,8 +73,7 @@ stdenv.mkDerivation ({
   inherit pname version patches;
 
   src = src';
-  sourceRoot = if lib.versionOlder release_version "13" then null
-    else "${src'.name}/${baseName}";
+  sourceRoot = "${src'.name}/${baseName}";
 
   nativeBuildInputs = [ cmake ]
     ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
