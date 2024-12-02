@@ -636,12 +636,8 @@ rec {
       substSubModules = m: attrsWith { elemType = elemType.substSubModules m; inherit lazy; };
       functor = defaultFunctor "attrsWith" // {
         wrappedDeprecationMessage = { loc }: lib.warn ''
-            Using 'functor.wrapped' on option types will be deprecated.
-
-            Use 'nestedTypes.elemType' instead.
-
-            option: '${showOption loc}'
-          '' elemType;
+          The deprecated `type.functor.wrapped` attribute of the option `${showOption loc}` is accessed, use `type.nestedTypes.elemType` instead.
+        '' elemType;
         payload = {
           # Important!: Add new function attributes here in case of future changes
           inherit elemType lazy;
