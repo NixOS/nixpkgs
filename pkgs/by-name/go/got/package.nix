@@ -84,8 +84,13 @@ stdenv'.mkDerivation (finalAttrs: {
     ]
   );
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--url=https://github.com/ThomasAdam/got-portable" ];
+    };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = {
