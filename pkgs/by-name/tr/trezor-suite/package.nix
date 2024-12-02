@@ -8,7 +8,7 @@
 
 let
   pname = "trezor-suite";
-  version = "24.8.3";
+  version = "24.11.3";
 
   suffix = {
     aarch64-linux = "linux-arm64";
@@ -18,8 +18,8 @@ let
   src = fetchurl {
     url = "https://github.com/trezor/trezor-suite/releases/download/v${version}/Trezor-Suite-${version}-${suffix}.AppImage";
     hash = { # curl -Lfs https://github.com/trezor/trezor-suite/releases/download/v${version}/latest-linux{-arm64,}.yml | grep ^sha512 | sed 's/: /-/'
-      aarch64-linux = "sha512-od/OmYbPd3mmmyz131nQCVrhuSMU9znV8REHwbJLWVRoATMc21LSwCuAGZGRE1ijowJ1DI+TkLiLEq9rLldRmw=";
-      x86_64-linux  = "sha512-IeEbscMGGaCaDQbNqmHYiKqdVm/QfyNDludiLWpcfnbN7udcxWIQG6tB9C9UY2BrimyNFvZgq1z9mZMfGScEYQ==";
+      aarch64-linux = "sha512-erNWQTaj/WWoqy3TO7wb+ijQkwXjqfCjqvQN6/9gCVjbHswURWHX36P0rJg9vuQu6odi5EKtooDusIxjIUkQzA==";
+      x86_64-linux  = "sha512-BorpJI0Vi6fFRGo2lATcuBiI1vTLY8vfmnUXKckJkMCBiurs/ZR08ZxKPOTaoS61BzSanUCRwcovev294bcqkA==";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -42,7 +42,7 @@ appimageTools.wrapType2 rec {
     install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
     install -m 444 -D ${appimageContents}/resources/images/desktop/512x512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
 
     # symlink system binaries instead bundled ones
     mkdir -p $out/share/${pname}/resources/bin/{bridge,tor}

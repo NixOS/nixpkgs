@@ -261,6 +261,7 @@ let
           --slurpfile after ${afterResultDir}/outpaths.json \
           > $out/changed-paths.json
 
+        jq -r -f ${./generate-step-summary.jq} < $out/changed-paths.json > $out/step-summary.md
         # TODO: Compare eval stats
       '';
 

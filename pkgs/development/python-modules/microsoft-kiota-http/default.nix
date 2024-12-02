@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-http";
-  version = "1.3.3";
+  version = "1.3.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "kiota-http-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dtSTrsLVDNJ+s5B3wLvZ9qGerZ8fdYpEsqrBoPf7Lrk=";
+    hash = "sha256-0hntB9GSDE05l/ghWTzMrX1MAPdWNHJVIQFpskraDV8=";
   };
 
   build-system = [ flit-core ];

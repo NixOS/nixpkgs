@@ -103,12 +103,15 @@ let
     lib.mapAttrs
       (
         _: provider:
-        # use opentofu plugin registry over terraform's
-        provider.override (oldArgs: {
-          provider-source-address = lib.replaceStrings [ "https://registry.terraform.io/providers" ] [
-            "registry.opentofu.org"
-          ] oldArgs.homepage;
-        })
+        if provider ? override then
+          # use opentofu plugin registry over terraform's
+          provider.override (oldArgs: {
+            provider-source-address = lib.replaceStrings [ "https://registry.terraform.io/providers" ] [
+              "registry.opentofu.org"
+            ] oldArgs.homepage;
+          })
+        else
+          provider
       )
       (
         removeAttrs terraform-providers [
