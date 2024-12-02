@@ -6,6 +6,7 @@
   stdenv,
   testers,
   gh,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -49,8 +50,11 @@ buildGoModule rec {
   # most tests require network access
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion {
-    package = gh;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = gh;
+    };
   };
 
   meta = with lib; {
