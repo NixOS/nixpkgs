@@ -11,26 +11,23 @@
   markupsafe,
   pydantic,
   pytestCheckHook,
-  pythonImportsCheckHook,
   pyyaml,
   rich,
-  setuptools
+  setuptools,
 }:
 buildPythonPackage rec {
   pname = "essentials-openapi";
-  version = "1.0.7";
+  version = "1.0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Neoteroi";
     repo = "essentials-openapi";
-    rev = "v${version}";
-    hash = "sha256-j0vEMNXZ9TrcFx8iIyTFQIwF49LEincLmnAt+qodYmA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/NYv0NrE8+0kQg5G3Qf2DtesMHlmKQYczNT8pFlNFZE=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   nativeCheckInputs = [
     flask
@@ -47,19 +44,29 @@ buildPythonPackage rec {
     markupsafe
   ];
 
-  passthru.optional-dependencies = {
-    full = [ click jinja2 rich httpx ];
+  optional-dependencies = {
+    full = [
+      click
+      jinja2
+      rich
+      httpx
+    ];
   };
 
-  pythonImportsCheck = [
-    "openapidocs"
+  pythonRelaxDeps = [
+    "markupsafe"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "openapidocs" ];
+
+  meta = {
     homepage = "https://github.com/Neoteroi/essentials-openapi";
     description = "Functions to handle OpenAPI Documentation";
     changelog = "https://github.com/Neoteroi/essentials-openapi/releases/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [aldoborrero zimbatm];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      aldoborrero
+      zimbatm
+    ];
   };
 }

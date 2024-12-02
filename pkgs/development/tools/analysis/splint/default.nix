@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "02pv8kscsrkrzip9r08pfs9xs98q74c52mlxzbii6cv6vx1vd3f7";
   };
 
-  patches = [ ./tmpdir.patch ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
+  patches = [ ./tmpdir.patch ] ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
 
   buildInputs = [ flex ];
 
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.splint.org/";
     description = "Annotation-assisted lightweight static analyzer for C";
+    mainProgram = "splint";
 
     longDescription = ''
       Splint is a tool for statically checking C programs for security

@@ -20,21 +20,21 @@
 , pango
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "impression";
-  version = "3.0.1";
+  version = "3.3.0";
 
   src = fetchFromGitLab {
     owner = "adhami3310";
     repo = "Impression";
-    rev = "v${version}";
-    hash = "sha256-xxPclDjHdXWo43cwvSuF9MpNlMTJANNXScLY1mkQTqY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-F2ZyATDKnUgEOAI++54fR6coJOr9rtyGm5TzsKzkDmg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-LDYckpKwNvkIdpPijTRIZPNfb4d9MZzxVFdSXarhFl0=";
+    inherit (finalAttrs) src;
+    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-H4x7D25UzDdAEad7QEsZZGLXhfiUupm3mTrNho+ShFo=";
   };
 
   nativeBuildInputs = [
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.linux;
   };
-}
+})

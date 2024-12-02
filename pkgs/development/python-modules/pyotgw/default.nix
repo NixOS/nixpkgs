@@ -1,37 +1,42 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pyserial-asyncio
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pyserial-asyncio-fast,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyotgw";
-  version = "2.1.3";
-  format = "setuptools";
+  version = "2.2.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mvn23";
-    repo = pname;
+    repo = "pyotgw";
     rev = "refs/tags/${version}";
-    hash = "sha256-XIwBGjvIulKLmYZIorKIJwoHTNOIYYX8US2Na8MZ2LA=";
+    hash = "sha256-BQgRWXBSmB9AzpPeTJP7motJeKF2G0tyqJpbwIwnxwk=";
   };
 
-  propagatedBuildInputs = [
-    pyserial-asyncio
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyserial-asyncio-fast ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyotgw"
+  pythonImportsCheck = [ "pyotgw" ];
+
+  disabledTests = [
+    # Tests require network access
+    "connect_timeouterror"
   ];
 
   meta = with lib; {

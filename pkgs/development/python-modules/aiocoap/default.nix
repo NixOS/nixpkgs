@@ -1,32 +1,56 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pygments
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cbor-diag,
+  cbor2,
+  cryptography,
+  dtlssocket,
+  fetchFromGitHub,
+  filelock,
+  ge25519,
+  pygments,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
+  setuptools,
+  termcolor,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "aiocoap";
-  version = "0.4.7";
-  format = "setuptools";
+  version = "0.4.11";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "chrysn";
-    repo = pname;
+    repo = "aiocoap";
     rev = "refs/tags/${version}";
-    hash = "sha256-4iwoPfmIwk+PlWUp60aqA5qZgzyj34pnZHf9uH5UhnY=";
+    hash = "sha256-a2qhMDFkRbMK4+xvPc140i0lPaWbTWeFlpvdLaNtOxA=";
   };
 
-  propagatedBuildInputs = [
-    pygments
-  ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  optional-dependencies = {
+    oscore = [
+      cbor2
+      cryptography
+      filelock
+      ge25519
+    ];
+    tinydtls = [ dtlssocket ];
+    ws = [ websockets ];
+    prettyprint = [
+      termcolor
+      cbor2
+      pygments
+      cbor-diag
+    ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Don't test the plugins
@@ -35,14 +59,31 @@ buildPythonPackage rec {
     "tests/test_oscore_plugtest.py"
   ];
 
-  disabledTests = [
-    # Communication is not properly mocked
-    "test_uri_parser"
-  ];
+  disabledTests =
+    [
+      # Communication is not properly mocked
+      "test_uri_parser"
+      # Doctest
+      "test_001"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # https://github.com/chrysn/aiocoap/issues/339
+      "TestServerTCP::test_big_resource"
+      "TestServerTCP::test_empty_accept"
+      "TestServerTCP::test_error_resources"
+      "TestServerTCP::test_fast_resource"
+      "TestServerTCP::test_js_accept"
+      "TestServerTCP::test_manualbig_resource"
+      "TestServerTCP::test_nonexisting_resource"
+      "TestServerTCP::test_replacing_resource"
+      "TestServerTCP::test_root_resource"
+      "TestServerTCP::test_slow_resource"
+      "TestServerTCP::test_slowbig_resource"
+      "TestServerTCP::test_spurious_resource"
+      "TestServerTCP::test_unacceptable_accept"
+    ];
 
-  pythonImportsCheck = [
-    "aiocoap"
-  ];
+  pythonImportsCheck = [ "aiocoap" ];
 
   meta = with lib; {
     description = "Python CoAP library";

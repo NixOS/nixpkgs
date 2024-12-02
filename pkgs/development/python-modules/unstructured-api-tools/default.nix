@@ -1,31 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-# propagated build inputs
-, click
-, fastapi
-, jinja2
-, mypy
-, nbconvert
-, python-multipart
-, pandas
-, types-requests
-, types-ujson
-, uvicorn
-, autoflake
-# native check inputs
-, pytestCheckHook
-, black
-, coverage
-, flake8
-, httpx
-, ipython
-, pytest-cov
-, requests
-, requests-toolbelt
-, nbdev
-, pytest-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  # propagated build inputs
+  click,
+  fastapi,
+  jinja2,
+  mypy,
+  nbconvert,
+  python-multipart,
+  pandas,
+  types-requests,
+  types-ujson,
+  uvicorn,
+  autoflake,
+  # native check inputs
+  pytestCheckHook,
+  black,
+  coverage,
+  flake8,
+  httpx,
+  ipython,
+  pytest-cov-stub,
+  requests,
+  requests-toolbelt,
+  nbdev,
+  pytest-mock,
 }:
 let
   version = "0.10.11";
@@ -76,7 +77,7 @@ buildPythonPackage {
     flake8
     httpx
     ipython
-    pytest-cov
+    pytest-cov-stub
     requests
     requests-toolbelt
     nbdev
@@ -85,6 +86,7 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "";
+    mainProgram = "unstructured_api_tools";
     homepage = "https://github.com/Unstructured-IO/unstructured-api-tools";
     changelog = "https://github.com/Unstructured-IO/unstructured-api-tools/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

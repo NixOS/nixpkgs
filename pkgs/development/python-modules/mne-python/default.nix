@@ -1,52 +1,51 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, numpy
-, scipy
-, pytestCheckHook
-, pytest-timeout
-, pytest-harvest
-, matplotlib
-, decorator
-, jinja2
-, pooch
-, tqdm
-, packaging
-, importlib-resources
-, lazy-loader
-, h5io
-, pymatreader
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  numpy,
+  scipy,
+  pytestCheckHook,
+  pytest-timeout,
+  matplotlib,
+  decorator,
+  jinja2,
+  pooch,
+  tqdm,
+  packaging,
+  lazy-loader,
+  h5io,
+  pymatreader,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mne-python";
-  version = "1.6.1";
+  version = "1.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mne-tools";
     repo = "mne-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-U1aMqcUZ3BcwqwOYh/qfG5PhacwBVioAgNc52uaoJL0";
+    hash = "sha256-WPRTX8yB4oP/L5DjSq9M6WOmHJDpQv0sAbuosp7ZGVw=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml  \
-      --replace "--cov-report=" ""  \
-      --replace "--cov-branch" ""
+      --replace-fail "--cov-report=" ""  \
+      --replace-fail "--cov-branch" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
     matplotlib
@@ -56,22 +55,17 @@ buildPythonPackage rec {
     packaging
     jinja2
     lazy-loader
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
   ];
 
-  passthru.optional-dependencies = {
-    hdf5 = [
-      h5io
-      pymatreader
-    ];
-  };
+  optional-dependencies.hdf5 = [
+    h5io
+    pymatreader
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
-    pytest-harvest
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -79,15 +73,24 @@ buildPythonPackage rec {
     export MNE_SKIP_NETWORK_TESTS=1
   '';
 
-  pythonImportsCheck = [
-    "mne"
+  disabledTests = [
+    # requires qtbot which is unmaintained/not in Nixpkgs:
+    "test_plotting_scalebars"
+    # tries to write a datetime object to hdf5, which fails:
+    "test_hitachi_basic"
   ];
+
+  pythonImportsCheck = [ "mne" ];
 
   meta = with lib; {
     description = "Magnetoencephelography and electroencephalography in Python";
+    mainProgram = "mne";
     homepage = "https://mne.tools";
     changelog = "https://mne.tools/stable/changes/v${version}.html";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin mbalatsko ];
+    maintainers = with maintainers; [
+      bcdarwin
+      mbalatsko
+    ];
   };
 }

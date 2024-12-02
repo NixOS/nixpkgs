@@ -1,14 +1,13 @@
 { lib, stdenv, fetchFromGitHub, mpiCheckPhaseHook
 , autoreconfHook, pkg-config
 , p4est-sc-debugEnable ? true, p4est-sc-mpiSupport ? true
-, mpi, openssh, zlib
+, mpi, zlib
 }:
 
 let
   dbg = lib.optionalString debugEnable "-dbg";
   debugEnable = p4est-sc-debugEnable;
   mpiSupport = p4est-sc-mpiSupport;
-  isOpenmpi = mpiSupport && mpi.pname == "openmpi";
 in
 stdenv.mkDerivation {
   pname = "p4est-sc${dbg}";
@@ -24,9 +23,7 @@ stdenv.mkDerivation {
 
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  propagatedNativeBuildInputs = lib.optional mpiSupport mpi
-    ++ lib.optional isOpenmpi openssh
-  ;
+  propagatedNativeBuildInputs = lib.optional mpiSupport mpi ;
   propagatedBuildInputs = [ zlib ];
   inherit debugEnable mpiSupport;
 
@@ -49,12 +46,11 @@ stdenv.mkDerivation {
 
   nativeCheckInputs = lib.optionals mpiSupport [
     mpiCheckPhaseHook
-    openssh
   ];
 
   # disallow Darwin checks due to prototype incompatibility of qsort_r
   # to be fixed in a future version of the source code
-  doCheck = !stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = !stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform;
 
   meta = {
     branch = "prev3-develop";

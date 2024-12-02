@@ -1,4 +1,4 @@
-{ wrapGAppsHook
+{ wrapGAppsHook4
 , glib
 , lib
 , stdenv
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     glib
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = lib.forEach selectedPlugs (x: x.buildInputs)
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --set SWITCHBOARD_PLUGS_PATH "$out/lib/switchboard"
+      --set SWITCHBOARD_PLUGS_PATH "$out/lib/switchboard-3"
     )
   '';
 

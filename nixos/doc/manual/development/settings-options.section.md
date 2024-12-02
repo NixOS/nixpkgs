@@ -46,6 +46,237 @@ have a predefined type and string generator already declared under
     `generate` to build a Java `.properties` file, taking
     care of the correct escaping, etc.
 
+`pkgs.formats.hocon` { *`generator`* ? `<derivation>`, *`validator`* ? `<derivation>`, *`doCheck`* ? true }
+
+:  A function taking an attribute set with values
+
+    `generator`
+
+    :   A derivation used for converting the JSON output
+        from the nix settings into HOCON. This might be
+        useful if your HOCON variant is slightly different
+        from the java-based one, or for testing purposes.
+
+    `validator`
+
+    :   A derivation used for verifying that the HOCON
+        output is correct and parsable. This might be
+        useful if your HOCON variant is slightly different
+        from the java-based one, or for testing purposes.
+
+    `doCheck`
+
+    :   Whether to enable/disable the validator check.
+
+    It returns an attrset with a `type`, `generate` function,
+    and a `lib` attset, as specified [below](#pkgs-formats-result).
+    Some of the lib functions will be best understood if you have
+    read the reference specification. You can find this
+    specification here:
+
+    <https://github.com/lightbend/config/blob/main/HOCON.md>
+
+    Inside of `lib`, you will find these functions
+
+    `mkInclude`
+
+    :   This is used together with a specially named
+        attribute `includes`, to include other HOCON
+        sources into the document.
+
+        The function has a shorthand variant where it
+        is up to the HOCON parser to figure out what type
+        of include is being used. The include will default
+        to being non-required. If you want to be more
+        explicit about the details of the include, you can
+        provide an attrset with following arguments
+
+        `required`
+
+        :   Whether the parser should fail upon failure
+            to include the document
+
+        `type`
+
+        :   Type of the source of the included document.
+            Valid values are `file`, `url` and `classpath`.
+            See upstream documentation for the semantics
+            behind each value
+
+        `value`
+
+        :   The URI/path/classpath pointing to the source of
+            the document to be included.
+
+        `Example usage:`
+
+        ```nix
+          let
+            format = pkgs.formats.hocon { };
+            hocon_file = pkgs.writeText "to_include.hocon" ''
+              a = 1;
+            '';
+          in {
+            some.nested.hocon.attrset = {
+              _includes = [
+                (format.lib.mkInclude hocon_file)
+                (format.lib.mkInclude "https://example.com/to_include.hocon")
+                (format.lib.mkInclude {
+                  required = true;
+                  type = "file";
+                  value = include_file;
+                })
+              ];
+              ...
+            };
+          }
+        ```
+
+    `mkAppend`
+
+    :   This is used to invoke the `+=` operator.
+        This can be useful if you need to add something
+        to a list that is included from outside of nix.
+        See upstream documentation for the semantics
+        behind the `+=` operation.
+
+        `Example usage:`
+
+        ```nix
+          let
+            format = pkgs.formats.hocon { };
+            hocon_file = pkgs.writeText "to_include.hocon" ''
+              a = [ 1 ];
+              b = [ 2 ];
+            '';
+          in {
+            _includes = [
+              (format.lib.mkInclude hocon_file)
+            ];
+
+            c = 3;
+            a = format.lib.mkAppend 3;
+            b = format.lib.mkAppend (format.lib.mkSubstitution "c");
+          }
+        ```
+
+    `mkSubstitution`
+
+    :   This is used to make HOCON substitutions.
+        Similarly to `mkInclude`, this function has
+        a shorthand variant where you just give it
+        the string with the substitution value.
+        The substitution is not optional by default.
+        Alternatively, you can provide an attrset
+        with more options
+
+        `optional`
+
+        :   Whether the parser should fail upon
+            failure to fetch the substitution value.
+
+        `value`
+
+        :   The name of the variable to use for
+            substitution.
+
+        See upstream documentation for semantics
+        behind the substitution functionality.
+
+        `Example usage:`
+
+        ```nix
+          let
+            format = pkgs.formats.hocon { };
+          in {
+            a = 1;
+            b = format.lib.mkSubstitution "a";
+            c = format.lib.mkSubstition "SOME_ENVVAR";
+            d = format.lib.mkSubstition {
+              value = "SOME_OPTIONAL_ENVVAR";
+              optional = true;
+            };
+          }
+        ```
+
+    `Implementation notes:`
+
+    - classpath includes are not implemented in pyhocon,
+      which is used for validating the HOCON output. This
+      means that if you are using classpath includes,
+      you will want to either use an alternative validator
+      or set `doCheck = false` in the format options.
+
+`pkgs.formats.libconfig` { *`generator`* ? `<derivation>`, *`validator`* ? `<derivation>` }
+
+:  A function taking an attribute set with values
+
+    `generator`
+
+    :   A derivation used for converting the JSON output
+        from the nix settings into libconfig. This might be
+        useful if your libconfig variant is slightly different
+        from the original one, or for testing purposes.
+
+    `validator`
+
+    :   A derivation used for verifying that the libconfig
+        output is correct and parsable. This might be
+        useful if your libconfig variant is slightly different
+        from the original one, or for testing purposes.
+
+    It returns an attrset with a `type`, `generate` function,
+    and a `lib` attset, as specified [below](#pkgs-formats-result).
+    Some of the lib functions will be best understood if you have
+    read the reference specification. You can find this
+    specification here:
+
+    <https://hyperrealm.github.io/libconfig/libconfig_manual.html#Configuration-Files>
+
+    Inside of `lib`, you will find these functions
+
+    `mkHex`, `mkOctal`, `mkFloat`
+
+    :   Use these to specify numbers in other formats.
+
+        `Example usage:`
+
+        ```nix
+          let
+            format = pkgs.formats.libconfig { };
+          in {
+            myHexValue = format.lib.mkHex "0x1FC3";
+            myOctalValue = format.lib.mkOctal "0027";
+            myFloatValue = format.lib.mkFloat "1.2E-3";
+          }
+        ```
+
+    `mkArray`, `mkList`
+
+    :   Use these to differentiate between whether
+        a nix list should be considered as a libconfig
+        array or a libconfig list. See the upstream
+        documentation for the semantics behind these types.
+
+        `Example usage:`
+
+        ```nix
+          let
+            format = pkgs.formats.libconfig { };
+          in {
+            myList = format.lib.mkList [ "foo" 1 true ];
+            myArray = format.lib.mkArray [ 1 2 3 ];
+          }
+        ```
+
+    `Implementation notes:`
+
+    - Since libconfig does not allow setting names to start with an underscore,
+      this is used as a prefix for both special types and include directives.
+
+    - The difference between 32bit and 64bit values became optional in libconfig
+      1.5, so we assume 64bit values for all numbers.
+
 `pkgs.formats.json` { }
 
 :   A function taking an empty attribute set (for future extensibility)
@@ -73,6 +304,38 @@ have a predefined type and string generator already declared under
 
     It returns a set with INI-specific attributes `type` and `generate`
     as specified [below](#pkgs-formats-result).
+    The type of the input is an *attrset* of sections; key-value pairs where
+    the key is the section name and the value is the corresponding content
+    which is also an *attrset* of key-value pairs for the actual key-value
+    mappings of the INI format.
+    The values of the INI atoms are subject to the above parameters (e.g. lists
+    may be transformed into multiple key-value pairs depending on
+    `listToValue`).
+
+    The attribute `lib.type.atom` contains the used INI atom.
+
+`pkgs.formats.iniWithGlobalSection` { *`listsAsDuplicateKeys`* ? false, *`listToValue`* ? null, \.\.\. }
+
+:   A function taking an attribute set with values
+
+    `listsAsDuplicateKeys`
+
+    :   A boolean for controlling whether list values can be used to
+        represent duplicate INI keys
+
+    `listToValue`
+
+    :   A function for turning a list of values into a single value.
+
+    It returns a set with INI-specific attributes `type` and `generate`
+    as specified [below](#pkgs-formats-result).
+    The type of the input is an *attrset* of the structure
+    `{ sections = {}; globalSection = {}; }` where *sections* are several
+    sections as with *pkgs.formats.ini* and *globalSection* being just a single
+    attrset of key-value pairs for a single section, the global section which
+    preceedes the section definitions.
+
+    The attribute `lib.type.atom` contains the used INI atom.
 
 `pkgs.formats.toml` { }
 
@@ -118,6 +381,27 @@ have a predefined type and string generator already declared under
     :   Outputs the given attribute set as an Elixir map, instead of the
         default Elixir keyword list
 
+`pkgs.formats.php { finalVariable }` []{#pkgs-formats-php}
+
+:   A function taking an attribute set with values
+
+    `finalVariable`
+
+    :   The variable that will store generated expression (usually `config`). If set to `null`, generated expression will contain `return`.
+
+    It returns a set with PHP-Config-specific attributes `type`, `lib`, and
+    `generate` as specified [below](#pkgs-formats-result).
+
+    The `lib` attribute contains functions to be used in settings, for
+    generating special PHP values:
+
+    `mkRaw phpCode`
+
+    :   Outputs the given string as raw PHP code
+
+    `mkMixedArray list set`
+
+    :   Creates PHP array that contains both indexed and associative values. For example, `lib.mkMixedArray [ "hello" "world" ] { "nix" = "is-great"; }` returns `['hello', 'world', 'nix' => 'is-great']`
 
 []{#pkgs-formats-result}
 These functions all return an attribute set with these values:
@@ -220,28 +504,30 @@ up in the manual.
 ::: {#ex-settings-typed-attrs .example}
 ### Declaring a type-checked `settings` attribute
 ```nix
-settings = lib.mkOption {
-  type = lib.types.submodule {
+{
+  settings = lib.mkOption {
+    type = lib.types.submodule {
 
-    freeformType = settingsFormat.type;
+      freeformType = settingsFormat.type;
 
-    # Declare an option for the port such that the type is checked and this option
-    # is shown in the manual.
-    options.port = lib.mkOption {
-      type = lib.types.port;
-      default = 8080;
-      description = ''
-        Which port this service should listen on.
-      '';
+      # Declare an option for the port such that the type is checked and this option
+      # is shown in the manual.
+      options.port = lib.mkOption {
+        type = lib.types.port;
+        default = 8080;
+        description = ''
+          Which port this service should listen on.
+        '';
+      };
+
     };
-
+    default = {};
+    description = ''
+      Configuration for Foo, see
+      <link xlink:href="https://example.com/docs/foo"/>
+      for supported values.
+    '';
   };
-  default = {};
-  description = ''
-    Configuration for Foo, see
-    <link xlink:href="https://example.com/docs/foo"/>
-    for supported values.
-  '';
-};
+}
 ```
 :::

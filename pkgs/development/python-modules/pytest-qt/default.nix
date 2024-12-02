@@ -1,39 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools-scm
-, pytest
-, pyqt5
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  pytest,
+  pyqt5,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-qt";
-  version = "4.3.1";
+  version = "4.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AlYEGveAgt/AjiLM+GCqqHjYApVX8D9L/CAH/CkbHmE=";
+    hash = "sha256-dolhQqlApChTOQCNaSijbUvnSv7H5jRXfoQsnMXFaEQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  nativeCheckInputs = [
-    pyqt5
-  ];
+  nativeCheckInputs = [ pyqt5 ];
 
-  pythonImportsCheck = [
-    "pytestqt"
-  ];
+  pythonImportsCheck = [ "pytestqt" ];
 
   # Tests require X server
   doCheck = false;
@@ -42,6 +35,6 @@ buildPythonPackage rec {
     description = "pytest support for PyQt and PySide applications";
     homepage = "https://github.com/pytest-dev/pytest-qt";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

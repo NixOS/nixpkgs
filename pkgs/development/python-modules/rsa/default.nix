@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pyasn1
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pyasn1,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "open('README.md')" "open('README.md',encoding='utf-8')"
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [ pyasn1 ];
 
@@ -35,17 +34,13 @@ buildPythonPackage rec {
     sed -i '/addopts/d' tox.ini
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTestPaths = [
-    "tests/test_mypy.py"
-  ];
+  disabledTestPaths = [ "tests/test_mypy.py" ];
 
   meta = with lib; {
     homepage = "https://stuvel.eu/rsa";
     license = licenses.asl20;
-    description = "A pure-Python RSA implementation";
+    description = "Pure-Python RSA implementation";
   };
 }

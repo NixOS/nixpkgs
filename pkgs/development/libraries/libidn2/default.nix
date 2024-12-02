@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
 
   # The above patch causes the documentation to be regenerated, so the
   # documentation tools are required.
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [ help2man texinfo ];
-  buildInputs = [ libunistring ] ++ lib.optional stdenv.isDarwin libiconv;
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ help2man texinfo ];
+  buildInputs = [ libunistring ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   meta = {
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
       detailed information.
     '';
 
+    mainProgram = "idn2";
     license = with lib.licenses; [ lgpl3Plus gpl2Plus gpl3Plus ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ fpletz ];

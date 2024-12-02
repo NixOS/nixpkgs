@@ -11,7 +11,7 @@
 # 2. then run 'bumblebeed' as root
 # 3. Then either 'optirun glxinfo' or 'primusrun glxinfo' as user.
 #
-# The glxinfo output should indicate the NVidia driver is being used
+# The glxinfo output should indicate the Nvidia driver is being used
 # and all expected extensions are supported.
 #
 # To use at startup, see hardware.bumblebee options.

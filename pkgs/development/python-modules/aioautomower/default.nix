@@ -1,20 +1,24 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, mashumaro
-, poetry-core
-, pyjwt
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, syrupy
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  ical,
+  mashumaro,
+  poetry-core,
+  pyjwt,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  syrupy,
+  tzlocal,
 }:
 
 buildPythonPackage rec {
   pname = "aioautomower";
-  version = "2024.2.7";
+  version = "2024.10.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -23,7 +27,7 @@ buildPythonPackage rec {
     owner = "Thomas55555";
     repo = "aioautomower";
     rev = "refs/tags/${version}";
-    hash = "sha256-ij/Webe/YqpAyjCXFpKq0eyvTegiTDJYiMASuUJKc7Q=";
+    hash = "sha256-kLsHJBmNxh+PmJQ9Y9Ve/CACovzsRZyzVjor/VKUmYk=";
   };
 
   postPatch = ''
@@ -32,34 +36,33 @@ buildPythonPackage rec {
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-    setuptools
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
+    ical
     mashumaro
     pyjwt
+    tzlocal
   ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "aioautomower"
-  ];
+  pythonImportsCheck = [ "aioautomower" ];
 
-  pytestFlagsArray = [
-    "--snapshot-update"
-  ];
+  pytestFlagsArray = [ "--snapshot-update" ];
 
   disabledTests = [
     # File is missing
     "test_standard_mower"
+    # Call no found
+    "test_post_commands"
   ];
 
   meta = with lib; {

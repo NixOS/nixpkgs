@@ -1,18 +1,21 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchFromGitHub
-, mpi4py
-, numpy
-, precice
-, pkgconfig
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  setuptools,
+  pip,
+  cython,
+  fetchFromGitHub,
+  mpi4py,
+  numpy,
+  precice,
+  pkgconfig,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyprecice";
-  version = "3.0.0.0";
-  format = "setuptools";
+  version = "3.1.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,10 +23,12 @@ buildPythonPackage rec {
     owner = "precice";
     repo = "python-bindings";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iW3Mll28Z3Ew+eIJxeF1HR7JhVhXs9FiYaAb5TwYSpg=";
+    hash = "sha256-/atuMJVgvY4kgvrB+LuQZmJuSK4O8TJdguC7NCiRS2Y=";
   };
 
   nativeBuildInputs = [
+    setuptools
+    pip
     cython
     pkgconfig
   ];

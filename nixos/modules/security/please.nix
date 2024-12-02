@@ -1,31 +1,28 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.security.please;
   ini = pkgs.formats.ini { };
 in
 {
   options.security.please = {
-    enable = mkEnableOption (mdDoc ''
+    enable = lib.mkEnableOption ''
       please, a Sudo clone which allows a users to execute a command or edit a
       file as another user
-    '');
+    '';
 
-    package = mkPackageOption pkgs "please" { };
+    package = lib.mkPackageOption pkgs "please" { };
 
-    wheelNeedsPassword = mkOption {
-      type = types.bool;
+    wheelNeedsPassword = lib.mkOption {
+      type = lib.types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether users of the `wheel` group must provide a password to run
         commands or edit files with {command}`please` and
         {command}`pleaseedit` respectively.
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = ini.type;
       default = { };
       example = {
@@ -45,7 +42,7 @@ in
           require_pass = true;
         };
       };
-      description = mdDoc ''
+      description = ''
         Please configuration. Refer to
         <https://github.com/edneville/please/blob/master/please.ini.md> for
         details.
@@ -53,7 +50,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     security.wrappers =
       let
         owner = "root";
@@ -110,6 +107,6 @@ in
       usshAuth = true;
     };
 
-    meta.maintainers = with maintainers; [ azahi ];
+    meta.maintainers = with lib.maintainers; [ azahi ];
   };
 }

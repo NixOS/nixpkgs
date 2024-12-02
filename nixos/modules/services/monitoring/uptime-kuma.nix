@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.uptime-kuma;
 in
@@ -11,11 +8,11 @@ in
 
   options = {
     services.uptime-kuma = {
-      enable = mkEnableOption (mdDoc "Uptime Kuma, this assumes a reverse proxy to be set");
+      enable = lib.mkEnableOption "Uptime Kuma, this assumes a reverse proxy to be set";
 
-      package = mkPackageOption pkgs "uptime-kuma" { };
+      package = lib.mkPackageOption pkgs "uptime-kuma" { };
 
-      appriseSupport = mkEnableOption (mdDoc "apprise support for notifications");
+      appriseSupport = lib.mkEnableOption "apprise support for notifications";
 
       settings = lib.mkOption {
         type = lib.types.submodule { freeformType = with lib.types; attrsOf str; };
@@ -24,7 +21,7 @@ in
           PORT = "4000";
           NODE_EXTRA_CA_CERTS = "/etc/ssl/certs/ca-certificates.crt";
         };
-        description = lib.mdDoc ''
+        description = ''
           Additional configuration for Uptime Kuma, see
           <https://github.com/louislam/uptime-kuma/wiki/Environment-Variables>
           for supported values.
@@ -33,13 +30,13 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.uptime-kuma.settings = {
       DATA_DIR = "/var/lib/uptime-kuma/";
-      NODE_ENV = mkDefault "production";
-      HOST = mkDefault "127.0.0.1";
-      PORT = mkDefault "3001";
+      NODE_ENV = lib.mkDefault "production";
+      HOST = lib.mkDefault "127.0.0.1";
+      PORT = lib.mkDefault "3001";
     };
 
     systemd.services.uptime-kuma = {

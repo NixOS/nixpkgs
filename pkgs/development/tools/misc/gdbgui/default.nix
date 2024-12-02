@@ -25,7 +25,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-vmMlRmjFqhs3Vf+IU9IDtJzt4dZ0yIOmXIVOx5chZPA=";
+    hash = "sha256-vmMlRmjFqhs3Vf+IU9IDtJzt4dZ0yIOmXIVOx5chZPA=";
   };
 
   postPatch = ''
@@ -43,7 +43,8 @@ buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A browser-based frontend for GDB";
+    description = "Browser-based frontend for GDB";
+    mainProgram = "gdbgui";
     homepage = "https://www.gdbgui.com/";
     license = licenses.gpl3;
     platforms = platforms.unix;

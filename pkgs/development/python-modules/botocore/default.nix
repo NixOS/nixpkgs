@@ -1,33 +1,45 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, python-dateutil
-, jmespath
-, urllib3
-, pytestCheckHook
-, jsonschema
-, awscrt
+{
+  lib,
+  awscrt,
+  buildPythonPackage,
+  fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  jmespath,
+  python-dateutil,
+  urllib3,
+
+  # tests
+  jsonschema,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.33.6"; # N.B: if you change this, change boto3 and awscli to a matching version
-  format = "setuptools";
+  version = "1.35.30"; # N.B: if you change this, change boto3 and awscli to a matching version
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k4BWurgxgp+Q4J7NcN1rKVr9UrFIL1WC7noR2CQ9lmE=";
+    hash = "sha256-q1NQ6KUOSNNx+i1RfWXCmkDEN4jLmhU4f5PqxaI98P0=";
   };
 
-  propagatedBuildInputs = [
-    python-dateutil
+  pythonRelaxDeps = [ "urllib3" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     jmespath
+    python-dateutil
     urllib3
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     jsonschema
+    pytestCheckHook
   ];
 
   disabledTestPaths = [
@@ -38,19 +50,17 @@ buildPythonPackage rec {
     "tests/functional"
   ];
 
-  pythonImportsCheck = [
-    "botocore"
-  ];
+  pythonImportsCheck = [ "botocore" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     crt = [ awscrt ];
   };
 
-  meta = with lib; {
+  meta = {
+    description = "Low-level interface to a growing number of Amazon Web Services";
     homepage = "https://github.com/boto/botocore";
     changelog = "https://github.com/boto/botocore/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
-    description = "A low-level interface to a growing number of Amazon Web Services";
-    maintainers = with maintainers; [ anthonyroussel ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
   };
 }

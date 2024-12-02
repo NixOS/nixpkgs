@@ -6,13 +6,13 @@
 
 buildDunePackage rec {
   pname = "dscheck";
-  version = "0.2.0";
+  version = "0.5.0";
 
   minimalOCamlVersion = "5.0";
 
   src = fetchurl {
     url = "https://github.com/ocaml-multicore/dscheck/releases/download/${version}/dscheck-${version}.tbz";
-    hash = "sha256-QgkbnD3B1lONg9U60BM2xWVgIt6pZNmOmxkKy+UJH9E=";
+    hash = "sha256-9Rm2DmdvVeCkgAWCvkYdQTj94wmU7JkY8UI3fReIaG0=";
   };
 
   propagatedBuildInputs = [ containers oseq ];

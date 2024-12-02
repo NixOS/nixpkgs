@@ -1,59 +1,60 @@
 [
   {
     "version": "latest",
-    "buildId": "1.0.025891",
-    "publishDate": "2024-02-02T19:23:37.1915908Z",
+    "buildId": "53b7d0e07fe5c34bf68929fab92f87ce910288dc",
+    "publishDate": "2024-10-24T20:43:23.5850191Z",
     "files": {
       "linux-x64": {
-        "url": "https://swalocaldeploy.azureedge.net/downloads/1.0.025891/linux/StaticSitesClient",
-        "sha": "798b4032d1b6cd3f7057a6b7510c502dd69fa8cb4d27d47433542e8e80e9f87c"
+        "url": "https://swalocaldeploy.azureedge.net/downloads/53b7d0e07fe5c34bf68929fab92f87ce910288dc/linux/StaticSitesClient",
+        "sha": "66fca4b42cbc64d451097931ca4ed75649233bd818f97f0c3f6d1d75cff61413"
       },
       "win-x64": {
-        "url": "https://swalocaldeploy.azureedge.net/downloads/1.0.025891/windows/StaticSitesClient.exe",
-        "sha": "097f9633c12b55e85e4ea9c053576a94b4f5847ce3a5a7671112c881878cfc4b"
+        "url": "https://swalocaldeploy.azureedge.net/downloads/53b7d0e07fe5c34bf68929fab92f87ce910288dc/windows/StaticSitesClient.exe",
+        "sha": "fc949fb19d29cce1e8b74cf1e2c31706426d46b3e03d830d601524cee63faa0b"
       },
       "osx-x64": {
-        "url": "https://swalocaldeploy.azureedge.net/downloads/1.0.025891/macOS/StaticSitesClient",
-        "sha": "142310370774f91526c5d08ebde2f0b224b4f7f88bb6e514d25c1ef6f04fd8c8"
+        "url": "https://swalocaldeploy.azureedge.net/downloads/53b7d0e07fe5c34bf68929fab92f87ce910288dc/macOS/StaticSitesClient",
+        "sha": "89ec4fe61217325e89ed849a564ffe4cc51b61c325abdca82e8e441a4959ec92"
       }
     }
   },
   {
     "version": "stable",
-    "buildId": "1.0.025891",
-    "publishDate": "2024-02-02T19:23:37.1915908Z",
+    "buildId": "53b7d0e07fe5c34bf68929fab92f87ce910288dc",
+    "publishDate": "2024-10-24T20:43:23.5850191Z",
     "files": {
       "linux-x64": {
-        "url": "https://swalocaldeploy.azureedge.net/downloads/1.0.025891/linux/StaticSitesClient",
-        "sha": "798b4032d1b6cd3f7057a6b7510c502dd69fa8cb4d27d47433542e8e80e9f87c"
+        "url": "https://swalocaldeploy.azureedge.net/downloads/53b7d0e07fe5c34bf68929fab92f87ce910288dc/linux/StaticSitesClient",
+        "sha": "66fca4b42cbc64d451097931ca4ed75649233bd818f97f0c3f6d1d75cff61413"
       },
       "win-x64": {
-        "url": "https://swalocaldeploy.azureedge.net/downloads/1.0.025891/windows/StaticSitesClient.exe",
-        "sha": "097f9633c12b55e85e4ea9c053576a94b4f5847ce3a5a7671112c881878cfc4b"
+        "url": "https://swalocaldeploy.azureedge.net/downloads/53b7d0e07fe5c34bf68929fab92f87ce910288dc/windows/StaticSitesClient.exe",
+        "sha": "fc949fb19d29cce1e8b74cf1e2c31706426d46b3e03d830d601524cee63faa0b"
       },
       "osx-x64": {
-        "url": "https://swalocaldeploy.azureedge.net/downloads/1.0.025891/macOS/StaticSitesClient",
-        "sha": "142310370774f91526c5d08ebde2f0b224b4f7f88bb6e514d25c1ef6f04fd8c8"
+        "url": "https://swalocaldeploy.azureedge.net/downloads/53b7d0e07fe5c34bf68929fab92f87ce910288dc/macOS/StaticSitesClient",
+        "sha": "89ec4fe61217325e89ed849a564ffe4cc51b61c325abdca82e8e441a4959ec92"
       }
     }
   },
   {
     "version": "backup",
-    "buildId": "1.0.025241",
-    "publishDate": "2023-11-30T02:51:40.8356813Z",
+    "buildId": "c25b033e400580829b0fea1fc7fb566139ab61c0",
+    "publishDate": "2024-10-16T22:53:44.2035066Z",
     "files": {
       "linux-x64": {
-        "url": "https://swalocaldeploy.azureedge.net/downloads/1.0.025241/linux/StaticSitesClient",
-        "sha": "e4ccb44c516e03e6dcc2a26a35ffd4c84a61dfea581990dd5c0edb7c12662db0"
+        "url": "https://swalocaldeploy.azureedge.net/downloads/c25b033e400580829b0fea1fc7fb566139ab61c0/linux/StaticSitesClient",
+        "sha": "25a33db34c0647e1225755fb65a441c3ccfe523523f54a38f85c3ff6531aa475"
       },
       "win-x64": {
-        "url": "https://swalocaldeploy.azureedge.net/downloads/1.0.025241/windows/StaticSitesClient.exe",
-        "sha": "4146ac01a488910d6ea066e1c46505048b0c9af2e74ef273c4236b387796712d"
+        "url": "https://swalocaldeploy.azureedge.net/downloads/c25b033e400580829b0fea1fc7fb566139ab61c0/windows/StaticSitesClient.exe",
+        "sha": "40e9339b57c2df7fafdddb73cee5f5ed10ad03841bd25796b3ea81b793b4bf66"
       },
       "osx-x64": {
-        "url": "https://swalocaldeploy.azureedge.net/downloads/1.0.025241/macOS/StaticSitesClient",
-        "sha": "05b213d7861454368d2c9801b0ccc75cfd13cb48f8e121fffaa2ab7e9b5671cd"
+        "url": "https://swalocaldeploy.azureedge.net/downloads/c25b033e400580829b0fea1fc7fb566139ab61c0/macOS/StaticSitesClient",
+        "sha": "aac8b80f43a40714f1d38a0c8c23752aaec5fc4cb32e05cd2c38ff9ef0a60f32"
       }
     }
   }
 ]
+

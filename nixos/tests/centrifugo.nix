@@ -24,12 +24,10 @@ in
             engine = "redis";
             # Connect to local Redis shard via Unix socket.
             redis_address =
-              let
-                otherNodes = lib.take index nodes ++ lib.drop (index + 1) nodes;
-              in
-              map (name: "${name}:${toString redisPort}") otherNodes ++ [
+              let toRedisAddresses = map (name: "${name}:${toString redisPort}"); in
+              toRedisAddresses (lib.take index nodes) ++ [
                 "unix://${config.services.redis.servers.centrifugo.unixSocket}"
-              ];
+              ] ++ toRedisAddresses (lib.drop (index + 1) nodes);
             usage_stats_disable = true;
             api_insecure = true;
           };

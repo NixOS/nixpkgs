@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, aiocoap
-, aiohappyeyeballs
-, async-interrupt
-, bleak
-, bleak-retry-connector
-, chacha20poly1305
-, chacha20poly1305-reuseable
-, commentjson
-, cryptography
-, fetchFromGitHub
-, orjson
-, poetry-core
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, zeroconf
+{
+  lib,
+  buildPythonPackage,
+  aiocoap,
+  aiohappyeyeballs,
+  async-interrupt,
+  bleak,
+  bleak-retry-connector,
+  chacha20poly1305,
+  chacha20poly1305-reuseable,
+  commentjson,
+  cryptography,
+  fetchFromGitHub,
+  orjson,
+  poetry-core,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "3.1.4";
+  version = "3.2.7";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,14 +30,12 @@ buildPythonPackage rec {
     owner = "Jc2k";
     repo = "aiohomekit";
     rev = "refs/tags/${version}";
-    hash = "sha256-hZhbmEEqmhvoxGD4hvy4SDQWG5Xk1cmzFDSNa742iMs=";
+    hash = "sha256-E7N/FFUFsur0y9H5Pp7ol/9bytwUU5EG8E68TMF5tJ8=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiocoap
     aiohappyeyeballs
     async-interrupt
@@ -50,8 +49,6 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  doCheck = lib.versionAtLeast pytest-aiohttp.version "1.0.0";
-
   nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
@@ -62,20 +59,7 @@ buildPythonPackage rec {
     "tests/test_ip_pairing.py"
   ];
 
-  disabledTests = [
-    # AttributeError: 'MockedAsyncServiceInfo' object has no attribute '_set_properties'
-    "test_discover_find_one_unpaired"
-    "test_find_device_id_case_lower"
-    "test_find_device_id_case_upper"
-    "test_discover_missing_csharp"
-    "test_discover_csharp_case"
-    "test_discover_device_id_case_lower"
-    "test_discover_device_id_case_upper"
-  ];
-
-  pythonImportsCheck = [
-    "aiohomekit"
-  ];
+  pythonImportsCheck = [ "aiohomekit" ];
 
   meta = with lib; {
     description = "Python module that implements the HomeKit protocol";
@@ -85,7 +69,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/Jc2k/aiohomekit";
     changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "aiohomekitctl";
   };
 }

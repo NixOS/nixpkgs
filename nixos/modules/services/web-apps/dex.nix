@@ -19,12 +19,12 @@ let
 in
 {
   options.services.dex = {
-    enable = mkEnableOption (lib.mdDoc "the OpenID Connect and OAuth2 identity provider");
+    enable = mkEnableOption "the OpenID Connect and OAuth2 identity provider";
 
     environmentFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         Environment file (see `systemd.exec(5)`
         "EnvironmentFile=" section for the syntax) to define variables for dex.
         This option can be used to safely include secret keys into the dex configuration.
@@ -56,7 +56,7 @@ in
           ];
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         The available options can be found in
         [the example configuration](https://github.com/dexidp/dex/blob/v${pkgs.dex-oidc.version}/config.yaml.dist).
 
@@ -80,7 +80,6 @@ in
         ];
 
         RuntimeDirectory = "dex";
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         BindReadOnlyPaths = [
           "/nix/store"
           "-/etc/dex"
@@ -91,7 +90,6 @@ in
           "-/etc/ssl/certs/ca-certificates.crt"
         ];
         BindPaths = optional (cfg.settings.storage.type == "postgres") "/var/run/postgresql";
-        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         # ProtectClock= adds DeviceAllow=char-rtc r
         DeviceAllow = "";
         DynamicUser = true;

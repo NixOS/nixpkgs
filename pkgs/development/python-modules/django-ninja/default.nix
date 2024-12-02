@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchFromGitHub
-, flit-core
-, psycopg2
-, pydantic
-, pytest-asyncio
-, pytest-django
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchFromGitHub,
+  flit-core,
+  psycopg2,
+  pydantic,
+  pytest-asyncio,
+  pytest-django,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "django-ninja";
-  version = "1.1.0";
+  version = "1.3.0-unstable-2024-11-13";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,11 +22,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vitalik";
     repo = "django-ninja";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pvpYDuUZi0Gr5RbBWc91LzgmRLhihrhsKaD/AWN5+Bo=";
+    rev = "ee0f27b169fb227e8786bbf9011659f46b2795ea";
+    hash = "sha256-8qjGEo2n0O4WrKqhaBZNSDAW4fTOBg/nX7T4eOoJ+Pw=";
   };
 
-  propagatedBuildInputs = [ django pydantic ];
+  propagatedBuildInputs = [
+    django
+    pydantic
+  ];
 
   nativeBuildInputs = [ flit-core ];
 

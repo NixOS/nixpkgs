@@ -1,11 +1,6 @@
 { callPackage
-, clangStdenv
 , cling
 , fetchurl
-, lib
-, llvmPackages_9
-, makeWrapper
-, runCommand
 , stdenv
 }:
 

@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, cython
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "murmurhash";
-  version = "1.0.10";
+  version = "1.0.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UoKqsTF4BMbr1t1/afFbqQda7mccRKNL4r3g8bEe+Io=";
+    hash = "sha256-h/9oolXlTnZI0HKf9BMPQ/fzjwMoijduVnk04W25N2c=";
   };
 
   postPatch = ''
@@ -22,16 +23,12 @@ buildPythonPackage rec {
       --replace "'wheel>=0.32.0,<0.33.0'" ""
   '';
 
-  buildInputs = [
-   cython
-  ];
+  buildInputs = [ cython ];
 
   # No test
   doCheck = false;
 
-  pythonImportsCheck = [
-    "murmurhash"
-  ];
+  pythonImportsCheck = [ "murmurhash" ];
 
   meta = with lib; {
     description = "Cython bindings for MurmurHash2";

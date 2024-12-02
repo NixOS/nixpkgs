@@ -47,9 +47,10 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Network monitoring module for atop";
+    mainProgram = "netatopd";
     homepage = "https://www.atoptool.nl/downloadnetatop.php";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ viric ];
+    maintainers = [ ];
   };
 }

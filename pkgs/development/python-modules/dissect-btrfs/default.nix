@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, google-crc32c
-, python-lzo
-, pythonOlder
-, setuptools
-, setuptools-scm
-, zstandard
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  google-crc32c,
+  python-lzo,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-btrfs";
-  version = "1.1";
+  version = "1.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.btrfs";
     rev = "refs/tags/${version}";
-    hash = "sha256-3k0UUkce7bZ3mZ8Umjms4DX63QeBdRPUXpsdaK0VDyc=";
+    hash = "sha256-p7gtzZhKOovA+BcM7jYdicP301ueMS1IMGkBbmOxaIA=";
   };
 
   nativeBuildInputs = [
@@ -35,22 +36,18 @@ buildPythonPackage rec {
     dissect-util
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [
       python-lzo
       zstandard
     ];
-    gcrc32 = [
-      google-crc32c
-    ];
+    gcrc32 = [ google-crc32c ];
   };
 
   # Issue with the test file handling
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dissect.btrfs"
-  ];
+  pythonImportsCheck = [ "dissect.btrfs" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for the BTRFS file system";

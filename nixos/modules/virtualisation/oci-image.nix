@@ -1,18 +1,35 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.oci;
 in
 {
-  imports = [ ./oci-common.nix ];
+  imports = [
+    ./oci-common.nix
+    ../image/file-options.nix
+  ];
 
   config = {
+    # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
+    # to avoid breaking existing configs using that.
+    virtualisation.diskSize = lib.mkOverride 1490 (8 * 1024);
+    virtualisation.diskSizeAutoSupported = false;
+
+    system.nixos.tags = [ "oci" ];
+    image.extension = "qcow2";
+    system.build.image = config.system.build.OCIImage;
     system.build.OCIImage = import ../../lib/make-disk-image.nix {
       inherit config lib pkgs;
+      inherit (config.virtualisation) diskSize;
       name = "oci-image";
+      baseName = config.image.baseName;
       configFile = ./oci-config-user.nix;
       format = "qcow2";
-      diskSize = 8192;
       partitionTableType = if cfg.efi then "efi" else "legacy";
     };
 
@@ -25,7 +42,10 @@ in
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
 
-      path  = [ pkgs.coreutils pkgs.curl ];
+      path = [
+        pkgs.coreutils
+        pkgs.curl
+      ];
       script = ''
         mkdir -m 0700 -p /root/.ssh
         if [ -f /root/.ssh/authorized_keys ]; then

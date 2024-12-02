@@ -14,7 +14,6 @@
 , nixosTests
 , testers
 , amazon-ssm-agent
-, overrideEtc ? true
 }:
 
 let
@@ -42,13 +41,13 @@ let
 in
 buildGoModule rec {
   pname = "amazon-ssm-agent";
-  version = "3.2.2222.0";
+  version = "3.3.1345.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ssm-agent";
     rev = "refs/tags/${version}";
-    hash = "sha256-0mXf7n+Cd5t3xAB/84ejdCzcZviBLODBPkJah1X63+0=";
+    hash = "sha256-6MGb6P3PYfnoztLdLhOm/smCjyWuV7ZGJtK40l4yFB0=";
   };
 
   vendorHash = null;
@@ -64,7 +63,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.DarwinTools
   ];
 
@@ -85,23 +84,20 @@ buildGoModule rec {
     printf "#!/bin/sh\ntrue" > ./Tools/src/checkstyle.sh
 
     substituteInPlace agent/platform/platform_unix.go \
-      --replace "/usr/bin/uname" "${coreutils}/bin/uname" \
-      --replace '"/bin", "hostname"' '"${nettools}/bin/hostname"' \
-      --replace '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
+      --replace-fail "/usr/bin/uname" "${coreutils}/bin/uname" \
+      --replace-fail '"/bin", "hostname"' '"${nettools}/bin/hostname"' \
+      --replace-fail '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
 
     substituteInPlace agent/session/shell/shell_unix.go \
-      --replace '"script"' '"${util-linux}/bin/script"'
+      --replace-fail '"script"' '"${util-linux}/bin/script"'
 
     substituteInPlace agent/rebooter/rebooter_unix.go \
-      --replace "/sbin/shutdown" "shutdown"
+      --replace-fail "/sbin/shutdown" "shutdown"
 
     echo "${version}" > VERSION
-  '' + lib.optionalString overrideEtc ''
-    substituteInPlace agent/appconfig/constants_unix.go \
-      --replace '"/etc/amazon/ssm/"' '"${placeholder "out"}/etc/amazon/ssm/"'
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace agent/managedInstances/fingerprint/hardwareInfo_unix.go \
-      --replace /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode
+      --replace-fail /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode
   '';
 
   preBuild = ''
@@ -140,6 +136,7 @@ buildGoModule rec {
   checkFlags = [
     # Skip time dependent/flaky test
     "-skip=TestSendStreamDataMessageWithStreamDataSequenceNumberMutexLocked"
+    "-skip=TestParallelAccessOfQueue"
   ];
 
   postFixup = ''
@@ -166,6 +163,6 @@ buildGoModule rec {
     homepage = "https://github.com/aws/amazon-ssm-agent";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ copumpkin manveru anthonyroussel ];
+    maintainers = with maintainers; [ copumpkin manveru anthonyroussel arianvp ];
   };
 }

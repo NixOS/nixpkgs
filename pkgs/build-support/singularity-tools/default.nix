@@ -1,122 +1,125 @@
-{ runCommand
-, lib
-, stdenv
-, storeDir ? builtins.storeDir
-, writeScript
-, singularity
-, writeReferencesToFile
-, bash
-, vmTools
-, gawk
-, util-linux
-, runtimeShell
-, e2fsprogs
+{
+  lib,
+  # Build helpers
+  stdenv,
+  runCommand,
+  vmTools,
+  writeClosure,
+  writeDirectReferencesToFile,
+  writeScript,
+  writeStringReferencesToFile,
+  # Native build inputs
+  buildPackages,
+  e2fsprogs,
+  util-linux,
+  # Build inputs
+  bashInteractive,
+  runtimeShell,
+  singularity,
 }:
-rec {
-  shellScript = name: text:
-    writeScript name ''
-      #!${runtimeShell}
-      set -e
-      ${text}
-    '';
 
-  mkLayer =
-    { name
-    , contents ? [ ]
-      # May be "apptainer" instead of "singularity"
-    , projectName ? (singularity.projectName or "singularity")
-    }:
-    runCommand "${projectName}-layer-${name}"
-      {
-        inherit contents;
-      } ''
-      mkdir $out
-      for f in $contents ; do
-        cp -ra $f $out/
-      done
-    '';
-
+let
+  defaultSingularity = singularity;
+in
+lib.makeExtensible (final: {
   buildImage =
-    let
-      defaultSingularity = singularity;
-    in
-    { name
-    , contents ? [ ]
-    , diskSize ? 1024
-    , runScript ? "#!${stdenv.shell}\nexec /bin/sh"
-    , runAsRoot ? null
-    , memSize ? 512
-    , singularity ? defaultSingularity
+    {
+      name,
+      contents ? [ ],
+      diskSize ? 1024,
+      memSize ? 1024,
+      runAsRoot ? null,
+      runScript ? "#!${stdenv.shell}\nexec /bin/sh",
+      singularity ? defaultSingularity,
     }:
     let
       projectName = singularity.projectName or "singularity";
-      layer = mkLayer {
-        inherit name;
-        contents = contents ++ [ bash runScriptFile ];
-        inherit projectName;
-      };
-      runAsRootFile = shellScript "run-as-root.sh" runAsRoot;
-      runScriptFile = shellScript "run-script.sh" runScript;
+      runAsRootFile = buildPackages.writers.writeBash "run-as-root.sh" ''
+        set -e
+        ${runAsRoot}
+      '';
+      runScriptFile = writeScript "run-script.sh" ''
+        #!/bin/sh
+        set -e
+        ${runScript}
+      '';
+      runScriptReferences =
+        if builtins ? getContext then
+          lib.splitString "\n" (writeStringReferencesToFile runScriptFile.text).text
+        else
+          [ (writeDirectReferencesToFile runScriptFile) ];
       result = vmTools.runInLinuxVM (
-        runCommand "${projectName}-image-${name}.img"
+        runCommand "${projectName}-image-${name}.sif"
           {
-            buildInputs = [ singularity e2fsprogs util-linux gawk ];
-            layerClosure = writeReferencesToFile layer;
+            __structuredAttrs = true;
+            nativeBuildInputs = [
+              singularity
+              e2fsprogs
+              util-linux
+            ];
+            strictDeps = true;
+            inherit contents;
+            layerClosure = writeClosure ([ bashInteractive ] ++ runScriptReferences ++ contents);
             preVM = vmTools.createEmptyImage {
               size = diskSize;
               fullName = "${projectName}-run-disk";
+              # Leaving "$out" for the Singularity/Container image
+              destination = "disk-image";
             };
             inherit memSize;
           }
           ''
-            rm -rf $out
-            mkdir disk
+            mkdir workspace
             mkfs -t ext3 -b 4096 /dev/${vmTools.hd}
-            mount /dev/${vmTools.hd} disk
-            mkdir -p disk/img
-            cd disk/img
+            mount /dev/${vmTools.hd} workspace
+            mkdir -p workspace/img
+            cd workspace/img
             mkdir proc sys dev
 
             # Run root script
             ${lib.optionalString (runAsRoot != null) ''
-              mkdir -p ./${storeDir}
-              mount --rbind ${storeDir} ./${storeDir}
+              mkdir -p ./${builtins.storeDir}
+              mount --rbind "${builtins.storeDir}" ./${builtins.storeDir}
               unshare -imnpuf --mount-proc chroot ./ ${runAsRootFile}
-              umount -R ./${storeDir}
+              umount -R ./${builtins.storeDir}
             ''}
 
             # Build /bin and copy across closure
             mkdir -p bin ./${builtins.storeDir}
-            for f in $(cat $layerClosure) ; do
-              cp -ar $f ./$f
-            done
+            # Loop over the line-separated paths in $layerClosure
+            while IFS= read -r f; do
+              cp -ar "$f" "./$f"
+            done < "$layerClosure"
 
-            for c in ${toString contents} ; do
-              for f in $c/bin/* ; do
-                if [ ! -e bin/$(basename $f) ] ; then
-                  ln -s $f bin/
+            for c in "''${contents[@]}"; do
+              for f in "$c"/bin/* ; do
+                if [ ! -e "bin/$(basename "$f")" ] ; then
+                  ln -s "$f" bin/
                 fi
               done
             done
 
-            # Create runScript and link shell
+            # Link /bin/sh
             if [ ! -e bin/sh ]; then
-              ln -s ${runtimeShell} bin/sh
+              ln -s ${lib.getExe bashInteractive} bin/sh
             fi
-            mkdir -p .${projectName}.d
-            ln -s ${runScriptFile} .${projectName}.d/runscript
+            mkdir -p .singularity.d
 
-            # Fill out .${projectName}.d
-            mkdir -p .${projectName}.d/env
-            touch .${projectName}.d/env/94-appsbase.sh
+            # Create runscript
+            cp "${runScriptFile}" .singularity.d/runscript
+
+            # Fill out .singularity.d
+            mkdir -p .singularity.d/env
+            touch .singularity.d/env/94-appsbase.sh
 
             cd ..
             mkdir -p /var/lib/${projectName}/mnt/session
             echo "root:x:0:0:System administrator:/root:/bin/sh" > /etc/passwd
             echo > /etc/resolv.conf
-            TMPDIR=$(pwd -P) ${projectName} build $out ./img
-          '');
+            TMPDIR="$(pwd -P)" ${projectName} build "$out" ./img
+          ''
+      );
 
     in
     result;
-}
+})

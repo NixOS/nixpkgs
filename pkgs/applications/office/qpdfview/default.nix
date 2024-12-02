@@ -40,6 +40,9 @@ mkDerivation rec {
     ghostscript
   ];
 
+  # needed for qmakeFlags+=( below
+  __structuredAttrs = true;
+
   preConfigure = ''
     lrelease qpdfview.pro
     qmakeFlags+=(*.pro)
@@ -61,7 +64,8 @@ mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A tabbed document viewer";
+    description = "Tabbed document viewer";
+    mainProgram = "qpdfview";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

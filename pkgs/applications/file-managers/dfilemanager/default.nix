@@ -19,6 +19,7 @@ mkDerivation {
   meta = {
     homepage = "https://github.com/probonopd/dfilemanager";
     description = "File manager written in Qt/C++";
+    mainProgram = "dfm";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
   };

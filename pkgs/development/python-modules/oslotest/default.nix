@@ -1,21 +1,22 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fixtures
-, pbr
-, six
-, subunit
-, callPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fixtures,
+  pbr,
+  six,
+  subunit,
+  callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "oslotest";
-  version = "4.5.0";
+  version = "5.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "360ad2c41ba3ad6f059c7c6e7291450d082c2e5dbb0012e839a829978053dfe6";
+    hash = "sha256-97skDGy+8voLq7lRP/PafQ8ozDja+Y70Oy6ISDZ/vSA=";
   };
 
   nativeBuildInputs = [ pbr ];
@@ -30,7 +31,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru.tests = {
-    tests = callPackage ./tests.nix {};
+    tests = callPackage ./tests.nix { };
   };
 
   pythonImportsCheck = [ "oslotest" ];

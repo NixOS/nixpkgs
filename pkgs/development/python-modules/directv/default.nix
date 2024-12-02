@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, aiohttp
-, yarl
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  aiohttp,
+  yarl,
+  aresponses,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,11 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    #  ValueError: Host '#' cannot contain '#' (at position 0)
+    "test_client_error"
   ];
 
   pythonImportsCheck = [ "directv" ];

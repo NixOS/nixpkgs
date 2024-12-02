@@ -60,13 +60,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvscode-server";
-  version = "1.84.0";
+  version = "1.88.1";
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
     rev = "openvscode-server-v${finalAttrs.version}";
-    hash = "sha256-kYKvJrHWKHDIqJsN0j1WFN3OBWwEyNgY5hjNHBg+kKQ=";
+    hash = "sha256-Yc16L13Z8AmsGoSFbvy+4+KBdHxvqLMwZLeU2/dAQVU=";
   };
 
   yarnCache = stdenv.mkDerivation {
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-oW/JngHpXb8kscikscI7N9csSyZsZQgG75jOdWll6dw=";
+    outputHash = "sha256-89c6GYLT2RzHqwxBKegYqB6g5rEJ6/nH53cnfV7b0Ts=";
   };
 
   nativeBuildInputs = [
@@ -103,9 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
     moreutils
   ];
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
     ++ (with xorg; [ libX11 libxkbfile libkrb5 ])
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Cocoa
     Security
@@ -116,6 +116,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Patch out remote download of nodejs from build script
     ./remove-node-download.patch
   ];
+
+  # Disable NAPI_EXPERIMENTAL to allow to build with Node.js≥18.20.0.
+  env.NIX_CFLAGS_COMPILE = "-DNODE_API_EXPERIMENTAL_NOGC_ENV_OPT_OUT";
 
   postPatch = ''
     export HOME=$PWD
@@ -178,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
     find -path "*@vscode/ripgrep" -type d \
       -execdir mkdir -p {}/bin \; \
       -execdir ln -s ${ripgrep}/bin/rg {}/bin/rg \;
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
     # (see issue #101229)
     pushd ./remote/node_modules/@parcel/watcher

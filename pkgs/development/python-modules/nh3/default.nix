@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, rustPlatform
-, libiconv
-, fetchFromGitHub
-, darwin
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  rustPlatform,
+  libiconv,
+  fetchFromGitHub,
+  darwin,
 }:
 let
   pname = "nh3";
-  version = "0.2.13";
+  version = "0.2.17";
   src = fetchFromGitHub {
     owner = "messense";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-NILPy+lC0jhOF6ykriUPZWHLlSYBC00tpDdfJ6XjcjA=";
+    hash = "sha256-j9OoXAuuCWsBHanN+SzSip94ZA+kY8HUVvfY/omUSSM=";
   };
 in
 buildPythonPackage {
@@ -25,12 +26,15 @@ buildPythonPackage {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Ror2KcIdSeXHa44eUWGiPsKiD935hsBREREySbGedxA=";
+    hash = "sha256-WomlVzKOUfcgAWGJInSvZn9hm+bFpgc4nJbRiyPCU64=";
   };
 
-  nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
+  nativeBuildInputs = with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     darwin.apple_sdk.frameworks.Security
   ];

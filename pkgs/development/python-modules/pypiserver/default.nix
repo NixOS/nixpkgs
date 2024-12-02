@@ -1,50 +1,60 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, passlib
-, pip
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, setuptools-git
-, twine
-, watchdog
-, webtest
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  distutils,
+  fetchFromGitHub,
+  passlib,
+  pip,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-git,
+  setuptools,
+  twine,
+  watchdog,
+  webtest,
+  wheel,
+  build,
+  importlib-resources,
 }:
 
 buildPythonPackage rec {
   pname = "pypiserver";
-  version = "2.0.1";
-  format = "setuptools";
+  version = "2.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "pypiserver";
+    repo = "pypiserver";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Eh/3URt7pcJhoDDLRP8iHyjlPsE5E9M/0Hixqi5YNdg=";
+    hash = "sha256-5GJthS3kWOyWvYW+mYnIcNKD3fgSVexABZ+DpVh7qkE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-git
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    distutils
     pip
-  ];
+  ] ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
 
-  passthru.optional-dependencies = {
-    passlib = [
-      passlib
-    ];
-    cache = [
-      watchdog
-    ];
+  optional-dependencies = {
+    passlib = [ passlib ];
+    cache = [ watchdog ];
   };
+
+  nativeCheckInputs = [
+    pip
+    pytestCheckHook
+    setuptools
+    twine
+    webtest
+    build
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   __darwinAllowLocalNetworking = true;
 
@@ -56,14 +66,6 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$TMPDIR
   '';
-
-  nativeCheckInputs = [
-    pip
-    pytestCheckHook
-    setuptools
-    twine
-    webtest
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTests = [
     # Fails to install the package
@@ -77,15 +79,17 @@ buildPythonPackage rec {
     "docker/test_docker.py"
   ];
 
-  pythonImportsCheck = [
-    "pypiserver"
-  ];
+  pythonImportsCheck = [ "pypiserver" ];
 
   meta = with lib; {
     description = "Minimal PyPI server for use with pip/easy_install";
     homepage = "https://github.com/pypiserver/pypiserver";
     changelog = "https://github.com/pypiserver/pypiserver/releases/tag/v${version}";
-    license = with licenses; [ mit zlib ];
+    license = with licenses; [
+      mit
+      zlib
+    ];
     maintainers = with maintainers; [ austinbutler ];
+    mainProgram = "pypi-server";
   };
 }

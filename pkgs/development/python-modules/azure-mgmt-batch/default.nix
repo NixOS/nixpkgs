@@ -1,28 +1,28 @@
-{ lib
-, azure-common
-, azure-mgmt-core
-, buildPythonPackage
-, fetchPypi
-, isodate
-, pythonOlder
-, setuptools
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-batch";
-  version = "17.2.0";
+  version = "18.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ihXjijfW5OzilXPegIxaiSdsmfJSDqHzUrhqcEyJhY0=";
+    pname = "azure_mgmt_batch";
+    inherit version;
+    hash = "sha256-MF61H7P3OyCSfvR7O2+T6eMtyTmHbARflwvThsB7p5w=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     azure-common
@@ -33,9 +33,7 @@ buildPythonPackage rec {
   # Tests are only available in mono repo
   doCheck = false;
 
-  pythonImportsCheck = [
-    "azure.mgmt.batch"
-  ];
+  pythonImportsCheck = [ "azure.mgmt.batch" ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Batch Management Client Library";

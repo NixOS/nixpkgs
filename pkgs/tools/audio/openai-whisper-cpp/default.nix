@@ -12,6 +12,7 @@
 , MetalKit
 
 , config
+, autoAddDriverRunpath
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 }:
@@ -24,13 +25,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.5.4";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "whisper.cpp";
     rev = "refs/tags/v${finalAttrs.version}" ;
-    hash = "sha256-9H2Mlua5zx2WNXbz2C5foxIteuBgeCNALdq5bWyhQCk=";
+    hash = "sha256-y30ZccpF3SCdRGa+P3ddF1tT1KnvlI4Fexx81wZxfTk=";
   };
 
   # The upstream download script tries to download the models to the
@@ -42,73 +43,58 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
       which
       makeWrapper
-    ] ++ lib.optionals cudaSupport ( with cudaPackages ;[
-      cuda_nvcc
-
-      # TODO: Replace with autoAddDriverRunpath
-      # once https://github.com/NixOS/nixpkgs/pull/275241 has been merged
-      autoAddOpenGLRunpathHook
-    ]);
+    ] ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_nvcc
+      autoAddDriverRunpath
+    ];
 
   buildInputs = [
       SDL2
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Accelerate
       CoreGraphics
       CoreML
       CoreVideo
       MetalKit
     ] ++ lib.optionals cudaSupport ( with cudaPackages; [
-
-      # A temporary hack for reducing the closure size, remove once cudaPackages
-      # have stopped using lndir: https://github.com/NixOS/nixpkgs/issues/271792
-      cuda_cccl.dev # provides nv/target
-      cuda_cudart.dev
-      cuda_cudart.lib
-      cuda_cudart.static
-      libcublas.dev
-      libcublas.lib
-      libcublas.static
+      cuda_cccl # provides nv/target
+      cuda_cudart
+      libcublas
     ]);
 
   postPatch = let
     cudaOldStr = "-lcuda ";
-    cudaNewStr = "-lcuda -L${cudaPackages.cuda_cudart.lib}/lib/stubs ";
+    cudaNewStr = "-lcuda -L${cudaPackages.cuda_cudart}/lib/stubs ";
   in lib.optionalString cudaSupport ''
     substituteInPlace Makefile \
-      --replace '${cudaOldStr}' '${cudaNewStr}'
+      --replace-fail '${cudaOldStr}' '${cudaNewStr}'
   '';
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     WHISPER_COREML = "1";
     WHISPER_COREML_ALLOW_FALLBACK = "1";
+    WHISPER_METAL_EMBED_LIBRARY = "1";
   } // lib.optionalAttrs cudaSupport {
-    WHISPER_CUBLAS = "1";
+    GGML_CUDA = "1";
   };
-
-  makeFlags = [ "main" "stream" "command" ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
+
     cp ./main $out/bin/whisper-cpp
-    cp ./stream $out/bin/whisper-cpp-stream
-    cp ./command $out/bin/whisper-cpp-command
+
+    for file in *; do
+      if [[ -x "$file" && -f "$file" && "$file" != "main" ]]; then
+        cp "$file" "$out/bin/whisper-cpp-$file"
+      fi
+    done
 
     cp models/download-ggml-model.sh $out/bin/whisper-cpp-download-ggml-model
 
     wrapProgram $out/bin/whisper-cpp-download-ggml-model \
       --prefix PATH : ${lib.makeBinPath [wget]}
-
-    ${lib.optionalString stdenv.isDarwin ''
-      install -Dt $out/share/whisper-cpp ggml-metal.metal
-
-      for bin in whisper-cpp whisper-cpp-stream whisper-cpp-command; do
-        wrapProgram $out/bin/$bin \
-          --set-default GGML_METAL_PATH_RESOURCES $out/share/whisper-cpp
-      done
-    ''}
 
     runHook postInstall
   '';

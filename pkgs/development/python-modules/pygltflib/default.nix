@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, dataclasses-json
-, deprecated
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  dataclasses-json,
+  deprecated,
+  pytestCheckHook,
 }:
 
 let
@@ -20,7 +21,7 @@ in
 
 buildPythonPackage rec {
   pname = "pygltflib";
-  version = "1.16.1";
+  version = "1.16.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -28,22 +29,18 @@ buildPythonPackage rec {
   src = fetchFromGitLab {
     owner = "dodgyville";
     repo = "pygltflib";
-    rev = "da1c687f5ea88d6063616857d54d195fa0739b37";  # no tags in repo, only on PyPI
-    hash = "sha256-aoYVglpQ0Qaq6gEqZ455GlkL2/C1Q5YjQASVLplsWbs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rUAg05M5biVsdG2yEH0Olng/0jH1R/Jo5/+j4ToKkTI=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     dataclasses-json
     deprecated
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
   preCheck = ''
     ln -s ${gltf-sample-models} glTF-Sample-Models
   '';
@@ -53,7 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for reading and writing basic glTF files";
     homepage = "https://gitlab.com/dodgyville/pygltflib";
-    changelog = "https://gitlab.com/dodgyville/pygltflib/-/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://gitlab.com/dodgyville/pygltflib/-/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

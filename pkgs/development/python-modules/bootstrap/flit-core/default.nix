@@ -1,14 +1,19 @@
-{ lib
-, stdenv
-, python
-, flit-core
+{
+  stdenv,
+  python,
+  flit-core,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "${python.libPrefix}-bootstrap-${flit-core.pname}";
-  inherit (flit-core) version src patches meta;
+  inherit (flit-core)
+    version
+    src
+    patches
+    meta
+    ;
 
-  sourceRoot = "source/flit_core";
+  postPatch = "cd flit_core";
 
   buildPhase = ''
     runHook preBuild

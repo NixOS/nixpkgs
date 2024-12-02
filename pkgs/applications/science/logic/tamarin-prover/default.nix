@@ -1,16 +1,17 @@
-{ haskellPackages, mkDerivation, fetchFromGitHub, fetchpatch, lib, stdenv
+{ haskellPackages, mkDerivation, fetchFromGitHub, lib, stdenv
 # the following are non-haskell dependencies
 , makeWrapper, which, maude, graphviz, glibcLocales
 }:
 
 let
-  version = "1.8.0";
+  version = "1.10.0";
   src = fetchFromGitHub {
-    owner  = "tamarin-prover";
-    repo   = "tamarin-prover";
-    rev    = version;
-    sha256 = "sha256-ujnaUdbjqajmkphOS4Fs4QBCRGX4JZkQ2p1X2jripww=";
+    owner = "tamarin-prover";
+    repo  = "tamarin-prover";
+    rev   = version;
+    hash  = "sha256-v1BruU2p/Sg/g7b9a+QRza46bD7PkMtsGq82qFaNhpI=";
   };
+
 
   # tamarin has its own dependencies, but they're kept inside the repo,
   # no submodules. this factors out the common metadata among all derivations
@@ -34,8 +35,8 @@ let
   tamarin-prover-utils = mkDerivation (common "tamarin-prover-utils" (src + "/lib/utils") // {
     postPatch = replaceSymlinks;
     libraryHaskellDepends = with haskellPackages; [
-      base64-bytestring blaze-builder
-      dlist exceptions fclabels safe SHA syb
+      base64-bytestring blaze-builder list-t
+      dlist exceptions fclabels haskellPackages.graphviz safe SHA split syb
     ];
   });
 
@@ -78,9 +79,7 @@ let
   tamarin-prover-export = mkDerivation (common "tamarin-prover-export" (src + "/lib/export") // {
     postPatch = "cp --remove-destination ${src}/LICENSE .";
     doHaddock = false; # broken
-    libraryHaskellDepends = (with haskellPackages; [
-      HStringTemplate
-    ]) ++ [
+    libraryHaskellDepends = [
       tamarin-prover-utils
       tamarin-prover-term
       tamarin-prover-theory
@@ -93,8 +92,6 @@ mkDerivation (common "tamarin-prover" src // {
   isLibrary = false;
   isExecutable = true;
 
-  patches = [ ];
-
   # strip out unneeded deps manually
   doHaddock = false;
   enableSharedExecutables = false;
@@ -104,7 +101,7 @@ mkDerivation (common "tamarin-prover" src // {
   executableToolDepends = [ makeWrapper which maude graphviz ];
   postInstall = ''
     wrapProgram $out/bin/tamarin-prover \
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
       --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
   '' + ''
       --prefix PATH : ${lib.makeBinPath [ which maude graphviz ]}
@@ -121,7 +118,7 @@ mkDerivation (common "tamarin-prover" src // {
 
   executableHaskellDepends = (with haskellPackages; [
     binary-instances binary-orphans blaze-html conduit file-embed
-    gitrev http-types lifted-base monad-control
+    gitrev http-types
     resourcet shakespeare threads wai warp yesod-core yesod-static
   ]) ++ [ tamarin-prover-utils
           tamarin-prover-sapic

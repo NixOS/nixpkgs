@@ -1,80 +1,77 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.xdg.mime;
-  associationOptions = with types; attrsOf (
-    coercedTo (either (listOf str) str) (x: concatStringsSep ";" (toList x)) str
+  associationOptions = with lib.types; attrsOf (
+    coercedTo (either (listOf str) str) (x: lib.concatStringsSep ";" (lib.toList x)) str
   );
 in
 
 {
   meta = {
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ figsoda ]);
+    maintainers = lib.teams.freedesktop.members ++ (with lib.maintainers; [ figsoda ]);
   };
 
   options = {
-    xdg.mime.enable = mkOption {
-      type = types.bool;
+    xdg.mime.enable = lib.mkOption {
+      type = lib.types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to install files to support the
-        [XDG Shared MIME-info specification](https://specifications.freedesktop.org/shared-mime-info-spec/shared-mime-info-spec-latest.html) and the
-        [XDG MIME Applications specification](https://specifications.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html).
+        [XDG Shared MIME-info specification](https://specifications.freedesktop.org/shared-mime-info-spec/latest) and the
+        [XDG MIME Applications specification](https://specifications.freedesktop.org/mime-apps-spec/latest).
       '';
     };
 
-    xdg.mime.addedAssociations = mkOption {
+    xdg.mime.addedAssociations = lib.mkOption {
       type = associationOptions;
       default = {};
       example = {
         "application/pdf" = "firefox.desktop";
         "text/xml" = [ "nvim.desktop" "codium.desktop" ];
       };
-      description = lib.mdDoc ''
+      description = ''
         Adds associations between mimetypes and applications. See the
         [
-        specifications](https://specifications.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html#associations) for more information.
+        specifications](https://specifications.freedesktop.org/mime-apps-spec/latest/associations) for more information.
       '';
     };
 
-    xdg.mime.defaultApplications = mkOption {
+    xdg.mime.defaultApplications = lib.mkOption {
       type = associationOptions;
       default = {};
       example = {
         "application/pdf" = "firefox.desktop";
         "image/png" = [ "sxiv.desktop" "gimp.desktop" ];
       };
-      description = lib.mdDoc ''
+      description = ''
         Sets the default applications for given mimetypes. See the
         [
-        specifications](https://specifications.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html#default) for more information.
+        specifications](https://specifications.freedesktop.org/mime-apps-spec/latest/default) for more information.
       '';
     };
 
-    xdg.mime.removedAssociations = mkOption {
+    xdg.mime.removedAssociations = lib.mkOption {
       type = associationOptions;
       default = {};
       example = {
         "audio/mp3" = [ "mpv.desktop" "umpv.desktop" ];
         "inode/directory" = "codium.desktop";
       };
-      description = lib.mdDoc ''
+      description = ''
         Removes associations between mimetypes and applications. See the
         [
-        specifications](https://specifications.freedesktop.org/mime-apps-spec/mime-apps-spec-latest.html#associations) for more information.
+        specifications](https://specifications.freedesktop.org/mime-apps-spec/latest/associations) for more information.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
-    environment.etc."xdg/mimeapps.list" = mkIf (
+  config = lib.mkIf cfg.enable {
+    environment.etc."xdg/mimeapps.list" = lib.mkIf (
       cfg.addedAssociations != {}
       || cfg.defaultApplications != {}
       || cfg.removedAssociations != {}
     ) {
-      text = generators.toINI { } {
+      text = lib.generators.toINI { } {
         "Added Associations" = cfg.addedAssociations;
         "Default Applications" = cfg.defaultApplications;
         "Removed Associations" = cfg.removedAssociations;

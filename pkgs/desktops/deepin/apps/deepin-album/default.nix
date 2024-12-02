@@ -1,39 +1,37 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, dtkwidget
-, dtkdeclarative
-, qt5integration
-, qt5platform-plugins
-, qtbase
-, qtsvg
-, udisks2-qt5
-, gio-qt
-, freeimage
-, ffmpeg
-, ffmpegthumbnailer
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  dtkwidget,
+  dtkdeclarative,
+  qt5integration,
+  qt5platform-plugins,
+  udisks2-qt5,
+  gio-qt,
+  freeimage,
+  ffmpeg_6,
+  ffmpegthumbnailer,
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-album";
-  version = "6.0.2";
+  version = "6.0.4";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-kRQiH6LvXDpQOgBQiFHM+YQzQFSupOj98aEPbcUumZ8=";
+    hash = "sha256-kTcVmROsqLH8GwJzAf3zMq/wGYWNvhFBiHODaROt7Do=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -41,12 +39,12 @@ stdenv.mkDerivation rec {
     dtkdeclarative
     qt5integration
     qt5platform-plugins
-    qtbase
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     udisks2-qt5
     gio-qt
     freeimage
-    ffmpeg
+    ffmpeg_6
     ffmpegthumbnailer
   ];
 
@@ -55,7 +53,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DVERSION=${version}" ];
 
   meta = with lib; {
-    description = "A fashion photo manager for viewing and organizing pictures";
+    description = "Fashion photo manager for viewing and organizing pictures";
     homepage = "https://github.com/linuxdeepin/deepin-album";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

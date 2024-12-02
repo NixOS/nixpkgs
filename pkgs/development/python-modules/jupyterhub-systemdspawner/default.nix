@@ -1,16 +1,18 @@
-{ lib
-, bash
-, buildPythonPackage
-, fetchFromGitHub
-, jupyterhub
-, pythonOlder
-, tornado
+{
+  lib,
+  bash,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jupyterhub,
+  pythonOlder,
+  setuptools,
+  tornado,
 }:
 
 buildPythonPackage rec {
   pname = "jupyterhub-systemdspawner";
-  version = "1.0.1";
-  format = "setuptools";
+  version = "1.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -18,22 +20,17 @@ buildPythonPackage rec {
     owner = "jupyterhub";
     repo = "systemdspawner";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2Pxswa472umovHBUVTIX1l+Glj6bzzgBLsu+p4IA6jA=";
+    hash = "sha256-obM8HGCHsisRV1+kHMWdA7d6eb6awwPMBuDUAf3k0uI=";
   };
 
   postPatch = ''
-    substituteInPlace systemdspawner/systemd.py \
-      --replace "/bin/bash" "${bash}/bin/bash"
-
     substituteInPlace systemdspawner/systemdspawner.py \
-      --replace "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
   '';
 
-  buildInputs = [
-    bash
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jupyterhub
     tornado
   ];
@@ -47,15 +44,14 @@ buildPythonPackage rec {
     patchShebangs $out/bin
   '';
 
-  pythonImportsCheck = [
-    "systemdspawner"
-  ];
+  pythonImportsCheck = [ "systemdspawner" ];
 
   meta = with lib; {
     description = "JupyterHub Spawner using systemd for resource isolation";
+    mainProgram = "check-kernel.bash";
     homepage = "https://github.com/jupyterhub/systemdspawner";
     changelog = "https://github.com/jupyterhub/systemdspawner/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

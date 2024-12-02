@@ -1,7 +1,6 @@
 { lib
 , python3Packages
 , fetchFromGitHub
-, fetchpatch
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -18,7 +17,6 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = with python3Packages; [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -36,9 +34,10 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    changelog = "https://github.com/rhasspy/wyoming-openwakeword/v${version}/master/CHANGELOG.md";
+    changelog = "https://github.com/rhasspy/wyoming-piper/v${version}/master/CHANGELOG.md";
     description = "Wyoming Server for Piper";
-    homepage = "https://github.com/rhasspy/wyoming-openwakeword";
+    mainProgram = "wyoming-piper";
+    homepage = "https://github.com/rhasspy/wyoming-piper";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

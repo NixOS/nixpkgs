@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, gevent
-, pytest-asyncio
-, pytest-tornado
-, pytestCheckHook
-, pythonOlder
-, pytz
-, setuptools
-, setuptools-scm
-, six
-, tornado
-, twisted
-, tzlocal
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  gevent,
+  pytest-asyncio,
+  pytest-tornado,
+  pytestCheckHook,
+  pythonOlder,
+  pytz,
+  setuptools,
+  setuptools-scm,
+  six,
+  tornado,
+  twisted,
+  tzlocal,
 }:
 
 buildPythonPackage rec {
   pname = "apscheduler";
   version = "3.10.4";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -29,11 +30,12 @@ buildPythonPackage rec {
     hash = "sha256-5t8HGyfZvomOSGvHlAp75QtK8unafAjwdEqW1L1M70o=";
   };
 
-  buildInputs = [
+  build-system = [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pytz
     setuptools
     six
@@ -51,28 +53,28 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace " --cov --tb=short" ""
+      --replace-fail " --cov --tb=short" ""
   '';
 
-  disabledTests = [
-    "test_broken_pool"
-    # gevent tests have issue on newer Python releases
-    "test_add_live_job"
-    "test_add_pending_job"
-    "test_shutdown"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_submit_job"
-    "test_max_instances"
-  ];
+  disabledTests =
+    [
+      "test_broken_pool"
+      # gevent tests have issue on newer Python releases
+      "test_add_live_job"
+      "test_add_pending_job"
+      "test_shutdown"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "test_submit_job"
+      "test_max_instances"
+    ];
 
-  pythonImportsCheck = [
-    "apscheduler"
-  ];
+  pythonImportsCheck = [ "apscheduler" ];
 
   meta = with lib; {
     description = "Library that lets you schedule your Python code to be executed";
     homepage = "https://github.com/agronholm/apscheduler";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

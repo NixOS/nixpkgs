@@ -2,7 +2,7 @@
 , sqlite, wxGTK32, libusb1, soapysdr
 , mesa_glu, libX11, gnuplot, fltk
 , GLUT
-, withGui ? !stdenv.isDarwin # withGui transitively depends on mesa, which is broken on darwin
+, withGui ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     gnuplot
     libusb1
     soapysdr
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     GLUT
   ] ++ lib.optionals withGui [
     fltk
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ markuskowa ];
     platforms = platforms.unix;
+    badPlatforms = lib.optionals withGui platforms.darwin; # withGui transitively depends on mesa, which is broken on darwin
   };
 }
 

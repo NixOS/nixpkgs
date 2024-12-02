@@ -13,7 +13,7 @@
 , getopt
 , setuptools
 , pygobject3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 buildPythonApplication {
@@ -25,7 +25,7 @@ buildPythonApplication {
     owner = "ubports";
     repo = "development/core/click";
     rev = "aaf2735e8e6cbeaf2e429c70136733513a81718a";
-    sha256 = "sha256-pNu995/w3tbz15QQVdVYBnWnAoZmqWj1DN/5PZZ0iZw=";
+    hash = "sha256-pNu995/w3tbz15QQVdVYBnWnAoZmqWj1DN/5PZZ0iZw=";
   };
 
   postPatch = ''
@@ -57,7 +57,7 @@ buildPythonApplication {
     gobject-introspection
     vala
     getopt
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   # Tests were omitted for time constraint reasons
@@ -83,7 +83,7 @@ buildPythonApplication {
   ];
 
   meta = {
-    description = "A tool to build click packages. Mainly used for Ubuntu Touch.";
+    description = "Tool to build click packages. Mainly used for Ubuntu Touch";
     homepage = "https://gitlab.com/ubports/development/core/click";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ilyakooo0 OPNA2608 ];

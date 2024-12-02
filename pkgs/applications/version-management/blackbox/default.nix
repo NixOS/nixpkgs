@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ gnupg ];
 
   # https://github.com/NixOS/nixpkgs/issues/134445
-  doCheck = !stdenv.isDarwin && stdenv.isx86_64;
+  doCheck = !stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
 
   nativeCheckInputs = [
     expect
     which
     coreutils
-    pinentry.tty
+    pinentry
     git
     gnutar
     procps

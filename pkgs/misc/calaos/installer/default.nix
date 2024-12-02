@@ -16,7 +16,7 @@ mkDerivation rec {
 
   qmakeFlags = [ "REVISION=${version}" ];
 
-  installPhase = if stdenv.isDarwin then ''
+  installPhase = if stdenv.hostPlatform.isDarwin then ''
     mkdir -p $out/Applications
     cp -a calaos_installer.app $out/Applications
   '' else ''
@@ -26,6 +26,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Calaos Installer, a tool to create calaos configuration";
+    mainProgram = "calaos_installer";
     homepage = "https://www.calaos.fr/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

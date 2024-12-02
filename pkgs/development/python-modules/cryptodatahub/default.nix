@@ -1,22 +1,23 @@
-{ lib
-, asn1crypto
-, attrs
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitLab
-, pathlib2
-, pyfakefs
-, python-dateutil
-, pythonOlder
-, setuptools
-, six
-, unittestCheckHook
-, urllib3
+{
+  lib,
+  asn1crypto,
+  attrs,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pathlib2,
+  pyfakefs,
+  python-dateutil,
+  pythonOlder,
+  setuptools,
+  six,
+  unittestCheckHook,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "cryptodatahub";
-  version = "0.12.2";
+  version = "0.12.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,19 +26,17 @@ buildPythonPackage rec {
     owner = "coroner";
     repo = "cryptodatahub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zVHHBQYcl26zTtXPAs/AgKOojKQORu08rpkfY0l1zjM=";
+    hash = "sha256-jYMzvh4tgfLS7Za0MYHbWbczptAvENfzfTEV9Drlfto=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt  \
-      --replace-warn "attrs>=20.3.0,<22.0.1" "attrs>=20.3.0"
+      --replace-fail "attrs>=20.3.0,<22.0.1" "attrs>=20.3.0"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asn1crypto
     attrs
     pathlib2
@@ -52,14 +51,12 @@ buildPythonPackage rec {
     unittestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "cryptodatahub"
-  ];
-
+  pythonImportsCheck = [ "cryptodatahub" ];
 
   preCheck = ''
     # failing tests
     rm test/updaters/test_common.py
+    rm test/common/test_key.py
     # Tests require network access
     rm test/common/test_utils.py
   '';
@@ -69,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/coroner/cryptodatahub";
     changelog = "https://gitlab.com/coroner/cryptodatahub/-/blob/${version}/CHANGELOG.rst";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,11 +1,10 @@
 { lib
 , ocaml
-, version ? if lib.versionAtLeast ocaml.version "5.1" then "0.14" else "0.12"
+, version ? if lib.versionAtLeast ocaml.version "5.1" then "1.2" else "0.12"
 , buildDunePackage
 , bigstringaf
 , cstruct
 , domain-local-await
-, dune-configurator
 , fetchurl
 , fmt
 , hmap
@@ -24,9 +23,9 @@ let
       minimalOCamlVersion = "5.0";
       hash = "sha256-2EhHzoX/t4ZBSWrSS+PGq1zCxohc7a1q4lfsrFnZJqA=";
     };
-    "0.14" = {
+    "1.2" = {
       minimalOCamlVersion = "5.1";
-      hash = "sha256-UvhblH0+DecJQLW7qsDT54hB/qVkjnOvfYp1SrUchxs=";
+      hash = "sha256-N5LpEr2NSUuy449zCBgl5NISsZcM8sHxspZsqp/WvEA=";
     };
   }."${version}";
 in
@@ -63,8 +62,8 @@ buildDunePackage rec {
   ];
 
   meta = {
-    homepage = "https://github.com/ocaml-multicore/ocaml-${pname}";
-    changelog = "https://github.com/ocaml-multicore/ocaml-${pname}/raw/v${version}/CHANGES.md";
+    homepage = "https://github.com/ocaml-multicore/${pname}";
+    changelog = "https://github.com/ocaml-multicore/${pname}/raw/v${version}/CHANGES.md";
     description = "Effects-Based Parallel IO for OCaml";
     license = with lib.licenses; [ isc ];
     maintainers = with lib.maintainers; [ toastal ];

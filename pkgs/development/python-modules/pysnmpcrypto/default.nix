@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, cryptography
-, pycryptodomex
+  # dependencies
+  cryptography,
+  pycryptodomex,
 
-# tests
-, pytestCheckHook
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,28 +31,22 @@ buildPythonPackage rec {
       "observed_version = [36, 2, 0]"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     cryptography
     pycryptodomex
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pysnmpcrypto"
-  ];
+  pythonImportsCheck = [ "pysnmpcrypto" ];
 
   meta = with lib; {
     description = "Strong crypto support for Python SNMP library";
     homepage = "https://github.com/etingof/pysnmpcrypto";
     changelog = "https://github.com/etingof/pysnmpcrypto/blob/${version}/CHANGES.txt";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,47 +1,40 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, gobject-introspection
-, setuptools
-, wrapGAppsHook
-, dbus-python
-, packaging
-, proton-core
-, proton-keyring-linux
-, proton-keyring-linux-secretservice
-, proton-vpn-api-core
-, proton-vpn-connection
-, proton-vpn-killswitch
-, proton-vpn-killswitch-network-manager
-, proton-vpn-logger
-, proton-vpn-network-manager
-, proton-vpn-network-manager-openvpn
-, proton-vpn-session
-, pycairo
-, pygobject3
-, pytestCheckHook
-, withIndicator ? true
-, libappindicator-gtk3
-, libayatana-appindicator
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  gobject-introspection,
+  setuptools,
+  wrapGAppsHook3,
+  dbus-python,
+  packaging,
+  proton-core,
+  proton-keyring-linux,
+  proton-vpn-api-core,
+  proton-vpn-local-agent,
+  proton-vpn-network-manager,
+  pycairo,
+  pygobject3,
+  withIndicator ? true,
+  libappindicator-gtk3,
+  libayatana-appindicator,
 }:
 
 buildPythonApplication rec {
   pname = "protonvpn-gui";
-  version = "4.1.10";
+  version = "4.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "proton-vpn-gtk-app";
     rev = "refs/tags/v${version}";
-    hash = "sha256-D06dMMjzFE7gIGFpIH/+0xmVCckqAWLkb3lc2ZmxNZs=";
+    hash = "sha256-qF6rLCF4Lfzdr2I2jmhLJzhYYstncnQVdyHOn2ajCyg=";
   };
 
   nativeBuildInputs = [
     # Needed for the NM namespace
     gobject-introspection
-    setuptools
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = lib.optionals withIndicator [
@@ -51,38 +44,27 @@ buildPythonApplication rec {
     libayatana-appindicator
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     dbus-python
     packaging
     proton-core
     proton-keyring-linux
-    proton-keyring-linux-secretservice
     proton-vpn-api-core
-    proton-vpn-connection
-    proton-vpn-killswitch
-    proton-vpn-killswitch-network-manager
-    proton-vpn-logger
+    proton-vpn-local-agent
     proton-vpn-network-manager
-    proton-vpn-network-manager-openvpn
-    proton-vpn-session
     pycairo
     pygobject3
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov=proton --cov-report=html --cov-report=term" ""
-  '';
 
   postInstall = ''
     mkdir -p $out/share/{applications,pixmaps}
     install -Dm 644 ${src}/rpmbuild/SOURCES/protonvpn-app.desktop $out/share/applications
     install -Dm 644 ${src}/rpmbuild/SOURCES/proton-vpn-logo.svg $out/share/pixmaps
   '';
-
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
 
   preCheck = ''
     # Needed for Permission denied: '/homeless-shelter'
@@ -92,12 +74,12 @@ buildPythonApplication rec {
   # Gets a segmentation fault after the widgets test
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Proton VPN GTK app for Linux";
     homepage = "https://github.com/ProtonVPN/proton-vpn-gtk-app";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "protonvpn-app";
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = with lib.maintainers; [ sebtm ];
   };
 }

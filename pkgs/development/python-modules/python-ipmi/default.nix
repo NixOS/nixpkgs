@@ -1,48 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, future
-, mock
-, nose
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  future,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-ipmi";
-  version = "0.5.4";
-  format = "setuptools";
+  version = "0.5.7";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kontron";
-    repo = pname;
+    repo = "python-ipmi";
     rev = "refs/tags/${version}";
-    hash = "sha256-IXEq3d1nXGEndciQw2MJ1Abc0vmEYez+k6aWGSWEzWA=";
+    hash = "sha256-vwjVUkTeVC1On1I1BtM0kBbne6CbX/6Os1+HA8WN9jU=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "version=version," "version='${version}',"
+      --replace-fail "version=version," "version='${version}',"
   '';
 
-  propagatedBuildInputs = [
-    future
-  ];
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [ future ];
 
   nativeCheckInputs = [
     mock
-    nose
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pyipmi"
-  ];
+  pythonImportsCheck = [ "pyipmi" ];
 
   meta = with lib; {
     description = "Python IPMI Library";
+    mainProgram = "ipmitool.py";
     homepage = "https://github.com/kontron/python-ipmi";
     license = with licenses; [ lgpl2Plus ];
     maintainers = with maintainers; [ fab ];

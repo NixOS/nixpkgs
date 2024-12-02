@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, oauthlib
-, pyjwt
-, pythonOlder
-, requests
-, requests-oauthlib
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  oauthlib,
+  pyjwt,
+  pythonOlder,
+  requests,
+  requests-oauthlib,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "mwoauth";
-  version = "0.3.8";
+  version = "0.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CNr07auqD5WoRfmOVwfecxaoODqWJfIK52iwNZkcNqw=";
+    hash = "sha256-IuNAPnSOcBRvjszBQw/lQsn5xP9nfv9CSlLmRPbY98U=";
   };
 
   propagatedBuildInputs = [
@@ -33,9 +34,7 @@ buildPythonPackage rec {
   # https://github.com/mediawiki-utilities/python-mwoauth/issues/44
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mwoauth"
-  ];
+  pythonImportsCheck = [ "mwoauth" ];
 
   meta = with lib; {
     description = "Python library to perform OAuth handshakes with a MediaWiki installation";

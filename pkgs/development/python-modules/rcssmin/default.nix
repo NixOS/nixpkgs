@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,14 +21,12 @@ buildPythonPackage rec {
   # tests auto-discovery
   doCheck = false;
 
-  pythonImportsCheck = [
-    "rcssmin"
-  ];
+  pythonImportsCheck = [ "rcssmin" ];
 
   meta = with lib; {
     description = "CSS minifier written in pure python";
     homepage = "http://opensource.perlig.de/rcssmin/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

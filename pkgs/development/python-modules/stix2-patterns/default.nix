@@ -1,12 +1,13 @@
-{ lib
-, antlr4-python3-runtime
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, pytestCheckHook
-, wheel
-, six
+{
+  lib,
+  antlr4_9,
+  antlr4-python3-runtime,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -23,39 +24,20 @@ buildPythonPackage rec {
     hash = "sha256-lFgnvI5a7U7/Qj4Pqjr3mx4TNDnC2/Ru7tVG7VggR7Y=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "antlr4-python3-runtime~=" "antlr4-python3-runtime>="
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
-
-  propagatedBuildInputs = [
-    antlr4-python3-runtime
+  dependencies = [
+    (antlr4-python3-runtime.override { antlr4 = antlr4_9; })
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "stix2patterns"
-  ];
-
-  disabledTestPaths = [
-    # Exception: Could not deserialize ATN with version  (expected 4)
-    "stix2patterns/test/v20/test_inspector.py"
-    "stix2patterns/test/v21/test_inspector.py"
-    "stix2patterns/test/v20/test_validator.py"
-    "stix2patterns/test/v21/test_validator.py"
-  ];
+  pythonImportsCheck = [ "stix2patterns" ];
 
   meta = with lib; {
     description = "Validate patterns used to express cyber observable content in STIX Indicators";
+    mainProgram = "validate-patterns";
     homepage = "https://github.com/oasis-open/cti-pattern-validator";
     changelog = "https://github.com/oasis-open/cti-pattern-validator/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;

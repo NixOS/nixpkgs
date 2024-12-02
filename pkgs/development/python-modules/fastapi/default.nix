@@ -1,121 +1,125 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, hatchling
+  # build-system
+  pdm-backend,
 
-# dependencies
-, starlette
-, pydantic
-, typing-extensions
+  # dependencies
+  fastapi-cli,
+  starlette,
+  pydantic,
+  typing-extensions,
 
-# tests
-, dirty-equals
-, flask
-, passlib
-, pytest-asyncio
-, pytestCheckHook
-, python-jose
-, sqlalchemy
-, trio
+  # tests
+  dirty-equals,
+  flask,
+  inline-snapshot,
+  passlib,
+  pyjwt,
+  pytest-asyncio,
+  pytestCheckHook,
+  sqlalchemy,
+  trio,
 
-# optional-dependencies
-, httpx
-, jinja2
-, python-multipart
-, itsdangerous
-, pyyaml
-, ujson
-, orjson
-, email-validator
-, uvicorn
-, pydantic-settings
-, pydantic-extra-types
+  # optional-dependencies
+  httpx,
+  jinja2,
+  python-multipart,
+  itsdangerous,
+  pyyaml,
+  ujson,
+  orjson,
+  email-validator,
+  uvicorn,
+  pydantic-settings,
+  pydantic-extra-types,
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.109.0";
+  version = "0.115.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tiangolo";
-    repo = pname;
+    repo = "fastapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-iZBc0tYGmhQuOL/pdthhBYYnZhe+wEttoinePNAIgEs=";
+    hash = "sha256-JIaPgZVbz887liVwd3YtubJm+L4tFCM9Jcn9/smjiKo=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-    pythonRelaxDepsHook
-  ];
+  build-system = [ pdm-backend ];
 
   pythonRelaxDeps = [
     "anyio"
-    # https://github.com/tiangolo/fastapi/pull/9636
     "starlette"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    fastapi-cli
     starlette
     pydantic
     typing-extensions
   ];
 
-  passthru.optional-dependencies.all = [
-    httpx
-    jinja2
-    python-multipart
-    itsdangerous
-    pyyaml
-    ujson
-    orjson
-    email-validator
-    uvicorn
-  ] ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
-    pydantic-settings
-    pydantic-extra-types
-  ] ++ uvicorn.optional-dependencies.standard;
+  optional-dependencies.all =
+    [
+      httpx
+      jinja2
+      python-multipart
+      itsdangerous
+      pyyaml
+      ujson
+      orjson
+      email-validator
+      uvicorn
+    ]
+    ++ lib.optionals (lib.versionAtLeast pydantic.version "2") [
+      pydantic-settings
+      pydantic-extra-types
+    ]
+    ++ uvicorn.optional-dependencies.standard;
 
   nativeCheckInputs = [
     dirty-equals
     flask
+    inline-snapshot
     passlib
+    pyjwt
     pytestCheckHook
     pytest-asyncio
-    python-jose
     trio
     sqlalchemy
-  ] ++ passthru.optional-dependencies.all
-  ++ python-jose.optional-dependencies.cryptography;
+  ] ++ optional-dependencies.all;
 
   pytestFlagsArray = [
     # ignoring deprecation warnings to avoid test failure from
     # tests/test_tutorial/test_testing/test_tutorial001.py
     "-W ignore::DeprecationWarning"
+    "-W ignore::pytest.PytestUnraisableExceptionWarning"
+  ];
+
+  disabledTests = [
+    # Coverage test
+    "test_fastapi_cli"
   ];
 
   disabledTestPaths = [
     # Don't test docs and examples
     "docs_src"
-    # databases is incompatible with SQLAlchemy 2.0
-    "tests/test_tutorial/test_async_sql_databases"
     "tests/test_tutorial/test_sql_databases"
   ];
 
-  pythonImportsCheck = [
-    "fastapi"
-  ];
+  pythonImportsCheck = [ "fastapi" ];
 
   meta = with lib; {
-    changelog = "https://github.com/tiangolo/fastapi/releases/tag/${version}";
+    changelog = "https://github.com/fastapi/fastapi/releases/tag/${version}";
     description = "Web framework for building APIs";
-    homepage = "https://github.com/tiangolo/fastapi";
+    homepage = "https://github.com/fastapi/fastapi";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };

@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "frp";
-  meta.maintainers = with lib.maintainers; [ zaldnoay janik ];
+  meta.maintainers = with lib.maintainers; [ zaldnoay ];
   nodes = {
     frps = {
       networking = {

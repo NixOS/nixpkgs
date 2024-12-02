@@ -1,11 +1,10 @@
 { config, lib, pkgs, ... }:
-with lib;
 {
   options.services.sdrplayApi = {
-    enable = mkOption {
+    enable = lib.mkOption {
       default = false;
       example = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable the SDRplay API service and udev rules.
 
         ::: {.note}
@@ -17,7 +16,7 @@ with lib;
     };
   };
 
-  config = mkIf config.services.sdrplayApi.enable {
+  config = lib.mkIf config.services.sdrplayApi.enable {
     systemd.services.sdrplayApi = {
       description = "SDRplay API Service";
       after = [ "network.target" ];

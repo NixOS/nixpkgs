@@ -31,7 +31,7 @@ def process_repo(path: str, official: bool):
     origurl = repourl
     if '/' in name or ' ' in name:
         name = os.path.split(path)[-1].removesuffix('.yaml')
-    name = name.replace('_', '-')
+    name = name.replace('_', '-').lower()
     if name in PLUGINS.keys():
         raise ValueError(f'Duplicate plugin {name}, refusing to continue')
     repodir = os.path.join(TMP, 'maubot-plugins', name)
@@ -73,7 +73,7 @@ def process_repo(path: str, official: bool):
         'description': desc,
         'homepage': origurl,
     }
-    if domain.endswith('github.com'):
+    if domain == 'github.com':
         owner, repo = query.split('/')
         ret['github'] = {
             'owner': owner,

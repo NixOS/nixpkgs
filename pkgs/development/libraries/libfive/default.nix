@@ -2,6 +2,7 @@
 , stdenv
 , wrapQtAppsHook
 , fetchFromGitHub
+, unstableGitUpdater
 , cmake
 , ninja
 , pkg-config
@@ -17,18 +18,18 @@
 
 stdenv.mkDerivation {
   pname = "libfive";
-  version = "unstable-2023-06-07";
+  version = "0-unstable-2024-10-10";
 
   src = fetchFromGitHub {
     owner = "libfive";
     repo = "libfive";
-    rev = "7af5f43684a8a497ac8610d39f7fca935364a9b9";
-    hash = "sha256-GQzsHKeKsCWKOVfBrTuUFq2XasPxhsN+19stWY0WtVc=";
+    rev = "71899313d36ce14de6646ef760fa6bbc5c0cc067";
+    hash = "sha256-bA+4wGAygdbHcOMGFwNyzn2daQ8E7NeOTUF2Tr3RQww=";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook cmake ninja pkg-config python.pkgs.pythonImportsCheckHook ];
   buildInputs = [ eigen zlib libpng boost guile python qtbase ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk_11_0.frameworks.Cocoa ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk_11_0.frameworks.Cocoa ];
 
   preConfigure = ''
     substituteInPlace studio/src/guile/interpreter.cpp \
@@ -56,7 +57,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DGUILE_CCACHE_DIR=${placeholder "out"}/${guile.siteCcacheDir}"
-  ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11") [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11") [
     # warning: 'aligned_alloc' is only available on macOS 10.15 or newer
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.15"
   ];
@@ -65,7 +66,7 @@ stdenv.mkDerivation {
     NIX_CFLAGS_COMPILE = "-Wno-error=enum-constexpr-conversion";
   };
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # No rules to install the mac app, so do it manually.
     mkdir -p $out/Applications
     cp -r studio/Studio.app $out/Applications/Studio.app
@@ -94,6 +95,10 @@ stdenv.mkDerivation {
     "libfive.shape"
     "libfive.stdlib"
   ];
+
+  passthru.updateScript = unstableGitUpdater {
+    tagFormat = "";
+  };
 
   meta = with lib; {
     description = "Infrastructure for solid modeling with F-Reps in C, C++, and Guile";

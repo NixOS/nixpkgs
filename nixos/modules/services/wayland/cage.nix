@@ -5,12 +5,12 @@ with lib;
 let
   cfg = config.services.cage;
 in {
-  options.services.cage.enable = mkEnableOption (lib.mdDoc "cage kiosk service");
+  options.services.cage.enable = mkEnableOption "cage kiosk service";
 
   options.services.cage.user = mkOption {
     type = types.str;
     default = "demo";
-    description = lib.mdDoc ''
+    description = ''
       User to log-in as.
     '';
   };
@@ -19,7 +19,7 @@ in {
     type = types.listOf types.str;
     default = [];
     defaultText = literalExpression "[]";
-    description = lib.mdDoc "Additional command line arguments to pass to Cage.";
+    description = "Additional command line arguments to pass to Cage.";
     example = ["-d"];
   };
 
@@ -29,14 +29,14 @@ in {
     example = {
       WLR_LIBINPUT_NO_DEVICES = "1";
     };
-    description = lib.mdDoc "Additional environment variables to pass to Cage.";
+    description = "Additional environment variables to pass to Cage.";
   };
 
   options.services.cage.program = mkOption {
     type = types.path;
     default = "${pkgs.xterm}/bin/xterm";
     defaultText = literalExpression ''"''${pkgs.xterm}/bin/xterm"'';
-    description = lib.mdDoc ''
+    description = ''
       Program to run in cage.
     '';
   };
@@ -101,7 +101,7 @@ in {
       session required ${config.systemd.package}/lib/security/pam_systemd.so
     '';
 
-    hardware.opengl.enable = mkDefault true;
+    hardware.graphics.enable = mkDefault true;
 
     systemd.targets.graphical.wants = [ "cage-tty1.service" ];
 

@@ -9,5 +9,5 @@ callPackage ./generic.nix (args // rec {
 
   additionalBuildInputs = [ libjack2 ];
 
-  description = "A JACK patchbay in flow matrix style";
+  description = "JACK patchbay in flow matrix style";
 })

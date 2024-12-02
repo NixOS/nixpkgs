@@ -6,8 +6,6 @@
 , pkg-config
 , libxcb
 , openssl
-  # Darwin dependencies
-, AppKit
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,19 +19,17 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-PSEoh1OMElFJ8m4er1vBMkQak3JvLjd+oWNWA46cows=";
   };
 
-  cargoSha256 = "sha256-QERnohWpkJ0LWkdxHrY6gKxdGqxDkLla7jlG44laojk=";
+  cargoHash = "sha256-QERnohWpkJ0LWkdxHrY6gKxdGqxDkLla7jlG44laojk=";
 
   nativeBuildInputs = [
     installShellFiles
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libxcb
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
   ];
 
   postInstall = ''
@@ -46,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A CLI spelling corrector for when you're unsure";
+    description = "CLI spelling corrector for when you're unsure";
     homepage = "https://github.com/hisbaan/didyoumean";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ evanjs wegank ];

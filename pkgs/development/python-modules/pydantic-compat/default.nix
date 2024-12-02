@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, hatch-vcs
-, hatchling
-, importlib-metadata
-, pydantic
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  git,
+  hatch-vcs,
+  hatchling,
+  importlib-metadata,
+  pydantic,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -36,13 +37,9 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pydantic_compat"
-  ];
+  pythonImportsCheck = [ "pydantic_compat" ];
 
   meta = with lib; {
     description = "Compatibility layer for pydantic v1/v2";

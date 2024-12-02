@@ -1,29 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, ipykernel
-, ipywidgets
-, jinja2
-, jupyter
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, traitlets
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  ipykernel,
+  ipywidgets,
+  jinja2,
+  jupyter,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  traitlets,
+  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "pydeck";
-  version = "0.8.0";
+  version = "0.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-B+3egz98/O9nSRJDURlap9zSRmPUkJ/XiY29C2+8Aew=";
+    hash = "sha256-90R1rmN5UdY/LuWDJnV/jU+c2fKkV89ClQcVAD4stgU=";
   };
 
   # upstream has an invalid pyproject.toml
@@ -44,7 +45,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     carto = [
       # pydeck-carto
     ];
@@ -60,7 +61,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pandas
-  ] ++ passthru.optional-dependencies.jupyter;
+  ] ++ optional-dependencies.jupyter;
 
   # tries to start a jupyter server
   disabledTests = [ "test_nbconvert" ];

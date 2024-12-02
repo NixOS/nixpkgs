@@ -12,12 +12,12 @@ security model.
  1 file changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/obs-browser-source.cpp b/obs-browser-source.cpp
-index ab1181e..c775283 100644
+index 09b3017..1094340 100644
 --- a/plugins/obs-browser/obs-browser-source.cpp
 +++ b/plugins/obs-browser/obs-browser-source.cpp
-@@ -179,9 +179,12 @@ bool BrowserSource::CreateBrowser()
+@@ -239,9 +239,12 @@ bool BrowserSource::CreateBrowser()
  
- #if ENABLE_LOCAL_FILE_URL_SCHEME
+ #if ENABLE_LOCAL_FILE_URL_SCHEME && CHROME_VERSION_BUILD < 4430
  		if (is_local) {
 -			/* Disable web security for file:// URLs to allow
 -			 * local content access to remote APIs */
@@ -30,7 +30,4 @@ index ab1181e..c775283 100644
 +				STATE_ENABLED;
  		}
  #endif
- 
--- 
-2.31.1
-
+ 		auto browser = CefBrowserHost::CreateBrowserSync(

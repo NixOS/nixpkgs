@@ -1,19 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, substituteAll
-, requests
-, unicode-character-database
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  substituteAll,
+  setuptools,
+  setuptools-scm,
+  filelock,
+  requests,
+  unicode-character-database,
 }:
 
 buildPythonPackage rec {
   pname = "youseedee";
-  version = "0.4.1";
-  format = "setuptools";
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fdI4CBUSMbdKW0qg4y22wjWI6bhotgDkQdFMc9X00as=";
+    hash = "sha256-9w6yr28zq0LgOvMp5fCFaHGOwK4wbbDo/g1jH4Uky0E=";
   };
 
   patches = [
@@ -25,15 +29,20 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
+    filelock
     requests
   ];
 
-  doCheck = true;
   # Package has no unit tests, but we can check an example as per README.rst:
   checkPhase = ''
     runHook preCheck
-    python -m youseedee 0x078A | grep -q "'Block': 'Thaana'"
+    python -m youseedee 0x078A | grep -qE "Block\s+Thaana"
     runHook postCheck
   '';
 

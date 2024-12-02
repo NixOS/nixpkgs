@@ -23,12 +23,13 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
   meta = with lib; {
-    description = "Increments the version number of the current project.";
+    description = "Increments the version number of the current project";
+    mainProgram = "cargo-bump";
     homepage = "https://github.com/wraithan/cargo-bump";
     license = with licenses; [ isc ];
     maintainers = with maintainers; [ cafkafk ];

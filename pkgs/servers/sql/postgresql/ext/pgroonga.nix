@@ -1,34 +1,27 @@
-{ lib, stdenv, fetchurl, pkg-config, postgresql, msgpack-c, groonga }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, postgresql, msgpack-c, groonga, buildPostgresqlExtension, xxHash }:
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "pgroonga";
-  version = "3.1.7";
+  version = "3.2.4";
 
-  src = fetchurl {
-    url = "https://packages.groonga.org/source/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-13hRe7nooWvx0VhQ1fvZs6ytu30AwJFBwDGjAawDRBI=";
+  src = fetchFromGitHub {
+    owner = "pgroonga";
+    repo = "pgroonga";
+    rev = "${version}";
+    hash = "sha256-ZHACMsQ+hneU68Y2jOpz16Mo0jzgXKaVSCZ/qAqCDdI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ postgresql msgpack-c groonga ];
+  buildInputs = [ msgpack-c groonga xxHash ];
 
   makeFlags = [
+    "HAVE_XXHASH=1"
     "HAVE_MSGPACK=1"
     "MSGPACK_PACKAGE_NAME=msgpack-c"
   ];
 
-  installPhase = ''
-    install -D pgroonga${postgresql.dlSuffix} -t $out/lib/
-    install -D pgroonga.control -t $out/share/postgresql/extension
-    install -D data/pgroonga-*.sql -t $out/share/postgresql/extension
-
-    install -D pgroonga_database${postgresql.dlSuffix} -t $out/lib/
-    install -D pgroonga_database.control -t $out/share/postgresql/extension
-    install -D data/pgroonga_database-*.sql -t $out/share/postgresql/extension
-  '';
-
   meta = with lib; {
-    description = "A PostgreSQL extension to use Groonga as the index";
+    description = "PostgreSQL extension to use Groonga as the index";
     longDescription = ''
       PGroonga is a PostgreSQL extension to use Groonga as the index.
       PostgreSQL supports full text search against languages that use only alphabet and digit.

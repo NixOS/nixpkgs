@@ -1,8 +1,5 @@
 # Nagios system/network monitoring daemon.
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.nagios;
 
@@ -35,8 +32,8 @@ let
       illegal_macro_output_chars="`~$&|'\"<>";
       retain_state_information="1";
     };
-    lines = mapAttrsToList (key: value: "${key}=${value}") (default // cfg.extraConfig);
-    content = concatStringsSep "\n" lines;
+    lines = lib.mapAttrsToList (key: value: "${key}=${value}") (default // cfg.extraConfig);
+    content = lib.concatStringsSep "\n" lines;
     file = pkgs.writeText "nagios.cfg" content;
     validated =  pkgs.runCommand "nagios-checked.cfg" {preferLocalBuild=true;} ''
       cp ${file} nagios.cfg
@@ -81,82 +78,82 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "nagios" "urlPath" ] "The urlPath option has been removed as it is hard coded to /nagios in the nagios package.")
+    (lib.mkRemovedOptionModule [ "services" "nagios" "urlPath" ] "The urlPath option has been removed as it is hard coded to /nagios in the nagios package.")
   ];
 
   meta.maintainers = with lib.maintainers; [ symphorien ];
 
   options = {
     services.nagios = {
-      enable = mkEnableOption (lib.mdDoc ''[Nagios](https://www.nagios.org/) to monitor your system or network.'');
+      enable = lib.mkEnableOption ''[Nagios](https://www.nagios.org/) to monitor your system or network'';
 
-      objectDefs = mkOption {
-        description = lib.mdDoc ''
+      objectDefs = lib.mkOption {
+        description = ''
           A list of Nagios object configuration files that must define
           the hosts, host groups, services and contacts for the
           network that you want Nagios to monitor.
         '';
-        type = types.listOf types.path;
-        example = literalExpression "[ ./objects.cfg ]";
+        type = lib.types.listOf lib.types.path;
+        example = lib.literalExpression "[ ./objects.cfg ]";
       };
 
-      plugins = mkOption {
-        type = types.listOf types.package;
+      plugins = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = with pkgs; [ monitoring-plugins msmtp mailutils ];
-        defaultText = literalExpression "[pkgs.monitoring-plugins pkgs.msmtp pkgs.mailutils]";
-        description = lib.mdDoc ''
+        defaultText = lib.literalExpression "[pkgs.monitoring-plugins pkgs.msmtp pkgs.mailutils]";
+        description = ''
           Packages to be added to the Nagios {env}`PATH`.
           Typically used to add plugins, but can be anything.
         '';
       };
 
-      mainConfigFile = mkOption {
-        type = types.nullOr types.package;
+      mainConfigFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.package;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           If non-null, overrides the main configuration file of Nagios.
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.attrsOf types.str;
+      extraConfig = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
         example = {
           debug_level = "-1";
           debug_file = "/var/log/nagios/debug.log";
         };
         default = {};
-        description = lib.mdDoc "Configuration to add to /etc/nagios.cfg";
+        description = "Configuration to add to /etc/nagios.cfg";
       };
 
-      validateConfig = mkOption {
-        type = types.bool;
+      validateConfig = lib.mkOption {
+        type = lib.types.bool;
         default = pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform;
-        defaultText = literalExpression "pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform";
-        description = lib.mdDoc "if true, the syntax of the nagios configuration file is checked at build time";
+        defaultText = lib.literalExpression "pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform";
+        description = "if true, the syntax of the nagios configuration file is checked at build time";
       };
 
-      cgiConfigFile = mkOption {
-        type = types.package;
+      cgiConfigFile = lib.mkOption {
+        type = lib.types.package;
         default = nagiosCGICfgFile;
-        defaultText = literalExpression "nagiosCGICfgFile";
-        description = lib.mdDoc ''
+        defaultText = lib.literalExpression "nagiosCGICfgFile";
+        description = ''
           Derivation for the configuration file of Nagios CGI scripts
           that can be used in web servers for running the Nagios web interface.
         '';
       };
 
-      enableWebInterface = mkOption {
-        type = types.bool;
+      enableWebInterface = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the Nagios web interface.  You should also
           enable Apache ({option}`services.httpd.enable`).
         '';
       };
 
-      virtualHost = mkOption {
-        type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
-        example = literalExpression ''
+      virtualHost = lib.mkOption {
+        type = lib.types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
+        example = lib.literalExpression ''
           { hostName = "example.org";
             adminAddr = "webmaster@example.org";
             enableSSL = true;
@@ -164,7 +161,7 @@ in
             sslServerKey = "/var/lib/acme/example.org/key.pem";
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Apache configuration can be done by adapting {option}`services.httpd.virtualHosts`.
           See [](#opt-services.httpd.virtualHosts) for further information.
         '';
@@ -173,9 +170,9 @@ in
   };
 
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.nagios = {
-      description = "Nagios user ";
+      description = "Nagios user";
       uid         = config.ids.uids.nagios;
       home        = nagiosState;
       group       = "nagios";
@@ -206,8 +203,8 @@ in
       };
     };
 
-    services.httpd.virtualHosts = optionalAttrs cfg.enableWebInterface {
-      ${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost { extraConfig = extraHttpdConfig; } ];
+    services.httpd.virtualHosts = lib.optionalAttrs cfg.enableWebInterface {
+      ${cfg.virtualHost.hostName} = lib.mkMerge [ cfg.virtualHost { extraConfig = extraHttpdConfig; } ];
     };
   };
 }

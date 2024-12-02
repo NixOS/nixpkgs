@@ -1,15 +1,17 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "millheater";
-  version = "0.11.8";
-  format = "setuptools";
+  version = "0.12.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
@@ -17,10 +19,12 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pymill";
     rev = "refs/tags/${version}";
-    hash = "sha256-BSrnUhe6SFtalUGldC24eJTqJAF5FdUWo3rwWNT1uCw=";
+    hash = "sha256-8PrTypJuWNuFz1NZLuyqOpWFsN5OLshj7S10YgcGusQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     async-timeout
   ];
@@ -28,9 +32,7 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "mill"
-  ];
+  pythonImportsCheck = [ "mill" ];
 
   meta = with lib; {
     description = "Python library for Mill heater devices";

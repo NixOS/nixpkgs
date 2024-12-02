@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, django
-, django-jquery-js
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  django,
+  django-jquery-js,
 }:
 
 buildPythonPackage rec {
@@ -17,22 +18,16 @@ buildPythonPackage rec {
     hash = "sha256-bOM24ldXk9WeV0jl6LIJB3BJ5hVWLA1PJTBBnJBoprU=";
   };
 
-  buildInputs = [
-    django
-  ];
+  buildInputs = [ django ];
 
-  propagatedBuildInputs = [
-    django-jquery-js
-  ];
+  propagatedBuildInputs = [ django-jquery-js ];
 
-  pythonImportsCheck = [
-    "djangoformsetjs"
-  ];
+  pythonImportsCheck = [ "djangoformsetjs" ];
 
   doCheck = false; # no tests
 
   meta = with lib; {
-    description = "A wrapper for a JavaScript formset helper";
+    description = "Wrapper for a JavaScript formset helper";
     homepage = "https://github.com/pretix/django-formset-js";
     license = licenses.bsd2;
     maintainers = with maintainers; [ hexa ];

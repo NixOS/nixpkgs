@@ -53,17 +53,11 @@ autoPatchelf() {
         esac
     done
 
-    if [ -n "$__structuredAttrs" ]; then
-        local ignoreMissingDepsArray=( "${autoPatchelfIgnoreMissingDeps[@]}" )
-        local appendRunpathsArray=( "${appendRunpaths[@]}" )
-        local runtimeDependenciesArray=( "${runtimeDependencies[@]}" )
-        local patchelfFlagsArray=( "${patchelfFlags[@]}" )
-    else
-        readarray -td' ' ignoreMissingDepsArray < <(echo -n "$autoPatchelfIgnoreMissingDeps")
-        local appendRunpathsArray=($appendRunpaths)
-        local runtimeDependenciesArray=($runtimeDependencies)
-        local patchelfFlagsArray=($patchelfFlags)
-    fi
+    concatTo ignoreMissingDepsArray autoPatchelfIgnoreMissingDeps
+    concatTo appendRunpathsArray appendRunpaths
+    concatTo runtimeDependenciesArray runtimeDependencies
+    concatTo patchelfFlagsArray patchelfFlags
+    concatTo autoPatchelfFlagsArray autoPatchelfFlags
 
     # Check if ignoreMissingDepsArray contains "1" and if so, replace it with
     # "*", printing a deprecation warning.
@@ -77,7 +71,7 @@ autoPatchelf() {
         fi
     done
 
-    @pythonInterpreter@ @autoPatchelfScript@                            \
+    auto-patchelf                                                       \
         ${norecurse:+--no-recurse}                                      \
         --ignore-missing "${ignoreMissingDepsArray[@]}"                 \
         --paths "$@"                                                    \
@@ -85,25 +79,25 @@ autoPatchelf() {
                "${extraAutoPatchelfLibs[@]}"                            \
         --runtime-dependencies "${runtimeDependenciesArray[@]/%//lib}"  \
         --append-rpaths "${appendRunpathsArray[@]}"                     \
+        "${autoPatchelfFlagsArray[@]}"                                  \
         --extra-args "${patchelfFlagsArray[@]}"
 }
 
-# XXX: This should ultimately use fixupOutputHooks but we currently don't have
-# a way to enforce the order. If we have $runtimeDependencies set, the setup
-# hook of patchelf is going to ruin everything and strip out those additional
-# RPATHs.
-#
-# So what we do here is basically run in postFixup and emulate the same
-# behaviour as fixupOutputHooks because the setup hook for patchelf is run in
-# fixupOutput and the postFixup hook runs later.
-#
-# shellcheck disable=SC2016
-# (Expressions don't expand in single quotes, use double quotes for that.)
-postFixupHooks+=('
-    if [ -z "${dontAutoPatchelf-}" ]; then
+autoPatchelfPostFixup() {
+    # XXX: This should ultimately use fixupOutputHooks but we currently don't have
+    # a way to enforce the order. If we have $runtimeDependencies set, the setup
+    # hook of patchelf is going to ruin everything and strip out those additional
+    # RPATHs.
+    #
+    # So what we do here is basically run in postFixup and emulate the same
+    # behaviour as fixupOutputHooks because the setup hook for patchelf is run in
+    # fixupOutput and the postFixup hook runs later.
+    if [[ -z "${dontAutoPatchelf-}" ]]; then
         autoPatchelf -- $(for output in $(getAllOutputNames); do
             [ -e "${!output}" ] || continue
             echo "${!output}"
         done)
     fi
-')
+}
+
+postFixupHooks+=(autoPatchelfPostFixup)

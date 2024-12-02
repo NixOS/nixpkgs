@@ -220,10 +220,10 @@ rec {
           (if isList example then "${pkgsText}." + concatStringsSep "." example else example);
       });
 
-  /* Alias of mkPackageOption. Previously used to create options with markdown
-     documentation, which is no longer required.
+  /* Deprecated alias of mkPackageOption, to be removed in 25.05.
+     Previously used to create options with markdown documentation, which is no longer required.
   */
-  mkPackageOptionMD = mkPackageOption;
+  mkPackageOptionMD = lib.warn "mkPackageOptionMD is deprecated and will be removed in 25.05; please use mkPackageOption." mkPackageOption;
 
   /* This option accepts anything, but it does not produce any result.
 
@@ -398,11 +398,6 @@ rec {
     else { _type = "literalExpression"; inherit text; };
 
   literalExample = lib.warn "lib.literalExample is deprecated, use lib.literalExpression instead, or use lib.literalMD for a non-Nix description." literalExpression;
-
-  /* Transition marker for documentation that's already migrated to markdown
-     syntax. This is a no-op and no longer needed.
-  */
-  mdDoc = lib.id;
 
   /* For use in the `defaultText` and `example` option attributes. Causes the
      given MD text to be inserted verbatim in the documentation, for when

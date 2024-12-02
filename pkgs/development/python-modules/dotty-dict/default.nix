@@ -1,7 +1,8 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -21,6 +22,6 @@ buildPythonPackage rec {
     description = "Dictionary wrapper for quick access to deeply nested keys";
     homepage = "https://dotty-dict.readthedocs.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, wrapQtAppsHook
-, freeglut, freealut, libGLU, libGL, libICE, libjpeg, openal, openscenegraph, plib
+, libglut, freealut, libGLU, libGL, libICE, libjpeg, openal, openscenegraph, plib
 , libSM, libunwind, libX11, xorgproto, libXext, libXi
 , libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
 , makeDesktopItem, qtbase, qtdeclarative, glew, curl
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
   buildInputs = [
-    freeglut freealut libGLU libGL libICE libjpeg openal openscenegraph plib
+    libglut freealut libGLU libGL libICE libjpeg openal openscenegraph plib
     libSM libunwind libX11 xorgproto libXext libXi
     libXmu libXt simgear zlib boost libpng udev fltk13 apr qtbase
     glew qtdeclarative curl
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
     hydraPlatforms = []; # disabled from hydra because it's so big
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     mainProgram = "fgfs";
   };
 }

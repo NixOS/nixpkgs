@@ -31,17 +31,18 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit CoreFoundation CoreGraphics CoreVideo Foundation Metal QuartzCore
   ];
 
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     wrapProgram $out/bin/binocle \
       --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath (with xorg; [ libX11 libXcursor libXi libXrandr ] ++ [ vulkan-loader ])}
   '';
 
   meta = with lib; {
     description = "Graphical tool to visualize binary data";
+    mainProgram = "binocle";
     homepage = "https://github.com/sharkdp/binocle";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ figsoda ];

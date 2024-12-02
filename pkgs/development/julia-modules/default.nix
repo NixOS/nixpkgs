@@ -1,7 +1,6 @@
 { lib
 , callPackage
 , runCommand
-, fetchFromGitHub
 , fetchgit
 , fontconfig
 , git
@@ -36,9 +35,7 @@ packageNames:
 let
   util = callPackage ./util.nix {};
 
-in
 
-let
   # Some Julia packages require access to Python. Provide a Nixpkgs version so it
   # doesn't try to install its own.
   pythonToUse = let
@@ -48,7 +45,7 @@ let
 
   # Start by wrapping Julia so it has access to Python and any other extra libs.
   # Also, prevent various packages (CondaPkg.jl, PythonCall.jl) from trying to do network calls.
-  juliaWrapped = runCommand "julia-${julia.version}-wrapped" { buildInputs = [makeWrapper]; inherit makeWrapperArgs; } ''
+  juliaWrapped = runCommand "julia-${julia.version}-wrapped" { nativeBuildInputs = [makeWrapper]; inherit makeWrapperArgs; } ''
     mkdir -p $out/bin
     makeWrapper ${julia}/bin/julia $out/bin/julia \
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLibs}" \
@@ -166,23 +163,25 @@ let
 in
 
 runCommand "julia-${julia.version}-env" {
-  buildInputs = [makeWrapper];
+  nativeBuildInputs = [makeWrapper];
 
-  inherit julia;
-  inherit juliaWrapped;
-  meta = julia.meta;
+  passthru = {
+    inherit julia;
+    inherit juliaWrapped;
+    inherit (julia) pname version meta;
 
-  # Expose the steps we used along the way in case the user wants to use them, for example to build
-  # expressions and build them separately to avoid IFD.
-  inherit dependencies;
-  inherit closureYaml;
-  inherit dependencyUuidToInfoYaml;
-  inherit dependencyUuidToRepoYaml;
-  inherit minimalRegistry;
-  inherit artifactsNix;
-  inherit overridesJson;
-  inherit overridesToml;
-  inherit projectAndDepot;
+    # Expose the steps we used along the way in case the user wants to use them, for example to build
+    # expressions and build them separately to avoid IFD.
+    inherit dependencies;
+    inherit closureYaml;
+    inherit dependencyUuidToInfoYaml;
+    inherit dependencyUuidToRepoYaml;
+    inherit minimalRegistry;
+    inherit artifactsNix;
+    inherit overridesJson;
+    inherit overridesToml;
+    inherit projectAndDepot;
+  };
 } (''
   mkdir -p $out/bin
   makeWrapper ${juliaWrapped}/bin/julia $out/bin/julia \

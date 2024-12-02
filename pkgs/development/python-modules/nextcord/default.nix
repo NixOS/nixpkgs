@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, substituteAll
-, ffmpeg
-, libopus
-, aiohttp
-, aiodns
-, brotli
-, faust-cchardet
-, orjson
-, pynacl
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  substituteAll,
+  ffmpeg,
+  libopus,
+  aiohttp,
+  aiodns,
+  brotli,
+  faust-cchardet,
+  orjson,
+  pynacl,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "nextcord";
   version = "2.6.1";
-
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -37,13 +38,18 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aiodns
     aiohttp
     brotli
     faust-cchardet
     orjson
     pynacl
+    setuptools # for pkg_resources, remove with next release
   ];
 
   # upstream has no tests

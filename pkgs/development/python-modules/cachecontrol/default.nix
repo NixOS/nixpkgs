@@ -1,56 +1,44 @@
-{ lib
-, buildPythonPackage
-, cherrypy
-, fetchFromGitHub
-, flit-core
-, filelock
-, mock
-, msgpack
-, pytestCheckHook
-, pythonOlder
-, redis
-, requests
+{
+  lib,
+  buildPythonPackage,
+  cherrypy,
+  fetchFromGitHub,
+  flit-core,
+  filelock,
+  mock,
+  msgpack,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "cachecontrol";
-  version = "0.13.1";
-  format = "pyproject";
+  version = "0.14.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "ionrock";
-    repo = pname;
+    repo = "cachecontrol";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4N+vk65WxOrT+IJRn+lEnbs5vlWQh9ievVHWWe3BKJ0=";
+    hash = "sha256-qeTq2NfMOmNtjBItLmjxlaxqqy/Uvb6JfBpCBRvRLh4=";
   };
 
-  postPatch = ''
-    # https://github.com/ionrock/cachecontrol/issues/297
-    substituteInPlace tests/test_etag.py --replace \
-      "requests.adapters.HTTPResponse.from_httplib" \
-      "urllib3.response.HTTPResponse.from_httplib"
-  '';
+  build-system = [ flit-core ];
 
-  nativeBuildInputs = [
-    flit-core
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     msgpack
     requests
   ];
 
-  passthru.optional-dependencies = {
-    filecache = [
-      filelock
-    ];
-    redis = [
-      redis
-    ];
+  optional-dependencies = {
+    filecache = [ filelock ];
+    redis = [ redis ];
   };
 
   nativeCheckInputs = [
@@ -58,17 +46,16 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
     requests
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "cachecontrol"
-  ];
+  pythonImportsCheck = [ "cachecontrol" ];
 
   meta = with lib; {
     description = "Httplib2 caching for requests";
+    mainProgram = "doesitcache";
     homepage = "https://github.com/ionrock/cachecontrol";
     changelog = "https://github.com/psf/cachecontrol/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

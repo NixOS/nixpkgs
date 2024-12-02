@@ -1,21 +1,21 @@
 {
-  lib
-, php
-, fetchFromGitHub
+  lib,
+  php82,
+  fetchFromGitHub,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php82.buildComposerProject2 (finalAttrs: {
   pname = "robo";
-  version = "4.0.6";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "consolidation";
     repo = "robo";
     rev = finalAttrs.version;
-    hash = "sha256-rpCs24Q15XM4BdW1+IfysFR/8/ZU4o5b4MyJL48uDaU=";
+    hash = "sha256-bAT4jHvqWeYcACeyGtBwVBA2Rz+AvkZcUGLDwSf+fLg=";
   };
 
-  vendorHash = "sha256-Ul8XjH0Nav37UVpNQslOkF2bkiyqUAEZiIbcSW2tGkQ=";
+  vendorHash = "sha256-PYtZy6c/Z1GTcYyfU77uJjXCzQSfBaNkon8kqGyVq+o=";
 
   meta = {
     changelog = "https://github.com/consolidation/robo/blob/${finalAttrs.version}/CHANGELOG.md";

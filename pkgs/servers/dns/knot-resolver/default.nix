@@ -18,11 +18,11 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.7.1";
+  version = "5.7.4";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "da14b415c61d53747a991f12d6209367ef826a13dc6bf4eeaf5d88760294c3a2";
+    hash = "sha256-a22m7PBoKAQa+tRN+iJ3gfCuNK0YOmZwCFCTVdGL2cg=";
   };
 
   outputs = [ "out" "dev" ];
@@ -64,7 +64,7 @@ unwrapped = stdenv.mkDerivation rec {
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
     ## the rest are optional dependencies
-    ++ optionals stdenv.isLinux [ /*lib*/systemd libcap_ng ]
+    ++ optionals stdenv.hostPlatform.isLinux [ /*lib*/systemd libcap_ng ]
     ++ [ jemalloc nghttp2 ]
     ++ [ fstrm protobufc ] # dnstap support
     ;
@@ -78,7 +78,7 @@ unwrapped = stdenv.mkDerivation rec {
   ]
   ++ optional doInstallCheck "-Dunit_tests=enabled"
   ++ optional doInstallCheck "-Dconfig_tests=enabled"
-  ++ optional stdenv.isLinux "-Dsystemd_files=enabled" # used by NixOS service
+  ++ optional stdenv.hostPlatform.isLinux "-Dsystemd_files=enabled" # used by NixOS service
     #"-Dextra_tests=enabled" # not suitable as in-distro tests; many deps, too.
   ;
 
@@ -112,7 +112,8 @@ wrapped-full = runCommand unwrapped.name
       # For http module, prefill module, trust anchor bootstrap.
       # It brings lots of deps; some are useful elsewhere (e.g. cqueues).
       http
-      # psl isn't in nixpkgs yet, but policy.slice_randomize_psl() seems not important.
+      # used by policy.slice_randomize_psl()
+      psl
     ];
     preferLocalBuild = true;
     allowSubstitutes = false;

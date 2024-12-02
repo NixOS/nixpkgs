@@ -5,9 +5,6 @@
 with lib;
 
 let
-  # the demo agent isn't built by default, but we need it here
-  package = pkgs.geoclue2.override { withDemoAgent = config.services.geoclue2.enableDemoAgent; };
-
   cfg = config.services.geoclue2;
 
   defaultWhitelist = [ "gnome-shell" "io.elementary.desktop.agent-geoclue2" ];
@@ -16,19 +13,19 @@ let
     options = {
       desktopID = mkOption {
         type = types.str;
-        description = lib.mdDoc "Desktop ID of the application.";
+        description = "Desktop ID of the application.";
       };
 
       isAllowed = mkOption {
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether the application will be allowed access to location information.
         '';
       };
 
       isSystem = mkOption {
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether the application is a system component or not.
         '';
       };
@@ -36,7 +33,7 @@ let
       users = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           List of UIDs of all users for which this application is allowed location
           info access, Defaults to an empty string to allow it for all users.
         '';
@@ -67,7 +64,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable GeoClue 2 daemon, a DBus service
           that provides location information for accessing.
         '';
@@ -76,7 +73,7 @@ in
       enableDemoAgent = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to use the GeoClue demo agent. This should be
           overridden by desktop environments that provide their own
           agent.
@@ -86,7 +83,7 @@ in
       enableNmea = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to fetch location from NMEA sources on local network.
         '';
       };
@@ -94,7 +91,7 @@ in
       enable3G = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable 3G source.
         '';
       };
@@ -102,7 +99,7 @@ in
       enableCDMA = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable CDMA source.
         '';
       };
@@ -110,7 +107,7 @@ in
       enableModemGPS = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable Modem-GPS source.
         '';
       };
@@ -118,7 +115,7 @@ in
       enableWifi = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable WiFi source.
         '';
       };
@@ -127,15 +124,26 @@ in
         type = types.str;
         default = "https://location.services.mozilla.com/v1/geolocate?key=geoclue";
         example = "https://www.googleapis.com/geolocation/v1/geolocate?key=YOUR_KEY";
-        description = lib.mdDoc ''
+        description = ''
           The url to the wifi GeoLocation Service.
         '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.geoclue2;
+        defaultText = literalExpression "pkgs.geoclue2";
+        apply = pkg: pkg.override {
+          # the demo agent isn't built by default, but we need it here
+          withDemoAgent = cfg.enableDemoAgent;
+        };
+        description = "The geoclue2 package to use";
       };
 
       submitData = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to submit data to a GeoLocation Service.
         '';
       };
@@ -143,7 +151,7 @@ in
       submissionUrl = mkOption {
         type = types.str;
         default = "https://location.services.mozilla.com/v1/submit?key=geoclue";
-        description = lib.mdDoc ''
+        description = ''
           The url to submit data to a GeoLocation Service.
         '';
       };
@@ -151,7 +159,7 @@ in
       submissionNick = mkOption {
         type = types.str;
         default = "geoclue";
-        description = lib.mdDoc ''
+        description = ''
           A nickname to submit network data with.
           Must be 2-32 characters long.
         '';
@@ -167,7 +175,7 @@ in
             users = [ "300" ];
           };
         '';
-        description = lib.mdDoc ''
+        description = ''
           Specify extra settings per application.
         '';
       };
@@ -180,11 +188,11 @@ in
   ###### implementation
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ package ];
+    environment.systemPackages = [ cfg.package ];
 
-    services.dbus.packages = [ package ];
+    services.dbus.packages = [ cfg.package ];
 
-    systemd.packages = [ package ];
+    systemd.packages = [ cfg.package ];
 
     # we cannot use DynamicUser as we need the the geoclue user to exist for the
     # dbus policy to work
@@ -223,7 +231,7 @@ in
         unitConfig.ConditionUser = "!@system";
         serviceConfig = {
           Type = "exec";
-          ExecStart = "${package}/libexec/geoclue-2.0/demos/agent";
+          ExecStart = "${cfg.package}/libexec/geoclue-2.0/demos/agent";
           Restart = "on-failure";
           PrivateTmp = true;
         };

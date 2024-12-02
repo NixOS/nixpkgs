@@ -1,42 +1,55 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, testers
-, cmake
-, dbus-test-runner
-, pkg-config
-, qtbase
-, qtdeclarative
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  testers,
+  cmake,
+  dbus-test-runner,
+  pkg-config,
+  qtbase,
+  qtdeclarative,
+  qttools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "u1db-qt";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/u1db-qt";
     rev = finalAttrs.version;
-    hash = "sha256-qlWkxpiVEUbpsKhzR0s7SKaEFCLM2RH+v9XmJ3qLoGY=";
+    hash = "sha256-KmAEgnWHY0cDKJqRhZpY0fzVjNlEU67e559XEbAPpJI=";
   };
 
   outputs = [
     "out"
     "dev"
+    "doc"
     "examples"
+  ];
+
+  patches = [
+    # Remove when https://gitlab.com/ubports/development/core/u1db-qt/-/merge_requests/8 merged & in release
+    (fetchpatch {
+      name = "0001-u1db-qt-Use-BUILD_TESTING.patch";
+      url = "https://gitlab.com/ubports/development/core/u1db-qt/-/commit/df5d526df26c056d54bfa532a3a3fa025d655690.patch";
+      hash = "sha256-CILMcvqXrTbEL/N2Tic4IsKLnTtmFJ2QbV3r4PsQ5t0=";
+    })
   ];
 
   postPatch = ''
     patchShebangs tests/strict-qmltestrunner.sh
 
-    # QMake query response is broken
+    # QMake query response is broken, just hardcode the expected location
     substituteInPlace modules/U1db/CMakeLists.txt \
-      --replace "\''${QT_IMPORTS_DIR}" "$out/$qtQmlPrefix"
-  '' + lib.optionalString (!finalAttrs.doCheck) ''
-    # Other locations add dependencies to custom check target from tests
-    substituteInPlace CMakeLists.txt \
-      --replace 'add_subdirectory(tests)' 'add_custom_target(check COMMAND "echo check dummy")'
+      --replace-fail 'exec_program(''${QMAKE_EXECUTABLE} ARGS "-query QT_INSTALL_QML"' 'exec_program(echo ARGS "''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"'
+
+    # For our automatic pkg-config output patcher to work, prefix must be used here
+    substituteInPlace libu1db-qt.pc.in \
+      --replace-fail 'libdir=''${exec_prefix}/lib' 'libdir=''${prefix}/lib'
   '';
 
   strictDeps = true;
@@ -45,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     qtdeclarative # qmlplugindump
+    qttools # qdoc
   ];
 
   buildInputs = [
@@ -52,13 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     qtdeclarative
   ];
 
-  nativeCheckInputs = [
-    dbus-test-runner
-  ];
+  nativeCheckInputs = [ dbus-test-runner ];
 
   cmakeFlags = [
-    # Needs qdoc
-    "-DBUILD_DOCS=OFF"
+    (lib.cmakeBool "BUILD_DOCS" true)
   ];
 
   dontWrapQtApps = true;
@@ -89,14 +100,13 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Qt5 binding and QtQuick2 plugin for U1DB";
     homepage = "https://gitlab.com/ubports/development/core/u1db-qt";
-    license = licenses.lgpl3Only;
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
-    pkgConfigModules = [
-      "libu1db-qt5"
-    ];
+    changelog = "https://gitlab.com/ubports/development/core/u1db-qt/-/blob/${finalAttrs.version}/ChangeLog";
+    license = lib.licenses.lgpl3Only;
+    maintainers = lib.teams.lomiri.members;
+    platforms = lib.platforms.linux;
+    pkgConfigModules = [ "libu1db-qt5" ];
   };
 })

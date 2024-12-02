@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, setuptools-scm
-, wheel
-, importlib-metadata
-, myst-parser
-, pyscaffold
-, configupdater
-, pre-commit
-, pytest
-, pytest-cov
-, pytest-xdist
-, tox
-, twine
-, virtualenv
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  importlib-metadata,
+  myst-parser,
+  pyscaffold,
+  configupdater,
+  pre-commit,
+  pytest,
+  pytest-cov-stub,
+  pytest-xdist,
+  tox,
+  twine,
+  virtualenv,
 }:
 
 buildPythonPackage rec {
@@ -40,12 +41,12 @@ buildPythonPackage rec {
     wheel
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     testing = [
       configupdater
       pre-commit
       pytest
-      pytest-cov
+      pytest-cov-stub
       pytest-xdist
       setuptools-scm
       tox

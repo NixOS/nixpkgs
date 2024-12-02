@@ -1,8 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  python,
+  pythonOlder,
+  pillow,
 }:
 
 buildPythonPackage rec {
@@ -19,14 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-tiq8h6s2noWLBIOIWcj8jfSqJFN01ee2uoHN4aFwn7s=";
   };
 
+  dependencies = [ pillow ];
+
   checkPhase = ''
     ${python.interpreter} tests/test_icnsutil.py
     ${python.interpreter} tests/test_cli.py
   '';
 
-  pythonImportsCheck = [
-    "icnsutil"
-  ];
+  pythonImportsCheck = [ "icnsutil" ];
 
   meta = with lib; {
     description = "Create and extract .icns files";

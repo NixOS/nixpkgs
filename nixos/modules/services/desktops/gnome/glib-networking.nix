@@ -2,21 +2,11 @@
 
 { config, pkgs, lib, ... }:
 
-with lib;
-
 {
 
   meta = {
-    maintainers = teams.gnome.members;
+    maintainers = lib.teams.gnome.members;
   };
-
-  # Added 2021-05-07
-  imports = [
-    (mkRenamedOptionModule
-      [ "services" "gnome3" "glib-networking" "enable" ]
-      [ "services" "gnome" "glib-networking" "enable" ]
-    )
-  ];
 
   ###### interface
 
@@ -24,7 +14,7 @@ with lib;
 
     services.gnome.glib-networking = {
 
-      enable = mkEnableOption (lib.mdDoc "network extensions for GLib");
+      enable = lib.mkEnableOption "network extensions for GLib";
 
     };
 
@@ -32,7 +22,7 @@ with lib;
 
   ###### implementation
 
-  config = mkIf config.services.gnome.glib-networking.enable {
+  config = lib.mkIf config.services.gnome.glib-networking.enable {
 
     services.dbus.packages = [ pkgs.glib-networking ];
 

@@ -1,18 +1,18 @@
-{ lib
-, aiohttp
-, aresponses
-, awesomeversion
-, backoff
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, yarl
+{
+  lib,
+  aiohttp,
+  aresponses,
+  awesomeversion,
+  backoff,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  pydantic,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  yarl,
 }:
 
 buildPythonPackage rec {
@@ -34,7 +34,10 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "pydantic_2-compatibility.patch";
       url = "https://github.com/frenck/python-demetriek/commit/e677fe5b735b6b28572e3e5fd6aab56fc056f5e6.patch";
-      excludes = [ "pyproject.toml" "poetry.lock" ];
+      excludes = [
+        "pyproject.toml"
+        "poetry.lock"
+      ];
       hash = "sha256-oMVR45KHDhcPId/0X9obJXCPE8s1gk5IgsGsgZesdZw=";
     })
   ];
@@ -46,13 +49,10 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  pythonRelaxDeps = [
-    "pydantic"
-  ];
+  pythonRelaxDeps = [ "pydantic" ];
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -69,9 +69,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "demetriek"
-  ];
+  pythonImportsCheck = [ "demetriek" ];
 
   __darwinAllowLocalNetworking = true;
 

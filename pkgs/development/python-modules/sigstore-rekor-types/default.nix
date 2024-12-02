@@ -1,14 +1,15 @@
-{ lib
-, pythonOlder
-, pydantic
-, flit-core
-, fetchFromGitHub
-, buildPythonPackage
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pydantic,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "sigstore-rekor-types";
-  version = "0.0.11";
+  version = "0.0.13";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     owner = "trailofbits";
     repo = "sigstore-rekor-types";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oOFdRiDp9USc3A+aaPExprEO2i/RERNahiyi2kVpkns=";
+    hash = "sha256-vZNzNu0Ks0Xp/v406jVqPV9FuHgXORMa7NzmXeWoa+Q=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
-    pydantic
-  ] ++ pydantic.optional-dependencies.email;
+  dependencies = [ pydantic ] ++ pydantic.optional-dependencies.email;
 
   # Module has no tests
   doCheck = false;

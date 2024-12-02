@@ -1,7 +1,4 @@
 { config, options, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.nixpkgs;
   opt = options.nixpkgs;
@@ -19,19 +16,19 @@ let
       lhs = optCall lhs_ { inherit pkgs; };
       rhs = optCall rhs_ { inherit pkgs; };
     in
-    recursiveUpdate lhs rhs //
-    optionalAttrs (lhs ? packageOverrides) {
+    lib.recursiveUpdate lhs rhs //
+    lib.optionalAttrs (lhs ? packageOverrides) {
       packageOverrides = pkgs:
         optCall lhs.packageOverrides pkgs //
-        optCall (attrByPath [ "packageOverrides" ] { } rhs) pkgs;
+        optCall (lib.attrByPath [ "packageOverrides" ] { } rhs) pkgs;
     } //
-    optionalAttrs (lhs ? perlPackageOverrides) {
+    lib.optionalAttrs (lhs ? perlPackageOverrides) {
       perlPackageOverrides = pkgs:
         optCall lhs.perlPackageOverrides pkgs //
-        optCall (attrByPath [ "perlPackageOverrides" ] { } rhs) pkgs;
+        optCall (lib.attrByPath [ "perlPackageOverrides" ] { } rhs) pkgs;
     };
 
-  configType = mkOptionType {
+  configType = lib.mkOptionType {
     name = "nixpkgs-config";
     description = "nixpkgs config";
     check = x:
@@ -39,34 +36,34 @@ let
             if c x then true
             else lib.traceSeqN 1 x false;
       in traceXIfNot isConfig;
-    merge = args: foldr (def: mergeConfig def.value) {};
+    merge = args: lib.foldr (def: mergeConfig def.value) {};
   };
 
-  overlayType = mkOptionType {
+  overlayType = lib.mkOptionType {
     name = "nixpkgs-overlay";
     description = "nixpkgs overlay";
     check = lib.isFunction;
     merge = lib.mergeOneOption;
   };
 
-  pkgsType = types.pkgs // {
+  pkgsType = lib.types.pkgs // {
     # This type is only used by itself, so let's elaborate the description a bit
     # for the purpose of documentation.
     description = "An evaluation of Nixpkgs; the top level attribute set of packages";
   };
 
-  hasBuildPlatform = opt.buildPlatform.highestPrio < (mkOptionDefault {}).priority;
+  hasBuildPlatform = opt.buildPlatform.highestPrio < (lib.mkOptionDefault {}).priority;
   hasHostPlatform = opt.hostPlatform.isDefined;
   hasPlatform = hasHostPlatform || hasBuildPlatform;
 
   # Context for messages
-  hostPlatformLine = optionalString hasHostPlatform "${showOptionWithDefLocs opt.hostPlatform}";
-  buildPlatformLine = optionalString hasBuildPlatform "${showOptionWithDefLocs opt.buildPlatform}";
+  hostPlatformLine = lib.optionalString hasHostPlatform "${lib.showOptionWithDefLocs opt.hostPlatform}";
+  buildPlatformLine = lib.optionalString hasBuildPlatform "${lib.showOptionWithDefLocs opt.buildPlatform}";
 
   legacyOptionsDefined =
-    optional (opt.localSystem.highestPrio < (mkDefault {}).priority) opt.system
-    ++ optional (opt.localSystem.highestPrio < (mkOptionDefault {}).priority) opt.localSystem
-    ++ optional (opt.crossSystem.highestPrio < (mkOptionDefault {}).priority) opt.crossSystem
+    lib.optional (opt.localSystem.highestPrio < (lib.mkDefault {}).priority) opt.system
+    ++ lib.optional (opt.localSystem.highestPrio < (lib.mkOptionDefault {}).priority) opt.localSystem
+    ++ lib.optional (opt.crossSystem.highestPrio < (lib.mkOptionDefault {}).priority) opt.crossSystem
     ;
 
   defaultPkgs =
@@ -99,20 +96,20 @@ in
   imports = [
     ./assertions.nix
     ./meta.nix
-    (mkRemovedOptionModule [ "nixpkgs" "initialSystem" ] "The NixOS options `nesting.clone` and `nesting.children` have been deleted, and replaced with named specialisation. Therefore `nixpgks.initialSystem` has no effect anymore.")
+    (lib.mkRemovedOptionModule [ "nixpkgs" "initialSystem" ] "The NixOS options `nesting.clone` and `nesting.children` have been deleted, and replaced with named specialisation. Therefore `nixpgks.initialSystem` has no effect anymore.")
   ];
 
   options.nixpkgs = {
 
-    pkgs = mkOption {
-      defaultText = literalExpression ''
+    pkgs = lib.mkOption {
+      defaultText = lib.literalExpression ''
         import "''${nixos}/.." {
           inherit (cfg) config overlays localSystem crossSystem;
         }
       '';
       type = pkgsType;
-      example = literalExpression "import <nixpkgs> {}";
-      description = lib.mdDoc ''
+      example = lib.literalExpression "import <nixpkgs> {}";
+      description = ''
         If set, the pkgs argument to all NixOS modules is the value of
         this option, extended with `nixpkgs.overlays`, if
         that is also set. Either `nixpkgs.crossSystem` or
@@ -145,25 +142,24 @@ in
       '';
     };
 
-    config = mkOption {
+    config = lib.mkOption {
       default = {};
-      example = literalExpression
+      example = lib.literalExpression
         ''
           { allowBroken = true; allowUnfree = true; }
         '';
       type = configType;
-      description = lib.mdDoc ''
-        The configuration of the Nix Packages collection.  (For
-        details, see the Nixpkgs documentation.)  It allows you to set
-        package configuration options.
+      description = ''
+        Global configuration for Nixpkgs.
+        The complete list of [Nixpkgs configuration options](https://nixos.org/manual/nixpkgs/unstable/#sec-config-options-reference) is in the [Nixpkgs manual section on global configuration](https://nixos.org/manual/nixpkgs/unstable/#chap-packageconfig).
 
-        Ignored when `nixpkgs.pkgs` is set.
+        Ignored when {option}`nixpkgs.pkgs` is set.
       '';
     };
 
-    overlays = mkOption {
+    overlays = lib.mkOption {
       default = [];
-      example = literalExpression
+      example = lib.literalExpression
         ''
           [
             (self: super: {
@@ -174,8 +170,8 @@ in
             })
           ]
         '';
-      type = types.listOf overlayType;
-      description = lib.mdDoc ''
+      type = lib.types.listOf overlayType;
+      description = ''
         List of overlays to apply to Nixpkgs.
         This option allows modifying the Nixpkgs package set accessed through the `pkgs` module argument.
 
@@ -185,15 +181,15 @@ in
       '';
     };
 
-    hostPlatform = mkOption {
-      type = types.either types.str types.attrs; # TODO utilize lib.systems.parsedPlatform
+    hostPlatform = lib.mkOption {
+      type = lib.types.either lib.types.str lib.types.attrs; # TODO utilize lib.systems.parsedPlatform
       example = { system = "aarch64-linux"; };
       # Make sure that the final value has all fields for sake of other modules
       # referring to this. TODO make `lib.systems` itself use the module system.
       apply = lib.systems.elaborate;
-      defaultText = literalExpression
+      defaultText = lib.literalExpression
         ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
-      description = lib.mdDoc ''
+      description = ''
         Specifies the platform where the NixOS configuration will run.
 
         To cross-compile, set also `nixpkgs.buildPlatform`.
@@ -202,16 +198,20 @@ in
       '';
     };
 
-    buildPlatform = mkOption {
-      type = types.either types.str types.attrs; # TODO utilize lib.systems.parsedPlatform
+    buildPlatform = lib.mkOption {
+      type = lib.types.either lib.types.str lib.types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = cfg.hostPlatform;
       example = { system = "x86_64-linux"; };
       # Make sure that the final value has all fields for sake of other modules
       # referring to this.
-      apply = lib.systems.elaborate;
-      defaultText = literalExpression
+      apply = inputBuildPlatform:
+        let elaborated = lib.systems.elaborate inputBuildPlatform;
+        in if lib.systems.equals elaborated cfg.hostPlatform
+          then cfg.hostPlatform  # make identical, so that `==` equality works; see https://github.com/NixOS/nixpkgs/issues/278001
+          else elaborated;
+      defaultText = lib.literalExpression
         ''config.nixpkgs.hostPlatform'';
-      description = lib.mdDoc ''
+      description = ''
         Specifies the platform on which NixOS should be built.
         By default, NixOS is built on the system where it runs, but you can
         change where it's built. Setting this option will cause NixOS to be
@@ -225,16 +225,16 @@ in
       '';
     };
 
-    localSystem = mkOption {
-      type = types.attrs; # TODO utilize lib.systems.parsedPlatform
+    localSystem = lib.mkOption {
+      type = lib.types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = { inherit (cfg) system; };
       example = { system = "aarch64-linux"; };
       # Make sure that the final value has all fields for sake of other modules
       # referring to this. TODO make `lib.systems` itself use the module system.
       apply = lib.systems.elaborate;
-      defaultText = literalExpression
+      defaultText = lib.literalExpression
         ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
-      description = lib.mdDoc ''
+      description = ''
         Systems with a recently generated `hardware-configuration.nix`
         do not need to specify this option, unless cross-compiling, in which case
         you should set *only* {option}`nixpkgs.buildPlatform`.
@@ -259,11 +259,11 @@ in
     # TODO deprecate. "crossSystem" is a nonsense identifier, because "cross"
     #      is a relation between at least 2 systems in the context of a
     #      specific build step, not a single system.
-    crossSystem = mkOption {
-      type = types.nullOr types.attrs; # TODO utilize lib.systems.parsedPlatform
+    crossSystem = lib.mkOption {
+      type = lib.types.nullOr lib.types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = null;
       example = { system = "aarch64-linux"; };
-      description = lib.mdDoc ''
+      description = ''
         Systems with a recently generated `hardware-configuration.nix`
         may instead specify *only* {option}`nixpkgs.buildPlatform`,
         or fall back to removing the {option}`nixpkgs.hostPlatform` line from the generated config.
@@ -280,8 +280,8 @@ in
       '';
     };
 
-    system = mkOption {
-      type = types.str;
+    system = lib.mkOption {
+      type = lib.types.str;
       example = "i686-linux";
       default =
         if opt.hostPlatform.isDefined
@@ -302,7 +302,7 @@ in
       defaultText = lib.literalMD ''
         Traditionally `builtins.currentSystem`, but unset when invoking NixOS through `lib.nixosSystem`.
       '';
-      description = lib.mdDoc ''
+      description = ''
         This option does not need to be specified for NixOS configurations
         with a recently generated `hardware-configuration.nix`.
 
@@ -369,12 +369,12 @@ in
       {
         assertion = constructedByMe -> hasPlatform -> legacyOptionsDefined == [];
         message = ''
-          Your system configures nixpkgs with the platform parameter${optionalString hasBuildPlatform "s"}:
+          Your system configures nixpkgs with the platform parameter${lib.optionalString hasBuildPlatform "s"}:
           ${hostPlatformLine
           }${buildPlatformLine
           }
           However, it also defines the legacy options:
-          ${concatMapStrings showOptionWithDefLocs legacyOptionsDefined}
+          ${lib.concatMapStrings lib.showOptionWithDefLocs legacyOptionsDefined}
           For a future proof system configuration, we recommend to remove
           the legacy definitions.
         '';
@@ -386,7 +386,10 @@ in
           `nixpkgs.config` options should be passed when creating the instance instead.
 
           Current value:
-          ${lib.generators.toPretty { multiline = true; } opt.config}
+          ${lib.generators.toPretty { multiline = true; } cfg.config}
+
+          Defined in:
+          ${lib.concatMapStringsSep "\n" (file: "  - ${file}") opt.config.files}
         '';
       }
     ];

@@ -1,8 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, chmlib
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  chmlib,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
 diff --git a/lua/sniprun.lua b/lua/sniprun.lua
-index fe29d1e..92d4729 100644
+index 49be442..1834566 100644
 --- a/lua/sniprun.lua
 +++ b/lua/sniprun.lua
-@@ -4,9 +4,7 @@ M.custom_highlight=false
+@@ -3,9 +3,7 @@ M.ping_anwsered = 0
  M.info_floatwin = {}
  
  -- See https://github.com/tjdevries/rofl.nvim/blob/632c10f2ec7c56882a3f7eda8849904bcac6e8af/lua/rofl.lua
 -local binary_path = vim.fn.fnamemodify(
--  vim.api.nvim_get_runtime_file("lua/sniprun.lua", false)[1], ":h:h")
--  .. "/target/release/sniprun"
+-        vim.api.nvim_get_runtime_file("lua/sniprun.lua", false)[1], ":h:h")
+-    .. "/target/release/sniprun"
 +local binary_path = "@sniprun_bin@/bin/sniprun"
  
- local sniprun_path = vim.fn.fnamemodify( vim.api.nvim_get_runtime_file("lua/sniprun.lua", false)[1], ":p:h") .. "/.."
+ local sniprun_path = vim.fn.fnamemodify(vim.api.nvim_get_runtime_file("lua/sniprun.lua", false)[1], ":p:h") .. "/.."
  

@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , protobuf
 , bzip2
@@ -16,20 +15,20 @@
 }:
 
 let
-  version = "0.8.1";
+  version = "0.11.0";
   src = fetchFromGitHub {
     owner = "openobserve";
     repo = "openobserve";
     rev = "v${version}";
-    hash = "sha256-J8TuaWjtuR39XA7tizyI+DFkpOaLFweM+/9VImGj8UE=";
+    hash = "sha256-VRkAOUtF/eOxE7/Xjxi/WEfeSseGEJ9IROCFbgeFUkI=";
   };
   web = buildNpmPackage {
     inherit src version;
     pname = "openobserve-ui";
 
-    sourceRoot = "source/web";
+    sourceRoot = "${src.name}/web";
 
-    npmDepsHash = "sha256-RNUCR80ewFt9F/VHv7kXLa87h0fz0YBp+9gSOUhtrdU=";
+    npmDepsHash = "sha256-2beTB6BHHshQkgbqVc195j2/0hBEn/fFz8+0ViSG5Gc=";
 
     preBuild = ''
       # Patch vite config to not open the browser to visualize plugin composition
@@ -56,12 +55,6 @@ rustPlatform.buildRustPackage {
   inherit version src;
 
   patches = [
-    (fetchpatch {
-      name = "fix-test-hash-partition.patch";
-      url = "https://github.com/openobserve/openobserve/commit/24919333d6b6696f0f9d9aff0a883431481e8fce.patch";
-      includes = ["src/common/meta/stream.rs"];
-      hash = "sha256-GB3Pgmp1swJt6ESgKL2eWOZ3jBcsN0r+5Dxasgg50D4=";
-    })
     # prevent using git to determine version info during build time
     ./build.rs.patch
   ];
@@ -72,7 +65,8 @@ rustPlatform.buildRustPackage {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "enrichment-0.1.0" = "sha256-FDPSCBkx+DPeWwTBz9+ORcbbiSBC2a8tJaay9Pxwz4w=";
+      "chromiumoxide-0.5.7" = "sha256-GHrm5u8FtXRUjSRGMU4PNU6AJZ5W2KcgfZY1c/CBVYA=";
+      "enrichment-0.1.0" = "sha256-Ui4rsvmemOF00E4yBRFRS2gw9qliDrNEVQu5fvIpahA=";
     };
   };
 
@@ -88,7 +82,7 @@ rustPlatform.buildRustPackage {
     xz
     zlib
     zstd
-  ] ++ lib.optionals stdenv.isDarwin (with apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with apple_sdk.frameworks; [
     CoreFoundation
     CoreServices
     IOKit
@@ -111,6 +105,7 @@ rustPlatform.buildRustPackage {
   # requires network access or filesystem mutations
   checkFlags = [
     "--skip handler::http::auth::tests::test_validate"
+    "--skip handler::http::router::tests::test_get_proxy_routes"
     "--skip handler::http::router::ui::tests::test_index_not_ok"
     "--skip handler::http::router::ui::tests::test_index_ok"
     "--skip handler::http::request::search::saved_view::tests::test_create_view_post"
@@ -126,19 +121,21 @@ rustPlatform.buildRustPackage {
     "--skip service::db::compact::files::tests::test_compact_files"
     "--skip service::db::user::tests::test_user"
     "--skip service::ingestion::grpc::tests::test_get_val"
+    "--skip service::metadata::trace_list_index::tests::test_write"
     "--skip service::organization::tests::test_organization"
     "--skip service::search::sql::tests::test_sql_full"
     "--skip service::triggers::tests::test_triggers"
     "--skip service::users::tests::test_post_user"
     "--skip service::users::tests::test_user"
     "--skip common::infra::cache::file_data::disk::tests::test_get_file_from_cache"
+    "--skip common::infra::cluster::tests::test_consistent_hashing"
     "--skip common::infra::db::tests::test_get"
     "--skip common::utils::auth::tests::test_is_root_user2"
     "--skip tests::e2e_test"
   ];
 
   meta = with lib; {
-    description = "A cloud-native observability platform built specifically for logs, metrics, traces, analytics & realtime user-monitoring";
+    description = "Cloud-native observability platform built specifically for logs, metrics, traces, analytics & realtime user-monitoring";
     homepage = "https://github.com/openobserve/openobserve";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];

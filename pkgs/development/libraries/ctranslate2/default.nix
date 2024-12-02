@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ctranslate2";
-  version = "3.24.0";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "OpenNMT";
     repo = "CTranslate2";
     rev = "v${version}";
-    hash = "sha256-RK5GQymtaYOM6HK2eRK5Rbz6NZva3Jt7lTPTUbSQXxI=";
+    hash = "sha256-2Znrt+TiQf/9YI1HYAikDfqbekAghOvxKoC05S18scQ=";
     fetchSubmodules = true;
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     "-DWITH_RUY=${cmakeBool withRuy}"
     "-DWITH_MKL=${cmakeBool withMkl}"
   ]
-  ++ lib.optional stdenv.isDarwin "-DWITH_ACCELERATE=ON";
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-DWITH_ACCELERATE=ON";
 
   buildInputs = lib.optionals withMkl [
     mkl
@@ -67,10 +67,10 @@ stdenv.mkDerivation rec {
     oneDNN
   ] ++ lib.optionals withOpenblas [
     openblas
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
     darwin.apple_sdk.frameworks.Accelerate
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     darwin.apple_sdk.frameworks.CoreGraphics
     darwin.apple_sdk.frameworks.CoreVideo
   ];
@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast inference engine for Transformer models";
+    mainProgram = "ct2-translator";
     homepage = "https://github.com/OpenNMT/CTranslate2";
     changelog = "https://github.com/OpenNMT/CTranslate2/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

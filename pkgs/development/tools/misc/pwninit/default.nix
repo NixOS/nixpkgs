@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-tbZS7PdRFvO2ifoHA/w3cSPfqqHrLeLHAg6V8oG9gVE=";
   };
 
-  buildInputs = [ openssl xz ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ openssl xz ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
   nativeBuildInputs = [ pkg-config makeBinaryWrapper ];
   postInstall = ''
     wrapProgram $out/bin/pwninit \
@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Automate starting binary exploit challenges";
+    mainProgram = "pwninit";
     homepage = "https://github.com/io12/pwninit";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.scoder12 ];

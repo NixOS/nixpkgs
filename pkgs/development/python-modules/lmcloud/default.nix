@@ -1,50 +1,53 @@
-{ lib
-, authlib
-, bleak
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pythonOlder
-, setuptools
-, websockets
+{
+  lib,
+  authlib,
+  bleak,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  syrupy,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "lmcloud";
-  version = "0.4.35";
+  version = "1.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "zweckj";
-    repo = "lmcloud";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TUve21yamtEmEceK/V1w7IZjnMgKConMfSY/GlqFpp8=";
+    repo = "pylamarzocco";
+    rev = "refs/tags/v.${version}";
+    hash = "sha256-iRxn4xAP5b/2byeWbYm6mQwAu1TUmJgOVEqm/bZT9Xw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     authlib
     bleak
     httpx
     websockets
   ];
 
-  # Module has no tests
-  doCheck = false;
-
-  pythonImportsCheck = [
-    "lmcloud"
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+    syrupy
   ];
+
+  pythonImportsCheck = [ "lmcloud" ];
 
   meta = with lib; {
     description = "Library to interface with La Marzocco's cloud";
-    homepage = "https://github.com/zweckj/lmcloud";
-    changelog = "https://github.com/zweckj/lmcloud/releases/tag/v${version}";
+    homepage = "https://github.com/zweckj/pylamarzocco";
+    changelog = "https://github.com/zweckj/pylamarzocco/releases/tag/v.${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

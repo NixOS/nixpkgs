@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "go-critic";
-  version = "0.11.1";
+  version = "0.11.5";
 
   src = fetchFromGitHub {
     owner = "go-critic";
     repo = "go-critic";
     rev = "v${version}";
-    hash = "sha256-8dRgPhYedEPwK4puP8hJWhjub2NkOl3OWNRb43AH3xc=";
+    hash = "sha256-KH7jawMd73qdl1S+YQlQGW/2Vj8XjMLJ15Hz0cdwDO4=";
   };
 
-  vendorHash = "sha256-0Y9yMcgyRgXQUie7oj0bRy4+eGfQOa9QXux2AoRc6pw=";
+  vendorHash = "sha256-vBGCFnKKpMcM7RWmT05oPwCItR4QMHhTAZ8x2ejJpcI=";
 
   subPackages = [
     "cmd/gocritic"
@@ -38,7 +38,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "The most opinionated Go source code linter for code audit";
+    description = "Most opinionated Go source code linter for code audit";
     homepage = "https://go-critic.com/";
     changelog = "https://github.com/go-critic/go-critic/releases/tag/${src.rev}";
     license = lib.licenses.mit;

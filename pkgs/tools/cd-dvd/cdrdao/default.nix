@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     libmad
     libao
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices
     IOKit
   ];
@@ -65,9 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
   meta = {
-    description = "A tool for recording audio or data CD-Rs in disk-at-once (DAO) mode";
+    description = "Tool for recording audio or data CD-Rs in disk-at-once (DAO) mode";
     homepage = "https://cdrdao.sourceforge.net/";
     platforms = lib.platforms.unix;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
   };
 })

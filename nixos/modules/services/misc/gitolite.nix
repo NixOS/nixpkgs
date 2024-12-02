@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.gitolite;
   # Use writeTextDir to not leak Nix store hash into file name
@@ -11,10 +8,10 @@ in
 {
   options = {
     services.gitolite = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable gitolite management under the
           `gitolite` user. After
           switching to a configuration with Gitolite enabled, you can
@@ -22,10 +19,10 @@ in
         '';
       };
 
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/gitolite";
-        description = lib.mdDoc ''
+        description = ''
           The gitolite home directory used to store all repositories. If left as the default value
           this directory will automatically be created before the gitolite server starts, otherwise
           the sysadmin is responsible for ensuring the directory exists with appropriate ownership
@@ -33,9 +30,9 @@ in
         '';
       };
 
-      adminPubkey = mkOption {
-        type = types.str;
-        description = lib.mdDoc ''
+      adminPubkey = lib.mkOption {
+        type = lib.types.str;
+        description = ''
           Initial administrative public key for Gitolite. This should
           be an SSH Public Key. Note that this key will only be used
           once, upon the first initialization of the Gitolite user.
@@ -43,27 +40,27 @@ in
         '';
       };
 
-      enableGitAnnex = mkOption {
-        type = types.bool;
+      enableGitAnnex = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Enable git-annex support. Uses the `extraGitoliteRc` option
           to apply the necessary configuration.
         '';
       };
 
-      commonHooks = mkOption {
-        type = types.listOf types.path;
+      commonHooks = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           A list of custom git hooks that get copied to `~/.gitolite/hooks/common`.
         '';
       };
 
-      extraGitoliteRc = mkOption {
-        type = types.lines;
+      extraGitoliteRc = lib.mkOption {
+        type = lib.types.lines;
         default = "";
-        example = literalExpression ''
+        example = lib.literalExpression ''
           '''
             $RC{UMASK} = 0027;
             $RC{SITE_INFO} = 'This is our private repository host';
@@ -71,7 +68,7 @@ in
             @{$RC{ENABLE}} = grep { $_ ne 'desc' } @{$RC{ENABLE}}; # disable the command/feature
           '''
         '';
-        description = lib.mdDoc ''
+        description = ''
           Extra configuration to append to the default `~/.gitolite.rc`.
 
           This should be Perl code that modifies the `%RC`
@@ -93,33 +90,33 @@ in
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "gitolite";
-        description = lib.mdDoc ''
+        description = ''
           Gitolite user account. This is the username of the gitolite endpoint.
         '';
       };
 
-      description = mkOption {
-        type = types.str;
+      description = lib.mkOption {
+        type = lib.types.str;
         default = "Gitolite user";
-        description = lib.mdDoc ''
+        description = ''
           Gitolite user account's description.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "gitolite";
-        description = lib.mdDoc ''
+        description = ''
           Primary group of the Gitolite user account.
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable (
+  config = lib.mkIf cfg.enable (
   let
     manageGitoliteRc = cfg.extraGitoliteRc != "";
     rcDir = pkgs.runCommand "gitolite-rc" { preferLocalBuild = true; } rcDirScript;
@@ -136,18 +133,18 @@ in
         END
         cat "$out/gitolite.rc.default" >>"$out/gitolite.rc"
       '' +
-      optionalString (cfg.extraGitoliteRc != "") ''
-        echo -n ${escapeShellArg ''
+      lib.optionalString (cfg.extraGitoliteRc != "") ''
+        echo -n ${lib.escapeShellArg ''
 
           # Added by NixOS:
-          ${removeSuffix "\n" cfg.extraGitoliteRc}
+          ${lib.removeSuffix "\n" cfg.extraGitoliteRc}
 
           # per perl rules, this should be the last line in such a file:
           1;
         ''} >>"$out/gitolite.rc"
       '';
   in {
-    services.gitolite.extraGitoliteRc = optionalString cfg.enableGitAnnex ''
+    services.gitolite.extraGitoliteRc = lib.optionalString cfg.enableGitAnnex ''
       # Enable git-annex support:
       push( @{$RC{ENABLE}}, 'git-annex-shell ua');
     '';
@@ -171,8 +168,8 @@ in
         GITOLITE_RC_DEFAULT = "${rcDir}/gitolite.rc.default";
       };
 
-      serviceConfig = mkMerge [
-        (mkIf (cfg.dataDir == "/var/lib/gitolite") {
+      serviceConfig = lib.mkMerge [
+        (lib.mkIf (cfg.dataDir == "/var/lib/gitolite") {
           StateDirectory = "gitolite gitolite/.gitolite gitolite/.gitolite/logs";
           StateDirectoryMode = "0750";
         })
@@ -236,6 +233,6 @@ in
     };
 
     environment.systemPackages = [ pkgs.gitolite pkgs.git ]
-        ++ optional cfg.enableGitAnnex pkgs.git-annex;
+        ++ lib.optional cfg.enableGitAnnex pkgs.git-annex;
   });
 }

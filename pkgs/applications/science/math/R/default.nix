@@ -15,13 +15,13 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.3.2";
+  version = "4.4.1";
 
   src = let
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-s/V2CsLu6AJqPw7vyyW0dyPZeAOO7o6ER2IJTIYMRSo=";
+    sha256 = "sha256-tMtnXequtymdOyZdIYzeQ/GSlRzluJt7saUUijay2U0=";
   };
 
   outputs = [ "out" "tex" ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
     pango pcre2 perl readline (texliveSmall.withPackages (ps: with ps; [ inconsolata helvetic ps.texinfo fancyvrb cm-super rsfs ])) xz zlib less texinfo graphviz icu
     bison imake which blas lapack curl tcl tk jdk tzdata
-  ] ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
   patches = [
     ./no-usr-local-search-paths.patch
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Test of the examples for package 'tcltk' fails in Darwin sandbox. See:
   # https://github.com/NixOS/nixpkgs/issues/146131
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure \
       --replace "-install_name libRblas.dylib" "-install_name $out/lib/R/lib/libRblas.dylib" \
       --replace "-install_name libRlapack.dylib" "-install_name $out/lib/R/lib/libRlapack.dylib" \
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       RANLIB=$(type -p ranlib)
       r_cv_have_curl728=yes
       R_SHELL="${stdenv.shell}"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       --disable-R-framework
       --without-x
       OBJC="clang"
@@ -101,7 +101,10 @@ stdenv.mkDerivation (finalAttrs: {
   # The store path to "which" is baked into src/library/base/R/unix/system.unix.R,
   # but Nix cannot detect it as a run-time dependency because the installed file
   # is compiled and compressed, which hides the store path.
-  postFixup = "echo ${which} > $out/nix-support/undetected-runtime-dependencies";
+  postFixup = ''
+    echo ${which} > $out/nix-support/undetected-runtime-dependencies
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''find $out -name "*.so" -exec patchelf {} --add-rpath $out/lib/R/lib \;''}
+  '';
 
   doCheck = true;
   preCheck = "export HOME=$TMPDIR; export TZ=CET; bin/Rscript -e 'sessionInfo()'";

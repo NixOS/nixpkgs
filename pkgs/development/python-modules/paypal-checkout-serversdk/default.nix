@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# propagates
-, paypalhttp
+  # propagates
+  paypalhttp,
 
-# tersts
-, pytestCheckHook
-, responses
+  # tersts
+  pytestCheckHook,
+  responses,
 }:
 
 buildPythonPackage rec {
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     rm -rf sample
   '';
 
-  propagatedBuildInputs = [
-    paypalhttp
-  ];
+  propagatedBuildInputs = [ paypalhttp ];
 
   nativeCheckInputs = [
     pytestCheckHook

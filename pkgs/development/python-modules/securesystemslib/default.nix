@@ -1,24 +1,25 @@
-{ lib
-, asn1crypto
-, azure-identity
-, azure-keyvault-keys
-, boto3
-, botocore
-, buildPythonPackage
-, cryptography
-, ed25519
-, fetchFromGitHub
-, google-cloud-kms
-, hatchling
-, pynacl
-, pyspx
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  asn1crypto,
+  azure-identity,
+  azure-keyvault-keys,
+  boto3,
+  botocore,
+  buildPythonPackage,
+  cryptography,
+  ed25519,
+  fetchFromGitHub,
+  google-cloud-kms,
+  hatchling,
+  pynacl,
+  pyspx,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "securesystemslib";
-  version = "0.31.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,22 +28,13 @@ buildPythonPackage rec {
     owner = "secure-systems-lab";
     repo = "securesystemslib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-REi38rIVZmWawFGcrPl9QzSthW4jHZDr/0ug7kJRz3Y=";
+    hash = "sha256-PDivKunqQcGnER4eyWtGE5gvbqvhavXF7n/O2rTFTkI=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "hatchling==1.18.0" "hatchling"
-  '';
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [
-    hatchling
-  ];
-
-  passthru.optional-dependencies = {
-    PySPX = [
-      pyspx
-    ];
+  optional-dependencies = {
+    PySPX = [ pyspx ];
     awskms = [
       boto3
       botocore
@@ -53,9 +45,7 @@ buildPythonPackage rec {
       azure-keyvault-keys
       cryptography
     ];
-    crypto = [
-      cryptography
-    ];
+    crypto = [ cryptography ];
     gcpkms = [
       cryptography
       google-cloud-kms
@@ -63,11 +53,9 @@ buildPythonPackage rec {
     hsm = [
       asn1crypto
       cryptography
-    #   pykcs11
+      #   pykcs11
     ];
-    pynacl = [
-      pynacl
-    ];
+    pynacl = [ pynacl ];
     # Circular dependency
     # sigstore = [
     #   sigstore
@@ -77,11 +65,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ed25519
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "securesystemslib"
-  ];
+  pythonImportsCheck = [ "securesystemslib" ];
 
   disabledTestPaths = [
     # pykcs11 is not available
@@ -98,4 +84,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ fab ];
   };
 }
-

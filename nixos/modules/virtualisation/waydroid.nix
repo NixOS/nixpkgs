@@ -20,7 +20,7 @@ in
 {
 
   options.virtualisation.waydroid = {
-    enable = lib.mkEnableOption (lib.mdDoc "Waydroid");
+    enable = lib.mkEnableOption "Waydroid";
   };
 
   config = lib.mkIf cfg.enable {
@@ -55,15 +55,18 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
+        Type = "dbus";
+        UMask = "0022";
         ExecStart = "${pkgs.waydroid}/bin/waydroid -w container start";
-        ExecStop = "${pkgs.waydroid}/bin/waydroid container stop";
-        ExecStopPost = "${pkgs.waydroid}/bin/waydroid session stop";
+        BusName = "id.waydro.Container";
       };
     };
 
     systemd.tmpfiles.rules = [
       "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
     ];
+
+    services.dbus.packages = with pkgs; [ waydroid ];
   };
 
 }

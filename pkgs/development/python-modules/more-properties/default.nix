@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -31,14 +32,12 @@ buildPythonPackage rec {
       --replace dataclasses ""
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "more_properties" ];
 
   meta = {
-    description = "A collection of property variants";
+    description = "Collection of property variants";
     homepage = "https://github.com/madman-bob/python-more-properties";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];

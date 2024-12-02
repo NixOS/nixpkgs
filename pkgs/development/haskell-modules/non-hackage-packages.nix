@@ -1,3 +1,19 @@
+{ pkgs, haskellLib }:
+
+let
+  inherit (pkgs) lib;
+  inherit (lib.strings) hasSuffix removeSuffix;
+
+  pathsByName =
+    lib.concatMapAttrs
+      (name: type:
+        lib.optionalAttrs (type == "regular" && hasSuffix ".nix" name) {
+          ${removeSuffix ".nix" name} = ./replacements-by-name + "/${name}";
+        }
+      )
+      (builtins.readDir ./replacements-by-name);
+in
+
 # EXTRA HASKELL PACKAGES NOT ON HACKAGE
 #
 # This file should only contain packages that are not in ./hackage-packages.nix.
@@ -14,6 +30,8 @@ self: super: {
   # Used by maintainers/scripts/regenerate-hackage-packages.sh, and generated
   # from the latest master instead of the current version on Hackage.
   cabal2nix-unstable = self.callPackage ./cabal2nix-unstable.nix { };
+
+  ghc-settings-edit = self.callPackage ../tools/haskell/ghc-settings-edit { };
 
   # https://github.com/channable/vaultenv/issues/1
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
@@ -40,3 +58,4 @@ self: super: {
   hercules-ci-optparse-applicative = self.callPackage ../misc/haskell/hercules-ci-optparse-applicative.nix {};
 
 }
+// lib.mapAttrs (_name: path: self.callPackage path {}) pathsByName

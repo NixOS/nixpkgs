@@ -1,15 +1,16 @@
-{ lib
-, bleak
-, bleak-retry-connector
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
+{
+  lib,
+  bleak,
+  bleak-retry-connector,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pymicrobot";
-  version = "0.0.16";
+  version = "0.0.22";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -17,12 +18,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyMicroBot";
     inherit version;
-    hash = "sha256-W1i1kKDM6DimcerhS5L7yEa32+cB032DrCAfhMCso4A=";
+    hash = "sha256-8Nkkgznt4JzImJSAbdaX6znhvmgqwOIBjAXVhaMorLk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     bleak
@@ -32,9 +31,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "microbot"
-  ];
+  pythonImportsCheck = [ "microbot" ];
 
   meta = with lib; {
     description = "Library to communicate with MicroBot";

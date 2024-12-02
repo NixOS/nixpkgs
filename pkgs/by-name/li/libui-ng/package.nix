@@ -12,16 +12,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libui-ng";
-  version = "unstable-2024-02-05";
+  version = "4.1-unstable-2024-05-19";
 
   src = fetchFromGitHub {
     owner = "libui-ng";
     repo = "libui-ng";
-    rev = "4d46de31eafad84c88b939356bcd64e6c5ee3821";
-    hash = "sha256-Yb8VdJe75uBzRnsfTOVxUXstZmu6dJ9nBuOrf86KO5s=";
+    rev = "49b04c4cf8ae4d3e38e389f446ef75170eb62762";
+    hash = "sha256-W9LnUBUKwx1x3+BEeUanisBGR2Q4dnbcMM5k8mCondM=";
   };
 
-  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
     substituteInPlace meson.build --replace "'-arch', 'arm64'" ""
   '';
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    if stdenv.isDarwin then [
+    if stdenv.hostPlatform.isDarwin then [
       darwin.libobjc
       darwin.apple_sdk_11_0.Libsystem
       darwin.apple_sdk_11_0.frameworks.Cocoa
@@ -44,16 +44,18 @@ stdenv.mkDerivation rec {
     ];
 
   mesonFlags = [
-    (lib.mesonBool "examples" (!stdenv.isDarwin))
+    (lib.mesonBool "examples" (!stdenv.hostPlatform.isDarwin))
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "alpha";
+  };
 
   meta = with lib; {
-    description = "A portable GUI library for C";
+    description = "Portable GUI library for C";
     homepage = "https://github.com/libui-ng/libui-ng";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

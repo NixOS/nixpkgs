@@ -14,9 +14,10 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ click future six ];
 
   meta = with lib; {
-    description = "A linter for prose";
+    description = "Linter for prose";
+    mainProgram = "proselint";
     homepage = "http://proselint.com";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ alibabzo ];
+    maintainers = [ ];
   };
 }

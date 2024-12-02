@@ -1,32 +1,44 @@
 {
   "twentynineteen": {
-    "path": "twentynineteen/2.7",
-    "rev": "207575",
-    "sha256": "19zbbpj1qxfz6599di2455qr97z5x4vrprf0bf20c8dq8n8lrh41",
-    "version": "2.7"
+    "path": "twentynineteen/3.0",
+    "rev": "248593",
+    "sha256": "0sjpkb3h7109svnfpvxha1xv3ga4plrhqr0xi28j8fp55fry2bl1",
+    "version": "3.0"
   },
   "twentytwenty": {
-    "path": "twentytwenty/2.4",
-    "rev": "207576",
-    "sha256": "0xp2jcgsn16gv9ad8dirm7j24mi7633yrl524wi858l3m8dh4q4a",
-    "version": "2.4"
+    "path": "twentytwenty/2.8",
+    "rev": "248599",
+    "sha256": "1qk4yhw3hcgb4nr8dpmb0ssvvq176xwqpnr8ad8xzhkz4qbaqcz3",
+    "version": "2.8"
   },
-  "twentytwentyone": {
-    "path": "twentytwentyone/2.0",
-    "rev": "207577",
-    "sha256": "0ypdqxfd1va9m6f3zbc0281i69br5hpvvjdqb03kk2xnmam2hjaa",
-    "version": "2.0"
+  "twentytwentyfive": {
+    "path": "twentytwentyfive/1.0",
+    "rev": "248589",
+    "sha256": "00360gxmnzq4z5z2b7z1wpziwfb6x8nz74qv3c9fpri2d9k4356f",
+    "version": "1.0"
   },
-  "twentytwentythree": {
-    "path": "twentytwentythree/1.3",
-    "rev": "207579",
-    "sha256": "0r2k73yskqaxhl641ri1shy74rck5xvmfi7b562kz3j44hx0dz4f",
+  "twentytwentyfour": {
+    "path": "twentytwentyfour/1.3",
+    "rev": "248600",
+    "sha256": "12zfb83s1zgbs3r8an17hdwzn7s01hfwhxd5ak5x6106cy61nshq",
     "version": "1.3"
   },
-  "twentytwentytwo": {
-    "path": "twentytwentytwo/1.6",
-    "rev": "207578",
-    "sha256": "0ga1682a5sh038xfc7whvdws5vfy1g3qvvy13rm5dln79x022riq",
+  "twentytwentyone": {
+    "path": "twentytwentyone/2.4",
+    "rev": "248601",
+    "sha256": "06sx6nx8v1bpc9csd718560fi9j7iazw1fb4kwfgckiq79kp8s7g",
+    "version": "2.4"
+  },
+  "twentytwentythree": {
+    "path": "twentytwentythree/1.6",
+    "rev": "248602",
+    "sha256": "0q8qz75a2yaf4lqj84w4hfcizjj7fvgbq0rinag4abk7ivdys537",
     "version": "1.6"
+  },
+  "twentytwentytwo": {
+    "path": "twentytwentytwo/1.9",
+    "rev": "248603",
+    "sha256": "0c7rx47n7kd5khrd7im4y9hf8bnwlwxhnrgcqhmwvcry60wzc7y2",
+    "version": "1.9"
   }
 }

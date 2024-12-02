@@ -1,6 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -p "haskellPackages.ghcWithPackages (p: [p.aeson p.req])"
-#! nix-shell -p hydra-unstable
+#! nix-shell -p hydra
 #! nix-shell -i runhaskell
 
 {-
@@ -78,12 +78,13 @@ import Network.HTTP.Req (
  )
 import System.Directory (XdgDirectory (XdgCache), getXdgDirectory)
 import System.Environment (getArgs)
+import System.Exit (die)
 import System.Process (readProcess)
 import Prelude hiding (id)
 import Data.List (sortOn)
 import Control.Concurrent.Async (concurrently)
 import Control.Exception (evaluate)
-import qualified Data.IntMap.Strict as IntMap
+import qualified Data.IntMap.Lazy as IntMap
 import qualified Data.IntSet as IntSet
 import Data.Bifunctor (second)
 import Data.Data (Proxy)
@@ -155,17 +156,20 @@ data Build = Build
 data HydraSlownessWorkaroundFlag = HydraSlownessWorkaround | NoHydraSlownessWorkaround
 data RequestLogsFlag = RequestLogs | NoRequestLogs
 
+usage :: IO a
+usage = die "Usage: get-report [--slow] [EVAL-ID] | ping-maintainers | mark-broken-list [--no-request-logs] | eval-info"
+
 main :: IO ()
 main = do
    args <- getArgs
    case args of
-      ["get-report", "--slow"] -> getBuildReports HydraSlownessWorkaround
-      ["get-report"] -> getBuildReports NoHydraSlownessWorkaround
+      "get-report":"--slow":id -> getBuildReports HydraSlownessWorkaround id
+      "get-report":id -> getBuildReports NoHydraSlownessWorkaround id
       ["ping-maintainers"] -> printMaintainerPing
       ["mark-broken-list", "--no-request-logs"] -> printMarkBrokenList NoRequestLogs
       ["mark-broken-list"] -> printMarkBrokenList RequestLogs
       ["eval-info"] -> printEvalInfo
-      _ -> putStrLn "Usage: get-report [--slow] | ping-maintainers | mark-broken-list [--no-request-logs] | eval-info"
+      _ -> usage
 
 reportFileName :: IO FilePath
 reportFileName = getXdgDirectory XdgCache "haskell-updates-build-report.json"
@@ -173,23 +177,26 @@ reportFileName = getXdgDirectory XdgCache "haskell-updates-build-report.json"
 showT :: Show a => a -> Text
 showT = Text.pack . show
 
-getBuildReports :: HydraSlownessWorkaroundFlag -> IO ()
-getBuildReports opt = runReq defaultHttpConfig do
-   evalMay <- Seq.lookup 0 . evals <$> hydraJSONQuery mempty ["jobset", "nixpkgs", "haskell-updates", "evals"]
-   eval@Eval{id} <- maybe (liftIO $ fail "No Evaluation found") pure evalMay
+getBuildReports :: HydraSlownessWorkaroundFlag -> [String] -> IO ()
+getBuildReports opt args = runReq defaultHttpConfig do
+   eval@Eval{id} <- case args of
+      [id] -> hydraJSONQuery mempty ["eval", Text.pack id]
+      [] -> do
+         evalMay <- Seq.lookup 0 . evals <$> hydraJSONQuery mempty ["jobset", "nixpkgs", "haskell-updates", "evals"]
+         maybe (liftIO $ fail "No Evaluation found") pure evalMay
+      _ -> liftIO usage
    liftIO . putStrLn $ "Fetching evaluation " <> show id <> " from Hydra. This might take a few minutes..."
-   buildReports <- getEvalBuilds opt id
+   buildReports <- getEvalBuilds opt eval
    liftIO do
       fileName <- reportFileName
       putStrLn $ "Finished fetching all builds from Hydra, saving report as " <> fileName
       now <- getCurrentTime
       encodeFile fileName (eval, now, buildReports)
 
-getEvalBuilds :: HydraSlownessWorkaroundFlag -> Int -> Req (Seq Build)
-getEvalBuilds NoHydraSlownessWorkaround id =
+getEvalBuilds :: HydraSlownessWorkaroundFlag -> Eval -> Req (Seq Build)
+getEvalBuilds NoHydraSlownessWorkaround Eval{id} =
   hydraJSONQuery mempty ["eval", showT id, "builds"]
-getEvalBuilds HydraSlownessWorkaround id = do
-  Eval{builds} <- hydraJSONQuery mempty [ "eval", showT id ]
+getEvalBuilds HydraSlownessWorkaround Eval{builds} = do
   forM builds $ \buildId -> do
     liftIO $ putStrLn $ "Querying build " <> show buildId
     hydraJSONQuery mempty [ "build", showT buildId ]
@@ -299,7 +306,7 @@ calculateReverseDependencies depMap =
    Map.fromDistinctAscList $ zip keys (zip (rdepMap False) (rdepMap True))
  where
     -- This code tries to efficiently invert the dependency map and calculate
-    -- it’s transitive closure by internally identifying every pkg with it’s index
+    -- its transitive closure by internally identifying every pkg with its index
     -- in the package list and then using memoization.
     keys :: [PkgName]
     keys = Map.keys depMap
@@ -317,11 +324,11 @@ calculateReverseDependencies depMap =
     intDeps :: [(Int, (Bool, [Int]))]
     intDeps = zip [0..] (fmap depInfoToIdx depInfos)
 
-    rdepMap onlyUnbroken = IntSet.size <$> resultList
+    rdepMap onlyUnbroken = IntSet.size <$> IntMap.elems resultList
      where
-       resultList = go <$> [0..]
+       resultList = IntMap.fromDistinctAscList [(i, go i) | i <- [0..length keys - 1]]
        oneStepMap = IntMap.fromListWith IntSet.union $ (\(key,(_,deps)) -> (,IntSet.singleton key) <$> deps) <=< filter (\(_, (broken,_)) -> not (broken && onlyUnbroken)) $ intDeps
-       go pkg = IntSet.unions (oneStep:((resultList !!) <$> IntSet.toList oneStep))
+       go pkg = IntSet.unions (oneStep:((resultList IntMap.!) <$> IntSet.toList oneStep))
         where oneStep = IntMap.findWithDefault mempty pkg oneStepMap
 
 -- | Generate a mapping of Hydra job names to maintainer GitHub handles. Calls

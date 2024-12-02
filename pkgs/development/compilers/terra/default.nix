@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, llvmPackages, ncurses, cmake, libxml2
-, symlinkJoin, breakpointHook, cudaPackages, enableCUDA ? false
+{ lib, stdenv, fetchFromGitHub, llvmPackages_16, ncurses, cmake, libxml2
+, symlinkJoin, cudaPackages, enableCUDA ? false
 , libffi, libobjc, libpfm, Cocoa, Foundation
 }:
 
@@ -14,6 +14,7 @@ let
     sha256 = "1g87pl014b5v6z2nnhiwn3wf405skawszfr5wdzyfbx00j3kgxd0";
   };
 
+  llvmPackages = llvmPackages_16;
   llvmMerged = symlinkJoin {
     name = "llvmClangMerged";
     paths = with llvmPackages; [
@@ -44,8 +45,8 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ llvmMerged ncurses libffi libxml2 ]
     ++ lib.optionals enableCUDA [ cuda ]
-    ++ lib.optional (!stdenv.isDarwin) libpfm
-    ++ lib.optionals stdenv.isDarwin [ libobjc Cocoa Foundation ];
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) libpfm
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc Cocoa Foundation ];
 
   cmakeFlags = let
     resourceDir = "${llvmMerged}/lib/clang/" + (
@@ -91,7 +92,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A low-level counterpart to Lua";
+    description = "Low-level counterpart to Lua";
     homepage = "https://terralang.org/";
     platforms = platforms.all;
     maintainers = with maintainers; [ jb55 seylerius thoughtpolice elliottslaughter ];
@@ -99,6 +100,6 @@ in stdenv.mkDerivation rec {
     # never built on aarch64-darwin since first introduction in nixpkgs
     # Linux Aarch64 broken above LLVM11
     # https://github.com/terralang/terra/issues/597
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

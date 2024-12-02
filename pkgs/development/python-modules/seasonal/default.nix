@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, numpy
-, scipy
-, pandas
-, matplotlib
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  numpy,
+  scipy,
+  pandas,
+  matplotlib,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -31,28 +32,26 @@ buildPythonPackage rec {
       --replace 'setup_requires=["pytest-runner"],' ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     numpy
     scipy
   ];
 
-  passthru.optional-dependencies = {
-    csv = [
-      pandas
-    ];
-    plot = [
-      matplotlib
-    ];
+  optional-dependencies = {
+    csv = [ pandas ];
+    plot = [ matplotlib ];
   };
 
-  pythonImportsCheck = [ "seasonal" "seasonal.trend" "seasonal.periodogram" ];
+  pythonImportsCheck = [
+    "seasonal"
+    "seasonal.trend"
+    "seasonal.periodogram"
+  ];
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   meta = with lib; {
     description = "Robustly estimate trend and periodicity in a timeseries";

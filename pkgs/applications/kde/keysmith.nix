@@ -7,6 +7,7 @@
 , kdbusaddons
 , ki18n
 , kirigami2
+, kirigami-addons
 , kwindowsystem
 , libsodium
 , qtquickcontrols2
@@ -24,6 +25,7 @@ mkDerivation rec {
     kdbusaddons
     ki18n
     kirigami2
+    kirigami-addons
     kwindowsystem
     libsodium
     qtquickcontrols2
@@ -31,9 +33,10 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "OTP client for Plasma Mobile and Desktop";
+    mainProgram = "keysmith";
     license = licenses.gpl3;
     homepage = "https://github.com/KDE/keysmith";
-    maintainers = with maintainers; [ samueldr shamilton ];
+    maintainers = with maintainers; [ shamilton ];
     platforms = platforms.linux;
   };
 }

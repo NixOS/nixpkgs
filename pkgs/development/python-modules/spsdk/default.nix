@@ -1,100 +1,106 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, asn1crypto
-, astunparse
-, bincopy
-, bitstring
-, click
-, click-command-tree
-, click-option-group
-, cmsis-pack-manager
-, commentjson
-, crcmod
-, cryptography
-, deepmerge
-, fastjsonschema
-, hexdump
-, importlib-metadata
-, jinja2
-, libusbsio
-, oscrypto
-, pycryptodome
-, pyftdi
-, pylink-square
-, pyocd
-, pypemicro
-, pyserial
-, requests
-, ruamel-yaml
-, setuptools
-, sly
-, spsdk
-, testers
-, typing-extensions
-, pytestCheckHook
-, voluptuous
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  asn1crypto,
+  bincopy,
+  bitstring,
+  click,
+  click-command-tree,
+  click-option-group,
+  colorama,
+  crcmod,
+  cryptography,
+  deepmerge,
+  fastjsonschema,
+  filelock,
+  hexdump,
+  libusbsio,
+  libuuu,
+  oscrypto,
+  packaging,
+  platformdirs,
+  prettytable,
+  pyocd,
+  pyserial,
+  requests,
+  ruamel-yaml,
+  sly,
+  typing-extensions,
+
+  # tests
+  ipykernel,
+  pytest-notebook,
+  pytestCheckHook,
+  voluptuous,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "2.0.1";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nxp-mcuxpresso";
-    repo = pname;
-    rev = version;
-    hash = "sha256-C6cz5jhIHI4WkCYT0rURFa4kBAu6cMcKpQHiHACIiu8=";
+    repo = "spsdk";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WRR4YyA4HaYoyOZSt/RYivhH2E/20DKLXExWg2yOL48=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=72.1,<74" "setuptools"
+
+    substituteInPlace setup.py \
+      --replace-fail "setuptools>=72.1,<74" "setuptools"
+  '';
+
+  build-system = [
     setuptools
+    setuptools-scm
   ];
 
   pythonRelaxDeps = [
-    "bincopy"
-    "bitstring"
-    "cmsis-pack-manager"
-    "deepmerge"
-    "jinja2"
-    "pycryptodome"
-    "pylink-square"
-    "pyocd"
+    "cryptography"
+    "requests"
+    "packaging"
     "typing-extensions"
-    "click"
-    "ruamel.yaml"
   ];
 
   pythonRemoveDeps = [
+    # Remove unneeded unfree package. pyocd-pemicro is only used when
+    # generating a pyinstaller package, which we don't do.
     "pyocd-pemicro"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asn1crypto
-    astunparse
     bincopy
     bitstring
     click
     click-command-tree
     click-option-group
-    cmsis-pack-manager
-    commentjson
+    colorama
     crcmod
     cryptography
     deepmerge
     fastjsonschema
+    filelock
     hexdump
-    importlib-metadata
-    jinja2
     libusbsio
+    libuuu
     oscrypto
-    pycryptodome
-    pylink-square
+    packaging
+    platformdirs
+    prettytable
     pyocd
-    pypemicro
     pyserial
     requests
     ruamel-yaml
@@ -102,22 +108,35 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [
-    pyftdi
-    pytestCheckHook
-    voluptuous
-  ];
-
   pythonImportsCheck = [ "spsdk" ];
 
-  passthru.tests.version = testers.testVersion { package = spsdk; };
+  preInstallCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
 
-  meta = with lib; {
-    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.rev}/docs/release_notes.rst";
+  nativeCheckInputs = [
+    ipykernel
+    pytest-notebook
+    pytestCheckHook
+    voluptuous
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+
+  disabledTests = [
+    # Missing rotk private key
+    "test_general_notebooks"
+  ];
+
+  meta = {
+    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/v${version}/docs/release_notes.rst";
     description = "NXP Secure Provisioning SDK";
     homepage = "https://github.com/nxp-mcuxpresso/spsdk";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ frogamic sbruder ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      frogamic
+      sbruder
+    ];
     mainProgram = "spsdk";
   };
 }

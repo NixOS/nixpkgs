@@ -1,8 +1,8 @@
 import time
+from collections.abc import Callable
 from math import isfinite
-from typing import Callable, Optional
 
-from .logger import rootlog
+from test_driver.logger import AbstractLogger
 
 
 class PollingConditionError(Exception):
@@ -12,19 +12,22 @@ class PollingConditionError(Exception):
 class PollingCondition:
     condition: Callable[[], bool]
     seconds_interval: float
-    description: Optional[str]
+    description: str | None
+    logger: AbstractLogger
 
     last_called: float
     entry_count: int
 
     def __init__(
         self,
-        condition: Callable[[], Optional[bool]],
+        condition: Callable[[], bool | None],
+        logger: AbstractLogger,
         seconds_interval: float = 2.0,
-        description: Optional[str] = None,
+        description: str | None = None,
     ):
         self.condition = condition  # type: ignore
         self.seconds_interval = seconds_interval
+        self.logger = logger
 
         if description is None:
             if condition.__doc__:
@@ -41,7 +44,7 @@ class PollingCondition:
         if (self.entered or not self.overdue) and not force:
             return True
 
-        with self, rootlog.nested(self.nested_message):
+        with self, self.logger.nested(self.nested_message):
             time_since_last = time.monotonic() - self.last_called
             last_message = (
                 f"Time since last: {time_since_last:.2f}s"
@@ -49,13 +52,13 @@ class PollingCondition:
                 else "(not called yet)"
             )
 
-            rootlog.info(last_message)
+            self.logger.info(last_message)
             try:
                 res = self.condition()  # type: ignore
             except Exception:
                 res = False
             res = res is None or res
-            rootlog.info(self.status_message(res))
+            self.logger.info(self.status_message(res))
             return res
 
     def maybe_raise(self) -> None:

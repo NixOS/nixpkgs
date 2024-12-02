@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, buildPackages
+{ lib, stdenv, fetchurl, fetchFromGitHub, fetchpatch, buildPackages
 , texlive
 , zlib, libiconv, libpng, libX11
-, freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
+, freetype, ttfautohint, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
 , perl, perlPackages, python3Packages, pkg-config, cmake, ninja
-, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr, mupdf
+, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr, mupdf-headless
 , brotli, cairo, pixman, xorg, clisp, biber, woff2, xxHash
 , makeWrapper, shortenPerlShebang, useFixedHashes, asymptote
 , biber-ms
 , tlpdb
-}:
+}@args:
 
 # Useful resource covering build options:
 # http://tug.org/texlive/doc/tlbuild.html
@@ -38,12 +38,19 @@ let
   binPackages = lib.getAttrs (corePackages ++ coreBigPackages) tlpdb;
 
   common = {
-    src = fetchurl {
-      urls = [
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0313-source.tar.xz"
-              "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0313-source.tar.xz"
-      ];
-      hash = "sha256-OHiqDh7QMBwFOw4u5OmtmZxEE0X0iC55vdHI9M6eebk=";
+    # FIXME revert to official tarballs for TeX-Live 2025
+    #src = fetchurl {
+    #  urls = [
+    #    "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0312-source.tar.xz"
+    #          "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0312-source.tar.xz"
+    #  ];
+    #  hash = "sha256-e22HzwFmFnD6xFyTEmvtl7mEMTntUQ+XXQR+qTi2/pY=";
+    #};
+    src = fetchFromGitHub {
+      owner = "TeX-Live";
+      repo = "texlive-source";
+      rev = "refs/tags/svn70897";
+      hash = "sha256-ZCoZAO0qGWPWW72BJOi5P7/A/qEm+SY3PQyLbx+e3pY=";
     };
 
     prePatch = ''
@@ -187,7 +194,7 @@ core = stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Basic binaries for TeX Live";
     homepage    = "http://www.tug.org/texlive";
-    license     = lib.licenses.gpl2;
+    license     = lib.licenses.gpl2Plus;
     maintainers = with maintainers; [ veprbl lovek323 raskin jwiegley ];
     platforms   = platforms.all;
   };
@@ -212,21 +219,12 @@ core-big = stdenv.mkDerivation {
       url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1009196;filename=lua_fixed_hash.patch;msg=45";
       sha256 = "sha256-FTu1eRd3AUU7IRs2/7e7uwHuvZsrzTBPypbcEZkU7y4=";
     })
-    # fixes a security-issue in luatex that allows arbitrary code execution even with shell-escape disabled, see https://tug.org/~mseven/luatex.html
-    # fixed in LuaTeX 1.17.0, remove patch when upgrading to TL 2024
-    (fetchpatch {
-      name = "CVE-2023-32700.patch";
-      url = "https://tug.org/~mseven/luatex-files/2023/patch";
-      hash = "sha256-AvMedFkZJAFsCJ51eQqBQM4MpzLzn+GeBrzuTzISVkk=";
-      excludes = [  "build.sh" ];
-      stripLen = 1;
-    })
     # Fixes texluajitc crashes on aarch64, backport of the upstream fix
     # https://github.com/LuaJIT/LuaJIT/commit/e9af1abec542e6f9851ff2368e7f196b6382a44c
     # to the version vendored by texlive (2.1.0-beta3)
     (fetchpatch {
       name = "luajit-fix-aarch64-linux.patch";
-      url = "https://raw.githubusercontent.com/void-linux/void-packages/master/srcpkgs/LuaJIT/patches/e9af1abec542e6f9851ff2368e7f196b6382a44c.patch";
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/30253fbfc22cd93d97ec53df323778a3aab82754/srcpkgs/LuaJIT/patches/e9af1abec542e6f9851ff2368e7f196b6382a44c.patch";
       hash = "sha256-ysSZmfpfCFMukfHmIqwofAZux1e2kEq/37lfqp7HoWo=";
       stripLen = 1;
       extraPrefix = "libs/luajit/LuaJIT-src/";
@@ -251,6 +249,11 @@ core-big = stdenv.mkDerivation {
       utils/{tpic2pdftex,vlna,xindy,xml2pmx,xpdfopen}
     mkdir WorkDir
     cd WorkDir
+  ''
+  # force XeTeX to use fontconfig instead of Core Text, so that fonts can be made available via FONTCONFIG_FILE,
+  # by tricking configure into thinking that the relevant test result is already in the config cache
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export kpse_cv_have_ApplicationServices=no
   '';
 
   configureFlags = common.configureFlags
@@ -304,64 +307,47 @@ chktex = stdenv.mkDerivation {
 # for details see https://wiki.contextgarden.net/Building_LuaMetaTeX_for_TeX_Live
 context = stdenv.mkDerivation rec {
   pname = "luametatex";
-  version = "2.10.08";
+  version = "2.11.02";
 
   src = fetchurl {
-    url = "https://tug.org/svn/texlive/trunk/Master/source/luametatex-${version}.tar.xz?revision=67034&view=co";
-    hash = "sha256-3JeOUQ63jJOZWTxFCoyWjfcrspmdmC/yqgS1JaLfTWk=";
+    name = "luametatex-${version}.tar.xz";
+    url = "https://tug.org/svn/texlive/trunk/Master/source/luametatex-${version}.tar.xz?pathrev=70384&view=co";
+    hash = "sha256-o7esoBBTTYEstkd7l34BWxew3fIRdVcFiGxrT1/KP1o=";
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ cmake ninja ];
 
   meta = with lib; {
-    description = "The LUAMETATEX engine is a follow up on LUATEX and is again part of CONTEXT development";
+    description = "LUAMETATEX engine is a follow up on LUATEX and is again part of CONTEXT development";
     homepage = "https://www.pragma-ade.nl/luametatex-1.htm";
     license = licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ apfelkuchen6 xworld21 ];
   };
 };
 
-dvisvgm = stdenv.mkDerivation {
+dvisvgm = stdenv.mkDerivation rec {
   pname = "dvisvgm";
-  inherit (texlive.pkgs.dvisvgm) version;
+  version = "3.2.2";
 
-  inherit (common) src;
+  src = assert lib.assertMsg (version == texlive.pkgs.dvisvgm.version) "dvisvgm: TeX Live version (${texlive.pkgs.dvisvgm.version}) different from source (${version}), please update dvisvgm"; fetchurl {
+    url = "https://github.com/mgieseki/dvisvgm/releases/download/${version}/dvisvgm-${version}.tar.gz";
+    hash = "sha256-8GKL6lqjMUXXWwpqbdGPrYibdSc4y8AcGUGPNUc6HQA=";
+  };
 
-  patches = [
-    # do not use deprecated NEWPDF option with Ghostscript >= 10.02.0
-    # https://github.com/mgieseki/dvisvgm/issues/245
-    (fetchpatch {
-      name = "dont-use-NEWPDF-with-GS-10.02.0.patch";
-      url = "https://github.com/mgieseki/dvisvgm/commit/f31cdf14d73f586e2b92b4b0891d097a90274a0b.patch";
-      hash = "sha256-Yf/GhmJYM87M0ITZ/+7q2ZvSYnac4N2/NkTkFlJ2VII=";
-      stripLen = 1;
-      extraPrefix = "texk/dvisvgm/dvisvgm-src/";
-    })
+  configureFlags = [
+    "--disable-manpage" # man pages are provided by the doc container
+    "--with-ttfautohint"
   ];
 
-  # since we are running configure directly in texk/dvisvgm,
-  # the option --with-system-potrace is not picked up properly
-  # and dvisvgm tries to build a vendored copy of potrace
+  # PDF handling requires mutool (from mupdf) since Ghostscript 10.01
   postPatch = ''
-    cat > texk/dvisvgm/dvisvgm-src/libs/potrace/Makefile <<EOF
-    all:
-    install:
-    EOF
-  '' +
-    # PDF handling requires mutool (from mupdf) since Ghostscript 10.01
-  ''
-    substituteInPlace texk/dvisvgm/dvisvgm-src/src/PDFHandler.cpp \
-      --replace 'Process("mutool"' "Process(\"$(PATH="$HOST_PATH" command -v mutool)\""
+    substituteInPlace src/PDFHandler.cpp \
+      --replace-fail 'Process("mutool"' "Process(\"$(PATH="$HOST_PATH" command -v mutool)\""
   '';
 
-  preConfigure = "cd texk/dvisvgm";
-
-  configureFlags = common.configureFlags
-    ++ [ "--with-system-kpathsea" ];
-
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ core brotli ghostscript zlib freetype woff2 potrace xxHash mupdf ];
+  buildInputs = [ core brotli ghostscript zlib freetype ttfautohint woff2 potrace xxHash mupdf-headless ];
 
   enableParallelBuilding = true;
 };
@@ -426,7 +412,19 @@ pygmentex = python3Packages.buildPythonApplication rec {
   };
 };
 
-inherit asymptote;
+asymptote = args.asymptote.overrideAttrs (finalAttrs: prevAttrs: {
+  version = texlive.pkgs.asymptote.version;
+
+  # keep local src and patches even if duplicated in the top level asymptote
+  # so that top level updates do not break texlive
+  src = fetchurl {
+    url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
+    hash = "sha256-nZtcb6fg+848HlT+sl4tUdKMT+d5jyTHbNyugpGo6mY=";
+  };
+
+  texContainer = texlive.pkgs.asymptote.tex;
+  texdocContainer = texlive.pkgs.asymptote.texdoc;
+});
 
 inherit biber;
 inherit biber-ms;
@@ -468,7 +466,7 @@ xdvi = stdenv.mkDerivation {
 
   postInstall = ''
     substituteInPlace "$out/bin/xdvi" \
-      --replace "exec xdvi-xaw" "exec '$out/bin/xdvi-xaw'"
+      --replace-fail "exec xdvi-xaw" "exec '$out/bin/xdvi-xaw'"
   '';
   # TODO: it's suspicious that mktexpk generates fonts into ~/.texlive2014
 };
@@ -504,24 +502,24 @@ xindy = stdenv.mkDerivation {
   # hardcode clisp location
   postPatch = ''
     substituteInPlace xindy-*/user-commands/xindy.in \
-      --replace "our \$clisp = ( \$is_windows ? 'clisp.exe' : 'clisp' ) ;" \
-                "our \$clisp = '$(type -P clisp)';"
+      --replace-fail "our \$clisp = ( \$is_windows ? 'clisp.exe' : 'clisp' ) ;" \
+                     "our \$clisp = '$(type -P clisp)';" \
+      --replace-fail 'die "$cmd: Cannot locate xindy modules directory";' \
+                     '$modules_dir = "${texlive.pkgs.xindy.tex}/xindy/modules"; die "$cmd: Cannot locate xindy modules directory" unless -d $modules_dir;'
   '';
 
   nativeBuildInputs = [
     pkg-config perl
-    (texlive.combine { inherit (texlive) scheme-basic cyrillic ec; })
   ];
   buildInputs = [ clisp libiconv perl ];
 
-  configureFlags = [ "--with-clisp-runtime=system" "--disable-xindy-docs" ];
+  configureFlags = [ "--with-clisp-runtime=system" "--disable-xindy-docs" "--disable-xindy-rules" ];
 
   preInstall = ''mkdir -p "$out/bin" '';
   # fixup various file-location errors of: lib/xindy/{xindy.mem,modules/}
   postInstall = ''
     mkdir -p "$out/lib/xindy"
     mv "$out"/{bin/xindy.mem,lib/xindy/}
-    ln -s ../../share/texmf-dist/xindy/modules "$out/lib/xindy/"
   '';
 };
 

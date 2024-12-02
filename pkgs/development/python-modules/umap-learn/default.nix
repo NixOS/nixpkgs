@@ -1,42 +1,42 @@
-{ lib
-, bokeh
-, buildPythonPackage
-, colorcet
-, datashader
-, fetchFromGitHub
-, holoviews
-, matplotlib
-, numba
-, numpy
-, pandas
-, pynndescent
-, pytestCheckHook
-, pythonOlder
-, scikit-image
-, scikit-learn
-, scipy
-, seaborn
-, tbb
-, tensorflow
-, tensorflow-probability
-, tqdm
+{
+  lib,
+  bokeh,
+  buildPythonPackage,
+  colorcet,
+  datashader,
+  fetchFromGitHub,
+  setuptools,
+  holoviews,
+  matplotlib,
+  numba,
+  numpy,
+  pandas,
+  pynndescent,
+  pytestCheckHook,
+  scikit-image,
+  scikit-learn,
+  scipy,
+  seaborn,
+  tensorflow,
+  tensorflow-probability,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "0.5.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-bXAQjq7xBYn34tIZF96Sr5jDUii3s4FGkNx65rGKXkY=";
+    hash = "sha256-hPYmRDSeDa4JWGekUVq3CWf5NthHTpMpyuUQ1yIkVAE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numba
     numpy
     pynndescent
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  passthru.optional-dependencies = rec {
+  optional-dependencies = rec {
     plot = [
       bokeh
       colorcet
@@ -62,16 +62,12 @@ buildPythonPackage rec {
       tensorflow-probability
     ];
 
-    tbb = [
-      tbb
-    ];
+    tbb = [ tbb ];
 
     all = plot ++ parametric_umap ++ tbb;
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -95,7 +91,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Uniform Manifold Approximation and Projection";
     homepage = "https://github.com/lmcinnes/umap";
+    changelog = "https://github.com/lmcinnes/umap/releases/tag/release-${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

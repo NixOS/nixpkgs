@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
+  configureFlags = lib.optional stdenv.hostPlatform.isDarwin "--disable-sdltest";
 
   desktopItems = [
     (makeDesktopItem {
@@ -78,7 +78,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.dosbox.com/";
-    description = "A DOS emulator";
+    changelog = "https://www.dosbox.com/wiki/Releases";
+    description = "DOS emulator";
     longDescription = ''
       DOSBox is an emulator that recreates a MS-DOS compatible environment
       (complete with Sound, Input, Graphics and even basic networking). This

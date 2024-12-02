@@ -1,29 +1,26 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, pycryptodomex
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  pycryptodomex,
 }:
 
 buildPythonPackage rec {
   pname = "pyctr";
-  version = "0.7.4";
+  version = "0.7.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1nPP+rz/8BiFHu3nGcHuqCPwyyR55LUhoBprHFTudWQ=";
+    hash = "sha256-fiDJWcypFabnUoS313f56ypDuDrLASHrkk0Em8bymmw=";
   };
 
-  propagatedBuildInputs = [
-    pycryptodomex
-  ];
+  propagatedBuildInputs = [ pycryptodomex ];
 
-  pythonImportsCheck = [
-    "pyctr"
-  ];
+  pythonImportsCheck = [ "pyctr" ];
 
   meta = with lib; {
     description = "Python library to interact with Nintendo 3DS files";

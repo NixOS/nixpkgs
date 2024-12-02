@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "scitokens-cpp";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "scitokens";
     repo = "scitokens-cpp";
 
-    rev = "v1.1.0";
-    hash = "sha256-g97Ah5Oob0iOvMQegpG/AACLZCW37kA0RpSIcKOyQnE=";
+    rev = "v1.1.2";
+    hash = "sha256-87mV1hyoUI/pWzRXaI051H3+FN5TXcachhgAPTtQYHg=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

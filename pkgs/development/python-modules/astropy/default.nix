@@ -1,50 +1,54 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, pythonOlder
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  pythonOlder,
 
-# build time
-, astropy-extension-helpers
-, cython_3
-, jinja2
-, oldest-supported-numpy
-, setuptools-scm
-, wheel
-# testing
-, pytestCheckHook
-, pytest-xdist
-, pytest-astropy
+  # build time
+  astropy-extension-helpers,
+  cython,
+  setuptools,
+  setuptools-scm,
 
-# runtime
-, astropy-iers-data
-, numpy
-, packaging
-, pyerfa
-, pyyaml
+  # testing
+  pytestCheckHook,
+  stdenv,
+  pytest-xdist,
+  pytest-astropy,
+
+  # runtime
+  astropy-iers-data,
+  numpy,
+  packaging,
+  pyerfa,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "6.0.0";
+  version = "6.1.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8"; # according to setup.cfg
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-A82AGlUwXaUjzY14DXY1n1clXc3Fn+C91x/VFU/Hd9k=";
+    hash = "sha256-NhVY4rCTqZvr5p8f1H+shqGSYHpMFu05ugqACyq2DDQ=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0"  "numpy"
+  '';
+
+  build-system = [
     astropy-extension-helpers
-    cython_3
-    jinja2
-    oldest-supported-numpy
+    cython
+    setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astropy-iers-data
     numpy
     packaging
@@ -65,20 +69,33 @@ buildPythonPackage rec {
     export HOME="$(mktemp -d)"
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
   '';
-  pythonImportsCheck = [
-    "astropy"
-  ];
+  pythonImportsCheck = [ "astropy" ];
   disabledTests = [
     # May fail due to parallelism, see:
     # https://github.com/astropy/astropy/issues/15441
     "TestUnifiedOutputRegistry"
-  ];
+
+    # flaky
+    "test_timedelta_conversion"
+    # More flaky tests, see: https://github.com/NixOS/nixpkgs/issues/294392
+    "test_sidereal_lon_independent"
+    "test_timedelta_full_precision_arithmetic"
+    "test_datetime_to_timedelta"
+
+    "test_datetime_difference_agrees_with_timedelta_no_hypothesis"
+
+    # SAMPProxyError 1: 'Timeout expired!'
+    "TestStandardProfile.test_main"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_sidereal_lat_independent" ];
 
   meta = {
     description = "Astronomy/Astrophysics library for Python";
     homepage = "https://www.astropy.org";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ kentjames doronbehar ];
+    maintainers = with lib.maintainers; [
+      kentjames
+      doronbehar
+    ];
   };
 }

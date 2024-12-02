@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "federicomenaquintero";
     repo = "bzip2";
     rev = "15255b553e7c095fb7a26d4dc5819a11352ebba1";
-    sha256 = "sha256-BAyz35D62LWi47B/gNcCSKpdaECHBGSpt21vtnk3fKs=";
+    hash = "sha256-BAyz35D62LWi47B/gNcCSKpdaECHBGSpt21vtnk3fKs=";
   };
 
   postPatch = ''
@@ -42,6 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsdOriginal;
     pkgConfigModules = [ "bz2" ];
     platforms = platforms.all;
-    maintainers = [];
+    maintainers = [ ];
   };
 })

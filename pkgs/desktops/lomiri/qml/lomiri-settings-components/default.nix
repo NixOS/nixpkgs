@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace CMakeLists.txt \
       --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" '${placeholder "out"}/${qtbase.qtQmlPrefix}'
-  '' + lib.optionalString (!finalAttrs.doCheck) ''
+  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     sed -i CMakeLists.txt \
       -e '/add_subdirectory(tests)/d'
   '';
@@ -36,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    qtdeclarative
   ];
 
   buildInputs = [

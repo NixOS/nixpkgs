@@ -34,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--disable-arch-native"
-  ] ++ lib.optionals stdenv.isDarwin [ "--disable-link-time-optimization" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-link-time-optimization" ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {
-    description = "A better and stronger spiritual successor to BZip2";
+    description = "Better and stronger spiritual successor to BZip2";
     homepage = "https://github.com/kspalaiologos/bzip3";
     changelog = "https://github.com/kspalaiologos/bzip3/blob/${finalAttrs.src.rev}/NEWS";
     license = lib.licenses.lgpl3Plus;

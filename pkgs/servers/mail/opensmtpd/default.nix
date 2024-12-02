@@ -6,7 +6,6 @@
 , pkgconf
 , libtool
 , bison
-, libasr
 , libevent
 , zlib
 , libressl
@@ -18,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "opensmtpd";
-  version = "7.4.0p0";
+  version = "7.5.0p0";
 
   nativeBuildInputs = [ autoreconfHook autoconf-archive pkgconf libtool bison ];
   buildInputs = [ libevent zlib libressl db pam libxcrypt ];
 
   src = fetchurl {
     url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
-    hash = "sha256-wYHMw0NKEeWDYZ4AAoUg1Ff+Bi403AO+6jWAeCIM43Q=";
+    hash = "sha256-hPXBOTwMG+zHLO6pceCr1wdbLKfk4fiQm4Pt/Y3gw5w=";
   };
 
   patches = [

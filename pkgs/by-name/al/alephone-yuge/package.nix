@@ -7,7 +7,7 @@ alephone.makeWrapper rec {
 
   zip = fetchurl {
     url = "https://lochnits.com/marathon/yuge/files/Mararthon_Yuge.zip";
-    sha256 = "sha256-dZHInYThB/4igpAXbUadXwPvh2Fl3XGZ4ficg7IEnNc=";
+    hash = "sha256-dZHInYThB/4igpAXbUadXwPvh2Fl3XGZ4ficg7IEnNc=";
   };
 
   meta = {

@@ -11,26 +11,21 @@
 , CoreFoundation
 , Security
 , SystemConfiguration
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sqlx-cli";
-  version = "0.7.3";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "launchbadge";
     repo = "sqlx";
     rev = "v${version}";
-    hash = "sha256-AKVNyuV9jwzmsy6tHkGkLj1fhVT8XYvEn2Ip2wCKDxI=";
+    hash = "sha256-hxqd0TrsKANCPgQf6JUP0p1BYhZdqfnWbtCQCBxF8Gs=";
   };
 
-  cargoHash = "sha256-F3FLu/n57F8psk+d0Hf+HnqV/DvEFQwRefu/4C8A1sU=";
-
-  # Prepare the Cargo.lock for offline use.
-  # See https://github.com/NixOS/nixpkgs/issues/261412
-  postConfigure = ''
-    cargo metadata --offline > /dev/null
-  '';
+  cargoHash = "sha256-jDwfFHC19m20ECAo5VbFI6zht4gnZMYqTKsbyoVJJZU=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
@@ -50,10 +45,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       openssl
     ] ++
-    lib.optionals stdenv.isDarwin [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       CoreFoundation
       Security
       SystemConfiguration
@@ -71,6 +66,8 @@ rustPlatform.buildRustPackage rec {
     package = sqlx-cli;
     command = "sqlx --version";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description =

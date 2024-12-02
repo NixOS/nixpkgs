@@ -18,7 +18,7 @@ mkDerivation {
   ];
   testHaskellDepends = [ base hspec ];
   homepage = "https://github.com/bos/pool";
-  description = "A high-performance striped resource pooling implementation";
+  description = "High-performance striped resource pooling implementation";
   license = lib.licenses.bsd3;
   maintainers = with lib.maintainers; [ lassulus ];
 }

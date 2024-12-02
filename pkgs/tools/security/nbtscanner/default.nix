@@ -22,10 +22,11 @@ rustPlatform.buildRustPackage rec {
     ./Cargo.lock.patch
   ];
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     description = "NetBIOS scanner written in Rust";
+    mainProgram = "nbtscanner";
     homepage = "https://github.com/jonkgrimes/nbtscanner";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

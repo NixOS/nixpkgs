@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loksh";
-  version = "7.4";
+  version = "7.6";
 
   src = fetchFromGitHub {
     owner = "dimkr";
     repo = "loksh";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-gQK9gq6MsKVyOikOW0sW/SbIM1K/3I8pn58P/SqzKys=";
+    hash = "sha256-R9yLrXzXeu7gUoV+CDOAu89p2YmPP0ImAWq2fod722c=";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/dimkr/loksh";
     description = "Linux port of OpenBSD's ksh";
+    mainProgram = "loksh";
     longDescription = ''
       loksh is a Linux port of OpenBSD's ksh.
 
@@ -58,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       systems.
     '';
     license = with lib.licenses; [ publicDomain ];
-    maintainers = with lib.maintainers; [ AndersonTorres cameronnemo ];
+    maintainers = with lib.maintainers; [ cameronnemo ];
     platforms = lib.platforms.linux;
   };
 })

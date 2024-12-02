@@ -19,6 +19,7 @@
 , systemd
 , wayland
 , wayland-protocols
+, wayland-scanner
 , withXwayland ? true , xwayland
 , wlroots
 }:
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     scdoc
-    wayland
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -82,7 +83,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/project-repo/cagebreak";
-    description = "A Wayland tiling compositor inspired by ratpoison";
+    description = "Wayland tiling compositor inspired by ratpoison";
     license = licenses.mit;
     maintainers = with maintainers; [ berbiche ];
     platforms = platforms.linux;

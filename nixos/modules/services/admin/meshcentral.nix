@@ -5,10 +5,10 @@ let
   configFile = configFormat.generate "meshcentral-config.json" cfg.settings;
 in with lib; {
   options.services.meshcentral = with types; {
-    enable = mkEnableOption (lib.mdDoc "MeshCentral computer management server");
+    enable = mkEnableOption "MeshCentral computer management server";
     package = mkPackageOption pkgs "meshcentral" { };
     settings = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Settings for MeshCentral. Refer to upstream documentation for details:
 
         - [JSON Schema definition](https://github.com/Ylianst/MeshCentral/blob/master/meshcentral-config-schema.json)
@@ -42,5 +42,5 @@ in with lib; {
       };
     };
   };
-  meta.maintainers = [ maintainers.lheckemann ];
+  meta.maintainers = [ ];
 }

@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, pytestCheckHook
-, numpy
-, pandas
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
+  numpy,
+  pandas,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "formulae";
-  version = "0.5.1";
+  version = "0.5.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,10 +22,13 @@ buildPythonPackage rec {
     owner = "bambinos";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-nmqGdXqsesRhR06FDS5t64C6+Bz1B97W+PkHrfV7Qmg=";
+    hash = "sha256-SSyQa7soIp+wSXX5wek9LG95q7J7K34mztzx01lPiWo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -33,7 +38,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
   # use assertions of form `assert pytest.approx(...)`, which is now disallowed:
-  disabledTests = [ "test_basic" "test_degree" ];
+  disabledTests = [
+    "test_basic"
+    "test_degree"
+  ];
   pythonImportsCheck = [
     "formulae"
     "formulae.matrices"

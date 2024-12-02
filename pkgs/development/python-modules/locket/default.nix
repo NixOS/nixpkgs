@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,9 +20,7 @@ buildPythonPackage rec {
   # weird test requirements (spur.local>=0.3.7,<0.4)
   doCheck = false;
 
-  pythonImportsCheck = [
-    "locket"
-  ];
+  pythonImportsCheck = [ "locket" ];
 
   meta = with lib; {
     description = "Library which provides a lock that can be used by multiple processes";

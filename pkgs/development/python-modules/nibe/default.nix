@@ -1,25 +1,25 @@
-{ lib
-, aiohttp
-, aresponses
-, async-modbus
-, async-timeout
-, asyncclick
-, buildPythonPackage
-, construct
-, exceptiongroup
-, fetchFromGitHub
-, pandas
-, pytest-asyncio
-, pytestCheckHook
-, python-slugify
-, pythonOlder
-, setuptools
-, tenacity
+{
+  lib,
+  aresponses,
+  async-modbus,
+  async-timeout,
+  asyncclick,
+  buildPythonPackage,
+  construct,
+  exceptiongroup,
+  fetchFromGitHub,
+  pandas,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-slugify,
+  pythonOlder,
+  setuptools,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "nibe";
-  version = "2.8.0";
+  version = "2.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,14 +28,12 @@ buildPythonPackage rec {
     owner = "yozik04";
     repo = "nibe";
     rev = "refs/tags/${version}";
-    hash = "sha256-baw2uJn2M0tcP897+h88aMkVul6l170Vyz6qwFHZ8+s=";
+    hash = "sha256-azAVvVAlG74wgH/96+sc6S9XQLRFZgR4aU6d4gy43PQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-modbus
     async-timeout
     construct
@@ -43,31 +41,27 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     convert = [
       pandas
       python-slugify
     ];
-    cli = [
-      asyncclick
-    ];
+    cli = [ asyncclick ];
   };
 
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "nibe"
-  ];
+  pythonImportsCheck = [ "nibe" ];
 
   meta = with lib; {
     description = "Library for the communication with Nibe heatpumps";
     homepage = "https://github.com/yozik04/nibe";
     changelog = "https://github.com/yozik04/nibe/releases/tag/${version}";
-    license = with licenses; [ gpl3Plus ];
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fab ];
   };
 }

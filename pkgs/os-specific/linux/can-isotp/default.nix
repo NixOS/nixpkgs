@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     broken = kernel.kernelAtLeast "5.16";
     description = "Kernel module for ISO-TP (ISO 15765-2)";
     homepage = "https://github.com/hartkopp/can-isotp";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.evck ];
   };

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "owncloud-client";
-  version = "5.2.1";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "owncloud";
     repo = "client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yErMHh0QbWVpJhNiXU1IIGpQ5CGARN/4cqELRMoxSac=";
+    hash = "sha256-ot+2hxipeZ5eI6nPJ8XGE8gFMNQoblUq+koAFZpZDv4=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     qt6Packages.qtkeychain
     libre-graph-api-cpp-qt-client
     kdsingleapplication
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libinotify-kqueue sparkleshare
   ];
 

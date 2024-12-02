@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, sphinx, pbr }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  sphinx,
+  pbr,
+}:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-fulltoc";

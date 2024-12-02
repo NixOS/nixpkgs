@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, jinja2
-, pythonOlder
-, riscv-config
-, riscv-isac
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  pythonOlder,
+  riscv-config,
+  riscv-isac,
 }:
 
 buildPythonPackage rec {
@@ -41,15 +41,14 @@ buildPythonPackage rec {
     jinja2
   ];
 
-  pythonImportsCheck = [
-    "riscof"
-  ];
+  pythonImportsCheck = [ "riscof" ];
 
   # No unitests available
   doCheck = false;
 
   meta = with lib; {
     description = "RISC-V Architectural Test Framework";
+    mainProgram = "riscof";
     homepage = "https://github.com/riscv-software-src/riscof";
     changelog = "https://github.com/riscv-software-src/riscof/blob/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ genericnerdyusername ];

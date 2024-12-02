@@ -13,7 +13,7 @@ in
   options.services.minidlna.enable = mkOption {
     type = types.bool;
     default = false;
-    description = lib.mdDoc ''
+    description = ''
       Whether to enable MiniDLNA, a simple DLNA server.
       It serves media files such as video and music to DLNA client devices
       such as televisions and media players. If you use the firewall, consider
@@ -21,17 +21,19 @@ in
     '';
   };
 
+  options.services.minidlna.package = lib.mkPackageOption pkgs "minidlna" { };
+
   options.services.minidlna.openFirewall = mkOption {
     type = types.bool;
     default = false;
-    description = lib.mdDoc ''
+    description = ''
       Whether to open both HTTP (TCP) and SSDP (UDP) ports in the firewall.
     '';
   };
 
   options.services.minidlna.settings = mkOption {
     default = {};
-    description = lib.mdDoc ''
+    description = ''
       The contents of MiniDLNA's configuration file.
       When the service is activated, a basic template is generated from the current options opened here.
     '';
@@ -42,7 +44,7 @@ in
         type = types.listOf types.str;
         default = [];
         example = [ "/data/media" "V,/home/alice/video" ];
-        description = lib.mdDoc ''
+        description = ''
           Directories to be scanned for media files.
           The `A,` `V,` `P,` prefixes restrict a directory to audio, video or image files.
           The directories must be accessible to the `minidlna` user account.
@@ -51,7 +53,7 @@ in
       options.notify_interval = mkOption {
         type = types.int;
         default = 90000;
-        description = lib.mdDoc ''
+        description = ''
           The interval between announces (in seconds).
           Instead of waiting for announces, you should set `openFirewall` option to use SSDP discovery.
           Lower values (e.g. 30 seconds) should be used if your network blocks the discovery unicast.
@@ -62,47 +64,47 @@ in
       options.port = mkOption {
         type = types.port;
         default = 8200;
-        description = lib.mdDoc "Port number for HTTP traffic (descriptions, SOAP, media transfer).";
+        description = "Port number for HTTP traffic (descriptions, SOAP, media transfer).";
       };
       options.db_dir = mkOption {
         type = types.path;
         default = "/var/cache/minidlna";
         example = "/tmp/minidlna";
-        description = lib.mdDoc "Specify the directory where you want MiniDLNA to store its database and album art cache.";
+        description = "Specify the directory where you want MiniDLNA to store its database and album art cache.";
       };
       options.friendly_name = mkOption {
         type = types.str;
         default = config.networking.hostName;
         defaultText = literalExpression "config.networking.hostName";
         example = "rpi3";
-        description = lib.mdDoc "Name that the DLNA server presents to clients.";
+        description = "Name that the DLNA server presents to clients.";
       };
       options.root_container = mkOption {
         type = types.str;
         default = "B";
         example = ".";
-        description = lib.mdDoc "Use a different container as the root of the directory tree presented to clients.";
+        description = "Use a different container as the root of the directory tree presented to clients.";
       };
       options.log_level = mkOption {
         type = types.str;
         default = "warn";
         example = "general,artwork,database,inotify,scanner,metadata,http,ssdp,tivo=warn";
-        description = lib.mdDoc "Defines the type of messages that should be logged and down to which level of importance.";
+        description = "Defines the type of messages that should be logged and down to which level of importance.";
       };
       options.inotify = mkOption {
         type = types.enum [ "yes" "no" ];
         default = "no";
-        description = lib.mdDoc "Whether to enable inotify monitoring to automatically discover new files.";
+        description = "Whether to enable inotify monitoring to automatically discover new files.";
       };
       options.enable_tivo = mkOption {
         type = types.enum [ "yes" "no" ];
         default = "no";
-        description = lib.mdDoc "Support for streaming .jpg and .mp3 files to a TiVo supporting HMO.";
+        description = "Support for streaming .jpg and .mp3 files to a TiVo supporting HMO.";
       };
       options.wide_links = mkOption {
         type = types.enum [ "yes" "no" ];
         default = "no";
-        description = lib.mdDoc "Set this to yes to allow symlinks that point outside user-defined `media_dir`.";
+        description = "Set this to yes to allow symlinks that point outside user-defined `media_dir`.";
       };
     };
   };
@@ -141,7 +143,7 @@ in
         CacheDirectory = "minidlna";
         RuntimeDirectory = "minidlna";
         PIDFile = "/run/minidlna/pid";
-        ExecStart = "${pkgs.minidlna}/sbin/minidlnad -S -P /run/minidlna/pid -f ${settingsFile}";
+        ExecStart = "${lib.getExe cfg.package} -S -P /run/minidlna/pid -f ${settingsFile}";
       };
     };
   };

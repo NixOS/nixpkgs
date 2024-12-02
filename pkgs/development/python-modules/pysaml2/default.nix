@@ -1,37 +1,40 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, defusedxml
-, fetchFromGitHub
-, importlib-resources
-, poetry-core
-, pyasn1
-, pymongo
-, pyopenssl
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, requests
-, responses
-, setuptools
-, substituteAll
-, xmlschema
-, xmlsec
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  defusedxml,
+  fetchFromGitHub,
+  paste,
+  poetry-core,
+  pyasn1,
+  pymongo,
+  pyopenssl,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  repoze-who,
+  requests,
+  responses,
+  setuptools,
+  substituteAll,
+  xmlschema,
+  xmlsec,
+  zope-interface,
 }:
 
 buildPythonPackage rec {
   pname = "pysaml2";
-  version = "7.4.2";
+  version = "7.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "IdentityPython";
-    repo = pname;
+    repo = "pysaml2";
     rev = "refs/tags/v${version}";
-    hash = "sha256-f8qd1Mfy32CYH9/PshfMMBviDg7OhOPlwz69bPjlYbg=";
+    hash = "sha256-M/tdKGu6K38TeBZc8/dt376bHhPB0svHB3iis/se0DY=";
   };
 
   patches = [
@@ -46,6 +49,8 @@ buildPythonPackage rec {
     sed -i 's/2999\(-.*T\)/2029\1/g' tests/*.xml
   '';
 
+  pythonRelaxDeps = [ "xmlschema" ];
+
   nativeBuildInputs = [
     poetry-core
   ];
@@ -59,9 +64,15 @@ buildPythonPackage rec {
     requests
     setuptools
     xmlschema
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
   ];
+
+  optional-dependencies = {
+    s2repoze = [
+      paste
+      repoze-who
+      zope-interface
+    ];
+  };
 
   nativeCheckInputs = [
     pyasn1
@@ -78,15 +89,13 @@ buildPythonPackage rec {
     "test_conf_syslog"
   ];
 
-  pythonImportsCheck = [
-    "saml2"
-  ];
+  pythonImportsCheck = [ "saml2" ];
 
   meta = with lib; {
     description = "Python implementation of SAML Version 2 Standard";
     homepage = "https://github.com/IdentityPython/pysaml2";
     changelog = "https://github.com/IdentityPython/pysaml2/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.security.audit;
   enabled = cfg.enable == "lock" || cfg.enable;
@@ -29,7 +26,7 @@ let
 
     # Put the rules in a temporary file owned and only readable by root
     rulesfile="$(mktemp)"
-    ${concatMapStrings (x: "echo '${x}' >> $rulesfile\n") cfg.rules}
+    ${lib.concatMapStrings (x: "echo '${x}' >> $rulesfile\n") cfg.rules}
 
     # Apply the requested rules
     auditctl -R "$rulesfile"
@@ -53,10 +50,10 @@ let
 in {
   options = {
     security.audit = {
-      enable = mkOption {
-        type        = types.enum [ false true "lock" ];
+      enable = lib.mkOption {
+        type        = lib.types.enum [ false true "lock" ];
         default     = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to enable the Linux audit system. The special `lock` value can be used to
           enable auditing and prevent disabling it until a restart. Be careful about locking
           this, as it will prevent you from changing your audit configuration until you
@@ -64,35 +61,35 @@ in {
         '';
       };
 
-      failureMode = mkOption {
-        type        = types.enum [ "silent" "printk" "panic" ];
+      failureMode = lib.mkOption {
+        type        = lib.types.enum [ "silent" "printk" "panic" ];
         default     = "printk";
-        description = lib.mdDoc "How to handle critical errors in the auditing system";
+        description = "How to handle critical errors in the auditing system";
       };
 
-      backlogLimit = mkOption {
-        type        = types.int;
+      backlogLimit = lib.mkOption {
+        type        = lib.types.int;
         default     = 64; # Apparently the kernel default
-        description = lib.mdDoc ''
+        description = ''
           The maximum number of outstanding audit buffers allowed; exceeding this is
           considered a failure and handled in a manner specified by failureMode.
         '';
       };
 
-      rateLimit = mkOption {
-        type        = types.int;
+      rateLimit = lib.mkOption {
+        type        = lib.types.int;
         default     = 0;
-        description = lib.mdDoc ''
+        description = ''
           The maximum messages per second permitted before triggering a failure as
           specified by failureMode. Setting it to zero disables the limit.
         '';
       };
 
-      rules = mkOption {
-        type        = types.listOf types.str; # (types.either types.str (types.submodule rule));
+      rules = lib.mkOption {
+        type        = lib.types.listOf lib.types.str; # (types.either types.str (types.submodule rule));
         default     = [];
         example     = [ "-a exit,always -F arch=b64 -S execve" ];
-        description = lib.mdDoc ''
+        description = ''
           The ordered audit rules, with each string appearing as one line of the audit.rules file.
         '';
       };

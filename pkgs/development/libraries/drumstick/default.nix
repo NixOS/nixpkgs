@@ -1,44 +1,81 @@
-{ lib, stdenv, fetchurl
-, cmake, docbook_xml_dtd_45, docbook_xsl, doxygen, graphviz-nox, pkg-config, qttools, wrapQtAppsHook
-, alsa-lib, fluidsynth, libpulseaudio, qtbase, qtsvg, sonivox
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  doxygen,
+  graphviz-nox,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  alsa-lib,
+  fluidsynth,
+  libpulseaudio,
+  qtbase,
+  qtsvg,
+  qtwayland,
+  sonivox,
+  qt5compat ? null,
 }:
 
+let
+  isQt6 = lib.versions.major qtbase.version == "6";
+in
 stdenv.mkDerivation rec {
   pname = "drumstick";
-  version = "2.7.2";
+  version = "2.9.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/drumstick/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-5XxG5ur584fgW4oCONgMiWzV48Q02HEdmpb9+YhBFe0=";
+    hash = "sha256-U5Cm9pTDxC8NzyQfjaC/eBBDUWELV4jq4ov4QGefM9g=";
   };
 
-  patches = [
-    ./drumstick-plugins.patch
-  ];
+  patches = [ ./drumstick-plugins.patch ];
 
   postPatch = ''
     substituteInPlace library/rt/backendmanager.cpp --subst-var out
   '';
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   nativeBuildInputs = [
-    cmake docbook_xml_dtd_45 docbook_xml_dtd_45 docbook_xsl doxygen graphviz-nox pkg-config qttools wrapQtAppsHook
+    cmake
+    docbook_xml_dtd_45
+    docbook_xml_dtd_45
+    docbook_xsl
+    doxygen
+    graphviz-nox
+    pkg-config
+    qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
-    alsa-lib fluidsynth libpulseaudio qtbase qtsvg sonivox
-  ];
+    alsa-lib
+    fluidsynth
+    libpulseaudio
+    qtbase
+    qtsvg
+    qtwayland
+    sonivox
+  ] ++ lib.optionals isQt6 [ qt5compat ];
 
   cmakeFlags = [
-    "-DUSE_DBUS=ON"
+    (lib.cmakeBool "USE_DBUS" true)
+    (lib.cmakeBool "USE_QT5" (!isQt6))
   ];
 
   meta = with lib; {
-    maintainers = [];
-    description = "MIDI libraries for Qt5/C++";
+    description = "MIDI libraries for Qt/C++";
     homepage = "https://drumstick.sourceforge.io/";
     license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ wegank ];
     platforms = platforms.linux;
   };
 }

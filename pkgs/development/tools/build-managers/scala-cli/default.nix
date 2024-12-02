@@ -22,7 +22,7 @@ in
 stdenv.mkDerivation {
   inherit pname version;
   nativeBuildInputs = [ installShellFiles makeWrapper ]
-    ++ lib.optional stdenv.isLinux autoPatchelfHook;
+    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
   buildInputs =
     assert lib.assertMsg (lib.versionAtLeast jre.version "17.0.0") ''
       scala-cli requires Java 17 or newer, but ${jre.name} is ${jre.version}
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
   # We need to call autopatchelf before generating completions
   dontAutoPatchelf = true;
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     autoPatchelf $out
   '' + ''
     # hack to ensure the completion function looks right
@@ -74,6 +74,7 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     description = "Command-line tool to interact with the Scala language";
+    mainProgram = "scala-cli";
     maintainers = [ maintainers.kubukoz ];
     inherit platforms;
   };

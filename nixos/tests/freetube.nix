@@ -24,7 +24,7 @@ let
       nodes = { "${name}" = machine; };
       meta.maintainers = with pkgs.lib.maintainers; [ kirillrdy ];
       # time-out on ofborg
-      meta.broken = pkgs.stdenv.isAarch64;
+      meta.broken = pkgs.stdenv.hostPlatform.isAarch64;
       enableOCR = true;
 
       testScript = ''
@@ -35,9 +35,9 @@ let
         machine.wait_for_text('Your Subscription list is currently empty')
         machine.screenshot("main.png")
         machine.send_key("ctrl-comma")
-        machine.wait_for_text('General Settings', timeout=30)
+        machine.wait_for_text('Data', timeout=60)
         machine.screenshot("preferences.png")
       '';
     });
 in
-builtins.mapAttrs (k: v: mkTest k v { }) tests
+builtins.mapAttrs (k: v: mkTest k v) tests

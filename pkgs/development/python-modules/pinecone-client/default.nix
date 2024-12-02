@@ -1,61 +1,63 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, poetry-core
-, pythonRelaxDepsHook
-, numpy
-, pyyaml
-, python-dateutil
-, urllib3
-, tqdm
-, dnspython
-, requests
-, typing-extensions
-, loguru
+{
+  lib,
+  buildPythonPackage,
+  dnspython,
+  fetchPypi,
+  loguru,
+  numpy,
+  poetry-core,
+  python-dateutil,
+  pythonOlder,
+  pyyaml,
+  requests,
+  setuptools,
+  tqdm,
+  typing-extensions,
+  urllib3,
 }:
+
 buildPythonPackage rec {
   pname = "pinecone-client";
-  version = "3.0.3";
+  version = "4.1.2";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "pinecone_client";
     inherit version;
-    hash = "sha256-KtPvdiftxNnuJI2XgYYcQ0HW0noVvAX2vvU9lYg303Q=";
+    hash = "sha256-+onGBXkuyU3jbUyVhSULR7C2Q0B0VwU+yokAhCS+YoE=";
   };
 
-  nativeBuildInputs = [
+  pythonRelaxDeps = [ "urllib3" ];
+
+
+  build-system = [
     setuptools
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
-    numpy
-    pyyaml
-    python-dateutil
-    urllib3
-    tqdm
+  dependencies = [
     dnspython
-    requests
-    typing-extensions
     loguru
+    numpy
+    python-dateutil
+    pyyaml
+    requests
+    tqdm
+    typing-extensions
+    urllib3
   ];
 
-  pythonRelaxDeps = [
-    "urllib3"
-  ];
-
+  # Tests require network access
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pinecone"
-  ];
+  pythonImportsCheck = [ "pinecone" ];
 
   meta = with lib; {
+    description = "Pinecone python client";
     homepage = "https://www.pinecone.io/";
-    description = "The Pinecone python client";
+    changelog = "https://github.com/pinecone-io/pinecone-python-client/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
   };

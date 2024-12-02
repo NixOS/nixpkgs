@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, speg
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  speg,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cson" ];
 
   meta = with lib; {
-    description = "A python parser for the Coffeescript Object Notation (CSON)";
+    description = "Python parser for the Coffeescript Object Notation (CSON)";
     homepage = "https://github.com/avakar/pycson";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ xworld21 ];

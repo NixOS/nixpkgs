@@ -1,57 +1,57 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, jsonschema
-, poetry-core
-, pymacaroons
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jsonschema,
+  poetry-core,
+  pymacaroons,
+  pytest-cov-stub,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pypitoken";
   version = "7.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ewjoachim";
-    repo = pname;
+    repo = "pypitoken";
     rev = "refs/tags/${version}";
     hash = "sha256-1SUR6reZywgFpSdD49E5PjEDNrlvsHH4TK6SkXStUws=";
   };
 
   postPatch = ''
-    sed -i "/--cov/d" setup.cfg
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pymacaroons
     jsonschema
     typing-extensions
   ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "pypitoken"
-  ];
+  pythonImportsCheck = [ "pypitoken" ];
 
   meta = with lib; {
     description = "Library for generating and manipulating PyPI tokens";
     homepage = "https://pypitoken.readthedocs.io/";
-    changelog = "https://github.com/ewjoachim/pypitoken/releases/tag/6.0.3${version}";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/ewjoachim/pypitoken/releases/tag/${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

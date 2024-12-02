@@ -33,15 +33,15 @@ stdenv.mkDerivation ({
   pname = product;
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optional stdenv.isLinux autoPatchelfHook
+    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
     ++ extraNativeBuildInputs;
 
   buildInputs = [
-    stdenv.cc.cc.lib # libstdc++.so.6
+    (lib.getLib stdenv.cc.cc) # libstdc++.so.6
     zlib
     libxcrypt-legacy # libcrypt.so.1 (default is .2 now)
   ]
-  ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Foundation
+  ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Foundation
   ++ extraBuildInputs;
 
   unpackPhase = ''
@@ -72,5 +72,6 @@ stdenv.mkDerivation ({
   meta = ({
     inherit (graalvm-ce.meta) homepage license sourceProvenance maintainers platforms;
     description = "High-Performance Polyglot VM (Product: ${product})";
+    mainProgram = "js";
   } // (args.meta or { }));
 } // extraArgs)

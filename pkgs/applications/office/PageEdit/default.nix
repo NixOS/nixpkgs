@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DINSTALL_BUNDLED_DICTS=0" ];
 
   installPhase =
-    if stdenv.isDarwin then ''
+    if stdenv.hostPlatform.isDarwin then ''
       runHook preInstall
 
       mkdir -p $out/Applications
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "ePub XHTML Visual Editor";
+    mainProgram = "pageedit";
     homepage = "https://sigil-ebook.com/pageedit/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.pasqui23 ];

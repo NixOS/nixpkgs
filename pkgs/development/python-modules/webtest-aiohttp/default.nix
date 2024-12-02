@@ -1,12 +1,13 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pytest-aiohttp
-, pytestCheckHook
-, pythonOlder
-, webtest
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytest-aiohttp,
+  pytestCheckHook,
+  pythonOlder,
+  webtest,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    webtest
-  ];
+  propagatedBuildInputs = [ webtest ];
 
   nativeCheckInputs = [
     aiohttp
@@ -41,9 +40,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "webtest_aiohttp"
-  ];
+  pythonImportsCheck = [ "webtest_aiohttp" ];
 
   meta = with lib; {
     changelog = "https://github.com/sloria/webtest-aiohttp/blob/${src.rev}/CHANGELOG.rst";

@@ -1,20 +1,17 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-update
+#!nix-shell -i bash -p curl jq nixpkgs-fmt nix-update xmlstarlet
 
 set -eu -o pipefail
 
 source_file=pkgs/development/python-modules/mypy-boto3/default.nix
 
-version="1.34.0"
-
-nix-update python311Packages.botocore-stubs --commit --build
+#nix-update python312Packages.botocore-stubs --commit --build
 
 packages=(
   mypy-boto3-accessanalyzer
   mypy-boto3-account
   mypy-boto3-acm
   mypy-boto3-acm-pca
-  mypy-boto3-alexaforbusiness
   mypy-boto3-amp
   mypy-boto3-amplify
   mypy-boto3-amplifybackend
@@ -41,7 +38,6 @@ packages=(
   mypy-boto3-autoscaling-plans
   mypy-boto3-backup
   mypy-boto3-backup-gateway
-  mypy-boto3-backupstorage
   mypy-boto3-batch
   mypy-boto3-billingconductor
   mypy-boto3-braket
@@ -142,7 +138,6 @@ packages=(
   mypy-boto3-frauddetector
   mypy-boto3-fsx
   mypy-boto3-gamelift
-#  mypy-boto3-gamesparks
   mypy-boto3-glacier
   mypy-boto3-globalaccelerator
   mypy-boto3-glue
@@ -153,7 +148,6 @@ packages=(
   mypy-boto3-guardduty
   mypy-boto3-health
   mypy-boto3-healthlake
-  mypy-boto3-honeycode
   mypy-boto3-iam
   mypy-boto3-identitystore
   mypy-boto3-imagebuilder
@@ -164,7 +158,6 @@ packages=(
   mypy-boto3-iot
   mypy-boto3-iot-data
   mypy-boto3-iot-jobs-data
-  mypy-boto3-iot-roborunner
   mypy-boto3-iot1click-devices
   mypy-boto3-iot1click-projects
   mypy-boto3-iotanalytics
@@ -212,7 +205,6 @@ packages=(
   mypy-boto3-lookoutvision
   mypy-boto3-m2
   mypy-boto3-machinelearning
-  #mypy-boto3-macie
   mypy-boto3-macie2
   mypy-boto3-managedblockchain
   mypy-boto3-managedblockchain-query
@@ -237,7 +229,7 @@ packages=(
   mypy-boto3-migrationhub-config
   mypy-boto3-migrationhuborchestrator
   mypy-boto3-migrationhubstrategy
-  mypy-boto3-mobile
+  # mypy-boto3-mobile
   mypy-boto3-mq
   mypy-boto3-mturk
   mypy-boto3-mwaa
@@ -367,20 +359,33 @@ packages=(
   mypy-boto3-xray)
 
 for package in "${packages[@]}"; do
-  echo "Updating ${package}"
+  package_short_name="${package#mypy-boto3-}"
+  old_version=$(awk -v pkg="\"$package_short_name\"" -F'"' '$0 ~ pkg {printf $4}' ${source_file})
+  version=$(curl -s https://pypi.org/pypi/${package}/json | jq -r '.info.version')
 
-  url="https://pypi.io/packages/source/m/${package}/${package}-${version}.tar.gz"
-  hash=$(nix-prefetch-url --type sha256 $url)
-  sri_hash="$(nix hash to-sri --type sha256 $hash)"
+  echo "Updating ${package} from ${old_version} to ${version}"
 
-  awk -i inplace -v package="$package" -v new_version="$version" -v new_sha256="$sri_hash" '
-    $1 == package {
-      $5 = "\"" new_version "\"";
-      $6 = "\"" new_sha256 "\";";
-    }
-    {print}
-  ' $source_file
+  if [ "${version}" != "${old_version}" ]; then
+    url="https://pypi.io/packages/source/m/${package//-/_}/${package//-/_}-${version}.tar.gz"
+    hash=$(nix-prefetch-url --type sha256 $url)
+    sri_hash="$(nix hash to-sri --type sha256 $hash)"
+
+    awk -i inplace -v pkg="\"$package_short_name\"" -v new_version="$version" -v new_sha256="$sri_hash" '
+      # Match the line containing the package name
+      $0 ~ pkg && $0 ~ /buildMypyBoto3Package/ {
+        # Update the version
+        sub(/"[^"]+"/, "\"" new_version "\"", $3);
+        print;
+        # Update the next line with the new sha256
+        getline;
+        sub(/"[^"]+"/, "\"" new_sha256 "\"");
+      }
+      { print }
+    ' ${source_file}
+
+    nixfmt ${source_file}
+
+    git commit ${source_file} -m "python312Packages.${package}: ${old_version} -> ${version}"
+  fi
 
 done
-
-nixpkgs-fmt $source_file

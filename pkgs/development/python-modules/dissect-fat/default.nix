@@ -1,33 +1,34 @@
-{ lib
-, buildPythonPackage
-, dissect-cstruct
-, dissect-util
-, fetchFromGitHub
-, setuptools
-, setuptools-scm
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dissect-cstruct,
+  dissect-util,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-fat";
-  version = "3.7";
+  version = "3.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.fat";
     rev = "refs/tags/${version}";
-    hash = "sha256-YfWshytfj4p2MqLpzE3b1/RtrL1/+Xd/5+RNbrH/Jfc=";
+    hash = "sha256-LGSIuRclytD4RHHzq2Zj1DG01RAFINj4+5ErbQ3M57E=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];
@@ -35,9 +36,7 @@ buildPythonPackage rec {
   # dissect.fat.exceptions.InvalidBPB: Invalid BS_jmpBoot
   doCheck = false;
 
-  pythonImportsCheck = [
-    "dissect.fat"
-  ];
+  pythonImportsCheck = [ "dissect.fat" ];
 
   meta = with lib; {
     description = "Dissect module implementing a parser for the FAT file system";

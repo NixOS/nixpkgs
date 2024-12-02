@@ -1,16 +1,15 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
-  cfg = config.i18n.inputMethod.ibus;
+  imcfg = config.i18n.inputMethod;
+  cfg = imcfg.ibus;
   ibusPackage = pkgs.ibus-with-plugins.override { plugins = cfg.engines; };
-  ibusEngine = types.package // {
+  ibusEngine = lib.types.mkOptionType {
     name  = "ibus-engine";
-    check = x: (lib.types.package.check x) && (attrByPath ["meta" "isIbusEngine"] false x);
+    inherit (lib.types.package) descriptionClass merge;
+    check = x: (lib.types.package.check x) && (lib.attrByPath ["meta" "isIbusEngine"] false x);
   };
 
-  impanel = optionalString (cfg.panel != null) "--panel=${cfg.panel}";
+  impanel = lib.optionalString (cfg.panel != null) "--panel=${cfg.panel}";
 
   ibusAutostart = pkgs.writeTextFile {
     name = "autostart-ibus-daemon";
@@ -27,33 +26,32 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "programs" "ibus" "plugins" ] [ "i18n" "inputMethod" "ibus" "engines" ])
+    (lib.mkRenamedOptionModule [ "programs" "ibus" "plugins" ] [ "i18n" "inputMethod" "ibus" "engines" ])
   ];
 
   options = {
     i18n.inputMethod.ibus = {
-      engines = mkOption {
-        type    = with types; listOf ibusEngine;
+      engines = lib.mkOption {
+        type    = with lib.types; listOf ibusEngine;
         default = [];
-        example = literalExpression "with pkgs.ibus-engines; [ mozc hangul ]";
+        example = lib.literalExpression "with pkgs.ibus-engines; [ mozc hangul ]";
         description =
           let
-            enginesDrv = filterAttrs (const isDerivation) pkgs.ibus-engines;
-            engines = concatStringsSep ", "
-              (map (name: "`${name}`") (attrNames enginesDrv));
-          in
-            lib.mdDoc "Enabled IBus engines. Available engines are: ${engines}.";
+            enginesDrv = lib.filterAttrs (lib.const lib.isDerivation) pkgs.ibus-engines;
+            engines = lib.concatStringsSep ", "
+              (map (name: "`${name}`") (lib.attrNames enginesDrv));
+          in "Enabled IBus engines. Available engines are: ${engines}.";
       };
-      panel = mkOption {
-        type = with types; nullOr path;
+      panel = lib.mkOption {
+        type = with lib.types; nullOr path;
         default = null;
-        example = literalExpression ''"''${pkgs.plasma5Packages.plasma-desktop}/libexec/kimpanel-ibus-panel"'';
-        description = lib.mdDoc "Replace the IBus panel with another panel.";
+        example = lib.literalExpression ''"''${pkgs.plasma5Packages.plasma-desktop}/libexec/kimpanel-ibus-panel"'';
+        description = "Replace the IBus panel with another panel.";
       };
     };
   };
 
-  config = mkIf (config.i18n.inputMethod.enabled == "ibus") {
+  config = lib.mkIf (imcfg.enable && imcfg.type == "ibus") {
     i18n.inputMethod.package = ibusPackage;
 
     environment.systemPackages = [
@@ -75,7 +73,7 @@ in
       XMODIFIERS = "@im=ibus";
     };
 
-    xdg.portal.extraPortals = mkIf config.xdg.portal.enable [
+    xdg.portal.extraPortals = lib.mkIf config.xdg.portal.enable [
       ibusPackage
     ];
   };

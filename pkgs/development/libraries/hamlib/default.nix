@@ -5,20 +5,21 @@
 , swig
 , gd
 , ncurses
-, python3
+, python311
 , libxml2
 , tcl
 , libusb-compat-0_1
 , pkg-config
 , boost
 , libtool
-, perlPackages
 , pythonBindings ? true
 , tclBindings ? true
 , perlBindings ? stdenv.buildPlatform == stdenv.hostPlatform
 , buildPackages
 }:
-
+let
+  python3 = python311; # needs distutils and imp
+in
 stdenv.mkDerivation rec {
   pname = "hamlib";
   version = "3.3";

@@ -5,6 +5,7 @@
 , python3
 , binutils-unwrapped
 , findutils
+, flashrom
 , gawk
 , kmod
 , pciutils
@@ -12,13 +13,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raspberrypi-eeprom";
-  version = "2024.01.05-2712";
+  version = "2024.11.08-2712";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
-    rev = "refs/tags/v.${finalAttrs.version}";
-    hash = "sha256-/DWnGtNyN9DEDNdz+mOBWu38bGj7YIbbgqUVN/B2VcM=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-reZFKuOtY+mjoq6ie7S+VwYnbcl9f488HzWFhR+dqC8=";
   };
 
   buildInputs = [ python3 ];
@@ -48,15 +49,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     for i in rpi-eeprom-update rpi-eeprom-config; do
       wrapProgram $out/bin/$i \
         --set FIRMWARE_ROOT "$out/lib/firmware/raspberrypi/bootloader" \
-        ${lib.optionalString stdenvNoCC.isAarch64 "--set VCMAILBOX ${libraspberrypi}/bin/vcmailbox"} \
+        ${lib.optionalString stdenvNoCC.hostPlatform.isAarch64 "--set VCMAILBOX ${libraspberrypi}/bin/vcmailbox"} \
         --prefix PATH : "${lib.makeBinPath ([
           binutils-unwrapped
           findutils
+          flashrom
           gawk
           kmod
           pciutils
           (placeholder "out")
-        ] ++ lib.optionals stdenvNoCC.isAarch64 [
+        ] ++ lib.optionals stdenvNoCC.hostPlatform.isAarch64 [
           libraspberrypi
         ])}"
     done

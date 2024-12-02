@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/octodns/octodns-hetzner/";
     changelog = "https://github.com/octodns/octodns-hetzner/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ janik ];
+    maintainers = [ ];
   };
 }

@@ -1,50 +1,60 @@
-{ buildPythonPackage
-, colorama
-, coverage
-, distro
-, fetchFromGitHub
-, httpretty
-, lib
-, mock
-, psutil
-, pytest
-, pytest-socket
-, python-dateutil
-, pyyaml
-, requests
-, requests-toolbelt
-, stdenv
-, setuptools
-, stevedore
-, tomlkit
-, tox
-, tqdm
-, typeguard
+{
+  lib,
+  stdenv,
+  autoPatchelfHook,
+  buildPythonPackage,
+  colorama,
+  distro,
+  fetchFromGitHub,
+  packaging,
+  psutil,
+  python-dateutil,
+  pythonOlder,
+  pyyaml,
+  requests-cache,
+  requests-toolbelt,
+  requests,
+  setuptools,
+  stevedore,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "e3-core";
-  version = "22.3.1";
+  version = "22.6.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "e3-core";
-    rev = "v${version}";
-    hash = "sha256-4StHOJldfeqApdF6D14Euzg9HvZ2e7G4/OQ0UrEbEIw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6rClGDo8KhBbOg/Rw0nVISVtOAACf5cwSafNInlBGCw=";
   };
 
-  patches = [ ./0001-use-distro-over-ld.patch ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
-  propagatedBuildInputs = [
-    colorama pyyaml python-dateutil requests requests-toolbelt tqdm stevedore
-  ] ++ lib.optional stdenv.isLinux [
-    # See setup.py:24. These are required only on Linux. Darwin has its own set
-    # of requirements.
-    psutil distro
-  ];
+  dependencies =
+    [
+      colorama
+      packaging
+      python-dateutil
+      pyyaml
+      requests
+      requests-cache
+      requests-toolbelt
+      stevedore
+      tqdm
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux [
+      # See https://github.com/AdaCore/e3-core/blob/v22.6.0/pyproject.toml#L37-L42
+      # These are required only on Linux. Darwin has its own set of requirements
+      psutil
+      distro
+    ];
 
   pythonImportsCheck = [ "e3" ];
 
@@ -52,7 +62,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    changelog = "https://github.com/AdaCore/e3-core/releases/tag/${src.rev}";
+    changelog = "https://github.com/AdaCore/e3-core/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     homepage = "https://github.com/AdaCore/e3-core/";
     description = "Core framework for developing portable automated build systems";
     license = licenses.gpl3Only;

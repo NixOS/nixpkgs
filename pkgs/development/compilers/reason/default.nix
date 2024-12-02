@@ -1,54 +1,35 @@
-{ lib, callPackage, stdenv, makeWrapper, fetchurl, ocaml, findlib, dune_3
-, ncurses
-, fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, utop, cppo, ppx_derivers
+{ lib, callPackage, buildDunePackage, fetchurl
+, fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, cppo, ppx_derivers
 , dune-build-info
 }:
 
-stdenv.mkDerivation rec {
-  pname = "ocaml${ocaml.version}-reason";
-  version = "3.10.0";
+buildDunePackage rec {
+  pname = "reason";
+  version = "3.13.0";
+
+  minimalOCamlVersion = "4.11";
 
   src = fetchurl {
     url = "https://github.com/reasonml/reason/releases/download/${version}/reason-${version}.tbz";
-    hash = "sha256-F+rUwoZK9yc/VtCtYsRWS+Lq3nbT2oex04HtW0T0Zss=";
+    hash = "sha256-3yVEYGvIJKZwguIBGCbnoc3nrwzLW6RX6Tf+AYw85+Q=";
   };
 
-  strictDeps = true;
   nativeBuildInputs = [
-    makeWrapper
-    menhir
-    ocaml
     menhir
     cppo
-    dune_3
-    findlib
   ];
 
   buildInputs = [
     dune-build-info
     fix
     menhirSdk
-    ppxlib
-    utop
-  ] ++ lib.optional (lib.versionOlder ocaml.version "4.07") ncurses;
-
-  propagatedBuildInputs = [
-    menhirLib
     merlin-extend
-    ppx_derivers
   ];
 
-  buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
-
-  installPhase = ''
-    runHook preInstall
-    dune install --prefix=$out --libdir=$OCAMLFIND_DESTDIR
-    wrapProgram $out/bin/rtop \
-      --prefix PATH : "${utop}/bin" \
-      --prefix CAML_LD_LIBRARY_PATH : "$CAML_LD_LIBRARY_PATH" \
-      --prefix OCAMLPATH : "$OCAMLPATH:$OCAMLFIND_DESTDIR"
-    runHook postInstall
-  '';
+  propagatedBuildInputs = [
+    ppxlib
+    menhirLib
+  ];
 
   passthru.tests = {
     hello = callPackage ./tests/hello { };
@@ -57,9 +38,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://reasonml.github.io/";
     downloadPage = "https://github.com/reasonml/reason";
-    description = "Facebook's friendly syntax to OCaml";
+    description = "User-friendly programming language built on OCaml";
     license = licenses.mit;
-    inherit (ocaml.meta) platforms;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

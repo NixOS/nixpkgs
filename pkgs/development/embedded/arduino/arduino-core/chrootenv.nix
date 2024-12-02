@@ -3,7 +3,8 @@ let
   arduino-unwrapped = arduino-core-unwrapped.override { inherit withGui withTeensyduino; };
 in
 buildFHSEnv {
-  name = "arduino";
+  pname = "arduino";
+  inherit (arduino-core-unwrapped) version;
 
   targetPkgs =
     pkgs: (with pkgs; [
@@ -14,7 +15,6 @@ buildFHSEnv {
         pyserial
       ]))
     ]);
-  multiArch = false;
 
   extraInstallCommands = ''
     ${lib.optionalString withGui ''

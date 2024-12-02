@@ -1,42 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, intltool
-, pkg-config
-, gtk2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "screentest";
-  version = "unstable-2021-05-10";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "TobiX";
     repo = "screentest";
-    rev = "780e6cbbbbd6ba93e246e7747fe593b40c4e2747";
-    hash = "sha256-TJ47c77vQ/aRBJ2uEiFLuAR4dd4CMEo+iAAx0HCFbmA=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-dbag1EAD+6+srfu/eqSl3CWlZtSopioQjyBQRJcUggA=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    autoreconfHook
-    intltool
+    meson
+    ninja
     pkg-config
-    gtk2 # for autoconf macros
+    wrapGAppsHook3
   ];
 
-  buildInputs = [
-    gtk2
-  ];
-
-  meta = with lib; {
-    description = "A simple screen testing tool";
+  meta = {
+    description = "Simple screen testing tool";
+    mainProgram = "screentest";
     homepage = "https://github.com/TobiX/screentest";
-    changelog = "https://github.com/TobiX/screentest/blob/${finalAttrs.src.rev}/NEWS";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ evils ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/TobiX/screentest/blob/${finalAttrs.version}/NEWS";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ evils ];
+    platforms = lib.platforms.unix;
   };
 })

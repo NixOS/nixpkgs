@@ -3,7 +3,7 @@
 rec {
   gen =
 
-    { version, nativeVersion, hash,
+    { version, hash,
 
       # The default JDK/JRE that will be used for derived Gradle packages.
       # A current LTS version of a JDK is a good choice.
@@ -23,20 +23,34 @@ rec {
         "x86_64-darwin"
         "x86_64-linux"
         "x86_64-windows"
-      ]
+      ],
+
+      # Extra attributes to be merged into the resulting derivation's
+      # meta attribute.
+      meta ? {}
     }:
 
-    { lib, stdenv, fetchurl, makeWrapper, unzip, ncurses5, ncurses6,
+    { lib
+    , stdenv
+    , fetchurl
+    , makeWrapper
+    , unzip
+    , ncurses5
+    , ncurses6
+    , testers
+    , runCommand
+    , writeText
+    , autoPatchelfHook
 
-      # The JDK/JRE used for running Gradle.
-      java ? defaultJava,
+    # The JDK/JRE used for running Gradle.
+    , java ? defaultJava
 
-      # Additional JDK/JREs to be registered as toolchains.
-      # See https://docs.gradle.org/current/userguide/toolchains.html
-      javaToolchains ? [ ]
+    # Additional JDK/JREs to be registered as toolchains.
+    # See https://docs.gradle.org/current/userguide/toolchains.html
+    , javaToolchains ? [ ]
     }:
 
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "gradle";
       inherit version;
 
@@ -48,8 +62,22 @@ rec {
 
       dontBuild = true;
 
-      nativeBuildInputs = [ makeWrapper unzip ];
-      buildInputs = [ java ];
+      nativeBuildInputs = [
+        makeWrapper
+        unzip
+      ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+        autoPatchelfHook
+      ];
+
+      buildInputs = [
+        java
+        stdenv.cc.cc
+        ncurses5
+        ncurses6
+      ];
+
+      # We only need to patchelf some libs embedded in JARs.
+      dontAutoPatchelf = true;
 
       installPhase = with builtins;
         let
@@ -74,21 +102,25 @@ rec {
             --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain${toolchain.property}"
         '';
 
-      dontFixup = !stdenv.isLinux;
+      dontFixup = !stdenv.hostPlatform.isLinux;
 
-      fixupPhase = let arch = if stdenv.is64bit then "amd64" else "i386";
+      fixupPhase = let arch = if stdenv.hostPlatform.is64bit then "amd64" else "i386";
       in ''
+        . ${./patching.sh}
+
+        nativeVersion="$(extractVersion native-platform $out/lib/gradle/lib/native-platform-*.jar)"
         for variant in "" "-ncurses5" "-ncurses6"; do
-          mkdir "patching$variant"
-          pushd "patching$variant"
-          jar xf $out/lib/gradle/lib/native-platform-linux-${arch}$variant-${nativeVersion}.jar
-          patchelf \
-            --set-rpath "${stdenv.cc.cc.lib}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ncurses5 ncurses6 ]}" \
-            net/rubygrapefruit/platform/linux-${arch}$variant/libnative-platform*.so
-          jar cf native-platform-linux-${arch}$variant-${nativeVersion}.jar .
-          mv native-platform-linux-${arch}$variant-${nativeVersion}.jar $out/lib/gradle/lib/
-          popd
+          autoPatchelfInJar \
+            $out/lib/gradle/lib/native-platform-linux-${arch}$variant-''${nativeVersion}.jar \
+            "${lib.getLib stdenv.cc.cc}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ncurses5 ncurses6 ]}"
         done
+
+        # The file-events library _seems_ to follow the native-platform version, but
+        # we won’t assume that.
+        fileEventsVersion="$(extractVersion file-events $out/lib/gradle/lib/file-events-*.jar)"
+        autoPatchelfInJar \
+          $out/lib/gradle/lib/file-events-linux-${arch}-''${fileEventsVersion}.jar \
+          "${lib.getLib stdenv.cc.cc}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ]}"
 
         # The scanner doesn't pick up the runtime dependency in the jar.
         # Manually add a reference where it will be found.
@@ -98,6 +130,30 @@ rec {
         echo ${ncurses5} >> $out/nix-support/manual-runtime-dependencies
         echo ${ncurses6} >> $out/nix-support/manual-runtime-dependencies
       '';
+
+      passthru.tests = {
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = ''
+            env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
+              gradle --version
+          '';
+        };
+
+        java-application = testers.testEqualContents {
+          assertion = "can build and run a trivial Java application";
+          expected = writeText "expected" "hello\n";
+          actual = runCommand "actual" {
+            nativeBuildInputs = [ finalAttrs.finalPackage ];
+            src = ./tests/java-application;
+          } ''
+            cp -a $src/* .
+            env GRADLE_USER_HOME=$TMPDIR/gradle org.gradle.native.dir=$TMPDIR/native \
+              gradle run --no-daemon --quiet --console plain > $out
+          '';
+        };
+      };
+      passthru.jdk = defaultJava;
 
       meta = with lib; {
         inherit platforms;
@@ -118,33 +174,70 @@ rec {
           binaryNativeCode
         ];
         license = licenses.asl20;
-        maintainers = with maintainers; [ lorenzleutgeb liff ];
+        maintainers = with maintainers; [ lorenzleutgeb liff ] ++ lib.teams.java.members;
         mainProgram = "gradle";
-      };
-    };
+      } // meta;
+    });
 
   # NOTE: Default JDKs that are hardcoded below must be LTS versions
   # and respect the compatibility matrix at
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_8 = gen {
-    version = "8.6";
-    nativeVersion = "0.22-milestone-25";
-    hash = "sha256-ljHVPPPnS/pyaJOu4fiZT+5OBgxAEzWUbbohVvRA8kw=";
+    version = "8.10.2";
+    hash = "sha256-McVXE+QCM6gwOCfOtCykikcmegrUurkXcSMSHnFSTCY=";
     defaultJava = jdk21;
   };
 
   gradle_7 = gen {
     version = "7.6.4";
-    nativeVersion = "0.22-milestone-25";
     hash = "sha256-vtHaM8yg9VerE2kcd/OLtnOIEZ5HlNET4FEDm4Cvm7E=";
     defaultJava = jdk17;
   };
 
-  gradle_6 = gen {
-    version = "6.9.4";
-    nativeVersion = "0.22-milestone-20";
-    hash = "sha256-PiQCKFON6fGHcqV06ZoLqVnoPW7zUQFDgazZYxeBOJo=";
-    defaultJava = jdk11;
-  };
+  wrapGradle = {
+      lib, callPackage, mitm-cache, substituteAll, symlinkJoin, concatTextFile, makeSetupHook, nix-update-script
+    }:
+    gradle-unwrapped:
+    updateAttrPath:
+    lib.makeOverridable (args:
+    let
+      gradle = gradle-unwrapped.override args;
+    in symlinkJoin {
+      name = "gradle-${gradle.version}";
+
+      paths = [
+        (makeSetupHook { name = "gradle-setup-hook"; } (concatTextFile {
+          name = "setup-hook.sh";
+          files = [
+            (mitm-cache.setupHook)
+            (substituteAll {
+              src = ./setup-hook.sh;
+              # jdk used for keytool
+              inherit (gradle) jdk;
+              init_script = ./init-build.gradle;
+            })
+          ];
+        }))
+        gradle
+        mitm-cache
+      ];
+
+      passthru = {
+        fetchDeps = callPackage ./fetch-deps.nix { inherit mitm-cache; };
+        inherit (gradle) jdk tests;
+        unwrapped = gradle;
+      } // lib.optionalAttrs (updateAttrPath != null) {
+        updateScript = nix-update-script {
+          attrPath = updateAttrPath;
+          extraArgs = [ "--url=https://github.com/gradle/gradle" ];
+        };
+      };
+
+      meta = gradle.meta // {
+        # prefer normal gradle/mitm-cache over this wrapper, this wrapper only provides the setup hook
+        # and passthru
+        priority = (gradle.meta.priority or lib.meta.defaultPriority) + 1;
+      };
+    }) { };
 }

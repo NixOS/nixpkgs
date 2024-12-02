@@ -14,14 +14,14 @@ let
   }.${system} or throwSystem;
 
   hash = {
-    x86_64-linux = "sha256-17RtPUuFmIwxh+9mEsR9vwUHQHnXLIHEEhpV05Q9Ssw=";
-    aarch64-linux = "sha256-bJjhKf8dkOsVaaPikDrPLe+zF5CFvxvEALuzmiQuINY=";
-    armv7l-linux = "sha256-m/Ncr/+5kkC4p1/DhEfWermdsOAuekVECzR7SI1KpIQ=";
+    x86_64-linux = "sha256-oga8WQYxFeJlXhkJRpgb08QSV1vA7rfbVzwxxdl8xUw=";
+    aarch64-linux = "sha256-Xa7CGpv35fZDZjYmR3y3NUriOt1/I85556P32eP9UjQ=";
+    armv7l-linux = "sha256-k3FGn5pZX5Iqzh0J/nclQC4+n6CMrr+JPt2/rabnWvo=";
   }.${system} or throwSystem;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zrok";
-  version = "0.4.24";
+  version = "0.4.44";
 
   src = fetchzip {
     url = "https://github.com/openziti/zrok/releases/download/v${finalAttrs.version}/zrok_${finalAttrs.version}_${plat}.tar.gz";

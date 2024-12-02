@@ -1,54 +1,56 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, incremental
-, pydantic
-, pythonOlder
-, typer
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  incremental,
+  pythonOlder,
+  setuptools,
+  typer,
 }:
 
 buildPythonPackage rec {
   pname = "ovoenergy";
-  version = "1.3.1";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "timmo001";
-    repo = pname;
+    repo = "ovoenergy";
     rev = "refs/tags/${version}";
-    hash = "sha256-oeNwBmzlkE8JewSwuFG8OYigyispP4xdwO3s2CAcfW4=";
+    hash = "sha256-ZcTSf7UejEUqQo0qEXP3fWjZYRx0a3ZBNVkwS2dL3Yk=";
   };
 
-  nativeBuildInputs = [
-    incremental
-  ];
-
   postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "typer==0.6.1" "typer"
+    substituteInPlace requirements_setup.txt \
+      --replace-fail "==" ">="
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    incremental
+    setuptools
+  ];
+
+  nativeBuildInputs = [ incremental ];
+
+  dependencies = [
     aiohttp
     click
-    pydantic
     typer
   ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "ovoenergy"
-  ];
+  pythonImportsCheck = [ "ovoenergy" ];
 
   meta = with lib; {
     description = "Python client for getting data from OVO's API";
     homepage = "https://github.com/timmo001/ovoenergy";
+    changelog = "https://github.com/timmo001/ovoenergy/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

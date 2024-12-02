@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, cloudpickle
-, deepdish
-, deepmerge
-, dm-haiku
-, fetchFromGitHub
-, fetchpatch
-, jaxlib
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, sh
-, tables
-, tabulate
-, tensorboardx
-, tensorflow
-, toolz
-, torch
-, treex
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  cloudpickle,
+  deepdish,
+  deepmerge,
+  dm-haiku,
+  fetchFromGitHub,
+  fetchpatch,
+  jaxlib,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  sh,
+  tables,
+  tabulate,
+  tensorboardx,
+  tensorflow,
+  toolz,
+  torch,
+  treex,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -54,13 +55,9 @@ buildPythonPackage rec {
       --replace 'wandb = { version = "^0.12.10", optional = true }' ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  buildInputs = [
-    jaxlib
-  ];
+  buildInputs = [ jaxlib ];
 
   propagatedBuildInputs = [
     cloudpickle
@@ -76,9 +73,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pythonImportsCheck = [
-    "elegy"
-  ];
+  pythonImportsCheck = [ "elegy" ];
 
   nativeCheckInputs = [
     pytestCheckHook

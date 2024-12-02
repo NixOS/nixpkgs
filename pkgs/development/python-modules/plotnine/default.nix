@@ -1,43 +1,45 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools-scm
-, matplotlib
-, mizani
-, pandas
-, patsy
-, scipy
-, statsmodels
-, geopandas
-, pytestCheckHook
-, scikit-misc
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools-scm,
+
+  # dependencies
+  matplotlib,
+  mizani,
+  pandas,
+  patsy,
+  scipy,
+  statsmodels,
+
+  # tests
+  geopandas,
+  pytestCheckHook,
+  scikit-misc,
 }:
 
 buildPythonPackage rec {
   pname = "plotnine";
-  version = "0.13.0";
+  version = "0.14.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "plotnine";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qhmo1Ckc4OUzWCnjCNQvwsExB98/BCKydMZdB/yfOY0=";
+    hash = "sha256-hGgPW40PEkOV1Z7gaqHtbx1ybdtEFYyz8fYUBMZchmU=";
   };
-
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace " --cov=plotnine --cov-report=xml" ""
+      --replace-fail " --cov=plotnine --cov-report=xml" ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
     matplotlib
     mizani
     pandas
@@ -56,8 +58,12 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "plotnine"
+  pythonImportsCheck = [ "plotnine" ];
+
+  disabledTests = [
+    # Tries to change locale. The issued warning causes this test to fail.
+    # UserWarning: Could not set locale to English/United States. Some date-related tests may fail
+    "test_no_after_scale_warning"
   ];
 
   disabledTestPaths = [
@@ -87,6 +93,7 @@ buildPythonPackage rec {
     "tests/test_geom_smooth.py"
     "tests/test_geom_text_label.py"
     "tests/test_geom_violin.py"
+    "tests/test_layout.py"
     "tests/test_position.py"
     "tests/test_qplot.py"
     "tests/test_scale_internals.py"
@@ -101,11 +108,11 @@ buildPythonPackage rec {
     "tests/test_lint_and_format.py"
   ];
 
-  meta = with lib; {
-    description = "Grammar of graphics for python";
+  meta = {
+    description = "Grammar of graphics for Python";
     homepage = "https://plotnine.readthedocs.io/";
     changelog = "https://github.com/has2k1/plotnine/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

@@ -72,11 +72,40 @@ let
       };
     };
 
+    without-trailing-newline = stdenv.mkDerivation {
+      name = "without-trailing-newline";
+      strictDeps = false;
+      dontUnpack = true;
+      installPhase = ''
+        mkdir -p $out/bin
+        printf "#!/bin/bash" > $out/bin/test
+        chmod +x $out/bin/test
+        dontPatchShebangs=
+      '';
+      passthru = {
+        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+      };
+    };
+
+    dont-patch-builtins = stdenv.mkDerivation {
+      name = "dont-patch-builtins";
+      strictDeps = false;
+      dontUnpack = true;
+      installPhase = ''
+        mkdir -p $out/bin
+        echo "#!/usr/bin/builtin" > $out/bin/test
+        chmod +x $out/bin/test
+        dontPatchShebangs=
+      '';
+      passthru = {
+        assertion = "grep '^#!/usr/bin/builtin' $out/bin/test > /dev/null";
+      };
+    };
   };
 in
 stdenv.mkDerivation {
   name = "test-patch-shebangs";
-  passthru = { inherit (tests) bad-shebang ignores-nix-store updates-nix-store split-string; };
+  passthru = { inherit (tests) bad-shebang ignores-nix-store updates-nix-store split-string without-trailing-newline; };
   buildCommand = ''
     validate() {
       local name=$1

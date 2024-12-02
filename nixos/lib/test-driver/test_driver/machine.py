@@ -12,12 +12,13 @@ import sys
 import tempfile
 import threading
 import time
+from collections.abc import Callable, Iterable
 from contextlib import _GeneratorContextManager, nullcontext
 from pathlib import Path
 from queue import Queue
-from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
+from typing import Any
 
-from test_driver.logger import rootlog
+from test_driver.logger import AbstractLogger
 
 from .qmp import QMPSession
 
@@ -91,7 +92,7 @@ def make_command(args: list) -> str:
 
 def _perform_ocr_on_screenshot(
     screenshot_path: str, model_ids: Iterable[int]
-) -> List[str]:
+) -> list[str]:
     if shutil.which("tesseract") is None:
         raise Exception("OCR requested but enableOCR is false")
 
@@ -165,8 +166,6 @@ class StartCommand:
         )
         if not allow_reboot:
             qemu_opts += " -no-reboot"
-        # TODO: qemu script already catpures this env variable, legacy?
-        qemu_opts += " " + os.environ.get("QEMU_OPTS", "")
 
         return (
             f"{self._cmd}"
@@ -208,7 +207,6 @@ class StartCommand:
             ),
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
             shell=True,
             cwd=state_dir,
             env=self.build_environment(state_dir, shared_dir),
@@ -235,77 +233,6 @@ class NixStartScript(StartCommand):
         return name
 
 
-class LegacyStartCommand(StartCommand):
-    """Used in some places to create an ad-hoc machine instead of
-    using nix test instrumentation + module system for that purpose.
-    Legacy.
-    """
-
-    def __init__(
-        self,
-        netBackendArgs: Optional[str] = None,  # noqa: N803
-        netFrontendArgs: Optional[str] = None,  # noqa: N803
-        hda: Optional[Tuple[Path, str]] = None,
-        cdrom: Optional[str] = None,
-        usb: Optional[str] = None,
-        bios: Optional[str] = None,
-        qemuBinary: Optional[str] = None,  # noqa: N803
-        qemuFlags: Optional[str] = None,  # noqa: N803
-    ):
-        if qemuBinary is not None:
-            self._cmd = qemuBinary
-        else:
-            self._cmd = "qemu-kvm"
-
-        self._cmd += " -m 384"
-
-        # networking
-        net_backend = "-netdev user,id=net0"
-        net_frontend = "-device virtio-net-pci,netdev=net0"
-        if netBackendArgs is not None:
-            net_backend += "," + netBackendArgs
-        if netFrontendArgs is not None:
-            net_frontend += "," + netFrontendArgs
-        self._cmd += f" {net_backend} {net_frontend}"
-
-        # hda
-        hda_cmd = ""
-        if hda is not None:
-            hda_path = hda[0].resolve()
-            hda_interface = hda[1]
-            if hda_interface == "scsi":
-                hda_cmd += (
-                    f" -drive id=hda,file={hda_path},werror=report,if=none"
-                    " -device scsi-hd,drive=hda"
-                )
-            else:
-                hda_cmd += f" -drive file={hda_path},if={hda_interface},werror=report"
-        self._cmd += hda_cmd
-
-        # cdrom
-        if cdrom is not None:
-            self._cmd += f" -cdrom {cdrom}"
-
-        # usb
-        usb_cmd = ""
-        if usb is not None:
-            # https://github.com/qemu/qemu/blob/master/docs/usb2.txt
-            usb_cmd += (
-                " -device usb-ehci"
-                f" -drive id=usbdisk,file={usb},if=none,readonly"
-                " -device usb-storage,drive=usbdisk "
-            )
-        self._cmd += usb_cmd
-
-        # bios
-        if bios is not None:
-            self._cmd += f" -bios {bios}"
-
-        # qemu flags
-        if qemuFlags is not None:
-            self._cmd += f" {qemuFlags}"
-
-
 class Machine:
     """A handle to the machine with this name, that also knows how to manage
     the machine lifecycle with the help of a start script / command."""
@@ -322,19 +249,19 @@ class Machine:
     start_command: StartCommand
     keep_vm_state: bool
 
-    process: Optional[subprocess.Popen]
-    pid: Optional[int]
-    monitor: Optional[socket.socket]
-    qmp_client: Optional[QMPSession]
-    shell: Optional[socket.socket]
-    serial_thread: Optional[threading.Thread]
+    process: subprocess.Popen | None
+    pid: int | None
+    monitor: socket.socket | None
+    qmp_client: QMPSession | None
+    shell: socket.socket | None
+    serial_thread: threading.Thread | None
 
     booted: bool
     connected: bool
     # Store last serial console lines for use
     # of wait_for_console_text
     last_lines: Queue = Queue()
-    callbacks: List[Callable]
+    callbacks: list[Callable]
 
     def __repr__(self) -> str:
         return f"<Machine '{self.name}'>"
@@ -344,9 +271,10 @@ class Machine:
         out_dir: Path,
         tmp_dir: Path,
         start_command: StartCommand,
+        logger: AbstractLogger,
         name: str = "machine",
         keep_vm_state: bool = False,
-        callbacks: Optional[List[Callable]] = None,
+        callbacks: list[Callable] | None = None,
     ) -> None:
         self.out_dir = out_dir
         self.tmp_dir = tmp_dir
@@ -354,6 +282,7 @@ class Machine:
         self.name = name
         self.start_command = start_command
         self.callbacks = callbacks if callbacks is not None else []
+        self.logger = logger
 
         # set up directories
         self.shared_dir = self.tmp_dir / "shared-xchg"
@@ -377,42 +306,19 @@ class Machine:
         self.booted = False
         self.connected = False
 
-    @staticmethod
-    def create_startcommand(args: Dict[str, str]) -> StartCommand:
-        rootlog.warning(
-            "Using legacy create_startcommand(), "
-            "please use proper nix test vm instrumentation, instead "
-            "to generate the appropriate nixos test vm qemu startup script"
-        )
-        hda = None
-        if args.get("hda"):
-            hda_arg: str = args.get("hda", "")
-            hda_arg_path: Path = Path(hda_arg)
-            hda = (hda_arg_path, args.get("hdaInterface", ""))
-        return LegacyStartCommand(
-            netBackendArgs=args.get("netBackendArgs"),
-            netFrontendArgs=args.get("netFrontendArgs"),
-            hda=hda,
-            cdrom=args.get("cdrom"),
-            usb=args.get("usb"),
-            bios=args.get("bios"),
-            qemuBinary=args.get("qemuBinary"),
-            qemuFlags=args.get("qemuFlags"),
-        )
-
     def is_up(self) -> bool:
         return self.booted and self.connected
 
     def log(self, msg: str) -> None:
-        rootlog.log(msg, {"machine": self.name})
+        self.logger.log(msg, {"machine": self.name})
 
     def log_serial(self, msg: str) -> None:
-        rootlog.log_serial(msg, self.name)
+        self.logger.log_serial(msg, self.name)
 
-    def nested(self, msg: str, attrs: Dict[str, str] = {}) -> _GeneratorContextManager:
+    def nested(self, msg: str, attrs: dict[str, str] = {}) -> _GeneratorContextManager:
         my_attrs = {"machine": self.name}
         my_attrs.update(attrs)
-        return rootlog.nested(msg, my_attrs)
+        return self.logger.nested(msg, my_attrs)
 
     def wait_for_monitor_prompt(self) -> str:
         assert self.monitor is not None
@@ -438,7 +344,7 @@ class Machine:
         return self.wait_for_monitor_prompt()
 
     def wait_for_unit(
-        self, unit: str, user: Optional[str] = None, timeout: int = 900
+        self, unit: str, user: str | None = None, timeout: int = 900
     ) -> None:
         """
         Wait for a systemd unit to get into "active" state.
@@ -468,7 +374,7 @@ class Machine:
         ):
             retry(check_active, timeout)
 
-    def get_unit_info(self, unit: str, user: Optional[str] = None) -> Dict[str, str]:
+    def get_unit_info(self, unit: str, user: str | None = None) -> dict[str, str]:
         status, lines = self.systemctl(f'--no-pager show "{unit}"', user)
         if status != 0:
             raise Exception(
@@ -479,7 +385,7 @@ class Machine:
 
         line_pattern = re.compile(r"^([^=]+)=(.*)$")
 
-        def tuple_from_line(line: str) -> Tuple[str, str]:
+        def tuple_from_line(line: str) -> tuple[str, str]:
             match = line_pattern.match(line)
             assert match is not None
             return match[1], match[2]
@@ -494,7 +400,7 @@ class Machine:
         self,
         unit: str,
         property: str,
-        user: Optional[str] = None,
+        user: str | None = None,
     ) -> str:
         status, lines = self.systemctl(
             f'--no-pager show "{unit}" --property="{property}"',
@@ -519,7 +425,7 @@ class Machine:
         assert match[1] == property, invalid_output_message
         return match[2]
 
-    def systemctl(self, q: str, user: Optional[str] = None) -> Tuple[int, str]:
+    def systemctl(self, q: str, user: str | None = None) -> tuple[int, str]:
         """
         Runs `systemctl` commands with optional support for
         `systemctl --user`
@@ -575,8 +481,8 @@ class Machine:
         command: str,
         check_return: bool = True,
         check_output: bool = True,
-        timeout: Optional[int] = 900,
-    ) -> Tuple[int, str]:
+        timeout: int | None = 900,
+    ) -> tuple[int, str]:
         """
         Execute a shell command, returning a list `(status, stdout)`.
 
@@ -643,7 +549,7 @@ class Machine:
 
         return (rc, output.decode(errors="replace"))
 
-    def shell_interact(self, address: Optional[str] = None) -> None:
+    def shell_interact(self, address: str | None = None) -> None:
         """
         Allows you to directly interact with the guest shell. This should
         only be used during test development, not in production tests.
@@ -690,7 +596,7 @@ class Machine:
                 break
             self.send_console(char.decode())
 
-    def succeed(self, *commands: str, timeout: Optional[int] = None) -> str:
+    def succeed(self, *commands: str, timeout: int | None = None) -> str:
         """
         Execute a shell command, raising an exception if the exit status is
         not zero, otherwise returning the standard output. Similar to `execute`,
@@ -707,7 +613,7 @@ class Machine:
                 output += out
         return output
 
-    def fail(self, *commands: str, timeout: Optional[int] = None) -> str:
+    def fail(self, *commands: str, timeout: int | None = None) -> str:
         """
         Like `succeed`, but raising an exception if the command returns a zero
         status.
@@ -819,7 +725,7 @@ class Machine:
         with self.nested(f"waiting for {regexp} to appear on tty {tty}"):
             retry(tty_matches, timeout)
 
-    def send_chars(self, chars: str, delay: Optional[float] = 0.01) -> None:
+    def send_chars(self, chars: str, delay: float | None = 0.01) -> None:
         """
         Simulate typing a sequence of characters on the virtual keyboard,
         e.g., `send_chars("foobar\n")` will type the string `foobar`
@@ -893,10 +799,10 @@ class Machine:
         with self.nested(f"waiting for TCP port {port} on {addr} to be closed"):
             retry(port_is_closed, timeout)
 
-    def start_job(self, jobname: str, user: Optional[str] = None) -> Tuple[int, str]:
+    def start_job(self, jobname: str, user: str | None = None) -> tuple[int, str]:
         return self.systemctl(f"start {jobname}", user)
 
-    def stop_job(self, jobname: str, user: Optional[str] = None) -> Tuple[int, str]:
+    def stop_job(self, jobname: str, user: str | None = None) -> tuple[int, str]:
         return self.systemctl(f"stop {jobname}", user)
 
     def wait_for_job(self, jobname: str) -> None:
@@ -1037,13 +943,13 @@ class Machine:
         """Debugging: Dump the contents of the TTY<n>"""
         self.execute(f"fold -w 80 /dev/vcs{tty} | systemd-cat")
 
-    def _get_screen_text_variants(self, model_ids: Iterable[int]) -> List[str]:
+    def _get_screen_text_variants(self, model_ids: Iterable[int]) -> list[str]:
         with tempfile.TemporaryDirectory() as tmpdir:
             screenshot_path = os.path.join(tmpdir, "ppm")
             self.send_monitor_command(f"screendump {screenshot_path}")
             return _perform_ocr_on_screenshot(screenshot_path, model_ids)
 
-    def get_screen_text_variants(self) -> List[str]:
+    def get_screen_text_variants(self) -> list[str]:
         """
         Return a list of different interpretations of what is currently
         visible on the machine's screen using optical character
@@ -1123,7 +1029,7 @@ class Machine:
                     pass
 
     def send_key(
-        self, key: str, delay: Optional[float] = 0.01, log: Optional[bool] = True
+        self, key: str, delay: float | None = 0.01, log: bool | None = True
     ) -> None:
         """
         Simulate pressing keys on the virtual keyboard, e.g.,
@@ -1210,8 +1116,8 @@ class Machine:
 
     def cleanup_statedir(self) -> None:
         shutil.rmtree(self.state_dir)
-        rootlog.log(f"deleting VM state directory {self.state_dir}")
-        rootlog.log("if you want to keep the VM state, pass --keep-vm-state")
+        self.logger.log(f"deleting VM state directory {self.state_dir}")
+        self.logger.log("if you want to keep the VM state, pass --keep-vm-state")
 
     def shutdown(self) -> None:
         """
@@ -1263,7 +1169,7 @@ class Machine:
         with self.nested("waiting for the X11 server"):
             retry(check_x, timeout)
 
-    def get_window_names(self) -> List[str]:
+    def get_window_names(self) -> list[str]:
         return self.succeed(
             r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
         ).splitlines()
@@ -1318,7 +1224,7 @@ class Machine:
     def release(self) -> None:
         if self.pid is None:
             return
-        rootlog.info(f"kill machine (pid {self.pid})")
+        self.logger.info(f"kill machine (pid {self.pid})")
         assert self.process
         assert self.shell
         assert self.monitor
@@ -1328,6 +1234,9 @@ class Machine:
         self.shell.close()
         self.monitor.close()
         self.serial_thread.join()
+
+        if self.qmp_client:
+            self.qmp_client.close()
 
     def run_callbacks(self) -> None:
         for callback in self.callbacks:
@@ -1345,6 +1254,5 @@ class Machine:
             check_return=False,
             check_output=False,
         )
-        self.wait_for_console_text(r"systemd\[1\]:.*Switching root\.")
         self.connected = False
         self.connect()

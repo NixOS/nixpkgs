@@ -34,9 +34,10 @@ llvmPackages.stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cone Programming Language";
+    mainProgram = "conec";
     homepage = "https://cone.jondgoodwin.com";
     license = licenses.mit;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

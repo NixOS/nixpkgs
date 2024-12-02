@@ -7,7 +7,7 @@
 , gtk3
 , gdk-pixbuf
 , gobject-introspection
-, wrapGAppsHook
+, wrapGAppsHook3
 , glib
 , gitUpdater
 }:
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook
+    wrapGAppsHook3
     intltool
     python3Packages.distutils-extra
     gobject-introspection
@@ -81,6 +81,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/ubuntu-mate/mate-tweak/releases/tag/${version}";
     license = [ licenses.gpl2Plus ];
     platforms = platforms.linux;
-    maintainers = teams.mate.members ++ (with maintainers; [ luc65r ]);
+    maintainers = teams.mate.members;
   };
 }

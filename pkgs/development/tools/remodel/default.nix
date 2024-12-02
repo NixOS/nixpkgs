@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-tZ6ptGeNBULJaoFomMFN294wY8YUu1SrJh4UfOL/MnI=";
   };
 
-  cargoSha256 = "sha256-YCYs+MMTxnJEKhzjddBp7lnSYPrpf3G+ktr1ez/ZKkg=";
+  cargoHash = "sha256-YCYs+MMTxnJEKhzjddBp7lnSYPrpf3G+ktr1ez/ZKkg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -26,12 +26,13 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 
   meta = with lib; {
     description = "Roblox file manipulation tool";
+    mainProgram = "remodel";
     longDescription = ''
       Remodel is a command line tool for manipulating Roblox files and the instances contained within them.
     '';

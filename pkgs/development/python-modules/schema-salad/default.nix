@@ -1,52 +1,63 @@
-{ lib
-, black
-, buildPythonPackage
-, cachecontrol
-, fetchFromGitHub
-, importlib-resources
-, mistune
-, mypy-extensions
-, pytestCheckHook
-, pythonOlder
-, rdflib
-, requests
-, ruamel-yaml
-, setuptools-scm
+{
+  lib,
+  black,
+  buildPythonPackage,
+  cachecontrol,
+  fetchFromGitHub,
+  fetchpatch,
+  importlib-resources,
+  mistune,
+  mypy,
+  mypy-extensions,
+  pytestCheckHook,
+  pythonOlder,
+  rdflib,
+  requests,
+  ruamel-yaml,
+  setuptools-scm,
+  types-dataclasses,
+  types-requests,
+  types-setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.5.20240102191336.dev7+g8e95468";
-  format = "setuptools";
+  version = "8.7.20241021092521";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "schema_salad";
-    rev = "8e954684b08d222d54b7eff680eaa4d4e65920a9";
-    hash = "sha256-VoFFKe6XHDytj5UlmsN14RevKcgpl+DSDMGDVS2Ols4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-1V73y+sp94QwoCz8T2LCMnf5iq8MtL9cvrhF949R+08=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "mypy[mypyc]==1.12.1" "mypy"
+  '';
 
-  propagatedBuildInputs = [
-    cachecontrol
-    mistune
-    mypy-extensions
-    rdflib
-    requests
-    ruamel-yaml
-  ] ++ cachecontrol.optional-dependencies.filecache
-  ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  build-system = [ setuptools-scm ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.pycodegen;
+  dependencies =
+    [
+      cachecontrol
+      mistune
+      mypy
+      mypy-extensions
+      rdflib
+      requests
+      ruamel-yaml
+      types-dataclasses
+      types-requests
+      types-setuptools
+    ]
+    ++ cachecontrol.optional-dependencies.filecache
+    ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.pycodegen;
 
   preCheck = ''
     rm tox.ini
@@ -62,14 +73,10 @@ buildPythonPackage rec {
     "test_bad_schemas"
   ];
 
-  pythonImportsCheck = [
-    "schema_salad"
-  ];
+  pythonImportsCheck = [ "schema_salad" ];
 
-  passthru.optional-dependencies = {
-    pycodegen = [
-      black
-    ];
+  optional-dependencies = {
+    pycodegen = [ black ];
   };
 
   meta = with lib; {

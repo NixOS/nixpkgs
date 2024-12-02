@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchpatch
-, python
-, numba
-, ndtypes
-, xnd
-, libndtypes
-, libxnd
-, libgumath
-, isPy27
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchpatch,
+  python,
+  numba,
+  ndtypes,
+  xnd,
+  libndtypes,
+  libxnd,
+  libgumath,
+  isPy27,
 }:
 
 buildPythonPackage {
@@ -34,7 +35,10 @@ buildPythonPackage {
 
   nativeCheckInputs = [ numba ];
 
-  propagatedBuildInputs = [ ndtypes xnd ];
+  propagatedBuildInputs = [
+    ndtypes
+    xnd
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -46,7 +50,7 @@ buildPythonPackage {
                 'add_runtime_library_dirs = ["${libndtypes}/lib", "${libxnd}/lib", "${libgumath}/lib"]'
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath ${libgumath}/lib $out/${python.sitePackages}/gumath/_gumath.*.so
   '';
 
@@ -60,4 +64,3 @@ buildPythonPackage {
     popd
   '';
 }
-

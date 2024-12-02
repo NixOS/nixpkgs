@@ -5,9 +5,8 @@
 , meson
 , ninja
 , pkg-config
-, python3
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , clutter-gtk
 , evolution-data-server
 , granite
@@ -23,22 +22,21 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-tasks";
-  version = "6.3.2";
+  version = "6.3.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "tasks";
     rev = version;
-    sha256 = "sha256-6Vwx+NRVGDqZzN5IVk4cQxGjSkYwrrNhUVoB8TRo28U=";
+    hash = "sha256-xOMS4Zwfl7TLHvm8Zn6wQ4ZoMg+Yuci+cTpUVG+liss=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -54,11 +52,6 @@ stdenv.mkDerivation rec {
     libical
     libportal-gtk3
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

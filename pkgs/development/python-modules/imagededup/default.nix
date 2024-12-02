@@ -1,17 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchurl
-, cython
-, torch
-, torchvision
-, pillow
-, tqdm
-, scikit-learn
-, pywavelets
-, matplotlib
-, pytestCheckHook
-, pytest-mock
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  fetchurl,
+  matplotlib,
+  pillow,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pywavelets,
+  scikit-learn,
+  setuptools,
+  torch,
+  torchvision,
+  tqdm,
+  fetchpatch,
 }:
 let
   MobileNetV3 = fetchurl {
@@ -23,43 +27,48 @@ let
     hash = "sha256-msG1N42ZJ71sg3TODNVX74Dhs/j7wYWd8zLE3J0P2CU=";
   };
   EfficientNet = fetchurl {
-    url = "https://download.pytorch.org/models/efficientnet_b4_rwightman-7eb33cd5.pth";
+    url = "https://download.pytorch.org/models/efficientnet_b4_rwightman-23ab8bcd.pth";
     hash = "sha256-I6uLzVvb72GnpDuRrcrYH2Iv1/NvtJNaVpgo13iIxE4=";
   };
 in
 buildPythonPackage rec {
   pname = "imagededup";
   version = "0.3.2";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "idealo";
-    repo = pname;
-    rev = "v${version}";
+    repo = "imagededup";
+    rev = "refs/tags/v${version}";
     hash = "sha256-B2IuNMTZnzBi6IxrHBoMDsmIcqGQpznd/2f1XKo1Oa4=";
   };
 
   nativeBuildInputs = [
     cython
+    setuptools
   ];
 
   propagatedBuildInputs = [
+    matplotlib
+    pillow
+    pywavelets
+    scikit-learn
     torch
     torchvision
-    pillow
     tqdm
-    scikit-learn
-    pywavelets
-    matplotlib
   ];
 
-  nativeCheckInputs = [ pytestCheckHook pytest-mock ];
+  nativeCheckInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
 
   preCheck = ''
-    # checks fail with: error: [Errno 13] Permission denied: '/homeless-shelter'
     export HOME=$(mktemp -d)
 
-    # checks with CNN are preloaded to avoid downloads in check-phase
+    # Checks with CNN are preloaded to avoid downloads in the check phase
     mkdir -p $HOME/.cache/torch/hub/checkpoints/
     ln -s ${MobileNetV3} $HOME/.cache/torch/hub/checkpoints/${MobileNetV3.name}
     ln -s ${ViT} $HOME/.cache/torch/hub/checkpoints/${ViT.name}
@@ -68,9 +77,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "imagededup" ];
 
+  patches = [
+    # https://github.com/idealo/imagededup/pull/217
+    (fetchpatch {
+      name = "pytest-warnings-none.patch";
+      url = "https://github.com/idealo/imagededup/commit/e2d7a21568e3115acd0632af569549c511ad5c0d.patch";
+      hash = "sha256-AQwJpU3Ag6ONRAw0z8so5icW4fRpMHuBOMT5X+HsQ2w=";
+    })
+  ];
+
   meta = with lib; {
     homepage = "https://idealo.github.io/imagededup/";
-    changelog = "https://github.com/idealo/imagededup/releases/tag/${src.rev}";
+    changelog = "https://github.com/idealo/imagededup/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     description = "Finding duplicate images made easy";
     license = licenses.asl20;
     maintainers = with maintainers; [ stunkymonkey ];

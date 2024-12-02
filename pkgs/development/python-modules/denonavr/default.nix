@@ -1,24 +1,26 @@
-{ lib
-, async-timeout
-, asyncstdlib
-, attrs
-, buildPythonPackage
-, defusedxml
-, fetchFromGitHub
-, ftfy
-, httpx
-, netifaces
-, pytest-asyncio
-, pytestCheckHook
-, pytest-httpx
-, pytest-timeout
-, pythonOlder
-, setuptools
+{
+  lib,
+  async-timeout,
+  asyncstdlib,
+  attrs,
+  buildPythonPackage,
+  defusedxml,
+  fetchFromGitHub,
+  fetchpatch2,
+  ftfy,
+  httpx,
+  netifaces,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytest-httpx,
+  pytest-timeout,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "denonavr";
-  version = "0.11.6";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,23 +29,29 @@ buildPythonPackage rec {
     owner = "ol-iver";
     repo = "denonavr";
     rev = "refs/tags/${version}";
-    hash = "sha256-VxoRK1qeGrIunsiCzeZJUHxW/sxk+PFpntInL+G/yI8=";
+    hash = "sha256-/K2pz3B4H205grDeuMWZmEeA4wJqKhP0XdpmbqFguTM=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  patches = [
+    (fetchpatch2 {
+      name = "pytest-httpx-compat.patch";
+      url = "https://github.com/ol-iver/denonavr/commit/5320aadae91135a8c208c83d82688ddf26eb6498.patch";
+      hash = "sha256-F9R5GJ1XK3lHWLY+OgzKu3+xCosK3nX4EII9J1jhlys=";
+    })
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "defusedxml" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     asyncstdlib
     attrs
     defusedxml
     ftfy
     httpx
     netifaces
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -52,15 +60,13 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
-  pythonImportsCheck = [
-    "denonavr"
-  ];
+  pythonImportsCheck = [ "denonavr" ];
 
   meta = with lib; {
     description = "Automation Library for Denon AVR receivers";
     homepage = "https://github.com/ol-iver/denonavr";
     changelog = "https://github.com/ol-iver/denonavr/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ colemickens ];
   };
 }

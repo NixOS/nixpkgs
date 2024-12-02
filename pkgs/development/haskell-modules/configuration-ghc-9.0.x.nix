@@ -4,6 +4,7 @@ with haskellLib;
 
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
+  inherit (pkgs) lib;
 in
 
 self: super: {
@@ -59,10 +60,16 @@ self: super: {
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
+  # For GHC < 9.2, os-string is not required.
   hashable = addBuildDepends [
     self.data-array-byte
     self.base-orphans
-  ] super.hashable;
+  ] (super.hashable.override {
+    os-string = null;
+  });
+
+  # Too strict lower bounds on base
+  primitive-addr = doJailbreak super.primitive-addr;
 
   hashable-time = doJailbreak super.hashable-time;
   tuple = addBuildDepend self.base-orphans super.tuple;
@@ -79,7 +86,12 @@ self: super: {
   haskell-language-server =  throw "haskell-language-server has dropped support for ghc 9.0 in version 2.4.0.0, please use a newer ghc version or an older nixpkgs version";
 
   # Needs to use ghc-lib due to incompatible GHC
-  ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_6);
+  ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_5);
+
+  # ghc-lib >= 9.6 and friends no longer build with GHC 9.0
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_8_20230729;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_2_1_1;
+  ghc-lib = doDistribute self.ghc-lib_9_2_8_20230729;
 
   # Test suite sometimes segfaults with GHC 9.0.1 and 9.0.2
   # https://github.com/ekmett/reflection/issues/51
@@ -135,4 +147,21 @@ self: super: {
 
   # No instance for (Show B.Builder) arising from a use of ‘print’
   http-types = dontCheck super.http-types;
+
+  # Packages which need compat library for GHC < 9.6
+  inherit
+    (lib.mapAttrs
+      (_: addBuildDepends [ self.foldable1-classes-compat ])
+      super)
+    indexed-traversable
+    these
+  ;
+  base-compat-batteries = addBuildDepends [
+    self.foldable1-classes-compat
+    self.OneTuple
+  ] super.base-compat-batteries;
+  OneTuple = addBuildDepends [
+    self.foldable1-classes-compat
+    self.base-orphans
+  ] super.OneTuple;
 }

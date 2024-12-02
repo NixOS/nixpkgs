@@ -1,69 +1,89 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, attrs
-, boto3
-, cloudpickle
-, google-pasta
-, numpy
-, protobuf
-, smdebug-rulesconfig
-, importlib-metadata
-, packaging
-, pandas
-, pathos
-, schema
-, pyyaml
-, jsonschema
-, platformdirs
-, tblib
-, urllib3
-, docker
-, scipy
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  attrs,
+  boto3,
+  cloudpickle,
+  docker,
+  google-pasta,
+  importlib-metadata,
+  jsonschema,
+  numpy,
+  packaging,
+  pandas,
+  pathos,
+  platformdirs,
+  protobuf,
+  psutil,
+  pyyaml,
+  requests,
+  sagemaker-core,
+  sagemaker-mlflow,
+  schema,
+  smdebug-rulesconfig,
+  tblib,
+  tqdm,
+  urllib3,
+
+  # optional-dependencies
+  scipy,
+  accelerate,
 }:
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.208.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "2.232.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-python-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9YcYRwwa5P31jZpDrsewBY+r2kjRmoGM8CkXqAMilvE=";
+    hash = "sha256-6kGxmgkR/1ih2V49C9aEUBBCJS6s1Jbev80FDnJtHFg=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  build-system = [
+    hatchling
   ];
 
   pythonRelaxDeps = [
     "attrs"
     "boto3"
+    "cloudpickle"
+    "importlib-metadata"
+    "protobuf"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     boto3
     cloudpickle
+    docker
     google-pasta
-    numpy
-    protobuf
-    smdebug-rulesconfig
     importlib-metadata
+    jsonschema
+    numpy
     packaging
     pandas
     pathos
-    schema
-    pyyaml
-    jsonschema
     platformdirs
+    protobuf
+    psutil
+    pyyaml
+    requests
+    sagemaker-core
+    sagemaker-mlflow
+    schema
+    smdebug-rulesconfig
     tblib
+    tqdm
+    urllib3
   ];
 
   doCheck = false; # many test dependencies are not available in nixpkgs
@@ -73,17 +93,22 @@ buildPythonPackage rec {
     "sagemaker.lineage.visualizer"
   ];
 
-  passthru.optional-dependencies = {
-    local = [ urllib3 docker pyyaml ];
+  optional-dependencies = {
+    local = [
+      urllib3
+      docker
+      pyyaml
+    ];
     scipy = [ scipy ];
+    huggingface = [ accelerate ];
     # feature-processor = [ pyspark sagemaker-feature-store-pyspark ]; # not available in nixpkgs
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library for training and deploying machine learning models on Amazon SageMaker";
     homepage = "https://github.com/aws/sagemaker-python-sdk/";
     changelog = "https://github.com/aws/sagemaker-python-sdk/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nequissimus ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nequissimus ];
   };
 }

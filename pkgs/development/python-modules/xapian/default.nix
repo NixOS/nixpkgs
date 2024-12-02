@@ -1,6 +1,10 @@
-{ lib, buildPythonPackage, fetchurl, python
-, sphinx
-, xapian
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  python,
+  sphinx,
+  xapian,
 }:
 
 let
@@ -13,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://oligarchy.co.uk/xapian/${version}/xapian-bindings-${version}.tar.xz";
-    hash = "sha256-UT1XhIgnkZis4TrUl1ENKyIgTV15S2QUPQW3vpdOts8=";
+    hash = "sha256-VQhzVz7gQBGZ+DX+9R3ficp7wm97jRvcylnaZD+zyoE=";
   };
 
   configureFlags = [
@@ -25,9 +29,10 @@ buildPythonPackage rec {
     export XAPIAN_CONFIG=${xapian}/bin/xapian-config
   '';
 
-  buildInputs = [ sphinx xapian ];
-
-  doCheck = true;
+  buildInputs = [
+    sphinx
+    xapian
+  ];
 
   checkPhase = ''
     ${python.interpreter} python${pythonSuffix}/pythontest.py
@@ -38,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://xapian.org/";
     changelog = "https://xapian.org/docs/xapian-bindings-${version}/NEWS";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

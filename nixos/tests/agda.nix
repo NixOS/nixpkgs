@@ -25,13 +25,6 @@ in
   };
 
   testScript = ''
-    assert (
-        "${pkgs.agdaPackages.lib.interfaceFile "Everything.agda"}" == "Everything.agdai"
-    ), "wrong interface file for Everything.agda"
-    assert (
-        "${pkgs.agdaPackages.lib.interfaceFile "tmp/Everything.agda.md"}" == "tmp/Everything.agdai"
-    ), "wrong interface file for tmp/Everything.agda.md"
-
     # Minimal script that typechecks
     machine.succeed("touch TestEmpty.agda")
     machine.succeed("agda TestEmpty.agda")

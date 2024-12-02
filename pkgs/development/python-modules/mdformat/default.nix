@@ -1,20 +1,18 @@
-{ lib
-, buildPythonApplication
-, buildPythonPackage
-, fetchFromGitHub
-, importlib-metadata
-, makeWrapper
-, markdown-it-py
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, tomli
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  importlib-metadata,
+  markdown-it-py,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat";
-  version = "0.7.17";
+  version = "0.7.18";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,28 +21,19 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = "mdformat";
     rev = "refs/tags/${version}";
-    hash = "sha256-umtfbhN6sDR/rFr1LwmJ21Ph9bK1Qq43bmMVzGCPD5s=";
+    hash = "sha256-t2yx8cIq8es3XOc2nbHPKjUUium5+RPZuD8oNWZxVV0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    markdown-it-py
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  dependencies =
+    [ markdown-it-py ]
+    ++ lib.optionals (pythonOlder "3.11") [ tomli ]
+    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "mdformat"
-  ];
+  pythonImportsCheck = [ "mdformat" ];
 
   passthru = {
     withPlugins = throw "Use pkgs.mdformat.withPlugins, i.e. the top-level attribute.";
@@ -55,7 +44,10 @@ buildPythonPackage rec {
     homepage = "https://mdformat.rtfd.io/";
     changelog = "https://github.com/executablebooks/mdformat/blob/${version}/docs/users/changelog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab aldoborrero ];
+    maintainers = with maintainers; [
+      fab
+      aldoborrero
+    ];
     mainProgram = "mdformat";
   };
 }

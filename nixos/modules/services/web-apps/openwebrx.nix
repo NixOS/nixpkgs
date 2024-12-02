@@ -4,7 +4,7 @@ let
 in
 {
   options.services.openwebrx = with lib; {
-    enable = mkEnableOption (lib.mdDoc "OpenWebRX Web interface for Software-Defined Radios on http://localhost:8073");
+    enable = mkEnableOption "OpenWebRX Web interface for Software-Defined Radios on http://localhost:8073";
 
     package = mkPackageOption pkgs "openwebrx" { };
   };
@@ -18,7 +18,7 @@ in
         codec2
         js8call
         m17-cxx-demod
-        alsaUtils
+        alsa-utils
         netcat
       ];
       serviceConfig = {

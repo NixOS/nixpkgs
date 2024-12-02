@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , pkg-config
 , cmake
-, qtbase
 , qttools
 , libuuid
 , seafile-shared
@@ -16,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "seafile-client";
-  version = "9.0.4";
+  version = "9.0.9";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-client";
     rev = "v${version}";
-    sha256 = "sha256-Qt4Y7s2BMwuKXTYjHAzK40HgAsxlk98af3irOXT4/Vs=";
+    sha256 = "sha256-dy5EXDEyxtV88Fgbao/J3fNwO5AO/ES0IJLIeRenO8I=";
   };
 
   nativeBuildInputs = [

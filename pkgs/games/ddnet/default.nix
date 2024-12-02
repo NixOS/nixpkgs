@@ -1,53 +1,51 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cargo
-, cmake
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, curl
-, freetype
-, libGLU
-, libnotify
-, libogg
-, libX11
-, opusfile
-, pcre
-, python3
-, SDL2
-, sqlite
-, wavpack
-, ffmpeg
-, x264
-, vulkan-headers
-, vulkan-loader
-, glslang
-, spirv-tools
-, gtest
-, Carbon
-, Cocoa
-, OpenGL
-, Security
-, buildClient ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  cmake,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  apple-sdk_11,
+  curl,
+  freetype,
+  libGLU,
+  libnotify,
+  libogg,
+  libX11,
+  opusfile,
+  pcre,
+  python3,
+  SDL2,
+  sqlite,
+  wavpack,
+  ffmpeg,
+  x264,
+  vulkan-headers,
+  vulkan-loader,
+  glslang,
+  spirv-tools,
+  gtest,
+  buildClient ? true,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "18.0.3";
+  version = "18.7";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    hash = "sha256-XirN16XywTtF+gLQT3G3HjqStkNk+NVO7j+FEecq54E=";
+    hash = "sha256-mOXD7lEggFus+TBZ5042QALu4PhHRBntnChQFnHu6Dw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
-    hash = "sha256-dFYrvnVxOelRIuqtTiSwBIFher/b/dCdyZvqIne3Lng=";
+    hash = "sha256-zug7MzxqGhlmm6ZeRo+3ldwmFEn5cVCb+nvRzomFrnc=";
   };
 
   nativeBuildInputs = [
@@ -63,33 +61,36 @@ stdenv.mkDerivation rec {
     gtest
   ];
 
-  buildInputs = [
-    curl
-    libnotify
-    pcre
-    python3
-    sqlite
-  ] ++ lib.optionals buildClient ([
-    freetype
-    libGLU
-    libogg
-    opusfile
-    SDL2
-    wavpack
-    ffmpeg
-    x264
-    vulkan-loader
-    vulkan-headers
-    glslang
-    spirv-tools
-  ] ++ lib.optionals stdenv.isLinux [
-    libX11
-  ] ++ lib.optionals stdenv.isDarwin [
-    Carbon
-    Cocoa
-    OpenGL
-    Security
-  ]);
+  buildInputs =
+    [
+      curl
+      libnotify
+      pcre
+      python3
+      sqlite
+    ]
+    ++ lib.optionals buildClient (
+      [
+        freetype
+        libGLU
+        libogg
+        opusfile
+        SDL2
+        wavpack
+        ffmpeg
+        x264
+        vulkan-loader
+        vulkan-headers
+        glslang
+        spirv-tools
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        libX11
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        apple-sdk_11
+      ]
+    );
 
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
@@ -101,7 +102,8 @@ stdenv.mkDerivation rec {
     "-DCLIENT=${if buildClient then "ON" else "OFF"}"
   ];
 
-  doCheck = true;
+  # Tests loop forever on Darwin for some reason
+  doCheck = !stdenv.hostPlatform.isDarwin;
   checkTarget = "run_tests";
 
   postInstall = lib.optionalString (!buildClient) ''
@@ -113,8 +115,13 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/metainfo
   '';
 
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Upstream links against <prefix>/lib while it installs this library in <prefix>/lib/ddnet
+    install_name_tool -change "$out/lib/libsteam_api.dylib" "$out/lib/ddnet/libsteam_api.dylib" "$out/bin/DDNet"
+  '';
+
   meta = with lib; {
-    description = "A Teeworlds modification with a unique cooperative gameplay";
+    description = "Teeworlds modification with a unique cooperative gameplay";
     longDescription = ''
       DDraceNetwork (DDNet) is an actively maintained version of DDRace,
       a Teeworlds modification with a unique cooperative gameplay.
@@ -124,7 +131,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ddnet.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ sirseruju lom ncfavier ];
+    maintainers = with maintainers; [
+      sirseruju
+      lom
+      ncfavier
+    ];
     mainProgram = "DDNet";
   };
 }

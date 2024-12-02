@@ -1,4 +1,4 @@
-{ config, lib, options, ... }:
+{ config, options, ... }:
 {
   config = {
     result =

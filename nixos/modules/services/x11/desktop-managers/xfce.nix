@@ -49,25 +49,25 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Enable the Xfce desktop environment.";
+        description = "Enable the Xfce desktop environment.";
       };
 
       noDesktop = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc "Don't install XFCE desktop components (xfdesktop and panel).";
+        description = "Don't install XFCE desktop components (xfdesktop and panel).";
       };
 
       enableXfwm = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Enable the XFWM (default) window manager.";
+        description = "Enable the XFWM (default) window manager.";
       };
 
       enableScreensaver = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Enable the XFCE screensaver.";
+        description = "Enable the XFCE screensaver.";
       };
     };
 
@@ -75,20 +75,20 @@ in
       default = [];
       example = literalExpression "[ pkgs.xfce.xfce4-volumed-pulse ]";
       type = types.listOf types.package;
-      description = lib.mdDoc "Which packages XFCE should exclude from the default environment";
+      description = "Which packages XFCE should exclude from the default environment";
     };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = utils.removePackagesByName (with pkgs.xfce // pkgs; [
+    environment.systemPackages = utils.removePackagesByName (with pkgs; [
       glib # for gsettings
       gtk3.out # gtk-update-icon-cache
 
-      gnome.gnome-themes-extra
-      gnome.adwaita-icon-theme
+      gnome-themes-extra
+      adwaita-icon-theme
       hicolor-icon-theme
       tango-icon-theme
-      xfce4-icon-theme
+      xfce.xfce4-icon-theme
 
       desktop-file-utils
       shared-mime-info # for update-mime-database
@@ -99,38 +99,39 @@ in
       # Needed by Xfce's xinitrc script
       xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
 
-      exo
-      garcon
-      libxfce4ui
+      xfce.exo
+      xfce.garcon
+      xfce.libxfce4ui
 
-      mousepad
-      parole
-      ristretto
-      xfce4-appfinder
-      xfce4-notifyd
-      xfce4-screenshooter
-      xfce4-session
-      xfce4-settings
-      xfce4-taskmanager
-      xfce4-terminal
+      xfce.mousepad
+      xfce.parole
+      xfce.ristretto
+      xfce.xfce4-appfinder
+      xfce.xfce4-notifyd
+      xfce.xfce4-screenshooter
+      xfce.xfce4-session
+      xfce.xfce4-settings
+      xfce.xfce4-taskmanager
+      xfce.xfce4-terminal
     ] # TODO: NetworkManager doesn't belong here
       ++ optional config.networking.networkmanager.enable networkmanagerapplet
-      ++ optional config.powerManagement.enable xfce4-power-manager
-      ++ optionals config.hardware.pulseaudio.enable [
+      ++ optional config.powerManagement.enable xfce.xfce4-power-manager
+      ++ optionals (config.hardware.pulseaudio.enable || config.services.pipewire.pulse.enable) [
         pavucontrol
         # volume up/down keys support:
         # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
         # but can only be used with xfce4-panel, so for no-desktop usage we still include
         # xfce4-volumed-pulse
-        (if cfg.noDesktop then xfce4-volumed-pulse else xfce4-pulseaudio-plugin)
+        (if cfg.noDesktop then xfce.xfce4-volumed-pulse else xfce.xfce4-pulseaudio-plugin)
       ] ++ optionals cfg.enableXfwm [
-        xfwm4
-        xfwm4-themes
+        xfce.xfwm4
+        xfce.xfwm4-themes
       ] ++ optionals (!cfg.noDesktop) [
-        xfce4-panel
-        xfdesktop
-      ] ++ optional cfg.enableScreensaver xfce4-screensaver) excludePackages;
+        xfce.xfce4-panel
+        xfce.xfdesktop
+      ] ++ optional cfg.enableScreensaver xfce.xfce4-screensaver) excludePackages;
 
+    programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-gtk2;
     programs.xfconf.enable = true;
     programs.thunar.enable = true;
 
@@ -144,7 +145,7 @@ in
     services.xserver.desktopManager.session = [{
       name = "xfce";
       desktopNames = [ "XFCE" ];
-      bgSupport = true;
+      bgSupport = !cfg.noDesktop;
       start = ''
         ${pkgs.runtimeShell} ${pkgs.xfce.xfce4-session.xinitrc} &
         waitPID=$!
@@ -152,7 +153,7 @@ in
     }];
 
     services.xserver.updateDbusEnvironment = true;
-    services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
+    programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
     # Enable helpful DBus services.
     services.udisks2.enable = true;
@@ -163,7 +164,8 @@ in
     services.gvfs.enable = true;
     services.tumbler.enable = true;
     services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
-    services.xserver.libinput.enable = mkDefault true; # used in xfce4-settings-manager
+    services.libinput.enable = mkDefault true; # used in xfce4-settings-manager
+    services.colord.enable = mkDefault true;
 
     # Enable default programs
     programs.dconf.enable = true;

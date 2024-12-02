@@ -11,15 +11,14 @@ import ./make-test-python.nix ({ pkgs, ...} :
   {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
-    services.xserver.displayManager.sddm.enable = true;
-    services.xserver.displayManager.defaultSession = "plasma";
+    services.displayManager.sddm.enable = true;
+    services.displayManager.defaultSession = "plasma";
     services.xserver.desktopManager.plasma5.enable = true;
     environment.plasma5.excludePackages = [ pkgs.plasma5Packages.elisa ];
-    services.xserver.displayManager.autoLogin = {
+    services.displayManager.autoLogin = {
       enable = true;
       user = "alice";
     };
-    hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
   };
 
   testScript = { nodes, ... }: let

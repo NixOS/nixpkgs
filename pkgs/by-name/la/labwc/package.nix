@@ -1,39 +1,48 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cairo
-, gettext
-, glib
-, libdrm
-, libinput
-, libpng
-, librsvg
-, libxcb
-, libxkbcommon
-, libxml2
-, meson
-, ninja
-, pango
-, pkg-config
-, scdoc
-, wayland
-, wayland-protocols
-, wayland-scanner
-, wlroots
-, xcbutilwm
-, xwayland
+{
+  lib,
+  cairo,
+  fetchFromGitHub,
+  gettext,
+  glib,
+  libdrm,
+  libinput,
+  libpng,
+  librsvg,
+  libsfdo,
+  libxcb,
+  libxkbcommon,
+  libxml2,
+  meson,
+  ninja,
+  pango,
+  pkg-config,
+  scdoc,
+  stdenv,
+  versionCheckHook,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  wlroots_0_18,
+  xcbutilwm,
+  xwayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc";
-  version = "0.7.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc";
-    rev = finalAttrs.version;
-    hash = "sha256-/z2Wo9zhuEVIpk8jHYwg2JbBqkX7tfDP2KTZ9yzj454=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-TXxdjMkzZQoCqkZBqus5eCBEhA/nvxNNXaNHUTGFQDQ=";
   };
+
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -51,24 +60,26 @@ stdenv.mkDerivation (finalAttrs: {
     libinput
     libpng
     librsvg
+    libsfdo
     libxcb
     libxkbcommon
     libxml2
     pango
     wayland
     wayland-protocols
-    wlroots
+    wlroots_0_18
     xcbutilwm
     xwayland
   ];
 
-  outputs = [ "out" "man" ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  mesonFlags = [ (lib.mesonEnable "xwayland" true) ];
 
   strictDeps = true;
 
-  mesonFlags = [
-    (lib.mesonEnable "xwayland" true)
-  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
 
   passthru = {
     providedSessions = [ "labwc" ];
@@ -76,10 +87,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/labwc/labwc";
-    description = "A Wayland stacking compositor, inspired by Openbox";
-    changelog = "https://raw.githubusercontent.com/labwc/labwc/${finalAttrs.version}/NEWS.md";
-    license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    description = "Wayland stacking compositor, inspired by Openbox";
+    changelog = "https://github.com/labwc/labwc/blob/master/NEWS.md";
+    license = with lib.licenses; [ gpl2Plus ];
+    mainProgram = "labwc";
+    maintainers = with lib.maintainers; [ ];
     inherit (wayland.meta) platforms;
   };
 })

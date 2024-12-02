@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, xfce4-dev-tools, hicolor-icon-theme, xfce, wrapGAppsHook, gitUpdater }:
+{ lib, stdenv, fetchFromGitLab, pkg-config, xfce4-dev-tools, hicolor-icon-theme, xfce, wrapGAppsHook3, gitUpdater }:
 
 { category
 , pname
@@ -25,7 +25,7 @@ let
     zipAttrsWithNames (filterAttrNames isList (head attrsets)) (_: concatLists) attrsets;
 
   template = {
-    nativeBuildInputs = [ pkg-config xfce4-dev-tools wrapGAppsHook ];
+    nativeBuildInputs = [ pkg-config xfce4-dev-tools wrapGAppsHook3 ];
     buildInputs = [ hicolor-icon-theme ];
     configureFlags = [ "--enable-maintainer-mode" ];
 
@@ -58,4 +58,4 @@ let
 in
 
 stdenv.mkDerivation (publicArgs // template // concatAttrLists [ template args ])
-# TODO [ AndersonTorres ]: verify if it allows using hash attribute as an option to sha256
+

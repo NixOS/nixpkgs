@@ -1,26 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, unittestCheckHook
-, cython
-, setuptools
-, wheel
-, numpy
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  unittestCheckHook,
+  cython_0,
+  setuptools,
+  wheel,
+  numpy,
 }:
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "daqp";
-  version = "0.5.1";
+  version = "0.6.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "darnstrom";
     repo = "daqp";
-    rev = "5a15a3d16731d3d50f867218c1b281567db556fd";
-    hash = "sha256-in7Ci/wM7i0csJ4XVfo1lboWOyfuuU+8E+TzGmMV3x0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9sPYyd8J78HKDxbwkogu8tW38rgYIctEWqrriqJKy0M=";
   };
 
-  sourceRoot = "source/interfaces/daqp-python";
+  sourceRoot = "${src.name}/interfaces/daqp-python";
 
   postPatch = ''
     sed -i 's|../../../daqp|../..|' setup.py
@@ -29,22 +29,26 @@ buildPythonPackage {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-s" "test" "-p" "'*.py'" "-v" ];
+  unittestFlagsArray = [
+    "-s"
+    "test"
+    "-p"
+    "'*.py'"
+    "-v"
+  ];
 
   nativeBuildInputs = [
-    cython
+    cython_0
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  propagatedBuildInputs = [ numpy ];
 
   pythonImportsCheck = [ "daqp" ];
 
   meta = with lib; {
-    description = "A dual active-set algorithm for convex quadratic programming";
+    description = "Dual active-set algorithm for convex quadratic programming";
     homepage = "https://github.com/darnstrom/daqp";
     license = licenses.mit;
     maintainers = with maintainers; [ renesat ];

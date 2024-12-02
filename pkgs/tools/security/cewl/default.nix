@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Custom wordlist generator";
+    mainProgram = "cewl";
     homepage = "https://digi.ninja/projects/cewl.php/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

@@ -23,6 +23,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Simple Network Manager frontend written in Qt";
+    mainProgram = "nm-tray";
     homepage = "https://github.com/palinek/nm-tray";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dtzWill ];

@@ -1,38 +1,41 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, itstool
-, libxml2
-, mate-desktop
-, dconf
-, vte
-, pcre2
-, wrapGAppsHook
-, mateUpdateScript
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  itstool,
+  libxml2,
+  mate-desktop,
+  dconf,
+  vte,
+  pcre2,
+  wrapGAppsHook3,
+  mateUpdateScript,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-terminal";
-  version = "1.26.1";
+  version = "1.28.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "fBMCBvC0eIfoySdOc/jBn65RETRXKGmnwjERt4nh4dA=";
+    sha256 = "8TXrGp4q4ieY7LLcGRT9tM/XdOa7ZcAVK+N8xslGnpI=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     gettext
     itstool
     pkg-config
-    wrapGAppsHook
+    libxml2 # xmllint
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     dconf
-    libxml2
     mate-desktop
     pcre2
     vte

@@ -1,46 +1,41 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, setuptools
-, typing-extensions
-, zeroconf
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  setuptools,
+  typing-extensions,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "pyvlx";
-  version = "0.2.22";
+  version = "0.2.25";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Julius2342";
     repo = "pyvlx";
     rev = "refs/tags/${version}";
-    hash = "sha256-Ne/mEgvD2ANb5ER0y3eSW4TsPmrqDX1Pvki+0cb+t7w=";
+    hash = "sha256-c0HlmqLvpIn2GXorOArBKJ0YzvWz1spmhWwm6Gow2iU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyyaml
     typing-extensions
     zeroconf
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pyvlx"
-  ];
+  pythonImportsCheck = [ "pyvlx" ];
 
   meta = with lib; {
     description = "Python client to work with Velux units";
@@ -50,8 +45,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/Julius2342/pyvlx";
     changelog = "https://github.com/Julius2342/pyvlx/releases/tag/${version}";
-    license = with licenses; [ lgpl2Only ];
+    license = licenses.lgpl2Only;
     maintainers = with maintainers; [ fab ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

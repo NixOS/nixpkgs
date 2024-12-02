@@ -1,6 +1,7 @@
 {
   lib,
   rustPlatform,
+  fetchpatch,
   fetchFromGitHub,
   pkg-config,
   stdenv,
@@ -21,20 +22,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rerun";
-  version = "0.13.0";
-
+  version = "0.18.2";
   src = fetchFromGitHub {
     owner = "rerun-io";
     repo = "rerun";
     rev = version;
-    hash = "sha256-HgzzuvCpzKgWC8it0PSq62hBjjqpdgYtQQ50SNbr3do=";
+    sha256 = "sha256-mQjjgRKNFSts34Lphfje9H1BLY9nybCrJ2V09nMzVDM=";
   };
-  patches = [
-    # Disables a doctest that depends on a nightly feature
-    ./0001-re_space_view_time_series-utils-patch-out-doctests-w.patch
-  ];
 
-  cargoHash = "sha256-qvnkOlcjADV4b+JfFAy9yNaZGaf0ZO7hh9HBg5XmPi0=";
+  cargoHash = "sha256-ZyjRe4M6RabSKhKCLa1ed1fsF6dkUt2a1c8C/1E48+M=";
+  # the crate uses an old rust version (currently 1.76)
+  # nixpkgs only works with the latest rust (currently 1.80)
+  # so we patch this
+  cargoPatches = [ ./rust-version.patch ];
+
+  cargoBuildFlags = [ "--package rerun-cli" ];
+  cargoTestFlags = [ "--package rerun-cli" ];
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ "native_viewer" ];
 
   nativeBuildInputs = [
     (lib.getBin binaryen) # wasm-opt
@@ -56,7 +61,7 @@ rustPlatform.buildRustPackage rec {
       libxkbcommon
       vulkan-loader
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.CoreFoundation
       darwin.apple_sdk.frameworks.CoreGraphics
@@ -67,49 +72,37 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.QuartzCore
       darwin.apple_sdk.frameworks.Security
     ]
-    ++ lib.optionals stdenv.isLinux [ (lib.getLib wayland) ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
 
-  env.CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
+  addDlopenRunpaths = map (p: "${lib.getLib p}/lib") (
+    lib.optionals stdenv.hostPlatform.isLinux [
+      libxkbcommon
+      vulkan-loader
+      wayland
+    ]
+  );
 
-  addBuildInputRunpathsPhase = ''
-    declare _extraRunpaths
-    _sep=
-    for p in "''${pkgsHostTarget[@]}" ; do
-      if [[ -d "$p/lib" ]] ; then
-        _extraRunpaths+="$_sep$p/lib"
-        if [[ -z "$_sep" ]] ; then
-          _sep=:
-        fi
-      fi
-    done
-
+  addDlopenRunpathsPhase = ''
     elfHasDynamicSection() {
         patchelf --print-rpath "$1" >& /dev/null
     }
 
     while IFS= read -r -d $'\0' path ; do
-      if elfHasDynamicSection "$path" ; then
-        patchelf "$path" --add-rpath "''${_extraRunpaths}"
-      fi
+      elfHasDynamicSection "$path" || continue
+      for dep in $addDlopenRunpaths ; do
+        patchelf "$path" --add-rpath "$dep"
+      done
     done < <(
       for o in $(getAllOutputNames) ; do
         find "''${!o}" -type f -and "(" -executable -or -iname '*.so' ")" -print0
       done
     )
-
-    unset _extraRunpaths
-    unset _sep
   '';
 
-  postPhases = lib.optionals stdenv.isLinux [ "addBuildInputRunpathsPhase" ];
+  postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
-  cargoTestFlags = [
-    "-p"
-    "rerun"
-    "--workspace"
-    "--exclude=crates/rerun/src/lib.rs"
-  ];
-
+  # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
+  patches = [ ./tests.patch ];
   passthru.tests = {
     inherit (python3Packages) rerun-sdk;
   };
@@ -122,7 +115,10 @@ rustPlatform.buildRustPackage rec {
       asl20
       mit
     ];
-    maintainers = with maintainers; [ SomeoneSerge ];
+    maintainers = with maintainers; [
+      SomeoneSerge
+      robwalt
+    ];
     mainProgram = "rerun";
   };
 }

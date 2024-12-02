@@ -1,32 +1,39 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, isPyPy
-, snappy
-, cffi
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cramjam,
+  setuptools,
+  snappy,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "python-snappy";
-  version = "0.6.1";
-  format = "setuptools";
+  version = "0.7.3";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tqEHqwYgasxTWdTFYyvZsi1EhwKnmzFpsMYuD7gIuyo=";
+    pname = "python_snappy";
+    inherit version;
+    hash = "sha256-QCFsG637LTiseB7LFiodDsQPjul0fmELz+/fp5SGzuM=";
   };
+
+  build-system = [
+    cramjam
+    setuptools
+  ];
 
   buildInputs = [ snappy ];
 
-  propagatedBuildInputs = lib.optional isPyPy cffi;
+  dependencies = [ cramjam ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {
     description = "Python library for the snappy compression library from Google";
-    homepage = "https://github.com/andrix/python-snappy";
+    homepage = "https://github.com/intake/python-snappy";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

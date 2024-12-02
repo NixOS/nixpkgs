@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "0.10.0";
+  version = "0.15.0";
 in
 crystal.buildCrystalPackage {
   pname = "crystalline";
@@ -17,7 +17,7 @@ crystal.buildCrystalPackage {
     owner = "elbywan";
     repo = "crystalline";
     rev = "v${version}";
-    hash = "sha256-g4k/vP7yYbTAy2bTAfr6HQhkskWfI6Zv2lxP+AZf6yw=";
+    hash = "sha256-6ZAogEuOJH1QQ6NSJ+8KZUSFSgQAcvd4U9vWNAGix/M=";
   };
 
   format = "crystal";
@@ -40,7 +40,8 @@ crystal.buildCrystalPackage {
   '';
 
   meta = with lib; {
-    description = "A Language Server Protocol implementation for Crystal";
+    description = "Language Server Protocol implementation for Crystal";
+    mainProgram = "crystalline";
     homepage = "https://github.com/elbywan/crystalline";
     license = licenses.mit;
     maintainers = with maintainers; [ donovanglover ];

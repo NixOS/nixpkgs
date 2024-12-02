@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pymongo
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pymongo,
 }:
 
 buildPythonPackage rec {
@@ -21,5 +22,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/turicas/mongodict/";
     license = licenses.gpl3;
   };
-
 }

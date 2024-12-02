@@ -1,7 +1,5 @@
-{ lib
-, stdenv
+{ stdenv
 , boost
-, cmake
 , gettext
 , libdrm
 , meson
@@ -13,7 +11,7 @@
 }:
 
 stdenv.mkDerivation {
-  inherit (tuxclocker) src version meta BOOST_INCLUDEDIR BOOST_LIBRARYDIR;
+  inherit (tuxclocker) src version meta;
 
   pname = "tuxclocker-plugins";
 

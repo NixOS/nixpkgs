@@ -1,57 +1,55 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, pkg-config
-, qmake
-, qttools
-, gstreamer
-, libX11
-, pulseaudio
-, qtbase
-, qtmultimedia
-, qtx11extras
-
+{ fetchFromGitHub
+, gst_all_1
+, gst-plugins-bad
 , gst-plugins-base
 , gst-plugins-good
-, gst-plugins-bad
 , gst-plugins-ugly
-, wayland
+, gstreamer
+, lib
+, libX11
 , pipewire
-, wrapQtAppsHook
+, pkg-config
+, pulseaudio
+, qt6
+, stdenv
+, wayland
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "vokoscreen-ng";
-  version = "3.8.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "vkohaupt";
     repo = "vokoscreenNG";
     rev = version;
-    sha256 = "sha256-4tQ/fLaAbjfc3mt2qJsW9scku/CGUs74SehDaZgLPj4=";
+    hash = "sha256-PLgKOdSx0Kdobex5KaeCxWcindHEN9p4+xaVN/gr7Pk=";
   };
 
   qmakeFlags = [ "src/vokoscreenNG.pro" ];
 
-  nativeBuildInputs = [ qttools pkg-config qmake wrapQtAppsHook ];
+  nativeBuildInputs = [ qt6.qttools pkg-config qt6.qmake qt6.wrapQtAppsHook ];
   buildInputs = [
-    gstreamer
+    gst_all_1.gstreamer
     libX11
     pulseaudio
-    qtbase
-    qtmultimedia
-    qtx11extras
+    qt6.qtbase
+    qt6.qtmultimedia
     wayland
     pipewire
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
   ];
 
   postPatch = ''
     substituteInPlace src/vokoscreenNG.pro \
       --replace lrelease-qt5 lrelease
+  '';
+
+  preBuild = ''
+    lrelease src/language/*.ts
   '';
 
   postInstall = ''
@@ -67,7 +65,7 @@ mkDerivation rec {
     description = "User friendly Open Source screencaster for Linux and Windows";
     license = licenses.gpl2Plus;
     homepage = "https://github.com/vkohaupt/vokoscreenNG";
-    maintainers = with maintainers; [ shamilton ];
+    maintainers = with maintainers; [ shamilton dietmarw ];
     platforms = platforms.linux;
     mainProgram = "vokoscreenNG";
   };

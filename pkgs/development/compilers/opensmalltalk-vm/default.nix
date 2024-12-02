@@ -103,7 +103,7 @@ let
       '';
 
       meta = {
-        description = "The cross-platform virtual machine for Squeak, Pharo, Cuis, and Newspeak.";
+        description = "Cross-platform virtual machine for Squeak, Pharo, Cuis, and Newspeak";
         mainProgram = scriptName;
         homepage = "https://opensmalltalk.org/";
         license = with lib.licenses; [ mit ];
@@ -118,10 +118,12 @@ let
         platformDir = "linux64ARMv8";
         vmName = "squeak.cog.spur";
         scriptName = "squeak";
-        configureFlagsArray = ''(
-          CFLAGS="-DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -DCOGMTVM=0 -DDUAL_MAPPED_CODE_ZONE=1"
-          LIBS="-lrt"
-        )'';
+        configureFlagsArray = ''
+          (
+            CFLAGS="-DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -DCOGMTVM=0 -DDUAL_MAPPED_CODE_ZONE=1"
+            LIBS="-lrt"
+          )
+        '';
         configureFlags = [
           "--with-vmversion=5.0"
           "--with-src=src/spur64.cog"
@@ -134,9 +136,11 @@ let
         platformDir = "linux64ARMv8";
         vmName = "squeak.stack.spur";
         scriptName = "squeak";
-        configureFlagsArray = ''(
-          CFLAGS="-DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -D__ARM_ARCH_ISA_A64 -DARM64 -D__arm__ -D__arm64__ -D__aarch64__"
-        )'';
+        configureFlagsArray = ''
+          (
+            CFLAGS="-DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -D__ARM_ARCH_ISA_A64 -DARM64 -D__arm__ -D__arm64__ -D__aarch64__"
+          )
+        '';
         configureFlags = [
           "--with-vmversion=5.0"
           "--with-src=src/spur64.stack"
@@ -151,9 +155,11 @@ let
         platformDir = "linux64x64";
         vmName = "newspeak.cog.spur";
         scriptName = "newspeak";
-        configureFlagsArray = ''(
-          CFLAGS="-DNDEBUG -DDEBUGVM=0"
-        )'';
+        configureFlagsArray = ''
+          (
+            CFLAGS="-DNDEBUG -DDEBUGVM=0"
+          )
+        '';
         configureFlags = [
           "--with-vmversion=5.0"
           "--with-src=src/spur64.cog.newspeak"
@@ -166,9 +172,11 @@ let
         platformDir = "linux64x64";
         vmName = "squeak.cog.spur";
         scriptName = "squeak";
-        configureFlagsArray = ''(
-          CFLAGS="-DNDEBUG -DDEBUGVM=0 -DCOGMTVM=0"
-        )'';
+        configureFlagsArray = ''
+          (
+            CFLAGS="-DNDEBUG -DDEBUGVM=0 -DCOGMTVM=0"
+          )
+        '';
         configureFlags = [
           "--with-vmversion=5.0"
           "--with-src=src/spur64.cog"

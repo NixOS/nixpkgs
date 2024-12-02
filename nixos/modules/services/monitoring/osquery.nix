@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   cfg = config.services.osquery;
   dirname = path: with lib.strings; with lib.lists; concatStringsSep "/"
@@ -13,8 +11,8 @@ let
   # flagfile is the file containing osquery command line flags to be
   # provided to the application using the special --flagfile option.
   flagfile = pkgs.writeText "osquery.flags"
-    (concatStringsSep "\n"
-      (mapAttrsToList (name: value: "--${name}=${value}")
+    (lib.concatStringsSep "\n"
+      (lib.mapAttrsToList (name: value: "--${name}=${value}")
         # Use the conf derivation if not otherwise specified.
         ({ config_path = conf; } // cfg.flags)));
 
@@ -26,49 +24,49 @@ let
 in
 {
   options.services.osquery = {
-    enable = mkEnableOption (mdDoc "osqueryd daemon");
+    enable = lib.mkEnableOption "osqueryd daemon";
 
-    settings = mkOption {
+    settings = lib.mkOption {
       default = { };
-      description = mdDoc ''
+      description = ''
         Configuration to be written to the osqueryd JSON configuration file.
         To understand the configuration format, refer to https://osquery.readthedocs.io/en/stable/deployment/configuration/#configuration-components.
       '';
       example = {
         options.utc = false;
       };
-      type = types.attrs;
+      type = lib.types.attrs;
     };
 
-    flags = mkOption {
+    flags = lib.mkOption {
       default = { };
-      description = mdDoc ''
+      description = ''
         Attribute set of flag names and values to be written to the osqueryd flagfile.
         For more information, refer to https://osquery.readthedocs.io/en/stable/installation/cli-flags.
       '';
       example = {
         config_refresh = "10";
       };
-      type = with types;
+      type = with lib.types;
         submodule {
           freeformType = attrsOf str;
           options = {
-            database_path = mkOption {
+            database_path = lib.mkOption {
               default = "/var/lib/osquery/osquery.db";
               readOnly = true;
-              description = mdDoc "Path used for the database file.";
+              description = "Path used for the database file.";
               type = path;
             };
-            logger_path = mkOption {
+            logger_path = lib.mkOption {
               default = "/var/log/osquery";
               readOnly = true;
-              description = mdDoc "Base directory used for logging.";
+              description = "Base directory used for logging.";
               type = path;
             };
-            pidfile = mkOption {
+            pidfile = lib.mkOption {
               default = "/run/osquery/osqueryd.pid";
               readOnly = true;
-              description = mdDoc "Path used for pid file.";
+              description = "Path used for pid file.";
               type = path;
             };
           };
@@ -76,7 +74,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ osqueryi ];
     systemd.services.osqueryd = {
       after = [ "network.target" "syslog.service" ];

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, pytz
-, ujson
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  ujson,
 }:
 
 buildPythonPackage rec {
@@ -29,31 +30,23 @@ buildPythonPackage rec {
     pytz
   ];
 
-  passthru.optional-dependencies = {
-    fast = [
-      ujson
-    ];
+  optional-dependencies = {
+    fast = [ ujson ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "tests/*.py"
-  ];
+  pytestFlagsArray = [ "tests/*.py" ];
 
   disabledTests = [
     # This test fail for unknown reason, I suspect it to be flaky.
     "test_invalid_country_code"
   ];
 
-  pythonImportsCheck = [
-    "ripe.atlas.sagan"
-  ];
+  pythonImportsCheck = [ "ripe.atlas.sagan" ];
 
   meta = with lib; {
-    description = "A parsing library for RIPE Atlas measurements results";
+    description = "Parsing library for RIPE Atlas measurements results";
     homepage = "https://github.com/RIPE-NCC/ripe-atlas-sagan";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ raitobezarius ];

@@ -2,12 +2,12 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-muse";
-  version = "0.0.30";
+  version = "0.0.33";
 
   src = fetchPypi {
     inherit version;
     pname = "Mopidy-Muse";
-    sha256 = "sha256-uFptv2niq8LVvEmMEteEN+RzghDiPC7z5EsAmxifDmw=";
+    hash = "sha256-CEPAPWtMrD+HljyqBB6EAyGVeOjzkvVoEywlE4XEJGs=";
   };
 
   propagatedBuildInputs = [
@@ -24,6 +24,6 @@ pythonPackages.buildPythonApplication rec {
     description = "Mopidy web client with Snapcast support";
     homepage = "https://github.com/cristianpb/muse";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

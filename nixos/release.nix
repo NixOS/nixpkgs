@@ -1,6 +1,6 @@
 with import ../lib;
 
-{ nixpkgs ? { outPath = cleanSource ./..; revCount = 130979; shortRev = "gfedcba"; }
+{ nixpkgs ? { outPath = cleanSource ./..; revCount = 708350; shortRev = "1d95cb5"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" "aarch64-linux" ]
 , configuration ? {}
@@ -12,7 +12,7 @@ let
 
   version = fileContents ../.version;
   versionSuffix =
-    (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
+    (if stableBranch then "." else "beta") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
   # Run the tests for each platform.  You can run a test by doing
   # e.g. ‘nix-build release.nix -A tests.login.x86_64-linux’,
@@ -49,7 +49,7 @@ let
     system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
 
     # At creation time we do not have state yet, so just default to latest.
-    system.stateVersion = config.system.nixos.version;
+    system.stateVersion = config.system.nixos.release;
   };
 
   makeModules = module: rest: [ configuration versionModule module rest ];
@@ -177,6 +177,12 @@ in rec {
     inherit system;
   });
 
+  iso_plasma6 = forMatchingSystems supportedSystems (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma6.nix;
+    type = "plasma6";
+    inherit system;
+  });
+
   iso_gnome = forMatchingSystems supportedSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-gnome.nix;
     type = "gnome";
@@ -223,21 +229,6 @@ in rec {
     type = "minimal-new-kernel-no-zfs";
     inherit system;
   });
-
-  # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
-  ova = forMatchingSystems [ "x86_64-linux" ] (system:
-
-    with import ./.. { inherit system; };
-
-    hydraJob ((import lib/eval-config.nix {
-      inherit system;
-      modules =
-        [ versionModule
-          ./modules/installer/virtualbox-demo.nix
-        ];
-    }).config.system.build.virtualBoxOVA)
-
-  );
 
   # KVM image for proxmox in VMA format
   proxmoxImage = forMatchingSystems [ "x86_64-linux" ] (system:
@@ -306,11 +297,106 @@ in rec {
         [ configuration
           versionModule
           ./maintainers/scripts/ec2/amazon-image.nix
-          ({ ... }: { amazonImage.sizeMB = "auto"; })
+          ({ ... }: { virtualisation.diskSize = "auto"; })
         ];
     }).config.system.build.amazonImage)
 
   );
+
+  # An image that can be imported into incus and used for container creation
+  incusContainerImage =
+    forMatchingSystems
+      [
+        "x86_64-linux"
+        "aarch64-linux"
+      ]
+      (
+        system:
+        with import ./.. { inherit system; };
+
+        hydraJob (
+          (import lib/eval-config.nix {
+            inherit system;
+            modules = [
+              configuration
+              versionModule
+              ./maintainers/scripts/incus/incus-container-image.nix
+            ];
+          }).config.system.build.squashfs
+        )
+      );
+
+  # Metadata for the incus image
+  incusContainerMeta =
+    forMatchingSystems
+      [
+        "x86_64-linux"
+        "aarch64-linux"
+      ]
+      (
+        system:
+
+        with import ./.. { inherit system; };
+
+        hydraJob (
+          (import lib/eval-config.nix {
+            inherit system;
+            modules = [
+              configuration
+              versionModule
+              ./maintainers/scripts/incus/incus-container-image.nix
+            ];
+          }).config.system.build.metadata
+        )
+      );
+
+  # An image that can be imported into incus and used for container creation
+  incusVirtualMachineImage =
+    forMatchingSystems
+      [
+        "x86_64-linux"
+        "aarch64-linux"
+      ]
+      (
+        system:
+
+        with import ./.. { inherit system; };
+
+        hydraJob (
+          (import lib/eval-config.nix {
+            inherit system;
+            modules = [
+              configuration
+              versionModule
+              ./maintainers/scripts/incus/incus-virtual-machine-image.nix
+            ];
+          }).config.system.build.qemuImage
+        )
+      );
+
+  # Metadata for the incus image
+  incusVirtualMachineImageMeta =
+    forMatchingSystems
+      [
+        "x86_64-linux"
+        "aarch64-linux"
+      ]
+      (
+        system:
+
+        with import ./.. { inherit system; };
+
+        hydraJob (
+          (import lib/eval-config.nix {
+            inherit system;
+            modules = [
+              configuration
+              versionModule
+              ./maintainers/scripts/incus/incus-virtual-machine-image.nix
+            ];
+          }).config.system.build.metadata
+        )
+      );
 
   # An image that can be imported into lxd and used for container creation
   lxdContainerImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
@@ -435,7 +521,7 @@ in rec {
 
     kde = makeClosure ({ ... }:
       { services.xserver.enable = true;
-        services.xserver.displayManager.sddm.enable = true;
+        services.displayManager.sddm.enable = true;
         services.xserver.desktopManager.plasma5.enable = true;
       });
 

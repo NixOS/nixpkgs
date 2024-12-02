@@ -25,6 +25,7 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ openssl ];
 
+  __darwinAllowLocalNetworking = true;
   doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ alcotest ];
   preCheck = ''
@@ -34,7 +35,7 @@ buildDunePackage rec {
 
   meta = {
     homepage = "http://savonet.rastageeks.org/";
-    description = "OCaml bindings for libssl ";
+    description = "OCaml bindings for libssl";
     license = "LGPL+link exception";
     maintainers = with lib.maintainers; [ anmonteiro dandellion maggesi ];
   };

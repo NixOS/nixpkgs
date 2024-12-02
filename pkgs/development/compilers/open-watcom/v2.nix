@@ -13,13 +13,13 @@
 stdenv.mkDerivation rec {
   pname = "${passthru.prettyName}-unwrapped";
   # nixpkgs-update: no auto update
-  version = "unstable-2023-11-24";
+  version = "0-unstable-2024-10-13";
 
   src = fetchFromGitHub {
     owner = "open-watcom";
     repo = "open-watcom-v2";
-    rev = "7976a5c7ca4e856907ccd378c17c71578ad51cb7";
-    hash = "sha256-u9ljy4dZRoXKyUqdolxZijpc99TuhKPPlL6xlV3xJXA=";
+    rev = "f0a6465832643ba08b7f94fb814c552804fb395b";
+    hash = "sha256-rT3z0KrkCZ78SbsK2CEHfvJa1TEnRH2kwhzZhi8fZDo=";
   };
 
   postPatch = ''
@@ -46,9 +46,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withDocs [
     ghostscript
   ];
-
-  # Work around https://github.com/NixOS/nixpkgs/issues/166205
-  env.NIX_LDFLAGS = lib.optionalString (stdenv.cc.isClang && stdenv.cc.libcxx != null) "-l${stdenv.cc.libcxx.cxxabi.libName}";
 
   configurePhase = ''
     runHook preConfigure
@@ -92,11 +89,13 @@ stdenv.mkDerivation rec {
     prettyName = "open-watcom-v2";
     updateScript = unstableGitUpdater {
       url = "https://github.com/open-watcom/open-watcom-v2.git";
+      # no numerical releases, monthly "YYYY-MM-DD-Build" tags and daily "Current-build", "Last-CI-build" & "Coverity-scan" retagging
+      hardcodeZeroVersion = true;
     };
   };
 
   meta = with lib; {
-    description = "The v2 fork of the Open Watcom suite of compilers and tools";
+    description = "V2 fork of the Open Watcom suite of compilers and tools";
     longDescription = ''
       A fork of Open Watcom: A C/C++/Fortran compiler and assembler suite
       targeting a multitude of architectures (x86, IA-32, Alpha AXP, MIPS,

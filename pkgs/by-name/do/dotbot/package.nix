@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -19,14 +20,20 @@ python3Packages.buildPythonApplication rec {
     patchShebangs bin/dotbot
   '';
 
+  patches = [
+    # ignore pytest-cache because it was not at /tmp/nix-shell and it was used by pytest itself not our program
+    ./0001-fix-build.patch
+  ];
+
   nativeBuildInputs = with python3Packages; [ setuptools ];
 
   propagatedBuildInputs = with python3Packages; [ pyyaml ];
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
-  meta = with lib; {
-    description = "A tool that bootstraps your dotfiles";
+  meta = {
+    description = "Tool that bootstraps your dotfiles";
+    mainProgram = "dotbot";
     longDescription = ''
       Dotbot is designed to be lightweight and self-contained, with no external
       dependencies and no installation required. Dotbot can also be a drop-in
@@ -35,9 +42,8 @@ python3Packages.buildPythonApplication rec {
       dotfiles.
     '';
     homepage = "https://github.com/anishathalye/dotbot";
-    changelog =
-      "https://github.com/anishathalye/dotbot/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ludat ];
+    changelog = "https://github.com/anishathalye/dotbot/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ludat ];
   };
 }

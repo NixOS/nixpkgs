@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, colorama
-, dill
-, fetchFromGitHub
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  colorama,
+  dill,
+  fetchFromGitHub,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -23,25 +24,19 @@ buildPythonPackage rec {
     hash = "sha256-o9IAk3EN8ghEft7Y7Xx+sEjWMNgoyiZ0eiBqnCyXkm8=";
   };
 
-  propagatedBuildInputs = [
-    colorama
-  ];
+  propagatedBuildInputs = [ colorama ];
 
-  passthru.optional-dependencies = {
-    all = [
-      dill
-    ];
+  optional-dependencies = {
+    all = [ dill ];
   };
 
   nativeCheckInputs = [
     numpy
     pandas
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
-  pythonImportsCheck = [
-    "debuglater"
-  ];
+  pythonImportsCheck = [ "debuglater" ];
 
   meta = with lib; {
     description = "Module for post-mortem debugging of Python programs";

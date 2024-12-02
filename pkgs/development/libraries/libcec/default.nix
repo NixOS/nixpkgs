@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=1"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DHAVE_LINUX_API=1"
   ];
 
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "http://libcec.pulse-eight.com";
     license = lib.licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.titanous ];
+    maintainers = teams.kodi.members;
   };
 }

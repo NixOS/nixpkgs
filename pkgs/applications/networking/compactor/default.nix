@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "dns-stats";
-    repo = pname;
+    repo = "compactor";
     rev = version;
     fetchSubmodules = true;
     hash = "sha256-5Z14suhO5ghhmZsSj4DsSoKm+ct2gQFO6qxhjmx4Xm4=";
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.isDarwin; # check-dnstap.sh failing on Darwin
+  doCheck = !stdenv.hostPlatform.isDarwin; # check-dnstap.sh failing on Darwin
   nativeCheckInputs = [
     cbor-diag
     cddl
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Tools to capture DNS traffic and record it in C-DNS files";
     homepage    = "https://dns-stats.org/";
-    changelog   = "https://github.com/dns-stats/${pname}/raw/${version}/ChangeLog.txt";
+    changelog   = "https://github.com/dns-stats/compactor/raw/${version}/ChangeLog.txt";
     license     = licenses.mpl20;
     maintainers = with maintainers; [ fdns ];
     platforms   = platforms.unix;

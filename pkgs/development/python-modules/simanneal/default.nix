@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pytest }:
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "simanneal";
@@ -16,7 +21,7 @@ buildPythonPackage rec {
   checkPhase = "pytest tests";
 
   meta = with lib; {
-    description = "A python implementation of the simulated annealing optimization technique";
+    description = "Python implementation of the simulated annealing optimization technique";
     homepage = "https://github.com/perrygeo/simanneal";
     license = licenses.isc;
     maintainers = with maintainers; [ veprbl ];

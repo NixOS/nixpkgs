@@ -1,4 +1,8 @@
-{ buildPecl, lib, fetchFromGitHub }:
+{
+  buildPecl,
+  lib,
+  fetchFromGitHub,
+}:
 
 buildPecl rec {
   version = "unstable-2022-03-25";

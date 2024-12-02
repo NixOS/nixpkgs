@@ -1,16 +1,17 @@
-{ lib
-, pythonOlder
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, cython
-, slurm
+{
+  lib,
+  pythonOlder,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  cython,
+  slurm,
 }:
 
 buildPythonPackage rec {
   pname = "pyslurm";
-  version = "23.2.2";
-  format = "setuptools";
+  version = "24.5.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -18,18 +19,20 @@ buildPythonPackage rec {
     repo = "pyslurm";
     owner = "PySlurm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-M8seh5pkw2OTiDU4O96D0Lg3+FrlB2w4ehy53kSxyoU=";
+    hash = "sha256-EJTzaoHBidnaHxFLw8FrjJITUxioRGEhl1yvm/QDpXc=";
   };
 
-  patches = [ (fetchpatch {
-    name = "remove-undeclared-KILL_JOB_ARRAY";
-    url = "https://github.com/PySlurm/pyslurm/commit/f7a7d8beb8ceb4e4c1b248bab2ebb995dcae77e2.patch";
-    hash = "sha256-kQLGiGzAhqP8Z6pObz9vdTRdITd12w7KuUDXsfyLIU8=";
-  })];
+  nativeBuildInputs = [ setuptools ];
 
-  buildInputs = [ cython slurm ];
+  buildInputs = [
+    cython
+    slurm
+  ];
 
-  setupPyBuildFlags = [ "--slurm-lib=${lib.getLib slurm}/lib" "--slurm-inc=${lib.getDev slurm}/include" ];
+  env = {
+    SLURM_LIB_DIR = "${lib.getLib slurm}/lib";
+    SLURM_INCLUDE_DIR = "${lib.getDev slurm}/include";
+  };
 
   # Test cases need /etc/slurm/slurm.conf and require a working slurm installation
   doCheck = false;

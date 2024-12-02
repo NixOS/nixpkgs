@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     directory where you saved it.
   '';
 
-  src = if (stdenv.isi686) then
+  src = if (stdenv.hostPlatform.isi686) then
     requireFile {
       message = goBuyItNow;
       name = "vessel-${version}-bin";
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A fluid physics based puzzle game";
+    description = "Fluid physics based puzzle game";
     longDescription = ''
       Living liquid machines have overrun this world of unstoppable progress,
       and it is the role of their inventor, Arkwright, to stop the chaos they are

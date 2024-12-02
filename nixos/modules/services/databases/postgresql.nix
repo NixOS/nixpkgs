@@ -1,33 +1,60 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    any
+    attrValues
+    concatMapStrings
+    concatStringsSep
+    const
+    elem
+    escapeShellArgs
+    filterAttrs
+    getName
+    isString
+    literalExpression
+    mapAttrs
+    mapAttrsToList
+    mkAfter
+    mkBefore
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    mkPackageOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    optionalString
+    types
+    versionAtLeast
+    warn
+    ;
 
   cfg = config.services.postgresql;
 
-  postgresql =
-    let
-      # ensure that
-      #   services.postgresql = {
-      #     enableJIT = true;
-      #     package = pkgs.postgresql_<major>;
-      #   };
-      # works.
-      base = if cfg.enableJIT && !cfg.package.jitSupport then cfg.package.withJIT else cfg.package;
-    in
-    if cfg.extraPlugins == []
-      then base
-      else base.withPackages cfg.extraPlugins;
+  # ensure that
+  #   services.postgresql = {
+  #     enableJIT = true;
+  #     package = pkgs.postgresql_<major>;
+  #   };
+  # works.
+  basePackage = if cfg.enableJIT
+    then cfg.package.withJIT
+    else cfg.package.withoutJIT;
+
+  postgresql = if cfg.extensions == []
+    then basePackage
+    else basePackage.withPackages cfg.extensions;
 
   toStr = value:
     if true == value then "yes"
     else if false == value then "no"
     else if isString value then "'${lib.replaceStrings ["'"] ["''"] value}'"
-    else toString value;
+    else builtins.toString value;
 
   # The main PostgreSQL configuration file.
-  configFile = pkgs.writeTextDir "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") cfg.settings));
+  configFile = pkgs.writeTextDir "postgresql.conf" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n} = ${toStr v}") (filterAttrs (const (x: x != null)) cfg.settings)));
 
   configFileCheck = pkgs.runCommand "postgresql-configfile-check" {} ''
     ${cfg.package}/bin/postgres -D${configFile} -C config_file >/dev/null
@@ -36,11 +63,17 @@ let
 
   groupAccessAvailable = versionAtLeast postgresql.version "11.0";
 
+  extensionNames = map getName postgresql.installedExtensions;
+  extensionInstalled = extension: elem extension extensionNames;
 in
 
 {
   imports = [
     (mkRemovedOptionModule [ "services" "postgresql" "extraConfig" ] "Use services.postgresql.settings instead.")
+
+    (mkRenamedOptionModule [ "services" "postgresql" "logLinePrefix" ] [ "services" "postgresql" "settings" "log_line_prefix" ])
+    (mkRenamedOptionModule [ "services" "postgresql" "port" ] [ "services" "postgresql" "settings" "port" ])
+    (mkRenamedOptionModule [ "services" "postgresql" "extraPlugins" ] [ "services" "postgresql" "extensions" ])
   ];
 
   ###### interface
@@ -49,33 +82,25 @@ in
 
     services.postgresql = {
 
-      enable = mkEnableOption (lib.mdDoc "PostgreSQL Server");
+      enable = mkEnableOption "PostgreSQL Server";
 
-      enableJIT = mkEnableOption (lib.mdDoc "JIT support");
+      enableJIT = mkEnableOption "JIT support";
 
       package = mkPackageOption pkgs "postgresql" {
         example = "postgresql_15";
       };
 
-      port = mkOption {
-        type = types.port;
-        default = 5432;
-        description = lib.mdDoc ''
-          The port on which PostgreSQL listens.
-        '';
-      };
-
       checkConfig = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Check the syntax of the configuration file at compile time";
+        description = "Check the syntax of the configuration file at compile time";
       };
 
       dataDir = mkOption {
         type = types.path;
         defaultText = literalExpression ''"/var/lib/postgresql/''${config.services.postgresql.package.psqlSchema}"'';
         example = "/var/lib/postgresql/15";
-        description = lib.mdDoc ''
+        description = ''
           The data directory for PostgreSQL. If left as the default value
           this directory will automatically be created before the PostgreSQL server starts, otherwise
           the sysadmin is responsible for ensuring the directory exists with appropriate ownership
@@ -86,7 +111,7 @@ in
       authentication = mkOption {
         type = types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Defines how users authenticate themselves to the server. See the
           [PostgreSQL documentation for pg_hba.conf](https://www.postgresql.org/docs/current/auth-pg-hba-conf.html)
           for details on the expected format of this option. By default,
@@ -106,7 +131,7 @@ in
           map-name-0 system-username-0 database-username-0
           map-name-1 system-username-1 database-username-1
         '';
-        description = lib.mdDoc ''
+        description = ''
           Defines the mapping from system users to database users.
 
           See the [auth doc](https://postgresql.org/docs/current/auth-username-maps.html).
@@ -117,7 +142,7 @@ in
         type = with types; listOf str;
         default = [];
         example = [ "--data-checksums" "--allow-group-access" ];
-        description = lib.mdDoc ''
+        description = ''
           Additional arguments passed to `initdb` during data dir
           initialisation.
         '';
@@ -131,7 +156,7 @@ in
             alter user postgres with password 'myPassword';
           ''';'';
 
-        description = lib.mdDoc ''
+        description = ''
           A file containing SQL statements to execute on first startup.
         '';
       };
@@ -139,7 +164,7 @@ in
       ensureDatabases = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Ensures that the specified databases exist.
           This option will never delete existing databases, especially not when the value of this
           option is changed. This means that databases created once through this option or
@@ -156,42 +181,15 @@ in
           options = {
             name = mkOption {
               type = types.str;
-              description = lib.mdDoc ''
+              description = ''
                 Name of the user to ensure.
-              '';
-            };
-
-            ensurePermissions = mkOption {
-              type = types.attrsOf types.str;
-              default = {};
-              visible = false; # This option has been deprecated.
-              description = lib.mdDoc ''
-                This option is DEPRECATED and should not be used in nixpkgs anymore,
-                use `ensureDBOwnership` instead. It can also break with newer
-                versions of PostgreSQL (≥ 15).
-
-                Permissions to ensure for the user, specified as an attribute set.
-                The attribute names specify the database and tables to grant the permissions for.
-                The attribute values specify the permissions to grant. You may specify one or
-                multiple comma-separated SQL privileges here.
-
-                For more information on how to specify the target
-                and on which privileges exist, see the
-                [GRANT syntax](https://www.postgresql.org/docs/current/sql-grant.html).
-                The attributes are used as `GRANT ''${attrValue} ON ''${attrName}`.
-              '';
-              example = literalExpression ''
-                {
-                  "DATABASE \"nextcloud\"" = "ALL PRIVILEGES";
-                  "ALL TABLES IN SCHEMA public" = "ALL PRIVILEGES";
-                }
               '';
             };
 
             ensureDBOwnership = mkOption {
               type = types.bool;
               default = false;
-              description = mdDoc ''
+              description = ''
                 Grants the user ownership to a database with the same name.
                 This database must be defined manually in
                 [](#opt-services.postgresql.ensureDatabases).
@@ -199,7 +197,7 @@ in
             };
 
             ensureClauses = mkOption {
-              description = lib.mdDoc ''
+              description = ''
                 An attrset of clauses to grant to the user. Under the hood this uses the
                 [ALTER USER syntax](https://www.postgresql.org/docs/current/sql-alteruser.html) for each attrName where
                 the attrValue is true in the attrSet:
@@ -224,7 +222,7 @@ in
                 in {
                   superuser = mkOption {
                     type = types.nullOr types.bool;
-                    description = lib.mdDoc ''
+                    description = ''
                       Grants the user, created by the ensureUser attr, superuser permissions. From the postgres docs:
 
                       A database superuser bypasses all permission checks,
@@ -241,7 +239,7 @@ in
                   };
                   createrole = mkOption {
                     type = types.nullOr types.bool;
-                    description = lib.mdDoc ''
+                    description = ''
                       Grants the user, created by the ensureUser attr, createrole permissions. From the postgres docs:
 
                       A role must be explicitly given permission to create more
@@ -260,7 +258,7 @@ in
                   };
                   createdb = mkOption {
                     type = types.nullOr types.bool;
-                    description = lib.mdDoc ''
+                    description = ''
                       Grants the user, created by the ensureUser attr, createdb permissions. From the postgres docs:
 
                       A role must be explicitly given permission to create
@@ -275,7 +273,7 @@ in
                   };
                   "inherit" = mkOption {
                     type = types.nullOr types.bool;
-                    description = lib.mdDoc ''
+                    description = ''
                       Grants the user created inherit permissions. From the postgres docs:
 
                       A role is given permission to inherit the privileges of
@@ -290,7 +288,7 @@ in
                   };
                   login = mkOption {
                     type = types.nullOr types.bool;
-                    description = lib.mdDoc ''
+                    description = ''
                       Grants the user, created by the ensureUser attr, login permissions. From the postgres docs:
 
                       Only roles that have the LOGIN attribute can be used as
@@ -312,7 +310,7 @@ in
                   };
                   replication = mkOption {
                     type = types.nullOr types.bool;
-                    description = lib.mdDoc ''
+                    description = ''
                       Grants the user, created by the ensureUser attr, replication permissions. From the postgres docs:
 
                       A role must explicitly be given permission to initiate
@@ -328,7 +326,7 @@ in
                   };
                   bypassrls = mkOption {
                     type = types.nullOr types.bool;
-                    description = lib.mdDoc ''
+                    description = ''
                       Grants the user, created by the ensureUser attr, replication permissions. From the postgres docs:
 
                       A role must be explicitly given permission to bypass
@@ -348,7 +346,7 @@ in
           };
         });
         default = [];
-        description = lib.mdDoc ''
+        description = ''
           Ensures that the specified users exist.
           The PostgreSQL users will be identified using peer authentication. This authenticates the Unix user with the
           same name only, and that without the need for a password.
@@ -372,37 +370,57 @@ in
       enableTCPIP = mkOption {
         type = types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether PostgreSQL should listen on all network interfaces.
           If disabled, the database can only be accessed via its Unix
           domain socket or via TCP connections to localhost.
         '';
       };
 
-      logLinePrefix = mkOption {
-        type = types.str;
-        default = "[%p] ";
-        example = "%m [%p] ";
-        description = lib.mdDoc ''
-          A printf-style string that is output at the beginning of each log line.
-          Upstream default is `'%m [%p] '`, i.e. it includes the timestamp. We do
-          not include the timestamp, because journal has it anyway.
-        '';
-      };
-
-      extraPlugins = mkOption {
+      extensions = mkOption {
         type = with types; coercedTo (listOf path) (path: _ignorePg: path) (functionTo (listOf path));
         default = _: [];
         example = literalExpression "ps: with ps; [ postgis pg_repack ]";
-        description = lib.mdDoc ''
-          List of PostgreSQL plugins.
+        description = ''
+          List of PostgreSQL extensions to install.
         '';
       };
 
       settings = mkOption {
-        type = with types; attrsOf (oneOf [ bool float int str ]);
+        type = with types; submodule {
+          freeformType = attrsOf (oneOf [ bool float int str ]);
+          options = {
+            shared_preload_libraries = mkOption {
+              type = nullOr (coercedTo (listOf str) (concatStringsSep ", ") str);
+              default = null;
+              example = literalExpression ''[ "auto_explain" "anon" ]'';
+              description = ''
+                List of libraries to be preloaded.
+              '';
+            };
+
+            log_line_prefix = mkOption {
+              type = types.str;
+              default = "[%p] ";
+              example = "%m [%p] ";
+              description = ''
+                A printf-style string that is output at the beginning of each log line.
+                Upstream default is `'%m [%p] '`, i.e. it includes the timestamp. We do
+                not include the timestamp, because journal has it anyway.
+              '';
+            };
+
+            port = mkOption {
+              type = types.port;
+              default = 5432;
+              description = ''
+                The port on which PostgreSQL listens.
+              '';
+            };
+          };
+        };
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           PostgreSQL configuration. Refer to
           <https://www.postgresql.org/docs/current/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE>
           for an overview of `postgresql.conf`.
@@ -426,7 +444,7 @@ in
       recoveryConfig = mkOption {
         type = types.nullOr types.lines;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           Contents of the {file}`recovery.conf` file.
         '';
       };
@@ -436,7 +454,7 @@ in
         default = "postgres";
         internal = true;
         readOnly = true;
-        description = lib.mdDoc ''
+        description = ''
           PostgreSQL superuser account to use for various operations. Internal since changing
           this value would lead to breakage while setting up databases.
         '';
@@ -451,7 +469,7 @@ in
   config = mkIf cfg.enable {
 
     assertions = map ({ name, ensureDBOwnership, ... }: {
-      assertion = ensureDBOwnership -> builtins.elem name cfg.ensureDatabases;
+      assertion = ensureDBOwnership -> elem name cfg.ensureDatabases;
       message = ''
         For each database user defined with `services.postgresql.ensureUsers` and
         `ensureDBOwnership = true;`, a database with the same name must be defined
@@ -460,33 +478,30 @@ in
         Offender: ${name} has not been found among databases.
       '';
     }) cfg.ensureUsers;
-    # `ensurePermissions` is now deprecated, let's avoid it.
-    warnings = lib.optional (any ({ ensurePermissions, ... }: ensurePermissions != {}) cfg.ensureUsers) "
-      `services.postgresql.ensureUsers.*.ensurePermissions` is used in your expressions,
-      this option is known to be broken with newer PostgreSQL versions,
-      consider migrating to `services.postgresql.ensureUsers.*.ensureDBOwnership` or
-      consult the release notes or manual for more migration guidelines.
-
-      This option will be removed in NixOS 24.05 unless it sees significant
-      maintenance improvements.
-    ";
 
     services.postgresql.settings =
       {
         hba_file = "${pkgs.writeText "pg_hba.conf" cfg.authentication}";
         ident_file = "${pkgs.writeText "pg_ident.conf" cfg.identMap}";
         log_destination = "stderr";
-        log_line_prefix = cfg.logLinePrefix;
         listen_addresses = if cfg.enableTCPIP then "*" else "localhost";
-        port = cfg.port;
         jit = mkDefault (if cfg.enableJIT then "on" else "off");
       };
 
     services.postgresql.package = let
         mkThrow = ver: throw "postgresql_${ver} was removed, please upgrade your postgresql version.";
-        base = if versionAtLeast config.system.stateVersion "23.11" then pkgs.postgresql_15
+        mkWarn = ver: warn ''
+          The postgresql package is not pinned and selected automatically by
+          `system.stateVersion`. Right now this is `pkgs.postgresql_${ver}`, the
+          oldest postgresql version available and thus the next that will be
+          removed when EOL on the next stable cycle.
+
+          See also https://endoflife.date/postgresql
+        '';
+        base = if versionAtLeast config.system.stateVersion "24.11" then pkgs.postgresql_16
+            else if versionAtLeast config.system.stateVersion "23.11" then pkgs.postgresql_15
             else if versionAtLeast config.system.stateVersion "22.05" then pkgs.postgresql_14
-            else if versionAtLeast config.system.stateVersion "21.11" then pkgs.postgresql_13
+            else if versionAtLeast config.system.stateVersion "21.11" then mkWarn "13" pkgs.postgresql_13
             else if versionAtLeast config.system.stateVersion "20.03" then mkThrow "11"
             else if versionAtLeast config.system.stateVersion "17.09" then mkThrow "9_6"
             else mkThrow "9_5";
@@ -545,7 +560,7 @@ in
               rm -f ${cfg.dataDir}/*.conf
 
               # Initialise the database.
-              initdb -U ${cfg.superUser} ${concatStringsSep " " cfg.initdbArgs}
+              initdb -U ${cfg.superUser} ${escapeShellArgs cfg.initdbArgs}
 
               # See postStart!
               touch "${cfg.dataDir}/.first_startup"
@@ -561,7 +576,7 @@ in
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
           ''
-            PSQL="psql --port=${toString cfg.port}"
+            PSQL="psql --port=${builtins.toString cfg.settings.port}"
 
             while ! $PSQL -d postgres -c "" 2> /dev/null; do
                 if ! kill -0 "$MAINPID"; then exit 1; fi
@@ -583,11 +598,6 @@ in
               concatMapStrings
               (user:
               let
-                  userPermissions = concatStringsSep "\n"
-                    (mapAttrsToList
-                      (database: permission: ''$PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"' '')
-                      user.ensurePermissions
-                    );
                   dbOwnershipStmt = optionalString
                     user.ensureDBOwnership
                     ''$PSQL -tAc 'ALTER DATABASE "${user.name}" OWNER TO "${user.name}";' '';
@@ -599,7 +609,6 @@ in
                   userClauses = ''$PSQL -tAc 'ALTER ROLE "${user.name}" ${concatStringsSep " " clauseSqlStatements}' '';
                 in ''
                   $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
-                  ${userPermissions}
                   ${userClauses}
 
                   ${dbOwnershipStmt}
@@ -628,7 +637,48 @@ in
             TimeoutSec = 120;
 
             ExecStart = "${postgresql}/bin/postgres";
+
+            # Hardening
+            CapabilityBoundingSet = [ "" ];
+            DevicePolicy = "closed";
+            PrivateTmp = true;
+            ProtectHome = true;
+            ProtectSystem = "strict";
+            MemoryDenyWriteExecute = lib.mkDefault (cfg.settings.jit == "off" && (!any extensionInstalled [ "plv8" ]));
+            NoNewPrivileges = true;
+            LockPersonality = true;
+            PrivateDevices = true;
+            PrivateMounts = true;
+            ProcSubset = "pid";
+            ProtectClock = true;
+            ProtectControlGroups = true;
+            ProtectHostname = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectProc = "invisible";
+            RemoveIPC = true;
+            RestrictAddressFamilies = [
+              "AF_INET"
+              "AF_INET6"
+              "AF_NETLINK" # used for network interface enumeration
+              "AF_UNIX"
+            ];
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            SystemCallArchitectures = "native";
+            SystemCallFilter =
+              [
+                "@system-service"
+                "~@privileged @resources"
+              ]
+              ++ lib.optionals (any extensionInstalled [ "plv8" ]) [ "@pkey" ];
+            UMask = if groupAccessAvailable then "0027" else "0077";
           }
+          (mkIf (cfg.dataDir != "/var/lib/postgresql") {
+            ReadWritePaths = [ cfg.dataDir ];
+          })
           (mkIf (cfg.dataDir == "/var/lib/postgresql/${cfg.package.psqlSchema}") {
             StateDirectory = "postgresql postgresql/${cfg.package.psqlSchema}";
             StateDirectoryMode = if groupAccessAvailable then "0750" else "0700";

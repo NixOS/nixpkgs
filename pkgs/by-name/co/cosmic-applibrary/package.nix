@@ -8,36 +8,29 @@
 , libxkbcommon
 , wayland
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-applibrary";
-  version = "unstable-2024-01-03";
+  version = "0-unstable-2024-02-09";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = pname;
-    rev = "889cb6078c05cdf3eb94f19f64db552fa2be32dc";
-    hash = "sha256-qLAFSHA7YdOWr7ZmLCkQ+aGWb2schANfgdD2BxsrvaE=";
+    rev = "e214e9867876c96b24568d8a45aaca2936269d9b";
+    hash = "sha256-fZxDRktiHHmj7X3e5VyJJMO081auOpSMSsBnJdhhtR8=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "accesskit-0.11.0" = "sha256-xVhe6adUb8VmwIKKjHxwCwOo5Y1p3Or3ylcJJdLDrrE=";
-      "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "cosmic-config-0.1.0" = "sha256-WM08/jnB2kAf77FE+0xpBJcVGOHOCcUorifQ/5LXav0=";
-      "cosmic-client-toolkit-0.1.0" = "sha256-AEgvF7i/OWPdEMi8WUaAg99igBwE/AexhAXHxyeJMdc=";
-      "glyphon-0.3.0" = "sha256-JGkNIfj1HjOF8kGxqJPNq/JO+NhZD6XrZ4KmkXEP6Xc=";
-      "smithay-client-toolkit-0.18.0" = "sha256-2WbDKlSGiyVmi7blNBr2Aih9FfF2dq/bny57hoA4BrE=";
-      "softbuffer-0.3.3" = "sha256-eKYFVr6C1+X6ulidHIu9SP591rJxStxwL9uMiqnXx4k=";
-      "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
-      "cosmic-settings-daemon-0.1.0" = "sha256-z/dvRyc3Zc1fAQh2HKk6NI6QSDpNqarqslwszjU+0nc=";
-      "cosmic-text-0.10.0" = "sha256-C2FHJBESbiyL2BhLb6T+wI9EX+xCyp02Kk6cI46EfDs=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-WCS1jCfnanILXGLq96+FI0gM1o4FIJQtSgZg86fe86E=";
 
-  nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
-  buildInputs = [ libxkbcommon wayland ];
+  nativeBuildInputs = [
+    just
+    pkg-config
+    makeBinaryWrapper
+  ];
+  buildInputs = [
+    libxkbcommon
+    wayland
+  ];
 
   dontUseJustBuild = true;
 
@@ -56,14 +49,14 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/cosmic-app-library \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [wayland]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
   '';
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-applibrary";
     description = "Application Template for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyanbinary ];
+    maintainers = with maintainers; [ nyabinary ];
     platforms = platforms.linux;
     mainProgram = "cosmic-app-library";
   };

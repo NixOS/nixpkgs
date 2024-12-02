@@ -1,4 +1,4 @@
-{ lib, fetchFromGitLab, buildDunePackage
+{ buildDunePackage, substituteAll, ocaml
 , menhirLib, menhirSdk
 }:
 
@@ -11,7 +11,15 @@ buildDunePackage rec {
 
   buildInputs = [ menhirLib menhirSdk ];
 
+  patches = [
+    (substituteAll {
+      src = ./menhir-suggest-menhirLib.patch;
+      libdir = "${menhirLib}/lib/ocaml/${ocaml.version}/site-lib/menhirLib";
+    })
+  ];
+
   meta = menhirSdk.meta // {
-    description = "A LR(1) parser generator for OCaml";
+    description = "LR(1) parser generator for OCaml";
+    mainProgram = "menhir";
   };
 }

@@ -1,17 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, matchpy
-, pytestCheckHook
-, pythonOlder
-, pytools
+{
+  lib,
+  astunparse,
+  buildPythonPackage,
+  fetchpatch,
+  fetchPypi,
+  immutabledict,
+  matchpy,
+  numpy,
+  pytestCheckHook,
+  pythonOlder,
+  pytools,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pymbolic";
   version = "2022.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -28,29 +34,35 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
-    pytools
-  ];
-
-  nativeCheckInputs = [
-    matchpy
-    pytestCheckHook
-  ];
-
   postPatch = ''
     # pytest is a test requirement not a run-time one
       substituteInPlace setup.py \
         --replace '"pytest>=2.3",' ""
   '';
 
-  pythonImportsCheck = [
-    "pymbolic"
+  build-system = [ setuptools ];
+
+  dependencies = [
+    astunparse
+    immutabledict
+    pytools
+    typing-extensions
   ];
 
+  optional-dependencies = {
+    matchpy = [ matchpy ];
+    numpy = [ numpy ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "pymbolic" ];
+
   meta = with lib; {
-    description = "A package for symbolic computation";
+    description = "Package for symbolic computation";
     homepage = "https://documen.tician.de/pymbolic/";
+    changelog = "https://github.com/inducer/pymbolic/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

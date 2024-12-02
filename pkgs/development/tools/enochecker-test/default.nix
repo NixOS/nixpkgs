@@ -2,7 +2,6 @@
 , buildPythonApplication
 , fetchPypi
 , pythonOlder
-, pythonRelaxDepsHook
 
 , certifi
 , charset-normalizer
@@ -34,7 +33,6 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;
@@ -61,6 +59,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Automatically test services/checker using the enochecker API";
+    mainProgram = "enochecker_test";
     homepage = "https://github.com/enowars/enochecker_test";
     changelog = "https://github.com/enowars/enochecker_test/releases/tag/v${version}";
     license = licenses.mit;

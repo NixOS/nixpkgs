@@ -11,10 +11,10 @@ in {
 
   options = {
     services.qdrant = {
-      enable = mkEnableOption (lib.mdDoc "Vector Search Engine for the next generation of AI applications");
+      enable = mkEnableOption "Vector Search Engine for the next generation of AI applications";
 
       settings = mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Configuration for Qdrant
           Refer to <https://github.com/qdrant/qdrant/blob/master/config/config.yaml> for details on supported values.
         '';
@@ -60,6 +60,7 @@ in {
 
   config = mkIf cfg.enable {
     services.qdrant.settings = {
+      service.static_content_dir = mkDefault pkgs.qdrant-web-ui;
       storage.storage_path = mkDefault "/var/lib/qdrant/storage";
       storage.snapshots_path = mkDefault "/var/lib/qdrant/snapshots";
       # The following default values are the same as in the default config,

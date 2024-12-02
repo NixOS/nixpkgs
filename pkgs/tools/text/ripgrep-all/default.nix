@@ -9,6 +9,7 @@
 , ripgrep
 , Security
 , zip
+, fzf
 }:
 
 let
@@ -18,6 +19,7 @@ let
     poppler_utils
     ripgrep
     zip
+    fzf
   ];
 in rustPlatform.buildRustPackage rec {
   pname = "ripgrep-all";
@@ -37,14 +39,19 @@ in rustPlatform.buildRustPackage rec {
     };
   };
 
+  # override debug=true set in Cargo.toml upstream
+  RUSTFLAGS = "-C debuginfo=none";
+
   nativeBuildInputs = [ makeWrapper poppler_utils ];
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   nativeCheckInputs = path;
 
   postInstall = ''
-    wrapProgram $out/bin/rga \
-      --prefix PATH ":" "${lib.makeBinPath path}"
+    for bin in $out/bin/*; do
+      wrapProgram $bin \
+        --prefix PATH ":" "${lib.makeBinPath path}"
+    done
   '';
 
   meta = with lib; {

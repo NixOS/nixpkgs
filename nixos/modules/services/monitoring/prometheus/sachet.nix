@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.prometheus.sachet;
   configFile = pkgs.writeText "sachet.yml" (builtins.toJSON cfg.configuration);
@@ -9,12 +6,12 @@ in
 {
   options = {
     services.prometheus.sachet = {
-      enable = mkEnableOption (lib.mdDoc "Sachet, an SMS alerting tool for the Prometheus Alertmanager");
+      enable = lib.mkEnableOption "Sachet, an SMS alerting tool for the Prometheus Alertmanager";
 
-      configuration = mkOption {
-        type = types.nullOr types.attrs;
+      configuration = lib.mkOption {
+        type = lib.types.nullOr lib.types.attrs;
         default = null;
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             providers = {
               twilio = {
@@ -32,23 +29,23 @@ in
             }];
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           Sachet's configuration as a nix attribute set.
         '';
       };
 
-      address = mkOption {
-        type = types.str;
+      address = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
-        description = lib.mdDoc ''
+        description = ''
           The address Sachet will listen to.
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 9876;
-        description = lib.mdDoc ''
+        description = ''
           The port Sachet will listen to.
         '';
       };
@@ -56,8 +53,8 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    assertions = singleton {
+  config = lib.mkIf cfg.enable {
+    assertions = lib.singleton {
       assertion = cfg.configuration != null;
       message = "Cannot enable Sachet without a configuration.";
     };

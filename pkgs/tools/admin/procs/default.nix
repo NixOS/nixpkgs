@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
-  version = "0.14.4";
+  version = "0.14.7";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = "procs";
     rev = "v${version}";
-    hash = "sha256-Gx3HRGWi+t/wT1WrbuHXVyX+cP+JvZV8lBun1Qs8Xys=";
+    hash = "sha256-KYKHH41lGKm+En4vUDi6KG6J/zJtYxeJr8vY3WOgkl0=";
   };
 
-  cargoHash = "sha256-0eLOAZnHbnvT8qgSfWO/RKXIdRr5wwfUQ9YQ77I6okQ=";
+  cargoHash = "sha256-mGjxXetGgYBBXuaQ3ARS/6wWG5+YdBTmXcy22npPeBY=";
 
   nativeBuildInputs = [ installShellFiles ]
-    ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -23,10 +23,10 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion procs.{bash,fish} --zsh _procs
   '';
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv Libsystem ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security libiconv Libsystem ];
 
   meta = with lib; {
-    description = "A modern replacement for ps written in Rust";
+    description = "Modern replacement for ps written in Rust";
     homepage = "https://github.com/dalance/procs";
     changelog = "https://github.com/dalance/procs/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;

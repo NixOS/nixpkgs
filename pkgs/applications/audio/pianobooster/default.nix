@@ -62,10 +62,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A MIDI file player that teaches you how to play the piano";
+    description = "MIDI file player that teaches you how to play the piano";
+    mainProgram = "pianobooster";
     homepage = "https://github.com/pianobooster/PianoBooster";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu orivej ];
+    maintainers = with maintainers; [ orivej ];
   };
 }

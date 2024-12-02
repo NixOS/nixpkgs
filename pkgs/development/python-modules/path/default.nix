@@ -1,30 +1,33 @@
-{ lib
-, appdirs
-, buildPythonPackage
-, fetchPypi
-, packaging
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  more-itertools,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "path";
-  version = "16.7.1";
-  format = "pyproject";
+  version = "16.16.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-K0d/WIcDPzy+oc/YVT7mpqSY6yVAoZ9KoIKCKq3Oowo=";
+    hash = "sha256-pqbZFskQ3Bfg3ciDNYdWxaM9G2299dbehlVPOZBTr1g=";
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
   nativeCheckInputs = [
+    more-itertools
     pytestCheckHook
   ];
 
@@ -34,15 +37,13 @@ buildPythonPackage rec {
     "test_utime"
   ];
 
-  pythonImportsCheck = [
-    "path"
-  ];
+  pythonImportsCheck = [ "path" ];
 
   meta = with lib; {
     description = "Object-oriented file system path manipulation";
     homepage = "https://github.com/jaraco/path";
     changelog = "https://github.com/jaraco/path/blob/v${version}/NEWS.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

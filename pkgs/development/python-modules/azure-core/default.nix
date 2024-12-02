@@ -1,36 +1,40 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, aiodns
-, aiohttp
-, flask
-, mock
-, pytest
-, pytest-asyncio
-, pytest-trio
-, pytestCheckHook
-, requests
-, six
-, trio
-, typing-extensions
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  aiodns,
+  aiohttp,
+  flask,
+  mock,
+  pytest,
+  pytest-asyncio,
+  pytest-trio,
+  pytestCheckHook,
+  requests,
+  setuptools,
+  six,
+  trio,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
-  version = "1.28.0";
+  version = "1.31.0";
   pname = "azure-core";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    hash = "sha256-6e78Zvwf3lbatvBNTl0SxgdU1an6Sb3P2FNPyW7ZNr0=";
+    pname = "azure_core";
+    inherit version;
+    hash = "sha256-ZWoN1h4YabFQa3xqOzHWLxWYSxpXPWMm9qovPkEjKEs=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     requests
@@ -38,10 +42,8 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
-    aio = [
-      aiohttp
-    ];
+  optional-dependencies = {
+    aio = [ aiohttp ];
   };
 
   nativeCheckInputs = [
@@ -53,16 +55,14 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     trio
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # test server needs to be available
   preCheck = ''
     export PYTHONPATH=tests/testserver_tests/coretestserver:$PYTHONPATH
   '';
 
-  pytestFlagsArray = [
-    "tests/"
-  ];
+  pytestFlagsArray = [ "tests/" ];
 
   # disable tests which touch network
   disabledTests = [
@@ -73,12 +73,10 @@ buildPythonPackage rec {
     "timeout"
     "test_sync_transport_short_read_download_stream"
     "test_aio_transport_short_read_download_stream"
-  # disable 8 tests failing on some darwin machines with errors:
-  # azure.core.polling.base_polling.BadStatus: Invalid return status 403 for 'GET' operation
-  # azure.core.exceptions.HttpResponseError: Operation returned an invalid status 'Forbidden'
-  ] ++ lib.optionals stdenv.isDarwin [
-    "location_polling_fail"
-  ];
+    # disable 8 tests failing on some darwin machines with errors:
+    # azure.core.polling.base_polling.BadStatus: Invalid return status 403 for 'GET' operation
+    # azure.core.exceptions.HttpResponseError: Operation returned an invalid status 'Forbidden'
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "location_polling_fail" ];
 
   disabledTestPaths = [
     # requires testing modules which aren't published, and likely to create cyclic dependencies
@@ -99,9 +97,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Microsoft Azure Core Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
-    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/core/azure-core/CHANGELOG.md";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/core/azure-core";
+    changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-core_${version}/sdk/core/azure-core/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

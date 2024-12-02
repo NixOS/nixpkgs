@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "helm-diff";
-  version = "3.9.4";
+  version = "3.9.12";
 
   src = fetchFromGitHub {
     owner = "databus23";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hDni0bAF4tp7upP/D5S6dGN//zaNHidWAYf/l6W9j28=";
+    hash = "sha256-fHL5YlqDS4taQNgqgYYttq/6Q5kQhp/hvtqMRCKPt70=";
   };
 
-  vendorHash = "sha256-51xjHGU9TC4Nwa9keR0b7bgwpZcRmG7duT9R1JRr3Uw=";
+  vendorHash = "sha256-7amqt5FIgnDtaybyur3t01BuuQXPdFptDBfqhX6jPIE=";
 
   ldflags = [ "-s" "-w" "-X github.com/databus23/helm-diff/v3/cmd.Version=${version}" ];
 
@@ -28,7 +28,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A Helm plugin that shows a diff";
+    description = "Helm plugin that shows a diff";
     homepage = "https://github.com/databus23/helm-diff";
     license = licenses.asl20;
     maintainers = with maintainers; [ yurrriq ];

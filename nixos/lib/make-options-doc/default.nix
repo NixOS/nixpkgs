@@ -1,20 +1,91 @@
-/* Generate JSON, XML and DocBook documentation for given NixOS options.
+/**
+  Generates documentation for [nix modules](https://nix.dev/tutorials/module-system/index.html).
 
-   Minimal example:
+  It uses the declared `options` to generate documentation in various formats.
 
-    { pkgs,  }:
+  # Outputs
 
-    let
-      eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
-        baseModules = [
-          ../module.nix
-        ];
-        modules = [];
-      };
-    in pkgs.nixosOptionsDoc {
-      options = eval.options;
+  This function returns an attribute set with the following entries.
+
+  ## optionsCommonMark
+
+  Documentation in CommonMark text format.
+
+  ## optionsJSON
+
+  All options in a JSON format suitable for further automated processing.
+
+  `example.json`
+  ```json
+  {
+    ...
+    "fileSystems.<name>.options": {
+      "declarations": ["nixos/modules/tasks/filesystems.nix"],
+      "default": {
+        "_type": "literalExpression",
+        "text": "[\n  \"defaults\"\n]"
+      },
+      "description": "Options used to mount the file system.",
+      "example": {
+        "_type": "literalExpression",
+        "text": "[\n  \"data=journal\"\n]"
+      },
+      "loc": ["fileSystems", "<name>", "options"],
+      "readOnly": false,
+      "type": "non-empty (list of string (with check: non-empty))"
+      "relatedPackages": "- [`pkgs.tmux`](\n    https://search.nixos.org/packages?show=tmux&sort=relevance&query=tmux\n  )\n",
+    },
+    ...
+  }
+  ```
+
+  ## optionsAsciiDoc
+
+  Documentation rendered as AsciiDoc. This is useful for e.g. man pages.
+
+  > Note: NixOS itself uses this ouput to to build the configuration.nix man page"
+
+  ## optionsNix
+
+  All options as a Nix attribute set value, with the same schema as `optionsJSON`.
+
+  # Example
+
+  ## Example: NixOS configuration
+
+  ```nix
+  let
+    # Evaluate a NixOS configuration
+    eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
+      # Overriden explicitly here, this would include all modules from NixOS otherwise.
+      # See: docs of eval-config.nix for more details
+      baseModules = [];
+      modules = [
+        ./module.nix
+      ];
+    };
+  in
+    pkgs.nixosOptionsDoc {
+      inherit (eval) options;
     }
+  ```
 
+  ## Example: non-NixOS modules
+
+  `nixosOptionsDoc` can also be used to build documentation for non-NixOS modules.
+
+  ```nix
+  let
+    eval = lib.evalModules {
+      modules = [
+        ./module.nix
+      ];
+    };
+  in
+    pkgs.nixosOptionsDoc {
+      inherit (eval) options;
+    }
+  ```
 */
 { pkgs
 , lib
@@ -36,19 +107,7 @@
 # instead of printing warnings for eg options with missing descriptions (which may be lost
 # by nix build unless -L is given), emit errors instead and fail the build
 , warningsAreErrors ? true
-# allow docbook option docs if `true`. only markdown documentation is allowed when set to
-# `false`, and a different renderer may be used with different bugs and performance
-# characteristics but (hopefully) indistinguishable output.
-# deprecated since 23.11.
-# TODO remove in a while.
-, allowDocBook ? false
-# whether lib.mdDoc is required for descriptions to be read as markdown.
-# deprecated since 23.11.
-# TODO remove in a while.
-, markdownByDefault ? true
 }:
-
-assert markdownByDefault && ! allowDocBook;
 
 let
   rawOpts = lib.optionAttrSetToDocList options;
@@ -156,20 +215,4 @@ in rec {
       echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
       echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
     '';
-
-  optionsDocBook = lib.warn "optionsDocBook is deprecated since 23.11 and will be removed in 24.05"
-    (pkgs.runCommand "options-docbook.xml" {
-      nativeBuildInputs = [
-        pkgs.nixos-render-docs
-      ];
-    } ''
-      nixos-render-docs -j $NIX_BUILD_CORES options docbook \
-        --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
-        --revision ${lib.escapeShellArg revision} \
-        --document-type ${lib.escapeShellArg documentType} \
-        --varlist-id ${lib.escapeShellArg variablelistId} \
-        --id-prefix ${lib.escapeShellArg optionIdPrefix} \
-        ${optionsJSON}/share/doc/nixos/options.json \
-        "$out"
-    '');
 }

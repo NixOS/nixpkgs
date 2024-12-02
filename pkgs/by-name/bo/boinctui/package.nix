@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   '';
 
   outputs = [ "out" "man" ];
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   enableParallelBuilding = true;
 

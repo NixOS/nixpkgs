@@ -4,7 +4,6 @@
 , qmake
 , pkg-config
 , qttools
-, qtbase
 , qtwebengine
 , wrapQtAppsHook
 , qmarkdowntextedit
@@ -48,7 +47,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A Qt-based, free and open source markdown editor";
+    description = "Qt-based, free and open source markdown editor";
+    mainProgram = "cutemarked";
     homepage = "https://github.com/Waqar144/CuteMarkEd-NG";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ rewine ];

@@ -1,19 +1,19 @@
-{ lib
-, black
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, pytest
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, ruff
+{
+  lib,
+  black,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  pytest,
+  pytestCheckHook,
+  pythonOlder,
+  ruff,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-examples";
-  version = "0.0.10";
-  format = "pyproject";
+  version = "0.0.14";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -21,51 +21,29 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pytest-examples";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jCxOGDJlFkMH9VtaaPsE5zt+p3Z/mrVzhdNSI51/nVM=";
+    hash = "sha256-MAiTNz2Ygk+JOiiT5DGhJ15xITbS+4Gk23YCKJm7OKE=";
   };
 
-  postPatch = ''
-    # ruff binary is used directly, the ruff Python package is not needed
-    substituteInPlace pytest_examples/lint.py \
-      --replace "'ruff'" "'${ruff}/bin/ruff'"
-  '';
-
-  pythonRemoveDeps = [
-    "ruff"
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     black
+    ruff
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "pytest_examples"
-  ];
+  pythonImportsCheck = [ "pytest_examples" ];
 
-  disabledTests = [
-    # Test fails with latest ruff v0.1.2
-    # See https://github.com/pydantic/pytest-examples/issues/26
-    "test_ruff_error"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for testing examples in docstrings and markdown files";
     homepage = "https://github.com/pydantic/pytest-examples";
     changelog = "https://github.com/pydantic/pytest-examples/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

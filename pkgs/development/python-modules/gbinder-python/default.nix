@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, cython
-, pkg-config
-, libgbinder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  cython_0,
+  pkg-config,
+  libgbinder,
 }:
 
 buildPythonPackage rec {
@@ -18,12 +19,10 @@ buildPythonPackage rec {
     sha256 = "1X9gAux9w/mCEVmE3Yqvvq3kU7hu4iAFaZWNZZZxt3E=";
   };
 
-  buildInputs = [
-    libgbinder
-  ];
+  buildInputs = [ libgbinder ];
 
   nativeBuildInputs = [
-    cython
+    cython_0
     pkg-config
   ];
 
@@ -39,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/erfanoabdi/gbinder-python";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ mcaju ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

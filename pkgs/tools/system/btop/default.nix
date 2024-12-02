@@ -1,34 +1,41 @@
-{ lib
-, config
-, stdenv
-, fetchFromGitHub
-, cmake
-, darwin
-, removeReferencesTo
-, btop
-, testers
-, cudaSupport ? config.cudaSupport
-, cudaPackages
+{
+  lib,
+  config,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  removeReferencesTo,
+  autoAddDriverRunpath,
+  apple-sdk_15,
+  darwinMinVersionHook,
+  versionCheckHook,
+  rocmPackages,
+  cudaSupport ? config.cudaSupport,
+  rocmSupport ? config.rocmSupport,
 }:
 
 stdenv.mkDerivation rec {
   pname = "btop";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Y6agmrqozKiV+GbiY60eOYORRrYLuB1zLNilxzM6oV0=";
+    hash = "sha256-A5hOBxj8tKlkHd8zDHfDoU6fIu8gDpt3/usbiDk0/G0=";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddOpenGLRunpathHook
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals cudaSupport [
+      autoAddDriverRunpath
+    ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.CoreFoundation
-    darwin.apple_sdk_11_0.frameworks.IOKit
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
+    (darwinMinVersionHook "10.15")
   ];
 
   installFlags = [ "PREFIX=$(out)" ];
@@ -37,17 +44,25 @@ stdenv.mkDerivation rec {
     ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/bin/btop)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = btop;
-  };
+  postPhases = lib.optionals rocmSupport [ "postPatchelf" ];
+  postPatchelf = lib.optionalString rocmSupport ''
+    patchelf --add-rpath ${lib.getLib rocmPackages.rocm-smi}/lib $out/bin/btop
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = with lib; {
-    description = "A monitor of resources";
+    description = "Monitor of resources";
     homepage = "https://github.com/aristocratos/btop";
     changelog = "https://github.com/aristocratos/btop/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ rmcgibbo ];
+    maintainers = with maintainers; [
+      khaneliman
+      rmcgibbo
+    ];
     mainProgram = "btop";
   };
 }

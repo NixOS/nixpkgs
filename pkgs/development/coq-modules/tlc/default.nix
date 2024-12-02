@@ -18,12 +18,12 @@
 
   meta = with lib; {
     homepage = "http://www.chargueraud.org/softs/tlc/";
-    description = "A non-constructive library for Coq";
+    description = "Non-constructive library for Coq";
     license = licenses.free;
     maintainers = [ maintainers.vbgl ];
   };
 }).overrideAttrs (x:
-  lib.optionalAttrs (lib.versionOlder x.version "20210316") {
+  lib.optionalAttrs (lib.versionOlder x.version "20210316" && x.version != "dev") {
     installFlags = [ "CONTRIB=$(out)/lib/coq/${coq.coq-version}/user-contrib" ];
   }
 )

@@ -1,62 +1,65 @@
-{ lib
-, stdenv
-, arxiv2bib
-, beautifulsoup4
-, bibtexparser
-, buildPythonPackage
-, chardet
-, click
-, colorama
-, configparser
-, dominate
-, fetchFromGitHub
-, filetype
-, habanero
-, isbnlib
-, lxml
-, prompt-toolkit
-, pygments
-, pyparsing
-, pytestCheckHook
-, python-doi
-, python-slugify
-, pythonAtLeast
-, pythonOlder
-, pyyaml
-, requests
-, stevedore
-, tqdm
-, typing-extensions
-, whoosh
-}:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
+  # build-system
+  hatchling,
+
+  # dependencies
+  arxiv,
+  beautifulsoup4,
+  bibtexparser,
+  click,
+  colorama,
+  dominate,
+  filetype,
+  habanero,
+  isbnlib,
+  lxml,
+  platformdirs,
+  prompt-toolkit,
+  pygments,
+  pyparsing,
+  python-doi,
+  python-slugify,
+  pyyaml,
+  requests,
+  stevedore,
+
+  # tests
+  docutils,
+  git,
+  pytestCheckHook,
+  sphinx,
+  sphinx-click,
+}:
 buildPythonPackage rec {
   pname = "papis";
-  version = "0.13";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.14";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "papis";
-    repo = pname;
+    repo = "papis";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iRrf37hq+9D01JRaQIqg7yTPbLX6I0ZGnzG3r1DX464=";
+    hash = "sha256-UpZoMYk4URN8tSFGIynVzWMk+9S0izROAgbx6uI2cN8=";
   };
 
-  propagatedBuildInputs = [
-    arxiv2bib
+  build-system = [ hatchling ];
+
+  dependencies = [
+    arxiv
     beautifulsoup4
     bibtexparser
-    chardet
     click
     colorama
-    configparser
     dominate
     filetype
     habanero
     isbnlib
     lxml
+    platformdirs
     prompt-toolkit
     pygments
     pyparsing
@@ -65,18 +68,21 @@ buildPythonPackage rec {
     pyyaml
     requests
     stevedore
-    tqdm
-    typing-extensions
-    whoosh
   ];
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=papis" ""
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=papis" ""
   '';
 
+  pythonImportsCheck = [ "papis" ];
+
   nativeCheckInputs = [
+    docutils
+    git
     pytestCheckHook
+    sphinx
+    sphinx-click
   ];
 
   preCheck = ''
@@ -84,38 +90,30 @@ buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
-    "papis tests"
+    "papis"
+    "tests"
   ];
 
   disabledTestPaths = [
+    # Require network access
     "tests/downloaders"
     "papis/downloaders/usenix.py"
   ];
 
   disabledTests = [
-    "get_document_url"
-    "match"
-    "test_doi_to_data"
-    "test_downloader_getter"
-    "test_general"
-    "test_get_config_dirs"
-    "test_get_data"
-    "test_valid_dblp_key"
-    "test_validate_arxivid"
-    "test_yaml"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_default_opener"
+    # Require network access
+    "test_yaml_unicode_dump"
   ];
 
-  pythonImportsCheck = [
-    "papis"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Powerful command-line document and bibliography manager";
+    mainProgram = "papis";
     homepage = "https://papis.readthedocs.io/";
     changelog = "https://github.com/papis/papis/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nico202 teto marsam ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      nico202
+      teto
+    ];
   };
 }

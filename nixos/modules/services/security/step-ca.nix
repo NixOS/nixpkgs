@@ -4,22 +4,22 @@ let
   settingsFormat = (pkgs.formats.json { });
 in
 {
-  meta.maintainers = with lib.maintainers; [ mohe2015 ];
+  meta.maintainers = [ ];
 
   options = {
     services.step-ca = {
-      enable = lib.mkEnableOption (lib.mdDoc "the smallstep certificate authority server");
-      openFirewall = lib.mkEnableOption (lib.mdDoc "opening the certificate authority server port");
+      enable = lib.mkEnableOption "the smallstep certificate authority server";
+      openFirewall = lib.mkEnableOption "opening the certificate authority server port";
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.step-ca;
         defaultText = lib.literalExpression "pkgs.step-ca";
-        description = lib.mdDoc "Which step-ca package to use.";
+        description = "Which step-ca package to use.";
       };
       address = lib.mkOption {
         type = lib.types.str;
         example = "127.0.0.1";
-        description = lib.mdDoc ''
+        description = ''
           The address (without port) the certificate authority should listen at.
           This combined with {option}`services.step-ca.port` overrides {option}`services.step-ca.settings.address`.
         '';
@@ -27,14 +27,14 @@ in
       port = lib.mkOption {
         type = lib.types.port;
         example = 8443;
-        description = lib.mdDoc ''
+        description = ''
           The port the certificate authority should listen on.
           This combined with {option}`services.step-ca.address` overrides {option}`services.step-ca.settings.address`.
         '';
       };
       settings = lib.mkOption {
         type = with lib.types; attrsOf anything;
-        description = lib.mdDoc ''
+        description = ''
           Settings that go into {file}`ca.json`. See
           [the step-ca manual](https://smallstep.com/docs/step-ca/configuration)
           for more information. The easiest way to
@@ -57,7 +57,7 @@ in
       intermediatePasswordFile = lib.mkOption {
         type = lib.types.path;
         example = "/run/keys/smallstep-password";
-        description = lib.mdDoc ''
+        description = ''
           Path to the file containing the password for the intermediate
           certificate private key.
 
@@ -107,7 +107,7 @@ in
           UMask = "0077";
           Environment = "HOME=%S/step-ca";
           WorkingDirectory = ""; # override upstream
-          ReadWriteDirectories = ""; # override upstream
+          ReadWritePaths = ""; # override upstream
 
           # LocalCredential handles file permission problems arising from the use of DynamicUser.
           LoadCredential = "intermediate_password:${cfg.intermediatePasswordFile}";

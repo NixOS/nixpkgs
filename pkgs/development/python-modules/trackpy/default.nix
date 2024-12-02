@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, looseversion
-, matplotlib
-, numba
-, numpy
-, pandas
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, scipy
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  looseversion,
+  matplotlib,
+  numba,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  scipy,
 }:
 
 buildPythonPackage rec {
   pname = "trackpy";
-  version = "0.6.1";
+  version = "0.6.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "soft-matter";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-NG1TOppqRbIZHLxJjlaXD4icYlAUkSxtmmC/fsS/pXo=";
+    hash = "sha256-6i1IfdxgV6bpf//mXATpnsQ0zN26S8rlL0/1ql68sd8=";
   };
 
   propagatedBuildInputs = [
@@ -37,27 +38,23 @@ buildPythonPackage rec {
     scipy
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # specifically needed for darwin
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.matplotlib
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
   '';
 
-  pythonImportsCheck = [
-    "trackpy"
-  ];
+  pythonImportsCheck = [ "trackpy" ];
 
   meta = with lib; {
     description = "Particle-tracking toolkit";
     homepage = "https://github.com/soft-matter/trackpy";
     changelog = "https://github.com/soft-matter/trackpy/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    maintainers = [ ];
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }

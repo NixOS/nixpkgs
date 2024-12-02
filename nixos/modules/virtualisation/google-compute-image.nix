@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -14,22 +19,29 @@ let
 in
 {
 
-  imports = [ ./google-compute-config.nix ];
+  imports = [
+    ./google-compute-config.nix
+    ./disk-size-option.nix
+    ../image/file-options.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "virtualisation"
+        "googleComputeImage"
+        "diskSize"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
+  ];
 
   options = {
-    virtualisation.googleComputeImage.diskSize = mkOption {
-      type = with types; either (enum [ "auto" ]) int;
-      default = "auto";
-      example = 1536;
-      description = lib.mdDoc ''
-        Size of disk image. Unit is MB.
-      '';
-    };
-
     virtualisation.googleComputeImage.configFile = mkOption {
       type = with types; nullOr str;
       default = null;
-      description = lib.mdDoc ''
+      description = ''
         A path to a configuration file which will be placed at `/etc/nixos/configuration.nix`
         and be used when switching to a new configuration.
         If set to `null`, a default configuration is used, where the only import is
@@ -40,7 +52,7 @@ in
     virtualisation.googleComputeImage.compressionLevel = mkOption {
       type = types.int;
       default = 6;
-      description = lib.mdDoc ''
+      description = ''
         GZIP compression level of the resulting disk image (1-9).
       '';
     };
@@ -61,21 +73,30 @@ in
       fsType = "vfat";
     };
 
+    system.nixos.tags = [ "google-compute" ];
+    image.extension = "raw.tar.gz";
+    system.build.image = config.system.build.googleComputeImage;
     system.build.googleComputeImage = import ../../lib/make-disk-image.nix {
       name = "google-compute-image";
+      inherit (config.image) baseName;
       postVM = ''
-        PATH=$PATH:${with pkgs; lib.makeBinPath [ gnutar gzip ]}
+        PATH=$PATH:${
+          with pkgs;
+          lib.makeBinPath [
+            gnutar
+            gzip
+          ]
+        }
         pushd $out
-        mv $diskImage disk.raw
-        tar -Sc disk.raw | gzip -${toString cfg.compressionLevel} > \
-          nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.raw.tar.gz
-        rm $out/disk.raw
+        tar -Sc $diskImage | gzip -${toString cfg.compressionLevel} > \
+          ${config.image.fileName}
+        rm $diskImage
         popd
       '';
       format = "raw";
       configFile = if cfg.configFile == null then defaultConfigFile else cfg.configFile;
       partitionTableType = if cfg.efi then "efi" else "legacy";
-      inherit (cfg) diskSize;
+      inherit (config.virtualisation) diskSize;
       inherit config lib pkgs;
     };
 

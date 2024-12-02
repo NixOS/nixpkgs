@@ -5,9 +5,8 @@
 , meson
 , ninja
 , pkg-config
-, python3
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , clutter
 , evolution-data-server
 , folks
@@ -24,22 +23,21 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
-  version = "7.0.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "calendar";
     rev = version;
-    sha256 = "sha256-qZvSzhLGr4Gg9DSJ638IQRLlPiZkbJUCJ7tZ8ZFZZ1E=";
+    sha256 = "sha256-gBQfrRSaw3TKcsSAQh/hcTpBoEQstGdLbppoZ1/Z1q8=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -56,11 +54,6 @@ stdenv.mkDerivation rec {
     libical
     libportal-gtk3
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

@@ -1,4 +1,15 @@
-{ lib, fetchurl, fetchpatch, buildPythonPackage, python, isPyPy, pythonAtLeast, sip-module ? "sip" }:
+{
+  lib,
+  fetchurl,
+  fetchpatch,
+  buildPythonPackage,
+  python,
+  isPyPy,
+  pythonAtLeast,
+  pythonOlder,
+  sip-module ? "sip",
+  setuptools,
+}:
 
 buildPythonPackage rec {
   pname = sip-module;
@@ -20,6 +31,12 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = lib.optionalString (pythonAtLeast "3.12") ''
+    substituteInPlace configure.py --replace-fail "from distutils" "from setuptools._distutils"
+  '';
+
+  propagatedBuildInputs = lib.optional (pythonAtLeast "3.12") setuptools;
+
   configurePhase = ''
     ${python.executable} ./configure.py \
       --sip-module ${sip-module} \
@@ -29,15 +46,26 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  pythonImportsCheck = [ sip-module "sipconfig" ];
+  pythonImportsCheck = [
+    # https://www.riverbankcomputing.com/pipermail/pyqt/2023-January/045094.html
+    # the import check for "sip" will fail, as it segfaults as the interperter is shutting down.
+    # This is an upstream bug with sip4 on python3.12, and happens in the ubuntu packages version as well.
+    # As the pacakge works fine until exit, just remove the import check for now.
+    # See discussion at https://github.com/NixOS/nixpkgs/pull/327976#discussion_r1706488319
+    (lib.optional (pythonOlder "3.12") sip-module)
 
-  doCheck = true;
+    "sipconfig"
+  ];
 
   meta = with lib; {
     description = "Creates C++ bindings for Python modules";
-    homepage    = "https://riverbankcomputing.com/";
-    license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 sander ];
-    platforms   = platforms.all;
+    mainProgram = "sip";
+    homepage = "https://riverbankcomputing.com/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      lovek323
+      sander
+    ];
+    platforms = platforms.all;
   };
 }

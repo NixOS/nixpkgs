@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-0jI/mbXaXanY6ay2zn+dPWGvsqWRcF8aYHRvfGVsObE=";
   };
   deskreenUnwrapped = appimageTools.wrapType2 {
-    name = "deskreen";
+    inherit (finalAttrs) pname version;
     src = finalAttrs.src;
   };
 
@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Turn any device into a secondary screen for your computer";
     homepage = "https://deskreen.com";
-    license = lib.licenses.agpl3;
+    license = lib.licenses.agpl3Only;
     mainProgram = "deskreen";
     maintainers = with lib.maintainers; [ leo248 drupol ];
     platforms = lib.platforms.linux;

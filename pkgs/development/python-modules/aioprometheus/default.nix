@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, orjson
-, quantile-python
-, aiohttp
-, aiohttp-basicauth
-, starlette
-, quart
-, pytestCheckHook
-, httpx
-, fastapi
-, uvicorn
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  orjson,
+  quantile-python,
+  aiohttp,
+  aiohttp-basicauth,
+  starlette,
+  quart,
+  pytestCheckHook,
+  httpx,
+  fastapi,
+  uvicorn,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -33,16 +34,10 @@ buildPythonPackage rec {
     quantile-python
   ];
 
-  passthru.optional-dependencies = {
-    aiohttp = [
-      aiohttp
-    ];
-    starlette = [
-      starlette
-    ];
-    quart = [
-      quart
-    ];
+  optional-dependencies = {
+    aiohttp = [ aiohttp ];
+    starlette = [ starlette ];
+    quart = [ quart ];
   };
 
   nativeCheckInputs = [
@@ -51,12 +46,12 @@ buildPythonPackage rec {
     httpx
     fastapi
     uvicorn
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "aioprometheus" ];
 
   meta = with lib; {
-    description = "A Prometheus Python client library for asyncio-based applications";
+    description = "Prometheus Python client library for asyncio-based applications";
     homepage = "https://github.com/claws/aioprometheus";
     changelog = "https://github.com/claws/aioprometheus/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, pkgs
 , fetchFromGitHub
 , cmake
 , boost
@@ -25,6 +24,9 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-Dzug_BUILD_EXAMPLES=OFF"
   ];
+  preConfigure = ''
+    rm BUILD
+  '';
   meta = with lib; {
     homepage    = "https://github.com/arximboldi/zug";
     description = "library for functional interactive c++ programs";

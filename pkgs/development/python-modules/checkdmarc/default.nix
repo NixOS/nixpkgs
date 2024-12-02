@@ -1,22 +1,25 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, dnspython
-, expiringdict
-, fetchFromGitHub
-, hatchling
-, publicsuffixlist
-, pyleri
-, iana-etc
-, pytestCheckHook
-, pythonOlder
-, requests
-, timeout-decorator
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  dnspython,
+  expiringdict,
+  fetchFromGitHub,
+  hatchling,
+  pem,
+  publicsuffixlist,
+  pyleri,
+  pyopenssl,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  timeout-decorator,
+  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "checkdmarc";
-  version = "4.8.4";
+  version = "5.7.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,37 +28,35 @@ buildPythonPackage rec {
     owner = "domainaware";
     repo = "checkdmarc";
     rev = "refs/tags/${version}";
-    hash = "sha256-NNB5dYQzzdNapjP4mtpCW08BzfZ+FFRESUtpxCOzrdk=";
+    hash = "sha256-fqSRqiakwFk1Cfb79oOEBbPF/fbtumuV7M6Mjl09Vmw=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  pythonRelaxDeps = [ "xmltodict" ];
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     cryptography
     dnspython
     expiringdict
+    pem
     publicsuffixlist
     pyleri
+    pyopenssl
     requests
     timeout-decorator
+    xmltodict
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "checkdmarc"
-  ];
+  pythonImportsCheck = [ "checkdmarc" ];
 
-  pytestFlagsArray = [
-    "tests.py"
-  ];
+  pytestFlagsArray = [ "tests.py" ];
 
   disabledTests = [
     # Tests require network access
+    "testBIMI"
     "testDMARCPctLessThan100Warning"
     "testSPFMissingARecord"
     "testSPFMissingMXRecord"
@@ -65,11 +66,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A parser for SPF and DMARC DNS records";
+    description = "Parser for SPF and DMARC DNS records";
+    mainProgram = "checkdmarc";
     homepage = "https://github.com/domainaware/checkdmarc";
     changelog = "https://github.com/domainaware/checkdmarc/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }
-

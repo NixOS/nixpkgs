@@ -1,102 +1,98 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, cryptography
-, cython
-, eventlet
-, fetchFromGitHub
-, geomet
-, gevent
-, gremlinpython
-, iana-etc
-, libev
-, libredirect
-, mock
-, nose
-, pytestCheckHook
-, pythonOlder
-, pytz
-, pyyaml
-, scales
-, six
-, sure
-, twisted
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  cryptography,
+  cython,
+  eventlet,
+  fetchFromGitHub,
+  geomet,
+  gevent,
+  gremlinpython,
+  iana-etc,
+  libev,
+  libredirect,
+  pytestCheckHook,
+  pytz,
+  pyyaml,
+  scales,
+  six,
+  sure,
+  twisted,
+  setuptools,
+  distutils,
 }:
 
 buildPythonPackage rec {
   pname = "cassandra-driver";
-  version = "3.28.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "3.29.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datastax";
     repo = "python-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-5JRbzYl7ftgK6GuvXWdvo52ZlS1th9JyLAYu/UCcPVc=";
+    hash = "sha256-RX9GLk2admzRasmP7LCwIfsJIt8TC/9rWhIcoTqS0qc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'geomet>=0.1,<0.3' 'geomet'
-  '';
+  pythonRelaxDeps = [ "geomet" ];
 
-  nativeBuildInputs = [
+  build-system = [
+    distutils
+    setuptools
     cython
   ];
 
-  buildInputs = [
-    libev
-  ];
+  buildInputs = [ libev ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     six
     geomet
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    mock
-    nose
     pytz
     pyyaml
     sure
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  # This is used to determine the version of cython that can be used
+  CASS_DRIVER_ALLOWED_CYTHON_VERSION = cython.version;
 
   # Make /etc/protocols accessible to allow socket.getprotobyname('tcp') in sandbox,
   # also /etc/resolv.conf is referenced by some tests
-  preCheck = (lib.optionalString stdenv.isLinux ''
-    echo "nameserver 127.0.0.1" > resolv.conf
-    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
-    export LD_PRELOAD=${libredirect}/lib/libredirect.so
-  '') + ''
-    # increase tolerance for time-based test
-    substituteInPlace tests/unit/io/utils.py --replace 'delta=.15' 'delta=.3'
+  preCheck =
+    (lib.optionalString stdenv.hostPlatform.isLinux ''
+      echo "nameserver 127.0.0.1" > resolv.conf
+      export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
+      export LD_PRELOAD=${libredirect}/lib/libredirect.so
+    '')
+    + ''
+      # increase tolerance for time-based test
+      substituteInPlace tests/unit/io/utils.py --replace 'delta=.15' 'delta=.3'
 
-    export HOME=$(mktemp -d)
-    # cythonize this before we hide the source dir as it references
-    # one of its files
-    cythonize -i tests/unit/cython/types_testhelper.pyx
+      export HOME=$(mktemp -d)
+      # cythonize this before we hide the source dir as it references
+      # one of its files
+      cythonize -i tests/unit/cython/types_testhelper.pyx
 
-    mv cassandra .cassandra.hidden
-  '';
+      mv cassandra .cassandra.hidden
+    '';
 
-  pythonImportsCheck = [
-    "cassandra"
-  ];
+  pythonImportsCheck = [ "cassandra" ];
 
   postCheck = ''
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  pytestFlagsArray = [
-    "tests/unit"
-  ];
+  pytestFlagsArray = [ "tests/unit" ];
 
   disabledTestPaths = [
     # requires puresasl
     "tests/unit/advanced/test_auth.py"
+    # Uses asyncore, which is deprecated in python 3.12+
+    "tests/unit/io/test_asyncorereactor.py"
   ];
 
   disabledTests = [
@@ -108,7 +104,7 @@ buildPythonPackage rec {
     "test_nts_token_performance"
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cle = [ cryptography ];
     eventlet = [ eventlet ];
     gevent = [ gevent ];
@@ -117,11 +113,11 @@ buildPythonPackage rec {
     twisted = [ twisted ];
   };
 
-  meta = with lib; {
-    description = "A Python client driver for Apache Cassandra";
+  meta = {
+    description = "Python client driver for Apache Cassandra";
     homepage = "http://datastax.github.io/python-driver";
     changelog = "https://github.com/datastax/python-driver/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

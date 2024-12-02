@@ -1,29 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pybind11
-, setuptools
-, wheel
-, aiohttp
-, diskcache
-, gptcache
-, msal
-, nest-asyncio
-, numpy
-, openai
-, ordered-set
-, platformdirs
-, pyformlang
-, requests
-, tiktoken
-, torch
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pybind11,
+  setuptools,
+  wheel,
+  aiohttp,
+  diskcache,
+  fastapi,
+  gptcache,
+  msal,
+  numpy,
+  openai,
+  ordered-set,
+  platformdirs,
+  protobuf,
+  pyformlang,
+  requests,
+  tiktoken,
+  torch,
+  uvicorn,
 }:
 
 buildPythonPackage rec {
   pname = "guidance";
-  version = "0.1.6";
+  version = "0.1.16";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,28 +35,31 @@ buildPythonPackage rec {
     owner = "guidance-ai";
     repo = "guidance";
     rev = "refs/tags/${version}";
-    hash = "sha256-Z3EuHAQPPXf/i0HnbDhGv5KBUBP0aZDHTwpff7g2E3g=";
+    hash = "sha256-dPakdT97cuLv4OwdaUFncopD5X6uXGyUjwzqn9fxnhU=";
   };
 
-  nativeBuildInputs = [
-    pybind11
+  nativeBuildInputs = [ pybind11 ];
+
+  build-system = [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     diskcache
+    fastapi
     gptcache
     msal
-    nest-asyncio
     numpy
     openai
     ordered-set
     platformdirs
+    protobuf
     pyformlang
     requests
     tiktoken
+    uvicorn
   ];
 
   nativeCheckInputs = [
@@ -73,6 +79,9 @@ buildPythonPackage rec {
     "test_recursion_error"
     "test_openai_class_detection"
     "test_openai_chat_without_roles"
+
+    # flaky tests
+    "test_remote_mock_gen" # frequently fails when building packages in parallel
   ];
 
   disabledTestPaths = [
@@ -86,10 +95,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "guidance" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
-    description = "A guidance language for controlling large language models";
+    description = "Guidance language for controlling large language models";
     homepage = "https://github.com/guidance-ai/guidance";
-    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${src.rev}";
+    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

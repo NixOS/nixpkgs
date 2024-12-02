@@ -1,4 +1,4 @@
-{ lib, symlinkJoin, makeWrapper, gimpPlugins, gnome, plugins ? null}:
+{ lib, symlinkJoin, makeWrapper, gimpPlugins, gnome-themes-extra, plugins ? null}:
 
 let
 inherit (gimpPlugins) gimp;
@@ -19,7 +19,7 @@ in symlinkJoin {
       wrapProgram $out/bin/$each \
         --set GIMP2_PLUGINDIR "$out/lib/gimp/2.0" \
         --set GIMP2_DATADIR "$out/share/gimp/2.0" \
-        --prefix GTK_PATH : "${gnome.gnome-themes-extra}/lib/gtk-2.0" \
+        --prefix GTK_PATH : "${gnome-themes-extra}/lib/gtk-2.0" \
         ${toString extraArgs}
     done
     set +x

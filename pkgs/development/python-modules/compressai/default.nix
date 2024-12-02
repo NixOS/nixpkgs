@@ -1,53 +1,63 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pybind11
-, setuptools
-, wheel
-, numpy
-, matplotlib
-, pytorch-msssim
-, scipy
-, torch
-, torchvision
-, ipywidgets
-, jupyter
-, plotly
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  pybind11,
+  setuptools,
+
+  # dependencies
+  einops,
+  numpy,
+  matplotlib,
+  pandas,
+  pytorch-msssim,
+  scipy,
+  torch,
+  torch-geometric,
+  torchvision,
+
+  # optional-dependencies
+  ipywidgets,
+  jupyter,
+
+  # tests
+  plotly,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "compressai";
-  version = "1.2.4";
+  version = "1.2.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "InterDigitalInc";
     repo = "CompressAI";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nT2vd7t67agIWobJalORbRuns0UJGRGGbTX2/8vbTiY=";
+    hash = "sha256-xvzhhLn0iBzq3h1nro8/83QWEQe9K4zRa3RSZk+hy3Y=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pybind11
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    einops
     numpy
     matplotlib
+    pandas
     pytorch-msssim
     scipy
     torch
+    torch-geometric
     torchvision
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     tutorials = [
       ipywidgets
       jupyter
@@ -78,12 +88,15 @@ buildPythonPackage rec {
     "test_eval_model_pretrained"
     "test_cheng2020_anchor"
     "test_pretrained"
+
+    # Flaky (AssertionError: assert 0.08889999999999998 < 0.064445)
+    "test_find_close"
   ];
 
-  meta = with lib; {
-    description = "A PyTorch library and evaluation platform for end-to-end compression research";
+  meta = {
+    description = "PyTorch library and evaluation platform for end-to-end compression research";
     homepage = "https://github.com/InterDigitalInc/CompressAI";
-    license = licenses.bsd3Clear;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.bsd3Clear;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

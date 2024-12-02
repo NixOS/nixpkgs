@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aocd-example-parser";
-  version = "unstable-2023-12-17";
+  version = "2023.12.20";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,9 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-iOxqzZj29aY/xyigir1KOU6GcBBvnlxEOBLHChEQjf4=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   # Circular dependency with aocd
   # pythonImportsCheck = [

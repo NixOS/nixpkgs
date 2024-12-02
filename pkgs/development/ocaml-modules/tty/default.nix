@@ -22,7 +22,7 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = {
-    description = "A library for interacting with teletype and terminal emulators";
+    description = "Library for interacting with teletype and terminal emulators";
     homepage = "https://github.com/leostera/tty";
     changelog = "https://github.com/leostera/tty/blob/${version}/CHANGES.md";
     license = lib.licenses.mit;

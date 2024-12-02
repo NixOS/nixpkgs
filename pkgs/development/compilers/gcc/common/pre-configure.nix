@@ -4,7 +4,6 @@
 , gnat-bootstrap ? null
 , langAda ? false
 , langFortran
-, langJava ? false
 , langJit ? false
 , langGo
 , withoutTargetLibc
@@ -13,18 +12,13 @@
 , pkgsBuildTarget
 }:
 
-assert langJava -> lib.versionOlder version "7";
-assert langAda -> gnat-bootstrap != null; let
-  needsLib
-    =  (lib.versionOlder version "7" && (langJava || langGo))
-    || (lib.versions.major version == "4" && lib.versions.minor version == "9" && targetPlatform.isDarwin);
-in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
+assert langAda -> gnat-bootstrap != null;
+
+lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
   export NIX_LDFLAGS=`echo $NIX_LDFLAGS | sed -e s~$prefix/lib~$prefix/lib/amd64~g`
   export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
   export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
   export CFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CFLAGS_FOR_TARGET"
-'' + lib.optionalString needsLib ''
-  export lib=$out;
 '' + lib.optionalString langAda ''
   export PATH=${gnat-bootstrap}/bin:$PATH
 ''
@@ -36,31 +30,6 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # meet that need: it runs on the hostPlatform.
 + lib.optionalString (langFortran && (with stdenv; buildPlatform != hostPlatform && hostPlatform == targetPlatform)) ''
   export GFORTRAN_FOR_TARGET=${pkgsBuildTarget.gfortran}/bin/${stdenv.targetPlatform.config}-gfortran
-''
-
-# On x86_64-darwin, the gnat-bootstrap bootstrap compiler that we need to build a
-# native GCC with Ada support emits assembly that is accepted by the Clang
-# integrated assembler, but not by the GNU assembler in cctools-port that Nix
-# usually in the x86_64-darwin stdenv.  In particular, x86_64-darwin gnat-bootstrap
-# emits MOVQ as the mnemonic for quadword interunit moves, such as between XMM
-# and general registers (e.g "movq %xmm0, %rbp"); the cctools-port assembler,
-# however, only recognises MOVD for such moves.
-#
-# Therefore, for native x86_64-darwin builds that support Ada, we have to use
-# the Clang integrated assembler to build (at least stage 1 of) GCC, but have to
-# target GCC at the cctools-port GNU assembler.  In the wrapped x86_64-darwin
-# gnat-bootstrap, the former is provided as `as`, while the latter is provided as
-# `gas`.
-#
-+ lib.optionalString (
-    langAda
-    && buildPlatform == hostPlatform
-    && hostPlatform == targetPlatform
-    && targetPlatform.isx86_64
-    && targetPlatform.isDarwin
-  ) ''
-  export AS_FOR_BUILD=${gnat-bootstrap}/bin/as
-  export AS_FOR_TARGET=${gnat-bootstrap}/bin/gas
 ''
 
 # NOTE 2020/3/18: This environment variable prevents configure scripts from

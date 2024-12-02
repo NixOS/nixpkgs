@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchurl
-, gpgme
-, isPyPy
-, pythonAtLeast
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  gpgme,
+  isPyPy,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -27,8 +28,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://launchpad.net/pygpgme";
-    description = "A Python wrapper for the GPGME library";
+    description = "Python wrapper for the GPGME library";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ allegro ];
 
-  configureFlags = lib.optional stdenv.isx86_64 "--disable-asm";
+  configureFlags = lib.optional stdenv.hostPlatform.isx86_64 "--disable-asm";
 
   hardeningDisable = [ "format" ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "The classic version of a quick tactics game LiquidWar";
+    description = "Classic version of a quick tactics game LiquidWar";
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Helper library for RESTful services";
-    homepage = "https://wiki.gnome.org/Projects/Librest";
+    homepage = "https://gitlab.gnome.org/GNOME/librest";
     license = licenses.lgpl21Only;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

@@ -26,8 +26,7 @@ in lib.recursiveUpdate orig rec {
   #### overrides of texlive.tlpdb
 
   #### nonstandard script folders
-  context.scriptsFolder = "context/stubs-mkiv/unix";
-  context-legacy.scriptsFolder = "context/stubs/unix";
+  context-texlive.scriptsFolder = "context-texlive/stubs-mkiv/unix";
   cyrillic-bin.scriptsFolder = "texlive-extra";
   fontinst.scriptsFolder = "texlive-extra";
   mptopdf.scriptsFolder = "context/perl";
@@ -53,10 +52,13 @@ in lib.recursiveUpdate orig rec {
   latex-git-log.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ IPCSystemSimple ])) ];
   latexindent.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ FileHomeDir LogDispatch LogLog4perl UnicodeLineBreak YAMLTiny ])) ];
   pax.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ FileWhich ])) ];
+  pdflatexpicscale.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ GD ImageExifTool ])) ];
   ptex-fontmaps.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ Tk ])) ];
   purifyeps.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ FileWhich ])) ];
+  sqltex.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ DBI ])) ];
   svn-multi.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ TimeDate ])) ];
   texdoctk.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ Tk ])) ];
+  typog.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ IPCSystemSimple ])) ];
   ulqda.extraBuildInputs = [ (perl.withPackages (ps: with ps; [ DigestSHA1 ])) ];
 
   #### python packages
@@ -67,8 +69,6 @@ in lib.recursiveUpdate orig rec {
   bibexport.extraBuildInputs = [ gnugrep ];
   checklistings.extraBuildInputs = [ coreutils ];
   cjk-gs-integrate.extraBuildInputs = [ ghostscript_headless ];
-  context.extraBuildInputs = [ coreutils ];
-  context-legacy.extraBuildInputs = [ ruby ];
   cyrillic-bin.extraBuildInputs = [ coreutils gnused ];
   dtxgen.extraBuildInputs = [ coreutils getopt gnumake zip ];
   dviljk.extraBuildInputs = [ coreutils ];
@@ -126,15 +126,20 @@ in lib.recursiveUpdate orig rec {
     "mtxrun.lua" = tl.context.tex + "/scripts/context/lua/mtxrun.lua";
   };
 
+  context-legacy.binlinks = {
+    texexec = tl.context-legacy.tex + "/scripts/context/ruby/texexec.rb";
+    texmfstart = tl.context-legacy.tex + "/scripts/context/ruby/texmfstart.rb";
+  };
+
   epstopdf.binlinks.repstopdf = "epstopdf";
   pdfcrop.binlinks.rpdfcrop = "pdfcrop";
 
   # TODO: handle symlinks in bin.core
   ptex.binlinks = {
-    pbibtex = tl.uptex + "/bin/upbibtex";
-    pdvitype = tl.uptex + "/bin/updvitype";
-    ppltotf = tl.uptex + "/bin/uppltotf";
-    ptftopl = tl.uptex + "/bin/uptftopl";
+    pbibtex = tl.uptex.out + "/bin/upbibtex";
+    pdvitype = tl.uptex.out + "/bin/updvitype";
+    ppltotf = tl.uptex.out + "/bin/uppltotf";
+    ptftopl = tl.uptex.out + "/bin/uptftopl";
   };
 
   texdef.binlinks = {
@@ -143,7 +148,7 @@ in lib.recursiveUpdate orig rec {
 
   texlive-scripts.binlinks = {
     mktexfmt = "fmtutil";
-    texhash = tl."texlive.infra" + "/bin/mktexlsr";
+    texhash = tl."texlive.infra".out + "/bin/mktexlsr";
   };
 
   texlive-scripts-extra.binlinks = {
@@ -168,14 +173,6 @@ in lib.recursiveUpdate orig rec {
 
   cjk-gs-integrate.postFixup = ''
     sed -i '2i$ENV{PATH}='"'"'${lib.makeBinPath cjk-gs-integrate.extraBuildInputs}'"'"' . ($ENV{PATH} ? ":$ENV{PATH}" : '"'''"');' "$out"/bin/cjk-gs-integrate
-  '';
-
-  context.postFixup = ''
-    sed -i '2iPATH="${lib.makeBinPath context.extraBuildInputs}''${PATH:+:$PATH}"' "$out"/bin/{contextjit,mtxrunjit}
-  '';
-
-  context-legacy.postFixup = ''
-    sed -i '2iPATH="${lib.makeBinPath context-legacy.extraBuildInputs}''${PATH:+:$PATH}"' "$out"/bin/texexec
   '';
 
   cyrillic-bin.postFixup = ''
@@ -291,11 +288,6 @@ in lib.recursiveUpdate orig rec {
   '';
 
   #### other script fixes
-  # wrong $0 expectations
-  bibcop.postFixup = ''
-    substituteInPlace "$out"/bin/bibcop --replace "basename(\$0) eq 'bibcop.pl'" "basename(\$0) eq 'bibcop'"
-  '';
-
   # misc tab and python3 fixes
   ebong.postFixup = ''
     sed -Ei 's/import sre/import re/; s/file\(/open(/g; s/\t/        /g; s/print +(.*)$/print(\1)/g' "$out"/bin/ebong
@@ -305,12 +297,17 @@ in lib.recursiveUpdate orig rec {
   # add runtime dependencies to PATH
   epspdf.postFixup = ''
     sed -i '2ios.setenv("PATH","${lib.makeBinPath epspdf.extraBuildInputs}" .. (os.getenv("PATH") and ":" .. os.getenv("PATH") or ""))' "$out"/bin/epspdf
-    substituteInPlace "$out"/bin/epspdftk --replace '[info script]' "\"$scriptsFolder/epspdftk.tcl\""
+    substituteInPlace "$out"/bin/epspdftk --replace-fail '[info script]' "\"$scriptsFolder/epspdftk.tcl\""
   '';
 
   # find files in script directory, not in binary directory
   latexindent.postFixup = ''
-    substituteInPlace "$out"/bin/latexindent --replace 'use FindBin;' "BEGIN { \$0 = '$scriptsFolder' . '/latexindent.pl'; }; use FindBin;"
+    substituteInPlace "$out"/bin/latexindent --replace-fail 'use FindBin;' "BEGIN { \$0 = '$scriptsFolder' . '/latexindent.pl'; }; use FindBin;"
+  '';
+
+  # find files in script directory, not in binary directory
+  minted.postFixup = ''
+    substituteInPlace "$out"/bin/latexminted --replace-fail "__file__" "\"$scriptsFolder/latexminted.py\""
   '';
 
   # flag lua dependency
@@ -330,19 +327,21 @@ in lib.recursiveUpdate orig rec {
 
   # patch interpreter
   texosquery.postFixup = ''
-    substituteInPlace "$out"/bin/* --replace java "$interpJava"
+    substituteInPlace "$out"/bin/* --replace-fail java "$interpJava"
   '';
 
   # hardcode revision numbers (since texlive.infra, tlshell are not in either system or user texlive.tlpdb)
   tlshell.postFixup = ''
     substituteInPlace "$out"/bin/tlshell \
-      --replace '[dict get $::pkgs texlive.infra localrev]' '${toString orig."texlive.infra".revision}' \
-      --replace '[dict get $::pkgs tlshell localrev]' '${toString orig.tlshell.revision}'
+      --replace-fail '[dict get $::pkgs texlive.infra localrev]' '${toString orig."texlive.infra".revision}' \
+      --replace-fail '[dict get $::pkgs tlshell localrev]' '${toString orig.tlshell.revision}'
   '';
 
   #### dependency changes
   # it seems to need it to transform fonts
-  xdvi.deps = (orig.xdvi.deps or []) ++  [ "metafont" ];
+  xdvi.deps = (orig.xdvi.deps or [ ]) ++ [ "metafont" ];
+
+  mltex.deps = (orig.mltex.deps or [ ]) ++ [ "pdftex" ];
 
   # remove dependency-heavy packages from the basic collections
   collection-basic.deps = lib.subtractLists [ "metafont" "xdvi" ] orig.collection-basic.deps;
@@ -358,8 +357,8 @@ in lib.recursiveUpdate orig rec {
     (!(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) && !stdenv.hostPlatform.isRiscV)
     orig.luajittex.binfiles;
 
-  # tlpdb lists license as "unknown", but the README says lppl13: http://mirrors.ctan.org/language/arabic/arabi-add/README
-  arabi-add.license = [  "lppl13c" ];
+  # osda is unfree. Hence, we can't include it by default
+  collection-publishers.deps = builtins.filter (dep: dep != "osda") orig.collection-publishers.deps;
 
   texdoc = {
     extraRevision = "-tlpdb${toString tlpdbVersion.revision}";
@@ -389,9 +388,9 @@ in lib.recursiveUpdate orig rec {
       TEXMFCNF="${tl.kpathsea.tex}"/web2c TEXMF="$scriptsFolder/../.." \
         texlua "$out"/bin/texdoc --print-completion zsh > "$TMPDIR"/_texdoc
       substituteInPlace "$TMPDIR"/_texdoc \
-        --replace 'compdef __texdoc texdoc' '#compdef texdoc' \
-        --replace '$(kpsewhich -var-value TEXMFROOT)/tlpkg/texlive.tlpdb' '$(kpsewhich Data.tlpdb.lua)' \
-        --replace '/^name[^.]*$/ {print $2}' '/^  \["[^"]*"\] = {$/ { print substr($1,3,length($1)-4) }'
+        --replace-fail 'compdef __texdoc texdoc' '#compdef texdoc' \
+        --replace-fail '$(kpsewhich -var-value TEXMFROOT)/tlpkg/texlive.tlpdb' '$(kpsewhich Data.tlpdb.lua)' \
+        --replace-fail '/^name[^.]*$/ {print $2}' '/^  \["[^"]*"\] = {$/ { print substr($1,3,length($1)-4) }'
       echo '__texdoc' >> "$TMPDIR"/_texdoc
       installShellCompletion --zsh "$TMPDIR"/_texdoc
     '';
@@ -410,14 +409,14 @@ in lib.recursiveUpdate orig rec {
     # make tlmgr believe it can use kpsewhich to evaluate TEXMFROOT
     postFixup = ''
       substituteInPlace "$out"/bin/tlmgr \
-        --replace 'if (-r "$bindir/$kpsewhichname")' 'if (1)'
+        --replace-fail 'if (-r "$bindir/$kpsewhichname")' 'if (1)'
       sed -i '2i$ENV{PATH}='"'"'${lib.makeBinPath [ gnupg ]}'"'"' . ($ENV{PATH} ? ":$ENV{PATH}" : '"'''"');' "$out"/bin/tlmgr
       sed -i '2iPATH="${lib.makeBinPath [ coreutils gnused tl.kpathsea ]}''${PATH:+:$PATH}"' "$out"/bin/mktexlsr
     '';
 
     # add minimal texlive.tlpdb
     postUnpack = ''
-      if [[ "$tlType" == "tlpkg" ]] ; then
+      if [[ -d "$out"/TeXLive ]] ; then
         xzcat "${tlpdbxz}" | sed -n -e '/^name \(00texlive.config\|00texlive.installation\)$/,/^$/p' > "$out"/texlive.tlpdb
       fi
     '';

@@ -1,66 +1,87 @@
-{ lib
-, awkward
-, buildPythonPackage
-, dask
-, fetchFromGitHub
-, hatch-vcs
-, hatchling
-, pyarrow
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
+  awkward,
+  cachetools,
+  dask,
+  typing-extensions,
+
+  # optional-dependencies
+  pyarrow,
+
+  # checks
+  dask-histogram,
+  distributed,
+  hist,
+  pandas,
+  pytestCheckHook,
+  uproot,
 }:
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2024.2.0";
+  version = "2024.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-awkward";
     rev = "refs/tags/${version}";
-    hash = "sha256-oBGja1dt9UbHym0c5K/pAMXNErryr3u6IhDRuhwTvG0=";
+    hash = "sha256-4CwixPj0bJHVjnwZ7fPkRdiDHs8/IzvNlwSPynXvcAo=";
   };
 
-  pythonRelaxDeps = [
-    "awkward"
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     awkward
+    cachetools
     dask
+    typing-extensions
   ];
+
+  optional-dependencies = {
+    io = [ pyarrow ];
+  };
 
   checkInputs = [
+    dask-histogram
+    distributed
+    hist
+    pandas
     pytestCheckHook
-    pyarrow
-  ];
+    uproot
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "dask_awkward"
-  ];
+  pythonImportsCheck = [ "dask_awkward" ];
 
   disabledTests = [
     # Tests require network access
     "test_remote_double"
     "test_remote_single"
     "test_from_text"
+    # ValueError: not a ROOT file: first four bytes...
+    "test_basic_root_works"
+    # Flaky. https://github.com/dask-contrib/dask-awkward/issues/506.
+    "test_distance_behavior"
   ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Native Dask collection for awkward arrays, and the library to use it";
     homepage = "https://github.com/dask-contrib/dask-awkward";
     changelog = "https://github.com/dask-contrib/dask-awkward/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

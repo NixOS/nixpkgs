@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, flit-core
-, ninja
+{
+  lib,
+  buildPythonPackage,
+  flit-core,
+  ninja,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
 
   inherit (ninja) setupHook;
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   preBuild = ''
     cp "${ninja.src}/misc/ninja_syntax.py" ninja/ninja_syntax.py
@@ -36,13 +35,17 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A small build system with a focus on speed";
+    description = "Small build system with a focus on speed";
+    mainProgram = "ninja";
     longDescription = ''
       This is a stub of the ninja package on PyPI that uses the ninja program
       provided by nixpkgs instead of downloading ninja from the web.
     '';
     homepage = "https://github.com/scikit-build/ninja-python-distributions";
     license = licenses.asl20;
-    maintainers = with maintainers; [ _999eagle tjni ];
+    maintainers = with maintainers; [
+      _999eagle
+      tjni
+    ];
   };
 }

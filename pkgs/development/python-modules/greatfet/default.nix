@@ -1,34 +1,69 @@
-{ lib, fetchFromGitHub, buildPythonPackage, isPy3k, future, pyusb, ipython, pygreat }:
+{
+  buildPythonPackage,
+  cmsis-svd,
+  fetchFromGitHub,
+  future,
+  ipython,
+  lib,
+  prompt-toolkit,
+  pyfwup,
+  pygreat,
+  pythonOlder,
+  pyusb,
+  setuptools,
+  tabulate,
+  tqdm,
+}:
 
 buildPythonPackage rec {
-  pname = "GreatFET";
-  version = "2019.5.1.dev0";
+  pname = "greatfet";
+  version = "2024.0.3";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "greatfet";
-    rev = "v${version}";
-    sha256 = "054vkx4xkbhxhh5grjbs9kw3pjkv1zapp91ysrqr0c8mg1pc7zxv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jdOTEOotLiIxA9TxmFGOjP8IZ/8xo7mzXSJRg3A5Ri4=";
   };
 
-  disabled = !isPy3k;
+  sourceRoot = "${src.name}/host";
 
-  propagatedBuildInputs = [ future pyusb ipython pygreat ];
-
-  doCheck = false;
-
-  preBuild = ''
-    cd host
-    echo "$version" > ../VERSION
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    cmsis-svd
+    future
+    ipython
+    prompt-toolkit
+    pyfwup
+    pygreat
+    pyusb
+    tabulate
+    tqdm
+  ];
+
+  # Tests seem to require devices (or simulators) which are
+  # not available in the build sandbox.
+  doCheck = false;
 
   meta = {
     description = "Hardware hacking with the greatfet";
     homepage = "https://greatscottgadgets.com/greatfet";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ mog ];
+    mainProgram = "gf";
+    maintainers = with lib.maintainers; [
+      mog
+      msanft
+    ];
   };
 }
-
-

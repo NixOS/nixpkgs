@@ -1,4 +1,4 @@
 (executable
- (name console-test)
- (public_name console-test)
+ (name console_test)
+ (public_name console_test)
  (libraries reason console.lib))

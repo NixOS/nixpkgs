@@ -27,11 +27,11 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     jinja2
-  ] ++ lib.attrVals extras passthru.optional-dependencies;
+  ] ++ lib.attrVals extras optional-dependencies;
 
   pythonImportsCheck = [ "jinja2cli" ];
 
-  passthru.optional-dependencies = with python3.pkgs; {
+  optional-dependencies = with python3.pkgs; {
     hjson = [ hjson ];
     json5 = [ json5 ];
     toml = [ toml ];

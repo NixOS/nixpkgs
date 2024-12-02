@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Visual Trace Explorer (ViTE), a tool to visualize execution traces";
+    mainProgram = "vite";
 
     longDescription = ''
       ViTE is a trace explorer. It is a tool to visualize execution
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
 
     homepage = "http://vite.gforge.inria.fr/";
     license = lib.licenses.cecill20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

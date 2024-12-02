@@ -8,22 +8,22 @@ import ./make-test-python.nix ({ pkgs, ... }:
   nodes.machine = { pkgs, ... }: {
     security.polkit.enable = true;
     services.power-profiles-daemon.enable = true;
-    environment.systemPackages = [ pkgs.glib ];
+    environment.systemPackages = [ pkgs.glib pkgs.power-profiles-daemon ];
   };
 
   testScript = ''
     def get_profile():
         return machine.succeed(
-            """gdbus call --system --dest net.hadess.PowerProfiles --object-path /net/hadess/PowerProfiles \
-    --method org.freedesktop.DBus.Properties.Get 'net.hadess.PowerProfiles' 'ActiveProfile'
+            """gdbus call --system --dest org.freedesktop.UPower.PowerProfiles --object-path /org/freedesktop/UPower/PowerProfiles \
+    --method org.freedesktop.DBus.Properties.Get 'org.freedesktop.UPower.PowerProfiles' 'ActiveProfile'
     """
         )
 
 
     def set_profile(profile):
         return machine.succeed(
-            """gdbus call --system --dest net.hadess.PowerProfiles --object-path /net/hadess/PowerProfiles \
-    --method org.freedesktop.DBus.Properties.Set 'net.hadess.PowerProfiles' 'ActiveProfile' "<'{profile}'>"
+            """gdbus call --system --dest org.freedesktop.UPower.PowerProfiles --object-path /org/freedesktop/UPower/PowerProfiles \
+    --method org.freedesktop.DBus.Properties.Set 'org.freedesktop.UPower.PowerProfiles' 'ActiveProfile' "<'{profile}'>"
     """.format(
                 profile=profile
             )
@@ -42,5 +42,16 @@ import ./make-test-python.nix ({ pkgs, ... }:
     profile = get_profile()
     if not "balanced" in profile:
         raise Exception("Unable to set balanced profile")
+
+    # test powerprofilectl CLI
+    machine.succeed("powerprofilesctl set power-saver")
+    profile = get_profile()
+    if not "power-saver" in profile:
+        raise Exception("Unable to set power-saver profile with powerprofilectl")
+
+    machine.succeed("powerprofilesctl set balanced")
+    profile = get_profile()
+    if not "balanced" in profile:
+        raise Exception("Unable to set balanced profile with powerprofilectl")
   '';
 })

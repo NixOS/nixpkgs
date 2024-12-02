@@ -18,7 +18,7 @@ A complete list of options for the Athens module may be found
 ## Basic usage for a caching proxy configuration {#opt-services-development-athens-caching-proxy}
 
 A very basic configuration for Athens that acts as a caching and forwarding HTTP proxy is:
-```
+```nix
 {
     services.athens = {
       enable = true;
@@ -28,7 +28,7 @@ A very basic configuration for Athens that acts as a caching and forwarding HTTP
 
 If you want to prevent Athens from writing to disk, you can instead configure it to cache modules only in memory:
 
-```
+```nix
 {
     services.athens = {
       enable = true;
@@ -37,16 +37,31 @@ If you want to prevent Athens from writing to disk, you can instead configure it
 }
 ```
 
-To use the local proxy in Go builds, you can set the proxy as environment variable:
+To use the local proxy in Go builds (outside of `nix`), you can set the proxy as environment variable:
 
-```
+```nix
 {
   environment.variables = {
-    GOPROXY = "http://localhost:3000"
+    GOPROXY = "http://localhost:3000";
   };
 }
 ```
 
-It is currently not possible to use the local proxy for builds done by the Nix daemon. This might be enabled
-by experimental features, specifically [`configurable-impure-env`](https://nixos.org/manual/nix/unstable/contributing/experimental-features#xp-feature-configurable-impure-env),
-in upcoming Nix versions.
+To also use the local proxy for Go builds happening in `nix` (with `buildGoModule`), the nix daemon can be configured to pass the GOPROXY environment variable to the `goModules` fixed-output derivation.
+
+This can either be done via the nix-daemon systemd unit:
+
+```nix
+{
+  systemd.services.nix-daemon.environment.GOPROXY = "http://localhost:3000";
+}
+```
+
+or via the [impure-env experimental feature](https://nix.dev/manual/nix/2.24/command-ref/conf-file#conf-impure-env):
+
+```nix
+{
+  nix.settings.experimental-features = [ "configurable-impure-env" ];
+  nix.settings.impure-env = "GOPROXY=http://localhost:3000";
+}
+```

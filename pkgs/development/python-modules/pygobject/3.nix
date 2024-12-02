@@ -1,38 +1,40 @@
-{ lib
-, stdenv
-, fetchurl
-, buildPythonPackage
-, pkg-config
-, glib
-, gobject-introspection
-, pycairo
-, cairo
-, ncurses
-, meson
-, ninja
-, pythonOlder
-, gnome
-, python
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPythonPackage,
+  pkg-config,
+  glib,
+  gobject-introspection,
+  pycairo,
+  cairo,
+  ncurses,
+  meson,
+  ninja,
+  pythonOlder,
+  gnome,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "3.46.0";
+  version = "3.50.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "QmAIstrVSMmvHHsDtZ3wRA/eXDPzj7VAaxA6Q9ZTyvw=";
+    hash = "sha256-jYNudbWogdRX7hYiyuSjK826KKC6ViGTrbO7tHJHIhI=";
   };
 
-  depsBuildBuild = [
-    pkg-config
-  ];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     pkg-config
@@ -42,15 +44,13 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    # # .so files link to this
+    cairo
     glib
-  ] ++ lib.optionals stdenv.isDarwin [
-    ncurses
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ ncurses ];
 
   propagatedBuildInputs = [
     pycairo
-    cairo
+    gobject-introspection # e.g. try building: python3Packages.urwid python3Packages.pydbus
   ];
 
   mesonFlags = [

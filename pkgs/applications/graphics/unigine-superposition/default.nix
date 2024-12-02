@@ -28,10 +28,11 @@
 }:
 
 let
+  pname = "unigine-superposition";
+  version = "1.1";
 
   superposition = stdenv.mkDerivation rec{
-    pname = "unigine-superposition";
-    version = "1.1";
+    inherit pname version;
 
     src = fetchurl {
       url = "https://assets.unigine.com/d/Unigine_Superposition-${version}.run";
@@ -97,7 +98,7 @@ in
 # For that we need use a buildFHSEnv.
 
 buildFHSEnv {
-  name = "Superposition";
+  inherit pname version;
 
   targetPkgs = pkgs: [
     superposition
@@ -137,7 +138,7 @@ buildFHSEnv {
   '';
 
   meta = {
-    description = "The Unigine Superposition GPU benchmarking tool";
+    description = "Unigine Superposition GPU benchmarking tool";
     homepage = "https://benchmark.unigine.com/superposition";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;

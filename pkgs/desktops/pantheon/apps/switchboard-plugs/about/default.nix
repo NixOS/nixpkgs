@@ -7,35 +7,38 @@
 , ninja
 , pkg-config
 , vala
+, libadwaita
 , libgee
 , libgtop
 , libgudev
-, libhandy
-, granite
-, gtk3
+, granite7
+, gtk4
+, packagekit
+, polkit
 , switchboard
 , udisks2
 , fwupd
 , appstream
+, elementary-settings-daemon
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";
-  version = "6.2.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-MJybc2yAchU6qMqkoRz45QdhR7bj/UFk2nyxcBivsHI=";
+    sha256 = "sha256-6b6nuOp4pEufHEmTraSfKpbtPuO3Z9hQJfvKuuyy7as=";
   };
 
   patches = [
-    # Add support for AppStream 1.0
-    # https://github.com/elementary/switchboard-plug-about/pull/275
+    # Fix build with fwupd 2.0.0
+    # https://github.com/elementary/switchboard-plug-about/pull/343
     (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-about/commit/72d7da13da2824812908276751fd3024db2dd0f8.patch";
-      hash = "sha256-R7oW3mL77/JNqxuMiqxtdMlHWMJgGRQBBzVeRiqx8PY=";
+      url = "https://github.com/elementary/switchboard-plug-about/commit/6f8ba61cb3d82229e19358ede81b77f66dbb06a2.patch";
+      hash = "sha256-E9itq/KGzw36S1dAFoCowa/A2/f6Shx9F379nEIM2qI=";
     })
   ];
 
@@ -48,20 +51,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     appstream
+    elementary-settings-daemon # for gsettings schemas
     fwupd
-    granite
-    gtk3
+    granite7
+    gtk4
+    libadwaita
     libgee
     libgtop
     libgudev
-    libhandy
+    packagekit
+    polkit
     switchboard
     udisks2
-  ];
-
-  mesonFlags = [
-    # Does not play nice with the nix-snowflake logo
-    "-Dwallpaper=false"
   ];
 
   passthru = {

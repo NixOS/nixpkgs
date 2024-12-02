@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.telegraf;
 
@@ -11,15 +8,15 @@ in {
   ###### interface
   options = {
     services.telegraf = {
-      enable = mkEnableOption (lib.mdDoc "telegraf server");
+      enable = lib.mkEnableOption "telegraf server";
 
-      package = mkPackageOption pkgs "telegraf" { };
+      package = lib.mkPackageOption pkgs "telegraf" { };
 
-      environmentFiles = mkOption {
-        type = types.listOf types.path;
+      environmentFiles = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [];
         example = [ "/run/keys/telegraf.env" ];
-        description = lib.mdDoc ''
+        description = ''
           File to load as environment file. Environment variables from this file
           will be interpolated into the config file using envsubst with this
           syntax: `$ENVIRONMENT` or `''${VARIABLE}`.
@@ -27,9 +24,9 @@ in {
         '';
       };
 
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         default = {};
-        description = lib.mdDoc "Extra configuration options for telegraf";
+        description = "Extra configuration options for telegraf";
         type = settingsFormat.type;
         example = {
           outputs.influxdb = {
@@ -47,7 +44,7 @@ in {
 
 
   ###### implementation
-  config = mkIf config.services.telegraf.enable {
+  config = lib.mkIf config.services.telegraf.enable {
     services.telegraf.extraConfig = {
       inputs = {};
       outputs = {};
@@ -61,7 +58,8 @@ in {
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      path = lib.optional (config.services.telegraf.extraConfig.inputs ? procstat) pkgs.procps;
+      path = lib.optional (config.services.telegraf.extraConfig.inputs ? procstat) pkgs.procps
+             ++ lib.optional (config.services.telegraf.extraConfig.inputs ? ping) pkgs.iputils;
       serviceConfig = {
         EnvironmentFile = config.services.telegraf.environmentFiles;
         ExecStartPre = lib.optional (config.services.telegraf.environmentFiles != [])

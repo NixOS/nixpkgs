@@ -1,5 +1,21 @@
-with import ../../.. { };
-with vmTools;
+let
+  pkgs = import ../../.. { };
+
+  inherit (pkgs)
+    hello
+    patchelf
+    pcmanfm
+    stdenv
+    ;
+
+  inherit (pkgs.vmTools)
+    buildRPM
+    diskImages
+    makeImageTestScript
+    runInLinuxImage
+    runInLinuxVM
+    ;
+in
 
 {
 
@@ -8,6 +24,7 @@ with vmTools;
   buildPatchelfInVM = runInLinuxVM patchelf;
 
   buildHelloInVM = runInLinuxVM hello;
+  buildStructuredAttrsHelloInVM = runInLinuxVM (hello.overrideAttrs { __structuredAttrs = true; });
 
   buildPcmanrmInVM = runInLinuxVM (pcmanfm.overrideAttrs (old: {
     # goes out-of-memory with many cores

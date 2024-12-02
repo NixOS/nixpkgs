@@ -2,50 +2,46 @@
   cfg = config.services.sogo;
 
   preStart = pkgs.writeShellScriptBin "sogo-prestart" ''
-    touch /etc/sogo/sogo.conf
-    chown sogo:sogo /etc/sogo/sogo.conf
-    chmod 640 /etc/sogo/sogo.conf
-
     ${if (cfg.configReplaces != {}) then ''
       # Insert secrets
       ${concatStringsSep "\n" (mapAttrsToList (k: v: ''export ${k}="$(cat "${v}" | tr -d '\n')"'') cfg.configReplaces)}
 
-      ${pkgs.perl}/bin/perl -p ${concatStringsSep " " (mapAttrsToList (k: v: '' -e 's/${k}/''${ENV{"${k}"}}/g;' '') cfg.configReplaces)} /etc/sogo/sogo.conf.raw > /etc/sogo/sogo.conf
+      ${pkgs.perl}/bin/perl -p ${concatStringsSep " " (mapAttrsToList (k: v: '' -e 's/${k}/''${ENV{"${k}"}}/g;' '') cfg.configReplaces)} /etc/sogo/sogo.conf.raw | install -m 640 -o sogo -g sogo /dev/stdin /etc/sogo/sogo.conf
     '' else ''
-      cp /etc/sogo/sogo.conf.raw /etc/sogo/sogo.conf
+      install -m 640 -o sogo -g sogo /etc/sogo/sogo.conf.raw /etc/sogo/sogo.conf
     ''}
   '';
 
 in {
   options.services.sogo = with types; {
-    enable = mkEnableOption (lib.mdDoc "SOGo groupware");
+    enable = mkEnableOption "SOGo groupware";
 
     vhostName = mkOption {
-      description = lib.mdDoc "Name of the nginx vhost";
+      description = "Name of the nginx vhost";
       type = str;
       default = "sogo";
     };
 
     timezone = mkOption {
-      description = lib.mdDoc "Timezone of your SOGo instance";
+      description = "Timezone of your SOGo instance";
       type = str;
       example = "America/Montreal";
     };
 
     language = mkOption {
-      description = lib.mdDoc "Language of SOGo";
+      description = "Language of SOGo";
       type = str;
       default = "English";
     };
 
     ealarmsCredFile = mkOption {
-      description = lib.mdDoc "Optional path to a credentials file for email alarms";
+      description = "Optional path to a credentials file for email alarms";
       type = nullOr str;
       default = null;
     };
 
     configReplaces = mkOption {
-      description = lib.mdDoc ''
+      description = ''
         Replacement-filepath mapping for sogo.conf.
         Every key is replaced with the contents of the file specified as value.
 
@@ -60,7 +56,7 @@ in {
     };
 
     extraConfig = mkOption {
-      description = lib.mdDoc "Extra sogo.conf configuration lines";
+      description = "Extra sogo.conf configuration lines";
       type = lines;
       default = "";
     };

@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qtsvg
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
   ];
 
-  installPhase = if stdenv.isDarwin then ''
+  installPhase = if stdenv.hostPlatform.isDarwin then ''
     runHook preInstall
 
     mkdir -p $out/Applications
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     changelog = "https://github.com/gottcode/cutemaze/blob/v${version}/ChangeLog";
     description = "Simple, top-down game in which mazes are randomly generated";
+    mainProgram = "cutemaze";
     homepage = "https://gottcode.org/cutemaze/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];

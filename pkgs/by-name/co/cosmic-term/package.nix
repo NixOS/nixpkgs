@@ -8,7 +8,6 @@
 , libinput
 , libxkbcommon
 , makeBinaryWrapper
-, mesa
 , pkg-config
 , rustPlatform
 , stdenv
@@ -19,30 +18,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-term";
-  version = "0-unstable-2024-01-19";
+  version = "1.0.0-alpha.3";
+
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "6d519018a070e25db0cd099a2752a7add4d6b138";
-    hash = "sha256-gfvBLrhq6Bz6cQdgiLH5o8vyptOT+q3xwUYoDG6eGTY=";
+    repo = "cosmic-term";
+    rev = "epoch-${version}";
+    hash = "sha256-4++wCyRVIodWdlrvK2vMcHGoY4BctnrkopWC6dZvhMk=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "accesskit-0.11.0" = "sha256-xVhe6adUb8VmwIKKjHxwCwOo5Y1p3Or3ylcJJdLDrrE=";
-      "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "cosmic-config-0.1.0" = "sha256-uo4So9I/jD3LPfigyKwESUdZiK1wqm7rg9wYwyv4uKc=";
-      "cosmic-text-0.10.0" = "sha256-S0GkKUiUsSkL1CZHXhtpQy7Mf5+6fqNuu33RRtxG3mE=";
-      "glyphon-0.4.1" = "sha256-mwJXi63LTBIVFrFcywr/NeOJKfMjQaQkNl3CSdEgrZc=";
-      "libc-0.2.151" = "sha256-VcNTcLOnVXMlX86yeY0VDfIfKOZyyx/DO1Hbe30BsaI=";
-      "sctk-adwaita-0.5.4" = "sha256-yK0F2w/0nxyKrSiHZbx7+aPNY2vlFs7s8nu/COp2KqQ=";
-      "smithay-client-toolkit-0.16.1" = "sha256-z7EZThbh7YmKzAACv181zaEZmWxTrMkFRzP0nfsHK6c=";
-      "softbuffer-0.3.3" = "sha256-eKYFVr6C1+X6ulidHIu9SP591rJxStxwL9uMiqnXx4k=";
-      "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
-      "winit-0.28.6" = "sha256-FhW6d2XnXCGJUMoT9EMQew9/OPXiehy/JraeCiVd76M=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-0KXo1wtbbnK3Kk+EGZo7eEecM4PChLpwawWWI0Bp/Yw=";
+
+  # COSMIC applications now uses vergen for the About page
+  # Update the COMMIT_DATE to match when the commit was made
+  env.VERGEN_GIT_COMMIT_DATE = "2024-09-24";
+  env.VERGEN_GIT_SHA = src.rev;
 
   postPatch = ''
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
@@ -88,16 +79,14 @@ rustPlatform.buildRustPackage rec {
 
   # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
   postInstall = ''
-    wrapProgram "$out/bin/${pname}" \
+    wrapProgram "$out/bin/cosmic-term" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
         libxkbcommon
-        mesa.drivers
         vulkan-loader
         xorg.libX11
         xorg.libXcursor
         xorg.libXi
-        xorg.libXrandr
       ]}
   '';
 
@@ -105,7 +94,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pop-os/cosmic-term";
     description = "Terminal for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ahoneybun nyanbinary ];
+    maintainers = with maintainers; [ ahoneybun nyabinary ];
     platforms = platforms.linux;
     mainProgram = "cosmic-term";
   };

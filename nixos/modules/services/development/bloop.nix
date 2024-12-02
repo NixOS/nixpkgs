@@ -17,7 +17,7 @@ in {
         "-J-XX:MaxInlineLevel=20"
         "-J-XX:+UseParallelGC"
       ];
-      description = lib.mdDoc ''
+      description = ''
         Specifies additional command line argument to pass to bloop
         java process.
       '';
@@ -26,7 +26,7 @@ in {
     install = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to install a user service for the Bloop server.
 
         The service must be manually started for each user with
@@ -43,8 +43,9 @@ in {
         PATH = mkForce "${makeBinPath [ config.programs.java.package ]}";
       };
       serviceConfig = {
-        Type        = "simple";
-        ExecStart   = "${pkgs.bloop}/bin/bloop server";
+        Type        = "forking";
+        ExecStart   = "${pkgs.bloop}/bin/bloop start";
+        ExecStop    = "${pkgs.bloop}/bin/bloop exit";
         Restart     = "always";
       };
     };

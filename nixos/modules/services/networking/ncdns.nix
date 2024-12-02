@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfgs = config.services;
   cfg  = cfgs.ncdns;
@@ -9,10 +6,10 @@ let
   dataDir  = "/var/lib/ncdns";
   username = "ncdns";
 
-  valueType = with types; oneOf [ int str bool path ]
+  valueType = with lib.types; oneOf [ int str bool path ]
     // { description = "setting type (integer, string, bool or path)"; };
 
-  configType = with types; attrsOf (nullOr (either valueType configType))
+  configType = with lib.types; attrsOf (nullOr (either valueType configType))
     // { description = ''
           ncdns.conf configuration type. The format consists of an
           attribute set of settings. Each setting can be either `null`,
@@ -35,10 +32,10 @@ let
   };
 
   # if all keys are the default value
-  needsKeygen = all id (flip mapAttrsToList cfg.dnssec.keys
-    (n: v: v == getAttr n defaultFiles));
+  needsKeygen = lib.all lib.id (lib.flip lib.mapAttrsToList cfg.dnssec.keys
+    (n: v: v == lib.getAttr n defaultFiles));
 
-  mkDefaultAttrs = mapAttrs (n: v: mkDefault v);
+  mkDefaultAttrs = lib.mapAttrs (n: v: lib.mkDefault v);
 
 in
 
@@ -50,35 +47,35 @@ in
 
     services.ncdns = {
 
-      enable = mkEnableOption (lib.mdDoc ''
+      enable = lib.mkEnableOption ''
         ncdns, a Go daemon to bridge Namecoin to DNS.
         To resolve .bit domains set `services.namecoind.enable = true;`
         and an RPC username/password
-      '');
+      '';
 
-      address = mkOption {
-        type = types.str;
+      address = lib.mkOption {
+        type = lib.types.str;
         default = "[::1]";
-        description = lib.mdDoc ''
+        description = ''
           The IP address the ncdns resolver will bind to.  Leave this unchanged
           if you do not wish to directly expose the resolver.
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 5333;
-        description = lib.mdDoc ''
+        description = ''
           The port the ncdns resolver will bind to.
         '';
       };
 
-      identity.hostname = mkOption {
-        type = types.str;
+      identity.hostname = lib.mkOption {
+        type = lib.types.str;
         default = config.networking.hostName;
-        defaultText = literalExpression "config.networking.hostName";
+        defaultText = lib.literalExpression "config.networking.hostName";
         example = "example.com";
-        description = lib.mdDoc ''
+        description = ''
           The hostname of this ncdns instance, which defaults to the machine
           hostname. If specified, ncdns lists the hostname as an NS record at
           the zone apex:
@@ -92,38 +89,38 @@ in
         '';
       };
 
-      identity.hostmaster = mkOption {
-        type = types.str;
+      identity.hostmaster = lib.mkOption {
+        type = lib.types.str;
         default = "";
         example = "root@example.com";
-        description = lib.mdDoc ''
+        description = ''
           An email address for the SOA record at the bit zone.
           If you are only using ncdns locally you can ignore this.
         '';
       };
 
-      identity.address = mkOption {
-        type = types.str;
+      identity.address = lib.mkOption {
+        type = lib.types.str;
         default = "127.127.127.127";
-        description = lib.mdDoc ''
+        description = ''
           The IP address the hostname specified in
           {option}`services.ncdns.identity.hostname` should resolve to.
           If you are only using ncdns locally you can ignore this.
         '';
       };
 
-      dnssec.enable = mkEnableOption (lib.mdDoc ''
+      dnssec.enable = lib.mkEnableOption ''
         DNSSEC support in ncdns. This will generate KSK and ZSK keypairs
         (unless provided via the options
         {option}`services.ncdns.dnssec.publicKey`,
         {option}`services.ncdns.dnssec.privateKey` etc.) and add a trust
         anchor to recursive resolvers
-      '');
+      '';
 
-      dnssec.keys.public = mkOption {
-        type = types.path;
+      dnssec.keys.public = lib.mkOption {
+        type = lib.types.path;
         default = defaultFiles.public;
-        description = lib.mdDoc ''
+        description = ''
           Path to the file containing the KSK public key.
           The key can be generated using the `dnssec-keygen`
           command, provided by the package `bind` as follows:
@@ -133,18 +130,18 @@ in
         '';
       };
 
-      dnssec.keys.private = mkOption {
-        type = types.path;
+      dnssec.keys.private = lib.mkOption {
+        type = lib.types.path;
         default = defaultFiles.private;
-        description = lib.mdDoc ''
+        description = ''
           Path to the file containing the KSK private key.
         '';
       };
 
-      dnssec.keys.zonePublic = mkOption {
-        type = types.path;
+      dnssec.keys.zonePublic = lib.mkOption {
+        type = lib.types.path;
         default = defaultFiles.zonePublic;
-        description = lib.mdDoc ''
+        description = ''
           Path to the file containing the ZSK public key.
           The key can be generated using the `dnssec-keygen`
           command, provided by the package `bind` as follows:
@@ -154,18 +151,18 @@ in
         '';
       };
 
-      dnssec.keys.zonePrivate = mkOption {
-        type = types.path;
+      dnssec.keys.zonePrivate = lib.mkOption {
+        type = lib.types.path;
         default = defaultFiles.zonePrivate;
-        description = lib.mdDoc ''
+        description = ''
           Path to the file containing the ZSK private key.
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = configType;
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           { # enable webserver
             ncdns.httplistenaddr = ":8202";
 
@@ -176,7 +173,7 @@ in
             certstore.nssdbdir = "../../home/alice/.pki/nssdb";
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           ncdns settings. Use this option to configure ncds
           settings not exposed in a NixOS option or to bypass one.
           See the example ncdns.conf file at <https://github.com/namecoin/ncdns/blob/master/_doc/ncdns.conf.example>
@@ -186,10 +183,10 @@ in
 
     };
 
-    services.pdns-recursor.resolveNamecoin = mkOption {
-      type = types.bool;
+    services.pdns-recursor.resolveNamecoin = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Resolve `.bit` top-level domains using ncdns and namecoin.
       '';
     };
@@ -199,9 +196,9 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    services.pdns-recursor = mkIf cfgs.pdns-recursor.resolveNamecoin {
+    services.pdns-recursor = lib.mkIf cfgs.pdns-recursor.resolveNamecoin {
       forwardZonesRecurse.bit = "${cfg.address}:${toString cfg.port}";
       luaConfig =
         if cfg.dnssec.enable
@@ -210,7 +207,7 @@ in
     };
 
     # Avoid pdns-recursor not finding the DNSSEC keys
-    systemd.services.pdns-recursor = mkIf cfgs.pdns-recursor.resolveNamecoin {
+    systemd.services.pdns-recursor = lib.mkIf cfgs.pdns-recursor.resolveNamecoin {
       after = [ "ncdns.service" ];
       wants = [ "ncdns.service" ];
     };
@@ -231,7 +228,7 @@ in
           # Other
           bind = "${cfg.address}:${toString cfg.port}";
         }
-        // optionalAttrs cfg.dnssec.enable
+        // lib.optionalAttrs cfg.dnssec.enable
         { # DNSSEC
           publickey  = "../.." + cfg.dnssec.keys.public;
           privatekey = "../.." + cfg.dnssec.keys.private;
@@ -263,7 +260,7 @@ in
         ExecStart = "${pkgs.ncdns}/bin/ncdns -conf=${configFile}";
       };
 
-      preStart = optionalString (cfg.dnssec.enable && needsKeygen) ''
+      preStart = lib.optionalString (cfg.dnssec.enable && needsKeygen) ''
         cd ${dataDir}
         if [ ! -e bit.key ]; then
           ${pkgs.bind}/bin/dnssec-keygen -a RSASHA256 -3 -b 2048 bit

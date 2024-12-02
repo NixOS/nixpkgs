@@ -1,31 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, rustPlatform
-, cmake
-, pkg-config
-, perl
-, python3
-, fontconfig
-, glib
-, gtk3
-, openssl
-, libGL
-, libobjc
-, libxkbcommon
-, Security
-, CoreServices
-, ApplicationServices
-, Carbon
-, AppKit
-, wrapGAppsHook
-, wayland
-, gobject-introspection
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  rustPlatform,
+  cmake,
+  pkg-config,
+  perl,
+  python3,
+  fontconfig,
+  glib,
+  gtk3,
+  openssl,
+  libGL,
+  libobjc,
+  libxkbcommon,
+  wrapGAppsHook3,
+  wayland,
+  gobject-introspection,
+  xorg,
+  apple-sdk_11,
 }:
 let
-  rpathLibs = lib.optionals stdenv.isLinux [
+  rpathLibs = lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libxkbcommon
     xorg.libX11
@@ -39,33 +36,28 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "lapce";
-  version = "0.3.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "lapce";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-R7z3E6Moyc6yMFGzfggiYgglLs/A+iOx8ZJKMPhbAz0=";
+    repo = "lapce";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-vBBYNHgZiW5JfGeUG6YZObf4oK0hHxTbsZNTfnIX95Y=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "alacritty_config-0.1.2-dev" = "sha256-6FSi5RU7YOzNIB2kd/O1OKswn54ak6qrLvN/FbJD3g0=";
-      "cosmic-text-0.7.0" = "sha256-ATBeQeSlRCuBZIV4Fdam3p+eW5YH8uJadJearZuONrQ=";
-      "floem-0.1.0" = "sha256-UVmqF2vkX71o4JBrhIIhd2SkLNBaqibwl51FKLJUo4c=";
+      "alacritty_terminal-0.24.1-dev" = "sha256-aVB1CNOLjNh6AtvdbomODNrk00Md8yz8QzldzvDo1LI=";
+      "floem-0.1.1" = "sha256-/4Y38VXx7wFVVEzjqZ2D6+jiXCXPfzK44rDiNOR1lAk=";
       "human-sort-0.2.2" = "sha256-tebgIJGXOY7pwWRukboKAzXY47l4Cn//0xMKQTaGu8w=";
-      "peniko-0.1.0" = "sha256-FZu56HLN5rwSWOwIC00FvKShSv4QPCR44l9MURgC+iI=";
+      "locale_config-0.3.1-alpha.0" = "sha256-cCEO+dmU05TKkpH6wVK6tiH94b7k2686xyGxlhkcmAM=";
+      "lsp-types-0.95.1" = "sha256-+tWqDBM5x/gvQOG7V3m2tFBZB7smgnnZHikf9ja2FfE=";
       "psp-types-0.1.0" = "sha256-/oFt/AXxCqBp21hTSYrokWsbFYTIDCrHMUBuA2Nj5UU=";
-      "structdesc-0.1.0" = "sha256-4j6mJ1H5hxJXr7Sz0UsZxweyAm9sYuxjq8yg3ZlpksI=";
-      "tracing-0.2.0" = "sha256-Tc44Mg2Ue4HyB1z+9UBqpjdecJa60ekGXs+npqv22uA=";
-      "tree-sitter-bash-0.19.0" = "sha256-gTsA874qpCI/N5tmBI5eT8KDaM25gXM4VbcCbUU2EeI=";
-      "tree-sitter-json-0.20.0" = "sha256-pXa6WFJ4wliXHBiuHuqtAFWz+OscTOxbna5iymS547w=";
-      "tree-sitter-md-0.1.2" = "sha256-gKbjAcY/x9sIxiG7edolAQp2JWrx78mEGeCpayxFOuE=";
-      "tree-sitter-yaml-0.0.1" = "sha256-bQ/APnFpes4hQLv37lpoADyjXDBY7J4Zg+rLyUtbra4=";
-      "vger-0.2.7" = "sha256-evri/64mA0TQY7mFn+9bCl3c247V2QEYlwyMPpOcv5Y=";
+      "regalloc2-0.9.3" = "sha256-tzXFXs47LDoNBL1tSkLCqaiHDP5vZjvh250hz0pbEJs=";
+      "structdesc-0.1.0" = "sha256-KiR0R2YWZ7BucXIIeziu2FPJnbP7WNSQrxQhcNlpx2Q=";
+      "tracing-0.2.0" = "sha256-31jmSvspNstOAh6VaWie+aozmGu4RpY9Gx2kbBVD+CI=";
       "wasi-experimental-http-wasmtime-0.10.0" = "sha256-FuF3Ms1bT9bBasbLK+yQ2xggObm/lFDRyOvH21AZnQI=";
-      "winit-0.29.4" = "sha256-Y71QsRiHo0ldUAoAhid3yRDtHyIdd3HJ3AA6YJG04as=";
     };
   };
 
@@ -75,10 +67,6 @@ rustPlatform.buildRustPackage rec {
 
     # This variable is read by build script, so that Lapce editor knows its version
     RELEASE_TAG_NAME = "v${version}";
-
-  } // lib.optionalAttrs stdenv.cc.isClang {
-    # Work around https://github.com/NixOS/nixpkgs/issues/166205.
-    NIX_LDFLAGS = "-l${stdenv.cc.libcxx.cxxabi.libName}";
   };
 
   postPatch = ''
@@ -90,37 +78,41 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     perl
     python3
-    wrapGAppsHook # FIX: No GSettings schemas are installed on the system
+    wrapGAppsHook3 # FIX: No GSettings schemas are installed on the system
     gobject-introspection
   ];
 
-  buildInputs = rpathLibs ++ [
-    glib
-    gtk3
-    openssl
-  ] ++ lib.optionals stdenv.isLinux [
-    fontconfig
-  ] ++ lib.optionals stdenv.isDarwin [
-    libobjc
-    Security
-    CoreServices
-    ApplicationServices
-    Carbon
-    AppKit
-  ];
+  buildInputs =
+    rpathLibs
+    ++ [
+      glib
+      gtk3
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      fontconfig
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libobjc
+      apple-sdk_11
+    ];
 
-  postInstall = if stdenv.isLinux then ''
-    install -Dm0644 $src/extra/images/logo.svg $out/share/icons/hicolor/scalable/apps/dev.lapce.lapce.svg
-    install -Dm0644 $src/extra/linux/dev.lapce.lapce.desktop $out/share/applications/lapce.desktop
+  postInstall =
+    if stdenv.hostPlatform.isLinux then
+      ''
+        install -Dm0644 $src/extra/images/logo.svg $out/share/icons/hicolor/scalable/apps/dev.lapce.lapce.svg
+        install -Dm0644 $src/extra/linux/dev.lapce.lapce.desktop $out/share/applications/lapce.desktop
 
-    $STRIP -S $out/bin/lapce
+        $STRIP -S $out/bin/lapce
 
-    patchelf --add-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/lapce
-  '' else ''
-    mkdir $out/Applications
-    cp -r extra/macos/Lapce.app $out/Applications
-    ln -s $out/bin $out/Applications/Lapce.app/Contents/MacOS
-  '';
+        patchelf --add-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/lapce
+      ''
+    else
+      ''
+        mkdir $out/Applications
+        cp -r extra/macos/Lapce.app $out/Applications
+        ln -s $out/bin $out/Applications/Lapce.app/Contents/MacOS
+      '';
 
   dontPatchELF = true;
 
@@ -129,6 +121,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Lightning-fast and Powerful Code Editor written in Rust";
     homepage = "https://github.com/lapce/lapce";
+    changelog = "https://github.com/lapce/lapce/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ elliot ];
     mainProgram = "lapce";

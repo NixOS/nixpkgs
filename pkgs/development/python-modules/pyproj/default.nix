@@ -1,23 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, python
-, proj
-, pythonOlder
-, substituteAll
-, cython
-, pytestCheckHook
-, mock
-, certifi
-, numpy
-, shapely
-, pandas
-, xarray
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  pythonOlder,
+  substituteAll,
+
+  certifi,
+  cython,
+  mock,
+  numpy,
+  pandas,
+  proj,
+  shapely,
+  xarray,
 }:
 
 buildPythonPackage rec {
   pname = "pyproj";
-  version = "3.6.1";
+  version = "3.7.0";
   format = "setuptools";
   disabled = pythonOlder "3.9";
 
@@ -25,7 +27,7 @@ buildPythonPackage rec {
     owner = "pyproj4";
     repo = "pyproj";
     rev = "refs/tags/${version}";
-    hash = "sha256-ynAhu89VpvtQJRkIeVyffQHhd+OvWSiZzaI/7nd6fXA=";
+    hash = "sha256-uCoWmJ0xtbJ/DHts5+9KR6d6p8vmZqDrI4RFjXQn2fM=";
   };
 
   # force pyproj to use ${proj}
@@ -40,16 +42,14 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cython ];
   buildInputs = [ proj ];
 
-  propagatedBuildInputs = [
-     certifi
-  ];
+  propagatedBuildInputs = [ certifi ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     mock
     numpy
-    shapely
     pandas
+    pytestCheckHook
+    shapely
     xarray
   ];
 
@@ -83,6 +83,9 @@ buildPythonPackage rec {
     "test_sync_download__directory"
     "test_sync_download__system_directory"
     "test_transformer_group__download_grids"
+
+    # proj-data grid required
+    "test_azimuthal_equidistant"
   ];
 
   pythonImportsCheck = [
@@ -103,9 +106,16 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python interface to PROJ library";
+    mainProgram = "pyproj";
     homepage = "https://github.com/pyproj4/pyproj";
     changelog = "https://github.com/pyproj4/pyproj/blob/${src.rev}/docs/history.rst";
     license = licenses.mit;
-    maintainers = with maintainers; teams.geospatial.members ++ [ lsix dotlambda ];
+    maintainers =
+      with maintainers;
+      teams.geospatial.members
+      ++ [
+        lsix
+        dotlambda
+      ];
   };
 }

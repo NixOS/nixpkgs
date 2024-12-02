@@ -3,7 +3,6 @@
 , cmake
 , enet
 , fetchFromGitHub
-, fetchpatch
 , flac
 , freetype
 , gtk3
@@ -72,7 +71,7 @@ stdenv.mkDerivation rec {
     physfs
     texinfo
     zlib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libpthreadstubs
     libpulseaudio
@@ -99,7 +98,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
 
   meta = with lib; {
-    description = "A game programming library";
+    description = "Game programming library";
     homepage = "https://liballeg.org/";
     license = licenses.zlib;
     maintainers = [ maintainers.raskin ];

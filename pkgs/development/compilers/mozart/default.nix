@@ -70,13 +70,13 @@ in stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An open source implementation of Oz 3";
+    description = "Open source implementation of Oz 3";
     maintainers = with maintainers; [ layus h7x4 ];
     license = licenses.bsd2;
     homepage = "https://mozart.github.io";
     platforms = platforms.all;
     # Trace/BPT trap: 5
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 
 }

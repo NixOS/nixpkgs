@@ -23,22 +23,21 @@
 
 let cutter = stdenv.mkDerivation rec {
   pname = "cutter";
-  version = "2.3.2";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "rizinorg";
     repo = "cutter";
     rev = "v${version}";
-    hash = "sha256-88yIqFYIv7o6aC2YSJwWJ46fZJBnOmifv+SirsfS4tw=";
+    hash = "sha256-TSEi1mXVvvaGo4koo3EnN/veXPUHF747g+gifnl4IDQ=";
     fetchSubmodules = true;
   };
 
   patches = [
-    # tracking: https://github.com/rizinorg/cutter/pull/3268
+    # https://github.com/rizinorg/cutter/issues/3384
     (fetchpatch {
-      name = "cutter-simplify-python-binding-include-handling.patch";
-      url = "https://github.com/rizinorg/cutter/compare/7256fbb00e92ab12a24d14a92364db482ed295cb..ca5949d9d7c907185cf3d062d9fa71c34c5960d4.diff";
-      hash = "sha256-bqV2FTA8lMNpHBDXdenNx+1cLYa7MH47XKo1YatmLV4=";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/rz-cutter/-/raw/f736a5709c0b4711760f8242fa77eeaf178c0302/pyside-6.8.patch";
+      hash = "sha256-k1Bn6tCNkbE9r5QLfJTBg1zZZU9R7fG1tyfPgSJyQgg=";
     })
   ];
 
@@ -62,7 +61,7 @@ let cutter = stdenv.mkDerivation rec {
     qttools
     qtwebengine
     rizin
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
   ];
 

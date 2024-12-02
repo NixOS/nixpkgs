@@ -1,21 +1,21 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, commonmark
-, fetchFromGitHub
-, markdown
-, pydash
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, recommonmark
-, setuptools
-, sphinx
-, unify
-, yapf
+{
+  lib,
+  buildPythonPackage,
+  commonmark,
+  fetchFromGitHub,
+  markdown,
+  pydash,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  recommonmark,
+  setuptools,
+  sphinx,
+  unify,
+  yapf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "sphinx-markdown-parser";
   version = "0.2.4";
   pyproject = true;
@@ -31,9 +31,7 @@ buildPythonPackage rec {
     sha256 = "0i0hhapmdmh83yx61lxi2h4bsmhnzddamz95844g2ghm132kw5mv";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     commonmark
@@ -45,17 +43,11 @@ buildPythonPackage rec {
     yapf
   ];
 
-  buildInputs = [
-    sphinx
-  ];
+  buildInputs = [ sphinx ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "sphinx_markdown_parser"
-  ];
+  pythonImportsCheck = [ "sphinx_markdown_parser" ];
 
   disabledTests = [
     # AssertionError
@@ -69,6 +61,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/clayrisser/sphinx-markdown-parser";
     license = licenses.mit;
     maintainers = with maintainers; [ FlorianFranzen ];
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
   };
 }

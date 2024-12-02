@@ -45,6 +45,7 @@ let
         meta = with lib; {
           homepage = "https://sourceforge.net/projects/gawkextlib/";
           description = "Dynamically loaded extension libraries for GNU AWK";
+          mainProgram = "xmlgawk";
           longDescription = ''
             The gawkextlib project provides several extension libraries for
             gawk (GNU AWK), as well as libgawkextlib containing some APIs that
@@ -108,14 +109,14 @@ let
       #! No such device
       #  mdb_env_open(env, /dev/null)
       #! Operation not supported by device
-      doCheck = !stdenv.isDarwin;
+      doCheck = !stdenv.hostPlatform.isDarwin;
     };
     mbs = buildExtension {
       inherit gawkextlib;
       name = "mbs";
       extraBuildInputs = [ glibcLocales ];
       #! "spät": length: 5, mbs_length: 6, wcswidth: 4
-      doCheck = !stdenv.isDarwin;
+      doCheck = !stdenv.hostPlatform.isDarwin;
     };
     mpfr = buildExtension {
       inherit gawkextlib;

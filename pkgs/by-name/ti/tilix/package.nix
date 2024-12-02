@@ -13,7 +13,7 @@
 , gettext
 , gtkd
 , libsecret
-, wrapGAppsHook
+, wrapGAppsHook3
 , libunwind
 , appstream
 , nixosTests
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook3
     appstream
   ];
 
@@ -59,11 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
-  '';
-
-  preFixup = ''
-    substituteInPlace $out/share/applications/com.gexperts.Tilix.desktop \
-      --replace "Exec=tilix" "Exec=$out/bin/tilix"
   '';
 
   passthru.tests.test = nixosTests.terminal-emulators.tilix;

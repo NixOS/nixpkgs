@@ -1,20 +1,20 @@
 let
   pkgs = import ../../.. {
-    config = {};
-    overlays = [];
+    config = { };
+    overlays = [ ];
   };
 
   common = import ./common.nix;
   inherit (common) outputPath indexPath;
-
-  web-devmode = import ../../../pkgs/tools/nix/web-devmode.nix {
-    inherit pkgs;
+  devmode = pkgs.devmode.override {
     buildArgs = "../../release.nix -A manualHTML.${builtins.currentSystem}";
     open = "/${outputPath}/${indexPath}";
   };
+  nixos-render-docs-redirects = pkgs.writeShellScriptBin "redirects" "${pkgs.lib.getExe pkgs.nixos-render-docs-redirects} --file ${toString ./redirects.json} $@";
 in
-  pkgs.mkShell {
-    packages = [
-      web-devmode
-    ];
-  }
+pkgs.mkShellNoCC {
+  packages = [
+    devmode
+    nixos-render-docs-redirects
+  ];
+}

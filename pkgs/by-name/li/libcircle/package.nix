@@ -4,7 +4,6 @@
 , autoreconfHook
 , pkg-config
 , mpi
-, lwgrp
 }:
 
 stdenv.mkDerivation rec {

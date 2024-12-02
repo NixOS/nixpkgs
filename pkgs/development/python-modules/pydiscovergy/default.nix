@@ -1,58 +1,61 @@
-{ lib
-, authlib
-, buildPythonPackage
-, dataclasses-json
-, fetchFromGitHub
-, httpx
-, marshmallow
-, pytest-httpx
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pytz
-, respx
+{
+  lib,
+  authlib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  mashumaro,
+  orjson,
+  pytest-asyncio,
+  pytest-httpx,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  respx,
 }:
 
 buildPythonPackage rec {
   pname = "pydiscovergy";
-  version = "2.0.5";
-  format = "pyproject";
+  version = "3.0.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "jpbede";
     repo = "pydiscovergy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-u2G+o/vhPri7CPSnekC8rUo/AvuvePpG51MR+FdH2XA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-g6KWX7APdqB0dNe7p6WGualxSj5fiw+jRq+0qfqTs4w=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  postPatch = ''
+    sed -i '/addopts =/d' pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     authlib
-    dataclasses-json
     httpx
-    marshmallow
-    pytz
+    mashumaro
+    orjson
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytest-httpx
     pytestCheckHook
     respx
   ];
 
-  pythonImportsCheck = [
-    "pydiscovergy"
-  ];
+  pythonImportsCheck = [ "pydiscovergy" ];
 
   meta = with lib; {
-    description = "Async Python 3 library for interacting with the Discovergy API";
+    description = "Library for interacting with the Discovergy API";
     homepage = "https://github.com/jpbede/pydiscovergy";
-    changelog = "https://github.com/jpbede/pydiscovergy/releases/tag/${version}";
+    changelog = "https://github.com/jpbede/pydiscovergy/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

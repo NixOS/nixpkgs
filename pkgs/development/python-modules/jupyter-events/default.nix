@@ -1,31 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build
-, hatchling
+  # build
+  hatchling,
 
-# runtime
-, jsonschema
-, python-json-logger
-, pyyaml
-, referencing
-, traitlets
+  # runtime
+  jsonschema,
+  python-json-logger,
+  pyyaml,
+  referencing,
+  traitlets,
 
-# optionals
-, click
-, rich
+  # optionals
+  click,
+  rich,
 
-# tests
-, pytest-asyncio
-, pytest-console-scripts
-, pytestCheckHook
+  # tests
+  pytest-asyncio,
+  pytest-console-scripts,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-events";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -34,12 +35,10 @@ buildPythonPackage rec {
     owner = "jupyter";
     repo = "jupyter_events";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LDj6dTtq3npJxLKBQEEwGQFeDPvWF2adHeJhOai2MRU=";
+    hash = "sha256-8aps8aNgXw+XbDgtCvWw+Ij1Cm1N0G+wcL35ySkofOk=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [
     jsonschema
@@ -47,10 +46,9 @@ buildPythonPackage rec {
     pyyaml
     referencing
     traitlets
-  ]
-  ++ jsonschema.optional-dependencies.format-nongpl;
+  ] ++ jsonschema.optional-dependencies.format-nongpl;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [
       click
       rich
@@ -61,21 +59,20 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-console-scripts
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH="$out/bin:$PATH"
   '';
 
-  pythonImportsCheck = [
-    "jupyter_events"
-  ];
+  pythonImportsCheck = [ "jupyter_events" ];
 
   meta = with lib; {
     changelog = "https://github.com/jupyter/jupyter_events/releases/tag/v${version}";
     description = "Configurable event system for Jupyter applications and extensions";
+    mainProgram = "jupyter-events";
     homepage = "https://github.com/jupyter/jupyter_events";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

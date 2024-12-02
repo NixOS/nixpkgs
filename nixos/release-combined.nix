@@ -43,17 +43,16 @@ in rec {
       name = "nixos-${nixos.channel.version}";
       meta = {
         description = "Release-critical builds for the NixOS channel";
-        maintainers = with pkgs.lib.maintainers; [ eelco ];
+        maintainers = with pkgs.lib.maintainers; [ ];
       };
       constituents = pkgs.lib.concatLists [
         [ "nixos.channel" ]
         (onFullSupported "nixos.dummy")
         (onAllSupported "nixos.iso_minimal")
         (onSystems ["x86_64-linux" "aarch64-linux"] "nixos.amazonImage")
-        (onFullSupported "nixos.iso_plasma5")
+        (onFullSupported "nixos.iso_plasma6")
         (onFullSupported "nixos.iso_gnome")
         (onFullSupported "nixos.manual")
-        (onSystems ["x86_64-linux"] "nixos.ova")
         (onSystems ["aarch64-linux"] "nixos.sd_image")
         (onFullSupported "nixos.tests.acme")
         (onSystems ["x86_64-linux"] "nixos.tests.boot.biosCdrom")
@@ -84,6 +83,7 @@ in rec {
         (onFullSupported "nixos.tests.gnome-xorg")
         (onSystems ["x86_64-linux"] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
+        (onSystems ["aarch64-linux"] "nixos.tests.installer.simpleUefiSystemdBoot")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSimple")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvolDefault")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvolEscape")
@@ -100,6 +100,7 @@ in rec {
         (onSystems ["x86_64-linux"] "nixos.tests.installer.swraid")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.zfsroot")
         (onSystems ["x86_64-linux"] "nixos.tests.nixos-rebuild-specialisations")
+        (onFullSupported "nixos.tests.nix-misc.default")
         (onFullSupported "nixos.tests.ipv6")
         (onFullSupported "nixos.tests.keymap.azerty")
         (onFullSupported "nixos.tests.keymap.colemak")
@@ -142,7 +143,6 @@ in rec {
         (onFullSupported "nixos.tests.networking.networkd.virtual")
         (onFullSupported "nixos.tests.networking.networkd.vlan")
         (onFullSupported "nixos.tests.systemd-networkd-ipv6-prefix-delegation")
-        (onFullSupported "nixos.tests.nfs3.simple")
         (onFullSupported "nixos.tests.nfs4.simple")
         (onSystems ["x86_64-linux"] "nixos.tests.oci-containers.podman")
         (onFullSupported "nixos.tests.openssh")
@@ -169,12 +169,10 @@ in rec {
         (onFullSupported "nixpkgs.emacs")
         (onFullSupported "nixpkgs.jdk")
         (onSystems ["x86_64-linux"] "nixpkgs.mesa_i686") # i686 sanity check + useful
-        ["nixpkgs.tarball"]
-
-        # Ensure that nixpkgs-check-by-name is available in nixos-unstable,
-        # so that a pre-built version can be used in CI for PR's
-        # See ../pkgs/test/nixpkgs-check-by-name/README.md
-        (onSystems ["x86_64-linux"] "nixpkgs.tests.nixpkgs-check-by-name")
+        [
+          "nixpkgs.tarball"
+          "nixpkgs.release-checks"
+        ]
       ];
     };
 }

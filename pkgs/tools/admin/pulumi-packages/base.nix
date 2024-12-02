@@ -10,9 +10,10 @@ let
     , vendorHash
     , cmd
     , extraLdflags
+    , env
     , ...
     }@args: buildGoModule (rec {
-      inherit pname src vendorHash version;
+      inherit pname src vendorHash version env;
 
       sourceRoot = "${src.name}/provider";
 
@@ -88,6 +89,7 @@ in
 , cmdGen
 , cmdRes
 , extraLdflags
+, env ? { }
 , meta
 , fetchSubmodules ? false
 , ...
@@ -99,14 +101,14 @@ let
   };
 
   pulumi-gen = mkBasePackage rec {
-    inherit src version vendorHash extraLdflags;
+    inherit src version vendorHash extraLdflags env;
 
     cmd = cmdGen;
     pname = cmdGen;
   };
 in
 mkBasePackage ({
-  inherit meta src version vendorHash extraLdflags;
+  inherit meta src version vendorHash extraLdflags env;
 
   pname = repo;
 

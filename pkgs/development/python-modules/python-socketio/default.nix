@@ -1,59 +1,54 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, bidict
-, python-engineio
+  # dependencies
+  bidict,
+  python-engineio,
 
-# optional-dependencies
-, aiohttp
-, requests
-, websocket-client
+  # optional-dependencies
+  aiohttp,
+  requests,
+  websocket-client,
 
-# tests
-, msgpack
-, pytestCheckHook
-, simple-websocket
-, uvicorn
+  # tests
+  msgpack,
+  pytestCheckHook,
+  simple-websocket,
+  uvicorn,
 
 }:
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "5.11.1";
+  version = "5.11.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-socketio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-miIl/+3JtjtoQaS6Jy0M9lPQJQp3VlpvrO5Hqlrq5JM=";
+    hash = "sha256-iWe9IwUR+nq9SAmHzFZYUJpVOOEbc1ZdiMAjaBjQrVs=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bidict
     python-engineio
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     client = [
       requests
       websocket-client
     ];
-    asyncio_client = [
-      aiohttp
-    ];
+    asyncio_client = [ aiohttp ];
   };
 
   nativeCheckInputs = [
@@ -61,13 +56,19 @@ buildPythonPackage rec {
     pytestCheckHook
     uvicorn
     simple-websocket
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "socketio"
+  pythonImportsCheck = [ "socketio" ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Use fixed ports which leads to failures when building concurrently
+    "tests/async/test_admin.py"
+    "tests/common/test_admin.py"
   ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Python Socket.IO server and client";
     longDescription = ''
       Socket.IO is a lightweight transport protocol that enables real-time
@@ -75,7 +76,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/miguelgrinberg/python-socketio/";
     changelog = "https://github.com/miguelgrinberg/python-socketio/blob/v${version}/CHANGES.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ mic92 ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

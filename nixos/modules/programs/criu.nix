@@ -1,22 +1,20 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let cfg = config.programs.criu;
 in {
 
   options = {
     programs.criu = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Install {command}`criu` along with necessary kernel options.
         '';
       };
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "CHECKPOINT_RESTORE")
     ];

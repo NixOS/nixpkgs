@@ -1,46 +1,46 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchFromGitHub
-, fetchurl
-, pythonOlder
-, substituteAll
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchurl,
+  pythonOlder,
+  substituteAll,
 
-# build
-, postgresql
-, setuptools
+  # build
+  postgresql,
+  setuptools,
 
-# propagates
-, backports-zoneinfo
-, typing-extensions
+  # propagates
+  typing-extensions,
 
-# psycopg-c
-, cython_3
-, tomli
+  # psycopg-c
+  cython,
+  tomli,
 
-# docs
-, furo
-, shapely
-, sphinxHook
-, sphinx-autodoc-typehints
+  # docs
+  furo,
+  shapely,
+  sphinxHook,
+  sphinx-autodoc-typehints,
 
-# tests
-, anyio
-, pproxy
-, pytest-randomly
-, pytestCheckHook
-, postgresqlTestHook
+  # tests
+  anyio,
+  pproxy,
+  pytest-randomly,
+  pytestCheckHook,
+  postgresqlTestHook,
 }:
 
 let
   pname = "psycopg";
-  version = "3.1.17";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Paq4Wkvv6d6+fNcvRO/yfj7OWCMygqccKIdfsohHUMM=";
+    hash = "sha256-vcUZvQeD5MnEM02phk73I9dpf0Eug95V7Rspi0s6S2M=";
   };
 
   patches = [
@@ -72,10 +72,15 @@ let
     '';
 
     nativeBuildInputs = [
-      cython_3
+      cython
+      # needed to find pg_config with strictDeps
       postgresql
       setuptools
       tomli
+    ];
+
+    buildInputs = [
+      postgresql
     ];
 
     # tested in psycopg
@@ -99,9 +104,7 @@ let
       cd psycopg_pool
     '';
 
-    propagatedBuildInputs = [
-      typing-extensions
-    ];
+    propagatedBuildInputs = [ typing-extensions ];
 
     # tested in psycopg
     doCheck = false;
@@ -110,7 +113,6 @@ let
       description = "Connection Pool for Psycopg";
     };
   };
-
 in
 
 buildPythonPackage rec {
@@ -128,8 +130,8 @@ buildPythonPackage rec {
 
   # Introduce this file necessary for the docs build via environment var
   LIBPQ_DOCS_FILE = fetchurl {
-    url = "https://raw.githubusercontent.com/postgres/postgres/REL_14_STABLE/doc/src/sgml/libpq.sgml";
-    hash = "sha256-yn09fR9+7zQni8SvTG7BUmYRD7MK7u2arVAznWz2oAw=";
+    url = "https://raw.githubusercontent.com/postgres/postgres/496a1dc44bf1261053da9b3f7e430769754298b4/doc/src/sgml/libpq.sgml";
+    hash = "sha256-JwtCngkoi9pb0pqIdNgukY8GbG5pUDZvrGAHZqjFOw4";
   };
 
   inherit patches;
@@ -150,8 +152,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     psycopg-c
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
   ];
 
   pythonImportsCheck = [
@@ -160,21 +160,22 @@ buildPythonPackage rec {
     "psycopg_pool"
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     c = [ psycopg-c ];
     pool = [ psycopg-pool ];
   };
 
-  nativeCheckInputs = [
-    anyio
-    pproxy
-    pytest-randomly
-    pytestCheckHook
-    postgresql
-  ]
-  ++ lib.optional (stdenv.isLinux) postgresqlTestHook
-  ++ passthru.optional-dependencies.c
-  ++ passthru.optional-dependencies.pool;
+  nativeCheckInputs =
+    [
+      anyio
+      pproxy
+      pytest-randomly
+      pytestCheckHook
+      postgresql
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isLinux) postgresqlTestHook
+    ++ optional-dependencies.c
+    ++ optional-dependencies.pool;
 
   env = {
     postgresqlEnableTCP = 1;
@@ -182,11 +183,13 @@ buildPythonPackage rec {
     PGDATABASE = "psycopg";
   };
 
-  preCheck = ''
-    cd ..
-  '' + lib.optionalString (stdenv.isLinux) ''
-    export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
-  '';
+  preCheck =
+    ''
+      cd ..
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
+    '';
 
   disabledTests = [
     # don't depend on mypy for tests
@@ -201,11 +204,19 @@ buildPythonPackage rec {
     # Mypy typing test
     "tests/test_typing.py"
     "tests/crdb/test_typing.py"
+    # https://github.com/psycopg/psycopg/pull/915
+    "tests/test_notify.py"
+    "tests/test_notify_async.py"
   ];
 
   pytestFlagsArray = [
-    "-o" "cache_dir=$TMPDIR"
-    "-m" "'not refcount and not timing'"
+    "-o"
+    "cache_dir=$TMPDIR"
+    "-m"
+    "'not refcount and not timing and not flakey'"
+    # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect
+    "-W"
+    "ignore::pytest.PytestRemovedIn9Warning"
   ];
 
   postCheck = ''

@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flit-core
-, pytestCheckHook
-, pythonOlder
-, pyyaml
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "svg-py";
-  version = "1.4.2";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,21 +19,17 @@ buildPythonPackage rec {
     owner = "orsinium-labs";
     repo = "svg.py";
     rev = "refs/tags/${version}";
-    hash = "sha256-GbXPDYDq6zlsPJ/PAjR6OvarVrp7x3LGhseyTMwY8Dg=";
+    hash = "sha256-Lxzk3IVCD4PG36Pozz2crccwxCAAAM2QfS4rgwbjs6g=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pyyaml
   ];
 
-  pythonImportsCheck = [
-    "svg"
-  ];
+  pythonImportsCheck = [ "svg" ];
 
   disabledTestPaths = [
     # Tests need additional files
