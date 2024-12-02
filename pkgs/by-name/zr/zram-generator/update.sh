@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-version=$(curl -s https://api.github.com/repos/systemd/zram-generator/releases/latest | jq -r .tag_name)
+version=$(curl -s https://api.github.com/repos/systemd/zram-generator/tags | jq -r '.[0].name')
 update-source-version zram-generator "${version#v}"
 
 tmp=$(mktemp -d)
