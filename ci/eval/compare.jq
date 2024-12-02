@@ -146,7 +146,7 @@ def diff($before; $after):
       elif .value <= 5000 then
         "2501-5000"
       else
-        "5000+"
+        "5001+"
       end
   )
 )

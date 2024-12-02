@@ -1610,8 +1610,9 @@ with pkgs;
 
   inherit (callPackages ../development/tools/ammonite {})
     ammonite_2_12
-    ammonite_2_13;
-  ammonite = ammonite_2_13;
+    ammonite_2_13
+    ammonite_3_3;
+  ammonite = ammonite_3_3;
 
   android-tools = lowPrio (darwin.apple_sdk_11_0.callPackage ../tools/misc/android-tools { });
 
@@ -16008,9 +16009,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  virt-manager = callPackage ../applications/virtualization/virt-manager {
-    system-libvirt = libvirt;
-  };
+  virt-manager = callPackage ../applications/virtualization/virt-manager { };
 
   virt-manager-qt = libsForQt5.callPackage ../applications/virtualization/virt-manager/qt.nix {
     qtermwidget = lxqt.qtermwidget_1_4;
