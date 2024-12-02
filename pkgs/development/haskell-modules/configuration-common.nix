@@ -102,20 +102,33 @@ self: super: {
   #######################################
 
   # All jailbreaks in this section due to: https://github.com/haskell/haskell-language-server/pull/4316#discussion_r1667684895
-  haskell-language-server = doJailbreak (dontCheck (super.haskell-language-server.overrideScope (lself: lsuper: {
-    # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
-    # because some packages, like ormolu, need a newer Cabal version.
-    # ghc-paths is special because it depends on Cabal for building
-    # its Setup.hs, and therefor declares a Cabal dependency, but does
-    # not actually use it as a build dependency.
-    # That means ghc-paths can just use the ghc included Cabal version,
-    # without causing package-db incoherence and we should do that because
-    # otherwise we have different versions of ghc-paths
-    # around which have the same abi-hash, which can lead to confusions and conflicts.
-    ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
-  })));
+  haskell-language-server =
+    lib.pipe
+      (super.haskell-language-server.overrideScope (lself: lsuper: {
+        # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
+        # because some packages, like ormolu, need a newer Cabal version.
+        # ghc-paths is special because it depends on Cabal for building
+        # its Setup.hs, and therefor declares a Cabal dependency, but does
+        # not actually use it as a build dependency.
+        # That means ghc-paths can just use the ghc included Cabal version,
+        # without causing package-db incoherence and we should do that because
+        # otherwise we have different versions of ghc-paths
+        # around which have the same abi-hash, which can lead to confusions and conflicts.
+        ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
+      }))
+      [
+        doJailbreak
+        dontCheck
+      ];
+
   hls-plugin-api = doJailbreak super.hls-plugin-api;
-  ghcide = doJailbreak super.ghcide;
+  ghcide = doJailbreak (appendPatch (pkgs.fetchpatch {
+    name = "ghcide-ghc-9.8.3.patch";
+    url = "https://github.com/haskell/haskell-language-server/commit/6d0a6f220226fe6c1cb5b6533177deb55e755b0b.patch";
+    sha256 = "1jwxldar9qzkg2z6vsx8f2yih3vkf4yjk9p3mryv0azn929qn3h1";
+    stripLen = 1;
+    excludes = [ "cabal.project" ];
+  }) super.ghcide);
 
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
@@ -160,6 +173,14 @@ self: super: {
 
   # 2024-07-09: rhine 1.4.* needs newer monad-schedule than stackage (and is only consumer)
   monad-schedule = assert super.monad-schedule.version == "0.1.2.2"; doDistribute self.monad-schedule_0_2_0_1;
+
+  # Test suite hangs on 32bit. Unclear if this is a bug or not, but if so, then
+  # it has been present in past versions as well.
+  # https://github.com/haskell-unordered-containers/unordered-containers/issues/491
+  unordered-containers =
+    if pkgs.stdenv.hostPlatform.is32bit
+    then dontCheck super.unordered-containers
+    else super.unordered-containers;
 
   aeson =
     # aeson's test suite includes some tests with big numbers that fail on 32bit

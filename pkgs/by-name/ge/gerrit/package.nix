@@ -1,12 +1,17 @@
-{ lib, stdenv, fetchurl, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gerrit";
-  version = "3.10.2";
+  version = "3.10.3";
 
   src = fetchurl {
     url = "https://gerrit-releases.storage.googleapis.com/gerrit-${version}.war";
-    hash = "sha256-jsyL7j4ENzHVi07Uii0ouWXF3hkoGrq3NJi8fB1kj8o=";
+    hash = "sha256-pVI5YZihvJNuaboh2dLe/Aw371rNPiGbaLUd0ALpANQ=";
   };
 
   buildCommand = ''
@@ -40,7 +45,10 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     description = "Web based code review and repository management for the git version control system";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ flokli zimbatm ];
+    maintainers = with maintainers; [
+      flokli
+      zimbatm
+    ];
     platforms = platforms.unix;
   };
 }
