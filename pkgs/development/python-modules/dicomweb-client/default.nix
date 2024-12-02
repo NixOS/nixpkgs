@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "dicomweb-client";
-  version = "0.59.1";
+  version = "0.59.3";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "ImagingDataCommons";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-h9gFCBmutTGNJ3wP2AGPfiUtA49yywUlNKiSh/x9kFE=";
+    hash = "sha256-D3j5EujrEdGTfR8/V3o2VJ/VkGdZ8IifPYMhP4ppXhw=";
   };
 
   build-system = [ setuptools ];
