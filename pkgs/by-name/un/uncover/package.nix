@@ -10,12 +10,19 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
-    repo = pname;
+    repo = "uncover";
     rev = "refs/tags/v${version}";
     hash = "sha256-avGbawIeh7ZUtacRLo/tLz4D6U7JAlu9BXDYu/xvoa0=";
   };
 
   vendorHash = "sha256-93iXho+WCQyhw9DoLgo9ZKiPrd88D2ibgp1M9uP7bUU=";
+
+  subPackages = [ "cmd/uncover" ];
+
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "API wrapper to search for exposed hosts";
@@ -29,5 +36,6 @@ buildGoModule rec {
     changelog = "https://github.com/projectdiscovery/uncover/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "uncover";
   };
 }
