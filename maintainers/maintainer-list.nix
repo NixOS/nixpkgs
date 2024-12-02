@@ -7062,12 +7062,6 @@
     githubId = 878822;
     name = "Tristan Helmich";
   };
-  falsifian = {
-    email = "james.cook@utoronto.ca";
-    github = "falsifian";
-    githubId = 225893;
-    name = "James Cook";
-  };
   fangpen = {
     email = "hello@fangpenlin.com";
     github = "fangpenlin";
