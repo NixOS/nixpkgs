@@ -1,11 +1,12 @@
 {
   lib,
-  buildGoModule,
+  buildGo122Module,
   fetchFromGitHub,
   lazygit,
   testers,
 }:
-buildGoModule rec {
+# Regression in go1.23 see https://github.com/jesseduffield/lazygit/issues/4002
+buildGo122Module rec {
   pname = "lazygit";
   version = "0.44.1";
 
