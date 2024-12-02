@@ -12,7 +12,7 @@
         Additionally to installing `k3b` enabling this will
         add `setuid` wrappers in `/run/wrappers/bin`
         for both `cdrdao` and `cdrecord`. On first
-        run you must manually configure the path of `cdrdae` and
+        run you must manually configure the path of `cdrdao` and
         `cdrecord` to correspond to the appropriate paths under
         `/run/wrappers/bin` in the "Setup External Programs" menu.
       '';
