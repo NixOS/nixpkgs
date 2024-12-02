@@ -52,6 +52,8 @@ lib.makeScope newScope (self: with self; {
 
   hydro = callPackage ./hydro.nix { };
 
+  node-binpath = callPackage ./node-binpath.nix { };
+
   pisces = callPackage ./pisces.nix { };
 
   plugin-git = callPackage ./plugin-git.nix { };
