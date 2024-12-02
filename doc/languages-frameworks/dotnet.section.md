@@ -27,42 +27,48 @@ mkShell {
   name = "dotnet-env";
   packages = [
     (with dotnetCorePackages; combinePackages [
-      sdk_6_0
-      sdk_7_0
+      sdk_8_0
+      sdk_9_0
     ])
   ];
 }
 ```
 
-This will produce a dotnet installation that has the dotnet 6.0 7.0 sdk. The first sdk listed will have it's cli utility present in the resulting environment. Example info output:
+This will produce a dotnet installation that has the dotnet 8.0 9.0 sdk. The first sdk listed will have it's cli utility present in the resulting environment. Example info output:
 
 ```ShellSession
 $ dotnet --info
 .NET SDK:
- Version:   7.0.202
- Commit:    6c74320bc3
+ Version:           9.0.100
+ Commit:            59db016f11
+ Workload version:  9.0.100-manifests.3068a692
+ MSBuild version:   17.12.7+5b8665660
 
 Runtime Environment:
  OS Name:     nixos
- OS Version:  23.05
+ OS Version:  25.05
  OS Platform: Linux
  RID:         linux-x64
- Base Path:   /nix/store/n2pm44xq20hz7ybsasgmd7p3yh31gnh4-dotnet-sdk-7.0.202/sdk/7.0.202/
+ Base Path:   /nix/store/a03c70i7x6rjdr6vikczsp5ck3v6rixh-dotnet-sdk-9.0.100/share/dotnet/sdk/9.0.100/
+
+.NET workloads installed:
+There are no installed workloads to display.
+Configured to use loose manifests when installing new manifests.
 
 Host:
-  Version:      7.0.4
+  Version:      9.0.0
   Architecture: x64
-  Commit:       0a396acafe
+  Commit:       9d5a6a9aa4
 
 .NET SDKs installed:
-  6.0.407 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/sdk]
-  7.0.202 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/sdk]
+  8.0.404 [/nix/store/6wlrjiy10wg766490dcmp6x64zb1vc8j-dotnet-core-combined/share/dotnet/sdk]
+  9.0.100 [/nix/store/6wlrjiy10wg766490dcmp6x64zb1vc8j-dotnet-core-combined/share/dotnet/sdk]
 
 .NET runtimes installed:
-  Microsoft.AspNetCore.App 6.0.15 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/shared/Microsoft.AspNetCore.App]
-  Microsoft.AspNetCore.App 7.0.4 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/shared/Microsoft.AspNetCore.App]
-  Microsoft.NETCore.App 6.0.15 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/shared/Microsoft.NETCore.App]
-  Microsoft.NETCore.App 7.0.4 [/nix/store/3b19303vwrhv0xxz1hg355c7f2hgxxgd-dotnet-core-combined/shared/Microsoft.NETCore.App]
+  Microsoft.AspNetCore.App 8.0.11 [/nix/store/6wlrjiy10wg766490dcmp6x64zb1vc8j-dotnet-core-combined/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.AspNetCore.App 9.0.0 [/nix/store/6wlrjiy10wg766490dcmp6x64zb1vc8j-dotnet-core-combined/share/dotnet/shared/Microsoft.AspNetCore.App]
+  Microsoft.NETCore.App 8.0.11 [/nix/store/6wlrjiy10wg766490dcmp6x64zb1vc8j-dotnet-core-combined/share/dotnet/shared/Microsoft.NETCore.App]
+  Microsoft.NETCore.App 9.0.0 [/nix/store/6wlrjiy10wg766490dcmp6x64zb1vc8j-dotnet-core-combined/share/dotnet/shared/Microsoft.NETCore.App]
 
 Other architectures found:
   None
@@ -146,8 +152,8 @@ in buildDotnetModule rec {
 
   buildInputs = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   executables = [ "foo" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
   executables = []; # Don't install any executables.
