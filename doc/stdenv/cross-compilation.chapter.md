@@ -10,14 +10,7 @@ This chapter will be organized in three parts. First, it will describe the basic
 
 ### Platform parameters {#ssec-cross-platform-parameters}
 
-Nixpkgs follows the [conventions of GNU autoconf](https://gcc.gnu.org/onlinedocs/gccint/Configure-Terms.html). We distinguish between 3 types of platforms when building a derivation: _build_, _host_, and _target_. In summary, _build_ is the platform on which a package is being built, _host_ is the platform on which it will run. The third attribute, _target_, is relevant only for certain specific compilers and build tools. Using this terminology, we can summarize the different types of compilation as follows:
-
-| Type of compilation        | Condition               |
-|----------------------------|-------------------------|
-| native compilation         | build == host == target |
-| cross-compilation          | build /= host == target |
-| Canadian cross-compilation | build /= host /= target |
-
+Nixpkgs follows the [conventions of GNU autoconf](https://gcc.gnu.org/onlinedocs/gccint/Configure-Terms.html). We distinguish between 3 types of platforms when building a derivation: _build_, _host_, and _target_. In summary, _build_ is the platform on which a package is being built, _host_ is the platform on which it will run. The third attribute, _target_, is relevant only for certain specific compilers and build tools.
 
 In Nixpkgs, these three platforms are defined as attribute sets under the names `buildPlatform`, `hostPlatform`, and `targetPlatform`. They are always defined as attributes in the standard environment. That means one can access them like:
 
