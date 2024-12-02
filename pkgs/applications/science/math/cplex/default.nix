@@ -31,16 +31,22 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "cp $src $name";
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e 's|/usr/bin/tr"|tr"         |' $name
   '';
 
   buildPhase = ''
+    runHook preBuild
+
      export JAVA_TOOL_OPTIONS=-Djdk.util.zip.disableZip64ExtraFieldValidation=true
      sh $name LAX_VM ${openjdk}/bin/java -i silent -DLICENSE_ACCEPTED=TRUE -DUSER_INSTALL_DIR=$out
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     ln -s $out/opl/bin/x86-64_linux/oplrun\
       $out/opl/bin/x86-64_linux/oplrunjava\
@@ -48,12 +54,16 @@ stdenv.mkDerivation rec {
       $out/cplex/bin/x86-64_linux/cplex\
       $out/cpoptimizer/bin/x86-64_linux/cpoptimizer\
       $out/bin
+
+    runHook postInstall
   '';
 
   fixupPhase =
   let
     libraryPath = lib.makeLibraryPath [ stdenv.cc.cc gtk2 xorg.libXtst ];
   in ''
+    runHook preFixup
+
     interpreter=${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2
 
     for pgm in $out/opl/bin/x86-64_linux/oplrun $out/opl/bin/x86-64_linux/oplrunjava $out/opl/oplide/oplide;
@@ -71,6 +81,8 @@ stdenv.mkDerivation rec {
         patchelf --set-interpreter "$interpreter" $pgm;
       fi
     done
+
+    runHook postFixup
   '';
 
   passthru = {
