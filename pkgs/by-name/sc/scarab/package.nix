@@ -61,7 +61,7 @@ buildDotnetModule rec {
       name = "scarab";
       exec = "Scarab";
       icon = "scarab";
-      comment = meta.description;
+      comment = "Hollow Knight mod installer and manager";
       type = "Application";
       categories = [ "Game" ];
     })
