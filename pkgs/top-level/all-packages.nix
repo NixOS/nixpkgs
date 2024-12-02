@@ -4929,10 +4929,6 @@ with pkgs;
 
   po4a = perlPackages.Po4a;
 
-  poac = callPackage ../development/tools/poac {
-    inherit (llvmPackages_14) stdenv;
-  };
-
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose { };
 
   podman-desktop = callPackage ../applications/virtualization/podman-desktop {
