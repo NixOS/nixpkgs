@@ -71,7 +71,10 @@ python3Packages.buildPythonPackage rec {
 
   # Run cargo tests
   cargoCheckType = "debug";
-  postInstallCheck = ''
+  # tests do not appear to respect linker options on doctests
+  # Upstream issue: https://github.com/rust-lang/cargo/issues/14189
+  # This causes errors like "error: linker `cc` not found" on static builds
+  postInstallCheck = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     cargoCheckHook
   '';
 
