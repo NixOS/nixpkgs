@@ -1,17 +1,19 @@
-{ lib,
+{
+  lib,
   stdenv,
   fetchFromGitHub,
   buildDotnetModule,
   buildGoModule,
   dotnetCorePackages,
+  versionCheckHook,
 }:
 let
-  version = "4.0.5455";
+  version = "4.0.6610";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-functions-core-tools";
-    rev = version;
-    sha256 = "sha256-Ip1m0/l0YWFosYfp8UeREg9DP5pnvRnXyAaAuch7Op4=";
+    tag = version;
+    hash = "sha256-tUNiyvIjaIrdo6377IdXND7YgIk9zKkazDHV4kiWYa8=";
   };
   gozip = buildGoModule {
     pname = "gozip";
@@ -20,19 +22,20 @@ let
     vendorHash = null;
   };
 in
-buildDotnetModule rec {
+buildDotnetModule {
   pname = "azure-functions-core-tools";
   inherit src version;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.sdk_8_0;
+  dotnetFlags = [ "-p:TargetFramework=net8.0" ];
   nugetDeps = ./deps.nix;
   useDotnetFromEnv = true;
   executables = [ "func" ];
 
   postPatch = ''
     substituteInPlace src/Azure.Functions.Cli/Common/CommandChecker.cs \
-      --replace "CheckExitCode(\"/bin/bash" "CheckExitCode(\"${stdenv.shell}"
+      --replace-fail "CheckExitCode(\"/bin/bash" "CheckExitCode(\"${stdenv.shell}"
   '';
 
   postInstall = ''
@@ -40,11 +43,19 @@ buildDotnetModule rec {
     ln -s ${gozip}/bin/gozip $out/bin/gozip
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Azure/azure-functions-core-tools";
     description = "Command line tools for Azure Functions";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mdarocha detegr ];
-    platforms = ["x86_64-linux" "aarch64-darwin" "x86_64-darwin"];
+    mainProgram = "func";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      mdarocha
+      detegr
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
   };
 }
