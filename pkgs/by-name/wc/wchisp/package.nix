@@ -6,8 +6,7 @@
   pkg-config,
   libusb1,
   nix-update-script,
-  testers,
-  wchisp,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,11 +26,11 @@ rustPlatform.buildRustPackage rec {
     libusb1
   ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = wchisp;
-    };
   };
 
   meta = {
