@@ -10,7 +10,9 @@
   xclip,
   wl-clipboard,
   passAlias ? false,
+  testers,
   nix-update-script,
+  gopass,
 }:
 
 buildGoModule rec {
@@ -68,6 +70,10 @@ buildGoModule rec {
   '';
   passthru = {
     inherit wrapperPath;
+
+    tests.version = testers.testVersion {
+      package = gopass;
+    };
 
     updateScript = nix-update-script { };
   };
