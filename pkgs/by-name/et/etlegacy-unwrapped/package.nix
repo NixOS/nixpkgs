@@ -2,6 +2,7 @@
 , stdenv
 , writeShellApplication
 , fetchFromGitHub
+, fetchpatch
 , cjson
 , cmake
 , git
@@ -43,6 +44,16 @@ stdenv.mkDerivation {
     rev = "refs/tags/v${version}";
     hash = "sha256-k1H3irA9UVOICY3keKGVJMtBczW/b5ObyNvB7fGAcFA=";
   };
+
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fix compilation on Darwin archs
+    # Reported upstream at https://github.com/etlegacy/etlegacy/pull/3005
+    # Remove this patch when the PR is merged
+    (fetchpatch {
+      url = "https://github.com/etlegacy/etlegacy/commit/2767d15c67fe0680178d9cc85ed4cf2ad1d88ad0.patch?full_index=1";
+      hash = "sha256-rGfNIWb9zohk1QJLrYg9nqw6sMvXM0IbIl9kvYXRBuk=";
+    })
+  ];
 
   nativeBuildInputs = [
     cjson
@@ -104,6 +115,5 @@ stdenv.mkDerivation {
       gameplay is still considered unmatched by many, despite its great age.
     '';
     maintainers = with lib.maintainers; [ ashleyghooper drupol ];
-    platforms = lib.platforms.linux;
   };
 }
