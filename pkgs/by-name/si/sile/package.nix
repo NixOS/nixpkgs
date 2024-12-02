@@ -192,5 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.mit;
     mainProgram = "sile";
+    # https://github.com/NixOS/nixpkgs/pull/355895#issuecomment-2510637906
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
