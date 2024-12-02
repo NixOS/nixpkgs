@@ -52,6 +52,6 @@ stdenv.mkDerivation {
     license = licenses.wtfpl;
     maintainers = with maintainers; [ erictapen ];
     mainProgram = "hexdiff";
-    platforms = platforms.all;
+    platforms = platforms.unix;
   };
 }
