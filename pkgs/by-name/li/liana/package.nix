@@ -47,13 +47,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-2aIaRZNIRgFdA+NVnzOkEE3kYA15CoNBrsNGBhIz0nU=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "liana-8.0.0" = "sha256-NPaCW5JVBh2+8OnklF/bcZeVhUsxZdjNN/4MhTX0hJI=";
-      "iced_futures-0.12.3" = "sha256-ztWEde3bJpT8lmk+pNhj/v2cpw/z3TNvzCSvEXwinKQ=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-pjvJ+UNM/2g2BDLptjEs6XVukScBB5miDx55zwHJ/C4=";
 
   nativeBuildInputs = [
     pkg-config
