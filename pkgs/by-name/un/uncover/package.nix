@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -19,10 +20,16 @@ buildGoModule rec {
 
   subPackages = [ "cmd/uncover" ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   ldflags = [
     "-s"
     "-w"
   ];
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "-version" ];
 
   meta = with lib; {
     description = "API wrapper to search for exposed hosts";
