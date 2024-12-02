@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
     else
       releasePath;
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
-  buildInputs = [ openjdk gtk2 xorg.libXtst glibcLocales ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper openjdk ];
+  buildInputs = [ gtk2 xorg.libXtst glibcLocales ];
 
   unpackPhase = "cp $src $name";
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     runHook preBuild
 
      export JAVA_TOOL_OPTIONS=-Djdk.util.zip.disableZip64ExtraFieldValidation=true
-     sh $name LAX_VM ${openjdk}/bin/java -i silent -DLICENSE_ACCEPTED=TRUE -DUSER_INSTALL_DIR=$out
+    sh $name LAX_VM "$(command -v java)" -i silent -DLICENSE_ACCEPTED=TRUE -DUSER_INSTALL_DIR=$out
 
     runHook postBuild
   '';
