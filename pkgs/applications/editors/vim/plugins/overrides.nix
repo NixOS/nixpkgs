@@ -2897,6 +2897,10 @@ in
       "snacks.terminal"
       "snacks.win"
       "snacks.words"
+      "snacks.debug"
+      "snacks.scratch"
+      # Optional trouble integration
+      "trouble.sources.profiler"
     ];
   };
 
