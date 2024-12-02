@@ -19,6 +19,8 @@ lib.makeScope newScope (self: with self; {
 
   done = callPackage ./done.nix { };
 
+  editor-updater = callPackage ./editor-updater.nix { };
+
   fifc = callPackage ./fifc.nix { };
 
   fish-bd = callPackage ./fish-bd.nix { };
