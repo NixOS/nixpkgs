@@ -17,6 +17,13 @@ buildGoModule rec {
 
   vendorHash = "sha256-WbFkBTPy4N+mAVSkq1q9XcNs1jk6YuBcYxiEmQV/TsM=";
 
+  subPackages = [ "cmd/dnsx" ];
+
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+
   # Tests require network access
   doCheck = false;
 
@@ -32,5 +39,6 @@ buildGoModule rec {
     changelog = "https://github.com/projectdiscovery/dnsx/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "dnsx";
   };
 }
