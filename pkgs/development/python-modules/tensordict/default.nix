@@ -72,6 +72,9 @@ buildPythonPackage rec {
 
       # torch._dynamo.exc.InternalTorchDynamoError: RuntimeError: to_module requires TORCHDYNAMO_INLINE_INBUILT_NN_MODULES to be set.
       "test_functional"
+
+      # hangs forever on some CPUs
+      "test_map_iter_interrupt_early"
     ]
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
       # RuntimeError: internal error
@@ -81,9 +84,6 @@ buildPythonPackage rec {
 
       # _queue.Empty errors in multiprocessing tests
       "test_isend"
-
-      # hangs forever
-      "test_map_iter_interrupt_early"
     ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
