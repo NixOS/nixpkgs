@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace Makefile --replace '$(if $(STRIP), $(STRIP) -x $@)' '$(if $(STRIP), $(STRIP) -S $@)'
+    substituteInPlace Makefile --replace-fail \
+      '$(if $(STRIP), $(STRIP) -x $@)' '$(if $(STRIP), $(STRIP) -S $@)'
   '';
 
   enableParallelBuilding = true;
