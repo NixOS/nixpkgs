@@ -5,15 +5,27 @@
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs:
+  let
+    versionParts = lib.strings.splitString " " finalAttrs.version;
+
+    versionNumberParts = lib.strings.splitString "." (lib.lists.head versionParts);
+    # X264_BUILD in x264_config.h
+    apiVersion = lib.lists.elemAt versionNumberParts 1;
+    # X264_REV in x264_config.h
+    numCommits = lib.lists.last versionNumberParts;
+
+    gitRevision = lib.lists.last versionParts;
+in {
   pname = "x264";
-  version = "0-unstable-2023-10-01";
+  # X264_POINTVER in x264_config.h
+  version = "0.164.3108 31e19f9";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
-    repo = pname;
-    rev = "31e19f92f00c7003fa115047ce50978bc98c3a0d";
+    repo = "x264";
+    rev = gitRevision;
     hash = "sha256-7/FaaDFmoVhg82BIhP3RbFq4iKGNnhviOPxl3/8PWCM=";
   };
 
@@ -43,6 +55,19 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!stdenv.hostPlatform.isi686) "--enable-pic"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--cross-prefix=${stdenv.cc.targetPrefix}";
 
+  postConfigure = ''
+    substituteInPlace x264_config.h --replace-fail \
+      "X264_VERSION \"\"" "X264_VERSION \" r${numCommits} ${gitRevision}\""
+
+    substituteInPlace x264_config.h --replace-fail \
+      "X264_POINTVER \"0.${apiVersion}.x\"" "X264_POINTVER \"${finalAttrs.version}\""
+
+    cat << EOF >> x264_config.h
+    #define X264_REV ${numCommits}
+    #define X264_REV_DIFF 0
+    EOF
+  '';
+
   makeFlags = [
     "BASHCOMPLETIONSDIR=$(out)/share/bash-completion/completions"
     "install-bashcompletion"
@@ -60,4 +85,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix ++ platforms.windows;
     maintainers = [ ];
   };
-}
+})
