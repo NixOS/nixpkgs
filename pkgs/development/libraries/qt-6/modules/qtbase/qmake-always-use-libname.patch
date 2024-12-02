@@ -1,5 +1,3 @@
-diff --git a/cmake/QtFinishPrlFile.cmake b/cmake/QtFinishPrlFile.cmake
-index 0cef22617c..232d92bc62 100644
 --- a/cmake/QtFinishPrlFile.cmake
 +++ b/cmake/QtFinishPrlFile.cmake
 @@ -69,9 +69,10 @@ foreach(line ${lines})
@@ -16,8 +14,6 @@ index 0cef22617c..232d92bc62 100644
                      endif()
                  endif()
              else()
-diff --git a/cmake/QtGenerateLibHelpers.cmake b/cmake/QtGenerateLibHelpers.cmake
-index 96675267d2..c9d4a69497 100644
 --- a/cmake/QtGenerateLibHelpers.cmake
 +++ b/cmake/QtGenerateLibHelpers.cmake
 @@ -82,9 +82,6 @@ function(qt_transform_absolute_library_paths_to_link_flags out_var library_path_
