@@ -4727,6 +4727,12 @@
     githubId = 62989;
     name = "Demyan Rogozhin";
   };
+  denperidge = {
+    email = "contact@denperidge.com";
+    github = "denperidge";
+    githubId = 27348469;
+    name = "Cat";
+  };
   derchris = {
     email = "derchris@me.com";
     github = "derchrisuk";
@@ -11783,6 +11789,12 @@
     github = "lumi-me-not";
     githubId = 26020062;
     name = "lumi";
+  };
+  luna_1024 = {
+    email = "contact@luna.computer";
+    github = "luna-1024";
+    githubId = 7243615;
+    name = "Luna";
   };
   lunarequest = {
     email = "nullarequest@vivlaid.net";
