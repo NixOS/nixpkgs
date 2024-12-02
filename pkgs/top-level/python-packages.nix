@@ -245,6 +245,8 @@ self: super: with self; {
 
   aiohasupervisor = callPackage ../development/python-modules/aiohasupervisor { };
 
+  aiohomeconnect = callPackage ../development/python-modules/aiohomeconnect { };
+
   aiohomekit = callPackage ../development/python-modules/aiohomekit { };
 
   aiohttp = callPackage ../development/python-modules/aiohttp { };
@@ -7977,6 +7979,8 @@ self: super: with self; {
 
   medpy = callPackage ../development/python-modules/medpy { };
 
+  medvol = callPackage ../development/python-modules/medvol { };
+
   meeko = callPackage ../development/python-modules/meeko { };
 
   meep = callPackage ../development/python-modules/meep { };
@@ -8965,6 +8969,8 @@ self: super: with self; {
   };
 
   napari-console = callPackage ../development/python-modules/napari-console { };
+
+  napari-nifti = callPackage ../development/python-modules/napari-nifti { };
 
   napari-npe2 = callPackage ../development/python-modules/napari-npe2 { };
 
@@ -10572,6 +10578,8 @@ self: super: with self; {
 
   pysuez = callPackage ../development/python-modules/pysuez { };
 
+  pysuezv2 = callPackage ../development/python-modules/pysuezv2 { };
+
   pysqlitecipher = callPackage ../development/python-modules/pysqlitecipher { };
 
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
@@ -10859,6 +10867,8 @@ self: super: with self; {
   potr = callPackage ../development/python-modules/potr { };
 
   power = callPackage ../development/python-modules/power { };
+
+  powerapi = callPackage ../development/python-modules/powerapi { };
 
   powerline = callPackage ../development/python-modules/powerline { };
 
