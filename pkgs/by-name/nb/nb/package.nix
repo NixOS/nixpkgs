@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "xwmx";
     repo = "nb";
     rev = version;
-    sha256 = "sha256-VcYE1luwNtdrOmjTDKkIAX9rmcbFyCBtnib+c9FyJuA=";
+    hash = "sha256-VcYE1luwNtdrOmjTDKkIAX9rmcbFyCBtnib+c9FyJuA=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
