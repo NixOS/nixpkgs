@@ -15,9 +15,9 @@ buildDotnetModule rec {
 
   src = fetchFromGitHub {
     owner = "fifty-six";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-z1hmMrfeoYyjVEPPjWvUfKUKsOS7UsocSWMYrFY+/kI=";
+    repo = "scarab";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-z1hmMrfeoYyjVEPPjWvUfKUKsOS7UsocSWMYrFY+/kI=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
