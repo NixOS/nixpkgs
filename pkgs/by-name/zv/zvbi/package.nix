@@ -4,6 +4,7 @@
   gitUpdater,
   lib,
   libiconv,
+  libintl,
   stdenv,
   testers,
   validatePkgConfig,
@@ -25,7 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
   ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  propagatedBuildInputs = [
+    libiconv
+    libintl
+  ];
 
   outputs = [
     "out"
