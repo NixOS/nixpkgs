@@ -1,4 +1,4 @@
-{ lib, stdenv, makeWrapper, openjdk, gtk2, xorg, glibcLocales, releasePath ? null }:
+{ lib, stdenv, makeDesktopItem, copyDesktopItems, makeWrapper, openjdk, gtk2, xorg, glibcLocales, releasePath ? null }:
 
 # To use this package, you need to download your own cplex installer from IBM
 # and override the releasePath attribute to point to the location of the file.
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     else
       releasePath;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
   buildInputs = [ openjdk gtk2 xorg.libXtst glibcLocales ];
 
   unpackPhase = "cp $src $name";
@@ -55,6 +55,9 @@ stdenv.mkDerivation rec {
       $out/cpoptimizer/bin/x86-64_linux/cpoptimizer\
       $out/bin
 
+    mkdir -p $out/share/pixmaps
+    ln -s $out/opl/oplide/icon.xpm $out/share/pixmaps/oplide.xpm
+
     mkdir -p $out/share/doc
     mv $out/doc $out/share/doc/$name
 
@@ -63,6 +66,17 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "oplide";
+      desktopName = "IBM ILOG CPLEX Optimization Studio";
+      genericName = "Optimization Software";
+      icon = "oplide";
+      exec = "oplide";
+      categories = [ "Development" "IDE" "Math" "Science" ];
+    })
+  ];
 
   fixupPhase =
   let
