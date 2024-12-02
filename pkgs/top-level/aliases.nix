@@ -856,7 +856,7 @@ mapAliases {
   nextcloud27Packages = throw "Nextcloud27 is EOL!"; # Added 2024-06-25
   nagiosPluginsOfficial = monitoring-plugins;
   neochat = libsForQt5.kdeGear.neochat; # added 2022-05-10
-  nerdfonts = throw "nerdfonts has been separated into individual font packages under the namespace nerd-fonts"; # Added 2024-11-09
+  nerdfonts = throw "nerdfonts has been separated into individual font packages under the namespace nerd-fonts. To list all fonts use `builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts)`."; # Added 2024-11-09
   newlibCross = newlib; # Added 2024-09-06
   newlib-nanoCross = newlib-nano; # Added 2024-09-06
   nix-direnv-flakes = nix-direnv;
