@@ -55,6 +55,12 @@ stdenv.mkDerivation rec {
       $out/cpoptimizer/bin/x86-64_linux/cpoptimizer\
       $out/bin
 
+    mkdir -p $out/share/doc
+    mv $out/doc $out/share/doc/$name
+
+    mkdir -p $out/share/licenses
+    mv $out/license $out/share/licenses/$name
+
     runHook postInstall
   '';
 
@@ -63,6 +69,8 @@ stdenv.mkDerivation rec {
     libraryPath = lib.makeLibraryPath [ stdenv.cc.cc gtk2 xorg.libXtst ];
   in ''
     runHook preFixup
+
+    rm -r $out/Uninstall
 
     interpreter=${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2
 
