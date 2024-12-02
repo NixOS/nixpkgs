@@ -19,10 +19,14 @@
   btrfs-progs,
   libfaketime,
   fakeroot,
+  util-linux,
 }:
 
 let
   sdClosureInfo = pkgs.buildPackages.closureInfo { rootPaths = storePaths; };
+
+  becomeRootPkg = if pkgs.stdenv.buildPlatform.isLinux then util-linux else fakeroot;
+  becomeRoot = if pkgs.stdenv.buildPlatform.isLinux then "unshare -r" else "fakeroot";
 in
 pkgs.stdenv.mkDerivation {
   name = "btrfs-fs.img${lib.optionalString compressImage ".zst"}";
@@ -30,7 +34,7 @@ pkgs.stdenv.mkDerivation {
   nativeBuildInputs = [
     btrfs-progs
     libfaketime
-    fakeroot
+    becomeRootPkg
   ] ++ lib.optional compressImage zstd;
 
   buildCommand = ''
@@ -57,7 +61,7 @@ pkgs.stdenv.mkDerivation {
     cp ${sdClosureInfo}/registration ./rootImage/nix-path-registration
 
     touch $img
-    faketime -f "1970-01-01 00:00:01" fakeroot mkfs.btrfs -L ${volumeLabel} -U ${uuid} -r ./rootImage --shrink $img
+    faketime -f "1970-01-01 00:00:01" ${becomeRoot} mkfs.btrfs -L ${volumeLabel} -U ${uuid} -r ./rootImage --shrink $img
 
     if ! btrfs check $img; then
       echo "--- 'btrfs check' failed for BTRFS image ---"
