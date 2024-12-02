@@ -73,6 +73,10 @@ let
       pages_parent_dir = cfg.settings.server.pages_parent_dir or cfg.package.src;
       keys_parent_dir = cfg.settings.server.keys_parent_dir or cfg.stateDir;
     };
+
+    email = cfg.settings.email or { } // {
+      smtp_password = "#smtppass#";
+    };
   };
 
   configFile = format.generate "config.ini" settings;
@@ -105,9 +109,15 @@ let
     db_pass=${
       optionalString (cfg.database.passwordFile != null) "$(head -n1 ${cfg.database.passwordFile})"
     }
+    smtp_pass=${
+      optionalString (
+        cfg.email.smtpPasswordFile != null
+      ) ''$(printf '%s\n' "$(head -n1 ${cfg.email.smtpPasswordFile})" | sed -e 's/[\/&]/\\&/g')''
+    }
 
     cp -f ${configFile} '${cfg.stateDir}/config.ini'
     sed -e "s,#dbpass#,$db_pass,g" -i '${cfg.stateDir}/config.ini'
+    sed -e "s,#smtppass#,$smtp_pass,g" -i '${cfg.stateDir}/config.ini'
     chmod 440 '${cfg.stateDir}/config.ini'
 
     ${text}
@@ -289,6 +299,14 @@ in
         '';
         default = pkgs.writeText "default-admin-pass" "nixos";
         defaultText = "/nix/store/xxx-default-admin-pass";
+      };
+    };
+
+    email = {
+      smtpPasswordFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = "The file to load the password for the smtp email server.";
       };
     };
 
