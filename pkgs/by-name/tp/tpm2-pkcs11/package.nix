@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, substituteAll
+{ stdenv, lib, fetchFromGitHub
 , pkg-config, autoreconfHook, autoconf-archive, makeWrapper, patchelf
 , tpm2-tss, tpm2-tools, opensc, openssl, sqlite, python3, glibc, libyaml
 , abrmdSupport ? true, tpm2-abrmd ? null

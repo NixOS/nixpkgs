@@ -10,7 +10,6 @@
   rpcsvc-proto,
   libtirpc,
   makeWrapper,
-  substituteAll,
   removeReferencesTo,
   replaceVars,
   go,
@@ -23,8 +22,8 @@ let
     rev = modprobeVersion;
     sha256 = "sha256-iBRMkvOXacs/llTtvc/ZC5i/q9gc8lMuUHxMbu8A+Kg=";
   };
-  modprobePatch = substituteAll {
-    src = ./modprobe.patch;
+  modprobePatch = replaceVars ./modprobe.patch {
+
     inherit modprobeVersion;
   };
 in
