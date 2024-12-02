@@ -432,6 +432,11 @@ concatTo() {
 # $ flags=("lorem ipsum" "dolor" "sit amet")
 # $ concatStringsSep ";" flags
 # lorem ipsum;dolor;sit amet
+#
+# Also supports multi-character separators;
+# $ flags=("lorem ipsum" "dolor" "sit amet")
+# $ concatStringsSep " and " flags
+# lorem ipsum and dolor and sit amet
 concatStringsSep() {
     local sep="$1"
     local name="$2"
@@ -443,11 +448,15 @@ concatStringsSep() {
                 echo "concatStringsSep(): ERROR: trying to use concatStringsSep on an associative array." >&2
                 return 1 ;;
             -a*)
-                local IFS="$sep"
-                echo -n "${nameref[*]}" ;;
+                # \036 is the "record separator" character. We assume that this will never need to be part of
+                # an argument string we create here. If anyone ever hits this limitation: Feel free to refactor.
+                local IFS=$'\036' ;;
             *)
-                echo -n "${nameref// /"${sep}"}" ;;
+                local IFS=" " ;;
+
         esac
+        local ifs_separated="${nameref[*]}"
+        echo -n "${ifs_separated//"$IFS"/"$sep"}"
     fi
 }
 
