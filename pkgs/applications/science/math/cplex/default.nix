@@ -48,12 +48,17 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin
-    ln -s $out/opl/bin/x86-64_linux/oplrun\
-      $out/opl/bin/x86-64_linux/oplrunjava\
-      $out/opl/oplide/oplide\
-      $out/cplex/bin/x86-64_linux/cplex\
-      $out/cpoptimizer/bin/x86-64_linux/cpoptimizer\
-      $out/bin
+
+    for pgm in \
+      $out/opl/bin/x86-64_linux/oplrun \
+      $out/opl/bin/x86-64_linux/oplrunjava \
+      $out/opl/oplide/oplide \
+      $out/cplex/bin/x86-64_linux/cplex \
+      $out/cpoptimizer/bin/x86-64_linux/cpoptimizer
+    do
+      makeWrapper "$pgm" "$out/bin/$(basename "$pgm")" \
+        --set-default LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive
+    done
 
     mkdir -p $out/share/pixmaps
     ln -s $out/opl/oplide/icon.xpm $out/share/pixmaps/oplide.xpm
@@ -78,20 +83,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  fixupPhase =
-  let
-    libraryPath = lib.makeLibraryPath [ stdenv.cc.cc gtk2 xorg.libXtst ];
-  in ''
+  fixupPhase = ''
     runHook preFixup
 
     rm -r $out/Uninstall
-
-    for pgm in $out/opl/bin/x86-64_linux/oplrun $out/opl/bin/x86-64_linux/oplrunjava $out/opl/oplide/oplide;
-    do
-      wrapProgram $pgm \
-        --prefix LD_LIBRARY_PATH : $out/opl/bin/x86-64_linux:${libraryPath} \
-        --set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive;
-    done
 
     runHook postFixup
   '';
