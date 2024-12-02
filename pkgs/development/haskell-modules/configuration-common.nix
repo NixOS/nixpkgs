@@ -2913,12 +2913,6 @@ self: super: {
   # 2024-03-17: broken
   vaultenv = dontDistribute super.vaultenv;
 
-  # Support base16 1.0
-  nix-serve-ng = appendPatch (fetchpatch {
-    url = "https://github.com/aristanetworks/nix-serve-ng/commit/4d9eacfcf753acbcfa0f513bec725e9017076270.patch";
-    hash = "sha256-zugyUpEq/iVkxghrvguL95+lJDEpE8MLvZivken0p24=";
-  }) super.nix-serve-ng;
-
   # 2024-01-24: support optparse-applicative 0.18
   niv = appendPatches [
     (fetchpatch {
