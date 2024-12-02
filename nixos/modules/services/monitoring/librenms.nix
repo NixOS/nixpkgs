@@ -116,7 +116,7 @@ in
       type = types.bool;
       default = false;
       description = ''
-        Enables (distributed pollers)[https://docs.librenms.org/Extensions/Distributed-Poller/]
+        Enables [distributed pollers](https://docs.librenms.org/Extensions/Distributed-Poller/)
         for this LibreNMS instance. This will enable a local `rrdcached` and `memcached` server.
 
         To use this feature, make sure to configure your firewall that the distributed pollers
@@ -129,7 +129,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Configure this LibreNMS instance as a (distributed poller)[https://docs.librenms.org/Extensions/Distributed-Poller/].
+          Configure this LibreNMS instance as a [distributed poller](https://docs.librenms.org/Extensions/Distributed-Poller/).
           This will disable all web features and just configure the poller features.
           Use the `mysql` database of your main LibreNMS instance in the database settings.
         '';
