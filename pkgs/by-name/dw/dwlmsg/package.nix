@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = "This tool allows for scripting of window manager features in DWL, It relies on the IPC patch for DWL";
     homepage = "https://codeberg.org/notchoc/dwlmsg";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ Person1873 ];
+    #maintainers = with maintainers; [ Person1873 ];
     platforms = platforms.all;
   };
 
