@@ -4,8 +4,7 @@
   fetchFromGitHub,
   git,
   installShellFiles,
-  kubescape,
-  testers,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -25,7 +24,10 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    versionCheckHook
+  ];
 
   nativeCheckInputs = [ git ];
 
@@ -62,11 +64,9 @@ buildGoModule rec {
       --zsh <($out/bin/kubescape completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = kubescape;
-    command = "kubescape version";
-    version = "v${version}";
-  };
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "version" ];
 
   meta = with lib; {
     description = "Tool for testing if Kubernetes is deployed securely";
