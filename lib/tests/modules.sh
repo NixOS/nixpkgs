@@ -391,6 +391,10 @@ checkConfigError 'The option `mergedLazyNonLazy'\'' in `.*'\'' is already declar
 checkConfigOutput '^11$' config.lazyResult ./lazy-attrsWith.nix
 checkConfigError 'infinite recursion encountered' config.nonLazyResult ./lazy-attrsWith.nix
 
+# Test the attrsOf functor.wrapped warning
+# shellcheck disable=2016
+NIX_ABORT_ON_WARN=1 checkConfigError 'The deprecated `type.functor.wrapped` attribute of the option `mergedLazyLazy` is accessed, use `nestedTypes.elemType` instead.' options.mergedLazyLazy.type.functor.wrapped ./lazy-attrsWith.nix
+
 # Even with multiple assignments, a type error should be thrown if any of them aren't valid
 checkConfigError 'A definition for option .* is not of type .*' \
   config.value ./declare-int-unsigned-value.nix ./define-value-list.nix ./define-value-int-positive.nix
