@@ -18,13 +18,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2024.12";
+  version = "2024.14";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     rev = "refs/tags/${version}";
-    hash = "sha256-NEm6qsU/Kes1rtNCsEauShpJZzrhBtOqo70uzrWpYtE=";
+    hash = "sha256-Tns0Jd5v+lizU7NMVqS/hoqjHhmqrc9VVawjoZvhk78=";
   };
 
   useFetchCargoVendor = true;
