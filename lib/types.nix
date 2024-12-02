@@ -597,17 +597,31 @@ rec {
 
     # base type for lazyAttrsOf and attrsOf
     attrsWith =
+    let
+      # Push down position info.
+      pushPositions = map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value);
+      binOp = lhs: rhs:
+        let
+          elemType = lhs.elemType.typeMerge rhs.elemType.functor;
+          lazy =
+            if lhs.lazy == rhs.lazy then
+              lhs.lazy
+            else
+              null;
+        in
+        if elemType == null || lazy == null then
+          null
+        else
+          {
+            inherit elemType lazy;
+          };
+    in
     {
       elemType,
       lazy ? false,
     }:
-    let
-      typeName = if lazy then "lazyAttrsOf" else "attrsOf";
-      # Push down position info.
-      pushPositions = map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value);
-    in
     mkOptionType {
-      name = typeName;
+      name = if lazy then "lazyAttrsOf" else "attrsOf";
       description = (if lazy then "lazy attribute set" else "attribute set") + " of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
       descriptionClass = "composite";
       check = isAttrs;
@@ -642,21 +656,7 @@ rec {
           # Important!: Add new function attributes here in case of future changes
           inherit elemType lazy;
         };
-        binOp = lhs: rhs:
-          let
-            elemType = lhs.elemType.typeMerge rhs.elemType.functor;
-            lazy =
-              if lhs.lazy == rhs.lazy then
-                lhs.lazy
-              else
-                null;
-          in
-          if elemType == null || lazy == null then
-            null
-          else
-            {
-              inherit elemType lazy;
-            };
+        inherit binOp;
       };
       nestedTypes.elemType = elemType;
     };
