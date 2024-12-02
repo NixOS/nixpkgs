@@ -1,5 +1,3 @@
-diff --git a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
-index c0fbb53..3c82085 100644
 --- a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
 +++ b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
 @@ -14,7 +14,7 @@
