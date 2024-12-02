@@ -175,7 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Parallels Tools for Linux guests";
     homepage = "https://parallels.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ catap wegank codgician ];
+    maintainers = with maintainers; [ wegank codgician ];
     platforms = platforms.linux;
   };
 })
