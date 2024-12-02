@@ -18242,6 +18242,8 @@ self: super: with self; {
     python3 = python;
   })).py;
 
+  zenoh = callPackage ../development/python-modules/zenoh { };
+
   zephyr-python-api = callPackage ../development/python-modules/zephyr-python-api { };
 
   zeroc-ice = callPackage ../development/python-modules/zeroc-ice { };
