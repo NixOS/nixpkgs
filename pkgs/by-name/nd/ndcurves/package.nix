@@ -52,14 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
       (lib.cmakeBool "CURVES_WITH_PINOCCHIO_SUPPORT" true)
     ]
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) (
+    ++ lib.optional stdenv.hostPlatform.isAarch64 (
       lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'curves_tests|python-curves'"
     )
     ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) (
       lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'test-so3-smooth'"
-    )
-    ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) (
-      lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'curves_tests'"
     );
 
   doCheck = true;
