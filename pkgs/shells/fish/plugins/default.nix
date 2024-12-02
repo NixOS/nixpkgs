@@ -58,6 +58,8 @@ lib.makeScope newScope (self: with self; {
 
   nvm = callPackage ./nvm.nix { };
 
+  osx = callPackage ./osx.nix { };
+
   pisces = callPackage ./pisces.nix { };
 
   plugin-git = callPackage ./plugin-git.nix { };
