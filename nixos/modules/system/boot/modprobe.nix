@@ -11,7 +11,7 @@ with lib;
       default = true;
     };
 
-    boot.modprobeConfig.useUbuntuModuleBlacklist = mkEnableOption (lib.mdDoc "Ubuntu distro's module blacklist") // {
+    boot.modprobeConfig.useUbuntuModuleBlacklist = mkEnableOption "Ubuntu distro's module blacklist" // {
       default = true;
     };
 
