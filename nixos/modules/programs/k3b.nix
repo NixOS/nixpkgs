@@ -17,13 +17,24 @@
         `/run/wrappers/bin` in the "Setup External Programs" menu.
       '';
     };
+
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.kdePackages.k3b;
+      description = "k3b package to use";
+      defaultText = lib.literalExpression "pkgs.kdePackages.k3b";
+      relatedPackages = [
+        "kdePackages.k3b"
+        "libsForQt5.k3b"
+      ];
+    };
   };
 
   # implementation
   config = lib.mkIf config.programs.k3b.enable {
 
     environment.systemPackages = with pkgs; [
-      k3b
+      config.programs.k3b.package
       dvdplusrwtools
       cdrdao
       cdrtools
