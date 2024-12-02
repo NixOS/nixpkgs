@@ -20,7 +20,7 @@ let
     optionalString
     ;
 
-  inherit (pkgs) sqlite;
+  inherit (pkgs) sqlite openssl;
 
   format = pkgs.formats.ini {
     mkKeyValue =
@@ -374,6 +374,8 @@ in
       ++ optional isMysql "writefreely-mysql-init.service"
       ++ optional isMysqlLocal "mysql.service";
       wantedBy = [ "multi-user.target" ];
+
+      path = [ openssl ];
 
       serviceConfig = {
         Type = "simple";
