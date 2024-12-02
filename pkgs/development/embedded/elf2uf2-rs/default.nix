@@ -2,11 +2,11 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "elf2uf2-rs";
-  version = "2.0.0";
+  version = "2.1.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-cmiCOykORue0Cg2uUUWa/nXviX1ddbGNC5gRKe+1kYs=";
+    hash = "sha256-7RS2OC00tjsSBYFvg0/FQf1HN515FdrmCoKhJBu4fvI=";
   };
 
   nativeBuildInputs = [
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
       Foundation
     ];
 
-  cargoHash = "sha256-TBH3pLB6vQVGnfShLtFPNKjciuUIuTkvp3Gayzo+X9E=";
+  cargoHash = "sha256-oz2XVqDWmv/8HLrIFL+xJinZNUdoWk4KVHDPZr2v+Ls=";
 
   meta = with lib; {
     description = "Convert ELF files to UF2 for USB Flashing Bootloaders";
