@@ -95,6 +95,13 @@ stdenv.mkDerivation (finalAttrs: {
       stripLen = 1;
       hash = "sha256-7SDBRr9G40b9DfbgdaYJxTeiDSLUfVixtMtM3cLTVZs=";
     })
+
+    # Fix lossless audio, ffmpeg 7,1 compatibility issue
+    (fetchpatch {
+      name = "fix-lossless-audio.patch";
+      url = "https://github.com/obsproject/obs-studio/commit/dfc3a69c5276edf84c933035ff2a7e278fa13c9a.patch";
+      hash = "sha256-wiF3nolBpZKp7LR7NloNfJ+v4Uq/nBgwCVoKZX+VEMA=";
+    })
   ];
 
   nativeBuildInputs = [
