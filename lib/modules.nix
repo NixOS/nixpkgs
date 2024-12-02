@@ -1341,7 +1341,7 @@ let
     { config, options, ... }:
     let
       attrPaths = lib.attrsets.associateWithAttrPath spec;
-      existsInSpec = op: spec != { } && hasAttr attrPaths op;
+      existsInSpec = op: spec != { } && hasAttr op attrPaths;
       getPathForOp =
         op:
         if existsInSpec op then
