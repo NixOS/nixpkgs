@@ -20,11 +20,16 @@ buildDotnetModule rec {
     sha256 = "sha256-z1hmMrfeoYyjVEPPjWvUfKUKsOS7UsocSWMYrFY+/kI=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
   nugetDeps = ./deps.nix;
   projectFile = "Scarab/Scarab.csproj";
   testProjectFile = "Scarab.Tests/Scarab.Tests.csproj";
   executables = [ "Scarab" ];
+
+  postPatch = ''
+    substituteInPlace Scarab/Scarab.csproj Scarab.Tests/Scarab.Tests.csproj \
+      --replace-fail 'net6.0' 'net8.0'
+  '';
 
   preConfigureNuGet = ''
     # This should really be in the upstream nuget.config
