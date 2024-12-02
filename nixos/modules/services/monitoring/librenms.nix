@@ -14,6 +14,7 @@ let
     log_errors = on
     post_max_size = 100M
     upload_max_filesize = 100M
+    memory_limit = ${toString cfg.settings.php_memory_limit}M
     date.timezone = "${config.time.timeZone}"
   '';
   phpIni = pkgs.runCommand "php.ini"
@@ -375,6 +376,9 @@ in
 
       # enable fast ping by default
       "ping_rrd_step" = 60;
+
+      # set default memory limit to 1G
+      "php_memory_limit" = lib.mkDefault 1024;
 
       # one minute polling
       "rrd.step" = if cfg.enableOneMinutePolling then 60 else 300;
