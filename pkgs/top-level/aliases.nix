@@ -1056,6 +1056,8 @@ mapAliases {
 
   rabbitvcs = throw "rabbitvcs has been removed from nixpkgs, because it was broken"; # Added 2024-07-15
   radare2-cutter = throw "'radare2-cutter' has been renamed to/replaced by 'cutter'"; # Converted to throw 2024-10-17
+  radicale2 = throw "'radicale2' was removed because it was broken. Use 'radicale' (version 3) instead"; # Added 2024-11-29
+  radicale3 = radicale; # Added 2024-11-29
   radicle-cli = throw "'radicle-cli' was removed in favor of 'radicle-node'"; # Added 2024-05-04
   radicle-upstream = throw "'radicle-upstream' was sunset, see <https://community.radworks.org/t/2962>"; # Added 2024-05-04
   railway-travel = diebahn; # Added 2024-04-01

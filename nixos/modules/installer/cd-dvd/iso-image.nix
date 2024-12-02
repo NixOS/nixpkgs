@@ -335,12 +335,14 @@ let
       set textmode=true
       terminal_output console
     }
+
+    ${lib.optionalString (config.isoImage.grubTheme != null) ''
     hiddenentry 'GUI mode' --hotkey 'g' {
       $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/BOOT/grub-theme/%P\n")
       set textmode=false
       terminal_output gfxterm
     }
-
+    ''}
 
     # If the parameter iso_path is set, append the findiso parameter to the kernel
     # line. We need this to allow the nixos iso to be booted from grub directly.

@@ -28,6 +28,8 @@ bambu-studio.overrideAttrs (
       )
     '';
 
+    cmakeFlags = lib.remove "-DFLATPAK=1" previousAttrs.cmakeFlags or [ ];
+
     # needed to prevent collisions between the LICENSE.txt files of
     # bambu-studio and orca-slicer.
     postInstall = ''
