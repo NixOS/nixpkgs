@@ -3,9 +3,7 @@
   lib,
   fetchFromGitHub,
   pkg-config,
-  qmake,
-  qttools,
-  wrapQtAppsHook,
+  libsForQt5,
   libisoburn,
 }:
 
@@ -21,10 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake
-    qttools
+    libsForQt5.qmake
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [ libisoburn ];

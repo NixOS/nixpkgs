@@ -38,7 +38,10 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pythonRelaxDeps = [ "ipywidgets" ];
+  pythonRelaxDeps = [
+    "ipywidgets"
+    "lark"
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
   disabledTestPaths = [

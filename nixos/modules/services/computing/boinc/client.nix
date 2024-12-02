@@ -95,7 +95,7 @@ in
         after = ["network.target"];
         wantedBy = ["multi-user.target"];
         script = ''
-          ${fhsEnvExecutable} --dir ${cfg.dataDir} ${allowRemoteGuiRpcFlag}
+          exec ${fhsEnvExecutable} --dir ${cfg.dataDir} ${allowRemoteGuiRpcFlag}
         '';
         serviceConfig = {
           User = "boinc";

@@ -46,7 +46,7 @@ buildNpmPackage rec {
 
       makeWrapper ${lib.getExe electron} $out/bin/caprine \
           --add-flags $out/share/caprine/resources/app.asar \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
           --set-default ELECTRON_IS_DEV 0 \
           --inherit-argv0
 
@@ -84,7 +84,10 @@ buildNpmPackage rec {
     description = "Elegant Facebook Messenger desktop app";
     homepage = "https://github.com/sindresorhus/caprine";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ astronaut0212 ];
+    maintainers = with lib.maintainers; [
+      astronaut0212
+      khaneliman
+    ];
     inherit (electron.meta) platforms;
   };
 }

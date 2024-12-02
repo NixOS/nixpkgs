@@ -146,8 +146,8 @@ in
         --replace-fail '@node@' ${nodejs}
 
       substituteInPlace src/cpp/core/libclang/LibClang.cpp \
-        --replace-fail '@libclang@' ${llvmPackages.libclang.lib} \
-        --replace-fail '@libclang.so@' ${llvmPackages.libclang.lib}/lib/libclang.so
+        --replace-fail '@libclang@' ${lib.getLib llvmPackages.libclang} \
+        --replace-fail '@libclang.so@' ${lib.getLib llvmPackages.libclang}/lib/libclang.so
 
       substituteInPlace src/cpp/session/CMakeLists.txt \
         --replace-fail '@pandoc@' ${pandoc} \

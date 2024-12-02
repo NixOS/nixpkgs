@@ -1,29 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, perl
-, perlPackages
-, runtimeShell
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  perlPackages,
+  runtimeShell,
 }:
 
 stdenv.mkDerivation rec {
   pname = "regripper";
-  version = "unstable-2023-07-23";
+  version = "0-unstable-2024-11-02";
 
   src = fetchFromGitHub {
     owner = "keydet89";
     repo = "RegRipper3.0";
-    rev = "cee174fb6f137b14c426e97d17945ddee0d31051";
-    hash = "sha256-vejIRlcVjxQJpxJabJJcljODYr+lLJjYINVtAPObvkQ=";
+    rev = "89f3cac57e10bce1a79627e6038353e8e8a0c378";
+    hash = "sha256-dW3Gr4HQH484i47Bg+CEnBYoGQQRMBJr88+YeuU+iV4=";
   };
 
-  propagatedBuildInputs = [ perl perlPackages.ParseWin32Registry ];
-
-  postPatch = ''
-    substituteInPlace rip.pl rr.pl \
-      --replace \"plugins/\" \"$out/share/regripper/plugins/\" \
-      --replace \"plugins\" \"$out/share/regripper/plugins\"
-  '';
+  propagatedBuildInputs = [
+    perl
+    perlPackages.ParseWin32Registry
+  ];
 
   installPhase = ''
     runHook preInstall

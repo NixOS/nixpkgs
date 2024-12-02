@@ -12,25 +12,17 @@
 
 buildPythonPackage rec {
   pname = "pytest-examples";
-  version = "0.0.13";
+  version = "0.0.14";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pytest-examples";
     rev = "refs/tags/v${version}";
-    hash = "sha256-R0gSWQEGMkJhkeXImyris2wzqjJ0hC3zO0voEdhWLoY=";
+    hash = "sha256-MAiTNz2Ygk+JOiiT5DGhJ15xITbS+4Gk23YCKJm7OKE=";
   };
-
-  postPatch = ''
-    # ruff binary is used directly, the ruff Python package is not needed
-    substituteInPlace pytest_examples/lint.py \
-      --replace-fail "'ruff'" "'${lib.getExe ruff}'"
-  '';
-
-  pythonRemoveDeps = [ "ruff" ];
 
   build-system = [
     hatchling
@@ -38,7 +30,10 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  dependencies = [ black ];
+  dependencies = [
+    black
+    ruff
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

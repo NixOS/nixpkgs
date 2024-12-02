@@ -4,6 +4,7 @@
   lib,
   fetchFromGitLab,
   fetchgit,
+  fetchpatch,
 
   cmake,
   ninja,
@@ -61,17 +62,19 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "digikam";
-  version = "8.4.0";
+  version = "8.5.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "digikam";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GJYlxJkvFEXppVk0yC9ojszylfAGt3eBMAjNUu60XDY=";
+    hash = "sha256-KO6kq0SlYzu7sh6+7JQWhIeHNowy3fx03OFTdDwyR10=";
   };
 
-  patches = [ ./disable-tests-download.patch ];
+  patches = [
+    ./disable-tests-download.patch
+  ];
 
   strictDeps = true;
 

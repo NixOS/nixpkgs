@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, python3
-, alsa-lib, curl, freetype, gtk3, libGL, libX11, libXext, libXinerama, webkitgtk
+, alsa-lib, curl, freetype, gtk3, libGL, libX11, libXext, libXinerama, webkitgtk_4_0
 }:
 
 stdenv.mkDerivation {
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config python3 ];
-  buildInputs = [ alsa-lib curl freetype gtk3 libGL libX11 libXext libXinerama webkitgtk ];
+  buildInputs = [ alsa-lib curl freetype gtk3 libGL libX11 libXext libXinerama webkitgtk_4_0 ];
 
   postPatch = ''
     patchShebangs src/tunefish4/generate-lv2-ttl.py

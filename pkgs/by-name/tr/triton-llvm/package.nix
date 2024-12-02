@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , pkgsBuildBuild
 , pkg-config
 , cmake
@@ -11,6 +12,7 @@
 , libedit
 , libffi
 , libpfm
+, lit
 , mpfr
 , zlib
 , ncurses
@@ -45,7 +47,7 @@ let
   isNative = stdenv.hostPlatform == stdenv.buildPlatform;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "triton-llvm";
-  version = "17.0.0-c5dede880d17";
+  version = "19.1.0-rc1"; # One of the tags at https://github.com/llvm/llvm-project/commit/10dc3a8e916d73291269e5e2b82dd22681489aa1
 
   outputs = [
     "out"
@@ -60,9 +62,18 @@ in stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
-    rev = "c5dede880d175f7229c9b2923f4753e12702305d";
-    hash = "sha256-v4r3+7XVFK+Dzxt/rErZNJ9REqFO3JmGN4X4vZ+77ew=";
+    rev = "10dc3a8e916d73291269e5e2b82dd22681489aa1";
+    hash = "sha256-9DPvcFmhzw6MipQeCQnr35LktW0uxtEL8axMMPXIfWw=";
   };
+  patches = [
+    # glibc-2.40 support
+    # [llvm-exegesis] Use correct rseq struct size #100804
+    # https://github.com/llvm/llvm-project/issues/100791
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project//commit/84837e3cc1cf17ed71580e3ea38299ed2bfaa5f6.patch";
+      hash = "sha256-QKa+kyXjjGXwTQTEpmKZx5yYjOyBX8A8NQoIYUaGcIw=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -74,6 +85,7 @@ in stdenv.mkDerivation (finalAttrs: {
     doxygen
     sphinx
     python3Packages.recommonmark
+    python3Packages.myst-parser
   ];
 
   buildInputs = [
@@ -90,7 +102,9 @@ in stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
-  sourceRoot = "${finalAttrs.src.name}/llvm";
+  preConfigure = ''
+    cd llvm
+  '';
 
   cmakeFlags = [
     (lib.cmakeFeature "LLVM_TARGETS_TO_BUILD" (lib.concatStringsSep ";" llvmTargetsToBuild'))
@@ -140,23 +154,25 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # `CMake Error: cannot write to file "/build/source/llvm/build/lib/cmake/mlir/MLIRTargets.cmake": Permission denied`
-    chmod +w -R ../mlir
-    patchShebangs ../mlir/test/mlir-reduce
+    chmod +w -R ./mlir
+    patchShebangs ./mlir/test/mlir-reduce
 
     # FileSystem permissions tests fail with various special bits
-    rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
-    rm unittests/Support/Path.cpp
+    rm llvm/test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
+    rm llvm/unittests/Support/Path.cpp
 
-    substituteInPlace unittests/Support/CMakeLists.txt \
+    substituteInPlace llvm/unittests/Support/CMakeLists.txt \
       --replace "Path.cpp" ""
   '' + lib.optionalString stdenv.hostPlatform.isAarch64 ''
     # Not sure why this fails
-    rm test/tools/llvm-exegesis/AArch64/latency-by-opcode-name.s
+    rm llvm/test/tools/llvm-exegesis/AArch64/latency-by-opcode-name.s
   '';
 
-  postInstall = lib.optionalString (!isNative) ''
+  postInstall = ''
+    cp ${lib.getExe lit} $out/bin/llvm-lit
+  '' + (lib.optionalString (!isNative) ''
     cp -a NATIVE/bin/llvm-config $out/bin/llvm-config-native
-  '';
+  '');
 
   doCheck = buildTests;
 

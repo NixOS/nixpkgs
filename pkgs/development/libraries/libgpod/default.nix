@@ -67,6 +67,13 @@ stdenv.mkDerivation rec {
     libimobiledevice
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-int"
+      "-Wno-error=incompatible-pointer-types"
+    ];
+  };
+
   meta = with lib; {
     homepage = "https://sourceforge.net/projects/gtkpod/";
     description = "Library used by gtkpod to access the contents of an ipod";

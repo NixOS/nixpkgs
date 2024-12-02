@@ -3,12 +3,11 @@
   lib,
   stdenv,
   postgresql,
+  buildPostgresqlExtension,
 }:
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "system_stats";
   version = "3.2";
-
-  buildInputs = [ postgresql ];
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
@@ -17,17 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-/xXnui0S0ZjRw7P8kMAgttHVv8T41aOhM3pM8P0OTig=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/{lib,share/postgresql/extension}
-
-    cp *${postgresql.dlSuffix} $out/lib
-    cp *.sql     $out/share/postgresql/extension
-    cp *.control $out/share/postgresql/extension
-
-    runHook postInstall
-  '';
+  buildFlags = [ "PG_CFLAGS=-Wno-error=vla" ];
 
   meta = with lib; {
     description = "A Postgres extension for exposing system metrics such as CPU, memory and disk information";

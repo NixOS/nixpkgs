@@ -4,7 +4,7 @@
 , makeWrapper
 , coreutils
 , tcl-8_6
-, tcllib
+, tclPackages
 , installShellFiles
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     hash = "sha256-ENa/r3+o7abW8iun6V/2LhTVmFVSwVM6v46KXBcKJ1g=";
   };
 
-  buildInputs = [ tcl-8_6 tcllib coreutils ];
+  buildInputs = [ tcl-8_6 tclPackages.tcllib coreutils ];
   nativeBuildInputs = [ makeWrapper tcl-8_6.tclPackageHook installShellFiles ];
 
   tclWrapperArgs = [ "--prefix" "PATH" ":" (lib.makeBinPath [ tcl-8_6 ]) ];

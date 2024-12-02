@@ -7,6 +7,13 @@ in {
   options.services.lvm = {
     enable = mkEnableOption "lvm2" // {
       default = true;
+      description = ''
+        Whether to enable lvm2.
+
+        :::{.note}
+        The lvm2 package contains device-mapper udev rules and without those tools like cryptsetup do not fully function!
+        :::
+      '';
     };
 
     package = mkOption {
@@ -31,6 +38,8 @@ in {
 
       Whether to enable booting from LVM2 in the initrd.
     '';
+    default = config.boot.initrd.systemd.enable && config.services.lvm.enable;
+    defaultText = lib.literalExpression "config.boot.initrd.systemd.enable && config.services.lvm.enable";
   };
 
   config = mkMerge [

@@ -86,6 +86,13 @@ in
     (addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libinotify-kqueue) old)
     // lib.optionalAttrs stdenv.hostPlatform.isDarwin (addToCscOptions "-L -linotify" old);
   leveldb = addToBuildInputs pkgs.leveldb;
+  lowdown = old: {
+    # For some reason comparse version gets interpreted as 0.0.0
+    postPatch = ''
+      substituteInPlace lowdown.egg \
+        --replace-fail 'comparse "3"' 'comparse "0.0.0"'
+    '';
+  };
   magic = addToBuildInputs pkgs.file;
   mdh = old:
     (addToBuildInputs pkgs.pcre old)
@@ -95,6 +102,13 @@ in
         "-Wno-error=implicit-int"
       ];
     };
+  medea = old: {
+    # For some reason comparse gets interpreted as comparse 0.0.0
+    postPatch = ''
+      substituteInPlace medea.egg \
+        --replace-fail 'comparse "0.3.0"' 'comparse "0.0.0"'
+    '';
+  };
   # missing dependency in upstream egg
   mistie = addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 ]);
   mosquitto = addToPropagatedBuildInputs ([ pkgs.mosquitto ]);
@@ -139,7 +153,7 @@ in
       addToNativeBuildInputs pkgs.taglib old
     );
   uuid-lib = addToBuildInputs pkgs.libuuid;
-  webview = addToBuildInputsWithPkgConfig pkgs.webkitgtk;
+  webview = addToBuildInputsWithPkgConfig pkgs.webkitgtk_4_0;
   ws-client = addToBuildInputs pkgs.zlib;
   xlib = addToPropagatedBuildInputs pkgs.xorg.libX11;
   yaml = addToBuildInputs pkgs.libyaml;

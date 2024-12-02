@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "replicate";
-  version = "0.34.1";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "replicate";
     repo = "replicate-python";
-    rev = version;
-    hash = "sha256-DhmuGh0OASd4rBvizf1qx537j4RGs4eVe0jH1BrhZa4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-q//RV4Y9k2KXXgZGfBF/XObxsBfAHE50oG+r/Vvu9BY=";
   };
 
   build-system = [ setuptools ];

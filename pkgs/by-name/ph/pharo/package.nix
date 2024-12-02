@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = let
     libPath = lib.makeLibraryPath (finalAttrs.buildInputs ++ [
-      stdenv.cc.cc.lib
+      stdenv.cc.cc
       "$out"
     ]);
   in ''

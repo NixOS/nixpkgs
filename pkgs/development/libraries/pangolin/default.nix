@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config, doxygen, libGL, glew
-, xorg, ffmpeg_7, libjpeg, libpng, libtiff, eigen
+, xorg, ffmpeg, libjpeg, libpng, libtiff, eigen
 , Carbon, Cocoa
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     libGL
     glew
     xorg.libX11
-    ffmpeg_7
+    ffmpeg
     libjpeg
     libpng
     libtiff
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/stevenlovegrove/Pangolin";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.expipiplus1 ];
+    maintainers = [];
     platforms = lib.platforms.all;
   };
 }

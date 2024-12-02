@@ -35,13 +35,13 @@
 
 let
   pname = "pulsar";
-  version = "1.121.0";
+  version = "1.123.0";
 
   sourcesPath = {
     x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
-    x86_64-linux.hash = "sha256-xouxKl4GTNZkT5wn8qbG2W2PbVAbsK9povmIL/Mikk4=";
+    x86_64-linux.hash = "sha256-PVNk4auxJB+mLFqYH7uJiK7L/SVqn5Z3BE8wmknBNjs=";
     aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
-    aarch64-linux.hash = "sha256-qRBX8jO5xDXkZ/6TWkgNa1NS3l+z8K/JyJDAa/3me5Q=";
+    aarch64-linux.hash = "sha256-Y4qaaWvVsd4HDQx50ntq5W40MVy8oWAePOVsPSFE8q0=";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   newLibpath = lib.makeLibraryPath [
@@ -70,7 +70,7 @@ let
     libxkbcommon
     xorg.libxkbfile
     pango
-    stdenv.cc.cc.lib
+    stdenv.cc.cc
     systemd
   ];
 

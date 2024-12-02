@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     rsync
     openssh
+    qt5.qtwayland
   ];
 
   strictDeps = true;

@@ -2,7 +2,9 @@
 , stdenv
 , fetchurl
 , ncurses
+, pkg-config
 , zig
+, zstd
 , installShellFiles
 , testers
 , pie ? stdenv.hostPlatform.isDarwin
@@ -10,20 +12,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ncdu";
-  version = "2.5";
+  version = "2.7";
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/ncdu-${finalAttrs.version}.tar.gz";
-    hash = "sha256-f0neJQJKurGvH/IrO4VCwNFY4Bj+DpYHT9lLDh5tMaU=";
+    hash = "sha256-shjMFKK7mFLPlR204hrsiYDnqMOsoJfjqjQX8g65MAA=";
   };
 
   nativeBuildInputs = [
     zig.hook
     installShellFiles
+    pkg-config
   ];
 
   buildInputs = [
     ncurses
+    zstd
   ];
 
   zigBuildFlags = lib.optional pie "-Dpie=true";

@@ -50,6 +50,7 @@ let
     "junos-czerwonk"
     "kea"
     "keylight"
+    "klipper"
     "knot"
     "lnd"
     "mail"
@@ -87,9 +88,7 @@ let
     "statsd"
     "surfboard"
     "systemd"
-    "tor"
     "unbound"
-    "unifi"
     "unpoller"
     "v2ray"
     "varnish"
@@ -297,6 +296,9 @@ in
         (lib.mkRemovedOptionModule [ "minio" ] ''
           The Minio exporter has been removed, as it was broken and unmaintained.
           See the 24.11 release notes for more information.
+        '')
+        (lib.mkRemovedOptionModule [ "tor" ] ''
+          The Tor exporter has been removed, as it was broken and unmaintained.
         '')
       ];
     };

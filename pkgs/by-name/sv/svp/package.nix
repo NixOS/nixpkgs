@@ -53,7 +53,7 @@ let
     libusb1
     mpvForSVP
     ocl-icd
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     vapoursynth
     xdg-utils
     xorg.libX11

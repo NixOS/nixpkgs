@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, coq, version ? null , paco, coq-ext-lib }:
+{ lib, mkCoqDerivation, coq, version ? null , paco, ExtLib }:
 
 mkCoqDerivation rec {
   pname = "InteractionTrees";
@@ -15,7 +15,7 @@ mkCoqDerivation rec {
   release."4.0.0".sha256 = "0h5rhndl8syc24hxq1gch86kj7mpmgr89bxp2hmf28fd7028ijsm";
   release."3.2.0".sha256 = "sha256-10ckCAqSQ0I3CZKlSllI1obOgWVxDagTd7eyhrl1xpE=";
   releaseRev = v: "${v}";
-  propagatedBuildInputs = [ coq-ext-lib paco ];
+  propagatedBuildInputs = [ ExtLib paco ];
   meta = {
     description = "Library for Representing Recursive and Impure Programs in Coq";
     maintainers = with lib.maintainers; [ larsr ];

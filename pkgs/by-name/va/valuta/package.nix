@@ -15,7 +15,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "valuta";
-  version = "1.2.0";
+  version = "1.3.2";
 
   pyproject = false;
 
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     owner = "ideveCore";
     repo = "Valuta";
     rev = "v${version}";
-    hash = "sha256-ygroF9hlmsjQTocly7CNL6zQi4N6h8va/ZkJ8w8QHms=";
+    hash = "sha256-g2x+pqs7dXdTMSxzSU5TeQtE+Q+tdQ93xaMtUVEE5/U=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    babel
     dbus-python
     pygobject3
   ];

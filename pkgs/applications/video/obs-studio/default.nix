@@ -73,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  separateDebugInfo = true;
+
   patches = [
     # Lets obs-browser build against CEF 90.1.0+
     ./Enable-file-access-and-universal-access-for-file-URL.patch
@@ -84,6 +86,14 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.alpinelinux.org/aports/plain/community/obs-studio/broken-config.patch?id=a92887564dcc65e07b6be8a6224fda730259ae2b";
       hash = "sha256-yRSw4VWDwMwysDB3Hw/tsmTjEQUhipvrVRQcZkbtuoI=";
       includes = [ "*/CompilerConfig.cmake" ];
+    })
+
+    (fetchpatch {
+      name = "qt-6.8.patch";
+      url = "https://github.com/obsproject/obs-websocket/commit/d9befb9e0a4898695eef5ccbc91a4fac02027854.patch";
+      extraPrefix = "plugins/obs-websocket/";
+      stripLen = 1;
+      hash = "sha256-7SDBRr9G40b9DfbgdaYJxTeiDSLUfVixtMtM3cLTVZs=";
     })
   ];
 
@@ -161,7 +171,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=deprecated-declarations"
     "-Wno-error=sign-compare" # https://github.com/obsproject/obs-studio/issues/10200
+    "-Wno-error=stringop-overflow="
   ];
 
   dontWrapGApps = true;

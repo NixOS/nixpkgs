@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nomacs";
-  version = "3.19.0";
+  version = "3.19.1";
 
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
     rev = finalAttrs.version;
     fetchSubmodules = false; # We'll use our own
-    hash = "sha256-lpmM2GfMDlIp1vnbHMaOdicFcKH6LwEoKSETMt7C1NY=";
+    hash = "sha256-NRwZ/ShJaLCMFv7QdfRoJY5zQFo18cAVWGRpS3ap3Rw=";
   };
 
   outputs = [ "out" ]
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nomacs/nomacs/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "nomacs";
-    maintainers = with lib.maintainers; [ AndersonTorres mindavi ];
+    maintainers = with lib.maintainers; [ mindavi ];
     inherit (libsForQt5.qtbase.meta) platforms;
   };
 })

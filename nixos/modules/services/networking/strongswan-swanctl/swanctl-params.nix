@@ -1035,7 +1035,7 @@ in {
         all kernel interfaces.
       '';
 
-      start_action = mkEnumParam ["none" "trap" "start"] "none" ''
+      start_action = mkEnumParam ["none" "trap" "start" "trap|start" ] "none" ''
         Action to perform after loading the configuration.
 
         - The default of `none` loads the connection only, which
@@ -1043,6 +1043,8 @@ in {
         - The value `trap` installs a trap policy, which triggers
           the tunnel as soon as matching traffic has been detected.
         - The value `start` initiates the connection actively.
+        - Since version 5.9.6 two modes above can be combined with `trap|start`,
+          to immediately initiate a connection for which trap policies have been installed.
 
         When unloading or replacing a CHILD_SA configuration having a
         {option}`start_action` different from `none`,

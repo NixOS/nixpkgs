@@ -9,7 +9,9 @@
 , libxfce4util
 , libxklavier
 , upower
-, withUpower ? true
+# Disabled by default on upstream and actually causes issues:
+# https://gitlab.xfce.org/xfce/xfce4-settings/-/issues/222
+, withUpower ? false
 , xfconf
 , xf86inputlibinput
 , colord

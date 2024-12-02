@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
       };
       aarch64-darwin = passthru.sources.x86_64-darwin;
     };
+    updateScript = ./update.sh;
   };
 
   src = passthru.sources.${stdenv.hostPlatform.system}

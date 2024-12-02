@@ -2,7 +2,7 @@
   alsa-lib,
   buildPythonPackage,
   cargo,
-  fetchPypi,
+  fetchFromGitHub,
   glib,
   lib,
   libpcap,
@@ -21,18 +21,20 @@
 }:
 buildPythonPackage rec {
   pname = "skytemple-ssb-emulator";
-  version = "1.6.4";
+  version = "1.8.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-qGRfX7Bwr19KJnIdhwuSVBZzXxMJyEgyBuy91aLhEj4=";
+  src = fetchFromGitHub {
+    owner = "SkyTemple";
+    repo = pname;
+    rev = version;
+    hash = "sha256-9xD9Q/oYsi9tuxTOJ6ItLbWkqAjG78uzXYZXOiITDEA=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "skytemple_rust-1.6.4" = "sha256-t7P3F1zes7bgDu2JGqb5DgxlDCiztWtmViy4QY9CzT0=";
+      "skytemple_rust-1.8.1" = "sha256-KtMqgUOlyF02msQRouE4NpvCHqahY+aRiRV9P32ASqg=";
     };
   };
 

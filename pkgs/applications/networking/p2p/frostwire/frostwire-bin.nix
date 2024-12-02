@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "6.9.8";
+  version = "6.13.3";
   pname = "frostwire";
 
   src = fetchurl {
-    url = "https://dl.frostwire.com/frostwire/${version}/frostwire-${version}.amd64.tar.gz";
-    sha256 = "sha256-gslNdvxA4rGKg0bjf2KWw7w9NMp3zqrii144AfKsV4s=";
+    url = "https://github.com/frostwire/frostwire/releases/download/frostwire-desktop-${version}-build-322/frostwire-${version}.amd64.tar.gz";
+    hash = "sha256-wRT8Oo+niOFBpEnq3pgjO9jpagZMgSE44V9RBYnGwig=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

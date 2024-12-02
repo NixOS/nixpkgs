@@ -36,6 +36,7 @@ _nixos-rebuild() {
     --rollback
     --specialisation -c # name
     --use-remote-sudo
+    --no-ssh-tty
     --build-host # host
     --target-host # host
     # Used with list-generations

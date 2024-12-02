@@ -4,17 +4,12 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  qttools,
-  wrapQtAppsHook,
-  qtbase,
+  libsForQt5,
   dtkwidget,
   qt5integration,
   qt5platform-plugins,
-  qtsvg,
   dde-qt-dbus-factory,
   deepin-movie-reborn,
-  qtmultimedia,
-  qtwebengine,
   libvlc,
   gst_all_1,
   gtest,
@@ -43,20 +38,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs =
     [
-      qtbase
-      qtsvg
+      libsForQt5.qtbase
+      libsForQt5.qtsvg
       dtkwidget
+      qt5integration
       qt5platform-plugins
       dde-qt-dbus-factory
       deepin-movie-reborn
-      qtmultimedia
-      qtwebengine
+      libsForQt5.qtmultimedia
+      libsForQt5.qtwebengine
       libvlc
       gtest
     ]
@@ -69,9 +65,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
   qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
     "--prefix LD_LIBRARY_PATH : ${
       lib.makeLibraryPath [
         gst_all_1.gstreamer

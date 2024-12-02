@@ -155,15 +155,16 @@ let
       home = jdk;
     };
 
-    meta = (import ../openjdk/meta.nix lib version) // {
+    meta = {
       description = "Certified builds of OpenJDK";
       longDescription = ''
         Certified builds of OpenJDK that can be deployed across multiple
         operating systems, containers, hypervisors and Cloud platforms.
       '';
       homepage = "https://www.azul.com/products/zulu/";
+      license = lib.licenses.gpl2Only;
       mainProgram = "java";
-      maintainers = [ ];
+      maintainers = [ ] ++ lib.teams.java.members;
       platforms = builtins.attrNames dists;
       sourceProvenance = with lib.sourceTypes; [ binaryBytecode binaryNativeCode ];
     };

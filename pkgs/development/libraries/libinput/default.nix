@@ -22,6 +22,7 @@
 , valgrind
 , python3
 , nixosTests
+, wayland-scanner
 }:
 
 let
@@ -86,6 +87,7 @@ stdenv.mkDerivation rec {
     cairo
     glib
     gtk3
+    wayland-scanner
   ];
 
   propagatedBuildInputs = [

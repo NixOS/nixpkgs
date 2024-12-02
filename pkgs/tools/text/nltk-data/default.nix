@@ -63,4 +63,9 @@ lib.makeScope newScope (self: {
     location = "corpora";
     hash = "sha256-8lMjW5YI8h6dHJ/83HVY2OYGDyKPpgkUAKPISiAKqqk=";
   };
+  wordnet = makeNltkDataPackage {
+    pname = "wordnet";
+    location = "corpora";
+    hash = "sha256-8lMjW5YI8h6dHJ/83HVY2OYGDyKPpgkUAKPISiAKqqk=";
+  };
 })

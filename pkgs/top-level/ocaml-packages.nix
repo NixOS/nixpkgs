@@ -516,31 +516,31 @@ let
 
     ffmpeg = callPackage ../development/ocaml-modules/ffmpeg { };
     ffmpeg-av = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-av.nix {
-      inherit (pkgs) ffmpeg;
+      ffmpeg = pkgs.ffmpeg_6;
       inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox VideoToolbox;
     };
     ffmpeg-avcodec = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avcodec.nix {
-      inherit (pkgs) ffmpeg;
+      ffmpeg = pkgs.ffmpeg_6;
       inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox VideoToolbox;
     };
     ffmpeg-avdevice = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avdevice.nix {
-      inherit (pkgs) ffmpeg;
+      ffmpeg = pkgs.ffmpeg_6;
       inherit (pkgs.darwin.apple_sdk.frameworks) AppKit AudioToolbox AVFoundation Cocoa CoreImage ForceFeedback OpenGL VideoToolbox;
     };
     ffmpeg-avfilter = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avfilter.nix {
-      inherit (pkgs) ffmpeg;
+      ffmpeg = pkgs.ffmpeg_6;
       inherit (pkgs.darwin.apple_sdk.frameworks) AppKit CoreImage OpenGL VideoToolbox;
     };
     ffmpeg-avutil = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-avutil.nix {
-      inherit (pkgs) ffmpeg;
+      ffmpeg = pkgs.ffmpeg_6;
       inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox VideoToolbox;
     };
     ffmpeg-swresample = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swresample.nix {
-      inherit (pkgs) ffmpeg;
+      ffmpeg = pkgs.ffmpeg_6;
       inherit (pkgs.darwin.apple_sdk.frameworks) VideoToolbox;
     };
     ffmpeg-swscale = callPackage ../development/ocaml-modules/ffmpeg/ffmpeg-swscale.nix {
-      inherit (pkgs) ffmpeg;
+      ffmpeg = pkgs.ffmpeg_6;
       inherit (pkgs.darwin.apple_sdk.frameworks) VideoToolbox;
     };
 
@@ -913,6 +913,8 @@ let
 
     kcas = callPackage ../development/ocaml-modules/kcas { };
 
+    kdf = callPackage ../development/ocaml-modules/kdf { };
+
     ke = callPackage ../development/ocaml-modules/ke { };
 
     kicadsch = callPackage ../development/ocaml-modules/kicadsch { };
@@ -1067,6 +1069,8 @@ let
     };
 
     mec = callPackage ../development/ocaml-modules/mec { };
+
+    melange = callPackage ../development/tools/ocaml/melange { };
 
     memprof-limits = callPackage ../development/ocaml-modules/memprof-limits { };
 
@@ -1407,6 +1411,8 @@ let
 
     ogg = callPackage ../development/ocaml-modules/ogg { };
 
+    ohex = callPackage ../development/ocaml-modules/ohex { };
+
     ojs = callPackage ../development/ocaml-modules/gen_js_api/ojs.nix { };
 
     omd = callPackage ../development/ocaml-modules/omd { };
@@ -1686,6 +1692,8 @@ let
     rpclib-lwt = callPackage ../development/ocaml-modules/rpclib/lwt.nix { };
 
     rresult = callPackage ../development/ocaml-modules/rresult { };
+
+    rtop = callPackage ../development/compilers/reason/rtop.nix { };
 
     rusage = callPackage ../development/ocaml-modules/rusage { };
 

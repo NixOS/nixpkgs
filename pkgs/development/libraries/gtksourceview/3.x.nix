@@ -35,6 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./3.x-nix_share_path.patch ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
+
   enableParallelBuilding = true;
 
   doCheck = stdenv.hostPlatform.isLinux;

@@ -93,13 +93,13 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "MIT/GNU Scheme, a native code Scheme compiler";
 
-    longDescription =
-      '' MIT/GNU Scheme is an implementation of the Scheme programming
-         language, providing an interpreter, compiler, source-code debugger,
-         integrated Emacs-like editor, and a large runtime library.  MIT/GNU
-         Scheme is best suited to programming large applications with a rapid
-         development cycle.
-      '';
+    longDescription = ''
+      MIT/GNU Scheme is an implementation of the Scheme programming
+      language, providing an interpreter, compiler, source-code debugger,
+      integrated Emacs-like editor, and a large runtime library.  MIT/GNU
+      Scheme is best suited to programming large applications with a rapid
+      development cycle.
+    '';
 
     homepage = "https://www.gnu.org/software/mit-scheme/";
 

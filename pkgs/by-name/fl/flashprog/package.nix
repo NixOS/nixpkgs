@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flashprog";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchgit {
     url = "https://review.sourcearcade.org/flashprog";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Z09hZ4a/G3DhWCmSkPyKs7ecSFBUfez7IWWxIhH3LyI=";
+    hash = "sha256-S+UKDtpKYenwm+zR+Bg8HHxb2Jr7mFHAVCZdZTqCyRQ=";
   };
 
   nativeBuildInputs = [

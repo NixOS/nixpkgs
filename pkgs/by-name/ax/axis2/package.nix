@@ -34,6 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    install -Dm644 lib/* -t $out/lib
     install -Dm644 dist/axis2.war -t $out/webapps
     unzip $out/webapps/axis2.war -d $out/webapps/axis2
 

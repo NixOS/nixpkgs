@@ -10,7 +10,7 @@
   rustPlatform,
   cargo,
   rustc,
-  cargo-tauri,
+  cargo-tauri_1,
 
   pkg-config,
   wrapGAppsHook3,
@@ -18,7 +18,7 @@
   libevdev,
   gtk3,
   libsoup,
-  webkitgtk,
+  webkitgtk_4_0,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     cargo
     rustc
-    cargo-tauri.hook
+    cargo-tauri_1.hook
     pkg-config
     wrapGAppsHook3
   ];
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Tauri deps
     gtk3
     libsoup
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   npmDeps = fetchNpmDeps {

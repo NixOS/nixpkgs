@@ -1,55 +1,50 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
+  cython,
   fetchpatch,
   fetchPypi,
-  cython,
-  setuptools-scm,
+  fontconfig,
+  gdal,
   geos,
-  proj,
   matplotlib,
   numpy,
-  pyproj,
-  pyshp,
-  shapely,
   owslib,
   pillow,
-  gdal,
-  scipy,
-  fontconfig,
+  proj,
+  pyproj,
+  pyshp,
   pytest-mpl,
   pytestCheckHook,
+  pythonOlder,
+  scipy,
+  setuptools-scm,
+  shapely,
 }:
 
 buildPythonPackage rec {
   pname = "cartopy";
-  version = "0.23.0";
+  version = "0.24.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  format = "setuptools";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
-    inherit version;
-    pname = "Cartopy";
-    hash = "sha256-Ix83s1cB8rox2UlZzKdebaBMLuo6fxTOHHXuOw6udnY=";
+    inherit pname version;
+    hash = "sha256-AckQ1WNMaafv3sRuChfUc9Iyh2fwAdTcC1xLSOWFyL0=";
   };
 
-  patches = [
-    # Some tests in the 0.23.0 release are failing due to missing network markers. Revisit after update.
-    (fetchpatch {
-      name = "mnt-add-missing-needs-network-markers.patch";
-      url = "https://github.com/SciTools/cartopy/commit/2403847ea69c3d95e899ad5d0cab32ac6017df0e.patch";
-      hash = "sha256-aGBUX4jFn7GgoqmHVC51DmS+ga3GcQGKfkut++x67Q0=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0rc1" "numpy"
+  '';
+
+  build-system = [ setuptools-scm ];
 
   nativeBuildInputs = [
     cython
     geos # for geos-config
     proj
-    setuptools-scm
   ];
 
   buildInputs = [
@@ -57,7 +52,7 @@ buildPythonPackage rec {
     proj
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     numpy
     pyproj
@@ -101,9 +96,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Process geospatial data to create maps and perform analyses";
-    mainProgram = "feature_download";
-    license = licenses.lgpl3Plus;
     homepage = "https://scitools.org.uk/cartopy/docs/latest/";
+    changelog = "https://github.com/SciTools/cartopy/releases/tag/v${version}";
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ ];
+    mainProgram = "feature_download";
   };
 }

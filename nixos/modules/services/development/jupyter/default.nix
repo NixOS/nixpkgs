@@ -185,7 +185,7 @@ in {
     })
     (lib.mkIf (cfg.enable && (cfg.user == "jupyter")) {
       users.extraUsers.jupyter = {
-        extraGroups = [ cfg.group ];
+        inherit (cfg) group;
         home = "/var/lib/jupyter";
         createHome = true;
         isSystemUser = true;

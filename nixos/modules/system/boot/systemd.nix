@@ -160,6 +160,7 @@ let
 
       # Misc.
       "systemd-sysctl.service"
+      "systemd-machine-id-commit.service"
     ] ++ optionals cfg.package.withTimedated [
       "dbus-org.freedesktop.timedate1.service"
       "systemd-timedated.service"
@@ -197,7 +198,7 @@ in
 
     package = mkPackageOption pkgs "systemd" {};
 
-    enableStrictShellChecks = mkEnableOption "running shellcheck on the generated scripts for systemd units.";
+    enableStrictShellChecks = mkEnableOption "" // { description = "Whether to run shellcheck on the generated scripts for systemd units."; };
 
     units = mkOption {
       description = "Definition of systemd units; see {manpage}`systemd.unit(5)`.";

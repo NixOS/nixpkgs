@@ -1,80 +1,99 @@
 {
-  rustPlatform,
-  callPackage,
-  pkg-config,
   lib,
+  stdenv,
+
+  rustPlatform,
   fetchFromGitHub,
-  libayatana-appindicator,
+  fetchNpmDeps,
+  yq,
+
+  cargo-tauri,
+  cargo,
+  rustc,
+  nodejs,
+  npmHooks,
+  pkg-config,
+  wrapGAppsHook3,
+
   openssl,
   webkitgtk_4_1,
-}:
+  apple-sdk_11,
 
-rustPlatform.buildRustPackage rec {
-  pname = "gg-jj";
-  version = "0.20.0";
+  versionCheckHook,
+  nix-update-script,
+}:
+stdenv.mkDerivation (finalAttrs: {
+  pname = "gg";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "gulbanana";
     repo = "gg";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xOi/AUlH0FeenTXz3hsDYixCEl+yr22PGy6Ow4TKxY0=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-iQxPJgMxBtyindkNdQkehwPf7ZgWCI09PToqs2y1Hfw=";
   };
 
-  sourceRoot = "${src.name}/src-tauri";
+  cargoRoot = "src-tauri";
+  buildAndTestSubdir = "src-tauri";
 
-  webui = callPackage ./webui.nix {
-    inherit
-      src
-      pname
-      version
-      meta
-      ;
+  # FIXME: Switch back to cargoHash when https://github.com/NixOS/nixpkgs/issues/356811 is fixed
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit (finalAttrs) pname version src;
+    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
+    hash = "sha256-Lr/0GkWHvfDy/leRLxisuTzGPZYFo2beHq9UCl6XlDo=";
+
+    nativeBuildInputs = [ yq ];
+
+    # Work around https://github.com/rust-lang/cargo/issues/10801
+    # See https://discourse.nixos.org/t/rust-tauri-v2-error-no-matching-package-found/56751/4
+    preBuild = ''
+      tomlq -it '.dependencies.tauri.features += ["native-tls"]' Cargo.toml
+    '';
   };
 
-  env = {
-    OPENSSL_NO_VENDOR = 1;
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-SMz1ohPSF5tvf2d3is4PXhnjHG9hHuS5NYmHbe46HaU=";
   };
-
-  buildInputs = [
-    webkitgtk_4_1
-    openssl
-  ];
 
   nativeBuildInputs = [
+    cargo-tauri.hook
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    nodejs
+    npmHooks.npmConfigHook
     pkg-config
+    wrapGAppsHook3
   ];
 
-  cargoHash = "sha256-u3SkRA7327ZwqEnB+Xq2JDbI0k5HfeKzV17dvQ8B6xk=";
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      webkitgtk_4_1
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
-  postPatch = ''
-    buildRoot=$(pwd)
-    pushd $cargoDepsCopy/libappindicator-sys
-    oldHash=$(sha256sum src/lib.rs | cut -d " " -f 1)
-    substituteInPlace src/lib.rs \
-      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-    substituteInPlace .cargo-checksum.json \
-      --replace-fail $oldHash $(sha256sum src/lib.rs | cut -d " " -f 1)
-    popd
+  env.OPENSSL_NO_VENDOR = true;
 
-    pushd $cargoDepsCopy/jj-cli
-    oldHash=$(sha256sum build.rs | cut -d " " -f 1)
-    substituteInPlace build.rs \
-      --replace-fail 'let path = std::env::var("CARGO_MANIFEST_DIR").unwrap();' "let path = \"$buildRoot\";"
-    substituteInPlace .cargo-checksum.json \
-      --replace-fail $oldHash $(sha256sum build.rs | cut -d " " -f 1)
-    popd
-
-    substituteInPlace ./tauri.conf.json \
-      --replace-fail '"frontendDist": "../dist"' '"frontendDist": "${webui}"' \
-      --replace-fail '"beforeBuildCommand": "npm run build"' '"beforeBuildCommand": ""'
+  postInstall = lib.optionals stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/bin
+    ln -s $out/Applications/gg.app/Contents/MacOS/gg $out/bin/gg
   '';
 
+  # The generated Darwin bundle cannot be tested in the same way as a standalone Linux executable
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
+    description = "GUI for the version control system Jujutsu";
     homepage = "https://github.com/gulbanana/gg";
-    changelog = "https://github.com/gulbanana/gg/releases/tag/v${version}";
-    description = "GUI for jj users";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    changelog = "https://github.com/gulbanana/gg/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = with lib.licenses; [ asl20 ];
+    inherit (cargo-tauri.hook.meta) platforms;
+    maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "gg";
-    license = lib.licenses.apsl20;
   };
-}
+})

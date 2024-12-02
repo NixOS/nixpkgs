@@ -23,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
+    ./fix-build-on-qt-6.8.patch
   ];
 
   nativeBuildInputs = [

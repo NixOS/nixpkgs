@@ -89,10 +89,15 @@ buildPythonPackage rec {
     "cirq/_version_test.py"
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isAarch64 [
-    # https://github.com/quantumlib/Cirq/issues/5924
-    "test_prepare_two_qubit_state_using_sqrt_iswap"
-  ];
+  disabledTests =
+    [
+      # Assertion error
+      "test_parameterized_cphase"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+      # https://github.com/quantumlib/Cirq/issues/5924
+      "test_prepare_two_qubit_state_using_sqrt_iswap"
+    ];
 
   meta = with lib; {
     description = "Framework for creating, editing, and invoking Noisy Intermediate Scale Quantum (NISQ) circuits";

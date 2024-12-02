@@ -4,21 +4,27 @@
   mkDerivation,
   compatIfNeeded,
   compatIsNeeded,
-  libmd,
   libnetbsd,
-  libutil,
+  libmd,
 }:
 
+let
+  libmd' = libmd.override {
+    bootstrapInstallation = true;
+  };
+
+in
 mkDerivation {
   path = "contrib/mtree";
   extraPaths = [ "contrib/mknod" ];
   buildInputs =
     compatIfNeeded
-    ++ [
-      libmd
-      libnetbsd
+    ++ lib.optionals (!stdenv.hostPlatform.isFreeBSD) [
+      libmd'
     ]
-    ++ lib.optional (stdenv.hostPlatform.isFreeBSD) libutil;
+    ++ [
+      libnetbsd
+    ];
 
   postPatch = ''
     ln -s $BSDSRCDIR/contrib/mknod/*.c $BSDSRCDIR/contrib/mknod/*.h $BSDSRCDIR/contrib/mtree

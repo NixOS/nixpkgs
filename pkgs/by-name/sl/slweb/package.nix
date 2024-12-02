@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slweb";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromSourcehut {
     owner = "~strahinja";
     repo = "slweb";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AJg8qgbNUKizU0uyTnq9EviIXOUuaGvQowLAyTWhGTY=";
+    hash = "sha256-TS87rFmK6IZbyj+11Oi/lHepa3MDebYILVLLLAgNEdc=";
   };
 
   postPatch = ''

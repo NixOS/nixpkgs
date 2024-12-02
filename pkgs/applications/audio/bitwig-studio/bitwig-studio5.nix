@@ -14,6 +14,7 @@
 , libglvnd
 , libjack2
 , libjpeg
+, libnghttp2
 , libxkbcommon
 , makeWrapper
 , pango
@@ -28,20 +29,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "bitwig-studio";
-  version = "5.2.4";
+  pname = "bitwig-studio-unwrapped";
+  version = "5.2.7";
 
   src = fetchurl {
+    name = "bitwig-studio-${version}.deb";
     url = "https://www.bitwig.com/dl/Bitwig%20Studio/${version}/installer_linux/";
-    hash = "sha256-/JEJthaFSdad5Hj5sdBQLLyDdp2Rp4ZAlhIA+RgwXRw=";
+    hash = "sha256-Tyi7qYhTQ5i6fRHhrmz4yHXSdicd4P4iuF9FRKRhkMI=";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook3 ];
-
-  unpackCmd = ''
-    mkdir -p root
-    dpkg-deb -x $curSrc root
-  '';
 
   dontBuild = true;
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
@@ -59,6 +56,7 @@ stdenv.mkDerivation rec {
     libjack2
     # libjpeg8 is required for converting jpeg's to colour palettes
     libjpeg
+    libnghttp2
     libxcb
     libXcursor
     libX11
@@ -67,7 +65,7 @@ stdenv.mkDerivation rec {
     pango
     pipewire
     pulseaudio
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     vulkan-loader
     xcb-imdkit
     xcbutil
@@ -131,5 +129,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ bfortz michalrus mrVanDalo ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

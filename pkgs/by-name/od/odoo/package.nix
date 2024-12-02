@@ -1,29 +1,17 @@
 { lib
 , fetchgit
 , fetchzip
-, python310
+, python312
 , rtlcss
 , wkhtmltopdf
 , nixosTests
-, odoo_version ? "17.0"
-, odoo_release ? "20240610"
 }:
 
 let
-  python = python310.override {
+  odoo_version = "18.0";
+  odoo_release = "20241010";
+  python = python312.override {
     self = python;
-    packageOverrides = final: prev: {
-      # requirements.txt fixes docutils at 0.17; the default 0.21.1 tested throws exceptions
-      docutils-0_17 = prev.docutils.overridePythonAttrs (old: rec {
-        version = "0.17";
-        src = fetchgit {
-          url = "git://repo.or.cz/docutils.git";
-          rev = "docutils-${version}";
-          hash = "sha256-O/9q/Dg1DBIxKdNBOhDV16yy5ez0QANJYMjeovDoWX8=";
-        };
-        buildInputs = with prev; [setuptools];
-      });
-    };
   };
 in python.pkgs.buildPythonApplication rec {
   pname = "odoo";
@@ -34,12 +22,9 @@ in python.pkgs.buildPythonApplication rec {
   src = fetchzip {
     # find latest version on https://nightly.odoo.com/${odoo_version}/nightly/src
     url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
-    name = "${pname}-${version}";
-    hash = "sha256-blibGJyaz+MxMazOXhPbGBAJWZoGubirwSnjVYyLBJs="; # odoo
+    name = "odoo-${version}";
+    hash = "sha256-TUfLyB0m8XyEiS493Q/ECgSJutAd1rtWX93f3mwfOK0="; # odoo
   };
-
-  # needs some investigation
-  doCheck = false;
 
   makeWrapperArgs = [
     "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf rtlcss ]}"
@@ -50,7 +35,8 @@ in python.pkgs.buildPythonApplication rec {
     chardet
     cryptography
     decorator
-    docutils-0_17  # sphinx has a docutils requirement >= 18
+    docutils
+    distutils
     ebaysdk
     freezegun
     geoip2

@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "nibe";
-  version = "2.12.0";
+  version = "2.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "yozik04";
     repo = "nibe";
     rev = "refs/tags/${version}";
-    hash = "sha256-Sqwwk++iA/PsAKZRkUPjXuzgSrhnH4N02c072pIVEyw=";
+    hash = "sha256-azAVvVAlG74wgH/96+sc6S9XQLRFZgR4aU6d4gy43PQ=";
   };
 
   build-system = [ setuptools ];
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     aresponses
     pytest-asyncio
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "nibe" ];
 

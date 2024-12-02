@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pax";
-  version = "20201030";
+  version = "20240817";
 
   src = fetchurl {
     url = "http://www.mirbsd.org/MirOS/dist/mir/cpio/paxmirabilis-${version}.tgz";
-    sha256 = "1p18nxijh323f4i1s2pg7pcr0557xljl5avv8ll5s9nfr34r5j0w";
+    sha256 = "sha256-6VXV06+Xrt4KP0Y6mlm4Po0Qg6rxQutvOIxUmn0YLms=";
   };
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin utmp

@@ -5,7 +5,7 @@
   pkg-config,
   openssl,
   pname,
-  webkitgtk,
+  webkitgtk_4_0,
   service-cargo-hash,
   meta,
 }:
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     openssl
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   env = {

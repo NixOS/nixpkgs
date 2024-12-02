@@ -21,7 +21,7 @@ In Nixpkgs, `cargo-tauri.hook` overrides the default build and install phases.
   npmHooks,
   openssl,
   pkg-config,
-  webkitgtk,
+  webkitgtk_4_0,
   wrapGAppsHook3,
 }:
 
@@ -52,12 +52,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       glib-networking # Most Tauri apps need networking
       libsoup
-      webkitgtk
+      webkitgtk_4_0
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         AppKit

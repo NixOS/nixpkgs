@@ -7,7 +7,7 @@
 , docbook-xsl-nons
 , dvdauthor
 , dvdplusrwtools
-, ffmpeg_7
+, ffmpeg
 , flex
 , fontconfig
 , gettext
@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
     cdrtools
     dvdauthor
     dvdplusrwtools
-    ffmpeg_7
+    ffmpeg
     fontconfig
     glib
     libexif

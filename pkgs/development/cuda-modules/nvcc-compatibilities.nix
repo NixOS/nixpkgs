@@ -22,28 +22,6 @@ let
   # attrs :: AttrSet CudaVersion CompilerCompatibilities
   attrs = {
     # Our baseline
-    # https://docs.nvidia.com/cuda/archive/10.0/cuda-toolkit-release-notes/index.html#cuda-compiler-new-features
-    "10.0" = {
-      clangMaxMajorVersion = "6";
-      clangMinMajorVersion = "6";
-      gccMaxMajorVersion = "7";
-      gccMinMajorVersion = "5";
-    };
-
-    # Added support for Clang 7 and GCC 8
-    # https://docs.nvidia.com/cuda/archive/10.1/cuda-toolkit-release-notes/index.html#cuda-compiler-new-features
-    "10.1" = attrs."10.0" // {
-      clangMaxMajorVersion = "7";
-      gccMaxMajorVersion = "8";
-    };
-
-    # Added clang 8
-    # https://docs.nvidia.com/cuda/archive/10.2/cuda-toolkit-release-notes/index.html#cuda-compiler-new-features
-    "10.2" = attrs."10.1" // {
-      clangMaxMajorVersion = "8";
-    };
-
-    # Added support for Clang 9 and GCC 9
     # https://docs.nvidia.com/cuda/archive/11.0/cuda-toolkit-release-notes/index.html#cuda-compiler-new-features
     "11.0" = {
       clangMaxMajorVersion = "9";

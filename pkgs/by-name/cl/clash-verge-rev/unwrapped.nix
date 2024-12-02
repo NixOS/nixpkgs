@@ -9,7 +9,7 @@
   rustPlatform,
   makeDesktopItem,
   meta,
-  webkitgtk,
+  webkitgtk_4_0,
   openssl,
 }:
 rustPlatform.buildRustPackage {
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     openssl
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   postInstall = ''

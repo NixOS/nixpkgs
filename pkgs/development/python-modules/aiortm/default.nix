@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aiortm";
-  version = "0.9.7";
+  version = "0.9.37";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = "aiortm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dkQihn2x6WHEPA4bbbeONhQlFXR0xc1vC1A+sWAhSl8=";
+    hash = "sha256-ZjpuUjUNcAw9G911q3koYB17iFhsylA+RuqpOGUSAEQ=";
   };
 
   pythonRelaxDeps = [ "typer" ];

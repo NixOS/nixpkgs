@@ -437,9 +437,7 @@ in {
 
         "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
         "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
-        "/etc/modprobe.d/ubuntu.conf".source = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" { } ''
-          ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
-        '';
+        "/etc/modprobe.d/ubuntu.conf".source = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
         "/etc/modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
 
         "/etc/os-release".source = config.boot.initrd.osRelease;
@@ -484,6 +482,9 @@ in {
 
         # so NSS can look up usernames
         "${pkgs.glibc}/lib/libnss_files.so.2"
+
+        # Resolving sysroot symlinks without code exec
+        "${pkgs.chroot-realpath}/bin/chroot-realpath"
       ] ++ optionals cfg.package.withCryptsetup [
         # fido2 support
         "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
@@ -507,16 +508,24 @@ in {
                          in nameValuePair "${n}.automount" (automountToUnit v)) cfg.automounts);
 
 
-      services.initrd-nixos-activation = {
-        after = [ "initrd-fs.target" ];
+      services.initrd-find-nixos-closure = {
+        description = "Find NixOS closure";
+
+        unitConfig = {
+          RequiresMountsFor = "/sysroot/nix/store";
+          DefaultDependencies = false;
+        };
+        before = [ "initrd.target" "shutdown.target" ];
+        conflicts = [ "shutdown.target" ];
         requiredBy = [ "initrd.target" ];
-        unitConfig.AssertPathExists = "/etc/initrd-release";
-        serviceConfig.Type = "oneshot";
-        description = "NixOS Activation";
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
 
         script = /* bash */ ''
           set -uo pipefail
-          export PATH="/bin:${cfg.package.util-linux}/bin"
+          export PATH="/bin:${cfg.package.util-linux}/bin:${pkgs.chroot-realpath}/bin"
 
           # Figure out what closure to boot
           closure=
@@ -537,10 +546,12 @@ in {
 
           # Resolve symlinks in the init parameter. We need this for some boot loaders
           # (e.g. boot.loader.generationsDir).
-          closure="$(chroot /sysroot ${pkgs.coreutils}/bin/realpath "$closure")"
+          closure="$(chroot-realpath /sysroot "$closure")"
 
           # Assume the directory containing the init script is the closure.
           closure="$(dirname "$closure")"
+
+          ln --symbolic "$closure" /nixos-closure
 
           # If we are not booting a NixOS closure (e.g. init=/bin/sh),
           # we don't know what root to prepare so we don't do anything
@@ -550,12 +561,44 @@ in {
             exit 0
           fi
           echo 'NEW_INIT=' > /etc/switch-root.conf
+        '';
+      };
 
+      # We need to propagate /run for things like /run/booted-system
+      # and /run/current-system.
+      mounts = [
+        {
+          where = "/sysroot/run";
+          what = "/run";
+          options = "bind";
+          unitConfig = {
+            # See the comment on the mount unit for /run/etc-metadata
+            DefaultDependencies = false;
+          };
+          requiredBy = [ "initrd-fs.target" ];
+          before = [ "initrd-fs.target" ];
+        }
+      ];
 
-          # We need to propagate /run for things like /run/booted-system
-          # and /run/current-system.
-          mkdir -p /sysroot/run
-          mount --bind /run /sysroot/run
+      services.initrd-nixos-activation = {
+        after = [ "initrd-switch-root.target" ];
+        requiredBy = [ "initrd-switch-root.service" ];
+        before = [ "initrd-switch-root.service" ];
+        unitConfig.DefaultDependencies = false;
+        unitConfig = {
+          AssertPathExists = "/etc/initrd-release";
+          RequiresMountsFor = [
+            "/sysroot/run"
+          ];
+        };
+        serviceConfig.Type = "oneshot";
+        description = "NixOS Activation";
+
+        script = /* bash */ ''
+          set -uo pipefail
+          export PATH="/bin:${cfg.package.util-linux}/bin"
+
+          closure="$(realpath /nixos-closure)"
 
           # Initialize the system
           export IN_NIXOS_SYSTEMD_STAGE1=true

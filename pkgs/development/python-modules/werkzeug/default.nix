@@ -29,19 +29,19 @@
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "3.0.3";
-  format = "pyproject";
+  version = "3.0.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CX5b/anwq6jaa4VFFG3vSB0Gqn0yZudEjizM9n3YvRg=";
+    hash = "sha256-qN1Z1N4oynBHGjTLp5vtX37y4Danazqwg1R0JG60H40=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ markupsafe ];
+  dependencies = [ markupsafe ];
 
   optional-dependencies = {
     watchdog = lib.optionals (!stdenv.hostPlatform.isDarwin) [

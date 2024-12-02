@@ -2,10 +2,12 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  testers,
+  act,
 }:
 
 let
-  version = "0.2.67";
+  version = "0.2.68";
 in
 buildGoModule {
   pname = "act";
@@ -15,10 +17,10 @@ buildGoModule {
     owner = "nektos";
     repo = "act";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yNa6o35YUP8D8K3kQLHQOG3V9mWGoxNvYgw5UQOqAtc=";
+    hash = "sha256-BON29uUruBoeBLoBdOgnonrVIyLZlvBW5UyWfxFgjPs=";
   };
 
-  vendorHash = "sha256-bkOLortxztmzAO/KCbQC4YsZ5iAero1yxblCkDZg8Ds=";
+  vendorHash = "sha256-yxuOORShJL9nFIS5srZFI31Nyz7xFxnJCmcN8UFhyr0=";
 
   doCheck = false;
 
@@ -27,6 +29,10 @@ buildGoModule {
     "-w"
     "-X main.version=${version}"
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = act;
+  };
 
   meta = {
     description = "Run your GitHub Actions locally";

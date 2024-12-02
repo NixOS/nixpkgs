@@ -2,23 +2,22 @@
   coreutils,
   fetchFromGitHub,
   lib,
-  python39,
+  python3,
   bash,
 }:
 
 let
-  # the latest python version that waagent test against according to https://github.com/Azure/WALinuxAgent/blob/28345a55f9b21dae89472111635fd6e41809d958/.github/workflows/ci_pr.yml#L75
-  python = python39;
+  python = python3;
 
 in
 python.pkgs.buildPythonApplication rec {
   pname = "waagent";
-  version = "2.11.1.12";
+  version = "2.12.0.2";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "WALinuxAgent";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1MaPjz9hWb/kJxuyJAUWPk065vpSyx2jq1ZSlDB4yFo=";
+    hash = "sha256-pp54J3x/+hkG4p7X1cojupdhjc0pyKcBRnE5ejd5ZpU=";
   };
   patches = [
     # Suppress the following error when waagent tries to configure sshd:

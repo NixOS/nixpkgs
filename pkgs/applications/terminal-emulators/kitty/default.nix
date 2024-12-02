@@ -2,7 +2,7 @@
 , harfbuzz, fontconfig, pkg-config, ncurses, imagemagick
 , libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
 , libxkbcommon, libXi, libXext, wayland-protocols, wayland, xxHash
-, nerdfonts
+, nerd-fonts
 , lcms2
 , librsync
 , openssl
@@ -28,25 +28,27 @@
 , go_1_23
 , buildGo123Module
 , nix-update-script
+, makeBinaryWrapper
+, autoSignDarwinBinariesHook
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.36.4";
+  version = "0.37.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nN0y2VKK5UNaozpHQNPN7AYkto9z6rJNpYRJhvLPtVQ=";
+    hash = "sha256-xxM5nqEr7avtJUlcsrA/KXOTxSajIg7kDQM6Q4V+6WM=";
   };
 
   goModules = (buildGo123Module {
     pname = "kitty-go-modules";
     inherit src version;
-    vendorHash = "sha256-8hsQH7OdsxeVG6pomuxdmTXNmQYBROoUUxoC10LeLFo=";
+    vendorHash = "sha256-d5jRhOm53HDGnsU5Lg5tVGU/9z8RGqORzS53hOyIKBk=";
   }).goModules;
 
   buildInputs = [
@@ -55,6 +57,7 @@ buildPythonApplication rec {
     simde
     lcms2
     librsync
+    matplotlib
     openssl.dev
     xxHash
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -84,9 +87,11 @@ buildPythonApplication rec {
     sphinx-inline-tabs
     go_1_23
     fontconfig
+    makeBinaryWrapper
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
+    autoSignDarwinBinariesHook
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland-scanner
   ];
@@ -139,7 +144,7 @@ buildPythonApplication rec {
 
     # Add the font by hand because fontconfig does not finds it in darwin
     mkdir ./fonts/
-    cp "${(nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})}/share/fonts/truetype/NerdFonts/SymbolsNerdFontMono-Regular.ttf" ./fonts/
+    cp "${nerd-fonts.symbols-only}/share/fonts/truetype/NerdFonts/Symbols/SymbolsNerdFontMono-Regular.ttf" ./fonts/
 
     ${ lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "export MACOSX_DEPLOYMENT_TARGET=11" }
     ${if stdenv.hostPlatform.isDarwin then ''

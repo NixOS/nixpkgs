@@ -52,4 +52,7 @@ callPackage' ./hadrian.nix ({
   # to build hadrian. (Hackage-released conditional dependencies are handled
   # in ./hadrian.nix without requiring intervention here.)
   inherit ghc-platform ghc-toolchain;
+} // lib.optionalAttrs (lib.versionAtLeast ghcVersion "9.11") {
+  # See https://gitlab.haskell.org/ghc/ghc/-/commit/145a6477854d4003a07573d5e7ffa0c9a64ae29c
+  Cabal = bootPkgs.Cabal_3_14_0_0;
 })

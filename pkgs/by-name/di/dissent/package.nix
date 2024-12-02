@@ -1,4 +1,5 @@
 { buildGoModule
+, fetchFromGitLab
 , fetchFromGitHub
 , gobject-introspection
 , gst_all_1
@@ -12,15 +13,28 @@
 , wrapGAppsHook4
 }:
 
+let
+  libspelling_2_1 = libspelling.overrideAttrs {
+    version = "0.2.1";
+
+    src = fetchFromGitLab {
+      domain = "gitlab.gnome.org";
+      owner = "GNOME";
+      repo = "libspelling";
+      rev = "refs/tags/0.2.1";
+      hash = "sha256-0OGcwPGWtYYf0XmvzXEaQgebBOW/6JWcDuF4MlQjCZQ=";
+    };
+  };
+in
 buildGoModule rec {
   pname = "dissent";
-  version = "0.0.30";
+  version = "0.0.31";
 
   src = fetchFromGitHub {
     owner = "diamondburned";
     repo = "dissent";
     rev = "v${version}";
-    hash = "sha256-wBDN9eUPOr9skTTgA0ea50Byta3qVr1loRrfMWhnxP8=";
+    hash = "sha256-mI0rZ7w2a6fzELYRHgeekTWYDaQGcDYectRWUdOmlYc=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +53,9 @@ buildGoModule rec {
     libadwaita
     libcanberra-gtk3
     sound-theme-freedesktop
-    libspelling
+    # gotk4-spelling fails to build with libspelling >= 0.3.0
+    # https://github.com/diamondburned/gotk4-spelling/issues/1
+    libspelling_2_1
     gtksourceview5
   ];
 
@@ -53,7 +69,7 @@ buildGoModule rec {
     install -D -m 444 -t $out/share/dbus-1/services nix/so.libdb.dissent.service
   '';
 
-  vendorHash = "sha256-TXqdO+DjnDD/+zwm3gK3+sxMTEVSHuceKz4ZJVH5Y34=";
+  vendorHash = "sha256-JISIS8k/veBAqZ0DlxVBrc+25IVM6BpY4eE5uxsjo+Y=";
 
   meta = with lib; {
     description = "A third-party Discord client designed for a smooth, native experience (formerly gtkcord4)";

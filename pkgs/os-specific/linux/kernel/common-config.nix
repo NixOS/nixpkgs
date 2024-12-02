@@ -11,6 +11,7 @@
 
 # Configuration
 { lib, stdenv, version
+, rustAvailable
 
 , features ? {}
 }:
@@ -32,9 +33,14 @@ let
   forceRust = features.rust or false;
   kernelSupportsRust = lib.versionAtLeast version "6.7";
 
-  # Currently not enabling Rust by default, as upstream requires rustc 1.81
-  defaultRust = false;
-  withRust = (forceRust || defaultRust) && kernelSupportsRust;
+  # Currently only enabling Rust by default on kernel 6.12+,
+  # which actually has features that use Rust that we want.
+  defaultRust = lib.versionAtLeast version "6.12" && rustAvailable;
+  withRust =
+    assert lib.assertMsg (!(forceRust && !kernelSupportsRust)) ''
+      Kernels below 6.7 (the kernel being built is ${version}) don't support Rust.
+    '';
+    (forceRust || defaultRust) && kernelSupportsRust;
 
   options = {
 
@@ -763,6 +769,10 @@ let
       # Shadow stacks
       X86_USER_SHADOW_STACK = whenAtLeast "6.6" yes;
 
+      # Enable support for Intel Trust Domain Extensions (TDX)
+      INTEL_TDX_GUEST = whenAtLeast "5.19" yes;
+      TDX_GUEST_DRIVER = whenAtLeast "6.2" module;
+
       # Mitigate straight line speculation at the cost of some file size
       SLS = whenBetween "5.17" "6.9" yes;
       MITIGATION_SLS = whenAtLeast "6.9" yes;
@@ -984,6 +994,7 @@ let
       JOYSTICK_PSXPAD_SPI_FF = yes;
       LOGIG940_FF        = yes;
       NINTENDO_FF        = whenAtLeast "5.16" yes;
+      NVIDIA_SHIELD_FF   = whenAtLeast "6.5" yes;
       PLAYSTATION_FF     = whenAtLeast "5.12" yes;
       SONY_FF            = yes;
       SMARTJOYPLUS_FF    = yes;

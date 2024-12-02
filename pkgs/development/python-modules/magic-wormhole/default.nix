@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -28,7 +28,6 @@
   # tests
   nettools,
   unixtools,
-  mock,
   magic-wormhole-transit-relay,
   magic-wormhole-mailbox-server,
   pytestCheckHook,
@@ -36,12 +35,14 @@
 
 buildPythonPackage rec {
   pname = "magic-wormhole";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FObBRomNvaem0ZAmJiOmlBmVU2Pn5DTWSq0tIz1tlMk=";
+  src = fetchFromGitHub {
+    owner = "magic-wormhole";
+    repo = "magic-wormhole";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BxPF4iQ91wLBagdvQ/Y89VIZBkMxFiEHnK+BU55Bwr4=";
   };
 
   postPatch =
@@ -79,32 +80,15 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs =
-    # For Python 3.12, remove magic-wormhole-mailbox-server and magic-wormhole-transit-relay from test dependencies,
-    # which are not yet supported with this version.
-    lib.optionals (!magic-wormhole-mailbox-server.meta.broken) [ magic-wormhole-mailbox-server ]
-    ++ lib.optionals (!magic-wormhole-transit-relay.meta.broken) [ magic-wormhole-transit-relay ]
-    ++ [
-      mock
+    [
+      magic-wormhole-mailbox-server
+      magic-wormhole-transit-relay
       pytestCheckHook
     ]
     ++ optional-dependencies.dilation
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ unixtools.locale ];
 
   __darwinAllowLocalNetworking = true;
-
-  disabledTestPaths =
-    # For Python 3.12, remove the tests depending on magic-wormhole-mailbox-server and magic-wormhole-transit-relay,
-    # which are not yet supported with this version.
-    lib.optionals
-      (magic-wormhole-mailbox-server.meta.broken || magic-wormhole-transit-relay.meta.broken)
-      [
-        "src/wormhole/test/dilate/test_full.py"
-        "src/wormhole/test/test_args.py"
-        "src/wormhole/test/test_cli.py"
-        "src/wormhole/test/test_wormhole.py"
-        "src/wormhole/test/test_xfer_util.py"
-      ]
-    ++ lib.optionals magic-wormhole-transit-relay.meta.broken [ "src/wormhole/test/test_transit.py" ];
 
   postInstall = ''
     install -Dm644 docs/wormhole.1 $out/share/man/man1/wormhole.1

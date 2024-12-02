@@ -8,35 +8,35 @@ callPackage ./common.nix ({
   # Note that the latest build may differ by platform
   dists = {
     x86_64-linux = {
-      zuluVersion = "8.76.0.17";
-      jdkVersion = "8.0.402";
+      zuluVersion = "8.80.0.17";
+      jdkVersion = "8.0.422";
       hash =
-        if enableJavaFX then "sha256-29aDAu8WVYQFSpMUFq4gG64BBz/ei/VDMg72xrpB9w4="
-        else "sha256-34DI6O7T8iqDHsX63S3xk+BKDu8IHRRWNvtxpsnUJEk=";
+        if enableJavaFX then "sha256-Ls2sHCtP9htBIDwq5fNDRA3/bGN0bzaMp6nNkjU1zx8="
+        else "sha256-YNxnNOFvTc0S3jt4F3UREi2196W7wSBmwieNJl7qamo=";
     };
 
     aarch64-linux = {
-      zuluVersion = "8.74.0.17";
-      jdkVersion = "8.0.392";
+      zuluVersion = "8.80.0.17";
+      jdkVersion = "8.0.422";
       hash =
-        if enableJavaFX then throw "JavaFX is not available for aarch64-linux"
-        else "sha256-xESdKEmfkiE657X/xclwsJR5M+P72BpWErtAcYMcK0Y=";
+        if enableJavaFX then "sha256-aVBleFrj4OpUJh82rM8XQGy9SzGqjaeOBo20nAbtpJo="
+        else "sha256-C5ebWtKAyKexOuEf4yM1y5tQZ2ICxREObwvMrcz5TXE=";
     };
 
     x86_64-darwin = {
-      zuluVersion = "8.76.0.17";
-      jdkVersion = "8.0.402";
+      zuluVersion = "8.80.0.17";
+      jdkVersion = "8.0.422";
       hash =
-        if enableJavaFX then "sha256-oqFpKeWwfiXr3oX78LGvAyDGAAS2GON2gAm6fHGH7Ow="
-        else "sha256-edZqDEsydQCDEwC1ZCDF/MjWVTnuQNWcKR2k/RjaIEI=";
+        if enableJavaFX then "sha256-7NB0OH194nZdpIGyX8gLxJzjJdi2UIxmGsGI5M0yqJ4="
+        else "sha256-vyB1Fepnpwsi9KjwFjEF+YbiCgmqZcirZu0zmRAp8PA=";
     };
 
     aarch64-darwin = {
-      zuluVersion = "8.76.0.17";
-      jdkVersion = "8.0.402";
+      zuluVersion = "8.80.0.17";
+      jdkVersion = "8.0.422";
       hash =
-        if enableJavaFX then "sha256-UCWRXCz4v381IWzWPDYzwJwbhsmZOYxKPLGJBQGjPmc="
-        else "sha256-0VPlOuNB39gDnU+pK0DGTSUjTHTtYoxaRg3YD2LyLXg=";
+        if enableJavaFX then "sha256-JuQkY923tizx5HQo4WC3YCk75a4qHJYNRFKpZ8XES58="
+        else "sha256-Q/hU2ICVwmJehrXmACm4/X48ULTqM6WSc55JDVgkBvM=";
     };
   };
 } // builtins.removeAttrs args [ "callPackage" ])

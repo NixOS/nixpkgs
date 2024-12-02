@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sp800-90b-entropyassessment";
-  version = "1.1.6";
+  version = "1.1.8";
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "SP800-90B_EntropyAssessment";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KZQ7kC0PbBkjLEQZIqYakQ91OvCxruhdfUwiRHtno3w=";
+    hash = "sha256-qGJqL77IOuVx8jKDdOk4YkLPbggfn+TQtpdcYEu4hC8=";
   };
 
   buildInputs = [ bzip2 libdivsufsort jsoncpp openssl mpfr ];

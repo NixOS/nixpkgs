@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
-, python3
 , meson
 , ninja
 , sassc
@@ -19,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "7.5.0";
+  version = "7.6.0";
 
   outputs = [ "out" "dev" ];
 
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-mwivme79zsPcS+Ol8iApECjpQz+fYcBLZwkULagXVvI=";
+    sha256 = "sha256-bv2rOq16xg9lCWfcLzAFN4LjBTJBxPhXvEJzutkdYzs=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     sassc
     vala
     wrapGAppsHook4
@@ -48,11 +46,6 @@ stdenv.mkDerivation rec {
     gtk4
     libgee
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

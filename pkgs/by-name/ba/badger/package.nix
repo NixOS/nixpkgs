@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "badger";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "dgraph-io";
     repo = "badger";
     rev = "v${version}";
-    hash = "sha256-Kzhua1nF9Y0j6Ez35ucKdYMRR46yEwM0pJ8P6A7pUrw=";
+    hash = "sha256-2d+OnSEERWx2JNYawbnuorBl6uIIoi2oO5n7uCsUzFo=";
   };
 
-  vendorHash = "sha256-A9rMLWjCpM9VrXmWXNo/mZbGCBKrakxbjthVOl2aDa4=";
+  vendorHash = "sha256-iaTR7V8l66BEadAiCftUZy7Gr+fdLRNnvBbtwdU/m/k=";
 
   subPackages = [ "badger" ];
 

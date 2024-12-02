@@ -1,5 +1,5 @@
 { lib, stdenv, makeDesktopItem, freetype, fontconfig, libX11, libXrender
-, zlib, jdk, glib, glib-networking, gtk, libXtst, libsecret, gsettings-desktop-schemas, webkitgtk
+, zlib, jdk, glib, glib-networking, gtk, libXtst, libsecret, gsettings-desktop-schemas, webkitgtk_4_0
 , makeWrapper, perl, ... }:
 
 { name, src ? builtins.getAttr stdenv.hostPlatform.system sources, sources ? null, description, productVersion }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fontconfig freetype glib gsettings-desktop-schemas gtk jdk libX11
     libXrender libXtst libsecret zlib
-  ] ++ lib.optional (webkitgtk != null) webkitgtk;
+  ] ++ lib.optional (webkitgtk_4_0 != null) webkitgtk_4_0;
 
   buildCommand = ''
     # Unpack tarball.
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
       --prefix PATH : ${jdk}/bin \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk libXtst libsecret ] ++ lib.optional (webkitgtk != null) webkitgtk)} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk libXtst libsecret ] ++ lib.optional (webkitgtk_4_0 != null) webkitgtk_4_0)} \
       --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --add-flags "-configuration \$HOME/.eclipse/''${productId}_${productVersion}/configuration"

@@ -39,9 +39,9 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
   # Use the stdenv default phases (./configure; make) instead of the
   # ones from buildRustPackage.
   configurePhase = "configurePhase";
-  buildPhase = "buildPhase";
-  checkPhase = "checkPhase";
-  installPhase = "installPhase";
+  dontCargoBuild = true;
+  dontCargoCheck = true;
+  dontCargoInstall = true;
 
   postPatch = ''
     # Have to do this here instead of in preConfigure because

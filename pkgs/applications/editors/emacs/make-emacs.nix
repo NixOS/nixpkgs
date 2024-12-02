@@ -55,7 +55,7 @@
 , systemd
 , tree-sitter
 , texinfo
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 , zlib
 
@@ -274,7 +274,7 @@ mkDerivation (finalAttrs: {
   ] ++ lib.optionals withXinput2 [
     libXi
   ] ++ lib.optionals withXwidgets [
-    webkitgtk
+    webkitgtk_4_0
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     sigtool
   ] ++ lib.optionals withNS [
@@ -407,6 +407,7 @@ mkDerivation (finalAttrs: {
   passthru = {
     inherit withNativeCompilation;
     inherit withTreeSitter;
+    inherit withXwidgets;
     pkgs = recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
     tests = { inherit (nixosTests) emacs-daemon; };
   };

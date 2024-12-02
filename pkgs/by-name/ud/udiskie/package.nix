@@ -106,6 +106,6 @@ python3Packages.buildPythonApplication rec {
       - password caching (requires python keyutils 0.3)
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Icarus Verilog compiler";
-    homepage    = "http://iverilog.icarus.com/";  # https does not work
+    homepage    = "https://steveicarus.github.io/iverilog";
     license     = with licenses; [ gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ thoughtpolice ];
     platforms   = platforms.all;

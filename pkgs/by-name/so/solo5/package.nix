@@ -2,7 +2,7 @@
 , pkg-config, qemu_test, syslinux, util-linux }:
 
 let
-  version = "0.8.1";
+  version = "0.9.0";
   # list of all theoretically available targets
   targets = [
     "genode"
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
-    hash = "sha256-J1xcL/AdcLQ7Ph3TFwEaS9l4cWjDQsTaXTdBDcT7p6E=";
+    hash = "sha256-w5ZEPxjplBTkedPN4yJN1A55HtItYjuwZA8UPFQBOw8=";
   };
 
   hardeningEnable = [ "pie" ];

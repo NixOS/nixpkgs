@@ -1,27 +1,28 @@
-{ lib
-, rustPlatform
-, clangStdenv
-, fetchFromGitHub
-, linkFarm
-, fetchgit
-, runCommand
-, gn
-, neovim
-, ninja
-, makeWrapper
-, pkg-config
-, python3
-, removeReferencesTo
-, xcbuild
-, SDL2
-, fontconfig
-, xorg
-, stdenv
-, darwin
-, libglvnd
-, libxkbcommon
-, enableWayland ? stdenv.hostPlatform.isLinux
-, wayland
+{
+  lib,
+  rustPlatform,
+  clangStdenv,
+  fetchFromGitHub,
+  linkFarm,
+  fetchgit,
+  runCommand,
+  gn,
+  neovim,
+  ninja,
+  makeWrapper,
+  pkg-config,
+  python3,
+  removeReferencesTo,
+  apple-sdk_11,
+  cctools,
+  SDL2,
+  fontconfig,
+  xorg,
+  stdenv,
+  libglvnd,
+  libxkbcommon,
+  enableWayland ? stdenv.hostPlatform.isLinux,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
@@ -47,26 +48,32 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
         hash = "sha256-4l6ekAJy+pG27hBGT6A6LLRwbsyKinJf6PP6mMHwaAs=";
       };
       # The externals for skia are taken from skia/DEPS
-      externals = linkFarm "skia-externals" (lib.mapAttrsToList
-        (name: value: { inherit name; path = fetchgit value; })
-        (lib.importJSON ./skia-externals.json));
+      externals = linkFarm "skia-externals" (
+        lib.mapAttrsToList (name: value: {
+          inherit name;
+          path = fetchgit value;
+        }) (lib.importJSON ./skia-externals.json)
+      );
     in
     runCommand "source" { } ''
       cp -R ${repo} $out
       chmod -R +w $out
       ln -s ${externals} $out/third_party/externals
-    ''
-  ;
+    '';
 
   SKIA_GN_COMMAND = "${gn}/bin/gn";
   SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
 
-  nativeBuildInputs = [
-    makeWrapper
-    pkg-config
-    python3 # skia
-    removeReferencesTo
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+      pkg-config
+      python3 # skia
+      removeReferencesTo
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools.libtool
+    ];
 
   nativeCheckInputs = [ neovim ];
 
@@ -74,20 +81,23 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     SDL2
     fontconfig
     rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
-  postFixup = let
-    libPath = lib.makeLibraryPath ([
-      libglvnd
-      libxkbcommon
-      xorg.libXcursor
-      xorg.libXext
-      xorg.libXrandr
-      xorg.libXi
-    ] ++ lib.optionals enableWayland [ wayland ]);
-  in ''
+  postFixup =
+    let
+      libPath = lib.makeLibraryPath (
+        [
+          libglvnd
+          libxkbcommon
+          xorg.libXcursor
+          xorg.libXext
+          xorg.libXrandr
+          xorg.libXi
+        ]
+        ++ lib.optionals enableWayland [ wayland ]
+      );
+    in
+    ''
       # library skia embeds the path to its sources
       remove-references-to -t "$SKIA_SOURCE_DIR" \
         $out/bin/neovide
@@ -96,18 +106,20 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
         --prefix LD_LIBRARY_PATH : ${libPath}
     '';
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/Applications
-    cp -r extra/osx/Neovide.app $out/Applications
-    ln -s $out/bin $out/Applications/Neovide.app/Contents/MacOS
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    for n in 16x16 32x32 48x48 256x256; do
-      install -m444 -D "assets/neovide-$n.png" \
-        "$out/share/icons/hicolor/$n/apps/neovide.png"
-    done
-    install -m444 -Dt $out/share/icons/hicolor/scalable/apps assets/neovide.svg
-    install -m444 -Dt $out/share/applications assets/neovide.desktop
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p $out/Applications
+      cp -r extra/osx/Neovide.app $out/Applications
+      ln -s $out/bin $out/Applications/Neovide.app/Contents/MacOS
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      for n in 16x16 32x32 48x48 256x256; do
+        install -m444 -D "assets/neovide-$n.png" \
+          "$out/share/icons/hicolor/$n/apps/neovide.png"
+      done
+      install -m444 -Dt $out/share/icons/hicolor/scalable/apps assets/neovide.svg
+      install -m444 -Dt $out/share/applications assets/neovide.desktop
+    '';
 
   disallowedReferences = [ SKIA_SOURCE_DIR ];
 
@@ -118,6 +130,6 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ck3d ];
-    platforms = platforms.linux ++ [ "aarch64-darwin" ];
+    platforms = platforms.unix;
   };
 }

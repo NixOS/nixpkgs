@@ -85,10 +85,17 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     import re
     import subprocess
 
+    machine.start(allow_reboot=True)
+
     # Will not succeed unless ConditionFirstBoot=yes
     machine.wait_for_unit("first-boot-complete.target")
 
+    # Make sure, a subsequent boot isn't a ConditionFirstBoot=yes.
+    machine.reboot()
     machine.wait_for_x()
+    state = machine.get_unit_info("first-boot-complete.target")['ActiveState']
+    assert state == 'inactive', "Detected first boot despite first-boot-completed.target was already reached on a previous boot."
+
     # wait for user services
     machine.wait_for_unit("default.target", "alice")
 

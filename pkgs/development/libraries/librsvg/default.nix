@@ -42,7 +42,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librsvg";
-  version = "2.58.2";
+  version = "2.58.3";
 
   outputs = [ "out" "dev" ] ++ lib.optionals withIntrospection [
     "devdoc"
@@ -50,13 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-GOnXDAjPJfUNYQ1tWvVxVh1nz0F5+WLgQmZHXfbi4iQ=";
+    hash = "sha256-SfKaCpL0wtGaLLQelqsvzn61veQYUMipFPz2VeMRCUQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
-    hash = "sha256-E0bXSxWI0MkJmNvl8gxklXHgy4zlkiee59+s0h4Gw5s=";
+    hash = "sha256-pTd3H4ZYwsCb4C6gijE0gRWZ4Mq6gGGmwXE3nKGILhw=";
     # TODO: move this to fetchCargoTarball
     dontConfigure = true;
   };
@@ -113,11 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
     ${lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (stdenv.hostPlatform.emulator buildPackages)} ${lib.getDev gdk-pixbuf}/bin/gdk-pixbuf-query-loaders
   '';
 
-  # librsvg only links Foundation, but it also requiers libobjc. The Framework.tbd in the 11.0 SDK
-  # reexports libobjc, but the one in the 10.12 SDK does not, so link it manually.
-  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
-    NIX_LDFLAGS = "-lobjc";
-  };
+  # librsvg only links Foundation, but it also requiers libobjc.
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_LDFLAGS = "-lobjc"; };
 
   preConfigure = ''
     PKG_CONFIG_VAPIGEN_VAPIGEN="$(type -p vapigen)"

@@ -1,5 +1,6 @@
 {
   fetchurl,
+  fetchpatch,
   runCommand,
   lib,
   stdenv,
@@ -15,6 +16,7 @@
   libcanberra,
   ninja,
   xvfb-run,
+  libadwaita,
   libxcvt,
   libICE,
   libX11,
@@ -28,7 +30,6 @@
   libxkbfile,
   xkeyboard_config,
   libxkbcommon,
-  libXrender,
   libxcb,
   libXrandr,
   libXinerama,
@@ -68,7 +69,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "46.4";
+  version = "47.1";
 
   outputs = [
     "out"
@@ -79,13 +80,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-YRvZz5gq21ZZfOKzQiQnL9phm7O7kSpoTXXG8sN1AuQ=";
+    hash = "sha256-kFR0oyzZmzQ0LNaedLsBlxs4fi+iI2G22ZrdEJQJ3ck=";
   };
+
+  patches = [
+    # Fix cursor positioning
+    # https://gitlab.gnome.org/GNOME/mutter/-/issues/3696
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/5bcaa7c80b7640e2da6135cdff83eba77c202407.patch";
+      hash = "sha256-+LDTZRagBltarGvHtTI94mA70DrkonuqA+ibLkjvZ50=";
+    })
+  ];
 
   mesonFlags = [
     "-Degl_device=true"
     "-Dinstalled_tests=false" # TODO: enable these
-    "-Dtests=false"
+    "-Dtests=disabled"
     "-Dwayland_eglstream=true"
     "-Dprofiler=true"
     "-Dxwayland_path=${lib.getExe xwayland}"
@@ -159,7 +169,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbfile
     xkeyboard_config
     libxkbcommon
-    libXrender
     libxcb
     libXrandr
     libXinerama
@@ -168,6 +177,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs src/backends/native/gen-default-modes.py
+
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/3981
+    substituteInPlace src/frames/main.c \
+      --replace-fail "libadwaita-1.so.0" "${libadwaita}/lib/libadwaita-1.so.0"
   '';
 
   postInstall = ''
@@ -177,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     # TODO: Move this into a directory devhelp can find.
-    moveToOutput "share/mutter-14/doc" "$devdoc"
+    moveToOutput "share/mutter-15/doc" "$devdoc"
   '';
 
   # Install udev files into our own tree.
@@ -186,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
-    libdir = "${finalAttrs.finalPackage}/lib/mutter-14";
+    libdir = "${finalAttrs.finalPackage}/lib/mutter-15";
 
     tests = {
       libdirExists = runCommand "mutter-libdir-exists" { } ''

@@ -795,6 +795,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "convert_case"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ec182b0ca2f35d8fc196cf3404988fd8b8c739a4d270ff118a398feb0cbec1ca"
+dependencies = [
+ "unicode-segmentation",
+]
+
+[[package]]
 name = "core-foundation"
 version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1012,6 +1021,7 @@ dependencies = [
  "bytes",
  "chrono",
  "const_format",
+ "derive_more",
  "dirs-next",
  "flate2",
  "futures",
@@ -1031,6 +1041,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2",
+ "strum",
  "thiserror",
  "timeago",
  "tokio",
@@ -1054,6 +1065,28 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b42b6fa04a440b495c8b04d0e71b707c585f83cb9cb28cf8cd0d976c315e31b4"
 dependencies = [
  "powerfmt",
+]
+
+[[package]]
+name = "derive_more"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4a9b99b9cbbe49445b21764dc0625032a89b145a2642e67603e1c936f5458d05"
+dependencies = [
+ "derive_more-impl",
+]
+
+[[package]]
+name = "derive_more-impl"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cb7330aeadfbe296029522e6c40f315320aba36fc43a5b3632f3795348f3bd22"
+dependencies = [
+ "convert_case",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.74",
+ "unicode-xid",
 ]
 
 [[package]]
@@ -1788,9 +1821,11 @@ dependencies = [
  "palette",
  "rfd",
  "rodio",
+ "strum",
  "thiserror",
  "timeago",
  "tokio",
+ "tokio-stream",
  "unicode-segmentation",
  "uuid",
  "windows_exe_info",
@@ -1835,6 +1870,12 @@ name = "heck"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "95505c38b4572b2d910cecb0281560f54b440a19336cbbcb27bf6ce6adc6f5a8"
+
+[[package]]
+name = "heck"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 
 [[package]]
 name = "hermit-abi"
@@ -2005,7 +2046,7 @@ dependencies = [
 [[package]]
 name = "iced"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=9628dc20d5dab128b9fff2c4b73cc66b0071e149#9628dc20d5dab128b9fff2c4b73cc66b0071e149"
+source = "git+https://github.com/iced-rs/iced?rev=8fb939b5a920e0cd836dbdd24c948f8f2512fc7e#8fb939b5a920e0cd836dbdd24c948f8f2512fc7e"
 dependencies = [
  "iced_core",
  "iced_futures",
@@ -2019,7 +2060,7 @@ dependencies = [
 [[package]]
 name = "iced_core"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=9628dc20d5dab128b9fff2c4b73cc66b0071e149#9628dc20d5dab128b9fff2c4b73cc66b0071e149"
+source = "git+https://github.com/iced-rs/iced?rev=8fb939b5a920e0cd836dbdd24c948f8f2512fc7e#8fb939b5a920e0cd836dbdd24c948f8f2512fc7e"
 dependencies = [
  "bitflags 2.6.0",
  "bytes",
@@ -2038,7 +2079,7 @@ dependencies = [
 [[package]]
 name = "iced_futures"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=9628dc20d5dab128b9fff2c4b73cc66b0071e149#9628dc20d5dab128b9fff2c4b73cc66b0071e149"
+source = "git+https://github.com/iced-rs/iced?rev=8fb939b5a920e0cd836dbdd24c948f8f2512fc7e#8fb939b5a920e0cd836dbdd24c948f8f2512fc7e"
 dependencies = [
  "futures",
  "iced_core",
@@ -2052,7 +2093,7 @@ dependencies = [
 [[package]]
 name = "iced_graphics"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=9628dc20d5dab128b9fff2c4b73cc66b0071e149#9628dc20d5dab128b9fff2c4b73cc66b0071e149"
+source = "git+https://github.com/iced-rs/iced?rev=8fb939b5a920e0cd836dbdd24c948f8f2512fc7e#8fb939b5a920e0cd836dbdd24c948f8f2512fc7e"
 dependencies = [
  "bitflags 2.6.0",
  "bytemuck",
@@ -2073,7 +2114,7 @@ dependencies = [
 [[package]]
 name = "iced_renderer"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=9628dc20d5dab128b9fff2c4b73cc66b0071e149#9628dc20d5dab128b9fff2c4b73cc66b0071e149"
+source = "git+https://github.com/iced-rs/iced?rev=8fb939b5a920e0cd836dbdd24c948f8f2512fc7e#8fb939b5a920e0cd836dbdd24c948f8f2512fc7e"
 dependencies = [
  "iced_graphics",
  "iced_tiny_skia",
@@ -2085,7 +2126,7 @@ dependencies = [
 [[package]]
 name = "iced_runtime"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=9628dc20d5dab128b9fff2c4b73cc66b0071e149#9628dc20d5dab128b9fff2c4b73cc66b0071e149"
+source = "git+https://github.com/iced-rs/iced?rev=8fb939b5a920e0cd836dbdd24c948f8f2512fc7e#8fb939b5a920e0cd836dbdd24c948f8f2512fc7e"
 dependencies = [
  "bytes",
  "iced_core",
@@ -2097,7 +2138,7 @@ dependencies = [
 [[package]]
 name = "iced_tiny_skia"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=9628dc20d5dab128b9fff2c4b73cc66b0071e149#9628dc20d5dab128b9fff2c4b73cc66b0071e149"
+source = "git+https://github.com/iced-rs/iced?rev=8fb939b5a920e0cd836dbdd24c948f8f2512fc7e#8fb939b5a920e0cd836dbdd24c948f8f2512fc7e"
 dependencies = [
  "bytemuck",
  "cosmic-text",
@@ -2112,7 +2153,7 @@ dependencies = [
 [[package]]
 name = "iced_wgpu"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=9628dc20d5dab128b9fff2c4b73cc66b0071e149#9628dc20d5dab128b9fff2c4b73cc66b0071e149"
+source = "git+https://github.com/iced-rs/iced?rev=8fb939b5a920e0cd836dbdd24c948f8f2512fc7e#8fb939b5a920e0cd836dbdd24c948f8f2512fc7e"
 dependencies = [
  "bitflags 2.6.0",
  "bytemuck",
@@ -2131,7 +2172,7 @@ dependencies = [
 [[package]]
 name = "iced_widget"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=9628dc20d5dab128b9fff2c4b73cc66b0071e149#9628dc20d5dab128b9fff2c4b73cc66b0071e149"
+source = "git+https://github.com/iced-rs/iced?rev=8fb939b5a920e0cd836dbdd24c948f8f2512fc7e#8fb939b5a920e0cd836dbdd24c948f8f2512fc7e"
 dependencies = [
  "iced_renderer",
  "iced_runtime",
@@ -2146,7 +2187,7 @@ dependencies = [
 [[package]]
 name = "iced_winit"
 version = "0.13.0-dev"
-source = "git+https://github.com/iced-rs/iced?rev=9628dc20d5dab128b9fff2c4b73cc66b0071e149#9628dc20d5dab128b9fff2c4b73cc66b0071e149"
+source = "git+https://github.com/iced-rs/iced?rev=8fb939b5a920e0cd836dbdd24c948f8f2512fc7e#8fb939b5a920e0cd836dbdd24c948f8f2512fc7e"
 dependencies = [
  "iced_futures",
  "iced_graphics",
@@ -3218,7 +3259,7 @@ version = "0.18.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "39b0deead1528fd0e5947a8546a9642a9777c25f6e1e26f34c97b204bbb465bd"
 dependencies = [
- "heck",
+ "heck 0.4.1",
  "itertools 0.12.1",
  "proc-macro2",
  "proc-macro2-diagnostics",
@@ -3907,6 +3948,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "rustversion"
+version = "1.0.17"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "955d28af4278de8121b7ebeb796b6a45735dc01436d898801014aced2773a3d6"
+
+[[package]]
 name = "rustybuzz"
 version = "0.14.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4313,6 +4360,28 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6637bab7722d379c8b41ba849228d680cc12d0a45ba1fa2b48f2a30577a06731"
 
 [[package]]
+name = "strum"
+version = "0.26.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8fec0f0aef304996cf250b31b5a10dee7980c85da9d759361292b8bca5a18f06"
+dependencies = [
+ "strum_macros",
+]
+
+[[package]]
+name = "strum_macros"
+version = "0.26.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4c6bee85a5a24955dc440386795aa378cd9cf82acd5f764469152d2270e581be"
+dependencies = [
+ "heck 0.5.0",
+ "proc-macro2",
+ "quote",
+ "rustversion",
+ "syn 2.0.74",
+]
+
+[[package]]
 name = "subtle"
 version = "2.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4648,9 +4717,9 @@ dependencies = [
 
 [[package]]
 name = "tokio-stream"
-version = "0.1.15"
+version = "0.1.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "267ac89e0bec6e691e5813911606935d77c476ff49024f98abcea3e7b15e37af"
+checksum = "4f4e6ce100d0eb49a2734f8c0812bcd324cf357d21810932c5df6b96ef2b86f1"
 dependencies = [
  "futures-core",
  "pin-project-lite",

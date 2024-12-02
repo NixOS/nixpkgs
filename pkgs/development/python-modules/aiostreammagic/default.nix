@@ -1,6 +1,5 @@
 {
   lib,
-  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiostreammagic";
-  version = "2.5.0";
+  version = "2.8.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     owner = "noahhusby";
     repo = "aiostreammagic";
     rev = "refs/tags/${version}";
-    hash = "sha256-Tb15ro+6K+7jqmer/bXDJUEBonMv1sZSU/0ZtCWOCfc=";
+    hash = "sha256-1/9cpdKRr7O4Ji34OSkbBudSedTAt50oGZBc88XNI18=";
   };
 
   pythonRelaxDeps = [ "websockets" ];
@@ -30,7 +29,6 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
-    aiohttp
     mashumaro
     orjson
     websockets

@@ -73,6 +73,12 @@ buildPythonPackage rec {
     # broken in werkzeug 2.3 upgrade
     "test_media_types_method"
     "test_media_types_q"
+    # erroneous use of pytz
+    # https://github.com/python-restx/flask-restx/issues/620
+    # two fixes are proposed: one fixing just tests, and one removing pytz altogether.
+    # we disable the tests in the meanwhile and let upstream decide
+    "test_rfc822_value"
+    "test_iso8601_value"
   ];
 
   pythonImportsCheck = [ "flask_restx" ];

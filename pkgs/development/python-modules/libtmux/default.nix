@@ -3,8 +3,8 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   ncurses,
-  poetry-core,
   procps,
   pytest-rerunfailures,
   pytestCheckHook,
@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "libtmux";
-  version = "0.37.0";
+  version = "0.39.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = "libtmux";
     rev = "refs/tags/v${version}";
-    hash = "sha256-I0E6zkfQ6mx2svCaXEgKPhrrog3iLgXZ4E3CMMxPkIA=";
+    hash = "sha256-JqOxJD34DL5Iku3Ov8JzwSVThqDg41PQ/v1Dz6ex4ro=";
   };
 
   postPatch = ''
@@ -28,7 +28,7 @@ buildPythonPackage rec {
       --replace-fail '"--doctest-docutils-modules",' ""
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     procps

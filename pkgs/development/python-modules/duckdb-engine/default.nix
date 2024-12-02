@@ -9,6 +9,7 @@
   duckdb,
   hypothesis,
   pandas,
+  pyarrow,
   poetry-core,
   pytest-remotedata,
   snapshottest,
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.13.2";
+  version = "0.13.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     repo = "duckdb_engine";
     owner = "Mause";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zao8kzzQbnjwJqjHyqDkgmXa3E9nlBH2W0wh7Kjk/qw=";
+    hash = "sha256-B9vh8OILmRZKKznBbEkkm3zlAwGwMGdiuc378msiywE=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -48,6 +49,7 @@ buildPythonPackage rec {
     pandas
     pytest-remotedata
     typing-extensions
+    pyarrow
   ] ++ lib.optionals (pythonOlder "3.12") [
     # requires wasmer which is broken for python 3.12
     # https://github.com/wasmerio/wasmer-python/issues/778

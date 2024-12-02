@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "yutto";
-  version = "2.0.0-beta.43";
+  version = "2.0.0-rc.5";
   pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.9";
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     owner = "yutto-dev";
     repo = "yutto";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ND3uE4vsFa7gPr1E2UfiebExsrj+ELN0+hqnxxOQu8Y=";
+    hash = "sha256-QaApCkZtHjvGB6FOfic9wEH7rUlukwmxnrDaHkbvyJo=";
   };
 
   build-system = with python3Packages; [ hatchling ];
@@ -32,6 +32,7 @@ python3Packages.buildPythonApplication rec {
       dict2xml
       colorama
       typing-extensions
+      pydantic
     ]
     ++ (with httpx.optional-dependencies; http2 ++ socks);
 

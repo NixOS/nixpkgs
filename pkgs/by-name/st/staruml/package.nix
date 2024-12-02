@@ -35,12 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ wrapGAppsHook3 dpkg ];
   buildInputs = [ glib hicolor-icon-theme ];
 
-  unpackPhase = ''
-    mkdir pkg
-    dpkg-deb -x $src pkg
-    sourceRoot=pkg
-  '';
-
   installPhase = ''
     mkdir -p $out/bin
     mv opt $out
@@ -52,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "/opt/StarUML/staruml" "$out/bin/staruml"
 
     mkdir -p $out/lib
-    ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
+    ln -s ${lib.getLib stdenv.cc.cc}/lib/libstdc++.so.6 $out/lib/
     ln -s ${lib.getLib systemd}/lib/libudev.so.1 $out/lib/libudev.so.0
 
     patchelf \

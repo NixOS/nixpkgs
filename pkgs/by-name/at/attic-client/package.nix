@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , nix
+, nixosTests
 , boost
 , pkg-config
 , stdenv
@@ -11,13 +12,13 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "attic";
-  version = "0-unstable-2024-10-04";
+  version = "0-unstable-2024-10-06";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "attic";
-    rev = "61ebdef2e263c091f24807b07701be5cb8068dea";
-    hash = "sha256-whgxjoDF7aey3xWy2b9Dp+NHsszK6By+raEbygcSU6w=";
+    rev = "1b29816235b7573fca7f964709fd201e1a187024";
+    hash = "sha256-icNt2T1obK3hFNgBOgiiyOoiScUfz9blmRbNp3aOUBE=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +54,13 @@ rustPlatform.buildRustPackage {
     fi
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests = {
+      inherit (nixosTests) atticd;
+    };
+
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Multi-tenant Nix Binary Cache";

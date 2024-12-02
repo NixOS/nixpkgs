@@ -1,5 +1,4 @@
 diff --git a/daemon/gdm-local-display-factory.c b/daemon/gdm-local-display-factory.c
-index f2d8e155b..54b998826 100644
 --- a/daemon/gdm-local-display-factory.c
 +++ b/daemon/gdm-local-display-factory.c
 @@ -245,9 +245,9 @@ struct GdmDisplayServerConfiguration {
@@ -9,11 +8,12 @@ index f2d8e155b..54b998826 100644
 -        { "wayland", GDM_KEY_WAYLAND_ENABLE, "/usr/bin/Xwayland", "wayland" },
 +        { "wayland", GDM_KEY_WAYLAND_ENABLE, "@xwayland@/bin/Xwayland", "wayland" },
  #endif
+ #ifdef ENABLE_X11_SUPPORT
 -        { "xorg", GDM_KEY_XORG_ENABLE, "/usr/bin/Xorg", "x11" },
 +        { "xorg", GDM_KEY_XORG_ENABLE, "@xorgserver@/bin/Xorg", "x11" },
+ #endif
          { NULL, NULL, NULL },
  };
- 
 diff --git a/daemon/gdm-manager.c b/daemon/gdm-manager.c
 index fc5aef6ac..c61e0046b 100644
 --- a/daemon/gdm-manager.c

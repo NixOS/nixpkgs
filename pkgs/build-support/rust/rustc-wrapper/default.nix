@@ -30,7 +30,9 @@ runCommand "${rustc-unwrapped.pname}-wrapper-${rustc-unwrapped.version}" {
   };
 
   passthru = {
-    inherit (rustc-unwrapped) pname version src llvm llvmPackages;
+    inherit (rustc-unwrapped)
+      pname version src llvm llvmPackages
+      tier1TargetPlatforms targetPlatforms badTargetPlatforms;
     unwrapped = rustc-unwrapped;
   };
 

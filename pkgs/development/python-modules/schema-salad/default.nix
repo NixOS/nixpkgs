@@ -22,21 +22,21 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.5.20240503091721";
+  version = "8.7.20241021092521";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "schema_salad";
     rev = "refs/tags/${version}";
-    hash = "sha256-VbEIkWzg6kPnJWqbvlfsD83oS0VQasGQo+pUIPiGjhU=";
+    hash = "sha256-1V73y+sp94QwoCz8T2LCMnf5iq8MtL9cvrhF949R+08=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "black>=19.10b0,<23.12" "black>=19.10b0"
+      --replace-fail "mypy[mypyc]==1.12.1" "mypy"
   '';
 
   build-system = [ setuptools-scm ];
@@ -56,11 +56,6 @@ buildPythonPackage rec {
     ]
     ++ cachecontrol.optional-dependencies.filecache
     ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
-
-  patches = [ (fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/common-workflow-language/schema_salad/pull/840.patch";
-    hash = "sha256-fke75FCCn23LAMJ5bDWJpuBR6E9XIpjmzzXSbjqpxn8=";
-  } ) ];
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.pycodegen;
 

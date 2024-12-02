@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, coq, ssreflect, coq-ext-lib, simple-io, version ? null }:
+{ lib, mkCoqDerivation, coq, ssreflect, ExtLib, simple-io, version ? null }:
 
 let recent = lib.versions.isGe "8.7" coq.coq-version || coq.coq-version == "dev"; in
 (mkCoqDerivation {
@@ -47,7 +47,7 @@ let recent = lib.versions.isGe "8.7" coq.coq-version || coq.coq-version == "dev"
   mlPlugin = true;
   nativeBuildInputs = lib.optional recent coq.ocamlPackages.ocamlbuild;
   propagatedBuildInputs = [ ssreflect ]
-    ++ lib.optionals recent [ coq-ext-lib simple-io ];
+    ++ lib.optionals recent [ ExtLib simple-io ];
   extraInstallFlags = [ "-f Makefile.coq" ];
 
   enableParallelBuilding = false;

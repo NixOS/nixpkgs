@@ -178,6 +178,13 @@ in nameDrvAfterAttrName ({
     ignorePie = false;
   });
 
+  pieExplicitEnabledStructuredAttrs = brokenIf stdenv.hostPlatform.isStatic (checkTestBin (f2exampleWithStdEnv stdenv {
+    hardeningEnable = [ "pie" ];
+    __structuredAttrs = true;
+  }) {
+    ignorePie = false;
+  });
+
   relROExplicitEnabled = checkTestBin (f2exampleWithStdEnv stdenv {
     hardeningEnable = [ "relro" ];
   }) {

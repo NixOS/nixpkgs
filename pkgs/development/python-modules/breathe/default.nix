@@ -46,6 +46,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTestPaths = [
+    # tests fail with sphinx 7.4.x
+    "tests/test_renderer.py"
+  ];
+
   pythonImportsCheck = [ "breathe" ];
 
   meta = {

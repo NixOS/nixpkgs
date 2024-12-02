@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "miniflux";
-  version = "2.2.1";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "miniflux";
     repo = "v2";
     rev = "refs/tags/${version}";
-    hash = "sha256-b4slACQl+3vDsioULVKscBhS8LvTxCUPDnO7GlT46CM=";
+    hash = "sha256-B/joQJ64/NPiZo1JEAhcrHLQ67m1oVTbmBk3drZ8lC4=";
   };
 
-  vendorHash = "sha256-PL5tc6MQRHloc3Dfw+FpWdqrXErFPjEb8RNPmHr7jSk=";
+  vendorHash = "sha256-hzgfuwewJDIz/iaBU3lyB2/mAxYGTWsKkaqAiCkPQQ0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -35,7 +35,7 @@ buildGoModule rec {
     description = "Minimalist and opinionated feed reader";
     homepage = "https://miniflux.app/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rvolosatovs benpye emilylange ];
+    maintainers = with maintainers; [ rvolosatovs benpye emilylange adamcstephens ];
     mainProgram = "miniflux";
   };
 }

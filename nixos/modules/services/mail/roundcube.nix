@@ -55,7 +55,12 @@ in
         default = "";
       };
       passwordFile = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
+        example = lib.literalExpression ''
+          pkgs.writeText "roundcube-postgres-passwd.txt" '''
+            hostname:port:database:username:password
+          '''
+        '';
         description = ''
           Password file for the postgresql connection.
           Must be formatted according to PostgreSQL .pgpass standard (see https://www.postgresql.org/docs/current/libpq-pgpass.html)

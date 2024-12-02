@@ -164,6 +164,10 @@ let
 
       RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
+      # avoid leaking Rust source file names into the final binary, which adds
+      # a false dependency on rust-lib-src on targets with uncompressed kernels
+      KRUSTFLAGS = lib.optionalString withRust "--remap-path-prefix ${rustPlatform.rustLibSrc}=/";
+
       patches =
         map (p: p.patch) kernelPatches
         # Required for deterministic builds along with some postPatch magic.
@@ -396,6 +400,9 @@ let
       requiredSystemFeatures = [ "big-parallel" ];
 
       meta = {
+        # https://github.com/NixOS/nixpkgs/pull/345534#issuecomment-2391238381
+        broken = withRust && lib.versionOlder version "6.12";
+
         description =
           "The Linux kernel" +
           (if kernelPatches == [] then "" else

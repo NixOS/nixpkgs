@@ -586,37 +586,6 @@ in
       ensureDatabases = [ "outline" ];
     };
 
-    # Outline is unable to create the uuid-ossp extension when using postgresql 12, in later version this
-    # extension can be created without superuser permission. This services therefor this extension before
-    # outline starts and postgresql 12 is using on the host.
-    #
-    # Can be removed after postgresql 12 is dropped from nixos.
-    systemd.services.outline-postgresql =
-      let
-        pgsql = config.services.postgresql;
-      in
-        lib.mkIf (cfg.databaseUrl == "local" && pgsql.package == pkgs.postgresql_12) {
-          after = [ "postgresql.service" ];
-          bindsTo = [ "postgresql.service" ];
-          wantedBy = [ "outline.service" ];
-          partOf = [ "outline.service" ];
-          path = [
-            pgsql.package
-          ];
-          script = ''
-            set -o errexit -o pipefail -o nounset -o errtrace
-            shopt -s inherit_errexit
-
-            psql outline -tAc 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'
-          '';
-
-          serviceConfig = {
-            User = pgsql.superUser;
-            Type = "oneshot";
-            RemainAfterExit = true;
-          };
-        };
-
     services.redis.servers.outline = lib.mkIf (cfg.redisUrl == "local") {
       enable = true;
       user = config.services.outline.user;

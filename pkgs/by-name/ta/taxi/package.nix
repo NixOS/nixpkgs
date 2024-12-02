@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Alecaddd/taxi";
     description = "FTP Client that drives you anywhere";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ] ++ teams.pantheon.members;
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     mainProgram = "com.github.alecaddd.taxi";
   };

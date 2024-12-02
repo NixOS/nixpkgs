@@ -16,15 +16,16 @@
 stdenv.mkDerivation rec {
   pname = "streamcontroller";
 
-  # Note that the latest tagged version (1.5.0-beta.6) includes a python dependency
-  # that doesn't exist anymore, so we package an unstable version instead.
-  version = "1.5.0-beta.6-unstable-2024-08-13";
+  version = "1.5.0-beta.7";
+  # We have to hardcode revision because upstream often create multiple releases for the same version number.
+  # This is the commit hash that maps to 1.5.0-beta.7 released on 2024-11-20
+  rev = "45b5bc72f617c5aea306450d6592da66ade53568";
 
   src = fetchFromGitHub {
     repo = "StreamController";
     owner = "StreamController";
-    rev = "dbb6460a69137af192db09d504224ae9f1127cbd";
-    hash = "sha256-+YYzHLRU5MNjF3iaKIDj9k4PVg+vnEZhbc3ZmNI7xyw=";
+    inherit rev;
+    hash = "sha256-tgbqURtqp1KbzOfXo4b4Dp3N8Sg8xcUSTwdEFXq+f6w=";
   };
 
   # The installation method documented upstream

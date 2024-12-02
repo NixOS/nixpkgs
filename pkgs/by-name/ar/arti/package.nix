@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "arti";
-  version = "1.2.7";
+  version = "1.3.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -19,17 +19,17 @@ rustPlatform.buildRustPackage rec {
     owner = "core";
     repo = "arti";
     rev = "arti-v${version}";
-    hash = "sha256-lyko4xwTn03/Es8icOx8GIrjC4XDXvZPDYHYILw8Opo=";
+    hash = "sha256-zGaNA6LdW2jZ6NyySklFCsLm2b5xk44E8ecJDV393c4=";
   };
 
-  cargoHash = "sha256-I45SaawWAK7iTZDFhJT4YVO439D/3NmWLp3FtFmhLC0=";
+  cargoHash = "sha256-9BvIQdhY/7i0X8w6XJZZeWzxEfqJlquO/qOWvvhCWaA=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   buildInputs =
     [ sqlite ]
-    ++ lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         CoreServices
@@ -47,8 +47,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   checkFlags = [
-    # problematic tests that were fixed after the release
-    "--skip=reload_cfg::test::watch_single_file"
+    # problematic test that hangs the build
     "--skip=reload_cfg::test::watch_multiple"
   ];
 

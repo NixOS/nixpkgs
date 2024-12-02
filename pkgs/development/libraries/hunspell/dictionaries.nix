@@ -980,7 +980,7 @@ rec {
     readmeFile = "README";
 
     src = fetchurl {
-      url = "https://downloads.sourceforge.net/rospell/${fileName}";
+      url = "mirror://sourceforge/rospell/${fileName}";
       hash = "sha256-fxKNZOoGyeZxHDCxGMCv7vsBTY8zyS2szfRVq6LQRRk=";
     };
 

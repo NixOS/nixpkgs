@@ -11,6 +11,8 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
+      django = prev.django_5;
+
       django-bootstrap4 = prev.django-bootstrap4.overridePythonAttrs (oldAttrs: rec {
         version = "3.0.0";
         src = oldAttrs.src.override {
@@ -26,23 +28,29 @@ let
         # fails with some assertions
         doCheck = false;
       });
+
+      django-extensions = prev.django-extensions.overridePythonAttrs {
+        # Compat issues with Django 5.1
+        # https://github.com/django-extensions/django-extensions/issues/1885
+        doCheck = false;
+      };
     };
   };
 
-  version = "2024.2.1";
+  version = "2024.3.1";
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx";
     rev = "v${version}";
-    hash = "sha256-D0ju9aOVy/new9GWqyFalZYCisdmM7irWSbn2TVCJYQ=";
+    hash = "sha256-y3BsNmLh9M5NgDPURCjCGWYci40hYcQtDVqsu2HqPRU=";
   };
 
   meta = with lib; {
     description = "Conference planning tool: CfP, scheduling, speaker management";
     mainProgram = "pretalx-manage";
     homepage = "https://github.com/pretalx/pretalx";
-    changelog = "https://docs.pretalx.org/en/latest/changelog.html";
+    changelog = "https://docs.pretalx.org/changelog/#${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa] ++ teams.c3d2.members;
     platforms = platforms.linux;
@@ -54,7 +62,7 @@ let
 
     sourceRoot = "${src.name}/src/pretalx/frontend/schedule-editor";
 
-    npmDepsHash = "sha256-EAdeXdcC3gHun6BOHzvqpzv9+oDl1b/VTeNkYLiD+hA=";
+    npmDepsHash = "sha256-i7awRuR7NxhpxN2IZuI01PsN6FjXht7BxTbB1k039HA=";
 
     npmBuildScript = "build";
 
@@ -146,9 +154,6 @@ python.pkgs.buildPythonApplication rec {
   ++ plugins;
 
   optional-dependencies = {
-    mysql = with python.pkgs; [
-      mysqlclient
-    ];
     postgres = with python.pkgs; [
       psycopg2
     ];
@@ -215,6 +220,8 @@ python.pkgs.buildPythonApplication rec {
     "test_schedule_page_text_table"
     "test_schedule_page_text_wrong_format"
     "test_versioned_schedule_page"
+    # Test is racy
+    "test_can_reset_password_by_email"
   ];
 
   passthru = {

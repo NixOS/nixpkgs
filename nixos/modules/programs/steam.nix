@@ -31,7 +31,7 @@ in {
       default = pkgs.steam;
       defaultText = lib.literalExpression "pkgs.steam";
       example = lib.literalExpression ''
-        pkgs.steam-small.override {
+        pkgs.steam.override {
           extraEnv = {
             MANGOHUD = true;
             OBS_VKCAPTURE = true;

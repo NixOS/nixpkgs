@@ -1,6 +1,6 @@
 {pkgs, lib, config, ...}:
 let
-  cfg = config.dysnomia;
+  cfg = config.services.dysnomia;
 
   printProperties = properties:
     lib.concatMapStrings (propertyName:
@@ -79,7 +79,7 @@ let
 in
 {
   options = {
-    dysnomia = {
+    services.dysnomia = {
 
       enable = lib.mkOption {
         type = lib.types.bool;
@@ -142,6 +142,10 @@ in
     };
   };
 
+  imports = [
+    (lib.mkRenamedOptionModule ["dysnomia"] ["services" "dysnomia"])
+  ];
+
   config = lib.mkIf cfg.enable {
 
     environment.etc = {
@@ -164,7 +168,7 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    dysnomia.package = pkgs.dysnomia.override (origArgs: dysnomiaFlags // lib.optionalAttrs (cfg.enableLegacyModules) {
+    services.dysnomia.package = pkgs.dysnomia.override (origArgs: dysnomiaFlags // lib.optionalAttrs (cfg.enableLegacyModules) {
       enableLegacy = builtins.trace ''
         WARNING: Dysnomia has been configured to use the legacy 'process' and 'wrapper'
         modules for compatibility reasons! If you rely on these modules, consider
@@ -181,7 +185,7 @@ in
       '' true;
     });
 
-    dysnomia.properties = {
+    services.dysnomia.properties = {
       hostname = config.networking.hostName;
       inherit (pkgs.stdenv.hostPlatform) system;
 
@@ -208,7 +212,7 @@ in
       ++ lib.optional (dysnomiaFlags.enableSubversionRepository) "subversion-repository";
     };
 
-    dysnomia.containers = lib.recursiveUpdate ({
+    services.dysnomia.containers = lib.recursiveUpdate ({
       process = {};
       wrapper = {};
     }

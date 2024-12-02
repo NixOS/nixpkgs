@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "spyder-kernels";
-  version = "3.0.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spyder-ide";
     repo = "spyder-kernels";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oyPgujvaj2tqouZKuMVDq3gxm0GNrKmeUWqUFUkEMB4=";
+    hash = "sha256-OWdm4ytF9evqMEOOASssMag6QuJq2MwqmIZ+4et5IoI=";
   };
 
   build-system = [ setuptools ];

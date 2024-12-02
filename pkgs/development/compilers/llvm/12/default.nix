@@ -199,7 +199,7 @@ let
             ({ substituteAll, libclang }: substituteAll
               {
                 src = ./lldb/resource-dir.patch;
-                clangLibDir = "${libclang.lib}/lib";
+                clangLibDir = "${lib.getLib libclang}/lib";
               })
             { };
         in

@@ -34,8 +34,6 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_get_page" ];
 
-  doCheck = true;
-
   pythonImportsCheck = [ "telegraph" ];
 
   meta = with lib; {

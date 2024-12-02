@@ -14,7 +14,7 @@
   requests,
   urllib3,
 
-  # optional-dependenices
+  # optional-dependencies
   paramiko,
   websocket-client,
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    ssh = [ paramiko ];
+    ssh = [ paramiko paramiko.optional-dependencies.ed25519 ];
     tls = [];
     websockets = [ websocket-client ];
   };

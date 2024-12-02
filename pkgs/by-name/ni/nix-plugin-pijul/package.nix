@@ -6,21 +6,22 @@
   pkg-config,
   boost,
   howard-hinnant-date,
-  nix,
 
   # for tests
   runCommand,
   pijul,
   nixVersions,
+  nixOverride ? null,
   nix-plugin-pijul,
 }:
-stdenv.mkDerivation (finalAttrs: {
+let nix = if nixOverride != null then nixOverride else nixVersions.nix_2_24;
+in stdenv.mkDerivation (finalAttrs: {
   pname = "nix-plugin-pijul";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchzip {
     url = "https://dblsaiko.net/pub/nix-plugin-pijul/nix-plugin-pijul-${finalAttrs.version}.tar.gz";
-    hash = "sha256-X25tFqcAgNWmkMxbfXGx8KJ25BV6sFWAQM9NvjQeSmQ=";
+    hash = "sha256-1BJZ0lv7XDgT/AiXmJ2Z5Jn0tEa1Yerp9YYcjVCHqoI=";
   };
 
   nativeBuildInputs = [
@@ -35,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru.tests = let
-    localRepoCheck = nix:
-      runCommand "localRepoCheck-${nix.name}"
+    localRepoCheck = nixOverride:
+      runCommand "localRepoCheck-${nixOverride.name}"
       {
         nativeBuildInputs = [
           pijul
@@ -57,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
         output=$(
           nix \
-            --option plugin-files ${nix-plugin-pijul.override {inherit nix;}}/lib/nix/plugins/pijul.so \
+            --option plugin-files ${nix-plugin-pijul.override {inherit nixOverride;}}/lib/nix/plugins/pijul.so \
             --extra-experimental-features 'nix-command flakes' \
             eval --impure --raw --expr "builtins.readFile ((builtins.fetchTree \"pijul+file://$PWD\") + \"/foo\")"
         )
@@ -72,12 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     stable = localRepoCheck nixVersions.stable;
     latest = localRepoCheck nixVersions.latest;
     git = localRepoCheck nixVersions.git;
-    nix_2_18 = localRepoCheck nixVersions.nix_2_18;
-    nix_2_19 = localRepoCheck nixVersions.nix_2_19;
-    nix_2_20 = localRepoCheck nixVersions.nix_2_20;
-    nix_2_21 = localRepoCheck nixVersions.nix_2_21;
-    nix_2_22 = localRepoCheck nixVersions.nix_2_22;
-    nix_2_23 = localRepoCheck nixVersions.nix_2_23;
+    nix_2_24 = localRepoCheck nixVersions.nix_2_24;
   };
 
   meta = {

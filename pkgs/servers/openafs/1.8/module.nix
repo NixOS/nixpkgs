@@ -20,10 +20,6 @@ let
   modDestDir = "$out/lib/modules/${kernel.modDirVersion}/extra/openafs";
   kernelBuildDir = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
-  fetchBase64Patch = args: (fetchpatch args).overrideAttrs (o: {
-    postFetch = "mv $out p; base64 -d p > $out; " + o.postFetch;
-  });
-
 in
 stdenv.mkDerivation {
   pname = "openafs";
@@ -31,30 +27,23 @@ stdenv.mkDerivation {
   inherit src;
 
   patches = [
-    # Linux-6.10: Use filemap_alloc_folio when avail
+    # Linux: Define Clear/Set PageError macros as NOPs
     (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/0f6a3a402f4a66114da9231032bd68cdc4dee7bc.patch";
-      hash = "sha256-1D0mijyF4hbd+xCONT50cd6T9eCpeM8Li3nCI7HgLPA=";
+      url = "https://gerrit.openafs.org/changes/15964/revisions/917d071a1b3c3e23c984ca8e5501ddccd62a01b6/patch";
+      decode = "base64 -d";
+      hash = "sha256-WqAHRN1YZj7Cz4X4iF1K3DJC1h8nXlnA9gveClL3KHc=";
     })
-    # Linux-6.10: define a wrapper for vmalloc
+    # Linux: Refactor afs_linux_write_begin() variants
     (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/658942f2791fad5e33ec7542158c16dfc66eed39.patch";
-      hash = "sha256-MhfAUX/eNOEkjO0cGVbnIdObMlGtLdCnnGfJECDwO+A=";
+      url = "https://gerrit.openafs.org/changes/15965/revisions/c955b666b904b96620df10328a9a37c2fb5f2ed6/patch";
+      decode = "base64 -d";
+      hash = "sha256-U2W+8YrD1K7Pb/Jq08uBcuPnGkVvcSyTpwaWWcTbq0w=";
     })
-    # Linux-6.10: remove includes for asm/ia32_unistd.h
+    # Linux: Use folios for aops->write_begin/end
     (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/03b280649f5e22ed74c217d7c98c3416a2fa9052.patch";
-      hash = "sha256-ZdXz2ziuflqz7zNzjepuGvwDAPM31FIzsoEa4iNdLmo=";
-    })
-    # afs: avoid empty-body warning
-    (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/d8b56f21994ce66d8daebb7d69e792f34c1a19ed.patch";
-      hash = "sha256-10VUfZdZiOC8xSPM0nq8onqiv7X/Vv4/WwGlkqWkNkQ=";
-    })
-    # Linux 6.10: Move 'inline' before func return type
-    (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/7097eec17bc01bcfc12c4d299136b2d3b94ec3d7.patch";
-      hash = "sha256-PZmqeXWJL3EQFD9250YfDwCY1rvSGVCbAhzyHP1pE0Q=";
+      url = "https://gerrit.openafs.org/changes/15966/revisions/d1706bdc5080b86b1876d10f062c369e8d898188/patch";
+      decode = "base64 -d";
+      hash = "sha256-jY+r9LO/4g6K9J1stxNCa38nyr1/J3beOhG9YilEbzg=";
     })
   ];
 

@@ -45,6 +45,13 @@ stdenv.mkDerivation {
       hash = "sha256-oA8GC8LmuqNKGuPqGfiQVhL5nWb7ArLWGUI6wjpsIW8=";
       excludes = [ "ChangeLog" ];
     })
+  ] ++ lib.optionals stdenv.cc.isGNU [
+    # Fixes compilation with gcc >= 14.
+    (fetchpatch {
+      url = "https://github.com/zsh-users/zsh/commit/4c89849c98172c951a9def3690e8647dae76308f.patch";
+      hash = "sha256-l5IHQuIXo0N6ynLlZoQA7wJd/C7KrW3G7nMzfjQINkw=";
+      excludes = [ "ChangeLog" ];
+    })
   ];
 
   strictDeps = true;

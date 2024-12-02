@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-lib-paths.patch;
       antlr4RuntimeCpp = antlr4.runtime.cpp.dev;
-      inherit libargs catch2 yaml-cpp;
+      yamlCpp = yaml-cpp;
+      inherit libargs catch2;
     })
   ];
 
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.isDarwin && stdenv.isx86_64
+    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
   ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
 
   meta = with lib; {

@@ -111,12 +111,12 @@ let
 in {
   inherit makeLinuxHeaders;
 
-  linuxHeaders = let version = "6.9"; in
+  linuxHeaders = let version = "6.10"; in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
         url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
-        hash = "sha256-JPoB+5icej4oRT8Rd5kWhxN2bhGcU4HawwEV8Y8mgUk=";
+        hash = "sha256-d0aYQi7lTF8ecERW83xlwGtRtOmosIZvNFgNhv744iY=";
       };
       patches = [
         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms

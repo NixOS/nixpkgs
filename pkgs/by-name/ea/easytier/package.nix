@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "easytier";
-  version = "2.0.0";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "EasyTier";
     repo = "EasyTier";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Qej6g9oxY6Wvv7jbyK9TN7QE7sfrdref7XPj10mSKUg=";
+    hash = "sha256-0bS2VzddRZcFGmHugR0yXHjHqz06tpL4+IhQ6ReaU4Y=";
   };
 
-  cargoHash = "sha256-UegTL9ZdqLQYtcg8sJSGkie3ezt9OFMX0iVm/B1D91I=";
+  cargoHash = "sha256-AkEgEymgq2asxT4oR+NtGe8bUEPRUskVvwIJYrCD7xs=";
 
   nativeBuildInputs = [ protobuf ];
 

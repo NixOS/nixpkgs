@@ -15,6 +15,7 @@
 , mesa # firefox wants gbm for drm+dmabuf
 , cups
 , pciutils
+, vulkan-loader
 , sndio
 , libjack2
 , speechd-minimal
@@ -86,7 +87,10 @@ let
                 else [])
        );
 
-      libs =   lib.optionals stdenv.hostPlatform.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
+       libs = lib.optionals stdenv.hostPlatform.isLinux (
+            [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils vulkan-loader ]
+            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
+       )
             ++ lib.optional pipewireSupport pipewire
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport libkrb5
@@ -98,7 +102,6 @@ let
             ++ lib.optional sndioSupport sndio
             ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
-            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
             ++ pkcs11Modules
             ++ gtk_modules;
       gtk_modules = [ libcanberra-gtk3 ];

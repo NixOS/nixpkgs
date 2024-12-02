@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper '${electron}/bin/electron' "$out/bin/drawio" \
       --add-flags "$out/share/lib/drawio/resources/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
       --inherit-argv0
   '' + ''
 
@@ -116,9 +116,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Desktop application for creating diagrams";
     homepage = "https://about.draw.io/";
-    license = licenses.asl20;
+    license = licenses.unfree;
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ qyliss darkonion0 ];
+    maintainers = with maintainers; [ darkonion0 ];
     platforms = platforms.darwin ++ platforms.linux;
     mainProgram = "drawio";
   };

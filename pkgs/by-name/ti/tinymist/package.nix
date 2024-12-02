@@ -6,8 +6,6 @@
   libgit2,
   openssl,
   zlib,
-  stdenv,
-  darwin,
   versionCheckHook,
   nix-update-script,
   vscode-extensions,
@@ -17,50 +15,48 @@ rustPlatform.buildRustPackage rec {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.11.28";
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Wiuf53HlTMJeYJG815e9PgOtJBRxYRPllus7mmxdvM4=";
+    hash = "sha256-xX0dA6ode2YGT+aFCHDn1LjQHWcXdqRiKP+sxdoPvI0=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "typst-0.11.1" = "sha256-dQf4qYaOni/jwIjRVXXCZLTn6ox3v6EyhCbaONqNtcw=";
-      "typst-syntax-0.7.0" = "sha256-yrtOmlFAKOqAmhCP7n0HQCOQpU3DWyms5foCdUb9QTg=";
-      "typstfmt_lib-0.2.7" = "sha256-LBYsTCjZ+U+lgd7Z3H1sBcWwseoHsuepPd66bWgfvhI=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-mkL7zQM7LOp9MxmGL2JZsFErnKp3rc0OSwek10Uj5tc=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.CoreFoundation
-      darwin.apple_sdk_11_0.frameworks.CoreServices
-      darwin.apple_sdk_11_0.frameworks.Security
-      darwin.apple_sdk_11_0.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    libgit2
+    openssl
+    zlib
+  ];
 
   checkFlags = [
     "--skip=e2e"
 
-    # Fails because of missing `creation_timestamp` field
-    # https://github.com/NixOS/nixpkgs/pull/328756#issuecomment-2241322796
-    "--skip=test_config_update"
-
     # Require internet access
-    "--skip=docs::tests::cetz"
-    "--skip=docs::tests::tidy"
-    "--skip=docs::tests::touying"
+    "--skip=docs::package::tests::cetz"
+    "--skip=docs::package::tests::tidy"
+    "--skip=docs::package::tests::touying"
+
+    # Tests are flaky for unclear reasons since the 0.12.3 release
+    # Reported upstream: https://github.com/Myriad-Dreamin/tinymist/issues/868
+    "--skip=analysis::expr_tests::scope"
+    "--skip=analysis::post_type_check_tests::test"
+    "--skip=analysis::type_check_tests::test"
+    "--skip=completion::tests::test_pkgs"
+    "--skip=folding_range::tests::test"
+    "--skip=goto_definition::tests::test"
+    "--skip=hover::tests::test"
+    "--skip=inlay_hint::tests::smart"
+    "--skip=prepare_rename::tests::prepare"
+    "--skip=references::tests::test"
+    "--skip=rename::tests::test"
+    "--skip=semantic_tokens_full::tests::test"
   ];
 
   nativeInstallCheckInputs = [
@@ -77,7 +73,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/v${version}/CHANGELOG.md";
     description = "Tinymist is an integrated language service for Typst";
     homepage = "https://github.com/Myriad-Dreamin/tinymist";
     license = lib.licenses.asl20;

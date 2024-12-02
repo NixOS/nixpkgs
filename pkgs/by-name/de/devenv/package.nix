@@ -26,7 +26,7 @@ let
     doInstallCheck = false;
   });
 
-  version = "1.3";
+  version = "1.3.1";
 in rustPlatform.buildRustPackage {
   pname = "devenv";
   inherit version;
@@ -35,10 +35,10 @@ in rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     rev = "v${version}";
-    hash = "sha256-14hqEeVy72nYDOFn7HK6Mff7L49kUI5K6wMLVHG3A90=";
+    hash = "sha256-FhlknassIb3rKEucqnfFAzgny1ANmenJcTyRaXYwbA0=";
   };
 
-  cargoHash = "sha256-E4pU/tZHxMrKSheqWF5qeOfS/NZ/Uw5jY+AbSUHmoaI=";
+  cargoHash = "sha256-dJ8A2kVXkpJcRvMLE/IawFUZNJqok/IRixTRGtLsE3w=";
 
   buildAndTestSubdir = "devenv";
 

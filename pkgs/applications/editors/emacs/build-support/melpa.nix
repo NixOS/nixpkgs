@@ -12,8 +12,8 @@ let
     src = fetchFromGitHub {
       owner = "melpa";
       repo = "package-build";
-      rev = "c48aa078c01b4f07b804270c4583a0a58ffea1c0";
-      sha256 = "sha256-MzPj375upIiYXdQR+wWXv3A1zMqbSrZlH0taLuxx/1M=";
+      rev = "d5661f1f1996a893fbcbacb4d290c57acab4fb0e";
+      hash = "sha256-zVhFR2kLLkCKC+esPBbIk3qOa033YND1HF9GiNI4JM8=";
     };
 
     patches = [ ./package-build-dont-use-mtime.patch ];

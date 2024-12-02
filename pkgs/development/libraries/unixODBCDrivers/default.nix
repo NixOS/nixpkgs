@@ -52,6 +52,10 @@
 
     buildFlags = if stdenv.hostPlatform.isDarwin then [ "maodbc" ] else null;
 
+    env = lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+    };
+
     installTargets = if stdenv.hostPlatform.isDarwin then [ "install/fast" ] else null;
 
     # see the top of the file for an explanation

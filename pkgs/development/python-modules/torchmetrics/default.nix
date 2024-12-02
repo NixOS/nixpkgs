@@ -12,7 +12,7 @@
   # buildInputs
   torch,
 
-  # checks
+  # tests
   cloudpickle,
   psutil,
   pytestCheckHook,
@@ -28,7 +28,7 @@
 
 let
   pname = "torchmetrics";
-  version = "1.4.2";
+  version = "1.4.3";
 in
 buildPythonPackage {
   inherit pname version;
@@ -38,7 +38,7 @@ buildPythonPackage {
     owner = "Lightning-AI";
     repo = "torchmetrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YieIz99QFnuW3hTtNFgxhkNnSXGsTG2qqYhRCyvZo7Q=";
+    hash = "sha256-527cHPFdFw/JajHe7Kkz7+zl4EfePaLx77I2OTjjxaA=";
   };
 
   dependencies = [

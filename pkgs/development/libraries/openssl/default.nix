@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, buildPackages, perl, coreutils, writeShellScript
-, makeWrapper
+, makeBinaryWrapper
 , withCryptodev ? false, cryptodev
 , withZlib ? false, zlib
 , enableSSL2 ? false
@@ -25,7 +25,13 @@ let
     inherit version;
 
     src = fetchurl {
-      url = "https://www.openssl.org/source/openssl-${version}.tar.gz";
+      url = if lib.versionOlder version "3.0" then
+        let
+          versionFixed = builtins.replaceStrings ["."] ["_"] version;
+        in
+          "https://github.com/openssl/openssl/releases/download/OpenSSL_${versionFixed}/openssl-${version}.tar.gz"
+      else
+        "https://github.com/openssl/openssl/releases/download/openssl-${version}/openssl-${version}.tar.gz";
       inherit hash;
     };
 
@@ -71,7 +77,7 @@ let
       stdenv.cc.isGNU;
 
     nativeBuildInputs =
-         lib.optional (!stdenv.hostPlatform.isWindows) makeWrapper
+         lib.optional (!stdenv.hostPlatform.isWindows) makeBinaryWrapper
       ++ [ perl ]
       ++ lib.optionals static [ removeReferencesTo ];
     buildInputs = lib.optional withCryptodev cryptodev
@@ -216,8 +222,8 @@ let
       rm -r $etc/etc/ssl/misc
 
       rmdir $etc/etc/ssl/{certs,private}
-
-      ${lib.optionalString (conf != null) "cat ${conf} > $etc/etc/ssl/openssl.cnf"}
+    '' + lib.optionalString (conf != null) ''
+      cat ${conf} > $etc/etc/ssl/openssl.cnf
     '';
 
     postFixup = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
@@ -227,6 +233,10 @@ let
         echo "Found an erroneous dependency on perl ^^^" >&2
         exit 1
       fi
+    '' + lib.optionalString (lib.versionAtLeast version "3.3.0") ''
+      # cleanup cmake helpers for now (for OpenSSL >= 3.3), only rely on pkg-config.
+      # pkg-config gets its paths fixed correctly
+      rm -rf $dev/lib/cmake
     '';
 
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
@@ -280,8 +290,8 @@ in {
   };
 
   openssl_3 = common {
-    version = "3.0.14";
-    hash = "sha256-7soDXU3U6E/CWEbZUtpil0hK+gZQpvhMaC453zpBI8o=";
+    version = "3.0.15";
+    hash = "sha256-I8Zm0O3yDxQkmz2PA2isrumrWFsJ4d6CEHxm4fPslTM=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -289,8 +299,6 @@ in {
       # openssl will only compile in KTLS if the current kernel supports it.
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
-
-      ./3.3/CVE-2024-5535.patch
 
       (if stdenv.hostPlatform.isDarwin
        then ./use-etc-ssl-certs-darwin.patch
@@ -304,34 +312,9 @@ in {
     };
   };
 
-  openssl_3_2 = common {
-    version = "3.2.2";
-    hash = "sha256-GXFJwY2enyksQ/BACsq6EuX1LKz+BQ89GZJ36nOOwuc=";
-
-    patches = [
-      ./3.0/nix-ssl-cert-file.patch
-
-      # openssl will only compile in KTLS if the current kernel supports it.
-      # This patch disables build-time detection.
-      ./3.0/openssl-disable-kernel-detection.patch
-
-      ./3.3/CVE-2024-5535.patch
-
-      (if stdenv.hostPlatform.isDarwin
-       then ./3.2/use-etc-ssl-certs-darwin.patch
-       else ./3.2/use-etc-ssl-certs.patch)
-    ];
-
-    withDocs = true;
-
-    extraMeta = {
-      license = lib.licenses.asl20;
-    };
-  };
-
   openssl_3_3 = common {
-    version = "3.3.1";
-    hash = "sha256-d3zVlihMiDN1oqehG/XSeG/FQTJV76sgxQ1v/m0CC34=";
+    version = "3.3.2";
+    hash = "sha256-LopAsBl5r+i+C7+z3l3BxnCf7bRtbInBDaEUq1/D0oE=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -340,11 +323,9 @@ in {
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
-      ./3.3/CVE-2024-5535.patch
-
       (if stdenv.hostPlatform.isDarwin
-       then ./3.2/use-etc-ssl-certs-darwin.patch
-       else ./3.2/use-etc-ssl-certs.patch)
+       then ./3.3/use-etc-ssl-certs-darwin.patch
+       else ./3.3/use-etc-ssl-certs.patch)
     ];
 
     withDocs = true;

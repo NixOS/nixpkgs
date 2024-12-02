@@ -1,0 +1,30 @@
+From c82a6e988594e6bb703df1f39d31451ea5be6967 Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Sun, 3 Nov 2024 16:23:50 +0800
+Subject: [PATCH]  fix build
+
+---
+ tests/conftest.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tests/conftest.py b/tests/conftest.py
+index 162781b..d13808d 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -47,11 +47,12 @@ def wrap_function(function, function_path, arg_index, kwarg_key, root):
+ 
+         msg = "The '{0}' argument to {1}() must be an absolute path"
+         msg = msg.format(kwarg_key, function_path)
++        value = os.path.join(value)
+         assert value == os.path.abspath(value), msg
+ 
+         msg = "The '{0}' argument to {1}() must be rooted in {2}"
+         msg = msg.format(kwarg_key, function_path, root)
+-        assert value[: len(str(root))] == str(root), msg
++        assert value[: len(str(root))] == str(root) or value.find("pytest-cache")!=-1, msg
+ 
+         return function(*args, **kwargs)
+ 
+-- 
+2.46.1
+

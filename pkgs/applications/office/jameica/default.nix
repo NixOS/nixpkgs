@@ -24,6 +24,7 @@ let
     else if stdenv.hostPlatform.system == "x86_64-linux" then "linux64"
     else if stdenv.hostPlatform.system == "aarch64-linux" then "linux-arm64"
     else if stdenv.hostPlatform.system == "x86_64-darwin" then "macos64"
+    else if stdenv.hostPlatform.system == "aarch64-darwin" then "macos-aarch64"
     else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   desktopItem = makeDesktopItem {
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
   # and is not able to build the application itself
   buildPhase = ''
     runHook preBuild
-    ant -f build -Dsystem.version=${version} init compile jar
+    ant -f build -Dsystem.version=${version} init compile jar ${lib.optionalString stdenv.hostPlatform.isDarwin "zip lib"}
     runHook postBuild
   '';
 
@@ -75,6 +76,13 @@ stdenv.mkDerivation rec {
     install -Dm644 plugin.xml $out/share/java/
     install -Dm644 build/jameica-icon.png $out/share/pixmaps/jameica.png
     cp ${desktopItem}/share/applications/* $out/share/applications/
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+
+    # Create .app bundle for macOS
+    mkdir -p $out/Applications
+    chmod +x releases/${_version}-${_build}-${_build}/tmp/jameica.app/jameica*.sh
+    cp -r releases/${_version}-${_build}-${_build}/tmp/jameica.app $out/Applications/Jameica.app
+  '' + ''
 
     runHook postInstall
   '';
@@ -101,7 +109,7 @@ stdenv.mkDerivation rec {
       binaryBytecode # source bundles dependencies as jars
     ];
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ flokli r3dl3g ];
     mainProgram = "jameica";
   };

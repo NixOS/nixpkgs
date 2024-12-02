@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "python-zunclient";
-  version = "5.0.0";
+  version = "5.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "openstack";
     repo = "python-zunclient";
     rev = "refs/tags/${version}";
-    hash = "sha256-EVfrxSc/eHYZR0FGFnNAxFCiXangt8uRkAC2zpwWqcA=";
+    hash = "sha256-2gC2aMaMI//QKIpbDNT9cii17680g4X1c0rgrgPbAsg=";
   };
 
   env.PBR_VERSION = version;
@@ -83,7 +83,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "zunclient" ];
 
   meta = {
-    homepage = "https://opendev.org/openstack/python-zunclient";
+    homepage = "https://github.com/openstack/python-zunclient";
     description = "Client library for OpenStack Zun API";
     license = lib.licenses.asl20;
     mainProgram = "zun";

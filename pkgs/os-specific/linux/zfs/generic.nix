@@ -26,6 +26,7 @@ let
   { version
   , hash
   , kernelModuleAttribute
+  , extraLongDescription ? ""
   , extraPatches ? []
   , rev ? "zfs-${version}"
   , kernelCompatible ? null
@@ -69,39 +70,42 @@ let
       # The arrays must remain the same length, so we repeat a flag that is
       # already part of the command and therefore has no effect.
       substituteInPlace ./module/os/linux/zfs/zfs_ctldir.c \
-        --replace '"/usr/bin/env", "umount"' '"${util-linux}/bin/umount", "-n"' \
-        --replace '"/usr/bin/env", "mount"'  '"${util-linux}/bin/mount", "-n"'
+        --replace-fail '"/usr/bin/env", "umount"' '"${util-linux}/bin/umount", "-n"' \
+        --replace-fail '"/usr/bin/env", "mount"'  '"${util-linux}/bin/mount", "-n"'
     '' + optionalString buildUser ''
-      substituteInPlace ./lib/libshare/os/linux/nfs.c --replace "/usr/sbin/exportfs" "${
+      substituteInPlace ./lib/libshare/os/linux/nfs.c --replace-fail "/usr/sbin/exportfs" "${
         # We don't *need* python support, but we set it like this to minimize closure size:
         # If it's disabled by default, no need to enable it, even if we have python enabled
         # And if it's enabled by default, only change that if we explicitly disable python to remove python from the closure
         nfs-utils.override (old: { enablePython = old.enablePython or true && enablePython; })
       }/bin/exportfs"
-      substituteInPlace ./lib/libshare/smb.h        --replace "/usr/bin/net"            "${samba}/bin/net"
+      substituteInPlace ./lib/libshare/smb.h        --replace-fail "/usr/bin/net"            "${samba}/bin/net"
       # Disable dynamic loading of libcurl
-      substituteInPlace ./config/user-libfetch.m4   --replace "curl-config --built-shared" "true"
-      substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
-      substituteInPlace ./config/zfs-build.m4       --replace "\$sysconfdir/init.d"     "$out/etc/init.d" \
-                                                    --replace "/etc/default"            "$out/etc/default"
+      substituteInPlace ./config/user-libfetch.m4   --replace-fail "curl-config --built-shared" "true"
+      substituteInPlace ./config/user-systemd.m4    --replace-fail "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
+      substituteInPlace ./config/zfs-build.m4       --replace-fail "\$sysconfdir/init.d"     "$out/etc/init.d" \
+                                                    --replace-fail "/etc/default"            "$out/etc/default"
       substituteInPlace ./contrib/initramfs/Makefile.am \
-        --replace "/usr/share/initramfs-tools" "$out/usr/share/initramfs-tools"
+        --replace-fail "/usr/share/initramfs-tools" "$out/usr/share/initramfs-tools"
     '' + optionalString isAtLeast22Series ''
       substituteInPlace ./udev/vdev_id \
-        --replace "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
+        --replace-fail "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
          "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
+
+      substituteInPlace ./config/zfs-build.m4 \
+        --replace-fail "bashcompletiondir=/etc/bash_completion.d" \
+          "bashcompletiondir=$out/share/bash-completion/completions"
+
+      substituteInPlace ./cmd/arc_summary --replace-fail "/sbin/modinfo" "modinfo"
     '' + optionalString (!isAtLeast22Series) ''
-      substituteInPlace ./etc/zfs/Makefile.am --replace "\$(sysconfdir)/zfs" "$out/etc/zfs"
+      substituteInPlace ./etc/zfs/Makefile.am --replace-fail "\$(sysconfdir)/zfs" "$out/etc/zfs"
 
       find ./contrib/initramfs -name Makefile.am -exec sed -i -e 's|/usr/share/initramfs-tools|'$out'/share/initramfs-tools|g' {} \;
 
+      substituteInPlace ./cmd/arc_summary/arc_summary3 --replace-fail "/sbin/modinfo" "modinfo"
       substituteInPlace ./cmd/vdev_id/vdev_id \
-        --replace "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
+        --replace-fail "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
         "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
-    '' + ''
-      substituteInPlace ./config/zfs-build.m4 \
-        --replace "bashcompletiondir=/etc/bash_completion.d" \
-          "bashcompletiondir=$out/share/bash-completion/completions"
     '';
 
     nativeBuildInputs = [ autoreconfHook269 nukeReferences ]
@@ -176,7 +180,7 @@ let
            continue
          fi
          sed -i '/zfs-import-scan.service/d' $i
-         substituteInPlace $i --replace "zfs-import-cache.service" "zfs-import.target"
+         substituteInPlace $i --replace-warn "zfs-import-cache.service" "zfs-import.target"
       done
 
       # Remove tests because they add a runtime dependency on gcc
@@ -220,7 +224,7 @@ let
         snapshotting, cloning, block devices, deduplication, and more.
 
         ${if buildUser then "This is the userspace tools package." else "This is the kernel module package."}
-      '';
+      '' + extraLongDescription;
       homepage = "https://github.com/openzfs/zfs";
       changelog = "https://github.com/openzfs/zfs/releases/tag/zfs-${version}";
       license = lib.licenses.cddl;
@@ -237,8 +241,6 @@ let
 
       inherit maintainers;
       mainProgram = "zfs";
-      # If your Linux kernel version is not yet supported by zfs, try zfs_unstable.
-      # On NixOS set the option `boot.zfs.package = pkgs.zfs_unstable`.
       broken = buildKernel && (kernelCompatible != null) && !(kernelCompatible kernel);
     };
   };

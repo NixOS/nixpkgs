@@ -18,18 +18,18 @@
   adwaita-icon-theme,
   libgweather,
   gucharmap,
-  tracker,
+  tinysparql,
   polkit,
   gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-applets";
-  version = "3.52.0";
+  version = "3.54.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-applets/${lib.versions.majorMinor finalAttrs.version}/gnome-applets-${finalAttrs.version}.tar.xz";
-    hash = "sha256-bz07QoZW/21bHT7lzLfs49Kxi1S/BFes9DtxHlXi1iw=";
+    hash = "sha256-FASM8amK2U4U715E/f6IVvo/KDZAHHkr/83mi4db2vk=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     adwaita-icon-theme
     libgweather
     gucharmap
-    tracker
+    tinysparql
     polkit
     wirelesstools
     linuxPackages.cpupower

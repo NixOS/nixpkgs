@@ -8,11 +8,11 @@
 }:
 let
   pname = "cursor";
-  version = "0.41.3";
+  version = "0.43.0";
   appKey = "230313mzl4w4u92";
   src = fetchurl {
-    url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.41.3-build-240925fkhcqg263-x86_64.AppImage";
-    hash = "sha256-WtfyiNGnUn8g1HR0TQPyn3SMJmjqe+otAYeyokMIO+w=";
+    url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.43.0-build-24112423a8e6ct7-x86_64.AppImage";
+    hash = "sha256-IcAUXGSMHxGd5Ak4cYA9/2YYg8UA+cRBGgnOupDuRXs=";
   };
   appimageContents = appimageTools.extractType2 { inherit version pname src; };
 in
@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation {
     substituteInPlace $out/share/applications/cursor.desktop --replace-fail "AppRun" "cursor"
 
     wrapProgram $out/bin/cursor \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}} --no-update"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}} --no-update"
 
     runHook postInstall
   '';

@@ -11,6 +11,8 @@
   in "${if matched == null then base else builtins.head matched}${appendShort}";
 in
 lib.makeOverridable (lib.fetchers.withNormalizedHash { } (
+# NOTE Please document parameter additions or changes in
+#   doc/build-helpers/fetchers.chapter.md
 { url, rev ? "HEAD", leaveDotGit ? deepClone
 , outputHash ? lib.fakeHash, outputHashAlgo ? null
 , fetchSubmodules ? true, deepClone ? false

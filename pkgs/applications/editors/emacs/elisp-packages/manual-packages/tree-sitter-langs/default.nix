@@ -44,8 +44,6 @@ melpaStablePackages.tree-sitter-langs.overrideAttrs(old: {
           fi
         '') plugins);
 
-  ignoreCompilationError = false;
-
   passthru = old.passthru or {} // {
     inherit plugins;
     withPlugins = fn: final.tree-sitter-langs.override { plugins = fn tree-sitter-grammars; };

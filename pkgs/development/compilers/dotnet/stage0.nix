@@ -12,6 +12,7 @@
   patchNupkgs,
   symlinkJoin,
 
+  baseName ? "dotnet",
   releaseManifestFile,
   tarballHash,
   depsFile,
@@ -34,7 +35,12 @@ let
 
   vmr =
     (mkVMR {
-      inherit releaseManifestFile tarballHash bootstrapSdk;
+      inherit
+        baseName
+        releaseManifestFile
+        tarballHash
+        bootstrapSdk
+        ;
     }).overrideAttrs
       (old: rec {
         prebuiltPackages = mkNugetDeps {
@@ -138,4 +144,4 @@ let
         };
       });
 in
-mkPackages { inherit vmr; }
+mkPackages { inherit baseName vmr; }

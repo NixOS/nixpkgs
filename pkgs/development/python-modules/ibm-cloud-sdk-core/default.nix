@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pyjwt,
   pytestCheckHook,
   python-dateutil,
@@ -14,14 +14,16 @@
 
 buildPythonPackage rec {
   pname = "ibm-cloud-sdk-core";
-  version = "3.20.1";
+  version = "3.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-nE1JIlYlJ5O3L7FQD5L+JvLnVs7nq4Ff6dmHvgXjj0M=";
+  src = fetchFromGitHub {
+    owner = "IBM";
+    repo = "python-sdk-core";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-gNEd79kOtDlFJg3Ji9kO6VGGsy/VGxd6GzC/cuen9M0=";
   };
 
   pythonRelaxDeps = [ "requests" ];
@@ -55,6 +57,8 @@ buildPythonPackage rec {
       "test_retry_config_external"
       # assertion error due to requests brotli support
       "test_http_client"
+      # Tests require network access
+      "test_tls_v1_2"
     ]
     ++ lib.optionals (pythonAtLeast "3.12") [
       # Tests are blocking or failing

@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://codeberg.org/nsxiv/nsxiv/src/tag/${finalAttrs.src.rev}/etc/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres sikmir ];
+    maintainers = with lib.maintainers; [ sikmir ];
     platforms = lib.platforms.unix;
   };
 })

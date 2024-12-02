@@ -9,7 +9,7 @@ let
   cfg = config.services.magic-wormhole-mailbox-server;
   # keep semicolon in dataDir for backward compatibility
   dataDir = "/var/lib/magic-wormhole-mailbox-server;";
-  python = pkgs.python311.withPackages (
+  python = pkgs.python3.withPackages (
     py: with py; [
       magic-wormhole-mailbox-server
       twisted

@@ -6,7 +6,7 @@
   fetchFromGitHub,
   pnpm_9,
   wrapGAppsHook3,
-  cargo-tauri,
+  cargo-tauri_1,
   darwin,
   desktop-file-utils,
   esbuild,
@@ -19,7 +19,7 @@
   moreutils,
   openssl,
   rust,
-  webkitgtk,
+  webkitgtk_4_0,
   nix-update-script,
   cacert,
 }:
@@ -51,11 +51,11 @@ rustPlatform.buildRustPackage rec {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
-    hash = "sha256-r2PkNDvOofginL5Y0K+7Qhnsev2zle1q9qraG/ub7Wo=";
+    hash = "sha256-rlEwFwN6DrOJZm1Hzy6qu7rLKQx69rRIqrScx9FExZM=";
   };
 
   nativeBuildInputs = [
-    cargo-tauri.hook
+    cargo-tauri_1.hook
     desktop-file-utils
     jq
     moreutils
@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       glib-networking
       libsoup
-      webkitgtk
+      webkitgtk_4_0
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
@@ -173,5 +173,6 @@ rustPlatform.buildRustPackage rec {
       techknowlogick
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    broken = true; # build fails on darwin and linux
   };
 }

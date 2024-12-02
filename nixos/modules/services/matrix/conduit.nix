@@ -111,6 +111,8 @@ in
         description = "Conduit Matrix Server";
         documentation = [ "https://gitlab.com/famedly/conduit/" ];
         wantedBy = [ "multi-user.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
         environment = lib.mkMerge ([
           { CONDUIT_CONFIG = configFile; }
           cfg.extraEnvironment
