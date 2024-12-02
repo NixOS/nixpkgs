@@ -51,6 +51,10 @@ in
         DynamicUser = true;
         ExecStart = "${cfg.package}/bin/uptime-kuma-server";
         Restart = "on-failure";
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = false; # enabling it breaks execution
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
@@ -62,10 +66,15 @@ in
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
+        ProtectProc = "noaccess";
         ProtectSystem = "strict";
         RemoveIPC = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" "AF_NETLINK" ];
+        RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        UMask = 027;
       };
     };
   };
