@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   libpcap,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -20,12 +21,18 @@ buildGoModule rec {
 
   buildInputs = [ libpcap ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   subPackages = [ "cmd/naabu/" ];
 
   ldflags = [
     "-w"
     "-s"
   ];
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "-version" ];
 
   meta = with lib; {
     description = "Fast SYN/CONNECT port scanner";
