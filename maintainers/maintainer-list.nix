@@ -7307,6 +7307,13 @@
     github = "fkautz";
     githubId = 135706;
   };
+  flacks = {
+    name = "Jean Lucas";
+    email = "jean@4ray.co";
+    github = "flacks";
+    githubId = 2135469;
+    matrix = "@flacks:matrix.org";
+  };
   FlafyDev = {
     name = "Flafy Arazi";
     email = "flafyarazi@gmail.com";
