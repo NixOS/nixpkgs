@@ -10,6 +10,7 @@
   xclip,
   wl-clipboard,
   passAlias ? false,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -67,6 +68,8 @@ buildGoModule rec {
   '';
   passthru = {
     inherit wrapperPath;
+
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
