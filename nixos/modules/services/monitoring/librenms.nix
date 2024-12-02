@@ -102,6 +102,16 @@ in
       '';
     };
 
+    enableLocalBilling = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Enable billing Cron-Jobs on the local instance. Enabled by default, but you may disable it
+        on some nodes within a distributed poller setup. See [the docs](https://docs.librenms.org/Extensions/Distributed-Poller/#discovery)
+        for more informations about billing with distributed pollers.
+      '';
+    };
+
     useDistributedPollers = mkOption {
       type = types.bool;
       default = false;
@@ -147,6 +157,10 @@ in
         default = false;
         description = ''
           Enable distributed billing on this poller.
+
+          Note: according to [the docs](https://docs.librenms.org/Extensions/Distributed-Poller/#discovery),
+          billing should only be calculated on a single node per poller group. You can disable billing on
+          some nodes with the `services.librenms.enableLocalBilling` option.
         '';
       };
 
@@ -613,8 +627,6 @@ in
           "${if cfg.enableOneMinutePolling then "*" else "*/5"} * * * * ${cfg.user} ${env} ${package}/cronic ${package}/poller-wrapper.py ${toString cfg.pollerThreads}"
           "* * * * * ${cfg.user} ${env} ${package}/alerts.php >> /dev/null 2>&1"
 
-          "*/5 * * * * ${cfg.user} ${env} ${package}/poll-billing.php >> /dev/null 2>&1"
-          "01 * * * * ${cfg.user} ${env} ${package}/billing-calculate.php >> /dev/null 2>&1"
           "*/5 * * * * ${cfg.user} ${env} ${package}/check-services.php >> /dev/null 2>&1"
 
           # extra: fast ping
@@ -625,6 +637,9 @@ in
           "19 0 * * * ${cfg.user} ${env} ${package}/daily.sh notifications >> /dev/null 2>&1"
           "19 0 * * * ${cfg.user} ${env} ${package}/daily.sh peeringdb >> /dev/null 2>&1"
           "19 0 * * * ${cfg.user} ${env} ${package}/daily.sh mac_oui >> /dev/null 2>&1"
+        ] ++ lib.optionals cfg.enableLocalBilling [
+          "*/5 * * * * ${cfg.user} ${env} ${package}/poll-billing.php >> /dev/null 2>&1"
+          "01 * * * * ${cfg.user} ${env} ${package}/billing-calculate.php >> /dev/null 2>&1"
         ];
     };
 
