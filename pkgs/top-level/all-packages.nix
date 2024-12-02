@@ -3002,7 +3002,7 @@ with pkgs;
 
   bluetooth_battery = python3Packages.callPackage ../applications/misc/bluetooth_battery { };
 
-  calyx-vpn = libsForQt5.callPackage ../tools/networking/bitmask-vpn {
+  calyx-vpn = qt6Packages.callPackage ../tools/networking/bitmask-vpn {
     provider = "calyx";
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
@@ -12270,12 +12270,7 @@ with pkgs;
       overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx
     else stdenv;
   };
-  busybox-sandbox-shell = callPackage ../os-specific/linux/busybox/sandbox-shell.nix {
-    # musl roadmap has RISC-V support projected for 1.1.20
-    busybox = if !stdenv.hostPlatform.isRiscV && !stdenv.hostPlatform.isLoongArch64 && stdenv.hostPlatform.libc != "bionic"
-              then pkgsStatic.busybox
-              else busybox;
-  };
+  busybox-sandbox-shell = callPackage ../os-specific/linux/busybox/sandbox-shell.nix { };
 
   cm-rgb = python3Packages.callPackage ../tools/system/cm-rgb { };
 

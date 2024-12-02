@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "FlxPeters";
     repo = "netbox-plugin-prometheus-sd";
     rev = "v${version}";
-    hash = lib.fakeHash;
+    hash = "sha256-UtvSkqs2PN3uxCB78hJjh0lZ1WbZGjDpwlKyeAGpiEM=";
   };
 
   nativeBuildInputs = [

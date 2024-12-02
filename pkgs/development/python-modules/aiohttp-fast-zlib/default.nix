@@ -1,12 +1,12 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
-  aiohttp,
   isal,
-  zlib-ng,
+  poetry-core,
   pytestCheckHook,
+  zlib-ng,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiohttp-fast-zlib";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-fvZVviKN/CL42Zmmm6k/JNdeAljRoqN63rlduNJVr98=";
   };
 

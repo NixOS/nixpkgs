@@ -33,14 +33,14 @@ let
       ports = if m == null then throw "bad ip:ports `${IPPorts}'" else elemAt m 1;
     };
 
-  mkTable = { ipVer, dest, ipSet, forwardPorts, dmzHost }:
+  mkTable = { ipVer, dest, ipSet, forwardPorts, dmzHost, externalIP }:
     let
       # nftables maps for port forward
-      # l4proto . dport : addr . port
+      # [daddr .] l4proto . dport : addr . port
       fwdMap = toNftSet (map
         (fwd:
           with (splitIPPorts fwd.destination);
-          "${fwd.proto} . ${toNftRange fwd.sourcePort} : ${IP} . ${ports}"
+          "${optionalString (externalIP != null) "${externalIP} . "}${fwd.proto} . ${toNftRange fwd.sourcePort} : ${IP} . ${ports}"
         )
         forwardPorts);
 
@@ -69,7 +69,7 @@ let
         type nat hook prerouting priority dstnat;
 
         ${optionalString (fwdMap != "") ''
-          iifname "${cfg.externalInterface}" meta l4proto { tcp, udp } dnat meta l4proto . th dport map { ${fwdMap} } comment "port forward"
+          iifname "${cfg.externalInterface}" meta l4proto { tcp, udp } dnat ${optionalString (externalIP != null) "${ipVer} daddr . "}meta l4proto . th dport map { ${fwdMap} } comment "port forward"
         ''}
 
         ${optionalString (fwdLoopDnatMap != "") ''
@@ -133,7 +133,7 @@ in
           ipVer = "ip";
           inherit dest ipSet;
           forwardPorts = filter (x: !(isIPv6 x.destination)) cfg.forwardPorts;
-          inherit (cfg) dmzHost;
+          inherit (cfg) dmzHost externalIP;
         };
       };
       "nixos-nat6" = mkIf cfg.enableIPv6 {
@@ -145,6 +145,7 @@ in
           ipSet = ipv6Set;
           forwardPorts = filter (x: isIPv6 x.destination) cfg.forwardPorts;
           dmzHost = null;
+          externalIP = cfg.externalIPv6;
         };
       };
     };

@@ -5,12 +5,12 @@
 }:
 
 let
-  version = "1.4.0";
+  version = "1.4.2";
   pname = "quba";
 
   src = fetchurl {
     url = "https://github.com/ZUGFeRD/quba-viewer/releases/download/v${version}/Quba-${version}.AppImage";
-    hash = "sha256-EsTF7W1np5qbQQh3pdqsFe32olvGK3AowGWjqHPEfoM=";
+    hash = "sha256-3goMWN5GeQaLJimUKbjozJY/zJmqc9Mvy2+6bVSt1p0=";
   };
 
   appimageContents = appimageTools.extractType1 { inherit pname version src; };
