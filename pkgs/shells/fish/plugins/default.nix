@@ -54,6 +54,8 @@ lib.makeScope newScope (self: with self; {
 
   node-binpath = callPackage ./node-binpath.nix { };
 
+  node-version = callPackage ./node-version.nix { };
+
   pisces = callPackage ./pisces.nix { };
 
   plugin-git = callPackage ./plugin-git.nix { };
