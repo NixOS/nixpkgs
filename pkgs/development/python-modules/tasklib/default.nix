@@ -1,17 +1,14 @@
 {
   lib,
-  pythonPackages,
+  buildPythonPackage,
+  six,
+  pytz,
+  tzlocal,
   fetchPypi,
-  taskwarrior,
+  taskwarrior2,
   writeShellScriptBin,
 }:
 
-with pythonPackages;
-
-let
-
-  wsl_stub = writeShellScriptBin "wsl" "true";
-in
 buildPythonPackage rec {
   pname = "tasklib";
   version = "2.5.1";
@@ -29,16 +26,17 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    taskwarrior
-    wsl_stub
+    taskwarrior2
+    # stub
+    (writeShellScriptBin "wsl" "true")
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/robgolding/tasklib";
     description = "Library for interacting with taskwarrior databases";
     changelog = "https://github.com/GothenburgBitFactory/tasklib/releases/tag/${version}";
-    maintainers = with maintainers; [ arcnmx ];
-    platforms = platforms.all;
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ arcnmx ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd3;
   };
 }

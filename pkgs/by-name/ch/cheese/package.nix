@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/cheese/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "XyGFxMmeVN3yuLr2DIKBmVDlSVLhMuhjmHXz7cv49o4=";
+    url = "mirror://gnome/sources/cheese/${lib.versions.major version}/cheese-${version}.tar.xz";
+    hash = "sha256-XyGFxMmeVN3yuLr2DIKBmVDlSVLhMuhjmHXz7cv49o4=";
   };
 
   nativeBuildInputs = [
@@ -98,9 +98,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/cheese";
+    changelog = "https://gitlab.gnome.org/GNOME/cheese/-/blob/${version}/NEWS?ref_type=tags";
     description = "Take photos and videos with your webcam, with fun graphical effects";
     mainProgram = "cheese";
-    maintainers = [ ];
+    maintainers = with maintainers; [ aleksana ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

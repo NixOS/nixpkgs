@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  defusedxml,
   dnspython,
   fetchFromGitHub,
   fetchpatch,
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "ipwhois";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,33 +24,25 @@ buildPythonPackage rec {
     owner = "secynic";
     repo = "ipwhois";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2CfRRHlIIaycUtzKeMBKi6pVPeBCb1nW3/1hoxQU1YM=";
+    hash = "sha256-PY3SUPELcCvS/o5kfko4OD1BlTc9DnyqfkSFuzcAOSY=";
   };
-
-  patches = [
-    # Use assertEqual instead of assertEquals, https://github.com/secynic/ipwhois/pull/316
-    (fetchpatch {
-      name = "assert-equal.patch";
-      url = "https://github.com/secynic/ipwhois/commit/fce2761354af99bc169e6cd08057e838fcc40f75.patch";
-      hash = "sha256-7Ic4xWTAmklk6MvnZ/WsH9SW/4D9EG/jFKt5Wi89Xtc=";
-    })
-  ];
 
   __darwinAllowLocalNetworking = true;
 
   pythonRelaxDeps = [ "dnspython" ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ dnspython ];
+  dependencies = [
+    defusedxml
+    dnspython
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ipwhois" ];
 
-  preCheck = lib.optionalString stdenv.isLinux ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf) \
       LD_PRELOAD=${libredirect}/lib/libredirect.so

@@ -37,7 +37,7 @@ let
 
   bits = builtins.toString stdenv.hostPlatform.parsed.cpu.bits;
   osname =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       "osx"
     else
       stdenv.hostPlatform.parsed.kernel.name;
@@ -106,9 +106,9 @@ stdenv.mkDerivation (finalAttrs: {
     rm dmd/compiler/test/dshell/test6952.d
   '' + lib.optionalString (lib.versionAtLeast version "2.092.2") ''
     substituteInPlace dmd/compiler/test/dshell/test6952.d --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace phobos/std/socket.d --replace-fail "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace phobos/std/socket.d --replace-fail "foreach (name; names)" "names = []; foreach (name; names)"
   '';
 
@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     tzdata
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Foundation
   ];
 
@@ -224,6 +224,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
     # ld: section __DATA/__thread_bss has type zero-fill but non-zero file offset file '/private/tmp/nix-build-dmd-2.109.1.drv-0/.rdmd-301/rdmd-build.d-A1CF043A7D87C5E88A58F3C0EF5A0DF7/objs/build.o' for architecture x86_64
     # clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

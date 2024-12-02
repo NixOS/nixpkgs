@@ -1,18 +1,15 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.clipcat;
 in {
 
   options.services.clipcat= {
-    enable = mkEnableOption "Clipcat clipboard daemon";
+    enable = lib.mkEnableOption "Clipcat clipboard daemon";
 
-    package = mkPackageOption pkgs "clipcat" { };
+    package = lib.mkPackageOption pkgs "clipcat" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.user.services.clipcat = {
       enable      = true;
       description = "clipcat daemon";

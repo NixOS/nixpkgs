@@ -116,6 +116,7 @@ import ../make-test-python.nix (
           services.k3s = {
             inherit tokenFile;
             enable = true;
+            package = k3s;
             serverAddr = "https://192.168.1.1:6443";
             clusterInit = false;
             extraFlags = builtins.toString [
@@ -161,6 +162,7 @@ import ../make-test-python.nix (
             inherit tokenFile;
             enable = true;
             role = "agent";
+            package = k3s;
             serverAddr = "https://192.168.1.3:6443";
             extraFlags = lib.concatStringsSep " " [
               "--pause-image"
@@ -189,15 +191,13 @@ import ../make-test-python.nix (
           m.start()
           m.wait_for_unit("k3s")
 
-      is_aarch64 = "${toString pkgs.stdenv.isAarch64}" == "1"
+      is_aarch64 = "${toString pkgs.stdenv.hostPlatform.isAarch64}" == "1"
 
       # wait for the agent to show up
       server.wait_until_succeeds("k3s kubectl get node agent")
 
       for m in machines:
-          # Fix-Me: Tests fail for 'aarch64-linux' as: "CONFIG_CGROUP_FREEZER: missing (fail)"
-          if not is_aarch64:
-              m.succeed("k3s check-config")
+          m.succeed("k3s check-config")
           m.succeed(
               "${pauseImage} | k3s ctr image import -"
           )

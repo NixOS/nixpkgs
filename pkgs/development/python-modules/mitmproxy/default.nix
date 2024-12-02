@@ -45,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "10.4.0";
+  version = "11.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -54,11 +54,12 @@ buildPythonPackage rec {
     owner = "mitmproxy";
     repo = "mitmproxy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-W+m7PVphj4sP5+Um7dtPbdnaZ+edZn/fcE4XJGX1E6M=";
+    hash = "sha256-1yqR82YpHD5Z2Ufa/8T0htjLm2s+fhBN5BfKGHCGnEw=";
   };
 
-
   pythonRelaxDeps = [
+    "passlib"
+    "protobuf"
     "urwid"
   ];
 
@@ -90,7 +91,7 @@ buildPythonPackage rec {
     urwid
     wsproto
     zstandard
-  ] ++ lib.optionals stdenv.isDarwin [ mitmproxy-macos ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ mitmproxy-macos ];
 
   nativeCheckInputs = [
     hypothesis
@@ -122,6 +123,7 @@ buildPythonPackage rec {
     "test_statusbar"
     # FileNotFoundError: [Errno 2] No such file or directory
     # likely wireguard is also not working in the sandbox
+    "test_tun_mode"
     "test_wireguard"
     # test require a DNS server
     # RuntimeError: failed to get dns servers: io error: entity not found

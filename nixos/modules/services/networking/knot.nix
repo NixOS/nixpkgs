@@ -337,6 +337,7 @@ in {
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
+          "@chown"
         ] ++ optionals (cfg.enableXDP) [
           "bpf"
         ];

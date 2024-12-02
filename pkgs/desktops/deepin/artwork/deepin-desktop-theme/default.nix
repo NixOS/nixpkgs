@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, gtk3
-, xcursorgen
-, papirus-icon-theme
-, breeze-icons
-, hicolor-icon-theme
-, deepin-icon-theme
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  gtk3,
+  xcursorgen,
+  papirus-icon-theme,
+  libsForQt5,
+  hicolor-icon-theme,
+  deepin-icon-theme,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    breeze-icons
+    libsForQt5.breeze-icons
     papirus-icon-theme
     hicolor-icon-theme
     deepin-icon-theme
@@ -47,7 +48,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Provides a variety of well-designed theme resources";
     homepage = "https://github.com/linuxdeepin/deepin-desktop-theme";
-    license = with licenses; [ gpl3Plus cc-by-sa-40 ];
+    license = with licenses; [
+      gpl3Plus
+      cc-by-sa-40
+    ];
     platforms = platforms.linux;
     maintainers = teams.deepin.members;
   };

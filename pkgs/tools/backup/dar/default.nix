@@ -48,10 +48,10 @@ stdenv.mkDerivation rec {
     xz
     zlib
     zstd
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     attr
     e2fsprogs
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
   ];
 

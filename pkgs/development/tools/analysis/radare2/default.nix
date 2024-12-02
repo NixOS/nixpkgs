@@ -46,13 +46,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "radare2";
-  version = "5.9.2";
+  version = "5.9.6";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-smsjGfTvSTVwd7nhWhptYpkus2fEQ2EVdT5bDt/rHZE=";
+    hash = "sha256-t/BMsYqNLMAlBBYm6JCDkFYL5YwJBwmEaaIY4KFYxY4=";
   };
 
   preBuild = ''
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath $out/lib $out/lib/libr_io.${finalAttrs.version}.dylib
   '';
 

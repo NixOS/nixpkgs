@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     qt6.qtbase
   ] ++
-  lib.optionals (stdenv.isLinux) [
+  lib.optionals (stdenv.hostPlatform.isLinux) [
     qt6.qtwayland
   ];
 

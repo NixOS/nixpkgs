@@ -2,11 +2,11 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  setuptools,
   requests,
   stups-cli-support,
   stups-zign,
-  pytest,
-  pytest-cov,
+  pytestCheckHook,
   hypothesis,
   pythonOlder,
 }:
@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "stups-pierone";
   version = "1.1.51";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -25,7 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-OypGYHfiFUfcUndylM2N2WfPnfXXJ4gvWypUbltYAYE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "stups-zign" ];
+
+  dependencies = [
     requests
     stups-cli-support
     stups-zign
@@ -36,8 +40,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    pytest
-    pytest-cov
+    pytestCheckHook
     hypothesis
   ];
 

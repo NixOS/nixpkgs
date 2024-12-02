@@ -1,54 +1,33 @@
 { lib
 , buildPackages
-, clang
 , fetchFromGitHub
-, libclang
-, libiconv
-, llvmPackages_12
 , openssl
 , pkg-config
 , protobuf
 , rustPlatform
-, stdenv
-, Security
-, SystemConfiguration
 }:
-let
-  # Rust rocksdb bindings have C++ compilation/linking errors on Darwin when using newer clang
-  # Forcing it to clang 12 fixes the issue.
-  buildRustPackage =
-    if stdenv.isDarwin then
-      rustPlatform.buildRustPackage.override { stdenv = llvmPackages_12.stdenv; }
-    else
-      rustPlatform.buildRustPackage;
-in
-buildRustPackage rec {
+
+rustPlatform.buildRustPackage rec {
   pname = "fedimint";
-  version = "0.3.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "fedimint";
     repo = "fedimint";
     rev = "v${version}";
-    hash = "sha256-0SsIuMCdsZdYSRA1yT1axMe6+p+tIpXyN71V+1B7jYc=";
+    hash = "sha256-YyvppmKs6RCIzmn9bezNxjoCSlPY6GCWmy+bsSbCA2A=";
   };
 
-  cargoHash = "sha256-nQvEcgNOT04H5OgMHfN1713A4nbEaKK2KDx9E3qxcbM=";
+  cargoHash = "sha256-nWwAmthTOzKDLrHN0v/usC8DfmHzywNJs/6xdyCBBZY=";
 
   nativeBuildInputs = [
     protobuf
     pkg-config
-    clang
-    libclang.lib
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-    libiconv
-    Security
-    SystemConfiguration
   ];
 
   outputs = [ "out" "fedimintCli" "fedimint" "gateway" "gatewayCli" "devimint" ];
@@ -62,13 +41,9 @@ buildRustPackage rec {
     keepPattern=''${keepPattern:1}
     find "$out/bin" -maxdepth 1 -type f | grep -Ev "(''${keepPattern})" | xargs rm -f
 
-    # fix the upstream name
-    mv $out/bin/recoverytool $out/bin/fedimint-recoverytool
-
-
     cp -a $releaseDir/fedimint-cli  $fedimintCli/bin/
     cp -a $releaseDir/fedimint-dbtool  $fedimintCli/bin/
-    cp -a $releaseDir/recoverytool  $fedimintCli/bin/fedimint-recoverytool
+    cp -a $releaseDir/fedimint-recoverytool  $fedimintCli/bin/
 
     cp -a $releaseDir/fedimintd  $fedimint/bin/
 
@@ -83,7 +58,6 @@ buildRustPackage rec {
   PROTOC = "${buildPackages.protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
   OPENSSL_DIR = openssl.dev;
-  LIBCLANG_PATH = "${libclang.lib}/lib";
 
   FEDIMINT_BUILD_FORCE_GIT_HASH = "0000000000000000000000000000000000000000";
 

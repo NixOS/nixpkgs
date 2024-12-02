@@ -5,15 +5,16 @@
   makeWrapper,
   jre_headless,
   gawk,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nexus";
-  version = "3.69.0-02";
+  version = "3.70.1-02";
 
   src = fetchurl {
     url = "https://download.sonatype.com/nexus/3/nexus-${version}-unix.tar.gz";
-    hash = "sha256-7sgLPuM93mFEPlTd3qJY+FGVHErvgcTGJWwSBcqBgWI=";
+    hash = "sha256-oBappm8WRcgyD5HWqJKPbMHjlwCUo9y5+FtB2Kq1PCE=";
   };
 
   preferLocalBuild = true;
@@ -48,6 +49,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) nexus;
+  };
 
   meta = {
     description = "Repository manager for binary software components";

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy-deconz";
-  version = "0.23.2";
+  version = "0.24.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,13 +22,13 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-H3WsprBTfBpxMGqasWbj41Yikt/UMU0cKaROzXE2dLU=";
+    hash = "sha256-CSXJcERqrPnCdlwyNSqSkxoiVhjNuL2GL4J6h2DMZY4=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace ', "setuptools-git-versioning<2"' "" \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail ', "setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   nativeBuildInputs = [ setuptools ];

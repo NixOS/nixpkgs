@@ -2,7 +2,7 @@
 
 let
   pname = "uucp";
-  version = "15.1.0";
+  version = "16.0.0";
   webpage = "https://erratique.ch/software/${pname}";
   minimalOCamlVersion = "4.03";
   doCheck = true;
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    hash = "sha256-qR5LiAZHt4oD3ak0x17GqbYXNaJmJxFk/WGoxT+yWYc=";
+    hash = "sha256-5//UGI4u3OROYdxtwz9K2vCTzYiN16mOyEFhUQWtgEQ=";
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];

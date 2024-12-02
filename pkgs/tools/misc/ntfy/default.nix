@@ -3,16 +3,17 @@
 , python39
 , fetchFromGitHub
 , fetchpatch
-, withXmpp ? !stdenv.isDarwin
+, withXmpp ? !stdenv.hostPlatform.isDarwin
 , withMatrix ? true
 , withSlack ? true
 , withEmoji ? true
 , withPid ? true
-, withDbus ? stdenv.isLinux
+, withDbus ? stdenv.hostPlatform.isLinux
 }:
 
 let
   python = python39.override {
+    self = python;
     packageOverrides = self: super: {
       ntfy-webpush = self.callPackage ./webpush.nix { };
 

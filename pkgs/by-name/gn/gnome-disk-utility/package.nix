@@ -15,6 +15,7 @@
 , libnotify
 , itstool
 , gnome
+, gnome-settings-daemon
 , adwaita-icon-theme
 , libxml2
 , gsettings-desktop-schemas
@@ -28,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-disk-utility";
-  version = "46.0";
+  version = "46.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-disk-utility/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-RkZJFIxtZ3HxrC6/5DpOUZIFsRwtkUoJ8qABgh0GlX0=";
+    url = "mirror://gnome/sources/gnome-disk-utility/${lib.versions.major version}/gnome-disk-utility-${version}.tar.xz";
+    hash = "sha256-wk6UOaBNcLz640nKE0xwBUNf4rb0UhFN+Hi/8Libv/4=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
     udisks2
     adwaita-icon-theme
     systemd
-    gnome.gnome-settings-daemon
+    gnome-settings-daemon
     gsettings-desktop-schemas
   ];
 

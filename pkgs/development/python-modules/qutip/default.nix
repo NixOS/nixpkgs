@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "qutip";
-  version = "5.0.2";
+  version = "5.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,8 +29,14 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-lMPzgmUaoEQB5TzmqEJFiFTuS3AGpyMMjPHlPUKTLvk=";
+    hash = "sha256-KT5Mk0w6EKTUZzGRnQ6XQPZfH5ZXVuiD+EwSflNqHNo=";
   };
+
+  postPatch = ''
+    # build-time constriant, used to ensure forward and backward compat
+    substituteInPlace pyproject.toml setup.cfg \
+      --replace-fail "numpy>=2.0.0" "numpy"
+  '';
 
   nativeBuildInputs = [
     cython_0
@@ -47,7 +53,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-rerunfailures
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # QuTiP tries to access the home directory to create an rc file for us.
   # We need to go to another directory to run the tests from there.
@@ -68,7 +74,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qutip" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     graphics = [ matplotlib ];
     ipython = [ ipython ];
     semidefinite = [

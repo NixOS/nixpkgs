@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     makeWrapper ${lib.getExe jre} "$out/bin/minecraft-server" \
       --append-flags "-jar $out/share/papermc/papermc.jar nogui" \
-      ${lib.optionalString stdenvNoCC.isLinux "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}"}
+      ${lib.optionalString stdenvNoCC.hostPlatform.isLinux "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}"}
 
     runHook postInstall
   '';

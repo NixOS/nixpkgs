@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bino";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchgit {
     url = "https://git.marlam.de/git/bino.git";
     rev = "bino-${finalAttrs.version}";
-    hash = "sha256-t7bkpYOswGEjUg+k2gjUkWwZJjj44KIVrEQs5P4DoSI=";
+    hash = "sha256-3DnEVde7LzaQUMhPi/RosRIW9j8bbkPVkihO5swCbws=";
   };
 
   nativeBuildInputs = [
@@ -35,12 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     qtmultimedia
     qttools
     # The optional QVR dependency is not currently packaged.
-  ];
-
-  # LTO is currently broken on macOS.
-  # https://github.com/NixOS/nixpkgs/issues/19098
-  cmakeFlags = lib.optionals stdenv.isDarwin [
-    (lib.cmakeBool "CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE" false)
   ];
 
   meta = {

@@ -28,6 +28,7 @@
 , qtbase
 , yelp-tools
 , yelp-xsl
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -115,6 +116,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) lightdm; };
   };
 
 

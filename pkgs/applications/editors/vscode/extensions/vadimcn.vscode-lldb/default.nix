@@ -41,11 +41,11 @@ let
 
     cargoHash = "sha256-e/Jki/4pCs0qzaBVR4iiUhdBFmWlTZYREQkuFSoWYFo=";
 
-    buildInputs = lib.optionals stdenv.isDarwin [ lldb ];
+    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ lldb ];
 
     nativeBuildInputs = [ makeWrapper ];
 
-    env = lib.optionalAttrs stdenv.isDarwin { NIX_LDFLAGS = "-llldb -lc++abi"; };
+    env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_LDFLAGS = "-llldb -lc++abi"; };
 
     buildAndTestSubdir = "adapter";
 
@@ -90,7 +90,7 @@ let
 
     buildInputs =
       [ libsecret ]
-      ++ lib.optionals stdenv.isDarwin (
+      ++ lib.optionals stdenv.hostPlatform.isDarwin (
         with darwin.apple_sdk.frameworks;
         [
           Security
@@ -114,7 +114,7 @@ let
   # entitlement which nixpkgs' lldb-server does not yet provide; see
   # <https://github.com/NixOS/nixpkgs/pull/38624> for details
   lldbServer =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       "/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/Resources/debugserver"
     else
       "${lldb.out}/bin/lldb-server";
@@ -150,7 +150,7 @@ stdenv.mkDerivation {
     ''
       cp -r ${nodeDeps}/lib/node_modules .
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       export HOME="$TMPDIR/home"
       mkdir $HOME
     '';
@@ -161,7 +161,7 @@ stdenv.mkDerivation {
   ];
   makeFlags = [ "vsix_bootstrap" ];
 
-  preBuild = lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export HOME=$TMPDIR
   '';
 

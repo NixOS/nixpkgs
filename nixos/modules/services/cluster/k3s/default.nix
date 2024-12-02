@@ -4,8 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
 let
   cfg = config.services.k3s;
   removeOption =
@@ -21,6 +19,7 @@ let
   manifestDir = "/var/lib/rancher/k3s/server/manifests";
   chartDir = "/var/lib/rancher/k3s/server/static/charts";
   imageDir = "/var/lib/rancher/k3s/agent/images";
+  containerdConfigTemplateFile = "/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl";
 
   manifestModule =
     let
@@ -97,7 +96,7 @@ let
       }
     );
 
-  enabledManifests = with builtins; filter (m: m.enable) (attrValues cfg.manifests);
+  enabledManifests = lib.filter (m: m.enable) (lib.attrValues cfg.manifests);
   linkManifestEntry = m: "${pkgs.coreutils-full}/bin/ln -sfn ${m.source} ${manifestDir}/${m.target}";
   linkImageEntry = image: "${pkgs.coreutils-full}/bin/ln -sfn ${image} ${imageDir}/${image.name}";
   linkChartEntry =
@@ -119,6 +118,11 @@ let
     ${builtins.concatStringsSep "\n" (map linkManifestEntry enabledManifests)}
     ${builtins.concatStringsSep "\n" (lib.mapAttrsToList linkChartEntry cfg.charts)}
     ${builtins.concatStringsSep "\n" (map linkImageEntry cfg.images)}
+
+    ${lib.optionalString (cfg.containerdConfigTemplate != null) ''
+      mkdir -p $(dirname ${containerdConfigTemplateFile})
+      ${pkgs.coreutils-full}/bin/ln -sfn ${pkgs.writeText "config.toml.tmpl" cfg.containerdConfigTemplate} ${containerdConfigTemplateFile}
+    ''}
   '';
 in
 {
@@ -126,11 +130,11 @@ in
 
   # interface
   options.services.k3s = {
-    enable = mkEnableOption "k3s";
+    enable = lib.mkEnableOption "k3s";
 
-    package = mkPackageOption pkgs "k3s" { };
+    package = lib.mkPackageOption pkgs "k3s" { };
 
-    role = mkOption {
+    role = lib.mkOption {
       description = ''
         Whether k3s should run as a server or agent.
 
@@ -146,14 +150,14 @@ in
         - `serverAddr` is required.
       '';
       default = "server";
-      type = types.enum [
+      type = lib.types.enum [
         "server"
         "agent"
       ];
     };
 
-    serverAddr = mkOption {
-      type = types.str;
+    serverAddr = lib.mkOption {
+      type = lib.types.str;
       description = ''
         The k3s server to connect to.
 
@@ -165,8 +169,8 @@ in
       default = "";
     };
 
-    clusterInit = mkOption {
-      type = types.bool;
+    clusterInit = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Initialize HA cluster using an embedded etcd datastore.
@@ -187,8 +191,8 @@ in
       '';
     };
 
-    token = mkOption {
-      type = types.str;
+    token = lib.mkOption {
+      type = lib.types.str;
       description = ''
         The k3s token to use when connecting to a server.
 
@@ -198,15 +202,15 @@ in
       default = "";
     };
 
-    tokenFile = mkOption {
-      type = types.nullOr types.path;
+    tokenFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       description = "File path containing k3s token to use when connecting to the server.";
       default = null;
     };
 
-    extraFlags = mkOption {
+    extraFlags = lib.mkOption {
       description = "Extra flags to pass to the k3s command.";
-      type = with types; either str (listOf str);
+      type = with lib.types; either str (listOf str);
       default = [ ];
       example = [
         "--no-deploy traefik"
@@ -214,28 +218,28 @@ in
       ];
     };
 
-    disableAgent = mkOption {
-      type = types.bool;
+    disableAgent = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Only run the server. This option only makes sense for a server.";
     };
 
-    environmentFile = mkOption {
-      type = types.nullOr types.path;
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       description = ''
         File path containing environment variables for configuring the k3s service in the format of an EnvironmentFile. See systemd.exec(5).
       '';
       default = null;
     };
 
-    configPath = mkOption {
-      type = types.nullOr types.path;
+    configPath = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = "File path containing the k3s YAML config. This is useful when the config is generated (for example on boot).";
     };
 
-    manifests = mkOption {
-      type = types.attrsOf manifestModule;
+    manifests = lib.mkOption {
+      type = lib.types.attrsOf manifestModule;
       default = { };
       example = lib.literalExpression ''
         deployment.source = ../manifests/deployment.yaml;
@@ -322,8 +326,8 @@ in
       '';
     };
 
-    charts = mkOption {
-      type = with types; attrsOf (either path package);
+    charts = lib.mkOption {
+      type = with lib.types; attrsOf (either path package);
       default = { };
       example = lib.literalExpression ''
         nginx = ../charts/my-nginx-chart.tgz;
@@ -340,8 +344,28 @@ in
       '';
     };
 
-    images = mkOption {
-      type = with types; listOf package;
+    containerdConfigTemplate = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = lib.literalExpression ''
+        # Base K3s config
+        {{ template "base" . }}
+
+        # Add a custom runtime
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes."custom"]
+          runtime_type = "io.containerd.runc.v2"
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes."custom".options]
+          BinaryName = "/path/to/custom-container-runtime"
+      '';
+      description = ''
+        Config template for containerd, to be placed at
+        `/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl`.
+        See the K3s docs on [configuring containerd](https://docs.k3s.io/advanced#configuring-containerd).
+      '';
+    };
+
+    images = lib.mkOption {
+      type = with lib.types; listOf package;
       default = [ ];
       example = lib.literalExpression ''
         [
@@ -351,12 +375,16 @@ in
             sha256 = "0imblp0kw9vkcr7sp962jmj20fpmb3hvd3hmf4cs4x04klnq3k90";
             finalImageTag = "21.1.2-debian-11-r0";
           })
+
+          config.services.k3s.package.airgapImages
         ]
       '';
       description = ''
         List of derivations that provide container images.
         All images are linked to {file}`${imageDir}` before k3s starts and consequently imported
-        by the k3s agent. This option only makes sense on nodes with an enabled agent.
+        by the k3s agent. Consider importing the k3s airgap images archive of the k3s package in
+        use, if you want to pre-provision this node with all k3s container images. This option
+        only makes sense on nodes with an enabled agent.
       '';
     };
 
@@ -410,7 +438,7 @@ in
 
   # implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     warnings =
       (lib.optional (cfg.role != "server" && cfg.manifests != { })
         "k3s: Auto deploying manifests are only installed on server nodes (role == server), they will be ignored by this node."
@@ -470,7 +498,7 @@ in
           "network-online.target"
         ];
         wantedBy = [ "multi-user.target" ];
-        path = optional config.boot.zfs.enabled config.boot.zfs.package;
+        path = lib.optional config.boot.zfs.enabled config.boot.zfs.package;
         serviceConfig = {
           # See: https://github.com/rancher/k3s/blob/dddbd16305284ae4bd14c0aade892412310d7edc/install.sh#L197
           Type = if cfg.role == "agent" then "exec" else "notify";
@@ -484,15 +512,15 @@ in
           TasksMax = "infinity";
           EnvironmentFile = cfg.environmentFile;
           ExecStartPre = activateK3sContent;
-          ExecStart = concatStringsSep " \\\n " (
+          ExecStart = lib.concatStringsSep " \\\n " (
             [ "${cfg.package}/bin/k3s ${cfg.role}" ]
-            ++ (optional cfg.clusterInit "--cluster-init")
-            ++ (optional cfg.disableAgent "--disable-agent")
-            ++ (optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")
-            ++ (optional (cfg.token != "") "--token ${cfg.token}")
-            ++ (optional (cfg.tokenFile != null) "--token-file ${cfg.tokenFile}")
-            ++ (optional (cfg.configPath != null) "--config ${cfg.configPath}")
-            ++ (optional (kubeletParams != { }) "--kubelet-arg=config=${kubeletConfig}")
+            ++ (lib.optional cfg.clusterInit "--cluster-init")
+            ++ (lib.optional cfg.disableAgent "--disable-agent")
+            ++ (lib.optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")
+            ++ (lib.optional (cfg.token != "") "--token ${cfg.token}")
+            ++ (lib.optional (cfg.tokenFile != null) "--token-file ${cfg.tokenFile}")
+            ++ (lib.optional (cfg.configPath != null) "--config ${cfg.configPath}")
+            ++ (lib.optional (kubeletParams != { }) "--kubelet-arg=config=${kubeletConfig}")
             ++ (lib.flatten cfg.extraFlags)
           );
         };

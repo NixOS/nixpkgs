@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     description = "Ncurses client for libtorrent, ideal for use with screen, tmux, or dtach (jesec's fork)";
     homepage = "https://github.com/jesec/rtorrent";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ winter AndersonTorres ];
+    maintainers = with maintainers; [ winter ];
     platforms = platforms.linux;
     mainProgram = "rtorrent";
   };

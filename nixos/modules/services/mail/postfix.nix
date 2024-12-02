@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.postfix;
@@ -17,32 +14,32 @@ let
   haveLocalRecipients = cfg.localRecipients != null;
 
   clientAccess =
-    optional (cfg.dnsBlacklistOverrides != "")
+    lib.optional (cfg.dnsBlacklistOverrides != "")
       "check_client_access hash:/etc/postfix/client_access";
 
   dnsBl =
-    optionals (cfg.dnsBlacklists != [])
+    lib.optionals (cfg.dnsBlacklists != [])
       (map (s: "reject_rbl_client " + s) cfg.dnsBlacklists);
 
-  clientRestrictions = concatStringsSep ", " (clientAccess ++ dnsBl);
+  clientRestrictions = lib.concatStringsSep ", " (clientAccess ++ dnsBl);
 
   mainCf = let
-    escape = replaceStrings ["$"] ["$$"];
-    mkList = items: "\n  " + concatStringsSep ",\n  " items;
+    escape = lib.replaceStrings ["$"] ["$$"];
+    mkList = items: "\n  " + lib.concatStringsSep ",\n  " items;
     mkVal = value:
-      if isList value then mkList value
+      if lib.isList value then mkList value
         else " " + (if value == true then "yes"
         else if value == false then "no"
         else toString value);
     mkEntry = name: value: "${escape name} =${mkVal value}";
   in
-    concatStringsSep "\n" (mapAttrsToList mkEntry cfg.config)
+    lib.concatStringsSep "\n" (lib.mapAttrsToList mkEntry cfg.config)
       + "\n" + cfg.extraConfig;
 
   masterCfOptions = { options, config, name, ... }: {
     options = {
-      name = mkOption {
-        type = types.str;
+      name = lib.mkOption {
+        type = lib.types.str;
         default = name;
         example = "smtp";
         description = ''
@@ -50,15 +47,15 @@ let
         '';
       };
 
-      type = mkOption {
-        type = types.enum [ "inet" "unix" "unix-dgram" "fifo" "pass" ];
+      type = lib.mkOption {
+        type = lib.types.enum [ "inet" "unix" "unix-dgram" "fifo" "pass" ];
         default = "unix";
         example = "inet";
         description = "The type of the service";
       };
 
-      private = mkOption {
-        type = types.bool;
+      private = lib.mkOption {
+        type = lib.types.bool;
         example = false;
         description = ''
           Whether the service's sockets and storage directory is restricted to
@@ -67,14 +64,14 @@ let
         '';
       };
 
-      privileged = mkOption {
-        type = types.bool;
+      privileged = lib.mkOption {
+        type = lib.types.bool;
         example = true;
         description = "";
       };
 
-      chroot = mkOption {
-        type = types.bool;
+      chroot = lib.mkOption {
+        type = lib.types.bool;
         example = true;
         description = ''
           Whether the service is chrooted to have only access to the
@@ -83,8 +80,8 @@ let
         '';
       };
 
-      wakeup = mkOption {
-        type = types.int;
+      wakeup = lib.mkOption {
+        type = lib.types.int;
         example = 60;
         description = ''
           Automatically wake up the service after the specified number of
@@ -93,8 +90,8 @@ let
         '';
       };
 
-      wakeupUnusedComponent = mkOption {
-        type = types.bool;
+      wakeupUnusedComponent = lib.mkOption {
+        type = lib.types.bool;
         example = false;
         description = ''
           If set to `false` the component will only be woken
@@ -104,8 +101,8 @@ let
         '';
       };
 
-      maxproc = mkOption {
-        type = types.int;
+      maxproc = lib.mkOption {
+        type = lib.types.int;
         example = 1;
         description = ''
           The maximum number of processes to spawn for this service. If the
@@ -115,8 +112,8 @@ let
         '';
       };
 
-      command = mkOption {
-        type = types.str;
+      command = lib.mkOption {
+        type = lib.types.str;
         default = name;
         example = "smtpd";
         description = ''
@@ -125,8 +122,8 @@ let
         '';
       };
 
-      args = mkOption {
-        type = types.listOf types.str;
+      args = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         example = [ "-o" "smtp_helo_timeout=5" ];
         description = ''
@@ -136,8 +133,8 @@ let
         '';
       };
 
-      rawEntry = mkOption {
-        type = types.listOf types.str;
+      rawEntry = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         internal = true;
         description = ''
@@ -148,7 +145,7 @@ let
 
     config.rawEntry = let
       mkBool = bool: if bool then "y" else "n";
-      mkArg = arg: "${optionalString (hasPrefix "-" arg) "\n  "}${arg}";
+      mkArg = arg: "${lib.optionalString (lib.hasPrefix "-" arg) "\n  "}${arg}";
 
       maybeOption = fun: option:
         if options.${option}.isDefined then fun config.${option} else "-";
@@ -158,7 +155,7 @@ let
         wakeupDefined = options.wakeup.isDefined;
         wakeupUCDefined = options.wakeupUnusedComponent.isDefined;
         finalValue = toString config.wakeup
-                   + optionalString (wakeupUCDefined && !config.wakeupUnusedComponent) "?";
+                   + lib.optionalString (wakeupUCDefined && !config.wakeupUnusedComponent) "?";
       in if wakeupDefined then finalValue else "-";
 
     in [
@@ -169,7 +166,7 @@ let
       (maybeOption mkBool "chroot")
       wakeup
       (maybeOption toString "maxproc")
-      (config.command + " " + concatMapStringsSep " " mkArg config.args)
+      (config.command + " " + lib.concatMapStringsSep " " mkArg config.args)
     ];
   };
 
@@ -184,47 +181,47 @@ let
       "# " "" "(yes)" "(yes)" "(no)" "(never)" "(100)" "" ""
     ];
 
-    masterCf = mapAttrsToList (const (getAttr "rawEntry")) cfg.masterConfig;
+    masterCf = lib.mapAttrsToList (lib.const (lib.getAttr "rawEntry")) cfg.masterConfig;
 
     # A list of the maximum width of the columns across all lines and labels
     maxWidths = let
       foldLine = line: acc: let
-        columnLengths = map stringLength line;
-      in zipListsWith max acc columnLengths;
+        columnLengths = map lib.stringLength line;
+      in lib.zipListsWith lib.max acc columnLengths;
       # We need to handle the last column specially here, because it's
       # open-ended (command + args).
-      lines = [ labels labelDefaults ] ++ (map (l: init l ++ [""]) masterCf);
-    in foldr foldLine (genList (const 0) (length labels)) lines;
+      lines = [ labels labelDefaults ] ++ (map (l: lib.init l ++ [""]) masterCf);
+    in lib.foldr foldLine (lib.genList (lib.const 0) (lib.length labels)) lines;
 
     # Pad a string with spaces from the right (opposite of fixedWidthString).
     pad = width: str: let
-      padWidth = width - stringLength str;
-      padding = concatStrings (genList (const " ") padWidth);
-    in str + optionalString (padWidth > 0) padding;
+      padWidth = width - lib.stringLength str;
+      padding = lib.concatStrings (lib.genList (lib.const " ") padWidth);
+    in str + lib.optionalString (padWidth > 0) padding;
 
     # It's + 2 here, because that's the amount of spacing between columns.
-    fullWidth = foldr (width: acc: acc + width + 2) 0 maxWidths;
+    fullWidth = lib.foldr (width: acc: acc + width + 2) 0 maxWidths;
 
-    formatLine = line: concatStringsSep "  " (zipListsWith pad maxWidths line);
+    formatLine = line: lib.concatStringsSep "  " (lib.zipListsWith pad maxWidths line);
 
     formattedLabels = let
-      sep = "# " + concatStrings (genList (const "=") (fullWidth + 5));
+      sep = "# " + lib.concatStrings (lib.genList (lib.const "=") (fullWidth + 5));
       lines = [ sep (formatLine labels) (formatLine labelDefaults) sep ];
-    in concatStringsSep "\n" lines;
+    in lib.concatStringsSep "\n" lines;
 
-  in formattedLabels + "\n" + concatMapStringsSep "\n" formatLine masterCf + "\n" + cfg.extraMasterConf;
+  in formattedLabels + "\n" + lib.concatMapStringsSep "\n" formatLine masterCf + "\n" + cfg.extraMasterConf;
 
   headerCheckOptions = { ... }:
   {
     options = {
-      pattern = mkOption {
-        type = types.str;
+      pattern = lib.mkOption {
+        type = lib.types.str;
         default = "/^.*/";
         example = "/^X-Mailer:/";
         description = "A regexp pattern matching the header";
       };
-      action = mkOption {
-        type = types.str;
+      action = lib.mkOption {
+        type = lib.types.str;
         default = "DUNNO";
         example = "BCC mail@example.com";
         description = "The action to be executed when the pattern is matched";
@@ -232,13 +229,13 @@ let
     };
   };
 
-  headerChecks = concatStringsSep "\n" (map (x: "${x.pattern} ${x.action}") cfg.headerChecks) + cfg.extraHeaderChecks;
+  headerChecks = lib.concatStringsSep "\n" (map (x: "${x.pattern} ${x.action}") cfg.headerChecks) + cfg.extraHeaderChecks;
 
-  aliases = let separator = optionalString (cfg.aliasMapType == "hash") ":"; in
-    optionalString (cfg.postmasterAlias != "") ''
+  aliases = let separator = lib.optionalString (cfg.aliasMapType == "hash") ":"; in
+    lib.optionalString (cfg.postmasterAlias != "") ''
       postmaster${separator} ${cfg.postmasterAlias}
     ''
-    + optionalString (cfg.rootAlias != "") ''
+    + lib.optionalString (cfg.rootAlias != "") ''
       root${separator} ${cfg.rootAlias}
     ''
     + cfg.extraAliases
@@ -247,7 +244,7 @@ let
   aliasesFile = pkgs.writeText "postfix-aliases" aliases;
   canonicalFile = pkgs.writeText "postfix-canonical" cfg.canonical;
   virtualFile = pkgs.writeText "postfix-virtual" cfg.virtual;
-  localRecipientMapFile = pkgs.writeText "postfix-local-recipient-map" (concatMapStrings (x: x + " ACCEPT\n") cfg.localRecipients);
+  localRecipientMapFile = pkgs.writeText "postfix-local-recipient-map" (lib.concatMapStrings (x: x + " ACCEPT\n") cfg.localRecipients);
   checkClientAccessFile = pkgs.writeText "postfix-check-client-access" cfg.dnsBlacklistOverrides;
   mainCfFile = pkgs.writeText "postfix-main.cf" mainCf;
   masterCfFile = pkgs.writeText "postfix-master.cf" masterCfContent;
@@ -264,26 +261,26 @@ in
 
     services.postfix = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to run the Postfix mail server.";
       };
 
-      enableSmtp = mkOption {
-        type = types.bool;
+      enableSmtp = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Whether to enable smtp in master.cf.";
       };
 
-      enableSubmission = mkOption {
-        type = types.bool;
+      enableSubmission = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable smtp submission.";
       };
 
-      enableSubmissions = mkOption {
-        type = types.bool;
+      enableSubmissions = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable smtp submission via smtps.
@@ -293,8 +290,8 @@ in
         '';
       };
 
-      submissionOptions = mkOption {
-        type = with types; attrsOf str;
+      submissionOptions = lib.mkOption {
+        type = with lib.types; attrsOf str;
         default = {
           smtpd_tls_security_level = "encrypt";
           smtpd_sasl_auth_enable = "yes";
@@ -311,8 +308,8 @@ in
         description = "Options for the submission config in master.cf";
       };
 
-      submissionsOptions = mkOption {
-        type = with types; attrsOf str;
+      submissionsOptions = lib.mkOption {
+        type = with lib.types; attrsOf str;
         default = {
           smtpd_sasl_auth_enable = "yes";
           smtpd_client_restrictions = "permit_sasl_authenticated,reject";
@@ -334,26 +331,26 @@ in
         '';
       };
 
-      setSendmail = mkOption {
-        type = types.bool;
+      setSendmail = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Whether to set the system sendmail to postfix's.";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "postfix";
         description = "What to call the Postfix user (must be used only for postfix).";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "postfix";
         description = "What to call the Postfix group (must be used only for postfix).";
       };
 
-      setgidGroup = mkOption {
-        type = types.str;
+      setgidGroup = lib.mkOption {
+        type = lib.types.str;
         default = "postdrop";
         description = ''
           How to call postfix setgid group (for postdrop). Should
@@ -361,8 +358,8 @@ in
         '';
       };
 
-      networks = mkOption {
-        type = types.nullOr (types.listOf types.str);
+      networks = lib.mkOption {
+        type = lib.types.nullOr (lib.types.listOf lib.types.str);
         default = null;
         example = ["192.168.0.1/24"];
         description = ''
@@ -372,8 +369,8 @@ in
         '';
       };
 
-      networksStyle = mkOption {
-        type = types.str;
+      networksStyle = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Name of standard way of trusted network specification to use,
@@ -382,8 +379,8 @@ in
         '';
       };
 
-      hostname = mkOption {
-        type = types.str;
+      hostname = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Hostname to use. Leave blank to use just the hostname of machine.
@@ -391,24 +388,24 @@ in
         '';
       };
 
-      domain = mkOption {
-        type = types.str;
+      domain = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Domain to use. Leave blank to use hostname minus first component.
         '';
       };
 
-      origin = mkOption {
-        type = types.str;
+      origin = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Origin to use in outgoing e-mail. Leave blank to use hostname.
         '';
       };
 
-      destination = mkOption {
-        type = types.nullOr (types.listOf types.str);
+      destination = lib.mkOption {
+        type = lib.types.nullOr (lib.types.listOf lib.types.str);
         default = null;
         example = ["localhost"];
         description = ''
@@ -417,8 +414,8 @@ in
         '';
       };
 
-      relayDomains = mkOption {
-        type = types.nullOr (types.listOf types.str);
+      relayDomains = lib.mkOption {
+        type = lib.types.nullOr (lib.types.listOf lib.types.str);
         default = null;
         example = ["localdomain"];
         description = ''
@@ -426,32 +423,32 @@ in
         '';
       };
 
-      relayHost = mkOption {
-        type = types.str;
+      relayHost = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Mail relay for outbound mail.
         '';
       };
 
-      relayPort = mkOption {
-        type = types.int;
+      relayPort = lib.mkOption {
+        type = lib.types.int;
         default = 25;
         description = ''
           SMTP port for relay mail relay.
         '';
       };
 
-      lookupMX = mkOption {
-        type = types.bool;
+      lookupMX = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether relay specified is just domain whose MX must be used.
         '';
       };
 
-      postmasterAlias = mkOption {
-        type = types.str;
+      postmasterAlias = lib.mkOption {
+        type = lib.types.str;
         default = "root";
         description = ''
           Who should receive postmaster e-mail. Multiple values can be added by
@@ -459,8 +456,8 @@ in
         '';
       };
 
-      rootAlias = mkOption {
-        type = types.str;
+      rootAlias = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Who should receive root e-mail. Blank for no redirection.
@@ -468,23 +465,23 @@ in
         '';
       };
 
-      extraAliases = mkOption {
-        type = types.lines;
+      extraAliases = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Additional entries to put verbatim into aliases file, cf. man-page aliases(8).
         '';
       };
 
-      aliasMapType = mkOption {
-        type = with types; enum [ "hash" "regexp" "pcre" ];
+      aliasMapType = lib.mkOption {
+        type = with lib.types; enum [ "hash" "regexp" "pcre" ];
         default = "hash";
         example = "regexp";
         description = "The format the alias map should have. Use regexp if you want to use regular expressions.";
       };
 
-      config = mkOption {
-        type = with types; attrsOf (oneOf [ bool str (listOf str) ]);
+      config = lib.mkOption {
+        type = with lib.types; attrsOf (oneOf [ bool int str (listOf str) ]);
         description = ''
           The main.cf configuration file as key value set.
         '';
@@ -494,37 +491,37 @@ in
         };
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Extra lines to be added verbatim to the main.cf configuration file.
         '';
       };
 
-      tlsTrustedAuthorities = mkOption {
-        type = types.str;
+      tlsTrustedAuthorities = lib.mkOption {
+        type = lib.types.str;
         default = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-        defaultText = literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
+        defaultText = lib.literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
         description = ''
           File containing trusted certification authorities (CA) to verify certificates of mailservers contacted for mail delivery. This basically sets smtp_tls_CAfile and enables opportunistic tls. Defaults to NixOS trusted certification authorities.
         '';
       };
 
-      sslCert = mkOption {
-        type = types.str;
+      sslCert = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = "SSL certificate to use.";
       };
 
-      sslKey = mkOption {
-        type = types.str;
+      sslKey = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = "SSL key to use.";
       };
 
-      recipientDelimiter = mkOption {
-        type = types.str;
+      recipientDelimiter = lib.mkOption {
+        type = lib.types.str;
         default = "";
         example = "+";
         description = ''
@@ -532,32 +529,32 @@ in
         '';
       };
 
-      canonical = mkOption {
-        type = types.lines;
+      canonical = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Entries for the {manpage}`canonical(5)` table.
         '';
       };
 
-      virtual = mkOption {
-        type = types.lines;
+      virtual = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Entries for the virtual alias map, cf. man-page virtual(5).
         '';
       };
 
-      virtualMapType = mkOption {
-        type = types.enum ["hash" "regexp" "pcre"];
+      virtualMapType = lib.mkOption {
+        type = lib.types.enum ["hash" "regexp" "pcre"];
         default = "hash";
         description = ''
           What type of virtual alias map file to use. Use `"regexp"` for regular expressions.
         '';
       };
 
-      localRecipients = mkOption {
-        type = with types; nullOr (listOf str);
+      localRecipients = lib.mkOption {
+        type = with lib.types; nullOr (listOf str);
         default = null;
         description = ''
           List of accepted local users. Specify a bare username, an
@@ -569,28 +566,28 @@ in
         '';
       };
 
-      transport = mkOption {
+      transport = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Entries for the transport map, cf. man-page transport(8).
         '';
       };
 
-      dnsBlacklists = mkOption {
+      dnsBlacklists = lib.mkOption {
         default = [];
-        type = with types; listOf str;
+        type = with lib.types; listOf str;
         description = "dns blacklist servers to use with smtpd_client_restrictions";
       };
 
-      dnsBlacklistOverrides = mkOption {
+      dnsBlacklistOverrides = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = "contents of check_client_access for overriding dnsBlacklists";
       };
 
-      masterConfig = mkOption {
-        type = types.attrsOf (types.submodule masterCfOptions);
+      masterConfig = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.submodule masterCfOptions);
         default = {};
         example =
           { submission = {
@@ -605,48 +602,48 @@ in
         '';
       };
 
-      extraMasterConf = mkOption {
-        type = types.lines;
+      extraMasterConf = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = "submission inet n - n - - smtpd";
         description = "Extra lines to append to the generated master.cf file.";
       };
 
-      enableHeaderChecks = mkOption {
-        type = types.bool;
+      enableHeaderChecks = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         example = true;
         description = "Whether to enable postfix header checks";
       };
 
-      headerChecks = mkOption {
-        type = types.listOf (types.submodule headerCheckOptions);
+      headerChecks = lib.mkOption {
+        type = lib.types.listOf (lib.types.submodule headerCheckOptions);
         default = [];
         example = [ { pattern = "/^X-Spam-Flag:/"; action = "REDIRECT spam@example.com"; } ];
         description = "Postfix header checks.";
       };
 
-      extraHeaderChecks = mkOption {
-        type = types.lines;
+      extraHeaderChecks = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = "/^X-Spam-Flag:/ REDIRECT spam@example.com";
         description = "Extra lines to /etc/postfix/header_checks file.";
       };
 
-      aliasFiles = mkOption {
-        type = types.attrsOf types.path;
+      aliasFiles = lib.mkOption {
+        type = lib.types.attrsOf lib.types.path;
         default = {};
         description = "Aliases' tables to be compiled and placed into /var/lib/postfix/conf.";
       };
 
-      mapFiles = mkOption {
-        type = types.attrsOf types.path;
+      mapFiles = lib.mkOption {
+        type = lib.types.attrsOf lib.types.path;
         default = {};
         description = "Maps to be compiled and placed into /var/lib/postfix/conf.";
       };
 
-      useSrs = mkOption {
-        type = types.bool;
+      useSrs = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable sender rewriting scheme";
       };
@@ -658,7 +655,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.postfix.enable (mkMerge [
+  config = lib.mkIf config.services.postfix.enable (lib.mkMerge [
     {
 
       environment = {
@@ -670,7 +667,7 @@ in
 
       services.pfix-srsd.enable = config.services.postfix.useSrs;
 
-      services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
+      services.mail.sendmailSetuidWrapper = lib.mkIf config.services.postfix.setSendmail {
         program = "sendmail";
         source = "${pkgs.postfix}/bin/sendmail";
         owner = "root";
@@ -706,7 +703,7 @@ in
         setgid = true;
       };
 
-      users.users = optionalAttrs (user == "postfix")
+      users.users = lib.optionalAttrs (user == "postfix")
         { postfix = {
             description = "Postfix mail server user";
             uid = config.ids.uids.postfix;
@@ -715,10 +712,10 @@ in
         };
 
       users.groups =
-        optionalAttrs (group == "postfix")
+        lib.optionalAttrs (group == "postfix")
         { ${group}.gid = config.ids.gids.postfix;
         }
-        // optionalAttrs (setgidGroup == "postdrop")
+        // lib.optionalAttrs (setgidGroup == "postdrop")
         { ${setgidGroup}.gid = config.ids.gids.postdrop;
         };
 
@@ -745,11 +742,11 @@ in
             ln -sf ${mainCfFile} /var/lib/postfix/conf/main.cf
             ln -sf ${masterCfFile} /var/lib/postfix/conf/master.cf
 
-            ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
+            ${lib.concatStringsSep "\n" (lib.mapAttrsToList (to: from: ''
               ln -sf ${from} /var/lib/postfix/conf/${to}
               ${pkgs.postfix}/bin/postalias -o -p /var/lib/postfix/conf/${to}
             '') cfg.aliasFiles)}
-            ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
+            ${lib.concatStringsSep "\n" (lib.mapAttrsToList (to: from: ''
               ln -sf ${from} /var/lib/postfix/conf/${to}
               ${pkgs.postfix}/bin/postmap /var/lib/postfix/conf/${to}
             '') cfg.mapFiles)}
@@ -795,7 +792,7 @@ in
           };
         };
 
-      services.postfix.config = (mapAttrs (_: v: mkDefault v) {
+      services.postfix.config = (lib.mapAttrs (_: v: lib.mkDefault v) {
         compatibility_level  = pkgs.postfix.version;
         mail_owner           = cfg.user;
         default_privs        = "nobody";
@@ -819,39 +816,39 @@ in
         mail_spool_directory = "/var/spool/mail/";
         setgid_group         = cfg.setgidGroup;
       })
-      // optionalAttrs (cfg.relayHost != "") { relayhost = if cfg.lookupMX
+      // lib.optionalAttrs (cfg.relayHost != "") { relayhost = if cfg.lookupMX
                                                            then "${cfg.relayHost}:${toString cfg.relayPort}"
                                                            else "[${cfg.relayHost}]:${toString cfg.relayPort}"; }
-      // optionalAttrs (!config.networking.enableIPv6) { inet_protocols = mkDefault "ipv4"; }
-      // optionalAttrs (cfg.networks != null) { mynetworks = cfg.networks; }
-      // optionalAttrs (cfg.networksStyle != "") { mynetworks_style = cfg.networksStyle; }
-      // optionalAttrs (cfg.hostname != "") { myhostname = cfg.hostname; }
-      // optionalAttrs (cfg.domain != "") { mydomain = cfg.domain; }
-      // optionalAttrs (cfg.origin != "") { myorigin =  cfg.origin; }
-      // optionalAttrs (cfg.destination != null) { mydestination = cfg.destination; }
-      // optionalAttrs (cfg.relayDomains != null) { relay_domains = cfg.relayDomains; }
-      // optionalAttrs (cfg.recipientDelimiter != "") { recipient_delimiter = cfg.recipientDelimiter; }
-      // optionalAttrs haveAliases { alias_maps = [ "${cfg.aliasMapType}:/etc/postfix/aliases" ]; }
-      // optionalAttrs haveTransport { transport_maps = [ "hash:/etc/postfix/transport" ]; }
-      // optionalAttrs haveVirtual { virtual_alias_maps = [ "${cfg.virtualMapType}:/etc/postfix/virtual" ]; }
-      // optionalAttrs haveLocalRecipients { local_recipient_maps = [ "hash:/etc/postfix/local_recipients" ] ++ optional haveAliases "$alias_maps"; }
-      // optionalAttrs (cfg.dnsBlacklists != []) { smtpd_client_restrictions = clientRestrictions; }
-      // optionalAttrs cfg.useSrs {
+      // lib.optionalAttrs (!config.networking.enableIPv6) { inet_protocols = lib.mkDefault "ipv4"; }
+      // lib.optionalAttrs (cfg.networks != null) { mynetworks = cfg.networks; }
+      // lib.optionalAttrs (cfg.networksStyle != "") { mynetworks_style = cfg.networksStyle; }
+      // lib.optionalAttrs (cfg.hostname != "") { myhostname = cfg.hostname; }
+      // lib.optionalAttrs (cfg.domain != "") { mydomain = cfg.domain; }
+      // lib.optionalAttrs (cfg.origin != "") { myorigin =  cfg.origin; }
+      // lib.optionalAttrs (cfg.destination != null) { mydestination = cfg.destination; }
+      // lib.optionalAttrs (cfg.relayDomains != null) { relay_domains = cfg.relayDomains; }
+      // lib.optionalAttrs (cfg.recipientDelimiter != "") { recipient_delimiter = cfg.recipientDelimiter; }
+      // lib.optionalAttrs haveAliases { alias_maps = [ "${cfg.aliasMapType}:/etc/postfix/aliases" ]; }
+      // lib.optionalAttrs haveTransport { transport_maps = [ "hash:/etc/postfix/transport" ]; }
+      // lib.optionalAttrs haveVirtual { virtual_alias_maps = [ "${cfg.virtualMapType}:/etc/postfix/virtual" ]; }
+      // lib.optionalAttrs haveLocalRecipients { local_recipient_maps = [ "hash:/etc/postfix/local_recipients" ] ++ lib.optional haveAliases "$alias_maps"; }
+      // lib.optionalAttrs (cfg.dnsBlacklists != []) { smtpd_client_restrictions = clientRestrictions; }
+      // lib.optionalAttrs cfg.useSrs {
         sender_canonical_maps = [ "tcp:127.0.0.1:10001" ];
         sender_canonical_classes = [ "envelope_sender" ];
         recipient_canonical_maps = [ "tcp:127.0.0.1:10002" ];
         recipient_canonical_classes = [ "envelope_recipient" ];
       }
-      // optionalAttrs cfg.enableHeaderChecks { header_checks = [ "regexp:/etc/postfix/header_checks" ]; }
-      // optionalAttrs (cfg.tlsTrustedAuthorities != "") {
+      // lib.optionalAttrs cfg.enableHeaderChecks { header_checks = [ "regexp:/etc/postfix/header_checks" ]; }
+      // lib.optionalAttrs (cfg.tlsTrustedAuthorities != "") {
         smtp_tls_CAfile = cfg.tlsTrustedAuthorities;
-        smtp_tls_security_level = mkDefault "may";
+        smtp_tls_security_level = lib.mkDefault "may";
       }
-      // optionalAttrs (cfg.sslCert != "") {
+      // lib.optionalAttrs (cfg.sslCert != "") {
         smtp_tls_cert_file = cfg.sslCert;
         smtp_tls_key_file = cfg.sslKey;
 
-        smtp_tls_security_level = mkDefault "may";
+        smtp_tls_security_level = lib.mkDefault "may";
 
         smtpd_tls_cert_file = cfg.sslCert;
         smtpd_tls_key_file = cfg.sslKey;
@@ -931,16 +928,16 @@ in
         scache = {
           maxproc = 1;
         };
-      } // optionalAttrs cfg.enableSubmission {
+      } // lib.optionalAttrs cfg.enableSubmission {
         submission = {
           type = "inet";
           private = false;
           command = "smtpd";
           args = let
             mkKeyVal = opt: val: [ "-o" (opt + "=" + val) ];
-          in concatLists (mapAttrsToList mkKeyVal cfg.submissionOptions);
+          in lib.concatLists (lib.mapAttrsToList mkKeyVal cfg.submissionOptions);
         };
-      } // optionalAttrs cfg.enableSmtp {
+      } // lib.optionalAttrs cfg.enableSmtp {
         smtp_inet = {
           name = "smtp";
           type = "inet";
@@ -952,7 +949,7 @@ in
           command = "smtp";
           args = [ "-o" "smtp_fallback_relay=" ];
         };
-      } // optionalAttrs cfg.enableSubmissions {
+      } // lib.optionalAttrs cfg.enableSubmissions {
         submissions = {
           type = "inet";
           private = false;
@@ -964,43 +961,43 @@ in
                                       cfg.submissionsOptions.smtpd_tls_security_level == "may";
             submissionsOptions = cfg.submissionsOptions // {
               smtpd_tls_wrappermode = "yes";
-            } // optionalAttrs adjustSmtpTlsSecurityLevel {
+            } // lib.optionalAttrs adjustSmtpTlsSecurityLevel {
               smtpd_tls_security_level = "encrypt";
             };
-          in concatLists (mapAttrsToList mkKeyVal submissionsOptions);
+          in lib.concatLists (lib.mapAttrsToList mkKeyVal submissionsOptions);
         };
       };
     }
 
-    (mkIf haveAliases {
+    (lib.mkIf haveAliases {
       services.postfix.aliasFiles.aliases = aliasesFile;
     })
-    (mkIf haveCanonical {
+    (lib.mkIf haveCanonical {
       services.postfix.mapFiles.canonical = canonicalFile;
     })
-    (mkIf haveTransport {
+    (lib.mkIf haveTransport {
       services.postfix.mapFiles.transport = transportFile;
     })
-    (mkIf haveVirtual {
+    (lib.mkIf haveVirtual {
       services.postfix.mapFiles.virtual = virtualFile;
     })
-    (mkIf haveLocalRecipients {
+    (lib.mkIf haveLocalRecipients {
       services.postfix.mapFiles.local_recipients = localRecipientMapFile;
     })
-    (mkIf cfg.enableHeaderChecks {
+    (lib.mkIf cfg.enableHeaderChecks {
       services.postfix.mapFiles.header_checks = headerChecksFile;
     })
-    (mkIf (cfg.dnsBlacklists != []) {
+    (lib.mkIf (cfg.dnsBlacklists != []) {
       services.postfix.mapFiles.client_access = checkClientAccessFile;
     })
   ]);
 
   imports = [
-   (mkRemovedOptionModule [ "services" "postfix" "sslCACert" ]
+   (lib.mkRemovedOptionModule [ "services" "postfix" "sslCACert" ]
      "services.postfix.sslCACert was replaced by services.postfix.tlsTrustedAuthorities. In case you intend that your server should validate requested client certificates use services.postfix.extraConfig.")
 
-   (mkChangedOptionModule [ "services" "postfix" "useDane" ]
+   (lib.mkChangedOptionModule [ "services" "postfix" "useDane" ]
      [ "services" "postfix" "config" "smtp_tls_security_level" ]
-     (config: mkIf config.services.postfix.useDane "dane"))
+     (config: lib.mkIf config.services.postfix.useDane "dane"))
   ];
 }

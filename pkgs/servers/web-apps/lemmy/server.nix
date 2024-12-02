@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = pinData.serverCargoHash;
 
   buildInputs = [ postgresql ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security SystemConfiguration ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security SystemConfiguration ];
 
   # Using OPENSSL_NO_VENDOR is not an option on darwin
   # As of version 0.10.35 rust-openssl looks for openssl on darwin
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
 
     # tests require network access
     "--skip=scheduled_tasks::tests::test_nodeinfo_mastodon_social"
-    "--skip=scheduled_tasks::tests::test_nodeinfo_voyager_lemmy_ml"
+    "--skip=scheduled_tasks::tests::test_nodeinfo_lemmy_ml"
   ];
 
   passthru.updateScript = ./update.py;

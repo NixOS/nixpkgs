@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "imap-tools";
-  version = "1.7.1";
+  version = "1.7.4";
 
   disabled = pythonOlder "3.5";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "ikvk";
     repo = "imap_tools";
     rev = "refs/tags/v${version}";
-    hash = "sha256-G2CO5WgMvpPeq/EM9eFW36xYoMD+7nUm8FsMWfCoLf4=";
+    hash = "sha256-2qSmnJnjwXNysUh0xeXshLZklCIOd92aM3gXtL8JhlI=";
   };
 
   build-system = [ setuptools ];

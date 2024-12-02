@@ -7,12 +7,12 @@
 }:
 buildPythonPackage rec {
   pname = "sabctools";
-  version = "8.2.4";
+  version = "8.2.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qPi/+Q+xLm+djlYeTXyVi3q/R1zEtXgOY7wxLjnp7Ew=";
+    hash = "sha256-ZEC813/JpGPEFL+nXKFAXFfUrrhECCIqONe27LwS00g=";
   };
 
   nativeBuildInputs = [ setuptools ];

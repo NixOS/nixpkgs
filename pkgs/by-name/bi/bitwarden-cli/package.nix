@@ -3,37 +3,45 @@
 , buildNpmPackage
 , nodejs_20
 , fetchFromGitHub
-, python3
 , cctools
+, nix-update-script
 , nixosTests
+, perl
 , xcbuild
 }:
 
 buildNpmPackage rec {
   pname = "bitwarden-cli";
-  version = "2024.7.1";
+  version = "2024.11.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "cli-v${version}";
-    hash = "sha256-ZnqvqPR1Xuf6huhD5kWlnu4XOAWn7yte3qxgU/HPhiQ=";
+    hash = "sha256-4QTQgW8k3EMf07Xqs2B+VXQOUPzoOgaNvoC02x4zvu8=";
   };
+
+  postPatch = ''
+    # remove code under unfree license
+    rm -r bitwarden_license
+  '';
 
   nodejs = nodejs_20;
 
-  npmDepsHash = "sha256-lWlAc0ITSp7WwxM09umBo6qeRzjq4pJdC0RDUrZwcHY=";
+  npmDepsHash = "sha256-YzhCyNMvfXGmgOpl3qWj1Pqd1hY8CJ9QLwQds5ZMnqg=";
 
-  nativeBuildInputs = [
-    (python3.withPackages (ps: with ps; [ setuptools ]))
-  ] ++ lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
+    perl
     xcbuild.xcrun
   ];
 
   makeCacheWritable = true;
 
-  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    npm_config_build_from_source = "true";
+  };
 
   npmBuildScript = "build:oss:prod";
 
@@ -41,8 +49,13 @@ buildNpmPackage rec {
 
   npmFlags = [ "--legacy-peer-deps" ];
 
-  passthru.tests = {
-    vaultwarden = nixosTests.vaultwarden.sqlite;
+  passthru = {
+    tests = {
+      vaultwarden = nixosTests.vaultwarden.sqlite;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [ "--commit" "--version=stable" "--version-regex=^cli-v(.*)$" ];
+    };
   };
 
   meta = with lib; {

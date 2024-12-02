@@ -28,7 +28,7 @@ in rustPlatform.buildRustPackage {
 
   buildInputs = [
     bzip2
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices
   ];
 

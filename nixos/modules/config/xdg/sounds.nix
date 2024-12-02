@@ -1,14 +1,12 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 {
   meta = {
-    maintainers = teams.freedesktop.members;
+    maintainers = lib.teams.freedesktop.members;
   };
 
   options = {
-    xdg.sounds.enable = mkOption {
-      type = types.bool;
+    xdg.sounds.enable = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to install files to support the
@@ -17,7 +15,7 @@ with lib;
     };
   };
 
-  config = mkIf config.xdg.sounds.enable {
+  config = lib.mkIf config.xdg.sounds.enable {
     environment.systemPackages = [
       pkgs.sound-theme-freedesktop
     ];

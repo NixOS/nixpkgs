@@ -9,7 +9,6 @@
 mkDerivation rec {
   pname = "soulseekqt";
   version = "2018-1-30";
-  name="${pname}-${version}";
 
   src = fetchzip {
       url = "https://www.slsknet.org/SoulseekQt/Linux/SoulseekQt-${version}-64bit-appimage.tgz";
@@ -17,7 +16,7 @@ mkDerivation rec {
   };
 
   appextracted = appimageTools.extractType2 {
-    inherit name;
+    inherit pname version;
     src="${src}/SoulseekQt-2018-1-30-64bit.AppImage";
   };
 
@@ -33,7 +32,8 @@ mkDerivation rec {
 
       # fixup and install desktop file
       desktop-file-install --dir $out/share/applications \
-        --set-key Exec --set-value $binary \
+        --set-key Exec --set-value SoulseekQt \
+        --set-key Terminal --set-value false \
         --set-key Comment --set-value "${meta.description}" \
         --set-key Categories --set-value Network ${appextracted}/default.desktop
       mv $out/share/applications/default.desktop $out/share/applications/SoulseekQt.desktop

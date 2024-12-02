@@ -5,7 +5,7 @@
 mkKdeDerivation {
   pname = "artikulate";
 
-  extraBuildInputs = [qtmultimedia];
+  extraBuildInputs = [ qtmultimedia ];
   # FIXME(qt5)
   meta.broken = true;
 }

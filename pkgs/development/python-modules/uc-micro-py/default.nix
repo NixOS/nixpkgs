@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Micro subset of unicode data files for linkify-it-py";
     homepage = "https://github.com/tsutsu3/uc.micro-py";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
   };
 }

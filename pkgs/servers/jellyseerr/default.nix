@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchYarnDeps,
   makeWrapper,
+  node-pre-gyp,
   nodejs,
   python3,
   sqlite,
@@ -35,7 +36,7 @@ mkYarnPackage rec {
   # Fixes "SQLite package has not been found installed" at launch
   pkgConfig.sqlite3 = {
     nativeBuildInputs = [
-      nodejs.pkgs.node-pre-gyp
+      node-pre-gyp
       python3
       sqlite
     ];
@@ -48,7 +49,7 @@ mkYarnPackage rec {
 
   pkgConfig.bcrypt = {
     nativeBuildInputs = [
-      nodejs.pkgs.node-pre-gyp
+      node-pre-gyp
       python3
     ];
     postInstall = ''

@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  can,
+  python-can,
   cobs,
   libpcap,
   nunavut,
@@ -33,8 +33,8 @@ buildPythonPackage rec {
     nunavut
   ];
 
-  passthru.optional-dependencies = {
-    transport-can-pythoncan = [ can ] ++ can.optional-dependencies.serial;
+  optional-dependencies = {
+    transport-can-pythoncan = [ python-can ] ++ python-can.optional-dependencies.serial;
     transport-serial = [
       cobs
       pyserial
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
-  ] ++ builtins.foldl' (x: y: x ++ y) [ ] (builtins.attrValues passthru.optional-dependencies);
+  ] ++ builtins.foldl' (x: y: x ++ y) [ ] (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME=$TMPDIR

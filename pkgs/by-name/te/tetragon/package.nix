@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tetragon";
-  version = "0.11.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "tetragon";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-KOR5MMRnhrlcMPqRjzjSJXvitiZQ8/tlxEnBiQG2x/Q=";
+    hash = "sha256-KOR5MMRnhrlcMPqRjzjSJXvitiZQ8/tlxEnBiQG2x/Q=";
   };
 
   buildInputs = [
@@ -39,6 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     make tetragon-bpf
     runHook postBuild
   '';
+
+  # For BPF compilation
+  hardeningDisable = [
+    "zerocallusedregs"
+  ];
 
   postPatch = ''
     substituteInPlace bpf/Makefile --replace '/bin/bash' '${lib.getExe bash}'

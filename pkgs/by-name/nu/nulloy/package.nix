@@ -61,6 +61,6 @@ stdenv.mkDerivation rec {
     mainProgram = "nulloy";
     maintainers = with maintainers; [ aleksana ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -21,11 +21,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "1.9.3";
+  version = "1.9.5";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    hash = "sha256-TxWyUDoBvscKa2ogPrFlzLC2q+5RMyMnAiOpQdpFP4M=";
+    hash = "sha256-f99NsOsWp+vGecI2DxRfZOCrz/DxaRPEX5LI642HVjw=";
   };
 
   format = "pyproject";
@@ -47,6 +47,14 @@ python3.pkgs.buildPythonApplication rec {
 
   dontWrapGApps = true;
 
+  preBuild = ''
+    python make.py build --dist unix
+  '';
+
+  postInstall = ''
+    python make.py install --dist unix --prefix=$out
+  '';
+
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
@@ -59,14 +67,6 @@ python3.pkgs.buildPythonApplication rec {
     ++ extraPythonPackages python3.pkgs;
 
   nativeCheckInputs = [ xvfb-run dbus ];
-
-  preBuild = ''
-    python pep517build/build_metadata.py -o dist/metadata
-  '';
-
-  postInstall = ''
-    python pep517build/install_metadata.py dist/metadata --prefix=$out
-  '';
 
   checkPhase = ''
     xvfb-run dbus-run-session \

@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     xlsxwriter
   ];
 
-  passthru.optional-dependencies = with python3.pkgs; {
+  optional-dependencies = with python3.pkgs; {
     development = [
       invoke
       tox
@@ -60,6 +60,7 @@ python3.pkgs.buildPythonApplication rec {
     "python-datauri"
     "xlsxwriter"
     "lxml"
+    "textx"
   ];
 
   pythonImportsCheck = [ "strictdoc" ];

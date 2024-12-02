@@ -1,9 +1,9 @@
-{ runCommand, openssh }:
+{ lib, runCommand, openssh }:
 
 runCommand "ssh-copy-id-${openssh.version}" {
   meta = openssh.meta // {
     description = "Tool to copy SSH public keys to a remote machine";
-    priority = (openssh.meta.priority or 0) - 1;
+    priority = (openssh.meta.priority or lib.meta.defaultPriority) - 1;
   };
 } ''
   install -Dm 755 {${openssh},$out}/bin/ssh-copy-id

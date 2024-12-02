@@ -7,7 +7,7 @@
   metar,
   pytest-aiohttp,
   pytest-asyncio,
-  pytest-cov,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     freezegun
     pytest-aiohttp
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 

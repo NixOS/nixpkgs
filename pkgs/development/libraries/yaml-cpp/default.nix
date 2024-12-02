@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , gitUpdater
 , cmake
+, static ? stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DYAML_CPP_BUILD_TOOLS=false"
-    "-DYAML_BUILD_SHARED_LIBS=${lib.boolToString (!stdenv.hostPlatform.isStatic)}"
+    (lib.cmakeBool "YAML_BUILD_SHARED_LIBS" (!static))
     "-DINSTALL_GTEST=false"
   ];
 

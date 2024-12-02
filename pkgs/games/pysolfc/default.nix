@@ -106,6 +106,6 @@ python311Packages.buildPythonApplication rec {
     mainProgram = "pysol.py";
     homepage = "https://pysolfc.sourceforge.io";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ kierdavis ];
+    maintainers = with maintainers; [ ];
   };
 }

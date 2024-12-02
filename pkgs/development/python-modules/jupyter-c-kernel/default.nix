@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  setuptools,
   fetchPypi,
   ipykernel,
   gcc,
@@ -9,7 +10,7 @@
 buildPythonPackage rec {
   pname = "jupyter-c-kernel";
   version = "1.2.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "jupyter_c_kernel";
@@ -19,10 +20,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace jupyter_c_kernel/kernel.py \
-      --replace "'gcc'" "'${gcc}/bin/gcc'"
+      --replace-fail "'gcc'" "'${gcc}/bin/gcc'"
   '';
 
-  propagatedBuildInputs = [ ipykernel ];
+  build-system = [ setuptools ];
+
+  dependencies = [ ipykernel ];
 
   # no tests in repository
   doCheck = false;

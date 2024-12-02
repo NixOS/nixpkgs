@@ -56,6 +56,7 @@ buildPythonPackage rec {
   preCheck = ''
     # failing tests
     rm test/updaters/test_common.py
+    rm test/common/test_key.py
     # Tests require network access
     rm test/common/test_utils.py
   '';

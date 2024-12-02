@@ -24,7 +24,6 @@
   libnatpmp,
   libpulseaudio,
   libupnp,
-  yaml-cpp,
   msgpack-cxx,
   openssl,
   restinio,
@@ -32,7 +31,11 @@
   speex,
   udev,
   webrtc-audio-processing,
+  yaml-cpp,
   zlib,
+
+  # for dhtnet
+  expected-lite,
 
   # for client
   cmake,
@@ -65,14 +68,14 @@
 
 stdenv.mkDerivation rec {
   pname = "jami";
-  version = "20240627.0";
+  version = "20241031.0";
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
-    hash = "sha256-aePF1c99ju9y7JEgC+F2BPfpSAZlLd5OI5Jm6i9VlQQ=";
+    hash = "sha256-LKezdzM+ltUSgW4GmTXICyufx9mI1AVbdEcwSp6tmao=";
     fetchSubmodules = true;
   };
 
@@ -107,7 +110,7 @@ stdenv.mkDerivation rec {
       "--disable-resample"
       "--disable-libwebrtc"
       "--with-gnutls=yes"
-    ] ++ lib.optionals stdenv.isLinux [ "--enable-epoll" ];
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-epoll" ];
 
     buildInputs = old.buildInputs ++ [ gnutls ];
   });
@@ -128,15 +131,22 @@ stdenv.mkDerivation rec {
 
   dhtnet = stdenv.mkDerivation {
     pname = "dhtnet";
-    version = "unstable-2024-05-17";
+    version = "unstable-2024-07-22";
 
     src = fetchFromGitLab {
       domain = "git.jami.net";
       owner = "savoirfairelinux";
       repo = "dhtnet";
-      rev = "77331098ff663a5ac54fae7d0bedafe076c575a1";
-      hash = "sha256-55LEnI1YgVujCtv1dGOFtJdvnzB2SKqwEptaHasZB7I=";
+      rev = "8cd00200669fa5b7632faa447ba206c3847e2879";
+      hash = "sha256-SGidaCi5z7hO0ePJIZIkcWAkb+cKsZTdksVS7ldpjME=";
     };
+
+    postPatch = ''
+      substituteInPlace dependencies/build.py \
+        --replace-fail \
+        "wget https://raw.githubusercontent.com/martinmoene/expected-lite/master/include/nonstd/expected.hpp -O" \
+        "cp ${expected-lite}/include/nonstd/expected.hpp"
+    '';
 
     nativeBuildInputs = [
       cmake
@@ -163,6 +173,8 @@ stdenv.mkDerivation rec {
       "-DBUILD_BENCHMARKS=Off"
       "-DBUILD_TOOLS=Off"
       "-DBUILD_TESTING=Off"
+      "-DBUILD_DEPENDENCIES=Off"
+      "-DBUILD_EXAMPLE=Off"
     ];
 
     meta = with lib; {
@@ -177,6 +189,12 @@ stdenv.mkDerivation rec {
     pname = "jami-daemon";
     inherit src version meta;
     sourceRoot = "${src.name}/daemon";
+
+    # Fix for libgit2 breaking changes
+    postPatch = ''
+      substituteInPlace src/jamidht/conversationrepository.cpp \
+        --replace-fail "git_commit* const" "const git_commit*"
+    '';
 
     nativeBuildInputs = [
       autoreconfHook
@@ -202,7 +220,6 @@ stdenv.mkDerivation rec {
       libnatpmp
       libpulseaudio
       libupnp
-      yaml-cpp
       msgpack-cxx
       opendht-jami
       openssl
@@ -212,6 +229,7 @@ stdenv.mkDerivation rec {
       speex
       udev
       webrtc-audio-processing
+      yaml-cpp
       zlib
     ];
 

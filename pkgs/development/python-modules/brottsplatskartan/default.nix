@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytest-cov,
+  pytest-cov-stub,
   pytestCheckHook,
   requests,
 }:
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
   ];
 

@@ -23,10 +23,10 @@ python3Packages.buildPythonApplication {
 
   postPatch = ''
     substituteInPlace org.debian.apt.aptoffline.policy \
-      --replace /usr/bin/ "$out/bin"
+      --replace-fail /usr/bin/ "$out/bin"
 
     substituteInPlace apt_offline_core/AptOfflineCoreLib.py \
-      --replace /usr/bin/gpgv "${lib.getBin gnupg}/bin/gpgv"
+      --replace-fail /usr/bin/gpgv "${lib.getBin gnupg}/bin/gpgv"
   '';
 
   postInstall = ''
@@ -48,7 +48,7 @@ python3Packages.buildPythonApplication {
     description = "Offline APT package manager";
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "apt-offline";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
 # TODO: verify GUI and pkexec

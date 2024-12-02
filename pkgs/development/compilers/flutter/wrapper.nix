@@ -18,7 +18,6 @@
 , extraCFlags ? [ ]
 , extraLinkerFlags ? [ ]
 , makeWrapper
-, runCommandLocal
 , writeShellScript
 , wrapGAppsHook3
 , git
@@ -39,7 +38,6 @@
 , cmake
 , ninja
 , clang
-, lndir
 , symlinkJoin
 }:
 
@@ -56,7 +54,7 @@ let
       };
     }));
 
-  cacheDir = symlinkJoin rec {
+  cacheDir = symlinkJoin {
     name = "flutter-cache-dir";
     paths = builtins.attrValues flutterPlatformArtifacts;
     postBuild = ''
@@ -148,7 +146,8 @@ in
       '' + lib.optionalString (flutter ? engine && flutter.engine.meta.available) ''
         --set-default FLUTTER_ENGINE "${flutter.engine}" \
         --add-flags "--local-engine-host ${flutter.engine.outName}" \
-      '' + '' --suffix PATH : '${lib.makeBinPath (tools ++ buildTools)}' \
+      '' + ''
+      --suffix PATH : '${lib.makeBinPath (tools ++ buildTools)}' \
       --suffix PKG_CONFIG_PATH : "$FLUTTER_PKG_CONFIG_PATH" \
       --suffix LIBRARY_PATH : '${lib.makeLibraryPath appStaticBuildDeps}' \
       --prefix CXXFLAGS "''\t" '${builtins.concatStringsSep " " (includeFlags ++ extraCxxFlags)}' \

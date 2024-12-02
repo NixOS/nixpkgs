@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "Genesis/Mega Drive emulator";
     platforms = [ "i686-linux" ];
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.eelco ];
+    maintainers = [ ];
   };
 }

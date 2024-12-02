@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "noto-fonts-cjk-serif";
-  version = "2.002";
+  version = "2.003";
 
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "noto-cjk";
     rev = "Serif${version}";
-    hash = "sha256-GLjpTAiHfygj1J4AdUVDJh8kykkFOglq+h4kyat5W9s=";
+    hash = "sha256-E+Ic7XhomI6cUa+q77gQvMlaLvy+vgTq4NJ58/nPZtk=";
     sparseCheckout = [ "Serif/Variable/OTC" ];
   };
 

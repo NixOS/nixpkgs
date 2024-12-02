@@ -2,13 +2,11 @@
 
 stdenv.mkDerivation {
   pname = "duff";
-  # The last release (0.5.2) is more than 2 years old and lacks features like -D,
-  # limiting its usefulness. Upstream appears comatose if not dead.
-  version = "2014-07-03";
+  version = "2024-02-16";
 
   src = fetchFromGitHub {
-    sha256 = "1k2dx38pjzc5d624vw1cs5ipj9fprsm5vqv55agksc29m63lswnx";
-    rev = "f26d4837768b062a3f98fa075c791d9c8a0bb75c";
+    sha256 = "9lS4th+qeglsoA+1s45uEE2UGmlE3YtSy4/uGqWKU/k=";
+    rev = "c1baefa4f4d5cefbbbc7bfefc0c18356752c8a1b";
     repo = "duff";
     owner = "elmindreda";
   };
@@ -23,6 +21,8 @@ stdenv.mkDerivation {
     ./gettextize
     sed 's@po/Makefile.in\( .*\)po/Makefile.in@po/Makefile.in \1@' \
       -i configure.ac
+    # src/main.c is utf8, not ascii
+    sed '/^XGETTEXT_OPTIONS =/ s,$, --from-code=utf-8,' -i po/Makevars
   '';
 
   enableParallelBuilding = true;
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
       Duff is a Unix command-line utility for quickly finding duplicates in
       a given set of files.
     '';
-    homepage = "https://duff.dreda.org/";
+    homepage = "https://github.com/elmindreda/duff";
     license = licenses.zlib;
     platforms = platforms.all;
   };

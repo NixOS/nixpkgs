@@ -3,6 +3,7 @@
   buildPythonPackage,
   certifi,
   click,
+  dotmap,
   ecs-logging,
   elastic-transport,
   elasticsearch8,
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "es-client";
-  version = "8.14.4";
+  version = "8.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,17 +30,17 @@ buildPythonPackage rec {
     owner = "untergeek";
     repo = "es_client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CJhiSDmIlhTWV7LLWd2ZCzuj5cWXwgh0lkKJvhmaDFw=";
+    hash = "sha256-t/d+aZ11JU9vhZIRkZcsahW8HzEkxbgIc5Zua4WPMjg=";
   };
 
   pythonRelaxDeps = true;
 
   build-system = [ hatchling ];
 
-
   dependencies = [
     certifi
     click
+    dotmap
     ecs-logging
     elastic-transport
     elasticsearch8
@@ -68,6 +69,10 @@ buildPythonPackage rec {
     "test_multiple_hosts_raises"
     "test_non_dict_passed"
     "test_skip_version_check"
+    # Test wants to handle credentials
+    "test_logging_options_from_config_file"
+    # es_client.exceptions.ConfigurationError: Must populate both username and password, or leave both empty
+    "test_exit_if_not_master "
   ];
 
   meta = with lib; {

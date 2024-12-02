@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "notepad-next";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "dail8859";
     repo = "NotepadNext";
     rev = "v${version}";
-    hash = "sha256-fwHTsTKcVaeIv0NQQBjzfXscGDfXr3X/yH07YnYh3fU=";
+    hash = "sha256-3BCLPY104zxALd3wFH8e9PitjmFbPcOfKsLqXowXqnY=";
     # External dependencies - https://github.com/dail8859/NotepadNext/issues/135
     fetchSubmodules = true;
   };
@@ -27,7 +27,7 @@ mkDerivation rec {
       --replace '$$[QT_INSTALL_TRANSLATIONS]/qt_zh_CN.qm' ""
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mv $out/bin $out/Applications
     rm -fr $out/share
   '';
@@ -38,7 +38,7 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.sebtm ];
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "NotepadNext";
   };
 }

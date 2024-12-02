@@ -18,25 +18,26 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-automl";
-  version = "2.13.4";
+  version = "2.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NxAoob0wJKobtcEQNTgH+fylnTtJdL98h23IVNfLhew=";
+    pname = "google_cloud_automl";
+    inherit version;
+    hash = "sha256-APghvmZPVcscmm1y6BfFPk6QfGovn5Q1KxPTe08mHKM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     proto-plus
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     libcst = [ libcst ];
     pandas = [ pandas ];
     storage = [ google-cloud-storage ];

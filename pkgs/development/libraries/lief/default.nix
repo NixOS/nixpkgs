@@ -11,13 +11,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "lief";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "lief-project";
     repo = "LIEF";
     rev = version;
-    sha256 = "sha256-YpED7Bm+WjO+N0h08VhiRWXOVWscBTK3lcf6BIjcZ9Y=";
+    sha256 = "sha256-2W/p6p7YXqSNaVs8yPAnLQhbBVIQWEbUVnhx9edV5gI=";
   };
 
   outputs = [ "out" "py" ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  # Not a propagatedBuildInput because only the $py output needs it; $out is
+  # Not in propagatedBuildInputs because only the $py output needs it; $out is
   # just the library itself (e.g. C/C++ headers).
   buildInputs = with python.pkgs; [
     python
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     scikit-build-core
   ];
 
-  env.CXXFLAGS = toString (lib.optional stdenv.isDarwin [ "-faligned-allocation" "-fno-aligned-new" "-fvisibility=hidden" ]);
+  env.CXXFLAGS = toString (lib.optional stdenv.hostPlatform.isDarwin [ "-faligned-allocation" "-fno-aligned-new" "-fvisibility=hidden" ]);
 
   postBuild = ''
     pushd ../api/python

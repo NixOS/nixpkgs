@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  targetPlatform,
   fetchurl,
   python312,
   SDL2,
@@ -23,18 +22,18 @@ let
     {
       x86_64-linux = {
         name = "BombSquad_Linux_x86_64";
-        hash = "sha256-XSt6YvBZba/0fO85aJpg1vJnr5tLQsKVuqxSKOrMXw8=";
+        hash = "sha256-aujLYzFcKaW0ff7sRdyJ6SvSQowafWVbmwycQfDQUYY=";
       };
       aarch-64-linux = {
         name = "BombSquad_Linux_Arm64";
-        hash = "sha256-w42qhioZ9JRm004WEKzsJ3G1u09tLuPvTy8qV3DuglI=";
+        hash = "sha256-pPP7QZzToTOQtSxzF7Q3ZzlDjUjQWMBM/y79d6Yf38I=";
       };
     }
-    .${targetPlatform.system} or (throw "${targetPlatform.system} is unsupported.");
+    .${stdenv.targetPlatform.system} or (throw "${stdenv.targetPlatform.system} is unsupported.");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bombsquad";
-  version = "1.7.36";
+  version = "1.7.37";
   sourceRoot = ".";
   src = fetchurl {
     url = "https://files.ballistica.net/bombsquad/builds/${archive.name}_${finalAttrs.version}.tar.gz";

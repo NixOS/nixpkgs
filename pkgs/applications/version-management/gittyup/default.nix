@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     openssl
     qtbase
     qttools
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreFoundation
     Security
   ]);
@@ -73,6 +73,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ mit ];
     maintainers = [ ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

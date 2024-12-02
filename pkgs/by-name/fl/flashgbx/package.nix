@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flashgbx";
-  version = "4.1";
+  version = "4.3";
 
   src = fetchFromGitHub {
     repo = "FlashGBX";
     owner = "lesserkuma";
     rev = "refs/tags/${version}";
-    hash = "sha256-4/f3K5MQBEIdYdcT2NudHJL+VyZT/hj9bw5tfJIco8w=";
+    hash = "sha256-jPD+7bFU6k1+NRKRHwynEmZ0G6ZwnF8AZVuTqk5DjEY=";
   };
 
   desktopItems = [
@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication rec {
     requests
     setuptools
     qt6.qtbase
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qt6.qtwayland
   ];
 

@@ -1,29 +1,26 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.interception-tools;
 in {
   options.services.interception-tools = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Whether to enable the interception tools service.";
     };
 
-    plugins = mkOption {
-      type = types.listOf types.package;
+    plugins = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
       default = [ pkgs.interception-tools-plugins.caps2esc ];
-      defaultText = literalExpression "[ pkgs.interception-tools-plugins.caps2esc ]";
+      defaultText = lib.literalExpression "[ pkgs.interception-tools-plugins.caps2esc ]";
       description = ''
         A list of interception tools plugins that will be made available to use
         inside the udevmon configuration.
       '';
     };
 
-    udevmonConfig = mkOption {
-      type = types.either types.str types.path;
+    udevmonConfig = lib.mkOption {
+      type = lib.types.either lib.types.str lib.types.path;
       default = ''
         - JOB: "intercept -g $DEVNODE | caps2esc | uinput -d $DEVNODE"
           DEVICE:
@@ -43,7 +40,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.interception-tools = {
       description = "Interception tools";
       path = [ pkgs.bash pkgs.interception-tools ] ++ cfg.plugins;

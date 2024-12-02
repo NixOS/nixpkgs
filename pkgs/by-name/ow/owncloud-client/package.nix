@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     qt6Packages.qtkeychain
     libre-graph-api-cpp-qt-client
     kdsingleapplication
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libinotify-kqueue sparkleshare
   ];
 

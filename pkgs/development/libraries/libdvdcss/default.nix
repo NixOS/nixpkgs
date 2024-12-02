@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "libdvdcss";
   version = "1.4.3";
 
-  buildInputs = lib.optional stdenv.isDarwin IOKit;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin IOKit;
 
   src = fetchurl {
     url = "http://get.videolan.org/libdvdcss/${version}/${pname}-${version}.tar.bz2";

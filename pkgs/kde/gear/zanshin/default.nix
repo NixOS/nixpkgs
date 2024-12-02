@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "zanshin";
 
-  extraBuildInputs = [boost];
+  extraBuildInputs = [ boost ];
 }

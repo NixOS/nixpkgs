@@ -1,15 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, xz, buildPackages }:
+{ stdenv, lib, fetchpatch, fetchFromGitHub, autoreconfHook, buildPackages
+, xz
+, testers
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libunwind";
   version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "libunwind";
     repo = "libunwind";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rCFBHs6rCSnp5FEwbUR5veNNTqSQpFblAv8ebSPX0qE=";
   };
+
+  patches = lib.optional (stdenv.targetPlatform.useLLVM or false) (fetchpatch {
+    url = "https://github.com/libunwind/libunwind/pull/770/commits/a69d0f14c9e6c46e82ba6e02fcdedb2eb63b7f7f.patch";
+    hash = "sha256-9oBZimCXonNN++jJs3emp9w+q1aj3eNzvSKPgh92itA=";
+  });
 
   postPatch = if (stdenv.cc.isClang || stdenv.hostPlatform.isStatic) then ''
     substituteInPlace configure.ac --replace "-lgcc_s" ""
@@ -45,12 +53,18 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = finalAttrs.finalPackage;
+    versionCheck = true;
+  };
+
   meta = with lib; {
     homepage = "https://www.nongnu.org/libunwind";
     description = "Portable and efficient API to determine the call-chain of a program";
     maintainers = with maintainers; [ orivej ];
+    pkgConfigModules = [ "libunwind" "libunwind-coredump" "libunwind-generic" "libunwind-ptrace" "libunwind-setjmp" ];
     # https://github.com/libunwind/libunwind#libunwind
     platforms = [ "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux" "armv7l-linux" "i686-freebsd" "i686-linux" "loongarch64-linux" "mips64el-linux" "mipsel-linux" "powerpc64-linux" "powerpc64le-linux" "riscv64-linux" "s390x-linux" "x86_64-freebsd" "x86_64-linux" "x86_64-solaris" ];
     license = licenses.mit;
   };
-}
+})

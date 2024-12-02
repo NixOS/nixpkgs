@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "gamble";
-  version = "0.13";
+  version = "0.14.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "jpetrucciani";
     repo = "gamble";
     rev = "refs/tags/${version}";
-    hash = "sha256-eHosY/JfJr317S7WI8phy7DNHf3cZzs6c5MMfw7yzAE=";
+    hash = "sha256-vzaY5gJ0Ou2ArUJ0kuTWzTeLfiRDhUt/Hxpns9rFiDk=";
   };
 
   build-system = [ poetry-core ];

@@ -7,15 +7,18 @@
   protobuf,
 }:
 
+# This package should be updated together with the main grpc package and other
+# related python grpc packages.
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-channelz";
-  version = "1.65.1";
+  version = "1.67.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_channelz";
     inherit version;
-    hash = "sha256-LAAFFlzWYPooRJeoDD4izW+0TscLq9FAQUM+vhXu/Ag=";
+    hash = "sha256-F2Jfq6lOYn4RsjP9Ay21G67F6HkGeY3SIEk26Z0BWnE=";
   };
 
   build-system = [ setuptools ];

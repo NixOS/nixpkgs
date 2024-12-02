@@ -1,69 +1,66 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.chisel-server;
 
 in {
   options = {
     services.chisel-server = {
-      enable = mkEnableOption "Chisel Tunnel Server";
-      host = mkOption {
+      enable = lib.mkEnableOption "Chisel Tunnel Server";
+      host = lib.mkOption {
         description = "Address to listen on, falls back to 0.0.0.0";
-        type = with types; nullOr str;
+        type = with lib.types; nullOr str;
         default = null;
         example = "[::1]";
       };
-      port = mkOption {
+      port = lib.mkOption {
         description = "Port to listen on, falls back to 8080";
-        type = with types; nullOr port;
+        type = with lib.types; nullOr port;
         default = null;
       };
-      authfile = mkOption {
+      authfile = lib.mkOption {
         description = "Path to auth.json file";
-        type = with types; nullOr path;
+        type = with lib.types; nullOr path;
         default = null;
       };
-      keepalive  = mkOption {
+      keepalive  = lib.mkOption {
         description = "Keepalive interval, falls back to 25s";
-        type = with types; nullOr str;
+        type = with lib.types; nullOr str;
         default = null;
         example = "5s";
       };
-      backend = mkOption {
+      backend = lib.mkOption {
         description = "HTTP server to proxy normal requests to";
-        type = with types; nullOr str;
+        type = with lib.types; nullOr str;
         default = null;
         example = "http://127.0.0.1:8888";
       };
-      socks5 = mkOption {
+      socks5 = lib.mkOption {
         description = "Allow clients access to internal SOCKS5 proxy";
-        type = types.bool;
+        type = lib.types.bool;
         default = false;
       };
-      reverse = mkOption {
+      reverse = lib.mkOption {
         description = "Allow clients reverse port forwarding";
-        type = types.bool;
+        type = lib.types.bool;
         default = false;
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.chisel-server = {
       description = "Chisel Tunnel Server";
       wantedBy = [ "network-online.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.chisel}/bin/chisel server " + concatStringsSep " " (
-          optional (cfg.host != null) "--host ${cfg.host}"
-          ++ optional (cfg.port != null) "--port ${builtins.toString cfg.port}"
-          ++ optional (cfg.authfile != null) "--authfile ${cfg.authfile}"
-          ++ optional (cfg.keepalive != null) "--keepalive ${cfg.keepalive}"
-          ++ optional (cfg.backend != null) "--backend ${cfg.backend}"
-          ++ optional cfg.socks5 "--socks5"
-          ++ optional cfg.reverse "--reverse"
+        ExecStart = "${pkgs.chisel}/bin/chisel server " + lib.concatStringsSep " " (
+          lib.optional (cfg.host != null) "--host ${cfg.host}"
+          ++ lib.optional (cfg.port != null) "--port ${builtins.toString cfg.port}"
+          ++ lib.optional (cfg.authfile != null) "--authfile ${cfg.authfile}"
+          ++ lib.optional (cfg.keepalive != null) "--keepalive ${cfg.keepalive}"
+          ++ lib.optional (cfg.backend != null) "--backend ${cfg.backend}"
+          ++ lib.optional cfg.socks5 "--socks5"
+          ++ lib.optional cfg.reverse "--reverse"
         );
 
         # Security Hardening
@@ -95,5 +92,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ clerie ];
+  meta.maintainers = with lib.maintainers; [ clerie ];
 }

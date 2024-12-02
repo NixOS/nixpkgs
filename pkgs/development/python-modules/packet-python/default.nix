@@ -4,6 +4,7 @@
   fetchPypi,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   requests,
   requests-mock,
 }:
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "packet-python";
   version = "1.44.3";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -22,10 +23,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest-runner" ""
+      --replace-fail "pytest-runner" ""
   '';
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   nativeCheckInputs = [
     pytestCheckHook

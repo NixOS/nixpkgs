@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [ libxcb libXau libXdmcp ]
-    ++ lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
+    ++ lib.optional stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
   nativeBuildInputs = [ cmake pkg-config ];
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];

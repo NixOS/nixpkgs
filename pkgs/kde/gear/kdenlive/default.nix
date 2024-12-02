@@ -17,14 +17,14 @@ mkKdeDerivation {
   pname = "kdenlive";
 
   patches = [
-    (
-      substituteAll {
-        src = ./dependency-paths.patch;
-        inherit mediainfo mlt glaxnimate;
-        ffmpeg = ffmpeg-full;
-      }
-    )
+    (substituteAll {
+      src = ./dependency-paths.patch;
+      inherit mediainfo mlt glaxnimate;
+      ffmpeg = ffmpeg-full;
+    })
   ];
+
+  extraNativeBuildInputs = [ shared-mime-info ];
 
   extraBuildInputs = [
     qtsvg
@@ -34,7 +34,6 @@ mkKdeDerivation {
     qqc2-desktop-style
 
     mlt
-    shared-mime-info
     libv4l
   ];
 

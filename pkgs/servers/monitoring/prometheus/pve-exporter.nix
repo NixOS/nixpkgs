@@ -6,11 +6,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "prometheus_pve_exporter";
-  version = "3.4.3";
+  version = "3.4.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5xvTUOwBj3N0hxLKfAlEq8y8snoDb92f7o7u7j0RdhY=";
+    hash = "sha256-Jsv45qK1KZYJn9ClokaXa+FVWOEQzoPX9uP26VAQ4yo=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

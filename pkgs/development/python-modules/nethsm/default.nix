@@ -12,7 +12,7 @@
 
 let
   pname = "nethsm";
-  version = "1.2.0";
+  version = "1.2.1";
 in
 
 buildPythonPackage {
@@ -21,7 +21,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BFdnRHHe/UIusZn1JdV3Fc6W5TtJAMk4e8masEYrqdQ=";
+    hash = "sha256-EPxGJFCGGl3p3yLlM7NH7xtEVS2woRigKJhL57A0gAE=";
   };
 
   propagatedBuildInputs = [

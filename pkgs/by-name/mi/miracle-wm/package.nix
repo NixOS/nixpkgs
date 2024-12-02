@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   gitUpdater,
   nixosTests,
   boost,
@@ -9,6 +10,7 @@
   glib,
   glm,
   gtest,
+  json_c,
   libevdev,
   libglvnd,
   libnotify,
@@ -19,19 +21,29 @@
   nlohmann_json,
   pcre2,
   pkg-config,
+  wayland,
   yaml-cpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.3.0";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "mattkae";
     repo = "miracle-wm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Ss93yI33e+XFjbKedbBjmYHkjPeWUWxEStwNTgTszA4=";
+    hash = "sha256-31S7Mfz3LIOAmDUl6jbr3kSP2BdLaM0M4xMZ8FHhLH0=";
   };
+
+  patches = [
+    # Remove when https://github.com/mattkae/miracle-wm/pull/211 merged & in release
+    (fetchpatch {
+      name = "0001-miracle-wm-Dont-ignore-PKG_CONFIG_PATH.patch";
+      url = "https://github.com/mattkae/miracle-wm/commit/a9fe6ed1e7dc605f72e18cdc2d19afb3c187be3a.patch";
+      hash = "sha256-zzOwqUjyZGYIy/3BvOiedfCubrqaeglvsAzTXyq3wYU=";
+    })
+  ];
 
   postPatch =
     ''
@@ -57,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     glib
     glm
+    json_c
     libevdev
     libglvnd
     libnotify
@@ -66,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     mir
     nlohmann_json
     pcre2
+    wayland
     yaml-cpp
   ];
 

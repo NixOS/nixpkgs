@@ -1,57 +1,57 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  writeScript,
   appstream-glib,
-  cargo,
-  meson,
-  ninja,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  wrapGAppsHook4,
   cairo,
+  cargo,
   desktop-file-utils,
+  fetchFromGitLab,
   gdb,
   gdk-pixbuf,
+  git,
   glib,
   gtk4,
   gtksourceview5,
+  lib,
   libadwaita,
   libgit2,
   libusb1,
+  meson,
+  ninja,
+  nix-update-script,
   openssl,
+  openxr-loader,
   pango,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  stdenv,
   vte-gtk4,
+  wrapGAppsHook4,
   zlib,
-  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "envision-unwrapped";
-  version = "0-unstable-2024-07-03";
+  version = "0-unstable-2024-10-20";
 
   src = fetchFromGitLab {
     owner = "gabmus";
     repo = "envision";
-    rev = "6cf5e40b96d1cbd99a3cfcef1f03899356e79448";
-    hash = "sha256-a/IUNGoq9OKEC3uCg6PUp2TRHkfm4mTT3QQ8SfA29RU=";
+    rev = "c40a4ad05a8e6ea99eed4a7d7d2098a08686e065";
+    hash = "sha256-C/m5Hx52fFyuVI87EmHpe5YqjwDWoyveiXA0sJTt2NQ=";
   };
 
   strictDeps = true;
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libmonado-rs-0.1.0" = "sha256-PsNgfpgso3HhIMXKky/u6Xw8phk1isRpNXKLhvN1wIE=";
-    };
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-I9UDCKrqU6TWcmHsSFwt1elplPwU+XTgyXiN2wtw5y0=";
   };
 
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
     cargo
+    git
     meson
     ninja
     pkg-config
@@ -70,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgit2
     libusb1
     openssl
+    openxr-loader
     pango
     vte-gtk4
     zlib
@@ -80,11 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${lib.makeBinPath [ gdb ]}"
   '';
 
-  passthru.updateScript = writeScript "envision-update" ''
-    source ${builtins.head (unstableGitUpdater { })}
-
-    cp $tmpdir/Cargo.lock ./pkgs/by-name/en/envision-unwrapped/Cargo.lock
-  '';
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=main" ]; };
 
   meta = {
     description = "UI for building, configuring and running Monado, the open source OpenXR runtime";

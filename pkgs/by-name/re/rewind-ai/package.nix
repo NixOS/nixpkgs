@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # 15284.1 (build number)
   # dcd0176 (commit hash)
   # 20240504 (pub date)
-  version = "1.5284-15284.1-dcd0176-20240504";
+  version = "1.5310-15310.1-5f6bcc5-20240930";
 
   src = fetchzip {
     url =
@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         commitHash = lib.elemAt (lib.splitString "-" finalAttrs.version) 2;
       in
       "https://updates.rewind.ai/builds/main/b${buildNumber}-main-${commitHash}.zip";
-    hash = "sha256-Y7iAYHH/msZoXFzAZHJb6YoDz5fwMPHJx1kg7TqP5Gw=";
+    hash = "sha256-uNqblEOezCj1JanDl6MZZO3GLX5jgWh19VeMcmwZvZg=";
   };
 
   installPhase = ''

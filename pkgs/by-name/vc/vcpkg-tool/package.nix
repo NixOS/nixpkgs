@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , runtimeShell
+, apple-sdk_11
 , cacert
 , cmake
 , cmakerc
@@ -23,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcpkg-tool";
-  version = "2024-06-10";
+  version = "2024-07-10";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vcpkg-tool";
     rev = finalAttrs.version;
-    hash = "sha256-TGRTzUd1FtErD+h/ksUsUm1Rhank9/yVy06JbAgEEw0=";
+    hash = "sha256-P/ARKMfZdrfO+24rBrRm9k8tkBPSJJBqH509+iarNkw=";
   };
 
   nativeBuildInputs = [
@@ -40,10 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cmakerc
     fmt
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   patches = [
     ./change-lock-location.patch
+    ./read-bundle-info-from-root.patch
   ];
 
   cmakeFlags = [

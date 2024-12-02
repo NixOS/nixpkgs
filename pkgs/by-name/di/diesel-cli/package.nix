@@ -27,15 +27,15 @@ assert lib.assertMsg (lib.elem true [
 
 rustPlatform.buildRustPackage rec {
   pname = "diesel-cli";
-  version = "2.2.1";
+  version = "2.2.5";
 
   src = fetchCrate {
     inherit version;
     crateName = "diesel_cli";
-    hash = "sha256-B+AHTJgOBUGVc4J2VcwuqVwAbm0wpsFHc9+gc5g2RAM=";
+    hash = "sha256-cMGSBZ2UexIvSWRI2LIXR7thKciM9+HTB4V8FWpP3ZU=";
   };
 
-  cargoHash = "sha256-HFhkePq2fZ7MxZfH0jLlS5B10jqf15+RUcGZnDbML5Q=";
+  cargoHash = "sha256-Qdi9zdBiaAWS0Ao/8Z1jrb07FLE92ETd7RCMd/7J+mI=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -44,8 +44,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security
-    ++ lib.optional (stdenv.isDarwin && mysqlSupport) libiconv
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security
+    ++ lib.optional (stdenv.hostPlatform.isDarwin && mysqlSupport) libiconv
     ++ lib.optional sqliteSupport sqlite
     ++ lib.optional postgresqlSupport postgresql
     ++ lib.optionals mysqlSupport [
@@ -79,7 +79,7 @@ rustPlatform.buildRustPackage rec {
   # Tests currently fail due to *many* duplicate definition errors
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd diesel \
       --bash <($out/bin/diesel completions bash) \
       --fish <($out/bin/diesel completions fish) \

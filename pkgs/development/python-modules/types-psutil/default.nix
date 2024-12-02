@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "Typing stubs for psutil";
     homepage = "https://github.com/python/typeshed";
     license = licenses.asl20;
-    maintainers = with maintainers; [ anselmschueler ];
+    maintainers = [ ];
   };
 }

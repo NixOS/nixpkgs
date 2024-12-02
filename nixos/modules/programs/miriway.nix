@@ -72,6 +72,8 @@ in {
 
     # To make the Miriway session available if a display manager like SDDM is enabled:
     services.displayManager.sessionPackages = [ pkgs.miriway ];
+
+    xdg.icons.enable = true;
   };
 
   meta.maintainers = with lib.maintainers; [ OPNA2608 ];

@@ -74,7 +74,7 @@ buildPythonPackage rec {
   disabledTests = [ "test_show_clip" ];
 
   meta = {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Password manager pass in Python";
     mainProgram = "pypass";
     homepage = "https://github.com/aviau/python-pass";

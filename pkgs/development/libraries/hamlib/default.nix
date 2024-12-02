@@ -12,7 +12,6 @@
 , pkg-config
 , boost
 , libtool
-, perlPackages
 , pythonBindings ? true
 , tclBindings ? true
 , perlBindings ? stdenv.buildPlatform == stdenv.hostPlatform

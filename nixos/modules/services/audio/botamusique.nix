@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.botamusique;
 
@@ -12,34 +9,34 @@ in
   meta.maintainers = with lib.maintainers; [ hexa ];
 
   options.services.botamusique = {
-    enable = mkEnableOption "botamusique, a bot to play audio streams on mumble";
+    enable = lib.mkEnableOption "botamusique, a bot to play audio streams on mumble";
 
-    package = mkPackageOption pkgs "botamusique" { };
+    package = lib.mkPackageOption pkgs "botamusique" { };
 
-    settings = mkOption {
-      type = with types; submodule {
+    settings = lib.mkOption {
+      type = with lib.types; submodule {
         freeformType = format.type;
         options = {
-          server.host = mkOption {
+          server.host = lib.mkOption {
             type = types.str;
             default = "localhost";
             example = "mumble.example.com";
             description = "Hostname of the mumble server to connect to.";
           };
 
-          server.port = mkOption {
+          server.port = lib.mkOption {
             type = types.port;
             default = 64738;
             description = "Port of the mumble server to connect to.";
           };
 
-          bot.username = mkOption {
+          bot.username = lib.mkOption {
             type = types.str;
             default = "botamusique";
             description = "Name the bot should appear with.";
           };
 
-          bot.comment = mkOption {
+          bot.comment = lib.mkOption {
             type = types.str;
             default = "Hi, I'm here to play radio, local music or youtube/soundcloud music. Have fun!";
             description = "Comment displayed for the bot.";
@@ -54,7 +51,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.botamusique = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];

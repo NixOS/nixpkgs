@@ -5,36 +5,14 @@
   lib,
   makeWrapper,
   nix-update-script,
-  python3,
+  python3Packages,
   squashfsTools,
   stdenv,
 }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      pydantic-yaml = super.pydantic-yaml.overridePythonAttrs (old: rec {
-        version = "0.11.2";
-        src = fetchFromGitHub {
-          owner = "NowanIlfideme";
-          repo = "pydantic-yaml";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-AeUyVav0/k4Fz69Qizn4hcJKoi/CDR9eUan/nJhWsDY=";
-        };
-        dependencies = with self; [
-          deprecated
-          importlib-metadata
-          pydantic_1
-          ruamel-yaml
-          types-deprecated
-        ];
-      });
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.3.1";
+  version = "8.5.0";
 
   pyproject = true;
 
@@ -42,7 +20,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     rev = "refs/tags/${version}";
-    hash = "sha256-cdRlUY9hAJ8US93aiJymzsV27JVPY7lWCK7IUdjDmYE=";
+    hash = "sha256-u5LO29LnAJrU8fafa1EA4ii5g8sO8REfuf/7lzI7x5k=";
   };
 
   patches = [
@@ -87,13 +65,12 @@ python.pkgs.buildPythonApplication rec {
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
 
     substituteInPlace pyproject.toml \
-      --replace-fail '"pytest-cov>=4.0",' "" \
-      --replace-fail "--cov=snapcraft" ""
+      --replace-fail '"pytest-cov>=4.0",' ""
   '';
 
   nativeBuildInputs = [ makeWrapper ];
 
-  dependencies = with python.pkgs; [
+  dependencies = with python3Packages; [
     attrs
     catkin-pkg
     click
@@ -102,6 +79,7 @@ python.pkgs.buildPythonApplication rec {
     craft-cli
     craft-grammar
     craft-parts
+    craft-platforms
     craft-providers
     craft-store
     debian
@@ -125,7 +103,7 @@ python.pkgs.buildPythonApplication rec {
     pyyaml
     raven
     requests-toolbelt
-    requests-unixsocket
+    requests-unixsocket2
     simplejson
     snap-helpers
     tabulate
@@ -136,7 +114,7 @@ python.pkgs.buildPythonApplication rec {
     validators
   ];
 
-  build-system = with python.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
   pythonRelaxDeps = [
     "docutils"
@@ -151,9 +129,10 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs =
-    with python.pkgs;
+    with python3Packages;
     [
       pytest-check
+      pytest-cov-stub
       pytest-mock
       pytest-subprocess
       pytestCheckHook
@@ -181,6 +160,7 @@ python.pkgs.buildPythonApplication rec {
     "test_get_base_configuration_snap_channel"
     "test_get_base_configuration_snap_instance_name_default"
     "test_get_base_configuration_snap_instance_name_not_running_as_snap"
+    "test_get_build_commands"
     "test_get_extensions_data_dir"
     "test_get_os_platform_alternative_formats"
     "test_get_os_platform_linux"
@@ -195,7 +175,7 @@ python.pkgs.buildPythonApplication rec {
     "test_snap_command_fallback"
     "test_validate_architectures_supported"
     "test_validate_architectures_unsupported"
-  ] ++ lib.optionals stdenv.isAarch64 [ "test_load_project" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_load_project" ];
 
   disabledTestPaths = [
     "tests/unit/commands/test_remote.py"

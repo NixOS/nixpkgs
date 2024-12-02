@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sideload";
-  version = "6.2.2";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7qwjZpEvB0eHIRsXv8jU7fVhbCIYI6tqJYmYvZR8oLo=";
+    sha256 = "sha256-2tYdcHx77XN2iu2PKXAKwOtb4TOFt3Igv17w2zIxqT4=";
   };
 
   nativeBuildInputs = [

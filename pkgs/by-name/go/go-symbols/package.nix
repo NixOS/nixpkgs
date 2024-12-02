@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "acroca";
     repo = "go-symbols";
     rev = "v${version}";
-    sha256 = "0yyzw6clndb2r5j9isyd727njs98zzp057v314vfvknsm8g7hqrz";
+    hash = "sha256-P2N4Hqrazu02CWOfAu7/KGlpjzjN65hkyWI1S5nh33s=";
   };
 
   patches = [

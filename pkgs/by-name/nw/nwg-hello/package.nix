@@ -9,13 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nwg-hello";
-  version = "0.2.2";
+  version = "0.2.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-hello";
     rev = "refs/tags/v${version}";
-    hash = "sha256-czvKUuSAGEqtjIcIW9mm/LlUsvkGknHbwuXJw5YGT5A=";
+    hash = "sha256-WE6jtVZfsWJREZghU93v8EAq16MiERYnq3Y0g2caYPs=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +29,9 @@ python3Packages.buildPythonApplication rec {
     gtk-layer-shell
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ python3Packages.setuptools ];
+
+  dependencies = [
     python3Packages.pygobject3
   ];
 
@@ -50,6 +53,12 @@ python3Packages.buildPythonApplication rec {
     install -D -m 644 -t "$out/etc/nwg-hello/" nwg-hello-default.json nwg-hello-default.css hyprland.conf sway-config README
     install -D -m 644 -t "$out/share/nwg-hello/" nwg.jpg
     install -D -m 644 -t "$out/share/nwg-hello/" img/*
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   # Upstream has no tests

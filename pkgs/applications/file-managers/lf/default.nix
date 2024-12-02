@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "lf";
-  version = "32";
+  version = "33";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     rev = "r${version}";
-    hash = "sha256-rFK1M15NcshVY2vtXcMWZhB9Rd/DRC8JyKE5u4wjh2I=";
+    hash = "sha256-aKvTf2tqAUbB3plOemvgJJ7qYdGfQoXhsGVE7Y9wuMo=";
   };
 
-  vendorHash = "sha256-r1Kq6CYGNbxTTue3sb3CKMsWZJDzX2dKX7QHQ73nZ8g=";
+  vendorHash = "sha256-E6uZVsQAiwy3uGXp9COvtJSlgXhXxfS7vOfhM5uBPQw=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -24,7 +24,7 @@ buildGoModule rec {
 
   # Force the use of the pure-go implementation of the os/user library.
   # Relevant issue: https://github.com/gokcehan/lf/issues/191
-  tags = lib.optionals (!stdenv.isDarwin) [ "osusergo" ];
+  tags = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "osusergo" ];
 
   postInstall = ''
     install -D --mode=444 lf.desktop $out/share/applications/lf.desktop

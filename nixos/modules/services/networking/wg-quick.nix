@@ -57,6 +57,15 @@ let
         '';
       };
 
+      generatePrivateKeyFile = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Automatically generate a private key with
+          {command}`wg genkey`, at the privateKeyFile location.
+        '';
+      };
+
       privateKeyFile = mkOption {
         example = "/private/wireguard_key";
         type = with types; nullOr str;
@@ -218,9 +227,24 @@ let
 
   writeScriptFile = name: text: ((pkgs.writeShellScriptBin name text) + "/bin/${name}");
 
+  generatePrivateKeyScript = privateKeyFile: ''
+    set -e
+
+    # If the parent dir does not already exist, create it.
+    # Otherwise, does nothing, keeping existing permissions intact.
+    mkdir -p --mode 0755 "${dirOf privateKeyFile}"
+
+    if [ ! -f "${privateKeyFile}" ]; then
+      # Write private key file with atomically-correct permissions.
+      (set -e; umask 077; wg genkey > "${privateKeyFile}")
+    fi
+  '';
+
   generateUnit = name: values:
     assert assertMsg (values.configFile != null || ((values.privateKey != null) != (values.privateKeyFile != null))) "Only one of privateKey, configFile or privateKeyFile may be set";
+    assert assertMsg (values.generatePrivateKeyFile == false || values.privateKeyFile != null) "generatePrivateKeyFile requires privateKeyFile to be set";
     let
+      generateKeyScriptFile = if values.generatePrivateKeyFile then writeScriptFile "generatePrivateKey.sh" (generatePrivateKeyScript values.privateKeyFile) else null;
       preUpFile = if values.preUp != "" then writeScriptFile "preUp.sh" values.preUp else null;
       postUp =
             optional (values.privateKeyFile != null) "wg set ${name} private-key <(cat ${values.privateKeyFile})" ++
@@ -247,6 +271,7 @@ let
         optionalString (values.mtu != null) "MTU = ${toString values.mtu}\n" +
         optionalString (values.privateKey != null) "PrivateKey = ${values.privateKey}\n" +
         optionalString (values.listenPort != null) "ListenPort = ${toString values.listenPort}\n" +
+        optionalString (generateKeyScriptFile != null) "PreUp = ${generateKeyScriptFile}\n" +
         optionalString (preUpFile != null) "PreUp = ${preUpFile}\n" +
         optionalString (postUpFile != null) "PostUp = ${postUpFile}\n" +
         optionalString (preDownFile != null) "PreDown = ${preDownFile}\n" +

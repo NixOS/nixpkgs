@@ -4,11 +4,9 @@
               "load_average" "memory" "volume" "wifi" ]
 }:
 
-with lib;
-
 let
   perlscripts = [ "battery" "cpu_usage" "openvpn" "temperature" ];
-  contains_any = l1: l2: 0 < length( intersectLists l1 l2 );
+  contains_any = l1: l2: 0 < lib.length( lib.intersectLists l1 l2 );
 
 in
 stdenv.mkDerivation rec {
@@ -25,24 +23,24 @@ stdenv.mkDerivation rec {
   makeFlags = [ "all" ];
   installFlags = [ "PREFIX=\${out}" "VERSION=${version}" ];
 
-  buildInputs = optional (contains_any scripts perlscripts) perl;
+  buildInputs = lib.optional (contains_any scripts perlscripts) perl;
   nativeBuildInputs = [ makeWrapper ];
 
-  postFixup = optionalString (elem "bandwidth" scripts) ''
+  postFixup = lib.optionalString (lib.elem "bandwidth" scripts) ''
     wrapProgram $out/libexec/i3blocks/bandwidth \
-      --prefix PATH : ${makeBinPath [ iproute2 ]}
-  '' + optionalString (elem "battery" scripts) ''
+      --prefix PATH : ${lib.makeBinPath [ iproute2 ]}
+  '' + lib.optionalString (lib.elem "battery" scripts) ''
     wrapProgram $out/libexec/i3blocks/battery \
-      --prefix PATH : ${makeBinPath [ acpi ]}
-  '' + optionalString (elem "cpu_usage" scripts) ''
+      --prefix PATH : ${lib.makeBinPath [ acpi ]}
+  '' + lib.optionalString (lib.elem "cpu_usage" scripts) ''
     wrapProgram $out/libexec/i3blocks/cpu_usage \
-      --prefix PATH : ${makeBinPath [ sysstat ]}
-  '' + optionalString (elem "iface" scripts) ''
+      --prefix PATH : ${lib.makeBinPath [ sysstat ]}
+  '' + lib.optionalString (lib.elem "iface" scripts) ''
     wrapProgram $out/libexec/i3blocks/iface \
-      --prefix PATH : ${makeBinPath [ iproute2 ]}
-  '' + optionalString (elem "volume" scripts) ''
+      --prefix PATH : ${lib.makeBinPath [ iproute2 ]}
+  '' + lib.optionalString (lib.elem "volume" scripts) ''
     wrapProgram $out/libexec/i3blocks/volume \
-      --prefix PATH : ${makeBinPath [ alsa-utils ]}
+      --prefix PATH : ${lib.makeBinPath [ alsa-utils ]}
   '';
 
   meta = with lib; {

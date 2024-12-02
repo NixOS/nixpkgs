@@ -1,26 +1,24 @@
 { config, lib, name, ... }:
-
-with lib;
 {
   options = {
-    dataPath = mkOption {
-      type = types.path;
+    dataPath = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/pantalaimon-${name}";
       description = ''
         The directory where `pantalaimon` should store its state such as the database file.
       '';
     };
 
-    logLevel = mkOption {
-      type = types.enum [ "info" "warning" "error" "debug" ];
+    logLevel = lib.mkOption {
+      type = lib.types.enum [ "info" "warning" "error" "debug" ];
       default = "warning";
       description = ''
         Set the log level of the daemon.
       '';
     };
 
-    homeserver = mkOption {
-      type = types.str;
+    homeserver = lib.mkOption {
+      type = lib.types.str;
       example = "https://matrix.org";
       description = ''
         The URI of the homeserver that the `pantalaimon` proxy should
@@ -29,8 +27,8 @@ with lib;
       '';
     };
 
-    ssl = mkOption {
-      type = types.bool;
+    ssl = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether or not SSL verification should be enabled for outgoing
@@ -38,8 +36,8 @@ with lib;
       '';
     };
 
-    listenAddress = mkOption {
-      type = types.str;
+    listenAddress = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
       description = ''
         The address where the daemon will listen to client connections
@@ -47,18 +45,18 @@ with lib;
       '';
     };
 
-    listenPort = mkOption {
-      type = types.port;
+    listenPort = lib.mkOption {
+      type = lib.types.port;
       default = 8009;
       description = ''
         The port where the daemon will listen to client connections for
         this homeserver. Note that the listen address/port combination
-        needs to be unique between different homeservers.
+        needs to be lib.unique between different homeservers.
       '';
     };
 
-    extraSettings = mkOption {
-      type = types.attrs;
+    extraSettings = lib.mkOption {
+      type = lib.types.attrs;
       default = { };
       description = ''
         Extra configuration options. See

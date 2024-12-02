@@ -6,11 +6,11 @@
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fcitx5-pinyin-zhwiki";
   version = "0.2.5";
-  date = "20240509";
+  date = "20240909";
 
   src = fetchurl {
     url = "https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/${finalAttrs.version}/zhwiki-${finalAttrs.date}.dict";
-    hash = "sha256-uRpKPq+/xJ8akKB8ol/JRF79VfDIQ8L4SxLDXzpfPxg=";
+    hash = "sha256-djXrwl1MmiAf0U5Xvm4S7Fk2fKNRm5jtc94KUYIrcm8=";
   };
 
   dontUnpack = true;

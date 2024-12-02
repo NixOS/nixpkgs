@@ -6,5 +6,8 @@
 mkKdeDerivation {
   pname = "ksvg";
 
-  extraBuildInputs = [qtdeclarative qtsvg];
+  extraBuildInputs = [
+    qtdeclarative
+    qtsvg
+  ];
 }

@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.rethinkdb;
   rethinkdb = cfg.package;
@@ -15,41 +12,41 @@ in
 
     services.rethinkdb = {
 
-      enable = mkEnableOption "RethinkDB server";
+      enable = lib.mkEnableOption "RethinkDB server";
 
-      #package = mkOption {
+      #package = lib.mkOption {
       #  default = pkgs.rethinkdb;
       #  description = "Which RethinkDB derivation to use.";
       #};
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "rethinkdb";
         description = "User account under which RethinkDB runs.";
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         default = "rethinkdb";
         description = "Group which rethinkdb user belongs to.";
       };
 
-      dbpath = mkOption {
+      dbpath = lib.mkOption {
         default = "/var/db/rethinkdb";
         description = "Location where RethinkDB stores its data, 1 data directory per instance.";
       };
 
-      pidpath = mkOption {
+      pidpath = lib.mkOption {
         default = "/run/rethinkdb";
         description = "Location where each instance's pid file is located.";
       };
 
-      #cfgpath = mkOption {
+      #cfgpath = lib.mkOption {
       #  default = "/etc/rethinkdb/instances.d";
       #  description = "Location where RethinkDB stores it config files, 1 config file per instance.";
       #};
 
       # TODO: currently not used by our implementation.
-      #instances = mkOption {
-      #  type = types.attrsOf types.str;
+      #instances = lib.mkOption {
+      #  type = lib.types.attrsOf lib.types.str;
       #  default = {};
       #  description = "List of named RethinkDB instances in our cluster.";
       #};
@@ -59,7 +56,7 @@ in
   };
 
   ###### implementation
-  config = mkIf config.services.rethinkdb.enable {
+  config = lib.mkIf config.services.rethinkdb.enable {
 
     environment.systemPackages = [ rethinkdb ];
 
@@ -93,13 +90,13 @@ in
       '';
     };
 
-    users.users.rethinkdb = mkIf (cfg.user == "rethinkdb")
+    users.users.rethinkdb = lib.mkIf (cfg.user == "rethinkdb")
       { name = "rethinkdb";
         description = "RethinkDB server user";
         isSystemUser = true;
       };
 
-    users.groups = optionalAttrs (cfg.group == "rethinkdb") (singleton
+    users.groups = lib.optionalAttrs (cfg.group == "rethinkdb") (lib.singleton
       { name = "rethinkdb";
       });
 

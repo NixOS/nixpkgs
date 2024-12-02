@@ -33,27 +33,27 @@
   pkg-config,
   rnnoise,
   rubberband,
-  speexdsp,
   soundtouch,
+  speexdsp,
   tbb,
   wrapGAppsHook4,
   zam-plugins,
   zita-convolver,
 }:
+
 let
   # Fix crashes with speexdsp effects
   speexdsp' = speexdsp.override { withFftw3 = false; };
 in
-
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "7.1.7";
+  version = "7.1.9";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
-    rev = "v${version}";
-    hash = "sha256-y7we7/MQWweAoZkM8SuHiOTVyWFj9/foufLYBum/KKc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-It+kldlhThWF9y/rTgKt9QlIouH1cQcCtSHQTsaGjfo=";
   };
 
   nativeBuildInputs = [
@@ -113,6 +113,11 @@ stdenv.mkDerivation rec {
         --set LADSPA_PATH "${lib.makeSearchPath "lib/ladspa" ladspaPlugins}"
       )
     '';
+
+  patches = [
+    # Remove when lsp-plugins is >= 1.2.17. (https://github.com/wwmm/easyeffects/issues/3394)
+    ./0001-Revert-Merge-pull-request-3340-from-violetmage-viole.patch
+  ];
 
   separateDebugInfo = true;
 

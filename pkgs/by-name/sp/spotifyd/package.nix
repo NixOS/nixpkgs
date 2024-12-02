@@ -6,17 +6,18 @@
   rustPackages,
   pkg-config,
   openssl,
-  withALSA ? stdenv.isLinux,
+  withALSA ? stdenv.hostPlatform.isLinux,
   alsa-lib,
-  withJack ? stdenv.isLinux,
+  withJack ? stdenv.hostPlatform.isLinux,
   libjack2,
-  withPulseAudio ? config.pulseaudio or stdenv.isLinux,
+  withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
-  withPortAudio ? stdenv.isDarwin,
+  withPortAudio ? stdenv.hostPlatform.isDarwin,
   portaudio,
-  withMpris ? stdenv.isLinux,
+  withMpris ? stdenv.hostPlatform.isLinux,
   withKeyring ? true,
   dbus,
+  withPipe ? true,
   nix-update-script,
   testers,
   spotifyd,
@@ -24,28 +25,28 @@
 
 rustPackages.rustPlatform.buildRustPackage rec {
   pname = "spotifyd";
-  version = "0.3.5-unstable-2024-07-10";
+  version = "0.3.5-unstable-2024-10-21";
 
   src = fetchFromGitHub {
     owner = "Spotifyd";
     repo = "spotifyd";
-    rev = "8fb0b9a5cce46d2e99e127881a04fb1986e58008";
-    hash = "sha256-wEPdf5ylnmu/SqoaWHxAzIEUpdRhhZfdQ623zYzcU+s=";
+    rev = "b25538f5c4dfc5b376927e7edf71c7c988492ace";
+    hash = "sha256-50eUVax3yqwncQUWgCPc0PHVUuUERQ9iORSSajPHB9c=";
   };
 
-  cargoHash = "sha256-+xTmkp+hGzmz4XrfKqPCtlpsX8zLA8XgJWM1SPunjq4=";
+  cargoHash = "sha256-3aEBLPyf72o9gF58j9OANpcqD/IClb2alfAEKRFzatU=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs =
-    lib.optionals stdenv.isLinux [ openssl ]
+    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
     ++ lib.optional (withALSA || withJack) alsa-lib
     ++ lib.optional withJack libjack2
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio
     # The `dbus_keying` feature works on other platforms, but only requires
     # `dbus` on Linux
-    ++ lib.optional ((withMpris || withKeyring) && stdenv.isLinux) dbus;
+    ++ lib.optional ((withMpris || withKeyring) && stdenv.hostPlatform.isLinux) dbus;
 
   buildNoDefaultFeatures = true;
   buildFeatures =
@@ -54,6 +55,7 @@ rustPackages.rustPlatform.buildRustPackage rec {
     ++ lib.optional withPulseAudio "pulseaudio_backend"
     ++ lib.optional withPortAudio "portaudio_backend"
     ++ lib.optional withMpris "dbus_mpris"
+    ++ lib.optional withPipe "pipe_backend"
     ++ lib.optional withKeyring "dbus_keyring";
 
   doCheck = false;

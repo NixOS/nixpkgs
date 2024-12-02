@@ -23,7 +23,7 @@ listToAttrs (map
       meta = {
         platforms = platforms.all;
         maintainers = [ maintainers.matthewbauer maintainers.shazow ];
-        license = licenses.free;
+        license = licenses.unfree;
       };
     };
   })

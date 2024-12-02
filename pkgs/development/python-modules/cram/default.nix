@@ -36,6 +36,6 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ jluttine ];
     # Tests fail on i686: https://hydra.nixos.org/build/52896671/nixlog/4
-    broken = stdenv.isi686;
+    broken = stdenv.hostPlatform.isi686;
   };
 }

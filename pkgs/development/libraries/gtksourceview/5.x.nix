@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
-  version = "5.12.1";
+  version = "5.14.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtksourceview/${lib.versions.majorMinor finalAttrs.version}/gtksourceview-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hMgqrZhcWq2ufOp4BJBKdjQeyCsmjUZZTBpHjzm0LB8=";
+    hash = "sha256-AJhi6HuSnaWnJOzgefAfjO4p50eXoeysNJ9YwVo8vFg=";
   };
 
   patches = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # The 10.12 SDK used by x86_64-darwin requires defining `_POSIX_C_SOURCE` to use `strnlen`.
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) "-D_POSIX_C_SOURCE=200809L";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "-D_POSIX_C_SOURCE=200809L";
 
   nativeBuildInputs = [
     meson
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Ddocumentation=true"
   ];
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   checkPhase = ''
     runHook preCheck

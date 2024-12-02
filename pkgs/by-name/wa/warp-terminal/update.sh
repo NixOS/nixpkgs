@@ -27,8 +27,12 @@ resolve_url() {
             pkg=macos
             sfx=dmg
             ;;
-        linux)
+        linux_x86_64)
             pkg=pacman
+            sfx=pkg.tar.zst
+            ;;
+        linux_aarch64)
+            pkg=pacman_arm64
             sfx=pkg.tar.zst
             ;;
         *)
@@ -64,7 +68,8 @@ sri_get() {
 }
 
 
-for sys in darwin linux; do
+for sys in darwin linux_x86_64 linux_aarch64; do
+    echo ${sys}
     url=$(resolve_url ${sys})
     version=$(get_version "${url}")
     if [[ ${version} != "$(json_get ".${sys}.version")" ]]; then

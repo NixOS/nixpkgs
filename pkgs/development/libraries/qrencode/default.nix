@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libiconv libpng ]
-    ++ lib.optionals stdenv.isDarwin [ libobjc ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc ];
 
   nativeCheckInputs = [ SDL2 ];
 

@@ -7,7 +7,7 @@ alephone.makeWrapper rec {
 
   zip = fetchurl {
     url = "http://files3.bungie.org/trilogy/MarathonEvil.zip";
-    sha256 = "08nizbjp2rx10bpqrbhb76as0j2zynmy2c0qa5b482lz1szf9b95";
+    hash = "sha256-Ja3kvg6fCkRWURgw4av1X0iglTkLrozvAqFnceX60SI=";
   };
 
   meta = {

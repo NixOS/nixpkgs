@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
   extra-cmake-modules,
   karchive, kcrash, ki18n, kio, libgcrypt, qca-qt5, solid,
   boost, gmp
@@ -7,10 +7,10 @@
 
 mkDerivation {
   pname = "libktorrent";
-  meta = with lib; {
+  meta = {
     description = "BitTorrent library used by KTorrent";
     homepage    = "https://apps.kde.org/ktorrent/";
-    maintainers = with maintainers; [ eelco ];
+    maintainers = [ ];
   };
 
   nativeBuildInputs = [ extra-cmake-modules ];

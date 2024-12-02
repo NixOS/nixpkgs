@@ -29,7 +29,7 @@ buildPythonApplication rec {
 
   makeWrapperArgs = [
     "--prefix"
-    (if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH")
+    (if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH")
     ":"
     (lib.makeLibraryPath [ nss ])
   ];

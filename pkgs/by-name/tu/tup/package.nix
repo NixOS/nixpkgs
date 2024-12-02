@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fuse3, macfuse-stubs, pkg-config, sqlite, pcre2 }:
 
 let
-  fuse = if stdenv.isDarwin then macfuse-stubs else fuse3;
+  fuse = if stdenv.hostPlatform.isDarwin then macfuse-stubs else fuse3;
 in stdenv.mkDerivation rec {
   pname = "tup";
   version = "0.8";
@@ -71,6 +71,6 @@ in stdenv.mkDerivation rec {
     # ../../../../os-specific/darwin/apple-sdk/default.nix
     #
     # https://github.com/gittup/tup/commit/3697c74
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

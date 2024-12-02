@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   # do not use x87's 80-bit arithmetic, rouding errors result in very different font binaries
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-msse2 -mfpmath=sse";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isi686 "-msse2 -mfpmath=sse";
 
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ]
     ++ lib.optionals withSpiro [ libspiro ]
     ++ lib.optionals withGUI [ gtk3 cairo pango ]
-    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
 
   cmakeFlags = [ "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" ]
     ++ lib.optional (!withSpiro) "-DENABLE_LIBSPIRO=OFF"

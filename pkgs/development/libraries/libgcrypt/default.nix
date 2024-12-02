@@ -11,7 +11,7 @@
 , rsyslog
 }:
 
-assert enableCapabilities -> stdenv.isLinux;
+assert enableCapabilities -> stdenv.hostPlatform.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "libgcrypt";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   buildInputs = [ libgpg-error ]
-    ++ lib.optional stdenv.isDarwin gettext
+    ++ lib.optional stdenv.hostPlatform.isDarwin gettext
     ++ lib.optional enableCapabilities libcap;
 
   strictDeps = true;
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   # TODO: figure out why this is even necessary and why the missing dylib only crashes
   # random instead of every test
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $lib/lib
     cp src/.libs/libgcrypt.20.dylib $lib/lib
   '';

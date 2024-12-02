@@ -55,7 +55,7 @@
 
 buildPythonPackage rec {
   pname = "twisted";
-  version = "24.3.0";
+  version = "24.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-azi27Ocpa14SLJ6xfaLuqz2YoZj1DKnv0A+wPltP1K4=";
+    hash = "sha256-WmAUfwRBh6En7H2pbRcNSbzOUMb9NvWU5g9Fh+/005Q=";
   };
 
   patches = [
@@ -74,11 +74,12 @@ buildPythonPackage rec {
       hash = "sha256-LmvKUTViZoY/TPBmSlx4S9FbJNZfB5cxzn/YcciDmoI=";
     })
 
-    # https://github.com/twisted/twisted/security/advisories/GHSA-cf56-g6w6-pqq2
-    ./CVE-2024-41671.patch
-
-    # https://github.com/twisted/twisted/security/advisories/GHSA-c8m8-j448-xjx7
-    ./CVE-2024-41810.patch
+    (fetchpatch {
+      name = "python-3.12.6.patch";
+      url = "https://github.com/twisted/twisted/commit/3422f7988e3d42e6e5184acd65f103fd28750648.patch";
+      excludes = [ ".github/workflows/test.yaml" ];
+      hash = "sha256-/UmrHdWaApytkEDZiISjPGzpWv/Yxe/xjvr9GOjMPmQ=";
+    })
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -144,7 +145,7 @@ buildPythonPackage rec {
       substituteInPlace src/twisted/test/test_failure.py \
         --replace "from cython_test_exception_raiser import raiser  # type: ignore[import]" "raiser = None"
     ''
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       echo 'PTYProcessTestsBuilder_EPollReactorTests.test_openFileDescriptors.skip = "invalid syntax"'>> src/twisted/internet/test/test_process.py
       echo 'PTYProcessTestsBuilder_PollReactorTests.test_openFileDescriptors.skip = "invalid syntax"'>> src/twisted/internet/test/test_process.py
       echo 'UNIXTestsBuilder_EPollReactorTests.test_sendFileDescriptorTriggersPauseProducing.skip = "sendFileDescriptor producer was not paused"'>> src/twisted/internet/test/test_unix.py
@@ -155,7 +156,7 @@ buildPythonPackage rec {
       substituteInPlace src/twisted/python/_inotify.py --replace \
         "ctypes.util.find_library(\"c\")" "'${stdenv.cc.libc}/lib/libc.so.6'"
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       echo 'ProcessTestsBuilder_AsyncioSelectorReactorTests.test_openFileDescriptors.skip = "invalid syntax"'>> src/twisted/internet/test/test_process.py
       echo 'ProcessTestsBuilder_SelectReactorTests.test_openFileDescriptors.skip = "invalid syntax"'>> src/twisted/internet/test/test_process.py
       echo 'ProcessTestsBuilder_AsyncioSelectorReactorTests.test_processEnded.skip = "exit code 120"' >> src/twisted/internet/test/test_process.py
@@ -177,11 +178,13 @@ buildPythonPackage rec {
       hypothesis
       pyhamcrest
     ]
-    ++ passthru.optional-dependencies.conch
-    ++ passthru.optional-dependencies.http2
-    ++ passthru.optional-dependencies.serial
+    ++ optional-dependencies.conch
+    ++ optional-dependencies.http2
+    ++ optional-dependencies.serial
     # not supported on aarch64-darwin: https://github.com/pyca/pyopenssl/issues/873
-    ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) passthru.optional-dependencies.tls;
+    ++ lib.optionals (
+      !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+    ) optional-dependencies.tls;
 
   checkPhase = ''
     export SOURCE_DATE_EPOCH=315532800
@@ -190,26 +193,26 @@ buildPythonPackage rec {
     ${python.interpreter} -m twisted.trial -j1 twisted
   '';
 
-  passthru = {
-    optional-dependencies = {
-      conch = [
-        appdirs
-        bcrypt
-        cryptography
-        pyasn1
-      ];
-      http2 = [
-        h2
-        priority
-      ];
-      serial = [ pyserial ];
-      tls = [
-        idna
-        pyopenssl
-        service-identity
-      ];
-    };
+  optional-dependencies = {
+    conch = [
+      appdirs
+      bcrypt
+      cryptography
+      pyasn1
+    ];
+    http2 = [
+      h2
+      priority
+    ];
+    serial = [ pyserial ];
+    tls = [
+      idna
+      pyopenssl
+      service-identity
+    ];
+  };
 
+  passthru = {
     tests = {
       inherit
         cassandra-driver

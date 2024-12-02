@@ -242,11 +242,13 @@ let
         #"bin/gunzip"
       ];
     };
-    bzip2 = linkBootstrap { paths = [ "bin/bzip2" ]; };
+    bzip2 = linkBootstrap { paths = [ "bin/bzip2" "lib/libbz2.so" "lib/libbz2.so.1" ]; };
     xz = linkBootstrap {
       paths = [
         "bin/xz"
         "bin/unxz"
+        "lib/liblzma.so"
+        "lib/liblzma.so.5"
       ];
     };
     binutils-unwrapped = linkBootstrap {
@@ -274,7 +276,58 @@ let
       libc = linkBootstrap {
         name = "bootstrapLibs";
         paths = [
-          "lib"
+          "lib/Scrt1.o"
+          "lib/crt1.o"
+          "lib/crtbegin.o"
+          "lib/crtbeginS.o"
+          "lib/crtbeginT.o"
+          "lib/crtend.o"
+          "lib/crtendS.o"
+          "lib/crti.o"
+          "lib/crtn.o"
+          "lib/libc++.a"
+          "lib/libc++.so"
+          "lib/libc++.so.1"
+          "lib/libc.a"
+          "lib/libc.so"
+          "lib/libc.so.7"
+          "lib/libc_nonshared.a"
+          "lib/libcrypt.so"
+          "lib/libcrypt.so.5"
+          "lib/libcxxrt.a"
+          "lib/libcxxrt.so"
+          "lib/libcxxrt.so.1"
+          "lib/libdevstat.so"
+          "lib/libdevstat.so.7"
+          "lib/libdl.so"
+          "lib/libdl.so.1"
+          "lib/libelf.so"
+          "lib/libelf.so.2"
+          "lib/libexecinfo.so"
+          "lib/libexecinfo.so.1"
+          "lib/libgcc.a"
+          "lib/libgcc_eh.a"
+          "lib/libgcc_s.so"
+          "lib/libgcc_s.so.1"
+          "lib/libkvm.so"
+          "lib/libkvm.so.7"
+          "lib/libm.a"
+          "lib/libm.so"
+          "lib/libm.so.5"
+          "lib/libmd.so"
+          "lib/libmd.so.6"
+          "lib/libncurses.so"
+          "lib/libncurses.so.6"
+          "lib/libncursesw.so"
+          "lib/libncursesw.so.6"
+          "lib/libpthread.so"
+          "lib/librt.so"
+          "lib/librt.so.1"
+          "lib/libthr.so"
+          "lib/libthr.so.3"
+          "lib/libutil.so"
+          "lib/libutil.so.9"
+          "lib/libxnet.so"
           "include"
           "share"
           "libexec"
@@ -485,7 +538,6 @@ in
       # we can import the foundational libs from boot-0
       # we can import bins and libs that DON'T get imported OR LINKED into the final stdenv from boot-0
       curl = prevStage.curlReal;
-      curlReal = super.curl;
       inherit (prevStage)
         fetchurl
         python3
@@ -511,7 +563,6 @@ in
     name = "freebsd";
     overrides = prevStage: self: super: {
       __bootstrapArchive = bootstrapArchive;
-      curl = prevStage.curlReal;
       fetchurl = prevStage.fetchurlReal;
       freebsd = super.freebsd.overrideScope (
         self': super': { localesPrev = prevStage.freebsd.localesReal; }

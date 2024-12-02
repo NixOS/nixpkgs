@@ -7,7 +7,7 @@
   testers,
   # Boolean flags
   enableMmx ? stdenv.hostPlatform.isx86,
-  enableSdltest ? (!stdenv.isDarwin),
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.libobjc
   ];
 

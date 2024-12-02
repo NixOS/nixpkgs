@@ -11,7 +11,18 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
+      bleach = super.bleach.overridePythonAttrs (oldAttrs: rec {
+        version = "5.0.1";
+
+        src = fetchPypi {
+          pname = "bleach";
+          inherit version;
+          hash = "sha256-DQMlXEfrm9Lyaqm7fyEHcy5+j+GVyi9kcJ/POwpKCFw=";
+        };
+      });
+
       django = super.django_4;
 
       django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: {
@@ -40,13 +51,13 @@ let
   };
 
   pname = "pretix";
-  version = "2024.6.0";
+  version = "2024.10.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-erI3Ai6zwNSvMiF3YKfnU9ePb9R92rfi5rsxfAOh6EQ=";
+    hash = "sha256-MCiCr00N7894DjckAw3vpxdiNtlgzqivlbSY4A/327E=";
   };
 
   npmDeps = buildNpmPackage {
@@ -54,7 +65,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-//CLPnx5eUxIHIUGc7x2UF8qsfAYRtvHbHXSDNtI/eI=";
+    npmDepsHash = "sha256-PPcA6TBsU/gGk4wII+w7VZOm65nS7qGjZ/UoQs31s9M=";
 
     dontBuild = true;
 
@@ -78,6 +89,27 @@ python.pkgs.buildPythonApplication rec {
     ./plugin-build.patch
   ];
 
+  pythonRelaxDeps = [
+    "django-phonenumber-field"
+    "dnspython"
+    "importlib-metadata"
+    "kombu"
+    "markdown"
+    "pillow"
+    "protobuf"
+    "pycryptodome"
+    "pyjwt"
+    "python-bidi"
+    "qrcode"
+    "redis"
+    "requests"
+    "sentry-sdk"
+  ];
+
+  pythonRemoveDeps = [
+    "vat-moss-forked" # we provide a patched vat-moss package
+  ];
+
   postPatch = ''
     NODE_PREFIX=src/pretix/static.dist/node_prefix
     mkdir -p $NODE_PREFIX
@@ -88,22 +120,8 @@ python.pkgs.buildPythonApplication rec {
     sed -i "/setuptools-rust/d" pyproject.toml
 
     substituteInPlace pyproject.toml \
-      --replace-fail phonenumberslite phonenumbers \
-      --replace-fail psycopg2-binary psycopg2 \
-      --replace-fail vat_moss_forked==2020.3.20.0.11.0 vat-moss \
-      --replace-fail "bleach==5.0.*" bleach \
-      --replace-fail "djangorestframework==3.15.*" djangorestframework \
-      --replace-fail "django-compressor==4.5" django-compressor \
-      --replace-fail "dnspython==2.6.*" dnspython \
-      --replace-fail "importlib_metadata==7.*" importlib_metadata \
-      --replace-fail "markdown==3.6" markdown \
-      --replace-fail "protobuf==5.27.*" protobuf \
-      --replace-fail "pycryptodome==3.20.*" pycryptodome \
-      --replace-fail "pypdf==4.2.*" pypdf \
-      --replace-fail "python-dateutil==2.9.*" python-dateutil \
-      --replace-fail "requests==2.31.*" "requests" \
-      --replace-fail "sentry-sdk==2.5.*" "sentry-sdk>=2" \
-      --replace-fail "stripe==7.9.*" stripe
+      --replace-fail '"backend"' '"setuptools.build_meta"' \
+      --replace-fail 'backend-path = ["_build"]' ""
   '';
 
   build-system = with python.pkgs; [
@@ -123,7 +141,6 @@ python.pkgs.buildPythonApplication rec {
     cryptography
     css-inline
     defusedcsv
-    dj-static
     django
     django-bootstrap3
     django-compressor
@@ -161,11 +178,11 @@ python.pkgs.buildPythonApplication rec {
     paypalrestsdk
     paypal-checkout-serversdk
     pyjwt
-    phonenumbers
+    phonenumberslite
     pillow
     pretix-plugin-build
     protobuf
-    psycopg2
+    psycopg2-binary
     pycountry
     pycparser
     pycryptodome
@@ -182,7 +199,6 @@ python.pkgs.buildPythonApplication rec {
     sentry-sdk
     sepaxml
     slimit
-    static3
     stripe
     text-unidecode
     tlds

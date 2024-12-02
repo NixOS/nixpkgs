@@ -1,0 +1,591 @@
+diff --git a/src/webassets/test.py b/src/webassets/test.py
+index 232806c..a362120 100644
+--- a/src/webassets/test.py
++++ b/src/webassets/test.py
+@@ -27,7 +27,7 @@ class TempDirHelper(object):
+ 
+     default_files = {}
+ 
+-    def setup(self):
++    def setup_method(self):
+         self._tempdir_created = tempfile.mkdtemp()
+         self.create_files(self.default_files)
+ 
+@@ -35,7 +35,7 @@ class TempDirHelper(object):
+         shutil.rmtree(self._tempdir_created)
+ 
+     def __enter__(self):
+-        self.setup()
++        self.setup_method()
+         return self
+ 
+     def __exit__(self, type, value, traceback):
+@@ -136,8 +136,8 @@ class TempEnvironmentHelper(TempDirHelper):
+ 
+     default_files = {'in1': 'A', 'in2': 'B', 'in3': 'C', 'in4': 'D'}
+ 
+-    def setup(self):
+-        TempDirHelper.setup(self)
++    def setup_method(self):
++        TempDirHelper.setup_method(self)
+ 
+         self.env = self._create_environment()
+         # Unless we explicitly test it, we don't want to use the cache
+diff --git a/tests/__init__.py b/tests/__init__.py
+index 7d859d3..363b641 100644
+--- a/tests/__init__.py
++++ b/tests/__init__.py
+@@ -1,4 +1,4 @@
+-def setup():
++def setup_method():
+     # For some strange reason (using Python 2.6.6), if a warning has
+     # already been raised somewhere else before a test attempts to
+     # capture and verify it using warnings.catch_warnings(), the warning
+diff --git a/tests/test_bundle_build.py b/tests/test_bundle_build.py
+index 9325bb9..86f69b9 100644
+--- a/tests/test_bundle_build.py
++++ b/tests/test_bundle_build.py
+@@ -473,8 +473,8 @@ class TestAutoBuild(TempEnvironmentHelper):
+     generally everything involving the updater (as used by the build() method).
+     """
+ 
+-    def setup(self):
+-        TempEnvironmentHelper.setup(self)
++    def setup_method(self):
++        TempEnvironmentHelper.setup_method(self)
+ 
+         class CustomUpdater(BaseUpdater):
+             allow = True
+diff --git a/tests/test_bundle_urls.py b/tests/test_bundle_urls.py
+index 317889e..9bd8753 100644
+--- a/tests/test_bundle_urls.py
++++ b/tests/test_bundle_urls.py
+@@ -29,8 +29,8 @@ class BaseUrlsTester(TempEnvironmentHelper):
+ 
+     default_files = {'a': '', 'b': '', 'c': '', '1': '', '2': ''}
+ 
+-    def setup(self):
+-        TempEnvironmentHelper.setup(self)
++    def setup_method(self):
++        TempEnvironmentHelper.setup_method(self)
+ 
+         self.env.url_expire = False
+ 
+@@ -282,8 +282,8 @@ class TestUrlsWithDebugTrue(BaseUrlsTester):
+     """Test url generation in debug mode.
+     """
+ 
+-    def setup(self):
+-        BaseUrlsTester.setup(self)
++    def setup_method(self):
++        BaseUrlsTester.setup_method(self)
+         self.env.debug = True
+ 
+     def test_simple_bundle(self):
+@@ -427,8 +427,8 @@ class TestUrlsWithDebugTrue(BaseUrlsTester):
+ 
+ class TestUrlsWithDebugMerge(BaseUrlsTester):
+ 
+-    def setup(self):
+-        BaseUrlsTester.setup(self)
++    def setup_method(self):
++        BaseUrlsTester.setup_method(self)
+         self.env.debug = 'merge'
+ 
+     def test_simple_bundle(self):
+diff --git a/tests/test_bundle_various.py b/tests/test_bundle_various.py
+index b24a903..6d92eb3 100644
+--- a/tests/test_bundle_various.py
++++ b/tests/test_bundle_various.py
+@@ -177,8 +177,8 @@ class TestVersionFeatures(TempEnvironmentHelper):
+ 
+     default_files = {'in': 'foo'}
+ 
+-    def setup(self):
+-        super(TestVersionFeatures, self).setup()
++    def setup_method(self):
++        super(TestVersionFeatures, self).setup_method()
+         self.env.manifest = DummyManifest()
+         self.env.versions = DummyVersion()
+ 
+@@ -371,8 +371,8 @@ class TestLoadPath(TempEnvironmentHelper):
+     an optional feature.
+     """
+ 
+-    def setup(self):
+-        TempEnvironmentHelper.setup(self)
++    def setup_method(self):
++        TempEnvironmentHelper.setup_method(self)
+         self.env.updater = False
+         self.env.directory = self.path('dir')
+         self.env.debug = True
+@@ -603,8 +603,8 @@ class TestUrlContents(TempEnvironmentHelper):
+     """Test bundles containing a URL.
+     """
+ 
+-    def setup(self):
+-        TempEnvironmentHelper.setup(self)
++    def setup_method(self):
++        TempEnvironmentHelper.setup_method(self)
+         mock_opener = build_opener(MockHTTPHandler({
+             'http://foo': u'function() {}'}))
+         install_opener(mock_opener)
+diff --git a/tests/test_cache.py b/tests/test_cache.py
+index 9afbe3d..f8afb61 100644
+--- a/tests/test_cache.py
++++ b/tests/test_cache.py
+@@ -89,8 +89,8 @@ class TestCacheIsUsed(TempEnvironmentHelper):
+     """Ensure the cache is used during the build process.
+     """
+ 
+-    def setup(self):
+-        TempEnvironmentHelper.setup(self)
++    def setup_method(self):
++        TempEnvironmentHelper.setup_method(self)
+ 
+         class MyCache(BaseCache):
+             def __init__(self):
+diff --git a/tests/test_environment.py b/tests/test_environment.py
+index bd89ef6..ff36289 100644
+--- a/tests/test_environment.py
++++ b/tests/test_environment.py
+@@ -13,7 +13,7 @@ from webassets import Bundle
+ class TestEnvApi(object):
+     """General Environment functionality."""
+ 
+-    def setup(self):
++    def setup_method(self):
+         self.m = Environment(None, None)
+ 
+     def test_register_single_bundle(self):
+@@ -186,7 +186,7 @@ class TestEnvConfig(object):
+     """Custom config values through get_config/set_config.
+     """
+ 
+-    def setup(self):
++    def setup_method(self):
+         self.m = Environment(None, None)
+ 
+     def test_initial_values_override_defaults(self):
+@@ -216,7 +216,7 @@ class TestSpecialProperties(object):
+     as a string, and would receive object instances when accessing the property.
+     """
+ 
+-    def setup(self):
++    def setup_method(self):
+         self.m = Environment('.', None)  # we won't create any files
+ 
+     def test_versioner(self):
+diff --git a/tests/test_ext/test_jinja2.py b/tests/test_ext/test_jinja2.py
+index 37139bb..155ad40 100644
+--- a/tests/test_ext/test_jinja2.py
++++ b/tests/test_ext/test_jinja2.py
+@@ -12,7 +12,7 @@ from webassets.ext.jinja2 import AssetsExtension, Jinja2Loader
+ 
+ class TestTemplateTag(object):
+ 
+-    def setup(self):
++    def setup_method(self):
+         # Setup the assets environment.
+         assets_env = AssetsEnvironment('', '')
+         self.foo_bundle = Bundle()
+@@ -123,8 +123,8 @@ class TestLoader(TempEnvironmentHelper):
+             """
+     }
+ 
+-    def setup(self):
+-        TempEnvironmentHelper.setup(self)
++    def setup_method(self):
++        TempEnvironmentHelper.setup_method(self)
+         self.jinja_env = JinjaEnvironment()
+         self.jinja_env.add_extension(AssetsExtension)
+         self.jinja_env.assets_environment = self.env
+diff --git a/tests/test_filters.py b/tests/test_filters.py
+index 9976f4e..deec66d 100644
+--- a/tests/test_filters.py
++++ b/tests/test_filters.py
+@@ -79,7 +79,7 @@ class TestFilterBaseClass(object):
+         env = Environment(None, None)
+         env.config['attr1'] = 'bar'
+         env.config['attr4'] = 'bar'
+-        f = TestFilter(); f.ctx = ContextWrapper(env); f.setup()
++        f = TestFilter(); f.ctx = ContextWrapper(env); f.setup_method()
+         assert f.attr1 == 'bar'
+         assert f.attr4 is None    # Was configured to not support env
+ 
+@@ -177,7 +177,7 @@ class TestExternalToolClass(object):
+             self.__class__.result = \
+                 argv, data.getvalue() if data is not None else data
+ 
+-    def setup(self):
++    def setup_method(self):
+         if not hasattr(str, 'format'):
+             # A large part of this functionality is not available on Python 2.5
+             pytest.skip()
+@@ -630,12 +630,12 @@ class TestBuiltinFilters(TempEnvironmentHelper):
+ 
+ class TestCSSPrefixer(TempEnvironmentHelper):
+ 
+-    def setup(self):
++    def setup_method(self):
+         try:
+             import cssprefixer
+         except ImportError:
+             pytest.skip()
+-        TempEnvironmentHelper.setup(self)
++        TempEnvironmentHelper.setup_method(self)
+ 
+     def test(self):
+         self.create_files({'in': """a { border-radius: 1em; }"""})
+@@ -650,10 +650,10 @@ class TestCSSPrefixer(TempEnvironmentHelper):
+ 
+ class TestCoffeeScript(TempEnvironmentHelper):
+ 
+-    def setup(self):
++    def setup_method(self):
+         if not find_executable('coffee'):
+             pytest.skip()
+-        TempEnvironmentHelper.setup(self)
++        TempEnvironmentHelper.setup_method(self)
+ 
+     def test_default_options(self):
+         self.create_files({'in': "alert \"I knew it!\" if elvis?"})
+@@ -674,12 +674,12 @@ class TestCoffeeScript(TempEnvironmentHelper):
+ 
+ class TestJinja2(TempEnvironmentHelper):
+ 
+-    def setup(self):
++    def setup_method(self):
+         try:
+             import jinja2
+         except ImportError:
+             pytest.skip()
+-        TempEnvironmentHelper.setup(self)
++        TempEnvironmentHelper.setup_method(self)
+ 
+     def test_default_options(self):
+         self.create_files({'in': """Hi there, {{ name }}!"""})
+@@ -705,13 +705,13 @@ class TestClosure(TempEnvironmentHelper):
+         """
+     }
+ 
+-    def setup(self):
++    def setup_method(self):
+         try:
+             import closure
+         except ImportError:
+             pytest.skip()
+ 
+-        TempEnvironmentHelper.setup(self)
++        TempEnvironmentHelper.setup_method(self)
+ 
+     def test_closure(self):
+         self.mkbundle('foo.js', filters='closure_js', output='out.js').build()
+@@ -832,10 +832,10 @@ class TestLess(TempEnvironmentHelper):
+         'foo.less': "h1 { color: #FFFFFF; }",
+     }
+ 
+-    def setup(self):
++    def setup_method(self):
+         if not find_executable('lessc'):
+             pytest.skip()
+-        TempEnvironmentHelper.setup(self)
++        TempEnvironmentHelper.setup_method(self)
+ 
+     def test(self):
+         self.mkbundle('foo.less', filters='less', output='out.css').build()
+@@ -928,14 +928,14 @@ class TestRubySass(TempEnvironmentHelper):
+         """,
+     }
+ 
+-    def setup(self):
++    def setup_method(self):
+         if not find_executable('sass'):
+             pytest.skip()
+ 
+         if "Ruby" not in check_output(["sass", "--version"]).decode('utf-8'):
+             pytest.skip()
+ 
+-        TempEnvironmentHelper.setup(self)
++        TempEnvironmentHelper.setup_method(self)
+ 
+     def test_sass(self):
+         sass = get_filter('sass_ruby', debug_info=False)
+@@ -1038,10 +1038,10 @@ class TestSass(TempEnvironmentHelper):
+         """,
+     }
+ 
+-    def setup(self):
++    def setup_method(self):
+         if not find_executable('sass'):
+             pytest.skip()
+-        TempEnvironmentHelper.setup(self)
++        TempEnvironmentHelper.setup_method(self)
+ 
+     def test_sass(self):
+         sass = get_filter('sass')
+@@ -1099,13 +1099,13 @@ class TestPyScss(TempEnvironmentHelper):
+         'bar.scss': 'h1{color:red}'
+     }
+ 
+-    def setup(self):
++    def setup_method(self):
+         try:
+             import scss
+             self.scss = scss
+         except ImportError:
+             pytest.skip()
+-        TempEnvironmentHelper.setup(self)
++        TempEnvironmentHelper.setup_method(self)
+ 
+     def test(self):
+         self.mkbundle('foo.scss', filters='pyscss', output='out.css').build()
+@@ -1136,13 +1136,13 @@ class TestLibSass(TempEnvironmentHelper):
+         'b.scss': '$foo: foo !default; .test {background-color: $foo;}'
+     }
+ 
+-    def setup(self):
++    def setup_method(self):
+         try:
+             import sass
+             self.sass = sass
+         except ImportError:
+             pytest.skip()
+-        TempEnvironmentHelper.setup(self)
++        TempEnvironmentHelper.setup_method(self)
+ 
+     def test(self):
+         self.mkbundle('foo.scss', filters='libsass', output='out.css').build()
+@@ -1198,10 +1198,10 @@ class TestCompass(TempEnvironmentHelper):
+         """
+     }
+ 
+-    def setup(self):
++    def setup_method(self):
+         if not find_executable('compass'):
+             pytest.skip()
+-        TempEnvironmentHelper.setup(self)
++        TempEnvironmentHelper.setup_method(self)
+ 
+     def test_compass(self):
+         self.mkbundle('foo.sass', filters='compass', output='out.css').build()
+@@ -1262,7 +1262,7 @@ class TestCompassConfig(object):
+         }
+     }
+ 
+-    def setup(self):
++    def setup_method(self):
+         self.compass_config = CompassConfig(self.config).to_string()
+ 
+     def test_compass_config_is_unicode(self):
+@@ -1294,8 +1294,8 @@ class TestJST(TempEnvironmentHelper):
+         'templates/bar.html': "<div>Im an html jst template.  Go syntax highlighting!</div>"
+     }
+ 
+-    def setup(self):
+-        TempEnvironmentHelper.setup(self)
++    def setup_method(self):
++        TempEnvironmentHelper.setup_method(self)
+ 
+     def test_jst(self):
+         self.mkbundle('templates/*', filters='jst', output='out.js').build()
+@@ -1424,10 +1424,10 @@ class TestHandlebars(TempEnvironmentHelper):
+             """
+     }
+ 
+-    def setup(self):
++    def setup_method(self):
+         if not find_executable('handlebars'):
+             pytest.skip()
+-        TempEnvironmentHelper.setup(self)
++        TempEnvironmentHelper.setup_method(self)
+ 
+     def test_basic(self):
+         self.mkbundle('foo.html', 'dir/bar.html',
+@@ -1461,12 +1461,12 @@ class TestJinja2JS(TempEnvironmentHelper):
+         )
+     }
+ 
+-    def setup(self):
++    def setup_method(self):
+         try:
+             import closure_soy
+         except:
+             pytest.skip()
+-        TempEnvironmentHelper.setup(self)
++        TempEnvironmentHelper.setup_method(self)
+ 
+     def test(self):
+         self.mkbundle('foo.soy', filters='closure_tmpl', output='out.js').build()
+@@ -1490,10 +1490,10 @@ class TestTypeScript(TempEnvironmentHelper):
+         'foo.ts': """class X { z: number; }"""
+     }
+ 
+-    def setup(self):
++    def setup_method(self):
+         if not find_executable('tsc'):
+             pytest.skip()
+-        TempEnvironmentHelper.setup(self)
++        TempEnvironmentHelper.setup_method(self)
+ 
+     def test(self):
+         self.mkbundle('foo.ts', filters='typescript', output='out.js').build()
+@@ -1521,10 +1521,10 @@ define("script/utils",[],function(){return{debug:console.log}}),\
+ define("script/app",["./utils"],function(e){e.debug("APP")});\
+ '''
+ 
+-    def setup(self):
++    def setup_method(self):
+         if not find_executable('r.js'):
+             pytest.skip('"r.js" executable not found')
+-        TempEnvironmentHelper.setup(self)
++        TempEnvironmentHelper.setup_method(self)
+         self.env.config['requirejs_config'] = self.path('requirejs.json')
+         self.env.config['requirejs_baseUrl'] = self.path('')
+ 
+@@ -1573,10 +1573,10 @@ class TestClosureStylesheets(TempEnvironmentHelper):
+         """
+     }
+ 
+-    def setup(self):
++    def setup_method(self):
+         if not 'CLOSURE_STYLESHEETS_PATH' in os.environ:
+             pytest.skip()
+-        TempEnvironmentHelper.setup(self)
++        TempEnvironmentHelper.setup_method(self)
+ 
+     def test_compiler(self):
+         self.mkbundle('test.css', filters = 'closure_stylesheets_compiler', output = 'output.css').build()
+diff --git a/tests/test_loaders.py b/tests/test_loaders.py
+index f910ecb..5c183a5 100644
+--- a/tests/test_loaders.py
++++ b/tests/test_loaders.py
+@@ -14,7 +14,7 @@ from webassets.exceptions import EnvironmentError
+ 
+ class TestYAML(object):
+ 
+-    def setup(self):
++    def setup_method(self):
+         yaml = pytest.importorskip("yaml")
+ 
+     def loader(self, text, filename=None):
+@@ -189,8 +189,8 @@ class TestPython(object):
+ 
+ class TestYAMLCustomFilters(TestYAML):
+ 
+-    def setup(self):
+-        super(TestYAMLCustomFilters, self).setup()
++    def setup_method(self):
++        super(TestYAMLCustomFilters, self).setup_method()
+ 
+         # If zope.dottedname is not installed, that's OK
+         pytest.importorskip("zope.dottedname.resolve")
+diff --git a/tests/test_script.py b/tests/test_script.py
+index 84b9940..479c64b 100644
+--- a/tests/test_script.py
++++ b/tests/test_script.py
+@@ -38,8 +38,8 @@ class MockBundle(Bundle):
+ 
+ class TestCLI(TempEnvironmentHelper):
+ 
+-    def setup(self):
+-        super(TestCLI, self).setup()
++    def setup_method(self):
++        super(TestCLI, self).setup_method()
+         self.assets_env = self.env
+         self.cmd_env = CommandLineEnvironment(self.assets_env, logging)
+ 
+@@ -210,8 +210,8 @@ class TestWatchCommand(TestWatchMixin, TestCLI):
+ 
+     default_files = {'in': 'foo', 'out': 'bar'}
+ 
+-    def setup(self):
+-        super(TestWatchCommand, self).setup()
++    def setup_method(self):
++        super(TestWatchCommand, self).setup_method()
+ 
+         # Pay particular attention that the watch command works with auto_build
+         # disabled (since normally this implies no use of the updater, but
+diff --git a/tests/test_updaters.py b/tests/test_updaters.py
+index aaa5b72..8c5f48a 100644
+--- a/tests/test_updaters.py
++++ b/tests/test_updaters.py
+@@ -15,7 +15,7 @@ class TestBundleDefBaseUpdater(object):
+     changes.
+     """
+ 
+-    def setup(self):
++    def setup_method(self):
+         self.env = Environment(None, None)  # we won't create files
+         self.env.cache = MemoryCache(capacity=100)
+         self.bundle = Bundle(output="target")
+@@ -65,8 +65,8 @@ class TestTimestampUpdater(TempEnvironmentHelper):
+ 
+     default_files = {'in': '', 'out': ''}
+ 
+-    def setup(self):
+-        TempEnvironmentHelper.setup(self)
++    def setup_method(self):
++        TempEnvironmentHelper.setup_method(self)
+ 
+         # Test the timestamp updater with cache disabled, so that the
+         # BundleDefUpdater() base class won't interfere.
+diff --git a/tests/test_version.py b/tests/test_version.py
+index d83297d..3aab5eb 100644
+--- a/tests/test_version.py
++++ b/tests/test_version.py
+@@ -32,8 +32,8 @@ def test_builtin_manifest_accessors():
+ 
+ class TestTimestampVersion(TempEnvironmentHelper):
+ 
+-    def setup(self):
+-        super(TestTimestampVersion, self).setup()
++    def setup_method(self):
++        super(TestTimestampVersion, self).setup_method()
+         self.v = TimestampVersion()
+ 
+         # Create a bunch of files with known mtimes
+@@ -95,8 +95,8 @@ class TestTimestampVersion(TempEnvironmentHelper):
+ 
+ class TestHashVersion(TempEnvironmentHelper):
+ 
+-    def setup(self):
+-        super(TestHashVersion, self).setup()
++    def setup_method(self):
++        super(TestHashVersion, self).setup_method()
+         self.v = HashVersion()
+ 
+         # Create a bunch of files with known content
+@@ -140,8 +140,8 @@ class TestHashVersion(TempEnvironmentHelper):
+ 
+ class TestFileManifest(TempEnvironmentHelper):
+ 
+-    def setup(self):
+-        super(TestFileManifest, self).setup()
++    def setup_method(self):
++        super(TestFileManifest, self).setup_method()
+         self.bundle = self.mkbundle(output='foo')
+ 
+     def test_repl(self):
+@@ -177,8 +177,8 @@ class TestFileManifest(TempEnvironmentHelper):
+ 
+ class TestJsonManifest(TempEnvironmentHelper):
+ 
+-    def setup(self):
+-        super(TestJsonManifest, self).setup()
++    def setup_method(self):
++        super(TestJsonManifest, self).setup_method()
+         self.bundle = self.mkbundle(output='foo')
+ 
+     def test_repl(self):
+@@ -200,8 +200,8 @@ class TestJsonManifest(TempEnvironmentHelper):
+ 
+ class TestCacheManifest(TempEnvironmentHelper):
+ 
+-    def setup(self):
+-        super(TestCacheManifest, self).setup()
++    def setup_method(self):
++        super(TestCacheManifest, self).setup_method()
+         self.bundle = self.mkbundle(output='foo')
+ 
+     def test_repl(self):

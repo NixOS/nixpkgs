@@ -30,11 +30,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qtcreator";
-  version = "14.0.0";
+  version = "14.0.2";
 
   src = fetchurl {
-    url = "https://download.qt.io/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    hash = "sha256-8v3P+cuO1/1csfx3k1LHp6lCkieIygAN6F2229eo1FQ=";
+    url = "mirror://qt/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
+    hash = "sha256-stL4eLtpKKjm4w2HYAvdk89ATCYZoVHGS9zcjNB4OJI=";
   };
 
   nativeBuildInputs = [
@@ -85,11 +85,6 @@ stdenv.mkDerivation rec {
   qtWrapperArgs = [
     "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin"
   ];
-
-  postInstall = ''
-    substituteInPlace $out/share/applications/org.qt-project.qtcreator.desktop \
-      --replace "Exec=qtcreator" "Exec=$out/bin/qtcreator"
-  '';
 
   meta = with lib; {
     description = "Cross-platform IDE tailored to the needs of Qt developers";

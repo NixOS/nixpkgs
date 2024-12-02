@@ -18,6 +18,7 @@
 , pkg-config
 , libdrm
 , wayland
+, wayland-scanner
 , libffi
 , libcap
 , mesa
@@ -90,6 +91,7 @@ stdenv'.mkDerivation rec {
     pkg-config
     python3
     makeWrapper
+    wayland-scanner
     # Avoid fighting upstream's usage of vendored ffmpeg libraries
     autoPatchelfHook
   ] ++ lib.optionals cudaSupport [
@@ -137,7 +139,7 @@ stdenv'.mkDerivation rec {
     miniupnpc
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cudatoolkit
-  ] ++ lib.optionals stdenv.isx86_64 [
+  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     intel-media-sdk
   ];
 

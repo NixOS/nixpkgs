@@ -1,6 +1,6 @@
-{ lib, stdenv, buildGoModule, tailscale }:
+{ lib, stdenv, buildGo123Module, tailscale }:
 
-buildGoModule {
+buildGo123Module {
   pname = "tailscale-nginx-auth";
   inherit (tailscale) version src vendorHash;
 
@@ -15,7 +15,7 @@ buildGoModule {
     "-X tailscale.com/version.shortStamp=${tailscale.version}"
   ];
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mv $out/bin/nginx-auth $out/bin/tailscale.nginx-auth
     sed -i -e "s#/usr/sbin#$out/bin#" ./cmd/nginx-auth/tailscale.nginx-auth.service
     install -D -m0444 -t $out/lib/systemd/system ./cmd/nginx-auth/tailscale.nginx-auth.service

@@ -15,8 +15,8 @@
   stdenv,
   timidity,
   # Boolean flags
-  enableSdltest ? (!stdenv.isDarwin),
-  enableSmpegtest ? (!stdenv.isDarwin),
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
+  enableSmpegtest ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 let
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     AudioToolbox
     AudioUnit
     CoreServices
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "SDL multi-channel audio mixer library";
     license = lib.licenses.zlib;
     maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ AndersonTorres ]);
+                  ++ (with lib.maintainers; [ ]);
     platforms = lib.platforms.unix;
   };
 })

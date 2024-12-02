@@ -17,6 +17,7 @@ find = {}
 test_driver = ["py.typed"]
 
 [tool.ruff]
+target-version = "py312"
 line-length = 88
 
 lint.select = ["E", "F", "I", "U", "N"]
@@ -34,11 +35,6 @@ ignore_missing_imports = true
 [[tool.mypy.overrides]]
 module = "junit_xml.*"
 ignore_missing_imports = true
-
-[tool.black]
-line-length = 88
-target-version = ['py39']
-include = '\.pyi?$'
 
 [tool.mypy]
 warn_redundant_casts = true

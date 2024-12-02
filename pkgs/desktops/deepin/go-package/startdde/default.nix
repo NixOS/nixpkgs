@@ -1,30 +1,31 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, gettext
-, pkg-config
-, jq
-, wrapGAppsHook3
-, glib
-, libgnome-keyring
-, gtk3
-, alsa-lib
-, pulseaudio
-, libgudev
-, libsecret
-, runtimeShell
-, dbus
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gettext,
+  pkg-config,
+  jq,
+  wrapGAppsHook3,
+  glib,
+  libgnome-keyring,
+  gtk3,
+  alsa-lib,
+  pulseaudio,
+  libgudev,
+  libsecret,
+  runtimeShell,
+  dbus,
 }:
 
 buildGoModule rec {
   pname = "startdde";
-  version = "6.0.14";
+  version = "6.0.15";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-2aPQaH78+J18a/SXA2i+gQ5iypsjNhcYaORGN2qkz7c=";
+    hash = "sha256-RSfdlLT2v3fM4P8E0mIyZZ8A1MWVIS0N0MDczqq7Y64=";
   };
 
   vendorHash = "sha256-Y81p3yPQayXbvyUI7N6PvFDO3hSU3SL0AuUKxvZkZNE=";

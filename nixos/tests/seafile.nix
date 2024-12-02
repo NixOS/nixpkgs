@@ -14,6 +14,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
         services.seafile = {
           enable = true;
           ccnetSettings.General.SERVICE_URL = "http://server";
+          seafileSettings.fileserver.host = "unix:/run/seafile/server.sock";
           adminEmail = "admin@example.com";
           initialAdminPassword = "seafile_password";
         };
@@ -22,7 +23,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
           virtualHosts."server" = {
             locations."/".proxyPass = "http://unix:/run/seahub/gunicorn.sock";
             locations."/seafhttp" = {
-              proxyPass = "http://127.0.0.1:8082";
+              proxyPass = "http://unix:/run/seafile/server.sock";
               extraConfig = ''
                 rewrite ^/seafhttp(.*)$ $1 break;
                 client_max_body_size 0;

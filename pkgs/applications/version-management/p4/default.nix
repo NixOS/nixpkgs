@@ -43,11 +43,11 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   nativeBuildInputs = [ jam ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Foundation Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Foundation Security ];
 
   outputs = [ "out" "bin" "dev" ];
 
-  hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "strictoverflow" ];
 
   jamFlags =
     [
@@ -59,27 +59,30 @@ stdenv.mkDerivation (finalAttrs: rec {
     ]
     ++ lib.optionals stdenv.cc.isClang [ "-sOSCOMP=clang" "-sCLANGVER=${stdenv.cc.cc.version}" ]
     ++ lib.optionals stdenv.cc.isGNU [ "-sOSCOMP=gcc" "-sGCCVER=${stdenv.cc.cc.version}" ]
-    ++ lib.optionals stdenv.isLinux [ "-sOSVER=26" ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ "-sOSVER=26" ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-sOSVER=1013"
-      "-sMACOSX_SDK=${emptyDirectory}"
       "-sLIBC++DIR=${lib.getLib stdenv.cc.libcxx}/lib"
     ];
 
   CCFLAGS =
     # The file contrib/optimizations/slide_hash_neon.h is missing from the
     # upstream distribution. It comes from the Android/Chromium sources.
-    lib.optionals stdenv.isAarch64 [ "-I${androidZlibContrib}" ];
+    lib.optionals stdenv.hostPlatform.isAarch64 [ "-I${androidZlibContrib}" ];
 
   "C++FLAGS" =
     # Avoid a compilation error that only occurs for 4-byte longs.
-    lib.optionals stdenv.isi686 [ "-Wno-narrowing" ]
+    lib.optionals stdenv.hostPlatform.isi686 [ "-Wno-narrowing" ]
     # See the "Header dependency changes" section of
     # https://www.gnu.org/software/gcc/gcc-11/porting_to.html for more
     # information on why we need to include these.
     ++ lib.optionals
       (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0.0"))
       [ "-include" "limits" "-include" "thread" ];
+
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export MACOSX_SDK=$SDKROOT
+  '';
 
   buildPhase = ''
     runHook preBuild

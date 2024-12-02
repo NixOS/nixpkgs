@@ -3,7 +3,6 @@
 , stdenv
 , fetchFromGitHub
 , rocmUpdateScript
-, runCommand
 , cmake
 , rocm-cmake
 , clr

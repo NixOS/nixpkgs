@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtomcrypt
     zlib
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Carbon
   ];
 
@@ -56,6 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aanderse karolchmist ];
     platforms = lib.platforms.all;
-    broken = stdenv.isDarwin; # installation directory mismatch
+    broken = stdenv.hostPlatform.isDarwin; # installation directory mismatch
   };
 })

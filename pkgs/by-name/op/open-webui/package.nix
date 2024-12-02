@@ -2,33 +2,35 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  python3,
+  python312,
   nixosTests,
 }:
 let
   pname = "open-webui";
-  version = "0.3.10";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
-    rev = "v${version}";
-    hash = "sha256-Q8ZUc3fNfWeijPLUtgwkU2rv7SWSfi7Q1QOlt14O3nE=                 ";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LQFedDcECmS142tGH9+/7ic+wKTeMuysK2fjGmvYPYQ=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-nkJksj1FAOMqEDQS1k++E2izv9TT3PkoZLxzHIcHzvA=";
+    npmDepsHash = "sha256-KeHMt51QvF5qfHKQpEbM0ukGm34xo3TFcXKeZ3CrmHM=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
     postPatch = ''
       substituteInPlace package.json \
-        --replace-fail "npm run pyodide:fetch && vite build" "vite build" \
+        --replace-fail "npm run pyodide:fetch && vite build" "vite build"
     '';
 
     env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
+    env.ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
+    env.NODE_OPTIONS = "--max-old-space-size=8192";
 
     installPhase = ''
       runHook preInstall
@@ -40,7 +42,7 @@ let
     '';
   };
 in
-python3.pkgs.buildPythonApplication rec {
+python312.pkgs.buildPythonApplication rec {
   inherit pname version src;
   pyproject = true;
 
@@ -55,26 +57,30 @@ python3.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = true;
 
   pythonRemoveDeps = [
-    # using `opencv4`
-    "opencv-python-headless"
-    # using `psycopg2` instead
-    "psycopg2-binary"
+    "docker"
+    "pytest"
+    "pytest-docker"
   ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python312.pkgs; [
+    aiocache
+    aiofiles
     aiohttp
     alembic
     anthropic
     apscheduler
     argon2-cffi
+    async-timeout
     authlib
     bcrypt
     beautifulsoup4
     black
     boto3
     chromadb
+    colbert-ai
     docx2txt
     duckduckgo-search
+    einops
     extract-msg
     fake-useragent
     fastapi
@@ -82,39 +88,49 @@ python3.pkgs.buildPythonApplication rec {
     flask
     flask-cors
     fpdf2
+    ftfy
     google-generativeai
+    googleapis-common-protos
     langchain
     langchain-chroma
     langchain-community
     langfuse
+    ldap3
     markdown
+    nltk
     openai
-    opencv4
+    opencv-python-headless
     openpyxl
+    opensearch-py
     pandas
     passlib
     peewee
     peewee-migrate
+    pgvector
     psutil
-    psycopg2
+    psycopg2-binary
     pydub
     pyjwt
+    pymdown-extensions
+    pymilvus
     pymongo
     pymysql
     pypandoc
     pypdf
+    python-dotenv
     python-jose
     python-multipart
     python-pptx
     python-socketio
     pytube
     pyxlsb
+    qdrant-client
     rank-bm25
     rapidocr-onnxruntime
     redis
     requests
     sentence-transformers
-    sqlalchemy
+    soundfile
     tiktoken
     unstructured
     uvicorn
@@ -123,8 +139,7 @@ python3.pkgs.buildPythonApplication rec {
     youtube-transcript-api
   ];
 
-  build-system = with python3.pkgs; [ hatchling ];
-
+  build-system = with python312.pkgs; [ hatchling ];
 
   pythonImportsCheck = [ "open_webui" ];
 
@@ -135,11 +150,11 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = {
+    changelog = "https://github.com/open-webui/open-webui/blob/${src.rev}/CHANGELOG.md";
     description = "Comprehensive suite for LLMs with a user-friendly WebUI";
     homepage = "https://github.com/open-webui/open-webui";
-    changelog = "https://github.com/open-webui/open-webui/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ shivaraj-bh ];
     mainProgram = "open-webui";
+    maintainers = with lib.maintainers; [ shivaraj-bh ];
   };
 }

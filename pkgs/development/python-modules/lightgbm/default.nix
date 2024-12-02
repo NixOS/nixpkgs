@@ -29,13 +29,13 @@
   boost,
   ocl-icd,
   opencl-headers,
-  gpuSupport ? stdenv.isLinux && !cudaSupport,
+  gpuSupport ? stdenv.hostPlatform.isLinux && !cudaSupport,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
 }:
 
-assert gpuSupport -> cudaSupport != true;
-assert cudaSupport -> gpuSupport != true;
+assert gpuSupport -> !cudaSupport;
+assert cudaSupport -> !gpuSupport;
 
 buildPythonPackage rec {
   pname = "lightgbm";
@@ -84,7 +84,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     arrow = [
       cffi
       pyarrow

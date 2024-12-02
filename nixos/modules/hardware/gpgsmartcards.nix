@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   # gnupg's manual describes how to setup ccid udev rules:
   #   https://www.gnupg.org/howtos/card-howto/en/ch02s03.html
@@ -28,10 +26,10 @@ let
   cfg = config.hardware.gpgSmartcards;
 in {
   options.hardware.gpgSmartcards = {
-    enable = mkEnableOption "udev rules for gnupg smart cards";
+    enable = lib.mkEnableOption "udev rules for gnupg smart cards";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.udev.packages = [ scdaemonUdevRulesPkg ];
   };
 }

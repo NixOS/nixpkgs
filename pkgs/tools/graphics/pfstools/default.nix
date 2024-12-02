@@ -1,7 +1,7 @@
 { lib, stdenv, mkDerivation, fetchurl, cmake, pkg-config, darwin
 , openexr, zlib, imagemagick6, libGLU, libGL, libglut, fftwFloat
 , fftw, gsl, libexif, perl, qtbase, netpbm
-, enableUnfree ? false, opencv2
+, enableUnfree ? false, opencv
 }:
 
 mkDerivation rec {
@@ -32,11 +32,11 @@ mkDerivation rec {
   buildInputs = [
     openexr zlib imagemagick6 fftwFloat
     fftw gsl libexif perl qtbase netpbm
-  ] ++ (if stdenv.isDarwin then (with darwin.apple_sdk.frameworks; [
+  ] ++ (if stdenv.hostPlatform.isDarwin then (with darwin.apple_sdk.frameworks; [
     OpenGL GLUT
   ]) else [
     libGLU libGL libglut
-  ]) ++ lib.optional enableUnfree (opencv2.override { enableUnfree = true; });
+  ]) ++ lib.optional enableUnfree (opencv.override { enableUnfree = true; });
 
   patches = [ ./glut.patch ./threads.patch ./pfstools.patch ./pfsalign.patch ];
 

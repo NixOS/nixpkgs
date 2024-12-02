@@ -28,6 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-yl2+PcKr7xRW4oIBWl+gzh/nKhSNu5GH9fWKRGgaNHU=";
   };
 
+  patches = [
+    # https://github.com/pypa/flit/commit/6ab62c91d0db451b5e9ab000f0dba5471550b442.patch
+    ./python314-compat.patch
+  ];
+
   nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [

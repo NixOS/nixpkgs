@@ -1,25 +1,36 @@
-{ lib, buildPythonApplication, fetchFromGitHub, nose }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+}:
 
 buildPythonApplication rec {
   pname = "mbutil";
   version = "0.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mapbox";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "06d62r89h026asaa4ryzb23m86j0cmbvy54kf4zl5f35sgiha45z";
+    repo = "mbutil";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-vxAF49NluEI/cZMUv1dlQBpUh1jfZ6KUVkYAmFAWphk=";
   };
 
-  nativeCheckInputs = [ nose ];
-  checkPhase = "nosetests";
+  patches = [ ./migrate_to_pytest.patch ];
 
-  meta = with lib; {
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+  pytestFlagsArray = [ "test/test.py" ];
+
+  meta = {
     description = "Importer and exporter for MBTiles";
     mainProgram = "mb-util";
     homepage = "https://github.com/mapbox/mbutil";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

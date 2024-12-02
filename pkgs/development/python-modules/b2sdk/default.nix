@@ -10,7 +10,7 @@
   packaging,
   pdm-backend,
   pyfakefs,
-  pytest-lazy-fixture,
+  pytest-lazy-fixtures,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "2.4.0";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,13 +30,10 @@ buildPythonPackage rec {
     owner = "Backblaze";
     repo = "b2-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SaoQzP7vtzVWmkUTw0vCeneeSMTmBTIr5kiMXGcgm9g=";
+    hash = "sha256-nYsbcRRNh6WEelur/GvzE800Yg0h51FDhxJwBryVs4w=";
   };
 
   build-system = [ pdm-backend ];
-
-
-  pythonRemoveDeps = [ "setuptools" ];
 
   dependencies =
     [
@@ -49,12 +46,11 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   nativeCheckInputs = [
-    pyfakefs
-    pytest-lazy-fixture
+    pytest-lazy-fixtures
     pytest-mock
     pytestCheckHook
     tqdm
-  ] ++ lib.optionals stdenv.isLinux [ glibcLocales ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ glibcLocales ];
 
   disabledTestPaths = [
     # requires aws s3 auth
@@ -71,6 +67,7 @@ buildPythonPackage rec {
     "test_files_headers"
     "test_large_file"
     "test_file_info_b2_attributes"
+    "test_sync_folder"
   ];
 
   pythonImportsCheck = [ "b2sdk" ];
@@ -80,6 +77,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Backblaze/b2-sdk-python";
     changelog = "https://github.com/Backblaze/b2-sdk-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ pmw ];
   };
 }

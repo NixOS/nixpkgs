@@ -272,7 +272,8 @@ in
                     truncate --size 0 "$DEVICE"
                     chattr +C "$DEVICE" 2>/dev/null || true
 
-                    dd if=/dev/zero of="$DEVICE" bs=1M count=${toString sw.size}
+                    echo "Creating swap file using dd and mkswap."
+                    dd if=/dev/zero of="$DEVICE" bs=1M count=${toString sw.size} status=progress
                     ${lib.optionalString (!sw.randomEncryption.enable) "mkswap ${sw.realDevice}"}
                   fi
                 ''}

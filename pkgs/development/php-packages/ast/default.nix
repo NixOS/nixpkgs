@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "1.1.1";
+  version = "1.1.2";
 in
 buildPecl {
   inherit version;
@@ -15,7 +15,7 @@ buildPecl {
     owner = "nikic";
     repo = "php-ast";
     rev = "v${version}";
-    sha256 = "sha256-ulMLufhLf9E11Z6+rVBZ14CY3ILp/NrhMjRXmrUHnBA=";
+    sha256 = "sha256-9HP+hKcpkWmvsx335JiCVjFG+xyAMEm5dWxWC1nZPxU=";
   };
 
   meta = with lib; {

@@ -79,7 +79,7 @@ Besides tests provided by upstream, that you run in the [`checkPhase`](#ssec-che
 
 - They access the package as consumers would, independently from the environment in which it was built
 - They can be run and debugged without rebuilding the package, which is useful if that takes a long time
-- They don't add overhead to each build, as opposed checks added to the [`distPhase`](#ssec-distribution-phase), such as [`versionCheckHook`](#versioncheckhook).
+- They don't add overhead to each build, as opposed checks added to the [`installCheckPhase`](#ssec-installCheck-phase), such as [`versionCheckHook`](#versioncheckhook).
 
 It is also possible to use `passthru.tests` to test the version with [`testVersion`](#tester-testVersion), but since that is pretty trivial and recommended thing to do, we recommend using [`versionCheckHook`](#versioncheckhook) for that, which has the following advantages over `passthru.tests`:
 

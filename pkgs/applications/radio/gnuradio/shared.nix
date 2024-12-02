@@ -38,7 +38,7 @@ in {
       sha256 = sourceSha256;
     }
   ;
-  nativeBuildInputs = lib.flatten (lib.mapAttrsToList (
+  nativeBuildInputs = [ removeReferencesTo ] ++ lib.flatten (lib.mapAttrsToList (
     feat: info: (
       lib.optionals (hasFeature feat) (
         (lib.optionals (builtins.hasAttr "native" info) info.native) ++
@@ -85,11 +85,11 @@ in {
   postInstall = ""
     # Gcc references
     + lib.optionalString (hasFeature "gnuradio-runtime") ''
-      ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
+      remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
     ''
     # Clang references in InstalledDir
-    + lib.optionalString (hasFeature "gnuradio-runtime" && stdenv.isDarwin) ''
-      ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
+    + lib.optionalString (hasFeature "gnuradio-runtime" && stdenv.hostPlatform.isDarwin) ''
+      remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
     ''
   ;
   # NOTE: Outputs are disabled due to upstream not using GNU InstallDIrs cmake
@@ -116,7 +116,7 @@ in {
   dontWrapQtApps = true;
   # On darwin, it requires playing with DYLD_FALLBACK_LIBRARY_PATH to make if
   # find libgnuradio-runtim.3.*.dylib .
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   preCheck = ''
     export HOME=$(mktemp -d)
     export QT_QPA_PLATFORM=offscreen

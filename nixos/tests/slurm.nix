@@ -154,7 +154,7 @@ in {
 
   with subtest("run_distributed_command"):
       # Run `hostname` on 3 nodes of the partition (so on all the 3 nodes).
-      # The output must contain the 3 different names
+      # The output must contain the 3 different names
       submit.succeed("srun -N 3 hostname | sort | uniq | wc -l | xargs test 3 -eq")
 
       with subtest("check_slurm_dbd"):

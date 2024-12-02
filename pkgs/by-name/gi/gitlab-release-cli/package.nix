@@ -7,18 +7,18 @@
 
 buildGoModule rec {
   pname = "gitlab-release-cli";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "release-cli";
     rev = "v${version}";
-    hash = "sha256-CCSice/uMf2OfFNEpwwhX6A0wrSsC1v9XWEhAAwQRso=";
+    hash = "sha256-AEDao1tehg15SmluHlivG/I+Y9Gcxjj7KUEGAmOZ1aY=";
   };
 
   vendorHash = "sha256-UwDMRsWbk8rEv2d5FssIzCLby68YZULoxd3/JGLsCQU=";
 
-  checkFlags = lib.optionals stdenv.isDarwin [
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # Skip failing test
     "-skip TestHTTPSCustomCA"
   ];

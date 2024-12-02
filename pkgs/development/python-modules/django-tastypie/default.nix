@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "django-tastypie";
-  version = "0.14.7";
+  version = "0.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "django-tastypie";
     repo = "django-tastypie";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bQBq5Wk5P9c+/a5B+LnxG8aCrVK1A3jLsLFK69/UYjo=";
+    hash = "sha256-StXWqwGVILXtK53fa2vSNXSIf7UGfdn7iJyOIzdnth4=";
   };
 
   build-system = [ setuptools ];

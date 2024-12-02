@@ -1,8 +1,11 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   buildNpmPackage,
   fetchFromGitHub,
+  cacert,
+  unzip,
   pkg-config,
   libGL,
   libX11,
@@ -14,19 +17,33 @@
   mupdf,
   fontconfig,
   freetype,
-  stdenv,
-  darwin,
+  apple-sdk_11,
 }:
 
 buildGoModule rec {
   pname = "gcs";
-  version = "5.21.0";
+  version = "5.28.1";
 
   src = fetchFromGitHub {
     owner = "richardwilkes";
     repo = "gcs";
-    rev = "v${version}";
-    hash = "sha256-mes1aXh4R1re4sW3xYDWtSIcW7lwkWoAxbcbdyT/W+o=";
+    rev = "refs/tags/v${version}";
+
+    nativeBuildInputs = [
+      cacert
+      unzip
+    ];
+
+    # also fetch pdf.js files
+    # note: the version is locked in the file
+    postFetch = ''
+      cd $out/server/pdf
+      substituteInPlace refresh-pdf.js.sh \
+          --replace-fail '/bin/rm' 'rm'
+      . refresh-pdf.js.sh
+    '';
+
+    hash = "sha256-ArJ+GveG2Y1PYeCuIFJoQ3eVyqvAi4HEeAEd4X03yu4=";
   };
 
   modPostBuild = ''
@@ -34,15 +51,14 @@ buildGoModule rec {
     sed -i 's|-lmupdf[^ ]* |-lmupdf |g' vendor/github.com/richardwilkes/pdf/pdf.go
   '';
 
-  vendorHash = "sha256-H5GCrrqmDwpCneXawu7kZsRfrQ8hcsbqhpAAG6FCawg=";
+  vendorHash = "sha256-EmAGkQ+GHzVbSq/nPu0awL79jRmZuMHheBWwanfEgGI=";
 
   frontend = buildNpmPackage {
     name = "${pname}-${version}-frontend";
 
     inherit src;
     sourceRoot = "${src.name}/server/frontend";
-
-    npmDepsHash = "sha256-wP6sjdcjljzmTs0GUMbF2BPo83LKpfdn15sUuMEIn6E=";
+    npmDepsHash = "sha256-LqOH3jhp4Mx7JGYSjF29kVUny3xNn7oX0qCYi79SH4w=";
 
     installPhase = ''
       runHook preInstall
@@ -60,6 +76,9 @@ buildGoModule rec {
 
   buildInputs =
     [
+      mupdf
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       libGL
       libX11
       libXcursor
@@ -67,14 +86,11 @@ buildGoModule rec {
       libXinerama
       libXi
       libXxf86vm
-      mupdf
       fontconfig
       freetype
     ]
-    ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.Carbon
-      darwin.apple_sdk_11_0.frameworks.Cocoa
-      darwin.apple_sdk_11_0.frameworks.Kernel
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_11
     ];
 
   # flags are based on https://github.com/richardwilkes/gcs/blob/master/build.sh
@@ -92,7 +108,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    changelog = "https://github.com/richardwilkes/gcs/releases/tag/${src.rev}";
+    changelog = "https://github.com/richardwilkes/gcs/releases/tag/v${version}";
     description = "Stand-alone, interactive, character sheet editor for the GURPS 4th Edition roleplaying game system";
     homepage = "https://gurpscharactersheet.com/";
     license = lib.licenses.mpl20;
@@ -100,6 +116,6 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     # incompatible vendor/github.com/richardwilkes/unison/internal/skia/libskia_linux.a
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 }

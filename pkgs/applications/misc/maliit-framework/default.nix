@@ -20,6 +20,7 @@
 , doxygen
 , pkg-config
 , wayland-protocols
+, wayland-scanner
 }:
 
 mkDerivation rec {
@@ -62,6 +63,7 @@ mkDerivation rec {
     doxygen
     pkg-config
     wayland-protocols
+    wayland-scanner
   ];
 
   preConfigure = ''

@@ -59,7 +59,9 @@ stdenv.mkDerivation {
 
   # Additional phase performing the actual test.
   installCheckPhase =
-    let allDeps = runtimeDependencies ++ [ (lib.getLib freetype) ];
+    let allDeps = runtimeDependencies ++ [
+        (lib.getLib freetype)
+      ];
     in
     ''
       local binary="$out/bin/ToneLib-Jam"

@@ -6,8 +6,8 @@
 mkKdeDerivation {
   pname = "lskat";
 
-  extraNativeBuildInputs = [_7zz];
-  extraBuildInputs = [qtsvg];
+  extraNativeBuildInputs = [ _7zz ];
+  extraBuildInputs = [ qtsvg ];
 
   meta.mainProgram = "lskat";
 }

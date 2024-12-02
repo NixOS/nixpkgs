@@ -11,7 +11,7 @@
 , nixosTests
 }:
 let
-  generic = { version, sha256, cargoHash, eol ? false, broken ? false }: rustPlatform.buildRustPackage {
+  generic = { version, hash, cargoHash, cargoPatches ? [], eol ? false, broken ? false }: rustPlatform.buildRustPackage {
     pname = "garage";
     inherit version;
 
@@ -20,7 +20,7 @@ let
       owner = "Deuxfleurs";
       repo = "garage";
       rev = "v${version}";
-      inherit sha256;
+      inherit hash;
     };
 
     postPatch = ''
@@ -29,13 +29,13 @@ let
       rm .cargo/config.toml || true
     '';
 
-    inherit cargoHash;
+    inherit cargoHash cargoPatches;
 
     nativeBuildInputs = [ protobuf pkg-config ];
 
     buildInputs = [
       openssl
-    ] ++ lib.optional stdenv.isDarwin Security;
+    ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
     checkInputs = [
       cacert
@@ -96,30 +96,32 @@ rec {
 
   garage_0_8_7 = generic {
     version = "0.8.7";
-    sha256 = "sha256-2QGbR6YvMQeMxN3n1MMJ5qfBcEJ5hjXARUOfEn+m4Jc=";
-    cargoHash = "sha256-Q0QyBNPEDrlhgIHD4q7Qb1Pu3xBvzlLOSW7LSWWdoIo=";
-    broken = stdenv.isDarwin;
+    hash = "sha256-2QGbR6YvMQeMxN3n1MMJ5qfBcEJ5hjXARUOfEn+m4Jc=";
+    cargoHash = "sha256-1cGlJP/RRgxt3GGMN1c+7Y5lLHJyvHEnpLsR35R5FfI=";
+    cargoPatches = [ ./update-time-0.8.patch ];
+    broken = stdenv.hostPlatform.isDarwin;
+  };
+
+  garage_0_9_4 = generic {
+    version = "0.9.4";
+    hash = "sha256-2ZaxenwaVGYYUjUJaGgnGpZNQprQV9+Jns2sXM6cowk=";
+    cargoHash = "sha256-1Hrip4R5dr31czOcFMGW4ZvVfVwvdd7LkwukwNpS3o4=";
+    cargoPatches = [ ./update-time.patch ];
+    broken = stdenv.hostPlatform.isDarwin;
+  };
+
+  garage_1_0_1 = generic {
+    version = "1.0.1";
+    hash = "sha256-f6N2asycN04I6U5XQ5LEAqYu/v5jYZiFCxZ8YQ32XyM=";
+    cargoHash = "sha256-jpc/vaygC5WNSkVA3P01mCRk9Nx/CUumE893tHWoe34=";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 
   garage_0_8 = garage_0_8_7;
 
-  garage_0_9_4 = generic {
-    version = "0.9.4";
-    sha256 = "sha256-2ZaxenwaVGYYUjUJaGgnGpZNQprQV9+Jns2sXM6cowk=";
-    cargoHash = "sha256-Cssls9csn6qribF+pAAagBydX9e9WTq4K/ehaLCWOOA=";
-    broken = stdenv.isDarwin;
-  };
-
-  garage_1_0_0 = generic {
-    version = "1.0.0";
-    sha256 = "sha256-5W5cXylFCrDup+HOOUVPWBJUSphOp8szgtpvRIv82b8=";
-    cargoHash = "sha256-tXO+Vk6bYpayNWi/y4sMtkn2EQ9wiwSAfn79Zbt28q0=";
-    broken = stdenv.isDarwin;
-  };
-
   garage_0_9 = garage_0_9_4;
 
-  garage_1_x = garage_1_0_0;
+  garage_1_x = garage_1_0_1;
 
   garage = garage_1_x;
 }

@@ -1,6 +1,5 @@
 {
   lib,
-  python3Packages,
   fetchPypi,
   pytestCheckHook,
   pythonOlder,
@@ -8,8 +7,9 @@
   colorama,
   tabulate,
   unidecode,
+  buildPythonPackage,
 }:
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "cli-ui";
   version = "0.17.2";
   pyproject = true;

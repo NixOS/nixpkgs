@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , fetchpatch
 , trezor-udev-rules
+, nixosTests
 , AppKit
 }:
 
@@ -29,13 +30,15 @@ buildGoModule rec {
     })
   ];
 
-  propagatedBuildInputs = lib.optionals stdenv.isLinux [ trezor-udev-rules ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit ];
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ trezor-udev-rules ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
   ldflags = [
     "-s" "-w"
     "-X main.githash=${commit}"
   ];
+
+  passthru.tests = { inherit (nixosTests) trezord; };
 
   meta = with lib; {
     description = "Trezor Communication Daemon aka Trezor Bridge";

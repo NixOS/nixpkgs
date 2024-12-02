@@ -34,9 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     [ glib cairo fontconfig libtiff giflib
       libjpeg libpng libXrender libexif
     ]
-    ++ lib.optional stdenv.isDarwin Carbon;
+    ++ lib.optional stdenv.hostPlatform.isDarwin Carbon;
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ln -s $out/lib/libgdiplus.0.dylib $out/lib/libgdiplus.so
   '';
 

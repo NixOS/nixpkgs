@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     social_cards_generation = [ matplotlib ];
   };
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     beautifulsoup4
-  ] ++ passthru.optional-dependencies.social_cards_generation;
+  ] ++ optional-dependencies.social_cards_generation;
 
   pythonImportsCheck = [ "sphinxext.opengraph" ];
 

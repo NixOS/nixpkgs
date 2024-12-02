@@ -25,8 +25,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isLinux xclip
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optional stdenv.hostPlatform.isLinux xclip
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
          libiconv
          darwin.apple_sdk.frameworks.Security
          darwin.apple_sdk.frameworks.AppKit

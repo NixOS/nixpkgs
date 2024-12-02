@@ -10,6 +10,7 @@
   scipy,
   pandas,
   pytestCheckHook,
+  pytest-cov-stub,
   setuptools,
 }:
 
@@ -25,11 +26,6 @@ buildPythonPackage rec {
     hash = "sha256-An5RzK0nnRaBI6JEUl5shLrA22RgWzEbC9NJiRvgxT4=";
   };
 
-  postPatch = ''
-    substituteInPlace tox.ini \
-      --replace-fail "--cov=./hickle" ""
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [
@@ -42,6 +38,7 @@ buildPythonPackage rec {
     astropy
     pandas
     pytestCheckHook
+    pytest-cov-stub
     scipy
   ];
 

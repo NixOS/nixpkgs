@@ -34,7 +34,7 @@ buildPythonPackage {
     wsproto
   ] ++ uvicorn.optional-dependencies.standard;
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   __darwinAllowLocalNetworking = true;
 

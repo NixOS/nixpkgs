@@ -12,11 +12,11 @@
   setuptools,
 }:
 let
-  commit = "90dc1671b59077ee27c3d44d9d536d6659eb3bbe";
+  commit = "cbc722eed8dc807955bd46f84886ae74d161dd0c";
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "miasm";
-  version = "0.1.5-unstable-2024-04-28";
+  version = "0.1.5-unstable-2024-08-20";
 
   pyproject = true;
   build-system = [ setuptools ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "cea-sec";
     repo = "miasm";
     rev = commit;
-    hash = "sha256-nkRcirJLmTwSL7lwd+Yk6mteU3YPnm5ekJ4eFF5FmYo=";
+    hash = "sha256-Ot11QuMtaJ8OQDAUgV3zVxTNp0kKc0Y9EXRZD96Caow=";
   };
 
   patches = [

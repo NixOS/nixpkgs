@@ -39,7 +39,7 @@ buildPythonPackage rec {
     flask
     pillow
     psycopg2
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     tkinter
   ];
 

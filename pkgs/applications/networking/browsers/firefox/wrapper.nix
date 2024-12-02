@@ -15,6 +15,7 @@
 , mesa # firefox wants gbm for drm+dmabuf
 , cups
 , pciutils
+, vulkan-loader
 , sndio
 , libjack2
 , speechd-minimal
@@ -50,7 +51,7 @@ let
     # https://mozilla.github.io/policy-templates/
     , extraPolicies ? {}
     , extraPoliciesFiles ? []
-    , libName ? browser.libName or "firefox" # Important for tor package or the like
+    , libName ? browser.libName or applicationName # Important for tor package or the like
     , nixExtensions ? null
     }:
 
@@ -86,7 +87,10 @@ let
                 else [])
        );
 
-      libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
+       libs = lib.optionals stdenv.hostPlatform.isLinux (
+            [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils vulkan-loader ]
+            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
+       )
             ++ lib.optional pipewireSupport pipewire
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport libkrb5
@@ -98,7 +102,6 @@ let
             ++ lib.optional sndioSupport sndio
             ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
-            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
             ++ pkcs11Modules
             ++ gtk_modules;
       gtk_modules = [ libcanberra-gtk3 ];
@@ -421,7 +424,7 @@ let
         inherit (browser.meta) description;
         mainProgram = launcherName;
         hydraPlatforms = [];
-        priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
+        priority = (browser.meta.priority or lib.meta.defaultPriority) - 1; # prefer wrapper over the package
       };
     };
 in lib.makeOverridable wrapper

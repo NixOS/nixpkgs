@@ -8,7 +8,6 @@
 
   # Packages that provide a single executable.
   "@angular/cli" = "ng";
-  "@astrojs/language-server" = "astro-ls";
   "@babel/cli" = "babel";
   "@commitlint/cli" = "commitlint";
   "@gitbeaker/cli" = "gitbeaker";
@@ -37,7 +36,6 @@
   less = "lessc";
   localtunnel = "lt";
   lua-fmt = "luafmt";
-  neovim = "neovim-node-host";
   parsoid = "parse.js";
   poor-mans-t-sql-formatter-cli = "sqlformat";
   postcss-cli = "postcss";
@@ -49,7 +47,6 @@
   purty = "purty";
   pscid = "pscid";
   remod-cli = "remod";
-  teck-programmer = "teck-firmware-upgrade";
   vscode-json-languageserver = "vscode-json-languageserver";
   webtorrent-cli = "webtorrent";
 }

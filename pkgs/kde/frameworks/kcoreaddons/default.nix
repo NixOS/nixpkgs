@@ -7,6 +7,9 @@
 mkKdeDerivation {
   pname = "kcoreaddons";
 
-  extraNativeBuildInputs = [qttools shared-mime-info];
-  extraBuildInputs = [qtdeclarative];
+  extraNativeBuildInputs = [
+    qttools
+    shared-mime-info
+  ];
+  extraBuildInputs = [ qtdeclarative ];
 }

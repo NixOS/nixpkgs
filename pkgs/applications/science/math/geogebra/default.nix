@@ -95,6 +95,6 @@ let
     '';
   };
 in
-if stdenv.isDarwin
+if stdenv.hostPlatform.isDarwin
 then darwinPkg
 else linuxPkg

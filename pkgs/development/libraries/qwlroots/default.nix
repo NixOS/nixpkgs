@@ -20,19 +20,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qwlroots";
-  version = "0.1.0";
+  version = "0.3.0-wlroots0.17-0.18";
 
   src = fetchFromGitHub {
     owner = "vioken";
     repo = "qwlroots";
     rev = finalAttrs.version;
-    hash = "sha256-ev4oCKR43XaYNTavj9XI3RAtB6RFprChpBFsrA2nVsM=";
+    hash = "sha256-ObXegiJ4LT8bTUxNVJ9wBKN5oILWPDYTsuCy+OCsh3k=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
     wayland-scanner
   ];
 
@@ -57,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "PREFER_QT_5" (lib.versionOlder qtbase.version "6"))
   ];
+
+  dontWrapQtApps = true;
 
   meta = {
     description = "Qt and QML bindings for wlroots";

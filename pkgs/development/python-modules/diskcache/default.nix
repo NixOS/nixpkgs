@@ -34,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   # Darwin sandbox causes most tests to fail
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # Very time sensitive, can fail on over subscribed machines

@@ -18,12 +18,12 @@ let
 
   transcriptome19 = fetchurl {
     url = transcriptome-url + "/transcriptome_hg19.RData";
-    sha256 = "sha256-E8UmHoNoySSIde+TRE6bxVP0PrccpKDvIHBGCvWnYOw=";
+    hash = "sha256-E8UmHoNoySSIde+TRE6bxVP0PrccpKDvIHBGCvWnYOw=";
   };
 
   transcriptome38 = fetchurl {
     url = transcriptome-url + "/transcriptome_hg38.RData";
-    sha256 = "sha256-mQMMZVN1byXMYjFoRdezmoZtnhUur2CHOP/j/pmw8as=";
+    hash = "sha256-mQMMZVN1byXMYjFoRdezmoZtnhUur2CHOP/j/pmw8as=";
   };
 
 in
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     owner = "raphaelleman";
     repo = "SPiP";
     rev = "cae95fe0ee7a2602630b7a4eacbf7cfa0e1763f0";
-    sha256 = "sha256-/CufUaQYnsdo8Rij/24JmixPgMi7o1CApLxeTneWAVc=";
+    hash = "sha256-/CufUaQYnsdo8Rij/24JmixPgMi7o1CApLxeTneWAVc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

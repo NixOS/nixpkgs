@@ -113,7 +113,7 @@ buildPythonPackage rec {
     [
       "test_run_all" # Matplotlib issues. Broken integration is less useless than a broken build
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_reconstruction_incremental"
       "test_reconstruction_triangulation"
     ];
@@ -121,7 +121,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "opensfm" ];
 
   meta = {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = [ lib.maintainers.SomeoneSerge ];
     license = lib.licenses.bsd2;
     changelog = "https://github.com/mapillary/OpenSfM/blob/${src.rev}/CHANGELOG.md";

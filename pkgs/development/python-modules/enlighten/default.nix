@@ -38,7 +38,7 @@ buildPythonPackage rec {
       "test_floats_prefixed"
       "test_subcounter_prefixed"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # https://github.com/Rockhopper-Technologies/enlighten/issues/44
       "test_autorefresh"
     ];

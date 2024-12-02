@@ -18,20 +18,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wiliwili";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "xfangfang";
     repo = "wiliwili";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Fl8YV7yBW9dmcpcHCDVvkAzICTopNb4zKziDkR6NEwU=";
+    hash = "sha256-IHGUNnBSwCi+DU7K2yjRLUFRjeysiMojyGXMVecNyu4=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland-scanner
   ];
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libxkbcommon
     dbus
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libffi # needed for wayland
     wayland
     egl-wayland
@@ -55,8 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "PLATFORM_DESKTOP" true)
     (lib.cmakeBool "INSTALL" true)
-    (lib.cmakeBool "GLFW_BUILD_WAYLAND" stdenv.isLinux)
-    (lib.cmakeBool "GLFW_BUILD_X11" stdenv.isLinux)
+    (lib.cmakeBool "GLFW_BUILD_WAYLAND" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "GLFW_BUILD_X11" stdenv.hostPlatform.isLinux)
     # Otherwise cpr cmake will try to download zlib
     (lib.cmakeBool "CPR_FORCE_USE_SYSTEM_CURL" true)
   ];

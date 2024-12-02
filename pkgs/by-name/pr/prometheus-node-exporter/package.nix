@@ -17,7 +17,7 @@ buildGoModule rec {
   # FIXME: tests fail due to read-only nix store
   doCheck = false;
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation IOKit ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation IOKit ]);
 
   excludedPackages = [ "docs/node-mixin" ];
 

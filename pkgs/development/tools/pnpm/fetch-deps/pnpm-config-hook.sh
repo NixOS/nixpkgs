@@ -22,9 +22,27 @@ pnpmConfigHook() {
 
     pnpm config set store-dir "$STORE_PATH"
 
-    echo "Installing dependencies"
+    if [[ -n "$pnpmWorkspace" ]]; then
+        echo "'pnpmWorkspace' is deprecated, please migrate to 'pnpmWorkspaces'."
+        exit 2
+    fi
 
-    pnpm install --offline --frozen-lockfile --ignore-script
+    echo "Installing dependencies"
+    if [[ -n "$pnpmWorkspaces" ]]; then
+        local IFS=" "
+        for ws in $pnpmWorkspaces; do
+            pnpmInstallFlags+=("--filter=$ws")
+        done
+    fi
+
+    runHook prePnpmInstall
+
+    pnpm install \
+        --offline \
+        --ignore-scripts \
+        "${pnpmInstallFlags[@]}" \
+        --frozen-lockfile
+
 
     echo "Patching scripts"
 

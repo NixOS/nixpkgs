@@ -27,6 +27,12 @@ in {
             desc = "some-repo description";
           };
         };
+        settings = {
+          readme = [
+            ":README.md"
+            ":date.txt"
+          ];
+        };
       };
 
       environment.systemPackages = [ pkgs.git ];
@@ -56,18 +62,42 @@ in {
       git init -b master reference
       cd reference
       git remote add origin /tmp/git/some-repo
-      date > date.txt
+      { echo -n "cgit NixOS Test at "; date; } > date.txt
       git add date.txt
       git -c user.name=test -c user.email=test@localhost commit -m 'add date'
       git push -u origin master
     ''}")
 
+    # test web download
     server.succeed(
         "curl -fsS 'http://localhost/%28c%29git/some-repo/plain/date.txt?id=master' | diff -u reference/date.txt -"
     )
 
+    # test http clone
     server.succeed(
        "git clone http://localhost/%28c%29git/some-repo && diff -u reference/date.txt some-repo/date.txt"
+    )
+
+    # test list settings by greping for the fallback readme
+    server.succeed(
+        "curl -fsS 'http://localhost/%28c%29git/some-repo/about/' | grep -F 'cgit NixOS Test at'"
+    )
+
+    # add real readme
+    server.succeed("sudo -u cgit ${pkgs.writeShellScript "cgit-commit-readme" ''
+      set -e
+      echo '# cgit NixOS test README' > reference/README.md
+      git -C reference add README.md
+      git -C reference -c user.name=test -c user.email=test@localhost commit -m 'add readme'
+      git -C reference push
+    ''}")
+
+    # test list settings by greping for the real readme
+    server.succeed(
+        "curl -fsS 'http://localhost/%28c%29git/some-repo/about/' | grep -F '# cgit NixOS test README'"
+    )
+    server.fail(
+        "curl -fsS 'http://localhost/%28c%29git/some-repo/about/' | grep -F 'cgit NixOS Test at'"
     )
   '';
 })

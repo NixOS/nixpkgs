@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -11,22 +10,20 @@
   rope,
   python-lsp-server,
 
-  # checks
+  # tests
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pylsp-rope";
-  version = "0.1.16";
+  version = "0.1.17";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python-rope";
     repo = "pylsp-rope";
     rev = "refs/tags/${version}";
-    hash = "sha256-Mr+mWRvOXoy7+SosMae80o0V1jBMn1dEoGmaR/BGHrc=";
+    hash = "sha256-gEmSZQZ2rtSljN8USsUiqsP2cr54k6kwvsz8cjam9dU=";
   };
 
   build-system =  [

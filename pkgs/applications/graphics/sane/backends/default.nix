@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     libxml2
     poppler
     gawk
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libieee1284
     libv4l
     net-snmp

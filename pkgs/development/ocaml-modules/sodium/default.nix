@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  hardeningDisable = lib.optional stdenv.isDarwin "strictoverflow";
+  hardeningDisable = lib.optional stdenv.hostPlatform.isDarwin "strictoverflow";
 
   meta = with lib; {
     homepage = "https://github.com/dsheets/ocaml-sodium";

@@ -16,6 +16,7 @@ let
     set  -g default-terminal "${cfg.terminal}"
     set  -g base-index      ${toString cfg.baseIndex}
     setw -g pane-base-index ${toString cfg.baseIndex}
+    set  -g history-limit   ${toString cfg.historyLimit}
 
     ${optionalString cfg.newSession "new-session"}
 
@@ -50,7 +51,6 @@ let
     setw -g aggressive-resize ${boolToStr cfg.aggressiveResize}
     setw -g clock-mode-style  ${if cfg.clock24 then "24" else "12"}
     set  -s escape-time       ${toString cfg.escapeTime}
-    set  -g history-limit     ${toString cfg.historyLimit}
 
     ${cfg.extraConfigBeforePlugins}
 
@@ -230,4 +230,6 @@ in {
   imports = [
     (lib.mkRenamedOptionModule [ "programs" "tmux" "extraTmuxConf" ] [ "programs" "tmux" "extraConfig" ])
   ];
+
+  meta.maintainers = with lib.maintainers; [ hxtmdev ];
 }

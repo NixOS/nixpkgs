@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ libgpg-error gpgme gettext installShellFiles ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   buildFeatures = [ "vault" "extract" "completions" "substitute" "process" ];
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--bin" "sy" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd sy \
       --bash <($out/bin/sy completions bash) \
       --fish <($out/bin/sy completions fish) \

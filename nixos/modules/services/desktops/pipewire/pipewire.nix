@@ -19,7 +19,7 @@ let
   '';
   cfg = config.services.pipewire;
   enable32BitAlsaPlugins = cfg.alsa.support32Bit
-                           && pkgs.stdenv.isx86_64
+                           && pkgs.stdenv.hostPlatform.isx86_64
                            && pkgs.pkgsi686Linux.pipewire != null;
 
   # The package doesn't output to $out/lib/pipewire directly so that the
@@ -332,7 +332,7 @@ in {
       {
         # JACK intentionally not checked, as PW-on-JACK setups are a thing that some people may want
         assertion = (cfg.alsa.enable || cfg.pulse.enable) -> cfg.audio.enable;
-        message = "Using PipeWire's ALSA/PulseAudio compatibility layers requires running PipeWire as the sound server. Set `services.pipewire.audio.enable` to true.";
+        message = "Using PipeWire's ALSA/PulseAudio compatibility layers requires running PipeWire as the sound server. Either set `services.pipewire.audio.enable` to true to enable audio support, or set both `services.pipewire.pulse.enable` and `services.pipewire.alsa.enable` to false to use pipewire exclusively for the compositor.";
       }
       {
         assertion = length
@@ -344,7 +344,7 @@ in {
                 )
                 config.environment.etc
             )) == 1;
-        message = "Using `environment.etc.\"pipewire<...>\"` directly is no longer supported in 24.05. Use `services.pipewire.extraConfig` or `services.pipewire.configPackages` instead.";
+        message = "Using `environment.etc.\"pipewire<...>\"` directly is no longer supported. Use `services.pipewire.extraConfig` or `services.pipewire.configPackages` instead.";
       }
     ];
 
@@ -410,8 +410,30 @@ in {
 
     networking.firewall.allowedUDPPorts = mkIf cfg.raopOpenFirewall [ 6001 6002 ];
 
-    users = mkIf cfg.systemWide {
-      users.pipewire = {
+    # See https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/master/src/modules/module-rt/25-pw-rlimits.conf.in
+    security.pam.loginLimits = [
+      {
+        domain = "@pipewire";
+        item = "rtprio";
+        type = "-";
+        value = 95;
+      }
+      {
+        domain = "@pipewire";
+        item = "nice";
+        type = "-";
+        value = -19;
+      }
+      {
+        domain = "@pipewire";
+        item = "memlock";
+        type = "-";
+        value = 4194304;
+      }
+    ];
+
+    users = {
+      users.pipewire = mkIf cfg.systemWide {
         uid = config.ids.uids.pipewire;
         group = "pipewire";
         extraGroups = [

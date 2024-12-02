@@ -1,15 +1,16 @@
 # This file has been autogenerate with cabal2nix.
 # Update via ./update.sh
-{ mkDerivation, base, cmdargs, directory, fetchzip, filepath, lib
-, megaparsec, mtl, parser-combinators, pretty-simple
-, safe-exceptions, scientific, text, transformers, unix
+{ mkDerivation, base, bytestring, cmdargs, directory, fetchzip
+, file-embed, filepath, lib, megaparsec, mtl, parser-combinators
+, pretty-simple, safe-exceptions, scientific, text, transformers
+, unix
 }:
 mkDerivation {
   pname = "nixfmt";
   version = "0.6.0";
   src = fetchzip {
-    url = "https://github.com/nixos/nixfmt/archive/83de1eceaae8a891ae52a3a2b82226540207309e.tar.gz";
-    sha256 = "0lnl9vlbyrfplmq3hpmpjlmhjdwwbgk900wgi25ib27v0mlgpnxp";
+    url = "https://github.com/nixos/nixfmt/archive/cb92834560306868e4020dd643f09482587c6e7a.tar.gz";
+    sha256 = "0fg2mdjny6i90bivw5d4wxl522azmcmikcak2ffgrq69qhjv21f6";
   };
   isLibrary = true;
   isExecutable = true;
@@ -18,7 +19,8 @@ mkDerivation {
     text transformers
   ];
   executableHaskellDepends = [
-    base cmdargs directory filepath safe-exceptions text unix
+    base bytestring cmdargs directory file-embed filepath
+    safe-exceptions text transformers unix
   ];
   jailbreak = true;
   homepage = "https://github.com/NixOS/nixfmt";

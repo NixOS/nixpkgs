@@ -5,20 +5,16 @@
 }:
 buildGoModule rec {
   pname = "astartectl";
-  version = "23.5.1";
-
-  # Workaround for go vendor failing
-  # https://github.com/astarte-platform/astartectl/pull/244
-  postPatch = "go mod edit -go=1.22";
+  version = "24.5.2";
 
   src = fetchFromGitHub {
     owner = "astarte-platform";
     repo = "astartectl";
     rev = "v${version}";
-    hash = "sha256-ntlLk7soiZq6Ql6k/RG9PdHawguRV6Wha8C+5FM+2og=";
+    hash = "sha256-T4/lkeipE7GWq1zTxkoV3MfADlduFKtGuB/dsI4YZZw=";
   };
 
-  vendorHash = "sha256-3k/G7fLll19XG2RU8YsepWv8BtkCmiLg4/c7lSvx+9k=";
+  vendorHash = "sha256-kVI1DigDlTvrYLVRUYoW+AAkd31d9EehjRJxrqo8OB4=";
 
   nativeBuildInputs = [ installShellFiles ];
 

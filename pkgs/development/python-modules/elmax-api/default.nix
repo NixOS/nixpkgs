@@ -2,16 +2,18 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   httpx,
   pyjwt,
   pythonOlder,
+  websockets,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "elmax-api";
-  version = "0.0.5";
-  format = "setuptools";
+  version = "0.0.6.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -19,12 +21,15 @@ buildPythonPackage rec {
     owner = "albertogeniola";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-57pmmH7f893H71CMhdnahvbN/5F2yfrVZ6MFpYQ4+mQ=";
+    hash = "sha256-71ewBzAMWncvgXII2VAcbSDwudxqA+MBCl+TCCwTxa4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     httpx
     pyjwt
+    websockets
     yarl
   ];
 

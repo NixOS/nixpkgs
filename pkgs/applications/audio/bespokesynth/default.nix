@@ -24,7 +24,7 @@
 , xcbutilkeysyms
 , xcb-util-cursor
 , gtk3
-, webkitgtk
+, webkitgtk_4_0
 , python3
 , curl
 , pcre
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     libXScrnSaver
     curl
     gtk3
-    webkitgtk
+    webkitgtk_4_0
     freetype
     libGL
     libusb1

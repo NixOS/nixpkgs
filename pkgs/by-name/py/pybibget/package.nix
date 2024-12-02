@@ -9,7 +9,7 @@ let
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1n4as3kdsgrcmxxyjz9klm0v0pb24rsa1b7r43j7wmnfsir8i81k";
+    hash = "sha256-M6CIctTOVn7kIPmsoHQmYl2wQaUzfel7ryw/3ebQitg=";
   };
 
 in

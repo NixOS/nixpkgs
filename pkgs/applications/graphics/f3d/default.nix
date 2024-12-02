@@ -15,7 +15,7 @@
 , opencascade-occt
 , assimp
 , fontconfig
-, withManual ? !stdenv.isDarwin
+, withManual ? !stdenv.hostPlatform.isDarwin
 , withPythonBinding ? false
 }:
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     opencascade-occt
     assimp
     fontconfig
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
     OpenGL
   ] ++ lib.optionals withPythonBinding [
@@ -80,5 +80,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bcdarwin pbsds ];
     platforms = with platforms; unix;
     mainProgram = "f3d";
+    # error: use of undeclared identifier 'NSMenuItem'
+    # adding AppKit does not solve it
+    broken = with stdenv.hostPlatform; isDarwin && isx86_64;
   };
 }

@@ -13,7 +13,7 @@ buildNimPackage {
   patches = [
     (fetchpatch {
       url = "https://github.com/unxsh/nitch/commit/6831cf96144f58c4da298a0bc9b50d33056f6c08.patch";
-      sha256 = "sha256-uZUzUBLHBsssNqDxZ0NuTRMN9/gBxIlIiGgQkqCqEFc=";
+      hash = "sha256-uZUzUBLHBsssNqDxZ0NuTRMN9/gBxIlIiGgQkqCqEFc=";
     })
     (fetchpatch {
       url = "https://github.com/ssleert/nitch/commit/ff10dea47dbc4d9736bd839b87869f53166cf395.patch";

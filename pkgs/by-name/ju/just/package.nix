@@ -12,20 +12,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "1.32.0";
+  version = "1.37.0";
   outputs = [ "out" "man" "doc" ];
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-4W0Ft4wM2iLeepqg9XnHV/uejJEE9gIBOwm7axnC8bo=";
+    hash = "sha256-WF1kyIZyqnIYfFL/HZWBER97aXH3FSCbTRonOKSwgNg=";
   };
 
-  cargoHash = "sha256-kjvc87HKMoKWImeAMiESb7xHuA+znX5z6MsWu6ThrhE=";
+  cargoHash = "sha256-/uWxYxczTOlUs2wOCCn5wwbGETHwIqdDI2mb/h4xVxQ=";
 
   nativeBuildInputs = [ installShellFiles mdbook ];
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   preCheck = ''
     # USER must not be empty

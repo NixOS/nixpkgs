@@ -29,6 +29,9 @@ buildGoModule rec {
     tests = {
       inherit (nixosTests) ddns-updater;
     };
+    # nixpkgs-update: no auto update
+    # Necessary only as rryantm keeps getting confused and thinks 2.6.1 is newer than 2.7.0
+    # TODO remove once version newer than 2.7.0 is released
     updateScript = nix-update-script { };
   };
 

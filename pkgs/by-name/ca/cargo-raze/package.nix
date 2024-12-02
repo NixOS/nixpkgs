@@ -36,9 +36,9 @@ rustPlatform.buildRustPackage {
     libgit2
     openssl
     curl
-  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Darwin issue: Os { code: 24, kind: Uncategorized, message: "Too many open files" }
     # https://github.com/google/cargo-raze/issues/544
     ulimit -n 1024

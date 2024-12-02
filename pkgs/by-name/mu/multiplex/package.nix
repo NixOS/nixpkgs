@@ -4,39 +4,44 @@
   fetchFromGitHub,
   pkg-config,
   gobject-introspection,
+  blueprint-compiler,
   wrapGAppsHook4,
   libadwaita,
 }:
 
 buildGoModule rec {
   pname = "multiplex";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "pojntfx";
     repo = "multiplex";
     rev = "v${version}";
-    hash = "sha256-6xZ46LeFuJXwd7s63YKekUIdb8ytdLk+rp+tFox27zY=";
+    hash = "sha256-qc8RHvU7uGbqtMGy/mYXHCxqvE6gekgfFOWwej33+zQ=";
   };
 
-  vendorHash = "sha256-S14dMAejoVTVn3rRdZyG+npM5kNehHwntJkeW3M7Stk=";
+  vendorHash = "sha256-VLlco6CeedoUM5gy8+5yLffAtMsjH/RQ+U4VYvY5mcg=";
 
   nativeBuildInputs = [
     pkg-config
     gobject-introspection
+    blueprint-compiler
     wrapGAppsHook4
   ];
 
   buildInputs = [ libadwaita ];
 
-  # recursively generate all files requested by go:generate
+  # generate files requested by go:generate
+  # don't generate in goModules because buildInputs isn't available
   preBuild = ''
-    go generate ./...
+    if [[ ! $name == *"-go-modules" ]]; then
+      go generate ./internal/resources/resources.go
+    fi
   '';
 
   postInstall = ''
     install -Dm644 -t $out/share/applications com.pojtinger.felicitas.Multiplex.desktop
-    install -Dm644 -t $out/share/metainfo com.pojtinger.felicitas.Multiplex.metainfo.xml
+    install -Dm644 -t $out/share/metainfo internal/resources/com.pojtinger.felicitas.Multiplex.metainfo.xml
     # The provided pixmap icons appears to be a bit blurry so not installing them
     install -Dm644 docs/icon.svg $out/share/icons/hicolor/scalable/apps/com.pojtinger.felicitas.Multiplex.svg
     install -Dm644 docs/icon-symbolic.svg $out/share/icons/hicolor/symbolic/apps/com.pojtinger.felicitas.Multiplex-symbolic.svg

@@ -15,15 +15,15 @@
 
 buildPythonPackage rec {
   pname = "uplc";
-  version = "1.0.4";
+  version = "1.0.7";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "OpShin";
     repo = "uplc";
-    rev = version;
-    hash = "sha256-Mio6VVgQKy1GMeHNk0DITks9Nhr3lA1t7zewu9734j4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-xK2k0XLybWqyP5Qa2Oby8YBgiiswR++yVK7NPgpdSa0=";
   };
 
   propagatedBuildInputs = [
@@ -37,16 +37,11 @@ buildPythonPackage rec {
     python-secp256k1-cardano
   ];
 
-  pythonRelaxDeps = [
-    "pycardano"
-    "rply"
-  ];
-
   pythonImportsCheck = [ "uplc" ];
 
   meta = with lib; {
     description = "Python implementation of untyped plutus language core";
-    homepage = "https://opshin.dev";
+    homepage = "https://github.com/OpShin/uplc";
     license = licenses.mit;
     maintainers = with maintainers; [ t4ccer ];
     mainProgram = "opshin";

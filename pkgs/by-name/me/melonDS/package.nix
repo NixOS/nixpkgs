@@ -2,6 +2,7 @@
   lib,
   SDL2,
   cmake,
+  enet,
   extra-cmake-modules,
   fetchFromGitHub,
   libGL,
@@ -26,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";
-  version = "0.9.5-unstable-2024-07-21";
+  version = "1.0rc-unstable-2024-11-27";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "837a58208711722e1762098c2a0244c2d8409864";
-    hash = "sha256-SSW/+wLnZKlldVIBXMqDvXuwyK1LxcfON6ZTKLxY68U=";
+    rev = "cba838dd52a8d163c59e312d75f451a04cea9b48";
+    hash = "sha256-0Pv2ARbQkYaGDQ7AMLlMdK1MjnsctPIIWxGz2XNTNmI=";
   };
 
   nativeBuildInputs = [
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       SDL2
+      enet
       extra-cmake-modules
       libarchive
       libslirp
@@ -52,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       qtmultimedia
       zstd
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       wayland
       qtwayland
     ];
@@ -62,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   qtWrapperArgs =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       "--prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           libpcap
@@ -70,16 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
     ];
-
-  installPhase = lib.optionalString stdenv.isDarwin ''
-    runHook preInstall
-    mkdir -p $out/Applications
-    cp -r melonDS.app $out/Applications/
-    runHook postInstall
-  '';
 
   passthru = {
     updateScript = unstableGitUpdater { };

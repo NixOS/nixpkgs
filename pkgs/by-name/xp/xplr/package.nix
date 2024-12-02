@@ -8,13 +8,13 @@ rustPlatform.buildRustPackage rec {
     owner = "sayanarijit";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0c2QJUEQwKEzzDBDP5XdX7xe1rivazsoZtepB4Dxp/c=";
+    hash = "sha256-0c2QJUEQwKEzzDBDP5XdX7xe1rivazsoZtepB4Dxp/c=";
   };
 
   cargoHash = "sha256-RZgdWhVBZozYxbbNslCBLhN6EnogpyVXvht6GbzLnPs=";
 
   # fixes `thread 'main' panicked at 'cannot find strip'` on x86_64-darwin
-  env = lib.optionalAttrs (stdenv.isx86_64 && stdenv.isDarwin) {
+  env = lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin) {
     TARGET_STRIP = "${stdenv.cc.targetPrefix}strip";
   };
 

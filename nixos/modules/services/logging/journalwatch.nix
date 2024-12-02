@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-with lib;
-
 let
   cfg = config.services.journalwatch;
   user = "journalwatch";
@@ -15,7 +13,7 @@ let
     priority = ${toString cfg.priority}
     mail_from = ${cfg.mailFrom}
   ''
-  + optionalString (cfg.mailTo != null) ''
+  + lib.optionalString (cfg.mailTo != null) ''
     mail_to = ${cfg.mailTo}
   ''
   + cfg.extraConfig);
@@ -27,7 +25,7 @@ let
   '';
 
   # empty line at the end needed to to separate the blocks
-  mkPatterns = filterBlocks: concatStringsSep "\n" (map (block: ''
+  mkPatterns = filterBlocks: lib.concatStringsSep "\n" (map (block: ''
     ${block.match}
     ${block.filters}
 
@@ -48,18 +46,18 @@ let
 in {
   options = {
     services.journalwatch = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           If enabled, periodically check the journal with journalwatch and report the results by mail.
         '';
       };
 
-      package = mkPackageOption pkgs "journalwatch" { };
+      package = lib.mkPackageOption pkgs "journalwatch" { };
 
-      priority = mkOption {
-        type = types.int;
+      priority = lib.mkOption {
+        type = lib.types.int;
         default = 6;
         description = ''
           Lowest priority of message to be considered.
@@ -73,33 +71,33 @@ in {
       # HACK: this is a workaround for journalwatch's usage of socket.getfqdn() which always returns localhost if
       # there's an alias for the localhost on a separate line in /etc/hosts, or take for ages if it's not present and
       # then return something right-ish in the direction of /etc/hostname. Just bypass it completely.
-      mailFrom = mkOption {
-        type = types.str;
+      mailFrom = lib.mkOption {
+        type = lib.types.str;
         default = "journalwatch@${config.networking.hostName}";
-        defaultText = literalExpression ''"journalwatch@''${config.networking.hostName}"'';
+        defaultText = lib.literalExpression ''"journalwatch@''${config.networking.hostName}"'';
         description = ''
           Mail address to send journalwatch reports from.
         '';
       };
 
-      mailTo = mkOption {
-        type = types.nullOr types.str;
+      mailTo = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Mail address to send journalwatch reports to.
         '';
       };
 
-      mailBinary = mkOption {
-        type = types.path;
+      mailBinary = lib.mkOption {
+        type = lib.types.path;
         default = "/run/wrappers/bin/sendmail";
         description = ''
           Sendmail-compatible binary to be used to send the messages.
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.str;
+      extraConfig = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           Extra lines to be added verbatim to the journalwatch/config configuration file.
@@ -108,11 +106,11 @@ in {
           '';
       };
 
-      filterBlocks = mkOption {
-        type = types.listOf (types.submodule {
+      filterBlocks = lib.mkOption {
+        type = lib.types.listOf (lib.types.submodule {
           options = {
-           match = mkOption {
-              type = types.str;
+           match = lib.mkOption {
+              type = lib.types.str;
               example = "SYSLOG_IDENTIFIER = systemd";
               description = ''
                 Syntax: `field = value`
@@ -125,8 +123,8 @@ in {
               '';
             };
 
-            filters = mkOption {
-              type = types.str;
+            filters = lib.mkOption {
+              type = lib.types.str;
               example = ''
                 (Stopped|Stopping|Starting|Started) .*
                 (Reached target|Stopped target) .*
@@ -190,8 +188,8 @@ in {
         '';
       };
 
-      interval = mkOption {
-        type = types.str;
+      interval = lib.mkOption {
+        type = lib.types.str;
         default = "hourly";
         description = ''
           How often to run journalwatch.
@@ -199,8 +197,8 @@ in {
           The format is described in systemd.time(7).
         '';
       };
-      accuracy = mkOption {
-        type = types.str;
+      accuracy = lib.mkOption {
+        type = lib.types.str;
         default = "10min";
         description = ''
           The time window around the interval in which the journalwatch run will be scheduled.
@@ -211,7 +209,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.${user} = {
       isSystemUser = true;
@@ -242,7 +240,7 @@ in {
         # requires a relative directory name to create beneath /var/lib
         StateDirectory = user;
         StateDirectoryMode = "0750";
-        ExecStart = "${getExe cfg.package} mail";
+        ExecStart = "${lib.getExe cfg.package} mail";
         # lowest CPU and IO priority, but both still in best-effort class to prevent starvation
         Nice=19;
         IOSchedulingPriority=7;

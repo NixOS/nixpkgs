@@ -17,9 +17,9 @@ buildBazelPackage rec {
   removeRulesCC = false;
   removeLocalConfigCC = false;
 
-  LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
+  LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
-  fetchAttrs.sha256 = "sha256-WOBlZ0XNrl5UxIaSDxZeOfzS2a8ZkrKdTLKHBDC9UNQ=";
+  fetchAttrs.hash = "sha256-WOBlZ0XNrl5UxIaSDxZeOfzS2a8ZkrKdTLKHBDC9UNQ=";
 
   buildAttrs.installPhase = ''
     mkdir -p $out/bin

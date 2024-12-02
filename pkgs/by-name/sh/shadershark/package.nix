@@ -9,6 +9,8 @@
 , imagemagick
 , makeWrapper
 , installShellFiles
+, genericUpdater
+, writeShellScript
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = [ ./update.sh finalAttrs.src.url ];
+  passthru.updateScript = genericUpdater {
+    inherit (finalAttrs) pname version;
+    versionLister = writeShellScript "shadershark-tags" ''
+      repo_url=${finalAttrs.src.url}
+      curl "$repo_url/tags" | grep '/rev/v' | sed 's;.*/rev/v\([^"]*\)[^$]*;\1; #'
+    '';
+  };
 
   meta = with lib; {
     mainProgram = "shader-shark";

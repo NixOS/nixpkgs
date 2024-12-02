@@ -11,18 +11,20 @@ let
   platformInfos = {
     "x86_64-linux" = {
       platform = "manylinux1_x86_64";
-      hash = "sha256-IJFuMtrddHciuHGeiCuv4hgco9E3GJveegL7dBmVmAw=";
+      hash = "sha256-aTANmCWyR8QVZVQGk1WbgjWjZeBSUN2ZVNg5ab9s6n0=";
     };
     "x86_64-darwin" = {
       platform = "macosx_10_9_universal2";
-      hash = "sha256-eTD8NnmDTMSB0dt5skPOlWbnW6AexxEkKZ9ABc+kUas=";
+      hash = "sha256-9ihkrgcREVbp7GDvl7w1MlpAWmpjHFusJYNqvBnQij4=";
     };
   };
-  platformInfo = platformInfos.${stdenv.system} or (throw "Unsupported platform ${stdenv.system}");
+
+  inherit (stdenv.hostPlatform) system;
+  platformInfo = platformInfos.${system} or (throw "Unsupported platform ${system}");
 in
 python3Packages.buildPythonApplication rec {
   pname = "sourcery";
-  version = "1.19.0";
+  version = "1.23.0";
   format = "wheel";
 
   src = fetchPypi {
@@ -30,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     inherit (platformInfo) platform hash;
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [ zlib ];
 

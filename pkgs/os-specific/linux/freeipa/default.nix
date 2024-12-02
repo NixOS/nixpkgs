@@ -39,6 +39,7 @@ let
   pathsPy = ./paths.py;
 
   pythonInputs = with python3.pkgs; [
+    distutils
     six
     python-ldap
     dnspython

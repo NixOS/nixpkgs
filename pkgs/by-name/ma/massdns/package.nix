@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "PROJECT_FLAGS=-DMASSDNS_REVISION='\"v${version}\"'"
   ];
-  buildFlags = if stdenv.isLinux then "all" else "nolinux";
+  buildFlags = if stdenv.hostPlatform.isLinux then "all" else "nolinux";
 
   passthru.updateScript = nix-update-script { };
 

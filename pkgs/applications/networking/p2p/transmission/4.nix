@@ -55,7 +55,7 @@ let
     zlib
   ]
   ++ optionals enableSystemd [ systemd ]
-  ++ optionals stdenv.isLinux [ inotify-tools ]);
+  ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ]);
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_MAC" false) # requires xcodebuild
     (cmakeBool "ENABLE_QT" (enableQt5 || enableQt6))
     (cmakeBool "INSTALL_LIB" installLib)
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
     # Transmission sets this to 10.13 if not explicitly specified, see https://github.com/transmission/transmission/blob/0be7091eb12f4eb55f6690f313ef70a66795ee72/CMakeLists.txt#L7-L16.
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
   ];
@@ -113,6 +113,10 @@ stdenv.mkDerivation (finalAttrs: {
       cmake/FindUtfCpp.cmake
     # Upstream uses different config file name.
     substituteInPlace CMakeLists.txt --replace 'find_package(UtfCpp)' 'find_package(utf8cpp)'
+
+    # Use gettext even on Darwin
+    substituteInPlace libtransmission/utils.h \
+      --replace-fail '#if defined(HAVE_GETTEXT) && !defined(__APPLE__)' '#if defined(HAVE_GETTEXT)'
   '';
 
   nativeBuildInputs = [
@@ -145,8 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals enableQt6 (with qt6Packages; [ qttools qtbase qtsvg ])
   ++ optionals enableGTK3 [ gtkmm3 xorg.libpthreadstubs ]
   ++ optionals enableSystemd [ systemd ]
-  ++ optionals stdenv.isLinux [ inotify-tools ]
-  ++ optionals stdenv.isDarwin [ libiconv Foundation ];
+  ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ];
 
   postInstall = ''
     mkdir $apparmor

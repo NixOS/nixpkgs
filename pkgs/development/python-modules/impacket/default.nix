@@ -8,6 +8,7 @@
   ldap3,
   ldapdomaindump,
   pyasn1,
+  pyasn1-modules,
   pycryptodomex,
   pyopenssl,
   pythonOlder,
@@ -18,15 +19,17 @@
 
 buildPythonPackage rec {
   pname = "impacket";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7kA5tNKu3o9fZEeLxZ+qyGA2eWviTeqNwY8An7CQXko=";
+    hash = "sha256-iVh9G4NqUiDXSEjJNHV5YrOCiG3KixtKDETWk/JgBkM=";
   };
+
+  pythonRelaxDeps = [ "pyopenssl" ];
 
   build-system = [ setuptools ];
 
@@ -37,6 +40,7 @@ buildPythonPackage rec {
     ldap3
     ldapdomaindump
     pyasn1
+    pyasn1-modules
     pycryptodomex
     pyopenssl
     setuptools

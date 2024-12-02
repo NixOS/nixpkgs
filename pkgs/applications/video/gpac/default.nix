@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cctools, pkg-config, Carbon, zlib }:
+{ lib, stdenv, fetchFromGitHub, cctools, pkg-config, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "gpac";
@@ -15,14 +15,12 @@ stdenv.mkDerivation rec {
   # For most other functionality, this should probably be extended
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
   ];
 
   buildInputs = [
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    Carbon
   ];
 
   enableParallelBuilding = true;

@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.37.2";
+  version = "0.40.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "encode";
     repo = "starlette";
     rev = "refs/tags/${version}";
-    hash = "sha256-GiCN1sfhLu9i19d2OcLZrlY8E64DFrFh+ITRSvLaxdE=";
+    hash = "sha256-CBkDDsIw9LAIeAzN5E9gdEvznFugoa/RilPmnwcJBy4=";
   };
 
   build-system = [ hatchling ];
@@ -63,6 +63,8 @@ buildPythonPackage rec {
     "ignore::DeprecationWarning"
     "-W"
     "ignore::trio.TrioDeprecationWarning"
+    "-W"
+    "ignore::ResourceWarning" # FIXME remove once test suite is fully compatible with anyio 4.4.0
   ];
 
   pythonImportsCheck = [ "starlette" ];

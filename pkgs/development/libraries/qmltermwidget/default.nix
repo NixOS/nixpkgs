@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   buildInputs = [
     qtbase
     qtmultimedia
-  ] ++ lib.optional stdenv.isDarwin utmp;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin utmp;
 
   patches = [
     # Changes required to make it compatible with lomiri-terminal-app

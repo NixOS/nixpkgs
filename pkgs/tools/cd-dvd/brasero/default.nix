@@ -39,6 +39,10 @@ in stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PATH : "${binpath}")
   '';
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
+
   meta = with lib; {
     description = "Gnome CD/DVD Burner";
     homepage = "https://gitlab.gnome.org/GNOME/brasero";

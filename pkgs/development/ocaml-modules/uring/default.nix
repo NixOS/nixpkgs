@@ -37,7 +37,9 @@ buildDunePackage rec {
     mdx.bin
   ];
 
-  doCheck = true;
+  # Tests use io_uring, which is blocked by Lix's sandbox because it's
+  # opaque to seccomp.
+  doCheck = false;
 
   dontStrip = true;
 

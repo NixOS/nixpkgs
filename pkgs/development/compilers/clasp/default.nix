@@ -9,7 +9,6 @@
 , boost
 , libunwind
 , ninja
-, cacert
 }:
 
 let
@@ -71,7 +70,7 @@ stdenv.mkDerivation rec {
     platforms = ["x86_64-linux" "x86_64-darwin"];
     # Upstream claims support, but breaks with:
     # error: use of undeclared identifier 'aligned_alloc'
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/clasp-developers/clasp";
     mainProgram = "clasp";
   };

@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dermotduffy/motioneye-client";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

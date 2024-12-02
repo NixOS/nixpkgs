@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-egwL3z7uB4AcRwPT0uPrenyh4FSxhbZKMdkPhRztMbs=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Recursive blake2 digest (hash) of a file-system path";

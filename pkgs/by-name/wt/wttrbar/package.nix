@@ -8,18 +8,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wttrbar";
-  version = "0.10.5";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "bjesus";
     repo = "wttrbar";
     rev = version;
-    hash = "sha256-u+JrmpXDH+9tsjATs6xLjjQmuBWCuE9daPlJUWfcm+A=";
+    hash = "sha256-FJexqBzsLeaF7iWWwcenRINpMRtkpThxLWlMEectjfQ=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ Security SystemConfiguration ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ Security SystemConfiguration ]);
 
-  cargoHash = "sha256-UUIDiTXGWezbPVjz5OqFivnmLaIJ/yZYBgob4CAt43s=";
+  cargoHash = "sha256-4pcMcCxidNY4EIvYWGa/cfovRGHMEIcVfJWiMG/8aog=";
 
   passthru.updateScript = nix-update-script { };
 

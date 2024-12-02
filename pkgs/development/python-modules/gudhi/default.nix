@@ -7,7 +7,7 @@
   boost,
   eigen,
   gmp,
-  cgal, # see https://github.com/NixOS/nixpkgs/pull/94875 about cgal
+  cgal,
   mpfr,
   tbb,
   numpy,
@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "gudhi";
-  version = "3.9.0";
+  version = "3.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     repo = "gudhi-devel";
     rev = "tags/gudhi-release-${version}";
     fetchSubmodules = true;
-    hash = "sha256-VL6RIPe8a2/cUHnHOql9e9EUMBB9QU311kMCaMZTbGI=";
+    hash = "sha256-zHjSGm3hk3FZQmyQ03y14vJp5xeoofvij1hczKidvVA=";
   };
 
   nativeBuildInputs = [

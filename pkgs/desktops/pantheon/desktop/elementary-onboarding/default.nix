@@ -10,6 +10,7 @@
 , appcenter
 , elementary-settings-daemon
 , glib
+, gnome-settings-daemon
 , granite7
 , gtk4
 , libadwaita
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-onboarding";
-  version = "7.2.0";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "onboarding";
     rev = version;
-    sha256 = "sha256-5vEKQUGg5KQSheM6tSK8uieEfCqlY6pABfPb/333FHU=";
+    sha256 = "sha256-tLqLGkcryXGe1wsupgwtnNtFj5aXXUPrwkpxUQmyJFM=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     appcenter # settings schema
     elementary-settings-daemon # settings schema
     glib
+    gnome-settings-daemon # org.gnome.settings-daemon.plugins.color
     granite7
     gtk4
     libadwaita

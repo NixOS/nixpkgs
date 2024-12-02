@@ -59,6 +59,7 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
     startupWMClass = wmClass;
   };
 
+  vmoptsIDE = if hiName == "WEBSTORM" then "WEBIDE" else hiName;
   vmoptsFile = lib.optionalString (vmopts != null) (writeText vmoptsName vmopts);
 
   nativeBuildInputs = [ makeWrapper patchelf unzip autoPatchelfHook ];
@@ -103,7 +104,14 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
     jdk=${jdk.home}
     item=${desktopItem}
 
-    wrapProgram  "$out/$pname/bin/${loName}.sh" \
+    launcher="$out/$pname/bin/${loName}"
+    if [ -e "$launcher" ]; then
+      rm "$launcher".sh # We do not wrap the old script-style launcher anymore.
+    else
+      launcher+=.sh
+    fi
+
+    wrapProgram  "$launcher" \
       --prefix PATH : "${lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
       --suffix PATH : "${lib.makeBinPath [ python3 ]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLdPath}" \
@@ -114,9 +122,9 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
       --set-default JETBRAINS_CLIENT_JDK "$jdk" \
       --set-default ${hiName}_JDK "$jdk" \
       --set-default LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
-      --set-default ${hiName}_VM_OPTIONS ${vmoptsFile}
+      --set-default ${vmoptsIDE}_VM_OPTIONS ${vmoptsFile}
 
-    ln -s "$out/$pname/bin/${loName}.sh" $out/bin/$pname
+    ln -s "$launcher" $out/bin/$pname
     rm -rf $out/$pname/plugins/remote-dev-server/selfcontained/
     echo -e '#!/usr/bin/env bash\n'"$out/$pname/bin/remote-dev-server.sh"' "$@"' > $out/$pname/bin/remote-dev-server-wrapped.sh
     chmod +x $out/$pname/bin/remote-dev-server-wrapped.sh

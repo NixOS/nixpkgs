@@ -3,7 +3,7 @@
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt
 , withPdfReader      ? true
-, pipewireSupport    ? stdenv.isLinux
+, pipewireSupport    ? stdenv.hostPlatform.isLinux
 , pipewire
 , qtwayland
 , qtbase
@@ -26,15 +26,17 @@ let
     stripRoot = false;
   };
 
-  version = "3.2.1";
+  version = "3.3.1";
 in
 
 python3.pkgs.buildPythonApplication {
   pname = "qutebrowser" + lib.optionalString (!isQt6) "-qt5";
   inherit version;
+  pyproject = true;
+
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/qutebrowser-${version}.tar.gz";
-    hash = "sha256-AqevKmxds42HsiWwuEEsgNmDgzXzLQ6KOPbX+804iX0=";
+    hash = "sha256-qttkrMxzC8mhXONByaBYCx82OD7Uh09U0xzh2r6U4Xo=";
   };
 
   # Needs tox
@@ -43,8 +45,12 @@ python3.pkgs.buildPythonApplication {
   buildInputs = [
     qtbase
     glib-networking
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
+  ];
+
+  build-system = with python3.pkgs; [
+    setuptools
   ];
 
   nativeBuildInputs = [

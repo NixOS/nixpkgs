@@ -39,7 +39,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     metrics = [ motmetrics ];
     video = [ opencv4 ];
   };

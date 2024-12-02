@@ -16,14 +16,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-error-reporting";
-  version = "1.11.0";
+  version = "1.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+oeVT/ag00BEObbqzkC/EazEwnrWvRURnz3gnCBbn4k=";
+    pname = "google_cloud_error_reporting";
+    inherit version;
+    hash = "sha256-1ir8o3jwzmfi7E8QPTn3E6RGtTOL9KM05NRaMRYzh5A=";
   };
 
   build-system = [ setuptools ];
@@ -38,8 +39,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     google-cloud-testutils
     mock
-    pytestCheckHook
     pytest-asyncio
+    pytestCheckHook
   ];
 
   disabledTests = [

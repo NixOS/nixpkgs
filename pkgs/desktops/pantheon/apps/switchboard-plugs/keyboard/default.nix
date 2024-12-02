@@ -7,12 +7,12 @@
 , ninja
 , pkg-config
 , vala
+, libadwaita
 , libgee
 , gnome-settings-daemon
-, granite
+, granite7
 , gsettings-desktop-schemas
-, gtk3
-, libhandy
+, gtk4
 , libxml2
 , libgnomekbd
 , libxklavier
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
-  version = "3.2.1";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4LfS2F8pLbZw+HhnEVmZqbEaNCM96q+lqnf4sUBDVJI=";
+    sha256 = "sha256-jOUrotgtSRmSVsxOXEbQfIi92BlpIPye7maCsa+ssT8=";
   };
 
   patches = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit ibus onboard libgnomekbd;
+      inherit onboard libgnomekbd;
     })
   ];
 
@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gnome-settings-daemon # media-keys
-    granite
+    granite7
     gsettings-desktop-schemas
-    gtk3
+    gtk4
     ibus
+    libadwaita
     libgee
-    libhandy
     libxklavier
     switchboard
   ];

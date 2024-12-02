@@ -76,8 +76,8 @@ stdenv.mkDerivation rec {
   FONTCONFIG_FILE = fontsConf;
   LD_LIBRARY_PATH = libPath;
   NIX_LDFLAGS = lib.concatStringsSep " " [
-    (lib.optionalString (stdenv.cc.isGNU && !stdenv.isDarwin) "-lgcc_s")
-    (lib.optionalString stdenv.isDarwin "-framework CoreFoundation")
+    (lib.optionalString (stdenv.cc.isGNU && !stdenv.hostPlatform.isDarwin) "-lgcc_s")
+    (lib.optionalString stdenv.hostPlatform.isDarwin "-framework CoreFoundation")
   ];
 
   nativeBuildInputs = [
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
       gsettings-desktop-schemas
       gtk3
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       CoreFoundation
     ];
@@ -110,14 +110,14 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=("--prefix" "LD_LIBRARY_PATH" ":" ${LD_LIBRARY_PATH})
   '';
 
-  shared = if stdenv.isDarwin then "dylib" else "shared";
+  shared = if stdenv.hostPlatform.isDarwin then "dylib" else "shared";
   configureFlags =
     [
       "--enable-${shared}"
       "--enable-lt=${libtool}/bin/libtool"
     ]
     ++ lib.optionals disableDocs [ "--disable-docs" ]
-    ++ lib.optionals stdenv.isDarwin [ "--enable-xonx" ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--enable-xonx" ];
 
   configureScript = "../configure";
 
@@ -145,6 +145,6 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    broken = stdenv.isDarwin; # No support yet for setting FFI lookup path
+    broken = stdenv.hostPlatform.isDarwin; # No support yet for setting FFI lookup path
   };
 }

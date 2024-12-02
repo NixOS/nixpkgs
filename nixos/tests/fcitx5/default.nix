@@ -14,22 +14,20 @@ rec {
       pkgs.alacritty
     ];
 
+    services.displayManager.autoLogin = {
+      enable = true;
+      user = "alice";
+    };
+
     services.xserver = {
       enable = true;
-
-      displayManager = {
-        lightdm.enable = true;
-        autoLogin = {
-          enable = true;
-          user = "alice";
-        };
-      };
-
+      displayManager.lightdm.enable = true;
       desktopManager.xfce.enable = true;
     };
 
     i18n.inputMethod = {
-      enabled = "fcitx5";
+      enable = true;
+      type = "fcitx5";
       fcitx5.addons = [
         pkgs.fcitx5-chinese-addons
         pkgs.fcitx5-hangul

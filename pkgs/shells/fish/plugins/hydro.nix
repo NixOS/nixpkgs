@@ -2,7 +2,7 @@
 
 buildFishPlugin rec {
   pname = "hydro";
-  version = "unstable-2024-03-24";
+  version = "0-unstable-2024-03-24";
 
   src = fetchFromGitHub {
     owner = "jorgebucaran";

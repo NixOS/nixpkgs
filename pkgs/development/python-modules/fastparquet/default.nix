@@ -58,7 +58,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     lzo = [ python-lzo ];
   };
 

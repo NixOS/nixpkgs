@@ -120,6 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "ghdl";
     maintainers = with lib.maintainers; [ lucus16 thoughtpolice ];
-    platforms = lib.platforms.linux;
+    platforms =
+      lib.platforms.linux
+      ++ lib.optionals (backend == "mcode" || backend == "llvm") [ "x86_64-darwin" ];
   };
 })

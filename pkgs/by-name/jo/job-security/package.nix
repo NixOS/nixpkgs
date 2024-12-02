@@ -23,6 +23,6 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ asl20 mit mpl20 ];
     maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "jobs";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

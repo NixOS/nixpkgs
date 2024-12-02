@@ -16,7 +16,7 @@
 , ninja
 , glib
 , python3
-, x11Support? !stdenv.isDarwin, libXft
+, x11Support? !stdenv.hostPlatform.isDarwin, libXft
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , buildPackages, gobject-introspection
 , testers
@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pango";
-  version = "1.52.2";
+  version = "1.54.0";
 
   outputs = [ "bin" "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = with finalAttrs; "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-0Adq/gEIKBS4U97smfk0ns5fLOg5CLjlj/c2tB94qWs=";
+    hash = "sha256-ip7tdQIe5zTX/A/fOmXDu6Ud/v5K5RqbQUpgxwstHtg=";
   };
 
   depsBuildBuild = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fribidi
     libthai
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
     Carbon
     CoreGraphics
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonBool "documentation" withIntrospection)
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "xft" x11Support)
   ];

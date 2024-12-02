@@ -36,7 +36,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     stats = [
       scipy
       statsmodels

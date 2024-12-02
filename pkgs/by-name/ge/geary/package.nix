@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
   version = "46.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "r60VEwKBfd8Ji15BbnrH8tXupWejuAu5C9PGKv0TuaE=";
+    url = "mirror://gnome/sources/geary/${lib.versions.major version}/geary-${version}.tar.xz";
+    hash = "sha256-r60VEwKBfd8Ji15BbnrH8tXupWejuAu5C9PGKv0TuaE=";
   };
 
   nativeBuildInputs = [
@@ -142,12 +142,13 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "geary";
     };
   };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/geary";
+    changelog = "https://gitlab.gnome.org/GNOME/geary/-/blob/${version}/NEWS?ref_type=tags";
     description = "Mail client for GNOME 3";
     maintainers = teams.gnome.members;
     license = licenses.lgpl21Plus;

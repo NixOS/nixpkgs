@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     unset CPP
   '';
 
-  configureFlags = lib.optionals stdenv.isDarwin [
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--disable-nls"
   ];
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id $out/lib/libnewt.so.${version} $out/lib/libnewt.so.${version}
     install_name_tool -change libnewt.so.${version} $out/lib/libnewt.so.${version} $out/bin/whiptail
   '';

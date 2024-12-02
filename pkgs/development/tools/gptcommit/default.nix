@@ -11,7 +11,7 @@
 
 let
   pname = "gptcommit";
-  version = "0.5.16";
+  version = "0.5.17";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -20,18 +20,18 @@ rustPlatform.buildRustPackage {
     owner = "zurawiki";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-JhMkK2zw3VL9o7j8DJmjY/im+GyCjfV2TJI3GDo8T8c=";
+    hash = "sha256-MB78QsJA90Au0bCUXfkcjnvfPagTPZwFhFVqxix+Clw=";
   };
 
-  cargoHash = "sha256-ye9MAfG3m24ofV95Kr+KTP4FEqfrsm3aTQ464hG9q08=";
+  cargoHash = "sha256-F4nabUeQZMnmSNC8KlHjx3IcyR2Xn36kovabmJ6g1zo=";
 
   nativeBuildInputs = [ pkg-config ];
 
   # 0.5.6 release has failing tests
   doCheck = false;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ]
-    ++ lib.optionals stdenv.isLinux [ openssl ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   passthru = {
     updateScript = nix-update-script { };

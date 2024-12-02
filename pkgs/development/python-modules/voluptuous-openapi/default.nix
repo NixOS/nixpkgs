@@ -15,15 +15,14 @@
 
 buildPythonPackage rec {
   pname = "voluptuous-openapi";
-  version = "0.0.4";
+  version = "0.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Shulyaka";
+    owner = "home-assistant-libs";
     repo = "voluptuous-openapi";
-    # TODO: https://github.com/Shulyaka/voluptuous-openapi/commit/155f2dd6d55998c41aaafe0aa8a980f78f9e478b#commitcomment-142845137
-    rev = "155f2dd6d55998c41aaafe0aa8a980f78f9e478b";
-    hash = "sha256-ciAaWTltPKT9NzfxWoX6gk1gSMszQjVVimfn/0D+mfg=";
+    rev = "v${version}";
+    hash = "sha256-QZi2uxFrYMSJVKIHTRBlGAM1sCD6oIzsZNQH7zkXL8w=";
   };
 
   build-system = [ setuptools ];
@@ -35,8 +34,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "voluptuous_openapi" ];
 
   meta = with lib; {
+    changelog = "https://github.com/home-assistant-libs/voluptuous-openapi/releases/tag/${src.rev}";
     description = "Convert voluptuous schemas to OpenAPI Schema object";
-    homepage = "https://github.com/Shulyaka/voluptuous-openapi";
+    homepage = "https://github.com/home-assistant-libs/voluptuous-openapi";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];
   };

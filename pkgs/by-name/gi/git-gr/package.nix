@@ -15,7 +15,7 @@ let
   canRunGitGr = stdenv.hostPlatform.emulatorAvailable buildPackages;
   gitGr = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/git-gr";
   pname = "git-gr";
-  version = "1.4.1";
+  version = "1.4.3";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -24,22 +24,22 @@ rustPlatform.buildRustPackage {
     owner = "9999years";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-8Z4ZLejNS6KQ/MXmQuZ0Tq9VmuJ5Nhxo4TS0tOlg/R4=";
+    hash = "sha256-t308Ep27iRvRHSdvVMOrRGVoajBtnTutHAkKbZkO7Wg=";
   };
 
   buildFeatures = [ "clap_mangen" ];
 
-  cargoHash = "sha256-REtY+UgtJCoTDgpI/+O341WsC4WJ4PS7/yFwWSVKKRo=";
+  cargoHash = "sha256-oukVU3YZMI2Z6HqIrEe2npmCj9PtwQUT6VOPkklM0Ig=";
 
   OPENSSL_NO_VENDOR = true;
 
   nativeBuildInputs =
     [installShellFiles]
-    ++ lib.optional stdenv.isLinux pkg-config;
+    ++ lib.optional stdenv.hostPlatform.isLinux pkg-config;
 
   buildInputs =
-    lib.optional stdenv.isLinux openssl
-    ++ lib.optionals stdenv.isDarwin [
+    lib.optional stdenv.hostPlatform.isLinux openssl
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       darwin.apple_sdk.frameworks.CoreServices
       darwin.apple_sdk.frameworks.SystemConfiguration

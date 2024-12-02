@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cage";
-  version = "0.1.5";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
-    owner = "Hjdskes";
+    owner = "cage-kiosk";
     repo = "cage";
-    rev = "v${version}";
-    hash = "sha256-Suq14YRw/MReDRvO/TQqjpZvpzAEDnHUyVbQj0BPT4c=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2SFtz62z0EF8cpFTC6wGi125MD4a5mkXqP/C+7fH+3g=";
   };
 
   depsBuildBuild = [
@@ -29,9 +29,7 @@ stdenv.mkDerivation rec {
     systemd libGL libX11
   ];
 
-  mesonFlags = [ "-Dxwayland=${lib.boolToString (xwayland != null)}" ];
-
-  postFixup = lib.optionalString (xwayland != null) ''
+  postFixup = lib.optionalString wlroots.enableXWayland ''
     wrapProgram $out/bin/cage --prefix PATH : "${xwayland}/bin"
   '';
 

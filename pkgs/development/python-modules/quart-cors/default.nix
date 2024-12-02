@@ -14,12 +14,13 @@
   # tests
   pytestCheckHook,
   pytest-asyncio,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "quart-cors";
   version = "0.7.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pgjones";
@@ -28,20 +29,16 @@ buildPythonPackage rec {
     hash = "sha256-qUzs0CTZHf3fGADBXPkd3CjZ6dnz1t3cTxflMErvz/k=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--no-cov-on-fail " ""
-  '';
-
-  propagatedBuildInputs = [ quart ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  dependencies = [ quart ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   pythonImportsCheck = [ "quart_cors" ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    pytest-cov-stub
   ];
 
   meta = with lib; {

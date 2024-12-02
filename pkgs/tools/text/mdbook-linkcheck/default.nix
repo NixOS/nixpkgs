@@ -14,9 +14,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-AwixlCL5ZcLgj9wYeBvkSy2U6J8alXf488l8DMn73w4=";
 
-  buildInputs = if stdenv.isDarwin then [ Security ] else [ openssl ];
+  buildInputs = if stdenv.hostPlatform.isDarwin then [ Security ] else [ openssl ];
 
-  nativeBuildInputs = lib.optionals (!stdenv.isDarwin) [ pkg-config ];
+  nativeBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ];
 
   OPENSSL_NO_VENDOR = 1;
 

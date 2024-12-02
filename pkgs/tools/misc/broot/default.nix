@@ -13,22 +13,22 @@
 , xorg
 , zlib
 , buildPackages
-, withClipboard ? !stdenv.isDarwin
-, withTrash ? !stdenv.isDarwin
+, withClipboard ? !stdenv.hostPlatform.isDarwin
+, withTrash ? !stdenv.hostPlatform.isDarwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.40.0";
+  version = "1.44.2";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3KStqeT/SZa7KGFEqwGEvchMB6MSME5jPfGSPQ+xZpw=";
+    hash = "sha256-rMAGnC1CcHYPLh199a+aKgVdm/xheUQIRSvF+HqeZQE=";
   };
 
-  cargoHash = "sha256-E1MNlmJnkV+VKHMbuTkuItIi7bG0TrmfD/8P47c+Qhc=";
+  cargoHash = "sha256-DVH7dKJEkyBnjNtLK/xfO+Hlw+rr3wTKqyooj5JM2is=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ libgit2 oniguruma xorg.libxcb ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ libgit2 oniguruma xorg.libxcb ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Foundation
     libiconv
     Security

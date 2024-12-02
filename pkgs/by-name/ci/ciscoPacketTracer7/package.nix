@@ -19,7 +19,7 @@ let
     dontUnpack = true;
     src = requireFile {
       name = "PacketTracer_${builtins.replaceStrings ["."] [""] version}_amd64.deb";
-      sha256 = "c39802d15dd61d00ba27fb8c116da45fd8562ab4b49996555ad66b88deace27f";
+      hash = "sha256-w5gC0V3WHQC6J/uMEW2kX9hWKrS0mZZVWtZriN6s4n8=";
       url = "https://www.netacad.com";
     };
 
@@ -84,7 +84,7 @@ in stdenv.mkDerivation {
     homepage = "https://www.netacad.com/courses/packet-tracer";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ lucasew ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

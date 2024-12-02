@@ -5,6 +5,6 @@
 mkKdeDerivation {
   pname = "krecorder";
 
-  extraBuildInputs = [qtmultimedia];
+  extraBuildInputs = [ qtmultimedia ];
   meta.mainProgram = "krecorder";
 }

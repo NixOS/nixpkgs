@@ -12,7 +12,7 @@ let
       rev = "v${version}";
       hash = "sha256-Z2J17YMzQNZqABIa5eyJDT7BWfXveymzs+DWsrklPIs=";
     };
-    sourceRoot = "source/Box2D";
+    sourceRoot = "${src.name}/Box2D";
     cmakeFlags = old.cmakeFlags or [ ] ++ [
       (cmakeBool "BOX2D_INSTALL" true)
       (cmakeBool "BOX2D_BUILD_SHARED" true)

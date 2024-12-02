@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9X2UIRDD+1kNLbV8AnnPabdO2M0OfTDxQ7xyZtsE10k=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     # Darwin requires both Magick++ and MagickCore for a successful linkage
     ./0001-link-magickcore.diff
   ];
@@ -51,9 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtmultimedia
     zeromq
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
   ];
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
       to the world. API currently supports C++, Python, and Ruby.
     '';
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

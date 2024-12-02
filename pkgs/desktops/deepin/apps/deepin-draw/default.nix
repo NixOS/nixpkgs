@@ -1,15 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qttools
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, qtsvg
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,15 +28,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    qttools
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     qt5integration
-    qtsvg
+    libsForQt5.qtsvg
     dtkwidget
     qt5platform-plugins
   ];

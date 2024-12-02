@@ -13,19 +13,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-language";
-  version = "2.13.4";
+  version = "2.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-j8ZgMxoTxkDbdqSLrBP56AIBJjGvm63TViaep/Z3xZI=";
+    pname = "google_cloud_language";
+    inherit version;
+    hash = "sha256-HGHHFbAkxbOWmF7N7qr6CLhldiag3WjQKGq/WD2Ox5Q=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     proto-plus
     protobuf

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "CLIUtils";
     repo = "CLI11";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-x3/kBlf5LdzkTO4NYOKanZBfcU4oK+fJw9L7cf88LsY=";
+    hash = "sha256-x3/kBlf5LdzkTO4NYOKanZBfcU4oK+fJw9L7cf88LsY=";
   };
 
   buildInputs = [ catch2 ];

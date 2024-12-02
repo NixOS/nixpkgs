@@ -8,6 +8,7 @@
   jupyterhub,
   pythonOlder,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
@@ -35,13 +36,9 @@ buildPythonPackage rec {
     jupyterhub
   ];
 
-  preCheck = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=batchspawner" ""
-  '';
-
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

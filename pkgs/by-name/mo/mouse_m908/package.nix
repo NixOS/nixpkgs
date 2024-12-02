@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dokutan";
     repo = "mouse_m908";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-sCAvjNpJYkp4G0KkDJtHOBR1vc80DZJtWR2W9gakkzQ=";
+    hash = "sha256-sCAvjNpJYkp4G0KkDJtHOBR1vc80DZJtWR2W9gakkzQ=";
   };
 
   nativeBuildInputs = [ pkg-config installShellFiles ];

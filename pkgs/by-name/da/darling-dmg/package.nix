@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ fuse openssl zlib bzip2 libxml2 icu lzfse ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   CXXFLAGS = [
     "-DCOMPILE_WITH_LZFSE=1"

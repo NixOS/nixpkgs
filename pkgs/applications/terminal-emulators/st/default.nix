@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     (writeText "config.def.h" conf);
 
   postPatch = lib.optionalString (conf != null) "cp ${finalAttrs.configFile} config.def.h"
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace config.mk --replace "-lrt" ""
   '';
 

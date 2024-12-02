@@ -34,7 +34,7 @@ buildPythonPackage rec {
     versioneer
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     jsonutil = [ simplejson ];
     # Module not available
     # randcookie = [
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     mock
     twisted
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pyutil" ];
 

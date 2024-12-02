@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses jansson ]
     ++ lib.optional withGtk gtk3
-    ++ lib.optional stdenv.isLinux libcap;
+    ++ lib.optional stdenv.hostPlatform.isLinux libcap;
 
   enableParallelBuilding = true;
 

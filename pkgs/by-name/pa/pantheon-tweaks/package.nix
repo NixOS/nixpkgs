@@ -5,47 +5,47 @@
 , meson
 , ninja
 , pkg-config
-, python3
+, sassc
 , vala
-, wrapGAppsHook3
-, gtk3
+, wrapGAppsHook4
+, gtk4
 , libgee
+, pango
 , pantheon
 }:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-tweaks";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "pantheon-tweaks";
     repo = pname;
     rev = version;
-    hash = "sha256-7a6maEpvmIS+Raawr9ec44nCbuj83EUnd+8RqYgWy24=";
+    hash = "sha256-NrDBr7Wtfxf9UA/sbi9ilgrlxK6QGQAopuz3TV2ITjs=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
+    sassc
     vala
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     libgee
+    pango
   ] ++ (with pantheon; [
     elementary-files # settings schemas
     elementary-terminal # settings schemas
-    granite
+    granite7
+    switchboard
   ]);
 
   postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-
     substituteInPlace src/Settings/ThemeSettings.vala \
       --replace-fail "/usr/share/" "/run/current-system/sw/share/"
   '';

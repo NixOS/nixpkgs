@@ -39,14 +39,14 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "cameractrls";
-  version = "0.6.6";
+  version = "0.6.7";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "soyersoyer";
     repo = "cameractrls";
     rev = "v${version}";
-    hash = "sha256-QjjLd5L+8Slxc3ywurhsWp1pZ2E1Y7NOdnCV2ZYBlqU=";
+    hash = "sha256-MM+Py8tHtqJWIGmGg3RaIhJa0E1zM3hXOnTOqXPuejw=";
   };
 
   postPatch = ''
@@ -125,7 +125,7 @@ python3Packages.buildPythonApplication rec {
       presets at device connection).
     '';
     homepage = "https://github.com/soyersoyer/cameractrls";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     mainProgram = mainExecutable;
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.linux;

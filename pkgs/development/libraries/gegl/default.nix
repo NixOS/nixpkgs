@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     gexiv2
     openexr
     suitesparse
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     OpenCL
   ] ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
   '';
 
   # tests fail to connect to the com.apple.fonts daemon in sandboxed mode
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Graph-based image processing framework";

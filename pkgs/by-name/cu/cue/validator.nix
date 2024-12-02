@@ -5,8 +5,8 @@
 # against the fragment described by `document` or the whole definition.
 # The script will be strict and enforce concrete values, i.e. partial documents are not supported.
 cueSchemaFile: { document ? null }:
-  writeShellScript "validate-using-cue"
-  ''${cue}/bin/cue \
+  writeShellScript "validate-using-cue" ''
+    ${cue}/bin/cue \
       --all-errors \
       --strict \
       vet \

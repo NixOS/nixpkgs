@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "openpyxl";
-  version = "3.1.2";
+  version = "3.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     owner = "openpyxl";
     repo = "openpyxl";
     rev = "refs/tags/${version}";
-    hash = "sha256-SWRbjA83AOLrfe6on2CSb64pH5EWXkfyYcTqWJNBEP0=";
+    hash = "sha256-vp+TIWcHCAWlDaBcmC7w/kV7DZTZpa6463NusaJmqKo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ et-xmlfile ];
+  dependencies = [ et-xmlfile ];
 
   nativeCheckInputs = [
     lxml
@@ -42,6 +42,7 @@ buildPythonPackage rec {
     "-W"
     "ignore::DeprecationWarning"
   ];
+
   disabledTests =
     [
       # Tests broken since lxml 2.12; https://foss.heptapod.net/openpyxl/openpyxl/-/issues/2116

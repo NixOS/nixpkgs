@@ -10,14 +10,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.90";
+  version = "2.92";
   pname = "asymptote";
 
   outputs = [ "out" "man" "info" "doc" "tex" ];
 
   src = fetchurl {
     url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-    hash = "sha256-jGlW+4CL9EqPJJcpW0+muumMQYkrQPPuj8dYqSRwc0A=";
+    hash = "sha256-nZtcb6fg+848HlT+sl4tUdKMT+d5jyTHbNyugpGo6mY=";
   };
 
   # override with TeX Live containers to avoid building sty, docs from source
@@ -41,13 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     boehmgc ncurses readline gsl libsigsegv
     zlib perl curl qtbase qtsvg boost
     (python3.withPackages (ps: with ps; [ cson numpy pyqt5 ]))
-  ] ++ lib.optionals stdenv.isLinux [ libtirpc ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ];
 
   propagatedBuildInputs = [
     glm
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libglut libGLU libGL
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     OpenGL GLUT Cocoa
   ]);
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   # do not use bundled libgc.so
   configureFlags = [ "--enable-gc=system" ]
     # TODO add open_memstream to enable XDR/V3D on Darwin (requires memstream or >=10.13 Apple SDK)
-    ++ lib.optional stdenv.isDarwin "--enable-xdr=no";
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-xdr=no";
 
   env.NIX_CFLAGS_COMPILE = "-I${boehmgc.dev}/include/gc";
 

@@ -5,16 +5,16 @@
 }:
 buildGoModule rec {
   pname = "superfile";
-  version = "1.1.3";
+  version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "yorukot";
     repo = "superfile";
     rev = "v${version}";
-    hash = "sha256-z1jcRzID20s7tEDUaEcnOYBfv/BPZtcXz9fy3V5iPPg=";
+    hash = "sha256-3zQDErfst0CAE9tdOUtPGtGWuOo/K8x/M+r6+RPrlCM=";
   };
 
-  vendorHash = "sha256-OzPH7dNu/V4HDGSxrvYxu3s+hw36NiulFZs0BJ44Pjk=";
+  vendorHash = "sha256-DU0Twutepmk+8lkBM2nDChbsSHh4awt5m33ACUtH4AQ=";
 
   ldflags = ["-s" "-w"];
 
@@ -23,7 +23,7 @@ buildGoModule rec {
     homepage = "https://github.com/yorukot/superfile";
     changelog = "https://github.com/yorukot/superfile/blob/${src.rev}/changelog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [momeemt];
+    maintainers = with maintainers; [momeemt redyf];
     mainProgram = "superfile";
   };
 }

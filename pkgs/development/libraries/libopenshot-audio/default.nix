@@ -40,9 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-  ] ++ (if stdenv.isDarwin then [
+  ] ++ (if stdenv.hostPlatform.isDarwin then [
     Accelerate
     AGL
     Cocoa
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       JUCE library.
     '';
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

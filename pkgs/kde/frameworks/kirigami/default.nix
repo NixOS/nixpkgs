@@ -17,18 +17,27 @@ let
   unwrapped = mkKdeDerivation {
     pname = "kirigami";
 
-    extraNativeBuildInputs = [qtsvg qttools];
-    extraBuildInputs = [qtdeclarative];
-    extraPropagatedBuildInputs = [qt5compat];
+    extraNativeBuildInputs = [
+      qtsvg
+      qttools
+    ];
+    extraBuildInputs = [ qtdeclarative ];
+    extraPropagatedBuildInputs = [ qt5compat ];
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "kirigami-wrapped";
   inherit (unwrapped) version;
 
-  propagatedBuildInputs = [ unwrapped qqc2-desktop-style ];
+  propagatedBuildInputs = [
+    unwrapped
+    qqc2-desktop-style
+  ];
 
   dontUnpack = true;
   dontWrapQtApps = true;
 
-  passthru = { inherit unwrapped; };
+  passthru = {
+    inherit unwrapped;
+  };
 }

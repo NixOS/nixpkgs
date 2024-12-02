@@ -68,6 +68,13 @@
               (sqlite:execute-single db
                  "select count(*) from sha256")))))
 
+(defparameter *broken-systems*
+  '(
+    ;; Infinite recursion through dependencies in 2024-10-12 dist
+    "cl-quil" "qvm"
+    )
+  "List of broken systems, which should be omitted from the package graph")
+
 (defmethod import-lisp-packages ((repository quicklisp-repository)
                                  (database sqlite-database))
 
@@ -112,6 +119,17 @@
              project url size md5 sha1 prefix (json:stringify (coerce
                                                                asds
                                                                'vector))))))
+
+      ;; Skip known broken systems and their dependents
+      (dolist (system *broken-systems*)
+        (sql-query
+         "with recursive broken(name) as (
+            select ?
+            union
+            select s.name from quicklisp_system s, broken b
+            where b.name in (select value from json_each(deps))
+          ) delete from quicklisp_system where name in (select name from broken)"
+          system))
 
       (sqlite:with-transaction db
         ;; Should these be temp tables, that then get queried by

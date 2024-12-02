@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "asyncstdlib";
-  version = "3.12.4";
+  version = "3.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "maxfischer2781";
     repo = "asyncstdlib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5xbz56/s448PIOZ4DN6NFcYYWXaebaZA3ApGAIMZXH4=";
+    hash = "sha256-0VEJ26MP6gIgPvjan7LgCEtSLpg4wXhmFNPGZGntPD8=";
   };
 
   build-system = [ flit-core ];

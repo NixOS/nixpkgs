@@ -23,10 +23,10 @@
 
 buildPythonPackage rec {
   pname = "openstacksdk";
-  version = "3.3.0";
+  version = "4.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BghpDKN8pzMnsPo3YdF+ZTlb43/yALhzXY8kJ3tPSYA=";
+    hash = "sha256-54YN2WtwUxMJI8EdVx0lgCuWjx4xOIRct8rHxrMzv0s=";
   };
 
   postPatch = ''
@@ -44,13 +44,14 @@ buildPythonPackage rec {
       --replace-fail "'sphinxcontrib.rsvgconverter'," "#'sphinxcontrib.rsvgconverter',"
   '';
 
-  build-system = [
+  nativeBuildInputs = [
     openstackdocstheme
-    setuptools
     sphinxHook
   ];
 
   sphinxBuilders = [ "man" ];
+
+  build-system = [ setuptools ];
 
   dependencies = [
     platformdirs

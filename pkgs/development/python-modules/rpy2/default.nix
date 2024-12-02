@@ -87,7 +87,7 @@ buildPythonPackage rec {
     simplegeneric
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # https://github.com/rpy2/rpy2/issues/1111
   disabledTests = [

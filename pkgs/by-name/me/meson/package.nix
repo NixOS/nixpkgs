@@ -13,7 +13,6 @@
 , python3
 , substituteAll
 , zlib
-, fetchpatch
 }:
 
 let
@@ -21,16 +20,19 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.4.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     rev = "refs/tags/${version}";
-    hash = "sha256-RBE4AUF5fymUA87JEDWtpUFXmVPFzdhZgDI7/kscTx4=";
+    hash = "sha256-st0dbb+GfF0KEyF+Qn/PIE2462ZrrXy8YcnrulHTI8M=";
   };
 
   patches = [
+    # Nixpkgs cmake uses NIXPKGS_CMAKE_PREFIX_PATH for the search path
+    ./000-nixpkgs-cmake-prefix-path.patch
+
     # In typical distributions, RPATH is only needed for internal libraries so
     # meson removes everything else. With Nix, the locations of libraries
     # are not as predictable, therefore we need to keep them in the RPATH.
@@ -71,16 +73,6 @@ python3.pkgs.buildPythonApplication rec {
 
     # This edge case is explicitly part of meson but is wrong for nix
     ./007-freebsd-pkgconfig-path.patch
-
-    # Find boost via pkg-config
-    # https://github.com/NixOS/nixpkgs/issues/86131
-    # Already merged upstream PR: https://github.com/mesonbuild/meson/pull/13272
-    # FIXME: Will be in meson 1.5.0
-    (fetchpatch {
-      name = "find-boost-pkg-config.patch";
-      url = "https://github.com/mesonbuild/meson/commit/c21b886ba8a60cce7fa56e4be40bd7547129fb00.patch";
-      hash = "sha256-uSilNuSx9yd1cxs0XVLcLw4MOXEd2uIe2g+wk+SBqeU=";
-    })
   ];
 
   buildInputs = lib.optionals (python3.pythonOlder "3.9") [
@@ -97,7 +89,7 @@ python3.pkgs.buildPythonApplication rec {
   checkInputs = [
     zlib
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Cocoa
     Foundation
@@ -105,7 +97,7 @@ python3.pkgs.buildPythonApplication rec {
     OpenAL
     OpenGL
     openldap
-  ] ++ lib.optionals (stdenv.cc.isClang && !stdenv.isDarwin) [
+  ] ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) [
     # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
     llvmPackages.openmp
     # https://github.com/mesonbuild/meson/blob/1670fca36fcb1a4fe4780e96731e954515501a35/test%20cases/frameworks/29%20blocks/meson.build
@@ -118,7 +110,7 @@ python3.pkgs.buildPythonApplication rec {
       patchShebangs 'test cases'
       substituteInPlace \
         'test cases/native/8 external program shebang parsing/script.int.in' \
-        'test cases/common/273 customtarget exe for test/generate.py' \
+        'test cases/common/274 customtarget exe for test/generate.py' \
           --replace /usr/bin/env ${coreutils}/bin/env
     ''
   ]
@@ -133,7 +125,10 @@ python3.pkgs.buildPythonApplication rec {
     ''test cases/linuxlike/14 static dynamic linkage''
     # Nixpkgs cctools does not have bitcode support.
     ''test cases/osx/7 bitcode''
-  ] ++ lib.optionals stdenv.isFreeBSD [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # requires llvmPackages.openmp, creating cyclic dependency
+    ''test cases/common/184 openmp''
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     # pch doesn't work quite right on FreeBSD, I think
     ''test cases/common/13 pch''
   ]))
@@ -178,7 +173,7 @@ python3.pkgs.buildPythonApplication rec {
       code.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ AndersonTorres qyliss ];
+    maintainers = with lib.maintainers; [ qyliss ];
     inherit (python3.meta) platforms;
   };
 }

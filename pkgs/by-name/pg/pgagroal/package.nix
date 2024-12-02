@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake docutils ];
 
   buildInputs = [ cjson libev openssl ]
-    ++ lib.optionals stdenv.isLinux [ systemd ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
 
   meta = with lib; {
     description = "High-performance connection pool for PostgreSQL";

@@ -1,17 +1,17 @@
-{ buildGoModule, fetchFromGitHub, installShellFiles, lib, tenv, testers }:
+{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles, lib, tenv, testers }:
 
 buildGoModule rec {
   pname = "tenv";
-  version = "2.7.9";
+  version = "3.2.10";
 
   src = fetchFromGitHub {
     owner = "tofuutils";
     repo = "tenv";
     rev = "v${version}";
-    hash = "sha256-oeMbpnYCkJ5GjfgOlNyQpwy80DbrupXIFS2dx4W2xo4=";
+    hash = "sha256-EiWajXUQTK8xJoehpq+LWdjy84+lB7oilFM1v59F/30=";
   };
 
-  vendorHash = "sha256-/4RiOF9YU4GEZlJcx2S2bLhJ1Q6F+8To3XiyWzGGHUU=";
+  vendorHash = "sha256-YC6LCrrxw9gZMc/ow628lL9KbePM8RhiAjLZ7HG2FY8=";
 
   # Tests disabled for requiring network access to release.hashicorp.com
   doCheck = false;
@@ -23,7 +23,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tenv \
       --zsh <($out/bin/tenv completion zsh) \
       --bash <($out/bin/tenv completion bash) \

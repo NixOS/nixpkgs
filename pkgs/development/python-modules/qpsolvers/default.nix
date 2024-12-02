@@ -16,17 +16,18 @@
   osqp,
   quadprog,
   scs,
+  highspy,
 }:
 buildPythonPackage rec {
   pname = "qpsolvers";
-  version = "4.3.2";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qpsolvers";
     repo = "qpsolvers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EU7/OGLeOIHw7wyNTibMmHZLAiRTCUFwjEaVNsHg1vw=";
+    hash = "sha256-/yIFLxy2gjEFg/J9A5pcbrVmq4A3Tz2efEAntH0Twk8=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -38,14 +39,14 @@ buildPythonPackage rec {
     scipy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     # FIXME commented out solvers have not been packaged yet
     clarabel = [ clarabel ];
     cvxopt = [ cvxopt ];
     daqp = [ daqp ];
     ecos = [ ecos ];
     gurobi = [ gurobipy ];
-    # highs = [ highspy ];
+    highs = [ highspy ];
     # mosek = [ cvxopt mosek ];
     osqp = [ osqp ];
     # piqp = [ piqp ];
@@ -54,19 +55,20 @@ buildPythonPackage rec {
     quadprog = [ quadprog ];
     scs = [ scs ];
     open_source_solvers =
-      with passthru.optional-dependencies;
+      with optional-dependencies;
       lib.flatten [
         clarabel
         cvxopt
         daqp
-        ecos # highs
         osqp # piqp proxqp qpalm
+        ecos
+        highs
         quadprog
         scs
       ];
   };
 
-  nativeCheckInputs = [ unittestCheckHook ] ++ passthru.optional-dependencies.open_source_solvers;
+  nativeCheckInputs = [ unittestCheckHook ] ++ optional-dependencies.open_source_solvers;
 
   meta = with lib; {
     changelog = "https://github.com/qpsolvers/qpsolvers/blob/${src.rev}/CHANGELOG.md";

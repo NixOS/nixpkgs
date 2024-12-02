@@ -6,6 +6,9 @@
 mkKdeDerivation {
   pname = "kontrast";
 
-  extraBuildInputs = [qtsvg qcoro];
+  extraBuildInputs = [
+    qtsvg
+    qcoro
+  ];
   meta.mainProgram = "kontrast";
 }

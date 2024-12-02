@@ -2,12 +2,15 @@
 
 let
   inherit (lib)
+    any
     attrValues
     concatMapStrings
     concatStringsSep
     const
     elem
+    escapeShellArgs
     filterAttrs
+    getName
     isString
     literalExpression
     mapAttrs
@@ -25,23 +28,24 @@ let
     optionalString
     types
     versionAtLeast
+    warn
     ;
 
   cfg = config.services.postgresql;
 
-  postgresql =
-    let
-      # ensure that
-      #   services.postgresql = {
-      #     enableJIT = true;
-      #     package = pkgs.postgresql_<major>;
-      #   };
-      # works.
-      base = if cfg.enableJIT then cfg.package.withJIT else cfg.package.withoutJIT;
-    in
-    if cfg.extraPlugins == []
-      then base
-      else base.withPackages cfg.extraPlugins;
+  # ensure that
+  #   services.postgresql = {
+  #     enableJIT = true;
+  #     package = pkgs.postgresql_<major>;
+  #   };
+  # works.
+  basePackage = if cfg.enableJIT
+    then cfg.package.withJIT
+    else cfg.package.withoutJIT;
+
+  postgresql = if cfg.extensions == []
+    then basePackage
+    else basePackage.withPackages cfg.extensions;
 
   toStr = value:
     if true == value then "yes"
@@ -59,6 +63,8 @@ let
 
   groupAccessAvailable = versionAtLeast postgresql.version "11.0";
 
+  extensionNames = map getName postgresql.installedExtensions;
+  extensionInstalled = extension: elem extension extensionNames;
 in
 
 {
@@ -67,6 +73,7 @@ in
 
     (mkRenamedOptionModule [ "services" "postgresql" "logLinePrefix" ] [ "services" "postgresql" "settings" "log_line_prefix" ])
     (mkRenamedOptionModule [ "services" "postgresql" "port" ] [ "services" "postgresql" "settings" "port" ])
+    (mkRenamedOptionModule [ "services" "postgresql" "extraPlugins" ] [ "services" "postgresql" "extensions" ])
   ];
 
   ###### interface
@@ -370,12 +377,12 @@ in
         '';
       };
 
-      extraPlugins = mkOption {
+      extensions = mkOption {
         type = with types; coercedTo (listOf path) (path: _ignorePg: path) (functionTo (listOf path));
         default = _: [];
         example = literalExpression "ps: with ps; [ postgis pg_repack ]";
         description = ''
-          List of PostgreSQL plugins.
+          List of PostgreSQL extensions to install.
         '';
       };
 
@@ -483,9 +490,18 @@ in
 
     services.postgresql.package = let
         mkThrow = ver: throw "postgresql_${ver} was removed, please upgrade your postgresql version.";
-        base = if versionAtLeast config.system.stateVersion "23.11" then pkgs.postgresql_15
+        mkWarn = ver: warn ''
+          The postgresql package is not pinned and selected automatically by
+          `system.stateVersion`. Right now this is `pkgs.postgresql_${ver}`, the
+          oldest postgresql version available and thus the next that will be
+          removed when EOL on the next stable cycle.
+
+          See also https://endoflife.date/postgresql
+        '';
+        base = if versionAtLeast config.system.stateVersion "24.11" then pkgs.postgresql_16
+            else if versionAtLeast config.system.stateVersion "23.11" then pkgs.postgresql_15
             else if versionAtLeast config.system.stateVersion "22.05" then pkgs.postgresql_14
-            else if versionAtLeast config.system.stateVersion "21.11" then pkgs.postgresql_13
+            else if versionAtLeast config.system.stateVersion "21.11" then mkWarn "13" pkgs.postgresql_13
             else if versionAtLeast config.system.stateVersion "20.03" then mkThrow "11"
             else if versionAtLeast config.system.stateVersion "17.09" then mkThrow "9_6"
             else mkThrow "9_5";
@@ -544,7 +560,7 @@ in
               rm -f ${cfg.dataDir}/*.conf
 
               # Initialise the database.
-              initdb -U ${cfg.superUser} ${concatStringsSep " " cfg.initdbArgs}
+              initdb -U ${cfg.superUser} ${escapeShellArgs cfg.initdbArgs}
 
               # See postStart!
               touch "${cfg.dataDir}/.first_startup"
@@ -621,7 +637,48 @@ in
             TimeoutSec = 120;
 
             ExecStart = "${postgresql}/bin/postgres";
+
+            # Hardening
+            CapabilityBoundingSet = [ "" ];
+            DevicePolicy = "closed";
+            PrivateTmp = true;
+            ProtectHome = true;
+            ProtectSystem = "strict";
+            MemoryDenyWriteExecute = lib.mkDefault (cfg.settings.jit == "off" && (!any extensionInstalled [ "plv8" ]));
+            NoNewPrivileges = true;
+            LockPersonality = true;
+            PrivateDevices = true;
+            PrivateMounts = true;
+            ProcSubset = "pid";
+            ProtectClock = true;
+            ProtectControlGroups = true;
+            ProtectHostname = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectProc = "invisible";
+            RemoveIPC = true;
+            RestrictAddressFamilies = [
+              "AF_INET"
+              "AF_INET6"
+              "AF_NETLINK" # used for network interface enumeration
+              "AF_UNIX"
+            ];
+            RestrictNamespaces = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            SystemCallArchitectures = "native";
+            SystemCallFilter =
+              [
+                "@system-service"
+                "~@privileged @resources"
+              ]
+              ++ lib.optionals (any extensionInstalled [ "plv8" ]) [ "@pkey" ];
+            UMask = if groupAccessAvailable then "0027" else "0077";
           }
+          (mkIf (cfg.dataDir != "/var/lib/postgresql") {
+            ReadWritePaths = [ cfg.dataDir ];
+          })
           (mkIf (cfg.dataDir == "/var/lib/postgresql/${cfg.package.psqlSchema}") {
             StateDirectory = "postgresql postgresql/${cfg.package.psqlSchema}";
             StateDirectoryMode = if groupAccessAvailable then "0750" else "0700";

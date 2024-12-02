@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "rules";
-  version = "3.4.0";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dfunckt";
     repo = "django-rules";
-    rev = "v${version}";
-    hash = "sha256-fxLaxjni+0S59vtvKBduR0pYMwJWWBPzR5mnH+j6gVE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8Kay2b2uwaI/ml/cPpcj9svoDQI0ptV8tyGeZ76SgZw=";
   };
 
   build-system = [ setuptools ];

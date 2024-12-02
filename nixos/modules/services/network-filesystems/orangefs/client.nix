@@ -1,7 +1,4 @@
 { config, lib, pkgs, ...} :
-
-with lib;
-
 let
   cfg = config.services.orangefs.client;
 
@@ -10,15 +7,15 @@ in {
 
   options = {
     services.orangefs.client = {
-      enable = mkEnableOption "OrangeFS client daemon";
+      enable = lib.mkEnableOption "OrangeFS client daemon";
 
-      extraOptions = mkOption {
-        type = with types; listOf str;
+      extraOptions = lib.mkOption {
+        type = with lib.types; listOf str;
         default = [];
         description = "Extra command line options for pvfs2-client.";
       };
 
-      fileSystems = mkOption {
+      fileSystems = lib.mkOption {
         description = ''
           The orangefs file systems to be mounted.
           This option is preferred over using {option}`fileSystems` directly since
@@ -30,23 +27,23 @@ in {
           target = "tcp://server:3334/orangefs";
         }];
 
-        type = with types; listOf (submodule ({ ... } : {
+        type = with lib.types; listOf (submodule ({ ... } : {
           options = {
 
-            mountPoint = mkOption {
-              type = types.str;
+            mountPoint = lib.mkOption {
+              type = lib.types.str;
               default = "/orangefs";
               description = "Mount point.";
             };
 
-            options = mkOption {
-              type = with types; listOf str;
+            options = lib.mkOption {
+              type = with lib.types; listOf str;
               default = [];
               description = "Mount options";
             };
 
-            target = mkOption {
-              type = types.str;
+            target = lib.mkOption {
+              type = lib.types.str;
               example = "tcp://server:3334/orangefs";
               description = "Target URL";
             };
@@ -59,7 +56,7 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.orangefs ];
 
     boot.supportedFilesystems = [ "pvfs2" ];
@@ -74,7 +71,7 @@ in {
 
          ExecStart = ''
            ${pkgs.orangefs}/bin/pvfs2-client-core \
-              --logtype=syslog ${concatStringsSep " " cfg.extraOptions}
+              --logtype=syslog ${lib.concatStringsSep " " cfg.extraOptions}
         '';
 
         TimeoutStopSec = "120";
@@ -87,7 +84,7 @@ in {
       bindsTo = [ "orangefs-client.service" ];
       wantedBy = [ "remote-fs.target" ];
       type = "pvfs2";
-      options = concatStringsSep "," fs.options;
+      options = lib.concatStringsSep "," fs.options;
       what = fs.target;
       where = fs.mountPoint;
     }) cfg.fileSystems;

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   imagemagick,
   matplotlib,
 }:
@@ -9,18 +10,20 @@
 buildPythonPackage rec {
   pname = "matplotlib-sixel";
   version = "0.0.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-JXOb1/IacJV8bhDvF+OPs2Yg1tgRDOqwiAQfiSKTlew=";
   };
 
-  propagatedBuildInputs = [ matplotlib ];
+  build-system = [ setuptools ];
+
+  dependencies = [ matplotlib ];
 
   postPatch = ''
     substituteInPlace sixel/sixel.py \
-      --replace 'Popen(["convert",' 'Popen(["${imagemagick}/bin/convert",'
+      --replace-fail 'Popen(["convert",' 'Popen(["${imagemagick}/bin/convert",'
   '';
 
   pythonImportsCheck = [ "sixel" ];

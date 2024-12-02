@@ -21,7 +21,7 @@ maven.buildMavenPackage {
     hash = "sha256-GhZPvo8wlXInHwg8rSmpwMMkZVw5SMpnZyKqFUYLbrE=";
   };
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeBuildInputs = [ makeWrapper ];
 

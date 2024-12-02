@@ -1,6 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
 let
   cfg = config.services.paperless;
 
@@ -17,16 +15,16 @@ let
     PAPERLESS_CONSUMPTION_DIR = cfg.consumptionDir;
     PAPERLESS_THUMBNAIL_FONT_NAME = defaultFont;
     GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
-  } // optionalAttrs (config.time.timeZone != null) {
+  } // lib.optionalAttrs (config.time.timeZone != null) {
     PAPERLESS_TIME_ZONE = config.time.timeZone;
-  } // optionalAttrs enableRedis {
+  } // lib.optionalAttrs enableRedis {
     PAPERLESS_REDIS = "unix://${redisServer.unixSocket}";
-  } // optionalAttrs (cfg.settings.PAPERLESS_ENABLE_NLTK or true) {
+  } // lib.optionalAttrs (cfg.settings.PAPERLESS_ENABLE_NLTK or true) {
     PAPERLESS_NLTK_DIR = pkgs.symlinkJoin {
       name = "paperless_ngx_nltk_data";
       paths = cfg.package.nltkData;
     };
-  } // optionalAttrs (cfg.openMPThreadingWorkaround) {
+  } // lib.optionalAttrs (cfg.openMPThreadingWorkaround) {
     OMP_NUM_THREADS = "1";
   } // (lib.mapAttrs (_: s:
     if (lib.isAttrs s || lib.isList s) then builtins.toJSON s
@@ -37,11 +35,13 @@ let
   manage = pkgs.writeShellScript "manage" ''
     set -o allexport # Export the following env vars
     ${lib.toShellVars env}
+    ${lib.optionalString (cfg.environmentFile != null) "source ${cfg.environmentFile}"}
     exec ${cfg.package}/bin/paperless-ngx "$@"
   '';
 
-  # Secure the services
   defaultServiceConfig = {
+    Slice = "system-paperless.slice";
+    # Secure the services
     ReadWritePaths = [
       cfg.consumptionDir
       cfg.dataDir
@@ -51,6 +51,7 @@ let
     CapabilityBoundingSet = "";
     # ProtectClock adds DeviceAllow=char-rtc r
     DeviceAllow = "";
+    EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
     LockPersonality = true;
     MemoryDenyWriteExecute = true;
     NoNewPrivileges = true;
@@ -77,22 +78,22 @@ let
     RestrictNamespaces = true;
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
-    SupplementaryGroups = optional enableRedis redisServer.user;
+    SupplementaryGroups = lib.optional enableRedis redisServer.user;
     SystemCallArchitectures = "native";
     SystemCallFilter = [ "@system-service" "~@privileged @setuid @keyring" ];
     UMask = "0066";
   };
 in
 {
-  meta.maintainers = with maintainers; [ erikarvstedt Flakebi leona ];
+  meta.maintainers = with lib.maintainers; [ leona SuperSandro2000 erikarvstedt ];
 
   imports = [
-    (mkRenamedOptionModule [ "services" "paperless-ng" ] [ "services" "paperless" ])
-    (mkRenamedOptionModule [ "services" "paperless" "extraConfig" ] [ "services" "paperless" "settings" ])
+    (lib.mkRenamedOptionModule [ "services" "paperless-ng" ] [ "services" "paperless" ])
+    (lib.mkRenamedOptionModule [ "services" "paperless" "extraConfig" ] [ "services" "paperless" "settings" ])
   ];
 
   options.services.paperless = {
-    enable = mkOption {
+    enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
       description = ''
@@ -107,34 +108,34 @@ in
       '';
     };
 
-    dataDir = mkOption {
-      type = types.str;
+    dataDir = lib.mkOption {
+      type = lib.types.str;
       default = "/var/lib/paperless";
       description = "Directory to store the Paperless data.";
     };
 
-    mediaDir = mkOption {
-      type = types.str;
+    mediaDir = lib.mkOption {
+      type = lib.types.str;
       default = "${cfg.dataDir}/media";
-      defaultText = literalExpression ''"''${dataDir}/media"'';
+      defaultText = lib.literalExpression ''"''${dataDir}/media"'';
       description = "Directory to store the Paperless documents.";
     };
 
-    consumptionDir = mkOption {
-      type = types.str;
+    consumptionDir = lib.mkOption {
+      type = lib.types.str;
       default = "${cfg.dataDir}/consume";
-      defaultText = literalExpression ''"''${dataDir}/consume"'';
+      defaultText = lib.literalExpression ''"''${dataDir}/consume"'';
       description = "Directory from which new documents are imported.";
     };
 
-    consumptionDirIsPublic = mkOption {
-      type = types.bool;
+    consumptionDirIsPublic = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = "Whether all users can write to the consumption dir.";
     };
 
-    passwordFile = mkOption {
-      type = types.nullOr types.path;
+    passwordFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       example = "/run/keys/paperless-password";
       description = ''
@@ -155,19 +156,19 @@ in
       '';
     };
 
-    address = mkOption {
-      type = types.str;
+    address = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
       description = "Web interface address.";
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 28981;
       description = "Web interface port.";
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = with lib.types; attrsOf (let
           typeList = [ bool float int str path package ];
@@ -193,19 +194,19 @@ in
       };
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = defaultUser;
       description = "User under which Paperless runs.";
     };
 
-    package = mkPackageOption pkgs "paperless-ngx" { } // {
+    package = lib.mkPackageOption pkgs "paperless-ngx" { } // {
       apply = pkg: pkg.override {
         tesseract5 = pkg.tesseract5.override {
           # always enable detection modules
           # tesseract fails to build when eng is not present
           enableLanguages = if cfg.settings ? PAPERLESS_OCR_LANGUAGE then
-            lists.unique (
+            lib.lists.unique (
               [ "equ" "osd" "eng" ]
               ++ lib.splitString "+" cfg.settings.PAPERLESS_OCR_LANGUAGE
             )
@@ -214,7 +215,7 @@ in
       };
     };
 
-    openMPThreadingWorkaround = mkEnableOption ''
+    openMPThreadingWorkaround = lib.mkEnableOption ''
       a workaround for document classifier timeouts.
 
       Paperless uses OpenBLAS via scikit-learn for document classification.
@@ -226,11 +227,34 @@ in
 
       This sets `OMP_NUM_THREADS` to `1` in order to mitigate the issue. See
       https://github.com/NixOS/nixpkgs/issues/240591 for more information
-    '' // mkOption { default = true; };
+    '' // lib.mkOption { default = true; };
+
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      example = "/run/secrets/paperless";
+      description = ''
+        Path to a file containing extra paperless config options in the systemd `EnvironmentFile`
+        format. Refer to the [documentation](https://docs.paperless-ngx.com/configuration/) for
+        config options.
+
+        This can be used to pass secrets to paperless without putting them in the Nix store.
+
+        To set a database password, point `environmentFile` at a file containing:
+        ```
+        PAPERLESS_DBPASS=<pass>
+        ```
+      '';
+    };
   };
 
-  config = mkIf cfg.enable {
-    services.redis.servers.paperless.enable = mkIf enableRedis true;
+  config = lib.mkIf cfg.enable {
+    services.redis.servers.paperless.enable = lib.mkIf enableRedis true;
+
+    systemd.slices.system-paperless = {
+      description = "Paperless Document Management System Slice";
+      documentation = [ "https://docs.paperless-ngx.com" ];
+    };
 
     systemd.tmpfiles.settings."10-paperless" = let
       defaultRule = {
@@ -282,18 +306,19 @@ in
           echo ${cfg.package.version} > "$versionFile"
         fi
       ''
-      + optionalString (cfg.passwordFile != null) ''
+      + lib.optionalString (cfg.passwordFile != null) ''
         export PAPERLESS_ADMIN_USER="''${PAPERLESS_ADMIN_USER:-admin}"
-        export PAPERLESS_ADMIN_PASSWORD=$(cat $CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD)
+        PAPERLESS_ADMIN_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD")
+        export PAPERLESS_ADMIN_PASSWORD
         superuserState="$PAPERLESS_ADMIN_USER:$PAPERLESS_ADMIN_PASSWORD"
         superuserStateFile="${cfg.dataDir}/superuser-state"
 
-        if [[ $(cat "$superuserStateFile" 2>/dev/null) != $superuserState ]]; then
+        if [[ $(cat "$superuserStateFile" 2>/dev/null) != "$superuserState" ]]; then
           ${cfg.package}/bin/paperless-ngx manage_superuser
           echo "$superuserState" > "$superuserStateFile"
         fi
       '';
-    } // optionalAttrs enableRedis {
+    } // lib.optionalAttrs enableRedis {
       after = [ "redis-paperless.service" ];
     };
 
@@ -347,7 +372,8 @@ in
             tr -dc A-Za-z0-9 < /dev/urandom | head -c64 | ${pkgs.moreutils}/bin/sponge '${secretKeyFile}'
           )
         fi
-        export PAPERLESS_SECRET_KEY=$(cat '${secretKeyFile}')
+        PAPERLESS_SECRET_KEY="$(cat '${secretKeyFile}')"
+        export PAPERLESS_SECRET_KEY
         if [[ ! $PAPERLESS_SECRET_KEY ]]; then
           echo "PAPERLESS_SECRET_KEY is empty, refusing to start."
           exit 1
@@ -364,9 +390,6 @@ in
         SystemCallFilter = defaultServiceConfig.SystemCallFilter ++ [ "@setuid mbind" ];
         # Needs to serve web page
         PrivateNetwork = false;
-      } // lib.optionalAttrs (cfg.port < 1024) {
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
       };
       environment = env // {
         PYTHONPATH = "${cfg.package.python.pkgs.makePythonPath cfg.package.propagatedBuildInputs}:${cfg.package}/lib/paperless-ngx/src";
@@ -376,7 +399,7 @@ in
       unitConfig.JoinsNamespaceOf = "paperless-task-queue.service";
     };
 
-    users = optionalAttrs (cfg.user == defaultUser) {
+    users = lib.optionalAttrs (cfg.user == defaultUser) {
       users.${defaultUser} = {
         group = defaultUser;
         uid = config.ids.uids.paperless;

@@ -15,17 +15,18 @@
   porthole,
   unstableGitUpdater,
   yasnippet,
+  el-patch,
 }:
 
 melpaBuild {
   pname = "voicemacs";
-  version = "0-unstable-2022-02-16";
+  version = "0-unstable-2024-10-11";
 
   src = fetchFromGitHub {
     owner = "jcaw";
     repo = "voicemacs";
-    rev = "d91de2a31c68ab083172ade2451419d6bd7bb389";
-    hash = "sha256-/MBB2R9/V0aYZp15e0vx+67ijCPp2iPlgxe262ldmtc=";
+    rev = "d8dade06a48994ff04f48e1177eed4e9243cbcb1";
+    hash = "sha256-kCuwjMl3pPWQNoXEl+oK6YoOLpk8kazLb69RwiGltAA=";
   };
 
   patches = [
@@ -45,6 +46,7 @@ melpaBuild {
     nav-flash
     porthole
     yasnippet
+    el-patch
   ];
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };

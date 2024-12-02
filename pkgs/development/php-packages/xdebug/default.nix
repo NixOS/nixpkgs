@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "3.3.2";
+  version = "3.4.0";
 in
 buildPecl {
   inherit version;
@@ -16,11 +16,10 @@ buildPecl {
     owner = "xdebug";
     repo = "xdebug";
     rev = version;
-    hash = "sha256-3Hj/6pFLwJkVfsUIkX9lP8cOa1cVjobqHZd/cnH0TaU=";
+    hash = "sha256-Gt6/ARrUzmsAhsdkKPNiX0CBmWTv7D3mHnxvvWjbLnE=";
   };
 
   doCheck = true;
-  checkTarget = "test";
 
   zendExtension = true;
 

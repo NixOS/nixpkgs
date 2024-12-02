@@ -154,7 +154,7 @@ let
     cp ${personProto} $out/person/person.proto
     cp ${personBUILD} $out/person/BUILD.bazel
   ''
-  + (lib.optionalString stdenv.isDarwin ''
+  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/tools
     cp ${toolsBazel} $out/tools/bazel
   ''));
@@ -178,7 +178,7 @@ let
         --host_javabase='@local_jdk//:jdk' \
         --java_toolchain='@bazel_tools//tools/jdk:toolchain_hostjdk8' \
         --javabase='@local_jdk//:jdk' \
-    '' + lib.optionalString (stdenv.isDarwin) ''
+    '' + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
         --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
         --linkopt=-stdlib=libc++ --host_linkopt=-stdlib=libc++ \
     '';

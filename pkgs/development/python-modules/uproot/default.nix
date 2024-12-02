@@ -2,14 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  awkward,
-  cramjam,
+
+  # build-system
   hatch-vcs,
   hatchling,
+
+  # dependencies
+  awkward,
+  cramjam,
   numpy,
   fsspec,
   packaging,
+
+  # checks
+  awkward-pandas,
   pandas,
   pytestCheckHook,
   pytest-timeout,
@@ -20,16 +26,14 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.3.10";
+  version = "5.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "uproot5";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2cTa6AaN4BMJuzLhU9G4e0yl1kqyxblLWsSaIOHYS+o=";
+    hash = "sha256-letdC246I9LDqEnLCOTz51cBnQGbkrsR/i7UN6EMcDA=";
   };
 
   build-system = [
@@ -43,15 +47,16 @@ buildPythonPackage rec {
     numpy
     fsspec
     packaging
+    xxhash
   ];
 
   nativeCheckInputs = [
+    awkward-pandas
     pandas
     pytestCheckHook
     pytest-timeout
     rangehttpserver
     scikit-hep-testdata
-    xxhash
   ];
 
   preCheck = ''
@@ -87,6 +92,7 @@ buildPythonPackage rec {
     # Cyclic dependency with dask-awkward
     "test_dask_duplicated_keys"
     "test_decompression_executor_for_dask"
+    "test_decompression_threadpool_executor_for_dask"
   ];
 
   disabledTestPaths = [

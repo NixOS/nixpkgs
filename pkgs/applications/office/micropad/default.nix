@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ yarnBuildHook copyDesktopItems makeWrapper ]
-    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   installPhase = ''
     runHook preInstall
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     # executable wrapper
     makeWrapper '${electron}/bin/electron' "$out/bin/micropad" \
       --add-flags "$out/share/micropad" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
 
     runHook postInstall
   '';

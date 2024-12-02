@@ -36,7 +36,7 @@ let params =
         hash = "sha256-HklX+VPD0Ta3Knv++dBT2rhsDSlDRH90k4Cj1YtWIa8=";
       };
 
-      nativeBuildInputs = lib.optional stdenv.isDarwin darwin.sigtool;
+      nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.sigtool;
 
       propagatedBuildInputs = [ camlp-streams dune-site ];
     };

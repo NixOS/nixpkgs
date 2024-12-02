@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "corrscope";
-  version = "0.9.1";
+  version = "0.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "corrscope";
     repo = "corrscope";
     rev = "refs/tags/${version}";
-    hash = "sha256-SKsPe68CNaoUzGjMZn4azGFM3SbBipHK8gJcrm4+T+I=";
+    hash = "sha256-WSv65jEu/w6iNrL/f5PN147FBjmR0j30H1D39dd+KN8=";
   };
 
   pythonRelaxDeps = [ "attrs" "ruamel.yaml" ];
