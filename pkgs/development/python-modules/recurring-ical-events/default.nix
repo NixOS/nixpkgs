@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [ "icalendar" ];
+  pythonRelaxDeps = [ "x-wr-timezone" ];
 
   dependencies = [
     icalendar

@@ -14,6 +14,7 @@
 , libglvnd
 , libjack2
 , libjpeg
+, libnghttp2
 , libxkbcommon
 , makeWrapper
 , pango
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     libjack2
     # libjpeg8 is required for converting jpeg's to colour palettes
     libjpeg
+    libnghttp2
     libxcb
     libXcursor
     libX11
