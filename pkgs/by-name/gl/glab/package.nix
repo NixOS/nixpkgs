@@ -4,6 +4,7 @@
   fetchFromGitLab,
   installShellFiles,
   stdenv,
+  nix-update-script,
 }:
 
 buildGo123Module rec {
@@ -42,6 +43,8 @@ buildGo123Module rec {
       --fish <($out/bin/glab completion -s fish) \
       --zsh <($out/bin/glab completion -s zsh)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GitLab CLI tool bringing GitLab to your command line";
