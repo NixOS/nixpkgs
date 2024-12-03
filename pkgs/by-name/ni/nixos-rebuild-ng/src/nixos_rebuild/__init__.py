@@ -322,12 +322,13 @@ def execute(argv: list[str]) -> None:
                     from_host=build_host,
                     **copy_flags,
                 )
-                nix.set_profile(
-                    profile,
-                    path_to_config,
-                    target_host=target_host,
-                    sudo=args.sudo,
-                )
+                if action in (Action.SWITCH, Action.BOOT):
+                    nix.set_profile(
+                        profile,
+                        path_to_config,
+                        target_host=target_host,
+                        sudo=args.sudo,
+                    )
             if action in (Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE):
                 nix.switch_to_configuration(
                     path_to_config,
