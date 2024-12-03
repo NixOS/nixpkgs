@@ -24,7 +24,7 @@ in {
         '';
       };
       package = mkPackageOption pkgs "localtime" { };
-      geoclue2Package = mkPackageOption pkgs "geoclue2-with-demo-agent" { };
+      geoclue2Package = mkPackageOption pkgs "Geoclue2" { default = "geoclue2-with-demo-agent"; };
     };
   };
 
