@@ -1,9 +1,9 @@
 {
   lib,
   stdenv,
+  darwin,
   fetchFromGitHub,
   rustPlatform,
-  Security,
   versionCheckHook,
 }:
 
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-wqoU9UfXDmf7KIHgFif5rZfZY8Zu0SsaMVfwTtXLzHg=";
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
