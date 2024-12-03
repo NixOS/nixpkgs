@@ -263,11 +263,12 @@ def execute(argv: list[str]) -> None:
             attr = "config.system.build.toplevel"
             dry_run = action == Action.DRY_BUILD
             no_link = action in (Action.SWITCH, Action.BOOT)
+            rollback = bool(args.rollback)
 
-            if args.rollback:
-                if action in (Action.SWITCH, Action.BOOT):
+            match (action, rollback, build_host, flake):
+                case (Action.SWITCH | Action.BOOT, True, _, _):
                     path_to_config = nix.rollback(profile, target_host, sudo=args.sudo)
-                elif action in (Action.TEST, Action.BUILD):
+                case (Action.TEST | Action.BUILD, True, _, _):
                     maybe_path_to_config = nix.rollback_temporary_profile(
                         profile,
                         target_host,
@@ -277,45 +278,48 @@ def execute(argv: list[str]) -> None:
                         path_to_config = maybe_path_to_config
                     else:
                         raise NRError("could not find previous generation")
-                else:
+                case (_, True, _, _):
                     raise NRError(f"--rollback is incompatible with '{action}'")
-            else:
-                if flake:
-                    if build_host:
-                        path_to_config = nix.remote_build_flake(
-                            attr,
-                            flake,
-                            build_host,
-                            flake_build_flags=flake_build_flags,
-                            copy_flags=copy_flags,
-                            build_flags=build_flags,
-                        )
-                    else:
-                        path_to_config = nix.build_flake(
-                            attr,
-                            flake,
-                            no_link=no_link,
-                            dry_run=dry_run,
-                            **flake_build_flags,
-                        )
-                else:
-                    if build_host:
-                        path_to_config = nix.remote_build(
-                            attr,
-                            build_attr,
-                            build_host,
-                            instantiate_flags=common_flags,
-                            copy_flags=copy_flags,
-                            build_flags=build_flags,
-                        )
-                    else:
-                        path_to_config = nix.build(
-                            attr,
-                            build_attr,
-                            no_out_link=no_link,
-                            dry_run=dry_run,
-                            **build_flags,
-                        )
+                case (_, False, Remote(_), Flake(_)):
+                    path_to_config = nix.remote_build_flake(
+                        attr,
+                        flake,
+                        build_host,
+                        flake_build_flags=flake_build_flags,
+                        copy_flags=copy_flags,
+                        build_flags=build_flags,
+                    )
+                case (_, False, None, Flake(_)):
+                    path_to_config = nix.build_flake(
+                        attr,
+                        flake,
+                        no_link=no_link,
+                        dry_run=dry_run,
+                        **flake_build_flags,
+                    )
+                case (_, False, Remote(_), None):
+                    path_to_config = nix.remote_build(
+                        attr,
+                        build_attr,
+                        build_host,
+                        instantiate_flags=common_flags,
+                        copy_flags=copy_flags,
+                        build_flags=build_flags,
+                    )
+                case (_, False, None, None):
+                    path_to_config = nix.build(
+                        attr,
+                        build_attr,
+                        no_out_link=no_link,
+                        dry_run=dry_run,
+                        **build_flags,
+                    )
+                case m:
+                    # should never happen, but mypy is not smart enough to
+                    # handle this with assert_never
+                    raise NRError(f"invalid match for build: {m}")
+
+            if not rollback:
                 nix.copy_closure(
                     path_to_config,
                     to_host=target_host,
