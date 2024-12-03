@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchFromGitHub,
   kernel,
 }:
@@ -13,21 +12,14 @@ in
 stdenv.mkDerivation (finalAttrs: {
   name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
   pname = "lkrg";
-  version = "0.9.5";
+  version = "0.9.9";
 
   src = fetchFromGitHub {
     owner = "lkrg-org";
     repo = "lkrg";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-+yIKkTvfVbLnFBoXSKGebB1A8KqpaRmsLh8SsNuI9Dc=";
+    hash = "sha256-dxgkEj8HGOX4AMZRNbhv3utrNjKDFpp7kZmj17Wp2HE=";
   };
-  patches = [
-    (fetchpatch {
-      name = "fix-aarch64.patch";
-      url = "https://github.com/lkrg-org/lkrg/commit/a4e5c00f13f7081b346bc3736e4c035e3d17d3f7.patch";
-      sha256 = "sha256-DPscqi+DySHwFxGuGe7P2itPkoyb3XGu5Xp2S/ezP4Y=";
-    })
-  ];
 
   hardeningDisable = [ "pic" ];
 
@@ -37,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     "KERNEL=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
+  enableParallelBuilding = true;
   dontConfigure = true;
 
   prePatch = ''
@@ -56,6 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ chivay ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "5.10" || kernel.kernelAtLeast "6.1" || isKernelRT;
+    broken = kernel.kernelOlder "5.10" || isKernelRT;
   };
 })
