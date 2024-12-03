@@ -76,6 +76,7 @@ let
     ghc981
     ghc982
     ghc983
+    ghc984
     ghc9101
   ];
 
@@ -466,8 +467,8 @@ let
               ;
             };
 
-            haskell.packages.native-bignum.ghc983 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc983)
+            haskell.packages.native-bignum.ghc984 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc984)
                 hello
                 random
                 QuickCheck
@@ -721,7 +722,7 @@ let
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskell.packages.native-bignum.ghc948 # non-hadrian
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc983
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc984
         ];
       };
     }
