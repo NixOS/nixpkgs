@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   Security,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,7 +24,19 @@ rustPlatform.buildRustPackage rec {
     ./Cargo.lock.patch
   ];
 
+  postPatch = ''
+    # https://github.com/jonkgrimes/nbtscanner/issues/4
+    substituteInPlace src/main.rs \
+      --replace-fail '.version("0.1")' '.version("${version}")'
+  '';
+
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "--version" ];
 
   meta = with lib; {
     description = "NetBIOS scanner written in Rust";
