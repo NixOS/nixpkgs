@@ -1,0 +1,7 @@
+{
+	"name": "C++",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"postCreateCommand": "git submodule init && git submodule update"
+}
