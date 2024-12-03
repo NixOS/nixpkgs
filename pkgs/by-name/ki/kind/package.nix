@@ -26,8 +26,6 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  doCheck = false;
-
   postInstall = ''
     installShellCompletion --cmd kind \
       --bash <($out/bin/kind completion bash) \
