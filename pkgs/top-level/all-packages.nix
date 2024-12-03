@@ -4205,10 +4205,6 @@ with pkgs;
 
   nanoemoji = with python3Packages; toPythonApplication nanoemoji;
 
-  nbtscanner = callPackage ../tools/security/nbtscanner {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   netexec = python3Packages.callPackage ../tools/security/netexec { };
 
   netdata = callPackage ../tools/system/netdata {
