@@ -311,7 +311,7 @@ in
       newScope? :: AttrSet -> scope,
       directory :: Path,
       recurseIntoDirectory? :: (args -> AttrSet) -> args -> AttrSet,
-      ...
+      recurseArgs? :: Any
     }) -> AttrSet
     ```
 
@@ -348,6 +348,9 @@ in
         ))
       ```
       :::
+
+    `recurseArgs`
+    : Optional argument, which can be hold data used by `recurseIntoDirectory`
 
     # Examples
     :::{.example}
@@ -421,8 +424,11 @@ in
     in
     {
       callPackage,
+      newScope ? throw "lib.packagesFromDirectoryRecursive: newScope wasn't passed in args",
       directory,
-      # recurseIntoDirectory can modify the function used when processing directory entries; see nixdoc above
+      # recurseIntoDirectory can modify the function used when processing directory entries
+      #  and recurseArgs can (optionally) hold data for its use ; see nixdoc above
+      recurseArgs ? throw "lib.packagesFromDirectoryRecursive: recurseArgs wasn't passed in args",
       recurseIntoDirectory ?
         if args ? newScope then
           # `processDir` is the same function as defined above
@@ -442,7 +448,6 @@ in
         else
           # otherwise, no modification is necessary
           id,
-      ...
     }@args:
     let
       defaultPath = append directory "package.nix";
