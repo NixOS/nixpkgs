@@ -14,8 +14,8 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "13xforever";
     repo = "ps3-disc-dumper";
-    rev = "v${version}";
-    sha256 = "sha256-m3TS9H6cbEAHn6PvYQDMzdKdnOnDSM4lxCTdHBCXLV4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-m3TS9H6cbEAHn6PvYQDMzdKdnOnDSM4lxCTdHBCXLV4=";
   };
 
   selfContainedBuild = true;
