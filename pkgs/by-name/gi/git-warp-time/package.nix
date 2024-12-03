@@ -13,7 +13,6 @@
 
   # buildInputs
   libgit2,
-  typos,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,14 +21,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/alerque/git-warp-time/releases/download/v${finalAttrs.version}/git-warp-time-${finalAttrs.version}.tar.zst";
-    sha256 = "sha256-Xh30nA77cJ7+UfKlIslnyD+93AtnQ+8P3sCFsG0DAUk=";
+    hash = "sha256-Xh30nA77cJ7+UfKlIslnyD+93AtnQ+8P3sCFsG0DAUk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     nativeBuildInputs = [ zstd ];
+    # so the cargo fetcher won't try to run the `./configure` script
     dontConfigure = true;
-    hash = "sha256-ozy8Mfl5fTJL2Sr22tCSnK30SOKaC9cL+g4lX6ivi9Q=";
+    hash = "sha256-bmClqtH1xU2KOKVbCOrgN14jpLKiA2ZMzWwrOiufwnQ=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libgit2
-    typos
   ];
 
   env = {

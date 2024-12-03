@@ -5,7 +5,7 @@
 , writeText
 , writeShellScriptBin
 , pkgs
-, pkgsi686Linux
+, pkgsHostTarget
 }:
 
 { profile ? ""
@@ -36,6 +36,10 @@
 # /lib will link to /lib64
 
 let
+  # The splicing code does not handle `pkgsi686Linux` well, so we have to be
+  # explicit about which package set it's coming from.
+  inherit (pkgsHostTarget) pkgsi686Linux;
+
   name = if (args ? pname && args ? version)
     then "${args.pname}-${args.version}"
     else args.name;
@@ -212,7 +216,7 @@ let
         ln -fsr $d/glib-2.0/schemas/*.xml $out/usr/share/glib-2.0/schemas
         ln -fsr $d/glib-2.0/schemas/*.gschema.override $out/usr/share/glib-2.0/schemas
       done
-      ${pkgs.glib.dev}/bin/glib-compile-schemas $out/usr/share/glib-2.0/schemas
+      ${pkgs.pkgsBuildBuild.glib.dev}/bin/glib-compile-schemas $out/usr/share/glib-2.0/schemas
     fi
 
     ${extraBuildCommands}
