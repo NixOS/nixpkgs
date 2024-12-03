@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, openssl
-, pkg-config
-, rustPlatform
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,31 +14,32 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "mayeranalytics";
-    repo = pname;
-    rev = "v${version}";
+    repo = "coinlive";
+    rev = "refs/tags/v${version}";
     hash = "sha256-llw97jjfPsDd4nYi6lb9ug6sApPoD54WlzpJswvdbRs=";
   };
 
   cargoHash = "sha256-T1TgwnohUDvfpn6GXNP4xJGHM3aenMK+ORxE3z3PPA4=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+    ];
 
   checkFlags = [
-    # requires network access
+    # Test requires network access
     "--skip=utils::test_get_infos"
   ];
 
   meta = with lib; {
     description = "Live cryptocurrency prices CLI";
     homepage = "https://github.com/mayeranalytics/coinlive";
+    changelog = "https://github.com/mayeranalytics/coinlive/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fab ];
     mainProgram = "coinlive";
