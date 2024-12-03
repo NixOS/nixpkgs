@@ -4,14 +4,11 @@
   fetchFromGitHub,
   fetchzip,
   rustPlatform,
-  bootstrap_cmds,
-  DiskArbitration,
-  Foundation,
   cmake,
-  libiconv,
   openssl,
   perl,
   pkg-config,
+  darwin,
   protobuf,
   libclang,
   rdkafka,
@@ -143,22 +140,16 @@ rustPlatform.buildRustPackage rec {
       rustPlatform.bindgenHook
     ]
     # Provides the mig command used by the krb5-src build script
-    ++ lib.optional stdenv.hostPlatform.isDarwin bootstrap_cmds;
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.bootstrap_cmds;
 
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
 
-  buildInputs =
-    [
-      openssl
-      rdkafka
-      libclang
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      DiskArbitration
-      Foundation
-    ];
+  buildInputs = [
+    openssl
+    rdkafka
+    libclang
+  ];
 
   # the check phase requires linking with rocksdb which can be a problem since
   # the rust rocksdb crate is not updated very often.

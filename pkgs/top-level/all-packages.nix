@@ -11714,11 +11714,6 @@ with pkgs;
     yarn-berry = yarn-berry.override { nodejs = nodejs-slim_22; };
   };
 
-  materialize = callPackage ../servers/sql/materialize {
-    inherit (buildPackages.darwin) bootstrap_cmds;
-    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
-  };
-
   micro-full = micro.wrapper.override {
     extraPackages = [
       wl-clipboard
