@@ -1,16 +1,20 @@
 {
-  stdenv,
   lib,
-  fetchFromGitHub,
+  stdenv,
   fetchzip,
   rustPlatform,
+  fetchFromGitHub,
+  protobuf,
+
+  # nativeBuildInputs
   cmake,
-  openssl,
   perl,
   pkg-config,
   darwin,
-  protobuf,
+
+# buildInputs
   libclang,
+  openssl,
   rdkafka,
 }:
 
@@ -90,8 +94,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "MaterializeInc";
-    repo = pname;
-    rev = "v${version}";
+    repo = "materialize";
+    rev = "refs/tags/v${version}";
     hash = "sha256-+cvTCiTbuaPYPIyDxQlMWdJA5/6cbMoiTcSmjj5KPjs=";
     fetchSubmodules = true;
   };
@@ -99,17 +103,20 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     ${lib.concatStringsSep "\n" (map fetchNpmPackage npmPackages)}
     substituteInPlace ./misc/dist/materialized.service \
-      --replace /usr/bin $out/bin \
-      --replace _Materialize root
+      --replace-fail /usr/bin $out/bin \
+      --replace-fail _Materialize root
     substituteInPlace ./src/catalog/build.rs \
-      --replace '&[ ' '&["."'
+      --replace-fail '&[ ' '&["."'
   '';
 
-  # needed for internal protobuf c wrapper library
-  env.PROTOC = "${protobuf}/bin/protoc";
-  env.PROTOC_INCLUDE = "${protobuf}/include";
-  # needed to dynamically link rdkafka
-  env.CARGO_FEATURE_DYNAMIC_LINKING = 1;
+  env = {
+    # needed for internal protobuf c wrapper library
+    PROTOC = lib.getExe protobuf;
+    PROTOC_INCLUDE = "${protobuf}/include";
+
+    # needed to dynamically link rdkafka
+    CARGO_FEATURE_DYNAMIC_LINKING = 1;
+  };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -146,9 +153,9 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_NO_VENDOR = 1;
 
   buildInputs = [
+    libclang
     openssl
     rdkafka
-    libclang
   ];
 
   # the check phase requires linking with rocksdb which can be a problem since
@@ -173,15 +180,16 @@ rustPlatform.buildRustPackage rec {
     install --mode=444 -D ./misc/dist/materialized.service $out/etc/systemd/system/materialized.service
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://materialize.com";
     description = "Streaming SQL materialized view engine for real-time applications";
-    license = licenses.bsl11;
+    license = lib.licenses.bsl11;
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"
       "aarch64-linux"
     ];
-    maintainers = [ maintainers.petrosagg ];
+    maintainers = with lib.maintainers; [ petrosagg ];
+    mainProgram = "environmentd";
   };
 }
