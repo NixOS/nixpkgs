@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "nettigo-air-monitor";
-  version = "3.3.0";
+  version = "4.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = "nettigo-air-monitor";
     rev = "refs/tags/${version}";
-    hash = "sha256-u4BfmdSP7UbwuS04MzsKRTWIsztBoNawcLXwhy4P4YA=";
+    hash = "sha256-aYlnaFim4ezZ/nOAf1m6iIfE4NGswtEmPsslfrTd5tI=";
   };
 
   build-system = [ setuptools ];
