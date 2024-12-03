@@ -5,8 +5,8 @@ The code in this directory is used by the [eval.yml](../../.github/workflows/eva
 Furthermore it also allows local evaluation using
 ```
 nix-build ci -A eval.full \
-  --max-jobs 4
-  --cores 2
+  --max-jobs 4 \
+  --cores 2 \
   --arg chunkSize 10000
 ```
 
