@@ -173,7 +173,6 @@
 , "smartdc"
 , "socket.io"
 , "speed-test"
-, "stackdriver-statsd-backend"
 , "svelte-check"
 , "svgo"
 , "tailwindcss"

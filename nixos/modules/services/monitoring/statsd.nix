@@ -87,7 +87,6 @@ in
         "console"
         "repeater"
         "statsd-librato-backend"
-        "stackdriver-statsd-backend"
         "statsd-influxdb-backend"
       ];
       type = lib.types.listOf lib.types.str;
