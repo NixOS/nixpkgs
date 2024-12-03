@@ -14073,6 +14073,8 @@ self: super: with self; {
 
   rollbar = callPackage ../development/python-modules/rollbar { };
 
+  roma = callPackage ../development/python-modules/roma { };
+
   roman = callPackage ../development/python-modules/roman { };
 
   romy = callPackage ../development/python-modules/romy { };
