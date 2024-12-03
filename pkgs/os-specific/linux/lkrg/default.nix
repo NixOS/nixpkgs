@@ -1,16 +1,24 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchFromGitHub,
+  kernel,
+}:
 let
-  isKernelRT = (kernel.structuredExtraConfig ? PREEMPT_RT) && (kernel.structuredExtraConfig.PREEMPT_RT == lib.kernel.yes);
+  isKernelRT =
+    (kernel.structuredExtraConfig ? PREEMPT_RT)
+    && (kernel.structuredExtraConfig.PREEMPT_RT == lib.kernel.yes);
 in
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}-${kernel.version}";
+stdenv.mkDerivation (finalAttrs: {
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
   pname = "lkrg";
   version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "lkrg-org";
     repo = "lkrg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+yIKkTvfVbLnFBoXSKGebB1A8KqpaRmsLh8SsNuI9Dc=";
   };
   patches = [
@@ -50,4 +58,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     broken = kernel.kernelOlder "5.10" || kernel.kernelAtLeast "6.1" || isKernelRT;
   };
-}
+})
