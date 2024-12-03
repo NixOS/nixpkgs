@@ -7,13 +7,13 @@
 }:
 
 let
-  version = "0.14.2";
+  version = "0.14.3";
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "Klasse-Methode";
     repo = "eintopf";
     rev = "v${version}";
-    hash = "sha256-38lVbgAjKsg/yXGFmIdw4KmvfIDCAE3K6qhvza3c+dU=";
+    hash = "sha256-cWHWRxZFoArBB5PiuY6EQubKJKm3/79fwNhnABOtBrM=";
   };
   frontend = callPackage ./frontend.nix { inherit src version; };
 in
