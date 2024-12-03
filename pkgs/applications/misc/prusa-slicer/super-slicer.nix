@@ -62,6 +62,11 @@ let
 
       substituteInPlace src/libslic3r/CMakeLists.txt \
         --replace "libexpat" "EXPAT::EXPAT"
+
+      # fixes GCC 14 error
+      substituteInPlace src/libslic3r/MeshBoolean.cpp \
+        --replace-fail 'auto &face' 'auto face' \
+        --replace-fail 'auto &vi' 'auto vi'
     '';
 
     # We don't need PS overrides anymore, and gcode-viewer is embedded in the binary.
