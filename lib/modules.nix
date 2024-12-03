@@ -751,17 +751,47 @@ let
           t' = opt.options.type;
           mergedType = t.typeMerge t'.functor;
           typesMergeable = mergedType != null;
-          typeSet = if (bothHave "type") && typesMergeable
-                       then { type = mergedType; }
-                       else {};
+
+          # TODO: Remove this when all downstream reliances of internals: 'functor.wrapped' are sufficiently migrated.
+          # A function that adds the deprecated wrapped message to a type.
+          addDeprecatedWrapped = t:
+            t // {
+              functor = t.functor // {
+                wrapped = t.functor.wrappedDeprecationMessage {
+                  inherit loc;
+                };
+              };
+            };
+
+          typeSet =
+            if opt.options ? type then
+              if res ? type then
+                if typesMergeable then
+                  {
+                    type =
+                      if mergedType ? functor.wrappedDeprecationMessage then
+                        addDeprecatedWrapped mergedType
+                      else
+                        mergedType;
+                  }
+                else
+                  # Keep in sync with the same error below!
+                  throw "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
+              else if opt.options.type ? functor.wrappedDeprecationMessage then
+                { type = addDeprecatedWrapped opt.options.type; }
+              else
+                {}
+            else
+              {};
+
           bothHave = k: opt.options ? ${k} && res ? ${k};
       in
       if bothHave "default" ||
          bothHave "example" ||
          bothHave "description" ||
-         bothHave "apply" ||
-         (bothHave "type" && (! typesMergeable))
+         bothHave "apply"
       then
+        # Keep in sync with the same error above!
         throw "The option `${showOption loc}' in `${opt._file}' is already declared in ${showFiles res.declarations}."
       else
         let
