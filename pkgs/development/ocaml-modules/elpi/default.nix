@@ -8,7 +8,7 @@
 , ppxlib, ppx_deriving
 , ppxlib_0_15, ppx_deriving_0_15
 , coqPackages
-, version ? if lib.versionAtLeast ocaml.version "4.08" then "1.20.0"
+, version ? if lib.versionAtLeast ocaml.version "4.08" then "2.0.3"
     else "1.15.2"
 }:
 
@@ -16,6 +16,7 @@ let p5 = camlp5; in
 let camlp5 = p5.override { legacy = true; }; in
 
 let fetched = coqPackages.metaFetch ({
+    release."2.0.3".sha256 = "sha256-t2z0sWPiFgp6LuR6CsH/Zk9qfxW+3QjjFcYrB6qSPgc=";
     release."1.20.0".sha256 = "sha256-lctZAIQgOg5d+LfILtWsBVcsemV3zTZYfJfDlCxHtcA=";
     release."1.19.2".sha256 = "sha256-dBj5Ek7PWq/8Btq/dggJUqa8cUtfvbi6EWo/lJEDOU4=";
     release."1.18.2".sha256 = "sha256-usOYukHQ/h4YBxlhYrAkMTVjNm97hq4IArI9bvDzy/k=";
