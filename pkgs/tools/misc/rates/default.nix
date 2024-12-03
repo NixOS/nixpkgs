@@ -4,6 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
   Security,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,6 +21,12 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-5EcTeMfa1GNp1q60qSgEi/I3298hXUD1Vc1K55XGW4I=";
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "--version" ];
 
   meta = with lib; {
     description = "CLI tool that brings currency exchange rates right into your terminal";
