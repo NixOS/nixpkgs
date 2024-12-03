@@ -201,6 +201,11 @@ in stdenv.mkDerivation {
     (lib.mesonBool "osmesa" true) # used by wine
     (lib.mesonBool "teflon" true) # TensorFlow frontend
 
+    # Enable all freedreno kernel mode drivers. (For example, virtio can be
+    # used with a virtio-gpu device supporting drm native context.) This option
+    # is ignored when freedreno is not being built.
+    (lib.mesonOption "freedreno-kmds" "msm,kgsl,virtio,wsl")
+
     # Enable Intel RT stuff when available
     (lib.mesonBool "install-intel-clc" true)
     (lib.mesonEnable "intel-rt" stdenv.hostPlatform.isx86_64)
