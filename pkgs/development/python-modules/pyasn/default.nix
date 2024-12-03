@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pyasn";
-  version = "1.6.2";
+  version = "1.6.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-otVfs+5HlHYJ9QIRylsLrEEahvPJNfuSyksLirfGaP8=";
+    hash = "sha256-6UK1SRY2Pse4tw6urs0OtOQe8bz0ojl7KabXFfzN+SU=";
   };
 
   datasrc = fetchFromGitHub {
