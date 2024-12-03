@@ -59,9 +59,14 @@ mapAliases ({
   cctools-llvm = pkgs.cctools; # added 2024-07-01
   cctools-port = pkgs.cctools; # added 2024-07-17
 
+  ### D ###
+
+  discrete-scroll = pkgs.discrete-scroll; # added 2024-11-27
+
   ### I ###
 
   insert_dylib = throw "'darwin.insert_dylib' has been renamed to 'insert-dylib'"; # added 2024-04-04
+  ios-deploy = throw "'darwin.ios-deploy' has been renamed to 'ios-deploy'"; # added 2024-11-28
 
   ### L ###
 

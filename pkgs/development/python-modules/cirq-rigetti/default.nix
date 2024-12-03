@@ -53,4 +53,10 @@ buildPythonPackage rec {
 
   # cirq's importlib hook doesn't work here
   #pythonImportsCheck = [ "cirq_rigetti" ];
+
+  meta = {
+    inherit (cirq-core.meta) changelog license maintainers;
+    description = "Cirq package to simulate and connect to Rigetti quantum computers and Quil QVM";
+    homepage = "https://github.com/quantumlib/Cirq/tree/main/cirq-rigetti";
+  };
 }

@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  testers,
+  act,
 }:
 
 let
@@ -27,6 +29,10 @@ buildGoModule {
     "-w"
     "-X main.version=${version}"
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = act;
+  };
 
   meta = {
     description = "Run your GitHub Actions locally";

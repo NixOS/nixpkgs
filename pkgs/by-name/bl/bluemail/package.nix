@@ -64,8 +64,6 @@ stdenv.mkDerivation rec {
     udev
   ];
 
-  unpackCmd = "${dpkg}/bin/dpkg-deb -x $src debcontents";
-
   dontBuild = true;
   dontStrip = true;
   dontWrapGApps = true;

@@ -17,12 +17,12 @@
 , openvpn
 , electron
 }: let
-  version = "1.3.4066.51";
+  version = "1.3.4083.88";
   src = fetchFromGitHub {
     owner = "pritunl";
     repo = "pritunl-client-electron";
     rev = version;
-    sha256 = "sha256-yoPpDOcTv3kBTHscYn//KseZpfj1HArInODSxPKOFXY=";
+    sha256 = "sha256-6CKckRrf1TVhuYOJ7caTRDFWiX5b27kDjLjd709NKUs=";
   };
 
   cli = buildGoModule {

@@ -1,10 +1,11 @@
 { lib
 , stdenv
 , alsa-lib
+, apple-sdk_11
 , autoPatchelfHook
 , cairo
 , cups
-, darwin
+, darwinMinVersionHook
 , fontconfig
 , glib
 , glibc
@@ -29,10 +30,12 @@ let
     "lib"
     "stdenv"
     "alsa-lib"
+    "apple-sdk_11"
     "autoPatchelfHook"
     "cairo"
     "cups"
     "darwin"
+    "darwinMinVersionHook"
     "fontconfig"
     "glib"
     "glibc"
@@ -106,8 +109,7 @@ let
     nativeBuildInputs = [ unzip makeWrapper ]
       ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
-    propagatedBuildInputs = [ setJavaClassPath zlib ]
-      ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk_11_0.frameworks.Foundation;
+    propagatedBuildInputs = [ setJavaClassPath zlib ];
 
     buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
@@ -118,13 +120,15 @@ let
       xorg.libXi
       xorg.libXrender
       xorg.libXtst
-    ];
+    ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+        apple-sdk_11
+        (darwinMinVersionHook "11.0")
+      ]);
 
     postInstall =
       let
         cLibsAsFlags = (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs);
         preservedNixVariables = [
-          "-ELOCALE_ARCHIVE"
           "-ENIX_BINTOOLS"
           "-ENIX_BINTOOLS_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
           "-ENIX_BUILD_CORES"
@@ -134,10 +138,20 @@ let
           "-ENIX_CFLAGS_COMPILE"
           "-ENIX_HARDENING_ENABLE"
           "-ENIX_LDFLAGS"
+        ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+          "-ELOCALE_ARCHIVE"
+        ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          "-EDEVELOPER_DIR"
+          "-EDEVELOPER_DIR_FOR_BUILD"
+          "-EDEVELOPER_DIR_FOR_TARGET"
+          "-EMACOSX_DEPLOYMENT_TARGET"
+          "-EMACOSX_DEPLOYMENT_TARGET_FOR_BUILD"
+          "-EMACOSX_DEPLOYMENT_TARGET_FOR_TARGET"
+          "-ENIX_APPLE_SDK_VERSION"
         ];
         preservedNixVariablesAsFlags = (map (f: "--add-flags '${f}'") preservedNixVariables);
       in
-      ''
+        ''
         # jni.h expects jni_md.h to be in the header search path.
         ln -sf $out/include/linux/*_md.h $out/include/
 

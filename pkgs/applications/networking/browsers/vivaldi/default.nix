@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE, libxkbcommon, libxshmfence
+{ lib, stdenv, coreutils, fetchurl, zlib, libX11, libXext, libSM, libICE, libxkbcommon, libxshmfence
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
 , alsa-lib, dbus, cups, libexif, ffmpeg, systemd, libva, libGL
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
@@ -110,10 +110,11 @@ in stdenv.mkDerivation rec {
     done
     wrapProgram "$out/bin/vivaldi" \
       --add-flags ${lib.escapeShellArg commandLineArgs} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
       --set-default FONTCONFIG_FILE "${fontconfig.out}/etc/fonts/fonts.conf" \
       --set-default FONTCONFIG_PATH "${fontconfig.out}/etc/fonts" \
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
+      --prefix PATH : ${coreutils}/bin \
       ${lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
   '' + lib.optionalString enableWidevine ''
     ln -sf ${widevine-cdm}/share/google/chrome/WidevineCdm $out/opt/${vivaldiName}/WidevineCdm

@@ -9,13 +9,13 @@
 }:
 buildPythonApplication rec {
   pname = "mpremote";
-  version = "1.24.0";
+  version = "1.24.1";
 
   src = fetchFromGitHub {
     owner = "micropython";
     repo = "micropython";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nBz4m5YxD6MV5SyyzvJcwBTttV8uJGdcCUY6HYxZ4nY=";
+    hash = "sha256-Dc40uLyLQBfs8Elku8g+sTz/OETsFNqLqp/xnbF/rn4=";
   };
   sourceRoot = "${src.name}/tools/mpremote";
   format = "pyproject";

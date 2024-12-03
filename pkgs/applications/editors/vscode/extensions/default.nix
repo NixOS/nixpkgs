@@ -2071,8 +2071,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.243.1191"; # compatible with vscode ^1.95
-          hash = "sha256-tMUFMi+lBZZQA/8UTyoqQ5s+xnWKh39V8GYErO9ZuSo=";
+          version = "1.246.1233"; # compatible with vscode ^1.95
+          hash = "sha256-Pz46qTCGtn7q7UqCzwkQbuEEkH6tKxZV1HKSUs9WA8M=";
         };
 
         meta = {
@@ -4297,8 +4297,8 @@ let
         mktplcRef = {
           name = "sas-lsp";
           publisher = "SAS";
-          version = "1.11.0";
-          hash = "sha256-CJn5pSZB+f5Eo7DvkJbP0iEzBbuBQC3FSZwxbxlrq58=";
+          version = "1.12.0";
+          hash = "sha256-go7H9DS1uJkzKowIQ2riSPOZRC737/Q0AWxzHIcBwg4=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/SAS.sas-lsp/changelog";
@@ -4636,8 +4636,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "4.0.16";
-          hash = "sha256-1GH3liiExURy5e6owSRr5UJ7UXa8KUgglIzfGsSPARg=";
+          version = "4.0.21";
+          hash = "sha256-AcZAhmJeAD4nGDhBXieUxldzNZhTPCOg6W44Sc7W4H0=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";

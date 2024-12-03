@@ -1,53 +1,50 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.plex;
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "plex" "managePlugins" ] "Please omit or define the option: `services.plex.extraPlugins' instead.")
+    (lib.mkRemovedOptionModule [ "services" "plex" "managePlugins" ] "Please omit or define the option: `services.plex.extraPlugins' instead.")
   ];
 
   options = {
     services.plex = {
-      enable = mkEnableOption "Plex Media Server";
+      enable = lib.mkEnableOption "Plex Media Server";
 
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/plex";
         description = ''
           The directory where Plex stores its data files.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Open ports in the firewall for the media server.
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "plex";
         description = ''
           User account under which Plex runs.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "plex";
         description = ''
           Group under which Plex runs.
         '';
       };
 
-      extraPlugins = mkOption {
-        type = types.listOf types.path;
+      extraPlugins = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [];
         description = ''
           A list of paths to extra plugin bundles to install in Plex's plugin
@@ -55,7 +52,7 @@ in
           symlinks in Plex's plugin directory will be cleared and this module
           will symlink all of the paths specified here to that directory.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [
             (builtins.path {
               name = "Audnexus.bundle";
@@ -70,8 +67,8 @@ in
         '';
       };
 
-      extraScanners = mkOption {
-        type = types.listOf types.path;
+      extraScanners = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [];
         description = ''
           A list of paths to extra scanners to install in Plex's scanners
@@ -81,7 +78,7 @@ in
           in Plex's scanners directory will be cleared and this module will
           symlink all of the paths specified here to that directory.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [
             (fetchFromGitHub {
               owner = "ZeroQI";
@@ -93,8 +90,8 @@ in
         '';
       };
 
-      accelerationDevices = mkOption {
-        type = types.listOf types.str;
+      accelerationDevices = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = ["*"];
         example = [ "/dev/dri/renderD128" ];
         description = ''
@@ -104,7 +101,7 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "plex" {
+      package = lib.mkPackageOption pkgs "plex" {
         extraDescription = ''
           Plex subscribers may wish to use their own package here,
           pointing to subscriber-only server versions.
@@ -113,7 +110,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # Most of this is just copied from the RPM package's systemd service file.
     systemd.services.plex = {
       description = "Plex Media Server";
@@ -149,7 +146,7 @@ in
         NoNewPrivileges = true;
         PrivateTmp = true;
         PrivateDevices = cfg.accelerationDevices == [];
-        DeviceAllow = mkIf (cfg.accelerationDevices != [] && !lib.elem "*" cfg.accelerationDevices) cfg.accelerationDevices;
+        DeviceAllow = lib.mkIf (cfg.accelerationDevices != [] && !lib.elem "*" cfg.accelerationDevices) cfg.accelerationDevices;
         ProtectSystem = true;
         ProtectHome = true;
         ProtectControlGroups = true;
@@ -167,8 +164,8 @@ in
       environment = {
         # Configuration for our FHS userenv script
         PLEX_DATADIR=cfg.dataDir;
-        PLEX_PLUGINS=concatMapStringsSep ":" builtins.toString cfg.extraPlugins;
-        PLEX_SCANNERS=concatMapStringsSep ":" builtins.toString cfg.extraScanners;
+        PLEX_PLUGINS=lib.concatMapStringsSep ":" builtins.toString cfg.extraPlugins;
+        PLEX_SCANNERS=lib.concatMapStringsSep ":" builtins.toString cfg.extraScanners;
 
         # The following variables should be set by the FHS userenv script:
         #   PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR
@@ -186,19 +183,19 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ 32400 3005 8324 32469 ];
       allowedUDPPorts = [ 1900 5353 32410 32412 32413 32414 ];
     };
 
-    users.users = mkIf (cfg.user == "plex") {
+    users.users = lib.mkIf (cfg.user == "plex") {
       plex = {
         group = cfg.group;
         uid = config.ids.uids.plex;
       };
     };
 
-    users.groups = mkIf (cfg.group == "plex") {
+    users.groups = lib.mkIf (cfg.group == "plex") {
       plex = {
         gid = config.ids.gids.plex;
       };

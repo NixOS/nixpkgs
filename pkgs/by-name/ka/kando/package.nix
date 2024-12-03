@@ -24,16 +24,16 @@
 
 buildNpmPackage rec {
   pname = "kando";
-  version = "1.4.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "kando-menu";
     repo = "kando";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JcPTplqrMgDsT0HDTh7liChUWvLqe9gwS51ANM3Wsds=";
+    hash = "sha256-0Y6JDTbzrtAU14soyQgnGTkdR/h52gX2ByNGIYCY38A=";
   };
 
-  npmDepsHash = "sha256-13NuhGq5Pv5GSLeXASWxbXZYaUb9KzMgR7y5I7mv+MA=";
+  npmDepsHash = "sha256-qmLaUd01Mk6yQYqd/rXy4aZoi6oYYY6eZ2kupGRb1z0=";
 
   npmFlags = [ "--ignore-scripts" ];
 
@@ -111,7 +111,7 @@ buildNpmPackage rec {
 
       makeWrapper ${lib.getExe electron} $out/bin/kando \
           --add-flags $out/share/kando/resources/app \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
           --inherit-argv0
     ''}
 

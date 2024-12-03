@@ -17,8 +17,8 @@ in bootStages ++ [
   (vanillaPackages: {
     inherit config overlays;
     stdenv =
-      assert vanillaPackages.hostPlatform == localSystem;
-      assert vanillaPackages.targetPlatform == localSystem;
+      assert vanillaPackages.stdenv.hostPlatform == localSystem;
+      assert vanillaPackages.stdenv.targetPlatform == localSystem;
       config.replaceStdenv { pkgs = vanillaPackages; };
   })
 

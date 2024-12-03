@@ -93,7 +93,8 @@
       '';
     };
   in buildFHSEnv {
-    name = "SideQuest";
+    pname = "SideQuest";
+    inherit version;
 
     passthru = {
       inherit pname version;

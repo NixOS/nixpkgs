@@ -134,11 +134,16 @@ let
       "${juliaWrapped}/bin/julia" \
       "${if lib.versionAtLeast julia.version "1.7" then ./extract_artifacts.jl else ./extract_artifacts_16.jl}" \
       '${lib.generators.toJSON {} (import ./extra-libs.nix)}' \
+      '${lib.generators.toJSON {} (stdenv.hostPlatform.isDarwin)}' \
       "$out"
   '';
 
   # Import the artifacts Nix to build Overrides.toml (IFD)
-  artifacts = import artifactsNix { inherit lib fetchurl pkgs glibc stdenv; };
+  artifacts = import artifactsNix ({
+    inherit lib fetchurl pkgs stdenv;
+  } // lib.optionalAttrs (!stdenv.targetPlatform.isDarwin) {
+    inherit glibc;
+  });
   overridesJson = writeTextFile {
     name = "Overrides.json";
     text = lib.generators.toJSON {} artifacts;
@@ -165,21 +170,23 @@ in
 runCommand "julia-${julia.version}-env" {
   nativeBuildInputs = [makeWrapper];
 
-  inherit julia;
-  inherit juliaWrapped;
-  meta = julia.meta;
+  passthru = {
+    inherit julia;
+    inherit juliaWrapped;
+    inherit (julia) pname version meta;
 
-  # Expose the steps we used along the way in case the user wants to use them, for example to build
-  # expressions and build them separately to avoid IFD.
-  inherit dependencies;
-  inherit closureYaml;
-  inherit dependencyUuidToInfoYaml;
-  inherit dependencyUuidToRepoYaml;
-  inherit minimalRegistry;
-  inherit artifactsNix;
-  inherit overridesJson;
-  inherit overridesToml;
-  inherit projectAndDepot;
+    # Expose the steps we used along the way in case the user wants to use them, for example to build
+    # expressions and build them separately to avoid IFD.
+    inherit dependencies;
+    inherit closureYaml;
+    inherit dependencyUuidToInfoYaml;
+    inherit dependencyUuidToRepoYaml;
+    inherit minimalRegistry;
+    inherit artifactsNix;
+    inherit overridesJson;
+    inherit overridesToml;
+    inherit projectAndDepot;
+  };
 } (''
   mkdir -p $out/bin
   makeWrapper ${juliaWrapped}/bin/julia $out/bin/julia \

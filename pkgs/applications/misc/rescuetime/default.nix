@@ -20,11 +20,7 @@ in mkDerivation rec {
   nativeBuildInputs = [ dpkg ];
   # avoid https://github.com/NixOS/patchelf/issues/99
   dontStrip = true;
-  unpackPhase = ''
-    mkdir pkg
-    dpkg-deb -x $src pkg
-    sourceRoot=pkg
-  '';
+
   installPhase = ''
     mkdir -p $out/bin
     cp usr/bin/rescuetime $out/bin

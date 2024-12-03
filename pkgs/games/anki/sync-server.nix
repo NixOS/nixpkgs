@@ -1,12 +1,11 @@
-{ lib
-, stdenv
-, rustPlatform
-, anki
-, darwin
+{
+  lib,
+  rustPlatform,
+  anki,
 
-, openssl
-, pkg-config
-, protobuf
+  openssl,
+  pkg-config,
+  buildPackages,
 }:
 
 rustPlatform.buildRustPackage {
@@ -30,22 +29,21 @@ rustPlatform.buildRustPackage {
     "--skip=scheduler::answering::test::state_application"
   ];
 
-  nativeBuildInputs = [ protobuf pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
-  env.PROTOC = lib.getExe protobuf;
+  env.PROTOC = lib.getExe buildPackages.protobuf;
 
-  meta = with lib; {
+  meta = {
     description = "Standalone official anki sync server";
     homepage = "https://apps.ankiweb.net";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ martinetd ];
+    license = with lib.licenses; [ agpl3Plus ];
+    maintainers = with lib.maintainers; [ martinetd ];
     mainProgram = "anki-sync-server";
   };
 }

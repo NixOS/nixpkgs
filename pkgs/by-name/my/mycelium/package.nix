@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mycelium";
-  version = "0.5.6";
+  version = "0.5.7";
 
   sourceRoot = "${src.name}/myceliumd";
 
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     owner = "threefoldtech";
     repo = "mycelium";
     rev = "v${version}";
-    hash = "sha256-Lv/k35mZCGc4u4E6fMAO5tGi5CmcPXEuSJUHh4iIDdQ=";
+    hash = "sha256-PbEoM+AnZTuo9xtwcDcTH9FZAzPzfBhX41+zVVTdgRo=";
   };
 
   cargoLock = {

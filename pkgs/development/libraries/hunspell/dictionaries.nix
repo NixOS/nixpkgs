@@ -846,6 +846,18 @@ rec {
     };
   };
 
+  /* INDONESIA */
+
+  id_ID = id_id;
+  id_id = mkDictFromLibreOffice {
+    shortName = "id-id";
+    dictFileName = "id_ID";
+    sourceRoot = "id";
+    shortDescription = "Bahasa Indonesia (Indonesia)";
+    readmeFile = "README-dict.md";
+    license = with lib.licenses; [ lgpl21Only lgpl3Only ];
+  };
+
   /* CROATIAN */
 
   hr_HR = hr-hr;

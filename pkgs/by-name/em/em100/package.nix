@@ -27,11 +27,13 @@ stdenv.mkDerivation rec {
 
   buildFlags = [
     "em100"
+    "makedpfw"
   ];
 
   installPhase = ''
     runHook preInstall
     install -Dm755 em100 $out/bin/em100
+    install -Dm755 makedpfw $out/bin/makedpfw
     install -Dm644 60-dediprog-em100pro.rules $out/lib/udev/rules.d/dediprog_em100.rules
     runHook postInstall
   '';

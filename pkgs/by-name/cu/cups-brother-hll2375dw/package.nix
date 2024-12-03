@@ -38,8 +38,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-N5VCBZLFrfw29QjjzlSvQ12urvyaf7ez/RJ08UwqHdk=";
   };
 
-  unpackPhase = "dpkg-deb -x $src .";
-
   patches = [
     # The brother lpdwrapper uses a temporary file to convey the printer settings.
     # The original settings file will be copied with "400" permissions and the "brprintconflsr3"
