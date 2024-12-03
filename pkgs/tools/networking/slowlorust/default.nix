@@ -11,8 +11,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "MJVL";
-    repo = pname;
-    rev = version;
+    repo = "slowlorust";
+    rev = "refs/tags/${version}";
     hash = "sha256-c4NWkQ/QvlUo1YoV2s7rWB6wQskAP5Qp1WVM23wvV3c=";
   };
 
@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Lightweight slowloris (HTTP DoS) tool";
     homepage = "https://github.com/MJVL/slowlorust";
+    changelog = "https://github.com/MJVL/slowlorust/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "slowlorust";
