@@ -46,7 +46,7 @@ async function fixPkgAddMissingSha1(pkg) {
 
   const [url, sha1] = pkg.resolved.split("#", 2);
 
-  if (sha1 || url.startsWith("https://codeload.github.com")) {
+  if (sha1 || url.startsWith("https://codeload.github.com/")) {
     return pkg;
   }
 

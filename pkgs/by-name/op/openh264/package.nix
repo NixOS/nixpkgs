@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "dev" ];
 
+  postPatch = ''
+    substituteInPlace meson.build --replace-fail "'-Werror'," ""
+  '';
+
   nativeBuildInputs = [
     meson
     nasm

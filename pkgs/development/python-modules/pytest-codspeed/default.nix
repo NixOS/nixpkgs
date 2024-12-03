@@ -1,17 +1,19 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
   cffi,
+  fetchFromGitHub,
   filelock,
+  hatchling,
   importlib-metadata,
-  pytest,
-  rich,
-  setuptools,
+  pytest-benchmark,
   pytest-cov-stub,
+  pytest-xdist,
+  pytest,
   pytestCheckHook,
+  rich,
   semver,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -22,36 +24,42 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CodSpeedHQ";
     repo = "pytest-codspeed";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-06U7S0hRb0J4hO48DaKMQk8Uzl2rUi1thQ4lGorfqpU=";
   };
 
   build-system = [ hatchling ];
 
+  buildInputs = [ pytest ];
+
   dependencies = [
     cffi
     filelock
     importlib-metadata
-    pytest
     rich
     setuptools
   ];
 
+  optional-dependencies = {
+    compat = [
+      pytest-benchmark
+      pytest-xdist
+    ];
+  };
+
   nativeCheckInputs = [
+    semver
     pytest-cov-stub
     pytestCheckHook
-    semver
   ];
 
-  pythonImportsCheck = [
-    "pytest_codspeed"
-  ];
+  pythonImportsCheck = [ "pytest_codspeed" ];
 
   meta = {
-    changelog = "https://github.com/CodSpeedHQ/pytest-codspeed/releases/tag/v${version}";
     description = "Pytest plugin to create CodSpeed benchmarks";
     homepage = "https://github.com/CodSpeedHQ/pytest-codspeed";
+    changelog = "https://github.com/CodSpeedHQ/pytest-codspeed/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

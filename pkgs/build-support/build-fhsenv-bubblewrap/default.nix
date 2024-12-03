@@ -4,7 +4,7 @@
 , runCommandLocal
 , writeShellScript
 , glibc
-, pkgsi686Linux
+, pkgsHostTarget
 , runCommandCC
 , coreutils
 , bubblewrap
@@ -41,6 +41,10 @@ let
     ;
 
   inherit (lib.attrsets) removeAttrs;
+
+  # The splicing code does not handle `pkgsi686Linux` well, so we have to be
+  # explicit about which package set it's coming from.
+  inherit (pkgsHostTarget) pkgsi686Linux;
 
   name = args.name or "${args.pname}-${args.version}";
   executableName = args.pname or args.name;

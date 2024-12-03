@@ -432,6 +432,11 @@ concatTo() {
 # $ flags=("lorem ipsum" "dolor" "sit amet")
 # $ concatStringsSep ";" flags
 # lorem ipsum;dolor;sit amet
+#
+# Also supports multi-character separators;
+# $ flags=("lorem ipsum" "dolor" "sit amet")
+# $ concatStringsSep " and " flags
+# lorem ipsum and dolor and sit amet
 concatStringsSep() {
     local sep="$1"
     local name="$2"
@@ -443,11 +448,15 @@ concatStringsSep() {
                 echo "concatStringsSep(): ERROR: trying to use concatStringsSep on an associative array." >&2
                 return 1 ;;
             -a*)
-                local IFS="$sep"
-                echo -n "${nameref[*]}" ;;
+                # \036 is the "record separator" character. We assume that this will never need to be part of
+                # an argument string we create here. If anyone ever hits this limitation: Feel free to refactor.
+                local IFS=$'\036' ;;
             *)
-                echo -n "${nameref// /"${sep}"}" ;;
+                local IFS=" " ;;
+
         esac
+        local ifs_separated="${nameref[*]}"
+        echo -n "${ifs_separated//"$IFS"/"$sep"}"
     fi
 }
 
@@ -1211,7 +1220,7 @@ _defaultUnpack() {
         # We can't preserve hardlinks because they may have been
         # introduced by store optimization, which might break things
         # in the build.
-        cp -pr --reflink=auto -- "$fn" "$destination"
+        cp -r --preserve=mode,timestamps --reflink=auto -- "$fn" "$destination"
 
     else
 
@@ -1685,6 +1694,7 @@ showPhaseFooter() {
 
 
 runPhase() {
+    local retval=0
     local curPhase="$*"
     if [[ "$curPhase" = unpackPhase && -n "${dontUnpack:-}" ]]; then return; fi
     if [[ "$curPhase" = patchPhase && -n "${dontPatch:-}" ]]; then return; fi
@@ -1703,8 +1713,9 @@ runPhase() {
     startTime=$(date +"%s")
 
     # Evaluate the variable named $curPhase if it exists, otherwise the
-    # function named $curPhase.
-    eval "${!curPhase:-$curPhase}"
+    # function named $curPhase. Trap errors in subshell to set non-zero retval.
+    trap 'retval=1; trap - ERR' ERR
+    eval "set -o errtrace; ${!curPhase:-$curPhase}"
 
     endTime=$(date +"%s")
 
@@ -1716,6 +1727,8 @@ runPhase() {
 
         cd -- "${sourceRoot:-.}"
     fi
+
+    return $retval
 }
 
 

@@ -53,7 +53,11 @@ let
       , libkrb5
 
       # icu
-      , icuSupport ? true
+      # Building with icu in pkgsStatic gives tons of "undefined reference" errors like this:
+      #   /nix/store/452lkaak37d3mzzn3p9ak7aa3wzhdqaj-icu4c-74.2-x86_64-unknown-linux-musl/lib/libicuuc.a(chariter.ao):
+      #    (.data.rel.ro._ZTIN6icu_7417CharacterIteratorE[_ZTIN6icu_7417CharacterIteratorE]+0x0):
+      #    undefined reference to `vtable for __cxxabiv1::__si_class_type_info'
+      , icuSupport ? !stdenv.hostPlatform.isStatic
       , icu
 
       # JIT
@@ -71,7 +75,11 @@ let
       , gettext
 
       # PAM
-      , pamSupport ? stdenv.hostPlatform.isLinux
+      # Building with linux-pam in pkgsStatic gives a few "undefined reference" errors like this:
+      #   /nix/store/3s55icpsbc36sgn7sa8q3qq4z6al6rlr-linux-pam-static-x86_64-unknown-linux-musl-1.6.1/lib/libpam.a(pam_audit.o):
+      #     in function `pam_modutil_audit_write':(.text+0x571):
+      #     undefined reference to `audit_close'
+      , pamSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic
       , linux-pam
 
       # PL/Perl
@@ -132,22 +140,22 @@ let
       disallowedReferences = [ "dev" "doc" "man" ];
       disallowedRequisites = [
         stdenv'.cc
+        llvmPackages.llvm.out
       ] ++ (
         map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs)
-      ) ++ lib.optionals jitSupport [
-        llvmPackages.llvm.out
-      ];
+      );
     };
     outputChecks.lib = {
       disallowedReferences = [ "out" "dev" "doc" "man" ];
       disallowedRequisites = [
         stdenv'.cc
+        llvmPackages.llvm.out
       ] ++ (
         map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs)
-      ) ++ lib.optionals jitSupport [
-        llvmPackages.llvm.out
-      ];
+      );
     };
+
+    strictDeps = true;
 
     buildInputs = [
       zlib
@@ -171,6 +179,7 @@ let
       ++ lib.optionals nlsSupport [ gettext ];
 
     nativeBuildInputs = [
+      libxml2
       makeWrapper
       pkg-config
       removeReferencesTo
@@ -207,9 +216,8 @@ let
       ++ lib.optionals pythonSupport [ "--with-python" ]
       ++ lib.optionals jitSupport [ "--with-llvm" ]
       ++ lib.optionals pamSupport [ "--with-pam" ]
-      # This could be removed once the upstream issue is resolved:
-      # https://postgr.es/m/flat/427c7c25-e8e1-4fc5-a1fb-01ceff185e5b%40technowledgy.de
-      ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16") [ "LDFLAGS_EX_BE=-Wl,-export_dynamic" ]
+      # This can be removed once v17 is removed. v18+ ships with it.
+      ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16" && olderThan "18") [ "LDFLAGS_EX_BE=-Wl,-export_dynamic" ]
       ++ lib.optionals (atLeast "17" && !perlSupport) [ "--without-perl" ]
       ++ lib.optionals ldapSupport [ "--with-ldap" ]
       ++ lib.optionals tclSupport [ "--with-tcl" ]
@@ -264,7 +272,7 @@ let
         # because there is a realistic use-case for extensions to locate the /lib directory to
         # load other shared modules.
         remove-references-to -t "$dev" -t "$doc" -t "$man" "$out/bin/postgres"
-
+      '' + lib.optionalString (!stdenv'.hostPlatform.isStatic) ''
         if [ -z "''${dontDisableStatic:-}" ]; then
           # Remove static libraries in case dynamic are available.
           for i in $lib/lib/*.a; do
@@ -275,6 +283,7 @@ let
             fi
           done
         fi
+      '' + ''
         # The remaining static libraries are libpgcommon.a, libpgport.a and related.
         # Those are only used when building e.g. extensions, so go to $dev.
         moveToOutput "lib/*.a" "$dev"
@@ -303,7 +312,7 @@ let
     # Also see <nixpkgs>/doc/stdenv/platform-notes.chapter.md
     doCheck = false;
     # Tests just get stuck on macOS 14.x for v13 and v14
-    doInstallCheck = !(stdenv'.hostPlatform.isDarwin && olderThan "15");
+    doInstallCheck = !(stdenv'.hostPlatform.isDarwin && olderThan "15") && !(stdenv'.hostPlatform.isStatic);
     installCheckTarget = "check-world";
 
     passthru = let

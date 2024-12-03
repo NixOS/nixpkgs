@@ -30,7 +30,7 @@
 , postgresql
 , proj
 , protobuf
-, python311
+, python3
 , qca-qt5
 , qscintilla
 , qt3d
@@ -49,11 +49,12 @@
 }:
 
 let
-  py = python311.override {
+  py = python3.override {
     self = py;
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
         withLocation = true;
+        withSerialPort = true;
       };
     };
   };
@@ -79,14 +80,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.34.11";
+  version = "3.34.13";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-VNgUMEA7VKZXsLG1ZYUIlYvjwRrH8LsliGiVRMnXOM0=";
+    hash = "sha256-eNncDIRfFYFxyc5a2tZijmVpx/LNm/roak84guFvldg=";
   };
 
   passthru = {

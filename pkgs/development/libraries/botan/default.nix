@@ -79,12 +79,10 @@ let
           "--with-bzip2"
           "--with-zlib"
           "--with-rst2man"
+          "--cpu=${stdenv.hostPlatform.parsed.cpu.name}"
         ]
         ++ lib.optionals stdenv.cc.isClang [
           "--cc=clang"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-          "--cpu=aarch64"
         ]
         ++ lib.optionals (lib.versionAtLeast version "3.6.0") [
           "--enable-modules=jitter_rng"

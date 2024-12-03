@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opensearch";
-  version = "2.17.1";
+  version = "2.18.0";
 
   src = fetchurl {
     url = "https://artifacts.opensearch.org/releases/bundle/opensearch/${finalAttrs.version}/opensearch-${finalAttrs.version}-linux-x64.tar.gz";
-    hash = "sha256-9m7Vt+x4SPOBAqVL88gufSmqhvAiCcnOi7bL43XzCiU=";
+    hash = "sha256-rjy0EHsuDNu5uYu05fLwGbc2to6ZVELHGORZ05/wHfE=";
   };
 
   nativeBuildInputs = [

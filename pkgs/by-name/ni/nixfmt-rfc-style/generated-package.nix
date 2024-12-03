@@ -9,8 +9,8 @@ mkDerivation {
   pname = "nixfmt";
   version = "0.6.0";
   src = fetchzip {
-    url = "https://github.com/nixos/nixfmt/archive/14be7e665024f1a8c31d748b22f5e215856d3479.tar.gz";
-    sha256 = "017a1069sy4bhc2wchgd5hl6c106spf0zq5dcg65mf4flba1xs0j";
+    url = "https://github.com/nixos/nixfmt/archive/cb92834560306868e4020dd643f09482587c6e7a.tar.gz";
+    sha256 = "0fg2mdjny6i90bivw5d4wxl522azmcmikcak2ffgrq69qhjv21f6";
   };
   isLibrary = true;
   isExecutable = true;
@@ -20,7 +20,7 @@ mkDerivation {
   ];
   executableHaskellDepends = [
     base bytestring cmdargs directory file-embed filepath
-    safe-exceptions text unix
+    safe-exceptions text transformers unix
   ];
   jailbreak = true;
   homepage = "https://github.com/NixOS/nixfmt";

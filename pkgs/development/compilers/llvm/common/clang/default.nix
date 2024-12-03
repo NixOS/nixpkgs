@@ -5,7 +5,6 @@
 , src ? null
 , monorepoSrc ? null
 , runCommand
-, substituteAll
 , cmake
 , ninja
 , libxml2

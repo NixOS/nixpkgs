@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://github.com/AbiWord/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/rrthomas/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
     hash = "sha256-2aWhDcmzikOzoPoix27W67fgnrU1r/YpVK/NvUDv/2s=";
   };
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Generic spell checking library";
-    homepage = "https://abiword.github.io/enchant/";
+    homepage = "https://rrthomas.github.io/enchant/";
     license = licenses.lgpl21Plus; # with extra provision for non-free checkers
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;

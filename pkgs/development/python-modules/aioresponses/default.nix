@@ -19,24 +19,15 @@
 
 buildPythonPackage rec {
   pname = "aioresponses";
-  version = "0.7.6";
+  version = "0.7.7";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-95XZ29otYXdIQOfjL1Nm9FdS0a3Bt0yTYq/QFylsfuE=";
+    hash = "sha256-ZikvHVyUo8uYTzM22AZEYEKtsXNH0wifLTli3W5bpVo=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # https://github.com/pnuckowski/aioresponses/pull/262
-      name = "aiohttp-3.11.0-compat.patch";
-      url = "https://github.com/pnuckowski/aioresponses/commit/e909123c5a70180a54443899d26b44ada511cd39.patch";
-      hash = "sha256-i/2rPtX64buVrVDSdB06NMOJCTdgENsxZDyphXWRwJI=";
-    })
-  ];
 
   nativeBuildInputs = [
     pbr
@@ -53,9 +44,10 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Skip a test which makes requests to httpbin.org
+    # Skip tests which make requests to httpbin.org
     "test_address_as_instance_of_url_combined_with_pass_through"
     "test_pass_through_with_origin_params"
+    "test_pass_through_unmatched_requests"
   ];
 
   meta = {

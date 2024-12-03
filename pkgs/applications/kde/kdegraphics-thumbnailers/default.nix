@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, ghostscript, substituteAll,
+  mkDerivation, lib, ghostscript, replaceVars,
   extra-cmake-modules, karchive, kio, libkexiv2, libkdcraw, kdegraphics-mobipocket
 }:
 
@@ -15,9 +15,8 @@ mkDerivation {
   patches = [
     # Hardcode patches to Ghostscript so PDF thumbnails work OOTB.
     # Intentionally not doing the same for dvips because TeX is big.
-    (substituteAll {
+    (replaceVars ./gs-paths.patch {
       gs = "${ghostscript}/bin/gs";
-      src = ./gs-paths.patch;
     })
   ];
 }

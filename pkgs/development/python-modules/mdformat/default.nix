@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "mdformat";
-  version = "0.7.18";
+  version = "0.7.19";
   pyproject = true;
 
   disabled = pythonOlder "3.8";

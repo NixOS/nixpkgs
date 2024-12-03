@@ -78,7 +78,7 @@ let
       touch ${configPath}
 
       # update global options
-      remarshal --if toml --of json ${configPath} \
+      remarshal --if toml --of json --stringify ${configPath} \
         | jq -cM 'with_entries(select([.key] | inside(["runners"])))' \
         | jq -scM '.[0] + .[1]' - <(echo ${escapeShellArg (toJSON cfg.settings)}) \
         | remarshal --if json --of toml \

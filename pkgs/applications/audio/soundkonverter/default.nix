@@ -19,7 +19,7 @@
   withSox ? true, sox,
   withOpus ? true, opusTools,
   withTwolame ? false, twolame,
-  withApe ? false, mac,
+  withApe ? false, monkeysAudio,
   withWavpack ? false, wavpack
 }:
 
@@ -35,7 +35,7 @@ let runtimeDeps = []
     ++ lib.optional withSox sox
     ++ lib.optional withOpus opusTools
     ++ lib.optional withTwolame twolame
-    ++ lib.optional withApe mac
+    ++ lib.optional withApe monkeysAudio
     ++ lib.optional withWavpack wavpack
     ++ lib.optional withUnfreeAac faac
     ++ lib.optionals withMidi [ fluidsynth timidity ]

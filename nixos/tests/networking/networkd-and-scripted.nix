@@ -462,6 +462,7 @@ let
               };
               bridges.bridge.interfaces = [ "greTunnel" "eth1" ];
               interfaces.eth1.ipv4.addresses = lib.mkOverride 0 [];
+              interfaces.eth1.ipv6.addresses = lib.mkOverride 0 [];
               interfaces.bridge.ipv4.addresses = lib.mkOverride 0 [
                 { address = "192.168.1.1"; prefixLength = 24; }
               ];
@@ -498,6 +499,7 @@ let
               };
               bridges.bridge.interfaces = [ "greTunnel" "eth2" ];
               interfaces.eth2.ipv4.addresses = lib.mkOverride 0 [];
+              interfaces.eth2.ipv6.addresses = lib.mkOverride 0 [];
               interfaces.bridge.ipv4.addresses = lib.mkOverride 0 [
                 { address = "192.168.1.2"; prefixLength = 24; }
               ];
@@ -658,10 +660,22 @@ let
             assert "02:de:ad:be:ef:01" in machine.succeed("ip link show dev tap0")
       '' # network-addresses-* only exist in scripted networking
       + lib.optionalString (!networkd) ''
-        with subtest("Test interfaces clean up"):
+        with subtest("Test interfaces' addresses clean up"):
             machine.succeed("systemctl stop network-addresses-tap0")
             machine.sleep(10)
             machine.succeed("systemctl stop network-addresses-tun0")
+            machine.sleep(10)
+            residue = machine.succeed("ip tuntap list | sort").strip()
+            assert (
+                residue == targetList
+            ), "Some virtual interface has been removed:\n{}".format(residue)
+            assert "192.168.1.1" not in machine.succeed("ip address show dev tap0"), "tap0 interface address has not been removed"
+            assert "192.168.1.2" not in machine.succeed("ip address show dev tun0"), "tun0 interface address has not been removed"
+
+        with subtest("Test interfaces clean up"):
+            machine.succeed("systemctl stop tap0-netdev")
+            machine.sleep(10)
+            machine.succeed("systemctl stop tun0-netdev")
             machine.sleep(10)
             residue = machine.succeed("ip tuntap list")
             assert (

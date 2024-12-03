@@ -9,7 +9,10 @@ let
   cfg = config.oci;
 in
 {
-  imports = [ ./oci-common.nix ];
+  imports = [
+    ./oci-common.nix
+    ../image/file-options.nix
+  ];
 
   config = {
     # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
@@ -17,10 +20,14 @@ in
     virtualisation.diskSize = lib.mkOverride 1490 (8 * 1024);
     virtualisation.diskSizeAutoSupported = false;
 
+    system.nixos.tags = [ "oci" ];
+    image.extension = "qcow2";
+    system.build.image = config.system.build.OCIImage;
     system.build.OCIImage = import ../../lib/make-disk-image.nix {
       inherit config lib pkgs;
       inherit (config.virtualisation) diskSize;
       name = "oci-image";
+      baseName = config.image.baseName;
       configFile = ./oci-config-user.nix;
       format = "qcow2";
       partitionTableType = if cfg.efi then "efi" else "legacy";

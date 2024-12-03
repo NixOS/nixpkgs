@@ -161,7 +161,17 @@ stdenv.mkDerivation {
       extraPrefix = "libs/python/";
     })
   ]
-  ++ lib.optional (lib.versionAtLeast version "1.81" && stdenv.cc.isClang) ./fix-clang-target.patch;
+  ++ lib.optional (lib.versionAtLeast version "1.81" && stdenv.cc.isClang) ./fix-clang-target.patch
+  ++ lib.optional (lib.versionAtLeast version "1.86") [
+    # Backport fix for NumPy 2 support.
+    (fetchpatch {
+      name = "boost-numpy-2-compatibility.patch";
+      url = "https://github.com/boostorg/python/commit/0474de0f6cc9c6e7230aeb7164af2f7e4ccf74bf.patch";
+      stripLen = 1;
+      extraPrefix = "libs/python/";
+      hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
+    })
+  ];
 
   meta = with lib; {
     homepage = "http://boost.org/";
@@ -173,6 +183,10 @@ stdenv.mkDerivation {
     # a very cryptic error message.
     badPlatforms = [ lib.systems.inspect.patterns.isMips64n32 ];
     maintainers = with maintainers; [ hjones2199 ];
+    broken =
+      enableNumpy
+      && lib.versionOlder version "1.86"
+      && lib.versionAtLeast python.pkgs.numpy.version "2";
   };
 
   passthru = {

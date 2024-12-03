@@ -10,6 +10,7 @@
   cargo,
   rustc,
   rustPlatform,
+  luarocks,
 
   # buildInputs
   lua,
@@ -17,9 +18,6 @@
   icu,
   fontconfig,
   libiconv,
-  stylua,
-  typos,
-  darwin,
   # FONTCONFIG_FILE
   makeFontsConf,
   gentium,
@@ -31,18 +29,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
-  version = "0.15.6";
+  version = "0.15.7";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.zst";
-    sha256 = "sha256-CtPvxbpq2/qwuANPp9XDJQHlxIbFiaNZJvYZeUx/wyE=";
+    hash = "sha256-PjU6Qfn+FTL3vt66mkIAn/uXWMPPlH8iK6B264ekIis=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     nativeBuildInputs = [ zstd ];
+    # so the cargo fetcher won't try to run the `./configure` script
     dontConfigure = true;
-    hash = "sha256-5SheeabI4SqJZ3edAvX2rUEGTdCXHoBTa+rnX7lv9Cg=";
+    hash = "sha256-iPkXEUC4U1m/ComIDo/J5kwkmM1QdowioNtnSnmMhJ0=";
   };
 
   nativeBuildInputs = [
@@ -52,21 +51,18 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     rustc
     rustPlatform.cargoSetupHook
+    luarocks
   ];
+  # luarocks propagates cmake, but it shouldn't be used as a build system.
+  dontUseCmakeConfigure = true;
 
-  buildInputs =
-    [
-      finalAttrs.finalPackage.passthru.luaEnv
-      harfbuzz
-      icu
-      fontconfig
-      libiconv
-      stylua
-      typos
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-    ];
+  buildInputs = [
+    finalAttrs.finalPackage.passthru.luaEnv
+    harfbuzz
+    icu
+    fontconfig
+    libiconv
+  ];
 
   configureFlags =
     [
@@ -111,41 +107,48 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru = {
-    luaEnv = lua.withPackages (
-      ps:
-      with ps;
+    # Use this passthru variable to add packages to your lua environment. Use
+    # something like this in your development environment:
+    #
+    # myLuaEnv = lua.withPackages (
+    #  ps: lib.attrVals (sile.passthru.luaPackages ++ [
+    #    "lua-cjson"
+    #    "lua-resty-http"
+    #  ]) ps
+    # )
+    luaPackages =
       [
-        cassowary
-        cldr
-        fluent
-        linenoise
-        loadkit
-        lpeg
-        lua-zlib
-        lua_cliargs
-        luaepnf
-        luaexpat
-        luafilesystem
-        luarepl
-        luasec
-        luasocket
-        luautf8
-        penlight
-        vstruct
+        "cassowary"
+        "cldr"
+        "fluent"
+        "linenoise"
+        "loadkit"
+        "lpeg"
+        "lua-zlib"
+        "lua_cliargs"
+        "luaepnf"
+        "luaexpat"
+        "luafilesystem"
+        "luarepl"
+        "luasec"
+        "luasocket"
+        "luautf8"
+        "penlight"
+        "vstruct"
         # lua packages needed for testing
-        busted
-        luacheck
+        "busted"
+        "luacheck"
         # packages needed for building api docs
-        ldoc
+        "ldoc"
         # NOTE: Add lua packages here, to change the luaEnv also read by `flake.nix`
       ]
       ++ lib.optionals (lib.versionOlder lua.luaversion "5.2") [
-        bit32
+        "bit32"
       ]
       ++ lib.optionals (lib.versionOlder lua.luaversion "5.3") [
-        compat53
-      ]
-    );
+        "compat53"
+      ];
+    luaEnv = lua.withPackages (ps: lib.attrVals finalAttrs.finalPackage.passthru.luaPackages ps);
 
     # Copied from Makefile.am
     tests.test = lib.optionalAttrs (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) (

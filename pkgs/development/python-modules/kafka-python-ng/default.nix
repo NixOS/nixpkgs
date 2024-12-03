@@ -15,7 +15,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.2.2";
+  version = "2.2.3";
   pname = "kafka-python-ng";
   pyproject = true;
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "wbarnha";
     repo = "kafka-python-ng";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ELJvcj91MQ2RTjT1dwgnTGSSG5lP6B6/45dFgtNY2Cc=";
+    hash = "sha256-a2RFiBRh3S2YQBekpwEK74ow8bGlgWCGqSf2vcgYPYk=";
   };
 
   build-system = [ setuptools-scm ];

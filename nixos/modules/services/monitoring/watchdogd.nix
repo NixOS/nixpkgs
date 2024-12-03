@@ -1,33 +1,32 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   cfg = config.services.watchdogd;
 
   mkPluginOpts = plugin: defWarn: defCrit: {
-    enabled = mkEnableOption "watchdogd plugin ${plugin}";
-    interval = mkOption {
-      type = types.ints.unsigned;
+    enabled = lib.mkEnableOption "watchdogd plugin ${plugin}";
+    interval = lib.mkOption {
+      type = lib.types.ints.unsigned;
       default = 300;
       description = ''
         Amount of seconds between every poll.
       '';
     };
-    logmark = mkOption {
-      type = types.bool;
+    logmark = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to log current stats every poll interval.
       '';
     };
-    warning = mkOption {
-      type = types.numbers.nonnegative;
+    warning = lib.mkOption {
+      type = lib.types.numbers.nonnegative;
       default = defWarn;
       description = ''
         The high watermark level. Alert sent to log.
       '';
     };
-    critical = mkOption {
-      type = types.numbers.nonnegative;
+    critical = lib.mkOption {
+      type = lib.types.numbers.nonnegative;
       default = defCrit;
       description = ''
         The critical watermark level. Alert sent to log, followed by reboot or script action.
@@ -36,11 +35,11 @@ let
   };
 in {
   options.services.watchdogd = {
-    enable = mkEnableOption "watchdogd, an advanced system & process supervisor";
-    package = mkPackageOption pkgs "watchdogd" { };
+    enable = lib.mkEnableOption "watchdogd, an advanced system & process supervisor";
+    package = lib.mkPackageOption pkgs "watchdogd" { };
 
-    settings = mkOption {
-      type = with types; submodule {
+    settings = lib.mkOption {
+      type = with lib.types; submodule {
         freeformType = let
           valueType = oneOf [
             bool
@@ -51,14 +50,14 @@ in {
         in attrsOf (either valueType (attrsOf valueType));
 
         options = {
-          timeout = mkOption {
+          timeout = lib.mkOption {
             type = types.ints.unsigned;
             default = 15;
             description = ''
               The WDT timeout before reset.
             '';
           };
-          interval = mkOption {
+          interval = lib.mkOption {
             type = types.ints.unsigned;
             default = 5;
             description = ''
@@ -66,7 +65,7 @@ in {
             '';
           };
 
-          safe-exit = mkOption {
+          safe-exit = lib.mkOption {
             type = types.bool;
             default = true;
             description = ''
@@ -91,26 +90,26 @@ in {
   };
 
   config = let
-    toConfig = attrs: concatStringsSep "\n" (mapAttrsToList toValue attrs);
+    toConfig = attrs: lib.concatStringsSep "\n" (lib.mapAttrsToList toValue attrs);
 
     toValue = name: value:
-      if isAttrs value
-        then pipe value [
-          (mapAttrsToList toValue)
+      if lib.isAttrs value
+        then lib.pipe value [
+          (lib.mapAttrsToList toValue)
           (map (s: "  ${s}"))
-          (concatStringsSep "\n")
+          (lib.concatStringsSep "\n")
           (s: "${name} {\n${s}\n}")
         ]
-      else if isBool value
-        then "${name} = ${boolToString value}"
-      else if any (f: f value) [isString isInt isFloat]
+      else if lib.isBool value
+        then "${name} = ${lib.boolToString value}"
+      else if lib.any (f: f value) [lib.isString lib.isInt lib.isFloat]
         then "${name} = ${toString value}"
       else throw ''
-        Found invalid type in `services.watchdogd.settings`: '${typeOf value}'
+        Found invalid type in `services.watchdogd.settings`: '${lib.typeOf value}'
       '';
 
     watchdogdConf = pkgs.writeText "watchdogd.conf" (toConfig cfg.settings);
-  in mkIf cfg.enable {
+  in lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
     systemd.services.watchdogd = {
@@ -127,5 +126,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ vifino ];
+  meta.maintainers = with lib.maintainers; [ vifino ];
 }

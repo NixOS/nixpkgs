@@ -92,13 +92,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-aflzpJZ48AFBqNTssZl2KxkspQb662nGkEU6COIluxk=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "bindgen_cuda-0.1.6" = "sha256-OWGcQxT+x5HyIFskNVWpPr6Qfkh6Mv/g4PVSm5oA27g=";
-      "candle-core-0.7.2" = "sha256-OovBzD1gEYToa3HT8oQtbY6sDy0heRwAH2cK7gz5Jm0=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-USp8siEXVjtkPoCHfQjDYPtgLfNHcy02LSUNdwDbxgs=";
 
   nativeBuildInputs = [
     pkg-config

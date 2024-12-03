@@ -12,7 +12,7 @@ let
     self = python3;
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
   };
-  version = "0.62.0";
+  version = "0.66.0";
   aider-chat = python3.pkgs.buildPythonApplication {
     pname = "aider-chat";
     inherit version;
@@ -22,7 +22,7 @@ let
       owner = "Aider-AI";
       repo = "aider";
       rev = "refs/tags/v${version}";
-      hash = "sha256-o5vyOaJSUcdwuHBbzgpo5RDpZLnIur5dM+b7Y7PVBXA=";
+      hash = "sha256-6wD8wBDV6Roo3J+oEYiBzZ7i1iGOZhcoiKXHV7AJjDk=";
     };
 
     pythonRelaxDeps = true;
@@ -150,11 +150,18 @@ let
         # Tests fails on darwin
         "test_dark_mode_sets_code_theme"
         "test_default_env_file_sets_automatic_variable"
+        # FileNotFoundError: [Errno 2] No such file or directory: 'vim'
+        "test_pipe_editor"
       ];
+
+    makeWrapperArgs = [
+      "--set AIDER_CHECK_UPDATE false"
+      "--set AIDER_ANALYTICS false"
+    ];
 
     preCheck = ''
       export HOME=$(mktemp -d)
-      export AIDER_CHECK_UPDATE=false
+      export AIDER_ANALYTICS="false"
     '';
 
     optional-dependencies = with python3.pkgs; {

@@ -22,11 +22,11 @@ assert withConplay -> !libOnly;
 
 stdenv.mkDerivation rec {
   pname = "${lib.optionalString libOnly "lib"}mpg123";
-  version = "1.32.8";
+  version = "1.32.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/mpg123/mpg123-${version}.tar.bz2";
-    hash = "sha256-/u4TdMeVQODkBd8LxF/eIK1nARQlw2GidZ4hRolKJ6c=";
+    hash = "sha256-A7YeQATpYLrPKs2toD7ZTTduaqsnpgFEe9SQjYQHspE=";
   };
 
   outputs = [ "out" "dev" "man" ] ++ lib.optional withConplay "conplay";

@@ -51,7 +51,7 @@
 , recurseIntoAttrs
 , sigtool
 , sqlite
-, substituteAll
+, replaceVars
 , systemd
 , tree-sitter
 , texinfo
@@ -148,12 +148,12 @@ mkDerivation (finalAttrs: {
   inherit src;
 
   patches = patches fetchpatch ++ lib.optionals withNativeCompilation [
-    (substituteAll {
-      src = if lib.versionOlder finalAttrs.version "29"
+    (replaceVars (if lib.versionOlder finalAttrs.version "29"
             then ./native-comp-driver-options-28.patch
             else if lib.versionOlder finalAttrs.version "30"
             then ./native-comp-driver-options.patch
-            else ./native-comp-driver-options-30.patch;
+            else ./native-comp-driver-options-30.patch) {
+
       backendPath = (lib.concatStringsSep " "
         (builtins.map (x: ''"-B${x}"'') ([
           # Paths necessary so the JIT compiler finds its libraries:

@@ -5975,7 +5975,7 @@ with self; {
       description = "Hexadecial Dumper";
       homepage = "https://github.com/neilb/Data-HexDump";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ AndersonTorres ];
+      maintainers = with maintainers; [ ];
       mainProgram = "hexdump";
     };
   };

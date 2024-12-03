@@ -307,14 +307,14 @@ in {
   };
 
   ruby_3_2 = generic {
-    version = rubyVersion "3" "2" "5" "";
-    hash = "sha256-7wYQtJj2D7XP13tRrbPBD0yo7ZoXy4fGHlvqMUrDShY=";
+    version = rubyVersion "3" "2" "6" "";
+    hash = "sha256-2ctl7N8/GGaWOfJji2M3ntb7sX2Trk5ybU6yv2ikg3A=";
     cargoHash = "sha256-6du7RJo0DH+eYMOoh3L31F3aqfR5+iG1iKauSV1uNcQ=";
   };
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "5" "";
-    hash = "sha256-N4GjUEIiwvJstLnrnBoS2/SUTTZs4kqf+M+Z7LznUZY=";
+    version = rubyVersion "3" "3" "6" "";
+    hash = "sha256-jcSP/68nD4bxAZBT8o5R5NpMzjKjZ2CgYDqa7mfX/Y0=";
     cargoHash = "sha256-GeelTMRFIyvz1QS2L+Q3KAnyQy7jc0ejhx3TdEFVEbk=";
   };
 

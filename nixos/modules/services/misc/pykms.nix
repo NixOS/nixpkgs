@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   cfg = config.services.pykms;
   libDir = "/var/lib/pykms";
@@ -10,56 +8,56 @@ in
   meta.maintainers = with lib.maintainers; [ peterhoeg ];
 
   imports = [
-    (mkRemovedOptionModule [ "services" "pykms" "verbose" ] "Use services.pykms.logLevel instead")
+    (lib.mkRemovedOptionModule [ "services" "pykms" "verbose" ] "Use services.pykms.logLevel instead")
   ];
 
   options = {
     services.pykms = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable the PyKMS service.";
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "0.0.0.0";
         description = "The IP address on which to listen.";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 1688;
         description = "The port on which to listen.";
       };
 
-      openFirewallPort = mkOption {
-        type = types.bool;
+      openFirewallPort = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether the listening port should be opened automatically.";
       };
 
-      memoryLimit = mkOption {
-        type = types.str;
+      memoryLimit = lib.mkOption {
+        type = lib.types.str;
         default = "64M";
         description = "How much memory to use at most.";
       };
 
-      logLevel = mkOption {
-        type = types.enum [ "CRITICAL" "ERROR" "WARNING" "INFO" "DEBUG" "MININFO" ];
+      logLevel = lib.mkOption {
+        type = lib.types.enum [ "CRITICAL" "ERROR" "WARNING" "INFO" "DEBUG" "MININFO" ];
         default = "INFO";
         description = "How much to log";
       };
 
-      extraArgs = mkOption {
-        type = types.listOf types.str;
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         description = "Additional arguments";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewallPort [ cfg.port ];
 
     systemd.services.pykms = {
