@@ -8,32 +8,20 @@
   SDL2,
   SDL2_mixer,
   SDL2_net,
-  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chocolate-doom";
-  version = "3.0.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "chocolate-doom";
     repo = "chocolate-doom";
     rev = "refs/tags/chocolate-doom-${finalAttrs.version}";
-    hash = "sha256-VxbhaRMzj9oFakuH8mw36IPgBctYPajURrawRBrEjP4=";
+    hash = "sha256-yDPfqCuzRbDhOQisIDAGo2bmmMjT+0lds5xc9C2pqoU=";
   };
 
-  patches = [
-    # Pull upstream patch to fix builx against gcc-10:
-    #   https://github.com/chocolate-doom/chocolate-doom/pull/1257
-    (fetchpatch {
-      name = "fno-common.patch";
-      url = "https://github.com/chocolate-doom/chocolate-doom/commit/a8fd4b1f563d24d4296c3e8225c8404e2724d4c2.patch";
-      sha256 = "1dmbygn952sy5n8qqp0asg11pmygwgygl17lrj7i0fxa0nrhixhj";
-    })
-  ];
-
   postPatch = ''
-    sed -e 's#/games#/bin#g' -i src{,/setup}/Makefile.am
     patchShebangs --build man/{simplecpp,docgen}
   '';
 
