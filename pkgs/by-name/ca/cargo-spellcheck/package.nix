@@ -2,8 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , stdenv
-, Security
-, SystemConfiguration
+, apple-sdk_11
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   preCheck = "HOME=$(mktemp -d)";
 

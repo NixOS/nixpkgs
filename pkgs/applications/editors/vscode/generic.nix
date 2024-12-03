@@ -63,7 +63,8 @@ let
   # extension tooling without significant pain.
   fhs = { additionalPkgs ? pkgs: [ ] }: buildFHSEnv {
     # also determines the name of the wrapped command
-    name = executableName;
+    pname = executableName;
+    inherit version;
 
     # additional libraries which are commonly needed for extensions
     targetPkgs = pkgs: (with pkgs; [
