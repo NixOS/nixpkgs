@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, qemu
-, sigtool
-, makeWrapper
-, nix-update-script
-, apple-sdk_15
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  qemu,
+  sigtool,
+  makeWrapper,
+  nix-update-script,
+  apple-sdk_15,
 }:
 
 buildGoModule rec {
@@ -23,8 +24,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-nNSBwvhKSWs6to37+RLziYQqVOYfvjYib3fRRALACho=";
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
@@ -48,20 +51,23 @@ buildGoModule rec {
     export LIMA_HOME="$(mktemp -d)"
   '';
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out
-    cp -r _output/* $out
-    wrapProgram $out/bin/limactl \
-      --prefix PATH : ${lib.makeBinPath [ qemu ]}
-  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd limactl \
-      --bash <($out/bin/limactl completion bash) \
-      --fish <($out/bin/limactl completion fish) \
-      --zsh <($out/bin/limactl completion zsh)
-  '' + ''
-    runHook postInstall
-  '';
+  installPhase =
+    ''
+      runHook preInstall
+      mkdir -p $out
+      cp -r _output/* $out
+      wrapProgram $out/bin/limactl \
+        --prefix PATH : ${lib.makeBinPath [ qemu ]}
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd limactl \
+        --bash <($out/bin/limactl completion bash) \
+        --fish <($out/bin/limactl completion fish) \
+        --zsh <($out/bin/limactl completion zsh)
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   doInstallCheck = true;
   installCheckPhase = ''
