@@ -29,6 +29,15 @@ buildDotnetModule (
       dotnet-runtime ? dotnet-sdk,
       ...
     }@args:
+    let
+      nupkg = fetchNupkg {
+        pname = nugetName;
+        inherit version;
+        sha256 = nugetSha256;
+        hash = nugetHash;
+        installable = true;
+      };
+    in
     args
     // {
       inherit
@@ -40,15 +49,7 @@ buildDotnetModule (
 
       src = emptyDirectory;
 
-      buildInputs = [
-        (fetchNupkg {
-          pname = nugetName;
-          inherit version;
-          sha256 = nugetSha256;
-          hash = nugetHash;
-          installable = true;
-        })
-      ];
+      buildInputs = [ nupkg ];
 
       dotnetGlobalTool = true;
 
@@ -67,6 +68,11 @@ buildDotnetModule (
 
         runHook postInstall
       '';
+
+      passthru = {
+        updateScript = ./update.sh;
+        nupkg = nupkg;
+      } // args.passthru or {};
     }
   )
     (if lib.isFunction fnOrAttrs then fnOrAttrs finalAttrs else fnOrAttrs)
