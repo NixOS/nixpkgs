@@ -1,20 +1,10 @@
 # Static arguments
 { lib, runCommand, pkg-config }:
 
-let
-  genTestName = moduleNames:
-    # An overly long name made the progress bar weird and distraction, and same
-    # for the build log prefix.
-    if lib.length moduleNames > 1 then
-      "modules"
-    else
-      lib.head moduleNames;
-in
-
 # Tester arguments
 { package,
   moduleNames ? package.meta.pkgConfigModules,
-  testName ? "check-pkg-config-${genTestName moduleNames}",
+  testName ? "check-pkg-config-${package.pname or package.name}",
   version ? package.version or null,
   versionCheck ? false,
 }:
