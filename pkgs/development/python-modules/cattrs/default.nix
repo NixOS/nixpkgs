@@ -27,13 +27,11 @@
 buildPythonPackage rec {
   pname = "cattrs";
   version = "24.1.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-attrs";
-    repo = pname;
+    repo = "cattrs";
     rev = "refs/tags/v${version}";
     hash = "sha256-LSP8a/JduK0h9GytfbN7/CjFlnGGChaa3VbbCHQ3AFE=";
   };
@@ -116,11 +114,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cattr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python custom class converters for attrs";
     homepage = "https://github.com/python-attrs/cattrs";
     changelog = "https://github.com/python-attrs/cattrs/blob/${src.rev}/HISTORY.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
