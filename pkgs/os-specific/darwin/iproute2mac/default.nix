@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, darwin, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  darwin,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.4.1";
