@@ -3,9 +3,9 @@
 , fetchFromGitHub
 , makeWrapper
 , copyDesktopItems
-, electron
+, electron_33
 , nodejs
-, pnpm
+, pnpm_9
 , makeDesktopItem
 , autoSignDarwinBinariesHook
 , nix-update-script
@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.13.2";
+  version = "1.14.1";
 
   passthru.updateScript = nix-update-script { };
 
@@ -21,12 +21,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "containers";
     repo = "podman-desktop";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-07lf9jy22JUT+Vc5y9Tu1nkWaXU5RTdu3GibcvQsSs8=";
+    sha256 = "sha256-/aL6WZvUr2FAxR5L/gceMX/5PIYvOj/yiBbjZvP9rok=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-LPsNRd1c/cQeyBn3LZKnKeAsZ981sOkLYTnXIZL82LA=";
+  pnpmDeps = pnpm_9.fetchDeps {
+    inherit (finalAttrs) pname version src patches;
+    hash = "sha256-f7LDfKMPaVRtgvZLFz2JePXd45JBdBCNQR/Ch6VaBKU=";
   };
 
   patches = [
@@ -35,10 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    for file in packages/main/src/tray-animate-icon.ts packages/main/src/plugin/certificates.ts; do
-      substituteInPlace "$file" \
-        --replace-fail 'process.resourcesPath' "'$out/share/lib/podman-desktop/resources'"
-    done
+    substituteInPlace 'packages/main/src/plugin/certificates.ts' \
+      --replace-fail 'process.resourcesPath' "'$out/share/lib/podman-desktop/resources'"
     substituteInPlace "extensions/podman/packages/extension/src/util.ts" \
       --replace-fail '(process as any).resourcesPath' "'$out/share/lib/podman-desktop/resources'"
   '';
@@ -46,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
-    makeWrapper nodejs pnpm.configHook
+    makeWrapper nodejs pnpm_9.configHook
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -56,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    cp -r ${electron.dist} electron-dist
+    cp -r ${electron_33.dist} electron-dist
     chmod -R u+w electron-dist
 
     pnpm build
@@ -64,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
       --dir \
       --config .electron-builder.config.cjs \
       -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron_33.version}
 
     runHook postBuild
   '';
@@ -84,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 buildResources/icon.svg "$out/share/icons/hicolor/scalable/apps/podman-desktop.svg"
 
-    makeWrapper '${electron}/bin/electron' "$out/bin/podman-desktop" \
+    makeWrapper '${electron_33}/bin/electron' "$out/bin/podman-desktop" \
       --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0
@@ -113,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/containers/podman-desktop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ booxter panda2134 ];
-    inherit (electron.meta) platforms;
+    inherit (electron_33.meta) platforms;
     mainProgram = "podman-desktop";
   };
 })
