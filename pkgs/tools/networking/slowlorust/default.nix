@@ -4,6 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
   Security,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,9 +20,21 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Wu1mm+yJw2SddddxC5NfnMWLr+dplnRxH3AJ1/mTAKM=";
 
+  postPatch = ''
+    # https://github.com/MJVL/slowlorust/issues/2
+    substituteInPlace src/main.rs \
+      --replace-fail 'version = "1.0"' 'version = "${version}"'
+  '';
+
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "--version" ];
 
   meta = with lib; {
     description = "Lightweight slowloris (HTTP DoS) tool";
