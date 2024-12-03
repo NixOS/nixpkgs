@@ -142,6 +142,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  # FIXME: remove on rebuild
+  dylib_version = if stdenv.isLinux then lib.versions.majorMinor version else null;
+  preFixup = "";
+
   # validate dynamic linkage
   doInstallCheck = true;
   installCheckPhase = ''
