@@ -33,6 +33,7 @@ in
   srcs ? [ ],
   patches ? [ ],
   sourceRoot ? "",
+  cargoRoot ? "",
   cargoUpdateHook ? "",
   nativeBuildInputs ? [ ],
   ...
