@@ -9,9 +9,9 @@
   stdenv,
   curl,
   darwin,
-  version ? "0.2.95",
-  hash ? "sha256-prMIreQeAcbJ8/g3+pMp1Wp9H5u+xLqxRxL+34hICss=",
-  cargoHash ? "sha256-6iMebkD7FQvixlmghGGIvpdGwFNLfnUcFke/Rg8nPK4=",
+  version ? "0.2.97",
+  hash ? "sha256-DDUdJtjCrGxZV84QcytdxrmS5qvXD8Gcdq4OApj5ktI=",
+  cargoHash ? "sha256-Zfc2aqG7Qi44dY2Jz1MCdpcL3lk8C/3dt7QiE0QlNhc=",
 }:
 
 rustPlatform.buildRustPackage rec {
