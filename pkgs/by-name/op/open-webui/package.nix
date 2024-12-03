@@ -81,6 +81,7 @@ python312.pkgs.buildPythonApplication rec {
     docx2txt
     duckduckgo-search
     einops
+    emoji # This dependency is missing in upstream's pyproject.toml
     extract-msg
     fake-useragent
     fastapi

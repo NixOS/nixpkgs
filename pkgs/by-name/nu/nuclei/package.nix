@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -16,9 +17,12 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-lxqVNhA8/iMx31Bbp4rIHVrh3nUARlxY2KDcCxOtO+I=";
+
   proxyVendor = true; # hash mismatch between Linux and Darwin
 
   subPackages = [ "cmd/nuclei/" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   ldflags = [
     "-w"
@@ -27,6 +31,10 @@ buildGoModule rec {
 
   # Test files are not part of the release tarball
   doCheck = false;
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "-version" ];
 
   meta = with lib; {
     description = "Tool for configurable targeted scanning";

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   stdenv,
   vimUtils,
+  nix-update-script,
 }:
 let
   version = "0.6.2";
@@ -17,12 +18,14 @@ let
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
     inherit version src;
     pname = "blink-fuzzy-lib";
+
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-XXI2jEoD6XbFNk3O8B6+aLzl1ZcJq1VinQXb+AOw8Rw=";
+
     env = {
       # TODO: remove this if plugin stops using nightly rust
       RUSTC_BOOTSTRAP = true;
     };
-    useFetchCargoVendor = true;
-    cargoHash = "sha256-XXI2jEoD6XbFNk3O8B6+aLzl1ZcJq1VinQXb+AOw8Rw=";
   };
 in
 vimUtils.buildVimPlugin {
@@ -32,6 +35,16 @@ vimUtils.buildVimPlugin {
     mkdir -p target/release
     ln -s ${blink-fuzzy-lib}/lib/libblink_cmp_fuzzy.${libExt} target/release/libblink_cmp_fuzzy.${libExt}
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "vimPlugins.blink-cmp.blink-fuzzy-lib";
+    };
+
+    # needed for the update script
+    inherit blink-fuzzy-lib;
+  };
+
   meta = {
     description = "Performant, batteries-included completion plugin for Neovim";
     homepage = "https://github.com/saghen/blink.cmp";
