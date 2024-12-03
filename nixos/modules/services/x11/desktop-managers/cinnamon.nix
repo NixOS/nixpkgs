@@ -152,9 +152,6 @@ in
         # cinnamon-killer-daemon: provided by cinnamon-common
         networkmanagerapplet # session requirement - also nm-applet not needed
 
-        # For a polkit authentication agent
-        polkit_gnome
-
         # packages
         nemo-with-extensions
         gnome-online-accounts-gtk
