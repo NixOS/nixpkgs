@@ -36,10 +36,10 @@ qtModule {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi ];
 
   patches = [
-    ../patches/fix-qtgui-include-incorrect-case.patch
+    ./fix-qtgui-include-incorrect-case.patch
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
-    ../patches/qtmultimedia-windows-no-uppercase-libs.patch
-    ../patches/qtmultimedia-windows-resolve-function-name.patch
+    ./windows-no-uppercase-libs.patch
+    ./windows-resolve-function-name.patch
   ];
 
   cmakeFlags = [

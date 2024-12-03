@@ -1,14 +1,3 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Nick Cao <nickcao@nichi.co>
-Date: Fri, 14 Apr 2023 09:34:46 +0800
-Subject: [PATCH] qtbase: qmake: fix includedir in generated pkg-config
-
----
- qmake/generators/makefile.cpp | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/qmake/generators/makefile.cpp b/qmake/generators/makefile.cpp
-index 482ef2e2697..49217e62cda 100644
 --- a/qmake/generators/makefile.cpp
 +++ b/qmake/generators/makefile.cpp
 @@ -3412,8 +3412,7 @@ MakefileGenerator::writePkgConfigFile()
