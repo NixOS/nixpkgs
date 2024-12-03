@@ -1,23 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, ronn
-, systemd
-, kmod
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  bash,
+  ronn,
+  systemd,
+  kmod,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zram-generator";
-  version = "1.1.2";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-n+ZOWU+sPq9DcHgzQWTxxfMmiz239qdetXypqdy33cM=";
+    hash = "sha256-aGBvvjGKZ5biruwmJ0ITakqPhTWs9hspRIE9QirqstA=";
   };
 
   # RFE: Include Cargo.lock in sources
@@ -27,10 +29,12 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
     substituteInPlace Makefile \
-      --replace 'target/$(BUILDTYPE)' 'target/${stdenv.hostPlatform.rust.rustcTargetSpec}/$(BUILDTYPE)'
+      --replace-fail 'target/$(BUILDTYPE)' 'target/${stdenv.hostPlatform.rust.rustcTargetSpec}/$(BUILDTYPE)'
     substituteInPlace src/generator.rs \
-      --replace 'Command::new("systemd-detect-virt")' 'Command::new("${systemd}/bin/systemd-detect-virt")' \
-      --replace 'Command::new("modprobe")' 'Command::new("${kmod}/bin/modprobe")'
+      --replace-fail 'Command::new("systemd-detect-virt")' 'Command::new("${systemd}/bin/systemd-detect-virt")' \
+      --replace-fail 'Command::new("modprobe")' 'Command::new("${kmod}/bin/modprobe")'
+    substituteInPlace src/config.rs \
+      --replace-fail 'Command::new("/bin/sh")' 'Command::new("${bash}/bin/sh")'
   '';
 
   nativeBuildInputs = [
@@ -44,7 +48,7 @@ rustPlatform.buildRustPackage rec {
 
   preBuild = ''
     # embedded into the binary at build time
-    # https://github.com/systemd/zram-generator/blob/v1.1.2/Makefile#LL11-L11C56
+    # https://github.com/systemd/zram-generator/blob/v1.2.0/Makefile#LL11-L11C56
     export SYSTEMD_UTIL_DIR=$($PKG_CONFIG --variable=systemdutildir systemd)
   '';
 

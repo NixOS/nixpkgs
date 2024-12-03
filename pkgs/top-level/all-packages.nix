@@ -2855,8 +2855,9 @@ with pkgs;
     citrix_workspace_23_11_0
     citrix_workspace_24_02_0
     citrix_workspace_24_05_0
+    citrix_workspace_24_08_0
   ;
-  citrix_workspace = citrix_workspace_24_05_0;
+  citrix_workspace = citrix_workspace_24_08_0;
 
   cmst = libsForQt5.callPackage ../tools/networking/cmst { };
 
@@ -4923,10 +4924,6 @@ with pkgs;
   pnpm = pnpm_9;
 
   po4a = perlPackages.Po4a;
-
-  poac = callPackage ../development/tools/poac {
-    inherit (llvmPackages_14) stdenv;
-  };
 
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose { };
 
@@ -7218,8 +7215,7 @@ with pkgs;
   };
 
   inherit (callPackage ../applications/editors/jupyter-kernels/xeus-cling { })
-    cpp11-kernel cpp14-kernel cpp17-kernel cpp2a-kernel;
-  xeus-cling = callPackage ../applications/editors/jupyter-kernels/xeus-cling/xeus-cling.nix { };
+    cpp11-kernel cpp14-kernel cpp17-kernel cpp2a-kernel xeus-cling;
 
   clojure = callPackage ../development/interpreters/clojure {
     # set this to an LTS version of java
@@ -17805,7 +17801,7 @@ with pkgs;
 
   kicadAddons = recurseIntoAttrs (callPackage ../applications/science/electronics/kicad/addons {});
 
-  librepcb = libsForQt5.callPackage ../applications/science/electronics/librepcb { };
+  librepcb = qt6Packages.callPackage ../applications/science/electronics/librepcb { };
 
   ngspice = libngspice.override {
     withNgshared = false;
@@ -18876,8 +18872,6 @@ with pkgs;
   ldid = callPackage ../development/tools/ldid {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
-
-  zram-generator = callPackage ../tools/system/zram-generator { };
 
   zrythm = callPackage ../applications/audio/zrythm {
     inherit (plasma5Packages) breeze-icons;
