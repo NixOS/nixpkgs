@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec
 {
   pname = "alembic";
-  version = "1.8.7";
+  version = "1.8.8";
 
   src = fetchFromGitHub {
     owner = "alembic";
     repo = "alembic";
     rev = version;
-    hash = "sha256-EJZvbaGP9aea/UvcXmFbI3Y2/xTkdqORdzyz5ch931A=";
+    hash = "sha256-R69UYyvLnMwv1JzEQ6S6elvR83Rmvc8acBJwSV/+hCk=";
   };
 
   # note: out is unused (but required for outputDoc anyway)
