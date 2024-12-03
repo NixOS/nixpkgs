@@ -4,7 +4,7 @@ let
 
   iana-enterprise-numbers = fetchurl {
     url = "https://web.archive.org/web/20230312103209id_/https://www.iana.org/assignments/enterprise-numbers.txt";
-    sha256 = "sha256-huFWygMEylBKBMLV16UE6xLWP6Aw1FGYk5h1q5CErUs=";
+    sha256 = "sha256-3Z5uoOYfbF1o6MSgvnr00w4Z5w4IHc56L1voKDzeH/w=";
   };
 
 in stdenv.mkDerivation rec {
