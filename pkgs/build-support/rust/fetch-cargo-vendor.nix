@@ -32,8 +32,15 @@ let
 in
 
 {
+  pname ? null,
+  version ? null,
   name ? if args ? pname && args ? version then "${args.pname}-${args.version}" else "cargo-deps",
   hash ? (throw "fetchCargoVendor requires a `hash` value to be set for ${name}"),
+  src ? null,
+  srcs ? [ ],
+  patches ? [ ],
+  sourceRoot ? "",
+  cargoRoot ? "",
   nativeBuildInputs ? [ ],
   ...
 }@args:
