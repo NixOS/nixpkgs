@@ -104,6 +104,7 @@ python.pkgs.buildPythonApplication rec {
     "redis"
     "requests"
     "sentry-sdk"
+    "ua-parser"
   ];
 
   pythonRemoveDeps = [
