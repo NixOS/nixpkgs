@@ -15532,6 +15532,12 @@
     githubId = 50854675;
     name = "Nelson Jeppesen";
   };
+  nemodex = {
+    email = "nemodex.tech@gmail.com";
+    github = "Echo1429";
+    githubId = 119753974;
+    name = "Keith Dietz";
+  };
   neonfuz = {
     email = "neonfuz@gmail.com";
     github = "neonfuz";
