@@ -3,6 +3,9 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  testers,
+  nix-update-script,
+  kind,
 }:
 
 buildGoModule rec {
@@ -40,6 +43,13 @@ buildGoModule rec {
       --fish <($out/bin/kind completion fish) \
       --zsh <($out/bin/kind completion zsh)
   '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = kind;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Kubernetes IN Docker - local clusters for testing Kubernetes";
