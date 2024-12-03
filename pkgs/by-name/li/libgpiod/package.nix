@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgpiod";
-  version = "2.1.3";
+  version = "2.2";
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/snapshot/libgpiod-${version}.tar.gz";
-    hash = "sha256-jYDqAirngSKqUlMI50I7gwZL/yePzZzQRblLT4H4BX0=";
+    hash = "sha256-rjUynbcCfHQOkMiDuvJ8JjEfBhTmp7EVdxsoGIuZKuw=";
   };
 
   nativeBuildInputs = [
