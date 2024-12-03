@@ -20,16 +20,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "uiua";
-  version = "0.13.0";
+  version = "0.14.0-dev.5";
 
   src = fetchFromGitHub {
     owner = "uiua-lang";
     repo = "uiua";
     rev = version;
-    hash = "sha256-5IqJ/lvozXzc7LRUzxpG04M3Nir+3h+GoL7dqTgC9J8=";
+    hash = "sha256-wHuq0KmBK33CZxJeoD0YNfxdvuXBwQAqMIqY1Ouggsg=";
   };
 
-  cargoHash = "sha256-0hbE2ZH7daw/VQLe51CxOIborABDF0x00kTyx9NCs9g=";
+  cargoHash = "sha256-rAS56m2OBayvGxzJ1u+0DV6uyYCIoOHuo0NV2qmYZa8=";
 
   nativeBuildInputs =
     lib.optionals (webcamSupport || stdenv.hostPlatform.isDarwin) [ rustPlatform.bindgenHook ]
