@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "ncroxon";
     repo = "gnu-efi";
     rev = version;
-    hash = "sha256-xtiKglLXm9m4li/8tqbOsyM6ThwGhyu/g4kw5sC4URY=";
+    hash = "sha256-WTXUIBiyWEVCKfhUUWK5vrK6XmcvsAMl4CuhEw5oYWI=";
   };
 
   buildInputs = [ pciutils ];
