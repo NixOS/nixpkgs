@@ -44,6 +44,7 @@ buildDotnetModule rec {
     mainProgram = "ps3-disc-dumper";
     maintainers = with lib.maintainers; [
       evanjs
+      gepbird
     ];
     platforms = [ "x86_64-linux" ];
   };
