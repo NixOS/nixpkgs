@@ -13,7 +13,6 @@
   darwin,
 
   # buildInputs
-  libclang,
   openssl,
   rdkafka,
   apple-sdk_11,
@@ -138,7 +137,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [
-      libclang
       openssl
       rdkafka
     ]
