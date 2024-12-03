@@ -39,7 +39,7 @@ let
   inherit (binary) platform hash;
 in stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "13.13.2";
+  version = "13.16.0";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";
