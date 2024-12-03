@@ -96,7 +96,6 @@ in {
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
 
       serviceConfig = let
         conf = if cfg.configFile == null
