@@ -11,8 +11,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "jonkgrimes";
-    repo = pname;
-    rev = version;
+    repo = "nbtscanner";
+    rev = "refs/tags/${version}";
     hash = "sha256-lnTTutOc829COwfNhBkSK8UpiNnGsm7Da53b+eSBt1Q=";
   };
 
@@ -26,9 +26,10 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "NetBIOS scanner written in Rust";
-    mainProgram = "nbtscanner";
     homepage = "https://github.com/jonkgrimes/nbtscanner";
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/jonkgrimes/nbtscanner/releases/tag/${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "nbtscanner";
   };
 }
