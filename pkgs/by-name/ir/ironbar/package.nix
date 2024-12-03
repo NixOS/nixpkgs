@@ -12,6 +12,7 @@
   gtk-layer-shell,
   adwaita-icon-theme,
   libxkbcommon,
+  libdbusmenu-gtk3,
   openssl,
   pkg-config,
   hicolor-icon-theme,
@@ -29,16 +30,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "ironbar";
-  version = "0.16.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "ironbar";
     rev = "v${version}";
-    hash = "sha256-bvg7U7asuTONZgINQO8wSM2QjXAybvV7j5Ex/g6IDok=";
+    hash = "sha256-UtBO1XaghmzKv9qfhfoLi4ke+mf+Mtgh4f4UpCeEVDg=";
   };
 
-  cargoHash = "sha256-Hlucn83Uf1XydRY4SYso+fJ5EvH2hOGmCFYuKgCeSuE=";
+  cargoHash = "sha256-PIesf/wqz8jrc7WbPBvku4MOTAbNq6m4VhYSKoStvY8=";
 
   buildInputs =
     [
@@ -55,7 +56,8 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals (hasFeature "http") [ openssl ]
     ++ lib.optionals (hasFeature "volume") [ libpulseaudio ]
-    ++ lib.optionals (hasFeature "cairo") [ luajit ];
+    ++ lib.optionals (hasFeature "cairo") [ luajit ]
+    ++ lib.optionals (hasFeature "tray") [ libdbusmenu-gtk3 ];
 
   nativeBuildInputs = [
     pkg-config
