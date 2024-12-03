@@ -1,24 +1,26 @@
-{ lib
-, stdenv
-, runCommandLocal
-, buildEnv
-, writeText
-, writeShellScriptBin
-, pkgs
-, pkgsHostTarget
+{
+  lib,
+  stdenv,
+  runCommandLocal,
+  buildEnv,
+  writeText,
+  writeShellScriptBin,
+  pkgs,
+  pkgsHostTarget,
 }:
 
-{ profile ? ""
-, targetPkgs ? pkgs: []
-, multiPkgs ? pkgs: []
-, multiArch ? false # Whether to include 32bit packages
-, includeClosures ? false # Whether to include closures of all packages
-, nativeBuildInputs ? []
-, extraBuildCommands ? ""
-, extraBuildCommandsMulti ? ""
-, extraOutputsToInstall ? []
-, ... # for name, or pname+version
-} @ args:
+{
+  profile ? "",
+  targetPkgs ? pkgs: [ ],
+  multiPkgs ? pkgs: [ ],
+  multiArch ? false, # Whether to include 32bit packages
+  includeClosures ? false, # Whether to include closures of all packages
+  nativeBuildInputs ? [ ],
+  extraBuildCommands ? "",
+  extraBuildCommandsMulti ? "",
+  extraOutputsToInstall ? [ ],
+  ... # for name, or pname+version
+}@args:
 
 # HOWTO:
 # All packages (most likely programs) returned from targetPkgs will only be
@@ -40,16 +42,14 @@ let
   # explicit about which package set it's coming from.
   inherit (pkgsHostTarget) pkgsi686Linux;
 
-  name = if (args ? pname && args ? version)
-    then "${args.pname}-${args.version}"
-    else args.name;
+  name = if (args ? pname && args ? version) then "${args.pname}-${args.version}" else args.name;
 
   # "use of glibc_multi is only supported on x86_64-linux"
   isMultiBuild = multiArch && stdenv.system == "x86_64-linux";
 
   # list of packages (usually programs) which match the host's architecture
   # (which includes stuff from multiPkgs)
-  targetPaths = targetPkgs pkgs ++ (if multiPkgs == null then [] else multiPkgs pkgs);
+  targetPaths = targetPkgs pkgs ++ (if multiPkgs == null then [ ] else multiPkgs pkgs);
 
   # list of packages which are for x86 (only multiPkgs, only for x86_64 hosts)
   multiPaths = multiPkgs pkgsi686Linux;
@@ -83,7 +83,9 @@ let
 
   ldconfig = writeShellScriptBin "ldconfig" ''
     # due to a glibc bug, 64-bit ldconfig complains about patchelf'd 32-bit libraries, so we use 32-bit ldconfig when we have them
-    exec ${if isMultiBuild then pkgsi686Linux.glibc.bin else pkgs.glibc.bin}/bin/ldconfig -f /etc/ld.so.conf -C /etc/ld.so.cache "$@"
+    exec ${
+      if isMultiBuild then pkgsi686Linux.glibc.bin else pkgs.glibc.bin
+    }/bin/ldconfig -f /etc/ld.so.conf -C /etc/ld.so.cache "$@"
   '';
 
   etcProfile = pkgs.writeTextFile {
@@ -129,10 +131,12 @@ let
     '';
   };
 
-  ensureGsettingsSchemasIsDirectory = runCommandLocal "fhsenv-ensure-gsettings-schemas-directory" {} ''
-    mkdir -p $out/share/glib-2.0/schemas
-    touch $out/share/glib-2.0/schemas/.keep
-  '';
+  ensureGsettingsSchemasIsDirectory =
+    runCommandLocal "fhsenv-ensure-gsettings-schemas-directory" { }
+      ''
+        mkdir -p $out/share/glib-2.0/schemas
+        touch $out/share/glib-2.0/schemas/.keep
+      '';
 
   # Shamelessly stolen (and cleaned up) from original buildEnv.
   # Should be semantically equivalent, except we also take
@@ -142,38 +146,54 @@ let
   # as that will apply even to derivations with an output
   # explicitly specified, so this does change the behavior
   # very slightly for that particular edge case.
-  pickOutputs = let
-    pickOutputsOne = outputs: drv:
-      let
-        isSpecifiedOutput = drv.outputSpecified or false;
-        outputsToInstall = drv.meta.outputsToInstall or null;
-        pickedOutputs = if isSpecifiedOutput || outputsToInstall == null
-          then [ drv ]
-          else map (out: drv.${out} or null) (outputsToInstall ++ outputs);
-        extraOutputs = map (out: drv.${out} or null) extraOutputsToInstall;
-        cleanOutputs = lib.filter (o: o != null) (pickedOutputs ++ extraOutputs);
-      in {
-        paths = cleanOutputs;
-        priority = drv.meta.priority or lib.meta.defaultPriority;
-      };
-  in paths: outputs: map (pickOutputsOne outputs) paths;
+  pickOutputs =
+    let
+      pickOutputsOne =
+        outputs: drv:
+        let
+          isSpecifiedOutput = drv.outputSpecified or false;
+          outputsToInstall = drv.meta.outputsToInstall or null;
+          pickedOutputs =
+            if isSpecifiedOutput || outputsToInstall == null then
+              [ drv ]
+            else
+              map (out: drv.${out} or null) (outputsToInstall ++ outputs);
+          extraOutputs = map (out: drv.${out} or null) extraOutputsToInstall;
+          cleanOutputs = lib.filter (o: o != null) (pickedOutputs ++ extraOutputs);
+        in
+        {
+          paths = cleanOutputs;
+          priority = drv.meta.priority or lib.meta.defaultPriority;
+        };
+    in
+    paths: outputs: map (pickOutputsOne outputs) paths;
 
-  paths = let
-    basePaths = [
-      etcProfile
-      # ldconfig wrapper must come first so it overrides the original ldconfig
-      ldconfig
-      # magic package that just creates a directory, to ensure that
-      # the entire directory can't be a symlink, as we will write
-      # compiled schemas to it
-      ensureGsettingsSchemasIsDirectory
-    ] ++ baseTargetPaths ++ targetPaths;
-  in pickOutputs basePaths ["out" "lib" "bin"];
+  paths =
+    let
+      basePaths = [
+        etcProfile
+        # ldconfig wrapper must come first so it overrides the original ldconfig
+        ldconfig
+        # magic package that just creates a directory, to ensure that
+        # the entire directory can't be a symlink, as we will write
+        # compiled schemas to it
+        ensureGsettingsSchemasIsDirectory
+      ] ++ baseTargetPaths ++ targetPaths;
+    in
+    pickOutputs basePaths [
+      "out"
+      "lib"
+      "bin"
+    ];
 
   paths32 = lib.optionals isMultiBuild (
     let
       basePaths = baseMultiPaths ++ multiPaths;
-    in pickOutputs basePaths ["out" "lib"]
+    in
+    pickOutputs basePaths [
+      "out"
+      "lib"
+    ]
   );
 
   allPaths = paths ++ paths32;
@@ -185,41 +205,50 @@ let
     doCheck = false;
   };
 
-  rootfs = pkgs.runCommand "${name}-fhsenv-rootfs" {
-    __structuredAttrs = true;
-    exportReferencesGraph.graph = lib.concatMap (p: p.paths) allPaths;
-    inherit paths paths32 isMultiBuild includeClosures;
-    nativeBuildInputs = [ pkgs.jq ];
-  } ''
-    ${rootfs-builder}/bin/rootfs-builder
+  rootfs =
+    pkgs.runCommand "${name}-fhsenv-rootfs"
+      {
+        __structuredAttrs = true;
+        exportReferencesGraph.graph = lib.concatMap (p: p.paths) allPaths;
+        inherit
+          paths
+          paths32
+          isMultiBuild
+          includeClosures
+          ;
+        nativeBuildInputs = [ pkgs.jq ];
+      }
+      ''
+        ${rootfs-builder}/bin/rootfs-builder
 
-    # create a bunch of symlinks for usrmerge
-    ln -s /usr/bin $out/bin
-    ln -s /usr/sbin $out/sbin
-    ln -s /usr/lib $out/lib
-    ln -s /usr/lib32 $out/lib32
-    ln -s /usr/lib64 $out/lib64
-    ln -s /usr/lib64 $out/usr/lib
-    ln -s /usr/libexec $out/libexec
+        # create a bunch of symlinks for usrmerge
+        ln -s /usr/bin $out/bin
+        ln -s /usr/sbin $out/sbin
+        ln -s /usr/lib $out/lib
+        ln -s /usr/lib32 $out/lib32
+        ln -s /usr/lib64 $out/lib64
+        ln -s /usr/lib64 $out/usr/lib
+        ln -s /usr/libexec $out/libexec
 
-    # symlink 32-bit ld-linux so it's visible in /lib
-    if [ -e $out/usr/lib32/ld-linux.so.2 ]; then
-      ln -s /usr/lib32/ld-linux.so.2 $out/usr/lib64/ld-linux.so.2
-    fi
+        # symlink 32-bit ld-linux so it's visible in /lib
+        if [ -e $out/usr/lib32/ld-linux.so.2 ]; then
+          ln -s /usr/lib32/ld-linux.so.2 $out/usr/lib64/ld-linux.so.2
+        fi
 
-    # symlink /etc/mtab -> /proc/mounts (compat for old userspace progs)
-    ln -s /proc/mounts $out/etc/mtab
+        # symlink /etc/mtab -> /proc/mounts (compat for old userspace progs)
+        ln -s /proc/mounts $out/etc/mtab
 
-    if [[ -d $out/usr/share/gsettings-schemas/ ]]; then
-      for d in $out/usr/share/gsettings-schemas/*; do
-        # Force symlink, in case there are duplicates
-        ln -fsr $d/glib-2.0/schemas/*.xml $out/usr/share/glib-2.0/schemas
-        ln -fsr $d/glib-2.0/schemas/*.gschema.override $out/usr/share/glib-2.0/schemas
-      done
-      ${pkgs.pkgsBuildBuild.glib.dev}/bin/glib-compile-schemas $out/usr/share/glib-2.0/schemas
-    fi
+        if [[ -d $out/usr/share/gsettings-schemas/ ]]; then
+          for d in $out/usr/share/gsettings-schemas/*; do
+            # Force symlink, in case there are duplicates
+            ln -fsr $d/glib-2.0/schemas/*.xml $out/usr/share/glib-2.0/schemas
+            ln -fsr $d/glib-2.0/schemas/*.gschema.override $out/usr/share/glib-2.0/schemas
+          done
+          ${pkgs.pkgsBuildBuild.glib.dev}/bin/glib-compile-schemas $out/usr/share/glib-2.0/schemas
+        fi
 
-    ${extraBuildCommands}
-    ${lib.optionalString isMultiBuild extraBuildCommandsMulti}
-  '';
-in rootfs
+        ${extraBuildCommands}
+        ${lib.optionalString isMultiBuild extraBuildCommandsMulti}
+      '';
+in
+rootfs
