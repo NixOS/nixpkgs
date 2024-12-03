@@ -22579,6 +22579,12 @@
     githubId = 2125828;
     name = "Alex Davies";
   };
+  travgm = {
+    email = "travis@travgm.org";
+    github = "travgm";
+    githubId = 99630881;
+    name = "Travis Montoya";
+  };
   travisbhartwell = {
     email = "nafai@travishartwell.net";
     github = "travisbhartwell";
