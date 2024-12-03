@@ -10,12 +10,6 @@
   copyDesktopItems,
   makeDesktopItem,
   python3,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXcursor,
-  libXi,
-  libXext,
   glew,
   boost,
   SDL2,
@@ -28,35 +22,90 @@
   makeWrapper,
   darwin,
   libicns,
+  libzip,
+  nlohmann_json,
+  tinyxml-2,
+  spdlog,
+  writeTextFile,
+  shipwright,
 }:
+
+let
+
+  # The following would normally get fetched at build time, or a specific version is required
+
+  gamecontrollerdb = fetchFromGitHub {
+    owner = "mdqinc";
+    repo = "SDL_GameControllerDB";
+    rev = "a74711e1e87733ccdf02d7020d8fa9e4fa67176e";
+    hash = "sha256-rXC4akz9BaKzr/C2CryZC6RGk6+fGVG7RsQryUFUUk0=";
+  };
+
+  imgui' = fetchFromGitHub {
+    owner = "ocornut";
+    repo = "imgui";
+    tag = "v1.91.6-docking";
+    hash = "sha256-28wyzzwXE02W5vbEdRCw2iOF8ONkb3M3Al8XlYBvz1A=";
+  };
+
+  libgfxd = fetchFromGitHub {
+    owner = "glankk";
+    repo = "libgfxd";
+    rev = "008f73dca8ebc9151b205959b17773a19c5bd0da";
+    hash = "sha256-AmHAa3/cQdh7KAMFOtz5TQpcM6FqO9SppmDpKPTjTt8=";
+  };
+
+  prism = fetchFromGitHub {
+    owner = "KiritoDv";
+    repo = "prism-processor";
+    rev = "fb3f8b4a2d14dfcbae654d0f0e59a73b6f6ca850";
+    hash = "sha256-gGdQSpX/TgCNZ0uyIDdnazgVHpAQhl30e+V0aVvTFMM=";
+  };
+
+  stb_impl = writeTextFile {
+    name = "stb_impl.c";
+    text = ''
+      #define STB_IMAGE_IMPLEMENTATION
+      #include "stb_image.h"
+    '';
+  };
+
+  stb' = fetchurl {
+    name = "stb_image.h";
+    url = "https://raw.githubusercontent.com/nothings/stb/0bc88af4de5fb022db643c2d8e549a0927749354/stb_image.h";
+    hash = "sha256-xUsVponmofMsdeLsI6+kQuPg436JS3PBl00IZ5sg3Vw=";
+  };
+
+  stormlib' = fetchFromGitHub {
+    owner = "ladislav-zezula";
+    repo = "StormLib";
+    tag = "v9.25";
+    hash = "sha256-HTi2FKzKCbRaP13XERUmHkJgw8IfKaRJvsK3+YxFFdc=";
+  };
+
+  thread_pool = fetchFromGitHub {
+    owner = "bshoshany";
+    repo = "thread-pool";
+    rev = "v4.1.0";
+    hash = "sha256-zhRFEmPYNFLqQCfvdAaG5VBNle9Qm8FepIIIrT9sh88=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shipwright";
-  version = "8.0.6";
+  version = "9.0.2";
 
   src = fetchFromGitHub {
     owner = "harbourmasters";
     repo = "shipwright";
     tag = finalAttrs.version;
-    hash = "sha256-bA+Bm7M6udeZLpFhGa8fCtagfYBeRxWWqFuAj62XwGQ=";
+    hash = "sha256-xmRUUMjQt3CFJ0GxlUsUqmp//XTRWik3jSD4auql7Nk=";
     fetchSubmodules = true;
   };
 
   patches = [
     ./darwin-fixes.patch
-    (fetchpatch {
-      name = "gcc14.patch";
-      url = "https://github.com/HarbourMasters/Shipwright/commit/1bc15d5bf3042d4fd64e1952eb68c47a7d5d8061.patch";
-      hash = "sha256-OpjP+rGqx56DB4W8yzLkxuxSAQa6oXQqtbQ2cNcFjYQ=";
-    })
+    ./disable-downloading-stb_image.patch
   ];
-
-  # This would get fetched at build time otherwise, see:
-  # https://github.com/HarbourMasters/Shipwright/blob/e46c60a7a1396374e23f7a1f7122ddf9efcadff7/soh/CMakeLists.txt#L736
-  gamecontrollerdb = fetchurl {
-    name = "gamecontrollerdb.txt";
-    url = "https://raw.githubusercontent.com/gabomdq/SDL_GameControllerDB/075c1549075ef89a397fd7e0663d21e53a2485fd/gamecontrollerdb.txt";
-    hash = "sha256-atjc0t921l6JSUAd/Yk7uup2R7mCp5ivAh6Dr7HBY7I=";
-  };
 
   nativeBuildInputs =
     [
@@ -85,19 +134,23 @@ stdenv.mkDerivation (finalAttrs: {
       libpng
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXrandr
-      libXinerama
-      libXcursor
-      libXi
-      libXext
       libpulseaudio
       zenity
+      libzip
+      nlohmann_json
+      tinyxml-2
+      spdlog
     ];
 
   cmakeFlags = [
+    (lib.cmakeBool "BUILD_REMOTE_CONTROL" true)
     (lib.cmakeBool "NON_PORTABLE" true)
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/lib")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_IMGUI" "/build/source/build/_deps/imgui-src")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_LIBGFXD" "${libgfxd}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PRISM" "${prism}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_STORMLIB" "/build/source/build/_deps/stormlib-src")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_THREADPOOL" "${thread_pool}")
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-int-conversion -Wno-implicit-int";
@@ -107,21 +160,43 @@ stdenv.mkDerivation (finalAttrs: {
   # Linking fails without this
   hardeningDisable = [ "format" ];
 
+  preConfigure = ''
+    mkdir stb
+    cp ${stb'} ./stb/${stb'.name}
+    cp ${stb_impl} ./stb/${stb_impl.name}
+    substituteInPlace libultraship/cmake/dependencies/common.cmake \
+      --replace-fail "\''${STB_DIR}" "/build/source/stb"
+  '';
+
+  postPatch = ''
+    # use the soh patched deps when building
+
+    mkdir -p ./build/_deps/imgui-src
+    cp -R --no-preserve=mode,ownership ${imgui'}/* ./build/_deps/imgui-src
+    pushd ./build/_deps/imgui-src
+    patch -p1 < ${shipwright.src}/libultraship/cmake/dependencies/patches/imgui-fixes-and-config.patch
+    popd
+
+    mkdir -p ./build/_deps/stormlib-src
+    cp -R --no-preserve=mode,ownership ${stormlib'}/* ./build/_deps/stormlib-src
+    pushd ./build/_deps/stormlib-src
+    patch -p1 < ${shipwright.src}/libultraship/cmake/dependencies/patches/stormlib-optimizations.patch
+    popd
+
+  '';
+
   postBuild = ''
-    cp ${finalAttrs.gamecontrollerdb} ${finalAttrs.gamecontrollerdb.name}
+    cp ${gamecontrollerdb}/gamecontrollerdb.txt gamecontrollerdb.txt
+    mv ../libultraship/src/graphic/Fast3D/shaders ../soh/assets/custom
     pushd ../OTRExporter
     python3 ./extract_assets.py -z ../build/ZAPD/ZAPD.out --norom --xml-root ../soh/assets/xml --custom-assets-path ../soh/assets/custom --custom-otr-file soh.otr --port-ver ${finalAttrs.version}
     popd
   '';
 
-  preInstall =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      # Cmake likes it here for its install paths
-      cp ../OTRExporter/soh.otr ..
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      cp ../OTRExporter/soh.otr soh/soh.otr
-    '';
+  preInstall = ''
+    # Cmake likes it here for its install paths
+    cp ../OTRExporter/soh.otr soh/soh.otr
+  '';
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
