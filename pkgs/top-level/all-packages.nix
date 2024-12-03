@@ -5152,10 +5152,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  rustcat = callPackage ../tools/networking/rustcat {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   rustscan = callPackage ../tools/security/rustscan {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
