@@ -53,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "chocolate-doom";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    hydraPlatforms = lib.platforms.linux; # darwin times out
     maintainers = with lib.maintainers; [ Gliczy ];
   };
 })
