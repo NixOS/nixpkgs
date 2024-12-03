@@ -36,6 +36,8 @@ in buildLinux (args // {
     RT_GROUP_SCHED = lib.mkForce (option no); # Removed by sched-disable-rt-group-sched-on-rt.patch.
   } // structuredExtraConfig;
 
+  isLTS = true;
+
   extraMeta = extraMeta // {
     inherit branch;
   };
