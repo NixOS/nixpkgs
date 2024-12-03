@@ -241,7 +241,7 @@ rec {
 
           for dir in lib/ReSharperHost/linux-*; do
             rm -rf $dir/dotnet
-            ln -s ${dotnet-sdk_7} $dir/dotnet
+            ln -s ${dotnet-sdk_7.unwrapped}/share/dotnet $dir/dotnet
           done
         )
       '';

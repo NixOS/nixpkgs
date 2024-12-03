@@ -15,6 +15,7 @@
   cmake,
   darwin,
   gitUpdater,
+  ffmpeg,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotcut";
@@ -52,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (substituteAll {
-      inherit mlt;
+      inherit mlt ffmpeg;
       src = ./fix-mlt-ffmpeg-path.patch;
     })
   ];
