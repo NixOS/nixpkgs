@@ -28,16 +28,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "kanidm";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-zI+IPwpkkF67/JSl3Uu+Q1giUN49r/hjvY+/QLqB5eM=";
+    hash = "sha256-AXgq9ohnSeQvq1IIhxMhe+FhX6/hyvRsJCI4VaiN/MQ=";
   };
 
-  cargoHash = "sha256-l4UNdVvPteqs46Fm7yVgkgplANvkAmb4fooLigXRqZM=";
+  cargoHash = "sha256-/PsQ9yqyhSub1Qg2A3wOsgucq4rM0CU4uA8tEOJhtAU=";
 
   KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
 
