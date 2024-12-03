@@ -28,6 +28,8 @@ lib.overrideDerivation (buildLinux (args // {
     efiBootStub = false;
   } // (args.features or {});
 
+  isLTS = true;
+
   extraMeta = if (rpiVersion < 3) then {
     platforms = with lib.platforms; arm;
     hydraPlatforms = [];
