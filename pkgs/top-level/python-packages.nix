@@ -3454,6 +3454,8 @@ self: super: with self; {
 
   django-formset-js-improved = callPackage ../development/python-modules/django-formset-js-improved { };
 
+  django-fsm = callPackage ../development/python-modules/django-fsm { };
+
   django-graphiql-debug-toolbar = callPackage ../development/python-modules/django-graphiql-debug-toolbar { };
 
   django-gravatar2 = callPackage ../development/python-modules/django-gravatar2 { };
@@ -4905,6 +4907,8 @@ self: super: with self; {
   frilouz = callPackage ../development/python-modules/frilouz { };
 
   fritzconnection = callPackage ../development/python-modules/fritzconnection { };
+
+  froide = toPythonModule (pkgs.froide.override { python3Packages = self; });
 
   frozendict = callPackage ../development/python-modules/frozendict { };
 
