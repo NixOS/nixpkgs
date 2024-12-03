@@ -18125,10 +18125,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  websocat = callPackage ../tools/misc/websocat {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   vector = callPackage ../tools/misc/vector {
     inherit (darwin.apple_sdk.frameworks) Security CoreServices SystemConfiguration;
   };
