@@ -7,8 +7,10 @@
   qemu,
   sigtool,
   makeWrapper,
+  testers,
   nix-update-script,
   apple-sdk_15,
+  lima,
 }:
 
 buildGoModule rec {
@@ -74,7 +76,10 @@ buildGoModule rec {
     USER=nix $out/bin/limactl validate templates/default.yaml
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.version = testers.testVersion { package = lima; };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/lima-vm/lima";
