@@ -16254,6 +16254,8 @@ self: super: with self; {
 
   trezor = callPackage ../development/python-modules/trezor { };
 
+  triangle = callPackage ../development/python-modules/triangle { };
+
   trimesh = callPackage ../development/python-modules/trimesh { };
 
   trino-python-client = callPackage ../development/python-modules/trino-python-client { };
