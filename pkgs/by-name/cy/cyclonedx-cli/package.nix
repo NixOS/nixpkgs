@@ -6,21 +6,26 @@
 
 buildDotnetModule rec {
   pname = "cyclonedx-cli";
-  version = "0.25.1";
+  version = "0.27.2";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9G9g4bfH6EGSTZQlaiLsRjnryl+mQ3uNXdBUBVcKwlg=";
+    hash = "sha256-QU/MaT8iIf/9VpOb2mixOfOtG/J+sE7S0mT6BKYQnlI=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
   nugetDeps = ./deps.nix;
 
   preFixup = ''
     cd $out/bin
     find . ! -name 'cyclonedx' -type f -exec rm -f {} +
+  '';
+
+  postPatch = ''
+    substituteInPlace src/cyclonedx/cyclonedx.csproj tests/cyclonedx.tests/cyclonedx.tests.csproj \
+      --replace-fail 'net6.0' 'net8.0'
   '';
 
   meta = with lib; {
