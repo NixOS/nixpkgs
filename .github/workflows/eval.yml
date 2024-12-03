@@ -267,3 +267,21 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
           NUMBER: ${{ github.event.number }}
+
+      - name: Adding comments
+        if: ${{ github.event_name == 'pull_request_target' }}
+        run: |
+          # Add the eval summary as a comment
+          body="$(jq -r '
+          "## [Eval summary](https://github.com/" + env.GH_REPO + "/actions/runs/" + env.GITHUB_RUN_ID + "?pr=" + env.NUMBER + ")\n\n" +
+          "- Added packages: " + (.attrdiff.added | length | tostring) + "\n" +
+          "- Removed packages: " + (.attrdiff.removed | length | tostring) + "\n" +
+          "- Changed packages: " + (.attrdiff.changed | length | tostring) + "\n" +
+          "- Rebuild Linux: " + (.rebuildCountByKernel.linux | tostring) + "\n" +
+          "- Rebuild Darwin: " + (.rebuildCountByKernel.darwin | tostring)
+          ' <comparison/changed-paths.json)"
+          gh pr comment "$NUMBER" --edit-last --body "$body" || gh pr comment "$NUMBER" --body "$body"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.number }}
