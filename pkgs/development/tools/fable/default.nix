@@ -5,7 +5,6 @@ buildDotnetGlobalTool {
   version = "4.20.0";
 
   nugetHash = "sha256-K3908gEbl9crT4wmZfBtvag5Z6qYABfalBfLZlqZuDk=";
-  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Fable is an F# to JavaScript compiler";
