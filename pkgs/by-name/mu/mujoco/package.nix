@@ -23,8 +23,8 @@ let
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "7c8ed6b082aa3c7a3402f18e50da4480421d08fd";
-      hash = "sha256-xX3o4wX7RUvw1x2gOlT6sGhutDYLBZ/JzFnv68qN6E8=";
+      rev = "24e0bd827a8bec8121b128b0634cb34402fb3259";
+      hash = "sha256-h3QllJC/tiUzl5UlGCTIoDuDcKG6J538MCY2Pqe2IOE=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -35,8 +35,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "b396a6fbb2e173f52edb3360485dedf3389ef830";
-      hash = "sha256-UroGjERR5TW9KbyLwR/NBpytXrW1tHfu6ZvQPngROq4=";
+      rev = "d34b100c137ac931379ae5e1b888f16a9c8d6c72";
+      hash = "sha256-GYjENtobSWCJqRw2GJbxAJDZSdyBNqWkobn2Vm5H53Q=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -131,7 +131,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mujoco";
-  version = "3.2.5";
+  version = "3.2.6";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     owner = "google-deepmind";
     repo = "mujoco";
     rev = "refs/tags/${version}";
-    hash = "sha256-MyQL/WV8ehH7nYNlB/H5DgSrOrd252I6GFV2KLeef5g=";
+    hash = "sha256-n1H9e+GMqHYsimypF7AiVzHC2dXkL+4FWDEHB5B2ZIE=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];
