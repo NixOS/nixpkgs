@@ -32,7 +32,7 @@ buildDotnetModule rec {
     description = "CycloneDX CLI tool for SBOM analysis, merging, diffs and format conversions";
     homepage = "https://github.com/CycloneDX/cyclonedx-cli";
     changelog = "https://github.com/CycloneDX/cyclonedx-cli/releases/tag/v${version}";
-    maintainers = with maintainers; [ thillux ];
+    maintainers = (with maintainers; [ thillux ]) ++ teams.cyberus.members;
     license = licenses.asl20;
     platforms = with platforms; (linux ++ darwin);
     mainProgram = "cyclonedx";
