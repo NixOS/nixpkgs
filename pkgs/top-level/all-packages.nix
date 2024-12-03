@@ -5235,10 +5235,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_12;
   };
 
-  slowlorust = callPackage ../tools/networking/slowlorust {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   slstatus = callPackage ../applications/misc/slstatus {
     conf = config.slstatus.conf or null;
   };
