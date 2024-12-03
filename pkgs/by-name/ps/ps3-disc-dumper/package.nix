@@ -35,6 +35,8 @@ buildDotnetModule rec {
     openssl
   ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     homepage = "https://github.com/13xforever/ps3-disc-dumper";
     description = "Handy utility to make decrypted PS3 disc dumps";
