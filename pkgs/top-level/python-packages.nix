@@ -4842,6 +4842,8 @@ self: super: with self; {
 
   openstep-plist = callPackage ../development/python-modules/openstep-plist { };
 
+  glumpy = callPackage ../development/python-modules/glumpy { };
+
   glyphsets = callPackage ../development/python-modules/glyphsets { };
 
   glyphslib = callPackage ../development/python-modules/glyphslib { };
