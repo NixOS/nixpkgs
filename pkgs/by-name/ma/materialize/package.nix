@@ -12,10 +12,12 @@
   pkg-config,
   darwin,
 
-# buildInputs
+  # buildInputs
   libclang,
   openssl,
   rdkafka,
+  apple-sdk_11,
+  darwinMinVersionHook,
 }:
 
 let
@@ -134,11 +136,17 @@ rustPlatform.buildRustPackage rec {
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
 
-  buildInputs = [
-    libclang
-    openssl
-    rdkafka
-  ];
+  buildInputs =
+    [
+      libclang
+      openssl
+      rdkafka
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
+      apple-sdk_11
+      (darwinMinVersionHook "10.13")
+    ];
 
   # the check phase requires linking with rocksdb which can be a problem since
   # the rust rocksdb crate is not updated very often.
