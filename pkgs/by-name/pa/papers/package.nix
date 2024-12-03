@@ -1,6 +1,7 @@
 { lib
 , stdenv
-, fetchFromGitLab
+, fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -33,32 +34,34 @@
 , exempi
 , cargo
 , rustPlatform
+, rustfmt
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papers";
-  version = "46.2";
+  version = "47.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME/Incubator";
-    repo = "papers";
-    rev = finalAttrs.version;
-    hash = "sha256-T67d7xHK23CvmT8omEqNZrV5KloK4QXU973dtP9lTDE=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/papers/${lib.versions.major finalAttrs.version}/papers-${finalAttrs.version}.tar.xz";
+    hash = "sha256-z2nrCjcX/jVAEWFuL2Ajg4FP9Xt6nqzzBsZ25k2PZmY=";
   };
+
+  # FIXME: remove in next version
+  patches = [
+    (fetchpatch {
+      name = "fix-crash-when-drag-and-drop";
+      url = "https://gitlab.gnome.org/GNOME/Incubator/papers/-/commit/455ad2aebe5e5d5a57a2f4defc6af054927eac73.patch";
+      hash = "sha256-PeWlFhvM8UzUFRaK9k/9Txwgta/EiFnMRjHwld3O+cU=";
+    })
+  ];
 
   cargoRoot = "shell-rs";
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-
-    outputHashes = {
-      "cairo-rs-0.20.0" = "sha256-us8Q1cqHbs0wSfMcRgZx7wTqSagYkLv/aNI8Fle2nNk=";
-      "gdk4-0.9.0" = "sha256-a+fkiCilKbq7sBHZ9Uvq9a/qqbsVomxG6K07B5f4eYM=";
-      "libadwaita-0.7.0" = "sha256-gfkaj/BIqvWj1UNVAGNNXww4aoJPlqvBwIRGmDiv48E=";
-    };
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit (finalAttrs) src pname version cargoRoot;
+    hash = "sha256-/5IySNEUkwiQezLx4n4jlPJdqJhlcgt5bXIelUFftZI=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
     yelp-tools
     cargo
     rustPlatform.cargoSetupHook
+    # FIXME: remove rustfmt in next version
+    # https://gitlab.gnome.org/GNOME/Incubator/papers/-/commit/d0093c8c9cbacfbdafd70b6024982638b30a2591
+    rustfmt
   ];
 
   buildInputs = [
@@ -119,9 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
-      # Required to open multiple files.
-      # https://gitlab.gnome.org/GNOME/Incubator/papers/-/issues/176
-      --prefix PATH : "$out/bin"
     )
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath "$out/lib" "$out/bin/papers"

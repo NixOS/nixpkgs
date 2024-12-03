@@ -220,7 +220,7 @@ in
         '';
       };
 
-      systemd.tmpfiles.rules = [ "d /run/frr 0750 frr frr -" ];
+      systemd.tmpfiles.rules = [ "d /run/frr 0755 frr frr -" ];
 
       systemd.services.frr = {
         description = "FRRouting";
