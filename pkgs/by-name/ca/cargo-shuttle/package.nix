@@ -8,7 +8,6 @@
   stdenv,
   darwin,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "cargo-shuttle";
   version = "0.47.0";
@@ -21,6 +20,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   useFetchCargoVendor = true;
+
   cargoHash = "sha256-RqPVFovDaD2rW31HyETJfQ0qVwFxoGEvqkIgag3H6KU=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -45,12 +45,12 @@ rustPlatform.buildRustPackage rec {
     "init::shuttle_init_tests::"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cargo command for the shuttle platform";
     mainProgram = "cargo-shuttle";
     homepage = "https://shuttle.rs";
     changelog = "https://github.com/shuttle-hq/shuttle/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }
