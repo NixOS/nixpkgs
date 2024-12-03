@@ -35,6 +35,7 @@ in {
     systemd.services.fireqos = {
       description = "FireQOS";
       after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
