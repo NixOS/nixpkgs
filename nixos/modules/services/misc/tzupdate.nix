@@ -26,11 +26,12 @@ in
     # zone, which is better than silently overriding it.
     time.timeZone = null;
 
-    # We provide a one-shot service which can be manually run. We could
-    # provide a service that runs on startup, but it's tricky to get
-    # a service to run after you have *internet* access.
+    # We provide a one-shot service that runs at startup once network
+    # interfaces are up, but we can’t ensure we actually have Internet access
+    # at that point. It can also be run manually with `systemctl start tzupdate`.
     systemd.services.tzupdate = {
       description = "tzupdate timezone update service";
+      wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       script = ''
