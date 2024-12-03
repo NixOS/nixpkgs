@@ -41,10 +41,6 @@ mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DSYSTEM_BOOST=ON"
     "-DSYSTEM_YAMLCPP=ON"
-    # FIXME: Enabling darwin support but with the IDE disabled due to
-    # `macdeployqt` segfault in `installPhase`.
-    # Remove this when attempting to get the IDE building on darwin.
-    "-DSC_IDE=OFF"
   ];
 
   passthru = {
@@ -76,7 +72,6 @@ mkDerivation rec {
   };
 
   # The darwin target doesn't install headers by default.
-  # We copy them during `preConfigure` as configure phase appears to rm them.
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/include
     cp -r include $out/include/SuperCollider
@@ -95,16 +90,21 @@ mkDerivation rec {
     mkdir -p $out/lib/SuperCollider/plugins
     ln -s $out/Applications/SuperCollider.app/Contents/Resources/plugins/* $out/lib/SuperCollider/plugins/
 
-    # Expose the `sclang` and `scsynth` bins from the `.app` on darwin.
+    # Expose the bins from the `.app`.
     mkdir -p $out/bin
     ln -s $out/Applications/SuperCollider.app/Contents/MacOS/sclang $out/bin/sclang
+    ln -s $out/Applications/SuperCollider.app/Contents/MacOS/SuperCollider $out/bin/SuperCollider
     ln -s $out/Applications/SuperCollider.app/Contents/Resources/scsynth $out/bin/scsynth
+
+    # Remove executable permissions from `.dylib` and `.scx` files to prevent them from being wrapped.
+    find $out \( -name "*.dylib" -o -name "*.scx" \) -exec chmod a-x {} +
   '';
 
   meta = with lib; {
     description = "Programming language for real time audio synthesis";
     homepage = "https://supercollider.github.io";
     changelog = "https://github.com/supercollider/supercollider/blob/Version-${version}/CHANGELOG.md";
+    mainProgram = "SuperCollider";
     maintainers = with maintainers; [ mitchmindtree ];
     license = licenses.gpl3Plus;
     platforms = with platforms; darwin ++ linux;
