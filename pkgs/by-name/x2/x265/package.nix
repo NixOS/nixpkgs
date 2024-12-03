@@ -35,7 +35,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "x265";
-  version = "3.6";
+  version = "4.1";
 
   outputs = [
     "out"
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   # whether we fetch a source tarball or a tag from the git repo
   src = fetchurl {
     url = "https://bitbucket.org/multicoreware/x265_git/downloads/x265_${version}.tar.gz";
-    hash = "sha256-ZjUx80HFOJ9GDXMOYuEKT8yjQoyiyhCWk4Z7xf4uKAc=";
+    hash = "sha256-oxaZxqiYBrdLAVHl5qffZd5LSQUEgv5ev4pDedevjyk=";
   };
 
   patches = [
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
   postPatch =
     ''
       substituteInPlace cmake/Version.cmake \
-        --replace "unknown" "${version}" \
-        --replace "0.0" "${version}"
+        --replace-fail "unknown" "${version}" \
+        --replace-fail "0.0" "${version}"
     ''
     # There is broken and complicated logic when setting X265_LATEST_TAG for
     # mingwW64 builds. This bypasses the logic by setting it at the end of the
@@ -75,6 +75,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     [
+      "-DENABLE_ALPHA=ON"
+      "-DENABLE_MULTIVIEW=ON"
+      "-DENABLE_SCC_EXT=ON"
       "-Wno-dev"
       (mkFlag custatsSupport "DETAILED_CU_STATS")
       (mkFlag debugSupport "CHECKED_BUILD")
