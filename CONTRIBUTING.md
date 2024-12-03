@@ -690,6 +690,9 @@ Ask them nicely whether they still intend to review your PR and find yourself an
 
 - Improve skimmability: use a simple descriptive PR title (details go in commit titles) outlining _what_ is done and _why_.
 - Improve discoverability: apply all relevant labels, tick all relevant PR body checkboxes.
+- Add labels:
+  - If your PR needs a review, add the `needs_reviewer` label
+  - If your PR already has an approving review and is ready to be merged, add the `needs_merger` label
 - Wait. Reviewers frequently browse open PRs and may happen to run across yours and take a look.
 - Get non-committers to review/approve. Many committers filter open PRs for low-hanging fruit that are already been reviewed.
 - [@-mention](https://github.blog/news-insights/mention-somebody-they-re-notified/) someone and ask them nicely
