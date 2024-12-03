@@ -5,17 +5,18 @@
   lib,
   python3,
   toybox,
+  lsof
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "handheld-daemon";
-  version = "3.4.1";
+  version = "3.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hhd-dev";
     repo = "hhd";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hup9G4pTlTl68zLzhaDmH7nV8fp/I94Nuis68B8K2wY=";
+    hash = "sha256-IdpSRb66G+WzTv/BC29r2OjO1b4VdWbV6OSzOoiFAO0=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -27,6 +28,8 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
     toybox
     xlib
+    pyserial
+    lsof
   ];
 
   # This package doesn't have upstream tests.
@@ -46,6 +49,7 @@ python3.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     install -Dm644 $src/usr/lib/udev/rules.d/83-hhd.rules -t $out/lib/udev/rules.d/
+    install -Dm644 $src/usr/lib/udev/hwdb.d/83-hhd.hwdb -t $out/lib/udev/hwdb.d/
   '';
 
   meta = with lib; {
