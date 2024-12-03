@@ -1,17 +1,18 @@
 { lib
 , stdenv
-, fetchFromGitHub
+, fetchFromGitea
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dev86";
-  version = "unstable-2022-07-19";
+  version = "0-unstable-2024-03-28";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "jbruchon";
     repo = "dev86";
-    rev = "f5cd3e5c17a0d3cd8298bac8e30bed6e59c4e57a";
-    hash = "sha256-CWeboFkJkpKHZ/wkuvMj5a+5qB2uzAtoYy8OdyYErMg=";
+    rev = "a6a438062e8e36a7407d44c41a3958a4451e598d";
+    hash = "sha256-8aris/WLHMEOs2Eg8XfEUTaYIpmUk1NTEaRxm7xLreU=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
