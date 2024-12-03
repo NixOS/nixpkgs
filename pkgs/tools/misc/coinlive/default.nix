@@ -6,6 +6,7 @@
   pkg-config,
   rustPlatform,
   Security,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,10 +32,14 @@ rustPlatform.buildRustPackage rec {
       Security
     ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   checkFlags = [
     # Test requires network access
     "--skip=utils::test_get_infos"
   ];
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Live cryptocurrency prices CLI";
