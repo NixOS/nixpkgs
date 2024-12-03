@@ -9,6 +9,7 @@
   pkg-config,
   rustPlatform,
   Security,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,9 +18,9 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "vi";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-v5+9cbKe3c12/SrW7mgN6tvQIiAuweqvMIl46Ce9f2A=";
+    repo = "websocat";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-v5+9cbKe3c12/SrW7mgN6tvQIiAuweqvMIl46Ce9f2A=";
   };
 
   cargoHash = "sha256-2THUFcaM4niB7YiQiRXJQuaQu02fpgZKPWrejfhmRQ0=";
@@ -28,12 +29,15 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     makeWrapper
   ];
+
   buildInputs =
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       Security
     ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   buildFeatures = [ "ssl" ];
 
@@ -47,6 +51,8 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/websocat \
       --prefix PATH : ${lib.makeBinPath [ bash ]}
   '';
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Command-line client for WebSockets (like netcat/socat)";
