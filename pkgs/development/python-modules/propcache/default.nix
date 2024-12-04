@@ -4,6 +4,7 @@
   cython,
   expandvars,
   fetchFromGitHub,
+  pytest-codspeed,
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "propcache";
-  version = "0.2.0";
+  version = "0.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = "propcache";
     rev = "refs/tags/v${version}";
-    hash = "sha256-S0u5/HJYtZCWB9X+Nlnz+oSFb3o98mGWWwsNLodzS9g=";
+    hash = "sha256-j2PjSaOx0IKijoMjhtYVNrpqEwRjVFsON5OU/Fv5idc=";
   };
 
   build-system = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-codspeed
     pytest-cov-stub
     pytest-xdist
     pytestCheckHook
