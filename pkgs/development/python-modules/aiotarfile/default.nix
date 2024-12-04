@@ -39,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ unittestCheckHook ];
-  unittestFlagsArray = [ "tests/" ];  # Not sure why it isn't autodiscovered
+  unittestFlagsArray = [ "tests/" ]; # Not sure why it isn't autodiscovered
 
   pythonImportsCheck = [ "aiotarfile" ];
 
