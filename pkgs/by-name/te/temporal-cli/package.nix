@@ -101,7 +101,7 @@ let
 in
 symlinkJoin rec {
   pname = "temporal-cli";
-  inherit (tctl) version;
+  inherit (tctl-next) version;
   name = "${pname}-${version}";
 
   paths = [
