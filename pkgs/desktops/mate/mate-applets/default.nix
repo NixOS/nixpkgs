@@ -7,7 +7,6 @@
 , dbus-glib
 , glib
 , gtk3
-, gtksourceview4
 , gucharmap
 , libmateweather
 , libnl
@@ -27,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-applets";
-  version = "1.28.0";
+  version = "1.28.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "G2vva9XTJvudyCj/kQ5LG5KUtGYMMR3ByQMQ/Zw1ZoY=";
+    sha256 = "pZZxQVJ9xbFy0yKmADwjruwlMWD2ULs2QwoG3a76fi4=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +43,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     dbus-glib
     gtk3
-    gtksourceview4
     gucharmap
     hicolor-icon-theme
     libgtop
