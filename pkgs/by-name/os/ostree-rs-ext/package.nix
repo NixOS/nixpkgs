@@ -8,7 +8,6 @@
 , zlib
 , ostree
 , stdenv
-, darwin
 , util-linux
 , skopeo
 , gnutar
@@ -44,9 +43,6 @@ rustPlatform.buildRustPackage rec {
     openssl
     zlib
     ostree
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
   ];
 
   checkFlags = [
