@@ -156,7 +156,9 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         help="Skip possibly expensive operations",
     )
     main_parser.add_argument("--build-host", help="Specifies host to perform the build")
-    main_parser.add_argument("--target-host", help="Specifies the NixOS target host")
+    main_parser.add_argument(
+        "--target-host", help="Specifies host to activate the configuration"
+    )
     main_parser.add_argument("--no-build-nix", action="store_true", help="Deprecated")
     main_parser.add_argument("action", choices=Action.values(), nargs="?")
 
@@ -193,7 +195,7 @@ def parse_args(
         args.sudo = True
 
     if args.help or args.action is None:
-        r = run(["man", "8", "nixos-rebuild"], check=False)
+        r = run(["man", "8", "@executable@"], check=False)
         parser.exit(r.returncode)
 
     # TODO: use deprecated=True in Python >=3.13
@@ -262,7 +264,7 @@ def reexec(
         logger.warning("could not find a newer version of nixos-rebuild")
 
     if drv:
-        new = drv / "bin/nixos-rebuild-ng"
+        new = drv / "bin/@executable@"
         current = Path(argv[0])
         # Disable re-exec during development
         if current.name != "__main__.py" and new != current:

@@ -4,10 +4,11 @@
   installShellFiles,
   mkShell,
   nix,
-  nixos-rebuild,
   python3,
   python3Packages,
   runCommand,
+  scdoc,
+  withManPage ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
   withShellCompletion ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
   withNgSuffix ? true,
 }:
@@ -29,8 +30,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeBuildInputs =
-    [
+    lib.optionals (withManPage || withShellCompletion) [
       installShellFiles
+    ]
+    ++ lib.optionals withManPage [
+      scdoc
     ]
     ++ lib.optionals withShellCompletion [
       python3Packages.shtab
@@ -48,9 +52,15 @@ python3Packages.buildPythonApplication rec {
     nix
   ];
 
+  postPatch = ''
+    substituteInPlace nixos_rebuild/__init__.py \
+      --subst-var-by executable ${executable}
+  '';
+
   postInstall =
-    ''
-      installManPage ${nixos-rebuild}/share/man/man8/nixos-rebuild.8
+    lib.optionalString withManPage ''
+      scdoc < ${./nixos-rebuild.8.scd} > ${executable}.8
+      installManPage ${executable}.8
     ''
     + lib.optionalString withShellCompletion ''
       installShellCompletion --cmd ${executable} \
