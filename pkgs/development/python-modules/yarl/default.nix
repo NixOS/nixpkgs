@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   cython,
   expandvars,
   setuptools,
@@ -18,17 +17,14 @@
 
 buildPythonPackage rec {
   pname = "yarl";
-  version = "1.17.1";
-
-  disabled = pythonOlder "3.8";
-
+  version = "1.18.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "yarl";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0/3hyx0n4UHlqZyGLGfdNlm04gCYiBjYYbaqRPoSfgA=";
+    hash = "sha256-j2z6YAFbQe26YUQGLBwLr9ztUoxMDJJGS9qYeVqSob0=";
   };
 
   build-system = [
