@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
+      name = "urh";
       exec = "urh";
       icon = "urh";
       desktopName = "Universal Radio Hacker";
