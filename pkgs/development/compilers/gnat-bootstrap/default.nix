@@ -54,16 +54,13 @@ in {
 
   nativeBuildInputs = [
     dejagnu
-    expat
     gmp
     guile
     libipt
     mpfr
-    ncurses5
     python3
     readline
     sourceHighlight
-    xz
     zlib
   ] ++ lib.optionals stdenv.buildPlatform.isLinux [
     autoPatchelfHook
@@ -71,6 +68,14 @@ in {
   ] ++ lib.optionals (lib.meta.availableOn stdenv.buildPlatform elfutils) [
     elfutils
   ];
+
+  buildInputs = [
+    expat
+    ncurses5
+    xz
+  ];
+
+  strictDeps = true;
 
   postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     substituteInPlace lib/gcc/${upstreamTriplet}/${gccVersion}/install-tools/mkheaders.conf \
