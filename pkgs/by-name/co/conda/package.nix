@@ -43,10 +43,10 @@
 # $ conda-shell
 # $ conda install spyder
 let
-  version = "4.11.0";
+  version = "24.9.2";
   src = fetchurl {
-    url = "https://repo.continuum.io/miniconda/Miniconda3-py39_${version}-Linux-x86_64.sh";
-    sha256 = "sha256-TunDqlMynNemO0mHfAurtJsZt+WvKYB7eTp2vbHTYrQ=";
+    url = "https://repo.anaconda.com/miniconda/Miniconda3-py312_${version}-0-Linux-x86_64.sh";
+    hash = "sha256-jZNrpgAwDgjso9h03uiMYcbzkwNZeytmuu5Ur097QSI=";
   };
   conda = (
     let
@@ -116,9 +116,6 @@ buildFHSEnv {
     homepage = "https://conda.io/";
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      jluttine
-      bhipple
-    ];
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }
