@@ -3235,11 +3235,9 @@ with pkgs;
 
   sonobuoy = callPackage ../applications/networking/cluster/sonobuoy { };
 
-  strawberry-qt5 = libsForQt5.callPackage ../applications/audio/strawberry { };
-
   strawberry-qt6 = qt6Packages.callPackage ../applications/audio/strawberry { };
 
-  strawberry = strawberry-qt5;
+  strawberry = strawberry-qt6;
 
   schleuder = callPackage ../tools/security/schleuder { };
 
