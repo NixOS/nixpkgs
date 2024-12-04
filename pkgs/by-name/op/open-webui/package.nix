@@ -92,9 +92,11 @@ python312.pkgs.buildPythonApplication rec {
     ftfy
     google-generativeai
     googleapis-common-protos
+    iso-639
     langchain
     langchain-chroma
     langchain-community
+    langdetect
     langfuse
     ldap3
     markdown

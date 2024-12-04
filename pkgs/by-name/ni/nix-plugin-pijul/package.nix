@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchzip,
-  cmake,
+  meson,
+  ninja,
   pkg-config,
   boost,
   howard-hinnant-date,
@@ -17,15 +18,16 @@
 let nix = if nixOverride != null then nixOverride else nixVersions.nix_2_24;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "nix-plugin-pijul";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchzip {
     url = "https://dblsaiko.net/pub/nix-plugin-pijul/nix-plugin-pijul-${finalAttrs.version}.tar.gz";
-    hash = "sha256-1BJZ0lv7XDgT/AiXmJ2Z5Jn0tEa1Yerp9YYcjVCHqoI=";
+    hash = "sha256-BOuBaFvejv1gffhBlAJADLtd5Df71oQbuCnniU07nF4=";
   };
 
   nativeBuildInputs = [
-    cmake
+    meson
+    ninja
     pkg-config
   ];
 

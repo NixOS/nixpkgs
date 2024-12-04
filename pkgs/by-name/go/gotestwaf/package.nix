@@ -2,8 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  gotestwaf,
-  testers,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -19,8 +18,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-mPqCphweDF9RQibdjTaXXfXdO8NENHVMdIPxrJEw2g4=";
 
-  # Some tests require networking as of v0.4.0
-  doCheck = false;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   ldflags = [
     "-w"
@@ -28,11 +26,12 @@ buildGoModule rec {
     "-X=github.com/wallarm/gotestwaf/internal/version.Version=v${version}"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    command = "gotestwaf --version";
-    package = gotestwaf;
-    version = "v${version}";
-  };
+  # Tests require network access
+  doCheck = false;
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "--version" ];
 
   meta = with lib; {
     description = "Tool for API and OWASP attack simulation";
