@@ -1,13 +1,13 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   asciidoctor,
   installShellFiles,
   git,
-  testers,
-  git-lfs,
-  stdenv,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "git-lfs";
     repo = "git-lfs";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-PpNdbvtDAZDT43yyEkUvnhfUTAMM+mYImb3dVbAVPic=";
   };
 
@@ -61,16 +61,22 @@ buildGoModule rec {
         --zsh <($out/bin/git-lfs completion zsh)
     '';
 
-  passthru.tests.version = testers.testVersion {
-    package = git-lfs;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Git extension for versioning large files";
     homepage = "https://git-lfs.github.com/";
     changelog = "https://github.com/git-lfs/git-lfs/raw/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ twey ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ twey ];
     mainProgram = "git-lfs";
   };
 }
