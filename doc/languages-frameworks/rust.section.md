@@ -399,7 +399,7 @@ Some packages may use custom scripts for building/installing, e.g. with a `Makef
 In these cases, it's recommended to override the `buildPhase`/`installPhase`/`checkPhase`.
 Otherwise, some steps may fail because of the modified directory structure of `target/`.
 
-If you want to run targets from a `Makefile`, instead of overriding the phases,
+If you want to run hooks from other build systems, instead of overriding the phases,
 you can set `dontCargoBuild`/`dontCargoInstall`/`dontCargoCheck` to `true` to
 use the [default phases from `stdenv`](#sec-stdenv-phases), which execute make
 targets and can be controlled by various variables in the derivation.
