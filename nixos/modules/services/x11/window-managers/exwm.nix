@@ -12,7 +12,8 @@ let
     ''}
   '';
   packages = epkgs: cfg.extraPackages epkgs ++ [ epkgs.exwm ];
-  exwm-emacs = pkgs.emacsWithPackages packages;
+  exwm-emacs = pkgs.emacs.pkgs.withPackages packages;
+
 in
 
 {
