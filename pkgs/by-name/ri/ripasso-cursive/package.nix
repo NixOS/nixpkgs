@@ -2,14 +2,18 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+
+  # nativeBuildInputs
+  gpgme,
+  installShellFiles,
   pkg-config,
   python3,
-  openssl,
+
+  # buildInputs
   libgpg-error,
-  gpgme,
-  xorg,
   nettle,
-  installShellFiles,
+  openssl,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cortex";
     repo = "ripasso";
-    rev = "release-${version}";
+    rev = "refs/tags/release-${version}";
     hash = "sha256-j98X/+UTea4lCtFfMpClnfcKlvxm4DpOujLc0xc3VUY=";
   };
 
@@ -32,35 +36,35 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p ripasso-cursive" ];
 
   nativeBuildInputs = [
-    pkg-config
     gpgme
-    python3
     installShellFiles
+    pkg-config
+    python3
     rustPlatform.bindgenHook
   ];
 
   buildInputs = [
-    openssl
-    libgpg-error
     gpgme
-    xorg.libxcb
+    libgpg-error
     nettle
+    openssl
+    xorg.libxcb
   ];
 
   preCheck = ''
-    export HOME=$TMPDIR
+    export HOME=$(mktemp -d)
   '';
 
   postInstall = ''
     installManPage target/man-page/cursive/ripasso-cursive.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple password manager written in Rust";
     mainProgram = "ripasso-cursive";
     homepage = "https://github.com/cortex/ripasso";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ sgo ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ sgo ];
+    platforms = lib.platforms.unix;
   };
 }
