@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -9,7 +8,6 @@
   rustc,
   setuptools,
   setuptools-rust,
-  libiconv,
 }:
 
 buildPythonPackage rec {
@@ -41,8 +39,6 @@ buildPythonPackage rec {
     rustc
     cargo
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # has no tests
   doCheck = false;
