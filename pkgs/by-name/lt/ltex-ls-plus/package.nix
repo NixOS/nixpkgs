@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   version = "17.0.1";
 
   src = fetchurl {
-    url = "https://github.com/ltex-plus/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/ltex-plus/ltex-ls-plus/releases/download/${version}/ltex-ls-plus-${version}.tar.gz";
     sha256 = "sha256-S4d9yL4hgpdhqp6Vx87FUFqdUyj3k97QsJsGFyrDVDg=";
   };
 
