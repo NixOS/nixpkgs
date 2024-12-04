@@ -27,9 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "prosemirror" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Python implementation of core ProseMirror modules for collaborative editing";
