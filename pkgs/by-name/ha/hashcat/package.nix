@@ -116,9 +116,7 @@ stdenv.mkDerivation {
       makeWrapper
       autoAddDriverRunpath
     ]
-    ++ [ openclLibs ]
-    ++ lib.optionals enableRocm [ rocmLibs ]
-    ++ lib.optionals enableCuda [ cudaLibs ];
+    ++ [ openclLibs ] ++ lib.optionals enableRocm [ rocmLibs ] ++ lib.optionals enableCuda [ cudaLibs ];
 
   buildInputs =
     [
@@ -129,10 +127,10 @@ stdenv.mkDerivation {
     ++ lib.optionals rocmRequested [ rocmLibs ]
     ++ lib.optionals cudaRequested [ cudaLibs ];
 
-    patches = lib.optionals enableRocm [
-      ./rocm1.patch
-      ./rocm2.patch
-    ];
+  patches = lib.optionals enableRocm [
+    ./rocm1.patch
+    ./rocm2.patch
+  ];
   makeFlags =
     [
       "PREFIX=${placeholder "out"}"
