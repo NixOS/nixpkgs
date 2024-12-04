@@ -2,6 +2,7 @@
 , equations
 , mathcomp-ssreflect
 , mathcomp-analysis
+, mathcomp-experimental-reals
 , extructures
 , deriving
 }:
@@ -33,6 +34,7 @@
   propagatedBuildInputs = [equations
                            mathcomp-ssreflect
                            mathcomp-analysis
+                           mathcomp-experimental-reals
                            extructures
                            deriving];
 
