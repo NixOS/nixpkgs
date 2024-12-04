@@ -58,7 +58,7 @@ in
         BindReadOnlyPaths = [
           # gonic can access scrobbling services
           "-/etc/resolv.conf"
-          "-/etc/ssl/certs/ca-certificates.crt"
+          "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
           builtins.storeDir
           cfg.settings.podcast-path
         ] ++ cfg.settings.music-path
