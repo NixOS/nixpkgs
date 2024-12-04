@@ -12902,6 +12902,12 @@
     name = "Loïs Postula";
     keys = [ { fingerprint = "0B4A E7C7 D3B7 53F5 3B3D  774C 3819 3C6A 09C3 9ED1"; } ];
   };
+  lpzimmermann = {
+    github = "lpzimmermann";
+    githubId = 28627408;
+    name = "Lucien Zimmermann";
+    matrix = "@lpzimmermann:beeper.com";
+  };
   lrewega = {
     email = "lrewega@c32.ca";
     github = "lrewega";
