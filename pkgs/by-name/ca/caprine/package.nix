@@ -6,6 +6,7 @@
   makeDesktopItem,
   copyDesktopItems,
   electron,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
@@ -78,6 +79,8 @@ buildNpmPackage rec {
       terminal = false;
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/sindresorhus/caprine/releases/tag/${src.rev}";
