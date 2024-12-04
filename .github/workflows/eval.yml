@@ -168,7 +168,7 @@ jobs:
         run: |
           # Get the latest eval.yml workflow run for the PR's base commit
           if ! run=$(gh api --method GET /repos/"$REPOSITORY"/actions/workflows/eval.yml/runs \
-            -f head_sha="$BASE_SHA" \
+            -f head_sha="$BASE_SHA" -f event=push \
             --jq '.workflow_runs | sort_by(.run_started_at) | .[-1]') \
             || [[ -z "$run" ]]; then
             echo "Could not find an eval.yml workflow run for $BASE_SHA, cannot make comparison"
@@ -210,7 +210,7 @@ jobs:
             --arg beforeResultDir ./baseResult \
             --arg afterResultDir ./prResult \
             -o comparison
-
+          cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
           # TODO: Request reviews from maintainers for packages whose files are modified in the PR
 
       - name: Upload the combined results
@@ -237,9 +237,33 @@ jobs:
 
       - name: Tagging pull request
         run: |
+          # Get all currently set rebuild labels
           gh api \
-            --method POST \
-            /repos/${{ github.repository }}/issues/${{ github.event.number }}/labels \
-            --input <(jq -c '{ labels: .labels }' comparison/changed-paths.json)
+            /repos/"$REPOSITORY"/issues/"$NUMBER"/labels \
+            --jq '.[].name | select(startswith("10.rebuild"))' \
+            | sort > before
+
+          # And the labels that should be there
+          jq -r '.labels[]' comparison/changed-paths.json \
+            | sort > after
+
+          # Remove the ones not needed anymore
+          while read -r toRemove; do
+            echo "Removing label $toRemove"
+            gh api \
+              --method DELETE \
+              /repos/"$REPOSITORY"/issues/"$NUMBER"/labels/"$toRemove"
+          done < <(comm -23 before after)
+
+          # And add the ones that aren't set already
+          while read -r toAdd; do
+            echo "Adding label $toAdd"
+            gh api \
+              --method POST \
+              /repos/"$REPOSITORY"/issues/"$NUMBER"/labels \
+              -f "labels[]=$toAdd"
+          done < <(comm -13 before after)
         env:
           GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          NUMBER: ${{ github.event.number }}

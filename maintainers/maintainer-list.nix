@@ -8601,6 +8601,13 @@
     githubId = 5317234;
     name = "Raphael Megzari";
   };
+  harbiinger = {
+    email = "theo.godin@protonmail.com";
+    matrix = "@hrbgr:matrix.org";
+    github = "harbiinger";
+    githubId = 55398594;
+    name = "Theo Godin";
+  };
   hardselius = {
     email = "martin@hardselius.dev";
     github = "hardselius";
@@ -18543,7 +18550,7 @@
   };
   returntoreality = {
     email = "linus@lotz.li";
-    github = "retuntoreality";
+    github = "returntoreality";
     githubId = 255667;
     name = "Linus Karl";
   };
