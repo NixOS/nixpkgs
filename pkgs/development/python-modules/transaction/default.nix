@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "transaction";
-  version = "4.0";
+  version = "5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aANduRP2DRvhL2Vj0gHaqzbIPnY94ViZ/4M48m5eYvI=";
+    hash = "sha256-EG5714K8wMtRGfySJbDJpx38U625OL6QUiOtrvIrEXQ=";
   };
 
   propagatedBuildInputs = [
