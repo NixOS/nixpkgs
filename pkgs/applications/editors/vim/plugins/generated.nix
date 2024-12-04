@@ -12629,6 +12629,18 @@ final: prev:
     meta.homepage = "https://github.com/levouh/tint.nvim/";
   };
 
+  tiny-devicons-auto-colors-nvim = buildVimPlugin {
+    pname = "tiny-devicons-auto-colors.nvim";
+    version = "2024-08-23";
+    src = fetchFromGitHub {
+      owner = "rachartier";
+      repo = "tiny-devicons-auto-colors.nvim";
+      rev = "a39fa4c92268832f6034306793b8acbfec2a7549";
+      sha256 = "1mr98s9gx2rnz2w8z8d1vci259c26a9fq0s6qjgvzizz36zipn9m";
+    };
+    meta.homepage = "https://github.com/rachartier/tiny-devicons-auto-colors.nvim/";
+  };
+
   tiny-inline-diagnostic-nvim = buildVimPlugin {
     pname = "tiny-inline-diagnostic.nvim";
     version = "2024-12-03";
