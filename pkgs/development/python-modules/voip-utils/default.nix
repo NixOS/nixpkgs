@@ -34,9 +34,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # no tests as of v0.1.0
-  doCheck = false;
-
   meta = {
     changelog = "https://github.com/home-assistant-libs/voip-utils/blob/${src.rev}/CHANGELOG.md";
     description = "Voice over IP Utilities";
