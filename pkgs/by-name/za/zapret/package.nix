@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
 
   libcap,
   zlib,
@@ -15,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zapret";
-  version = "67";
+  version = "69.5";
 
   src = fetchFromGitHub {
     owner = "bol-van";
     repo = "zapret";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-4TgM0NkvVvdSEJ01SULu+GqpfqokTTErHAt3QkxkLIs=";
+    hash = "sha256-3wFNXtx9Yt40ahlikHbQWh2fUtJZrCNkqgJF1C+fsDo=";
   };
 
   buildInputs = [ libcap zlib libnetfilter_queue libnfnetlink ];
@@ -73,9 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "DPI bypass multi platform";
     homepage = "https://github.com/bol-van/zapret";
+    changelog = "https://github.com/bol-van/zapret/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nishimara ];
     mainProgram = "zapret";
