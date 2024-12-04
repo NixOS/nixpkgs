@@ -91,7 +91,7 @@ in
 
     ipv6 = lib.mkOption {
       type = lib.types.bool;
-      default = false;
+      default = true;
       description = "Whether to use IPv6.";
     };
 
