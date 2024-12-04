@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   installShellFiles,
   mkShell,
   nix,
@@ -7,8 +8,12 @@
   python3,
   python3Packages,
   runCommand,
+  withShellCompletion ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
   withNgSuffix ? true,
 }:
+let
+  executable = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";
+in
 python3Packages.buildPythonApplication rec {
   pname = "nixos-rebuild-ng";
   version = "0.0.0";
@@ -23,9 +28,13 @@ python3Packages.buildPythonApplication rec {
     tabulate
   ];
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs =
+    [
+      installShellFiles
+    ]
+    ++ lib.optionals withShellCompletion [
+      python3Packages.shtab
+    ];
 
   propagatedBuildInputs = [
     # Make sure that we use the Nix package we depend on, not something
@@ -42,12 +51,14 @@ python3Packages.buildPythonApplication rec {
   postInstall =
     ''
       installManPage ${nixos-rebuild}/share/man/man8/nixos-rebuild.8
-
-      installShellCompletion \
-        --bash ${nixos-rebuild}/share/bash-completion/completions/_nixos-rebuild
+    ''
+    + lib.optionalString withShellCompletion ''
+      installShellCompletion --cmd ${executable} \
+        --bash <(shtab --shell bash nixos_rebuild.get_main_parser) \
+        --zsh <(shtab --shell zsh nixos_rebuild.get_main_parser)
     ''
     + lib.optionalString withNgSuffix ''
-      mv $out/bin/nixos-rebuild $out/bin/nixos-rebuild-ng
+      mv $out/bin/nixos-rebuild $out/bin/${executable}
     '';
 
   nativeCheckInputs = with python3Packages; [
@@ -98,6 +109,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/ni/nixos-rebuild-ng";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.thiagokokada ];
-    mainProgram = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";
+    mainProgram = executable;
   };
 }

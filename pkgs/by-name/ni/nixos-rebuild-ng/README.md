@@ -109,7 +109,7 @@ ruff format .
   `system.switch.enableNg` for `switch-to-configuration-ng`
 - [ ] Improve documentation
 - [x] `nixos-rebuild repl`
-- [ ] Generate tab completion via [`shtab`](https://docs.iterative.ai/shtab/)
+- [x] Generate tab completion via [`shtab`](https://docs.iterative.ai/shtab/)
 - [x] Reduce build closure
 
 ## TODON'T
