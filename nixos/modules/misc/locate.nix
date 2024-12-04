@@ -278,11 +278,23 @@ in
         PRUNE_BIND_MOUNTS = if cfg.pruneBindMounts then "yes" else "no";
       };
       serviceConfig = {
+        CapabilityBoundingSet = "CAP_DAC_READ_SEARCH CAP_CHOWN";
         Nice = 19;
         IOSchedulingClass = "idle";
+        IPAddressDeny = "any";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
         PrivateTmp = "yes";
+        PrivateDevices = true;
         PrivateNetwork = "yes";
-        NoNewPrivileges = "yes";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHostname = true;
+        RestrictAddressFamilies = "AF_UNIX";
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
         ReadOnlyPaths = "/";
         # Use dirOf cfg.output because mlocate creates temporary files next to
         # the actual database. We could specify and create them as well,
@@ -290,6 +302,8 @@ in
         # NOTE: If /var/cache does not exist, this leads to the misleading error message:
         # update-locatedb.service: Failed at step NAMESPACE spawning …/update-locatedb-start: No such file or directory
         ReadWritePaths = dirOf cfg.output;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "@system-service @chown";
       };
     };
 
