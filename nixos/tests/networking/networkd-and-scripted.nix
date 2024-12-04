@@ -120,11 +120,12 @@ let
         };
       };
       testScript = ''
-          start_all()
-
-          client.wait_for_unit("network.target")
+          router.start()
           router.systemctl("start network-online.target")
           router.wait_for_unit("network-online.target")
+
+          client.start()
+          client.wait_for_unit("network.target")
 
           with subtest("Wait until we have an ip address on each interface"):
               client.wait_until_succeeds("ip addr show dev enp1s0 | grep -q '192.168.1'")
