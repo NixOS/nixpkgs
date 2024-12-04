@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-lock";
-  version = "9.0.0";
+  version = "10.0.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-SMxM66qo3Xmst+SVXu4LYZ0Zzn15wqVVNqqHzAkip/s=";
+    hash = "sha256-Ui/Z4syhSxemV1R815R+yytDwN2YJBcHGscUYUp/0zE=";
   };
 
-  cargoHash = "sha256-wUp4zBY64MvD4anGlVsJrI3pyfwVSQGnn6YuweTeYNk=";
+  cargoHash = "sha256-5Hg0y723wjV13rdEExK2II7EPpzAR29ZCqVgOeuJpO0=";
 
   buildFeatures = [ "cli" ];
 

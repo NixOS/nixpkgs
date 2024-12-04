@@ -175,8 +175,8 @@ stdenv.mkDerivation (finalAttrs: {
       "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
       "-DPYTHON_LIBPATH=${python3}/lib"
       "-DPYTHON_LIBRARY=${python3.libPrefix}"
-      "-DPYTHON_NUMPY_INCLUDE_DIRS=${python3Packages.numpy}/${python3.sitePackages}/numpy/core/include"
-      "-DPYTHON_NUMPY_PATH=${python3Packages.numpy}/${python3.sitePackages}"
+      "-DPYTHON_NUMPY_INCLUDE_DIRS=${python3Packages.numpy_1}/${python3.sitePackages}/numpy/core/include"
+      "-DPYTHON_NUMPY_PATH=${python3Packages.numpy_1}/${python3.sitePackages}"
       "-DPYTHON_VERSION=${python3.pythonVersion}"
       "-DWITH_ALEMBIC=ON"
       "-DWITH_BUILDINFO=OFF"
@@ -342,7 +342,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     [
       ps.materialx
-      ps.numpy
+      ps.numpy_1
       ps.requests
       ps.zstandard
     ]
