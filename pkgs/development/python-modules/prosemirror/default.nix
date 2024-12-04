@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of core ProseMirror modules for collaborative editing";
     homepage = "https://pypi.org/project/prosemirror";
+    changelog = "https://github.com/fellowapp/prosemirror-py/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ onny ];
   };
