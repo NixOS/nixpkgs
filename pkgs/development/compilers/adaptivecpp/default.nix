@@ -24,14 +24,14 @@ let
   llvmPackages = llvmPackages_17;
   lld = lld_17;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "adaptivecpp";
   version = "24.06.0";
 
   src = fetchFromGitHub {
     owner = "AdaptiveCpp";
     repo = "AdaptiveCpp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-TPa2DT66bGQ9VfSXaFUDuE5ng5x5fiLC2bqQ+ZVo9LQ=";
   };
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
       (lib.cmakeBool "WITH_CUDA_BACKEND" cudaSupport)
       (lib.cmakeBool "WITH_ROCM_BACKEND" rocmSupport)
     ]
-    ++ lib.optionals (lib.versionAtLeast version "24") [
+    ++ lib.optionals (lib.versionAtLeast finalAttrs.version "24") [
       (lib.cmakeBool "WITH_OPENCL_BACKEND" openclSupport)
     ];
 
@@ -100,4 +100,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ yboettcher ];
     license = licenses.bsd2;
   };
-}
+})
