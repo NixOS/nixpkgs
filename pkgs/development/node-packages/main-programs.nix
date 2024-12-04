@@ -32,7 +32,6 @@
   graphql-language-service-cli = "graphql-lsp";
   grunt-cli = "grunt";
   gulp-cli = "gulp";
-  kaput-cli = "kaput";
   less = "lessc";
   localtunnel = "lt";
   lua-fmt = "luafmt";

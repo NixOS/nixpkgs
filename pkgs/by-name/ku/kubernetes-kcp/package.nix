@@ -5,6 +5,7 @@
   fetchFromGitHub,
   installShellFiles,
   testers,
+  kubernetes-kcp,
 }:
 
 buildGoModule rec {
@@ -50,6 +51,7 @@ buildGoModule rec {
   '';
 
   passthru.tests.version = testers.testVersion {
+    package = kubernetes-kcp;
     command = "kcp --version";
     # NOTE: Once the go.mod version is pulled in, the version info here needs
     # to be also updated.

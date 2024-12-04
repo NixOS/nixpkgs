@@ -39,11 +39,6 @@ python3Packages.buildPythonApplication rec {
     nix
   ];
 
-  preBuild = ''
-    substituteInPlace nixos_rebuild/__init__.py \
-      --subst-var-by nixos_rebuild ${lib.getExe nixos-rebuild}
-  '';
-
   postInstall =
     ''
       installManPage ${nixos-rebuild}/share/man/man8/nixos-rebuild.8

@@ -1,9 +1,21 @@
-import sys
-from functools import partial
-from typing import TypeAlias
+import logging
+from typing import TypeAlias, override
 
-info = partial(print, file=sys.stderr)
 Args: TypeAlias = bool | str | list[str] | int | None
+
+
+class LogFormatter(logging.Formatter):
+    formatters = {
+        logging.INFO: logging.Formatter("%(message)s"),
+        logging.DEBUG: logging.Formatter("%(levelname)s: %(name)s: %(message)s"),
+        "DEFAULT": logging.Formatter("%(levelname)s: %(message)s"),
+    }
+
+    @override
+    def format(self, record: logging.LogRecord) -> str:
+        record.levelname = record.levelname.lower()
+        formatter = self.formatters.get(record.levelno, self.formatters["DEFAULT"])
+        return formatter.format(record)
 
 
 def dict_to_flags(d: dict[str, Args]) -> list[str]:
