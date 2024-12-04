@@ -1,4 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub, asciidoctor, installShellFiles, git, testers, git-lfs, stdenv }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  asciidoctor,
+  installShellFiles,
+  git,
+  testers,
+  git-lfs,
+  stdenv,
+}:
 
 buildGoModule rec {
   pname = "git-lfs";
@@ -13,7 +23,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-JT0r/hs7ZRtsYh4aXy+v8BjwiLvRJ10e4yRirqmWVW0=";
 
-  nativeBuildInputs = [ asciidoctor installShellFiles ];
+  nativeBuildInputs = [
+    asciidoctor
+    installShellFiles
+  ];
 
   ldflags = [
     "-s"
@@ -37,14 +50,16 @@ buildGoModule rec {
     unset subPackages
   '';
 
-  postInstall = ''
-    installManPage man/man*/*
-  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd git-lfs \
-      --bash <($out/bin/git-lfs completion bash) \
-      --fish <($out/bin/git-lfs completion fish) \
-      --zsh <($out/bin/git-lfs completion zsh)
-  '';
+  postInstall =
+    ''
+      installManPage man/man*/*
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd git-lfs \
+        --bash <($out/bin/git-lfs completion bash) \
+        --fish <($out/bin/git-lfs completion fish) \
+        --zsh <($out/bin/git-lfs completion zsh)
+    '';
 
   passthru.tests.version = testers.testVersion {
     package = git-lfs;
