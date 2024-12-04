@@ -72,7 +72,7 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-o cache_dir=$(mktemp -d)"
+    "-p no:cacheprovider"
     "-W"
     "ignore::DeprecationWarning"
   ];

@@ -27,20 +27,11 @@ stdenv.mkDerivation rec {
       sha256 = "Za+7K93pgnuEUQ+jDItEzWlN0izhbynX2crSOXBBY/I=";
     })
     # Fix build on armv7l.
-    # https://bugs.kde.org/show_bug.cgi?id=454346
-    #   Applied on 3.22.0. Does not apply on 3.23.0.
-    #(fetchpatch {
-    #  url = "https://bugsfiles.kde.org/attachment.cgi?id=149172";
-    #  sha256 = "sha256-4MASLsEK8wcshboR4YOc6mIt7AvAgDPvqIZyHqlvTEs=";
-    #})
-    #(fetchpatch {
-    #  url = "https://bugsfiles.kde.org/attachment.cgi?id=149173";
-    #  sha256 = "sha256-jX9hD4utWRebbXMJYZ5mu9jecvdrNP05E5J+PnKRTyQ=";
-    #})
-    #(fetchpatch {
-    #  url = "https://bugsfiles.kde.org/attachment.cgi?id=149174";
-    #  sha256 = "sha256-f1YIFIhWhXYVw3/UNEWewDak2mvbAd3aGzK4B+wTlys=";
-    #})
+    # see also https://bugs.kde.org/show_bug.cgi?id=454346
+    (fetchpatch {
+      url = "https://git.yoctoproject.org/poky/plain/meta/recipes-devtools/valgrind/valgrind/use-appropriate-march-mcpu-mfpu-for-ARM-test-apps.patch?id=b7a9250590a16f1bdc8c7b563da428df814d4292";
+      sha256 = "sha256-sBZzn98Sf/ETFv8ubivgA6Y6fBNcyR8beB3ICDAyAH0=";
+    })
   ];
 
   outputs = [ "out" "dev" "man" "doc" ];

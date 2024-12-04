@@ -27,27 +27,23 @@
   mock,
   py,
   pytest-asyncio,
-  pytest7CheckHook,
+  pytest-cov-stub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "quart";
-  version = "0.19.8";
+  version = "0.19.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "quart";
     rev = "refs/tags/${version}";
-    hash = "sha256-A23+25bDzK2GlGNTCul6HbsjNujrnhpzTxdnV3Ig028=";
+    hash = "sha256-jekbrHpB+7d3IagVUtDYA1VFlWtnE7kPqIm19NB2scA=";
   };
 
   build-system = [ poetry-core ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--no-cov-on-fail " ""
-  '';
 
   dependencies =
     [
@@ -75,7 +71,8 @@ buildPythonPackage rec {
     mock
     py
     pytest-asyncio
-    pytest7CheckHook
+    pytest-cov-stub
+    pytestCheckHook
   ];
 
   meta = with lib; {

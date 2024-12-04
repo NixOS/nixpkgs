@@ -2,20 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pkginfo";
-  version = "1.11.1";
-  format = "setuptools";
+  version = "1.11.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Lg3KHPTI45ZE7tMkCOqZZu4V4NMkxiuomaOTs8a0Z6o=";
+    hash = "sha256-xryRa4KY0VnjHywhbjXuW4bafaGIdPh5eY0KGYNTfIY=";
   };
 
+  build-system = [ setuptools ];
+
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # wheel metadata version mismatch 2.1 vs 2.3
+    "test_installed_ctor_w_dist_info"
+  ];
 
   pythonImportsCheck = [ "pkginfo" ];
 

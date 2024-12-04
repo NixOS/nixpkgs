@@ -23,11 +23,6 @@ buildPythonPackage rec {
     hash = "sha256-oWAF8YDvb0SdlRzSjG2BNEekBkvR3U6KQ+e2FoIs+tw=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0" "numpy"
-  '';
-
   build-system = [
     meson-python
     cython

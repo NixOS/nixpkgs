@@ -24,8 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja wayland-scanner ];
-  nativeCheckInputs = [ python3 ];
+  nativeCheckInputs = [ python3 wayland ];
   checkInputs = [ wayland ];
+  strictDeps = true;
 
   mesonFlags = [ "-Dtests=${lib.boolToString finalAttrs.doCheck}" ];
 

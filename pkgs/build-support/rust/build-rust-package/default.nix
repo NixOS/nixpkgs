@@ -128,8 +128,6 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   cargoCheckFeatures = checkFeatures;
 
-  patchRegistryDeps = ./patch-registry-deps;
-
   nativeBuildInputs = nativeBuildInputs ++ lib.optionals auditable [
     (buildPackages.cargo-auditable-cargo-wrapper.override {
       inherit cargo cargo-auditable;

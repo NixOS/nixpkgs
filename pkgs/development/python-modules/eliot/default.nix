@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pythonOlder,
   pythonAtLeast,
 
@@ -36,6 +37,14 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-KqAXOMrRawzjpt5do2KdqpMMgpBtxeZ+X+th0WwBl+U=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "numpy2-compat.patch";
+      url = "https://github.com/itamarst/eliot/commit/39eccdad44f91971ecf1211fb01366b4d9801817.patch";
+      hash = "sha256-al6olmvFZ8pDblljWmWqs5QrtcuHKcea255XgG+1+1o=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

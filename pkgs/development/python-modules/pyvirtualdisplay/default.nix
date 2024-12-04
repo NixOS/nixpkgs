@@ -14,6 +14,7 @@
   entrypoint2,
   pillow,
   psutil,
+  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   vncdo,
@@ -47,13 +48,15 @@ buildPythonPackage rec {
     entrypoint2
     pillow
     psutil
-    pytest-xdist
+    pytest-timeout
     pytestCheckHook
     (vncdo.overridePythonAttrs { doCheck = false; })
     xorg.xorgserver
     xorg.xmessage
     xorg.xvfb
   ];
+
+  pytestFlagsArray = [ "-v" ];
 
   meta = with lib; {
     description = "Python wrapper for Xvfb, Xephyr and Xvnc";

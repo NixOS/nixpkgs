@@ -87,31 +87,24 @@ When that happens, the one with the  highest version is always used.
 
 The following is a list of Xcode versions, the SDK version in Nixpkgs, and the attribute to use to add it.
 Check your package’s documentation (platform support or installation instructions) to find which Xcode or SDK version to use.
-Generally, only the last SDK release for a major version is packaged (each _x_ in 10._x_ until 10.15 is considered a major version).
+Generally, only the last SDK release for a major version is packaged.
 
-| Xcode version      | SDK version                                       | Nixpkgs attribute |
-|--------------------|---------------------------------------------------|-------------------|
-| Varies by platform | 10.12.2 (x86_64-darwin)<br/>11.3 (aarch64-darwin) | `apple-sdk`       |
-| 8.0–8.3.3          | 10.12.2                                           | `apple-sdk_10_12` |
-| 9.0–9.4.1          | 10.13.2                                           | `apple-sdk_10_13` |
-| 10.0–10.3          | 10.14.6                                           | `apple-sdk_10_14` |
-| 11.0–11.7          | 10.15.6                                           | `apple-sdk_10_15` |
-| 12.0–12.5.1        | 11.3                                              | `apple-sdk_11`    |
-| 13.0–13.4.1        | 12.3                                              | `apple-sdk_12`    |
-| 14.0–14.3.1        | 13.3                                              | `apple-sdk_13`    |
-| 15.0–15.4          | 14.4                                              | `apple-sdk_14`    |
-| 16.0               | 15.0                                              | `apple-sdk_15`    |
+| Xcode version      | SDK version        | Nixpkgs attribute            |
+|--------------------|--------------------|------------------------------|
+| 12.0–12.5.1        | 11.3               | `apple-sdk_11` / `apple-sdk` |
+| 13.0–13.4.1        | 12.3               | `apple-sdk_12`               |
+| 14.0–14.3.1        | 13.3               | `apple-sdk_13`               |
+| 15.0–15.4          | 14.4               | `apple-sdk_14`               |
+| 16.0               | 15.0               | `apple-sdk_15`               |
 
 
 #### Darwin Default SDK versions {#sec-darwin-troubleshooting-darwin-defaults}
 
-The current default versions of the deployment target (minimum version) and SDK are indicated by Darwin-specific attributes on the platform. Because of the ways that minimum version and SDK can be changed that are not visible to Nix, they should be treated as lower bounds.
+The current default version of the SDK and deployment target (minimum supported version) are indicated by the Darwin-specific platform attributes `darwinSdkVersion` and `darwinMinVersion`.
+Because of the ways that minimum version and SDK can be changed that are not visible to Nix, they should be treated as lower bounds.
 If you need to parameterize over a specific version, create a function that takes the version as a parameter instead of relying on these attributes.
 
-- `darwinMinVersion` defaults to 10.12 on x86_64-darwin and 11.0 on aarch64-darwin.
-  It sets the default deployment target.
-- `darwinSdkVersion` defaults to 10.12 on x86-64-darwin and 11.0 on aarch64-darwin.
-  Only the major version determines the SDK version, resulting in the 10.12.2 and 11.3 SDKs being used on these platforms respectively.
+On macOS, the `darwinMinVersion` and `darwinSdkVersion` are always the same, and are currently set to 11.3.
 
 
 #### `xcrun` cannot find a binary {#sec-darwin-troubleshooting-xcrun}
@@ -264,10 +257,10 @@ The legacy SDK provided two ways of overriding the default SDK.
 These are both being phased out along with the legacy SDKs.
 They have been updated to set up the new SDK for you, but you should replace them with doing that directly.
 
-- `pkgs.darwin.apple_sdk_11_0.callPackage` - this pattern was used to provide frameworks from the 11.0 SDK.
-  It now adds the `apple-sdk_11` package to your derivation’s build inputs.
+- `pkgs.darwin.apple_sdk_11_0.callPackage` - this pattern was used to provide frameworks from the macOS 11 SDK.
+  It is now the same as `callPackage`.
 - `overrideSDK` - this stdenv adapter would try to replace the frameworks used by your derivation and its transitive dependencies.
-  It now adds the `apple-sdk_11` package for `11.0` or the `apple-sdk_12` package for `12.3`.
+  It now adds the `apple-sdk_12` package for `12.3` and does nothing for `11.0`.
   If `darwinMinVersion` is specified, it will add `darwinMinVersionHook` with the specified minimum version.
   No other SDK versions are supported.
 

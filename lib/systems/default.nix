@@ -261,7 +261,7 @@ let
         else null;
       # The canonical name for this attribute is darwinSdkVersion, but some
       # platforms define the old name "sdkVer".
-      darwinSdkVersion = final.sdkVer or (if final.isAarch64 then "11.0" else "10.12");
+      darwinSdkVersion = final.sdkVer or "11.3";
       darwinMinVersion = final.darwinSdkVersion;
       darwinMinVersionVariable =
         if final.isMacOS then "MACOSX_DEPLOYMENT_TARGET"
@@ -293,7 +293,7 @@ let
           # to an emulator program. That is, if an emulator requires additional
           # arguments, a wrapper should be used.
           if pkgs.stdenv.hostPlatform.canExecute final
-          then "${pkgs.execline}/bin/exec"
+          then lib.getExe (pkgs.writeShellScriptBin "exec" ''exec "$@"'')
           else if final.isWindows
           then "${wine}/bin/wine${optionalString (final.parsed.cpu.bits == 64) "64"}"
           else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null

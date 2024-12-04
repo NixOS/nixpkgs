@@ -219,7 +219,7 @@ let
           succeed(
               'echo \'${postData}\'> /tmp/data.json'
           )
-          succeed('sed -ie "s DATE $(date +%s) " /tmp/data.json')
+          succeed('sed -i -e "s DATE $(date +%s) " /tmp/data.json')
           succeed(
               "curl -sSfH 'Content-Type: application/json' -X POST --data @/tmp/data.json localhost:9103/collectd"
           )

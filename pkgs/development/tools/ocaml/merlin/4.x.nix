@@ -1,5 +1,5 @@
 { lib
-, substituteAll
+, replaceVars
 , fetchurl
 , ocaml
 , dune_3
@@ -57,9 +57,9 @@ buildDunePackage {
     old-patch = lib.versionOlder version "4.17";
   in
   [
-    (substituteAll {
-      src = if old-patch then ./fix-paths.patch else ./fix-paths2.patch;
-      dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
+    (replaceVars (if old-patch then ./fix-paths.patch else ./fix-paths2.patch) {
+
+      dot-merlin-reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
       dune = "${dune_3}/bin/dune";
     })
   ];

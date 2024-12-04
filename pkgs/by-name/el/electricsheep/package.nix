@@ -11,7 +11,7 @@
 , pkg-config
 , flam3
 , libgtop
-, boost179
+, boost
 , tinyxml
 , libglut
 , libGLU
@@ -30,6 +30,11 @@ stdenv.mkDerivation {
     hash = "sha256-X3EZ1/VcLEU1GkZbskWSsqQWYTnsH3pbFDvDLpdLmcU=";
   };
 
+  patches = [
+    # <https://github.com/scottdraves/electricsheep/pull/126>
+    ./boost-1.85.patch
+  ];
+
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
@@ -41,7 +46,7 @@ stdenv.mkDerivation {
     xorg.libXrender
     flam3
     libgtop
-    boost179
+    boost
     tinyxml
     libglut
     libGLU

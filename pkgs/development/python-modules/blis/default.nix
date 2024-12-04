@@ -9,7 +9,7 @@
   pytestCheckHook,
   pythonOlder,
   blis,
-  numpy_2,
+  numpy_1,
   gitUpdater,
 }:
 
@@ -28,12 +28,6 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    # The commit pinning numpy to version 2 doesn't have any functional changes:
-    # https://github.com/explosion/cython-blis/pull/108
-    # BLIS should thus work with numpy and numpy_2.
-    substituteInPlace pyproject.toml setup.py \
-      --replace-fail "numpy>=2.0.0,<3.0.0" numpy
-
     # See https://github.com/numpy/numpy/issues/21079
     # has no functional difference as the name is only used in log output
     substituteInPlace blis/benchmark.py \
@@ -62,8 +56,8 @@ buildPythonPackage rec {
 
   passthru = {
     tests = {
-      numpy_2 = blis.overridePythonAttrs (old: {
-        numpy = numpy_2;
+      numpy_1 = blis.overridePythonAttrs (old: {
+        numpy = numpy_1;
       });
     };
     updateScript = gitUpdater {

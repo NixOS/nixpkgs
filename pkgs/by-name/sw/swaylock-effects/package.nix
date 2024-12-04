@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    sed -iE "s/version: '1\.3',/version: '${version}',/" meson.build
+    sed -i "s/version: '1\.3',/version: '${version}',/" meson.build
   '';
 
   strictDeps = true;

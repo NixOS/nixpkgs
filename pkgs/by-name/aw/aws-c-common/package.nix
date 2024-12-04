@@ -7,13 +7,14 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-common";
-  version = "0.9.27";
+  # nixpkgs-update: no auto update
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-VbF+R2LB5M2luOoQ/HsAOqk/ujHSW4QJC0OTzNnu9PM=";
+    hash = "sha256-sA6CsLLHh4Ce/+ffl4OhisMSgdrD+EmXvTNGSq7/vvk=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -32,8 +33,6 @@ stdenv.mkDerivation rec {
   preCheck = let
     ignoreTests = [
       "promise_test_multiple_waiters"
-    ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-      "sba_metrics" # https://github.com/awslabs/aws-c-common/issues/839
     ];
   in ''
     cat <<EOW >CTestCustom.cmake

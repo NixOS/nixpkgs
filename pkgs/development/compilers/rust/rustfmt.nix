@@ -1,6 +1,14 @@
-{ lib, stdenv, rustPlatform, rustc, Security, asNightly ? false }:
+{ lib
+, stdenv
+, cargo
+, makeWrapper
+, rustPlatform
+, rustc
+, Security
+, asNightly ? false
+}:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "rustfmt" + lib.optionalString asNightly "-nightly";
   inherit (rustc) version src;
 
@@ -10,6 +18,10 @@ rustPlatform.buildRustPackage rec {
 
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
   buildInputs = [
     rustc.llvm
@@ -33,6 +45,11 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/rust-lang/rust/pull/72001)
   CFG_RELEASE = rustc.version;
   CFG_RELEASE_CHANNEL = if asNightly then "nightly" else "stable";
+
+  postInstall = ''
+    wrapProgram $out/bin/cargo-fmt \
+      --suffix PATH : ${lib.makeBinPath [ cargo ]}
+  '';
 
   meta = with lib; {
     description = "Tool for formatting Rust code according to style guidelines";

@@ -111,7 +111,7 @@ ecmHostPathHook() {
 
     if [ -d "$1/dbus-1" ]
     then
-        propagatedUserEnvPkgs+=" $1"
+        appendToVar propagatedUserEnvPkgs "$1"
     fi
 }
 addEnvHooks "$targetOffset" ecmHostPathHook

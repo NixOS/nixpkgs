@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    cmakeFlags+="-Dabs_top_srcdir=$(readlink -f ./)"
+    appendToVar cmakeFlags "-Dabs_top_srcdir=$(readlink -f ./)"
   '';
 
   nativeBuildInputs = [ cmake ninja ];

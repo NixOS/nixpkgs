@@ -46,12 +46,6 @@ buildPythonPackage rec {
     hash = "sha256-Szfr0lraQFmw3J4Ik+cN3l34NIUymgaO8EWA5wiSpl0=";
   };
 
-  postPatch = ''
-    # spaCy is compatible with NumPy v1 and v2
-    substituteInPlace pyproject.toml setup.cfg \
-      --replace-fail "numpy>=2.0.0,<2.1.0" numpy
-  '';
-
   build-system = [
     cymem
     cython_0
