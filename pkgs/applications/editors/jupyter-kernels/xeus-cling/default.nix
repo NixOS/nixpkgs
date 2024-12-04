@@ -72,14 +72,8 @@ let
       "-f" "{connection_file}"
     ];
     language = "cpp";
-    logo32 = fetchurl {
-      url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISO_C%2B%2B_Logo.svg/32px-ISO_C%2B%2B_Logo.svg.png";
-      hash = "sha256-+TKtwXybKw4oAHfgOsDxvL4ucItPguF76HJHdFTd3s0=";
-    };
-    logo64 = fetchurl {
-      url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/ISO_C%2B%2B_Logo.svg/64px-ISO_C%2B%2B_Logo.svg.png";
-      hash = "sha256-7SjOcSaSPUHIKnjBxMdn+KSjviL69IXhX7eJsacYeGE=";
-    };
+    logo32 = "${xeus-cling-unwrapped}/share/jupyter/kernels/xcpp17/logo-32x32.png";
+    logo64 = "${xeus-cling-unwrapped}/share/jupyter/kernels/xcpp17/logo-64x64.png";
   };
 
 in
