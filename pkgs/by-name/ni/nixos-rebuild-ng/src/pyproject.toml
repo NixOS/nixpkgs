@@ -9,6 +9,9 @@ version = "0.0.0"
 [project.scripts]
 nixos-rebuild = "nixos_rebuild:main"
 
+[tool.setuptools.package-data]
+nixos_rebuild = ["*.template.nix"]
+
 [tool.mypy]
 # `--strict` config, but explicit options to avoid breaking build when mypy is
 # updated
@@ -40,6 +43,8 @@ extend-select = [
     "I",
     # require `check` argument for `subprocess.run`
     "PLW1510",
+    # check for needless exception names in raise statements
+    "TRY201",
 ]
 
 [tool.ruff.lint.per-file-ignores]
