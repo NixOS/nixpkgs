@@ -23,6 +23,10 @@ buildDunePackage rec {
 
   doCheck = true;
 
+  preCheck = ''
+    export DUNE_CACHE=disabled
+  '';
+
   meta = with lib; {
     description = "Hexdump in OCaml";
     homepage = "https://github.com/dinosaure/hxd";
