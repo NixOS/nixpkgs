@@ -50,6 +50,37 @@ buildGoModule rec {
     unset subPackages
   '';
 
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin (
+    let
+      # Fail in the sandbox with network-related errors.
+      # Enabling __darwinAllowLocalNetworking is not enough.
+      skippedTests = [
+        "TestAPIBatch"
+        "TestAPIBatchOnlyBasic"
+        "TestAuthErrWithBody"
+        "TestAuthErrWithoutBody"
+        "TestCertFromSSLCAInfoConfig"
+        "TestCertFromSSLCAInfoEnv"
+        "TestCertFromSSLCAInfoEnvWithSchannelBackend"
+        "TestCertFromSSLCAPathConfig"
+        "TestCertFromSSLCAPathEnv"
+        "TestClientRedirect"
+        "TestClientRedirectReauthenticate"
+        "TestDoAPIRequestWithAuth"
+        "TestDoWithAuthApprove"
+        "TestDoWithAuthNoRetry"
+        "TestDoWithAuthReject"
+        "TestFatalWithBody"
+        "TestFatalWithoutBody"
+        "TestHttp2"
+        "TestHttpVersion"
+        "TestWithNonFatal500WithBody"
+        "TestWithNonFatal500WithoutBody"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ]
+  );
+
   postInstall =
     ''
       installManPage man/man*/*
@@ -70,6 +101,8 @@ buildGoModule rec {
   passthru = {
     updateScript = nix-update-script { };
   };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Git extension for versioning large files";
