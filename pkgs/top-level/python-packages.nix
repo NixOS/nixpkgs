@@ -8503,6 +8503,8 @@ self: super: with self; {
 
   muscima = callPackage ../development/python-modules/muscima { };
 
+  music-assistant-client = callPackage ../development/python-modules/music-assistant-client { };
+
   music-assistant-models = callPackage ../development/python-modules/music-assistant-models { };
 
   musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
