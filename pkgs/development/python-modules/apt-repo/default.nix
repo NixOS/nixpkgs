@@ -21,7 +21,7 @@ buildPythonPackage rec {
     rev = "0287c59317f9ec8e8edbf7c228665a7010f758e7";
     hash = "sha256-9PA6AIeMXpaDc9g+rYpzwhf4ts3Xb31rvAUgDebTG4A=";
   };
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   build-system = [ setuptools ];
   nativeBuildInputs = [ pytestCheckHook ];
