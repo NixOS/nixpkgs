@@ -3,7 +3,7 @@
 lib.makeOverridable (
 { owner, repo
 , tag ? null
-, rev ? if tag != null then "refs/tags/${tag}" else null
+, rev ? null
 , name ? "source"
 , fetchSubmodules ? false, leaveDotGit ? null
 , deepClone ? false, private ? false, forceFetchGit ? false
@@ -14,13 +14,16 @@ lib.makeOverridable (
 , ... # For hash agility
 }@args:
 
-assert (lib.assertMsg (rev != null) "You must provide `fetchFromGitHub with a `rev` or `tag`.");
+assert (lib.assertMsg (lib.xor (tag == null) (rev == null)) "fetchFromGitHub requires one of either `rev` or `tag` to be provided (not both).");
 
 let
 
   position = (if args.meta.description or null != null
     then builtins.unsafeGetAttrPos "description" args.meta
-    else builtins.unsafeGetAttrPos "rev" args
+    else if tag != null then
+      builtins.unsafeGetAttrPos "tag" args
+    else
+      builtins.unsafeGetAttrPos "rev" args
   );
   baseUrl = "https://${githubBase}/${owner}/${repo}";
   newMeta = meta // {
@@ -61,7 +64,7 @@ let
       inherit tag rev deepClone fetchSubmodules sparseCheckout fetchLFS; url = gitRepoUrl;
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
     else {
-      url = "${baseUrl}/archive/${rev}.tar.gz";
+      url = "${baseUrl}/archive/${if tag != null then "refs/tags/${tag}" else rev}.tar.gz";
 
       passthru = {
         inherit gitRepoUrl;
