@@ -16,7 +16,7 @@ in
 rec {
   qemu-common = import ../../../nixos/lib/qemu-common.nix { inherit lib pkgs; };
 
-  qemu = buildPackages.qemu_kvm;
+  qemu = buildPackages.qemu;
 
   modulesClosure = pkgs.makeModulesClosure {
     inherit kernel rootModules;
@@ -161,6 +161,27 @@ rec {
     ];
   };
 
+ # Switch standard build environment to target host platform
+ stage2Stdenv = 
+    let
+      buildSystem = pkgs.stdenv.buildPlatform.system;
+      hostSystem = pkgs.stdenv.hostPlatform.system;
+    in  if (buildSystem == hostSystem) then stdenv else 
+      let
+        targetArch = if ( hostSystem == "x86_64-linux") then  
+        "gnu64" else
+        "aarch64-multiplatform";
+      in 
+      pkgs.stdenv.override {
+         buildPlatform = pkgs.stdenv.hostPlatform;
+         cc = null;
+         preHook = "";
+         allowedRequisites = null;
+         initialPath = [pkgs.pkgsCross.${targetArch}.busybox];
+         shell = "${pkgs.pkgsCross.${targetArch}.bash}/bin/bash";
+         extraNativeBuildInputs = [];
+        }
+     ;
 
   stage2Init = writeScript "vm-run-stage2" ''
     #! ${bash}/bin/sh
@@ -178,8 +199,9 @@ rec {
     export PATH=/empty
     cd "$NIX_BUILD_TOP"
 
-    source $stdenv/setup
-
+    source ${stage2Stdenv}/setup
+    export stdenv=${stage2Stdenv}
+    
     if ! test -e /bin/sh; then
       ${coreutils}/bin/mkdir -p /bin
       ${coreutils}/bin/ln -s ${bash}/bin/sh /bin/sh

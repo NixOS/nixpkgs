@@ -30,7 +30,7 @@ rec {
       guestSystem = pkgs.stdenv.hostPlatform.system;
 
       linuxHostGuestMatrix = {
-        x86_64-linux = "${qemuPkg}/bin/qemu-kvm -cpu max";
+        x86_64-linux = "${qemuPkg}/bin/qemu-system-x86_64 -machine q35,accel=kvm:tcg -cpu max";
         armv7l-linux = "${qemuPkg}/bin/qemu-system-arm -machine virt,accel=kvm:tcg -cpu max";
         aarch64-linux = "${qemuPkg}/bin/qemu-system-aarch64 -machine virt,gic-version=max,accel=kvm:tcg -cpu max";
         powerpc64le-linux = "${qemuPkg}/bin/qemu-system-ppc64 -machine powernv";
