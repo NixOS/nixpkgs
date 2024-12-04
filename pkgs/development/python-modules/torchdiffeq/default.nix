@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "torchdiffeq";
-  version = "0.2.4";
+  version = "0.2.5";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wOV8PIif7dp/I6YBXb/Nba5QcqBt1u0Q6CAMIAmEQEM=";
+    hash = "sha256-tQ03YNE/0TjczqxlH0uAOW9E/vzr0DegM/7P6qnMEuc=";
   };
 
   propagatedBuildInputs = [
