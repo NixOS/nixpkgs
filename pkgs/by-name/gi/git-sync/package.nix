@@ -8,6 +8,7 @@
   gnused,
   makeWrapper,
   inotify-tools,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,6 +51,10 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/git-sync-on-inotify \
       --prefix PATH : $wrap_path
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Script to automatically synchronize a git repository";
