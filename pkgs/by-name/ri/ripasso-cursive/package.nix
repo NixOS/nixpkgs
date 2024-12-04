@@ -9,7 +9,6 @@
   gpgme,
   xorg,
   nettle,
-  clang,
   installShellFiles,
 }:
 
@@ -37,7 +36,6 @@ rustPlatform.buildRustPackage rec {
     gpgme
     python3
     installShellFiles
-    clang
     rustPlatform.bindgenHook
   ];
 
