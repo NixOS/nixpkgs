@@ -11,6 +11,7 @@
 , Xaw3d
 , acl
 , alsa-lib
+, apple-sdk
 , autoreconfHook
 , cairo
 , dbus
@@ -163,6 +164,9 @@ mkDerivation (finalAttrs: {
           "${lib.getBin stdenv.cc.cc}/bin"
           "${lib.getBin stdenv.cc.bintools}/bin"
           "${lib.getBin stdenv.cc.bintools.bintools}/bin"
+        ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          # The linker needs to know where to find libSystem on Darwin.
+          "${apple-sdk.sdkroot}/usr/lib"
         ])));
     })
   ];
