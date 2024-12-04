@@ -10,22 +10,22 @@
 
 rustPlatform.buildRustPackage {
   pname = "tdf";
-  version = "0-unstable-2024-10-09";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "itsjunetime";
     repo = "tdf";
     fetchSubmodules = true;
-    rev = "f6d339923bc71d3f637f24bf0c6eef6dacb61bf9";
-    hash = "sha256-C1S5u1EsOYvUE1CqreeBg7Z5Oj+mzCf0zPdZBz0LNLw=";
+    rev = "a2b728fae3c5b0addfa64e8d3e44eac6fd50f1d9";
+    hash = "sha256-0as/tKw0nKkZn+5q5PlKwK+LZK0xWXDAdiD3valVjBs=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ratatui-0.28.1" = "sha256-riVdXpHW5J1f4YY2A32YLpwydxn/kJ1cHRdm7CCdoN8=";
-      "ratatui-image-2.0.1" = "sha256-ZFd7ABeyuO270vWEZEE685Bil6sq3RndqoD7TSU8qmU=";
-      "vb64-0.1.2" = "sha256-Ypb59Rtn0ZkP6fwqIqOEeiNLcmzB368CkViIVCxpCI8=";
+      "ratatui-0.29.0" = "sha256-Aeu8HnP4vhHCzu/gRFl7pLLwXv5FcRrlLsstT/AHDVA=";
+      "ratatui-image-3.0.0" = "sha256-IrWHtUuC7OypRAZFEE/UKrPzXT4u9k4jMeJEydcXZWs=";
+      "vb64-0.1.2" = "sha256-VvObgaJhHNah3exVQInFa5mhHjzEg0MaFqQdnCE5Pp8=";
     };
   };
 
