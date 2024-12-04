@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "line-profiler";
-  version = "4.1.3";
+  version = "4.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6" || isPyPy;
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "line_profiler";
     inherit version;
-    hash = "sha256-5fESPDZywyGLoGPCO9ZKURWeRGSf7WeAuZPHgfte0xg=";
+    hash = "sha256-CeEPJfh2UUOAs/rubek/sMIoq7qFgguhpZHds+tFGpY=";
   };
 
   nativeBuildInputs = [
