@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
 
   buildPythonPackage,
   unittestCheckHook,
@@ -24,8 +24,7 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-DslG+XxIYb04I3B7m0fmRmE3hFCczF039QhSVdHGPL8=";
   };
-  # TODO(nicoo): extend updateScript to update Cargo.lock & cargoDeps.outputHashes
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = nix-update-script { };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
