@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     owner = "jopohl";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-r3d80dzGwgf5Tuwt1IWGcmNbblwBNKTKKm+GGx1r2HE=";
+    hash = "sha256-r3d80dzGwgf5Tuwt1IWGcmNbblwBNKTKKm+GGx1r2HE=";
   };
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook wrapGAppsHook3 copyDesktopItems
