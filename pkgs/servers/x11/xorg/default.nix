@@ -2776,7 +2776,7 @@ self: with self; {
   })) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videoamdgpu = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, mesa, libGL, libdrm, udev, xorgserver, testers }: stdenv.mkDerivation (finalAttrs: {
+  xf86videoamdgpu = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libgbm, libGL, libdrm, udev, xorgserver, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xf86-video-amdgpu";
     version = "23.0.0";
     builder = ./builder.sh;
@@ -2787,7 +2787,7 @@ self: with self; {
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ xorgproto mesa libGL libdrm udev xorgserver ];
+    buildInputs = [ xorgproto libgbm libGL libdrm udev xorgserver ];
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -2856,7 +2856,7 @@ self: with self; {
   })) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videoati = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, mesa, libGL, libdrm, udev, libpciaccess, xorgserver, testers }: stdenv.mkDerivation (finalAttrs: {
+  xf86videoati = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libgbm, libGL, libdrm, udev, libpciaccess, xorgserver, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xf86-video-ati";
     version = "22.0.0";
     builder = ./builder.sh;
@@ -2867,7 +2867,7 @@ self: with self; {
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ xorgproto mesa libGL libdrm udev libpciaccess xorgserver ];
+    buildInputs = [ xorgproto libgbm libGL libdrm udev libpciaccess xorgserver ];
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];

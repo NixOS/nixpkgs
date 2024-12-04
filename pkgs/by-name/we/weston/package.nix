@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl
 , meson, ninja, pkg-config, python3, wayland-scanner
-, cairo, libGL, libdisplay-info, libdrm, libevdev, libinput, libxkbcommon, mesa
+, cairo, libGL, libdisplay-info, libdrm, libevdev, libinput, libxkbcommon, libgbm
 , seatd, wayland, wayland-protocols, xcbutilcursor
 
 , demoSupport ? true
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config python3 wayland-scanner ];
   buildInputs = [
-    cairo libGL libdisplay-info libdrm libevdev libinput libxkbcommon mesa seatd
+    cairo libGL libdisplay-info libdrm libevdev libinput libxkbcommon libgbm seatd
     wayland wayland-protocols
   ] ++ lib.optional jpegSupport libjpeg
     ++ lib.optional lcmsSupport lcms2

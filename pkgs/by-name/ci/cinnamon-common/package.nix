@@ -23,7 +23,7 @@
 , libstartup_notification
 , libXtst
 , libXdamage
-, mesa
+, libgbm
 , muffin
 , networkmanager
 , pkg-config
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     libstartup_notification
     libXtst
     libXdamage
-    mesa
+    libgbm
     muffin
     networkmanager
     polkit

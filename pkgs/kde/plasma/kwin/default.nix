@@ -12,7 +12,7 @@
   libcanberra,
   libdisplay-info,
   libei,
-  mesa,
+  libgbm,
   lcms2,
   pipewire,
   krunner,
@@ -54,7 +54,7 @@ mkKdeDerivation {
 
     krunner
 
-    mesa # libgbm
+    libgbm
     lcms2
     libcanberra
     libdisplay-info

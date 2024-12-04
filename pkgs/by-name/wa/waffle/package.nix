@@ -12,7 +12,7 @@
 , python3
 , x11Support ? true, libxcb, libX11
 , waylandSupport ? true, wayland, wayland-protocols, wayland-scanner
-, useGbm ? true, mesa, udev
+, useGbm ? true, libgbm, udev
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner = "mesa";
+    owner = "libgbm";
     repo = "waffle";
     rev = "v${version}";
     sha256 = "sha256-Y7GRYLqSO572qA1eZ3jS8QlZ1X9xKpDtScaySTuPK/U=";
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     wayland-protocols
   ] ++ lib.optionals useGbm [
     udev
-    mesa
+    libgbm
   ];
 
   depsBuildBuild = [ pkg-config ];
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     mainProgram = "wflinfo";
     homepage = "https://www.waffle-gl.org/";
     license = licenses.bsd2;
-    inherit (mesa.meta) platforms;
+    inherit (libgbm.meta) platforms;
     maintainers = with maintainers; [ Flakebi ];
   };
 }

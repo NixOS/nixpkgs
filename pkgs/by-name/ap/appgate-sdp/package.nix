@@ -25,7 +25,7 @@
 , libxkbcommon
 , lttng-ust
 , makeWrapper
-, mesa
+, libgbm
 , networkmanager
 , nspr
 , nss
@@ -61,7 +61,7 @@ let
     libxcb
     libxkbcommon
     lttng-ust
-    mesa
+    libgbm
     nspr
     nss
     openssl

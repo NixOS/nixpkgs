@@ -3,7 +3,7 @@
 , freetype, gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
 , libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence
-, mesa, nspr, nss, pango, systemd, libappindicator-gtk3, libdbusmenu
+, libgbm, nspr, nss, pango, systemd, libappindicator-gtk3, libdbusmenu
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     libXtst
     libxcb
     libxshmfence
-    mesa
+    libgbm
     nss
   ];
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   libPath = lib.makeLibraryPath [
-    libcxx systemd libpulseaudio libdrm mesa
+    libcxx systemd libpulseaudio libdrm libgbm
     stdenv.cc.cc alsa-lib atk at-spi2-atk at-spi2-core cairo cups dbus expat fontconfig freetype
     gdk-pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
     libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender

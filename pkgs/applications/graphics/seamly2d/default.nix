@@ -1,5 +1,5 @@
 { stdenv, lib, qtbase, wrapQtAppsHook, fetchFromGitHub,
-  addDriverRunpath, poppler_utils, qtxmlpatterns, qtsvg, mesa, xvfb-run,
+  addDriverRunpath, poppler_utils, qtxmlpatterns, qtsvg, libgbm, xvfb-run,
   fontconfig, freetype, xorg, qmake, python3, qttools, git
 }:
 let
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     poppler_utils
     qtxmlpatterns
     qtsvg
-    mesa
+    libgbm
     freetype
     xorg.libXi
     xorg.libXrender

@@ -37,7 +37,7 @@
   libuuid,
   libxkbcommon,
   libxshmfence,
-  mesa,
+  libgbm,
   nspr,
   nss,
   pango,
@@ -125,7 +125,7 @@ let
     libxshmfence
     libXtst
     libuuid
-    mesa
+    libgbm
     nspr
     nss
     pango
