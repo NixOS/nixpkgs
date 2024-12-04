@@ -18,13 +18,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "systemd-netlogd";
-  version = "1.4.2";
+  version = "1.4.3";
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd-netlogd";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-FwBwhsnVathlRQjKyrsPpZZlCb2rIpVuHGq9mG3mNsw=";
+    hash = "sha256-NwDmNrq2rLing5BQrSXoNDErcLK0Q8go9TN9zLSW5rE=";
   };
 
   # Fixup a few installation paths
@@ -39,11 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace units/systemd-netlogd.service.in \
       --replace-fail '@PKGPREFIX@/systemd-netlogd' '${placeholder "out"}/bin/systemd-netlogd'
   '';
-
-  outputs = [
-    "out"
-    "man"
-  ];
 
   strictDeps = true;
 
@@ -72,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = lib.optionalAttrs (stdenv.buildPlatform.system == "x86_64-linux") {
       aarch64-cross = pkgsCross.aarch64-multiplatform.systemd-netlogd;
     };
+
     updateScript = nix-update-script { };
   };
 
@@ -81,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/systemd/systemd-netlogd/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ getchoo ];
-    inherit (systemd.meta) platforms;
     mainProgram = "systemd-netlogd";
+    inherit (systemd.meta) platforms;
   };
 })
