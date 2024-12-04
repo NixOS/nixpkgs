@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "git-filter-repo";
-  version = "2.45.0";
+  version = "2.47.0";
   docs_version = "71d71d4be238628bf9cb9b27be79b8bb824ed1a9";
   pyproject = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "git_filter_repo";
     inherit version;
-    hash = "sha256-L6gP+NpUOCpuGJvBUi3Jhu56UqvL6eKBkvc8D2yLXqk=";
+    hash = "sha256-QRsn5ooIDAemnCM8tSbbwthIsJpy8QR39ERN0IIs8pA=";
   };
 
   docs = fetchFromGitHub {
