@@ -21,7 +21,7 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "debug" ] ''
+    (mkRemovedOptionModule [ "services" "aesmd" "debug" ] ''
       Enable debug mode by overriding the aesmd package directly:
 
           services.aesmd.package = pkgs.sgx-psw.override { debug = true; };
