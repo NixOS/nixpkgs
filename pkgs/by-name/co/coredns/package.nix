@@ -10,9 +10,9 @@
 
 let
   attrsToPlugins = attrs:
-    builtins.map ({name, repo, version}: "${name}:${repo}") attrs;
+    builtins.map ({name, repo, version, priority ? 1}: "${toString priority}i${name}:${repo}") attrs;
   attrsToSources = attrs:
-    builtins.map ({name, repo, version}: "${repo}@${version}") attrs;
+    builtins.map ({name, repo, version, priority ? 1}: "${repo}@${version}") attrs;
 in buildGoModule rec {
   pname = "coredns";
   version = "1.11.3";
@@ -32,7 +32,7 @@ in buildGoModule rec {
 
   # Override the go-modules fetcher derivation to fetch plugins
   modBuildPhase = ''
-    for plugin in ${builtins.toString (attrsToPlugins externalPlugins)}; do echo $plugin >> plugin.cfg; done
+    for plugin in ${builtins.toString (attrsToPlugins externalPlugins)}; do sed -i "$plugin" plugin.cfg; done
     for src in ${builtins.toString (attrsToSources externalPlugins)}; do go get $src; done
     GOOS= GOARCH= go generate
     go mod vendor
