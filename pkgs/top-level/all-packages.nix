@@ -6966,9 +6966,6 @@ with pkgs;
 
   opensmalltalk-vm = callPackage ../development/compilers/opensmalltalk-vm { };
 
-  opensycl = darwin.apple_sdk_11_0.callPackage ../development/compilers/opensycl { };
-  opensyclWithRocm = opensycl.override { rocmSupport = true; };
-
   rustfmt = rustPackages.rustfmt;
   rust-bindgen-unwrapped = callPackage ../development/tools/rust/bindgen/unwrapped.nix { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
