@@ -129,8 +129,9 @@ buildDotnetModule rec {
 
   projectFile = "FamiStudio/${csprojName}.csproj";
   nugetDeps = ./deps.nix;
-  dotnet-sdk = dotnetCorePackages.sdk_7_0;
-  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnetFlags = [ "-p:TargetFramework=net8.0" ];
 
   runtimeDeps = lib.optionals stdenv.hostPlatform.isLinux [
     libglvnd
