@@ -22,7 +22,7 @@ appimageTools.wrapType2 {
     let contents = appimageTools.extract { inherit pname version src; };
     in ''
       wrapProgram $out/bin/wootility \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
       install -Dm444 ${contents}/wootility-lekker.desktop -t $out/share/applications
       install -Dm444 ${contents}/wootility-lekker.png -t $out/share/pixmaps

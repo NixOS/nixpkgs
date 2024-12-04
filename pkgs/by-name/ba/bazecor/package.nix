@@ -41,7 +41,7 @@ appimageTools.wrapAppImage {
 
   extraInstallCommands = ''
     wrapProgram $out/bin/bazecor \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     install -m 444 -D ${src}/Bazecor.desktop -t $out/share/applications
     install -m 444 -D ${src}/bazecor.png -t $out/share/pixmaps
