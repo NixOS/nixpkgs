@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
 
@@ -56,6 +57,13 @@ rustPlatform.buildRustPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails in the darwin sandbox with:
+    # Attempted to create a NULL object.
+    # event loop thread panicked
+    "--skip=pass::pass_tests::test_add_recipient_not_in_key_ring"
+  ];
 
   postInstall = ''
     installManPage target/man-page/cursive/ripasso-cursive.1
