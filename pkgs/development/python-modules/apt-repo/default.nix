@@ -24,6 +24,7 @@ buildPythonPackage rec {
   passthru.updateScript = unstableGitUpdater {};
 
   build-system = [ setuptools ];
+  nativeBuildInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "apt_repo" ];
 
