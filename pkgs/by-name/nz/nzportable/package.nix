@@ -47,7 +47,7 @@
   libxkbcommon,
 }:
 let
-  fteqwVersion = "0-unstable-2024-09-11-20-07-31";
+  fteqwVersion = "0-unstable-2024-11-30-14-18-42";
 
   # We use the youngest version of all of the dependencies as the version number.
   # This is similar to what upstream uses, except ours is a bit more accurate
@@ -76,8 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nzp-team";
     repo = "fteqw";
-    rev = "593345a7f03245fc45580ac252857e5db5105033";
-    hash = "sha256-ANDHh4PKh8fAvbBiiW47l1XeGOCes0Sg595+65NFG6w=";
+    rev = "91e23786b4b3d8557bc421ebd8559264d407c7c2";
+    hash = "sha256-GI2fshnRLuQytWtQo4hwcFH77zgdUESpQCniO5Zv3vc=";
   };
 
   nativeBuildInputs = [
