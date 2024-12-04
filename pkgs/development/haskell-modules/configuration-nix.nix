@@ -1419,7 +1419,7 @@ self: super: builtins.intersectAttrs super {
   tailwind = addBuildDepend
       # Overrides for tailwindcss copied from:
       # https://github.com/EmaApps/emanote/blob/master/nix/tailwind.nix
-      (pkgs.nodePackages.tailwindcss.overrideAttrs (oa: {
+      (pkgs.tailwindcss.overrideAttrs (oa: {
         plugins = [
           pkgs.nodePackages."@tailwindcss/aspect-ratio"
           pkgs.nodePackages."@tailwindcss/forms"
