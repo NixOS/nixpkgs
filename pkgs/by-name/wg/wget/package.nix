@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
       perlPackages.perl
     ];
 
+  strictDeps = true;
+
   configureFlags =
     [
       (lib.withFeatureAs withOpenssl "ssl" "openssl")
@@ -101,7 +103,8 @@ stdenv.mkDerivation rec {
         sed -i 's/^exit/exit 77 #/' $f
       done
     '';
-  checkInputs =
+
+  nativeCheckInputs =
     [
       perlPackages.HTTPDaemon
       python3
