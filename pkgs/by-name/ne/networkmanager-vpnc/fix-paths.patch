@@ -1,0 +1,31 @@
+--- a/properties/nm-vpnc-editor-plugin.c
++++ b/properties/nm-vpnc-editor-plugin.c
+@@ -161,7 +161,7 @@
+ 	GError *error = NULL;
+ 
+ 	const char *decrypt_possible_paths[] = {
+-		"/usr/lib/vpnc/cisco-decrypt",
++		"@vpnc@/bin/cisco-decrypt",
+ 		"/usr/bin/cisco-decrypt",
+ 		NULL
+ 	};
+--- a/src/nm-vpnc-service.c
++++ b/src/nm-vpnc-service.c
+@@ -610,7 +610,7 @@
+ find_vpnc (void)
+ {
+ 	static const char *vpnc_paths[] = {
+-		"/usr/sbin/vpnc",
++		"@vpnc@/bin/vpnc",
+ 		"/sbin/vpnc",
+ 		"/usr/local/sbin/vpnc",
+ 		NULL
+@@ -1308,7 +1308,7 @@
+ 	_LOGD ("   vpnc interactive mode is %s", interactive_available ? "enabled" : "disabled");
+ 	_LOGD ("   uses%s --bus-name \"%s\"", bus_name_free ? "" : " default", bus_name);
+ 
+-	if (system ("/sbin/modprobe tun") == -1)
++	if (system ("@kmod@/bin/modprobe tun") == -1)
+ 		exit (EXIT_FAILURE);
+ 
+ 	plugin = nm_vpnc_plugin_new (bus_name);

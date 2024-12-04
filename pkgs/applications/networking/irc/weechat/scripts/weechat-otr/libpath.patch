@@ -1,0 +1,13 @@
+diff --git a/weechat_otr.py b/weechat_otr.py
+index 0ccfb35..c42bebf 100644
+--- a/weechat_otr.py
++++ b/weechat_otr.py
+@@ -41,6 +41,8 @@ import shlex
+ import shutil
+ import sys
+ 
++sys.path.append('@env@')
++
+ import potr
+ import weechat
+ 

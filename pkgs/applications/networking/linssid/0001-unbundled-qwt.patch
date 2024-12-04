@@ -1,0 +1,43 @@
+From e57f22a5089f194013534c9a9bbc42ee639297f1 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Sat, 19 Sep 2015 11:10:32 -0500
+Subject: [PATCH] unbundled qwt
+
+---
+ linssid-app/linssid-app.pro | 4 +---
+ linssid.pro                 | 4 +---
+ 2 files changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/linssid-app/linssid-app.pro b/linssid-app/linssid-app.pro
+index 26f61e7..7b80b60 100644
+--- a/linssid-app/linssid-app.pro
++++ b/linssid-app/linssid-app.pro
+@@ -19,13 +19,11 @@ QMAKE_CC = gcc
+ QMAKE_CXX = g++
+ DEFINES += 
+ INCLUDEPATH += /usr/include/qt5
+-# /usr/local/qwt-6.1.0/include
+-INCLUDEPATH += ../qwt-lib/src
+ # LIBS += /usr/lib/x86_64-linux-gnu/libboost_regex.a 
+ # LIBS += -lboost_regex
+ LIBS += -l:libboost_regex.a
+ # /usr/local/qwt-6.1.0/lib/libqwt.a
+-LIBS += ../qwt-lib/lib/libqwt.a
++LIBS += -lqwt
+ QMAKE_CXXFLAGS += -std=c++11
+ #
+ TARGET = linssid
+diff --git a/linssid.pro b/linssid.pro
+index 42dc277..26d1a2c 100644
+--- a/linssid.pro
++++ b/linssid.pro
+@@ -1,5 +1,3 @@
+ TEMPLATE = subdirs
+ CONFIG += ordered
+-SUBDIRS = qwt-lib \
+-          linssid-app
+-linssid-app.depends = qwt-lib
++SUBDIRS = linssid-app
+-- 
+2.5.2
+

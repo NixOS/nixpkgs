@@ -1,0 +1,25 @@
+From 29b58e29c813d9bf0b31139a19b556614c28638e Mon Sep 17 00:00:00 2001
+From: Flakebi <flakebi@t-online.de>
+Date: Sat, 2 Dec 2023 16:26:22 +0100
+Subject: [PATCH 1/6] Fix flask 2.3 issue
+
+'Blueprint' object has no attribute 'before_app_first_request'
+---
+ powerdnsadmin/routes/index.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/powerdnsadmin/routes/index.py b/powerdnsadmin/routes/index.py
+index d56ce61..2176bd6 100644
+--- a/powerdnsadmin/routes/index.py
++++ b/powerdnsadmin/routes/index.py
+@@ -46,7 +46,6 @@ index_bp = Blueprint('index',
+                      url_prefix='/')
+ 
+ 
+-@index_bp.before_app_first_request
+ def register_modules():
+     global google
+     global github
+-- 
+2.42.0
+

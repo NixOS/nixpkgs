@@ -1,0 +1,141 @@
+name: Eval
+
+on: pull_request_target
+
+permissions:
+  contents: read
+
+jobs:
+  attrs:
+    name: Attributes
+    runs-on: ubuntu-latest
+    outputs:
+      mergedSha: ${{ steps.merged.outputs.mergedSha }}
+      systems: ${{ steps.systems.outputs.systems }}
+    steps:
+      # Important: Because of `pull_request_target`, this doesn't check out the PR,
+      # but rather the base branch of the PR, which is needed so we don't run untrusted code
+      - name: Check out the ci directory of the base branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          path: base
+          sparse-checkout: ci
+      - name: Check if the PR can be merged and get the test merge commit
+        id: merged
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if mergedSha=$(base/ci/get-merge-commit.sh ${{ github.repository }} ${{ github.event.number }}); then
+            echo "Checking the merge commit $mergedSha"
+            echo "mergedSha=$mergedSha" >> "$GITHUB_OUTPUT"
+          else
+            # Skipping so that no notifications are sent
+            echo "Skipping the rest..."
+          fi
+          rm -rf base
+      - name: Check out the PR at the test merge commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        # Add this to _all_ subsequent steps to skip them
+        if: steps.merged.outputs.mergedSha
+        with:
+          ref: ${{ steps.merged.outputs.mergedSha }}
+          path: nixpkgs
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+        if: steps.merged.outputs.mergedSha
+
+      - name: Evaluate the list of all attributes and get the systems matrix
+        id: systems
+        if: steps.merged.outputs.mergedSha
+        run: |
+          nix-build nixpkgs/ci -A eval.attrpathsSuperset
+          echo "systems=$(<result/systems.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Upload the list of all attributes
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        if: steps.merged.outputs.mergedSha
+        with:
+          name: paths
+          path: result/*
+
+  outpaths:
+    name: Outpaths
+    runs-on: ubuntu-latest
+    needs: attrs
+    # Skip this and future steps if the PR can't be merged
+    if: needs.attrs.outputs.mergedSha
+    strategy:
+      matrix:
+        system: ${{ fromJSON(needs.attrs.outputs.systems) }}
+    steps:
+      - name: Download the list of all attributes
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: paths
+          path: paths
+
+      - name: Check out the PR at the test merge commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ needs.attrs.outputs.mergedSha }}
+          path: nixpkgs
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+
+      - name: Evaluate the ${{ matrix.system }} output paths for all derivation attributes
+        env:
+          MATRIX_SYSTEM: ${{ matrix.system }}
+        run: |
+          nix-build nixpkgs/ci -A eval.singleSystem \
+            --argstr evalSystem "$MATRIX_SYSTEM" \
+            --arg attrpathFile ./paths/paths.json \
+            --arg chunkSize 10000
+          # If it uses too much memory, slightly decrease chunkSize
+
+      - name: Upload the output paths and eval stats
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        if: needs.attrs.outputs.mergedSha
+        with:
+          name: intermediate-${{ matrix.system }}
+          path: result/*
+
+  process:
+    name: Process
+    runs-on: ubuntu-latest
+    needs: [ outpaths, attrs ]
+    steps:
+      - name: Download output paths and eval stats for all systems
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          pattern: intermediate-*
+          path: intermediate
+
+      - name: Check out the PR at the test merge commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ needs.attrs.outputs.mergedSha }}
+          path: nixpkgs
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+
+      - name: Combine all output paths and eval stats
+        run: |
+          nix-build nixpkgs/ci -A eval.combine \
+            --arg resultsDir ./intermediate
+
+      - name: Upload the combined results
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: result
+          path: result/*
+
+
+      # TODO: Run this workflow also on `push` (on at least the main development branches)
+      # Then add an extra step here that waits for the base branch (not the merge base, because that could be very different)
+      # to have completed the eval, then use
+      # gh api --method GET /repos/NixOS/nixpkgs/actions/workflows/eval.yml/runs -f head_sha=<BASE>
+      # and follow it to the artifact results, where you can then download the outpaths.json from the base branch
+      # That can then be used to compare the number of changed paths, get evaluation stats and ping appropriate reviewers

@@ -1,0 +1,41 @@
+diff --git a/src/ansible-cmdb.py b/bin/ansible-cmdb
+similarity index 100%
+rename from src/ansible-cmdb.py
+rename to bin/ansible-cmdb
+diff --git a/setup.py b/setup.py
+index a8db25d..c1670f1 100755
+--- a/setup.py
++++ b/setup.py
+@@ -42,17 +42,16 @@ setup(
+     package_dir={'': 'src'},
+     packages=find_packages('src'),
+     include_package_data=True,
+-    data_files=\
+-        get_data_files(
+-            'src/ansiblecmdb/data',
+-            strip='src',
+-            prefix='lib'
+-        ) +
+-        [['lib/ansiblecmdb/', ['src/ansible-cmdb.py']]],
++    data_files=get_data_files(
++        'src/ansiblecmdb/data',
++        strip='src',
++        prefix='lib',
++    ),
+     zip_safe=False,
+-    install_requires=['mako', 'pyyaml', 'ushlex', 'jsonxs'],
++    install_requires=['mako', 'pyyaml'],
++    extras_require={'jsonxs_templates': ['jsonxs']},
+     scripts=[
+-        'src/ansible-cmdb',
++        'bin/ansible-cmdb',
+     ],
+ 
+     classifiers=[
+diff --git a/src/ansiblecmdb/data/VERSION b/src/ansiblecmdb/data/VERSION
+index 79d94e6..14d2ff6 100644
+--- a/src/ansiblecmdb/data/VERSION
++++ b/src/ansiblecmdb/data/VERSION
+@@ -1 +1 @@
+-MASTER
++@version@

@@ -1,0 +1,25 @@
+diff --git a/cmdstanpy/utils/cmdstan.py b/cmdstanpy/utils/cmdstan.py
+index 227d97a..27c3ccc 100644
+--- a/cmdstanpy/utils/cmdstan.py
++++ b/cmdstanpy/utils/cmdstan.py
+@@ -163,19 +163,7 @@ def cmdstan_path() -> str:
+     if 'CMDSTAN' in os.environ and len(os.environ['CMDSTAN']) > 0:
+         cmdstan = os.environ['CMDSTAN']
+     else:
+-        cmdstan_dir = os.path.expanduser(os.path.join('~', _DOT_CMDSTAN))
+-        if not os.path.exists(cmdstan_dir):
+-            raise ValueError(
+-                'No CmdStan installation found, run command "install_cmdstan"'
+-                'or (re)activate your conda environment!'
+-            )
+-        latest_cmdstan = get_latest_cmdstan(cmdstan_dir)
+-        if latest_cmdstan is None:
+-            raise ValueError(
+-                'No CmdStan installation found, run command "install_cmdstan"'
+-                'or (re)activate your conda environment!'
+-            )
+-        cmdstan = os.path.join(cmdstan_dir, latest_cmdstan)
++        cmdstan = '@cmdstan@'
+         os.environ['CMDSTAN'] = cmdstan
+     validate_cmdstan_path(cmdstan)
+     return os.path.normpath(cmdstan)
