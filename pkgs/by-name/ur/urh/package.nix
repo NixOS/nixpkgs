@@ -19,8 +19,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-r3d80dzGwgf5Tuwt1IWGcmNbblwBNKTKKm+GGx1r2HE=";
   };
 
-  nativeBuildInputs = [ qt5.wrapQtAppsHook wrapGAppsHook3 copyDesktopItems
-                      ];
+  nativeBuildInputs = [ qt5.wrapQtAppsHook wrapGAppsHook3 copyDesktopItems ];
   buildInputs = [ hackrf rtl-sdr airspy limesuite libiio libbladeRF ]
     ++ lib.optional USRPSupport uhd
     ++ lib.optional stdenv.hostPlatform.isLinux qt5.qtwayland;
