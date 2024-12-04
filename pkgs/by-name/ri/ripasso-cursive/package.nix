@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
@@ -11,8 +10,6 @@
   xorg,
   nettle,
   clang,
-  AppKit,
-  Security,
   installShellFiles,
 }:
 
@@ -44,18 +41,13 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      openssl
-      libgpg-error
-      gpgme
-      xorg.libxcb
-      nettle
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Security
-    ];
+  buildInputs = [
+    openssl
+    libgpg-error
+    gpgme
+    xorg.libxcb
+    nettle
+  ];
 
   preCheck = ''
     export HOME=$TMPDIR
