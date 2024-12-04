@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wgpu-utils";
-  version = "22.1.0";
+  version = "23.0.1";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu";
-    rev = "v${version}";
-    hash = "sha256-Gtq0xYZoWNwW+BKVLqVVKGqc+4HjaD7NN1hlzyFP5g0=";
+    tag = "wgpu-v${version}";
+    hash = "sha256-aBBAV3oRPm8eFKdDaHr/YMCKPgoSmeKhFC9Ukz+Gd1I=";
   };
 
   cargoLock = {
