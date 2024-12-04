@@ -137,7 +137,6 @@
 , "meat"
 , "mocha"
 , "multi-file-swagger"
-, "neovim"
 , "nijs"
 , "node-gyp-build"
 , "node2nix"
