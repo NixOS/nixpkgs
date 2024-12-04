@@ -8,21 +8,214 @@ import pytest
 
 import nixos_rebuild.models as m
 import nixos_rebuild.nix as n
+import nixos_rebuild.process as p
 
 from .helpers import get_qualified_name
 
 
+@patch(
+    get_qualified_name(n.run_wrapper, n),
+    autospec=True,
+    return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
+)
+def test_build(mock_run: Any, monkeypatch: Any) -> None:
+    assert n.build(
+        "config.system.build.attr", m.BuildAttr("<nixpkgs/nixos>", None), nix_flag="foo"
+    ) == Path("/path/to/file")
+    mock_run.assert_called_with(
+        [
+            "nix-build",
+            "<nixpkgs/nixos>",
+            "--attr",
+            "config.system.build.attr",
+            "--nix-flag",
+            "foo",
+        ],
+        stdout=PIPE,
+    )
+
+    assert n.build(
+        "config.system.build.attr", m.BuildAttr(Path("file"), "preAttr")
+    ) == Path("/path/to/file")
+    mock_run.assert_called_with(
+        ["nix-build", Path("file"), "--attr", "preAttr.config.system.build.attr"],
+        stdout=PIPE,
+    )
+
+
+@patch(
+    get_qualified_name(n.run_wrapper, n),
+    autospec=True,
+    return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
+)
+def test_build_flake(mock_run: Any) -> None:
+    flake = m.Flake.parse(".#hostname")
+
+    assert n.build_flake(
+        "config.system.build.toplevel",
+        flake,
+        no_link=True,
+        nix_flag="foo",
+    ) == Path("/path/to/file")
+    mock_run.assert_called_with(
+        [
+            "nix",
+            "--extra-experimental-features",
+            "nix-command flakes",
+            "build",
+            "--print-out-paths",
+            ".#nixosConfigurations.hostname.config.system.build.toplevel",
+            "--no-link",
+            "--nix-flag",
+            "foo",
+        ],
+        stdout=PIPE,
+    )
+
+
+@patch(
+    get_qualified_name(n.run_wrapper, n),
+    autospec=True,
+    return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
+)
+def test_remote_build(mock_run: Any, monkeypatch: Any) -> None:
+    build_host = m.Remote("user@host", [], None)
+    monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
+    assert n.remote_build(
+        "config.system.build.toplevel",
+        m.BuildAttr("<nixpkgs/nixos>", "preAttr"),
+        build_host,
+        build_flags={"build": True},
+        instantiate_flags={"inst": True},
+        copy_flags={"copy": True},
+    ) == Path("/path/to/file")
+    mock_run.assert_has_calls(
+        [
+            call(
+                [
+                    "nix-instantiate",
+                    "--raw",
+                    "<nixpkgs/nixos>",
+                    "--attr",
+                    "preAttr.config.system.build.toplevel",
+                    "--inst",
+                ],
+                stdout=PIPE,
+            ),
+            call(
+                [
+                    "nix-copy-closure",
+                    "--copy",
+                    "--to",
+                    "user@host",
+                    Path("/path/to/file"),
+                ],
+                extra_env={
+                    "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh opts"])
+                },
+                remote=None,
+            ),
+            call(
+                ["nix-store", "--realise", Path("/path/to/file"), "--build"],
+                remote=build_host,
+                stdout=PIPE,
+            ),
+        ]
+    )
+
+
+@patch(
+    get_qualified_name(n.run_wrapper, n),
+    autospec=True,
+    return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
+)
+def test_remote_build_flake(mock_run: Any, monkeypatch: Any) -> None:
+    flake = m.Flake.parse(".#hostname")
+    build_host = m.Remote("user@host", [], None)
+    monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
+
+    assert n.remote_build_flake(
+        "config.system.build.toplevel",
+        flake,
+        build_host,
+        flake_build_flags={"flake": True},
+        copy_flags={"copy": True},
+        build_flags={"build": True},
+    ) == Path("/path/to/file")
+    mock_run.assert_has_calls(
+        [
+            call(
+                [
+                    "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
+                    "eval",
+                    "--raw",
+                    ".#nixosConfigurations.hostname.config.system.build.toplevel.drvPath",
+                    "--flake",
+                ],
+                stdout=PIPE,
+            ),
+            call(
+                [
+                    "nix-copy-closure",
+                    "--copy",
+                    "--to",
+                    "user@host",
+                    Path("/path/to/file"),
+                ],
+                extra_env={
+                    "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh opts"])
+                },
+                remote=None,
+            ),
+            call(
+                [
+                    "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
+                    "build",
+                    "/path/to/file^*",
+                    "--print-out-paths",
+                    "--build",
+                ],
+                remote=build_host,
+                stdout=PIPE,
+            ),
+        ]
+    )
+
+
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-def test_copy_closure(mock_run: Any) -> None:
+def test_copy_closure(mock_run: Any, monkeypatch: Any) -> None:
     closure = Path("/path/to/closure")
     n.copy_closure(closure, None)
     mock_run.assert_not_called()
 
-    target_host = m.Remote("user@host", ["--ssh", "opt"], None)
+    target_host = m.Remote("user@target.host", [], None)
+    build_host = m.Remote("user@build.host", [], None)
+
     n.copy_closure(closure, target_host)
     mock_run.assert_called_with(
-        ["nix-copy-closure", "--to", "user@host", closure],
-        extra_env={"NIX_SSHOPTS": "--ssh opt"},
+        ["nix-copy-closure", "--to", "user@target.host", closure],
+        extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
+        remote=None,
+    )
+
+    monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-opt")
+    n.copy_closure(closure, None, build_host)
+    mock_run.assert_called_with(
+        ["nix-copy-closure", "--from", "user@build.host", closure],
+        extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-opt"])},
+        remote=None,
+    )
+
+    monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-target-opt")
+    n.copy_closure(closure, target_host, build_host)
+    mock_run.assert_called_with(
+        ["nix-copy-closure", "--to", "user@target.host", closure],
+        remote=build_host,
+        extra_env={"NIX_SSHOPTS": "--ssh build-target-opt"},
     )
 
 
@@ -193,65 +386,23 @@ def test_list_generations(mock_get_generations: Any, tmp_path: Path) -> None:
     ]
 
 
-@patch(
-    get_qualified_name(n.run_wrapper, n),
-    autospec=True,
-    return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
-)
-def test_nixos_build_flake(mock_run: Any) -> None:
-    flake = m.Flake.parse(".#hostname")
-
-    assert n.nixos_build_flake(
-        "toplevel",
-        flake,
-        no_link=True,
-        nix_flag="foo",
-    ) == Path("/path/to/file")
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_repl(mock_run: Any) -> None:
+    n.repl("attr", m.BuildAttr("<nixpkgs/nixos>", None), nix_flag=True)
     mock_run.assert_called_with(
-        [
-            "nix",
-            "--extra-experimental-features",
-            "nix-command flakes",
-            "build",
-            "--print-out-paths",
-            ".#nixosConfigurations.hostname.config.system.build.toplevel",
-            "--no-link",
-            "--nix-flag",
-            "foo",
-        ],
-        stdout=PIPE,
+        ["nix", "repl", "--file", "<nixpkgs/nixos>", "--nix-flag"]
     )
 
+    n.repl("attr", m.BuildAttr(Path("file.nix"), "myAttr"))
+    mock_run.assert_called_with(["nix", "repl", "--file", Path("file.nix"), "myAttr"])
 
-@patch(
-    get_qualified_name(n.run_wrapper, n),
-    autospec=True,
-    return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
-)
-def test_nixos_build(mock_run: Any, monkeypatch: Any) -> None:
-    assert n.nixos_build("attr", None, None, nix_flag="foo") == Path("/path/to/file")
-    mock_run.assert_called_with(
-        ["nix-build", "<nixpkgs/nixos>", "--attr", "attr", "--nix-flag", "foo"],
-        stdout=PIPE,
-    )
 
-    n.nixos_build("attr", "preAttr", "file")
-    mock_run.assert_called_with(
-        ["nix-build", "file", "--attr", "preAttr.attr"],
-        stdout=PIPE,
-    )
-
-    n.nixos_build("attr", None, "file", no_out_link=True)
-    mock_run.assert_called_with(
-        ["nix-build", "file", "--attr", "attr", "--no-out-link"],
-        stdout=PIPE,
-    )
-
-    n.nixos_build("attr", "preAttr", None, no_out_link=False, keep_going=True)
-    mock_run.assert_called_with(
-        ["nix-build", "default.nix", "--attr", "preAttr.attr", "--keep-going"],
-        stdout=PIPE,
-    )
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_repl_flake(mock_run: Any) -> None:
+    n.repl_flake("attr", m.Flake(Path("flake.nix"), "myAttr"), nix_flag=True)
+    # This method would be really annoying to test, and it is not that important
+    # So just check that we are at least calling it
+    assert mock_run.called
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
@@ -418,7 +569,8 @@ def test_switch_to_configuration(mock_run: Any, monkeypatch: Any) -> None:
         Path("/nix/var/nix/profiles/per-user/root/channels/home-manager"),
     ],
 )
-def test_upgrade_channels(mock_glob: Any) -> None:
+@patch(get_qualified_name(n.Path.is_dir, n), autospec=True, return_value=True)
+def test_upgrade_channels(mock_is_dir: Any, mock_glob: Any) -> None:
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.upgrade_channels(False)
     mock_run.assert_called_with(["nix-channel", "--update", "nixos"], check=False)

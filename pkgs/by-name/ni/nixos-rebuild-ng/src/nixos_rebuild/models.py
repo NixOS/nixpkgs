@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import platform
 import re
 import subprocess
@@ -46,10 +44,28 @@ class Action(Enum):
 
 
 @dataclass(frozen=True)
+class BuildAttr:
+    path: str | Path
+    attr: str | None
+
+    def to_attr(self, *attrs: str) -> str:
+        return f"{self.attr + '.' if self.attr else ''}{".".join(attrs)}"
+
+    @classmethod
+    def from_arg(cls, attr: str | None, file: str | None) -> Self:
+        if not (attr or file):
+            return cls("<nixpkgs/nixos>", None)
+        return cls(Path(file or "default.nix"), attr)
+
+
+@dataclass(frozen=True)
 class Flake:
     path: Path
     attr: str
     _re: ClassVar = re.compile(r"^(?P<path>[^\#]*)\#?(?P<attr>[^\#\"]*)$")
+
+    def to_attr(self, *attrs: str) -> str:
+        return f"{self}.{".".join(attrs)}"
 
     @override
     def __str__(self) -> str:
@@ -125,7 +141,7 @@ class Profile:
     path: Path
 
     @classmethod
-    def from_name(cls, name: str = "system") -> Self:
+    def from_arg(cls, name: str) -> Self:
         match name:
             case "system":
                 return cls(name, Path("/nix/var/nix/profiles/system"))
