@@ -494,7 +494,7 @@ When using the `patches` parameter to `mkDerivation`, make sure the patch name c
 
 ### Fetching patches
 
-In the interest of keeping our maintenance burden and the size of nixpkgs to a minimum, patches already merged upstream or published elsewhere _should_ be retrieved using `fetchpatch`:
+In the interest of keeping our maintenance burden and the size of Nixpkgs to a minimum, patches already merged upstream or published elsewhere _should_ be retrieved using `fetchpatch`:
 
 ```nix
 {
@@ -512,14 +512,14 @@ If a patch is available online but does not cleanly apply, it can be modified in
 
 ### Vendoring patches
 
-In the following cases, a `.patch` file _should_ be added to `nixpkgs` repository, instead of retrieved:
+In the following cases, a `.patch` file _should_ be added to Nixpkgs repository, instead of retrieved:
 
-- solves problems unique to packaging in `nixpkgs`
+- solves problems unique to packaging in Nixpkgs
 - is already proposed upstream but not merged yet
 - cannot be fetched easily
 - has a high chance to disappear in the future due to unstable or unreliable URLs
 
-The latter avoid link rot when the upstream abandons, squashes or rebases their change, in which case the commit may get garbage-collected.
+The latter avoids link rot when the upstream abandons, squashes or rebases their change, in which case the commit may get garbage-collected.
 
 ```nix
 {
