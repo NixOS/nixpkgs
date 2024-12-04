@@ -14,6 +14,8 @@
   nettle,
   openssl,
   xorg,
+
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -58,6 +60,10 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installManPage target/man-page/cursive/ripasso-cursive.1
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Simple password manager written in Rust";
