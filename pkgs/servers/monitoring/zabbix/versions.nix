@@ -10,8 +10,8 @@ generic: {
     vendorHash = null;
   };
   v60 = generic {
-    version = "6.0.26";
-    hash = "sha256-MIOKe5hqfDecB1oWZKzbFmJCsQLuAGtp21l2WxxVG+g=";
+    version = "6.0.36";
+    hash = "sha256-Ne0OY6NGzTYOn3sDVd+5tfawBu5VBjxNRtlxasubGCk=";
     vendorHash = null;
   };
 
