@@ -1,30 +1,40 @@
 {
   lib,
   stdenv,
-  cmake,
   fetchzip,
+  fetchpatch,
+  cmake,
   pkg-config,
   alsa-lib,
   curl,
   ffmpeg,
   freeimage,
   freetype,
+  harfbuzz,
+  icu,
   libgit2,
   poppler,
   pugixml,
-  SDL2
+  SDL2,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "emulationstation-de";
-  version = "2.2.1";
+  version = "3.1.0";
 
   src = fetchzip {
-    url = "https://gitlab.com/es-de/emulationstation-de/-/archive/v2.2.1/emulationstation-de-v2.2.1.tar.gz";
-    hash = "sha256:1kp9p3fndnx4mapgfvy742zwisyf0y5k57xkqkis0kxyibx0z8i6";
+    url = "https://gitlab.com/es-de/emulationstation-de/-/archive/v${finalAttrs.version}/emulationstation-de-v${finalAttrs.version}.tar.gz";
+    hash = "sha256-v9nOY9T5VOVLBUKoDXqwYa1iYvW42iGA+3kpPUOmHkg=";
   };
 
-  patches = [ ./001-add-nixpkgs-retroarch-cores.patch ];
+  patches = [
+    (fetchpatch {
+      name = "fix-buffer-overflow-detection-with-gcc-fortification";
+      url = "https://gitlab.com/es-de/emulationstation-de/-/commit/41fd33fdc3dacef507b987ed316aec2b0d684317.patch";
+      sha256 = "sha256-LHJ11mtBn8hRU97+Lz9ugPTTGUAxrPz7yvyxqNOAYKY=";
+    })
+    ./001-add-nixpkgs-retroarch-cores.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -37,23 +47,22 @@ stdenv.mkDerivation {
     ffmpeg
     freeimage
     freetype
+    harfbuzz
+    icu
     libgit2
     poppler
     pugixml
     SDL2
   ];
 
-  installPhase = ''
-    install -D ../emulationstation $out/bin/emulationstation
-    cp -r ../resources/ $out/bin/resources/
-  '';
+  cmakeFlags = [ (lib.cmakeBool "APPLICATION_UPDATER" false) ];
 
   meta = {
-    description = "EmulationStation Desktop Edition is a frontend for browsing and launching games from your multi-platform game collection";
+    description = "ES-DE (EmulationStation Desktop Edition) is a frontend for browsing and launching games from your multi-platform collection";
     homepage = "https://es-de.org";
     maintainers = with lib.maintainers; [ ivarmedi ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    mainProgram = "emulationstation";
+    mainProgram = "es-de";
   };
-}
+})
