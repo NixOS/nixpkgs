@@ -28,7 +28,7 @@ in {
         extraPackages = ps: with ps; [
           colorama
         ];
-        extraComponents = [
+        integrations = [
           # test char-tty device allow propagation into the service
           "zha"
          ];

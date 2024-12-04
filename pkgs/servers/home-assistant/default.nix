@@ -11,8 +11,8 @@
 , home-assistant
 , testers
 
-# Look up dependencies of specified components in component-packages.nix
-, extraComponents ? [ ]
+# Look up dependencies of specified integrations in component-packages.nix
+, integrations ? [ ]
 
 # Additional packages to add to propagatedBuildInputs
 , extraPackages ? ps: []
@@ -400,25 +400,25 @@ let
     packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
 
-  componentPackages = import ./component-packages.nix;
+  metadata = import ./component-packages.nix;
 
-  availableComponents = builtins.attrNames componentPackages.components;
+  availableIntegrations = builtins.attrNames metadata.components;
 
-  inherit (componentPackages) supportedComponentsWithTests;
+  inherit (metadata) testableIntegrations;
 
-  getPackages = component: componentPackages.components.${component};
+  getPackages = component: metadata.components.${component};
 
-  componentBuildInputs = lib.concatMap (component: getPackages component python.pkgs) extraComponents;
+  integrationDependencies = lib.concatMap (component: getPackages component python.pkgs) integrations;
 
   # Ensure that we are using a consistent package set
-  extraBuildInputs = extraPackages python.pkgs;
+  extraDependencies = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
   hassVersion = "2024.9.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
-  version = assert (componentPackages.version == hassVersion); hassVersion;
+  version = assert (metadata.version == hassVersion); hassVersion;
   pyproject = true;
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
@@ -621,12 +621,12 @@ in python.pkgs.buildPythonApplication rec {
 
   passthru = {
     inherit
-      availableComponents
-      extraComponents
+      availableIntegrations
+      integrations
       getPackages
       python
-      supportedComponentsWithTests;
-    pythonPath = python.pkgs.makePythonPath (componentBuildInputs ++ extraBuildInputs);
+      testableIntegrations;
+    pythonPath = python.pkgs.makePythonPath (integrationDependencies ++ extraDependencies);
     frontend = python.pkgs.home-assistant-frontend;
     intents = python.pkgs.home-assistant-intents;
     tests = {

@@ -52,11 +52,11 @@ let
   lovelaceConfigFile = format.generate "ui-lovelace.yaml" cfg.lovelaceConfig;
 
   # Components advertised by the home-assistant package
-  availableComponents = cfg.package.availableComponents;
+  inherit (cfg.package) availableIntegrations;
 
   # Components that were added by overriding the package
-  explicitComponents = cfg.package.extraComponents;
-  useExplicitComponent = component: elem component explicitComponents;
+  explicitIntegrations = cfg.package.integrations;
+  useIntegrationFromPackage = component: elem component explicitIntegrations;
 
   # Given a component "platform", looks up whether it is used in the config
   # as `platform = "platform";`.
@@ -77,23 +77,24 @@ let
       concatMap usedPlatforms config
     else [ ];
 
-  useComponentPlatform = component: elem component (usedPlatforms cfg.config);
+  useIntegrationFromPlatform = integration: elem integration (usedPlatforms cfg.config);
+  useIntegrationFromConfig = integration: hasAttrByPath (splitString "." integration) cfg.config;
 
-  # Returns whether component is used in config, explicitly passed into package or
+  # Returns whether integration is used in config, explicitly passed into package or
   # configured in the module.
-  useComponent = component:
-    hasAttrByPath (splitString "." component) cfg.config
-    || useComponentPlatform component
-    || useExplicitComponent component
-    || builtins.elem component (cfg.extraComponents ++ cfg.defaultIntegrations);
+  useIntegration = integration:
+    useIntegrationFromConfig integration
+    || useIntegrationFromPlatform integration
+    || useIntegrationFromPackage integration
+    || elem integration (cfg.defaultIntegrations ++ cfg.integrations);
 
-  # Final list of components passed into the package to include required dependencies
-  extraComponents = filter useComponent availableComponents;
+  # Final list of integrations passed into the package to include required dependencies
+  integrations = filter useIntegration availableIntegrations;
 
-  package = (cfg.package.override (oldArgs: {
+  finalPackage = (cfg.package.override (oldArgs: {
     # Respect overrides that already exist in the passed package and
     # concat it with values passed via the module.
-    extraComponents = oldArgs.integrations or [] ++ integrations;
+    integrations = oldArgs.integrations or [] ++ integrations;
     extraPackages = ps: (oldArgs.extraPackages or (_: []) ps)
       ++ (cfg.extraPythonPackages ps)
       ++ (concatMap (component: component.propagatedBuildInputs or []) cfg.integrationPackages);
@@ -152,7 +153,7 @@ in {
     };
 
     defaultIntegrations = mkOption {
-      type = types.listOf (types.enum availableComponents);
+      type = types.listOf (types.enum availableIntegrations);
       # https://github.com/home-assistant/core/blob/2024.8.3/homeassistant/bootstrap.py#L178
       default = [
         # core functionality
@@ -191,7 +192,7 @@ in {
     };
 
     integrations = mkOption {
-      type = types.listOf (types.enum availableComponents);
+      type = types.listOf (types.enum availableIntegrations);
       default = [
         # List of components required to complete the onboarding
         # homeassistant/components/onboarding/__init__.py
@@ -584,23 +585,23 @@ in {
         copyLovelaceResources +
         copyIntegrationPackages
       ;
-      environment.PYTHONPATH = package.pythonPath;
+      environment.PYTHONPATH = finalPackage.pythonPath;
       serviceConfig = let
         # List of capabilities to equip home-assistant with, depending on configured components
         capabilities = unique ([
           # Empty string first, so we will never accidentally have an empty capability bounding set
           # https://github.com/NixOS/nixpkgs/issues/120617#issuecomment-830685115
           ""
-        ] ++ optionals (any useComponent componentsUsingBluetooth) [
+        ] ++ optionals (any useIntegration componentsUsingBluetooth) [
           # Required for interaction with hci devices and bluetooth sockets, identified by bluetooth-adapters dependency
           # https://www.home-assistant.io/integrations/bluetooth_le_tracker/#rootless-setup-on-core-installs
           "CAP_NET_ADMIN"
           "CAP_NET_RAW"
-        ] ++ optionals (useComponent "emulated_hue") [
+        ] ++ optionals (useIntegration "emulated_hue") [
           # Alexa looks for the service on port 80
           # https://www.home-assistant.io/integrations/emulated_hue
           "CAP_NET_BIND_SERVICE"
-        ] ++ optionals (useComponent "nmap_tracker") [
+        ] ++ optionals (useIntegration "nmap_tracker") [
           # https://www.home-assistant.io/integrations/nmap_tracker#linux-capabilities
           "CAP_NET_ADMIN"
           "CAP_NET_BIND_SERVICE"
@@ -713,7 +714,7 @@ in {
         ];
       in {
         ExecStart = escapeSystemdExecArgs ([
-          (lib.getExe package)
+          (lib.getExe finalPackage)
           "--config" cfg.configDir
         ] ++ cfg.extraArgs);
         ExecReload = (escapeSystemdExecArgs [
@@ -734,7 +735,7 @@ in {
         # Hardening
         AmbientCapabilities = capabilities;
         CapabilityBoundingSet = capabilities;
-        DeviceAllow = (optionals (any useComponent componentsUsingSerialDevices) [
+        DeviceAllow = (optionals (any useIntegration componentsUsingSerialDevices) [
           "char-ttyACM rw"
           "char-ttyAMA rw"
           "char-ttyUSB rw"
@@ -767,20 +768,20 @@ in {
           "AF_INET6"
           "AF_NETLINK"
           "AF_UNIX"
-        ] ++ optionals (any useComponent componentsUsingBluetooth) [
+        ] ++ optionals (any useIntegration componentsUsingBluetooth) [
           "AF_BLUETOOTH"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
-        SupplementaryGroups = optionals (any useComponent componentsUsingSerialDevices) [
+        SupplementaryGroups = optionals (any useIntegration componentsUsingSerialDevices) [
           "dialout"
         ];
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
-        ] ++ optionals (any useComponent componentsUsingPing) [
+        ] ++ optionals (any useIntegration componentsUsingPing) [
           "capset"
           "setuid"
         ];

@@ -145,4 +145,4 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
       platforms = lib.platforms.linux;
     };
   })
-)) home-assistant.supportedComponentsWithTests)
+)) home-assistant.testableIntegrations)
