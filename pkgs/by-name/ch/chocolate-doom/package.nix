@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.chocolate-doom.org";
+    changelog = "https://github.com/chocolate-doom/chocolate-doom/releases/tag/chocolate-doom-${finalAttrs.version}";
     description = "Doom source port that accurately reproduces the experience of Doom as it was played in the 1990s";
     mainProgram = "chocolate-doom";
     license = lib.licenses.gpl2Plus;
