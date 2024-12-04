@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage {
     description = "Tui-based PDF viewer";
     homepage = "https://github.com/itsjunetime/tdf";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
+    maintainers = with lib.maintainers; [ luftmensch-luftmensch DieracDelta ];
     mainProgram = "tdf";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
