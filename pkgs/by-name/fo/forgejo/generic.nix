@@ -153,7 +153,7 @@ buildGoModule rec {
     updateScript = nix-update-script {
       extraArgs = nixUpdateExtraArgs ++ [
         "--version-regex"
-        "v(${lib.versions.major version}\.[0-9.]+)"
+        "v(${lib.versions.major version}\\.[0-9.]+)"
       ];
     };
   };
