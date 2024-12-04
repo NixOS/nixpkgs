@@ -46,7 +46,6 @@
   purs-tidy = "purs-tidy";
   purty = "purty";
   pscid = "pscid";
-  remod-cli = "remod";
   vscode-json-languageserver = "vscode-json-languageserver";
   webtorrent-cli = "webtorrent";
 }
