@@ -19,6 +19,7 @@
   darwinMinVersionHook,
 
   versionCheckHook,
+  nix-update-script,
 }:
 
 let
@@ -176,6 +177,10 @@ rustPlatform.buildRustPackage rec {
   versionCheckProgram = "${placeholder "out"}/bin/environmentd";
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://materialize.com";
