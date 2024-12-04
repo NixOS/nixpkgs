@@ -1,24 +1,24 @@
 {
   lib,
   stdenv,
+  diesel-cli,
   fetchCrate,
-  rustPlatform,
   installShellFiles,
-  darwin,
   libiconv,
   libmysqlclient,
   nix-update-script,
   openssl,
   pkg-config,
   postgresql,
+  rustPlatform,
   sqlite,
   testers,
   zlib,
-  diesel-cli,
   sqliteSupport ? true,
   postgresqlSupport ? true,
   mysqlSupport ? true,
 }:
+
 assert lib.assertMsg (lib.elem true [
   postgresqlSupport
   mysqlSupport
@@ -44,8 +44,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && mysqlSupport) libiconv
     ++ lib.optional sqliteSupport sqlite
     ++ lib.optional postgresqlSupport postgresql
     ++ lib.optionals mysqlSupport [
