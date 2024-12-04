@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  libpng,
+  libsamplerate,
   pkg-config,
   python3,
   SDL2,
@@ -33,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libpng
+    libsamplerate
     SDL2
     SDL2_mixer
     SDL2_net
