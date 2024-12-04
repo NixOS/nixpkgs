@@ -4,7 +4,7 @@
   cargo,
   copyDesktopItems,
   fetchFromGitHub,
-  flutter319,
+  flutter324,
   ffmpeg,
   gst_all_1,
   fuse3,
@@ -17,6 +17,7 @@
   libvpx,
   libxkbcommon,
   libyuv,
+  alsa-lib,
   pam,
   makeDesktopItem,
   rustPlatform,
@@ -29,7 +30,7 @@ let
 
   flutterRustBridge = rustPlatform.buildRustPackage rec {
     pname = "flutter_rust_bridge_codegen";
-    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.3.2/.github/workflows/bridge.yml#L10
+    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.3.3/.github/workflows/bridge.yml#L10
 
     src = fetchFromGitHub {
       owner = "fzyzcjy";
@@ -49,14 +50,14 @@ let
   sharedLibraryExt = rustc.stdenv.hostPlatform.extensions.sharedLibrary;
 
 in
-flutter319.buildFlutterApplication rec {
+flutter324.buildFlutterApplication rec {
   pname = "rustdesk";
-  version = "1.3.2";
+  version = "1.3.3";
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     rev = version;
-    hash = "sha256-SvK11IuuTkO8sxLVnYyyRtYyzV6R9NwMtyY5UCdw/P8=";
+    hash = "sha256-AvChOOXJmxxrGZFDGR7Tim7ng9mKLqwt5T6x5JeeG94=";
   };
 
   strictDeps = true;
@@ -64,7 +65,7 @@ flutter319.buildFlutterApplication rec {
 
   # Configure the Flutter/Dart build
   sourceRoot = "${src.name}/flutter";
-  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.3.2/flutter/pubspec.lock | yq > pubspec.lock.json
+  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.3.3/flutter/pubspec.lock | yq > pubspec.lock.json
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = {
     dash_chat_2 = "sha256-J5Bc6CeCoRGN870aNEVJ2dkQNb+LOIZetfG2Dsfz5Ow=";
@@ -74,6 +75,7 @@ flutter319.buildFlutterApplication rec {
     flutter_improved_scrolling = "sha256-fKs1+JmhDVVfjyhr6Fl17pc6n++mCTjBo1PT3l/DUnc=";
     window_manager = "sha256-CUTcSl+W7Wz/Og5k9ujOdAlhKWv/gIYe58wurf9CJH4=";
     window_size = "sha256-+lqY46ZURT0qcqPvHFXUnd83Uvfq79Xr+rw1AHqrpak=";
+    uni_links = "sha256-O2BgNwu5HFRQyaNkskWHORx8pZhdwEjtljvw1+zFzfo=";
   };
 
   # Configure the Rust build
@@ -89,8 +91,10 @@ flutter319.buildFlutterApplication rec {
       "clipboard-master-4.0.0-beta.6" = "sha256-GZyzGMQOZ0iwGNZa/ZzFp8gU2tQVWZBpAbim8yb6yZA=";
       "confy-0.4.0-2" = "sha256-V7BCKISrkJIxWC3WT5+B5Vav86YTQvdO9TO6A++47FU=";
       "core-foundation-0.9.3" = "sha256-iB4OVmWZhuWbs9RFWvNc+RNut6rip2/50o5ZM6c0c3g=";
+      "cidre-0.4.0" = "sha256-FSpMC/kpTH10ncqRcJ+XJJ1yjgAc2U+mxLH9NTfLM3o=";
+      "cpal-0.15.3" = "sha256-x+xf4a4ZcrLVndWHJcqXSFFSDdDzrnV/tIrf7Vhjlyc=";
       "evdev-0.11.5" = "sha256-aoPmjGi/PftnH6ClEWXHvIj0X3oh15ZC1q7wPC1XPr0=";
-      "hwcodec-0.7.0" = "sha256-JdpaKIzI6AOaHPB4SeWIccpP7FuDLP00fOFnbA9DIEc=";
+      "hwcodec-0.7.0" = "sha256-GaKhGEhvZdNErD0KZdBYQ4Uss+wM+WUxlM49bnNVUPo=";
       "impersonate_system-0.1.0" = "sha256-pIV7s2qGoCIUrhaRovBDCJaGQ/pMdJacDXJmeBpkcyI=";
       "keepawake-0.4.3" = "sha256-cqSpkq/PCz+5+ZUyPy5hF6rP3fBzuZDywyxMUQ50Rk4=";
       "machine-uid-0.3.0" = "sha256-rEOyNThg6p5oqE9URnxSkPtzyW8D4zKzLi9pAnzTElE=";
@@ -104,7 +108,7 @@ flutter319.buildFlutterApplication rec {
       "sciter-rs-0.5.57" = "sha256-5Nd9npdx8yQJEczHv7WmSmrE1lBfvp5z7BubTbYBg3E=";
       "sysinfo-0.29.10" = "sha256-/UsFAvlWs/F7X1xT+97Fx+pnpCguoPHU3hTynqYMEs4=";
       "tao-0.25.0" = "sha256-kLmx1z9Ybn/hDt2OcszEjtZytQIE+NKTIn9zNr9oEQk=";
-      "tfc-0.7.0" = "sha256-4plK8ttbHsBPat3/rS+4RhGzirq2Ked2wrU8cQEU1zo=";
+      "tfc-0.7.0" = "sha256-wJs+OhDZVO9iU+J7rLWIlV1VULtKyzizeXMbBCjRY90=";
       "tokio-socks-0.5.2-1" = "sha256-i1dfNatqN4dinMcyAdLhj9hJWVsT10OWpCXsxl7pifI=";
       "tray-icon-0.14.3" = "sha256-dSX7LucZaLplRrh6zLwmFzyZN4ZtwIXzAEdZzlu3gQg=";
       "wallpaper-3.2.0" = "sha256-p9NRmusdA0wvF6onp1UTL0/4t7XnEAc19sqyGDnfg/Q=";
@@ -147,6 +151,7 @@ flutter319.buildFlutterApplication rec {
     libvpx
     libxkbcommon
     libyuv
+    alsa-lib
     pam
     xdotool
   ];
@@ -194,6 +199,7 @@ flutter319.buildFlutterApplication rec {
     # Build the Rust shared library
     cd ..
     preBuild=() # prevent loops
+    export RUST_BACKTRACE=1
     cargoBuildHook
     mv ./target/*/release/liblibrustdesk${sharedLibraryExt} ./target/release/liblibrustdesk${sharedLibraryExt}
     cd flutter
