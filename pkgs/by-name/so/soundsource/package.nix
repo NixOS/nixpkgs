@@ -19,8 +19,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/Applications
-    unzip -d $out/Applications $src
+    mkdir -p "$out/Applications"
+    unzip -d "$out/Applications" $src
 
     runHook postInstall
   '';
