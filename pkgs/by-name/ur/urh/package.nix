@@ -35,10 +35,6 @@ python3Packages.buildPythonApplication rec {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  postFixup = ''
-    wrapQtApp $out/bin/urh
-  '';
-
   doCheck = false;
 
   desktopItems = [
