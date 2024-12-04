@@ -242,7 +242,7 @@ stdenv.mkDerivation {
 
       mkdir -p $out/{Applications,bin}
 
-      cp -r "Brave Browser.app" $out/Applications/
+      cp -r . "$out/Applications/Brave Browser.app"
 
       makeWrapper "$out/Applications/Brave Browser.app/Contents/MacOS/Brave Browser" $out/bin/brave
 
