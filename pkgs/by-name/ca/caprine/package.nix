@@ -38,6 +38,8 @@ buildNpmPackage rec {
         -c.electronVersion=${electron.version}
   '';
 
+  patches = [ ./001-disable-auto-update.patch ];
+
   installPhase = ''
     runHook preInstall
 
