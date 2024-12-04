@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://ltex-plus.github.io/ltex-plus/";
-    description = "Grammar/Spell Checker Using LanguageTool with Support for LaTeX, Markdown, and Others";
+    description = "Grammar and spell checker using LanguageTool with support for LaTeX, Markdown, and more";
     license = licenses.mpl20;
     maintainers = with maintainers; [ pwoelfel ];
     platforms = jre_headless.meta.platforms;
