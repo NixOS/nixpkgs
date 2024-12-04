@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, bzip2
-, git
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  bzip2,
+  git,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,20 +20,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-v+Fs2VJrpnIOk9nPRanYYChlR7WOfkXF1kbYOKjOUYc=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  nativeCheckInputs = [
-    git
-  ];
+  nativeCheckInputs = [ git ];
 
   meta = with lib; {
     description = "Unified tooling for Node.js";
     mainProgram = "cargonode";
     homepage = "https://github.com/xosnrdev/cargonode";
     changelog = "https://github.com/xosnrdev/cargonode/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ xosnrdev ];
   };
 }
