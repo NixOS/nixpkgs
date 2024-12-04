@@ -17,6 +17,8 @@
   rdkafka,
   apple-sdk_11,
   darwinMinVersionHook,
+
+  versionCheckHook,
 }:
 
 let
@@ -167,6 +169,13 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install --mode=444 -D ./misc/dist/materialized.service $out/etc/systemd/system/materialized.service
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/environmentd";
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://materialize.com";
