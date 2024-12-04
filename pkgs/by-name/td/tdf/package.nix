@@ -50,6 +50,6 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "tdf";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
