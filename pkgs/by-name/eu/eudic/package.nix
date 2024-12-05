@@ -21,7 +21,7 @@
 , nss
 , libgpg-error
 , libjack2
-, mesa
+, libgbm
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     nss
     libgpg-error
     libjack2
-    mesa
+    libgbm
   ];
 
   unpackPhase = ''

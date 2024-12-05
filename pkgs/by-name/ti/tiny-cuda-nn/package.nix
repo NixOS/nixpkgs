@@ -11,7 +11,7 @@
   which,
 }: let
   inherit (lib) lists strings;
-  inherit (cudaPackages) backendStdenv flags;
+  inherit (cudaPackages) backendStdenv cudaVersion flags;
 
   cuda-common-redist = with cudaPackages; [
     (lib.getDev cuda_cudart) # cuda_runtime.h
@@ -36,6 +36,14 @@
     name = "cuda-redist";
     paths = cuda-common-redist;
   };
+
+  unsupportedCudaCapabilities = [
+    "9.0a"
+  ];
+
+  cudaCapabilities = lists.subtractLists unsupportedCudaCapabilities flags.cudaCapabilities;
+
+  cudaArchitecturesString = strings.concatMapStringsSep ";" flags.dropDot cudaCapabilities;
 in
   stdenv.mkDerivation (finalAttrs: {
     pname = "tiny-cuda-nn";
@@ -51,6 +59,13 @@ in
       fetchSubmodules = true;
       hash = "sha256-qW6Fk2GB71fvZSsfu+mykabSxEKvaikZ/pQQZUycOy0=";
     };
+
+    # Remove this once a release is made with
+    # https://github.com/NVlabs/tiny-cuda-nn/commit/78a14fe8c292a69f54e6d0d47a09f52b777127e1
+    postPatch = lib.optionals (strings.versionAtLeast cudaVersion "11.0") ''
+      substituteInPlace bindings/torch/setup.py --replace-fail \
+        "-std=c++14" "-std=c++17"
+    '';
 
     nativeBuildInputs =
       [
@@ -89,7 +104,7 @@ in
     doCheck = false;
 
     preConfigure = ''
-      export TCNN_CUDA_ARCHITECTURES="${flags.cmakeCudaArchitecturesString}"
+      export TCNN_CUDA_ARCHITECTURES="${cudaArchitecturesString}"
       export CUDA_HOME="${cuda-native-redist}"
       export LIBRARY_PATH="${cuda-native-redist}/lib/stubs:$LIBRARY_PATH"
       export CC="${backendStdenv.cc}/bin/cc"

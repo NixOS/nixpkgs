@@ -1,6 +1,6 @@
 { lib, stdenv, autoPatchelfHook, makeDesktopItem, copyDesktopItems, wrapGAppsHook3, fetchurl
 , alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups
-, gtk3, nss, glib, nspr, gdk-pixbuf, libdrm, mesa
+, gtk3, nss, glib, nspr, gdk-pixbuf, libdrm, libgbm
 , libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
 , libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, pango
 , gcc-unwrapped, udev
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     libXtst
     libxcb
     libxshmfence
-    mesa # Required for libgbm
+    libgbm
     nspr
     nss
   ];

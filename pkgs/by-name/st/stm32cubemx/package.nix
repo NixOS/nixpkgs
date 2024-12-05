@@ -45,7 +45,7 @@ let
 
       cat << EOF > $out/bin/${pname}
       #!${stdenvNoCC.shell}
-      ${jdk17}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX
+      ${jdk17}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX "\$@"
       EOF
       chmod +x $out/bin/${pname}
 
@@ -100,7 +100,7 @@ let
         libGL
         libudev0-shim
         libxkbcommon
-        mesa
+        libgbm
         nspr
         nss
         pango

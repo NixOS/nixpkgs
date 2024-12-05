@@ -12,7 +12,7 @@
 , libdrm
 , libinput
 , libxkbcommon
-, mesa
+, libgbm
 , pipewire
 , udev
 , wayland
@@ -72,7 +72,7 @@ mkDerivation {
     libdrm
     libinput
     libxkbcommon
-    mesa
+    libgbm
     pipewire
     udev
     wayland

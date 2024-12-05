@@ -3240,6 +3240,8 @@ self: super: with self; {
 
   dirigera = callPackage ../development/python-modules/dirigera { };
 
+  dirsearch = callPackage ../development/python-modules/dirsearch { };
+
   dirty-equals = callPackage ../development/python-modules/dirty-equals { };
 
   dirtyjson = callPackage ../development/python-modules/dirtyjson { };
@@ -8959,6 +8961,8 @@ self: super: with self; {
   natasha = callPackage ../development/python-modules/natasha { };
 
   natural = callPackage ../development/python-modules/natural { };
+
+  ndcurves = toPythonModule (pkgs.ndcurves.override { python3Packages = self; pythonSupport = true; });
 
   nomadnet = callPackage ../development/python-modules/nomadnet { };
 
@@ -16272,9 +16276,7 @@ self: super: with self; {
 
   trino-python-client = callPackage ../development/python-modules/trino-python-client { };
 
-  trio = callPackage ../development/python-modules/trio {
-    inherit (pkgs) coreutils;
-  };
+  trio = callPackage ../development/python-modules/trio { };
 
   trio-asyncio = callPackage ../development/python-modules/trio-asyncio { };
 
@@ -17961,7 +17963,6 @@ self: super: with self; {
     wxGTK = pkgs.wxGTK32.override {
       withWebKit = true;
     };
-    inherit (pkgs) mesa;
   };
 
   wyoming = callPackage ../development/python-modules/wyoming { };

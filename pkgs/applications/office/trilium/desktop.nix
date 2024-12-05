@@ -1,6 +1,6 @@
 { stdenv, lib, unzip, autoPatchelfHook
 , fetchurl, makeWrapper
-, alsa-lib, mesa, nss, nspr, systemd
+, alsa-lib, libgbm, nss, nspr, systemd
 , makeDesktopItem, copyDesktopItems, wrapGAppsHook3
 , metaCommon
 }:
@@ -35,7 +35,7 @@ let
 
     buildInputs = [
       alsa-lib
-      mesa
+      libgbm
       nss
       nspr
       stdenv.cc.cc

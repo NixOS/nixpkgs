@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, alsa-lib, atk, cairo, cups, udev, libdrm, mesa
+{ stdenv, lib, fetchurl, alsa-lib, atk, cairo, cups, udev, libdrm, libgbm
 , dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, gtk3, libappindicator-gtk3
 , libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook3
 , runtimeShell, gsettings-desktop-schemas }:
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.libxcb
     libdrm
-    mesa.out
+    libgbm
   ];
 
   runtimeDependencies = [

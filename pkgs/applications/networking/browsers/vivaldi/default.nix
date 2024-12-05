@@ -6,7 +6,7 @@
 , libxml2
 , glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core
 , qt5
-, libdrm, mesa
+, libdrm, libgbm
 , vulkan-loader
 , nss, nspr
 , patchelf, makeWrapper
@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
     qt5.qtbase
     freetype fontconfig libXrender libuuid expat glib nss nspr libGL
     libxml2 pango cairo
-    libdrm mesa vulkan-loader
+    libdrm libgbm vulkan-loader
     wayland pipewire
   ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs
     ++ lib.optional pulseSupport libpulseaudio

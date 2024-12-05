@@ -25,7 +25,7 @@
 , libXrender
 , libXt
 , libXtst
-, mesa
+, libgbm
 , pango
 , pciutils
 , zlib
@@ -77,7 +77,7 @@ let
       libXrender
       libXt
       libXtst
-      mesa # for libgbm
+      libgbm
       pango
       pciutils
       stdenv.cc.cc
@@ -278,7 +278,7 @@ stdenv.mkDerivation rec {
     mainProgram = "mullvad-browser";
     homepage = "https://mullvad.net/en/browser";
     platforms = attrNames sources;
-    maintainers = with maintainers; [ felschr panicgh ];
+    maintainers = with maintainers; [ felschr panicgh sigmasquadron ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.

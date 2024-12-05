@@ -2,7 +2,7 @@
 , fetchzip
 , fetchFromGitHub
 , imagemagick
-, mesa
+, libgbm
 , libdrm
 , flutter324
 , pulseaudio
@@ -14,7 +14,7 @@
 }:
 
 let
-  libwebrtcRpath = lib.makeLibraryPath [ mesa libdrm ];
+  libwebrtcRpath = lib.makeLibraryPath [ libgbm libdrm ];
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 in
 flutter324.buildFlutterApplication (rec {

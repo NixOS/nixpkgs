@@ -21,6 +21,7 @@ in stdenv.mkDerivation {
   inherit (common) pname version src meta;
 
   patches = [
+    # Submitted upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/32497
     ./darwin-build-fix.patch
   ];
 

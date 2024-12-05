@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libsndfile, libglut, alsa-lib, mesa, libGLU, libX11, libXmu
+{ lib, stdenv, fetchurl, libsndfile, libglut, alsa-lib, libgbm, libGLU, libX11, libXmu
 , libXext, libXi }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libglut
     alsa-lib
-    mesa
+    libgbm
     libGLU
     libsndfile
     libX11

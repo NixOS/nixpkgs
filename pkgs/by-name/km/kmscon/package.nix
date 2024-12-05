@@ -14,7 +14,7 @@
 , pkg-config
 , docbook_xsl
 , libxslt
-, mesa
+, libgbm
 , ninja
 , buildPackages
 }:
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     pango
     pixman
     systemd
-    mesa
+    libgbm
   ];
 
   nativeBuildInputs = [

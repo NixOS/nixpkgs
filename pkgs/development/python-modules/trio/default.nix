@@ -18,7 +18,6 @@
 
   # tests
   astor,
-  coreutils,
   jedi,
   pyopenssl,
   pytestCheckHook,
@@ -36,7 +35,7 @@ let
 in
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.26.2";
+  version = "0.27.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -45,7 +44,7 @@ buildPythonPackage rec {
     owner = "python-trio";
     repo = "trio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Vlm6lEMKKfwmhbeefPjxm3vz1zFRUEGOCHXLcZKQcIo=";
+    hash = "sha256-VJVGMhoLISCtNh56E7ssKXBPh4/WvUbFyKUbnWvqd0s=";
   };
 
   build-system = [ setuptools ];
@@ -76,6 +75,11 @@ buildPythonPackage rec {
     # $out is first in path which causes "import file mismatch"
     PYTHONPATH=$PWD/src:$PYTHONPATH
   '';
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
 
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
   disabledTests = [

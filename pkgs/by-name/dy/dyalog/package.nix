@@ -17,7 +17,7 @@
 , gtk3
 , libdrm
 , libGL
-, mesa
+, libgbm
 , nss
 , htmlRendererSupport ? false
 
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     libdrm
     libGL
-    mesa
+    libgbm
     nss
   ]
   ++ lib.optional sqaplSupport unixODBC;

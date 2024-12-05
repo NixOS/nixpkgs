@@ -38,6 +38,7 @@ buildGo122Module rec {
       khaneliman
       paveloom
       starsep
+      sigmasquadron
     ];
     mainProgram = "lazygit";
   };

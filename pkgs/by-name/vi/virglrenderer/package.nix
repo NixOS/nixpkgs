@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, meson, ninja, pkg-config, python3
-, libGLU, libepoxy, libX11, libdrm, mesa
+, libGLU, libepoxy, libX11, libdrm, libgbm
 , vaapiSupport ? true, libva
 , gitUpdater
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
 
-  buildInputs = [ libGLU libepoxy libX11 libdrm mesa ]
+  buildInputs = [ libGLU libepoxy libX11 libdrm libgbm ]
     ++ lib.optionals vaapiSupport [ libva ];
 
   nativeBuildInputs = [ meson ninja pkg-config python3 ];

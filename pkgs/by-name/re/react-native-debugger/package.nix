@@ -23,7 +23,7 @@
 , makeDesktopItem
 , libdrm
 , libxkbcommon
-, mesa
+, libgbm
 , makeWrapper
 }:
 
@@ -49,7 +49,7 @@ let
     at-spi2-core
     libdrm
     libxkbcommon
-    mesa
+    libgbm
 
     xorg.libX11
     xorg.libXcursor

@@ -3,7 +3,6 @@
   aspectlib,
   buildPythonPackage,
   elasticsearch,
-  elastic-transport,
   fetchFromGitHub,
   freezegun,
   git,
@@ -26,8 +25,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "ionelmc";
-    repo = pname;
-    rev = "v${version}";
+    repo = "pytest-benchmark";
+    rev = "refs/tags/v${version}";
     hash = "sha256-4fD9UfZ6jtY7Gx/PVzd1JNWeQNz+DJ2kQmCku2TgxzI=";
   };
 
@@ -41,6 +40,7 @@ buildPythonPackage rec {
     aspect = [ aspectlib ];
     histogram = [
       pygal
+      # FIXME package pygaljs
       setuptools
     ];
     elasticsearch = [ elasticsearch ];
@@ -49,7 +49,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pytest_benchmark" ];
 
   nativeCheckInputs = [
-    elastic-transport
     freezegun
     git
     mercurial
@@ -77,11 +76,11 @@ buildPythonPackage rec {
       "test_help"
     ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ionelmc/pytest-benchmark/blob/${src.rev}/CHANGELOG.rst";
     description = "Pytest fixture for benchmarking code";
     homepage = "https://github.com/ionelmc/pytest-benchmark";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

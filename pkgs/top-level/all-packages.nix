@@ -10246,6 +10246,8 @@ with pkgs;
 
   mesa_i686 = pkgsi686Linux.mesa; # make it build on Hydra
 
+  libgbm = callPackage ../development/libraries/mesa/gbm.nix {};
+
   ## End libGL/libGLU/Mesa stuff
 
   midivisualizer = darwin.apple_sdk_11_0.callPackage ../applications/audio/midivisualizer {
@@ -11675,11 +11677,6 @@ with pkgs;
     python3 = python311;
     ruby = ruby_3_3;
     yarn-berry = yarn-berry.override { nodejs = nodejs-slim_22; };
-  };
-
-  materialize = callPackage ../servers/sql/materialize {
-    inherit (buildPackages.darwin) bootstrap_cmds;
-    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
   };
 
   micro-full = micro.wrapper.override {
