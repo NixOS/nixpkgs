@@ -183,21 +183,25 @@ let
       '';
 
   postStartScript = pkgs.writeShellScript "post-start" ''
-    set -euo pipefail
+      health_check() {
+      ${getExe pkgs.curl} --silent --max-time 1 --connect-timeout 1 --fail \
+        ${
+          optionalString (!isNull cfg.serverSettings.tls_chain) " --cacert ${cfg.serverSettings.tls_chain} "
+        } \
+        ${optionalString cfg.provision.acceptInvalidCerts "--insecure"} \
+        ${cfg.provision.instanceUrl}/status
+    }
 
-    # Wait for the kanidm server to come online
     count=0
-    while ! ${getExe pkgs.curl} -L --silent --max-time 1 --connect-timeout 1 --fail \
-       ${optionalString cfg.provision.acceptInvalidCerts "--insecure"} \
-       ${cfg.provision.instanceUrl} >/dev/null
-    do
-      sleep 1
-      if [[ "$count" -eq 30 ]]; then
-        echo "Tried for at least 30 seconds, giving up..."
+    while [[ ! "$(health_check)" =~ 'true' ]]; do
+      if [ $((count++)) -ge 15 ]; then
+        echo "Giving up after at least $count seconds ..."
         exit 1
       fi
-      count=$((count++))
+      echo "Waiting for kanidm to start ..."
+      sleep 1
     done
+    set -euo pipefail
 
     ${recoverIdmAdmin}
     ${maybeRecoverAdmin}
