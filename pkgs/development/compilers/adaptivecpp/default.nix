@@ -17,6 +17,7 @@
   rocmSupport ? config.rocmSupport,
   cudaSupport ? config.cudaSupport,
   autoAddDriverRunpath,
+  callPackage,
 }:
 let
   inherit (llvmPackages) stdenv;
@@ -93,6 +94,15 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString rocmSupport ''
       --add-flags "--rocm-device-lib-path=${rocmPackages.rocm-device-libs}/amdgcn/bitcode"
     '';
+
+  passthru = {
+    # For tests
+    inherit (finalAttrs) nativeBuildInputs buildInputs;
+
+    tests = {
+      sycl = callPackage ./tests.nix { };
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/AdaptiveCpp/AdaptiveCpp";
