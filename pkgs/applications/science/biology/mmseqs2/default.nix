@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   stdenv,
   fetchFromGitHub,
   cmake,
@@ -10,6 +11,8 @@
   enableSse4_1 ? stdenv.hostPlatform.sse4_1Support,
   enableMpi ? false,
   mpi,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
   openmp,
   zlib,
   bzip2,
@@ -26,18 +29,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-O7tx+gdVAmZLihPnWSo9RWNVzfPjI61LGY/XeaGHrI0=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    xxd
-    perl
-    installShellFiles
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      xxd
+      perl
+      installShellFiles
+    ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_nvcc
+    ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "HAVE_AVX2" enableAvx2)
-    (lib.cmakeBool "HAVE_SSE4_1" enableSse4_1)
-    (lib.cmakeBool "HAVE_MPI" enableMpi)
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "HAVE_AVX2" enableAvx2)
+      (lib.cmakeBool "HAVE_SSE4_1" enableSse4_1)
+      (lib.cmakeBool "HAVE_MPI" enableMpi)
+    ]
+    ++ lib.optionals cudaSupport [
+      (lib.cmakeBool "ENABLE_CUDA" true)
+      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
+    ];
 
   buildInputs =
     lib.optionals stdenv.cc.isClang [
@@ -45,7 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
       bzip2
     ]
-    ++ lib.optional enableMpi mpi;
+    ++ lib.optional enableMpi mpi
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_cudart
+      cudaPackages.cuda_cccl
+    ];
 
   postInstall = ''
     installShellCompletion --bash --cmd mmseqs $out/util/bash-completion.sh
