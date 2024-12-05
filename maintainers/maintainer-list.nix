@@ -537,6 +537,13 @@
     githubId = 749381;
     name = "Adam Tulinius";
   };
+  adda = {
+    email = "chocholaty.david@protonmail.com";
+    matrix = "@adda0:matrix.org";
+    github = "adda0";
+    githubId = 52529234;
+    name = "David Chocholatý";
+  };
   addict3d = {
     email = "nickbathum@gmail.com";
     matrix = "@nbathum:matrix.org";
