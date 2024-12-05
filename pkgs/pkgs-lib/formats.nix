@@ -1084,4 +1084,172 @@ optionalAttrs allowAliases aliases
 
       generate = name: value: pkgs.writeText name (lib.generators.toPlist { inherit escape; } value);
     };
+
+  # The Xen Project Hypervisor's `xl` configuration syntax.
+  # Useful for the entire Xen module and declarative VM configurations.
+  # https://xenbits.xen.org/docs/unstable/man/xl.cfg.5.html
+  # https://xenbits.xen.org/docs/unstable/man/xl.conf.5.html
+  xenLight =
+    {
+      type ? "cfg",
+    }:
+    assert lib.assertOneOf "pkgs.formats.xenLight's 'type' attribute" type [
+      "cfg"
+      "conf"
+    ];
+    {
+      type =
+        let
+          valueType =
+            oneOf [
+              bool
+              float
+              int
+              path
+              str
+              (listOf valueType)
+              (listOf (attrsOf valueType))
+            ]
+            // {
+              description = "xl.${type} value";
+            };
+        in
+        attrsOf valueType;
+      generate =
+        let
+          # Modified version of lib.generators.toKeyValue that does not use
+          # newlines and parses Xen's `SPEC` and `SPEC_STRING` value types.
+          generator =
+            let
+              inherit (lib)
+                all
+                concatLists
+                concatStrings
+                concatStringsSep
+                flatten
+                hasPrefix
+                hasSuffix
+                isAttrs
+                isList
+                isString
+                mapAttrs
+                mapAttrsToList
+                optionalString
+                removePrefix
+                removeSuffix
+                ;
+
+              # This prevents standardisedString from adding extra quotes to SPECs and SPEC_STRINGs
+              escapedString = val: mapAttrs (name: value: if (isString value) then ''{${value}}'' else value) val;
+
+              # This function:
+              # - Converts our native `true` and `false` types to numeric booleans,
+              # - Adds quotes to strings that aren't lists or escaped with '{}'.
+              standardisedString =
+                v:
+                if isString v then
+                  if ((hasPrefix "[" v) && (hasSuffix "]" v)) then
+                    v
+                  else if ((hasPrefix "{" v) && (hasSuffix "}" v)) then
+                    removePrefix "{" (removeSuffix "}" v)
+                  else
+                    ''"${v}"''
+                else if v == true then
+                  1
+                else if v == false then
+                  0
+                else
+                  v;
+
+              mkKeyValue = lib.generators.mkKeyValueDefault { } "=";
+
+              mkConfig =
+                {
+                  semicolon,
+                  quotes,
+                }:
+                k: v:
+                optionalString quotes ''"''
+                + (mkKeyValue k (standardisedString v))
+                + optionalString quotes ''"''
+                + optionalString semicolon ";";
+
+              mkConfigFile =
+                {
+                  semicolon ? true,
+                  quotes ? false,
+                }:
+                k: v: [
+                  (mkConfig { inherit semicolon quotes; } k (
+                    let
+                      specString = concatStringsSep "," (
+                        flatten (
+                          map (
+                            val:
+                            (concatStringsSep "" (
+                              [ ''"'' ]
+                              ++ [
+                                (concatStringsSep "," (
+                                  flatten (
+                                    mapAttrsToList (mkConfigFile {
+                                      semicolon = false;
+                                    }) (escapedString val)
+                                  )
+                                ))
+                              ]
+                              ++ [ ''"'' ]
+                            ))
+                          ) v
+                        )
+                      );
+
+                      spec = concatStringsSep "," (
+                        map (
+                          val:
+                          (concatStringsSep "" (
+                            flatten (
+                              map (
+                                val2:
+                                [ "[" ]
+                                ++ [
+                                  (concatStringsSep "," (
+                                    flatten (
+                                      mapAttrsToList (mkConfigFile {
+                                        semicolon = false;
+                                        quotes = true;
+                                      }) (escapedString val2)
+                                    )
+                                  ))
+                                ]
+                                ++ [ "]" ]
+                              ) val
+                            )
+                          ))
+                        ) v
+                      );
+
+                      standard = concatStringsSep "," (map (val: standardisedString val) v);
+
+                      keyValuePairs =
+                        if (all (x: isAttrs x) v) then
+                          specString
+                        else if (all (x: isList x) v) then
+                          spec
+                        else if (all (x: !isAttrs x) v) then
+                          standard
+                        else
+                          throw "pkgs.formats.xenLight: lists must include only attribute sets (SPEC_STRING), only lists (SPEC), or only simple types.";
+                    in
+                    if isList v then ''[${keyValuePairs}]'' else v
+                  ))
+                ];
+            in
+            attrs:
+            (removeSuffix ";" (
+              concatStrings (concatLists (mapAttrsToList (name: value: mkConfigFile { } name value) attrs))
+            ))
+            + "\n";
+        in
+        name: value: pkgs.writeText name (generator value);
+    };
 }
