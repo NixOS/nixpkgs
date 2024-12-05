@@ -63,7 +63,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "lightweight library for PyTorch training tools and utilities";
+    description = "Lightweight library for PyTorch training tools and utilities";
     homepage = "https://github.com/pytorch/tnt";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nim65s ];
