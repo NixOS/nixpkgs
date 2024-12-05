@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wangle";
-  version = "2024.11.18.00";
+  version = "2024.12.09.00";
 
   outputs = [
     "out"
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "wangle";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-4mqE9GgJP2f7QAykwdhMFoReE9wmPKOXqSHJ2MHP2G0=";
+    hash = "sha256-alRlq5gHVlyY1B8344D9C1EHjgQWl4VaOcTVhZ9NdSI=";
   };
 
   nativeBuildInputs = [
