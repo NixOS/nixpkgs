@@ -194,7 +194,7 @@ let
 
     count=0
     while [[ ! "$(health_check)" =~ 'true' ]]; do
-      if [ $((count++)) -ge 15 ]; then
+      if [ $((count++)) -ge 30 ]; then
         echo "Giving up after at least $count seconds ..."
         exit 1
       fi
