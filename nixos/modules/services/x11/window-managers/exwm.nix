@@ -6,16 +6,17 @@ let
   cfg = config.services.xserver.windowManager.exwm;
   loadScript = pkgs.writeText "emacs-exwm-load" ''
     ${cfg.loadScript}
-    ${optionalString cfg.enableDefaultConfig ''
-      (require 'exwm-config)
-      (exwm-config-default)
-    ''}
   '';
   packages = epkgs: cfg.extraPackages epkgs ++ [ epkgs.exwm ];
-  exwm-emacs = pkgs.emacsWithPackages packages;
+  exwm-emacs = pkgs.emacs.pkgs.withPackages packages;
 in
-
 {
+
+  imports = [
+    (mkRemovedOptionModule [ "services" "xserver" "windowManager" "exwm" "enableDefaultConfig" ]
+      "The upstream EXWM project no longer provides a default configuration, instead copy (parts of) exwm-config.el to your local config.")
+  ];
+
   options = {
     services.xserver.windowManager.exwm = {
       enable = mkEnableOption "exwm";
@@ -28,14 +29,8 @@ in
         '';
         description = ''
           Emacs lisp code to be run after loading the user's init
-          file. If enableDefaultConfig is true, this will be run
-          before loading the default config.
+          file.
         '';
-      };
-      enableDefaultConfig = mkOption {
-        default = true;
-        type = lib.types.bool;
-        description = "Enable an uncustomised exwm configuration.";
       };
       extraPackages = mkOption {
         type = types.functionTo (types.listOf types.package);
