@@ -8,8 +8,8 @@ let
   cfg = config.services.evremap;
   format = pkgs.formats.toml { };
 
-  key = lib.types.strMatching "KEY_[[:upper:]]+" // {
-    description = "key ID prefixed with KEY_";
+  key = lib.types.strMatching "(BTN|KEY)_[[:upper:]]+" // {
+    description = "key ID prefixed with BTN_ or KEY_";
   };
 
   mkKeyOption =
