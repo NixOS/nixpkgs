@@ -8,7 +8,7 @@ buildGoModule rec {
   version = "1.16.9";
 
   src = fetchFromGitHub {
-    owner = "antonmedv";
+    owner = "expr-lang";
     repo = "expr";
     rev = "v${version}";
     hash = "sha256-AyFL+XHxitueAadx1M/xWqeittDCQ/hzsE/fUzt75yI=";
@@ -26,8 +26,8 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Expression language and expression evaluation for Go";
-    homepage = "https://github.com/antonmedv/expr";
-    changelog = "https://github.com/antonmedv/expr/releases/tag/${src.rev}";
+    homepage = "https://github.com/expr-lang/expr";
+    changelog = "https://github.com/expr-lang/expr/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "expr";

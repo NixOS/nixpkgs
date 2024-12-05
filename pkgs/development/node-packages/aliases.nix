@@ -97,6 +97,7 @@ mapAliases {
   inherit (pkgs) firebase-tools; # added 2023-08-18
   inherit (pkgs) fixjson; # added 2024-06-26
   flood = pkgs.flood; # Added 2023-07-25
+  ganache = throw "ganache was removed because it was deprecated upstream"; # added 2024-12-02
   generator-code = throw "generator-code was removed because it provides no executable"; # added 2023-09-24
   inherit (pkgs) git-run; # added 2024-06-26
   git-ssb = throw "git-ssb was removed because it was broken"; # added 2023-08-21

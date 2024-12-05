@@ -92,7 +92,6 @@
 , "fleek-cli"
 , "forever"
 , "fx"
-, "ganache"
 , "gatsby-cli"
 , "@gitbeaker/cli"
 , "graphql"
