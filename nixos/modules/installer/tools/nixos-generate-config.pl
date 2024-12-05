@@ -7,6 +7,7 @@ use File::Path;
 use File::Basename;
 use File::Slurp;
 use File::stat;
+use Config::IniFiles;
 
 umask(0022);
 
@@ -38,6 +39,12 @@ my $noFilesystems = 0;
 my $flake = 0;
 my $showHardwareConfig = 0;
 
+if (-e "/etc/nixos-generate-config.conf") {
+    my $cfg = new Config::IniFiles -file => "/etc/nixos-generate-config.conf";
+    $outDir = $cfg->val("Defaults", "Directory") // $outDir;
+    $rootDir = $cfg->val("Defaults", "RootDirectory") // $rootDir;
+}
+
 for (my $n = 0; $n < scalar @ARGV; $n++) {
     my $arg = $ARGV[$n];
     if ($arg eq "--help") {
@@ -53,8 +60,6 @@ for (my $n = 0; $n < scalar @ARGV; $n++) {
         $rootDir = $ARGV[$n];
         die "$0: ‘--root’ requires an argument\n" unless defined $rootDir;
         die "$0: no need to specify `/` with `--root`, it is the default\n" if $rootDir eq "/";
-        $rootDir =~ s/\/*$//; # remove trailing slashes
-        $rootDir = File::Spec->rel2abs($rootDir); # resolve absolute path
     }
     elsif ($arg eq "--force") {
         $force = 1;
@@ -73,6 +78,8 @@ for (my $n = 0; $n < scalar @ARGV; $n++) {
     }
 }
 
+$rootDir =~ s/\/*$//; # remove trailing slashes
+$rootDir = File::Spec->rel2abs($rootDir); # resolve absolute path
 
 my @attrs = ();
 my @kernelModules = ();
