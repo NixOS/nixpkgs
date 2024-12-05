@@ -16,7 +16,12 @@
   openmp,
   zlib,
   bzip2,
+  pkgsStatic,
 }:
+let
+  # require static library, libzstd.a
+  inherit (pkgsStatic) zstd;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mmseqs2";
@@ -35,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       xxd
       perl
       installShellFiles
+      zstd
     ]
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_nvcc
@@ -45,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "HAVE_AVX2" enableAvx2)
       (lib.cmakeBool "HAVE_SSE4_1" enableSse4_1)
       (lib.cmakeBool "HAVE_MPI" enableMpi)
+      (lib.cmakeBool "USE_SYSTEM_ZSTD" true)
     ]
     ++ lib.optionals cudaSupport [
       (lib.cmakeBool "ENABLE_CUDA" true)
