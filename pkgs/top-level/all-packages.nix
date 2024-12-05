@@ -6955,6 +6955,8 @@ with pkgs;
     zig = buildPackages.zig_0_12;
   };
 
+  cfclient = with python3Packages; toPythonApplication cfclient;
+
   opensmalltalk-vm = callPackage ../development/compilers/opensmalltalk-vm { };
 
   opensycl = darwin.apple_sdk_11_0.callPackage ../development/compilers/opensycl { };

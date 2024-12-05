@@ -2179,6 +2179,10 @@ self: super: with self; {
 
   cf-xarray = callPackage ../development/python-modules/cf-xarray { };
 
+  cfclient = callPackage ../development/python-modules/cfclient {
+    inherit (pkgs.libsForQt5) wrapQtAppsHook;
+  };
+
   cffconvert = callPackage ../development/python-modules/cffconvert { };
 
   cffi = callPackage ../development/python-modules/cffi { };
@@ -2190,6 +2194,8 @@ self: super: with self; {
   cfn-flip = callPackage ../development/python-modules/cfn-flip { };
 
   cfn-lint = callPackage ../development/python-modules/cfn-lint { };
+
+  cflib = callPackage ../development/python-modules/cflib { };
 
   cfscrape = callPackage ../development/python-modules/cfscrape { };
 
@@ -7377,6 +7383,10 @@ self: super: with self; {
   libtmux = callPackage ../development/python-modules/libtmux { };
 
   libtorrent-rasterbar = (toPythonModule (pkgs.libtorrent-rasterbar.override { python3 = python; })).python;
+
+  libusb-package = callPackage ../development/python-modules/libusb-package {
+    inherit (pkgs) libusb1;
+  };
 
   libusb1 = callPackage ../development/python-modules/libusb1 {
     inherit (pkgs) libusb1;
@@ -13595,6 +13605,8 @@ self: super: with self; {
     wlroots = pkgs.wlroots_0_17;
   };
   qtile-extras = callPackage ../development/python-modules/qtile-extras { };
+
+  qtm = callPackage ../development/python-modules/qtm { };
 
   qtpy = callPackage ../development/python-modules/qtpy { };
 
