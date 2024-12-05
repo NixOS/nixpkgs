@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-panel";
-  version = "3.52.0";
+  version = "3.54.0";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-panel/${lib.versions.majorMinor finalAttrs.version}/gnome-panel-${finalAttrs.version}.tar.xz";
-    hash = "sha256-nim6iHPN5A1AwpNKRk+PQ7ousbUisZFEfKon3XhTxdQ=";
+    hash = "sha256-lLnNUcpQ/zKiic1QWRNuexYMHxJrXWZp4QbcqIUEXCg=";
   };
 
   patches = [
@@ -44,16 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     # load modules from other packages as well.
     ./modulesdir-env-var.patch
   ];
-
-  # make .desktop Exec absolute
-  postPatch = ''
-    patch -p0 <<END_PATCH
-    +++ gnome-panel/gnome-panel.desktop.in
-    @@ -7 +7 @@
-    -Exec=gnome-panel
-    +Exec=$out/bin/gnome-panel
-    END_PATCH
-  '';
 
   preFixup = ''
     gappsWrapperArgs+=(

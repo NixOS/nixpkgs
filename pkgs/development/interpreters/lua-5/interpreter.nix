@@ -169,6 +169,7 @@ stdenv.mkDerivation (finalAttrs:
       management with incremental garbage collection, making it ideal
       for configuration, scripting, and rapid prototyping.
     '';
+    mainProgram = "lua";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };

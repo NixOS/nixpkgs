@@ -1,21 +1,23 @@
-{ lib
-, stdenv
-, autoconf-archive
-, autoreconfHook
-, cppunit
-, curl
-, fetchFromGitHub
-, installShellFiles
-, libsigcxx
-, libtool
-, libtorrent
-, ncurses
-, openssl
-, pkg-config
-, xmlrpc_c
-, zlib
-, nixosTests
-, gitUpdater
+{
+  lib,
+  stdenv,
+  autoconf-archive,
+  autoreconfHook,
+  cppunit,
+  curl,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  libsigcxx,
+  libtool,
+  libtorrent,
+  ncurses,
+  openssl,
+  pkg-config,
+  xmlrpc_c,
+  zlib,
+  nixosTests,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +31,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-G/30Enycpqg/pWC95CzT9LY99kN4tI+S8aSQhnQO+M8=";
   };
 
-  outputs = [ "out" "man" ];
+  patches = [
+    # fix: use fsync for osx builds
+    (fetchpatch {
+      url = "https://github.com/rakshasa/rtorrent/commit/5ce84929e44fbe3f8d6cf142e3133f43afa4071f.patch";
+      hash = "sha256-bFDxbpkTZ6nIUT2zMxKMgV94vWlVNzBbIbhx4Bpr8gw=";
+    })
+  ];
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   passthru = {
     inherit libtorrent;
@@ -77,7 +90,11 @@ stdenv.mkDerivation rec {
     homepage = "https://rakshasa.github.io/rtorrent/";
     description = "Ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ebzzry codyopel thiagokokada ];
+    maintainers = with lib.maintainers; [
+      ebzzry
+      codyopel
+      thiagokokada
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "rtorrent";
   };

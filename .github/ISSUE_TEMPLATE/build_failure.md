@@ -7,31 +7,43 @@ assignees: ''
 
 ---
 
-### Steps To Reproduce
+## Steps To Reproduce
 
 Steps to reproduce the behavior:
+
 1. build *X*
 
-### Build log
+## Build log
+
+<!-- insert build log in code block in collapsable section -->
+
+<details>
+
+<summary>Build Log</summary>
 
 ```
-log here if short otherwise a link to a gist
 ```
 
-### Additional context
+</details>
 
-Add any other context about the problem here.
+## Additional context
 
-### Notify maintainers
+<!-- Add any other context about the problem here. -->
+
+## Metadata
+
+<!-- Please insert the output of running `nix-shell -p nix-info --run "nix-info -m"` below this line -->
+
+## Notify maintainers
 
 <!--
 Please @ people who are in the `meta.maintainers` list of the offending package or module.
 If in doubt, check `git blame` for whoever last touched something.
 -->
 
-### Metadata
+---
 
-<!-- Please insert the output of running `nix-shell -p nix-info --run "nix-info -m"` below this line -->
+Note for maintainers: Please tag this issue in your PR.
 
 ---
 

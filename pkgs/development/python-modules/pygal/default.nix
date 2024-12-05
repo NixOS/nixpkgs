@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonOlder,
 
   # build-system
   setuptools,
@@ -20,22 +21,24 @@
 
 buildPythonPackage rec {
   pname = "pygal";
-  version = "3.0.4";
+  version = "3.0.5";
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bF2jPxBB6LMMvJgPijSRDZ7cWEuDMkApj2ol32VCUok=";
+    hash = "sha256-wKDzTlvBwBl1wr+4NCrVIeKTrULlJWmd0AxNelLBS3E=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace pytest-runner ""
+      --replace-fail pytest-runner ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ importlib-metadata ];
+  dependencies = [ importlib-metadata ];
 
   optional-dependencies = {
     lxml = [ lxml ];
@@ -45,7 +48,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pyquery
     pytestCheckHook
-  ] ++ optional-dependencies.png;
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     # necessary on darwin to pass the testsuite
@@ -53,12 +56,12 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    description = "Module for dynamic SVG charting";
+    homepage = "http://www.pygal.org";
     changelog = "https://github.com/Kozea/pygal/blob/${version}/docs/changelog.rst";
     downloadPage = "https://github.com/Kozea/pygal";
-    description = "Sexy and simple python charting";
-    mainProgram = "pygal_gen.py";
-    homepage = "http://www.pygal.org";
     license = licenses.lgpl3Plus;
     maintainers = [ ];
+    mainProgram = "pygal_gen.py";
   };
 }

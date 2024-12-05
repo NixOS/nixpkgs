@@ -330,12 +330,12 @@ in
 
           ln -sf ${hydraConf} ${baseDir}/hydra.conf
 
-          mkdir -m 0700 -p ${baseDir}/www
+          mkdir -m 0700 ${baseDir}/www || true
           chown hydra-www:hydra ${baseDir}/www
 
-          mkdir -m 0700 -p ${baseDir}/queue-runner
-          mkdir -m 0750 -p ${baseDir}/build-logs
-          mkdir -m 0750 -p ${baseDir}/runcommand-logs
+          mkdir -m 0700 ${baseDir}/queue-runner || true
+          mkdir -m 0750 ${baseDir}/build-logs || true
+          mkdir -m 0750 ${baseDir}/runcommand-logs || true
           chown hydra-queue-runner:hydra \
             ${baseDir}/queue-runner \
             ${baseDir}/build-logs \
@@ -362,8 +362,8 @@ in
 
           # Move legacy hydra-www roots.
           if [ -e /nix/var/nix/gcroots/per-user/hydra-www/hydra-roots ]; then
-            find /nix/var/nix/gcroots/per-user/hydra-www/hydra-roots/ -type f \
-              | xargs -r mv -f -t ${cfg.gcRootsDir}/
+            find /nix/var/nix/gcroots/per-user/hydra-www/hydra-roots/ -type f -print0 \
+              | xargs -0 -r mv -f -t ${cfg.gcRootsDir}/
             rmdir /nix/var/nix/gcroots/per-user/hydra-www/hydra-roots
           fi
 
@@ -520,7 +520,7 @@ in
             elif [[ $compression == zstd ]]; then
               compression="zstd --rm"
             fi
-            find ${baseDir}/build-logs -type f -name "*.drv" -mtime +3 -size +0c | xargs -r "$compression" --force --quiet
+            find ${baseDir}/build-logs -type f -name "*.drv" -mtime +3 -size +0c -print0 | xargs -0 -r "$compression" --force --quiet
           '';
         startAt = "Sun 01:45";
         serviceConfig.Slice = "system-hydra.slice";

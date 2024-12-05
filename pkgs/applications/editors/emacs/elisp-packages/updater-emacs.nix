@@ -36,7 +36,6 @@ let
 in pkgs.mkShell {
   packages = [
     pkgs.git
-    pkgs.nix
     pkgs.bash
     pkgs.nix-prefetch-git
     pkgs.nix-prefetch-hg

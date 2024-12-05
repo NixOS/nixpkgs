@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "mongoengine";
-  version = "0.28.2";
+  version = "0.29.1";
   format = "setuptools";
   disabled = isPy27;
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "MongoEngine";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-5wcviRqUTOKqaeusHxS4Er3LD1BpTMW02Tip3d4zAPM=";
+    hash = "sha256-trWCKmCa+q+qtzF0HKCZMnko1cvvpwJvczLFuKtB83E=";
   };
 
   propagatedBuildInputs = [

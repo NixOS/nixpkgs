@@ -82,14 +82,14 @@ assert assertMsg (!hidpiXWayland)
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.44.1";
+  version = "0.45.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-hnoPoxMFetuoXQuAMgvopl1kCRQ33FYaVVBgV9FIFkM=";
+    hash = "sha256-1pNsLGNStCFjXiBc2zMUxKzKk45CePTf+GwKlzTmrCY=";
   };
 
   postPatch = ''

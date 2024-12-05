@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    (lib.strings.enableFeature stdenv.hostPlatform.isLinux "platform")
+    (lib.enableFeature stdenv.hostPlatform.isLinux "platform")
+    (lib.enableFeature (!stdenv.hostPlatform.isDarwin) "sdltest")
     "--enable-examples=no"
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "--x-includes=${lib.getDev libX11}/include"
@@ -62,5 +63,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "http://www.antigrain.com/";
     platforms = lib.platforms.unix;
+    hydraPlatforms = lib.platforms.linux; # build hangs on both Darwin platforms, needs investigation
   };
 }

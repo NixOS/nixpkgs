@@ -23,19 +23,19 @@
   accelerate,
   datasets,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "sentence-transformers";
-  version = "3.2.1";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "UKPLab";
     repo = "sentence-transformers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5N5yObR3+3eV65ojFJFhzDbqtjNi/U2IhHlAaKttcVI=";
+    hash = "sha256-D8LHzEVHRuayod084B05cL3OvZiO1ByDZLxROGxTD0I=";
   };
 
   build-system = [ setuptools ];
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     accelerate
     datasets
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "sentence_transformers" ];
@@ -100,7 +100,7 @@ buildPythonPackage rec {
   meta = {
     description = "Multilingual Sentence & Image Embeddings with BERT";
     homepage = "https://github.com/UKPLab/sentence-transformers";
-    changelog = "https://github.com/UKPLab/sentence-transformers/releases/tag/${version}";
+    changelog = "https://github.com/UKPLab/sentence-transformers/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
     # Segmentation fault at import

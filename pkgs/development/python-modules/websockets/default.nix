@@ -10,19 +10,19 @@
 
 buildPythonPackage rec {
   pname = "websockets";
-  version = "12.0";
+  version = "13.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aaugustin";
-    repo = pname;
+    repo = "websockets";
     rev = "refs/tags/${version}";
-    hash = "sha256-sOL3VI9Ib/PncZs5KN4dAIHOrBc7LfXqT15LO4M6qKg=";
+    hash = "sha256-Y0HDZw+H7l8+ywLLzFk66GNDCI0uWOZYypG86ozLo7c=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   patchPhase =
     ''
@@ -48,9 +48,15 @@ buildPythonPackage rec {
     + lib.optionalString (pythonOlder "3.11") ''
       # Our Python 3.10 and older raise SSLError instead of SSLCertVerificationError
       sed -i "s/def test_reject_invalid_server_certificate(/def skip_test_reject_invalid_server_certificate(/" tests/sync/test_client.py
+      sed -i "s/def test_reject_invalid_server_certificate(/def skip_test_reject_invalid_server_certificate(/" tests/asyncio/test_client.py
     '';
 
   nativeCheckInputs = [ unittestCheckHook ];
+
+  preCheck = ''
+    # https://github.com/python-websockets/websockets/issues/1509
+    export WEBSOCKETS_TESTS_TIMEOUT_FACTOR=100
+  '';
 
   # Tests fail on Darwin with `OSError: AF_UNIX path too long`
   doCheck = !stdenv.hostPlatform.isDarwin;

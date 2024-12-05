@@ -4,8 +4,7 @@
 , tzdata
 , substituteAll
 , iana-etc
-, Security
-, Foundation
+, apple-sdk_11
 , xcbuild
 , mailcap
 , buildPackages
@@ -47,11 +46,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.23.2";
+  version = "1.23.3";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-NpMBYqk99BfZC9IsbhTa/0cFuqwrAkGO3aZxzfqc0H8=";
+    hash = "sha256-jWp3MySHVXxq+iQhExtQ+D20rjxXnDvHLmcO4faWhZk=";
   };
 
   strictDeps = true;
@@ -59,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
-  depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [ Foundation Security xcbuild ];
+  depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [ apple-sdk_11 xcbuild ];
 
   depsBuildTarget = lib.optional isCross targetCC;
 

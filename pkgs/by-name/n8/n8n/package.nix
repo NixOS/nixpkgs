@@ -18,18 +18,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.61.0";
+  version = "1.70.1";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     rev = "n8n@${finalAttrs.version}";
-    hash = "sha256-9hIwpid/uly7wUcrBgLkSw+Aah8OQ66MgrMQbs/5v1Y=";
+    hash = "sha256-acbC6MO2wM9NsjqUqcs8jPNHfBg/P0wEYF5MxbnFhQQ=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-lZLWqlR6xq7DYpnydgJK8gL7WdfZcRU+8Autzh6e7kY=";
+    hash = "sha256-h2hIOVK9H5OlyhyyoRs113CbE4z4SIxVVPha0Ia9I4A=";
   };
 
   nativeBuildInputs = [
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     description = "Free and source-available fair-code licensed workflow automation tool";
     longDescription = ''
       Free and source-available fair-code licensed workflow automation tool.
@@ -97,12 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://n8n.io";
     changelog = "https://github.com/n8n-io/n8n/releases/tag/${finalAttrs.src.rev}";
-    maintainers = with maintainers; [
-      freezeboy
+    maintainers = with lib.maintainers; [
       gepbird
     ];
-    license = licenses.sustainableUse;
+    license = lib.licenses.sustainableUse;
     mainProgram = "n8n";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

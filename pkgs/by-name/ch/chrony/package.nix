@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  overrideSDK,
   fetchurl,
   pkg-config,
   gnutls,
@@ -11,19 +10,11 @@
   libseccomp,
   pps-tools,
   nixosTests,
+  apple-sdk_11,
+  darwinMinVersionHook,
 }:
 
-let
-  stdenv' =
-    if stdenv.hostPlatform.isDarwin then
-      overrideSDK stdenv {
-        darwinSdkVersion = "11.0";
-        darwinMinVersion = "10.13";
-      }
-    else
-      stdenv;
-in
-stdenv'.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "chrony";
   version = "4.6.1";
 
@@ -49,6 +40,10 @@ stdenv'.mkDerivation rec {
       libcap
       libseccomp
       pps-tools
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_11
+      (darwinMinVersionHook "10.13")
     ];
 
   configureFlags = [

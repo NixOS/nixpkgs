@@ -18,6 +18,7 @@
 , glib-networking
 , wrapGAppsHook3
 , gsettings-desktop-schemas
+, dotnetCorePackages
 }:
 let
   am2r-run = buildFHSEnv {
@@ -26,7 +27,7 @@ let
     multiArch = true;
 
     multiPkgs = pkgs: with pkgs; [
-        stdenv.cc.cc.lib
+        (lib.getLib stdenv.cc.cc)
         xorg.libX11
         xorg.libXext
         xorg.libXrandr
@@ -54,6 +55,7 @@ buildDotnetModule {
     hash = "sha256-/nHqo8jh3sOUngbpqdfiQjUWO/8Uzpc5jtW7Ep4q6Wg=";
   };
 
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   projectFile = "AM2RLauncher/AM2RLauncher.Gtk/AM2RLauncher.Gtk.csproj";
 
   nugetDeps = ./deps.nix;

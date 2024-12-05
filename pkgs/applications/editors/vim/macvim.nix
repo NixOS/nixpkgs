@@ -94,6 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
       cppflags = map (drv: "-isystem ${lib.getDev drv}/include") inputs;
     in
     ''
+      unset DEVELOPER_DIR # Use the system Xcode not the nixpkgs SDK.
+
       CC=/usr/bin/clang
 
       DEV_DIR=$(/usr/bin/xcode-select -print-path)/Platforms/MacOSX.platform/Developer
@@ -137,7 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
   # Xcode project or pass it as a flag to xcodebuild as well.
   postConfigure = ''
     substituteInPlace src/auto/config.mk \
-      --replace "PERL_CFLAGS${"\t"}=" "PERL_CFLAGS${"\t"}= -I${darwin.libutil}/include" \
       --replace " -L${stdenv.cc.libc}/lib" "" \
       --replace " -L${darwin.libobjc}/lib" "" \
       --replace " -L${darwin.libunwind}/lib" "" \

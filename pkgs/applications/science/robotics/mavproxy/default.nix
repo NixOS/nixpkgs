@@ -5,7 +5,7 @@
 , lxml
 , matplotlib
 , numpy
-, opencv4
+, opencv-python
 , pymavlink
 , pyserial
 , setuptools
@@ -25,16 +25,11 @@ buildPythonApplication rec {
     hash = "sha256-A7tqV1kBCSuWHJUTdUZGcPY/r7X1edGZs6xDctpMbMI=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "opencv-python" ""
-  '';
-
   propagatedBuildInputs = [
     lxml
     matplotlib
     numpy
-    opencv4
+    opencv-python
     pymavlink
     pyserial
     setuptools

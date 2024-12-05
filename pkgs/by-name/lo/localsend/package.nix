@@ -15,17 +15,16 @@
 
 let
   pname = "localsend";
-  version = "1.15.4";
+  version = "1.16.1";
 
   linux = flutter324.buildFlutterApplication rec {
-    inherit pname;
-    version = "1.15.4-unstable-2024-10-26";
+    inherit pname version;
 
     src = fetchFromGitHub {
       owner = pname;
       repo = pname;
-      rev = "d0e864ddf6ebe1c55188b33f8fdccd534d203c75";
-      hash = "sha256-qaW9LoRQge4K/CAQwbjNxmlUkQmxvaZyBJdAjXbbTw4=";
+      rev = "v${version}";
+      hash = "sha256-9nW1cynvRgX565ZupR+ogfDH9Qem+LQH4XZupVsrEWo=";
     };
 
     sourceRoot = "${src.name}/app";
@@ -50,6 +49,10 @@ let
         mkdir -p $d
         cp ./assets/img/logo-''${s}.png $d/localsend.png
       done
+    '';
+
+    extraWrapProgramArgs = ''
+      --prefix LD_LIBRARY_PATH : "$out/app/${pname}/lib"
     '';
 
     desktopItems = [
@@ -79,7 +82,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.dmg";
-      hash = "sha256-ZU2aXZNKo01TnXNH0e+r0l4J5HIILmGam3T4+6GaeA4=";
+      hash = "sha256-kgq3AoypDdRwk9bKa1zjUJo4tHHUbDZIg0G0Rk9S3n4=";
     };
 
     nativeBuildInputs = [

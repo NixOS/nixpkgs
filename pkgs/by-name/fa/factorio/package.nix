@@ -70,6 +70,15 @@ let
       nix-prefetch-url file://\''$HOME/Downloads/factorio_\''${releaseType}_x64_\''${version}.tar.xz --name factorio_\''${releaseType}_x64-\''${version}.tar.xz
 
     Note the ultimate "_" is replaced with "-" in the --name arg!
+
+    If you go this route you might want to tell Nix to explicitly hold on to the
+    source tarball. Otherwise it could get GC'd from the Nix store and you'd
+    have to redownload it next time the package wants to rebuild to use a newer
+    dependency. E.g. if you're using NixOS:
+
+      system.extraDependencies = [
+        factorio.src
+      ];
   '';
 
   desktopItem = makeDesktopItem {
@@ -192,15 +201,7 @@ let
         $out/bin/factorio
     '';
 
-    passthru.updateScript =
-      if (username != "" && token != "") then
-        [
-          ./update.py
-          "--username=${username}"
-          "--token=${token}"
-        ]
-      else
-        null;
+    passthru.updateScript = ./update.py;
 
     meta = {
       description = "Game in which you build and maintain factories";

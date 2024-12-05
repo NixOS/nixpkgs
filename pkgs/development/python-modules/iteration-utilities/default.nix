@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "iteration-utilities";
-  version = "0.12.1";
+  version = "0.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "MSeifert04";
     repo = "iteration_utilities";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BiBbmZHo5B/u//LItqEcKtGXOA6xK+T1zoitR9XIiSU=";
+    hash = "sha256-SiqNUyuvsD5m5qz5ByYyVln3SSa4/D4EHpmM+pf8ngM=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

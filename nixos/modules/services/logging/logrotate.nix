@@ -261,6 +261,7 @@ in
         CapabilityBoundingSet = [
           "CAP_CHOWN"
           "CAP_DAC_OVERRIDE"
+          "CAP_FOWNER"
           "CAP_KILL"
           "CAP_SETUID"
           "CAP_SETGID"

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       cmake
       pkg-config
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
     ];
 
@@ -47,7 +47,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [
       thoughtpolice
-      luc65r
     ];
   };
 }

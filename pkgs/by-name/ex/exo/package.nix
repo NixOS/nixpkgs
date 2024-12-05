@@ -3,17 +3,18 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
+  unstableGitUpdater,
 }:
 python3Packages.buildPythonApplication {
   pname = "exo";
-  version = "0-unstable-2024-10-21";
+  version = "0-unstable-2024-11-30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exo-explore";
     repo = "exo";
-    rev = "82a708f974b9a720e127c38a383f22e129be6373";
-    hash = "sha256-BhhcYOipdLAviTzWRdNLMMPiND4mYv9Mkn8/yxo0vXY=";
+    rev = "fcce9c347404e37921890e85f8d251e17025acc0";
+    hash = "sha256-ROWNhQuAwjKfcEWYWSJTPaksXdxQZ9nOoR7Ft63Kx2A=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -26,26 +27,22 @@ python3Packages.buildPythonApplication {
     aiohttp
     aiohttp-cors
     aiofiles
-    blobfile
     grpcio
     grpcio-tools
-    hf-transfer
-    huggingface-hub
     jinja2
     netifaces
     numpy
+    nuitka
     nvidia-ml-py
+    opencv-python
     pillow
     prometheus-client
     protobuf
     psutil
+    pydantic
     requests
     rich
-    safetensors
-    tailscale
     tenacity
-    tiktoken
-    tokenizers
     tqdm
     transformers
     tinygrad
@@ -66,7 +63,13 @@ python3Packages.buildPythonApplication {
   ];
 
   # Tests require `mlx` which is not supported on linux.
-  doCheck = stdenv.isDarwin;
+  doCheck = stdenv.hostPlatform.isDarwin;
+
+  passthru = {
+    updateScript = unstableGitUpdater {
+      hardcodeZeroVersion = true;
+    };
+  };
 
   meta = {
     description = "Run your own AI cluster at home with everyday devices";

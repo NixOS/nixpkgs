@@ -23,7 +23,7 @@ let
       changelog = "https://github.com/mistakenelf/fm/releases/tag/${finalAttrs.src.rev}";
       license = with lib.licenses; [ mit ];
       mainProgram = "fm";
-      maintainers = with lib.maintainers; [ AndersonTorres ];
+      maintainers = with lib.maintainers; [ ];
     };
   };
 in

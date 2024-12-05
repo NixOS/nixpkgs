@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pinocchio";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "pinocchio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8V+n1TwFojXKOVkGG8k9aXVadt2NBFlZKba93L+NRNU=";
+    hash = "sha256-8lRGdtN3V0pfRH3f70H8n2pt5CGQkUY1wKg9gUY0toQ=";
   };
 
   outputs = [
@@ -52,13 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # silence matplotlib warning
     export MPLCONFIGDIR=$(mktemp -d)
-  '';
-
-  # CMAKE_BUILD_TYPE defaults to Release in this package,
-  # which enable -O3, which break some tests
-  # ref. https://github.com/stack-of-tasks/pinocchio/issues/2304#issuecomment-2231018300
-  postConfigure = ''
-    substituteInPlace CMakeCache.txt --replace-fail '-O3' '-O2'
   '';
 
   strictDeps = true;
@@ -95,13 +88,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = lib.optionals (pythonSupport && casadiSupport) [ python3Packages.matplotlib ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
-    (lib.cmakeBool "BUILD_WITH_LIBPYTHON" pythonSupport)
-    (lib.cmakeBool "BUILD_WITH_CASADI_SUPPORT" casadiSupport)
-    (lib.cmakeBool "BUILD_WITH_COLLISION_SUPPORT" collisionSupport)
-    (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+      (lib.cmakeBool "BUILD_WITH_LIBPYTHON" pythonSupport)
+      (lib.cmakeBool "BUILD_WITH_CASADI_SUPPORT" casadiSupport)
+      (lib.cmakeBool "BUILD_WITH_COLLISION_SUPPORT" collisionSupport)
+      (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
+      # Disable test that fails on darwin
+      # https://github.com/stack-of-tasks/pinocchio/blob/42306ed023b301aafef91e2e76cb070c5e9c3f7d/flake.nix#L24C1-L27C17
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;pinocchio-example-py-casadi-quadrotor-ocp")
+    ];
 
   doCheck = true;
   pythonImportsCheck = [ "pinocchio" ];

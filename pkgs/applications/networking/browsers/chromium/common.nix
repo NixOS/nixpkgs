@@ -1,15 +1,19 @@
 { stdenv, lib, fetchpatch
-, recompressTarball
+, zstd
+, fetchFromGitiles
+, fetchNpmDeps
 , buildPackages
 , pkgsBuildBuild
 # Channel data:
-, channel, upstream-info
+, upstream-info
 # Helper functions:
 , chromiumVersionAtLeast, versionRange
 
 # Native build inputs:
 , ninja, pkg-config
 , python3, perl
+, nodejs
+, npmHooks
 , which
 , libuuid
 , overrideCC
@@ -145,12 +149,64 @@ let
       else throw "no chromium Rosetta Stone entry for os: ${platform.config}";
   };
 
+  isElectron = packageName == "electron";
+
+  chromiumDeps = lib.mapAttrs (path: args: fetchFromGitiles (removeAttrs args [ "recompress" ] // lib.optionalAttrs args.recompress or false {
+    name = "source.tar.zstd";
+    downloadToTemp = false;
+    passthru.unpack = true;
+    postFetch = ''
+      tar \
+        --use-compress-program="${lib.getExe zstd} -T$NIX_BUILD_CORES" \
+        --sort=name \
+        --mtime="1970-01-01" \
+        --owner=root --group=root \
+        --numeric-owner --mode=go=rX,u+rw,a-s \
+        --remove-files \
+        --directory="$out" \
+        -cf "$TMPDIR/source.zstd" .
+      mv "$TMPDIR/source.zstd" "$out"
+    '';
+  })) upstream-info.DEPS;
+
+  unpackPhaseSnippet = lib.concatStrings (lib.mapAttrsToList (path: dep:
+    (if dep.unpack or false
+      then ''
+        mkdir -p ${path}
+        pushd ${path}
+        unpackFile ${dep}
+        popd
+      ''
+      else ''
+        mkdir -p ${builtins.dirOf path}
+        cp -r ${dep}/. ${path}
+      ''
+    ) + ''
+      chmod u+w -R ${path}
+    '') chromiumDeps);
+
   base = rec {
     pname = "${lib.optionalString ungoogled "ungoogled-"}${packageName}-unwrapped";
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 
-    src = recompressTarball { inherit version; inherit (upstream-info) hash; };
+    unpackPhase = ''
+      runHook preUnpack
+
+      ${unpackPhaseSnippet}
+      sourceRoot=src
+
+      runHook postUnpack
+    '';
+
+    npmRoot = "third_party/node";
+    npmDeps = (fetchNpmDeps {
+      src = chromiumDeps."src";
+      sourceRoot = npmRoot;
+      hash = upstream-info.deps.npmHash;
+    }).overrideAttrs (p: {
+      nativeBuildInputs = p.nativeBuildInputs or [ ] ++ [ zstd ];
+    });
 
     nativeBuildInputs = [
       ninja pkg-config
@@ -158,6 +214,9 @@ let
       which
       buildPackages.rustc.llvmPackages.bintools
       bison gperf
+    ] ++ lib.optionals (!isElectron) [
+      nodejs
+      npmHooks.npmConfigHook
     ];
 
     depsBuildBuild = [
@@ -252,14 +311,6 @@ let
       # We also need enable_widevine_cdm_component to be false. Unfortunately it isn't exposed as gn
       # flag (declare_args) so we simply hardcode it to false.
       ./patches/widevine-disable-auto-download-allow-bundle.patch
-    ] ++ lib.optionals (versionRange "125" "126") [
-      # Fix building M125 with ninja 1.12. Not needed for M126+.
-      # https://issues.chromium.org/issues/336911498
-      # https://chromium-review.googlesource.com/c/chromium/src/+/5487538
-      (githubPatch {
-        commit = "a976cb05b4024b7a6452d1541378d718cdfe33e6";
-        hash = "sha256-K2PSeJAvhGH2/Yp63/4mJ85NyqXqDDkMWY+ptrpgmOI=";
-      })
     ] ++ lib.optionals (versionRange "127" "128") [
       # Fix missing chrome/browser/ui/webui_name_variants.h dependency
       # and ninja 1.12 compat in M127.
@@ -293,21 +344,14 @@ let
       # Chromium reads initial_preferences from its own executable directory
       # This patch modifies it to read /etc/chromium/initial_preferences
       ./patches/chromium-initial-prefs.patch
-    ] ++ lib.optionals (versionRange "120" "126") [
-      # Partial revert to build M120+ with LLVM 17:
       # https://github.com/chromium/chromium/commit/02b6456643700771597c00741937e22068b0f956
       # https://github.com/chromium/chromium/commit/69736ffe943ff996d4a88d15eb30103a8c854e29
-      ./patches/chromium-120-llvm-17.patch
-    ] ++ lib.optionals (chromiumVersionAtLeast "126") [
-      # Rebased variant of patch right above to build M126+ with LLVM 17.
+      # Rebased variant of patch to build M126+ with LLVM 17.
       # staging-next will bump LLVM to 18, so we will be able to drop this soon.
       ./patches/chromium-126-llvm-17.patch
-    ] ++ lib.optionals (versionRange "121" "126") [
-      # M121 is the first version to require the new rust toolchain.
+    ] ++ lib.optionals (versionRange "126" "129") [
       # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
       # allowing us to use our rustc and our clang.
-      ./patches/chromium-121-rust.patch
-    ] ++ lib.optionals (versionRange "126" "129") [
       # Rebased variant of patch right above to build M126+ with our rust and our clang.
       ./patches/chromium-126-rust.patch
     ] ++ lib.optionals (chromiumVersionAtLeast "129") [
@@ -332,7 +376,32 @@ let
       })
     ];
 
-    postPatch = ''
+    postPatch =  lib.optionalString (!isElectron) ''
+      ln -s ${./files/gclient_args.gni} build/config/gclient_args.gni
+
+      echo 'LASTCHANGE=${upstream-info.DEPS."src".rev}-refs/tags/${version}@{#0}' > build/util/LASTCHANGE
+      echo "$SOURCE_DATE_EPOCH" > build/util/LASTCHANGE.committime
+
+      cat << EOF > gpu/config/gpu_lists_version.h
+      /* Generated by lastchange.py, do not edit.*/
+      #ifndef GPU_CONFIG_GPU_LISTS_VERSION_H_
+      #define GPU_CONFIG_GPU_LISTS_VERSION_H_
+      #define GPU_LISTS_VERSION "${upstream-info.DEPS."src".rev}"
+      #endif  // GPU_CONFIG_GPU_LISTS_VERSION_H_
+      EOF
+
+      cat << EOF > skia/ext/skia_commit_hash.h
+      /* Generated by lastchange.py, do not edit.*/
+      #ifndef SKIA_EXT_SKIA_COMMIT_HASH_H_
+      #define SKIA_EXT_SKIA_COMMIT_HASH_H_
+      #define SKIA_COMMIT_HASH "${upstream-info.DEPS."src/third_party/skia".rev}-"
+      #endif  // SKIA_EXT_SKIA_COMMIT_HASH_H_
+      EOF
+
+      echo -n '${upstream-info.DEPS."src/third_party/dawn".rev}' > gpu/webgpu/DAWN_VERSION
+
+      mkdir -p third_party/jdk/current/bin
+    '' + ''
       # Workaround/fix for https://bugs.chromium.org/p/chromium/issues/detail?id=1313361:
       substituteInPlace BUILD.gn \
         --replace '"//infra/orchestrator:orchestrator_all",' ""
@@ -528,6 +597,11 @@ let
     # enable those features in our stable builds.
     preConfigure = ''
       export RUSTC_BOOTSTRAP=1
+    '' + lib.optionalString (!isElectron) ''
+      (
+        cd third_party/node
+        grep patch update_npm_deps | sh
+      )
     '';
 
     configurePhase = ''
@@ -585,11 +659,9 @@ let
     '';
 
     passthru = {
-      updateScript = ./update.py;
-      chromiumDeps = {
-        gn = gnChromium;
-      };
-      inherit recompressTarball;
+      updateScript = ./update.mjs;
+    } // lib.optionalAttrs (!isElectron) {
+      inherit chromiumDeps npmDeps;
     };
   }
   # overwrite `version` with the exact same `version` from the same source,

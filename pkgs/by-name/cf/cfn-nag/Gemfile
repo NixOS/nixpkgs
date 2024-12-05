@@ -1,5 +1,5 @@
-# frozen_string_literal: true
-
 source 'https://rubygems.org'
-
-gemspec
+gem 'cfn-nag'
+gem 'logger'
+gem 'ostruct'
+gem 'syslog'

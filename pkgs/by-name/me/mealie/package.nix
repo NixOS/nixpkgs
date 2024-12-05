@@ -2,7 +2,6 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , makeWrapper
 , nixosTests
 , python3Packages
@@ -10,12 +9,12 @@
 }:
 
 let
-  version = "1.12.0";
+  version = "2.2.0";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     rev = "v${version}";
-    hash = "sha256-Lwd0P1ssAITLH256uMXNb5b1OcFAy8OVjjpnmfNVUvQ=";
+    hash = "sha256-t4YYvj8dG8o9PVAlDxdxVBi2omBGQ2h53/IVv089778=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
@@ -68,6 +67,7 @@ pythonpkgs.buildPythonApplication rec {
     gunicorn
     html2text
     httpx
+    itsdangerous
     jinja2
     lxml
     openai

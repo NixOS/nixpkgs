@@ -9,14 +9,6 @@ let
     initArgs: ffmpegVariant:
     callPackage ./generic.nix (
       {
-        inherit (darwin.apple_sdk.frameworks)
-          Accelerate
-          AppKit
-          AudioToolbox
-          AVFoundation
-          CoreImage
-          VideoToolbox
-          ;
         inherit (darwin) xcode;
         inherit (cudaPackages) cuda_cudart cuda_nvcc libnpp;
       }
@@ -34,8 +26,8 @@ let
   };
 
   v7 = {
-    version = "7.0.2";
-    hash = "sha256-6bcTxMt0rH/Nso3X7zhrFNkkmWYtxsbUqVQKh25R1Fs=";
+    version = "7.1";
+    hash = "sha256-erTkv156VskhYEJWjpWFvHjmcr2hr6qgUi28Ho8NFYk=";
   };
 in
 

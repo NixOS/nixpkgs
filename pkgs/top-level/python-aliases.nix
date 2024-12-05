@@ -68,6 +68,10 @@ mapAliases ({
   awkward0 = throw "awkward0 has been removed, use awkward instead"; # added 2022-12-13
   azure-functions-devops-build = throw "azure-functions-devops-build has been removed, because it is abandoned"; # added 2024-10-04
   Babel = babel; # added 2022-05-06
+  backports-cached-property = throw "backports-cached-property has been removed, since we no longer need to backport to python3.7"; # added 2024-11-12
+  backports-shutil-get-terminal-size = throw "backports-shutil-get-terminal-size has been removed, since we no longer need to backport to python3.2"; # added 2024-11-12
+  backports-shutil-which = throw "backports-shutil-which has been removed, since we no longer need to backport to python3.2"; # added 2024-11-12
+  backports-zoneinfo = throw "backports-zoneinfo has been removed, since we no longer need to backport to python3.8"; # added 2024-11-12
   backports_csv = throw "backports_csv has been removed, since we no longer need to backport to python2"; # added 2023-07-28
   backports_functools_lru_cache = throw "backports_functools_lru_cache has been removed, since we no longer need to backport to python3.2"; # added 2023-07-28
   backports_shutil_get_terminal_size = backports-shutil-get-terminal-size; # added 2024-04-21
@@ -97,6 +101,7 @@ mapAliases ({
   BTrees = btrees; # added 2023-02-19
   cacheyou = throw "cacheyou has been removed, as it was no longer used for the only consumer pdm"; # added 2023-12-21
   cadquery = throw "cadquery was removed, because it was disabled on all python version since 3.8 and marked as broken"; # added 2024-05-13
+  caffeWithCuda = throw "caffeWithCuda has been removed, as it was broken and required CUDA 10"; # Added 2024-11-20
   can = python-can; # added 2024-08-12
   carrot = throw "carrot has been removed, as its development was discontinued in 2012"; # added 2022-01-18
   case = throw "case has been removed, since it is an unused leaf package with a dependency on the nose test framework"; # added 2024-07-08
@@ -230,6 +235,7 @@ mapAliases ({
   fritzprofiles = throw "fritzprofiles was removed from nixpkgs, because it was removed as dependency of home-assistant for which it was pacakged."; # added 2024-01-05
   garages-amsterdam = throw "garages-amsterdam has been renamed odp-amsterdam."; # added 2023-01-04
   garminconnect-ha = garminconnect; # added 2022-02-05
+  gbulb = throw "gbulb has been removed as it is unmaintained and no longer compatible with PyGObject 3.50."; # added 2024-10-14
   gcs-oauth2-boto-plugin = throw "gcs-oauth2-boto-plugin was removed as it depends on the removed boto package"; # Added 2024-09-22
   gdtoolkit = throw "gdtoolkit has been promoted to a top-level attribute name: `pkgs.gdtoolkit`"; # added 2023-02-15
   GeoIP = geoip; # added 2023-02-19
@@ -330,6 +336,7 @@ mapAliases ({
   mask-rcnn = throw "mask-rcnn has been removed as it is unmaintained and its dependency imgaug no longer builds"; # added 2023-07-10
   mac_alias = mac-alias; # added 2024-01-07
   MDP = mdp; # added 2023-02-19
+  mdp = throw "mdp has been removed as it is unmaintained and broken"; # added 2024-11-23
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
   memcached = python-memcached; # added 2022-05-06
   mailman = throw "Please use pkgs.mailman"; # added 2022-04-29
@@ -402,6 +409,7 @@ mapAliases ({
   pdfminer = pdfminer-six; # added 2022-05-25
   pdfx = throw "pdfx has been removed because the upstream repository was archived in 2023"; # Added 2024-10-04
   pep257 = pydocstyle; # added 2022-04-12
+  pillow-simd = throw "pillow-simd has been removed for lagging behind pillow upstream, which exposes it to various security issues."; # Added 2024-10-24
   pixelmatch = "pixelmatch has been removed as it was unmaintained"; # Added 2024-08-18
   pkutils = throw "pkutils was removed as it was unused and is not applicable to modern Python build tools"; # added 2024-07-28
   poetry = throw "poetry was promoted to a top-level attribute, use poetry-core to build Python packages"; # added 2023-01-09
@@ -486,6 +494,7 @@ mapAliases ({
   pyres = throw "pyres has been removed, since it is abandoned and broken"; # added 2023-06-20
   pygeoip = throw "pygeoip has been removed, since it wash archived in April 2018"; # added 2024-07-27
   pygeos = throw "pygeos has been removed, since it was merged with shapely 2.0"; # added 2024-05-26
+  pyreqwest-impersonate = throw "pyreqwest has been renamed to primp"; # added 2024-10-22
   pyRFC3339 = pyrfc3339; # added 2024-01-07
   pyroute2-core = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
   pyroute2-ethtool = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
@@ -509,6 +518,7 @@ mapAliases ({
   pysparse = throw "pysparse has been abandoned upstream."; # added 2023-02-28
   pyspotify = throw "pyspotify has been removed because Spotify stopped supporting libspotify"; # added 2022-05-29
   PyStemmer = pystemmer; # added 2023-02-19
+  pytado = python-tado; # added 2024-12-02
   pytest_6 = pytest; # added 2022-02-10
   pytestcov = pytest-cov; # added 2021-01-04
   pytest-ordering = throw "pytest-ordering has been removed, since it is no longer maintained and broken"; # added 2023-06-22
@@ -546,8 +556,8 @@ mapAliases ({
   pyuavcan = throw "pyuavcan has been renamed to pycyphal and the old package deprecated, use pycyphal instead"; # added 2024-02-09
   pyunifiprotect = throw "pyunifiprotect has disappeared from GitHub and PyPI, use uiprotect instead"; # added 2024-09-17
   pyutilib = throw "pyutilib has been removed, since it is no longer maintained"; # added 2024-07-28
+  pyvicare-neo = pyvicare; # Added 2024-11-06
   pyvcf = throw "pyvcf has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2023-05-19
-  pyvicare = pyvicare-neo; # added 2024-08-31
   PyVirtualDisplay = pyvirtualdisplay; # added 2023-02-19
   pywick = throw "pywick has been removed, since it is no longer maintained"; # added 2023-07-01
   pyxb = throw "pyxb has been removed, its last release was in 2017 and it has finally been archived in April 2023."; # added 2024-01-05
@@ -571,6 +581,7 @@ mapAliases ({
   recursivePthLoader = recursive-pth-loader; # added 2024-01-07
   rednose = throw "rednose is no longer maintained (since February 2018)"; # added 2023-08-06
   repeated_test = repeated-test; # added 2022-11-15
+  repocheck = throw "repocheck has been promoted to a top-level attribute name: `pkgs.repocheck`"; # Added 2024-11-03
   reportengine = throw "reportengine has been removed, since it is unmaintained and broken"; # added 2024-08-21
   repoze_lru = repoze-lru; # added 2023-11-11
   repoze_sphinx_autointerface = repoze-sphinx-autointerface; # added 2023-11-11
@@ -638,6 +649,7 @@ mapAliases ({
   suseapi = throw "suseapi has been removed because it is no longer maintained"; # added 2023-02-27
   synologydsm-api = py-synologydsm-api; # added 2024-07-29
   sysv_ipc = sysv-ipc; # added 2024-01-07
+  telegram = throw "telegram has been removed since it is abandoned"; # added 2024-11-06
   tempita = throw "tempita has been removed because it is unmaintained and the upstream repository is gone"; # added 2024-07-29
   tensorflow-bin_2 = tensorflow-bin; # added 2021-11-25
   tensorflow-build_2 = tensorflow-build; # added 2021-11-25
@@ -658,6 +670,7 @@ mapAliases ({
   torrent_parser = torrent-parser; # added 2023-11-04
   transip = throw "transip has been removed because it is no longer maintained. TransIP SOAP V5 API was marked as deprecated"; # added 2023-02-27
   py-tree-sitter = throw "Was merged with tree-sitter."; # added 2024-03-20
+  transmissionrpc = throw "transmissionrpc has been removed because it no longer builds and is unmaintained"; # added 2024-10-12
   trezor_agent = trezor-agent; # Added 2024-01-07
   tumpa = throw "tumpa was promoted to a top-level attribute"; # added 2022-11-19
   tvdb_api = tvdb-api; # added 2023-10-20
@@ -698,6 +711,7 @@ mapAliases ({
   WSME = wsme; # added 2023-02-19
   x11_hash = x11-hash; # added 2023-11-05
   xapp = python-xapp; # added 2024-07-19
+  xarray-datatree = throw "Datatree has been merged upstream into pydata/xarray, and released as of xarray version 2024.10.0."; # added 2024-11-02
   xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
   XlsxWriter = xlsxwriter; # added 2023-02-19
   xsser = "xsser has been removed because it was unmaintained and relies on a archived project"; # added 2024-07-27

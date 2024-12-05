@@ -18,8 +18,8 @@
   harminv,
   libctl,
   libGDSII,
-  openssh,
   guile,
+  mpb,
   python,
   numpy,
   scipy,
@@ -73,6 +73,7 @@ buildPythonPackage rec {
     libGDSII
     guile
     gsl
+    mpb
   ];
 
   propagatedBuildInputs =
@@ -124,7 +125,9 @@ buildPythonPackage rec {
   */
   nativeCheckInputs = [
     mpiCheckPhaseHook
-    openssh
+  ];
+  pythonImportCheck = [
+    "meep.mpb"
   ];
   checkPhase = ''
     runHook preCheck
@@ -156,12 +159,12 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Free finite-difference time-domain (FDTD) software for electromagnetic simulations";
     homepage = "https://meep.readthedocs.io/en/latest/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       sheepforce
       markuskowa
     ];

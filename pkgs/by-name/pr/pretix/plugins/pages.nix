@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pretix-pages";
-  version = "1.6.1";
+  version = "1.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-pages";
     rev = "v${version}";
-    hash = "sha256-u2POt3v0OpjbauDCX8Uclvqd1+jujvVrzUIYrvDv/qI=";
+    hash = "sha256-0pTFGCgtt/JGviTLsZFwgx93TD8ArLwZGfWoSYv5XuY=";
   };
 
   build-system = [

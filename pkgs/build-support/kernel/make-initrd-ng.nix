@@ -8,7 +8,7 @@ let
   # compression type and filename extension.
   compressorName = fullCommand: builtins.elemAt (builtins.match "([^ ]*/)?([^ ]+).*" fullCommand) 1;
 in
-{ stdenvNoCC, libarchive, ubootTools, lib, pkgsBuildHost, makeInitrdNGTool, binutils, runCommand
+{ stdenvNoCC, cpio, ubootTools, lib, pkgsBuildHost, makeInitrdNGTool, binutils, runCommand
 # Name of the derivation (not of the resulting file!)
 , name ? "initrd"
 
@@ -74,7 +74,7 @@ in
   passAsFile = ["contents"];
   contents = builtins.toJSON contents;
 
-  nativeBuildInputs = [makeInitrdNGTool libarchive] ++ lib.optional makeUInitrd ubootTools ++ lib.optional strip binutils;
+  nativeBuildInputs = [makeInitrdNGTool cpio] ++ lib.optional makeUInitrd ubootTools ++ lib.optional strip binutils;
 
   STRIP = if strip then "${pkgsBuildHost.binutils.targetPrefix}strip" else null;
 }) ''
@@ -85,7 +85,7 @@ in
   for PREP in $prepend; do
     cat $PREP >> $out/initrd
   done
-  (cd root && find . -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @- | eval -- $compress >> "$out/initrd")
+  (cd root && find . -print0 | sort -z | cpio --quiet -o -H newc -R +0:+0 --reproducible --null | eval -- $compress >> "$out/initrd")
 
   if [ -n "$makeUInitrd" ]; then
       mkimage -A "$uInitrdArch" -O linux -T ramdisk -C "$uInitrdCompression" -d "$out/initrd" $out/initrd.img

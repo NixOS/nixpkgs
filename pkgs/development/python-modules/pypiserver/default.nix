@@ -13,11 +13,13 @@
   watchdog,
   webtest,
   wheel,
+  build,
+  importlib-resources,
 }:
 
 buildPythonPackage rec {
   pname = "pypiserver";
-  version = "2.0.1";
+  version = "2.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +28,7 @@ buildPythonPackage rec {
     owner = "pypiserver";
     repo = "pypiserver";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Eh/3URt7pcJhoDDLRP8iHyjlPsE5E9M/0Hixqi5YNdg=";
+    hash = "sha256-5GJthS3kWOyWvYW+mYnIcNKD3fgSVexABZ+DpVh7qkE=";
   };
 
   build-system = [
@@ -38,7 +40,7 @@ buildPythonPackage rec {
   dependencies = [
     distutils
     pip
-  ];
+  ] ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ];
 
   optional-dependencies = {
     passlib = [ passlib ];
@@ -51,6 +53,7 @@ buildPythonPackage rec {
     setuptools
     twine
     webtest
+    build
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   __darwinAllowLocalNetworking = true;

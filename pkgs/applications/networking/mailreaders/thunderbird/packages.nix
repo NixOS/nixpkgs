@@ -38,7 +38,6 @@ let
       mainProgram = "thunderbird";
       maintainers = with maintainers; [ lovesegfault pierron vcunat ];
       platforms = platforms.unix;
-      badPlatforms = platforms.darwin;
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = licenses.mpl20;
@@ -53,22 +52,24 @@ let
   };
 
 in rec {
-  thunderbird = thunderbird-128;
+  # Upstream claims -latest is "for testing purposes only". Stick to -esr until this changes.
+  thunderbird = thunderbird-esr;
 
-  thunderbird-115 = common {
-    version = "115.16.0esr";
-    sha512 = "1c70050a773c92593dca2a34b25e9e6edcef6fbb9b081024e4dba024450219e06aace52d9fb90ccc2e8069b7bba0396258c86cc19848a7ac705b42641f6e36a5";
+  thunderbird-latest = common {
+    version = "132.0.1";
+    sha512 = "ff2ff1344c3ab6594fba2e03d3f0548221934b94972819cfb6de9cea0bf9bac4ec67d14e7c6b9ae854ecdbc472b814a5f6f7204a9ce71ddac6167ff536a6276a";
 
     updateScript = callPackage ./update.nix {
-      attrPath = "thunderbirdPackages.thunderbird-115";
-      versionPrefix = "115";
-      versionSuffix = "esr";
+      attrPath = "thunderbirdPackages.thunderbird-latest";
     };
   };
 
+  # Eventually, switch to an updateScript without versionPrefix hardcoded...
+  thunderbird-esr = thunderbird-128;
+
   thunderbird-128 = common {
-    version = "128.3.1esr";
-    sha512 = "9fef04a0c498eb16688c141cb7d45e803ecc75ea6fc6117ff8ad1e6b049716f49b435f3e5a1baa703fa937e25483137e22256e58572eeacf317de264b961ba6a";
+    version = "128.4.3esr";
+    sha512 = "18691722f6376f3dc0658c01164fcdbf6008fc31eff8c1bd403d34f188db0e7850883315a96fc07289d207c9977d732628d3945736aa191fefd0a01735e3037d";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-128";
@@ -79,5 +80,6 @@ in rec {
 }
  // lib.optionalAttrs config.allowAliases {
   thunderbird-102 = throw "Thunderbird 102 support ended in September 2023";
+  thunderbird-115 = throw "Thunderbird 115 support ended in October 2024";
 }
 

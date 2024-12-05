@@ -1,15 +1,13 @@
 {
   lib,
   stdenv,
-  symlinkJoin,
-  modrinth-app-unwrapped,
   addDriverRunpath,
   alsa-lib,
   flite,
   glib-networking,
-  jdk8,
   jdk17,
   jdk21,
+  jdk8,
   jdks ? [
     jdk8
     jdk17
@@ -18,9 +16,11 @@
   libGL,
   libjack2,
   libpulseaudio,
+  modrinth-app-unwrapped,
   pipewire,
+  symlinkJoin,
   udev,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   xorg,
 }:
 
@@ -31,7 +31,7 @@ symlinkJoin rec {
 
   paths = [ modrinth-app-unwrapped ];
 
-  nativeBuildInputs = [ wrapGAppsHook3 ];
+  nativeBuildInputs = [ wrapGAppsHook4 ];
 
   buildInputs = [ glib-networking ];
 
@@ -48,7 +48,7 @@ symlinkJoin rec {
       xorg.libXxf86vm
 
       # lwjgl
-      stdenv.cc.cc.lib
+      (lib.getLib stdenv.cc.cc)
 
       # narrator support
       flite

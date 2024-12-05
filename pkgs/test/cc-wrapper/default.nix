@@ -8,7 +8,7 @@ let
     || (stdenv.cc.isGNU && stdenv.hostPlatform.isLinux)
   );
   staticLibc = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "-L ${glibc.static}/lib";
-  emulator = stdenv.hostPlatform.emulator buildPackages;
+  emulator = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (stdenv.hostPlatform.emulator buildPackages);
   isCxx = stdenv.cc.libcxx != null;
   libcxxStdenvSuffix = lib.optionalString isCxx "-libcxx";
   CC = "PATH= ${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}cc"}";
@@ -130,6 +130,9 @@ in stdenv.mkDerivation {
       ${CC} -o sanitizers -fsanitize=address,undefined ${./sanitizers.c}
       ASAN_OPTIONS=use_sigaltstack=0 ${emulator} ./sanitizers
     ''}
+
+    echo "Check whether CC and LD with NIX_X_USE_RESPONSE_FILE hardcodes all required binaries..." >&2
+    NIX_CC_USE_RESPONSE_FILE=1 NIX_LD_USE_RESPONSE_FILE=1 ${CC} -v
 
     touch $out
   '';

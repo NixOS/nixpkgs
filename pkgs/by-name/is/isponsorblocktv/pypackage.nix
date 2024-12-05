@@ -56,6 +56,7 @@ buildPythonApplication rec {
     "pyytlounge"
     "textual-slider"
     "textual"
+    "rich"
   ];
 
   meta = {

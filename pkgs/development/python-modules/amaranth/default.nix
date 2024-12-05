@@ -31,6 +31,13 @@ buildPythonPackage rec {
     hash = "sha256-lPQw7fAVM7URdyC/9c/UIYsRxVXrLjvHODvhYBdlkkg=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        "pdm-backend~=2.3.0" \
+        "pdm-backend>=2.3.0"
+  '';
+
   nativeBuildInputs = [ git ];
   build-system = [ pdm-backend ];
 

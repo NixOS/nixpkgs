@@ -913,6 +913,8 @@ let
 
     kcas = callPackage ../development/ocaml-modules/kcas { };
 
+    kdf = callPackage ../development/ocaml-modules/kdf { };
+
     ke = callPackage ../development/ocaml-modules/ke { };
 
     kicadsch = callPackage ../development/ocaml-modules/kicadsch { };
@@ -1067,6 +1069,8 @@ let
     };
 
     mec = callPackage ../development/ocaml-modules/mec { };
+
+    melange = callPackage ../development/tools/ocaml/melange { };
 
     memprof-limits = callPackage ../development/ocaml-modules/memprof-limits { };
 
@@ -1335,6 +1339,7 @@ let
     ocamlformat_0_26_0 = ocamlformat.override { version = "0.26.0"; };
     ocamlformat_0_26_1 = ocamlformat.override { version = "0.26.1"; };
     ocamlformat_0_26_2 = ocamlformat.override { version = "0.26.2"; };
+    ocamlformat_0_27_0 = ocamlformat.override { version = "0.27.0"; };
 
     ocamlformat = callPackage ../development/ocaml-modules/ocamlformat/ocamlformat.nix {};
 
@@ -1688,6 +1693,8 @@ let
     rpclib-lwt = callPackage ../development/ocaml-modules/rpclib/lwt.nix { };
 
     rresult = callPackage ../development/ocaml-modules/rresult { };
+
+    rtop = callPackage ../development/compilers/reason/rtop.nix { };
 
     rusage = callPackage ../development/ocaml-modules/rusage { };
 

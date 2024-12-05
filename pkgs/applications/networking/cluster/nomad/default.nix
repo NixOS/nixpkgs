@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , buildGo122Module
+, buildGo123Module
 , fetchFromGitHub
 , nixosTests
 , installShellFiles
@@ -25,6 +26,12 @@ let
       };
 
       nativeBuildInputs = [ installShellFiles ];
+
+      ldflags = [
+        "-X github.com/hashicorp/nomad/version.Version=${version}"
+        "-X github.com/hashicorp/nomad/version.VersionPrerelease="
+        "-X github.com/hashicorp/nomad/version.BuildDate=1970-01-01T00:00:00Z"
+      ];
 
       # ui:
       #  Nomad release commits include the compiled version of the UI, but the file
@@ -54,7 +61,7 @@ rec {
   # Upstream partially documents used Go versions here
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
 
-  nomad = nomad_1_7;
+  nomad = nomad_1_8;
 
   nomad_1_4 = throwUnsupportaed "nomad_1_4";
 
@@ -79,6 +86,18 @@ rec {
     version = "1.8.4";
     sha256 = "sha256-BzLvALD65VqWNB9gx4BgI/mYWLNeHzp6WSXD/1Xf0Wk=";
     vendorHash = "sha256-0mnhZeiCLAWvwAoNBJtwss85vhYCrf/5I1AhyXTFnWk=";
+    license = lib.licenses.bsl11;
+    passthru.tests.nomad = nixosTests.nomad;
+    preCheck = ''
+      export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
+    '';
+  };
+
+  nomad_1_9 = generic {
+    buildGoModule = buildGo123Module;
+    version = "1.9.3";
+    sha256 = "sha256-KjVr9NIL9Qw10EoP/C+2rjtqU2qBSF6SKpIvQWQJWuo=";
+    vendorHash = "sha256-paUI5mYa9AvMsI0f/VeVdnZzwKS9gsBIb6T4KmugPKQ=";
     license = lib.licenses.bsl11;
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''

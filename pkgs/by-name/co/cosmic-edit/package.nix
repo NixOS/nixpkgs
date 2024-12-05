@@ -20,40 +20,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-edit";
-  version = "1.0.0-alpha.2";
+  version = "1.0.0-alpha.3";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-edit";
     rev = "epoch-${version}";
-    hash = "sha256-3goolnDRGQkQ3zN08WKzN6Dxt+Sh1lR+tFxeWjO3VKY=";
+    hash = "sha256-GCy/JyicPeCA7y9bfbVlyYiofRp0c82INPZi0zbnnxE=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "accesskit-0.12.2" = "sha256-1UwgRyUe0PQrZrpS7574oNLi13fg5HpgILtZGW6JNtQ=";
-      "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "clipboard_macos-0.1.0" = "sha256-cG5vnkiyDlQnbEfV2sPbmBYKv1hd3pjJrymfZb8ziKk=";
-      "cosmic-config-0.1.0" = "sha256-gXrMEoAN+7nYAEcs4w6wROhQTjMCxkGn+muJutktLyk=";
-      "cosmic-files-0.1.0" = "sha256-rBR6IPpMgOltyaRPPZ5V8tYH/xtQphgrPWci/kvlgEg=";
-      "cosmic-syntax-theme-0.1.0" = "sha256-BNb9wrryD5FJImboD3TTdPRIfiBqPpItqwGdT1ZiNng=";
-      "cosmic-text-0.12.1" = "sha256-u2Tw+XhpIKeFg8Wgru/sjGw6GUZ2m50ZDmRBJ1IM66w=";
-      "d3d12-0.19.0" = "sha256-usrxQXWLGJDjmIdw1LBXtBvX+CchZDvE8fHC0LjvhD4=";
-      "filetime-0.2.24" = "sha256-lU7dPotdnmyleS2B75SmDab7qJfEzmJnHPF18CN/Y98=";
-      "fs_extra-1.3.0" = "sha256-ftg5oanoqhipPnbUsqnA4aZcyHqn9XsINJdrStIPLoE=";
-      "glyphon-0.5.0" = "sha256-j1HrbEpUBqazWqNfJhpyjWuxYAxkvbXzRKeSouUoPWg=";
-      "smithay-clipboard-0.8.0" = "sha256-4InFXm0ahrqFrtNLeqIuE3yeOpxKZJZx+Bc0yQDtv34=";
-      "softbuffer-0.4.1" = "sha256-a0bUFz6O8CWRweNt/OxTvflnPYwO5nm6vsyc/WcXyNg=";
-      "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
-      "trash-5.1.1" = "sha256-So8rQ8gLF5o79Az396/CQY/veNo4ticxYpYZPfMJyjQ=";
-      "winit-0.29.10" = "sha256-ScTII2AzK3SC8MVeASZ9jhVWsEaGrSQ2BnApTxgfxK4=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-mQSCUnCJ52iSekljNAvf7G+WefmXhhmZTxumvXl9Jyc=";
 
   # COSMIC applications now uses vergen for the About page
   # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-09-24";
+  env.VERGEN_GIT_COMMIT_DATE = "2024-10-31";
   env.VERGEN_GIT_SHA = src.rev;
 
   postPatch = ''
@@ -99,7 +80,7 @@ rustPlatform.buildRustPackage rec {
     wrapProgram "$out/bin/cosmic-edit" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        xorg.libX11 xorg.libXcursor xorg.libXi xorg.libXrandr vulkan-loader libxkbcommon wayland
+        xorg.libX11 xorg.libXcursor xorg.libXi vulkan-loader libxkbcommon wayland
       ]}
   '';
 

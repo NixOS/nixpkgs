@@ -78,7 +78,7 @@ let
       touch ${configPath}
 
       # update global options
-      remarshal --if toml --of json ${configPath} \
+      remarshal --if toml --of json --stringify ${configPath} \
         | jq -cM 'with_entries(select([.key] | inside(["runners"])))' \
         | jq -scM '.[0] + .[1]' - <(echo ${escapeShellArg (toJSON cfg.settings)}) \
         | remarshal --if json --of toml \
@@ -499,21 +499,21 @@ in {
             '';
           };
           preGetSourcesScript = mkOption {
-            type = types.nullOr types.path;
+            type = types.nullOr (types.either types.str types.path);
             default = null;
             description = ''
               Runner-specific command script executed before code is pulled.
             '';
           };
           postGetSourcesScript = mkOption {
-            type = types.nullOr types.path;
+            type = types.nullOr (types.either types.str types.path);
             default = null;
             description = ''
               Runner-specific command script executed after code is pulled.
             '';
           };
           preBuildScript = mkOption {
-            type = types.nullOr types.path;
+            type = types.nullOr (types.either types.str types.path);
             default = null;
             description = ''
               Runner-specific command script executed after code is pulled,
@@ -521,7 +521,7 @@ in {
             '';
           };
           postBuildScript = mkOption {
-            type = types.nullOr types.path;
+            type = types.nullOr (types.either types.str types.path);
             default = null;
             description = ''
               Runner-specific command script executed after code is pulled

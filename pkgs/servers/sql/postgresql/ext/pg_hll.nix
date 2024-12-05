@@ -1,10 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql, buildPostgresqlExtension }:
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "pg_hll";
   version = "2.18";
-
-  buildInputs = [ postgresql ];
 
   src = fetchFromGitHub {
     owner  = "citusdata";
@@ -12,12 +10,6 @@ stdenv.mkDerivation rec {
     rev    = "refs/tags/v${version}";
     hash   = "sha256-Latdxph1Ura8yKEokEjalJ+/GY+pAKOT3GXjuLprj6c=";
   };
-
-  installPhase = ''
-    install -D -t $out/lib hll${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension *.sql
-    install -D -t $out/share/postgresql/extension *.control
- '';
 
   meta = with lib; {
     description = "HyperLogLog for PostgreSQL";

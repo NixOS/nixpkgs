@@ -23,6 +23,12 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-XTGHHD5Qw3mr+lkPKOXyqb0K3sEENW8Sf0n9mtrFFXI=";
   };
 
+  patches = [
+    # open PR: https://github.com/mozilla/cbindgen/pull/1010
+    # see also: https://github.com/NixOS/nixpkgs/pull/298108
+    ./1010-fix-test-failures-due-to-CARGO_BUILD_TARGET.patch
+  ];
+
   cargoHash = "sha256-l4FgwXdibek4BAnqjWd1rLxpEwuMNjYgvo6X3SS3fRo=";
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;

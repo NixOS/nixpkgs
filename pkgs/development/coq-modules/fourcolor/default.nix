@@ -11,10 +11,11 @@ mkCoqDerivation {
   release."1.2.5".sha256 = "sha256-3qOPNCRjGK2UdHGMSqElpIXhAPVCklpeQgZwf9AFals=";
   release."1.3.0".sha256 = "sha256-h9pa6vaKT6jCEaIdEdcu0498Ou5kEXtZdb9P7WXK1DQ=";
   release."1.3.1".sha256 = "sha256-wBizm1hJXPYBu0tHFNScQHd22FebsJYoggT5OlhY/zM=";
+  release."1.4.0".sha256 = "sha256-8TtNPEbp3uLAH+MjOKiTZHOjPb3vVYlabuqsdWxbg80=";
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch [ coq.version mathcomp.version ] [
-    { cases = [ (isGe "8.16") (isGe "2.0") ]; out = "1.3.1"; }
+    { cases = [ (isGe "8.16") (isGe "2.0") ]; out = "1.4.0"; }
     { cases = [ (isGe "8.16") "2.0.0" ]; out = "1.3.0"; }
     { cases = [ (isGe "8.11") (range "1.12" "1.19") ]; out = "1.2.5"; }
     { cases = [ (isGe "8.11") (range "1.11" "1.14") ]; out = "1.2.4"; }

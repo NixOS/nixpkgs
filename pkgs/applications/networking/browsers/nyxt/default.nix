@@ -26,25 +26,18 @@
 , xdg-utils
 , xclip
 , wl-clipboard
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nyxt";
-  version = "3.11.8";
+  version = "3.12.0";
 
   src = fetchzip {
     url = "https://github.com/atlas-engineer/nyxt/releases/download/${finalAttrs.version}/nyxt-${finalAttrs.version}-source-with-submodules.tar.xz";
-    hash = "sha256-mLf2dvnXYUwPEB3QkoB/O3m/e96t6ISUZNfh+y1ArX4=";
+    hash = "sha256-T5p3OaWp28rny81ggdE9iXffmuh6wt6XSuteTOT8FLI=";
     stripRoot = false;
   };
-
-  # for sbcl 2.4.3
-  postPatch = ''
-    substituteInPlace _build/cl-gobject-introspection/src/init.lisp \
-       --replace-warn sb-ext::set-floating-point-modes sb-int:set-floating-point-modes
-    substituteInPlace _build/fset/Code/port.lisp \
-       --replace-warn sb-ext::once-only sb-int:once-only
-  '';
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
 
@@ -97,7 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
   # prevent corrupting core in exe
   dontStrip = true;
 
-  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  passthru = {
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Infinitely extensible web-browser (with Lisp development files using WebKitGTK platform port)";

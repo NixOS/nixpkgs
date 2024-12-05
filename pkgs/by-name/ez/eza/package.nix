@@ -1,14 +1,11 @@
 { lib
 , gitSupport ? true
-, stdenv
 , fetchFromGitHub
 , rustPlatform
 , cmake
 , pandoc
 , pkg-config
 , zlib
-, darwin
-, libiconv
 , installShellFiles
   # once eza upstream gets support for setting up a compatibility symlink for exa, we should change
   # the handling here from postInstall to passing the required argument to the builder.
@@ -17,20 +14,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "eza";
-  version = "0.20.5";
+  version = "0.20.10";
 
   src = fetchFromGitHub {
     owner = "eza-community";
     repo = "eza";
     rev = "v${version}";
-    hash = "sha256-cxgEeYazhWO1V2Tf+70u6wlc9oME5ws3Da+OYf7UprQ=";
+    hash = "sha256-zAyklIIm6jAhFmaBu3BEysLfGEwB34rpYztZaJEQtYg=";
   };
 
-  cargoHash = "sha256-trO/NGNC5Kz76ua1RxBqfjNoXaQqikgPNyGnD7f/FXM=";
+  cargoHash = "sha256-fXrw753Hn4fbeX6+GRoH9MKrH0udjxnBK7AVCHnqIcs=";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
-  buildInputs = [ zlib ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
+  buildInputs = [ zlib ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = lib.optional gitSupport "git";

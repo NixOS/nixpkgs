@@ -16,7 +16,6 @@
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
-, clang-tools-extra_src ? null
 , devExtraCmakeFlags ? []
 }:
 
@@ -38,8 +37,7 @@ let
 
     src = src';
 
-    sourceRoot = if lib.versionOlder release_version "13" then null
-      else "${src.name}/${pname}";
+    sourceRoot = "${src.name}/${pname}";
 
     nativeBuildInputs = [ cmake ]
       ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
@@ -72,22 +70,19 @@ let
       # `clang-pseudo-gen`: https://github.com/llvm/llvm-project/commit/cd2292ef824591cc34cc299910a3098545c840c7
       "-DCLANG_TIDY_CONFUSABLE_CHARS_GEN=${buildLlvmTools.libclang.dev}/bin/clang-tidy-confusable-chars-gen"
       "-DCLANG_PSEUDO_GEN=${buildLlvmTools.libclang.dev}/bin/clang-pseudo-gen"
-    ]) ++ lib.optionals (stdenv.targetPlatform.useLLVM or false) [
-      "-DCLANG_DEFAULT_CXX_STDLIB=ON"
-    ] ++ lib.optional (lib.versionAtLeast release_version "20") "-DLLVM_DIR=${libllvm.dev}/lib/cmake/llvm"
+    ]) ++ lib.optional (lib.versionAtLeast release_version "20") "-DLLVM_DIR=${libllvm.dev}/lib/cmake/llvm"
       ++ devExtraCmakeFlags;
 
     postPatch = ''
       # Make sure clang passes the correct location of libLTO to ld64
       substituteInPlace lib/Driver/ToolChains/Darwin.cpp \
         --replace-fail 'StringRef P = llvm::sys::path::parent_path(D.Dir);' 'StringRef P = "${lib.getLib libllvm}";'
-    '' + (if lib.versionOlder release_version "13" then ''
-      sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
-             -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' \
-             lib/Driver/ToolChains/*.cpp
-    '' else ''
       (cd tools && ln -s ../../clang-tools-extra extra)
-    '') + lib.optionalString stdenv.hostPlatform.isMusl ''
+    '' + lib.optionalString (lib.versionOlder release_version "13") ''
+      substituteInPlace tools/extra/clangd/quality/CompletionModel.cmake \
+        --replace ' ''${CMAKE_SOURCE_DIR}/../clang-tools-extra' ' ''${CMAKE_SOURCE_DIR}/tools/extra'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isMusl ''
       sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
     '';
 
@@ -213,18 +208,7 @@ let
     '';
   } else {
     ninjaFlags = [ "docs-clang-man" ];
-  })) // (lib.optionalAttrs (clang-tools-extra_src != null) { inherit clang-tools-extra_src; })
-    // (lib.optionalAttrs (lib.versionOlder release_version "13") {
-      unpackPhase = ''
-        unpackFile $src
-        mv clang-* clang
-        sourceRoot=$PWD/clang
-        unpackFile ${clang-tools-extra_src}
-        mv clang-tools-extra-* $sourceRoot/tools/extra
-        substituteInPlace $sourceRoot/tools/extra/clangd/quality/CompletionModel.cmake \
-          --replace ' ''${CMAKE_SOURCE_DIR}/../clang-tools-extra' ' ''${CMAKE_SOURCE_DIR}/tools/extra'
-      '';
-    })
+  }))
   // (lib.optionalAttrs (lib.versionAtLeast release_version "15") {
     env = lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform && !stdenv.hostPlatform.useLLVM) {
       # The following warning is triggered with (at least) gcc >=

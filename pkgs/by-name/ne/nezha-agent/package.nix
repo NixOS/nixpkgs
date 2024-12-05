@@ -3,22 +3,21 @@
   buildGoModule,
   stdenv,
   fetchFromGitHub,
-  nezha-agent,
   versionCheckHook,
-  testers,
+  nix-update-script,
 }:
 buildGoModule rec {
   pname = "nezha-agent";
-  version = "0.20.2";
+  version = "0.20.5";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "agent";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BM3FhCf9zfccC2xC/Fhz2/andZmPYsJojMRUA3M9NOQ=";
+    hash = "sha256-CVE1c0LLheGlH8oMWQWs6fox7mlHc5Y2O9XQ6kqXAwI=";
   };
 
-  vendorHash = "sha256-q6/265vVg6jCnDvs825nni8QFHkJpQz4xxC9MlJH2do=";
+  vendorHash = "sha256-ytFsTHl6kVwmqCabaMDxxijszY3jzWWUIZKBCebPMkI=";
 
   ldflags = [
     "-s"
@@ -55,6 +54,10 @@ buildGoModule rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Agent of Nezha Monitoring";

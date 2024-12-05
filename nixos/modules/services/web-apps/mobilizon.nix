@@ -52,7 +52,7 @@ let
   dbUser = if repoSettings.username != null then repoSettings.username else "mobilizon";
 
   postgresql = config.services.postgresql.package;
-  postgresqlSocketDir = "/var/run/postgresql";
+  postgresqlSocketDir = "/run/postgresql";
 
   secretEnvFile = "/var/lib/mobilizon/secret-env.sh";
 in
@@ -383,7 +383,7 @@ in
           ensureDBOwnership = false;
         }
       ];
-      extraPlugins = ps: with ps; [ postgis ];
+      extensions = ps: with ps; [ postgis ];
     };
 
     # Nginx config taken from support/nginx/mobilizon-release.conf

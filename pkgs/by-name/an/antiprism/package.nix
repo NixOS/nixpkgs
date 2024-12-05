@@ -1,24 +1,33 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libX11
-, libGL
-, libGLU
-, libglut }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libX11,
+  libGL,
+  libGLU,
+  libglut,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "antiprism";
-  version = "0.30";
+  version = "0.32";
 
   src = fetchFromGitHub {
     owner = "antiprism";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-dD3MH+KectuuKOYF7bqWtGsBo5zz+UMyY/io1tgXbgU=";
+    repo = "antiprism";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-0FkaIsZixYHP45H0gytnzlpRvNd8mMYjW22w15z3RH8=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libX11 libGLU libGL libglut ];
+
+  buildInputs = [
+    libX11
+    libGLU
+    libGL
+    libglut
+  ];
 
   meta = with lib; {
     homepage = "https://www.antiprism.com";
@@ -26,4 +35,4 @@ stdenv.mkDerivation rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ AndersonTorres ];
   };
-}
+})

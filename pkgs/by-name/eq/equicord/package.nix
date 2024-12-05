@@ -9,7 +9,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "equicord";
-  version = "1.10.4"; # from package.json
+  version = "1.10.6"; # from package.json
 
   src = fetchFromGitHub {
     owner = "Equicord";

@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "3.4.4";
+  version = "3.6.0";
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-KRxncl827ZDqQ+//JQZLacWi0ZgUiEd8BcSBo7Swxao=";
+    sha256 = "sha256-YpWfeR6OhEL4wTztrIxJGdePkSDVu1MBvmel5TMYtKM=";
   };
 
   depsBuildBuild = [

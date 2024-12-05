@@ -5,17 +5,18 @@
   glibcLocales,
   python3,
   fetchPypi,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "devpi-client";
-  version = "7.1.0";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "devpi_client";
+    pname = "devpi-client";
     inherit version;
-    hash = "sha256-NwbhrojxOJSpDvMk0MbAGCbjmS8z2g1ynW6zzgVvy/M=";
+    hash = "sha256-wUM2hFjDh4unvuah2bQY4uZZVxo4VmFPWNdriigmnXs=";
   };
 
   build-system = with python3.pkgs; [
@@ -65,6 +66,8 @@ python3.pkgs.buildPythonApplication rec {
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "devpi" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Client for devpi, a pypi index server and packaging meta tool";

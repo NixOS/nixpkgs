@@ -118,7 +118,6 @@ let
       python3Packages = {
         boxx = linux;
         bpycv = linux;
-        caffe = linux;
         catboost = linux;
         chainer = linux;
         cupy = linux;

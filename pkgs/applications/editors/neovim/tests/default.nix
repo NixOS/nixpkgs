@@ -55,9 +55,15 @@ let
   nvim-with-luasnip = wrapNeovim2 "-with-luasnip" (makeNeovimConfig {
     plugins = [ {
         plugin = vimPlugins.luasnip;
-
       }
     ];
+  });
+
+  # build should fail with a wrong
+  nvim-run-failing-check = (wrapNeovimUnstable neovim-unwrapped {
+    luaRcContent = "this is an invalid lua statement to break the build";
+  }).overrideAttrs({
+    doCheck = true;
   });
 
   nvimAutoDisableWrap = makeNeovimConfig { };
@@ -74,7 +80,12 @@ let
     sha256 = "1ykcvyx82nhdq167kbnpgwkgjib8ii7c92y3427v986n2s5lsskc";
   };
 
-  # neovim-drv must be a wrapped neovim
+  /* neovim-drv must be a wrapped neovim
+    - exposes lua config in $luarcGeneric
+    - exposes vim config in $vimrcGeneric
+
+  */
+
   runTest = neovim-drv: buildCommand:
     runCommandLocal "test-${neovim-drv.name}" ({
       nativeBuildInputs = [ ];
@@ -95,6 +106,9 @@ in
   pkgs.recurseIntoAttrs (rec {
 
   inherit nmt;
+
+  # Disabled because of https://github.com/NixOS/nixpkgs/pull/352727
+  # failed_check = pkgs.testers.testBuildFailure nvim-run-failing-check;
 
   vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
 
@@ -154,6 +168,13 @@ in
   run_nvim_with_plug = runTest nvim_with_plug ''
     ${nvim_with_plug}/bin/nvim -V3log.txt -i NONE -c 'color base16-tomorrow-night'  +quit! -e
   '';
+
+  nvim_with_autoconfigure = pkgs.neovim.overrideAttrs(oa: {
+    plugins = [ vimPlugins.unicode-vim ];
+    autoconfigure = true;
+    # legacy wrapper sets it to false
+    wrapRc = true;
+  });
 
   nvim_with_ftplugin = let
     # this plugin checks that it's ftplugin/vim.tex is loaded before $VIMRUNTIME/ftplugin/vim.tex
@@ -314,6 +335,12 @@ in
   '';
 
   inherit nvim-with-luasnip;
+
+  autoconfigure = runTest nvim_with_autoconfigure ''
+      assertFileContains \
+        "$luarc" \
+        '${vimPlugins.unicode-vim.passthru.initLua}'
+  '';
 
   # check that bringing in one plugin with lua deps makes those deps visible from wrapper
   # for instance luasnip has a dependency on jsregexp

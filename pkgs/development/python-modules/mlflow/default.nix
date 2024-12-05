@@ -70,19 +70,30 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.16.2";
+  version = "2.17.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7W1gpVgJSN/iXoW987eCHfcOeE3D/ZJ2W/eilDdzOww=";
+    hash = "sha256-s3t6RAJh129d5XJKtMNxS0wgGO4mKbAfMCXDBXEKBxM=";
   };
 
-  build-system = [
-    setuptools
+  # Remove currently broken dependency `shap`, a model explainability package.
+  # This seems quite unprincipled especially with tests not being enabled,
+  # but not mlflow has a 'skinny' install option which does not require `shap`.
+  pythonRemoveDeps = [ "shap" ];
+  pythonRelaxDeps = [
+    "gunicorn"
+    "importlib-metadata"
+    "packaging"
+    "protobuf"
+    "pytz"
+    "pyarrow"
   ];
+
+  build-system = [ setuptools ];
 
   dependencies = [
     alembic

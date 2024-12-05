@@ -21,7 +21,7 @@ Rendered documentation:
 - [Unstable (from master)](https://nixos.org/manual/nixpkgs/unstable/)
 - [Stable (from latest release)](https://nixos.org/manual/nixpkgs/stable/)
 
-The rendering tool is [nixos-render-docs](../pkgs/tools/nix/nixos-render-docs/src/nixos_render_docs), sometimes abbreviated `nrd`.
+The rendering tool is [nixos-render-docs](../pkgs/by-name/ni/nixos-render-docs), sometimes abbreviated `nrd`.
 
 ## Contributing to this documentation
 
@@ -41,6 +41,12 @@ It is a daemon, that:
 1. watches the manual's source for changes and when they occur — rebuilds
 2. HTTP serves the manual, injecting a script that triggers reload on changes
 3. opens the manual in the default browser
+
+### Testing redirects
+
+Once you have a successful build, you can open the relevant HTML (path mentioned above) in a browser along with the anchor, and observe the redirection.
+
+Note that if you already loaded the page and *then* input the anchor, you will need to perform a reload. This is because browsers do not re-run client JS code when only the anchor has changed.
 
 ## Syntax
 

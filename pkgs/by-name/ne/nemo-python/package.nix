@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo-python";
-  version = "6.2.0";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo-extensions";
     rev = version;
-    hash = "sha256-qghGgd+OWYiXvcGUfgiQT6rR4mJPAOfOtYB3lWLg4iA=";
+    hash = "sha256-39hWA4SNuEeaPA6D5mWMHjJDs4hYK7/ZdPkTyskvm5Y=";
   };
 
   sourceRoot = "${src.name}/nemo-python";

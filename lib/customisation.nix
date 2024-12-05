@@ -543,10 +543,6 @@ rec {
           newScope = scope: newScope (self // scope);
           callPackage = self.newScope {};
           overrideScope = g: makeScope newScope (extends g f);
-          # Remove after 24.11 is released.
-          overrideScope' = g: warnIf (isInOldestRelease 2311)
-            "`overrideScope'` (from `lib.makeScope`) has been renamed to `overrideScope`."
-            (makeScope newScope (extends g f));
           packages = f;
         };
     in self;

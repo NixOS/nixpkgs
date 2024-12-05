@@ -10,8 +10,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pythinqconnect";
-  version = "0.9.7-unstable-2024-09-09";
+  pname = "thinqconnect";
+  version = "1.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,9 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thinq-connect";
     repo = "pythinqconnect";
-    # https://github.com/thinq-connect/pythinqconnect/issues/1
-    rev = "39d535a2a5d1067a110eea37ae92002d0793b7e9";
-    hash = "sha256-+nQAUqg5rB2eJgPBJJR8NsQ1O2Wb4UsbBQVPir1jyAU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Y/L/PhTBTUF8INqLgIi1llRrticlGPb8F/sPq3XWxN4=";
   };
 
   build-system = [ setuptools ];

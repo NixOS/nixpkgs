@@ -69,9 +69,7 @@ in stdenv.mkDerivation (rec {
     expat
     stdenv.cc.cc
   ];
-  runtimeDependencies = [ libglvnd stdenv.cc.cc.lib (lib.getLib udev) libnotify libappindicator-gtk3 ];
-
-  unpackPhase = "dpkg-deb -x $src .";
+  runtimeDependencies = [ libglvnd (lib.getLib stdenv.cc.cc) (lib.getLib udev) libnotify libappindicator-gtk3 ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -91,7 +89,7 @@ in stdenv.mkDerivation (rec {
     wrapProgramShell $out/opt/${name}/${pname} \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDependencies}" \
       --suffix PATH : ${xdg-utils}/bin \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       "''${gappsWrapperArgs[@]}"
   '';
 } // cleanedArgs)

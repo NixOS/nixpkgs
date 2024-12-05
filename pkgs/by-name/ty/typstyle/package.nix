@@ -2,48 +2,23 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  pkg-config,
-  libgit2,
-  zlib,
-  stdenv,
-  darwin,
   nix-update-script,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "typstyle";
-  version = "0.12.0";
+  version = "0.12.6";
 
   src = fetchFromGitHub {
     owner = "Enter-tainer";
     repo = "typstyle";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jrhxOtaawZ2vCiK8BQ9G09HTC5F6cnEK/Ji567xYfXw=";
+    hash = "sha256-g7GudDxmTq7dRjrVrUAxJXaduQbX/g0By+hNhzicn+g=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "reflexo-0.5.0-rc7" = "sha256-XjzHo9HprI1FVPDwNQ0Gw9iTXspo6PUsxz3BOd6qkL0=";
-    };
-  };
-
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
-  buildInputs =
-    [
-      libgit2
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-e9//IvqACYErcxC7s4+PGyw6S+4xtrbfu1io0X4iR9k=";
 
   # Disabling tests requiring network access
   checkFlags = [

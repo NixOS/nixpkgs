@@ -74,7 +74,7 @@
     }
     {
       name = "customisation";
-      description = "Functions to customise (derivation-related) functions, derivatons, or attribute sets";
+      description = "Functions to customise (derivation-related) functions, derivations, or attribute sets";
     }
     {
       name = "meta";

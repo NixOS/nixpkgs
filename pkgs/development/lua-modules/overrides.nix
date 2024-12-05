@@ -302,6 +302,12 @@ in
     ];
   });
 
+  luacheck = prev.luacheck.overrideAttrs (oa: {
+    meta = oa.meta // {
+      mainProgram = "luacheck";
+    };
+  });
+
   lua-curl = prev.lua-curl.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
       curl.dev
@@ -343,9 +349,8 @@ in
 
     luarocksConfig = lib.recursiveUpdate oa.luarocksConfig {
       variables = {
-        # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-        MYSQL_INCDIR = "${libmysqlclient.dev}/include/mysql";
-        MYSQL_LIBDIR = "${libmysqlclient}/lib/mysql";
+        MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/";
+        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib/";
       };
     };
     buildInputs = oa.buildInputs ++ [
@@ -415,11 +420,17 @@ in
     ];
   });
 
-  luaprompt = prev.luaprompt.overrideAttrs (_: {
+  luaprompt = prev.luaprompt.overrideAttrs (oa: {
     externalDeps = [
       { name = "READLINE"; dep = readline; }
       { name = "HISTORY"; dep = readline; }
     ];
+
+    nativeBuildInputs = oa.nativeBuildInputs ++ [ installShellFiles ];
+
+    postInstall = ''
+      installManPage luap.1
+    '';
   });
 
   # As a nix user, use this derivation instead of "luarocks_bootstrap"
@@ -555,7 +566,7 @@ in
   });
 
   neotest  = prev.neotest.overrideAttrs(oa: {
-    doCheck = stdenv.isLinux;
+    doCheck = stdenv.hostPlatform.isLinux;
     nativeCheckInputs = oa.nativeCheckInputs ++ [
       final.nlua final.busted neovim-unwrapped
     ];
@@ -831,7 +842,7 @@ in
 
     cargoDeps = rustPlatform.fetchCargoTarball {
       src = oa.src;
-      hash = "sha256-2WN5RoM1G2SE6H3g5pmEQvOoSCoaw3xMG8cDdfU2DAo=";
+      hash = "sha256-lguGj8fDqztrvqvEYVcJLmiuxPDaCpXU8aztInKjF+E=";
     };
 
     NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin
@@ -853,6 +864,12 @@ in
     in oa.propagatedBuildInputs ++ [
       lua.pkgs.luarocks-build-treesitter-parser-cpp
     ];
+  });
+
+  tl = prev.tl.overrideAttrs ({
+    preConfigure = ''
+      rm luarocks.lock
+    '';
   });
 
   vstruct = prev.vstruct.overrideAttrs (_: {

@@ -7,7 +7,6 @@
   python3,
   makeWrapper,
   writeScriptBin,
-  darwin,
   which,
   nix-update-script,
   versionCheckHook,
@@ -15,21 +14,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pylyzer";
-  version = "0.0.67";
+  version = "0.0.71";
 
   src = fetchFromGitHub {
     owner = "mtshiba";
     repo = "pylyzer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UMNyztdcFr88wOpRMBtLigGJcxR+0uScN+8i0+WfeYU=";
+    hash = "sha256-CzmfDOEh+3kUIl8dWYcxXH+6o+6zea/8hzZ09FaT8sw=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "rustpython-ast-0.4.0" = "sha256-kMUuqOVFSvvSHOeiYMjWdsLnDu12RyQld3qtTyd5tAM=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ZX3ql8GkgDLWFc3M1zIAu4QOYtZ/ryd1rrctkHpYmiU=";
 
   nativeBuildInputs = [
     git
@@ -39,10 +34,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ];
 
   preBuild = ''
-    export HOME=$TMPDIR
+    export HOME=$(mktemp -d)
   '';
 
   postInstall = ''
@@ -52,11 +47,17 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [ which ];
 
-  checkFlags = [
-    # this test causes stack overflow
-    # > thread 'exec_import' has overflowed its stack
-    "--skip=exec_import"
-  ];
+  checkFlags =
+    [
+      # this test causes stack overflow
+      # > thread 'exec_import' has overflowed its stack
+      "--skip=exec_import"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      # Dict({Str..Obj: Int}) does not implement Iterable(Str..Obj..Obj) and Indexable({"a"}..Obj, Int)
+      # https://github.com/mtshiba/pylyzer/issues/114
+      "--skip=exec_casting"
+    ];
 
   postFixup = ''
     wrapProgram $out/bin/pylyzer --set ERG_PATH $out/lib/erg

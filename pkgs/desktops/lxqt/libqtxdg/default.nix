@@ -7,7 +7,7 @@
 , lxqt-build-tools
 , wrapQtAppsHook
 , gitUpdater
-, version ? "4.0.1"
+, version ? "4.1.0"
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = {
       "3.12.0" = "sha256-y+3noaHubZnwUUs8vbMVvZPk+6Fhv37QXUb//reedCU=";
-      "4.0.1" = "sha256-h8uHIB0KuSHQVHI61h5BmpvpJHumloHMKN3GabH66EM=";
+      "4.1.0" = "sha256-Efn08a8MkR459Ww0WiEb5GXKgQzJwKupIdL2TySpivE=";
     }."${version}";
   };
 

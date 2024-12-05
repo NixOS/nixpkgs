@@ -74,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     "installedTests"
   ];
 
+  separateDebugInfo = true;
+
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
     hash = "sha256-a73HkIEnNQrYWkpH1wKSyi9MRul3sysf0jHCpxnYIc0=";
@@ -263,6 +265,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/flatpak/flatpak/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "flatpak";
     platforms = lib.platforms.linux;
   };
 })

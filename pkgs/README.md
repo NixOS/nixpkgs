@@ -75,7 +75,7 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
    - GNU cpio: [`pkgs/tools/archivers/cpio/default.nix`](tools/archivers/cpio/default.nix). Also a simple package. The generic builder in `stdenv` does everything for you. It has no dependencies beyond `stdenv`.
 
-   - GNU Multiple Precision arithmetic library (GMP): [`pkgs/development/libraries/gmp/5.1.x.nix`](development/libraries/gmp/5.1.x.nix). Also done by the generic builder, but has a dependency on `m4`.
+   - GNU Multiple Precision arithmetic library (GMP): [`pkgs/development/libraries/gmp`](development/libraries/gmp). Also done by the generic builder, but has a dependency on `m4`.
 
    - Pan, a GTK-based newsreader: [`pkgs/applications/networking/newsreaders/pan/default.nix`](applications/networking/newsreaders/pan/default.nix). Has an optional dependency on `gtkspell`, which is only built if `spellCheck` is `true`.
 
@@ -492,7 +492,9 @@ Examples going from bad to best practices:
 Sometimes, changes are needed to the source to allow building a derivation in nixpkgs, or to get earlier access to an upstream fix or improvement.
 When using the `patches` parameter to `mkDerivation`, make sure the patch name clearly describes the reason for the patch, or add a comment.
 
-Patches already merged upstream or published elsewhere should be retrieved using `fetchpatch`.
+### Fetching patches
+
+In the interest of keeping our maintenance burden and the size of Nixpkgs to a minimum, patches already merged upstream or published elsewhere _should_ be retrieved using `fetchpatch`:
 
 ```nix
 {
@@ -506,15 +508,22 @@ Patches already merged upstream or published elsewhere should be retrieved using
 }
 ```
 
-Otherwise, you can add a `.patch` file to the `nixpkgs` repository.
-In the interest of keeping our maintenance burden and the size of nixpkgs to a minimum, only do this for patches that are unique to `nixpkgs` or that have been proposed upstream but are not merged yet, cannot be easily fetched or have a high chance to disappear in the future due to unstable or unreliable URLs.
-The latter avoids link rot when the upstream abandons, squashes or rebases their change, in which case the commit may get garbage-collected.
-
 If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [the `fetchpatch` reference](https://nixos.org/manual/nixpkgs/unstable/#fetchpatch) for details.
+
+### Vendoring patches
+
+In the following cases, a `.patch` file _should_ be added to Nixpkgs repository, instead of retrieved:
+
+- solves problems unique to packaging in Nixpkgs
+- is already proposed upstream but not merged yet
+- cannot be fetched easily
+- has a high chance to disappear in the future due to unstable or unreliable URLs
+
+The latter avoids link rot when the upstream abandons, squashes or rebases their change, in which case the commit may get garbage-collected.
 
 ```nix
 {
-  patches = [ ./0001-changes.patch ];
+  patches = [ ./0001-add-missing-include.patch ];
 }
 ```
 
@@ -628,8 +637,8 @@ buildGoModule rec {
 }
 ```
 
-Any derivaton can be specified as a test, even if it's in a different file.
-Such a derivaton that implements a test can depend on the package under test, even in the presence of `overrideAttrs`.
+Any derivation can be specified as a test, even if it's in a different file.
+Such a derivation that implements a test can depend on the package under test, even in the presence of `overrideAttrs`.
 
 In the following example, `(my-package.overrideAttrs f).passthru.tests` will work as expected, as long as the definition of `tests` does not rely on the original `my-package` or overrides all occurrences of `my-package`:
 

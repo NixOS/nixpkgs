@@ -11,7 +11,7 @@
 , tcl ? null, tk ? null, tclPackages, libX11 ? null, x11Support ? false
 , zlib
 , self
-, configd, coreutils
+, coreutils
 , autoreconfHook
 , python-setup-hook
 # Some proprietary libs assume UCS2 unicode, especially on darwin :(
@@ -140,10 +140,6 @@ let
     ] ++ lib.optionals (x11Support && stdenv.hostPlatform.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
 
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Fix darwin build https://bugs.python.org/issue34027
-      ../3.7/darwin-libutil.patch
-
     ] ++ lib.optionals stdenv.hostPlatform.isLinux [
 
       # Disable the use of ldconfig in ctypes.util.find_library (since
@@ -239,8 +235,7 @@ let
   buildInputs =
     lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
     [ bzip2 openssl zlib libffi expat db gdbm ncurses sqlite readline ]
-    ++ lib.optionals x11Support [ tcl tk libX11 ]
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && configd != null) configd;
+    ++ lib.optionals x11Support [ tcl tk libX11 ];
   nativeBuildInputs =
     [ autoreconfHook ]
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)

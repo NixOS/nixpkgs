@@ -72,11 +72,13 @@ in
             inherit description password;
           };
 
-          services.desktopManager.lomiri.enable = lib.mkForce true;
-          services.displayManager.defaultSession = lib.mkForce "lomiri";
-
-          # Help with OCR
-          fonts.packages = [ pkgs.inconsolata ];
+          services.xserver.enable = true;
+          services.xserver.windowManager.icewm.enable = true;
+          services.xserver.displayManager.lightdm = {
+            enable = true;
+            greeters.lomiri.enable = true;
+          };
+          services.displayManager.defaultSession = lib.mkForce "none+icewm";
         };
 
       enableOCR = true;
@@ -110,13 +112,8 @@ in
 
               # Login
               machine.send_chars("${password}\n")
-              machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
-
-              # Output rendering from Lomiri has started when it starts printing performance diagnostics
-              machine.wait_for_console_text("Last frame took")
-              # Look for datetime's clock, one of the last elements to load
-              wait_for_text(r"(AM|PM)")
-              machine.screenshot("lomiri_launched")
+              machine.wait_for_x()
+              machine.screenshot("session_launched")
         '';
     }
   );

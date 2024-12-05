@@ -274,6 +274,7 @@ let
     };
   };
 
+  # https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
   promTypes.scrape_config = types.submodule {
     options = {
       authorization = mkOption {
@@ -297,6 +298,15 @@ let
       scrape_timeout = mkOpt types.str ''
         Per-target timeout when scraping this job. Defaults to the
         globally configured default.
+      '';
+
+      scrape_protocols = mkOpt (types.listOf types.str) ''
+        The protocols to negotiate during a scrape with the client.
+      '';
+
+      fallback_scrape_protocol = mkOpt types.str ''
+        Fallback protocol to use if a scrape returns blank, unparseable, or otherwise
+        invalid Content-Type.
       '';
 
       metrics_path = mkDefOpt types.str "/metrics" ''
@@ -1834,8 +1844,6 @@ in
         StateDirectory = cfg.stateDir;
         StateDirectoryMode = "0700";
         # Hardening
-        AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
-        CapabilityBoundingSet = if (cfg.port < 1024) then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
         DeviceAllow = [ "/dev/null rw" ];
         DevicePolicy = "strict";
         LockPersonality = true;

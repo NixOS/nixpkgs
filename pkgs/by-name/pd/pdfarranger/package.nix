@@ -22,9 +22,9 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-94qziqJaKW8/L/6+U1yojxdG8BmeAStn+qbfGemTrVA=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 ] ++ lib.optionals stdenv.isDarwin [ gettext ];
+  nativeBuildInputs = [ wrapGAppsHook3 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     LINTL="${lib.getLib gettext}/lib/libintl.8.dylib"
     substituteInPlace pdfarranger/pdfarranger.py --replace-fail \
       "return 'libintl.8.dylib'" \

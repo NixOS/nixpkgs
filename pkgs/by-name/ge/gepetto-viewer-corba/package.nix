@@ -14,26 +14,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gepetto-viewer-corba";
-  version = "5.8.0";
-  pyproject = false; # CMake
+  version = "5.8.1";
 
   src = fetchFromGitHub {
     owner = "gepetto";
     repo = "gepetto-viewer-corba";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/bpAs4ca/+QjWEGuHhuDT8Ts2Ggg+DZWETZfjho6E0w=";
+    hash = "sha256-C7xrODoKCcyLPZr0+zZSZ/o5i5EeNsxCPXp2WrP28A4=";
   };
 
   outputs = [
     "out"
     "doc"
   ];
-
-  postPatch = ''
-    substituteInPlace src/CMakeLists.txt \
-      --replace-fail "ARGUMENTS $" "ARGUMENTS -p${python3Packages.omniorbpy}/${python3Packages.python.sitePackages} $" \
-      --replace-fail '$'{CMAKE_SOURCE_DIR}/cmake '$'{JRL_CMAKE_MODULES}
-  '';
 
   buildInputs = [ libsForQt5.qtbase ];
 

@@ -111,6 +111,7 @@ in {
   aesmd = runTestOn ["x86_64-linux"] ./aesmd.nix;
   agate = runTest ./web-servers/agate.nix;
   agda = handleTest ./agda.nix {};
+  agorakit = runTest ./web-apps/agorakit.nix;
   airsonic = handleTest ./airsonic.nix {};
   akkoma = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./akkoma.nix {};
   akkoma-confined = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./akkoma.nix { confined = true; };
@@ -118,6 +119,7 @@ in {
   alloy = handleTest ./alloy.nix {};
   allTerminfo = handleTest ./all-terminfo.nix {};
   alps = handleTest ./alps.nix {};
+  amazon-cloudwatch-agent = handleTest ./amazon-cloudwatch-agent.nix {};
   amazon-init-shell = handleTest ./amazon-init-shell.nix {};
   amazon-ssm-agent = handleTest ./amazon-ssm-agent.nix {};
   amd-sev = runTest ./amd-sev.nix;
@@ -182,6 +184,7 @@ in {
   cagebreak = handleTest ./cagebreak.nix {};
   calibre-web = handleTest ./calibre-web.nix {};
   calibre-server = handleTest ./calibre-server.nix {};
+  canaille = handleTest ./canaille.nix {};
   castopod = handleTest ./castopod.nix {};
   cassandra_3_0 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_0; };
   cassandra_3_11 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_3_11; };
@@ -283,6 +286,7 @@ in {
   drawterm = discoverTests (import ./drawterm.nix);
   drbd = handleTest ./drbd.nix {};
   druid = handleTestOn [ "x86_64-linux" ] ./druid {};
+  drbd-driver = handleTest ./drbd-driver.nix {};
   dublin-traceroute = handleTest ./dublin-traceroute.nix {};
   earlyoom = handleTestOn ["x86_64-linux"] ./earlyoom.nix {};
   early-mount-options = handleTest ./early-mount-options.nix {};
@@ -383,6 +387,7 @@ in {
   gitolite = handleTest ./gitolite.nix {};
   gitolite-fcgiwrap = handleTest ./gitolite-fcgiwrap.nix {};
   glance = runTest ./glance.nix;
+  glances = runTest ./glances.nix;
   glusterfs = handleTest ./glusterfs.nix {};
   gnome = handleTest ./gnome.nix {};
   gnome-extensions = handleTest ./gnome-extensions.nix {};
@@ -512,6 +517,7 @@ in {
   keycloak = discoverTests (import ./keycloak.nix);
   keyd = handleTest ./keyd.nix {};
   keymap = handleTest ./keymap.nix {};
+  kimai = handleTest ./kimai.nix {};
   knot = handleTest ./knot.nix {};
   komga = handleTest ./komga.nix {};
   krb5 = discoverTests (import ./krb5);
@@ -614,6 +620,7 @@ in {
   mongodb = handleTest ./mongodb.nix {};
   moodle = handleTest ./moodle.nix {};
   moonraker = handleTest ./moonraker.nix {};
+  mopidy = handleTest ./mopidy.nix {};
   morph-browser = handleTest ./morph-browser.nix { };
   morty = handleTest ./morty.nix {};
   mosquitto = handleTest ./mosquitto.nix {};
@@ -745,6 +752,7 @@ in {
   openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).userdata or {};
   opentabletdriver = handleTest ./opentabletdriver.nix {};
   opentelemetry-collector = handleTest ./opentelemetry-collector.nix {};
+  open-web-calendar = handleTest ./web-apps/open-web-calendar.nix {};
   ocsinventory-agent = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./ocsinventory-agent.nix {};
   owncast = handleTest ./owncast.nix {};
   outline = handleTest ./outline.nix {};
@@ -775,13 +783,10 @@ in {
   peering-manager = handleTest ./web-apps/peering-manager.nix {};
   peertube = handleTestOn ["x86_64-linux"] ./web-apps/peertube.nix {};
   peroxide = handleTest ./peroxide.nix {};
-  pg_anonymizer = handleTest ./pg_anonymizer.nix {};
   pgadmin4 = handleTest ./pgadmin4.nix {};
   pgbouncer = handleTest ./pgbouncer.nix {};
   pghero = runTest ./pghero.nix;
-  pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
-  pgvecto-rs = handleTest ./pgvecto-rs.nix {};
   phosh = handleTest ./phosh.nix {};
   photonvision = handleTest ./photonvision.nix {};
   photoprism = handleTest ./photoprism.nix {};
@@ -814,13 +819,7 @@ in {
   postfix = handleTest ./postfix.nix {};
   postfix-raise-smtpd-tls-security-level = handleTest ./postfix-raise-smtpd-tls-security-level.nix {};
   postfixadmin = handleTest ./postfixadmin.nix {};
-  postgis = handleTest ./postgis.nix {};
-  apache_datasketches = handleTest ./apache_datasketches.nix {};
-  postgresql = handleTest ./postgresql.nix {};
-  postgresql-jit = handleTest ./postgresql-jit.nix {};
-  postgresql-wal-receiver = handleTest ./postgresql-wal-receiver.nix {};
-  postgresql-tls-client-cert = handleTest ./postgresql-tls-client-cert.nix {};
-  postgresql-wal2json = handleTest ./postgresql-wal2json.nix {};
+  postgresql = handleTest ./postgresql {};
   powerdns = handleTest ./powerdns.nix {};
   powerdns-admin = handleTest ./powerdns-admin.nix {};
   power-profiles-daemon = handleTest ./power-profiles-daemon.nix {};
@@ -828,8 +827,10 @@ in {
   predictable-interface-names = handleTest ./predictable-interface-names.nix {};
   pretalx = runTest ./web-apps/pretalx.nix;
   pretix = runTest ./web-apps/pretix.nix;
-  printing-socket = handleTest ./printing.nix { socket = true; };
-  printing-service = handleTest ./printing.nix { socket = false; };
+  printing-socket = handleTest ./printing.nix { socket = true; listenTcp = true; };
+  printing-service = handleTest ./printing.nix { socket = false; listenTcp = true; };
+  printing-socket-notcp = handleTest ./printing.nix { socket = true; listenTcp = false; };
+  printing-service-notcp = handleTest ./printing.nix { socket = false; listenTcp = false; };
   private-gpt = handleTest ./private-gpt.nix {};
   privatebin = runTest ./privatebin.nix;
   privoxy = handleTest ./privoxy.nix {};
@@ -849,8 +850,8 @@ in {
   qemu-vm-volatile-root = runTest ./qemu-vm-volatile-root.nix;
   qemu-vm-external-disk-image = runTest ./qemu-vm-external-disk-image.nix;
   qemu-vm-store = runTest ./qemu-vm-store.nix;
-  qgis = handleTest ./qgis.nix { qgisPackage = pkgs.qgis; };
-  qgis-ltr = handleTest ./qgis.nix { qgisPackage = pkgs.qgis-ltr; };
+  qgis = handleTest ./qgis.nix { package = pkgs.qgis; };
+  qgis-ltr = handleTest ./qgis.nix { package = pkgs.qgis-ltr; };
   qownnotes = handleTest ./qownnotes.nix {};
   qtile = handleTestOn ["x86_64-linux" "aarch64-linux"] ./qtile/default.nix {};
   quake3 = handleTest ./quake3.nix {};
@@ -868,7 +869,7 @@ in {
   realm = handleTest ./realm.nix {};
   redis = handleTest ./redis.nix {};
   redlib = handleTest ./redlib.nix {};
-  redmine = handleTest ./redmine.nix {};
+  redmine = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./redmine.nix {};
   renovate = handleTest ./renovate.nix {};
   replace-dependencies = handleTest ./replace-dependencies {};
   restartByActivationScript = handleTest ./restart-by-activation-script.nix {};
@@ -877,6 +878,7 @@ in {
   retroarch = handleTest ./retroarch.nix {};
   rke2 = handleTestOn ["aarch64-linux" "x86_64-linux"] ./rke2 {};
   rkvm = handleTest ./rkvm {};
+  rmfakecloud = runTest ./rmfakecloud.nix;
   robustirc-bridge = handleTest ./robustirc-bridge.nix {};
   roundcube = handleTest ./roundcube.nix {};
   rosenpass = handleTest ./rosenpass.nix {};
@@ -904,6 +906,7 @@ in {
   seafile = handleTest ./seafile.nix {};
   searx = runTest ./searx.nix;
   seatd = handleTest ./seatd.nix {};
+  send = runTest ./send.nix;
   service-runner = handleTest ./service-runner.nix {};
   sftpgo = runTest ./sftpgo.nix;
   sfxr-qt = handleTest ./sfxr-qt.nix {};
@@ -957,6 +960,7 @@ in {
   swap-file-btrfs = handleTest ./swap-file-btrfs.nix {};
   swap-partition = handleTest ./swap-partition.nix {};
   swap-random-encryption = handleTest ./swap-random-encryption.nix {};
+  swapspace = handleTestOn ["aarch64-linux" "x86_64-linux"] ./swapspace.nix {};
   sway = handleTest ./sway.nix {};
   swayfx = handleTest ./swayfx.nix {};
   switchTest = handleTest ./switch-test.nix { ng = false; };
@@ -1043,8 +1047,8 @@ in {
   tiddlywiki = handleTest ./tiddlywiki.nix {};
   tigervnc = handleTest ./tigervnc.nix {};
   tika = runTest ./tika.nix;
-  timescaledb = handleTest ./timescaledb.nix {};
   timezone = handleTest ./timezone.nix {};
+  timidity = handleTestOn ["aarch64-linux" "x86_64-linux"] ./timidity {};
   tinc = handleTest ./tinc {};
   tinydns = handleTest ./tinydns.nix {};
   tinyproxy = handleTest ./tinyproxy.nix {};
@@ -1062,7 +1066,6 @@ in {
   trezord = handleTest ./trezord.nix {};
   trickster = handleTest ./trickster.nix {};
   trilium-server = handleTestOn ["x86_64-linux"] ./trilium-server.nix {};
-  tsja = handleTest ./tsja.nix {};
   tsm-client-gui = handleTest ./tsm-client-gui.nix {};
   ttyd = handleTest ./web-servers/ttyd.nix {};
   txredisapi = handleTest ./txredisapi.nix {};
@@ -1097,7 +1100,6 @@ in {
   uwsgi = handleTest ./uwsgi.nix {};
   v2ray = handleTest ./v2ray.nix {};
   varnish60 = handleTest ./varnish.nix { package = pkgs.varnish60; };
-  varnish74 = handleTest ./varnish.nix { package = pkgs.varnish74; };
   varnish75 = handleTest ./varnish.nix { package = pkgs.varnish75; };
   vault = handleTest ./vault.nix {};
   vault-agent = handleTest ./vault-agent.nix {};
@@ -1106,7 +1108,7 @@ in {
   vaultwarden = discoverTests (import ./vaultwarden.nix);
   vector = handleTest ./vector {};
   vengi-tools = handleTest ./vengi-tools.nix {};
-  victoriametrics = handleTest ./victoriametrics.nix {};
+  victoriametrics = handleTest ./victoriametrics {};
   vikunja = handleTest ./vikunja.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
   vscode-remote-ssh = handleTestOn ["x86_64-linux"] ./vscode-remote-ssh.nix {};

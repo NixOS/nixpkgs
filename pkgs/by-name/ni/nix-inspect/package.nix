@@ -9,12 +9,13 @@
   meson,
   ninja,
   stdenv,
+  fetchpatch,
 }: let
   src = fetchFromGitHub {
     owner = "bluskript";
     repo = "nix-inspect";
-    rev = "86f636b1e01579b3a63b2c778c21a818b00c3d1e";
-    hash = "sha256-G5Md4ghux4LBRkPE8vzLTUWxzlQ7s1xKxZ8i3ICWZU8=";
+    rev = "c55921e1d1cf980ff6351273fde6cedd5d8fa320";
+    hash = "sha256-Upz+fnWJjzt5WokjO/iaiPbqiwSrqpWjrpcFOqQ4p0E=";
   };
 
   workerPackage = stdenv.mkDerivation {
@@ -22,14 +23,24 @@
 
     pname = "nix-inspect-worker";
     version = "0.1.2";
-    sourceRoot = "${src.name}/worker";
+    postPatch = ''
+      cd worker
+    '';
 
     nativeBuildInputs = [meson ninja pkg-config];
+
+    # TODO: Remove this patch when this pull request is merged and released: https://github.com/bluskript/nix-inspect/pull/18
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/bluskript/nix-inspect/commit/e1e05883d42ce0c7029a3d69dce14ae9d057aae6.patch";
+        sha256 = "sha256-bHo+sRc9pICK0ccdiWLRNNvr8QjNCrlcwMvmUHznAtg=";
+      })
+    ];
 
     buildInputs = [
       boost
       nlohmann_json
-      nixVersions.nix_2_19.dev
+      nixVersions.nix_2_24.dev
     ];
 
     mesonBuildType = "release";

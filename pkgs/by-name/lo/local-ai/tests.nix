@@ -33,7 +33,10 @@ in
 
   health = testers.runNixOSTest {
     name = self.name + "-health";
-    nodes.machine = common-config;
+    nodes.machine = {
+      imports = [ common-config ];
+      virtualisation.memorySize = 2048;
+    };
     testScript =
       let
         port = "8080";
@@ -47,6 +50,8 @@ in
       '';
   };
 
+}
+// lib.optionalAttrs (!self.features.with_cublas) {
   # https://localai.io/features/embeddings/#bert-embeddings
   bert =
     let
@@ -73,7 +78,7 @@ in
       nodes.machine = {
         imports = [ common-config ];
         virtualisation.cores = 2;
-        virtualisation.memorySize = 2048;
+        virtualisation.memorySize = 4096;
         services.local-ai.models = models;
       };
       passthru = {

@@ -83,7 +83,6 @@ let
       license = lib.licenses.mit;
       mainProgram = "micro";
       maintainers = with lib.maintainers; [
-        AndersonTorres
         pbsds
       ];
     };

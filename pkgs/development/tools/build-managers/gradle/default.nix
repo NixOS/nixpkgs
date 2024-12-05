@@ -23,7 +23,11 @@ rec {
         "x86_64-darwin"
         "x86_64-linux"
         "x86_64-windows"
-      ]
+      ],
+
+      # Extra attributes to be merged into the resulting derivation's
+      # meta attribute.
+      meta ? {}
     }:
 
     { lib
@@ -108,7 +112,7 @@ rec {
         for variant in "" "-ncurses5" "-ncurses6"; do
           autoPatchelfInJar \
             $out/lib/gradle/lib/native-platform-linux-${arch}$variant-''${nativeVersion}.jar \
-            "${stdenv.cc.cc.lib}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ncurses5 ncurses6 ]}"
+            "${lib.getLib stdenv.cc.cc}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ncurses5 ncurses6 ]}"
         done
 
         # The file-events library _seems_ to follow the native-platform version, but
@@ -116,7 +120,7 @@ rec {
         fileEventsVersion="$(extractVersion file-events $out/lib/gradle/lib/file-events-*.jar)"
         autoPatchelfInJar \
           $out/lib/gradle/lib/file-events-linux-${arch}-''${fileEventsVersion}.jar \
-          "${stdenv.cc.cc.lib}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ]}"
+          "${lib.getLib stdenv.cc.cc}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ]}"
 
         # The scanner doesn't pick up the runtime dependency in the jar.
         # Manually add a reference where it will be found.
@@ -170,9 +174,9 @@ rec {
           binaryNativeCode
         ];
         license = licenses.asl20;
-        maintainers = with maintainers; [ lorenzleutgeb liff ];
+        maintainers = with maintainers; [ lorenzleutgeb liff ] ++ lib.teams.java.members;
         mainProgram = "gradle";
-      };
+      } // meta;
     });
 
   # NOTE: Default JDKs that are hardcoded below must be LTS versions
@@ -180,8 +184,8 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_8 = gen {
-    version = "8.10";
-    hash = "sha256-W5xes/n8LJSrrqV9kL14dHyhF927+WyFnTdBGBoSvyo=";
+    version = "8.10.2";
+    hash = "sha256-McVXE+QCM6gwOCfOtCykikcmegrUurkXcSMSHnFSTCY=";
     defaultJava = jdk21;
   };
 
@@ -189,12 +193,6 @@ rec {
     version = "7.6.4";
     hash = "sha256-vtHaM8yg9VerE2kcd/OLtnOIEZ5HlNET4FEDm4Cvm7E=";
     defaultJava = jdk17;
-  };
-
-  gradle_6 = gen {
-    version = "6.9.4";
-    hash = "sha256-PiQCKFON6fGHcqV06ZoLqVnoPW7zUQFDgazZYxeBOJo=";
-    defaultJava = jdk11;
   };
 
   wrapGradle = {

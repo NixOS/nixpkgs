@@ -611,17 +611,6 @@ dependencies = [
 
 [[package]]
 name = "config"
-version = "0.10.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "19b076e143e1d9538dde65da30f8481c2a6c44040edb8e02b9bf1351edb92ce3"
-dependencies = [
- "lazy_static",
- "nom 5.1.3",
- "serde 1.0.203",
-]
-
-[[package]]
-name = "config"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1b1b9d958c2b1368a663f05538fc1b5975adce1e19f435acceae987aceeeb369"
@@ -682,15 +671,6 @@ name = "crossbeam-channel"
 version = "0.5.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "33480d6946193aa8033910124896ca395333cae7e2d1113d1fef6c3272217df2"
-dependencies = [
- "crossbeam-utils",
-]
-
-[[package]]
-name = "crossbeam-queue"
-version = "0.3.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "df0346b5d5e76ac2fe4e327c5fd1118d6be7c51dfb18f9b7922923f287471e35"
 dependencies = [
  "crossbeam-utils",
 ]
@@ -778,14 +758,21 @@ dependencies = [
 
 [[package]]
 name = "deadpool"
-version = "0.7.0"
-source = "git+https://github.com/mozilla-services/deadpool?tag=deadpool-v0.7.0#4e041037f758186e62021021e130926d5302ebe8"
+version = "0.12.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6541a3916932fe57768d4be0b1ffb5ec7cbf74ca8c903fdfd5c0fe8aa958f0ed"
 dependencies = [
- "async-trait",
- "config 0.10.1",
- "crossbeam-queue",
+ "deadpool-runtime",
  "num_cpus",
- "serde 1.0.203",
+ "tokio",
+]
+
+[[package]]
+name = "deadpool-runtime"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "092966b41edc516079bdf31ec78a2e0588d1d0c08f78b91d8307215928642b2b"
+dependencies = [
  "tokio",
 ]
 
@@ -1630,7 +1617,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0c2a198fb6b0eada2a8df47933734e6d35d350665a33a3593d7164fa52c75c19"
 dependencies = [
  "cfg-if",
- "windows-targets 0.48.5",
+ "windows-targets 0.52.5",
 ]
 
 [[package]]
@@ -2458,8 +2445,7 @@ checksum = "61697e0a1c7e512e84a621326239844a24d8207b4669b41bc18b32ea5cbf988b"
 [[package]]
 name = "sentry"
 version = "0.34.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5484316556650182f03b43d4c746ce0e3e48074a21e2f51244b648b6542e1066"
+source = "git+https://github.com/getsentry/sentry-rust?rev=1b65b5c#1b65b5c99af975496880e7325218479e0037d097"
 dependencies = [
  "curl",
  "httpdate",
@@ -2473,8 +2459,7 @@ dependencies = [
 [[package]]
 name = "sentry-backtrace"
 version = "0.34.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "40aa225bb41e2ec9d7c90886834367f560efc1af028f1c5478a6cce6a59c463a"
+source = "git+https://github.com/getsentry/sentry-rust?rev=1b65b5c#1b65b5c99af975496880e7325218479e0037d097"
 dependencies = [
  "backtrace",
  "once_cell",
@@ -2485,8 +2470,7 @@ dependencies = [
 [[package]]
 name = "sentry-contexts"
 version = "0.34.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1a8dd746da3d16cb8c39751619cefd4fcdbd6df9610f3310fd646b55f6e39910"
+source = "git+https://github.com/getsentry/sentry-rust?rev=1b65b5c#1b65b5c99af975496880e7325218479e0037d097"
 dependencies = [
  "hostname",
  "libc",
@@ -2499,8 +2483,7 @@ dependencies = [
 [[package]]
 name = "sentry-core"
 version = "0.34.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "161283cfe8e99c8f6f236a402b9ccf726b201f365988b5bb637ebca0abbd4a30"
+source = "git+https://github.com/getsentry/sentry-rust?rev=1b65b5c#1b65b5c99af975496880e7325218479e0037d097"
 dependencies = [
  "once_cell",
  "rand",
@@ -2512,8 +2495,7 @@ dependencies = [
 [[package]]
 name = "sentry-debug-images"
 version = "0.34.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8fc6b25e945fcaa5e97c43faee0267eebda9f18d4b09a251775d8fef1086238a"
+source = "git+https://github.com/getsentry/sentry-rust?rev=1b65b5c#1b65b5c99af975496880e7325218479e0037d097"
 dependencies = [
  "findshlibs",
  "once_cell",
@@ -2523,8 +2505,7 @@ dependencies = [
 [[package]]
 name = "sentry-tracing"
 version = "0.34.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cd3c5faf2103cd01eeda779ea439b68c4ee15adcdb16600836e97feafab362ec"
+source = "git+https://github.com/getsentry/sentry-rust?rev=1b65b5c#1b65b5c99af975496880e7325218479e0037d097"
 dependencies = [
  "sentry-backtrace",
  "sentry-core",
@@ -2535,8 +2516,7 @@ dependencies = [
 [[package]]
 name = "sentry-types"
 version = "0.34.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5d68cdf6bc41b8ff3ae2a9c4671e97426dcdd154cc1d4b6b72813f285d6b163f"
+source = "git+https://github.com/getsentry/sentry-rust?rev=1b65b5c#1b65b5c99af975496880e7325218479e0037d097"
 dependencies = [
  "debugid",
  "hex",
@@ -2827,7 +2807,7 @@ checksum = "a7065abeca94b6a8a577f9bd45aa0867a2238b74e8eb67cf10d492bc39351394"
 
 [[package]]
 name = "syncserver"
-version = "0.17.9"
+version = "0.17.15"
 dependencies = [
  "actix-cors",
  "actix-http",
@@ -2882,7 +2862,7 @@ dependencies = [
 
 [[package]]
 name = "syncserver-common"
-version = "0.17.9"
+version = "0.17.15"
 dependencies = [
  "actix-web",
  "backtrace",
@@ -2902,7 +2882,7 @@ dependencies = [
 
 [[package]]
 name = "syncserver-db-common"
-version = "0.17.9"
+version = "0.17.15"
 dependencies = [
  "backtrace",
  "deadpool",
@@ -2916,9 +2896,9 @@ dependencies = [
 
 [[package]]
 name = "syncserver-settings"
-version = "0.17.9"
+version = "0.17.15"
 dependencies = [
- "config 0.11.0",
+ "config",
  "num_cpus",
  "serde 1.0.203",
  "slog-scope",
@@ -2930,7 +2910,7 @@ dependencies = [
 
 [[package]]
 name = "syncstorage-db"
-version = "0.17.9"
+version = "0.17.15"
 dependencies = [
  "async-trait",
  "cadence",
@@ -2953,7 +2933,7 @@ dependencies = [
 
 [[package]]
 name = "syncstorage-db-common"
-version = "0.17.9"
+version = "0.17.15"
 dependencies = [
  "async-trait",
  "backtrace",
@@ -2972,7 +2952,7 @@ dependencies = [
 
 [[package]]
 name = "syncstorage-mysql"
-version = "0.17.9"
+version = "0.17.15"
 dependencies = [
  "async-trait",
  "backtrace",
@@ -2995,7 +2975,7 @@ dependencies = [
 
 [[package]]
 name = "syncstorage-settings"
-version = "0.17.9"
+version = "0.17.15"
 dependencies = [
  "rand",
  "serde 1.0.203",
@@ -3005,7 +2985,7 @@ dependencies = [
 
 [[package]]
 name = "syncstorage-spanner"
-version = "0.17.9"
+version = "0.17.15"
 dependencies = [
  "async-trait",
  "backtrace",
@@ -3149,7 +3129,7 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokenserver-auth"
-version = "0.17.9"
+version = "0.17.15"
 dependencies = [
  "async-trait",
  "base64 0.22.1",
@@ -3176,7 +3156,7 @@ dependencies = [
 
 [[package]]
 name = "tokenserver-common"
-version = "0.17.9"
+version = "0.17.15"
 dependencies = [
  "actix-web",
  "backtrace",
@@ -3191,7 +3171,7 @@ dependencies = [
 
 [[package]]
 name = "tokenserver-db"
-version = "0.17.9"
+version = "0.17.15"
 dependencies = [
  "async-trait",
  "backtrace",
@@ -3216,7 +3196,7 @@ dependencies = [
 
 [[package]]
 name = "tokenserver-settings"
-version = "0.17.9"
+version = "0.17.15"
 dependencies = [
  "jsonwebtoken",
  "serde 1.0.203",

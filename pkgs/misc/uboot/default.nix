@@ -17,6 +17,7 @@
 , swig
 , which
 , python3
+, perl
 , armTrustedFirmwareAllwinner
 , armTrustedFirmwareAllwinnerH6
 , armTrustedFirmwareAllwinnerH616
@@ -88,6 +89,7 @@ let
       ]))
       swig
       which # for scripts/dtc-version.sh
+      perl # for oid build (secureboot)
     ] ++ lib.optionals (!crossTools) toolsDeps;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     buildInputs = lib.optionals crossTools toolsDeps;

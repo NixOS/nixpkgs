@@ -314,7 +314,7 @@ in
         binlog-ignore-db = [ "information_schema" "performance_schema" "mysql" ];
       })
       (lib.mkIf (!isMariaDB) {
-        plugin-load-add = "auth_socket.so";
+        plugin-load-add = [ "auth_socket.so" ];
       })
     ];
 
@@ -333,6 +333,12 @@ in
     environment.systemPackages = [ cfg.package ];
 
     environment.etc."my.cnf".source = cfg.configFile;
+
+    # The mysql_install_db binary will try to adjust the permissions, but fail to do so with a permission
+    # denied error in some circumstances. Setting the permissions manually with tmpfiles is a workaround.
+    systemd.tmpfiles.rules = [
+      "d ${cfg.dataDir} 0755 ${cfg.user} ${cfg.group} - -"
+    ];
 
     systemd.services.mysql = {
       description = "MySQL Server";

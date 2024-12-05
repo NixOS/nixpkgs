@@ -4,7 +4,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   cython,
   ninja,
@@ -20,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "3.10.0";
+  version = "3.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,17 +28,8 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hLYidU09nCSOi42zgSh7dW83glxIjFY4C6BTmy/sf60=";
+    hash = "sha256-0L8nkjgWdP/w//M69ZRxYk9If3CIEcnAl9mkJKJ4o1g=";
   };
-
-  patches = [
-    # https://github.com/rapidfuzz/RapidFuzz/pull/414
-    (fetchpatch2 {
-      name = "support-taskflow-3.8.0.patch";
-      url = "https://github.com/rapidfuzz/RapidFuzz/commit/8f0429bbd970ccc036018b87108845c384911ff7.patch";
-      hash = "sha256-1wizdCkXYEMe5JWXUHCOCuDdS0z76FKimR47B3s2oVU=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

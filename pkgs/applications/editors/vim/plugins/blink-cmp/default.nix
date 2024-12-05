@@ -4,28 +4,27 @@
   fetchFromGitHub,
   stdenv,
   vimUtils,
+  nix-update-script,
 }:
 let
-  version = "0.4.1";
+  version = "0.7.1";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jWRXrFh83lTRsgm0gSZuRORltqo147BAg1zVcd7rIMg=";
+    hash = "sha256-IHl+XIldo2kculpbiOuLIJ6RJbFODiRlQU4x8hvE7pI=";
   };
   libExt = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
     inherit version src;
     pname = "blink-fuzzy-lib";
+
+    useFetchCargoVendor = true;
+    cargoHash = "sha256-XXI2jEoD6XbFNk3O8B6+aLzl1ZcJq1VinQXb+AOw8Rw=";
+
     env = {
       # TODO: remove this if plugin stops using nightly rust
       RUSTC_BOOTSTRAP = true;
-    };
-    cargoLock = {
-      lockFile = ./Cargo.lock;
-      outputHashes = {
-        "frizbee-0.1.0" = "sha256-eYth+xOIqwGPkH39OxNCMA9zE+5CTNpsuX8Ue/mySIA=";
-      };
     };
   };
 in
@@ -36,6 +35,16 @@ vimUtils.buildVimPlugin {
     mkdir -p target/release
     ln -s ${blink-fuzzy-lib}/lib/libblink_cmp_fuzzy.${libExt} target/release/libblink_cmp_fuzzy.${libExt}
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "vimPlugins.blink-cmp.blink-fuzzy-lib";
+    };
+
+    # needed for the update script
+    inherit blink-fuzzy-lib;
+  };
+
   meta = {
     description = "Performant, batteries-included completion plugin for Neovim";
     homepage = "https://github.com/saghen/blink.cmp";

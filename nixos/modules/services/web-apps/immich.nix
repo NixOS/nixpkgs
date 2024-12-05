@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.services.immich;
+  format = pkgs.formats.json { };
   isPostgresUnixSocket = lib.hasPrefix "/" cfg.database.host;
   isRedisUnixSocket = lib.hasPrefix "/" cfg.redis.host;
 
@@ -110,6 +111,37 @@ in
       description = "The group immich should run as.";
     };
 
+    settings = mkOption {
+      default = null;
+      description = ''
+        Configuration for Immich.
+        See <https://immich.app/docs/install/config-file/> or navigate to
+        <https://my.immich.app/admin/system-settings> for
+        options and defaults.
+        Setting it to `null` allows configuring Immich in the web interface.
+      '';
+      type = types.nullOr (
+        types.submodule {
+          freeformType = format.type;
+          options = {
+            newVersionCheck.enabled = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Check for new versions.
+                This feature relies on periodic communication with github.com.
+              '';
+            };
+            server.externalDomain = mkOption {
+              type = types.str;
+              default = "";
+              description = "Domain for publicly shared links, including `http(s)://`.";
+            };
+          };
+        }
+      );
+    };
+
     machine-learning = {
       enable =
         mkEnableOption "immich's machine-learning functionality to detect faces and search for objects"
@@ -195,7 +227,7 @@ in
           ensureClauses.login = true;
         }
       ];
-      extraPlugins = ps: with ps; [ pgvecto-rs ];
+      extensions = ps: with ps; [ pgvecto-rs ];
       settings = {
         shared_preload_libraries = [ "vectors.so" ];
         search_path = "\"$user\", public, vectors";
@@ -238,7 +270,7 @@ in
       let
         postgresEnv =
           if isPostgresUnixSocket then
-            { DB_URL = "socket://${cfg.database.host}?dbname=${cfg.database.name}"; }
+            { DB_URL = "postgresql:///${cfg.database.name}?host=${cfg.database.host}"; }
           else
             {
               DB_HOSTNAME = cfg.database.host;
@@ -258,10 +290,13 @@ in
       postgresEnv
       // redisEnv
       // {
-        HOST = cfg.host;
+        IMMICH_HOST = cfg.host;
         IMMICH_PORT = toString cfg.port;
         IMMICH_MEDIA_LOCATION = cfg.mediaLocation;
         IMMICH_MACHINE_LEARNING_URL = "http://localhost:3003";
+      }
+      // lib.optionalAttrs (cfg.settings != null) {
+        IMMICH_CONFIG_FILE = "${format.generate "immich.json" cfg.settings}";
       };
 
     services.immich.machine-learning.environment = {
@@ -272,15 +307,26 @@ in
       IMMICH_PORT = "3003";
     };
 
+    systemd.slices.system-immich = {
+      description = "Immich (self-hosted photo and video backup solution) slice";
+      documentation = [ "https://immich.app/docs" ];
+    };
+
     systemd.services.immich-server = {
       description = "Immich backend server (Self-hosted photo and video backup solution)";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       inherit (cfg) environment;
+      path = [
+        # gzip and pg_dumpall are used by the backup service
+        pkgs.gzip
+        config.services.postgresql.package
+      ];
 
       serviceConfig = commonServiceConfig // {
         ExecStart = lib.getExe cfg.package;
         EnvironmentFile = mkIf (cfg.secretsFile != null) cfg.secretsFile;
+        Slice = "system-immich.slice";
         StateDirectory = "immich";
         SyslogIdentifier = "immich";
         RuntimeDirectory = "immich";
@@ -300,6 +346,7 @@ in
       inherit (cfg.machine-learning) environment;
       serviceConfig = commonServiceConfig // {
         ExecStart = lib.getExe (cfg.package.machine-learning.override { immich = cfg.package; });
+        Slice = "system-immich.slice";
         CacheDirectory = "immich";
         User = cfg.user;
         Group = cfg.group;

@@ -69,7 +69,9 @@ runCommand "flutter-artifacts-${flutterPlatform}-${systemPlatform}"
   lndir -silent '${flutter'}/bin/cache/dart-sdk' "$FLUTTER_ROOT/bin/cache/dart-sdk"
 '' + ''
 
-  HOME="$(mktemp -d)" flutter precache -v '--${flutterPlatform}' ${builtins.concatStringsSep " " (map (p: "'--no-${p}'") (lib.remove flutterPlatform flutterPlatforms))}
+  HOME="$(mktemp -d)" flutter precache ${lib.optionalString (flutter ? engine && flutter.engine.meta.available) "--local-engine ${flutter.engine.outName}"} \
+    -v '--${flutterPlatform}' ${builtins.concatStringsSep " " (map (p: "'--no-${p}'") (lib.remove flutterPlatform flutterPlatforms))}
+
   rm -rf "$FLUTTER_ROOT/bin/cache/lockfile"
 '' + lib.optionalString (lib.versionAtLeast flutter'.version "3.26") ''
   rm -rf "$FLUTTER_ROOT/bin/cache/dart-sdk"

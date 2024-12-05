@@ -28,7 +28,7 @@ let
   # ÁNYK needs JavaFX for the Ügyfélkapu login webview.
   jdkWithFX = openjdk.override {
     enableJavaFX = true;
-    openjfx = openjfx.override { withWebKit = true; };
+    openjfx_jdk = openjfx.override { withWebKit = true; };
   };
 
   extraClasspath = [

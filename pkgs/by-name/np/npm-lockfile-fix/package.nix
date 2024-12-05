@@ -7,13 +7,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "npm-lockfile-fix";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "jeslie0";
     repo = "npm-lockfile-fix";
     rev = "v${version}";
-    hash = "sha256-0EGPCPmCf6bxbso3aHCeJ1XBOpYp3jtMXv8LGdwrsbs=";
+    hash = "sha256-P93OowrVkkOfX5XKsRsg0c4dZLVn2ZOonJazPmHdD7g=";
   };
 
   propagatedBuildInputs = [

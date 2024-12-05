@@ -43,5 +43,9 @@ home-assistant.python.pkgs.buildPythonPackage (
       isHomeAssistantComponent = true;
     } // args.passthru or { };
 
-  } // builtins.removeAttrs args [ "nativeCheckInputs" "passthru" ]
+    meta = {
+      inherit (home-assistant.meta) platforms;
+    } // args.meta or { };
+
+  } // builtins.removeAttrs args [ "meta" "nativeCheckInputs" "passthru" ]
 )

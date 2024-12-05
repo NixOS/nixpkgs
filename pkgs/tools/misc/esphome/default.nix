@@ -21,14 +21,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2024.10.2";
+  version = "2024.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-WEsFgmwH6OGkAn1c0h/HBhBJr2329YHSKMZzjEDTKNg=";
+    hash = "sha256-zxFP7QXZbX/kj17po3tMNHoc7OfCdFSQ73e1umf+QA8=";
   };
 
   build-systems = with python.pkgs; [
@@ -49,13 +49,14 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==" "setuptools>="
+      --replace-fail "setuptools==" "setuptools>=" \
+      --replace-fail "wheel~=" "wheel>="
 
     # ensure component dependencies are available
     cat requirements_optional.txt >> requirements.txt
     # relax strict runtime version check
     substituteInPlace esphome/components/font/__init__.py \
-      --replace-fail "10.2.0" "${python.pkgs.pillow.version}"
+      --replace-fail "10.4.0" "${python.pkgs.pillow.version}"
   '';
 
   # Remove esptool and platformio from requirements
@@ -75,7 +76,9 @@ python.pkgs.buildPythonApplication rec {
     colorama
     cryptography
     esphome-dashboard
+    freetype-py
     icmplib
+    glyphsets
     kconfiglib
     packaging
     paho-mqtt
@@ -101,7 +104,7 @@ python.pkgs.buildPythonApplication rec {
     # inetutils is used in esphome/dashboard/status/ping.py
     "--prefix PATH : ${lib.makeBinPath [ platformio esptool git inetutils ]}"
     "--prefix PYTHONPATH : ${python.pkgs.makePythonPath dependencies}" # will show better error messages
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
 

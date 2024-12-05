@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-language";
-  version = "2.14.0";
+  version = "2.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_language";
     inherit version;
-    hash = "sha256-BeXnoiGavnq9TvUaMpzFy7ZMMd0CS9U3LZ+iv2GVF6k=";
+    hash = "sha256-HGHHFbAkxbOWmF7N7qr6CLhldiag3WjQKGq/WD2Ox5Q=";
   };
 
   build-system = [ setuptools ];

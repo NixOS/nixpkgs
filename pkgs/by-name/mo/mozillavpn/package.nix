@@ -32,20 +32,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-X2rtHAZ9vbWjuOmD3B/uPasUQ1Q+b4SkNqk4MqGMaYo=";
   };
   patches = [
-    # Fix build errors from deprecated QByteArray::count()
+    # Fix build errors from deprecated `QByteArray::count()`, `QVariant::type()`, `QEventPoint::pos()` (#9961)
     (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/9961/commits/1b358d27d4bf29567b5d58f3591146bf639b99e1.patch";
-      hash = "sha256-LeDgwZaQDgS8HNf9k2fC0RYQy4nGEq0DMNjY7muNads=";
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/b4077b9927d9208118e81694dce490dac2f0e76f.patch";
+      hash = "sha256-Vx7aHEBxubthqsmH37ZZDJDPI9jE9vS/p+JNJP6eUlI=";
     })
-    # Fix build errors from deprecated QVariant::type()
+    # Re:#9966 Fix Crash in MZFlickable
     (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/9961/commits/ebdd38ce19ef6eb80f076acf93299bd7d24ae6db.patch";
-      hash = "sha256-ZWl0wHH5Foxlttj/GK5phr/C6qJv39U2GWIofZR+Rto=";
-    })
-    # Fix build errors from deprecated QEventPoint::pos and friends
-    (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/9961/commits/10b1c98517dac4eacffd6890c551b817aedd4a19.patch";
-      hash = "sha256-DHOtvVDEdQ+k2ggg4HGpcv1EmKzlijNRTi1yJ7a1bWU=";
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/9984/commits/485a2ad8feab6b1dee7c672ce03736d819fd9d37.patch";
+      includes = [ "nebula/ui/components/MZFlickable.qml" ];
+      hash = "sha256-fnOXBTsuQC3kqAvHgoJ7rRGX5ra0R/MO8M9Ysys/l7Q=";
     })
   ];
 

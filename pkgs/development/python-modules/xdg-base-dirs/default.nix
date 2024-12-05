@@ -35,7 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Implementation of the XDG Base Directory Specification in Python";
     homepage = "https://github.com/srstevenson/xdg-base-dirs";
-    changelog = "https://github.com/srstevenson/xdg-base-dirs/releases/tag/${src.rev}";
+    changelog = "https://github.com/srstevenson/xdg-base-dirs/releases/tag/${version}";
     license = licenses.isc;
     maintainers = with maintainers; [ figsoda ];
   };

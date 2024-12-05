@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.isDarwin && stdenv.isx86_64
+    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
   ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
 
   meta = with lib; {

@@ -58,6 +58,7 @@ buildPythonPackage rec {
       libpangocairo = "${pango}/lib/libpangocairo-1.0.so";
       libcairo = "${cairo}/lib/libcairo.so";
     })
+    ./0001-add-missing-bool-c.patch # Add missing bool.c from old source
   ];
 
   # https://github.com/wxWidgets/Phoenix/issues/2575

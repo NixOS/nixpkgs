@@ -47,7 +47,7 @@ let
 
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${libPath}:$out/eagle-${version}/lib:${stdenv.cc.cc.lib}/lib" \
+        --set-rpath "${libPath}:$out/eagle-${version}/lib:${lib.getLib stdenv.cc.cc}/lib" \
         "$out"/eagle-${version}/eagle
 
       mkdir -p "$out"/bin

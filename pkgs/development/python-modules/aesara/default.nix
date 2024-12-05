@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "aesara";
-  version = "2.9.3";
+  version = "2.9.4";
   pyproject = true;
 
   # Python 3.12 is not supported: https://github.com/aesara-devs/aesara/issues/1520
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "aesara-devs";
     repo = "aesara";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-aO0+O7Ts9phsV4ghunNolxfAruGBbC+tHjVkmFedcCI=";
+    hash = "sha256-V34uP50TfH6cLU7nWOx+8oXY1QawtaoIaKQpbLnz7eo=";
   };
 
   build-system = [

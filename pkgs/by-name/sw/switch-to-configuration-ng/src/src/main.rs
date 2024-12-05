@@ -79,6 +79,7 @@ const DRY_RELOAD_BY_ACTIVATION_LIST_FILE: &str = "/run/nixos/dry-activation-relo
 #[derive(Debug, Clone, PartialEq)]
 enum Action {
     Switch,
+    Check,
     Boot,
     Test,
     DryActivate,
@@ -93,6 +94,7 @@ impl std::str::FromStr for Action {
             "boot" => Self::Boot,
             "test" => Self::Test,
             "dry-activate" => Self::DryActivate,
+            "check" => Self::Check,
             _ => bail!("invalid action {s}"),
         })
     }
@@ -105,6 +107,7 @@ impl Into<&'static str> for &Action {
             Action::Boot => "boot",
             Action::Test => "test",
             Action::DryActivate => "dry-activate",
+            Action::Check => "check",
         }
     }
 }
@@ -127,6 +130,28 @@ fn parse_os_release() -> Result<HashMap<String, String>> {
 
             acc
         }))
+}
+
+fn do_pre_switch_check(command: &str, toplevel: &Path) -> Result<()> {
+    let mut cmd_split = command.split_whitespace();
+    let Some(argv0) = cmd_split.next() else {
+        bail!("missing first argument in install bootloader commands");
+    };
+
+    match std::process::Command::new(argv0)
+        .args(cmd_split.collect::<Vec<&str>>())
+        .arg(toplevel)
+        .spawn()
+        .map(|mut child| child.wait())
+    {
+        Ok(Ok(status)) if status.success() => {}
+        _ => {
+            eprintln!("Pre-switch checks failed");
+            die()
+        }
+    }
+
+    Ok(())
 }
 
 fn do_install_bootloader(command: &str, toplevel: &Path) -> Result<()> {
@@ -939,7 +964,8 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
 
 fn usage(argv0: &str) -> ! {
     eprintln!(
-        r#"Usage: {} [switch|boot|test|dry-activate]
+        r#"Usage: {} [check|switch|boot|test|dry-activate]
+check:        run pre-switch checks and exit
 switch:       make the configuration the boot default and activate now
 boot:         make the configuration the boot default
 test:         activate the configuration, but don't make it the boot default
@@ -955,6 +981,7 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
     let out = PathBuf::from(required_env("OUT")?);
     let toplevel = PathBuf::from(required_env("TOPLEVEL")?);
     let distro_id = required_env("DISTRO_ID")?;
+    let pre_switch_check = required_env("PRE_SWITCH_CHECK")?;
     let install_bootloader = required_env("INSTALL_BOOTLOADER")?;
     let locale_archive = required_env("LOCALE_ARCHIVE")?;
     let new_systemd = PathBuf::from(required_env("SYSTEMD")?);
@@ -969,10 +996,6 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
     if !locale_archive.is_empty() {
         std::env::set_var("LOCALE_ARCHIVE", locale_archive);
     }
-
-    let current_system_bin = std::path::PathBuf::from("/run/current-system/sw/bin")
-        .canonicalize()
-        .context("/run/current-system/sw/bin is missing")?;
 
     let os_release = parse_os_release().context("Failed to parse os-release")?;
 
@@ -1013,6 +1036,18 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
         bail!("Failed to initialize logger");
     }
 
+    if std::env::var("NIXOS_NO_CHECK")
+        .as_deref()
+        .unwrap_or_default()
+        != "1"
+    {
+        do_pre_switch_check(&pre_switch_check, &toplevel)?;
+    }
+
+    if *action == Action::Check {
+        return Ok(());
+    }
+
     // Install or update the bootloader.
     if matches!(action, Action::Switch | Action::Boot) {
         do_install_bootloader(&install_bootloader, &toplevel)?;
@@ -1032,6 +1067,11 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
     if *action == Action::Boot {
         std::process::exit(0);
     }
+
+    // Needs to be after the "boot" action exits, as this directory will not exist when doing a NIXOS_LUSTRATE install
+    let current_system_bin = std::path::PathBuf::from("/run/current-system/sw/bin")
+        .canonicalize()
+        .context("/run/current-system/sw/bin is missing")?;
 
     let current_init_interface_version =
         std::fs::read_to_string("/run/current-system/init-interface-version").unwrap_or_default();

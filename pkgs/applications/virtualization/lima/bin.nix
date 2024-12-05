@@ -57,7 +57,7 @@ stdenvNoCC.mkDerivation {
     chmod +x $out/bin/limactl
     wrapProgram $out/bin/limactl \
       --prefix PATH : ${lib.makeBinPath [ qemu ]}
-
+  '' + lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
     # the shell completion only works with a patched $out/bin/limactl and so
     # needs to run after the autoPatchelfHook is executed in postFixup.
     doShellCompletion() {
@@ -67,7 +67,7 @@ stdenvNoCC.mkDerivation {
         --zsh <($out/bin/limactl completion zsh)
     }
     postFixupHooks+=(doShellCompletion)
-
+  '' + ''
     runHook postInstall
   '';
 

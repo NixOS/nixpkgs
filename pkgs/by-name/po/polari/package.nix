@@ -14,7 +14,7 @@
   desktop-file-utils,
   pkg-config,
   gtk4,
-  tracker,
+  tinysparql,
   libadwaita,
   gtk3,
   glib,
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk4
-    tracker
+    tinysparql
     libadwaita
     gtk3 # for thumbnailer
     glib

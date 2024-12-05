@@ -51,7 +51,6 @@ rustPlatform.buildRustPackage rec {
       xorg.libX11
       xorg.libXcursor
       xorg.libXi
-      xorg.libXrandr
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
@@ -76,6 +75,7 @@ rustPlatform.buildRustPackage rec {
       mimeTypes = [
         "x-scheme-handler/irc"
         "x-scheme-handler/ircs"
+        "x-scheme-handler/halloy"
       ];
       categories = [
         "Network"

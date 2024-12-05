@@ -18,7 +18,7 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
-  version = "0.8.0";
+  version = "0.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "vxgmichel";
     repo = "aioconsole";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gexVeMlDRxZXcBi/iIYPip0DZIKvxCxKmTd+9jm0ud8=";
+    hash = "sha256-gFkRhewuRScEhXy0lv2R0kHfaHT1gSp3TVrqL36cRVs=";
   };
 
   postPatch = ''

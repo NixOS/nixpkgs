@@ -20,7 +20,7 @@ buildPythonPackage rec {
   };
 
   # Workaround for https://github.com/ethanfurman/dbf/issues/48
-  patches = lib.optional python.stdenv.isDarwin ./darwin.patch;
+  patches = lib.optional python.stdenv.hostPlatform.isDarwin ./darwin.patch;
 
   propagatedBuildInputs = [ aenum ];
 

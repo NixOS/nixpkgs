@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "castxml";
-  version = "0.6.8";
+  version = "0.6.10";
 
   src = fetchFromGitHub {
     owner = "CastXML";
     repo = "CastXML";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-J4Z/NjCVOq4QS7ncCi87P5YPgqRwFyDAc14uS5T7s6M=";
+    hash = "sha256-3TVJu63O1spleR9hNZKfSNoVa+q+oxtMWCOXetFNrgI=";
   };
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals (withManual || withHTML) [ sphinx ];
@@ -51,6 +51,14 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   strictDeps = true;
+
+  # darwin clang adds `-isysroot` when $SDKROOT is set. this confuses the
+  # regular expressions for the disabled tests below.
+  checkPhase = ''
+    runHook preCheck
+    ctest -E 'cmd.cc-gnu-(src-cxx|c-src-c)-cmd' -j $NIX_BUILD_CORES
+    runHook postCheck
+  '';
 
   passthru.tests = testers.testVersion { package = finalAttrs.finalPackage; };
 

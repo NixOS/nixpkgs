@@ -22,6 +22,7 @@ let
       async-test = callPackage ../development/coq-modules/async-test {};
       atbr = callPackage ../development/coq-modules/atbr {};
       autosubst = callPackage ../development/coq-modules/autosubst {};
+      autosubst-ocaml = callPackage ../development/coq-modules/autosubst-ocaml {};
       bbv = callPackage ../development/coq-modules/bbv {};
       bignums = if lib.versionAtLeast coq.coq-version "8.6"
         then callPackage ../development/coq-modules/bignums {}
@@ -41,7 +42,6 @@ let
       };
       coq-bits = callPackage ../development/coq-modules/coq-bits {};
       coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
-      coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
       coq-hammer = callPackage ../development/coq-modules/coq-hammer { };
       coq-hammer-tactics = callPackage ../development/coq-modules/coq-hammer/tactics.nix { };
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
@@ -63,6 +63,7 @@ let
       dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
       ElmExtraction = callPackage ../development/coq-modules/ElmExtraction {};
       equations = callPackage ../development/coq-modules/equations { };
+      ExtLib = callPackage ../development/coq-modules/ExtLib {};
       extructures = callPackage ../development/coq-modules/extructures { };
       fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
       flocq = callPackage ../development/coq-modules/flocq {};
@@ -86,6 +87,7 @@ let
       ITree = callPackage ../development/coq-modules/ITree { };
       itree-io = callPackage ../development/coq-modules/itree-io { };
       json = callPackage ../development/coq-modules/json {};
+      lemma-overloading = callPackage ../development/coq-modules/lemma-overloading {};
       LibHyps = callPackage ../development/coq-modules/LibHyps {};
       ltac2 = callPackage ../development/coq-modules/ltac2 {};
       math-classes = callPackage ../development/coq-modules/math-classes { };
@@ -100,25 +102,37 @@ let
       mathcomp-abel = callPackage ../development/coq-modules/mathcomp-abel {};
       mathcomp-algebra-tactics = callPackage ../development/coq-modules/mathcomp-algebra-tactics {};
       mathcomp-analysis = callPackage ../development/coq-modules/mathcomp-analysis {};
+      mathcomp-analysis-stdlib = self.mathcomp-analysis.analysis-stdlib;
       mathcomp-apery = callPackage ../development/coq-modules/mathcomp-apery {};
       mathcomp-bigenough = callPackage ../development/coq-modules/mathcomp-bigenough {};
       mathcomp-classical = self.mathcomp-analysis.classical;
+      mathcomp-experimental-reals = self.mathcomp-analysis.experimental-reals;
       mathcomp-finmap = callPackage ../development/coq-modules/mathcomp-finmap {};
       mathcomp-infotheo = callPackage ../development/coq-modules/mathcomp-infotheo {};
       mathcomp-real-closed = callPackage ../development/coq-modules/mathcomp-real-closed {};
+      mathcomp-reals = self.mathcomp-analysis.reals;
+      mathcomp-reals-stdlib = self.mathcomp-analysis.reals-stdlib;
       mathcomp-tarjan = callPackage ../development/coq-modules/mathcomp-tarjan {};
       mathcomp-word = callPackage ../development/coq-modules/mathcomp-word {};
       mathcomp-zify = callPackage ../development/coq-modules/mathcomp-zify {};
       MenhirLib = callPackage ../development/coq-modules/MenhirLib {};
       metacoq = callPackage ../development/coq-modules/metacoq { };
-      metacoq-template-coq = self.metacoq.template-coq;
-      metacoq-pcuic        = self.metacoq.pcuic;
-      metacoq-safechecker  = self.metacoq.safechecker;
-      metacoq-erasure      = self.metacoq.erasure;
+      metacoq-utils              = self.metacoq.utils;
+      metacoq-common             = self.metacoq.common;
+      metacoq-template-coq       = self.metacoq.template-coq;
+      metacoq-pcuic              = self.metacoq.pcuic;
+      metacoq-safechecker        = self.metacoq.safechecker;
+      metacoq-template-pcuic     = self.metacoq.template-pcuic;
+      metacoq-erasure            = self.metacoq.erasure;
+      metacoq-quotation          = self.metacoq.quotation;
+      metacoq-safechecker-plugin = self.metacoq.safechecker-plugin;
+      metacoq-erasure-plugin     = self.metacoq.erasure-plugin;
+      metacoq-translations       = self.metacoq.translations;
       metalib = callPackage ../development/coq-modules/metalib { };
       mtac2 = callPackage ../development/coq-modules/mtac2 {};
       multinomials = callPackage ../development/coq-modules/multinomials {};
       odd-order = callPackage ../development/coq-modules/odd-order { };
+      Ordinal = callPackage ../development/coq-modules/Ordinal {};
       paco = callPackage ../development/coq-modules/paco {};
       paramcoq = callPackage ../development/coq-modules/paramcoq {};
       parsec = callPackage ../development/coq-modules/parsec {};

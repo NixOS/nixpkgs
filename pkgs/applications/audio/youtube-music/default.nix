@@ -12,18 +12,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "youtube-music";
-  version = "3.5.1";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "th-ch";
     repo = "youtube-music";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6aAaIugho8yHohEHp0HVkmzIOfhpkNYts6BOKPp9Wbw=";
+    hash = "sha256-S13f3vGMQJvpJbdfUstJlA8MfY5Q1efRA7QcPXYvhMI=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-6Fh1fbl7Y33EyWbWUhe70CGzhc4y+I59vPbzZydoJ18=";
+    hash = "sha256-brHNp19BEYzgxhdNnn7n1GYhBdyi3S/2VqvKWXmKGX8=";
   };
 
   nativeBuildInputs = [ makeWrapper python3 nodejs pnpm.configHook ]
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     makeWrapper ${electron}/bin/electron $out/bin/youtube-music \
       --add-flags $out/share/lib/youtube-music/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0

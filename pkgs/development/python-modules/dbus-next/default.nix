@@ -6,7 +6,7 @@
   setuptools,
   dbus,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-asyncio,
   pytest-timeout,
 }:
@@ -28,10 +28,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     dbus
     pytest
-    pytest-cov
+    pytest-cov-stub
     pytest-asyncio
     pytest-timeout
   ];
+
+  # Tests are flaky and upstream is no longer active
+  doCheck = false;
 
   # test_peer_interface hits a timeout
   # test_tcp_connection_with_forwarding fails due to dbus
@@ -49,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/altdesktop/python-dbus-next";
     changelog = "https://github.com/altdesktop/python-dbus-next/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ sfrijters ];
+    maintainers = with maintainers; [ ];
   };
 }

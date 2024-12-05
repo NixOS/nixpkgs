@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
     pipewire
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   patches =
@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/{Applications,bin}
-      mv dist/mac*/Vesktop.App $out/Applications
+      mv dist/mac*/Vesktop.app $out/Applications/Vesktop.app
     ''
     + ''
       runHook postInstall
@@ -137,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
         --add-flags $out/opt/Vesktop/resources/app.asar \
         ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
         ${lib.optionalString withMiddleClickScroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       makeWrapper $out/Applications/Vesktop.app/Contents/MacOS/Vesktop $out/bin/vesktop

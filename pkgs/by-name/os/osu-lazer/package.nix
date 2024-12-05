@@ -15,17 +15,18 @@
   libglvnd,
   xorg,
   udev,
+  vulkan-loader,
 }:
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2024.1009.1";
+  version = "2024.1115.3";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    hash = "sha256-odWTLvx41miFgn4O/EDzwm2pfWKxj4B1ieSfNS0hrW8=";
+    hash = "sha256-AZN/zgHV6ydImOd1zUjYqXJqq5o0XGnvNvTTL/mIrHg=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -57,6 +58,9 @@ buildDotnetModule rec {
     # [verbose]: SDL error log [debug]: Failed loading udev_device_get_action: /nix/store/*-osu-lazer-*/lib/osu-lazer/runtimes/linux-x64/native/libSDL2.so: undefined symbol: _udev_device_get_action
     # [verbose]: SDL error log [debug]: Failed loading libudev.so.1: libudev.so.1: cannot open shared object file: No such file or directory
     udev
+
+    # needed for vulkan renderer, can fall back to opengl if omitted
+    vulkan-loader
   ];
 
   executables = [ "osu!" ];
@@ -102,6 +106,7 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [
       gepbird
       thiagokokada
+      Guanran928
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "osu!";

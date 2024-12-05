@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql, buildPostgresqlExtension }:
 
 let
   source = {
@@ -28,7 +28,7 @@ let
     };
   }.${lib.versions.major postgresql.version} or (throw "Source for pg_hint_plan is not available for ${postgresql.version}");
 in
-stdenv.mkDerivation {
+buildPostgresqlExtension {
   pname = "pg_hint_plan";
   inherit (source) version;
 
@@ -44,13 +44,7 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace "LDFLAGS+=-Wl,--build-id" ""
   '';
 
-  buildInputs = [ postgresql ];
-
-  installPhase = ''
-    install -D -t $out/lib pg_hint_plan${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension *.sql
-    install -D -t $out/share/postgresql/extension *.control
-  '';
+  enableUpdateScript = false;
 
   meta = with lib; {
     description = "Extension to tweak PostgreSQL execution plans using so-called 'hints' in SQL comments";

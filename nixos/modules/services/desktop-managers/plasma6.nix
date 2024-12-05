@@ -73,6 +73,7 @@ in {
         kguiaddons # provides geo URL handlers
         kiconthemes # provides Qt plugins
         kimageformats # provides Qt plugins
+        qtimageformats # provides optional image formats such as .webp and .avif
         kio # provides helper service + a bunch of other stuff
         kio-admin # managing files as admin
         kio-extras # stuff for MTP, AFC, etc

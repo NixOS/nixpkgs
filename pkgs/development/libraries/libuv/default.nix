@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , autoconf
 , automake
+, darwin
 , libtool
 , pkg-config
 , pkgsStatic
@@ -71,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
         "fs_event_watch_dir_recursive" "fs_event_watch_file"
         "fs_event_watch_file_current_dir" "fs_event_watch_file_exact_path"
         "process_priority" "udp_create_early_bad_bind"
+        "fs_event_watch_delete_dir"
     ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
         # fail on macos < 10.15 (starting in libuv 1.47.0)
         "fs_write_alotof_bufs_with_offset" "fs_write_multiple_bufs" "fs_read_bufs"
@@ -78,6 +80,12 @@ stdenv.mkDerivation (finalAttrs: {
       # I observe this test failing with some regularity on ARMv7:
       # https://github.com/libuv/libuv/issues/1871
       "shutdown_close_pipe"
+    ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      # EOPNOTSUPP when performed in jailed build env
+      "tcp_reuseport" "udp_reuseport"
+      # Fails when built on non-nix FreeBSD
+      # https://github.com/libuv/libuv/issues/4606
+      "fs_event_watch_delete_dir"
     ];
     tdRegexp = lib.concatStringsSep "\\|" toDisable;
     in lib.optionalString (finalAttrs.finalPackage.doCheck) ''
@@ -85,6 +93,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   nativeBuildInputs = [ automake autoconf libtool pkg-config ];
+
+  # This is part of the Darwin bootstrap, so we don’t always get
+  # `libutil.dylib` automatically propagated through the SDK.
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.getLib darwin.libutil)
+  ];
 
   preConfigure = ''
     LIBTOOLIZE=libtoolize ./autogen.sh

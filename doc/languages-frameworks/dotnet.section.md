@@ -42,7 +42,7 @@ $ dotnet --info
  Version:   7.0.202
  Commit:    6c74320bc3
 
-Środowisko uruchomieniowe:
+Runtime Environment:
  OS Name:     nixos
  OS Version:  23.05
  OS Platform: Linux

@@ -33,4 +33,10 @@ mkKdeDerivation {
     "-DWITH_GDB12=1"
     "-DWITH_PYTHON_VENDORING=0"
   ];
+
+  # Hardcoded as QString, which is UTF-16 so Nix can't pick it up automatically
+  postFixup = ''
+    mkdir -p $out/nix-support
+    echo "${gdb'}" > $out/nix-support/depends
+  '';
 }

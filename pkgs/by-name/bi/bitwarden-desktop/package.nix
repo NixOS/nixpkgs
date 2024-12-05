@@ -35,22 +35,27 @@ let
 
 in buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.9.0";
+  version = "2024.11.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-o5nRG2j73qheDOyeFfSga64D8HbTn1EUrCiN0W+Xn0w=";
+    hash = "sha256-4QTQgW8k3EMf07Xqs2B+VXQOUPzoOgaNvoC02x4zvu8=";
   };
 
   patches = [
     ./electron-builder-package-lock.patch
+    ./dont-auto-setup-biometrics.patch
+    ./set-exe-path.patch # ensures `app.getPath("exe")` returns our wrapper, not ${electron}/bin/electron
+    ./skip-afterpack.diff # this modifies bin/electron etc., but we wrap read-only bin/electron ourselves
   ];
 
   postPatch = ''
     # remove code under unfree license
     rm -r bitwarden_license
+
+    substituteInPlace apps/desktop/src/main.ts --replace-fail '%%exePath%%' "$out/bin/bitwarden"
   '';
 
   nodejs = nodejs_20;
@@ -58,7 +63,7 @@ in buildNpmPackage rec {
   makeCacheWritable = true;
   npmFlags = [ "--engine-strict" "--legacy-peer-deps" ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-L7/frKCNlq0xr6T+aSqyEQ44yrIXwcpdU/djrhCJNNk=";
+  npmDepsHash = "sha256-YzhCyNMvfXGmgOpl3qWj1Pqd1hY8CJ9QLwQds5ZMnqg=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
@@ -74,7 +79,7 @@ in buildNpmPackage rec {
       patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-y+6vaESiOeVrFJpZoOJ75onOpldqSsT2kqkMMzTDUmM=";
+    hash = "sha256-aurjpVzWET30O+ysyE4ZzauMe8kHjOL169tfKUR1Vpg=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -99,20 +104,6 @@ in buildNpmPackage rec {
     libsecret
   ];
 
-  # node-argon2 builds with LTO, but that causes missing symbols. So disable it
-  # and rebuild. Then we need to copy it into the build output for
-  # electron-builder, as `apps/desktop/src/package.json` specifies `argon2` as
-  # a dependency and electron-builder will otherwise install a fresh (and
-  # broken) argon2. See https://github.com/ranisalt/node-argon2/pull/415
-  preConfigure = ''
-    pushd node_modules/argon2
-    substituteInPlace binding.gyp --replace-fail '"-flto", ' ""
-    "$npm_config_node_gyp" rebuild
-    popd
-    mkdir -p apps/desktop/build/node_modules
-    cp -r ./{,apps/desktop/build/}node_modules/argon2
-  '';
-
   preBuild = ''
     if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '^[0-9]+') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
       echo 'ERROR: electron version mismatch'
@@ -127,7 +118,7 @@ in buildNpmPackage rec {
   postBuild = ''
     pushd apps/desktop
 
-    # desktop_native/index.js loads a file of that name regarldess of the libc being used
+    # desktop_native/index.js loads a file of that name regardless of the libc being used
     mv desktop_native/napi/desktop_napi.* desktop_native/napi/desktop_napi.linux-${bitwardenDesktopNativeArch}-musl.node
 
     npm exec electron-builder -- \
@@ -148,17 +139,14 @@ in buildNpmPackage rec {
     "--skip=password::password::tests::test"
   ];
 
-  checkPhase = ''
-    runHook preCheck
+  preCheck = ''
+    pushd ${cargoRoot}
+    cargoCheckType=release
+    HOME=$(mktemp -d)
+  '';
 
-    (
-      cd ${cargoRoot}
-      HOME=$(mktemp -d)
-      cargoCheckType=release
-      cargoCheckHook
-    )
-
-    runHook postCheck
+  postCheck = ''
+    popd
   '';
 
   installPhase = ''
@@ -166,16 +154,23 @@ in buildNpmPackage rec {
 
     mkdir $out
 
-    pushd apps/desktop/dist/linux-${lib.optionalString stdenv.isAarch64 "arm64-"}unpacked
+    pushd apps/desktop/dist/linux-${lib.optionalString stdenv.hostPlatform.isAarch64 "arm64-"}unpacked
     mkdir -p $out/opt/Bitwarden
     cp -r locales resources{,.pak} $out/opt/Bitwarden
     popd
 
     makeWrapper '${lib.getExe electron}' "$out/bin/bitwarden" \
       --add-flags $out/opt/Bitwarden/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
+
+    # Extract the polkit policy file from the multiline string in the source code.
+    # This may break in the future but its better than copy-pasting it manually.
+    mkdir -p $out/share/polkit-1/actions/
+    pushd apps/desktop/src/key-management/biometrics
+    awk '/const polkitPolicy = `/{gsub(/^.*`/, ""); print; str=1; next} str{if (/`;/) str=0; gsub(/`;/, ""); print}' biometric.unix.main.ts > $out/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
+    popd
 
     pushd apps/desktop/resources/icons
     for icon in *.png; do

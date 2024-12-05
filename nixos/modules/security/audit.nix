@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.security.audit;
   enabled = cfg.enable == "lock" || cfg.enable;
@@ -29,7 +26,7 @@ let
 
     # Put the rules in a temporary file owned and only readable by root
     rulesfile="$(mktemp)"
-    ${concatMapStrings (x: "echo '${x}' >> $rulesfile\n") cfg.rules}
+    ${lib.concatMapStrings (x: "echo '${x}' >> $rulesfile\n") cfg.rules}
 
     # Apply the requested rules
     auditctl -R "$rulesfile"
@@ -53,8 +50,8 @@ let
 in {
   options = {
     security.audit = {
-      enable = mkOption {
-        type        = types.enum [ false true "lock" ];
+      enable = lib.mkOption {
+        type        = lib.types.enum [ false true "lock" ];
         default     = false;
         description = ''
           Whether to enable the Linux audit system. The special `lock` value can be used to
@@ -64,14 +61,14 @@ in {
         '';
       };
 
-      failureMode = mkOption {
-        type        = types.enum [ "silent" "printk" "panic" ];
+      failureMode = lib.mkOption {
+        type        = lib.types.enum [ "silent" "printk" "panic" ];
         default     = "printk";
         description = "How to handle critical errors in the auditing system";
       };
 
-      backlogLimit = mkOption {
-        type        = types.int;
+      backlogLimit = lib.mkOption {
+        type        = lib.types.int;
         default     = 64; # Apparently the kernel default
         description = ''
           The maximum number of outstanding audit buffers allowed; exceeding this is
@@ -79,8 +76,8 @@ in {
         '';
       };
 
-      rateLimit = mkOption {
-        type        = types.int;
+      rateLimit = lib.mkOption {
+        type        = lib.types.int;
         default     = 0;
         description = ''
           The maximum messages per second permitted before triggering a failure as
@@ -88,8 +85,8 @@ in {
         '';
       };
 
-      rules = mkOption {
-        type        = types.listOf types.str; # (types.either types.str (types.submodule rule));
+      rules = lib.mkOption {
+        type        = lib.types.listOf lib.types.str; # (types.either types.str (types.submodule rule));
         default     = [];
         example     = [ "-a exit,always -F arch=b64 -S execve" ];
         description = ''

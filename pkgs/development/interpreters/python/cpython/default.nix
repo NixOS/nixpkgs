@@ -25,7 +25,7 @@
 
 # platform-specific dependencies
 , bash
-, configd
+, apple-sdk_11
 , darwin
 , windows
 
@@ -178,11 +178,12 @@ let
     bluez
   ] ++ optionals enableFramework [
     darwin.apple_sdk.frameworks.Cocoa
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
+    # Work around for ld64 crashes on x86_64-darwin. Remove once 11.0 becomes the default.
+    apple-sdk_11
   ] ++ optionals stdenv.hostPlatform.isMinGW [
     windows.dlfcn
     windows.mingw_w64_pthreads
-  ] ++ optionals stdenv.hostPlatform.isDarwin [
-    configd
   ] ++ optionals tzdataSupport [
     tzdata
   ] ++ optionals withGdbm [
@@ -270,11 +271,6 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals mimetypesSupport [
     # Make the mimetypes module refer to the right file
     ./mimetypes.patch
-  ] ++ optionals (pythonAtLeast "3.7" && pythonOlder "3.11") [
-    # Fix darwin build https://bugs.python.org/issue34027
-    ./3.7/darwin-libutil.patch
-  ] ++ optionals (pythonAtLeast "3.11") [
-    ./3.11/darwin-libutil.patch
   ] ++ optionals (pythonAtLeast "3.9" && pythonOlder "3.11" && stdenv.hostPlatform.isDarwin) [
     # Stop checking for TCL/TK in global macOS locations
     ./3.9/darwin-tcl-tk.patch
@@ -362,9 +358,6 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     (enableFeature enableGIL "gil")
   ] ++ optionals enableOptimizations [
     "--enable-optimizations"
-  ] ++ optionals (stdenv.hostPlatform.isDarwin && configd == null) [
-    # Make conditional on Darwin for now to avoid causing Linux rebuilds.
-    "py_cv_module__scproxy=n/a"
   ] ++ optionals (sqlite != null) [
     "--enable-loadable-sqlite-extensions"
   ] ++ optionals (libxcrypt != null) [

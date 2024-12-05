@@ -8,6 +8,7 @@ mkCoqDerivation {
   repo = "coq-dpdgraph";
   inherit version;
   defaultVersion = lib.switch coq.coq-version [
+    { case = "8.20"; out = "1.0+8.20"; }
     { case = "8.19"; out = "1.0+8.19"; }
     { case = "8.18"; out = "1.0+8.18"; }
     { case = "8.17"; out = "1.0+8.17"; }
@@ -23,6 +24,7 @@ mkCoqDerivation {
     { case = "8.7";  out = "0.6.2"; }
   ] null;
 
+  release."1.0+8.20".sha256 = "sha256-szfH/OksCH3SCbcFjwEvLwHE5avmHp1vYiJM6KAXFqs=";
   release."1.0+8.19".sha256 = "sha256-L1vjEydYiwDFTXES3sgfdaO/D50AbTJKBXUKUCgbpto=";
   release."1.0+8.18".sha256 = "sha256-z14MI1VSYzPqmF1PqDXzymXWRMYoTlQAfR/P3Pdf7fI=";
   release."1.0+8.17".sha256 = "sha256-gcvL3vseLKEF9xinT0579jXBBaA5E3rJ5KaU8RfKtm4=";

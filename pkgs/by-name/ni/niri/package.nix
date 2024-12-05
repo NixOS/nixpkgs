@@ -1,6 +1,5 @@
 {
   lib,
-  clang,
   dbus,
   eudev,
   fetchFromGitHub,
@@ -25,13 +24,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "niri";
-  version = "0.1.9";
+  version = "0.1.10.1";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4YDrKMwXGVOBkeaISbxqf24rLuHvO98TnqxWYfgiSeg=";
+    hash = "sha256-Qjf7alRbPPERfiZsM9EMKX+HwjESky1tieh5PJIkLwE=";
   };
 
   postPatch = ''
@@ -43,15 +42,14 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "smithay-0.3.0" = "sha256-/3BO66yVoo63+5rwrZzoxhSTncvLyHdvtSaApFj3fBg=";
-      "libspa-0.8.0" = "sha256-R68TkFbzDFA/8Btcar+0omUErLyBMm4fsmQlCvfqR9o=";
+      "libspa-0.8.0" = "sha256-kp5x5QhmgEqCrt7xDRfMFGoTK5IXOuvW2yOW02B8Ftk=";
+      "smithay-0.3.0" = "sha256-nSM7LukWHO2n2eWz5ipFNkTCYDvx/VvPXnKVngJFU0U=";
     };
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    clang
     pkg-config
     rustPlatform.bindgenHook
   ];
@@ -86,9 +84,14 @@ rustPlatform.buildRustPackage rec {
     + lib.optionalString withDbus ''
       install -Dm0644 resources/niri-portals.conf -t $out/share/xdg-desktop-portal
     ''
-    + lib.optionalString withSystemd ''
+    + lib.optionalString (withSystemd || withDinit) ''
       install -Dm0755 resources/niri-session -t $out/bin
+    ''
+    + lib.optionalString withSystemd ''
       install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/lib/systemd/user
+    ''
+    + lib.optionalString withDinit ''
+      install -Dm0644 resources/dinit/niri{-shutdown,} -t $out/lib/dinit.d/user
     '';
 
   env = {

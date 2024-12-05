@@ -69,7 +69,7 @@ buildGoModule rec {
     description = "Build applications using Go + HTML + CSS + JS";
     homepage = "https://wails.io";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ianmjones ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "wails";
     platforms = lib.platforms.unix;
   };

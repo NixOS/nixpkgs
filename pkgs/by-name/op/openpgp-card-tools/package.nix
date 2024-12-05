@@ -2,40 +2,44 @@
 , stdenv
 , rustPlatform
 , fetchFromGitea
+, installShellFiles
 , pkg-config
 , pcsclite
 , dbus
 , testers
 , openpgp-card-tools
-, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "openpgp-card-tools";
-  version = "0.11.6";
+  version = "0.11.7";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "openpgp-card";
     repo = "openpgp-card-tools";
     rev = "v${version}";
-    hash = "sha256-ZnIJLNg9soRzGEjoRNbUzDUtj71y54t+qTC4QDjiCmM=";
+    hash = "sha256-sR+jBCSuDH4YdJz3YuvA4EE36RHV3m/xU8hIEXXsqKo=";
   };
 
-  cargoHash = "sha256-t+fKCviu9UOz2GHkIBqtSp0vyqXPAR1TuWi4yOYR0Bc=";
+  cargoHash = "sha256-G5+lVK41hbzy/Ltc0EKoUfqF0M1OYu679jyVjYKJmn0=";
 
-  nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
+  nativeBuildInputs = [ installShellFiles pkg-config rustPlatform.bindgenHook ];
 
-  buildInputs = [ pcsclite dbus ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.PCSC
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = [ pcsclite dbus ];
 
   passthru = {
     tests.version = testers.testVersion {
       package = openpgp-card-tools;
     };
   };
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    OCT_COMPLETION_OUTPUT_DIR=$PWD/shell $out/bin/oct
+    installShellCompletion ./shell/oct.{bash,fish} ./shell/_oct
+    OCT_MANPAGE_OUTPUT_DIR=$PWD/man $out/bin/oct
+    installManPage ./man/*.1
+  '';
 
   meta = with lib; {
     description = "Tool for inspecting and configuring OpenPGP cards";

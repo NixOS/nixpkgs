@@ -5,7 +5,7 @@
   setuptools,
   levenshtein,
   pytesseract,
-  opencv4,
+  opencv-python,
   fuzzywuzzy,
 }:
 
@@ -24,14 +24,13 @@ buildPythonPackage rec {
   dependencies = [
     levenshtein
     pytesseract
-    opencv4
+    opencv-python
     fuzzywuzzy
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "python-Levenshtein" "Levenshtein" \
-      --replace-fail "opencv-python" "opencv"
+      --replace-fail "python-Levenshtein" "Levenshtein"
     substituteInPlace videocr/constants.py \
       --replace-fail "master" "main"
     substituteInPlace videocr/video.py \

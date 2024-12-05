@@ -35,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "dissect";
-  version = "3.16.1";
+  version = "3.17";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect";
     rev = "refs/tags/${version}";
-    hash = "sha256-OpTznjOVV3hyreJv4WCHwP09ULMTz+vjjcmBtYL685E=";
+    hash = "sha256-0AVdihnnH3LMqHKwX5Ll4Nwt8LYfW4GktECvVCyyex8=";
   };
 
   pythonRelaxDeps = true;

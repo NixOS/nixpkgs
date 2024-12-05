@@ -1,35 +1,50 @@
 {
   lib,
   buildPythonPackage,
+  dos2unix,
   fetchPypi,
+  fetchpatch2,
   numpy,
   pytestCheckHook,
   setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "numexpr";
-  version = "2.10.0";
+  version = "2.10.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yJ6TB1JjnfBAU5FgMm2PmahBWbvqQZQ6uOlgWR7arvA=";
+    hash = "sha256-m7qZ01SmXxoAiri4fwfYRATGaOZrq2JN9ba1NzQDz4E=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/pydata/numexpr/pull/491
+      name = "fix-test.patch";
+      url = "https://github.com/pydata/numexpr/commit/2c7bb85e117147570db5619ed299497a42af9f54.patch";
+      hash = "sha256-cv2logZ8dKeWNB5+bPmPfpfiWaV7k8+2sE9lZa+dUsA=";
+    })
+  ];
+
+  prePatch = ''
+    dos2unix numexpr/tests/test_numexpr.py
+  '';
 
   # patch for compatibility with numpy < 2.0
   # see more details, https://numpy.org/devdocs/numpy_2_0_migration_guide.html#c-api-changes
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0rc1" "numpy"
+      --replace-fail "numpy>=2.0.0" "numpy"
     sed -i "1i#define PyDataType_SET_ELSIZE(descr, elsize)" numexpr/interpreter.cpp
     sed -i "1i#define PyDataType_ELSIZE(descr) ((descr)->elsize)" numexpr/interpreter.cpp
   '';
 
+  nativeBuildInputs = [ dos2unix ];
+
   build-system = [
     setuptools
-    wheel
     numpy
   ];
 

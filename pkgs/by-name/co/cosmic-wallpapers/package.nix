@@ -8,7 +8,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cosmic-wallpapers";
-  version = "1.0.0-alpha.2";
+  version = "1.0.0-alpha.3";
 
   src = fetchFromGitHub {
     owner = "pop-os";
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rev = "epoch-${finalAttrs.version}";
     forceFetchGit = true;
     fetchLFS = true;
-    hash = "sha256-9abkb9dECE7qVq547DkpIUvaYLXLGfkRlTgLCbQtSPw=";
+    hash = "sha256-Exrps3DicL/G/g0kbSsCvoFhiJn1k3v8I09GhW7EwNM=";
   };
 
   patches = [
@@ -39,9 +39,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Wallpapers for the COSMIC Desktop Environment";
     homepage = "https://system76.com/cosmic";
     license = with lib.licenses; [
-      unfree # https://github.com/pop-os/cosmic-wallpapers/issues/1 https://github.com/pop-os/cosmic-wallpapers/issues/3
-      cc-by-40 # https://www.esa.int/ESA_Multimedia/Images/2017/06/A_stormy_stellar_nursery (A_stormy_stellar_nursery_esa_379309.jpg)
-      publicDomain # https://earthobservatory.nasa.gov/image-use-policy (otherworldly_earth_nasa_ISS064-E-29444.jpg, phytoplankton_bloom_nasa_oli2_20240121.jpg); https://hubblesite.org/copyright (orion_nebula_nasa_heic0601a.jpg); https://webbtelescope.org/copyright (tarantula_nebula_nasa_PIA23646.jpg); https://www.planetary.org/space-images/the-solar-systems-round-moons (round_moons_nasa.jpg)
+      # A_stormy_stellar_nursery_esa_379309.jpg: https://www.esa.int/ESA_Multimedia/Images/2017/06/A_stormy_stellar_nursery
+      # webb-inspired-wallpaper-system76.jpg
+      cc-by-40
+
+      # otherworldly_earth_nasa_ISS064-E-29444.jpg: https://earthobservatory.nasa.gov/image-use-policy
+      # phytoplankton_bloom_nasa_oli2_20240121.jpg: https://earthobservatory.nasa.gov/image-use-policy
+      # orion_nebula_nasa_heic0601a.jpg: https://hubblesite.org/copyright
+      # tarantula_nebula_nasa_PIA23646.jpg: https://webbtelescope.org/copyright
+      # round_moons_nasa.jpg: https://www.planetary.org/space-images/the-solar-systems-round-moons
+      publicDomain
     ];
     maintainers = with lib.maintainers; [ pandapip1 ];
     platforms = lib.platforms.unix;

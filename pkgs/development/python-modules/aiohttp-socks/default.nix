@@ -28,7 +28,7 @@ buildPythonPackage rec {
     aiohttp
     attrs
     python-socks
-  ];
+  ] ++ python-socks.optional-dependencies.asyncio;
 
   # Checks needs internet access
   doCheck = false;

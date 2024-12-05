@@ -22,6 +22,7 @@
 , "opengraph": "asl20"
 , "simple-login-captcha": "gpl2Plus"
 , "simple-mastodon-verification": "gpl2Plus"
+, "so-clean-up-wp-seo": "gpl3Plus"
 , "static-mail-sender-configurator": "mit"
 , "surge": "gpl3Only"
 , "tc-custom-javascript": "gpl2Plus"

@@ -7,6 +7,7 @@
 , wrapQtAppsHook
 
 , withGrass
+, withServer
 , withWebKit
 
 , bison
@@ -29,7 +30,7 @@
 , postgresql
 , proj
 , protobuf
-, python311
+, python3
 , qca-qt5
 , qscintilla
 , qt3d
@@ -48,7 +49,7 @@
 }:
 
 let
-  py = python311.override {
+  py = python3.override {
     self = py;
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
@@ -79,14 +80,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.38.3";
+  version = "3.40.1";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-yJFYq4t0LzBr+O2bmtBSeehQ2vfUaZIQfOY68WZcHG4=";
+    hash = "sha256-C86RwyeIZrflC5F2VQCw1LwF9VM4/OBEsLbGPiWKeco=";
   };
 
   passthru = {
@@ -157,7 +158,10 @@ in mkDerivation rec {
     "-DENABLE_TESTS=False"
     "-DQT_PLUGINS_DIR=${qtbase}/${qtbase.qtPluginPrefix}"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
-    ++ lib.optional withGrass (let
+    ++ lib.optional withServer [
+    "-DWITH_SERVER=True"
+    "-DQGIS_CGIBIN_SUBDIR=${placeholder "out"}/lib/cgi-bin"
+  ] ++ lib.optional withGrass (let
         gmajor = lib.versions.major grass.version;
         gminor = lib.versions.minor grass.version;
       in "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"

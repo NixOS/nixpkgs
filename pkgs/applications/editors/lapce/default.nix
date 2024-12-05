@@ -1,28 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, rustPlatform
-, cmake
-, pkg-config
-, perl
-, python3
-, fontconfig
-, glib
-, gtk3
-, openssl
-, libGL
-, libobjc
-, libxkbcommon
-, Security
-, CoreServices
-, ApplicationServices
-, Carbon
-, AppKit
-, wrapGAppsHook3
-, wayland
-, gobject-introspection
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  rustPlatform,
+  cmake,
+  pkg-config,
+  perl,
+  python3,
+  fontconfig,
+  glib,
+  gtk3,
+  openssl,
+  libGL,
+  libobjc,
+  libxkbcommon,
+  wrapGAppsHook3,
+  wayland,
+  gobject-introspection,
+  xorg,
+  apple-sdk_11,
 }:
 let
   rpathLibs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -85,33 +82,37 @@ rustPlatform.buildRustPackage rec {
     gobject-introspection
   ];
 
-  buildInputs = rpathLibs ++ [
-    glib
-    gtk3
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    fontconfig
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libobjc
-    Security
-    CoreServices
-    ApplicationServices
-    Carbon
-    AppKit
-  ];
+  buildInputs =
+    rpathLibs
+    ++ [
+      glib
+      gtk3
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      fontconfig
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libobjc
+      apple-sdk_11
+    ];
 
-  postInstall = if stdenv.hostPlatform.isLinux then ''
-    install -Dm0644 $src/extra/images/logo.svg $out/share/icons/hicolor/scalable/apps/dev.lapce.lapce.svg
-    install -Dm0644 $src/extra/linux/dev.lapce.lapce.desktop $out/share/applications/lapce.desktop
+  postInstall =
+    if stdenv.hostPlatform.isLinux then
+      ''
+        install -Dm0644 $src/extra/images/logo.svg $out/share/icons/hicolor/scalable/apps/dev.lapce.lapce.svg
+        install -Dm0644 $src/extra/linux/dev.lapce.lapce.desktop $out/share/applications/lapce.desktop
 
-    $STRIP -S $out/bin/lapce
+        $STRIP -S $out/bin/lapce
 
-    patchelf --add-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/lapce
-  '' else ''
-    mkdir $out/Applications
-    cp -r extra/macos/Lapce.app $out/Applications
-    ln -s $out/bin $out/Applications/Lapce.app/Contents/MacOS
-  '';
+        patchelf --add-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/lapce
+      ''
+    else
+      ''
+        mkdir $out/Applications
+        cp -r extra/macos/Lapce.app $out/Applications
+        ln -s $out/bin $out/Applications/Lapce.app/Contents/MacOS
+      '';
 
   dontPatchELF = true;
 
@@ -124,7 +125,5 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ elliot ];
     mainProgram = "lapce";
-    # Undefined symbols for architecture x86_64: "_NSPasteboardTypeFileURL"
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

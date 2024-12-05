@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sudachi-rs";
-  version = "0.6.8";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
     owner = "WorksApplications";
     repo = "sudachi.rs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9GXU+YDPuQ+roqQfUE5q17Hl6AopsvGhRPjZ+Ui+n24=";
+    hash = "sha256-G+lJzOYxrR/Le2lgfZMXbbjCqPYmCKMy1pIomTP5NIg=";
   };
 
   postPatch = ''
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
       --replace '"resources"' '"${placeholder "out"}/share/resources"'
   '';
 
-  cargoHash = "sha256-Ufo3dB2KGDDNiebp7hLhQrUMLsefO8wRpJQDz57Yb8Y=";
+  cargoHash = "sha256-iECIk5+QvTP1xiH9AcEJGKt1YHG8KASYmsuIq0vHD20=";
 
   # prepare the resources before the build so that the binary can find sudachidict
   preBuild = ''

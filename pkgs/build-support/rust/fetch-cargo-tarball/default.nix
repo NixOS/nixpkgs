@@ -85,6 +85,10 @@ stdenv.mkDerivation (
       # Ensure deterministic Cargo vendor builds
       export SOURCE_DATE_EPOCH=1
 
+      if [ -n "''${cargoRoot-}" ]; then
+        cd "$cargoRoot"
+      fi
+
       if [[ ! -f Cargo.lock ]]; then
           echo
           echo "ERROR: The Cargo.lock file doesn't exist"
@@ -120,8 +124,9 @@ stdenv.mkDerivation (
           echo
           echo "ERROR: The Cargo.lock contains git dependencies"
           echo
-          echo "This is currently not supported in the fixed-output derivation fetcher."
-          echo "Use cargoLock.lockFile / importCargoLock instead."
+          echo "This is not supported in the default fixed-output derivation fetcher."
+          echo "Set \`useFetchCargoVendor = true\` / use fetchCargoVendor"
+          echo "or use cargoLock.lockFile / importCargoLock instead."
           echo
 
           exit 1

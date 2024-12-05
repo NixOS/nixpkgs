@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-api-core";
-  version = "0.35.5";
+  version = "0.36.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-api-core";
     rev = "v${version}";
-    hash = "sha256-YdBsA8qKcWpR+L/I9rEFntR448kaxEjYuGDPS1ynsMU=";
+    hash = "sha256-LzABTSIa7guoAYv9scSm2edxeiSS7yMfJdZnAqXHtF0=";
   };
 
   build-system = [
@@ -67,6 +67,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Permission denied: '/run'
     "test_ensure_configuration_file_is_created"
+    "test_ovpnconfig_with_certificate"
     "test_ovpnconfig_with_settings"
     "test_wireguard_config_content_generation"
     "test_wireguard_with_non_certificate"

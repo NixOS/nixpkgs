@@ -33,15 +33,15 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.3.0-unstable-2024-10-14";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
-    rev = "09725bd921088b73746605e672abf6ff40171880";
-    hash = "sha256-NtIiqmiZ1iCciMjT1cL7ONWxNHRO/0bci/thLrcORjo=";
+    rev = "refs/tags/v.${finalAttrs.version}";
+    hash = "sha256-dAhm9XMFnpNmbgi/TGktNHMdFDYPOWj31pZkBoUfQhA=";
     fetchSubmodules = true;
   };
 
@@ -55,6 +55,9 @@ stdenv.mkDerivation {
     # downloading an AppImage and trying to run it just won't work.
     # https://github.com/shadps4-emu/shadPS4/issues/1368
     ./0001-Disable-update-checking.patch
+
+    # https://github.com/shadps4-emu/shadPS4/issues/1457
+    ./av_err2str_macro.patch
   ];
 
   buildInputs = [
@@ -132,9 +135,10 @@ stdenv.mkDerivation {
   meta = {
     description = "Early in development PS4 emulator";
     homepage = "https://github.com/shadps4-emu/shadPS4";
+    changelog = "https://github.com/shadps4-emu/shadPS4/releases/tag/v.${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ryand56 ];
     mainProgram = "shadps4";
     platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86_64;
   };
-}
+})

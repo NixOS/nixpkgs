@@ -33,7 +33,6 @@
 , lib
 , makeBinaryWrapper
 , nix-update-script
-, writeShellScriptBin
 , enableExecutable ? true
 , enableWsi ? true
 }:
@@ -47,14 +46,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.15.13";
+  version = "3.15.14";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-AePYKdDyAtnVkL8/VeWmhJ3ATZnhyVZcU/QtVpCfTQE=";
+    hash = "sha256-LVwwkISokjSXEYd/SFRtCDDY6P2sr6pQp8Xb8BsrXAw=";
   };
 
   patches = [
@@ -101,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
 
     # calls git describe to encode its own version into the build
-    (writeShellScriptBin "git" "echo ${finalAttrs.version}")
+    (buildPackages.writeShellScriptBin "git" "echo ${finalAttrs.version}")
   ] ++ lib.optionals enableExecutable [
     makeBinaryWrapper
     glslang

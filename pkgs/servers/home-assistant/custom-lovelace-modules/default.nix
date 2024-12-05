@@ -9,6 +9,8 @@
 
   atomic-calendar-revive = callPackage ./atomic-calendar-revive { };
 
+  bubble-card = callPackage ./bubble-card { };
+
   button-card = callPackage ./button-card { };
 
   card-mod = callPackage ./card-mod { };
@@ -31,16 +33,20 @@
 
   rmv-card = callPackage ./rmv-card { };
 
+  sankey-chart = callPackage ./sankey-chart { };
+
   template-entity-row = callPackage ./template-entity-row { };
 
   universal-remote-card = callPackage ./universal-remote-card { };
 
   valetudo-map-card = callPackage ./valetudo-map-card { };
 
+  weather-card = callPackage ./weather-card { };
+
   zigbee2mqtt-networkmap = callPackage ./zigbee2mqtt-networkmap { };
 }
 // lib.optionalAttrs pkgs.config.allowAliases {
   android-tv-card =
-    lib.warn "`home-assistant-custom-lovelace-modules.android-tv-card` has been renamed to `universal-remote-card`"
+    lib.warnOnInstantiate "`home-assistant-custom-lovelace-modules.android-tv-card` has been renamed to `universal-remote-card`"
     pkgs.home-assistant-custom-lovelace-modules.universal-remote-card;
 }

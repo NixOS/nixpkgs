@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clevis";
-  version = "20";
+  version = "21";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "clevis";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-rBdZrnHPzRd9vbyl1h/Nb0cFAtIPUHSmxVoKrKuCrQ8=";
+    hash = "sha256-2vDQP+yvH4v46fLEWG/37r5cYP3OeDfJz71cDHEGiUg=";
   };
 
   patches = [

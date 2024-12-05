@@ -35,14 +35,14 @@ buildType = if stdenv.hostPlatform.isDarwin then
 
 edk2 = stdenv.mkDerivation {
   pname = "edk2";
-  version = "202408";
+  version = "202411";
 
   srcWithVendoring = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2";
     rev = "edk2-stable${edk2.version}";
     fetchSubmodules = true;
-    hash = "sha256-2odaTqiAZD5xduT0dwIYWj3gY/aFPVsTFbblIsEhBiA=";
+    hash = "sha256-KYaTGJ3DHtWbPEbP+n8MTk/WwzLv5Vugty/tvzuEUf0=";
   };
 
   src = applyPatches {

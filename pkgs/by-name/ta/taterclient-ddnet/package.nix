@@ -27,25 +27,25 @@
   glslang,
   spirv-tools,
   gtest,
-  darwin,
+  apple-sdk_11,
 }:
 let
   clientExecutable = "TaterClient-DDNet";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "8.6.0";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "sjrc6";
     repo = "taterclient-ddnet";
     rev = finalAttrs.version;
-    hash = "sha256-IfTQRMC2wcEH+KhlADHVIhfavlTN4mfTtlN5+/KojA0=";
+    hash = "sha256-2vWZ5RE65nJrKEtqD2/vK0RKnIK3mSYdlcS/OD9jFvw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-L6NsLC5hg4/MlTfnOITBNoPIoKxlDx5BwXWnV7W4uT0=";
+    hash = "sha256-+NY2g8WeuMxsh3WJHhn3ESLxIUnvaf73qjlWaLOYzuM=";
   };
 
   nativeBuildInputs = [
@@ -80,15 +80,9 @@ stdenv.mkDerivation (finalAttrs: {
       spirv-tools
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Carbon
-        Cocoa
-        OpenGL
-        Security
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_11
+    ];
 
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \

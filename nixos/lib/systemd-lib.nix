@@ -99,8 +99,9 @@ in rec {
       l = reverseList (stringToCharacters s);
       suffix = head l;
       nums = tail l;
-    in elem suffix (["K" "M" "G" "T"] ++ digits)
-      && all (num: elem num digits) nums;
+    in builtins.isInt s
+      || (elem suffix (["K" "M" "G" "T"] ++ digits)
+          && all (num: elem num digits) nums);
 
   assertByteFormat = name: group: attr:
     optional (attr ? ${name} && ! isByteFormat attr.${name})

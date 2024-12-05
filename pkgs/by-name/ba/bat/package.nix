@@ -7,7 +7,7 @@
 , libiconv
 , installShellFiles
 , makeWrapper
-, darwin
+, apple-sdk_11
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv apple-sdk_11 ];
 
   postInstall = ''
     installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1

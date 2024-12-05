@@ -1,26 +1,25 @@
 #!/usr/bin/env python
 # format:
-# $ nix run nixpkgs#python3Packages.black -- update.py
+# $ nix run nixpkgs#python3Packages.ruff -- update.py
 # type-check:
 # $ nix run nixpkgs#python3Packages.mypy -- update.py
 # linted:
 # $ nix run nixpkgs#python3Packages.flake8 -- --ignore E501,E265,E402 update.py
 
-import inspect
-import os
-import tempfile
-import shutil
-from dataclasses import dataclass
-import subprocess
 import csv
+import inspect
 import logging
+import os
+import shutil
+import subprocess
+import tempfile
 import textwrap
+from dataclasses import dataclass
 from multiprocessing.dummy import Pool
-import pluginupdate
-from pluginupdate import update_plugins, FetchConfig
-
-from typing import List, Tuple, Optional
 from pathlib import Path
+
+import pluginupdate
+from pluginupdate import FetchConfig, update_plugins
 
 log = logging.getLogger()
 log.addHandler(logging.StreamHandler())
@@ -35,9 +34,7 @@ HEADER = """/* {GENERATED_NIXFILE} is an auto-generated file -- DO NOT EDIT!
 Regenerate it with: nix run nixpkgs#luarocks-packages-updater
 You can customize the generated packages in pkgs/development/lua-modules/overrides.nix
 */
-""".format(
-    GENERATED_NIXFILE=GENERATED_NIXFILE
-)
+""".format(GENERATED_NIXFILE=GENERATED_NIXFILE)
 
 FOOTER = """
 }
@@ -51,18 +48,18 @@ class LuaPlugin:
     """Name of the plugin, as seen on luarocks.org"""
     rockspec: str
     """Full URI towards the rockspec"""
-    ref: Optional[str]
+    ref: str | None
     """git reference (branch name/tag)"""
-    version: Optional[str]
+    version: str | None
     """Set it to pin a package """
-    server: Optional[str]
+    server: str | None
     """luarocks.org registers packages under different manifests.
     Its value can be 'http://luarocks.org/dev'
     """
-    luaversion: Optional[str]
+    luaversion: str | None
     """lua version if a package is available only for a specific lua version"""
-    maintainers: Optional[str]
-    """ Optional string listing maintainers separated by spaces"""
+    maintainers: str | None
+    """Optional string listing maintainers separated by spaces"""
 
     @property
     def normalized_name(self) -> str:
@@ -71,7 +68,6 @@ class LuaPlugin:
 
 # rename Editor to LangUpdate/ EcosystemUpdater
 class LuaEditor(pluginupdate.Editor):
-
     def create_parser(self):
         parser = super().create_parser()
         parser.set_defaults(proc=1)
@@ -80,7 +76,7 @@ class LuaEditor(pluginupdate.Editor):
     def get_current_plugins(self):
         return []
 
-    def load_plugin_spec(self, input_file) -> List[LuaPlugin]:
+    def load_plugin_spec(self, input_file) -> list[LuaPlugin]:
         luaPackages = []
         csvfilename = input_file
         log.info("Loading package descriptions from %s", csvfilename)
@@ -98,7 +94,7 @@ class LuaEditor(pluginupdate.Editor):
     def update(self, args):
         update_plugins(self, args)
 
-    def generate_nix(self, results: List[Tuple[LuaPlugin, str]], outfilename: str):
+    def generate_nix(self, results: list[tuple[LuaPlugin, str]], outfilename: str):
         with tempfile.NamedTemporaryFile("w+") as f:
             f.write(HEADER)
             header2 = textwrap.dedent(
@@ -124,7 +120,16 @@ class LuaEditor(pluginupdate.Editor):
     def attr_path(self):
         return "luaPackages"
 
-    def get_update(self, input_file: str, outfile: str, config: FetchConfig):
+    def get_update(
+        self,
+        input_file: str,
+        outfile: str,
+        config: FetchConfig,
+        # TODO: implement support for adding/updating individual plugins
+        to_update: list[str] | None,
+    ):
+        if to_update is not None:
+            raise NotImplementedError("For now, lua updater doesn't support updating individual packages.")
         _prefetch = generate_pkg_nix
 
         def update() -> dict:
@@ -173,10 +178,7 @@ def generate_pkg_nix(plug: LuaPlugin):
 
     if plug.rockspec != "":
         if plug.ref or plug.version:
-            msg = (
-                "'version' and 'ref' will be ignored as the rockspec is hardcoded for package %s"
-                % plug.name
-            )
+            msg = "'version' and 'ref' will be ignored as the rockspec is hardcoded for package %s" % plug.name
             log.warning(msg)
 
         log.debug("Updating from rockspec %s", plug.rockspec)
@@ -193,7 +195,7 @@ def generate_pkg_nix(plug: LuaPlugin):
 
     if plug.luaversion:
         cmd.append(f"--lua-version={plug.luaversion}")
-        luaver = plug.luaversion.replace('.', '')
+        luaver = plug.luaversion.replace(".", "")
         if luaver := os.getenv(f"LUA_{luaver}"):
             cmd.append(f"--lua-dir={luaver}")
 

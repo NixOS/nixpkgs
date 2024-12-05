@@ -32,11 +32,9 @@
   graphql-language-service-cli = "graphql-lsp";
   grunt-cli = "grunt";
   gulp-cli = "gulp";
-  kaput-cli = "kaput";
   less = "lessc";
   localtunnel = "lt";
   lua-fmt = "luafmt";
-  neovim = "neovim-node-host";
   parsoid = "parse.js";
   poor-mans-t-sql-formatter-cli = "sqlformat";
   postcss-cli = "postcss";

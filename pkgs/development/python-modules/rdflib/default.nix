@@ -23,7 +23,7 @@
 
   # tests
   pip,
-  pytest-cov,
+  pytest-cov-stub,
   pytest7CheckHook,
   setuptools,
 }:
@@ -59,7 +59,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pip
-    pytest-cov
+    pytest-cov-stub
     # Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
     pytest7CheckHook
     setuptools

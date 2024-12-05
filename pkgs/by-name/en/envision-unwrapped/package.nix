@@ -31,23 +31,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "envision-unwrapped";
-  version = "0-unstable-2024-09-28";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     owner = "gabmus";
     repo = "envision";
-    rev = "56d500a9f914ce2ddad038223711192e4d1dcbe1";
-    hash = "sha256-8wU2sjhH026l6a11XZ5Qdu5x/EbI+ZqwE7AixsYMCFk=";
+    rev = finalAttrs.version;
+    hash = "sha256-Q6PGBt3vWAp5QhSFsG88gi9ZFHLOQLAYdKpS94wCwCc=";
   };
 
   strictDeps = true;
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libmonado-rs-0.1.0" = "sha256-xztevBUaYBm5G3A0ZTb+3GV3g1IAU3SzfSS5BBqfp1Y=";
-      "openxr-0.18.0" = "sha256-ktkbhmExstkNJDYM/HYOwAwv3acex7P9SP0KMAOKhQk=";
-    };
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-JRSTzcurHNUtyISAvhvdLJkokxLnoR+xs42YiRVmZnE=";
   };
 
   nativeBuildInputs = [
@@ -84,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${lib.makeBinPath [ gdb ]}"
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=main" ]; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "UI for building, configuring and running Monado, the open source OpenXR runtime";

@@ -11,7 +11,7 @@
   albucore,
   eval-type-backport,
   numpy,
-  opencv4,
+  opencv-python,
   pydantic,
   pyyaml,
   scikit-image,
@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "albumentations";
-  version = "1.4.18";
+  version = "1.4.20";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,14 +40,14 @@ buildPythonPackage rec {
     owner = "albumentations-team";
     repo = "albumentations";
     rev = "refs/tags/${version}";
-    hash = "sha256-uAYnbglBT1mduyRnsWWjZ8axG7DzZEVcgAVeMLF48oM=";
+    hash = "sha256-lyYbkO2J3kpZGk8Q3FYfRiQh+BdolCfeEcjlI3W/rIw=";
   };
 
   patches = [
     ./dont-check-for-updates.patch
   ];
 
-  pythonRemoveDeps = [ "opencv-python" ];
+  pythonRelaxDeps = [ "opencv-python" ];
 
   build-system = [ setuptools ];
 
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     albucore
     eval-type-backport
     numpy
-    opencv4
+    opencv-python
     pydantic
     pyyaml
     scikit-image

@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   rimeDataDrv = symlinkJoin {
     name = "fcitx5-rime-data";
     paths = rimeDataPkgs;
+    postBuild = "mkdir -p $out/share/rime-data";
   };
 
   postInstall = ''

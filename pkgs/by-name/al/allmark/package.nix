@@ -10,20 +10,24 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "andreaskoch";
-    repo = pname;
+    repo = "allmark";
     rev = "v${version}";
     hash = "sha256-JfNn/e+cSq1pkeXs7A2dMsyhwOnh7x2bwm6dv6NOjLU=";
   };
 
-  postPatch = ''
-    go mod init github.com/andreaskoch/allmark
-  '';
+  vendorHash = "sha256-dEmI+COrWhXdqtTkLIjyiUapHtjezCEuY9jLDqxkBBg=";
 
-  vendorHash = null;
+  deleteVendor = true;
+
+  patches = [
+    ./0001-Add-go.mod-go.sum.patch # Add go.mod, go.sum, remove vendor
+  ];
 
   postInstall = ''
     mv $out/bin/{cli,allmark}
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Cross-platform markdown web server";

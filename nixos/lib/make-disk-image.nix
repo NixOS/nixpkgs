@@ -163,6 +163,9 @@ To solve this, you can run `fdisk -l $image` and generate `dd if=$image of=$imag
 , # Disk image format, one of qcow2, qcow2-compressed, vdi, vpc, raw.
   format ? "raw"
 
+, # Disk image filename, without any extensions (e.g. `image_1`).
+  baseName ? "nixos"
+
   # Whether to fix:
   #   - GPT Disk Unique Identifier (diskGUID)
   #   - GPT Partition Unique Identifier: depends on the layout, root partition UUID can be controlled through `rootGPUID` option
@@ -208,7 +211,7 @@ let format' = format; in let
 
   compress = lib.optionalString (format' == "qcow2-compressed") "-c";
 
-  filename = "nixos." + {
+  filename = "${baseName}." + {
     qcow2 = "qcow2";
     vdi   = "vdi";
     vpc   = "vhd";
@@ -470,7 +473,7 @@ let format' = format; in let
       additionalSpace=$(( $(numfmt --from=iec '${additionalSpace}') + reservedSpace ))
 
       # Compute required space in filesystem blocks
-      diskUsage=$(find . ! -type d -print0 | du --files0-from=- --apparent-size --block-size "${blockSize}" | cut -f1 | sum_lines)
+      diskUsage=$(find . ! -type d -print0 | du --files0-from=- --apparent-size --count-links --block-size "${blockSize}" | cut -f1 | sum_lines)
       # Each inode takes space!
       numInodes=$(find . | wc -l)
       # Convert to bytes, inodes take two blocks each!

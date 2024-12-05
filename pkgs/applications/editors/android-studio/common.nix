@@ -137,7 +137,7 @@ let
           e2fsprogs
 
           # Gradle wants libstdc++.so.6
-          stdenv.cc.cc.lib
+          (lib.getLib stdenv.cc.cc)
           # mksdcard wants 32 bit libstdc++.so.6
           pkgsi686Linux.stdenv.cc.cc.lib
 
@@ -208,7 +208,8 @@ let
   # (e.g. `mksdcard`) have `/lib/ld-linux.so.2` set as the interpreter. An FHS
   # environment is used as a work around for that.
   fhsEnv = buildFHSEnv {
-    name = "${drvName}-fhs-env";
+    pname = "${drvName}-fhs-env";
+    inherit version;
     multiPkgs = pkgs: [
       ncurses5
 
@@ -294,6 +295,7 @@ let
         dev = stable;
       }."${channel}";
       mainProgram = pname;
+      sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     };
   }
   ''

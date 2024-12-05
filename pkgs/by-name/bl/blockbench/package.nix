@@ -12,13 +12,13 @@
 
 buildNpmPackage rec {
   pname = "blockbench";
-  version = "4.11.1";
+  version = "4.11.2";
 
   src = fetchFromGitHub {
     owner = "JannisX11";
     repo = "blockbench";
-    rev = "v${version}";
-    hash = "sha256-a+55seE5tFxTmdTn4qDFWWW6C6FzO8Vgjvfow/tBqf0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rUMzn+3j+RL8DY8euS6a4MmdoIAVLXxXu9wvKNmK/TU=";
   };
 
   nativeBuildInputs =
@@ -71,7 +71,7 @@ buildNpmPackage rec {
 
       makeWrapper ${lib.getExe electron} $out/bin/blockbench \
           --add-flags $out/share/blockbench/resources/app.asar \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           --inherit-argv0
     ''}
 
@@ -93,7 +93,7 @@ buildNpmPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/JannisX11/blockbench/releases/tag/${src.rev}";
+    changelog = "https://github.com/JannisX11/blockbench/releases/tag/v${version}";
     description = "Low-poly 3D modeling and animation software";
     homepage = "https://blockbench.net/";
     license = lib.licenses.gpl3Only;

@@ -5,6 +5,7 @@
 , wrapQtAppsHook
 , qtbase
 , qtwayland
+, qtsvg
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -27,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildInputs = [ qtbase ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
+    qtwayland qtsvg
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -42,6 +43,11 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [
     "nitrokeyapp"
   ];
+
+  postInstall = ''
+    install -Dm755 meta/com.nitrokey.nitrokey-app2.desktop $out/share/applications/com.nitrokey.nitrokey-app2.desktop
+    install -Dm755 meta/nk-app2.png $out/share/icons/hicolor/128x128/apps/com.nitrokey.nitrokey-app2.png
+  '';
 
   meta = with lib; {
     description = "This application allows to manage Nitrokey 3 devices";

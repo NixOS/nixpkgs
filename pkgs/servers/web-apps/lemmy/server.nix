@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
 
     # tests require network access
     "--skip=scheduled_tasks::tests::test_nodeinfo_mastodon_social"
-    "--skip=scheduled_tasks::tests::test_nodeinfo_voyager_lemmy_ml"
+    "--skip=scheduled_tasks::tests::test_nodeinfo_lemmy_ml"
   ];
 
   passthru.updateScript = ./update.py;

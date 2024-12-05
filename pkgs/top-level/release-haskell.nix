@@ -9,7 +9,7 @@
 
   $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
 */
-{ supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ] }:
+{ supportedSystems ? import ../../ci/supportedSystems.nix }:
 
 let
 
@@ -75,6 +75,7 @@ let
     ghc966
     ghc981
     ghc982
+    ghc983
     ghc9101
   ];
 
@@ -366,7 +367,6 @@ let
         stylish-haskell
         taffybar
         tamarin-prover
-        taskell
         termonad
         tldr-hs
         tweet-hs
@@ -379,6 +379,7 @@ let
         xmobar
         xmonadctl
         xmonad-with-packages
+        yi
         zsh-git-prompt
         ;
 
@@ -465,8 +466,8 @@ let
               ;
             };
 
-            haskell.packages.native-bignum.ghc982 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc982)
+            haskell.packages.native-bignum.ghc983 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc983)
                 hello
                 random
                 QuickCheck
@@ -560,9 +561,8 @@ let
         compilerNames.ghc9101
       ] released;
       Cabal_3_10_3_0 = released;
-      Cabal-syntax_3_10_3_0 = released;
       Cabal_3_12_1_0 = released;
-      Cabal-syntax_3_12_1_0 = released;
+      Cabal_3_14_0_0 = released;
       cabal2nix = lib.subtractLists [
         compilerNames.ghc9101
       ] released;
@@ -590,9 +590,6 @@ let
       language-nix = lib.subtractLists [
         compilerNames.ghc9101
       ] released;
-      large-hashable = [
-        compilerNames.ghc928
-      ];
       nix-paths = released;
       titlecase = lib.subtractLists [
         compilerNames.ghc9101
@@ -724,7 +721,7 @@ let
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskell.packages.native-bignum.ghc948 # non-hadrian
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc982
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc983
         ];
       };
     }

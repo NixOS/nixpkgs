@@ -45,6 +45,8 @@ buildPythonPackage rec {
   disabledTests = [
     # super slow
     "test_source_code_from_libcst_node_type"
+    # https://github.com/Zac-HD/hypothesmith/issues/38
+    "test_black_autoformatter_from_grammar"
   ];
 
   pythonImportsCheck = [ "hypothesmith" ];

@@ -1,4 +1,5 @@
-{ qtModule
+{ lib
+, qtModule
 , qtbase
 , qtdeclarative
 , wayland
@@ -22,4 +23,9 @@ qtModule {
   postPatch = ''
     cp ${wayland-scanner}/share/wayland/wayland.xml src/3rdparty/protocol/wayland/wayland.xml
   '';
+
+  meta = {
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
+  };
 }

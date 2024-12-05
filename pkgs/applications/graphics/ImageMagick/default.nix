@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch2
 , pkg-config
 , libtool
 , bzip2Support ? true, bzip2
@@ -24,6 +25,7 @@
 , openjpegSupport ? !stdenv.hostPlatform.isMinGW, openjpeg
 , libwebpSupport ? !stdenv.hostPlatform.isMinGW, libwebp
 , libheifSupport ? true, libheif
+, fftwSupport ? true, fftw
 , potrace
 , coreutils
 , curl
@@ -49,14 +51,21 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
-  version = "7.1.1-39";
+  version = "7.1.1-40";
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
-    hash = "sha256-3NUl0q/j3dBdNBtLH+69vh0elobBnTOvqQpC/2KwGBU=";
+    hash = "sha256-NrTIx1OvwPIeVlA39hGkXZ2Atk4FCsU3/55SZeSc40E=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/ImageMagick/ImageMagick/commit/bf5650f0dd41b500102a129d6867cb568f4edee4.patch";
+      hash = "sha256-nxvSTyNZ35DqjR41nM5uidWwRFWzd1e/LFE0n3fpbb8=";
+    })
+  ];
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny
@@ -76,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature libjxlSupport "jxl")
     (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript.fonts}/share/fonts")
     (lib.withFeature ghostscriptSupport "gslib")
+    (lib.withFeature fftwSupport "fftw")
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     # due to libxml2 being without DLLs ATM
     "--enable-static" "--disable-shared"
@@ -113,7 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional lcms2Support lcms2
     ++ lib.optional libX11Support libX11
     ++ lib.optional libXtSupport libXt
-    ++ lib.optional libwebpSupport libwebp;
+    ++ lib.optional libwebpSupport libwebp
+    ++ lib.optional fftwSupport fftw;
 
   postInstall = ''
     (cd "$dev/include" && ln -s ImageMagick* ImageMagick)
@@ -146,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ dotlambda rhendric ];
+    maintainers = with maintainers; [ dotlambda rhendric bloxx12 ];
     license = licenses.asl20;
     mainProgram = "magick";
   };

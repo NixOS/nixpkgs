@@ -11,7 +11,7 @@
 
 let
   pname = "tflint";
-  version = "0.52.0";
+  version = "0.54.0";
 in
 buildGoModule {
   inherit pname version;
@@ -20,10 +20,10 @@ buildGoModule {
     owner = "terraform-linters";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-H27krznCX00F0EZ4ahdsMVh+wcAAUC/ErQac9Y4QaJs=";
+    hash = "sha256-/eome0jF0l7Hb5c96c2S80I7DQGmyF09IgOEudpXMuE=";
   };
 
-  vendorHash = "sha256-jTwzheC/BtcuLGwtLanOccbidOPCHmqxJ4Mwhsid6jY=";
+  vendorHash = "sha256-dYMfZcz4d+XWgnQ/u+BjNN2bFQnRNums7D0tTzYkC+Y=";
 
   doCheck = false;
 

@@ -8,9 +8,6 @@
   pkg-config,
   curl,
   openssl,
-  Security,
-  CoreServices,
-  libiconv,
   xz,
   substituteAll,
   # for passthru.tests:
@@ -19,25 +16,25 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "edgedb";
-  version = "5.4.1";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "edgedb";
     repo = "edgedb-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qythVPcNijYmdH/IvyoYZIB8WfYiB8ByYLz+VuWGRAM=";
+    hash = "sha256-GBtqAHmXHgsWRXelOQ9i3R0VL8OqcASfpWU/EJaimNo=";
     fetchSubmodules = true;
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "edgedb-derive-0.5.2" = "sha256-mKgJ0Jge/eZHCT89BEOR4/Pzbu63UUoeHSp7w9GgANs=";
-      "edgeql-parser-0.1.0" = "sha256-v3B7aKEVWweTXxdl6GfutdqHGw+qkI6OPZw7OBPVn0w=";
+      "edgedb-derive-0.5.2" = "sha256-r1KWnIbX/TV2ZK/WXtYaNsGOqxMeykD1bgFyA992FGE=";
+      "edgeql-parser-0.1.0" = "sha256-qyY8mvZhLgQJgT7ZtxkyhpQMCLPGAIzw/E64rMiOAkw=";
       "rexpect-0.5.0" = "sha256-vstAL/fJWWx7WbmRxNItKpzvgGF3SvJDs5isq9ym/OA=";
-      "serde_str-1.0.0" = "sha256-CMBh5lxdQb2085y0jc/DrV6B8iiXvVO2aoZH/lFFjak=";
       "scram-0.7.0" = "sha256-QTPxyXBpMXCDkRRJEMYly1GKp90khrwwuMI1eHc2H+Y=";
-      "test-utils-0.1.0" = "sha256-FoF/U89Q9E2Dlmpoh+cfDcScmhcsSNut+rE7BECJSJI=";
+      "serde_str-1.0.0" = "sha256-CMBh5lxdQb2085y0jc/DrV6B8iiXvVO2aoZH/lFFjak=";
+      "test-utils-0.1.0" = "sha256-u29t7o+iBw3ja0LdbsQVntQMm5j4a2pDIyDfAvDGHiI=";
       "warp-0.3.6" = "sha256-knDt2aw/PJ0iabhKg+okwwnEzCY+vQVhE7HKCTM6QbE=";
     };
   };
@@ -55,9 +52,6 @@ rustPlatform.buildRustPackage rec {
       openssl
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      Security
-      libiconv
       xz
     ];
 
@@ -82,15 +76,15 @@ rustPlatform.buildRustPackage rec {
     command = "edgedb --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "EdgeDB cli";
     homepage = "https://www.edgedb.com/docs/cli/index";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ahirner
       kirillrdy
     ];

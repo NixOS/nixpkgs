@@ -165,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
       bsd3
     ];
     mainProgram = "aegisub";
-    maintainers = with lib.maintainers; [ AndersonTorres wegank ];
+    maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
   };
 })

@@ -8,13 +8,13 @@
 }:
 mkHyprlandPlugin hyprland rec {
   pluginName = "hyprsplit";
-  version = "0.44.1";
+  version = "0.45.0";
 
   src = fetchFromGitHub {
     owner = "shezdy";
     repo = "hyprsplit";
     rev = "refs/tags/v${version}";
-    hash = "sha256-l+DQHWPMyUCXbKhbIFVooTKKnCRQ97Ic5smw4VzUcTc=";
+    hash = "sha256-otDIivy4sMZBN2t9eHVI5PaFacg2Je4U9gBPPcH/Vpo=";
   };
 
   nativeBuildInputs = [

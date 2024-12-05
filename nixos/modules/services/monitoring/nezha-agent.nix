@@ -52,6 +52,20 @@ in
           Disable executing the command from dashboard.
         '';
       };
+      disableNat = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Disable NAT penetration.
+        '';
+      };
+      disableSendQuery = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Disable sending TCP/ICMP/HTTP requests.
+        '';
+      };
       skipConnection = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -92,6 +106,14 @@ in
           Address to the dashboard
         '';
       };
+      extraFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [ "--gpu" ];
+        description = ''
+          Extra command-line flags passed to nezha-agent.
+        '';
+      };
     };
   };
 
@@ -117,6 +139,8 @@ in
         ]
         ++ lib.optional cfg.debug "--debug"
         ++ lib.optional cfg.disableCommandExecute "--disable-command-execute"
+        ++ lib.optional cfg.disableNat "--disable-nat"
+        ++ lib.optional cfg.disableSendQuery "--disable-send-query"
         ++ lib.optional (cfg.reportDelay != null) "--report-delay ${toString cfg.reportDelay}"
         ++ lib.optional (cfg.server != null) "--server ${cfg.server}"
         ++ lib.optional cfg.skipConnection "--skip-conn"
@@ -125,6 +149,7 @@ in
         ++ lib.optional cfg.gpu "--gpu"
         ++ lib.optional cfg.temperature "--temperature"
         ++ lib.optional cfg.useIPv6CountryCode "--use-ipv6-countrycode"
+        ++ cfg.extraFlags
       );
       wantedBy = [ "multi-user.target" ];
     };

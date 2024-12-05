@@ -144,7 +144,7 @@ rustPlatform.buildRustPackage {
     openssl
     rustfmt
     lld
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   nativeBuildInputs = [
@@ -170,7 +170,7 @@ rustPlatform.buildRustPackage {
           bash
         ]
       } \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc ]} \
       --set PYTHON_PATH "${pythonEnv}/bin/python3" \
       --set GO_PATH "${go}/bin/go" \
       --set DENO_PATH "${deno}/bin/deno" \

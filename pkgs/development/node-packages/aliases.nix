@@ -71,6 +71,7 @@ mapAliases {
   inherit (pkgs) clean-css-cli; # added 2023-08-18
   inherit (pkgs) clubhouse-cli; # added 2023-08-18
   inherit (pkgs) coc-clangd; # added 2024-06-29
+  inherit (pkgs) coc-css; # added 2024-06-29
   inherit (pkgs) coc-diagnostic; # added 2024-06-29
   coc-imselect = throw "coc-imselect was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) coc-pyright; # added 2024-07-14
@@ -123,6 +124,7 @@ mapAliases {
   ionic = throw "ionic was replaced by @ionic/cli"; # added 2023-08-19
   inherit (pkgs) jake; # added 2023-08-19
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
+  inherit (pkgs) kaput-cli; # added 2024-12-03
   karma = pkgs.karma-runner; # added 2023-07-29
   leetcode-cli = self.vsc-leetcode-cli; # added 2023-08-31
   inherit (pkgs) lv_font_conv; # added 2024-06-28
@@ -135,6 +137,7 @@ mapAliases {
   inherit (pkgs) mermaid-cli; # added 2023-10-01
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
   inherit (pkgs) near-cli; # added 2023-09-09
+  neovim = pkgs.neovim-node-client; # added 2024-11-13
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) node-gyp; # added 2024-08-13
   inherit (pkgs) node-pre-gyp; # added 2024-08-05
@@ -208,6 +211,7 @@ mapAliases {
   inherit (pkgs) web-ext; # added 2023-08-20
   inherit (pkgs) wrangler; # added 2024-07-01
   inherit (pkgs) write-good; # added 2023-08-20
+  inherit (pkgs) yalc; # added 2024-06-29
   inherit (pkgs) yaml-language-server; # added 2023-09-05
   inherit (pkgs) yarn; # added 2024-08-13
   inherit (pkgs) yo; # added 2023-08-20

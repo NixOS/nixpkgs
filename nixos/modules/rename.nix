@@ -20,6 +20,7 @@ in
     (mkAliasOptionModuleMD [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ])
 
     # Completely removed modules
+    (mkRemovedOptionModule [ "boot" "loader" "raspberryPi" ] "The raspberryPi boot loader has been removed. See https://github.com/NixOS/nixpkgs/pull/241534 for what to use instead.")
     (mkRemovedOptionModule [ "environment" "blcr" "enable" ] "The BLCR module has been removed")
     (mkRemovedOptionModule [ "environment" "noXlibs" ] ''
       The environment.noXlibs option was removed, as it often caused surprising breakages for new users.
@@ -31,6 +32,10 @@ in
       brightnessctl don't require the udev rules anymore (they can use the
       systemd-logind API). Instead of using the module you can now
       simply add the brightnessctl package to environment.systemPackages.
+    '')
+    (mkRemovedOptionModule [ "hardware" "gkraken" "enable" ] ''
+      gkraken was deprecated by coolercontrol and thus removed from nixpkgs.
+      Consider using programs.coolercontrol instead.
     '')
     (mkRemovedOptionModule [ "hardware" "u2f" ] ''
       The U2F modules module was removed, as all it did was adding the
@@ -62,7 +67,9 @@ in
     (mkRemovedOptionModule [ "services" "beegfsEnable" ] "The BeeGFS module has been removed")
     (mkRemovedOptionModule [ "services" "cgmanager" "enable"] "cgmanager was deprecated by lxc and therefore removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "chronos" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "confluence" ] "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements")
     (mkRemovedOptionModule [ "services" "couchpotato" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "crowd" ] "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements")
     (mkRemovedOptionModule [ "services" "dd-agent" ] "dd-agent was removed from nixpkgs in favor of the newer datadog-agent.")
     (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
     (mkRemovedOptionModule [ "services" "dnscrypt-wrapper" ] ''
@@ -78,16 +85,16 @@ in
     (mkRemovedOptionModule [ "services" "fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
     (mkRemovedOptionModule [ "services" "fprot" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "frab" ] "The frab module has been removed")
-    (mkRemovedOptionModule [ "services" "globalprotect"] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "homeassistant-satellite"] "The `services.homeassistant-satellite` module has been replaced by `services.wyoming-satellite`.")
     (mkRemovedOptionModule [ "services" "hydron" ] "The `services.hydron` module has been removed as the project has been archived upstream since 2022 and is affected by a severe remote code execution vulnerability.")
     (mkRemovedOptionModule [ "services" "ihatemoney" ] "The ihatemoney module has been removed for lack of downstream maintainer")
+    (mkRemovedOptionModule [ "services" "jira" ] "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements")
     (mkRemovedOptionModule [ "services" "kippo" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "lshd" ] "The corresponding package was removed from nixpkgs as it had no maintainer in Nixpkgs and hasn't seen an upstream release in over a decades.")
     (mkRemovedOptionModule [ "services" "mailpile" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "marathon" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mathics" ] "The Mathics module has been removed")
-    (mkRemovedOptionModule [ "services" "matrix-sliding-sync" ] "The matrix-sliding-sync package has been removed, since matrix-synapse incorporated its functionality")
+    (mkRemovedOptionModule [ "services" "matrix-sliding-sync" ] "The matrix-sliding-sync package has been removed, since matrix-synapse incorporated its functionality. Remove `services.sliding-sync` from your NixOS Configuration, and the `.well-known` record for `org.matrix.msc3575.proxy` from your webserver")
     (mkRemovedOptionModule [ "services" "meguca" ] "Use meguca has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "mesos" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mxisd" ] "The mxisd module has been removed as both mxisd and ma1sd got removed.")

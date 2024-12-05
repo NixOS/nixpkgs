@@ -104,6 +104,7 @@ name = "arm"
 version = "0.0.0"
 dependencies = [
  "bitvec",
+ "config",
  "debugvault",
  "decoder",
  "tokenizing",
@@ -381,7 +382,7 @@ checksum = "349f9b6a179ed607305526ca489b34ad0a41aed5f7980fa90eb03160b69598fb"
 
 [[package]]
 name = "bite"
-version = "0.2.1"
+version = "0.3.0"
 dependencies = [
  "commands",
  "debugvault",
@@ -696,8 +697,6 @@ dependencies = [
  "egui",
  "log 0.0.0",
  "once_cell",
- "serde",
- "serde_yaml",
  "triple_accel",
 ]
 
@@ -708,6 +707,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d16048cd947b08fa32c24458a22f5dc5e835264f689f4f5653210c69fd107363"
 dependencies = [
  "crossbeam-utils",
+]
+
+[[package]]
+name = "config"
+version = "0.0.0"
+dependencies = [
+ "dirs",
+ "egui",
+ "log 0.0.0",
+ "once_cell",
+ "serde",
+ "serde_yaml",
 ]
 
 [[package]]
@@ -867,6 +878,7 @@ version = "0.0.0"
 dependencies = [
  "binformat",
  "bitflags 2.4.2",
+ "config",
  "crossbeam-queue",
  "dashmap",
  "gimli",
@@ -1662,6 +1674,7 @@ dependencies = [
  "bytemuck",
  "cc",
  "commands",
+ "config",
  "copypasta",
  "crossbeam-queue",
  "debugvault",
@@ -2045,6 +2058,7 @@ dependencies = [
 name = "mips"
 version = "0.0.0"
 dependencies = [
+ "config",
  "debugvault",
  "decoder",
  "tokenizing",
@@ -2532,6 +2546,7 @@ dependencies = [
  "arm",
  "binformat",
  "commands",
+ "config",
  "debugvault",
  "decoder",
  "log 0.0.0",
@@ -2724,6 +2739,7 @@ dependencies = [
 name = "riscv"
 version = "0.0.0"
 dependencies = [
+ "config",
  "crc",
  "debugvault",
  "decoder",
@@ -4153,6 +4169,7 @@ checksum = "e63e71c4b8bd9ffec2c963173a4dc4cbde9ee96961d4fcb4429db9929b606c34"
 name = "x86_64"
 version = "0.0.0"
 dependencies = [
+ "config",
  "debugvault",
  "decoder",
  "tokenizing",

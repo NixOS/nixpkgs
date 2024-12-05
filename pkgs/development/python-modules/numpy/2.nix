@@ -140,7 +140,11 @@ buildPythonPackage rec {
   ];
 
   disabledTests =
-    lib.optionals (pythonAtLeast "3.13") [
+    [
+      # Tries to import numpy.distutils.msvccompiler, removed in setuptools 74.0
+      "test_api_importable"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
       # https://github.com/numpy/numpy/issues/26713
       "test_iter_refcount"
     ]
