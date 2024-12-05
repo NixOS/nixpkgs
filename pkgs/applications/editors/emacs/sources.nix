@@ -110,6 +110,14 @@ in
     hash = "sha256-FCP6ySkN9mAdp2T09n6foS2OciqZXc/54guRZ0B4Z2s=";
   });
 
+  emacs30 = import ./make-emacs.nix (mkArgs {
+    pname = "emacs";
+    version = "30.0.92";
+    variant = "mainline";
+    rev = "30.0.92";
+    hash = "sha256-V2TXLemSCIPTpg6RDChv4va7pHfVcqSMw/EWqvlRQ1o=";
+  });
+
   emacs28-macport = import ./make-emacs.nix (mkArgs {
     pname = "emacs-mac";
     version = "28.2";
