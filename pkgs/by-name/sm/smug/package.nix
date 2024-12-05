@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "smug";
-  version = "0.3.5";
+  version = "0.3.6";
 
   subPackages = [ "." ];
 
@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "ivaaaan";
     repo = "smug";
     rev = "v${version}";
-    sha256 = "sha256-5n4EmkcHv6pw1gd9VUtJRR3QdRJsu5DYYsozJ25uggs=";
+    sha256 = "sha256-9So81tZwQa3rQYgVO+KjOlTVIzlm/e2K5C/qULZeA7U=";
   };
 
   vendorHash = "sha256-vaDUzVRmpmNn8/vUPeR1U5N6T4llFRIk9A1lum8uauU=";
