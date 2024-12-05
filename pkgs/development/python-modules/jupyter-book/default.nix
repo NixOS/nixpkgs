@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "jupyter-book";
-  version = "1.0.3";
+  version = "2.0.0a0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "jupyter-book";
     repo = "jupyter-book";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MBSf2/+4+efWHJ530jdezeh5OLTtUZlAEOl5SqoWOuE=";
+    hash = "sha256-VEiWkngXZhqlUjvx349XxXQi31FYRpauOw+y0nOmC+w=";
   };
 
   build-system = [ flit-core ];
