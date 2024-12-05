@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   testers,
+  nix-update-script,
   act,
 }:
 
@@ -30,8 +31,12 @@ buildGoModule {
     "-X main.version=${version}"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = act;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = act;
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
