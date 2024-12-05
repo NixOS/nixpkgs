@@ -1,9 +1,9 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   runCommand,
   replaceVars,
+  slimevr,
   jdk17_headless,
   gradle,
   hidapi,
@@ -32,16 +32,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slimevr-server";
-  version = "0.13.2";
 
-  src = fetchFromGitHub {
-    owner = "SlimeVR";
-    repo = "SlimeVR-Server";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-XQDbP+LO/brpl7viSxuV3H4ALN0yIkj9lwr5eS1txNs=";
-    # solarxr
-    fetchSubmodules = true;
-  };
+  inherit (slimevr)
+    src
+    version
+    ;
 
   mitmCache = gradle.fetchDeps {
     inherit (finalAttrs) pname;
@@ -88,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit java javaOptions;
+    # `slimevr-server` is updated by the `slimevr` update script.
   };
 
   meta = {
