@@ -25,6 +25,7 @@ stdenv.mkDerivation {
 
   configureFlags = [
     "--cc" "${stdenv.cc.targetPrefix}cc"
+    "-O2"
   ];
 
   installPhase = ''
