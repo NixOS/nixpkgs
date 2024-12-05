@@ -56,6 +56,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oslo_log" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "oslo.log library";
     mainProgram = "convert-json";
