@@ -10,11 +10,12 @@
   kasa-crypt,
   orjson,
   ptpython,
-  pydantic,
+  mashumaro,
   pytest-asyncio,
   pytest-freezer,
   pytest-mock,
   pytest-socket,
+  pytest-xdist,
   pytestCheckHook,
   pythonOlder,
   rich,
@@ -23,16 +24,16 @@
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.7.7";
+  version = "0.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "python-kasa";
     repo = "python-kasa";
     rev = "refs/tags/${version}";
-    hash = "sha256-405FrKG1jZNrxTmz/K8vqwPhiOqrxURWVCpyFQRJeXc=";
+    hash = "sha256-z4MBH4fBiR996/0nCsCkRYBD0+bd+NowJLR1ee2hr4Y=";
   };
 
   build-system = [ hatchling ];
@@ -42,7 +43,7 @@ buildPythonPackage rec {
     async-timeout
     asyncclick
     cryptography
-    pydantic
+    mashumaro
   ];
 
   nativeCheckInputs = [
@@ -50,6 +51,7 @@ buildPythonPackage rec {
     pytest-freezer
     pytest-mock
     pytest-socket
+    pytest-xdist
     pytestCheckHook
     voluptuous
   ];
@@ -69,7 +71,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Skip the examples tests
-    "kasa/tests/test_readme_examples.py"
+    "tests/test_readme_examples.py"
   ];
 
   pythonImportsCheck = [ "kasa" ];
