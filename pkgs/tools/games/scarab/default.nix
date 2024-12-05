@@ -76,7 +76,10 @@ buildDotnetModule rec {
     downloadPage = "https://github.com/fifty-six/Scarab/releases";
     changelog = "https://github.com/fifty-six/Scarab/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ huantian ];
+    maintainers = with lib.maintainers; [
+      huantian
+      sigmasquadron
+    ];
     mainProgram = "Scarab";
     platforms = lib.platforms.linux;
   };
