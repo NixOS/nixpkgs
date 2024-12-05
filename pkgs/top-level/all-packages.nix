@@ -3522,9 +3522,7 @@ with pkgs;
 
   gaphor = python3Packages.callPackage ../tools/misc/gaphor { };
 
-  inherit (callPackages ../tools/filesystems/garage {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  })
+  inherit (callPackages ../tools/filesystems/garage { })
     garage
       garage_0_8 garage_0_9
       garage_0_8_7 garage_0_9_4
@@ -6863,12 +6861,12 @@ with pkgs;
 
   inherit (ocaml-ng.ocamlPackages_4_14)
     ocamlformat_0_19_0 ocamlformat_0_20_0 ocamlformat_0_20_1 ocamlformat_0_21_0
-    ocamlformat_0_22_4;
+    ocamlformat_0_22_4 ocamlformat_0_23_0 ocamlformat_0_24_1 ocamlformat_0_25_1
+    ocamlformat_0_26_0 ocamlformat_0_26_1;
 
   inherit (ocamlPackages)
     ocamlformat # latest version
-    ocamlformat_0_23_0 ocamlformat_0_24_1 ocamlformat_0_25_1 ocamlformat_0_26_0
-    ocamlformat_0_26_1 ocamlformat_0_26_2;
+    ocamlformat_0_26_2 ocamlformat_0_27_0;
 
   inherit (ocamlPackages) odig;
 

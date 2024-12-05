@@ -136,6 +136,7 @@ mapAliases {
   inherit (pkgs) mermaid-cli; # added 2023-10-01
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
   inherit (pkgs) near-cli; # added 2023-09-09
+  neovim = pkgs.neovim-node-client; # added 2024-11-13
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) node-gyp; # added 2024-08-13
   inherit (pkgs) node-pre-gyp; # added 2024-08-05
