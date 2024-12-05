@@ -18,6 +18,7 @@
   cudaSupport ? config.cudaSupport,
   autoAddDriverRunpath,
   callPackage,
+  nix-update-script,
 }:
 let
   inherit (llvmPackages) stdenv;
@@ -102,6 +103,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       sycl = callPackage ./tests.nix { };
     };
+
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
