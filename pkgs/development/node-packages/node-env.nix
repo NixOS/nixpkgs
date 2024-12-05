@@ -495,10 +495,12 @@ let
     in
     stdenv.mkDerivation ({
       name = "${name}${if version == null then "" else "-${version}"}";
+      strictDeps = true;
       buildInputs = [ tarWrapper python nodejs ]
         ++ lib.optional (stdenv.hostPlatform.isLinux) pkgs.util-linux
         ++ lib.optional (stdenv.hostPlatform.isDarwin) libtool
         ++ buildInputs;
+      propagatedNativeBuildInputs = [ nodejs ];
 
       inherit nodejs;
 
