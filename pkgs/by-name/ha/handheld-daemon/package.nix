@@ -36,15 +36,16 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   postPatch = ''
+    # The generated udev rules point to /bin/chmod, which does not exist in NixOS
+    substituteInPlace src/hhd/controller/lib/hide.py \
+      --replace-fail /bin/chmod ${toybox}/bin/chmod
+
     # handheld-daemon contains a fork of the python module `hid`, so this hook
     # is borrowed from the `hid` derivation.
-    hidapi=${hidapi}/lib/
+    hidapi=${hidapi}/lib
     test -d $hidapi || { echo "ERROR: $hidapi doesn't exist, please update/fix this build expression."; exit 1; }
-    sed -i -e "s|libhidapi|$hidapi/libhidapi|" src/hhd/controller/lib/hid.py
-
-    # The generated udev rules point to /bin/chmod, which does not exist in NixOS
-    chmod=${toybox}/bin/chmod
-    sed -i -e "s|/bin/chmod|$chmod|" src/hhd/controller/lib/hide.py
+    substituteInPlace src/hhd/controller/lib/hid.py \
+      --replace-fail libhidapi $hidapi/libhidapi
   '';
 
   postInstall = ''
