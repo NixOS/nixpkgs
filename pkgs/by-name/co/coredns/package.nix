@@ -10,7 +10,10 @@
 
 let
   attrsToPlugins = attrs:
-    builtins.map ({name, repo, version, priority ? 1}: "${toString priority}i${name}:${repo}") attrs;
+    let
+        sortedAttrs = lib.sort (a: b: (a.priority or 1) > (b.priority or 1)) attrs;
+    in
+        builtins.map ({name, repo, version, priority ? 1}: "${toString priority}i${name}:${repo}") sortedAttrs;
   attrsToSources = attrs:
     builtins.map ({name, repo, version, priority ? 1}: "${repo}@${version}") attrs;
 in buildGoModule rec {
