@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "HAVE_SSE4_1" enableSse4_1)
       (lib.cmakeBool "HAVE_MPI" enableMpi)
       (lib.cmakeBool "USE_SYSTEM_ZSTD" true)
+      (lib.cmakeBool "HAVE_ARM8" stdenv.hostPlatform.isAarch64)
     ]
     ++ lib.optionals cudaSupport [
       (lib.cmakeBool "ENABLE_CUDA" true)
