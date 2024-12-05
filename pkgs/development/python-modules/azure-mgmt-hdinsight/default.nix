@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchPypi,
   msrest,
-  msrestazure,
   pythonOlder,
   setuptools,
 }:
@@ -29,7 +28,6 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     msrest
-    msrestazure
   ];
 
   # no tests included
