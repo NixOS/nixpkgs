@@ -3,10 +3,9 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  msrestazure,
   azure-common,
   azure-mgmt-core,
-  azure-mgmt-nspkg,
+  msrest,
 }:
 
 buildPythonPackage rec {
@@ -23,10 +22,9 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    msrestazure
+    msrest
     azure-common
     azure-mgmt-core
-    azure-mgmt-nspkg
   ];
 
   preBuild = ''
