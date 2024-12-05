@@ -4689,6 +4689,12 @@
     githubId = 490965;
     name = "Craig Swank";
   };
+  cterence = {
+    email = "terence.chateigne@posteo.net";
+    github = "cterence";
+    githubId = 25285508;
+    name = "Térence Chateigné";
+  };
   ctron = {
     email = "ctron@dentrassi.de";
     github = "ctron";
@@ -6339,6 +6345,12 @@
     github = "eikek";
     githubId = 701128;
     name = "Eike Kettner";
+  };
+  eilvelia = {
+    email = "hi@eilvelia.cat";
+    github = "eilvelia";
+    githubId = 10106819;
+    name = "eilvelia";
   };
   eken = {
     email = "edvin.kallstrom@protonmail.com";
@@ -19539,6 +19551,14 @@
     github = "Sail0rd";
     githubId = 55802415;
   };
+  sako = {
+    name = "Sako";
+    email = "sako@cock.email";
+    matrix = "@sako:imagisphe.re";
+    github = "Sakooooo";
+    githubId = 78461130;
+    keys = [ { fingerprint = "CA52 EE7B E681 720E 32B6  6792 FE52 FD65 B76E 4751"; } ];
+  };
   samalws = {
     email = "sam@samalws.com";
     name = "Sam Alws";
@@ -21637,6 +21657,17 @@
     github = "TakWolf";
     githubId = 6064962;
     name = "TakWolf";
+  };
+  talhaHavadar = {
+    email = "havadartalha@gmail.com";
+    github = "talhaHavadar";
+    githubId = 6908462;
+    name = "Talha Can Havadar";
+    keys = [
+      {
+        fingerprint = "1E13 12DF 4B71 58B6 EBF9  DE78 2574 3879 62FE B0D1";
+      }
+    ];
   };
   talkara = {
     email = "taito.horiuchi@relexsolutions.com";

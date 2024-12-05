@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     makeShellWrapper "${lib.getExe electron_32}" "$out/bin/legcord" \
       --add-flags "$out/share/lib/legcord/resources/app.asar" \
       "''${gappsWrapperArgs[@]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
 

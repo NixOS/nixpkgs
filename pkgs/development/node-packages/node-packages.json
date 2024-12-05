@@ -119,7 +119,6 @@
 , "json-server"
 , "jsonlint"
 , "jsonplaceholder"
-, "kaput-cli"
 , "katex"
 , "keyoxide"
 , "lcov-result-merger"

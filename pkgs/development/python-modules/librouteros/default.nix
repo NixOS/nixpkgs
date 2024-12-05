@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "librouteros";
-  version = "3.3.0";
+  version = "3.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "luqasz";
     repo = "librouteros";
     rev = "refs/tags/${version}";
-    hash = "sha256-dbeKJ3iG0eEW+sJJoZmQXyUad6mPhIlCAdJyQZT+CCQ=";
+    hash = "sha256-vwM7psrb+7ww+oAc3l7y1YkNzgLyxX2VvHbLxcqQypo=";
   };
 
   build-system = [ poetry-core ];

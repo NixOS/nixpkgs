@@ -1,13 +1,14 @@
-{ lib
-, callPackage
-, runCommand
+{ callPackage
 , fetchgit
 , fontconfig
 , git
+, lib
 , makeWrapper
+, python3
+, runCommand
+, system
 , writeText
 , writeTextFile
-, python3
 
 # Artifacts dependencies
 , fetchurl
@@ -23,18 +24,18 @@
 
 # Other overridable arguments
 , extraLibs ? []
-, precompile ? true
-, setDefaultDepot ? true
+, juliaCpuTarget ? null
+, makeTransitiveDependenciesImportable ? false # Used to support symbol indexing
 , makeWrapperArgs ? ""
 , packageOverrides ? {}
-, makeTransitiveDependenciesImportable ? false # Used to support symbol indexing
+, precompile ? true
+, setDefaultDepot ? true
 }:
 
 packageNames:
 
 let
   util = callPackage ./util.nix {};
-
 
   # Some Julia packages require access to Python. Provide a Nixpkgs version so it
   # doesn't try to install its own.
@@ -157,7 +158,7 @@ let
   # Build a Julia project and depot. The project contains Project.toml/Manifest.toml, while the
   # depot contains package build products (including the precompiled libraries, if precompile=true)
   projectAndDepot = callPackage ./depot.nix {
-    inherit closureYaml extraLibs overridesToml packageImplications precompile;
+    inherit closureYaml extraLibs juliaCpuTarget overridesToml packageImplications precompile;
     julia = juliaWrapped;
     registry = minimalRegistry;
     packageNames = if makeTransitiveDependenciesImportable

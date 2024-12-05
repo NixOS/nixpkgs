@@ -19,7 +19,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "MolBar";
+  pname = "MolBar";
   version = "1.1.1";
 
   src = fetchgit {

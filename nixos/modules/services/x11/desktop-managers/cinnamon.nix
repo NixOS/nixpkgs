@@ -12,7 +12,7 @@ let
     extraGSettingsOverrides = cfg.extraGSettingsOverrides;
   };
 
-  notExcluded = pkg: (!(lib.elem (lib.getName pkg) (map lib.getName config.environment.cinnamon.excludePackages)));
+  notExcluded = pkg: utils.disablePackageByName pkg config.environment.cinnamon.excludePackages;
 in
 
 {
@@ -111,6 +111,7 @@ in
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
+      services.power-profiles-daemon.enable = mkDefault true;
       services.switcherooControl.enable = mkDefault true; # xapp-gpu-offload-helper
       services.touchegg.enable = mkDefault true;
       services.udisks2.enable = true;
@@ -150,9 +151,6 @@ in
         cinnamon-screensaver
         # cinnamon-killer-daemon: provided by cinnamon-common
         networkmanagerapplet # session requirement - also nm-applet not needed
-
-        # For a polkit authentication agent
-        polkit_gnome
 
         # packages
         nemo-with-extensions

@@ -1312,10 +1312,10 @@ with self; {
 
   AudioScan = buildPerlPackage {
     pname = "Audio-Scan";
-    version = "1.05";
+    version = "1.10";
     src = fetchurl {
-        url = "https://github.com/Logitech/slimserver-vendor/raw/public/8.3/CPAN/Audio-Scan-1.05.tar.gz";
-        hash = "sha256-9YXC8GHPRWKlV8emmTke7RB0HhiCbALmZQqtQFLcBi4=";
+        url = "https://github.com/Logitech/slimserver-vendor/raw/public/9.0/CPAN/Audio-Scan-1.10.tar.gz";
+        hash = "sha256-Vqi/rnYKijmaWYwTFTyj88aMoDB2cCSHxHeR1bkfqSk=";
     };
     buildInputs = [ pkgs.zlib TestWarn ];
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.zlib.dev}/include";

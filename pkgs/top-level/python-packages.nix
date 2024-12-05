@@ -55,6 +55,8 @@ self: super: with self; {
 
   adafruit-io = callPackage ../development/python-modules/adafruit-io { };
 
+  adafruit-board-toolkit = callPackage ../development/python-modules/adafruit-board-toolkit { };
+
   adafruit-platformdetect = callPackage ../development/python-modules/adafruit-platformdetect { };
 
   adafruit-pureio = callPackage ../development/python-modules/adafruit-pureio { };
@@ -1558,6 +1560,8 @@ self: super: with self; {
   beancount-parser = callPackage ../development/python-modules/beancount-parser { };
 
   beancount-docverif = callPackage ../development/python-modules/beancount-docverif { };
+
+  beancount-plugin-utils = callPackage ../development/python-modules/beancount-plugin-utils { };
 
   beanhub-cli = callPackage ../development/python-modules/beanhub-cli { };
 
@@ -4921,6 +4925,8 @@ self: super: with self; {
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
 
   fschat = callPackage ../development/python-modules/fschat { };
+
+  fslpy = callPackage ../development/python-modules/fslpy { };
 
   fsspec-xrootd = callPackage ../development/python-modules/fsspec-xrootd { };
 
@@ -10145,6 +10151,8 @@ self: super: with self; {
 
   phik = callPackage ../development/python-modules/phik { };
 
+  philipstv = callPackage ../development/python-modules/philipstv { };
+
   phone-modem = callPackage ../development/python-modules/phone-modem { };
 
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
@@ -13436,6 +13444,8 @@ self: super: with self; {
   pywerview = callPackage ../development/python-modules/pywerview { };
 
   pywfa = callPackage ../development/python-modules/pywfa { };
+
+  pywikibot = callPackage ../development/python-modules/pywikibot { };
 
   pywilight = callPackage ../development/python-modules/pywilight { };
 

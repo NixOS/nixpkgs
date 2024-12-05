@@ -1243,8 +1243,6 @@ with pkgs;
 
   git-imerge = python3Packages.callPackage ../applications/version-management/git-imerge { };
 
-  git-lfs = lowPrio (callPackage ../applications/version-management/git-lfs { });
-
   git-machete = python3Packages.callPackage ../applications/version-management/git-machete { };
 
   git-ps-rs = callPackage ../development/tools/git-ps-rs {
@@ -2692,10 +2690,6 @@ with pkgs;
 
   razergenie = libsForQt5.callPackage ../applications/misc/razergenie { };
 
-  ripasso-cursive = callPackage ../tools/security/ripasso/cursive.nix {
-    inherit (darwin.apple_sdk.frameworks) AppKit Security;
-  };
-
   roundcube = callPackage ../servers/roundcube { };
 
   roundcubePlugins = dontRecurseIntoAttrs (callPackage ../servers/roundcube/plugins { });
@@ -3231,11 +3225,9 @@ with pkgs;
 
   sonobuoy = callPackage ../applications/networking/cluster/sonobuoy { };
 
-  strawberry-qt5 = libsForQt5.callPackage ../applications/audio/strawberry { };
-
   strawberry-qt6 = qt6Packages.callPackage ../applications/audio/strawberry { };
 
-  strawberry = strawberry-qt5;
+  strawberry = strawberry-qt6;
 
   schleuder = callPackage ../tools/security/schleuder { };
 
@@ -3479,9 +3471,7 @@ with pkgs;
 
   gaphor = python3Packages.callPackage ../tools/misc/gaphor { };
 
-  inherit (callPackages ../tools/filesystems/garage {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  })
+  inherit (callPackages ../tools/filesystems/garage { })
     garage
       garage_0_8 garage_0_9
       garage_0_8_7 garage_0_9_4
@@ -6772,7 +6762,7 @@ with pkgs;
 
   inherit (ocamlPackages)
     ocamlformat # latest version
-    ocamlformat_0_26_2;
+    ocamlformat_0_26_2 ocamlformat_0_27_0;
 
   inherit (ocamlPackages) odig;
 
@@ -11643,7 +11633,16 @@ with pkgs;
 
   jitsi-videobridge = callPackage ../servers/jitsi-videobridge { };
 
-  kanidmWithSecretProvisioning = callPackage ../by-name/ka/kanidm/package.nix {
+  kanidm_1_3 = callPackage ../by-name/ka/kanidm/1_3.nix { };
+  kanidm_1_4 = callPackage ../by-name/ka/kanidm/1_4.nix { };
+
+  kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_4;
+
+  kanidmWithSecretProvisioning_1_3 = callPackage ../by-name/ka/kanidm/1_3.nix {
+    enableSecretProvisioning = true;
+  };
+
+  kanidmWithSecretProvisioning_1_4 = callPackage ../by-name/ka/kanidm/1_4.nix {
     enableSecretProvisioning = true;
   };
 
@@ -18384,6 +18383,8 @@ with pkgs;
   pgadmin4-desktopmode = callPackage ../tools/admin/pgadmin { server-mode = false; };
 
   pgmodeler = qt6Packages.callPackage ../applications/misc/pgmodeler { };
+
+  philipstv = with python3Packages; toPythonApplication philipstv;
 
   pjsip = darwin.apple_sdk_11_0.callPackage ../applications/networking/pjsip {
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreFoundation Security;
