@@ -6035,7 +6035,8 @@ with pkgs;
   flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutterPackages-source = recurseIntoAttrs (callPackage ../development/compilers/flutter { useNixpkgsEngine = true; });
   flutterPackages = flutterPackages-bin;
-  flutter = flutterPackages.stable;
+  # This is moved to aliases.nix to avoid unpinned use in-tree
+  # flutter = flutterPackages.stable;
   flutter327 = flutterPackages.v3_27;
   flutter326 = flutterPackages.v3_26;
   flutter324 = flutterPackages.v3_24;
