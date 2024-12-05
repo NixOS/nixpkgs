@@ -8,12 +8,12 @@ rec {
       , runcRev, runcHash
       , containerdRev, containerdHash
       , tiniRev, tiniHash
-      , buildxSupport ? true, composeSupport ? true, sbomSupport ? false
+      , buildxSupport ? true, composeSupport ? true, sbomSupport ? false, initSupport ? false
       # package dependencies
       , stdenv, fetchFromGitHub, fetchpatch, buildGoModule
       , makeWrapper, installShellFiles, pkg-config, glibc
       , go-md2man, go, containerd, runc, tini, libtool
-      , sqlite, iproute2, docker-buildx, docker-compose, docker-sbom
+      , sqlite, iproute2, docker-buildx, docker-compose, docker-sbom, docker-init
       , iptables, e2fsprogs, xz, util-linux, xfsprogs, gitMinimal
       , procps, rootlesskit, slirp4netns, fuse-overlayfs, nixosTests
       , clientOnly ? !stdenv.hostPlatform.isLinux, symlinkJoin
@@ -185,7 +185,8 @@ rec {
 
     plugins = lib.optional buildxSupport docker-buildx
       ++ lib.optional composeSupport docker-compose
-      ++ lib.optional sbomSupport docker-sbom;
+      ++ lib.optional sbomSupport docker-sbom
+      ++ lib.optional initSupport docker-init;
     pluginsRef = symlinkJoin { name = "docker-plugins"; paths = plugins; };
   in
   buildGoModule (lib.optionalAttrs (!clientOnly) {

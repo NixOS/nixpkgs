@@ -2497,6 +2497,13 @@
     githubId = 6987136;
     keys = [ { fingerprint = "2C6D 37D4 6AA1 DCDA BE8D  F346 43E2 CF4C 01B9 4940"; } ];
   };
+  BastianAsmussen = {
+    name = "Bastian Asmussen";
+    email = "bastian@asmussen.tech";
+    github = "BastianAsmussen";
+    githubId = 76102128;
+    keys = [ { fingerprint = "3B11 7469 0893 85E7 16C2  7CD9 0FE5 A355 DBC9 2568"; } ];
+  };
   basvandijk = {
     email = "v.dijk.bas@gmail.com";
     github = "basvandijk";
