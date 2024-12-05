@@ -27,7 +27,7 @@ appimageTools.wrapType2 rec {
     in
     ''
       wrapProgram $out/bin/${pname} \
-         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
+         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
          --add-flags "--no-sandbox --disable-gpu-sandbox" # Cider 2 does not start up properly without these from my preliminary testing
 
       install -m 444 -D ${contents}/cider.desktop $out/share/applications/${pname}.desktop

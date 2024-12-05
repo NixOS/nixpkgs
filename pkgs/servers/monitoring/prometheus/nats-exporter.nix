@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, gitUpdater, testers, prometheus-nats-exporter }:
 
 buildGoModule rec {
   pname = "prometheus-nats-exporter";
@@ -17,6 +17,21 @@ buildGoModule rec {
     # Fix `insecure algorithm SHA1-RSA` problem
     export GODEBUG=x509sha1=1;
   '';
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      prometheus-nats-exporter-version = testers.testVersion {
+        package = prometheus-nats-exporter;
+      };
+    };
+  };
 
   meta = with lib; {
     description = "Exporter for NATS metrics";
