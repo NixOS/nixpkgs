@@ -521,16 +521,8 @@ let
     fetchAttrs = {
       sha256 =
         {
-          x86_64-linux =
-            if cudaSupport then
-              lib.fakeHash
-            else
-              lib.fakeHash;
-          aarch64-linux =
-            if cudaSupport then
-              lib.fakeHash
-            else
-              lib.fakeHash;
+          x86_64-linux = if cudaSupport then lib.fakeHash else lib.fakeHash;
+          aarch64-linux = if cudaSupport then lib.fakeHash else lib.fakeHash;
           x86_64-darwin = lib.fakeHash;
           aarch64-darwin = lib.fakeHash;
         }
