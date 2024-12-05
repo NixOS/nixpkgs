@@ -31,8 +31,12 @@ python3Packages.buildPythonApplication rec {
   # dont double wrap
   # https://nixos.org/manual/nixpkgs/stable/#ssec-gnome-common-issues-double-wrapped
   dontWrapGApps = true;
+  dontWrapQtApps = true;
   preFixup = ''
-    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    makeWrapperArgs+=(
+      ''${gappsWrapperArgs[@]}
+      ''${qtWrapperArgs[@]}
+    )
   '';
 
   doCheck = false;
