@@ -7,5 +7,7 @@ genericBuild
     @nugetToNix@/bin/nuget-to-nix "${NUGET_PACKAGES%/}"
 ) > deps.nix
 
+@nixfmt@/bin/nixfmt deps.nix
+
 mv deps.nix "$1"
 echo "Succesfully wrote lockfile to $1"

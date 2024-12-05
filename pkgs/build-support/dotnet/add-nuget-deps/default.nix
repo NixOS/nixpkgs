@@ -5,6 +5,7 @@
   lib,
   substituteAll,
   nuget-to-nix,
+  nixfmt-rfc-style,
   cacert,
   fetchNupkg,
   callPackage,
@@ -67,6 +68,7 @@ attrs
             isExecutable = true;
             inherit cacert;
             nugetToNix = nuget-to-nix;
+            nixfmt = nixfmt-rfc-style;
           };
 
           defaultDepsFile =
