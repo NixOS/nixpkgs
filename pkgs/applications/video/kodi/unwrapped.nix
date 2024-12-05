@@ -19,6 +19,7 @@
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn2, libpthreadstubs, libtasn1
 , libplist, p11-kit, zlib, flatbuffers, fstrcmp, rapidjson
 , lirc
+, callPackage
 , x11Support ? true, libX11, xorgproto, libXt, libXmu, libXext, libXinerama, libXrandr, libXtst, libXfixes, xdpyinfo, libXdmcp
 , dbusSupport ? true, dbus
 , joystickSupport ? true, cwiid
@@ -80,6 +81,10 @@ let
     url = "mirror://apache/commons/text/binaries/commons-text-1.11.0-bin.zip";
     sha512 = "sha512-P2IvnrHSYRF70LllTMI8aev43h2oe8lq6rrMYw450PEhEa7OuuCjh1Krnc/A4OqENUcidVAAX5dK1RAsZHh8Dg==";
   };
+
+  jsonSchemaBuilder = buildPackages.callPackage ./jsonschemabuilder.nix {};
+
+  texturePacker = buildPackages.callPackage ./texturepacker.nix {};
 
   kodi_platforms = lib.optional gbmSupport "gbm"
     ++ lib.optional waylandSupport "wayland"
@@ -163,11 +168,15 @@ in stdenv.mkDerivation (finalAttrs: {
       which
       pkg-config
       autoconf automake libtool # still needed for some components. Check if that is the case with 19.0
-      jre_headless yasm gettext python3Packages.python flatbuffers
-
-      # for TexturePacker
-      giflib zlib libpng libjpeg lzo
-    ] ++ lib.optionals waylandSupport [ wayland-protocols waylandpp.bin ];
+      buildPackages.jre_headless yasm gettext python3Packages.python flatbuffers
+    ]
+    ++ lib.optionals waylandSupport [
+      wayland-protocols waylandpp.bin
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      # In crosscompile Kodi can't use its "internal" versions of these, so we have to build them
+      jsonSchemaBuilder texturePacker
+    ];
 
     depsBuildBuild = [
       buildPackages.stdenv.cc
@@ -202,6 +211,10 @@ in stdenv.mkDerivation (finalAttrs: {
       "-DKODI_WEBSERVER_EXTRA_WHITELIST=${builtins.storeDir}"
     ] ++ lib.optionals waylandSupport [
       "-DWAYLANDPP_SCANNER=${buildPackages.waylandpp}/bin/wayland-scanner++"
+    ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      # In crosscompile Kodi can't use its "internal" versions of these, so we have to build them
+      "-DWITH_JSONSCHEMABUILDER=${jsonSchemaBuilder}/bin"
+      "-DWITH_TEXTUREPACKER=${texturePacker}/bin"
     ];
 
     # 14 tests fail but the biggest issue is that every test takes 30 seconds -
@@ -210,14 +223,6 @@ in stdenv.mkDerivation (finalAttrs: {
 
     preConfigure = ''
       cmakeFlagsArray+=("-DCORE_PLATFORM_NAME=${lib.concatStringsSep " " kodi_platforms}")
-    '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-      # Need these tools on the build system when cross compiling,
-      # hacky, but have found no other way.
-      CXX=$CXX_FOR_BUILD LD=ld make -C tools/depends/native/JsonSchemaBuilder
-      cmakeFlags+=" -DWITH_JSONSCHEMABUILDER=$PWD/tools/depends/native/JsonSchemaBuilder/bin"
-
-      CXX=$CXX_FOR_BUILD LD=ld make EXTRA_CONFIGURE= -C tools/depends/native/TexturePacker
-      cmakeFlags+=" -DWITH_TEXTUREPACKER=$PWD/tools/depends/native/TexturePacker/bin"
     '';
 
     postPatch = ''
