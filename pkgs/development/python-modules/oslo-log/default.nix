@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -27,11 +27,16 @@ buildPythonPackage rec {
   version = "6.1.2";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "oslo.log";
-    inherit version;
-    hash = "sha256-92gEffnXBsSE3WZl3LvqKJAh1Iy3zlq/eh9poJSR9f4=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "oslo.log";
+    rev = "refs/tags/${version}";
+    hash = "sha256-uNY+t3mv56F5wZOCWnOpZz8IWVR3+/kWGwu61AIbXbQ=";
   };
+
+  # Manually set version because prb wants to get it from the git upstream repository (and we are
+  # installing from tarball instead)
+  PBR_VERSION = version;
 
   build-system = [ setuptools ];
 
