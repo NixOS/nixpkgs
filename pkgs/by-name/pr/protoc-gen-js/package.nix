@@ -19,7 +19,7 @@ buildBazelPackage rec {
 
   LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
-  fetchAttrs.hash = "sha256-WOBlZ0XNrl5UxIaSDxZeOfzS2a8ZkrKdTLKHBDC9UNQ=";
+  fetchAttrs.hash = lib.fakeHash;
 
   buildAttrs.installPhase = ''
     mkdir -p $out/bin
