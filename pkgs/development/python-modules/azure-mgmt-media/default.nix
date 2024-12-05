@@ -3,10 +3,9 @@
   buildPythonPackage,
   fetchPypi,
   msrest,
-  msrestazure,
   azure-common,
   azure-mgmt-core,
-  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +23,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     msrest
-    msrestazure
     azure-common
     azure-mgmt-core
+    typing-extensions
   ];
 
   # has no tests
