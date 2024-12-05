@@ -57,6 +57,7 @@
 # if you include the generated code in the output via postInstall.
 , useFakeRustfmt ? true
 , usePgTestCheckFeature ? true
+, member ? null
 , ...
 } @ args:
 let
@@ -127,6 +128,7 @@ let
       PGRX_BUILD_FLAGS="--frozen -j $NIX_BUILD_CORES ${builtins.concatStringsSep " " cargoBuildFlags}" \
       ${lib.optionalString stdenv.hostPlatform.isDarwin ''RUSTFLAGS="''${RUSTFLAGS:+''${RUSTFLAGS} }-Clink-args=-Wl,-undefined,dynamic_lookup"''} \
       cargo pgrx package \
+        ${lib.optionalString (member != null) "--package ${member}"} \
         --pg-config ${lib.getDev postgresql}/bin/pg_config \
         ${maybeDebugFlag} \
         --features "${builtins.concatStringsSep " " buildFeatures}" \
