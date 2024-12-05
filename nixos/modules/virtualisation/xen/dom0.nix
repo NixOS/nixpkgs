@@ -71,6 +71,7 @@ in
 
 {
   imports = [
+    ./oxenstored.nix
     (mkRemovedOptionModule
       [
         "virtualisation"
@@ -133,19 +134,6 @@ in
         "package"
       ]
     )
-    (mkRenamedOptionModule
-      [
-        "virtualisation"
-        "xen"
-        "stored"
-      ]
-      [
-        "virtualisation"
-        "xen"
-        "store"
-        "path"
-      ]
-    )
   ];
 
   ## Interface ##
@@ -154,15 +142,7 @@ in
 
     enable = mkEnableOption "the Xen Project Hypervisor, a virtualisation technology defined as a *type-1 hypervisor*, which allows multiple virtual machines, known as *domains*, to run concurrently on the physical machine. NixOS runs as the privileged *Domain 0*. This option requires a reboot into a Xen kernel to take effect";
 
-    debug = mkEnableOption "Xen debug features for Domain 0. This option enables some hidden debugging tests and features, and should not be used in production";
-
-    trace = mkOption {
-      type = bool;
-      default = cfg.debug;
-      defaultText = literalExpression "false";
-      example = true;
-      description = "Whether to enable Xen debug tracing and logging for Domain 0.";
-    };
+    trace = mkEnableOption "Xen debug tracing and logging for Domain 0";
 
     package = mkPackageOption pkgs "Xen Hypervisor" { default = [ "xen" ]; };
 
@@ -289,316 +269,6 @@ in
         '';
       };
     };
-
-    store = {
-      path = mkOption {
-        type = path;
-        default = "${cfg.package}/bin/oxenstored";
-        defaultText = literalExpression "\${config.virtualisation.xen.package}/bin/oxenstored";
-        example = literalExpression "\${config.virtualisation.xen.package}/bin/xenstored";
-        description = ''
-          Path to the Xen Store Daemon. This option is useful to
-          switch between the legacy C-based Xen Store Daemon, and
-          the newer OCaml-based Xen Store Daemon, `oxenstored`.
-        '';
-      };
-      type = mkOption {
-        type = enum [
-          "c"
-          "ocaml"
-        ];
-        default = if (hasSuffix "oxenstored" cfg.store.path) then "ocaml" else "c";
-        internal = true;
-        readOnly = true;
-        description = "Helper internal option that determines the type of the Xen Store Daemon based on cfg.store.path.";
-      };
-      settings = mkOption {
-        default = { };
-        example = {
-          enableMerge = false;
-          quota.maxWatchEvents = 2048;
-          quota.enable = true;
-          conflict.maxHistorySeconds = 0.12;
-          conflict.burstLimit = 15.0;
-          xenstored.log.file = "/dev/null";
-          xenstored.log.level = "info";
-        };
-        description = ''
-          The OCaml-based Xen Store Daemon configuration. This
-          option does nothing with the C-based `xenstored`.
-        '';
-        type = submodule {
-          options = {
-            pidFile = mkOption {
-              default = "/run/xen/xenstored.pid";
-              example = "/var/run/xen/xenstored.pid";
-              type = path;
-              description = "Path to the Xen Store Daemon PID file.";
-            };
-            testEAGAIN = mkOption {
-              default = cfg.debug;
-              defaultText = literalExpression "config.virtualisation.xen.debug";
-              example = true;
-              type = bool;
-              visible = false;
-              description = "Randomly fail a transaction with EAGAIN. This option is used for debugging purposes only.";
-            };
-            enableMerge = mkOption {
-              default = true;
-              example = false;
-              type = bool;
-              description = "Whether to enable transaction merge support.";
-            };
-            conflict = {
-              burstLimit = mkOption {
-                default = 5.0;
-                example = 15.0;
-                type = addCheck (
-                  float
-                  // {
-                    name = "nonnegativeFloat";
-                    description = "nonnegative floating point number, meaning >=0";
-                    descriptionClass = "nonRestrictiveClause";
-                  }
-                ) (n: n >= 0);
-                description = ''
-                  Limits applied to domains whose writes cause other domains' transaction
-                  commits to fail. Must include decimal point.
-
-                  The burst limit is the number of conflicts a domain can cause to
-                  fail in a short period; this value is used for both the initial and
-                  the maximum value of each domain's conflict-credit, which falls by
-                  one point for each conflict caused, and when it reaches zero the
-                  domain's requests are ignored.
-                '';
-              };
-              maxHistorySeconds = mkOption {
-                default = 5.0e-2;
-                example = 1.0;
-                type = addCheck (float // { description = "nonnegative floating point number, meaning >=0"; }) (
-                  n: n >= 0
-                );
-                description = ''
-                  Limits applied to domains whose writes cause other domains' transaction
-                  commits to fail. Must include decimal point.
-
-                  The conflict-credit is replenished over time:
-                  one point is issued after each conflict.maxHistorySeconds, so this
-                  is the minimum pause-time during which a domain will be ignored.
-                '';
-              };
-              rateLimitIsAggregate = mkOption {
-                default = true;
-                example = false;
-                type = bool;
-                description = ''
-                  If the conflict.rateLimitIsAggregate option is `true`, then after each
-                  tick one point of conflict-credit is given to just one domain: the
-                  one at the front of the queue. If `false`, then after each tick each
-                  domain gets a point of conflict-credit.
-
-                  In environments where it is known that every transaction will
-                  involve a set of nodes that is writable by at most one other domain,
-                  then it is safe to set this aggregate limit flag to `false` for better
-                  performance. (This can be determined by considering the layout of
-                  the xenstore tree and permissions, together with the content of the
-                  transactions that require protection.)
-
-                  A transaction which involves a set of nodes which can be modified by
-                  multiple other domains can suffer conflicts caused by any of those
-                  domains, so the flag must be set to `true`.
-                '';
-              };
-            };
-            perms = {
-              enable = mkOption {
-                default = true;
-                example = false;
-                type = bool;
-                description = "Whether to enable the node permission system.";
-              };
-              enableWatch = mkOption {
-                default = true;
-                example = false;
-                type = bool;
-                description = ''
-                  Whether to enable the watch permission system.
-
-                  When this is set to `true`, unprivileged guests can only get watch events
-                  for xenstore entries that they would've been able to read.
-
-                  When this is set to `false`, unprivileged guests may get watch events
-                  for xenstore entries that they cannot read. The watch event contains
-                  only the entry name, not the value.
-                  This restores behaviour prior to [XSA-115](https://xenbits.xenproject.org/xsa/advisory-115.html).
-                '';
-              };
-            };
-            quota = {
-              enable = mkOption {
-                default = true;
-                example = false;
-                type = bool;
-                description = "Whether to enable the quota system.";
-              };
-              maxEntity = mkOption {
-                default = 1000;
-                example = 1024;
-                type = ints.positive;
-                description = "Entity limit for transactions.";
-              };
-              maxSize = mkOption {
-                default = 2048;
-                example = 4096;
-                type = ints.positive;
-                description = "Size limit for transactions.";
-              };
-              maxWatch = mkOption {
-                default = 100;
-                example = 256;
-                type = ints.positive;
-                description = "Maximum number of watches by the Xenstore Watchdog.";
-              };
-              transaction = mkOption {
-                default = 10;
-                example = 50;
-                type = ints.positive;
-                description = "Maximum number of transactions.";
-              };
-              maxRequests = mkOption {
-                default = 1024;
-                example = 1024;
-                type = ints.positive;
-                description = "Maximum number of requests per transaction.";
-              };
-              maxPath = mkOption {
-                default = 1024;
-                example = 1024;
-                type = ints.positive;
-                description = "Path limit for the quota system.";
-              };
-              maxOutstanding = mkOption {
-                default = 1024;
-                example = 1024;
-                type = ints.positive;
-                description = "Maximum outstanding requests, i.e. in-flight requests / domain.";
-              };
-              maxWatchEvents = mkOption {
-                default = 1024;
-                example = 2048;
-                type = ints.positive;
-                description = "Maximum number of outstanding watch events per watch.";
-              };
-            };
-            persistent = mkOption {
-              default = false;
-              example = true;
-              type = bool;
-              description = "Whether to activate the filed base backend.";
-            };
-            xenstored = {
-              log = {
-                file = mkOption {
-                  default = "/var/log/xen/xenstored.log";
-                  example = "/dev/null";
-                  type = path;
-                  description = "Path to the Xen Store log file.";
-                };
-                level = mkOption {
-                  default = if cfg.trace then "debug" else null;
-                  defaultText = literalExpression "if (config.virtualisation.xen.trace == true) then \"debug\" else null";
-                  example = "error";
-                  type = nullOr (enum [
-                    "debug"
-                    "info"
-                    "warn"
-                    "error"
-                  ]);
-                  description = "Logging level for the Xen Store.";
-                };
-                # The hidden options below have no upstream documentation whatsoever.
-                # The nb* options appear to alter the log rotation behaviour, and
-                # the specialOps option appears to affect the Xenbus logging logic.
-                nbFiles = mkOption {
-                  default = 10;
-                  example = 16;
-                  type = int;
-                  visible = false;
-                  description = "Set `xenstored-log-nb-files`.";
-                };
-              };
-              accessLog = {
-                file = mkOption {
-                  default = "/var/log/xen/xenstored-access.log";
-                  example = "/var/log/security/xenstored-access.log";
-                  type = path;
-                  description = "Path to the Xen Store access log file.";
-                };
-                nbLines = mkOption {
-                  default = 13215;
-                  example = 16384;
-                  type = int;
-                  visible = false;
-                  description = "Set `access-log-nb-lines`.";
-                };
-                nbChars = mkOption {
-                  default = 180;
-                  example = 256;
-                  type = int;
-                  visible = false;
-                  description = "Set `acesss-log-nb-chars`.";
-                };
-                specialOps = mkOption {
-                  default = false;
-                  example = true;
-                  type = bool;
-                  visible = false;
-                  description = "Set `access-log-special-ops`.";
-                };
-              };
-              xenfs = {
-                kva = mkOption {
-                  default = "/proc/xen/xsd_kva";
-                  example = cfg.store.settings.xenstored.xenfs.kva;
-                  type = path;
-                  visible = false;
-                  description = ''
-                    Path to the Xen Store Daemon KVA location inside the XenFS pseudo-filesystem.
-                    While it is possible to alter this value, some drivers may be hardcoded to follow the default paths.
-                  '';
-                };
-                port = mkOption {
-                  default = "/proc/xen/xsd_port";
-                  example = cfg.store.settings.xenstored.xenfs.port;
-                  type = path;
-                  visible = false;
-                  description = ''
-                    Path to the Xen Store Daemon userspace port inside the XenFS pseudo-filesystem.
-                    While it is possible to alter this value, some drivers may be hardcoded to follow the default paths.
-                  '';
-                };
-              };
-            };
-            ringScanInterval = mkOption {
-              default = 20;
-              example = 30;
-              type = addCheck (
-                int
-                // {
-                  name = "nonzeroInt";
-                  description = "nonzero signed integer, meaning !=0";
-                  descriptionClass = "nonRestrictiveClause";
-                }
-              ) (n: n != 0);
-              description = ''
-                Perodic scanning for all the rings as a safenet for lazy clients.
-                Define the interval in seconds; set to a negative integer to disable.
-              '';
-            };
-          };
-        };
-      };
-    };
   };
 
   ## Implementation ##
@@ -624,17 +294,6 @@ in
         message = ''
           You have allocated more memory to dom0 than virtualisation.xen.dom0Resources.maxMemory
           allows for. Please increase the maximum memory limit, or decrease the default memory allocation.
-        '';
-      }
-      {
-        assertion = cfg.debug -> cfg.trace;
-        message = "Xen's debugging features are enabled, but logging is disabled. This is most likely not what you want.";
-      }
-      {
-        assertion = cfg.store.settings.quota.maxWatchEvents >= cfg.store.settings.quota.maxOutstanding;
-        message = ''
-          Upstream Xen recommends that maxWatchEvents be equal to or greater than maxOutstanding,
-          in order to mitigate denial of service attacks from malicious frontends.
         '';
       }
     ];
@@ -754,44 +413,6 @@ in
             source ${cfg.package}/etc/default/xendomains
 
             ${cfg.domains.extraConfig}
-          '';
-        }
-        # The OCaml-based Xen Store Daemon requires /etc/xen/oxenstored.conf to start.
-        // optionalAttrs (cfg.store.type == "ocaml") {
-          "xen/oxenstored.conf".text = ''
-            pid-file = ${cfg.store.settings.pidFile}
-            test-eagain = ${boolToString cfg.store.settings.testEAGAIN}
-            merge-activate = ${toString cfg.store.settings.enableMerge}
-            conflict-burst-limit = ${toString cfg.store.settings.conflict.burstLimit}
-            conflict-max-history-seconds = ${toString cfg.store.settings.conflict.maxHistorySeconds}
-            conflict-rate-limit-is-aggregate = ${toString cfg.store.settings.conflict.rateLimitIsAggregate}
-            perms-activate = ${toString cfg.store.settings.perms.enable}
-            perms-watch-activate = ${toString cfg.store.settings.perms.enableWatch}
-            quota-activate = ${toString cfg.store.settings.quota.enable}
-            quota-maxentity = ${toString cfg.store.settings.quota.maxEntity}
-            quota-maxsize = ${toString cfg.store.settings.quota.maxSize}
-            quota-maxwatch = ${toString cfg.store.settings.quota.maxWatch}
-            quota-transaction = ${toString cfg.store.settings.quota.transaction}
-            quota-maxrequests = ${toString cfg.store.settings.quota.maxRequests}
-            quota-path-max = ${toString cfg.store.settings.quota.maxPath}
-            quota-maxoutstanding = ${toString cfg.store.settings.quota.maxOutstanding}
-            quota-maxwatchevents = ${toString cfg.store.settings.quota.maxWatchEvents}
-            persistent = ${boolToString cfg.store.settings.persistent}
-            xenstored-log-file = ${cfg.store.settings.xenstored.log.file}
-            xenstored-log-level = ${
-              if isNull cfg.store.settings.xenstored.log.level then
-                "null"
-              else
-                cfg.store.settings.xenstored.log.level
-            }
-            xenstored-log-nb-files = ${toString cfg.store.settings.xenstored.log.nbFiles}
-            access-log-file = ${cfg.store.settings.xenstored.accessLog.file}
-            access-log-nb-lines = ${toString cfg.store.settings.xenstored.accessLog.nbLines}
-            acesss-log-nb-chars = ${toString cfg.store.settings.xenstored.accessLog.nbChars}
-            access-log-special-ops = ${boolToString cfg.store.settings.xenstored.accessLog.specialOps}
-            ring-scan-interval = ${toString cfg.store.settings.ringScanInterval}
-            xenstored-kva = ${cfg.store.settings.xenstored.xenfs.kva}
-            xenstored-port = ${cfg.store.settings.xenstored.xenfs.port}
           '';
         };
     };
