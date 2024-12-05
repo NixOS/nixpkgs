@@ -93,9 +93,6 @@ writeScript "update-dotnet-vmr.sh" ''
       tmp="$(mktemp -d)"
       trap 'rm -rf "$tmp"' EXIT
 
-      echo ${lib.escapeShellArg (toString ./update.sh)} \
-          -o ${lib.escapeShellArg (toString bootstrapSdkFile)} --sdk foo
-
       cd "$tmp"
 
       curl -fsSL "$releaseUrl" -o release.json
