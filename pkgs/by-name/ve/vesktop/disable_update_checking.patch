@@ -1,0 +1,12 @@
+diff --git a/src/main/index.ts b/src/main/index.ts
+index 2e0d6f7..1108c0f 100644
+--- a/src/main/index.ts
++++ b/src/main/index.ts
+@@ -20,7 +20,6 @@ import { isDeckGameMode } from "./utils/steamOS";
+ if (IS_DEV) {
+     require("source-map-support").install();
+ } else {
+-    autoUpdater.checkForUpdatesAndNotify();
+ }
+ 
+ // Make the Vencord files use our DATA_DIR

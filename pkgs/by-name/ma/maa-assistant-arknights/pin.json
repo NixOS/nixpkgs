@@ -1,0 +1,10 @@
+{
+  "stable": {
+    "version": "5.9.0",
+    "hash": "sha256-i3jpLRidpkg6+LwNFTRKXJoiWOJdd1H41e1wIFAc7Bw="
+  },
+  "beta": {
+    "version": "5.9.0",
+    "hash": "sha256-i3jpLRidpkg6+LwNFTRKXJoiWOJdd1H41e1wIFAc7Bw="
+  }
+}

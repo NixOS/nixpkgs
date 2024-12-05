@@ -1,0 +1,18 @@
+diff -pNaru5 a/ax99100_sp.c b/ax99100_sp.c
+--- ax99100_sp.c	2023-01-02 23:44:46.707423858 -0500
++++ ax99100_sp.c	2023-01-02 23:44:27.171293092 -0500
+@@ -1915,11 +1915,13 @@ static unsigned int serial99100_get_divi
+ 	DEBUG("In %s quot=%u----baud=%u-----------------------------END\n",__FUNCTION__,quot,baud);
+ 	return quot;	
+ }
+ 
+ //This is a port ops function to set the terminal settings.
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,20)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,1,0)
++static void serial99100_set_termios(struct uart_port *port, struct ktermios *termios, const struct ktermios *old)
++#elif LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,20)
+ static void serial99100_set_termios(struct uart_port *port, struct ktermios *termios, struct ktermios *old)
+ #else
+ static void serial99100_set_termios(struct uart_port *port, struct termios *termios, struct termios *old)
+ #endif
+ {

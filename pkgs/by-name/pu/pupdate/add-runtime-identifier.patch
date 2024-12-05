@@ -1,0 +1,23 @@
+From 84d8c110882fe23bdd05d9007225b71d4395bbaa Mon Sep 17 00:00:00 2001
+From: Philipp Rintz <git@rintz.net>
+Date: Sun, 3 Mar 2024 18:05:40 +0100
+Subject: [PATCH] uncommited
+
+---
+ pupdate.csproj | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/pupdate.csproj b/pupdate.csproj
+index 04fe5e0..962682f 100644
+--- a/pupdate.csproj
++++ b/pupdate.csproj
+@@ -12,6 +12,7 @@
+     <Authors>Matt Pannella</Authors>
+     <Product>Pupdate</Product>
+     <RepositoryUrl>https://github.com/mattpannella/pupdate</RepositoryUrl>
++    <RuntimeIdentifier>@RuntimeIdentifier@</RuntimeIdentifier>
+     <RootNamespace>Pannella</RootNamespace>
+   </PropertyGroup>
+   <ItemGroup>
+-- 
+2.42.0

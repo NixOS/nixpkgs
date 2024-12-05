@@ -1,0 +1,17 @@
+diff --git a/clients/lcdproc/machine_Linux.c b/clients/lcdproc/machine_Linux.c
+index 7bb7266..a629674 100644
+--- a/clients/lcdproc/machine_Linux.c
++++ b/clients/lcdproc/machine_Linux.c
+@@ -259,11 +259,7 @@ machine_get_fs(mounts_type fs[], int *cnt)
+	char line[256];
+	int x = 0, err;
+
+-#ifdef MTAB_FILE
+-	mtab_fd = fopen(MTAB_FILE, "r");
+-#else
+-#error "Can't find your mounted filesystem table file."
+-#endif
++	mtab_fd = fopen("/etc/mtab", "r");
+
+	/* Get rid of old, unmounted filesystems... */
+	memset(fs, 0, sizeof(mounts_type) * 256);
