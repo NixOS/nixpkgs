@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , gitUpdater
 , alsa-lib
 , cmake
@@ -21,23 +20,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "milkytracker";
-  version = "1.04.00";
+  version = "1.05.01";
 
   src = fetchFromGitHub {
     owner = "milkytracker";
     repo = "MilkyTracker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ta4eV/FGBfgTppJwDam0OKQ7udtlinbWly/FPCE+Qss=";
+    hash = "sha256-31Jy93bQj9wZ9vWJe5DVnBqFXfPSH1qmk8kcT/t+FY0=";
   };
-
-  patches = [
-    # Fix crash after querying midi ports
-    # Remove when version > 1.04.00
-    (fetchpatch {
-      url = "https://github.com/milkytracker/MilkyTracker/commit/7e9171488fc47ad2de646a4536794fda21e7303d.patch";
-      hash = "sha256-CmnIwmGGnsnlRrvVAXe2zaQf1CFMB5BJPKmiwGOHgGY=";
-    })
-  ];
 
   strictDeps = true;
 
@@ -66,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm644 $src/resources/milkytracker.desktop $out/share/applications/milkytracker.desktop
     install -Dm644 $src/resources/pictures/carton.png $out/share/pixmaps/milkytracker.png
-    install -Dm644 $src/resources/milkytracker.appdata $out/share/appdata/milkytracker.appdata.xml
+    install -Dm644 $src/resources/org.milkytracker.MilkyTracker.metainfo.xml $out/share/appdata/org.milkytracker.MilkyTracker.metainfo.xml
   '';
 
   passthru.updateScript = gitUpdater {
