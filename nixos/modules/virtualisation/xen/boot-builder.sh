@@ -1,4 +1,4 @@
-# This script is called by ./xen-dom0.nix to create the Xen boot entries.
+# This script is called by ./dom0.nix to create the Xen boot entries.
 # shellcheck shell=bash
 
 export LC_ALL=C
