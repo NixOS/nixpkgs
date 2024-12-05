@@ -5,7 +5,7 @@
 , img ? pkgs.stdenv.hostPlatform.linux-kernel.target
 , storeDir ? builtins.storeDir
 , rootModules ?
-    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "crc32c_generic" "iso9660" "loop" ]
+    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "virtiofs" "crc32c_generic" "iso9660" "loop" ]
 }:
 
 let
@@ -123,7 +123,7 @@ rec {
 
     echo "mounting Nix store..."
     mkdir -p /fs${storeDir}
-    mount -t 9p store /fs${storeDir} -o trans=virtio,version=9p2000.L,cache=loose,msize=131072
+    mount -t virtiofs store /fs${storeDir}
 
     mkdir -p /fs/tmp /fs/run /fs/var
     mount -t tmpfs -o "mode=1777" none /fs/tmp
@@ -132,7 +132,7 @@ rec {
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
-    mount -t 9p xchg /fs/tmp/xchg -o trans=virtio,version=9p2000.L,msize=131072
+    mount -t virtiofs xchg /fs/tmp/xchg
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
@@ -161,8 +161,8 @@ rec {
     ];
   };
 
- # Switch standard build environment to target host platform
- stage2Stdenv =
+  # Switch standard build environment to target host platform
+  stage2Stdenv =
     let
       buildSystem = pkgs.stdenv.buildPlatform.system;
       hostSystem = pkgs.stdenv.hostPlatform.system;
@@ -239,20 +239,20 @@ rec {
     fi
   '';
 
-
   qemuCommandLinux = ''
     ${if (customQemu != null) then customQemu else (qemu-common.qemuBinary qemu)} \
       -nographic -no-reboot \
       -device virtio-rng-pci \
-      -virtfs local,path=${storeDir},security_model=none,mount_tag=store \
-      -virtfs local,path=xchg,security_model=none,mount_tag=xchg \
+      -chardev socket,id=store,path=virtio-store.sock \
+      -device vhost-user-fs-pci,chardev=store,tag=store \
+      -chardev socket,id=xchg,path=virtio-xchg.sock \
+      -device vhost-user-fs-pci,chardev=xchg,tag=xchg \
       ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report} \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
       -append "console=${qemu-common.qemuSerialDevice} panic=1 command=${stage2Init} mountDisk=$mountDisk loglevel=4" \
       $QEMU_OPTS
   '';
-
 
   vmRunCommand = qemuCommand: writeText "vm-run" ''
     ${coreutils}/bin/mkdir xchg
@@ -280,7 +280,11 @@ rec {
     # the -K option to preserve the temporary build directory).
     cat > ./run-vm <<EOF
     #! ${bash}/bin/sh
+    
     ''${diskImage:+diskImage=$diskImage}
+    ${buildPackages.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --shared-dir "${storeDir}" &
+    ${buildPackages.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --shared-dir xchg &
+    
     ${qemuCommand}
     EOF
 
@@ -361,7 +365,7 @@ rec {
     args = ["-e" (vmRunCommand qemuCommandLinux)];
     origArgs = args;
     origBuilder = builder;
-    QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize}";
+    QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize} -object memory-backend-memfd,id=mem,size=${toString memSize}M,share=on -machine memory-backend=mem";
     passAsFile = []; # HACK fix - see https://github.com/NixOS/nixpkgs/issues/16742
   });
 
