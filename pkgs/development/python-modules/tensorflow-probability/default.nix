@@ -66,7 +66,7 @@ let
     LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
     fetchAttrs = {
-      sha256 = lib.fakeHash;
+      sha256 = "sha256-1VVrKARZsWg/UT9K8rcGjl5A91Sif+DgoeAu+oeaFV8=";
     };
 
     buildAttrs = {

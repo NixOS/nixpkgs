@@ -385,11 +385,11 @@ let
       sha256 =
         (
           if cudaSupport then
-            { x86_64-linux = lib.fakeHash; }
+            { x86_64-linux = "sha256-3ITBU7DplS7xXs1ndbGxzpczik9umuTkmnOo36Bhs3M="; }
           else
             {
-              x86_64-linux = lib.fakeHash;
-              aarch64-linux = lib.fakeHash;
+              x86_64-linux = "sha256-3ITBU7DplS7xXs1ndbGxzpczik9umuTkmnOo36Bhs3M=";
+              aarch64-linux = "sha256-5fJHpXF7vvKOzoPc6rGNU/udPgnYrRoBO73dWQQXNJs=";
             }
         ).${effectiveStdenv.system} or (throw "jaxlib: unsupported system: ${effectiveStdenv.system}");
 

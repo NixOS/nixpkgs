@@ -38,8 +38,8 @@ buildBazelPackage rec {
   fetchAttrs = {
     hash =
       {
-        aarch64-linux = lib.fakeHash;
-        x86_64-linux = lib.fakeHash;
+        aarch64-linux = "sha256-GK5UB5Om0hGsgyiipyRjDG8LymLtThvUd9Cjt97+ue8=";
+        x86_64-linux = "sha256-udo3EmbbZFmZ0L60htocXdFA3fo8MflsKC9ZXSUJkXc=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };

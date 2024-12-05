@@ -40,7 +40,7 @@ buildBazelPackage rec {
   ];
 
   fetchAttrs = {
-    hash = lib.fakeHash;
+    hash = "sha256-1971ZjIz/6PTihwsSa3ccog3p06aDU+5YC9twASRWr4=";
   };
 
   nativeBuildInputs = [
