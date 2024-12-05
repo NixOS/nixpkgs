@@ -6,27 +6,25 @@
   setuptools,
   setuptools-scm,
   sip,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "pyqt-builder";
-  version = "1.16.4";
-  format = "pyproject";
+  version = "1.17.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pyqt_builder";
     inherit version;
-    hash = "sha256-RRXkGuN5vi5U+IqJ7PR81uTKxD6GLEq/3hg4nCZmr98=";
+    hash = "sha256-/ODpI0bSpCllJbetnwK3TqQl8mIQOQrg0+TKCMMc9Mw=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     sip
   ];
