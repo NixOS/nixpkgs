@@ -105,7 +105,7 @@ ruff format .
   old `nixos-rebuild`)
 - [x] `_NIXOS_REBUILD_REEXEC`
 - [ ] Port `nixos-rebuild.passthru.tests`
-- [ ] Change module system to allow easier opt-in, like
+- [x] Change module system to allow easier opt-in, like
   `system.switch.enableNg` for `switch-to-configuration-ng`
 - [x] Improve documentation
 - [x] `nixos-rebuild repl`
