@@ -1,4 +1,4 @@
-# This script is called by ./xen-dom0.nix to create the Xen boot entries.
+# This script is called by ./dom0.nix to create the Xen boot entries.
 # shellcheck shell=bash
 
 export LC_ALL=C
@@ -67,7 +67,6 @@ for gen in "${gens[@]}"; do
     # Check for a valid Xen spec being detected
     if [ -n "$xenSpecVer" ]; then
         [ "$1" = "debug" ] && echo -e "                \e[1;32msuccess:\e[0m found $xenSpecVer Xen entries in $gen."
-
         # TODO: Support DeviceTree booting. Xen has some special handling for DeviceTree
         # attributes, which will need to be translated in a boot script similar to this
         # one. Having a DeviceTree entry is rare, and it is not always required for a
