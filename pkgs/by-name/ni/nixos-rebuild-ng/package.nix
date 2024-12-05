@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   installShellFiles,
   mkShell,
   nix,
@@ -9,7 +8,7 @@
   runCommand,
   scdoc,
   withNgSuffix ? true,
-  withShellFiles ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
+  withShellFiles ? true,
 }:
 let
   executable = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";
