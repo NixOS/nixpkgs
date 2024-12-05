@@ -10427,6 +10427,8 @@ self: super: with self; {
 
   pyaehw4a1 = callPackage ../development/python-modules/pyaehw4a1 { };
 
+  pyalsa = callPackage ../development/python-modules/pyalsa { };
+
   pyalsaaudio = callPackage ../development/python-modules/pyalsaaudio { };
 
   pyatag = callPackage ../development/python-modules/pyatag { };
