@@ -58,13 +58,13 @@ let
 in
 {
   pname = "nanopb";
-  version = "0.4.9";
+  version = "0.4.9.1";
 
   src = fetchFromGitHub {
     owner = "nanopb";
     repo = "nanopb";
     rev = self.version;
-    hash = "sha256-zXhUEajCZ24VA/S0pSFewz096s8rmhKARSWbSC5TdAg=";
+    hash = "sha256-bMSZZaF8egAegi3enCM+DRyxOrPoWKAKybvWsrKZEDc=";
   };
 
   dontPatch = true;
