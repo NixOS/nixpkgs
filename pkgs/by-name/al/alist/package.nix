@@ -7,6 +7,7 @@
   stdenv,
   installShellFiles,
   versionCheckHook,
+  callPackage,
 }:
 buildGoModule rec {
   pname = "alist";
@@ -87,6 +88,10 @@ buildGoModule rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
+  passthru = {
+    updateScript = lib.getExe (callPackage ./update.nix { });
+  };
 
   meta = {
     description = "File list/WebDAV program that supports multiple storages";
