@@ -11,11 +11,11 @@
 let
   attrsToPlugins = attrs:
     let
-        sortedAttrs = lib.sort (a: b: (a.priority or 1) > (b.priority or 1)) attrs;
+        sortedAttrs = lib.sort (a: b: (a.priority or 0) > (b.priority or 0)) attrs;
     in
-        builtins.map ({name, repo, version, priority ? 1}: "${toString priority}i${name}:${repo}") sortedAttrs;
+        builtins.map ({name, repo, version, priority ? 0}: "${toString priority}i${name}:${repo}") sortedAttrs;
   attrsToSources = attrs:
-    builtins.map ({name, repo, version, priority ? 1}: "${repo}@${version}") attrs;
+    builtins.map ({name, repo, version, priority ? 0}: "${repo}@${version}") attrs;
 in buildGoModule rec {
   pname = "coredns";
   version = "1.11.3";
@@ -34,8 +34,16 @@ in buildGoModule rec {
   outputs = [ "out" "man" ];
 
   # Override the go-modules fetcher derivation to fetch plugins
+  # If a priority is set, the plugin will be inserted at that line number in the plugin.cfg
+  # otherwise it will be appended to the end of the file
   modBuildPhase = ''
-    for plugin in ${builtins.toString (attrsToPlugins externalPlugins)}; do sed -i "$plugin" plugin.cfg; done
+    for plugin in ${builtins.toString (attrsToPlugins externalPlugins)}; do
+      if [[ "$plugin" == 0i* ]]; then
+        echo "''${plugin:2}" >> plugin.cfg
+      else
+        sed -i "$plugin" plugin.cfg
+      fi
+    done
     for src in ${builtins.toString (attrsToSources externalPlugins)}; do go get $src; done
     GOOS= GOARCH= go generate
     go mod vendor
