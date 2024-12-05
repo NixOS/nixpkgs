@@ -6,10 +6,10 @@
   cryptography,
   fetchPypi,
   msrest,
-  msrestazure,
   pythonOlder,
   requests,
   setuptools,
+  python-dateutil,
 }:
 
 buildPythonPackage rec {
@@ -31,8 +31,8 @@ buildPythonPackage rec {
     azure-core
     cryptography
     msrest
-    msrestazure
     requests
+    python-dateutil
   ];
 
   # fix namespace
