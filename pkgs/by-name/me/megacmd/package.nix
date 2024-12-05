@@ -6,9 +6,8 @@
   cryptopp,
   curl,
   fetchFromGitHub,
-  # build fails with latest ffmpeg, see https://github.com/meganz/MEGAcmd/issues/523.
-  # to be re-enabled when patch available
-  # ffmpeg,
+  ffmpeg,
+  freeimage,
   gcc-unwrapped,
   icu,
   libmediainfo,
@@ -20,6 +19,7 @@
   pkg-config,
   readline,
   sqlite,
+  withFreeImage ? false, # default to false because freeimage is insecure
 }:
 
 let
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     c-ares
     cryptopp
     curl
-    # ffmpeg
+    ffmpeg
     icu
     gcc-unwrapped
     libmediainfo
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     pcre-cpp
     readline
     sqlite
-  ];
+  ] ++ lib.optionals withFreeImage [ freeimage ];
 
   configureFlags = [
     "--disable-curl-checks"
@@ -66,8 +66,7 @@ stdenv.mkDerivation {
     "--with-cares"
     "--with-cryptopp"
     "--with-curl"
-    # "--with-ffmpeg"
-    "--without-freeimage" # disabled as freeimage is insecure
+    "--with-ffmpeg"
     "--with-icu"
     "--with-libmediainfo"
     "--with-libuv"
@@ -76,6 +75,10 @@ stdenv.mkDerivation {
     "--with-readline"
     "--with-sodium"
     "--with-termcap"
+  ] ++ (if withFreeImage then [ "--with-freeimage" ] else [ "--without-freeimage" ]);
+
+  patches = [
+    ./fix-ffmpeg.patch # https://github.com/meganz/sdk/issues/2635#issuecomment-1495405085
   ];
 
   meta = {
@@ -89,6 +92,9 @@ stdenv.mkDerivation {
       "i686-linux"
       "x86_64-linux"
     ];
-    maintainers = with lib.maintainers; [ lunik1 ];
+    maintainers = with lib.maintainers; [
+      lunik1
+      ulysseszhan
+    ];
   };
 }
