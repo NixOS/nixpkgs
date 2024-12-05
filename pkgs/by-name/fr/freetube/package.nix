@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
       ryneeverett
       alyaeanyx
       ryand56
+      sigmasquadron
     ];
     inherit (electron.meta) platforms;
     mainProgram = "freetube";

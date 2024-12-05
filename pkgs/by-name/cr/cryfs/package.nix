@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://www.cryfs.org/";
     changelog   = "https://github.com/cryfs/cryfs/raw/${version}/ChangeLog.txt";
     license     = licenses.lgpl3Only;
-    maintainers = with maintainers; [ peterhoeg c0bw3b ];
+    maintainers = with maintainers; [ peterhoeg c0bw3b sigmasquadron ];
     platforms   = platforms.unix;
   };
 }
