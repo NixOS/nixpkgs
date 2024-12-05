@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "azure-servicebus";
-  version = "7.12.3";
+  version = "7.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "azure_servicebus";
     inherit version;
-    hash = "sha256-PwdZcxrSIRxo60sh5byimCf31v8Ccr3H7vEDwcE/gyI=";
+    hash = "sha256-p16aYUNco606eX8di/T90Nhz66nl04OJSsh+9eGnDPA=";
   };
 
   build-system = [ setuptools ];
