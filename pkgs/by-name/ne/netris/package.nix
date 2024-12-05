@@ -23,6 +23,10 @@ stdenv.mkDerivation {
   configureScript = "./Configure";
   dontAddPrefix = true;
 
+  configureFlags = [
+    "--cc" "${stdenv.cc.targetPrefix}cc"
+  ];
+
   installPhase = ''
     mkdir -p $out/bin
     cp ./netris $out/bin
@@ -33,6 +37,6 @@ stdenv.mkDerivation {
     mainProgram = "netris";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ patryk27 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
