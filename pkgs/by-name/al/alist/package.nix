@@ -8,6 +8,7 @@
   installShellFiles,
   versionCheckHook,
   callPackage,
+  nixosTests,
 }:
 buildGoModule rec {
   pname = "alist";
@@ -92,6 +93,9 @@ buildGoModule rec {
 
   passthru = {
     updateScript = lib.getExe (callPackage ./update.nix { });
+    tests = {
+      inherit (nixosTests) alist;
+    };
   };
 
   meta = {
