@@ -160,7 +160,7 @@ buildNpmPackage' {
     python3
     makeWrapper
     glib
-    node-gyp
+    node-gyp # for building node_modules/sharp from source
   ];
 
   buildInputs = [
