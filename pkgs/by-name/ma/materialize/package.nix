@@ -93,14 +93,14 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "materialize";
-  version = "0.84.2";
+  version = "0.87.2";
   MZ_DEV_BUILD_SHA = "000000000000000000000000000000000000000000000000000";
 
   src = fetchFromGitHub {
     owner = "MaterializeInc";
     repo = "materialize";
-    hash = "sha256-+cvTCiTbuaPYPIyDxQlMWdJA5/6cbMoiTcSmjj5KPjs=";
     tag = "v${version}";
+    hash = "sha256-EHhN+avUxzwKU48MubiMM40W9J93yZlNqV+xeP44dl0=";
     fetchSubmodules = true;
   };
 
@@ -123,7 +123,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-EHVuwVYPZKaoP3GYtJpYJaKG3CLsy9CWuEmajF4P7Qc=";
+  cargoHash = "sha256-+OREisZ/vw3Oi5MNCYn7u06pZKtf+2trlGyn//uAGws=";
 
   nativeBuildInputs =
     [
