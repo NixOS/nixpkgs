@@ -1,4 +1,5 @@
 { lib
+, bash
 , ddcutil
 , easyeffects
 , gjs
@@ -165,5 +166,12 @@ super: lib.trivial.pipe super [
       substituteInPlace "src/touchegg/ToucheggConfig.js" \
         --replace "GLib.build_filenamev([GLib.DIR_SEPARATOR_S, 'usr', 'share', 'touchegg', 'touchegg.conf'])" "'${touchegg}/share/touchegg/touchegg.conf'"
     '';
+  }))
+
+  (patchExtension "custom-command-list@storageb.github.com" (old: {
+    postPatch = ''
+        substituteInPlace "extension.js" \
+          --replace-fail '"/bin/bash"' '"${bash}/bin/bash"'
+      '';
   }))
 ]
