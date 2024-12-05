@@ -13,7 +13,7 @@
   mpi,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
-  openmp,
+  llvmPackages,
   zlib,
   bzip2,
   pkgsStatic,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     lib.optionals stdenv.cc.isClang [
-      openmp
+      llvmPackages.openmp
       zlib
       bzip2
     ]
