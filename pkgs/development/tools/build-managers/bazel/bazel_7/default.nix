@@ -718,16 +718,8 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   passthru = {
-    # Additional tests that check bazel’s functionality. Execute
-    #
-    #     nix-build . -A bazel_7.tests
-    #
-    # in the nixpkgs checkout root to exercise them locally.
-    # tests = callPackage ./tests.nix {
-    #   inherit Foundation bazel_self lockfile repoCache;
-    # };
-    # TODO tests have not been updated yet and will likely need a rewrite
-    # tests = callPackage ./tests.nix { inherit Foundation bazelDeps bazel_self; };
+    # TODO add some tests to cover basic functionality, and also tests for enableNixHacks=true (buildBazelPackage tests)
+    # tests = ...
 
     # For ease of debugging
     inherit bazelDeps bazelFhs bazelBootstrap;
