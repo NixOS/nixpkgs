@@ -1,30 +1,28 @@
-{ lib
-, fetchFromGitHub
-, python3
-, meson
-, ninja
-, pkg-config
-, glib
-, gtk4
-, libadwaita
-, librsvg
-, espeak-ng
-, gobject-introspection
-, wrapGAppsHook4
-, appstream-glib
-, desktop-file-utils
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  meson,
+  ninja,
+  pkg-config,
+  libadwaita,
+  espeak-ng,
+  gobject-introspection,
+  wrapGAppsHook4,
+  appstream-glib,
+  desktop-file-utils,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wordbook";
-  version = "unstable-2022-11-02";
-  format = "other";
+  version = "0.4.0";
+  pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "fushinari";
     repo = "Wordbook";
-    rev = "2d79e9e9ef21ba4b54d0b46c764a1481a06f0f1b";
-    hash = "sha256-ktusZEQ7m8P0kiH09r3XC6q9bQCWVCn543IMLKmULDo=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-oiAXSDJJtlV6EIHzi+jFv+Ym1XHCMLx9DN1YRiXZNzc=";
   };
 
   nativeBuildInputs = [
@@ -38,13 +36,10 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    glib
-    gtk4
-    librsvg
     libadwaita
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     pygobject3
     wn
   ];
@@ -59,12 +54,12 @@ python3.pkgs.buildPythonApplication rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Offline English-English dictionary application built for GNOME";
     mainProgram = "wordbook";
     homepage = "https://github.com/fushinari/Wordbook";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zendo ];
   };
 }

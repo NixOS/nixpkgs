@@ -3240,6 +3240,8 @@ self: super: with self; {
 
   dirigera = callPackage ../development/python-modules/dirigera { };
 
+  dirsearch = callPackage ../development/python-modules/dirsearch { };
+
   dirty-equals = callPackage ../development/python-modules/dirty-equals { };
 
   dirtyjson = callPackage ../development/python-modules/dirtyjson { };
@@ -14089,6 +14091,8 @@ self: super: with self; {
 
   rollbar = callPackage ../development/python-modules/rollbar { };
 
+  roma = callPackage ../development/python-modules/roma { };
+
   roman = callPackage ../development/python-modules/roman { };
 
   romy = callPackage ../development/python-modules/romy { };
@@ -16151,6 +16155,8 @@ self: super: with self; {
   torchsde = callPackage ../development/python-modules/torchsde { };
 
   torchsummary = callPackage ../development/python-modules/torchsummary { };
+
+  torchtnt = callPackage ../development/python-modules/torchtnt { };
 
   torchvision = callPackage ../development/python-modules/torchvision { };
 

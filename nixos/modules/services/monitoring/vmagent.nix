@@ -115,7 +115,7 @@ in {
         CacheDirectory = "vmagent";
         ExecStart = lib.escapeShellArgs (
           startCLIList
-          ++ lib.optionals (cfg.prometheusConfig != null) ["-promscrape.config=${prometheusConfigYml}"]
+          ++ lib.optionals (cfg.prometheusConfig != {}) ["-promscrape.config=${prometheusConfigYml}"]
         );
         LoadCredential = lib.optional (cfg.remoteWrite.basicAuthPasswordFile != null) [
           "remote_write_basic_auth_password:${cfg.remoteWrite.basicAuthPasswordFile}"
