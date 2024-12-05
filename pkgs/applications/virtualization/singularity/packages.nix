@@ -9,14 +9,14 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "apptainer";
-        version = "1.3.5";
+        version = "1.3.6";
         projectName = "apptainer";
 
         src = fetchFromGitHub {
           owner = "apptainer";
           repo = "apptainer";
           rev = "refs/tags/v${version}";
-          hash = "sha256-yBUCUHc9vgyKFqAOHXQjAYQnmN0yXSIvkpR/s3LNAmk=";
+          hash = "sha256-ZdSo9bKZ7Q1xwMe4SR840U3+fVpKwtiZQA5KDM5qF9M=";
         };
 
         # Update by running
