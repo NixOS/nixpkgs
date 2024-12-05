@@ -94,13 +94,13 @@ in
 rustPlatform.buildRustPackage rec {
   pname = "materialize";
   version = "0.84.2";
-  MZ_DEV_BUILD_SHA = "9f8cf75b461d288335cb6a7a73aaa670bab4a466";
+  MZ_DEV_BUILD_SHA = "000000000000000000000000000000000000000000000000000";
 
   src = fetchFromGitHub {
     owner = "MaterializeInc";
     repo = "materialize";
-    rev = "refs/tags/v${version}";
     hash = "sha256-+cvTCiTbuaPYPIyDxQlMWdJA5/6cbMoiTcSmjj5KPjs=";
+    tag = "v${version}";
     fetchSubmodules = true;
   };
 
@@ -156,16 +156,19 @@ rustPlatform.buildRustPackage rec {
   # Skip tests that use the network
   checkFlags = [
     "--exact"
-    "--skip test_client"
-    "--skip test_client_errors"
-    "--skip test_client_all_subjects"
-    "--skip test_client_subject_and_references"
-    "--skip test_no_block"
-    "--skip test_safe_mode"
-    "--skip test_tls"
+    "--skip=test_client"
+    "--skip=test_client_errors"
+    "--skip=test_client_all_subjects"
+    "--skip=test_client_subject_and_references"
+    "--skip=test_no_block"
+    "--skip=test_safe_mode"
+    "--skip=test_tls"
   ];
 
-  cargoBuildFlags = [ "--bin environmentd --bin clusterd" ];
+  cargoBuildFlags = [
+    "--bin=clusterd"
+    "--bin=environmentd"
+  ];
 
   postInstall = ''
     install --mode=444 -D ./misc/dist/materialized.service $out/etc/systemd/system/materialized.service
