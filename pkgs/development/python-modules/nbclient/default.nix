@@ -21,7 +21,7 @@
 let
   nbclient = buildPythonPackage rec {
     pname = "nbclient";
-    version = "0.10.0";
+    version = "0.10.1";
     format = "pyproject";
 
     disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ let
       owner = "jupyter";
       repo = pname;
       rev = "refs/tags/v${version}";
-      hash = "sha256-8OLkpwX4Gpam9VSFUtNS41Ypxe4+2yN3ng6iVY9DSqY=";
+      hash = "sha256-FbsHN49ADUBQ3EEvxjkOknIZiIvUixv6DVIgNoMSG40=";
     };
 
     nativeBuildInputs = [ hatchling ];
