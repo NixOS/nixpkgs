@@ -1,60 +1,80 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libuuid
-, sane-backends, podofo, libjpeg, djvulibre, libxmlxx3, libzip, tesseract
-, intltool, poppler, json-glib
-, ninja
-, python3
-, doxygen
-, enchant
-
-# Gtk deps
-# upstream gImagereader supports Qt too
-, gobject-introspection, wrapGAppsHook3
-, gtkmm3, gtksourceview3, gtksourceviewmm, gtkspell3, gtkspellmm, cairomm
-, kdePackages
-, qt6Packages
-, withGTK3 ? false
-, withQt6 ? false ? false, wrapQtAppsHook ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  cairomm,
+  djvulibre,
+  doxygen,
+  enchant,
+  gobject-introspection,
+  gtkmm3,
+  gtksourceview3,
+  gtksourceviewmm,
+  gtkspell3,
+  gtkspellmm,
+  intltool,
+  json-glib,
+  kdePackages,
+  libjpeg,
+  libuuid,
+  libxmlxx3,
+  libzip,
+  ninja,
+  podofo,
+  poppler,
+  python3,
+  qt6Packages,
+  sane-backends,
+  tesseract,
+  wrapGAppsHook3,
+  withGTK3 ? false,
+  withQt6 ? false ? false, wrapQtAppsHook ? null,
 }:
 
 let
-  pythonEnv = python3.withPackages (ps: with ps;[ pygobject3 ]);
+  pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);
 in
 stdenv.mkDerivation rec {
   pname = "gImageReader";
   version = "b794fd5a58dbefbc46158f32e706a61b3ba3c518";
 
   src = fetchFromGitHub {
-    owner= "manisandro";
+    owner = "manisandro";
     repo = "gImageReader";
     rev = "${version}";
     sha256 = "sha256-6FU/49CmRDP91VoFzEsrJMgCKFlfsTKZcEYSfdeq2VU=";
   };
 
-  nativeBuildInputs = [
-    cmake ninja
-    intltool
-    pkg-config
-    pythonEnv
-    enchant
-  ]
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+      enchant
+      intltool
+      ninja
+      pythonEnv
+    ]
     ++ lib.optionals withGTK3 [
       gobject-introspection
       wrapGAppsHook3
     ]
     ++ lib.optionals withQt6 [ qt6Packages.wrapQtAppsHook ];
 
-  buildInputs = [
-    libxmlxx3
-    libzip
-    libuuid
-    sane-backends
-    podofo
-    libjpeg
-    djvulibre
-    tesseract
-    poppler
-    doxygen
-  ]
+  buildInputs =
+    [
+      djvulibre
+      doxygen
+      libjpeg
+      libuuid
+      libxmlxx3
+      libzip
+      podofo
+      poppler
+      sane-backends
+      tesseract
+    ]
     ++ lib.optionals withGTK3 [
       cairomm
       gtkmm3
@@ -87,7 +107,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/manisandro/gImageReader";
     changelog = "https://github.com/manisandro/gImageReader/blob/${version}/NEWS";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [teto];
+    maintainers = with maintainers; [ teto ];
     platforms = platforms.linux;
   };
 }
