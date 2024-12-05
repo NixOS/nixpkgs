@@ -136,6 +136,7 @@ mapAliases {
   inherit (pkgs) mathjax-node-cli; # added 2023-11-02
   mdctl-cli = self."@medable/mdctl-cli"; # added 2023-08-21
   inherit (pkgs) mermaid-cli; # added 2023-10-01
+  meshcommander = throw "meshcommander was removed because it was abandoned upstream"; # added 2024-12-02
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
   inherit (pkgs) near-cli; # added 2023-09-09
   neovim = pkgs.neovim-node-client; # added 2024-11-13

@@ -23820,15 +23820,6 @@ let
         sha512 = "r05VYoBL3i2pswuehoFSy+uM8NBuVaY7avp5qrYjQBDzagx2Z5A77FZqPT8/gNLF3HopWkIzaTFaC4JysWXLqg==";
       };
     };
-    "express-ws-2.0.0" = {
-      name = "express-ws";
-      packageName = "express-ws";
-      version = "2.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/express-ws/-/express-ws-2.0.0.tgz";
-        sha512 = "Voh/dZzLoNVxd+foiLS24ch2ZBKEuSJyXjHIjE2mq5bKtII8JKUVRqhr5onD7nVXU8SCxJtn4LYKnHlypRYGOA==";
-      };
-    };
     "ext-1.7.0" = {
       name = "ext";
       packageName = "ext";
@@ -68841,99 +68832,6 @@ in
       description = "The Makam metalanguage -- a tool for rapid language prototyping";
       homepage = "http://astampoulis.github.io/makam/";
       license = "GPL-3.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  meshcommander = nodeEnv.buildNodePackage {
-    name = "meshcommander";
-    packageName = "meshcommander";
-    version = "0.9.5-a";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/meshcommander/-/meshcommander-0.9.5-a.tgz";
-      sha512 = "RneCQXwu1Nuqu69+EPHIpDkrOcMcWaacM4T8Jibk0MkcquxF2iILX5bB6joCuNHHVr1I+9fPlYQoCjN1K22deg==";
-    };
-    dependencies = [
-      sources."accepts-1.3.8"
-      sources."array-flatten-1.1.1"
-      sources."body-parser-1.20.3"
-      sources."bytes-3.1.2"
-      sources."call-bind-1.0.7"
-      sources."content-disposition-0.5.4"
-      sources."content-type-1.0.5"
-      sources."cookie-0.6.0"
-      sources."cookie-signature-1.0.6"
-      sources."debug-2.6.9"
-      sources."define-data-property-1.1.4"
-      sources."depd-2.0.0"
-      sources."destroy-1.2.0"
-      sources."ee-first-1.1.1"
-      sources."encodeurl-2.0.0"
-      sources."es-define-property-1.0.0"
-      sources."es-errors-1.3.0"
-      sources."escape-html-1.0.3"
-      sources."etag-1.8.1"
-      sources."express-4.21.0"
-      sources."express-ws-2.0.0"
-      sources."finalhandler-1.3.1"
-      sources."forwarded-0.2.0"
-      sources."fresh-0.5.2"
-      sources."function-bind-1.1.2"
-      sources."get-intrinsic-1.2.4"
-      sources."gopd-1.0.1"
-      sources."has-property-descriptors-1.0.2"
-      sources."has-proto-1.0.3"
-      sources."has-symbols-1.0.3"
-      sources."hasown-2.0.2"
-      sources."http-errors-2.0.0"
-      sources."iconv-lite-0.4.24"
-      sources."inherits-2.0.4"
-      sources."ipaddr.js-1.9.1"
-      sources."media-typer-0.3.0"
-      sources."merge-descriptors-1.0.3"
-      sources."methods-1.1.2"
-      sources."mime-1.6.0"
-      sources."mime-db-1.52.0"
-      sources."mime-types-2.1.35"
-      sources."minimist-1.2.8"
-      sources."ms-2.0.0"
-      sources."negotiator-0.6.3"
-      sources."object-inspect-1.13.2"
-      sources."on-finished-2.4.1"
-      sources."options-0.0.6"
-      sources."parseurl-1.3.3"
-      sources."path-to-regexp-0.1.10"
-      sources."proxy-addr-2.0.7"
-      sources."qs-6.13.0"
-      sources."range-parser-1.2.1"
-      sources."raw-body-2.5.2"
-      sources."safe-buffer-5.2.1"
-      sources."safer-buffer-2.1.2"
-      (sources."send-0.19.0" // {
-        dependencies = [
-          sources."encodeurl-1.0.2"
-          sources."ms-2.1.3"
-        ];
-      })
-      sources."serve-static-1.16.2"
-      sources."set-function-length-1.2.2"
-      sources."setprototypeof-1.2.0"
-      sources."side-channel-1.0.6"
-      sources."statuses-2.0.1"
-      sources."toidentifier-1.0.1"
-      sources."type-is-1.6.18"
-      sources."ultron-1.0.2"
-      sources."unpipe-1.0.0"
-      sources."utils-merge-1.0.1"
-      sources."vary-1.1.2"
-      sources."ws-1.1.5"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "MeshCommander web server";
-      homepage = "http://meshcommander.com";
-      license = "Apache-2.0";
     };
     production = true;
     bypassCache = true;
