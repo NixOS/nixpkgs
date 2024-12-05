@@ -2,7 +2,7 @@
 , alsa-lib, atk, at-spi2-atk, at-spi2-core, cairo, cups, dbus, expat, fontconfig, freetype
 , gdk-pixbuf, glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid, libX11, libxcb
 , libXcomposite, libXcursor, libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender
-, libXScrnSaver, libXtst, mesa, nspr, nss, openssl, pango, systemd }:
+, libXScrnSaver, libXtst, libgbm, nspr, nss, openssl, pango, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "upwork";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     stdenv.cc.cc alsa-lib atk at-spi2-atk at-spi2-core cairo cups
     dbus expat fontconfig freetype gdk-pixbuf glib gtk3 libdrm libnotify
     libuuid libX11 libxcb libXcomposite libXcursor libXdamage libXext libXfixes
-    libXi libXrandr libXrender libXScrnSaver libXtst mesa nspr nss pango systemd
+    libXi libXrandr libXrender libXScrnSaver libXtst libgbm nspr nss pango systemd
   ];
 
   libPath = lib.makeLibraryPath buildInputs;

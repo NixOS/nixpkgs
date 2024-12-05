@@ -25,7 +25,7 @@
 , libXrender
 , libXt
 , libXtst
-, mesa
+, libgbm
 , pango
 , pciutils
 , zlib
@@ -77,7 +77,7 @@ let
       libXrender
       libXt
       libXtst
-      mesa # for libgbm
+      libgbm
       pango
       pciutils
       stdenv.cc.cc

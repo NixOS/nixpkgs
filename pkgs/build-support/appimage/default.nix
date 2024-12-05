@@ -160,7 +160,7 @@ rec {
       libidn
       tbb
       wayland
-      mesa
+      libgbm
       libxkbcommon
       vulkan-loader
 

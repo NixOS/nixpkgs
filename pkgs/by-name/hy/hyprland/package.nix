@@ -23,7 +23,7 @@
   libinput,
   libuuid,
   libxkbcommon,
-  mesa,
+  libgbm,
   pango,
   pciutils,
   pkgconf,
@@ -145,7 +145,7 @@ customStdenv.mkDerivation (finalAttrs: {
       libinput
       libuuid
       libxkbcommon
-      mesa
+      libgbm
       pango
       pciutils
       tomlplusplus

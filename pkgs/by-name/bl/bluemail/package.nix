@@ -10,7 +10,7 @@
 , nss
 , libXdamage
 , libdrm
-, mesa
+, libgbm
 , libxshmfence
 , makeDesktopItem
 , makeWrapper
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     nss
     libXdamage
     libdrm
-    mesa
+    libgbm
     libxshmfence
     udev
   ];

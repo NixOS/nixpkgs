@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitLab
 , meson, ninja, pkg-config, scdoc
-, mesa, lz4, zstd, ffmpeg, libva
+, libgbm, lz4, zstd, ffmpeg, libva
 , wayland, wayland-scanner
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
   buildInputs = [
     # Optional dependencies:
-    mesa lz4 zstd ffmpeg libva
+    libgbm lz4 zstd ffmpeg libva
 
     wayland
   ];
