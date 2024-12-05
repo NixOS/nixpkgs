@@ -163,6 +163,7 @@ mapAliases {
   react-tools = throw "react-tools was removed because it was deprecated"; # added 2023-09-25
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   inherit (pkgs) redoc-cli; # added 2023-09-12
+  remod-cli = pkgs.remod; # added 2024-12-04
   reveal-md = pkgs.reveal-md; # added 2023-07-31
   inherit (pkgs) rtlcss; # added 2023-08-29
   s3http = throw "s3http was removed because it was abandoned upstream"; # added 2023-08-18
