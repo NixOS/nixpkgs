@@ -41,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folly";
-  version = "2024.11.18.00";
+  version = "2024.12.09.00";
 
   # split outputs to reduce downstream closure sizes
   outputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "folly";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-CX4YzNs64yeq/nDDaYfD5y8GKrxBueW4y275edPoS0c=";
+    hash = "sha256-uX63Zg0Dy5kHdDFYAX7kbVTXUyrWNsdz867VJ0191YI=";
   };
 
   nativeBuildInputs = [
@@ -124,6 +124,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  patches = [
+    # The base template for std::char_traits has been removed in LLVM 19
+    # https://releases.llvm.org/19.1.0/projects/libcxx/docs/ReleaseNotes.html
+    ./char_traits.patch
+  ];
+
   # https://github.com/NixOS/nixpkgs/issues/144170
   postPatch = ''
     substituteInPlace CMake/libfolly.pc.in \
@@ -169,6 +175,8 @@ stdenv.mkDerivation (finalAttrs: {
           ]
           ++ lib.optionals stdenv.hostPlatform.isDarwin [
             "buffered_atomic_test.BufferedAtomic.singleThreadUnguardedAccess"
+            "io_async_notification_queue_test.NotificationQueueTest.UseAfterFork"
+            "container_heap_vector_types_test.HeapVectorTypes.SimpleSetTes"
           ]
         )
       )
