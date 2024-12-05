@@ -12,10 +12,6 @@ rustPlatform.buildRustPackage {
   pname = "anki-sync-server";
   inherit (anki) version src cargoLock;
 
-  patches = [
-    ./patches/Cargo.lock-update-time-for-rust-1.80.patch
-  ];
-
   # only build sync server
   cargoBuildFlags = [
     "--bin"
