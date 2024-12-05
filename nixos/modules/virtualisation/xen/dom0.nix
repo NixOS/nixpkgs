@@ -36,6 +36,7 @@ in
   imports = [
     ./oxenstored.nix
     ./efi.nix
+    ./xl.nix
     (mkRemovedOptionModule [
       "virtualisation"
       "xen"
@@ -262,7 +263,6 @@ in
       etc =
         # Set up Xen Domain 0 configuration files.
         {
-          "xen/xl.conf".source = "${cfg.package}/etc/xen/xl.conf"; # TODO: Add options to configure xl.conf declaratively. It's worth considering making a new "xl value" type, as it could be reused to produce xl.cfg (domain definition) files.
           "xen/scripts-xen" = {
             source = "${cfg.package}/etc/xen/scripts/*";
             target = "xen/scripts";
