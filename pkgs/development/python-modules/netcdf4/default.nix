@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "netcdf4";
-  version = "1.7.1.post2";
+  version = "1.7.2";
   pyproject = true;
 
   disabled = isPyPy || pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-N9VX42ZUiJ1wIBkr+1b51fk4lMsymX64N65YbFOP17Y=";
+    hash = "sha256-pMY3VUCxmYmJYTaUOrttRIUP9vH6fT8GMlOxrT+Lf84=";
   };
 
   postPatch = ''
