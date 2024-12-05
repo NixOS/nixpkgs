@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "ipyparallel";
-  version = "8.8.0";
+  version = "9.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JATVn4ajqqO9J79rV993e/9cE2PBxuYEA3WdFu1C3Hs=";
+    hash = "sha256-cGAcuvmhadNQ/+IsgtW73+bf5MTfAoNtmZDpxVm1vLY=";
   };
 
   # We do not need the jupyterlab build dependency, because we do not need to
