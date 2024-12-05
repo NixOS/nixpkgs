@@ -15851,10 +15851,7 @@ with pkgs;
     wlroots = wlroots_0_18;
   };
 
-  treesheets = callPackage ../applications/office/treesheets {
-    wxGTK = wxGTK32;
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
+  treesheets = callPackage ../applications/office/treesheets { };
 
   trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
 

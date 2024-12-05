@@ -5,8 +5,7 @@
 , ninja
 , wrapGAppsHook3
 , makeWrapper
-, wxGTK
-, Cocoa
+, wxGTK32
 , unstableGitUpdater
 }:
 
@@ -29,19 +28,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    wxGTK
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
+    wxGTK32
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${builtins.replaceStrings [ "unstable-" ] [ "" ] version}\"";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    shopt -s extglob
-    mkdir -p $out/{share/treesheets,bin}
-    mv $out/!(share) $out/share/treesheets
-    makeWrapper $out/{share/treesheets,bin}/treesheets \
-      --chdir $out/share/treesheets
+    mkdir -p $out/{Applications,bin}
+    mv $out/TreeSheets.app $out/Applications
+    makeWrapper $out/Applications/TreeSheets.app/Contents/MacOS/TreeSheets $out/bin/TreeSheets
   '';
 
   passthru = {
@@ -52,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Free Form Data Organizer";
-    mainProgram = "treesheets";
+    mainProgram = "TreeSheets";
 
     longDescription = ''
       The ultimate replacement for spreadsheets, mind mappers, outliners,
