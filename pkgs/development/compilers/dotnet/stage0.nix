@@ -17,6 +17,7 @@
   releaseManifestFile,
   tarballHash,
   depsFile,
+  fallbackTargetPackages,
   bootstrapSdk,
 }:
 
