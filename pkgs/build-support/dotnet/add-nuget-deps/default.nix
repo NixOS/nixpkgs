@@ -11,6 +11,23 @@
 }:
 
 {
+  /**
+    A list of nuget packages.
+
+    Should be a list of derivations or arguments to be applied to `fetchNupkg`.
+
+    ```nix
+    [
+      # Arguments for use fetchNupkg
+      { pname = "FosterFramework"; version = "0.1.15-alpha"; hash = "sha256-lM6eYgOGjl1fx6WFD7rnRi/YAQieM0mx60h0p5dr+l8="; }
+
+      # Or a derivation
+      (fetchNupkg { pname = "Microsoft.AspNetCore.App.Runtime.linux-x64"; version = "8.0.1"; hash = "sha256-QbUQXjCzr8j8u/5X0af9jE++EugdoxMhT08F49MZX74="; })
+    ]
+    ```
+
+    Either a JSON or nix file with the same structure can also be used.
+  */
   nugetDeps,
   overrideFetchAttrs ? x: { },
 }:
@@ -18,17 +35,27 @@ fnOrAttrs: finalAttrs:
 let
   attrs = if builtins.isFunction fnOrAttrs then fnOrAttrs finalAttrs else fnOrAttrs;
 
-  deps =
-    if (nugetDeps != null) then
-      if lib.isDerivation nugetDeps then
-        [ nugetDeps ]
-      else if lib.isList nugetDeps then
-        nugetDeps
-      else
-        assert (lib.isPath nugetDeps);
-        callPackage nugetDeps { fetchNuGet = fetchNupkg; }
+  callNupkg = pkg: if lib.isDerivation pkg then pkg else fetchNupkg pkg;
+
+  loadDeps =
+    x:
+    if x == null then
+      [ ]
+    else if lib.isDerivation x then
+      [ x ]
+    else if builtins.isList x then
+      builtins.map callNupkg x
     else
-      [ ];
+      loadDeps (
+        if builtins.isFunction x then
+          callPackage x { fetchNuGet = fetchNupkg; }
+        else if lib.hasSuffix ".json" x then
+          lib.importJSON x
+        else
+          import x
+      );
+
+  deps = loadDeps nugetDeps;
 
   finalPackage = finalAttrs.finalPackage;
 
