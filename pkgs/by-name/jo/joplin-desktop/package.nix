@@ -66,11 +66,19 @@ let
 
     nativeBuildInputs = [ _7zz ];
 
-    sourceRoot = "Joplin.app";
+    unpackPhase = ''
+      runHook preUnpack
+      7zz x -x'!Joplin ${version}/Applications' $src
+      runHook postUnpack
+    '';
+
+    sourceRoot = if stdenv.hostPlatform.isx86_64 then "Joplin ${version}" else ".";
 
     installPhase = ''
-      mkdir -p $out/Applications/Joplin.app
-      cp -R . $out/Applications/Joplin.app
+      runHook preInstall
+      mkdir -p $out/Applications
+      cp -R Joplin.app $out/Applications
+      runHook postInstall
     '';
   };
 in
