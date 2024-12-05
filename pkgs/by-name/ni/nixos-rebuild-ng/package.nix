@@ -4,6 +4,7 @@
   installShellFiles,
   mkShell,
   nix,
+  nixosTests,
   python3,
   python3Packages,
   runCommand,
@@ -94,6 +95,7 @@ python3Packages.buildPythonApplication rec {
       };
 
       tests = {
+        inherit (nixosTests) nixos-rebuild-install-bootloader-ng;
         repl = callPackage ./tests/repl.nix { };
         # NOTE: this is a passthru test rather than a build-time test because we
         # want to keep the build closures small
