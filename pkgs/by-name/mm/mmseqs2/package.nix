@@ -17,6 +17,7 @@
   zlib,
   bzip2,
   pkgsStatic,
+  runCommand,
 }:
 let
   # require static library, libzstd.a
@@ -75,6 +76,14 @@ stdenv.mkDerivation (finalAttrs: {
     installShellCompletion --bash --cmd mmseqs $out/util/bash-completion.sh
     rm -r $out/util/
   '';
+
+  passthru.tests = {
+    example = runCommand "mmseqs2-test" { } ''
+      ${lib.getExe finalAttrs.finalPackage} createdb ${finalAttrs.src}/examples/DB.fasta targetDB > $out
+      ${lib.getExe finalAttrs.finalPackage} createindex targetDB tmp >> $out
+      ${lib.getExe finalAttrs.finalPackage} easy-search ${finalAttrs.src}/examples/QUERY.fasta targetDB alnRes.m8 tmp >> $out
+    '';
+  };
 
   meta = with lib; {
     description = "Ultra fast and sensitive sequence search and clustering suite";
