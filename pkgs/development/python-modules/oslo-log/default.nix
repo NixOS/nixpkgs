@@ -3,26 +3,29 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  eventlet,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   oslo-config,
   oslo-context,
   oslo-serialization,
   oslo-utils,
-  oslotest,
   pbr,
-  pyinotify,
   python-dateutil,
+  pyinotify,
+
+  # tests
+  eventlet,
+  oslotest,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-log";
   version = "6.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "oslo.log";
@@ -58,11 +61,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "oslo.log library";
     mainProgram = "convert-json";
     homepage = "https://github.com/openstack/oslo.log";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    maintainers = lib.teams.openstack.members;
   };
 }
