@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edencommon";
-  version = "2024.11.18.00";
+  version = "2024.12.09.00";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebookexperimental";
     repo = "edencommon";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-pVPkH80vowdpwWv/h6ovEk335OeI6/0k0cAFhhFqSDM=";
+    hash = "sha256-2kn7RCFNpsfyXFWhV7ikXiCCLMND185JRyxAnNq/1ro=";
   };
 
   patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
