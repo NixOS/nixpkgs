@@ -65,6 +65,8 @@ let
   };
   fBuildAttrs = fArgs // buildAttrs;
   fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "hash" "sha256" ];
+  # Use bazel with extra buildBazelPackage patches
+  bazelForBuild = bazel.override { enableNixHacks = true; };
   bazelCmd = { cmd, additionalFlags, targets, targetRunFlags ? [ ] }:
     lib.optionalString (targets != [ ]) ''
       # See footnote called [USER and BAZEL_USE_CPP_ONLY_TOOLCHAIN variables]
@@ -115,7 +117,7 @@ stdenv.mkDerivation (fBuildAttrs // {
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ fFetchAttrs.impureEnvVars or [];
 
-    nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [] ++ [ bazel ];
+    nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [] ++ [ bazelForBuild ];
 
     preHook = fFetchAttrs.preHook or "" + ''
       export bazelOut="$(echo ''${NIX_BUILD_TOP}/output | sed -e 's,//,/,g')"
@@ -187,7 +189,7 @@ stdenv.mkDerivation (fBuildAttrs // {
     '' + ''
       done
 
-      echo '${bazel.name}' > $bazelOut/external/.nix-bazel-version
+      echo '${bazelForBuild.name}' > $bazelOut/external/.nix-bazel-version
 
       (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/)
 
@@ -203,7 +205,7 @@ stdenv.mkDerivation (fBuildAttrs // {
     ;
   });
 
-  nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [] ++ [ (bazel.override { enableNixHacks = true; }) ];
+  nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [] ++ [ bazelForBuild ];
 
   preHook = fBuildAttrs.preHook or "" + ''
     export bazelOut="$NIX_BUILD_TOP/output"
@@ -216,10 +218,10 @@ stdenv.mkDerivation (fBuildAttrs // {
 
     (cd $bazelOut && tar xfz $deps)
 
-    test "${bazel.name}" = "$(<$bazelOut/external/.nix-bazel-version)" || {
+    test "${bazelForBuild.name}" = "$(<$bazelOut/external/.nix-bazel-version)" || {
       echo "fixed output derivation was built for a different bazel version" >&2
       echo "     got: $(<$bazelOut/external/.nix-bazel-version)" >&2
-      echo "expected: ${bazel.name}" >&2
+      echo "expected: ${bazelForBuild.name}" >&2
       exit 1
     }
 
