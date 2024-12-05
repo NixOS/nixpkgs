@@ -1,21 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gitUpdater
-, alsa-lib
-, cmake
-, Cocoa
-, CoreAudio
-, Foundation
-, libjack2
-, lhasa
-, makeWrapper
-, perl
-, pkg-config
-, rtmidi
-, SDL2
-, zlib
-, zziplib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  alsa-lib,
+  cmake,
+  libjack2,
+  lhasa,
+  makeWrapper,
+  pkg-config,
+  rtmidi,
+  SDL2,
+  zlib,
+  zziplib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,21 +34,18 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    lhasa
-    libjack2
-    perl
-    rtmidi
-    SDL2
-    zlib
-    zziplib
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-    CoreAudio
-    Foundation
-  ];
+  buildInputs =
+    [
+      lhasa
+      libjack2
+      rtmidi
+      SDL2
+      zlib
+      zziplib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm644 $src/resources/milkytracker.desktop $out/share/applications/milkytracker.desktop
@@ -63,14 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Music tracker application, similar to Fasttracker II";
     homepage = "https://milkytracker.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     # ibtool -> real Xcode -> I can't get that, and Ofborg can't test that
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [ OPNA2608 ];
+    maintainers = with lib.maintainers; [ OPNA2608 ];
     mainProgram = "milkytracker";
   };
 })
