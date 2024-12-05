@@ -60,6 +60,7 @@ let
       pango
       cairo
       mesa
+      libGL
       expat
       libxkbcommon
     ]) ++ (with pkgs.xorg; [
@@ -73,7 +74,7 @@ let
       libxcb
     ]);
     runScript = ''
-      Typora $*
+      Typora "$@"
     '';
   };
 
