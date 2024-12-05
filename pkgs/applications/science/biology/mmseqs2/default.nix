@@ -15,15 +15,15 @@
   bzip2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mmseqs2";
   version = "16-747c6";
 
   src = fetchFromGitHub {
     owner = "soedinglab";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-O7tx+gdVAmZLihPnWSo9RWNVzfPjI61LGY/XeaGHrI0=";
+    repo = "mmseqs2";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-O7tx+gdVAmZLihPnWSo9RWNVzfPjI61LGY/XeaGHrI0=";
   };
 
   nativeBuildInputs = [
@@ -32,10 +32,12 @@ stdenv.mkDerivation rec {
     perl
     installShellFiles
   ];
-  cmakeFlags =
-    lib.optional enableAvx2 "-DHAVE_AVX2=1"
-    ++ lib.optional enableSse4_1 "-DHAVE_SSE4_1=1"
-    ++ lib.optional enableMpi "-DHAVE_MPI=1";
+
+  cmakeFlags = [
+    (lib.cmakeBool "HAVE_AVX2" enableAvx2)
+    (lib.cmakeBool "HAVE_SSE4_1" enableSse4_1)
+    (lib.cmakeBool "HAVE_MPI" enableMpi)
+  ];
 
   buildInputs =
     lib.optionals stdenv.cc.isClang [
@@ -58,4 +60,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ natsukium ];
     platforms = platforms.unix;
   };
-}
+})
