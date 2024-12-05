@@ -6491,6 +6491,8 @@ self: super: with self; {
 
   jaconv = callPackage ../development/python-modules/jaconv { };
 
+  jack-client = callPackage ../development/python-modules/jack-client { };
+
   jaeger-client = callPackage ../development/python-modules/jaeger-client { };
 
   jalali-core = callPackage ../development/python-modules/jalali-core { };
