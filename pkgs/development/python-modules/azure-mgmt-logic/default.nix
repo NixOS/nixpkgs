@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   msrest,
-  msrestazure,
   azure-common,
   azure-mgmt-core,
   pythonOlder,
@@ -24,7 +23,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     msrest
-    msrestazure
     azure-common
     azure-mgmt-core
   ];
