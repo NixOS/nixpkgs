@@ -212,6 +212,7 @@ mapAliases {
   vue-language-server = self.vls; # added 2023-08-20
   vue-cli = throw "vue-cli has been removed since upstream no longer recommends using it; consider using create-vue and the new Vite-based tooling instead."; # added 2024-07-12
   inherit (pkgs) web-ext; # added 2023-08-20
+  inherit (pkgs) webpack-cli; # added 2024-12-03
   inherit (pkgs) wrangler; # added 2024-07-01
   inherit (pkgs) write-good; # added 2023-08-20
   inherit (pkgs) yalc; # added 2024-06-29

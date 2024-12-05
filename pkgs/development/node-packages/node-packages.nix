@@ -4063,15 +4063,6 @@ let
         sha512 = "fneVypElGUH6Be39mlRZeAu00pccTlf4oVuzf9xPJD1cdEqI8NyAiQua/EW7lZdrbMUbgyXcJmfKPefhYius3A==";
       };
     };
-    "@discoveryjs/json-ext-0.5.7" = {
-      name = "_at_discoveryjs_slash_json-ext";
-      packageName = "@discoveryjs/json-ext";
-      version = "0.5.7";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz";
-        sha512 = "dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==";
-      };
-    };
     "@edge-runtime/format-2.2.1" = {
       name = "_at_edge-runtime_slash_format";
       packageName = "@edge-runtime/format";
@@ -11918,33 +11909,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/@webassemblyjs/wast-printer/-/wast-printer-1.8.1.tgz";
         sha512 = "YYRBpDCBLeYJBO+sVapLRkEE/+wrjv1O03IEybkqyls3sCZqhu3ZXjJwMSMCgFEyYP2MrdZvqL/dz2RBnULTbA==";
-      };
-    };
-    "@webpack-cli/configtest-2.1.1" = {
-      name = "_at_webpack-cli_slash_configtest";
-      packageName = "@webpack-cli/configtest";
-      version = "2.1.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@webpack-cli/configtest/-/configtest-2.1.1.tgz";
-        sha512 = "wy0mglZpDSiSS0XHrVR+BAdId2+yxPSoJW8fsna3ZpYSlufjvxnP4YbKTCBZnNIcGN4r6ZPXV55X4mYExOfLmw==";
-      };
-    };
-    "@webpack-cli/info-2.0.2" = {
-      name = "_at_webpack-cli_slash_info";
-      packageName = "@webpack-cli/info";
-      version = "2.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@webpack-cli/info/-/info-2.0.2.tgz";
-        sha512 = "zLHQdI/Qs1UyT5UBdWNqsARasIA+AaF8t+4u2aS2nEpBQh2mWIVb8qAklq0eUENnC5mOItrIB4LiS9xMtph18A==";
-      };
-    };
-    "@webpack-cli/serve-2.0.5" = {
-      name = "_at_webpack-cli_slash_serve";
-      packageName = "@webpack-cli/serve";
-      version = "2.0.5";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@webpack-cli/serve/-/serve-2.0.5.tgz";
-        sha512 = "lqaoKnRYBdo1UgDX8uF24AfGMifWK19TxPmM5FHc2vAGxrJ/qtyUyFBWoY1tISZdelsQ5fBcOusifo5o5wSJxQ==";
       };
     };
     "@webtorrent/http-node-1.3.0" = {
@@ -53397,15 +53361,6 @@ let
         sha512 = "KcsGn50VT+06JH/iunZJedYGUJS5FGjow8wb9c0v5n1Om8O1g4L6LjtfxwlXIATopoQu+vOXXa7gYisWxCoPyg==";
       };
     };
-    "webpack-cli-5.1.4" = {
-      name = "webpack-cli";
-      packageName = "webpack-cli";
-      version = "5.1.4";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/webpack-cli/-/webpack-cli-5.1.4.tgz";
-        sha512 = "pIDJHIEI9LR0yxHXQ+Qh95k2EvXpWzZ5l+d+jIo+RdSm9MiHfzazIxwwni/p7+x4eJZuvG1AJwgC4TNQ7NRgsg==";
-      };
-    };
     "webpack-dev-middleware-5.3.4" = {
       name = "webpack-dev-middleware";
       packageName = "webpack-dev-middleware";
@@ -53440,15 +53395,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/webpack-manifest-plugin/-/webpack-manifest-plugin-4.1.1.tgz";
         sha512 = "YXUAwxtfKIJIKkhg03MKuiFAD72PlrqCiwdwO4VEXdRO5V0ORCNwaOwAZawPZalCbmH9kBDmXnNeQOw+BIEiow==";
-      };
-    };
-    "webpack-merge-5.10.0" = {
-      name = "webpack-merge";
-      packageName = "webpack-merge";
-      version = "5.10.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/webpack-merge/-/webpack-merge-5.10.0.tgz";
-        sha512 = "+4zXKdx7UnO+1jaN4l2lHVD+mFvnlZQP/6ljaJVb4SZiwIKeUnrT5l0gkT8z+n4hKpC+jpOv6O9R+gLtag7pSA==";
       };
     };
     "webpack-sources-2.3.1" = {
@@ -53746,15 +53692,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/wikipeg/-/wikipeg-2.0.6.tgz";
         sha512 = "b3Ni/3kKzoHfqL8OdbwHELvEdFt3jyZfjgNXzz0pDvAu7++DdaKE9iCceyzHS2lOdAidyREcUVRY4F9kWwd/Lg==";
-      };
-    };
-    "wildcard-2.0.1" = {
-      name = "wildcard";
-      packageName = "wildcard";
-      version = "2.0.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/wildcard/-/wildcard-2.0.1.tgz";
-        sha512 = "CC1bOL87PIWSBhDcTrdeLo6eGT7mCFtrg0uIJtqJUFyK+eJnzl8A1niH56uu7KMa5XFrtiV+AQuHO3n7DsHnLQ==";
       };
     };
     "window-size-0.2.0" = {
@@ -83053,149 +82990,6 @@ in
     meta = {
       description = "Packs ECMAScript/CommonJs/AMD modules for the browser. Allows you to split your codebase into multiple bundles, which can be loaded on demand. Supports loaders to preprocess files, i.e. json, jsx, es7, css, less, ... and your custom stuff.";
       homepage = "https://github.com/webpack/webpack";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  webpack-cli = nodeEnv.buildNodePackage {
-    name = "webpack-cli";
-    packageName = "webpack-cli";
-    version = "5.1.4";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/webpack-cli/-/webpack-cli-5.1.4.tgz";
-      sha512 = "pIDJHIEI9LR0yxHXQ+Qh95k2EvXpWzZ5l+d+jIo+RdSm9MiHfzazIxwwni/p7+x4eJZuvG1AJwgC4TNQ7NRgsg==";
-    };
-    dependencies = [
-      sources."@discoveryjs/json-ext-0.5.7"
-      sources."@jridgewell/gen-mapping-0.3.5"
-      sources."@jridgewell/resolve-uri-3.1.2"
-      sources."@jridgewell/set-array-1.2.1"
-      sources."@jridgewell/source-map-0.3.6"
-      sources."@jridgewell/sourcemap-codec-1.5.0"
-      sources."@jridgewell/trace-mapping-0.3.25"
-      sources."@types/estree-1.0.6"
-      sources."@types/json-schema-7.0.15"
-      sources."@types/node-22.5.5"
-      sources."@webassemblyjs/ast-1.12.1"
-      sources."@webassemblyjs/floating-point-hex-parser-1.11.6"
-      sources."@webassemblyjs/helper-api-error-1.11.6"
-      sources."@webassemblyjs/helper-buffer-1.12.1"
-      sources."@webassemblyjs/helper-numbers-1.11.6"
-      sources."@webassemblyjs/helper-wasm-bytecode-1.11.6"
-      sources."@webassemblyjs/helper-wasm-section-1.12.1"
-      sources."@webassemblyjs/ieee754-1.11.6"
-      sources."@webassemblyjs/leb128-1.11.6"
-      sources."@webassemblyjs/utf8-1.11.6"
-      sources."@webassemblyjs/wasm-edit-1.12.1"
-      sources."@webassemblyjs/wasm-gen-1.12.1"
-      sources."@webassemblyjs/wasm-opt-1.12.1"
-      sources."@webassemblyjs/wasm-parser-1.12.1"
-      sources."@webassemblyjs/wast-printer-1.12.1"
-      sources."@webpack-cli/configtest-2.1.1"
-      sources."@webpack-cli/info-2.0.2"
-      sources."@webpack-cli/serve-2.0.5"
-      sources."@xtuc/ieee754-1.2.0"
-      sources."@xtuc/long-4.2.2"
-      sources."acorn-8.12.1"
-      sources."acorn-import-attributes-1.9.5"
-      sources."ajv-6.12.6"
-      sources."ajv-keywords-3.5.2"
-      sources."browserslist-4.23.3"
-      sources."buffer-from-1.1.2"
-      sources."caniuse-lite-1.0.30001662"
-      sources."chrome-trace-event-1.0.4"
-      sources."clone-deep-4.0.1"
-      sources."colorette-2.0.20"
-      sources."commander-10.0.1"
-      sources."cross-spawn-7.0.3"
-      sources."electron-to-chromium-1.5.26"
-      sources."enhanced-resolve-5.17.1"
-      sources."envinfo-7.14.0"
-      sources."es-module-lexer-1.5.4"
-      sources."escalade-3.2.0"
-      sources."eslint-scope-5.1.1"
-      (sources."esrecurse-4.3.0" // {
-        dependencies = [
-          sources."estraverse-5.3.0"
-        ];
-      })
-      sources."estraverse-4.3.0"
-      sources."events-3.3.0"
-      sources."fast-deep-equal-3.1.3"
-      sources."fast-json-stable-stringify-2.1.0"
-      sources."fastest-levenshtein-1.0.16"
-      sources."find-up-4.1.0"
-      sources."flat-5.0.2"
-      sources."function-bind-1.1.2"
-      sources."glob-to-regexp-0.4.1"
-      sources."graceful-fs-4.2.11"
-      sources."has-flag-4.0.0"
-      sources."hasown-2.0.2"
-      sources."import-local-3.2.0"
-      sources."interpret-3.1.1"
-      sources."is-core-module-2.15.1"
-      sources."is-plain-object-2.0.4"
-      sources."isexe-2.0.0"
-      sources."isobject-3.0.1"
-      sources."jest-worker-27.5.1"
-      sources."json-parse-even-better-errors-2.3.1"
-      sources."json-schema-traverse-0.4.1"
-      sources."kind-of-6.0.3"
-      sources."loader-runner-4.3.0"
-      sources."locate-path-5.0.0"
-      sources."merge-stream-2.0.0"
-      sources."mime-db-1.52.0"
-      sources."mime-types-2.1.35"
-      sources."neo-async-2.6.2"
-      sources."node-releases-2.0.18"
-      sources."p-limit-2.3.0"
-      sources."p-locate-4.1.0"
-      sources."p-try-2.2.0"
-      sources."path-exists-4.0.0"
-      sources."path-key-3.1.1"
-      sources."path-parse-1.0.7"
-      sources."picocolors-1.1.0"
-      sources."pkg-dir-4.2.0"
-      sources."punycode-2.3.1"
-      sources."randombytes-2.1.0"
-      sources."rechoir-0.8.0"
-      sources."resolve-1.22.8"
-      sources."resolve-cwd-3.0.0"
-      sources."resolve-from-5.0.0"
-      sources."safe-buffer-5.2.1"
-      sources."schema-utils-3.3.0"
-      sources."serialize-javascript-6.0.2"
-      sources."shallow-clone-3.0.1"
-      sources."shebang-command-2.0.0"
-      sources."shebang-regex-3.0.0"
-      sources."source-map-0.6.1"
-      sources."source-map-support-0.5.21"
-      sources."supports-color-8.1.1"
-      sources."supports-preserve-symlinks-flag-1.0.0"
-      sources."tapable-2.2.1"
-      (sources."terser-5.33.0" // {
-        dependencies = [
-          sources."commander-2.20.3"
-        ];
-      })
-      sources."terser-webpack-plugin-5.3.10"
-      sources."undici-types-6.19.8"
-      sources."update-browserslist-db-1.1.0"
-      sources."uri-js-4.4.1"
-      sources."watchpack-2.4.2"
-      sources."webpack-5.94.0"
-      sources."webpack-cli-5.1.4"
-      sources."webpack-merge-5.10.0"
-      sources."webpack-sources-3.2.3"
-      sources."which-2.0.2"
-      sources."wildcard-2.0.1"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "CLI for webpack & friends";
-      homepage = "https://github.com/webpack/webpack-cli/tree/master/packages/webpack-cli";
       license = "MIT";
     };
     production = true;

@@ -225,7 +225,6 @@
 , "vscode-json-languageserver"
 , "wavedrom-cli"
 , "webpack"
-, "webpack-cli"
 , "webpack-dev-server"
 , "copy-webpack-plugin"
 , "webtorrent-cli"
