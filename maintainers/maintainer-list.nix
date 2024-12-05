@@ -2497,6 +2497,13 @@
     githubId = 6987136;
     keys = [ { fingerprint = "2C6D 37D4 6AA1 DCDA BE8D  F346 43E2 CF4C 01B9 4940"; } ];
   };
+  BastianAsmussen = {
+    name = "Bastian Asmussen";
+    email = "bastian@asmussen.tech";
+    github = "BastianAsmussen";
+    githubId = 76102128;
+    keys = [ { fingerprint = "3B11 7469 0893 85E7 16C2  7CD9 0FE5 A355 DBC9 2568"; } ];
+  };
   basvandijk = {
     email = "v.dijk.bas@gmail.com";
     github = "basvandijk";
@@ -5583,6 +5590,12 @@
     github = "DianaOlympos";
     githubId = 15774340;
     name = "Thomas Depierre";
+  };
+  DictXiong = {
+    email = "me@beardic.cn";
+    github = "DictXiong";
+    githubId = 41772157;
+    name = "Dict Xiong";
   };
   diegolelis = {
     email = "diego.o.lelis@gmail.com";
@@ -12868,6 +12881,13 @@
     github = "loskutov";
     githubId = 1202012;
     name = "Ignat Loskutov";
+  };
+  lostmsu = {
+    email = "lostfreeman@gmail.com";
+    github = "lostmsu";
+    githubId = 239520;
+    matrix = "@lostmsu:matrix.org";
+    name = "Victor Nova";
   };
   lostnet = {
     email = "lost.networking@gmail.com";
@@ -20259,6 +20279,12 @@
     githubId = 293035;
     name = "Shawn Dellysse";
   };
+  ShawnToubeau = {
+    name = "Shawn Toubeau";
+    email = "shawntoubeau@gmail.com";
+    github = "ShawnToubeau";
+    githubId = 22332636;
+  };
   shayne = {
     email = "shaynesweeney@gmail.com";
     github = "shayne";
@@ -22621,6 +22647,12 @@
     github = "traverseda";
     githubId = 2125828;
     name = "Alex Davies";
+  };
+  travgm = {
+    email = "travis@travgm.org";
+    github = "travgm";
+    githubId = 99630881;
+    name = "Travis Montoya";
   };
   travisbhartwell = {
     email = "nafai@travishartwell.net";
