@@ -1,4 +1,5 @@
 { lib
+, fetchzip
 , ddcutil
 , easyeffects
 , gjs
@@ -112,13 +113,18 @@ super: lib.trivial.pipe super [
     ];
   }))
 
-  (patchExtension "pano@elhan.io" (old: {
-    patches = [
-      (substituteAll {
-        src = ./extensionOverridesPatches/pano_at_elhan.io.patch;
-        inherit gsound libgda;
-      })
-    ];
+  (patchExtension "pano@elhan.io" (final: prev: {
+    version = "v23-alpha3";
+    src = fetchzip {
+      url = "https://github.com/oae/gnome-shell-pano/releases/download/${final.version}/pano@elhan.io.zip";
+      hash = "sha256-LYpxsl/PC8hwz0ZdH5cDdSZPRmkniBPUCqHQxB4KNhc=";
+      stripRoot = false;
+    };
+    preInstall = ''
+      substituteInPlace extension.js \
+        --replace-fail "import Gda from 'gi://Gda?version>=5.0'" "imports.gi.GIRepository.Repository.prepend_search_path('${libgda}/lib/girepository-1.0'); const Gda = (await import('gi://Gda')).default" \
+        --replace-fail "import GSound from 'gi://GSound'" "imports.gi.GIRepository.Repository.prepend_search_path('${gsound}/lib/girepository-1.0'); const GSound = (await import('gi://GSound')).default"
+    '';
   }))
 
   (patchExtension "system-monitor@gnome-shell-extensions.gcampax.github.com" (old: {
