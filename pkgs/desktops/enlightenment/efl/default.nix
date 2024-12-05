@@ -39,7 +39,7 @@
 , libxkbcommon
 , luajit
 , lz4
-, mesa
+, libgbm
 , mint-x-icons
 , openjpeg
 , openssl
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     libsndfile
     libtiff
     lz4
-    mesa
+    libgbm
     openssl
     systemd
     udev

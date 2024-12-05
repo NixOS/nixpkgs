@@ -9,7 +9,7 @@
 , pcre
 , gtkmm4
 , pugixml
-, mesa
+, libgbm
 , pciutils
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libdrm libGL atkmm pcre gtkmm4 pugixml mesa pciutils ];
+  buildInputs = [ libdrm libGL atkmm pcre gtkmm4 pugixml libgbm pciutils ];
 
   cmakeFlags = [ "-DENABLE_UNIT_TESTS=off" ];
 

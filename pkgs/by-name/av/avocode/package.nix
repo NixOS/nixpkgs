@@ -1,6 +1,6 @@
 { lib, stdenv, makeDesktopItem, fetchurl, unzip
 , gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsa-lib, cups, expat, udev, adwaita-icon-theme
-, xorg, mozjpeg, makeWrapper, wrapGAppsHook3, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon
+, xorg, mozjpeg, makeWrapper, wrapGAppsHook3, libuuid, at-spi2-core, libdrm, libgbm, libxkbcommon
 }:
 
 stdenv.mkDerivation rec {
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libXScrnSaver
     libuuid
     libdrm
-    mesa
+    libgbm
   ]);
 
   desktopItem = makeDesktopItem {

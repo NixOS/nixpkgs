@@ -27,7 +27,7 @@
 , libxkbfile
 , libxshmfence
 , libxcvt
-, mesa
+, libgbm
 , meson
 , ninja
 , openssl
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     libxkbfile
     libxshmfence
     libxcvt
-    mesa
+    libgbm
     openssl
     pixman
     systemd

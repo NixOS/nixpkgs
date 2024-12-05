@@ -11,7 +11,7 @@
   libffi,
   libGL,
   libinput,
-  mesa,
+  libgbm,
   nix-update-script,
   pixman,
   pkg-config,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libffi
     libGL
     libinput
-    mesa
+    libgbm
     pixman
     seatd
     udev

@@ -12,7 +12,7 @@
   libinput,
   fontconfig,
   freetype,
-  mesa,
+  libgbm,
   wayland,
   xorg,
   vulkan-loader,
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
     libglvnd
     fontconfig
     freetype
-    mesa
+    libgbm
     wayland
     vulkan-loader
   ];

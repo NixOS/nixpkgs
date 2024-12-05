@@ -18,7 +18,7 @@
   libXext,
   libXfixes,
   libXrandr,
-  mesa,
+  libgbm,
   expat,
   libxcb,
   alsa-lib,
@@ -125,7 +125,7 @@ let
       libXext
       libXfixes
       libXrandr
-      mesa
+      libgbm
       expat
       libxcb
       alsa-lib

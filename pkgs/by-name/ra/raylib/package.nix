@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , fetchpatch
-, mesa
+, libgbm
 , libGLU
 , glfw
 , libX11
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
   buildInputs = [ glfw ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ mesa libXi libXcursor libXrandr libXinerama ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libgbm libXi libXcursor libXrandr libXinerama ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ]
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseSupport libpulseaudio;

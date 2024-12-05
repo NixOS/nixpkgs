@@ -32,7 +32,7 @@
   pipewire,
   libgudev,
   libwacom,
-  mesa,
+  libgbm,
   meson,
   nix-update-script,
   validatePkgConfig,
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
     gettext
     libxcvt
-    mesa # needed for gbm
+    libgbm
     meson
     ninja
     xvfb-run

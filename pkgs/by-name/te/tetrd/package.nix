@@ -17,7 +17,7 @@
 , libappindicator-gtk3
 , libappindicator
 , udev
-, mesa # required for libgbm
+, libgbm
 }:
 
 stdenv.mkDerivation rec {
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libappindicator-gtk3
     libappindicator
     udev
-    mesa
+    libgbm
   ];
 
   installPhase = ''

@@ -12,7 +12,7 @@
 , libpng
 , libxcb
 , libxkbcommon
-, mesa
+, libgbm
 , meson
 , ninja
 , pandoc
@@ -93,7 +93,7 @@ stdenv.mkDerivation {
     libpng
     libxcb
     libxkbcommon
-    mesa
+    libgbm
     pixman
     wayland
     wayland-protocols

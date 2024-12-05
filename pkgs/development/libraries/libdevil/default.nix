@@ -15,7 +15,7 @@
 , runtimeShell
 , withXorg ? true
 , testers
-, mesa
+, libgbm
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ilur";
     license = licenses.lgpl2;
     pkgConfigModules = [ "IL" ];
-    inherit (mesa.meta) platforms;
+    inherit (libgbm.meta) platforms;
     maintainers = [ ];
   };
 })

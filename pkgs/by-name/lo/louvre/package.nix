@@ -12,7 +12,7 @@
 , libX11
 , libXcursor
 , libxkbcommon
-, mesa
+, libgbm
 , pixman
 , seatd
 , srm-cuarzo
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libX11
     libXcursor
     libxkbcommon
-    mesa
+    libgbm
     pixman
     seatd
     srm-cuarzo
