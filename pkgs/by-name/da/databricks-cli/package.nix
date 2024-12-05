@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "databricks-cli";
-  version = "0.234.0";
+  version = "0.235.0";
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-I1S31a1JvXFXWw4EkS40efKEE9wsQlMdjVxEJDRTzA8=";
+    hash = "sha256-cjK2gjcUwrmU6R++BAwI1CYGCsunH3biqfcp1GQis8c=";
   };
 
   vendorHash = "sha256-Zih5NftJMbtLYG0Sej1BaErJ8NnU25mwhl3pfqSOSxc=";
@@ -58,6 +58,9 @@ buildGoModule rec {
     homepage = "https://github.com/databricks/cli";
     changelog = "https://github.com/databricks/cli/releases/tag/v${version}";
     license = licenses.databricks;
-    maintainers = with maintainers; [ kfollesdal ];
+    maintainers = with maintainers; [
+      kfollesdal
+      taranarmo
+    ];
   };
 }
