@@ -91,10 +91,10 @@ in
       program
       year
       ;
-    version = "${year}.0.3";
+    version = "${year}.0.4";
     src = fetchurl {
       url = "https://download.qoppa.com/pdfstudio/v${year}/PDFStudio_v${dot2dash version}_linux64.deb";
-      hash = "sha256-Po7BMmEWoC46rP7tUwZT9Ji/Wi8lKc6WN8x47fx2DXg=";
+      hash = "sha256-TTh0yzpCOpxFKGfrakvnu1Y+l9NI0nfWlVuvSWpkRkE=";
     };
     extraBuildInputs = [
       (lib.getLib stdenv.cc.cc) # for libstdc++.so.6 and libgomp.so.1
