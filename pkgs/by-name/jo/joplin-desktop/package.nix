@@ -68,7 +68,7 @@ let
 
     unpackPhase = ''
       runHook preUnpack
-      7zz x $src || true
+      7zz x -x'!Joplin ${version}/Applications' $src
       runHook postUnpack
     '';
 
