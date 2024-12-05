@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   pkg-config,
-  flutter,
+  flutter324,
   buildGoModule,
   libayatana-appindicator,
   stdenv,
@@ -76,7 +76,7 @@ let
     hash = "sha256-b45qezNSc3SIFvmztiu9w3Koid6HgtfwSMZTpEdBen0=";
   };
 in
-flutter.buildFlutterApplication {
+flutter324.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

@@ -2,11 +2,11 @@
   autoPatchelfHook,
   lib,
   fetchFromGitHub,
-  flutter,
+  flutter324,
   pkg-config,
   webkitgtk_4_1,
 }:
-flutter.buildFlutterApplication rec {
+flutter324.buildFlutterApplication rec {
   pname = "jhentai";
   version = "8.0.5";
 

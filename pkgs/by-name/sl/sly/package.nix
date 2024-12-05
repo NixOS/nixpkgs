@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter,
+  flutter324,
 }:
 let
   version = "0.4.0";
@@ -12,7 +12,7 @@ let
     hash = "sha256-P7LhhXQQDRsDQ8bZgfvWazLRMYVGhFhMTD41fgs718g=";
   };
 in
-flutter.buildFlutterApplication {
+flutter324.buildFlutterApplication {
   pname = "sly";
   inherit version src;
 

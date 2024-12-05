@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter,
+  flutter324,
   gst_all_1,
   libunwind,
   orc,
@@ -9,7 +9,7 @@
   autoPatchelfHook,
   xorg,
 }:
-flutter.buildFlutterApplication rec {
+flutter324.buildFlutterApplication rec {
   pname = "saber";
   version = "0.25.2";
 

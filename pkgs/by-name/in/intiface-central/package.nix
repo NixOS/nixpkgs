@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, flutterPackages
+, flutter324
 , corrosion
 , rustPlatform
 , cargo
@@ -9,7 +9,7 @@
 , copyDesktopItems
 , makeDesktopItem
 }:
-flutterPackages.stable.buildFlutterApplication rec {
+flutter324.buildFlutterApplication rec {
   pname = "intiface-central";
   version = "2.6.4";
   src = fetchFromGitHub {

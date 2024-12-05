@@ -1,10 +1,10 @@
 { lib
 , writeText
-, flutter
+, flutter324
 , fetchFromGitHub
 }:
 
-flutter.buildFlutterApplication rec {
+flutter324.buildFlutterApplication rec {
   pname = "firmware-updater";
   version = "0-unstable-2024-10-03";
 
