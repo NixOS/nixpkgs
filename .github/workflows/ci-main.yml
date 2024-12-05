@@ -1,0 +1,37 @@
+name: "GHborg"
+
+on:
+  push:
+  # Using pull_request_target instead of pull_request avoids having to approve first time contributors.
+  pull_request_target:
+    # This workflow depends on the base branch of the PR, but changing the base branch is not included in the default trigger events, which would be `opened`, `synchronize` or `reopened`.
+    # Instead it causes an `edited` event, so we need to add it explicitly here.
+    # While `edited` is also triggered when the PR title/body is changed, this PR action is fairly quick, and PRs don't get edited **that** often, so it shouldn't be a problem.
+    # There is a feature request for adding a `base_changed` event: https://github.com/orgs/community/discussions/35058
+    types: [opened, synchronize, reopened, edited]
+
+jobs:
+  get-merge-commit:
+    uses: ./.github/workflows/get-merge-commit.yml
+  nixpkgs-vet:
+    uses: ./.github/workflows/nixpkgs-vet.yml
+    needs: get-merge-commit
+    with:
+      mergedSha: ${{ needs.get-merge-commit.outputs.mergedSha }}
+  eval:
+    uses: ./.github/workflows/eval.yml
+    needs: get-merge-commit
+    if: |
+      github.event_name == 'pull_request_target' || 
+      (
+        github.event_name == 'push' && (
+          startsWith(github.ref, 'refs/heads/master') ||
+          startsWith(github.ref, 'refs/heads/staging') ||
+          startsWith(github.ref, 'refs/heads/release-') ||
+          startsWith(github.ref, 'refs/heads/staging-') ||
+          github.ref == 'refs/heads/haskell-updates' ||
+          github.ref == 'refs/heads/python-updates'
+        )
+      )
+    with:
+      mergedSha: ${{ needs.get-merge-commit.outputs.mergedSha }}
