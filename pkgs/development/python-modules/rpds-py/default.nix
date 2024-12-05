@@ -9,7 +9,6 @@
   rustc,
   rustPlatform,
   libiconv,
-  python3
 }:
 
 buildPythonPackage rec {
@@ -36,7 +35,6 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
     cargo
     rustc
-    python3
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
