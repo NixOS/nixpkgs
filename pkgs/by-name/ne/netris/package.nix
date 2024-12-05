@@ -11,6 +11,11 @@ stdenv.mkDerivation {
     sha256 = "0gmxbpn50pnffidwjchkzph9rh2jm4wfq7hj8msp5vhdq5h0z9hm";
   };
 
+  patches = [
+    # https://github.com/naclander/netris/pull/1
+    ./configure-fixes-for-gcc-14.patch
+  ];
+
   buildInputs = [
     ncurses
   ];
