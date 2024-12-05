@@ -79122,24 +79122,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  stackdriver-statsd-backend = nodeEnv.buildNodePackage {
-    name = "stackdriver-statsd-backend";
-    packageName = "stackdriver-statsd-backend";
-    version = "0.2.3";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/stackdriver-statsd-backend/-/stackdriver-statsd-backend-0.2.3.tgz";
-      sha512 = "IqzSTHJ4EBwlhFyuWFyfecyhPEQFPzFL3/txi/VVxsMPLVt+YJm/bEkTlTPfn95/rYW1VyCfwSkdDb0HxqDwxw==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Send metric data from statsd to Stackdriver";
-      homepage = "https://www.stackdriver.com";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   svelte-check = nodeEnv.buildNodePackage {
     name = "svelte-check";
     packageName = "svelte-check";

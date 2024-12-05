@@ -170,6 +170,7 @@ mapAliases {
   inherit (pkgs) sql-formatter; # added 2024-06-29
   "@squoosh/cli" = throw "@squoosh/cli was removed because it was abandoned upstream"; # added 2023-09-02
   ssb-server = throw "ssb-server was removed because it was broken"; # added 2023-08-21
+  stackdriver-statsd-backend = throw "stackdriver-statsd-backend was removed because Stackdriver is now discontinued"; # added 2024-12-02
   stf = throw "stf was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) stylelint; # added 2023-09-13
   surge = pkgs.surge-cli; # Added 2023-09-08
