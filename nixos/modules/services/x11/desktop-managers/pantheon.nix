@@ -12,7 +12,7 @@ let
     extraGSettingsOverrides = cfg.extraGSettingsOverrides;
   };
 
-  notExcluded = pkg: (!(lib.elem pkg config.environment.pantheon.excludePackages));
+  notExcluded = pkg: utils.disablePackageByName pkg config.environment.pantheon.excludePackages;
 in
 
 {

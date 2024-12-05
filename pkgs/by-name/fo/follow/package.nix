@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
       --inherit-argv0 \
       --add-flags --disable-gpu-compositing \
       --add-flags $out/share/follow \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     install -m 444 -D "${desktopItem}/share/applications/"* \
         -t $out/share/applications/

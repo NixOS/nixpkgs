@@ -4926,6 +4926,8 @@ self: super: with self; {
 
   fschat = callPackage ../development/python-modules/fschat { };
 
+  fslpy = callPackage ../development/python-modules/fslpy { };
+
   fsspec-xrootd = callPackage ../development/python-modules/fsspec-xrootd { };
 
   fsspec = callPackage ../development/python-modules/fsspec { };
@@ -13442,6 +13444,8 @@ self: super: with self; {
   pywerview = callPackage ../development/python-modules/pywerview { };
 
   pywfa = callPackage ../development/python-modules/pywfa { };
+
+  pywikibot = callPackage ../development/python-modules/pywikibot { };
 
   pywilight = callPackage ../development/python-modules/pywilight { };
 

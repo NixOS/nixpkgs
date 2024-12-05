@@ -210,6 +210,7 @@ rec {
       pipewire # immersed-vr wayland support
 
       libsecret # For bitwarden
+      libmpg123 # Slippi launcher
     ];
   };
 }

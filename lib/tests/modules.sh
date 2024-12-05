@@ -386,6 +386,10 @@ checkConfigOutput '^true$' config.conditionalWorks ./declare-attrsOf.nix ./attrs
 checkConfigOutput '^false$' config.conditionalWorks ./declare-lazyAttrsOf.nix ./attrsOf-conditional-check.nix
 checkConfigOutput '^"empty"$' config.value.foo ./declare-lazyAttrsOf.nix ./attrsOf-conditional-check.nix
 
+# Check attrsWith type merging
+checkConfigError 'The option `mergedLazyNonLazy'\'' in `.*'\'' is already declared in `.*'\''\.' options.mergedLazyNonLazy ./lazy-attrsWith.nix
+checkConfigOutput '^11$' config.lazyResult ./lazy-attrsWith.nix
+checkConfigError 'infinite recursion encountered' config.nonLazyResult ./lazy-attrsWith.nix
 
 # Even with multiple assignments, a type error should be thrown if any of them aren't valid
 checkConfigError 'A definition for option .* is not of type .*' \
@@ -574,6 +578,7 @@ checkConfigOutput '^38|27$' options.submoduleLine38.declarationPositions.0.line 
 checkConfigOutput '^38|27$' options.submoduleLine38.declarationPositions.1.line ./declaration-positions.nix
 # nested options work
 checkConfigOutput '^34$' options.nested.nestedLine34.declarationPositions.0.line ./declaration-positions.nix
+
 
 cat <<EOF
 ====== module tests ======

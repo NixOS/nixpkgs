@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     mkdir "$out/share/applications"
     makeWrapper ${electron}/bin/electron "$out/bin/passky" \
       --add-flags "$out/share/passky/electron/" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     runHook postInstall
   '';

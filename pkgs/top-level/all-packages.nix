@@ -1243,8 +1243,6 @@ with pkgs;
 
   git-imerge = python3Packages.callPackage ../applications/version-management/git-imerge { };
 
-  git-lfs = lowPrio (callPackage ../applications/version-management/git-lfs { });
-
   git-machete = python3Packages.callPackage ../applications/version-management/git-machete { };
 
   git-ps-rs = callPackage ../development/tools/git-ps-rs {
@@ -2691,10 +2689,6 @@ with pkgs;
     rainloop-standard;
 
   razergenie = libsForQt5.callPackage ../applications/misc/razergenie { };
-
-  ripasso-cursive = callPackage ../tools/security/ripasso/cursive.nix {
-    inherit (darwin.apple_sdk.frameworks) AppKit Security;
-  };
 
   roundcube = callPackage ../servers/roundcube { };
 
