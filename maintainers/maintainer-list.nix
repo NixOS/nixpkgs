@@ -10524,6 +10524,12 @@
     githubId = 1058504;
     name = "José Luis Lafuente";
   };
+  jljox = {
+    email = "jeanluc.jox@gmail.com";
+    github = "jljox";
+    githubId = 3665886;
+    name = "Jean-Luc Jox";
+  };
   jloyet = {
     email = "ml@fatbsd.com";
     github = "fatpat";
