@@ -8231,8 +8231,6 @@ with pkgs;
 
   dbt = with python3Packages; toPythonApplication dbt-core;
 
-  dprint = callPackage ../development/tools/dprint { };
-
   devbox = callPackage ../development/tools/devbox { buildGoModule = buildGo123Module; };
 
   libcxx = llvmPackages.libcxx;
