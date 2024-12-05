@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "haguichi";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "ztefn";
     repo = "haguichi";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-Rhag2P4GAO9qhcajwDHIkgzKZqNii/SgvFwCI6Kc8XE=";
+    hash = "sha256-hSQsKG86QUzv/dfqz2amSXyAaA1ZAk9dTvel9KVgeFs=";
   };
 
   postPatch = ''
