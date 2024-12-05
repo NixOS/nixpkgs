@@ -37,10 +37,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "azure.mgmt.relay" ];
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Relay Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }
