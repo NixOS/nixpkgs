@@ -8,9 +8,8 @@
   python3Packages,
   runCommand,
   scdoc,
-  withManPage ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
-  withShellCompletion ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
   withNgSuffix ? true,
+  withShellFiles ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
 }:
 let
   executable = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";
@@ -29,16 +28,11 @@ python3Packages.buildPythonApplication rec {
     tabulate
   ];
 
-  nativeBuildInputs =
-    lib.optionals (withManPage || withShellCompletion) [
-      installShellFiles
-    ]
-    ++ lib.optionals withManPage [
-      scdoc
-    ]
-    ++ lib.optionals withShellCompletion [
-      python3Packages.shtab
-    ];
+  nativeBuildInputs = lib.optionals withShellFiles [
+    installShellFiles
+    python3Packages.shtab
+    scdoc
+  ];
 
   propagatedBuildInputs = [
     # Make sure that we use the Nix package we depend on, not something
@@ -55,21 +49,18 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace nixos_rebuild/__init__.py \
       --subst-var-by executable ${executable}
+    substituteInPlace pyproject.toml \
+      --subst-var-by executable ${executable}
   '';
 
-  postInstall =
-    lib.optionalString withManPage ''
-      scdoc < ${./nixos-rebuild.8.scd} > ${executable}.8
-      installManPage ${executable}.8
-    ''
-    + lib.optionalString withShellCompletion ''
-      installShellCompletion --cmd ${executable} \
-        --bash <(shtab --shell bash nixos_rebuild.get_main_parser) \
-        --zsh <(shtab --shell zsh nixos_rebuild.get_main_parser)
-    ''
-    + lib.optionalString withNgSuffix ''
-      mv $out/bin/nixos-rebuild $out/bin/${executable}
-    '';
+  postInstall = lib.optionalString withShellFiles ''
+    scdoc < ${./nixos-rebuild.8.scd} > ${executable}.8
+    installManPage ${executable}.8
+
+    installShellCompletion --cmd ${executable} \
+      --bash <(shtab --shell bash nixos_rebuild.get_main_parser) \
+      --zsh <(shtab --shell zsh nixos_rebuild.get_main_parser)
+  '';
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook

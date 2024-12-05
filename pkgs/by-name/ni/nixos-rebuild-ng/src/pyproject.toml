@@ -7,7 +7,7 @@ name = "nixos-rebuild-ng"
 version = "0.0.0"
 
 [project.scripts]
-nixos-rebuild = "nixos_rebuild:main"
+@executable@ = "nixos_rebuild:main"
 
 [tool.setuptools.package-data]
 nixos_rebuild = ["*.template.nix"]
