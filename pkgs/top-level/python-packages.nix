@@ -14746,6 +14746,8 @@ self: super: with self; {
 
   skybellpy = callPackage ../development/python-modules/skybellpy { };
 
+  skyboxremote = callPackage ../development/python-modules/skyboxremote { };
+
   skyfield = callPackage ../development/python-modules/skyfield { };
 
   skytemple-dtef = callPackage ../development/python-modules/skytemple-dtef { };
