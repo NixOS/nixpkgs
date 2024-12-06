@@ -12,6 +12,7 @@
   libxmp,
   libebur128,
   python3,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     libebur128
     openal
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Woof! is a continuation of the Boom/MBF bloodline of Doom source ports";
