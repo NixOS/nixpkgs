@@ -11,6 +11,7 @@
   pyvmomi,
   qemu,
   requests,
+  distutils,
   setuptools,
   stdenv,
   verboselogs,
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     colorlog
+    distutils
     pyvmomi
     requests
     verboselogs
@@ -41,6 +43,8 @@ buildPythonPackage rec {
     pytest-mock
     qemu
   ];
+
+  patches = [ ./configparser312.patch ];
 
   prePatch = ''
     # argparse is part of the standardlib
@@ -84,6 +88,5 @@ buildPythonPackage rec {
     '';
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ evanjs ];
-    broken = pythonAtLeast "3.12"; # Because it requires packages removed from 3.12 onwards
   };
 }
