@@ -35,7 +35,7 @@ in appimageTools.wrapType2 {
     homepage = "https://zulip.com";
     license = licenses.asl20;
     maintainers = with maintainers; [ andersk ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
     mainProgram = "zulip";
   };
 }
