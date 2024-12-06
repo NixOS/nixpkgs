@@ -29,11 +29,11 @@ assert petsc-withp4est -> p4est.mpiSupport;
 
 stdenv.mkDerivation rec {
   pname = "petsc";
-  version = "3.21.3";
+  version = "3.22.2";
 
   src = fetchzip {
     url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${version}.tar.gz";
-    hash = "sha256-dxHa8JUJCN4zRIXMCx7gcvbzFH2SPtkJ377ssIevjgU=";
+    hash = "sha256-ax9idJOECM88Xj/75/tfi9eOmhh59NaIPw6Hod8tDQM=";
   };
 
   strictDeps = true;
