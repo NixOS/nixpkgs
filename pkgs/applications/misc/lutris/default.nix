@@ -75,7 +75,7 @@ let
 in
 buildPythonApplication rec {
   pname = "lutris-unwrapped";
-  version = "0.5.17";
+  version = "0.5.18";
 
   src = fetchFromGitHub {
     owner = "lutris";
