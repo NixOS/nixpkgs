@@ -10,7 +10,6 @@
 , zlib
 , protobuf
 , openssl
-, libclang
 , libcxx
 , rocksdb_8_3
 , rustfmt
@@ -75,7 +74,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config protobuf rustfmt perl rustPlatform.bindgenHook ];
   buildInputs =
-    [ openssl zlib libclang hidapi ] ++ (lib.optionals stdenv.hostPlatform.isLinux [ udev ])
+    [ openssl zlib hidapi ] ++ (lib.optionals stdenv.hostPlatform.isLinux [ udev ])
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security System Libsystem libcxx ];
   strictDeps = true;
 
