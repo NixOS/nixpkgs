@@ -12,7 +12,7 @@ let
     self = python3;
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
   };
-  version = "0.66.0";
+  version = "0.67.0";
   aider-chat = python3.pkgs.buildPythonApplication {
     pname = "aider-chat";
     inherit version;
@@ -22,7 +22,7 @@ let
       owner = "Aider-AI";
       repo = "aider";
       rev = "refs/tags/v${version}";
-      hash = "sha256-6wD8wBDV6Roo3J+oEYiBzZ7i1iGOZhcoiKXHV7AJjDk=";
+      hash = "sha256-JuUfG/+svkkPlBiHx6rJX60gTl+DXDOzmjASMbDWEsw=";
     };
 
     pythonRelaxDeps = true;
@@ -109,6 +109,7 @@ let
       tree-sitter-languages
       typing-extensions
       urllib3
+      watchfiles
       wcwidth
       yarl
       zipp
