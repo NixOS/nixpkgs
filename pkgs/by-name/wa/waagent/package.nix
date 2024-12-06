@@ -4,6 +4,7 @@
   lib,
   python3,
   bash,
+  gitUpdater,
 }:
 
 let
@@ -63,7 +64,11 @@ python.pkgs.buildPythonApplication rec {
 
   dontWrapPythonPrograms = false;
 
-  meta = {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
+
+  meta = with lib; {
     description = "Microsoft Azure Linux Agent (waagent)";
     mainProgram = "waagent";
     longDescription = ''
@@ -71,6 +76,7 @@ python.pkgs.buildPythonApplication rec {
       manages Linux provisioning and VM interaction with the Azure
       Fabric Controller'';
     homepage = "https://github.com/Azure/WALinuxAgent";
-    license = with lib.licenses; [ asl20 ];
+    maintainers = with maintainers; [ codgician ];
+    license = with licenses; [ asl20 ];
   };
 }
