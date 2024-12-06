@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "autoslot";
-  version = "2022.12.1";
+  version = "2024.12.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "cjrh";
     repo = "autoslot";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fG4rRwRubJt2aXChEsMybEKal6LscZI7GA2uwtK5Vtg=";
+    hash = "sha256-wYjsBrjvSZFHDt0HLrnS9Xwk8EHVQupfPSkQnUFmMAk=";
   };
 
   postPatch = ''
