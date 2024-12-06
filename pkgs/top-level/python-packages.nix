@@ -10530,6 +10530,8 @@ self: super: with self; {
 
   pynotifier = callPackage ../development/python-modules/pynotifier { };
 
+  pynordpool = callPackage ../development/python-modules/pynordpool { };
+
   pynslookup = callPackage ../development/python-modules/pynslookup { };
 
   pynuki = callPackage ../development/python-modules/pynuki { };
