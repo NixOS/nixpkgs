@@ -856,6 +856,12 @@
     githubId = 45179933;
     name = "Alex Jackson";
   };
+  a-jay98 = {
+    email = "ali@jamadi.me";
+    github = "A-jay98";
+    githubId = 23138252;
+    name = "Ali Jamadi";
+  };
   ajgon = {
     email = "igor@rzegocki.pl";
     github = "ajgon";
