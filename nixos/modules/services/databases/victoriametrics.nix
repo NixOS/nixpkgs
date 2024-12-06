@@ -131,7 +131,7 @@ in
       serviceConfig = {
         ExecStart = lib.escapeShellArgs (
           startCLIList
-          ++ lib.optionals (cfg.prometheusConfig != null) [ "-promscrape.config=${prometheusConfigYml}" ]
+          ++ lib.optionals (cfg.prometheusConfig != {}) [ "-promscrape.config=${prometheusConfigYml}" ]
         );
 
         DynamicUser = true;
