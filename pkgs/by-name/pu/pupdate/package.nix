@@ -35,7 +35,7 @@ buildDotnetModule rec {
 
   projectFile = "pupdate.csproj";
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   selfContainedBuild = true;
 

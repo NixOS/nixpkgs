@@ -108,7 +108,7 @@ buildDotnetModule rec {
     "LogicReinc.BlendFarm.Server/LogicReinc.BlendFarm.Server.csproj"
     "LogicReinc.BlendFarm/LogicReinc.BlendFarm.csproj"
   ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   executables = [
     "LogicReinc.BlendFarm"
     "LogicReinc.BlendFarm.Server"

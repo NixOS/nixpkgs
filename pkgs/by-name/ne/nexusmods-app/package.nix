@@ -57,7 +57,7 @@ buildDotnetModule (finalAttrs: {
     imagemagick # For resizing SVG icon in postInstall
   ];
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   mapNuGetDependencies = true;
 
   # TODO: remove .NET 8; StrawberryShake currently needs it

@@ -23,7 +23,7 @@ buildDotnetModule rec {
   dotnetFlags = [ "-p:TargetFramework=net9.0" ];
   buildType = "Linux";
   projectFile = "UI.Avalonia/UI.Avalonia.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   preConfigureNuGet = ''
     # This should really be in the upstream nuget.config

@@ -23,7 +23,7 @@ buildDotnetModule (finalAttrs: {
 
   projectFile = [ "Yafc/Yafc.csproj" ];
   testProjectFile = [ "Yafc.Model.Tests/Yafc.Model.Tests.csproj" ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   dotnet-sdk = dotnet.sdk;
   dotnet-runtime = dotnet.runtime;

@@ -65,7 +65,7 @@ buildDotnetModule {
     ln -s -- Sonarr "$out/bin/NzbDrone"
   '';
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   runtimeDeps = [ sqlite ];
 

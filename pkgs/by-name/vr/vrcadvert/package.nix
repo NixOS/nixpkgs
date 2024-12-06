@@ -18,7 +18,7 @@ buildDotnetModule rec {
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   executables = [ "VrcAdvert" ];
 

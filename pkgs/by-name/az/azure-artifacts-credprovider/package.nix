@@ -17,7 +17,7 @@ buildDotnetModule rec {
   pname = "azure-artifacts-credprovider";
   projectFile = "CredentialProvider.Microsoft/CredentialProvider.Microsoft.csproj";
   testProjectFile = "CredentialProvider.Microsoft.Tests/CredentialProvider.Microsoft.Tests.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   passthru.updateScript = ./update.sh;
   patchPhase = ''
     sed -i 's|<TargetFrameworks>.*</TargetFrameworks>|<TargetFramework>net8.0</TargetFramework>|' Build.props

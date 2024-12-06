@@ -29,7 +29,7 @@ buildDotnetModule rec {
 
   projectFile = "v2rayN/v2rayN.Desktop/v2rayN.Desktop.csproj";
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   postPatch = ''
     substituteInPlace v2rayN/AmazTool/UpgradeApp.cs \

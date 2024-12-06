@@ -19,7 +19,7 @@ buildDotnetModule rec {
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
-  nugetDeps = ./nuget-deps.nix;
+  nugetDeps = ./nuget-deps.json;
 
   projectFile = [
     "TechnitiumLibrary.ByteTree/TechnitiumLibrary.ByteTree.csproj"

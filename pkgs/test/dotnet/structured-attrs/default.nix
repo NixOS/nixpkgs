@@ -16,7 +16,7 @@ let
   app = buildDotnetModule {
     name = "structured-attrs-test-application";
     src = ./src;
-    nugetDeps = ./nuget-deps.nix;
+    nugetDeps = ./nuget-deps.json;
     dotnetFlags = [ "--property:Copyright=${copyrightString}" ];
     env.TargetFramework = "net${lib.versions.majorMinor (lib.getVersion dotnet-sdk)}";
     __structuredAttrs = true;

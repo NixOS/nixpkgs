@@ -45,7 +45,7 @@ buildDotnetModule rec {
   ];
 
   projectFile = [ "src/App.CLI.Linux/App.CLI.Linux.net8.csproj" ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;

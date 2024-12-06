@@ -24,7 +24,7 @@ buildDotnetModule rec {
 
   projectFile = "src/Bicep.Cli/Bicep.Cli.csproj";
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
 

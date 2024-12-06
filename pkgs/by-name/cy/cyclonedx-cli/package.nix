@@ -16,7 +16,7 @@ buildDotnetModule rec {
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   preFixup = ''
     cd $out/bin

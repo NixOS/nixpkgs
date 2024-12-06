@@ -17,7 +17,7 @@ buildDotnetModule rec {
   };
 
   projectFile = "NBXplorer/NBXplorer.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;

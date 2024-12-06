@@ -12,7 +12,7 @@ let
   app = buildDotnetModule {
     name = "use-dotnet-from-env-test-application";
     src = ./src;
-    nugetDeps = ./nuget-deps.nix;
+    nugetDeps = ./nuget-deps.json;
     useDotnetFromEnv = true;
     env.TargetFramework = "net${lib.versions.majorMinor (lib.getVersion dotnet-sdk)}";
   };

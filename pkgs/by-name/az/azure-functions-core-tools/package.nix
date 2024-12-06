@@ -29,7 +29,7 @@ buildDotnetModule {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.sdk_8_0;
   dotnetFlags = [ "-p:TargetFramework=net8.0" ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   useDotnetFromEnv = true;
   executables = [ "func" ];
 

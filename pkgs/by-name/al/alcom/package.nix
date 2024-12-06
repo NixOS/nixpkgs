@@ -51,7 +51,7 @@ let
       "vrc-get-litedb/dotnet/vrc-get-litedb.csproj"
       "vrc-get-litedb/dotnet/LiteDB/LiteDB/LiteDB.csproj"
     ];
-    nugetDeps = ./deps.nix;
+    nugetDeps = ./deps.json;
   };
 in
 rustPlatform.buildRustPackage {

@@ -16,7 +16,7 @@ buildDotnetModule rec {
   };
 
   projectFile = "CarCareTracker.sln";
-  nugetDeps = ./deps.nix; # File generated with `nix-build -A package.passthru.fetch-deps`.
+  nugetDeps = ./deps.json; # File generated with `nix-build -A package.passthru.fetch-deps`.
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
