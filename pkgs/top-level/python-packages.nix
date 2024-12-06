@@ -10528,6 +10528,8 @@ self: super: with self; {
 
   pynotifier = callPackage ../development/python-modules/pynotifier { };
 
+  pynordpool = callPackage ../development/python-modules/pynordpool { };
+
   pynslookup = callPackage ../development/python-modules/pynslookup { };
 
   pynuki = callPackage ../development/python-modules/pynuki { };
@@ -13594,6 +13596,8 @@ self: super: with self; {
   };
   qtile-extras = callPackage ../development/python-modules/qtile-extras { };
 
+  qtile-bonsai = callPackage ../development/python-modules/qtile-bonsai { };
+
   qtpy = callPackage ../development/python-modules/qtpy { };
 
   quadprog = callPackage ../development/python-modules/quadprog { };
@@ -14741,6 +14745,8 @@ self: super: with self; {
   skrl = callPackage ../development/python-modules/skrl { };
 
   skybellpy = callPackage ../development/python-modules/skybellpy { };
+
+  skyboxremote = callPackage ../development/python-modules/skyboxremote { };
 
   skyfield = callPackage ../development/python-modules/skyfield { };
 

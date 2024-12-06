@@ -14,30 +14,21 @@
   ncurses,
   openssl,
   pkg-config,
-  xmlrpc_c,
   zlib,
   nixosTests,
-  gitUpdater,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "rakshasa-rtorrent";
-  version = "0.10.0";
+  version = "0.10.0-unstable-2024-12-06";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
-    rev = "v${version}";
-    hash = "sha256-G/30Enycpqg/pWC95CzT9LY99kN4tI+S8aSQhnQO+M8=";
+    rev = "5a200f5d8f8bc8ed28dfc948321451585f724b15";
+    hash = "sha256-RLFOHJLpt7xkrEvYwEBWs5wQRThrK1N2olI64p2TPeA=";
   };
-
-  patches = [
-    # fix: use fsync for osx builds
-    (fetchpatch {
-      url = "https://github.com/rakshasa/rtorrent/commit/5ce84929e44fbe3f8d6cf142e3133f43afa4071f.patch";
-      hash = "sha256-bFDxbpkTZ6nIUT2zMxKMgV94vWlVNzBbIbhx4Bpr8gw=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -63,17 +54,16 @@ stdenv.mkDerivation rec {
     libtorrent
     ncurses
     openssl
-    xmlrpc_c
     zlib
   ];
 
   configureFlags = [
-    "--with-xmlrpc-c"
+    "--with-xmlrpc-tinyxml2"
     "--with-posix-fallocate"
   ];
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    updateScript = unstableGitUpdater { rev-prefix = "v"; };
     tests = {
       inherit (nixosTests) rtorrent;
     };
