@@ -15,6 +15,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-YMki+1rC726RtbZceoVbcpk/Gi3F81xxERQjpqLjn+A=";
   };
 
+  pythonRelaxDeps = [
+    "yt-dlp"
+  ];
+
   build-system = with python3Packages; [
     setuptools
     wheel

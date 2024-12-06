@@ -28,7 +28,10 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  pythonRelaxDeps = [ "pypdf" ];
+  pythonRelaxDeps = [
+    "pillow"
+    "pypdf"
+  ];
 
   propagatedBuildInputs = [
     ebooklib

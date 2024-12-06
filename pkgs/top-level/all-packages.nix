@@ -1077,8 +1077,6 @@ with pkgs;
 
   ronin = callPackage ../tools/security/ronin { };
 
-  scarab = callPackage ../tools/games/scarab { };
-
   inherit (callPackage ../development/libraries/sdbus-cpp { }) sdbus-cpp sdbus-cpp_2;
 
   sdkmanager = with python3Packages; toPythonApplication sdkmanager;
