@@ -135,6 +135,17 @@ in
       };
 
       environment.systemPackages = with pkgs; ([
+        # Teach nemo-desktop how to launch file browser.
+        # https://github.com/linuxmint/nemo/blob/6.4.0/src/nemo-desktop-application.c#L398
+        (writeTextFile {
+          name = "x-cinnamon-mimeapps";
+          destination = "/share/applications/x-cinnamon-mimeapps.list";
+          text = ''
+            [Default Applications]
+            inode/directory=nemo.desktop
+          '';
+        })
+
         desktop-file-utils
 
         # common-files
