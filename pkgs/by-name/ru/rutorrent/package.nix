@@ -2,18 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "rutorrent";
-  version = "4.3.8";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "Novik";
     repo = "ruTorrent";
-    rev = "v${version}";
-    hash = "sha256-1JENw3JByrtzygSXov5Q0tTLrSzJnchYaS9SllXFOds=";
+    tag = "v${version}";
+    hash = "sha256-QFxeOUtHIKKAhw8rQRYcGK0eay3dIWKNh4ST582EMYU=";
   };
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/
     cp -r . $out/
+    runHook postInstall;
   '';
 
   meta = with lib; {
