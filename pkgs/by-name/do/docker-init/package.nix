@@ -6,8 +6,8 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "docker-init";
-  version = "v1.3.0";
-  tag = "157355";
+  version = "v1.4.0";
+  tag = "175267";
 
   src = fetchurl {
     url = "https://desktop.docker.com/linux/main/amd64/${finalAttrs.tag}/docker-desktop-x86_64.pkg.tar.zst";
@@ -40,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "docker-init";
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    badPlatforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ BastianAsmussen ];
   };
