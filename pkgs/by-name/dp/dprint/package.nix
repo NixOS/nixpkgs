@@ -1,21 +1,40 @@
-{ lib, stdenv, fetchCrate, rustPlatform, CoreFoundation, Security }:
+{
+  lib,
+  stdenv,
+  fetchCrate,
+  rustPlatform,
+  testers,
+  nix-update-script,
+  dprint,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "dprint";
-  version = "0.47.2";
+  version = "0.47.6";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-zafRwiXfRACT6G408pXLCk7t6akabOs1VFLRF9SeNWI=";
+    hash = "sha256-7tGzSFp7Dnu27L65mqFd7hzeFFDfe1xJ6cMul3hGyJs=";
   };
 
-  cargoHash = "sha256-86ecnwDDVvgXgBBodP2rSZOn+R52Jap8RCKILttGOn8=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreFoundation Security ];
+  cargoHash = "sha256-y3tV3X7YMOUGBn2hCmxsUUc9QQleKEioTIw7SGoBvSQ=";
 
   # Tests fail because they expect a test WASM plugin. Tests already run for
   # every commit upstream on GitHub Actions
   doCheck = false;
+
+  passthru = {
+    tests.version = testers.testVersion {
+      inherit version;
+
+      package = dprint;
+      command = ''
+        DPRINT_CACHE_DIR="$(mktemp --directory)" dprint --version
+      '';
+    };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Code formatting platform written in Rust";
