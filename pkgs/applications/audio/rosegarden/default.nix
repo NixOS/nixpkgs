@@ -7,27 +7,36 @@
 , pkg-config
 , qttools
 , wrapQtAppsHook
+, alsa-lib
 , dssi
 , fftwSinglePrec
+, flac
+, glib
 , ladspaH
 , ladspaPlugins
 , libjack2
-, alsa-lib
 , liblo
+, libmpg123
+, libopus
 , libsamplerate
 , libsndfile
+, libsysprof-capture
+, libvorbis
+, lilv
+, lv2
 , lirc
 , lrdf
+, libogg
 , qtbase
 }:
 
 stdenv.mkDerivation rec {
   pname = "rosegarden";
-  version = "22.12.1";
+  version = "24.12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/rosegarden/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-fqeif37lxJeBcI+cYVpRkZuJImSlmeZO3yzSNzPZkgY=";
+    url = "mirror://sourceforge/rosegarden/${pname}-${version}.tar.xz";
+    sha256 = "sha256-fz9mE2sJrxS9mZjkreTWIE1Fiv0WlHiP1tyzqW6/Fcw=";
   };
 
   postPhase = ''
@@ -37,18 +46,31 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake makedepend perl pkg-config qttools wrapQtAppsHook ];
 
   buildInputs = [
+    alsa-lib
     dssi
     fftwSinglePrec
+    flac
+    glib
     ladspaH
     ladspaPlugins
     libjack2
     liblo
+    libmpg123
+    libogg
+    libopus
     libsamplerate
     libsndfile
+    libsysprof-capture
+    libvorbis
+    lilv
+    lv2
     lirc
     lrdf
     qtbase
-    alsa-lib
+  ];
+
+  cmakeFlags = [ 
+    "-DLILV_INCLUDE_DIR=${lilv.dev}/include/lilv-0"
   ];
 
   meta = with lib; {
