@@ -1264,13 +1264,32 @@ let
       (opt.highestPrio or defaultOverridePriority)
       (f opt.value);
 
+  # Spec is an attrpath spec, extra is an additional argument, depending on the action
+  doRename2 = spec: extra:
+    let
+      attrPaths = lib.attrsets.associateWithAttrPath spec;
+      existsInSpec = op: hasAttr op attrPaths;
+      getPathForOp = op: attrPaths.${op};
+    in
+    if existsInSpec "to" || existsInSpec "from" then
+      assert (lib.assertMsg (existsInSpec "to" && existsInSpec "from") "You must provide doRename with `to` and `from` or a rename spec.");
+      if extra != null then
+        mkRenamedOptionModuleWith (getPathForOp "from") (getPathForOp "to") extra
+      else
+        mkRenamedOptionModule (getPathForOp "from") (getPathForOp "to")
+    else if existsInSpec "original" || existsInSpec "alias" then
+      assert (lib.assertMsg (existsInSpec "original" && existsInSpec "alias") "The rename spec provided to doRename must contain `original` and `alias`.");
+      mkAliasOptionModule (getPathForOp "original") (getPathForOp "alias")
+    else if existsInSpec "remove" then
+      mkRemovedOptionModule (getPathForOp "remove") extra
+    else
+      abort "doRename2 was called without a valid rename specification. (Check for typos!)";
+
   /*
     Return a module that help declares an option that has been renamed.
     When a value is defined for the old option, it is forwarded to the `to` option.
    */
   doRename = args@{
-    # An attribute path operation specification for the "from" and "to" operations
-    spec ? { },
     # List of strings representing the attribute path of the old option.
     from ? null,
     # List of strings representing the attribute path of the new option.
