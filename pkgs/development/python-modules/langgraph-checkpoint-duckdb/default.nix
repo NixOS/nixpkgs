@@ -36,6 +36,9 @@ buildPythonPackage rec {
     langgraph-checkpoint
   ];
 
+  # Checkpoint clients are lagging behind langgraph-checkpoint
+  pythonRelaxDeps = [ "langgraph-checkpoint" ];
+
   pythonImportsCheck = [ "langgraph.checkpoint.duckdb" ];
 
   nativeCheckInputs = [
