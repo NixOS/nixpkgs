@@ -526,13 +526,25 @@ in
         User = cfg.user;
         Group = cfg.group;
         ExecStartPre = lib.mkIf cfg.database.createLocally [
-          "!${pkgs.writeShellScript "librenms-db-init" ''
-          DB_PASSWORD=$(cat ${cfg.database.passwordFile} | tr -d '\n')
-          echo "ALTER USER '${cfg.database.username}'@'localhost' IDENTIFIED BY '$DB_PASSWORD';" | ${pkgs.mariadb}/bin/mysql
-          ${lib.optionalString cfg.useDistributedPollers ''
-            echo "ALTER USER '${cfg.database.username}'@'%' IDENTIFIED BY '$DB_PASSWORD';" | ${pkgs.mariadb}/bin/mysql
-          ''}
-        ''}"
+          "!${
+            pkgs.writeShellScript "librenms-db-init" (
+              if !isNull cfg.database.socket then
+                ''
+                  echo "ALTER USER '${cfg.database.username}'@'localhost' IDENTIFIED VIA unix_socket;" | ${pkgs.mariadb}/bin/mysql --socket='${cfg.database.socket}'
+                  ${lib.optionalString cfg.useDistributedPollers ''
+                    echo "ALTER USER '${cfg.database.username}'@'%' IDENTIFIED VIA unix_socket;" | ${pkgs.mariadb}/bin/mysql --socket='${cfg.database.socket}'
+                  ''}
+                ''
+              else
+                ''
+                  DB_PASSWORD=$(cat ${cfg.database.passwordFile} | tr -d '\n')
+                  echo "ALTER USER '${cfg.database.username}'@'localhost' IDENTIFIED BY '$DB_PASSWORD';" | ${pkgs.mariadb}/bin/mysql
+                  ${lib.optionalString cfg.useDistributedPollers ''
+                    echo "ALTER USER '${cfg.database.username}'@'%' IDENTIFIED BY '$DB_PASSWORD';" | ${pkgs.mariadb}/bin/mysql
+                  ''}
+                ''
+            )
+          }"
         ];
       };
       script = ''
@@ -567,6 +579,7 @@ in
         then ''
           # use socket connection
           echo "DB_SOCKET=${cfg.database.socket}" >> ${cfg.dataDir}/.env
+          echo "DB_PASSWORD=null" >> ${cfg.dataDir}/.env
         ''
         else ''
           # use TCP connection
