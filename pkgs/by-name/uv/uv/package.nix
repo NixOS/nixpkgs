@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "uv";
-  version = "0.5.5";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
-    rev = "refs/tags/${version}";
-    hash = "sha256-E0U6K+lvtIM9htpMpFN36JHA772LgTHaTCVGiTTlvQk=";
+    tag = version;
+    hash = "sha256-iiIbSya+SUM7Xk+lV7h7Zyb1WMvc1IAHxCAylWmKaKU=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-WbA0/HojU/E2ccAvV2sv9EAXLqcb+99LFHxddcYFZFw=";
+  cargoHash = "sha256-xrUjHJ8VDGNwN4xfOqqaRRUTEhRh2Jnckj7ynILigpc=";
 
   nativeBuildInputs = [
     cmake
@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Extremely fast Python package installer and resolver, written in Rust";
     homepage = "https://github.com/astral-sh/uv";
-    changelog = "https://github.com/astral-sh/uv/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/astral-sh/uv/blob/${version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit

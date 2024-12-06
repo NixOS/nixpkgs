@@ -16,7 +16,7 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "ruff";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
 
   outputs = [
@@ -27,8 +27,8 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
-    rev = "refs/tags/${version}";
-    hash = "sha256-N3TplR+vPu2r56VP/vnOfkxN3Lh2o92kE2hFZKLXO04=";
+    tag = version;
+    hash = "sha256-rAIedDjJ1OajxrHS9cgP9sdcTbT7JFbA16jeVsaoEEY=";
   };
 
   # Do not rely on path lookup at runtime to find the ruff binary
@@ -41,7 +41,7 @@ python3Packages.buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-iddUzip2LmBMOB+MfpI4k3OitdPbwAZkc4szDPB6duM=";
+    hash = "sha256-aT1qF7RYytUTLVIM0QDgPesiJPCLwKoARWcIBgwN7C8=";
   };
 
   nativeBuildInputs =
