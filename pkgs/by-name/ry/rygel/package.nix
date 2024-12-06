@@ -33,6 +33,7 @@
   tinysparql,
   shared-mime-info,
   gnome,
+  rygel,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -78,9 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
       gupnp-dlna
       libgee
       libsoup_3
-      gtk3
       libmediaart
       pipewire
+      # Move this to withGtk when it's not unconditionally included
+      # https://gitlab.gnome.org/GNOME/rygel/-/issues/221
+      # https://gitlab.gnome.org/GNOME/rygel/-/merge_requests/27
       libX11
       sqlite
       systemd
@@ -116,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "rygel";
       versionPolicy = "odd-unstable";
     };
+    noGtk = rygel.override { withGtk = false; };
   };
 
   meta = with lib; {
