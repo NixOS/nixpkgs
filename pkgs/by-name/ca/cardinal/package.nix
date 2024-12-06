@@ -1,29 +1,30 @@
-{ stdenv
-, apple-sdk_15
-, fetchurl
-, cmake
-, dbus
-, fftwFloat
-, file
-, freetype
-, jansson
-, lib
-, libGL
-, libX11
-, libXcursor
-, libXext
-, libXrandr
-, libarchive
-, libjack2
-, liblo
-, libsamplerate
-, libsndfile
-, makeWrapper
-, pkg-config
-, python3
-, speexdsp
-, libglvnd
-, headless ? false
+{
+  stdenv,
+  apple-sdk_15,
+  fetchurl,
+  cmake,
+  dbus,
+  fftwFloat,
+  file,
+  freetype,
+  jansson,
+  lib,
+  libGL,
+  libX11,
+  libXcursor,
+  libXext,
+  libXrandr,
+  libarchive,
+  libjack2,
+  liblo,
+  libsamplerate,
+  libsndfile,
+  makeWrapper,
+  pkg-config,
+  python3,
+  speexdsp,
+  libglvnd,
+  headless ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -51,31 +52,35 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [
-    dbus
-    fftwFloat
-    freetype
-    jansson
-    libarchive
-    liblo
-    libsamplerate
-    libsndfile
-    speexdsp
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libGL
-    libX11
-    libXcursor
-    libXext
-    libXrandr
-    libglvnd # libGL.so
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin ([
-    apple-sdk_15
-  ]);
+  buildInputs =
+    [
+      dbus
+      fftwFloat
+      freetype
+      jansson
+      libarchive
+      liblo
+      libsamplerate
+      libsndfile
+      speexdsp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGL
+      libX11
+      libXcursor
+      libXext
+      libXrandr
+      libglvnd # libGL.so
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin ([
+      apple-sdk_15
+    ]);
 
   hardeningDisable = [ "format" ];
-  makeFlags = lib.optional headless "HEADLESS=true" ++ [ "SYSDEPS=true" "PREFIX=$(out)" ];
+  makeFlags = lib.optional headless "HEADLESS=true" ++ [
+    "SYSDEPS=true"
+    "PREFIX=$(out)"
+  ];
 
   postInstall = lib.optionals stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/Cardinal \
@@ -88,7 +93,8 @@ stdenv.mkDerivation rec {
     rm -f $out/bin/CardinalNative
   '';
 
-  installPhase = if stdenv.hostPlatform.isDarwin then
+  installPhase =
+    if stdenv.hostPlatform.isDarwin then
       ''
         mkdir -p $out/bin $out/lib/{lv2,clap,vst,vst3} $out/share/{cardinal,doc/cardinal/docs}
         cp -rf bin/*.lv2      $out/lib/lv2/
@@ -112,7 +118,11 @@ stdenv.mkDerivation rec {
     description = "Plugin wrapper around VCV Rack";
     homepage = "https://github.com/DISTRHO/cardinal";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ magnetophon PowerUser64 multivac61 ];
+    maintainers = with lib.maintainers; [
+      magnetophon
+      PowerUser64
+      multivac61
+    ];
     mainProgram = "Cardinal";
     platforms = lib.platforms.all;
   };
