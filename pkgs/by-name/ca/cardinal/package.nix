@@ -52,29 +52,28 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs =
-    [
-      dbus
-      fftwFloat
-      freetype
-      jansson
-      libarchive
-      liblo
-      libsamplerate
-      libsndfile
-      speexdsp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      libX11
-      libXcursor
-      libXext
-      libXrandr
-      libglvnd # libGL.so
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin ([
-      apple-sdk_15
-    ]);
+  buildInputs = [
+    dbus
+    fftwFloat
+    freetype
+    jansson
+    libarchive
+    liblo
+    libsamplerate
+    libsndfile
+    speexdsp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    libX11
+    libXcursor
+    libXext
+    libXrandr
+    libglvnd # libGL.so
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin ([
+    apple-sdk_15
+  ]);
 
   hardeningDisable = [ "format" ];
   
@@ -85,6 +84,14 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "CROSS_COMPILING=true"
     ++ lib.optional headless "HEADLESS=true";
+
+  postPatch = lib.optionals stdenv.hostPlatform.isDarwin ''
+    substituteInPlace ./src/CardinalRemote/main.cpp \
+      --replace "/Library/Application Support/Cardinal" $out/share/Cardinal
+
+    substituteInPlace ./src/CardinalCommon.cpp \
+      --replace "/Library/Application Support/Cardinal" $out/share/Cardinal
+  '';
 
   postInstall = lib.optionals stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/Cardinal \
@@ -97,10 +104,10 @@ stdenv.mkDerivation rec {
     rm -f $out/bin/CardinalNative
   '';
 
-  installPhase =
-    if stdenv.hostPlatform.isDarwin then
+  installPhase = if stdenv.hostPlatform.isDarwin then
       ''
         mkdir -p $out/bin $out/lib/{lv2,clap,vst,vst3} $out/share/{cardinal,doc/cardinal/docs}
+
         cp -rf bin/*.lv2      $out/lib/lv2/
         cp -rf bin/*.clap     $out/lib/clap/
         cp -rf bin/*.vst      $out/lib/vst/
@@ -122,11 +129,7 @@ stdenv.mkDerivation rec {
     description = "Plugin wrapper around VCV Rack";
     homepage = "https://github.com/DISTRHO/cardinal";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [
-      magnetophon
-      PowerUser64
-      multivac61
-    ];
+    maintainers = with lib.maintainers; [ magnetophon PowerUser64 multivac61 ];
     mainProgram = "Cardinal";
     platforms = lib.platforms.all;
   };
