@@ -13598,6 +13598,8 @@ self: super: with self; {
   };
   qtile-extras = callPackage ../development/python-modules/qtile-extras { };
 
+  qtile-bonsai = callPackage ../development/python-modules/qtile-bonsai { };
+
   qtpy = callPackage ../development/python-modules/qtpy { };
 
   quadprog = callPackage ../development/python-modules/quadprog { };
