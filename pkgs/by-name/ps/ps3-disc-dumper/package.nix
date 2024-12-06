@@ -21,7 +21,7 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.sdk_9_0;
   projectFile = "UI.Console/UI.Console.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   postPatch = ''
     substituteInPlace UI.Console/UI.Console.csproj \

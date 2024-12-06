@@ -112,9 +112,9 @@ new_yarn_hash = nix_hash_to_sri(subprocess.run(
 
 package_dir = package_attrs["dir"]
 package_file_name = "package.nix"
-deps_file_name = "deps.nix"
+deps_file_name = "deps.json"
 
-# To update deps.nix, we copy the package to a temporary directory and run
+# To update deps.json, we copy the package to a temporary directory and run
 # passthru.fetch-deps script there.
 with tempfile.TemporaryDirectory() as work_dir:
     package_file = os.path.join(work_dir, package_file_name)
@@ -130,7 +130,7 @@ with tempfile.TemporaryDirectory() as work_dir:
         old_yarn_hash: new_yarn_hash,
     })
 
-    # Generate nuget-to-nix dependency lock file.
+    # Generate nuget-to-json dependency lock file.
     fetch_deps = os.path.join(work_dir, "fetch-deps")
     subprocess.run(
         [
