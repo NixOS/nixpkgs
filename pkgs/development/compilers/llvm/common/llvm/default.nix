@@ -346,6 +346,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DLLVM_LINK_LLVM_DYLIB=ON"
     ];
   in flagsForLlvmConfig ++ [
+    "-DLLVM_TABLEGEN=${buildLlvmTools.tblgen}/bin/llvm-tblgen"
     "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
     "-DLLVM_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     "-DLLVM_ENABLE_FFI=ON"
@@ -382,7 +383,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCAN_TARGET_i386=false"
   ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
     "-DCMAKE_CROSSCOMPILING=True"
-    "-DLLVM_TABLEGEN=${buildLlvmTools.llvm}/bin/llvm-tblgen"
     (
       let
         nativeCC = pkgsBuildBuild.targetPackages.stdenv.cc;

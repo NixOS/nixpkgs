@@ -52,11 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ];
 
-  cmakeFlags =
-    lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.llvm}/bin/llvm-tblgen")
-    ]
-    ++ devExtraCmakeFlags;
+  cmakeFlags = [
+    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
+  ] ++ devExtraCmakeFlags;
 
   postUnpack = ''
     chmod -R u+w -- $sourceRoot/..

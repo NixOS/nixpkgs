@@ -60,16 +60,18 @@ let
       "-DSPHINX_OUTPUT_MAN=ON"
       "-DSPHINX_OUTPUT_HTML=OFF"
       "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
-      "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
-      "-DCLANG_TABLEGEN=${buildLlvmTools.libclang.dev}/bin/clang-tblgen"
+    ] ++ [
+      "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.tblgen}/bin/llvm-tblgen"
+      "-DCLANG_TABLEGEN=${buildLlvmTools.tblgen}/bin/clang-tblgen"
     ] ++ lib.optionals (lib.versionAtLeast release_version "15") [
       # Added in LLVM15:
       # `clang-tidy-confusable-chars-gen`: https://github.com/llvm/llvm-project/commit/c3574ef739fbfcc59d405985a3a4fa6f4619ecdb
       # `clang-pseudo-gen`: https://github.com/llvm/llvm-project/commit/cd2292ef824591cc34cc299910a3098545c840c7
-      "-DCLANG_TIDY_CONFUSABLE_CHARS_GEN=${buildLlvmTools.libclang.dev}/bin/clang-tidy-confusable-chars-gen"
-      "-DCLANG_PSEUDO_GEN=${buildLlvmTools.libclang.dev}/bin/clang-pseudo-gen"
-    ]) ++ lib.optional (lib.versionAtLeast release_version "20") "-DLLVM_DIR=${libllvm.dev}/lib/cmake/llvm"
+      "-DCLANG_TIDY_CONFUSABLE_CHARS_GEN=${buildLlvmTools.tblgen}/bin/clang-tidy-confusable-chars-gen"
+    ] ++ lib.optionals (lib.versionOlder release_version "20") [
+      # clang-pseudo removed in LLVM20: https://github.com/llvm/llvm-project/commit/ed8f78827895050442f544edef2933a60d4a7935
+      "-DCLANG_PSEUDO_GEN=${buildLlvmTools.tblgen}/bin/clang-pseudo-gen"
+    ] ++ lib.optional (lib.versionAtLeast release_version "20") "-DLLVM_DIR=${libllvm.dev}/lib/cmake/llvm"
       ++ devExtraCmakeFlags;
 
     postPatch = ''
