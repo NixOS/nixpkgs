@@ -4,6 +4,7 @@
   coreutils,
   curl,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
   ldc,
   libnotify,
@@ -26,6 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-neJi5lIx45GsuwZPzzwwEm1bfrL2DFSysVkxa4fCBww";
   };
+
+  patches = [
+    # remove when updating to v2.5.4
+    (fetchpatch {
+      name = "fix-openssl-version-check-error.patch";
+      url = "https://github.com/abraunegg/onedrive/commit/d956318b184dc119d65d7a230154df4097171a6d.patch";
+      hash = "sha256-LGmKqYgFpG4MPFrHXqvlDp7Cxe3cEGYeXXH9pCXtGkU=";
+    })
+  ];
 
   outputs = [
     "out"
