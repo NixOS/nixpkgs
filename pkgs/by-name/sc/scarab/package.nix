@@ -15,16 +15,21 @@ buildDotnetModule rec {
 
   src = fetchFromGitHub {
     owner = "fifty-six";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-z1hmMrfeoYyjVEPPjWvUfKUKsOS7UsocSWMYrFY+/kI=";
+    repo = "scarab";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-z1hmMrfeoYyjVEPPjWvUfKUKsOS7UsocSWMYrFY+/kI=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
   nugetDeps = ./deps.nix;
   projectFile = "Scarab/Scarab.csproj";
   testProjectFile = "Scarab.Tests/Scarab.Tests.csproj";
   executables = [ "Scarab" ];
+
+  postPatch = ''
+    substituteInPlace Scarab/Scarab.csproj Scarab.Tests/Scarab.Tests.csproj \
+      --replace-fail 'net6.0' 'net8.0'
+  '';
 
   preConfigureNuGet = ''
     # This should really be in the upstream nuget.config
@@ -62,7 +67,7 @@ buildDotnetModule rec {
       name = "scarab";
       exec = "Scarab";
       icon = "scarab";
-      comment = meta.description;
+      comment = "Hollow Knight mod installer and manager";
       type = "Application";
       categories = [ "Game" ];
     })
