@@ -13747,7 +13747,7 @@ with pkgs;
   geany = callPackage ../applications/editors/geany { };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
 
-  gimagereader-gtk = callPackage ../by-name/gi/gImageReader/package.nix { withGTK3 = true; };
+  gimagereader-gtk = callPackage ../by-name/gi/gImageReader/package.nix { };
   gimagereader-qt6 = callPackage ../by-name/gi/gImageReader/package.nix { withQt6 = true; };
 
   gnuradio = callPackage ../applications/radio/gnuradio/wrapper.nix {

@@ -16,7 +16,6 @@
   gtkspellmm,
   intltool,
   json-glib,
-  kdePackages,
   libjpeg,
   libuuid,
   libxmlxx3,
@@ -25,12 +24,10 @@
   podofo,
   poppler,
   python3,
-  qt6Packages,
   sane-backends,
   tesseract,
+  withQt6 ? false ? false, kdePackages ? null, qt6Packages ? null, wrapQtAppsHook ? null,
   wrapGAppsHook3,
-  withGTK3 ? false,
-  withQt6 ? false ? false, wrapQtAppsHook ? null,
 }:
 
 let
@@ -55,8 +52,7 @@ stdenv.mkDerivation rec {
       intltool
       ninja
       pythonEnv
-    ]
-    ++ lib.optionals withGTK3 [
+
       gobject-introspection
       wrapGAppsHook3
     ]
@@ -74,8 +70,7 @@ stdenv.mkDerivation rec {
       poppler
       sane-backends
       tesseract
-    ]
-    ++ lib.optionals withGTK3 [
+
       cairomm
       gtkmm3
       gtksourceview3
@@ -90,16 +85,14 @@ stdenv.mkDerivation rec {
         kdePackages.poppler
         qtbase
         qtspell
-        qttools
         quazip
       ]
     );
 
   # interface type can be where <type> is either gtk, qt5, qt4
   cmakeFlags =
-    [ ]
-    ++ lib.optionals withQt6 [ "-DINTERFACE_TYPE=qt6 -DQT_VER=6" ]
-    ++ lib.optionals withGTK3 [ "-DINTERFACE_TYPE=gtk" ];
+    [ "-DINTERFACE_TYPE=gtk" ]
+    ++ lib.optionals withQt6 [ "-DINTERFACE_TYPE=qt6 -DQT_VER=6" ];
 
   meta = with lib; {
     description = "Simple Gtk/Qt front-end to tesseract-ocr";
