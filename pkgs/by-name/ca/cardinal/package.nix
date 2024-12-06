@@ -52,31 +52,32 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs = [
-    dbus
-    fftwFloat
-    freetype
-    jansson
-    libarchive
-    liblo
-    libsamplerate
-    libsndfile
-    speexdsp
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libGL
-    libX11
-    libXcursor
-    libXext
-    libXrandr
-    libglvnd # libGL.so
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin ([
-    apple-sdk_15
-  ]);
+  buildInputs =
+    [
+      dbus
+      fftwFloat
+      freetype
+      jansson
+      libarchive
+      liblo
+      libsamplerate
+      libsndfile
+      speexdsp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGL
+      libX11
+      libXcursor
+      libXext
+      libXrandr
+      libglvnd # libGL.so
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin ([
+      apple-sdk_15
+    ]);
 
   hardeningDisable = [ "format" ];
-  
+
   makeFlags =
     [
       "SYSDEPS=true"
@@ -104,7 +105,8 @@ stdenv.mkDerivation rec {
     rm -f $out/bin/CardinalNative
   '';
 
-  installPhase = if stdenv.hostPlatform.isDarwin then
+  installPhase =
+    if stdenv.hostPlatform.isDarwin then
       ''
         mkdir -p $out/bin $out/lib/{lv2,clap,vst,vst3} $out/share/{cardinal,doc/cardinal/docs}
 
@@ -129,7 +131,11 @@ stdenv.mkDerivation rec {
     description = "Plugin wrapper around VCV Rack";
     homepage = "https://github.com/DISTRHO/cardinal";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ magnetophon PowerUser64 multivac61 ];
+    maintainers = with lib.maintainers; [
+      magnetophon
+      PowerUser64
+      multivac61
+    ];
     mainProgram = "Cardinal";
     platforms = lib.platforms.all;
   };
