@@ -1105,6 +1105,8 @@ self: super: with self; {
 
   aws-encryption-sdk = callPackage ../development/python-modules/aws-encryption-sdk { };
 
+  aws-error-utils = callPackage ../development/python-modules/aws-error-utils { };
+
   aws-lambda-builders = callPackage ../development/python-modules/aws-lambda-builders { };
 
   aws-request-signer = callPackage ../development/python-modules/aws-request-signer { };
@@ -1112,6 +1114,8 @@ self: super: with self; {
   aws-sam-translator = callPackage ../development/python-modules/aws-sam-translator { };
 
   aws-secretsmanager-caching = callPackage ../development/python-modules/aws-secretsmanager-caching { };
+
+  aws-sso-lib = callPackage ../development/python-modules/aws-sso-lib { };
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
 
