@@ -1,33 +1,34 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, makedepend
-, perl
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, alsa-lib
-, dssi
-, fftwSinglePrec
-, flac
-, glib
-, ladspaH
-, ladspaPlugins
-, libjack2
-, liblo
-, libmpg123
-, libopus
-, libsamplerate
-, libsndfile
-, libsysprof-capture
-, libvorbis
-, lilv
-, lv2
-, lirc
-, lrdf
-, libogg
-, qtbase
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  makedepend,
+  perl,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  alsa-lib,
+  dssi,
+  fftwSinglePrec,
+  flac,
+  glib,
+  ladspaH,
+  ladspaPlugins,
+  libjack2,
+  liblo,
+  libmpg123,
+  libopus,
+  libsamplerate,
+  libsndfile,
+  libsysprof-capture,
+  libvorbis,
+  lilv,
+  lv2,
+  lirc,
+  lrdf,
+  libogg,
+  qtbase,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +44,14 @@ stdenv.mkDerivation rec {
     substituteInPlace src/CMakeLists.txt --replace svnheader svnversion
   '';
 
-  nativeBuildInputs = [ cmake makedepend perl pkg-config qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    makedepend
+    perl
+    pkg-config
+    qttools
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     alsa-lib
@@ -69,7 +77,7 @@ stdenv.mkDerivation rec {
     qtbase
   ];
 
-  cmakeFlags = [ 
+  cmakeFlags = [
     "-DLILV_INCLUDE_DIR=${lilv.dev}/include/lilv-0"
   ];
 
