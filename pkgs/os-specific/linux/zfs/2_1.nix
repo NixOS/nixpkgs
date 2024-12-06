@@ -18,9 +18,9 @@ callPackage ./generic.nix args {
 
   # This is a fixed version to the 2.1.x series, move only
   # if the 2.1.x series moves.
-  version = "2.1.15";
+  version = "2.1.16";
 
-  hash = "sha256-zFO8fMbirEOrn5W57rAN7IWY6EIXG8jDXqhP7BWJyiY=";
+  hash = "sha256-egs7paAOdbRAJH4QwIjlK3jAL/le51kDQrdW4deHfAI=";
 
   tests = {
     inherit (nixosTests.zfs) series_2_1;
