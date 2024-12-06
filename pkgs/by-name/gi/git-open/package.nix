@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-open";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "paulirish";
     repo = "git-open";
     rev = "v${version}";
-    sha256 = "sha256-Bag2rI2uR7ilkg2ozjR8tPXqKz5XjiY7WAUJKTVTXd8=";
+    sha256 = "sha256-bZOknoRMkPqm1pFFFbvrHrSi90ANLEE5fLcABYHov6Q=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper pandoc ];
