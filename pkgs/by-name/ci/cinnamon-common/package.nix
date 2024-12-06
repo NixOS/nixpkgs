@@ -73,13 +73,13 @@ in
 # TODO (after 25.05 branch-off): Rename to pkgs.cinnamon
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "6.4.1";
+  version = "6.4.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-xkM6t1AiFpfAJOUEP2eeWBtYLQa36FNxrpPiRgHot3w=";
+    hash = "sha256-r5cSm/a+xtHwwAHQmdgviDAN3nnMAnXGY/p+ER1/gbk=";
   };
 
   patches = [
