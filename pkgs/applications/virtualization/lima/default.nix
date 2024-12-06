@@ -19,7 +19,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "lima-vm";
-    repo = pname;
+    repo = "lima";
     rev = "v${version}";
     sha256 = "sha256-LNsxMrbEgdosGDDUNvMZq/hpP5azNiIHjKTp0Iw/PC0=";
   };
