@@ -1,4 +1,5 @@
 { stdenv
+, apple-sdk_15
 , fetchurl
 , cmake
 , dbus
@@ -55,23 +56,28 @@ stdenv.mkDerivation rec {
     fftwFloat
     freetype
     jansson
-    libGL
-    libX11
-    libXcursor
-    libXext
-    libXrandr
     libarchive
     liblo
     libsamplerate
     libsndfile
     speexdsp
-    libglvnd
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    libX11
+    libXcursor
+    libXext
+    libXrandr
+    libglvnd # libGL.so
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin ([
+    apple-sdk_15
+  ]);
 
   hardeningDisable = [ "format" ];
   makeFlags = lib.optional headless "HEADLESS=true" ++ [ "SYSDEPS=true" "PREFIX=$(out)" ];
 
-  postInstall = ''
+  postInstall = lib.optionals stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/Cardinal \
     --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}
 
@@ -82,14 +88,32 @@ stdenv.mkDerivation rec {
     rm -f $out/bin/CardinalNative
   '';
 
+  installPhase = if stdenv.hostPlatform.isDarwin then
+      ''
+        mkdir -p $out/bin $out/lib/{lv2,clap,vst,vst3} $out/share/{cardinal,doc/cardinal/docs}
+        cp -rf bin/*.lv2      $out/lib/lv2/
+        cp -rf bin/*.clap     $out/lib/clap/
+        cp -rf bin/*.vst      $out/lib/vst/
+        cp -rf bin/*.vst3      $out/lib/vst3/
+        rm -rf $out/lib/lv2/*.lv2/resources
+        rm -rf $out/lib/vst/*.vst/Contents/Resources
+        rm -rf $out/lib/vst3/*.vst3/Contents/Resources
+        rm -rf $out/lib/clap/*.clap/Contents/Resources
+
+        cp -rf bin/CardinalNative.app       $out/bin/
+        cp -rf bin/Cardinal.lv2/resources/* $out/share/cardinal/
+        cp -rf README.md            $out/share/doc/cardinal/
+        cp -rf docs/*.md docs/*.png $out/share/doc/cardinal/docs/
+      ''
+    else
+      null;
+
   meta = {
     description = "Plugin wrapper around VCV Rack";
     homepage = "https://github.com/DISTRHO/cardinal";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ magnetophon PowerUser64 ];
+    maintainers = with lib.maintainers; [ magnetophon PowerUser64 multivac61 ];
     mainProgram = "Cardinal";
     platforms = lib.platforms.all;
-    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }
