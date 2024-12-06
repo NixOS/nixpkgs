@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libpostal";
@@ -7,21 +7,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "openvenues";
     repo = "libpostal";
-    rev = "v${version}";
-    sha256 = "sha256-gQTD2LQibaB2TK0SbzoILAljAGExURvDcF3C/TfDXqk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7G/CjYdVzsrvUFXGODoXgXoRp8txkl5SddcPtgltrjY=";
   };
-
-  patches = [
-    # Fix darwin compilation with XCode 12 https://github.com/openvenues/libpostal/issues/511
-    (fetchpatch {
-      name = "Fix-C-compilation-macOS.patch";
-      url = "https://github.com/openvenues/libpostal/commit/9fcf066e38121b5c1439fc6bdc9a7e02234c8622.patch";
-      hash = "sha256-VpboGK+5sc1XrxMB051KWc8vP7Eu2g7zmTirzSaerns=";
-    })
-    # https://github.com/openvenues/libpostal/commit/bfdb6b8f87cc1cae9ba47870ff23deae0bb8ba51.patch
-    # with extra hunk removed so it applies
-    ./0001-test-adding-header-to-fix-warning.patch
-  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
