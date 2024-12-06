@@ -4,6 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   stdenvNoCC,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -27,9 +28,6 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  # Some checks fail to download deps
-  doCheck = false;
-
   ldflags = [
     "-s"
     "-w"
@@ -47,6 +45,12 @@ buildGoModule rec {
         --fish <($out/bin/cloudquery completion fish) \
         --zsh <($out/bin/cloudquery completion zsh)
     '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Data movement tool to sync data from any source to any destination";
