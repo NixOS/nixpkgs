@@ -40,6 +40,11 @@ let
   cacheDir = "/var/cache/mediawiki";
   stateDir = "/var/lib/mediawiki";
 
+  toolsPath = pkgs.symlinkJoin {
+    name = "mediawiki-path";
+    paths = cfg.path;
+  };
+
   pkg = pkgs.stdenv.mkDerivation rec {
     pname = "mediawiki-full";
     inherit (src) version;
@@ -48,6 +53,10 @@ let
     installPhase = ''
       mkdir -p $out
       cp -r * $out/
+
+      substituteInPlace $out/share/mediawiki/includes/config-schema.php \
+        --replace-fail "/usr/bin/" "${toolsPath}/bin/" \
+        --replace-fail "\$path/" "${toolsPath}/bin/"
 
       # try removing directories before symlinking to allow overwriting any builtin extension or skin
       ${concatStringsSep "\n" (
@@ -187,7 +196,6 @@ let
         ''}
 
         $wgUseImageMagick = true;
-        $wgImageMagickConvertCommand = "${pkgs.imagemagick}/bin/convert";
 
         # InstantCommons allows wiki to use images from https://commons.wikimedia.org
         $wgUseInstantCommons = false;
@@ -223,10 +231,6 @@ let
         $wgRightsText = "";
         $wgRightsIcon = "";
 
-        # Path to the GNU diff3 utility. Used for conflict resolution.
-        $wgDiff = "${pkgs.diffutils}/bin/diff";
-        $wgDiff3 = "${pkgs.diffutils}/bin/diff3";
-
         # Enabled skins.
         ${concatStringsSep "\n" (mapAttrsToList (k: v: "wfLoadSkin('${k}');") cfg.skins)}
 
@@ -244,7 +248,6 @@ let
   withTrailingSlash = str: if lib.hasSuffix "/" str then str else "${str}/";
 in
 {
-  # interface
   options = {
     services.mediawiki = {
 
@@ -337,6 +340,13 @@ in
               config.services.httpd.adminAddr else "root@localhost"
         '';
         description = "Contact address for password reset.";
+      };
+
+      path = mkOption {
+        type = types.listOf types.package;
+        defaultText = lib.literalExpression "with pkgs; [ diffutils imagemagick ]";
+        example = lib.literalExpression "with pkgs; [ librsvg ]";
+        description = "Extra packages to add to the PATH of phpfpm-pool.";
       };
 
       skins = mkOption {
@@ -532,7 +542,6 @@ in
     )
   ];
 
-  # implementation
   config = mkIf cfg.enable {
 
     assertions = [
@@ -556,10 +565,16 @@ in
       }
     ];
 
-    services.mediawiki.skins = {
-      MonoBook = "${cfg.package}/share/mediawiki/skins/MonoBook";
-      Timeless = "${cfg.package}/share/mediawiki/skins/Timeless";
-      Vector = "${cfg.package}/share/mediawiki/skins/Vector";
+    services.mediawiki = {
+      path = with pkgs; [
+        diffutils
+        imagemagick
+      ];
+      skins = {
+        MonoBook = "${cfg.package}/share/mediawiki/skins/MonoBook";
+        Timeless = "${cfg.package}/share/mediawiki/skins/Timeless";
+        Vector = "${cfg.package}/share/mediawiki/skins/Vector";
+      };
     };
 
     services.mysql = mkIf (cfg.database.type == "mysql" && cfg.database.createLocally) {
