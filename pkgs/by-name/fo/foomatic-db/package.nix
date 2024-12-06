@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "foomatic-db";
-  version = "unstable-2024-08-13";
+  version = "0-unstable-2024-08-13";
 
   src = fetchFromGitHub {
     # there is also a daily snapshot at the `downloadPage`,
