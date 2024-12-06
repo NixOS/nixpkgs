@@ -27,6 +27,12 @@ let
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jvanbruegge ];
+    knownVulnerabilities = [
+      "CVE-2024-52307"
+      "CVE-2024-52287"
+      "CVE-2024-52289"
+      "Authentik 2024.6.x is end-of-life, consider using https://github.com/nix-community/authentik-nix for an up-to-date alternative"
+    ];
   };
 
   website = buildNpmPackage {
