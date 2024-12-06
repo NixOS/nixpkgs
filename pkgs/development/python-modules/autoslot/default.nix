@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "autoslot";
   version = "2024.12.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,13 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-wYjsBrjvSZFHDt0HLrnS9Xwk8EHVQupfPSkQnUFmMAk=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'requires = ["flit"]' 'requires = ["flit_core"]' \
-      --replace 'build-backend = "flit.buildapi"' 'build-backend = "flit_core.buildapi"'
-  '';
-
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
