@@ -220,6 +220,8 @@ let
 
         install -Dm644 etc/completion.bash $out/share/bash-completion/completions/crystal
         install -Dm644 etc/completion.zsh $out/share/zsh/site-functions/_crystal
+        # fish completion was introduced since 1.6.0
+        test -f etc/completion.fish && install -Dm644 etc/completion.fish $out/share/fish/vendor_completions.d/crystal.fish
 
         install -Dm644 man/crystal.1 $out/share/man/man1/crystal.1
 
