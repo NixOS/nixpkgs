@@ -5107,8 +5107,6 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.libs) simd;
   };
 
-  rosegarden = libsForQt5.callPackage ../applications/audio/rosegarden { };
-
   rosenpass = callPackage ../tools/networking/rosenpass  { };
 
   rosenpass-tools = callPackage ../tools/networking/rosenpass/tools.nix  { };

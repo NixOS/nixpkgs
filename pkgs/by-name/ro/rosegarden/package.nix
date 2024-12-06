@@ -6,8 +6,7 @@
   makedepend,
   perl,
   pkg-config,
-  qttools,
-  wrapQtAppsHook,
+  qt5,
   alsa-lib,
   dssi,
   fftwSinglePrec,
@@ -28,7 +27,6 @@
   lirc,
   lrdf,
   libogg,
-  qtbase,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,8 +47,8 @@ stdenv.mkDerivation rec {
     makedepend
     perl
     pkg-config
-    qttools
-    wrapQtAppsHook
+    qt5.qttools
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -74,7 +72,7 @@ stdenv.mkDerivation rec {
     lv2
     lirc
     lrdf
-    qtbase
+    qt5.qtbase
   ];
 
   cmakeFlags = [
