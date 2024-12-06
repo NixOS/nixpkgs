@@ -7,7 +7,6 @@
   fetchFromGitHub,
   psycopg2,
   python,
-  pythonOlder,
   pytz,
   setuptools-scm,
   tablib,
@@ -15,22 +14,19 @@
 
 buildPythonPackage rec {
   pname = "django-import-export";
-  version = "4.1.1";
+  version = "4.3.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "django-import-export";
     repo = "django-import-export";
     rev = "refs/tags/${version}";
-    hash = "sha256-kD/9cpFqjipP3onMHCfimu0ffzGQAoEspjc4IfyuZak=";
+    hash = "sha256-1vb8a0ntp5ikWrJ3aI4KsGlraXRoFa7o+sP2sJpFbVc=";
   };
 
   pythonRelaxDeps = [ "tablib" ];
 
   build-system = [ setuptools-scm ];
-
 
   dependencies = [
     diff-match-patch
