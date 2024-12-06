@@ -112,7 +112,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${version}";
     maintainers = with lib.maintainers; [
       chuangzhu
-      infinitivewitch
     ];
   };
 }
