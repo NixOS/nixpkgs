@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
       else if stdenv.hostPlatform.isAarch64 then
         "arm64"
       else
-        abort "unsupported system: ${stdenv.system}"
+        throw "unsupported system: ${stdenv.system}"
     }"
   ];
 
