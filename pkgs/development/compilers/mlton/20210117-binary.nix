@@ -4,6 +4,7 @@
   fetchpatch,
   fetchurl,
   patchelf,
+  bash,
   gmp,
 }:
 let
@@ -41,8 +42,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ gmp ];
+  buildInputs = [
+    bash
+    gmp
+  ];
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux patchelf;
+  strictDeps = true;
 
   buildPhase = ''
     make update \
