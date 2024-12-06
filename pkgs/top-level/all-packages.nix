@@ -5393,9 +5393,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins {
-    pkgs = pkgs.__splicedPackages;
-  });
+  tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins { });
 
   tokei = callPackage ../development/tools/misc/tokei {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -5756,7 +5754,7 @@ with pkgs;
 
   yarn-berry = callPackage ../development/tools/yarn-berry { };
 
-  yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea/yarn2nix { pkgs = pkgs.__splicedPackages; };
+  yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea/yarn2nix { };
 
   inherit (yarn2nix-moretea)
     yarn2nix
@@ -6463,7 +6461,6 @@ with pkgs;
 
   idrisPackages = dontRecurseIntoAttrs (callPackage ../development/idris-modules {
     idris-no-deps = haskellPackages.idris;
-    pkgs = pkgs.__splicedPackages;
   });
 
   idris = idrisPackages.with-packages [ idrisPackages.base ] ;
@@ -16947,8 +16944,7 @@ with pkgs;
   openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
 
   openraPackages_2019 = import ../games/openra_2019 {
-    inherit lib;
-    pkgs = pkgs.__splicedPackages;
+    inherit lib pkgs;
   };
 
   openra_2019 = openraPackages_2019.engines.release;

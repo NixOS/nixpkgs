@@ -1,8 +1,5 @@
-{ __splicedPackages, lib }:
+{ pkgs, lib }:
 
-let
-  pkgs = __splicedPackages;
-in
 rec {
 
   /* Similar to callPackageWith/callPackage, but without makeOverridable
