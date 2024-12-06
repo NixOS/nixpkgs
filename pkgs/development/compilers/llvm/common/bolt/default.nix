@@ -8,6 +8,7 @@
   cmake,
   libxml2,
   libllvm,
+  ninja,
   libclang,
   version,
   python3,
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"
       cp -r ${monorepoSrc}/third-party "$out"
 
-      # tablegen stuff, probably not the best way but it works...
+      # BOLT re-runs tablegen against LLVM sources, so needs them available.
       cp -r ${monorepoSrc}/llvm/ "$out"
       chmod -R +w $out/llvm
     ''
@@ -42,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    ninja
     python3
   ];
 
   buildInputs = [
     libllvm
-    libclang
     libxml2
   ];
 
