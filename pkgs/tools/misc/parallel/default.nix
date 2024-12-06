@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  strictDeps = true;
+  nativeBuildInputs = [ makeWrapper perl ];
   buildInputs = [ perl procps ];
 
   postPatch = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
