@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://git.code.sf.net/p/flightgear/flightgear";
     rev = "3168828949d6b42959ccee6c202b8895493edb2b";
-    sha256 = "sha256-QiIMkrzaB/ljVf6c+RJNFWKLZa84cIjYPO5nxEFDqjg=";
+    hash = "sha256-QiIMkrzaB/ljVf6c+RJNFWKLZa84cIjYPO5nxEFDqjg=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "Qt-based remote canvas application for FlightGear";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nayala ];
+    maintainers = [ ];
     mainProgram = "fgqcanvas";
   };
 }

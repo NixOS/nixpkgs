@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/siduck76/st";
     description = "Fork of st with many add-ons";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

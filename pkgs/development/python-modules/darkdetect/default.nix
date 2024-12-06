@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "darkdetect" ];
 
-  postPatch = lib.optionalString (stdenv.isLinux) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isLinux) ''
     substituteInPlace darkdetect/_linux_detect.py \
       --replace "'gsettings'" "'${glib.bin}/bin/gsettings'"
   '';
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Detect OS Dark Mode from Python";
     homepage = "https://github.com/albertosottile/darkdetect";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Library to apply JSON Patches according to RFC 6902";
     homepage = "https://github.com/stefankoegl/python-json-patch";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -3,12 +3,12 @@
 , python3
 , fetchFromGitHub
 , kdePackages
-, gnome
+, gnome-themes-extra
 , qt6
 , makeWrapper
-, x11Support ? stdenv.isLinux
+, x11Support ? stdenv.hostPlatform.isLinux
 # pypinput is marked as broken for darwin
-, pynputSupport ? stdenv.isLinux
+, pynputSupport ? stdenv.hostPlatform.isLinux
 # Experimental Drag & Drop support requires x11 & pyinput suport
 , hasDndSupport ? x11Support && pynputSupport
 , enableDragAndDrop ? false
@@ -19,14 +19,14 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tuifimanager";
-  version = "4.0.6";
+  version = "5.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "GiorgosXou";
     repo = "TUIFIManager";
     rev = "v.${version}";
-    hash = "sha256-pppPlpPA1UYjUCKvGCjUo9jFNyOOkk6aF7/v5sXIptI=";
+    hash = "sha256-2yYD1YFGoN0uj3HzcYxEs3zbwfUIDLLzvfTcZILx5h4=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
   postFixup = let
     # fix missing 'adwaita' warning missing with ncurses tui
     # see: https://github.com/NixOS/nixpkgs/issues/60918
-    theme = gnome.gnome-themes-extra;
+    theme = gnome-themes-extra;
   in
     lib.optionalString enableDragAndDrop ''
       wrapProgram $out/bin/tuifi \
@@ -62,7 +62,7 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "TUIFIManager" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform terminal-based termux-oriented file manager";
     longDescription = ''
       A cross-platform terminal-based termux-oriented file manager (and component),
@@ -70,8 +70,8 @@ python3.pkgs.buildPythonApplication rec {
       attempt to get more attention to the Uni-Curses project.
     '';
     homepage = "https://github.com/GiorgosXou/TUIFIManager";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ michaelBelsanti sigmanificient ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ michaelBelsanti sigmanificient ];
     mainProgram = "tuifi";
   };
 }

@@ -37,7 +37,7 @@ let
 
   bits = builtins.toString stdenv.hostPlatform.parsed.cpu.bits;
   osname =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       "osx"
     else
       stdenv.hostPlatform.parsed.kernel.name;
@@ -82,6 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
       extraPrefix = "dmd/";
       hash = "sha256-N21mAPfaTo+zGCip4njejasraV5IsWVqlGR5eOdFZZE=";
     })
+  ] ++ lib.optionals (lib.versionOlder version "2.110.0") [
+    (fetchpatch {
+      url = "https://github.com/dlang/dmd/commit/fdd25893e0ac04893d6eba8652903d499b7b0dfc.patch";
+      stripLen = 1;
+      extraPrefix = "dmd/";
+      hash = "sha256-Uccb8rBPBLAEPWbOYWgdR5xN3wJoIkKKhLGu58IK1sM=";
+    })
   ];
 
   postPatch = ''
@@ -106,9 +113,9 @@ stdenv.mkDerivation (finalAttrs: {
     rm dmd/compiler/test/dshell/test6952.d
   '' + lib.optionalString (lib.versionAtLeast version "2.092.2") ''
     substituteInPlace dmd/compiler/test/dshell/test6952.d --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace phobos/std/socket.d --replace-fail "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace phobos/std/socket.d --replace-fail "foreach (name; names)" "names = []; foreach (name; names)"
   '';
 
@@ -123,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     tzdata
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Foundation
   ];
 
@@ -208,14 +215,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   disallowedReferences = [ dmdBootstrap ];
 
+  passthru = {
+    inherit dmdBootstrap;
+  };
+
   meta = with lib; {
     description = "Official reference compiler for the D language";
     homepage = "https://dlang.org/";
+    changelog = "https://dlang.org/changelog/${finalAttrs.version}.html";
     # Everything is now Boost licensed, even the backend.
     # https://github.com/dlang/dmd/pull/6680
     license = licenses.boost;
     mainProgram = "dmd";
     maintainers = with maintainers; [ lionello dukc jtbx ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+    # ld: section __DATA/__thread_bss has type zero-fill but non-zero file offset file '/private/tmp/nix-build-dmd-2.109.1.drv-0/.rdmd-301/rdmd-build.d-A1CF043A7D87C5E88A58F3C0EF5A0DF7/objs/build.o' for architecture x86_64
+    # clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

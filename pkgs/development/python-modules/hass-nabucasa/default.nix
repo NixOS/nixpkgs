@@ -14,30 +14,28 @@
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   snitun,
   syrupy,
+  webrtc-models,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.81.1";
+  version = "0.83.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = "hass-nabucasa";
     rev = "refs/tags/${version}";
-    hash = "sha256-/sY/JijBCcGcbMjoX0yuhFIWvU+TFVN8sRxBx+CDVVs=";
+    hash = "sha256-1l0nLSY+r5ujYo3pHzicqnmZ49OH8elVLGpK3lqCaTo=";
   };
 
   pythonRelaxDeps = [ "acme" ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [ setuptools ];
 
@@ -51,6 +49,7 @@ buildPythonPackage rec {
     pycognito
     pyjwt
     snitun
+    webrtc-models
   ];
 
   nativeCheckInputs = [

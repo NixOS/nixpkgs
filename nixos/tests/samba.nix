@@ -1,46 +1,47 @@
-import ./make-test-python.nix ({ pkgs, ... }:
-
-{
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "samba";
 
-  meta.maintainers = [ ];
+  meta.maintainers = [ lib.maintainers.anthonyroussel ];
 
-  nodes =
-    { client =
-        { pkgs, ... }:
-        { virtualisation.fileSystems =
-            { "/public" = {
-                fsType = "cifs";
-                device = "//server/public";
-                options = [ "guest" ];
-              };
-            };
+  nodes = {
+    client =
+      { ... }:
+      {
+        virtualisation.fileSystems = {
+          "/public" = {
+            fsType = "cifs";
+            device = "//server/public";
+            options = [ "guest" ];
+          };
         };
+      };
 
-      server =
-        { ... }:
-        { services.samba.enable = true;
-          services.samba.openFirewall = true;
-          services.samba.shares.public =
-            { path = "/public";
+    server =
+      { ... }:
+      {
+        services.samba = {
+          enable = true;
+          openFirewall = true;
+          settings = {
+            "public" = {
+              "path" = "/public";
               "read only" = true;
-              browseable = "yes";
+              "browseable" = "yes";
               "guest ok" = "yes";
-              comment = "Public samba share.";
+              "comment" = "Public samba share.";
             };
+          };
         };
-    };
+      };
+  };
 
-  # client# [    4.542997] mount[777]: sh: systemd-ask-password: command not found
+  testScript = ''
+    server.start()
+    server.wait_for_unit("samba.target")
+    server.succeed("mkdir -p /public; echo bar > /public/foo")
 
-  testScript =
-    ''
-      server.start()
-      server.wait_for_unit("samba.target")
-      server.succeed("mkdir -p /public; echo bar > /public/foo")
-
-      client.start()
-      client.wait_for_unit("remote-fs.target")
-      client.succeed("[[ $(cat /public/foo) = bar ]]")
-    '';
+    client.start()
+    client.wait_for_unit("remote-fs.target")
+    client.succeed("[[ $(cat /public/foo) = bar ]]")
+  '';
 })

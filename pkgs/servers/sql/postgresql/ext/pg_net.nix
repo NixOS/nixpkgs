@@ -1,27 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, curl, postgresql }:
+{ lib, stdenv, fetchFromGitHub, curl, postgresql, buildPostgresqlExtension }:
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "pg_net";
-  version = "0.8.0";
+  version = "0.13.0";
 
-  buildInputs = [ curl postgresql ];
+  buildInputs = [ curl ];
 
   src = fetchFromGitHub {
     owner  = "supabase";
     repo   = pname;
     rev    = "refs/tags/v${version}";
-    hash   = "sha256-ZPsRPWV1G3lMM2mT+H139Wvgoy8QnmeUbzEnGeDJmZA=";
+    hash   = "sha256-FRaTZPCJQPYAFmsJg22hYJJ0+gH1tMdDQoCQgiqEnaA=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
-
-  installPhase = ''
-    mkdir -p $out/{lib,share/postgresql/extension}
-
-    cp *${postgresql.dlSuffix} $out/lib
-    cp sql/*.sql $out/share/postgresql/extension
-    cp *.control $out/share/postgresql/extension
-  '';
 
   meta = with lib; {
     description = "Async networking for Postgres";

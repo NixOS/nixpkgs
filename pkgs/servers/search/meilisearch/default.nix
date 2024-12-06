@@ -3,14 +3,13 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  Security,
-  SystemConfiguration,
+  apple-sdk_11,
   nixosTests,
   nix-update-script,
 }:
 
 let
-  version = "1.8.3";
+  version = "1.11.3";
 in
 rustPlatform.buildRustPackage {
   pname = "meilisearch";
@@ -18,9 +17,9 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "meilisearch";
-    repo = "MeiliSearch";
+    repo = "meiliSearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-R074dn9kWxHf5loq/K4aLWvrJwpt7YAigNU0YHc0mRg=";
+    hash = "sha256-CVofke9tOGeDEhRHEt6EYwT52eeAYNqlEd9zPpmXQ2U=";
   };
 
   cargoBuildFlags = [ "--package=meilisearch" ];
@@ -28,7 +27,7 @@ rustPlatform.buildRustPackage {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "actix-web-static-files-3.0.5" = "sha256-2BN0RzLhdykvN3ceRLkaKwSZtel2DBqZ+uz4Qut+nII=";
+      "rhai-1.20.0" = "sha256-lirpciSMM+OJh6Z4Ok3nZyJSdP8SNyUG15T9QqPNjII=";
       "hf-hub-0.3.2" = "sha256-tsn76b+/HRvPnZ7cWd8SBcEdnMPtjUEIRJipOJUbz54=";
       "tokenizers-0.15.2" = "sha256-lWvCu2hDJFzK6IUBJ4yeL4eZkOA08LHEMfiKXVvkog8=";
     };
@@ -39,10 +38,7 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    Security
-    SystemConfiguration
-  ];
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   passthru = {
     updateScript = nix-update-script { };
@@ -60,7 +56,10 @@ rustPlatform.buildRustPackage {
     homepage = "https://docs.meilisearch.com/";
     changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [
+      happysalada
+      bbenno
+    ];
     platforms = [
       "aarch64-linux"
       "aarch64-darwin"

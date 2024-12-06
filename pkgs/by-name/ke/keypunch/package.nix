@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  nix-update-script,
   cargo,
   rustc,
   meson,
@@ -18,19 +19,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keypunch";
-  version = "1.0";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "bragefuglseth";
     repo = "keypunch";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-S4RckHwrVVQrxy9QngTisNM4+cMM+1dXucwEDnM98Rg=";
+    hash = "sha256-Xd4fzreComOUnoJ6l2ncMWn6DlUeRCM+YwApilhFd/8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    inherit (finalAttrs) src;
-    hash = "sha256-YzENAGy7zEu1dyuhme+x+gJQlE74Vw0JZvRso0vNQXs=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-agFOxSZBi8f0zEPd+ha5c3IAbSH2jHfUx2iNeHFs9jI=";
   };
 
   strictDeps = true;
@@ -54,12 +54,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libadwaita ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Practice your typing skills";
     homepage = "https://github.com/bragefuglseth/keypunch";
     license = lib.licenses.gpl3Plus;
     mainProgram = "keypunch";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      getchoo
+    ];
     platforms = lib.platforms.linux;
   };
 })

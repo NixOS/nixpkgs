@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, ... }:
 {
   config = {
     services.foos."".bar = "baz";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, dpkg, jdk11_headless, makeWrapper, writeText, xorg }:
+{ lib, stdenv, fetchurl, dpkg, jdk11_headless, makeWrapper, writeText, xorg, nixosTests }:
 
 let
   xorgModulePaths = writeText "module-paths" ''
@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = ./update.sh;
+
+  passthru.tests = { inherit (nixosTests) jibri; };
 
   meta = with lib; {
     description = "JItsi BRoadcasting Infrastructure";

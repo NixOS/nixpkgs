@@ -6,11 +6,11 @@
 
 buildOctavePackage rec {
   pname = "netcdf";
-  version = "1.0.16";
+  version = "1.0.17";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1Lr+6xLRXxSeUhM9+WdCUPFRZSWdxtAQlxpiv4CHJrs=";
+    sha256 = "sha256-uuFD8VNeWbyHFyWMDMzWDd2n+dG9EFmc/JnZU2tx+Uk=";
   };
 
   buildInputs = [

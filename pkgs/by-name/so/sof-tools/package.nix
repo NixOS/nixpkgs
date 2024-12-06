@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sof-tools";
-  version = "2.9";
+  version = "2.10";
 
   src = fetchFromGitHub {
     owner = "thesofproject";
     repo = "sof";
     rev = "v${version}";
-    hash = "sha256-AOBJtC40Lu1gWM8w/Vs/nc540bisg58m+qH16F1e6jY=";
+    hash = "sha256-VmP0z3q1P8LqQ+ELZGkI7lEXGiMYdAPvS8Lbwv6dUyk=";
   };
 
   nativeBuildInputs = [ cmake ];

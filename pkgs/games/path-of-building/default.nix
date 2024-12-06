@@ -17,13 +17,13 @@
 let
   data = stdenv.mkDerivation (finalAttrs: {
     pname = "path-of-building-data";
-    version = "2.42.0";
+    version = "2.49.2";
 
     src = fetchFromGitHub {
       owner = "PathOfBuildingCommunity";
       repo = "PathOfBuilding";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-OxAyB+tMszQktGvxlGL/kc+Wt0iInFYY0qHNjK6EnSg=";
+      hash = "sha256-rxvReL2ofdaQdKmIg2lMDT0thN1IkeJMf1B7+HWlQaI=";
     };
 
     nativeBuildInputs = [ unzip ];
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
     qttools
     wrapQtAppsHook
     icoutils
-  ] ++ lib.optional stdenv.isLinux copyDesktopItems;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     qtbase
@@ -126,6 +126,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.k900 ];
     mainProgram = "pobfrontend";
-    broken = stdenv.isDarwin; # doesn't find uic6 for some reason
+    broken = stdenv.hostPlatform.isDarwin; # doesn't find uic6 for some reason
   };
 }

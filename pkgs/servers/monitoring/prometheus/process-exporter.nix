@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "process-exporter";
-  version = "0.8.2";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "ncabatoff";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-irI1vEoLKBn7odWpFfpSwLtkStEUyxRtD/fi3CV5oNM=";
+    sha256 = "sha256-l767shpUFTLJV3yd9MhG5h7QTIKonwCPDW4PYQ2lTcg=";
   };
 
   vendorHash = "sha256-Mmcc7Tp71OH5BQgMYMRhokqNDOqCudaUaCNzjOGoQ68=";

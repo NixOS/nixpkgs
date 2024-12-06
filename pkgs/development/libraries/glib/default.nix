@@ -2,7 +2,6 @@
 , lib
 , stdenv
 , fetchurl
-, fetchpatch
 , gettext
 , meson
 , ninja
@@ -17,12 +16,14 @@
 , buildPackages
 
 # this is just for tests (not in the closure of any regular package)
-, coreutils, dbus, tzdata
+, dbus, tzdata
 , desktop-file-utils, shared-mime-info
 , darwin
 , makeHardcodeGsettingsPatch
 , testers
 , gobject-introspection
+, libsystemtap
+, libsysprof-capture
 , mesonEmulatorHook
 , withIntrospection ?
   stdenv.hostPlatform.emulatorAvailable buildPackages &&
@@ -30,22 +31,9 @@
   stdenv.hostPlatform.isLittleEndian == stdenv.buildPlatform.isLittleEndian
 }:
 
-assert stdenv.isLinux -> util-linuxMinimal != null;
+assert stdenv.hostPlatform.isLinux -> util-linuxMinimal != null;
 
 let
-  # Some packages don't get "Cflags" from pkg-config correctly
-  # and then fail to build when directly including like <glib/...>.
-  # This is intended to be run in postInstall of any package
-  # which has $out/include/ containing just some disjunct directories.
-  flattenInclude = ''
-    for dir in "''${!outputInclude}"/include/*; do
-      cp -r "$dir"/* "''${!outputInclude}/include/"
-      rm -r "$dir"
-      ln -s . "$dir"
-    done
-    ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
-  '';
-
   gobject-introspection' = buildPackages.gobject-introspection.override {
     propagateFullGlib = false;
     # Avoid introducing cairo, which enables gobjectSupport by default.
@@ -57,32 +45,29 @@ let
                   else if (stdenv.hostPlatform.extensions.library == ".a") then "2.0.a"
                   else if (stdenv.hostPlatform.extensions.library == ".dll") then "2.0-0.dll"
                   else "2.0-0.lib";
+
+  systemtap' = buildPackages.linuxPackages.systemtap.override { withStap = false; };
+  withDtrace =
+    lib.meta.availableOn stdenv.buildPlatform systemtap' &&
+    # dtrace support requires sys/sdt.h header
+    lib.meta.availableOn stdenv.hostPlatform libsystemtap;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.80.2";
+  version = "2.82.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    hash = "sha256-uc+296W9WzEjj9XVbfImst2l6jdhFHW/ifag+UAP6L0=";
+    hash = "sha256-R4Y0RAv1LuTsRCjVWHhzmMC+awQ8UhvrMIM0s9tEiaY=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     ./darwin-compilation.patch
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
   ] ++ [
-    # Fix double-free & segfault issues on menu and dbus connection action group export failures
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4073
-    # Remove when version > 2.80.2
-    (fetchpatch {
-      name = "GLib-Fix-memory-problems-on-gmenuexporter-and-gactiongroupexporter-error-paths.patch";
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/b9490a499a004618c883f180b1081a166ff1a86b.patch";
-      hash = "sha256-c6uZ9NEhg26/2RdgjQ4s5ErCDm5HH6T/tfJXTwh/H6o=";
-    })
-
     # This patch lets GLib's GDesktopAppInfo API watch and notice changes
     # to the Nix user and system profiles.  That way, the list of available
     # applications shown by the desktop environment is immediately updated
@@ -103,9 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     # GLib contains many binaries used for different purposes;
     # we will install them to different outputs:
-    # 1. Tools for desktop environment ($bin)
+    # 1. Tools for desktop environment and introspection ($bin)
     #    * gapplication (non-darwin)
     #    * gdbus
+    #    * gi-compile-repository
+    #    * gi-decompile-typelib
+    #    * gi-inspect-typelib
     #    * gio
     #    * gio-launch-desktop (symlink to $out)
     #    * gsettings
@@ -124,6 +112,12 @@ stdenv.mkDerivation (finalAttrs: {
     # 3. Tools for desktop environment that cannot go to $bin due to $out depending on them ($out)
     #    * gio-launch-desktop
     ./split-dev-programs.patch
+
+    # Tell Meson to install gdb scripts next to the lib
+    # GDB only looks there and in ${gdb}/share/gdb/auto-load,
+    # and by default meson installs in to $out/share/gdb/auto-load
+    # which does not help
+    ./gdb_script.patch
   ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
@@ -132,15 +126,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     finalAttrs.setupHook
+  ] ++ lib.optionals (!stdenv.hostPlatform.isFreeBSD) [
+    libsysprof-capture
+  ] ++ [
     pcre2
   ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals withDtrace [
+    libsystemtap
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libselinux
     util-linuxMinimal # for libmount
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
   ]);
 
@@ -166,12 +165,17 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection'
   ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
+  ] ++ lib.optionals withDtrace [
+    systemtap' # for dtrace
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
 
   mesonFlags = [
+    "-Dglib_debug=disabled" # https://gitlab.gnome.org/GNOME/glib/-/issues/3421#note_2206315
     "-Ddocumentation=true" # gvariant specification can be built without gi-docgen
+    (lib.mesonEnable "dtrace" withDtrace)
+    (lib.mesonEnable "systemtap" withDtrace) # requires dtrace option to be enabled
     "-Dnls=enabled"
     "-Ddevbindir=${placeholder "dev"}/bin"
     (lib.mesonEnable "introspection" withIntrospection)
@@ -180,9 +184,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dtests=${lib.boolToString (!stdenv.hostPlatform.isStatic)}"
   ] ++ lib.optionals (!lib.meta.availableOn stdenv.hostPlatform elfutils) [
     "-Dlibelf=disabled"
-  ] ++ lib.optionals stdenv.isFreeBSD [
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     "-Db_lundef=false"
     "-Dxattr=false"
+    "-Dsysprof=disabled"  # sysprof-capture does not build on FreeBSD
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -221,6 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     moveToOutput "share/glib-2.0" "$dev"
+    moveToOutput "share/glib-2.0/gdb" "$out"
     substituteInPlace "$dev/bin/gdbus-codegen" --replace "$out" "$dev"
     sed -i "$dev/bin/glib-gettextize" -e "s|^gettext_dir=.*|gettext_dir=$dev/share/glib-2.0/gettext|"
 
@@ -285,7 +291,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm $out/lib/libglib-${librarySuffix}
   '';
 
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   passthru = rec {
     gioModuleDir = "lib/gio/modules";
@@ -300,7 +306,6 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
 
-    inherit flattenInclude;
     updateScript = gnome.updateScript {
       packageName = "glib";
       versionPolicy = "odd-unstable";

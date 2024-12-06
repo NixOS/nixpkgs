@@ -3,13 +3,14 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  setuptools,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "pyosf";
   version = "1.0.5";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -22,12 +23,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner', " ""
+      --replace-fail "'pytest-runner', " ""
   '';
 
   preBuild = "export HOME=$TMP";
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   # Tests require network access
   doCheck = false;

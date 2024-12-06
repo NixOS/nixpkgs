@@ -3,14 +3,12 @@
 let
 
   inherit (builtins) toFile;
-  inherit (lib) concatMapStringsSep concatStringsSep mapAttrsToList
+  inherit (lib) concatMapStrings concatStringsSep mapAttrsToList
                 mkIf mkEnableOption mkOption types literalExpression optionalString;
 
   cfg = config.services.strongswan;
 
-  ipsecSecrets = secrets: toFile "ipsec.secrets" (
-    concatMapStringsSep "\n" (f: "include ${f}") secrets
-  );
+  ipsecSecrets = secrets: concatMapStrings (f: "include ${f}\n") secrets;
 
   ipsecConf = {setup, connections, ca}:
     let
@@ -138,16 +136,12 @@ in
   };
 
 
-  config = with cfg;
-  let
-    secretsFile = ipsecSecrets cfg.secrets;
-  in
-  mkIf enable
+  config = with cfg; mkIf enable
     {
 
     # here we should use the default strongswan ipsec.secrets and
     # append to it (default one is empty so not a pb for now)
-    environment.etc."ipsec.secrets".source = secretsFile;
+    environment.etc."ipsec.secrets".text = ipsecSecrets cfg.secrets;
 
     systemd.services.strongswan = {
       description = "strongSwan IPSec Service";
@@ -156,7 +150,10 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       environment = {
-        STRONGSWAN_CONF = strongswanConf { inherit setup connections ca secretsFile managePlugins enabledPlugins; };
+        STRONGSWAN_CONF = strongswanConf {
+          inherit setup connections ca managePlugins enabledPlugins;
+          secretsFile = "/etc/ipsec.secrets";
+        };
       };
       serviceConfig = {
         ExecStart  = "${pkgs.strongswan}/sbin/ipsec start --nofork";

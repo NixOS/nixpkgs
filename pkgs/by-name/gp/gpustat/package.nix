@@ -22,10 +22,10 @@ rustPlatform.buildRustPackage rec {
     owner = "arduano";
     repo = "gpustat";
     rev = "v${version}";
-    sha256 = "sha256-M9P/qfw/tp9ogkNOE3b2fD2rGFnii1/VwmqJHqXb7Mg=";
+    hash = "sha256-M9P/qfw/tp9ogkNOE3b2fD2rGFnii1/VwmqJHqXb7Mg=";
   };
 
-  cargoSha256 = "sha256-po/pEMZEtySZnz7l2FI7Wqbmp2CiWBijchKGkqlIMPU=";
+  cargoHash = "sha256-po/pEMZEtySZnz7l2FI7Wqbmp2CiWBijchKGkqlIMPU=";
 
   nativeBuildInputs = [
     cmake

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xst";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "gnotclub";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-V7WzletBFOOXBXClDJZIGT2comnC5WDApO1ZCoPKThY=";
+    sha256 = "sha256-2pXR9U2tTBd0lyeQ3BjnXW+Ne9aUQg/+rnpmYPPG06A=";
   };
 
   nativeBuildInputs = [

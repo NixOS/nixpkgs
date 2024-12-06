@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, extra-cmake-modules
+, pkg-config
 , ninja
 , wayland
 , wayland-scanner
@@ -20,22 +20,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-vkcapture";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "nowrep";
-    repo = finalAttrs.pname;
+    repo = "obs-vkcapture";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hYPQ1N4k4eb+bvGWZqaQJ/C8C5Lh8ooZ03raGF5ORgE=";
+    hash = "sha256-RIDsT6eL6bUfqPiyPlecnZHu5OorcJb3Xal8pjdOpAA=";
   };
 
-  cmakeFlags = lib.optionals stdenv.isi686 [
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isi686 [
     # We don't want to build the plugin for 32bit. The library integrates with
     # the 64bit plugin but it's necessary to be loaded into 32bit games.
     "-DBUILD_PLUGIN=OFF"
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ninja wayland-scanner ];
+  nativeBuildInputs = [ cmake ninja pkg-config wayland-scanner ];
   buildInputs = [
     libGL
     libffi
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-loader
     wayland
   ]
-  ++ lib.optionals (!stdenv.isi686) [
+  ++ lib.optionals (!stdenv.hostPlatform.isi686) [
     obs-studio
   ];
 

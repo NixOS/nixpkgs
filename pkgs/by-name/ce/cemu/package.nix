@@ -1,7 +1,7 @@
 {
   lib,
   SDL2,
-  addOpenGLRunpath,
+  addDriverRunpath,
   boost,
   cmake,
   cubeb,
@@ -29,6 +29,7 @@
   vulkan-headers,
   vulkan-loader,
   wayland,
+  wayland-scanner,
   wrapGAppsHook3,
   wxGTK32,
   zarchive,
@@ -43,18 +44,19 @@ let
       owner = "ocornut";
       repo = "imgui";
       rev = "v${version}";
-      sha256 = "sha256-gf47uLeNiXQic43buB5ZnMqiotlUfIyAsP+3H7yJuFg=";
+      hash = "sha256-gf47uLeNiXQic43buB5ZnMqiotlUfIyAsP+3H7yJuFg=";
     };
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "cemu";
-  version = "2.0-86";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AS5Qo4J0U1MeTYWl4jiJMi879bhBuioU1BikxGKtUrE=";
+    hash = "sha256-JBd5ntU1fFDvQpNbfP63AQANzuQTdfd4dfB29/BN5LM=";
   };
 
   patches = [
@@ -62,17 +64,19 @@ in stdenv.mkDerivation (finalAttrs: {
     # > The following imported targets are referenced, but are missing:
     # > SPIRV-Tools-opt
     ./0000-spirv-tools-opt-cmakelists.patch
+    ./0001-glslang-cmake-target.patch
   ];
 
   nativeBuildInputs = [
     SDL2
-    addOpenGLRunpath
+    addDriverRunpath
     wrapGAppsHook3
     cmake
-    glslang
     nasm
     ninja
     pkg-config
+    wxGTK32
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -82,6 +86,7 @@ in stdenv.mkDerivation (finalAttrs: {
     curl
     fmt_9
     glm
+    glslang
     gtk3
     hidapi
     imgui'
@@ -110,15 +115,20 @@ in stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  preConfigure = let
-    tag = lib.last (lib.splitString "-" finalAttrs.version);
-  in ''
-    rm -rf dependencies/imgui
-    # cemu expects imgui source code, not just header files
-    ln -s ${imgui'.src} dependencies/imgui
-    substituteInPlace src/Common/version.h --replace-fail " (experimental)" "-${tag} (experimental)"
-    substituteInPlace dependencies/gamemode/lib/gamemode_client.h --replace-fail "libgamemode.so.0" "${gamemode.lib}/lib/libgamemode.so.0"
-  '';
+  preConfigure =
+    let
+      tag = lib.splitString "." (lib.last (lib.splitString "-" finalAttrs.version));
+      majorv = builtins.elemAt tag 0;
+      minorv = builtins.elemAt tag 1;
+    in
+    ''
+      rm -rf dependencies/imgui
+      # cemu expects imgui source code, not just header files
+      ln -s ${imgui'.src} dependencies/imgui
+      substituteInPlace CMakeLists.txt --replace-fail "EMULATOR_VERSION_MAJOR \"0\"" "EMULATOR_VERSION_MAJOR \"${majorv}\""
+      substituteInPlace CMakeLists.txt --replace-fail "EMULATOR_VERSION_MINOR \"0\"" "EMULATOR_VERSION_MINOR \"${minorv}\""
+      substituteInPlace dependencies/gamemode/lib/gamemode_client.h --replace-fail "libgamemode.so.0" "${gamemode.lib}/lib/libgamemode.so.0"
+    '';
 
   installPhase = ''
     runHook preInstall
@@ -136,13 +146,15 @@ in stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  preFixup = let
-    libs = [ vulkan-loader ] ++ cubeb.passthru.backendLibs;
-  in ''
-    gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}"
-    )
-  '';
+  preFixup =
+    let
+      libs = [ vulkan-loader ] ++ cubeb.passthru.backendLibs;
+    in
+    ''
+      gappsWrapperArgs+=(
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath libs}"
+      )
+    '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -158,7 +170,11 @@ in stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cemu.info";
     license = lib.licenses.mpl20;
     mainProgram = "cemu";
-    maintainers = with lib.maintainers; [ zhaofengli baduhai AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      zhaofengli
+      baduhai
+      AndersonTorres
+    ];
     platforms = [ "x86_64-linux" ];
   };
 })

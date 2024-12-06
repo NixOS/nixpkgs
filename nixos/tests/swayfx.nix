@@ -3,7 +3,7 @@ import ./make-test-python.nix (
   {
     name = "swayfx";
     meta = {
-      maintainers = with lib.maintainers; [ eclairevoyant ];
+      maintainers = with lib.maintainers; [ ];
     };
 
     # testScriptWithTypes:49: error: Cannot call function of unknown type

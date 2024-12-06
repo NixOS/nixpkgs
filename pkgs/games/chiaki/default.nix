@@ -44,10 +44,10 @@ mkDerivation rec {
     qtsvg
     protobuf
     SDL2
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libevdev
     udev
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     qtmacextras
   ];
 
@@ -59,7 +59,7 @@ mkDerivation rec {
     homepage = "https://git.sr.ht/~thestr4ng3r/chiaki";
     description = "Free and Open Source PlayStation Remote Play Client";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
     mainProgram = "chiaki";
   };

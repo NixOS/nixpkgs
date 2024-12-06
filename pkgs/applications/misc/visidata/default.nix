@@ -2,7 +2,7 @@
 , lib
 , buildPythonApplication
 , fetchFromGitHub
-# python requirements
+  # python requirements
 , beautifulsoup4
 , boto3
 , faker
@@ -22,6 +22,8 @@
 , pyarrow
 , pyshp
 , pypng
+, msgpack
+, brotli
 , python-dateutil
 , pyyaml
 , requests
@@ -39,19 +41,19 @@
 # other
 , git
 , withPcap ? true, dpkt, dnslib
-, withXclip ? stdenv.isLinux, xclip
+, withXclip ? stdenv.hostPlatform.isLinux, xclip
 , testers
 , visidata
 }:
 buildPythonApplication rec {
   pname = "visidata";
-  version = "3.0.2";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    hash = "sha256-gplrkrFTIP6TLvk1YazD5roDzsPvDtOXLlTOmTio52s=";
+    hash = "sha256-ICEYC9QjYrB+oTzakfjgyg4DigzDOtYnqHRTaqF7Gw0=";
   };
 
   propagatedBuildInputs = [
@@ -71,6 +73,9 @@ buildPythonApplication rec {
     #mapbox-vector-tile
     pypng
     #pyconll
+    msgpack
+    brotli
+    #fecfile
     fonttools
     #sas7bdat
     #xport
@@ -111,7 +116,7 @@ buildPythonApplication rec {
   ];
 
   # check phase uses the output bin, which is not possible when cross-compiling
-  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   checkPhase = ''
     runHook preCheck
@@ -124,6 +129,7 @@ buildPythonApplication rec {
     # tests to disable because we don't have a package to load such files
     rm -f tests/load-conllu.vdj         # no 'pyconll'
     rm -f tests/load-sav.vd             # no 'savReaderWriter'
+    rm -f tests/load-fec.vdj            # no 'fecfile'
 
     # tests use git to compare outputs to references
     git init -b "test-reference"

@@ -1,3 +1,10 @@
+let
+  # `ides.json` is handwritten and contains information that doesn't change across updates, like maintainers and other metadata
+  # `versions.json` contains everything generated/needed by the update script version numbers, build numbers and tarball hashes
+  ideInfo = builtins.fromJSON (builtins.readFile ./bin/ides.json);
+  versions = builtins.fromJSON (builtins.readFile ./bin/versions.json);
+in
+
 { lib
 , stdenv
 , callPackage
@@ -7,7 +14,7 @@
 , zlib
 , python3
 , lldb
-, dotnet-sdk_7
+, dotnet-sdk_8
 , maven
 , openssl
 , expat
@@ -24,25 +31,27 @@
 , xorg
 , libGL
 
+, libICE
+, libSM
+, libX11
+
 , vmopts ? null
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
 
-  # `ides.json` is handwritten and contains information that doesn't change across updates, like maintainers and other metadata
-  # `versions.json` contains everything generated/needed by the update script version numbers, build numbers and tarball hashes
-  ideInfo = lib.importJSON ./bin/ides.json;
-  versions = lib.importJSON ./bin/versions.json;
   products = versions.${system} or (throw "Unsupported system: ${system}");
 
-  package = if stdenv.isDarwin then ./bin/darwin.nix else ./bin/linux.nix;
+  package = if stdenv.hostPlatform.isDarwin then ./bin/darwin.nix else ./bin/linux.nix;
   mkJetBrainsProductCore = callPackage package { inherit vmopts; };
   mkMeta = meta: fromSource: {
     inherit (meta) homepage longDescription;
     description = meta.description + lib.optionalString meta.isOpenSource (if fromSource then " (built from source)" else " (patched binaries from jetbrains)");
     maintainers = map (x: lib.maintainers."${x}") meta.maintainers;
     license = if meta.isOpenSource then lib.licenses.asl20 else lib.licenses.unfree;
+    sourceProvenance = if fromSource then [ lib.sourceTypes.fromSource ] else
+      (if stdenv.hostPlatform.isDarwin then [ lib.sourceTypes.binaryNativeCode ] else [ lib.sourceTypes.binaryBytecode ]);
   };
 
   mkJetBrainsProduct =
@@ -80,7 +89,7 @@ let
     });
 
   buildPycharm = args:
-    (mkJetBrainsProduct args).overrideAttrs (finalAttrs: previousAttrs: lib.optionalAttrs stdenv.isLinux {
+    (mkJetBrainsProduct args).overrideAttrs (finalAttrs: previousAttrs: lib.optionalAttrs stdenv.hostPlatform.isLinux {
       buildInputs = with python3.pkgs; (previousAttrs.buildInputs or []) ++ [ python3 setuptools ];
       preInstall = ''
         echo "compiling cython debug speedups"
@@ -97,9 +106,11 @@ in
 rec {
   # Sorted alphabetically
 
+  aqua = mkJetBrainsProduct { pname = "aqua"; extraBuildInputs = [ stdenv.cc.cc lldb ]; };
+
   clion = (mkJetBrainsProduct {
     pname = "clion";
-    extraBuildInputs = lib.optionals (stdenv.isLinux) [
+    extraBuildInputs = lib.optionals (stdenv.hostPlatform.isLinux) [
       fontconfig
       python3
       stdenv.cc.cc
@@ -107,24 +118,24 @@ rec {
       libxcrypt-legacy
       lttng-ust_2_12
       musl
-    ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       expat
       libxml2
       xz
     ];
   }).overrideAttrs (attrs: {
-    postInstall = (attrs.postInstall or "") + lib.optionalString (stdenv.isLinux) ''
+    postInstall = (attrs.postInstall or "") + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       (
         cd $out/clion
 
         for dir in plugins/clion-radler/DotFiles/linux-*; do
           rm -rf $dir/dotnet
-          ln -s ${dotnet-sdk_7} $dir/dotnet
+          ln -s ${dotnet-sdk_8.unwrapped}/share/dotnet $dir/dotnet
         done
       )
     '';
 
-    postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
+    postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       (
         cd $out/clion
 
@@ -168,7 +179,7 @@ rec {
     extraBuildInputs = [ libgcc stdenv.cc.cc ];
   }).overrideAttrs
     (attrs: {
-      postFixup = (attrs.postFixup or "") + lib.optionalString stdenv.isLinux ''
+      postFixup = (attrs.postFixup or "") + lib.optionalString stdenv.hostPlatform.isLinux ''
         interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
         patchelf --set-interpreter $interp $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
         chmod +x $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
@@ -179,7 +190,7 @@ rec {
 
   idea-community-src = buildIdea { pname = "idea-community"; extraBuildInputs = [ stdenv.cc.cc ]; fromSource = true; };
 
-  idea-community = if stdenv.isDarwin || stdenv.isAarch64 then idea-community-bin else idea-community-src;
+  idea-community = if stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64 then idea-community-bin else idea-community-src;
 
   idea-ultimate = buildIdea { pname = "idea-ultimate"; extraBuildInputs = [ stdenv.cc.cc lldb musl ]; };
 
@@ -191,7 +202,7 @@ rec {
 
   pycharm-community-src = buildPycharm { pname = "pycharm-community"; fromSource = true; };
 
-  pycharm-community = if stdenv.isDarwin then pycharm-community-bin else pycharm-community-src;
+  pycharm-community = if stdenv.hostPlatform.isDarwin then pycharm-community-bin else pycharm-community-src;
 
   pycharm-professional = buildPycharm { pname = "pycharm-professional"; extraBuildInputs = [ musl ]; };
 
@@ -204,14 +215,20 @@ rec {
         libxcrypt
         lttng-ust_2_12
         musl
-      ]++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+      ]++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
         expat
         libxml2
         xz
       ];
-
+      extraLdPath = lib.optionals (stdenv.hostPlatform.isLinux) [
+        # Avalonia dependencies needed for dotMemory
+        libICE
+        libSM
+        libX11
+        libGL
+      ];
     }).overrideAttrs (attrs: {
-      postInstall = (attrs.postInstall or "") + lib.optionalString (stdenv.isLinux) ''
+      postInstall = (attrs.postInstall or "") + lib.optionalString (stdenv.hostPlatform.isLinux) ''
         (
           cd $out/rider
 
@@ -223,7 +240,7 @@ rec {
 
           for dir in lib/ReSharperHost/linux-*; do
             rm -rf $dir/dotnet
-            ln -s ${dotnet-sdk_7} $dir/dotnet
+            ln -s ${dotnet-sdk_8.unwrapped}/share/dotnet $dir/dotnet
           done
         )
       '';
@@ -233,20 +250,20 @@ rec {
 
   rust-rover = (mkJetBrainsProduct {
     pname = "rust-rover";
-    extraBuildInputs = lib.optionals (stdenv.isLinux) [
+    extraBuildInputs = lib.optionals (stdenv.hostPlatform.isLinux) [
       python3
       openssl
       libxcrypt-legacy
       fontconfig
       xorg.libX11
       libGL
-    ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       expat
       libxml2
       xz
     ];
   }).overrideAttrs (attrs: {
-    postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
+    postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       (
         cd $out/rust-rover
 

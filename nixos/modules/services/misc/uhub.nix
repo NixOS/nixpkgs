@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   settingsFormat = {
     type = with lib.types; attrsOf (oneOf [ bool int str ]);
@@ -13,21 +10,21 @@ let
 in {
   options = {
 
-    services.uhub = mkOption {
+    services.uhub = lib.mkOption {
       default = { };
       description = "Uhub ADC hub instances";
-      type = types.attrsOf (types.submodule {
+      type = lib.types.attrsOf (lib.types.submodule {
         options = {
 
-          enable = mkEnableOption "hub instance" // { default = true; };
+          enable = lib.mkEnableOption "hub instance" // { default = true; };
 
-          enableTLS = mkOption {
-            type = types.bool;
+          enableTLS = lib.mkOption {
+            type = lib.types.bool;
             default = false;
             description = "Whether to enable TLS support.";
           };
 
-          settings = mkOption {
+          settings = lib.mkOption {
             inherit (settingsFormat) type;
             description = ''
               Configuration of uhub.
@@ -43,18 +40,18 @@ in {
             };
           };
 
-          plugins = mkOption {
+          plugins = lib.mkOption {
             description = "Uhub plugin configuration.";
-            type = with types;
+            type = with lib.types;
               listOf (submodule {
                 options = {
-                  plugin = mkOption {
+                  plugin = lib.mkOption {
                     type = path;
-                    example = literalExpression
+                    example = lib.literalExpression
                       "$${pkgs.uhub}/plugins/mod_auth_sqlite.so";
                     description = "Path to plugin file.";
                   };
-                  settings = mkOption {
+                  settings = lib.mkOption {
                     description = "Settings specific to this plugin.";
                     type = with types; attrsOf str;
                     example = { file = "/etc/uhub/users.db"; };

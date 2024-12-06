@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mollysocket";
-  version = "1.4.0";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "mollyim";
     repo = "mollysocket";
     rev = version;
-    hash = "sha256-wZIP4mmIrg8D70C8jLjPC/+TlOT+gP7YOkM1Ey44Tvk=";
+    hash = "sha256-kWmftkzxhVkXQ8EcGJz+Yg6o9OubIMQprwDrcKb2HWQ=";
   };
 
-  cargoHash = "sha256-3yTbwbgOIm69Nf8stPMMhgR6g0sfenycx07by8AM01M=";
+  cargoHash = "sha256-UgJI9lUbvX/Yw90fo6/voX9noWZH8XVssOR4DpquHUY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 

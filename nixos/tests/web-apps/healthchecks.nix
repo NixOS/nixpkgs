@@ -24,7 +24,7 @@ import ../make-test-python.nix ({ lib, pkgs, ... }: {
 
     with subtest("Home screen loads"):
         machine.succeed(
-            "curl -sSfL http://localhost:8000 | grep '<title>Sign In'"
+            "curl -sSfL http://localhost:8000 | grep '<title>Log In'"
         )
 
     with subtest("Setting SITE_NAME via freeform option works"):

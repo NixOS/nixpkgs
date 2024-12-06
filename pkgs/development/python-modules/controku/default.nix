@@ -1,6 +1,5 @@
 {
   lib,
-  python3Packages,
   fetchFromGitHub,
   setuptools,
   requests,
@@ -10,10 +9,11 @@
   gobject-introspection,
   gtk3,
   wrapGAppsHook3,
+  buildPythonPackage,
   buildApplication ? false,
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "controku";
   version = "1.1.0";
   format = "pyproject";

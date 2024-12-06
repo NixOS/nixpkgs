@@ -9,13 +9,13 @@
 
 buildDotnetModule rec {
   pname = "bicep";
-  version = "0.28.1";
+  version = "0.31.92";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "bicep";
     rev = "v${version}";
-    hash = "sha256-9yWfzYrs7LxVmb+AZUI+G0TQQteJP7gpISJGdY0qKAg=";
+    hash = "sha256-NBWZ/URykZxkupMI+xOWB/sJ0hJojkJKvEnrmQg6CCk=";
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@ buildDotnetModule rec {
 
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64); # mono is not available on aarch64-darwin
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64); # mono is not available on aarch64-darwin
 
   nativeCheckInputs = [ mono ];
 
@@ -43,7 +43,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/Azure/bicep/";
     changelog = "https://github.com/Azure/bicep/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ khaneliman ];
+    maintainers = with lib.maintainers; [ khaneliman ] ++ lib.teams.stridtech.members;
     mainProgram = "bicep";
   };
 }

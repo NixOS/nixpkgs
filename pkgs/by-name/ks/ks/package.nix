@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ks";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "loteoo";
     repo = "ks";
     rev = "${finalAttrs.version}";
-    hash = "sha256-jGo0u0wiwOc2n8x0rvDIg1suu6vJQ5UCfslYD5vUlyI=";
+    hash = "sha256-v05wqlG7Utq1b7ctvDY9MCdjHVVZZNNzuHaIBwuRjEE=";
   };
 
   installPhase = ''

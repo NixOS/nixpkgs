@@ -9,8 +9,13 @@
 , libxfce4util
 , libxklavier
 , upower
+# Disabled by default on upstream and actually causes issues:
+# https://gitlab.xfce.org/xfce/xfce4-settings/-/issues/222
+, withUpower ? false
 , xfconf
 , xf86inputlibinput
+, colord
+, withColord ? true
 }:
 
 mkXfceDerivation {
@@ -29,15 +34,18 @@ mkXfceDerivation {
     libxfce4ui
     libxfce4util
     libxklavier
-    upower
     xf86inputlibinput
     xfconf
-  ];
+  ]
+  ++ lib.optionals withUpower [ upower ]
+  ++ lib.optionals withColord [ colord ];
 
   configureFlags = [
     "--enable-pluggable-dialogs"
     "--enable-sound-settings"
-  ];
+  ]
+  ++ lib.optionals withUpower [ "--enable-upower-glib" ]
+  ++ lib.optionals withColord [ "--enable-colord" ];
 
   meta = with lib; {
     description = "Settings manager for Xfce";

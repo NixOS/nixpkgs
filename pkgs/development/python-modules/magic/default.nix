@@ -6,9 +6,7 @@
 }:
 
 buildPythonPackage {
-  name = pkgs.file.name;
-
-  src = pkgs.file.src;
+  inherit (pkgs.file) pname version src;
 
   patchPhase = ''
     substituteInPlace python/magic.py --replace "find_library('magic')" "'${pkgs.file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"

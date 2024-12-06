@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "sacn";
-  version = "1.9.1";
+  version = "1.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ppXWRBZVm4QroxZ19S388sRuI5zpaDgJrJqhnwefr3k=";
+    hash = "sha256-Z2Td/tdXYfQ9/QvM1NeT/OgQ/TYa3CQtWo8O1Dl3+Ao=";
   };
 
   # no tests
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Hundemeier/sacn";
     changelog = "https://github.com/Hundemeier/sacn/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

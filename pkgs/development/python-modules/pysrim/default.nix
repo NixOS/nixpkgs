@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   numpy,
   pythonOlder,
   pyyaml,
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pysrim";
   version = "0.5.10";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -21,10 +22,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'pytest-runner', " ""
+      --replace-fail "'pytest-runner', " ""
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     numpy
     pyyaml
   ];
@@ -39,6 +42,6 @@ buildPythonPackage rec {
     description = "Srim Automation of Tasks via Python";
     homepage = "https://gitlab.com/costrouc/pysrim";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

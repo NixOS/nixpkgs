@@ -1,41 +1,40 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
-  isPy3k,
   lib,
 
   # pythonPackages
   mock,
-  nose,
+  pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "dodgy";
   version = "0.2.1";
-  format = "setuptools";
-  disabled = !isPy3k;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "landscapeio";
-    repo = pname;
+    repo = "dodgy";
     rev = version;
     sha256 = "0ywwjpz0p6ls3hp1lndjr9ql6s5lkj7dgpll1h87w04kwan70j0x";
   };
 
+  build-system = [ setuptools ];
+
   nativeCheckInputs = [
     mock
-    nose
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    nosetests tests/test_checks.py
-  '';
+  pytestFlagsArray = [ "tests/test_checks.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Looks at Python code to search for things which look \"dodgy\" such as passwords or diffs";
     mainProgram = "dodgy";
     homepage = "https://github.com/landscapeio/dodgy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

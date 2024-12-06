@@ -1,6 +1,10 @@
-{ godot3, mono }:
+{ godot3, mono, scons, python311Packages }:
 
-godot3.overrideAttrs (self: base: {
+(godot3.override {
+  scons = scons.override {
+    python3Packages = python311Packages;
+  };
+}).overrideAttrs (self: base: {
   pname = "godot3-mono-glue";
   godotBuildDescription = "mono glue";
   godotBuildPlatform = "server";

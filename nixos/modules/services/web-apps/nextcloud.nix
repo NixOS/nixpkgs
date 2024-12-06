@@ -91,10 +91,10 @@ let
     cd ${webroot}
     sudo=exec
     if [[ "$USER" != nextcloud ]]; then
-      sudo='exec /run/wrappers/bin/sudo -u nextcloud --preserve-env=NEXTCLOUD_CONFIG_DIR --preserve-env=OC_PASS'
+      sudo='exec /run/wrappers/bin/sudo -u nextcloud'
     fi
-    export NEXTCLOUD_CONFIG_DIR="${datadir}/config"
-    $sudo \
+    $sudo ${pkgs.coreutils}/bin/env \
+      NEXTCLOUD_CONFIG_DIR="${datadir}/config" \
       ${phpCli} \
       occ "$@"
   '';
@@ -300,7 +300,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud26" "nextcloud27" "nextcloud28" ];
+      relatedPackages = [ "nextcloud28" "nextcloud29" "nextcloud30" ];
     };
     phpPackage = mkPackageOption pkgs "php" {
       example = "php82";
@@ -821,7 +821,7 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
-        latest = 29;
+        latest = 30;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -847,11 +847,11 @@ in {
           If you have an existing installation with a custom table prefix, make sure it is
           set correctly in `config.php` and remove the option from your NixOS config.
         '')
-        ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
         ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
         ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
         ++ (optional (versionOlder cfg.package.version "28") (upgradeWarning 27 "24.05"))
-        ++ (optional (versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"));
+        ++ (optional (versionOlder cfg.package.version "29") (upgradeWarning 28 "24.11"))
+        ++ (optional (versionOlder cfg.package.version "30") (upgradeWarning 29 "24.11"));
 
       services.nextcloud.package = with pkgs;
         mkDefault (
@@ -861,10 +861,9 @@ in {
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if versionOlder stateVersion "23.05" then nextcloud25
-          else if versionOlder stateVersion "23.11" then nextcloud26
           else if versionOlder stateVersion "24.05" then nextcloud27
-          else nextcloud29
+          else if versionOlder stateVersion "24.11" then nextcloud29
+          else nextcloud30
         );
 
       services.nextcloud.phpPackage =
@@ -931,7 +930,10 @@ in {
         nextcloud-setup = let
           c = cfg.config;
           occInstallCmd = let
-            mkExport = { arg, value }: "export ${arg}=${value}";
+            mkExport = { arg, value }: ''
+              ${arg}=${value};
+              export ${arg};
+            '';
             dbpass = {
               arg = "DBPASS";
               value = if c.dbpassFile != null
@@ -1021,7 +1023,7 @@ in {
           '';
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
-          # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
+          # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
           # an automatic creation of the database user.
           environment.NC_setup_create_db_user = lib.mkIf (nextcloudGreaterOrEqualThan "26") "false";
         };

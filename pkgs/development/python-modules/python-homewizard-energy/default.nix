@@ -3,8 +3,10 @@
   aiohttp,
   aresponses,
   async-timeout,
+  backoff,
   buildPythonPackage,
   fetchFromGitHub,
+  multidict,
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
@@ -14,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "python-homewizard-energy";
-  version = "6.0.0";
+  version = "6.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +25,7 @@ buildPythonPackage rec {
     owner = "DCSBL";
     repo = "python-homewizard-energy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tOoNC9MysL5PcIa1N/GjzNy+4+ovZGQznYYDt1o6f4c=";
+    hash = "sha256-etbYZKTNdlQCDc7LXir4D7LtRzYx9jhXZc1bJvsEb8E=";
   };
 
   postPatch = ''
@@ -36,6 +38,8 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     async-timeout
+    backoff
+    multidict
   ];
 
   __darwinAllowLocalNetworking = true;

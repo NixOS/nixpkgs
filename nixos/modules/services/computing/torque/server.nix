@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.torque.server;
   torque = pkgs.torque;
@@ -11,13 +8,13 @@ in
 
     services.torque.server = {
 
-      enable = mkEnableOption "torque server";
+      enable = lib.mkEnableOption "torque server";
 
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.torque ];
 
     systemd.services.torque-server-init = {

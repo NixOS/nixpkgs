@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/etingof/pysnmpcrypto";
     changelog = "https://github.com/etingof/pysnmpcrypto/blob/${version}/CHANGES.txt";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

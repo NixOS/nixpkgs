@@ -51,7 +51,7 @@ buildPythonPackage rec {
     homepage = "https://logilab-common.readthedocs.io/";
     changelog = "https://forge.extranet.logilab.fr/open-source/logilab-common/-/blob/branch/default/CHANGELOG.md";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "logilab-pytest";
   };
 }

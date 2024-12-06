@@ -2,7 +2,7 @@
 , lib
 , buildNpmPackage
 , fetchFromGitHub
-, darwin
+, cctools
 , remarshal
 , ttfautohint-nox
   # Custom font set options.
@@ -55,23 +55,23 @@ assert (extraParameters != null) -> set != null;
 
 buildNpmPackage rec {
   pname = "Iosevka${toString set}";
-  version = "30.3.0";
+  version = "32.1.0";
 
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "iosevka";
     rev = "v${version}";
-    hash = "sha256-GzIyDQchi8o4CGQexkQez2sqqI0IEBy/nppqyXlad8U=";
+    hash = "sha256-bLB85rla5hN62EGOSVkW6FZM0+U2hkg50LMg2NsMXkU=";
   };
 
-  npmDepsHash = "sha256-SKYxEilEvNu+Tc6ytEjjfE5gl1hFiIoE9YP7IwaDzKg=";
+  npmDepsHash = "sha256-lBLz/BsSVh6szJxunoTj31oxB/3yqd1oWjSzTmQFGv8=";
 
   nativeBuildInputs = [
     remarshal
     ttfautohint-nox
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # libtool
-    darwin.cctools
+    cctools
   ];
 
   buildPlan =
@@ -138,7 +138,6 @@ buildNpmPackage rec {
     maintainers = with maintainers; [
       ttuegel
       rileyinman
-      AluisioASG
       lunik1
     ];
   };

@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "icingaweb2";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ das_j ];
+  meta = {
+    maintainers = pkgs.lib.teams.helsinki-systems.members;
   };
 
   nodes = {

@@ -8,35 +8,35 @@ callPackage ./common.nix ({
   # Note that the latest build may differ by platform
   dists = {
     x86_64-linux = {
-      zuluVersion = "11.70.15";
-      jdkVersion = "11.0.22";
+      zuluVersion = "11.74.15";
+      jdkVersion = "11.0.24";
       hash =
-        if enableJavaFX then "sha256-FxTHgng7/oDY3n3qy8j1ztbpBQeoGcEBJbEXqaE4Zr4="
-        else "sha256-V41ZRrJtkle3joKhwoID5bvWkN5I4gFjmbEnTD7no8U=";
+        if enableJavaFX then "sha256-eP2BCD77uRmukd48+pDlIlhos9RjL9VYx8tpQdq2uNo="
+        else "sha256-p6rA5pqZv2Sho+yW8IFJrAaaW72q766SLuOnRl/ZGLM=";
     };
 
     aarch64-linux = {
-      zuluVersion = "11.70.15";
-      jdkVersion = "11.0.22";
+      zuluVersion = "11.74.15";
+      jdkVersion = "11.0.24";
       hash =
-        if enableJavaFX then throw "JavaFX is not available for aarch64-linux"
-        else "sha256-u6XWMXAArUhMMb6j3KFOhkIxpVYR1oYLF0Wde7/tI0k=";
+        if enableJavaFX then "sha256-nAUjPk9gktO0UJk7gAKygq+ztSJY5wk+EoG1LgJidJ8="
+        else "sha256-T0c+YwfEZcA3iJmBriyzxBM2SECcczG25XVApIlgM+E=";
     };
 
     x86_64-darwin = {
-      zuluVersion = "11.70.15";
-      jdkVersion = "11.0.22";
+      zuluVersion = "11.74.15";
+      jdkVersion = "11.0.24";
       hash =
-        if enableJavaFX then "sha256-JkJZwk+D28wHWqwUoLo7WW5ypwTrT5biSoP+70YI3eQ="
-        else "sha256-ca/ttkPe2tbcm1ruguDgPsxKWbEdKcICsKCDXaup9N4=";
+        if enableJavaFX then "sha256-hanQw2FWbqsmGR1WixbM0BNWGeXmS2vt9tbaaEY7D1c="
+        else "sha256-CH6pVui0PInHMt+AJOE0T2hrAmEcLFRJvmR4KZuanaw=";
     };
 
     aarch64-darwin = {
-      zuluVersion = "11.70.15";
-      jdkVersion = "11.0.22";
+      zuluVersion = "11.74.15";
+      jdkVersion = "11.0.24";
       hash =
-        if enableJavaFX then "sha256-bAgH4lCxPvvFOeif5gI2aoLt1aC4EXPzb2YmiS9bQsU="
-        else "sha256-PWQOF+P9djZarjAJaE3I0tuI1E4H/9584VN04BMzmvM=";
+        if enableJavaFX then "sha256-WbzpfPgoT3CTazKBnI1Fg+q+YQP6MwCWkon6VOeLZsA="
+        else "sha256-+KxFgHbBDxN1O3NCAzqqBztxXveYAjrPFVuoFL/2dRQ=";
     };
   };
 } // builtins.removeAttrs args [ "callPackage" ])

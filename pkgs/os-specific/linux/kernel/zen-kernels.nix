@@ -1,20 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, buildLinux, ... } @ args:
+{ lib, stdenv, fetchFromGitHub, buildLinux, variant, ... } @ args:
 
 let
   # comments with variant added for update script
-  # ./update-zen.py zen
-  zenVariant = {
-    version = "6.9.6"; #zen
-    suffix = "zen1"; #zen
-    sha256 = "09s3h4wiqfh8nsb1xw78qn2pqdjm8cff89f1q8r2p8hfzs6zpc1b"; #zen
-    isLqx = false;
-  };
-  # ./update-zen.py lqx
-  lqxVariant = {
-    version = "6.9.5"; #lqx
-    suffix = "lqx1"; #lqx
-    sha256 = "0r3pgjfyza3vkvp7kw1s7sn1gf4hxq6r6qs5wvv76gmff7s399yz"; #lqx
-    isLqx = true;
+  variants = {
+    # ./update-zen.py zen
+    zen = {
+      version = "6.12.1"; #zen
+      suffix = "zen1"; #zen
+      sha256 = "18aws41zlayv4xd6489jzrhr8b3kwmrx2q1b50g67v4rsp02sb4p"; #zen
+      isLqx = false;
+    };
+    # ./update-zen.py lqx
+    lqx = {
+      version = "6.12.1"; #lqx
+      suffix = "lqx1"; #lqx
+      sha256 = "1q8rdghkgq0kn530pxncwsrfqlf3xfn4mdvxysdizyfn71vmrz8f"; #lqx
+      isLqx = true;
+    };
   };
   zenKernelsFor = { version, suffix, sha256, isLqx }: buildLinux (args // {
     inherit version;
@@ -31,7 +33,7 @@ let
 
     # This is based on the following sources:
     # - zen: https://gitlab.archlinux.org/archlinux/packaging/packages/linux-zen/-/blob/main/config
-    # - lqx: https://github.com/damentz/liquorix-package/blob/6.4/master/linux-liquorix/debian/config/kernelarch-x86/config-arch-64
+    # - lqx: https://github.com/damentz/liquorix-package/blob/6.8/master/linux-liquorix/debian/config/kernelarch-x86/config-arch-64
     # - Liquorix features: https://liquorix.net/
     # The list below is not exhaustive, so the kernels probably doesn't match
     # the upstream, but should bring most of the improvements that will be
@@ -43,7 +45,6 @@ let
       # FQ-Codel Packet Scheduling
       NET_SCH_DEFAULT = yes;
       DEFAULT_FQ_CODEL = yes;
-      DEFAULT_NET_SCH = freeform "fq_codel";
 
       # Preempt (low-latency)
       PREEMPT = lib.mkOverride 60 yes;
@@ -63,26 +64,37 @@ let
       RCU_FANOUT = freeform "64";
       RCU_FANOUT_LEAF = freeform "16";
       RCU_BOOST = yes;
-      RCU_BOOST_DELAY = freeform "500";
+      RCU_BOOST_DELAY = option (freeform "500");
       RCU_NOCB_CPU = yes;
       RCU_LAZY = yes;
+      RCU_DOUBLE_CHECK_CB_TIME = yes;
+
+      # BFQ I/O scheduler
+      IOSCHED_BFQ = lib.mkOverride 60 yes;
 
       # Futex WAIT_MULTIPLE implementation for Wine / Proton Fsync.
       FUTEX = yes;
       FUTEX_PI = yes;
 
+      # NT synchronization primitive emulation
+      NTSYNC = yes;
+
       # Preemptive Full Tickless Kernel at 1000Hz
       HZ = freeform "1000";
       HZ_1000 = yes;
+
     } // lib.optionalAttrs (isLqx) {
       # Google's BBRv3 TCP congestion Control
       TCP_CONG_BBR = yes;
       DEFAULT_BBR = yes;
-      DEFAULT_TCP_CONG = freeform "bbr";
 
       # PDS Process Scheduler
       SCHED_ALT = yes;
       SCHED_PDS = yes;
+
+      # https://github.com/damentz/liquorix-package/commit/a7055b936c0f4edb8f6afd5263fe1d2f8a5cd877
+      RCU_BOOST = no;
+      RCU_LAZY = lib.mkOverride 60 no;
 
       # Swap storage is compressed with LZ4 using zswap
       ZSWAP_COMPRESSOR_DEFAULT_LZ4  = lib.mkOptionDefault yes;
@@ -96,9 +108,6 @@ let
       SCHED_CORE = lib.mkForce (option no);
       UCLAMP_TASK = lib.mkForce (option no);
       UCLAMP_TASK_GROUP = lib.mkForce (option no);
-
-      # ERROR: modpost: "sched_numa_hop_mask" [drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko] undefined!
-      MLX5_CORE = no;
     };
 
     passthru.updateScript = [ ./update-zen.py (if isLqx then "lqx" else "zen") ];
@@ -108,12 +117,9 @@ let
       maintainers = with lib.maintainers; [ thiagokokada jerrysm64 ];
       description = "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads." +
         lib.optionalString isLqx " (Same as linux_zen, but less aggressive release schedule and additional extra config)";
-      broken = stdenv.isAarch64;
+      broken = stdenv.hostPlatform.isAarch64;
     };
 
   } // (args.argsOverride or { }));
 in
-{
-  zen = zenKernelsFor zenVariant;
-  lqx = zenKernelsFor lqxVariant;
-}
+zenKernelsFor variants.${variant}

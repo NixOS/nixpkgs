@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.rss2email;
 in {
@@ -12,25 +9,25 @@ in {
 
     services.rss2email = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable rss2email.";
       };
 
-      to = mkOption {
-        type = types.str;
+      to = lib.mkOption {
+        type = lib.types.str;
         description = "Mail address to which to send emails";
       };
 
-      interval = mkOption {
-        type = types.str;
+      interval = lib.mkOption {
+        type = lib.types.str;
         default = "12h";
         description = "How often to check the feeds, in systemd interval format";
       };
 
-      config = mkOption {
-        type = with types; attrsOf (oneOf [ str int bool ]);
+      config = lib.mkOption {
+        type = with lib.types; attrsOf (oneOf [ str int bool ]);
         default = {};
         description = ''
           The configuration to give rss2email.
@@ -48,17 +45,17 @@ in {
         '';
       };
 
-      feeds = mkOption {
+      feeds = lib.mkOption {
         description = "The feeds to watch.";
-        type = types.attrsOf (types.submodule {
+        type = lib.types.attrsOf (lib.types.submodule {
           options = {
-            url = mkOption {
-              type = types.str;
+            url = lib.mkOption {
+              type = lib.types.str;
               description = "The URL at which to fetch the feed.";
             };
 
-            to = mkOption {
-              type = with types; nullOr str;
+            to = lib.mkOption {
+              type = with lib.types; nullOr str;
               default = null;
               description = ''
                 Email address to which to send feed items.
@@ -78,7 +75,7 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.groups = {
       rss2email.gid = config.ids.gids.rss2email;
     };
@@ -104,7 +101,7 @@ in {
     systemd.services.rss2email = let
       conf = pkgs.writeText "rss2email.cfg" (lib.generators.toINI {} ({
           DEFAULT = cfg.config;
-        } // lib.mapAttrs' (name: feed: nameValuePair "feed.${name}" (
+        } // lib.mapAttrs' (name: feed: lib.nameValuePair "feed.${name}" (
           { inherit (feed) url; } //
           lib.optionalAttrs (feed.to != null) { inherit (feed) to; }
         )) cfg.feeds

@@ -6,24 +6,27 @@
   pycryptodomex,
   pytestCheckHook,
   requests,
+  setuptools,
   xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "huawei-lte-api";
-  version = "1.8.1";
-  format = "setuptools";
+  version = "1.10";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Salamek";
     repo = "huawei-lte-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-KmkoCQDZ1NC3CKfV5DZBukExF9fUTojvWv2ZLTCzRZU=";
+    hash = "sha256-L6xCX+NHASunB876N1R++xMOx55Z8zc77j5QwKqHsNY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pycryptodomex
     requests
     xmltodict

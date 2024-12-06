@@ -30,10 +30,10 @@ in
     };
 
     featureGates = mkOption {
-      description = "List set of feature gates";
+      description = "Attribute set of feature gates.";
       default = top.featureGates;
       defaultText = literalExpression "config.${otop.featureGates}";
-      type = listOf str;
+      type = attrsOf bool;
     };
 
     hostname = mkOption {
@@ -69,8 +69,8 @@ in
           --bind-address=${cfg.bindAddress} \
           ${optionalString (top.clusterCidr!=null)
             "--cluster-cidr=${top.clusterCidr}"} \
-          ${optionalString (cfg.featureGates != [])
-            "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
+          ${optionalString (cfg.featureGates != {})
+            "--feature-gates=${concatStringsSep "," (builtins.attrValues (mapAttrs (n: v: "${n}=${trivial.boolToString v}") cfg.featureGates))}"} \
           --hostname-override=${cfg.hostname} \
           --kubeconfig=${top.lib.mkKubeConfig "kube-proxy" cfg.kubeconfig} \
           ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \

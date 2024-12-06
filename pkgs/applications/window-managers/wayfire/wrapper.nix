@@ -27,6 +27,6 @@ symlinkJoin {
     # To prevent builds on hydra
     hydraPlatforms = [];
     # prefer wrapper over the package
-    priority = (wayfire.meta.priority or 0) - 1;
+    priority = (wayfire.meta.priority or lib.meta.defaultPriority) - 1;
   };
 }

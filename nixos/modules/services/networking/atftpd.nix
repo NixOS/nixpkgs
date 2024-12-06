@@ -1,9 +1,5 @@
 # NixOS module for atftpd TFTP server
-
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.atftpd;
@@ -16,19 +12,19 @@ in
 
     services.atftpd = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to enable the atftpd TFTP server. By default, the server
           binds to address 0.0.0.0.
         '';
       };
 
-      extraOptions = mkOption {
+      extraOptions = lib.mkOption {
         default = [];
-        type = types.listOf types.str;
-        example = literalExpression ''
+        type = lib.types.listOf lib.types.str;
+        example = lib.literalExpression ''
           [ "--bind-address 192.168.9.1"
             "--verbose=7"
           ]
@@ -38,9 +34,9 @@ in
         '';
       };
 
-      root = mkOption {
+      root = lib.mkOption {
         default = "/srv/tftp";
-        type = types.path;
+        type = lib.types.path;
         description = ''
           Document root directory for the atftpd.
         '';
@@ -50,7 +46,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.atftpd = {
       description = "TFTP Server";

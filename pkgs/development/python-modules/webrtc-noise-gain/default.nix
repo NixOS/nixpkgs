@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "webrtc-noise-gain";
-  version = "1.2.3";
+  version = "1.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "webrtc-noise-gain";
-    rev = "v${version}";
-    hash = "sha256-DFEtuO49zXNixLwBjQ/WOiARDhMAXVH+5hfc3eSdPIo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GbdG2XM11zgPk2VZ0mu7qMv256jaMyJDHdBCBUnynMY=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     abseil-cpp
-  ] ++ lib.optionals (stdenv.isDarwin) [ darwin.apple_sdk.frameworks.CoreServices ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ darwin.apple_sdk.frameworks.CoreServices ];
 
   pythonImportsCheck = [ "webrtc_noise_gain" ];
 

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pipx";
-  version = "1.4.3";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "pypa";
     repo = "pipx";
     rev = "refs/tags/${version}";
-    hash = "sha256-NxXOeVXwBhGqi4DUABV8UV+cDER0ROBFdgiyYTzdvuo=";
+    hash = "sha256-diHWzrSpXWbNosXKN5nj2FM09HicDhHWKxQDXc+AZ4o=";
   };
 
   build-system = [
@@ -41,7 +41,10 @@ buildPythonPackage rec {
     userpath
   ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    argcomplete
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -77,15 +80,27 @@ buildPythonPackage rec {
     "legacy_venv"
     "determination"
     "json"
+    "test_auto_update_shared_libs"
+    "test_cli"
+    "test_cli_global"
+    "test_fetch_missing_python"
+    "test_list_does_not_trigger_maintenance"
+    "test_list_pinned_packages"
     "test_list_short"
+    "test_list_standalone_interpreter"
+    "test_list_unused_standalone_interpreters"
+    "test_list_used_standalone_interpreters"
+    "test_pin"
     "test_skip_maintenance"
+    "test_unpin"
+    "test_unpin_warning"
   ];
 
   postInstall = ''
     installShellCompletion --cmd pipx \
-      --bash <(${argcomplete}/bin/register-python-argcomplete pipx --shell bash) \
-      --zsh <(${argcomplete}/bin/register-python-argcomplete pipx --shell zsh) \
-      --fish <(${argcomplete}/bin/register-python-argcomplete pipx --shell fish)
+      --bash <(register-python-argcomplete pipx --shell bash) \
+      --zsh <(register-python-argcomplete pipx --shell zsh) \
+      --fish <(register-python-argcomplete pipx --shell fish)
   '';
 
   meta = with lib; {

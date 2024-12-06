@@ -6,9 +6,7 @@
   packaging,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
   tomli,
-  wheel,
 }:
 
 buildPythonPackage rec {

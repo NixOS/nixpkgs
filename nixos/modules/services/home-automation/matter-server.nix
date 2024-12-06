@@ -3,9 +3,6 @@
 , config
 , ...
 }:
-
-with lib;
-
 let
   cfg = config.services.matter-server;
   storageDir = "matter-server";
@@ -16,24 +13,24 @@ in
 {
   meta.maintainers = with lib.maintainers; [ leonm1 ];
 
-  options.services.matter-server = with types; {
-    enable = mkEnableOption "Matter-server";
+  options.services.matter-server = with lib.types; {
+    enable = lib.mkEnableOption "Matter-server";
 
-    package = mkPackageOptionMD pkgs "python-matter-server" { };
+    package = lib.mkPackageOption pkgs "python-matter-server" { };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 5580;
       description = "Port to expose the matter-server service on.";
     };
 
-    logLevel = mkOption {
-      type = types.enum [ "critical" "error" "warning" "info" "debug" ];
+    logLevel = lib.mkOption {
+      type = lib.types.enum [ "critical" "error" "warning" "info" "debug" ];
       default = "info";
       description = "Verbosity of logs from the matter-server";
     };
 
-    extraArgs = mkOption {
+    extraArgs = lib.mkOption {
       type = listOf str;
       default = [];
       description = ''
@@ -43,7 +40,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.matter-server = {
       after = [ "network-online.target" ];
       before = [ "home-assistant.service" ];
@@ -52,13 +49,13 @@ in
       description = "Matter Server";
       environment.HOME = storagePath;
       serviceConfig = {
-        ExecStart = (concatStringsSep " " [
+        ExecStart = (lib.concatStringsSep " " [
           "${cfg.package}/bin/matter-server"
           "--port" (toString cfg.port)
           "--vendorid" vendorId
           "--storage-path" storagePath
           "--log-level" "${cfg.logLevel}"
-          "${escapeShellArgs cfg.extraArgs}"
+          "${lib.escapeShellArgs cfg.extraArgs}"
         ]);
         # Start with a clean root filesystem, and allowlist what the container
         # is permitted to access.
@@ -103,7 +100,7 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
-        SystemCallFilter = concatStringsSep " " [
+        SystemCallFilter = lib.concatStringsSep " " [
           "~" # Blocklist
           "@clock"
           "@cpu-emulation"

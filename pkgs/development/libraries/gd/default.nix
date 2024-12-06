@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     "--enable-gd-formats"
   ]
     # -pthread gets passed to clang, causing warnings
-    ++ lib.optional stdenv.isDarwin "--enable-werror=no";
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-werror=no";
 
   nativeBuildInputs = [ autoconf automake pkg-config ];
 
@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
     description = "Dynamic image creation library";
     license = licenses.free; # some custom license
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

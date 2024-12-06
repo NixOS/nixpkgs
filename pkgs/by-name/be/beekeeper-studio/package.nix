@@ -7,7 +7,7 @@
 
 let
   pname = "beekeeper-studio";
-  version = "4.6.0";
+  version = "4.6.8";
 
   plat = {
     aarch64-linux = "-arm64";
@@ -15,8 +15,8 @@ let
   }.${stdenv.hostPlatform.system};
 
   hash = {
-    aarch64-linux = "sha256-ZxqwxCON21S+RPG0/M2TtcI2Ave7ZT05lKQdyysQFUk=";
-    x86_64-linux = "sha256-y4Muap7X4YyeIftRGC+NrDt3wjqOPi1lt+tsHhKmx4M=";
+    aarch64-linux = "sha256-EKGL+aeuCcBuSh+VtkdgFhI1LccuvO8WHoqbZ/JdX7c=";
+    x86_64-linux = "sha256-LyO9xCqZG5gNAvCIX9wacSb59wiLjXPDta+Fipu24fk=";
   }.${stdenv.hostPlatform.system};
 
   src = fetchurl {
@@ -29,10 +29,11 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraInstallCommands = ''
-    source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram $out/bin/${pname} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
     install -Dm444 ${appimageContents}/${pname}.desktop -t $out/share/applications/
     install -Dm444 ${appimageContents}/${pname}.png -t $out/share/pixmaps/
     substituteInPlace $out/share/applications/${pname}.desktop \

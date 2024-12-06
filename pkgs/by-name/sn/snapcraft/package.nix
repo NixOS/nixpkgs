@@ -9,22 +9,18 @@
   squashfsTools,
   stdenv,
 }:
+
 python3Packages.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.2.5";
+  version = "8.5.0";
 
   pyproject = true;
-
-  # Somewhere deep in the dependency tree is 'versioningit', which depends
-  # on pydantic 2. Snapcraft will soon migrate to pydantic 2, and disabling
-  # this doesn't seem to affect the functionality of the application.
-  catchConflicts = false;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "snapcraft";
     rev = "refs/tags/${version}";
-    hash = "sha256-+1Gzseuq402m5FvlRAGXl7Lsy2VnRmd1cXNXhkMDDDE=";
+    hash = "sha256-u5LO29LnAJrU8fafa1EA4ii5g8sO8REfuf/7lzI7x5k=";
   };
 
   patches = [
@@ -67,11 +63,14 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace snapcraft/elf/elf_utils.py \
       --replace-fail 'arch_linker_path = Path(arch_config.dynamic_linker)' \
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
+
+    substituteInPlace pyproject.toml \
+      --replace-fail '"pytest-cov>=4.0",' ""
   '';
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     attrs
     catkin-pkg
     click
@@ -80,6 +79,7 @@ python3Packages.buildPythonApplication rec {
     craft-cli
     craft-grammar
     craft-parts
+    craft-platforms
     craft-providers
     craft-store
     debian
@@ -90,47 +90,59 @@ python3Packages.buildPythonApplication rec {
     lxml
     macaroonbakery
     mypy-extensions
+    overrides
+    packaging
     progressbar
     pyelftools
     pygit2
     pylxd
+    pymacaroons
     python-apt
     python-gnupg
+    pyxdg
+    pyyaml
     raven
     requests-toolbelt
+    requests-unixsocket2
     simplejson
     snap-helpers
     tabulate
+    toml
     tinydb
+    typing-extensions
+    urllib3
+    validators
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
   pythonRelaxDeps = [
     "docutils"
     "jsonschema"
     "pygit2"
     "urllib3"
+    "validators"
   ];
 
   postInstall = ''
     wrapProgram $out/bin/snapcraft --prefix PATH : ${squashfsTools}/bin
   '';
 
-  nativeCheckInputs = with python3Packages; [
-    pytest-check
-    pytest-cov
-    pytest-mock
-    pytest-subprocess
-    pytestCheckHook
-    responses
-  ] ++ [
-    git
-    squashfsTools
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytest-check
+      pytest-cov-stub
+      pytest-mock
+      pytest-subprocess
+      pytestCheckHook
+      responses
+      setuptools
+    ]
+    ++ [
+      git
+      squashfsTools
+    ];
 
   preCheck = ''
     mkdir -p check-phase
@@ -144,9 +156,11 @@ python3Packages.buildPythonApplication rec {
     "test_classic_linter_filter"
     "test_classic_linter"
     "test_complex_snap_yaml"
+    "test_core24_try_command"
     "test_get_base_configuration_snap_channel"
     "test_get_base_configuration_snap_instance_name_default"
     "test_get_base_configuration_snap_instance_name_not_running_as_snap"
+    "test_get_build_commands"
     "test_get_extensions_data_dir"
     "test_get_os_platform_alternative_formats"
     "test_get_os_platform_linux"
@@ -161,9 +175,7 @@ python3Packages.buildPythonApplication rec {
     "test_snap_command_fallback"
     "test_validate_architectures_supported"
     "test_validate_architectures_unsupported"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    "test_load_project"
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_load_project" ];
 
   disabledTestPaths = [
     "tests/unit/commands/test_remote.py"

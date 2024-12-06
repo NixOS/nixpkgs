@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Add JavaScript or Python style comments in JSON";
     homepage = "https://github.com/vaidik/commentjson/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

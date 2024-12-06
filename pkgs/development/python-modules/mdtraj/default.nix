@@ -21,40 +21,22 @@
   pytest-xdist,
   pytestCheckHook,
   tables,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "mdtraj";
-  version = "1.9.9";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mdtraj";
     repo = "mdtraj";
     rev = "refs/tags/${version}";
-    hash = "sha256-2Jg6DyVJlRBLD/6hMtcsrAdxKF5RkpUuhAQm/lqVGeE=";
+    hash = "sha256-hNv/humEZOX4W7cOlJSAodk9pIi18//YJNSWNiEFiVg=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "gsd_3-compatibility.patch";
-      url = "https://github.com/mdtraj/mdtraj/commit/81209d00817ab07cfc4668bf5ec88088d16904c0.patch";
-      hash = "sha256-ttNmij7csxF0Z5wPPwhGumRX055W2IgFjRAe6nI6GNY=";
-    })
-    # remove pkg_resources usage
-    # https://github.com/mdtraj/mdtraj/pull/1837
-    (fetchpatch {
-      name = "fix-runtime-error.patch";
-      url = "https://github.com/mdtraj/mdtraj/commit/02d44d4db7039fceb199c85b4f993244804f470d.patch";
-      hash = "sha256-nhbi3iOrDSM87DyIp1KVt383Vvb6aYOgkjuYzviqiq8=";
-    })
-    # remove distutils usage
-    # https://github.com/mdtraj/mdtraj/pull/1834
-    (fetchpatch {
-      name = "python312-compatibility.patch";
-      url = "https://github.com/mdtraj/mdtraj/commit/95d79747deef42c976ca362a57806b61933409f3.patch";
-      hash = "sha256-Cq7/d745q6ZgAyWGM4ULnSsWezsbnu1CjSz5eqYSb+g=";
-    })
     # disable intrinsics when SIMD is not available
     # TODO: enable SIMD with python3.12
     # https://github.com/mdtraj/mdtraj/pull/1884
@@ -113,12 +95,19 @@ buildPythonPackage rec {
     "test_precentered_2"
   ];
 
+  # these files import distutils
+  # remove once https://github.com/mdtraj/mdtraj/pull/1916 is merged
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
+    "test_mol2.py"
+    "test_netcdf.py"
+  ];
+
   pythonImportsCheck = [ "mdtraj" ];
 
   meta = with lib; {
     description = "Open library for the analysis of molecular dynamics trajectories";
     homepage = "https://github.com/mdtraj/mdtraj";
-    changelog = "https://github.com/mdtraj/mdtraj/releases/tag/${src.rev}";
+    changelog = "https://github.com/mdtraj/mdtraj/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ natsukium ];
   };

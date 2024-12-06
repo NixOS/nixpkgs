@@ -6,8 +6,9 @@ let
   cfg = config.services.opentelemetry-collector;
   opentelemetry-collector = cfg.package;
 
-  settingsFormat = pkgs.formats.yaml {};
-in {
+  settingsFormat = pkgs.formats.yaml { };
+in
+{
   options.services.opentelemetry-collector = {
     enable = mkEnableOption "Opentelemetry Collector";
 
@@ -15,7 +16,7 @@ in {
 
     settings = mkOption {
       type = settingsFormat.type;
-      default = {};
+      default = { };
       description = ''
         Specify the configuration for Opentelemetry Collector in Nix.
 
@@ -35,9 +36,9 @@ in {
   config = mkIf cfg.enable {
     assertions = [{
       assertion = (
-        (cfg.settings == {}) != (cfg.configFile == null)
+        (cfg.settings == { }) != (cfg.configFile == null)
       );
-      message  = ''
+      message = ''
         Please specify a configuration for Opentelemetry Collector with either
         'services.opentelemetry-collector.settings' or
         'services.opentelemetry-collector.configFile'.
@@ -48,21 +49,27 @@ in {
       description = "Opentelemetry Collector Service Daemon";
       wantedBy = [ "multi-user.target" ];
 
-      serviceConfig = let
-        conf = if cfg.configFile == null
-               then settingsFormat.generate "config.yaml" cfg.settings
-               else cfg.configFile;
-      in
-      {
-        ExecStart = "${getExe opentelemetry-collector} --config=file:${conf}";
-        DynamicUser = true;
-        Restart = "always";
-        ProtectSystem = "full";
-        DevicePolicy = "closed";
-        NoNewPrivileges = true;
-        WorkingDirectory = "/var/lib/opentelemetry-collector";
-        StateDirectory = "opentelemetry-collector";
-      };
+      serviceConfig =
+        let
+          conf =
+            if cfg.configFile == null
+            then settingsFormat.generate "config.yaml" cfg.settings
+            else cfg.configFile;
+        in
+        {
+          ExecStart = "${getExe opentelemetry-collector} --config=file:${conf}";
+          DynamicUser = true;
+          Restart = "always";
+          ProtectSystem = "full";
+          DevicePolicy = "closed";
+          NoNewPrivileges = true;
+          WorkingDirectory = "%S/opentelemetry-collector";
+          StateDirectory = "opentelemetry-collector";
+          SupplementaryGroups = [
+            # allow to read the systemd journal for opentelemetry-collector
+            "systemd-journal"
+          ];
+        };
     };
   };
 }

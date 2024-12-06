@@ -5,8 +5,12 @@ with lib;
 let
   cfg = config.services.caddy;
 
+  certs = config.security.acme.certs;
   virtualHosts = attrValues cfg.virtualHosts;
-  acmeVHosts = filter (hostOpts: hostOpts.useACMEHost != null) virtualHosts;
+  acmeEnabledVhosts = filter (hostOpts: hostOpts.useACMEHost != null) virtualHosts;
+  vhostCertNames = unique (map (hostOpts: hostOpts.useACMEHost) acmeEnabledVhosts);
+  dependentCertNames = filter (cert: certs.${cert}.dnsProvider == null) vhostCertNames; # those that might depend on the HTTP server
+  independentCertNames = filter (cert: certs.${cert}.dnsProvider != null) vhostCertNames; # those that don't depend on the HTTP server
 
   mkVHostConf = hostOpts:
     let
@@ -51,9 +55,7 @@ let
 
   configPath = "/etc/${etcConfigFile}";
 
-  acmeHosts = unique (catAttrs "useACMEHost" acmeVHosts);
-
-  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix lib;
 in
 {
   imports = [
@@ -84,12 +86,12 @@ in
       default = "caddy";
       type = types.str;
       description = ''
-        Group account under which caddy runs.
+        Group under which caddy runs.
 
         ::: {.note}
-        If left as the default value this user will automatically be created
+        If left as the default value this group will automatically be created
         on system activation, otherwise you are responsible for
-        ensuring the user exists before the Caddy service starts.
+        ensuring the group exists before the Caddy service starts.
         :::
       '';
     };
@@ -242,7 +244,7 @@ in
             serverAliases = [ "www.hydra.example.com" ];
             extraConfig = '''
               encode gzip
-              root /srv/http
+              root * /srv/http
             ''';
           };
         };
@@ -329,10 +331,10 @@ in
         message = "To specify an adapter other than 'caddyfile' please provide your own configuration via `services.caddy.configFile`";
       }
     ] ++ map (name: mkCertOwnershipAssertion {
-      inherit (cfg) group user;
       cert = config.security.acme.certs.${name};
       groups = config.users.groups;
-    }) acmeHosts;
+      services = [ config.systemd.services.caddy ];
+    }) vhostCertNames;
 
     services.caddy.globalConfig = ''
       ${optionalString (cfg.email != null) "email ${cfg.email}"}
@@ -348,14 +350,16 @@ in
 
     systemd.packages = [ cfg.package ];
     systemd.services.caddy = {
-      wants = map (hostOpts: "acme-finished-${hostOpts.useACMEHost}.target") acmeVHosts;
-      after = map (hostOpts: "acme-selfsigned-${hostOpts.useACMEHost}.service") acmeVHosts;
-      before = map (hostOpts: "acme-${hostOpts.useACMEHost}.service") acmeVHosts;
+      wants = map (certName: "acme-finished-${certName}.target") vhostCertNames;
+      after = map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
+        ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa
+      before = map (certName: "acme-${certName}.service") dependentCertNames;
 
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 14400;
       startLimitBurst = 10;
       reloadTriggers = optional cfg.enableReload cfg.configFile;
+      restartTriggers = optional (! cfg.enableReload) cfg.configFile;
 
       serviceConfig = let
         runOptions = ''--config ${configPath} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"}'';
@@ -396,10 +400,10 @@ in
 
     security.acme.certs =
       let
-        certCfg = map (useACMEHost: nameValuePair useACMEHost {
+        certCfg = map (certName: nameValuePair certName {
           group = mkDefault cfg.group;
           reloadServices = [ "caddy.service" ];
-        }) acmeHosts;
+        }) vhostCertNames;
       in
         listToAttrs certCfg;
 

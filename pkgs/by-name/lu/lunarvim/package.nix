@@ -13,8 +13,8 @@
 , gzip
 , lua-language-server
 , neovim
+, neovim-node-client
 , nodejs
-, nodePackages
 , ripgrep
 , tree-sitter
 , unzip
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     lua-language-server
     neovim
     nodejs
-    nodePackages.neovim
+    neovim-node-client
     ripgrep
     tree-sitter
     unzip
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm444 utils/desktop/lvim.desktop -t $out/share/applications
 
     wrapProgram $out/bin/lvim --prefix PATH : ${ lib.makeBinPath finalAttrs.runtimeDeps } \
-      --prefix LD_LIBRARY_PATH : ${stdenv.cc.cc.lib} \
+      --prefix LD_LIBRARY_PATH : ${lib.getLib stdenv.cc.cc} \
       --prefix CC : ${stdenv.cc.targetPrefix}cc
   '' + lib.optionalString finalAttrs.nvimAlias ''
     ln -s $out/bin/lvim $out/bin/nvim

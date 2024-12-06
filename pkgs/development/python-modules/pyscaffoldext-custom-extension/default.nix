@@ -11,7 +11,7 @@
   pyscaffold,
   pre-commit,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-xdist,
   tox,
   virtualenv,
@@ -40,12 +40,12 @@ buildPythonPackage rec {
     pyscaffold
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     testing = [
       configupdater
       pre-commit
       pytest
-      pytest-cov
+      pytest-cov-stub
       pytest-xdist
       setuptools-scm
       tox

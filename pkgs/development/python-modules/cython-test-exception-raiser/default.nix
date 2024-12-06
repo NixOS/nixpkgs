@@ -35,6 +35,6 @@ buildPythonPackage rec {
       publicDomain
       mit
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

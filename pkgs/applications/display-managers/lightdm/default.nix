@@ -21,13 +21,14 @@
 , polkit
 , accountsservice
 , gtk-doc
-, gnome
 , gobject-introspection
 , vala
 , fetchpatch
 , withQt5 ? false
 , qtbase
 , yelp-tools
+, yelp-xsl
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
     autoconf
     automake
     yelp-tools
-    gnome.yelp-xsl
+    yelp-xsl
     gobject-introspection
     gtk-doc
     intltool
@@ -115,6 +116,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) lightdm; };
   };
 
 

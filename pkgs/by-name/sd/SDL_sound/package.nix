@@ -7,7 +7,7 @@
   libvorbis,
   stdenv,
   # Boolean flags
-  enableSdltest ? (!stdenv.isDarwin)
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
-    (lib.enableFeature enableSdltest "--disable-sdltest")
+    (lib.enableFeature enableSdltest "sdltest")
   ];
 
   strictDeps = true;

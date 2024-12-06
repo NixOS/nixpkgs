@@ -28,10 +28,10 @@ buildKodiBinaryAddon rec {
 
   extraBuildInputs = [ pugixml rapidjson ];
 
-  extraRuntimeDependencies = [ glib nspr nss stdenv.cc.cc.lib ];
+  extraRuntimeDependencies = [ glib nspr nss (lib.getLib stdenv.cc.cc) ];
 
   extraInstallPhase = let n = namespace; in ''
-    ln -s $out/lib/addons/${n}/libssd_wv.so $out/${addonDir}/${n}/libssd_wv.so
+    ${lib.optionalString stdenv.hostPlatform.isAarch64 "ln -s $out/lib/addons/${n}/libcdm_aarch64_loader.so $out/${addonDir}/${n}/libcdm_aarch64_loader.so"}
   '';
 
   meta = with lib; {

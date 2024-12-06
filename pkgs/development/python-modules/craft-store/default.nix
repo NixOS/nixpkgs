@@ -7,10 +7,10 @@
   setuptools-scm,
   pytest-check,
   pytest-mock,
-  pydantic_1,
+  pydantic,
   pyyaml,
   pytestCheckHook,
-  keyring,
+  keyring_24,
   macaroonbakery,
   overrides,
   pyxdg,
@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "craft-store";
-  version = "2.6.0";
+  version = "3.0.2";
 
   pyproject = true;
 
@@ -28,33 +28,32 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-store";
     rev = "refs/tags/${version}";
-    hash = "sha256-VtKOe3IrvGcNWfp1/tg1cO94xtfkP7AbIHh0WTdlfbQ=";
+    hash = "sha256-l8WnuaMJN4/nZRkWoU6omgbd4hKR2m7YC+YVcvAqzcA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==67.7.2" "setuptools"
+      --replace-fail "setuptools==" "setuptools>="
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
-    keyring
+  dependencies = [
+    keyring_24
     macaroonbakery
     overrides
-    pydantic_1
+    pydantic
     pyxdg
     requests
     requests-toolbelt
   ];
 
+  pythonRelaxDeps = [ "macaroonbakery" ];
+
   pythonImportsCheck = [ "craft_store" ];
 
   nativeCheckInputs = [
-    pydantic_1
+    pydantic
     pytest-check
     pytest-mock
     pytestCheckHook

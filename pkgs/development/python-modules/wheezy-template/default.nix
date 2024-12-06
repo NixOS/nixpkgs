@@ -20,6 +20,6 @@ buildPythonPackage rec {
     description = "Lightweight template library";
     mainProgram = "wheezy.template";
     license = licenses.mit;
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
   };
 }

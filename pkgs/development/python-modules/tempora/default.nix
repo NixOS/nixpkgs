@@ -1,38 +1,38 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  freezegun,
+  fetchFromGitHub,
   jaraco-functools,
-  pytest-freezegun,
+  pytest-freezer,
   pytestCheckHook,
+  python-dateutil,
   pythonOlder,
-  pytz,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "tempora";
-  version = "5.5.1";
-  format = "pyproject";
+  version = "5.7.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ortR4hIZdtkxNHs+QzkXw2S4P91fZO8nM2yGW/H7D3U=";
+  src = fetchFromGitHub {
+    owner = "jaraco";
+    repo = "tempora";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-M6nWKYvgn4tk2diiTDAYb1uQdP8H1M8yqhsFLJ9H7HU=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jaraco-functools
-    pytz
+    python-dateutil
   ];
 
   nativeCheckInputs = [
-    freezegun
-    pytest-freezegun
+    pytest-freezer
     pytestCheckHook
   ];
 
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/tempora";
     changelog = "https://github.com/jaraco/tempora/blob/v${version}/NEWS.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

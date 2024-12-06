@@ -36,7 +36,7 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # Fails because spacy_alignments module cannot be loaded correctly.
   doCheck = false;
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     description = "Align tokenizations for spaCy and transformers";
     homepage = "https://github.com/explosion/spacy-alignments";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

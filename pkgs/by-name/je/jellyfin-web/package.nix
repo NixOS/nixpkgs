@@ -1,33 +1,20 @@
 {
   lib,
   stdenv,
-  overrideSDK,
   fetchFromGitHub,
   buildNpmPackage,
-  jellyfin,
   nix-update-script,
   pkg-config,
   xcbuild,
   pango,
   giflib,
-  darwin,
+  apple-sdk_11,
+  darwinMinVersionHook,
+  jellyfin,
 }:
-let
-  # node-canvas builds code that requires aligned_alloc,
-  # which on Darwin requires at least the 10.15 SDK
-  stdenv' =
-    if stdenv.isDarwin then
-      overrideSDK stdenv {
-        darwinMinVersion = "10.15";
-        darwinSdkVersion = "11.0";
-      }
-    else
-      stdenv;
-  buildNpmPackage' = buildNpmPackage.override { stdenv = stdenv'; };
-in
-buildNpmPackage' rec {
+buildNpmPackage rec {
   pname = "jellyfin-web";
-  version = "10.9.6";
+  version = "10.10.3";
 
   src =
     assert version == jellyfin.version;
@@ -35,20 +22,33 @@ buildNpmPackage' rec {
       owner = "jellyfin";
       repo = "jellyfin-web";
       rev = "v${version}";
-      hash = "sha256-cKMKcT2roah35Pv36KJqYIhwoYXaT1yYfvOsxbt+EfE=";
+      hash = "sha256-xmy2cr6MJSen6Pok3Wde4mBcu5pM4qtGEBfqMpGdAxY=";
     };
 
-  npmDepsHash = "sha256-9uAFWlbzDzd8f8G/v/eLWJ3Is4aO5mqEd4o/YZXDkTQ=";
+  postPatch = ''
+    substituteInPlace webpack.common.js \
+      --replace-fail "git describe --always --dirty" "echo ${src.rev}" \
+  '';
+
+  npmDepsHash = "sha256-qzjniTbJRNeZ2WFu8RBjcdZR96nvGRHMERdEiELLufg=";
+
+  preBuild = ''
+    # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
+    rm -r node_modules/sass-embedded*
+  '';
 
   npmBuildScript = [ "build:production" ];
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs =
     [ pango ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       giflib
-      darwin.apple_sdk.frameworks.CoreText
+      apple-sdk_11
+      # node-canvas builds code that requires aligned_alloc,
+      # which on Darwin requires at least the 10.15 SDK
+      (darwinMinVersionHook "10.15")
     ];
 
   installPhase = ''

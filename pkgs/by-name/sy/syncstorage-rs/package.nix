@@ -6,6 +6,7 @@
 , libmysqlclient
 , makeBinaryWrapper
 , lib
+, nix-update-script
 }:
 
 let
@@ -20,13 +21,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "syncstorage-rs";
-  version = "0.17.0";
+  version = "0.17.15";
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-8MxGrE8BaqSN0vPORKupKQuqHiv2vcqQhTX+SnmWFoM=";
+    hash = "sha256-2o1QVDOgcVWvU0G8/dmVnxX4w5ZOZ9D8oh5GgO1ZpV0=";
   };
 
   nativeBuildInputs = [
@@ -48,19 +49,21 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "deadpool-0.7.0" = "sha256-yQwn45EuzmPBwuT+iLJ/LLWAkBkW2vF+GLswdbpFVAY=";
+      "sentry-0.34.0" = "sha256-BdWz6EIEm2YU3DG3ODkuXCVCMV6srdyx2gXkOxINjHc=";
     };
   };
 
   # almost all tests need a DB to test against
   doCheck = false;
 
+  passthru.updateScript = nix-update-script {};
+
   meta = {
     description = "Mozilla Sync Storage built with Rust";
     homepage = "https://github.com/mozilla-services/syncstorage-rs";
     changelog = "https://github.com/mozilla-services/syncstorage-rs/releases/tag/${version}";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ pennae ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "syncserver";
   };

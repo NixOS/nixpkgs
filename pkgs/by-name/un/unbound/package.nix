@@ -36,7 +36,7 @@
 , withRedis ? false
 # Avoid .lib depending on lib.getLib openssl
 # The build gets a little hacky, so in some cases we disable this approach.
-, withSlimLib ? stdenv.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP
+, withSlimLib ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP
 # enable support for python plugins in unbound: note this is distinct from pyunbound
 # see https://unbound.docs.nlnetlabs.nl/en/latest/developer/python-modules.html
 , withPythonModule ? false
@@ -50,11 +50,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
-  version = "1.20.0";
+  version = "1.21.1";
 
   src = fetchurl {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${finalAttrs.version}.tar.gz";
-    hash = "sha256-VrTO7TNjlSIAD9lndVdt34eCuzYXYQcV1/Hnd8XsHb8=";
+    hash = "sha256-MDbSPCNiKzbTyH6UMRe97BrI+Bljbrl42AZBaw+p6kY=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
@@ -164,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
     homepage = "https://www.unbound.net";
-    maintainers = lib.teams.helsinki-systems.members;
+    maintainers = [ ];
     platforms = platforms.unix ++ platforms.windows;
   };
 })

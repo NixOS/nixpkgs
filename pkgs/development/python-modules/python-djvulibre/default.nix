@@ -7,7 +7,6 @@
   ghostscript_headless,
   packaging,
   pkg-config,
-  requests,
   setuptools,
   unittestCheckHook,
   wheel,

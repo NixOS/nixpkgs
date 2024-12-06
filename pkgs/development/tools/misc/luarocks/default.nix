@@ -24,14 +24,14 @@ with two "luarocks" derivations.
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "luarocks";
-  version = "3.11.0";
+  pname = "luarocks_bootstrap";
+  version = "3.11.1";
 
   src = fetchFromGitHub {
     owner = "luarocks";
     repo = "luarocks";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mSwwBuLWoMT38iYaV/BTdDmmBz4heTRJzxBHC0Vrvc4=";
+    hash = "sha256-GglygI8HP+aDFEuucOkjQ2Pgfv4+jW+og+2vL3KoZCQ=";
   };
 
   patches = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
     substituteInPlace $out/etc/luarocks/* \
-     --replace '${lua.luaOnBuild}' '${lua}'
+     --replace-quiet '${lua.luaOnBuild}' '${lua}'
    ''
     + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd luarocks \

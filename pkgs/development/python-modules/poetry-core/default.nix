@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "1.9.0";
-  format = "pyproject";
+  version = "1.9.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
-    repo = pname;
-    rev = version;
-    hash = "sha256-vvwKbzGlvv2LTbXfJxQVM3nUXFGntgJxsku6cbRxCzw=";
+    repo = "poetry-core";
+    rev = "refs/tags/${version}";
+    hash = "sha256-L8lR9sUdRYqjkDCQ0XHXZm5X6xD40t1gxlGiovvb/+8=";
   };
 
   nativeCheckInputs = [
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Core utilities for Poetry";
     homepage = "https://github.com/python-poetry/poetry-core/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

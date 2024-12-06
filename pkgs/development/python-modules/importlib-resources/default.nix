@@ -16,12 +16,13 @@
 
   # tests
   jaraco-collections,
+  jaraco-test,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "importlib-resources";
-  version = "6.3.2";
+  version = "6.4.5";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -29,7 +30,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "importlib_resources";
     inherit version;
-    hash = "sha256-lj63lkklKwFgwa/P5aHT/jrWbt0KixFL6s/7cMBnQiM=";
+    hash = "sha256-mAhiodFsnhR6WWA2d/oqpf2CuH8iO2y4cGlbz86DAGU=";
   };
 
   build-system = [
@@ -42,6 +43,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     jaraco-collections
+    jaraco-test
   ];
 
   pythonImportsCheck = [ "importlib_resources" ];

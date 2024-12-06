@@ -1,6 +1,6 @@
 { lib, fetchurl, buildDunePackage
 , ppx_sexp_conv, base64, jsonm, re, stringext, uri-sexp
-, ocaml, fmt, alcotest
+, fmt, alcotest
 , crowbar
 }:
 

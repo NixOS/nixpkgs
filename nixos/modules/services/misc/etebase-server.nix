@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.etebase-server;
 
@@ -13,24 +10,24 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule
+    (lib.mkRemovedOptionModule
       [ "services" "etebase-server" "customIni" ]
       "Set the option `services.etebase-server.settings' instead.")
-    (mkRemovedOptionModule
+    (lib.mkRemovedOptionModule
       [ "services" "etebase-server" "database" ]
       "Set the option `services.etebase-server.settings.database' instead.")
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "etebase-server" "secretFile" ]
       [ "services" "etebase-server" "settings" "secret_file" ])
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "etebase-server" "host" ]
       [ "services" "etebase-server" "settings" "allowed_hosts" "allowed_host1" ])
   ];
 
   options = {
     services.etebase-server = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         example = true;
         description = ''
@@ -43,77 +40,77 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.python3.pkgs.etebase-server;
-        defaultText = literalExpression "pkgs.python3.pkgs.etebase-server";
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.etebase-server;
+        defaultText = lib.literalExpression "pkgs.python3.pkgs.etebase-server";
         description = "etebase-server package to use.";
       };
 
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/etebase-server";
         description = "Directory to store the Etebase server data.";
       };
 
-      port = mkOption {
-        type = with types; nullOr port;
+      port = lib.mkOption {
+        type = with lib.types; nullOr port;
         default = 8001;
         description = "Port to listen on.";
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to open ports in the firewall for the server.
         '';
       };
 
-      unixSocket = mkOption {
-        type = with types; nullOr str;
+      unixSocket = lib.mkOption {
+        type = with lib.types; nullOr str;
         default = null;
         description = "The path to the socket to bind to.";
         example = "/run/etebase-server/etebase-server.sock";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = lib.types.submodule {
           freeformType = iniFmt.type;
 
           options = {
             global = {
-              debug = mkOption {
-                type = types.bool;
+              debug = lib.mkOption {
+                type = lib.types.bool;
                 default = false;
                 description = ''
                   Whether to set django's DEBUG flag.
                 '';
               };
-              secret_file = mkOption {
-                type = with types; nullOr str;
+              secret_file = lib.mkOption {
+                type = with lib.types; nullOr str;
                 default = null;
                 description = ''
                   The path to a file containing the secret
                   used as django's SECRET_KEY.
                 '';
               };
-              static_root = mkOption {
-                type = types.str;
+              static_root = lib.mkOption {
+                type = lib.types.str;
                 default = "${cfg.dataDir}/static";
-                defaultText = literalExpression ''"''${config.services.etebase-server.dataDir}/static"'';
+                defaultText = lib.literalExpression ''"''${config.services.etebase-server.dataDir}/static"'';
                 description = "The directory for static files.";
               };
-              media_root = mkOption {
-                type = types.str;
+              media_root = lib.mkOption {
+                type = lib.types.str;
                 default = "${cfg.dataDir}/media";
-                defaultText = literalExpression ''"''${config.services.etebase-server.dataDir}/media"'';
+                defaultText = lib.literalExpression ''"''${config.services.etebase-server.dataDir}/media"'';
                 description = "The media directory.";
               };
             };
             allowed_hosts = {
-              allowed_host1 = mkOption {
-                type = types.str;
+              allowed_host1 = lib.mkOption {
+                type = lib.types.str;
                 default = "0.0.0.0";
                 example = "localhost";
                 description = ''
@@ -122,15 +119,15 @@ in
               };
             };
             database = {
-              engine = mkOption {
-                type = types.enum [ "django.db.backends.sqlite3" "django.db.backends.postgresql" ];
+              engine = lib.mkOption {
+                type = lib.types.enum [ "django.db.backends.sqlite3" "django.db.backends.postgresql" ];
                 default = "django.db.backends.sqlite3";
                 description = "The database engine to use.";
               };
-              name = mkOption {
-                type = types.str;
+              name = lib.mkOption {
+                type = lib.types.str;
                 default = "${cfg.dataDir}/db.sqlite3";
-                defaultText = literalExpression ''"''${config.services.etebase-server.dataDir}/db.sqlite3"'';
+                defaultText = lib.literalExpression ''"''${config.services.etebase-server.dataDir}/db.sqlite3"'';
                 description = "The database name.";
               };
             };
@@ -154,15 +151,15 @@ in
         };
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = defaultUser;
         description = "User under which Etebase server runs.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = with pkgs; [
       (runCommand "etebase-server" {
@@ -170,7 +167,7 @@ in
       } ''
         makeWrapper ${cfg.package}/bin/etebase-server \
           $out/bin/etebase-server \
-          --chdir ${escapeShellArg cfg.dataDir} \
+          --chdir ${lib.escapeShellArg cfg.dataDir} \
           --prefix ETEBASE_EASY_CONFIG_PATH : "${configIni}"
       '')
     ];
@@ -217,7 +214,7 @@ in
         '';
     };
 
-    users = optionalAttrs (cfg.user == defaultUser) {
+    users = lib.optionalAttrs (cfg.user == defaultUser) {
       users.${defaultUser} = {
         isSystemUser = true;
         group = defaultUser;
@@ -227,7 +224,7 @@ in
       groups.${defaultUser} = {};
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
   };

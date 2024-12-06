@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "python-qt";
-  version = "3.5.2";
+  version = "3.5.6";
 
   src = fetchFromGitHub {
     owner = "MeVisLab";
     repo = "pythonqt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Mpi1pAPS/UuzaBK7I1kI0HlS3dphcKiVXIPuJwdEDXM=";
+    hash = "sha256-+cmwTTNmy87yuHukesA+nukM2RjMTHsvIbeG7J7X8ig=";
   };
 
   nativeBuildInputs = [
@@ -44,11 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ./extensions $out/include/PythonQt
   '';
 
-  preFixup = lib.optionalString stdenv.isDarwin ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id \
       $out/lib/libPythonQt-Qt5-Python3.${python3.sourceVersion.minor}.dylib \
       $out/lib/libPythonQt-Qt5-Python3.${python3.sourceVersion.minor}.dylib
-    install_name_tool -id \
+    install_name_tool -change \
+               libPythonQt-Qt5-Python3.${python3.sourceVersion.minor}.3.dylib \
+      $out/lib/libPythonQt-Qt5-Python3.${python3.sourceVersion.minor}.3.dylib \
+      -id \
       $out/lib/libPythonQt_QtAll-Qt5-Python3.${python3.sourceVersion.minor}.dylib \
       $out/lib/libPythonQt_QtAll-Qt5-Python3.${python3.sourceVersion.minor}.dylib
   '';

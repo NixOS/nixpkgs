@@ -14,7 +14,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     services.geth."testnet" = {
       enable = true;
       port = 30304;
-      network = "goerli";
+      network = "holesky";
       http = {
         enable = true;
         port = 18545;

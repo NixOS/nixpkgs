@@ -10,7 +10,6 @@
   pycryptodomex,
   pygtrie,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pythonOlder,
   setuptools,
 }:
@@ -33,7 +32,6 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -56,6 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/named-data/python-ndn";
     changelog = "https://github.com/named-data/python-ndn/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ janik ];
+    maintainers = [ ];
   };
 }

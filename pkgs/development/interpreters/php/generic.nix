@@ -37,7 +37,7 @@ let
     , hash ? null
     , extraPatches ? [ ]
     , packageOverrides ? (final: prev: { })
-    , phpAttrsOverrides ? (attrs: { })
+    , phpAttrsOverrides ? (final: prev: { })
     , pearInstallPhar ? (callPackage ./install-pear-nozlib-phar.nix { })
 
       # Sapi flags
@@ -58,21 +58,11 @@ let
     , zendSignalsSupport ? true
     , zendMaxExecutionTimersSupport ? false
     , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
-    , valgrindSupport ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
+    , valgrindSupport ? !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
     , ztsSupport ? apxs2Support
     }@args:
 
     let
-      # Compose two functions of the type expected by 'overrideAttrs'
-      # into one where changes made in the first are available to the second.
-      composeOverrides =
-        f: g: attrs:
-        let
-          fApplied = f attrs;
-          attrs' = attrs // fApplied;
-        in
-        fApplied // g attrs';
-
       # buildEnv wraps php to provide additional extensions and
       # configuration. Its usage is documented in
       # doc/languages-frameworks/php.section.md.
@@ -153,7 +143,8 @@ let
               overrideAttrs =
                 f:
                 let
-                  newPhpAttrsOverrides = composeOverrides (filteredArgs.phpAttrsOverrides or (attrs: { })) f;
+                  phpAttrsOverrides = filteredArgs.phpAttrsOverrides or (final: prev: { });
+                  newPhpAttrsOverrides = lib.composeExtensions (lib.toExtension phpAttrsOverrides) (lib.toExtension f);
                   php = generic (filteredArgs // { phpAttrsOverrides = newPhpAttrsOverrides; });
                 in
                 php.buildEnv { inherit extensions extraConfig; };
@@ -164,7 +155,7 @@ let
                 nixos = lib.recurseIntoAttrs nixosTests."php${lib.strings.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor php.version)}";
                 package = tests.php;
               };
-              inherit (php-packages) extensions buildPecl mkComposerRepository buildComposerProject buildComposerWithPlugin composerHooks mkExtension;
+              inherit (php-packages) extensions buildPecl mkComposerRepository mkComposerVendor buildComposerProject buildComposerProject2 buildComposerWithPlugin composerHooks composerHooks2 mkExtension;
               packages = php-packages.tools;
               meta = php.meta // {
                 outputsToInstall = [ "out" ];
@@ -213,7 +204,7 @@ let
           enableParallelBuilding = true;
 
           nativeBuildInputs = [ autoconf automake bison flex libtool pkg-config re2c ]
-            ++ lib.optional stdenv.isDarwin xcbuild;
+            ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
           buildInputs =
             # PCRE extension
@@ -285,7 +276,7 @@ let
               if [ -f "scripts/dev/genfiles" ]; then
                 ./scripts/dev/genfiles
               fi
-            '' + lib.optionalString stdenv.isDarwin ''
+            '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
               substituteInPlace configure --replace-fail "-lstdc++" "-lc++"
             '';
 
@@ -313,7 +304,11 @@ let
 
           src = if phpSrc == null then defaultPhpSrc else phpSrc;
 
-          patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
+          patches = lib.optionals (lib.versionOlder version "8.4")  [
+            ./fix-paths-php7.patch
+          ] ++ lib.optionals (lib.versionAtLeast version "8.4") [
+            ./fix-paths-php84.patch
+          ] ++ extraPatches;
 
           separateDebugInfo = true;
 
@@ -338,7 +333,7 @@ let
             overrideAttrs =
               f:
               let
-                newPhpAttrsOverrides = composeOverrides phpAttrsOverrides f;
+                newPhpAttrsOverrides = lib.composeExtensions (lib.toExtension phpAttrsOverrides) (lib.toExtension f);
                 php = generic (args // { phpAttrsOverrides = newPhpAttrsOverrides; });
               in
               php;
@@ -355,8 +350,9 @@ let
             outputsToInstall = [ "out" "dev" ];
           };
         };
+        final = attrs // (lib.toExtension phpAttrsOverrides) final attrs;
       in
-      attrs // phpAttrsOverrides attrs
+      final
     );
 in
 generic

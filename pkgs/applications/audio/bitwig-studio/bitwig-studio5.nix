@@ -14,32 +14,31 @@
 , libglvnd
 , libjack2
 , libjpeg
+, libnghttp2
 , libxkbcommon
 , makeWrapper
 , pango
 , pipewire
 , pulseaudio
+, vulkan-loader
 , wrapGAppsHook3
+, xcb-imdkit
 , xdg-utils
 , xorg
 , zlib
 }:
 
 stdenv.mkDerivation rec {
-  pname = "bitwig-studio";
-  version = "5.1.9";
+  pname = "bitwig-studio-unwrapped";
+  version = "5.2.7";
 
   src = fetchurl {
+    name = "bitwig-studio-${version}.deb";
     url = "https://www.bitwig.com/dl/Bitwig%20Studio/${version}/installer_linux/";
-    hash = "sha256-J5kLqXCMnGb0ZMhES6PQIPjN51ptlBGj4Fy8qSzJ6Qg=";
+    hash = "sha256-Tyi7qYhTQ5i6fRHhrmz4yHXSdicd4P4iuF9FRKRhkMI=";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook3 ];
-
-  unpackCmd = ''
-    mkdir -p root
-    dpkg-deb -x $curSrc root
-  '';
 
   dontBuild = true;
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
@@ -57,6 +56,7 @@ stdenv.mkDerivation rec {
     libjack2
     # libjpeg8 is required for converting jpeg's to colour palettes
     libjpeg
+    libnghttp2
     libxcb
     libXcursor
     libX11
@@ -65,7 +65,9 @@ stdenv.mkDerivation rec {
     pango
     pipewire
     pulseaudio
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
+    vulkan-loader
+    xcb-imdkit
     xcbutil
     xcbutilwm
     zlib
@@ -78,6 +80,11 @@ stdenv.mkDerivation rec {
     cp -r opt/bitwig-studio $out/libexec
     ln -s $out/libexec/bitwig-studio $out/bin/bitwig-studio
     cp -r usr/share $out/share
+
+    # Bitwig includes a copy of libxcb-imdkit.
+    # Removing it will force it to use our version.
+    rm $out/libexec/lib/bitwig-studio/libxcb-imdkit.so.1
+
     substitute usr/share/applications/com.bitwig.BitwigStudio.desktop \
       $out/share/applications/com.bitwig.BitwigStudio.desktop \
       --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
@@ -122,5 +129,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ bfortz michalrus mrVanDalo ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

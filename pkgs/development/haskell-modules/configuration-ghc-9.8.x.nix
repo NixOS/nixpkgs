@@ -4,6 +4,7 @@ with haskellLib;
 
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
+  inherit (pkgs) lib;
 in
 
 self: super: {
@@ -53,13 +54,13 @@ self: super: {
   # Version upgrades
   #
   th-abstraction = doDistribute self.th-abstraction_0_7_0_0;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_2_20240223;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_3_20241022;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
-  ghc-lib = doDistribute self.ghc-lib_9_8_2_20240223;
+  ghc-lib = doDistribute self.ghc-lib_9_8_3_20241022;
   megaparsec = doDistribute self.megaparsec_9_6_1;
-  # TODO: remove when aeson updates or launches a revision
-  # see https://github.com/haskell/aeson/issues/1089 and https://github.com/haskell/aeson/pulls/1088
-  aeson = doJailbreak (doDistribute self.aeson_2_2_2_0);
+  # aeson 2.2.3.0 seemingly unnecessesarily bumped the lower bound on hashable
+  # https://github.com/haskell/aeson/commit/1a666febd0775d8e88d315ece1b97cd20602fb5f
+  aeson = doJailbreak (doDistribute self.aeson_2_2_3_0);
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_2_0;
   xmonad = doDistribute self.xmonad_0_18_0;
   apply-refact = self.apply-refact_0_14_0_0;
@@ -67,8 +68,12 @@ self: super: {
   fourmolu = self.fourmolu_0_15_0_0;
   stylish-haskell = self.stylish-haskell_0_14_6_0;
   hlint = self.hlint_3_8;
-  ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_11_0;
+  ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_12_0;
   websockets = self.websockets_0_13_0_0;
+  th-desugar = doJailbreak self.th-desugar_1_16; # th-abstraction >=0.6 && <0.7
+  singletons-th = self.singletons-th_3_3;
+  singletons-base = self.singletons-base_3_3;
+  ghc-tags = self.ghc-tags_1_8;
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = self.ghc-exactprint_1_8_0_0;
@@ -113,13 +118,13 @@ self: super: {
   string-random = doJailbreak super.string-random; # text >=1.2.2.1 && <2.1
   inflections = doJailbreak super.inflections; # text >=0.2 && <2.1
   universe-some = doJailbreak super.universe-some; # th-abstraction < 0.7
+  broadcast-chan = doJailbreak super.broadcast-chan; # base <4.19  https://github.com/merijn/broadcast-chan/pull/19
 
   #
   # Test suite issues
   #
   unordered-containers = dontCheck super.unordered-containers; # ChasingBottoms doesn't support base 4.20
   lifted-base = dontCheck super.lifted-base; # doesn't compile with transformers == 0.6.*
-  hourglass = dontCheck super.hourglass; # umaintained, test suite doesn't compile anymore
   bsb-http-chunked = dontCheck super.bsb-http-chunked; # umaintained, test suite doesn't compile anymore
   pcre-heavy = dontCheck super.pcre-heavy; # GHC warnings cause the tests to fail
 
@@ -131,15 +136,6 @@ self: super: {
   #   A factor of 100 is insufficent, 200 seems seems to work.
   hip = appendConfigureFlag "--ghc-options=-fsimpl-tick-factor=200" super.hip;
 
-  # Fix build with text-2.x.
-  libmpd = appendPatch
-    (pkgs.fetchpatch {
-        name = "138.patch"; # https://github.com/vimus/libmpd-haskell/pull/138
-        url = "https://github.com/vimus/libmpd-haskell/compare/95d3b3bab5858d6d1f0e079d0ab7c2d182336acb...f1cbf247261641565a3937b90721f7955d254c5e.patch";
-        sha256 = "Q4fA2J/Tq+WernBo+UIMdj604ILOMlIYkG4Pr046DfM=";
-      })
-    super.libmpd;
-
   # Loosen bounds
   patch = appendPatch (pkgs.fetchpatch {
     url = "https://github.com/reflex-frp/patch/commit/91fed138483a7bf2b098d45b9e5cc36191776320.patch";
@@ -150,4 +146,9 @@ self: super: {
     sha256 = "sha256-umjwgdSKebJdRrXjwHhsi8HBqotx1vFibY9ttLkyT/0=";
   }) super.reflex;
 
+}
+// lib.optionalAttrs (lib.versionAtLeast super.ghc.version "9.8.3") {
+  # Breakage related to GHC 9.8.3 / deepseq 1.5.1.0
+  # https://github.com/typeable/generic-arbitrary/issues/18
+  generic-arbitrary = dontCheck super.generic-arbitrary;
 }

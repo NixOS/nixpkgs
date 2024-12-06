@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   streams = builtins.attrNames config.services.liquidsoap.streams;
 
@@ -29,7 +26,7 @@ in
 
   options = {
 
-    services.liquidsoap.streams = mkOption {
+    services.liquidsoap.streams = lib.mkOption {
 
       description = ''
           Set of Liquidsoap streams to start,
@@ -38,7 +35,7 @@ in
 
       default = {};
 
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           myStream1 = "/etc/liquidsoap/myStream1.liq";
           myStream2 = ./myStream2.liq;
@@ -46,13 +43,13 @@ in
         }
       '';
 
-      type = types.attrsOf (types.either types.path types.str);
+      type = lib.types.attrsOf (lib.types.either lib.types.path lib.types.str);
     };
 
   };
   ##### implementation
 
-  config = mkIf (builtins.length streams != 0) {
+  config = lib.mkIf (builtins.length streams != 0) {
 
     users.users.liquidsoap = {
       uid = config.ids.uids.liquidsoap;

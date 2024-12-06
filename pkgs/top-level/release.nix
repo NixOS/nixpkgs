@@ -12,7 +12,7 @@
 , system ? builtins.currentSystem
 , officialRelease ? false
   # The platform doubles for which we build Nixpkgs.
-, supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]
+, supportedSystems ? import ../../ci/supportedSystems.nix
   # The platform triples for which we build bootstrap tools.
 , bootstrapConfigs ? [
     "aarch64-apple-darwin"
@@ -22,6 +22,8 @@
     "x86_64-apple-darwin"
     "x86_64-unknown-linux-gnu"
     "x86_64-unknown-linux-musl"
+    # we can uncomment that once our bootstrap tarballs are fixed
+    #"x86_64-unknown-freebsd"
   ]
   # Strip most of attributes when evaluating to spare memory usage
 , scrubJobs ? true
@@ -29,6 +31,11 @@
 , nixpkgsArgs ? { config = {
     allowUnfree = false;
     inHydra = true;
+    # Exceptional unsafe packages that we still build and distribute,
+    # so users choosing to allow don't have to rebuild them every time.
+    permittedInsecurePackages = [
+      "olm-3.2.16" # see PR #347899
+    ];
   }; }
 
   # This flag, if set to true, will inhibit the use of `mapTestOn`
@@ -75,61 +82,106 @@ let
 
       release-checks = import ./nixpkgs-basic-release-checks.nix { inherit pkgs nixpkgs supportedSystems; };
 
+      manual = pkgs.nixpkgs-manual.override { inherit nixpkgs; };
       metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
-
-      manual = import ../../doc { inherit pkgs nixpkgs; };
       lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
       pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
-      darwin-tested = if supportDarwin.x86_64 then pkgs.releaseTools.aggregate
+      darwin-tested = if supportDarwin.x86_64 || supportDarwin.aarch64 then pkgs.releaseTools.aggregate
         { name = "nixpkgs-darwin-${jobs.tarball.version}";
           meta.description = "Release-critical builds for the Nixpkgs darwin channel";
-          constituents =
-            [ jobs.tarball
-              jobs.release-checks
-              jobs.cabal2nix.x86_64-darwin
-              jobs.ghc.x86_64-darwin
-              jobs.git.x86_64-darwin
-              jobs.go.x86_64-darwin
-              jobs.mariadb.x86_64-darwin
-              jobs.nix.x86_64-darwin
-              jobs.nixpkgs-review.x86_64-darwin
-              jobs.nix-info.x86_64-darwin
-              jobs.nix-info-tested.x86_64-darwin
-              jobs.openssh.x86_64-darwin
-              jobs.openssl.x86_64-darwin
-              jobs.pandoc.x86_64-darwin
-              jobs.postgresql.x86_64-darwin
-              jobs.python3.x86_64-darwin
-              jobs.ruby.x86_64-darwin
-              jobs.rustc.x86_64-darwin
-              # blocking ofBorg CI 2020-02-28
-              # jobs.stack.x86_64-darwin
-              jobs.stdenv.x86_64-darwin
-              jobs.vim.x86_64-darwin
-              jobs.cachix.x86_64-darwin
-              jobs.darwin.linux-builder.x86_64-darwin
+          constituents = [
+            jobs.tarball
+            jobs.release-checks
+          ]
+          ++ optionals supportDarwin.x86_64 [
+            jobs.cabal2nix.x86_64-darwin
+            jobs.ghc.x86_64-darwin
+            jobs.git.x86_64-darwin
+            jobs.go.x86_64-darwin
+            jobs.mariadb.x86_64-darwin
+            jobs.nix.x86_64-darwin
+            jobs.nixpkgs-review.x86_64-darwin
+            jobs.nix-info.x86_64-darwin
+            jobs.nix-info-tested.x86_64-darwin
+            jobs.openssh.x86_64-darwin
+            jobs.openssl.x86_64-darwin
+            jobs.pandoc.x86_64-darwin
+            jobs.postgresql.x86_64-darwin
+            jobs.python3.x86_64-darwin
+            jobs.ruby.x86_64-darwin
+            jobs.rustc.x86_64-darwin
+            # blocking ofBorg CI 2020-02-28
+            # jobs.stack.x86_64-darwin
+            jobs.stdenv.x86_64-darwin
+            jobs.vim.x86_64-darwin
+            jobs.cachix.x86_64-darwin
+            jobs.darwin.linux-builder.x86_64-darwin
 
-              # UI apps
-              # jobs.firefox-unwrapped.x86_64-darwin
-              jobs.qt5.qtmultimedia.x86_64-darwin
-              jobs.inkscape.x86_64-darwin
-              jobs.gimp.x86_64-darwin
-              jobs.emacs.x86_64-darwin
-              jobs.wireshark.x86_64-darwin
-              jobs.transmission_3-gtk.x86_64-darwin
-              jobs.transmission_4-gtk.x86_64-darwin
+            # UI apps
+            # jobs.firefox-unwrapped.x86_64-darwin
+            jobs.qt5.qtmultimedia.x86_64-darwin
+            jobs.inkscape.x86_64-darwin
+            jobs.gimp.x86_64-darwin
+            jobs.emacs.x86_64-darwin
+            jobs.wireshark.x86_64-darwin
+            jobs.transmission_3-gtk.x86_64-darwin
+            jobs.transmission_4-gtk.x86_64-darwin
 
-              # Tests
-              /*
-              jobs.tests.cc-wrapper.default.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
-              jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
-              jobs.tests.stdenv-inputs.x86_64-darwin
-              jobs.tests.macOSSierraShared.x86_64-darwin
-              jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
-              */
-            ];
+            # Tests
+            /*
+            jobs.tests.cc-wrapper.default.x86_64-darwin
+            jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
+            jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
+            jobs.tests.stdenv-inputs.x86_64-darwin
+            jobs.tests.macOSSierraShared.x86_64-darwin
+            jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
+            */
+          ]
+          ++ optionals supportDarwin.aarch64 [
+            jobs.cabal2nix.aarch64-darwin
+            jobs.ghc.aarch64-darwin
+            jobs.git.aarch64-darwin
+            jobs.go.aarch64-darwin
+            jobs.mariadb.aarch64-darwin
+            jobs.nix.aarch64-darwin
+            jobs.nixpkgs-review.aarch64-darwin
+            jobs.nix-info.aarch64-darwin
+            jobs.nix-info-tested.aarch64-darwin
+            jobs.openssh.aarch64-darwin
+            jobs.openssl.aarch64-darwin
+            jobs.pandoc.aarch64-darwin
+            jobs.postgresql.aarch64-darwin
+            jobs.python3.aarch64-darwin
+            jobs.ruby.aarch64-darwin
+            jobs.rustc.aarch64-darwin
+            # blocking ofBorg CI 2020-02-28
+            # jobs.stack.aarch64-darwin
+            jobs.stdenv.aarch64-darwin
+            jobs.vim.aarch64-darwin
+            jobs.cachix.aarch64-darwin
+            jobs.darwin.linux-builder.aarch64-darwin
+
+            # UI apps
+            # jobs.firefox-unwrapped.aarch64-darwin
+            jobs.qt5.qtmultimedia.aarch64-darwin
+            jobs.inkscape.aarch64-darwin
+            jobs.gimp.aarch64-darwin
+            jobs.emacs.aarch64-darwin
+            jobs.wireshark.aarch64-darwin
+            jobs.transmission_3-gtk.aarch64-darwin
+            jobs.transmission_4-gtk.aarch64-darwin
+
+            # Tests
+            /*
+            jobs.tests.cc-wrapper.default.aarch64-darwin
+            jobs.tests.cc-wrapper.llvmPackages.clang.aarch64-darwin
+            jobs.tests.cc-wrapper.llvmPackages.libcxx.aarch64-darwin
+            jobs.tests.stdenv-inputs.aarch64-darwin
+            jobs.tests.macOSSierraShared.aarch64-darwin
+            jobs.tests.stdenv.hooks.patch-shebangs.aarch64-darwin
+            */
+          ];
         } else null;
 
       unstable = pkgs.releaseTools.aggregate
@@ -163,8 +215,6 @@ let
               TODO: re-add tests; context: https://github.com/NixOS/nixpkgs/commit/36587a587ab191eddd868179d63c82cdd5dee21b
 
               jobs.tests.cc-wrapper.default.x86_64-linux
-              jobs.tests.cc-wrapper.gcc7Stdenv.x86_64-linux
-              jobs.tests.cc-wrapper.gcc8Stdenv.x86_64-linux
 
               # broken see issue #40038
 
@@ -196,8 +246,6 @@ let
               jobs.darwin.linux-builder.x86_64-darwin
               /*
               jobs.tests.cc-wrapper.default.x86_64-darwin
-              jobs.tests.cc-wrapper.gcc7Stdenv.x86_64-darwin
-              jobs.tests.cc-wrapper.gcc8Stdenv.x86_64-darwin
               jobs.tests.cc-wrapper.llvmPackages.clang.x86_64-darwin
               jobs.tests.cc-wrapper.llvmPackages.libcxx.x86_64-darwin
               jobs.tests.stdenv-inputs.x86_64-darwin
@@ -249,6 +297,16 @@ let
               # TODO: Re-enable once the new bootstrap-tools are in place.
               #inherit (bootstrap.test-pkgs) stdenv;
             }
+          else if hasSuffix "-freebsd" config then
+            let
+              bootstrap = import ../stdenv/freebsd/make-bootstrap-tools.nix {
+                pkgs = import ../.. {
+                  localSystem = { inherit config; };
+                };
+              };
+            in {
+              inherit (bootstrap) build;  # test does't exist yet
+            }
           else
             abort "No bootstrap implementation for system: ${config}"
         );
@@ -259,8 +317,9 @@ let
   # Conflicts usually cause silent job drops like in
   #   https://github.com/NixOS/nixpkgs/pull/182058
   jobs = let
-    packagePlatforms = if attrNamesOnly then id else release-lib.packagePlatforms;
-    packageJobs = {
+    packagePlatforms = release-lib.recursiveMapPackages
+      (if attrNamesOnly then id else release-lib.getPlatforms);
+    packageJobs = packagePlatforms pkgs // {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
       # Build selected packages (HLS) for multiple Haskell compilers to rebuild
@@ -272,6 +331,7 @@ let
         "ghc94"
         "ghc96"
         "ghc98"
+        "ghc910"
       ] (compilerName: {
         inherit (packagePlatforms pkgs.haskell.packages.${compilerName})
           haskell-language-server;
@@ -280,6 +340,8 @@ let
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
       pkgsLLVM.stdenv = [ "x86_64-linux" "aarch64-linux" ];
+      pkgsArocc.stdenv = [ "x86_64-linux" "aarch64-linux" ];
+      pkgsZig.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsMusl.stdenv = [ "x86_64-linux" "aarch64-linux" ];
       pkgsStatic.stdenv = [ "x86_64-linux" "aarch64-linux" ];
 
@@ -298,8 +360,8 @@ let
     };
     mapTestOn-packages =
       if attrNamesOnly
-      then pkgs // packageJobs
-      else mapTestOn ((packagePlatforms pkgs) // packageJobs);
+      then packageJobs
+      else mapTestOn packageJobs;
   in
     unionOfDisjoint nonPackageJobs mapTestOn-packages;
 

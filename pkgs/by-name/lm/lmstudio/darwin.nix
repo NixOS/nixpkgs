@@ -1,7 +1,6 @@
 { stdenv
 , fetchurl
 , undmg
-, lib
 , meta
 , pname
 , version
@@ -10,8 +9,8 @@ stdenv.mkDerivation {
   inherit meta pname version;
 
   src = fetchurl {
-    url = "https://releases.lmstudio.ai/mac/arm64/${version}/latest/LM-Studio-${version}-arm64.dmg";
-    hash = "sha256-byS0LNJQjs/+sf2anhTAdsXUWad9HujxmLx5uEfdlo8=";
+    url = "https://releases.lmstudio.ai/darwin/arm64/${version}/3/LM-Studio-${version}-arm64.dmg";
+    hash = "sha256-b9QJMZl42D3TL8nzoQ+Dtxhit8uzGp9gByeCCHyu6gw=";
   };
 
   nativeBuildInputs = [ undmg ];

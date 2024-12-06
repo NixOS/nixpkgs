@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "opshin";
-  version = "0.20.0";
+  version = "0.23.0";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "OpShin";
     repo = "opshin";
-    rev = version;
-    hash = "sha256-fJlPeVAuEf80FVxdXnaKASLmjMEgz6ysXenUY72+sos=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-H6tuSJYV9bAwXu/5Y8g6aFbbQFCpq2aqcmRaDq2cAEg=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -25,6 +26,11 @@ python3.pkgs.buildPythonApplication rec {
     frozenlist2
     astunparse
     ordered-set
+  ];
+
+  pythonRelaxDeps = [
+    "pluthon"
+    "uplc"
   ];
 
   meta = with lib; {

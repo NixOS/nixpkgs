@@ -22,6 +22,7 @@
 , valgrind
 , python3
 , nixosTests
+, wayland-scanner
 }:
 
 let
@@ -45,7 +46,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.25.0";
+  version = "1.26.2";
 
   outputs = [ "bin" "out" "dev" ];
 
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     owner = "libinput";
     repo = "libinput";
     rev = version;
-    hash = "sha256-c2FU5OW+CIgtYTQy+bwIbaw3SP1pVxaLokhO+ag5/1s=";
+    hash = "sha256-Ly832W2U38JuXiqvt6e7u3APynrmwi4Ns98bBdTBnP8=";
   };
 
   patches = [
@@ -86,6 +87,7 @@ stdenv.mkDerivation rec {
     cairo
     glib
     gtk3
+    wayland-scanner
   ];
 
   propagatedBuildInputs = [

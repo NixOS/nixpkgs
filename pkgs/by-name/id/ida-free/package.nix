@@ -36,10 +36,9 @@ stdenv.mkDerivation rec {
 
   icon = fetchurl {
     urls = [
-      "https://www.hex-rays.com/products/ida/news/8_1/images/icon_free.png"
       "https://web.archive.org/web/20221105181231if_/https://hex-rays.com/products/ida/news/8_1/images/icon_free.png"
     ];
-    sha256 = "sha256-widkv2VGh+eOauUK/6Sz/e2auCNFAsc8n9z0fdrSnW0=";
+    hash = "sha256-widkv2VGh+eOauUK/6Sz/e2auCNFAsc8n9z0fdrSnW0=";
   };
 
   desktopItem = makeDesktopItem {
@@ -121,12 +120,17 @@ stdenv.mkDerivation rec {
       ln -s $IDADIR/$bb $out/bin/$bb
     done
 
+    # runtimeDependencies don't get added to non-executables, and openssl is needed
+    #  for cloud decompilation
+    patchelf --add-needed libcrypto.so $IDADIR/libida64.so
+
     runHook postInstall
   '';
 
   meta = with lib; {
     description = "Freeware version of the world's smartest and most feature-full disassembler";
     homepage = "https://hex-rays.com/ida-free/";
+    changelog = "https://hex-rays.com/products/ida/news/";
     license = licenses.unfree;
     mainProgram = "ida64";
     maintainers = with maintainers; [ msanft ];

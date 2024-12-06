@@ -17,7 +17,7 @@ mkDerivation rec {
   buildInputs = [ qttools fribidi libunibreak ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/buggins/coolreader";
     description = "Cross platform open source e-book reader";
     mainProgram = "cr3";

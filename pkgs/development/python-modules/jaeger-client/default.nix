@@ -37,6 +37,6 @@ buildPythonPackage rec {
     downloadPage = "https://pypi.org/project/jaeger-client/";
     homepage = "https://github.com/jaegertracing/jaeger-client-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

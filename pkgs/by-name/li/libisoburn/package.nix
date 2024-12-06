@@ -39,12 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libburn
     libisofs
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     acl
     attr
   ];
 
-  propagatedBuildInputs = lib.optionals stdenv.isLinux [
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     acl
   ];
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://libburnia-project.org/";
-    description = "Enables creation and expansion of ISO-9660 filesystems on CD/DVD/BD ";
+    description = "Enables creation and expansion of ISO-9660 filesystems on CD/DVD/BD";
     changelog = "https://dev.lovelyhq.com/libburnia/libisoburn/src/tag/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     mainProgram = "osirrox";

@@ -153,7 +153,6 @@
 
     refined = callPackage ./refined.nix {};
 
-    sdl = throw "'idrisPackages.sdl' has been removed, as it was broken and unmaintained"; # added 2024-05-09
     sdl2 = callPackage ./sdl2.nix {};
 
     semidirect = callPackage ./semidirect.nix {};
@@ -207,5 +206,6 @@
   } // builtins_ // pkgs.lib.optionalAttrs config.allowAliases {
     # removed packages
     protobuf = throw "idrisPackages.protobuf has been removed: abandoned by upstream"; # Added 2022-02-06
+    sdl = throw "'idrisPackages.sdl' has been removed, as it was broken and unmaintained"; # added 2024-05-09
   };
 in fix' (extends overrides idrisPackages)

@@ -3,11 +3,8 @@
 , src
 , patches ? [ ]
 , version
-, coreutils
-, buildPackages
 , bison
 , flex
-, gdb
 , gperf
 , lndir
 , perl
@@ -36,7 +33,6 @@
 , libdatrie
 , lttng-ust
 , libepoxy
-, libiconv
 , dbus
 , fontconfig
 , freetype
@@ -71,15 +67,8 @@
 , unixODBCDrivers
   # darwin
 , moveBuildTree
+, darwinVersionInputs
 , xcbuild
-, AGL
-, AVFoundation
-, AppKit
-, Contacts
-, CoreBluetooth
-, EventKit
-, GSS
-, MetalKit
   # mingw
 , pkgsBuildBuild
   # optional dependencies
@@ -165,39 +154,29 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.xcbutilcursor
     libepoxy
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AGL
-    AVFoundation
-    AppKit
-    Contacts
-    CoreBluetooth
-    EventKit
-    GSS
-    MetalKit
   ] ++ lib.optionals libGLSupported [
     libGL
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     vulkan-headers
     vulkan-loader
-  ];
+  ] ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups;
 
   buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform at-spi2-core) [
     at-spi2-core
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libinput) [
     libinput
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    AppKit
-    CoreBluetooth
-  ]
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin darwinVersionInputs
   ++ lib.optional withGtk3 gtk3
-  ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups
   ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
   ++ lib.optional (postgresql != null && lib.meta.availableOn stdenv.hostPlatform postgresql) postgresql;
 
   nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake xmlstarlet ninja ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 
-  propagatedNativeBuildInputs = [ lndir ];
+  propagatedNativeBuildInputs = [ lndir ]
+    # I’m not sure if this is necessary, but the macOS mkspecs stuff
+    # tries to call `xcrun xcodebuild`, so better safe than sorry.
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   strictDeps = true;
 
@@ -206,7 +185,24 @@ stdenv.mkDerivation rec {
   inherit patches;
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace cmake/QtPublicAppleHelpers.cmake --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
+    # TODO: Verify that this catches all the occurrences?
+    for file in \
+      cmake/QtPublicAppleHelpers.cmake \
+      mkspecs/features/mac/asset_catalogs.prf \
+      mkspecs/features/mac/default_pre.prf \
+      mkspecs/features/mac/sdk.mk \
+      mkspecs/features/mac/sdk.prf \
+      mkspecs/features/permissions.prf \
+      src/corelib/Qt6CoreMacros.cmake
+    do
+      substituteInPlace "$file" \
+        --replace-quiet /usr/bin/xcrun '${lib.getExe' xcbuild "xcrun"}' \
+        --replace-quiet /usr/bin/xcode-select '${lib.getExe' xcbuild "xcode-select"}' \
+        --replace-quiet /usr/libexec/PlistBuddy '${lib.getExe' xcbuild "PlistBuddy"}'
+    done
+
+    substituteInPlace mkspecs/common/macx.conf \
+      --replace-fail 'CONFIG += ' 'CONFIG += no_default_rpath '
   '';
 
   fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
@@ -231,22 +227,17 @@ stdenv.mkDerivation rec {
     "-DQT_FEATURE_journald=${if systemdSupport then "ON" else "OFF"}"
     "-DQT_FEATURE_vulkan=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # error: 'path' is unavailable: introduced in macOS 10.15
-    "-DQT_FEATURE_cxx17_filesystem=OFF"
+    "-DQT_FEATURE_rpath=OFF"
   ] ++ lib.optionals isCrossBuild [
     "-DQT_HOST_PATH=${pkgsBuildBuild.qt6.qtbase}"
     "-DQt6HostInfo_DIR=${pkgsBuildBuild.qt6.qtbase}/lib/cmake/Qt6HostInfo"
   ]
   ++ lib.optional (qttranslations != null && !isCrossBuild) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
 
-  env.NIX_LDFLAGS = toString (lib.optionals stdenv.hostPlatform.isDarwin [
-    # Undefined symbols for architecture arm64: "___gss_c_nt_hostbased_service_oid_desc"
-    "-framework GSS"
-  ]);
-
   env.NIX_CFLAGS_COMPILE = "-DNIXPKGS_QT_PLUGIN_PREFIX=\"${qtPluginPrefix}\"";
 
   outputs = [ "out" "dev" ];
+  separateDebugInfo = true;
 
   moveToDev = false;
 
@@ -254,7 +245,7 @@ stdenv.mkDerivation rec {
     moveToOutput      "mkspecs/modules" "$dev"
     fixQtModulePaths  "$dev/mkspecs/modules"
     fixQtBuiltinPaths "$out" '*.pr?'
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
 
     # FIXME: not sure why this isn't added automatically?
     patchelf --add-rpath "${libmysqlclient}/lib/mariadb" $out/${qtPluginPrefix}/sqldrivers/libqsqlmysql.so

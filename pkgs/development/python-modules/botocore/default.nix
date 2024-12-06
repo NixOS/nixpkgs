@@ -3,36 +3,35 @@
   awscrt,
   buildPythonPackage,
   fetchPypi,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   jmespath,
+  python-dateutil,
+  urllib3,
+
+  # tests
   jsonschema,
   pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  pythonRelaxDepsHook,
-  setuptools,
-  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.34.109"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.35.30"; # N.B: if you change this, change boto3 and awscli to a matching version
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gEghJSWXgh9yI8s7/KKipROuC7mnHo4iYFr/aGbhPnE=";
+    hash = "sha256-q1NQ6KUOSNNx+i1RfWXCmkDEN4jLmhU4f5PqxaI98P0=";
   };
 
   pythonRelaxDeps = [ "urllib3" ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jmespath
     python-dateutil
     urllib3
@@ -53,15 +52,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "botocore" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     crt = [ awscrt ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Low-level interface to a growing number of Amazon Web Services";
     homepage = "https://github.com/boto/botocore";
     changelog = "https://github.com/boto/botocore/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ anthonyroussel ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
   };
 }

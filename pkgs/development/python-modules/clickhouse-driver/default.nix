@@ -7,7 +7,6 @@
   freezegun,
   lz4,
   mock,
-  nose,
   pytestCheckHook,
   pytest-xdist,
   pytz,
@@ -45,7 +44,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     freezegun
     mock
-    nose
     pytest-xdist
     pytestCheckHook
   ];

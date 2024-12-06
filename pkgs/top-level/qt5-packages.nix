@@ -40,7 +40,6 @@ makeScopeWithSplicing' {
     attrs = {
       inherit libsForQt5;
       inherit (pkgs) config lib fetchurl;
-      gconf = pkgs.gnome2.GConf;
       inherit (pkgs) gsettings-desktop-schemas;
     };
   in (lib.makeOverridable mkPlasma5 attrs);
@@ -69,9 +68,7 @@ makeScopeWithSplicing' {
     };
   in (lib.makeOverridable mkMaui attrs);
 
-  noExtraAttrs = set:
-    lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideScope'" "overrideDerivation" ]
-    // { __attrsFailEvaluation = true; };
+  noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideDerivation" ];
 
 in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGear // mauiPackages // qt5 // {
 
@@ -157,7 +154,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
   libopenshot = callPackage ../development/libraries/libopenshot {
-    stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+    stdenv = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+    python3 = pkgs.python311;
   };
 
   packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
@@ -172,8 +170,6 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   libqofono = callPackage ../development/libraries/libqofono { };
 
-  libqtav = callPackage ../development/libraries/libqtav { };
-
   libquotient = callPackage ../development/libraries/libquotient { };
 
   libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
@@ -183,6 +179,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   mapbox-gl-qml = libsForQt5.callPackage ../development/libraries/mapbox-gl-qml { };
 
   maplibre-gl-native = callPackage ../development/libraries/maplibre-gl-native { };
+
+  maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
   maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
 
@@ -209,7 +207,7 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
 
   qca = callPackage ../development/libraries/qca {
-    stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+    stdenv = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
     inherit (libsForQt5) qtbase;
   };
   qca-qt5 = self.qca;
@@ -241,7 +239,7 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   qtinstaller = callPackage ../development/libraries/qtinstaller { };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain {
-    stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+    stdenv = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
@@ -291,9 +289,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   xp-pen-g430-driver = callPackage ../os-specific/linux/xp-pen-drivers/g430 { };
 
+  xwaylandvideobridge = callPackage ../tools/wayland/xwaylandvideobridge { };
+
   yuview = callPackage ../applications/video/yuview { };
-}) // lib.optionalAttrs pkgs.config.allowAliases {
-  # Remove completely before 24.11
-  overrideScope' = builtins.throw "libsForQt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\".";
-}));
+})));
 }

@@ -2,15 +2,18 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  poetry-core,
   lxml,
+  paragraphs,
+  setuptools,
+  setuptools-scm,
   pytestCheckHook,
+  pythonOlder,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "docx2python";
-  version = "2.11.0";
+  version = "3.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,22 +22,29 @@ buildPythonPackage rec {
     owner = "ShayHill";
     repo = "docx2python";
     rev = "refs/tags/${version}";
-    hash = "sha256-SavRYnNbESRQh9Elk8qCt/qdI2x+sYZJFMYy+Gojg2k=";
+    hash = "sha256-ucLDdfmLAWcGunOKvh8tBQknXTPI1qOqyXgVGjQOGoQ=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ lxml ];
+  dependencies = [
+    lxml
+    paragraphs
+    typing-extensions
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "docx2python" ];
 
   meta = with lib; {
-    homepage = "https://github.com/ShayHill/docx2python";
     description = "Extract docx headers, footers, (formatted) text, footnotes, endnotes, properties, and images";
+    homepage = "https://github.com/ShayHill/docx2python";
     changelog = "https://github.com/ShayHill/docx2python/blob/${src.rev}/CHANGELOG.md";
-    maintainers = [ maintainers.ivar ];
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

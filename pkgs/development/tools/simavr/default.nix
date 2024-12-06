@@ -1,4 +1,4 @@
-{ lib, stdenv, makeSetupHook, fetchFromGitHub, libelf, which, pkg-config, freeglut
+{ lib, stdenv, makeSetupHook, fetchFromGitHub, libelf, which, pkg-config, libglut
 , avrgcc, avrlibc
 , libGLU, libGL
 , GLUT }:
@@ -31,12 +31,12 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ which pkg-config avrgcc ]
-    ++ lib.optional stdenv.isDarwin setupHookDarwin;
-  buildInputs = [ libelf freeglut libGLU libGL ]
-    ++ lib.optional stdenv.isDarwin GLUT;
+    ++ lib.optional stdenv.hostPlatform.isDarwin setupHookDarwin;
+  buildInputs = [ libelf libglut libGLU libGL ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin GLUT;
 
   # remove forbidden references to $TMPDIR
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out"/bin/*
   '';
 

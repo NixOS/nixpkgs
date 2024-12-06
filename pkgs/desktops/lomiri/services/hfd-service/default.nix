@@ -45,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    qtdeclarative
   ];
 
   buildInputs = [

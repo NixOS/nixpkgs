@@ -20,6 +20,8 @@ let
 
       nodes = {
         keycloak = { config, ... }: {
+          virtualisation.memorySize = 2047;
+
           security.pki.certificateFiles = [
             certs.ca.cert
           ];
@@ -44,11 +46,11 @@ let
             };
             plugins = with config.services.keycloak.package.plugins; [
               keycloak-discord
+              keycloak-metrics-spi
             ];
           };
           environment.systemPackages = with pkgs; [
-            xmlstarlet
-            html-tidy
+            htmlq
             jq
           ];
         };
@@ -121,6 +123,14 @@ let
                    | jq -r '"Authorization: bearer " + .access_token' >admin_auth_header
           """)
 
+          # Register the metrics SPI
+          keycloak.succeed(
+              """${pkgs.jre}/bin/keytool -import -alias snakeoil -file ${certs.ca.cert} -storepass aaaaaa -keystore cacert.jks -noprompt""",
+              """KC_OPTS='-Djavax.net.ssl.trustStore=cacert.jks -Djavax.net.ssl.trustStorePassword=aaaaaa' kcadm.sh config credentials --server '${frontendUrl}' --realm master --user admin --password "$(<${adminPasswordFile})" """,
+              """KC_OPTS='-Djavax.net.ssl.trustStore=cacert.jks -Djavax.net.ssl.trustStorePassword=aaaaaa' kcadm.sh update events/config -s 'eventsEnabled=true' -s 'adminEventsEnabled=true' -s 'eventsListeners+=metrics-listener'""",
+              """curl -sSf '${frontendUrl}/realms/master/metrics' | grep '^keycloak_admin_event_UPDATE'"""
+          )
+
           # Publish the realm, including a test OIDC client and user
           keycloak.succeed(
               "curl -sSf -H @admin_auth_header -X POST -H 'Content-Type: application/json' -d @${realmDataJson} '${frontendUrl}/admin/realms/'"
@@ -142,16 +152,14 @@ let
           # post url.
           keycloak.succeed(
               "curl -sSf -c cookie '${frontendUrl}/realms/${realm.realm}/protocol/openid-connect/auth?client_id=${client.name}&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob&scope=openid+email&response_type=code&response_mode=query&nonce=qw4o89g3qqm' >login_form",
-              "tidy -asxml -q -m login_form || true",
-              "xml sel -T -t -m \"_:html/_:body/_:div/_:div/_:div/_:div/_:div/_:div/_:form[@id='kc-form-login']\" -v @action login_form >form_post_url",
+              "htmlq '#kc-form-login' --attribute action --filename login_form --output form_post_url"
           )
 
           # Post the login form and save the response. Once again tidy up
           # the HTML, then extract the authorization code.
           keycloak.succeed(
               "curl -sSf -L -b cookie -d 'username=${user.username}' -d 'password=${password}' -d 'credentialId=' \"$(<form_post_url)\" >auth_code_html",
-              "tidy -asxml -q -m auth_code_html || true",
-              "xml sel -T -t -m \"_:html/_:body/_:div/_:div/_:div/_:div/_:div/_:input[@id='code']\" -v @value auth_code_html >auth_code",
+              "htmlq '#code' --attribute value --filename auth_code_html --output auth_code"
           )
 
           # Exchange the authorization code for an access token.

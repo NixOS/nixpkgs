@@ -1,18 +1,15 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.xdg.portal.lxqt;
 
 in
 {
   meta = {
-    maintainers = teams.lxqt.members;
+    maintainers = lib.teams.lxqt.members;
   };
 
   options.xdg.portal.lxqt = {
-    enable = mkEnableOption ''
+    enable = lib.mkEnableOption ''
       the desktop portal for the LXQt desktop environment.
 
       This will add the `lxqt.xdg-desktop-portal-lxqt`
@@ -20,10 +17,10 @@ in
       {option}`xdg.portal.extraPortals` option
     '';
 
-    styles = mkOption {
-      type = types.listOf types.package;
+    styles = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
       default = [];
-      example = literalExpression ''[
+      example = lib.literalExpression ''[
         pkgs.libsForQt5.qtstyleplugin-kvantum
         pkgs.breeze-qt5
         pkgs.qtcurve
@@ -36,7 +33,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     xdg.portal = {
       enable = true;
       extraPortals = [

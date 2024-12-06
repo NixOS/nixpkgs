@@ -2,12 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  python3Packages,
   poetry-core,
   tkinter,
   typing-extensions,
-  pythonRelaxDepsHook,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +19,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     poetry-core
   ];
 

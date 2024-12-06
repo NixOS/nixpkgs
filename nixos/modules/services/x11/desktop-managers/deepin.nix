@@ -47,13 +47,11 @@ in
       '';
 
       hardware.bluetooth.enable = mkDefault true;
-      hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
 
       services.deepin.dde-daemon.enable = mkForce true;
       services.deepin.dde-api.enable = mkForce true;
       services.deepin.app-services.enable = mkForce true;
-      services.deepin.deepin-anything.enable = mkDefault true;
 
       services.colord.enable = mkDefault true;
       services.accounts-daemon.enable = mkDefault true;
@@ -75,9 +73,7 @@ in
       xdg.icons.enable = true;
       xdg.portal.enable = mkDefault true;
       xdg.portal.extraPortals = mkDefault [
-        (pkgs.xdg-desktop-portal-gtk.override {
-          buildPortalsInGnome = false;
-        })
+        pkgs.xdg-desktop-portal-gtk
       ];
 
       # https://github.com/NixOS/nixpkgs/pull/247766#issuecomment-1722839259
@@ -156,8 +152,6 @@ in
             deepin-desktop-base
 
             startdde
-            # TODO: should remove dde-dock, but dde-shell still need it's dconfig
-            dde-dock
             dde-shell
             dde-launchpad
             dde-session-ui
@@ -166,35 +160,28 @@ in
             dde-control-center
             dde-network-core
             dde-clipboard
-            dde-calendar
             dde-polkit-agent
             dpa-ext-gnomekeyring
             deepin-desktop-schemas
-            deepin-terminal
             deepin-kwin
             dde-session
             dde-widgets
             dde-appearance
             dde-application-manager
             deepin-service-manager
-            dde-grand-search
+            dde-api-proxy
+            dde-tray-loader
           ];
           optionalPackages = [
+            dde-calendar
+            dde-grand-search
+            deepin-terminal
             onboard # dde-dock plugin
             deepin-calculator
             deepin-compressor
             deepin-editor
-            deepin-picker
-            deepin-draw
-            deepin-music
-            deepin-movie-reborn
             deepin-system-monitor
             deepin-shortcut-viewer
-            # freeimage has knownVulnerabilties, don't install packages using freeiamge by default
-            # deepin-album
-            # deepin-camera
-            # deepin-image-viewer
-            # deepin-screen-recorder
           ];
         in
         requiredPackages
@@ -217,6 +204,7 @@ in
         dde-application-manager
         deepin-service-manager
         dde-grand-search
+        dde-api-proxy
       ];
 
       systemd.packages = with pkgs.deepin; [
@@ -231,6 +219,7 @@ in
         dde-session
         dde-application-manager
         deepin-service-manager
+        dde-api-proxy
       ];
     };
 }

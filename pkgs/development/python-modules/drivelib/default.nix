@@ -1,38 +1,53 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
   expiringdict,
+  fetchPypi,
+  google-api-python-client,
   google-auth-httplib2,
   google-auth-oauthlib,
-  google-api-python-client,
+  pythonOlder,
+  setuptools,
+  versioneer,
 }:
 
 buildPythonPackage rec {
   pname = "drivelib";
   version = "0.3.0";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bz3dn6wm9mlm2w8czwjmhvf3ws3iggr57hvd8z8acl1qafr2g4m";
+    hash = "sha256-lTyRncKBMoU+ahuekt+LQ/PhNqySf4a4qLSmyo1t468=";
   };
 
-  propagatedBuildInputs = [
-    google-api-python-client
-    google-auth-oauthlib
-    google-auth-httplib2
-    expiringdict
+  postPatch = ''
+    # Remove vendorized versioneer.py
+    rm versioneer.py
+  '';
+
+  build-system = [
+    setuptools
+    versioneer
   ];
 
-  # tests depend on a google auth token
+  dependencies = [
+    expiringdict
+    google-api-python-client
+    google-auth-httplib2
+    google-auth-oauthlib
+  ];
+
+  # Tests depend on a google auth token
   doCheck = false;
 
   pythonImportsCheck = [ "drivelib" ];
 
   meta = with lib; {
     description = "Easy access to the most common Google Drive API calls";
-    homepage = "https://pypi.org/project/drivelib/";
+    homepage = "https://github.com/Lykos153/python-drivelib";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ gravndal ];
   };

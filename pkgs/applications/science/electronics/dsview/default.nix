@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ]
-    ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+    ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     boost fftw qtbase qtsvg libusb1 libzip
     python3
-  ] ++ lib.optional stdenv.isLinux qtwayland;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux qtwayland;
 
   meta = with lib; {
     description = "GUI program for supporting various instruments from DreamSourceLab, including logic analyzer, oscilloscope, etc";

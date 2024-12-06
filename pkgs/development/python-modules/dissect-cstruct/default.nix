@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-cstruct";
-  version = "3.14";
+  version = "4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.cstruct";
     rev = "refs/tags/${version}";
-    hash = "sha256-Et6Pb7iRVlxcrR4gZf+5h7mVikf7CyDd7N+q4TH18vg=";
+    hash = "sha256-Y6maLjugnso3cc9zyiZ/6AdrftYAAImYNBDXPJdTuWc=";
   };
 
   build-system = [

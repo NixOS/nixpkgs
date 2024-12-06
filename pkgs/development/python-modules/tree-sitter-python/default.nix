@@ -1,45 +1,27 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, cargo
-, rustPlatform
-, rustc
 , setuptools
-, wheel
 , tree-sitter
 }:
 
 buildPythonPackage rec {
   pname = "tree-sitter-python";
-  version = "0.21.0";
+  version = "0.23.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter-python";
     rev = "v${version}";
-    hash = "sha256-ZQ949GbgzZ/W667J+ekvQbs4bGnbDO+IWejivhxPZXM=";
+    hash = "sha256-cOBG2xfFJ0PpR1RIKW1GeeNeOBA9DAP/N4RXRGYp3yw=";
   };
-
-  cargoDeps = rustPlatform.importCargoLock {
-    # Upstream doesn't track a Cargo.lock file unfortunatly, but they barely
-    # have rust dependencies so it doesn't cost us too much.
-    lockFile = ./Cargo.lock;
-  };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
 
   build-system = [
-    cargo
-    rustPlatform.cargoSetupHook
-    rustc
     setuptools
-    wheel
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     core = [
       tree-sitter
     ];

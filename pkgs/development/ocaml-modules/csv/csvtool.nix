@@ -1,4 +1,4 @@
-{ lib, ocamlPackages }:
+{ ocamlPackages }:
 
 let inherit (ocamlPackages) buildDunePackage csv uutf; in
 

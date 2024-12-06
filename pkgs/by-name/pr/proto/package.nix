@@ -10,18 +10,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "proto";
-  version = "0.37.1";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "moonrepo";
-    repo = pname;
+    repo = "proto";
     rev = "v${version}";
-    hash = "sha256-IqXxjR+M1OCRKUA2HCT6WQvdBMOa0efT8m+drhyQCoE=";
+    hash = "sha256-ZCuqxsCyaw5JmX9bpsSeTpSc07DnvPE9EiRQrHR5UNo=";
   };
 
-  cargoHash = "sha256-NnTiT1jLMo9EfYau+U0FiAC+V67GnoI90vSsotwniio=";
+  cargoHash = "sha256-ykl/WC3sfIwT1uhTrnRz2G8bzr1vkoGB03MwNP/Y5Xs=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
     libiconv
   ];
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     # proto looks up a proto-shim executable file in $PROTO_LOOKUP_DIR
-    wrapProgram $out/bin/${pname} \
+    wrapProgram $out/bin/proto \
       --set PROTO_LOOKUP_DIR $out/bin
   '';
 

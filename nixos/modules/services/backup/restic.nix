@@ -1,28 +1,25 @@
 { config, lib, pkgs, utils, ... }:
-
-with lib;
-
 let
   # Type for a valid systemd unit option. Needed for correctly passing "timerConfig" to "systemd.timers"
   inherit (utils.systemdUtils.unitOptions) unitOption;
 in
 {
-  options.services.restic.backups = mkOption {
+  options.services.restic.backups = lib.mkOption {
     description = ''
       Periodic backups to create with Restic.
     '';
-    type = types.attrsOf (types.submodule ({ name, ... }: {
+    type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: {
       options = {
-        passwordFile = mkOption {
-          type = types.str;
+        passwordFile = lib.mkOption {
+          type = lib.types.str;
           description = ''
             Read the repository password from a file.
           '';
           example = "/etc/nixos/restic-password";
         };
 
-        environmentFile = mkOption {
-          type = with types; nullOr str;
+        environmentFile = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = null;
           description = ''
             file containing the credentials to access the repository, in the
@@ -30,8 +27,8 @@ in
           '';
         };
 
-        rcloneOptions = mkOption {
-          type = with types; nullOr (attrsOf (oneOf [ str bool ]));
+        rcloneOptions = lib.mkOption {
+          type = with lib.types; nullOr (attrsOf (oneOf [ str bool ]));
           default = null;
           description = ''
             Options to pass to rclone to control its behavior.
@@ -47,8 +44,8 @@ in
           };
         };
 
-        rcloneConfig = mkOption {
-          type = with types; nullOr (attrsOf (oneOf [ str bool ]));
+        rcloneConfig = lib.mkOption {
+          type = with lib.types; nullOr (attrsOf (oneOf [ str bool ]));
           default = null;
           description = ''
             Configuration for the rclone remote being used for backup.
@@ -71,8 +68,8 @@ in
           };
         };
 
-        rcloneConfigFile = mkOption {
-          type = with types; nullOr path;
+        rcloneConfigFile = lib.mkOption {
+          type = with lib.types; nullOr path;
           default = null;
           description = ''
             Path to the file containing rclone configuration. This file
@@ -83,8 +80,17 @@ in
           '';
         };
 
-        repository = mkOption {
-          type = with types; nullOr str;
+        inhibitsSleep = lib.mkOption {
+          default = false;
+          type = lib.types.bool;
+          example = true;
+          description = ''
+            Prevents the system from sleeping while backing up.
+          '';
+        };
+
+        repository = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = null;
           description = ''
             repository to backup to.
@@ -92,18 +98,18 @@ in
           example = "sftp:backup@192.168.1.100:/backups/${name}";
         };
 
-        repositoryFile = mkOption {
-          type = with types; nullOr path;
+        repositoryFile = lib.mkOption {
+          type = with lib.types; nullOr path;
           default = null;
           description = ''
             Path to the file containing the repository location to backup to.
           '';
         };
 
-        paths = mkOption {
+        paths = lib.mkOption {
           # This is nullable for legacy reasons only. We should consider making it a pure listOf
           # after some time has passed since this comment was added.
-          type = types.nullOr (types.listOf types.str);
+          type = lib.types.nullOr (lib.types.listOf lib.types.str);
           default = [ ];
           description = ''
             Which paths to backup, in addition to ones specified via
@@ -117,8 +123,8 @@ in
           ];
         };
 
-        exclude = mkOption {
-          type = types.listOf types.str;
+        exclude = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ ];
           description = ''
             Patterns to exclude when backing up. See
@@ -132,8 +138,8 @@ in
           ];
         };
 
-        timerConfig = mkOption {
-          type = types.nullOr (types.attrsOf unitOption);
+        timerConfig = lib.mkOption {
+          type = lib.types.nullOr (lib.types.attrsOf unitOption);
           default = {
             OnCalendar = "daily";
             Persistent = true;
@@ -150,8 +156,8 @@ in
           };
         };
 
-        user = mkOption {
-          type = types.str;
+        user = lib.mkOption {
+          type = lib.types.str;
           default = "root";
           description = ''
             As which user the backup should run.
@@ -159,8 +165,8 @@ in
           example = "postgresql";
         };
 
-        extraBackupArgs = mkOption {
-          type = types.listOf types.str;
+        extraBackupArgs = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ ];
           description = ''
             Extra arguments passed to restic backup.
@@ -170,8 +176,8 @@ in
           ];
         };
 
-        extraOptions = mkOption {
-          type = types.listOf types.str;
+        extraOptions = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ ];
           description = ''
             Extra extended options to be passed to the restic --option flag.
@@ -181,16 +187,16 @@ in
           ];
         };
 
-        initialize = mkOption {
-          type = types.bool;
+        initialize = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Create the repository if it doesn't exist.
           '';
         };
 
-        pruneOpts = mkOption {
-          type = types.listOf types.str;
+        pruneOpts = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ ];
           description = ''
             A list of options (--keep-\* et al.) for 'restic forget
@@ -206,16 +212,16 @@ in
           ];
         };
 
-        runCheck = mkOption {
-          type = types.bool;
+        runCheck = lib.mkOption {
+          type = lib.types.bool;
           default = (builtins.length config.services.restic.backups.${name}.checkOpts > 0);
-          defaultText = literalExpression ''builtins.length config.services.backups.${name}.checkOpts > 0'';
+          defaultText = lib.literalExpression ''builtins.length config.services.backups.${name}.checkOpts > 0'';
           description = "Whether to run the `check` command with the provided `checkOpts` options.";
           example = true;
         };
 
-        checkOpts = mkOption {
-          type = types.listOf types.str;
+        checkOpts = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [ ];
           description = ''
             A list of options for 'restic check'.
@@ -225,8 +231,8 @@ in
           ];
         };
 
-        dynamicFilesFrom = mkOption {
-          type = with types; nullOr str;
+        dynamicFilesFrom = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = null;
           description = ''
             A script that produces a list of files to back up.  The
@@ -236,23 +242,23 @@ in
           example = "find /home/matt/git -type d -name .git";
         };
 
-        backupPrepareCommand = mkOption {
-          type = with types; nullOr str;
+        backupPrepareCommand = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = null;
           description = ''
             A script that must run before starting the backup process.
           '';
         };
 
-        backupCleanupCommand = mkOption {
-          type = with types; nullOr str;
+        backupCleanupCommand = lib.mkOption {
+          type = with lib.types; nullOr str;
           default = null;
           description = ''
             A script that must run after finishing the backup process.
           '';
         };
 
-        package = mkPackageOption pkgs "restic" { };
+        package = lib.mkPackageOption pkgs "restic" { };
 
         createWrapper = lib.mkOption {
           type = lib.types.bool;
@@ -290,47 +296,54 @@ in
   };
 
   config = {
-    assertions = mapAttrsToList (n: v: {
+    assertions = lib.mapAttrsToList (n: v: {
       assertion = (v.repository == null) != (v.repositoryFile == null);
       message = "services.restic.backups.${n}: exactly one of repository or repositoryFile should be set";
     }) config.services.restic.backups;
     systemd.services =
-      mapAttrs'
+      lib.mapAttrs'
         (name: backup:
           let
-            extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
-            resticCmd = "${backup.package}/bin/restic${extraOptions}";
-            excludeFlags = optional (backup.exclude != []) "--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" backup.exclude)}";
+            extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
+            inhibitCmd = lib.concatStringsSep " " [
+              "${pkgs.systemd}/bin/systemd-inhibit"
+              "--mode='block'"
+              "--who='restic'"
+              "--what='sleep'"
+              "--why=${lib.escapeShellArg "Scheduled backup ${name}"} "
+            ];
+            resticCmd = "${lib.optionalString backup.inhibitsSleep inhibitCmd}${backup.package}/bin/restic${extraOptions}";
+            excludeFlags = lib.optional (backup.exclude != []) "--exclude-file=${pkgs.writeText "exclude-patterns" (lib.concatStringsSep "\n" backup.exclude)}";
             filesFromTmpFile = "/run/restic-backups-${name}/includes";
             doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != []);
-            pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
-              (resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts))
+            pruneCmd = lib.optionals (builtins.length backup.pruneOpts > 0) [
+              (resticCmd + " forget --prune " + (lib.concatStringsSep " " backup.pruneOpts))
             ];
-            checkCmd = optionals backup.runCheck [
-                (resticCmd + " check " + (concatStringsSep " " backup.checkOpts))
+            checkCmd = lib.optionals backup.runCheck [
+                (resticCmd + " check " + (lib.concatStringsSep " " backup.checkOpts))
             ];
             # Helper functions for rclone remotes
-            rcloneRemoteName = builtins.elemAt (splitString ":" backup.repository) 1;
-            rcloneAttrToOpt = v: "RCLONE_" + toUpper (builtins.replaceStrings [ "-" ] [ "_" ] v);
-            rcloneAttrToConf = v: "RCLONE_CONFIG_" + toUpper (rcloneRemoteName + "_" + v);
+            rcloneRemoteName = builtins.elemAt (lib.splitString ":" backup.repository) 1;
+            rcloneAttrToOpt = v: "RCLONE_" + lib.toUpper (builtins.replaceStrings [ "-" ] [ "_" ] v);
+            rcloneAttrToConf = v: "RCLONE_CONFIG_" + lib.toUpper (rcloneRemoteName + "_" + v);
             toRcloneVal = v: if lib.isBool v then lib.boolToString v else v;
           in
-          nameValuePair "restic-backups-${name}" ({
+          lib.nameValuePair "restic-backups-${name}" ({
             environment = {
               # not %C, because that wouldn't work in the wrapper script
               RESTIC_CACHE_DIR = "/var/cache/restic-backups-${name}";
               RESTIC_PASSWORD_FILE = backup.passwordFile;
               RESTIC_REPOSITORY = backup.repository;
               RESTIC_REPOSITORY_FILE = backup.repositoryFile;
-            } // optionalAttrs (backup.rcloneOptions != null) (mapAttrs'
+            } // lib.optionalAttrs (backup.rcloneOptions != null) (lib.mapAttrs'
               (name: value:
-                nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
+                lib.nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
               )
-              backup.rcloneOptions) // optionalAttrs (backup.rcloneConfigFile != null) {
+              backup.rcloneOptions) // lib.optionalAttrs (backup.rcloneConfigFile != null) {
               RCLONE_CONFIG = backup.rcloneConfigFile;
-            } // optionalAttrs (backup.rcloneConfig != null) (mapAttrs'
+            } // lib.optionalAttrs (backup.rcloneConfig != null) (lib.mapAttrs'
               (name: value:
-                nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
+                lib.nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
               )
               backup.rcloneConfig);
             path = [ config.programs.ssh.package ];
@@ -339,37 +352,37 @@ in
             after = [ "network-online.target" ];
             serviceConfig = {
               Type = "oneshot";
-              ExecStart = (optionals doBackup [ "${resticCmd} backup ${concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} --files-from=${filesFromTmpFile}" ])
+              ExecStart = (lib.optionals doBackup [ "${resticCmd} backup ${lib.concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} --files-from=${filesFromTmpFile}" ])
                 ++ pruneCmd ++ checkCmd;
               User = backup.user;
               RuntimeDirectory = "restic-backups-${name}";
               CacheDirectory = "restic-backups-${name}";
               CacheDirectoryMode = "0700";
               PrivateTmp = true;
-            } // optionalAttrs (backup.environmentFile != null) {
+            } // lib.optionalAttrs (backup.environmentFile != null) {
               EnvironmentFile = backup.environmentFile;
             };
-          } // optionalAttrs (backup.initialize || doBackup || backup.backupPrepareCommand != null) {
+          } // lib.optionalAttrs (backup.initialize || doBackup || backup.backupPrepareCommand != null) {
             preStart = ''
-              ${optionalString (backup.backupPrepareCommand != null) ''
+              ${lib.optionalString (backup.backupPrepareCommand != null) ''
                 ${pkgs.writeScript "backupPrepareCommand" backup.backupPrepareCommand}
               ''}
-              ${optionalString (backup.initialize) ''
-                ${resticCmd} snapshots || ${resticCmd} init
+              ${lib.optionalString (backup.initialize) ''
+                ${resticCmd} cat config > /dev/null || ${resticCmd} init
               ''}
-              ${optionalString (backup.paths != null && backup.paths != []) ''
-                cat ${pkgs.writeText "staticPaths" (concatStringsSep "\n" backup.paths)} >> ${filesFromTmpFile}
+              ${lib.optionalString (backup.paths != null && backup.paths != []) ''
+                cat ${pkgs.writeText "staticPaths" (lib.concatLines backup.paths)} >> ${filesFromTmpFile}
               ''}
-              ${optionalString (backup.dynamicFilesFrom != null) ''
+              ${lib.optionalString (backup.dynamicFilesFrom != null) ''
                 ${pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom} >> ${filesFromTmpFile}
               ''}
             '';
-          } // optionalAttrs (doBackup || backup.backupCleanupCommand != null) {
+          } // lib.optionalAttrs (doBackup || backup.backupCleanupCommand != null) {
             postStop = ''
-              ${optionalString (backup.backupCleanupCommand != null) ''
+              ${lib.optionalString (backup.backupCleanupCommand != null) ''
                 ${pkgs.writeScript "backupCleanupCommand" backup.backupCleanupCommand}
               ''}
-              ${optionalString doBackup ''
+              ${lib.optionalString doBackup ''
                 rm ${filesFromTmpFile}
               ''}
             '';
@@ -377,12 +390,12 @@ in
         )
         config.services.restic.backups;
     systemd.timers =
-      mapAttrs'
-        (name: backup: nameValuePair "restic-backups-${name}" {
+      lib.mapAttrs'
+        (name: backup: lib.nameValuePair "restic-backups-${name}" {
           wantedBy = [ "timers.target" ];
           timerConfig = backup.timerConfig;
         })
-        (filterAttrs (_: backup: backup.timerConfig != null) config.services.restic.backups);
+        (lib.filterAttrs (_: backup: backup.timerConfig != null) config.services.restic.backups);
 
     # generate wrapper scripts, as described in the createWrapper option
     environment.systemPackages = lib.mapAttrsToList (name: backup: let

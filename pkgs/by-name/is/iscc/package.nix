@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     cp -r ./app/* "$out/bin"
 
-    cat << 'EOF' > "$out/bin/${pname}"
+    cat << 'EOF' > "$out/bin/iscc"
     #!${runtimeShell}
     export PATH=${wineWow64Packages.stable}/bin:$PATH
     export WINEDLLOVERRIDES="mscoree=" # disable mono
@@ -44,10 +44,10 @@ stdenv.mkDerivation rec {
     ${wineWow64Packages.stable}/bin/wine "$out/bin/ISCC.exe" "$wineInputFile"
     EOF
 
-    substituteInPlace $out/bin/${pname} \
+    substituteInPlace $out/bin/iscc \
       --replace "\$out" "$out"
 
-    chmod +x "$out/bin/${pname}"
+    chmod +x "$out/bin/iscc"
 
     runHook postInstall
   '';
@@ -56,8 +56,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Compiler for Inno Setup, a tool for creating Windows installers";
     homepage = "https://jrsoftware.org/isinfo.php";
+    changelog = "https://jrsoftware.org/files/is6-whatsnew.htm";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = wineWow64Packages.stable.meta.platforms;
   };
 }

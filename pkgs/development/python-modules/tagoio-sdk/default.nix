@@ -8,7 +8,6 @@
   python-dateutil,
   python-socketio,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   requests-mock,
 }:
@@ -31,7 +30,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

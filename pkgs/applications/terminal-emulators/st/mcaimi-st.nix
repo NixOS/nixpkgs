@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "Suckless Terminal fork";
     mainProgram = "st";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

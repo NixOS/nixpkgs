@@ -1,18 +1,28 @@
-{ lib, buildDotnetModule, fetchFromGitHub, z3 }:
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  z3,
+  dotnetCorePackages,
+}:
 
 buildDotnetModule rec {
   pname = "Boogie";
-  version = "3.1.6";
+  version = "3.2.5";
 
   src = fetchFromGitHub {
     owner = "boogie-org";
     repo = "boogie";
     rev = "v${version}";
-    sha256 = "sha256-Bli/vEzzVQTWicQJskK9cQC2XsFRwMxX9cAePXN511c=";
+    hash = "sha256-36aGVJEzaAwQgR11NI+v8c4cXm24iiXtiwjW6qd3qsE=";
   };
 
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   projectFile = [ "Source/Boogie.sln" ];
   nugetDeps = ./deps.nix;
+
+  # [...]Microsoft.NET.Publish.targets(248,5): error MSB3021: Unable to copy file "[...]/NUnit3.TestAdapter.pdb" to "[...]/NUnit3.TestAdapter.pdb". Access to the path '[...]/NUnit3.TestAdapter.pdb' is denied. [[...]/ExecutionEngineTests.csproj]
+  enableParallelBuilding = false;
 
   executables = [ "BoogieDriver" ];
 
@@ -21,18 +31,18 @@ buildDotnetModule rec {
   ];
 
   postInstall = ''
-      # so that this derivation can be used as a vim plugin to install syntax highlighting
-      vimdir=$out/share/vim-plugins/boogie
-      install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
-      mkdir $vimdir/ftdetect
-      echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
-      mkdir -p $out/share/nvim
-      ln -s $out/share/vim-plugins/boogie $out/share/nvim/site
+    # so that this derivation can be used as a vim plugin to install syntax highlighting
+    vimdir=$out/share/vim-plugins/boogie
+    install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
+    mkdir $vimdir/ftdetect
+    echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
+    mkdir -p $out/share/nvim
+    ln -s $out/share/vim-plugins/boogie $out/share/nvim/site
   '';
 
   postFixup = ''
-      ln -s "$out/bin/BoogieDriver" "$out/bin/boogie"
-      rm -f $out/bin/{Microsoft,NUnit3,System}.* "$out/bin"/*Tests
+    ln -s "$out/bin/BoogieDriver" "$out/bin/boogie"
+    rm -f $out/bin/{Microsoft,NUnit3,System}.* "$out/bin"/*Tests
   '';
 
   doInstallCheck = true;
@@ -54,4 +64,3 @@ buildDotnetModule rec {
     platforms = with platforms; (linux ++ darwin);
   };
 }
-

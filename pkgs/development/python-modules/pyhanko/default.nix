@@ -1,73 +1,72 @@
 {
   lib,
-  aiohttp,
-  asn1crypto,
+  stdenv,
   buildPythonPackage,
-  certomancer,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  asn1crypto,
   click,
   cryptography,
-  defusedxml,
-  fetchFromGitHub,
-  fonttools,
-  freezegun,
-  oscrypto,
-  pillow,
   pyhanko-certvalidator,
-  pytest-aiohttp,
-  pytestCheckHook,
-  python-barcode,
-  python-pae,
-  python-pkcs11,
-  pythonOlder,
-  pytz,
   pyyaml,
   qrcode,
   requests,
-  requests-mock,
-  setuptools,
   tzlocal,
+
+  # optional-dependencies
+  oscrypto,
+  defusedxml,
+  fonttools,
   uharfbuzz,
-  wheel,
+  pillow,
+  python-barcode,
+  python-pkcs11,
+  aiohttp,
   xsdata,
+
+  # tests
+  certomancer,
+  freezegun,
+  pytest-aiohttp,
+  pytestCheckHook,
+  python-pae,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
   pname = "pyhanko";
-  version = "0.21.0";
+  version = "0.25.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+RlrXuKMY89mO4iuFw7RLQABy+wLrAeHlEvTDCpBSqU=";
+    hash = "sha256-HJkCQ5YDVr17gtY4PW89ep7GwFdP21/ruBEKm7j3+Qo=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace ' "pytest-runner",' ""
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
+  pythonRelaxDeps = [
+    "cryptography"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asn1crypto
     click
     cryptography
     pyhanko-certvalidator
-    pytz
     pyyaml
     qrcode
     requests
     tzlocal
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     extra-pubkey-algs = [ oscrypto ];
     xmp = [ defusedxml ];
     opentype = [
@@ -87,11 +86,11 @@ buildPythonPackage rec {
     aiohttp
     certomancer
     freezegun
-    python-pae
     pytest-aiohttp
-    requests-mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+    python-pae
+    requests-mock
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # ModuleNotFoundError: No module named 'csc_dummy'
@@ -126,12 +125,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyhanko" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sign and stamp PDF files";
     mainProgram = "pyhanko";
     homepage = "https://github.com/MatthiasValvekens/pyHanko";
     changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/v${version}/docs/changelog.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

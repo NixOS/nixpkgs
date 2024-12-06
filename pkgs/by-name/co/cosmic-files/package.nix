@@ -6,6 +6,7 @@
 , cosmic-icons
 , just
 , pkg-config
+, glib
 , libxkbcommon
 , wayland
 , xorg
@@ -13,34 +14,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-files";
-  version = "0-unstable-2024-06-10";
+  version = "1.0.0-alpha.1";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "6123108f3ae3c7074264184952f0a53e49a981d5";
-    hash = "sha256-BeqpoLIZbR5Dg7OGYGQMFWBLdD96n4t7fX8Ju9/h5JU=";
+    repo = "cosmic-files";
+    rev = "epoch-${version}";
+    hash = "sha256-UwQwZRzOyMvLRRmU2noxGrqblezkR8J2PNMVoyG0M0w=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "accesskit-0.12.2" = "sha256-ksaYMGT/oug7isQY8/1WD97XDUsX2ShBdabUzxWffYw=";
-      "atomicwrites-0.4.2" = "sha256-QZSuGPrJXh+svMeFWqAXoqZQxLq/WfIiamqvjJNVhxA=";
-      "cosmic-config-0.1.0" = "sha256-eaG/HCwlKqSfEp6GEPeBS63j5WHq4qdYTNHqnW2zeeE=";
-      "cosmic-text-0.11.2" = "sha256-Y9i5stMYpx+iqn4y5DJm1O1+3UIGp0/fSsnNq3Zloug=";
-      "d3d12-0.19.0" = "sha256-usrxQXWLGJDjmIdw1LBXtBvX+CchZDvE8fHC0LjvhD4=";
-      "glyphon-0.5.0" = "sha256-j1HrbEpUBqazWqNfJhpyjWuxYAxkvbXzRKeSouUoPWg=";
-      "softbuffer-0.4.1" = "sha256-a0bUFz6O8CWRweNt/OxTvflnPYwO5nm6vsyc/WcXyNg=";
-      "systemicons-0.7.0" = "sha256-zzAI+6mnpQOh+3mX7/sJ+w4a7uX27RduQ99PNxLNF78=";
-      "taffy-0.3.11" = "sha256-SCx9GEIJjWdoNVyq+RZAGn0N71qraKZxf9ZWhvyzLaI=";
-      "winit-0.29.10" = "sha256-ScTII2AzK3SC8MVeASZ9jhVWsEaGrSQ2BnApTxgfxK4=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-me/U4LtnvYtf77qxF2Z1ncHRVOLp3inDVlwnCjwlj08=";
 
   # COSMIC applications now uses vergen for the About page
   # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-06-10";
+  env.VERGEN_GIT_COMMIT_DATE = "2024-08-05";
   env.VERGEN_GIT_SHA = src.rev;
 
   postPatch = ''
@@ -48,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
-  buildInputs = [ wayland ];
+  buildInputs = [ glib libxkbcommon wayland ];
 
   dontUseJustBuild = true;
 
@@ -63,16 +51,16 @@ rustPlatform.buildRustPackage rec {
 
   # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
   postInstall = ''
-    wrapProgram "$out/bin/${pname}" \
+    wrapProgram "$out/bin/cosmic-files" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ xorg.libX11 xorg.libXcursor xorg.libXrandr xorg.libXi wayland libxkbcommon ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ xorg.libX11 xorg.libXcursor xorg.libXrandr xorg.libXi wayland ]}
   '';
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-files";
     description = "File Manager for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ahoneybun nyanbinary ];
+    maintainers = with maintainers; [ ahoneybun nyabinary ];
     platforms = platforms.linux;
   };
 }

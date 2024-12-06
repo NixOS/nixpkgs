@@ -1,10 +1,8 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
   glibcLocales,
-  nose,
   pylibmc,
   python-memcached,
   redis,
@@ -15,24 +13,28 @@
   pycrypto,
   cryptography,
   isPy27,
-  isPy3k,
+  pytestCheckHook,
+  setuptools,
   funcsigs ? null,
   pycryptopp ? null,
 }:
 
 buildPythonPackage rec {
   pname = "beaker";
-  version = "1.11.0";
+  version = "1.13.0";
+  pyproject = true;
 
   # The pypy release do not contains the tests
   src = fetchFromGitHub {
     owner = "bbangert";
     repo = "beaker";
-    rev = version;
-    sha256 = "059sc7iar90lc2y9mppdis5ddfcxyirz03gmsfb0307f5dsa1dhj";
+    rev = "refs/tags/${version}";
+    hash = "sha256-HzjhOPXElwKoJLrhGIbVn798tbX/kaS1EpQIX+vXCtE=";
   };
 
-  propagatedBuildInputs =
+  build-system = [ setuptools ];
+
+  dependencies =
     [
       sqlalchemy
       pycrypto
@@ -47,29 +49,19 @@ buildPythonPackage rec {
     glibcLocales
     python-memcached
     mock
-    nose
     pylibmc
     pymongo
     redis
     webtest
+    pytestCheckHook
   ];
 
-  # Can not run memcached tests because it immediately tries to connect
-  postPatch = ''
-    rm tests/test_memcached.py
-  '';
-
+  # Can not run memcached tests because it immediately tries to connect.
   # Disable external tests because they need to connect to a live database.
-  # Also disable a test in test_cache.py called "test_upgrade" because
-  # it currently fails on darwin.
-  # Please see issue https://github.com/bbangert/beaker/issues/166
-  checkPhase = ''
-    nosetests \
-      -e ".*test_ext_.*" \
-      -e "test_upgrade" \
-      ${lib.optionalString (!stdenv.isLinux) ''-e "test_cookie_expires_different_locale"''} \
-      -vv tests
-  '';
+  pytestFlagsArray = [
+    "--ignore=tests/test_memcached.py"
+    "--ignore-glob='tests/test_managers/test_ext_*'"
+  ];
 
   meta = {
     description = "Session and Caching library with WSGI Middleware";

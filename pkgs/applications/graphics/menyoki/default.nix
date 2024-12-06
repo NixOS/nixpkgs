@@ -22,14 +22,14 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-owP3G1Rygraifdc4iPURQ1Es0msNhYZIlfrtj0CSU6Y=";
   };
 
-  cargoSha256 = "sha256-NtXjlGkX8AzSw98xHPymzdnTipMIunyDbpSr4eVowa0=";
+  cargoHash = "sha256-NtXjlGkX8AzSw98xHPymzdnTipMIunyDbpSr4eVowa0=";
 
   nativeBuildInputs = [ installShellFiles ]
-    ++ lib.optional stdenv.isLinux pkg-config;
+    ++ lib.optional stdenv.hostPlatform.isLinux pkg-config;
 
   buildInputs = lib.optional withSixel libsixel
-    ++ lib.optionals stdenv.isLinux (with xorg; [ libX11 libXrandr ])
-    ++ lib.optional stdenv.isDarwin AppKit;
+    ++ lib.optionals stdenv.hostPlatform.isLinux (with xorg; [ libX11 libXrandr ])
+    ++ lib.optional stdenv.hostPlatform.isDarwin AppKit;
 
   buildNoDefaultFeatures = !withSki;
   buildFeatures = lib.optional withSixel "sixel";

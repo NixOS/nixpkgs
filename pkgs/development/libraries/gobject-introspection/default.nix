@@ -8,7 +8,6 @@
 , ninja
 , gtk-doc
 , docbook-xsl-nons
-, docbook_xml_dtd_43
 , docbook_xml_dtd_45
 , pkg-config
 , libffi
@@ -33,6 +32,7 @@ let
   pythonModules = pp: [
     pp.mako
     pp.markdown
+    pp.setuptools
   ];
 
   # https://discourse.gnome.org/t/dealing-with-glib-and-gobject-introspection-circular-dependency/18701
@@ -40,7 +40,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gobject-introspection";
-  version = "1.80.1";
+  version = "1.82.0";
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${lib.versions.majorMinor finalAttrs.version}/gobject-introspection-${finalAttrs.version}.tar.xz";
-    hash = "sha256-od98Qk4VvaGrY5wA6QUbmt9c6hqeUS+KYDtTzRmbxtg=";
+    hash = "sha256-D1pMGQhCS/JrxB6TYRaMNjaFCA+9uHoZbIkchAHKLwk=";
   };
 
   patches = [
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages pythonModules)
   ];
 
-  nativeCheckInputs = lib.optionals stdenv.isDarwin [
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cctools # for otool
   ];
 
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgi_cross_use_prebuilt_gi=true"
   ];
 
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   # During configurePhase, two python scripts are generated and need this. See
   # https://github.com/NixOS/nixpkgs/pull/98316#issuecomment-695785692

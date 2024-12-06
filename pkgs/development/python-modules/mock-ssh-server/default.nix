@@ -4,23 +4,26 @@
   fetchFromGitHub,
   paramiko,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "mock-ssh-server";
   version = "0.9.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "carletes";
-    repo = pname;
+    repo = "mock-ssh-server";
     rev = "refs/tags/${version}";
     hash = "sha256-yJd+WDidW5ouofytAKTlSiZhIQg2cLs8BvEp15qwtjo=";
   };
 
-  propagatedBuildInputs = [ paramiko ];
+  build-system = [ setuptools ];
+
+  dependencies = [ paramiko ];
 
   # Tests are running into a timeout on Hydra, they work locally
   doCheck = false;

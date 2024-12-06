@@ -4,6 +4,8 @@ let
   inherit (lib)
     genAttrs
     isString
+    mapAttrs
+    removeAttrs
     throwIfNot
     ;
 
@@ -206,4 +208,38 @@ in
   optionalDrvAttr =
     cond:
     value: if cond then value else null;
+
+  /**
+    Wrap a derivation such that instantiating it produces a warning.
+
+    All attributes apart from `meta`, `name`, and `type` (which are used by
+    `nix search`) will be wrapped in `lib.warn`.
+
+    # Inputs
+
+    `msg`
+    : The warning message to emit (via `lib.warn`).
+
+    `drv`
+    : The derivation to wrap.
+
+    # Examples
+    :::{.example}
+    ## `lib.derivations.warnOnInstantiate` usage example
+
+    ```nix
+    {
+      myPackage = warnOnInstantiate "myPackage has been renamed to my-package" my-package;
+    }
+    ```
+
+    :::
+  */
+  warnOnInstantiate =
+    msg: drv:
+    let
+      drvToWrap = removeAttrs drv [ "meta" "name" "type" ];
+    in
+    drv
+    // mapAttrs (_: lib.warn msg) drvToWrap;
 }

@@ -75,10 +75,6 @@ let
     inherit lib stdenv echo_colored noisily mkRustcDepArgs mkRustcFeatureArgs;
   };
 
-  buildCrate = import ./build-crate.nix {
-    inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs needUnstableCLI;
-  };
-
   installCrate = import ./install-crate.nix { inherit stdenv; };
 in
 
@@ -92,7 +88,11 @@ crate_: lib.makeOverridable
     # The rust compiler to use.
     #
     # Default: pkgs.rustc
-    { rust
+    { rust ? rustc
+      # The cargo package to use for getting some metadata.
+      #
+      # Default: pkgs.cargo
+    , cargo ? cargo
       # Whether to build a release version (`true`) or a debug
       # version (`false`). Debug versions are faster to build
       # but might be much slower at runtime.
@@ -251,6 +251,11 @@ crate_: lib.makeOverridable
       # https://github.com/kolloch/crate2nix/blame/5b19c1b14e1b0e5522c3e44e300d0b332dc939e7/crate2nix/templates/build.nix.tera#L89
       crateBin = lib.filter (bin: !(bin ? name && bin.name == ",")) (crate.crateBin or [ ]);
       hasCrateBin = crate ? crateBin;
+
+      buildCrate = import ./build-crate.nix {
+        inherit lib stdenv mkRustcDepArgs mkRustcFeatureArgs needUnstableCLI;
+        rustc = rust;
+      };
     in
     stdenv.mkDerivation (rec {
 
@@ -274,10 +279,11 @@ crate_: lib.makeOverridable
       name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
       version = crate.version;
       depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
-      nativeBuildInputs = [ rust stdenv.cc cargo jq ]
+      nativeBuildInputs = [ rust cargo jq ]
+        ++ lib.optionals stdenv.hasCC [ stdenv.cc ]
         ++ lib.optionals stdenv.buildPlatform.isDarwin [ libiconv ]
         ++ (crate.nativeBuildInputs or [ ]) ++ nativeBuildInputs_;
-      buildInputs = lib.optionals stdenv.isDarwin [ libiconv ] ++ (crate.buildInputs or [ ]) ++ buildInputs_;
+      buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ] ++ (crate.buildInputs or [ ]) ++ buildInputs_;
       dependencies = map lib.getLib dependencies_;
       buildDependencies = map lib.getLib buildDependencies_;
 
@@ -345,7 +351,7 @@ crate_: lib.makeOverridable
 
 
       configurePhase = configureCrate {
-        inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
+        inherit crateName crateType buildDependencies completeDeps completeBuildDeps crateDescription
           crateFeatures crateRenames libName build workspace_member release libPath crateVersion crateLinks
           extraLinkFlags extraRustcOptsForBuildRs
           crateLicense crateLicenseFile crateReadme crateRepository crateRustVersion
@@ -380,7 +386,8 @@ crate_: lib.makeOverridable
     )
   )
 {
-  rust = rustc;
+  rust = crate_.rust or rustc;
+  cargo = crate_.cargo or cargo;
   release = crate_.release or true;
   verbose = crate_.verbose or true;
   extraRustcOpts = [ ];

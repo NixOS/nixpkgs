@@ -21,6 +21,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tool and library for manipulating LilyPond files";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

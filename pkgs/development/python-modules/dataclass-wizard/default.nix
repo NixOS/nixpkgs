@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ] ++ lib.optionals (pythonOlder "3.9") [ typing-extensions ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     timedelta = [ pytimeparse ];
     yaml = [ pyyaml ];
   };
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
-  ] ++ passthru.optional-dependencies.timedelta ++ passthru.optional-dependencies.yaml;
+  ] ++ optional-dependencies.timedelta ++ optional-dependencies.yaml;
 
   disabledTests =
     [ ]

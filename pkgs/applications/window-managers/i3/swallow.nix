@@ -39,6 +39,6 @@ buildPythonApplication rec {
     license = licenses.mit;
     platforms = platforms.linux;
     mainProgram = "swallow";
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
   };
 }

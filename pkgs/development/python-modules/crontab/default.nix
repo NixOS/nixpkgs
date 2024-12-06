@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchFromGitLab,
   pytestCheckHook,
   pythonOlder,
   python-dateutil,
@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "crontab";
-  version = "0.23.0";
+  version = "3.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub {
-    owner = "josiahcarlson";
-    repo = "parse-crontab";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8vMkgBU1jIluo9+hAvk2KNM+Wn0+PvJqFNwX+JLXD+w=";
+  src = fetchFromGitLab {
+    owner = "doctormo";
+    repo = "python-crontab";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-OZalqh/A4pBM1Hat4t76Odk2cTmKLwaHGY7pndgIgss=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Parse and use crontab schedules in Python";
-    homepage = "https://github.com/josiahcarlson/parse-crontab";
+    homepage = "https://gitlab.com/doctormo/python-crontab/";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ fab ];
   };

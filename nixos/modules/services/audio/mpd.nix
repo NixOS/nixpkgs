@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   name = "mpd";
@@ -12,11 +9,11 @@ let
 
   credentialsPlaceholder = (creds:
     let
-      placeholders = (imap0
-        (i: c: ''password "{{password-${toString i}}}@${concatStringsSep "," c.permissions}"'')
+      placeholders = (lib.imap0
+        (i: c: ''password "{{password-${toString i}}}@${lib.concatStringsSep "," c.permissions}"'')
         creds);
     in
-      concatStringsSep "\n" placeholders);
+      lib.concatStringsSep "\n" placeholders);
 
   mpdConf = let
       mkSetting = with builtins; k: v: if isAttrs v then
@@ -73,16 +70,16 @@ in {
 
     services.mpd = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable MPD, the music player daemon.
         '';
       };
 
-      startWhenNeeded = mkOption {
-        type = types.bool;
+      startWhenNeeded = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           If set, {command}`mpd` is socket-activated; that
@@ -91,10 +88,10 @@ in {
         '';
       };
 
-      musicDirectory = mkOption {
-        type = with types; either path (strMatching "(http|https|nfs|smb)://.+");
+      musicDirectory = lib.mkOption {
+        type = with lib.types; either path (strMatching "(http|https|nfs|smb)://.+");
         default = "${cfg.dataDir}/music";
-        defaultText = literalExpression ''"''${dataDir}/music"'';
+        defaultText = lib.literalExpression ''"''${dataDir}/music"'';
         description = ''
           The directory or NFS/SMB network share where MPD reads music from. If left
           as the default value this directory will automatically be created before
@@ -103,10 +100,10 @@ in {
         '';
       };
 
-      playlistDirectory = mkOption {
-        type = types.path;
+      playlistDirectory = lib.mkOption {
+        type = lib.types.path;
         default = "${cfg.dataDir}/playlists";
-        defaultText = literalExpression ''"''${dataDir}/playlists"'';
+        defaultText = lib.literalExpression ''"''${dataDir}/playlists"'';
         description = ''
           The directory where MPD stores playlists. If left as the default value
           this directory will automatically be created before the MPD server starts,
@@ -115,8 +112,8 @@ in {
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Extra directives added to to the end of MPD's configuration file,
@@ -126,8 +123,8 @@ in {
         '';
       };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/${name}";
         description = ''
           The directory where MPD stores its state, tag cache, playlists etc. If
@@ -137,22 +134,22 @@ in {
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = name;
         description = "User account under which MPD runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = name;
         description = "Group account under which MPD runs.";
       };
 
       network = {
 
-        listenAddress = mkOption {
-          type = types.str;
+        listenAddress = lib.mkOption {
+          type = lib.types.str;
           default = "127.0.0.1";
           example = "any";
           description = ''
@@ -161,8 +158,8 @@ in {
           '';
         };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 6600;
           description = ''
             This setting is the TCP port that is desired for the daemon to get assigned
@@ -172,33 +169,33 @@ in {
 
       };
 
-      dbFile = mkOption {
-        type = types.nullOr types.str;
+      dbFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = "${cfg.dataDir}/tag_cache";
-        defaultText = literalExpression ''"''${dataDir}/tag_cache"'';
+        defaultText = lib.literalExpression ''"''${dataDir}/tag_cache"'';
         description = ''
           The path to MPD's database. If set to `null` the
           parameter is omitted from the configuration.
         '';
       };
 
-      credentials = mkOption {
-        type = types.listOf (types.submodule {
+      credentials = lib.mkOption {
+        type = lib.types.listOf (lib.types.submodule {
           options = {
-            passwordFile = mkOption {
-              type = types.path;
+            passwordFile = lib.mkOption {
+              type = lib.types.path;
               description = ''
                 Path to file containing the password.
               '';
             };
             permissions = let
               perms = ["read" "add" "control" "admin"];
-            in mkOption {
-              type = types.listOf (types.enum perms);
+            in lib.mkOption {
+              type = lib.types.listOf (lib.types.enum perms);
               default = [ "read" ];
               description = ''
                 List of permissions that are granted with this password.
-                Permissions can be "${concatStringsSep "\", \"" perms}".
+                Permissions can be "${lib.concatStringsSep "\", \"" perms}".
               '';
             };
           };
@@ -213,8 +210,8 @@ in {
         ];
       };
 
-      fluidsynth = mkOption {
-        type = types.bool;
+      fluidsynth = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           If set, add fluidsynth soundfont and configure the plugin.
@@ -254,31 +251,31 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     # install mpd units
     systemd.packages = [ pkgs.mpd ];
 
-    systemd.sockets.mpd = mkIf cfg.startWhenNeeded {
+    systemd.sockets.mpd = lib.mkIf cfg.startWhenNeeded {
       wantedBy = [ "sockets.target" ];
       listenStreams = [
         ""  # Note: this is needed to override the upstream unit
         (if hasPrefix "/" cfg.network.listenAddress
           then cfg.network.listenAddress
-          else "${optionalString (cfg.network.listenAddress != "any") "${cfg.network.listenAddress}:"}${toString cfg.network.port}")
+          else "${lib.optionalString (cfg.network.listenAddress != "any") "${cfg.network.listenAddress}:"}${toString cfg.network.port}")
       ];
     };
 
     systemd.services.mpd = {
-      wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
+      wantedBy = lib.optional (!cfg.startWhenNeeded) "multi-user.target";
 
       preStart =
         ''
           set -euo pipefail
           install -m 600 ${mpdConf} /run/mpd/mpd.conf
-        '' + optionalString (cfg.credentials != [])
-        (concatStringsSep "\n"
-          (imap0
+        '' + lib.optionalString (cfg.credentials != [])
+        (lib.concatStringsSep "\n"
+          (lib.imap0
             (i: c: ''${pkgs.replace-secret}/bin/replace-secret '{{password-${toString i}}}' '${c.passwordFile}' /run/mpd/mpd.conf'')
             cfg.credentials));
 
@@ -289,13 +286,13 @@ in {
           ExecStart = [ "" "${pkgs.mpd}/bin/mpd --systemd /run/mpd/mpd.conf" ];
           RuntimeDirectory = "mpd";
           StateDirectory = []
-            ++ optionals (cfg.dataDir == "/var/lib/${name}") [ name ]
-            ++ optionals (cfg.playlistDirectory == "/var/lib/${name}/playlists") [ name "${name}/playlists" ]
-            ++ optionals (cfg.musicDirectory == "/var/lib/${name}/music")        [ name "${name}/music" ];
+            ++ lib.optionals (cfg.dataDir == "/var/lib/${name}") [ name ]
+            ++ lib.optionals (cfg.playlistDirectory == "/var/lib/${name}/playlists") [ name "${name}/playlists" ]
+            ++ lib.optionals (cfg.musicDirectory == "/var/lib/${name}/music")        [ name "${name}/music" ];
         };
     };
 
-    users.users = optionalAttrs (cfg.user == name) {
+    users.users = lib.optionalAttrs (cfg.user == name) {
       ${name} = {
         inherit uid;
         group = cfg.group;
@@ -305,7 +302,7 @@ in {
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == name) {
+    users.groups = lib.optionalAttrs (cfg.group == name) {
       ${name}.gid = gid;
     };
   };

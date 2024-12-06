@@ -15,6 +15,7 @@ permissions:
 
 jobs:
   labels:
+    name: label-pr
     runs-on: ubuntu-latest
     if: "github.repository_owner == 'NixOS' && !contains(github.event.pull_request.title, '[skip treewide]')"
     steps:

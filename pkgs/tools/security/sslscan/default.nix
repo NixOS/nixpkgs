@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sslscan";
-  version = "2.1.4";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "rbsec";
     repo = "sslscan";
     rev = "refs/tags/${version}";
-    hash = "sha256-we55Oo9sIZ1FQn94xejlCKwlZBDMrQs/1f++blXTTUM=";
+    hash = "sha256-XFoTwBtufkT/Ja0a3MEytPHx37eg3ZZ7x15EXHjZey4=";
   };
 
   buildInputs = [ openssl ];

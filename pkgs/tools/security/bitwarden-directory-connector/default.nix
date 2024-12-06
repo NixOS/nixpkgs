@@ -13,14 +13,14 @@
 let
   common = { name, npmBuildScript, installPhase }: buildNpmPackage rec {
     pname = name;
-    version = "2024.3.2";
+    version = "2024.10.0";
     nodejs = nodejs_18;
 
     src = fetchFromGitHub {
       owner = "bitwarden";
       repo = "directory-connector";
       rev = "v${version}";
-      hash = "sha256-CB5HrT+p63zANg1SEoynk6hPPW5DcC9Qfo2+QDy2iwc=";
+      hash = "sha256-jisMEuIpTWCy+N1QeERf+05tsugY0f+H2ntcRcFKkgo=";
     };
 
     postPatch = ''
@@ -32,7 +32,7 @@ let
         --replace-fail "AppImage" "dir"
     '';
 
-    npmDepsHash = "sha256-6WYNaF6z8OwWmi/Mv091LsuTUEUhWd8cDD11QKE8A5U=";
+    npmDepsHash = "sha256-Zi7EHzQSSrZ6XGGV1DOASuddYA4svXQc1eGmchcLFBc=";
 
     env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -44,7 +44,7 @@ let
     ];
 
     nativeBuildInputs = [
-      python3
+      (python3.withPackages (ps: with ps; [ setuptools ]))
       pkg-config
     ];
 
@@ -66,7 +66,7 @@ in {
 
       npm exec electron-builder -- \
         --dir \
-        -c.electronDist=${electron}/libexec/electron \
+        -c.electronDist=${electron.dist} \
         -c.electronVersion=${electron.version} \
         -c.npmRebuild=false
 
@@ -75,7 +75,7 @@ in {
 
       makeWrapper ${lib.getExe electron} $out/bin/bitwarden-directory-connector \
         --add-flags $out/share/bitwarden-directory-connector/resources/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --set-default ELECTRON_IS_DEV 0 \
         --inherit-argv0
 

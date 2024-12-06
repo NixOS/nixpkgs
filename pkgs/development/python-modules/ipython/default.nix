@@ -36,19 +36,19 @@
   # Test dependencies
   pickleshare,
   pytest-asyncio,
-  pytest7CheckHook,
+  pytestCheckHook,
   testpath,
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.24.0";
+  version = "8.29.0";
   pyproject = true;
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AQ2z+KcopXi7ZB/dBsBjufuOlqlGTGOuxjEPvLXoBQE=";
+    hash = "sha256-QLYOFbIlkUUO73PkCgJ893vWUudXUj7rxb18fEmCkOs=";
   };
 
   build-system = [ setuptools ];
@@ -87,13 +87,13 @@ buildPythonPackage rec {
 
     # doctests try to fetch an image from the internet
     substituteInPlace pyproject.toml \
-      --replace '"--ipdoctest-modules",' '"--ipdoctest-modules", "--ignore=IPython/core/display.py",'
+      --replace-fail '"--ipdoctest-modules",' '"--ipdoctest-modules", "--ignore=IPython/core/display.py",'
   '';
 
   nativeCheckInputs = [
     pickleshare
     pytest-asyncio
-    pytest7CheckHook
+    pytestCheckHook
     testpath
   ];
 
@@ -102,7 +102,7 @@ buildPythonPackage rec {
       # UnboundLocalError: local variable 'child' referenced before assignment
       "test_system_interrupt"
     ]
-    ++ lib.optionals (stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
       "test_clipboard_get"
     ];
@@ -117,6 +117,6 @@ buildPythonPackage rec {
     homepage = "https://ipython.org/";
     changelog = "https://github.com/ipython/ipython/blob/${version}/docs/source/whatsnew/version${lib.versions.major version}.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [ bjornfor ] ++ teams.jupyter.members;
   };
 }

@@ -15,61 +15,58 @@
 , rofi-unwrapped
 , wl-clipboard
 , xclip
-, xsel
 , xdotool
 , wtype
 }:
 
-stdenv.mkDerivation rec {
-  pname = "rofi-emoji";
-  version = "3.3.0";
+import ./versions.nix ({ version, hash, patches}:
+  stdenv.mkDerivation rec {
+    pname = "rofi-emoji";
+    inherit version;
 
-  src = fetchFromGitHub {
-    owner = "Mange";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Y+E5TViKFVtqXMLVEcq1VMLPzG04vfZyThUM7a/fFGM=";
-  };
+    src = fetchFromGitHub {
+      owner = "Mange";
+      repo = "rofi-emoji";
+      rev = "v${version}";
+      inherit hash;
+    };
 
-  patches = [
-    # Look for plugin-related files in $out/lib/rofi
-    ./0001-Patch-plugindir-to-output.patch
-  ];
+    inherit patches;
 
-  postPatch = ''
-    patchShebangs clipboard-adapter.sh
-  '';
+    postPatch = ''
+      patchShebangs clipboard-adapter.sh
+    '';
 
-  postFixup = ''
-    chmod +x $out/share/rofi-emoji/clipboard-adapter.sh
-    wrapProgram $out/share/rofi-emoji/clipboard-adapter.sh \
-     --prefix PATH ":" ${lib.makeBinPath ([ libnotify wl-clipboard xclip xsel ]
-       ++ lib.optionals waylandSupport [ wtype ]
-       ++ lib.optionals x11Support [ xdotool ])}
-  '';
+    postFixup = ''
+      chmod +x $out/share/rofi-emoji/clipboard-adapter.sh
+      wrapProgram $out/share/rofi-emoji/clipboard-adapter.sh \
+       --prefix PATH ":" ${lib.makeBinPath ([ libnotify ]
+         ++ lib.optionals waylandSupport [ wl-clipboard wtype ]
+         ++ lib.optionals x11Support [ xclip xdotool ])}
+    '';
 
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    makeWrapper
-  ];
+    nativeBuildInputs = [
+      autoreconfHook
+      pkg-config
+      makeWrapper
+    ];
 
-  buildInputs = [
-    cairo
-    glib
-    libnotify
-    rofi-unwrapped
-    wl-clipboard
-    xclip
-    xsel
-  ];
+    buildInputs = [
+      cairo
+      glib
+      libnotify
+      rofi-unwrapped
+    ]
+      ++ lib.optionals waylandSupport [ wl-clipboard wtype ]
+      ++ lib.optionals x11Support [ xclip ];
 
-  meta = with lib; {
-    description = "Emoji selector plugin for Rofi";
-    homepage = "https://github.com/Mange/rofi-emoji";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cole-h ];
-    platforms = platforms.linux;
-  };
-}
+    meta = with lib; {
+      description = "Emoji selector plugin for Rofi (built against ${rofi-unwrapped.pname})";
+      homepage = "https://github.com/Mange/rofi-emoji";
+      license = licenses.mit;
+      maintainers = with maintainers; [ cole-h Mange ];
+      platforms = platforms.linux;
+    };
+  }
+)

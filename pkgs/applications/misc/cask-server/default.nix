@@ -1,5 +1,4 @@
 { lib
-, pkgs
 , mkDerivation
 , fetchFromGitHub
 , cmake

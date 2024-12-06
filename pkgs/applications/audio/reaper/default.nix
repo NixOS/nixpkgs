@@ -15,49 +15,49 @@
 , xdotool
 , which
 
-, jackSupport ? stdenv.isLinux
+, jackSupport ? stdenv.hostPlatform.isLinux
 , jackLibrary
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
 , libpulseaudio
 }:
 
 let
-  url_for_platform = version: arch: if stdenv.isDarwin
+  url_for_platform = version: arch: if stdenv.hostPlatform.isDarwin
     then "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_universal.dmg"
     else "https://www.reaper.fm/files/${lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_${arch}.tar.xz";
 in
 stdenv.mkDerivation rec {
   pname = "reaper";
-  version = "7.16";
+  version = "7.27";
 
   src = fetchurl {
     url = url_for_platform version stdenv.hostPlatform.qemuArch;
-    hash = if stdenv.isDarwin then "sha256-UMliD9tk8VDpeQ4tBC31peemv7HAKHW0xtqoSkzYG4Y=" else {
-      x86_64-linux = "sha256-sK0GVK29SGkLBILeWcFjcvQ956NCPb1HvqmXLeLbgP8=";
-      aarch64-linux = "sha256-mJ/UtrWaPq3Oar8rMvRFm8iafK1I7bL42deIQyiHVMk=";
+    hash = if stdenv.hostPlatform.isDarwin then "sha256-jDqdtm0W5mF8U/KJi7vRse9tT2X4AVwHUtvXC+6iADM=" else {
+      x86_64-linux = "sha256-/szRnFsu0LpthdMOy/6fmkE72zxBvhQkcVhPtO54Djk=";
+      aarch64-linux = "sha256-yl5PCRSzRiZ5TF9gXoP572H19/vlszJeFARtZy5ClXI=";
     }.${stdenv.hostPlatform.system};
   };
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     which
     autoPatchelfHook
     xdg-utils # Required for desktop integration
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     undmg
   ];
 
-  sourceRoot = lib.optionalString stdenv.isDarwin "Reaper.app";
+  sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin "Reaper.app";
 
   buildInputs = [
-    stdenv.cc.cc.lib # reaper and libSwell need libstdc++.so.6
-  ] ++ lib.optionals stdenv.isLinux [
+    (lib.getLib stdenv.cc.cc) # reaper and libSwell need libstdc++.so.6
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     gtk3
     alsa-lib
   ];
 
-  runtimeDependencies = lib.optionals stdenv.isLinux [
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
     gtk3 # libSwell needs libgdk-3.so.0
   ]
   ++ lib.optional jackSupport jackLibrary
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  installPhase = if stdenv.isDarwin then ''
+  installPhase = if stdenv.hostPlatform.isDarwin then ''
     runHook preInstall
     mkdir -p "$out/Applications/Reaper.app"
     cp -r * "$out/Applications/Reaper.app/"
@@ -88,11 +88,10 @@ stdenv.mkDerivation rec {
     # We opt for wrapping the executable with LD_LIBRARY_PATH prefix.
     # Note that libcurl and libxml2 are needed for ReaPack to run.
     wrapProgram $out/opt/REAPER/reaper \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ curl lame libxml2 ffmpeg vlc xdotool stdenv.cc.cc.lib ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ curl lame libxml2 ffmpeg vlc xdotool stdenv.cc.cc ]}"
 
     mkdir $out/bin
     ln -s $out/opt/REAPER/reaper $out/bin/
-    ln -s $out/opt/REAPER/reamote-server $out/bin/
 
     runHook postInstall
   '';

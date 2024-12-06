@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
       url = "https://github.com/fontforge/fontforge/commit/216eb14b558df344b206bf82e2bdaf03a1f2f429.patch";
       hash = "sha256-aRnir09FSQMT50keoB7z6AyhWAVBxjSQsTRvBzeBuHU=";
     })
+
+    # https://github.com/fontforge/fontforge/pull/5423
+    ./replace-distutils.patch
   ];
 
   # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps
@@ -41,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   # do not use x87's 80-bit arithmetic, rouding errors result in very different font binaries
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-msse2 -mfpmath=sse";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isi686 "-msse2 -mfpmath=sse";
 
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
@@ -50,7 +53,7 @@ stdenv.mkDerivation rec {
   ]
     ++ lib.optionals withSpiro [ libspiro ]
     ++ lib.optionals withGUI [ gtk3 cairo pango ]
-    ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
 
   cmakeFlags = [ "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" ]
     ++ lib.optional (!withSpiro) "-DENABLE_LIBSPIRO=OFF"

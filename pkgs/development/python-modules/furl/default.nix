@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  pythonAtLeast,
   flake8,
   orderedmultidict,
   pytestCheckHook,
@@ -33,6 +34,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     flake8
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # AssertionError: assert '//////path' == '////path'
+    # https://github.com/gruns/furl/issues/176
+    "test_odd_urls"
   ];
 
   pythonImportsCheck = [ "furl" ];

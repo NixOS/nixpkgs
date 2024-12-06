@@ -8,6 +8,7 @@
   orjson,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   syrupy,
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "aiomealie";
-  version = "0.4.0";
+  version = "0.9.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,13 +26,8 @@ buildPythonPackage rec {
     owner = "joostlek";
     repo = "python-mealie";
     rev = "refs/tags/v${version}";
-    hash = "sha256-I1CA/YD2pNvBijSQgF/R8v5DfR/xyh0t/HGGiVE5UbY=";
+    hash = "sha256-FJhmipWE3DE4PRWkEq8/j9iz9HQ7G7J5I9hwjU6e3FA=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov" ""
-  '';
 
   build-system = [ poetry-core ];
 
@@ -45,6 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];

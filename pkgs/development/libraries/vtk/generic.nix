@@ -3,19 +3,19 @@
 , fetchpatch
 , enableQt ? false, qtx11extras, qttools, qtdeclarative, qtEnv
 , enablePython ? false, python ? throw "vtk: Python support requested, but no python interpreter was given."
-# Darwin support
-, AGL, Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
-, ApplicationServices, CoreText, IOSurface, ImageIO, xpc, libobjc
+, enableEgl ? false
 }:
 
 let
-  inherit (lib) optionalString optionals optional;
+  inherit (lib) optionalString optionals;
 
   version = "${majorVersion}.${minorVersion}";
   pythonMajor = lib.substring 0 1 python.pythonVersion;
 
 in stdenv.mkDerivation {
-  pname = "vtk${optionalString enableQt "-qvtk"}";
+  pname = "vtk"
+    + optionalString enableEgl "-egl"
+    + optionalString enableQt "-qvtk";
   inherit version;
 
   src = fetchurl {
@@ -27,30 +27,14 @@ in stdenv.mkDerivation {
 
   buildInputs = [ libpng libtiff ]
     ++ optionals enableQt [ (qtEnv "qvtk-qt-env" [ qtx11extras qttools qtdeclarative ]) ]
-    ++ optionals stdenv.isLinux [
+    ++ optionals stdenv.hostPlatform.isLinux [
       libGLU
       xorgproto
       libXt
-    ] ++ optionals stdenv.isDarwin [
-      xpc
-      AGL
-      Cocoa
-      CoreServices
-      DiskArbitration
-      IOKit
-      CFNetwork
-      Security
-      ApplicationServices
-      CoreText
-      IOSurface
-      ImageIO
-      OpenGL
-      GLUT
     ] ++ optionals enablePython [
       python
     ];
-  propagatedBuildInputs = optionals stdenv.isDarwin [ libobjc ]
-    ++ optionals stdenv.isLinux [ libX11 libGL ];
+  propagatedBuildInputs = optionals stdenv.hostPlatform.isLinux [ libX11 libGL ];
     # see https://github.com/NixOS/nixpkgs/pull/178367#issuecomment-1238827254
 
   patches = map fetchpatch patchesToFetch;
@@ -61,7 +45,7 @@ in stdenv.mkDerivation {
       -i ThirdParty/libproj/vtklibproj/src/proj_json_streaming_writer.hpp \
       -i IO/Image/vtkSEPReader.h
   ''
-  + optionalString stdenv.isDarwin ''
+  + optionalString stdenv.hostPlatform.isDarwin ''
     sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-${majorVersion}|' ./Parallel/Core/CMakeLists.txt
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/' ./ThirdParty/libxml2/vtklibxml2/xmlschemas.c
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/g' ./ThirdParty/libxml2/vtklibxml2/xpath.c
@@ -80,9 +64,9 @@ in stdenv.mkDerivation {
     "-DVTK_MODULE_USE_EXTERNAL_vtkpng=ON"
     "-DVTK_MODULE_USE_EXTERNAL_vtktiff=1"
     "-DVTK_MODULE_ENABLE_VTK_RenderingExternal=YES"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "-DOPENGL_INCLUDE_DIR=${libGL}/include"
-    "-DVTK_OPENGL_HAS_EGL=ON"
+    (lib.cmakeBool "VTK_OPENGL_HAS_EGL" enableEgl)
   ] ++ [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
@@ -91,7 +75,6 @@ in stdenv.mkDerivation {
   ] ++ optionals enableQt [
     "-DVTK_GROUP_ENABLE_Qt:STRING=YES"
   ]
-    ++ optionals stdenv.isDarwin [ "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks" ]
     ++ optionals enablePython [
       "-DVTK_WRAP_PYTHON:BOOL=ON"
       "-DVTK_PYTHON_VERSION:STRING=${pythonMajor}"
@@ -113,6 +96,7 @@ in stdenv.mkDerivation {
     homepage = "https://www.vtk.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp tfmoraes ];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
+    badPlatforms = optionals enableEgl platforms.darwin;
   };
 }

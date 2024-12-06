@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "lit";
-  version = "17.0.6";
+  version = "18.1.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-36mvm1X8RQmla+e/I0bwedf0okLVg7ny4LB4/Qq64xs=";
+    hash = "sha256-R8F0oYaUGugw8E3tdqNERgC+Z9Xl+4KCw3g/umccTts=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     mainProgram = "lit";
     homepage = "http://llvm.org/docs/CommandGuide/lit.html";
     license = lib.licenses.ncsa;
-    maintainers = with lib.maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }

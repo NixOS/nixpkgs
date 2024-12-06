@@ -1,3 +1,4 @@
+#shellcheck shell=bash
 # Setup hook for checking whether Python imports succeed
 echo "Sourcing neovim-require-check-hook.sh"
 
@@ -9,13 +10,15 @@ neovimRequireCheckHook () {
 
 		# editorconfig-checker-disable
         export HOME="$TMPDIR"
+
+        local deps="${dependencies[*]}"
         @nvimBinary@ -es --headless -n -u NONE -i NONE --clean -V1 \
-            --cmd "set rtp+=$out,${dependencies/ /,}" \
+            --cmd "set rtp+=$out,${deps// /,}" \
             --cmd "lua require('$nvimRequireCheck')"
     fi
 }
 
 echo "Using neovimRequireCheckHook"
-preDistPhases+=" neovimRequireCheckHook"
+appendToVar preDistPhases neovimRequireCheckHook
 
 

@@ -1,20 +1,17 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.corerad;
   settingsFormat = pkgs.formats.toml {};
 
 in {
-  meta.maintainers = with maintainers; [ mdlayher ];
+  meta.maintainers = with lib.maintainers; [ mdlayher ];
 
   options.services.corerad = {
-    enable = mkEnableOption "CoreRAD IPv6 NDP RA daemon";
+    enable = lib.mkEnableOption "CoreRAD IPv6 NDP RA daemon";
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = settingsFormat.type;
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           interfaces = [
             # eth0 is an upstream interface monitoring for IPv6 router advertisements.
@@ -42,18 +39,18 @@ in {
       '';
     };
 
-    configFile = mkOption {
-      type = types.path;
-      example = literalExpression ''"''${pkgs.corerad}/etc/corerad/corerad.toml"'';
+    configFile = lib.mkOption {
+      type = lib.types.path;
+      example = lib.literalExpression ''"''${pkgs.corerad}/etc/corerad/corerad.toml"'';
       description = "Path to CoreRAD TOML configuration file.";
     };
 
-    package = mkPackageOption pkgs "corerad" { };
+    package = lib.mkPackageOption pkgs "corerad" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # Prefer the config file over settings if both are set.
-    services.corerad.configFile = mkDefault (settingsFormat.generate "corerad.toml" cfg.settings);
+    services.corerad.configFile = lib.mkDefault (settingsFormat.generate "corerad.toml" cfg.settings);
 
     systemd.services.corerad = {
       description = "CoreRAD IPv6 NDP RA daemon";
@@ -68,7 +65,7 @@ in {
         DynamicUser = true;
         Type = "notify";
         NotifyAccess = "main";
-        ExecStart = "${getBin cfg.package}/bin/corerad -c=${cfg.configFile}";
+        ExecStart = "${lib.getBin cfg.package}/bin/corerad -c=${cfg.configFile}";
         Restart = "on-failure";
         RestartKillSignal = "SIGHUP";
       };

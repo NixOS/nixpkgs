@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "pillow-heif";
-  version = "0.16.0";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TpK6VK2YoOtc4ueag33m5n1umcUWOUgcda/MZEEOR7g=";
+    hash = "sha256-a1qCxI+mMuEYsCk2CUYGNKCe+SONuvVizqUvmQKy3sE=";
   };
 
   postPatch = ''
@@ -46,8 +46,9 @@ buildPythonPackage rec {
     cmake
     nasm
     pkg-config
-    setuptools
   ];
+
+  build-system = [ setuptools ];
 
   dontUseCmakeConfigure = true;
 
@@ -65,7 +66,7 @@ buildPythonPackage rec {
     RELEASE_FULL_FLAG = 1;
   };
 
-  propagatedBuildInputs = [ pillow ];
+  dependencies = [ pillow ];
 
   pythonImportsCheck = [ "pillow_heif" ];
 
@@ -81,12 +82,12 @@ buildPythonPackage rec {
       # Time based
       "test_decode_threads"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # https://github.com/bigcat88/pillow_heif/issues/89
       # not reproducible in nixpkgs
       "test_opencv_crash"
     ]
-    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # RuntimeError: Encoder plugin generated an error: Unsupported bit depth: Bit depth not supported by x265
       "test_open_heif_compare_non_standard_modes_data"
       "test_open_save_disable_16bit"

@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyusb ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     serial = [ pyserial ];
     influx = [ influxdb-client ];
   };

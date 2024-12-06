@@ -66,8 +66,8 @@ let
 
     nativeBuildInputs = [ unzip ];
     buildInputs = [ libjpeg zlib libvorbis curl gmp ]
-      ++ lib.optionals withGLX [ libX11.dev libGLU.dev libGL.dev libXpm.dev libXext.dev libXxf86vm.dev alsa-lib.dev ]
-      ++ lib.optionals withSDL [ SDL2.dev ];
+      ++ lib.optionals withGLX [ libX11 libGLU libGL libXpm libXext libXxf86vm alsa-lib ]
+      ++ lib.optionals withSDL [ SDL2 ];
 
     sourceRoot = "Xonotic/source/darkplaces";
 
@@ -158,18 +158,16 @@ in rec {
       rm -rf $(ls | grep -v "^data$" | grep -v "^key_0.d0pk$")
     '';
     meta.hydraPlatforms = [];
-    passthru.version = version;
+    inherit version pname;
   };
 
   xonotic = runCommand "xonotic${variant}-${version}" {
-    inherit xonotic-unwrapped;
+    inherit xonotic-unwrapped version;
+    pname = "${pname}${variant}";
     nativeBuildInputs = [ makeWrapper copyDesktopItems ];
     desktopItems = [ desktopItem ];
-    passthru = {
-      inherit version;
-      meta = meta // {
-        hydraPlatforms = [];
-      };
+    meta = meta // {
+      hydraPlatforms = [];
     };
   } (''
     mkdir -p $out/bin

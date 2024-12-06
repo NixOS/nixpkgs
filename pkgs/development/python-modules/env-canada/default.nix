@@ -2,6 +2,7 @@
   lib,
   aiohttp,
   buildPythonPackage,
+  defusedxml,
   fetchFromGitHub,
   geopy,
   imageio,
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "env-canada";
-  version = "0.7.0";
+  version = "0.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,13 +27,14 @@ buildPythonPackage rec {
     owner = "michaeldavie";
     repo = "env_canada";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ND1QObDdn6tBGNlnnVadNv6ibYYpOoo2HZEXIMlfwyc=";
+    hash = "sha256-3SVpzWii9/ViJ7mbrqzKmN5FkOOYTeYdhJll6q/IseU=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
+    defusedxml
     geopy
     imageio
     lxml

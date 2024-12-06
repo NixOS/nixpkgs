@@ -1,8 +1,9 @@
 { config, pkgs, lib, ... }:
-
-with lib;
+let
+  imcfg = config.i18n.inputMethod;
+in
 {
-  config = mkIf (config.i18n.inputMethod.enabled == "nabi") {
+  config = lib.mkIf (imcfg.enable && imcfg.type == "nabi") {
     i18n.inputMethod.package = pkgs.nabi;
 
     environment.variables = {

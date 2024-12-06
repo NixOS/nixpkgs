@@ -2,15 +2,13 @@
   lib,
   agate,
   buildPythonPackage,
-  cffi,
   click,
-  colorama,
+  daff,
+  dbt-adapters,
+  dbt-common,
   dbt-extractor,
   dbt-semantic-interfaces,
   fetchFromGitHub,
-  hologram,
-  idna,
-  isodate,
   jinja2,
   logbook,
   mashumaro,
@@ -19,60 +17,58 @@
   packaging,
   pathspec,
   protobuf,
-  python3,
+  callPackage,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   pyyaml,
   requests,
   setuptools,
   sqlparse,
   typing-extensions,
-  urllib3,
-  werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.7.14";
+  version = "1.8.8";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4PydrJGhriGCB6oc4kQE8/a24Sn9cqZhoKsiBJuEDYM=";
+    hash = "sha256-M9O9jLjIr9kolkye5RwaS2jK6dpncEOo1rtxY7WXS7U=";
   };
 
   sourceRoot = "${src.name}/core";
 
   pythonRelaxDeps = [
+    "protobuf"
     "agate"
     "click"
+    "dbt-common"
+    "dbt-semantic-interfaces"
+    "logbook"
     "mashumaro"
     "networkx"
-    "logbook"
     "pathspec"
+    "protobuf"
     "urllib3"
   ];
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
   dependencies = [
     agate
-    cffi
     click
-    colorama
+    daff
+    dbt-adapters
+    dbt-common
     dbt-extractor
     dbt-semantic-interfaces
-    hologram
-    idna
-    isodate
     jinja2
     logbook
     mashumaro
@@ -86,15 +82,13 @@ buildPythonPackage rec {
     requests
     sqlparse
     typing-extensions
-    urllib3
-    werkzeug
   ] ++ mashumaro.optional-dependencies.msgpack;
 
   # tests exist for the dbt tool but not for this package specifically
   doCheck = false;
 
   passthru = {
-    withAdapters = python3.pkgs.callPackage ./with-adapters.nix { };
+    withAdapters = callPackage ./with-adapters.nix { };
   };
 
   meta = with lib; {

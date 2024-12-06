@@ -27,5 +27,6 @@ stdenv.mkDerivation {
 
   meta = rsync.meta // {
     description = "Helper to run rsync-only environments from ssh-logins";
+    mainProgram = "rrsync";
   };
 }

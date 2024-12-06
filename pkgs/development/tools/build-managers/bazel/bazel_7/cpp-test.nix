@@ -3,6 +3,7 @@
 , bazel-examples
 , bazelTest
 , callPackage
+, cctools
 , darwin
 , distDir
 , extraBazelArgs ? ""
@@ -37,8 +38,8 @@ let
     #! ${runtimeShell}
 
     export CXX='${stdenv.cc}/bin/clang++'
-    export LD='${darwin.cctools}/bin/ld'
-    export LIBTOOL='${darwin.cctools}/bin/libtool'
+    export LD='${cctools}/bin/ld'
+    export LIBTOOL='${cctools}/bin/libtool'
     export CC='${stdenv.cc}/bin/clang'
 
     # XXX: hack for macosX, this flags disable bazel usage of xcode
@@ -55,7 +56,7 @@ let
     cp ${./cpp-test-MODULE.bazel.lock} $out/MODULE.bazel.lock
     echo > $out/WORSPACE
   ''
-  + (lib.optionalString stdenv.isDarwin ''
+  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/tools
     cp ${toolsBazel} $out/tools/bazel
   ''));
@@ -70,10 +71,10 @@ let
         --verbose_failures \
         --repository_cache=${mergedDistDir} \
         --curses=no \
-    '' + lib.optionalString (stdenv.isDarwin) ''
+    '' + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
         --cxxopt=-x --cxxopt=c++ \
         --host_cxxopt=-x --host_cxxopt=c++ \
-    '' + lib.optionalString (stdenv.isDarwin && Foundation != null) ''
+    '' + lib.optionalString (stdenv.hostPlatform.isDarwin && Foundation != null) ''
         --linkopt=-Wl,-F${Foundation}/Library/Frameworks \
         --linkopt=-L${darwin.libobjc}/lib \
     '' + ''

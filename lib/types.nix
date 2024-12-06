@@ -73,7 +73,6 @@ let
 
   outer_types =
 rec {
-  __attrsFailEvaluation = true;
   isType = type: x: (x._type or "") == type;
 
   setType = typeName: value: value // {
@@ -84,23 +83,41 @@ rec {
   # Default type merging function
   # takes two type functors and return the merged type
   defaultTypeMerge = f: f':
-    let wrapped = f.wrapped.typeMerge f'.wrapped.functor;
-        payload = f.binOp f.payload f'.payload;
+    let
+      mergedWrapped = f.wrapped.typeMerge f'.wrapped.functor;
+      mergedPayload = f.binOp f.payload f'.payload;
+
+      hasPayload = assert (f'.payload != null) == (f.payload != null); f.payload != null;
+      hasWrapped = assert (f'.wrapped != null) == (f.wrapped != null); f.wrapped != null;
+
+      typeFromPayload = if mergedPayload == null then null else f.type mergedPayload;
+      typeFromWrapped = if mergedWrapped == null then null else f.type mergedWrapped;
     in
-    # cannot merge different types
+    # Abort early: cannot merge different types
     if f.name != f'.name
        then null
-    # simple types
-    else if    (f.wrapped == null && f'.wrapped == null)
-            && (f.payload == null && f'.payload == null)
-       then f.type
-    # composed types
-    else if (f.wrapped != null && f'.wrapped != null) && (wrapped != null)
-       then f.type wrapped
-    # value types
-    else if (f.payload != null && f'.payload != null) && (payload != null)
-       then f.type payload
-    else null;
+    else
+
+    if hasPayload then
+      # Just return the payload if returning wrapped is deprecated
+      if f ? wrappedDeprecationMessage then
+        typeFromPayload
+      else if hasWrapped then
+        # Has both wrapped and payload
+        throw ''
+          Type ${f.name} defines both `functor.payload` and `functor.wrapped` at the same time, which is not supported.
+
+          Use either `functor.payload` or `functor.wrapped` but not both.
+
+          If your code worked before remove either `functor.wrapped` or `functor.payload` from the type definition.
+        ''
+      else
+        typeFromPayload
+    else
+      if hasWrapped then
+        typeFromWrapped
+      else
+        f.type;
 
   # Default type functor
   defaultFunctor = name: {
@@ -220,7 +237,7 @@ rec {
     else "(${t.description})";
 
   # When adding new types don't forget to document them in
-  # nixos/doc/manual/development/option-types.xml!
+  # nixos/doc/manual/development/option-types.section.md!
   types = rec {
 
     raw = mkOptionType {
@@ -254,12 +271,6 @@ rec {
           mergeFunction = {
             # Recursively merge attribute sets
             set = (attrsOf anything).merge;
-            # Safe and deterministic behavior for lists is to only accept one definition
-            # listOf only used to apply mkIf and co.
-            list =
-              if length defs > 1
-              then throw "The option `${showOption loc}' has conflicting definitions, in ${showFiles (getFiles defs)}."
-              else (listOf anything).merge;
             # This is the type of packages, only accept a single definition
             stringCoercibleSet = mergeOneOption;
             lambda = loc: defs: arg: anything.merge
@@ -575,48 +586,78 @@ rec {
         substSubModules = m: nonEmptyListOf (elemType.substSubModules m);
       };
 
-    attrsOf = elemType: mkOptionType rec {
-      name = "attrsOf";
-      description = "attribute set of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
-      descriptionClass = "composite";
-      check = isAttrs;
-      merge = loc: defs:
-        mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
-            (mergeDefinitions (loc ++ [name]) elemType defs).optionalValue
-          )
-          # Push down position info.
-          (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs)));
-      emptyValue = { value = {}; };
-      getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
-      getSubModules = elemType.getSubModules;
-      substSubModules = m: attrsOf (elemType.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = elemType; };
-      nestedTypes.elemType = elemType;
-    };
+    attrsOf = elemType: attrsWith { inherit elemType; };
 
     # A version of attrsOf that's lazy in its values at the expense of
     # conditional definitions not working properly. E.g. defining a value with
     # `foo.attr = mkIf false 10`, then `foo ? attr == true`, whereas with
     # attrsOf it would correctly be `false`. Accessing `foo.attr` would throw an
     # error that it's not defined. Use only if conditional definitions don't make sense.
-    lazyAttrsOf = elemType: mkOptionType rec {
-      name = "lazyAttrsOf";
-      description = "lazy attribute set of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
+    lazyAttrsOf = elemType: attrsWith { inherit elemType; lazy = true; };
+
+    # base type for lazyAttrsOf and attrsOf
+    attrsWith =
+    let
+      # Push down position info.
+      pushPositions = map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value);
+      binOp = lhs: rhs:
+        let
+          elemType = lhs.elemType.typeMerge rhs.elemType.functor;
+          lazy =
+            if lhs.lazy == rhs.lazy then
+              lhs.lazy
+            else
+              null;
+        in
+        if elemType == null || lazy == null then
+          null
+        else
+          {
+            inherit elemType lazy;
+          };
+    in
+    {
+      elemType,
+      lazy ? false,
+    }:
+    mkOptionType {
+      name = if lazy then "lazyAttrsOf" else "attrsOf";
+      description = (if lazy then "lazy attribute set" else "attribute set") + " of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
       descriptionClass = "composite";
       check = isAttrs;
-      merge = loc: defs:
-        zipAttrsWith (name: defs:
-          let merged = mergeDefinitions (loc ++ [name]) elemType defs;
-          # mergedValue will trigger an appropriate error when accessed
-          in merged.optionalValue.value or elemType.emptyValue.value or merged.mergedValue
-        )
-        # Push down position info.
-        (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs);
+      merge = if lazy then (
+        # Lazy merge Function
+        loc: defs:
+          zipAttrsWith (name: defs:
+            let merged = mergeDefinitions (loc ++ [name]) elemType defs;
+            # mergedValue will trigger an appropriate error when accessed
+            in merged.optionalValue.value or elemType.emptyValue.value or merged.mergedValue
+          )
+          # Push down position info.
+          (pushPositions defs)
+      ) else (
+        # Non-lazy merge Function
+        loc: defs:
+          mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
+              (mergeDefinitions (loc ++ [name]) elemType (defs)).optionalValue
+            )
+          # Push down position info.
+          (pushPositions defs)))
+      );
       emptyValue = { value = {}; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
       getSubModules = elemType.getSubModules;
-      substSubModules = m: lazyAttrsOf (elemType.substSubModules m);
-      functor = (defaultFunctor name) // { wrapped = elemType; };
+      substSubModules = m: attrsWith { elemType = elemType.substSubModules m; inherit lazy; };
+      functor = defaultFunctor "attrsWith" // {
+        wrappedDeprecationMessage = { loc }: lib.warn ''
+          The deprecated `type.functor.wrapped` attribute of the option `${showOption loc}` is accessed, use `type.nestedTypes.elemType` instead.
+        '' elemType;
+        payload = {
+          # Important!: Add new function attributes here in case of future changes
+          inherit elemType lazy;
+        };
+        inherit binOp;
+      };
       nestedTypes.elemType = elemType;
     };
 
@@ -1036,7 +1077,7 @@ rec {
         getSubOptions = finalType.getSubOptions;
         getSubModules = finalType.getSubModules;
         substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
-        typeMerge = t1: t2: null;
+        typeMerge = t: null;
         functor = (defaultFunctor name) // { wrapped = finalType; };
         nestedTypes.coercedType = coercedType;
         nestedTypes.finalType = finalType;

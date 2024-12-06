@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://gentools.readthedocs.io/";
     changelog = "https://github.com/ariebovenberg/gentools/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ mredaelli ];
+    maintainers = with maintainers; [ ];
   };
 }

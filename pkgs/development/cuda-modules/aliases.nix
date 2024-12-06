@@ -1,18 +1,14 @@
-# Packges which have been deprecated or removed from cudaPackages
+# Packages which have been deprecated or removed from cudaPackages
 final: prev:
 let
-  mkRenamed =
-    oldName: newName: newPkg:
-    final.lib.warn "cudaPackages.${oldName} is deprecated, use ${newName} instead" newPkg;
-in
-{
+  inherit (prev.lib) warn;
+  inherit (builtins) mapAttrs;
 
-  # Deprecated: an alias kept for compatibility. Consider removing after 24.05
-  autoFixElfFiles = mkRenamed "autoFixElfFiles" "pkgs.autoFixElfFiles" final.pkgs.autoFixElfFiles; # Added 2024-03-30
-  autoAddDriverRunpath =
-    mkRenamed "autoAddDriverRunpath" "pkgs.autoAddDriverRunpath"
-      final.pkgs.autoAddDriverRunpath; # Added 2024-03-30
-  autoAddOpenGLRunpathHook =
-    mkRenamed "autoAddOpenGLRunpathHook" "pkgs.autoAddDriverRunpathHook"
-      final.pkgs.autoAddDriverRunpath; # Added 2024-03-30
+  mkRenamed =
+    oldName:
+    { path, package }:
+    warn "cudaPackages.${oldName} is deprecated, use ${path} instead" package;
+in
+mapAttrs mkRenamed {
+  # A comment to prevent empty { } from collapsing into a single line
 }

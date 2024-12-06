@@ -41,15 +41,15 @@ buildPythonPackage rec {
     pydicom
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     libjpeg = [
       pylibjpeg
       pylibjpeg-libjpeg
-      #pylibjpeg-openjpeg  # not in nixpkgs yet
+      #pylibjpeg-openjpeg  # broken on aarch64-linux
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.libjpeg;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.libjpeg;
   preCheck = ''
     export HOME=$TMP/test-home
     mkdir -p $HOME/.pydicom/

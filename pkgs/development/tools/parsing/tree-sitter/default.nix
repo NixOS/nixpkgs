@@ -27,13 +27,13 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.22.5";
-  hash = "sha256-f8bdpiPNo5M8aefTmrQ2MQVg7lS0Yq7j312K1slortA=";
+  version = "0.24.3";
+  hash = "sha256-2Pg4D1Pf1Ex6ykXouAJvD1NVfg5CH4rCQcSTAJmYwd4=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     inherit hash;
     fetchSubmodules = true;
   };
@@ -66,14 +66,13 @@ let
         { tree-sitter-latex = grammars'.tree-sitter-latex // { generate = true; }; } //
         { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "grammars/ocaml"; }; } //
         { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "grammars/interface"; }; } //
-        { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
+        { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "tree-sitter-org"; }; } //
         { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
         { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
         { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
-        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; } //
+        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "tree-sitter-markdown_inline"; location = "tree-sitter-markdown-inline"; }; } //
         { tree-sitter-php = grammars'.tree-sitter-php // { location = "php"; }; } //
-        { tree-sitter-sql = grammars'.tree-sitter-sql // { generate = true; }; } //
-        { tree-sitter-wing = grammars'.tree-sitter-wing // { location = "libs/tree-sitter-wing"; generate = true; }; };
+        { tree-sitter-sql = grammars'.tree-sitter-sql // { generate = true; }; };
     in
     lib.mapAttrs build (grammars);
 
@@ -112,10 +111,10 @@ rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version;
 
-  cargoHash = "sha256-Fk6V/kPKc/GL/q6QsaCUrq+ZG0R+N5FLOpIm77Y+n2A=";
+  cargoHash = "sha256-0ZoXf0eV3kmHaRoHcWrVEgoWnYNBsY9GiFfy84H+0mc=";
 
   buildInputs =
-    lib.optionals stdenv.isDarwin [ Security CoreServices ];
+    lib.optionals stdenv.hostPlatform.isDarwin [ Security CoreServices ];
   nativeBuildInputs =
     [ which ]
     ++ lib.optionals webUISupport [ emscripten ];
@@ -133,6 +132,8 @@ rustPlatform.buildRustPackage {
         -i cli/src/lib.rs
     sed -e 's/playground,//' \
         -e 's/playground::serve(&grammar_path.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
+        -i cli/src/main.rs
+    sed -e 's/playground::serve(.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
         -i cli/src/main.rs
   '';
 
@@ -170,7 +171,7 @@ rustPlatform.buildRustPackage {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tree-sitter/tree-sitter";
     description = "Parser generator tool and an incremental parsing library";
     mainProgram = "tree-sitter";
@@ -186,7 +187,7 @@ rustPlatform.buildRustPackage {
       * Robust enough to provide useful results even in the presence of syntax errors
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ Profpatsch ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Profpatsch ];
   };
 }

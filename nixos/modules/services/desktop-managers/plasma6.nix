@@ -8,11 +8,11 @@
   cfg = config.services.desktopManager.plasma6;
 
   inherit (pkgs) kdePackages;
-  inherit (lib) literalExpression mkDefault mkIf mkOption mkPackageOptionMD types;
+  inherit (lib) literalExpression mkDefault mkIf mkOption mkPackageOption types;
 
   activationScript = ''
     # will be rebuilt automatically
-    rm -fv $HOME/.cache/ksycoca*
+    rm -fv "$HOME/.cache/ksycoca"*
   '';
 in {
   options = {
@@ -29,7 +29,7 @@ in {
         description = "Enable Qt 5 integration (theming, etc). Disable for a pure Qt 6 system.";
       };
 
-      notoPackage = mkPackageOptionMD pkgs "Noto fonts - used for UI by default" {
+      notoPackage = mkPackageOption pkgs "Noto fonts - used for UI by default" {
         default = ["noto-fonts"];
         example = "noto-fonts-lgc-plus";
       };
@@ -58,6 +58,7 @@ in {
     ];
 
     qt.enable = true;
+    programs.xwayland.enable = true;
     environment.systemPackages = with kdePackages; let
       requiredPackages = [
         qtwayland # Hack? To make everything run on Wayland
@@ -72,12 +73,14 @@ in {
         kguiaddons # provides geo URL handlers
         kiconthemes # provides Qt plugins
         kimageformats # provides Qt plugins
+        qtimageformats # provides optional image formats such as .webp and .avif
         kio # provides helper service + a bunch of other stuff
         kio-admin # managing files as admin
         kio-extras # stuff for MTP, AFC, etc
         kio-fuse # fuse interface for KIO
         kpackage # provides kpackagetool tool
         kservice # provides kbuildsycoca6 tool
+        kunifiedpush # provides a background service and a KCM
         kwallet # provides helper service
         kwallet-pam # provides helper service
         kwalletmanager # provides KCMs and stuff
@@ -87,7 +90,6 @@ in {
 
         # Core Plasma parts
         kwin
-        pkgs.xwayland
         kscreen
         libkscreen
         kscreenlocker
@@ -143,10 +145,16 @@ in {
         kate
         khelpcenter
         dolphin
+        baloo-widgets  # baloo information in Dolphin
         dolphin-plugins
         spectacle
         ffmpegthumbs
         krdp
+        xwaylandvideobridge  # exposes Wayland windows to X11 screen capture
+      ] ++ lib.optionals config.services.flatpak.enable [
+        # Since PackageKit Nix support is not there yet,
+        # only install discover if flatpak is enabled.
+        discover
       ];
     in
       requiredPackages
@@ -213,6 +221,7 @@ in {
     };
 
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
+    programs.kde-pim.enable = mkDefault true;
     programs.ssh.askPassword = mkDefault "${kdePackages.ksshaskpass.out}/bin/ksshaskpass";
 
     # Enable helpful DBus services.
@@ -237,10 +246,20 @@ in {
     systemd.packages = [kdePackages.drkonqi];
     systemd.services."drkonqi-coredump-processor@".wantedBy = ["systemd-coredump@.service"];
 
+    xdg.icons.enable = true;
+    xdg.icons.fallbackCursorThemes = mkDefault ["breeze_cursors"];
+
     xdg.portal.enable = true;
-    xdg.portal.extraPortals = [kdePackages.xdg-desktop-portal-kde];
-    xdg.portal.configPackages = mkDefault [kdePackages.xdg-desktop-portal-kde];
+    xdg.portal.extraPortals = [
+      kdePackages.kwallet
+      kdePackages.xdg-desktop-portal-kde
+      pkgs.xdg-desktop-portal-gtk
+    ];
+    xdg.portal.configPackages = mkDefault [kdePackages.plasma-workspace];
     services.pipewire.enable = mkDefault true;
+
+    # Enable screen reader by default
+    services.orca.enable = mkDefault true;
 
     services.displayManager = {
       sessionPackages = [kdePackages.plasma-workspace];
@@ -253,6 +272,7 @@ in {
       extraPackages = with kdePackages; [
         breeze-icons
         kirigami
+        libplasma
         plasma5support
         qtsvg
         qtvirtualkeyboard

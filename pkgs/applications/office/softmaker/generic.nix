@@ -39,7 +39,7 @@ in stdenv.mkDerivation {
     libXmu
     libXrandr
     libXrender
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
   ];
 
   dontBuild = true;
@@ -124,7 +124,7 @@ in stdenv.mkDerivation {
     homepage = "https://www.softmaker.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -8,21 +8,32 @@ rec {
       , runcRev, runcHash
       , containerdRev, containerdHash
       , tiniRev, tiniHash
-      , buildxSupport ? true, composeSupport ? true, sbomSupport ? false
+      , buildxSupport ? true, composeSupport ? true, sbomSupport ? false, initSupport ? false
       # package dependencies
       , stdenv, fetchFromGitHub, fetchpatch, buildGoModule
       , makeWrapper, installShellFiles, pkg-config, glibc
       , go-md2man, go, containerd, runc, tini, libtool
-      , sqlite, iproute2, docker-buildx, docker-compose, docker-sbom
-      , iptables, e2fsprogs, xz, util-linux, xfsprogs, git
+      , sqlite, iproute2, docker-buildx, docker-compose, docker-sbom, docker-init
+      , iptables, e2fsprogs, xz, util-linux, xfsprogs, gitMinimal
       , procps, rootlesskit, slirp4netns, fuse-overlayfs, nixosTests
-      , clientOnly ? !stdenv.isLinux, symlinkJoin
+      , clientOnly ? !stdenv.hostPlatform.isLinux, symlinkJoin
       , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
-      , withBtrfs ? stdenv.isLinux, btrfs-progs
-      , withLvm ? stdenv.isLinux, lvm2
-      , withSeccomp ? stdenv.isLinux, libseccomp
+      , withBtrfs ? stdenv.hostPlatform.isLinux, btrfs-progs
+      , withLvm ? stdenv.hostPlatform.isLinux, lvm2
+      , withSeccomp ? stdenv.hostPlatform.isLinux, libseccomp
+      , knownVulnerabilities ? []
     }:
   let
+    docker-meta = {
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
+        offline
+        vdemeester
+        periklis
+        teutat3s
+      ];
+    };
+
     docker-runc = runc.overrideAttrs {
       pname = "docker-runc";
       inherit version;
@@ -42,6 +53,9 @@ rec {
       pname = "docker-containerd";
       inherit version;
 
+      # We only need binaries
+      outputs = [ "out" ];
+
       src = fetchFromGitHub {
         owner = "containerd";
         repo = "containerd";
@@ -51,6 +65,9 @@ rec {
 
       buildInputs = oldAttrs.buildInputs
         ++ lib.optionals withSeccomp [ libseccomp ];
+
+      # See above
+      installTargets = "install";
     });
 
     docker-tini = tini.overrideAttrs {
@@ -79,7 +96,7 @@ rec {
       hash = mobyHash;
     };
 
-    moby = buildGoModule (lib.optionalAttrs stdenv.isLinux rec {
+    moby = buildGoModule (lib.optionalAttrs stdenv.hostPlatform.isLinux rec {
       pname = "moby";
       inherit version;
 
@@ -94,9 +111,9 @@ rec {
         ++ lib.optional withSystemd systemd
         ++ lib.optional withSeccomp libseccomp;
 
-      extraPath = lib.optionals stdenv.isLinux (lib.makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
+      extraPath = lib.optionals stdenv.hostPlatform.isLinux (lib.makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux gitMinimal ]);
 
-      extraUserPath = lib.optionals (stdenv.isLinux && !clientOnly) (lib.makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
+      extraUserPath = lib.optionals (stdenv.hostPlatform.isLinux && !clientOnly) (lib.makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
 
       patches = lib.optionals (lib.versionOlder version "23") [
         # This patch incorporates code from a PR fixing using buildkit with the ZFS graph driver.
@@ -159,11 +176,17 @@ rec {
         ++ lib.optional (!withBtrfs) "exclude_graphdriver_btrfs"
         ++ lib.optional (!withLvm) "exclude_graphdriver_devicemapper"
         ++ lib.optional withSeccomp "seccomp";
+
+      meta = docker-meta // {
+          homepage = "https://mobyproject.org/";
+          description = "A collaborative project for the container ecosystem to assemble container-based systems.";
+        };
     });
 
     plugins = lib.optional buildxSupport docker-buildx
       ++ lib.optional composeSupport docker-compose
-      ++ lib.optional sbomSupport docker-sbom;
+      ++ lib.optional sbomSupport docker-sbom
+      ++ lib.optional initSupport docker-init;
     pluginsRef = symlinkJoin { name = "docker-plugins"; paths = plugins; };
   in
   buildGoModule (lib.optionalAttrs (!clientOnly) {
@@ -187,7 +210,7 @@ rec {
       makeWrapper pkg-config go-md2man go libtool installShellFiles
     ];
 
-    buildInputs = plugins ++ lib.optionals (lib.versionAtLeast version "23" && stdenv.isLinux) [
+    buildInputs = plugins ++ lib.optionals (lib.versionAtLeast version "23" && stdenv.hostPlatform.isLinux) [
       glibc
       glibc.static
     ];
@@ -253,10 +276,10 @@ rec {
     passthru = {
       # Exposed for tarsum build on non-linux systems (build-support/docker/default.nix)
       inherit moby-src;
-      tests = lib.optionals (!clientOnly) { inherit (nixosTests) docker; };
+      tests = lib.optionalAttrs (!clientOnly) { inherit (nixosTests) docker; };
     };
 
-    meta = with lib; {
+    meta = docker-meta // {
       homepage = "https://www.docker.com/";
       description = "Open source project to pack, ship and run any application as a lightweight container";
       longDescription = ''
@@ -264,9 +287,8 @@ rec {
 
         To enable the docker daemon on NixOS, set the `virtualisation.docker.enable` option to `true`.
       '';
-      license = licenses.asl20;
-      maintainers = with maintainers; [ offline vdemeester periklis teutat3s ];
       mainProgram = "docker";
+      inherit knownVulnerabilities;
     };
   });
 
@@ -284,32 +306,52 @@ rec {
     containerdHash = "sha256-y3CYDZbA2QjIn1vyq/p1F1pAVxQHi/0a6hGWZCRWzyk=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
+    knownVulnerabilities = [
+      "CVE-2024-23651"
+      "CVE-2024-23652"
+      "CVE-2024-23653"
+      "CVE-2024-41110"
+    ];
   };
 
   docker_25 = callPackage dockerGen rec {
-    version = "25.0.5";
+    version = "25.0.6";
     cliRev = "v${version}";
-    cliHash = "sha256-CACMi3bXUN6oGc2f/Z+lNQqMgQ4llRWPRKgijdpiPGg=";
+    cliHash = "sha256-7ZKjlONL5RXEJZrvssrL1PQMNANP0qTw4myGKdtd19U=";
     mobyRev = "v${version}";
-    mobyHash = "sha256-4QGz22fXxyAD77pyUWb2lF3VKqxmPIrGqcJGoyrEHew=";
+    mobyHash = "sha256-+zkhUMeVD3HNq8WrWQmLskq+HykvD5kzSACmf67YbJE=";
     runcRev = "v1.1.12";
     runcHash = "sha256-N77CU5XiGYIdwQNPFyluXjseTeaYuNJ//OsEUS0g/v0=";
-    containerdRev = "v1.7.13";
-    containerdHash = "sha256-y3CYDZbA2QjIn1vyq/p1F1pAVxQHi/0a6hGWZCRWzyk=";
+    containerdRev = "v1.7.20";
+    containerdHash = "sha256-Q9lTzz+G5PSoChy8MZtbOpO81AyNWXC+CgGkdOg14uY=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };
 
   docker_26 = callPackage dockerGen rec {
-    version = "26.1.4";
+    version = "26.1.5";
     cliRev = "v${version}";
-    cliHash = "sha256-7yCR49Un1i1kB+66IKt/8lgwKNkUjtVh52DH9OY8Pw4=";
+    cliHash = "sha256-UlN+Uc0YHhLyu14h5oDBXP4K9y2tYKPOIPTGZCe4PVY=";
     mobyRev = "v${version}";
-    mobyHash = "sha256-0WwlpUECvmNq6DBm7U7rjzYfGKF7pxsfs9+x5uVPV0k=";
+    mobyHash = "sha256-6Hx7GnA7P6HqDlnGoc+HpPHSl69XezwAEGbvWYUVQlE=";
     runcRev = "v1.1.12";
     runcHash = "sha256-N77CU5XiGYIdwQNPFyluXjseTeaYuNJ//OsEUS0g/v0=";
-    containerdRev = "v1.7.15";
-    containerdHash = "sha256-qLrPLGxsUmgEscrhyl+1rJ0k7c9ibKnpMpsJPD4xDZU=";
+    containerdRev = "v1.7.18";
+    containerdHash = "sha256-IlK5IwniaBhqMgxQzV8btQcbdJkNEQeUMoh6aOsBOHQ=";
+    tiniRev = "v0.19.0";
+    tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
+  };
+
+  docker_27 = callPackage dockerGen rec {
+    version = "27.3.1";
+    cliRev = "v${version}";
+    cliHash = "sha256-Iurud1BwswGZCFgJ04/wl1U9AKcsXDmzFXLFCrjfc0Y=";
+    mobyRev = "v${version}";
+    mobyHash = "sha256-AKl06k2ePWOFhL3oH086HcLLYs2Da+wLOcGjGnQ0SXE=";
+    runcRev = "v1.1.14";
+    runcHash = "sha256-7PYbSZqCQLTaeFppuNz5mxDlwEyLkA5zpdMhWy1tWmc=";
+    containerdRev = "v1.7.22";
+    containerdHash = "sha256-8IHBKai4PvvTuHPDTgx9wFEBzz4MM7Mwo8Q/bzFRzfk=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };

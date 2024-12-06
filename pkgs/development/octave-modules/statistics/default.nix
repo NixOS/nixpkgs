@@ -6,13 +6,13 @@
 
 buildOctavePackage rec {
   pname = "statistics";
-  version = "1.6.0";
+  version = "1.6.7";
 
   src = fetchFromGitHub {
     owner = "gnu-octave";
     repo = "statistics";
     rev = "refs/tags/release-${version}";
-    sha256 = "sha256-XJXDiVDg3Nw7a/ih49jtkYRmyvAhTfs3LbBQmw+87oc=";
+    hash = "sha256-cXAjUiv4xWPrWf7HQg9Y+JkR7ON9iefKFUGbEr9FGNA=";
   };
 
   requiredOctavePackages = [
@@ -20,9 +20,9 @@ buildOctavePackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://octave.sourceforge.io/statistics/index.html";
+    homepage = "https://packages.octave.org/statistics";
     license = with licenses; [ gpl3Plus publicDomain ];
     maintainers = with maintainers; [ KarlJoad ];
-    description = "Additional statistics functions for Octave";
+    description = "Statistics package for GNU Octave";
   };
 }

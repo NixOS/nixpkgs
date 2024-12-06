@@ -5,7 +5,7 @@ mkDerivation rec {
   version = "1.0.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
+    url = "mirror://kde/stable/isoimagewriter/${version}/isoimagewriter-${version}.tar.xz";
     hash = "sha256-ppAiMD7Bvra3tPDWjlnkGZ08mGh2fLnrI8bdGZngal0=";
   };
 

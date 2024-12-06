@@ -79,8 +79,9 @@ self: super: ({
 
   proteaaudio = addExtraLibrary darwin.apple_sdk.frameworks.AudioToolbox super.proteaaudio;
 
-  # the system-fileio tests use canonicalizePath, which fails in the sandbox
-  system-fileio = dontCheck super.system-fileio;
+  # issues finding libcharset.h without libiconv in buildInputs on darwin.
+  with-utf8 = addExtraLibrary pkgs.libiconv super.with-utf8;
+  with-utf8_1_1_0_0 = addExtraLibrary pkgs.libiconv super.with-utf8_1_1_0_0;
 
   git-annex = overrideCabal (drv: {
     # We can't use testFlags since git-annex side steps the Cabal test mechanism
@@ -92,6 +93,12 @@ self: super: ({
       )
     '';
   }) super.git-annex;
+
+  # on*Finish tests rely on a threadDelay timing differential of 0.1s.
+  # You'd think that's plenty of time even though immediate rescheduling
+  # after threadDelay is not guaranteed. However, it appears that these
+  # tests are quite flaky on Darwin.
+  immortal = dontCheck super.immortal;
 
   # Prevents needing to add `security_tool` as a run-time dependency for
   # everything using x509-system to give access to the `security` executable.
@@ -131,6 +138,8 @@ self: super: ({
       substituteInPlace Setup.hs --replace "addToLdLibraryPath libDir" "pure ()"
     '' + (oldAttrs.preCompileBuildDriver or "");
   }) super.llvm-hs;
+
+  sym = markBroken super.sym;
 
   yesod-bin = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.yesod-bin;
 
@@ -299,6 +308,13 @@ self: super: ({
     __darwinAllowLocalNetworking = true;
   });
 
+  # network requires `IP_RECVTOS`, which was added in 10.15.
+  network =
+    if lib.versionOlder (lib.getVersion pkgs.apple-sdk) "10.15" then
+      addBuildDepend pkgs.apple-sdk_10_15 super.network
+    else
+      super.network;
+
   foldl = overrideCabal (drv: {
     postPatch = ''
       # This comment has been inserted, so the derivation hash changes, forcing
@@ -323,6 +339,10 @@ self: super: ({
   # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
   zip = dontCheck super.zip;
 
+  snap = super.snap.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
   warp = super.warp.overrideAttrs (drv: {
     __darwinAllowLocalNetworking = true;
   });
@@ -341,9 +361,11 @@ self: super: ({
     libraryFrameworkDepends = with pkgs.buildPackages.darwin.apple_sdk.frameworks; [ Cocoa WebKit ];
     libraryHaskellDepends = with self; [ aeson data-default jsaddle ]; # cabal2nix doesn't add darwin-only deps
   }) super.jsaddle-wkwebview;
-  reflex-dom = overrideCabal (drv: {
-    libraryHaskellDepends = with self; [ base bytestring jsaddle-wkwebview reflex reflex-dom-core text ]; # cabal2nix doesn't add darwin-only deps
-  }) super.reflex-dom;
+
+  # cabal2nix doesn't add darwin-only deps
+  reflex-dom = addBuildDepend self.jsaddle-wkwebview (super.reflex-dom.override (drv: {
+    jsaddle-webkit2gtk = null;
+  }));
 
   # Remove a problematic assert, the length is sometimes 1 instead of 2 on darwin
   di-core = overrideCabal (drv: {
@@ -353,7 +375,7 @@ self: super: ({
     '';
   }) super.di-core;
 
-} // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
+} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {  # aarch64-darwin
 
   # Workarounds for justStaticExecutables on aarch64-darwin. Since dead code
   # elimination barely works on aarch64-darwin, any package that has a
@@ -404,7 +426,31 @@ self: super: ({
   # https://github.com/NixOS/nixpkgs/issues/149692
   Agda = disableCabalFlag "optimise-heavily" super.Agda;
 
-} // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
+  # https://github.com/NixOS/nixpkgs/issues/198495
+  eventsourcing-postgresql = dontCheck super.eventsourcing-postgresql;
+  gargoyle-postgresql-connect = dontCheck super.gargoyle-postgresql-connect;
+  hs-opentelemetry-instrumentation-postgresql-simple = dontCheck super.hs-opentelemetry-instrumentation-postgresql-simple;
+  moto-postgresql = dontCheck super.moto-postgresql;
+  persistent-postgresql = dontCheck super.persistent-postgresql;
+  pipes-postgresql-simple = dontCheck super.pipes-postgresql-simple;
+  postgresql-connector = dontCheck super.postgresql-connector;
+  postgresql-migration = dontCheck super.postgresql-migration;
+  postgresql-schema = dontCheck super.postgresql-schema;
+  postgresql-simple = dontCheck super.postgresql-simple;
+  postgresql-simple-interpolate = dontCheck super.postgresql-simple-interpolate;
+  postgresql-simple-migration = dontCheck super.postgresql-simple-migration;
+  postgresql-simple-url = dontCheck super.postgresql-simple-url;
+  postgresql-transactional = dontCheck super.postgresql-transactional;
+  postgrest = dontCheck super.postgrest;
+  rivet-adaptor-postgresql = dontCheck super.rivet-adaptor-postgresql;
+  tmp-proc-postgres = dontCheck super.tmp-proc-postgres;
+
+} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isx86_64 {  # x86_64-darwin
+
+  # Work around store corruption on one of our Hydra builders
+  # https://github.com/NixOS/nixpkgs/issues/356741
+  filepath-bytestring = triggerRebuild 1 super.filepath-bytestring;
+  magic = triggerRebuild 1 super.magic;
 
   # tests appear to be failing to link or something:
   # https://hydra.nixos.org/build/174540882/nixlog/9

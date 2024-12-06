@@ -156,6 +156,14 @@ if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source $cc_wrapper/nix-support/add-flags.sh
 fi
 
+# Only add darwin min version flag and set up `DEVELOPER_DIR` if a default darwin min version is set,
+# which is a signal that we're targeting darwin. (Copied from add-flags in libc but tailored for Swift).
+if [ "@darwinMinVersion@" ]; then
+    # Make sure the wrapped Swift compiler can find the overlays in the SDK.
+    NIX_SWIFTFLAGS_COMPILE+=" -I $SDKROOT/usr/lib/swift"
+    NIX_LDFLAGS_@suffixSalt@+=" -L $SDKROOT/usr/lib/swift"
+fi
+
 if [[ "$isCxx" = 1 ]]; then
     if [[ "$cxxInclude" = 1 ]]; then
         NIX_CFLAGS_COMPILE_@suffixSalt@+=" $NIX_CXXSTDLIB_COMPILE_@suffixSalt@"
@@ -252,7 +260,7 @@ for ((i=0; i < ${#extraBefore[@]}; i++));do
         # TODO: Assumes macOS.
         extraBefore[i]="${extraBefore[i]/-apple-darwin/-apple-macosx${MACOSX_DEPLOYMENT_TARGET:-11.0}}"
         ;;
-    -march=*)
+    -march=*|-mcpu=*|-mfloat-abi=*|-mfpu=*|-mmode=*|-mthumb|-marm|-mtune=*)
         [[ i -gt 0 && ${extraBefore[i-1]} == -Xcc ]] && continue
         extraBefore=(
             "${extraBefore[@]:0:i}"

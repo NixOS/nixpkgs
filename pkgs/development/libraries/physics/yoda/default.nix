@@ -1,6 +1,7 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitLab
+, autoreconfHook
 , python
 , root
 , makeWrapper
@@ -10,14 +11,17 @@
 
 stdenv.mkDerivation rec {
   pname = "yoda";
-  version = "1.9.10";
+  version = "2.0.2";
 
-  src = fetchurl {
-    url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
-    hash = "sha256-CnCO6dcElF0zh8xDexX/3fOCxw/lurOe0r2/g8LCjG8=";
+  src = fetchFromGitLab {
+    owner = "hepcedar";
+    repo = pname;
+    rev = "yoda-${version}";
+    hash = "sha256-sHvwgLH22fvdlh4oLjr4fzZ2WtBJMAlvr4Vxi9Xdf84=";
   };
 
   nativeBuildInputs = with python.pkgs; [
+    autoreconfHook
     cython
     makeWrapper
   ];

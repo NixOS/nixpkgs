@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libusb1
     openssl
-  ] ++ lib.optional stdenv.isDarwin AppKit;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin AppKit;
 
   nativeCheckInputs = [
     rage

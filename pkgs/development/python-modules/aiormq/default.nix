@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytestCheckHook,
   pamqp,
   yarl,
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiormq";
-  version = "6.8.0";
+  version = "6.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,12 +21,11 @@ buildPythonPackage rec {
     owner = "mosquito";
     repo = "aiormq";
     rev = "refs/tags/${version}";
-    hash = "sha256-XD1g4JXQJlJyXuZbo4hYW7cwQhy8+p4/inwNw2WOD9Y=";
+    hash = "sha256-3+PoDB5Owy8BWBUisX0i1mV8rqs5K9pBFQwup8vKxlg=";
   };
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "pamqp" ];

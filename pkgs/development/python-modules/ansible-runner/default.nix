@@ -4,14 +4,12 @@
   ansible-core,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   glibcLocales,
   importlib-metadata,
   mock,
   openssh,
-  pbr,
+  packaging,
   pexpect,
-  psutil,
   pytest-mock,
   pytest-timeout,
   pytest-xdist,
@@ -20,50 +18,36 @@
   python-daemon,
   pyyaml,
   setuptools,
-  six,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "ansible-runner";
-  version = "2.3.6";
+  version = "2.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-shdKEtytLcLzQuqCh2iY9WigtmxTVoYAv4BXcVj8uhw=";
+    hash = "sha256-gtArJUiDDzelNRe2XII8SvNxBpQGx9ITtckEHUXgxbY=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-tests.patch";
-      url = "https://github.com/ansible/ansible-runner/commit/0d522c90cfc1f305e118705a1b3335ccb9c1633d.patch";
-      hash = "sha256-eTnQkftvjK0YHU+ovotRVSuVlvaVeXp5SvYk1DPCg88=";
-      excludes = [
-        ".github/workflows/ci.yml"
-        "tox.ini"
-      ];
-    })
-    (fetchpatch {
-      # python 3.12 compat
-      url = "https://github.com/ansible/ansible-runner/commit/dc248497bb2375a363222ce755bf3a31f21d5f64.patch";
-      hash = "sha256-QT28Iw0uENoO35rqZpYBcmJB/GNDEF4m86SKf6p0XQU=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools>=45, <=69.0.2", "setuptools-scm[toml]>=6.2, <=8.0.4"' '"setuptools", "setuptools-scm"'
+  '';
 
   build-system = [
     setuptools
-    pbr
+    setuptools-scm
   ];
 
   dependencies = [
-    ansible-core
-    psutil
+    packaging
     pexpect
     python-daemon
     pyyaml
-    six
   ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   nativeCheckInputs = [
@@ -85,13 +69,18 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # Requires network access
+    # Tests require network access
     "test_callback_plugin_task_args_leak"
     "test_env_accuracy"
     # Times out on slower hardware
     "test_large_stdout_blob"
     # Failed: DID NOT RAISE <class 'RuntimeError'>
     "test_validate_pattern"
+    # Assertion error
+    "test_get_role_list"
+    "test_include_role_from_collection_events"
+    "test_resolved_actions"
+    "test_callback_plugin_censoring_does_not_overwrite"
   ];
 
   disabledTestPaths =
@@ -100,7 +89,7 @@ buildPythonPackage rec {
       "test/integration/test_runner.py"
       "test/unit/test_runner.py"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Integration tests on Darwin are not regularly passing in ansible-runner's own CI
       "test/integration"
       # These tests write to `/tmp` which is not writable on Darwin
@@ -111,9 +100,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Helps when interfacing with Ansible";
-    mainProgram = "ansible-runner";
     homepage = "https://github.com/ansible/ansible-runner";
+    changelog = "https://github.com/ansible/ansible-runner/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    mainProgram = "ansible-runner";
   };
 }

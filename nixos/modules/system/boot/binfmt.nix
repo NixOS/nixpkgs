@@ -28,8 +28,6 @@ let
          ''
     else interpreter;
 
-  getEmulator = system: (lib.systems.elaborate { inherit system; }).emulator pkgs;
-  getQemuArch = system: (lib.systems.elaborate { inherit system; }).qemuArch;
 
   # Mapping of systems to “magicOrExtension” and “mask”. Mostly taken from:
   # - https://github.com/cleverca22/nixos-configs/blob/master/qemu.nix
@@ -140,6 +138,10 @@ let
     wasm64-wasi = {
       magicOrExtension = ''\x00asm'';
       mask = ''\xff\xff\xff\xff'';
+    };
+    s390x-linux = {
+      magicOrExtension = ''\x7fELF\x02\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x16'';
+      mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff'';
     };
     x86_64-windows.magicOrExtension = "MZ";
     i686-windows.magicOrExtension = "MZ";
@@ -276,32 +278,64 @@ in {
         '';
         type = types.listOf (types.enum (builtins.attrNames magics));
       };
+
+      addEmulatedSystemsToNixSandbox = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description = ''
+          Whether to add the {option}`boot.binfmt.emulatedSystems` to {option}`nix.settings.extra-platforms`.
+          Disable this to use remote builders for those platforms, while allowing testing binaries locally.
+        '';
+      };
+
+      preferStaticEmulators = mkOption {
+        default = false;
+        description = ''
+          Whether to use static emulators when available.
+
+          This enables the kernel to preload the emulator binaries when
+          the binfmt registrations are added, obviating the need to make
+          the emulator binaries available inside chroots and chroot-like
+          sandboxes.
+        '';
+        type = types.bool;
+      };
     };
   };
 
   config = {
+    assertions = lib.mapAttrsToList (name: reg: {
+      assertion = reg.fixBinary -> !reg.wrapInterpreterInShell;
+      message = "boot.binfmt.registrations.\"${name}\" cannot have fixBinary when the interpreter is invoked through a shell.";
+    }) cfg.registrations;
+
     boot.binfmt.registrations = builtins.listToAttrs (map (system: assert system != pkgs.stdenv.hostPlatform.system; {
       name = system;
       value = { config, ... }: let
-        interpreter = getEmulator system;
-        qemuArch = getQemuArch system;
+        elaborated = lib.systems.elaborate { inherit system; };
+        useStaticEmulator = cfg.preferStaticEmulators && elaborated.staticEmulatorAvailable pkgs;
+        interpreter = elaborated.emulator (if useStaticEmulator then pkgs.pkgsStatic else pkgs);
 
-        preserveArgvZero = "qemu-${qemuArch}" == baseNameOf interpreter;
+        inherit (elaborated) qemuArch;
+        isQemu = "qemu-${qemuArch}" == baseNameOf interpreter;
+
         interpreterReg = let
           wrapperName = "qemu-${qemuArch}-binfmt-P";
           wrapper = pkgs.wrapQemuBinfmtP wrapperName interpreter;
         in
-          if preserveArgvZero then "${wrapper}/bin/${wrapperName}"
+          if isQemu && !useStaticEmulator then "${wrapper}/bin/${wrapperName}"
           else interpreter;
       in ({
-        preserveArgvZero = mkDefault preserveArgvZero;
+        preserveArgvZero = mkDefault isQemu;
 
         interpreter = mkDefault interpreterReg;
-        wrapInterpreterInShell = mkDefault (!config.preserveArgvZero);
+        fixBinary = mkDefault useStaticEmulator;
+        wrapInterpreterInShell = mkDefault (!config.preserveArgvZero && !config.fixBinary);
         interpreterSandboxPath = mkDefault (dirOf (dirOf config.interpreter));
       } // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}")));
     }) cfg.emulatedSystems);
-    nix.settings = lib.mkIf (cfg.emulatedSystems != []) {
+    nix.settings = lib.mkIf (cfg.addEmulatedSystemsToNixSandbox && cfg.emulatedSystems != []) {
       extra-platforms = cfg.emulatedSystems ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "i686-linux";
       extra-sandbox-paths = let
         ruleFor = system: cfg.registrations.${system};

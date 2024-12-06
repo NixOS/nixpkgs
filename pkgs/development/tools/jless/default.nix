@@ -13,11 +13,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-sas94liAOSIirIJGdexdApXic2gWIBDT4uJFRM3qMw0=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ python3 ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ python3 ];
 
   buildInputs = [ ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit ]
-    ++ lib.optionals stdenv.isLinux [ libxcb ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ];
 
   meta = with lib; {
     description = "Command-line pager for JSON data";

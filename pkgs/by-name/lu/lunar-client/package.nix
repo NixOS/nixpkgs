@@ -5,25 +5,25 @@
 }:
 
 appimageTools.wrapType2 rec {
-  pname = "lunar-client";
-  version = "3.2.10";
+  pname = "lunarclient";
+  version = "3.2.26";
 
   src = fetchurl {
     url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}.AppImage";
-    hash = "sha512-XsHMe4+TeTowxnMRby4W44YRa3Q/OgDf2QOVMjPel4wy3O9TSfNBTzpP7NM07BKVDmNJ7GJrF8WMXewfT3YU8g==";
+    hash = "sha512-g8VJCIRriUMUq+I+YjvWV9erki7jtQvIQzGWTUbdp2JNY4ix6gHesl232pk0Ypu1rQKHp3wKBhF98k2w6p7d4A==";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands =
     let contents = appimageTools.extract { inherit pname version src; };
     in ''
-      source "${makeWrapper}/nix-support/setup-hook"
-      wrapProgram $out/bin/lunar-client \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
-      install -Dm444 ${contents}/launcher.desktop $out/share/applications/lunar-client.desktop
-      install -Dm444 ${contents}/launcher.png $out/share/pixmaps/lunar-client.png
-      substituteInPlace $out/share/applications/lunar-client.desktop \
-        --replace 'Exec=AppRun --no-sandbox %U' 'Exec=lunar-client' \
-        --replace 'Icon=launcher' 'Icon=lunar-client'
+      wrapProgram $out/bin/lunarclient \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      install -Dm444 ${contents}/lunarclient.desktop -t $out/share/applications/
+      install -Dm444 ${contents}/lunarclient.png -t $out/share/pixmaps/
+      substituteInPlace $out/share/applications/lunarclient.desktop \
+        --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=lunarclient' \
     '';
 
   passthru.updateScript = ./update.sh;
@@ -32,8 +32,8 @@ appimageTools.wrapType2 rec {
     description = "Free Minecraft client with mods, cosmetics, and performance boost";
     homepage = "https://www.lunarclient.com/";
     license = with licenses; [ unfree ];
-    mainProgram = "lunar-client";
-    maintainers = with maintainers; [ zyansheep Technical27 surfaceflinger ];
+    mainProgram = "lunarclient";
+    maintainers = with maintainers; [ Technical27 surfaceflinger ];
     platforms = [ "x86_64-linux" ];
   };
 }

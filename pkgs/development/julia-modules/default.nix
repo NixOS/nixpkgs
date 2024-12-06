@@ -1,13 +1,14 @@
-{ lib
-, callPackage
-, runCommand
+{ callPackage
 , fetchgit
 , fontconfig
 , git
+, lib
 , makeWrapper
+, python3
+, runCommand
+, system
 , writeText
 , writeTextFile
-, python3
 
 # Artifacts dependencies
 , fetchurl
@@ -23,11 +24,12 @@
 
 # Other overridable arguments
 , extraLibs ? []
-, precompile ? true
-, setDefaultDepot ? true
+, juliaCpuTarget ? null
+, makeTransitiveDependenciesImportable ? false # Used to support symbol indexing
 , makeWrapperArgs ? ""
 , packageOverrides ? {}
-, makeTransitiveDependenciesImportable ? false # Used to support symbol indexing
+, precompile ? true
+, setDefaultDepot ? true
 }:
 
 packageNames:
@@ -35,9 +37,6 @@ packageNames:
 let
   util = callPackage ./util.nix {};
 
-in
-
-let
   # Some Julia packages require access to Python. Provide a Nixpkgs version so it
   # doesn't try to install its own.
   pythonToUse = let
@@ -47,7 +46,7 @@ let
 
   # Start by wrapping Julia so it has access to Python and any other extra libs.
   # Also, prevent various packages (CondaPkg.jl, PythonCall.jl) from trying to do network calls.
-  juliaWrapped = runCommand "julia-${julia.version}-wrapped" { buildInputs = [makeWrapper]; inherit makeWrapperArgs; } ''
+  juliaWrapped = runCommand "julia-${julia.version}-wrapped" { nativeBuildInputs = [makeWrapper]; inherit makeWrapperArgs; } ''
     mkdir -p $out/bin
     makeWrapper ${julia}/bin/julia $out/bin/julia \
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLibs}" \
@@ -136,11 +135,16 @@ let
       "${juliaWrapped}/bin/julia" \
       "${if lib.versionAtLeast julia.version "1.7" then ./extract_artifacts.jl else ./extract_artifacts_16.jl}" \
       '${lib.generators.toJSON {} (import ./extra-libs.nix)}' \
+      '${lib.generators.toJSON {} (stdenv.hostPlatform.isDarwin)}' \
       "$out"
   '';
 
   # Import the artifacts Nix to build Overrides.toml (IFD)
-  artifacts = import artifactsNix { inherit lib fetchurl pkgs glibc stdenv; };
+  artifacts = import artifactsNix ({
+    inherit lib fetchurl pkgs stdenv;
+  } // lib.optionalAttrs (!stdenv.targetPlatform.isDarwin) {
+    inherit glibc;
+  });
   overridesJson = writeTextFile {
     name = "Overrides.json";
     text = lib.generators.toJSON {} artifacts;
@@ -154,7 +158,7 @@ let
   # Build a Julia project and depot. The project contains Project.toml/Manifest.toml, while the
   # depot contains package build products (including the precompiled libraries, if precompile=true)
   projectAndDepot = callPackage ./depot.nix {
-    inherit closureYaml extraLibs overridesToml packageImplications precompile;
+    inherit closureYaml extraLibs juliaCpuTarget overridesToml packageImplications precompile;
     julia = juliaWrapped;
     registry = minimalRegistry;
     packageNames = if makeTransitiveDependenciesImportable
@@ -165,23 +169,25 @@ let
 in
 
 runCommand "julia-${julia.version}-env" {
-  buildInputs = [makeWrapper];
+  nativeBuildInputs = [makeWrapper];
 
-  inherit julia;
-  inherit juliaWrapped;
-  meta = julia.meta;
+  passthru = {
+    inherit julia;
+    inherit juliaWrapped;
+    inherit (julia) pname version meta;
 
-  # Expose the steps we used along the way in case the user wants to use them, for example to build
-  # expressions and build them separately to avoid IFD.
-  inherit dependencies;
-  inherit closureYaml;
-  inherit dependencyUuidToInfoYaml;
-  inherit dependencyUuidToRepoYaml;
-  inherit minimalRegistry;
-  inherit artifactsNix;
-  inherit overridesJson;
-  inherit overridesToml;
-  inherit projectAndDepot;
+    # Expose the steps we used along the way in case the user wants to use them, for example to build
+    # expressions and build them separately to avoid IFD.
+    inherit dependencies;
+    inherit closureYaml;
+    inherit dependencyUuidToInfoYaml;
+    inherit dependencyUuidToRepoYaml;
+    inherit minimalRegistry;
+    inherit artifactsNix;
+    inherit overridesJson;
+    inherit overridesToml;
+    inherit projectAndDepot;
+  };
 } (''
   mkdir -p $out/bin
   makeWrapper ${juliaWrapped}/bin/julia $out/bin/julia \

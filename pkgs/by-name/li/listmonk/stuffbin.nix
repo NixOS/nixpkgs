@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "knadh";
     repo = "stuffbin";
     rev = "v${version}";
-    sha256 = "sha256-M72xNh7bKUMLzA+M8bJB++kJ5KCrkboQm1v8BasP3Yo=";
+    hash = "sha256-M72xNh7bKUMLzA+M8bJB++kJ5KCrkboQm1v8BasP3Yo=";
   };
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];

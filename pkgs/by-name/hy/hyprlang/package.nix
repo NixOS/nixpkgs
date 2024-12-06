@@ -27,11 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/hyprwm/hyprlang";
     description = "Official implementation library for the hypr config language";
-    license = licenses.lgpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ iogamaster fufexan ];
+    license = lib.licenses.lgpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ iogamaster fufexan ];
   };
 })

@@ -11,7 +11,6 @@
   lorder,
   mandoc,
   statHook,
-  headers,
 }:
 
 mkDerivation {

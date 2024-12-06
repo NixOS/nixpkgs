@@ -1,12 +1,8 @@
 # Management of static files in /etc.
-
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
-  etc' = filter (f: f.enable) (attrValues config.environment.etc);
+  etc' = lib.filter (f: f.enable) (lib.attrValues config.environment.etc);
 
   etc = pkgs.runCommandLocal "etc" {
     # This is needed for the systemd module
@@ -51,7 +47,7 @@ let
     }
 
     mkdir -p "$out/etc"
-    ${concatMapStringsSep "\n" (etcEntry: escapeShellArgs [
+    ${lib.concatMapStringsSep "\n" (etcEntry: lib.escapeShellArgs [
       "makeEtcEntry"
       # Force local source paths to be added to the store
       "${etcEntry.source}"
@@ -62,15 +58,7 @@ let
     ]) etc'}
   '';
 
-  etcHardlinks = filter (f: f.mode != "symlink" && f.mode != "direct-symlink") etc';
-
-  build-composefs-dump = pkgs.buildPackages.runCommand "build-composefs-dump.py"
-    {
-      buildInputs = [ pkgs.buildPackages.python3 ];
-    } ''
-    install ${./build-composefs-dump.py} $out
-    patchShebangs --host $out
-  '';
+  etcHardlinks = lib.filter (f: f.mode != "symlink" && f.mode != "direct-symlink") etc';
 
 in
 
@@ -83,8 +71,8 @@ in
   options = {
 
     system.etc.overlay = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Mount `/etc` as an overlayfs instead of generating it via a perl script.
@@ -94,8 +82,8 @@ in
         '';
       };
 
-      mutable = mkOption {
-        type = types.bool;
+      mutable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to mount `/etc` mutably (i.e. read-write) or immutably (i.e. read-only).
@@ -106,9 +94,9 @@ in
       };
     };
 
-    environment.etc = mkOption {
+    environment.etc = lib.mkOption {
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         { example-configuration-file =
             { source = "/nix/store/.../etc/dir/file.conf.example";
               mode = "0440";
@@ -120,12 +108,12 @@ in
         Set of files that have to be linked in {file}`/etc`.
       '';
 
-      type = with types; attrsOf (submodule (
+      type = with lib.types; attrsOf (submodule (
         { name, config, options, ... }:
         { options = {
 
-            enable = mkOption {
-              type = types.bool;
+            enable = lib.mkOption {
+              type = lib.types.bool;
               default = true;
               description = ''
                 Whether this /etc file should be generated.  This
@@ -133,8 +121,8 @@ in
               '';
             };
 
-            target = mkOption {
-              type = types.str;
+            target = lib.mkOption {
+              type = lib.types.str;
               description = ''
                 Name of symlink (relative to
                 {file}`/etc`).  Defaults to the attribute
@@ -142,19 +130,19 @@ in
               '';
             };
 
-            text = mkOption {
+            text = lib.mkOption {
               default = null;
-              type = types.nullOr types.lines;
+              type = lib.types.nullOr lib.types.lines;
               description = "Text of the file.";
             };
 
-            source = mkOption {
-              type = types.path;
+            source = lib.mkOption {
+              type = lib.types.path;
               description = "Path of the source file.";
             };
 
-            mode = mkOption {
-              type = types.str;
+            mode = lib.mkOption {
+              type = lib.types.str;
               default = "symlink";
               example = "0600";
               description = ''
@@ -164,27 +152,27 @@ in
               '';
             };
 
-            uid = mkOption {
+            uid = lib.mkOption {
               default = 0;
-              type = types.int;
+              type = lib.types.int;
               description = ''
                 UID of created file. Only takes effect when the file is
                 copied (that is, the mode is not 'symlink').
                 '';
             };
 
-            gid = mkOption {
+            gid = lib.mkOption {
               default = 0;
-              type = types.int;
+              type = lib.types.int;
               description = ''
                 GID of created file. Only takes effect when the file is
                 copied (that is, the mode is not 'symlink').
               '';
             };
 
-            user = mkOption {
+            user = lib.mkOption {
               default = "+${toString config.uid}";
-              type = types.str;
+              type = lib.types.str;
               description = ''
                 User name of created file.
                 Only takes effect when the file is copied (that is, the mode is not 'symlink').
@@ -192,9 +180,9 @@ in
               '';
             };
 
-            group = mkOption {
+            group = lib.mkOption {
               default = "+${toString config.gid}";
-              type = types.str;
+              type = lib.types.str;
               description = ''
                 Group name of created file.
                 Only takes effect when the file is copied (that is, the mode is not 'symlink').
@@ -205,10 +193,10 @@ in
           };
 
           config = {
-            target = mkDefault name;
-            source = mkIf (config.text != null) (
+            target = lib.mkDefault name;
+            source = lib.mkIf (config.text != null) (
               let name' = "etc-" + lib.replaceStrings ["/"] ["-"] name;
-              in mkDerivedConfig options.text (pkgs.writeText name')
+              in lib.mkDerivedConfig options.text (pkgs.writeText name')
             );
           };
 
@@ -243,17 +231,41 @@ in
       if [[ ! $IN_NIXOS_SYSTEMD_STAGE1 ]] && [[ "${config.system.build.etc}/etc" != "$(readlink -f /run/current-system/etc)" ]]; then
         echo "remounting /etc..."
 
-        tmpMetadataMount=$(mktemp --directory)
+        tmpMetadataMount=$(mktemp --directory -t nixos-etc-metadata.XXXXXXXXXX)
         mount --type erofs ${config.system.build.etcMetadataImage} $tmpMetadataMount
 
         # Mount the new /etc overlay to a temporary private mount.
         # This needs the indirection via a private bind mount because you
         # cannot move shared mounts.
-        tmpEtcMount=$(mktemp --directory)
+        tmpEtcMount=$(mktemp --directory -t nixos-etc.XXXXXXXXXX)
         mount --bind --make-private $tmpEtcMount $tmpEtcMount
         mount --type overlay overlay \
           --options lowerdir=$tmpMetadataMount::${config.system.build.etcBasedir},${etcOverlayOptions} \
           $tmpEtcMount
+
+        # Before moving the new /etc overlay under the old /etc, we have to
+        # move mounts on top of /etc to the new /etc mountpoint.
+        findmnt /etc --submounts --list --noheading --kernel --output TARGET | while read -r mountPoint; do
+          if [[ "$mountPoint" = "/etc" ]]; then
+            continue
+          fi
+
+          tmpMountPoint="$tmpEtcMount/''${mountPoint:5}"
+            ${if config.system.etc.overlay.mutable then ''
+              if [[ -f "$mountPoint" ]]; then
+                touch "$tmpMountPoint"
+              elif [[ -d "$mountPoint" ]]; then
+                mkdir -p "$tmpMountPoint"
+              fi
+            '' else ''
+              if [[ ! -e "$tmpMountPoint" ]]; then
+                echo "Skipping undeclared mountpoint in environment.etc: $mountPoint"
+                continue
+              fi
+            ''
+          }
+          mount --bind "$mountPoint" "$tmpMountPoint"
+        done
 
         # Move the new temporary /etc mount underneath the current /etc mount.
         #
@@ -263,8 +275,23 @@ in
         ${pkgs.move-mount-beneath}/bin/move-mount --move --beneath $tmpEtcMount /etc
 
         # Unmount the top /etc mount to atomically reveal the new mount.
-        umount /etc
+        umount --lazy --recursive /etc
 
+        # Unmount the temporary mount
+        umount --lazy "$tmpEtcMount"
+        rmdir "$tmpEtcMount"
+
+        # Unmount old metadata mounts
+        # For some reason, `findmnt /tmp --submounts` does not show the nested
+        # mounts. So we'll just find all mounts of type erofs and filter on the
+        # name of the mountpoint.
+        findmnt --type erofs --list --kernel --output TARGET | while read -r mountPoint; do
+          if [[ "$mountPoint" =~ ^/tmp/nixos-etc-metadata\..{10}$ &&
+                "$mountPoint" != "$tmpMetadataMount" ]]; then
+            umount --lazy $mountPoint
+            rmdir "$mountPoint"
+          fi
+        done
       fi
     '' else ''
       # Set up the statically computed bits of /etc.
@@ -284,7 +311,7 @@ in
       }
 
       mkdir -p "$out"
-      ${concatMapStringsSep "\n" (etcEntry: escapeShellArgs [
+      ${lib.concatMapStringsSep "\n" (etcEntry: lib.escapeShellArgs [
         "makeEtcEntry"
         # Force local source paths to be added to the store
         "${etcEntry.source}"
@@ -295,10 +322,12 @@ in
     system.build.etcMetadataImage =
       let
         etcJson = pkgs.writeText "etc-json" (builtins.toJSON etc');
-        etcDump = pkgs.runCommand "etc-dump" { } "${build-composefs-dump} ${etcJson} > $out";
+        etcDump = pkgs.runCommand "etc-dump" { } ''
+          ${lib.getExe pkgs.buildPackages.python3} ${./build-composefs-dump.py} ${etcJson} > $out
+        '';
       in
       pkgs.runCommand "etc-metadata.erofs" {
-        nativeBuildInputs = [ pkgs.composefs pkgs.erofs-utils ];
+        nativeBuildInputs = with pkgs.buildPackages; [ composefs erofs-utils ];
       } ''
         mkcomposefs --from-file ${etcDump} $out
         fsck.erofs $out

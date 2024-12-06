@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchPypi,
-  gcc,
   cython,
   boost,
   bluez,

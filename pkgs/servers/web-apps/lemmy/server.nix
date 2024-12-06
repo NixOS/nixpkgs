@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = pinData.serverCargoHash;
 
   buildInputs = [ postgresql ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security SystemConfiguration ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security SystemConfiguration ];
 
   # Using OPENSSL_NO_VENDOR is not an option on darwin
   # As of version 0.10.35 rust-openssl looks for openssl on darwin
@@ -50,6 +50,10 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # test requires database access
     "--skip=session_middleware::tests::test_session_auth"
+
+    # tests require network access
+    "--skip=scheduled_tasks::tests::test_nodeinfo_mastodon_social"
+    "--skip=scheduled_tasks::tests::test_nodeinfo_lemmy_ml"
   ];
 
   passthru.updateScript = ./update.py;
@@ -59,7 +63,7 @@ rustPlatform.buildRustPackage rec {
     description = "🐀 Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada billewanick ];
+    maintainers = with maintainers; [ happysalada billewanick georgyo ];
     mainProgram = "lemmy_server";
   };
 }

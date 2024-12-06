@@ -11,19 +11,20 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-network";
-  version = "25.4.0";
+  version = "28.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ozjmLYH9vwUPgCFDwoy5ZbB+3UOADvBQTN+muIVNdVQ=";
+    pname = "azure_mgmt_network";
+    inherit version;
+    hash = "sha256-QDVtNI70g4Mk8ZpBzYA0C0+N1KwvChiky9XMle8pdPM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     azure-common
     azure-mgmt-core
     isodate

@@ -13,16 +13,14 @@
 
 stdenv.mkDerivation rec {
     pname = "rsgain";
-    version = "3.5.1";
+    version = "3.5.3";
 
     src = fetchFromGitHub {
       owner = "complexlogic";
       repo = "rsgain";
       rev = "v${version}";
-      sha256 = "sha256-33ezojvCYAvxmUWzLxes3nUpK4iIWjlXsVSi+q7xeGU=";
+      hash = "sha256-4LEvcuP2Eyco3iQvT6rZhbfY02Y70rW2n5PaS+rGDkQ=";
     };
-
-    cmakeFlags = ["-DCMAKE_BUILD_TYPE='Release'"];
 
     nativeBuildInputs = [pkg-config cmake];
     buildInputs = [libebur128 taglib ffmpeg inih fmt zlib];

@@ -33,6 +33,6 @@ stdenv.mkDerivation {
     mainProgram = "signal_backup_deduplicate";
     platforms = lib.platforms.all;
     # ld: symbol(s) not found for architecture ...
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

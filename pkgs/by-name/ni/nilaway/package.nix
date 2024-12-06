@@ -1,30 +1,43 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "nilaway";
-  version = "0-unstable-2024-04-04";
+  version = "0-unstable-2024-10-10";
 
   src = fetchFromGitHub {
     owner = "uber-go";
     repo = "nilaway";
-    rev = "755a685ab68b85d9b36833b38972a559f217d396";
-    hash = "sha256-sDDBITrGD79pcbsrcrs6D8njBp4kuK1NkuBPwzIkaUE=";
+    rev = "ba14292918d814eeaea4de62da2ad0daae92f8b0";
+    hash = "sha256-HAfuhGxmnMJvkz2vxBZ5kWsgSIw5KKlZp36HCLfCRxo=";
   };
 
-  vendorHash = "sha256-1j7NwfqrinEQL6XBO0PvwzxFytujoCtynMEXL2oTLkM=";
+  vendorHash = "sha256-5qaEvQoK5S0svqzFAbJb8wy8yApyRpz4QE8sOhcjdaA=";
 
+  subPackages = [ "cmd/nilaway" ];
   excludedPackages = [ "tools" ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+
+  preCheck = ''
+    # test all paths
+    unset subPackages
+  '';
 
   meta = with lib; {
     description = "Static Analysis tool to detect potential Nil panics in Go code";
     homepage = "https://github.com/uber-go/nilaway";
     license = licenses.asl20;
-    maintainers = with maintainers; [ prit342 jk ];
+    maintainers = with maintainers; [
+      prit342
+      jk
+    ];
     mainProgram = "nilaway";
   };
 }

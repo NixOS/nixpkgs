@@ -1,26 +1,28 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
+  cython,
   borgbackup,
 }:
 
 buildPythonPackage rec {
   pname = "msgpack";
-  version = "1.0.8";
-  format = "setuptools";
+  version = "1.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-lcArDifnBuSNDlQm0XEMp44PBijW6J1bWluRpfEidPM=";
+  src = fetchFromGitHub {
+    owner = "msgpack";
+    repo = "msgpack-python";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-yKQcQi0oSJ33gzsx1Q6ME3GbuSaHR091n7maU6F5QlU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [ cython ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -31,6 +33,10 @@ buildPythonPackage rec {
     # please be mindful before bumping versions.
     inherit borgbackup;
   };
+
+  preBuild = ''
+    make cython
+  '';
 
   meta = with lib; {
     description = "MessagePack serializer implementation";

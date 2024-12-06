@@ -6,7 +6,7 @@
 , cmake
 , zlib
 , bzip2
-, enableRexx ? stdenv.isLinux, regina
+, enableRexx ? stdenv.hostPlatform.isLinux, regina
 }:
 let
   herculesCpu =
@@ -105,13 +105,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hercules";
-  version = "4.6";
+  version = "4.7";
 
   src = fetchFromGitHub {
     owner = "SDL-Hercules-390";
     repo = "hyperion";
     rev = "Release_${version}";
-    hash = "sha256-ZhMTun6tmTsmIiFPTRFudwRXzWydrih61RsLyv0p24U=";
+    hash = "sha256-5Kvs2OWQrlsRZpmx7vet8GCky5xAISBNAqn+NHgicOM";
   };
 
   postPatch = ''

@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "geos";
-  version = "3.11.2";
+  version = "3.11.4";
 
   src = fetchurl {
-    url = "https://download.osgeo.org/geos/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-sfB3ZpSBxaPmKv/EnpbrBvKBmHpdNv2rIlIX5bgl5Mw=";
+    url = "https://download.osgeo.org/geos/geos-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-NkyIzPw4qlDPZccA57KuRwbtEDMmEoST2/dQx40TbSw=";
   };
 
   patches = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   # https://github.com/libgeos/geos/issues/930
-  cmakeFlags = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  cmakeFlags = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;unit-geom-Envelope"
   ];
 

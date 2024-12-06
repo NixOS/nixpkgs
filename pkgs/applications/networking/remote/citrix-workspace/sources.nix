@@ -3,9 +3,9 @@
 let
   mkVersionInfo = _: { major, minor, patch, x64hash, x86hash, x64suffix, x86suffix, homepage }:
     { inherit homepage;
-      version = "${major}.${minor}.${patch}.${if stdenv.is64bit then x64suffix else x86suffix}";
-      prefix = "linuxx${if stdenv.is64bit then "64" else "86"}";
-      hash = if stdenv.is64bit then x64hash else x86hash;
+      version = "${major}.${minor}.${patch}.${if stdenv.hostPlatform.is64bit then x64suffix else x86suffix}";
+      prefix = "linuxx${if stdenv.hostPlatform.is64bit then "64" else "86"}";
+      hash = if stdenv.hostPlatform.is64bit then x64hash else x86hash;
     };
 
   # Attribute-set with all actively supported versions of the Citrix workspace app
@@ -54,6 +54,17 @@ let
       x64hash   = "sha256-pye2JOilSbp8PFCpVXFkrRW98E8klCqoisVSWjR38nE=";
       x86hash   = "";
       x64suffix = "76";
+      x86suffix = "";
+      homepage  = "https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html";
+    };
+
+    "24.08.0" = {
+      major     = "24";
+      minor     = "8";
+      patch     = "0";
+      x64hash   = "1jb22n6gcv4pv8khg98sv663yfpi47dpkvqgifbhps98iw5zrkbp";
+      x86hash   = "";
+      x64suffix = "98";
       x86suffix = "";
       homepage  = "https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html";
     };

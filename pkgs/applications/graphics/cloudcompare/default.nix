@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , mkDerivation
 , fetchFromGitHub
 , makeDesktopItem
@@ -13,7 +12,6 @@
 , gmp
 , laszip
 , mpfr
-, pdal
 , pcl
 , qtbase
 , qtsvg
@@ -25,13 +23,13 @@
 
 mkDerivation rec {
   pname = "cloudcompare";
-  version = "2.13.1";
+  version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "CloudCompare";
     repo = "CloudCompare";
     rev = "v${version}";
-    hash = "sha256-QQwQt63tXxJnGaBLu+GvWkEazumYPhXnDe+giSu7wjk=";
+    hash = "sha256-a/0lf3Mt5ZpLFRM8jAoqZer8pY1ROgPRY4dPt34Bk3E=";
     fetchSubmodules = true;
   };
 
@@ -50,7 +48,6 @@ mkDerivation rec {
     gmp
     laszip
     mpfr
-    pdal
     pcl
     qtbase
     qtsvg
@@ -73,7 +70,7 @@ mkDerivation rec {
     "-DPLUGIN_IO_QCSV_MATRIX=ON"
     "-DPLUGIN_IO_QE57=ON"
     "-DPLUGIN_IO_QFBX=OFF" # Autodesk FBX SDK is gratis+proprietary; not packaged in nixpkgs
-    "-DPLUGIN_IO_QPDAL=ON" # required for .las/.laz support
+    "-DPLUGIN_IO_QLAS=ON" # required for .las/.laz support
     "-DPLUGIN_IO_QPHOTOSCAN=ON"
     "-DPLUGIN_IO_QRDB=OFF" # Riegl rdblib is proprietary; not packaged in nixpkgs
 

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "hidviz";
     repo = "hidviz";
     rev = "v${version}";
-    sha256 = "sha256-9crHFYVNNxJjwJojwqB8qdAGyr1Ieux9qC3m3rpIJw0=";
+    hash = "sha256-9crHFYVNNxJjwJojwqB8qdAGyr1Ieux9qC3m3rpIJw0=";
   };
 
   preConfigure = ''
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     description = "GUI application for in-depth analysis of USB HID class devices";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nayala ];
+    maintainers = [ ];
   };
 }

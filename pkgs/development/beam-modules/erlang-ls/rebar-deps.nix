@@ -26,11 +26,11 @@ let
     };
     quickrand = builder {
       name = "quickrand";
-      version = "2.0.1";
+      version = "2.0.7";
       src = fetchHex {
         pkg = "quickrand";
-        version = "2.0.1";
-        sha256 = "sha256-FNtn1K72uIFYEOyfPM714yS3O1bK42h/mddSuFvdTJY=";
+        version = "2.0.7";
+        sha256 = "sha256-uKy/iaIkvCF8MHDKi+vG6yNtvn+XZ5k7J0CE6gRNNfA=";
       };
       beamDeps = [ ];
     };
@@ -46,11 +46,11 @@ let
     };
     katana_code = builder {
       name = "katana_code";
-      version = "0.2.1";
+      version = "2.1.1";
       src = fetchHex {
         pkg = "katana_code";
-        version = "0.2.1";
-        sha256 = "sha256-hEitP1bZgU+YoovmUPcZG91QZXXjRcwW1YZmCxD26ZI=";
+        version = "2.1.1";
+        sha256 = "sha256-BoDzNSW5qILm9NMCJRixXEb2SL17Db6GkAmA/hwpFAQ=";
       };
       beamDeps = [ ];
     };
@@ -115,13 +115,23 @@ let
       };
       beamDeps = [ katana_code ];
     };
+    json_polyfill = builder {
+      name = "json_polyfill";
+      version = "0.1.4";
+      src = fetchHex {
+        pkg = "json_polyfill";
+        version = "0.1.4";
+        sha256 = "sha256-SMOX7iVH+kWe3gGjDsDoVxer7TAQhnpj7qrF8gMnQwM=";
+      };
+      beamDeps = [ ];
+    };
     jsx = builder {
       name = "jsx";
-      version = "3.0.0";
+      version = "2.10.0";
       src = fetchHex {
         pkg = "jsx";
-        version = "3.0.0";
-        sha256 = "sha256-N77KBDX1yoovRfdqRiEedkGPvvgMNvA2HCSfx1BZ3G0=";
+        version = "2.10.0";
+        sha256 = "sha256-moPjcEgHKYAWlo21Bvn60PAn3jdUbrg4s64QZMOgrWI=";
       };
       beamDeps = [ ];
     };
@@ -138,11 +148,11 @@ let
     };
     erlfmt = builder {
       name = "erlfmt";
-      version = "1.3.0";
+      version = "1.5.0";
       src = fetchHex {
         pkg = "erlfmt";
-        version = "1.3.0";
-        sha256 = "sha256-KoSqHrovT8190x1cV+neK8JwXdoY2kVT8n33EUz6oFI=";
+        version = "1.5.0";
+        sha256 = "sha256-OTOkDPvnkK2U5bZQs2iB3nBFYxkmPBR5tVbpr9vYDHU=";
       };
       beamDeps = [ ];
     };
@@ -158,11 +168,11 @@ let
     };
     elvis_core = builder {
       name = "elvis_core";
-      version = "1.3.1";
+      version = "3.2.5";
       src = fetchHex {
         pkg = "elvis_core";
-        version = "1.3.1";
-        sha256 = "sha256-eoiQv4GFoyUs1OvYJv5fita5MCTt+IV26yeunl3BnWk=";
+        version = "3.2.5";
+        sha256 = "sha256-NNkhjwuAclEZA79sy/WesXZd7Pxz/MaDO6XIlZ2384M=";
       };
       beamDeps = [ katana_code zipper ];
     };

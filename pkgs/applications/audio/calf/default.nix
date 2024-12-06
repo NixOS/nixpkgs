@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://calf-studio-gear.org";
     description = "Set of high quality open source audio plugins for musicians";
     license = licenses.lgpl2;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "calfjackhost";
   };

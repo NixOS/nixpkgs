@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals stdenv.cc.isClang [
     openmp
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
 

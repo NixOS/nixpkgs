@@ -20,8 +20,10 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
 
     if test "$staticCompiler" = "1"; then
         EXTRA_LDFLAGS="-static"
-    else
+    elif test "''${NIX_DONT_SET_RPATH-}" != "1"; then
         EXTRA_LDFLAGS="-Wl,-rpath,''${!outputLib}/lib"
+    else
+        EXTRA_LDFLAGS=""
     fi
 
     # GCC interprets empty paths as ".", which we don't want.
@@ -56,8 +58,13 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
                 extraLDFlags=("-L/usr/lib64" "-L/usr/lib")
                 libc_libdir="/usr/lib"
             fi
-            extraLDFlags=("-L$libc_libdir" "-rpath" "$libc_libdir"
-                          "''${extraLDFlags[@]}")
+            declare -a prefixExtraLDFlags=()
+            prefixExtraLDFlags=("-L$libc_libdir")
+            nixDontSetRpathVar=NIX_DONT_SET_RPATH''${post}
+            if test "''${!nixDontSetRpathVar-}" != "1"; then
+                prefixExtraLDFlags+=("-rpath" "$libc_libdir")
+            fi
+            extraLDFlags=("''${prefixExtraLDFlags[@]}" "''${extraLDFlags[@]}")
             for i in "''${extraLDFlags[@]}"; do
                 declare -g EXTRA_LDFLAGS''${post}+=" -Wl,$i"
             done
@@ -269,7 +276,7 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
     fi
 
     # Get rid of some "fixed" header files
-    rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux,sys/mount.h,bits/statx.h}
+    rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux,sys/mount.h,bits/statx.h,pthread.h}
 
     # Replace hard links for i686-pc-linux-gnu-gcc etc. with symlinks.
     for i in $out/bin/*-gcc*; do

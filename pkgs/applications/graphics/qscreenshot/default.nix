@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchgit
-, dos2unix
 , qtbase
 , qttools
 , qtx11extras

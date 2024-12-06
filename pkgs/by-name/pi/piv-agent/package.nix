@@ -9,25 +9,25 @@
 
 buildGoModule rec {
   pname = "piv-agent";
-  version = "0.21.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "smlx";
     repo = "piv-agent";
     rev = "v${version}";
-    hash = "sha256-aukcnubhB8kbAl22eeFKzLPvVcYdgcEQ1gy3n6KWG00=";
+    hash = "sha256-bfJIrWDFQIg0n1RDadARPHhQwE6i7mAMxE5GPYo4WU8=";
   };
 
-  vendorHash = "sha256-1d6EKEvo4XNDXRtbdnKkqyF9y0LPPHWKu9X/wYnbmas=";
+  vendorHash = "sha256-HIB+p0yh7EWudLp1YGoClYbK3hkYEJZ+o+9BbOHE4+0=";
 
   subPackages = [ "cmd/piv-agent" ];
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.shortCommit=${src.rev}" ];
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   buildInputs =
-    if stdenv.isDarwin
+    if stdenv.hostPlatform.isDarwin
     then [ darwin.apple_sdk.frameworks.PCSC ]
     else [ pcsclite ];
 

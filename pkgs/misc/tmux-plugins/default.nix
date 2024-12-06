@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , pkgs
 , stdenv
+, config
 }:
 
 let
@@ -49,8 +50,6 @@ let
 
 in rec {
   inherit mkTmuxPlugin;
-
-  mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
 
   battery = mkTmuxPlugin {
     pluginName = "battery";
@@ -140,26 +139,26 @@ in rec {
     };
   };
 
-  copy-toolkit = mkTmuxPlugin rec {
+  copy-toolkit = mkTmuxPlugin {
     pluginName = "copy-toolkit";
     rtpFilePath = "copytk.tmux";
-    version = "1.1";
+    version = "2021-12-20";
     src = fetchFromGitHub {
       owner = "CrispyConductor";
       repo = "tmux-copy-toolkit";
-      rev = "v${version}";
-      sha256 = "MEMC9klm+PH66UHwrB2SqdCaZX0LAujL+Woo/hV84m4=";
+      rev = "c80c2c068059fe04f840ea9f125c21b83cb6f81f";
+      hash = "sha256-cLeOoJ+4MF8lSpwy5lkcPakvB3cpgey0RfLbVTwERNk=";
     };
     postInstall = ''
       sed -i -e 's|python3 |${pkgs.python3}/bin/python3 |g' $target/copytk.tmux
-      sed -i -e 's|/bin/bash|${pkgs.bash}/bin/bash|g;s|/bin/cat|${pkgs.coreutils}/bin/cat|g' $target/copytk.py
+      sed -i -e 's|python3|${pkgs.python3}/bin/python3|g;s|/bin/bash|${pkgs.bash}/bin/bash|g;s|/bin/cat|${pkgs.coreutils}/bin/cat|g' $target/copytk.py
     '';
     meta = {
       homepage = "https://github.com/CrispyConductor/tmux-copy-toolkit";
       description = "Various copy-mode tools";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ deejayem ];
+      maintainers = with lib.maintainers; [ deejayem sedlund ];
     };
   };
 
@@ -216,55 +215,34 @@ in rec {
 
   extrakto = mkTmuxPlugin {
     pluginName = "extrakto";
-    version = "unstable-2021-04-04";
+    version = "0-unstable-2024-08-25";
     src = fetchFromGitHub {
       owner = "laktak";
       repo = "extrakto";
-      rev = "de8ac3e8a9fa887382649784ed8cae81f5757f77";
-      sha256 = "0mkp9r6mipdm7408w7ls1vfn6i3hj19nmir2bvfcp12b69zlzc47";
+      rev = "bf9e666f2a6a8172ebe99fff61b574ba740cffc2";
+      sha256 = "sha256-kIhJKgo1BDTeFyAPa//f/TrhPfV9Rfk9y4qMhIpCydk=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
+    buildInputs = [ pkgs.python3 ];
     postInstall = ''
-    for f in extrakto.sh open.sh tmux-extrakto.sh; do
-      wrapProgram $target/scripts/$f \
-        --prefix PATH : ${with pkgs; lib.makeBinPath (
-        [ pkgs.fzf pkgs.python3 pkgs.xclip ]
-        )}
-    done
+     patchShebangs extrakto.py extrakto_plugin.py
 
+      wrapProgram $target/scripts/open.sh \
+        --prefix PATH : ${ with pkgs; lib.makeBinPath
+          [ fzf xclip wl-clipboard ]
+        }
     '';
     meta = {
       homepage = "https://github.com/laktak/extrakto";
       description = "Fuzzy find your text with fzf instead of selecting it by hand ";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ kidd ];
+      maintainers = with lib.maintainers; [ kidd fnune ];
     };
   };
 
-  fingers = mkTmuxPlugin rec {
-    pluginName = "tmux-fingers";
-    rtpFilePath = "load-config.tmux";
-    version = "2.1.1";
-    src = fetchFromGitHub {
-      owner = "Morantron";
-      repo = "tmux-fingers";
-      rev = "${version}";
-      sha256 = "sha256-1YMh6m8M6FKf8RPXsOfWCVC5CXSr/MynguwkG7O+oEY=";
-    };
-    nativeBuildInputs = [ pkgs.makeWrapper pkgs.crystal pkgs.shards ];
-    postInstall = ''
-      shards build --production
-      rm -rf $target/* $target/.*
-      cp -r bin $target/bin
-      echo "$target/bin/${pluginName} load-config" > $target/${rtpFilePath}
-      chmod +x $target/${rtpFilePath}
-
-      wrapProgram $target/${rtpFilePath} \
-        --prefix PATH : ${with pkgs; lib.makeBinPath (
-          [ gawk ] ++ lib.optionals stdenv.isDarwin [ reattach-to-user-namespace ]
-        )}
-    '';
+  fingers = pkgs.callPackage ./tmux-fingers {
+    inherit mkTmuxPlugin;
   };
 
   fpp = mkTmuxPlugin {
@@ -399,14 +377,14 @@ in rec {
     };
   };
 
-  nord = mkTmuxPlugin rec {
+  nord = mkTmuxPlugin {
     pluginName = "nord";
-    version = "0.3.0";
+    version = "0.3.0-unstable-2023-03-03";
     src = pkgs.fetchFromGitHub {
       owner = "nordtheme";
       repo = "tmux";
-      rev = "v${version}";
-      hash = "sha256-s/rimJRGXzwY9zkOp9+2bAF1XCT9FcyZJ1zuHxOBsJM=";
+      rev = "f7b6da07ab55fe32ee5f7d62da56d8e5ac691a92";
+      hash = "sha256-mcmVYNWOUoQLiu4eM/EUudRg67Gcou13xuC6zv9aMKA=";
     };
     meta = {
       homepage = "https://www.nordtheme.com/ports/tmux";
@@ -420,6 +398,7 @@ in rec {
           theme in order to work properly.
       '';
       license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.sigmasquadron ];
     };
   };
 
@@ -479,6 +458,35 @@ in rec {
     };
   };
 
+  pass = mkTmuxPlugin {
+    pluginName = "pass";
+    version = "0-unstable-2020-02-28";
+    rtpFilePath = "plugin.tmux";
+    src = pkgs.fetchFromGitHub {
+      owner = "rafi";
+      repo = "tmux-pass";
+      rev = "76b1c98911d56928063a41bc93a2d9e81818ef4c";
+      sha256 = "sha256-bamz4IZrozo5R7jt+z7YKyrogawPqsZ9cTJi9osjVoA=";
+    };
+
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      rm $target/README.md
+      rm -r $target/test
+
+      wrapProgram $target/scripts/main.sh \
+        --prefix PATH : ${with pkgs; lib.makeBinPath ( [
+          findutils fzf gnugrep gnused ncurses pkgs.pass tmux
+        ] )}
+    '';
+
+    meta = with lib; {
+      description = "Password-store browser using fzf in tmux";
+      homepage = "https://github.com/rafi/tmux-pass";
+      license = licenses.unlicense;
+    };
+  };
+
   plumb = mkTmuxPlugin rec {
     pluginName = "plumb";
     version = "0.1.1";
@@ -496,12 +504,18 @@ in rec {
   power-theme = mkTmuxPlugin {
     pluginName = "power";
     rtpFilePath = "tmux-power.tmux";
-    version = "unstable-2020-11-18";
+    version = "unstable-2024-05-12";
     src = pkgs.fetchFromGitHub {
       owner = "wfxr";
       repo = "tmux-power";
-      rev = "aec44aa5e00cc39eb71c668b1d73823270058e7d";
-      sha256 = "11nm8cylx10d565g17acy0bj12n6dcbxp71zca2bmg0j1dq859cm";
+      rev = "16bbde801378a70512059541d104c5ae35be32b9";
+      hash = "sha256-IyYQyIONMnVBwhhcI3anOPxKpv2TfI2KZgJ5o5JtZ8I=";
+    };
+    meta = with lib; {
+      description = "Tmux powerline theme";
+      homepage = "https://github.com/wfxr/tmux-power";
+      license = licenses.mit;
+      platforms = platforms.unix;
     };
   };
 
@@ -579,7 +593,7 @@ in rec {
       rev = "e91b178ff832b7bcbbf4d99d9f467f63fd1b76b5";
       sha256 = "1z8dfbwblrbmb8sgb0k8h1q0dvfdz7gw57las8nwd5gj6ss1jyvx";
     };
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       sed -e 's:reattach-to-user-namespace:${pkgs.reattach-to-user-namespace}/bin/reattach-to-user-namespace:g' -i $target/sensible.tmux
     '';
   };
@@ -671,6 +685,25 @@ in rec {
     };
   };
 
+  tokyo-night-tmux = mkTmuxPlugin {
+    pluginName = "tokyo-night-tmux";
+    rtpFilePath = "tokyo-night.tmux";
+    version = "1.5.3";
+    src = pkgs.fetchFromGitHub {
+      owner = "janoamaral";
+      repo = "tokyo-night-tmux";
+      rev = "d34f1487b4a644b13d8b2e9a2ee854ae62cc8d0e";
+      hash = "sha256-3rMYYzzSS2jaAMLjcQoKreE0oo4VWF9dZgDtABCUOtY=";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/janoamaral/tokyo-night-tmux";
+      description = "A clean, dark Tmux theme that celebrates the lights of Downtown Tokyo at night.";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ redyf ];
+    };
+  };
+
   tmux-colors-solarized = mkTmuxPlugin {
     pluginName = "tmuxcolors";
     version = "unstable-2019-07-14";
@@ -679,6 +712,26 @@ in rec {
       repo = "tmux-colors-solarized";
       rev = "e5e7b4f1af37f8f3fc81ca17eadee5ae5d82cd09";
       sha256 = "1l3i82abzi4b395cgdsjg7lcfaq15kyyhijwvrgchzxi95z3hl4x";
+    };
+  };
+
+  tmux-floax = mkTmuxPlugin {
+    pluginName = "tmux-floax";
+    rtpFilePath = "floax.tmux";
+    version = "0-unstable-2024-07-24";
+    src = fetchFromGitHub {
+      owner = "omerxx";
+      repo = "tmux-floax";
+      rev = "46c0a6a8c3cf79b83d1b338f547acbbd1d306301";
+      hash = "sha256-bALZfVWcoAzcTeWwkBHhi7TzUQJicOBTNdeJh3O/Bj8=";
+    };
+    meta = {
+      description = "Floating pane for Tmux";
+      homepage = "https://github.com/omerxx/tmux-floax";
+      license = lib.licenses.gpl3Only;
+      maintainers = with lib.maintainers; [ redyf ];
+      mainProgram = "tmux-floax";
+      platforms = lib.platforms.all;
     };
   };
 
@@ -715,6 +768,26 @@ in rec {
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ kyleondy ];
+    };
+  };
+
+  tmux-powerline = mkTmuxPlugin {
+    pluginName = "powerline";
+    version = "3.0.0";
+    src = fetchFromGitHub {
+      owner = "erikw";
+      repo = "tmux-powerline";
+      rev = "2480e5531e0027e49a90eaf540f973e624443937";
+      hash = "sha256-25uG7OI8OHkdZ3GrTxG1ETNeDtW1K+sHu2DfJtVHVbk=";
+    };
+    rtpFilePath = "main.tmux";
+    meta = {
+      homepage = "https://github.com/erikw/tmux-powerline";
+      description = "Empowering your tmux (status bar) experience!";
+      longDescription = "A tmux plugin giving you a hackable status bar consisting of dynamic & beautiful looking powerline segments, written purely in bash.";
+      license = lib.licenses.bsd3;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ thomasjm ];
     };
   };
 
@@ -810,12 +883,12 @@ in rec {
 
   yank = mkTmuxPlugin {
     pluginName = "yank";
-    version = "unstable-2021-06-20";
+    version = "unstable-2023-07-19";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-yank";
-      rev = "1b1a436e19f095ae8f825243dbe29800a8acd25c";
-      sha256 = "hRvkBf+YrWycecnDixAsD4CAHg3KsioomfJ/nLl5Zgs=";
+      rev = "acfd36e4fcba99f8310a7dfb432111c242fe7392";
+      sha256 = "sha256-/5HPaoOx2U2d8lZZJo5dKmemu6hKgHJYq23hxkddXpA=";
     };
   };
 
@@ -837,4 +910,6 @@ in rec {
       maintainers = with maintainers; [ o0th ];
     };
   };
+} // lib.optionalAttrs config.allowAliases {
+  mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
 }

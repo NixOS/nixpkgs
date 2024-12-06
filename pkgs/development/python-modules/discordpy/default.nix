@@ -6,62 +6,56 @@
   fetchFromGitHub,
   libopus,
   pynacl,
-  pythonOlder,
   withVoice ? true,
   ffmpeg,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+let
   pname = "discord.py";
-  version = "2.3.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "2.4.0";
+in
+buildPythonPackage {
+  inherit pname version;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Rapptz";
-    repo = pname;
+    repo = "discord.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bZoYdDpk34x+Vw1pAZ3EcTFp2JJ/Ow0Jfof/XjqeRmY=";
+    hash = "sha256-GIwXx7bRCH2+G3zlilJ/Tb8el50SDbxGGX2/1bqL3+U=";
   };
 
-  propagatedBuildInputs =
-    [ aiohttp ]
-    ++ lib.optionals withVoice [
-      libopus
-      pynacl
-      ffmpeg
-    ];
+  build-system = [ setuptools ];
 
-  patchPhase =
-    ''
-      substituteInPlace "discord/opus.py" \
-        --replace "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
-    ''
-    + lib.optionalString withVoice ''
-      substituteInPlace "discord/player.py" \
-        --replace "executable='ffmpeg'" "executable='${ffmpeg}/bin/ffmpeg'"
-    '';
+  dependencies = [ aiohttp ] ++ lib.optionals withVoice [ pynacl ];
+
+  patchPhase = lib.optionalString withVoice ''
+    substituteInPlace "discord/opus.py" \
+      --replace-fail "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
+
+    substituteInPlace "discord/player.py" \
+      --replace-fail "executable: str = 'ffmpeg'" "executable: str = '${lib.getExe ffmpeg}'"
+  '';
 
   # Only have integration tests with discord
   doCheck = false;
 
   pythonImportsCheck = [
     "discord"
-    "discord.file"
-    "discord.member"
-    "discord.user"
-    "discord.state"
-    "discord.guild"
+    "discord.types"
+    "discord.ui"
     "discord.webhook"
-    "discord.ext.commands.bot"
+    "discord.app_commands"
+    "discord.ext.commands"
+    "discord.ext.tasks"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the Discord API";
     homepage = "https://discordpy.rtfd.org/";
     changelog = "https://github.com/Rapptz/discord.py/blob/v${version}/docs/whats_new.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ivar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ getpsyched ];
   };
 }

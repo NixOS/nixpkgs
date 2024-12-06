@@ -16,12 +16,10 @@ in {
   };
 
   testScript = ''
-    import json
-
     mollysocket.wait_for_unit("mollysocket.service")
     mollysocket.wait_for_open_port(${toString port})
 
     out = mollysocket.succeed("curl --fail http://127.0.0.1:${toString port}")
-    assert json.loads(out)["mollysocket"]["version"] == "${toString pkgs.mollysocket.version}"
+    assert "Version ${pkgs.mollysocket.version}" in out
   '';
 })

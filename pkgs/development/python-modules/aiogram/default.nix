@@ -1,8 +1,9 @@
 {
   lib,
+  aiodns,
   aiofiles,
-  aiohttp,
   aiohttp-socks,
+  aiohttp,
   aresponses,
   babel,
   buildPythonPackage,
@@ -20,53 +21,58 @@
   pytest-lazy-fixture,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   redis,
+  uvloop,
 }:
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "3.7.0";
+  version = "3.15.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "aiogram";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GIfujywp+yYRQ4xm6O5GgTCMn6I3TSYE5epaqhMGGnE=";
+    hash = "sha256-heCebvYP1rrExuD7tAMwSsBsds0cbsPvzHLUtBjNwW0=";
   };
 
   build-system = [ hatchling ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
-  pythonRelaxDeps = [ "pydantic" ];
-
   dependencies = [
     aiofiles
     aiohttp
-    babel
     certifi
     magic-filter
     pydantic
   ];
 
+  optional-dependencies = {
+    fast = [
+      aiodns
+      uvloop
+    ];
+    mongo = [
+      motor
+      pymongo
+    ];
+    redis = [ redis ];
+    proxy = [ aiohttp-socks ];
+    i18n = [ babel ];
+  };
+
   nativeCheckInputs = [
-    aiohttp-socks
     aresponses
-    motor
     pycryptodomex
-    pymongo
     pytest-aiohttp
     pytest-asyncio
     pytest-lazy-fixture
     pytestCheckHook
     pytz
-    redis
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [
     "-W"
@@ -80,6 +86,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aiogram" ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Modern and fully asynchronous framework for Telegram Bot API";

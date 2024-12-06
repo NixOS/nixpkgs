@@ -35,14 +35,14 @@ stdenv.mkDerivation rec {
     cmake
     qt6.qttools
     qt6.wrapQtAppsHook
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
   ];
 
   buildInputs = [
     qt6.qtbase
     qt6.qtsvg
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qt6.qtwayland
   ];
 
@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
       completely open source.
     '';
     homepage = "https://librumreader.com";
+    changelog = "https://github.com/Librum-Reader/Librum/releases/tag/${src.rev}";
     license = licenses.gpl3Plus;
     mainProgram = "librum";
     maintainers = with maintainers; [ aleksana oluceps ];

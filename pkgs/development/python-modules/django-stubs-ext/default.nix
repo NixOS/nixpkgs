@@ -3,30 +3,38 @@
   buildPythonPackage,
   django,
   fetchPypi,
+  oracledb,
   pytestCheckHook,
   pythonOlder,
+  redis,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "django-stubs-ext";
-  version = "4.2.7";
+  version = "5.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UZNCrAhJzaFVl0bJpWPwP/mfY2sOvnwUt16BagDf3cM=";
+    pname = "django_stubs_ext";
+    inherit version;
+    hash = "sha256-23Nk5PUK5+U2CZPb1Yo6V+pLLn5bqw+9UlzNs+eXXRw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     typing-extensions
   ];
+
+  optional-dependencies = {
+    redis = [ redis ];
+    oracle = [ oracledb ];
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 

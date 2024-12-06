@@ -1,41 +1,35 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "puncia";
-  version = "0.15-unstable-2024-03-23";
+  version = "0.24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ARPSyndicate";
     repo = "puncia";
-    # https://github.com/ARPSyndicate/puncia/issues/5
-    rev = "c70ed93ea1e7e42e12dd9c14713cab71bb0e0fe9";
-    hash = "sha256-xGJk8y26tluHUPm9ikrBBiWGuzq6MKl778BF8wNDmps=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4PJyAYPRsqay5Y9RxhOpUgIJvntVKokqYhE1b+hVc44=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  dependencies = with python3.pkgs; [
-    requests
-  ];
+  dependencies = with python3.pkgs; [ requests ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "puncia"
-  ];
+  pythonImportsCheck = [ "puncia" ];
 
   meta = with lib; {
     description = "CLI utility for Subdomain Center & Exploit Observer";
     homepage = "https://github.com/ARPSyndicate/puncia";
-    # https://github.com/ARPSyndicate/puncia/issues/6
-    license = licenses.unfree;
+    changelog = "https://github.com/ARPSyndicate/puncia/releases/tag/v${version}";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     mainProgram = "puncia";
   };

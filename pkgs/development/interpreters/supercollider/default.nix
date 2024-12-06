@@ -26,11 +26,11 @@ mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ cmake pkg-config qttools ];
+  nativeBuildInputs = [ cmake pkg-config qttools ]
+    ++ lib.optionals useSCEL [ emacs ];
 
   buildInputs = [ gcc libjack2 libsndfile fftw curl libXt qtbase qtwebengine qtwebsockets readline ]
-    ++ lib.optional (!stdenv.isDarwin) alsa-lib
-    ++ lib.optional useSCEL emacs;
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
 
   hardeningDisable = [ "stackprotector" ];
 
@@ -71,7 +71,7 @@ mkDerivation rec {
     description = "Programming language for real time audio synthesis";
     homepage = "https://supercollider.github.io";
     changelog = "https://github.com/supercollider/supercollider/blob/Version-${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

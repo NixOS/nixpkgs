@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "find-libpython";
-  version = "0.3.1";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "ktbarrett";
     repo = "find_libpython";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DBBAgfYQ4UBFn5Osb1kpVBWbrZVBAvcVGQ/J4rJO/rQ=";
+    hash = "sha256-rYVGE9P5Xtm32kMoiqaZVMgnDbX3JBnI1uV80aNNOfw=";
   };
 
   nativeBuildInputs = [

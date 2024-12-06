@@ -25,14 +25,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pydantic ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     async = [
       aiocoap
       dtlssocket
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.async;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.async;
 
   pythonImportsCheck = [ "pytradfri" ];
 

@@ -10,7 +10,6 @@
 , zlib
 , protobuf
 , openssl
-, libclang
 , libcxx
 , rocksdb_8_3
 , rustfmt
@@ -75,8 +74,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config protobuf rustfmt perl rustPlatform.bindgenHook ];
   buildInputs =
-    [ openssl zlib libclang hidapi ] ++ (lib.optionals stdenv.isLinux [ udev ])
-    ++ lib.optionals stdenv.isDarwin [ Security System Libsystem libcxx ];
+    [ openssl zlib hidapi ] ++ (lib.optionals stdenv.hostPlatform.isLinux [ udev ])
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security System Libsystem libcxx ];
   strictDeps = true;
 
   doCheck = false;
@@ -88,7 +87,7 @@ rustPlatform.buildRustPackage rec {
 
     # If set, always finds OpenSSL in the system, even if the vendored feature is enabled.
     OPENSSL_NO_VENDOR = "1";
-  } // lib.optionalAttrs stdenv.isDarwin {
+  } // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Require this on darwin otherwise the compiler starts rambling about missing
     # cmath functions
     CPPFLAGS = "-isystem ${lib.getDev libcxx}/include/c++/v1";
@@ -96,7 +95,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces. ";
+    description = "Web-Scale Blockchain for fast, secure, scalable, decentralized apps and marketplaces.";
     homepage = "https://solana.com";
     license = licenses.asl20;
     maintainers = with maintainers; [ adjacentresearch ];

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qsynth";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/qsynth/${pname}-${version}.tar.gz";
-    hash = "sha256-FOoqnJeh29J0clsqZ+wbhQmsaybrAbIqgeB7m/7Q+3M=";
+    hash = "sha256-SHMPmZMAlC9L5EAecaZNB0pWnq0heeD8bcbhKeI+YOo=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     mainProgram = "qsynth";
     homepage = "https://sourceforge.net/projects/qsynth";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

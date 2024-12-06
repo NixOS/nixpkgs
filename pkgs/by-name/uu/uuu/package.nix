@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uuu";
-  version = "1.5.182";
+  version = "1.5.191";
 
   src = fetchFromGitHub {
     owner = "nxp-imx";
     repo = "mfgtools";
     rev = "uuu_${finalAttrs.version}";
-    hash = "sha256-I0EX+vsaOwz+HJUWFC5Z/xRu6xegzEfmuAlBd/OSAp4=";
+    hash = "sha256-t9SvQrOpcJ646WyUqX//4Rv7M8Ix2NbjgAAlrR0e31E=";
   };
 
   passthru.updateScript = nix-update-script {

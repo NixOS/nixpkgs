@@ -11,7 +11,7 @@
 , pkg-config
 , tbb
 
-, withWayland ? stdenv.isLinux
+, withWayland ? stdenv.hostPlatform.isLinux
 , libxkbcommon
 , wayland
 }:
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     owner = "wolfpld";
     repo = "tracy";
     rev = "v${version}";
-    sha256 = "sha256-DN1ExvQ5wcIUyhMAfiakFbZkDsx+5l8VMtYGvSdboPA=";
+    hash = "sha256-DN1ExvQ5wcIUyhMAfiakFbZkDsx+5l8VMtYGvSdboPA=";
   };
 
-  patches = lib.optionals (stdenv.isDarwin && !(lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11")) [
+  patches = lib.optionals (stdenv.hostPlatform.isDarwin && !(lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11")) [
     ./0001-remove-unifiedtypeidentifiers-framework
   ];
 
@@ -37,28 +37,26 @@ stdenv.mkDerivation rec {
     capstone
     freetype
     glfw
-  ] ++ lib.optionals (stdenv.isLinux && withWayland) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withWayland) [
     libxkbcommon
     wayland
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
     hicolor-icon-theme
     tbb
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
     darwin.apple_sdk.frameworks.Carbon
-  ] ++ lib.optionals (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") [
     darwin.apple_sdk.frameworks.UniformTypeIdentifiers
   ];
 
   env.NIX_CFLAGS_COMPILE = toString ([ ]
     # Apple's compiler finds a format string security error on
     # ../../../server/TracyView.cpp:649:34, preventing building.
-    ++ lib.optional stdenv.isDarwin "-Wno-format-security"
-    ++ lib.optional stdenv.isLinux "-ltbb"
-    ++ lib.optional stdenv.cc.isClang "-faligned-allocation"
-    # workaround issue #19098
-    ++ lib.optional (stdenv.cc.isClang && stdenv.isDarwin) "-fno-lto");
+    ++ lib.optional stdenv.hostPlatform.isDarwin "-Wno-format-security"
+    ++ lib.optional stdenv.hostPlatform.isLinux "-ltbb"
+    ++ lib.optional stdenv.cc.isClang "-faligned-allocation");
 
   buildPhase = ''
     runHook preBuild
@@ -68,7 +66,7 @@ stdenv.mkDerivation rec {
     make -j $NIX_BUILD_CORES -C import-chrome/build/unix release
     make -j $NIX_BUILD_CORES -C library/unix release
     make -j $NIX_BUILD_CORES -C profiler/build/unix release \
-      ${lib.optionalString (stdenv.isLinux && !withWayland) "LEGACY=1"}
+      ${lib.optionalString (stdenv.hostPlatform.isLinux && !withWayland) "LEGACY=1"}
     make -j $NIX_BUILD_CORES -C update/build/unix release
 
     runHook postBuild
@@ -91,7 +89,7 @@ stdenv.mkDerivation rec {
     cp -p public/client/*.{h,hpp} $out/include/Tracy/client
     cp -p public/common/*.{h,hpp} $out/include/Tracy/common
     cp -p public/tracy/*.{h,hpp} $out/include/Tracy/tracy
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace extra/desktop/tracy.desktop \
       --replace Exec=/usr/bin/tracy Exec=tracy
 
@@ -104,7 +102,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -change libcapstone.4.dylib ${capstone}/lib/libcapstone.4.dylib $out/bin/tracy
   '';
 

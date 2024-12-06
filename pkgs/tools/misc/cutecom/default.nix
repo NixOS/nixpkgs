@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtserialport ];
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
 
-  postInstall = if stdenv.isDarwin then ''
+  postInstall = if stdenv.hostPlatform.isDarwin then ''
     mkdir -p $out/Applications
   '' else ''
     cd ..

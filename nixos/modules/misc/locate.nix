@@ -297,7 +297,10 @@ in
       description = "Update timer for locate database";
       partOf = [ "update-locatedb.service" ];
       wantedBy = [ "timers.target" ];
-      timerConfig.OnCalendar = cfg.interval;
+      timerConfig = {
+        OnCalendar = cfg.interval;
+        Persistent = true;
+      };
     };
   };
 

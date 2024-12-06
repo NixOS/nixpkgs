@@ -4,18 +4,18 @@
   php,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "grumphp";
-  version = "2.6.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "phpro";
     repo = "grumphp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-W4LNzdgWxXDPL46/C8SX99lpRMp/xL5q5v6vX3H80XU=";
+    hash = "sha256-6SO5LUK39pEVcJqL86CwuyU7xpi8ydJxin5sHqBYwmg=";
   };
 
-  vendorHash = "sha256-bpIG3P1BdsYNI59xANaihmjsT7WDKiss3mhi/brA0Mc=";
+  vendorHash = "sha256-pupoPA4VZKACv4nPiRIwe1BOXojnnXrjKOpq0JGl9Uc=";
 
   meta = {
     changelog = "https://github.com/phpro/grumphp/releases/tag/v${finalAttrs.version}";

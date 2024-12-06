@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools-scm,
-  future,
   cppy,
   pytestCheckHook,
   pythonOlder,
@@ -11,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "atom";
-  version = "0.10.4";
+  version = "0.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     owner = "nucleic";
     repo = "atom";
     rev = "refs/tags/${version}";
-    hash = "sha256-HoUKU6z+6PPBUsvI4earZG9UXN0PrugAxu/F7WUfUe8=";
+    hash = "sha256-3Xk4CM8Cnkc0lIdjJUYs/6UTqqpPALrUa3DpKD40og8=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

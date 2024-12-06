@@ -2,7 +2,6 @@
   buildPythonApplication,
   fetchFromGitHub,
   poetry-core,
-  pythonRelaxDepsHook,
   anchor-kr,
   anitopy,
   click,
@@ -47,7 +46,6 @@ buildPythonApplication {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
   propagatedBuildInputs = [
     anchor-kr

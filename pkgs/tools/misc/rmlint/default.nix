@@ -17,7 +17,7 @@
 , wrapGAppsHook3
 , withGui ? false }:
 
-assert withGui -> !stdenv.isDarwin;
+assert withGui -> !stdenv.hostPlatform.isDarwin;
 
 stdenv.mkDerivation rec {
   pname = "rmlint";

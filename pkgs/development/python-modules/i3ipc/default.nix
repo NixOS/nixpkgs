@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  xorgserver,
+  xorg,
   pytest,
   pytest-xvfb,
   i3,
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pytest
     xdpyinfo
     pytest-xvfb
-    xorgserver
+    xorg.xvfb
     i3
   ];
 

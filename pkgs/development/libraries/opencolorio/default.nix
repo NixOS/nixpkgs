@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , expat
 , yaml-cpp
@@ -10,7 +9,7 @@
 , minizip-ng
 # Only required on Linux
 , glew
-, freeglut
+, libglut
 # Only required on Darwin
 , Carbon
 , GLUT
@@ -26,22 +25,16 @@
 
 stdenv.mkDerivation rec {
   pname = "opencolorio";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
     rev = "v${version}";
-    sha256 = "sha256-E4TmMEFzI3nKqiDFaAkNx44uo84sacvZqjbfWe3A8fE=";
+    hash = "sha256-7Uj1YBpunj9/32U5hpCokxfcVoRB9Oi2G9Cso+gAu5Q=";
   };
 
   patches = [
-    (fetchpatch {
-      # Taken from https://github.com/AcademySoftwareFoundation/OpenColorIO/pull/1891.
-      name = "opencolorio-yaml-cpp-8.0-compat.patch";
-      url = "https://github.com/AcademySoftwareFoundation/OpenColorIO/commit/e99b4afcf0408d8ec56fdf2b9380327c9284db00.patch";
-      sha256 = "sha256-7eIvVWKcpE0lmuYdNqFQFHkW/sSSzQ//LNIMOC28KZg=";
-    })
     # Workaround for https://gitlab.kitware.com/cmake/cmake/-/issues/25200.
     # Needed for zlib >= 1.3 && cmake < 3.27.4.
     ./broken-cmake-zlib-version.patch
@@ -49,7 +42,7 @@ stdenv.mkDerivation rec {
     ./line-numbers.patch
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # these tests don't like being run headless on darwin. no builtin
     # way of skipping tests so this is what we're reduced to.
     substituteInPlace tests/cpu/Config_tests.cpp \
@@ -64,7 +57,7 @@ stdenv.mkDerivation rec {
     pystring
     imath
     minizip-ng
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ glew freeglut ]
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ glew libglut ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon GLUT Cocoa ]
     ++ lib.optionals pythonBindings [ python3Packages.python python3Packages.pybind11 ]
     ++ lib.optionals buildApps [
@@ -75,14 +68,14 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DOCIO_INSTALL_EXT_PACKAGES=NONE"
     "-DOCIO_USE_SSE2NEON=OFF"
-    # GPU test fails with: freeglut (GPU tests): failed to open display ''
+    # GPU test fails with: libglut (GPU tests): failed to open display ''
     "-DOCIO_BUILD_GPU_TESTS=OFF"
     "-Dminizip-ng_INCLUDE_DIR=${minizip-ng}/include/minizip-ng"
   ] ++ lib.optional (!pythonBindings) "-DOCIO_BUILD_PYTHON=OFF"
     ++ lib.optional (!buildApps) "-DOCIO_BUILD_APPS=OFF";
 
   # precision issues on non-x86
-  doCheck = stdenv.isx86_64;
+  doCheck = stdenv.hostPlatform.isx86_64;
   # Tends to fail otherwise.
   enableParallelChecking = false;
 

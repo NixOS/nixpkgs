@@ -3,8 +3,10 @@
 with lib;
 
 let
+  globalCfg = config.services.scion;
   cfg = config.services.scion.scion-control;
   toml = pkgs.formats.toml { };
+  connectionDir = if globalCfg.stateless then "/run" else "/var/lib";
   defaultConfig = {
     general = {
       id = "cs";
@@ -12,19 +14,19 @@ let
       reconnect_to_dispatcher = true;
     };
     beacon_db = {
-      connection = "/var/lib/scion-control/control.beacon.db";
+      connection = "${connectionDir}/scion-control/control.beacon.db";
     };
     path_db = {
-      connection = "/var/lib/scion-control/control.path.db";
+      connection = "${connectionDir}/scion-control/control.path.db";
     };
     trust_db = {
-      connection = "/var/lib/scion-control/control.trust.db";
+      connection = "${connectionDir}/scion-control/control.trust.db";
     };
     log.console = {
       level = "info";
     };
   };
-  configFile = toml.generate "scion-control.toml" (defaultConfig // cfg.settings);
+  configFile = toml.generate "scion-control.toml" (recursiveUpdate defaultConfig cfg.settings);
 in
 {
   options.services.scion.scion-control = {
@@ -35,7 +37,7 @@ in
       example = literalExpression ''
         {
           path_db = {
-            connection = "/var/lib/scion-control/control.path.db";
+            connection = "/run/scion-control/control.path.db";
           };
           log.console = {
             level = "info";
@@ -58,11 +60,11 @@ in
       serviceConfig = {
         Type = "simple";
         Group = if (config.services.scion.scion-dispatcher.enable == true) then "scion" else null;
-        ExecStart = "${pkgs.scion}/bin/scion-control --config ${configFile}";
+        ExecStart = "${globalCfg.package}/bin/scion-control --config ${configFile}";
         DynamicUser = true;
         Restart = "on-failure";
         BindPaths = [ "/dev/shm:/run/shm" ];
-        StateDirectory = "scion-control";
+        ${if globalCfg.stateless then "RuntimeDirectory" else "StateDirectory"} = "scion-control";
       };
     };
   };

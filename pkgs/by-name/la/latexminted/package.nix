@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "latexminted";
-  version = "0.1.0b5";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1K43rX3hs+ywMzOyeKX+GmAGUVHTDZB3Yo87dZ/uYaQ=";
+    hash = "sha256-lxqu39RkSdBcSuLbuMmjrD9kiKHZ2yBjLZkJhSUpsSI=";
   };
 
   build-system = with python3Packages; [
@@ -22,6 +22,7 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     pygments
     latex2pydata
+    latexrestricted
   ];
 
   passthru = {

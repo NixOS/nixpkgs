@@ -11,6 +11,7 @@
 , libnotify
 , slurp
 , wl-clipboard
+, bash
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -30,6 +31,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper
     scdoc
   ];
+
+  buildInputs = [ bash ];
 
   makeFlags = [
     "PREFIX=$(out)"

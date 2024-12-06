@@ -20,10 +20,10 @@ buildPythonApplication rec {
     sha256 = "sha256-T6VULLNRLWO4OcAsuTmhty6H4EhinyxQSg0dfv2DUJs=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace vpn_slice/mac.py \
       --replace "'/sbin/route'" "'${unixtools.route}/bin/route'"
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace vpn_slice/linux.py \
       --replace "'/sbin/ip'" "'${iproute2}/bin/ip'" \
       --replace "'/sbin/iptables'" "'${iptables}/bin/iptables'"
@@ -43,6 +43,6 @@ buildPythonApplication rec {
       "vpnc-script replacement for easy and secure split-tunnel VPN setup";
     mainProgram = "vpn-slice";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ liketechnik ];
+    maintainers = [ ];
   };
 }

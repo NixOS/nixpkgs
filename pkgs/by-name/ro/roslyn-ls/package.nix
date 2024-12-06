@@ -1,29 +1,53 @@
-{ lib, fetchFromGitHub, buildDotnetModule, dotnetCorePackages, stdenvNoCC, testers, roslyn-ls, jq }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
+  stdenvNoCC,
+  testers,
+  roslyn-ls,
+  jq,
+}:
 let
   pname = "roslyn-ls";
-  # see https://github.com/dotnet/roslyn/blob/main/eng/targets/TargetFrameworks.props
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_7_0 sdk_8_0 ];
+  dotnet-sdk =
+    with dotnetCorePackages;
+    sdk_9_0
+    // {
+      inherit
+        (combinePackages [
+          sdk_9_0
+          sdk_8_0
+          # NOTE: we should be able to remove net6.0 after upstream removes from here:
+          # https://github.com/dotnet/roslyn/blob/6cc106c0eaa9b0ae070dba3138a23aeab9b50c13/eng/targets/TargetFrameworks.props#L20
+          sdk_6_0
+        ])
+        packages
+        targetPackages
+        ;
+    };
   # need sdk on runtime as well
-  dotnet-runtime = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.sdk_9_0;
+  rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.targetPlatform.system;
 
   project = "Microsoft.CodeAnalysis.LanguageServer";
 in
 buildDotnetModule rec {
   inherit pname dotnet-sdk dotnet-runtime;
 
-  vsVersion = "2.22.2";
+  vsVersion = "2.59.14";
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "roslyn";
     rev = "VSCode-CSharp-${vsVersion}";
-    hash = "sha256-j7PXgYjISlPBbhUEEIxkDlOx7TMYPHtC3KH2DViWxJ8=";
+    hash = "sha256-tzBIqXBtPGupBBvHTFO93w6f5qCgllWY420xtjf9o3g=";
   };
 
   # versioned independently from vscode-csharp
   # "roslyn" in here:
   # https://github.com/dotnet/vscode-csharp/blob/main/package.json
-  version = "4.10.0-2.24124.2";
-  projectFile = "src/Features/LanguageServer/${project}/${project}.csproj";
+  version = "4.13.0-3.24577.4";
+  projectFile = "src/LanguageServer/${project}/${project}.csproj";
   useDotnetFromEnv = true;
   nugetDeps = ./deps.nix;
 
@@ -33,14 +57,10 @@ buildDotnetModule rec {
     # Upstream uses rollForward = latestPatch, which pins to an *exact* .NET SDK version.
     jq '.sdk.rollForward = "latestMinor"' < global.json > global.json.tmp
     mv global.json.tmp global.json
-
-    substituteInPlace $projectFile \
-      --replace-fail \
-        '>win-x64;win-x86;win-arm64;linux-x64;linux-arm64;linux-musl-x64;linux-musl-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>' \
-        '>linux-x64;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>'
   '';
 
   dotnetFlags = [
+    "-p:TargetRid=${rid}"
     # this removes the Microsoft.WindowsDesktop.App.Ref dependency
     "-p:EnableWindowsTargeting=false"
   ];
@@ -49,29 +69,26 @@ buildDotnetModule rec {
   # 1. --no-build removed -> BuildHost project within roslyn is running Build target during publish
   # 2. missing crossgen2 7.* in local nuget directory when PublishReadyToRun=true
   # the latter should be fixable here but unsure how
-  installPhase =
-    let
-      rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.targetPlatform.system;
-    in
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      env dotnet publish $projectFile \
-          -p:ContinuousIntegrationBuild=true \
-          -p:Deterministic=true \
-          -p:InformationalVersion=$version \
-          -p:UseAppHost=true \
-          -p:PublishTrimmed=false \
-          -p:PublishReadyToRun=false \
-          --configuration Release \
-          --no-self-contained \
-          --output "$out/lib/$pname" \
-          --runtime ${rid} \
-          ''${dotnetInstallFlags[@]}  \
-          ''${dotnetFlags[@]}
+    env dotnet publish $dotnetProjectFiles \
+        -p:ContinuousIntegrationBuild=true \
+        -p:Deterministic=true \
+        -p:InformationalVersion=$version \
+        -p:UseAppHost=true \
+        -p:PublishTrimmed=false \
+        -p:PublishReadyToRun=false \
+        --configuration Release \
+        --no-self-contained \
+        --output "$out/lib/$pname" \
+        --no-restore \
+        --runtime ${rid} \
+        ''${dotnetInstallFlags[@]}  \
+        ''${dotnetFlags[@]}
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   passthru = {
     tests.version = testers.testVersion { package = roslyn-ls; };

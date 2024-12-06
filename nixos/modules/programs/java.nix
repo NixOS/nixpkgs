@@ -1,7 +1,12 @@
 # This module provides JAVA_HOME, with a different way to install java
 # system-wide.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.java;
@@ -28,9 +33,7 @@ in
         '';
       };
 
-      package = lib.mkPackageOption pkgs "jdk" {
-        example = "jre";
-      };
+      package = lib.mkPackageOption pkgs "jdk" { example = "jre"; };
 
       binfmt = lib.mkEnableOption "binfmt to execute java jar's and classes";
 
@@ -64,7 +67,7 @@ in
     environment.systemPackages = [ cfg.package ];
 
     environment.shellInit = ''
-      test -e ${cfg.package}/nix-support/setup-hook && source ${cfg.package}/nix-support/setup-hook
+      test -e ${cfg.package}/nix-support/setup-hook && . ${cfg.package}/nix-support/setup-hook
     '';
 
   };

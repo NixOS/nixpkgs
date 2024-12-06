@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "alex2108";
     repo = "syncthing-tray";
     rev = "v${version}";
-    sha256 = "0869kinnsfzb8ydd0sv9fgqsi1sy5rhqg4whfdnrv82xjc71xyw3";
+    hash = "sha256-g/seDpNdoJ1tc5CTh2EuXoeo8XNpa9CaR+s7bW2cySA=";
   };
 
   vendorHash = "sha256-hGV5bivDUFEbOwU9sU+Eu5Wzz/aZtj6NUkpzHlmZTtw=";

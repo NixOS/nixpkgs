@@ -33,7 +33,7 @@
     "pcre"
     "rawsock"
   ]
-  ++ lib.optionals stdenv.isLinux [ "bindings/glibc" "zlib" ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ "bindings/glibc" "zlib" ]
   ++ lib.optional x11Support "clx/new-clx"
 }:
 
@@ -41,7 +41,7 @@ assert x11Support -> (libX11 != null && libXau != null && libXt != null
   && libXpm != null && xorgproto != null && libXext != null);
 
 let
-  ffcallAvailable = stdenv.isLinux && (libffcall != null);
+  ffcallAvailable = stdenv.hostPlatform.isLinux && (libffcall != null);
   # Some modules need autoreconf called in their directory.
   shouldReconfModule = name: name != "asdf";
 in
@@ -85,7 +85,7 @@ stdenv.mkDerivation {
     find . -type f | xargs sed -e 's/-lICE/-lXau &/' -i
   '';
 
-  preConfigure = lib.optionalString stdenv.isDarwin (''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin (''
     (
       cd src
       autoreconf -f -i -I m4 -I glm4
@@ -121,7 +121,7 @@ stdenv.mkDerivation {
       (''./clisp-link add "$out"/lib/clisp*/base "$(dirname "$out"/lib/clisp*/base)"/full''
       + lib.concatMapStrings (x: " " + x) withModules);
 
-  env.NIX_CFLAGS_COMPILE = "-O0 -falign-functions=${if stdenv.is64bit then "8" else "4"}";
+  env.NIX_CFLAGS_COMPILE = "-O0 -falign-functions=${if stdenv.hostPlatform.is64bit then "8" else "4"}";
 
   meta = {
     description = "ANSI Common Lisp Implementation";

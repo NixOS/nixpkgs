@@ -1,25 +1,22 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.cgminer;
 
   convType = with builtins;
-    v: if isBool v then boolToString v else toString v;
+    v: if lib.isBool v then lib.boolToString v else toString v;
   mergedHwConfig =
-    mapAttrsToList (n: v: ''"${n}": "${(concatStringsSep "," (map convType v))}"'')
-      (foldAttrs (n: a: [n] ++ a) [] cfg.hardware);
+    lib.mapAttrsToList (n: v: ''"${n}": "${(lib.concatStringsSep "," (map convType v))}"'')
+      (lib.foldAttrs (n: a: [n] ++ a) [] cfg.hardware);
   mergedConfig = with builtins;
-    mapAttrsToList (n: v: ''"${n}":  ${if isBool v then convType v else ''"${convType v}"''}'')
+    lib.mapAttrsToList (n: v: ''"${n}":  ${if lib.isBool v then convType v else ''"${convType v}"''}'')
       cfg.config;
 
   cgminerConfig = pkgs.writeText "cgminer.conf" ''
   {
-  ${concatStringsSep ",\n" mergedHwConfig},
-  ${concatStringsSep ",\n" mergedConfig},
+  ${lib.concatStringsSep ",\n" mergedHwConfig},
+  ${lib.concatStringsSep ",\n" mergedConfig},
   "pools": [
-  ${concatStringsSep ",\n"
+  ${lib.concatStringsSep ",\n"
     (map (v: ''{"url": "${v.url}", "user": "${v.user}", "pass": "${v.pass}"}'')
           cfg.pools)}]
   }
@@ -31,19 +28,19 @@ in
 
     services.cgminer = {
 
-      enable = mkEnableOption "cgminer, an ASIC/FPGA/GPU miner for bitcoin and litecoin";
+      enable = lib.mkEnableOption "cgminer, an ASIC/FPGA/GPU miner for bitcoin and litecoin";
 
-      package = mkPackageOption pkgs "cgminer" { };
+      package = lib.mkPackageOption pkgs "cgminer" { };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "cgminer";
         description = "User account under which cgminer runs";
       };
 
-      pools = mkOption {
+      pools = lib.mkOption {
         default = [];  # Run benchmark
-        type = types.listOf (types.attrsOf types.str);
+        type = lib.types.listOf (lib.types.attrsOf lib.types.str);
         description = "List of pools where to mine";
         example = [{
           url = "http://p2pool.org:9332";
@@ -52,9 +49,9 @@ in
         }];
       };
 
-      hardware = mkOption {
+      hardware = lib.mkOption {
         default = []; # Run without options
-        type = types.listOf (types.attrsOf (types.either types.str types.int));
+        type = lib.types.listOf (lib.types.attrsOf (lib.types.either lib.types.str lib.types.int));
         description= "List of config options for every GPU";
         example = [
         {
@@ -79,9 +76,9 @@ in
         }];
       };
 
-      config = mkOption {
+      config = lib.mkOption {
         default = {};
-        type = types.attrsOf (types.either types.bool types.int);
+        type = lib.types.attrsOf (lib.types.either lib.types.bool lib.types.int);
         description = "Additional config";
         example = {
           auto-fan = true;
@@ -101,16 +98,16 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.cgminer.enable {
+  config = lib.mkIf config.services.cgminer.enable {
 
-    users.users = optionalAttrs (cfg.user == "cgminer") {
+    users.users = lib.optionalAttrs (cfg.user == "cgminer") {
       cgminer = {
         isSystemUser = true;
         group = "cgminer";
         description = "Cgminer user";
       };
     };
-    users.groups = optionalAttrs (cfg.user == "cgminer") {
+    users.groups = lib.optionalAttrs (cfg.user == "cgminer") {
       cgminer = {};
     };
 

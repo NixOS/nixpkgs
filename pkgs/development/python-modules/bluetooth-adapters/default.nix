@@ -10,6 +10,7 @@
   mac-vendor-lookup,
   myst-parser,
   poetry-core,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   sphinx-rtd-theme,
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-adapters";
-  version = "0.19.2";
+  version = "0.20.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-adapters";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hPs6YnmndJ2Z5RotcIRIYWPdvMyX56ul84l1Cs8kqH0=";
+    hash = "sha256-JeYqzwlR0zY0BGC6iFCTu9EDlYnu+wdpGeje2xKwcVI=";
   };
 
   postPatch = ''
@@ -60,9 +61,12 @@ buildPythonPackage rec {
     usb-devices
   ];
 
-  pythonImportsCheck = [ "bluetooth_adapters" ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "bluetooth_adapters" ];
 
   meta = with lib; {
     description = "Tools to enumerate and find Bluetooth Adapters";

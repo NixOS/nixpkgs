@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "pyemvue";
-  version = "0.18.5";
+  version = "0.18.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cgQARaGM6Jb2kEcG7HqPStRPkhHldJ7UbxQpxN6JbZE=";
+    hash = "sha256-FQ34pKRK1HDLoupMDfVaNxAhn1HbZHYi6se4ewlUWGA=";
   };
 
   nativeBuildInputs = [ hatchling ];

@@ -16,22 +16,24 @@
   nlohmann_json,
   pkg-config,
   testers,
+  python3,
 }:
 
 let
   common = rec {
-    version = "2.2.2";
+    version = "2.5.1";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       rev = version;
-      hash = "sha256-Yr/+03ealYQHjxtCLNCz/EYypwMPgiaTvCE55BEUk2c=";
+      hash = "sha256-5+ul4PxMgPkmGLB8CYpJcIcRDY/pJgByvjIHDA1Gs5A=";
     };
 
     nativeBuildInputs = [
       meson
       ninja
+      python3
       pkg-config
     ];
 
@@ -49,6 +51,7 @@ let
         inclyc
         Ruixi-rebirth
         aleksana
+        redyf
       ];
       platforms = lib.platforms.unix;
     };

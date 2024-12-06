@@ -177,7 +177,7 @@ in
         type = types.nullOr types.str;
         example = "ban.Time * math.exp(float(ban.Count+1)*banFactor)/math.exp(1*banFactor)";
         description = ''
-          "bantime.formula" used by default to calculate next value of ban time, default value bellow,
+          "bantime.formula" used by default to calculate next value of ban time, default value below,
           the same ban time growing will be reached by multipliers 1, 2, 4, 8, 16, 32 ...
         '';
       };

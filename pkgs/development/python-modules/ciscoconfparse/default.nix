@@ -9,20 +9,19 @@
   poetry-core,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   toml,
 }:
 
 buildPythonPackage rec {
   pname = "ciscoconfparse";
   version = "1.7.24";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mpenning";
-    repo = pname;
+    repo = "ciscoconfparse";
     rev = "refs/tags/${version}";
     hash = "sha256-vL/CQdYcOP356EyRToviWylP1EBtxmeov6qkhfQNZ2Y=";
   };
@@ -36,17 +35,14 @@ buildPythonPackage rec {
     sed -i '/requires-python/d' pyproject.toml
 
     substituteInPlace pyproject.toml \
-      --replace '"poetry>=1.3.2",' ""
+      --replace-fail '"poetry>=1.3.2",' ""
 
     patchShebangs tests
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     passlib
     deprecat
     dnspython

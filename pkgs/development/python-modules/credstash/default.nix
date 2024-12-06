@@ -63,7 +63,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/LuminalOSS/credstash";
     changelog = "https://github.com/fugue/credstash/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "credstash";
   };
 }

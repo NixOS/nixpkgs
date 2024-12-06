@@ -15,7 +15,7 @@ mkDerivation ({
     editorconfig-core-c
   ];
   propagatedBuildInputs = [ kparts ];
-} // lib.optionalAttrs stdenv.isDarwin {
+} // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
   postPatch = ''
     substituteInPlace src/part/CMakeLists.txt \
       --replace "kpart.desktop" "${kparts}/share/kservicetypes5/kpart.desktop"

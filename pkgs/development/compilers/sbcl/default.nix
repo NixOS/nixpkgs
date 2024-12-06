@@ -10,11 +10,17 @@
 
 let
   versionMap = {
-    "2.4.4" = {
-      sha256 = "sha256-ipMmJ7Px2OlhjxzcIl7csAJFaARpfiyH0UBoN2ShBtU=";
+    # Necessary for Nyxt
+    "2.4.6" = {
+      sha256 = "sha256-pImQeELa4JoXJtYphb96VmcKrqLz7KH7cCO8pnw/MJE=";
     };
-    "2.4.5" = {
-      sha256 = "sha256-TfaOkMkDGAdkK0t2GYjetb9qG9FSxHI0goNO+nNae9E=";
+    # By unofficial and very loose convention we keep the latest version of
+    # SBCL, and the previous one in case someone quickly needs to roll back.
+    "2.4.9" = {
+      sha256 = "sha256-mXDk68XWlD3GTXyh9S2bXNn8lM75TSMyE9eOx182BeI=";
+    };
+    "2.4.10" = {
+      sha256 = "sha256-zus5a2nSkT7uBIQcKva+ylw0LOFGTD/j5FPy3hDF4vg=";
     };
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
@@ -159,17 +165,17 @@ stdenv.mkDerivation (self: {
     export HOME=$PWD/test-home
   '';
 
-  enableFeatures = with lib;
-    assert assertMsg (self.markRegionGC -> self.threadSupport) "SBCL mark region GC requires thread support";
-    optional self.threadSupport "sb-thread" ++
-    optional self.linkableRuntime "sb-linkable-runtime" ++
-    optional self.coreCompression "sb-core-compression" ++
-    optional stdenv.isAarch32 "arm" ++
-    optional self.markRegionGC "mark-region-gc";
+  enableFeatures =
+    assert lib.assertMsg (self.markRegionGC -> self.threadSupport) "SBCL mark region GC requires thread support";
+    lib.optional self.threadSupport "sb-thread" ++
+    lib.optional self.linkableRuntime "sb-linkable-runtime" ++
+    lib.optional self.coreCompression "sb-core-compression" ++
+    lib.optional stdenv.hostPlatform.isAarch32 "arm" ++
+    lib.optional self.markRegionGC "mark-region-gc";
 
-  disableFeatures = with lib;
-    optional (!self.threadSupport) "sb-thread" ++
-    optionals self.disableImmobileSpace [ "immobile-space" "immobile-code" "compact-instance-header" ];
+  disableFeatures =
+    lib.optional (!self.threadSupport) "sb-thread" ++
+    lib.optionals self.disableImmobileSpace [ "immobile-space" "immobile-code" "compact-instance-header" ];
 
   buildArgs = [
     "--prefix=$out"

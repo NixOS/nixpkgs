@@ -9,10 +9,10 @@
 , AudioUnit
 , CoreAudio
 , CoreServices
-, lazyLoad ? !stdenv.isDarwin
+, lazyLoad ? !stdenv.hostPlatform.isDarwin
 }:
 
-assert lib.assertMsg (stdenv.isDarwin -> !lazyLoad) "cubeb: lazyLoad is inert on Darwin";
+assert lib.assertMsg (stdenv.hostPlatform.isDarwin -> !lazyLoad) "cubeb: lazyLoad is inert on Darwin";
 
 let
   backendLibs = [
@@ -39,7 +39,7 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [ speexdsp ] ++ (
-    if stdenv.isDarwin then [ AudioUnit CoreAudio CoreServices ]
+    if stdenv.hostPlatform.isDarwin then [ AudioUnit CoreAudio CoreServices ]
     else backendLibs
   );
 

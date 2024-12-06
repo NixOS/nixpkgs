@@ -1,15 +1,16 @@
 {
   lib,
-  stdenv,
   aenum,
   aiohttp,
   buildPythonPackage,
   fetchPypi,
   flatdict,
+  jwcrypto,
   pycryptodome,
   pycryptodomex,
   pydash,
   pyfakefs,
+  pyjwt,
   pytest-asyncio,
   pytest-mock,
   pytest-recording,
@@ -17,29 +18,36 @@
   python-jose,
   pythonOlder,
   pyyaml,
+  setuptools,
   xmltodict,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "okta";
-  version = "2.9.6";
-  format = "setuptools";
+  version = "2.9.8";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WRWbS8bYUafnvnTKLHlV7YV5410E0jk2UYos2F20A7k=";
+    hash = "sha256-RDnRiPsc4p5yI9jFzOtRI+r00tvska8x4uCSjl+cWvo=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "aenum" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aenum
     aiohttp
     flatdict
+    jwcrypto
     pycryptodome
     pycryptodomex
     pydash
+    pyjwt
     python-jose
     pyyaml
     xmltodict
@@ -63,6 +71,7 @@ buildPythonPackage rec {
     "test_update_org_contact_user"
     "test_get_role_subscription"
     "test_subscribe_unsubscribe"
+    "test_client_invalid_url"
   ];
 
   pythonImportsCheck = [

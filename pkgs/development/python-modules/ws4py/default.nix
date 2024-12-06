@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://ws4py.readthedocs.org";
     changelog = "https://github.com/Lawouach/WebSocket-for-Python/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

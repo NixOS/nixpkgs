@@ -4,7 +4,6 @@
   cython,
   fetchFromGitHub,
   msgpack,
-  poetry-core,
   pytestCheckHook,
   pythonOlder,
   pyyaml,
@@ -34,7 +33,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       msgpack
       ruamel-yaml
@@ -48,7 +47,7 @@ buildPythonPackage rec {
     msgpack = [ msgpack ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.all;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "box" ];
 

@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-editing-services";
-  version = "1.24.3";
+  version = "1.24.7";
 
   outputs = [
     "out"
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-z3QyFWiLATkFzSyff+3aIeLTTIRDQJkMbqJdEKA3KT8=";
+    hash = "sha256-sjzDEqI/q3F+S2A/ByvkIJhPucndIHfiBraqmxHfKdg=";
   };
 
   nativeBuildInputs = [
@@ -61,6 +61,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs \
       scripts/extract-release-date-from-doap-file.py
+
+    # Hack for https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/3800
+    substituteInPlace ges/ges-frame-composition-meta.c \
+      --replace-fail "GstFrameCompositionApi" "GESFrameCompositionApi"
   '';
 
   meta = with lib; {
@@ -69,6 +73,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
   };
 }

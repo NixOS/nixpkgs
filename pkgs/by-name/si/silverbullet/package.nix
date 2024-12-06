@@ -3,14 +3,15 @@
 , fetchurl
 , deno
 , makeWrapper
+, nixosTests
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "silverbullet";
-  version = "0.7.7";
+  version = "0.9.4";
 
   src = fetchurl {
     url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet.js";
-    hash = "sha256-EhHPysliRi1bv/skS4+ljQW6qFsijmSup1+7/fVfFdg=";
+    hash = "sha256-J0fy1e/ObpujBNSRKA55oU30kXNfus+5P2ebggEN6Dw=";
   };
 
   dontUnpack = true;
@@ -26,6 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
         --add-flags "run -A --unstable-kv --unstable-worker-options ${placeholder "out"}/lib/silverbullet.js"
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) silverbullet;
+  };
 
   meta = {
     changelog = "https://github.com/silverbulletmd/silverbullet/blob/${finalAttrs.version}/website/CHANGELOG.md";

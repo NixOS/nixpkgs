@@ -23,7 +23,6 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ poetry-core ];
 
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   dependencies =
     with python3.pkgs;
@@ -31,8 +30,7 @@ python3.pkgs.buildPythonApplication rec {
       pytenable
       typer
       validators
-    ]
-    ++ typer.optional-dependencies.all;
+    ];
 
   pythonImportsCheck = [ "audiness" ];
 

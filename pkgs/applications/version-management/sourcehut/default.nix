@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , python3
 , callPackage
 , recurseIntoAttrs
@@ -14,6 +13,7 @@
 # https://github.com/NixOS/nixpkgs/pull/54425#discussion_r250688781
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       srht = self.callPackage ./core.nix { };
 

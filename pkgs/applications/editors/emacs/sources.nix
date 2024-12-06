@@ -50,14 +50,16 @@ let
         "macport" = "https://bitbucket.org/mituharu/emacs-mac/raw/${rev}/NEWS-mac";
       }.${variant};
       license = lib.licenses.gpl3Plus;
-      maintainers = with lib.maintainers; [
-        AndersonTorres
-        adisbladis
-        jwiegley
-        lovek323
-        matthewbauer
-        # atemu for issues relating to Macport
-      ];
+      maintainers = {
+        "mainline" = with lib.maintainers; [
+          AndersonTorres
+          adisbladis
+          jwiegley
+          lovek323
+          matthewbauer
+        ];
+        "macport" = with lib.maintainers; [ ];
+      }.${variant};
       platforms = {
         "mainline" = lib.platforms.all;
         "macport" = lib.platforms.darwin;
@@ -104,10 +106,18 @@ in
 
   emacs29 = import ./make-emacs.nix (mkArgs {
     pname = "emacs";
-    version = "29.3";
+    version = "29.4";
     variant = "mainline";
-    rev = "29.3";
-    hash = "sha256-4yN81djeKb9Hlr6MvaDdXqf4XOl0oolXEYGqkA+KUO0=";
+    rev = "29.4";
+    hash = "sha256-FCP6ySkN9mAdp2T09n6foS2OciqZXc/54guRZ0B4Z2s=";
+  });
+
+  emacs30 = import ./make-emacs.nix (mkArgs {
+    pname = "emacs";
+    version = "30.0.92";
+    variant = "mainline";
+    rev = "30.0.92";
+    hash = "sha256-V2TXLemSCIPTpg6RDChv4va7pHfVcqSMw/EWqvlRQ1o=";
   });
 
   emacs28-macport = import ./make-emacs.nix (mkArgs {

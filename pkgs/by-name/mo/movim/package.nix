@@ -38,13 +38,13 @@ let
 in
 php.buildComposerProject (finalAttrs: {
   pname = "movim";
-  version = "0.24.1";
+  version = "0.28";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-Ai82d1VwtAlKmM8N/hazMWsn5F6HS4I1do3VkpLPlBo=";
+    hash = "sha256-mjBeBu1seH5XMls+e4ON13ayVeugKogbNTzbjp1pUjE=";
   };
 
   php = php.buildEnv ({
@@ -67,17 +67,17 @@ php.buildComposerProject (finalAttrs: {
   # pinned commonmark
   composerStrictValidation = false;
 
-  vendorHash = "sha256-1sQm+eRrs9m52CepPXahsOJhyLZ68+FIDNHyY33IoD4=";
+  vendorHash = "sha256-ZfMUpkIRCAsiQf6PEVPrMpljZWjP9JXf+nEFA/LunsQ=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;
     # replacing `$configuration` with actually-used flags.
     substituteInPlace src/Movim/Daemon/Session.php \
-      --replace-fail "exec php ' . \$configuration " "exec php -dopcache.enable=1 -dopcache.enable_cli=1 ' "
+      --replace-fail \
+        "'exec ' . PHP_BINARY . ' ' . \$configuration . '" \
+        "'exec ' . PHP_BINARY . ' -dopcache.enable=1 -dopcache.enable_cli=1 ' . '"
 
     # Point to PHP + PHP INI in the Nix store
-    substituteInPlace src/Movim/{Console/DaemonCommand.php,Daemon/Session.php} \
-      --replace-fail "exec php " "exec ${lib.getExe finalAttrs.php} "
     substituteInPlace src/Movim/Console/DaemonCommand.php \
       --replace-fail "<info>php vendor/bin/phinx migrate</info>" \
         "<info>${lib.getBin finalAttrs.php} vendor/bin/phinx migrate</info>" \

@@ -9,19 +9,19 @@
 
 buildPythonPackage rec {
   pname = "urwid-readline";
-  version = "0.14";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rr-";
     repo = "urwid_readline";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZTg+GZnu7R6Jf2+SIwVo57yHnjwuY92DElTJs8oRErE=";
+    hash = "sha256-HiMMLzVE/Qw/PR7LXACyfzblxrGYrbMoi3/e/QzqF34=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ urwid ];
+  dependencies = [ urwid ];
 
   pythonImportsCheck = [ "urwid_readline" ];
 

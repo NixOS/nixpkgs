@@ -1,15 +1,16 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, writeText
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, onedrive
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  writeText,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  onedrive,
 }:
 
 let
-  version = "1.0.3";
+  version = "1.1.1a";
 
   setupPy = writeText "setup.py" ''
     from setuptools import setup
@@ -31,12 +32,18 @@ python3Packages.buildPythonApplication rec {
     owner = "bpozdena";
     repo = "OneDriveGUI";
     rev = "v${version}";
-    hash = "sha256-HutziAzhIDYP8upNPieL2GNrxPBHUCVs09FFxdSqeBs=";
+    hash = "sha256-pcY1JOi74pePvkIMRuHv5mlE4F68NzuBLJTCtgjUFRw=";
   };
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
-  propagatedBuildInputs = with python3Packages; [ pyside6 requests ];
+  propagatedBuildInputs = with python3Packages; [
+    pyside6
+    requests
+  ];
 
   # wrap manually to avoid having a bash script in $out/bin with a .py extension
   dontWrapPythonPrograms = true;
@@ -73,7 +80,9 @@ python3Packages.buildPythonApplication rec {
 
     makeWrapper ${python3Packages.python.interpreter} $out/bin/onedrivegui \
       --prefix PATH : ${lib.makeBinPath [ onedrive ]} \
-      --prefix PYTHONPATH : ${python3Packages.makePythonPath (propagatedBuildInputs ++ [(placeholder "out")])} \
+      --prefix PYTHONPATH : ${
+        python3Packages.makePythonPath (propagatedBuildInputs ++ [ (placeholder "out") ])
+      } \
       --add-flags $out/${python3Packages.python.sitePackages}/OneDriveGUI.py
   '';
 

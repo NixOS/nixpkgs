@@ -12,7 +12,6 @@
   pydantic,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   redis,
   requests,
   sentence-transformers,
@@ -46,7 +45,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pydantic" ];
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -62,7 +60,7 @@ buildPythonPackage rec {
     xxhash
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     api = [
       accelerate
       # deepspeed
@@ -86,7 +84,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME=$TMPDIR

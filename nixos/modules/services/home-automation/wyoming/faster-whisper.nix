@@ -142,18 +142,10 @@ in
           CapabilityBoundingSet = "";
           DeviceAllow = if builtins.elem options.device [ "cuda" "auto" ] then [
             # https://docs.nvidia.com/dgx/pdf/dgx-os-5-user-guide.pdf
-            # CUDA not working? Check DeviceAllow and PrivateDevices first!
-            "/dev/nvidia0"
-            "/dev/nvidia1"
-            "/dev/nvidia2"
-            "/dev/nvidia3"
-            "/dev/nvidia4"
-            "/dev/nvidia-caps/nvidia-cap1"
-            "/dev/nvidia-caps/nvidia-cap2"
-            "/dev/nvidiactl"
-            "/dev/nvidia-modeset"
-            "/dev/nvidia-uvm"
-            "/dev/nvidia-uvm-tools"
+            "char-nvidia-uvm"
+            "char-nvidia-frontend"
+            "char-nvidia-caps"
+            "char-nvidiactl"
           ] else "";
           DevicePolicy = "closed";
           LockPersonality = true;

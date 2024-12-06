@@ -117,16 +117,41 @@ in
         };
       };
     };
+    cgiTestServer = { ... }: {
+      users.users.cgi = {
+        isSystemUser = true;
+        group = "cgi";
+      };
+      users.groups.cgi = { };
+      services.stargazer = {
+        enable = true;
+        connectionLogging = false;
+        requestTimeout = 1;
+        allowCgiUser = true;
+        routes = [
+          {
+            route = "localhost:/cgi-bin";
+            root = "${test_env}/test_data";
+            cgi = true;
+            cgi-timeout = 5;
+            cgi-user = "cgi";
+          }
+        ];
+      };
+    };
   };
 
   testScript = { nodes, ... }: ''
     geminiserver.wait_for_unit("scgi_server")
     geminiserver.wait_for_open_port(1099)
     geminiserver.wait_for_unit("stargazer")
-    geminiserver.wait_for_open_port(1965)
+    cgiTestServer.wait_for_open_port(1965)
 
     with subtest("stargazer test suite"):
       response = geminiserver.succeed("sh -c 'cd ${test_env}; ${test_script}/bin/test'")
+      print(response)
+    with subtest("stargazer cgi-user test"):
+      response = cgiTestServer.succeed("sh -c 'cd ${test_env}; ${test_script}/bin/test --checks CGIVars'")
       print(response)
   '';
 }

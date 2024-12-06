@@ -2,18 +2,17 @@
   lib,
   callPackage,
   fetchurl,
-  jdk,
+  jdk_headless,
   makeWrapper,
   stdenvNoCC,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "apache-maven";
-  version = "3.9.6";
+  pname = "maven";
+  version = "3.9.9";
 
   src = fetchurl {
     url = "mirror://apache/maven/maven-3/${finalAttrs.version}/binaries/apache-maven-${finalAttrs.version}-bin.tar.gz";
-    hash = "sha256-bu3SyuNibWrTpcnuMkvSZYU9ZCl/B/AzQwdVvQ4MOks=";
+    hash = "sha256-epzfZ0/BcD1jgvXzMLPREOobUStR8WUoRtnk6KWI12Y=";
   };
 
   sourceRoot = ".";
@@ -27,21 +26,38 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r apache-maven-${finalAttrs.version}/* $out/maven
 
     makeWrapper $out/maven/bin/mvn $out/bin/mvn \
-      --set-default JAVA_HOME "${jdk}"
+      --set-default JAVA_HOME "${jdk_headless}"
     makeWrapper $out/maven/bin/mvnDebug $out/bin/mvnDebug \
-      --set-default JAVA_HOME "${jdk}"
+      --set-default JAVA_HOME "${jdk_headless}"
 
     runHook postInstall
   '';
 
-  passthru = {
-    buildMaven = callPackage ./build-maven.nix {
-      maven = finalAttrs.finalPackage;
+  passthru =
+    let
+      makeOverridableMavenPackage =
+        mavenRecipe: mavenArgs:
+        let
+          drv = mavenRecipe mavenArgs;
+          overrideWith =
+            newArgs: mavenArgs // (if lib.isFunction newArgs then newArgs mavenArgs else newArgs);
+        in
+        drv
+        // {
+          overrideMavenAttrs = newArgs: makeOverridableMavenPackage mavenRecipe (overrideWith newArgs);
+        };
+    in
+    {
+      buildMaven = callPackage ./build-maven.nix {
+        maven = finalAttrs.finalPackage;
+      };
+
+      buildMavenPackage = makeOverridableMavenPackage (
+        callPackage ./build-maven-package.nix {
+          maven = finalAttrs.finalPackage;
+        }
+      );
     };
-    buildMavenPackage = callPackage ./build-maven-package.nix {
-      maven = finalAttrs.finalPackage;
-    };
-  };
 
   meta = {
     homepage = "https://maven.apache.org/";
@@ -54,7 +70,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.asl20;
     mainProgram = "mvn";
-    maintainers = with lib.maintainers; [ cko ];
-    inherit (jdk.meta) platforms;
+    maintainers = with lib.maintainers; [ tricktron ] ++ lib.teams.java.members;
+    inherit (jdk_headless.meta) platforms;
   };
 })

@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen
     graphviz
     pkg-config
+    qtdeclarative
   ];
 
   buildInputs = [

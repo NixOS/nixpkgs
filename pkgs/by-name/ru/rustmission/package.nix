@@ -9,21 +9,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustmission";
-  version = "0.3.3";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "intuis";
     repo = "rustmission";
     rev = "v${version}";
-    hash = "sha256-OOewobyfJYnspeXFYzTP7SLrNQRnDl0jv81TJjQAdUE=";
+    hash = "sha256-V9sy3rkoI3mKpeZjXT4D3Bs4NVETJ8h43iwOoDx1MKU=";
   };
 
-  cargoHash = "sha256-dLddB+YA1uC8CVMVI1aVo1oMufxRupW26hGkb8796Ek=";
+  cargoHash = "sha256-KYg+SVAvlQn77kI1gyzXlzhKgPECYPZKICnmkcEnuh8=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration

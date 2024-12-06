@@ -8,7 +8,7 @@
 , nodejs
 , fetchYarnDeps
 , jq
-, electron
+, electron_33
 , element-web
 , sqlcipher
 , callPackage
@@ -17,6 +17,8 @@
 , CoreServices
 , desktopToDarwinBundle
 , useKeytar ? true
+# command line arguments which are always set
+, commandLineArgs ? ""
 }:
 
 let
@@ -25,12 +27,13 @@ let
   executableName = "element-desktop";
   keytar = callPackage ./keytar { inherit Security AppKit; };
   seshat = callPackage ./seshat { inherit CoreServices; };
+  electron = electron_33;
 in
 stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   pname = "element-desktop";
   name = "${finalAttrs.pname}-${finalAttrs.version}";
   src = fetchFromGitHub {
-    owner = "vector-im";
+    owner = "element-hq";
     repo = "element-desktop";
     rev = "v${finalAttrs.version}";
     hash = desktopSrcHash;
@@ -42,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   };
 
   nativeBuildInputs = [ yarn fixup-yarn-lock nodejs makeWrapper jq ]
-    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   inherit seshat;
 
@@ -106,13 +109,14 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher.so \
       --add-flags "$out/share/element/electron" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall
   '';
 
   # The desktop item properties should be kept in sync with data from upstream:
-  # https://github.com/vector-im/element-desktop/blob/develop/package.json
+  # https://github.com/element-hq/element-desktop/blob/develop/package.json
   desktopItem = makeDesktopItem {
     name = "element-desktop";
     exec = "${executableName} %u";
@@ -125,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     mimeTypes = [ "x-scheme-handler/element" ];
   };
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     cp build/icon.icns $out/Applications/Element.app/Contents/Resources/element.icns
   '';
 
@@ -147,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   meta = with lib; {
     description = "A feature-rich client for Matrix.org";
     homepage = "https://element.io/";
-    changelog = "https://github.com/vector-im/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/element-hq/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = teams.matrix.members;
     inherit (electron.meta) platforms;

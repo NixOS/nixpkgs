@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, gitUpdater, testers, tkey-ssh-agent }:
 
 buildGoModule rec {
   pname = "tkey-ssh-agent";
@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "tillitis";
     repo = "tkey-ssh-agent";
     rev = "v${version}";
-    sha256 = "sha256-Uf3VJJfZn4UYX1q79JdaOfrore+L/Mic3whzpP32JV0=";
+    hash = "sha256-Uf3VJJfZn4UYX1q79JdaOfrore+L/Mic3whzpP32JV0=";
   };
 
   vendorHash = "sha256-SFyp1UB6+m7/YllRyY56SwweJ3X175bChXQYiG2M7zM=";
@@ -16,6 +16,15 @@ buildGoModule rec {
   subPackages = [
     "cmd/tkey-ssh-agent"
   ];
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      tkey-ssh-agent-version = testers.testVersion {
+        package = tkey-ssh-agent;
+      };
+    };
+  };
 
   meta = with lib; {
     description = "SSH Agent for TKey, the flexible open hardware/software USB security key";

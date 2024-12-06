@@ -6,28 +6,31 @@
   craft-cli,
   craft-grammar,
   craft-parts,
+  craft-platforms,
   craft-providers,
+  jinja2,
   fetchFromGitHub,
   git,
   hypothesis,
+  license-expression,
   nix-update-script,
-  pydantic-yaml-0,
   pyfakefs,
   pygit2,
   pytest-check,
   pytest-mock,
+  pytest-subprocess,
   pytestCheckHook,
   pythonOlder,
   pyyaml,
   responses,
   setuptools-scm,
-  setuptools,
   snap-helpers,
+  freezegun,
 }:
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "2.6.3";
+  version = "4.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -36,20 +39,19 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-application";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZhZoR8O5oxcF8+zzihiIbiC/j3AkDL7AjaJSlZ0N48s=";
+    hash = "sha256-Sb7/p5g03stipnvfE5FceXv6xDA4c45qnxllBUWhmY8=";
   };
 
   postPatch = ''
-    substituteInPlace craft_application/__init__.py \
-      --replace-fail "dev" "${version}"
-
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==69.4.0" "setuptools"
+      --replace-fail "setuptools==75.2.0" "setuptools"
   '';
 
-  build-system = [
-    setuptools
-    setuptools-scm
+  build-system = [ setuptools-scm ];
+
+  pythonRelaxDeps = [
+    "pygit2"
+    "requests"
   ];
 
   dependencies = [
@@ -57,19 +59,23 @@ buildPythonPackage rec {
     craft-cli
     craft-grammar
     craft-parts
+    craft-platforms
     craft-providers
-    pydantic-yaml-0
+    jinja2
+    license-expression
     pygit2
     pyyaml
     snap-helpers
   ];
 
   nativeCheckInputs = [
+    freezegun
     git
     hypothesis
     pyfakefs
     pytest-check
     pytest-mock
+    pytest-subprocess
     pytestCheckHook
     responses
   ];
@@ -98,7 +104,7 @@ buildPythonPackage rec {
       # Tests expecting pytest-time
       "test_monitor_builds_success"
     ]
-    ++ lib.optionals stdenv.isAarch64 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # These tests have hardcoded "amd64" strings which fail on aarch64
       "test_process_grammar_build_for"
       "test_process_grammar_platform"
@@ -110,7 +116,7 @@ buildPythonPackage rec {
   meta = {
     description = "Basis for Canonical craft applications";
     homepage = "https://github.com/canonical/craft-application";
-    changelog = "https://github.com/canonical/craft-application/releases/tag/${version}";
+    changelog = "https://github.com/canonical/craft-application/blob/${src.rev}/docs/reference/changelog.rst";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.linux;

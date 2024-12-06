@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyyaml ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aws = [
       boto3
       botocore
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     pyspark
     unittestCheckHook
     warcio
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   unittestFlagsArray = [ "-v" ];
 
@@ -69,6 +69,6 @@ buildPythonPackage rec {
     description = "Run MapReduce jobs on Hadoop or Amazon Web Services";
     homepage = "https://github.com/Yelp/mrjob";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

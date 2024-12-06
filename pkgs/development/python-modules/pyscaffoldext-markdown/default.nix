@@ -11,7 +11,7 @@
   configupdater,
   pre-commit,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-xdist,
   tox,
   twine,
@@ -41,12 +41,12 @@ buildPythonPackage rec {
     wheel
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     testing = [
       configupdater
       pre-commit
       pytest
-      pytest-cov
+      pytest-cov-stub
       pytest-xdist
       setuptools-scm
       tox

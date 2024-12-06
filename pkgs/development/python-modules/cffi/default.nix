@@ -9,20 +9,22 @@
   libffi,
   pkg-config,
   pycparser,
-  pythonAtLeast,
 }:
 
+let
+  ccVersion = lib.getVersion stdenv.cc;
+in
 if isPyPy then
   null
 else
   buildPythonPackage rec {
     pname = "cffi";
-    version = "1.16.0";
+    version = "1.17.1";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-vLPvQ+WGZbvaL7GYaY/K5ndkg+DEpjGqVkeAbCXgLMA=";
+      hash = "sha256-HDnGAWwyvEjdVFYZUOvWg24WcPKuRhKPZ89J54nFKCQ=";
     };
 
     patches =
@@ -39,15 +41,15 @@ else
         #
         ./darwin-use-libffi-closures.diff
       ]
-      ++ lib.optionals (stdenv.cc.isClang && lib.versionAtLeast (lib.getVersion stdenv.cc) "13") [
+      ++ lib.optionals (stdenv.cc.isClang && (ccVersion == "boot" || lib.versionAtLeast ccVersion "13")) [
         # -Wnull-pointer-subtraction is enabled with -Wextra. Suppress it to allow the following tests
-        # to run and pass when cffi is built with newer versions of clang:
+        # to run and pass when cffi is built with newer versions of clang (including the bootstrap tools clang on Darwin):
         # - testing/cffi1/test_verify1.py::test_enum_usage
         # - testing/cffi1/test_verify1.py::test_named_pointer_as_argument
         ./clang-pointer-substraction-warning.diff
       ];
 
-    postPatch = lib.optionalString stdenv.isDarwin ''
+    postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Remove setup.py impurities
       substituteInPlace setup.py \
         --replace "'-iwithsysroot/usr/include/ffi'" "" \
@@ -55,14 +57,13 @@ else
         --replace '/usr/include/libffi' '${lib.getDev libffi}/include'
     '';
 
-    nativeBuildInputs = [
-      pkg-config
-      setuptools
-    ];
+    nativeBuildInputs = [ pkg-config ];
+
+    build-system = [ setuptools ];
 
     buildInputs = [ libffi ];
 
-    propagatedBuildInputs = [ pycparser ];
+    dependencies = [ pycparser ];
 
     # The tests use -Werror but with python3.6 clang detects some unreachable code.
     env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument -Wno-unreachable-code -Wno-c++11-narrowing";

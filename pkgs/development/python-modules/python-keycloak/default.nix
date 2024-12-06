@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/marcospereirampj/python-keycloak";
     changelog = "https://github.com/marcospereirampj/python-keycloak/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,18 +1,22 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, writeScript
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  writeScript,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-ge-bin";
-  version = "GE-Proton9-7";
+  version = "GE-Proton9-20";
 
   src = fetchzip {
     url = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/${finalAttrs.version}/${finalAttrs.version}.tar.gz";
-    hash = "sha256-/FXdyPuCe6rD5HoMOHPVlwRXu3DMJ3lEOnRloYZMA8s=";
+    hash = "sha256-1twCv81KO1fcRcIb4H7VtAjtcKrX+DymsYdf885eOWo=";
   };
 
-  outputs = [ "out" "steamcompattool" ];
+  outputs = [
+    "out"
+    "steamcompattool"
+  ];
 
   buildCommand = ''
     runHook preBuild
@@ -21,7 +25,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Also leave some breadcrumbs in the file.
     echo "${finalAttrs.pname} should not be installed into environments. Please use programs.steam.extraCompatPackages instead." > $out
 
-    ln -s $src $steamcompattool
+    mkdir $steamcompattool
+    ln -s $src/* $steamcompattool
+    rm $steamcompattool/{compatibilitytool.vdf,proton,version}
+    cp $src/{compatibilitytool.vdf,proton,version} $steamcompattool
+
+    sed -i -r 's|GE-Proton[0-9]*-[0-9]*|GE-Proton|' $steamcompattool/compatibilitytool.vdf
+    sed -i -r 's|GE-Proton[0-9]*-[0-9]*|GE-Proton|' $steamcompattool/proton
 
     runHook postBuild
   '';
@@ -50,7 +60,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/GloriousEggroll/proton-ge-custom";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ NotAShelf shawn8901 ];
+    maintainers = with lib.maintainers; [
+      NotAShelf
+      shawn8901
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };

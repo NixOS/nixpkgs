@@ -1,6 +1,6 @@
 {
   lib,
-  darwin,
+  cctools,
   fetchpatch,
   fetchurl,
   openssl,
@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "live555";
-  version = "2024.05.15";
+  version = "2024.09.20";
 
   src = fetchurl {
     urls = [
@@ -19,19 +19,19 @@ stdenv.mkDerivation (finalAttrs: {
       "https://download.videolan.org/contrib/live555/live.${finalAttrs.version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-Mgkf5XiFBEEDTTx+YlV12wE4zpmPPqaUPv9KcEK38D0=";
+    hash = "sha256-TrUneCGaJJxC+GgL1ZZ/ZcONeqDH05Bp44/3lkCs9tg=";
   };
 
   patches = [
     (fetchpatch {
-      name = "cflags-when-darwin.patch";
+      name = "0000-cflags-when-darwin.patch";
       url = "https://github.com/rgaufman/live555/commit/16701af5486bb3a2d25a28edaab07789c8a9ce57.patch?full_index=1";
       hash = "sha256-IDSdByBu/EBLsUTBe538rWsDwH61RJfAEhvT68Nb9rU=";
     })
   ];
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [
-    darwin.cctools
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
   ];
 
   buildInputs = [
@@ -74,9 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   configurePhase = let
     platform =
-      if stdenv.isLinux then
+      if stdenv.hostPlatform.isLinux then
         "linux"
-      else if stdenv.isDarwin then
+      else if stdenv.hostPlatform.isDarwin then
         "macosx-catalina"
       else
         throw "Unsupported platform: ${stdenv.hostPlatform.system}";

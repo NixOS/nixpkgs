@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "mashumaro";
-  version = "3.13";
+  version = "3.14";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,14 +27,14 @@ buildPythonPackage rec {
     owner = "Fatal1ty";
     repo = "mashumaro";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ETK1rHKlByQkqibejiZmXF6c4eIiMazLa8XY2OH30q4=";
+    hash = "sha256-0THj22KdMvD5O3dNwXKxs2wRIJziPmojLo4BPa3fZ3Y=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ typing-extensions ];
+  dependencies = [ typing-extensions ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     orjson = [ orjson ];
     msgpack = [ msgpack ];
     yaml = [ pyyaml ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     pendulum
     pytest-mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "mashumaro" ];
 

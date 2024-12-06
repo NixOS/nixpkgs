@@ -37,7 +37,7 @@ runCommand "optifine-${mcVersion}" {
     '';
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "optifine";
   };

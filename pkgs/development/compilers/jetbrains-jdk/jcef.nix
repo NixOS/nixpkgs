@@ -6,7 +6,6 @@
 , python3
 , jdk
 , git
-, libcef
 , rsync
 , lib
 , ant
@@ -46,7 +45,7 @@
 , thrift
 }:
 
-assert !stdenv.isDarwin;
+assert !stdenv.hostPlatform.isDarwin;
 # I can't test darwin
 
 let

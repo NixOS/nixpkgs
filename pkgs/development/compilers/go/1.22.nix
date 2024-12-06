@@ -4,8 +4,7 @@
 , tzdata
 , substituteAll
 , iana-etc
-, Security
-, Foundation
+, apple-sdk_11
 , xcbuild
 , mailcap
 , buildPackages
@@ -17,8 +16,7 @@
 }:
 
 let
-  useGccGoBootstrap = stdenv.buildPlatform.isMusl;
-  goBootstrap = if useGccGoBootstrap then buildPackages.gccgo12 else buildPackages.callPackage ./bootstrap121.nix { };
+  goBootstrap = buildPackages.callPackage ./bootstrap121.nix { };
 
   skopeoTest = skopeo.override { buildGoModule = buildGo122Module; };
 
@@ -48,19 +46,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.22.3";
+  version = "1.22.10";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-gGSO80+QMZPXKlnA3/AZ9fmK4MmqE63gsOy/+ZGnb2g=";
+    hash = "sha256-HpT9SL51DR+vtNmztt0xpunSc10zm/JGK8l7ZMpMEDc=";
   };
 
   strictDeps = true;
   buildInputs = [ ]
-    ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
-  depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [ Foundation Security xcbuild ];
+  depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [ apple-sdk_11 xcbuild ];
 
   depsBuildTarget = lib.optional isCross targetCC;
 
@@ -117,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Wasi does not support CGO
   CGO_ENABLED = if stdenv.targetPlatform.isWasi then 0 else 1;
 
-  GOROOT_BOOTSTRAP = if useGccGoBootstrap then goBootstrap else "${goBootstrap}/share/go";
+  GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
 
   buildPhase = ''
     runHook preBuild
@@ -181,12 +179,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor finalAttrs.version}";
+    changelog = "https://go.dev/doc/devel/release#go${finalAttrs.version}";
     description = "Go Programming language";
     homepage = "https://go.dev/";
     license = licenses.bsd3;
     maintainers = teams.golang.members;
-    platforms = platforms.darwin ++ platforms.linux ++ platforms.wasi;
+    platforms = platforms.darwin ++ platforms.linux ++ platforms.wasi ++ platforms.freebsd;
     mainProgram = "go";
   };
 })

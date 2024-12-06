@@ -13,27 +13,26 @@
 , runCommand
 , python3
 , quarto
-, extraPythonPackages ? ps: with ps; []
+, extraPythonPackages ? ps: []
 , sysctl
 }:
 
 stdenv.mkDerivation (final: {
   pname = "quarto";
-  version = "1.4.555";
+  version = "1.6.33";
+
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
-    sha256 = "sha256-uBKKgRsM7kUDeF0kMYbo6RjmiU6wq4EEcE94qqMSzt8=";
+    hash = "sha256-0qCQswtBC8R1Q7pHLhJtqCncllqgXo1t9pG97VwCtAI=";
   };
+
+  patches = [
+    ./deno2.patch
+  ];
 
   nativeBuildInputs = [
     makeWrapper
   ];
-
-  postPatch = ''
-    # Compat for Deno >=1.26
-    substituteInPlace bin/quarto.js \
-      --replace-fail ']))?.trim();' ']))?.trim().split(" ")[0];'
-  '';
 
   dontStrip = true;
 
@@ -63,7 +62,7 @@ stdenv.mkDerivation (final: {
 
   passthru.tests = {
     quarto-check = runCommand "quarto-check" {
-      nativeBuildInputs = lib.optionals stdenv.isDarwin [ sysctl ];
+      nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ sysctl ];
     } ''
       export HOME="$(mktemp -d)"
       ${quarto}/bin/quarto check

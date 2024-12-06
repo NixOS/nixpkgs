@@ -4,14 +4,13 @@
 , glibc
 , gtk3
 , libappindicator
-, webkitgtk
+, webkitgtk_4_0
 , e2fsprogs
 , libnotify
 , libgit2
 , openssl
 , xdelta
 , file
-, busybox
 , openjdk
 , patchelf
 , fetchFromGitHub
@@ -19,6 +18,7 @@
 , glib-networking
 , wrapGAppsHook3
 , gsettings-desktop-schemas
+, dotnetCorePackages
 }:
 let
   am2r-run = buildFHSEnv {
@@ -27,7 +27,7 @@ let
     multiArch = true;
 
     multiPkgs = pkgs: with pkgs; [
-        stdenv.cc.cc.lib
+        (lib.getLib stdenv.cc.cc)
         xorg.libX11
         xorg.libXext
         xorg.libXrandr
@@ -52,9 +52,10 @@ buildDotnetModule {
     owner = "AM2R-Community-Developers";
     repo = "AM2RLauncher";
     rev = "5d8b7d9b3de68e6215c10b9fd223b7f1d5e40dea";
-    sha256 = "sha256-/nHqo8jh3sOUngbpqdfiQjUWO/8Uzpc5jtW7Ep4q6Wg=";
+    hash = "sha256-/nHqo8jh3sOUngbpqdfiQjUWO/8Uzpc5jtW7Ep4q6Wg=";
   };
 
+  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   projectFile = "AM2RLauncher/AM2RLauncher.Gtk/AM2RLauncher.Gtk.csproj";
 
   nugetDeps = ./deps.nix;
@@ -64,7 +65,7 @@ buildDotnetModule {
     glibc
     gtk3
     libappindicator
-    webkitgtk
+    webkitgtk_4_0
     e2fsprogs
     libnotify
     libgit2

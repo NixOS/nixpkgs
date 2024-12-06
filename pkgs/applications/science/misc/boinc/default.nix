@@ -10,7 +10,7 @@
 , libGL
 , libXmu
 , libXi
-, freeglut
+, libglut
 , libjpeg
 , libtool
 , wxGTK32
@@ -27,14 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "boinc";
-  version = "8.0.3";
+  version = "8.0.4";
 
   src = fetchFromGitHub {
     name = "${pname}-${version}-src";
     owner = "BOINC";
     repo = "boinc";
     rev = "client_release/${lib.versions.majorMinor version}/${version}";
-    hash = "sha256-kkEEJp7NTpHwbo03BGjjJAraFQIJcoNyV+oDsCZlzPQ=";
+    hash = "sha256-dp0zRMIG0PGXhth+Cc8FDhzl5X/4ud3GFCdE7wqPL/c=";
   };
 
   nativeBuildInputs = [ libtool automake autoconf m4 pkg-config ];
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     libGL
     libXmu
     libXi
-    freeglut
+    libglut
     libjpeg
     wxGTK32
     gtk3

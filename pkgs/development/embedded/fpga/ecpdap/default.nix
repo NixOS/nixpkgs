@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libusb1 ]
-    ++ lib.optional stdenv.isDarwin AppKit;
+    ++ lib.optional stdenv.hostPlatform.isDarwin AppKit;
 
   postInstall = ''
     mkdir -p $out/etc/udev/rules.d
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/adamgreig/ecpdap";
     license = licenses.asl20;
-    maintainers = with maintainers; [ expipiplus1 ];
+    maintainers = [];
   };
 }
 

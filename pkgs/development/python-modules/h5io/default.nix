@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Read and write simple Python objects using HDF5";
     homepage = "https://github.com/h5io/h5io";
-    changelog = "https://github.com/h5io/h5io/releases/tag/${src.rev}";
+    changelog = "https://github.com/h5io/h5io/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mbalatsko ];
   };

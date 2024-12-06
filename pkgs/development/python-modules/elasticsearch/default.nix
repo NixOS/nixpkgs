@@ -2,36 +2,36 @@
   lib,
   aiohttp,
   buildPythonPackage,
-  certifi,
   elastic-transport,
   fetchPypi,
+  hatchling,
+  orjson,
+  pyarrow,
   pythonOlder,
   requests,
-  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "elasticsearch";
-  version = "8.13.0";
-  format = "setuptools";
+  version = "8.15.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5Ovrsi0J8O+DnCa2qpjhnM1ja8t38IwStWKwLKzV50Q=";
+    hash = "sha256-QMDTEvit+L3IF5W8FqC1Rt31RMsfkOgpokTkeAxNv9g=";
   };
 
-  nativeBuildInputs = [ elastic-transport ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    urllib3
-    certifi
-  ];
+  dependencies = [ elastic-transport ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     requests = [ requests ];
     async = [ aiohttp ];
+    orjson = [ orjson ];
+    pyarrow = [ pyarrow ];
   };
 
   pythonImportsCheck = [ "elasticsearch" ];

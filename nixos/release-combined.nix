@@ -53,7 +53,6 @@ in rec {
         (onFullSupported "nixos.iso_plasma6")
         (onFullSupported "nixos.iso_gnome")
         (onFullSupported "nixos.manual")
-        (onSystems ["x86_64-linux"] "nixos.ova")
         (onSystems ["aarch64-linux"] "nixos.sd_image")
         (onFullSupported "nixos.tests.acme")
         (onSystems ["x86_64-linux"] "nixos.tests.boot.biosCdrom")
@@ -82,10 +81,9 @@ in rec {
         (onFullSupported "nixos.tests.gitlab")
         (onFullSupported "nixos.tests.gnome")
         (onFullSupported "nixos.tests.gnome-xorg")
-        # FIXME: broken by QEMU 8.2.3 upgrade, reenable when fixed
-        # Upstream issue: https://gitlab.com/qemu-project/qemu/-/issues/2321
-        # (onSystems ["x86_64-linux"] "nixos.tests.hibernate")
+        (onSystems ["x86_64-linux"] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
+        (onSystems ["aarch64-linux"] "nixos.tests.installer.simpleUefiSystemdBoot")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSimple")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvolDefault")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvolEscape")

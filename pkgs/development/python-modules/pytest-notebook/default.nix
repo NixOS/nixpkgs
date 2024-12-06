@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonRelaxDepsHook,
   attrs,
   jsonschema,
   nbclient,
@@ -13,7 +12,7 @@
   black,
   coverage,
   ipykernel,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-regressions,
   pytestCheckHook,
 }:
@@ -32,7 +31,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     flit-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -56,7 +54,7 @@ buildPythonPackage rec {
     black
     coverage
     ipykernel
-    pytest-cov
+    pytest-cov-stub
     pytest-regressions
     pytestCheckHook
   ];

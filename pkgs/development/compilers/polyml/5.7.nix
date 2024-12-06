@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "polyml";
   version = "5.7.1";
 
-  prePatch = lib.optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure.ac --replace stdc++ c++
   '';
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libffi gmp ];
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin autoreconfHook;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin autoreconfHook;
 
   configureFlags = [
     "--enable-shared"
@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     platforms = with platforms; (linux ++ darwin);
     maintainers = with maintainers; [ maggesi ];
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

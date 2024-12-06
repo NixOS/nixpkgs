@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,7 +13,10 @@ let
 in
 {
 
-  meta.maintainers = with maintainers; [ Br1ght0ne happysalada ];
+  meta.maintainers = with maintainers; [
+    Br1ght0ne
+    happysalada
+  ];
   meta.doc = ./meilisearch.md;
 
   ###### interface
@@ -37,7 +45,10 @@ in
     environment = mkOption {
       description = "Defines the running environment of MeiliSearch.";
       default = "development";
-      type = types.enum [ "development" "production" ];
+      type = types.enum [
+        "development"
+        "production"
+      ];
     };
 
     # TODO change this to LoadCredentials once possible
@@ -105,6 +116,10 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    # used to restore dumps
+    environment.systemPackages = [ cfg.package ];
+
     systemd.services.meilisearch = {
       description = "MeiliSearch daemon";
       wantedBy = [ "multi-user.target" ];
@@ -112,7 +127,7 @@ in
       environment = {
         MEILI_DB_PATH = "/var/lib/meilisearch";
         MEILI_HTTP_ADDR = "${cfg.listenAddress}:${toString cfg.listenPort}";
-        MEILI_NO_ANALYTICS = toString cfg.noAnalytics;
+        MEILI_NO_ANALYTICS = boolToString cfg.noAnalytics;
         MEILI_ENV = cfg.environment;
         MEILI_DUMP_DIR = "/var/lib/meilisearch/dumps";
         MEILI_LOG_LEVEL = cfg.logLevel;

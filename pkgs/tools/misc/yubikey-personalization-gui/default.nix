@@ -34,7 +34,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://developers.yubico.com/yubikey-personalization-gui";
     description = "QT based cross-platform utility designed to facilitate reconfiguration of the Yubikey";
     license = licenses.bsd2;

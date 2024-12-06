@@ -34,7 +34,7 @@ buildPythonPackage rec {
   '';
 
   # Darwin sandbox causes most tests to fail
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # Very time sensitive, can fail on over subscribed machines
@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "Disk and file backed persistent cache";
     homepage = "http://www.grantjenks.com/docs/diskcache/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

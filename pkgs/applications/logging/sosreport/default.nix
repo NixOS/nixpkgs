@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "sosreport";
-  version = "4.7.2";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "sosreport";
     repo = "sos";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-67YRmD3kaJbRR7g3w57EwFg7duhcI6zov7gQ4H1MkR8=";
+    sha256 = "sha256-tnc0mAWk3IqQVRLj5oDhJSG4o27Ogv/Ce6oGEZ6AamM=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "Unified tool for collecting system logs and other debug information";
     homepage = "https://github.com/sosreport/sos";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

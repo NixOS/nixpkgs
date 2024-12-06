@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "pythia";
-  version = "8.311";
+  version = "8.312";
 
   src = fetchurl {
     url = "https://pythia.org/download/pythia83/pythia${builtins.replaceStrings ["."] [""] version}.tgz";
-    sha256 = "sha256-J4LV5CnBVDxnN1r+VH/UxMoHIDCd6wCPfbeGJtx9FGQ=";
+    sha256 = "sha256-utmOKWe2hwRsRWjJCR1jCgwxtih0XAIamUq6TR1Q+Oo=";
   };
 
   nativeBuildInputs = [ rsync ]
-    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
   buildInputs = [ boost fastjet hepmc zlib lhapdf ];
 
   configureFlags = [

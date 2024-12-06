@@ -1,6 +1,6 @@
 {
   lib,
-  crossLibcStdenv,
+  stdenvNoLibc,
   stdenvNoCC,
   makeScopeWithSplicing',
   generateSplicesForMkScope,
@@ -37,11 +37,13 @@ makeScopeWithSplicing' {
 
       compatIfNeeded = lib.optional (!stdenvNoCC.hostPlatform.isNetBSD) self.compat;
 
-      stdenvLibcMinimal = crossLibcStdenv.override (old: {
+      stdenvLibcMinimal = stdenvNoLibc.override (old: {
         cc = old.cc.override {
           libc = self.libcMinimal;
+          noLibc = false;
           bintools = old.cc.bintools.override {
             libc = self.libcMinimal;
+            noLibc = false;
             sharedLibraryLoader = null;
           };
         };
@@ -54,7 +56,6 @@ makeScopeWithSplicing' {
 
       compat = self.callPackage ./pkgs/compat/package.nix {
         inherit (buildPackages) coreutils;
-        inherit (buildPackages.darwin) cctools-port;
         inherit (buildNetbsd) makeMinimal;
         inherit (self) install;
       };
@@ -98,7 +99,7 @@ makeScopeWithSplicing' {
         inherit (buildNetbsd) makeMinimal;
       };
 
-      libcMinimal = self.callPackage ./pkgs/libcMinimal.nix {
+      libcMinimal = self.callPackage ./pkgs/libcMinimal/package.nix {
         inherit (self) headers csu;
         inherit (buildNetbsd)
           netbsdSetupHook

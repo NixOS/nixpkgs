@@ -19,6 +19,7 @@
   protego,
   pydispatcher,
   pyopenssl,
+  pytest-xdist,
   pytestCheckHook,
   pythonOlder,
   queuelib,
@@ -47,6 +48,9 @@ buildPythonPackage rec {
     hash = "sha256-EaO1kQ3VSTwEW+r0kSKycOxHNTPwwCVjch1ZBrTU0qQ=";
   };
 
+  pythonRelaxDeps = [
+    "defusedxml"
+  ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -78,6 +82,7 @@ buildPythonPackage rec {
     glibcLocales
     jmespath
     pexpect
+    pytest-xdist
     pytestCheckHook
     sybil
     testfixtures
@@ -112,7 +117,7 @@ buildPythonPackage rec {
       # Test fails on Hydra
       "test_start_requests_laziness"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_xmliter_encoding"
       "test_download"
       "test_reactor_default_twisted_reactor_select"

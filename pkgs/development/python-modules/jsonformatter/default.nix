@@ -1,29 +1,33 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "jsonformatter";
-  version = "0.3.2";
-  format = "setuptools";
+  version = "0.3.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MyColorfulDays";
-    repo = pname;
+    repo = "jsonformatter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oK419J/MIxRT+1j/5Yklj1F+4d3wuMXR8IVqJAMKPNw=";
+    hash = "sha256-A+lsSBrm/64w7yMabmuAbRCLwUUdulGH3jB/DbYJ2QY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jsonformatter" ];
 
   meta = with lib; {
-    description = "jsonformatter is a formatter for python output json log, e.g. output LogStash needed log";
+    description = "Formatter to output JSON log, e.g. output LogStash needed log";
     homepage = "https://github.com/MyColorfulDays/jsonformatter";
+    changelog = "https://github.com/MyColorfulDays/jsonformatter/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ gador ];
   };

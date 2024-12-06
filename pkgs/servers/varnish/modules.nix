@@ -39,11 +39,7 @@ in
 {
   modules15 = common {
     version = "0.15.1";
-    hash = "1lwgjhgr5yw0d17kbqwlaj5pkn70wvaqqjpa1i0n459nx5cf5pqj";
-  };
-  modules23 = common {
-    version = "0.23.0";
-    hash = "sha256-Dd1pLMmRC59iRRpReDeQJ8Sv00ojb8InvaMrb+iRv4I=";
+    hash = "sha256-Et/iWOk2FWJBDOpKjNXm4Nh5i1SU4zVPaID7kh+Uj9M=";
   };
   modules24 = common {
     version = "0.24.0";

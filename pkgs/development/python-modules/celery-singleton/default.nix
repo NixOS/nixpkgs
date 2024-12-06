@@ -8,12 +8,13 @@
   redis,
   pytestCheckHook,
   pytest-celery,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "celery-singleton";
   version = "0.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "steinitzu";
@@ -21,13 +22,6 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-fHlakxxjYIADELZdxIj6rvsZ/+1QfnKvAg3w5cdzvDc=";
   };
-
-  postPatch = ''
-    # Disable coverage reporting in tests
-    substituteInPlace setup.cfg \
-      --replace "--cov" "" \
-      --replace "--no-cov-on-fail" ""
-  '';
 
   patches = [
     # chore(poetry): use poetry-core
@@ -39,9 +33,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     celery
     redis
   ];
@@ -49,6 +43,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     pytest-celery
+    pytest-cov-stub
   ];
 
   pytestFlagsArray = [ "tests" ];

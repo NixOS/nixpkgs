@@ -9,7 +9,7 @@
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch [ coq.version mathcomp.version ] [
-      { cases = [ (range "8.17" "8.19") (isGe "2.1.0") ];       out = "2.2.0"; }
+      { cases = [ (range "8.17" "8.20") (isGe "2.1.0") ];       out = "2.2.0"; }
       { cases = [ (range "8.16" "8.18") "2.1.0" ];              out = "2.1.0"; }
       { cases = [ (range "8.16" "8.18") "2.0.0" ];              out = "2.0.0"; }
       { cases = [ (isGe "8.15") (range "1.15.0" "1.19.0") ];    out = "1.6.0"; }
@@ -41,7 +41,7 @@
     "1.0".sha256   = "1qmbxp1h81cy3imh627pznmng0kvv37k4hrwi2faa101s6bcx55m";
   };
 
-  useDuneifVersion = v: lib.versions.isGe "1.5.3" v || v == "dev";
+  useDuneifVersion = lib.versions.range "1.5.3" "2.2.0";
 
   preConfigure = ''
     patchShebangs configure || true

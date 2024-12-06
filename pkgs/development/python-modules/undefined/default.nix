@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "Ever needed a global object that act as None but not quite?";
     homepage = "https://github.com/Carreau/undefined";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

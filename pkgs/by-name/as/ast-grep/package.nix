@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ast-grep";
-  version = "0.23.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
     rev = version;
-    hash = "sha256-QW3ZwALvfSTcvXuH/ploqUD1UJ5fGySIAc3N/TMlB4g=";
+    hash = "sha256-Fk46F1EBWSVFAUUDAtXcwq9iCSATW1CV/ul3NEa1YqA=";
   };
 
-  cargoHash = "sha256-MUdHDP+1KQBXy2itOhW6pDuOTwIwXHy4oDfifDRdM94=";
+  cargoHash = "sha256-5yJ248BSp9w/r1chQqIucxzfvFGy+jumSquF9gVmSUM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config.toml
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd sg \
       --bash <($out/bin/sg completions bash) \
       --fish <($out/bin/sg completions fish) \

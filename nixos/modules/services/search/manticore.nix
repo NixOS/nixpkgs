@@ -8,7 +8,7 @@ let
   format = pkgs.formats.json { };
 
   toSphinx = {
-    mkKeyValue    ? mkKeyValueDefault {} "=",
+    mkKeyValue    ? generators.mkKeyValueDefault {} "=",
     listsAsDuplicateKeys ? true
   }: attrsOfAttrs:
     let

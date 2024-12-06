@@ -30,6 +30,6 @@ buildPythonPackage rec {
       some non-UTF8 locale settings.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

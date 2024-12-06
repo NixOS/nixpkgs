@@ -1,7 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # dependencies
   deprecated,
   memestra,
   python-lsp-server,
@@ -10,14 +12,16 @@
 buildPythonPackage rec {
   pname = "pyls-memestra";
   version = "0.0.16";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zMVDd2uB4znw38z3yb0Nt7qQH5dGHTbQBIZO/qo1/t8=";
+  src = fetchFromGitHub {
+    owner = "QuantStack";
+    repo = "pyls-memestra";
+    rev = "refs/tags/${version}";
+    hash = "sha256-C1d2BibjpoZCPSy39PkdcLiLIwZZG+XTDWXVjTT1Bws=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     deprecated
     memestra
     python-lsp-server
@@ -28,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyls_memestra" ];
 
-  meta = with lib; {
+  meta = {
     description = "Memestra plugin for the Python Language Server";
     homepage = "https://github.com/QuantStack/pyls-memestra";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

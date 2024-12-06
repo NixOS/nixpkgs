@@ -1,8 +1,8 @@
 { composeAndroidPackages, stdenv, lib, runtimeShell }:
 { name
 , app ? null
-, platformVersion ? "33"
-, abiVersion ? "armeabi-v7a"
+, platformVersion ? "35"
+, abiVersion ? "x86"
 , systemImageType ? "default"
 , enableGPU ? false # Enable GPU acceleration. It's deprecated, instead use `configOptions` below.
 , configOptions ? (

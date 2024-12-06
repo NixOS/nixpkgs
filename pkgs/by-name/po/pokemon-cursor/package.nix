@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "ful1e5";
     repo = "pokemon-cursor";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-EL6Ztbzjm1YuQP+8ZbrhbuBXn+GFiJGG0iGNWzU/rBY=";
+    hash = "sha256-EL6Ztbzjm1YuQP+8ZbrhbuBXn+GFiJGG0iGNWzU/rBY=";
   };
 
   nativeBuildInputs = [

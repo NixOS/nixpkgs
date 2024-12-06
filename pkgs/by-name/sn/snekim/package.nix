@@ -1,4 +1,4 @@
-{ lib, buildNimPackage, fetchFromGitea, raylib }:
+{ lib, buildNimPackage, fetchFromGitea }:
 
 buildNimPackage (finalAttrs: {
   pname = "snekim";
@@ -9,7 +9,7 @@ buildNimPackage (finalAttrs: {
     owner = "annaaurora";
     repo = "snekim";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Qgvq4CkGvNppYFpITCCifOHtVQYRQJPEK3rTJXQkTvI=";
+    hash = "sha256-Qgvq4CkGvNppYFpITCCifOHtVQYRQJPEK3rTJXQkTvI=";
   };
 
   strictDeps = true;

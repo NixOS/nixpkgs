@@ -21,7 +21,7 @@ let
       removeReferencesTo
     ];
     postFixup = (oldAttrs.postFixup or "") + ''
-      remove-references-to -t ${dotnet-runtime} "$out/bin/Application"
+      remove-references-to -t ${dotnet-runtime.unwrapped} "$out/bin/Application"
     '';
   });
 
@@ -46,7 +46,7 @@ in
   use-dotnet-root-env = testers.testEqualContents {
     assertion = "buildDotnetModule uses DOTNET_ROOT from environment in wrapper";
     expected = runtimeVersionFile;
-    actual = runCommand "use-dotnet-from-env-root-test" { env.DOTNET_ROOT = dotnet-runtime; } ''
+    actual = runCommand "use-dotnet-from-env-root-test" { env.DOTNET_ROOT = "${dotnet-runtime.unwrapped}/share/dotnet"; } ''
       ${appWithoutFallback}/bin/Application >"$out"
     '';
   };
@@ -54,7 +54,7 @@ in
     assertion = "buildDotnetModule uses DOTNET_ROOT from dotnet in PATH in wrapper";
     expected = runtimeVersionFile;
     actual = runCommand "use-dotnet-from-env-path-test" { dotnetRuntime = dotnet-runtime; } ''
-      PATH=$dotnetRuntime''${PATH+:}$PATH ${appWithoutFallback}/bin/Application >"$out"
+      PATH=$dotnetRuntime/bin''${PATH+:}$PATH ${appWithoutFallback}/bin/Application >"$out"
     '';
   };
 }

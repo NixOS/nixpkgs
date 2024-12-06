@@ -8,29 +8,29 @@ let
   };
 
   mkServer = args: callPackage (import ./server.nix (args)) { };
-in {
-
+in
+{
   guiStable = mkGui {
     channel = "stable";
-    version = "2.2.47";
-    hash = "sha256-6UXQTPkRHbtNX6RzWMakCsO9YpkFlWliNnm+mZ4wuZA=";
+    version = "2.2.50";
+    hash = "sha256-A6aLp/fN/0u5VIOX6d0QrZ2zWuNPvhI1xfw7cKU9jRA=";
   };
 
   guiPreview = mkGui {
     channel = "stable";
-    version = "2.2.47";
-    hash = "sha256-6UXQTPkRHbtNX6RzWMakCsO9YpkFlWliNnm+mZ4wuZA=";
+    version = "2.2.50";
+    hash = "sha256-A6aLp/fN/0u5VIOX6d0QrZ2zWuNPvhI1xfw7cKU9jRA=";
   };
 
   serverStable = mkServer {
     channel = "stable";
-    version = "2.2.47";
-    hash = "sha256-iZ/1qACPLe7r1cZMhJbFRjVt/FlVgadBgp9tJwvYSi0=";
+    version = "2.2.50";
+    hash = "sha256-m5Od3IPn31JaFOtilKh79aISH4lRd+KatSLRqsF8n4Y=";
   };
 
   serverPreview = mkServer {
     channel = "stable";
-    version = "2.2.47";
-    hash = "sha256-iZ/1qACPLe7r1cZMhJbFRjVt/FlVgadBgp9tJwvYSi0=";
+    version = "2.2.50";
+    hash = "sha256-m5Od3IPn31JaFOtilKh79aISH4lRd+KatSLRqsF8n4Y=";
   };
 }

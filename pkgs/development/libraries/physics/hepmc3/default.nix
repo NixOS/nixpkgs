@@ -11,7 +11,7 @@ let
   pythonVersion = with lib.versions; "${major python.version}${minor python.version}";
   withPython = python != null;
   # ensure that root is built with the same python interpreter, as it links against numpy
-  root_py = if withPython then root.override { inherit python; } else root;
+  root_py = if withPython then root.override { python3 = python; } else root;
 in
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withPython python;
 
   # error: invalid version number in 'MACOSX_DEPLOYMENT_TARGET=11.0'
-  preConfigure = lib.optionalString (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+  preConfigure = lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
 
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace "$out"/bin/HepMC3-config \
-      --replace 'greadlink' '${coreutils}/bin/readlink' \
-      --replace 'readlink' '${coreutils}/bin/readlink'
+      --replace-fail '$(greadlink' '$(${coreutils}/bin/readlink' \
+      --replace-fail '$(readlink' '$(${coreutils}/bin/readlink'
   '';
 
   pythonImportsCheck = [ "pyHepMC3" ];

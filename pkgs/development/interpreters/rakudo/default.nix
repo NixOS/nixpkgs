@@ -2,13 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rakudo";
-  version = "2024.01";
+  version = "2024.06";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "rakudo";
     repo = "rakudo";
     rev = version;
-    hash = "sha256-E4YwLds0eoh8PxcACntynQKeg8lRIsEy+JOiv8nF2t0=";
+    hash = "sha256-6XWfM7KJB+lMf/YFLaQ71DMa8owZtjjuMEyWY++CJnM=";
     fetchSubmodules = true;
   };
 
@@ -31,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://rakudo.org";
     license = licenses.artistic2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
+    maintainers = with maintainers; [ thoughtpolice sgo ];
   };
 }

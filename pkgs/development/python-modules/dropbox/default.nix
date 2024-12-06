@@ -12,7 +12,6 @@
   pytestCheckHook,
   sphinxHook,
   sphinx-rtd-theme,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -53,14 +52,11 @@ buildPythonPackage rec {
       --replace "'pytest-runner==5.2.0'," ""
   '';
 
-  doCheck = true;
-
   pythonImportsCheck = [ "dropbox" ];
 
   nativeBuildInputs = [
     sphinxHook
     sphinx-rtd-theme
-    pythonRelaxDepsHook
   ];
 
   # Version 12.0.0 re-introduced Python 2 support and set some very restrictive version bounds

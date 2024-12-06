@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://notionwm.net";
     license = lib.licenses.lgpl21;
     mainProgram = "notion";
-    maintainers = with lib.maintainers; [ jfb AndersonTorres raboof ];
+    maintainers = with lib.maintainers; [ jfb raboof ];
     platforms = lib.platforms.linux;
   };
 })

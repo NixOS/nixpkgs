@@ -45,6 +45,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool for checking tool output inspired by LLVM's FileCheck";
     homepage = "https://github.com/stp/OutputCheck";
+    changelog = "https://github.com/stp/OutputCheck/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fsagbuya ];
     mainProgram = "OutputCheck";

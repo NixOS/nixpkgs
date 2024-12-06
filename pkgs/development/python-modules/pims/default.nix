@@ -57,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/soft-matter/pims";
     changelog = "https://github.com/soft-matter/pims/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

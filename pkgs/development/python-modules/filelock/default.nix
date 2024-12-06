@@ -4,6 +4,7 @@
   fetchPypi,
   hatch-vcs,
   hatchling,
+  pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
@@ -11,24 +12,32 @@
 
 buildPythonPackage rec {
   pname = "filelock";
-  version = "3.13.4";
-  format = "pyproject";
+  version = "3.16.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0T9GZhi/3nK9LBglXiafclQsbnDnusg6AjLWscxcjPQ=";
+    hash = "sha256-wkn7/NXbR+Xi1tYhmOVlR17mXkgx4lYcjjE/p+uWFDU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytest-mock
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "filelock" ];
+
+  disabledTestPaths = [
+    # Circular dependency with virtualenv
+    "tests/test_virtualenv.py"
   ];
 
   meta = with lib; {

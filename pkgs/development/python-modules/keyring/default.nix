@@ -2,39 +2,48 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
   installShellFiles,
   setuptools-scm,
   shtab,
   importlib-metadata,
-  dbus-python,
   jaraco-classes,
+  jaraco-context,
+  jaraco-functools,
   jeepney,
   secretstorage,
+  pyfakefs,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "24.3.1";
+  version = "25.4.1";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wzJ7b/r8DovvvbWXys20ko/+XBIS92RfGG5tmVeomNs=";
+  src = fetchFromGitHub {
+    owner = "jaraco";
+    repo = "keyring";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5MK7f6/e8ZJ7azm5WX8T2+/6R3P3Y8XaN7jze2MgiJA=";
   };
+
+  build-system = [ setuptools-scm ];
 
   nativeBuildInputs = [
     installShellFiles
-    setuptools-scm
     shtab
   ];
 
-  propagatedBuildInputs =
-    [ jaraco-classes ]
-    ++ lib.optionals stdenv.isLinux [
+  dependencies =
+    [
+      jaraco-classes
+      jaraco-context
+      jaraco-functools
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       jeepney
       secretstorage
     ]
@@ -51,12 +60,15 @@ buildPythonPackage rec {
     "keyring.backend"
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pyfakefs
+    pytestCheckHook
+  ];
 
   disabledTestPaths =
     [ "tests/backends/test_macOS.py" ]
     # These tests fail when sandboxing is enabled because they are unable to get a password from keychain.
-    ++ lib.optional stdenv.isDarwin "tests/test_multiprocess.py";
+    ++ lib.optional stdenv.hostPlatform.isDarwin "tests/test_multiprocess.py";
 
   meta = with lib; {
     description = "Store and access your passwords safely";

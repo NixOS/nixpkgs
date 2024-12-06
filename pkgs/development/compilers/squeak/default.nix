@@ -135,6 +135,9 @@ in stdenv.mkDerivation {
     ./squeak-configure-version.patch
     ./squeak-plugins-discovery.patch
     ./squeak-squeaksh-nixpkgs.patch
+    # it looks like -export-dynamic is being passed erroneously to the compiler,
+    # as it is a linker flag and at this step the build is just compiling notice the -c flag.
+    ./cc-no-export-dynamic.patch
   ];
 
   postPatch = ''

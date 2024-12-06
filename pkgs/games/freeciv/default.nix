@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "freeciv";
-  version = "3.1.1";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "freeciv";
     repo = "freeciv";
     rev = "R${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-ImjXDJ1Bq85OfUhxGe184cd5eu4a8BrZh+YYhzUdrLo=";
+    hash = "sha256-z4BmkAjKgK0rf4fCMpAhI++HCKFrvpwKmcUvdPSF6Zw=";
   };
 
   postPatch = ''
@@ -79,10 +79,10 @@ stdenv.mkDerivation rec {
       to the space age...
     '';
     homepage = "http://www.freeciv.org"; # http only
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ pierron ];
     platforms = lib.platforms.unix;
     hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
-    broken = qtClient && stdenv.isDarwin; # Missing Qt5 development files
+    broken = qtClient && stdenv.hostPlatform.isDarwin; # Missing Qt5 development files
   };
 }

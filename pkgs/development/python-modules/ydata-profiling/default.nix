@@ -1,50 +1,59 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, dacite
-, htmlmin
-, imagehash
-, jinja2
-, matplotlib
-, multimethod
-, numba
-, numpy
-, pandas
-, phik
-, pyarrow
-, pydantic
-, pyyaml
-, requests
-, scipy
-, seaborn
-, statsmodels
-, tqdm
-, typeguard
-, visions
-, wordcloud
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  dacite,
+  htmlmin,
+  imagehash,
+  jinja2,
+  matplotlib,
+  multimethod,
+  numba,
+  numpy,
+  pandas,
+  phik,
+  pyarrow,
+  pydantic,
+  pyyaml,
+  requests,
+  scipy,
+  setuptools,
+  seaborn,
+  statsmodels,
+  tqdm,
+  typeguard,
+  visions,
+  wordcloud,
 }:
 
 buildPythonPackage rec {
   pname = "ydata-profiling";
-  version = "4.8.3";
+  version = "4.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ydataai";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-tMwhoVnn65EvZK5NBvh/G36W8tH7I9qaL+NTK3IZVdI=";
+    repo = "ydata-profiling";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-G1qW6HcJi176nfxOBGBK2tLyY/Nnz9STYpZWluWvhP0=";
   };
 
   preBuild = ''
     echo ${version} > VERSION
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "imagehash"
+    "scipy"
+  ];
+
+  dependencies = [
     dacite
     htmlmin
     imagehash
@@ -68,9 +77,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     pyarrow
+    pytestCheckHook
   ];
+
   disabledTestPaths = [
     # needs Spark:
     "tests/backends/spark_backend"
@@ -80,6 +90,7 @@ buildPythonPackage rec {
     "tests/unit/test_dataset_schema.py"
     "tests/unit/test_modular.py"
   ];
+
   disabledTests = [
     # try to download data:
     "test_decorator"
@@ -88,9 +99,7 @@ buildPythonPackage rec {
     "test_urls"
   ];
 
-  pythonImportsCheck = [
-    "ydata_profiling"
-  ];
+  pythonImportsCheck = [ "ydata_profiling" ];
 
   meta = with lib; {
     description = "Create HTML profiling reports from Pandas DataFrames";

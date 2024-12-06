@@ -35,9 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [ ./3.x-nix_share_path.patch ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
+
   enableParallelBuilding = true;
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
   checkPhase = ''
     NO_AT_BRIDGE=1 \
     XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \

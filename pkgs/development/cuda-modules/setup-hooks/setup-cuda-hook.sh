@@ -54,7 +54,8 @@ setupCUDAToolkit_ROOT() {
         fi
     done
 
-    export cmakeFlags+=" -DCUDAToolkit_INCLUDE_DIR=$CUDAToolkit_INCLUDE_DIR -DCUDAToolkit_ROOT=$CUDAToolkit_ROOT"
+    appendToVar cmakeFlags "-DCUDAToolkit_INCLUDE_DIR=$CUDAToolkit_INCLUDE_DIR"
+    appendToVar cmakeFlags "-DCUDAToolkit_ROOT=$CUDAToolkit_ROOT"
 }
 preConfigureHooks+=(setupCUDAToolkit_ROOT)
 
@@ -72,8 +73,8 @@ setupCUDAToolkitCompilers() {
     # https://cmake.org/cmake/help/latest/envvar/CUDAHOSTCXX.html
     # https://cmake.org/cmake/help/latest/variable/CMAKE_CUDA_HOST_COMPILER.html
 
-    export cmakeFlags+=" -DCUDA_HOST_COMPILER=@ccFullPath@"
-    export cmakeFlags+=" -DCMAKE_CUDA_HOST_COMPILER=@ccFullPath@"
+    appendToVar cmakeFlags "-DCUDA_HOST_COMPILER=@ccFullPath@"
+    appendToVar cmakeFlags "-DCMAKE_CUDA_HOST_COMPILER=@ccFullPath@"
 
     # For non-CMake projects:
     # We prepend --compiler-bindir to nvcc flags.
@@ -85,7 +86,7 @@ setupCUDAToolkitCompilers() {
       export CUDAHOSTCXX="@ccFullPath@";
     fi
 
-    export NVCC_PREPEND_FLAGS+=" --compiler-bindir=@ccRoot@/bin"
+    appendToVar NVCC_PREPEND_FLAGS "--compiler-bindir=@ccRoot@/bin"
 
     # NOTE: We set -Xfatbin=-compress-all, which reduces the size of the compiled
     #   binaries. If binaries grow over 2GB, they will fail to link. This is a problem for us, as
@@ -94,7 +95,7 @@ setupCUDAToolkitCompilers() {
     #
     # @SomeoneSerge: original comment was made by @ConnorBaker in .../cudatoolkit/common.nix
     if [[ -z "${dontCompressFatbin-}" ]]; then
-        export NVCC_PREPEND_FLAGS+=" -Xfatbin=-compress-all"
+        appendToVar NVCC_PREPEND_FLAGS "-Xfatbin=-compress-all"
     fi
 }
 preConfigureHooks+=(setupCUDAToolkitCompilers)

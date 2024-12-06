@@ -7,6 +7,7 @@
 , fontconfig
 , freetype
 , glib
+, libdrm
 , libGLU
 , libglvnd
 , libICE
@@ -17,19 +18,20 @@
 , libXi
 , libxkbcommon
 , ncurses
+, wayland
 , zlib
 }:
 
 let
-  buildNum = "2023-12-04-1282";
+  buildNum = "2024-09-26-1411";
 in
 stdenv.mkDerivation {
   pname = "rgp";
-  version = "2.0";
+  version = "2.3";
 
   src = fetchurl {
     url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
-    hash = "sha256-gGkINq0tmOCkZJMxtoURHikqEGXGuRAP6Y6PEOLqmI0=";
+    hash = "sha256-mgIFDStgat4E+67TaSLrcwgWTu7zLf7Nkn6zBlgeVcQ=";
   };
 
   nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
@@ -39,6 +41,7 @@ stdenv.mkDerivation {
     fontconfig
     freetype
     glib
+    libdrm
     libGLU
     libglvnd
     libICE
@@ -49,6 +52,7 @@ stdenv.mkDerivation {
     libXi
     libxkbcommon
     ncurses
+    wayland
     zlib
   ];
 
@@ -63,13 +67,11 @@ stdenv.mkDerivation {
       # makeWrapper is needed so that executables are started from the opt
       # directory, where qt.conf and other tools are.
       # Unset Qt theme, it does not work if the nixos Qt version is different from the packaged one.
-      # The packaged Qt version only supports X11, so enforce that.
       makeWrapper \
         $out/opt/rgp/$prog \
         $out/bin/$prog \
         --unset QT_QPA_PLATFORMTHEME \
         --unset QT_STYLE_OVERRIDE \
-        --set QT_QPA_PLATFORM xcb \
         --prefix LD_LIBRARY_PATH : $out/opt/rgp/lib
     done
   '';

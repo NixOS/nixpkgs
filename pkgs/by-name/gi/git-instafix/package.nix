@@ -1,7 +1,6 @@
 { git
 , lib
 , libgit2
-, makeWrapper
 , rustPlatform
 , stdenv
 , fetchFromGitHub
@@ -13,7 +12,7 @@ let
     maintainers
     ;
 
-  version = "0.2.5";
+  version = "0.2.7";
 in
 rustPlatform.buildRustPackage {
   pname = "git-instafix";
@@ -23,10 +22,10 @@ rustPlatform.buildRustPackage {
     owner = "quodlibetor";
     repo = "git-instafix";
     rev = "v${version}";
-    hash = "sha256-tizA5BLZZ/9gfHv2X8is7EJD1reMvfA7c6JETUoUgvI=";
+    hash = "sha256-Uz+KQ8cQT3v97EtmbAv2II30dUrFD0hMo/GhnqcdBOs=";
   };
 
-  cargoHash = "sha256-kIIwswj8mfpY382O0bdMoSk6+T+614l2QCeRgz3ZxEY=";
+  cargoHash = "sha256-12UkZyyu4KH3dcCadr8UhK8DTtVjcsjYzt7kiNLpUqU=";
 
   buildInputs = [ libgit2 ];
   nativeCheckInputs = [ git ];
@@ -36,8 +35,8 @@ rustPlatform.buildRustPackage {
     mainProgram = "git-instafix";
     homepage = "https://github.com/quodlibetor/git-instafix";
     license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ mightyiam ];
+    maintainers = with maintainers; [ mightyiam quodlibetor ];
     changelog = "https://github.com/quodlibetor/git-instafix/releases/tag/v${version}";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

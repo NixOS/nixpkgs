@@ -1,6 +1,4 @@
 {
-  stdenv,
-  pkgs,
   lib,
   buildPythonPackage,
   fetchFromGitHub,

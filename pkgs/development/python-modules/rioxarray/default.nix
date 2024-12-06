@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "rioxarray";
-  version = "0.15.5";
+  version = "0.18.1";
   pyproject = true;
   disabled = pythonOlder "3.10";
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "corteva";
     repo = "rioxarray";
     rev = "refs/tags/${version}";
-    hash = "sha256-bumFZQktgUqo2lyoLtDXkh6Vv5oS/wobqYpvNYy7La0=";
+    hash = "sha256-0YsGu8JuYrb6lWuC3RQ4jCkulxxFpnd0eaRajCwtFHo=";
   };
 
   build-system = [ setuptools ];
@@ -49,11 +49,13 @@ buildPythonPackage rec {
 
   disabledTests =
     [ "test_clip_geojson__no_drop" ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-      # numerical errors
-      "test_clip_geojson"
-      "test_open_rasterio_mask_chunk_clip"
-    ];
+    ++ lib.optionals
+      (stdenv.hostPlatform.system == "aarch64-linux" || stdenv.hostPlatform.system == "aarch64-darwin")
+      [
+        # numerical errors
+        "test_clip_geojson"
+        "test_open_rasterio_mask_chunk_clip"
+      ];
 
   pythonImportsCheck = [ "rioxarray" ];
 

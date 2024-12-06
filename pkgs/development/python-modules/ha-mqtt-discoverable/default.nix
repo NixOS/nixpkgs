@@ -8,13 +8,12 @@
   pyaml,
   pydantic,
   pythonOlder,
-  pythonRelaxDepsHook,
   thelogrus,
 }:
 
 buildPythonPackage rec {
   pname = "ha-mqtt-discoverable";
-  version = "0.14.0";
+  version = "0.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,14 +22,13 @@ buildPythonPackage rec {
     owner = "unixorn";
     repo = "ha-mqtt-discoverable";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vL4EzeU+8nUPyLR22MJtLhknWF4DWMo49EKvkIqIWhA=";
+    hash = "sha256-IdyrcqRX5YXS6tx5qP7vOnAJpvy5sOsCwFpWMdyYaeI=";
   };
 
   pythonRelaxDeps = [ "pyaml" ];
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     gitlike-commands

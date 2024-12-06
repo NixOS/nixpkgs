@@ -12,19 +12,19 @@
   nibabel,
   bids-validator,
   sqlalchemy,
+  universal-pathlib,
   pytestCheckHook,
   versioneer,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "pybids";
-  version = "0.16.5";
+  version = "0.17.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5MAp5CYlOh1WxsXOE/LHVNm/K4VGFaLKWaaKYwKjQIM=";
+    hash = "sha256-4MpFXGh2uOHCjMa213CF6QzKCyEQNiN1moyNolEcySQ=";
   };
 
   pythonRelaxDeps = [
@@ -32,13 +32,12 @@ buildPythonPackage rec {
     "sqlalchemy"
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  build-system = [
     setuptools
     versioneer
   ] ++ versioneer.optional-dependencies.toml;
 
-  propagatedBuildInputs = [
+  dependencies = [
     bids-validator
     click
     formulaic
@@ -48,6 +47,7 @@ buildPythonPackage rec {
     pandas
     scipy
     sqlalchemy
+    universal-pathlib
   ];
 
   pythonImportsCheck = [ "bids" ];
@@ -66,12 +66,12 @@ buildPythonPackage rec {
     "test_to_df"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python tools for querying and manipulating BIDS datasets";
     homepage = "https://github.com/bids-standard/pybids";
     changelog = "https://github.com/bids-standard/pybids/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wegank ];
     mainProgram = "pybids";
   };
 }

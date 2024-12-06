@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Utilities for working with inspect.Signature objects";
     homepage = "https://sigtools.readthedocs.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

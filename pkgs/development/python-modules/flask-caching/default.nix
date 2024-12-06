@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "flask-caching";
-  version = "2.1.0";
+  version = "2.3.0";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "Flask-Caching";
+    pname = "flask_caching";
     inherit version;
-    hash = "sha256-t1AMFFE1g2qVLj3jqAiB2WVOMnopyFLJJlYH9cRJI1w=";
+    hash = "sha256-1+TKZKM7Sf6zOfzdF+a6JfXgEWjPiF5TeQ6IX4Ok0s8=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ buildPythonPackage rec {
       "Redis"
       "Memcache"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # ignore flaky test
       "test_cache_timeout_dynamic"
       "test_cached_view_class"
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     description = "Caching extension for Flask";
     homepage = "https://github.com/pallets-eco/flask-caching";
     changelog = "https://github.com/pallets-eco/flask-caching/blob/v${version}/CHANGES.rst";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.bsd3;
   };
 }

@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pyee";
-  version = "11.1.0";
+  version = "12.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tTr5j2mQyBDt2bVrh3kQIaj1T9E9tO3RFCQ41EuiJj8=";
+    hash = "sha256-u8M8CeL/gn90GR4+W7xr59oC9ie37DDYb1zhpvskJKM=";
   };
 
   nativeBuildInputs = [

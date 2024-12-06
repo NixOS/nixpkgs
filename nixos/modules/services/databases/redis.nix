@@ -64,14 +64,7 @@ in {
       servers = mkOption {
         type = with types; attrsOf (submodule ({ config, name, ... }: {
           options = {
-            enable = mkEnableOption ''
-              Redis server.
-
-              Note that the NixOS module for Redis disables kernel support
-              for Transparent Huge Pages (THP),
-              because this features causes major performance problems for Redis,
-              e.g. (https://redis.io/topics/latency)
-            '';
+            enable = mkEnableOption "Redis server";
 
             user = mkOption {
               type = types.str;
@@ -79,7 +72,28 @@ in {
               defaultText = literalExpression ''
                 if name == "" then "redis" else "redis-''${name}"
               '';
-              description = "The username and groupname for redis-server.";
+              description = ''
+                User account under which this instance of redis-server runs.
+
+                ::: {.note}
+                If left as the default value this user will automatically be
+                created on system activation, otherwise you are responsible for
+                ensuring the user exists before the redis service starts.
+              '';
+            };
+
+            group = mkOption {
+              type = types.str;
+              default = config.user;
+              defaultText = literalExpression "config.user";
+              description = ''
+                Group account under which this instance of redis-server runs.
+
+                ::: {.note}
+                If left as the default value this group will automatically be
+                created on system activation, otherwise you are responsible for
+                ensuring the group exists before the redis service starts.
+              '';
             };
 
             port = mkOption {
@@ -344,7 +358,7 @@ in {
           redisConfStore = redisConfig conf.settings;
         in ''
           touch "${redisConfVar}" "${redisConfRun}"
-          chown '${conf.user}' "${redisConfVar}" "${redisConfRun}"
+          chown '${conf.user}':'${conf.group}' "${redisConfVar}" "${redisConfRun}"
           chmod 0600 "${redisConfVar}" "${redisConfRun}"
           if [ ! -s ${redisConfVar} ]; then
             echo 'include "${redisConfRun}"' > "${redisConfVar}"
@@ -360,7 +374,7 @@ in {
         Type = "notify";
         # User and group
         User = conf.user;
-        Group = conf.user;
+        Group = conf.group;
         # Runtime directory and mode
         RuntimeDirectory = redisName name;
         RuntimeDirectoryMode = "0750";

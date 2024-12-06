@@ -1,6 +1,5 @@
 { lib
 , callPackage
-, callPackages
 , config
 }:
 let
@@ -65,14 +64,15 @@ in rec {
   gnome44Extensions = mapUuidNames (produceExtensionsList "44");
   gnome45Extensions = mapUuidNames (produceExtensionsList "45");
   gnome46Extensions = mapUuidNames (produceExtensionsList "46");
+  gnome47Extensions = mapUuidNames (produceExtensionsList "47");
 
   # Keep the last three versions in here
-  gnomeExtensions = lib.trivial.pipe (gnome44Extensions // gnome45Extensions // gnome46Extensions) [
+  gnomeExtensions = lib.trivial.pipe (gnome45Extensions // gnome46Extensions // gnome47Extensions) [
     (v: builtins.removeAttrs v [ "__attrsFailEvaluation" ])
     # Apply some custom patches for automatically packaged extensions
     (callPackage ./extensionOverrides.nix {})
     # Add all manually packaged extensions
-    (extensions: extensions // (callPackages ./manuallyPackaged.nix {}))
+    (extensions: extensions // (import ./manuallyPackaged.nix { inherit callPackage; }))
     # Map the extension UUIDs to readable names
     (lib.attrValues)
     (mapReadableNames)

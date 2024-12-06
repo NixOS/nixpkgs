@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "2024.3.1";
+  version = "2024.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-G4vI29Zee2D1SHN49u7/4d5ZqnLKqe/Kba1quHdAVIc=";
+    hash = "sha256-ZJNwWrtQN01reZT5YW0nrb3YohnIY1EAvcKGOC79kfU=";
   };
 
   postPatch = ''

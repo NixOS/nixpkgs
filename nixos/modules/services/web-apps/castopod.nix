@@ -6,7 +6,7 @@ let
   user = "castopod";
 
   # https://docs.castopod.org/getting-started/install.html#requirements
-  phpPackage = pkgs.php.withExtensions ({ enabled, all }: with all; [
+  phpPackage = pkgs.php82.withExtensions ({ enabled, all }: with all; [
     intl
     curl
     mbstring

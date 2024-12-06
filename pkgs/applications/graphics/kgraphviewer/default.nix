@@ -31,7 +31,7 @@ mkDerivation rec {
     description = "Graphviz dot graph viewer for KDE";
     mainProgram = "kgraphviewer";
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms   = platforms.linux;
   };
 }

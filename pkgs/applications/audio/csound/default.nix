@@ -31,21 +31,21 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [ "-DBUILD_CSOUND_AC=0" ] # fails to find Score.hpp
-    ++ lib.optional stdenv.isDarwin "-DCS_FRAMEWORK_DEST=${placeholder "out"}/lib"
+    ++ lib.optional stdenv.hostPlatform.isDarwin "-DCS_FRAMEWORK_DEST=${placeholder "out"}/lib"
     # Ignore gettext in CMAKE_PREFIX_PATH on cross to prevent find_program picking up the wrong gettext
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DCMAKE_IGNORE_PATH=${lib.getBin gettext}/bin";
 
   nativeBuildInputs = [ cmake flex bison gettext ];
   buildInputs = [ libsndfile libsamplerate boost ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Accelerate AudioUnit CoreAudio CoreMIDI portaudio
-    ] ++ lib.optionals stdenv.isLinux (builtins.filter (optional: optional != null) [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux (builtins.filter (optional: optional != null) [
       alsa-lib libpulseaudio libjack2
       liblo ladspa-sdk fluidsynth eigen
       curl tcltk fltk
     ]);
 
-  postInstall = lib.optional stdenv.isDarwin ''
+  postInstall = lib.optional stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Library/Frameworks
     ln -s $out/lib/CsoundLib64.framework $out/Library/Frameworks
   '';

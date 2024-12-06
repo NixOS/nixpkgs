@@ -1,15 +1,23 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  versionCheckHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "await";
-  version = "0.999";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "slavaGanzin";
     repo = "await";
-    rev = "v${version}";
-    hash = "sha256-z178TKA0x6UnpBQaA8dig2FLeJKGxPndfvwtmylAD90=";
+    rev = version;
+    hash = "sha256-Yrit1WdWIfjwqbjvyjrPT3EqSSkooYX+uoOstbxy//I=";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildPhase = ''
     runHook preBuild
@@ -23,9 +31,16 @@ stdenv.mkDerivation rec {
     install -Dm755 await -t $out/bin
     install -Dm444 LICENSE -t $out/share/licenses/await
     install -Dm444 README.md -t $out/share/doc/await
+    installShellCompletion --cmd await autocompletions/await.{bash,fish,zsh}
 
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = [ "--version" ];
 
   meta = with lib; {
     description = "Small binary that runs a list of commands in parallel and awaits termination";

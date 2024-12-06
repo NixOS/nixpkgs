@@ -1,5 +1,5 @@
-{ lib, buildDunePackage
-, astring, digestif, fmt, jsonm, logs, ocaml_lwt, ocamlgraph, uri
+{ buildDunePackage
+, astring, digestif, fmt, jsonm, logs, ocamlgraph, uri
 , repr, ppx_irmin, bheap, uutf, mtime, lwt, optint
 , vector, hex, alcotest, qcheck-alcotest
 }:

@@ -4,9 +4,10 @@
   deprecation,
   fetchFromGitHub,
   ghostscript,
+  hatch-vcs,
+  hatchling,
   hypothesis,
   img2pdf,
-  importlib-resources,
   jbig2enc,
   packaging,
   pdfminer-six,
@@ -20,17 +21,15 @@
   pythonOlder,
   rich,
   reportlab,
-  setuptools-scm,
   substituteAll,
   tesseract,
-  tqdm,
   unpaper,
   installShellFiles,
 }:
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "16.3.1";
+  version = "16.6.2";
 
   disabled = pythonOlder "3.10";
 
@@ -46,7 +45,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-AGBLxN4XVP298a2DS14nfpDFbYTCvX3gx/BNVAj0iH8=";
+    hash = "sha256-065PeCsNfAvZTLyWz3toTrE/e944mzfuwRQvKXxdnd0=";
   };
 
   patches = [
@@ -61,7 +60,10 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -97,7 +97,7 @@ postPatchMkspecs() {
     fi
 }
 if [ -z "${dontPatchMkspecs-}" ]; then
-    postPhases="${postPhases-}${postPhases:+ }postPatchMkspecs"
+    appendToVar postPhases postPatchMkspecs
 fi
 
 qtPreHook() {
@@ -107,6 +107,6 @@ qtPreHook() {
         exit 1
     fi
 }
-prePhases+=" qtPreHook"
+appendToVar prePhases qtPreHook
 
 fi

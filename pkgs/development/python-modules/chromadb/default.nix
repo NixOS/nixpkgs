@@ -15,6 +15,7 @@
   importlib-resources,
   kubernetes,
   mmh3,
+  nixosTests,
   numpy,
   onnxruntime,
   openssl,
@@ -27,19 +28,19 @@
   pkg-config,
   posthog,
   protobuf,
+  psutil,
   pulsar-client,
   pydantic,
   pypika,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
   rustc,
   rustPlatform,
-  setuptools,
   setuptools-scm,
+  setuptools,
   tenacity,
   tokenizers,
   tqdm,
@@ -51,7 +52,7 @@
 
 buildPythonPackage rec {
   pname = "chromadb";
-  version = "0.5.3";
+  version = "0.5.18";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -60,34 +61,39 @@ buildPythonPackage rec {
     owner = "chroma-core";
     repo = "chroma";
     rev = "refs/tags/${version}";
-    hash = "sha256-czDL2b+Jj7mrYZCTfnaZArkOHBaWyTV0BTE2wvykHps=";
+    hash = "sha256-kJzBwUaA46HenwTn24AMy0xfgVmBtubJUujDS5/kYXs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-eTVT1yowuDsajjceWojdUdX466FKneUt1i5QipBFdp4=";
+    hash = "sha256-iW68C3Vp9C1gR7hF2x4VhBIKWX9wlnT8jPj+zMRUC7w=";
   };
 
-  pythonRelaxDeps = [ "orjson" ];
+  pythonRelaxDeps = [
+    "chroma-hnswlib"
+    "orjson"
+  ];
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeBuildInputs = [
     cargo
     pkg-config
     protobuf
-    pythonRelaxDepsHook
     rustc
     rustPlatform.cargoSetupHook
-    setuptools
-    setuptools-scm
   ];
 
   buildInputs = [
     openssl
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bcrypt
     build
     chroma-hnswlib
@@ -121,6 +127,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
+    psutil
     pytest-asyncio
     pytestCheckHook
   ];
@@ -139,8 +146,11 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # flaky / timing sensitive
+    # Tests are laky / timing sensitive
     "test_fastapi_server_token_authn_allows_when_it_should_allow"
+    "test_fastapi_server_token_authn_rejects_when_it_should_reject"
+    # Issue with event loop
+    "test_http_client_bw_compatibility"
   ];
 
   disabledTestPaths = [
@@ -156,6 +166,10 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  passthru.tests = {
+    inherit (nixosTests) chromadb;
+  };
+
   meta = with lib; {
     description = "AI-native open-source embedding database";
     homepage = "https://github.com/chroma-core/chroma";
@@ -163,6 +177,6 @@ buildPythonPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "chroma";
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 }

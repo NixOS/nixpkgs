@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     libxcrypt
     libyaml
     rust-jemalloc-sys-unprefixed
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     readline
     libiconv
     libobjc
@@ -61,27 +61,24 @@ rustPlatform.buildRustPackage rec {
   cargoPatches = [
     # Avoid checking whether ruby gitsubmodule is up-to-date.
     ./0002-remove-dependency-on-git.patch
+    # Avoid failing on unused variable warnings.
+    ./0003-ignore-warnings.patch
   ];
 
   cargoHash = "sha256-QZ26GmsKyENkzdCGg2peie/aJhEt7KQAF/lwsibonDk=";
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fdeclspec";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-fdeclspec";
 
   preFixup = ''
     mv $out/bin/rubyfmt{-main,}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ruby autoformatter";
     homepage = "https://github.com/fables-tales/rubyfmt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bobvanderlinden ];
-    # https://github.com/NixOS/nixpkgs/issues/320722
-    broken = true
-      # = note: Undefined symbols for architecture x86_64:
-      #       "_utimensat", referenced from:
-      #           _utime_internal in librubyfmt-3c969812b3b27083.rlib(file.o)
-      || stdenv.isDarwin && stdenv.isx86_64;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bobvanderlinden ];
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "rubyfmt";
   };
 }

@@ -1,20 +1,31 @@
 {
   lib,
-  buildPythonApplication,
   buildPythonPackage,
   fetchFromGitHub,
-  makeWrapper,
   pytestCheckHook,
-  python3,
   pythonOlder,
-  ruff,
   setuptools,
+  click-default-group,
+  numpy,
+  openai,
+  pip,
+  pluggy,
+  puremagic,
+  pydantic,
+  python-ulid,
+  pyyaml,
+  sqlite-migrate,
+  cogapp,
+  pytest-httpx,
+  sqlite-utils,
 }:
 let
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.14";
+    version = "0.19";
     pyproject = true;
+
+    build-system = [ setuptools ];
 
     disabled = pythonOlder "3.8";
 
@@ -22,19 +33,18 @@ let
       owner = "simonw";
       repo = "llm";
       rev = "refs/tags/${version}";
-      hash = "sha256-CgGVFUsntVkF0zORAtYQQMAeGtIwBbj9hE0Ei1OCGq4=";
+      hash = "sha256-FlE4VtvCvlNMJCf7qPrvQzJn9HcN/7UwH/UNL0XP618=";
     };
 
     patches = [ ./001-disable-install-uninstall-commands.patch ];
 
-    nativeBuildInputs = [ setuptools ];
-
-    propagatedBuildInputs = with python3.pkgs; [
+    dependencies = [
       click-default-group
       numpy
       openai
       pip
       pluggy
+      puremagic
       pydantic
       python-ulid
       pyyaml
@@ -43,7 +53,7 @@ let
       sqlite-utils
     ];
 
-    nativeCheckInputs = with python3.pkgs; [
+    nativeCheckInputs = [
       cogapp
       numpy
       pytest-httpx
@@ -69,37 +79,18 @@ let
       changelog = "https://github.com/simonw/llm/releases/tag/${version}";
       license = licenses.asl20;
       mainProgram = "llm";
-      maintainers = with maintainers; [ aldoborrero ];
+      maintainers = with maintainers; [
+        aldoborrero
+        mccartykim
+      ];
     };
   };
 
-  withPlugins =
-    plugins:
-    buildPythonApplication {
-      inherit (llm) pname version;
-      format = "other";
+  withPlugins = throw ''
+    llm.withPlugins was confusing to use and has been removed.
+    Please migrate to using python3.withPackages(ps: [ ps.llm ]) instead.
 
-      disabled = pythonOlder "3.8";
-
-      dontUnpack = true;
-      dontBuild = true;
-      doCheck = false;
-
-      nativeBuildInputs = [ makeWrapper ];
-
-      installPhase = ''
-        makeWrapper ${llm}/bin/llm $out/bin/llm \
-          --prefix PYTHONPATH : "${llm}/${python3.sitePackages}:$PYTHONPATH"
-        ln -sfv ${llm}/lib $out/lib
-      '';
-
-      propagatedBuildInputs = llm.propagatedBuildInputs ++ plugins;
-
-      passthru = llm.passthru // {
-        withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
-      };
-
-      inherit (llm) meta;
-    };
+    See https://nixos.org/manual/nixpkgs/stable/#python.withpackages-function for more usage examples.
+  '';
 in
 llm

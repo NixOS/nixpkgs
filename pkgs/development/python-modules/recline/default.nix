@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "recline";
-  version = "2024.6";
+  version = "2024.7.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "NetApp";
     repo = "recline";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-wVUM5vkavdLDtwRlbtVlVaBOXX+7tcB+SxYe1jZdq9I=";
+    sha256 = "sha256-Qc4oofuhSZ2S5zuCY9Ce9ISldYI3MDUJXFc8VcXdLIU=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "This library helps you quickly implement an interactive command-based application";
     homepage = "https://github.com/NetApp/recline";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

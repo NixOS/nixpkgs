@@ -1,5 +1,4 @@
-{ stdenv
-, fetchpatch
+{ fetchpatch
 , bashInteractive
 , diffPlugins
 , glibcLocales
@@ -126,6 +125,8 @@ python3Packages.buildPythonApplication {
     responses
   ] ++ pluginWrapperBins;
 
+  __darwinAllowLocalNetworking = true;
+
   disabledTestPaths = lib.flatten (attrValues (lib.mapAttrs (_: v: v.testPaths) disabledPlugins));
   inherit disabledTests;
 
@@ -174,7 +175,7 @@ EOF
     homepage = "https://beets.io";
     license = licenses.mit;
     maintainers = with maintainers; [ aszlig doronbehar lovesegfault pjones ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "beet";
   };
 }

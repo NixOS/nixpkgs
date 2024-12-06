@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-3d-effect";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-3d-effect";
     rev = version;
-    sha256 = "sha256-CAWx1wgk6G+9O7PkplrTg7uCmb8Yt6U3Z6YMVsq7IrQ=";
+    sha256 = "sha256-eHX5GH7Jmx+Q8ji5Flwajk2Ak37aaVO4mnEHGICOicY=";
   };
 
   nativeBuildInputs = [ cmake ];

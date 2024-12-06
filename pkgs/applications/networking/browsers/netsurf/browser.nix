@@ -107,7 +107,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  env.CFLAGS = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
+  env.CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
 
   patchPhase = lib.optionalString stdenv.cc.isClang ''
     runHook prePatch

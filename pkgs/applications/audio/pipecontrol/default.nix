@@ -4,7 +4,6 @@
 , pipewire
 , cmake
 , extra-cmake-modules
-, gnumake
 , wrapQtAppsHook
 , qtbase
 , qttools

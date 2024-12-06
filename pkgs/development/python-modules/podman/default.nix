@@ -5,7 +5,6 @@
   fixtures,
   pytestCheckHook,
   pythonOlder,
-  pyxdg,
   requests,
   requests-mock,
   rich,
@@ -16,27 +15,28 @@
 
 buildPythonPackage rec {
   pname = "podman";
-  version = "5.0.0";
+  version = "5.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3tbhTg060/K4ejT/xjItSu9zf05LR/d0vkg4XDsspEE=";
+    hash = "sha256-YER+qTC5+eF3PWtDBPq2WNOm5RzqXy30+1JdPzwyfrk=";
   };
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    pyxdg
+  dependencies = [
     requests
-    rich
-    tomli
     urllib3
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+
+  optional-dependencies = {
+    progress_bar = [ rich ];
+  };
 
   nativeCheckInputs = [
     fixtures
@@ -54,6 +54,7 @@ buildPythonPackage rec {
     # Integration tests require a running container setup
     "AdapterIntegrationTest"
     "ContainersIntegrationTest"
+    "ContainersExecIntegrationTests"
     "ImagesIntegrationTest"
     "ManifestsIntegrationTest"
     "NetworksIntegrationTest"
@@ -69,6 +70,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/containers/podman-py/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
-    mainProgram = "podman";
   };
 }

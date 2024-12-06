@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "owmods-cli";
-  version = "0.14.0";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "ow-mods";
     repo = "ow-mod-man";
     rev = "cli_v${version}";
-    hash = "sha256-PTYpkYDj9mlCPp9cPethGh6G4/QXwyXA6fsmtfmR79s=";
+    hash = "sha256-ONvmTBF9y3NMQx1KgNhJt+0nV57xc9cLalpfDqrTSq0=";
   };
 
-  cargoHash = "sha256-zjAs+p6SxCliUBrqLg2bpgciRH9HJ4vBrghVy9uCI9E=";
+  cargoHash = "sha256-I4OX27LHpT5YYW6yEhX+sCuA8m0KZd/qud4xdEUzkyA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,9 +35,9 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     zstd
     libsoup_3
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];

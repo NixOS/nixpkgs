@@ -1,6 +1,6 @@
 { stdenv, lib, makeWrapper, fetchzip, testdisk, imagemagick, jdk, findutils, sleuthkit, ... }:
 let
-  jdkWithJfx = jdk.override (lib.optionalAttrs stdenv.isLinux {
+  jdkWithJfx = jdk.override (lib.optionalAttrs stdenv.hostPlatform.isLinux {
     enableJavaFX = true;
   });
 in
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://github.com/sleuthkit/autopsy/releases/download/autopsy-${version}/autopsy-${version}.zip";
-    sha256 = "32iOQA3+ykltCYW/MpqCVxyhh3mm6eYzY+t0smAsWRw=";
+    hash = "sha256-32iOQA3+ykltCYW/MpqCVxyhh3mm6eYzY+t0smAsWRw=";
   };
 
   nativeBuildInputs = [ makeWrapper findutils ];

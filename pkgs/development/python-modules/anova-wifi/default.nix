@@ -8,11 +8,12 @@
   sensor-state-data,
   pytestCheckHook,
   pytest-asyncio,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "anova-wifi";
-  version = "0.13.0";
+  version = "0.17.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -21,13 +22,8 @@ buildPythonPackage rec {
     owner = "Lash-L";
     repo = "anova_wifi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5BSkUg36k2gNfOrVNkeRwU/4SlfEua3ZU4KTZmKSq4Q=";
+    hash = "sha256-TRiv5ljdVqc4qeX+fSH+aTDf5UyNII8/twlNx3KC6oI=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=anova_wifi --cov-report=term-missing:skip-covered" ""
-  '';
 
   build-system = [ poetry-core ];
 
@@ -39,6 +35,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    pytest-cov-stub
   ];
 
   disabledTests = [

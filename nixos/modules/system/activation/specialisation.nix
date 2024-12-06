@@ -23,6 +23,12 @@ let
 in
 {
   options = {
+    isSpecialisation = mkOption {
+      type = lib.types.bool;
+      internal = true;
+      default = false;
+      description = "Whether this system is a specialisation of another.";
+    };
 
     specialisation = mkOption {
       default = { };

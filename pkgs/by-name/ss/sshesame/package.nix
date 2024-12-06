@@ -1,25 +1,26 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, stdenv
 , nix-update-script
 }:
 
 buildGoModule rec {
   pname = "sshesame";
-  version = "0.0.27";
+  version = "0.0.39";
 
   src = fetchFromGitHub {
     owner = "jaksi";
     repo = "sshesame";
     rev = "v${version}";
-    hash = "sha256-pDLCOyjvbHM8Cw1AIt7+qTbCmH0tGSmwaTBz5pQ05bc=";
+    hash = "sha256-h0qvi90gbWm4LCL3FeipW8BKkbuUt0xGMTjaaeYadnE=";
   };
 
-  vendorHash = "sha256-iaINGWpj2gHfwsIOEp5PwlFBohXX591+/FBGyu656qI=";
+  vendorHash = "sha256-1v+cNMr2jpLPfxusPsgnFN31DwuNntXuq3sDNpWL0Rg=";
 
   ldflags = [ "-s" "-w" ];
 
-  hardeningEnable = [ "pie" ];
+  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -32,7 +33,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/jaksi/sshesame";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "sshesame";
   };
 }

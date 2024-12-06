@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.programs.fcast-receiver;
 in
@@ -11,20 +8,20 @@ in
   };
 
   options.programs.fcast-receiver = {
-    enable = mkEnableOption "FCast Receiver";
-    openFirewall = mkOption {
-      type = types.bool;
+    enable = lib.mkEnableOption "FCast Receiver";
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Open ports needed for the functionality of the program.
       '';
     };
-    package = mkPackageOption pkgs "fcast-receiver" { };
+    package = lib.mkPackageOption pkgs "fcast-receiver" { };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ 46899 ];
     };
   };

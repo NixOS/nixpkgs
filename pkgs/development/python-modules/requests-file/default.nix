@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dashea/requests-file";
     changelog = "https://github.com/dashea/requests-file/blob/${version}/CHANGES.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

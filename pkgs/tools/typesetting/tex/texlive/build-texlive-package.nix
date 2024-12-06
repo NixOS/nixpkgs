@@ -50,6 +50,8 @@
 , hasManpages ? false
 , hasRunfiles ? false
 , hasTlpkg ? false
+, hasCatalogue ? true
+, catalogue ? pname
 , extraNativeBuildInputs ? [ ]
 , ...
 }@args:
@@ -66,8 +68,15 @@ let
     '';
     # discourage nix-env from matching this package
     priority = 10;
+    platforms = lib.platforms.all;
+    # These create a large number of jobs, which puts load on Hydra
+    # without any appreciable benefit (as the combined packages already
+    # cause them all to be built and cached anyway).
+    hydraPlatforms = [ ];
   } // lib.optionalAttrs (args ? shortdesc) {
     description = args.shortdesc;
+  } // lib.optionalAttrs hasCatalogue {
+    homepage = "https://ctan.org/pkg/${catalogue}";
   };
 
   hasBinfiles = args ? binfiles && args.binfiles != [ ];
@@ -233,7 +242,7 @@ let
     # if the container is missing (that is, outputs == [ ]), create a file, to prevent passing the package to .withPackages
     ''
       for outputName in ''${!outputs[@]} ; do
-        if [[ -z ''${outputDrvs[$outputName]} ]] ; then
+        if [[ -n ''${outputDrvs[$outputName]} ]] ; then
           ln -s "''${outputDrvs[$outputName]}" "''${outputs[$outputName]}"
         else
           touch "''${outputs[$outputName]}"

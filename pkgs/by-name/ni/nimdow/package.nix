@@ -3,13 +3,13 @@
 buildNimPackage (finalAttrs: {
   pname = "nimdow";
 
-  version = "0.7.38";
+  version = "0.7.40";
 
   src = fetchFromGitHub {
     owner = "avahe-kellenberger";
-    repo = finalAttrs.pname;
+    repo = "nimdow";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GPu3Z63rFBgCCV7bdBg9cJh5thv2xrv/nSMa5Q/zp48=";
+    hash = "sha256-Q+oUmQ2ABl2nOSnHJYCrqN7dees4JBZgkb9OF4XFr5M=";
   };
 
   lockFile = ./lock.json;

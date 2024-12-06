@@ -7,16 +7,14 @@
   # build-system
   cython,
   gfortran,
+  meson-python,
   numpy,
   scipy,
-  setuptools,
-  wheel,
 
   # native dependencies
   glibcLocales,
   llvmPackages,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pytest-xdist,
   pillow,
   joblib,
@@ -26,20 +24,24 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.4.2";
+  version = "1.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2qHEcdlbrQgMbkS0lGyTkKSEKtwwglcsIOT4iE456Vk=";
+    pname = "scikit_learn";
+    inherit version;
+    hash = "sha256-tCN+17P90KSIJ5LmjvJUXVuqUKyju0WqffRoE4rY+U0=";
   };
 
-  # Avoid build-system requirements causing failure
-  prePatch = ''
+  postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "numpy==2.0.0rc1" "numpy"
+      --replace-fail "numpy>=2" "numpy"
+
+    substituteInPlace meson.build --replace-fail \
+      "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
+      "'${version}',"
   '';
 
   buildInputs = [
@@ -50,15 +52,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     gfortran
-    pythonRelaxDepsHook
   ];
 
   build-system = [
     cython
+    meson-python
     numpy
     scipy
-    setuptools
-    wheel
   ];
 
   dependencies = [
@@ -75,16 +75,16 @@ buildPythonPackage rec {
 
   env.LC_ALL = "en_US.UTF-8";
 
-  preBuild = ''
-    export SKLEARN_BUILD_PARALLEL=$NIX_BUILD_CORES
-  '';
-
   # PermissionError: [Errno 1] Operation not permitted: '/nix/nix-installer'
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # Skip test_feature_importance_regression - does web fetch
     "test_feature_importance_regression"
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # doesn't seem to produce correct results?
+    # possibly relevant: https://github.com/scikit-learn/scikit-learn/issues/25838#issuecomment-2308650816
+    "test_sparse_input"
   ];
 
   pytestFlagsArray = [

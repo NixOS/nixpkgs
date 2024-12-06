@@ -5,10 +5,10 @@
 
 let
   pname = "jan";
-  version = "0.5.1";
+  version = "0.5.7";
   src = fetchurl {
     url = "https://github.com/janhq/jan/releases/download/v${version}/jan-linux-x86_64-${version}.AppImage";
-    hash = "sha256-6AbV7rly4dLNX5xMKxitt5kli3xs5Hx0Vy+/HPsyEPc=";
+    hash = "sha256-mWmqvyX9n79uCtCZimU7B1jFE+0Ucwe+RGw0oSQaSB4=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
@@ -29,7 +29,7 @@ appimageTools.wrapType2 {
     homepage = "https://github.com/janhq/jan";
     license = lib.licenses.agpl3Plus;
     mainProgram = "jan";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

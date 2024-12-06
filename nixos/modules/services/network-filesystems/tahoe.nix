@@ -1,57 +1,55 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   cfg = config.services.tahoe;
 in
   {
     options.services.tahoe = {
-      introducers = mkOption {
+      introducers = lib.mkOption {
         default = {};
-        type = with types; attrsOf (submodule {
+        type = with lib.types; attrsOf (submodule {
           options = {
-            nickname = mkOption {
-              type = types.str;
+            nickname = lib.mkOption {
+              type = lib.types.str;
               description = ''
                 The nickname of this Tahoe introducer.
               '';
             };
-            tub.port = mkOption {
+            tub.port = lib.mkOption {
               default = 3458;
-              type = types.port;
+              type = lib.types.port;
               description = ''
                 The port on which the introducer will listen.
               '';
             };
-            tub.location = mkOption {
+            tub.location = lib.mkOption {
               default = null;
-              type = types.nullOr types.str;
+              type = lib.types.nullOr lib.types.str;
               description = ''
                 The external location that the introducer should listen on.
 
                 If specified, the port should be included.
               '';
             };
-            package = mkPackageOption pkgs "tahoelafs" { };
+            package = lib.mkPackageOption pkgs "tahoelafs" { };
           };
         });
         description = ''
           The Tahoe introducers.
         '';
       };
-      nodes = mkOption {
+      nodes = lib.mkOption {
         default = {};
-        type = with types; attrsOf (submodule {
+        type = with lib.types; attrsOf (submodule {
           options = {
-            nickname = mkOption {
-              type = types.str;
+            nickname = lib.mkOption {
+              type = lib.types.str;
               description = ''
                 The nickname of this Tahoe node.
               '';
             };
-            tub.port = mkOption {
+            tub.port = lib.mkOption {
               default = 3457;
-              type = types.port;
+              type = lib.types.port;
               description = ''
                 The port on which the tub will listen.
 
@@ -59,9 +57,9 @@ in
                 system to listen on a different port.
               '';
             };
-            tub.location = mkOption {
+            tub.location = lib.mkOption {
               default = null;
-              type = types.nullOr types.str;
+              type = lib.types.nullOr lib.types.str;
               description = ''
                 The external location that the node should listen on.
 
@@ -71,9 +69,9 @@ in
                 If specified, the port should be included.
               '';
             };
-            web.port = mkOption {
+            web.port = lib.mkOption {
               default = 3456;
-              type = types.port;
+              type = lib.types.port;
               description = ''
                 The port on which the Web server will listen.
 
@@ -81,59 +79,59 @@ in
                 listen on a different port.
               '';
             };
-            client.introducer = mkOption {
+            client.introducer = lib.mkOption {
               default = null;
-              type = types.nullOr types.str;
+              type = lib.types.nullOr lib.types.str;
               description = ''
                 The furl for a Tahoe introducer node.
 
                 Like all furls, keep this safe and don't share it.
               '';
             };
-            client.helper = mkOption {
+            client.helper = lib.mkOption {
               default = null;
-              type = types.nullOr types.str;
+              type = lib.types.nullOr lib.types.str;
               description = ''
                 The furl for a Tahoe helper node.
 
                 Like all furls, keep this safe and don't share it.
               '';
             };
-            client.shares.needed = mkOption {
+            client.shares.needed = lib.mkOption {
               default = 3;
-              type = types.int;
+              type = lib.types.int;
               description = ''
                 The number of shares required to reconstitute a file.
               '';
             };
-            client.shares.happy = mkOption {
+            client.shares.happy = lib.mkOption {
               default = 7;
-              type = types.int;
+              type = lib.types.int;
               description = ''
                 The number of distinct storage nodes required to store
                 a file.
               '';
             };
-            client.shares.total = mkOption {
+            client.shares.total = lib.mkOption {
               default = 10;
-              type = types.int;
+              type = lib.types.int;
               description = ''
                 The number of shares required to store a file.
               '';
             };
-            storage.enable = mkEnableOption "storage service";
-            storage.reservedSpace = mkOption {
+            storage.enable = lib.mkEnableOption "storage service";
+            storage.reservedSpace = lib.mkOption {
               default = "1G";
-              type = types.str;
+              type = lib.types.str;
               description = ''
                 The amount of filesystem space to not use for storage.
               '';
             };
-            helper.enable = mkEnableOption "helper service";
-            sftpd.enable = mkEnableOption "SFTP service";
-            sftpd.port = mkOption {
+            helper.enable = lib.mkEnableOption "helper service";
+            sftpd.enable = lib.mkEnableOption "SFTP service";
+            sftpd.port = lib.mkOption {
               default = null;
-              type = types.nullOr types.int;
+              type = lib.types.nullOr lib.types.int;
               description = ''
                 The port on which the SFTP server will listen.
 
@@ -141,35 +139,35 @@ in
                 daemon to listen on a different port.
               '';
             };
-            sftpd.hostPublicKeyFile = mkOption {
+            sftpd.hostPublicKeyFile = lib.mkOption {
               default = null;
-              type = types.nullOr types.path;
+              type = lib.types.nullOr lib.types.path;
               description = ''
                 Path to the SSH host public key.
               '';
             };
-            sftpd.hostPrivateKeyFile = mkOption {
+            sftpd.hostPrivateKeyFile = lib.mkOption {
               default = null;
-              type = types.nullOr types.path;
+              type = lib.types.nullOr lib.types.path;
               description = ''
                 Path to the SSH host private key.
               '';
             };
-            sftpd.accounts.file = mkOption {
+            sftpd.accounts.file = lib.mkOption {
               default = null;
-              type = types.nullOr types.path;
+              type = lib.types.nullOr lib.types.path;
               description = ''
                 Path to the accounts file.
               '';
             };
-            sftpd.accounts.url = mkOption {
+            sftpd.accounts.url = lib.mkOption {
               default = null;
-              type = types.nullOr types.str;
+              type = lib.types.nullOr lib.types.str;
               description = ''
                 URL of the accounts server.
               '';
             };
-            package = mkPackageOption pkgs "tahoelafs" { };
+            package = lib.mkPackageOption pkgs "tahoelafs" { };
           };
         });
         description = ''
@@ -177,11 +175,11 @@ in
         '';
       };
     };
-    config = mkMerge [
-      (mkIf (cfg.introducers != {}) {
+    config = lib.mkMerge [
+      (lib.mkIf (cfg.introducers != {}) {
         environment = {
-          etc = flip mapAttrs' cfg.introducers (node: settings:
-            nameValuePair "tahoe-lafs/introducer-${node}.cfg" {
+          etc = lib.flip lib.mapAttrs' cfg.introducers (node: settings:
+            lib.nameValuePair "tahoe-lafs/introducer-${node}.cfg" {
               mode = "0444";
               text = ''
                 # This configuration is generated by Nix. Edit at your own
@@ -190,25 +188,25 @@ in
                 [node]
                 nickname = ${settings.nickname}
                 tub.port = ${toString settings.tub.port}
-                ${optionalString (settings.tub.location != null)
+                ${lib.optionalString (settings.tub.location != null)
                   "tub.location = ${settings.tub.location}"}
               '';
             });
           # Actually require Tahoe, so that we will have it installed.
-          systemPackages = flip mapAttrsToList cfg.introducers (node: settings:
+          systemPackages = lib.flip lib.mapAttrsToList cfg.introducers (node: settings:
             settings.package
           );
         };
         # Open up the firewall.
-        # networking.firewall.allowedTCPPorts = flip mapAttrsToList cfg.introducers
+        # networking.firewall.allowedTCPPorts = lib.flip lib.mapAttrsToList cfg.introducers
         #   (node: settings: settings.tub.port);
-        systemd.services = flip mapAttrs' cfg.introducers (node: settings:
+        systemd.services = lib.flip lib.mapAttrs' cfg.introducers (node: settings:
           let
             pidfile = "/run/tahoe.introducer-${node}.pid";
             # This is a directory, but it has no trailing slash. Tahoe commands
             # get antsy when there's a trailing slash.
             nodedir = "/var/db/tahoe-lafs/introducer-${node}";
-          in nameValuePair "tahoe.introducer-${node}" {
+          in lib.nameValuePair "tahoe.introducer-${node}" {
             description = "Tahoe LAFS node ${node}";
             wantedBy = [ "multi-user.target" ];
             path = [ settings.package ];
@@ -242,16 +240,16 @@ in
               cp /etc/tahoe-lafs/introducer-"${node}".cfg ${lib.escapeShellArg nodedir}/tahoe.cfg
             '';
           });
-        users.users = flip mapAttrs' cfg.introducers (node: _:
-          nameValuePair "tahoe.introducer-${node}" {
+        users.users = lib.flip lib.mapAttrs' cfg.introducers (node: _:
+          lib.nameValuePair "tahoe.introducer-${node}" {
             description = "Tahoe node user for introducer ${node}";
             isSystemUser = true;
           });
       })
-      (mkIf (cfg.nodes != {}) {
+      (lib.mkIf (cfg.nodes != {}) {
         environment = {
-          etc = flip mapAttrs' cfg.nodes (node: settings:
-            nameValuePair "tahoe-lafs/${node}.cfg" {
+          etc = lib.flip lib.mapAttrs' cfg.nodes (node: settings:
+            lib.nameValuePair "tahoe-lafs/${node}.cfg" {
               mode = "0444";
               text = ''
                 # This configuration is generated by Nix. Edit at your own
@@ -260,16 +258,16 @@ in
                 [node]
                 nickname = ${settings.nickname}
                 tub.port = ${toString settings.tub.port}
-                ${optionalString (settings.tub.location != null)
+                ${lib.optionalString (settings.tub.location != null)
                   "tub.location = ${settings.tub.location}"}
                 # This is a Twisted endpoint. Twisted Web doesn't work on
                 # non-TCP. ~ C.
                 web.port = tcp:${toString settings.web.port}
 
                 [client]
-                ${optionalString (settings.client.introducer != null)
+                ${lib.optionalString (settings.client.introducer != null)
                   "introducer.furl = ${settings.client.introducer}"}
-                ${optionalString (settings.client.helper != null)
+                ${lib.optionalString (settings.client.helper != null)
                   "helper.furl = ${settings.client.helper}"}
 
                 shares.needed = ${toString settings.client.shares.needed}
@@ -277,41 +275,41 @@ in
                 shares.total = ${toString settings.client.shares.total}
 
                 [storage]
-                enabled = ${boolToString settings.storage.enable}
+                enabled = ${lib.boolToString settings.storage.enable}
                 reserved_space = ${settings.storage.reservedSpace}
 
                 [helper]
-                enabled = ${boolToString settings.helper.enable}
+                enabled = ${lib.boolToString settings.helper.enable}
 
                 [sftpd]
-                enabled = ${boolToString settings.sftpd.enable}
-                ${optionalString (settings.sftpd.port != null)
+                enabled = ${lib.boolToString settings.sftpd.enable}
+                ${lib.optionalString (settings.sftpd.port != null)
                   "port = ${toString settings.sftpd.port}"}
-                ${optionalString (settings.sftpd.hostPublicKeyFile != null)
+                ${lib.optionalString (settings.sftpd.hostPublicKeyFile != null)
                   "host_pubkey_file = ${settings.sftpd.hostPublicKeyFile}"}
-                ${optionalString (settings.sftpd.hostPrivateKeyFile != null)
+                ${lib.optionalString (settings.sftpd.hostPrivateKeyFile != null)
                   "host_privkey_file = ${settings.sftpd.hostPrivateKeyFile}"}
-                ${optionalString (settings.sftpd.accounts.file != null)
+                ${lib.optionalString (settings.sftpd.accounts.file != null)
                   "accounts.file = ${settings.sftpd.accounts.file}"}
-                ${optionalString (settings.sftpd.accounts.url != null)
+                ${lib.optionalString (settings.sftpd.accounts.url != null)
                   "accounts.url = ${settings.sftpd.accounts.url}"}
               '';
             });
           # Actually require Tahoe, so that we will have it installed.
-          systemPackages = flip mapAttrsToList cfg.nodes (node: settings:
+          systemPackages = lib.flip lib.mapAttrsToList cfg.nodes (node: settings:
             settings.package
           );
         };
         # Open up the firewall.
-        # networking.firewall.allowedTCPPorts = flip mapAttrsToList cfg.nodes
+        # networking.firewall.allowedTCPPorts = lib.flip lib.mapAttrsToList cfg.nodes
         #   (node: settings: settings.tub.port);
-        systemd.services = flip mapAttrs' cfg.nodes (node: settings:
+        systemd.services = lib.flip lib.mapAttrs' cfg.nodes (node: settings:
           let
             pidfile = "/run/tahoe.${node}.pid";
             # This is a directory, but it has no trailing slash. Tahoe commands
             # get antsy when there's a trailing slash.
             nodedir = "/var/db/tahoe-lafs/${node}";
-          in nameValuePair "tahoe.${node}" {
+          in lib.nameValuePair "tahoe.${node}" {
             description = "Tahoe LAFS node ${node}";
             wantedBy = [ "multi-user.target" ];
             path = [ settings.package ];
@@ -342,8 +340,8 @@ in
               cp /etc/tahoe-lafs/${lib.escapeShellArg node}.cfg ${lib.escapeShellArg nodedir}/tahoe.cfg
             '';
           });
-        users.users = flip mapAttrs' cfg.nodes (node: _:
-          nameValuePair "tahoe.${node}" {
+        users.users = lib.flip lib.mapAttrs' cfg.nodes (node: _:
+          lib.nameValuePair "tahoe.${node}" {
             description = "Tahoe node user for node ${node}";
             isSystemUser = true;
           });

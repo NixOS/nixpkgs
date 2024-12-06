@@ -1,17 +1,20 @@
-{ lib
-, stdenv
-, rustPlatform
-, anki
-, darwin
+{
+  lib,
+  rustPlatform,
+  anki,
 
-, openssl
-, pkg-config
-, protobuf
+  openssl,
+  pkg-config,
+  buildPackages,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "anki-sync-server";
   inherit (anki) version src cargoLock;
+
+  patches = [
+    ./patches/Cargo.lock-update-time-for-rust-1.80.patch
+  ];
 
   # only build sync server
   cargoBuildFlags = [
@@ -19,22 +22,28 @@ rustPlatform.buildRustPackage {
     "anki-sync-server"
   ];
 
-  nativeBuildInputs = [ protobuf pkg-config ];
+  checkFlags = [
+    # these two tests are flaky, see https://github.com/ankitects/anki/issues/3353
+    # Also removed from anki when removing this.
+    "--skip=media::check::test::unicode_normalization"
+    "--skip=scheduler::answering::test::state_application"
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
-  env.PROTOC = lib.getExe protobuf;
+  env.PROTOC = lib.getExe buildPackages.protobuf;
 
-  meta = with lib; {
+  meta = {
     description = "Standalone official anki sync server";
     homepage = "https://apps.ankiweb.net";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ martinetd ];
+    license = with lib.licenses; [ agpl3Plus ];
+    maintainers = with lib.maintainers; [ martinetd ];
     mainProgram = "anki-sync-server";
   };
 }

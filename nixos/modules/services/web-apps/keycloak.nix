@@ -249,12 +249,14 @@ in
       package = mkPackageOption pkgs "keycloak" { };
 
       initialAdminPassword = mkOption {
-        type = str;
-        default = "changeme";
+        type = nullOr str;
+        default = null;
         description = ''
-          Initial password set for the `admin`
-          user. The password is not stored safely and should be changed
+          Initial password set for the temporary `admin` user.
+          The password is not stored safely and should be changed
           immediately in the admin panel.
+
+          See [Admin bootstrap and recovery](https://www.keycloak.org/server/bootstrap-admin-recovery) for details.
         '';
       };
 
@@ -279,8 +281,8 @@ in
           options = {
             http-host = mkOption {
               type = str;
-              default = "0.0.0.0";
-              example = "127.0.0.1";
+              default = "::";
+              example = "::1";
               description = ''
                 On which address Keycloak should accept new connections.
               '';
@@ -328,7 +330,7 @@ in
             };
 
             hostname = mkOption {
-              type = str;
+              type = nullOr str;
               example = "keycloak.example.com";
               description = ''
                 The hostname part of the public URL used as base for
@@ -351,35 +353,12 @@ in
                 for more information about hostname configuration.
               '';
             };
-
-            proxy = mkOption {
-              type = enum [ "edge" "reencrypt" "passthrough" "none" ];
-              default = "none";
-              example = "edge";
-              description = ''
-                The proxy address forwarding mode if the server is
-                behind a reverse proxy.
-
-                - `edge`:
-                  Enables communication through HTTP between the
-                  proxy and Keycloak.
-                - `reencrypt`:
-                  Requires communication through HTTPS between the
-                  proxy and Keycloak.
-                - `passthrough`:
-                  Enables communication through HTTP or HTTPS between
-                  the proxy and Keycloak.
-
-                See <https://www.keycloak.org/server/reverseproxy> for more information.
-              '';
-            };
           };
         };
 
         example = literalExpression ''
           {
             hostname = "keycloak.example.com";
-            proxy = "reencrypt";
             https-key-store-file = "/path/to/file";
             https-key-store-password = { _secret = "/run/keys/store_password"; };
           }
@@ -478,6 +457,10 @@ in
             message = "Setting up a local PostgreSQL db for Keycloak requires `standard_conforming_strings` turned on to work reliably";
           }
           {
+            assertion = cfg.settings.hostname != null || ! cfg.settings.hostname-strict or true;
+            message = "Setting the Keycloak hostname is required, see `services.keycloak.settings.hostname`";
+          }
+          {
             assertion = cfg.settings.hostname-url or null == null;
             message = ''
               The option `services.keycloak.settings.hostname-url' has been removed.
@@ -491,6 +474,16 @@ in
               The option `services.keycloak.settings.hostname-strict-backchannel' has been removed.
               Set `services.keycloak.settings.hostname-backchannel-dynamic' instead.
               See [New Hostname options](https://www.keycloak.org/docs/25.0.0/upgrading/#new-hostname-options) for details.
+            '';
+          }
+          {
+            assertion = cfg.settings.proxy or null == null;
+            message = ''
+              The option `services.keycloak.settings.proxy' has been removed.
+              Set `services.keycloak.settings.proxy-headers` in combination
+              with other hostname options as needed instead.
+              See [Proxy option removed](https://www.keycloak.org/docs/latest/upgrading/index.html#proxy-option-removed)
+              for more information.
             '';
           }
         ];
@@ -629,6 +622,9 @@ in
             environment = {
               KC_HOME_DIR = "/run/keycloak";
               KC_CONF_DIR = "/run/keycloak/conf";
+            } // lib.optionalAttrs (cfg.initialAdminPassword != null) {
+              KC_BOOTSTRAP_ADMIN_USERNAME = "admin";
+              KC_BOOTSTRAP_ADMIN_PASSWORD = cfg.initialAdminPassword;
             };
             serviceConfig = {
               LoadCredential =
@@ -654,6 +650,7 @@ in
 
               ln -s ${themesBundle} /run/keycloak/themes
               ln -s ${keycloakBuild}/providers /run/keycloak/
+              ln -s ${keycloakBuild}/lib /run/keycloak/
 
               install -D -m 0600 ${confFile} /run/keycloak/conf/keycloak.conf
 
@@ -668,8 +665,6 @@ in
               mkdir -p /run/keycloak/ssl
               cp $CREDENTIALS_DIRECTORY/ssl_{cert,key} /run/keycloak/ssl/
             '' + ''
-              export KEYCLOAK_ADMIN=admin
-              export KEYCLOAK_ADMIN_PASSWORD=${escapeShellArg cfg.initialAdminPassword}
               kc.sh --verbose start --optimized
             '';
           };

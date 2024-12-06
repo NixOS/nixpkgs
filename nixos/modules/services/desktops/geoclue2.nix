@@ -5,9 +5,6 @@
 with lib;
 
 let
-  # the demo agent isn't built by default, but we need it here
-  package = pkgs.geoclue2.override { withDemoAgent = config.services.geoclue2.enableDemoAgent; };
-
   cfg = config.services.geoclue2;
 
   defaultWhitelist = [ "gnome-shell" "io.elementary.desktop.agent-geoclue2" ];
@@ -132,6 +129,17 @@ in
         '';
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.geoclue2;
+        defaultText = literalExpression "pkgs.geoclue2";
+        apply = pkg: pkg.override {
+          # the demo agent isn't built by default, but we need it here
+          withDemoAgent = cfg.enableDemoAgent;
+        };
+        description = "The geoclue2 package to use";
+      };
+
       submitData = mkOption {
         type = types.bool;
         default = false;
@@ -180,11 +188,11 @@ in
   ###### implementation
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ package ];
+    environment.systemPackages = [ cfg.package ];
 
-    services.dbus.packages = [ package ];
+    services.dbus.packages = [ cfg.package ];
 
-    systemd.packages = [ package ];
+    systemd.packages = [ cfg.package ];
 
     # we cannot use DynamicUser as we need the the geoclue user to exist for the
     # dbus policy to work
@@ -223,7 +231,7 @@ in
         unitConfig.ConditionUser = "!@system";
         serviceConfig = {
           Type = "exec";
-          ExecStart = "${package}/libexec/geoclue-2.0/demos/agent";
+          ExecStart = "${cfg.package}/libexec/geoclue-2.0/demos/agent";
           Restart = "on-failure";
           PrivateTmp = true;
         };

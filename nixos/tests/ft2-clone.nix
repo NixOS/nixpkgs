@@ -8,8 +8,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     imports = [
       ./common/x11.nix
     ];
-
-    sound.enable = true;
     environment.systemPackages = [ pkgs.ft2-clone ];
   };
 

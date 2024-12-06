@@ -69,7 +69,6 @@ self: super: {
   hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
   http-api-data = doJailbreak super.http-api-data;
   persistent-sqlite = dontCheck super.persistent-sqlite;
-  system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
   unicode-transforms = dontCheck super.unicode-transforms;
   wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
   RSA = dontCheck super.RSA; # https://github.com/GaloisInc/RSA/issues/14
@@ -87,10 +86,6 @@ self: super: {
   # cabal2spec needs a recent version of Cabal
   cabal2spec = super.cabal2spec.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });
 
-  # https://github.com/pikajude/stylish-cabal/issues/12
-  stylish-cabal = doDistribute (markUnbroken (super.stylish-cabal.override { haddock-library = self.haddock-library_1_7_0; }));
-  haddock-library_1_7_0 = dontCheck super.haddock-library_1_7_0;
-
   # ghc versions prior to 8.8.x needs additional dependency to compile successfully.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
 
@@ -99,8 +94,6 @@ self: super: {
 
   # vector 0.12.2 indroduced doctest checks that don’t work on older compilers
   vector = dontCheck super.vector;
-
-  mmorph = super.mmorph_1_1_3;
 
   # https://github.com/haskellari/time-compat/issues/23
   time-compat = dontCheck super.time-compat;

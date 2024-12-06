@@ -69,7 +69,7 @@ let
       owner = "catppuccin";
       repo = "Kvantum";
       rev = "d1e174c85311de9715aefc1eba4b8efd6b2730fc";
-      sha256 = "sha256-IrHo8pnR3u90bq12m7FEXucUF79+iub3I9vgH5h86Lk=";
+      hash = "sha256-IrHo8pnR3u90bq12m7FEXucUF79+iub3I9vgH5h86Lk=";
     };
 
     lazygit = fetchFromGitHub {

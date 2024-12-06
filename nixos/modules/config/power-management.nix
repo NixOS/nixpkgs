@@ -1,7 +1,4 @@
 { config, lib, ... }:
-
-with lib;
-
 let
 
   cfg = config.powerManagement;
@@ -16,8 +13,8 @@ in
 
     powerManagement = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
             Whether to enable power management.  This includes support
@@ -25,16 +22,16 @@ in
           '';
       };
 
-      resumeCommands = mkOption {
-        type = types.lines;
+      resumeCommands = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "Commands executed after the system resumes from suspend-to-RAM.";
       };
 
-      powerUpCommands = mkOption {
-        type = types.lines;
+      powerUpCommands = lib.mkOption {
+        type = lib.types.lines;
         default = "";
-        example = literalExpression ''
+        example = lib.literalExpression ''
           "''${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda"
         '';
         description = ''
@@ -44,10 +41,10 @@ in
           '';
       };
 
-      powerDownCommands = mkOption {
-        type = types.lines;
+      powerDownCommands = lib.mkOption {
+        type = lib.types.lines;
         default = "";
-        example = literalExpression ''
+        example = lib.literalExpression ''
           "''${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda"
         '';
         description = ''
@@ -64,7 +61,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.targets.post-resume = {
       description = "Post-Resume Actions";

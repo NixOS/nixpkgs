@@ -1,6 +1,5 @@
 {
   lib,
-  python,
   fetchPypi,
   buildPythonPackage,
   postgresql,
@@ -21,6 +20,9 @@ buildPythonPackage rec {
     unittestCheckHook
     postgresql
   ];
+
+  unittestFlagsArray = [ "test" ];
+
   propagatedBuildInputs = [ postgresql ];
 
   meta = with lib; {

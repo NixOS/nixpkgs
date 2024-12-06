@@ -81,11 +81,13 @@ newPkgs() {
     # could eat too much memory for a standard 4GiB machine.
     local -a list
     for i in 1 2; do
-        local l="$($MKTEMP)"
+        local l
+        l="$($MKTEMP)"
         list[$i]="$l"
         toRemove+=("$l")
 
-        local expr="$($MKTEMP)"
+        local expr
+        expr="$($MKTEMP)"
         toRemove+=("$expr")
         nixexpr "${!i}" > "$expr"
 

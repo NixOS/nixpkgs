@@ -32,13 +32,12 @@ rustPlatform.buildRustPackage rec {
     gdk-pixbuf
     gtk4
     libadwaita
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.IOKit
   ];
 
   postInstall = ''
     substituteInPlace snap/gui/fclones-gui.desktop \
-      --replace Exec=fclones-gui Exec=$out/bin/fclones-gui \
       --replace 'Icon=''${SNAP}/meta/gui/fclones-gui.png' Icon=fclones-gui
 
     install -Dm444 snap/gui/fclones-gui.desktop -t $out/share/applications

@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, buildPackages, perl, coreutils, writeShellScript
-, makeWrapper
+, makeBinaryWrapper
 , withCryptodev ? false, cryptodev
 , withZlib ? false, zlib
 , enableSSL2 ? false
 , enableSSL3 ? false
-, enableKTLS ? stdenv.isLinux
+, enableMD2 ? false
+, enableKTLS ? stdenv.hostPlatform.isLinux
 , static ? stdenv.hostPlatform.isStatic
 # path to openssl.cnf file. will be placed in $etc/etc/ssl/openssl.cnf to replace the default
 , conf ? null
@@ -24,7 +25,13 @@ let
     inherit version;
 
     src = fetchurl {
-      url = "https://www.openssl.org/source/${finalAttrs.pname}-${version}.tar.gz";
+      url = if lib.versionOlder version "3.0" then
+        let
+          versionFixed = builtins.replaceStrings ["."] ["_"] version;
+        in
+          "https://github.com/openssl/openssl/releases/download/OpenSSL_${versionFixed}/openssl-${version}.tar.gz"
+      else
+        "https://github.com/openssl/openssl/releases/download/openssl-${version}/openssl-${version}.tar.gz";
       inherit hash;
     };
 
@@ -70,7 +77,7 @@ let
       stdenv.cc.isGNU;
 
     nativeBuildInputs =
-         lib.optional (!stdenv.hostPlatform.isWindows) makeWrapper
+         lib.optional (!stdenv.hostPlatform.isWindows) makeBinaryWrapper
       ++ [ perl ]
       ++ lib.optionals static [ removeReferencesTo ];
     buildInputs = lib.optional withCryptodev cryptodev
@@ -87,6 +94,7 @@ let
         x86_64-linux = "./Configure linux-x86_64";
         x86_64-solaris = "./Configure solaris64-x86_64-gcc";
         powerpc64-linux = "./Configure linux-ppc64";
+        riscv32-linux = "./Configure ${if lib.versionAtLeast version "3.2" then "linux32-riscv32" else "linux-latomic"}";
         riscv64-linux = "./Configure linux64-riscv64";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
@@ -102,6 +110,7 @@ let
                                      (toString stdenv.hostPlatform.parsed.cpu.bits)}"
         else if stdenv.hostPlatform.isLinux
           then if stdenv.hostPlatform.isx86_64 then "./Configure linux-x86_64"
+          else if stdenv.hostPlatform.isMicroBlaze then "./Configure linux-latomic"
           else if stdenv.hostPlatform.isMips32 then "./Configure linux-mips32"
           else if stdenv.hostPlatform.isMips64n32 then "./Configure linux-mips64"
           else if stdenv.hostPlatform.isMips64n64 then "./Configure linux64-mips64"
@@ -128,7 +137,8 @@ let
     ] ++ lib.optionals withCryptodev [
       "-DHAVE_CRYPTODEV"
       "-DUSE_CRYPTODEV_DIGESTS"
-    ] ++ lib.optional enableSSL2 "enable-ssl2"
+    ] ++ lib.optional enableMD2 "enable-md2"
+      ++ lib.optional enableSSL2 "enable-ssl2"
       ++ lib.optional enableSSL3 "enable-ssl3"
       # We select KTLS here instead of the configure-time detection (which we patch out).
       # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
@@ -143,6 +153,15 @@ let
       # trying to build binaries statically.
       ++ lib.optional static "no-ct"
       ++ lib.optional withZlib "zlib"
+      # /dev/crypto support has been dropped in OpenBSD 5.7.
+      #
+      # OpenBSD's ports does this too,
+      # https://github.com/openbsd/ports/blob/a1147500c76970fea22947648fb92a093a529d7c/security/openssl/3.3/Makefile#L25.
+      #
+      # https://github.com/openssl/openssl/pull/10565 indicated the
+      # intent was that this would be configured properly automatically,
+      # but that doesn't appear to be the case.
+      ++ lib.optional stdenv.hostPlatform.isOpenBSD "no-devcryptoeng"
       ++ lib.optionals (stdenv.hostPlatform.isMips && stdenv.hostPlatform ? gcc.arch) [
       # This is necessary in order to avoid openssl adding -march
       # flags which ultimately conflict with those added by
@@ -203,8 +222,8 @@ let
       rm -r $etc/etc/ssl/misc
 
       rmdir $etc/etc/ssl/{certs,private}
-
-      ${lib.optionalString (conf != null) "cat ${conf} > $etc/etc/ssl/openssl.cnf"}
+    '' + lib.optionalString (conf != null) ''
+      cat ${conf} > $etc/etc/ssl/openssl.cnf
     '';
 
     postFixup = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
@@ -214,23 +233,27 @@ let
         echo "Found an erroneous dependency on perl ^^^" >&2
         exit 1
       fi
+    '' + lib.optionalString (lib.versionAtLeast version "3.3.0") ''
+      # cleanup cmake helpers for now (for OpenSSL >= 3.3), only rely on pkg-config.
+      # pkg-config gets its paths fixed correctly
+      rm -rf $dev/lib/cmake
     '';
 
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.openssl.org/";
       changelog = "https://github.com/openssl/openssl/blob/openssl-${version}/CHANGES.md";
       description = "Cryptographic library that implements the SSL and TLS protocols";
-      license = licenses.openssl;
+      license = lib.licenses.openssl;
       mainProgram = "openssl";
-      maintainers = with maintainers; [ thillux ];
+      maintainers = with lib.maintainers; [ thillux ] ++ lib.teams.stridtech.members;
       pkgConfigModules = [
         "libcrypto"
         "libssl"
         "openssl"
       ];
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
     } // extraMeta;
   });
 
@@ -267,8 +290,8 @@ in {
   };
 
   openssl_3 = common {
-    version = "3.0.13";
-    hash = "sha256-iFJXU/edO+wn0vp8ZqoLkrOqlJja/ZPXz6SzeAza4xM=";
+    version = "3.0.15";
+    hash = "sha256-I8Zm0O3yDxQkmz2PA2isrumrWFsJ4d6CEHxm4fPslTM=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -284,37 +307,14 @@ in {
 
     withDocs = true;
 
-    extraMeta = with lib; {
-      license = licenses.asl20;
-    };
-  };
-
-  openssl_3_2 = common {
-    version = "3.2.1";
-    hash = "sha256-g8cyn+UshQZ3115dCwyiRTCbl+jsvP3B39xKufrDWzk=";
-
-    patches = [
-      ./3.0/nix-ssl-cert-file.patch
-
-      # openssl will only compile in KTLS if the current kernel supports it.
-      # This patch disables build-time detection.
-      ./3.0/openssl-disable-kernel-detection.patch
-
-      (if stdenv.hostPlatform.isDarwin
-       then ./3.2/use-etc-ssl-certs-darwin.patch
-       else ./3.2/use-etc-ssl-certs.patch)
-    ];
-
-    withDocs = true;
-
-    extraMeta = with lib; {
-      license = licenses.asl20;
+    extraMeta = {
+      license = lib.licenses.asl20;
     };
   };
 
   openssl_3_3 = common {
-    version = "3.3.0";
-    hash = "sha256-U+ZrBDMipgar8Ah+dpmg4DOjf6E/65dC3zXDozsY+wI=";
+    version = "3.3.2";
+    hash = "sha256-LopAsBl5r+i+C7+z3l3BxnCf7bRtbInBDaEUq1/D0oE=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch
@@ -324,14 +324,14 @@ in {
       ./3.0/openssl-disable-kernel-detection.patch
 
       (if stdenv.hostPlatform.isDarwin
-       then ./3.2/use-etc-ssl-certs-darwin.patch
-       else ./3.2/use-etc-ssl-certs.patch)
+       then ./3.3/use-etc-ssl-certs-darwin.patch
+       else ./3.3/use-etc-ssl-certs.patch)
     ];
 
     withDocs = true;
 
-    extraMeta = with lib; {
-      license = licenses.asl20;
+    extraMeta = {
+      license = lib.licenses.asl20;
     };
   };
 }

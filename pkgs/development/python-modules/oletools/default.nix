@@ -10,12 +10,11 @@
   pyparsing,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "oletools";
-  version = "0.60.1";
+  version = "0.60.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +23,7 @@ buildPythonPackage rec {
     owner = "decalage2";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-H3oL8sk2r267wV0hoHOq9r9DY2Atxs+hZUVb6tmHy0w=";
+    hash = "sha256-ons1VeWStxUZw2CPpnX9p5I3Q7cMhi34JU8TeuUDt+Y=";
   };
 
   propagatedBuildInputs = [

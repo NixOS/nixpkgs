@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "plantuml-markdown";
-  version = "3.9.7";
+  version = "3.10.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "mikitex70";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-/lsu7kiUyQ6LUFINX+/aCFSKm1pGyIfUzSuUehwCz7I=";
+    hash = "sha256-5K8NSxMCdAsOtV0egY8gMbHnHifvYNRHzafR0LAcm+Q=";
   };
 
   propagatedBuildInputs = [

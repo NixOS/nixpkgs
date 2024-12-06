@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/oracle/ktls-utils";
     changelog = "https://github.com/oracle/ktls-utils/blob/${src.rev}/NEWS";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "ktls-utils";
     platforms = platforms.linux;
   };

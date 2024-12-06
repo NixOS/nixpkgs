@@ -9,7 +9,6 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
   nodes.machine =
     { pkgs, lib, ... }:
     { boot.kernelPackages = lib.mkIf latestKernel pkgs.linuxPackages_latest;
-      sound.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
     };
 
   testScript = ''

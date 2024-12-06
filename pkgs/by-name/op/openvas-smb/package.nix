@@ -1,21 +1,22 @@
-{ fetchFromGitHub
-, fetchurl
-, lib
-, stdenv
-, cmake
-, git
-, pkg-config
-, glib
-, gnutls
-, perl
-, heimdal
-, popt
-, libunistring
+{
+  fetchFromGitHub,
+  fetchurl,
+  lib,
+  stdenv,
+  cmake,
+  git,
+  pkg-config,
+  glib,
+  gnutls,
+  perl,
+  heimdal,
+  popt,
+  libunistring,
 }:
 let
   heimdalConfigHeader = fetchurl {
     url = "https://raw.githubusercontent.com/heimdal/heimdal/d8c10e68a61f10c8fca62b227a0766d294bda4a0/include/heim_threads.h";
-    sha256 = "08345hkb5jbdcgh2cx3d624w4c8wxmnnsjxlw46wsnm39k4l0ihw";
+    hash = "sha256-HEZAyUyjWs0N4bRLbW3tHDHCiTBtdCbgY23JsiYsZCA=";
   };
 in
 stdenv.mkDerivation rec {
@@ -66,6 +67,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ mi-ael ];
     mainProgram = "wmic";
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

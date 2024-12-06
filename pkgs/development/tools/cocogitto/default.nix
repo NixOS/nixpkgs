@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, stdenv, Security, makeWrapper, libgit2 }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, stdenv, libgit2 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cocogitto";
@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "oknozor";
     repo = pname;
     rev = version;
-    sha256 = "sha256-yGwGWXME9ZjFJk/3pVDRTa1phG6kd8+YhXe/MxOEdF0=";
+    hash = "sha256-yGwGWXME9ZjFJk/3pVDRTa1phG6kd8+YhXe/MxOEdF0=";
   };
 
   cargoHash = "sha256-iS/nRfy63bgo7MeL/5jJ3Vn6S7dG49erIZ+0516YxKM=";
@@ -19,9 +19,9 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = [ libgit2 ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ libgit2 ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cog \
       --bash <($out/bin/cog generate-completions bash) \
       --fish <($out/bin/cog generate-completions fish) \
@@ -33,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cog";
     homepage = "https://github.com/oknozor/cocogitto";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "defcon" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pens = [ fontpens ];
     lxml = [ fonttools ] ++ fonttools.optional-dependencies.lxml;
   };

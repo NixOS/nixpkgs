@@ -11,17 +11,17 @@
 , pkg-config
 }:
 
-let buildToxAV = !stdenv.isAarch32;
+let buildToxAV = !stdenv.hostPlatform.isAarch32;
 in stdenv.mkDerivation rec {
   pname = "libtoxcore";
-  version = "0.2.19";
+  version = "0.2.20";
 
   src =
     # We need the prepared sources tarball.
     fetchurl {
       url =
         "https://github.com/TokTok/c-toxcore/releases/download/v${version}/c-toxcore-${version}.tar.gz";
-      sha256 = "sha256-i0GPZHDbCFz1mpkVaFYTVWVW3yv0JxSPGBS3sRhihZQ=";
+      hash = "sha256-qciaja6nRdU+XXjnqsuZx7R5LEQApaaccSOPRdYWT0w=";
     };
 
   cmakeFlags = [

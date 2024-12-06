@@ -4,15 +4,47 @@ with lib;
 let
   cfg = config.services.freshrss;
 
-  poolName = "freshrss";
+  extension-env = pkgs.buildEnv {
+    name = "freshrss-extensions";
+    paths = cfg.extensions;
+  };
+  env-vars = {
+    DATA_PATH = cfg.dataDir;
+    THIRDPARTY_EXTENSIONS_PATH = "${extension-env}/share/freshrss/";
+  };
 in
 {
   meta.maintainers = with maintainers; [ etu stunkymonkey mattchrist ];
 
   options.services.freshrss = {
-    enable = mkEnableOption "FreshRSS RSS aggregator and reader with php-fpm backend.";
+    enable = mkEnableOption "FreshRSS RSS aggregator and reader with php-fpm backend";
 
     package = mkPackageOption pkgs "freshrss" { };
+
+    extensions = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      defaultText = literalExpression "[]";
+      example = literalExpression ''
+        with freshrss-extensions; [
+          youtube
+        ] ++ [
+          (freshrss-extensions.buildFreshRssExtension {
+            FreshRssExtUniqueId = "ReadingTime";
+            pname = "reading-time";
+            version = "1.5";
+            src = pkgs.fetchFromGitLab {
+              domain = "framagit.org";
+              owner = "Lapineige";
+              repo = "FreshRSS_Extension-ReadingTime";
+              rev = "fb6e9e944ef6c5299fa56ffddbe04c41e5a34ebf";
+             hash = "sha256-C5cRfaphx4Qz2xg2z+v5qRji8WVSIpvzMbethTdSqsk=";
+           };
+          })
+        ]
+      '';
+      description = "Additional extensions to be used.";
+    };
 
     defaultUser = mkOption {
       type = types.str;
@@ -101,12 +133,14 @@ in
       default = "freshrss";
       description = ''
         Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
+        You may need to configure the virtualhost further through services.nginx.virtualHosts.<virtualhost>,
+        for example to enable SSL.
       '';
     };
 
     pool = mkOption {
-      type = types.str;
-      default = poolName;
+      type = types.nullOr types.str;
+      default = "freshrss";
       description = ''
         Name of the php-fpm pool to use and setup. If not specified, a pool will be created
         with default values.
@@ -130,7 +164,6 @@ in
     let
       defaultServiceConfig = {
         ReadWritePaths = "${cfg.dataDir}";
-        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         DeviceAllow = "";
         LockPersonality = true;
         NoNewPrivileges = true;
@@ -199,8 +232,8 @@ in
       };
 
       # Set up phpfpm pool
-      services.phpfpm.pools = mkIf (cfg.pool == poolName) {
-        ${poolName} = {
+      services.phpfpm.pools = mkIf (cfg.pool != null) {
+        ${cfg.pool} = {
           user = "freshrss";
           settings = {
             "listen.owner" = "nginx";
@@ -214,9 +247,7 @@ in
             "pm.max_spare_servers" = 5;
             "catch_workers_output" = true;
           };
-          phpEnv = {
-            DATA_PATH = "${cfg.dataDir}";
-          };
+          phpEnv = env-vars;
         };
       };
 
@@ -237,9 +268,9 @@ in
         let
           settingsFlags = concatStringsSep " \\\n    "
             (mapAttrsToList (k: v: "${k} ${toString v}") {
-              "--default_user" = ''"${cfg.defaultUser}"'';
-              "--auth_type" = ''"${cfg.authType}"'';
-              "--base_url" = ''"${cfg.baseUrl}"'';
+              "--default-user" = ''"${cfg.defaultUser}"'';
+              "--auth-type" = ''"${cfg.authType}"'';
+              "--base-url" = ''"${cfg.baseUrl}"'';
               "--language" = ''"${cfg.language}"'';
               "--db-type" = ''"${cfg.database.type}"'';
               # The following attributes are optional depending on the type of
@@ -249,7 +280,10 @@ in
               ${if cfg.database.passFile != null then "--db-password" else null} = ''"$(cat ${cfg.database.passFile})"'';
               ${if cfg.database.user != null then "--db-user" else null} = ''"${cfg.database.user}"'';
               ${if cfg.database.tableprefix != null then "--db-prefix" else null} = ''"${cfg.database.tableprefix}"'';
+              # hostname:port e.g. "localhost:5432"
               ${if cfg.database.host != null && cfg.database.port != null then "--db-host" else null} = ''"${cfg.database.host}:${toString cfg.database.port}"'';
+              # socket path e.g. "/run/postgresql"
+              ${if cfg.database.host != null && cfg.database.port == null then "--db-host" else null} = ''"${cfg.database.host}"'';
             });
         in
         {
@@ -259,9 +293,7 @@ in
             RemainAfterExit = true;
           };
           restartIfChanged = true;
-          environment = {
-            DATA_PATH = cfg.dataDir;
-          };
+          environment = env-vars;
 
           script =
             let
@@ -293,9 +325,7 @@ in
         description = "FreshRSS feed updater";
         after = [ "freshrss-config.service" ];
         startAt = "*:0/5";
-        environment = {
-          DATA_PATH = cfg.dataDir;
-        };
+        environment = env-vars;
         serviceConfig = defaultServiceConfig // {
           ExecStart = "${cfg.package}/app/actualize_script.php";
         };

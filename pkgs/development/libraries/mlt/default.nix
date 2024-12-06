@@ -23,7 +23,7 @@
 , darwin
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
-, enableJackrack ? stdenv.isLinux
+, enableJackrack ? stdenv.hostPlatform.isLinux
 , glib
 , ladspa-sdk
 , ladspaPlugins
@@ -31,22 +31,27 @@
 , python3
 , swig
 , qt ? null
-, enableSDL1 ? stdenv.isLinux
+, enableSDL1 ? stdenv.hostPlatform.isLinux
 , SDL
 , enableSDL2 ? true
 , SDL2
 , gitUpdater
+, libarchive
 }:
 
 stdenv.mkDerivation rec {
   pname = "mlt";
-  version = "7.24.0";
+  version = "7.28.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    hash = "sha256-nQ9uRip6i9+/MziU4gQq1ah712J6f94cFQWTDYRjzyE=";
+    hash = "sha256-rXxjHXXIFFggd2v9ZlNBs0XUDmvJxLvR2JfGkTxDYEA=";
+    # The submodule contains glaxnimate code, since MLT uses internally some functions defined in glaxnimate.
+    # Since glaxnimate is not available as a library upstream, we cannot remove for now this dependency on
+    # submodules until upstream exports glaxnimate as a library: https://gitlab.com/mattbas/glaxnimate/-/issues/545
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
@@ -78,7 +83,7 @@ stdenv.mkDerivation rec {
     rubberband
     sox
     vid-stab
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Accelerate
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
@@ -90,6 +95,7 @@ stdenv.mkDerivation rec {
     qt.qtbase
     qt.qtsvg
     (qt.qt5compat or null)
+    libarchive
   ] ++ lib.optionals enableSDL1 [
     SDL
   ] ++ lib.optionals enableSDL2 [
@@ -106,6 +112,7 @@ stdenv.mkDerivation rec {
     "-DSWIG_PYTHON=ON"
   ] ++ lib.optionals (qt != null) [
     "-DMOD_QT${lib.versions.major qt.qtbase.version}=ON"
+    "-DMOD_GLAXNIMATE${if lib.versions.major qt.qtbase.version == "5" then "" else "_QT6"}=ON"
   ];
 
   preFixup = ''
@@ -133,7 +140,7 @@ stdenv.mkDerivation rec {
     description = "Open source multimedia framework, designed for television broadcasting";
     homepage = "https://www.mltframework.org/";
     license = with licenses; [ lgpl21Plus gpl2Plus ];
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -86,6 +86,5 @@ stdenv.mkDerivation {
       "$out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
 
     mkdir -p "$out/nix-support"
-    substituteAll ${./pure-corefoundation-hook.sh} "$out/nix-support/setup-hook"
   '';
 }

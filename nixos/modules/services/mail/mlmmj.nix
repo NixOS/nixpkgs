@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   concatMapLines = f: l: lib.concatStringsSep "\n" (map f l);
@@ -53,38 +50,38 @@ in
 
     services.mlmmj = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enable mlmmj";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "mlmmj";
         description = "mailinglist local user";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "mlmmj";
         description = "mailinglist local group";
       };
 
-      listDomain = mkOption {
-        type = types.str;
+      listDomain = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = "Set the mailing list domain";
       };
 
-      mailLists = mkOption {
-        type = types.listOf types.str;
+      mailLists = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         description = "The collection of hosted maillists";
       };
 
-      maintInterval = mkOption {
-        type = types.str;
+      maintInterval = lib.mkOption {
+        type = lib.types.str;
         default = "20min";
         description = ''
           Time interval between mlmmj-maintd runs, see
@@ -98,7 +95,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.${cfg.user} = {
       description = "mlmmj user";

@@ -28,7 +28,7 @@ mkDerivation rec {
     # Detection script is broken
     "-DQGLVIEWER_INCLUDE_DIR=${libqglviewer}/include/QGLViewer"
     "-DG2O_BUILD_EXAMPLES=OFF"
-  ] ++ lib.optionals stdenv.isx86_64 [
+  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     "-DDO_SSE_AUTODETECT=OFF"
     "-DDISABLE_SSE3=${  if stdenv.hostPlatform.sse3Support   then "OFF" else "ON"}"
     "-DDISABLE_SSE4_1=${if stdenv.hostPlatform.sse4_1Support then "OFF" else "ON"}"
@@ -43,6 +43,6 @@ mkDerivation rec {
     maintainers = with maintainers; [ lopsided98 ];
     platforms = platforms.all;
     # fatal error: 'qglviewer.h' file not found
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

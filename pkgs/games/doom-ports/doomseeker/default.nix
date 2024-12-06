@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ wrapQtAppsHook cmake qttools pkg-config xxd ];
   buildInputs = [ qtbase qtmultimedia zlib bzip2 ];
 
-  hardeningDisable = lib.optional stdenv.isDarwin "format";
+  hardeningDisable = lib.optional stdenv.hostPlatform.isDarwin "format";
 
   # Doomseeker looks for the engines in the program directory
   postInstall = ''
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     homepage = "http://doomseeker.drdteam.org/";
     description = "Multiplayer server browser for many Doom source ports";
     mainProgram = "doomseeker";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ ];
   };

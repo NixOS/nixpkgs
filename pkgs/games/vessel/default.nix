@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     directory where you saved it.
   '';
 
-  src = if (stdenv.isi686) then
+  src = if (stdenv.hostPlatform.isi686) then
     requireFile {
       message = goBuyItNow;
       name = "vessel-${version}-bin";

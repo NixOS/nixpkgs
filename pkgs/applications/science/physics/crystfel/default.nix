@@ -75,7 +75,7 @@ let
     let
       version = "7.4.0";
       src =
-        if stdenv.isDarwin then
+        if stdenv.hostPlatform.isDarwin then
           fetchurl
             {
               url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${builtins.replaceStrings [ "." ] [ "" ] version}/pre-built/mosflm-osx-64-noX11.zip";
@@ -86,7 +86,7 @@ let
             url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${builtins.replaceStrings [ "." ] [ "" ] version}/pre-built/mosflm-linux-64-noX11.zip";
             hash = "sha256:1f2qins5kaz5v6mkaclncqpirx3mlz177ywm13py9p6s9mk99g32";
           };
-      mosflmBinary = if stdenv.isDarwin then "bin/mosflm" else "mosflm-linux-64-noX11";
+      mosflmBinary = if stdenv.hostPlatform.isDarwin then "bin/mosflm" else "mosflm-linux-64-noX11";
     in
     stdenv.mkDerivation {
       pname = "mosflm";
@@ -187,10 +187,10 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crystfel";
-  version = "0.11.0";
+  version = "0.11.1";
   src = fetchurl {
     url = "https://www.desy.de/~twhite/crystfel/crystfel-${version}.tar.gz";
-    sha256 = "sha256-ogNHWYfbxRmB5TdK8K0JpcCnYOOyXapQGSPh8mfp+Tc=";
+    sha256 = "sha256-vZuN9dYnowySC/OX0EZB0mbhoBOyRiOWfX9d6sl1lKQ=";
   };
   nativeBuildInputs = [ meson pkg-config ninja flex bison doxygen opencl-headers makeWrapper ]
     ++ lib.optionals withGui [ wrapGAppsHook3 ];
@@ -209,9 +209,9 @@ stdenv.mkDerivation rec {
     xgandalf
     pandoc
   ] ++ lib.optionals withGui [ gtk3 gdk-pixbuf ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     argp-standalone
-  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64) [
     memorymappingHook
   ]
   ++ lib.optionals withBitshuffle [ hdf5-external-filter-plugins ];
@@ -220,9 +220,6 @@ stdenv.mkDerivation rec {
     # on darwin at least, we need to link to a separate argp library;
     # this patch adds a test for this and the necessary linker options
     ./link-to-argp-standalone-if-needed.patch
-    # hotfix for an issue that occurs (at least) on NixOS:
-    # if the temporary path is too long, we get a segfault
-    ./gui-path-issue.patch
   ];
 
   # CrystFEL calls mosflm by searching PATH for it. We could've create a wrapper script that sets the PATH, but

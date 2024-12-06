@@ -30,6 +30,6 @@ buildPythonPackage rec {
     mainProgram = "portserver.py";
     homepage = "https://github.com/google/python_portpicker";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

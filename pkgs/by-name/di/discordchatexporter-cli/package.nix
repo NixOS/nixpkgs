@@ -8,13 +8,13 @@
 
 buildDotnetModule rec {
   pname = "discordchatexporter-cli";
-  version = "2.43.1";
+  version = "2.43.3";
 
   src = fetchFromGitHub {
     owner = "tyrrrz";
     repo = "discordchatexporter";
     rev = version;
-    hash = "sha256-MLOWZJehajB002SqBW2HJTjr00eU9RV+Weu3rmgoEew=";
+    hash = "sha256-r9bvTgqKQY605BoUlysSz4WJMxn2ibNh3EhoMYCfV3c=";
   };
 
   projectFile = "DiscordChatExporter.Cli/DiscordChatExporter.Cli.csproj";
@@ -39,7 +39,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/Tyrrrz/DiscordChatExporter";
     license = licenses.gpl3Plus;
     changelog = "https://github.com/Tyrrrz/DiscordChatExporter/blob/${version}/Changelog.md";
-    maintainers = with maintainers; [ eclairevoyant ivar ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "discordchatexporter-cli";
   };

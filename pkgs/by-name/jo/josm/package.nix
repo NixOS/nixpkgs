@@ -1,22 +1,23 @@
-{ lib, stdenv, fetchurl, fetchsvn, makeWrapper, unzip, jre, libXxf86vm
+{ lib, stdenv, fetchurl, fetchFromGitHub, makeWrapper, unzip, jre, libXxf86vm
 , extraJavaOpts ? "-Djosm.restart=true -Djava.net.useSystemProxies=true"
 }:
 let
   pname = "josm";
-  version = "19096";
+  version = "19253";
   srcs = {
     jar = fetchurl {
       url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-      hash = "sha256-oX9B98yj9WmTLGVnDO8hOJ/rYFMTLiTaz1dWufD1wqg=";
+      hash = "sha256-GnN+XtGzhLZ2PKAGHv+GMMh0FpilwET7EfKI4CAwYgg=";
     };
     macosx = fetchurl {
       url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java21.zip";
-      hash = "sha256-qOMSG2eAaMHCvJXYzG07Ngb6fR9MbFQI5+1xuxGbBVU=";
+      hash = "sha256-bcCl+w+pvsR+8QXKjM9bVyTAgzp+wre71tZMp5+VJTA=";
     };
-    pkg = fetchsvn {
-      url = "https://josm.openstreetmap.de/svn/trunk/native/linux/tested";
-      rev = version;
-      sha256 = "sha256-L7P6FtqKLB4e+ezPzXePM33qj5esNoRlTFXi0/GhdsA=";
+    pkg = fetchFromGitHub {
+      owner = "JOSM";
+      repo = "josm";
+      rev = "refs/tags/${version}-tested";
+      hash = "sha256-I1mMtNzFkBoU0qcx2rVd9nmDK91ccVyaKwPft72M3r0=";
     };
   };
 
@@ -33,15 +34,15 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ jre ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ jre ];
 
   installPhase =
-    if stdenv.isDarwin then ''
+    if stdenv.hostPlatform.isDarwin then ''
       mkdir -p $out/Applications
       ${unzip}/bin/unzip ${srcs.macosx} 'JOSM.app/*' -d $out/Applications
     '' else ''
       install -Dm644 ${srcs.jar} $out/share/josm/josm.jar
-      cp -R ${srcs.pkg}/usr/share $out
+      cp -R ${srcs.pkg}/native/linux/tested/usr/share $out
 
       # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
       makeWrapper ${jre}/bin/java $out/bin/josm \
@@ -49,14 +50,14 @@ stdenv.mkDerivation rec {
         --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib'
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Extensible editor for OpenStreetMap";
     homepage = "https://josm.openstreetmap.de/";
     changelog = "https://josm.openstreetmap.de/wiki/Changelog";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ rycee sikmir ];
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ rycee sikmir ];
+    platforms = lib.platforms.all;
     mainProgram = "josm";
   };
 }

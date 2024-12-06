@@ -23,31 +23,29 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
-  version = "1.26.0";
+  version = "1.27.1";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
     rev = version;
-    sha256 = "sha256-rdhG9MdjWyvoaMGdjgFyCfQaoV48QtAZE7buA5TkDKg=";
+    sha256 = "sha256-BehkJTEIbZHaM+ABaWN/grl9pX75lPqyBj1q1Kt273M=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-iQoMPV97V9WJqT+qVtNpQtW5g+Jyl+U2uA+JEoRYTQA=";
 
   nativeBuildInputs = [ makeBinaryWrapper pkg-config ];
 
   buildInputs = [
     (curl.override { inherit openssl; })
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security libiconv xz ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Security libiconv xz ];
 
   buildFeatures = [ "no-self-update" ];
 
-  checkFeatures = [ ];
+  checkFeatures = [ "test" ];
 
-  patches = lib.optionals stdenv.isLinux [
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
     (runCommand "0001-dynamically-patchelf-binaries.patch"
       {
         CC = stdenv.cc;
@@ -62,7 +60,9 @@ rustPlatform.buildRustPackage rec {
     '')
   ];
 
-  doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
+  # Random tests fail nondeterministically on macOS.
+  # TODO: Investigate this.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # skip failing tests
   checkFlags = [
@@ -105,6 +105,7 @@ rustPlatform.buildRustPackage rec {
     # add a wrapper script for ld.lld
     mkdir -p $out/nix-support
     substituteAll ${../../../../../pkgs/build-support/wrapper-common/utils.bash} $out/nix-support/utils.bash
+    substituteAll ${../../../../../pkgs/build-support/wrapper-common/darwin-sdk-setup.bash} $out/nix-support/darwin-sdk-setup.bash
     substituteAll ${../../../../../pkgs/build-support/bintools-wrapper/add-flags.sh} $out/nix-support/add-flags.sh
     substituteAll ${../../../../../pkgs/build-support/bintools-wrapper/add-hardening.sh} $out/nix-support/add-hardening.sh
     export prog='$PROG'

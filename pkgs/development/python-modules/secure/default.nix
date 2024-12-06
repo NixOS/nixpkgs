@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Adds optional security headers and cookie attributes for Python web frameworks";
     homepage = "https://github.com/TypeError/secure.py";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

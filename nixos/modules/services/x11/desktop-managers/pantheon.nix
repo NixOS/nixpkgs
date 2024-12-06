@@ -12,7 +12,7 @@ let
     extraGSettingsOverrides = cfg.extraGSettingsOverrides;
   };
 
-  notExcluded = pkg: (!(lib.elem pkg config.environment.pantheon.excludePackages));
+  notExcluded = pkg: utils.disablePackageByName pkg config.environment.pantheon.excludePackages;
 in
 
 {
@@ -44,7 +44,7 @@ in
       sessionPath = mkOption {
         default = [];
         type = types.listOf types.package;
-        example = literalExpression "[ pkgs.gnome.gpaste ]";
+        example = literalExpression "[ pkgs.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
@@ -130,7 +130,6 @@ in
 
       # Default services
       hardware.bluetooth.enable = mkDefault true;
-      hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
       services.bamf.enable = true;
@@ -160,6 +159,7 @@ in
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
       services.libinput.enable = mkDefault true;
+      services.switcherooControl.enable = mkDefault true;
       services.xserver.updateDbusEnvironment = true;
       services.zeitgeist.enable = mkDefault true;
       services.geoclue2.enable = mkDefault true;
@@ -175,8 +175,9 @@ in
         # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1443
         pkgs.pantheon.mutter
       ];
+      services.orca.enable = mkDefault (notExcluded pkgs.orca);
       systemd.packages = with pkgs; [
-        gnome.gnome-session
+        gnome-session
         pantheon.gala
         pantheon.gnome-settings-daemon
         pantheon.elementary-session-settings
@@ -193,6 +194,7 @@ in
 
       # Global environment
       environment.systemPackages = (with pkgs.pantheon; [
+        elementary-bluetooth-daemon
         elementary-session-settings
         elementary-settings-daemon
         gala
@@ -207,10 +209,9 @@ in
         desktop-file-utils
         glib # for gsettings program
         gnome-menus
-        gnome.adwaita-icon-theme
+        adwaita-icon-theme
         gtk3.out # for gtk-launch program
         onboard
-        orca # elementary/greeter#668
         sound-theme-freedesktop
         xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
       ]) ++ (with pkgs.pantheon; [
@@ -284,11 +285,11 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
-      programs.evince.enable = mkDefault (notExcluded pkgs.gnome.evince);
-      programs.file-roller.enable = mkDefault (notExcluded pkgs.gnome.file-roller);
+      programs.evince.enable = mkDefault (notExcluded pkgs.evince);
+      programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
       environment.systemPackages = utils.removePackagesByName ([
-        pkgs.gnome.gnome-font-viewer
+        pkgs.gnome-font-viewer
       ] ++ (with pkgs.pantheon; [
         elementary-calculator
         elementary-calendar

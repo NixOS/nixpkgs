@@ -1,11 +1,14 @@
-lib: { rke2Version, rke2RepoSha256, rke2VendorHash, updateScript
+lib: { rke2Version, rke2Commit, rke2TarballHash, rke2VendorHash, updateScript
+, k8sImageTag, etcdVersion, pauseVersion, ccmVersion, dockerizedVersion, ... }:
 
-, rke2Commit, k8sImageTag, etcdVersion, pauseVersion, ccmVersion, dockerizedVersion, ... }:
-
-{ lib, stdenv, buildGoModule, go, fetchgit, makeWrapper
+# Build dependencies
+{ lib, stdenv, buildGoModule, go, makeWrapper, fetchzip
 
 # Runtime dependencies
 , procps, coreutils, util-linux, ethtool, socat, iptables, bridge-utils, iproute2, kmod, lvm2
+
+# Killall Script dependencies
+, systemd, gnugrep, gnused
 
 # Testing dependencies
 , nixosTests, testers, rke2
@@ -15,10 +18,9 @@ buildGoModule rec {
   pname = "rke2";
   version = rke2Version;
 
-  src = fetchgit {
-    url = "https://github.com/rancher/rke2.git";
-    rev = "v${version}";
-    sha256 = rke2RepoSha256;
+  src = fetchzip {
+    url = "https://github.com/rancher/rke2/archive/refs/tags/v${rke2Version}.tar.gz";
+    hash = "${rke2TarballHash}";
   };
 
   vendorHash = rke2VendorHash;
@@ -49,7 +51,7 @@ buildGoModule rec {
     "-X github.com/k3s-io/k3s/pkg/version.Version=v${version}"
     "-X github.com/k3s-io/k3s/pkg/version.UpstreamGolang=go${go.version}"
     "-X github.com/rancher/rke2/pkg/images.DefaultRegistry=docker.io"
-    "-X github.com/rancher/rke2/pkg/images.DefaultEtcdImage=rancher/hardened-etcd:${etcdVersion}-build20240418"
+    "-X github.com/rancher/rke2/pkg/images.DefaultEtcdImage=rancher/hardened-etcd:${etcdVersion}"
     "-X github.com/rancher/rke2/pkg/images.DefaultKubernetesImage=rancher/hardened-kubernetes:${k8sImageTag}"
     "-X github.com/rancher/rke2/pkg/images.DefaultPauseImage=rancher/mirrored-pause:${pauseVersion}"
     "-X github.com/rancher/rke2/pkg/images.DefaultRuntimeImage=rancher/rke2-runtime:${dockerizedVersion}"
@@ -72,6 +74,11 @@ buildGoModule rec {
     install -D $GOPATH/bin/rke2 $out/bin/rke2
     wrapProgram $out/bin/rke2 \
       --prefix PATH : ${lib.makeBinPath buildInputs}
+
+    install -D ./bundle/bin/rke2-killall.sh $out/bin/rke2-killall.sh
+    wrapProgram $out/bin/rke2-killall.sh \
+      --prefix PATH : ${lib.makeBinPath [ systemd gnugrep gnused ]} \
+      --prefix PATH : ${lib.makeBinPath buildInputs}
   '';
 
   doCheck = false;
@@ -83,7 +90,7 @@ buildGoModule rec {
       package = rke2;
       version = "v${version}";
     };
-  } // lib.optionalAttrs stdenv.isLinux {
+  } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
     inherit (nixosTests) rke2;
   };
 

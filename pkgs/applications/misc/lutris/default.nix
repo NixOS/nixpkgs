@@ -13,7 +13,7 @@
 , gtk3
 , libnotify
 , pango
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 
   # check inputs
@@ -39,7 +39,7 @@
 , xrandr
 , pciutils
 , psmisc
-, glxinfo
+, mesa-demos
 , vulkan-tools
 , xboxdrv
 , pulseaudio
@@ -58,7 +58,7 @@ let
     xrandr
     pciutils
     psmisc
-    glxinfo
+    mesa-demos
     vulkan-tools
     xboxdrv
     pulseaudio
@@ -75,13 +75,13 @@ let
 in
 buildPythonApplication rec {
   pname = "lutris-unwrapped";
-  version = "0.5.16";
+  version = "0.5.17";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
     rev = "v${version}";
-    hash = "sha256-Ed1bhugBe97XmY050A5jCPcnLj0Fd7qPX2p/Ab+YbOE=";
+    hash = "sha256-Tr5k5LU0s75+1B17oK8tlgA6SlS1SHyyLS6UBKadUmw=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
@@ -93,7 +93,7 @@ buildPythonApplication rec {
     gtk3
     libnotify
     pango
-    webkitgtk
+    webkitgtk_4_0
   ] ++ (with gst_all_1; [
     gst-libav
     gst-plugins-bad
@@ -121,7 +121,7 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace lutris/util/magic.py \
-      --replace "'libmagic.so.1'" "'${lib.getLib file}/lib/libmagic.so.1'"
+      --replace '"libmagic.so.1"' "'${lib.getLib file}/lib/libmagic.so.1'"
   '';
 
   nativeCheckInputs = [ xvfb-run nose2 flake8 ] ++ requiredTools;

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   isPyPy,
   substituteAll,
@@ -32,19 +31,17 @@
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.34.2";
+  version = "2.36.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "imageio";
     repo = "imageio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1q/LPEdo9rzcIR1ZD+bIP8MIKe7PmxRd8UX6c5C0V5k=";
+    hash = "sha256-dQrAVPXtDdibaxxfqW29qY7j5LyegvmI0Y7/btXmsyY=";
   };
 
-  patches = lib.optionals (!stdenv.isDarwin) [
+  patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     (substituteAll {
       src = ./libgl-path.patch;
       libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -58,7 +55,7 @@ buildPythonPackage rec {
     pillow
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     bsdf = [ ];
     dicom = [ ];
     feisem = [ ];
@@ -79,14 +76,11 @@ buildPythonPackage rec {
     heif = [ pillow-heif ];
   };
 
-  nativeCheckInputs =
-    [
-      fsspec
-      psutil
-      pytestCheckHook
-    ]
-    ++ fsspec.optional-dependencies.github
-    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  nativeCheckInputs = [
+    fsspec
+    psutil
+    pytestCheckHook
+  ] ++ fsspec.optional-dependencies.github ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [ "-m 'not needs_internet'" ];
 
@@ -103,15 +97,21 @@ buildPythonPackage rec {
     "tests/test_swf.py"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    # Segmentation fault
-    "test_bayer_write"
-    # RuntimeError: No valid H.264 encoder was found with the ffmpeg installation
-    "test_writer_file_properly_closed"
-    "test_writer_pixelformat_size_verbose"
-    "test_writer_ffmpeg_params"
-    "test_reverse_read"
-  ];
+  disabledTests =
+    [
+      # Pillow 11.0.0 compat
+      # https://github.com/imageio/imageio/issues/1104
+      "test_gif"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Segmentation fault
+      "test_bayer_write"
+      # RuntimeError: No valid H.264 encoder was found with the ffmpeg installation
+      "test_writer_file_properly_closed"
+      "test_writer_pixelformat_size_verbose"
+      "test_writer_ffmpeg_params"
+      "test_reverse_read"
+    ];
 
   meta = {
     description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";

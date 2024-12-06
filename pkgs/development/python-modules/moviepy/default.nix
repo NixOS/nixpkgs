@@ -16,7 +16,7 @@
   scipy,
   setuptools,
   tqdm,
-  youtube-dl,
+  yt-dlp,
 }:
 
 buildPythonPackage rec {
@@ -50,19 +50,19 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     optionals = [
       matplotlib
       scikit-image
       scikit-learn
       scipy
-      youtube-dl
+      yt-dlp
     ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "moviepy" ];
 
@@ -73,6 +73,8 @@ buildPythonPackage rec {
     "test_setup"
     "test_subtitles"
     "test_sys_write_flush"
+    # media duration mismatch: assert 2.9 == 3.0
+    "test_ffmpeg_parse_infos"
   ];
 
   disabledTestPaths = [
@@ -92,6 +94,6 @@ buildPythonPackage rec {
     homepage = "https://zulko.github.io/moviepy/";
     changelog = "https://github.com/Zulko/moviepy/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

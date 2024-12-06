@@ -42,6 +42,24 @@ let
   inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
   inherit (import ../../build-support/lib/meson.nix { inherit lib stdenv; }) makeMesonFlags;
 
+  /**
+    This function creates a derivation, and returns it in the form of a [package attribute set](https://nix.dev/manual/nix/latest/glossary#package-attribute-set)
+    that refers to the derivation's outputs.
+
+    `mkDerivation` takes many argument attributes, most of which affect the derivation environment,
+    but [`meta`](#chap-meta) and [`passthru`](#var-stdenv-passthru) only directly affect package attributes.
+
+    The `mkDerivation` argument attributes can be made to refer to one another by passing a function to `mkDerivation`.
+    See [Fixed-point argument of `mkDerivation`](#mkderivation-recursive-attributes).
+
+    Reference documentation see: https://nixos.org/manual/nixpkgs/stable/#sec-using-stdenv
+
+    :::{.note}
+    This is used as the fundamental building block of most other functions in Nixpkgs for creating derivations.
+
+    Most arguments are also passed through to the underlying call of [`builtins.derivation`](https://nixos.org/manual/nix/stable/language/derivations).
+    :::
+  */
   mkDerivation =
     fnOrAttrs:
       if builtins.isFunction fnOrAttrs
@@ -67,26 +85,8 @@ let
       #              ^^^^
 
       overrideAttrs = f0:
-        let
-          f = self: super:
-            # Convert f0 to an overlay. Legacy is:
-            #   overrideAttrs (super: {})
-            # We want to introduce self. We follow the convention of overlays:
-            #   overrideAttrs (self: super: {})
-            # Which means the first parameter can be either self or super.
-            # This is surprising, but far better than the confusion that would
-            # arise from flipping an overlay's parameters in some cases.
-            let x = f0 super;
-            in
-              if builtins.isFunction x
-              then
-                # Can't reuse `x`, because `self` comes first.
-                # Looks inefficient, but `f0 super` was a cheap thunk.
-                f0 self super
-              else x;
-        in
-          makeDerivationExtensible
-            (self: let super = rattrs self; in super // (if builtins.isFunction f0 || f0?__functor then f self super else f0));
+        makeDerivationExtensible
+          (lib.extends (lib.toExtension f0) rattrs);
 
       finalPackage =
         mkDerivationSimple overrideAttrs args;
@@ -115,10 +115,13 @@ let
     "format"
     "fortify"
     "fortify3"
+    "shadowstack"
+    "pacret"
     "pic"
     "pie"
     "relro"
     "stackprotector"
+    "stackclashprotection"
     "strictoverflow"
     "trivialautovarinit"
     "zerocallusedregs"
@@ -136,7 +139,7 @@ let
   # Turn a derivation into its outPath without a string context attached.
   # See the comment at the usage site.
   unsafeDerivationToUntrackedOutpath = drv:
-    if isDerivation drv
+    if isDerivation drv && (!drv.__contentAddressed or false)
     then builtins.unsafeDiscardStringContext drv.outPath
     else drv;
 
@@ -262,7 +265,9 @@ let
   defaultHardeningFlags =
     (if stdenv.hasCC then stdenv.cc else {}).defaultHardeningFlags or
       # fallback safe-ish set of flags
-      (remove "pie" knownHardeningFlags);
+      (if with stdenv.hostPlatform; isOpenBSD && isStatic
+       then knownHardeningFlags # Need pie, in fact
+       else remove "pie" knownHardeningFlags);
   enabledHardeningOptions =
     if builtins.elem "all" hardeningDisable'
     then []
@@ -351,7 +356,7 @@ else let
           then attrs.name + hostSuffix
           else
             # we cannot coerce null to a string below
-            assert assertMsg (attrs ? version && attrs.version != null) "The ‘version’ attribute cannot be null.";
+            assert assertMsg (attrs ? version && attrs.version != null) "The `version` attribute cannot be null.";
             "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
         );
     }) // {
@@ -408,7 +413,7 @@ else let
       enableParallelChecking = attrs.enableParallelChecking or true;
       enableParallelInstalling = attrs.enableParallelInstalling or true;
     } // optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
-      NIX_HARDENING_ENABLE = enabledHardeningOptions;
+      NIX_HARDENING_ENABLE = builtins.concatStringsSep " " enabledHardeningOptions;
     } // optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? gcc.arch) {
       requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.gcc.arch}" ];
     } // optionalAttrs (stdenv.buildPlatform.isDarwin) (
@@ -567,14 +572,17 @@ let
   checkedEnv =
     let
       overlappingNames = attrNames (builtins.intersectAttrs env derivationArg);
+      prettyPrint = lib.generators.toPretty {};
+      makeError = name: "  - ${name}: in `env`: ${prettyPrint env.${name}}; in derivation arguments: ${prettyPrint derivationArg.${name}}";
+      errors = lib.concatMapStringsSep "\n" makeError overlappingNames;
     in
     assert assertMsg envIsExportable
       "When using structured attributes, `env` must be an attribute set of environment variables.";
     assert assertMsg (overlappingNames == [ ])
-      "The ‘env’ attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping: ${concatStringsSep ", " overlappingNames}";
+      "The `env` attribute set cannot contain any attributes passed to derivation. The following attributes are overlapping:\n${errors}";
     mapAttrs
       (n: v: assert assertMsg (isString v || isBool v || isInt v || isDerivation v)
-        "The ‘env’ attribute set can only contain derivation, string, boolean or integer attributes. The ‘${n}’ attribute is of type ${builtins.typeOf v}."; v)
+        "The `env` attribute set can only contain derivation, string, boolean or integer attributes. The `${n}` attribute is of type ${builtins.typeOf v}."; v)
       env;
 
   # Fixed-output derivations may not reference other paths, which means that
@@ -605,13 +613,19 @@ extendDerivation
        _derivation_original_args = derivationArg.args;
 
        builder = stdenv.shell;
-       # The bash builtin `export` dumps all current environment variables,
+       # The builtin `declare -p` dumps all bash and environment variables,
        # which is where all build input references end up (e.g. $PATH for
        # binaries). By writing this to $out, Nix can find and register
        # them as runtime dependencies (since Nix greps for store paths
-       # through $out to find them)
+       # through $out to find them). Using placeholder for $out works with
+       # and without structuredAttrs.
+       # This build script does not use setup.sh or stdenv, to keep
+       # the env most pristine. This gives us a very bare bones env,
+       # hence the extra/duplicated compatibility logic and "pure bash" style.
        args = [ "-c" ''
-         export > $out
+         out="${placeholder "out"}"
+         if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
+         declare -p > $out
          for var in $passAsFile; do
              pathVar="''${var}Path"
              printf "%s" "$(< "''${!pathVar}")" >> $out

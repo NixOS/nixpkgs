@@ -36,7 +36,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   # tests sometimes fail with SIGQUIT on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru.tests = {
     version = testers.testVersion {

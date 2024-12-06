@@ -19,6 +19,6 @@ mkDerivation rec {
     homepage = "https://synthv1.sourceforge.io/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
   };
 }

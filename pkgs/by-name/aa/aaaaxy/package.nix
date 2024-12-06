@@ -20,17 +20,17 @@
 
 buildGoModule rec {
   pname = "aaaaxy";
-  version = "1.5.139";
+  version = "1.5.220";
 
   src = fetchFromGitHub {
     owner = "divVerent";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-j8BpLN0PhMqUQXhF1L7uEW2KLaVq5cfckXnWrkltCgM=";
+    hash = "sha256-XNLX5LDbL29Ko0zstgo+O5V0oe37dSChk8iJeVrYlLA=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-a6nfGP6Lwjwr4wXXRUrCyV9+BCyHOSKczk5rjZdFnlA=";
+  vendorHash = "sha256-tDQKU/1fKDPCrUHfFi79u4d2XwOqjvTuIlsUAB74e4c=";
 
   buildInputs = [
     alsa-lib
@@ -71,6 +71,9 @@ buildGoModule rec {
     # To work around this, use environment variables.
     postBuild = ''
       substituteInPlace 'vendor/github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/opengl/gl/procaddr_linbsd.go' \
+        --replace-fail \
+        'import (' \
+        'import ("os"' \
         --replace-fail \
         '{"libGL.so", "libGL.so.2", "libGL.so.1", "libGL.so.0"}' \
         '{os.Getenv("EBITENGINE_LIBGL")}' \

@@ -10,8 +10,9 @@
   gsettings-desktop-schemas,
   wrapGAppsHook3,
   gtk-layer-shell,
-  gnome,
+  adwaita-icon-theme,
   libxkbcommon,
+  libdbusmenu-gtk3,
   openssl,
   pkg-config,
   hicolor-icon-theme,
@@ -29,16 +30,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "ironbar";
-  version = "0.15.1";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "ironbar";
     rev = "v${version}";
-    hash = "sha256-TPbvKQdoGfZMzp+fl72vy6MtRV1yGcOG/es67VOA0xw=";
+    hash = "sha256-UtBO1XaghmzKv9qfhfoLi4ke+mf+Mtgh4f4UpCeEVDg=";
   };
 
-  cargoHash = "sha256-+9R505xyEycv5Dav4ZCh1BiYRp3U1I9yBDqSPefo9uY=";
+  cargoHash = "sha256-PIesf/wqz8jrc7WbPBvku4MOTAbNq6m4VhYSKoStvY8=";
 
   buildInputs =
     [
@@ -48,14 +49,15 @@ rustPlatform.buildRustPackage rec {
       gtk-layer-shell
       glib-networking
       shared-mime-info
-      gnome.adwaita-icon-theme
+      adwaita-icon-theme
       hicolor-icon-theme
       gsettings-desktop-schemas
       libxkbcommon
     ]
     ++ lib.optionals (hasFeature "http") [ openssl ]
     ++ lib.optionals (hasFeature "volume") [ libpulseaudio ]
-    ++ lib.optionals (hasFeature "cairo") [ luajit ];
+    ++ lib.optionals (hasFeature "cairo") [ luajit ]
+    ++ lib.optionals (hasFeature "tray") [ libdbusmenu-gtk3 ];
 
   nativeBuildInputs = [
     pkg-config

@@ -1,4 +1,5 @@
-{ fetchurl }: [
+{ fetchurl }:
+[
   {
     name = "gmp-6.3.0.tar.xz";
     archive = fetchurl {
@@ -21,10 +22,10 @@
     };
   }
   {
-    name = "gcc-13.2.0.tar.xz";
+    name = "gcc-14.1.0.tar.xz";
     archive = fetchurl {
-      sha256 = "1nj3qyswcgc650sl3h0480a171ixp33ca13zl90p61m689jffxg2";
-      url = "mirror://gnu/gcc/gcc-13.2.0/gcc-13.2.0.tar.xz";
+      sha256 = "0h3889kkfp9bzw8km9w1ssh5qjskg6yw02q8v3lkvzksk1acd0z2";
+      url = "mirror://gnu/gcc/gcc-14.1.0/gcc-14.1.0.tar.xz";
     };
   }
   {
@@ -42,10 +43,10 @@
     };
   }
   {
-    name = "nasm-2.16.01.tar.bz2";
+    name = "nasm-2.16.03.tar.bz2";
     archive = fetchurl {
-      sha256 = "0bmv8xbzck7jim7fzm6jnwiahqkprbpz6wzhg53irm28w0pavdim";
-      url = "https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/nasm-2.16.01.tar.bz2";
+      sha256 = "0mwynbnn7c4ay4rpcsyp99j49sa6j3p8gk5pigwssqfdkcaxxwxy";
+      url = "https://www.nasm.us/pub/nasm/releasebuilds/2.16.03/nasm-2.16.03.tar.bz2";
     };
   }
 ]

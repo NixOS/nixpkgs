@@ -5,6 +5,6 @@
 mkKdeDerivation {
   pname = "kbreakout";
 
-  extraNativeBuildInputs = [_7zz];
+  extraNativeBuildInputs = [ _7zz ];
   meta.mainProgram = "kbreakout";
 }

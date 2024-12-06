@@ -32,7 +32,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/Alir3z4/html2text/";
     changelog = "https://github.com/Alir3z4/html2text/blob/${src.rev}/ChangeLog.rst";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "html2text";
   };
 }

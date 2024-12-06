@@ -1,10 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  python,
   fetchFromGitHub,
   sdcc,
   libusb1,
+  setuptools-scm,
   crcmod,
 }:
 
@@ -20,7 +20,10 @@ buildPythonPackage rec {
     hash = "sha256-PtWxjT+97+EeNMN36zOT1+ost/w3lRRkaON3Cl3dpp4=";
   };
 
-  nativeBuildInputs = [ sdcc ];
+  nativeBuildInputs = [
+    setuptools-scm
+    sdcc
+  ];
 
   propagatedBuildInputs = [
     libusb1
@@ -46,6 +49,6 @@ buildPythonPackage rec {
     mainProgram = "fx2tool";
     homepage = "https://github.com/whitequark/libfx2";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

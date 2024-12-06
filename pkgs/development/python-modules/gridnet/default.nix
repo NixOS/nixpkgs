@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "gridnet";
-  version = "5.0.0";
+  version = "5.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-gridnet";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7tLT5sRoUjWs1DOIuUEbnJJkg9LHZqrN/eu+Mjx5Yd4=";
+    hash = "sha256-HVBUAasK7lFsj/tT0j70x/2w4RJtnHWfX/1XbfKKLf8=";
   };
 
   postPatch = ''

@@ -11,7 +11,7 @@
   # check inputs
   pytestCheckHook,
   parameterized,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-timeout,
   remote-pdb,
 }:
@@ -51,7 +51,7 @@ buildPythonPackage {
   nativeCheckInputs = [
     pytestCheckHook
     parameterized
-    pytest-cov
+    pytest-cov-stub
     pytest-timeout
     remote-pdb
   ];

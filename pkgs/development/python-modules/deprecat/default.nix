@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "deprecat";
-  version = "2.1.2";
+  version = "2.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "mjhajharia";
     repo = "deprecat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uAabZAtZDhcX6TfiM0LnrAzxxS64ys+vdodmxO//0x8=";
+    hash = "sha256-CvW4SQ78FG8GqBs6/a0yHWfTAn64sH54GVSETooMa6A=";
   };
 
   build-system = [ setuptools-scm ];

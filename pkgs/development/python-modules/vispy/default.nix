@@ -21,17 +21,24 @@
 
 buildPythonPackage rec {
   pname = "vispy";
-  version = "0.14.2";
+  version = "0.14.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7ti0TW9ch70pWySqmi4OTm3GqQXM7gGy1ByPvwp2ez0=";
+    hash = "sha256-77u4R6kIuvfnFpq5vylhOKOTZPNn5ssKjsA61xaZ0x0=";
   };
 
-  patches = [
+  postPatch = ''
+    # https://numpy.org/devdocs/dev/depending_on_numpy.html#numpy-2-0-specific-advice
+    # upstream enforce builds with numpy 2+, which is backward compat with 1.xx
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0rc2" "numpy"
+  '';
+
+  patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     (substituteAll {
       src = ./library-paths.patch;
       fontconfig = "${fontconfig.lib}/lib/libfontconfig${stdenv.hostPlatform.extensions.sharedLibrary}";

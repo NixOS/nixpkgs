@@ -4,7 +4,6 @@
   fetchPypi,
   numpy,
   scipy,
-  scikit-learn,
   matplotlib,
   unittestCheckHook,
 }:

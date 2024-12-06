@@ -3,7 +3,7 @@
 with lib;
 let cfg = config.services.espanso;
 in {
-  meta = { maintainers = with lib.maintainers; [ numkem ]; };
+  meta = { maintainers = with lib.maintainers; [ n8henrie numkem ]; };
 
   options = {
     services.espanso = {

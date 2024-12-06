@@ -5,7 +5,7 @@
 , ffmpeg
 , libopus
 , makeBinaryWrapper
-, nix-update-script
+, unstableGitUpdater
 , openssl
 , pkg-config
 , stdenv
@@ -28,14 +28,16 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [ cmake makeBinaryWrapper pkg-config ];
 
   buildInputs = [ libopus openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = ''
     wrapProgram $out/bin/parrot \
       --prefix PATH : ${lib.makeBinPath [ ffmpeg yt-dlp ]}
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = {
     description = "Hassle-free Discord music bot";

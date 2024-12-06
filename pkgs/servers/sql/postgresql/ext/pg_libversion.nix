@@ -5,9 +5,10 @@
 , pkg-config
 , postgresql
 , libversion
+, buildPostgresqlExtension
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildPostgresqlExtension (finalAttrs: {
   pname = "pg_libversion";
   version = "2.0.1";
 
@@ -23,19 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    postgresql
     libversion
   ];
-
-  installPhase = ''
-    runHook preInstall
-
-    install -D -t $out/lib libversion${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension *.sql
-    install -D -t $out/share/postgresql/extension *.control
-
-    runHook postInstall
-  '';
 
   passthru.updateScript = gitUpdater { };
 

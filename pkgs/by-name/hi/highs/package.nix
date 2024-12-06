@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "highs";
-  version = "1.7.1";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "ERGO-Code";
     repo = "HiGHS";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-SJbS0403HyiW8zPrLsNWp8+h/wL7UdrS+QOEjLf1jzE=";
+    hash = "sha256-JuUPnsCNImWpkeh0B//7yM1Wix9SpnfApp8cxX9WeYk=";
   };
 
   strictDeps = true;

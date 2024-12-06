@@ -1,4 +1,9 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.postfix;
@@ -14,6 +19,7 @@ in
 {
   port = 9154;
   extraOpts = {
+    package = lib.mkPackageOption pkgs "prometheus-postfix-exporter" { };
     group = mkOption {
       type = types.str;
       description = ''
@@ -88,18 +94,26 @@ in
       RestrictAddressFamilies = [ "AF_UNIX" ];
       SupplementaryGroups = mkIf cfg.systemd.enable [ "systemd-journal" ];
       ExecStart = ''
-        ${pkgs.prometheus-postfix-exporter}/bin/postfix_exporter \
+        ${lib.getExe cfg.package} \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
           --postfix.showq_path ${escapeShellArg cfg.showqPath} \
-          ${concatStringsSep " \\\n  " (cfg.extraFlags
-          ++ optional cfg.systemd.enable "--systemd.enable"
-          ++ optional cfg.systemd.enable (if cfg.systemd.slice != null
-                                          then "--systemd.slice ${cfg.systemd.slice}"
-                                          else "--systemd.unit ${cfg.systemd.unit}")
-          ++ optional (cfg.systemd.enable && (cfg.systemd.journalPath != null))
-                       "--systemd.journal_path ${escapeShellArg cfg.systemd.journalPath}"
-          ++ optional (!cfg.systemd.enable) "--postfix.logfile_path ${escapeShellArg cfg.logfilePath}")}
+          ${
+            concatStringsSep " \\\n  " (
+              cfg.extraFlags
+              ++ optional cfg.systemd.enable "--systemd.enable"
+              ++ optional cfg.systemd.enable (
+                if cfg.systemd.slice != null then
+                  "--systemd.slice ${cfg.systemd.slice}"
+                else
+                  "--systemd.unit ${cfg.systemd.unit}"
+              )
+              ++ optional (
+                cfg.systemd.enable && (cfg.systemd.journalPath != null)
+              ) "--systemd.journal_path ${escapeShellArg cfg.systemd.journalPath}"
+              ++ optional (!cfg.systemd.enable) "--postfix.logfile_path ${escapeShellArg cfg.logfilePath}"
+            )
+          }
       '';
     };
   };

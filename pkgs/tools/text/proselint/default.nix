@@ -18,6 +18,6 @@ buildPythonApplication rec {
     mainProgram = "proselint";
     homepage = "http://proselint.com";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ alibabzo ];
+    maintainers = [ ];
   };
 }

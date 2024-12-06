@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # src/ewmh/ewmh.cpp:67:28: error: non-constant-expression cannot be narrowed from type 'int' to 'uint32_t' (aka 'unsigned int') in initializer list
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-c++11-narrowing";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-c++11-narrowing";
 
   installPhase = ''
     runHook preInstall
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src.meta) homepage;
     description = "Tiling X11 window manager written in modern C++";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
     inherit (libX11.meta) platforms;
     mainProgram = "Hypr";
   };

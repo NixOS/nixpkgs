@@ -7,10 +7,12 @@
 , fetchpatch2
 , makeSetupHook
 , makeWrapper
+, runCommand
 , gst_all_1
 , libglvnd
 , darwin
-, overrideSDK
+, apple-sdk_15
+, darwinMinVersionHook
 , buildPackages
 , python3
 , config
@@ -26,27 +28,40 @@ let
     let
       callPackage = self.newScope ({
         inherit (self) qtModule;
-        inherit srcs python3;
-        stdenv =
-          if stdenv.isDarwin
-          then overrideSDK stdenv { darwinMinVersion = "11.0"; darwinSdkVersion = "11.0"; }
-          else stdenv;
+        inherit srcs python3 stdenv;
       });
+
+      # Per <https://doc.qt.io/qt-6/macos.html#supported-versions>.
+      # This should reflect the highest “Build Environment” and the
+      # lowest “Target Platform”.
+      darwinVersionInputs = [
+        apple-sdk_15
+        (darwinMinVersionHook "12.0")
+      ];
+
+      onlyPluginsAndQml = drv: let
+        drv' = drv.__spliced.targetTarget or drv;
+        inherit (self.qtbase) qtPluginPrefix qtQmlPrefix;
+      in (runCommand "${drv'.name}-only-plugins-qml" { } ''
+          mkdir -p $(dirname "$out/${qtPluginPrefix}")
+          test -d "${drv'}/${qtPluginPrefix}" && ln -s "${drv'}/${qtPluginPrefix}" "$out/${qtPluginPrefix}" || true
+          test -d "${drv'}/${qtQmlPrefix}" && ln -s "${drv'}/${qtQmlPrefix}" "$out/${qtQmlPrefix}" || true
+      '');
     in
     {
 
-      inherit callPackage srcs;
+      inherit callPackage srcs darwinVersionInputs;
 
-      qtModule = callPackage ./qtModule.nix { };
+      qtModule = callPackage ./qtModule.nix {
+        inherit darwinVersionInputs;
+      };
 
       qtbase = callPackage ./modules/qtbase.nix {
         withGtk3 = !stdenv.hostPlatform.isMinGW;
+        inherit darwinVersionInputs;
         inherit (srcs.qtbase) src version;
-        inherit (darwin.apple_sdk_11_0.frameworks)
-          AGL AVFoundation AppKit Contacts CoreBluetooth EventKit GSS MetalKit;
         patches = [
           ./patches/0001-qtbase-qmake-always-use-libname-instead-of-absolute-.patch
-          ./patches/0002-qtbase-qmake-fix-mkspecs-for-darwin.patch
           ./patches/0003-qtbase-qmake-fix-includedir-in-generated-pkg-config.patch
           ./patches/0004-qtbase-qt-cmake-always-use-cmake-from-path.patch
           ./patches/0005-qtbase-find-tools-in-PATH.patch
@@ -55,12 +70,18 @@ let
           ./patches/0008-qtbase-find-qmlimportscanner-in-macdeployqt-via-envi.patch
           ./patches/0009-qtbase-check-in-the-QML-folder-of-this-library-does-.patch
           ./patches/0010-qtbase-derive-plugin-load-path-from-PATH.patch
-          # Revert "macOS: Silence warning about supporting secure state restoration"
-          # fix build with macOS sdk < 12.0
+          # Backport patch for https://bugs.kde.org/show_bug.cgi?id=493116
+          # FIXME: remove for 6.8.1
           (fetchpatch2 {
-            url = "https://github.com/qt/qtbase/commit/fc1549c01445bb9c99d3ba6de8fa9da230614e72.patch";
-            revert = true;
-            hash = "sha256-cjB2sC4cvZn0UEc+sm6ZpjyC78ssqB1Kb5nlZQ15M4A=";
+            url = "https://github.com/qt/qtbase/commit/2ea3abed0125d81ca4f3bacb9650db7314657332.patch";
+            hash = "sha256-mdTdwhJtebuLUQRo+y1XUrrzgqG9G7GvPQwvrXLycJI=";
+          })
+
+          # Backport patch to fix plugin loading through symlinks
+          # FIXME: remove for 6.8.1
+          (fetchpatch2 {
+            url = "https://github.com/qt/qtbase/commit/e25150ca29437ab315e3686aa801b8636e201e2a.patch";
+            hash = "sha256-8WOjjffI48Vlx7gQIiOzfUtPloLys5lf06RQi1lsTys=";
           })
         ];
       };
@@ -106,15 +127,13 @@ let
             qtwebengine
             qtwebsockets
             qtwebview
-          ] ++ lib.optionals (!stdenv.isDarwin) [ qtwayland libglvnd ]))
+          ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ qtwayland libglvnd ]))
         { };
 
       qt3d = callPackage ./modules/qt3d.nix { };
       qt5compat = callPackage ./modules/qt5compat.nix { };
       qtcharts = callPackage ./modules/qtcharts.nix { };
-      qtconnectivity = callPackage ./modules/qtconnectivity.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) IOBluetooth PCSC;
-      };
+      qtconnectivity = callPackage ./modules/qtconnectivity.nix { };
       qtdatavis3d = callPackage ./modules/qtdatavis3d.nix { };
       qtdeclarative = callPackage ./modules/qtdeclarative.nix { };
       qtdoc = callPackage ./modules/qtdoc.nix { };
@@ -127,7 +146,6 @@ let
       qtlottie = callPackage ./modules/qtlottie.nix { };
       qtmultimedia = callPackage ./modules/qtmultimedia.nix {
         inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-libav gst-vaapi;
-        inherit (darwin.apple_sdk_11_0.frameworks) VideoToolbox;
       };
       qtmqtt = callPackage ./modules/qtmqtt.nix { };
       qtnetworkauth = callPackage ./modules/qtnetworkauth.nix { };
@@ -136,9 +154,7 @@ let
       qtserialbus = callPackage ./modules/qtserialbus.nix { };
       qtserialport = callPackage ./modules/qtserialport.nix { };
       qtshadertools = callPackage ./modules/qtshadertools.nix { };
-      qtspeech = callPackage ./modules/qtspeech.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) Cocoa;
-      };
+      qtspeech = callPackage ./modules/qtspeech.nix { };
       qtquick3d = callPackage ./modules/qtquick3d.nix { };
       qtquick3dphysics = callPackage ./modules/qtquick3dphysics.nix { };
       qtquickeffectmaker = callPackage ./modules/qtquickeffectmaker.nix { };
@@ -152,36 +168,33 @@ let
       qtwayland = callPackage ./modules/qtwayland.nix { };
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
       qtwebengine = callPackage ./modules/qtwebengine.nix {
-        inherit (darwin) autoSignDarwinBinariesHook bootstrap_cmds cctools xnu;
-        inherit (darwin.apple_sdk_11_0) libpm libunwind;
-        inherit (darwin.apple_sdk_11_0.libs) sandbox;
-        inherit (darwin.apple_sdk_11_0.frameworks)
-          AGL AVFoundation Accelerate Cocoa CoreLocation CoreML ForceFeedback
-          GameController ImageCaptureCore LocalAuthentication
-          MediaAccessibility MediaPlayer MetalKit Network OpenDirectory Quartz
-          ReplayKit SecurityInterface Vision;
-        qtModule = callPackage
-          ({ qtModule }: qtModule.override {
-            stdenv =
-              if stdenv.isDarwin
-              then overrideSDK stdenv { darwinMinVersion = "11.0"; darwinSdkVersion = "11.0"; }
-              else stdenv;
-          })
-          { };
-        xcbuild = buildPackages.xcbuild.override {
-          productBuildVer = "20A2408";
-        };
+        inherit (darwin) autoSignDarwinBinariesHook bootstrap_cmds;
       };
       qtwebsockets = callPackage ./modules/qtwebsockets.nix { };
-      qtwebview = callPackage ./modules/qtwebview.nix {
-        inherit (darwin.apple_sdk_11_0.frameworks) WebKit;
-      };
+      qtwebview = callPackage ./modules/qtwebview.nix { };
 
       wrapQtAppsHook = callPackage
-        ({ makeBinaryWrapper }: makeSetupHook
+        ({ makeBinaryWrapper, qtwayland, qtbase }:
+          makeSetupHook
           {
             name = "wrap-qt6-apps-hook";
             propagatedBuildInputs = [ makeBinaryWrapper ];
+            depsTargetTargetPropagated = [
+              (onlyPluginsAndQml qtbase)
+            ] ++ lib.optionals (lib.meta.availableOn stdenv.targetPlatform qtwayland) [
+              (onlyPluginsAndQml qtwayland)
+            ];
+          } ./hooks/wrap-qt-apps-hook.sh)
+        { };
+
+      wrapQtAppsNoGuiHook = callPackage
+        ({ makeBinaryWrapper, qtbase }: makeSetupHook
+          {
+            name = "wrap-qt6-apps-no-gui-hook";
+            propagatedBuildInputs = [ makeBinaryWrapper ];
+            depsTargetTargetPropagated = [
+              (onlyPluginsAndQml qtbase)
+            ];
           } ./hooks/wrap-qt-apps-hook.sh)
         { };
 
@@ -195,9 +208,6 @@ let
             };
           } ./hooks/qmake-hook.sh)
         { };
-    } // lib.optionalAttrs config.allowAliases {
-      # Remove completely before 24.11
-      overrideScope' = builtins.throw "qt6 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\".";
     };
 
   baseScope = makeScopeWithSplicing' {

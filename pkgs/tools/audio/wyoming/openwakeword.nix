@@ -17,7 +17,6 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = with python3Packages; [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -29,7 +28,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    tensorflow
+    tensorflow-bin
     wyoming
   ];
 

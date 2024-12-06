@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "django-soft-delete";
-  version = "1.0.13";
+  version = "1.0.14";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RDwApUwG0jb/iAbDJgJD13XMU2WB1zd8J4UICxBBzh0=";
+    hash = "sha256-Qo31bqT7sT9C1PdS8R8qUXqjGsPRtFDmt4xMXV2d/Ds=";
   };
 
   dependencies = [ django ];

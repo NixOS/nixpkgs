@@ -15,6 +15,12 @@ buildDunePackage rec {
     sha256 = "sha256-dp9qCIYqSdROIAQ+Jw73F3vMe7hnkDe8BgZWImNMVsA=";
   };
 
+  patches = [
+    # backport of patch to fix incompatible pointer type. remove next update
+    # https://github.com/aantron/luv/commit/ad7f953fccb8732fe4eb9018556e8d4f82abf8f2
+    ./incompatible-pointer-type-fix.diff
+  ];
+
   postConfigure = ''
     for f in src/c/vendor/configure/{ltmain.sh,configure}; do
       substituteInPlace "$f" --replace /usr/bin/file file

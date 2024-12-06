@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "notaryproject";
     repo = "notary";
     rev = "9d2b3b35929392c9945d976b8bdecbe2f53a299e";
-    sha256 = "sha256-u19BfTJwRWholK0b3BcgSmcMM9AR7OeXo64AOi87r0A=";
+    hash = "sha256-u19BfTJwRWholK0b3BcgSmcMM9AR7OeXo64AOi87r0A=";
   };
 
   vendorHash = null;

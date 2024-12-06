@@ -4,14 +4,15 @@
 
 let Dune =
   let dune-version = args.duneVersion or "3"; in
-  { "1" = dune_1; "2" = dune_2; "3" = dune_3; }."${dune-version}"
-; in
+  { "1" = dune_1; "2" = dune_2; "3" = dune_3; }."${dune-version}";
+  stdenv' = args.stdenv or stdenv;
+in
 
 if args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.minimalOCamlVersion
 then throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
 else
 
-stdenv.mkDerivation ({
+stdenv'.mkDerivation ({
 
   inherit enableParallelBuilding;
   dontAddStaticConfigureFlags = true;

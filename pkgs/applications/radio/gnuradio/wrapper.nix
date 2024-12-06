@@ -127,7 +127,7 @@ let
             unwrapped.qt.qtbase.qtPluginPrefix
             (builtins.map lib.getBin ([
               unwrapped.qt.qtbase
-            ] ++ lib.optionals stdenv.isLinux [
+            ] ++ lib.optionals stdenv.hostPlatform.isLinux [
               unwrapped.qt.qtwayland
             ]))
           }"
@@ -137,7 +137,7 @@ let
             unwrapped.qt.qtbase.qtQmlPrefix
             (builtins.map lib.getBin ([
               unwrapped.qt.qtbase
-            ] ++ lib.optionals stdenv.isLinux [
+            ] ++ lib.optionals stdenv.hostPlatform.isLinux [
               unwrapped.qt.qtwayland
             ]))
           }"

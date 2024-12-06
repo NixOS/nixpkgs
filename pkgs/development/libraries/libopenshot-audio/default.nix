@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libopenshot-audio";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot-audio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PLpB9sy9xehipN5S9okCHm1mPm5MaZMVaFqCBvFUiTw=";
+    hash = "sha256-9iHeVMoyzTQae/PVYJqON0qOPo3SJlhrqbcp2u1Y8MA=";
   };
 
   patches = [
@@ -40,9 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-  ] ++ (if stdenv.isDarwin then [
+  ] ++ (if stdenv.hostPlatform.isDarwin then [
     Accelerate
     AGL
     Cocoa
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       JUCE library.
     '';
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

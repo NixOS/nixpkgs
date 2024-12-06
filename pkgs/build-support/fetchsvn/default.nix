@@ -1,5 +1,5 @@
 { lib, stdenvNoCC, buildPackages
-, subversion, glibcLocales, sshSupport ? true, openssh ? null
+, cacert, subversion, glibcLocales, sshSupport ? true, openssh ? null
 }:
 
 { url, rev ? "HEAD", sha256 ? "", hash ? ""
@@ -10,15 +10,15 @@
 assert sshSupport -> openssh != null;
 
 let
-  repoName = with lib;
+  repoName =
     let
-      fst = head;
-      snd = l: head (tail l);
-      trd = l: head (tail (tail l));
+      fst = lib.head;
+      snd = l: lib.head (lib.tail l);
+      trd = l: lib.head (lib.tail (lib.tail l));
       path_ =
-        (p: if head p == "" then tail p else p) # ~ drop final slash if any
-        (reverseList (splitString "/" url));
-      path = [ (removeSuffix "/" (head path_)) ] ++ (tail path_);
+        (p: if lib.head p == "" then lib.tail p else p) # ~ drop final slash if any
+        (lib.reverseList (lib.splitString "/" url));
+      path = [ (lib.removeSuffix "/" (lib.head path_)) ] ++ (lib.tail path_);
     in
       # ../repo/trunk -> repo
       if fst path == "trunk" then snd path
@@ -38,7 +38,7 @@ else
 stdenvNoCC.mkDerivation {
   name = name_;
   builder = ./builder.sh;
-  nativeBuildInputs = [ subversion glibcLocales ]
+  nativeBuildInputs = [ cacert subversion glibcLocales ]
     ++ lib.optional sshSupport openssh;
 
   SVN_SSH = if sshSupport then "${buildPackages.openssh}/bin/ssh" else null;

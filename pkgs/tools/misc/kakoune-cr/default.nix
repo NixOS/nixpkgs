@@ -44,7 +44,7 @@ crystal.buildCrystalPackage rec {
     homepage = "https://github.com/alexherbo2/kakoune.cr";
     description = "Command-line tool for Kakoune";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ malte-v ];
+    maintainers = with maintainers; [ philiptaron malte-v ];
     platforms = platforms.unix;
   };
 }

@@ -21,7 +21,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     hatchling
-    pythonRelaxDepsHook
     qt6.wrapQtAppsHook
   ];
 
@@ -30,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     qt6.qtbase
   ] ++
-  lib.optionals (stdenv.isLinux) [
+  lib.optionals (stdenv.hostPlatform.isLinux) [
     qt6.qtwayland
   ];
 
@@ -50,6 +49,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Better filter tool for Redump and No-Intro dats";
     homepage = "https://github.com/unexpectedpanda/retool";
+    changelog = "https://github.com/unexpectedpanda/retool/blob/v${version}/changelog.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ thiagokokada ];
   };

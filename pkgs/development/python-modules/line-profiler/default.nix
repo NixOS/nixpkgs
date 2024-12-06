@@ -31,14 +31,14 @@ buildPythonPackage rec {
     scikit-build
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ipython = [ ipython ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     ubelt
-  ] ++ passthru.optional-dependencies.ipython;
+  ] ++ optional-dependencies.ipython;
 
   dontUseCmakeConfigure = true;
 

@@ -1,24 +1,24 @@
 { stdenv
 , lib
 , fetchurl
-, extra-cmake-modules
+, cmake
 , unzip
-, libsForQt5
+, kdePackages
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kshutdown";
-  version = "5.91-beta";
+  version = "5.92-beta";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/kshutdown/KShutdown/${finalAttrs.version}/kshutdown-source-${finalAttrs.version}.zip";
-    hash = "sha256-gWXpVBhoZ57kaQV1C+xCBYc2gZjzJfFViD/SI9D+BRc=";
+    hash = "sha256-EYgb2jeUoLNSPFIzlicnrmsccGc1nvoE5iDVt9x83ns=";
     name = "kshutdown-source-${finalAttrs.version}.zip";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules unzip libsForQt5.wrapQtAppsHook ];
+  nativeBuildInputs = [ cmake unzip kdePackages.wrapQtAppsHook ];
 
-  buildInputs = with libsForQt5; [ qtbase kxmlgui knotifyconfig kidletime ];
+  buildInputs = with kdePackages; [ qtbase kxmlgui knotifyconfig kidletime kstatusnotifieritem ];
 
   meta = with lib; {
     homepage = "https://kshutdown.sourceforge.io/";
@@ -29,4 +29,3 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
   };
 })
-

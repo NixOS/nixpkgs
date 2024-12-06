@@ -1,6 +1,4 @@
 { buildPythonPackage
-, python
-, pythonRelaxDepsHook
 , lib
 , gfortran
 , fetchgit
@@ -21,7 +19,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "MolBar";
+  pname = "MolBar";
   version = "1.1.1";
 
   src = fetchgit {
@@ -34,7 +32,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     gfortran
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "networkx" ];

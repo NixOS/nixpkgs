@@ -134,7 +134,7 @@ if [[ -z "$nixFile" ]]; then
     fi
 fi
 
-oldHashAlgo=$(nix-instantiate $systemArg --eval --strict -A "$attr.$sourceKey.drvAttrs.outputHashAlgo" | tr -d '"')
+oldHashAlgo=$(nix-instantiate $systemArg --eval --strict -E "let pkgs = $importTree; in pkgs.$attr.$sourceKey.drvAttrs.outputHashAlgo or pkgs.$attr.$sourceKey.drvAttrs.outputHash" | tr -d '"' | sed "s/-.*//")
 oldHash=$(nix-instantiate $systemArg --eval --strict -A "$attr.$sourceKey.drvAttrs.outputHash" | tr -d '"')
 
 if [[ -z "$oldHashAlgo" || -z "$oldHash" ]]; then

@@ -1,5 +1,7 @@
 { lib
 , stdenv
+, apple-sdk_11
+, darwinMinVersionHook
 , glibcLocales
   # The GraalVM derivation to use
 , graalvmDrv
@@ -11,8 +13,8 @@
   # Default native-image arguments. You probably don't want to set this,
   # except in special cases. In most cases, use extraNativeBuildArgs instead
 , nativeImageBuildArgs ? [
-    (lib.optionalString stdenv.isDarwin "-H:-CheckToolchain")
-    (lib.optionalString (stdenv.isLinux && stdenv.isAarch64) "-H:PageSize=64K")
+    (lib.optionalString stdenv.hostPlatform.isDarwin "-H:-CheckToolchain")
+    (lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) "-H:PageSize=64K")
     "-H:Name=${executable}"
     "-march=compatibility"
     "--verbose"
@@ -30,6 +32,8 @@ let
   extraArgs = builtins.removeAttrs args [
     "lib"
     "stdenv"
+    "apple-sdk_11"
+    "darwinMinVersionHook"
     "glibcLocales"
     "jar"
     "dontUnpack"
@@ -48,12 +52,17 @@ stdenv.mkDerivation ({
 
   nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ graalvmDrv glibcLocales removeReferencesTo ];
 
+  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin) [
+    apple-sdk_11
+    (darwinMinVersionHook "11.0")
+  ];
+
   nativeImageBuildArgs = nativeImageBuildArgs ++ extraNativeImageBuildArgs ++ [ graalvmXmx ];
 
   buildPhase = args.buildPhase or ''
     runHook preBuild
 
-    native-image -jar "$jar" $(export -p | sed -n 's/^declare -x \([^=]\+\)=.*$/ -E\1/p' | tr -d \\n) ''${nativeImageBuildArgs[@]}
+    native-image -jar "$jar" ''${nativeImageBuildArgs[@]}
 
     runHook postBuild
   '';

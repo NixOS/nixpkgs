@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   patches = [ ./000-enable-svg.patch ];
 
   # The strip options are not recognized by Darwin.
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i -e '/strip -s/d' Makefile
   '';
 

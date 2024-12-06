@@ -5,41 +5,47 @@
 , fetchFromGitHub
 , Cocoa
 , pkgsBuildHost
+, openssl
+, pkg-config
+, testers
+, gurk-rs
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gurk-rs";
-  version = "0.4.3";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "boxdot";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-MPYqWgwh5PKH3GsCDx6aa4ryorWZ96YK8KOYZ5PILkk=";
+    repo = "gurk-rs";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ZVpI60pZZCLRnKdC80P8f63gE0+Vi1lelhyFPAhpHyU=";
   };
 
   postPatch = ''
     rm .cargo/config.toml
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libsignal-protocol-0.1.0" = "sha256-p4YzrtJaQhuMBTtquvS1m9llszfyTeDfl7+IXzRUFSE=";
-      "libsignal-service-0.1.0" = "sha256-p0umCPtBg9s4G6RHcwK/tU+RtQE2fFLRHOYt2GmBCtQ=";
-      "curve25519-dalek-4.1.1" = "sha256-p9Vx0lAaYILypsI4/RVsHZLOqZKaa4Wvf7DanLA38pc=";
-      "presage-0.6.1" = "sha256-MsVSUI4ht+ftO2UC1IIeCtomkzg4ug95kKsc41PDVNg=";
-      "qr2term-0.3.1" = "sha256-U8YLouVZTtDwsvzZiO6YB4Pe75RXGkZXOxHCQcCOyT8=";
-    };
-  };
+  useFetchCargoVendor = true;
 
-  nativeBuildInputs = [ protobuf ];
+  cargoHash = "sha256-jTZ2wJPXj3nU7GVTfne64eSra+JuKhNryCtRZMKOE44=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa ];
+  nativeBuildInputs = [ protobuf pkg-config ];
 
-  NIX_LDFLAGS = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "-framework" "AppKit" ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+
+  NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ "-framework" "AppKit" ];
 
   PROTOC = "${pkgsBuildHost.protobuf}/bin/protoc";
+
+  OPENSSL_NO_VENDOR = true;
+
+  useNextest = true;
+
+  passthru.tests.version = testers.testVersion {
+    package = gurk-rs;
+  };
 
   meta = with lib; {
     description = "Signal Messenger client for terminal";

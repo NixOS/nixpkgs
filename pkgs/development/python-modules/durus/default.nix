@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
@@ -12,7 +11,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Durus";
     inherit version;
-    sha256 = "sha256:1gzxg43zawwgqjrfixvcrilwpikb1ix9b7710rsl5ffk7q50yi3c";
+    hash = "sha256:1gzxg43zawwgqjrfixvcrilwpikb1ix9b7710rsl5ffk7q50yi3c";
   };
 
   # Checks disabled due to missing python unittest framework 'sancho' in nixpkgs

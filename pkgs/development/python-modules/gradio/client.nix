@@ -1,10 +1,10 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   nix-update-script,
   pythonOlder,
-  pythonRelaxDepsHook,
   # pyproject
   hatchling,
   hatch-requirements-txt,
@@ -15,7 +15,6 @@
   httpx,
   huggingface-hub,
   packaging,
-  requests,
   typing-extensions,
   websockets,
   # checkInputs
@@ -29,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "gradio-client";
-  version = "1.0.1";
+  version = "1.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +40,7 @@ buildPythonPackage rec {
     # not to be confused with @gradio/client@${version}
     rev = "refs/tags/gradio_client@${version}";
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-nbOWg2ZPcXTft7e4tR5p5xecVU62en0hEdXqAgLDZF4=";
+    hash = "sha256-pS7yrqBuq/Pe7sEfReAM6OL2qFQVA+vWra36UuhyDkk=";
   };
   prePatch = ''
     cd client/python
@@ -58,7 +57,6 @@ buildPythonPackage rec {
     hatchling
     hatch-requirements-txt
     hatch-fancy-pypi-readme
-    pythonRelaxDepsHook
   ];
 
   dependencies = [
@@ -94,18 +92,30 @@ buildPythonPackage rec {
     #"-x" "-W" "ignore" # uncomment for debugging help
   ];
 
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # flaky: OSError: Cannot find empty port in range: 7860-7959
+    "test_layout_components_in_output"
+    "test_layout_and_state_components_in_output"
+    "test_upstream_exceptions"
+    "test_httpx_kwargs"
+  ];
+
   pythonImportsCheck = [ "gradio_client" ];
 
   __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "gradio_client@(.*)" ];
+    extraArgs = [
+      "--version-regex"
+      "gradio_client@(.*)"
+    ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gradio.app/";
+    changelog = "https://github.com/gradio-app/gradio/releases/tag/gradio_client@${version}";
     description = "Lightweight library to use any Gradio app as an API";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

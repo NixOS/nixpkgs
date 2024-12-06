@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.safeeyes;
@@ -16,7 +13,7 @@ in
 
     services.safeeyes = {
 
-      enable = mkEnableOption "the safeeyes OSGi service";
+      enable = lib.mkEnableOption "the safeeyes OSGi service";
 
     };
 
@@ -24,7 +21,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.safeeyes ];
 

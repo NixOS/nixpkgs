@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waf";
-  version = "2.0.27";
+  version = "2.1.3";
 
   src = fetchFromGitLab {
     owner = "ita1024";
     repo = "waf";
     rev = "waf-${finalAttrs.version}";
-    hash = "sha256-GeEoD5CHubwR4ndGk7J7czEf0hWtPQr88TqJDPqeK0s=";
+    hash = "sha256-7ujlE0brLFmET7tAy0/RTdDORUyr6keZ3OjvxBOC/BI=";
   };
 
   nativeBuildInputs = [
@@ -70,10 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://waf.io";
     description = "Meta build system";
-    changelog  = "https://gitlab.com/ita1024/waf/blob/${finalAttrs.version}/ChangeLog";
+    changelog  = "https://gitlab.com/ita1024/waf/blob/waf-${finalAttrs.version}/ChangeLog";
     license = lib.licenses.bsd3;
     mainProgram = "waf";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     inherit (python3.meta) platforms;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };

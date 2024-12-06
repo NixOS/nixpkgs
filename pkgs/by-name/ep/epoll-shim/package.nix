@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # https://github.com/jiixyj/epoll-shim/issues/41
   # https://github.com/jiixyj/epoll-shim/pull/34
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Small epoll implementation using kqueue";

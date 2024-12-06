@@ -1,13 +1,9 @@
 # This module defines the packages that appear in
 # /run/current-system/sw.
-
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
-  requiredPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
+  requiredPackages = map (pkg: lib.setPrio ((pkg.meta.priority or lib.meta.defaultPriority) + 3) pkg)
     [ pkgs.acl
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
@@ -48,9 +44,9 @@ let
     ];
   defaultPackages =
     map
-      (n: let pkg = pkgs.${n}; in setPrio ((pkg.meta.priority or 5) + 3) pkg)
+      (n: let pkg = pkgs.${n};in lib.setPrio ((pkg.meta.priority or lib.meta.defaultPriority) + 3) pkg)
       defaultPackageNames;
-  defaultPackagesText = "[ ${concatMapStringsSep " " (n: "pkgs.${n}") defaultPackageNames } ]";
+  defaultPackagesText = "[ ${lib.concatMapStringsSep " " (n: "pkgs.${n}") defaultPackageNames } ]";
 
 in
 
@@ -59,10 +55,10 @@ in
 
     environment = {
 
-      systemPackages = mkOption {
-        type = types.listOf types.package;
+      systemPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [];
-        example = literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
+        example = lib.literalExpression "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
           The set of packages that appear in
           /run/current-system/sw.  These packages are
@@ -74,10 +70,10 @@ in
         '';
       };
 
-      defaultPackages = mkOption {
-        type = types.listOf types.package;
+      defaultPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = defaultPackages;
-        defaultText = literalMD ''
+        defaultText = lib.literalMD ''
           these packages, with their `meta.priority` numerically increased
           (thus lowering their installation priority):
 
@@ -97,8 +93,8 @@ in
         '';
       };
 
-      pathsToLink = mkOption {
-        type = types.listOf types.str;
+      pathsToLink = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         # Note: We need `/lib' to be among `pathsToLink' for NSS modules
         # to work.
         default = [];
@@ -106,8 +102,8 @@ in
         description = "List of directories to be symlinked in {file}`/run/current-system/sw`.";
       };
 
-      extraOutputsToInstall = mkOption {
-        type = types.listOf types.str;
+      extraOutputsToInstall = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "dev" "info" ];
         description = ''
@@ -119,8 +115,8 @@ in
         '';
       };
 
-      extraSetup = mkOption {
-        type = types.lines;
+      extraSetup = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "Shell fragments to be run after the system environment has been created. This should only be used for things that need to modify the internals of the environment, e.g. generating MIME caches. The environment being built can be accessed at $out.";
       };
@@ -129,7 +125,7 @@ in
 
     system = {
 
-      path = mkOption {
+      path = lib.mkOption {
         internal = true;
         description = ''
           The packages you want in the boot environment.
@@ -153,10 +149,8 @@ in
         "/sbin"
         "/share/emacs"
         "/share/hunspell"
-        "/share/nano"
         "/share/org"
         "/share/themes"
-        "/share/vim-plugins"
         "/share/vulkan"
         "/share/kservices5"
         "/share/kservicetypes5"

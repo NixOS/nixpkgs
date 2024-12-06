@@ -39,16 +39,16 @@ Note that this mechanism can only exclude core utilities, games and core develop
 
 ### Disabling GNOME services {#sec-gnome-disabling-services}
 
-It is also possible to disable many of the [core services](https://github.com/NixOS/nixpkgs/blob/b8ec4fd2a4edc4e30d02ba7b1a2cc1358f3db1d5/nixos/modules/services/x11/desktop-managers/gnome.nix#L329-L348). For example, if you do not need indexing files, you can disable Tracker with:
+It is also possible to disable many of the [core services](https://github.com/NixOS/nixpkgs/blob/b8ec4fd2a4edc4e30d02ba7b1a2cc1358f3db1d5/nixos/modules/services/x11/desktop-managers/gnome.nix#L329-L348). For example, if you do not need indexing files, you can disable TinySPARQL with:
 
 ```nix
 {
-  services.gnome.tracker-miners.enable = false;
-  services.gnome.tracker.enable = false;
+  services.gnome.localsearch.enable = false;
+  services.gnome.tinysparql.enable = false;
 }
 ```
 
-Note, however, that doing so is not supported and might break some applications. Notably, GNOME Music cannot work without Tracker.
+Note, however, that doing so is not supported and might break some applications. Notably, GNOME Music cannot work without TinySPARQL.
 
 ### GNOME games {#sec-gnome-games}
 
@@ -114,7 +114,7 @@ in `dconf-editor`
 ## Shell Extensions {#sec-gnome-shell-extensions}
 
 Most Shell extensions are packaged under the `gnomeExtensions` attribute.
-Some packages that include Shell extensions, like `gnome.gpaste`, don’t have their extension decoupled under this attribute.
+Some packages that include Shell extensions, like `gpaste`, don’t have their extension decoupled under this attribute.
 
 You can install them like any other package:
 
@@ -167,7 +167,7 @@ You can use `dconf-editor` tool to explore which GSettings you can set.
 
     extraGSettingsOverridePackages = [
       pkgs.gsettings-desktop-schemas # for org.gnome.desktop
-      pkgs.gnome.gnome-shell # for org.gnome.shell
+      pkgs.gnome-shell # for org.gnome.shell
     ];
   };
 }

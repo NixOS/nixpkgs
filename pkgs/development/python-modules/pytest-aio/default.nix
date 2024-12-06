@@ -2,46 +2,48 @@
   lib,
   anyio,
   buildPythonPackage,
-  curio,
+  curio-compat,
   fetchFromGitHub,
   hypothesis,
   pytest,
   pytestCheckHook,
   pythonOlder,
   poetry-core,
-  sniffio,
   trio,
   trio-asyncio,
+  uvloop,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-aio";
-  version = "1.8.1";
+  version = "1.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "klen";
     repo = "pytest-aio";
     rev = "refs/tags/${version}";
-    hash = "sha256-MexIL9yFTzhkJ/61GgYoT54MWV8B0c1/CWkN5FVTvnw=";
+    hash = "sha256-6RxYn8/HAvXv1AEgSIEOLiaBkGgTcqQhWK+xbtxgj/o=";
   };
 
   build-system = [ poetry-core ];
 
   buildInputs = [ pytest ];
 
-  dependencies = [
-    anyio
-    curio
-    hypothesis
-    sniffio
-    trio
-    trio-asyncio
-  ];
+  optional-dependencies = {
+    curio = [ curio-compat ];
+    trio = [ trio ];
+    uvloop = [ uvloop ];
+  };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    anyio
+    hypothesis
+    pytestCheckHook
+    trio-asyncio
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pytest_aio" ];
 

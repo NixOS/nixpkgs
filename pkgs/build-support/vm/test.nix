@@ -24,6 +24,7 @@ in
   buildPatchelfInVM = runInLinuxVM patchelf;
 
   buildHelloInVM = runInLinuxVM hello;
+  buildStructuredAttrsHelloInVM = runInLinuxVM (hello.overrideAttrs { __structuredAttrs = true; });
 
   buildPcmanrmInVM = runInLinuxVM (pcmanfm.overrideAttrs (old: {
     # goes out-of-memory with many cores

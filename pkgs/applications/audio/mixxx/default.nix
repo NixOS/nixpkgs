@@ -57,13 +57,13 @@
 
 mkDerivation rec {
   pname = "mixxx";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = version;
-    hash = "sha256-BOdXgA+z3sFE4ngAEhSbp1gDbsti1STJY2Yy6Hp+zTE=";
+    hash = "sha256-YfpFRLosIIND+HnZN+76ZY0dQqEJaFkWZS84gZOCdfc=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 ];
@@ -132,7 +132,7 @@ mkDerivation rec {
     "-DINSTALL_USER_UDEV_RULES=OFF"
   ];
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     rules="$src/res/linux/mixxx-usb-uaccess.rules"
     if [ ! -f "$rules" ]; then
         echo "$rules is missing, must update the Nix file."
@@ -147,7 +147,7 @@ mkDerivation rec {
     description = "Digital DJ mixing software";
     mainProgram = "mixxx";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ goibhniu bfortz benley ];
+    maintainers = with maintainers; [ bfortz benley ];
     platforms = platforms.linux;
   };
 }

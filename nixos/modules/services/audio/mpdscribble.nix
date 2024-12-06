@@ -1,7 +1,4 @@
 { config, lib, options, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.mpdscribble;
   mpdCfg = config.services.mpd;
@@ -22,7 +19,7 @@ let
     journal  = /var/lib/mpdscribble/${secname}.journal
   '';
 
-  endpoints = concatStringsSep "\n" (mapAttrsToList mkSection cfg.endpoints);
+  endpoints = lib.concatStringsSep "\n" (lib.mapAttrsToList mkSection cfg.endpoints);
   cfgTemplate = pkgs.writeText "mpdscribble.conf" ''
     ## This file was automatically genenrated by NixOS and will be overwritten.
     ## Do not edit. Edit your NixOS configuration instead.
@@ -31,7 +28,7 @@ let
     ## http://mpd.wikia.com/wiki/Client:mpdscribble
 
     # HTTP proxy URL.
-    ${optionalString (cfg.proxy != null) "proxy = ${cfg.proxy}"}
+    ${lib.optionalString (cfg.proxy != null) "proxy = ${cfg.proxy}"}
 
     # The location of the mpdscribble log file.  The special value
     # "syslog" makes mpdscribble use the local syslog daemon.  On most
@@ -47,7 +44,7 @@ let
 
     # The host running MPD, possibly protected by a password
     # ([PASSWORD@]HOSTNAME).
-    host = ${(optionalString (cfg.passwordFile != null) "{{MPD_PASSWORD}}@") + cfg.host}
+    host = ${(lib.optionalString (cfg.passwordFile != null) "{{MPD_PASSWORD}}@") + cfg.host}
 
     # The port that the MPD listens on and mpdscribble should try to
     # connect to.
@@ -59,13 +56,13 @@ let
   cfgFile = "/run/mpdscribble/mpdscribble.conf";
 
   replaceSecret = secretFile: placeholder: targetFile:
-    optionalString (secretFile != null) ''
+    lib.optionalString (secretFile != null) ''
       ${pkgs.replace-secret}/bin/replace-secret '${placeholder}' '${secretFile}' '${targetFile}' '';
 
   preStart = pkgs.writeShellScript "mpdscribble-pre-start" ''
     cp -f "${cfgTemplate}" "${cfgFile}"
     ${replaceSecret cfg.passwordFile "{{MPD_PASSWORD}}" cfgFile}
-    ${concatStringsSep "\n" (mapAttrsToList (secname: cfg:
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (secname: cfg:
       replaceSecret cfg.passwordFile "{{${secname}_PASSWORD}}" cfgFile)
       cfg.endpoints)}
   '';
@@ -77,62 +74,62 @@ in {
 
   options.services.mpdscribble = {
 
-    enable = mkEnableOption "mpdscribble, an MPD client which submits info about tracks being played to Last.fm (formerly AudioScrobbler)";
+    enable = lib.mkEnableOption "mpdscribble, an MPD client which submits info about tracks being played to Last.fm (formerly AudioScrobbler)";
 
-    proxy = mkOption {
+    proxy = lib.mkOption {
       default = null;
-      type = types.nullOr types.str;
+      type = lib.types.nullOr lib.types.str;
       description = ''
         HTTP proxy URL.
       '';
     };
 
-    verbose = mkOption {
+    verbose = lib.mkOption {
       default = 1;
-      type = types.int;
+      type = lib.types.int;
       description = ''
         Log level for the mpdscribble daemon.
       '';
     };
 
-    journalInterval = mkOption {
+    journalInterval = lib.mkOption {
       default = 600;
       example = 60;
-      type = types.int;
+      type = lib.types.int;
       description = ''
         How often should mpdscribble save the journal file? [seconds]
       '';
     };
 
-    host = mkOption {
+    host = lib.mkOption {
       default = (if mpdCfg.network.listenAddress != "any" then
         mpdCfg.network.listenAddress
       else
         "localhost");
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         if config.${mpdOpt.network.listenAddress} != "any"
         then config.${mpdOpt.network.listenAddress}
         else "localhost"
       '';
-      type = types.str;
+      type = lib.types.str;
       description = ''
         Host for the mpdscribble daemon to search for a mpd daemon on.
       '';
     };
 
-    passwordFile = mkOption {
+    passwordFile = lib.mkOption {
       default = if localMpd then
-        (findFirst
-          (c: any (x: x == "read") c.permissions)
+        (lib.findFirst
+          (c: lib.any (x: x == "read") c.permissions)
           { passwordFile = null; }
           mpdCfg.credentials).passwordFile
       else
         null;
-      defaultText = literalMD ''
+      defaultText = lib.literalMD ''
         The first password file with read access configured for MPD when using a local instance,
         otherwise `null`.
       '';
-      type = types.nullOr types.str;
+      type = lib.types.nullOr lib.types.str;
       description = ''
         File containing the password for the mpd daemon.
         If there is a local mpd configured using {option}`services.mpd.credentials`
@@ -140,37 +137,37 @@ in {
       '';
     };
 
-    port = mkOption {
+    port = lib.mkOption {
       default = mpdCfg.network.port;
-      defaultText = literalExpression "config.${mpdOpt.network.port}";
-      type = types.port;
+      defaultText = lib.literalExpression "config.${mpdOpt.network.port}";
+      type = lib.types.port;
       description = ''
         Port for the mpdscribble daemon to search for a mpd daemon on.
       '';
     };
 
-    endpoints = mkOption {
+    endpoints = lib.mkOption {
       type = (let
         endpoint = { name, ... }: {
           options = {
-            url = mkOption {
-              type = types.str;
+            url = lib.mkOption {
+              type = lib.types.str;
               default = endpointUrls.${name} or "";
               description = "The url endpoint where the scrobble API is listening.";
             };
-            username = mkOption {
-              type = types.str;
+            username = lib.mkOption {
+              type = lib.types.str;
               description = ''
                 Username for the scrobble service.
               '';
             };
-            passwordFile = mkOption {
-              type = types.nullOr types.str;
+            passwordFile = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               description = "File containing the password, either as MD5SUM or cleartext.";
             };
           };
         };
-      in types.attrsOf (types.submodule endpoint));
+      in lib.types.attrsOf (lib.types.submodule endpoint));
       default = { };
       example = {
         "last.fm" = {
@@ -181,7 +178,7 @@ in {
       description = ''
         Endpoints to scrobble to.
         If the endpoint is one of "${
-          concatStringsSep "\", \"" (attrNames endpointUrls)
+          lib.concatStringsSep "\", \"" (lib.attrNames endpointUrls)
         }" the url is set automatically.
       '';
     };
@@ -190,9 +187,9 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.mpdscribble = {
-      after = [ "network.target" ] ++ (optional localMpd "mpd.service");
+      after = [ "network.target" ] ++ (lib.optional localMpd "mpd.service");
       description = "mpdscribble mpd scrobble client";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

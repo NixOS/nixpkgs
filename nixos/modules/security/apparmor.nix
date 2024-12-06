@@ -1,30 +1,27 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   inherit (builtins) attrNames head map match readFile;
   inherit (lib) types;
   inherit (config.environment) etc;
   cfg = config.security.apparmor;
-  mkDisableOption = name: mkEnableOption name // {
+  mkDisableOption = name: lib.mkEnableOption name // {
     default = true;
     example = false;
   };
-  enabledPolicies = filterAttrs (n: p: p.enable) cfg.policies;
+  enabledPolicies = lib.filterAttrs (n: p: p.enable) cfg.policies;
 in
 
 {
   imports = [
-    (mkRemovedOptionModule [ "security" "apparmor" "confineSUIDApplications" ] "Please use the new options: `security.apparmor.policies.<policy>.enable'.")
-    (mkRemovedOptionModule [ "security" "apparmor" "profiles" ] "Please use the new option: `security.apparmor.policies'.")
+    (lib.mkRemovedOptionModule [ "security" "apparmor" "confineSUIDApplications" ] "Please use the new options: `security.apparmor.policies.<policy>.enable'.")
+    (lib.mkRemovedOptionModule [ "security" "apparmor" "profiles" ] "Please use the new option: `security.apparmor.policies'.")
     apparmor/includes.nix
     apparmor/profiles.nix
   ];
 
   options = {
     security.apparmor = {
-      enable = mkEnableOption ''
+      enable = lib.mkEnableOption ''
         the AppArmor Mandatory Access Control system.
 
         If you're enabling this module on a running system,
@@ -41,7 +38,7 @@ in
         Enable [](#opt-security.apparmor.killUnconfinedConfinables)
         if you want this service to do such killing
         by sending a `SIGTERM` to those running processes'';
-      policies = mkOption {
+      policies = lib.mkOption {
         description = ''
           AppArmor policies.
         '';
@@ -49,7 +46,7 @@ in
           options = {
             enable = mkDisableOption "loading of the profile into the kernel";
             enforce = mkDisableOption "enforcing of the policy or only complain in the logs";
-            profile = mkOption {
+            profile = lib.mkOption {
               description = "The policy of the profile.";
               type = types.lines;
               apply = pkgs.writeText name;
@@ -58,28 +55,28 @@ in
         }));
         default = {};
       };
-      includes = mkOption {
+      includes = lib.mkOption {
         type = types.attrsOf types.lines;
         default = {};
         description = ''
           List of paths to be added to AppArmor's searched paths
           when resolving `include` directives.
         '';
-        apply = mapAttrs pkgs.writeText;
+        apply = lib.mapAttrs pkgs.writeText;
       };
-      packages = mkOption {
+      packages = lib.mkOption {
         type = types.listOf types.package;
         default = [];
         description = "List of packages to be added to AppArmor's include path";
       };
-      enableCache = mkEnableOption ''
+      enableCache = lib.mkEnableOption ''
         caching of AppArmor policies
         in `/var/cache/apparmor/`.
 
         Beware that AppArmor policies almost always contain Nix store paths,
         and thus produce at each change of these paths
         a new cached version accumulating in the cache'';
-      killUnconfinedConfinables = mkEnableOption ''
+      killUnconfinedConfinables = lib.mkEnableOption ''
         killing of processes which have an AppArmor profile enabled
         (in [](#opt-security.apparmor.policies))
         but are not confined (because AppArmor can only confine new processes).
@@ -92,7 +89,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = map (policy:
       { assertion = match ".*/.*" policy == null;
         message = "`security.apparmor.policies.\"${policy}\"' must not contain a slash.";
@@ -108,15 +105,15 @@ in
     environment.etc."apparmor.d".source = pkgs.linkFarm "apparmor.d" (
       # It's important to put only enabledPolicies here and not all cfg.policies
       # because aa-remove-unknown reads profiles from all /etc/apparmor.d/*
-      mapAttrsToList (name: p: { inherit name; path = p.profile; }) enabledPolicies ++
-      mapAttrsToList (name: path: { inherit name path; }) cfg.includes
+      lib.mapAttrsToList (name: p: { inherit name; path = p.profile; }) enabledPolicies ++
+      lib.mapAttrsToList (name: path: { inherit name path; }) cfg.includes
     );
     environment.etc."apparmor/parser.conf".text = ''
         ${if cfg.enableCache then "write-cache" else "skip-cache"}
         cache-loc /var/cache/apparmor
         Include /etc/apparmor.d
       '' +
-      concatMapStrings (p: "Include ${p}/etc/apparmor.d\n") cfg.packages;
+      lib.concatMapStrings (p: "Include ${p}/etc/apparmor.d\n") cfg.packages;
     # For aa-logprof
     environment.etc."apparmor/apparmor.conf".text = ''
     '';
@@ -142,7 +139,7 @@ in
           # 3 - force all perms on the rule to be user
           default_owner_prompt = 1
 
-          custom_includes = /etc/apparmor.d ${concatMapStringsSep " " (p: "${p}/etc/apparmor.d") cfg.packages}
+          custom_includes = /etc/apparmor.d ${lib.concatMapStringsSep " " (p: "${p}/etc/apparmor.d") cfg.packages}
 
         [qualifiers]
           ${pkgs.runtimeShell} = icnu
@@ -187,17 +184,17 @@ in
           xargs --verbose --no-run-if-empty --delimiter='\n' \
           kill
         '';
-        commonOpts = p: "--verbose --show-cache ${optionalString (!p.enforce) "--complain "}${p.profile}";
+        commonOpts = p: "--verbose --show-cache ${lib.optionalString (!p.enforce) "--complain "}${p.profile}";
         in {
         Type = "oneshot";
         RemainAfterExit = "yes";
         ExecStartPre = "${pkgs.apparmor-utils}/bin/aa-teardown";
-        ExecStart = mapAttrsToList (n: p: "${pkgs.apparmor-parser}/bin/apparmor_parser --add ${commonOpts p}") enabledPolicies;
-        ExecStartPost = optional cfg.killUnconfinedConfinables killUnconfinedConfinables;
+        ExecStart = lib.mapAttrsToList (n: p: "${pkgs.apparmor-parser}/bin/apparmor_parser --add ${commonOpts p}") enabledPolicies;
+        ExecStartPost = lib.optional cfg.killUnconfinedConfinables killUnconfinedConfinables;
         ExecReload =
           # Add or replace into the kernel profiles in enabledPolicies
           # (because AppArmor can do that without stopping the processes already confined).
-          mapAttrsToList (n: p: "${pkgs.apparmor-parser}/bin/apparmor_parser --replace ${commonOpts p}") enabledPolicies ++
+          lib.mapAttrsToList (n: p: "${pkgs.apparmor-parser}/bin/apparmor_parser --replace ${commonOpts p}") enabledPolicies ++
           # Remove from the kernel any profile whose name is not
           # one of the names within the content of the profiles in enabledPolicies
           # (indirectly read from /etc/apparmor.d/*, without recursing into sub-directory).
@@ -205,7 +202,7 @@ in
           [ "${pkgs.apparmor-utils}/bin/aa-remove-unknown" ] ++
           # Optionally kill the processes which are unconfined but now have a profile loaded
           # (because AppArmor can only start to confine new processes).
-          optional cfg.killUnconfinedConfinables killUnconfinedConfinables;
+          lib.optional cfg.killUnconfinedConfinables killUnconfinedConfinables;
         ExecStop = "${pkgs.apparmor-utils}/bin/aa-teardown";
         CacheDirectory = [ "apparmor" "apparmor/logprof" ];
         CacheDirectoryMode = "0700";
@@ -213,5 +210,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ julm ];
+  meta.maintainers = with lib.maintainers; [ julm ];
 }

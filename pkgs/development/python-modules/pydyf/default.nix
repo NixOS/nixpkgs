@@ -6,24 +6,25 @@
   ghostscript,
   pillow,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pydyf";
-  version = "0.9.0";
+  version = "0.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1bJE6PwkEZznvV1R6i1nc8D/iKqBWX21VrxEDGuIBhA=";
+    hash = "sha256-OU3d9hnMqdDFVxXjxV6hIam/nLx4DNwSAaJCeRe4a2Q=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--isort --flake8 --cov --no-cov-on-fail" ""
+      --replace "--isort --flake8" ""
   '';
 
   nativeBuildInputs = [ flit-core ];
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     ghostscript
     pillow
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "pydyf" ];

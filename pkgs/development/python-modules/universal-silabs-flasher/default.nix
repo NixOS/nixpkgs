@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
 
   # build-system
   setuptools,
@@ -15,6 +14,7 @@
   coloredlogs,
   crc,
   libgpiod,
+  pyserial-asyncio-fast,
   typing-extensions,
   zigpy,
 
@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "universal-silabs-flasher";
-  version = "0.0.20";
+  version = "0.0.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "universal-silabs-flasher";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+wmBsb7zsN6vdNqUvozV317kEZCg1b+lBToRSdN2YM4=";
+    hash = "sha256-fmm5QrRpZIYmPO4GK/JrP7w0Utlw52pfh524pgESliM=";
   };
 
   postPatch = ''
@@ -43,7 +43,6 @@ buildPythonPackage rec {
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [ setuptools ];
 
@@ -58,6 +57,7 @@ buildPythonPackage rec {
     click
     coloredlogs
     crc
+    pyserial-asyncio-fast
     typing-extensions
     zigpy
   ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libgpiod ];

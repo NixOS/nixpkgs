@@ -4,13 +4,15 @@
   buildPythonPackage,
   pythonOlder,
   pytestCheckHook,
+  iso8601,
   poetry-core,
+  pytest-lazy-fixture,
   pytz,
 }:
 
 buildPythonPackage rec {
   pname = "beanhub-extract";
-  version = "0.0.7";
+  version = "0.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,14 +21,20 @@ buildPythonPackage rec {
     owner = "LaunchPlatform";
     repo = "beanhub-extract";
     rev = "refs/tags/${version}";
-    hash = "sha256-Wt8ZCyCaERNXEd0/Q89QWUW/wGFSHAP2RZLhnv5xkgY=";
+    hash = "sha256-Uw9bSVOpiIALkgA77OrqAcDWcEafVSnp4iILa4Jkykc=";
   };
 
   build-system = [ poetry-core ];
 
-  dependencies = [ pytz ];
+  dependencies = [
+    iso8601
+    pytz
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-lazy-fixture
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "beanhub_extract" ];
 

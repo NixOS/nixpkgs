@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "API Wrapper for amiiboapi.com";
     homepage = "https://github.com/XiehCanCode/amiibo.py";
     license = licenses.mit;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
   };
 }

@@ -1,7 +1,10 @@
+let
+  modelSpecs = (builtins.fromJSON (builtins.readFile ./models.json));
+in
+
 { lib, stdenvNoCC, fetchurl }:
 
 let
-  modelSpecs = (builtins.fromJSON (builtins.readFile ./models.json));
   withCodeAsKey = f: { code, ... }@attrs: lib.nameValuePair code (f attrs);
   mkModelPackage = { name, code, version, url, checksum }:
     stdenvNoCC.mkDerivation {
@@ -34,10 +37,5 @@ let
     lib.listToAttrs (map (withCodeAsKey mkModelPackage) modelSpecs);
 
 in allModelPkgs // {
-  is-en-tiny = allModelPkgs.is-en-tiny.overrideAttrs (super: {
-    # missing model https://github.com/XapaJIaMnu/translateLocally/issues/147
-    meta = super.meta // { broken = true; };
-  });
-} // {
   passthru.updateScript = ./update.sh;
 }

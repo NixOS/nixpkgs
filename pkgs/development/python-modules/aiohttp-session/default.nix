@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-session";
-  version = "2.12.0";
+  version = "2.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp-session";
-    rev = "v${version}";
-    hash = "sha256-7MNah4OIQnoxLoZkLOdeu5uCwSyPMhc6Wsht8dFconc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-mGWtHo/+jdCmv3TmUUv42hWSiLzPiP5ytB25pVyvZig=";
   };
 
   build-system = [ setuptools ];

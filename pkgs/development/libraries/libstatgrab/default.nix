@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VoiqSmhVR9cXSoo3PqnY7pJ+dm48wwK97jRSPCxdbBE=";
   };
 
-  buildInputs = lib.optional stdenv.isDarwin IOKit;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin IOKit;
 
   meta = with lib; {
     homepage = "https://www.i-scream.org/libstatgrab/";
     description = "Library that provides cross platforms access to statistics about the running system";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

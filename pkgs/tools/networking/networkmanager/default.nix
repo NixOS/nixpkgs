@@ -60,11 +60,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "networkmanager";
-  version = "1.48.2";
+  version = "1.48.10";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    hash = "sha256-PZBxzGKWTd8OMfXQbwYD4XVouMlRFK4ndwNYGt1ahqE=";
+    hash = "sha256-XcGI/f/PLSPInTSx5jGaayAgPhLq7CSzADe36orIxhM=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -131,6 +131,9 @@ stdenv.mkDerivation rec {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
+
+    # https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/merge_requests/1966
+    ./without-systemd.patch
   ];
 
   buildInputs = [

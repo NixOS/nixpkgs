@@ -1,26 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, cmake, ninja, pkg-config
 , boost, miniupnpc, openssl, unbound
 , zeromq, pcsclite, readline, libsodium, hidapi
 , randomx, rapidjson, easyloggingpp
 , CoreData, IOKit, PCSC
 , trezorSupport ? true, libusb1, protobuf, python3
+, monero-cli
 }:
 
 stdenv.mkDerivation rec {
   pname = "haven-cli";
-  version = "3.3.4";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "haven-protocol-org";
     repo = "haven-main";
     rev = "v${version}";
-    sha256 = "sha256-jKeLFWJDwS8WWRynkDgBjvjq2EDpTEJadwkNsANQXws=";
+    hash = "sha256-yVFAIyxeD8HNGCcWu52xNDFm9zyHrCdH2zR2+VbpBe8=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    ./use-system-libraries.patch
-  ];
+  inherit (monero-cli) patches;
 
   postPatch = ''
     # remove vendored libraries
@@ -29,14 +28,14 @@ stdenv.mkDerivation rec {
     cp -r . $source
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
 
   buildInputs = [
     boost miniupnpc openssl unbound
     zeromq pcsclite readline
     libsodium hidapi randomx rapidjson
     protobuf readline easyloggingpp
-  ] ++ lib.optionals stdenv.isDarwin [ IOKit CoreData PCSC ]
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit CoreData PCSC ]
     ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ];
 
   cmakeFlags = [
@@ -44,7 +43,7 @@ stdenv.mkDerivation rec {
     "-DReadline_ROOT_DIR=${readline.dev}"
     "-DReadline_INCLUDE_DIR=${readline.dev}/include/readline"
     "-DRandomX_ROOT_DIR=${randomx}"
-  ] ++ lib.optional stdenv.isDarwin "-DBoost_USE_MULTITHREADED=OFF"
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "-DBoost_USE_MULTITHREADED=OFF"
     ++ lib.optional (!trezorSupport) "-DUSE_DEVICE_TREZOR=OFF";
 
   outputs = [ "out" "source" ];

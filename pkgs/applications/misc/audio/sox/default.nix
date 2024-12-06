@@ -31,7 +31,7 @@
 , enableAMR ? false
 , amrnb
 , amrwb
-, enableLibpulseaudio ? stdenv.isLinux && lib.meta.availableOn stdenv.hostPlatform libpulseaudio
+, enableLibpulseaudio ? stdenv.hostPlatform.isLinux && lib.meta.availableOn stdenv.hostPlatform libpulseaudio
 , libpulseaudio
 }:
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   patches = [ ./0001-musl-rewind-pipe-workaround.patch ];
 
   buildInputs =
-    lib.optional (enableAlsa && stdenv.isLinux) alsa-lib
+    lib.optional (enableAlsa && stdenv.hostPlatform.isLinux) alsa-lib
     ++ lib.optional enableLibao libao
     ++ lib.optional enableLame lame
     ++ lib.optional enableLibmad libmad
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableWavpack wavpack
     ++ lib.optionals enableAMR [ amrnb amrwb ]
     ++ lib.optional enableLibpulseaudio libpulseaudio
-    ++ lib.optional stdenv.isDarwin CoreAudio;
+    ++ lib.optional stdenv.hostPlatform.isDarwin CoreAudio;
 
   enableParallelBuilding = true;
 

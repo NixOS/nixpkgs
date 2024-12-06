@@ -7,7 +7,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "adguardhome";
-  version = "0.107.51";
+  version = "0.107.54";
   src = sources.${system} or (throw "Source for ${pname} is not available for ${system}");
 
   installPhase = ''
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = ./update.sh;
-    schema_version = 28;
+    schema_version = 29;
     tests.adguardhome = nixosTests.adguardhome;
   };
 

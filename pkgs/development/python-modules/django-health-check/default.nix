@@ -7,6 +7,8 @@
   django,
   redis,
   celery,
+  boto3,
+  django-storages,
   pytest-django,
   pytestCheckHook,
   mock,
@@ -15,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "django-health-check";
-  version = "3.18.1";
+  version = "3.18.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "KristianOellegaard";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-4fl7x0pleI1yL+tEWGt5Gmcl6ZKETQz2AsNQDVIAwy8=";
+    hash = "sha256-+6+YxB/x4JdKUCwxxe+YIc+r1YAzngFUHiS6atupWM8=";
   };
 
   buildInputs = [
@@ -36,6 +38,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    boto3
+    django-storages
     pytest-django
     pytestCheckHook
     mock

@@ -78,9 +78,6 @@ in {
     ] ++ drv.testFlags or [];
   }) (doJailbreak super.hpack);
 
-  # Tests depend on `parseTime` which is no longer available
-  hourglass = dontCheck super.hourglass;
-
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
 

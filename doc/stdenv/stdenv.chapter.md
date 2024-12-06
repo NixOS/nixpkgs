@@ -518,8 +518,10 @@ There are a number of variables that control what phases are executed and in wha
 
 Specifies the phases. You can change the order in which phases are executed, or add new phases, by setting this variable. If it’s not set, the default value is used, which is `$prePhases unpackPhase patchPhase $preConfigurePhases configurePhase $preBuildPhases buildPhase checkPhase $preInstallPhases installPhase fixupPhase installCheckPhase $preDistPhases distPhase $postPhases`.
 
+The elements of `phases` must not contain spaces. If `phases` is specified as a Nix Language attribute, it should be specified as lists instead of strings. The same rules apply to the `*Phases` variables.
+
 It is discouraged to set this variable, as it is easy to miss some important functionality hidden in some of the less obviously needed phases (like `fixupPhase` which patches the shebang of scripts).
-Usually, if you just want to add a few phases, it’s more convenient to set one of the variables below (such as `preInstallPhases`).
+Usually, if you just want to add a few phases, it’s more convenient to set one of the `*Phases` variables below.
 
 ##### `prePhases` {#var-stdenv-prePhases}
 
@@ -580,7 +582,7 @@ After unpacking all of `src` and `srcs`, if neither of `sourceRoot` and `setSour
 If `unpackPhase` produces multiple source directories, you should set `sourceRoot` to the name of the intended directory.
 You can also set `sourceRoot = ".";` if you want to control it yourself in a later phase.
 
-For example, if your want your build to start in a sub-directory inside your sources, and you are using `fetchzip`-derived `src` (like `fetchFromGitHub` or similar), you need to set `sourceRoot = "${src.name}/my-sub-directory"`.
+For example, if you want your build to start in a sub-directory inside your sources, and you are using `fetchzip`-derived `src` (like `fetchFromGitHub` or similar), you need to set `sourceRoot = "${src.name}/my-sub-directory"`.
 
 ##### `setSourceRoot` {#var-stdenv-setSourceRoot}
 
@@ -761,6 +763,8 @@ Before and after running `make`, the hooks `preBuild` and `postBuild` are called
 ### The check phase {#ssec-check-phase}
 
 The check phase checks whether the package was built correctly by running its test suite. The default `checkPhase` calls `make $checkTarget`, but only if the [`doCheck` variable](#var-stdenv-doCheck) is enabled.
+
+It is highly recommended, for packages' sources that are not distributed with any tests, to at least use [`versionCheckHook`](#versioncheckhook) to test that the resulting executable is basically functional.
 
 #### Variables controlling the check phase {#variables-controlling-the-check-phase}
 
@@ -1133,6 +1137,12 @@ Example removing all references to the compiler in the output:
   '';
 }
 ```
+
+### `runHook` \<hook\> {#fun-runHook}
+
+Execute \<hook\> and the values in the array associated with it. The array's name is determined by removing `Hook` from the end of \<hook\> and appending `Hooks`.
+
+For example, `runHook postHook` would run the hook `postHook` and all of the values contained in the `postHooks` array, if it exists.
 
 ### `substitute` \<infile\> \<outfile\> \<subs\> {#fun-substitute}
 
@@ -1515,28 +1525,60 @@ This flag can break dynamic shared object loading. For instance, the module syst
 intel_drv.so: undefined symbol: vgaHWFreeHWRec
 ```
 
+#### `zerocallusedregs` {#zerocallusedregs}
+
+Adds the `-fzero-call-used-regs=used-gpr` compiler option. This causes the general-purpose registers that an architecture's calling convention considers "call-used" to be zeroed on return from the function. This can make it harder for attackers to construct useful ROP gadgets and also reduces the chance of data leakage from a function call.
+
 ### Hardening flags disabled by default {#sec-hardening-flags-disabled-by-default}
 
 The following flags are disabled by default and should be enabled with `hardeningEnable` for packages that take untrusted input like network services.
 
 #### `pie` {#pie}
 
-This flag is disabled by default for normal `glibc` based NixOS package builds, but enabled by default for `musl` based package builds.
+This flag is disabled by default for normal `glibc` based NixOS package builds, but enabled by default for
+
+  - `musl`-based package builds, except on Aarch64 and Aarch32, where there are issues.
+
+  - Statically-linked for OpenBSD builds, where it appears to be required to get a working binary.
 
 Adds the `-fPIE` compiler and `-pie` linker options. Position Independent Executables are needed to take advantage of Address Space Layout Randomization, supported by modern kernel versions. While ASLR can already be enforced for data areas in the stack and heap (brk and mmap), the code areas must be compiled as position-independent. Shared libraries already do this with the `pic` flag, so they gain ASLR automatically, but binary .text regions need to be build with `pie` to gain ASLR. When this happens, ROP attacks are much harder since there are no static locations to bounce off of during a memory corruption attack.
 
 Static libraries need to be compiled with `-fPIE` so that executables can link them in with the `-pie` linker option.
 If the libraries lack `-fPIE`, you will get the error `recompile with -fPIE`.
 
-#### `zerocallusedregs` {#zerocallusedregs}
+#### `shadowstack` {#shadowstack}
 
-Adds the `-fzero-call-used-regs=used-gpr` compiler option. This causes the general-purpose registers that an architecture's calling convention considers "call-used" to be zeroed on return from the function. This can make it harder for attackers to construct useful ROP gadgets and also reduces the chance of data leakage from a function call.
+Adds the `-fcf-protection=return` compiler option. This enables the Shadow Stack feature supported by some newer processors, which maintains a user-inaccessible copy of the program's stack containing only return-addresses. When returning from a function, the processor compares the return-address value on the two stacks and throws an error if they do not match, considering it a sign of corruption and possible tampering. This should significantly increase the difficulty of ROP attacks.
+
+For the Shadow Stack to be enabled at runtime, all code linked into a process must be built with Shadow Stack enabled, so this is probably only useful to enable on a wide scale, so that all of a packages dependencies also have the feature enabled.
+
+This is currently only supported on some newer Intel and AMD processors as part of the Intel CET set of features. However, the generated code should continue to work on older processors which will simply omit any of this checking.
+
+This breaks some code that does advanced stack management or exception handling. If enabling this hardening flag it is important to test the result on a system that has known working and enabled CET support, so that any such breakage can be discovered.
 
 #### `trivialautovarinit` {#trivialautovarinit}
 
 Adds the `-ftrivial-auto-var-init=pattern` compiler option. This causes "trivially-initializable" uninitialized stack variables to be forcibly initialized with a nonzero value that is likely to cause a crash (and therefore be noticed). Uninitialized variables generally take on their values based on fragments of previous program state, and attackers can carefully manipulate that state to craft malicious initial values for these variables.
 
 Use of this flag is controversial as it can prevent tools that detect uninitialized variable use (such as valgrind) from operating correctly.
+
+This should be turned off or fixed for build errors such as:
+
+```
+sorry, unimplemented: __builtin_clear_padding not supported for variable length aggregates
+```
+
+#### `stackclashprotection` {#stackclashprotection}
+
+This flag adds the `-fstack-clash-protection` compiler option, which causes growth of a program's stack to access each successive page in order. This should force the guard page to be accessed and cause an attempt to "jump over" this guard page to crash.
+
+#### `pacret` {#pacret}
+
+This flag adds the `-mbranch-protection=pac-ret` compiler option on aarch64-linux targets. This uses ARM v8.3's Pointer Authentication feature to sign function return pointers before adding them to the stack. The pointer's authenticity is then validated before returning to its destination. This dramatically increases the difficulty of ROP exploitation techniques.
+
+This may cause problems with code that does advanced stack manipulation, and debugging/stack-unwinding tools need to be pac-ret aware to work correctly when these features are in operation.
+
+Pre-ARM v8.3 processors will ignore Pointer Authentication instructions, so code built with this flag will continue to work on older processors, though without any of the intended protections. If enabling this flag, it is recommended to ensure the resultant packages are tested against an ARM v8.3+ linux system with known-working Pointer Authentication support so that any breakage caused by this feature is actually detected.
 
 [^footnote-stdenv-ignored-build-platform]: The build platform is ignored because it is a mere implementation detail of the package satisfying the dependency: As a general programming principle, dependencies are always *specified* as interfaces, not concrete implementation.
 [^footnote-stdenv-native-dependencies-in-path]: Currently, this means for native builds all dependencies are put on the `PATH`. But in the future that may not be the case for sake of matching cross: the platforms would be assumed to be unique for native and cross builds alike, so only the `depsBuild*` and `nativeBuildInputs` would be added to the `PATH`.

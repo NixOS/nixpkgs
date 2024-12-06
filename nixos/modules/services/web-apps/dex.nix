@@ -80,7 +80,6 @@ in
         ];
 
         RuntimeDirectory = "dex";
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         BindReadOnlyPaths = [
           "/nix/store"
           "-/etc/dex"
@@ -91,7 +90,6 @@ in
           "-/etc/ssl/certs/ca-certificates.crt"
         ];
         BindPaths = optional (cfg.settings.storage.type == "postgres") "/var/run/postgresql";
-        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         # ProtectClock= adds DeviceAllow=char-rtc r
         DeviceAllow = "";
         DynamicUser = true;

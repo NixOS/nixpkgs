@@ -6,26 +6,26 @@
 , gettext
 , maxima
 , wxGTK
-, gnome
+, adwaita-icon-theme
 , glib
 }:
 
 stdenv.mkDerivation (finalAttrs:{
   pname = "wxmaxima";
-  version = "24.05.0";
+  version = "24.11.0";
 
   src = fetchFromGitHub {
     owner = "wxMaxima-developers";
     repo = "wxmaxima";
     rev = "Version-${finalAttrs.version}";
-    hash = "sha256-pl3sO28HANL9F41aaJznxUsH2Y7W/FO82Rik2/ik2Ag=";
+    hash = "sha256-3tGMkxp7nadD+LNluIiyPf55Daf7N1MPTH62U8/GxuA=";
   };
 
   buildInputs = [
     wxGTK
     maxima
     # So it won't embed svg files into headers.
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     # So it won't crash under Sway.
     glib
   ];

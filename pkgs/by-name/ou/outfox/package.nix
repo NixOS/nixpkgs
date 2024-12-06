@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = {
     i686-linux = fetchurl {
       url =  "https://github.com/TeamRizu/OutFox/releases/download/OF5.0.0-042/OutFox-alpha-0.5.0-pre042-Linux-14.04-32bit-i386-i386-legacy-date-20231227.tar.gz";
-      sha256 = "sha256-NFjNoqJ7Fq4A7Y0k6oQcWjykV+/b/MiRtJ1p6qlZdjs=";
+      hash = "sha256-NFjNoqJ7Fq4A7Y0k6oQcWjykV+/b/MiRtJ1p6qlZdjs=";
     };
     x86_64-linux = fetchurl {
       url = "https://github.com/TeamRizu/OutFox/releases/download/OF5.0.0-042/OutFox-alpha-0.5.0-pre042-Linux-22.04-amd64-current-date-20231224.tar.gz";
@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Rhythm game engine forked from StepMania";
     homepage = "https://projectoutfox.com";
+    changelog = "https://projectoutfox.com/releases/${version}";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "armv7l-linux" ];

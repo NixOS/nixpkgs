@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "i2p";
-  version = "2.5.2";
+  version = "2.7.0";
 
   src = fetchzip {
     urls = [
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://files.i2p-projekt.de/"
       "https://download.i2p2.no/releases/"
     ]);
-    hash = "sha256-0ftTLdU/tf1xTUSuqHvveSS33h1XLGPkrXcGpIe8f0U=";
+    hash = "sha256-gw1i6jrmTfz9CZlCjtOUdH5R4vD57ysDeQxyyWifieg=";
   };
 
   strictDeps = true;
@@ -97,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Applications and router for I2P, anonymity over the Internet";
     homepage = "https://geti2p.net";
+    changelog = "https://github.com/i2p/i2p.i2p/releases/tag/i2p-${finalAttrs.version}";
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars

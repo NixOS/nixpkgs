@@ -21,14 +21,13 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   sqlalchemy,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "ormar";
-  version = "0.12.2";
+  version = "0.20.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -37,7 +36,7 @@ buildPythonPackage rec {
     owner = "collerek";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Yd5ex0bcy61zq5Sn2dKeb98s/CMxUWnyGx6jFWQ3RUs=";
+    hash = "sha256-DzvmJpWJANIoc5lvWAD0b2bhbKdDEpNL2l3TqXSZSnc=";
   };
 
   pythonRelaxDeps = [
@@ -48,7 +47,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs =
@@ -64,7 +62,7 @@ buildPythonPackage rec {
       importlib-metadata
     ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     postgresql = [ asyncpg ];
     postgres = [ asyncpg ];
     aiopg = [ aiopg ];
@@ -91,7 +89,7 @@ buildPythonPackage rec {
     httpx
     nest-asyncio
     pytest-asyncio
-  ] ++ passthru.optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
   disabledTestPaths = [ "benchmarks/test_benchmark_*.py" ];
 
@@ -147,5 +145,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/collerek/ormar/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ andreasfelix ];
+    broken = true;
   };
 }

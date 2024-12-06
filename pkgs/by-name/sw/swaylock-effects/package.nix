@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "jirutka";
     repo = "swaylock-effects";
     rev = "v${version}";
-    sha256 = "sha256-cuFM+cbUmGfI1EZu7zOsQUj4rA4Uc4nUXcvIfttf9zE=";
+    hash = "sha256-cuFM+cbUmGfI1EZu7zOsQUj4rA4Uc4nUXcvIfttf9zE=";
   };
 
   postPatch = ''
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner];
   buildInputs = [ wayland wayland-protocols libxkbcommon cairo gdk-pixbuf pam ];
 

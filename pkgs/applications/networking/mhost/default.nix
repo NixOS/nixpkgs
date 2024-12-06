@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-d2JYT/eJaGm8pfmjsuSZiQxlzcsypFH53F/9joW0J6I=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security
     SystemConfiguration
   ];

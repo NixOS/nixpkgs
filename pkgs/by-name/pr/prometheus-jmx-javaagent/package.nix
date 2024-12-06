@@ -10,10 +10,10 @@ stdenv.mkDerivation (
   in
   {
     pname = "jmx-prometheus-javaagent";
-    version = "0.20.0";
+    version = "1.0.1";
     src = fetchurl {
       url = "mirror://maven/io/prometheus/jmx/jmx_prometheus_javaagent/${finalAttrs.version}/${jarName}";
-      sha256 = "sha256-i2ftQEhdR1ZIw20R0hRktIRAb4X6+RKzNj9xpqeGEyA=";
+      hash = "sha256-fWH3N/1mFhDMwUrqeXZPqh6pSjQMvI8AKbPS7eo9gME=";
     };
 
     dontUnpack = true;

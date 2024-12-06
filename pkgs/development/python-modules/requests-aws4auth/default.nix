@@ -4,36 +4,34 @@
   fetchFromGitHub,
   httpx,
   pytestCheckHook,
-  python,
   pythonOlder,
   requests,
-  six,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "requests-aws4auth";
-  version = "1.2.3";
-  format = "setuptools";
+  version = "1.3.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tedder";
-    repo = pname;
+    repo = "requests-aws4auth";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9ySuX7eKrSwgxgFoMdnVTsIfpnm9kVcI9AqSb+AsVaU=";
+    hash = "sha256-tRo38fdWqZmutGhWv8Hks+oFaLv770RlAHYgS3S6xJA=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    six
-  ];
+  build-system = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  dependencies = [ requests ];
+
+  optional-dependencies = {
     httpx = [ httpx ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.httpx;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.httpx;
 
   pythonImportsCheck = [ "requests_aws4auth" ];
 

@@ -385,7 +385,7 @@ let plugins = {
     # for the version, look for the driver of XP-750 in the search page
     version = "2.30.4";
 
-    buildInputs = [ stdenv.cc.cc.lib ];
+    buildInputs = [ (lib.getLib stdenv.cc.cc) ];
     nativeBuildInputs = [ autoPatchelfHook ];
 
     src = fetchurl {

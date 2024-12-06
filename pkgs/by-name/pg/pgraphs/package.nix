@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "pgraphs";
-  version = "0.6.12";
+  version = "0.6.17";
 
   src = fetchFromGitHub {
     owner = "pg-format";
     repo = "pgraphs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rhNXASSHgdL9knq9uPFhAGlh0ZAKo5TNh/2a4u6Mh1U=";
+    hash = "sha256-0Zo8Vg2KHhEGvO+vrbcP0ZTnfLtNTE2fqxq5LwPsJGs=";
   };
 
-  npmDepsHash = "sha256-S1pCmRaRuprqIjaylIsuHyguhgQC5vvp7pDq2KJgrHQ=";
+  npmDepsHash = "sha256-47zT3wlCnVIcv0Sst4lUWLUMiWftgvP60cOmHu65vB8=";
   dontNpmBuild = true;
 
   meta = {

@@ -6,10 +6,10 @@
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-brr";
-  version = "0.0.6";
+  version = "0.0.7";
   src = fetchurl {
     url = "https://erratique.ch/software/brr/releases/brr-${version}.tbz";
-    hash = "sha256-paYZlzujXsG1S+s/4/kAPBlDuV1Ljorw7okAu4qaAV0=";
+    hash = "sha256-rcWuW6avI/RJZNAlxKOsPSEtDQZ1hb51oKpSk3iG7oY=";
   };
   buildInputs = [ ocaml findlib ocamlbuild topkg ];
   propagatedBuildInputs = [ js_of_ocaml-compiler js_of_ocaml-toplevel ];

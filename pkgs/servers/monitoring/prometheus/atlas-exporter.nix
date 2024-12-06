@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorHash = "sha256-tR+OHxj/97AixuAp0Kx9xQsKPAxpvF6hDha5BgMBha0=";
 
   meta = with lib; {
-    description = "Prometheus exporter for RIPE Atlas measurement results ";
+    description = "Prometheus exporter for RIPE Atlas measurement results";
     mainProgram = "atlas_exporter";
     homepage = "https://github.com/czerwonk/atlas_exporter";
     license = licenses.lgpl3;

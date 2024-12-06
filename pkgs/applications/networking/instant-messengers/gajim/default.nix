@@ -1,7 +1,7 @@
 { lib, fetchurl, gettext, wrapGAppsHook3
 
 # Native dependencies
-, python3, gtk3, gobject-introspection, gnome
+, python3, gtk3, gobject-introspection, adwaita-icon-theme
 , gtksourceview4
 , glib-networking
 
@@ -21,17 +21,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "1.9.0";
+  version = "1.9.5";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    hash = "sha256-eiRLQZr60BvjqqnoYEY+LswgW6e+S9mTLvBKVCXrCzI=";
+    hash = "sha256-f99NsOsWp+vGecI2DxRfZOCrz/DxaRPEX5LI642HVjw=";
   };
 
   format = "pyproject";
 
   buildInputs = [
-    gtk3 gnome.adwaita-icon-theme
+    gtk3
+    adwaita-icon-theme
     gtksourceview4
     glib-networking
   ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-good libnice ]
@@ -46,6 +47,14 @@ python3.pkgs.buildPythonApplication rec {
 
   dontWrapGApps = true;
 
+  preBuild = ''
+    python make.py build --dist unix
+  '';
+
+  postInstall = ''
+    python make.py install --dist unix --prefix=$out
+  '';
+
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
@@ -58,14 +67,6 @@ python3.pkgs.buildPythonApplication rec {
     ++ extraPythonPackages python3.pkgs;
 
   nativeCheckInputs = [ xvfb-run dbus ];
-
-  preBuild = ''
-    python pep517build/build_metadata.py -o dist/metadata
-  '';
-
-  postInstall = ''
-    python pep517build/install_metadata.py dist/metadata --prefix=$out
-  '';
 
   checkPhase = ''
     xvfb-run dbus-run-session \

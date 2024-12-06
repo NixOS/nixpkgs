@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-data";
-  version = "3.15.1";
+  version = "3.16.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "dvc-data";
     rev = "refs/tags/${version}";
-    hash = "sha256-pr5RtVlGKKtpcmmCNGqcLiBFzJcajpqtPjBbzeCCHF8=";
+    hash = "sha256-HT+IcfUA1QMkWhQKNwjKexzG04WJj+WTyHV+15DDoCI=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dictdiffer
     diskcache
     dvc-objects

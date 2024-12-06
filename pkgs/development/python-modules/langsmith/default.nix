@@ -1,38 +1,41 @@
 {
   lib,
   stdenv,
-  anthropic,
-  attr,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  httpx,
+  orjson,
+  pydantic,
+  requests,
+  requests-toolbelt,
+
+  # tests
+  anthropic,
   dataclasses-json,
   fastapi,
-  fetchFromGitHub,
   freezegun,
-  httpx,
   instructor,
-  orjson,
-  poetry-core,
-  pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  pythonRelaxDepsHook,
-  requests,
   uvicorn,
+  attr,
 }:
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.1.77";
+  version = "0.1.137";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Tkqo0BbBqFMsEDtEo0sVgSQOoa/J+ECw/7T7yALnL84=";
+    hash = "sha256-nR3fb3MHBxFvI4qrsTpElLWTDUESZ8J78GsVoCGTIyQ=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -41,12 +44,12 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
   dependencies = [
+    httpx
     orjson
     pydantic
     requests
+    requests-toolbelt
   ];
 
   nativeCheckInputs = [
@@ -54,12 +57,11 @@ buildPythonPackage rec {
     dataclasses-json
     fastapi
     freezegun
-    httpx
     instructor
     pytest-asyncio
     pytestCheckHook
     uvicorn
-  ] ++ lib.optionals stdenv.isLinux [ attr ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ attr ];
 
   disabledTests = [
     # These tests require network access
@@ -81,6 +83,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # due to circular import
     "tests/integration_tests/test_client.py"
+    "tests/integration_tests/test_prompts.py"
     "tests/unit_tests/test_client.py"
     # Tests require a Langsmith API key
     "tests/evaluation/test_evaluation.py"
@@ -91,12 +94,12 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform";
     homepage = "https://github.com/langchain-ai/langsmith-sdk";
     changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "langsmith";
   };
 }

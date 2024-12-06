@@ -1,14 +1,14 @@
 { fetchFromGitHub, lib, stdenv, gtk2, pkg-config, qmake, qtbase, unstableGitUpdater }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "qt6gtk2";
-  version = "0.2-unstable-2024-05-06";
+  version = "0.2-unstable-2024-08-14";
 
   src = fetchFromGitHub {
     owner = "trialuser02";
-    repo = finalAttrs.pname;
-    rev = "d29ba6c1fb4ac933ed7b91f0480cbd0c5a975ab8";
-    hash = "sha256-lIUCdfsmvuzDQaOi2U/CHch1re6Jn6yDfcX26Gu0eUo=";
+    repo = "qt6gtk2";
+    rev = "b574ba5b59edf5ce220ca304e1d07d75c94d03a2";
+    hash = "sha256-2NzUmcNJBDUJqcBUF4yRO/mDqDf1Up1k9cuMxVUqe60=";
   };
 
   buildInputs = [ gtk2 qtbase ];
@@ -29,4 +29,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.misterio77 ];
     platforms = lib.platforms.linux;
   };
-})
+}

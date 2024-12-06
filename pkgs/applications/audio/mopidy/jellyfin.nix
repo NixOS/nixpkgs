@@ -7,7 +7,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchPypi {
     inherit version;
     pname = "Mopidy-Jellyfin";
-    sha256 = "sha256-cZliraTxTAJ2dXaxttWI3x4wCkmEhEo33GTNtAYwgTc=";
+    hash = "sha256-cZliraTxTAJ2dXaxttWI3x4wCkmEhEo33GTNtAYwgTc=";
   };
 
   propagatedBuildInputs = [ mopidy python3Packages.unidecode python3Packages.websocket-client ];

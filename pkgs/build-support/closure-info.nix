@@ -4,13 +4,13 @@
 # "nix-store --load-db" and "nix-store --register-validity
 # --hash-given".
 
-{ stdenv, coreutils, jq }:
+{ stdenvNoCC, coreutils, jq }:
 
 { rootPaths }:
 
 assert builtins.langVersion >= 5;
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   name = "closure-info";
 
   __structuredAttrs = true;

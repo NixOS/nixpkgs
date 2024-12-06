@@ -1,12 +1,14 @@
 { lib
 , config
+, stdenv
 , aws-sdk-cpp
 , boehmgc
+, libgit2
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , fetchpatch2
 , runCommand
+, buildPackages
 , Security
 
 , storeDir ? "/nix/store"
@@ -64,7 +66,7 @@ let
       rm aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
       # TestRandomURLMultiThreaded fails
       rm aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
-    '' + lib.optionalString aws-sdk-cpp.stdenv.isi686 ''
+    '' + lib.optionalString aws-sdk-cpp.stdenv.hostPlatform.isi686 ''
       # EPSILON is exceeded
       rm aws-cpp-sdk-core-tests/aws/client/AdaptiveRetryStrategyTest.cpp
     '';
@@ -83,6 +85,27 @@ let
     requiredSystemFeatures = [ ];
   };
 
+  libgit2-thin-packfile = libgit2.overrideAttrs (args: {
+    nativeBuildInputs = args.nativeBuildInputs or []
+      # gitMinimal does not build on Windows. See packbuilder patch.
+      ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
+        # Needed for `git apply`; see `prePatch`
+        buildPackages.gitMinimal
+      ];
+    # Only `git apply` can handle git binary patches
+    prePatch = args.prePatch or ""
+      + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
+        patch() {
+          git apply
+        }
+      '';
+    # taken from https://github.com/NixOS/nix/tree/master/packaging/patches
+    patches = (args.patches or []) ++ [
+      ./patches/libgit2-mempack-thin-packfile.patch
+    ] ++ lib.optionals (!stdenv.hostPlatform.isWindows) [
+      ./patches/libgit2-packbuilder-callback-interruptible.patch
+    ];
+  });
 
   common = args:
     callPackage
@@ -91,6 +114,7 @@ let
         inherit Security storeDir stateDir confDir;
         boehmgc = boehmgc-nix;
         aws-sdk-cpp = if lib.versionAtLeast args.version "2.12pre" then aws-sdk-cpp-nix else aws-sdk-cpp-old-nix;
+        libgit2 = if lib.versionAtLeast args.version "2.25.0" then libgit2-thin-packfile else libgit2;
       };
 
   # https://github.com/NixOS/nix/pull/7585
@@ -113,7 +137,9 @@ let
         runCommand "test-nix-fallback-paths-version-equals-nix-stable" {
           paths = lib.concatStringsSep "\n" (builtins.attrValues (import ../../../../nixos/modules/installer/tools/nix-fallback-paths.nix));
         } ''
-          if [[ "" != $(grep -v 'nix-${pkg.version}$' <<< "$paths") ]]; then
+          # NOTE: name may contain cross compilation details between the pname
+          #       and version this is permitted thanks to ([^-]*-)*
+          if [[ "" != $(grep -vE 'nix-([^-]*-)*${lib.strings.replaceStrings ["."] ["\\."] pkg.version}$' <<< "$paths") ]]; then
             echo "nix-fallback-paths not up to date with nixVersions.stable (nix-${pkg.version})"
             echo "The following paths are not up to date:"
             grep -v 'nix-${pkg.version}$' <<< "$paths"
@@ -146,55 +172,31 @@ in lib.makeExtensible (self: ({
     enableParallelChecking = false;
   };
 
-  nix_2_18 = common {
-    version = "2.18.3";
-    hash = "sha256-430V4oN1Pid0h3J1yucrik6lbDh5D+pHI455bzLPEDY=";
-    self_attribute_name = "nix_2_18";
+  nix_2_24 = common {
+    version = "2.24.10";
+    hash = "sha256-XdeVy1/d6DEIYb3nOA6JIYF4fwMKNxtwJMgT3pHi+ko=";
+    self_attribute_name = "nix_2_24";
   };
 
-  nix_2_19 = common {
-    version = "2.19.4";
-    hash = "sha256-qXjyVmDm1SFWk1az3GWIsJ0fVG0nWet2FdldFOnUydI=";
-    self_attribute_name = "nix_2_19";
-  };
-
-  nix_2_20 = common {
-    version = "2.20.6";
-    hash = "sha256-BSl8Jijq1A4n1ToQy0t0jDJCXhJK+w1prL8QMHS5t54=";
-    self_attribute_name = "nix_2_20";
-  };
-
-  nix_2_21 = common {
-    version = "2.21.2";
-    hash = "sha256-ObaVDDPtnOeIE0t7m4OVk5G+OS6d9qYh+ktK67Fe/zE=";
-    self_attribute_name = "nix_2_21";
-  };
-
-  nix_2_22 = common {
-    version = "2.22.1";
-    hash = "sha256-5Q1WkpTWH7fkVfYhHDc5r0A+Vc+K5xB1UhzrLzBCrB8=";
-    self_attribute_name = "nix_2_22";
-  };
-
-  nix_2_23 = common {
-    version = "2.23.0";
-    hash = "sha256-cRCwRDxR8rEQQEvGjIH8g0krJd4ZFJrdgmPXkv65S/Y=";
-    self_attribute_name = "nix_2_23";
+  nix_2_25 = common {
+    version = "2.25.2";
+    hash = "sha256-MZNpb4awWHXU+kGmH58VUB7M9l6UVo33riuQLTbMh4E=";
+    self_attribute_name = "nix_2_25";
   };
 
   git = common rec {
-    version = "2.23.0";
-    suffix = "pre20240526_${lib.substring 0 8 src.rev}";
+    version = "2.25.0";
+    suffix = "pre20241101_${lib.substring 0 8 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "7de033d63fbcf97aad164e131ae3a85e5dcebce7";
-      hash = "sha256-LtsyUsVpr9sM0n1L7MeTw8/6wGtGeXFvKAbPR5lqN8Q=";
+      rev = "2e5759e3778c460efc5f7cfc4cb0b84827b5ffbe";
+      hash = "sha256-E1Sp0JHtbD1CaGO3UbBH6QajCtOGqcrVfPSKL0n63yo=";
     };
     self_attribute_name = "git";
   };
 
-  latest = self.nix_2_23;
+  latest = self.nix_2_25;
 
   # The minimum Nix version supported by Nixpkgs
   # Note that some functionality *might* have been backported into this Nix version,
@@ -213,7 +215,8 @@ in lib.makeExtensible (self: ({
     else
       nix;
 
-  stable = addFallbackPathsCheck self.nix_2_18;
+  # Read ./README.md before bumping a major release
+  stable = addFallbackPathsCheck self.nix_2_24;
 } // lib.optionalAttrs config.allowAliases (
   lib.listToAttrs (map (
     minor:
@@ -221,7 +224,7 @@ in lib.makeExtensible (self: ({
       attr = "nix_2_${toString minor}";
     in
     lib.nameValuePair attr (throw "${attr} has been removed")
-  ) (lib.range 4 17))
+  ) (lib.range 4 23))
   // {
     unstable = throw "nixVersions.unstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest.";
   }

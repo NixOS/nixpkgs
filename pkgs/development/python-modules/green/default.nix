@@ -3,7 +3,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchPypi,
-  django,
   colorama,
   coverage,
   unidecode,
@@ -41,7 +40,6 @@ buildPythonPackage rec {
     $out/bin/green -tvvv \
       green.test.test_version \
       green.test.test_cmdline \
-      green.test.test_command
   '';
 
   pythonImportsCheck = [ "green" ];
@@ -50,6 +48,6 @@ buildPythonPackage rec {
     description = "Python test runner";
     homepage = "https://github.com/CleanCut/green";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -49,7 +49,7 @@
  
          if provider_cls == K5Realm:
 -            krb5_config = _discover_path("krb5-config", "/usr/bin/krb5-config", kwargs)
-+            krb5_config = _discover_path("krb5-config", "@krb5@/bin/krb5-config", kwargs)
++            krb5_config = _discover_path("krb5-config", "@krb5Dev@/bin/krb5-config", kwargs)
  
              try:
                  krb5_version = subprocess.check_output(
@@ -58,7 +58,7 @@
                  # macOS output doesn't contain Heimdal
                  if "heimdal" in krb5_version.lower() or (
 -                    sys.platform == "darwin" and krb5_config == "/usr/bin/krb5-config"
-+                    sys.platform == "darwin" and krb5_config == "@krb5@/bin/krb5-config"
++                    sys.platform == "darwin" and krb5_config == "@krb5Dev@/bin/krb5-config"
                  ):
                      provider_cls = HeimdalRealm
                  else:

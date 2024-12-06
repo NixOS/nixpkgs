@@ -13,13 +13,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ibus-typing-booster";
-  version = "2.25.10";
+  version = "2.25.17";
 
   src = fetchFromGitHub {
     owner = "mike-fabian";
     repo = "ibus-typing-booster";
     rev = version;
-    hash = "sha256-6kcU6oOH75X/M1+fv3m+r05ffIFYrXrlNl8tB6K+B5I=";
+    hash = "sha256-ewwyiKBSHopKfGhSbrGsJ3oYh7CQKCBZN/QGJfrl4+M=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook3 gobject-introspection ];
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     description = "Completion input method for faster typing";
     mainProgram = "emoji-picker";
     maintainers = with maintainers; [ ncfavier ];
+    platforms = platforms.linux;
     isIbusEngine = true;
   };
 }

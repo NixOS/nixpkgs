@@ -3,9 +3,6 @@
 , pkgs
 , ...
 }:
-
-with lib;
-
 let
   cfg = config.services.kea;
 
@@ -32,17 +29,17 @@ let
   package = pkgs.kea;
 in
 {
-  options.services.kea = with types; {
-    ctrl-agent = mkOption {
+  options.services.kea = with lib.types; {
+    ctrl-agent = lib.mkOption {
       description = ''
         Kea Control Agent configuration
       '';
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption "Kea Control Agent";
+          enable = lib.mkEnableOption "Kea Control Agent";
 
-          extraArgs = mkOption {
+          extraArgs = lib.mkOption {
             type = listOf str;
             default = [];
             description = ''
@@ -50,7 +47,7 @@ in
             '';
           };
 
-          configFile = mkOption {
+          configFile = lib.mkOption {
             type = nullOr path;
             default = null;
             description = ''
@@ -61,7 +58,7 @@ in
             '';
           };
 
-          settings = mkOption {
+          settings = lib.mkOption {
             type = format.type;
             default = null;
             description = ''
@@ -72,16 +69,16 @@ in
       };
     };
 
-    dhcp4 = mkOption {
+    dhcp4 = lib.mkOption {
       description = ''
         DHCP4 Server configuration
       '';
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption "Kea DHCP4 server";
+          enable = lib.mkEnableOption "Kea DHCP4 server";
 
-          extraArgs = mkOption {
+          extraArgs = lib.mkOption {
             type = listOf str;
             default = [];
             description = ''
@@ -89,7 +86,7 @@ in
             '';
           };
 
-          configFile = mkOption {
+          configFile = lib.mkOption {
             type = nullOr path;
             default = null;
             description = ''
@@ -100,7 +97,7 @@ in
             '';
           };
 
-          settings = mkOption {
+          settings = lib.mkOption {
             type = format.type;
             default = null;
             example = {
@@ -118,6 +115,7 @@ in
                 name = "/var/lib/kea/dhcp4.leases";
               };
               subnet4 = [ {
+                id = 1;
                 subnet = "192.0.2.0/24";
                 pools = [ {
                   pool = "192.0.2.100 - 192.0.2.240";
@@ -132,16 +130,16 @@ in
       };
     };
 
-    dhcp6 = mkOption {
+    dhcp6 = lib.mkOption {
       description = ''
         DHCP6 Server configuration
       '';
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption "Kea DHCP6 server";
+          enable = lib.mkEnableOption "Kea DHCP6 server";
 
-          extraArgs = mkOption {
+          extraArgs = lib.mkOption {
             type = listOf str;
             default = [];
             description = ''
@@ -149,7 +147,7 @@ in
             '';
           };
 
-          configFile = mkOption {
+          configFile = lib.mkOption {
             type = nullOr path;
             default = null;
             description = ''
@@ -160,7 +158,7 @@ in
             '';
           };
 
-          settings = mkOption {
+          settings = lib.mkOption {
             type = format.type;
             default = null;
             example = {
@@ -179,6 +177,7 @@ in
                 name = "/var/lib/kea/dhcp6.leases";
               };
               subnet6 = [ {
+                id = 1;
                 subnet = "2001:db8:1::/64";
                 pools = [ {
                   pool = "2001:db8:1::1-2001:db8:1::ffff";
@@ -193,16 +192,16 @@ in
       };
     };
 
-    dhcp-ddns = mkOption {
+    dhcp-ddns = lib.mkOption {
       description = ''
         Kea DHCP-DDNS configuration
       '';
       default = {};
       type = submodule {
         options = {
-          enable = mkEnableOption "Kea DDNS server";
+          enable = lib.mkEnableOption "Kea DDNS server";
 
-          extraArgs = mkOption {
+          extraArgs = lib.mkOption {
             type = listOf str;
             default = [];
             description = ''
@@ -210,7 +209,7 @@ in
             '';
           };
 
-          configFile = mkOption {
+          configFile = lib.mkOption {
             type = nullOr path;
             default = null;
             description = ''
@@ -221,7 +220,7 @@ in
             '';
           };
 
-          settings = mkOption {
+          settings = lib.mkOption {
             type = format.type;
             default = null;
             example = {
@@ -258,14 +257,14 @@ in
       StateDirectory = "kea";
       UMask = "0077";
     };
-  in mkIf (cfg.ctrl-agent.enable || cfg.dhcp4.enable || cfg.dhcp6.enable || cfg.dhcp-ddns.enable) (mkMerge [
+  in lib.mkIf (cfg.ctrl-agent.enable || cfg.dhcp4.enable || cfg.dhcp6.enable || cfg.dhcp-ddns.enable) (lib.mkMerge [
   {
     environment.systemPackages = [ package ];
   }
 
-  (mkIf cfg.ctrl-agent.enable {
+  (lib.mkIf cfg.ctrl-agent.enable {
     assertions = [{
-        assertion = xor (cfg.ctrl-agent.settings == null) (cfg.ctrl-agent.configFile == null);
+        assertion = lib.xor (cfg.ctrl-agent.settings == null) (cfg.ctrl-agent.configFile == null);
         message = "Either services.kea.ctrl-agent.settings or services.kea.ctrl-agent.configFile must be set to a non-null value.";
     }];
 
@@ -308,9 +307,9 @@ in
     };
   })
 
-  (mkIf cfg.dhcp4.enable {
+  (lib.mkIf cfg.dhcp4.enable {
     assertions = [{
-        assertion = xor (cfg.dhcp4.settings == null) (cfg.dhcp4.configFile == null);
+        assertion = lib.xor (cfg.dhcp4.settings == null) (cfg.dhcp4.configFile == null);
         message = "Either services.kea.dhcp4.settings or services.kea.dhcp4.configFile must be set to a non-null value.";
     }];
 
@@ -358,9 +357,9 @@ in
     };
   })
 
-  (mkIf cfg.dhcp6.enable {
+  (lib.mkIf cfg.dhcp6.enable {
     assertions = [{
-        assertion = xor (cfg.dhcp6.settings == null) (cfg.dhcp6.configFile == null);
+        assertion = lib.xor (cfg.dhcp6.settings == null) (cfg.dhcp6.configFile == null);
         message = "Either services.kea.dhcp6.settings or services.kea.dhcp6.configFile must be set to a non-null value.";
     }];
 
@@ -406,9 +405,9 @@ in
     };
   })
 
-  (mkIf cfg.dhcp-ddns.enable {
+  (lib.mkIf cfg.dhcp-ddns.enable {
     assertions = [{
-        assertion = xor (cfg.dhcp-ddns.settings == null) (cfg.dhcp-ddns.configFile == null);
+        assertion = lib.xor (cfg.dhcp-ddns.settings == null) (cfg.dhcp-ddns.configFile == null);
         message = "Either services.kea.dhcp-ddns.settings or services.kea.dhcp-ddns.configFile must be set to a non-null value.";
     }];
 
@@ -453,7 +452,7 @@ in
 
   ]);
 
-  meta.maintainers = with maintainers; [ hexa ];
+  meta.maintainers = with lib.maintainers; [ hexa ];
   # uses attributes of the linked package
   meta.buildDocsInSandbox = false;
 }

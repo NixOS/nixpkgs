@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "jsonpickle";
-  version = "3.0.4";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-obFMjWIhzY85TyqX5zXqHX7ckn+9E1sm8vhwBlfIxis=";
+    hash = "sha256-q0Z+YB5bGhzXbxgZ0BR5UWXaBxdE7zC/N4bpvFSd4lo=";
   };
 
   nativeBuildInputs = [

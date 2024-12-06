@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zopefoundation/zope.testing";
     changelog = "https://github.com/zopefoundation/zope.testing/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

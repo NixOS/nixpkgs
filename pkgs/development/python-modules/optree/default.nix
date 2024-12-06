@@ -1,5 +1,4 @@
 {
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -13,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "optree";
-  version = "0.11.0";
+  version = "0.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "metaopt";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-VnnnEoXkYJO+S7baH+JZvsW18Tk3TiY9+Cd230OlZWo=";
+    repo = "optree";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/Y2pMpVPz4EXyWoW++K3FFf67Ym6yUs0ZQI4y0GVwmo=";
   };
 
   dontUseCmakeConfigure = true;
@@ -45,11 +44,11 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "optree" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/metaopt/optree";
-    changelog = "https://github.com/metaopt/optree/releases/tag/v${version}";
+  meta = {
     description = "Optimized PyTree Utilities";
-    maintainers = with maintainers; [ pandapip1 ];
-    license = licenses.asl20;
+    homepage = "https://github.com/metaopt/optree";
+    changelog = "https://github.com/metaopt/optree/releases";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pandapip1 ];
   };
 }

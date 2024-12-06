@@ -79,7 +79,7 @@ buildPythonPackage rec {
   # Tests that rely on Gurobi are activated only when Gurobi support is enabled
   disabledTests = lib.optional (!gurobiSupport) "gurobi";
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     inherit gurobipy numpy;
   };
 
@@ -89,7 +89,7 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/coin-or/python-mip/releases";
     changelog = "https://github.com/coin-or/python-mip/releases/tag/${version}";
     license = licenses.epl20;
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
     maintainers = with maintainers; [ nessdoor ];
   };
 }

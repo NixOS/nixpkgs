@@ -1,15 +1,16 @@
 { lib
 , stdenv
 , stdenvNoCC
-, fetchurl
+, fetchFromGitLab
 , meson
 , ninja
 , pkg-config
 , python3
+, wayland-scanner
 , wrapGAppsHook3
 , libinput
 , gobject-introspection
-, gnome
+, mutter
 , gnome-desktop
 , glib
 , gtk3
@@ -22,16 +23,20 @@
 , directoryListingUpdater
 , nixosTests
 , testers
+, gmobile
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoc";
-  version = "0.38.0";
+  version = "0.41.0";
 
-  src = fetchurl {
-    # This tarball includes the meson wrapped subproject 'gmobile'.
-    url = with finalAttrs; "https://sources.phosh.mobi/releases/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-OcRUnw1Fck9bMSgfMMcWqqR6a6yzyKjY8P3nqcwVULc=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "Phosh";
+    repo = "phoc";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-T2gKvP3WyrGNOiCwiX93UjMuSTnnZ+nykEAFhq0BF4U=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
+    wayland-scanner
     wrapGAppsHook3
   ];
 
@@ -51,11 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     gnome-desktop
     # For keybindings settings schemas
-    gnome.mutter
+    mutter
     json-glib
     wayland
     finalAttrs.wlroots
     xorg.xcbutilwm
+    gmobile
   ];
 
   mesonFlags = ["-Dembed-wlroots=disabled"];

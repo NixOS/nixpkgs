@@ -2,7 +2,7 @@
 , qmake, qttools, wrapQtAppsHook
 , libusb1, shapelib, zlib
 , withGUI ? false, qtserialport
-, withMapPreview ? (!stdenv.isDarwin), qtwebengine
+, withMapPreview ? (!stdenv.hostPlatform.isDarwin), qtwebengine
 , withDoc ? false, docbook_xml_dtd_45, docbook_xsl, expat, fop, libxml2, libxslt, perl
 }:
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   # Floating point behavior on i686 causes nmea.test failures. Preventing
   # extended precision fixes this problem.
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-ffloat-store";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isi686 "-ffloat-store";
 
   doCheck = true;
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm755 gpsbabel -t $out/bin
-  '' + lib.optionalString withGUI (if stdenv.isDarwin then ''
+  '' + lib.optionalString withGUI (if stdenv.hostPlatform.isDarwin then ''
     mkdir -p $out/Applications
     mv gui/GPSBabelFE.app $out/Applications
     install -Dm644 gui/*.qm gui/coretool/*.qm -t $out/Applications/GPSBabelFE.app/Contents/Resources/translations
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     cp -r html $doc/share/doc/gpsbabel
   '';
 
-  postFixup = lib.optionalString withGUI (if stdenv.isDarwin then ''
+  postFixup = lib.optionalString withGUI (if stdenv.hostPlatform.isDarwin then ''
     wrapQtApp "$out/Applications/GPSBabelFE.app/Contents/MacOS/GPSBabelFE"
   '' else ''
     wrapQtApp "$out/bin/gpsbabelfe"

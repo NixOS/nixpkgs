@@ -9,29 +9,32 @@
   pure-python-adb,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "androidtv";
-  version = "0.0.73";
-  format = "setuptools";
+  version = "0.0.75";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "JeffLIrion";
     repo = "python-androidtv";
-    rev = "v${version}";
-    hash = "sha256-FJUTJfS9jiC7KDf6XcGVRNXf75bVUOBPZe8y9M39Uak=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2WFfGGEZkM3fWyTo5P6H3ha04Qyx2OiYetlGWv0jXac=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     adb-shell
     async-timeout
     pure-python-adb
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     async = [ aiofiles ];
     inherit (adb-shell.optional-dependencies) usb;
   };
@@ -39,7 +42,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.async ++ passthru.optional-dependencies.usb;
+  ] ++ optional-dependencies.async ++ optional-dependencies.usb;
 
   disabledTests = [
     # Requires git but fails anyway

@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "okolors";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "Ivordir";
     repo = "Okolors";
     rev = "v${version}";
-    sha256 = "sha256-xroiiDTm3B2sVC1sO7oe3deqh+j3URmiy/ctwqrvvkI=";
+    hash = "sha256-U7rLynXZGHCeZjaXoXx2IRDgUFv7zOKfb4BPgDROzBc=";
   };
 
-  cargoHash = "sha256-Ru7VZM+vLGkYeLqWilQvpWUnbNZqkJHn1D/Vo/KUmRk=";
+  cargoHash = "sha256-xRCxpmIocvkg1ErYVqBLHb/jXV2eWeWHg4IO/QsnnF0=";
 
   meta = with lib; {
     description = "Generate a color palette from an image using k-means clustering in the Oklab color space";

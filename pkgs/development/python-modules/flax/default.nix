@@ -1,12 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
   jaxlib,
-  pythonRelaxDepsHook,
   setuptools-scm,
 
   # dependencies
@@ -23,32 +21,35 @@
   # checks
   cloudpickle,
   einops,
+  flaxlib,
   keras,
-  pytest-xdist,
   pytestCheckHook,
+  pytest-xdist,
+  sphinx,
   tensorflow,
+  treescope,
 
   # optional-dependencies
   matplotlib,
+
+  writeScript,
+  tomlq,
 }:
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.8.5";
+  version = "0.10.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6WOFq0758gtNdrlWqSQBlKmWVIGe5e4PAaGrvHoGjr0=";
+    hash = "sha256-+URbQGnmqmSNgucEyWvI5DMnzXjpmJzLA+Pho2lX+S4=";
   };
 
   build-system = [
     jaxlib
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 
@@ -64,7 +65,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [ matplotlib ];
   };
 
@@ -73,10 +74,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     cloudpickle
     einops
+    flaxlib
     keras
-    pytest-xdist
     pytestCheckHook
+    pytest-xdist
+    sphinx
     tensorflow
+    treescope
   ];
 
   pytestFlagsArray = [
@@ -97,14 +101,27 @@ buildPythonPackage rec {
     "flax/nnx/examples/*"
     # See https://github.com/google/flax/issues/3232.
     "tests/jax_utils_test.py"
-    # Requires tree
+    # Too old version of tensorflow:
+    # ModuleNotFoundError: No module named 'keras.api._v2'
     "tests/tensorboard_test.py"
   ];
 
   disabledTests = [
     # ValueError: Checkpoint path should be absolute
     "test_overwrite_checkpoints0"
+    # Fixed in more recent versions of jax: https://github.com/google/flax/issues/4211
+    # TODO: Re-enable when jax>0.4.28 will be available in nixpkgs
+    "test_vmap_and_cond_passthrough" # ValueError: vmap has mapped output but out_axes is None
+    "test_vmap_and_cond_passthrough_error" # AssertionError: "at vmap.*'broadcast'.*got axis spec ...
   ];
+
+  passthru = {
+    updateScript = writeScript "update.sh" ''
+      nix-update flax # does not --build by default
+      nix-build . -A flax.src # src is essentially a passthru
+      nix-update flaxlib --version="$(${lib.getExe tomlq} <result/Cargo.toml .something.version)" --commit
+    '';
+  };
 
   meta = {
     description = "Neural network library for JAX";

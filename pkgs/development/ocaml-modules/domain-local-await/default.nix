@@ -22,6 +22,7 @@ buildDunePackage rec {
     thread-table
   ];
 
+  __darwinAllowLocalNetworking = true;
   doCheck = true;
 
   checkInputs = [

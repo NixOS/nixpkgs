@@ -1,43 +1,81 @@
 {
   lib,
-  bokeh,
   buildPythonPackage,
-  colorcet,
   fetchPypi,
+  pythonOlder,
+
+  # build-system
+  setuptools-scm,
+
+  # dependencies
+  bokeh,
+  colorcet,
   holoviews,
   pandas,
-  pythonOlder,
+
+  # tests
+  pytestCheckHook,
+  dask,
+  xarray,
+  bokeh-sampledata,
+  parameterized,
+  selenium,
+  matplotlib,
+  scipy,
+  plotly,
 }:
 
 buildPythonPackage rec {
   pname = "hvplot";
-  version = "0.9.2";
-  format = "setuptools";
+  version = "0.11.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-moyekkkTmqo97l8c6g+TzzY3TReemGcF/N3CuSxHB5M=";
+    hash = "sha256-mJ7QOJGJrcR+3NJgHS6rGL82bnSwf14oc+AhMjxKFLs=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools-scm
+  ];
+
+  dependencies = [
     bokeh
     colorcet
     holoviews
     pandas
   ];
 
-  # Many tests require a network connection
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    dask
+    xarray
+    bokeh-sampledata
+    parameterized
+    selenium
+    matplotlib
+    scipy
+    plotly
+  ];
+
+  disabledTestPaths = [
+    # All of the following below require xarray.tutorial files that require
+    # downloading files from the internet (not possible in the sandbox).
+    "hvplot/tests/testgeo.py"
+    "hvplot/tests/testinteractive.py"
+    "hvplot/tests/testui.py"
+    "hvplot/tests/testutil.py"
+  ];
 
   pythonImportsCheck = [ "hvplot.pandas" ];
 
-  meta = with lib; {
+  meta = {
     description = "High-level plotting API for the PyData ecosystem built on HoloViews";
     homepage = "https://hvplot.pyviz.org";
     changelog = "https://github.com/holoviz/hvplot/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

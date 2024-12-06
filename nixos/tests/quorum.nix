@@ -62,6 +62,7 @@ in
               "0x0000000000000000000000000000000000000000000000000000000000000000";
             eip155Block = 1;
             eip158Block = 1;
+            homesteadBlock = 1;
             isQuorum = true;
             istanbul = {
               epoch = 30000;

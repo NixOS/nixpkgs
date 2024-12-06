@@ -23,13 +23,13 @@ assert lib.elem lineEditingLibrary [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "trealla";
-  version = "2.52.40";
+  version = "2.60.18";
 
   src = fetchFromGitHub {
     owner = "trealla-prolog";
     repo = "trealla";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jH1UNxlvnmM3Uv0y6MSh0fWcK4QRyJY+LRGoBb3G72U=";
+    hash = "sha256-ajTEagfMWiwJYZ1spKeamyeB1Rc7SeORUSWZO0fg408=";
   };
 
   postPatch = ''
@@ -100,6 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "tpl";
     platforms = lib.platforms.all;
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

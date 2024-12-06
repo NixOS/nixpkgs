@@ -11,6 +11,7 @@
 , qmake
 , qtbase
 , qtsvg
+, qtwayland
 , stdenv
 , usePipewire ? true
 , usePulseaudio ? false
@@ -43,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     qtbase
     qtsvg
+    qtwayland
   ] ++ lib.optionals usePipewire [
     pipewire
   ] ++ lib.optionals usePulseaudio [
@@ -78,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Audio effect processor for PipeWire clients";
     mainProgram = "jamesdsp";
     homepage = "https://github.com/Audio4Linux/JDSP4Linux";

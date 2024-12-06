@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     yarn run nextron build --no-pack
     yarn run electron-builder --dir \
       --config electron-builder.yml \
-      -c.electronDist="${electron}/libexec/electron" \
+      -c.electronDist="${electron.dist}" \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
 
     makeWrapper "${electron}/bin/electron" "$out/bin/whalebird" \
       --add-flags "$out/opt/Whalebird/resources/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     runHook postInstall
   '';

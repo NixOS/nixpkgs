@@ -4,6 +4,7 @@
   tree-sitter-beancount = lib.importJSON ./tree-sitter-beancount.json;
   tree-sitter-bibtex = lib.importJSON ./tree-sitter-bibtex.json;
   tree-sitter-bitbake = lib.importJSON ./tree-sitter-bitbake.json;
+  tree-sitter-bqn = lib.importJSON ./tree-sitter-bqn.json;
   tree-sitter-c = lib.importJSON ./tree-sitter-c.json;
   tree-sitter-c-sharp = lib.importJSON ./tree-sitter-c-sharp.json;
   tree-sitter-clojure = lib.importJSON ./tree-sitter-clojure.json;
@@ -81,6 +82,7 @@
   tree-sitter-r = lib.importJSON ./tree-sitter-r.json;
   tree-sitter-regex = lib.importJSON ./tree-sitter-regex.json;
   tree-sitter-rego = lib.importJSON ./tree-sitter-rego.json;
+  tree-sitter-river = lib.importJSON ./tree-sitter-river.json;
   tree-sitter-rst = lib.importJSON ./tree-sitter-rst.json;
   tree-sitter-ruby = lib.importJSON ./tree-sitter-ruby.json;
   tree-sitter-rust = lib.importJSON ./tree-sitter-rust.json;

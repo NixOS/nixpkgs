@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -32,25 +31,25 @@
   toml,
   tqdm,
   uproot,
+  vector,
 
   # checks
   distributed,
   pyinstrument,
   pytestCheckHook,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2024.6.1";
+  version = "2024.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Z6c8R8B8IrDkXVDx89XVtg3eRgORuHPfUyAPRGwAlrg=";
+    hash = "sha256-QE+la7CB2xrbbIOUL/HtKRHUOGu19IyfDvjL6oucn7g=";
   };
 
   build-system = [
@@ -82,12 +81,14 @@ buildPythonPackage rec {
     toml
     tqdm
     uproot
+    vector
   ] ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
     distributed
     pyinstrument
     pytestCheckHook
+    pytest-xdist
   ];
 
   pythonImportsCheck = [ "coffea" ];

@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dirkjanm/ldapdomaindump/";
     changelog = "https://github.com/dirkjanm/ldapdomaindump/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "spython";
-  version = "0.3.12";
+  version = "0.3.14";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -18,15 +18,15 @@ buildPythonPackage rec {
     owner = "singularityhub";
     repo = "singularity-cli";
     rev = "refs/tags/${version}";
-    hash = "sha256-fRtqOpDgVMYlVDwbPkrnpd7PT4fV+2WS6RmpJoxaKdQ=";
+    hash = "sha256-PNMzqnKb691wcd8aGSleqHOcsUrahl8e0r5s5ek5GmQ=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"pytest-runner"' ""
+      --replace-fail '"pytest-runner"' ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -46,10 +46,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Streamlined singularity python client (spython) for singularity";
-    mainProgram = "spython";
     homepage = "https://github.com/singularityhub/singularity-cli";
     changelog = "https://github.com/singularityhub/singularity-cli/blob/${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "spython";
   };
 }

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "etr";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Pc3Fvd8D4Ymp7dG9YgU58mDceOqNfhWE1JtnpVaNx/Y=";
+    hash = "sha256-Pc3Fvd8D4Ymp7dG9YgU58mDceOqNfhWE1JtnpVaNx/Y=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];
@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ pongo1231 ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin; # configure: error: cannot find required auxiliary files: ltmain.sh
+    broken = stdenv.hostPlatform.isDarwin; # configure: error: cannot find required auxiliary files: ltmain.sh
   };
 }

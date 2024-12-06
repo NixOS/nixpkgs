@@ -13,7 +13,7 @@
 , glib-networking
 , gtk3
 , openssh
-, gnome
+, gnome-shell
 , evolution-data-server-gtk4
 , gjs
 , nixosTests
@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-gsconnect";
-  version = "57";
+  version = "58";
 
   outputs = [ "out" "installedTests" ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "GSConnect";
     repo = "gnome-shell-extension-gsconnect";
     rev = "v${version}";
-    hash = "sha256-0o5CEkdFPL7bZkHIA/zFWB8sY1OYROl4P3rl24+lze0=";
+    hash = "sha256-bpy4G+f3NJ2iVsycPluV+98at0G2wlp7t5cPEMGM90s=";
   };
 
   patches = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgnome_shell_libdir=${gnome.gnome-shell}/lib"
+    "-Dgnome_shell_libdir=${gnome-shell}/lib"
     "-Dchrome_nmhdir=${placeholder "out"}/etc/opt/chrome/native-messaging-hosts"
     "-Dchromium_nmhdir=${placeholder "out"}/etc/chromium/native-messaging-hosts"
     "-Dopenssl_path=${openssl}/bin/openssl"
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
     description = "KDE Connect implementation for Gnome Shell";
     homepage = "https://github.com/GSConnect/gnome-shell-extension-gsconnect/wiki";
     license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
+    maintainers = teams.gnome.members ++ [ maintainers.doronbehar ];
     platforms = platforms.linux;
   };
 }

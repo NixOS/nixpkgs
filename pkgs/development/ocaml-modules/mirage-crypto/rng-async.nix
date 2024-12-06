@@ -1,4 +1,4 @@
-{ lib, buildDunePackage
+{ buildDunePackage
 , mirage-crypto, mirage-crypto-rng
 , dune-configurator, async, logs
 }:

@@ -34,14 +34,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [ click ];
   };
 
   nativeCheckInputs = [
     pytest-timeout
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pythonfinder" ];
 

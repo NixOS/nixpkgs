@@ -29,6 +29,6 @@ pythonPackages.buildPythonApplication rec {
     description = "PlayStation 2 memory card manager";
     mainProgram = "mymcplus";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

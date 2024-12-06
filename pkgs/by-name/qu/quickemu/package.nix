@@ -6,14 +6,14 @@
   cdrtools,
   curl,
   gawk,
+  mesa-demos,
   gnugrep,
   gnused,
   jq,
-  ncurses,
   pciutils,
   procps,
   python3,
-  qemu,
+  qemu_full,
   socat,
   spice-gtk,
   swtpm,
@@ -25,44 +25,45 @@
   zsync,
   OVMF,
   OVMFFull,
-  quickemu,
   testers,
   installShellFiles,
-  fetchpatch2,
 }:
 let
-  runtimePaths = [
-    cdrtools
-    curl
-    gawk
-    gnugrep
-    gnused
-    jq
-    ncurses
-    pciutils
-    procps
-    python3
-    qemu
-    socat
-    swtpm
-    usbutils
-    util-linux
-    unzip
-    xdg-user-dirs
-    xrandr
-    zsync
-  ];
+  runtimePaths =
+    [
+      cdrtools
+      curl
+      gawk
+      gnugrep
+      gnused
+      jq
+      pciutils
+      procps
+      python3
+      qemu_full
+      socat
+      swtpm
+      util-linux
+      unzip
+      xrandr
+      zsync
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      mesa-demos
+      usbutils
+      xdg-user-dirs
+    ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickemu";
-  version = "4.9.4-unstable-2024-05-28";
+  version = "4.9.6";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
-    rev = "d78255b097b599e8ab3713cb61c4085cc45f5a95"; # TODO: return to version on next release
-    hash = "sha256-fF306CdGqKM+779OLm0NNyqPBtm7TuU7UN/NanT12y8=";
+    rev = finalAttrs.version;
+    hash = "sha256-VaA39QNZNaomvSBMzJMjYN0KOTwWw2798KE8VnM+1so=";
   };
 
   postPatch = ''
@@ -71,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       -e '/OVMF_CODE_4M.fd/s|ovmfs=(|ovmfs=("${OVMF.firmware}","${OVMF.variables}" |' \
       -e '/cp "''${VARS_IN}" "''${VARS_OUT}"/a chmod +w "''${VARS_OUT}"' \
       -e 's/Icon=.*qemu.svg/Icon=qemu/' \
+      -e 's,\[ -x "\$(command -v smbd)" \],true,' \
       quickemu
   '';
 
@@ -96,14 +98,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = testers.testVersion {
-    version = "4.9.5"; # required for passing tests, TODO: remove when release bump
-    package = quickemu;
-  };
+  passthru.tests = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Quickly create and run optimised Windows, macOS and Linux virtual machines";
     homepage = "https://github.com/quickemu-project/quickemu";
+    changelog = "https://github.com/quickemu-project/quickemu/releases/tag/${finalAttrs.version}";
     mainProgram = "quickemu";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

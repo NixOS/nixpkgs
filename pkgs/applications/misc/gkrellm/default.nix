@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ copyDesktopItems pkg-config which wrapGAppsHook3 ];
   buildInputs = [ gettext glib gtk2 libX11 libSM libICE ]
-    ++ lib.optionals stdenv.isDarwin [ IOKit ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   hardeningDisable = [ "format" ];
 

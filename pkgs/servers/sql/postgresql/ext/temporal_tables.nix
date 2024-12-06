@@ -1,10 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql, buildPostgresqlExtension }:
 
-stdenv.mkDerivation rec {
+buildPostgresqlExtension rec {
   pname = "temporal_tables";
   version = "1.2.2";
-
-  buildInputs = [ postgresql ];
 
   src = fetchFromGitHub {
     owner  = "arkhipov";
@@ -12,12 +10,6 @@ stdenv.mkDerivation rec {
     rev    = "v${version}";
     sha256 = "sha256-7+DCSPAPhsokWDq/5IXNhd7jY6FfzxxUjlsg/VJeD3k=";
   };
-
-  installPhase = ''
-    install -D -t $out/lib temporal_tables${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension *.sql
-    install -D -t $out/share/postgresql/extension *.control
- '';
 
   meta = with lib; {
     description = "Temporal Tables PostgreSQL Extension";

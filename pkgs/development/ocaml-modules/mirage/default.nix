@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, ocaml, alcotest
+{ buildDunePackage, ocaml, alcotest
 , functoria, mirage-runtime, bos
 , ipaddr, astring, logs, stdlib-shims
 }:

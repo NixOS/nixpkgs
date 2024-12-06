@@ -1,19 +1,20 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, cmdliner }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, cmdliner
+, version ? if lib.versionAtLeast ocaml.version "4.14" then "0.9.9" else "0.9.8"
+}:
 
 lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
   "uuidm is not available for OCaml ${ocaml.version}"
 
-stdenv.mkDerivation rec {
-  version = "0.9.8";
+stdenv.mkDerivation {
+  inherit version;
   pname = "uuidm";
   src = fetchurl {
     url = "https://erratique.ch/software/uuidm/releases/uuidm-${version}.tbz";
-    sha256 = "sha256-/GZbkJVDQu1UY8SliK282kUWAVMfOnpQadUlRT/tJrM=";
+    hash = {
+      "0.9.9" = "sha256-jOgNF05dpoU/XQEefSZhn3zSlQ1BA1b/U4Ib9j2mvFo=";
+      "0.9.8" = "sha256-/GZbkJVDQu1UY8SliK282kUWAVMfOnpQadUlRT/tJrM=";
+    }."${version}";
   };
-
-  postPatch = ''
-    substituteInPlace pkg/META --replace "bytes" ""
-  '';
 
   strictDeps = true;
 

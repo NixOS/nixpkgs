@@ -1,7 +1,6 @@
 { lib
 , buildDunePackage
 , fetchurl
-, ocaml
 , angstrom
 , ipaddr
 , base64

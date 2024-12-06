@@ -10,12 +10,8 @@
 , libdecor
 , libnotify
 , dejavu_fonts
-, gnome
+, zenity
 }:
-
-let
-  inherit (gnome) zenity;
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "trigger-control";
@@ -40,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     dbus
     libnotify
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libdecor
   ];
 
@@ -66,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/trigger-control \
       --prefix PATH : ${lib.makeBinPath [ zenity ]}
   '';

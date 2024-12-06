@@ -88,7 +88,7 @@ in {
   };
   config = lib.mkIf cfg.enable {
     assertions = [
-      { assertion = config.users.motd == null;
+      { assertion = config.users.motd == "";
         message = ''
           `programs.rust-motd` is incompatible with `users.motd`!
         '';
