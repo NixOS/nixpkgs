@@ -49,13 +49,13 @@ assert lib.assertMsg (withOpenLDAPAsHDBModule -> withOpenLDAP) ''
 
 stdenv.mkDerivation {
   pname = "heimdal";
-  version = "7.8.0-unstable-2023-11-29";
+  version = "7.8.0-unstable-2024-09-10";
 
   src = fetchFromGitHub {
     owner = "heimdal";
     repo = "heimdal";
-    rev = "3253c49544eacb33d5ad2f6f919b0696e5aab794";
-    hash = "sha256-uljzQBzXrZCZjcIWfioqHN8YsbUUNy14Vo+A3vZIXzM=";
+    rev = "fd2d434dd375c402d803e6f948cfc6e257d3facc";
+    hash = "sha256-WA3lo3eD05l7zKuKEVxudMmiG7OvjK/calaUzPQ2pWs=";
   };
 
   outputs = [ "out" "dev" "man" "info" ];
@@ -67,9 +67,9 @@ stdenv.mkDerivation {
     perl
     bison
     flex
+    perlPackages.JSON
     texinfo
-  ]
-  ++ (with perlPackages; [ JSON ]);
+  ];
 
   buildInputs = [ db libedit pam ]
     ++ lib.optionals (stdenv.isDarwin) [ CoreFoundation Security SystemConfiguration ]
@@ -108,6 +108,15 @@ stdenv.mkDerivation {
     "--with-sqlite3=${sqlite.dev}"
   ];
 
+  patches = [
+    # Proposed @ https://github.com/heimdal/heimdal/pull/1262
+    ./0001-Include-db.h-for-nbdb-compat-mode.patch
+    # Proposed @ https://github.com/heimdal/heimdal/pull/1264
+    ./0001-Define-HAVE_DB_185_H.patch
+    # Proposed @ https://github.com/heimdal/heimdal/pull/1265
+    ./0001-Link-tests-with-libresolv.patch
+  ];
+
   # (check-ldap) slapd resides within ${openldap}/libexec,
   #              which is not part of $PATH by default.
   # (check-ldap) prepending ${openldap}/bin to the path to avoid
@@ -116,17 +125,15 @@ stdenv.mkDerivation {
   # (check-ldap) the bdb backend got deprecated in favour of mdb in openldap 2.5.0,
   #              but the heimdal tests still seem to expect bdb as the openldap backend.
   #              This might be fixed upstream in a future update.
-  patchPhase = ''
-    runHook prePatch
-
+  postPatch = ''
     substituteInPlace tests/ldap/slapd-init.in \
-      --replace 'SCHEMA_PATHS="' 'SCHEMA_PATHS="${openldap}/etc/schema '
+      --replace-fail 'SCHEMA_PATHS="' 'SCHEMA_PATHS="${openldap}/etc/schema '
     substituteInPlace tests/ldap/check-ldap.in \
-      --replace 'PATH=' 'PATH=${openldap}/libexec:${openldap}/bin:'
+      --replace-fail 'PATH=' 'PATH=${openldap}/libexec:${openldap}/bin:'
     substituteInPlace tests/ldap/slapd.conf \
-      --replace 'database	bdb' 'database mdb'
-
-    runHook postPatch
+      --replace-fail 'database	bdb' 'database mdb'
+    substituteInPlace tests/kdc/check-iprop.in \
+      --replace-fail '/bin/pwd' 'pwd'
   '';
 
   # (test_cc) heimdal uses librokens implementation of `secure_getenv` on darwin,
