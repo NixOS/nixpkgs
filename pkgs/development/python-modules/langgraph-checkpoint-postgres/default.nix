@@ -48,7 +48,10 @@ buildPythonPackage rec {
     psycopg-pool
   ];
 
-  pythonRelaxDeps = [ "psycopg-pool" ];
+  pythonRelaxDeps = [
+    "langgraph-checkpoint"
+    "psycopg-pool"
+  ];
 
   doCheck = !(stdenvNoCC.hostPlatform.isDarwin);
 
@@ -60,7 +63,7 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    export postgresqlTestUserOptions = "LOGIN SUPERUSER"
+    export postgresqlTestUserOptions="LOGIN SUPERUSER"
   '';
 
   disabledTests = [
