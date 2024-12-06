@@ -23,7 +23,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-qhiCZMSLRnLbyHplcaPn/BGJ3Lv8O8eEvCuIHwA4sMs=";
 
-  doCheck = false;
+  checkFlags = [
+    # Workaround for "failed to load modules"
+    "-skip=TestCommands/mod"
+  ];
 
   proxyVendor = true;
 

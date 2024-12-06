@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  clang,
   cmake,
   copyDesktopItems,
   curl,
@@ -122,7 +121,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs =
     [
-      clang
       cmake
       copyDesktopItems
       curl

@@ -7182,8 +7182,10 @@ with self; {
       url = "mirror://cpan/authors/id/P/PA/PALI/DBD-MariaDB-1.23.tar.gz";
       hash = "sha256-DQx2xmDd1VVw5I8+L96o9iGmmsDtSBkOjPyvy16bhZ0=";
     };
+    nativeBuildInputs = [ pkgs.mariadb-connector-c ];
     buildInputs = [ pkgs.mariadb-connector-c DevelChecklib TestDeep TestDistManifest TestPod ];
     propagatedBuildInputs = [ DBI ];
+    strictDeps = true;
     meta = {
       description = "MariaDB and MySQL driver for the Perl5 Database Interface (DBI)";
       homepage = "https://github.com/gooddata/DBD-MariaDB";

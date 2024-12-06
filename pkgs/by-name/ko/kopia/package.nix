@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, gitUpdater, testers, kopia }:
+{ lib, buildGoModule, fetchFromGitHub, gitUpdater, installShellFiles, stdenv, testers, kopia }:
 
 buildGoModule rec {
   pname = "kopia";
@@ -19,6 +19,14 @@ buildGoModule rec {
     "-X github.com/kopia/kopia/repo.BuildVersion=${version}"
     "-X github.com/kopia/kopia/repo.BuildInfo=${src.rev}"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd kopia \
+      --bash <($out/bin/kopia --completion-script-bash) \
+      --zsh <($out/bin/kopia --completion-script-zsh)
+  '';
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
