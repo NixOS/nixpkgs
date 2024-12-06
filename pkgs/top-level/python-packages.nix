@@ -16069,9 +16069,7 @@ self: super: with self; {
 
   token-bucket = callPackage ../development/python-modules/token-bucket { };
 
-  tokenizers = callPackage ../development/python-modules/tokenizers {
-    inherit (pkgs.darwin.apple_sdk.frameworks) Security;
-  };
+  tokenizers = callPackage ../development/python-modules/tokenizers { };
 
   tokenize-rt = callPackage ../development/python-modules/tokenize-rt { };
 
