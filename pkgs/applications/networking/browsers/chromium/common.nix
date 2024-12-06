@@ -37,7 +37,7 @@
 , bison, gperf, libkrb5
 , glib, gtk3, dbus-glib
 , libXScrnSaver, libXcursor, libXtst, libxshmfence, libGLU, libGL
-, libgbm
+, mesa
 , pciutils, protobuf, speechd-minimal, libXdamage, at-spi2-core
 , pipewire
 , libva
@@ -246,7 +246,7 @@ let
       util-linux alsa-lib
       libkrb5
       glib gtk3 dbus-glib
-      libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL libgbm
+      libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL mesa
       pciutils protobuf speechd-minimal libXdamage at-spi2-core
       pipewire
       libva
@@ -273,7 +273,7 @@ let
       util-linux alsa-lib
       libkrb5
       glib gtk3 dbus-glib
-      libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL libgbm
+      libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL mesa
       pciutils protobuf speechd-minimal libXdamage at-spi2-core
       pipewire
       libva
