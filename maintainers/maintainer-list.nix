@@ -537,6 +537,13 @@
     githubId = 749381;
     name = "Adam Tulinius";
   };
+  adda = {
+    email = "chocholaty.david@protonmail.com";
+    matrix = "@adda0:matrix.org";
+    github = "adda0";
+    githubId = 52529234;
+    name = "David Chocholatý";
+  };
   addict3d = {
     email = "nickbathum@gmail.com";
     matrix = "@nbathum:matrix.org";
@@ -16803,6 +16810,11 @@
     github = "PanAeon";
     githubId = 686076;
     name = "Vitalii Voloshyn";
+  };
+  pancaek = {
+    github = "pancaek";
+    githubId = 20342389;
+    name = "paneku";
   };
   panda2134 = {
     email = "me+nixpkgs@panda2134.site";

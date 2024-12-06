@@ -31,6 +31,12 @@ buildDotnetModule rec {
       --replace-fail 'net6.0' 'net8.0'
   '';
 
+  preConfigureNuGet = ''
+    # This should really be in the upstream nuget.config
+    dotnet nuget add source https://api.nuget.org/v3/index.json \
+      -n nuget.org --configfile NuGet.Config
+  '';
+
   runtimeDeps = [
     bc
   ];
