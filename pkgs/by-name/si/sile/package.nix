@@ -39,8 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) pname version src;
     nativeBuildInputs = [ zstd ];
-    # so the cargo fetcher won't try to run the `./configure` script
-    dontConfigure = true;
     hash = "sha256-iPkXEUC4U1m/ComIDo/J5kwkmM1QdowioNtnSnmMhJ0=";
   };
 
