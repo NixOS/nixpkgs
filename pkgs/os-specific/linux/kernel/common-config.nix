@@ -45,8 +45,8 @@ let
   options = {
 
     debug = {
-      # Necessary for BTF
-      DEBUG_INFO                = whenOlder "5.18" yes;
+      # Necessary for BTF and crashkernel
+      DEBUG_INFO                = yes;
       DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT = whenAtLeast "5.18" yes;
       # Reduced debug info conflict with BTF and have been enabled in
       # aarch64 defconfig since 5.13
@@ -64,7 +64,7 @@ let
       RCU_TORTURE_TEST          = no;
       SCHEDSTATS                = yes;
       DETECT_HUNG_TASK          = yes;
-      CRASH_DUMP                = option no;
+      CRASH_DUMP                = yes;
       # Easier debugging of NFS issues.
       SUNRPC_DEBUG              = yes;
       # Provide access to tunables like sched_migration_cost_ns
@@ -85,6 +85,9 @@ let
 
       # Export known printks in debugfs
       PRINTK_INDEX              = whenAtLeast "5.15" yes;
+
+      # Enable crashkernel support
+      PROC_VMCORE               = yes;
     };
 
     power-management = {
