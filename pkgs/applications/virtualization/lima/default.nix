@@ -7,7 +7,6 @@
   qemu,
   sigtool,
   makeWrapper,
-  testers,
   nix-update-script,
   apple-sdk_15,
   lima,
@@ -72,14 +71,19 @@ buildGoModule rec {
     '';
 
   doInstallCheck = true;
+  # Workaround for: "panic: $HOME is not defined" at https://github.com/lima-vm/lima/blob/v1.0.2/pkg/limayaml/defaults.go#L52
+  # Don't use versionCheckHook for this package. It cannot inject environment variables.
   installCheckPhase = ''
+    if [[ "$(HOME="$(mktemp -d)" "$out/bin/limactl" --version | cut -d ' ' -f 3)" == "${version}" ]]; then
+      echo '${pname} smoke check passed'
+    else
+      echo '${pname} smoke check failed'
+      return 1
+    fi
     USER=nix $out/bin/limactl validate templates/default.yaml
   '';
 
-  passthru = {
-    tests.version = testers.testVersion { package = lima; };
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/lima-vm/lima";
