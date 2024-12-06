@@ -16,6 +16,8 @@ let
     ${optionalString (cfg.domains != [])
       "Domains=${concatStringsSep " " cfg.domains}"}
     LLMNR=${cfg.llmnr}
+    ${optionalString (cfg.dns != [])
+      "DNS=${concatStringsSep " " cfg.dns}"}
     DNSSEC=${cfg.dnssec}
     DNSOverTLS=${cfg.dnsovertls}
     ${config.services.resolved.extraConfig}
@@ -33,6 +35,17 @@ in
         Whether to enable the systemd DNS resolver daemon, `systemd-resolved`.
 
         Search for `services.resolved` to see all options.
+      '';
+    };
+
+    services.resolved.dns = mkOption {
+      default = [ ];
+      # DoT over IPv6 seems to not work? 2620:fe::9#dns.quad9.net 2606:4700:4700::1111#one.one.one.one and 2001:4860:4860::8888#dns.google
+      example = [ "9.9.9.9#dns.quad9.net" "1.1.1.1#one.one.one.one" "8.8.8.8#dns.google" ];
+      type = types.listOf types.str;
+      description = ''
+        To enable validation of your DNS provider's server certificate,
+        include their hostname in the DNS setting in the format ip_address#hostname
       '';
     };
 
