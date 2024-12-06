@@ -63,6 +63,18 @@ in
             '';
           };
 
+          phys = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            example = "usb-0000:07:00.3-2.1.1/input0";
+            description = ''
+              If you have multiple devices with the same name, you can optionally
+              specify this attribute.
+              
+              If available, the value will be printed when running `evremap list-devices` with elevated permissions.
+            '';
+          };
+
           dual_role = lib.mkOption {
             type = lib.types.listOf dualRoleModule;
             default = [ ];
