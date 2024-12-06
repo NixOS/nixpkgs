@@ -1264,7 +1264,15 @@ let
       (opt.highestPrio or defaultOverridePriority)
       (f opt.value);
 
-  # Spec is an attrpath spec, extra is an additional argument, depending on the action
+  /**
+
+    # Spec is an attrpath spec, extra is an additional argument, depending on the action
+
+    A modern version of `lib.modules.doRename` that is used using attrpath
+    declarations as defined in `lib.modules.associateWithAttrPath`.
+
+    # Inputs
+  */
   doRename2 = spec: extra:
     let
       attrPaths = lib.attrsets.associateWithAttrPath spec;
