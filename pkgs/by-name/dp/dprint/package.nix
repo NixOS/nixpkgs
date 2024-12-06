@@ -3,6 +3,7 @@
   stdenv,
   fetchCrate,
   rustPlatform,
+  installShellFiles,
   testers,
   nix-update-script,
   dprint,
@@ -22,6 +23,18 @@ rustPlatform.buildRustPackage rec {
   # Tests fail because they expect a test WASM plugin. Tests already run for
   # every commit upstream on GitHub Actions
   doCheck = false;
+
+  nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    installShellFiles
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    export DPRINT_CACHE_DIR="$(mktemp -d)"
+    installShellCompletion --cmd dprint \
+      --bash <($out/bin/dprint completions bash) \
+      --zsh <($out/bin/dprint completions zsh) \
+      --fish <($out/bin/dprint completions fish)
+  '';
 
   passthru = {
     tests.version = testers.testVersion {
