@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
+  stdenvNoCC,
 }:
 
 buildGoModule rec {
@@ -21,6 +23,10 @@ buildGoModule rec {
 
   modRoot = "cli";
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   # Some checks fail to download deps
   doCheck = false;
 
@@ -30,10 +36,17 @@ buildGoModule rec {
     "-X github.com/cloudquery/cloudquery/cli/cmd.Version=${version}"
   ];
 
-  postInstall = ''
-    mv $out/bin/cli $out/bin/cloudquery
-    rm $out/bin/gen
-  '';
+  postInstall =
+    ''
+      mv $out/bin/cli $out/bin/cloudquery
+      rm $out/bin/gen
+    ''
+    + lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
+      installShellCompletion --cmd cloudquery \
+        --bash <($out/bin/cloudquery completion bash) \
+        --fish <($out/bin/cloudquery completion fish) \
+        --zsh <($out/bin/cloudquery completion zsh)
+    '';
 
   meta = {
     description = "Data movement tool to sync data from any source to any destination";
