@@ -10,6 +10,7 @@
   pkg-config,
   qtbase,
   qttools,
+
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +41,9 @@ stdenv.mkDerivation rec {
       llvmPackages.clang
     ];
 
-  cmakeFlags = [ "-DQT_VER=6" ];
+  cmakeFlags = [
+    (lib.cmakeFeature "QT_VER" (lib.versions.major qtbase.version))
+  ];
 
   dontWrapQtApps = true;
 

@@ -247,6 +247,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 
+  qtspell = callPackage ../development/libraries/qtspell { };
+
   qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
 
   qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum {
