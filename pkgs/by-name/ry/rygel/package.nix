@@ -78,7 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
       gupnp-dlna
       libgee
       libsoup_3
-      gtk3
       libmediaart
       pipewire
       libX11
