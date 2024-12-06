@@ -400,6 +400,9 @@ let format' = format; in let
     for ((i = 0; i < ''${#targets_[@]}; i++)); do
       source="''${sources_[$i]}"
       target="''${targets_[$i]}"
+      echo "source $source"
+      echo "target $root/$target" 
+      echo "--"
       mode="''${modes_[$i]}"
 
       if [ -n "$mode" ]; then
@@ -584,30 +587,36 @@ let format' = format; in let
       mountPoint=/mnt
       mkdir $mountPoint
       mount $rootDisk $mountPoint
-
+      
+      # Fix activation error (not related to PR)
+      mkdir $mountPoint/run
+      mount -t tmpfs -o "mode=755" none $mountPoint/run
+      mkdir $mountPoint/run/current-system
+      ln -s ${config.system.build.etc}/etc $mountPoint/run/current-system/etc
+      
       # Create the ESP and mount it. Unlike e2fsprogs, mkfs.vfat doesn't support an
       # '-E offset=X' option, so we can't do this outside the VM.
       ${lib.optionalString (partitionTableType == "efi" || partitionTableType == "hybrid") ''
-        mkdir -p /mnt/boot
+        mkdir -p $mountPoint/boot
         mkfs.vfat -n ESP /dev/vda1
-        mount /dev/vda1 /mnt/boot
+        mount /dev/vda1 $mountPoint/boot
 
         ${lib.optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
       ''}
       ${lib.optionalString (partitionTableType == "efixbootldr") ''
-        mkdir -p /mnt/{boot,efi}
+        mkdir -p $mountPoint/{boot,efi}
         mkfs.vfat -n ESP /dev/vda1
         mkfs.vfat -n BOOT /dev/vda2
-        mount /dev/vda1 /mnt/efi
-        mount /dev/vda2 /mnt/boot
+        mount /dev/vda1 $mountPoint/efi
+        mount /dev/vda2 $mountPoint/boot
 
         ${lib.optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
       ''}
 
       # Install a configuration.nix
-      mkdir -p /mnt/etc/nixos
+      mkdir -p $mountPoint/etc/nixos
       ${lib.optionalString (configFile != null) ''
-        cp ${configFile} /mnt/etc/nixos/configuration.nix
+        cp ${configFile} $mountPoint/etc/nixos/configuration.nix
       ''}
 
       ${lib.optionalString installBootLoader ''
@@ -648,7 +657,7 @@ let format' = format; in let
         fi
       done
 
-      umount -R /mnt
+      umount -R $mountPoint
 
       # Make sure resize2fs works. Note that resize2fs has stricter criteria for resizing than a normal
       # mount, so the `-c 0` and `-i 0` don't affect it. Setting it to `now` doesn't produce deterministic
