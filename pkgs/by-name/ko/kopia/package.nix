@@ -24,7 +24,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionals stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kopia \
       --bash <($out/bin/kopia --completion-script-bash) \
       --zsh <($out/bin/kopia --completion-script-zsh)
