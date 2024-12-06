@@ -17,16 +17,16 @@ let
   ein = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/ein";
 in rustPlatform.buildRustPackage rec {
   pname = "gitoxide";
-  version = "0.38.0";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "Byron";
     repo = "gitoxide";
     rev = "v${version}";
-    hash = "sha256-JqWFdZXcmL97w5CochG9kXXH7cN2KMarkNUvfQXbYU0=";
+    hash = "sha256-xv4xGkrArJ/LTVLs2SYhvxhfNG6sjVm5nZWsi4s34iM=";
   };
 
-  cargoHash = "sha256-EGPx4NNvgGe+LJ8Gn0ne8O4lCA+9p+E9J7OOhLQDWX0=";
+  cargoHash = "sha256-36ue3f67Btw0/AM5lTaByrJLKU5r1FJA3sFRJ1IbXXc=";
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles ];
 

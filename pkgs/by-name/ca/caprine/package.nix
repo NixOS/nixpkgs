@@ -6,22 +6,23 @@
   makeDesktopItem,
   copyDesktopItems,
   electron,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
   pname = "caprine";
-  version = "2.60.1";
+  version = "2.60.3";
 
   src = fetchFromGitHub {
     owner = "sindresorhus";
     repo = "caprine";
     rev = "v${version}";
-    hash = "sha256-y4W295i7FhgJC3SlwSr801fLOGJY1WF136bbkkBUvyw=";
+    hash = "sha256-yfCilJ62m7nKe8B+4puwAbNgr2g1P7HaKIhFINdv0/k=";
   };
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  npmDepsHash = "sha256-JHaUc2p+wHsqWtls8xquHK9qnypuCrR0AQMGxcrTsC0=";
+  npmDepsHash = "sha256-hNOAplCSXrO4NZqDTkmhf0oZVeGRUHr2Y/Qdx2RIV9c=";
 
   nativeBuildInputs = [ copyDesktopItems ];
 
@@ -36,6 +37,8 @@ buildNpmPackage rec {
         -c.electronDist=electron-dist \
         -c.electronVersion=${electron.version}
   '';
+
+  patches = [ ./001-disable-auto-update.patch ];
 
   installPhase = ''
     runHook preInstall
@@ -78,6 +81,8 @@ buildNpmPackage rec {
       terminal = false;
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/sindresorhus/caprine/releases/tag/${src.rev}";
