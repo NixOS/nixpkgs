@@ -1,6 +1,7 @@
-{ lib, pkgs, erlang }:
+{ lib, __splicedPackages, erlang }:
 
 let
+  pkgs = __splicedPackages;
   inherit (lib) makeExtensible;
 
   lib' = pkgs.callPackage ./lib.nix { };
