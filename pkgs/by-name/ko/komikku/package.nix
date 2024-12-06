@@ -23,7 +23,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "komikku";
-  version = "1.64.0";
+  version = "1.65.0";
 
   format = "other";
 
@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "valos";
     repo = "Komikku";
     rev = "v${version}";
-    hash = "sha256-EpKLez5gTHCSJYGvDqmzj6YO1dIugZKrEP4zE2G5TxA=";
+    hash = "sha256-U+ekx6ON3mLaTqaQ6PYe9bGVWMyq9PXZyv+rQ1cd1n0=";
   };
 
   nativeBuildInputs = [
@@ -112,7 +112,7 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${version}";
     maintainers = with lib.maintainers; [
       chuangzhu
-      infinitivewitch
+      Gliczy
     ];
   };
 }
