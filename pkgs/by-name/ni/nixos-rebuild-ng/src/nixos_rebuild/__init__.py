@@ -180,6 +180,14 @@ def parse_args(
         for group, parser in sub_parsers.items()
     }
 
+    if args.help or args.action is None:
+        if "@withShellFiles@" == "true":
+            r = run(["man", "8", "@executable@"], check=False)
+            parser.exit(r.returncode)
+        else:
+            parser.print_help()
+            parser.exit()
+
     def parser_warn(msg: str) -> None:
         print(f"{parser.prog}: warning: {msg}", file=sys.stderr)
 
@@ -193,10 +201,6 @@ def parse_args(
 
     if args.ask_sudo_password:
         args.sudo = True
-
-    if args.help or args.action is None:
-        r = run(["man", "8", "@executable@"], check=False)
-        parser.exit(r.returncode)
 
     # TODO: use deprecated=True in Python >=3.13
     if args.install_grub:
