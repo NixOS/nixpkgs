@@ -1301,6 +1301,13 @@ let
       #  differently when run under aarch64 kernels compared to when
       #  it is run under an aarch32 kernel.
       COMPAT_ALIGNMENT_FIXUPS = lib.mkIf (stdenv.hostPlatform.system == "aarch64-linux") (whenAtLeast "6.1" yes);
+
+      # requirement for CP15_BARRIER_EMULATION
+      ARMV8_DEPRECATED = lib.mkIf (stdenv.hostPlatform.system == "aarch64-linux") yes;
+      # emulate a specific armv7 instruction that was removed from armv8
+      # this instruction is required to build a native armv7 nodejs on an
+      # aarch64-linux builder, for example
+      CP15_BARRIER_EMULATION  = lib.mkIf (stdenv.hostPlatform.system == "aarch64-linux") yes;
     } // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Required for various hardware features on Chrome OS devices
       CHROME_PLATFORMS = yes;
