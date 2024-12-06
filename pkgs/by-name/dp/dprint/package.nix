@@ -59,7 +59,10 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/dprint/dprint/releases/tag/${version}";
     homepage = "https://dprint.dev";
     license = licenses.mit;
-    maintainers = with maintainers; [ khushraj ];
+    maintainers = with maintainers; [
+      khushraj
+      kachick
+    ];
     mainProgram = "dprint";
   };
 }
