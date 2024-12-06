@@ -278,7 +278,7 @@ buildFHSEnv {
       ];
       text = ''
         set -o errexit
-        drv=pkgs/applications/video/davinci-resolve/default.nix
+        drv=pkgs/by-name/da/davinci-resolve/package.nix
         currentVersion=${lib.escapeShellArg davinci.version}
         downloadsJSON="$(curl --fail --silent https://www.blackmagicdesign.com/api/support/us/downloads.json)"
 
