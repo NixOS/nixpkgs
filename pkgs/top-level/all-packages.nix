@@ -7541,9 +7541,6 @@ with pkgs;
   racket = callPackage ../development/interpreters/racket {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
   };
-  racket_7_9 = callPackage ../development/interpreters/racket/racket_7_9.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation;
-  };
   racket-minimal = callPackage ../development/interpreters/racket/minimal.nix { };
 
   rakudo = callPackage ../development/interpreters/rakudo { };
