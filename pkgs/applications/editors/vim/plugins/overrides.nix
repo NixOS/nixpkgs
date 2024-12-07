@@ -258,6 +258,15 @@ in
     }
   );
 
+  aw-watcher-vim = super.aw-watcher-vim.overrideAttrs {
+    patches = [
+      (substituteAll {
+        src = ./patches/aw-watcher-vim/program_paths.patch;
+        curl = lib.getExe curl;
+      })
+    ];
+  };
+
   bamboo-nvim = super.bamboo-nvim.overrideAttrs {
     nvimSkipModule = [
       # Requires config table
