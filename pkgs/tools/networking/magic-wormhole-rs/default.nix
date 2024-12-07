@@ -4,8 +4,6 @@
 , rustPlatform
 , libxcb
 , installShellFiles
-, Security
-, AppKit
 }:
 rustPlatform.buildRustPackage rec {
   pname = "magic-wormhole-rs";
@@ -20,8 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-+OcjILDwGg0eybzBgVIZeVelnQatPU6rgd/b6buvTRQ=";
 
-  buildInputs = [ libxcb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security AppKit ];
+  buildInputs = [ libxcb ];
 
   nativeBuildInputs = [ installShellFiles ];
 
