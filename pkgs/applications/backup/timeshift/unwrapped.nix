@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
     substituteInPlace ./src/Utility/IconManager.vala \
       --replace-fail "/usr/share" "$out/share"
 
-    # Substitute app_command to look for the `timeshift-gtk` in the same directory as the executed `timeshift-launcher`.
+    # Substitute app_command to look for the `timeshift-gtk` in $out.
     # Substitute the `pkexec ...` as a hack to run a GUI application like Timeshift as root without setting up the corresponding pkexec policy.
     substituteInPlace ./src/timeshift-launcher \
-      --replace-fail "app_command='timeshift-gtk'" ${lib.escapeShellArg ''app_command="$(realpath "$(dirname "$0")")/timeshift-gtk"''} \
+      --replace-fail "app_command='timeshift-gtk'" "app_command=$out/bin/timeshift-gtk" \
       --replace-fail ${lib.escapeShellArg ''pkexec ''${app_command}''} ${lib.escapeShellArg ''pkexec env DISPLAY="$DISPLAY" XAUTHORITY="$XAUTHORITY" "''${app_command}"''}
   '';
 
