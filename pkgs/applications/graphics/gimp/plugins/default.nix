@@ -90,7 +90,16 @@ in
       })
     ];
 
+    postPatch = ''
+      substituteInPlace Makefile \
+        --replace-fail "gcc" "${stdenv.cc.targetPrefix}cc"
+    '';
+
     nativeBuildInputs = with pkgs; [ which ];
+
+    env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+      "-Wno-error=incompatible-function-pointer-types"
+    ]);
 
     installFlags = [
       "SYSTEM_INSTALL_DIR=${placeholder "out"}/${gimp.targetPluginDir}/bimp"
