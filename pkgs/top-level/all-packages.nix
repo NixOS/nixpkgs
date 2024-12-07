@@ -2777,6 +2777,7 @@ with pkgs;
 
   beetsPackages = lib.recurseIntoAttrs (callPackage ../tools/audio/beets { });
   inherit (beetsPackages) beets beets-unstable;
+  beetcamp = beetsPackages.beetcamp.override({propagateBeets = true;});
 
   biber-for-tectonic = callPackage ../tools/typesetting/tectonic/biber.nix { };
 
