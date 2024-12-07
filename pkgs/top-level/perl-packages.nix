@@ -18691,7 +18691,13 @@ with self; {
       url = "mirror://cpan/authors/id/N/NI/NINE/Net-CUPS-0.64.tar.gz";
       hash = "sha256-17x3/w9iv4dMhDxZDrEqgLvUR0mi+3Tb7URcNdDoWoU=";
     };
-    buildInputs = [ pkgs.cups pkgs.cups-filters ];
+    patches = [
+      (fetchpatch {
+        url = "https://git.launchpad.net/ubuntu/+source/libnet-cups-perl/plain/debian/patches/cupsfilters-2.0.patch?id=a47b8df8551853c12a7f965ae60bb52333883c88";
+        hash = "sha256-ouOrUsRHD1qxu8B6rZiqs9LXYIymX5kSuu99KnmP8Bo=";
+      })
+    ];
+    buildInputs = [ pkgs.cups pkgs.libcupsfilters ];
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.cups}/lib -lcups";
     meta = {
       description = "Common Unix Printing System Interface";
