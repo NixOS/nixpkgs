@@ -1,24 +1,32 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
+
+  # nativeBuildInputs
   pkg-config,
-  openssl,
   protobuf,
-  redis,
+
+  # buildInputs
   fontconfig,
+  openssl,
+  apple-sdk_15,
+  darwinMinVersionHook,
+
+  redis,
   versionCheckHook,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "golem";
-  version = "1.0.26";
+  version = "1.0.27";
 
   src = fetchFromGitHub {
     owner = "golemcloud";
     repo = "golem";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-q2DZrJIegu6X89tVLJE+OY7XRpqY2nGmTE699UhMP2E=";
+    tag = "v${version}";
+    hash = "sha256-H8Dykn079107gZTV2w/T/gyIVxJtV8NuhuCM2+46yyI=";
   };
 
   # Taker from https://github.com/golemcloud/golem/blob/v1.0.26/Makefile.toml#L399
@@ -32,10 +40,16 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [
-    fontconfig
-    (lib.getDev openssl)
-  ];
+  buildInputs =
+    [
+      fontconfig
+      (lib.getDev openssl)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_15
+      # aws-lc-sys requires CryptoKit's CommonCrypto, which is available on macOS 10.15+
+      (darwinMinVersionHook "10.15")
+    ];
 
   # Required for golem-wasm-rpc's build.rs to find the required protobuf files
   # https://github.com/golemcloud/wasm-rpc/blob/v1.0.6/wasm-rpc/build.rs#L7
@@ -44,12 +58,8 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/golemcloud/golem-examples/blob/v1.0.6/build.rs#L9
   GOLEM_WIT_ROOT = "../golem-wit-1.0.3";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "cranelift-bforest-0.108.1" = "sha256-WVRj6J7yXLFOsud9qKugmYja0Pe7AqZ0O2jgkOtHRg8=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-GrZhWcm7id8pRrwHRDt5k1tcVnoePO8eCWCHzkhCsZk=";
 
   # Tests are failing in the sandbox because of some redis integration tests
   doCheck = false;
