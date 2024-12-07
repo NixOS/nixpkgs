@@ -18,6 +18,12 @@ rustPlatform.buildRustPackage {
     "anki-sync-server"
   ];
 
+  checkFlags = [
+    # this test is flaky, see https://github.com/ankitects/anki/issues/3619
+    # also remove from anki when removing this
+    "--skip=deckconfig::update::test::should_keep_at_least_one_remaining_relearning_step"
+  ];
+
   nativeBuildInputs = [
     pkg-config
   ];
