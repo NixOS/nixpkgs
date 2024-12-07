@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-git-authors-plugin";
-  version = "0.9.0";
+  version = "0.9.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "timvink";
     repo = "mkdocs-git-authors-plugin";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UomcEXWNt5aVE9JxP9wskkHkFYXKN/+jXwr1SXCmeyE=";
+    tag = "v${version}";
+    hash = "sha256-2ITro34lZ+tz7ev7Yuh1wJjsSNik6VUTt3dupIajmLU=";
   };
 
   propagatedBuildInputs = [ mkdocs ];
