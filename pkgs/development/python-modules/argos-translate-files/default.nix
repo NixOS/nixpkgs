@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "argos-translate-files";
-  version = "1.1.4";
+  version = "1.2.0";
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YSTqqd+Kv2QVlAjA0lf4IRx7rJ1DmvB0JIReBv3yZcM=";
+    hash = "sha256-vIwZ2jdrBXtz6gG+Zfgqq6HVfdzmQf7nLqCDaQZT4js=";
   };
 
   propagatedBuildInputs = [

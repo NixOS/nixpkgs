@@ -5,14 +5,16 @@
   automake,
   libusb1,
 }:
-
+let
+  version = "1.20.20240909";
+in
 stdenv.mkDerivation {
   pname = "libphidget22";
-  version = "0-unstable-2024-04-11";
+  inherit version;
 
   src = fetchurl {
-    url = "https://cdn.phidgets.com/downloads/phidget22/libraries/linux/libphidget22.tar.gz";
-    hash = "sha256-mDoYVs0LhBb3+vzKjzYr9EmcrztmA4cy9xh5ONxHaxI=";
+    url = "https://www.phidgets.com/downloads/phidget22/libraries/linux/libphidget22/libphidget22-${version}.tar.gz";
+    hash = "sha256-20Y7cukEzq/Rf2v91SYTC1yCtS4p5aaG4aK8x6/6ebk=";
   };
 
   nativeBuildInputs = [ automake ];

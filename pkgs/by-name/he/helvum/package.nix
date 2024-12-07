@@ -1,6 +1,5 @@
 { lib
 , cargo
-, clang
 , desktop-file-utils
 , fetchFromGitLab
 , glib
@@ -35,7 +34,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    clang
     meson
     ninja
     pkg-config

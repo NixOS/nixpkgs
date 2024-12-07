@@ -92,6 +92,8 @@ let
         # Some of flutter_tools's dependencies contain static assets. The
         # application attempts to read its own package_config.json to find these
         # assets at runtime.
+        # TODO: Remove this once Flutter 3.24 is the lowest version in Nixpkgs.
+        # https://github.com/flutter/flutter/pull/150340 makes it redundant.
         mkdir -p packages/flutter_tools/.dart_tool
         ln -s '${flutterTools.pubcache}/package_config.json' packages/flutter_tools/.dart_tool/package_config.json
 
@@ -131,7 +133,7 @@ let
         makeShellWrapper "$out/bin/dart" "$out/bin/flutter" \
           --set-default FLUTTER_ROOT "$out" \
           --set FLUTTER_ALREADY_LOCKED true \
-          --add-flags "--disable-dart-dev \$NIX_FLUTTER_TOOLS_VM_OPTIONS $out/bin/cache/flutter_tools.snapshot"
+          --add-flags "--disable-dart-dev --packages='${flutterTools.pubcache}/package_config.json' \$NIX_FLUTTER_TOOLS_VM_OPTIONS $out/bin/cache/flutter_tools.snapshot"
 
         runHook postInstall
       '';

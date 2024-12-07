@@ -359,6 +359,8 @@ in {
 
     tideways = callPackage ../development/php-packages/tideways { };
 
+    uuid = callPackage ../development/php-packages/uuid { };
+
     uv = callPackage ../development/php-packages/uv { };
 
     vld = callPackage ../development/php-packages/vld { };

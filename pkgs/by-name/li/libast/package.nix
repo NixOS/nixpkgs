@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Library of Assorted Spiffy Things";
     mainProgram = "libast-config";
     license = licenses.bsd2;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

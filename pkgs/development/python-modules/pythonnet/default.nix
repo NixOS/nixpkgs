@@ -28,6 +28,7 @@ let
     projectFile = "src/runtime/Python.Runtime.csproj";
     testProjectFile = "src/testing/Python.Test.csproj";
     nugetDeps = ./deps.nix;
+    dotnet-sdk = dotnet-sdk_6;
   };
 in
 buildPythonPackage {

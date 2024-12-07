@@ -21,6 +21,8 @@
 , libXrender
 , libXtst
 , libXxf86vm
+, util-linux
+, socat
 }:
 
 let
@@ -33,14 +35,14 @@ let
   }.${system} or throwSystem;
 
   hash = {
-    x86_64-linux = "sha256-0Cdu1ntG8ZPHbLOIFvVFO6Dj8ZBHl4Rb+MM46luRKj4=";
+    x86_64-linux = "sha256-up0iDqqQ4vnkFX/gWwhLijY6qBIyDuXCDiyoWm5YuFM=";
   }.${system} or throwSystem;
 
   displayname = "XPipe";
 
 in stdenvNoCC.mkDerivation rec {
   pname = "xpipe";
-  version = "12.0";
+  version = "13.2";
 
   src = fetchzip {
     url = "https://github.com/xpipe-io/xpipe/releases/download/${version}/xpipe-portable-linux-${arch}.tar.gz";
@@ -74,6 +76,8 @@ in stdenvNoCC.mkDerivation rec {
       libXrender
       libXtst
       libXxf86vm
+      util-linux
+      socat
     ];
 
   desktopItem = makeDesktopItem {
@@ -110,9 +114,9 @@ in stdenvNoCC.mkDerivation rec {
     mv "$out/opt/$pkg/app/scripts/xpiped_debug.sh" "$out/opt/$pkg/app/scripts/xpiped_debug_raw.sh"
 
     makeShellWrapper "$out/opt/$pkg/app/bin/xpiped_raw" "$out/opt/$pkg/app/bin/xpiped" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fontconfig gtk3 udev ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fontconfig gtk3 udev util-linux socat ]}"
     makeShellWrapper "$out/opt/$pkg/app/scripts/xpiped_debug_raw.sh" "$out/opt/$pkg/app/scripts/xpiped_debug.sh" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fontconfig gtk3 udev ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ fontconfig gtk3 udev util-linux socat ]}"
 
     runHook postInstall
   '';

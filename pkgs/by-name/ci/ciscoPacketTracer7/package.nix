@@ -13,7 +13,7 @@ let
   version = "7.3.1";
 
   ptFiles = stdenv.mkDerivation {
-    name = "PacketTracer7drv";
+    pname = "PacketTracer7drv";
     inherit version;
 
     dontUnpack = true;
@@ -41,7 +41,8 @@ let
   };
 
   fhs = buildFHSEnv {
-    name = "packettracer7";
+    pname = "packettracer7";
+    inherit version;
     runScript = "${ptFiles}/bin/packettracer7";
 
     targetPkgs = pkgs: with pkgs; [

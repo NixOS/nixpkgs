@@ -2,7 +2,6 @@
 , nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
-, modTlsSupport ? false, rustls-ffi, Foundation
 , http2Support ? true, nghttp2
 , ldapSupport ? true, openldap
 , libxml2Support ? true, libxml2
@@ -40,8 +39,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl libxcrypt zlib ] ++
     lib.optional brotliSupport brotli ++
     lib.optional sslSupport openssl ++
-    lib.optional modTlsSupport rustls-ffi ++
-    lib.optional (modTlsSupport && stdenv.hostPlatform.isDarwin) Foundation ++
     lib.optional ldapSupport openldap ++    # there is no --with-ldap flag
     lib.optional libxml2Support libxml2 ++
     lib.optional http2Support nghttp2 ++
@@ -70,7 +67,6 @@ stdenv.mkDerivation rec {
     "--includedir=${placeholder "dev"}/include"
     (lib.enableFeature proxySupport "proxy")
     (lib.enableFeature sslSupport "ssl")
-    (lib.enableFeature modTlsSupport "tls")
     (lib.withFeatureAs libxml2Support "libxml2" "${libxml2.dev}/include/libxml2")
     "--docdir=$(doc)/share/doc"
 

@@ -1,16 +1,16 @@
 { lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "protolint";
-  version = "0.50.5";
+  version = "0.51.0";
 
   src = fetchFromGitHub {
     owner = "yoheimuta";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-dJurnM+AXdAd0/WBfnGT8KfpLmKHd5YAIZvMj5HHibI=";
+    hash = "sha256-q5Ck9p4UXmOur4mtQZ8nbBeXKCi5F++N5JU+E+sSHFk=";
   };
 
-  vendorHash = "sha256-pjDVOD6McJdER+BbUckKt4WW/AXsCxdA2nNn8iWSlGE=";
+  vendorHash = "sha256-u4KLYzM1A3t7qdIdbOw6rYPIBnO7TXKjxSgSUNB+Pcg=";
 
   # Something about the way we run tests causes issues. It doesn't happen
   # when using "go test" directly:

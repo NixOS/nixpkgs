@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pydrive2";
-  version = "1.20.0";
+  version = "1.21.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Foum622DybCC8FvIy5Xuk85iOJ2ztVn/DnabW7iysQo=";
+    hash = "sha256-ZJuE1gxje8cUZIUDlTWqjxJUrRVkI3OfB+XTJQdEfBM=";
   };
 
   build-system = [

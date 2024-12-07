@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     makeWrapper ${electron}/bin/electron $out/bin/youtube-music \
       --add-flags $out/share/lib/youtube-music/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
@@ -78,8 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
       name = "youtube-music";
       exec = "youtube-music %u";
       icon = "youtube-music";
-      desktopName = "Youtube Music";
-      startupWMClass = "Youtube Music";
+      desktopName = "YouTube Music";
+      startupWMClass = "YouTube Music";
       categories = [ "AudioVideo" ];
     })
   ];

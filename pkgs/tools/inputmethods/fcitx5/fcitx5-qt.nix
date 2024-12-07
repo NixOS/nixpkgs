@@ -14,13 +14,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5-qt${majorVersion}";
-  version = "5.1.7";
+  version = "5.1.8";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "fcitx5-qt";
     rev = version;
-    hash = "sha256-C/LRpC6w/2cb/+xAwsmOVEvWmHMtJKD1pAwMoeLVIYY=";
+    hash = "sha256-up4EC4GLzDjd9QJzeV2b2uVZNxYa268D/FotCyy1sos=";
   };
 
   postPatch = ''

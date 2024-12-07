@@ -18,8 +18,6 @@
   icu,
   fontconfig,
   libiconv,
-  stylua,
-  typos,
   # FONTCONFIG_FILE
   makeFontsConf,
   gentium,
@@ -35,14 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.zst";
-    sha256 = "sha256-PjU6Qfn+FTL3vt66mkIAn/uXWMPPlH8iK6B264ekIis=";
+    hash = "sha256-PjU6Qfn+FTL3vt66mkIAn/uXWMPPlH8iK6B264ekIis=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     nativeBuildInputs = [ zstd ];
-    dontConfigure = true;
-    hash = "sha256-m21SyGtHwVCz+77pYq48Gjnrf/TLCLCf/IQ7AnZk+fo=";
+    hash = "sha256-iPkXEUC4U1m/ComIDo/J5kwkmM1QdowioNtnSnmMhJ0=";
   };
 
   nativeBuildInputs = [
@@ -63,8 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     icu
     fontconfig
     libiconv
-    stylua
-    typos
   ];
 
   configureFlags =
@@ -172,6 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    broken = stdenv.isDarwin;
     description = "Typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful

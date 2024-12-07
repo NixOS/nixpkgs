@@ -49,6 +49,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         ExecStart = "${pkgs.signald}/bin/signald -d ${dataDir} -s ${cfg.socketPath}";
+        ExecStartPre = "${pkgs.signald}/bin/signald -d ${dataDir} -s ${cfg.socketPath} --migrate-data";
         Restart = "on-failure";
         StateDirectory = "signald";
         RuntimeDirectory = "signald";

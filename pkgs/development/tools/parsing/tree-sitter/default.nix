@@ -66,11 +66,11 @@ let
         { tree-sitter-latex = grammars'.tree-sitter-latex // { generate = true; }; } //
         { tree-sitter-ocaml = grammars'.tree-sitter-ocaml // { location = "grammars/ocaml"; }; } //
         { tree-sitter-ocaml-interface = grammars'.tree-sitter-ocaml // { location = "grammars/interface"; }; } //
-        { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "org"; }; } //
+        { tree-sitter-org-nvim = grammars'.tree-sitter-org-nvim // { language = "tree-sitter-org"; }; } //
         { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
         { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
         { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
-        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; } //
+        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "tree-sitter-markdown_inline"; location = "tree-sitter-markdown-inline"; }; } //
         { tree-sitter-php = grammars'.tree-sitter-php // { location = "php"; }; } //
         { tree-sitter-sql = grammars'.tree-sitter-sql // { generate = true; }; };
     in

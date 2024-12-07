@@ -97,6 +97,7 @@ mapAliases {
   inherit (pkgs) firebase-tools; # added 2023-08-18
   inherit (pkgs) fixjson; # added 2024-06-26
   flood = pkgs.flood; # Added 2023-07-25
+  ganache = throw "ganache was removed because it was deprecated upstream"; # added 2024-12-02
   generator-code = throw "generator-code was removed because it provides no executable"; # added 2023-09-24
   inherit (pkgs) git-run; # added 2024-06-26
   git-ssb = throw "git-ssb was removed because it was broken"; # added 2023-08-21
@@ -121,9 +122,11 @@ mapAliases {
   indium = throw "indium was removed because it was broken"; # added 2023-08-19
   inliner = throw "inliner was removed because it was abandoned upstream"; # added 2024-08-23
   inherit (pkgs) intelephense; # added 2024-08-31
+  insect = throw "insect was removed becuase it was deprecated by upstream. Use numbat instead."; # added 2024-12-02
   ionic = throw "ionic was replaced by @ionic/cli"; # added 2023-08-19
   inherit (pkgs) jake; # added 2023-08-19
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
+  inherit (pkgs) kaput-cli; # added 2024-12-03
   karma = pkgs.karma-runner; # added 2023-07-29
   leetcode-cli = self.vsc-leetcode-cli; # added 2023-08-31
   inherit (pkgs) lv_font_conv; # added 2024-06-28
@@ -134,6 +137,7 @@ mapAliases {
   inherit (pkgs) mathjax-node-cli; # added 2023-11-02
   mdctl-cli = self."@medable/mdctl-cli"; # added 2023-08-21
   inherit (pkgs) mermaid-cli; # added 2023-10-01
+  meshcommander = throw "meshcommander was removed because it was abandoned upstream"; # added 2024-12-02
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
   inherit (pkgs) near-cli; # added 2023-09-09
   neovim = pkgs.neovim-node-client; # added 2024-11-13
@@ -159,6 +163,7 @@ mapAliases {
   react-tools = throw "react-tools was removed because it was deprecated"; # added 2023-09-25
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   inherit (pkgs) redoc-cli; # added 2023-09-12
+  remod-cli = pkgs.remod; # added 2024-12-04
   reveal-md = pkgs.reveal-md; # added 2023-07-31
   inherit (pkgs) rtlcss; # added 2023-08-29
   s3http = throw "s3http was removed because it was abandoned upstream"; # added 2023-08-18
@@ -168,6 +173,7 @@ mapAliases {
   inherit (pkgs) sql-formatter; # added 2024-06-29
   "@squoosh/cli" = throw "@squoosh/cli was removed because it was abandoned upstream"; # added 2023-09-02
   ssb-server = throw "ssb-server was removed because it was broken"; # added 2023-08-21
+  stackdriver-statsd-backend = throw "stackdriver-statsd-backend was removed because Stackdriver is now discontinued"; # added 2024-12-02
   stf = throw "stf was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) stylelint; # added 2023-09-13
   surge = pkgs.surge-cli; # Added 2023-09-08
@@ -208,6 +214,8 @@ mapAliases {
   vue-language-server = self.vls; # added 2023-08-20
   vue-cli = throw "vue-cli has been removed since upstream no longer recommends using it; consider using create-vue and the new Vite-based tooling instead."; # added 2024-07-12
   inherit (pkgs) web-ext; # added 2023-08-20
+  inherit (pkgs) webpack-cli; # added 2024-12-03
+  webpack-dev-server = throw "webpack-dev-server has been removed. You should install it in your JS project instead."; # added 2024-12-05
   inherit (pkgs) wrangler; # added 2024-07-01
   inherit (pkgs) write-good; # added 2023-08-20
   inherit (pkgs) yalc; # added 2024-06-29

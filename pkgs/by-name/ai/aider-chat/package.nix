@@ -12,7 +12,7 @@ let
     self = python3;
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
   };
-  version = "0.65.0";
+  version = "0.66.0";
   aider-chat = python3.pkgs.buildPythonApplication {
     pname = "aider-chat";
     inherit version;
@@ -22,7 +22,7 @@ let
       owner = "Aider-AI";
       repo = "aider";
       rev = "refs/tags/v${version}";
-      hash = "sha256-crQnkTOujflBcAAOY8rjgSEioM/9Vxud3UfgipJ07uA=";
+      hash = "sha256-6wD8wBDV6Roo3J+oEYiBzZ7i1iGOZhcoiKXHV7AJjDk=";
     };
 
     pythonRelaxDeps = true;
@@ -156,10 +156,12 @@ let
 
     makeWrapperArgs = [
       "--set AIDER_CHECK_UPDATE false"
+      "--set AIDER_ANALYTICS false"
     ];
 
     preCheck = ''
       export HOME=$(mktemp -d)
+      export AIDER_ANALYTICS="false"
     '';
 
     optional-dependencies = with python3.pkgs; {

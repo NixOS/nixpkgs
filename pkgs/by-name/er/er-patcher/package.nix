@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation rec {
       that ensures the patched executable is never run with EAC enabled (unless explicity told to do so). Use at your own risk!
     '';
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.sigmasquadron ];
     mainProgram = "er-patcher";
   };
 }

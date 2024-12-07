@@ -231,7 +231,10 @@ in
     enableServer = mkEnableOption "the Kanidm server";
     enablePam = mkEnableOption "the Kanidm PAM and NSS integration";
 
-    package = mkPackageOption pkgs "kanidm" { };
+    package = mkPackageOption pkgs "kanidm" {
+      example = "kanidm_1_4";
+      extraDescription = "If not set will receive a specific version based on stateVersion. Set to `pkgs.kanidm` to always receive the latest version, with the understanding that this could introduce breaking changes.";
+    };
 
     serverSettings = mkOption {
       type = types.submodule {
@@ -810,6 +813,16 @@ in
           )
         )
       );
+
+    services.kanidm.package =
+      let
+        pkg =
+          if lib.versionAtLeast config.system.stateVersion "24.11" then
+            pkgs.kanidm_1_4
+          else
+            lib.warn "No default kanidm package found for stateVersion = '${config.system.stateVersion}'. Using unpinned version. Consider setting `services.kanidm.package = pkgs.kanidm_1_x` to avoid upgrades introducing breaking changes." pkgs.kanidm;
+      in
+      lib.mkDefault pkg;
 
     environment.systemPackages = mkIf cfg.enableClient [ cfg.package ];
 

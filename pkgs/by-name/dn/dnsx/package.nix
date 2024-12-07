@@ -1,6 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -16,8 +18,21 @@ buildGoModule rec {
 
   vendorHash = "sha256-WbFkBTPy4N+mAVSkq1q9XcNs1jk6YuBcYxiEmQV/TsM=";
 
+  subPackages = [ "cmd/dnsx" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+
   # Tests require network access
   doCheck = false;
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "-version" ];
 
   meta = with lib; {
     description = "Fast and multi-purpose DNS toolkit";
@@ -31,5 +46,6 @@ buildGoModule rec {
     changelog = "https://github.com/projectdiscovery/dnsx/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "dnsx";
   };
 }

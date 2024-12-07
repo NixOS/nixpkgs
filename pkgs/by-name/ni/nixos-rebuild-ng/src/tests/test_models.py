@@ -9,6 +9,27 @@ import nixos_rebuild.models as m
 from .helpers import get_qualified_name
 
 
+def test_build_attr_from_arg() -> None:
+    assert m.BuildAttr.from_arg(None, None) == m.BuildAttr("<nixpkgs/nixos>", None)
+    assert m.BuildAttr.from_arg("attr", None) == m.BuildAttr(
+        Path("default.nix"), "attr"
+    )
+    assert m.BuildAttr.from_arg("attr", "file.nix") == m.BuildAttr(
+        Path("file.nix"), "attr"
+    )
+    assert m.BuildAttr.from_arg(None, "file.nix") == m.BuildAttr(Path("file.nix"), None)
+
+
+def test_build_attr_to_attr() -> None:
+    assert (
+        m.BuildAttr("<nixpkgs/nixos>", None).to_attr("attr1", "attr2") == "attr1.attr2"
+    )
+    assert (
+        m.BuildAttr("<nixpkgs/nixos>", "preAttr").to_attr("attr1", "attr2")
+        == "preAttr.attr1.attr2"
+    )
+
+
 def test_flake_parse() -> None:
     assert m.Flake.parse("/path/to/flake#attr") == m.Flake(
         Path("/path/to/flake"), "nixosConfigurations.attr"
@@ -22,6 +43,15 @@ def test_flake_parse() -> None:
     assert m.Flake.parse(".#attr") == m.Flake(Path("."), "nixosConfigurations.attr")
     assert m.Flake.parse("#attr") == m.Flake(Path("."), "nixosConfigurations.attr")
     assert m.Flake.parse(".") == m.Flake(Path("."), "nixosConfigurations.default")
+
+
+def test_flake_to_attr() -> None:
+    assert (
+        m.Flake(Path("/path/to/flake"), "nixosConfigurations.preAttr").to_attr(
+            "attr1", "attr2"
+        )
+        == "/path/to/flake#nixosConfigurations.preAttr.attr1.attr2"
+    )
 
 
 @patch(get_qualified_name(platform.node), autospec=True)
@@ -100,13 +130,13 @@ def test_flake_from_arg(mock_node: Any) -> None:
 
 
 @patch(get_qualified_name(m.Path.mkdir, m), autospec=True)
-def test_profile_from_name(mock_mkdir: Any) -> None:
-    assert m.Profile.from_name("system") == m.Profile(
+def test_profile_from_arg(mock_mkdir: Any) -> None:
+    assert m.Profile.from_arg("system") == m.Profile(
         "system",
         Path("/nix/var/nix/profiles/system"),
     )
 
-    assert m.Profile.from_name("something") == m.Profile(
+    assert m.Profile.from_arg("something") == m.Profile(
         "something",
         Path("/nix/var/nix/profiles/system-profiles/something"),
     )

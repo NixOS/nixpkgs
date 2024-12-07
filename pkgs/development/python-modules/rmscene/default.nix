@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "rmscene";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,17 +19,17 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ricklupton";
     repo = "rmscene";
-    rev = "v${version}";
-    hash = "sha256-uIvoKdW7caOfc8OEGIcyDwyos9NLwtZ++CeZdUO/G8M=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-BnTr3rLehP5uhzXWXKPaXcJCWW2ofk5N8amqoEUmlWo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
   pythonRelaxDeps = [ "packaging" ];
 
-  propagatedBuildInputs = [ packaging ];
+  dependencies = [ packaging ];
 
   pythonImportsCheck = [ "rmscene" ];
 

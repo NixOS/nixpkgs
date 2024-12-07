@@ -100,7 +100,7 @@ let
       length head tail elem elemAt isList;
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
       stringLength substring isString replaceStrings
-      intersperse concatStringsSep concatMapStringsSep
+      intersperse concatStringsSep concatMapStringsSep concatMapAttrsStringSep
       concatImapStringsSep concatLines makeSearchPath makeSearchPathOutput
       makeLibraryPath makeIncludePath makeBinPath optionalString
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
@@ -121,7 +121,7 @@ let
     inherit (self.customisation) overrideDerivation makeOverridable
       callPackageWith callPackagesWith extendDerivation hydraJob
       makeScope makeScopeWithSplicing makeScopeWithSplicing';
-    inherit (self.derivations) lazyDerivation optionalDrvAttr;
+    inherit (self.derivations) lazyDerivation optionalDrvAttr warnOnInstantiate;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
       hiPrioSet licensesSpdx getLicenseFromSpdxId getLicenseFromSpdxIdOr

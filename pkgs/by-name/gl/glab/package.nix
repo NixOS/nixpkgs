@@ -8,16 +8,16 @@
 
 buildGo123Module rec {
   pname = "glab";
-  version = "1.49.0";
+  version = "1.50.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-G9z9lISalj3ZXlvDY+qA+0NB6F7flBd1cTcGfxrM91U=";
+    hash = "sha256-WQO+9Fmlzj21UPJ9cdFc6JC8mbkzOWxz077JR+11BXA=";
   };
 
-  vendorHash = "sha256-SsWZO77KqDPzyEK57WaK4NpnDWUtZPP0qur2EvEoiL0=";
+  vendorHash = "sha256-nwHY0221nacHk4M+RKA8BEJLCoJJdIKwP0ZPjhYxc7Q=";
 
   ldflags = [
     "-s"

@@ -29,325 +29,325 @@ in
 {
   app-schema = mkGeoserverExtension {
     name = "app-schema";
-    version = "2.26.0"; # app-schema
-    hash = "sha256-HOjhM9WI7lsqUNrozLB2oI6szqm+Cb7VqC0Hy9NlNMU="; # app-schema
+    version = "2.26.1"; # app-schema
+    hash = "sha256-klT03jure+ILuQX5X3jdIfUa7AI/bdzTEig2QDs/P5o="; # app-schema
   };
 
   authkey = mkGeoserverExtension {
     name = "authkey";
-    version = "2.26.0"; # authkey
-    hash = "sha256-34U3zq/SKm21fZV80+04N/0ygqShdYVMeQNuqtMSXgQ="; # authkey
+    version = "2.26.1"; # authkey
+    hash = "sha256-jjZtUiSQ8ZzsLrinT8Uw628jIRKnGi6XnGT/5GvCwew="; # authkey
   };
 
   cas = mkGeoserverExtension {
     name = "cas";
-    version = "2.26.0"; # cas
-    hash = "sha256-mosawsZkCKOm03CFg9poJ+XwbbGhvNt8AsxnegW59H4="; # cas
+    version = "2.26.1"; # cas
+    hash = "sha256-FcUlQ9gSb64wxnEZaU1oJViPDbA32GChcdiZ5uvft7w="; # cas
   };
 
   charts = mkGeoserverExtension {
     name = "charts";
-    version = "2.26.0"; # charts
-    hash = "sha256-rPnY9zYgdRoud2I2hcxnODDE/2gsBTMgTPrGAwDdrbM="; # charts
+    version = "2.26.1"; # charts
+    hash = "sha256-IDGBTMa+VMqZIxOFylL29t0h9AoOXe7GJmj3dKrdGQ0="; # charts
   };
 
   control-flow = mkGeoserverExtension {
     name = "control-flow";
-    version = "2.26.0"; # control-flow
-    hash = "sha256-4Kl0SgKW8MifMVY1+Aa9Ve0WufjHFQejobhQfnwGwbw="; # control-flow
+    version = "2.26.1"; # control-flow
+    hash = "sha256-09EuvTTGeaNRLKshhsyHPvE4p9F5IJPV/ig8cNigQbA="; # control-flow
   };
 
   css = mkGeoserverExtension {
     name = "css";
-    version = "2.26.0"; # css
-    hash = "sha256-CUG5cBxW/PyP/M2I5/1wC1UndzWSIg8aKeETtUnrH5A="; # css
+    version = "2.26.1"; # css
+    hash = "sha256-Qy5AYnXIcsoGxnGCjHRK4XiDflT1jVoVKr6Iq/GMYlg="; # css
   };
 
   csw = mkGeoserverExtension {
     name = "csw";
-    version = "2.26.0"; # csw
-    hash = "sha256-ABNFf6grpU97nd81H/s8Gfd1G9mxMwVdUduubLWrsRE="; # csw
+    version = "2.26.1"; # csw
+    hash = "sha256-mZ7BrWFmLrpzW/oM0YovTC+Zb6BMnj1idMSiemNX6Xc="; # csw
   };
 
   csw-iso = mkGeoserverExtension {
     name = "csw-iso";
-    version = "2.26.0"; # csw-iso
-    hash = "sha256-dKyVP5FuJ0Tl2z4veMeIJO66dBucfZo6qH+WvSBQ1Es="; # csw-iso
+    version = "2.26.1"; # csw-iso
+    hash = "sha256-FV5GDv+fywFhdNJi5hT5qvvPQVBT3TJpjI0SQnmH5BY="; # csw-iso
   };
 
   db2 = mkGeoserverExtension {
     name = "db2";
-    version = "2.26.0"; # db2
-    hash = "sha256-L0Xrc0MuSiezKk7l4P4lm3phRou79neQds4Yu2VG5DY="; # db2
+    version = "2.26.1"; # db2
+    hash = "sha256-XlCAFADr8hLFQAbCxrFtrNIBh4S4oEjbezlCwprW8uQ="; # db2
   };
 
   # Needs wps extension.
   dxf = mkGeoserverExtension {
     name = "dxf";
-    version = "2.26.0"; # dxf
-    hash = "sha256-OtpYej/MxqeoMBw17Ltr9l5iOGUa91L30hgBz6ZbD+Y="; # dxf
+    version = "2.26.1"; # dxf
+    hash = "sha256-WHuhp+nqO5NemYWGiRcuD5/vlBdmMNT+sdm2a+yk9do="; # dxf
   };
 
   excel = mkGeoserverExtension {
     name = "excel";
-    version = "2.26.0"; # excel
-    hash = "sha256-UHIVJnUJnzPDJWsrQw9YasUedpLujKr9s3VJtSgESHY="; # excel
+    version = "2.26.1"; # excel
+    hash = "sha256-JRNM+JilMODNb2r4XEBRj2wkIb/zc6e6Q+U+/X8egAY="; # excel
   };
 
   feature-pregeneralized = mkGeoserverExtension {
     name = "feature-pregeneralized";
-    version = "2.26.0"; # feature-pregeneralized
-    hash = "sha256-WT1TsHcYoxJK0LWsF4h8VdUGxIecx9SuIqWoA9JjZfA="; # feature-pregeneralized
+    version = "2.26.1"; # feature-pregeneralized
+    hash = "sha256-I0UzMFkZF9SaIFI+GcfegxdC4IFIUi6+GsutotJ5i1Q="; # feature-pregeneralized
   };
 
   # Note: The extension name ("gdal") clashes with pkgs.gdal.
   gdal = mkGeoserverExtension {
     name = "gdal";
-    version = "2.26.0"; # gdal
+    version = "2.26.1"; # gdal
     buildInputs = [ pkgs.gdal ];
-    hash = "sha256-lGyBxRCz5DvDQUNQmsk1+DfArwx3kcMoSgQq+O/DqZc="; # gdal
+    hash = "sha256-EoaKKlEhch5/wg4SODx9JV9+M+4Ui9Wcb2HSM1bcgLE="; # gdal
   };
 
   # Throws "java.io.FileNotFoundException: URL [jar:file:/nix/store/.../WEB-INF/lib/gs-geofence-server-2.24.1.jar!/geofence-default-override.properties] cannot be resolved to absolute file path because it does not reside in the file system: jar:file:/nix/store/.../WEB-INF/lib/gs-geofence-server-2.24.1.jar!/geofence-default-override.properties" but seems to work out of the box.
   #geofence = mkGeoserverExtension {
   #  name = "geofence";
-  #  version = "2.26.0"; # geofence
-  #  hash = "sha256-Io71mNpUu15klMWFHCaFfRmxPUGGTASZE7MZWyv2TDQ="; # geofence
+  #  version = "2.26.1"; # geofence
+  #  hash = "sha256-B2yPPEOsdBDxO/mG3W6MYBqhigjvS6YTZTsvHoUzBAg="; # geofence
   #};
 
   #geofence-server = mkGeoserverExtension {
   #  name = "geofence-server";
-  #  version = "2.26.0"; # geofence-server
-  #  hash = "sha256-UPRupgj9La/JWAneGeM+UdCvnkcW3ZTe7c1bYZRURGI="; # geofence-server
+  #  version = "2.26.1"; # geofence-server
+  #  hash = "sha256-pgWWomyBmru2tfQfuGdomQirN0Km3j5W/JG644vNHZQ="; # geofence-server
   #};
 
   #geofence-wps = mkGeoserverExtension {
   #  name = "geofence-wps";
-  #  version = "2.26.0"; # geofence-wps
-  #  hash = "sha256-SA7nWTyawzDZVsOATRLW/MQQfyXWhHQif3/4MdVogBM="; # geofence-wps
+  #  version = "2.26.1"; # geofence-wps
+  #  hash = "sha256-hQBYJ+jXx3/GOVzqcSS1w/Zc0GKAD2fyIX5lm9kiPmg="; # geofence-wps
   #};
 
   geopkg-output = mkGeoserverExtension {
     name = "geopkg-output";
-    version = "2.26.0"; # geopkg-output
-    hash = "sha256-SKIInEC9TI2FBtduGHi3apZip5ubA4/ip58+w0O1a38="; # geopkg-output
+    version = "2.26.1"; # geopkg-output
+    hash = "sha256-9EuI9Hvvxdf1FmJ6AMHmbc5RJr33MlBbGd9NqNwacFo="; # geopkg-output
   };
 
   grib = mkGeoserverExtension {
     name = "grib";
-    version = "2.26.0"; # grib
-    hash = "sha256-5Hn6LUxsCP5YvVsMgh6m/oMBJuIo2Y9XdbSRQAJm+vI="; # grib
+    version = "2.26.1"; # grib
+    hash = "sha256-o87Fyy+remmP8c3m4TZ6TX+lUoPdH//P2yJ1DeV+iBs="; # grib
     buildInputs = [ netcdf ];
   };
 
   gwc-s3 = mkGeoserverExtension {
     name = "gwc-s3";
-    version = "2.26.0"; # gwc-s3
-    hash = "sha256-www+MTFlkmJ6GeGd3v8uGTYV7PYVg5pIS9/2s1D6YeU="; # gwc-s3
+    version = "2.26.1"; # gwc-s3
+    hash = "sha256-7XLrG4sJ1Bvw6d0qzT0ZGLVQ8wr9br9mUEwZGvd9U+s="; # gwc-s3
   };
 
   h2 = mkGeoserverExtension {
     name = "h2";
-    version = "2.26.0"; # h2
-    hash = "sha256-+Y7pILmnz51c5eO+OdqHGLD05fEqaM3vkFU7s0UiA2g="; # h2
+    version = "2.26.1"; # h2
+    hash = "sha256-ldqz1tPPJkyJPFBeltDUIDLwZtTu8mpSHRbWGsY3TfY="; # h2
   };
 
   iau = mkGeoserverExtension {
     name = "iau";
-    version = "2.26.0"; # iau
-    hash = "sha256-5oM3JxD6HKVhq1/IxXWck1MtQ8KwsLtf+LQACpvdKMA="; # iau
+    version = "2.26.1"; # iau
+    hash = "sha256-mzkYYPfixrSx7+r0lSrOw9agocpi7BogDnmcqtiJh1M="; # iau
   };
 
   importer = mkGeoserverExtension {
     name = "importer";
-    version = "2.26.0"; # importer
-    hash = "sha256-HFBIEB8pgVaCMF34Z0Clp3+nk2h4Va0xV2ptSZUSx9I="; # importer
+    version = "2.26.1"; # importer
+    hash = "sha256-Os7oRg+EM5p7rXyI5Qg0vWzZ2i1/tplw1zHaLJJ0feM="; # importer
   };
 
   inspire = mkGeoserverExtension {
     name = "inspire";
-    version = "2.26.0"; # inspire
-    hash = "sha256-uIryr4WQbWdAMjqATGf0txp1sZWWABSMv8o2xiKaWiI="; # inspire
+    version = "2.26.1"; # inspire
+    hash = "sha256-cYxoBk/oOjKj7gk4mzHUSU1LbWLRxjSbH9B+JiZCxgU="; # inspire
   };
 
   # Needs Kakadu plugin from
   # https://github.com/geosolutions-it/imageio-ext
   #jp2k = mkGeoserverExtension {
   #  name = "jp2k";
-  #  version = "2.26.0"; # jp2k
-  #  hash = "sha256-gPipm6hnkIyEU3a8NbSCm5QUSF+IKNHgt5DNFsvC++c="; # jp2k
+  #  version = "2.26.1"; # jp2k
+  #  hash = "sha256-P4UUtfRSlH4GMpDcvy1TjyorolrPLK0P8zCwDJUbFhE="; # jp2k
   #};
 
   libjpeg-turbo = mkGeoserverExtension {
     name = "libjpeg-turbo";
-    version = "2.26.0"; # libjpeg-turbo
-    hash = "sha256-I1Ojsgd+gRjSJJkx9wSfzJfVq5z3vgxA4zynZvVd4jU="; # libjpeg-turbo
+    version = "2.26.1"; # libjpeg-turbo
+    hash = "sha256-pGorlT/BaS605wyIcgNAM5aJxV6I78Dr3m1uADxdebI="; # libjpeg-turbo
     buildInputs = [ libjpeg.out ];
   };
 
   mapml = mkGeoserverExtension {
     name = "mapml";
-    version = "2.26.0"; # mapml
-    hash = "sha256-VGg/3cB+KUwZtbKQUoU4NURDjcANzQpPv4ZWeCzwkq0="; # mapml
+    version = "2.26.1"; # mapml
+    hash = "sha256-r1Z7Gc3c/kH2jm6wD46Oj2ZZTg136k2n9lqnRVkPXfs="; # mapml
   };
 
   mbstyle = mkGeoserverExtension {
     name = "mbstyle";
-    version = "2.26.0"; # mbstyle
-    hash = "sha256-Z5CNKP2fqMcw6prP/b84tOAPYwlLiFsbV26VdVnqFns="; # mbstyle
+    version = "2.26.1"; # mbstyle
+    hash = "sha256-a5jQDyn/nOS/HbhAzKAKl40g1SDYQ51Xi+LzWtByntA="; # mbstyle
   };
 
   metadata = mkGeoserverExtension {
     name = "metadata";
-    version = "2.26.0"; # metadata
-    hash = "sha256-6E9Z6WqCQxlDL3w1FiI+gOzjQ4ZyS5oucj1/02W4k4Y="; # metadata
+    version = "2.26.1"; # metadata
+    hash = "sha256-O9/gBrJBp8/fOYOx7fsqkgcQ0k6wxIoz9DLQDemjJK8="; # metadata
   };
 
   mongodb = mkGeoserverExtension {
     name = "mongodb";
-    version = "2.26.0"; # mongodb
-    hash = "sha256-thfgMeDrDb2rPh9h9R2AgYYWPBHcEG/sI4UhNBb/DfQ="; # mongodb
+    version = "2.26.1"; # mongodb
+    hash = "sha256-j9e2V6UkagW55WKKW2eaCnBBGwKmdDjGQBSvngpAqb8="; # mongodb
   };
 
   monitor = mkGeoserverExtension {
     name = "monitor";
-    version = "2.26.0"; # monitor
-    hash = "sha256-vgeqZXzb8nz7daAeur1JMLS0Rospgyx+v9n687000EE="; # monitor
+    version = "2.26.1"; # monitor
+    hash = "sha256-CLTtJHO+/Hq8/JFErm3ieyLc6wIqCelx0CRDpzbPfZ0="; # monitor
   };
 
   mysql = mkGeoserverExtension {
     name = "mysql";
-    version = "2.26.0"; # mysql
-    hash = "sha256-PCNCyqJwOK6P6sDWVMdV6gGXgHJOPw97cqkjaixZxwQ="; # mysql
+    version = "2.26.1"; # mysql
+    hash = "sha256-TiSkHdp/U9P1acaD5mN0eOA/J/5fnnJH14nDlKNY3+k="; # mysql
   };
 
   netcdf = mkGeoserverExtension {
     name = "netcdf";
-    version = "2.26.0"; # netcdf
-    hash = "sha256-0i/zmiIE+xjec6dOd237MdIBrCspZEL+8h1c/g0h7oU="; # netcdf
+    version = "2.26.1"; # netcdf
+    hash = "sha256-k/zDVoh19Pg/jZa4svAqU1c4EqPnPRSIQL9ZTlrohvY="; # netcdf
     buildInputs = [ netcdf ];
   };
 
   netcdf-out = mkGeoserverExtension {
     name = "netcdf-out";
-    version = "2.26.0"; # netcdf-out
-    hash = "sha256-xl2mY9QYSVeC2k43H2GFz2D56rajCT9FlpP47Q8aOe8="; # netcdf-out
+    version = "2.26.1"; # netcdf-out
+    hash = "sha256-maHIpPQshEcB7JZuhTIo1X209o29iv36alUx76LWV2I="; # netcdf-out
     buildInputs = [ netcdf ];
   };
 
   ogr-wfs = mkGeoserverExtension {
     name = "ogr-wfs";
-    version = "2.26.0"; # ogr-wfs
+    version = "2.26.1"; # ogr-wfs
     buildInputs = [ pkgs.gdal ];
-    hash = "sha256-LiB+BE2Q3a2US7HJkBWT0Z9AMZ3A3M584qbEV1uhhEM="; # ogr-wfs
+    hash = "sha256-XFEO0JruZCgYj7LWNftIFeI0LoypMbtD2A148LbLg+4="; # ogr-wfs
   };
 
   # Needs ogr-wfs extension.
   ogr-wps = mkGeoserverExtension {
     name = "ogr-wps";
-    version = "2.26.0"; # ogr-wps
+    version = "2.26.1"; # ogr-wps
     # buildInputs = [ pkgs.gdal ];
-    hash = "sha256-0o4cD8wv1Km5pljxAlokVRVEfMbklXgkYhxFZqPdROk="; # ogr-wps
+    hash = "sha256-qfuU/HlVTHjPIA9DCdc8YURpLyPHSxXKEko0s3tDLpI="; # ogr-wps
   };
 
   oracle = mkGeoserverExtension {
     name = "oracle";
-    version = "2.26.0"; # oracle
-    hash = "sha256-mxc46ctIh7imjQgTI2zZ9gwtgDF6GkE/b5IogUktF9Y="; # oracle
+    version = "2.26.1"; # oracle
+    hash = "sha256-dZ6b+hYD1uJDHMJRDChsZc3W9TiQhKfvCBbDIr9xB9E="; # oracle
   };
 
   params-extractor = mkGeoserverExtension {
     name = "params-extractor";
-    version = "2.26.0"; # params-extractor
-    hash = "sha256-dLzEdnNy+Nrxkc4aBCGTESuReW6mkgXEpXDo9rDzsBU="; # params-extractor
+    version = "2.26.1"; # params-extractor
+    hash = "sha256-7qr+jxo4tzxW76k/t+Zd0h45U6mqzReRjnsJfWFZV8o="; # params-extractor
   };
 
   printing = mkGeoserverExtension {
     name = "printing";
-    version = "2.26.0"; # printing
-    hash = "sha256-31T/tizxkmzYbxR1eLiY3DanwlFVdeZvFOESgBnuG1A="; # printing
+    version = "2.26.1"; # printing
+    hash = "sha256-jXdp0zX5sq4HBs1lF658FtSRjMOm1KXrbVm9dDPDmfk="; # printing
   };
 
   pyramid = mkGeoserverExtension {
     name = "pyramid";
-    version = "2.26.0"; # pyramid
-    hash = "sha256-lpDexw5nd1jm9cDFsQ/qXdwbX5vTD0RXKIAOg6dKQqE="; # pyramid
+    version = "2.26.1"; # pyramid
+    hash = "sha256-hRc24f5pY94TRsmttc0SLPjS6S23kzCeiyuE8XbM4pA="; # pyramid
   };
 
   querylayer = mkGeoserverExtension {
     name = "querylayer";
-    version = "2.26.0"; # querylayer
-    hash = "sha256-ajrNJ0eG0pp+v/f4N5kxcUzYOyXuLhMRzvdfdiJh0Vk="; # querylayer
+    version = "2.26.1"; # querylayer
+    hash = "sha256-7wNSoi6PUZJLHGUO0D48O88xKoU63FBSH4+lfxgbEjA="; # querylayer
   };
 
   sldservice = mkGeoserverExtension {
     name = "sldservice";
-    version = "2.26.0"; # sldservice
-    hash = "sha256-xxpKSDghK+Xz8buPU5lzEa7eiG5A0rPgzCaIO9GKCMY="; # sldservice
+    version = "2.26.1"; # sldservice
+    hash = "sha256-T2v42w8mhaFH/gcnJUEJdlQZH6gNyx8Y8wpKws0Xsns="; # sldservice
   };
 
   sqlserver = mkGeoserverExtension {
     name = "sqlserver";
-    version = "2.26.0"; # sqlserver
-    hash = "sha256-UwZ4ho+HG+ocwri+N4ebTATGcT4tukAxwvx84rP0VWk="; # sqlserver
+    version = "2.26.1"; # sqlserver
+    hash = "sha256-gQrmBMxosWkvAb9+DG9UEgrmG8AKl3NPgYLZ2nG2iM0="; # sqlserver
   };
 
   vectortiles = mkGeoserverExtension {
     name = "vectortiles";
-    version = "2.26.0"; # vectortiles
-    hash = "sha256-rlQcWLEPvaKDT6JZ0RuZtaHz1bgtsblFOybKOVqDSVM="; # vectortiles
+    version = "2.26.1"; # vectortiles
+    hash = "sha256-/cR7S5dzR8td7dFk05QkLnp0vhSpXuCLO0vmiB2JyRQ="; # vectortiles
   };
 
   wcs2_0-eo = mkGeoserverExtension {
     name = "wcs2_0-eo";
-    version = "2.26.0"; # wcs2_0-eo
-    hash = "sha256-Ky+unKH+WBMvo/rlNPv2Uca3X610yXZvCy0/5KEN6wk="; # wcs2_0-eo
+    version = "2.26.1"; # wcs2_0-eo
+    hash = "sha256-SYUo3G/BuILOHN6t8F9Q/gwGjAzCY9crmvU+f6mDm/U="; # wcs2_0-eo
   };
 
   web-resource = mkGeoserverExtension {
     name = "web-resource";
-    version = "2.26.0"; # web-resource
-    hash = "sha256-S7Wu4wGo2j8PcBC8VS7EECBlr7NN1hALC1VOM5b6Wk0="; # web-resource
+    version = "2.26.1"; # web-resource
+    hash = "sha256-z2Zm4UvigN7TvIIHnn42xThIg8Xy3F2+1fPzdhDMZ+A="; # web-resource
   };
 
   wmts-multi-dimensional = mkGeoserverExtension {
     name = "wmts-multi-dimensional";
-    version = "2.26.0"; # wmts-multi-dimensional
-    hash = "sha256-BNigZB16d1BKRTl/UJs1oWYFKn/cFk5WX1fBwvC046I="; # wmts-multi-dimensional
+    version = "2.26.1"; # wmts-multi-dimensional
+    hash = "sha256-Wju8vN4KCN13aJshPqfUEQa8B0WHdeOvFEZ/ZzZOg7E="; # wmts-multi-dimensional
   };
 
   wps = mkGeoserverExtension {
     name = "wps";
-    version = "2.26.0"; # wps
-    hash = "sha256-HVTDMqG23Ign7qottKRo1PtQNr6606nV34SRopAMO1Q="; # wps
+    version = "2.26.1"; # wps
+    hash = "sha256-Yi1MdBWeoNBMco/8JUouVXVpfebmpXkTo6COJPLl0bw="; # wps
   };
 
   # Needs hazelcast (https://github.com/hazelcast/hazelcast (?)) which is not
   # available in nixpgs as of 2024/01.
   #wps-cluster-hazelcast = mkGeoserverExtension {
   #  name = "wps-cluster-hazelcast";
-  #  version = "2.26.0"; # wps-cluster-hazelcast
-  #  hash = "sha256-R0Btbf6BNwGKC2TQ6BmSte612Sel7NspOX9KU+zsHBc="; # wps-cluster-hazelcast
+  #  version = "2.26.1"; # wps-cluster-hazelcast
+  #  hash = "sha256-Ed2jV6fmoOUQX7Cs3Qe1TjJ8mki/u1v/nng7MqF+Jqs="; # wps-cluster-hazelcast
   #};
 
   wps-download = mkGeoserverExtension {
     name = "wps-download";
-    version = "2.26.0"; # wps-download
-    hash = "sha256-sVbAi0y8n2shox6TX0Y4Hg5GhYakv5+tgloMix6Wbfg="; # wps-download
+    version = "2.26.1"; # wps-download
+    hash = "sha256-HX+RUZHsfyMb/u/I2S57zrW6HKhzSdE9CZT3GjQ0fbM="; # wps-download
   };
 
   # Needs Postrgres configuration or similar.
   # See https://docs.geoserver.org/main/en/user/extensions/wps-jdbc/index.html
   wps-jdbc = mkGeoserverExtension {
     name = "wps-jdbc";
-    version = "2.26.0"; # wps-jdbc
-    hash = "sha256-iJk24m4UDwK1PrU0PiCDPGj0eK7EEQajUFyl+9aIGpE="; # wps-jdbc
+    version = "2.26.1"; # wps-jdbc
+    hash = "sha256-W6EUZtt8It1u786eFvuw9k7eZ1SLBG+J4amW036PZko="; # wps-jdbc
   };
 
   ysld = mkGeoserverExtension {
     name = "ysld";
-    version = "2.26.0"; # ysld
-    hash = "sha256-/qbtfaIE/4haGeS6U+FML1JI/AyXWFyKOd8tGaYFCmw="; # ysld
+    version = "2.26.1"; # ysld
+    hash = "sha256-kwAMkoSNxoraZ20fVg0xCOD3slxAITL+eLOIJCGewXk="; # ysld
   };
 
 }

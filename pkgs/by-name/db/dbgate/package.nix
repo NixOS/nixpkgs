@@ -61,6 +61,9 @@ if stdenv.hostPlatform.isDarwin then
     '';
   }
 else
+  let
+    appimageContents = appimageTools.extract { inherit pname src version; };
+  in
   appimageTools.wrapType2 {
     inherit
       pname
@@ -68,4 +71,9 @@ else
       src
       meta
       ;
+    extraInstallCommands = ''
+      install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
+      substituteInPlace $out/share/applications/${pname}.desktop --replace-warn "Exec=AppRun --no-sandbox" "Exec=$out/bin/${pname}"
+      cp -r ${appimageContents}/usr/share/icons $out/share
+    '';
   }

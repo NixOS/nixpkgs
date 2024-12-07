@@ -85,11 +85,19 @@ let
     let
       config = (import ../lib/eval-config.nix {
           inherit system;
-          modules =
-            [ ../modules/installer/netboot/netboot.nix
-              ../modules/testing/test-instrumentation.nix
-              { key = "serial"; }
-            ];
+          modules = [
+            ../modules/installer/netboot/netboot.nix
+            ../modules/testing/test-instrumentation.nix
+            {
+              boot.kernelParams = [
+                "serial"
+                "live.nixos.passwordHash=$6$jnwR50SkbLYEq/Vp$wmggwioAkfmwuYqd5hIfatZWS/bO6hewzNIwIrWcgdh7k/fhUzZT29Vil3ioMo94sdji/nipbzwEpxecLZw0d0" # "password"
+              ];
+            }
+            {
+              key = "serial";
+            }
+          ];
         }).config;
       ipxeBootDir = pkgs.symlinkJoin {
         name = "ipxeBootDir";
@@ -103,34 +111,39 @@ let
         pxe = ipxeBootDir;
       } // extraConfig);
     in
-      makeTest {
-        name = "boot-netboot-" + name;
-        nodes = { };
-        testScript = ''
-            machine = create_machine("${startCommand}")
-            machine.start()
-            machine.wait_for_unit("multi-user.target")
-            machine.shutdown()
-          '';
-      };
-in {
-    uefiCdrom = makeBootTest "uefi-cdrom" {
-      uefi = true;
-      cdrom = "${iso}/iso/${iso.isoName}";
+    makeTest {
+      name = "boot-netboot-" + name;
+      nodes = { };
+      testScript = ''
+        machine = create_machine("${startCommand}")
+        machine.start()
+        machine.wait_for_unit("multi-user.target")
+        machine.succeed("grep 'serial' /proc/cmdline")
+        machine.succeed("grep 'live.nixos.passwordHash' /proc/cmdline")
+        machine.succeed("grep '$6$jnwR50SkbLYEq/Vp$wmggwioAkfmwuYqd5hIfatZWS/bO6hewzNIwIrWcgdh7k/fhUzZT29Vil3ioMo94sdji/nipbzwEpxecLZw0d0' /etc/shadow")
+        machine.shutdown()
+      '';
     };
+in
+{
+  uefiCdrom = makeBootTest "uefi-cdrom" {
+    uefi = true;
+    cdrom = "${iso}/iso/${iso.isoName}";
+  };
 
-    uefiUsb = makeBootTest "uefi-usb" {
-      uefi = true;
-      usb = "${iso}/iso/${iso.isoName}";
-    };
+  uefiUsb = makeBootTest "uefi-usb" {
+    uefi = true;
+    usb = "${iso}/iso/${iso.isoName}";
+  };
 
-    uefiNetboot = makeNetbootTest "uefi" {
-      uefi = true;
-    };
-} // lib.optionalAttrs (pkgs.stdenv.hostPlatform.system == "x86_64-linux") {
-    biosCdrom = makeBootTest "bios-cdrom" {
-      cdrom = "${iso}/iso/${iso.isoName}";
-    };
+  uefiNetboot = makeNetbootTest "uefi" {
+    uefi = true;
+  };
+}
+// lib.optionalAttrs (pkgs.stdenv.hostPlatform.system == "x86_64-linux") {
+  biosCdrom = makeBootTest "bios-cdrom" {
+    cdrom = "${iso}/iso/${iso.isoName}";
+  };
 
     biosUsb = makeBootTest "bios-usb" {
       usb = "${iso}/iso/${iso.isoName}";

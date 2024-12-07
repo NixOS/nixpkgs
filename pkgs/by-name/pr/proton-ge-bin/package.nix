@@ -25,7 +25,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Also leave some breadcrumbs in the file.
     echo "${finalAttrs.pname} should not be installed into environments. Please use programs.steam.extraCompatPackages instead." > $out
 
-    ln -s $src $steamcompattool
+    mkdir $steamcompattool
+    ln -s $src/* $steamcompattool
+    rm $steamcompattool/{compatibilitytool.vdf,proton,version}
+    cp $src/{compatibilitytool.vdf,proton,version} $steamcompattool
+
+    sed -i -r 's|GE-Proton[0-9]*-[0-9]*|GE-Proton|' $steamcompattool/compatibilitytool.vdf
+    sed -i -r 's|GE-Proton[0-9]*-[0-9]*|GE-Proton|' $steamcompattool/proton
 
     runHook postBuild
   '';

@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "flask-allowed-hosts";
-  version = "1.1.2";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "flask_allowed_hosts";
-    hash = "sha256-l25bZlJkOVI+S+HtAK22ZGULP95evx2NASA9ViIax7Q=";
+    hash = "sha256-LL0Vm33R0BYo8IKyjAzpvO7ls4EfcPx3cx3OU6OsE6s=";
   };
 
   build-system = [ setuptools ];

@@ -8,7 +8,7 @@ with python3Packages;
 
 buildPythonPackage rec {
   pname = "manga-ocr";
-  version = "0.1.12";
+  version = "0.1.13";
   disabled = pythonOlder "3.7";
   format = "pyproject";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "kha-white";
     repo = "manga-ocr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uSWnrHS59fNcF7ve3imMwwNJ+/dmplBAavbDoBkEgGc=";
+    hash = "sha256-0EwXDMnA9SCmSsMVXnMenSFSzs74lorFNNym9y/NNsI=";
   };
 
   build-system = [

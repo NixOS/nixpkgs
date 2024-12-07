@@ -40,6 +40,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-maV2+Whi4aDG1VLAYpOTxluO9I0zNiZ8fA3w7epGlDg=";
   };
 
+  patches = [
+    # The `.pc` file lists `iconv` in `Requires.private` when `-liconv`
+    # is required, even though common platforms in that situation like
+    # Darwin don’t ship a `.pc` file for their `libiconv`. This isn’t
+    # upstreamed as there are a handful of closed or regressed PRs
+    # trying to fix it already and it seems upstream added this to deal
+    # with some non‐portable MSYS2 thing or something.
+    #
+    # See:
+    #
+    # * <https://github.com/libarchive/libarchive/issues/1766>
+    # * <https://github.com/libarchive/libarchive/issues/1819>
+    # * <https://github.com/Homebrew/homebrew-core/blob/f8e9e8d4f30979dc99146b5877fce76be6d35124/Formula/lib/libarchive.rb#L48-L52>
+    ./fix-pkg-config-iconv.patch
+  ];
+
   outputs = [ "out" "lib" "dev" ];
 
   postPatch = let

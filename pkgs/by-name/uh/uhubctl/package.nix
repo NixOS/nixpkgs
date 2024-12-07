@@ -1,6 +1,8 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, which
+, pkg-config
 , libusb1
 }:
 
@@ -15,6 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-mpeDePHLsa4sGe2+8X9KQ8AYn7wtybDnaZzxnf4oETQ=";
   };
 
+  nativeBuildInputs = [ which pkg-config ];
+
   buildInputs = [ libusb1 ];
 
   installFlags = [ "prefix=${placeholder "out"}" ];
@@ -23,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mvp/uhubctl";
     description = "Utility to control USB power per-port on smart USB hubs";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = with maintainers; [ prusnak carlossless ];
     platforms = with platforms; linux ++ darwin;
     mainProgram = "uhubctl";
   };

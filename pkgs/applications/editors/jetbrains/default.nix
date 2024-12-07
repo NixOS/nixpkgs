@@ -14,7 +14,6 @@ in
 , zlib
 , python3
 , lldb
-, dotnet-sdk_7
 , dotnet-sdk_8
 , maven
 , openssl
@@ -241,7 +240,7 @@ rec {
 
           for dir in lib/ReSharperHost/linux-*; do
             rm -rf $dir/dotnet
-            ln -s ${dotnet-sdk_7.unwrapped}/share/dotnet $dir/dotnet
+            ln -s ${dotnet-sdk_8.unwrapped}/share/dotnet $dir/dotnet
           done
         )
       '';

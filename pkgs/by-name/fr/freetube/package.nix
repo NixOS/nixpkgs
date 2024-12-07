@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime=true}}"
   '';
 
   meta = {
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
       ryneeverett
       alyaeanyx
       ryand56
+      sigmasquadron
     ];
     inherit (electron.meta) platforms;
     mainProgram = "freetube";

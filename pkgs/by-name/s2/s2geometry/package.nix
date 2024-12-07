@@ -47,6 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://s2geometry.io/";
     license = licenses.asl20;
     maintainers = [ maintainers.Thra11 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 })

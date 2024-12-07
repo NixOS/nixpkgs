@@ -11,12 +11,12 @@
 }:
 let
   pname = "homebox";
-  version = "0.15.2";
+  version = "0.16.0";
   src = fetchFromGitHub {
     owner = "sysadminsmedia";
     repo = "homebox";
     rev = "v${version}";
-    hash = "sha256-2jB2Oo0dK36n5tQPrGNyPO3Q0yNkUms4RPQzXiDzuks=";
+    hash = "sha256-d8SQWj7S6G1ZemMH6QL9QZuPQfxNRcfCurPaTnS0Iyo=";
   };
 in
 buildGo123Module {
@@ -38,7 +38,7 @@ buildGo123Module {
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version;
     src = "${src}/frontend";
-    hash = "sha256-fOb3oboNlOv/TpIrs3BsSlxIqNbbtSCE8zLMia2RIDw=";
+    hash = "sha256-x7sWSH84UJEXNRLCgEgXc4NrTRsn6OplANi+XGtIN9Y=";
   };
   pnpmRoot = "../frontend";
 

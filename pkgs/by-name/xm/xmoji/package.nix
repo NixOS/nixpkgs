@@ -14,7 +14,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "xmoji";
+  pname = "xmoji";
   version = "0.8";
 
   src = fetchFromGitHub {

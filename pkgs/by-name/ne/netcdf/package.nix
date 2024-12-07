@@ -36,7 +36,11 @@ in stdenv.mkDerivation rec {
       --replace '#!/bin/bash' '${stdenv.shell}'
   '';
 
-  nativeBuildInputs = [ m4 removeReferencesTo ];
+  nativeBuildInputs = [
+    m4
+    removeReferencesTo
+    libxml2 # xml2-config
+  ];
 
   buildInputs = [
     curl
@@ -47,6 +51,8 @@ in stdenv.mkDerivation rec {
     libzip
     zstd
   ] ++ lib.optional szipSupport szip;
+
+  strictDeps = true;
 
   passthru = {
     inherit mpiSupport mpi;

@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -19,6 +20,8 @@ buildGoModule rec {
 
   subPackages = [ "cmd/httpx" ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   ldflags = [
     "-s"
     "-w"
@@ -26,6 +29,10 @@ buildGoModule rec {
 
   # Tests require network access
   doCheck = false;
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "-version" ];
 
   meta = with lib; {
     description = "Fast and multi-purpose HTTP toolkit";

@@ -52,7 +52,6 @@ in
       services.deepin.dde-daemon.enable = mkForce true;
       services.deepin.dde-api.enable = mkForce true;
       services.deepin.app-services.enable = mkForce true;
-      services.deepin.deepin-anything.enable = mkDefault true;
 
       services.colord.enable = mkDefault true;
       services.accounts-daemon.enable = mkDefault true;
@@ -161,37 +160,28 @@ in
             dde-control-center
             dde-network-core
             dde-clipboard
-            dde-calendar
             dde-polkit-agent
             dpa-ext-gnomekeyring
             deepin-desktop-schemas
-            deepin-terminal
             deepin-kwin
             dde-session
             dde-widgets
             dde-appearance
             dde-application-manager
             deepin-service-manager
-            dde-grand-search
             dde-api-proxy
             dde-tray-loader
           ];
           optionalPackages = [
+            dde-calendar
+            dde-grand-search
+            deepin-terminal
             onboard # dde-dock plugin
             deepin-calculator
             deepin-compressor
             deepin-editor
-            deepin-picker
-            deepin-draw
-            deepin-music
-            deepin-movie-reborn
             deepin-system-monitor
             deepin-shortcut-viewer
-            # freeimage has knownVulnerabilties, don't install packages using freeiamge by default
-            # deepin-album
-            # deepin-camera
-            # deepin-image-viewer
-            # deepin-screen-recorder
           ];
         in
         requiredPackages

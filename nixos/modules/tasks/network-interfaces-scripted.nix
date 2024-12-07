@@ -260,7 +260,6 @@ let
             bindsTo = optional (!config.boot.isContainer) "dev-net-tun.device";
             after = optional (!config.boot.isContainer) "dev-net-tun.device" ++ [ "network-pre.target" ];
             wantedBy = [ "network-setup.service" (subsystemDevice i.name) ];
-            partOf = [ "network-setup.service" ];
             before = [ "network-setup.service" ];
             path = [ pkgs.iproute2 ];
             serviceConfig = {
@@ -411,7 +410,6 @@ let
           { description = "Bond Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
-            partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps
               ++ map (i: "network-addresses-${i}.service") v.interfaces;
             before = [ "network-setup.service" ];
@@ -450,7 +448,6 @@ let
           { description = "MACVLAN Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
-            partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
@@ -485,7 +482,6 @@ let
           { description = "FOU endpoint ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
-            partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
@@ -508,7 +504,6 @@ let
           { description = "6-to-4 Tunnel Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
-            partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
@@ -542,7 +537,6 @@ let
           { description = "GRE Tunnel Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
-            partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
             before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";

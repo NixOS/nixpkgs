@@ -47,6 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_plugin_install_notexisting"
     "test_plugin_install"
     "test_plugin_uninstall"
+    "test_backend_option_unknown_by_backend"
     # Tests require network access
     "test_check_with_issues"
     "test_plugin_show_identifier"

@@ -12,6 +12,7 @@
   cython,
   cmake,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -19,19 +20,23 @@ buildPythonPackage rec {
   version = "24.9.4";
 
   pyproject = true;
-  build-system = [ setuptools ];
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
-    pname = "BoltzTraP2";
+    pname = "boltztrap2";
     inherit version;
     hash = "sha256-BfGR7sY0E9r+RXA1fC9uy1GXC+EFV1RKOvMyvGcf+aE=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "USE_CYTHON = False" "USE_CYTHON = True"
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0" "numpy"
   '';
 
   dontUseCmakeConfigure = true;

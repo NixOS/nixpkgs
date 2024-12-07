@@ -203,7 +203,7 @@ let
     # This is set primarily to help find-tarballs.nix to do its job
     requiredTeXPackages = builtins.filter lib.isDerivation (pkgList.bin ++ pkgList.nonbin
       ++ lib.optionals (! __fromCombineWrapper)
-        (lib.concatMap (n: (pkgList.otherOutputs.${n} or [ ] ++ pkgList.specifiedOutputs.${n} or [ ]))) pkgList.nonEnvOutputs);
+        (lib.concatMap (n: (pkgList.otherOutputs.${n} or [ ] ++ pkgList.specifiedOutputs.${n} or [ ])) pkgList.nonEnvOutputs));
     # useful for inclusion in the `fonts.packages` nixos option or for use in devshells
     fonts = "${texmfroot}/texmf-dist/fonts";
     # support variants attrs, (prev: attrs)

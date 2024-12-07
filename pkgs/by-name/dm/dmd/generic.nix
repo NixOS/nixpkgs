@@ -82,6 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
       extraPrefix = "dmd/";
       hash = "sha256-N21mAPfaTo+zGCip4njejasraV5IsWVqlGR5eOdFZZE=";
     })
+  ] ++ lib.optionals (lib.versionOlder version "2.110.0") [
+    (fetchpatch {
+      url = "https://github.com/dlang/dmd/commit/fdd25893e0ac04893d6eba8652903d499b7b0dfc.patch";
+      stripLen = 1;
+      extraPrefix = "dmd/";
+      hash = "sha256-Uccb8rBPBLAEPWbOYWgdR5xN3wJoIkKKhLGu58IK1sM=";
+    })
   ];
 
   postPatch = ''

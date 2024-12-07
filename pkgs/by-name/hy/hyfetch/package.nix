@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   python3Packages,
+  pciutils,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "hyfetch";
@@ -29,6 +30,11 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [
     "hyfetch"
   ];
+
+  postFixup = ''
+    wrapProgram $out/bin/neowofetch \
+      --prefix PATH : ${lib.makeBinPath [ pciutils ]}
+  '';
 
   meta = {
     description = "neofetch with pride flags <3";

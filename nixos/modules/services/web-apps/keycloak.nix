@@ -281,8 +281,8 @@ in
           options = {
             http-host = mkOption {
               type = str;
-              default = "0.0.0.0";
-              example = "127.0.0.1";
+              default = "::";
+              example = "::1";
               description = ''
                 On which address Keycloak should accept new connections.
               '';

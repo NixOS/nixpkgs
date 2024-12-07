@@ -37,7 +37,7 @@
 
 let
   python3Runtime = python3.withPackages (ps: with ps; [ pygobject3 ]);
-  python3BuildEnv = python3.buildEnv.override {
+  python3BuildEnv = python3.pythonOnBuildForHost.buildEnv.override {
     # ImportError: No module named site
     postBuild = ''
       makeWrapper ${glib.dev}/bin/gdbus-codegen $out/bin/gdbus-codegen --unset PYTHONPATH
@@ -97,8 +97,10 @@ stdenv.mkDerivation rec {
     # The `AX_PROG_{CC,CXX}_FOR_BUILD` autoconf macros can pick up unwrapped GCC binaries,
     # so we set `{CC,CXX}_FOR_BUILD` to override that behavior.
     # https://github.com/NixOS/nixpkgs/issues/21751
-    "CC_FOR_BUILD=${stdenv.cc}/bin/cc"
-    "CXX_FOR_BUILD=${stdenv.cc}/bin/c++"
+    "CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
+    "CXX_FOR_BUILD=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++"
+    "GLIB_COMPILE_RESOURCES=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
+    "PKG_CONFIG_VAPIGEN_VAPIGEN=${lib.getBin buildPackages.vala}/bin/vapigen"
     "--disable-memconf"
     (lib.enableFeature (dconf != null) "dconf")
     (lib.enableFeature (libnotify != null) "libnotify")
@@ -109,12 +111,18 @@ stdenv.mkDerivation rec {
     "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
     "--with-emoji-annotation-dir=${cldr-annotations}/share/unicode/cldr/common/annotations"
+    "--with-python=${python3BuildEnv.interpreter}"
     "--with-ucd-dir=${unicode-character-database}/share/unicode"
   ];
 
   makeFlags = [
     "test_execsdir=${placeholder "installedTests"}/libexec/installed-tests/ibus"
     "test_sourcesdir=${placeholder "installedTests"}/share/installed-tests/ibus"
+  ];
+
+
+  depsBuildBuild = [
+    pkg-config
   ];
 
   nativeBuildInputs = [
@@ -146,6 +154,7 @@ stdenv.mkDerivation rec {
     json-glib
     libnotify
     libdbusmenu-gtk3
+    vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
   ] ++ lib.optionals withWayland [
     libxkbcommon
     wayland

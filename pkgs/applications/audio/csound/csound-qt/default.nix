@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "csound-qt";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "CsoundQt";
     repo = "CsoundQt";
     rev = "v${version}";
-    hash = "sha256-ufjZQnO3H5pwdeEwGqunbXCfx7nvWTzak4cwVYWqvz4=";
+    hash = "sha256-ZdQwWRAr6AKLmZ/L0lSxIlvWRLoZIKinn7BAQiR+luk=";
   };
 
   patches = [

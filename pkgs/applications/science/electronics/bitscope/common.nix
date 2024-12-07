@@ -57,6 +57,7 @@ let
     '';
   });
 in buildFHSEnv {
-  name = "${attrs.toolName}-${attrs.version}";
+  pname = attrs.toolName;
+  inherit (attrs) version;
   runScript = "${pkg.outPath}/bin/${attrs.toolName}";
 } // { inherit (pkg) meta name; }

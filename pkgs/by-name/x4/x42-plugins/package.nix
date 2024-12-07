@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "x42-plugins";
-  version = "20230315";
+  version = "20240611";
 
   src = fetchurl {
     url = "https://gareus.org/misc/x42-plugins/${pname}-${version}.tar.xz";
-    hash = "sha256-l7Wg+G795i4QFI94NHcPDnvJMYcfQONUkIJeyX2bZos=";
+    hash = "sha256-lO6Y1zEGGhv6HIrHmq9b0LA37K3ZzBtC/ERzBsGUZiw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
     patchShebangs ./stepseq.lv2/gridgen.sh
     patchShebangs ./matrixmixer.lv2/genttl.sh
     patchShebangs ./matrixmixer.lv2/genhead.sh
-    sed -i 's|/usr/include/zita-convolver.h|${zita-convolver}/include/zita-convolver.h|g' ./convoLV2/Makefile
   '';
 
   enableParallelBuilding = true;

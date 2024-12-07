@@ -109,11 +109,23 @@ def diff($before; $after):
 | ($after[0] | expand_system) as $after
 | .attrdiff = diff($before; $after)
 | .rebuildsByKernel = (
-  .attrdiff.changed
-  | map({
-    key: .,
-    value: diff($before."\(.)"; $after."\(.)").changed
-  })
+  [
+    (
+      .attrdiff.changed[]
+      | {
+        key: .,
+        value: diff($before."\(.)"; $after."\(.)").changed
+      }
+    )
+    ,
+    (
+      .attrdiff.added[]
+      | {
+        key: .,
+        value: ($after."\(.)" | keys)
+      }
+    )
+  ]
   | from_entries
   | transpose
 )
@@ -146,7 +158,7 @@ def diff($before; $after):
       elif .value <= 5000 then
         "2501-5000"
       else
-        "5000+"
+        "5001+"
       end
   )
 )

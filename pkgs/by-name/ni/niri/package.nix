@@ -1,6 +1,5 @@
 {
   lib,
-  clang,
   dbus,
   eudev,
   fetchFromGitHub,
@@ -51,7 +50,6 @@ rustPlatform.buildRustPackage rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    clang
     pkg-config
     rustPlatform.bindgenHook
   ];

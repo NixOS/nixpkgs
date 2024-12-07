@@ -25,7 +25,7 @@ let
   '';
 in
 {
-  meta.maintainers = with lib.maintainers; [ ambroisie ];
+  meta.maintainers = with lib.maintainers; [ ];
 
   options.services.tandoor-recipes = {
     enable = lib.mkOption {

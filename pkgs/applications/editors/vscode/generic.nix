@@ -63,7 +63,8 @@ let
   # extension tooling without significant pain.
   fhs = { additionalPkgs ? pkgs: [ ] }: buildFHSEnv {
     # also determines the name of the wrapped command
-    name = executableName;
+    pname = executableName;
+    inherit version;
 
     # additional libraries which are commonly needed for extensions
     targetPkgs = pkgs: (with pkgs; [
@@ -211,7 +212,7 @@ in
           "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdbusmenu ]}"}
       # Add gio to PATH so that moving files to the trash works when not using a desktop environment
       --prefix PATH : ${glib.bin}/bin
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
       --add-flags ${lib.escapeShellArg commandLineArgs}
     )
   '';

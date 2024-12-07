@@ -11,12 +11,11 @@ let
   };
 
   binary = appimageTools.wrapType2 {
-    name = pname;
-    inherit src;
+    inherit pname version src;
   };
   # we only use this to extract the icon
   appimage-contents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 
   desktopItem = makeDesktopItem {

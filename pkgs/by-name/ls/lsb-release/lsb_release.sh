@@ -1,4 +1,4 @@
-#! @shell@
+#! @runtimeShell@
 
 set -o errexit
 set -o nounset

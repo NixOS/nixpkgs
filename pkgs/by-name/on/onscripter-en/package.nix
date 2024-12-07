@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Japanese visual novel scripting engine";
     license = lib.licenses.gpl2Plus;
     mainProgram = "onscripter-en";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

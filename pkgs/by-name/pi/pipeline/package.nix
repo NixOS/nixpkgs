@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipeline";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "pipeline";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8LKd7zZuwo/HtxFo8x8UpO1Y8/DnTZmaOYrc9NmnIrc=";
+    hash = "sha256-1HNhcWNJsWik58Ho3+y4cHRRpHDug1zfumrMZA836DI=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

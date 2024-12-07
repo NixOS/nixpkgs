@@ -300,7 +300,7 @@ in {
 
               capabilities = mkOption {
                 type = types.listOf types.str;
-                default = ["HT40" "HT40-" "SHORT-GI-20" "SHORT-GI-40"];
+                default = ["HT40" "SHORT-GI-20" "SHORT-GI-40"];
                 example = ["LDPC" "HT40+" "HT40-" "GF" "SHORT-GI-20" "SHORT-GI-40" "TX-STBC" "RX-STBC1"];
                 description = ''
                   HT (High Throughput) capabilities given as a list of flags.
@@ -1001,7 +1001,7 @@ in {
                     "20-addMacAllowFromSaeFile" = mkIf (bssCfg.authentication.saeAddToMacAllow && bssCfg.authentication.saePasswordsFile != null) (pkgs.writeShellScript "add-mac-allow-from-sae-file" ''
                       MAC_ALLOW_FILE=$2
                       grep mac= ${escapeShellArg bssCfg.authentication.saePasswordsFile} \
-                        | grep -v '\s*#' \
+                        | grep -v '^\s*#' \
                         | grep -Eo 'mac=([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})' \
                         | sed 's|^mac=||' >> "$MAC_ALLOW_FILE"
                     '');
@@ -1025,7 +1025,7 @@ in {
                     # Add sae passwords from file
                     "20-saePasswordsFile" = mkIf (bssCfg.authentication.saePasswordsFile != null) (pkgs.writeShellScript "sae-passwords-file" ''
                       HOSTAPD_CONFIG_FILE=$1
-                      grep -v '\s*#' ${escapeShellArg bssCfg.authentication.saePasswordsFile} \
+                      grep -v '^\s*#' ${escapeShellArg bssCfg.authentication.saePasswordsFile} \
                         | sed 's/^/sae_password=/' >> "$HOSTAPD_CONFIG_FILE"
                     '');
                   };

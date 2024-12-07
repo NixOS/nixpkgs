@@ -29,7 +29,7 @@ let
     )}
     set +a
     ${artisan} package:discover
-    ${artisan} cache:clear
+    rm ${cfg.dataDir}/cache/*.php
     ${artisan} config:cache
   '';
 

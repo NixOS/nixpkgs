@@ -27,13 +27,13 @@
 
 resholve.mkDerivation rec {
   pname = "bats";
-  version = "1.11.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "bats-core";
     repo = "bats-core";
     rev = "v${version}";
-    hash = "sha256-goHIhbBoCf1eb1N8xIHdVvAURofvLDgEDXofhDHrr7Y=";
+    hash = "sha256-+qmCeLixfLak09XxgSe6ONcH1IoHGl5Au0s9JyNm95g=";
   };
 
   patchPhase = ''

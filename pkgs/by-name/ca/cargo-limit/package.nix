@@ -2,8 +2,6 @@
 , rustPlatform
 , fetchFromGitHub
 , nix-update-script
-, stdenv
-, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,8 +16,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-dwqbG0UFeUQHa0K98ebHfjbcQuQOhK2s6ZxAT6r0cik=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   passthru = {
     updateScript = nix-update-script { };

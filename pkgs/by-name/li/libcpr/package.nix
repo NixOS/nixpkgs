@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "1.11.0";
+  version = "1.11.1";
 in
 stdenv.mkDerivation {
   pname = "libcpr";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     owner = "libcpr";
     repo = "cpr";
     rev = version;
-    hash = "sha256-jWyss0krj8MVFqU1LAig+4UbXO5pdcWIT+hCs9DxemM=";
+    hash = "sha256-RIRqkb2Id3cyz35LM4bYftMv1NGyDyFP4fL4L5mHV8A=";
   };
 
   nativeBuildInputs = [ cmake ];

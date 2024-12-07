@@ -50,6 +50,8 @@
 , hasManpages ? false
 , hasRunfiles ? false
 , hasTlpkg ? false
+, hasCatalogue ? true
+, catalogue ? pname
 , extraNativeBuildInputs ? [ ]
 , ...
 }@args:
@@ -73,6 +75,8 @@ let
     hydraPlatforms = [ ];
   } // lib.optionalAttrs (args ? shortdesc) {
     description = args.shortdesc;
+  } // lib.optionalAttrs hasCatalogue {
+    homepage = "https://ctan.org/pkg/${catalogue}";
   };
 
   hasBinfiles = args ? binfiles && args.binfiles != [ ];
