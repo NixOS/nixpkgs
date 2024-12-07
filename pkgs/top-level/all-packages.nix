@@ -3282,10 +3282,6 @@ with pkgs;
 
   schleuder-cli = callPackage ../tools/security/schleuder/cli { };
 
-  tealdeer = callPackage ../tools/misc/tealdeer {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   teamocil = callPackage ../tools/misc/teamocil { };
 
   tsm-client-withGui = callPackage ../by-name/ts/tsm-client/package.nix { enableGui = true; };
