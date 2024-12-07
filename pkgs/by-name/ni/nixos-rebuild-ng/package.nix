@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication rec {
       --subst-var-by withShellFiles ${lib.boolToString withShellFiles}
 
     substituteInPlace pyproject.toml \
-      --subst-var-by executable ${executable}
+      --replace-fail nixos-rebuild ${executable}
   '';
 
   postInstall = lib.optionalString withShellFiles ''
