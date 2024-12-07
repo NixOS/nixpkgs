@@ -18,13 +18,6 @@ rustPlatform.buildRustPackage {
     "anki-sync-server"
   ];
 
-  checkFlags = [
-    # these two tests are flaky, see https://github.com/ankitects/anki/issues/3353
-    # Also removed from anki when removing this.
-    "--skip=media::check::test::unicode_normalization"
-    "--skip=scheduler::answering::test::state_application"
-  ];
-
   nativeBuildInputs = [
     pkg-config
   ];

@@ -226,13 +226,6 @@ python3.pkgs.buildPythonApplication {
   # TODO: verify if this is still true (I can't, no mac)
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  checkFlags = [
-    # these two tests are flaky, see https://github.com/ankitects/anki/issues/3353
-    # Also removed from anki-sync-server when removing this.
-    "--skip=media::check::test::unicode_normalization"
-    "--skip=scheduler::answering::test::state_application"
-  ];
-
   dontUseNinjaInstall = false;
   dontWrapQtApps = true;
 
