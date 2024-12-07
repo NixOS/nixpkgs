@@ -13,6 +13,10 @@ stdenv.mkDerivation {
 
   preBuild = ''
     substituteInPlace Makefile --replace-fail "modules_install" "INSTALL_MOD_PATH=$out modules_install"
+    substituteInPlace hid-lg4ff.c --replace-fail "#include \"hid-ids.h\"" "
+    #include \"hid-ids.h\"
+    #define CONFIG_LEDS_CLASS 1
+    "
     sed -i '/depmod/d' Makefile
     sed -i "10i\\\trmmod hid-logitech 2> /dev/null || true" Makefile
     sed -i "11i\\\trmmod hid-logitech-new 2> /dev/null || true" Makefile
