@@ -15,8 +15,8 @@ stdenvNoCC.mkDerivation {
   dontUnpack = true;
 
   nativeBuildInputs = [
-    xorg.lndir
     wrapGAppsHook3
+    xorg.lndir
   ];
 
   installPhase = ''
