@@ -6,7 +6,7 @@
 
 buildDunePackage rec {
   pname = "earlybird";
-  version = "1.3.2";
+  version = "1.3.3";
 
   minimalOCamlVersion = "4.12";
 
@@ -14,7 +14,7 @@ buildDunePackage rec {
     owner = "hackwaly";
     repo = "ocamlearlybird";
     rev = version;
-    hash = "sha256-E6ZZRkGO6Bqr6jWlV9fL3ibFwUVChHR17TPGeP94hfk=";
+    hash = "sha256-TzRJ+0I3VEx4Lvj3lhN9POzlXRgmTTdD5Bg1AX0pf3c=";
   };
 
   nativeBuildInputs = [ menhir ];
