@@ -4,12 +4,10 @@
 , autoreconfHook
 , libassuan
 , libgpg-error
-, libiconv
 , makeBinaryWrapper
 , texinfo
 , common-updater-scripts
 , writers
-, Cocoa
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +38,6 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook makeBinaryWrapper texinfo ];
-  buildInputs = [ libassuan libgpg-error libiconv Cocoa ];
 
   configureFlags = [
     "--enable-maintainer-mode"
