@@ -6867,9 +6867,6 @@ with pkgs;
   cargo-cyclonedx = callPackage ../development/tools/rust/cargo-cyclonedx {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
   };
-  cargo-deadlinks = callPackage ../development/tools/rust/cargo-deadlinks {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
   cargo-edit = callPackage ../development/tools/rust/cargo-edit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
