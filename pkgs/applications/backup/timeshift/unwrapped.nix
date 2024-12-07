@@ -27,10 +27,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-2qNLgUZLMcfoemdLvvjdkR7Ln5loSKGqbd402y5Id8k=";
   };
 
-  patches = [
-    ./timeshift-launcher.patch
-  ];
-
   postPatch = ''
     for FILE in src/Core/Main.vala src/Utility/Device.vala; do
       substituteInPlace "$FILE" \
@@ -39,6 +35,10 @@ stdenv.mkDerivation rec {
 
     substituteInPlace ./src/Utility/IconManager.vala \
       --replace-fail "/usr/share" "$out/share"
+
+    substituteInPlace ./src/timeshift-launcher \
+      --replace-fail "app_command='timeshift-gtk'" ${lib.escapeShellArg ''app_command="$(realpath "$(dirname "$0")")/timeshift-gtk"''} \
+      --replace-fail ${lib.escapeShellArg ''pkexec ''${app_command}''} ${lib.escapeShellArg ''pkexec env DISPLAY="$DISPLAY" XAUTHORITY="$XAUTHORITY" "''${app_command}"''}
   '';
 
   nativeBuildInputs = [
