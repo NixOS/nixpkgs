@@ -79,6 +79,7 @@ stdenv.mkDerivation (
       cargo
     ] ++ nativeBuildInputs;
 
+    dontConfigure = true;
     buildPhase = ''
       runHook preBuild
 

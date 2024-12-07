@@ -185,12 +185,12 @@ final: prev:
 
   LazyVim = buildVimPlugin {
     pname = "LazyVim";
-    version = "2024-12-02";
+    version = "2024-12-05";
     src = fetchFromGitHub {
       owner = "LazyVim";
       repo = "LazyVim";
-      rev = "4a626a81372df74c3ea33b435e91b127ef55a796";
-      sha256 = "0y0569j9yiqk08paa5ic58r2gvk06iy3211sgl41fkfg00dk362v";
+      rev = "b2f750558a3737879f8151e741e7a3988886e37f";
+      sha256 = "0jz611zvsvilvf8gb9wky70jcp7pnla5yf48qfcn9sa3arm7666h";
     };
     meta.homepage = "https://github.com/LazyVim/LazyVim/";
   };
@@ -5764,12 +5764,12 @@ final: prev:
 
   lazy-nvim = buildVimPlugin {
     pname = "lazy.nvim";
-    version = "2024-11-20";
+    version = "2024-12-05";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "lazy.nvim";
-      rev = "56ead98e05bb37a4ec28930a54d836d033cf00f2";
-      sha256 = "0fcb6zrxbrj0nnkbb7cilqsjr500rv43r5w9nbk9apvjcjx8rkg0";
+      rev = "3388a26417c48b15d5266d954f62a4d47fe99490";
+      sha256 = "15is61zfs4nkhjcdcg036fvv6rdd1kgyr6k704rcn77717m6ix6s";
     };
     meta.homepage = "https://github.com/folke/lazy.nvim/";
   };

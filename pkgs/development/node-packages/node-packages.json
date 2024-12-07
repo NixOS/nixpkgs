@@ -223,7 +223,6 @@
 , "vscode-json-languageserver"
 , "wavedrom-cli"
 , "webpack"
-, "webpack-dev-server"
 , "copy-webpack-plugin"
 , "webtorrent-cli"
 , "wring"

@@ -46,10 +46,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "9";
-      patch = "20";
+      patch = "21";
       suffix = "";
     };
-    hash = "sha256-aygSee/YUpTS1pk+FzmDpXRkwBM5Vvu7VTbslka+rww=";
+    hash = "sha256-MSb1lZLJsNeYWEdV8r97CB+hyjXOem/qmAEI11KgW7E=";
     inherit passthruFun;
   };
 
@@ -58,10 +58,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "10";
-      patch = "15";
+      patch = "16";
       suffix = "";
     };
-    hash = "sha256-qrCVCBdzUXJgGHmHLZN8HkkopXxAmuAjaew9kdzOvnk=";
+    hash = "sha256-v7JJYJmQIgSRobkoUKBxNe0IMeQXOM9oHWPPAbKo+9E=";
     inherit passthruFun;
   };
 
@@ -70,10 +70,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "11";
-      patch = "10";
+      patch = "11";
       suffix = "";
     };
-    hash = "sha256-B6Q1bpEpAOYaFcsJSaBsSgUBLiE+zWtOhND2equ+43I=";
+    hash = "sha256-Kpkgx6DNI23jNkTtmAoTy7whBYv9xSj+u2CBV17XO+M=";
     inherit passthruFun;
   };
 

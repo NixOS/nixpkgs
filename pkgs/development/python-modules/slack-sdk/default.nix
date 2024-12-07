@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.33.4";
+  version = "3.33.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WIUhkIFWbIcxjTjzZ2C3VNFhGftBmyYO3iaHpz6d+Sc=";
+    hash = "sha256-kpilxg/S9/U6lJW8FsMvcdGh+qqDH0Kr66sc+HsY2DM=";
   };
 
   postPatch = ''

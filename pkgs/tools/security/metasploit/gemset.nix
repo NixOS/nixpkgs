@@ -1,6 +1,5 @@
 {
   aarch64 = {
-    dependencies = ["racc"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -21,7 +20,6 @@
     version = "0.1.2";
   };
   actionpack = {
-    dependencies = ["actionview" "activesupport" "rack" "rack-test" "rails-dom-testing" "rails-html-sanitizer"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -32,7 +30,6 @@
     version = "7.0.8.6";
   };
   actionview = {
-    dependencies = ["activesupport" "builder" "erubi" "rails-dom-testing" "rails-html-sanitizer"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -43,7 +40,6 @@
     version = "7.0.8.6";
   };
   activemodel = {
-    dependencies = ["activesupport"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -54,7 +50,6 @@
     version = "7.0.8.6";
   };
   activerecord = {
-    dependencies = ["activemodel" "activesupport"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -65,7 +60,6 @@
     version = "7.0.8.6";
   };
   activesupport = {
-    dependencies = ["concurrent-ruby" "i18n" "minitest" "tzinfo"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -76,7 +70,6 @@
     version = "7.0.8.6";
   };
   addressable = {
-    dependencies = ["public_suffix"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -97,7 +90,6 @@
     version = "0.2.2";
   };
   arel-helpers = {
-    dependencies = ["activerecord"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -138,7 +130,6 @@
     version = "1.999.0";
   };
   aws-sdk-core = {
-    dependencies = ["aws-eventstream" "aws-partitions" "aws-sigv4" "jmespath"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -149,7 +140,6 @@
     version = "3.211.0";
   };
   aws-sdk-ec2 = {
-    dependencies = ["aws-sdk-core" "aws-sigv4"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -160,7 +150,6 @@
     version = "1.486.0";
   };
   aws-sdk-ec2instanceconnect = {
-    dependencies = ["aws-sdk-core" "aws-sigv4"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -171,7 +160,6 @@
     version = "1.52.0";
   };
   aws-sdk-iam = {
-    dependencies = ["aws-sdk-core" "aws-sigv4"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -182,7 +170,6 @@
     version = "1.112.0";
   };
   aws-sdk-kms = {
-    dependencies = ["aws-sdk-core" "aws-sigv4"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -193,7 +180,6 @@
     version = "1.95.0";
   };
   aws-sdk-s3 = {
-    dependencies = ["aws-sdk-core" "aws-sdk-kms" "aws-sigv4"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -204,7 +190,6 @@
     version = "1.169.0";
   };
   aws-sdk-ssm = {
-    dependencies = ["aws-sdk-core" "aws-sigv4"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -215,7 +200,6 @@
     version = "1.183.0";
   };
   aws-sigv4 = {
-    dependencies = ["aws-eventstream"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -276,7 +260,6 @@
     version = "2.4.15";
   };
   bootsnap = {
-    dependencies = ["msgpack"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -377,7 +360,6 @@
     version = "3.3.4";
   };
   dnsruby = {
-    dependencies = ["simpleidn"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -418,7 +400,6 @@
     version = "1.3.0";
   };
   elftools = {
-    dependencies = ["bindata"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -429,7 +410,6 @@
     version = "1.3.1";
   };
   em-http-request = {
-    dependencies = ["addressable" "cookiejar" "em-socksify" "eventmachine" "http_parser.rb"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -440,7 +420,6 @@
     version = "1.1.7";
   };
   em-socksify = {
-    dependencies = ["base64" "eventmachine"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -471,7 +450,6 @@
     version = "1.2.7";
   };
   faker = {
-    dependencies = ["i18n"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -482,7 +460,6 @@
     version = "3.5.1";
   };
   faraday = {
-    dependencies = ["base64" "faraday-net_http" "ruby2_keywords"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -503,7 +480,6 @@
     version = "3.0.2";
   };
   faraday-retry = {
-    dependencies = ["faraday"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -514,7 +490,6 @@
     version = "2.2.1";
   };
   faye-websocket = {
-    dependencies = ["eventmachine" "websocket-driver"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -555,7 +530,6 @@
     version = "0.2.1";
   };
   gssapi = {
-    dependencies = ["ffi"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -566,7 +540,6 @@
     version = "1.3.1";
   };
   gyoku = {
-    dependencies = ["builder" "rexml"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -597,7 +570,6 @@
     version = "0.4.2";
   };
   hrr_rb_ssh-ed25519 = {
-    dependencies = ["ed25519" "hrr_rb_ssh"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -608,7 +580,6 @@
     version = "0.4.2";
   };
   http-cookie = {
-    dependencies = ["domain_name"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -639,7 +610,6 @@
     version = "2.8.3";
   };
   i18n = {
-    dependencies = ["concurrent-ruby"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -660,7 +630,6 @@
     version = "0.7.2";
   };
   irb = {
-    dependencies = ["reline"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -681,7 +650,6 @@
     version = "1.6.2";
   };
   jsobfu = {
-    dependencies = ["rkelly-remix"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -712,7 +680,6 @@
     version = "1.1.4";
   };
   logging = {
-    dependencies = ["little-plugger" "multi_json"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -723,7 +690,6 @@
     version = "2.4.0";
   };
   loofah = {
-    dependencies = ["crass" "nokogiri"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -744,7 +710,6 @@
     version = "1.0.5";
   };
   metasploit-concern = {
-    dependencies = ["activemodel" "activesupport" "railties" "zeitwerk"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -755,7 +720,6 @@
     version = "5.0.3";
   };
   metasploit-credential = {
-    dependencies = ["metasploit-concern" "metasploit-model" "metasploit_data_models" "net-ssh" "pg" "railties" "rex-socket" "rubyntlm" "rubyzip"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -766,20 +730,18 @@
     version = "6.0.11";
   };
   metasploit-framework = {
-    dependencies = ["aarch64" "abbrev" "actionpack" "activerecord" "activesupport" "aws-sdk-ec2" "aws-sdk-ec2instanceconnect" "aws-sdk-iam" "aws-sdk-s3" "aws-sdk-ssm" "base64" "bcrypt" "bcrypt_pbkdf" "bigdecimal" "bootsnap" "bson" "chunky_png" "csv" "dnsruby" "drb" "ed25519" "elftools" "em-http-request" "eventmachine" "faker" "faraday" "faraday-retry" "faye-websocket" "ffi" "filesize" "getoptlong" "hrr_rb_ssh-ed25519" "http-cookie" "irb" "jsobfu" "json" "metasm" "metasploit-concern" "metasploit-credential" "metasploit-model" "metasploit-payloads" "metasploit_data_models" "metasploit_payloads-mettle" "mqtt" "msgpack" "mutex_m" "nessus_rest" "net-imap" "net-ldap" "net-sftp" "net-smtp" "net-ssh" "network_interface" "nexpose" "nokogiri" "octokit" "openssl-ccm" "openvas-omp" "packetfu" "patch_finder" "pcaprub" "pdf-reader" "pg" "puma" "railties" "rasn1" "rb-readline" "recog" "redcarpet" "reline" "rex-arch" "rex-bin_tools" "rex-core" "rex-encoder" "rex-exploitation" "rex-java" "rex-mime" "rex-nop" "rex-ole" "rex-powershell" "rex-random_identifier" "rex-registry" "rex-rop_builder" "rex-socket" "rex-sslscan" "rex-struct2" "rex-text" "rex-zip" "ruby-macho" "ruby-mysql" "ruby_smb" "rubyntlm" "rubyzip" "sinatra" "sqlite3" "sshkey" "swagger-blocks" "thin" "tzinfo" "tzinfo-data" "unix-crypt" "warden" "win32api" "windows_error" "winrm" "xdr" "xmlrpc" "zeitwerk"];
     groups = ["default"];
     platforms = [];
     source = {
       fetchSubmodules = false;
-      rev = "c58328ce3f0a86d24580e76961476ad37b8d6de9";
-      sha256 = "0lr8kdf2bqj8a0ag1qc3ffpi6silnqrcxb8x6hj0dffvjvzhbkgx";
+      rev = "b815ef9870c45e2f9d2e62475e1780ddb9bfb1d0";
+      sha256 = "10qiyvrncdfvvfgl2wsfyyx5dz1g8p581zmvaravp5vys25sw3k6";
       type = "git";
       url = "https://github.com/rapid7/metasploit-framework";
     };
-    version = "6.4.37";
+    version = "6.4.39";
   };
   metasploit-model = {
-    dependencies = ["activemodel" "activesupport" "railties"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -800,7 +762,6 @@
     version = "2.0.187";
   };
   metasploit_data_models = {
-    dependencies = ["activerecord" "activesupport" "arel-helpers" "metasploit-concern" "metasploit-model" "pg" "railties" "recog" "webrick"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -881,7 +842,6 @@
     version = "1.15.0";
   };
   mustermann = {
-    dependencies = ["ruby2_keywords"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -912,7 +872,6 @@
     version = "0.1.6";
   };
   net-imap = {
-    dependencies = ["date" "net-protocol"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -933,7 +892,6 @@
     version = "0.19.0";
   };
   net-protocol = {
-    dependencies = ["timeout"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -944,7 +902,6 @@
     version = "0.2.2";
   };
   net-sftp = {
-    dependencies = ["net-ssh"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -955,7 +912,6 @@
     version = "4.0.0";
   };
   net-smtp = {
-    dependencies = ["net-protocol"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1017,7 +973,6 @@
     version = "1.16.7";
   };
   nori = {
-    dependencies = ["bigdecimal"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1028,7 +983,6 @@
     version = "2.7.1";
   };
   octokit = {
-    dependencies = ["faraday" "sawyer"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1069,7 +1023,6 @@
     version = "0.0.4";
   };
   packetfu = {
-    dependencies = ["pcaprub"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1100,7 +1053,6 @@
     version = "0.13.3";
   };
   pdf-reader = {
-    dependencies = ["Ascii85" "afm" "hashery" "ruby-rc4" "ttfunk"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1131,7 +1083,6 @@
     version = "6.0.1";
   };
   puma = {
-    dependencies = ["nio4r"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1162,7 +1113,6 @@
     version = "2.2.10";
   };
   rack-protection = {
-    dependencies = ["base64" "rack"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1173,7 +1123,6 @@
     version = "3.2.0";
   };
   rack-test = {
-    dependencies = ["rack"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1184,7 +1133,6 @@
     version = "2.1.0";
   };
   rails-dom-testing = {
-    dependencies = ["activesupport" "minitest" "nokogiri"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1195,7 +1143,6 @@
     version = "2.2.0";
   };
   rails-html-sanitizer = {
-    dependencies = ["loofah" "nokogiri"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1206,7 +1153,6 @@
     version = "1.6.0";
   };
   railties = {
-    dependencies = ["actionpack" "activesupport" "method_source" "rake" "thor" "zeitwerk"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1227,7 +1173,6 @@
     version = "13.2.1";
   };
   rasn1 = {
-    dependencies = ["strptime"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1248,7 +1193,6 @@
     version = "0.5.5";
   };
   recog = {
-    dependencies = ["nokogiri"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1269,7 +1213,6 @@
     version = "3.6.0";
   };
   reline = {
-    dependencies = ["io-console"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1280,7 +1223,6 @@
     version = "0.5.10";
   };
   rex-arch = {
-    dependencies = ["rex-text"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1291,7 +1233,6 @@
     version = "0.1.16";
   };
   rex-bin_tools = {
-    dependencies = ["metasm" "rex-arch" "rex-core" "rex-struct2" "rex-text"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1312,7 +1253,6 @@
     version = "0.1.32";
   };
   rex-encoder = {
-    dependencies = ["metasm" "rex-arch" "rex-text"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1323,7 +1263,6 @@
     version = "0.1.7";
   };
   rex-exploitation = {
-    dependencies = ["jsobfu" "metasm" "rex-arch" "rex-encoder" "rex-text" "rexml"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1344,7 +1283,6 @@
     version = "0.1.7";
   };
   rex-mime = {
-    dependencies = ["rex-text"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1355,7 +1293,6 @@
     version = "0.1.8";
   };
   rex-nop = {
-    dependencies = ["rex-arch"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1366,7 +1303,6 @@
     version = "0.1.3";
   };
   rex-ole = {
-    dependencies = ["rex-text"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1377,7 +1313,6 @@
     version = "0.1.8";
   };
   rex-powershell = {
-    dependencies = ["rex-random_identifier" "rex-text" "ruby-rc4"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1388,7 +1323,6 @@
     version = "0.1.100";
   };
   rex-random_identifier = {
-    dependencies = ["rex-text"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1409,7 +1343,6 @@
     version = "0.1.5";
   };
   rex-rop_builder = {
-    dependencies = ["metasm" "rex-core" "rex-text"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1420,7 +1353,6 @@
     version = "0.1.5";
   };
   rex-socket = {
-    dependencies = ["rex-core"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1431,7 +1363,6 @@
     version = "0.1.57";
   };
   rex-sslscan = {
-    dependencies = ["rex-core" "rex-socket" "rex-text"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1462,7 +1393,6 @@
     version = "0.2.59";
   };
   rex-zip = {
-    dependencies = ["rex-text"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1533,7 +1463,6 @@
     version = "0.0.5";
   };
   ruby_smb = {
-    dependencies = ["bindata" "openssl-ccm" "openssl-cmac" "rubyntlm" "windows_error"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1544,7 +1473,6 @@
     version = "3.3.11";
   };
   rubyntlm = {
-    dependencies = ["base64"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1565,7 +1493,6 @@
     version = "2.3.2";
   };
   sawyer = {
-    dependencies = ["addressable" "faraday"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1586,7 +1513,6 @@
     version = "0.2.3";
   };
   sinatra = {
-    dependencies = ["mustermann" "rack" "rack-protection" "tilt"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1597,7 +1523,6 @@
     version = "3.2.0";
   };
   sqlite3 = {
-    dependencies = ["mini_portile2"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1638,7 +1563,6 @@
     version = "3.0.0";
   };
   thin = {
-    dependencies = ["daemons" "eventmachine" "rack"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1679,7 +1603,6 @@
     version = "0.4.1";
   };
   ttfunk = {
-    dependencies = ["bigdecimal"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1690,7 +1613,6 @@
     version = "1.8.0";
   };
   tzinfo = {
-    dependencies = ["concurrent-ruby"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1701,7 +1623,6 @@
     version = "2.0.6";
   };
   tzinfo-data = {
-    dependencies = ["tzinfo"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1722,7 +1643,6 @@
     version = "1.3.1";
   };
   warden = {
-    dependencies = ["rack"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1743,7 +1663,6 @@
     version = "1.8.2";
   };
   websocket-driver = {
-    dependencies = ["websocket-extensions"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1784,7 +1703,6 @@
     version = "0.1.5";
   };
   winrm = {
-    dependencies = ["builder" "erubi" "gssapi" "gyoku" "httpclient" "logging" "nori" "rexml" "rubyntlm"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1795,7 +1713,6 @@
     version = "2.3.9";
   };
   xdr = {
-    dependencies = ["activemodel" "activesupport"];
     groups = ["default"];
     platforms = [];
     source = {
@@ -1806,7 +1723,6 @@
     version = "3.0.3";
   };
   xmlrpc = {
-    dependencies = ["webrick"];
     groups = ["default"];
     platforms = [];
     source = {

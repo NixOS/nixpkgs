@@ -227,6 +227,11 @@ in stdenv.mkDerivation (finalAttrs: {
 
     # Useful debugging parameter
     # export VERBOSE=1
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.targetPlatform.isDarwin) ''
+    # Replace hardcoded path to strip with llvm-strip
+    # https://github.com/NixOS/nixpkgs/issues/299606
+    substituteInPlace compiler/rustc_codegen_ssa/src/back/link.rs \
+      --replace-fail "/usr/bin/strip" "${lib.getExe' llvmShared "llvm-strip"}"
   '' + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
     # See https://github.com/jemalloc/jemalloc/issues/1997
     # Using a value of 48 should work on both emulated and native x86_64-darwin.

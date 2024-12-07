@@ -1,41 +1,80 @@
 { lib
-, fetchurl
-, appimageTools
+, fetchFromGitHub
+, buildNpmPackage
+, electron_32
+, makeDesktopItem
+, makeShellWrapper
+, copyDesktopItems
 }:
 
-let
+buildNpmPackage rec {
   pname = "zulip";
   version = "5.11.1";
 
-  src = fetchurl {
-    url = "https://github.com/zulip/zulip-desktop/releases/download/v${version}/Zulip-${version}-x86_64.AppImage";
-    hash = "sha256-t5qBm5+kTdeRMvcHpNbS5mp184UG/IqgJrtj7Ntcbb0=";
-    name="${pname}-${version}.AppImage";
+  src = fetchFromGitHub {
+    owner = "zulip";
+    repo = "zulip-desktop";
+    rev = "v${version}";
+    hash = "sha256-ELuQ/K5QhtS4QiTR35J9VtYNe1qBrS56Ay6mtcGL+FI=";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit pname version src;
+  npmDepsHash = "sha256-13Rlqa7TC2JUq6q1b2U5X3EXpOJGZ62IeF163/mTo68=";
+
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
   };
 
-in appimageTools.wrapType2 {
-  inherit pname version src;
+  nativeBuildInputs = [
+    makeShellWrapper
+    copyDesktopItems
+  ];
 
-  runScript = "appimage-exec.sh -w ${appimageContents} -- \${NIXOS_OZONE_WL:+\${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime=true}}";
+  dontNpmBuild = true;
+  buildPhase = ''
+    runHook preBuild
 
-  extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/zulip.desktop $out/share/applications/zulip.desktop
-    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/zulip.png \
-      $out/share/icons/hicolor/512x512/apps/zulip.png
-    substituteInPlace $out/share/applications/zulip.desktop \
-      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
+    npm run pack -- \
+      -c.electronDist=${electron_32}/libexec/electron \
+      -c.electronVersion=${electron_32.version}
+
+    runHook postBuild
   '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p "$out/share/lib/zulip"
+    cp -r dist/*-unpacked/resources/app.asar* "$out/share/lib/zulip/"
+
+    install -m 444 -D app/resources/zulip.png $out/share/icons/hicolor/512x512/apps/zulip.png
+
+    makeShellWrapper '${lib.getExe electron_32}' "$out/bin/zulip" \
+      --add-flags "$out/share/lib/zulip/app.asar" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime=true}}" \
+      --inherit-argv0
+
+    runHook postInstall
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "zulip";
+      exec = "zulip %U";
+      icon = "zulip";
+      desktopName = "Zulip";
+      comment = "Zulip Desktop Client for Linux";
+      categories = [ "Chat" "Network" "InstantMessaging" ];
+      startupWMClass = "Zulip";
+      terminal = false;
+    })
+  ];
 
   meta = with lib; {
     description = "Desktop client for Zulip Chat";
     homepage = "https://zulip.com";
     license = licenses.asl20;
     maintainers = with maintainers; [ andersk ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
     mainProgram = "zulip";
   };
 }

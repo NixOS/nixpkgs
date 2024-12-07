@@ -11,16 +11,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "electrs";
-  version = "0.10.6";
+  version = "0.10.7";
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-yp9fKD7zH9Ne2+WQUupaxvUx39RWE8RdY4U6lHuDGSc=";
+    hash = "sha256-KDl+SV5U2aqsl3UMK8WWZiwkcqLpaRGmH/J8vBKTZcQ=";
   };
 
-  cargoHash = "sha256-J+6aek1PcW7G6f4h6cQcx5CyliryZeSxkSIQUX3yz6s=";
+  cargoHash = "sha256-vcn+94KklWlYQw4fbH8KxhBnovk0dJc8Hkj+jJ+SeB0=";
 
   # needed for librocksdb-sys
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
