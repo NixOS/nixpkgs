@@ -3,15 +3,14 @@
   python3,
   fetchFromGitea,
   gobject-introspection,
-  gtk3,
-  libhandy,
+  libadwaita,
   modemmanager,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "satellite";
-  version = "0.5.0";
+  version = "0.9.0";
 
   pyproject = true;
 
@@ -20,19 +19,18 @@ python3.pkgs.buildPythonApplication rec {
     owner = "tpikonen";
     repo = "satellite";
     tag = version;
-    hash = "sha256-61HCk0W07w0LybSVB4APvQX4PMSsqH9mKGzc+Rmno90=";
+    hash = "sha256-w0ZpH1joFoV7W7PH74//LGLUJQLCpAGcC6GlyTbdsTE=";
   };
 
   nativeBuildInputs = [
     gobject-introspection
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   build-system = with python3.pkgs; [ setuptools ];
 
   buildInputs = [
-    gtk3
-    libhandy
+    libadwaita
     modemmanager
   ];
 
