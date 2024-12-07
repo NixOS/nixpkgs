@@ -2,6 +2,7 @@
   lib,
   runCommand,
   writeShellScript,
+  writeText,
   linkFarm,
   time,
   procps,
@@ -246,24 +247,15 @@ let
           jq -s from_entries > $out/stats.json
       '';
 
-  compare =
-    { beforeResultDir, afterResultDir }:
-    runCommand "compare"
-      {
-        nativeBuildInputs = [
-          jq
-        ];
-      }
-      ''
-        mkdir $out
-        jq -n -f ${./compare.jq} \
-          --slurpfile before ${beforeResultDir}/outpaths.json \
-          --slurpfile after ${afterResultDir}/outpaths.json \
-          > $out/changed-paths.json
-
-        jq -r -f ${./generate-step-summary.jq} < $out/changed-paths.json > $out/step-summary.md
-        # TODO: Compare eval stats
-      '';
+  compare = import ./compare {
+    inherit
+      lib
+      jq
+      runCommand
+      writeText
+      supportedSystems
+      ;
+  };
 
   full =
     {
