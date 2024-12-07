@@ -3,6 +3,7 @@
 , fetchFromGitHub
 
 , chromaprint
+, libsForQt5
 , gettext
 , qt5
 
@@ -54,6 +55,7 @@ pythonPackages.buildPythonApplication rec {
     chromaprint
     discid
     fasteners
+    libsForQt5.kio
     markdown
     mutagen
     pyjwt
