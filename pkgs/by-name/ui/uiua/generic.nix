@@ -1,4 +1,12 @@
 {
+  pname,
+  version,
+  hash,
+  cargoHash,
+  updateScript,
+}:
+
+{
   lib,
   stdenv,
   rustPlatform,
@@ -12,24 +20,21 @@
 
   # passthru.tests.run
   runCommand,
-  uiua,
+  pkgs,
 }:
 
 let
   inherit (darwin.apple_sdk.frameworks) AppKit AudioUnit CoreServices;
 in
 rustPlatform.buildRustPackage rec {
-  pname = "uiua";
-  version = "0.13.0";
+  inherit pname version cargoHash;
 
   src = fetchFromGitHub {
     owner = "uiua-lang";
     repo = "uiua";
     rev = version;
-    hash = "sha256-5IqJ/lvozXzc7LRUzxpG04M3Nir+3h+GoL7dqTgC9J8=";
+    inherit hash;
   };
-
-  cargoHash = "sha256-0hbE2ZH7daw/VQLe51CxOIborABDF0x00kTyx9NCs9g=";
 
   nativeBuildInputs =
     lib.optionals (webcamSupport || stdenv.hostPlatform.isDarwin) [ rustPlatform.bindgenHook ]
@@ -45,8 +50,8 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional audioSupport "audio" ++ lib.optional webcamSupport "webcam";
 
-  passthru.updateScript = ./update.sh;
-  passthru.tests.run = runCommand "uiua-test-run" { nativeBuildInputs = [ uiua ]; } ''
+  passthru.updateScript = updateScript;
+  passthru.tests.run = runCommand "uiua-test-run" { nativeBuildInputs = [ pkgs.${pname} ]; } ''
     uiua init
     diff -U3 --color=auto <(uiua run main.ua) <(echo '"Hello, World!"')
     touch $out
