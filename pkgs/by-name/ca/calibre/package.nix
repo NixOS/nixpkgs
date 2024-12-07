@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       ps:
       with ps;
       [
-        (apsw.overrideAttrs (oldAttrs: {
+        (apsw.overrideAttrs (_oldAttrs: {
           setupPyBuildFlags = [ "--enable=load_extension" ];
         }))
         beautifulsoup4
@@ -138,10 +138,10 @@ stdenv.mkDerivation (finalAttrs: {
             # does not support by simply omitting qtwebengine.
             pyqt6-webengine
           ]
-      ++ lib.optional (unrarSupport) unrardll
+      ++ lib.optional unrarSupport unrardll
     ))
     xdg-utils
-  ] ++ lib.optional (speechSupport) speechd-minimal;
+  ] ++ lib.optional speechSupport speechd-minimal;
 
   installPhase = ''
     runHook preInstall
