@@ -147,7 +147,11 @@ in
       ffmpegSrc=$(realpath extern_libs/ffmpeg)
     '';
 
-    configureFlags = ["--with-ffmpegsrcdir=${placeholder "ffmpegSrc"}"];
+    configureFlags = [
+      "--with-ffmpegsrcdir=${placeholder "ffmpegSrc"}"
+    ] ++ lib.optionals (!stdenv.hostPlatform.isx86) [
+      "--disable-libavformat"
+    ];
 
     hardeningDisable = [ "format" ];
 
