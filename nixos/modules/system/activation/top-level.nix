@@ -135,11 +135,11 @@ in
       type = types.bool;
       default = false;
       description = ''
-        If enabled, copies the NixOS configuration file
-        (usually {file}`/etc/nixos/configuration.nix`)
-        and links it from the resulting system
-        (getting to {file}`/run/current-system/configuration.nix`).
-        Note that only this single file is copied, even if it imports others.
+       If enabled, this option copies the NixOS 
+       configuration file (usually {file}/etc/nixos/configuration.nix) 
+       and links it from the resulting system ({file} to /run/current-system/configuration.nix). 
+       Note that only this single file is copied, even if it imports others.
+       Warning: This feature cannot be used when the system is configured as a flake. 
       '';
     };
 
