@@ -165,6 +165,8 @@ in
       # The main code is given in GPLv3, but it has ffmpeg in it, and I think ffmpeg license
       # falls inside "free".
       license = with licenses; [ gpl3 free ];
+      # Depends on linux/soundcard.h
+      platforms = platforms.linux;
     };
   };
 
