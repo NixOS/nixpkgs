@@ -3,11 +3,11 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "nixos-rebuild-ng"
+name = "nixos-rebuild"
 version = "0.0.0"
 
 [project.scripts]
-@executable@ = "nixos_rebuild:main"
+nixos-rebuild = "nixos_rebuild:main"
 
 [tool.setuptools.package-data]
 nixos_rebuild = ["*.template.nix"]
