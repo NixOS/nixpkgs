@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, libxcb
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  libxcb,
+  installShellFiles,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "magic-wormhole-rs";
@@ -34,7 +35,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/magic-wormhole/magic-wormhole.rs";
     changelog = "https://github.com/magic-wormhole/magic-wormhole.rs/raw/${version}/changelog.md";
     license = licenses.eupl12;
-    maintainers = with maintainers; [ zeri piegames ];
+    maintainers = with maintainers; [
+      zeri
+      piegames
+    ];
     mainProgram = "wormhole-rs";
   };
 }
