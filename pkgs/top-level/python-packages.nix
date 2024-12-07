@@ -7583,8 +7583,6 @@ self: super: with self; {
 
   lm-format-enforcer = callPackage ../development/python-modules/lm-format-enforcer { };
 
-  lmcloud = callPackage ../development/python-modules/lmcloud { };
-
   lmdb = callPackage ../development/python-modules/lmdb {
     inherit (pkgs) lmdb;
   };
@@ -11837,6 +11835,8 @@ self: super: with self; {
   pylacus = callPackage ../development/python-modules/pylacus { };
 
   pylama = callPackage ../development/python-modules/pylama { };
+
+  pylamarzocco = callPackage ../development/python-modules/pylamarzocco { };
 
   pylast = callPackage ../development/python-modules/pylast { };
 
