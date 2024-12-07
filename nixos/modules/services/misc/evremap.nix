@@ -70,7 +70,7 @@ in
             description = ''
               If you have multiple devices with the same name, you can optionally
               specify this attribute.
-              
+
               If available, the value will be printed when running `evremap list-devices` with elevated permissions.
             '';
           };
@@ -129,7 +129,9 @@ in
       description = "evremap - keyboard input remapper";
       wantedBy = [ "multi-user.target" ];
 
-      script = "${lib.getExe pkgs.evremap} remap ${format.generate "evremap.toml" (lib.attrsets.filterAttrs (n: v: v != null) cfg.settings)}";
+      script = "${lib.getExe pkgs.evremap} remap ${
+        format.generate "evremap.toml" (lib.attrsets.filterAttrs (n: v: v != null) cfg.settings)
+      }";
 
       serviceConfig = {
         DynamicUser = true;
