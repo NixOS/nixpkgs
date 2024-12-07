@@ -7,13 +7,9 @@
 , pkg-config
 , libgit2
 , oniguruma
-, libiconv
-, Foundation
-, Security
-, xorg
 , zlib
 , buildPackages
-, withClipboard ? !stdenv.hostPlatform.isDarwin
+, withClipboard ? true
 , withTrash ? !stdenv.hostPlatform.isDarwin
 }:
 
@@ -36,10 +32,8 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ libgit2 oniguruma xorg.libxcb ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Foundation
-    libiconv
-    Security
+  # TODO: once https://github.com/Canop/broot/issues/956 is released, oniguruma can be removed.
+  buildInputs = [ libgit2 oniguruma ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     zlib
   ];
 
