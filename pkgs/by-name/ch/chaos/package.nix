@@ -19,6 +19,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/chaos/" ];
 
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+
   meta = with lib; {
     description = "Tool to communicate with Chaos DNS API";
     homepage = "https://github.com/projectdiscovery/chaos-client";
