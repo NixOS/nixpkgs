@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pkg-config,
 
-  darwin,
   audioSupport ? true,
   alsa-lib,
   webcamSupport ? false,
@@ -15,9 +14,6 @@
   uiua,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) AppKit AudioUnit CoreServices;
-in
 rustPlatform.buildRustPackage rec {
   pname = "uiua";
   version = "0.13.0";
@@ -35,13 +31,7 @@ rustPlatform.buildRustPackage rec {
     lib.optionals (webcamSupport || stdenv.hostPlatform.isDarwin) [ rustPlatform.bindgenHook ]
     ++ lib.optionals audioSupport [ pkg-config ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      CoreServices
-    ]
-    ++ lib.optionals (audioSupport && stdenv.hostPlatform.isDarwin) [ AudioUnit ]
-    ++ lib.optionals (audioSupport && stdenv.hostPlatform.isLinux) [ alsa-lib ];
+  buildInputs = lib.optionals (audioSupport && stdenv.hostPlatform.isLinux) [ alsa-lib ];
 
   buildFeatures = lib.optional audioSupport "audio" ++ lib.optional webcamSupport "webcam";
 
