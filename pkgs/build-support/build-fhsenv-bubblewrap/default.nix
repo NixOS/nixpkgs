@@ -36,6 +36,7 @@ let
     concatStringsSep
     escapeShellArgs
     filter
+    getExe
     optionalString
     splitString
     ;
@@ -131,6 +132,9 @@ let
   '';
 
   indentLines = str: concatLines (map (s: "  " + s) (filter (s: s != "") (splitString "\n" str)));
+  bubblewrapPatched = bubblewrap.overrideAttrs (oldAttrs: {
+    patches = (oldAttrs.patches or []) ++ [ ./disable_setuid_security_boundary.patch ];
+  });
   bwrapCmd = { initArgs ? "" }: ''
     ignored=(/nix /dev /proc /etc ${optionalString privateTmp "/tmp"})
     ro_mounts=()
@@ -233,7 +237,7 @@ let
     ''}
 
     cmd=(
-      ${bubblewrap}/bin/bwrap
+      ${getExe bubblewrapPatched}
       --dev-bind /dev /dev
       --proc /proc
       --chdir "$(pwd)"
