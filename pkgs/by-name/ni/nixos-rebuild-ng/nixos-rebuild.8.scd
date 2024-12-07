@@ -1,4 +1,4 @@
-nixos-rebuild-ng(8) ["nixpkgs"]
+nixos-rebuild(8) ["nixpkgs"]
 ; quick summary:
 ; # new section
 ; comments starts with ;
