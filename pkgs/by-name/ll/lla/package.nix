@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 let
-  version = "0.2.9";
+  version = "0.2.10";
 in
 rustPlatform.buildRustPackage {
   pname = "lla";
@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage {
     owner = "triyanox";
     repo = "lla";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bemu4MuZYmn6LDIGxCAxIuS78alz8UE6qHhLoxtZSUk=";
+    hash = "sha256-zHtHlEAh170t05DO5b/vspODkqx5G9C3nt5G8dtm8wI=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
-  cargoHash = "sha256-sjJUG32jchAG/q4y649PyTJ2kqjT+0COSvO2QM6GnV0=";
+  cargoHash = "sha256-ar7NEQKTdxM96dT9b9BBfYZA3zVlhN6OciKRo4ZhBSU=";
 
   cargoBuildFlags = [ "--workspace" ];
 
