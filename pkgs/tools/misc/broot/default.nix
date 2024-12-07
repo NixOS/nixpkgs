@@ -7,13 +7,10 @@
 , pkg-config
 , libgit2
 , oniguruma
-, libiconv
-, Foundation
-, Security
 , xorg
 , zlib
 , buildPackages
-, withClipboard ? !stdenv.hostPlatform.isDarwin
+, withClipboard ? true
 , withTrash ? !stdenv.hostPlatform.isDarwin
 }:
 
@@ -36,11 +33,10 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [ libgit2 oniguruma xorg.libxcb ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Foundation
-    libiconv
-    Security
+  buildInputs = [ libgit2 oniguruma ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     zlib
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    xorg.libxcb
   ];
 
   buildFeatures = lib.optionals withTrash [ "trash" ] ++ lib.optionals withClipboard [ "clipboard" ];

@@ -2063,9 +2063,7 @@ with pkgs;
 
   brasero = callPackage ../tools/cd-dvd/brasero/wrapper.nix { };
 
-  broot = callPackage ../tools/misc/broot {
-    inherit (darwin.apple_sdk.frameworks) Foundation Security;
-  };
+  broot = callPackage ../tools/misc/broot { };
 
   ssdfs-utils = callPackage ../tools/filesystems/ssdfs-utils { };
 
