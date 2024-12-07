@@ -148,8 +148,11 @@ python312.pkgs.buildPythonApplication rec {
 
   makeWrapperArgs = [ "--set FRONTEND_BUILD_DIR ${frontend}/share/open-webui" ];
 
-  passthru.tests = {
-    inherit (nixosTests) open-webui;
+  passthru = {
+    tests = {
+      inherit (nixosTests) open-webui;
+    };
+    updateScript = ./update.sh;
   };
 
   meta = {
