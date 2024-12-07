@@ -57,9 +57,9 @@ with lib;
         git
         gnutar
         gzip
-      ]) ++ [
-        config.nix.package
-      ] ++ cfg.extraPackages;
+      ])
+      ++ cfg.extraPackages
+      ++ lib.optional cfg.nixInPath config.nix.package;
 
       serviceConfig = mkMerge [
         {
@@ -223,7 +223,7 @@ with lib;
             "-${cfg.tokenFile}"
             # Token file in the state directory
             "${stateDir}/${currentConfigTokenFilename}"
-          ];
+          ] ++ optional (!cfg.nixInPath) "/nix/var/nix/daemon-socket";
 
           KillSignal = "SIGINT";
 
