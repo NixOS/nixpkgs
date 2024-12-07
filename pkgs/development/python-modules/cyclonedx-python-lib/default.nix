@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "7.6.2";
+  version = "8.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "CycloneDX";
     repo = "cyclonedx-python-lib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nklizCiu7Nmynjd5WU5oX/v2TWy9xFVF4GkmCwFKZLI=";
+    hash = "sha256-+IGykcKdezvwecLyQA1vW9YE8YJpd6ZEBe+J3zilH44=";
   };
 
   pythonRelaxDeps = [ "py-serializable" ];
