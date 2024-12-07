@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -23,6 +24,12 @@ buildGoModule rec {
     "-s"
     "-w"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "--version" ];
 
   meta = with lib; {
     description = "Tool to communicate with Chaos DNS API";
