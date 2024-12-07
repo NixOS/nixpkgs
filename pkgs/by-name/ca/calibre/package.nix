@@ -16,6 +16,8 @@
   libstemmer,
   libuchardet,
   libusb1,
+  libwebp,
+  optipng,
   piper-tts,
   pkg-config,
   podofo,
@@ -190,6 +192,13 @@ stdenv.mkDerivation (finalAttrs: {
         wrapProgram $program \
           ''${qtWrapperArgs[@]} \
           ''${gappsWrapperArgs[@]} \
+          --prefix PATH : ${
+            lib.makeBinPath [
+              libjpeg
+              libwebp
+              optipng
+            ]
+          } \
           ${if popplerSupport then popplerArgs else ""}
       done
     '';
