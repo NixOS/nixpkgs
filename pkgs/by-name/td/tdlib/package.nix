@@ -21,7 +21,7 @@ in
 
 stdenv.mkDerivation {
   pname = "tdlib";
-  version = "1.8.39";
+  version = "1.8.41";
 
   src = fetchFromGitHub {
     owner = "tdlib";
@@ -30,8 +30,8 @@ stdenv.mkDerivation {
     # The tdlib authors do not set tags for minor versions, but
     # external programs depending on tdlib constrain the minor
     # version, hence we set a specific commit with a known version.
-    rev = "056963e48fa8d3f89556239c22d6ac843d3c8a5b";
-    hash = "sha256-pQ+uYnyBTH4L6RW3MqAttx7K3z8fyEbzRy8JSjbBL98=";
+    rev = "5b974c298d4ed551d3ad2c061ad7b8280d137c7e";
+    hash = "sha256-1TyGv2yMjX75+ccZSox/2m6SMmwEZAkShIhLfCeNmZg=";
   };
 
   buildInputs = [ gperf openssl readline zlib ];
@@ -56,6 +56,6 @@ stdenv.mkDerivation {
     homepage = "https://core.telegram.org/tdlib/";
     license = [ licenses.boost ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.vyorkin ];
+    maintainers = [ maintainers.vyorkin maintainers.vonfry ];
   };
 }

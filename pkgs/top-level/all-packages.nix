@@ -6867,9 +6867,6 @@ with pkgs;
   cargo-cyclonedx = callPackage ../development/tools/rust/cargo-cyclonedx {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
   };
-  cargo-deadlinks = callPackage ../development/tools/rust/cargo-deadlinks {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
   cargo-edit = callPackage ../development/tools/rust/cargo-edit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -13470,7 +13467,6 @@ with pkgs;
   };
   datadog-process-agent = callPackage ../tools/networking/dd-agent/datadog-process-agent.nix { };
   datadog-integrations-core = extras: callPackage ../tools/networking/dd-agent/integrations-core.nix {
-    python = python3;
     extraIntegrations = extras;
   };
 
@@ -16232,10 +16228,6 @@ with pkgs;
 
   gxneur = callPackage ../applications/misc/gxneur  {
     inherit (gnome2) libglade GConf;
-  };
-
-  xournal = callPackage ../applications/graphics/xournal {
-    inherit (gnome2) libgnomecanvas;
   };
 
   xournalpp = darwin.apple_sdk_11_0.callPackage ../applications/graphics/xournalpp {
