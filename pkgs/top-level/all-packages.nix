@@ -7109,6 +7109,8 @@ with pkgs;
   babashka-unwrapped = callPackage ../development/interpreters/babashka { };
   babashka = callPackage ../development/interpreters/babashka/wrapped.nix { };
 
+  uiua-unstable = callPackage ../by-name/ui/uiua/package.nix { unstable = true; };
+
   # BQN interpreters and compilers
 
   mbqn = bqn;
