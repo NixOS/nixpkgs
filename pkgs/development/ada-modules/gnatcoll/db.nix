@@ -54,13 +54,13 @@ stdenv.mkDerivation rec {
     if onlyExecutable
     then builtins.replaceStrings [ "_" ] [ "-" ] component
     else "gnatcoll-${component}";
-  version = "24.0.0";
+  version = "25.0.0";
 
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "gnatcoll-db";
     rev = "v${version}";
-    sha256 = "0jq76s4s7q2x93jh8la6r0i3jkpvgsfj12vbbaqabh410xccyr3p";
+    sha256 = "sha256-4y/rWB53sUmBd4tuNhlRYKzwaGSFInN2KhASpUCMZWA=";
   };
 
   # Link executables dynamically unless specified by the platform,
