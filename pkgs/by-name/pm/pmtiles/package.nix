@@ -1,16 +1,16 @@
 { lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "pmtiles";
-  version = "1.22.1";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "protomaps";
     repo = "go-pmtiles";
     rev = "v${version}";
-    hash = "sha256-b473V082jM8d0XRn4tPzVGLryFNHn5Cab3IkNWve49s=";
+    hash = "sha256-TEQDjtSMJFZAYCoYXHmJxpxadYyd5DTo7HUhjglLRG8=";
   };
 
-  vendorHash = "sha256-QDGs0L29W4QQBeIH1Z23nI/FYdu95kLnOAIZEWPOMWw=";
+  vendorHash = "sha256-KRjMEH17cvSjtRP/qYeWRFUo6f6v1ZxEd+H3xvZ1udQ=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=v${version}" ];
 

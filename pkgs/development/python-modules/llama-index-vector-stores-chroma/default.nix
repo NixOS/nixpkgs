@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-vector-stores-chroma";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_vector_stores_chroma";
     inherit version;
-    hash = "sha256-VAWSFqI71r0dw69MWYbbOLKTNYawQujuEmOF16XeziM=";
+    hash = "sha256-xel5WR0JrckfCbCPsfUj08/jDu488T5T2ihUDK6nNmo=";
   };
 
   build-system = [ poetry-core ];

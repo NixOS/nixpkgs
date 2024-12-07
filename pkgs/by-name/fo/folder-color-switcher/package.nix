@@ -7,14 +7,14 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "folder-color-switcher";
-  version = "1.6.5";
+  version = "1.6.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     # They don't really do tags, this is just a named commit.
-    rev = "ba8ea15a48a1a31f318676f4079789af20bdf099";
-    hash = "sha256-jbfc831wTA3NMa905ZzMnV0dyzzqZxOzrRPdgS7E2ZU=";
+    rev = "208e66285ec33a078205a221af579c79bc8cad01";
+    hash = "sha256-t38eEFgbrFsZ+vy+axIeL8j6todPLg4NqS6DM20iIxQ=";
   };
 
   nativeBuildInputs = [

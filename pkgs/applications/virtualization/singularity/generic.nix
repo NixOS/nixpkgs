@@ -14,8 +14,9 @@
 }:
 
 let
-  # Workaround for vendor-related attributes not overridable (#86349)
-  # should be removed when the issue is resolved
+  # Backward compatibility layer for the obsolete workaround of
+  # the "vendor-related attributes not overridable" issue (#86349),
+  # whose solution is merged and released.
   _defaultGoVendorArgs = {
     inherit vendorHash deleteVendor proxyVendor;
   };
