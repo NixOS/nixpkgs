@@ -32,12 +32,13 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    while IFS="" read -r -d $'\0' FILE; do
+    for FILE in src/Core/Main.vala src/Utility/Device.vala; do
       substituteInPlace "$FILE" \
-        --replace "/sbin/blkid" "${util-linux}/bin/blkid"
-    done < <(find ./src -mindepth 1 -name "*.vala" -type f -print0)
+        --replace-fail "/sbin/blkid" "${lib.getExe' util-linux "blkid"}"
+    done
+
     substituteInPlace ./src/Utility/IconManager.vala \
-      --replace "/usr/share" "$out/share"
+      --replace-fail "/usr/share" "$out/share"
   '';
 
   nativeBuildInputs = [
