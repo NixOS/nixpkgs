@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -17,10 +18,18 @@ buildGoModule rec {
 
   vendorHash = "sha256-6J9AWONLP/FvR0dXt5Zx4n+kTpmnxF79HcWVFp9OZ0g=";
 
+  subPackages = [ "cmd/cloudlist/" ];
+
   ldflags = [
     "-w"
     "-s"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "--version" ];
 
   meta = with lib; {
     description = "Tool for listing assets from multiple cloud providers";
