@@ -125,6 +125,7 @@ let
       "@system-service"
       "~@privileged @resources @setuid @keyring"
     ];
+    TimeoutStartSec = 30;
     # Does not work well with the temporary root
     #UMask = "0066";
   };
@@ -192,12 +193,7 @@ let
         ${cfg.provision.instanceUrl}/status
     }
 
-    count=0
     while [[ ! "$(health_check)" =~ 'true' ]]; do
-      if [ $((count++)) -ge 30 ]; then
-        echo "Giving up after at least $count seconds ..."
-        exit 1
-      fi
       echo "Waiting for kanidm to start ..."
       sleep 1
     done
