@@ -17,28 +17,40 @@
 , gstreamer
 , gst-plugins-base
 , gst-plugins-bad
+, gst-plugins-good
+, gst-plugins-rs
 , wrapGAppsHook4
 , appstream-glib
 , desktop-file-utils
+, glycin-loaders
 }:
 
 clangStdenv.mkDerivation rec {
   pname = "gnome-decoder";
-  version = "0.4.1";
+  version = "0.6.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "decoder";
     rev = version;
-    hash = "sha256-ZEt4QaT2w7PgsnwBCYeDbhcYX0yd0boes/LoejQx0XU=";
+    hash = "sha256-qSPuEVW+FwC9OJa+dseIy4/2bhVdTryJSJNSpes9tpY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-acYOSPSUgm0Kg/bo2WF4sRWfCt03AZdTyNNt3Qv7Zjg=";
+    hash = "sha256-MbfukvqlzZPnWNtWCwYn7lABqBxtZWvPDba9Deah+w8=";
   };
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # vp8enc preset
+      --prefix GST_PRESET_PATH : "${gst-plugins-good}/share/gstreamer-1.0/presets"
+      # See https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
+      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
+    )
+  '';
 
   nativeBuildInputs = [
     meson
@@ -64,6 +76,8 @@ clangStdenv.mkDerivation rec {
     gstreamer
     gst-plugins-base
     gst-plugins-bad
+    gst-plugins-good
+    gst-plugins-rs # for gtk4paintablesink
   ];
 
   meta = with lib; {
