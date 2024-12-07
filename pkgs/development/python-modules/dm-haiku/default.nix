@@ -3,8 +3,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  setuptools,
   absl-py,
   flax,
+  jax,
   jaxlib,
   jmp,
   numpy,
@@ -25,14 +27,14 @@
 let
   dm-haiku = buildPythonPackage rec {
     pname = "dm-haiku";
-    version = "0.0.12";
-    format = "setuptools";
+    version = "0.0.13";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "deepmind";
       repo = "dm-haiku";
       rev = "refs/tags/v${version}";
-      hash = "sha256-aJRXlMq4CNMH3ZSTDP8MgnVltdSc8l5raw4//KccL48=";
+      hash = "sha256-RJpQ9BzlbQ4X31XoJFnsZASiaC9fP2AdyuTAGINhMxs=";
     };
 
     patches = [
@@ -44,14 +46,23 @@ let
       })
     ];
 
-    propagatedBuildInputs = [
+    build-system = [ setuptools ];
+
+    dependencies = [
       absl-py
-      flax
-      jaxlib
+      jaxlib # implicit runtime dependency
       jmp
       numpy
       tabulate
     ];
+
+    optional-dependencies = {
+      jax = [
+        jax
+        jaxlib
+      ];
+      flax = [ flax ];
+    };
 
     pythonImportsCheck = [ "haiku" ];
 
