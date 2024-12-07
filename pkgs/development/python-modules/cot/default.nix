@@ -7,7 +7,6 @@
   pyopenssl,
   pytest-mock,
   pytestCheckHook,
-  pythonAtLeast,
   pyvmomi,
   qemu,
   requests,
@@ -15,6 +14,7 @@
   setuptools,
   stdenv,
   verboselogs,
+  versioneer,
 }:
 
 buildPythonPackage rec {
@@ -26,6 +26,11 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-9LNVNBX5DarGVvidPoLnmz11F5Mjm7FzpoO0zAzrJjU=";
   };
+
+  build-system = [
+    setuptools
+    versioneer
+  ];
 
   propagatedBuildInputs = [
     colorlog
@@ -44,12 +49,11 @@ buildPythonPackage rec {
     qemu
   ];
 
-  patches = [ ./configparser312.patch ];
-
   prePatch = ''
     # argparse is part of the standardlib
     substituteInPlace setup.py \
       --replace "'argparse'," ""
+    rm versioneer.py
   '';
 
   disabledTests = [
