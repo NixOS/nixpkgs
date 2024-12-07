@@ -20,11 +20,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-user-share";
-  version = "47.0";
+  version = "47.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-user-share/${lib.versions.major finalAttrs.version}/gnome-user-share-${finalAttrs.version}.tar.xz";
-    hash = "sha256-yELzUv5/Dw6hj/kYa6lIK2yQ0vazZau1sR1oyQbbpJA=";
+    hash = "sha256-H6wbuIAN+kitnD4ZaQ9+EOZ6T5lNnLF8rh0b3/yRRLo=";
   };
 
   preConfigure = ''
