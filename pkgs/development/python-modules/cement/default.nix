@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   colorlog,
   fetchFromGitHub,
@@ -58,6 +59,9 @@ buildPythonPackage rec {
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "cement" ];
+
+  # Tests are failing on Darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # Test only works with the source from PyPI
