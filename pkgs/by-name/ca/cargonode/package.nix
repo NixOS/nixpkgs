@@ -28,15 +28,15 @@ rustPlatform.buildRustPackage rec {
     git
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Unified tooling for Node.js";
     mainProgram = "cargonode";
     homepage = "https://github.com/xosnrdev/cargonode";
     changelog = "https://github.com/xosnrdev/cargonode/blob/${version}/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ xosnrdev ];
+    maintainers = with lib.maintainers; [ xosnrdev ];
   };
 }
