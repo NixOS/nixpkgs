@@ -1,8 +1,11 @@
-{ stdenv, mkDerivation, lib, fetchFromGitHub
-, qmake, qttools
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  qt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "gpxlab";
   version = "0.7.0";
 
@@ -13,7 +16,11 @@ mkDerivation rec {
     sha256 = "080vnwcciqblfrbfyz9gjhl2lqw1hkdpbgr5qfrlyglkd4ynjd84";
   };
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [
+    qt5.qmake
+    qt5.qttools
+    qt5.wrapQtAppsHook
+  ];
 
   preConfigure = ''
     lrelease GPXLab/locale/*.ts
@@ -22,6 +29,9 @@ mkDerivation rec {
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv GPXLab/GPXLab.app $out/Applications
+
+    mkdir -p $out/bin
+    ln -s $out/Applications/GPXLab.app/Contents/MacOS/GPXLab $out/bin/gpxlab
   '';
 
   meta = with lib; {
