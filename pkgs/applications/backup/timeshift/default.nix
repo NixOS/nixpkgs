@@ -1,28 +1,28 @@
 {
   callPackage,
-  timeshift-unwrapped,
-  rsync,
-  coreutils,
-  mount,
-  umount,
-  psmisc,
-  cron,
   btrfs-progs,
+  coreutils,
+  cron,
   grubPackage,
+  mount,
+  psmisc,
+  rsync,
+  timeshift-unwrapped,
+  umount,
 }:
 let
   timeshift-wrapper = callPackage ./wrapper.nix { };
 in
-(timeshift-wrapper timeshift-unwrapped ([
-  rsync
-  coreutils
-  mount
-  umount
-  psmisc
-  cron
+(timeshift-wrapper timeshift-unwrapped [
   btrfs-progs
+  coreutils
+  cron
   grubPackage
-])).overrideAttrs
+  mount
+  psmisc
+  rsync
+  umount
+]).overrideAttrs
   (oldAttrs: {
     meta = oldAttrs.meta // {
       description = oldAttrs.meta.description;
