@@ -33,12 +33,12 @@
 #
 # [1]: https://github.com/DataDog/integrations-core
 
-{ pkgs, python, extraIntegrations ? { }, }:
+{ lib, fetchFromGitHub, python3Packages, extraIntegrations ? { }, }:
 
 let
-  inherit (pkgs.lib) attrValues mapAttrs;
+  inherit (lib) attrValues mapAttrs;
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "DataDog";
     repo = "integrations-core";
     rev = version;
@@ -48,13 +48,13 @@ let
 
   # Build helper to build a single datadog integration package.
   buildIntegration = { pname, ... }@args:
-    python.pkgs.buildPythonPackage (args // {
+    python3Packages.buildPythonPackage (args // {
       inherit src version;
       name = "datadog-integration-${pname}-${version}";
       pyproject = true;
 
       sourceRoot = "${src.name}/${args.sourceRoot or pname}";
-      buildInputs = with python.pkgs; [ hatchling setuptools ];
+      buildInputs = with python3Packages; [ hatchling setuptools ];
       doCheck = false;
     });
 
@@ -70,7 +70,7 @@ let
         --replace "packages=['datadog_checks']" "packages=find_packages()"
     '';
 
-    propagatedBuildInputs = with python.pkgs; [
+    propagatedBuildInputs = with python3Packages; [
       binary
       cachetools
       cryptography
@@ -110,10 +110,10 @@ let
   integrations = defaultIntegrations // extraIntegrations;
   builtIntegrations = mapAttrs (pname: fdeps: buildIntegration {
     inherit pname;
-    propagatedBuildInputs = (fdeps python.pkgs) ++ [ datadog_checks_base ];
+    propagatedBuildInputs = (fdeps python3Packages) ++ [ datadog_checks_base ];
   }) integrations;
 
 in builtIntegrations // {
   inherit datadog_checks_base;
-  python = python.withPackages (_: (attrValues builtIntegrations));
+  python = python3Packages.python.withPackages (_: (attrValues builtIntegrations));
 }
