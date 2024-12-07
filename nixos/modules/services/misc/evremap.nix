@@ -129,7 +129,7 @@ in
       description = "evremap - keyboard input remapper";
       wantedBy = [ "multi-user.target" ];
 
-      script = "${lib.getExe pkgs.evremap} remap ${format.generate "evremap.toml" cfg.settings}";
+      script = "${lib.getExe pkgs.evremap} remap ${format.generate "evremap.toml" (lib.attrsets.filterAttrs (n: v: v != null) cfg.settings)}";
 
       serviceConfig = {
         DynamicUser = true;
