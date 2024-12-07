@@ -51,6 +51,7 @@
   cups,
   libxshmfence,
   udev,
+  systemd,
   libdecor,
   autoPatchelfHook,
   makeWrapper,
@@ -83,6 +84,7 @@ let
     cups
     libxshmfence
     udev
+    systemd
   ];
   buildType = "Release";
   platform =
