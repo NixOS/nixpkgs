@@ -95,7 +95,7 @@ let
   };
 in
 buildGoModule rec {
-  name = "zitadel";
+  pname = "zitadel";
   inherit version;
 
   src = zitadelRepo;

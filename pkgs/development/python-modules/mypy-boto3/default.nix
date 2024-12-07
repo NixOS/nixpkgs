@@ -142,8 +142,8 @@ rec {
       "sha256-l5hKmbwel2Z5BvQbuKXRsfusKU28laF5mVDDPW+Ij0g=";
 
   mypy-boto3-athena =
-    buildMypyBoto3Package "athena" "1.35.44"
-      "sha256-2eDPfyD3gm+kOyVUOn83aAAEPO+IzTahq3CPkaICqJI=";
+    buildMypyBoto3Package "athena" "1.35.74"
+      "sha256-SWeOTAay7+inOejWohrQPD5ALm1kjMPizsR5yp/I95c=";
 
   mypy-boto3-auditmanager =
     buildMypyBoto3Package "auditmanager" "1.35.0"
@@ -258,8 +258,8 @@ rec {
       "sha256-YGz59Mf6cNqNAJmdI0YQF9dzzUY6Mwi7fgzsDwMWv3w=";
 
   mypy-boto3-cloudwatch =
-    buildMypyBoto3Package "cloudwatch" "1.35.63"
-      "sha256-sJ3dI0JUFD+V+hnsRh+4w45cz8VXjG+ZUbTPkdu/QOE=";
+    buildMypyBoto3Package "cloudwatch" "1.35.74"
+      "sha256-7yfx7/8EFJ4SYRoht/+TXU/LmnINxjJM8YC99cx/WzI=";
 
   mypy-boto3-codeartifact =
     buildMypyBoto3Package "codeartifact" "1.35.31"
@@ -434,8 +434,8 @@ rec {
       "sha256-OgK+ZM7wn7Elp6xzb1YnZtYP+eARgsP+BIYkQb+E4YE=";
 
   mypy-boto3-dynamodb =
-    buildMypyBoto3Package "dynamodb" "1.35.60"
-      "sha256-kurDXEnp8/8jpK1t7l3FTkEODEmpi02TSTxwAOvnRWg=";
+    buildMypyBoto3Package "dynamodb" "1.35.74"
+      "sha256-qBXQRLj19LowjqMRSRZWX72TL8ryGPjQKIsoQEFfnEY=";
 
   mypy-boto3-dynamodbstreams =
     buildMypyBoto3Package "dynamodbstreams" "1.35.0"
@@ -574,8 +574,8 @@ rec {
       "sha256-RJEZBr3yU/lGEainrpidLsdYBvVOPMq3cIaIpsTAziQ=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.35.65"
-      "sha256-FnVW/E8XSVLq9k4vwWpF71V/33yoW8HSJcWh6SeBg0I=";
+    buildMypyBoto3Package "glue" "1.35.74"
+      "sha256-Hgqsz+kwzH6i0Q+9dDkUVYuYBxe6X/5R7P5ZtbIBfvs=";
 
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.35.0"
@@ -718,8 +718,8 @@ rec {
       "sha256-xHARaL3zzxY6jy5VyQIrZLXqwvfprktif4pcSk+7xzY=";
 
   mypy-boto3-kendra =
-    buildMypyBoto3Package "kendra" "1.35.0"
-      "sha256-fnpRggcnA4mhk1vU7I0x+nn6wvx9PQ5Gi/WckSgfZ7c=";
+    buildMypyBoto3Package "kendra" "1.35.75"
+      "sha256-yLSTXvjrML3i/z2aJUj7feOaZlR+Yy5po0iBQ1pqc7M=";
 
   mypy-boto3-kendra-ranking =
     buildMypyBoto3Package "kendra-ranking" "1.35.0"
@@ -766,8 +766,8 @@ rec {
       "sha256-oGpeVJ4uuNUAIsZwc2k0QKLtzLSHC+ULM1f3Pcm+ZPk=";
 
   mypy-boto3-lakeformation =
-    buildMypyBoto3Package "lakeformation" "1.35.55"
-      "sha256-QuVCDfj8bAtFhEnrsGqDYHFbl6awqAjLDjeJn5Rq0IM=";
+    buildMypyBoto3Package "lakeformation" "1.35.74"
+      "sha256-9EOkF4dnzZRTuwh1DdOxVv1GQKl3gkiSVfZklwNU1xc=";
 
   mypy-boto3-lambda =
     buildMypyBoto3Package "lambda" "1.35.68"
@@ -1074,8 +1074,8 @@ rec {
       "sha256-mtpp+ro3b7tOrN4TrWr8BjLzaPo264ty8Sng6wtciMs=";
 
   mypy-boto3-quicksight =
-    buildMypyBoto3Package "quicksight" "1.35.68"
-      "sha256-bSIoIBGcXEnnjpUXkrm8NK+wiULLuBwvrvpOXsiDOvo=";
+    buildMypyBoto3Package "quicksight" "1.35.74"
+      "sha256-FyADa4l2ZWrc/nADSQ2rPhVNklgJHXsaNpC1dIADSSs=";
 
   mypy-boto3-ram =
     buildMypyBoto3Package "ram" "1.35.0"
@@ -1094,16 +1094,16 @@ rec {
       "sha256-wYdJOvvjN2biCMEBeFD87mqomOitaGQdiiB6b5Yiji4=";
 
   mypy-boto3-redshift =
-    buildMypyBoto3Package "redshift" "1.35.61"
-      "sha256-Z0Q/jd9A3CkKUjHcUTNgwMysosL/q4/PHC8uz42DAHQ=";
+    buildMypyBoto3Package "redshift" "1.35.74"
+      "sha256-o2WegSdOLShXqAMNLc2IMciRRBZb60OlcYmIwSWq9Cs=";
 
   mypy-boto3-redshift-data =
     buildMypyBoto3Package "redshift-data" "1.35.51"
       "sha256-wCF9VqKH8GBgmKHsJZfAbNefu/zLw2piSJpuOaQ4nMo=";
 
   mypy-boto3-redshift-serverless =
-    buildMypyBoto3Package "redshift-serverless" "1.35.52"
-      "sha256-/7yPEPa19Vyhfsb/WBrSXid/VlOwdaqu2SugU4GccDI=";
+    buildMypyBoto3Package "redshift-serverless" "1.35.74"
+      "sha256-fxEje2HyutoB7Js++GxMnfqEhceCr2CWfbPpGrY2IM0=";
 
   mypy-boto3-rekognition =
     buildMypyBoto3Package "rekognition" "1.35.0"
@@ -1162,8 +1162,8 @@ rec {
       "sha256-RwPNNFntNChLqbr86wd1bwp6OqWvs3oj3V+4X71J3Hw=";
 
   mypy-boto3-s3 =
-    buildMypyBoto3Package "s3" "1.35.72"
-      "sha256-Vx5lnB01VJnV5QcPM+YToeJR5vXSpX1TXF6u9S67aoY=";
+    buildMypyBoto3Package "s3" "1.35.76"
+      "sha256-bPHwNJhf5hB1TD5u8odJBimHDVCK2hO31h57mq60YQg=";
 
   mypy-boto3-s3control =
     buildMypyBoto3Package "s3control" "1.35.73"
@@ -1174,8 +1174,8 @@ rec {
       "sha256-P2Yg3qvcdAcjY+uwPg2DpTgT6ZXb1XYCOeu4bVfgFKI=";
 
   mypy-boto3-sagemaker =
-    buildMypyBoto3Package "sagemaker" "1.35.68"
-      "sha256-SjKW9Gc6TOStmB6AexAOI3VuBqBiN0me3/+nbp92cv0=";
+    buildMypyBoto3Package "sagemaker" "1.35.75"
+      "sha256-FFTK2PvJJaM8eceQZ3ndYWungIAb4CoWp8ue32+nQPs=";
 
   mypy-boto3-sagemaker-a2i-runtime =
     buildMypyBoto3Package "sagemaker-a2i-runtime" "1.35.0"

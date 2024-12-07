@@ -124,7 +124,7 @@ in stdenv.mkDerivation {
     mkdir -p "$out/bin"
 
     makeWrapper "${browserBinary}" "$out/bin/chromium" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     ed -v -s "$out/bin/chromium" << EOF
@@ -178,9 +178,3 @@ in stdenv.mkDerivation {
     inherit sandboxExecutableName;
   };
 }
-# the following is a complicated and long-winded variant of
-# `inherit (chromium.browser) version`, with the added benefit
-# that it keeps the pointer to upstream-info.nix for
-# builtins.unsafeGetAttrPos, which is what ofborg uses to
-# decide which maintainers need to be pinged.
-// builtins.removeAttrs chromium.browser (builtins.filter (e: e != "version") (builtins.attrNames chromium.browser))

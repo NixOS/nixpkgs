@@ -44,7 +44,7 @@ let
     enableSshSocket = config.services.openssh.startWhenNeeded;
   };
 
-  notExcluded = pkg: (!(lib.elem pkg config.environment.budgie.excludePackages));
+  notExcluded = pkg: utils.disablePackageByName pkg config.environment.budgie.excludePackages;
 in {
   meta.maintainers = lib.teams.budgie.members;
 

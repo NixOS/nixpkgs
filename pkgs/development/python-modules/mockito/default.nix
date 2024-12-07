@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "mockito";
-  version = "1.5.1";
+  version = "1.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QFYkCRcVzDlU4vo5zFDlCNWXeNTS+1bI23v6X1k9MwM=";
+    hash = "sha256-txkoQOfXDsJGOcxeGO/uXUGMg62GwP0r9+ccPkKuCqc=";
   };
 
   nativeBuildInputs = [ hatchling ];

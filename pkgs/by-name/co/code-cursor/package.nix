@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation {
     substituteInPlace $out/share/applications/cursor.desktop --replace-fail "AppRun" "cursor"
 
     wrapProgram $out/bin/cursor \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}} --no-update"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update"
 
     runHook postInstall
   '';

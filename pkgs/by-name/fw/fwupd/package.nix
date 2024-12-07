@@ -5,7 +5,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   gi-docgen,
   pkg-config,
   gobject-introspection,
@@ -118,7 +117,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "2.0.2";
+  version = "2.0.3";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -135,8 +134,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fwupd";
     repo = "fwupd";
-    rev = finalAttrs.version;
-    hash = "sha256-rmMb109SJVWDGT4z5GOA4V9O0cDMptTpwx0TXdGWjvk=";
+    tag = finalAttrs.version;
+    hash = "sha256-M0FZ5fyufm6h+/IyhajxpcjrGANKkyFzWKmn4EzLxKY=";
   };
 
   patches = [

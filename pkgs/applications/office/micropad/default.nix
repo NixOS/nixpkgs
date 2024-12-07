@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     # executable wrapper
     makeWrapper '${electron}/bin/electron' "$out/bin/micropad" \
       --add-flags "$out/share/micropad" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     runHook postInstall
   '';

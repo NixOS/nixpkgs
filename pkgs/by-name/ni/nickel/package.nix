@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nickel";
-  version = "1.8.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "nickel";
     rev = "refs/tags/${version}";
-    hash = "sha256-hlcF04m3SI66d1C9U1onog2QoEMfqtHb7V++47ZmeW4=";
+    hash = "sha256-chIpZqs1tyXk4YQBlF4K/Ofrn1CrijbYant9+SSppGU=";
   };
 
-  cargoHash = "sha256-VFjZb7lsqOSt5Rc94dhS4Br/5i/HXPHZMqC1c0/LzHU=";
+  cargoHash = "sha256-MaMzwvvWP+vmdBVCefXI6dehuTyPcPW2b6KdarxjBjA=";
 
   cargoBuildFlags = [ "-p nickel-lang-cli" "-p nickel-lang-lsp" ];
 
@@ -25,6 +25,16 @@ rustPlatform.buildRustPackage rec {
   ];
 
   outputs = [ "out" "nls" ];
+
+  # This fixes the way comrak is defined as a dependency, without the sed the build fails:
+  #
+  # cargo metadata failure: error: Package `nickel-lang-core v0.10.0
+  # (/build/source/core)` does not have feature `comrak`. It has an optional
+  # dependency with that name, but that dependency uses the "dep:" syntax in
+  # the features table, so it does not have an implicit feature with that name.
+  preBuild = ''
+    sed -i 's/dep:comrak/comrak/' core/Cargo.toml
+  '';
 
   postInstall = ''
     mkdir -p $nls/bin

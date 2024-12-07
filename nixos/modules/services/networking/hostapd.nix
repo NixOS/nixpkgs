@@ -300,7 +300,7 @@ in {
 
               capabilities = mkOption {
                 type = types.listOf types.str;
-                default = ["HT40" "HT40-" "SHORT-GI-20" "SHORT-GI-40"];
+                default = ["HT40" "SHORT-GI-20" "SHORT-GI-40"];
                 example = ["LDPC" "HT40+" "HT40-" "GF" "SHORT-GI-20" "SHORT-GI-40" "TX-STBC" "RX-STBC1"];
                 description = ''
                   HT (High Throughput) capabilities given as a list of flags.

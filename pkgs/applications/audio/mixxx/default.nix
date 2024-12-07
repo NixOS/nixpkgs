@@ -63,7 +63,7 @@ mkDerivation rec {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = version;
-    hash = "sha256-foY4K1rSth0GUjM1xpctI3fpavVjGoPMnRN2tT4Lsqg=";
+    hash = "sha256-YfpFRLosIIND+HnZN+76ZY0dQqEJaFkWZS84gZOCdfc=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 ];

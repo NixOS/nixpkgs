@@ -15,7 +15,7 @@
 }:
 
 let
-  version = "1.76.6";
+  version = "1.78.1";
 in
 buildGo123Module {
   pname = "tailscale";
@@ -27,7 +27,7 @@ buildGo123Module {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-c44Fz/cYGN2nsjlaKln8ozjjS5jHSO/X9RMnHa37tJM=";
+    hash = "sha256-HHLGvxB3MMmmOUNLr2ivouLDO/Lo2FJYRYzoCE2fUDk=";
   };
 
   patches = [
@@ -39,7 +39,7 @@ buildGo123Module {
     })
   ];
 
-  vendorHash = "sha256-xCZ6YMJ0fqVzO+tKbCzF0ftV05NOB+lJbJBovLqlrtQ=";
+  vendorHash = "sha256-0VB7q9HKd5/QKaWBMpCYycRRiNTWCEjUMc3g3z6agc8=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ makeWrapper ] ++ [ installShellFiles ];
 

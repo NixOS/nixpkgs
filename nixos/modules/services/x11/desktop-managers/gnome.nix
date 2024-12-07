@@ -58,7 +58,7 @@ let
     enableGnomePanel = true;
   } ++ cfg.flashback.customSessions;
 
-  notExcluded = pkg: mkDefault (!(lib.elem (lib.getName pkg) (map lib.getName config.environment.gnome.excludePackages)));
+  notExcluded = pkg: mkDefault (utils.disablePackageByName pkg config.environment.gnome.excludePackages);
 
 in
 

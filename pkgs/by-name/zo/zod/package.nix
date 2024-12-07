@@ -16,7 +16,7 @@
 , substituteAll
 }:
 let
-  name = "zod-engine";
+  pname = "zod-engine";
   version = "2011-09-06";
   src = fetchzip {
     url = "mirror://sourceforge/zod/linux_releases/zod_linux-${version}.tar.gz";
@@ -41,7 +41,7 @@ let
   NIX_LDFLAGS = "-L${libmysqlclient}/lib/mysql";
   zod_engine = stdenv.mkDerivation {
     inherit version src postPatch nativeBuildInputs buildInputs hardeningDisable NIX_LDFLAGS;
-    pname = "${name}-engine";
+    pname = "${pname}-engine";
     enableParallelBuilding = true;
     preBuild = "cd zod_src";
     installPhase = ''
@@ -52,7 +52,7 @@ let
   };
   zod_map_editor = stdenv.mkDerivation {
     inherit version src postPatch nativeBuildInputs buildInputs hardeningDisable NIX_LDFLAGS;
-    pname = "${name}-map_editor";
+    pname = "${pname}-map_editor";
     enableParallelBuilding = true;
     preBuild = "cd zod_src";
     makeFlags = [ "map_editor" ];
@@ -64,7 +64,7 @@ let
   };
   zod_launcher = stdenv.mkDerivation {
       inherit version src nativeBuildInputs buildInputs zod_engine zod_map_editor;
-      pname = "${name}-launcher";
+      pname = "${pname}-launcher";
       # This is necessary because the zod_launcher has terrible fixed-width window
       # the Idea is to apply the scalingFactor to all positions and sizes and I tested 1,2,3 and 4
       # 2,3,4 look acceptable on my 4k monitor and 1 is unreadable.
@@ -86,7 +86,7 @@ let
         install -m755 zod_launcher $out/bin
       '';
   };
-  zod_assets = runCommandLocal "${name}-assets" {} ''
+  zod_assets = runCommandLocal "${pname}-assets" {} ''
     mkdir -p $out/usr/lib/commander-zod{,blank_maps}
     cp -r ${src}/assets $out/usr/lib/commander-zod/assets
     for i in ${src}/*.map ${src}/*.txt; do
@@ -98,7 +98,7 @@ let
   '';
 in
   symlinkJoin {
-    inherit name;
+    inherit pname version;
     paths = [
       zod_engine
       zod_launcher

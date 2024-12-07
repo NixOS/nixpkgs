@@ -46,8 +46,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p "$out"/bin "$out"/share/dotnet
+    mkdir -p "$out"/bin "$out"/share
     ln -s "$src"/bin/* "$out"/bin
+    ln -s "$src"/share/dotnet "$out"/share
     runHook postInstall
   '';
 
@@ -125,8 +126,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               )
               (
                 lib.optionalString (runtime != null) ''
-                  # TODO: use runtime here
-                  export DOTNET_ROOT=${runtime.unwrapped}/share/dotnet
+                  export DOTNET_ROOT=${runtime}/share/dotnet
                 ''
                 + run
               );

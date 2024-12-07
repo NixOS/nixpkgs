@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
-  version = "7.2.0";
+  version = "7.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9je3W78PU3iZJjzVMSPXPxBZ0vMYY5xSLJA9zBJ7O5I=";
+    hash = "sha256-65q+VrUnJiRbmb37U5ps1RlsBSA5gJcDxlxpBJ5Eyjk=";
   };
 
   build-system = [

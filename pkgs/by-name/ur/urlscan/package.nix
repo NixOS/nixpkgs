@@ -1,35 +1,32 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "urlscan";
-  version = "1.0.3";
-  format = "pyproject";
+  version = "1.0.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firecat53";
-    repo = pname;
+    repo = "urlscan";
     rev = "refs/tags/${version}";
-    hash = "sha256-aAfsGsgCZwWcFkYaJsKjRroAZjW7b/vnX1oL/Mg0kgY=";
+    hash = "sha256-VbpKMaEjchfpLECCt1YtmiVynYgSLgAVP1iuHL7t8FQ=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    urwid
-  ];
+  dependencies = with python3.pkgs; [ urwid ];
 
   # No tests available
   doCheck = false;
 
-  pythonImportsCheck = [
-    "urlscan"
-  ];
+  pythonImportsCheck = [ "urlscan" ];
 
   meta = with lib; {
     description = "Mutt and terminal url selector (similar to urlview)";

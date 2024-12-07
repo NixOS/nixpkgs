@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corectrl";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitLab {
     owner = "corectrl";
     repo = "corectrl";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-WOljOakh177om7tLlroFwWO4gYsarfTCeVXX6+dmZs4=";
+    hash = "sha256-rQibIjLmSnkA8jk6GOo68JIeb4wZq0wxXpLs3zsB7GI=";
   };
 
   nativeBuildInputs = [

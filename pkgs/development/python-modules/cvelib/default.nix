@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "cvelib";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "RedHatProductSecurity";
     repo = "cvelib";
     rev = "refs/tags/${version}";
-    hash = "sha256-yDsnw7jw1NDs3dy5RUY4a+dWZzORyFG9kpR4WaJNbEE=";
+    hash = "sha256-voUBd4JQLk1Ik7JrhFYnY06AucVTj7WwAjDfjOTSENo=";
   };
 
   postPatch = ''

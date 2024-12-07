@@ -4,6 +4,8 @@ with lib;
 with utils;
 
 let
+  # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
+  escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
 
   addCheckDesc = desc: elemType: check: types.addCheck elemType check
     // { description = "${elemType.description} (with check: ${desc})"; };
@@ -136,6 +138,8 @@ let
 
     };
 
+    config.device = lib.mkIf (config.label != null) "/dev/disk/by-label/${escape config.label}";
+
     config.options = let
       inInitrd = utils.fsNeededForBoot config;
     in mkMerge [
@@ -196,11 +200,8 @@ let
       ];
       isBindMount = fs: builtins.elem "bind" fs.options;
       skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
-      # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
-      escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
     in fstabFileSystems: { }: concatMapStrings (fs:
       (if fs.device != null then escape fs.device
-         else if fs.label != null then "/dev/disk/by-label/${escape fs.label}"
          else throw "No device specified for mount point ‘${fs.mountPoint}’.")
       + " " + escape fs.mountPoint
       + " " + fs.fsType
