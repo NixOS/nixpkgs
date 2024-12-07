@@ -13832,8 +13832,6 @@ with pkgs;
   evolution = callPackage ../applications/networking/mailreaders/evolution/evolution { };
   evolutionWithPlugins = callPackage ../applications/networking/mailreaders/evolution/evolution/wrapper.nix { plugins = [ evolution evolution-ews ]; };
 
-  famistudio = darwin.apple_sdk_11_0.callPackage ../applications/audio/famistudio { };
-
   fdr = libsForQt5.callPackage ../applications/science/programming/fdr { };
 
   fetchmail = callPackage ../applications/misc/fetchmail { };
