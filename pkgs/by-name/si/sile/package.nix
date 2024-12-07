@@ -39,8 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) pname version src;
     nativeBuildInputs = [ zstd ];
-    # so the cargo fetcher won't try to run the `./configure` script
-    dontConfigure = true;
     hash = "sha256-iPkXEUC4U1m/ComIDo/J5kwkmM1QdowioNtnSnmMhJ0=";
   };
 
@@ -169,6 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    broken = stdenv.isDarwin;
     description = "Typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful

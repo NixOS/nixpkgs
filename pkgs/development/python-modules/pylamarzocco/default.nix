@@ -1,21 +1,20 @@
 {
   lib,
-  authlib,
+  aiohttp,
+  aioresponses,
   bleak,
   buildPythonPackage,
   fetchFromGitHub,
-  httpx,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   setuptools,
   syrupy,
-  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "pylamarzocco";
-  version = "1.2.11";
+  version = "1.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,25 +23,24 @@ buildPythonPackage rec {
     owner = "zweckj";
     repo = "pylamarzocco";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iRxn4xAP5b/2byeWbYm6mQwAu1TUmJgOVEqm/bZT9Xw=";
+    hash = "sha256-ngTVm1tfs42pXGIQh8Hy8d7UY3D/skCZkbKr6AACYH0=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    authlib
+    aiohttp
     bleak
-    httpx
-    websockets
   ];
 
   nativeCheckInputs = [
+    aioresponses
     pytest-asyncio
     pytestCheckHook
     syrupy
   ];
 
-  pythonImportsCheck = [ "lmcloud" ];
+  pythonImportsCheck = [ "pylamarzocco" ];
 
   meta = with lib; {
     description = "Library to interface with La Marzocco's cloud";
