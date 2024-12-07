@@ -226,6 +226,12 @@ python3.pkgs.buildPythonApplication {
   # TODO: verify if this is still true (I can't, no mac)
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  checkFlags = [
+    # this test is flaky, see https://github.com/ankitects/anki/issues/3619
+    # also remove from anki-sync-server when removing this
+    "--skip=deckconfig::update::test::should_keep_at_least_one_remaining_relearning_step"
+  ];
+
   dontUseNinjaInstall = false;
   dontWrapQtApps = true;
 
