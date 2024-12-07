@@ -281,15 +281,18 @@ update() {
     # If patch was not specified, check if the package is already the latest version
     # If it is, exit early
     if [ "$patch_specified" == false ] && [ -f "$output" ]; then
-        local current_version
-        current_version=$(nix-instantiate --eval -E "(import $output { \
-        buildAspNetCore = { ... }: {}; \
-        buildNetSdk = { ... }: {}; \
-        buildNetRuntime = { ... }: {}; \
-        fetchNupkg = { ... }: {}; \
-        }).release_${major_minor_underscore}" | jq -r)
-
-        if [[ "$current_version" == "$major_minor_patch" ]]; then
+        local -a versions
+        IFS= readarray -d '' versions < <(
+            nix-instantiate --eval --json -E "with (import $output {
+                buildAspNetCore = { ... }: {};
+                buildNetSdk = { version, ... }: { inherit version; };
+                buildNetRuntime = { version, ... }: { inherit version; };
+                fetchNupkg = { ... }: {};
+            }); (x: builtins.deepSeq x x) [
+                runtime_${major_minor_underscore}.version
+                sdk_${major_minor_underscore}.version
+            ]" | jq --raw-output0 .[])
+        if [[ "${versions[0]}" == "$major_minor_patch" && "${versions[1]}" == "${sdk_versions[0]}" ]]; then
             echo "Nothing to update."
             return
         fi
