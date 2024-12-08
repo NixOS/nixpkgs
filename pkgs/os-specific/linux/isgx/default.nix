@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "isgx-${version}-${kernel.version}";
+  pname = "isgx";
   version = "2.14";
 
   src = fetchFromGitHub {
