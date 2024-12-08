@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, nix-update-script, k9s }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, nix-update-script, k9s }:
 
 buildGoModule rec {
   pname = "k9s";
@@ -19,14 +19,12 @@ buildGoModule rec {
     "-X github.com/derailed/k9s/cmd.date=1970-01-01T00:00:00Z"
   ];
 
-  tags = [ "netcgo" ];
-
   proxyVendor = true;
 
   vendorHash = "sha256-ENn2BpGFEpiTNZbnNVt4hv4R6NTT3GivFd3rTy3xEH8=";
 
-  # TODO investigate why some config tests are failing
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
+  CGO_ENABLED = 0;
+
   # Required to workaround test check error:
   preCheck = "export HOME=$(mktemp -d)";
   # For arch != x86
