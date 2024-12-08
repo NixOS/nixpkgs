@@ -108,24 +108,16 @@ let
   } source;
 
   source = rec {
-    version = "1.5.634";
+    version = "1.5.735";
 
     # Needs submodules
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
       rev = "v${version}";
-      hash = "sha256-d9XmXHq264rTT80zphYcKLxS+AyUhjb19D3DuBJvMI4=";
+      hash = "sha256-JRnGgxkf5ct6P71bYgLbCEUmotDLS2Evy6t8R7ac7D4=";
       fetchSubmodules = true;
     };
-
-    patches = [
-      (fetchpatch {
-        name = "GCC14.patch";
-        url = "https://github.com/mumble-voip/mumble/commit/56945a9dfb62d29dccfe561572ebf64500deaed1.patch";
-        hash = "sha256-Frct9XJ/ZuHPglx+GB9h3vVycR8YY039dStIbfkPPDk=";
-      })
-    ];
   };
 in {
   mumble  = lib.recursiveUpdate (client source) {meta.mainProgram = "mumble";};
