@@ -1,8 +1,24 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook
-, alsa-lib, gcc-unwrapped, libX11, libcxx, libdrm, libglvnd, libpulseaudio, libxcb, mesa, wayland, xz, zlib
-, libva, libvdpau, addDriverRunpath
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  alsa-lib,
+  gcc-unwrapped,
+  libX11,
+  libcxx,
+  libdrm,
+  libglvnd,
+  libpulseaudio,
+  libxcb,
+  mesa,
+  wayland,
+  xz,
+  zlib,
+  libva,
+  libvdpau,
+  addDriverRunpath,
 }:
-
 stdenv.mkDerivation rec {
   pname = "mdk-sdk";
   version = "0.30.0";
@@ -15,11 +31,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
-    alsa-lib gcc-unwrapped libX11 libcxx libdrm libglvnd libpulseaudio libxcb mesa wayland xz zlib
+    alsa-lib
+    gcc-unwrapped
+    libX11
+    libcxx
+    libdrm
+    libglvnd
+    libpulseaudio
+    libxcb
+    mesa
+    wayland
+    xz
+    zlib
   ];
 
   appendRunpaths = lib.makeLibraryPath [
-    libva libvdpau addDriverRunpath.driverLink
+    libva
+    libvdpau
+    addDriverRunpath.driverLink
   ];
 
   installPhase = ''
@@ -34,11 +63,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "multimedia development kit";
     homepage = "https://github.com/wang-bin/mdk-sdk";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ orivej ];
     platforms = [ "x86_64-linux" ];
   };
 }
