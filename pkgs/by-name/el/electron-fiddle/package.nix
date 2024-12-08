@@ -98,7 +98,7 @@ let
 
 in
 buildFHSEnv {
-  name = "electron-fiddle";
+  inherit pname version;
   runScript = "${electron}/bin/electron ${unwrapped}/lib/electron-fiddle/resources/app.asar";
 
   extraInstallCommands = ''
