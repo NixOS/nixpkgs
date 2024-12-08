@@ -1,8 +1,20 @@
-{ lib, stdenv, fetchFromGitHub
-, openssl, nss, p11-kit
-, opensc, gnutls, expect, which
-, meson, ninja, pkg-config, valgrind, python3
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  nss,
+  p11-kit,
+  opensc,
+  gnutls,
+  expect,
+  which,
+  meson,
+  ninja,
+  pkg-config,
+  valgrind,
+  python3,
+  nix-update-script,
 }:
 
 let
@@ -20,11 +32,29 @@ stdenv.mkDerivation rec {
     hash = "sha256-wYqmxxAzraaVR2+mbsRfgyvD/tapn8UOO0UzBX2ZJH4=";
   };
 
-  buildInputs = [ openssl nss p11-kit ];
-  nativeBuildInputs = [ meson ninja pkg-config which ];
+  buildInputs = [
+    openssl
+    nss
+    p11-kit
+  ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    which
+  ];
 
   # don't add SoftHSM to here: https://github.com/openssl/openssl/issues/22508
-  nativeCheckInputs = [ p11-kit.bin opensc nss.tools gnutls openssl.bin expect valgrind pkcs11ProviderPython3 ];
+  nativeCheckInputs = [
+    p11-kit.bin
+    opensc
+    nss.tools
+    gnutls
+    openssl.bin
+    expect
+    valgrind
+    pkcs11ProviderPython3
+  ];
 
   postPatch = ''
     patchShebangs --build .
@@ -48,7 +78,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "v(\d\.\d)"];
+    extraArgs = [
+      "--version-regex"
+      "v(\d\.\d)"
+    ];
   };
 
   meta = with lib; {
