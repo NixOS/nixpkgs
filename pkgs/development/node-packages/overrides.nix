@@ -280,7 +280,9 @@ final: prev: {
   };
 
   thelounge-theme-flat-dark = prev.thelounge-theme-flat-dark.override {
-    nativeBuildInputs = [ pkgs.node-pre-gyp ];
+    nativeBuildInputs = [ pkgs.node-pre-gyp ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      pkgs.cctools
+    ];
     # TODO: needed until upstream pins thelounge version 4.3.1+ (which fixes dependency on old sqlite3 and transitively very old node-gyp 3.x)
     preRebuild = ''
       rm -r node_modules/node-gyp
