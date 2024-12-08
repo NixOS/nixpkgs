@@ -8,7 +8,6 @@
   flutter324,
   pulseaudio,
   makeDesktopItem,
-  zenity,
   olm,
 
   targetFlutterPlatform ? "linux",
@@ -63,8 +62,6 @@ flutter324.buildFlutterApplication (
     nativeBuildInputs = [ imagemagick ];
 
     runtimeDependencies = [ pulseaudio ];
-
-    extraWrapProgramArgs = "--prefix PATH : ${zenity}/bin";
 
     env.NIX_LDFLAGS = "-rpath-link ${libwebrtcRpath}";
 
