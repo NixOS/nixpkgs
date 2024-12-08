@@ -12,7 +12,6 @@
   mimalloc,
   mpv,
   mpv-unwrapped,
-  xdg-user-dirs,
 }:
 flutter324.buildFlutterApplication rec {
   pname = "kazumi";
@@ -108,10 +107,6 @@ flutter324.buildFlutterApplication rec {
   postInstall = ''
     install -Dm0644 ./assets/linux/io.github.Predidit.Kazumi.desktop $out/share/applications/io.github.Predidit.Kazumi.desktop
     install -Dm0644 ./assets/images/logo/logo_linux.png $out/share/icons/hicolor/512x512/apps/io.github.Predidit.Kazumi.png
-  '';
-
-  extraWrapProgramArgs = ''
-    --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
   '';
 
   meta = {
