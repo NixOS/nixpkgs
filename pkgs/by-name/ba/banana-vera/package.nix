@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     python310
-    python310.pkgs.boost
+    python310.pkgs.boost-python
     tcl
   ];
 

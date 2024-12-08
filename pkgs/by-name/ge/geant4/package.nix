@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   callPackage,
-  boost,
   clhep,
   cmake,
   coin3d,
@@ -26,16 +25,9 @@
   enableQt ? false,
   enableXM ? false,
   enableOpenGLX11 ? !stdenv.hostPlatform.isDarwin,
-  enablePython ? false,
+  enablePython ? true,
   enableRaytracerX11 ? false,
 }:
-
-let
-  boost_python = boost.override {
-    enablePython = true;
-    python = python3;
-  };
-in
 
 stdenv.mkDerivation rec {
   version = "11.3.2";
@@ -98,8 +90,8 @@ stdenv.mkDerivation rec {
       motif
     ]
     ++ lib.optionals enablePython [
-      boost_python
       python3
+      python3.pkgs.boost-python
     ];
 
   propagatedBuildInputs =
