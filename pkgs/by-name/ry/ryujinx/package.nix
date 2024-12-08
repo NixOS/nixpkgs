@@ -1,7 +1,7 @@
 { lib
 , buildDotnetModule
 , dotnetCorePackages
-, fetchzip
+, fetchFromGitHub
 , libX11
 , libgdiplus
 , ffmpeg
@@ -25,11 +25,13 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.1401"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.2.76"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
-  src = fetchzip {
-    url = "https://archive.org/download/ryujinx-5dbba-07e-33e-83c-9047dcbb-701c-9655edbbe-89086.tar/Ryujinx-5dbba07e33e83c9047dcbb701c9655edbbe89086.tar.gz";
-    hash = "sha256-UeJ3KE5e5H9crqroAxjmxYTf/Z4cbj41a6/1HW2nLcA=";
+  src = fetchFromGitHub {
+    owner = "GreemDev";
+    repo = "Ryujinx";
+    rev = "1.2.76";
+    hash = "sha256-RQbFN+XMEZtouUB7cvO3OdanUm6Is9V2L6q7dqzGQY4=";
   };
 
   enableParallelBuilding = false;
