@@ -31,7 +31,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     autoreconfHook = pkgs.autoreconfHook269;
   };
 
-} // lib.optionalAttrs config.allowAliases {
+}) // lib.optionalAttrs config.allowAliases {
   # added 2024-12-02
   glib = throw "gnome2.glib has been removed, please use top-level glib";
   glibmm = throw "gnome2.glibmm has been removed, please use top-level glibmm";
@@ -74,4 +74,4 @@ lib.makeScope pkgs.newScope (self: with self; {
   libgnomeui = throw "gnome2.libgnomeui has been removed"; # 2024-06-27
   libgtkhtml = throw "gnome2.libgtkhtml has been removed"; # 2023-01-15
   python_rsvg = throw "gnome2.python_rsvg has been removed"; # 2023-01-14
-})
+}
