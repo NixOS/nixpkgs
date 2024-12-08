@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter,
+  flutter324,
   keybinder3,
   libayatana-appindicator,
   buildGoModule,
@@ -46,7 +46,7 @@ let
     };
   };
 in
-flutter.buildFlutterApplication {
+flutter324.buildFlutterApplication {
   inherit pname version src;
 
   desktopItems = [

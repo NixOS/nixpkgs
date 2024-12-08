@@ -1,13 +1,13 @@
 {
   lib,
   fetchFromGitHub,
-  flutter,
+  flutter324,
   webkitgtk_4_1,
   pkg-config,
   copyDesktopItems,
   makeDesktopItem,
 }:
-flutter.buildFlutterApplication rec {
+flutter324.buildFlutterApplication rec {
   pname = "venera";
   version = "1.0.8";
 

@@ -2,11 +2,11 @@
 , makeDesktopItem
 , copyDesktopItems
 , lib
-, flutter
+, flutter324
 , quickemu
 , zenity
 }:
-flutter.buildFlutterApplication rec {
+flutter324.buildFlutterApplication rec {
   pname = "quickgui";
   version = "1.2.10";
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter,
+  flutter324,
   webkitgtk_4_1,
   alsa-lib,
   libayatana-appindicator,
@@ -14,7 +14,7 @@
 let
   version = "1.4.4";
 in
-flutter.buildFlutterApplication {
+flutter324.buildFlutterApplication {
   pname = "kazumi";
   inherit version;
 
