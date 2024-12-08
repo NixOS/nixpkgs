@@ -1,22 +1,25 @@
 {
   lib,
   fetchFromGitHub,
-  flutter,
+  flutter324,
   keybinder3,
   libayatana-appindicator,
   buildGoModule,
   makeDesktopItem,
   copyDesktopItems,
+  zenity,
+  wrapGAppsHook3,
+  autoPatchelfHook,
 }:
 let
   pname = "flclash";
-  version = "0.8.68";
+  version = "0.8.69";
   src =
     (fetchFromGitHub {
       owner = "chen08209";
       repo = "FlClash";
-      rev = "v${version}";
-      hash = "sha256-0S3sNmOxM5SpRLpYzi4br5/PJnxDklFHsEAKiHd0vOM=";
+      tag = "v${version}";
+      hash = "sha256-T9sqHzqnOvZG95EJegqT6TqOOrAuqzjNvVQWLyeQwng=";
       fetchSubmodules = true;
     }).overrideAttrs
       (_: {
@@ -26,13 +29,18 @@ let
       });
   libclash = buildGoModule {
     inherit pname version src;
+
     modRoot = "./core";
-    vendorHash = "sha256-BpZB+0r7x7Ntldimo/nHXIu98jwhcA53l3kMav9lHkA=";
+
+    vendorHash = "sha256-yam3DgY/dfwIRc7OvFltwX29x6xGlrrsK4Oj6oaGYRw=";
+
+    CGO_ENABLED = 0;
+
     buildPhase = ''
       runHook preBuild
 
-      mkdir -p $out/lib
-      go build -ldflags="-w -s" -tags=with_gvisor -buildmode=c-shared -o $out/lib/libclash.so
+      mkdir -p $out/bin
+      go build -ldflags="-w -s" -tags=with_gvisor -o $out/bin/FlClashCore
 
       runHook postBuild
     '';
@@ -42,18 +50,30 @@ let
       homepage = "https://github.com/chen08209/FlClash";
       license = with lib.licenses; [ gpl3Plus ];
       maintainers = with lib.maintainers; [ aucub ];
-      platforms = lib.platforms.linux;
     };
   };
 in
-flutter.buildFlutterApplication {
+flutter324.buildFlutterApplication {
   inherit pname version src;
+
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  nativeBuildInputs = [
+    copyDesktopItems
+    wrapGAppsHook3
+    autoPatchelfHook
+  ];
+
+  buildInputs = [
+    keybinder3
+    libayatana-appindicator
+  ];
 
   desktopItems = [
     (makeDesktopItem {
-      name = "FlClash";
+      name = "flclash";
       exec = "FlClash %U";
-      icon = "FlClash";
+      icon = "flclash";
       genericName = "FlClash";
       desktopName = "FlClash";
       categories = [
@@ -68,31 +88,18 @@ flutter.buildFlutterApplication {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace lib/clash/core.dart \
-      --replace-fail 'DynamicLibrary.open("libclash.so")' 'DynamicLibrary.open("${libclash}/lib/libclash.so")'
-  '';
-
   preBuild = ''
     mkdir -p ./libclash/linux/
-    cp ${libclash}/lib/libclash.so ./libclash/linux/libclash.so
+    cp ${libclash}/bin/FlClashCore ./libclash/linux/FlClashCore
   '';
 
   postInstall = ''
-    mkdir -p $out/share/pixmaps/
-    cp ./assets/images/icon.png $out/share/pixmaps/FlClash.png
+    install -Dm644 ./assets/images/icon.png $out/share/pixmaps/flclash.png
   '';
 
-  pubspecLock = lib.importJSON ./pubspec.lock.json;
-
-  nativeBuildInputs = [
-    copyDesktopItems
-  ];
-
-  buildInputs = [
-    keybinder3
-    libayatana-appindicator
-  ];
+  extraWrapProgramArgs = ''
+    --prefix PATH : ${lib.makeBinPath [ zenity ]}
+  '';
 
   meta = {
     description = "Multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free";
