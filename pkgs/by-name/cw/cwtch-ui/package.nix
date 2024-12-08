@@ -4,12 +4,10 @@
   flutter,
   lib,
   tor,
-  zenity,
 }:
 let
   runtimeBinDependencies = [
     tor
-    zenity
   ];
 in
 flutter.buildFlutterApplication rec {
