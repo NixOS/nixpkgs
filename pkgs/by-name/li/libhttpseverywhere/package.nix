@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkg-config, meson, ninja, makeFontsConf, vala, fetchpatch
-, gnome, libgee, glib, json-glib, libarchive, libsoup, gobject-introspection }:
+, gnome, libgee, glib, json-glib, libarchive, libsoup_2_4, gobject-introspection }:
 
 let
   pname = "libhttpseverywhere";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ vala gobject-introspection meson ninja pkg-config ];
-  buildInputs = [ glib libgee json-glib libsoup libarchive ];
+  buildInputs = [ glib libgee json-glib libsoup_2_4 libarchive ];
 
   patches = [
     # Fixes build with vala >=0.42

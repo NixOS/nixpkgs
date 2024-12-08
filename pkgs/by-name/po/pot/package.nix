@@ -15,7 +15,7 @@
   libayatana-appindicator,
   gtk3,
   webkitgtk_4_0,
-  libsoup,
+  libsoup_2_4,
   openssl,
   xdotool,
 }:
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gtk3
-    libsoup
+    libsoup_2_4
     libayatana-appindicator
     openssl
     webkitgtk_4_0
