@@ -111,9 +111,8 @@ installPhase = ''
 '';
 
   #--use-gl=egl for it to use hardware rendering it seems. Otherwise there are terrible framerates
-  postInstall = ''
-    substituteInPlace share/applications/Plasticity.desktop \
-      --replace-fail 'Exec=Plasticity %U' "Exec=Plasticity --use-gl=egl %U"
+  preFixup = ''
+    gappsWrapperArgs+=(--add-flags "--use-gl=egl")
   '';
 
   meta = with lib; {
