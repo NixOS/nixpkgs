@@ -28,13 +28,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "3.5";
+  version = "3.6";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swayimg";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-qI5M7ZC7GaVtVNh+MWPNdjXukk135IQ1gPHxdefBEyo=";
+    hash = "sha256-DboalwPhQYcqptdQvLHN+zrrdU3Swzb6z3vO+GJY2JY=";
   };
 
   strictDeps = true;
