@@ -13,13 +13,13 @@
 }:
 let
   pname = "flclash";
-  version = "0.8.69";
+  version = "0.8.70";
   src =
     (fetchFromGitHub {
       owner = "chen08209";
       repo = "FlClash";
       tag = "v${version}";
-      hash = "sha256-T9sqHzqnOvZG95EJegqT6TqOOrAuqzjNvVQWLyeQwng=";
+      hash = "sha256-6gDkRqbAGqwF+HCThWAHK0Jh/dxaYlnaYaAiXN48z5E=";
       fetchSubmodules = true;
     }).overrideAttrs
       (_: {
