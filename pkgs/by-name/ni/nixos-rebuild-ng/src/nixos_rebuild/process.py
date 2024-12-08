@@ -144,7 +144,7 @@ def run_wrapper(
 
         return r
     except subprocess.CalledProcessError:
-        if sudo and remote:
+        if sudo and remote and remote.sudo_password is None:
             logger.error(
                 "while running command with remote sudo, did you forget to use "
                 + "--ask-sudo-password?"
