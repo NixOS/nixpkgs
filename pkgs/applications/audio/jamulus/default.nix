@@ -3,11 +3,7 @@
   lib,
   fetchFromGitHub,
   pkg-config,
-  qtscript,
-  qmake,
-  qtbase,
-  qtmultimedia,
-  qtdeclarative,
+  libsForQt5,
   libjack2,
 }:
 mkDerivation rec {
@@ -23,14 +19,14 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    qmake
+    libsForQt5.qmake
   ];
 
   buildInputs = [
-    qtscript
-    qtbase
-    qtmultimedia
-    qtdeclarative
+    libsForQt5.qtscript
+    libsForQt5.qtbase
+    libsForQt5.qtmultimedia
+    libsForQt5.qtdeclarative
     libjack2
   ];
 
@@ -39,7 +35,7 @@ mkDerivation rec {
   meta = {
     description = "Enables musicians to perform real-time jam sessions over the internet";
     longDescription = "You also need to enable JACK and should enable several real-time optimizations. See project website for details";
-    homepage = "https://github.com/corrados/jamulus/wiki";
+    homepage = "https://github.com/corrados/jamulus";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     mainProgram = "jamulus";
