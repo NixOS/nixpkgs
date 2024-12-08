@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
+      boost
       gmp
       mpfr
       libedit
@@ -66,18 +67,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals gpgmeSupport [
       gpgme
     ]
-    ++ (
-      if usePython then
-        [
-          python3
-          (boost.override {
-            enablePython = true;
-            python = python3;
-          })
-        ]
-      else
-        [ boost ]
-    );
+    ++ lib.optionals usePython [
+      python3
+      python3.pkgs.boost-python
+    ];
 
   nativeBuildInputs = [
     cmake
