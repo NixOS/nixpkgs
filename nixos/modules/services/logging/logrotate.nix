@@ -240,11 +240,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ pkgs.logrotate ];
     systemd.services.logrotate = {
       description = "Logrotate Service";
       documentation = [
         "man:logrotate(8)"
-        "man:logrotate(5)"
+        "man:logrotate.conf(5)"
       ];
       startAt = "hourly";
 
