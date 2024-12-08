@@ -8,11 +8,9 @@
   which,
   rustPlatform,
   emscripten,
-  Security,
   callPackage,
   linkFarm,
   substitute,
-  CoreServices,
   installShellFiles,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
@@ -174,11 +172,7 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-mk3aw1aFu7N+b4AQL5kiaHuIAuJv24KonFeGKid427Q=";
 
   buildInputs =
-    [ installShellFiles ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      CoreServices
-    ];
+    [ installShellFiles ];
   nativeBuildInputs = [ which ] ++ lib.optionals webUISupport [ emscripten ];
 
   patches = lib.optionals webUISupport [
