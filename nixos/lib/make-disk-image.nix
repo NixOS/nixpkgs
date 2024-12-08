@@ -400,9 +400,6 @@ let format' = format; in let
     for ((i = 0; i < ''${#targets_[@]}; i++)); do
       source="''${sources_[$i]}"
       target="''${targets_[$i]}"
-      echo "source $source"
-      echo "target $root/$target" 
-      echo "--"
       mode="''${modes_[$i]}"
 
       if [ -n "$mode" ]; then
@@ -448,7 +445,7 @@ let format' = format; in let
       --system ${config.system.build.toplevel} \
       ${if copyChannel then "--channel ${channelSources}" else "--no-channel-copy"} \
       --substituters ""
-
+    
     ${lib.optionalString (additionalPaths' != []) ''
       nix --extra-experimental-features nix-command copy --to $root --no-check-sigs ${lib.concatStringsSep " " additionalPaths'}
     ''}
@@ -520,6 +517,7 @@ let format' = format; in let
     ''}
 
     echo "copying staging root to image..."
+    shopt -s dotglob
     cptofs -p ${lib.optionalString (partitionTableType != "none") "-P ${rootPartition}"} \
            -t ${fsType} \
            -i $diskImage \
@@ -593,7 +591,7 @@ let format' = format; in let
       mount -t tmpfs -o "mode=755" none $mountPoint/run
       mkdir $mountPoint/run/current-system
       ln -s ${config.system.build.etc}/etc $mountPoint/run/current-system/etc
-      
+
       # Create the ESP and mount it. Unlike e2fsprogs, mkfs.vfat doesn't support an
       # '-E offset=X' option, so we can't do this outside the VM.
       ${lib.optionalString (partitionTableType == "efi" || partitionTableType == "hybrid") ''
