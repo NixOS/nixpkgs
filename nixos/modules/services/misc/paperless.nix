@@ -185,7 +185,6 @@ in
       '';
       example = {
         PAPERLESS_OCR_LANGUAGE = "deu+eng";
-        PAPERLESS_DBHOST = "/run/postgresql";
         PAPERLESS_CONSUMER_IGNORE_PATTERN = [ ".DS_STORE/*" "desktop.ini" ];
         PAPERLESS_OCR_USER_ARGS = {
           optimize = 1;
@@ -246,10 +245,36 @@ in
         ```
       '';
     };
+
+    database = {
+      createLocally = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Configure local PostgreSQL database server for Paperless.
+        '';
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
     services.redis.servers.paperless.enable = lib.mkIf enableRedis true;
+
+    services.postgresql = lib.mkIf cfg.database.createLocally {
+      enable = true;
+      ensureDatabases = [ "paperless" ];
+      ensureUsers = [{
+        name = config.services.paperless.user;
+        ensureDBOwnership = true;
+      }];
+    };
+
+    services.paperless.settings = lib.mkIf cfg.database.createLocally {
+      PAPERLESS_DBENGINE = "postgresql";
+      PAPERLESS_DBHOST = "/run/postgresql";
+      PAPERLESS_DBNAME = "paperless";
+      PAPERLESS_DBUSER = "paperless";
+    };
 
     systemd.slices.system-paperless = {
       description = "Paperless Document Management System Slice";
@@ -318,13 +343,16 @@ in
           echo "$superuserState" > "$superuserStateFile"
         fi
       '';
-    } // lib.optionalAttrs enableRedis {
-      after = [ "redis-paperless.service" ];
+      requires = lib.optional cfg.database.createLocally "postgresql.service";
+      after = lib.optional enableRedis "redis-paperless.service"
+        ++ lib.optional cfg.database.createLocally "postgresql.service";
     };
 
     systemd.services.paperless-task-queue = {
       description = "Paperless Celery Workers";
-      after = [ "paperless-scheduler.service" ];
+      requires = lib.optional cfg.database.createLocally "postgresql.service";
+      after = [ "paperless-scheduler.service" ]
+        ++ lib.optional cfg.database.createLocally "postgresql.service";
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
         ExecStart = "${cfg.package}/bin/celery --app paperless worker --loglevel INFO";
@@ -342,7 +370,9 @@ in
       # Bind to `paperless-scheduler` so that the consumer never runs
       # during migrations
       bindsTo = [ "paperless-scheduler.service" ];
-      after = [ "paperless-scheduler.service" ];
+      requires = lib.optional cfg.database.createLocally "postgresql.service";
+      after = [ "paperless-scheduler.service" ]
+        ++ lib.optional cfg.database.createLocally "postgresql.service";
       serviceConfig = defaultServiceConfig // {
         User = cfg.user;
         ExecStart = "${cfg.package}/bin/paperless-ngx document_consumer";
@@ -359,7 +389,9 @@ in
       # Bind to `paperless-scheduler` so that the web server never runs
       # during migrations
       bindsTo = [ "paperless-scheduler.service" ];
-      after = [ "paperless-scheduler.service" ];
+      requires = lib.optional cfg.database.createLocally "postgresql.service";
+      after = [ "paperless-scheduler.service" ]
+        ++ lib.optional cfg.database.createLocally "postgresql.service";
       # Setup PAPERLESS_SECRET_KEY.
       # If this environment variable is left unset, paperless-ngx defaults
       # to a well-known value, which is insecure.
