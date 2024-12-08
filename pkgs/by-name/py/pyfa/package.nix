@@ -4,7 +4,7 @@
   fetchurl,
 }:
 let
-  version = "2.60.2";
+  version = "2.61.3";
 in
 appimageTools.wrapType2 {
   inherit version;
@@ -13,7 +13,7 @@ appimageTools.wrapType2 {
   src = fetchurl {
     name = "pyfa-appimage-${version}";
     url = "https://github.com/pyfa-org/Pyfa/releases/download/v${version}/pyfa-v${version}-linux.AppImage";
-    hash = "sha256-6doetQ6E1Occ/SqewfxRqPEX1MnUuFomm+8VmetIz4Y=";
+    hash = "sha256-RDynnxfRWcHnONlclNOqRincJFlZ+kNpYquSKZB1epg=";
   };
 
   meta = {
