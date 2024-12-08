@@ -18523,10 +18523,6 @@ with pkgs;
     ffmpeg = ffmpeg-full;
   };
 
-  vokoscreen-ng = libsForQt5.callPackage ../applications/video/vokoscreen-ng {
-    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly;
-  };
-
   wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
 
   wamr = darwin.apple_sdk_11_0.callPackage ../development/interpreters/wamr { };
