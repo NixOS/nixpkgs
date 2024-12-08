@@ -1,14 +1,10 @@
+# This test checks #418101, where lingering users would not be cleared up if
+# the configuration is updated to remove lingering from all users.
 rec {
-  name = "systemd-user-linger";
+  name = "systemd-user-linger-purge";
 
   nodes.machine = {
     users.users = {
-      alice = {
-        isNormalUser = true;
-        linger = true;
-        uid = 1000;
-      };
-
       bob = {
         isNormalUser = true;
         linger = false;
@@ -22,10 +18,12 @@ rec {
       uidStrings = builtins.mapAttrs (k: v: builtins.toString v.uid) nodes.machine.users.users;
     in
     ''
-      machine.wait_for_file("/var/lib/systemd/linger/alice")
-      machine.succeed("systemctl status user-${uidStrings.alice}.slice")
-
       machine.fail("test -e /var/lib/systemd/linger/bob")
       machine.fail("systemctl status user-${uidStrings.bob}.slice")
+
+      with subtest("missing users have linger purged"):
+          machine.succeed("touch /var/lib/systemd/linger/alice")
+          machine.systemctl("restart linger-users")
+          machine.succeed("test ! -e /var/lib/systemd/linger/alice")
     '';
 }
