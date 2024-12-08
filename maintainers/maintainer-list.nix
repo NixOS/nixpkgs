@@ -11234,6 +11234,12 @@
     githubId = 2576152;
     name = "John M. Harris, Jr.";
   };
+  JohnMolotov = {
+    name = "John Molotov";
+    email = "johnmolotov@cryptolab.net";
+    github = "JohnMolotov";
+    githubId = 171455312;
+  };
   johnpyp = {
     name = "John Paul Penaloza";
     email = "johnpyp.dev@gmail.com";
