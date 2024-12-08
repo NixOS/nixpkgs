@@ -1,26 +1,30 @@
 { lib, stdenv, fetchFromGitHub
 , openssl, nss, p11-kit
-, opensc, gnutls, expect
-, meson, ninja, pkg-config
+, opensc, gnutls, expect, which
+, meson, ninja, pkg-config, valgrind, python3
 , nix-update-script
 }:
 
+let
+  pkcs11ProviderPython3 = python3.withPackages (pythonPkgs: with pythonPkgs; [ six ]);
+in
 stdenv.mkDerivation rec {
   pname = "pkcs11-provider";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "pkcs11-provider";
     rev = "v${version}";
-    hash = "sha256-ii2xQPBgqIjrAP27qTQR9IXbEGZcc79M/cYzFwcAajQ=";
+    fetchSubmodules = true;
+    hash = "sha256-wYqmxxAzraaVR2+mbsRfgyvD/tapn8UOO0UzBX2ZJH4=";
   };
 
   buildInputs = [ openssl nss p11-kit ];
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config which ];
 
   # don't add SoftHSM to here: https://github.com/openssl/openssl/issues/22508
-  nativeCheckInputs = [ p11-kit.bin opensc nss.tools gnutls openssl.bin expect ];
+  nativeCheckInputs = [ p11-kit.bin opensc nss.tools gnutls openssl.bin expect valgrind pkcs11ProviderPython3 ];
 
   postPatch = ''
     patchShebangs --build .
