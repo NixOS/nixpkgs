@@ -16,6 +16,7 @@
 , expat
 , alsa-lib
 , buildFHSEnv
+, writeTextFile
 }:
 
 let
@@ -60,6 +61,7 @@ let
       pango
       cairo
       mesa
+      libGL
       expat
       libxkbcommon
     ]) ++ (with pkgs.xorg; [
@@ -73,8 +75,33 @@ let
       libxcb
     ]);
     runScript = ''
-      Typora $*
+      Typora "$@"
     '';
+  };
+
+  launchScript = writeTextFile {
+  name = "typora-launcher";
+  executable = true;
+  text = ''
+    #!${stdenv.shell}
+
+    # Configuration directory setup
+    XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-~/.config}
+    TYPORA_CONFIG_DIR="$XDG_CONFIG_HOME/Typora"
+    TYPORA_DICT_DIR="$TYPORA_CONFIG_DIR/typora-dictionaries"
+
+    # Create config directories with proper permissions
+    mkdir -p "$TYPORA_DICT_DIR"
+    chmod 755 "$TYPORA_CONFIG_DIR"
+    chmod 755 "$TYPORA_DICT_DIR"
+
+    # Read user flags if they exist
+    if [ -f "$XDG_CONFIG_HOME/typora-flags.conf" ]; then
+      TYPORA_USER_FLAGS="$(sed 's/#.*//' "$XDG_CONFIG_HOME/typora-flags.conf" | tr '\n' ' ')"
+    fi
+
+    exec ${typoraFHS}/bin/typora-fhs "$@" $TYPORA_USER_FLAGS
+  '';
   };
 
 in stdenv.mkDerivation {
@@ -87,7 +114,7 @@ in stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    ln -s ${typoraFHS}/bin/typora-fhs $out/bin/typora
+    ln -s ${launchScript} $out/bin/typora
     ln -s ${typoraBase}/share/ $out
     runHook postInstall
   '';
