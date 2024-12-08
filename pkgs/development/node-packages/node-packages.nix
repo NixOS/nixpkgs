@@ -61792,24 +61792,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  create-react-native-app = nodeEnv.buildNodePackage {
-    name = "create-react-native-app";
-    packageName = "create-react-native-app";
-    version = "4.0.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/create-react-native-app/-/create-react-native-app-4.0.0.tgz";
-      sha512 = "YRDkUIC0goqudxbBoSScj7rID1yVPKeRXAQGxasC3cLOk6Z1f7zZ1ZUrVLaLaQYjLwmLxCbkxzZpNGr9wnnY/Q==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Create React Native apps with no build configuration.";
-      homepage = "https://github.com/expo/create-react-native-app";
-      license = "BSD-3-Clause";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   cspell = nodeEnv.buildNodePackage {
     name = "cspell";
     packageName = "cspell";
