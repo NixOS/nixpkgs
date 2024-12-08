@@ -1,10 +1,8 @@
 {
-  boost,
   cmake,
   doxygen,
   fetchFromGitHub,
   fontconfig,
-  gepetto-viewer,
   lib,
   pkg-config,
   python3Packages,
@@ -39,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    python3Packages.boost
+    python3Packages.boost-python
     python3Packages.gepetto-viewer
     python3Packages.omniorbpy
   ];
