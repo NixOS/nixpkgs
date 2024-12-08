@@ -73,11 +73,6 @@ let
     ghdl = yosys-ghdl;
   } // (yosys-symbiflow);
 
-  boost_python = boost.override {
-    enablePython = true;
-    python = python3;
-  };
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yosys";
@@ -120,7 +115,10 @@ stdenv.mkDerivation (finalAttrs: {
         click
       ]
     ))
-  ] ++ lib.optional enablePython boost_python;
+  ] ++ lib.optionals enablePython  [
+    boost
+    (boost.pythonLib python3)
+  ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
