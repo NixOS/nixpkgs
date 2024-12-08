@@ -1,0 +1,72 @@
+diff --git a/CMakeGlobals.txt b/CMakeGlobals.txt
+index 8868c4426e..19b2fa0892 100644
+--- a/CMakeGlobals.txt
++++ b/CMakeGlobals.txt
+@@ -345,6 +345,7 @@ if (APPLE)
+       set(RSTUDIO_INSTALL_SUPPORTING RStudio.app/Contents/Resources/app)
+       # handles Quarto share when not stored alongside bin
+       set(RSTUDIO_INSTALL_RESOURCES RStudio.app/Contents/Resources)
++      set(RSTUDIO_INSTALL_ELECTRON .)
+    else()
+       set(RSTUDIO_INSTALL_BIN        RStudio.app/Contents/MacOS)
+       set(RSTUDIO_INSTALL_SUPPORTING RStudio.app/Contents/Resources)
+diff --git a/src/cpp/CMakeLists.txt b/src/cpp/CMakeLists.txt
+index b47f04f84d..928165d612 100644
+--- a/src/cpp/CMakeLists.txt
++++ b/src/cpp/CMakeLists.txt
+@@ -240,7 +240,7 @@ endif()
+ # determine whether we should statically link boost. we always do this
+ # unless we are building a non-packaged build on linux (in which case
+ # boost dynamic libraries are presumed to be installed on the system ldpath)
+-if(APPLE OR WIN32 OR RSTUDIO_PACKAGE_BUILD)
++if(WIN32 OR RSTUDIO_PACKAGE_BUILD)
+    set(Boost_USE_STATIC_LIBS ON)
+ endif()
+ 
+@@ -475,7 +475,7 @@ endif()
+ 
+ # find SOCI libraries
+ if(UNIX)
+-   if(NOT APPLE AND RSTUDIO_USE_SYSTEM_SOCI)
++   if(RSTUDIO_USE_SYSTEM_SOCI)
+       find_library(SOCI_CORE_LIB NAMES "libsoci_core.a" "soci_core" REQUIRED)
+       find_library(SOCI_SQLITE_LIB NAMES "libsoci_sqlite3.a" "soci_sqlite3" REQUIRED)
+       if(RSTUDIO_PRO_BUILD)
+diff --git a/src/node/desktop/CMakeLists.txt b/src/node/desktop/CMakeLists.txt
+index 2f4d9290e6..7ef0c0ea07 100644
+--- a/src/node/desktop/CMakeLists.txt
++++ b/src/node/desktop/CMakeLists.txt
+@@ -119,7 +119,9 @@ if (APPLE)
+    # configure Info.plist
+    configure_file (${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in
+       ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
++endif()
+ 
++if (false)
+    # copy sources to build directory. note that the build directory cannot
+    # be the "true" CMake directory as some files are resolved relative to
+    # the desktop project's relative path in the application structure
+@@ -230,16 +232,21 @@ if(WIN32)
+          PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
+          DESTINATION "${RSTUDIO_INSTALL_BIN}")
+ 
+-elseif(LINUX)
++elseif(LINUX OR APPLE)
+ 
+    if(UNAME_M STREQUAL aarch64)
+       set(ELECTRON_ARCH arm64)
+    else()
+       set(ELECTRON_ARCH x64)
+    endif()
++   if(APPLE)
++      set(ELECTRON_PLATFORM darwin)
++   else()
++      set(ELECTRON_PLATFORM linux)
++   endif()
+ 
+    install(
+-      DIRECTORY "${ELECTRON_BUILD_DIR}/out/RStudio-linux-${ELECTRON_ARCH}/"
++      DIRECTORY "${ELECTRON_BUILD_DIR}/out/RStudio-${ELECTRON_PLATFORM}-${ELECTRON_ARCH}/"
+       DIRECTORY_PERMISSIONS
+       OWNER_READ OWNER_WRITE OWNER_EXECUTE
+       GROUP_READ GROUP_EXECUTE
