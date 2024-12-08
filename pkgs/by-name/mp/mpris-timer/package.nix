@@ -50,6 +50,8 @@ buildGoModule rec {
   ];
 
   postInstall = ''
+    mv $out/bin/cmd $out/bin/mpris-timer
+
     install -Dm644 internal/ui/res/icon.svg $out/share/icons/hicolor/scalable/apps/io.github.efogdev.mpris-timer.svg
     install -Dm644 misc/io.github.efogdev.mpris-timer.desktop -t $out/share/applications
     install -Dm644 misc/io.github.efogdev.mpris-timer.metainfo.xml -t $out/share/metainfo
