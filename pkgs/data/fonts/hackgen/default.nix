@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "hackgen-font";
-  version = "2.9.0";
+  version = "2.9.1";
 
   src = fetchzip {
     url = "https://github.com/yuru7/HackGen/releases/download/v${version}/HackGen_v${version}.zip";
-    hash = "sha256-Ah2oVP8nzFiYA76kMPa9+YHQwFxq4i1muwkcmC7TzOk=";
+    hash = "sha256-PkCaidfPcUBGjPu36Jza175jCu6WJ06YhVFDENzd+Z4=";
   };
 
   installPhase = ''
