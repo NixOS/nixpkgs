@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/nokyan/resources/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/nokyan/resources/releases/tag/v${finalAttrs.version}";
     description = "Monitor your system resources and processes";
     homepage = "https://github.com/nokyan/resources";
     license = lib.licenses.gpl3Only;
