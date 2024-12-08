@@ -198,8 +198,8 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 
 # Browsers
 /pkgs/applications/networking/browsers/firefox @mweinelt
-/pkgs/applications/networking/browsers/chromium @emilylange
-/nixos/tests/chromium.nix @emilylange
+/pkgs/applications/networking/browsers/chromium @emilylange @networkException
+/nixos/tests/chromium.nix @emilylange @networkException
 
 # Certificate Authorities
 pkgs/data/misc/cacert/ @ajs124 @lukegb @mweinelt
