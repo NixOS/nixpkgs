@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pkg-config,
   bzip2,
-  git,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,14 +19,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-v+Fs2VJrpnIOk9nPRanYYChlR7WOfkXF1kbYOKjOUYc=";
 
-  doCheck = false;
+  checkFlags = [
+    # Skip test that requires network access
+    "--skip test_download_file"
+    "--skip test_extract_zip"
+    "--skip test_invalid_download_url"
+    "--skip test_create_package"
+    "--skip test_init_package"
+  ];
 
   nativeBuildInputs = [
     pkg-config
-  ];
-
-  nativeCheckInputs = [
-    git
   ];
 
   meta = {
