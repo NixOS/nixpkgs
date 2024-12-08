@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.35.0";
+  version = "2.36.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_auth";
     inherit version;
-    hash = "sha256-9MZO1OAejotkbvNMAY+L8zON8MjjfYs7ukDn9XSjJ4o=";
+    hash = "sha256-VF6WGPLfC8u33LxFpUZIWxISYkcWl1oepa6BSc52mrE=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -83,6 +83,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
+  ];
+
+  pytestFlagsArray = [
+    # cryptography 44 compat issue
+    "--deselect=tests/transport/test__mtls_helper.py::TestDecryptPrivateKey::test_success"
   ];
 
   disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
