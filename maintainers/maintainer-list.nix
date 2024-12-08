@@ -2,18 +2,18 @@
   List of NixOS maintainers.
    ```nix
    handle = {
-     # Required
-     name = "Your name";
+   # Required
+   name = "Your name";
 
-     # Optional, but at least one of email, matrix or githubId must be given
-     email = "address@example.org";
-     matrix = "@user:example.org";
-     github = "GithubUsername";
-     githubId = your-github-id;
+   # Optional, but at least one of email, matrix or githubId must be given
+   email = "address@example.org";
+   matrix = "@user:example.org";
+   github = "GithubUsername";
+   githubId = your-github-id;
 
-     keys = [{
+   keys = [{
        fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333";
-     }];
+   }];
    };
    ```
 
@@ -30,14 +30,14 @@
    Specifying a GitHub account ensures that you automatically:
    - get invited to the @NixOS/nixpkgs-maintainers team ;
    - once you are part of the @NixOS org, OfBorg will request you review
-     pull requests that modify a package for which you are a maintainer.
+   pull requests that modify a package for which you are a maintainer.
 
    `handle == github` is strongly preferred whenever `github` is an acceptable attribute name and is short and convenient.
 
    If `github` begins with a numeral, `handle` should be prefixed with an underscore.
    ```nix
    _1example = {
-     github = "1example";
+   github = "1example";
    };
    ```
 
@@ -15452,6 +15452,12 @@
     githubId = 93013864;
     name = "nat-418";
   };
+  nateeag = {
+    github = "NateEag";
+    githubId = 837719;
+    name = "Nate Eagleson";
+    email = "nate@nateeag.com";
+  };
   nathan-gs = {
     email = "nathan@nathan.gs";
     github = "nathan-gs";
@@ -15711,6 +15717,12 @@
     github = "newAM";
     githubId = 7845120;
     name = "Alex Martens";
+  };
+  nezia = {
+    email = "anthony@nezia.dev";
+    github = "nezia1";
+    githubId = 43719748;
+    name = "Anthony Rodriguez";
   };
   ngerstle = {
     name = "Nicholas Gerstle";
@@ -20192,6 +20204,12 @@
     github = "SergioRibera";
     githubId = 56278796;
     name = "Sergio Ribera";
+  };
+  serhao = {
+    name = "Sin Ser'hao";
+    email = "shobu_serhao@proton.me";
+    github = "shobu13";
+    githubId = 21972673;
   };
   sersorrel = {
     email = "ash@sorrel.sh";
