@@ -48,6 +48,8 @@ buildPythonPackage rec {
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
   propagatedNativeBuildInputs = [ setupHook ];
 
+  checkInputs = [ boost ];
+
   dontUseCmakeBuildDir = true;
 
   # Don't build tests if not needed, read the doInstallCheck value at runtime
@@ -58,7 +60,7 @@ buildPythonPackage rec {
   '';
 
   cmakeFlags = [
-    "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
+    "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
     "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
   ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [ "-DPYBIND11_CXX_STANDARD=-std=c++17" ];
 

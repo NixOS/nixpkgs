@@ -2,35 +2,15 @@
 , zlib, boost, openssl, python311, libiconv, ncurses, darwin
 , boost-build
 }:
-
-let
-  version = "1.2.19";
-
-  # Make sure we override python, so the correct version is chosen
-  # for the bindings, if overridden
-  boostPython = boost.override (_: {
-    enablePython = true;
-    python = python311;
-    enableStatic = true;
-    enableShared = false;
-    enableSingleThreaded = false;
-    enableMultiThreaded = true;
-    # So that libraries will be named like 'libboost_system.a' instead
-    # of 'libboost_system-x64.a'.
-    taggedLayout = false;
-  });
-
-  opensslStatic = openssl.override (_: { static = true; });
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtorrent-rasterbar";
-  inherit version;
+  version = "1.2.19";
 
   src = fetchFromGitHub {
     owner = "arvidn";
     repo = "libtorrent";
-    rev = "v${version}";
-    hash = "sha256-HkpaOCBL+0Kc7M9DmnW2dUGC+b60a7n5n3i1SyRfkb4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-KxyJmG7PdOjGPe18Dd3nzKI5X7B0MovWN8vq7llFFRc=";
   };
 
   enableParallelBuilding = true;
@@ -42,7 +22,7 @@ in stdenv.mkDerivation {
     python311.pkgs.setuptools
   ];
 
-  buildInputs = [ boostPython opensslStatic zlib python311 libiconv ncurses ]
+  buildInputs = [ (boost.withPython python311) openssl zlib python311 libiconv ncurses ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   preAutoreconf = ''
@@ -64,8 +44,8 @@ in stdenv.mkDerivation {
   configureFlags = [
     "--enable-python-binding"
     "--with-libiconv=yes"
-    "--with-boost=${boostPython.dev}"
-    "--with-boost-libdir=${boostPython.out}/lib"
+    "--with-boost=${lib.getDev boost}"
+    "--with-boost-libdir=${boost.withPython python311}/lib"
   ];
 
   meta = with lib; {
@@ -76,4 +56,4 @@ in stdenv.mkDerivation {
     broken = stdenv.hostPlatform.isDarwin;
     platforms = platforms.unix;
   };
-}
+})

@@ -7,12 +7,13 @@
   bzip2,
   zstd,
   xz,
-  python ? null,
   fixDarwinDylibNames,
   libiconv,
-  libxcrypt,
   makePkgconfigItem,
   copyPkgconfigItems,
+  callPackage,
+  runCommandLocal,
+  lndir,
   boost-build,
   fetchpatch,
   which,
@@ -52,7 +53,9 @@
 # We must build at least one type of libraries
 assert enableShared || enableStatic;
 
-assert enableNumpy -> enablePython;
+# Remove the enable* options after the NixOS 25.05 branch off.
+assert lib.asserts.assertMsg (!enablePython) "The `boost.enablePython` flag has been replaced by `boost.pythonLib pythonVer`";
+assert lib.asserts.assertMsg (!enableNumpy) "The `boost.enableNumpy` flag has been replaced by `boost.pythonLib pythonVer`";
 
 let
 
@@ -148,7 +151,7 @@ let
     ++ lib.optional (link != "static") "runtime-link=${runtime-link}"
     ++ lib.optional (variant == "release") "debug-symbols=off"
     ++ lib.optional (toolset != null) "toolset=${toolset}"
-    ++ lib.optional (!enablePython) "--without-python"
+    ++ [ "--without-python" ]
     ++ lib.optional needUserConfig "--user-config=user-config.jam"
     ++ lib.optional (stdenv.buildPlatform.isDarwin && stdenv.hostPlatform.isLinux) "pch=off"
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
@@ -157,9 +160,7 @@ let
     ++ extraB2Args
   );
 
-in
-
-stdenv.mkDerivation {
+self = stdenv.mkDerivation {
   pname = "boost";
 
   inherit src version;
@@ -213,17 +214,7 @@ stdenv.mkDerivation {
       })
     ]
     ++ lib.optional (lib.versionAtLeast version "1.81" && stdenv.cc.isClang) ./fix-clang-target.patch
-    ++ lib.optional (lib.versionAtLeast version "1.86" && lib.versionOlder version "1.87") [
-      # Backport fix for NumPy 2 support.
-      (fetchpatch {
-        name = "boost-numpy-2-compatibility.patch";
-        url = "https://github.com/boostorg/python/commit/0474de0f6cc9c6e7230aeb7164af2f7e4ccf74bf.patch";
-        stripLen = 1;
-        extraPrefix = "libs/python/";
-        hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
-      })
-    ]
-    ++ lib.optional (lib.versionAtLeast version "1.87") [
+    ++ lib.optional (lib.versionAtLeast version "1.87" && lib.versionOlder version "1.88") [
       # Fix operator<< for shared_ptr and intrusive_ptr
       # https://github.com/boostorg/smart_ptr/issues/115
       (fetchpatch {
@@ -249,6 +240,32 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit boostBuildPatches;
+    pythonLib = python: callPackage ./python.nix {
+      inherit boost-build python;
+      boost = self;
+    };
+    withPython = python: let
+      pythonLib = self.pythonLib python;
+    in runCommandLocal "boost-combined" {
+      outputs = [
+        "out"
+        "dev"
+      ];
+      propagatedBuildInputs = [
+        self
+      ];
+    }
+      ''
+        mkdir -p $out
+        ${lib.getExe lndir} -silent ${self.out} $out
+        ${lib.getExe lndir} -silent ${lib.getLib pythonLib} $out
+        mkdir -p $dev/lib
+        ${lib.getExe lndir} -silent ${self.dev}/lib $dev/lib
+        ln -s ${lib.getDev pythonLib}/lib/cmake/boost_python-${version}* $dev/lib/cmake/
+        ln -s ${lib.getDev pythonLib}/lib/cmake/boost_numpy-${version}* $dev/lib/cmake/
+        ln -s ${lib.getInclude self}/include $dev/include
+        recordPropagatedDependencies
+      '';
   };
 
   preConfigure =
@@ -285,15 +302,6 @@ stdenv.mkDerivation {
       using clang : cross : ${stdenv.cc.targetPrefix}c++
         : <archiver>$AR
           <ranlib>$RANLIB
-        ;
-      EOF
-    ''
-    # b2 needs to be explicitly told how to find Python when cross-compiling
-    + lib.optionalString enablePython ''
-      cat << EOF >> user-config.jam
-      using python : : ${python.pythonOnBuildForHost.interpreter}
-        : ${python}/include/python${python.pythonVersion}
-        : ${python}/lib
         ;
       EOF
     '';
@@ -347,12 +355,7 @@ stdenv.mkDerivation {
     ]
     ++ lib.optional (lib.versionAtLeast version "1.69") zstd
     ++ [ xz ]
-    ++ lib.optional enableIcu icu
-    ++ lib.optionals enablePython [
-      libxcrypt
-      python
-    ]
-    ++ lib.optional enableNumpy python.pkgs.numpy;
+    ++ lib.optional enableIcu icu;
 
   configureScript = "./bootstrap.sh";
   configurePlatforms = [ ];
@@ -401,4 +404,6 @@ stdenv.mkDerivation {
     "dev"
   ];
   setOutputFlags = false;
-}
+};
+in
+  self

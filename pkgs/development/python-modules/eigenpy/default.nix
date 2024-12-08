@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   doxygen,
-  boost,
+  boost-python,
   eigen,
   jrl-cmakemodules,
   numpy,
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  buildInputs = [ boost ];
+  buildInputs = [ boost-python ];
 
   propagatedBuildInputs = [
     eigen
