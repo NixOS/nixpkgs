@@ -25,7 +25,8 @@ buildGoModule rec {
   subPackages = [ "cmd/cilium" ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X=github.com/cilium/cilium-cli/defaults.CLIVersion=${version}"
   ];
 
@@ -51,7 +52,11 @@ buildGoModule rec {
     homepage = "https://www.cilium.io/";
     changelog = "https://github.com/cilium/cilium-cli/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bryanasdev000 humancalico qjoly ];
+    maintainers = with lib.maintainers; [
+      bryanasdev000
+      humancalico
+      qjoly
+    ];
     mainProgram = "cilium";
   };
 }
