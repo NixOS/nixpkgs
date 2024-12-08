@@ -36,8 +36,7 @@ stdenv.mkDerivation {
     wrapQtAppsHook
     pkg-config
     installShellFiles
-    xvfb-run
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
+  ] ++ lib.optionals stdenv.isLinux [ xvfb-run ] ++ lib.optionals stdenv.isDarwin [ makeWrapper ];
 
   buildInputs = [
     qtbase
@@ -52,13 +51,15 @@ stdenv.mkDerivation {
     "-DBUILD_WITH_SYSTEM_BOTAN=ON"
   ];
 
-  postInstall = ''
-    installShellCompletion --cmd ${appname} \
-      --bash <(xvfb-run $out/bin/${appname} --completion bash) \
-      --fish <(xvfb-run $out/bin/${appname} --completion fish)
-    installShellCompletion --cmd ${pname} \
-      --bash <(xvfb-run $out/bin/${appname} --completion bash) \
-      --fish <(xvfb-run $out/bin/${appname} --completion fish)
+  postInstall = ""
+    # Install shell completion on Linux (there is no xvfb-run on macOS)
+    + lib.optionalString stdenv.isLinux ''
+      installShellCompletion --cmd ${appname} \
+        --bash <(xvfb-run $out/bin/${appname} --completion bash) \
+        --fish <(xvfb-run $out/bin/${appname} --completion fish)
+      installShellCompletion --cmd ${pname} \
+        --bash <(xvfb-run $out/bin/${appname} --completion bash) \
+        --fish <(xvfb-run $out/bin/${appname} --completion fish)
   ''
   # Create a lowercase symlink for Linux
   + lib.optionalString stdenv.hostPlatform.isLinux ''
