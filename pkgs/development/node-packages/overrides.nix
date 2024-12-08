@@ -263,7 +263,10 @@ final: prev: {
   };
 
   thelounge-plugin-giphy = prev.thelounge-plugin-giphy.override {
-    nativeBuildInputs = [ pkgs.node-pre-gyp ];
+    nativeBuildInputs = [ pkgs.node-pre-gyp ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      pkgs.cctools
+    ];
+    buildInputs = [ pkgs.sqlite ];
   };
 
   thelounge-theme-flat-blue = prev.thelounge-theme-flat-blue.override {
