@@ -12,7 +12,7 @@
 }:
 
 let
-  name = "kingstvis";
+  pname = "kingstvis";
   version = "3.6.1";
   src = fetchzip {
     url = "http://res.kingst.site/kfs/KingstVIS_v${version}.tar.gz";
@@ -21,7 +21,7 @@ let
 in
 
 buildFHSEnv {
-  inherit name;
+  inherit pname version;
 
   targetPkgs = pkgs: (with pkgs; [
     dbus
