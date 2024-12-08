@@ -15452,6 +15452,12 @@
     githubId = 93013864;
     name = "nat-418";
   };
+  nateeag = {
+    github = "NateEag";
+    githubId = 837719;
+    name = "Nate Eagleson";
+    email = "nate@nateeag.com";
+  };
   nathan-gs = {
     email = "nathan@nathan.gs";
     github = "nathan-gs";
@@ -15711,6 +15717,12 @@
     github = "newAM";
     githubId = 7845120;
     name = "Alex Martens";
+  };
+  nezia = {
+    email = "anthony@nezia.dev";
+    github = "nezia1";
+    githubId = 43719748;
+    name = "Anthony Rodriguez";
   };
   ngerstle = {
     name = "Nicholas Gerstle";
