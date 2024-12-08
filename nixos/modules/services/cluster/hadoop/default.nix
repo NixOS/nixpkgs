@@ -3,15 +3,14 @@ let
   cfg = config.services.hadoop;
   opt = options.services.hadoop;
 in
-with lib;
 {
   imports = [ ./yarn.nix ./hdfs.nix ./hbase.nix ];
 
   options.services.hadoop = {
-    coreSite = mkOption {
+    coreSite = lib.mkOption {
       default = {};
-      type = types.attrsOf types.anything;
-      example = literalExpression ''
+      type = lib.types.attrsOf lib.types.anything;
+      example = lib.literalExpression ''
         {
           "fs.defaultFS" = "hdfs://localhost";
         }
@@ -21,31 +20,31 @@ with lib;
         <https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-common/core-default.xml>
       '';
     };
-    coreSiteInternal = mkOption {
+    coreSiteInternal = lib.mkOption {
       default = {};
-      type = types.attrsOf types.anything;
+      type = lib.types.attrsOf lib.types.anything;
       internal = true;
       description = ''
         Internal option to add configs to core-site.xml based on module options
       '';
     };
 
-    hdfsSiteDefault = mkOption {
+    hdfsSiteDefault = lib.mkOption {
       default = {
         "dfs.namenode.rpc-bind-host" = "0.0.0.0";
         "dfs.namenode.http-address" = "0.0.0.0:9870";
         "dfs.namenode.servicerpc-bind-host" = "0.0.0.0";
         "dfs.namenode.http-bind-host" = "0.0.0.0";
       };
-      type = types.attrsOf types.anything;
+      type = lib.types.attrsOf lib.types.anything;
       description = ''
         Default options for hdfs-site.xml
       '';
     };
-    hdfsSite = mkOption {
+    hdfsSite = lib.mkOption {
       default = {};
-      type = types.attrsOf types.anything;
-      example = literalExpression ''
+      type = lib.types.attrsOf lib.types.anything;
+      example = lib.literalExpression ''
         {
           "dfs.nameservices" = "namenode1";
         }
@@ -55,23 +54,23 @@ with lib;
         <https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml>
       '';
     };
-    hdfsSiteInternal = mkOption {
+    hdfsSiteInternal = lib.mkOption {
       default = {};
-      type = types.attrsOf types.anything;
+      type = lib.types.attrsOf lib.types.anything;
       internal = true;
       description = ''
         Internal option to add configs to hdfs-site.xml based on module options
       '';
     };
 
-    mapredSiteDefault = mkOption {
+    mapredSiteDefault = lib.mkOption {
       default = {
         "mapreduce.framework.name" = "yarn";
         "yarn.app.mapreduce.am.env" = "HADOOP_MAPRED_HOME=${cfg.package}";
         "mapreduce.map.env" = "HADOOP_MAPRED_HOME=${cfg.package}";
         "mapreduce.reduce.env" = "HADOOP_MAPRED_HOME=${cfg.package}";
       };
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         {
           "mapreduce.framework.name" = "yarn";
           "yarn.app.mapreduce.am.env" = "HADOOP_MAPRED_HOME=''${config.${opt.package}}";
@@ -79,15 +78,15 @@ with lib;
           "mapreduce.reduce.env" = "HADOOP_MAPRED_HOME=''${config.${opt.package}}";
         }
       '';
-      type = types.attrsOf types.anything;
+      type = lib.types.attrsOf lib.types.anything;
       description = ''
         Default options for mapred-site.xml
       '';
     };
-    mapredSite = mkOption {
+    mapredSite = lib.mkOption {
       default = {};
-      type = types.attrsOf types.anything;
-      example = literalExpression ''
+      type = lib.types.attrsOf lib.types.anything;
+      example = lib.literalExpression ''
         {
           "mapreduce.map.java.opts" = "-Xmx900m -XX:+UseParallelGC";
         }
@@ -98,7 +97,7 @@ with lib;
       '';
     };
 
-    yarnSiteDefault = mkOption {
+    yarnSiteDefault = lib.mkOption {
       default = {
         "yarn.nodemanager.admin-env" = "PATH=$PATH";
         "yarn.nodemanager.aux-services" = "mapreduce_shuffle";
@@ -112,15 +111,15 @@ with lib;
         "yarn.resourcemanager.bind-host" = "0.0.0.0";
         "yarn.resourcemanager.scheduler.class" = "org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler";
       };
-      type = types.attrsOf types.anything;
+      type = lib.types.attrsOf lib.types.anything;
       description = ''
         Default options for yarn-site.xml
       '';
     };
-    yarnSite = mkOption {
+    yarnSite = lib.mkOption {
       default = {};
-      type = types.attrsOf types.anything;
-      example = literalExpression ''
+      type = lib.types.attrsOf lib.types.anything;
+      example = lib.literalExpression ''
         {
           "yarn.resourcemanager.hostname" = "''${config.networking.hostName}";
         }
@@ -130,19 +129,19 @@ with lib;
         <https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-common/yarn-default.xml>
       '';
     };
-    yarnSiteInternal = mkOption {
+    yarnSiteInternal = lib.mkOption {
       default = {};
-      type = types.attrsOf types.anything;
+      type = lib.types.attrsOf lib.types.anything;
       internal = true;
       description = ''
         Internal option to add configs to yarn-site.xml based on module options
       '';
     };
 
-    httpfsSite = mkOption {
+    httpfsSite = lib.mkOption {
       default = { };
-      type = types.attrsOf types.anything;
-      example = literalExpression ''
+      type = lib.types.attrsOf lib.types.anything;
+      example = lib.literalExpression ''
         {
           "hadoop.http.max.threads" = 500;
         }
@@ -153,19 +152,19 @@ with lib;
       '';
     };
 
-    log4jProperties = mkOption {
+    log4jProperties = lib.mkOption {
       default = "${cfg.package}/etc/hadoop/log4j.properties";
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         "''${config.${opt.package}}/etc/hadoop/log4j.properties"
       '';
-      type = types.path;
-      example = literalExpression ''
+      type = lib.types.path;
+      example = lib.literalExpression ''
         "''${pkgs.hadoop}/etc/hadoop/log4j.properties";
       '';
       description = "log4j.properties file added to HADOOP_CONF_DIR";
     };
 
-    containerExecutorCfg = mkOption {
+    containerExecutorCfg = lib.mkOption {
       default = {
         # must be the same as yarn.nodemanager.linux-container-executor.group in yarnSite
         "yarn.nodemanager.linux-container-executor.group"="hadoop";
@@ -173,8 +172,8 @@ with lib;
         "feature.terminal.enabled"=1;
         "feature.mount-cgroup.enabled" = 1;
       };
-      type = types.attrsOf types.anything;
-      example = literalExpression ''
+      type = lib.types.attrsOf lib.types.anything;
+      example = lib.literalExpression ''
         options.services.hadoop.containerExecutorCfg.default // {
           "feature.terminal.enabled" = 0;
         }
@@ -185,10 +184,10 @@ with lib;
       '';
     };
 
-    extraConfDirs = mkOption {
+    extraConfDirs = lib.mkOption {
       default = [];
-      type = types.listOf types.path;
-      example = literalExpression ''
+      type = lib.types.listOf lib.types.path;
+      example = lib.literalExpression ''
         [
           ./extraHDFSConfs
           ./extraYARNConfs
@@ -197,13 +196,13 @@ with lib;
       description = "Directories containing additional config files to be added to HADOOP_CONF_DIR";
     };
 
-    gatewayRole.enable = mkEnableOption "gateway role for deploying hadoop configs";
+    gatewayRole.enable = lib.mkEnableOption "gateway role for deploying hadoop configs";
 
-    package = mkPackageOption pkgs "hadoop" { };
+    package = lib.mkPackageOption pkgs "hadoop" { };
   };
 
 
-  config = mkIf cfg.gatewayRole.enable {
+  config = lib.mkIf cfg.gatewayRole.enable {
     users.groups.hadoop = {
       gid = config.ids.gids.hadoop;
     };
