@@ -9,7 +9,6 @@
   copyDesktopItems,
   imagemagick,
   makeWrapper,
-  xdg-user-dirs,
 }:
 let
   # fetch simple-icons directly to avoid cloning with submodules,
@@ -89,9 +88,6 @@ flutter324.buildFlutterApplication rec {
     done
 
     install -Dm444 linux/packaging/ente_auth.appdata.xml -t $out/share/metainfo
-
-    wrapProgram $out/bin/ente_auth \
-      --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
   '';
 
   passthru.updateScript = ./update.sh;
