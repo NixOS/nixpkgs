@@ -5,7 +5,6 @@
   lib,
   flutter,
   quickemu,
-  zenity,
 }:
 flutter.buildFlutterApplication rec {
   pname = "quickgui";
@@ -26,7 +25,6 @@ flutter.buildFlutterApplication rec {
   extraWrapProgramArgs = "--prefix PATH : ${
     lib.makeBinPath [
       quickemu
-      zenity
     ]
   }";
 
