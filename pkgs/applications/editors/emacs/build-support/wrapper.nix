@@ -75,7 +75,7 @@ runCommand
           # well :D.
           local varSlice="$var[*]"
           # ''${..-} to hack around old bash empty array problem
-          case "''${!varSlice-}" in
+          case " ''${!varSlice-} " in
               *" $pkg "*) return 0 ;;
           esac
           unset -v varSlice
