@@ -1,10 +1,9 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
   fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
+  replaceVars,
   cmake,
   boost183,
   zlib,
@@ -14,7 +13,6 @@
   quarto,
   libuuid,
   hunspellDicts,
-  unzip,
   ant,
   jdk,
   gnumake,
@@ -22,25 +20,20 @@
   llvmPackages,
   yaml-cpp,
   soci,
-  postgresql,
-  nodejs,
-  server ? false, # build server version
   sqlite,
+  nodejs,
+  yarn,
+  yarnConfigHook,
+  fetchYarnDeps,
+  server ? false, # build server version
   pam,
   nixosTests,
 }:
 
 let
-  mathJaxSrc = fetchurl {
+  mathJaxSrc = fetchzip {
     url = "https://s3.amazonaws.com/rstudio-buildtools/mathjax-27.zip";
-    hash = "sha256-xWy6psTOA8H8uusrXqPDEtL7diajYCVHcMvLiPsgQXY=";
-  };
-
-  rsconnectSrc = fetchFromGitHub {
-    owner = "rstudio";
-    repo = "rsconnect";
-    rev = "v1.2.2";
-    hash = "sha256-wvM9Bm7Nb6yU9z0o+uF5lB2kdgjOW5wZSk6y48NPF2U=";
+    hash = "sha256-J7SZK/9q3HcXTD7WFHxvh++ttuCd89Vc4SEBrUEU0AI=";
   };
 
   # Ideally, rev should match the rstudio release name.
@@ -73,21 +66,20 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
-    rev = "v" + version;
+    rev = "refs/tags/v${version}";
     hash = "sha256-j258eW1MYQrB6kkpjyolXdNuwQ3zSWv9so4q0QLsZuw=";
   };
 
   nativeBuildInputs =
     [
       cmake
-      unzip
       ant
       jdk
-      pandoc
       nodejs
+      yarn
+      yarnConfigHook
     ]
     ++ lib.optionals (!server) [
-      copyDesktopItems
       libsForQt5.wrapQtAppsHook
     ];
 
@@ -100,13 +92,9 @@ stdenv.mkDerivation rec {
       libuuid
       yaml-cpp
       soci
-      postgresql
-      quarto
-    ]
-    ++ lib.optionals server [
       sqlite.dev
-      pam
     ]
+    ++ lib.optionals server [ pam ]
     ++ lib.optionals (!server) [
       libsForQt5.qtbase
       libsForQt5.qtxmlpatterns
@@ -117,97 +105,94 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     [
-      "-DRSTUDIO_TARGET=${if server then "Server" else "Desktop"}"
-      "-DRSTUDIO_USE_SYSTEM_SOCI=ON"
-      "-DRSTUDIO_USE_SYSTEM_BOOST=ON"
-      "-DRSTUDIO_USE_SYSTEM_YAML_CPP=ON"
-      "-DRSTUDIO_DISABLE_CHECK_FOR_UPDATES=ON"
-      "-DQUARTO_ENABLED=TRUE"
-      "-DPANDOC_VERSION=${pandoc.version}"
-      "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/lib/rstudio"
+      (lib.cmakeFeature "RSTUDIO_TARGET" (if server then "Server" else "Desktop"))
+      (lib.cmakeBool "RSTUDIO_USE_SYSTEM_SOCI" true)
+      (lib.cmakeBool "RSTUDIO_USE_SYSTEM_BOOST" true)
+      (lib.cmakeBool "RSTUDIO_USE_SYSTEM_YAML_CPP" true)
+      (lib.cmakeBool "RSTUDIO_DISABLE_CHECK_FOR_UPDATES" true)
+      (lib.cmakeBool "QUARTO_ENABLED" true)
+      (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/lib/rstudio")
     ]
     ++ lib.optionals (!server) [
-      "-DQT_QMAKE_EXECUTABLE=${libsForQt5.qmake}/bin/qmake"
+      (lib.cmakeFeature "QT_QMAKE_EXECUTABLE" "${libsForQt5.qmake}/bin/qmake")
+      (lib.cmakeBool "RSTUDIO_INSTALL_FREEDESKTOP" true)
     ];
 
-  # Hack RStudio to only use the input R and provided libclang.
   patches = [
-    ./r-location.patch
-    ./clang-location.patch
-    ./use-system-node.patch
+    # Hack RStudio to only use the input R and provided libclang.
+    (replaceVars ./r-location.patch {
+      R = lib.getBin R;
+    })
+    (replaceVars ./clang-location.patch {
+      libclang = lib.getLib llvmPackages.libclang;
+    })
+
     ./fix-resources-path.patch
-    ./pandoc-nix-path.patch
-    ./use-system-quarto.patch
     ./ignore-etc-os-release.patch
+    ./dont-yarn-install.patch
+    ./dont-assume-pandoc-in-quarto.patch
   ];
 
   postPatch = ''
-    substituteInPlace src/cpp/core/r_util/REnvironmentPosix.cpp --replace-fail '@R@' ${R}
+    # fix .desktop Exec field
+    substituteInPlace src/node/desktop/resources/freedesktop/rstudio.desktop.in \
+      --replace-fail "''${CMAKE_INSTALL_PREFIX}/rstudio" "rstudio"
 
-    substituteInPlace src/gwt/build.xml \
-      --replace-fail '@node@' ${nodejs} \
-      --replace-fail './lib/quarto' ${quartoSrc}
-
-    substituteInPlace src/cpp/conf/rsession-dev.conf \
-      --replace-fail '@node@' ${nodejs}
-
-    substituteInPlace src/cpp/core/libclang/LibClang.cpp \
-      --replace-fail '@libclang@' ${lib.getLib llvmPackages.libclang} \
-      --replace-fail '@libclang.so@' ${lib.getLib llvmPackages.libclang}/lib/libclang.so
-
-    substituteInPlace src/cpp/session/CMakeLists.txt \
-      --replace-fail '@pandoc@' ${pandoc} \
-      --replace-fail '@quarto@' ${quarto}
-
-    substituteInPlace src/cpp/session/include/session/SessionConstants.hpp \
-      --replace-fail '@pandoc@' ${pandoc}/bin \
-      --replace-fail '@quarto@' ${quarto}
+    # set install path of freedesktop files
+    substituteInPlace src/{cpp,node}/desktop/CMakeLists.txt \
+      --replace-fail "/usr/share" "$out/share"
   '';
 
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = quartoSrc + "/yarn.lock";
+    hash = "sha256-Qw8O1Jzl2EO0DEF3Jrw/cIT9t22zs3jyKgDA5XZbuGA=";
+  };
+
+  dontYarnInstallDeps = true; # will call manually in preConfigure
+
   preConfigure = ''
-     mkdir dependencies/dictionaries
-     for dict in ${builtins.concatStringsSep " " dictionaries}; do
-       for i in "$dict/share/hunspell/"*; do
-         ln -s $i dependencies/dictionaries/
-       done
-     done
+    # set up node_modules directory inside quarto so that panmirror can be built
+    mkdir src/gwt/lib/quarto
+    cp -r --no-preserve=all ${quartoSrc}/* src/gwt/lib/quarto
+    pushd src/gwt/lib/quarto
+    yarnConfigHook
+    popd
 
-     unzip -q ${mathJaxSrc} -d dependencies/mathjax-27
+    ### set up dependencies that will be copied into the result
+    # note: only the directory names have to match upstream, the actual versions don't
+    # note: symlinks are preserved
 
-    # As of Chocolate Cosmos, node 18.20.3 is used for runtime
-    # 18.18.2 is still used for build
-    # see https://github.com/rstudio/rstudio/commit/facb5cf1ab38fe77813aaf36590804e4f865d780
-    mkdir -p dependencies/common/node/18.20.3
+    mkdir dependencies/dictionaries
+    for dict in ${builtins.concatStringsSep " " dictionaries}; do
+      for i in "$dict/share/hunspell/"*; do
+        ln -s $i dependencies/dictionaries/
+      done
+    done
 
-     mkdir -p dependencies/pandoc/${pandoc.version}
-     cp ${pandoc}/bin/pandoc dependencies/pandoc/${pandoc.version}/pandoc
+    ln -s ${quarto} dependencies/quarto
 
-     cp -r ${rsconnectSrc} dependencies/rsconnect
-     ( cd dependencies && ${R}/bin/R CMD build -d --no-build-vignettes rsconnect )
+    # version in dependencies/common/install-mathjax
+    ln -s ${mathJaxSrc} dependencies/mathjax-27
+
+    # version in CMakeGlobals.txt (PANDOC_VERSION)
+    mkdir -p dependencies/pandoc/2.18
+    ln -s ${lib.getBin pandoc}/bin/* dependencies/pandoc/2.18
+
+    # version in CMakeGlobals.txt (RSTUDIO_INSTALLED_NODE_VERSION)
+    mkdir -p dependencies/common/node
+    ln -s ${nodejs} dependencies/common/node/18.20.3
   '';
 
   postInstall = ''
-    mkdir -p $out/bin $out/share
+    mkdir -p $out/bin
 
-    ${lib.optionalString (!server) ''
-      mkdir -p $out/share/icons/hicolor/48x48/apps
-      ln $out/lib/rstudio/rstudio.png $out/share/icons/hicolor/48x48/apps
+    ${lib.optionalString server ''
+      ln -s $out/lib/rstudio/bin/{crash-handler-proxy,postback,r-ldpath,rpostback,rserver,rserver-pam,rsession,rstudio-server} $out/bin
     ''}
 
-    for f in {${
-      if server then
-        "crash-handler-proxy,postback,r-ldpath,rpostback,rserver,rserver-pam,rsession,rstudio-server"
-      else
-        "diagnostics,rpostback,rstudio"
-    }}; do
-      ln -s $out/lib/rstudio/bin/$f $out/bin
-    done
-
-    for f in .gitignore .Rbuildignore LICENSE README; do
-      find . -name $f -delete
-    done
-
-    rm -r $out/lib/rstudio/{INSTALL,COPYING,NOTICE,README.md,SOURCE,VERSION}
+    ${lib.optionalString (!server) ''
+      ln -s $out/lib/rstudio/bin/{diagnostics,rpostback,rstudio} $out/bin
+    ''}
   '';
 
   qtWrapperArgs = lib.optionals (!server) [
@@ -233,39 +218,4 @@ stdenv.mkDerivation rec {
     mainProgram = "rstudio" + lib.optionalString server "-server";
     platforms = lib.platforms.linux;
   };
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "RStudio";
-      exec = "rstudio %F";
-      icon = "rstudio";
-      desktopName = "RStudio";
-      genericName = "IDE";
-      comment = meta.description;
-      categories = [ "Development" ];
-      mimeTypes = [
-        "text/x-r-source"
-        "text/x-r"
-        "text/x-R"
-        "text/x-r-doc"
-        "text/x-r-sweave"
-        "text/x-r-markdown"
-        "text/x-r-html"
-        "text/x-r-presentation"
-        "application/x-r-data"
-        "application/x-r-project"
-        "text/x-r-history"
-        "text/x-r-profile"
-        "text/x-tex"
-        "text/x-markdown"
-        "text/html"
-        "text/css"
-        "text/javascript"
-        "text/x-chdr"
-        "text/x-csrc"
-        "text/x-c++hdr"
-        "text/x-c++src"
-      ];
-    })
-  ];
 }
