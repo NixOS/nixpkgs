@@ -3,9 +3,6 @@
 , config
 , ...
 }:
-
-with lib;
-
 let
   cfg = config.services.evcc;
 
@@ -18,10 +15,10 @@ in
 {
   meta.maintainers = with lib.maintainers; [ hexa ];
 
-  options.services.evcc = with types; {
-    enable = mkEnableOption "EVCC, the extensible EV Charge Controller with PV integration";
+  options.services.evcc = with lib.types; {
+    enable = lib.mkEnableOption "EVCC, the extensible EV Charge Controller with PV integration";
 
-    extraArgs = mkOption {
+    extraArgs = lib.mkOption {
       type = listOf str;
       default = [];
       description = ''
@@ -29,7 +26,7 @@ in
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = format.type;
       description = ''
         evcc configuration as a Nix attribute set.
@@ -39,7 +36,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.evcc = {
       wants = [ "network-online.target" ];
       after = [
@@ -54,7 +51,7 @@ in
         getent
       ];
       serviceConfig = {
-        ExecStart = "${package}/bin/evcc --config ${configFile} ${escapeShellArgs cfg.extraArgs}";
+        ExecStart = "${package}/bin/evcc --config ${configFile} ${lib.escapeShellArgs cfg.extraArgs}";
         CapabilityBoundingSet = [ "" ];
         DeviceAllow = [
           "char-ttyUSB"
