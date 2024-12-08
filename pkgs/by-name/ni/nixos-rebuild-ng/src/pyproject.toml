@@ -10,7 +10,7 @@ version = "0.0.0"
 nixos-rebuild = "nixos_rebuild:main"
 
 [tool.setuptools.package-data]
-nixos_rebuild = ["*.template.nix"]
+nixos_rebuild = ["*.nix.template"]
 
 [tool.mypy]
 # `--strict` config, but explicit options to avoid breaking build when mypy is
