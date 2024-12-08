@@ -1,26 +1,31 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, pkg-config
-, qtscript
-, qmake
-, qtbase
-, qtmultimedia
-, qtdeclarative
-, libjack2
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  qtscript,
+  qmake,
+  qtbase,
+  qtmultimedia,
+  qtdeclarative,
+  libjack2,
 }:
-
 mkDerivation rec {
   pname = "jamulus";
   version = "3.10.0";
+
   src = fetchFromGitHub {
     owner = "jamulussoftware";
     repo = "jamulus";
-    rev = "r${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "r${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-uqBre1Hcdmmifm/gii3MlP9LiAovQVsAaPZTmVm1nnM=";
   };
 
-  nativeBuildInputs = [ pkg-config qmake ];
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+  ];
+
   buildInputs = [
     qtscript
     qtbase
@@ -38,6 +43,6 @@ mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     mainProgram = "jamulus";
-    maintainers = [ lib.maintainers.seb314 ];
+    maintainers = with lib.maintainers; [ seb314 ];
   };
 }
