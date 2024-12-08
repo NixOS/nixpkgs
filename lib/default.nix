@@ -71,7 +71,7 @@ let
     # these are the only ones that are currently not
     inherit (builtins) addErrorContext isPath trace typeOf unsafeGetAttrPos;
     inherit (self.trivial) id const pipe concat or and xor bitAnd bitOr bitXor
-      bitNot boolToString mergeAttrs flip mapNullable inNixShell isFloat min max
+      bitNot boolToString mergeAttrs flip defaultTo mapNullable inNixShell isFloat min max
       importJSON importTOML warn warnIf warnIfNot throwIf throwIfNot checkListOfEnum
       info showWarnings nixpkgsVersion version isInOldestRelease oldestSupportedReleaseIsAtLeast
       mod compare splitByAndCompare seq deepSeq lessThan add sub
@@ -100,7 +100,7 @@ let
       length head tail elem elemAt isList;
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
       stringLength substring isString replaceStrings
-      intersperse concatStringsSep concatMapStringsSep
+      intersperse concatStringsSep concatMapStringsSep concatMapAttrsStringSep
       concatImapStringsSep concatLines makeSearchPath makeSearchPathOutput
       makeLibraryPath makeIncludePath makeBinPath optionalString
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape

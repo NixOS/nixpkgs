@@ -27,7 +27,7 @@
 , librevenge
 , librsvg
 , libsigcxx
-, libsoup
+, libsoup_2_4
 , libvisio
 , libwpg
 , libXft
@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
     librevenge
     librsvg # for loading icons
     libsigcxx
-    libsoup
+    libsoup_2_4
     libvisio
     libwpg
     libXft

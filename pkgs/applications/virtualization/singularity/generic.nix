@@ -14,8 +14,9 @@
 }:
 
 let
-  # Workaround for vendor-related attributes not overridable (#86349)
-  # should be removed when the issue is resolved
+  # Backward compatibility layer for the obsolete workaround of
+  # the "vendor-related attributes not overridable" issue (#86349),
+  # whose solution is merged and released.
   _defaultGoVendorArgs = {
     inherit vendorHash deleteVendor proxyVendor;
   };
@@ -102,10 +103,6 @@ in
 }@args:
 
 let
-  concatMapStringAttrsSep =
-    sep: f: attrs:
-    lib.concatMapStringsSep sep (name: f name attrs.${name}) (lib.attrNames attrs);
-
   addShellDoubleQuotes = s: lib.escapeShellArg ''"'' + s + lib.escapeShellArg ''"'';
 in
 (buildGoModule {
@@ -210,7 +207,7 @@ in
     patchShebangs --build "$configureScript" makeit e2e scripts mlocal/scripts
 
     # Patching the hard-coded defaultPath by prefixing the packages in defaultPathInputs
-    ${concatMapStringAttrsSep "\n" (fileName: originalDefaultPaths: ''
+    ${lib.concatMapAttrsStringSep "\n" (fileName: originalDefaultPaths: ''
       substituteInPlace ${lib.escapeShellArg fileName} \
         ${
           lib.concatMapStringsSep " \\\n  " (

@@ -1,17 +1,17 @@
 diff --git a/buildit.bash b/buildit.bash
-index 6606562..57b9e14 100755
+index 47e861b..ce52387 100755
 --- a/buildit.bash
 +++ b/buildit.bash
-@@ -61,7 +61,7 @@ EXCLUDEMESSAGE=" -vm6058,2005,5027 "	# cut down on compiler noise
+@@ -63,7 +63,7 @@ EXCLUDEMESSAGE=" -vm6058,2005,5027 "	# cut down on compiler noise
  # 6058 - note about things not being inlined
  # 5027 - var not used
  # 2005 - level 2 comment
--FPCHARD=" -Cg  -k-pie -k-znow "
-+FPCHARD=""
- AUTODOWNLOAD=FALSE			# downloading large file, use -d to allow it
+-FPCHARD=" -Cg  -k-pie -k-znow "   # might get cancelled with a NOHARDENING semaphore file.
++FPCHARD=""   # might get cancelled with a NOHARDENING semaphore file.
+ AUTODOWNLOAD=FALSE			      # downloading large file, use -d to allow it
  
  # ------------------------ Some functions ------------------------
-@@ -180,8 +180,6 @@ if [ "$CPU" = "powerpc64le" ]; then	# power does not like intel switches !
+@@ -196,8 +196,6 @@ if [ "$CPU" = "powerpc64le" ]; then	   # power does not like intel switches !
  fi
  
  TARGET="$CPU-$OS"
@@ -20,7 +20,7 @@ index 6606562..57b9e14 100755
  CheckForQt5
  
  # OK, if to here, we have a fpc and lazbuild, but which FPC ?
-@@ -228,8 +226,8 @@ cd "$K_DIR"		# WARNING, kcontrols is not part of the github zip file, its added
+@@ -244,8 +242,8 @@ cd "$K_DIR"		# WARNING, kcontrols is not part of the github zip file, its added
  
  # Here we build just the kmemo.pas part of kcontrols.
  
@@ -31,7 +31,7 @@ index 6606562..57b9e14 100755
  
  FPCKOPT=" -B -MObjFPC -Scgi -Cg -O1 -g -gl -l -vewnibq -vh- $EXCLUDEMESSAGES -Fi$K_DIR"
  FPCKUNITS=" -Fu$LAZ_DIR/packager/units/$TARGET -Fu$LAZ_DIR/components/lazutils/lib/$TARGET"
-@@ -237,7 +235,7 @@ FPCKUNITS="$FPCKUNITS -Fu$LAZ_DIR/components/buildintf/units/$TARGET -Fu$LAZ_DIR
+@@ -253,7 +251,7 @@ FPCKUNITS="$FPCKUNITS -Fu$LAZ_DIR/components/buildintf/units/$TARGET -Fu$LAZ_DIR
  FPCKUNITS="$FPCKUNITS -Fu$LAZ_DIR/lib/$TARGET -Fu$LAZ_DIR/lcl/units/$TARGET -Fu$LAZ_DIR/lcl/units/$TARGET/$WIDGET"
  FPCKUNITS="$FPCKUNITS -Fu$LAZ_DIR/components/cairocanvas/lib/$TARGET/$WIDGET -Fu$LAZ_DIR/components/lazcontrols/lib/$TARGET/$WIDGET"
  FPCKUNITS="$FPCKUNITS -Fu$LAZ_DIR/components/ideintf/units/$TARGET/$WIDGET -Fu$LAZ_DIR/components/printers/lib/$TARGET/$WIDGET"
@@ -40,7 +40,7 @@ index 6606562..57b9e14 100755
  
  RUNIT="$COMPILER $EXCLUDEMESSAGE $FPCKOPT  $FPCHARD $LAZUNITSRC  $FPCKUNITS kmemo.pas"
  
-@@ -245,12 +243,12 @@ echo "--------------- kcontrols COMPILE COMMAND -------------"
+@@ -261,12 +259,12 @@ echo "--------------- kcontrols COMPILE COMMAND -------------"
  echo "$RUNIT"
  echo "-----------------"
  
@@ -55,7 +55,7 @@ index 6606562..57b9e14 100755
  	echo "ERROR failed to build KControls, exiting..."
  	K_DIR=""
  	exit 1
-@@ -301,7 +299,7 @@ UNITS="$UNITS -Fu$LAZ_DIR/lcl/units/$TARGET"
+@@ -318,7 +316,7 @@ UNITS="$UNITS -Fu$LAZ_DIR/lcl/units/$TARGET"
  UNITS="$UNITS -Fu$LAZ_DIR/packager/units/$TARGET"
  
  UNITS="$UNITS -Fu$SOURCE_DIR/"
@@ -64,7 +64,7 @@ index 6606562..57b9e14 100755
  
  OPT2=" -dLCL -dLCL$WIDGET" 
  DEFS="-dDisableLCLGIF -dDisableLCLJPEG -dDisableLCLPNM -dDisableLCLTIFF"
-@@ -322,11 +320,10 @@ RUNIT="$COMPILER $OPT1 $FPCHARD $UNITS $LAZUNITSRC $OPT2 $DEFS $PROJ.lpr"
+@@ -339,7 +337,7 @@ RUNIT="$COMPILER $OPT1 $FPCHARD $UNITS $LAZUNITSRC $OPT2 $DEFS $PROJ.lpr"
  echo "------------ tomboy-ng COMPILE COMMAND --------------------"
  echo "$RUNIT" 
  
@@ -72,8 +72,4 @@ index 6606562..57b9e14 100755
 +TOMBOY_NG_VER="$VERSION" $RUNIT
  
  if [ ! -e "$PROJ" ]; then
-     echo "======================== ERROR, COMPILE FAILED source/tomboy-ng.log ====="
--    cat tomboy-ng.log
-     echo "=========================================================== END of LOG =="
-     exit 1
- else
+     echo "======== ERROR, COMPILE FAILED see source/tomboy-ng.log ====="

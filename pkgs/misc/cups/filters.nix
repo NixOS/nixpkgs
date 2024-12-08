@@ -1,18 +1,18 @@
 { lib
-, avahi
 , bc
 , coreutils
 , cups
 , dbus
 , dejavu_fonts
-, fetchurl
-, fetchpatch
+, fetchFromGitHub
 , fontconfig
 , gawk
 , ghostscript
 , gnugrep
 , gnused
 , ijs
+, libcupsfilters
+, libppd
 , libexif
 , libjpeg
 , liblouis
@@ -30,70 +30,41 @@
 , withAvahi ? true
 }:
 
-let
+(if !withAvahi then lib.warn "the 'withAvahi' parameter to 'cups-filters' is deprecated, as the cups-browsed component (which does not make sense without avahi) has been split out of the cups-filters package (which no longer needs avahi)" else lib.id)
+
+(let
   binPath = lib.makeBinPath [ bc coreutils gawk gnused gnugrep which ];
 
 in
 stdenv.mkDerivation rec {
   pname = "cups-filters";
-  version = "1.28.17";
+  version = "2.0.1";
 
-  src = fetchurl {
-    url = "https://github.com/OpenPrinting/cups-filters/releases/download/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-Jwo3UqlgNoqpnUMftdNPQDmyrJQ8V22EBhLR2Bhcm7k=";
+  src = fetchFromGitHub {
+    owner = "OpenPrinting";
+    repo = "cups-filters";
+    rev = version;
+    hash = "sha256-bLOl64bdeZ10JLcQ7GbU+VffJu3Lzo0ves7O7GQIOWY=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2023-24805.patch";
-      url = "https://github.com/OpenPrinting/cups-filters/commit/93e60d3df358c0ae6f3dba79e1c9684657683d89.patch";
-      hash = "sha256-KgWTYFr2uShL040azzE+KaNyBPy7Gs/hCnEgQmmPCys=";
-    })
-    (fetchpatch {
-      name = "CVE-2024-47076.patch";
-      url = "https://github.com/OpenPrinting/libcupsfilters/commit/95576ec3d20c109332d14672a807353cdc551018.patch";
-      hash = "sha256-MXWllrdWt8n7zqvumQNg34dBgWMwMTwf9lrD+ZZP8Wk=";
-    })
-    (fetchpatch {
-      name = "remove-cups-ldap-browse-protocols_CVE-2024-47176_CVE-2024-47850.patch";
-      url = "https://github.com/OpenPrinting/cups-filters/commit/6fd2bdfbdce76149af531ce9fca9062304238451.patch";
-      hash = "sha256-XS1ODy7i7ilgEjsKuEvOUiRN9pqsj+bOktKoshKcg8Q=";
-    })
-  ];
 
   nativeBuildInputs = [ pkg-config makeWrapper autoreconfHook ];
 
   buildInputs = [
     cups
-    dbus
-    fontconfig
     ghostscript
-    ijs
-    libexif
-    libjpeg
-    liblouis # braille embosser support
-    libpng
+    libcupsfilters
+    libppd
     mupdf
-    perl
-    poppler
-    poppler_utils
-    qpdf
-  ] ++ lib.optionals withAvahi [ avahi ];
+  ];
 
   configureFlags = [
     "--with-mutool-path=${mupdf}/bin/mutool"
-    "--with-pdftops=pdftops"
-    "--with-pdftops-path=${poppler_utils}/bin/pdftops"
     "--with-gs-path=${ghostscript}/bin/gs"
-    "--with-pdftocairo-path=${poppler_utils}/bin/pdftocairo"
     "--with-ippfind-path=${cups}/bin/ippfind"
-    "--enable-imagefilters"
-    "--with-rcdir=no"
     "--with-shell=${stdenv.shell}"
-    "--with-test-font-path=${dejavu_fonts}/share/fonts/truetype/DejaVuSans.ttf"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
-  ] ++ lib.optionals (!withAvahi) [ "--disable-avahi" ];
+  ];
 
   makeFlags = [ "CUPS_SERVERBIN=$(out)/lib/cups" "CUPS_DATADIR=$(out)/share/cups" "CUPS_SERVERROOT=$(out)/etc/cups" ];
 
@@ -130,4 +101,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

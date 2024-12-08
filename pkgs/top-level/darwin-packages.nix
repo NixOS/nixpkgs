@@ -202,8 +202,6 @@ impure-cmds // apple-source-packages // apple-source-headers // stubs // {
     inherit (pkgs.llvmPackages) clang-unwrapped;
   };
 
-  iproute2mac = callPackage ../os-specific/darwin/iproute2mac { };
-
   lsusb = callPackage ../os-specific/darwin/lsusb { };
 
   openwith = callPackage ../os-specific/darwin/openwith { };

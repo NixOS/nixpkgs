@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-embeddings-openai";
-  version = "0.2.5";
+  version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "llama_index_embeddings_openai";
     inherit version;
-    hash = "sha256-AEfdcddHBoZF7XKMKTEqqRtlu+TGFCGAA0xk38XG9ug=";
+    hash = "sha256-o31bpcyUejajzqpB38ZdcmqHP/s6J7e0lZKE9blE9hc=";
   };
 
   build-system = [ poetry-core ];

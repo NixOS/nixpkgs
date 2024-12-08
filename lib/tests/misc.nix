@@ -39,6 +39,7 @@ let
     composeManyExtensions
     concatLines
     concatMapAttrs
+    concatMapAttrsStringSep
     concatMapStrings
     concatStrings
     concatStringsSep
@@ -326,6 +327,11 @@ runTests {
   testConcatStringsSep = {
     expr = concatStringsSep "," ["a" "b" "c"];
     expected = "a,b,c";
+  };
+
+  testConcatMapAttrsStringSepExamples = {
+    expr = concatMapAttrsStringSep "\n" (name: value: "${name}: foo-${value}") { a = "0.1.0"; b = "0.2.0"; };
+    expected = "a: foo-0.1.0\nb: foo-0.2.0";
   };
 
   testConcatLines = {

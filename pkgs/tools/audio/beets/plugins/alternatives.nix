@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, beets, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  beets,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "beets-alternatives";
@@ -27,10 +32,13 @@ python3Packages.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Beets plugin to manage external files";
     homepage = "https://github.com/geigerzaehler/beets-alternatives";
-    maintainers = with maintainers; [ aszlig lovesegfault ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [
+      aszlig
+      lovesegfault
+    ];
+    license = lib.licenses.mit;
   };
 }
