@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.security.pki;
@@ -19,12 +16,12 @@ in
 {
 
   options = {
-    security.pki.installCACerts = mkEnableOption "installing CA certificates to the system" // {
+    security.pki.installCACerts = lib.mkEnableOption "installing CA certificates to the system" // {
       default = true;
       internal = true;
     };
 
-    security.pki.useCompatibleBundle = mkEnableOption ''
+    security.pki.useCompatibleBundle = lib.mkEnableOption ''
       usage of a compatibility bundle.
 
       Such a bundle consists exclusively of `BEGIN CERTIFICATE` and no `BEGIN TRUSTED CERTIFICATE`,
@@ -36,10 +33,10 @@ in
       certificates themselves. This can have security consequences depending on your usecases
     '';
 
-    security.pki.certificateFiles = mkOption {
-      type = types.listOf types.path;
+    security.pki.certificateFiles = lib.mkOption {
+      type = lib.types.listOf lib.types.path;
       default = [];
-      example = literalExpression ''[ "''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ]'';
+      example = lib.literalExpression ''[ "''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ]'';
       description = ''
         A list of files containing trusted root certificates in PEM
         format. These are concatenated to form
@@ -49,10 +46,10 @@ in
       '';
     };
 
-    security.pki.certificates = mkOption {
-      type = types.listOf types.str;
+    security.pki.certificates = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [ '''
             NixOS.org
             =========
@@ -69,8 +66,8 @@ in
       '';
     };
 
-    security.pki.caCertificateBlacklist = mkOption {
-      type = types.listOf types.str;
+    security.pki.caCertificateBlacklist = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [];
       example = [
         "WoSign" "WoSign China"
@@ -87,7 +84,7 @@ in
 
   };
 
-  config = mkIf cfg.installCACerts {
+  config = lib.mkIf cfg.installCACerts {
 
     # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
     environment.etc."ssl/certs/ca-certificates.crt".source = caBundle;
