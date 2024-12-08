@@ -3,11 +3,9 @@
 , pkgs
 , ...
 }:
-
-with lib;
 {
-  config.assertions = flatten (
-    flip mapAttrsToList config.services.github-runners (name: cfg: map (mkIf cfg.enable) [
+  config.assertions = lib.flatten (
+    lib.flip lib.mapAttrsToList config.services.github-runners (name: cfg: map (lib.mkIf cfg.enable) [
       {
         assertion = !cfg.noDefaultLabels || (cfg.extraLabels != [ ]);
         message = "`services.github-runners.${name}`: The `extraLabels` option is mandatory if `noDefaultLabels` is set";
@@ -20,8 +18,8 @@ with lib;
   );
 
   config.systemd.services =
-  let enabledRunners = filterAttrs (_: cfg: cfg.enable) config.services.github-runners;
-  in (flip mapAttrs' enabledRunners (name: cfg:
+  let enabledRunners = lib.filterAttrs (_: cfg: cfg.enable) config.services.github-runners;
+  in (lib.flip lib.mapAttrs' enabledRunners (name: cfg:
     let
       svcName = "github-runner-${name}";
       systemdDir = "github-runner/${name}";
@@ -37,9 +35,9 @@ with lib;
 
       workDir = if cfg.workDir == null then runtimeDir else cfg.workDir;
       # Support old github-runner versions which don't have the `nodeRuntimes` arg yet.
-      package = cfg.package.override (old: optionalAttrs (hasAttr "nodeRuntimes" old) { inherit (cfg) nodeRuntimes; });
+      package = cfg.package.override (old: lib.optionalAttrs (lib.hasAttr "nodeRuntimes" old) { inherit (cfg) nodeRuntimes; });
     in
-    nameValuePair svcName {
+    lib.nameValuePair svcName {
       description = "GitHub Actions runner";
 
       wantedBy = [ "multi-user.target" ];
@@ -61,7 +59,7 @@ with lib;
         config.nix.package
       ] ++ cfg.extraPackages;
 
-      serviceConfig = mkMerge [
+      serviceConfig = lib.mkMerge [
         {
           ExecStart = "${package}/bin/Runner.Listener run --startuptype service";
 
@@ -90,7 +88,7 @@ with lib;
 
                 ${lines}
               '';
-              runnerRegistrationConfig = getAttrs [
+              runnerRegistrationConfig = lib.getAttrs [
                 "ephemeral"
                 "extraLabels"
                 "name"
@@ -114,9 +112,9 @@ with lib;
               unconfigureRunner = writeScript "unconfigure" ''
                 copy_tokens() {
                   # Copy the configured token file to the state dir and allow the service user to read the file
-                  install --mode=666 ${escapeShellArg cfg.tokenFile} "${newConfigTokenPath}"
+                  install --mode=666 ${lib.escapeShellArg cfg.tokenFile} "${newConfigTokenPath}"
                   # Also copy current file to allow for a diff on the next start
-                  install --mode=600 ${escapeShellArg cfg.tokenFile} "${currentConfigTokenPath}"
+                  install --mode=600 ${lib.escapeShellArg cfg.tokenFile} "${currentConfigTokenPath}"
                 }
                 clean_state() {
                   find "$STATE_DIRECTORY/" -mindepth 1 -delete
@@ -130,7 +128,7 @@ with lib;
                     || changed=1
                   # Also check the content of the token file
                   [[ -f "${currentConfigTokenPath}" ]] \
-                    && ${pkgs.diffutils}/bin/diff -q "${currentConfigTokenPath}" ${escapeShellArg cfg.tokenFile} >/dev/null 2>&1 \
+                    && ${pkgs.diffutils}/bin/diff -q "${currentConfigTokenPath}" ${lib.escapeShellArg cfg.tokenFile} >/dev/null 2>&1 \
                     || changed=1
                   # If the config has changed, remove old state and copy tokens
                   if [[ "$changed" -eq 1 ]]; then
@@ -140,7 +138,7 @@ with lib;
                     clean_state
                   fi
                 }
-                if [[ "${optionalString cfg.ephemeral "1"}" ]]; then
+                if [[ "${lib.optionalString cfg.ephemeral "1"}" ]]; then
                   # In ephemeral mode, we always want to start with a clean state
                   clean_state
                 elif [[ "$(ls -A "$STATE_DIRECTORY")" ]]; then
@@ -161,13 +159,13 @@ with lib;
                     --unattended
                     --disableupdate
                     --work "$WORK_DIRECTORY"
-                    --url ${escapeShellArg cfg.url}
-                    --labels ${escapeShellArg (concatStringsSep "," cfg.extraLabels)}
-                    ${optionalString (cfg.name != null ) "--name ${escapeShellArg cfg.name}"}
-                    ${optionalString cfg.replace "--replace"}
-                    ${optionalString (cfg.runnerGroup != null) "--runnergroup ${escapeShellArg cfg.runnerGroup}"}
-                    ${optionalString cfg.ephemeral "--ephemeral"}
-                    ${optionalString cfg.noDefaultLabels "--no-default-labels"}
+                    --url ${lib.escapeShellArg cfg.url}
+                    --labels ${lib.escapeShellArg (lib.concatStringsSep "," cfg.extraLabels)}
+                    ${lib.optionalString (cfg.name != null ) "--name ${lib.escapeShellArg cfg.name}"}
+                    ${lib.optionalString cfg.replace "--replace"}
+                    ${lib.optionalString (cfg.runnerGroup != null) "--runnergroup ${lib.escapeShellArg cfg.runnerGroup}"}
+                    ${lib.optionalString cfg.ephemeral "--ephemeral"}
+                    ${lib.optionalString cfg.noDefaultLabels "--no-default-labels"}
                   )
                   # If the token file contains a PAT (i.e., it starts with "ghp_" or "github_pat_"), we have to use the --pat option,
                   # if it is not a PAT, we assume it contains a registration token and use the --token option
@@ -196,7 +194,7 @@ with lib;
                 ln -s "$STATE_DIRECTORY"/{${lib.concatStringsSep "," runnerCredFiles}} "$WORK_DIRECTORY/"
               '';
             in
-            map (x: "${x} ${escapeShellArgs [ stateDir workDir logsDir ]}") [
+            map (x: "${x} ${lib.escapeShellArgs [ stateDir workDir logsDir ]}") [
               "+${unconfigureRunner}" # runs as root
               configureRunner
               setupWorkDir
@@ -230,30 +228,30 @@ with lib;
           # Hardening (may overlap with DynamicUser=)
           # The following options are only for optimizing:
           # systemd-analyze security github-runner
-          AmbientCapabilities = mkBefore [ "" ];
-          CapabilityBoundingSet = mkBefore [ "" ];
+          AmbientCapabilities = lib.mkBefore [ "" ];
+          CapabilityBoundingSet = lib.mkBefore [ "" ];
           # ProtectClock= adds DeviceAllow=char-rtc r
-          DeviceAllow = mkBefore [ "" ];
-          NoNewPrivileges = mkDefault true;
-          PrivateDevices = mkDefault true;
-          PrivateMounts = mkDefault true;
-          PrivateTmp = mkDefault true;
-          PrivateUsers = mkDefault true;
-          ProtectClock = mkDefault true;
-          ProtectControlGroups = mkDefault true;
-          ProtectHome = mkDefault true;
-          ProtectHostname = mkDefault true;
-          ProtectKernelLogs = mkDefault true;
-          ProtectKernelModules = mkDefault true;
-          ProtectKernelTunables = mkDefault true;
-          ProtectSystem = mkDefault "strict";
-          RemoveIPC = mkDefault true;
-          RestrictNamespaces = mkDefault true;
-          RestrictRealtime = mkDefault true;
-          RestrictSUIDSGID = mkDefault true;
-          UMask = mkDefault "0066";
-          ProtectProc = mkDefault "invisible";
-          SystemCallFilter = mkBefore [
+          DeviceAllow = lib.mkBefore [ "" ];
+          NoNewPrivileges = lib.mkDefault true;
+          PrivateDevices = lib.mkDefault true;
+          PrivateMounts = lib.mkDefault true;
+          PrivateTmp = lib.mkDefault true;
+          PrivateUsers = lib.mkDefault true;
+          ProtectClock = lib.mkDefault true;
+          ProtectControlGroups = lib.mkDefault true;
+          ProtectHome = lib.mkDefault true;
+          ProtectHostname = lib.mkDefault true;
+          ProtectKernelLogs = lib.mkDefault true;
+          ProtectKernelModules = lib.mkDefault true;
+          ProtectKernelTunables = lib.mkDefault true;
+          ProtectSystem = lib.mkDefault "strict";
+          RemoveIPC = lib.mkDefault true;
+          RestrictNamespaces = lib.mkDefault true;
+          RestrictRealtime = lib.mkDefault true;
+          RestrictSUIDSGID = lib.mkDefault true;
+          UMask = lib.mkDefault "0066";
+          ProtectProc = lib.mkDefault "invisible";
+          SystemCallFilter = lib.mkBefore [
             "~@clock"
             "~@cpu-emulation"
             "~@module"
@@ -265,33 +263,33 @@ with lib;
             "~setdomainname"
             "~sethostname"
           ];
-          RestrictAddressFamilies = mkBefore [ "AF_INET" "AF_INET6" "AF_UNIX" "AF_NETLINK" ];
+          RestrictAddressFamilies = lib.mkBefore [ "AF_INET" "AF_INET6" "AF_UNIX" "AF_NETLINK" ];
 
           BindPaths = lib.optionals (cfg.workDir != null) [ cfg.workDir ];
 
           # Needs network access
-          PrivateNetwork = mkDefault false;
+          PrivateNetwork = lib.mkDefault false;
           # Cannot be true due to Node
-          MemoryDenyWriteExecute = mkDefault false;
+          MemoryDenyWriteExecute = lib.mkDefault false;
 
           # The more restrictive "pid" option makes `nix` commands in CI emit
           # "GC Warning: Couldn't read /proc/stat"
           # You may want to set this to "pid" if not using `nix` commands
-          ProcSubset = mkDefault "all";
+          ProcSubset = lib.mkDefault "all";
           # Coverage programs for compiled code such as `cargo-tarpaulin` disable
           # ASLR (address space layout randomization) which requires the
           # `personality` syscall
           # You may want to set this to `true` if not using coverage tooling on
           # compiled code
-          LockPersonality = mkDefault false;
+          LockPersonality = lib.mkDefault false;
 
-          DynamicUser = mkDefault true;
+          DynamicUser = lib.mkDefault true;
         }
-        (mkIf (cfg.user != null) {
+        (lib.mkIf (cfg.user != null) {
           DynamicUser = false;
           User = cfg.user;
         })
-        (mkIf (cfg.group != null) {
+        (lib.mkIf (cfg.group != null) {
           DynamicUser = false;
           Group = cfg.group;
         })
