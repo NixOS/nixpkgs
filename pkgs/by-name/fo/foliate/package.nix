@@ -54,7 +54,10 @@ stdenv.mkDerivation rec {
     homepage = "https://johnfactotum.github.io/foliate";
     changelog = "https://github.com/johnfactotum/foliate/releases/tag/${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ onny ];
+    maintainers = with maintainers; [
+      onny
+      aleksana
+    ];
     mainProgram = "foliate";
   };
 }
