@@ -1,14 +1,15 @@
 {
   lib,
+  alsa-lib,
   buildGoModule,
   fetchFromGitHub,
-  pkg-config,
   glib,
-  wrapGAppsHook4,
-  alsa-lib,
   gobject-introspection,
   gtk4,
   libadwaita,
+  nix-update-script,
+  pkg-config,
+  wrapGAppsHook4,
 }:
 
 buildGoModule rec {
@@ -21,6 +22,7 @@ buildGoModule rec {
     rev = "refs/tags/${version}";
     hash = "sha256-Ak9DASAfW+dOhfbQDRAZJ1YD8j5Fcpz05jlXlUG1ydo=";
   };
+
   vendorHash = "sha256-APcQgNEn7ULIjBk7f4q6MMSX9k58+F7vzgUDiIZ3Jxc=";
 
   strictDeps = true;
@@ -42,6 +44,7 @@ buildGoModule rec {
     "-s"
     "-w"
   ];
+
   tags = [
     "wayland"
   ];
@@ -53,6 +56,10 @@ buildGoModule rec {
     install -Dm644 misc/io.github.efogdev.mpris-timer.gschema.xml -t $out/share/glib-2.0/schemas
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Timer app with seamless GNOME integration";
