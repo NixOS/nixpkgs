@@ -11,12 +11,22 @@ stdenv.mkDerivation {
     sha256 = "0gmxbpn50pnffidwjchkzph9rh2jm4wfq7hj8msp5vhdq5h0z9hm";
   };
 
+  patches = [
+    # https://github.com/naclander/netris/pull/1
+    ./configure-fixes-for-gcc-14.patch
+  ];
+
   buildInputs = [
     ncurses
   ];
 
   configureScript = "./Configure";
   dontAddPrefix = true;
+
+  configureFlags = [
+    "--cc" "${stdenv.cc.targetPrefix}cc"
+    "-O2"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -28,6 +38,6 @@ stdenv.mkDerivation {
     mainProgram = "netris";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ patryk27 ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
