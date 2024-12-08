@@ -10,11 +10,17 @@ stdenv.mkDerivation rec {
   inherit version src;
   inherit (src) passthru;
 
+  postPatch = ''
+    sed -i 's|.*libc++.so.1.*|${mdk-sdk}/lib/libc++.so.1|' ./linux/CMakeLists.txt
+    substituteInPlace ./linux/CMakeLists.txt \
+      --replace-fail "fvp_setup_deps()" "include(${mdk-sdk}/lib/cmake/FindMDK.cmake)"
+  '';
+
   installPhase = ''
     runHook preInstall
-    mkdir $out
-    tar -xf ${mdk-sdk.src} -C ./linux
-    cp -r ./* $out/
+
+    cp -r . $out
+
     runHook postInstall
   '';
 }
