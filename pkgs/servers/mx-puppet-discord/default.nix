@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, pkgs, lib, node-pre-gyp, nodejs_18, pkg-config
-, libjpeg, pixman, cairo, pango, which, libpq }:
+, libjpeg, pixman, cairo, pango, which, libpq, giflib, cctools}:
 
 let
   nodejs = nodejs_18;
@@ -22,8 +22,8 @@ let
 in myNodePackages.package.override {
   inherit version src;
 
-  nativeBuildInputs = [ node-pre-gyp nodejs.pkgs.node-gyp-build pkg-config which ];
-  buildInputs = [ libjpeg pixman cairo pango libpq ];
+  nativeBuildInputs = [ node-pre-gyp nodejs.pkgs.node-gyp-build pkg-config which ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ];
+  buildInputs = [ libjpeg pixman cairo pango libpq ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ giflib ];
 
   postRebuild = ''
     # Build typescript stuff
@@ -46,8 +46,6 @@ in myNodePackages.package.override {
     homepage = "https://gitlab.com/mx-puppet/discord/mx-puppet-discord";
     maintainers = [];
     platforms = platforms.unix;
-    # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     mainProgram = "mx-puppet-discord";
   };
 }
