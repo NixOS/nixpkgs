@@ -1,12 +1,12 @@
 {
-  mkDerivation,
+  stdenv,
   lib,
   fetchFromGitHub,
   pkg-config,
   libsForQt5,
   libjack2,
 }:
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "jamulus";
   version = "3.11.0";
 
@@ -20,6 +20,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
