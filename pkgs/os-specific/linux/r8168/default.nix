@@ -4,7 +4,7 @@
 let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/r8168";
 
 in stdenv.mkDerivation rec {
-  name = "r8168-${kernel.version}-${version}";
+  pname = "r8168";
   # on update please verify that the source matches the realtek version
   version = "8.053.00";
 
