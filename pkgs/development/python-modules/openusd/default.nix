@@ -1,7 +1,7 @@
 {
   alembic,
   bison,
-  boost,
+  boost-python,
   buildPythonPackage,
   cmake,
   darwin,
@@ -126,7 +126,7 @@ buildPythonPackage rec {
     [
       alembic.dev
       bison
-      boost
+      boost-python
       draco
       embree
       flex
@@ -153,7 +153,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs =
     [
-      boost
+      boost-python
       jinja2
       numpy
       pyopengl

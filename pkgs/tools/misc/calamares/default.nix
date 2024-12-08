@@ -1,5 +1,5 @@
 { lib, fetchurl, boost, cmake, extra-cmake-modules, kparts, kpmcore, kirigami2
-, kservice, libatasmart, libxcb, yaml-cpp, libpwquality, parted, polkit-qt, python
+, kservice, libatasmart, libxcb, yaml-cpp, libpwquality, parted, polkit-qt, python3
 , qtbase, qtquickcontrols, qtsvg, qttools, qtwebengine, util-linux, tzdata
 , ckbcomp, xkeyboard_config, mkDerivation
 , nixos-extensions ? false
@@ -34,14 +34,15 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [
-    boost kparts.dev kpmcore.out kservice.dev kirigami2
-    libatasmart libxcb yaml-cpp libpwquality parted polkit-qt python
+    (boost.withPython python3)
+    kparts.dev kpmcore.out kservice.dev kirigami2
+    libatasmart libxcb yaml-cpp libpwquality parted polkit-qt python3
     qtbase qtquickcontrols qtsvg qttools qtwebengine.dev util-linux
   ];
 
   cmakeFlags = [
-    "-DPYTHON_LIBRARY=${python}/lib/lib${python.libPrefix}.so"
-    "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}"
+    "-DPYTHON_LIBRARY=${python3}/lib/lib${python3.libPrefix}.so"
+    "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
     "-DCMAKE_VERBOSE_MAKEFILE=True"
     "-DWITH_PYTHONQT:BOOL=ON"
   ];

@@ -70,16 +70,14 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs =
     [
       console-bridge
+      boost
+      eigen
       jrl-cmakemodules
       urdfdom
     ]
-    ++ lib.optionals (!pythonSupport) [
-      boost
-      eigen
-    ]
     ++ lib.optionals (!pythonSupport && collisionSupport) [ coal ]
     ++ lib.optionals pythonSupport [
-      python3Packages.boost
+      python3Packages.boost-python
       python3Packages.eigenpy
     ]
     ++ lib.optionals (pythonSupport && collisionSupport) [ python3Packages.coal ]

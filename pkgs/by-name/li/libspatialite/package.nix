@@ -57,6 +57,11 @@ stdenv.mkDerivation rec {
       libiconv
     ];
 
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+    substituteInPlace spatialite.pc.in \
+      --replace-fail "@LIBS@ @LIBXML2_LIBS@ @SQLITE3_LIBS@ -lm" ""
+  '';
+
   enableParallelBuilding = true;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

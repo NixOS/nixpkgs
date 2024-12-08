@@ -38,12 +38,13 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ] ++ lib.optionals usePython [ "py" ];
 
   buildInputs = [
-    gmp mpfr libedit gnused
+    gmp mpfr libedit gnused boost
   ] ++ lib.optionals gpgmeSupport [
     gpgme
-  ] ++ (if usePython
-        then [ python3 (boost.override { enablePython = true; python = python3; }) ]
-        else [ boost ]);
+  ] ++ lib.optionals usePython [
+    python3
+    python3.pkgs.boost-python
+  ];
 
   nativeBuildInputs = [ cmake texinfo installShellFiles ];
 
