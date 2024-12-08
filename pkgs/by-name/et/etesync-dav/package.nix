@@ -1,11 +1,11 @@
-{ lib
-, stdenv
-, nixosTests
-, python3
-, fetchFromGitHub
-, radicale
+{
+  lib,
+  stdenv,
+  nixosTests,
+  python3,
+  fetchFromGitHub,
+  radicale,
 }:
-
 python3.pkgs.buildPythonApplication {
   pname = "etesync-dav";
   version = "0.32.1-unstable-2024-09-02";
@@ -17,18 +17,21 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-wWhwnOlwE1rFgROTSj90hlSw4k48fIEdk5CJOXoecuQ=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    appdirs
-    etebase
-    etesync
-    flask
-    flask-wtf
-    msgpack
-    setuptools
-    (python.pkgs.toPythonModule (radicale.override { python3 = python; }))
-    requests
-    types-setuptools
-  ] ++ requests.optional-dependencies.socks;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      appdirs
+      etebase
+      etesync
+      flask
+      flask-wtf
+      msgpack
+      setuptools
+      (python.pkgs.toPythonModule (radicale.override { python3 = python; }))
+      requests
+      types-setuptools
+    ]
+    ++ requests.optional-dependencies.socks;
 
   doCheck = false;
 
@@ -36,12 +39,15 @@ python3.pkgs.buildPythonApplication {
     inherit (nixosTests) etesync-dav;
   };
 
-  meta = with lib; {
-    homepage = "https://www.etesync.com/";
+  meta = {
+    homepage = "https://www.etesync.com";
     description = "Secure, end-to-end encrypted, and privacy respecting sync for contacts, calendars and tasks";
     mainProgram = "etesync-dav";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ thyol valodim ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
+      thyol
+      valodim
+    ];
     broken = stdenv.hostPlatform.isDarwin; # pyobjc-framework-Cocoa is missing
   };
 }
