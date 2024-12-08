@@ -16,4 +16,5 @@
   sqlite3_flutter_libs = callPackage ./sqlite3_flutter_libs { };
   system_tray = callPackage ./system-tray { };
   super_native_extensions = callPackage ./super_native_extensions { };
+  xdg_directories = callPackage ./xdg_directories { };
 }
