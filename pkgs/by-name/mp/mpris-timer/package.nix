@@ -72,5 +72,7 @@ buildGoModule rec {
       getchoo
     ];
     mainProgram = "mpris-timer";
+    # Always uses ALSA
+    platforms = lib.platforms.linux;
   };
 }
