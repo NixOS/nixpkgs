@@ -5,7 +5,7 @@
   fetchFromGitHub,
   setuptools,
   unittestCheckHook,
-  boost,
+  boost-python,
   numpy,
   scipy,
   simpleitk,
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    boost
+    boost-python
     numpy
     scipy
     simpleitk

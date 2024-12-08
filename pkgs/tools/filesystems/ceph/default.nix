@@ -310,11 +310,6 @@ let
       };
   };
 
-  boost' = boost183.override {
-    enablePython = true;
-    inherit python;
-  };
-
   # TODO: split this off in build and runtime environment
   ceph-python-env = python.withPackages (
     ps: with ps; [
@@ -428,7 +423,7 @@ rec {
       ++ [
         arrow-cpp
         babeltrace
-        boost'
+        (boost183.withPython python)
         bzip2
         # Adding `ceph-python-env` here adds the env's `site-packages` to `PYTHONPATH` during the build.
         # This is important, otherwise the build system may not find the Python deps and then

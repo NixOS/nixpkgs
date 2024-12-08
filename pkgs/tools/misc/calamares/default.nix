@@ -62,7 +62,7 @@ mkDerivation rec {
     extra-cmake-modules
   ];
   buildInputs = [
-    boost
+    (boost.withPython python3)
     kparts.dev
     kpmcore.out
     kservice.dev

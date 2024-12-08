@@ -26,7 +26,10 @@
   sparsehash,
 }:
 
-buildPythonPackage rec {
+let
+  boostWithPython = boost.withPython python;
+in
+buildPythonPackage {
   pname = "python-mapnik";
   version = "3.0.16-unstable-2024-02-22";
   pyproject = true;
@@ -51,8 +54,6 @@ buildPythonPackage rec {
     ./python-mapnik_std_optional.patch
   ];
 
-  stdenv = python.stdenv;
-
   build-system = [ setuptools ];
 
   nativeBuildInputs = [
@@ -61,8 +62,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    mapnik
-    boost
+    boostWithPython
     cairo
     harfbuzz
     icu
@@ -70,11 +70,12 @@ buildPythonPackage rec {
     libpng
     libtiff
     libwebp
-    proj
-    zlib
     libxml2
+    mapnik
+    proj
     sqlite
     sparsehash
+    zlib
   ];
 
   propagatedBuildInputs = [
@@ -86,13 +87,14 @@ buildPythonPackage rec {
 
   disabled = isPyPy;
 
-  preBuild = ''
-    export BOOST_PYTHON_LIB="boost_python${"${lib.versions.major python.version}${lib.versions.minor python.version}"}"
-    export BOOST_THREAD_LIB="boost_thread"
-    export BOOST_SYSTEM_LIB="boost_system"
-    export PYCAIRO=true
-    export XMLPARSER=libxml2
-  '';
+  env = {
+    LDFLAGS = "-L ${lib.getLib boost}/lib -L ${lib.getLib boostWithPython}/lib";
+    BOOST_PYTHON_LIB = "boost_python${lib.versions.major python.version}${lib.versions.minor python.version}";
+    BOOST_THREAD_LIB = "boost_thread";
+    BOOST_SYSTEM_LIB = "boost_system";
+    PYCAIRO = true;
+    XMLPARSER = "libxml2";
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -101,7 +103,7 @@ buildPythonPackage rec {
       # import from $out
       rm -r mapnik
     ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    + lib.optionalString python.stdenv.hostPlatform.isDarwin ''
       # Replace the hardcoded /tmp references with $TMPDIR
       sed -i "s,/tmp,$TMPDIR,g" test/python_tests/*.py
     '';
@@ -112,11 +114,12 @@ buildPythonPackage rec {
       "test_geometry_type"
       "test_passing_pycairo_context_pdf"
       "test_pdf_printing"
+      "test_raster_warping"
       "test_render_with_scale_factor"
       "test_raster_warping"
       "test_pycairo_svg_surface1"
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ++ lib.optionals python.stdenv.hostPlatform.isDarwin [
       "test_passing_pycairo_context_png"
       "test_passing_pycairo_context_svg"
       "test_pycairo_pdf_surface1"

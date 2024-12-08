@@ -2025,18 +2025,9 @@ self: super: with self; {
 
   booleanoperations = callPackage ../development/python-modules/booleanoperations { };
 
-  # Build boost for this specific Python version
-  # TODO: use separate output for libboost_python.so
-  boost = toPythonModule (
-    pkgs.boost.override {
-      inherit (self) python numpy;
-      enablePython = true;
-    }
-  );
+  boost-histogram = callPackage ../development/python-modules/boost-histogram { };
 
-  boost-histogram = callPackage ../development/python-modules/boost-histogram {
-    inherit (pkgs) boost;
-  };
+  boost-python = toPythonModule (pkgs.boost.pythonLib python);
 
   borb = callPackage ../development/python-modules/borb { };
 
@@ -2225,7 +2216,7 @@ self: super: with self; {
   caffe = toPythonModule (
     pkgs.caffe.override {
       pythonSupport = true;
-      inherit (self) python numpy boost;
+      inherit (self) python numpy;
     }
   );
 
@@ -14561,12 +14552,8 @@ self: super: with self; {
       proj
       zlib
       ;
-    boost = pkgs.boost.override {
-      enablePython = true;
-      inherit python;
-    };
     harfbuzz = pkgs.harfbuzz.override { withIcu = true; };
-    mapnik = pkgs.mapnik.override { inherit boost harfbuzz; };
+    mapnik = pkgs.mapnik.override { inherit harfbuzz; };
   };
 
   python-markdown-math = callPackage ../development/python-modules/python-markdown-math { };
@@ -15302,12 +15289,7 @@ self: super: with self; {
 
   rdflib = callPackage ../development/python-modules/rdflib { };
 
-  rdkit = callPackage ../development/python-modules/rdkit {
-    boost = pkgs.boost.override {
-      enablePython = true;
-      inherit python;
-    };
-  };
+  rdkit = callPackage ../development/python-modules/rdkit { };
 
   re-assert = callPackage ../development/python-modules/re-assert { };
 

@@ -6,7 +6,6 @@
   boost,
   python3,
   eigen,
-  python3Packages,
   icestorm,
   trellis,
   llvmPackages,
@@ -17,11 +16,6 @@
 }:
 
 let
-  boostPython = boost.override {
-    python = python3;
-    enablePython = true;
-  };
-
   pname = "nextpnr";
   version = "0.8";
 
@@ -57,9 +51,9 @@ stdenv.mkDerivation rec {
   ] ++ (lib.optional enableGui wrapQtAppsHook);
   buildInputs =
     [
-      boostPython
+      boost
       eigen
-      python3Packages.apycula
+      python3.pkgs.apycula
     ]
     ++ (lib.optional enableGui qtbase)
     ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
@@ -78,7 +72,7 @@ stdenv.mkDerivation rec {
       "-DICESTORM_INSTALL_PREFIX=${icestorm}"
       "-DTRELLIS_INSTALL_PREFIX=${trellis}"
       "-DTRELLIS_LIBDIR=${trellis}/lib/trellis"
-      "-DGOWIN_BBA_EXECUTABLE=${python3Packages.apycula}/bin/gowin_bba"
+      "-DGOWIN_BBA_EXECUTABLE=${python3.pkgs.apycula}/bin/gowin_bba"
       "-DUSE_OPENMP=ON"
       "-DHIMBAECHEL_UARCH=all"
       "-DHIMBAECHEL_GOWIN_DEVICES=all"

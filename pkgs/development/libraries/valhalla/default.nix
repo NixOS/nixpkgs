@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost
+    (boost.withPython python3)
     cxxopts
     lz4
     (python3.withPackages (ps: [ ps.pybind11 ]))
