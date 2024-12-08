@@ -18,16 +18,15 @@
 , ninja
 , pkg-config
 , rustc
-, rustPlatform
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glycin-loaders";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Vg7kIWfB7SKCZhjmHYPkkUDbW/R6Zam6js4s1z0qSqg=";
+    hash = "sha256-Qccr4eybpV2pDIL8GFc7dC3/WCsJr8N7RWXEfpnMj/Q=";
   };
 
   patches = [
@@ -45,7 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     rustc
-    rustPlatform.bindgenHook # for libheif-sys
   ];
 
   buildInputs = [
