@@ -6,7 +6,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nvidiabl-${version}-${kernel.version}";
+  pname = "nvidiabl";
   version = "2020-10-01";
 
   # We use a fork which adds support for newer kernels -- upstream has been abandoned.
