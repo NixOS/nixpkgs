@@ -1,6 +1,7 @@
 {
   lib,
   autoreconfHook,
+  coreutils,
   curl,
   fetchFromGitHub,
   installShellFiles,
@@ -57,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     installShellCompletion --bash --name onedrive contrib/completions/complete.bash
     installShellCompletion --fish --name onedrive contrib/completions/complete.fish
     installShellCompletion --zsh --name _onedrive contrib/completions/complete.zsh
+
+    substituteInPlace $out/lib/systemd/user/onedrive.service --replace-fail "/usr/bin/sleep" "${coreutils}/bin/sleep"
+    substituteInPlace $out/lib/systemd/system/onedrive@.service --replace-fail "/usr/bin/sleep" "${coreutils}/bin/sleep"
   '';
 
   passthru = {
