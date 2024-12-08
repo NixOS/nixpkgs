@@ -1,10 +1,9 @@
 {
   buildGoModule,
   fetchFromGitHub,
-  lib
+  lib,
 }:
-{
-  pet = buildGoModule rec {
+  buildGoModule rec {
     pname = "gamut-cli";
     version = "0.9.0";
 
@@ -17,18 +16,17 @@
 
     vendorHash = "sha256-2KtQpzgz6xTupbejkm95OVxnamZmBwanPmzUkjzkB+o=";
 
-    meta = {
+    meta = with lib; {
       description = "A command line interface for the gamut library made by muesli.";
       homepage = "https://github.com/nikolaizombie1/gamut-cli/tree/main";
       license = lib.licenses.gpl3;
       maintainers = [
-      {
-        name = "Fabio J. Matos Nieves";
-        email = "fabio.matos999@gmail.com";
-        githubId = "70602908";
-        github = "nikolaizombie1";
-      }
-    ];
+        {
+          name = "Fabio J. Matos Nieves";
+          email = "fabio.matos999@gmail.com";
+          githubId = "70602908";
+          github = "nikolaizombie1";
+        }
+      ];
     };
-  };
-}
+  }
