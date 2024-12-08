@@ -7,8 +7,7 @@
   libusb1,
   udev,
   nix-update-script,
-  testers,
-  wlink,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,11 +28,11 @@ rustPlatform.buildRustPackage rec {
     udev
   ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = wlink;
-    };
   };
 
   meta = {
