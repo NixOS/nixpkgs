@@ -7,11 +7,9 @@
 , which
 , rustPlatform
 , emscripten
-, Security
 , callPackage
 , linkFarm
 , substitute
-, CoreServices
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
 , webUISupport ? false
@@ -113,8 +111,6 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-32CcOb5op+7QOgLSw+8rvMW3GjJ0jaQsryX5DiW+bIk=";
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [ Security CoreServices ];
   nativeBuildInputs =
     [ which ]
     ++ lib.optionals webUISupport [ emscripten ];
