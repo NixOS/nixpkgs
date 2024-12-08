@@ -1,0 +1,12 @@
+diff --git src/env/__libc_start_main.c src/env/__libc_start_main.c
+index 8fbe526..9476c22 100644
+--- src/env/__libc_start_main.c
++++ src/env/__libc_start_main.c
+@@ -91,6 +91,7 @@ static int libc_start_main_stage2(int (*main)(int,char **,char **), int argc, ch
+ 	__libc_start_init();
+ 
+ 	/* Pass control to the application */
++	setbuf(stdout, NULL);
+ 	exit(main(argc, argv, envp));
+ 	return 0;
+ }

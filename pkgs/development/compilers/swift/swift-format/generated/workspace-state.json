@@ -1,0 +1,76 @@
+{
+  "object": {
+    "artifacts": [],
+    "dependencies": [
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-argument-parser",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-argument-parser.git",
+          "name": "swift-argument-parser"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "main",
+            "revision": "c5050aa63ed5bb23209e7120b7ff6618ee06e0ee"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-argument-parser"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-syntax",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-syntax.git",
+          "name": "SwiftSyntax"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "main",
+            "revision": "cd793adf5680e138bf2bcbaacc292490175d0dcd"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-syntax"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-system",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-system.git",
+          "name": "swift-system"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "836bc4557b74fe6d2660218d56e3ce96aff76574",
+            "version": "1.1.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-system"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-tools-support-core",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-tools-support-core.git",
+          "name": "swift-tools-support-core"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "main",
+            "revision": "1296d2f11b0226c4b83540010936c7238d21c12b"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-tools-support-core"
+      }
+    ]
+  },
+  "version": 6
+}

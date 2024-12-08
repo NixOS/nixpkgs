@@ -1,0 +1,24 @@
+From bfdb6b8f87cc1cae9ba47870ff23deae0bb8ba51 Mon Sep 17 00:00:00 2001
+From: Al <albarrentine@gmail.com>
+Date: Sun, 17 Dec 2017 20:17:01 -0500
+Subject: [PATCH] [test] adding header to fix warning
+
+---
+ test/test_expand.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/test_expand.c b/test/test_expand.c
+index 59ed9af7..2b211728 100644
+--- a/test/test_expand.c
++++ b/test/test_expand.c
+@@ -4,6 +4,7 @@
+ #include <stdarg.h>
+ 
+ #include "greatest.h"
++#include "../src/string_utils.h"
+ #include "../src/libpostal.h"
+ 
+ SUITE(libpostal_expansion_tests);
+-- 
+2.42.0
+

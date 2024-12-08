@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 04523c97d..945ba6a41 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -59,7 +59,7 @@ find_package(QCoro6 REQUIRED COMPONENTS Core)
+ 
+ qcoro_enable_coroutines()
+ 
+-ecm_find_qmlmodule(org.kde.kitemmodels 1.0 REQUIRED)
++ecm_find_qmlmodule(org.kde.kitemmodels 1.0)
+ 
+ list(APPEND CMAKE_AUTOMOC_MACRO_NAMES "DISCOVER_BACKEND_PLUGIN")
+ 

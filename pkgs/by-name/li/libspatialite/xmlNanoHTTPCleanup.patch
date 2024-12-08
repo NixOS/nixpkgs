@@ -1,0 +1,26 @@
+diff --git a/src/wfs/wfs_in.c b/src/wfs/wfs_in.c
+index fe07a0d..7f2557d 100644
+--- a/src/wfs/wfs_in.c
++++ b/src/wfs/wfs_in.c
+@@ -76,7 +76,10 @@ Regione Toscana - Settore Sistema Informativo Territoriale ed Ambientale
+ #ifdef ENABLE_LIBXML2		/* LIBXML2 enabled: supporting XML documents */
+ 
+ #include <libxml/parser.h>
+-#include <libxml/nanohttp.h>
++
++#ifdef LIBXML_HTTP_ENABLED
++  #include <libxml/nanohttp.h>
++#endif
+ 
+ #define MAX_GTYPES	28
+ 
+@@ -4637,7 +4640,9 @@ SPATIALITE_DECLARE void
+ reset_wfs_http_connection (void)
+ {
+ /* Resets the libxml2 "nano HTTP": useful when changing the HTTP_PROXY settings */
++#ifdef LIBXML_HTTP_ENABLED
+     xmlNanoHTTPCleanup ();
++#endif
+ }
+ 
+ #else /* LIBXML2 isn't enabled */

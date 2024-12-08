@@ -1,0 +1,39 @@
+diff --git a/apps/desktop/scripts/after-pack.js b/apps/desktop/scripts/after-pack.js
+index fd16cd5ffb..05a2325ee1 100644
+--- a/apps/desktop/scripts/after-pack.js
++++ b/apps/desktop/scripts/after-pack.js
+@@ -13,25 +13,6 @@ async function run(context) {
+   console.log("## After pack");
+   // console.log(context);
+ 
+-  if (context.packager.platform.nodeName !== "darwin" || context.arch === builder.Arch.universal) {
+-    await addElectronFuses(context);
+-  }
+-
+-  if (context.electronPlatformName === "linux") {
+-    console.log("Creating memory-protection wrapper script");
+-    const appOutDir = context.appOutDir;
+-    const oldBin = path.join(appOutDir, context.packager.executableName);
+-    const newBin = path.join(appOutDir, "bitwarden-app");
+-    fse.moveSync(oldBin, newBin);
+-    console.log("Moved binary to bitwarden-app");
+-
+-    const wrapperScript = path.join(__dirname, "../resources/memory-dump-wrapper.sh");
+-    const wrapperBin = path.join(appOutDir, context.packager.executableName);
+-    fse.copyFileSync(wrapperScript, wrapperBin);
+-    fse.chmodSync(wrapperBin, "755");
+-    console.log("Copied memory-protection wrapper script");
+-  }
+-
+   if (["darwin", "mas"].includes(context.electronPlatformName)) {
+     const is_mas = context.electronPlatformName === "mas";
+     const is_mas_dev = context.targets.some((e) => e.name === "mas-dev");
+@@ -140,6 +121,8 @@ function getIdentities() {
+  * @param {import("electron-builder").AfterPackContext} context
+  */
+ async function addElectronFuses(context) {
++  return;
++
+   const platform = context.packager.platform.nodeName;
+ 
+   const ext = {

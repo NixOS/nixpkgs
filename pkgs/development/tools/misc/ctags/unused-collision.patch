@@ -1,0 +1,246 @@
+--- a/c.c	(revision 816)
++++ b/c.c	(working copy)
+@@ -619,7 +619,7 @@
+ 	return name;
+ }
+ 
+-static void __unused__ pt (tokenInfo *const token)
++static void UNUSED pt (tokenInfo *const token)
+ {
+ 	if (isType (token, TOKEN_NAME))
+ 		printf ("type: %-12s: %-13s   line: %lu\n",
+@@ -634,7 +634,7 @@
+ 			tokenString (token->type), token->lineNumber);
+ }
+ 
+-static void __unused__ ps (statementInfo *const st)
++static void UNUSED ps (statementInfo *const st)
+ {
+ 	unsigned int i;
+ 	printf ("scope: %s   decl: %s   gotName: %s   gotParenName: %s\n",
+--- a/eiffel.c	(revision 816)
++++ b/eiffel.c	(working copy)
+@@ -807,7 +807,7 @@
+ 
+ static boolean parseType (tokenInfo *const token);
+ 
+-static void parseGeneric (tokenInfo *const token, boolean declaration __unused__)
++static void parseGeneric (tokenInfo *const token, boolean declaration UNUSED)
+ {
+ 	unsigned int depth = 0;
+ #ifdef TYPE_REFERENCE_TOOL
+--- a/general.h	(revision 816)
++++ b/general.h	(working copy)
+@@ -57,10 +57,10 @@
+  *  to prevent warnings about unused variables.
+  */
+ #if (__GNUC__ > 2  ||  (__GNUC__ == 2  &&  __GNUC_MINOR__ >= 7)) && !defined (__GNUG__)
+-# define __unused__  __attribute__((unused))
++# define UNUSED  __attribute__((unused))
+ # define __printf__(s,f)  __attribute__((format (printf, s, f)))
+ #else
+-# define __unused__
++# define UNUSED
+ # define __printf__(s,f)
+ #endif
+ 
+--- a/lregex.c	(revision 816)
++++ b/lregex.c	(working copy)
+@@ -538,11 +538,11 @@
+ #endif  /* HAVE_REGEX */
+ 
+ extern void addTagRegex (
+-		const langType language __unused__,
+-		const char* const regex __unused__,
+-		const char* const name __unused__,
+-		const char* const kinds __unused__,
+-		const char* const flags __unused__)
++		const langType language UNUSED,
++		const char* const regex UNUSED,
++		const char* const name UNUSED,
++		const char* const kinds UNUSED,
++		const char* const flags UNUSED)
+ {
+ #ifdef HAVE_REGEX
+ 	Assert (regex != NULL);
+@@ -564,10 +564,10 @@
+ }
+ 
+ extern void addCallbackRegex (
+-		const langType language __unused__,
+-		const char* const regex __unused__,
+-		const char* const flags __unused__,
+-		const regexCallback callback __unused__)
++		const langType language UNUSED,
++		const char* const regex UNUSED,
++		const char* const flags UNUSED,
++		const regexCallback callback UNUSED)
+ {
+ #ifdef HAVE_REGEX
+ 	Assert (regex != NULL);
+@@ -581,7 +581,7 @@
+ }
+ 
+ extern void addLanguageRegex (
+-		const langType language __unused__, const char* const regex __unused__)
++		const langType language UNUSED, const char* const regex UNUSED)
+ {
+ #ifdef HAVE_REGEX
+ 	if (! regexBroken)
+@@ -602,7 +602,7 @@
+ */
+ 
+ extern boolean processRegexOption (const char *const option,
+-								   const char *const parameter __unused__)
++								   const char *const parameter UNUSED)
+ {
+ 	boolean handled = FALSE;
+ 	const char* const dash = strchr (option, '-');
+@@ -624,7 +624,7 @@
+ 	return handled;
+ }
+ 
+-extern void disableRegexKinds (const langType language __unused__)
++extern void disableRegexKinds (const langType language UNUSED)
+ {
+ #ifdef HAVE_REGEX
+ 	if (language <= SetUpper  &&  Sets [language].count > 0)
+@@ -639,8 +639,8 @@
+ }
+ 
+ extern boolean enableRegexKind (
+-		const langType language __unused__,
+-		const int kind __unused__, const boolean mode __unused__)
++		const langType language UNUSED,
++		const int kind UNUSED, const boolean mode UNUSED)
+ {
+ 	boolean result = FALSE;
+ #ifdef HAVE_REGEX
+@@ -660,7 +660,7 @@
+ 	return result;
+ }
+ 
+-extern void printRegexKinds (const langType language __unused__, boolean indent __unused__)
++extern void printRegexKinds (const langType language UNUSED, boolean indent UNUSED)
+ {
+ #ifdef HAVE_REGEX
+ 	if (language <= SetUpper  &&  Sets [language].count > 0)
+--- a/lua.c	(revision 816)
++++ b/lua.c	(working copy)
+@@ -37,7 +37,7 @@
+ */
+ 
+ /* for debugging purposes */
+-static void __unused__ print_string (char *p, char *q)
++static void UNUSED print_string (char *p, char *q)
+ {
+ 	for ( ; p != q; p++)
+ 		fprintf (errout, "%c", *p);
+--- a/main.c	(revision 816)
++++ b/main.c	(working copy)
+@@ -522,7 +522,7 @@
+  *		Start up code
+  */
+ 
+-extern int main (int __unused__ argc, char **argv)
++extern int main (int UNUSED argc, char **argv)
+ {
+ 	cookedArgs *args;
+ #ifdef VMS
+--- a/options.c	(revision 816)
++++ b/options.c	(working copy)
+@@ -730,7 +730,7 @@
+ }
+ 
+ static void processExcludeOption (
+-		const char *const option __unused__, const char *const parameter)
++		const char *const option UNUSED, const char *const parameter)
+ {
+ 	const char *const fileName = parameter + 1;
+ 	if (parameter [0] == '\0')
+@@ -867,7 +867,7 @@
+ }
+ 
+ static void processFilterTerminatorOption (
+-		const char *const option __unused__, const char *const parameter)
++		const char *const option UNUSED, const char *const parameter)
+ {
+ 	freeString (&Option.filterTerminator);
+ 	Option.filterTerminator = stringCopy (parameter);
+@@ -930,8 +930,8 @@
+ }
+ 
+ static void processHelpOption (
+-		const char *const option __unused__,
+-		const char *const parameter __unused__)
++		const char *const option UNUSED,
++		const char *const parameter UNUSED)
+ {
+ 	printProgramIdentification ();
+ 	putchar ('\n');
+@@ -1139,8 +1139,8 @@
+ }
+ 
+ static void processLicenseOption (
+-		const char *const option __unused__,
+-		const char *const parameter __unused__)
++		const char *const option UNUSED,
++		const char *const parameter UNUSED)
+ {
+ 	printProgramIdentification ();
+ 	puts ("");
+@@ -1166,8 +1166,8 @@
+ }
+ 
+ static void processListMapsOption (
+-		const char *const __unused__ option,
+-		const char *const __unused__ parameter)
++		const char *const UNUSED option,
++		const char *const UNUSED parameter)
+ {
+ 	if (parameter [0] == '\0' || strcasecmp (parameter, "all") == 0)
+ 	    printLanguageMaps (LANG_AUTO);
+@@ -1183,8 +1183,8 @@
+ }
+ 
+ static void processListLanguagesOption (
+-		const char *const option __unused__,
+-		const char *const parameter __unused__)
++		const char *const option UNUSED,
++		const char *const parameter UNUSED)
+ {
+ 	printLanguageList ();
+ 	exit (0);
+@@ -1358,8 +1358,8 @@
+ }
+ 
+ static void processVersionOption (
+-		const char *const option __unused__,
+-		const char *const parameter __unused__)
++		const char *const option UNUSED,
++		const char *const parameter UNUSED)
+ {
+ 	printProgramIdentification ();
+ 	exit (0);
+--- a/parse.c	(revision 816)
++++ b/parse.c	(working copy)
+@@ -376,7 +376,7 @@
+ */
+ 
+ extern void processLanguageDefineOption (
+-		const char *const option, const char *const parameter __unused__)
++		const char *const option, const char *const parameter UNUSED)
+ {
+ #ifdef HAVE_REGEX
+ 	if (parameter [0] == '\0')
+--- a/routines.c	(revision 816)
++++ b/routines.c	(working copy)
+@@ -526,7 +526,7 @@
+ 
+ #if ! defined (HAVE_STAT_ST_INO)
+ 
+-static void canonicalizePath (char *const path __unused__)
++static void canonicalizePath (char *const path UNUSED)
+ {
+ #if defined (MSDOS_STYLE_PATH)
+ 	char *p;

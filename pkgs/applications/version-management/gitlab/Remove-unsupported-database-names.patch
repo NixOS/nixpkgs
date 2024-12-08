@@ -1,0 +1,79 @@
+From 054e2e2092e3f20267a5d2046978df6d33c72712 Mon Sep 17 00:00:00 2001
+From: Yaya <mak@nyantec.com>
+Date: Tue, 23 May 2023 13:49:18 +0000
+Subject: [PATCH] Remove unsupported database names
+
+The only supported ones are main, ci, main_clusterwide.
+---
+ config/database.yml.postgresql | 37 ----------------------------------
+ 1 file changed, 37 deletions(-)
+
+diff --git a/config/database.yml.postgresql b/config/database.yml.postgresql
+index da9f458ff..2d6d44e37 100644
+--- a/config/database.yml.postgresql
++++ b/config/database.yml.postgresql
+@@ -26,13 +26,6 @@ production:
+     username: git
+     password: "secure password"
+     host: localhost
+-  geo:
+-    adapter: postgresql
+-    encoding: unicode
+-    database: gitlabhq_geo_production
+-    username: git
+-    password: "secure password"
+-    host: localhost
+ 
+ #
+ # Development specific
+@@ -57,13 +50,6 @@ development:
+     host: localhost
+     variables:
+       statement_timeout: 15s
+-  geo:
+-    adapter: postgresql
+-    encoding: unicode
+-    database: gitlabhq_geo_development
+-    username: postgres
+-    password: "secure password"
+-    host: localhost
+ 
+ #
+ # Staging specific
+@@ -84,13 +70,6 @@ staging:
+     username: git
+     password: "secure password"
+     host: localhost
+-  geo:
+-    adapter: postgresql
+-    encoding: unicode
+-    database: gitlabhq_geo_staging
+-    username: git
+-    password: "secure password"
+-    host: localhost
+ 
+ # Warning: The database defined as "test" will be erased and
+ # re-generated from your development database when you run "rake".
+@@ -119,19 +98,3 @@ test: &test
+     reaping_frequency: nil
+     variables:
+       statement_timeout: 15s
+-  geo:
+-    adapter: postgresql
+-    encoding: unicode
+-    database: gitlabhq_geo_test
+-    username: postgres
+-    password:
+-    host: localhost
+-    reaping_frequency: nil
+-  embedding:
+-    adapter: postgresql
+-    encoding: unicode
+-    database: gitlabhq_embedding_test
+-    username: postgres
+-    password:
+-    host: localhost
+-    reaping_frequency: nil
+-- 
+2.40.1
+

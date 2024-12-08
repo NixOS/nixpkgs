@@ -1,0 +1,29 @@
+---
+ persepolis/scripts/download.py | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
+
+diff --git a/persepolis/scripts/download.py b/persepolis/scripts/download.py
+index aaabb35..69676d3 100644
+--- a/persepolis/scripts/download.py
++++ b/persepolis/scripts/download.py
+@@ -72,16 +72,8 @@ def startAria():
+ 
+     # in macintosh
+     elif os_type == OS.OSX:
+-        if aria2_path == "" or aria2_path == None or os.path.isfile(str(aria2_path)) == False:
+-
+-            cwd = sys.argv[0]
+-            current_directory = os.path.dirname(cwd)
+-            aria2d = os.path.join(current_directory, 'aria2c')
+ 
+-        else:
+-            aria2d = aria2_path
+-
+-        subprocess.Popen([aria2d, '--no-conf',
++        subprocess.Popen(['aria2c', '--no-conf',
+                           '--enable-rpc', '--rpc-listen-port=' + str(port),
+                           '--rpc-max-request-size=2M',
+                           '--rpc-listen-all', '--quiet=true'],
+-- 
+2.39.3 (Apple Git-145)
+

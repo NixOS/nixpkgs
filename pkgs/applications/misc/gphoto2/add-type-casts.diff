@@ -1,0 +1,21 @@
+diff --git a/gphoto2/main.c b/gphoto2/main.c
+index 2bf5964..cd84467 100644
+--- a/gphoto2/main.c
++++ b/gphoto2/main.c
+@@ -1215,14 +1215,14 @@ start_timeout_func (Camera *camera, unsigned int timeout,
+ 
+ 	pthread_create (&tid, NULL, thread_func, td);
+ 
+-	return (tid);
++	return (unsigned int)tid;
+ }
+ 
+ static void
+ stop_timeout_func (Camera __unused__ *camera, unsigned int id,
+ 		   void __unused__ *data)
+ {
+-	pthread_t tid = id;
++	pthread_t tid = (pthread_t)id;
+ 
+ 	pthread_cancel (tid);
+ 	pthread_join (tid, NULL);

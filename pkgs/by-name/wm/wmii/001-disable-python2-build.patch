@@ -1,0 +1,14 @@
+diff --git a/alternative_wmiircs/Makefile b/alternative_wmiircs/Makefile
+index 3b9c3709..3ce46169 100644
+--- a/alternative_wmiircs/Makefile
++++ b/alternative_wmiircs/Makefile
+@@ -3,8 +3,7 @@ include $(ROOT)/mk/hdr.mk
+ include $(ROOT)/mk/wmii.mk
+ 
+ BIN = $(GLOBALCONF)
+-DIRS =	python	\
+-	plan9port \
++DIRS =	plan9port \
+ 	ruby
+ 
+ DOCS   = README

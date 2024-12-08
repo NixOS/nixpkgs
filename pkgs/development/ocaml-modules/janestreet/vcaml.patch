@@ -1,0 +1,22 @@
+diff --git a/src/api_call.ml b/src/api_call.ml
+index 66f5083..6e96e95 100644
+--- a/src/api_call.ml
++++ b/src/api_call.ml
+@@ -112,7 +112,7 @@ include
+       include T
+     end)
+     (Open_on_rhs_intf)
+-    ()
++    (struct end)
+ 
+ module Or_error = struct
+   type nonrec 'a t = 'a Or_error.t t
+@@ -138,7 +138,7 @@ module Or_error = struct
+         include T
+       end)
+       (Open_on_rhs_intf)
+-      ()
++      (struct end)
+ 
+   let error_s sexp = Const (Or_error.error_s sexp)
+   let ignore_m t = map t ~f:ignore

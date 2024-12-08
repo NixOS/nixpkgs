@@ -1,0 +1,18 @@
+diff --git a/tests/test_climat2.py b/tests/test_climat2.py
+index cede642..2d5ad77 100644
+--- a/tests/test_climat2.py
++++ b/tests/test_climat2.py
+@@ -10,12 +10,7 @@ import glob
+ from libmat2 import images, parser_factory
+ 
+ 
+-mat2_binary = ['./mat2']
+-
+-if 'MAT2_GLOBAL_PATH_TESTSUITE' in os.environ:
+-    # Debian runs tests after installing the package
+-    # https://0xacab.org/jvoisin/mat2/issues/16#note_153878
+-    mat2_binary = ['/usr/bin/env', 'mat2']
++mat2_binary = [os.environ['out'] + '/bin/mat2']
+ 
+ 
+ class TestHelp(unittest.TestCase):

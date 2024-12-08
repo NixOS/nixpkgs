@@ -1,0 +1,22 @@
+commit 61865b5b5ad715e2b812087947281f0add9aa05e
+Author: Fintan Halpenny <fintan.halpenny@gmail.com>
+Date:   2024-11-19 14:38:38 +0100
+
+    cob: fix documentation
+    
+    `no_run` will compile but not run the code. Use `ignore` instead, and also added
+    `rust` for syntax highlighting.
+
+diff --git a/radicle-cob/src/backend/git/stable.rs b/radicle-cob/src/backend/git/stable.rs
+index 0d8ea27b..ef18ae55 100644
+--- a/radicle-cob/src/backend/git/stable.rs
++++ b/radicle-cob/src/backend/git/stable.rs
+@@ -53,7 +53,7 @@ pub fn read_timestamp() -> i64 {
+ ///
+ /// # Usage
+ ///
+-/// ```no_run
++/// ```rust, ignore
+ /// let oid1 = with_advanced_timestamp(|| cob.update("New revision OID"));
+ /// let oid2 = with_advanced_timestamp(|| cob.update("Another revision OID"));
+ /// ```

@@ -1,0 +1,14 @@
+diff --git a/Makefile b/Makefile
+index 9aa7356..c5f2a87 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,8 @@ PROG        = usb_modeswitch
+ VERS        = 2.6.0
+ CC          ?= gcc
+ CFLAGS      += -Wall -Wno-deprecated-declarations
+-LIBS        = `pkg-config --libs --cflags libusb-1.0`
++PKG_CONFIG  ?= pkg-config
++LIBS        = `$(PKG_CONFIG) --libs --cflags libusb-1.0`
+ RM          = /bin/rm -f
+ OBJS        = usb_modeswitch.c
+ PREFIX      = $(DESTDIR)/usr

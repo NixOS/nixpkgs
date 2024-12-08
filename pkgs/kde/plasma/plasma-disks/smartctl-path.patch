@@ -1,0 +1,13 @@
+diff --git a/src/helper.cpp b/src/helper.cpp
+index 102ebc5..4cde9da 100644
+--- a/src/helper.cpp
++++ b/src/helper.cpp
+@@ -69,7 +69,7 @@ ActionReply SMARTHelper::smartctl(const QVariantMap &args)
+     // PATH is super minimal when invoked through dbus
+     setenv("PATH", "/usr/sbin:/sbin:/usr/local/sbin", 1);
+ 
+-    const QString command = QStringLiteral("smartctl");
++    const QString command = QStringLiteral("@smartctl@");
+     const QString all = QStringLiteral("--all");
+ 
+     // JSON output.

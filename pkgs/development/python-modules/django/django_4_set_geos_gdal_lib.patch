@@ -1,0 +1,26 @@
+diff --git a/django/contrib/gis/gdal/libgdal.py b/django/contrib/gis/gdal/libgdal.py
+index 05b5732..91fafee 100644
+--- a/django/contrib/gis/gdal/libgdal.py
++++ b/django/contrib/gis/gdal/libgdal.py
+@@ -14,7 +14,7 @@ try:
+     from django.conf import settings
+     lib_path = settings.GDAL_LIBRARY_PATH
+ except (AttributeError, ImportError, ImproperlyConfigured, OSError):
+-    lib_path = None
++    lib_path = "@gdal@/lib/libgdal@extension@"
+ 
+ if lib_path:
+     lib_names = None
+diff --git a/django/contrib/gis/geos/libgeos.py b/django/contrib/gis/geos/libgeos.py
+index 2cdb5d3..fac2d04 100644
+--- a/django/contrib/gis/geos/libgeos.py
++++ b/django/contrib/gis/geos/libgeos.py
+@@ -24,7 +24,7 @@ def load_geos():
+         from django.conf import settings
+         lib_path = settings.GEOS_LIBRARY_PATH
+     except (AttributeError, ImportError, ImproperlyConfigured, OSError):
+-        lib_path = None
++        lib_path = "@geos@/lib/libgeos_c@extension@"
+ 
+     # Setting the appropriate names for the GEOS-C library.
+     if lib_path:

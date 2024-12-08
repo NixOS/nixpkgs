@@ -1,0 +1,154 @@
+diff --git a/share/mk/bsd.incs.mk b/share/mk/bsd.incs.mk
+index df4cf4641141..a87c7f9db03a 100644
+--- a/share/mk/bsd.incs.mk
++++ b/share/mk/bsd.incs.mk
+@@ -63,8 +63,8 @@ stage_includes: stage_as.${header:T}
+ 
+ installincludes: _${group}INS_${header:T}
+ _${group}INS_${header:T}: ${header}
+-	${INSTALL} ${TAG_ARGS:D${TAG_ARGS},dev} -C -o ${${group}OWN_${.ALLSRC:T}} \
+-	    -g ${${group}GRP_${.ALLSRC:T}} -m ${${group}MODE_${.ALLSRC:T}} \
++	${INSTALL} ${TAG_ARGS:D${TAG_ARGS},dev} -C \
++	    -m ${${group}MODE_${.ALLSRC:T}} \
+ 	    ${.ALLSRC} \
+ 	    ${DESTDIR}${${group}DIR_${.ALLSRC:T}}/${${group}NAME_${.ALLSRC:T}}
+ .else
+@@ -78,10 +78,10 @@ stage_includes: stage_files.${group}
+ installincludes: _${group}INS
+ _${group}INS: ${_${group}INCS}
+ .if defined(${group}NAME)
+-	${INSTALL} ${${group}TAG_ARGS} -C -o ${${group}OWN} -g ${${group}GRP} -m ${${group}MODE} \
++	${INSTALL} ${${group}TAG_ARGS} -C -m ${${group}MODE} \
+ 	    ${.ALLSRC} ${DESTDIR}${${group}DIR}/${${group}NAME}
+ .else
+-	${INSTALL} ${${group}TAG_ARGS} -C -o ${${group}OWN} -g ${${group}GRP} -m ${${group}MODE} \
++	${INSTALL} ${${group}TAG_ARGS} -C -m ${${group}MODE} \
+ 	    ${.ALLSRC} ${DESTDIR}${${group}DIR}/
+ .endif
+ .endif # !empty(_${group}INCS)
+diff --git a/share/mk/bsd.lib.mk b/share/mk/bsd.lib.mk
+index 5f328d5378ca..264bbcc84ffb 100644
+--- a/share/mk/bsd.lib.mk
++++ b/share/mk/bsd.lib.mk
+@@ -242,7 +242,7 @@ PO_FLAG=-pg
+ _LIBDIR:=${LIBDIR}
+ _SHLIBDIR:=${SHLIBDIR}
+ 
+-.if defined(SHLIB_NAME)
++.if defined(SHLIB_NAME) && !empty(SHLIB_NAME)
+ .if ${MK_DEBUG_FILES} != "no"
+ SHLIB_NAME_FULL=${SHLIB_NAME}.full
+ # Use ${DEBUGDIR} for base system debug files, else .debug subdirectory
+@@ -277,7 +277,7 @@ LDFLAGS+=	-Wl,--undefined-version
+ .endif
+ .endif
+ 
+-.if defined(LIB) && !empty(LIB) || defined(SHLIB_NAME)
++.if defined(LIB) && !empty(LIB) || (defined(SHLIB_NAME) && !empty(SHLIB_NAME))
+ OBJS+=		${SRCS:N*.h:${OBJS_SRCS_FILTER:ts:}:S/$/.o/}
+ BCOBJS+=	${SRCS:N*.[hsS]:N*.asm:${OBJS_SRCS_FILTER:ts:}:S/$/.bco/g}
+ LLOBJS+=	${SRCS:N*.[hsS]:N*.asm:${OBJS_SRCS_FILTER:ts:}:S/$/.llo/g}
+@@ -320,14 +320,14 @@ lib${LIB_PRIVATE}${LIB}.ll: ${LLOBJS}
+ CLEANFILES+=	lib${LIB_PRIVATE}${LIB}.bc lib${LIB_PRIVATE}${LIB}.ll
+ .endif
+ 
+-.if defined(SHLIB_NAME) || \
++.if (defined(SHLIB_NAME) && !empty(SHLIB_NAME)) || \
+     defined(INSTALL_PIC_ARCHIVE) && defined(LIB) && !empty(LIB)
+ SOBJS+=		${OBJS:.o=.pico}
+ DEPENDOBJS+=	${SOBJS}
+ CLEANFILES+=	${SOBJS}
+ .endif
+ 
+-.if defined(SHLIB_NAME)
++.if defined(SHLIB_NAME) && !empty(SHLIB_NAME)
+ _LIBS+=		${SHLIB_NAME}
+ 
+ SOLINKOPTS+=	-shared -Wl,-x
+@@ -435,7 +435,7 @@ all: all-man
+ CLEANFILES+=	${_LIBS}
+ 
+ _EXTRADEPEND:
+-.if !defined(NO_EXTRADEPEND) && defined(SHLIB_NAME)
++.if !defined(NO_EXTRADEPEND) && defined(SHLIB_NAME) && !empty(SHLIB_NAME)
+ .if defined(DPADD) && !empty(DPADD)
+ 	echo ${SHLIB_NAME_FULL}: ${DPADD} >> ${DEPENDFILE}
+ .endif
+@@ -482,7 +482,7 @@ _SHLINSTALLFLAGS:=	${_SHLINSTALLFLAGS${ie}}
+ installpcfiles: installpcfiles-${pcfile}
+ 
+ installpcfiles-${pcfile}: ${pcfile}
+-	${INSTALL} ${TAG_ARGS:D${TAG_ARGS},dev} -o ${LIBOWN} -g ${LIBGRP} -m ${LIBMODE} \
++	${INSTALL} ${TAG_ARGS:D${TAG_ARGS},dev} -m ${LIBMODE} \
+ 	    ${_INSTALLFLAGS} \
+ 	    ${.ALLSRC} ${DESTDIR}${LIBDATADIR}/pkgconfig/
+ .endfor
+@@ -494,28 +494,28 @@ realinstall: _libinstall installpcfiles
+ .ORDER: beforeinstall _libinstall
+ _libinstall:
+ .if defined(LIB) && !empty(LIB) && ${MK_INSTALLLIB} != "no"
+-	${INSTALL} ${TAG_ARGS:D${TAG_ARGS},dev} -o ${LIBOWN} -g ${LIBGRP} -m ${LIBMODE} \
++	${INSTALL} ${TAG_ARGS:D${TAG_ARGS},dev} -m ${LIBMODE} \
+ 	    ${_INSTALLFLAGS} lib${LIB_PRIVATE}${LIB}${_STATICLIB_SUFFIX}.a ${DESTDIR}${_LIBDIR}/
+ .if ${MK_PROFILE} != "no"
+-	${INSTALL} ${TAG_ARGS:D${TAG_ARGS},dev} -o ${LIBOWN} -g ${LIBGRP} -m ${LIBMODE} \
++	${INSTALL} ${TAG_ARGS:D${TAG_ARGS},dev} -m ${LIBMODE} \
+ 	    ${_INSTALLFLAGS} lib${LIB_PRIVATE}${LIB}_p.a ${DESTDIR}${_LIBDIR}/
+ .endif
+ .endif
+-.if defined(SHLIB_NAME)
+-	${INSTALL} ${TAG_ARGS} ${STRIP} -o ${LIBOWN} -g ${LIBGRP} -m ${LIBMODE} \
++.if defined(SHLIB_NAME) && !empty(SHLIB_NAME)
++	${INSTALL} ${TAG_ARGS} ${STRIP} -m ${LIBMODE} \
+ 	    ${_INSTALLFLAGS} ${_SHLINSTALLFLAGS} \
+ 	    ${SHLIB_NAME} ${DESTDIR}${_SHLIBDIR}/
+ .if ${MK_DEBUG_FILES} != "no"
+ .if defined(DEBUGMKDIR)
+ 	${INSTALL} ${TAG_ARGS:D${TAG_ARGS},dbg} -d ${DESTDIR}${DEBUGFILEDIR}/
+ .endif
+-	${INSTALL} ${TAG_ARGS:D${TAG_ARGS},dbg} -o ${LIBOWN} -g ${LIBGRP} -m ${DEBUGMODE} \
++	${INSTALL} ${TAG_ARGS:D${TAG_ARGS},dbg} -m ${DEBUGMODE} \
+ 	    ${_INSTALLFLAGS} \
+ 	    ${SHLIB_NAME}.debug ${DESTDIR}${DEBUGFILEDIR}/
+ .endif
+ .if defined(SHLIB_LINK)
+ .if commands(${SHLIB_LINK:R}.ld)
+-	${INSTALL} ${TAG_ARGS:D${TAG_ARGS},dev} -S -o ${LIBOWN} -g ${LIBGRP} -m ${LIBMODE} \
++	${INSTALL} ${TAG_ARGS:D${TAG_ARGS},dev} -S -m ${LIBMODE} \
+ 	    ${_INSTALLFLAGS} ${SHLIB_LINK:R}.ld \
+ 	    ${DESTDIR}${_LIBDIR}/${SHLIB_LINK}
+ .for _SHLIB_LINK_LINK in ${SHLIB_LDSCRIPT_LINKS}
+@@ -548,7 +548,7 @@ _libinstall:
+ .endif # SHLIB_LINK
+ .endif # SHIB_NAME
+ .if defined(INSTALL_PIC_ARCHIVE) && defined(LIB) && !empty(LIB)
+-	${INSTALL} ${TAG_ARGS:D${TAG_ARGS},dev} -o ${LIBOWN} -g ${LIBGRP} -m ${LIBMODE} \
++	${INSTALL} ${TAG_ARGS:D${TAG_ARGS},dev} -m ${LIBMODE} \
+ 	    ${_INSTALLFLAGS} lib${LIB}_pic.a ${DESTDIR}${_LIBDIR}/
+ .endif
+ .endif # !defined(INTERNALLIB)
+@@ -588,7 +588,7 @@ OBJS_DEPEND_GUESS+= ${SRCS:M*.h}
+ OBJS_DEPEND_GUESS.${_S:${OBJS_SRCS_FILTER:ts:}}.po+=	${_S}
+ .endfor
+ .endif
+-.if defined(SHLIB_NAME) || \
++.if (defined(SHLIB_NAME) && !empty(SHLIB_NAME)) || \
+     defined(INSTALL_PIC_ARCHIVE) && defined(LIB) && !empty(LIB)
+ .for _S in ${SRCS:N*.[hly]}
+ OBJS_DEPEND_GUESS.${_S:${OBJS_SRCS_FILTER:ts:}}.pico+=	${_S}
+diff --git a/share/mk/bsd.man.mk b/share/mk/bsd.man.mk
+index 04316c46b705..9ad3c8ce70e7 100644
+--- a/share/mk/bsd.man.mk
++++ b/share/mk/bsd.man.mk
+@@ -50,9 +50,9 @@
+ .endif
+ 
+ .if ${MK_MANSPLITPKG} == "no"
+-MINSTALL?=	${INSTALL} ${TAG_ARGS} -o ${MANOWN} -g ${MANGRP} -m ${MANMODE}
++MINSTALL?=	${INSTALL} ${TAG_ARGS} -m ${MANMODE}
+ .else
+-MINSTALL?=	${INSTALL} ${TAG_ARGS:D${TAG_ARGS},man} -o ${MANOWN} -g ${MANGRP} -m ${MANMODE}
++MINSTALL?=	${INSTALL} ${TAG_ARGS:D${TAG_ARGS},man} -m ${MANMODE}
+ .endif
+ 
+ CATDIR=		${MANDIR:H:S/$/\/cat/}

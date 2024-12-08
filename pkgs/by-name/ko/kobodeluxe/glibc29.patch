@@ -1,0 +1,83 @@
+--- a/enemies.h
++++ b/enemies.h
+@@ -70,9 +70,9 @@
+ extern const enemy_kind bomb2;
+ extern const enemy_kind bombdeto;
+ extern const enemy_kind cannon;
+-extern const enemy_kind pipe1;
++extern const enemy_kind pipeone;
+ extern const enemy_kind core;
+-extern const enemy_kind pipe2;
++extern const enemy_kind pipetwo;
+ extern const enemy_kind rock;
+ extern const enemy_kind ring;
+ extern const enemy_kind enemy_m1;
+@@ -430,7 +430,7 @@
+ 
+ inline int _enemy::is_pipe()
+ {
+-	return ((_state != notuse) && ((ek == &pipe1) || (ek == &pipe2)));
++	return ((_state != notuse) && ((ek == &pipeone) || (ek == &pipetwo)));
+ }
+ 
+ 
+--- a/enemy.cpp
++++ b/enemy.cpp
+@@ -713,7 +713,7 @@
+ 
+ void _enemy::kill_cannon()
+ {
+-	enemies.make(&pipe1, CS2PIXEL(x), CS2PIXEL(y));
++	enemies.make(&pipeone, CS2PIXEL(x), CS2PIXEL(y));
+ 	sound.g_base_node_explo(x, y);
+ 	release();
+ }
+@@ -755,10 +755,10 @@
+ 
+ void _enemy::kill_core()
+ {
+-	enemies.make(&pipe2, CS2PIXEL(x), CS2PIXEL(y), 0, 0, 3);
+-	enemies.make(&pipe2, CS2PIXEL(x), CS2PIXEL(y), 0, 0, 7);
+-	enemies.make(&pipe2, CS2PIXEL(x), CS2PIXEL(y), 0, 0, 1);
+-	enemies.make(&pipe2, CS2PIXEL(x), CS2PIXEL(y), 0, 0, 5);
++	enemies.make(&pipetwo, CS2PIXEL(x), CS2PIXEL(y), 0, 0, 3);
++	enemies.make(&pipetwo, CS2PIXEL(x), CS2PIXEL(y), 0, 0, 7);
++	enemies.make(&pipetwo, CS2PIXEL(x), CS2PIXEL(y), 0, 0, 1);
++	enemies.make(&pipetwo, CS2PIXEL(x), CS2PIXEL(y), 0, 0, 5);
+ 	enemies.make(&explosion4, CS2PIXEL(x), CS2PIXEL(y));
+ 	sound.g_base_core_explo(x, y);
+ 	release();
+@@ -851,7 +851,7 @@
+ 		screen.set_map(x1, y1, m ^ a);
+ 	release();
+ }
+-const enemy_kind pipe1 = {
++const enemy_kind pipeone = {
+ 	0,
+ 	&_enemy::make_pipe1,
+ 	&_enemy::move_pipe1,
+@@ -978,19 +978,19 @@
+ 	}
+ 	p ^= a;
+ 	if(p & U_MASK)
+-		enemies.make(&pipe2, CS2PIXEL(x), CS2PIXEL(y), 0, 0, 1);
++		enemies.make(&pipetwo, CS2PIXEL(x), CS2PIXEL(y), 0, 0, 1);
+ 	if(p & R_MASK)
+-		enemies.make(&pipe2, CS2PIXEL(x), CS2PIXEL(y), 0, 0, 3);
++		enemies.make(&pipetwo, CS2PIXEL(x), CS2PIXEL(y), 0, 0, 3);
+ 	if(p & D_MASK)
+-		enemies.make(&pipe2, CS2PIXEL(x), CS2PIXEL(y), 0, 0, 5);
++		enemies.make(&pipetwo, CS2PIXEL(x), CS2PIXEL(y), 0, 0, 5);
+ 	if(p & L_MASK)
+-		enemies.make(&pipe2, CS2PIXEL(x), CS2PIXEL(y), 0, 0, 7);
++		enemies.make(&pipetwo, CS2PIXEL(x), CS2PIXEL(y), 0, 0, 7);
+ 	manage.add_score(10);
+ 	release();
+ }
+ 
+ 
+-const enemy_kind pipe2 = {
++const enemy_kind pipetwo = {
+ 	0,
+ 	&_enemy::make_pipe2,
+ 	&_enemy::move_pipe2,
