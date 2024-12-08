@@ -1,8 +1,8 @@
 { lib, stdenv, mkDerivation, boost, fetchurl, cmake, runtimeShell
-, pkg-config, alsa-lib, libjack2, libsndfile, fftw
-, curl, gcc, libXt, libyamlcpp, qtbase, qtmacextras, qttools, qtwebengine
-, readline, qtwebsockets, useSCEL ? false, emacs
-, gitUpdater, supercollider-with-plugins
+, pkg-config, alsa-lib, libjack2, libsndfile, llvmPackages, fftw
+, curl, gcc, libXt, libyamlcpp, qtbase, qtdeclarative, qtmacextras, qtpositioning
+, qtsvg, qttools, qtwebengine, readline, qtwebchannel, qtwebsockets
+, useSCEL ? false, emacs, gitUpdater, supercollider-with-plugins
 , supercolliderPlugins, writeText, runCommand
 }:
 
@@ -22,6 +22,12 @@ mkDerivation rec {
 
   postPatch = ''
     substituteInPlace common/sc_popen.cpp --replace '/bin/sh' '${runtimeShell}'
+  ''
+  # `macdeployqt` installs `.dylib`s in `Frameworks` and modifies the binaries
+  # to point to these, but we don't want this, so here we use this hacky patch
+  # to skip the `macdeployqt` step.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace editors/sc-ide/CMakeLists.txt --replace "if(APPLE OR WIN32)" "if(FALSE)"
   '';
 
   strictDeps = true;
@@ -31,7 +37,7 @@ mkDerivation rec {
 
   buildInputs = [ gcc libjack2 libsndfile fftw curl libXt qtbase qtwebengine qtwebsockets readline ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ boost libyamlcpp qtmacextras ];
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ boost libyamlcpp llvmPackages.libcxx qtdeclarative qtmacextras qtpositioning qtsvg qtwebchannel ];
 
   hardeningDisable = [ "stackprotector" ];
 
@@ -95,10 +101,16 @@ mkDerivation rec {
     ln -s $out/Applications/SuperCollider.app/Contents/MacOS/sclang $out/bin/sclang
     ln -s $out/Applications/SuperCollider.app/Contents/MacOS/SuperCollider $out/bin/SuperCollider
     ln -s $out/Applications/SuperCollider.app/Contents/Resources/scsynth $out/bin/scsynth
-
-    # Remove executable permissions from `.dylib` and `.scx` files to prevent them from being wrapped.
-    find $out \( -name "*.dylib" -o -name "*.scx" \) -exec chmod a-x {} +
   '';
+
+  qtWrapperArgs = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Without this, supercollider runs into the following error, which is
+    # odd as `resources/icudtl.dat` is provided by `qtwebengine`...
+    # ```
+    # [1205/215056.686545:ERROR:icu_util.cc(251)] Couldn't mmap icu data file
+    # ```
+    "--set QTWEBENGINE_DISABLE_SANDBOX 1"
+  ];
 
   meta = with lib; {
     description = "Programming language for real time audio synthesis";
