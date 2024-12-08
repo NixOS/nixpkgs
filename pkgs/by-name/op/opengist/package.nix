@@ -15,7 +15,7 @@ let
   src = fetchFromGitHub {
     owner = "thomiceli";
     repo = "opengist";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Wpn9rqOUwbwi6pbPTnVzHb+ip3ay9WykEZDyHNdXYJU=";
   };
 
