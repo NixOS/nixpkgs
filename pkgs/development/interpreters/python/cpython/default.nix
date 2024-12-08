@@ -294,6 +294,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (pythonOlder "3.12") [
     # https://github.com/python/cpython/issues/90656
     ./loongarch-support.patch
+  ] ++ optionals (pythonAtLeast "3.12") [
+    ./3.12/CVE-2024-12254.patch
   ] ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
     # backport fix for https://github.com/python/cpython/issues/95855
     ./platform-triplet-detection.patch
