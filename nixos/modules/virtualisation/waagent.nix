@@ -247,7 +247,7 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.settings.HttpProxy.Host == null || cfg.settings.HttpProxy.Port != null;
+        assertion = (cfg.settings.HttpProxy.Host != null) -> (cfg.settings.HttpProxy.Port != null);
         message = "Option services.waagent.settings.HttpProxy.Port must be set if services.waagent.settings.HttpProxy.Host is set.";
       }
     ];
