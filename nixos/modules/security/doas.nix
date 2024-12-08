@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   cfg = config.security.doas;
 
@@ -10,36 +8,36 @@ let
 
   mkGrpString = group: ":${toString group}";
 
-  mkOpts = rule: concatStringsSep " " [
-    (optionalString rule.noPass "nopass")
-    (optionalString rule.noLog "nolog")
-    (optionalString rule.persist "persist")
-    (optionalString rule.keepEnv "keepenv")
-    "setenv { SSH_AUTH_SOCK TERMINFO TERMINFO_DIRS ${concatStringsSep " " rule.setEnv} }"
+  mkOpts = rule: lib.concatStringsSep " " [
+    (lib.optionalString rule.noPass "nopass")
+    (lib.optionalString rule.noLog "nolog")
+    (lib.optionalString rule.persist "persist")
+    (lib.optionalString rule.keepEnv "keepenv")
+    "setenv { SSH_AUTH_SOCK TERMINFO TERMINFO_DIRS ${lib.concatStringsSep " " rule.setEnv} }"
   ];
 
   mkArgs = rule:
     if (rule.args == null) then ""
-    else if (length rule.args == 0) then "args"
-    else "args ${concatStringsSep " " rule.args}";
+    else if (lib.length rule.args == 0) then "args"
+    else "args ${lib.concatStringsSep " " rule.args}";
 
   mkRule = rule:
     let
       opts = mkOpts rule;
 
-      as = optionalString (rule.runAs != null) "as ${rule.runAs}";
+      as = lib.optionalString (rule.runAs != null) "as ${rule.runAs}";
 
-      cmd = optionalString (rule.cmd != null) "cmd ${rule.cmd}";
+      cmd = lib.optionalString (rule.cmd != null) "cmd ${rule.cmd}";
 
       args = mkArgs rule;
     in
-    optionals (length cfg.extraRules > 0) [
+    lib.optionals (lib.length cfg.extraRules > 0) [
       (
-        optionalString (length rule.users > 0)
+        lib.optionalString (lib.length rule.users > 0)
           (map (usr: "permit ${opts} ${mkUsrString usr} ${as} ${cmd} ${args}") rule.users)
       )
       (
-        optionalString (length rule.groups > 0)
+        lib.optionalString (lib.length rule.groups > 0)
           (map (grp: "permit ${opts} ${mkGrpString grp} ${as} ${cmd} ${args}") rule.groups)
       )
     ];
@@ -50,8 +48,8 @@ in
 
   options.security.doas = {
 
-    enable = mkOption {
-      type = with types; bool;
+    enable = lib.mkOption {
+      type = with lib.types; bool;
       default = false;
       description = ''
         Whether to enable the {command}`doas` command, which allows
@@ -59,8 +57,8 @@ in
       '';
     };
 
-    wheelNeedsPassword = mkOption {
-      type = with types; bool;
+    wheelNeedsPassword = lib.mkOption {
+      type = with lib.types; bool;
       default = true;
       description = ''
         Whether users of the `wheel` group must provide a password to
@@ -68,7 +66,7 @@ in
       '';
     };
 
-    extraRules = mkOption {
+    extraRules = lib.mkOption {
       default = [];
       description = ''
         Define specific rules to be set in the
@@ -79,7 +77,7 @@ in
         this option cannot be used to override the behaviour allowing
         passwordless operation for root.
       '';
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [
           # Allow execution of any command by any user in group doas, requiring
           # a password and keeping any previously-defined environment variables.
@@ -108,11 +106,11 @@ in
             setEnv = [ "-SSH_AUTH_SOCK" "ALPHA=1" "BETA" ]; }
         ]
       '';
-      type = with types; listOf (
+      type = with lib.types; listOf (
         submodule {
           options = {
 
-            noPass = mkOption {
+            noPass = lib.mkOption {
               type = with types; bool;
               default = false;
               description = ''
@@ -121,7 +119,7 @@ in
               '';
             };
 
-            noLog = mkOption {
+            noLog = lib.mkOption {
               type = with types; bool;
               default = false;
               description = ''
@@ -131,7 +129,7 @@ in
               '';
             };
 
-            persist = mkOption {
+            persist = lib.mkOption {
               type = with types; bool;
               default = false;
               description = ''
@@ -140,7 +138,7 @@ in
               '';
             };
 
-            keepEnv = mkOption {
+            keepEnv = lib.mkOption {
               type = with types; bool;
               default = false;
               description = ''
@@ -151,7 +149,7 @@ in
               '';
             };
 
-            setEnv = mkOption {
+            setEnv = lib.mkOption {
               type = with types; listOf str;
               default = [];
               description = ''
@@ -170,19 +168,19 @@ in
               '';
             };
 
-            users = mkOption {
+            users = lib.mkOption {
               type = with types; listOf (either str int);
               default = [];
               description = "The usernames / UIDs this rule should apply for.";
             };
 
-            groups = mkOption {
+            groups = lib.mkOption {
               type = with types; listOf (either str int);
               default = [];
               description = "The groups / GIDs this rule should apply for.";
             };
 
-            runAs = mkOption {
+            runAs = lib.mkOption {
               type = with types; nullOr str;
               default = null;
               description = ''
@@ -196,7 +194,7 @@ in
               '';
             };
 
-            cmd = mkOption {
+            cmd = lib.mkOption {
               type = with types; nullOr str;
               default = null;
               description = ''
@@ -209,7 +207,7 @@ in
               '';
             };
 
-            args = mkOption {
+            args = lib.mkOption {
               type = with types; nullOr (listOf str);
               default = null;
               description = ''
@@ -222,8 +220,8 @@ in
       );
     };
 
-    extraConfig = mkOption {
-      type = with types; lines;
+    extraConfig = lib.mkOption {
+      type = with lib.types; lines;
       default = "";
       description = ''
         Extra configuration text appended to {file}`doas.conf`. Be aware that
@@ -236,9 +234,9 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    security.doas.extraRules = mkOrder 600 [
+    security.doas.extraRules = lib.mkOrder 600 [
       {
         groups = [ "wheel" ];
         noPass = !cfg.wheelNeedsPassword;
@@ -271,7 +269,7 @@ in
             # `environment.etc."doas.conf"`.
 
             # extraRules
-            ${concatStringsSep "\n" (lists.flatten (map mkRule cfg.extraRules))}
+            ${lib.concatStringsSep "\n" (lib.lists.flatten (map mkRule cfg.extraRules))}
 
             # extraConfig
             ${cfg.extraConfig}
@@ -288,5 +286,5 @@ in
 
   };
 
-  meta.maintainers = with maintainers; [ cole-h ];
+  meta.maintainers = with lib.maintainers; [ cole-h ];
 }
