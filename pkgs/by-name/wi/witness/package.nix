@@ -10,15 +10,15 @@
 
 buildGoModule rec {
   pname = "witness";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "in-toto";
     repo = "witness";
     rev = "v${version}";
-    sha256 = "sha256-ao9mxN5cMGopCRXUkJRTNJemizzibdw0Q+oAhKjUyHA=";
+    sha256 = "sha256-eHAEaecL4bJUZfFiXK3NqgTZU9l6b46WI/vDBuAqCUw=";
   };
-  vendorHash = "sha256-pDMvtSavifWfxJqfiOef0CyT8KtU8BUjEFwReElkEeM=";
+  vendorHash = "sha256-AZRY8N88dUKAybdstSTRB8sirx4L4ZmiffQ7Qwlpb/8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
