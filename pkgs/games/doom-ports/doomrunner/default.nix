@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doomrunner";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "Youda008";
     repo = "DoomRunner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IUc7qGW4ni/6IwEfY4wpQxKiR14uzKuvTZvHZ3aF++s=";
+    hash = "sha256-NpNhl3cGXpxI8Qu4l8PjojCCXCZdGBEkBzz5XxLm/mY=";
   };
 
   buildInputs = [ qtbase ];
