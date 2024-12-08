@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gbenchmark
-, gtest
-, civetweb
-, zlib
-, curl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  civetweb,
+  curl,
+  gbenchmark,
+  gtest,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,16 +22,24 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ gbenchmark gtest zlib curl ];
+  buildInputs = [
+    curl
+    gbenchmark
+    gtest
+    zlib
+  ];
   propagatedBuildInputs = [ civetweb ];
   strictDeps = true;
 
   cmakeFlags = [
-    "-DUSE_THIRDPARTY_LIBRARIES=OFF"
     "-DBUILD_SHARED_LIBS=ON"
+    "-DUSE_THIRDPARTY_LIBRARIES=OFF"
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postInstall = ''
     mkdir -p $dev/lib/pkgconfig
