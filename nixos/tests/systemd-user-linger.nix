@@ -1,33 +1,32 @@
-{ lib, ... }:
-{
+rec {
   name = "systemd-user-linger";
 
-  nodes.machine =
-    { ... }:
-    {
-      users.users = {
-        alice = {
-          isNormalUser = true;
-          linger = true;
-          uid = 1000;
-        };
+  nodes.machine = {
+    users.users = {
+      alice = {
+        isNormalUser = true;
+        linger = true;
+        uid = 1000;
+      };
 
-        bob = {
-          isNormalUser = true;
-          linger = false;
-          uid = 10001;
-        };
+      bob = {
+        isNormalUser = true;
+        linger = false;
+        uid = 1001;
       };
     };
+  };
 
   testScript =
-    { ... }:
+    let
+      uidStrings = builtins.mapAttrs (k: v: builtins.toString v.uid) nodes.machine.users.users;
+    in
     ''
       machine.wait_for_file("/var/lib/systemd/linger/alice")
-      machine.succeed("systemctl status user-1000.slice")
+      machine.succeed("systemctl status user-${uidStrings.alice}.slice")
 
       machine.fail("test -e /var/lib/systemd/linger/bob")
-      machine.fail("systemctl status user-1001.slice")
+      machine.fail("systemctl status user-${uidStrings.bob}.slice")
 
       with subtest("missing users have linger purged"):
           machine.succeed("touch /var/lib/systemd/linger/missing")
