@@ -10,14 +10,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "prometheus-cpp";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "jupp0r";
-    repo = pname;
-    rev = "v${version}";
+    repo = "prometheus-cpp";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-qx6oBxd0YrUyFq+7ArnKBqOwrl5X8RS9nErhRDUJ7+8=";
   };
 
@@ -51,5 +51,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jupp0r/prometheus-cpp";
     license = [ lib.licenses.mit ];
   };
-
-}
+})
