@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libsoup, webkitgtk_4_0, gtk3, glib-networking
+{ lib, stdenv, fetchFromGitHub, pkg-config, libsoup_2_4, webkitgtk_4_0, gtk3, glib-networking
 , gsettings-desktop-schemas, wrapGAppsHook3
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 pkg-config ];
-  buildInputs = [ gtk3 libsoup webkitgtk_4_0 glib-networking gsettings-desktop-schemas ];
+  buildInputs = [ gtk3 libsoup_2_4 webkitgtk_4_0 glib-networking gsettings-desktop-schemas ];
 
   passthru = {
     inherit gtk3;
