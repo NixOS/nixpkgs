@@ -33,6 +33,7 @@ in
     systemd.packages = [ cfg.package ];
     systemd.services."systemd-zram-setup@".path = [ pkgs.util-linux ]; # for mkswap
 
+    environment.systemPackages = [ cfg.package ];
     environment.etc."systemd/zram-generator.conf".source = settingsFormat.generate "zram-generator.conf" cfg.settings;
   };
 }
