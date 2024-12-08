@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, which, pkg-config, gtk2, pcre, glib, libxml2
-, libsoup ? null
+, libsoup_2_4 ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # Not adding 'hostname' command, the build shouldn't depend on what the build
   # host is called.
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ which gtk2 pcre glib libxml2 libsoup ];
+  buildInputs = [ which gtk2 pcre glib libxml2 libsoup_2_4 ];
 
   # Fixes '#error You must compile this program without "-O"'
   hardeningDisable = [ "all" ];

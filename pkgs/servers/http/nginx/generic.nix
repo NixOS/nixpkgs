@@ -206,8 +206,8 @@ stdenv.mkDerivation {
 
   postInstall =
     let
-      noSourceRefs = lib.concatMapStrings (m: "remove-references-to -t ${m.src} $out/bin/nginx\n") modules;
-    in noSourceRefs + postInstall;
+      noSourceRefs = lib.concatMapStrings (m: "remove-references-to -t ${m.src} $(readlink -fn $out/bin/nginx)\n") modules;
+    in postInstall + noSourceRefs;
 
   passthru = {
     inherit modules;

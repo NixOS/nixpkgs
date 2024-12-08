@@ -39,6 +39,8 @@
 
   universal-remote-card = callPackage ./universal-remote-card { };
 
+  vacuum-card = callPackage ./vacuum-card { };
+
   valetudo-map-card = callPackage ./valetudo-map-card { };
 
   weather-card = callPackage ./weather-card { };

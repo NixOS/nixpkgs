@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "0.23.0";
+  version = "0.24.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -32,10 +32,10 @@ rustPlatform.buildRustPackage {
     owner = "martinvonz";
     repo = "jj";
     rev = "v${version}";
-    hash = "sha256-NCeD+WA3uVl4l/KKFDtdG8+vpm10Y3rEAf8kY6SP0yo=";
+    hash = "sha256-XsD4P2UygZFcnlV2o3E/hRRgsGjwKw1r9zniEeAk758";
   };
 
-  cargoHash = "sha256-lnfh9zMMZfHhYY7kgmxuqZwoEQxiInjmHjzLabbUijU=";
+  cargoHash = "sha256-9JwRdeHo8JkwRQwPA+UsIEWar4gYQS4SIM/uj1TU2yg";
 
   nativeBuildInputs = [
     installShellFiles
@@ -77,14 +77,6 @@ rustPlatform.buildRustPackage {
     "jj-cli"
   ];
 
-  checkFlags = [
-    # flaky test fixed upstream in 0.24+; the actual feature works reliably,
-    # it's just a false caching issue inside the test. skip it to allow the
-    # binary cache to be populated. https://github.com/martinvonz/jj/issues/4784
-    "--skip"
-    "test_shallow_commits_lack_parents"
-  ];
-
   env = {
     # Disable vendored libraries.
     ZSTD_SYS_USE_PKG_CONFIG = "1";
@@ -101,9 +93,9 @@ rustPlatform.buildRustPackage {
       installManPage ./jj.1
 
       installShellCompletion --cmd jj \
-        --bash <(${jj} util completion bash) \
-        --fish <(${jj} util completion fish) \
-        --zsh <(${jj} util completion zsh)
+        --bash <(COMPLETE=bash ${jj}) \
+        --fish <(COMPLETE=fish ${jj}) \
+        --zsh <(COMPLETE=zsh ${jj})
     '';
 
   passthru = {

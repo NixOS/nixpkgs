@@ -5,6 +5,7 @@
 , perl
 , postgresql
 , nixosTests
+, withPostgres ? true
 , ...
 }@args:
 
@@ -37,7 +38,7 @@ callPackage ../nginx/generic.nix args rec {
     patchShebangs configure bundle/
   '';
 
-  configureFlags = [ "--with-http_postgres_module" ];
+  configureFlags = lib.optional withPostgres [ "--with-http_postgres_module" ];
 
   postInstall = ''
     ln -s $out/luajit/bin/luajit-2.1.ROLLING $out/bin/luajit-openresty

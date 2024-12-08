@@ -3,7 +3,7 @@
 , fetchurl
 , pkg-config
 , glib
-, libsoup
+, libsoup_2_4
 , libxml2
 , gobject-introspection
 , gtk-doc
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     glib
-    libsoup
+    libsoup_2_4
     libxml2
   ];
 

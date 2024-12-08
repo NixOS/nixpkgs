@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     mainProgram = "winetricks";
     license = lib.licenses.lgpl21;
     homepage = "https://github.com/Winetricks/winetricks";
-    platforms = with lib.platforms; linux;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

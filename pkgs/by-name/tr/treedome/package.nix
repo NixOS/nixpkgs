@@ -7,7 +7,7 @@
 , freetype
 , gsettings-desktop-schemas
 , gtk3
-, libsoup
+, libsoup_2_4
 , stdenv
 , yarnConfigHook
 , yarnBuildHook
@@ -95,7 +95,7 @@ rustPlatform.buildRustPackage {
     dbus
     openssl
     freetype
-    libsoup
+    libsoup_2_4
     gtk3
     webkitgtk_4_0
     gsettings-desktop-schemas
