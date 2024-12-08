@@ -3,7 +3,7 @@
 , fetchzip
 , icoutils
 , imagemagick
-, jdk17
+, jdk21
 , lib
 , makeDesktopItem
 , stdenvNoCC
@@ -13,11 +13,11 @@ let
   iconame = "STM32CubeMX";
   package = stdenvNoCC.mkDerivation rec {
     pname = "stm32cubemx";
-    version = "6.12.1";
+    version = "6.13.0";
 
     src = fetchzip {
       url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${builtins.replaceStrings ["."] [""] version}-lin.zip";
-      hash = "sha256-6VDvvKx68U47soBUWiaBuDu6enINLDhJd0he7sSCzeg=";
+      hash = "sha256-ypZVVPmAsApaccWl7ZtAECwphD2SUUiVNC2DYC5rYb4=";
       stripRoot = false;
     };
 
@@ -45,7 +45,7 @@ let
 
       cat << EOF > $out/bin/${pname}
       #!${stdenvNoCC.shell}
-      ${jdk17}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX "\$@"
+      ${jdk21}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX "\$@"
       EOF
       chmod +x $out/bin/${pname}
 
