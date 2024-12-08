@@ -21245,6 +21245,12 @@
     github = "shikanime";
     githubId = 22115108;
   };
+  shimun = {
+    email = "shimun@shimun.net";
+    name = "shimun";
+    github = "shimunn";
+    githubId = 41011289;
+  };
   shiphan = {
     email = "timlin940511@gmail.com";
     name = "Shiphan";
