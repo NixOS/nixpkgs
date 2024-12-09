@@ -32,7 +32,10 @@ in
 
       settings =  mkOption {
         type = configFormat.type;
-        default = {};
+        default = {
+          general.output_backend = "pa";
+          diagnostics.log_verbosity = 1;
+        };
         example = {
           general = {
             name = "NixOS Shairport";
@@ -64,7 +67,7 @@ in
 
       arguments = mkOption {
         type = types.str;
-        default = "-v -o pa";
+        default = "";
         description = ''
           Arguments to pass to the daemon. Defaults to a local pulseaudio
           server.
@@ -109,6 +112,11 @@ in
     services.avahi.enable = true;
     services.avahi.publish.enable = true;
     services.avahi.publish.userServices = true;
+
+    services.shairport-sync.settings = {
+      general.output_backend = lib.mkDefault "pa";
+      diagnostics.log_verbosity = lib.mkDefault 1;
+    };
 
     users = {
       users.${cfg.user} = {
