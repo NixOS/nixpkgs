@@ -37,6 +37,16 @@ let
         inherit rev;
       };
     };
+    "1.2.0" = rec {
+      release = "RC1";
+      rev = "da3a925491fab9fa2a8633d18e45f8e1b576c9d2";
+      src = fetchFromGitHub {
+        owner = "eeTools";
+        repo = "SimulIDE-dev";
+        hash = "sha256-6Gh0efBizDK1rUNkyU+/ysj7QwkAs3kTA1mQZYFb/pI=";
+        inherit rev;
+      };
+    };
   };
 in
 
@@ -71,6 +81,7 @@ let
         cp simulide $out/bin/simulide
       '';
 
+  release' = lib.optionalString (lib.versionOlder versionNum "1.2.0") "-" + release;
 in
 
 stdenv.mkDerivation {
@@ -84,9 +95,9 @@ stdenv.mkDerivation {
       -e "s|^Icon=.*$|Icon=simulide|"
 
     # Note: older versions don't have REV_NO
-    sed -i SimulIDE.pro \
+    sed -i SimulIDE.pr* \
       -e "s|^VERSION = .*$|VERSION = ${versionNum}|" \
-      -e "s|^RELEASE = .*$|RELEASE = -${release}|" \
+      -e "s|^RELEASE = .*$|RELEASE = ${release'}|" \
       -e "s|^REV_NO = .*$|REV_NO = ${rev}|" \
       -e "s|^BUILD_DATE = .*$|BUILD_DATE = ??-??-??|"
 
