@@ -40,6 +40,7 @@ buildDotnetModule rec {
     mainProgram = "kryptor";
     maintainers = with lib.maintainers; [
       arthsmn
+      gepbird
     ];
     platforms = lib.platforms.all;
   };
