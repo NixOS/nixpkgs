@@ -161,7 +161,7 @@ let
       zlib
       readline
       openssl
-      (libxml2.override {enableHttp = true;})
+      libxml2
       libuuid
     ]
       ++ lib.optionals icuSupport [ icu ]
