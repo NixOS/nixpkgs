@@ -456,7 +456,7 @@ in {
   hitch = handleTest ./hitch {};
   hledger-web = handleTest ./hledger-web.nix {};
   hockeypuck = handleTest ./hockeypuck.nix { };
-  home-assistant = handleTest ./home-assistant.nix {};
+  home-assistant = runTest ./home-assistant.nix;
   hostname = handleTest ./hostname.nix {};
   hound = handleTest ./hound.nix {};
   hub = handleTest ./git/hub.nix {};
