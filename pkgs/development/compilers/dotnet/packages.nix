@@ -25,6 +25,11 @@ let
             + ''
               ln -s ${vmr.man} $man
             '';
+          propagatedSandboxProfile = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+            (allow file-read* (subpath "/private/var/db/mds/system"))
+            (allow mach-lookup (global-name "com.apple.SecurityServer")
+                              (global-name "com.apple.system.opendirectoryd.membership"))
+          '';
         }
       )
     );
