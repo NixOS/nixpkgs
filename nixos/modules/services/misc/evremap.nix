@@ -7,6 +7,8 @@
 let
   cfg = config.services.evremap;
   format = pkgs.formats.toml { };
+  settings = lib.attrsets.filterAttrs (n: v: v != null) cfg.settings;
+  configFile = format.generate "evremap.toml" settings;
 
   key = lib.types.strMatching "(BTN|KEY)_[[:upper:]]+" // {
     description = "key ID prefixed with BTN_ or KEY_";
@@ -68,10 +70,10 @@ in
             default = null;
             example = "usb-0000:07:00.3-2.1.1/input0";
             description = ''
-              If you have multiple devices with the same name, you can optionally
-              specify this attribute.
+              The physical device name to listen on.
 
-              If available, the value will be printed when running `evremap list-devices` with elevated permissions.
+              This attribute may be specified to disambiguate multiple devices with the same device name.
+              The physical device names of each device can be obtained by running `evremap list-devices` with elevated permissions.
             '';
           };
 
@@ -129,9 +131,7 @@ in
       description = "evremap - keyboard input remapper";
       wantedBy = [ "multi-user.target" ];
 
-      script = "${lib.getExe pkgs.evremap} remap ${
-        format.generate "evremap.toml" (lib.attrsets.filterAttrs (n: v: v != null) cfg.settings)
-      }";
+      script = "${lib.getExe pkgs.evremap} remap ${configFile}";
 
       serviceConfig = {
         DynamicUser = true;
