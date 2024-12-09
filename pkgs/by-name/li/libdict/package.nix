@@ -28,6 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DLIBDICT_SHARED=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=strict-prototypes"
+      "-Wno-error=newline-eof"
+    ]
+  );
+
   doCheck = true;
 
   meta = with lib; {
