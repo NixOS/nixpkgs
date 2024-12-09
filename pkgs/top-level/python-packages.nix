@@ -18286,6 +18286,8 @@ self: super: with self; {
 
   zephyr-python-api = callPackage ../development/python-modules/zephyr-python-api { };
 
+  zephyr-test-management = callPackage ../development/python-modules/zephyr-test-management { };
+
   zeroc-ice = callPackage ../development/python-modules/zeroc-ice { };
 
   zeroconf = callPackage ../development/python-modules/zeroconf { };
