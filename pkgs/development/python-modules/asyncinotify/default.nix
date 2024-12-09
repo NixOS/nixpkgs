@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "asyncinotify";
-  version = "4.1.0";
+  version = "4.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "absperf";
     repo = "asyncinotify";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SzsPYVA5fBXVcv7vE3FB4jFkIRr6NBlTeHrPxf5d8Ks=";
+    hash = "sha256-RHzjUoVhDxI7kYD5HWkb0f8X6BjjTTCAvSvASPy6FGk=";
   };
 
   build-system = [ flit-core ];
