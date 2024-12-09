@@ -6590,6 +6590,28 @@ self: super: with self; {
     }
   );
 
+  hpp-corba = toPythonModule (
+    pkgs.symlinkJoin {
+      name = "hpp";
+      paths = with self; [
+        hpp-affordance-corba
+        hpp-baxter
+        hpp-bezier-com-traj
+        hpp-centroidal-dynamics
+        hpp-corbaserver
+        hpp-environments
+        hpp-gepetto-viewer
+        hpp-gui
+        hpp-manipulation-corba
+        hpp-plot
+        hpp-practicals
+        hpp-romeo
+        hpp-tutorial
+        hpp-universal-robot
+      ];
+    }
+  );
+
   hpp-corbaserver = toPythonModule (pkgs.hpp-corbaserver.override { python3Packages = self; });
 
   hpp-doc = toPythonModule (pkgs.hpp-doc.override { python3Packages = self; });
