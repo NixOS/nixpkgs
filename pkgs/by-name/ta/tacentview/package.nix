@@ -65,6 +65,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ PopeRigby ];
     mainProgram = "tacentview";
-    platforms = lib.platforms.all;
+    platforms = with lib.platforms; linux ++ windows;
   };
 }
