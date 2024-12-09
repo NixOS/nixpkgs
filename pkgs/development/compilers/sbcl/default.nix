@@ -112,6 +112,13 @@ stdenv.mkDerivation (self: rec {
     # Heisentest, sometimes fails on ofBorg, would rather just disable it than
     # have it block a release.
     "futex-wait.test.sh"
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # This only fails on darwin in 24.05 since
+    # 57b36ea5c83a1841b174ec6cd5e423439fe9d7a0.  It’s exclusively a 24.05
+    # problem.
+    #
+    # https://github.com/NixOS/nixpkgs/pull/359214
+    "run-program.test.sh"
   ];
   patches = [
     # Support the NIX_SBCL_DYNAMIC_SPACE_SIZE envvar. Upstream SBCL didn’t want
