@@ -348,10 +348,10 @@ in {
             index = "index.php";
             tryFiles = "$uri $uri/ /index.php?$query_string";
           };
-          "~ \.php$".extraConfig = ''
+          "~ \\.php$".extraConfig = ''
             fastcgi_pass unix:${config.services.phpfpm.pools."bookstack".socket};
           '';
-          "~ \.(js|css|gif|png|ico|jpg|jpeg)$" = {
+          "~ \\.(js|css|gif|png|ico|jpg|jpeg)$" = {
             extraConfig = "expires 365d;";
           };
         };
