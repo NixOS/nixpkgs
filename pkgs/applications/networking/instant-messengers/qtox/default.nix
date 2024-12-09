@@ -12,7 +12,7 @@
 , qtbase
 , qtsvg
 , qttools
-, ffmpeg
+, ffmpeg_6
 , filter-audio
 , libexif
 , libsodium
@@ -43,7 +43,7 @@ mkDerivation rec {
     libXScrnSaver
     qtbase
     qtsvg
-    ffmpeg
+    ffmpeg_6
     filter-audio
     libexif
     libopus
