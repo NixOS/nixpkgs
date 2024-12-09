@@ -6973,7 +6973,6 @@ with pkgs;
   swi-prolog-gui = swi-prolog.override { withGui = true; };
 
   tbb_2020_3 = callPackage ../development/libraries/tbb/2020_3.nix { };
-  tbb_2021_5 = callPackage ../development/libraries/tbb/2021_5.nix { } ;
   tbb_2021_11 = callPackage ../development/libraries/tbb { };
   # many packages still fail with latest version
   tbb = tbb_2020_3;
