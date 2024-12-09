@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  zlib,
-  testers,
-  bustools,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, zlib
+, testers
+, bustools
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "BUStools";
     repo = "bustools";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     sha256 = "sha256-chdHwwnhHFGJLu4KZmFJp3SZ26GFnbelm3Qz0yeKoBs=";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "bustools is a program for manipulating BUS files for single cell RNA-Seq datasets";
+    description = "Program for manipulating BUS files for single cell RNA-Seq datasets";
     longDescription = ''
       bustools is a program for manipulating BUS files for single cell RNA-Seq datasets. It can be used to error correct barcodes, collapse UMIs, produce gene count or transcript compatibility count matrices, and is useful for many other tasks. It is also part of the kallisto | bustools workflow for pre-processing single-cell RNA-seq data.
     '';

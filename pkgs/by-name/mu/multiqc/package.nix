@@ -1,10 +1,10 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, procps
-, testers
-, multiqc
-,
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  procps,
+  testers,
+  multiqc,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -99,9 +99,7 @@ python3Packages.buildPythonApplication rec {
     pygithub
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = multiqc;
-  };
+  passthru.tests.version = testers.testVersion { package = multiqc; };
 
   meta = {
     description = "Aggregate bioinformatics results across many samples into a single report";
