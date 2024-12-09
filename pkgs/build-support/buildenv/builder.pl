@@ -77,7 +77,7 @@ for my $p (@pathsToLink) {
 sub findFiles;
 
 sub findFilesInDir {
-    my ($relName, $target, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority) = @_;
+    my ($relName, $target, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs) = @_;
 
     opendir DIR, "$target" or die "cannot open `$target': $!";
     my @names = readdir DIR or die;
@@ -85,7 +85,7 @@ sub findFilesInDir {
 
     foreach my $name (@names) {
         next if $name eq "." || $name eq "..";
-        findFiles("$relName/$name", "$target/$name", $name, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority);
+        findFiles("$relName/$name", "$target/$name", $name, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs);
     }
 }
 
@@ -115,7 +115,7 @@ sub prependDangling {
 }
 
 sub findFiles {
-    my ($relName, $target, $baseName, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority) = @_;
+    my ($relName, $target, $baseName, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs) = @_;
 
     # The store path must not be a file when not ignoreSingleFileOutputs
     if (-f $target && isStorePath $target) {
@@ -193,8 +193,8 @@ sub findFiles {
         }
     }
 
-    findFilesInDir($relName, $oldTarget, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $oldPriority) unless $oldTarget eq "";
-    findFilesInDir($relName, $target, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority);
+    findFilesInDir($relName, $oldTarget, $ignoreCollisions, $checkCollisionContents, $oldPriority, $ignoreSingleFileOutputs) unless $oldTarget eq "";
+    findFilesInDir($relName, $target, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs);
 
     $symlinks{$relName} = ["", $priority]; # denotes directory
 }
@@ -204,12 +204,12 @@ my %done;
 my %postponed;
 
 sub addPkg {
-    my ($pkgDir, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority)  = @_;
+    my ($pkgDir, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs)  = @_;
 
     return if (defined $done{$pkgDir});
     $done{$pkgDir} = 1;
 
-    findFiles("", $pkgDir, "", $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority);
+    findFiles("", $pkgDir, "", $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs);
 
     my $propagatedFN = "$pkgDir/nix-support/propagated-user-env-packages";
     if (-e $propagatedFN) {
@@ -240,9 +240,9 @@ for my $pkg (@{decode_json $pkgs}) {
     for my $path (@{$pkg->{paths}}) {
         addPkg($path,
                $ENV{"ignoreCollisions"} eq "1",
-               $ENV{"ignoreSingleFileOutputs"} eq "1",
                $ENV{"checkCollisionContents"} eq "1",
-               $pkg->{priority})
+               $pkg->{priority},
+               $ENV{"ignoreSingleFileOutputs"} eq "1")
            if -e $path;
     }
 }
@@ -257,7 +257,7 @@ while (scalar(keys %postponed) > 0) {
     my @pkgDirs = keys %postponed;
     %postponed = ();
     foreach my $pkgDir (sort @pkgDirs) {
-        addPkg($pkgDir, 2, $ENV{"ignoreSingleFileOutputs"} eq "1", $ENV{"checkCollisionContents"} eq "1", $priorityCounter++);
+        addPkg($pkgDir, 2, $ENV{"checkCollisionContents"} eq "1", $priorityCounter++, $ENV{"ignoreSingleFileOutputs"} eq "1");
     }
 }
 
@@ -269,9 +269,9 @@ if ($extraPathsFilePath) {
         chomp $line;
         addPkg($line,
                $ENV{"ignoreCollisions"} eq "1",
-               $ENV{"ignoreSingleFileOutputs"} eq "1",
                $ENV{"checkCollisionContents"} eq "1",
-               1000)
+               1000,
+               $ENV{"ignoreSingleFileOutputs"} eq "1")
             if -d $line;
     }
 
