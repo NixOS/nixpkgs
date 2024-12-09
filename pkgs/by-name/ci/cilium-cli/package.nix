@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "cilium-cli";
-  version = "0.16.20";
+  version = "0.16.21";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "cilium-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aTCMYVvbVKhM2Nm1mYw8beEIb3sdDwjcigFvEum86s8=";
+    hash = "sha256-CduyQeUIh+FK1yS/3uLjBKDWkVF5f6FSlRG9+A+EI/I=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -25,8 +25,9 @@ buildGoModule rec {
   subPackages = [ "cmd/cilium" ];
 
   ldflags = [
-    "-s" "-w"
-    "-X=github.com/cilium/cilium-cli/defaults.CLIVersion=${version}"
+    "-s"
+    "-w"
+    "-X=github.com/cilium/cilium/cilium-cli/defaults.CLIVersion=${version}"
   ];
 
   # Required to workaround install check error:
@@ -51,7 +52,11 @@ buildGoModule rec {
     homepage = "https://www.cilium.io/";
     changelog = "https://github.com/cilium/cilium-cli/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bryanasdev000 humancalico qjoly ];
+    maintainers = with lib.maintainers; [
+      bryanasdev000
+      humancalico
+      qjoly
+    ];
     mainProgram = "cilium";
   };
 }
