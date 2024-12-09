@@ -15,13 +15,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "minigalaxy";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "sharkwouter";
     repo = "minigalaxy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-CMPBKnNrcjHVpsbBjY97FiygEJNG9jKHR/LoVMfuxG4=";
+    tag = version;
+    hash = "sha256-nxWJm+CkxZqRMUYQA0ZJKOb2fD1tPYXnYhy+DOnDbkQ=";
   };
 
   patches = [
