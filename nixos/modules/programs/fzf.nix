@@ -32,6 +32,10 @@ in
 
         ohMyZsh.plugins = lib.mkIf config.programs.zsh.ohMyZsh.enable [ "fzf" ];
       };
+
+      fish.interactiveShellInit = lib.optionalString cfg.keybindings ''
+        source ${pkgs.fzf}/share/fzf/key-bindings.fish
+      '';
     };
   };
 
