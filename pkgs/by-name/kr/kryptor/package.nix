@@ -3,6 +3,7 @@
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
+  versionCheckHook,
 }:
 
 buildDotnetModule rec {
@@ -23,6 +24,9 @@ buildDotnetModule rec {
   executables = [ "kryptor" ];
 
   dotnetFlags = [ "-p:TargetFramework=net8.0" ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
     updateScript = ./update.sh;
