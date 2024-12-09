@@ -399,9 +399,9 @@ def test_repl(mock_run: Any) -> None:
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_repl_flake(mock_run: Any) -> None:
     n.repl_flake("attr", m.Flake(Path("flake.nix"), "myAttr"), nix_flag=True)
-    # This method would be really annoying to test, and it is not that important
-    # So just check that we are at least calling it
-    assert mock_run.called
+    # See nixos-rebuild-ng.tests.repl for a better test,
+    # this is mostly for sanity check
+    assert mock_run.call_count == 1
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)

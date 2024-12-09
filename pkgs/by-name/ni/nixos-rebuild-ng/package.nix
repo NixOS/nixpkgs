@@ -1,5 +1,6 @@
 {
   lib,
+  callPackage,
   installShellFiles,
   mkShell,
   nix,
@@ -92,20 +93,23 @@ python3Packages.buildPythonApplication rec {
         '';
       };
 
-      # NOTE: this is a passthru test rather than a build-time test because we
-      # want to keep the build closures small
-      tests.ci = runCommand "${pname}-ci" { nativeBuildInputs = [ python-with-pkgs ]; } ''
-        export RUFF_CACHE_DIR="$(mktemp -d)"
+      tests = {
+        repl = callPackage ./tests/repl.nix { };
+        # NOTE: this is a passthru test rather than a build-time test because we
+        # want to keep the build closures small
+        linters = runCommand "${pname}-linters" { nativeBuildInputs = [ python-with-pkgs ]; } ''
+          export RUFF_CACHE_DIR="$(mktemp -d)"
 
-        echo -e "\x1b[32m## run mypy\x1b[0m"
-        mypy ${src}
-        echo -e "\x1b[32m## run ruff\x1b[0m"
-        ruff check ${src}
-        echo -e "\x1b[32m## run ruff format\x1b[0m"
-        ruff format --check ${src}
+          echo -e "\x1b[32m## run mypy\x1b[0m"
+          mypy ${src}
+          echo -e "\x1b[32m## run ruff\x1b[0m"
+          ruff check ${src}
+          echo -e "\x1b[32m## run ruff format\x1b[0m"
+          ruff format --check ${src}
 
-        touch $out
-      '';
+          touch $out
+        '';
+      };
     };
 
   meta = {
