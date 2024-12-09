@@ -12,8 +12,8 @@ let
   # As it does not encode the version, we use the wayback machine (web.archive.org) to get a fixed URL.
   # To update the client, head to web.archive.org and create a new snapshot of the download page.
   src = fetchurl {
-    url = "https://web.archive.org/web/20241202103051/https://launcher.cdn.ankama.com/installers/production/Ankama%20Launcher-Setup-x86_64.AppImage";
-    hash = "sha256-jI/qcIIrNU9ViaZ/LKMkUETXZpintDsofSgiRfe4GOU=";
+    url = "https://web.archive.org/web/20241209091715/https://launcher.cdn.ankama.com/installers/production/Ankama%20Launcher-Setup-x86_64.AppImage";
+    hash = "sha256-ii156AkxkqNCFmcMwfYn8AMX3/vJWUDKRbF6Cs0QIYw=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
