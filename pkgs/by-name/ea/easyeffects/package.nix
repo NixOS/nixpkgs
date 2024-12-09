@@ -130,7 +130,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wwmm/easyeffects";
     changelog = "https://github.com/wwmm/easyeffects/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      aleksana
+    ];
     mainProgram = "easyeffects";
     platforms = lib.platforms.linux;
   };

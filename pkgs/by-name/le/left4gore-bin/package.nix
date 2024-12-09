@@ -21,7 +21,8 @@ let
 
   # FHS env, as patchelf will not work
   env = buildFHSEnv {
-    name = "left4gore-env-${version}";
+    pname = "left4gore-env";
+    inherit version;
     targetPkgs = _: [ left4gore-unwrapped ];
     runScript = "left4gore";
   };

@@ -10,9 +10,9 @@
 }:
 
 buildFHSEnv {
-  name = "plexmediaserver";
+  pname = "plexmediaserver";
 
-  inherit (plexRaw) meta;
+  inherit (plexRaw) version meta;
 
   # Plex does some magic to detect if it is already running.
   # The separate PID namespace somehow breaks this and Plex is thinking it's already
