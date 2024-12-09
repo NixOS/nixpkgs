@@ -7570,7 +7570,9 @@ self: super: with self; {
 
   logical-unification = callPackage ../development/python-modules/logical-unification { };
 
-  logilab-common = callPackage ../development/python-modules/logilab/common.nix { };
+  logilab-common = callPackage ../development/python-modules/logilab/common.nix {
+    pytestCheckHook = pytest7CheckHook;
+  };
 
   logilab-constraint = callPackage ../development/python-modules/logilab/constraint.nix { };
 
@@ -9014,6 +9016,8 @@ self: super: with self; {
   netbox-documents = callPackage ../development/python-modules/netbox-documents { };
 
   netbox-reorder-rack = callPackage ../development/python-modules/netbox-reorder-rack { };
+
+  netbox-plugin-prometheus-sd = callPackage ../development/python-modules/netbox-plugin-prometheus-sd { };
 
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 

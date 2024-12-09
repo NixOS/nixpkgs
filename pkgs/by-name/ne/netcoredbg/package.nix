@@ -36,7 +36,7 @@ let
 
     cmakeFlags = [
       "-DCORECLR_DIR=${coreclr-src}/src/coreclr"
-      "-DDOTNET_DIR=${dotnet-sdk.unwrapped}/share/dotnet"
+      "-DDOTNET_DIR=${dotnet-sdk}/share/dotnet"
       "-DBUILD_MANAGED=0"
     ];
   };
