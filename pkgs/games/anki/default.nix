@@ -42,14 +42,10 @@ let
     fetchSubmodules = true;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "linkcheck-0.4.1" = "sha256-S93J1cDzMlzDjcvz/WABmv8CEC6x78E+f7nzhsN7NkE=";
-      "percent-encoding-iri-2.2.0" = "sha256-kCBeS1PNExyJd4jWfDfctxq6iTdAq69jtxFQgCCQ8kQ=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-4V75+jS250XfUH6B4VBxtL2t308nyKzhDoq86kq6rp4=";
   };
-  cargoDeps = rustPlatform.importCargoLock cargoLock;
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
@@ -313,8 +309,6 @@ python3.pkgs.buildPythonApplication {
   '';
 
   passthru = {
-    # cargoLock is reused in anki-sync-server
-    inherit cargoLock;
     tests.anki-sync-server = nixosTests.anki-sync-server;
   };
 
