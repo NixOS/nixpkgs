@@ -183,6 +183,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkTarget = "check";
 
+  passthru.tests.scripts = callPackage ./test-scripts.nix { };
+
   outputs = [
     "out"
     "auditor"
