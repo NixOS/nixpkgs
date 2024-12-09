@@ -70,9 +70,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       stepbrobd
       DimitarNestorov
     ];
-    platforms = [
-      "aarch64-darwin"
-      "x86_64-darwin"
-    ];
+    platforms = lib.platforms.darwin;
   };
 })
