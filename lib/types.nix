@@ -608,17 +608,27 @@ rec {
               lhs.lazy
             else
               null;
+          placeholder =
+            if lhs.placeholder == rhs.placeholder then
+              lhs.placeholder
+            else if lhs.placeholder == "name" then
+              rhs.placeholder
+            else if rhs.placeholder == "name" then
+              lhs.placeholder
+            else
+              null;
         in
-        if elemType == null || lazy == null then
+        if elemType == null || lazy == null || placeholder == null then
           null
         else
           {
-            inherit elemType lazy;
+            inherit elemType lazy placeholder;
           };
     in
     {
       elemType,
       lazy ? false,
+      placeholder ? "name",
     }:
     mkOptionType {
       name = if lazy then "lazyAttrsOf" else "attrsOf";
@@ -645,16 +655,16 @@ rec {
           (pushPositions defs)))
       );
       emptyValue = { value = {}; };
-      getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
+      getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<${placeholder}>"]);
       getSubModules = elemType.getSubModules;
-      substSubModules = m: attrsWith { elemType = elemType.substSubModules m; inherit lazy; };
+      substSubModules = m: attrsWith { elemType = elemType.substSubModules m; inherit lazy placeholder; };
       functor = defaultFunctor "attrsWith" // {
         wrappedDeprecationMessage = { loc }: lib.warn ''
           The deprecated `type.functor.wrapped` attribute of the option `${showOption loc}` is accessed, use `type.nestedTypes.elemType` instead.
         '' elemType;
         payload = {
           # Important!: Add new function attributes here in case of future changes
-          inherit elemType lazy;
+          inherit elemType lazy placeholder;
         };
         inherit binOp;
       };
