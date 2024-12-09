@@ -475,9 +475,10 @@ rec {
       check = isString;
       merge = loc: defs: concatStringsSep sep (getValues defs);
       functor = (defaultFunctor name) // {
-        payload = sep;
-        binOp = sepLhs: sepRhs:
-          if sepLhs == sepRhs then sepLhs
+        payload = { inherit sep; };
+        type = payload: types.separatedString payload.sep;
+        binOp = lhs: rhs:
+          if lhs.sep == rhs.sep then { inherit (lhs) sep; }
           else null;
       };
     };
@@ -1014,7 +1015,11 @@ rec {
           else "conjunction";
         check = flip elem values;
         merge = mergeEqualOption;
-        functor = (defaultFunctor name) // { payload = values; binOp = a: b: unique (a ++ b); };
+        functor = (defaultFunctor name) // {
+          payload = { inherit values; };
+          type = payload: types.enum payload.values;
+          binOp = a: b: { values = unique (a.values ++ b.values); };
+        };
       };
 
     # Either value of type `t1` or `t2`.
