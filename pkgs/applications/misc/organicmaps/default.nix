@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , ninja
 , pkg-config
@@ -39,6 +40,14 @@ in stdenv.mkDerivation rec {
     hash = "sha256-uA0KB9HGI0hXoD5YVOfWg3WblpGvWhgpnCVHWfLkrhs=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Fix for https://github.com/organicmaps/organicmaps/issues/7838
+    (fetchpatch {
+      url = "https://github.com/organicmaps/organicmaps/commit/1caf64e315c988cd8d5196c80be96efec6c74ccc.patch";
+      hash = "sha256-k3VVRgHCFDhviHxduQMVRUUvQDgMwFHIiDZKa4BNTyk=";
+    })
+  ];
 
   postPatch = ''
     # Disable certificate check. It's dependent on time
