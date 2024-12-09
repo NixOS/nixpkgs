@@ -321,6 +321,41 @@ in
         :::
       '';
     };
+
+    environmentFile = mkOption {
+      type = with types; nullOr path;
+      default = null;
+      example = "/run/secrets/caddy.env";
+      description = ''
+        Environment file as defined in {manpage}`systemd.exec(5)`.
+
+        You can use environment variables to pass secrets to the service without adding
+        them to the world-redable nix store.
+
+        ```
+        # in configuration.nix
+        services.caddy.environmentFile = "/run/secrets/caddy.env";
+        services.caddy.globalConfig = '''
+          {
+            acme_ca https://acme.zerossl.com/v2/DV90
+            acme_eab {
+              key_id {$EAB_KEY_ID}
+              mac_key {$EAB_MAC_KEY}
+            }
+          }
+        ''';
+        ```
+
+        ```
+        # in /run/secrets/caddy.env
+        EAB_KEY_ID=secret
+        EAB_MAC_KEY=secret
+        ```
+
+        Find more examples
+        [here](https://caddyserver.com/docs/caddyfile/concepts#environment-variables)
+      '';
+    };
   };
 
   # implementation
@@ -378,6 +413,7 @@ in
         Restart = "on-failure";
         RestartPreventExitStatus = 1;
         RestartSec = "5s";
+        EnvironmentFile = optional (cfg.environmentFile != null) cfg.environmentFile;
 
         # TODO: attempt to upstream these options
         NoNewPrivileges = true;
