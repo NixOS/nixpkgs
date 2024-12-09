@@ -11,6 +11,7 @@ in
 {
   imports = [
     ./disk-size-option.nix
+    ../image/file-options.nix
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2411;
       from = [
@@ -20,6 +21,18 @@ in
       to = [
         "virtualisation"
         "diskSize"
+      ];
+    })
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2505;
+      from = [
+        "virtualisation"
+        "virtualbox"
+        "vmFileName"
+      ];
+      to = [
+        "image"
+        "fileName"
       ];
     })
   ];
@@ -52,13 +65,6 @@ in
         default = "${config.system.nixos.distroName} ${config.system.nixos.label} (${pkgs.stdenv.hostPlatform.system})";
         description = ''
           The name of the VirtualBox appliance.
-        '';
-      };
-      vmFileName = lib.mkOption {
-        type = lib.types.str;
-        default = "nixos-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.ova";
-        description = ''
-          The file name of the VirtualBox appliance.
         '';
       };
       params = lib.mkOption {
@@ -207,8 +213,12 @@ in
       (lib.mkIf (pkgs.stdenv.hostPlatform.system == "i686-linux") { pae = "on"; })
     ];
 
+    system.nixos.tags = [ "virtualbox" ];
+    image.extension = "ova";
+    system.build.image = lib.mkDefault config.system.build.virtualBoxOVA;
     system.build.virtualBoxOVA = import ../../lib/make-disk-image.nix {
       name = cfg.vmDerivationName;
+      baseName = config.image.baseName;
 
       inherit pkgs lib config;
       partitionTableType = "legacy";
@@ -253,7 +263,7 @@ in
 
         echo "exporting VirtualBox VM..."
         mkdir -p $out
-        fn="$out/${cfg.vmFileName}"
+        fn="$out/${config.image.fileName}"
         VBoxManage export "$vmName" --output "$fn" --options manifest ${lib.escapeShellArgs cfg.exportParams}
         ${cfg.postExportCommands}
 

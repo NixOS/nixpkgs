@@ -1,0 +1,43 @@
+name: Get merge commit
+
+on:
+  workflow_call:
+    outputs:
+      mergedSha:
+        description: "The merge commit SHA"
+        value: ${{ jobs.resolve-merge-commit.outputs.mergedSha }}
+
+# We need a token to query the API, but it doesn't need any special permissions
+permissions: {}
+
+jobs:
+  resolve-merge-commit:
+    runs-on: ubuntu-latest
+    outputs:
+      mergedSha: ${{ steps.merged.outputs.mergedSha }}
+    steps:
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      with:
+        path: base
+        sparse-checkout: ci
+    - name: Check if the PR can be merged and get the test merge commit
+      id: merged
+      env:
+        GH_TOKEN: ${{ github.token }}
+        GH_EVENT: ${{ github.event_name }}
+      run: |
+        case "$GH_EVENT" in
+          push)
+            echo "mergedSha=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+            ;;
+          pull_request_target)
+            if mergedSha=$(base/ci/get-merge-commit.sh ${{ github.repository }} ${{ github.event.number }}); then
+              echo "Checking the merge commit $mergedSha"
+              echo "mergedSha=$mergedSha" >> "$GITHUB_OUTPUT"
+            else
+              # Skipping so that no notifications are sent
+              echo "Skipping the rest..."
+            fi
+            ;;
+        esac
+        rm -rf base

@@ -39,6 +39,8 @@
 
   universal-remote-card = callPackage ./universal-remote-card { };
 
+  vacuum-card = callPackage ./vacuum-card { };
+
   valetudo-map-card = callPackage ./valetudo-map-card { };
 
   weather-card = callPackage ./weather-card { };
@@ -47,6 +49,6 @@
 }
 // lib.optionalAttrs pkgs.config.allowAliases {
   android-tv-card =
-    lib.warn "`home-assistant-custom-lovelace-modules.android-tv-card` has been renamed to `universal-remote-card`"
+    lib.warnOnInstantiate "`home-assistant-custom-lovelace-modules.android-tv-card` has been renamed to `universal-remote-card`"
     pkgs.home-assistant-custom-lovelace-modules.universal-remote-card;
 }

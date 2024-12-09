@@ -25,7 +25,7 @@
 , libpcap
 , libsmi
 , libssh
-, lua5
+, lua5_4
 , lz4
 , makeWrapper
 , minizip
@@ -44,7 +44,7 @@
 , speexdsp
 , SystemConfiguration
 , wrapGAppsHook3
-, zlib
+, zlib-ng
 , zstd
 
 , withQt ? true
@@ -57,7 +57,7 @@ assert withQt -> qt6 != null;
 
 stdenv.mkDerivation rec {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
-  version = "4.2.8";
+  version = "4.4.2";
 
   outputs = [ "out" "dev" ];
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     repo = "wireshark";
     owner = "wireshark";
     rev = "v${version}";
-    hash = "sha256-QnBETFkYoeBTQFV8g2c/dZjgCXaMtFi1MQUgmkOool8=";
+    hash = "sha256-qeMaj8kRGG1NlDb5j4M/Za2M2Ohh2qhXbzBtQGjrCSo=";
   };
 
   patches = [
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
     libpcap
     libsmi
     libssh
-    lua5
+    lua5_4
     lz4
     minizip
     nghttp2
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     snappy
     spandsp3
     speexdsp
-    zlib
+    zlib-ng
     zstd
   ] ++ lib.optionals withQt (with qt6; [
     qt5compat

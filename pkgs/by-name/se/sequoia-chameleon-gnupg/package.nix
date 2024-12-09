@@ -6,7 +6,6 @@
 , nettle
 , openssl
 , sqlite
-, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,9 +30,6 @@ rustPlatform.buildRustPackage rec {
     nettle
     openssl
     sqlite
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   # gpgconf: error creating socket directory

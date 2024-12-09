@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   # the way the client parses things
   # - Instead, we use `yq-go` to convert it to yaml
   # Config validation needs to happen after yarnConfigHook, since it's what sets the yarn offline cache
-  postYarnConfigHook = lib.optional (settings != { }) ''
+  preBuild = lib.optional (settings != { }) ''
     echo "Writing settings override..."
     yq --output-format yml '${builtins.toFile "conf.json" ''${builtins.toJSON settings}''}' > user-data/conf.yml
     yarn validate-config --offline

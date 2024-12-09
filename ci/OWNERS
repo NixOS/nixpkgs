@@ -157,6 +157,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 # Python-related code and docs
 /doc/languages-frameworks/python.section.md   @mweinelt @natsukium
 /maintainers/scripts/update-python-libraries  @mweinelt @natsukium
+/pkgs/by-name/up/update-python-libraries      @mweinelt @natsukium
 /pkgs/development/interpreters/python         @mweinelt @natsukium
 /pkgs/top-level/python-packages.nix                     @natsukium
 /pkgs/top-level/release-python.nix                      @natsukium
@@ -206,8 +207,8 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 
 # Browsers
 /pkgs/applications/networking/browsers/firefox @mweinelt
-/pkgs/applications/networking/browsers/chromium @emilylange
-/nixos/tests/chromium.nix @emilylange
+/pkgs/applications/networking/browsers/chromium @emilylange @networkException
+/nixos/tests/chromium.nix @emilylange @networkException
 
 # Certificate Authorities
 pkgs/data/misc/cacert/ @ajs124 @lukegb @mweinelt

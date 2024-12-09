@@ -7,6 +7,7 @@
   nix,
   cacert,
   nuget-to-nix,
+  nixfmt-rfc-style,
   dotnetCorePackages,
   xmlstarlet,
   patchNupkgs,
@@ -16,6 +17,7 @@
   releaseManifestFile,
   tarballHash,
   depsFile,
+  fallbackTargetPackages,
   bootstrapSdk,
 }:
 
@@ -94,6 +96,7 @@ let
                   nix
                   cacert
                   nuget-to-nix
+                  nixfmt-rfc-style
                 ];
                 postPatch =
                   old.postPatch or ""
@@ -138,7 +141,10 @@ let
                 --arg list "[ ''${depsFiles[*]} ]" \
                 --argstr baseRid ${targetRid} \
                 --arg otherRids '${lib.generators.toPretty { multiline = false; } otherRids}' \
-                ) > "${toString prebuiltPackages.sourceFile}"
+                ) > deps.nix
+              nixfmt deps.nix
+
+              mv deps.nix "${toString prebuiltPackages.sourceFile}"
               EOF
             '';
         };

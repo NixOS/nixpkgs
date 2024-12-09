@@ -804,6 +804,38 @@ let
       '';
     };
 
+    mqtt = {
+      exporterConfig = {
+        enable = true;
+        environmentFile = pkgs.writeText "mqtt-exporter-envfile" ''
+          MQTT_PASSWORD=testpassword
+        '';
+      };
+      metricProvider = {
+        services.mosquitto = {
+          enable = true;
+          listeners = [{
+            users.exporter = {
+              acl = [ "read #" ];
+              passwordFile = pkgs.writeText "mosquitto-password" "testpassword";
+            };
+          }];
+        };
+        systemd.services.prometheus-mqtt-exporter ={
+          wants = [ "mosquitto.service" ];
+          after = [ "mosquitto.service" ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("mosquitto.service")
+        wait_for_unit("prometheus-mqtt-exporter.service")
+        wait_for_open_port(9000)
+        succeed(
+          "curl -sSf http://localhost:9000/metrics | grep '^python_info'"
+        )
+      '';
+    };
+
     mysqld = {
       exporterConfig = {
         enable = true;

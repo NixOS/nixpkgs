@@ -1,6 +1,6 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGo122Module, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGo122Module rec {
   pname = "nexttrace";
   version = "1.3.5";
 

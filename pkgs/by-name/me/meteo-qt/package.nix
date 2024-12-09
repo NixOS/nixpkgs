@@ -29,6 +29,10 @@ python3Packages.buildPythonApplication rec {
     pyqt5
   ];
 
+  postFixup = ''
+    mv $out/${python3Packages.python.sitePackages}/usr/share $out/share
+  '';
+
   pythonImportsCheck = [ "meteo_qt" ];
 
   makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];

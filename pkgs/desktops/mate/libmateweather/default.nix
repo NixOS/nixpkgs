@@ -7,7 +7,7 @@
 , glib-networking
 , libxml2
 , gtk3
-, libsoup
+, libsoup_2_4
 , tzdata
 , mateUpdateScript
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libsoup
+    libsoup_2_4
     tzdata
   ];
 

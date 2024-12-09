@@ -23,12 +23,6 @@ let
     hash = "sha256-eZiQQp2S/asE7MfGvfe6dA/kdCvek9SYa/FFGp24dVg=";
   };
 
-  # Fixes framebuffer with linux 6.11
-  fbdev_linux_611_patch = fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/NVIDIA/open-gpu-kernel-modules/pull/692.patch";
-    hash = "sha256-OYw8TsHDpBE5DBzdZCBT45+AiznzO9SfECz5/uXN5Uc=";
-  };
-
   # Fixes drm device not working with linux 6.12
   # https://github.com/NVIDIA/open-gpu-kernel-modules/issues/712
   drm_fop_flags_linux_612_patch  = fetchpatch {
@@ -55,15 +49,12 @@ rec {
   };
 
   latest = selectHighestVersion production (generic {
-    version = "560.35.03";
-    sha256_64bit = "sha256-8pMskvrdQ8WyNBvkU/xPc/CtcYXCa7ekP73oGuKfH+M=";
-    sha256_aarch64 = "sha256-s8ZAVKvRNXpjxRYqM3E5oss5FdqW+tv1qQC2pDjfG+s=";
-    openSha256 = "sha256-/32Zf0dKrofTmPZ3Ratw4vDM7B+OgpC4p7s+RHUjCrg=";
-    settingsSha256 = "sha256-kQsvDgnxis9ANFmwIwB7HX5MkIAcpEEAHc8IBOLdXvk=";
-    persistencedSha256 = "sha256-E2J2wYYyRu7Kc3MMZz/8ZIemcZg68rkzvqEwFAL3fFs=";
-    patchesOpen = [ fbdev_linux_611_patch ];
-
-    broken = kernel.kernelAtLeast "6.12";
+    version = "565.77";
+    sha256_64bit = "sha256-CnqnQsRrzzTXZpgkAtF7PbH9s7wbiTRNcM0SPByzFHw=";
+    sha256_aarch64 = "sha256-LSAYUnhfnK3rcuPe1dixOwAujSof19kNOfdRHE7bToE=";
+    openSha256 = "sha256-Fxo0t61KQDs71YA8u7arY+503wkAc1foaa51vi2Pl5I=";
+    settingsSha256 = "sha256-VUetj3LlOSz/LB+DDfMCN34uA4bNTTpjDrb6C6Iwukk=";
+    persistencedSha256 = "sha256-wnDjC099D8d9NJSp9D0CbsL+vfHXyJFYYgU3CwcqKww=";
   });
 
   beta = selectHighestVersion latest (generic {
@@ -79,11 +70,11 @@ rec {
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "550.40.80";
+    version = "550.40.81";
     persistencedVersion = "550.54.14";
     settingsVersion = "550.54.14";
-    sha256_64bit = "sha256-fuI9G9KHCCddtPNDz+8FAkporSB7G97UU/pw4KGGZOE=";
-    openSha256 = "sha256-+soDdbklk8wr/G5cj4BzZ8ql0zeHSswJ2OkOv59uMp0=";
+    sha256_64bit = "sha256-GfufNJ3jJKPyZhbRRPbRAjENRhJWNaZ1lJF7Z6x0h4c=";
+    openSha256 = "sha256-TOQN89yB29g9mka4CiRLSyvNVGP6hpkHWui2aFQPzLU=";
     settingsSha256 = "sha256-m2rNASJp0i0Ez2OuqL+JpgEF0Yd8sYVCyrOoo/ln2a4=";
     persistencedSha256 = "sha256-XaPN8jVTjdag9frLPgBtqvO/goB5zxeGzaTU0CdL6C4=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitVersion version)}-linux";

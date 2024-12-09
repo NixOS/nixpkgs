@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sonivox";
-  version = "3.6.13";
+  version = "3.6.14";
 
   src = fetchFromGitHub {
     owner = "pedrolcl";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QhXMmJbyqDxSJmT847Qbg1jbU3gLFsJ/FWVTy7MV2fE=";
+    hash = "sha256-4IlxXa9D65tGu8W5TXF9qoM/IEP9im0vbdde2SnZyX4=";
   };
 
   nativeBuildInputs = [ cmake ];

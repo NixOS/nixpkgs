@@ -54,6 +54,10 @@ mesonCheckPhase() {
     local flagsArray=()
     concatTo flagsArray mesonCheckFlags mesonCheckFlagsArray
 
+    if [ -z "${dontAddTimeoutMultiplier:-}" ]; then
+        flagsArray+=("--timeout-multiplier=0")
+    fi
+
     echoCmd 'mesonCheckPhase flags' "${flagsArray[@]}"
     meson test --no-rebuild --print-errorlogs "${flagsArray[@]}"
 

@@ -1,14 +1,11 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.spotifyd;
   toml = pkgs.formats.toml {};
   warnConfig =
     if cfg.config != ""
     then lib.trace "Using the stringly typed .config attribute is discouraged. Use the TOML typed .settings attribute instead."
-    else id;
+    else lib.id;
   spotifydConf =
     if cfg.settings != {}
     then toml.generate "spotify.conf" cfg.settings
@@ -17,18 +14,18 @@ in
 {
   options = {
     services.spotifyd = {
-      enable = mkEnableOption "spotifyd, a Spotify playing daemon";
+      enable = lib.mkEnableOption "spotifyd, a Spotify playing daemon";
 
-      config = mkOption {
+      config = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           (Deprecated) Configuration for Spotifyd. For syntax and directives, see
           <https://docs.spotifyd.rs/config/File.html>.
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         default = {};
         type = toml.type;
         example = { global.bitrate = 320; };
@@ -40,7 +37,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = cfg.config == "" || cfg.settings == {};
@@ -65,5 +62,5 @@ in
     };
   };
 
-  meta.maintainers = [ maintainers.anderslundstedt ];
+  meta.maintainers = [ lib.maintainers.anderslundstedt ];
 }

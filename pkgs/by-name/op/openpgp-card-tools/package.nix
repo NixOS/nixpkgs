@@ -8,7 +8,6 @@
 , dbus
 , testers
 , openpgp-card-tools
-, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,10 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles pkg-config rustPlatform.bindgenHook ];
 
-  buildInputs = [ pcsclite dbus ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.PCSC
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs = [ pcsclite dbus ];
 
   passthru = {
     tests.version = testers.testVersion {

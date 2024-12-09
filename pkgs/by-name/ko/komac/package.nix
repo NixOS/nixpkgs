@@ -10,6 +10,7 @@
   komac,
   dbus,
   zstd,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
@@ -30,7 +31,13 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-kb18phtY5rRNUw0ZaZu2tipAaOURSy+2duf/+cOj5Y8=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      installShellFiles
+    ];
 
   buildInputs =
     [
@@ -52,6 +59,13 @@ rustPlatform.buildRustPackage {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/komac";
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd komac \
+      --bash <($out/bin/komac complete bash) \
+      --zsh <($out/bin/komac complete zsh) \
+      --fish <($out/bin/komac complete fish)
+  '';
 
   passthru = {
     tests.version = testers.testVersion {

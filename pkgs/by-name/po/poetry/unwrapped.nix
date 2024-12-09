@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.8.4";
+  version = "1.8.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = "poetry";
     rev = "refs/tags/${version}";
-    hash = "sha256-pk57Jxf4hkMKLn1pOa9BtHLwLJ6qmXc55TqQN5Vr2k8=";
+    hash = "sha256-YR0IgDhmpbe8TyTMP1cjUxGRnrfV8CNHkPlZrNcnof0=";
   };
 
   build-system = [

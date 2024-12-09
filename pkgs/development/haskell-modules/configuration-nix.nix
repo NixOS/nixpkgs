@@ -350,17 +350,23 @@ self: super: builtins.intersectAttrs super {
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
 
-  # Doesn't declare boost dependency
-  nix-serve-ng = (overrideSrc {
-    version = "1.0.0-unstable-2023-12-18";
+  nix-serve-ng = (overrideCabal (old: {
     src = pkgs.fetchFromGitHub {
       repo = "nix-serve-ng";
       owner = "aristanetworks";
-      rev = "21e65cb4c62b5c9e3acc11c3c5e8197248fa46a4";
-      hash = "sha256-qseX+/8drgwxOb1I3LKqBYMkmyeI5d5gmHqbZccR660=";
+      rev = "578ad85b3096d99b25cae0a73c03df4e82f587c7";
+      hash = "sha256-2LPx4iRJonX4gtd3r73DBM/ZhN/hKu1lb/MHOav8c5s=";
     };
-  } (addPkgconfigDepend pkgs.boost.dev super.nix-serve-ng)).override {
-      nix = pkgs.nixVersions.nix_2_18;
+    version = "1.0.0-unstable-2024-10-01";
+    #editedCabalFile = null;
+    # Doesn't declare boost dependency
+    pkg-configDepends = (old.pkg-configDepends or []) ++ [ pkgs.boost.dev ];
+    patches = (old.patches or []) ++ [
+      # Part of https://github.com/aristanetworks/nix-serve-ng/pull/40
+      ./patches/nix-serve-ng-nix.2.24.patch
+    ];
+  }) super.nix-serve-ng).override {
+    nix = pkgs.nixVersions.nix_2_24;
   };
 
   # These packages try to access the network.

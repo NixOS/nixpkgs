@@ -2299,14 +2299,13 @@
       hassil
       home-assistant-intents
       ifaddr
-      lmcloud
       mutagen
       pymicro-vad
       pyserial
       pyspeex-noise
       pyudev
       zeroconf
-    ];
+    ]; # missing inputs: lmcloud
     "lametric" = ps: with ps; [
       demetriek
     ];
@@ -5458,7 +5457,6 @@
     "kostal_plenticore"
     "kraken"
     "kulersky"
-    "lamarzocco"
     "lametric"
     "landisgyr_heat_meter"
     "lastfm"

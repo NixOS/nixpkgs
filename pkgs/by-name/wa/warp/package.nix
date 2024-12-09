@@ -71,7 +71,11 @@ stdenv.mkDerivation rec {
     description = "Fast and secure file transfer";
     homepage = "https://apps.gnome.org/Warp/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ dotlambda foo-dogsquared ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      foo-dogsquared
+      aleksana
+    ];
     platforms = lib.platforms.all;
     mainProgram = "warp";
     broken = stdenv.hostPlatform.isDarwin;

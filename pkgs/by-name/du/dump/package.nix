@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "https://dump.sourceforge.io/";
     description = "Linux Ext2 filesystem dump/restore utilities";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ falsifian ];
+    maintainers = with maintainers; [ ];
   };
 }

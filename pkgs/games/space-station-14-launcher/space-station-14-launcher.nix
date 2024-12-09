@@ -27,7 +27,7 @@ let
   pname = "space-station-14-launcher";
 in
 buildDotnetModule rec {
-  inherit pname;
+  inherit pname version;
 
   # Workaround to prevent buildDotnetModule from overriding assembly versions.
   name = "${pname}-${version}";

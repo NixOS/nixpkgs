@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, installShellFiles }:
+{ stdenv, lib, fetchFromGitHub, installShellFiles, testers, nix-update-script, nb }:
 
 stdenv.mkDerivation rec {
   pname = "nb";
-  version = "7.14.4";
+  version = "7.14.6";
 
   src = fetchFromGitHub {
     owner = "xwmx";
     repo = "nb";
     rev = version;
-    sha256 = "sha256-YqqZZnin+aybAZ2dqaxdOrVZ7dLWwnjh2iL77orqHtE=";
+    hash = "sha256-VcYE1luwNtdrOmjTDKkIAX9rmcbFyCBtnib+c9FyJuA=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -24,6 +24,15 @@ stdenv.mkDerivation rec {
   postInstall = ''
     installShellCompletion --cmd nb etc/nb-completion.{bash,zsh,fish}
   '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = nb;
+      # Setting EDITOR to avoid: "Command line text editor not found"
+      command = "EDITOR=nano nb --version";
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Command line note-taking, bookmarking, archiving, and knowledge base application";

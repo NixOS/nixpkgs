@@ -25,6 +25,7 @@
 , pcre2
 , pcre
 , pkg-config
+, installShellFiles
 , readline
 , tzdata
 , which
@@ -166,7 +167,7 @@ let
 
 
       strictDeps = true;
-      nativeBuildInputs = [ binary makeWrapper which pkg-config llvmPackages.llvm ];
+      nativeBuildInputs = [ binary makeWrapper which pkg-config llvmPackages.llvm installShellFiles ];
       buildInputs = [
         boehmgc
         (if lib.versionAtLeast version "1.8" then pcre2 else pcre)
@@ -218,15 +219,18 @@ let
         cp -r docs/* $out/share/doc/crystal/api/
         cp -r samples $out/share/doc/crystal/
 
-        install -Dm644 etc/completion.bash $out/share/bash-completion/completions/crystal
-        install -Dm644 etc/completion.zsh $out/share/zsh/site-functions/_crystal
+        installShellCompletion --cmd ${finalAttrs.meta.mainProgram} etc/completion.*
 
-        install -Dm644 man/crystal.1 $out/share/man/man1/crystal.1
+        installManPage man/crystal.1
 
         install -Dm644 -t $out/share/licenses/crystal LICENSE README.md
 
         mkdir -p $out
         ln -s $bin/bin $out/bin
+        ln -s $bin/share/bash-completion $out/share/bash-completion
+        ln -s $bin/share/zsh $out/share/zsh
+        # fish completion was introduced in 1.6.0
+        test -f etc/completion.fish && ln -s $bin/share/fish $out/share/fish
         ln -s $lib $out/lib
 
         runHook postInstall

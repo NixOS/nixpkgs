@@ -1,13 +1,10 @@
 { lib, ... }:
-
-with lib;
-
 {
 
   options = {
 
-    assertions = mkOption {
-      type = types.listOf types.unspecified;
+    assertions = lib.mkOption {
+      type = lib.types.listOf lib.types.unspecified;
       internal = true;
       default = [];
       example = [ { assertion = false; message = "you can't enable this for that reason"; } ];
@@ -18,10 +15,10 @@ with lib;
       '';
     };
 
-    warnings = mkOption {
+    warnings = lib.mkOption {
       internal = true;
       default = [];
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       example = [ "The `foo' service is deprecated and will go away soon!" ];
       description = ''
         This option allows modules to show warnings to users during

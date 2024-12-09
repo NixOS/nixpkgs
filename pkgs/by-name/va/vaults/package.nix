@@ -77,7 +77,10 @@ stdenv.mkDerivation rec {
     homepage = "https://mpobaschnig.github.io/vaults/";
     changelog = "https://github.com/mpobaschnig/vaults/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ benneti ];
+    maintainers = with lib.maintainers; [
+      benneti
+      aleksana
+    ];
     mainProgram = "vaults";
     platforms = lib.platforms.linux;
   };

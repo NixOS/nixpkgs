@@ -4,6 +4,7 @@
   appdirs,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   lxml,
   packaging,
   py,
@@ -29,6 +30,14 @@ buildPythonPackage rec {
 
   # `stripLen` does not seem to work here
   patchFlags = [ "-p2" ];
+
+  patches = [
+    # fixes capture test
+    (fetchpatch {
+      url = "https://github.com/KimiNewt/pyshark/commit/7142c5bf88abcd4c65c81052a00226d6155dda42.patch";
+      hash = "sha256-Ti7cwRyYSbF4a4pEEV9FntNevkV/JVXNqACQWzoma7g=";
+    })
+  ];
 
   sourceRoot = "${src.name}/src";
 

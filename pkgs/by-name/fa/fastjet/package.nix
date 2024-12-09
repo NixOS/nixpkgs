@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fastjet";
-  version = "3.4.2";
+  version = "3.4.3";
 
   src = fetchurl {
     url = "http://fastjet.fr/repo/fastjet-${version}.tar.gz";
-    hash = "sha256-s9MxVbVc5D9CDNbZm1Jaz3vcJZOnu36omKnds9jKOOM=";
+    hash = "sha256-zBdUcb+rhla4xhg6jl6a0F1fdQbkbzISqagjCQW49qM=";
   };
 
   buildInputs = lib.optional withPython python;

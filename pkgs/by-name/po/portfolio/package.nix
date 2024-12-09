@@ -7,7 +7,7 @@
   lib,
   libsecret,
   makeDesktopItem,
-  openjdk17,
+  openjdk21,
   stdenvNoCC,
   webkitgtk_4_0,
   wrapGAppsHook3,
@@ -33,11 +33,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "PortfolioPerformance";
-  version = "0.71.2";
+  version = "0.72.2";
 
   src = fetchurl {
     url = "https://github.com/buchen/portfolio/releases/download/${finalAttrs.version}/PortfolioPerformance-${finalAttrs.version}-linux.gtk.x86_64.tar.gz";
-    hash = "sha256-TVrxYz6hFWn2C0CrBnNCPxkfQkTjCXkNSeQp6eC/fjc=";
+    hash = "sha256-IYidpwN82j/XKUV+Z3V2pNkxTh9BTTCYD+322ILxZgU=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     makeWrapper $out/portfolio/PortfolioPerformance $out/bin/portfolio \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --prefix PATH : ${openjdk17}/bin
+      --prefix PATH : ${openjdk21}/bin
 
     # Create desktop item
     mkdir -p $out/share/applications

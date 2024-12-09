@@ -1,4 +1,4 @@
-{ lib, buildPackages, callPackage, callPackages, cargo-auditable, stdenv, runCommand }@prev:
+{ lib, buildPackages, callPackage, callPackages, cargo-auditable, config, stdenv, runCommand }@prev:
 
 { rustc
 , cargo
@@ -8,11 +8,6 @@
 }:
 
 rec {
-  rust = {
-    rustc = lib.warn "rustPlatform.rust.rustc is deprecated. Use rustc instead." rustc;
-    cargo = lib.warn "rustPlatform.rust.cargo is deprecated. Use cargo instead." cargo;
-  };
-
   fetchCargoTarball = buildPackages.callPackage ../../../build-support/rust/fetch-cargo-tarball {
     git = buildPackages.gitMinimal;
     inherit cargo;
@@ -39,4 +34,9 @@ rec {
   inherit (callPackages ../../../build-support/rust/hooks {
     inherit stdenv cargo rustc;
   }) cargoBuildHook cargoCheckHook cargoInstallHook cargoNextestHook cargoSetupHook maturinBuildHook bindgenHook;
+} // lib.optionalAttrs config.allowAliases {
+  rust = {
+    rustc = lib.warn "rustPlatform.rust.rustc is deprecated. Use rustc instead." rustc;
+    cargo = lib.warn "rustPlatform.rust.cargo is deprecated. Use cargo instead." cargo;
+  };
 }

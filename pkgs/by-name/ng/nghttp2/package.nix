@@ -18,7 +18,7 @@
 
 # downstream dependencies, for testing
 , curl
-, libsoup
+, libsoup_3
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus cannot use fetchpatch!
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit curl libsoup;
+    inherit curl libsoup_3;
   };
 
   meta = with lib; {

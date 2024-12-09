@@ -3,17 +3,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "butt";
-  version = "1.42.0";
+  version = "1.44.0";
 
   src = fetchurl {
     url = "https://danielnoethen.de/butt/release/${finalAttrs.version}/butt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-/Y96Pq/3D37n/2JZdvcEQ1BBEtHlJ030QLesfNyBg2g=";
+    hash = "sha256-2RC0ChDbyhzjd+4jnBRuR0botIVQugpA1rUZm1yH4Kc=";
   };
 
   postPatch = ''
     # remove advertising
     substituteInPlace src/FLTK/flgui.cpp \
-      --replace 'idata_radio_co_badge, 124, 61, 4,' 'nullptr, 0, 0, 0,'
+      --replace-fail 'idata_radio_co_badge, 124, 61, 4,' 'nullptr, 0, 0, 0,'
+    substituteInPlace src/FLTK/fl_timer_funcs.cpp \
+      --replace-fail 'radio_co_logo, 124, 61, 4,' 'nullptr, 0, 0, 0,' \
+      --replace-fail 'live365_logo, 124, 61, 4,' 'nullptr, 0, 0, 0,'
   '';
 
   nativeBuildInputs = [ pkg-config ];

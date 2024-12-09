@@ -2,34 +2,31 @@
   lib,
   python3,
   fetchFromGitHub,
+  fetchPypi,
   git,
 }:
 
 let
-  changeVersion =
-    overrideFunc: version: hash:
-    overrideFunc (oldAttrs: rec {
-      inherit version;
-      src = oldAttrs.src.override {
-        inherit version hash;
-      };
-    });
-
-  localPython = python3.override {
-    self = localPython;
+  python = python3.override {
     packageOverrides = self: super: {
-      cement =
-        changeVersion super.cement.overridePythonAttrs "2.10.14"
-          "sha256-NC4n21SmYW3RiS7QuzWXoifO4z3C2FVgQm3xf8qQcFg=";
+      cement = super.cement.overridePythonAttrs (old: rec {
+        pname = "cement";
+        version = "2.10.14";
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-NC4n21SmYW3RiS7QuzWXoifO4z3C2FVgQm3xf8qQcFg=";
+        };
+        build-system = old.build-system or [ ] ++ (with python.pkgs; [ setuptools ]);
+        doCheck = false;
+      });
     };
   };
-
 in
 
-localPython.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   pname = "awsebcli";
   version = "3.21";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
@@ -38,12 +35,23 @@ localPython.pkgs.buildPythonApplication rec {
     hash = "sha256-VU8bXvS4m4eIamjlgGmHE2qwDXWAXvWTa0QHomXR5ZE=";
   };
 
+  pythonRelaxDeps = [
+    "botocore"
+    "colorama"
+    "pathspec"
+    "PyYAML"
+    "six"
+    "termcolor"
+    "urllib3"
+  ];
+
   postPatch = ''
     # https://github.com/aws/aws-elastic-beanstalk-cli/pull/469
-    substituteInPlace setup.py --replace-fail "scripts=['bin/eb']," ""
+    substituteInPlace setup.py \
+      --replace-fail "scripts=['bin/eb']," ""
   '';
 
-  propagatedBuildInputs = with localPython.pkgs; [
+  dependencies = with python.pkgs; [
     blessed
     botocore
     cement
@@ -59,20 +67,11 @@ localPython.pkgs.buildPythonApplication rec {
     websocket-client
   ];
 
-  pythonRelaxDeps = [
-    "botocore"
-    "colorama"
-    "pathspec"
-    "PyYAML"
-    "six"
-    "termcolor"
-  ];
-
-  nativeCheckInputs = with localPython.pkgs; [
-    pytestCheckHook
-    pytest-socket
-    mock
+  nativeCheckInputs = with python.pkgs; [
     git
+    mock
+    pytest-socket
+    pytestCheckHook
   ];
 
   pytestFlagsArray = [
@@ -92,11 +91,11 @@ localPython.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    homepage = "https://aws.amazon.com/elasticbeanstalk/";
     description = "Command line interface for Elastic Beanstalk";
+    homepage = "https://aws.amazon.com/elasticbeanstalk/";
     changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
-    maintainers = with maintainers; [ kirillrdy ];
     license = licenses.asl20;
+    maintainers = with maintainers; [ kirillrdy ];
     mainProgram = "eb";
   };
 }

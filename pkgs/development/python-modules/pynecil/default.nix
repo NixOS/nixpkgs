@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pynecil";
-  version = "0.2.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tr4nt0r";
     repo = "pynecil";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZltGA3O6DDOiOddKHMalqmOYrp3IbhAGN7wGfPBP2aA=";
+    hash = "sha256-JvLHzWFhvttix1BzFM6enrboGLQhgXK82ld55I/iA/s=";
   };
 
   build-system = [

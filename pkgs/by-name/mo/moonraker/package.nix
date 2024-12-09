@@ -20,17 +20,18 @@ let
       apprise
       python-periphery
       ldap3
+      importlib-metadata
     ]
   );
 in stdenvNoCC.mkDerivation rec {
   pname = "moonraker";
-  version = "0.8.0-unstable-2023-12-27";
+  version = "0.9.3-unstable-2024-11-17";
 
   src = fetchFromGitHub {
     owner = "Arksine";
     repo = "moonraker";
-    rev = "c226e9c1e44d65ff6ea400b81e3cedba7f637976";
-    sha256 = "sha256-wdf4uab8pJEWaX6PFN9Y9pykmylmxJ4Oo5pwSQcyjCc=";
+    rev = "ccfe32f2368a5ff6c2497478319909daeeeb8edf";
+    sha256 = "sha256-aCYE3EmflMRIHnGnkZ/0+zScVA5liHSbavScQ7XRf/4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

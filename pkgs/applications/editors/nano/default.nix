@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.nano-editor.org/";
     description = "Small, user-friendly console text editor";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ joachifm nequissimus ];
+    maintainers = with maintainers; [ joachifm nequissimus sigmasquadron ];
     platforms = platforms.all;
     mainProgram = "nano";
   };

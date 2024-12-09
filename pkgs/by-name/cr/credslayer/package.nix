@@ -55,5 +55,8 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/ShellCode33/CredSLayer";
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ fab ];
+    # broken due to wireshark 4.4 bump
+    # see: https://github.com/NixOS/nixpkgs/pull/344914
+    broken = true;
   };
 }

@@ -2,15 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svgbob";
-  version = "0.7.2";
+  version = "0.7.4";
 
   src = fetchCrate {
     inherit version;
     crateName = "svgbob_cli";
-    hash = "sha256-QWDi6cpADm5zOzz8hXuqOBtVrqb0DteWmiDXC6PsLS4=";
+    hash = "sha256-qSY12WjSPMoWqJHkYnPvhCtZAuI3eq+sA+/Yr9Yssp8=";
   };
 
-  cargoHash = "sha256-Fj1qjG4SKlchUWW4q0tBC+9fHFFuY6MHngJCFz6J5JY=";
+  cargoHash = "sha256-dgOEztAlX823M+bc+vnrOvmeWtxxCsCR6+k1Yho82EM=";
 
   postInstall = ''
     mv $out/bin/svgbob_cli $out/bin/svgbob

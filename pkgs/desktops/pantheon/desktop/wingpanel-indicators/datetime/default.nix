@@ -15,7 +15,7 @@
 , libgee
 , libhandy
 , libxml2
-, libsoup
+, libsoup_2_4
 , elementary-calendar
 }:
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     libgee
     libhandy
     libical
-    libsoup
+    libsoup_2_4
     wingpanel
   ];
 

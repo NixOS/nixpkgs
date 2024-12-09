@@ -1,58 +1,55 @@
 { pkgs, lib, config, utils, ... }:
-
-with lib;
-
 let
   cfg = config.services.gmediarender;
 in
 {
   options.services.gmediarender = {
-    enable = mkEnableOption "the gmediarender DLNA renderer";
+    enable = lib.mkEnableOption "the gmediarender DLNA renderer";
 
-    audioDevice = mkOption {
-      type = types.nullOr types.str;
+    audioDevice = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         The audio device to use.
       '';
     };
 
-    audioSink = mkOption {
-      type = types.nullOr types.str;
+    audioSink = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         The audio sink to use.
       '';
     };
 
-    friendlyName = mkOption {
-      type = types.nullOr types.str;
+    friendlyName = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         A "friendly name" for identifying the endpoint.
       '';
     };
 
-    initialVolume = mkOption {
-      type = types.nullOr types.int;
+    initialVolume = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
       default = 0;
       description = ''
         A default volume attenuation (in dB) for the endpoint.
       '';
     };
 
-    package = mkPackageOption pkgs "gmediarender" {
+    package = lib.mkPackageOption pkgs "gmediarender" {
       default = "gmrender-resurrect";
     };
 
-    port = mkOption {
-      type = types.nullOr types.port;
+    port = lib.mkOption {
+      type = lib.types.nullOr lib.types.port;
       default = null;
       description = "Port that will be used to accept client connections.";
     };
 
-    uuid = mkOption {
-      type = types.nullOr types.str;
+    uuid = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         A UUID for uniquely identifying the endpoint.  If you have
@@ -61,7 +58,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd = {
       services.gmediarender = {
         wants = [ "network-online.target" ];
@@ -78,12 +75,12 @@ in
           SupplementaryGroups = [ "audio" ];
           ExecStart =
             "${cfg.package}/bin/gmediarender " +
-            optionalString (cfg.audioDevice != null) ("--gstout-audiodevice=${utils.escapeSystemdExecArg cfg.audioDevice} ") +
-            optionalString (cfg.audioSink != null) ("--gstout-audiosink=${utils.escapeSystemdExecArg cfg.audioSink} ") +
-            optionalString (cfg.friendlyName != null) ("--friendly-name=${utils.escapeSystemdExecArg cfg.friendlyName} ") +
-            optionalString (cfg.initialVolume != 0) ("--initial-volume=${toString cfg.initialVolume} ") +
-            optionalString (cfg.port != null) ("--port=${toString cfg.port} ") +
-            optionalString (cfg.uuid != null) ("--uuid=${utils.escapeSystemdExecArg cfg.uuid} ");
+            lib.optionalString (cfg.audioDevice != null) ("--gstout-audiodevice=${utils.escapeSystemdExecArg cfg.audioDevice} ") +
+            lib.optionalString (cfg.audioSink != null) ("--gstout-audiosink=${utils.escapeSystemdExecArg cfg.audioSink} ") +
+            lib.optionalString (cfg.friendlyName != null) ("--friendly-name=${utils.escapeSystemdExecArg cfg.friendlyName} ") +
+            lib.optionalString (cfg.initialVolume != 0) ("--initial-volume=${toString cfg.initialVolume} ") +
+            lib.optionalString (cfg.port != null) ("--port=${toString cfg.port} ") +
+            lib.optionalString (cfg.uuid != null) ("--uuid=${utils.escapeSystemdExecArg cfg.uuid} ");
           Restart = "always";
           RuntimeDirectory = "gmediarender";
 

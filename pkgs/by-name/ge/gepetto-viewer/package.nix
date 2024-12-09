@@ -93,6 +93,8 @@ let
       plugins:
       runCommand "gepetto-gui"
         {
+          inherit (finalAttrs) version;
+          pname = "gepetto-gui";
           meta = {
             # can't just "inherit (gepetto-viewer) meta;" because:
             # error: derivation '/nix/store/…-gepetto-gui.drv' does not have wanted outputs 'bin'

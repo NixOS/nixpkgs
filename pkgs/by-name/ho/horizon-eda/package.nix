@@ -1,17 +1,25 @@
-{ stdenv
-, boost
-, callPackage
-, coreutils
-, libspnav
-, python3
-, wrapGAppsHook3
+{
+  stdenv,
+  boost,
+  callPackage,
+  coreutils,
+  libspnav,
+  python3,
+  wrapGAppsHook3,
 }:
 
 let
   base = callPackage ./base.nix { };
 in
 stdenv.mkDerivation rec {
-  inherit (base) pname version src meta CASROOT;
+  inherit (base)
+    pname
+    version
+    src
+    meta
+    CASROOT
+    env
+    ;
 
   # provide base for python module
   passthru = {

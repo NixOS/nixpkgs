@@ -360,6 +360,8 @@ let
           rev = "refs/tags/v${version}";
           hash = "sha256-PG4L6KphH9JIZO76cCN8eClFE2CneEIExlXS+x79k3U=";
         };
+        # tests were not implemented until version 0.2.0
+        doCheck = false;
       });
 
       vulcan-api = super.vulcan-api.overridePythonAttrs (oldAttrs: rec {

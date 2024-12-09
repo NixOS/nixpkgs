@@ -15,8 +15,6 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  unpackCmd = "dpkg-deb -x $src debcontents";
-
   installPhase = ''
     runHook preInstall
     substituteInPlace usr/share/${pname}/${pname}.sh \

@@ -1,8 +1,8 @@
-from nixos_rebuild import utils as u
+import nixos_rebuild.utils as u
 
 
 def test_dict_to_flags() -> None:
-    r = u.dict_to_flags(
+    r1 = u.dict_to_flags(
         {
             "test_flag_1": True,
             "test_flag_2": False,
@@ -12,7 +12,7 @@ def test_dict_to_flags() -> None:
             "verbose": 5,
         }
     )
-    assert r == [
+    assert r1 == [
         "--test-flag-1",
         "--test-flag-3",
         "value",
@@ -21,3 +21,5 @@ def test_dict_to_flags() -> None:
         "v2",
         "-vvvvv",
     ]
+    r2 = u.dict_to_flags({"verbose": 0, "empty_list": []})
+    assert r2 == []

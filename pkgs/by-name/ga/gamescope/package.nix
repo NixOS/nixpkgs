@@ -33,7 +33,6 @@
 , lib
 , makeBinaryWrapper
 , nix-update-script
-, writeShellScriptBin
 , enableExecutable ? true
 , enableWsi ? true
 }:
@@ -101,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
 
     # calls git describe to encode its own version into the build
-    (writeShellScriptBin "git" "echo ${finalAttrs.version}")
+    (buildPackages.writeShellScriptBin "git" "echo ${finalAttrs.version}")
   ] ++ lib.optionals enableExecutable [
     makeBinaryWrapper
     glslang

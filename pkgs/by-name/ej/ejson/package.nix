@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "ejson";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "ejson";
     rev = "v${version}";
-    sha256 = "sha256-Pv0eoFf/E+PE/C+0wsSQxhVTlymOMAYk5UVQP2udpnA=";
+    sha256 = "sha256-WazcVmZq9uQPXbslWFW0r0SFF4xNKECgxcBoD+RS17k=";
   };
 
   vendorHash = "sha256-N2vcj3STkaZO2eRr8VztZTWOBUTI+wOri0HYDJ1KiN8=";

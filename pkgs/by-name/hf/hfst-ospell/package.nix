@@ -2,7 +2,6 @@
 , stdenv
 , autoreconfHook
 , fetchFromGitHub
-, fetchpatch
 , icu
 , libarchive
 , pkg-config
@@ -10,23 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hfst-ospell";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "hfst";
     repo = "hfst-ospell";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-16H1nbAIe+G71+TnlLG0WnH9LktZwmc0d0O+oYduH1k=";
+    hash = "sha256-BmM0acqPL8qPOJ0KEkcI264xj89v+VaItZ0yS8QLF3o=";
   };
-
-  patches = [
-    # Pull upstream fix for gcc-13
-    (fetchpatch {
-      name = "cstdint.patch";
-      url = "https://github.com/hfst/hfst-ospell/commit/7481bffbf622bc9aee3547183fbe8db9cf8b22ce.patch";
-      hash = "sha256-q/B5mLx8Oc0nIRe3n3gl0OTyjIaEMCBsPc1GvpE226c=";
-    })
-  ];
 
   buildInputs = [
     icu

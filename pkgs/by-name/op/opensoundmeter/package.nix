@@ -4,13 +4,13 @@ let
   inherit (qt5) qmake wrapQtAppsHook qtgraphicaleffects qtquickcontrols2;
 in stdenv.mkDerivation rec {
   pname = "opensoundmeter";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "psmokotnin";
     repo = "osm";
     rev = "v${version}";
-    hash = "sha256-nRibcEtG6UUTgn7PhSg4IyahMYi5aSPvaEOrAdx6u3o=";
+    hash = "sha256-yFA1bwCv6E7za54FQREuT3nMZhY0lmHSsDz4PIAjarg=";
   };
 
   patches = [ ./build.patch ];

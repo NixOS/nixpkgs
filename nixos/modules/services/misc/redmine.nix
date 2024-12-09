@@ -442,6 +442,7 @@ in
         MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
+        PrivateMounts = true;
         PrivateTmp = true;
         ProcSubset = "pid";
         ProtectClock = true;

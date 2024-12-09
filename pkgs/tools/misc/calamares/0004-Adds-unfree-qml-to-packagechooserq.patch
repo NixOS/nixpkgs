@@ -69,16 +69,16 @@ index 000000000..5e36d77d9
 +
 +            Rectangle {
 +                width: 700
-+                height: 200
++                height: 250
 +                color: palette.base
 +                radius: 10
 +                border.width: 0
 +                Text {
 +                    color: palette.text
 +                    width: 600
-+                    height: 150
++                    height: 200
 +                    anchors.centerIn: parent
-+                    text: qsTr("NixOS is fully open source, but it also provides optional software packages that do not respect users' freedom to run, copy, distribute, study, change and improve the software, and are commonly not open source. By default such "unfree" packages are not allowed, but you can enable it here. If you check this box, you agree that unfree software may be installed which might have additional End User License Agreements (EULAs) that you need to agree to. If not enabled, some hardware (notably Nvidia GPUs and some WiFi chips) might not work or not work optimally.<br/>")
++                    text: qsTr("NixOS is fully open source, but it also provides optional software packages that do not respect users' freedom to run, copy, distribute, study, change and improve the software, and are commonly not open source. By default such \"unfree\" packages are not allowed, but you can enable it here. If you check this box, you agree that unfree software may be installed which might have additional End User License Agreements (EULAs) that you need to agree to. If not enabled, some hardware (notably Nvidia GPUs and some WiFi chips) might not work or not work optimally.<br/>")
 +                    font.pointSize: 12
 +                    wrapMode: Text.WordWrap
 +                }
@@ -86,7 +86,7 @@ index 000000000..5e36d77d9
 +                CheckBox {
 +                    id: element2
 +                    anchors.horizontalCenter: parent.horizontalCenter
-+                    y: 145
++                    y: 190
 +                    text: qsTr("Allow unfree software")
 +                    checked: false
 +

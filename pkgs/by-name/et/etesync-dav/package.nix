@@ -3,7 +3,7 @@
 , nixosTests
 , python3
 , fetchFromGitHub
-, radicale3
+, radicale
 }:
 
 python3.pkgs.buildPythonApplication {
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication {
     flask-wtf
     msgpack
     setuptools
-    (python.pkgs.toPythonModule (radicale3.override { python3 = python; }))
+    (python.pkgs.toPythonModule (radicale.override { python3 = python; }))
     requests
     types-setuptools
   ] ++ requests.optional-dependencies.socks;

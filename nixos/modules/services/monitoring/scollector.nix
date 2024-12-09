@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.scollector;
 
@@ -32,34 +29,34 @@ in {
 
     services.scollector = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to run scollector.
         '';
       };
 
-      package = mkPackageOption pkgs "scollector" { };
+      package = lib.mkPackageOption pkgs "scollector" { };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "scollector";
         description = ''
           User account under which scollector runs.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "scollector";
         description = ''
           Group account under which scollector runs.
         '';
       };
 
-      bosunHost = mkOption {
-        type = types.str;
+      bosunHost = lib.mkOption {
+        type = lib.types.str;
         default = "localhost:8070";
         description = ''
           Host and port of the bosun server that will store the collected
@@ -67,10 +64,10 @@ in {
         '';
       };
 
-      collectors = mkOption {
-        type = with types; attrsOf (listOf path);
+      collectors = lib.mkOption {
+        type = with lib.types; attrsOf (listOf path);
         default = {};
-        example = literalExpression ''{ "0" = [ "''${postgresStats}/bin/collect-stats" ]; }'';
+        example = lib.literalExpression ''{ "0" = [ "''${postgresStats}/bin/collect-stats" ]; }'';
         description = ''
           An attribute set mapping the frequency of collection to a list of
           binaries that should be executed at that frequency. You can use "0"
@@ -78,8 +75,8 @@ in {
         '';
       };
 
-      extraOpts = mkOption {
-        type = with types; listOf str;
+      extraOpts = lib.mkOption {
+        type = with lib.types; listOf str;
         default = [];
         example = [ "-d" ];
         description = ''
@@ -87,8 +84,8 @@ in {
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Extra scollector configuration added to the end of scollector.toml
@@ -99,7 +96,7 @@ in {
 
   };
 
-  config = mkIf config.services.scollector.enable {
+  config = lib.mkIf config.services.scollector.enable {
 
     systemd.services.scollector = {
       description = "scollector metrics collector (part of Bosun)";

@@ -111,7 +111,7 @@ stdenv.mkDerivation (args // {
     else ["nixpkgs_world"];
   buildInputs = optional (lib.versionOlder version "4.07") ncurses
     ++ optionals useX11 [ libX11 xorgproto ];
-  depsBuildBuild = [ binutils ];
+  depsBuildBuild = lib.optionals (!stdenv.hostPlatform.isDarwin) [ binutils ];
   propagatedBuildInputs = optional spaceTimeSupport libunwind;
   installTargets = [ "install" ] ++ optional useNativeCompilers "installopt";
   preConfigure = optionalString (lib.versionOlder version "4.04") ''

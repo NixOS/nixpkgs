@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy-rs";
-  version = "0.9.2";
+  version = "0.10.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy_rs";
     rev = "v${version}";
-    hash = "sha256-Cp0AbwRNLuLzmF4EAK/2Fzq5I9Iq7gqg6OLbK1B8fGY=";
+    hash = "sha256-YRiaslXdpRGJfuZAHQ4zX+6DgH+IPkeyD8RA7TYgmBY=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

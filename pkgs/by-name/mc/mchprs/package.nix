@@ -7,7 +7,6 @@
   sqlite,
   zlib,
   stdenv,
-  clang,
   darwin,
 }:
 
@@ -31,7 +30,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    clang
     rustPlatform.bindgenHook
   ];
 

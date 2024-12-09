@@ -73,7 +73,7 @@ def process_repo(path: str, official: bool):
         'description': desc,
         'homepage': origurl,
     }
-    if domain.endswith('github.com'):
+    if domain == 'github.com':
         owner, repo = query.split('/')
         ret['github'] = {
             'owner': owner,

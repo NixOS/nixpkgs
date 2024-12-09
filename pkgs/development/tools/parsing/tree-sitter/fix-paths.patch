@@ -1,11 +1,11 @@
 diff --git a/cli/loader/src/lib.rs b/cli/loader/src/lib.rs
-index 9c1d8dfc..a5cfc74c 100644
+index 4e3effed..74b4d3e3 100644
 --- a/cli/loader/src/lib.rs
 +++ b/cli/loader/src/lib.rs
-@@ -747,7 +747,7 @@ impl Loader {
-             Podman,
+@@ -969,7 +969,7 @@ impl Loader {
          }
  
+         let root_path = root_path.unwrap_or(src_path);
 -        let emcc_name = if cfg!(windows) { "emcc.bat" } else { "emcc" };
 +        let emcc_name = if cfg!(windows) { "emcc.bat" } else { "@emcc@" };
  

@@ -9,17 +9,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "kclvm_cli";
-  version = "0.10.3";
+  version = "0.10.8";
 
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "kcl";
     rev = "v${version}";
-    hash = "sha256-qIaDc10NxQKBH7WRzzkQ6bQfkSqsDrFxSwSX+Hf7qS8=";
+    hash = "sha256-ls/Qe/nw3UIfZTjt7r7tzUwxlb5y4jBK2FQlOsMCttM=";
   };
 
   sourceRoot = "${src.name}/cli";
-  cargoHash = "sha256-mB4qOUj9qZmbstvBIyaWHEzX3DQ7tLhQKDEvea4Bnyk=";
+  cargoHash = "sha256-elIo986ag7x+q17HwkcoqFnD9+1+Jq66XIHYZNaBB/w=";
   cargoPatches = [ ./cargo_lock.patch ];
 
   buildInputs = [ kclvm rustc ] ++ (

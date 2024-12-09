@@ -13,18 +13,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unison-code-manager";
-  version = "0.5.27";
+  version = "0.5.29";
 
-  src = if stdenv.hostPlatform.isDarwin then
-    fetchurl {
-      url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos.tar.gz";
-      hash = "sha256-bmEmox+CfkGZP9GCfwDyspTult0WV+6jfQzehT33p8U=";
-    }
-  else
-    fetchurl {
-      url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux.tar.gz";
-      hash = "sha256-js7MgzJQShy6z1QNsIRwjtZfrNOGwUA001SWlKWgMoA=";
+  src = {
+    aarch64-darwin = fetchurl {
+      url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos-arm64.tar.gz";
+      hash = "sha256-iSyhPCn8+u/kKW1NVorUaRXaP0Q771m6G1ICsHp1/Rs=";
     };
+    x86_64-darwin = fetchurl {
+      url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos-x64.tar.gz";
+      hash = "sha256-Rukx1I67jq78xvDB7eYP6TvZZBZtWisOv2WZe6/KlHE=";
+    };
+    x86_64-linux = fetchurl {
+      url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux-x64.tar.gz";
+      hash = "sha256-fVsKPTi9j+LVWDPhuHYb7NKD2JXJz7nRE6yuE7rQ3e0=";
+    };
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
 
   # The tarball is just the prebuilt binary, in the archive root.
   sourceRoot = ".";

@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "sigstore-python";
-  version = "3.5.1";
+  version = "3.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,8 +36,10 @@ buildPythonPackage rec {
     owner = "sigstore";
     repo = "sigstore-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AMKe+R1sTXdxFAelJmRiEyDNe+T55KaGK3HUARqz3Tw=";
+    hash = "sha256-pAzS/LU5me3qoJo6EmuSFPDO/lqRDKIl5hjFiysWTdM=";
   };
+
+  pythonRelaxDeps = [ "sigstore-rekor-types" ];
 
   build-system = [ flit-core ];
 

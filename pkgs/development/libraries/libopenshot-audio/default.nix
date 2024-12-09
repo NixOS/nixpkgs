@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       JUCE library.
     '';
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
   };
 })

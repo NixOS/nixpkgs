@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "0.21.2";
 
   src = fetchFromGitHub {
-    owner = "iovisor";
+    owner = "bpftrace";
     repo  = "bpftrace";
     rev   = "v${version}";
     hash  = "sha256-/2m+5iFE7R+ZEc/VcgWAhkLD/jEK88roUUOUyYODi0U=";
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
 
   # tests aren't built, due to gtest shenanigans. see:
   #
-  #     https://github.com/iovisor/bpftrace/issues/161#issuecomment-453606728
-  #     https://github.com/iovisor/bpftrace/pull/363
+  #     https://github.com/bpftrace/bpftrace/issues/161#issuecomment-453606728
+  #     https://github.com/bpftrace/bpftrace/pull/363
   #
   cmakeFlags = [
     "-DBUILD_TESTING=FALSE"
@@ -76,8 +76,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "High-level tracing language for Linux eBPF";
-    homepage    = "https://github.com/iovisor/bpftrace";
-    changelog   = "https://github.com/iovisor/bpftrace/releases/tag/v${version}";
+    homepage    = "https://github.com/bpftrace/bpftrace";
+    changelog   = "https://github.com/bpftrace/bpftrace/releases/tag/v${version}";
     mainProgram = "bpftrace";
     license     = licenses.asl20;
     maintainers = with maintainers; [ rvl thoughtpolice martinetd mfrw ];

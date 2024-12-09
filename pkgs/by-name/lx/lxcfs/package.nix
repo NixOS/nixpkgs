@@ -53,7 +53,12 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # `mount` hook requires access to the `mount` command from `util-linux` and `readlink` from `coreutils`:
-    wrapProgram "$out/share/lxcfs/lxc.mount.hook" --prefix PATH : ${lib.makeBinPath [ coreutils util-linux ]}
+    wrapProgram "$out/share/lxcfs/lxc.mount.hook" --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        util-linux
+      ]
+    }
   '';
 
   postFixup = ''

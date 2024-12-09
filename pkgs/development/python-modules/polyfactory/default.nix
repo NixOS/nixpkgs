@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "polyfactory";
-  version = "2.18.0";
+  version = "2.18.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-BNi01JhuQGzUwWzAHou3Rwg4QtV6XA26Y6Ie5e91umY=";
+    hash = "sha256-F8nbGK/k+4192OW6KW5p2g/PfQ87Y9GEDrENE1rtWq0=";
   };
 
   build-system = [ hatchling ];

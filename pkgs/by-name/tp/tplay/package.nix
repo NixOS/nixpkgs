@@ -7,7 +7,6 @@
   ffmpeg,
   openssl,
   alsa-lib,
-  libclang,
   opencv,
   makeWrapper,
 }:
@@ -42,7 +41,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl.dev
     alsa-lib.dev
-    (lib.getLib libclang)
     ffmpeg.dev
     opencv
   ];

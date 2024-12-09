@@ -65,10 +65,10 @@ let
       else
         throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
 
-    nativeBuildInputs = [ makeWrapper ];
-    buildInputs = [ dpkg ];
-
-    unpackPhase = "dpkg-deb -x ${src} ./";
+    nativeBuildInputs = [
+      dpkg
+      makeWrapper
+    ];
 
     installPhase = ''
       mkdir -p $out/bin

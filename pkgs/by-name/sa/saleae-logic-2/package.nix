@@ -1,14 +1,14 @@
 { lib, fetchurl, makeDesktopItem, appimageTools }:
 let
-  name = "saleae-logic-2";
+  pname = "saleae-logic-2";
   version = "2.4.13";
   src = fetchurl {
     url = "https://downloads.saleae.com/logic2/Logic-${version}-linux-x64.AppImage";
     hash = "sha256-0GIZQKQDY3arDUlxjQKWOHDB3j76xVwkx5H+8q+d0Rc=";
   };
   desktopItem = makeDesktopItem {
-    inherit name;
-    exec = name;
+    name = "saleae-logic-2";
+    exec = "saleae-logic-2";
     icon = "Logic";
     comment = "Software for Saleae logic analyzers";
     desktopName = "Saleae Logic";
@@ -17,11 +17,11 @@ let
   };
 in
 appimageTools.wrapType2 {
-  inherit name src;
+  inherit pname version src;
 
   extraInstallCommands =
     let
-      appimageContents = appimageTools.extractType2 { inherit name src; };
+      appimageContents = appimageTools.extractType2 { inherit pname version src; };
     in
       ''
         mkdir -p $out/etc/udev/rules.d

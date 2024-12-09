@@ -1,9 +1,9 @@
-{ godot3-mono, nuget-to-nix }:
+{ godot3-mono, nuget-to-nix, nixfmt-rfc-style }:
 
 godot3-mono.overrideAttrs (self: base: {
   pname = "godot3-mono-make-deps";
 
-  nativeBuildInputs = base.nativeBuildInputs ++ [ nuget-to-nix ];
+  nativeBuildInputs = base.nativeBuildInputs ++ [ nuget-to-nix nixfmt-rfc-style ];
 
   nugetDeps = null;
   nugetSource = null;
@@ -50,6 +50,7 @@ godot3-mono.overrideAttrs (self: base: {
       nugetRestore modules/mono/editor/GodotTools/GodotTools.sln
 
       nuget-to-nix nugetPackages > "$outdir"/deps.nix
+      nixfmt "$outdir"/deps.nix
     popd > /dev/null
   '';
 

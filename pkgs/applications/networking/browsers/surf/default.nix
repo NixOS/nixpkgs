@@ -1,6 +1,6 @@
 { lib, stdenv, fetchgit
 , pkg-config, wrapGAppsHook3
-, glib, gcr, glib-networking, gsettings-desktop-schemas, gtk, libsoup, webkitgtk_4_0
+, glib, gcr, glib-networking, gsettings-desktop-schemas, gtk, libsoup_2_4, webkitgtk_4_0
 , xorg, dmenu, findutils, gnused, coreutils, gst_all_1
 , patches ? null
 }:
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     glib-networking
     gsettings-desktop-schemas
     gtk
-    libsoup
+    libsoup_2_4
     webkitgtk_4_0
   ] ++ (with gst_all_1; [
     # Audio & video support for webkitgtk WebView

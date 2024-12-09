@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "YannickJadoul";
     repo = "Parselmouth";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-/Hde/DpSbmHs8WF3PAk4esYuMgOX6SxMaYJrrHYr/ZU=";
   };
@@ -45,6 +45,11 @@ buildPythonPackage rec {
     future
     pytest-lazy-fixture
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--run-praat-tests"
+    "-v"
   ];
 
   pythonImportsCheck = [ "parselmouth" ];

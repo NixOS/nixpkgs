@@ -1,7 +1,6 @@
 { lib
 , flutter327
 , mpv-unwrapped
-, xdg-user-dirs
 , patchelf
 , fetchFromGitHub
 , copyDesktopItems
@@ -38,10 +37,6 @@ flutter327.buildFlutterApplication {
 
   postInstall = ''
     install -Dm644 $src/assets/icon/icon_foreground.svg $out/share/icons/hicolor/scalable/apps/finamp.svg
-  '';
-
-  extraWrapProgramArgs = ''
-    --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
   '';
 
   desktopItems = [(makeDesktopItem {

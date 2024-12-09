@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       Graphics (SVG) files with the wxWidgets toolkit.
     '';
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = [ ];
     inherit (wxGTK.meta) platforms;
   };
 }

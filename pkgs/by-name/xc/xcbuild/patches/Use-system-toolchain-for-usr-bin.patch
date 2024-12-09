@@ -1,8 +1,7 @@
-diff --git a/Libraries/xcsdk/Tools/xcrun.cpp b/Libraries/xcsdk/Tools/xcrun.cpp
-index 9d6d4576d7..73aabc3d42 100644
---- a/Libraries/xcsdk/Tools/xcrun.cpp
-+++ b/Libraries/xcsdk/Tools/xcrun.cpp
-@@ -23,10 +23,14 @@
+diff -Naur a/Libraries/xcsdk/Tools/xcrun.cpp b/Libraries/xcsdk/Tools/xcrun.cpp
+--- a/Libraries/xcsdk/Tools/xcrun.cpp	1970-01-01 09:00:01
++++ b/Libraries/xcsdk/Tools/xcrun.cpp	2024-11-19 01:44:38
+@@ -23,10 +23,19 @@
  #include <process/DefaultUser.h>
  #include <pbxsetting/Type.h>
  
@@ -12,12 +11,17 @@ index 9d6d4576d7..73aabc3d42 100644
  using libutil::Filesystem;
  using libutil::FSUtil;
  
-+#define SYSTEM_DEVELOPER_DIR "/private/var/select/developer_dir"
++namespace {
++  const std::vector<std::string> kSystemDeveloperDirs = {
++    "/private/var/select/developer_dir",
++    "/private/var/db/xcode_select_link"
++  };
++}
 +
  class Options {
  private:
      ext::optional<bool>        _help;
-@@ -398,6 +402,8 @@
+@@ -398,6 +407,8 @@
              fprintf(stderr, "\n");
          }
  
@@ -26,7 +30,7 @@ index 9d6d4576d7..73aabc3d42 100644
          /*
           * Collect search paths for the tool.
           * Can be in toolchains, target (if one is provided), developer root,
-@@ -408,10 +414,42 @@
+@@ -408,10 +419,46 @@
          executablePaths.insert(executablePaths.end(), defaultExecutablePaths.begin(), defaultExecutablePaths.end());
  
          /*
@@ -49,16 +53,20 @@ index 9d6d4576d7..73aabc3d42 100644
 +             * Fixes https://github.com/NixOS/nixpkgs/issues/353875.
 +             */
 +            std::vector<std::string> toolchainPaths = { };
-+            if (executablePaths.size() < originalSize && filesystem->exists(SYSTEM_DEVELOPER_DIR)) {
-+                auto linkTarget = filesystem->readSymbolicLinkCanonical(SYSTEM_DEVELOPER_DIR);
-+                if (linkTarget) {
-+                    auto usrBinPath = FSUtil::NormalizePath(*linkTarget + "/usr/bin");
-+                    if (filesystem->exists(usrBinPath)) {
-+                        toolchainPaths.push_back(usrBinPath);
-+                    }
-+                    auto toolchainUsrBinPath = FSUtil::NormalizePath(*linkTarget + "/Toolchains/XcodeDefault.xctoolchain/usr/bin");
-+                    if (filesystem->exists(toolchainUsrBinPath)) {
-+                        toolchainPaths.push_back(toolchainUsrBinPath);
++            if (executablePaths.size() < originalSize) {
++                for (const auto& dir : kSystemDeveloperDirs) {
++                    if (filesystem->exists(dir)) {
++                        auto linkTarget = filesystem->readSymbolicLinkCanonical(dir);
++                        if (linkTarget) {
++                            auto usrBinPath = FSUtil::NormalizePath(*linkTarget + "/usr/bin");
++                            if (filesystem->exists(usrBinPath)) {
++                                toolchainPaths.push_back(usrBinPath);
++                            }
++                            auto toolchainUsrBinPath = FSUtil::NormalizePath(*linkTarget + "/Toolchains/XcodeDefault.xctoolchain/usr/bin");
++                            if (filesystem->exists(toolchainUsrBinPath)) {
++                                toolchainPaths.push_back(toolchainUsrBinPath);
++                            }
++                        }
 +                    }
 +                }
 +            }
@@ -69,12 +77,12 @@ index 9d6d4576d7..73aabc3d42 100644
              fprintf(stderr, "error: tool '%s' not found\n", options.tool()->c_str());
              return 1;
          }
-@@ -428,8 +466,6 @@
+@@ -427,8 +474,6 @@
+             return 0;
          } else {
              /* Run is the default. */
- 
--            std::unordered_map<std::string, std::string> environment = processContext->environmentVariables();
 -
+-            std::unordered_map<std::string, std::string> environment = processContext->environmentVariables();
+ 
              if (target != nullptr) {
                  /*
-                  * Update effective environment to include the target path.

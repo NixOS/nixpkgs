@@ -24,36 +24,66 @@ let
 
   # For the application option to work with systemd PATH, we find the store binary path of
   # the package, concat all of the following strings, and then update the application attribute.
-  # Application can either be a package or a list that has a package as the first element.
-  applicationExists = builtins.hasAttr "application" cfg.config.json;
+
+  # Since the json config attribute type "configFormat.type" doesn't allow specifying types for
+  # individual attributes, we have to type check manually.
+
+  # The application option must be either a package or a list with package as the first element.
+
+  # Checking if an application is provided
+  applicationAttrExists = builtins.hasAttr "application" cfg.config.json;
   applicationListNotEmpty = (
     if builtins.isList cfg.config.json.application then
       (builtins.length cfg.config.json.application) != 0
     else
       true
   );
-  applicationCheck = applicationExists && applicationListNotEmpty;
+  applicationCheck = applicationAttrExists && applicationListNotEmpty;
 
-  applicationBinary = (
+  # Manage packages and their exe paths
+  applicationAttr = (
     if builtins.isList cfg.config.json.application then
       builtins.head cfg.config.json.application
     else
       cfg.config.json.application
   );
+  applicationPackage = mkIf applicationCheck applicationAttr;
+  applicationPackageExe = getExe applicationAttr;
+  serverPackageExe = getExe cfg.package;
+
+  # Managing strings
   applicationStrings = builtins.tail cfg.config.json.application;
-
-  applicationPath = mkIf applicationCheck applicationBinary;
-
   applicationConcat = (
     if builtins.isList cfg.config.json.application then
-      builtins.concatStringsSep " " ([ (getExe applicationBinary) ] ++ applicationStrings)
+      builtins.concatStringsSep " " ([ applicationPackageExe ] ++ applicationStrings)
     else
-      (getExe applicationBinary)
+      applicationPackageExe
   );
+
+  # Manage config file
   applicationUpdate = recursiveUpdate cfg.config.json (
     optionalAttrs applicationCheck { application = applicationConcat; }
   );
   configFile = configFormat.generate "config.json" applicationUpdate;
+  enabledConfig = optionalString cfg.config.enable "-f ${configFile}";
+
+  # Manage server executables and flags
+  serverExec = builtins.concatStringsSep " " (
+    [
+      serverPackageExe
+      "--systemd"
+      enabledConfig
+    ]
+    ++ cfg.extraServerFlags
+  );
+  applicationExec = builtins.concatStringsSep " " (
+    [
+      serverPackageExe
+      "--application"
+      enabledConfig
+    ]
+    ++ cfg.extraApplicationFlags
+  );
 in
 {
   options = {
@@ -84,6 +114,19 @@ in
         };
       };
 
+      extraServerFlags = mkOption {
+        type = types.listOf types.str;
+        description = "Flags to add to the wivrn service.";
+        default = [ ];
+        example = ''[ "--no-publish-service" ]'';
+      };
+
+      extraApplicationFlags = mkOption {
+        type = types.listOf types.str;
+        description = "Flags to add to the wivrn-application service. This is NOT the WiVRn startup application.";
+        default = [ ];
+      };
+
       extraPackages = mkOption {
         type = types.listOf types.package;
         description = "Packages to add to the wivrn-application service $PATH.";
@@ -96,17 +139,17 @@ in
         json = mkOption {
           type = configFormat.type;
           description = ''
-            Configuration for WiVRn. The attributes are serialized to JSON in config.json.
+            Configuration for WiVRn. The attributes are serialized to JSON in config.json. If a config or certain attributes are not provided, the server will default to stock values.
 
             Note that the application option must be either a package or a
             list with package as the first element.
 
-            See https://github.com/Meumeu/WiVRn/blob/master/docs/configuration.md
+            See https://github.com/WiVRn/WiVRn/blob/master/docs/configuration.md
           '';
           default = { };
           example = literalExpression ''
             {
-              scale = 0.8;
+              scale = 0.5;
               bitrate = 100000000;
               encoders = [
                 {
@@ -119,7 +162,6 @@ in
                 }
               ];
               application = [ pkgs.wlx-overlay-s ];
-              tcp_only = true;
             }
           '';
         };
@@ -130,14 +172,14 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = !applicationCheck || isDerivation applicationBinary;
+        assertion = !applicationCheck || isDerivation applicationAttr;
         message = "The application in WiVRn configuration is not a package. Please ensure that the application is a package or that a package is the first element in the list.";
       }
     ];
 
     systemd.user = {
       services = {
-        # The WiVRn server runs in a hardened service and starts the applications in a different service
+        # The WiVRn server runs in a hardened service and starts the application in a different service
         wivrn = {
           description = "WiVRn XR runtime service";
           environment = {
@@ -148,9 +190,7 @@ in
             IPC_EXIT_ON_DISCONNECT = "off";
           } // cfg.monadoEnvironment;
           serviceConfig = {
-            ExecStart = (
-              (getExe cfg.package) + " --systemd" + optionalString cfg.config.enable " -f ${configFile}"
-            );
+            ExecStart = serverExec;
             # Hardening options
             CapabilityBoundingSet = [ "CAP_SYS_NICE" ];
             AmbientCapabilities = [ "CAP_SYS_NICE" ];
@@ -169,34 +209,24 @@ in
             RestrictSUIDSGID = true;
           };
           wantedBy = mkIf cfg.autoStart [ "default.target" ];
-          restartTriggers = [
-            cfg.package
-            configFile
-          ];
+          restartTriggers = [ cfg.package ];
         };
         wivrn-application = mkIf applicationCheck {
           description = "WiVRn application service";
           requires = [ "wivrn.service" ];
           serviceConfig = {
-            ExecStart = (
-              (getExe cfg.package) + " --application" + optionalString cfg.config.enable " -f ${configFile}"
-            );
+            ExecStart = applicationExec;
             Restart = "on-failure";
             RestartSec = 0;
             PrivateTmp = true;
           };
-          # We need to add the application to PATH so WiVRn can find it
-          path = [ applicationPath ] ++ cfg.extraPackages;
+          path = [ applicationPackage ] ++ cfg.extraPackages;
         };
       };
     };
 
     services = {
-      # WiVRn can be used with some wired headsets so we include xr-hardware
-      udev.packages = with pkgs; [
-        android-udev-rules
-        xr-hardware
-      ];
+      udev.packages = with pkgs; [ android-udev-rules ];
       avahi = {
         enable = true;
         publish = {
@@ -214,7 +244,7 @@ in
     environment = {
       systemPackages = [
         cfg.package
-        applicationPath
+        applicationPackage
       ];
       pathsToLink = [ "/share/openxr" ];
       etc."xdg/openxr/1/active_runtime.json" = mkIf cfg.defaultRuntime {

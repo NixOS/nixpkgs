@@ -6,11 +6,11 @@ assert lib.versionAtLeast ocaml.version "4.08.0";
 
 stdenv.mkDerivation {
   pname = "opam";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchurl {
-    url = "https://github.com/ocaml/opam/releases/download/2.2.0/opam-full-2.2.0-2.tar.gz";
-    sha256 = "459ed64e6643f05c677563a000e3baa05c76ce528064e9cb9ce6db49fff37c97";
+    url = "https://github.com/ocaml/opam/releases/download/2.3.0/opam-full-2.3.0.tar.gz";
+    hash = "sha256-UGunaGXcMVtn35qonnq9XBqJen8KkteyaUl0/cUys0Y=";
   };
 
   strictDeps = true;

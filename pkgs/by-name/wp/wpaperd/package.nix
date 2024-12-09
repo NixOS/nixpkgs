@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wpaperd";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "danyspin97";
     repo = "wpaperd";
     rev = version;
-    hash = "sha256-5riZ/6yjgsW++SUIyJP5rFG65tkjJKgtvDLIGaoiHN0=";
+    hash = "sha256-eCD+eNdiVWLEmpkt0EaID534t6eE2OIVCgWMie5kbFE=";
   };
 
-  cargoHash = "sha256-EkCGLxUQeSCR88Y95Hog9TAjpYMmZHlOqEM//ENiCco=";
+  cargoHash = "sha256-BlndjwvVYUaotCMKkArZ4EtFTLVcVhPDiY2QBnc5NUo=";
 
   nativeBuildInputs = [
     pkg-config

@@ -2,7 +2,7 @@
   dbus,
   openssl,
   freetype,
-  libsoup,
+  libsoup_2_4,
   gtk3,
   webkitgtk_4_0,
   pkg-config,
@@ -66,7 +66,7 @@ in
     '';
 
     nativeBuildInputs = [pkg-config wrapGAppsHook3 copyDesktopItems];
-    buildInputs = [dbus openssl freetype libsoup gtk3 webkitgtk_4_0];
+    buildInputs = [dbus openssl freetype libsoup_2_4 gtk3 webkitgtk_4_0];
 
     # Disable checkPhase, since the project doesn't contain tests
     doCheck = false;

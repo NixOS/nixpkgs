@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "superhtml";
-  version = "0.5.1";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "kristoff-it";
     repo = "superhtml";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ubFFFHlYTYmivVI5hd/Mj+jFIBuPQ/IycNv3BLxkeuc=";
+    hash = "sha256-rO7HS07nSqwOq6345q/SOL2imoD0cKV16QJcVVr6mHw=";
   };
 
   nativeBuildInputs = [

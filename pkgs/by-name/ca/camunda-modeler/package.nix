@@ -9,11 +9,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "camunda-modeler";
-  version = "5.28.0";
+  version = "5.30.0";
 
   src = fetchurl {
     url = "https://github.com/camunda/camunda-modeler/releases/download/v${version}/camunda-modeler-${version}-linux-x64.tar.gz";
-    hash = "sha256-0xOgnpHoFxBzDoDGI7bcBFRu47HDYASIu4ApQo288Bo=";
+    hash = "sha256-zv4gry/PcudNDSUNmnhB1nrGoKI1D3pswoXpHqouQAw=";
   };
   sourceRoot = "camunda-modeler-${version}-linux-x64";
 

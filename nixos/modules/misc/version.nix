@@ -36,14 +36,13 @@ let
       DOCUMENTATION_URL = optionalString isNixos "https://nixos.org/learn.html";
       SUPPORT_URL = optionalString isNixos "https://nixos.org/community.html";
       BUG_REPORT_URL = optionalString isNixos "https://github.com/NixOS/nixpkgs/issues";
-      ANSI_COLOR = optionalString isNixos "1;34";
+      ANSI_COLOR = optionalString isNixos "0;38;2;126;186;228";
       IMAGE_ID = optionalString (config.system.image.id != null) config.system.image.id;
       IMAGE_VERSION = optionalString (config.system.image.version != null) config.system.image.version;
       VARIANT = optionalString (cfg.variantName != null) cfg.variantName;
       VARIANT_ID = optionalString (cfg.variant_id != null) cfg.variant_id;
-      DEFAULT_HOSTNAME = config.networking.fqdnOrHostName;
-      SUPPORT_END = "2025-06-30";
-    };
+      DEFAULT_HOSTNAME = config.system.nixos.distroId;
+    } // cfg.extraOSReleaseArgs;
 
   initrdReleaseContents = (removeAttrs osReleaseContents [ "BUILD_ID" ]) // {
     PRETTY_NAME = "${osReleaseContents.PRETTY_NAME} (Initrd)";
@@ -143,6 +142,26 @@ in
         default = "NixOS";
         description = "The name of the operating system vendor";
       };
+
+      extraOSReleaseArgs = mkOption {
+        internal = true;
+        type = types.attrsOf types.str;
+        default = { };
+        description = "Additional attributes to be merged with the /etc/os-release generator.";
+        example = {
+          ANSI_COLOR = "1;31";
+        };
+      };
+
+      extraLSBReleaseArgs = mkOption {
+        internal = true;
+        type = types.attrsOf types.str;
+        default = { };
+        description = "Additional attributes to be merged with the /etc/lsb-release generator.";
+        example = {
+          LSB_VERSION = "1.0";
+        };
+      };
     };
 
     image = {
@@ -237,13 +256,13 @@ in
     # https://www.freedesktop.org/software/systemd/man/os-release.html for the
     # format.
     environment.etc = {
-      "lsb-release".text = attrsToText {
+      "lsb-release".text = attrsToText ({
         LSB_VERSION = "${cfg.release} (${cfg.codeName})";
         DISTRIB_ID = "${cfg.distroId}";
         DISTRIB_RELEASE = cfg.release;
         DISTRIB_CODENAME = toLower cfg.codeName;
         DISTRIB_DESCRIPTION = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
-      };
+      } // cfg.extraLSBReleaseArgs);
 
       "os-release".text = attrsToText osReleaseContents;
     };

@@ -40,7 +40,7 @@ buildGoModule {
   # Enabling silkworm also breaks the build as it requires dynamically linked libraries.
   # If we need it in the future, we should consider packaging silkworm and silkworm-go
   # as depenedencies explicitly.
-  tags = "-tags=nosqlite,noboltdb,nosilkworm";
+  tags = [ "nosqlite" "noboltdb" "nosilkworm" ];
 
   passthru.updateScript = nix-update-script { };
 

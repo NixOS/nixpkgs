@@ -94,17 +94,13 @@ if stdenv.hostPlatform.isLinux then
   # toolchains from the internet that have their interpreters pointed at
   # /lib64/ld-linux-x86-64.so.2
   buildFHSEnv {
-    inherit (pkg) name meta;
+    inherit (pkg) pname version meta;
 
     runScript = "${pkg.outPath}/bin/arduino-cli";
 
-    extraInstallCommands =
-      ''
-        mv $out/bin/$name $out/bin/arduino-cli
-      ''
-      + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-        cp -r ${pkg.outPath}/share $out/share
-      '';
+    extraInstallCommands = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      cp -r ${pkg.outPath}/share $out/share
+    '';
     passthru.pureGoPkg = pkg;
 
     targetPkgs = pkgs: with pkgs; [ zlib ];

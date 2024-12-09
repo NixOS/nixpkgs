@@ -36,7 +36,9 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "qrcode" ];
 
   checkPhase = ''
-    ${python.interpreter} -m django test --settings tests.settings
+    # Disable failing test test_origin_https
+    # https://github.com/xi/django-mfa3/issues/24
+    ${python.interpreter} -m django test --settings tests.settings -k "not test_origin_https"
   '';
 
   meta = {

@@ -1,10 +1,10 @@
 { lib, stdenv, fetchurl, fetchpatch, ncurses, which, perl
-, gdbm ? null
-, openssl ? null
-, cyrus_sasl ? null
-, gnupg ? null
-, gpgme ? null
-, libkrb5 ? null
+, gdbm
+, openssl
+, cyrus_sasl
+, gnupg
+, gpgme
+, libkrb5
 , headerCache  ? true
 , sslSupport   ? true
 , saslSupport  ? true

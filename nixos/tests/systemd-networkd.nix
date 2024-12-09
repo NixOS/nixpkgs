@@ -96,7 +96,11 @@ in import ./make-test-python.nix ({pkgs, ... }: {
   };
 testScript = ''
     start_all()
+    node1.succeed("systemctl start systemd-networkd-wait-online@eth1.service")
+    node1.wait_for_unit("systemd-networkd-wait-online@eth1.service")
     node1.wait_for_unit("systemd-networkd-wait-online.service")
+    node2.succeed("systemctl start systemd-networkd-wait-online@eth1.service")
+    node2.wait_for_unit("systemd-networkd-wait-online@eth1.service")
     node2.wait_for_unit("systemd-networkd-wait-online.service")
 
     # ================================

@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "Linux AMDGPU Controller";
+    description = "Linux GPU Configuration Tool for AMD and NVIDIA";
     homepage = "https://github.com/ilya-zlobintsev/LACT";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ figsoda atemu ];

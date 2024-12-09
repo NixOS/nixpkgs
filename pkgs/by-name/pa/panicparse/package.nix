@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "panicparse";
-  version = "2.3.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "maruel";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KjWUubrHPJUJWvoa13EGEwTd5uNC0nrHAF8hzdnxEmY=";
+    sha256 = "sha256-EBNOHI04v47sXAWrjHsU4pixP4TPOuHy8S3YmlkiLN4=";
   };
 
-  vendorHash = "sha256-udkh/6Bu+7djxugMIuVsZvZ3JN2JooihsmcS2wJT0Wo=";
+  vendorHash = "sha256-/w/dtt55NVHoJ5AeHsqH/IRe3bJq1YvpasLh8Zn8Ckg=";
 
   subPackages = [ "." ];
 

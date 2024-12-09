@@ -8,17 +8,17 @@
 python3.pkgs.toPythonModule (
   python3.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2024-11-17";
+    version = "0-unstable-2024-11-25";
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "10d3af84b833ab2f2d1095efa3a7ba240ffb32fc";
-      hash = "sha256-dXALuiPCzK0Az64Fj9ygsNFoPKf0oJ2LyZDeg00Bfyo=";
+      rev = "bad070b4bc2c5afa73edea546c68d3e142a476fc";
+      hash = "sha256-pJl0pD+lx1L7CMKEZaK15ahd96gwWKsR53EVF7RRNtY=";
     };
 
     postPatch = ''
-      sed -i 's/==.*$//' requirements.txt
+      sed -i 's/==/>=/' requirements.txt
     '';
 
     preBuild =
@@ -44,16 +44,17 @@ python3.pkgs.toPythonModule (
       with python3.pkgs;
       [
         babel
+        brotli
         certifi
-        python-dateutil
         fasttext-predict
         flask
         flask-babel
-        brotli
+        isodate
         jinja2
         lxml
         msgspec
         pygments
+        python-dateutil
         pyyaml
         redis
         typer

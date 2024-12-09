@@ -13,7 +13,7 @@ let
   version = "7.3.1";
 
   ptFiles = stdenv.mkDerivation {
-    name = "PacketTracer7drv";
+    pname = "PacketTracer7drv";
     inherit version;
 
     dontUnpack = true;
@@ -41,7 +41,8 @@ let
   };
 
   fhs = buildFHSEnv {
-    name = "packettracer7";
+    pname = "packettracer7";
+    inherit version;
     runScript = "${ptFiles}/bin/packettracer7";
 
     targetPkgs = pkgs: with pkgs; [
@@ -84,7 +85,7 @@ in stdenv.mkDerivation {
     homepage = "https://www.netacad.com/courses/packet-tracer";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ lucasew ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

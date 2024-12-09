@@ -6,7 +6,7 @@ let
 
   svcGroups = svc:
     (lib.optional (svc.serviceConfig ? Group) svc.serviceConfig.Group)
-    ++ (svc.serviceConfig.SupplementaryGroups or [ ]);
+    ++ lib.toList (svc.serviceConfig.SupplementaryGroups or [ ]);
 in
 {
   assertion = builtins.all (svc:

@@ -169,10 +169,11 @@
 
       patches =
         let
-          # Disable haddock generating pretty source listings to stay under 3GB on aarch64-linux
           enableHyperlinkedSource =
-            lib.versionAtLeast version "9.8" ||
-            !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux);
+            # Disable haddock generating pretty source listings to stay under 3GB on aarch64-linux
+            !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux)
+            # 9.8 and 9.10 don't run into this problem for some reason
+            || (lib.versionAtLeast version "9.8" && lib.versionOlder version "9.11");
         in
         [
           # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
@@ -207,12 +208,16 @@
            then ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
            else ./Cabal-3.12-paths-fix-cycle-aarch64-darwin.patch)
         ]
-        # Prevents passing --hyperlinked-source to haddock. This is a custom
-        # workaround as we wait for this to be configurable via userSettings or
-        # similar. https://gitlab.haskell.org/ghc/ghc/-/issues/23625
+        # Prevents passing --hyperlinked-source to haddock. Note that this can
+        # be configured via a user defined flavour now. Unfortunately, it is
+        # impossible to import an existing flavour in UserSettings, so patching
+        # the defaults is actually simpler and less maintenance intensive
+        # compared to keeping an entire flavour definition in sync with upstream
+        # manually. See also https://gitlab.haskell.org/ghc/ghc/-/issues/23625
         ++ lib.optionals (!enableHyperlinkedSource) [
-          # TODO(@sternenseemann): Doesn't apply for GHC >= 9.8
-          ../../tools/haskell/hadrian/disable-hyperlinked-source.patch
+          (if lib.versionOlder version "9.8"
+           then ../../tools/haskell/hadrian/disable-hyperlinked-source-pre-9.8.patch
+           else ../../tools/haskell/hadrian/disable-hyperlinked-source-extra-args.patch)
         ]
         # Incorrect bounds on Cabal in hadrian
         # https://gitlab.haskell.org/ghc/ghc/-/issues/24100

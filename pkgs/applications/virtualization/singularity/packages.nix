@@ -9,19 +9,18 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "apptainer";
-        version = "1.3.5";
+        version = "1.3.6";
         projectName = "apptainer";
 
         src = fetchFromGitHub {
           owner = "apptainer";
           repo = "apptainer";
           rev = "refs/tags/v${version}";
-          hash = "sha256-yBUCUHc9vgyKFqAOHXQjAYQnmN0yXSIvkpR/s3LNAmk=";
+          hash = "sha256-ZdSo9bKZ7Q1xwMe4SR840U3+fVpKwtiZQA5KDM5qF9M=";
         };
 
-        # Update by running
-        # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).goModules"
-        # at the root directory of the Nixpkgs repository
+        # Override vendorHash with overrideAttrs.
+        # See https://nixos.org/manual/nixpkgs/unstable/#buildGoModule-vendorHash
         vendorHash = "sha256-W853++SSvkAYYUczbl8vnoBQZnimUdsAEXp4MCkLPBU=";
 
         extraDescription = " (previously known as Singularity)";
@@ -57,9 +56,8 @@ let
           hash = "sha256-Go4um/bIgq2lCZvjJ2GR81XpA/JvjPholi1PzNG9Hz8=";
         };
 
-        # Update by running
-        # nix-prefetch -E "{ sha256 }: ((import ./. { }).singularity.override { vendorHash = sha256; }).goModules"
-        # at the root directory of the Nixpkgs repository
+        # Override vendorHash with overrideAttrs.
+        # See https://nixos.org/manual/nixpkgs/unstable/#buildGoModule-vendorHash
         vendorHash = "sha256-CRZ42NdmJhAkV6bkl5n7rEV4Tu/h65qF5qaQ4W5wQ3w=";
 
         # Do not build conmon and squashfuse from the Git submodule sources,

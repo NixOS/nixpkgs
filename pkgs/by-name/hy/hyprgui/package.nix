@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hyprgui";
-  version = "0.1.8";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "hyprutils";
     repo = "hyprgui";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Bg1S/FhduRSSXc3Yd7SkyrmMKff7oh0jw781jTB0J60=";
+    hash = "sha256-akV83bvPuSJUleP0mDcnAR1KFegOXyoKSD0CVyNDJmc=";
   };
 
-  cargoHash = "sha256-bhtmU0vGptUYrPN/BbbSvSa27Ykma8UI6TS17eiQkyU=";
+  cargoHash = "sha256-SBI2Gk4FImGw8169xIV8L0fbfcKzn6PqvLg6XxbpurI=";
 
   strictDeps = true;
 
@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     wrapGAppsHook4
   ];
+
   buildInputs = [
     glib
     cairo
@@ -36,9 +37,15 @@ rustPlatform.buildRustPackage rec {
     gtk4
   ];
 
+  prePatch = ''
+    substituteInPlace hyprgui.desktop \
+    --replace-fail "/usr/bin/" ""
+  '';
+
   postInstall = ''
     install -Dm644 -t $out/usr/share/icons hyprgui.png
     install -Dm644 -t $out/usr/share/applications hyprgui.desktop
+    install -Dm644 -t $out/usr/share/licenses/${pname} LICENSE
   '';
 
   meta = {

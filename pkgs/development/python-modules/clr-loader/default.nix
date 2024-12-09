@@ -29,6 +29,7 @@ let
       "example/example.csproj"
     ];
     nugetDeps = ./deps.nix;
+    dotnet-sdk = dotnetCorePackages.sdk_6_0;
   };
 in
 buildPythonPackage {

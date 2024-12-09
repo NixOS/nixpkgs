@@ -8,7 +8,7 @@
 , openssl
 , libsecret
 , webkitgtk_4_0
-, libsoup
+, libsoup_2_4
 , gtk3
 , atk
 , pango
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
           openssl
           libsecret
           webkitgtk_4_0
-          libsoup
+          libsoup_2_4
           gtk3
           atk
           glib

@@ -755,6 +755,9 @@ Used with Subversion. Expects `url` to a Subversion directory, `rev`, and `hash`
 
 Used with Git. Expects `url` to a Git repo, `rev`, and `hash`. `rev` in this case can be full the git commit id (SHA1 hash) or a tag name like `refs/tags/v1.0`.
 
+If you want to fetch a tag you should pass the `tag` parameter instead of `rev` which has the same effect as setting `rev = "refs/tags"/${version}"`.
+This is safer than just setting `rev = version` w.r.t. possible branch and tag name conflicts.
+
 Additionally, the following optional arguments can be given:
 
 *`fetchSubmodules`* (Boolean)
@@ -833,7 +836,7 @@ A number of fetcher functions wrap part of `fetchurl` and `fetchzip`. They are m
 
 ## `fetchFromGitHub` {#fetchfromgithub}
 
-`fetchFromGitHub` expects four arguments. `owner` is a string corresponding to the GitHub user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every GitHub HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. Finally, `hash` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available, but `hash` is currently preferred.
+`fetchFromGitHub` expects four arguments. `owner` is a string corresponding to the GitHub user or organization that controls this repository. `repo` corresponds to the name of the software repository. These are located at the top of every GitHub HTML page as `owner`/`repo`. `rev` corresponds to the Git commit hash or tag (e.g `v1.0`) that will be downloaded from Git. If you need to fetch a tag however, you should prefer to use the `tag` parameter which achieves this in a safer way with less boilerplate. Finally, `hash` corresponds to the hash of the extracted directory. Again, other hash algorithms are also available, but `hash` is currently preferred.
 
 To use a different GitHub instance, use `githubBase` (defaults to `"github.com"`).
 

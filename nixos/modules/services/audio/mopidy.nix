@@ -77,6 +77,7 @@ in {
       description = "mopidy music player daemon";
       serviceConfig = {
         ExecStart = "${mopidyEnv}/bin/mopidy --config ${lib.concatStringsSep ":" ([mopidyConf] ++ cfg.extraConfigFiles)}";
+        Restart = "on-failure";
         User = "mopidy";
       };
     };

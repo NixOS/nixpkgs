@@ -6,7 +6,6 @@
 , pkg-config
 , protobuf
 , cacert
-, Security
 , garage
 , nixosTests
 }:
@@ -35,7 +34,7 @@ let
 
     buildInputs = [
       openssl
-    ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+    ];
 
     checkInputs = [
       cacert

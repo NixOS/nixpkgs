@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "umr";
-  version = "1.0.8";
+  version = "1.0.10";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "tomstdenis";
     repo = "umr";
     rev = version;
-    hash = "sha256-ODkTYHDrKWNvjiEeIyfsCByf7hyr5Ps9ytbKb3253bU=";
+    hash = "sha256-i0pTcg1Y+G/nGZSbMtlg37z12gF4heitEl5L4gfVO9c=";
   };
 
   nativeBuildInputs = [
@@ -46,11 +46,6 @@ stdenv.mkDerivation rec {
 
     bash-completion # Tries to create bash-completions in /var/empty otherwise?
   ];
-
-  # Remove static libraries (there are no dynamic libraries in there)
-  postInstall = ''
-    rm -r $out/lib
-  '';
 
   passthru.updateScript = nix-update-script { };
 

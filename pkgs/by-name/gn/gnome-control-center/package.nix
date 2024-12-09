@@ -74,11 +74,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "47.1.1";
+  version = "47.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    hash = "sha256-BR/UBXFX9LIzcBP778luPRKWVOP8lg1ISdNUJSQAvnc=";
+    hash = "sha256-Q0oyLcN0OFi4nYFl2J+J3AWWi2t740AJRM7UJxJQ0+k=";
   };
 
   patches = [
@@ -151,9 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
     # For animations in Mouse panel.
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    # vp9alphadecodebin, observed from GST_DEBUG="*:3" warnings.
-    # https://github.com/NixOS/nixpkgs/pull/333911#issuecomment-2409233470
-    gst_all_1.gst-plugins-bad
   ];
 
   nativeCheckInputs = [

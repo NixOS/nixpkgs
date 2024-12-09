@@ -31,28 +31,33 @@ lib.makeScope pkgs.newScope (self: with self; {
     autoreconfHook = pkgs.autoreconfHook269;
   };
 
-} // lib.optionalAttrs config.allowAliases {
-  inherit (pkgs)
-    # GTK Libs
-    glib glibmm atk atkmm cairo pango pangomm gtkmm2 libcanberra-gtk2
+}) // lib.optionalAttrs config.allowAliases {
+  # added 2024-12-02
+  glib = throw "gnome2.glib has been removed, please use top-level glib";
+  glibmm = throw "gnome2.glibmm has been removed, please use top-level glibmm";
+  atk = throw "gnome2.atk has been removed, please use top-level atk";
+  atkmm = throw "gnome2.atkmm has been removed, please use top-level atkmm";
+  cairo = throw "gnome2.cairo has been removed, please use top-level cairo";
+  pango = throw "gnome2.pango has been removed, please use top-level pango";
+  pangomm = throw "gnome2.pangomm has been removed, please use top-level pangomm";
+  gtkmm2 = throw "gnome2.gtkmm2 has been removed, please use top-level gtkmm2";
+  libcanberra-gtk2 = throw "gnome2.libcanberra-gtk2 has been removed, please use top-level libcanberra-gtk2";
+  libsoup = throw "gnome2.libsoup has been removed, please use top-level libsoup_2_4";
+  libwnck2 = throw "gnome2.libwnck2 has been removed, please use top-level libwnck2";
+  gtk-doc = throw "gnome2.gtk-doc has been removed, please use top-level gtk-doc";
+  gnome-doc-utils = throw "gnome2.gnome-doc-utils has been removed, please use top-level gnome-doc-utils";
+  gvfs = throw "gnome2.gvfs has been removed, please use top-level gvfs";
+  gtk = throw "gnome2.gtk has been removed, please use top-level gtk2";
+  gtkmm = throw "gnome2.gtkmm has been removed, please use top-level gtkmm2";
+  gtkdoc = throw "gnome2.gtkdoc has been removed, please use top-level gtk-doc";
+  startup_notification = throw "gnome2.startup_notification has been removed, please use top-level libstartup_notification";
+  startupnotification = throw "gnome2.startupnotification has been removed, please use top-level libstartup_notification";
+  gnomedocutils = throw "gnome2.gnomedocutils has been removed, please use top-level gnome-doc-utils";
+  gnome-icon-theme = throw "gnome2.gnome-icon-theme has been removed, please use top-level gnome-icon-theme";
+  gnome_icon_theme = throw "gnome2.gnome_icon_theme has been removed, please use top-level gnome-icon-theme";
+  gnomeicontheme = throw "gnome2.gnomeicontheme has been removed, please use top-level gnome-icon-theme";
+  gnome_common = throw "gnome2.gnome_common has been removed, please use top-level gnome-common";
 
-    # Included for backwards compatibility
-    libsoup libwnck2 gtk-doc gnome-doc-utils
-
-    gvfs # added 2019-09-03
-  ;
-
-  gtk = pkgs.gtk2;
-  gtkmm = pkgs.gtkmm2;
-
-  gtkdoc = pkgs.gtk-doc;
-  startup_notification = pkgs.libstartup_notification;
-  startupnotification = pkgs.libstartup_notification;
-  gnomedocutils = pkgs.gnome-doc-utils;
-  gnome-icon-theme = pkgs.gnome-icon-theme;
-  gnome_icon_theme = self.gnome-icon-theme;
-  gnomeicontheme = self.gnome-icon-theme;
-  gnome_common = gnome-common;
   gnome_python = throw "gnome2.gnome_python has been removed"; # 2023-01-14
   gnome_python_desktop = throw "gnome2.gnome_python_desktop has been removed"; # 2023-01-14
   gnome_vfs = throw "gnome2.gnome_vfs has been removed"; # 2024-06-27
@@ -69,4 +74,4 @@ lib.makeScope pkgs.newScope (self: with self; {
   libgnomeui = throw "gnome2.libgnomeui has been removed"; # 2024-06-27
   libgtkhtml = throw "gnome2.libgtkhtml has been removed"; # 2023-01-15
   python_rsvg = throw "gnome2.python_rsvg has been removed"; # 2023-01-14
-})
+}

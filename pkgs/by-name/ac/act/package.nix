@@ -2,10 +2,13 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  testers,
+  nix-update-script,
+  act,
 }:
 
 let
-  version = "0.2.68";
+  version = "0.2.70";
 in
 buildGoModule {
   pname = "act";
@@ -15,10 +18,10 @@ buildGoModule {
     owner = "nektos";
     repo = "act";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BON29uUruBoeBLoBdOgnonrVIyLZlvBW5UyWfxFgjPs=";
+    hash = "sha256-7e2ehUM3d5hcFtaahW/hrhVkpy74ufMdYwdnbsUA+WM=";
   };
 
-  vendorHash = "sha256-yxuOORShJL9nFIS5srZFI31Nyz7xFxnJCmcN8UFhyr0=";
+  vendorHash = "sha256-2fHNiquFg6I0JefqXfXRrnXxKPkNQOtQB7fznldO3GE=";
 
   doCheck = false;
 
@@ -27,6 +30,14 @@ buildGoModule {
     "-w"
     "-X main.version=${version}"
   ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = act;
+    };
+
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Run your GitHub Actions locally";

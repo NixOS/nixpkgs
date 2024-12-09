@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://ffmpeg.org/";
     downloadPage = "https://git.videolan.org/?p=ffmpeg/nv-codec-headers.git";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 }

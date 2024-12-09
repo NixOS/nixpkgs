@@ -18,7 +18,8 @@
   ],
 }:
 symlinkJoin {
-  name = "zathura-with-plugins-${zathura_core.version}";
+  inherit (zathura_core) version;
+  pname = "zathura-with-plugins";
 
   paths =
     with zathura_core;

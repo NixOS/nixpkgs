@@ -84,6 +84,8 @@ mkChromiumDerivation (base: rec {
     homepage = if ungoogled
       then "https://github.com/ungoogled-software/ungoogled-chromium"
       else "https://www.chromium.org/";
+    # Maintainer pings for this derivation are highly unreliable.
+    # If you add yourself as maintainer here, please also add yourself as CODEOWNER.
     maintainers = with lib.maintainers; if ungoogled
       then [ networkexception emilylange ]
       else [ networkexception emilylange ];

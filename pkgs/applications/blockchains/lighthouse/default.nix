@@ -5,7 +5,6 @@
 , lib
 , lighthouse
 , nix-update-script
-, nodePackages
 , openssl
 , pkg-config
 , postgresql
@@ -131,7 +130,6 @@ rustPlatform.buildRustPackage rec {
   ];
 
   nativeCheckInputs = [
-    nodePackages.ganache
     postgresql
   ];
 

@@ -1,34 +1,33 @@
 { config, pkgs, lib, ... }:
-with lib;
 let
   cfg = config.networking.nftables;
 
   tableSubmodule = { name, ... }: {
     options = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Enable this table.";
       };
 
-      name = mkOption {
-        type = types.str;
+      name = lib.mkOption {
+        type = lib.types.str;
         description = "Table name.";
       };
 
-      content = mkOption {
-        type = types.lines;
+      content = lib.mkOption {
+        type = lib.types.lines;
         description = "The table content.";
       };
 
-      family = mkOption {
+      family = lib.mkOption {
         description = "Table family.";
-        type = types.enum [ "ip" "ip6" "inet" "arp" "bridge" "netdev" ];
+        type = lib.types.enum [ "ip" "ip6" "inet" "arp" "bridge" "netdev" ];
       };
     };
 
     config = {
-      name = mkDefault name;
+      name = lib.mkDefault name;
     };
   };
 in
@@ -36,8 +35,8 @@ in
   ###### interface
 
   options = {
-    networking.nftables.enable = mkOption {
-      type = types.bool;
+    networking.nftables.enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
           Whether to enable nftables and use nftables based firewall if enabled.
@@ -57,8 +56,8 @@ in
         '';
     };
 
-    networking.nftables.checkRuleset = mkOption {
-      type = types.bool;
+    networking.nftables.checkRuleset = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Run `nft check` on the ruleset to spot syntax errors during build.
@@ -69,14 +68,14 @@ in
       '';
     };
 
-    networking.nftables.checkRulesetRedirects = mkOption {
-      type = types.addCheck (types.attrsOf types.path) (attrs: all types.path.check (attrNames attrs));
+    networking.nftables.checkRulesetRedirects = lib.mkOption {
+      type = lib.types.addCheck (lib.types.attrsOf lib.types.path) (attrs: lib.all lib.types.path.check (lib.attrNames attrs));
       default = {
         "/etc/hosts" = config.environment.etc.hosts.source;
         "/etc/protocols" = config.environment.etc.protocols.source;
         "/etc/services" = config.environment.etc.services.source;
       };
-      defaultText = literalExpression ''
+      defaultText = lib.literalExpression ''
         {
           "/etc/hosts" = config.environment.etc.hosts.source;
           "/etc/protocols" = config.environment.etc.protocols.source;
@@ -89,8 +88,8 @@ in
       '';
     };
 
-    networking.nftables.preCheckRuleset = mkOption {
-      type = types.lines;
+    networking.nftables.preCheckRuleset = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = lib.literalExpression ''
         sed 's/skgid meadow/skgid nogroup/g' -i ruleset.conf
@@ -102,10 +101,10 @@ in
       '';
     };
 
-    networking.nftables.flushRuleset = mkEnableOption "flushing the entire ruleset on each reload";
+    networking.nftables.flushRuleset = lib.mkEnableOption "flushing the entire ruleset on each reload";
 
-    networking.nftables.extraDeletions = mkOption {
-      type = types.lines;
+    networking.nftables.extraDeletions = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = ''
         # this makes deleting a non-existing table a no-op instead of an error
@@ -119,8 +118,8 @@ in
         '';
     };
 
-    networking.nftables.ruleset = mkOption {
-      type = types.lines;
+    networking.nftables.ruleset = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example = ''
         # Check out https://wiki.nftables.org/ for better documentation.
@@ -173,8 +172,8 @@ in
           - or networking.nftables.tables can be used, which will clean up the table automatically
         '';
     };
-    networking.nftables.rulesetFile = mkOption {
-      type = types.nullOr types.path;
+    networking.nftables.rulesetFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
           The ruleset file to be used with nftables.  Should be in a format that
@@ -182,8 +181,8 @@ in
         '';
     };
 
-    networking.nftables.flattenRulesetFile = mkOption {
-      type = types.bool;
+    networking.nftables.flattenRulesetFile = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Use `builtins.readFile` rather than `include` to handle {option}`networking.nftables.rulesetFile`. It is useful when you want to apply {option}`networking.nftables.preCheckRuleset` to {option}`networking.nftables.rulesetFile`.
@@ -194,8 +193,8 @@ in
       '';
     };
 
-    networking.nftables.tables = mkOption {
-      type = types.attrsOf (types.submodule tableSubmodule);
+    networking.nftables.tables = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.submodule tableSubmodule);
 
       default = {};
 
@@ -254,11 +253,11 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     boot.blacklistedKernelModules = [ "ip_tables" ];
     environment.systemPackages = [ pkgs.nftables ];
     # versionOlder for backportability, remove afterwards
-    networking.nftables.flushRuleset = mkDefault (versionOlder config.system.stateVersion "23.11" || (cfg.rulesetFile != null || cfg.ruleset != ""));
+    networking.nftables.flushRuleset = lib.mkDefault (lib.versionOlder config.system.stateVersion "23.11" || (cfg.rulesetFile != null || cfg.ruleset != ""));
     systemd.services.nftables = {
       description = "nftables firewall";
       after = [ "sysinit.target" ];
@@ -268,11 +267,11 @@ in
       wantedBy = [ "multi-user.target" ];
       reloadIfChanged = true;
       serviceConfig = let
-        enabledTables = filterAttrs (_: table: table.enable) cfg.tables;
+        enabledTables = lib.filterAttrs (_: table: table.enable) cfg.tables;
         deletionsScript = pkgs.writeScript "nftables-deletions" ''
           #! ${pkgs.nftables}/bin/nft -f
           ${if cfg.flushRuleset then "flush ruleset"
-            else concatStringsSep "\n" (mapAttrsToList (_: table: ''
+            else lib.concatStringsSep "\n" (lib.mapAttrsToList (_: table: ''
               table ${table.family} ${table.name}
               delete table ${table.family} ${table.name}
             '') enabledTables)}
@@ -298,7 +297,7 @@ in
             include "${deletionsScriptVar}"
             # current deletions
             include "${deletionsScript}"
-            ${concatStringsSep "\n" (mapAttrsToList (_: table: ''
+            ${lib.concatStringsSep "\n" (lib.mapAttrsToList (_: table: ''
               table ${table.family} ${table.name} {
                 ${table.content}
               }
@@ -316,7 +315,7 @@ in
             cp $out ruleset.conf
             sed 's|include "${deletionsScriptVar}"||' -i ruleset.conf
             ${cfg.preCheckRuleset}
-            export NIX_REDIRECTS=${escapeShellArg (concatStringsSep ":" (mapAttrsToList (n: v: "${n}=${v}") cfg.checkRulesetRedirects))}
+            export NIX_REDIRECTS=${lib.escapeShellArg (lib.concatStringsSep ":" (lib.mapAttrsToList (n: v: "${n}=${v}") cfg.checkRulesetRedirects))}
             LD_PRELOAD="${pkgs.buildPackages.libredirect}/lib/libredirect.so ${pkgs.buildPackages.lklWithFirewall.lib}/lib/liblkl-hijack.so" \
               ${pkgs.buildPackages.nftables}/bin/nft --check --file ruleset.conf
           '';

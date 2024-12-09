@@ -48,8 +48,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    install -D etc/jay.portal $out/usr/share/xdg-desktop-portal/portals/jay.portal
-    install -D etc/jay-portals.conf $out/usr/share/xdg-desktop-portal/jay-portals.conf
+    install -D etc/jay.portal $out/share/xdg-desktop-portal/portals/jay.portal
+    install -D etc/jay-portals.conf $out/share/xdg-desktop-portal/jay-portals.conf
   '';
 
   meta = with lib; {

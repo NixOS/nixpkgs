@@ -32,7 +32,7 @@
 , gnutar
 , json-glib
 , libcap
-, libsoup
+, libsoup_2_4
 , libyaml
 , ostree
 , patch
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     json-glib
     libcap
-    libsoup
+    libsoup_2_4
     libxml2
     libyaml
     ostree

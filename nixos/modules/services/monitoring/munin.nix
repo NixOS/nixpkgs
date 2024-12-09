@@ -1,18 +1,12 @@
 { config, lib, pkgs, ... }:
-
 # TODO: support munin-async
 # TODO: LWP/Pg perl libs aren't recognized
-
 # TODO: support fastcgi
 # https://guide.munin-monitoring.org/en/latest/example/webserver/apache-cgi.html
 # spawn-fcgi -s /run/munin/fastcgi-graph.sock -U www-data   -u munin -g munin /usr/lib/munin/cgi/munin-cgi-graph
 # spawn-fcgi -s /run/munin/fastcgi-html.sock  -U www-data   -u munin -g munin /usr/lib/munin/cgi/munin-cgi-html
 # https://paste.sh/vofcctHP#-KbDSXVeWoifYncZmLfZzgum
 # nginx https://munin.readthedocs.org/en/latest/example/webserver/nginx.html
-
-
-with lib;
-
 let
   nodeCfg = config.services.munin-node;
   cronCfg = config.services.munin-cron;
@@ -140,9 +134,9 @@ in
 
     services.munin-node = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Enable Munin Node agent. Munin node listens on 0.0.0.0 and
           by default accepts connections only from 127.0.0.1 for security reasons.
@@ -151,18 +145,18 @@ in
         '';
       };
 
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           {file}`munin-node.conf` extra configuration. See
           <https://guide.munin-monitoring.org/en/latest/reference/munin-node.conf.html>
         '';
       };
 
-      extraPluginConfig = mkOption {
+      extraPluginConfig = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           {file}`plugin-conf.d` extra plugin configuration. See
           <https://guide.munin-monitoring.org/en/latest/plugin/use.html>
@@ -173,9 +167,9 @@ in
         '';
       };
 
-      extraPlugins = mkOption {
+      extraPlugins = lib.mkOption {
         default = {};
-        type = with types; attrsOf path;
+        type = with lib.types; attrsOf path;
         description = ''
           Additional Munin plugins to activate. Keys are the name of the plugin
           symlink, values are the path to the underlying plugin script. You
@@ -194,7 +188,7 @@ in
           `/bin`, `/usr/bin`,
           `/sbin`, and `/usr/sbin`.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             zfs_usage_bigpool = /src/munin-contrib/plugins/zfs/zfs_usage_;
             zfs_usage_smallpool = /src/munin-contrib/plugins/zfs/zfs_usage_;
@@ -203,9 +197,9 @@ in
         '';
       };
 
-      extraAutoPlugins = mkOption {
+      extraAutoPlugins = lib.mkOption {
         default = [];
-        type = with types; listOf path;
+        type = with lib.types; listOf path;
         description = ''
           Additional Munin plugins to autoconfigure, using
           `munin-node-configure --suggest`. These should be
@@ -225,7 +219,7 @@ in
           `/bin`, `/usr/bin`,
           `/sbin`, and `/usr/sbin`.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [
             /src/munin-contrib/plugins/zfs
             /src/munin-contrib/plugins/ssh
@@ -233,12 +227,12 @@ in
         '';
       };
 
-      disabledPlugins = mkOption {
+      disabledPlugins = lib.mkOption {
         # TODO: figure out why Munin isn't writing the log file and fix it.
         # In the meantime this at least suppresses a useless graph full of
         # NaNs in the output.
         default = [ "munin_stats" ];
-        type = with types; listOf str;
+        type = with lib.types; listOf str;
         description = ''
           Munin plugins to disable, even if
           `munin-node-configure --suggest` tries to enable
@@ -255,9 +249,9 @@ in
 
     services.munin-cron = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Enable munin-cron. Takes care of all heavy lifting to collect data from
           nodes and draws graphs to html. Runs munin-update, munin-limits,
@@ -268,9 +262,9 @@ in
         '';
       };
 
-      extraGlobalConfig = mkOption {
+      extraGlobalConfig = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           {file}`munin.conf` extra global configuration.
           See <https://guide.munin-monitoring.org/en/latest/reference/munin.conf.html>.
@@ -282,15 +276,15 @@ in
         '';
       };
 
-      hosts = mkOption {
+      hosts = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Definitions of hosts of nodes to collect data from. Needs at least one
           host for cron to succeed. See
           <https://guide.munin-monitoring.org/en/latest/reference/munin.conf.html>
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           '''
             [''${config.networking.hostName}]
             address localhost
@@ -298,9 +292,9 @@ in
         '';
       };
 
-      extraCSS = mkOption {
+      extraCSS = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Custom styling for the HTML that munin-cron generates. This will be
           appended to the CSS files used by munin-cron and will thus take
@@ -320,7 +314,7 @@ in
 
   };
 
-  config = mkMerge [ (mkIf (nodeCfg.enable || cronCfg.enable)  {
+  config = lib.mkMerge [ (lib.mkIf (nodeCfg.enable || cronCfg.enable)  {
 
     environment.systemPackages = [ pkgs.munin ];
 
@@ -335,7 +329,7 @@ in
       gid = config.ids.gids.munin;
     };
 
-  }) (mkIf nodeCfg.enable {
+  }) (lib.mkIf nodeCfg.enable {
 
     systemd.services.munin-node = {
       description = "Munin Node";
@@ -380,7 +374,7 @@ in
       group = "munin";
     };
 
-  }) (mkIf cronCfg.enable {
+  }) (lib.mkIf cronCfg.enable {
 
     # Munin is hardcoded to use DejaVu Mono and the graphs come out wrong if
     # it's not available.

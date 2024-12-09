@@ -159,7 +159,8 @@ let
   };
 
   bazelFhs = buildFHSEnv {
-    name = "bazel";
+    pname = "bazel";
+    inherit version;
     targetPkgs = _: [ bazelBootstrap ];
     runScript = "bazel";
   };

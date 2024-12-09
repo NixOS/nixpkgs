@@ -115,6 +115,7 @@ in
                 name = "/var/lib/kea/dhcp4.leases";
               };
               subnet4 = [ {
+                id = 1;
                 subnet = "192.0.2.0/24";
                 pools = [ {
                   pool = "192.0.2.100 - 192.0.2.240";
@@ -176,6 +177,7 @@ in
                 name = "/var/lib/kea/dhcp6.leases";
               };
               subnet6 = [ {
+                id = 1;
                 subnet = "2001:db8:1::/64";
                 pools = [ {
                   pool = "2001:db8:1::1-2001:db8:1::ffff";

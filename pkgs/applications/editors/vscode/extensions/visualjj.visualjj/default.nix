@@ -6,28 +6,28 @@
 }:
 
 let
-  version = "0.12.5";
+  version = "0.13.1";
 
   sources = {
     "x86_64-linux" = {
       arch = "linux-x64";
       url = "https://download.visualjj.com/visualjj-linux-x64-${version}.vsix";
-      hash = "sha256-wby6xz+pKVZDoAdF3Onkc6/rqMN8zh/b+9Phd7Q9yyo=";
+      hash = "sha256-vKlsRxqtEvx4Gu6tkBjERYHl4Xx0K9xnYkh1SMDOYl0=";
     };
     "x86_64-darwin" = {
       arch = "darwin-x64";
       url = "https://download.visualjj.com/visualjj-darwin-x64-${version}.vsix";
-      hash = "sha256-MrnXlvdE17yq8UdFPLOBE7z9hEIZ4mDj56SxXHZTttI=";
+      hash = "sha256-hzKZYPL/ZCRP2a4EaZGRXmzVpUNlGh4gOQt7NvGkn4M=";
     };
     "aarch64-linux" = {
       arch = "linux-arm64";
       url = "https://download.visualjj.com/visualjj-linux-arm64-${version}.vsix";
-      hash = "sha256-F3u1NF1JqZhcJjW9MCIV9iwuhSX1MJ2d/8ndghpUqPI=";
+      hash = "sha256-nvVeme/qRG1ObSeisIBQHka5zG2f7Bqsjmva5EevXxw=";
     };
     "aarch64-darwin" = {
       arch = "darwin-arm64";
       url = "https://download.visualjj.com/visualjj-darwin-arm64-${version}.vsix";
-      hash = "sha256-rgqArEjpS0Kc89MUBmdbBtK0l94fJfw8vRSwuz3CJC4=";
+      hash = "sha256-mW6zJq0XvliCAWuslHdnlMX7bgO0mS9kH7CIYXjlaCE=";
     };
   };
 in

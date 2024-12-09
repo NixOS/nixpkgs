@@ -105,13 +105,13 @@ let
 
       #### MISC
       deepin-desktop-base = callPackage ./misc/deepin-desktop-base { };
-      deepin-turbo = callPackage ./misc/deepin-turbo { };
     }
     // lib.optionalAttrs config.allowAliases {
       dde-kwin = throw "The 'deepin.dde-kwin' package was removed as it is outdated and no longer relevant."; # added 2023-09-27
       dde-launcher = throw "The 'deepin.dde-launcher' is no longer maintained. Please use 'deepin.dde-launchpad' instead."; # added 2023-11-23
       dde-dock = throw "The 'deepin.dde-dock' is no longer maintained. Please use 'deepin.dde-tray-loader' instead."; # added 2024-08-28
       deepin-clone = throw "The 'deepin.deepin-clone' package was removed as it is broken and unmaintained."; # added 2024-08-23
+      deepin-turbo = throw "The 'deepin.deepin-turbo' package was removed as it is outdated and no longer relevant."; # added 2024-12-06
       go-lib = throw "Then 'deepin.go-lib' package was removed, use 'go mod' to manage it"; # added 2024-05-31
       go-gir-generator = throw "Then 'deepin.go-gir-generator' package was removed, use 'go mod' to manage it"; # added 2024-05-31
       go-dbus-factory = throw "Then 'deepin.go-dbus-factory' package was removed, use 'go mod' to manage it"; # added 2024-05-31

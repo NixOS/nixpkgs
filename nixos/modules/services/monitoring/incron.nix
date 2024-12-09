@@ -1,8 +1,4 @@
-
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.incron;
@@ -14,8 +10,8 @@ in
 
     services.incron = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable the incron daemon.
@@ -24,8 +20,8 @@ in
         '';
       };
 
-      allow = mkOption {
-        type = types.nullOr (types.listOf types.str);
+      allow = lib.mkOption {
+        type = lib.types.nullOr (lib.types.listOf lib.types.str);
         default = null;
         description = ''
           Users allowed to use incrontab.
@@ -37,14 +33,14 @@ in
         '';
       };
 
-      deny = mkOption {
-        type = types.nullOr (types.listOf types.str);
+      deny = lib.mkOption {
+        type = lib.types.nullOr (lib.types.listOf lib.types.str);
         default = null;
         description = "Users forbidden from using incrontab.";
       };
 
-      systab = mkOption {
-        type = types.lines;
+      systab = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "The system incrontab contents.";
         example = ''
@@ -53,10 +49,10 @@ in
         '';
       };
 
-      extraPackages = mkOption {
-        type = types.listOf types.package;
+      extraPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [];
-        example = literalExpression "[ pkgs.rsync ]";
+        example = lib.literalExpression "[ pkgs.rsync ]";
         description = "Extra packages available to the system incrontab.";
       };
 
@@ -64,9 +60,9 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    warnings = optional (cfg.allow != null && cfg.deny != null)
+    warnings = lib.optional (cfg.allow != null && cfg.deny != null)
       "If `services.incron.allow` is set then `services.incron.deny` will be ignored.";
 
     environment.systemPackages = [ pkgs.incron ];
@@ -83,11 +79,11 @@ in
       mode = "0444";
       text = cfg.systab;
     };
-    environment.etc."incron.allow" = mkIf (cfg.allow != null) {
-      text = concatStringsSep "\n" cfg.allow;
+    environment.etc."incron.allow" = lib.mkIf (cfg.allow != null) {
+      text = lib.concatStringsSep "\n" cfg.allow;
     };
-    environment.etc."incron.deny" = mkIf (cfg.deny != null) {
-      text = concatStringsSep "\n" cfg.deny;
+    environment.etc."incron.deny" = lib.mkIf (cfg.deny != null) {
+      text = lib.concatStringsSep "\n" cfg.deny;
     };
 
     systemd.services.incron = {

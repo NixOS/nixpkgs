@@ -12,7 +12,7 @@
 , webkitgtk_4_0
 , sqlite
 , gsettings-desktop-schemas
-, libsoup
+, libsoup_2_4
 , glib-networking
 , json-glib
 , libarchive
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (libsoup.override { gnomeSupport = true; })
+    (libsoup_2_4.override { gnomeSupport = true; })
     gcr
     glib-networking
     gsettings-desktop-schemas

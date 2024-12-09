@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vgm2x";
-  version = "0-unstable-2024-06-18";
+  version = "0-unstable-2024-11-17";
 
   src = fetchFromGitHub {
     owner = "vampirefrog";
     repo = "vgm2x";
-    rev = "1c379d74d2365d4478abe25a12572f357d35d576";
+    rev = "615f68c160b035651d1a5111539d3d5ee0bd66a3";
     fetchSubmodules = true;
-    hash = "sha256-lWyOyaV9dDrvGfmCE7m5M8DsxcB8bzJ35Amj3DAOVeA=";
+    hash = "sha256-coPpxMF83c7WXy0BGkBMOwRA2SPQho5O8vtKcXB5Vk4=";
   };
 
   postPatch = ''

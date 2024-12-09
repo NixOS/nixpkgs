@@ -24,22 +24,16 @@ let
   ];
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "6.2.2";
+  version = "6.3.0";
   pname = "staruml";
 
   src = fetchurl {
       url = "https://files.staruml.io/releases-v6/StarUML_${finalAttrs.version}_amd64.deb";
-      sha256 = "sha256-1zxrT7phXeQYNbWHWMyPuHiUglrPSMPP0bfAcfvt8dM=";
+      sha256 = "sha256-G63MxjefAJ0J40HzrI9j/sRkHLIdUzBf0GSbw6fAFoI=";
     };
 
   nativeBuildInputs = [ wrapGAppsHook3 dpkg ];
   buildInputs = [ glib hicolor-icon-theme ];
-
-  unpackPhase = ''
-    mkdir pkg
-    dpkg-deb -x $src pkg
-    sourceRoot=pkg
-  '';
 
   installPhase = ''
     mkdir -p $out/bin

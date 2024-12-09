@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   openjdk,
-  gradle,
+  gradle_8,
   wget,
   which,
   gnused,
@@ -14,6 +14,10 @@
   testers,
   nixosTests,
 }:
+let
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextflow";
   # 24.08.0-edge is compatible with Java 21. The current (as of 2024-09-19)

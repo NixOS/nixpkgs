@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.jack;
 
@@ -10,29 +7,29 @@ let
 
   enable32BitAlsaPlugins = cfg.alsa.support32Bit && pkgs.stdenv.hostPlatform.isx86_64 && pkgs.pkgsi686Linux.alsa-lib != null;
 
-  umaskNeeded = versionOlder cfg.jackd.package.version "1.9.12";
-  bridgeNeeded = versionAtLeast cfg.jackd.package.version "1.9.12";
+  umaskNeeded = lib.versionOlder cfg.jackd.package.version "1.9.12";
+  bridgeNeeded = lib.versionAtLeast cfg.jackd.package.version "1.9.12";
 in {
   options = {
     services.jack = {
       jackd = {
-        enable = mkEnableOption ''
+        enable = lib.mkEnableOption ''
           JACK Audio Connection Kit. You need to add yourself to the "jackaudio" group
         '';
 
-        package = mkPackageOption pkgs "jack2" {
+        package = lib.mkPackageOption pkgs "jack2" {
           example = "jack1";
         } // {
           # until jack1 promiscuous mode is fixed
           internal = true;
         };
 
-        extraOptions = mkOption {
-          type = types.listOf types.str;
+        extraOptions = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [
             "-dalsa"
           ];
-          example = literalExpression ''
+          example = lib.literalExpression ''
             [ "-dalsa" "--device" "hw:1" ];
           '';
           description = ''
@@ -40,8 +37,8 @@ in {
           '';
         };
 
-        session = mkOption {
-          type = types.lines;
+        session = lib.mkOption {
+          type = lib.types.lines;
           description = ''
             Commands to run after JACK is started.
           '';
@@ -50,16 +47,16 @@ in {
       };
 
       alsa = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = ''
             Route audio to/from generic ALSA-using applications using ALSA JACK PCM plugin.
           '';
         };
 
-        support32Bit = mkOption {
-          type = types.bool;
+        support32Bit = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Whether to support sound for 32-bit ALSA applications on 64-bit system.
@@ -68,8 +65,8 @@ in {
       };
 
       loopback = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Create ALSA loopback device, instead of using PCM plugin. Has broader
@@ -78,23 +75,23 @@ in {
           '';
         };
 
-        index = mkOption {
-          type = types.int;
+        index = lib.mkOption {
+          type = lib.types.int;
           default = 10;
           description = ''
             Index of an ALSA loopback device.
           '';
         };
 
-        config = mkOption {
-          type = types.lines;
+        config = lib.mkOption {
+          type = lib.types.lines;
           description = ''
             ALSA config for loopback device.
           '';
         };
 
-        dmixConfig = mkOption {
-          type = types.lines;
+        dmixConfig = lib.mkOption {
+          type = lib.types.lines;
           default = "";
           example = ''
             period_size 2048
@@ -107,8 +104,8 @@ in {
           '';
         };
 
-        session = mkOption {
-          type = types.lines;
+        session = lib.mkOption {
+          type = lib.types.lines;
           description = ''
             Additional commands to run to setup loopback device.
           '';
@@ -119,9 +116,9 @@ in {
 
   };
 
-  config = mkMerge [
+  config = lib.mkMerge [
 
-    (mkIf pcmPlugin {
+    (lib.mkIf pcmPlugin {
       environment.etc."alsa/conf.d/98-jack.conf".text = ''
         pcm_type.jack {
           libs.native = ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;
@@ -136,13 +133,13 @@ in {
       '';
     })
 
-    (mkIf loopback {
+    (lib.mkIf loopback {
       boot.kernelModules = [ "snd-aloop" ];
       boot.kernelParams = [ "snd-aloop.index=${toString cfg.loopback.index}" ];
       environment.etc."alsa/conf.d/99-jack-loopback.conf".text = cfg.loopback.config;
     })
 
-    (mkIf cfg.jackd.enable {
+    (lib.mkIf cfg.jackd.enable {
       services.jack.jackd.session = ''
         ${lib.optionalString bridgeNeeded "${pkgs.a2jmidid}/bin/a2jmidid -e &"}
       '';
@@ -247,7 +244,7 @@ in {
           ExecStart = "${cfg.jackd.package}/bin/jackd ${lib.escapeShellArgs cfg.jackd.extraOptions}";
           LimitRTPRIO = 99;
           LimitMEMLOCK = "infinity";
-        } // optionalAttrs umaskNeeded {
+        } // lib.optionalAttrs umaskNeeded {
           UMask = "007";
         };
         path = [ cfg.jackd.package ];

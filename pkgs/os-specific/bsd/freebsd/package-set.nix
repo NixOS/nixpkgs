@@ -8,6 +8,7 @@
   buildFreebsd,
   patchesRoot,
   writeText,
+  buildPackages,
 }:
 
 self:
@@ -64,16 +65,32 @@ lib.packagesFromDirectoryRecursive {
     inherit (self) libmd libnetbsd;
   };
 
-  libc = self.callPackage ./pkgs/libc/package.nix {
+  libcMinimal = self.callPackage ./pkgs/libcMinimal.nix {
     inherit (buildFreebsd)
-      makeMinimal
-      install
-      gencat
       rpcgen
-      mkcsmapper
-      mkesdb
+      gencat
       ;
-    inherit (self) csu include;
+    inherit (buildPackages)
+      flex
+      byacc
+      ;
+  };
+
+  libc = self.callPackage ./pkgs/libc/package.nix {
+    inherit (self) libcMinimal librpcsvc libelf;
+  };
+
+  librpcsvc = self.callPackage ./pkgs/librpcsvc.nix {
+    inherit (buildFreebsd) rpcgen;
+  };
+
+  i18n = self.callPackage ./pkgs/i18n.nix { inherit (buildFreebsd) mkcsmapper mkesdb; };
+
+  libelf = self.callPackage ./pkgs/libelf.nix { inherit (buildPackages) m4; };
+
+  rtld-elf = self.callPackage ./pkgs/rtld-elf.nix {
+    inherit (buildFreebsd) rpcgen;
+    inherit (buildPackages) flex byacc;
   };
 
   libnetbsd = self.callPackage ./pkgs/libnetbsd/package.nix { inherit (buildFreebsd) makeMinimal; };

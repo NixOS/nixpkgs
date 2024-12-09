@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hyprlauncher";
-  version = "0.2.2";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "hyprutils";
     repo = "hyprlauncher";
     rev = "refs/tags/v${version}";
-    hash = "sha256-E6/V9p5YIjg3/Svw70GwY1jibkg2xnzdAvmphc0xbQQ=";
+    hash = "sha256-+CFMGWK7W8BWIY2Xg4P7VLYQ7wQmmmjGSM5Rzq8yMSY=";
   };
 
-  cargoHash = "sha256-gkBpBlBR9Y2dkuqK7X/sxKdS9staFsbHv3Slg9UvP3A=";
+  cargoHash = "sha256-epvUpsWkkJqWuUjsbHQaHMcBkDc06ke56I/5/QEag/g=";
 
   strictDeps = true;
 

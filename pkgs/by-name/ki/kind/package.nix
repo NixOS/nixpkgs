@@ -1,14 +1,22 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  nix-update-script,
+  kind,
+}:
 
 buildGoModule rec {
   pname = "kind";
-  version = "0.24.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "kubernetes-sigs";
     repo = "kind";
-    hash = "sha256-vndN3ssiaaJdpPZQ0vBdqr4xPuY2bAHAd+SJamNrX6Q=";
+    hash = "sha256-6WlkZ2dLMSSSlJAEshMpD5Ai0WVo1NzXAvpjEQd3JPA=";
   };
 
   patches = [
@@ -24,9 +32,10 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
 
-  ldflags = [ "-s" "-w" ];
-
-  doCheck = false;
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd kind \
@@ -35,10 +44,20 @@ buildGoModule rec {
       --zsh <($out/bin/kind completion zsh)
   '';
 
+  passthru = {
+    tests.version = testers.testVersion {
+      package = kind;
+    };
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Kubernetes IN Docker - local clusters for testing Kubernetes";
     homepage = "https://github.com/kubernetes-sigs/kind";
-    maintainers = with maintainers; [ offline rawkode ];
+    maintainers = with maintainers; [
+      offline
+      rawkode
+    ];
     license = licenses.asl20;
     mainProgram = "kind";
   };

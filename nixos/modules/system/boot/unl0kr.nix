@@ -15,6 +15,8 @@ in
       description = ''Whether to enable the unl0kr on-screen keyboard in initrd to unlock LUKS.'';
     };
 
+    package = lib.mkPackageOption pkgs "unl0kr" { };
+
     allowVendorDrivers = lib.mkEnableOption "load optional drivers" // {
       description = ''Whether to load additional drivers for certain vendors (I.E: Wacom, Intel, etc.)'';
     };
@@ -85,7 +87,7 @@ in
         libinput
         xkeyboard_config
         "${config.boot.initrd.systemd.package}/lib/systemd/systemd-reply-password"
-        "${pkgs.unl0kr}/bin/unl0kr"
+        (lib.getExe' cfg.package "unl0kr")
       ];
       services = {
         unl0kr-ask-password = {
@@ -112,7 +114,7 @@ in
             do
               for file in `ls $DIR/ask.*`; do
                 socket="$(cat "$file" | ${pkgs.gnugrep}/bin/grep "Socket=" | cut -d= -f2)"
-                ${pkgs.unl0kr}/bin/unl0kr -v -C "/etc/unl0kr.conf" | ${config.boot.initrd.systemd.package}/lib/systemd/systemd-reply-password 1 "$socket"
+                ${lib.getExe' cfg.package "unl0kr"} -v -C "/etc/unl0kr.conf" | ${config.boot.initrd.systemd.package}/lib/systemd/systemd-reply-password 1 "$socket"
               done
             done
           '';

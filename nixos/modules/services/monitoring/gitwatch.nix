@@ -5,11 +5,20 @@
   ...
 }:
 let
+  inherit (lib)
+    maintainers
+    mapAttrs'
+    mkEnableOption
+    mkOption
+    nameValuePair
+    optionalString
+    types
+    ;
   mkSystemdService =
     name: cfg:
-    lib.nameValuePair "gitwatch-${name}" (
+    nameValuePair "gitwatch-${name}" (
       let
-        getvar = flag: var: lib.optionalString (cfg."${var}" != null) "${flag} ${cfg."${var}"}";
+        getvar = flag: var: optionalString (cfg."${var}" != null) "${flag} ${cfg."${var}"}";
         branch = getvar "-b" "branch";
         remote = getvar "-r" "remote";
       in
@@ -35,7 +44,7 @@ let
     );
 in
 {
-  options.services.gitwatch = lib.mkOption {
+  options.services.gitwatch = mkOption {
     description = ''
       A set of git repositories to watch for. See
       [gitwatch](https://github.com/gitwatch/gitwatch) for more.
@@ -57,25 +66,25 @@ in
       };
     };
     type =
-      with lib.types;
+      with types;
       attrsOf (submodule {
         options = {
-          enable = lib.mkEnableOption "watching for repo";
-          path = lib.mkOption {
+          enable = mkEnableOption "watching for repo";
+          path = mkOption {
             description = "The path to repo in local machine";
             type = str;
           };
-          user = lib.mkOption {
+          user = mkOption {
             description = "The name of services's user";
             type = str;
             default = "root";
           };
-          remote = lib.mkOption {
+          remote = mkOption {
             description = "Optional url of remote repository";
             type = nullOr str;
             default = null;
           };
-          branch = lib.mkOption {
+          branch = mkOption {
             description = "Optional branch in remote repository";
             type = nullOr str;
             default = null;
@@ -83,5 +92,6 @@ in
         };
       });
   };
-  config.systemd.services = lib.mapAttrs' mkSystemdService config.services.gitwatch;
+  config.systemd.services = mapAttrs' mkSystemdService config.services.gitwatch;
+  meta.maintainers = with maintainers; [ shved ];
 }

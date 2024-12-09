@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "SDL multi-channel audio mixer library";
     license = lib.licenses.zlib;
     maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ AndersonTorres ]);
+                  ++ (with lib.maintainers; [ ]);
     platforms = lib.platforms.unix;
   };
 })

@@ -7,24 +7,24 @@
 
 buildDunePackage rec {
   pname = "srt";
-  version = "0.3.0";
+  version = "0.3.1";
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.12";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-srt";
     rev = "v${version}";
-    sha256 = "sha256-iD18bCbouBuMpuSzruDZJoYz2YyN080RK8BavUF3beY=";
+    hash = "sha256-5KBiHNnZ+ukaXLC90ku9PqGUUK6csDY9VqVKeeX6BQ8=";
   };
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ ctypes-foreign posix-socket srt ];
 
-  meta = with lib; {
+  meta = {
     description = "OCaml bindings for the libsrt library";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl2Plus;
     inherit (src.meta) homepage;
-    maintainers = with maintainers; [ vbgl dandellion ];
+    maintainers = with lib.maintainers; [ vbgl dandellion ];
   };
 }

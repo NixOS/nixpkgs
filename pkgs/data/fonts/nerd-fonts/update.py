@@ -3,6 +3,7 @@
 import os
 import urllib.request as ureq
 import json
+import html
 
 if not all(
     f"UPDATE_NIX_{v}" in os.environ
@@ -28,12 +29,12 @@ def fetchjson(url):
 
 def storejson(path, obj):
     with open(path, "w", encoding="utf-8") as f:
-        json.dump(obj, f, indent=2)
+        json.dump(obj, f, indent=2, ensure_ascii=False)
         # Needed to satisfy EditorConfig's rules
         f.write('\n')
 
 def slicedict(d, ks):
-    return {k: d[k] for k in ks}
+    return {k: html.unescape(d[k]) for k in ks}
 
 os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), "manifests"))
 

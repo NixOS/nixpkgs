@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "exprtk";
-  version = "0.0.2";
+  version = "0.0.3";
 
   src = fetchFromGitHub {
     owner = "ArashPartow";
     repo = pname;
     rev = version;
-    hash = "sha256-ZV5nS6wEbKfzXhfXEtVlkwaEtxpTOYQaGlaxKx3FIvE=";
+    hash = "sha256-A4UzNYZZGgTJOw9G4Jg1wJZhxguFRohNEcwmwUOAX18=";
   };
 
   dontBuild = true;

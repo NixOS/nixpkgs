@@ -1,5 +1,6 @@
 #include <fstream>
 
+#include <fcntl.h>
 #include <spawn.h>
 #include <string.h>
 #include <unistd.h>
@@ -34,11 +35,15 @@ int main(int, const char *argv[]) {
   pid_t pid;
   const char *ldconfig_argv[] = {"/bin/ldconfig", NULL};
   char *ldconfig_envp[] = {NULL};
-  if ((e = posix_spawn(&pid, ldconfig_argv[0], NULL, NULL,
+  posix_spawn_file_actions_t action;
+  posix_spawn_file_actions_init(&action);
+  posix_spawn_file_actions_addopen (&action, STDERR_FILENO, "/dev/null", O_WRONLY|O_APPEND, 0);
+  if ((e = posix_spawn(&pid, ldconfig_argv[0], &action, NULL,
                        (char *const *)ldconfig_argv, ldconfig_envp))) {
     fprintf(stderr, "Failed to run ldconfig: %s\n", strerror(e));
     return 1;
   }
+  posix_spawn_file_actions_destroy(&action);
 
   int status;
   if (waitpid(pid, &status, 0) == -1) {

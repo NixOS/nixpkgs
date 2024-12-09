@@ -189,6 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       borgbackup-integration = nixosTests.borgbackup;
       nixosTest = nixosTests.openssh;
+      initrd-network-openssh = nixosTests.initrd-network-ssh;
       openssh = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
         pname = previousAttrs.pname + "-test";
         doCheck = true;

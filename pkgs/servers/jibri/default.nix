@@ -13,10 +13,10 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jibri";
-  version = "8.0-169-g1258814";
+  version = "8.0-173-g77dc5a9";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "MAZJq2v25XQE6nbaAHSuxeoZOBwlOxCOIJkzxQVlKog=";
+    sha256 = "lJ1DdSKqS5D0QQSoePH8M3EAUHewfooO7avFfD+NtFc=";
   };
 
   dontBuild = true;

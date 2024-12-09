@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, stdenv, libiconv }:
+{ lib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-fuzz";
@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-sfvepPpYtgA0TuUlu0CD50HX933AVQbUGzJBNAzFR94=";
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   doCheck = false;
 

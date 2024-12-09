@@ -6,6 +6,7 @@
 };
 "12many" = {
   revision = 15878;
+  catalogue = "one2many";
   shortdesc = "Generalising mathematical index sets";
   stripPrefix = 0;
   sha512.run = "57a177b65450718631f36bfd8db0f2d1bff788f3bf147137b6412714cc945c7e08832f14f9e7e659adf7e072a91f13a2ea27fe3161cd9b60313bc956f1f543c6";
@@ -17,6 +18,7 @@
 };
 "2up" = {
   revision = 55076;
+  catalogue = "twoup-gen";
   shortdesc = "Macros to print two-up";
   stripPrefix = 0;
   sha512.run = "6408d1d99a97df71640bcdde4133edc2e5861bbcdc8c5e1be98d5704f7ecf9c043c5538ea19ac4952d811e3677ee0698bdd477eadbd1068725bdb210787d9dbc";
@@ -188,6 +190,7 @@ abstract = {
 };
 abstyles = {
   revision = 15878;
+  catalogue = "abstyles-orig";
   shortdesc = "Adaptable BibTeX styles";
   stripPrefix = 0;
   sha512.run = "de7e7a5c7e56ae4fb478c9a072c6b2dc8716ea34ee17be577cf4a485c5506f16cc5b79293cfbc80b245ab350c2e2059dd5fb37a2e28818f492edf7c0416d52e3";
@@ -1097,9 +1100,11 @@ amsldoc-it = {
   stripPrefix = 0;
   sha512.run = "9178b17bedc53957118083a78ead56f9fdaf9fd6a60ea0ebdbeee6c87254e7567b47b61bad1f9bda2554f471f79c28f3df7c3d2b9858faad65c3d110664ec4c8";
   sha512.doc = "eb23cb624c4cf6283b8f777911d102953d31dc8da04392d7023694fed02ee1b8a8a49365fe0f1cba9682e911405f04afc982b6cc9cf9699a4d76ec8dca6a471c";
+  hasCatalogue = false;
 };
 amsldoc-vn = {
   revision = 21855;
+  catalogue = "amslatexdoc-vietnamese";
   shortdesc = "Vietnamese translation of AMSLaTeX documentation";
   stripPrefix = 0;
   sha512.run = "5b0c2cc1afcc4060249be20271af92c71c866db47d2551a176b5685c58182a6ca17da9540dd9a7c7abd33de75b0335a625aa921fdbd77329bc91d16718fb346a";
@@ -1109,6 +1114,7 @@ amsldoc-vn = {
 };
 amsmath = {
   revision = 71408;
+  catalogue = "latex-amsmath";
   shortdesc = "AMS mathematical facilities for LaTeX";
   stripPrefix = 0;
   sha512.run = "443fb13e0aa80a73510166fce72e3f6b885ad743796c6509f1752ae070d65f909c6fae412096c740b84244aba958c6202956b2cddc4fefe5a5f591f91d6e6767";
@@ -1172,6 +1178,7 @@ amsthdoc-it = {
   stripPrefix = 0;
   sha512.run = "17631e2d6306887236f11eed586454a784f256c36c14955be1eb30377f1f73b189686b37ba6c95188fda2e0b0aac9a1f40469a32bc7787b5d4c244de9a01ccdf";
   sha512.doc = "2d35f87da43f957d7ec3d1e61d052d14b4dc207207fc2e6dc4de08b699e5211db17a84f0305888294ae163691e4dee2d067fb1c3a29fadcc34214033fe8e22eb";
+  hasCatalogue = false;
 };
 andika = {
   revision = 64540;
@@ -1283,6 +1290,7 @@ antanilipsum = {
 };
 antiqua = {
   revision = 24266;
+  catalogue = "urw-antiqua";
   shortdesc = "URW Antiqua condensed font, for use with TeX";
   stripPrefix = 0;
   fontMaps = [
@@ -2331,6 +2339,7 @@ autoaligne = {
 };
 autoarea = {
   revision = 59552;
+  catalogue = "pictex-autoarea";
   shortdesc = "Automatic computation of bounding boxes with PiCTeX";
   stripPrefix = 0;
   sha512.run = "dadd69326335b6fe6e425a867e2e62a0b1df2f3179801bcc726c6ceebc15c24e3a7c9ecb3034209e25e503be47a9ad8639addfb628f720bd0c0d64c15177043d";
@@ -2436,6 +2445,7 @@ auxhook = {
 };
 avantgar = {
   revision = 61983;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -3278,6 +3288,7 @@ bardiag = {
 };
 barr = {
   revision = 38479;
+  catalogue = "diagxy";
   shortdesc = "Diagram macros by Michael Barr";
   stripPrefix = 0;
   sha512.run = "6bd398efda5027e3b762b817ce777adb9bb1c8e593ca04386adedeab7dc26ba382058ccfa3c281ef8612fcc50c9b719e7f881dcde0cfec041cf4b2cd05f238f8";
@@ -3952,6 +3963,7 @@ beautynote = {
 };
 beebe = {
   revision = 72450;
+  catalogue = "biblio";
   shortdesc = "A collection of bibliographies";
   stripPrefix = 0;
   sha512.run = "7dfbf428557667e5739cf462532f90dfdfa070f8bbdb45f08b2611537c1a823d33751b4210e2a73c241bfc0883c5cc2554ad7f79f333364de389c8089f45b338";
@@ -4005,6 +4017,7 @@ belleek = {
 };
 bengali = {
   revision = 55475;
+  catalogue = "bengali-pandey";
   shortdesc = "Support for the Bengali language";
   stripPrefix = 0;
   sha512.run = "2ace635791a4c7a8af0843a5a92d518d0e93fc09a94929a277002a3e4426f199e207238766b07ff3f1e1bf0e3c0cf8b83897b30ba105ee7239d6ce1d591289fe";
@@ -4041,6 +4054,7 @@ berenisadf = {
 };
 besjournals = {
   revision = 45662;
+  catalogue = "besjournals-bst";
   shortdesc = "Bibliographies suitable for British Ecological Society journals";
   stripPrefix = 0;
   sha512.run = "e797bce36fa6529d6b57be352ed81b7413c2ca818fa904a8cc4c7c8f0801369543482aa5c286b40f6f7c5e0b73d53b6aa6b9aaeab3e6229da7dd954a3dedb1ca";
@@ -5750,6 +5764,7 @@ booklet = {
 };
 bookman = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -6658,6 +6673,7 @@ carlito = {
 };
 carolmin-ps = {
   revision = 15878;
+  catalogue = "carolmin-t1";
   shortdesc = "Adobe Type 1 format of Carolingian Minuscule fonts";
   stripPrefix = 0;
   fontMaps = [
@@ -6830,6 +6846,7 @@ cbcoptic = {
 };
 cbfonts = {
   revision = 54080;
+  catalogue = "cbgreek-complete";
   shortdesc = "Complete set of Greek fonts";
   stripPrefix = 0;
   deps = [
@@ -6936,6 +6953,7 @@ cd = {
 };
 cd-cover = {
   revision = 17121;
+  catalogue = "cdcover";
   shortdesc = "Typeset CD covers";
   stripPrefix = 0;
   sha512.run = "345b001cd40137d9739a97c3c06549c3c7b761f56f61109dd4908c767151515081defd6c432232ec7a9fdeb8e85e95258ded345facdef0cf6bffa82bb5c39fbe";
@@ -7951,6 +7969,7 @@ cjkpunct = {
 };
 cjkutils = {
   revision = 60833;
+  catalogue = "cjk";
   shortdesc = "CJK language support";
   sha512.run = "36b0d0ef4bae2a9e5f2238c5c9aa125eabfca509462b65a159f66cbafc690939e16760a86e7e7dcce22ffda2f301c039059cdff1af8ed862017f18552e13e728";
   sha512.doc = "636e6486f9661061d22d248b0b7a8debdb81cd08c56b449067782568fcc7db58922f7c9d40fbc992bdd008908f22a6733af4a8115d85c0572556d01e925c5587";
@@ -8377,6 +8396,7 @@ cmexb = {
 };
 cmextra = {
   revision = 57866;
+  catalogue = "knuth-local";
   shortdesc = "Knuth's local information";
   stripPrefix = 0;
   sha512.run = "fa6bd1e79ca96500080405e01a7524a6fd13358335d34b3e2983a7f33f7b7a50ff4106ee5f2f483f3e040a3a7135b4133d727c6a7cb0c90f63be40e5410e3b48";
@@ -8482,6 +8502,7 @@ cnltx = {
 };
 cns = {
   revision = 45677;
+  catalogue = "cjk-fonts";
   shortdesc = "Chinese/Japanese/Korean bitmap fonts";
   stripPrefix = 0;
   sha512.run = "0b3645da07e0fc9482cfeddd93f949e18dc12b6aa02e5a6c45669f3d5f7f25d5fa7ff4992f40b9b71894e21b5b1855999ba8e1b130be27e8b7001444ed30db0f";
@@ -8709,6 +8730,7 @@ collection-basic = {
     "xdvi"
   ];
   sha512.run = "4241bc3a3ef21502faa9a2e0b16295126c357fc15813a625306552b40f9da804164abccce642f4ec1e677092f81d61381958b87fcf515120a12f9b7a19055370";
+  hasCatalogue = false;
 };
 collection-bibtexextra = {
   revision = 71940;
@@ -8884,6 +8906,7 @@ collection-bibtexextra = {
     "zootaxa-bst"
   ];
   sha512.run = "72f0c141b94a844e67d6ce7850b17faa3e77fc621ddab7807595b42bd3a664f5e64557d7d0b26df6707247d10366cb95ec4aee7897d4373e4025bab92830a6c5";
+  hasCatalogue = false;
 };
 collection-binextra = {
   revision = 72338;
@@ -9003,6 +9026,7 @@ collection-binextra = {
     "xpdfopen"
   ];
   sha512.run = "e3802a6b8c5d229be4519f7f717ceb27d68ac5d8d6c566475a39734e919f7a7d71e9ead1e7e32cfa0d5889fc7ce52f5e6ef6fa5d4198424294b32ff76008f35d";
+  hasCatalogue = false;
 };
 collection-context = {
   revision = 71879;
@@ -9035,6 +9059,7 @@ collection-context = {
     "luajittex"
   ];
   sha512.run = "ce789f2713ee28ab46cf0cbe370fd1e914cd13b749033dfe86509ba44764d07a87f60883f1aca6fb96ef6f3291e9378ff56fbc5873f67040b1af0aecaddfebe5";
+  hasCatalogue = false;
 };
 collection-fontsextra = {
   revision = 72535;
@@ -9409,6 +9434,7 @@ collection-fontsextra = {
     "zlmtt"
   ];
   sha512.run = "9aa678907bffc04f4e321498ed204114ad3f9eb7c3172fdc0c57a98bc60d1890298685c8d294a096a985046fcd098c239b0dc139ecbc851ad4db4ac9121f14bf";
+  hasCatalogue = false;
 };
 collection-fontsrecommended = {
   revision = 54074;
@@ -9451,6 +9477,7 @@ collection-fontsrecommended = {
     "zapfding"
   ];
   sha512.run = "eaa6e54780a0813a88102258ee3bd7a4640787be0b89eff4ba2c9cc19298bf3e2799ffab4e03e49f20131d07fbac9f601a7223fc1b47257dd0feeb04797c56a8";
+  hasCatalogue = false;
 };
 collection-fontutils = {
   revision = 61207;
@@ -9478,6 +9505,7 @@ collection-fontutils = {
     "ttfutils"
   ];
   sha512.run = "430c95b7e104cb837b7424ebb17ab7ee1aefd99d70aaceefff8a1924fa949329aebe0d5a28b939fabf28d3c5dfc2dcb466147e1396514d5dcf4f64af231db8a7";
+  hasCatalogue = false;
 };
 collection-formatsextra = {
   revision = 72250;
@@ -9505,6 +9533,7 @@ collection-formatsextra = {
     "xmltex"
   ];
   sha512.run = "6844080cc444109ce84e69882a15f7738c6c6acabcc3373267bbd3ae55f4daf2ebb17fa53740f327a48708039eaafcffa0dad89a8b5fe996ced38c92dc5c54fe";
+  hasCatalogue = false;
 };
 collection-games = {
   revision = 71129;
@@ -9570,6 +9599,7 @@ collection-games = {
     "xskak"
   ];
   sha512.run = "43b0893ce80c5fa395348fd319110c3c0e0e47e589d70e63bc0023dc2e2ee9259c9e18367a1d999f99363ede13e1cb45ac4e637f27d6647511fb6303f39751ef";
+  hasCatalogue = false;
 };
 collection-humanities = {
   revision = 72250;
@@ -9635,6 +9665,7 @@ collection-humanities = {
     "xyling"
   ];
   sha512.run = "06383b5b387e89dd82507e7f7259c25e72b8513c998b7d1d323aba6f26500a11593f04bacb52997661379441421c603775bfa9e6a2b6a1c1d0fb6c5c17cc600e";
+  hasCatalogue = false;
 };
 collection-langarabic = {
   revision = 69111;
@@ -9677,6 +9708,7 @@ collection-langarabic = {
     "xindy-persian"
   ];
   sha512.run = "8cef2ee028669abcc0e964ba01f6287f52c4e2857fa7547036ea00bfa47d83d38c9c126705ba7989cfbc027586315284139ec6131c5ea7701136f1bfd7cdc2cf";
+  hasCatalogue = false;
 };
 collection-langchinese = {
   revision = 72136;
@@ -9721,6 +9753,7 @@ collection-langchinese = {
     "zhspacing"
   ];
   sha512.run = "d7f68746991c4d047f6fa6704428c8bfaafd338cc75710789ce81535d463d1683d046472b899fdba4bda5509b1812345035ccd052dc0049e12f226be171b70e0";
+  hasCatalogue = false;
 };
 collection-langcjk = {
   revision = 65824;
@@ -9747,6 +9780,7 @@ collection-langcjk = {
     "zxjafont"
   ];
   sha512.run = "bee71f9df25db567c0930659e5037d1b6144d5c157e0870e9144f82c6dddbd9df156e580583c65f1bf5f54a70c9fcab108bd117e74af0e28d72a33f6b78207d1";
+  hasCatalogue = false;
 };
 collection-langcyrillic = {
   revision = 69727;
@@ -9803,6 +9837,7 @@ collection-langcyrillic = {
     "xecyrmongolian"
   ];
   sha512.run = "d20f02886419a9c65b665fec5a65aaf232a2ae51ccccd159b611278887d0349bbc2e66b7f2f5ade9b79b918cc6a4cae30268b3472ef3d5441e8922b9c28a1413";
+  hasCatalogue = false;
 };
 collection-langczechslovak = {
   revision = 54074;
@@ -9827,6 +9862,7 @@ collection-langczechslovak = {
     "vlna"
   ];
   sha512.run = "719c321173ca12660891080dae509080934f72d13a9417b2c40a22add963c7c5a1ee95d3b306f0d6c26b0db97d69979c27fbb15d1690849aa03b06d4b0193a67";
+  hasCatalogue = false;
 };
 collection-langenglish = {
   revision = 71835;
@@ -9910,6 +9946,7 @@ collection-langenglish = {
     "yet-another-guide-latex2e"
   ];
   sha512.run = "0128c7f7df1ad098675272b20ab1f77ed69d83da8e8c156efb7e56dbcbe80d9269f3d31755906cd35d7d26514c1fa511f0b6df2687cc69aaad11fc9c60bde099";
+  hasCatalogue = false;
 };
 collection-langeuropean = {
   revision = 66432;
@@ -9988,6 +10025,7 @@ collection-langeuropean = {
     "turkmen"
   ];
   sha512.run = "5fa87f174fc372c21b80ebe6b097525218da63892bc8445a29c24f2bfb015b0f04c100467f85e6c9e16a27ad26e31f00832d7712ebea7dec8631a730a95a9759";
+  hasCatalogue = false;
 };
 collection-langfrench = {
   revision = 72499;
@@ -10046,6 +10084,7 @@ collection-langfrench = {
     "visualtikz"
   ];
   sha512.run = "7724b3a90a9217a6992f91c2eddbfafd01255fcf3581a3601f7ea1531ea7d4ff990d91ec070b50b6bbdd99672c4ff4017bbda3fed3e44a3adbb9e593df38afc2";
+  hasCatalogue = false;
 };
 collection-langgerman = {
   revision = 68711;
@@ -10101,6 +10140,7 @@ collection-langgerman = {
     "voss-mathcol"
   ];
   sha512.run = "3b52fac1e2520302998c3b11bc2f77b34d5bd4cc09f4fa4b9238ece66b0e36e676643f7476846d1b25eb64d31b0dbe87a33ad44669be101f61cf223e70ecb047";
+  hasCatalogue = false;
 };
 collection-langgreek = {
   revision = 65038;
@@ -10135,6 +10175,7 @@ collection-langgreek = {
     "yannisgr"
   ];
   sha512.run = "800991b6bb8ac7772ad030ad665b812abd9b294498f7b7678be721ccc87d54607e267bd189a0591ebead2c6ecb64047e5b5581c374f067c3b1575b6d442cc6c9";
+  hasCatalogue = false;
 };
 collection-langitalian = {
   revision = 55129;
@@ -10162,6 +10203,7 @@ collection-langitalian = {
     "verifica"
   ];
   sha512.run = "6ec5e8a62e3c1ed8e3c23542381091d38c77af507af7088a55e44f1e34b85d01ec19342db4541d9d6cd712c0929d54a3fc663e1d8fde3c53fef0d6fc43be4994";
+  hasCatalogue = false;
 };
 collection-langjapanese = {
   revision = 70738;
@@ -10234,6 +10276,7 @@ collection-langjapanese = {
     "zxjatype"
   ];
   sha512.run = "4e9e8fab9236bad4e7a7b4400f011a1e02a5ed6ea44071da566a4977fe2c4addc8f347fd5b4d3eb7527b5aa51741e6d2911c5ae17dc805a71486084d11e932b1";
+  hasCatalogue = false;
 };
 collection-langkorean = {
   revision = 54074;
@@ -10255,6 +10298,7 @@ collection-langkorean = {
     "unfonts-extra"
   ];
   sha512.run = "2d93df728d34137c8f9a884aa2871a2980e806672006f2c5f0c5f79412d5789c6f94958363cfc9a78b5a97a7d76bbb6cb157b2cb2a8a283f7afdfd838fa24883";
+  hasCatalogue = false;
 };
 collection-langother = {
   revision = 68719;
@@ -10326,6 +10370,7 @@ collection-langother = {
     "xetex-devanagari"
   ];
   sha512.run = "312be65445c4b862e50fcf4bb8d4413b233eadee8a9ca14ff3cb4eb37549314f37a5d00d22a4b3b2cd461b3b0473a7426a5e7f33ffbaf6dfc0687f1af754cae1";
+  hasCatalogue = false;
 };
 collection-langpolish = {
   revision = 54074;
@@ -10353,6 +10398,7 @@ collection-langpolish = {
     "utf8mex"
   ];
   sha512.run = "fc0d08f70aeb83869109290e6d1585d513097dcd4e17791752ecd3d26ac202838afb5931f78ceaeeaf72c63b18fe9183edd650c075d03188f24cb2caded178de";
+  hasCatalogue = false;
 };
 collection-langportuguese = {
   revision = 67125;
@@ -10374,6 +10420,7 @@ collection-langportuguese = {
     "xypic-tut-pt"
   ];
   sha512.run = "554f7d7e4828e1122cf3bc6b24c67661046ce2ae646975054f6903f8c2dfd3e63131ada963cd3b5a1ca3128539f039b4d275b9c8caadde1dbe9118d583d47585";
+  hasCatalogue = false;
 };
 collection-langspanish = {
   revision = 72203;
@@ -10397,6 +10444,7 @@ collection-langspanish = {
     "texlive-es"
   ];
   sha512.run = "9832d0e4f367ae73c292fd9d8894527c373c0db762ebf683667bee96f3431f1b6b70e3b2425bf6bbd8ca0a1f9e633ce8022b8747465e670523aecc607f7577ca";
+  hasCatalogue = false;
 };
 collection-latex = {
   revision = 71912;
@@ -10465,6 +10513,7 @@ collection-latex = {
     "url"
   ];
   sha512.run = "e2186a4295eb854d56e838deaae8330e47ced975d28ad83b51d8ada6955a5aa16f6cd9a08d2524f4419fd2256b895d1c14af183953c200dadc377f0d1e59fd91";
+  hasCatalogue = false;
 };
 collection-latexextra = {
   revision = 72656;
@@ -12049,6 +12098,7 @@ collection-latexextra = {
     "zwpagelayout"
   ];
   sha512.run = "07a02833cc78e3a217771ec09165eb189a99354a74c76a4430736ad07c97ec7f44a90c58be849e3d8ccb5e4935ef21a9b2a40cc9244d1ec3b4ca05f65ecab4a6";
+  hasCatalogue = false;
 };
 collection-latexrecommended = {
   revision = 71527;
@@ -12129,6 +12179,7 @@ collection-latexrecommended = {
     "xunicode"
   ];
   sha512.run = "69859043c611e236befbc95dc42d3e8ce283936971bfa41f0efa495919ddc79b0d464f82f6e27e6ed33ad1ac2b59c2a96aa862f661a89f35aaf7fb05daeb63f0";
+  hasCatalogue = false;
 };
 collection-luatex = {
   revision = 72049;
@@ -12244,6 +12295,7 @@ collection-luatex = {
     "yamlvars"
   ];
   sha512.run = "db570ce04f9068f5ae55a4d5cb9c6adf3c3317cd03fb63ebd96ea55ad5b8b8847a28313dee597c4245f7614061453162b0ba1e205a4fcfbaa5e858f5bac4d7c1";
+  hasCatalogue = false;
 };
 collection-mathscience = {
   revision = 72655;
@@ -12529,6 +12581,7 @@ collection-mathscience = {
     "zx-calculus"
   ];
   sha512.run = "b2c0bfa30f1dd02ff0a952b5545ae85cd52b39d03d22ecb427570290c3702f44aaf45577db5636e8b382828b9b7103aed2ef2c064db9f5e78123b4aa9b361415";
+  hasCatalogue = false;
 };
 collection-metapost = {
   revision = 72550;
@@ -12588,6 +12641,7 @@ collection-metapost = {
     "threeddice"
   ];
   sha512.run = "5d19ec9f716a2f5ef3ecb4b5c32146a40df34edf78c99a8895211f308116affb30aaf3bfc172c03c8d0ab1cdd28393f7e9396df2727de919d09058437d1749c5";
+  hasCatalogue = false;
 };
 collection-music = {
   revision = 69613;
@@ -12633,6 +12687,7 @@ collection-music = {
     "xpiano"
   ];
   sha512.run = "26100feabd6d95d8b29f0160f7e9b86d06e5055387acc63fe6e47fa0e681567e2d6537043bfa9138d3f8bf27705f2117b719aeb77d72b2f35ff5e5ad220a6038";
+  hasCatalogue = false;
 };
 collection-pictures = {
   revision = 72555;
@@ -12906,6 +12961,7 @@ collection-pictures = {
     "xypic"
   ];
   sha512.run = "77936bc2921814be28f8c6a80720f9f260f43b2a875fd70462ed596ae436744dab3c1312cbe4be470d1505929bf7e3c85a8c50837f564a02fe4568d29bc74846";
+  hasCatalogue = false;
 };
 collection-plaingeneric = {
   revision = 71220;
@@ -13030,6 +13086,7 @@ collection-plaingeneric = {
     "zztex"
   ];
   sha512.run = "4e54429ff7cb12037af1e7ae614b41000fc3dfa855e9bc1d22000e820836836843c1dab130c4629f882d189f64a2352768b1965b63075bf45e6e9e0189f0746c";
+  hasCatalogue = false;
 };
 collection-pstricks = {
   revision = 65367;
@@ -13152,6 +13209,7 @@ collection-pstricks = {
     "vocaltract"
   ];
   sha512.run = "508276fe37018f3d9773fc7cda0cb37edcdd28e9cf8ab54ed5be16b07c2066de4626a561bbe387c7bba0fb82d4102be406efd721a4b5dc90110b8560083d2b07";
+  hasCatalogue = false;
 };
 collection-publishers = {
   revision = 72576;
@@ -13461,6 +13519,7 @@ collection-publishers = {
     "york-thesis"
   ];
   sha512.run = "9e7a78acaca5d7bbea49873cc7b349acfd2776103ebe5aa811f62e3a3f6b8b19a2b622ebed71b68ebbe81618a0a10668814a5ca8825c667f57ba72c26c93551d";
+  hasCatalogue = false;
 };
 collection-texworks = {
   revision = 71515;
@@ -13471,12 +13530,14 @@ collection-texworks = {
     "texworks"
   ];
   sha512.run = "662ac482a30cfa231b1f3921d1252cdcbc7c509728ec72d2efd28f95765eab3c55f780a815df0e718db6cd18066505f95600faac74ee4e1e769e003041efff03";
+  hasCatalogue = false;
 };
 collection-wintools = {
   revision = 65952;
   shortdesc = "Windows-only support programs";
   stripPrefix = 0;
   sha512.run = "8af5c376990a7ed062588a0eb8695455936a92376b94f157d75a22f976f62017999aee8aeb692a07f98a64f05ac98bf4aba79c5f75688c54ad2196807471dc1b";
+  hasCatalogue = false;
 };
 collection-xetex = {
   revision = 71515;
@@ -13527,6 +13588,7 @@ collection-xetex = {
     "zbmath-review-template"
   ];
   sha512.run = "8309d912f2076a4fdbb8a1e4159768fa3f11a1304ca72c12888da2f36b7044d1753e88f5d2d455f24b68dc1496cfa0cd8481f505a14bc332d8d5e1467e6ed50a";
+  hasCatalogue = false;
 };
 collref = {
   revision = 46358;
@@ -13914,6 +13976,7 @@ complexity = {
 };
 components = {
   revision = 63184;
+  catalogue = "components";
   shortdesc = "Components of TeX";
   stripPrefix = 0;
   sha512.run = "e7f8aebb11919cd389648b1417c9d43f163858b7de28592998636a69003274d3825bb23f8faa2c29101d51343d9865780523cd95a2a014433399e2373970a116";
@@ -14665,6 +14728,7 @@ counttexruns = {
 };
 courier = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -14961,6 +15025,7 @@ cryst = {
 };
 cs = {
   revision = 41553;
+  catalogue = "csfonts";
   shortdesc = "Czech/Slovak-tuned Computer Modern fonts";
   stripPrefix = 0;
   deps = [
@@ -15327,6 +15392,7 @@ ctex-faq = {
 };
 ctib = {
   revision = 15878;
+  catalogue = "ctib4tex";
   shortdesc = "Tibetan for TeX and LaTeX2e";
   stripPrefix = 0;
   sha512.run = "8999ea42b82e56cbb06e2485060b829a0781550834ea421607b4621199692976488f4031266eee1a6b1443b12828e2fb5148ff43eff137c01ee9db8770bb1565";
@@ -15546,6 +15612,7 @@ cvss = {
 };
 cweb = {
   revision = 72279;
+  catalogue = "cwebbin";
   shortdesc = "CWEB for ANSI-C/C++ compilers";
   deps = [
     "iftex"
@@ -15619,6 +15686,7 @@ cyklop = {
 };
 cyrillic = {
   revision = 71408;
+  catalogue = "latex-cyrillic";
   shortdesc = "Support for Cyrillic fonts in LaTeX";
   stripPrefix = 0;
   deps = [
@@ -15657,6 +15725,7 @@ cyrillic-modern = {
 };
 cyrplain = {
   revision = 45692;
+  catalogue = "t2";
   shortdesc = "Support for using T2 encoding";
   stripPrefix = 0;
   sha512.run = "84651aeb63d3e47f208732f3c0d54ba86862d0ff7da7c56b3d8b8d1b49b6b88ed4c5f9abfb4c1c9d8a1ef8a455632aaa69408651e238bdc4aeb4eb7709f62096";
@@ -17681,6 +17750,7 @@ dviout-util = {
   sha512.run = "684f5efd93c0c12a07b753f169f44e764b01e4994faa86df8361ce38c15675a0601f61bdfc9702508f66273ac8c69250db65fa0d10d3c544fb78fcc824d4ff3f";
   sha512.doc = "d10e8c9343f9065499e2c06b5eecce4047730875ccee29d6a09d1608e2334f7310282cff765c88c7da8ed8a52816910c79f3fad58d118f047d04b4bb7ebf44ca";
   hasManpages = true;
+  hasCatalogue = false;
 };
 dviout-util.binfiles = [
   "chkdvifont"
@@ -17732,6 +17802,7 @@ dvipos = {
   sha512.run = "9e949fb402facda9c30fa2f388b80f2cfc530670b33cbd78559e4449fa6004c5d4082e4fb895ea397a334a333e5d5ae1a4f66fde3885f0a9eb28c9d9ebbecd0a";
   sha512.doc = "254a1db41636608a133e7807a8d4ea8ddd99ac646f35b66a43205ac7fdaf4a15c21eafbb85e23a182506e509895776d1fcbe63b3b8a7f197d577c6405ece5c44";
   hasManpages = true;
+  hasCatalogue = false;
 };
 dvipos.binfiles = [
   "dvipos"
@@ -19098,6 +19169,7 @@ epsincl = {
 };
 epslatex-fr = {
   revision = 19440;
+  catalogue = "fepslatex";
   shortdesc = "French version of \"graphics in LaTeX\"";
   stripPrefix = 0;
   sha512.run = "f3e90ecb487259301c20ab4c4c28702b9cadfa844a49361fee0881a26f827ae602f954e4a3e824e910d2e098097c387aa5311c5f32cb58df5a0a1e2fcd9d2364";
@@ -19309,6 +19381,7 @@ erw-l3 = {
 };
 es-tex-faq = {
   revision = 15878;
+  catalogue = "faq-es";
   shortdesc = "CervanTeX (Spanish TeX Group) FAQ";
   stripPrefix = 0;
   sha512.run = "33f66e4f928591188289f07e003cac10229735e69ee7390020748e119930ea7b74ad69e5eea991d8e34325ac4d548ce0b843a00b3ca50b9e6fae3e96526a4ad8";
@@ -20924,6 +20997,7 @@ fillwith = {
 };
 finbib = {
   revision = 15878;
+  catalogue = "finplain";
   shortdesc = "A Finnish version of plain.bst";
   stripPrefix = 0;
   sha512.run = "14f08cdc92a2d6d511c112c480efb0112d45c199023e89c9314740c2b9b83598bc9f8917ce616bb2493671f408f946ada3de4535136eff48b7bbf72e7436f912";
@@ -21011,6 +21085,7 @@ first-latex-doc = {
 };
 firstaid = {
   revision = 71628;
+  catalogue = "latex-firstaid";
   shortdesc = "First aid for external LaTeX files and packages that need updating";
   stripPrefix = 0;
   sha512.run = "23a546b9fb06b49e6bcc27e3f6044ea749e9c61cce85b569b993f07fe7df6744026f62b3836799faae2402f9fe3cf0b0c0a6b463fdab4e24924d50928d5de025";
@@ -21761,6 +21836,7 @@ fonttable = {
 };
 fontware = {
   revision = 70015;
+  catalogue = "vfware";
   shortdesc = "Tools for virtual font metrics";
   sha512.run = "6877d3b4de6f9e07fb63f1d13dcc48b82c5954dd6a79bdd3dbc21a36fc72a7359b96ef4d77936fdae9e0998fc2a0b5c04f9b853e25ccca808ee020e84d9a44f0";
   sha512.doc = "183e1f700d6ae37024c0eb7427a715a07a86eb70f9281b86c884a88231a24765a71fe7de6a66a01f0f3d12be6cf964b13ae87096d6ed32cd7843006767b7dc6c";
@@ -23647,6 +23723,7 @@ graphbox = {
 };
 graphics = {
   revision = 71408;
+  catalogue = "latex-graphics";
   shortdesc = "The LaTeX standard graphics bundle";
   stripPrefix = 0;
   deps = [
@@ -23922,6 +23999,7 @@ gridslides = {
 };
 grotesq = {
   revision = 35859;
+  catalogue = "urw-grotesq";
   shortdesc = "URW Grotesq font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -24038,6 +24116,7 @@ guide-to-latex = {
   stripPrefix = 0;
   sha512.run = "cc569e242b42361e6506144257db1109f1adee52915f361ed330699edea1895b78ac64488ae8b9e2224bd3baab01515be86486113afc1ed9b072a400ca736695";
   sha512.doc = "bba47b9a9e5223e558244029e258835a865b90824c7069287f0c996a36c4fb78d21e62e88e52ea008dbc573e7a4ea34843a646eab11d8377a5167724286c397e";
+  hasCatalogue = false;
 };
 guitar = {
   revision = 32258;
@@ -24094,6 +24173,7 @@ gustprog = {
   stripPrefix = 0;
   sha512.run = "bd9cf1c174a5674a0b71f07bf76f46ca4e15dfa194372cb04e63467c29ee1e07b03d0e611afceae80ea192b6f842fdbfae0bfce7eab2ce43a4e448058521cef6";
   sha512.doc = "268a01f59660e5225c1c21539076e6239381294e6aaa31992032ff8e3d777cb7e4195247c92d9f22efbee498c8bac34cdb915e0a5b0f6cb2b5c0b72c15695d72";
+  hasCatalogue = false;
 };
 gzt = {
   revision = 70532;
@@ -24476,6 +24556,7 @@ helmholtz-ellis-ji-notation = {
 };
 helvetic = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -25533,6 +25614,7 @@ hyphen-arabic = {
     }
   ];
   sha512.run = "85012062097dd4b624cb39c68b293169a25ab3c9cd15b4474c3a3ffbe4b8ab13d6856c6c70a580da45a2d210952df2d9760682da3917cfd24d17772dc2ccce7f";
+  hasCatalogue = false;
 };
 hyphen-armenian = {
   revision = 58652;
@@ -25565,6 +25647,7 @@ hyphen-base = {
 };
 hyphen-basque = {
   revision = 58652;
+  catalogue = "bahyph";
   shortdesc = "Basque hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -25714,6 +25797,7 @@ hyphen-coptic = {
 };
 hyphen-croatian = {
   revision = 58652;
+  catalogue = "hrhyph";
   shortdesc = "Croatian hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -25757,6 +25841,7 @@ hyphen-czech = {
 };
 hyphen-danish = {
   revision = 58652;
+  catalogue = "dkhyphen";
   shortdesc = "Danish hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -25779,6 +25864,7 @@ hyphen-danish = {
 };
 hyphen-dutch = {
   revision = 58609;
+  catalogue = "nehyph";
   shortdesc = "Dutch hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -25914,9 +26000,11 @@ hyphen-farsi = {
     }
   ];
   sha512.run = "5b02582769a55bb07d81e748e83170c16aca1c33b0a240cf547fa9c2212f2be52223e258229c760ddc5dd730419bd9e761614cc4fb3b3ba8102841bb779af511";
+  hasCatalogue = false;
 };
 hyphen-finnish = {
   revision = 71880;
+  catalogue = "fihyph";
   shortdesc = "Finnish hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -26071,6 +26159,7 @@ hyphen-german = {
 };
 hyphen-greek = {
   revision = 58652;
+  catalogue = "elhyphen";
   shortdesc = "Modern Greek hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -26104,6 +26193,7 @@ hyphen-greek = {
 };
 hyphen-hungarian = {
   revision = 58652;
+  catalogue = "hungarian";
   shortdesc = "Hungarian hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -26127,6 +26217,7 @@ hyphen-hungarian = {
 };
 hyphen-icelandic = {
   revision = 58652;
+  catalogue = "icehyph";
   shortdesc = "Icelandic hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -26321,6 +26412,7 @@ hyphen-irish = {
 };
 hyphen-italian = {
   revision = 58652;
+  catalogue = "ithyph";
   shortdesc = "Italian hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -26365,6 +26457,7 @@ hyphen-kurmanji = {
 };
 hyphen-latin = {
   revision = 58652;
+  catalogue = "lahyph";
   shortdesc = "Latin hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -26567,6 +26660,7 @@ hyphen-piedmontese = {
 };
 hyphen-polish = {
   revision = 58609;
+  catalogue = "plhyph";
   shortdesc = "Polish hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -26698,6 +26792,7 @@ hyphen-sanskrit = {
 };
 hyphen-serbian = {
   revision = 58609;
+  catalogue = "srhyphc";
   shortdesc = "Serbian hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -26840,6 +26935,7 @@ hyphen-thai = {
 };
 hyphen-turkish = {
   revision = 58652;
+  catalogue = "tkhyph";
   shortdesc = "Turkish hyphenation patterns.";
   stripPrefix = 0;
   deps = [
@@ -27403,6 +27499,7 @@ impatient = {
 };
 impatient-cn = {
   revision = 54080;
+  catalogue = "impatient";
   shortdesc = "Free edition of the book \"TeX for the Impatient\"";
   stripPrefix = 0;
   sha512.run = "e75363bb36568ec42f13217dc740b839e109529e41ac9cc713e8c7eb620e557dcc08d20f36cbdb5f0e3145d9201d659fc8478d40fae4862fefd3eec005a3463b";
@@ -27412,6 +27509,7 @@ impatient-cn = {
 };
 impatient-fr = {
   revision = 54080;
+  catalogue = "impatient";
   shortdesc = "Free edition of the book \"TeX for the Impatient\"";
   stripPrefix = 0;
   sha512.run = "f6a9a69ded33199fcd46d518fe8ed7dca48677c78fac5f90cdbbed2290558c4a9d7c9b0721c188023384acc97ad95df29565b06abc16fa33deb04490ca50b4ac";
@@ -28346,6 +28444,7 @@ jkmath = {
 };
 jknapltx = {
   revision = 19440;
+  catalogue = "jknappen";
   shortdesc = "Miscellaneous packages by Joerg Knappen";
   stripPrefix = 0;
   sha512.run = "0369405034393ea8de2cd94497a97ba6c40264ec9142eefee09647fd4e51f83e169a99757a4b92c1c9d911637f137404fa54231de452bcd208ba3f9982984153";
@@ -28753,6 +28852,7 @@ karnaughmap = {
 };
 kastrup = {
   revision = 15878;
+  catalogue = "binhex";
   shortdesc = "Convert numbers into binary, octal and hexadecimal";
   stripPrefix = 0;
   sha512.run = "d7cbd22ead6633284e9d114d90b2cb47924bfeb10c15eb350e4c2f82b883930c953410362313cdf8ac476a68cfa3a9b020217097909504b97a8ecd7addbc8d97";
@@ -29250,6 +29350,7 @@ kpfonts-otf = {
 };
 ksfh_nat = {
   revision = 24825;
+  catalogue = "ksfh-nat";
   shortdesc = "BibTeX style for KSFH Munich";
   stripPrefix = 0;
   sha512.run = "8893133ed49c9b4ba7472bc80a4e5583ec2546838e261fa2cf9aee188a0b00bca45de05c4e969af0b6f222a9668c3a7fac0caadbb180c10500fc53ae8c9f56c6";
@@ -29797,6 +29898,7 @@ latex-bin = {
   sha512.run = "47a9e27cd7e874d39f437a221bca0e906a82b712ff55ea7f83483d97b332dd64dd92a2f7daa2b624355df8ca7f91c0cc756143f5e9b7ce86f9467f2d8c2c478c";
   sha512.doc = "9f59881e18e2988f48e4ec2e2ca8ae9f9d97daf3c247848c667aa071a0c44e8efda366c14b50d90ceb334d6c87fd75ed4ae0fd8f521ef2b0215f703011428a8f";
   hasManpages = true;
+  hasCatalogue = false;
 };
 latex-bin-dev = {
   revision = 71362;
@@ -29856,6 +29958,7 @@ latex-bin-dev = {
   sha512.run = "a77e96826d13168bee4f82ca129cc83923e3d50f7e218bc73b30fcb9d1f95aba81edc023cb6d836fe9e9d5009319f37d231716bb6bf6a0026f9775563ff273bb";
   sha512.doc = "2692b0363620a1733ebaceae9a6ab293aa99d083b98f05a6e7ee0e5a2d30eb405d9d1a47dd9bbfa09a02d6d2b61e6c5770f7c0206117f8117e9a3feff759ab5e";
   hasManpages = true;
+  hasCatalogue = false;
 };
 latex-bin-dev.binfiles = [
   "dvilualatex-dev"
@@ -29947,6 +30050,7 @@ latex-git-log.binfiles = [
 ];
 latex-graphics-companion = {
   revision = 29235;
+  catalogue = "lgc-examples";
   shortdesc = "Examples from The LaTeX Graphics Companion";
   stripPrefix = 0;
   sha512.run = "3148a646539db3622096f9aeefd7ca2d44b0cf83cd454673893978897d07cfe7107b8f5bc745bc6b60734d4ad3429be1ffc2edaa8c9dd1721b41bfe913fa0dbe";
@@ -30082,6 +30186,7 @@ latex-via-exemplos = {
 };
 latex-web-companion = {
   revision = 29349;
+  catalogue = "lwc-examples";
   shortdesc = "Examples from The LaTeX Web Companion";
   stripPrefix = 0;
   sha512.run = "5f45c7f74a0e97b938009ada69146875e141edd556165b62185553b0ce5f590d5ca6f93a875dae1c546ebc788156d5cfc69c46535000adfe6933abe79a2fb06d";
@@ -30108,6 +30213,7 @@ latex2e-help-texinfo-fr = {
 };
 latex2e-help-texinfo-spanish = {
   revision = 65614;
+  catalogue = "latex2e-help-texinfo";
   shortdesc = "Unofficial reference manual covering LaTeX2e";
   stripPrefix = 0;
   sha512.run = "870c8f3af54ac42df5f4958669cf730cd16084c985f0b377c5aba9d526b8f7be14b367791d2c0a1f1a715739390ab63777ff2a92e7f9aad09897c8bbecff495e";
@@ -30450,6 +30556,7 @@ lcd = {
 };
 lcdftypetools = {
   revision = 70015;
+  catalogue = "lcdf-typetools";
   shortdesc = "A bundle of outline font manipulation tools";
   deps = [
     "glyphlist"
@@ -30693,6 +30800,7 @@ lettrine = {
 };
 levy = {
   revision = 21750;
+  catalogue = "levy-font";
   shortdesc = "Fonts for typesetting classical greek";
   stripPrefix = 0;
   sha512.run = "a71294df1b2bdb1402892ebc0c82dd60275cf41f6844cdd284e1ba73c8515e98258118c5a1e5158fb6d09acdc53427eb4e3f62f24591fd2eafc90d0bb69b71ea";
@@ -31710,6 +31818,7 @@ lshort-bulgarian = {
 };
 lshort-chinese = {
   revision = 67025;
+  catalogue = "lshort-zh-cn";
   shortdesc = "Introduction to LaTeX, in Chinese";
   stripPrefix = 0;
   sha512.run = "6d6ac34f79c3d5447c1bbd7f2c87071a92867bd770fd023bc4d6fb48500d27f1b1a8706a727b0d0a7b47eaa9a639c6b5a691b7d21a5e178eb79131cb4bd75b6c";
@@ -32349,6 +32458,7 @@ luahbtex = {
   sha512.run = "febc3c88887bd62afcf0f6a71b1e6f80fdaff91fcee50b7e23c94e2ba9ae3ee1cf614f1e8ad6d4ad8552a95488e30cf6c652be7443e7ce249c1b1d91cdd04b68";
   sha512.doc = "42b7a48bc2bb2f94486a2d1090698188d6a76a9a6d31d76d7e7d068fa1ce9e53053efca19f42092b623affdcb9e4124094e8f1fb1363f255f80817898724cfdb";
   hasManpages = true;
+  hasCatalogue = false;
 };
 luahbtex.binfiles = [
   "luahbtex"
@@ -32438,6 +32548,7 @@ luajittex = {
   sha512.run = "f6871ea1628238c57dc5aad427f52e3e9351f66fca8f405c0f82b0e89f5203fe900f4419a34b5955ea3d705021b2d2d5ec95a1d635f834ad1e8f7b769f8c3067";
   sha512.doc = "a421dde006695841b25d4f9b9d0e7d75dd6fb33ef742fdc67c6691932296d2078fd72ac1ae3123acd4f08bdf605ca6bff494a87cde1a0423e3a92ca2c30b80df";
   hasManpages = true;
+  hasCatalogue = false;
 };
 luajittex.binfiles = [
   "luajithbtex"
@@ -33159,6 +33270,7 @@ makeglos = {
 };
 makeindex = {
   revision = 62517;
+  catalogue = "makeindexk";
   shortdesc = "Makeindex development sources";
   sha512.run = "5967ba4123fd4c708ce841d29211fdb66c28518f4b418903be0ddf2a49964f706af96b250eec814c547e0703460c1273ce72a7acf3ea9fe28cc1c7073af29d3c";
   sha512.doc = "40b9ee1ebf7dba9a4bb4bb3077cdb1e88b07f276a9d0ae9c2817bd76a2f742ec9237d1b6d9658694fc5fc4e8f82591194862637bd83ea8e106c0541591d343ee";
@@ -33246,6 +33358,7 @@ manfnt = {
 };
 manfnt-font = {
   revision = 45777;
+  catalogue = "manual";
   shortdesc = "Knuth's \"manual\" fonts";
   stripPrefix = 0;
   fontMaps = [
@@ -34888,6 +35001,7 @@ mitthesis = {
 };
 mkgrkindex = {
   revision = 26313;
+  catalogue = "greek-makeindex";
   shortdesc = "Makeindex working with Greek";
   sha512.run = "bbb0b306f30b4fe898f5d5bfdcb1eaa4d2d88a95cfa1ea0da51957aad1de028928562c930180f6c0a7d66b5cdfd804d52afbd229e7ca43173477a229cefff192";
   sha512.doc = "5a5b14d4282e97420f796456155a71c23a44d4197d4d92bfea1f0f20e95b42e506c7be3f2b0aba37508415341e999522bd823c649cc6259a6e26d42399c6b8cf";
@@ -36260,6 +36374,7 @@ nchairx = {
 };
 ncntrsbk = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -37548,6 +37663,7 @@ omega = {
 };
 omegaware = {
   revision = 70015;
+  catalogue = "omega";
   shortdesc = "A wide-character-set extension of TeX";
   sha512.run = "3f7c11de9fa993140c291afe2fe83676abcfe8c1e54f73c6d98ab531f2e1eaf2d65f5d8ab365cecea4e4eda966623115daf5c0e3ad91ea66d4fdbc335f828eff";
   sha512.doc = "6a2f1a348ab48cfba8dfc22eed3c311e31ba1ed7efcbb651542c9c5efa5709528470810874a79a0b26dfec20c6d57da70bbcb468589d5311123dede389a9c6cb";
@@ -38118,6 +38234,7 @@ pageslts = {
 };
 palatino = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -38974,6 +39091,7 @@ pdftosrc = {
   sha512.run = "8bc301ccb6ee0f137f2ab994b9569f1f5431457d4ba0c06e1608be2621d319537ec3cb0e688d9582a3c964d302d126397d0affc6930f9feb2629acf25d85aaf1";
   sha512.doc = "1ce8ecc67afb34d3e43bf0cc9c57076722b4ebeeb9c5506bda5895e3007774552dca48020f0036bef52b7ca8c33fe354875a9c706515ea56bf12a63ca53e235c";
   hasManpages = true;
+  hasCatalogue = false;
 };
 pdftosrc.binfiles = [
   "pdftosrc"
@@ -39907,6 +40025,7 @@ pkuthss = {
 };
 pl = {
   revision = 58661;
+  catalogue = "pl-mf";
   shortdesc = "Polish extension of Computer Modern fonts";
   stripPrefix = 0;
   fontMaps = [
@@ -39960,6 +40079,7 @@ plain = {
 };
 plain-doc = {
   revision = 28424;
+  catalogue = "csname-doc";
   shortdesc = "A list of plain.tex cs names";
   stripPrefix = 0;
   sha512.run = "bae58c957de52e1a45f91d8ea49579ea9c5b50b641331ae8d27146b6bbda1cf93e09abe58a011164ef99e5513cc32d346da7d693e975271e1892674aa5799406";
@@ -40203,6 +40323,7 @@ plstmary = {
 };
 plweb = {
   revision = 15878;
+  catalogue = "pl";
   shortdesc = "Literate Programming for Prolog with LaTeX";
   stripPrefix = 0;
   sha512.run = "1899a3498d10950f67d24d2d7bf0488cd8867bd862960fa892581137bb1fb3426dea9e193f8993ffa93df11684dbd1f25bc79a98489317998936ab4186e9a22d";
@@ -42163,6 +42284,7 @@ pstool = {
 };
 pstricks = {
   revision = 71883;
+  catalogue = "pstricks-base";
   shortdesc = "PostScript macros for TeX";
   stripPrefix = 0;
   sha512.run = "7a5536d5adf7c3bc25e2b5685fbc4ab7be939d118ef74bc8242c126b72aad987059f11a1bf541dc85bc7d458c093c194cb7a6cc95f13826ce012e94b5ada6565";
@@ -42183,6 +42305,7 @@ pstricks-add = {
 };
 pstricks_calcnotes = {
   revision = 34363;
+  catalogue = "pstricks-calcnotes";
   shortdesc = "Use of PSTricks in calculus lecture notes";
   stripPrefix = 0;
   sha512.run = "1b17e544484b71f3c29e5c3e1bed6021658ce7b9a256c21c004113b722a85be7ea6861753230910771b7c900184ca8cce146408301e75de79e0c2bf8939c49a6";
@@ -42976,6 +43099,7 @@ qyxf-book = {
 };
 r_und_s = {
   revision = 15878;
+  catalogue = "r-und-s";
   shortdesc = "Chemical hazard codes";
   stripPrefix = 0;
   sha512.run = "86b219305e4e085af2a22d34bc586253b5674abb18e257fa96bab1d45695f841020c0004f1da51fcfca0fd0b325e4043f2e368740841a5a2e8db774711ac6348";
@@ -43632,6 +43756,7 @@ revtex = {
 };
 revtex4 = {
   revision = 56589;
+  catalogue = "revtex4-0";
   shortdesc = "Styles for various Physics Journals (old version)";
   stripPrefix = 0;
   sha512.run = "cd1f83a7f2664c6002b93bf7ac3b5dfef4767b79f66cd03ed738e395027736d062d23f1a6a9354834093857d467664168295e615ed1c734b708c098943d7bf87";
@@ -43794,6 +43919,7 @@ robustindex = {
 };
 roex = {
   revision = 45818;
+  catalogue = "mf-ps";
   shortdesc = "Metafont-PostScript conversions";
   stripPrefix = 0;
   sha512.run = "7df2224f9970b72cfa1474898c057799fe42d717876eed864f35aab113d01dfb483edb71f7f4a0a98b6762bbc309ce6fb51e41dc222a6f19be2025f6448fb1cd";
@@ -44026,6 +44152,7 @@ rtkinenc = {
 };
 rtklage = {
   revision = 15878;
+  catalogue = "ratex";
   shortdesc = "A package for German lawyers";
   stripPrefix = 0;
   sha512.run = "6e39e34a7c293f503949da66f1d5ebc65ae0388dc56e87992e9fc4daff1a250196afe68150be14ee2ec3242393ce9e5ea7b681cba31b7ed1c2d58526f6506554";
@@ -44482,6 +44609,7 @@ scheme-basic = {
     "collection-latex"
   ];
   sha512.run = "027a1cd0dd4fc5da2427864bb49fc885a00bec6e8a74da24ce9cd781c69bf4288ddfc3c790307ed48052a8fc00c1989d3939b253da6638370adbb1c43348749b";
+  hasCatalogue = false;
 };
 scheme-bookpub = {
   revision = 63547;
@@ -44516,6 +44644,7 @@ scheme-bookpub = {
     "willowtreebook"
   ];
   sha512.run = "0ea47f8907821e273a581c52494b6a4e9a511a71e11ebfb05756eaded6e5132fc548312cb6365cc4c1906b4e8ffb14ee5ed496484fe5e2a2611e154091d23cf6";
+  hasCatalogue = false;
 };
 scheme-context = {
   revision = 59636;
@@ -44545,6 +44674,7 @@ scheme-context = {
     "xits"
   ];
   sha512.run = "0b041f3c27ef88e7baec105b7cb24fa65c4b1f092f155482d584d9041ced4f329251f0b0d32f7019c15fff3c57b4d17f057cf39781f8be16a4e8c0ce4838163e";
+  hasCatalogue = false;
 };
 scheme-full = {
   revision = 54074;
@@ -44593,6 +44723,7 @@ scheme-full = {
     "collection-xetex"
   ];
   sha512.run = "bda507842fde5239d7f45169ff78690bd96066d1834cdcc6a0dcbd3e3439308c694ce4be6a91d1f155ebe5e29d46173fe13c83bcd4356969da95fb7cca1b4e38";
+  hasCatalogue = false;
 };
 scheme-gust = {
   revision = 59755;
@@ -44634,6 +44765,7 @@ scheme-gust = {
     "texdoc"
   ];
   sha512.run = "2b3e2e3d31c8fca7297729e910ada06a0d0282b618c92487b7a0da686938dc1f6f3b0881c7d1f8f3d002806ad8860c25802637c77919e21ca54ae8a23ef08ae7";
+  hasCatalogue = false;
 };
 scheme-infraonly = {
   revision = 54191;
@@ -44646,6 +44778,7 @@ scheme-infraonly = {
     "texlive.infra"
   ];
   sha512.run = "f3e449bf0b34deb9ae776685f386245c4ca9644f2175ae51e9c62faa00e3cfac30fa2aa07fbd83b15b21d487ca368c09a18742d2434047783350698ced3b20b9";
+  hasCatalogue = false;
 };
 scheme-medium = {
   revision = 54074;
@@ -44676,6 +44809,7 @@ scheme-medium = {
     "collection-xetex"
   ];
   sha512.run = "fdfbbd8fc370bfb0ea35ed9f3137b62eddd3e54777963668b3dfe7af6328a92f37c74e190e7f506ec27a3efbe44458941360599a4061a2765d0072af56808d60";
+  hasCatalogue = false;
 };
 scheme-minimal = {
   revision = 54191;
@@ -44685,6 +44819,7 @@ scheme-minimal = {
     "collection-basic"
   ];
   sha512.run = "ac177b74d9d5b9fa599831275a4084a0eeb7b764a6ed837d8f14f8391f0e6c0757f7b2d4a8e71868e0c8ea4d497f29d78c4c73fb9e6311dbecf29626516bbf82";
+  hasCatalogue = false;
 };
 scheme-small = {
   revision = 71080;
@@ -44742,6 +44877,7 @@ scheme-small = {
     "zapfding"
   ];
   sha512.run = "b8695c12bbb44ef28bdfea77bd23e496d169f6e56e6983e7465aee4e8b4123d15a6cf59d7f569ffc7d74055b15b1db89e424f3bbb37e46acfc436edc84a2a9fa";
+  hasCatalogue = false;
 };
 scheme-tetex = {
   revision = 59715;
@@ -44810,6 +44946,7 @@ scheme-tetex = {
     "xpdfopen"
   ];
   sha512.run = "fe8b53391733392a72be2e2c80892ec68fbdb749c70636c307825c8bfd6284945c9961610fd19f8b5d6b03ec50f0a1543c7d159f5f2a19534d71b221addfb708";
+  hasCatalogue = false;
 };
 schola-otf = {
   revision = 64734;
@@ -45210,6 +45347,7 @@ seealso = {
 };
 seetexk = {
   revision = 57972;
+  catalogue = "dvibook";
   shortdesc = "Utilities for manipulating DVI files";
   sha512.run = "1f217550f7455a82dd1771556045e10a39138eebddc90f4d38a274d56d9072501d94476c6045012f3c5cda43aea71924268fd222895079b225d893df3b78fa97";
   sha512.doc = "1b36ac131e25541123a7d18e9a5e3cb1fccab04ffca1b0d1e5a036a26de99fb05e6745d43cac6dc76a295eac5503f90eafdb2b40f96c88836123b5b599a47e2e";
@@ -46765,6 +46903,7 @@ sr-vorl = {
 };
 srbook-mem = {
   revision = 45818;
+  catalogue = "serbian-book";
   shortdesc = "Support for use of memoir in Serbian";
   stripPrefix = 0;
   sha512.run = "5cae41da74957078b2b0ed38c9fa4186006f24abca804b879641b4bff5324950b1a59296c5733fcadd2ef05661ff1dba8cd7d9a2c5f9e2a5c6bc1e6d993ff218";
@@ -47758,6 +47897,7 @@ symbats3 = {
 };
 symbol = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -47779,6 +47919,7 @@ sympycalc = {
 };
 sympytexpackage = {
   revision = 57090;
+  catalogue = "sympytex";
   shortdesc = "Include symbolic computation (using sympy) in documents";
   stripPrefix = 0;
   sha512.run = "9a1fa177703dbed088861ff47e5b53f3c0f433abe15d471d181368c52e0cdae7350090ce5cb3c25d4ca816d1132eb009359977ada3f3c0b5c3b80bc0873f8110";
@@ -47794,6 +47935,7 @@ synctex = {
   sha512.run = "cbe1f8c6d64619f742003c01566d55b675724f5d03681ad53dc1f58ff7314af88000ba25ea74e4fcfb07ece6160be6976ac8e69a9a1b524f223f5b80f350deb0";
   sha512.doc = "14e1f266182ee0be47a7b3841435f79594cdeb959245e6226520e81248691beeaa73f365c1112ef3bb4eacf4ca77e55265bd0d13c190858144bdc3064fa88a59";
   hasManpages = true;
+  hasCatalogue = false;
 };
 synctex.binfiles = [
   "synctex"
@@ -47810,6 +47952,7 @@ synproof = {
 };
 syntax = {
   revision = 15878;
+  catalogue = "syntax2";
   shortdesc = "Creation of syntax diagrams";
   stripPrefix = 0;
   sha512.run = "be1e049a98cd7e45cec9675e707575107af9c613028012b8fbfa658c6c9cbbac5782d3a7111f37edc719fb90e7c168c9a98a3d30a4c997b6ac4ed0691fc7fdc3";
@@ -48271,6 +48414,7 @@ tblr-extras = {
 };
 tcldoc = {
   revision = 22018;
+  catalogue = "tclldoc";
   shortdesc = "Doc/docstrip for tcl";
   stripPrefix = 0;
   sha512.run = "82348df3f6dcedc17a3cd50f709d01b1f2b0e4be9345e63d40ee6ad2aff908f97c7d19d586431e3fe8399a8d076505ceaadb5afe0116093240a6e59a335934c9";
@@ -48690,6 +48834,7 @@ tex-ps = {
 };
 tex-refs = {
   revision = 57349;
+  catalogue = "tex-references";
   shortdesc = "References for TeX and Friends";
   stripPrefix = 0;
   sha512.run = "aa03714a0ebb90c7431935608851c504080f8985db3bbba98cbfa9b957e0a3fbb87de8e0119bfdcc996d664aa46bb943c6f90b36c4408a42f14fcc8387508df6";
@@ -48992,6 +49137,7 @@ texlive-common = {
   stripPrefix = 0;
   sha512.run = "fe49d34680f826f157976410f0e75cbe6438e88bcba4f4cb0f925b1e2c54a2802e2c66f1f5c8424ed12f80c64120e74526cd31168a5a27d36a36a7dd152bc61c";
   sha512.doc = "4c04b3494649f2e2092e26356f057e89eeeeb75533b1b953b89fd154da40c64b4456d5492ca79fdf91f3c8fb097a4f2bbc4ef7802ffaed43369ee77471564560";
+  hasCatalogue = false;
 };
 texlive-cz = {
   revision = 72437;
@@ -48999,6 +49145,7 @@ texlive-cz = {
   stripPrefix = 0;
   sha512.run = "52d43409e3c99c163058a26d3d146e031dbf355400b7e08f74d9c7a1497c5c1d3203a57540800a0d2141597778dd72a16c7a6b83f50fa1a8b3c250b961d69a86";
   sha512.doc = "709a7d484cc431d33a7921d342eaa7c5360398914e2ffbccc02e34c58c4920a155651dadbd0928e20d04fc622784f469335f3be902b83115461de39a3d838f1e";
+  hasCatalogue = false;
 };
 texlive-de = {
   revision = 71542;
@@ -49006,6 +49153,7 @@ texlive-de = {
   stripPrefix = 0;
   sha512.run = "030027d8ff560646fabe5a8c4c61f3cd542cd83fc2a6d6fde6e4d7a3a67724aeb5195d084c2fc893637a009036737e912a64062462b411461bc422f0bb2186c0";
   sha512.doc = "243023c53520fcd82efa0ba8933a7a16b17c87aadd8fd186bfaee5270edd7553afbcc55a1e8d680ef734b232ea9f49ab2fa7404523ad21847500926ba1b206d9";
+  hasCatalogue = false;
 };
 texlive-en = {
   revision = 71152;
@@ -49014,6 +49162,7 @@ texlive-en = {
   sha512.run = "ffe4e1677dcb26c104df12d3ebe12a7d1fe810f329d6b5f20c16b865586f1576417cbc8026df061546e6513588b8ec7c907cdcd52e74f05570fda702f3362a03";
   sha512.doc = "598d8229c0ae50fc4697909b7305ef614e5d3d8a884e5375c87da32b138c071b54dd0766a4a8080fe9863e3793e480c5c89afd8231f795560cbfe718a8bea16b";
   hasInfo = true;
+  hasCatalogue = false;
 };
 texlive-es = {
   revision = 70417;
@@ -49021,6 +49170,7 @@ texlive-es = {
   stripPrefix = 0;
   sha512.run = "671cb1c99e88b4d2440ff3c46f506abf8f9e0df13e4f746bbbadf13de32a011e586adb878072f77359875b6274b625c74ac8883dd8d09088e2f9257f5d2c651e";
   sha512.doc = "4a5ad67613dc27a699befd53921860114c397983f44bb8c6cab54160ca09d8801cdbe2741936e2a360684a114e42a3ec2e69d78c35b38de9f5d18bd5755ff914";
+  hasCatalogue = false;
 };
 texlive-fr = {
   revision = 70783;
@@ -49028,6 +49178,7 @@ texlive-fr = {
   stripPrefix = 0;
   sha512.run = "0e880cd72585109a7cfa9a184fc9be441265af85aa262002ba1a793937eaa0a7e7dc1c18a91e4a665e53533a132221d995d9b10c21af0baf707aa2dbdfb9c547";
   sha512.doc = "7e43f0154c22ed8156ce880f5ab5d1846a5b71b1f7699ac4b9b5b3cf472e567d8b4936a3b2a0431afc604278f0e2ca719372564a81d4081039ec6493a5619f33";
+  hasCatalogue = false;
 };
 texlive-it = {
   revision = 58653;
@@ -49035,6 +49186,7 @@ texlive-it = {
   stripPrefix = 0;
   sha512.run = "22874afcd046572176439818fd3a1c2200d00c0e184adc4fcbfa90b2ecc88dac7f5b28eb95c74bd546fd7472fcfdb2c5b74e5b1b5d08ffe4d4a5aa5f924da698";
   sha512.doc = "0c0d3585bb2c12476751bc5dafb5ea5e10dcaf5149b98e823e607d7a99e5bd9dfd698d73950ecb1efe353435ba2f88be2c45e18c6cde2245df90cebfdbad4417";
+  hasCatalogue = false;
 };
 texlive-ja = {
   revision = 70587;
@@ -49042,6 +49194,7 @@ texlive-ja = {
   stripPrefix = 0;
   sha512.run = "387a61a4e104386506b9feb6e0b65df938210260a52d865d2f7eeee2637b2335a6b793c5c9ca16d2928c93346b2db69eaeefc9c632d2d483d626dd04cfa1b21c";
   sha512.doc = "39097626d2f747d607968bba94f40c24788b6f5a49224ef70883c51c109c4f03acaf8075e62df20a8c7a1b01c90beb2777c2e0384b423dbdb52eb1bc444784b1";
+  hasCatalogue = false;
 };
 texlive-msg-translations = {
   revision = 71858;
@@ -49055,6 +49208,7 @@ texlive-pl = {
   stripPrefix = 0;
   sha512.run = "b43de2e6d5fe66c53370a4c43ab1a66cb08f353944f58756debc40d6651cb5df11824d1eb4ec79890b449ed611b8674c0773a4e477ad4abf30f162906c1f75ec";
   sha512.doc = "09319f848fe28ca344367f70c826380b3927aa26df7eeb195f6eb176d4951ded181cc47c772f401e1e7936de5fb3a9be3339c69f5bb4e8a5f9785f7313e6baa8";
+  hasCatalogue = false;
 };
 texlive-ru = {
   revision = 58426;
@@ -49062,6 +49216,7 @@ texlive-ru = {
   stripPrefix = 0;
   sha512.run = "7658ab0d98a505eda9a86e9ecd64b0e35d9cd332b03066b46825c2a6252b9aa8edb24eb4af2bfc267127b349f741709ada836104dbfc2becadfd97d22e737365";
   sha512.doc = "40e8b29f29ed61addc2b9e7ce4b73d12bf2e59f1c50c65e59e9c8cac5e6c3ef264ce2071b0d54e15f5029c101a51d0efcda0144e113aaedc714eb1300aa9635d";
+  hasCatalogue = false;
 };
 texlive-scripts = {
   revision = 72673;
@@ -49131,6 +49286,7 @@ texlive-sr = {
   stripPrefix = 0;
   sha512.run = "de99d6d13c6b68f8327c0b72dd3ab8aef92d07085f3eb59d94aaf8901d11d542c0795a33cb2bff1ff0dfb1acc99e43fc767150956abd873536a7d4e3b8f031f7";
   sha512.doc = "4e07f6f015a023af113822e409e03405f49b9786f854308c14f2060cac75d8420ddab090696044860be75f1337b6d3b6e7a45fc0d56969b0894efce3a8c60ae7";
+  hasCatalogue = false;
 };
 texlive-zh-cn = {
   revision = 71700;
@@ -49138,6 +49294,7 @@ texlive-zh-cn = {
   stripPrefix = 0;
   sha512.run = "e0cc717146bd0de481ccaa73705ca63389b8a73bd0f5af4a3c38dbbe69c597a92534bbc81d3c77bdbb26ba1b2d71c7dec8899f70904ca90c3c6cacccea29b847";
   sha512.doc = "4dd44f1b131aefc7418018608a9ec6524ad490212827d3120c0beb5eea61bea511260407678112ae3498ad4da655303c17ecf8109b643ae91899c6f550f59574";
+  hasCatalogue = false;
 };
 "texlive.infra" = {
   revision = 71593;
@@ -49501,6 +49658,7 @@ texworks = {
   shortdesc = "friendly cross-platform front end";
   sha512.run = "228ac6589e8e14fc8061961353864eb54a83f2c4293ecf5a81c9199230dc14ba2b1d15f7f12d536a30fb896e4511e159f96f754206d48186341168be153bdd56";
   sha512.doc = "725b67517504b3858766f4edcc589765ab9ea24716dd5006147869585f8f7c2eabb2f54fc9552f920405f9efe1e1a80f5f10b9e10a694c7abca1204a4c6c04f8";
+  hasCatalogue = false;
 };
 tfrupee = {
   revision = 20770;
@@ -50552,6 +50710,7 @@ timbreicmc = {
 };
 times = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -50841,6 +51000,7 @@ tlc-article = {
 };
 tlc2 = {
   revision = 26096;
+  catalogue = "tlc2-examples";
   shortdesc = "Examples from \"The LaTeX Companion\", second edition";
   stripPrefix = 0;
   sha512.run = "3ac7d28285b15d7e97839619a449c870b3f96e1c557470ba4bf680016c9834af9f09715e09525b00aa2b951bbe20e5d3b1d0a5e5f957de99c13fdb39f4267e3d";
@@ -51032,6 +51192,7 @@ toolbox = {
 };
 tools = {
   revision = 71523;
+  catalogue = "latex-tools";
   shortdesc = "The LaTeX standard tools bundle";
   stripPrefix = 0;
   sha512.run = "43982deca3efedede52a441c1b9969a8aae1c5bab5d40bbfdf057efa3857bfcc1be176042c029b8fb8b2166d7b178831af3a8e58ab39d3d8b193ee40c963588f";
@@ -51350,6 +51511,7 @@ treesvr = {
 };
 treetex = {
   revision = 28176;
+  catalogue = "treetex-plain";
   shortdesc = "Draw trees";
   stripPrefix = 0;
   sha512.run = "49202a38697bd9bd3bc6fcbf30d28047b8ddc4d737bfa68cfdb83197b484352997a33f55e195211eff1d548f95e2072f07ed18f1d7c6772a03c66a13051d1709";
@@ -51664,6 +51826,7 @@ twoinone = {
 };
 twoup = {
   revision = 15878;
+  catalogue = "twoupltx";
   shortdesc = "Print two virtual pages on each physical page";
   stripPrefix = 0;
   sha512.run = "b3734b3818498a7038d544304d27376ff481b81fbd776cc44b9d246c3e69560364a784d897755cb69f9608c51135a1fdbb8ed370d624db64dd7b5f18a48bf754";
@@ -53248,6 +53411,7 @@ vectorlogos = {
 };
 velthuis = {
   revision = 66186;
+  catalogue = "devanagari";
   shortdesc = "Typeset Devanagari";
   deps = [
     "xetex-devanagari"
@@ -53499,6 +53663,7 @@ vlna = {
   sha512.run = "6c66717442bca3306e23f5d546e17929240ce9626a562b9e56512446998996d38f83f78fbb39e46bde0b9faf0db7eb0c0218c79e1d66711d6cd3c64a8778edec";
   sha512.doc = "921d76535cbe7e940617355c74b82acfc61edb840db8ed9cae1aaf987fe6b83245505048c7c550d59829b204f139ae1cfd44601435e2fff2b0d5230b45a27b77";
   hasManpages = true;
+  hasCatalogue = false;
 };
 vlna.binfiles = [
   "vlna"
@@ -54324,6 +54489,7 @@ xelatex-dev = {
     }
   ];
   sha512.run = "a1d891fe30b30acd7df1b72d809fc91152c05191184aa875ae7f3141487f7e37bc199ea325f3c4f1c71d6febd4560f144ab18fed1f011dbf81ac0bcc464b314a";
+  hasCatalogue = false;
 };
 xelatex-dev.binfiles = [
   "xelatex-dev"
@@ -55419,6 +55585,7 @@ ytableau = {
 };
 zapfchan = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [
@@ -55430,6 +55597,7 @@ zapfchan = {
 };
 zapfding = {
   revision = 61719;
+  catalogue = "urw-base35";
   shortdesc = "URW 'Base 35' font pack for LaTeX";
   stripPrefix = 0;
   fontMaps = [

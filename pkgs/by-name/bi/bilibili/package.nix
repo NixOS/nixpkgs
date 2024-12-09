@@ -2,21 +2,21 @@
   lib,
   stdenv,
   fetchurl,
-  electron_30,
+  electron,
   dpkg,
   makeWrapper,
   commandLineArgs ? "",
 }:
 let
-  version = "1.14.0-2";
+  version = "1.15.2-2";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/msojocs/bilibili-linux/releases/download/v${version}/io.github.msojocs.bilibili_${version}_amd64.deb";
-      hash = "sha256-QQMdEpKE7r/fPMaX/yEoaa7KjilhiPMYLRvGPkv1jds=";
+      hash = "sha256-juAhvdeLzjHDs59eS+wwUn3OmnDecC17Vclp0Q0LtJw=";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/msojocs/bilibili-linux/releases/download/v${version}/io.github.msojocs.bilibili_${version}_arm64.deb";
-      hash = "sha256-UaGI4BLhfoYluZpARsj+I0iEmFXYYNfl4JWhBWOOip0=";
+      hash = "sha256-8o0MX0Ih07KQ9wE+nonSZaupSOuUVyuoIbdHYmR29mc=";
     };
   };
   src =
@@ -25,11 +25,6 @@ in
 stdenv.mkDerivation {
   pname = "bilibili";
   inherit src version;
-  unpackPhase = ''
-    runHook preUnpack
-    dpkg -x $src ./
-    runHook postUnpack
-  '';
 
   nativeBuildInputs = [
     makeWrapper
@@ -43,7 +38,7 @@ stdenv.mkDerivation {
     cp -r usr/share $out/share
     sed -i "s|Exec=.*|Exec=$out/bin/bilibili|" $out/share/applications/*.desktop
     cp -r opt/apps/io.github.msojocs.bilibili/files/bin/app $out/opt
-    makeWrapper ${lib.getExe electron_30} $out/bin/bilibili \
+    makeWrapper ${lib.getExe electron} $out/bin/bilibili \
       --argv0 "bilibili" \
       --add-flags "$out/opt/app.asar" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
@@ -67,7 +62,7 @@ stdenv.mkDerivation {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "bilibili";
   };
 }

@@ -1,4 +1,6 @@
 { stdenv
+, lib
+, config
 , callPackage
 , recurseIntoAttrs
 , symlinkJoin
@@ -236,11 +238,6 @@ in rec {
   # hipBlasLt - Very broken with Tensile at the moment, only supports GFX9
   # hipTensor - Only supports GFX9
 
-  miopengemm= throw ''
-    'miopengemm' has been deprecated.
-    It is still available for some time as part of rocmPackages_5.
-  ''; # Added 2024-3-3
-
   composable_kernel = callPackage ./composable_kernel/unpack.nix {
     composable_kernel_build = callPackage ./composable_kernel {
       inherit rocmUpdateScript rocm-cmake clr;
@@ -263,11 +260,6 @@ in rec {
   };
 
   miopen-hip = miopen;
-
-  miopen-opencl= throw ''
-    'miopen-opencl' has been deprecated.
-    It is still available for some time as part of rocmPackages_5.
-  ''; # Added 2024-3-3
 
   migraphx = callPackage ./migraphx {
     inherit rocmUpdateScript rocm-cmake rocblas composable_kernel miopen clr half rocm-device-libs;
@@ -326,12 +318,6 @@ in rec {
     useOpenCL = false;
     useCPU = false;
   };
-
-  mivisionx-opencl = throw ''
-    'mivisionx-opencl' has been deprecated.
-    Other versions of mivisionx are still available.
-    It is also still available for some time as part of rocmPackages_5.
-  ''; # Added 2024-3-24
 
   mivisionx-cpu = mivisionx.override {
     rpp = rpp-cpu;
@@ -525,4 +511,20 @@ in rec {
       ];
     };
   };
+} // lib.optionalAttrs config.allowAliases {
+  miopengemm= throw ''
+    'miopengemm' has been deprecated.
+    It is still available for some time as part of rocmPackages_5.
+  ''; # Added 2024-3-3
+
+  miopen-opencl= throw ''
+    'miopen-opencl' has been deprecated.
+    It is still available for some time as part of rocmPackages_5.
+  ''; # Added 2024-3-3
+
+  mivisionx-opencl = throw ''
+    'mivisionx-opencl' has been deprecated.
+    Other versions of mivisionx are still available.
+    It is also still available for some time as part of rocmPackages_5.
+  ''; # Added 2024-3-24
 }

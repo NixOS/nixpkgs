@@ -102,7 +102,7 @@ def make_version_policy(
 
 def find_versions(package_name: str, version_policy: VersionPolicy) -> List[Version]:
     # The structure of cache.json: https://gitlab.gnome.org/Infrastructure/sysadmin-bin/blob/master/ftpadmin#L762
-    cache = json.loads(requests.get(f"https://ftp.gnome.org/pub/GNOME/sources/{package_name}/cache.json").text)
+    cache = json.loads(requests.get(f"https://download.gnome.org/sources/{package_name}/cache.json").text)
     if type(cache) != list or cache[0] != 4:
         raise Exception("Unknown format of cache.json file.")
 
@@ -117,7 +117,7 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument(
     "package-name",
-    help="Name of the directory in https://ftp.gnome.org/pub/GNOME/sources/ containing the package.",
+    help="Name of the directory in https://download.gnome.org/sources/ containing the package.",
 )
 parser.add_argument(
     "version-policy",

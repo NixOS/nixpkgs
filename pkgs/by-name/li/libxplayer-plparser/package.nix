@@ -6,7 +6,7 @@
 , gobject-introspection
 , gmime3
 , libxml2
-, libsoup
+, libsoup_2_4
 , pkg-config
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gmime3
     libxml2
-    libsoup
+    libsoup_2_4
   ];
 
   meta = with lib; {

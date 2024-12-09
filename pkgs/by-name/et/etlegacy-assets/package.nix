@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation {
   pname = "etlegacy-assets";
-  version = "2.82.0";
+  version = "2.83.1";
 
   srcs = let
     fetchAsset = { asset, hash }: fetchurl {

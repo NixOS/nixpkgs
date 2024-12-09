@@ -46,8 +46,8 @@ let
               };
 
               template = mkOption {
-                default = [ ];
-                type = with types; listOf (attrsOf anything);
+                default = null;
+                type = with types; nullOr (listOf (attrsOf anything));
                 description =
                   let upstreamDocs =
                     if flavour == "vault-agent"

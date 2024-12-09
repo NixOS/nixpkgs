@@ -7,18 +7,18 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "clash-rs";
-  version = "0.7.1";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-H76ErJQ+qKC3mt3IzNCPldAwlj7NnYUcLzUuOYykxnE=";
+    hash = "sha256-SJ3NhLiDA0iRgq9pKB/CeltPE2ewbY+z1NBQriebNi0=";
   };
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-yU5ioAuCJRuYKNOdd381W07Ua+c2me+wHFOMukTVVqM=";
+  cargoHash = "sha256-XZd3dah6c0jg5en/7fHAXz8iSb7AMJPvPZViXHTdEbw=";
 
   env = {
     PROTOC = "${protobuf}/bin/protoc";
@@ -26,26 +26,32 @@ rustPlatform.buildRustPackage rec {
     RUSTC_BOOTSTRAP = 1;
   };
 
-  doInstallCheck = true;
-
-  dontCargoCheck = true; # test failed
-
-  versionCheckProgramArg = "--version";
-
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
   buildFeatures = [
     "shadowsocks"
     "tuic"
     "onion"
   ];
 
+  doCheck = false; # test failed
+
+  postInstall = ''
+    # Align with upstream
+    ln -s "$out/bin/clash-rs" "$out/bin/clash"
+  '';
+
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   meta = {
     description = "Custom protocol, rule based network proxy software";
     homepage = "https://github.com/Watfaq/clash-rs";
-    mainProgram = "clash-rs";
+    mainProgram = "clash";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aucub ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

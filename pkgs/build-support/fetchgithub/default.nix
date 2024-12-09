@@ -1,7 +1,10 @@
 { lib, fetchgit, fetchzip }:
 
 lib.makeOverridable (
-{ owner, repo, rev, name ? "source"
+{ owner, repo
+, tag ? null
+, rev ? null
+, name ? "source"
 , fetchSubmodules ? false, leaveDotGit ? null
 , deepClone ? false, private ? false, forceFetchGit ? false
 , fetchLFS ? false
@@ -11,11 +14,16 @@ lib.makeOverridable (
 , ... # For hash agility
 }@args:
 
+assert (lib.assertMsg (lib.xor (tag == null) (rev == null)) "fetchFromGitHub requires one of either `rev` or `tag` to be provided (not both).");
+
 let
 
   position = (if args.meta.description or null != null
     then builtins.unsafeGetAttrPos "description" args.meta
-    else builtins.unsafeGetAttrPos "rev" args
+    else if tag != null then
+      builtins.unsafeGetAttrPos "tag" args
+    else
+      builtins.unsafeGetAttrPos "rev" args
   );
   baseUrl = "https://${githubBase}/${owner}/${repo}";
   newMeta = meta // {
@@ -24,7 +32,7 @@ let
     # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
     position = "${position.file}:${toString position.line}";
   };
-  passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" ];
+  passthruAttrs = removeAttrs args [ "owner" "repo" "tag" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" ];
   varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
   useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit || fetchLFS || (sparseCheckout != []);
   # We prefer fetchzip in cases we don't need submodules as the hash
@@ -53,10 +61,10 @@ let
 
   fetcherArgs = (if useFetchGit
     then {
-      inherit rev deepClone fetchSubmodules sparseCheckout fetchLFS; url = gitRepoUrl;
+      inherit tag rev deepClone fetchSubmodules sparseCheckout fetchLFS; url = gitRepoUrl;
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
     else {
-      url = "${baseUrl}/archive/${rev}.tar.gz";
+      url = "${baseUrl}/archive/${if tag != null then "refs/tags/${tag}" else rev}.tar.gz";
 
       passthru = {
         inherit gitRepoUrl;

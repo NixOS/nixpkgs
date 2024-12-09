@@ -16,9 +16,6 @@ stdenv.mkDerivation (finalAttrs: {
     curlOpts = "--user-agent Mozilla/5.0"; # HTTP 410 otherwise
   };
 
-  sourceRoot = ".";
-  unpackCmd = "dpkg-deb -x $curSrc .";
-
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg

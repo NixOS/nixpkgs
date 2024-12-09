@@ -2,6 +2,7 @@
 , stdenv
 , makeSetupHook
 , callPackage
+, config
 , vimUtils
 , vimPlugins
 , nodejs
@@ -256,5 +257,6 @@ in
   inherit normalizePlugins normalizedPluginsToVimPackage;
 
   inherit buildNeovimPlugin;
+} // lib.optionalAttrs config.allowAliases {
   buildNeovimPluginFrom2Nix = lib.warn "buildNeovimPluginFrom2Nix was renamed to buildNeovimPlugin" buildNeovimPlugin;
 }

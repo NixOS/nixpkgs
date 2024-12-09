@@ -64,6 +64,34 @@ in
           Read https://aria2.github.io/manual/en/html/aria2c.html#rpc-auth to know how this option value is used.
         '';
       };
+      downloadDirPermission = lib.mkOption {
+        type = lib.types.str;
+        default = "0770";
+        description = ''
+          The permission for `settings.dir`.
+
+          The default is 0770, which denies access for users not in the `aria2`
+          group.
+
+          You may want to adjust `serviceUMask` as well, which further restricts
+          the file permission for newly created files (i.e. the downloads).
+        '';
+      };
+      serviceUMask = lib.mkOption {
+        type = lib.types.str;
+        default = "0022";
+        example = "0002";
+        description = ''
+          The file mode creation mask for Aria2 service.
+
+          The default is 0022 for compatibility reason, as this is the default
+          used by systemd. However, this results in file permission 0644 for new
+          files, and denies `aria2` group member from modifying the file.
+
+          You may want to set this value to `0002` so you can manage the file
+          more easily.
+        '';
+      };
       settings = lib.mkOption {
         description = ''
           Generates the `aria2.conf` file. Refer to [the documentation][0] for
@@ -141,7 +169,7 @@ in
 
     systemd.tmpfiles.rules = [
       "d '${homeDir}' 0770 aria2 aria2 - -"
-      "d '${config.services.aria2.settings.dir}' 0770 aria2 aria2 - -"
+      "d '${config.services.aria2.settings.dir}' ${config.services.aria2.downloadDirPermission} aria2 aria2 - -"
     ];
 
     systemd.services.aria2 = {
@@ -165,6 +193,7 @@ in
         User = "aria2";
         Group = "aria2";
         LoadCredential = "rpcSecretFile:${cfg.rpcSecretFile}";
+        UMask = cfg.serviceUMask;
       };
     };
   };

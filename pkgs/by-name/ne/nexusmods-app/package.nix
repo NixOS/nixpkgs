@@ -5,7 +5,7 @@
   copyDesktopItems,
   desktop-file-utils,
   dotnetCorePackages,
-  fetchFromGitHub,
+  fetchgit,
   imagemagick,
   lib,
   runCommand,
@@ -24,14 +24,14 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.6.3";
+  version = "0.7.0";
 
-  src = fetchFromGitHub {
-    owner = "Nexus-Mods";
-    repo = "NexusMods.App";
-    rev = "v${finalAttrs.version}";
+  src = fetchgit {
+    url = "https://github.com/Nexus-Mods/NexusMods.App.git";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-7o+orpXLvZa+F0wEh3nVnYMe4ZkiaVJQOWvhWdNmcSk=";
     fetchSubmodules = true;
-    hash = "sha256-6oygXJEiTqb0xe7mKRUsZgghfTqrllCRXJy6IDeqJQI=";
+    fetchLFS = true;
   };
 
   enableParallelBuilding = false;
@@ -59,8 +59,14 @@ buildDotnetModule (finalAttrs: {
   nugetDeps = ./deps.nix;
   mapNuGetDependencies = true;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  # TODO: remove .NET 8; StrawberryShake currently needs it
+  dotnet-sdk =
+    with dotnetCorePackages;
+    combinePackages [
+      sdk_9_0
+      runtime_8_0
+    ];
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   postPatch = ''
     # for some reason these tests fail (intermittently?) with a zero timestamp
@@ -103,7 +109,7 @@ buildDotnetModule (finalAttrs: {
   executables = [ "NexusMods.App" ];
 
   dotnetBuildFlags = [
-    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.6.3/src/NexusMods.App/app.pupnet.conf#L38
+    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.7.0/src/NexusMods.App/app.pupnet.conf#L38
     "--property:Version=${finalAttrs.version}"
     "--property:TieredCompilation=true"
     "--property:PublishReadyToRun=true"

@@ -1,11 +1,56 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 let
+  inherit (lib)
+    any
+    attrsets
+    attrByPath
+    catAttrs
+    collect
+    concatMapStrings
+    concatStringsSep
+    escape
+    escapeShellArg
+    escapeShellArgs
+    hasInfix
+    isAttrs
+    isList
+    isStorePath
+    isString
+    mapAttrs
+    mapAttrsToList
+    optionalString
+    optionals
+    replaceStrings
+    splitString
+    substring
+    versionOlder
+
+    fileContents
+    readFile
+
+    literalExpression
+    literalMD
+    mkBefore
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    mkOptionType
+    mkPackageOption
+    types;
+
   cfg = config.services.akkoma;
   ex = cfg.config;
   db = ex.":pleroma"."Pleroma.Repo";
   web = ex.":pleroma"."Pleroma.Web.Endpoint";
+
+  format = pkgs.formats.elixirConf { elixir = cfg.package.elixirPackage; };
+  inherit (format.lib)
+    mkAtom
+    mkMap
+    mkRaw
+    mkTuple;
 
   isConfined = config.systemd.services.akkoma.confinement.enable;
   hasSmtp = (attrByPath [ ":pleroma" "Pleroma.Emails.Mailer" "adapter" "value" ] null ex) == "Swoosh.Adapters.SMTP";
@@ -96,16 +141,15 @@ let
       passAsFile = [ "code" ];
     } ''elixir "$codePath" >"$out"'');
 
-  format = pkgs.formats.elixirConf { elixir = cfg.package.elixirPackage; };
   configFile = format.generate "config.exs"
     (replaceSec
       (attrsets.updateManyAttrsByPath [{
         path = [ ":pleroma" "Pleroma.Web.Endpoint" "http" "ip" ];
         update = addr:
           if isAbsolutePath addr
-            then format.lib.mkTuple
-              [ (format.lib.mkAtom ":local") addr ]
-            else format.lib.mkRaw (erlAddr addr);
+            then mkTuple
+              [ (mkAtom ":local") addr ]
+            else mkRaw (erlAddr addr);
       }] cfg.config));
 
   writeShell = { name, text, runtimeInputs ? [ ] }:
@@ -282,7 +326,7 @@ let
         AKKOMA_CONFIG_PATH="''${RUNTIME_DIRECTORY%%:*}/config.exs" \
         ERL_EPMD_ADDRESS="${cfg.dist.address}" \
         ERL_EPMD_PORT="${toString cfg.dist.epmdPort}" \
-        ERL_FLAGS=${lib.escapeShellArg (lib.escapeShellArgs ([
+        ERL_FLAGS=${escapeShellArg (escapeShellArgs ([
           "-kernel" "inet_dist_use_interface" (erlAddr cfg.dist.address)
           "-kernel" "inet_dist_listen_min" (toString cfg.dist.portMin)
           "-kernel" "inet_dist_listen_max" (toString cfg.dist.portMax)
@@ -639,7 +683,7 @@ in {
               "Pleroma.Repo" = mkOption {
                 type = elixirValue;
                 default = {
-                  adapter = format.lib.mkRaw "Ecto.Adapters.Postgres";
+                  adapter = mkRaw "Ecto.Adapters.Postgres";
                   socket_dir = "/run/postgresql";
                   username = cfg.user;
                   database = "akkoma";
@@ -769,7 +813,7 @@ in {
               in {
                 base_url = mkOption {
                     type = types.nonEmptyStr;
-                    default = if lib.versionOlder config.system.stateVersion "24.05"
+                    default = if versionOlder config.system.stateVersion "24.05"
                               then "${httpConf.scheme}://${httpConf.host}:${builtins.toString httpConf.port}/media/"
                               else null;
                     defaultText = literalExpression ''
@@ -787,7 +831,7 @@ in {
               ":frontends" = mkOption {
                 type = elixirValue;
                 default = mapAttrs
-                  (key: val: format.lib.mkMap { name = val.name; ref = val.ref; })
+                  (key: val: mkMap { name = val.name; ref = val.ref; })
                   cfg.frontends;
                 defaultText = literalExpression ''
                   lib.mapAttrs (key: val:
@@ -816,7 +860,7 @@ in {
                 };
                 base_url = mkOption {
                     type = types.nullOr types.nonEmptyStr;
-                    default = if lib.versionOlder config.system.stateVersion "24.05"
+                    default = if versionOlder config.system.stateVersion "24.05"
                               then "${httpConf.scheme}://${httpConf.host}:${builtins.toString httpConf.port}"
                               else null;
                     defaultText = literalExpression ''
@@ -899,7 +943,7 @@ in {
               ":backends" = mkOption {
                 type = types.listOf elixirValue;
                 visible = false;
-                default = with format.lib; [
+                default = [
                   (mkTuple [ (mkRaw "ExSyslogger") (mkAtom ":ex_syslogger") ])
                 ];
               };
@@ -913,7 +957,7 @@ in {
 
                 level = mkOption {
                   type = types.nonEmptyStr;
-                  apply = format.lib.mkAtom;
+                  apply = mkAtom;
                   default = ":info";
                   example = ":warning";
                   description = ''
@@ -931,7 +975,7 @@ in {
               ":data_dir" = mkOption {
                 type = elixirValue;
                 internal = true;
-                default = format.lib.mkRaw ''
+                default = mkRaw ''
                   Path.join(System.fetch_env!("CACHE_DIRECTORY"), "tzdata")
                 '';
               };
@@ -1136,6 +1180,6 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ mvs ];
+  meta.maintainers = with lib.maintainers; [ mvs ];
   meta.doc = ./akkoma.md;
 }

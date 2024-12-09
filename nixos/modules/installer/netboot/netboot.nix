@@ -131,18 +131,30 @@ with lib;
 
     boot.loader.timeout = 10;
 
-    boot.postBootCommands =
-      ''
-        # After booting, register the contents of the Nix store
-        # in the Nix database in the tmpfs.
-        ${config.nix.package}/bin/nix-store --load-db < /nix/store/nix-path-registration
+    boot.postBootCommands = ''
+      # After booting, register the contents of the Nix store
+      # in the Nix database in the tmpfs.
+      ${config.nix.package}/bin/nix-store --load-db < /nix/store/nix-path-registration
 
-        # nixos-rebuild also requires a "system" profile and an
-        # /etc/NIXOS tag.
-        touch /etc/NIXOS
-        ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
-      '';
+      # nixos-rebuild also requires a "system" profile and an
+      # /etc/NIXOS tag.
+      touch /etc/NIXOS
+      ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
 
+      # Set password for user nixos if specified on cmdline
+      # Allows using nixos-anywhere in headless environments
+      for o in $(</proc/cmdline); do
+        case "$o" in
+          live.nixos.passwordHash=*)
+            set -- $(IFS==; echo $o)
+            ${pkgs.gnugrep}/bin/grep -q "root::" /etc/shadow && ${pkgs.shadow}/bin/usermod -p "$2" root
+            ;;
+          live.nixos.password=*)
+            set -- $(IFS==; echo $o)
+            ${pkgs.gnugrep}/bin/grep -q "root::" /etc/shadow && echo "root:$2" | ${pkgs.shadow}/bin/chpasswd
+            ;;
+        esac
+      done
+    '';
   };
-
 }

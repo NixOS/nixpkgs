@@ -26,5 +26,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = teams.geospatial.members;
     mainProgram = "t_rex";
     platforms = platforms.unix;
+    broken = true; # see https://github.com/t-rex-tileserver/t-rex/issues/320
   };
 }

@@ -5,16 +5,18 @@
 }:
 buildGoModule rec {
   pname = "termshot";
-  version = "0.2.8";
+  version = "0.2.12";
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "termshot";
     rev = "v${version}";
-    hash = "sha256-cCtae2O9P9czivNVcytJKz3tQ41TaqokZcTOwt2v6jk=";
+    hash = "sha256-ua2tFyOjLeqOpipLoSisASqwjqGEFdkxd2qHybZ1VDU=";
   };
 
-  vendorHash = "sha256-ji2B9Gr1oQGouGH2hBpTyfjbht6bRfIeLcdTBhmmIwk=";
+  vendorHash = "sha256-JweKjKvShiimFHQwRtoVuongWqqGIPcPz77qEVNec+M=";
+
+  patches = [./go-mod.patch];
 
   ldflags = [
     "-s"

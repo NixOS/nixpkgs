@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   ];
 
   fhsEnv = buildFHSEnv {
-    name = "${pname}-fhs-env";
+    pname = "${pname}-fhs-env";
+    inherit version;
     runScript = "";
 
     targetPkgs = pkgs: with pkgs; [

@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.serviio;
@@ -28,16 +25,16 @@ in {
   options = {
     services.serviio = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable the Serviio Media Server.
         '';
       };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/serviio";
         description = ''
           The directory where serviio stores its state, data, etc.
@@ -49,7 +46,7 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.serviio = {
       description = "Serviio Media Server";
       after = [ "network.target" ];

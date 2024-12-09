@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "0zlgdlk9nsskmr8xc2ajm6mn1x5wz82ssx9w88s02icz71mcihrx";
   };
 
+  patches = [
+    # Fix compilation with GCC 11.
+    # <https://github.com/skystrife/cpptoml/pull/123>
+    ./add-limits-include.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [

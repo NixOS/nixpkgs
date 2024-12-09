@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "withings-sync";
-  version = "4.2.5";
+  version = "4.2.6";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -21,8 +21,13 @@ buildPythonPackage rec {
     owner = "jaroslawhartman";
     repo = "withings-sync";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4gxJwe8v4trTysGBNORX7C54EUzFIPwpVLfKSNxJ8y4=";
+    hash = "sha256-rljzE/sEVBqG2vWcKmoC2fm9I06onMmDkf60rkq9k3g=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'read(".VERSION")' '"${version}"'
+  '';
 
   build-system = [ setuptools ];
 

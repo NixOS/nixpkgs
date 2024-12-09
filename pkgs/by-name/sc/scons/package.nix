@@ -45,6 +45,6 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://scons.org/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

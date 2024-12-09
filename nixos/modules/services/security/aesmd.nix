@@ -21,7 +21,7 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "debug" ] ''
+    (mkRemovedOptionModule [ "services" "aesmd" "debug" ] ''
       Enable debug mode by overriding the aesmd package directly:
 
           services.aesmd.package = pkgs.sgx-psw.override { debug = true; };
@@ -110,11 +110,7 @@ in
         description = "Intel Architectural Enclave Service Manager";
         wantedBy = [ "multi-user.target" ];
 
-        after = [
-          "auditd.service"
-          "network.target"
-          "syslog.target"
-        ];
+        after = [ "auditd.service" "network.target" ];
 
         environment = {
           NAME = "aesm_service";

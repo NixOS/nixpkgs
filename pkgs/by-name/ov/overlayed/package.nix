@@ -4,7 +4,7 @@
   callPackage,
   pkg-config,
   openssl,
-  libsoup,
+  libsoup_3,
   webkitgtk_4_1,
   fetchFromGitHub,
   libayatana-appindicator,
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
     webkitgtk_4_1
-    libsoup
+    libsoup_3
   ];
 
   env = {

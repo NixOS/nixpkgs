@@ -1,26 +1,27 @@
 # The cmake version of this build is meant to enable both cmake and .pc being exported
 # this is important because grpc exports a .cmake file which also expects for protobuf
 # to have been exported through cmake as well.
-{ lib
-, stdenv
-, abseil-cpp
-, buildPackages
-, cmake
-, fetchFromGitHub
-, fetchpatch
-, gtest
-, zlib
-, version
-, hash
+{
+  lib,
+  stdenv,
+  abseil-cpp,
+  buildPackages,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+  gtest,
+  zlib,
+  version,
+  hash,
 
   # downstream dependencies
-, python3
-, grpc
-, enableShared ? !stdenv.hostPlatform.isStatic
+  python3,
+  grpc,
+  enableShared ? !stdenv.hostPlatform.isStatic,
 
-, testers
-, protobuf
-, ...
+  testers,
+  protobuf,
+  ...
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,13 +49,15 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # protoc of the same version must be available for build. For non-cross builds, it's able to
-    # re-use the executable generated as part of the build
-    buildPackages."protobuf_${lib.versions.major version}"
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      # protoc of the same version must be available for build. For non-cross builds, it's able to
+      # re-use the executable generated as part of the build
+      buildPackages."protobuf_${lib.versions.major version}"
+    ];
 
   buildInputs = [
     gtest
@@ -68,15 +71,17 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   cmakeDir = if lib.versionOlder version "22" then "../cmake" else null;
-  cmakeFlags = [
-    "-Dprotobuf_USE_EXTERNAL_GTEST=ON"
-    "-Dprotobuf_ABSL_PROVIDER=package"
-  ] ++ lib.optionals enableShared [
-    "-Dprotobuf_BUILD_SHARED_LIBS=ON"
-  ]
-  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-    "-Dprotobuf_BUILD_TESTS=OFF"
-  ];
+  cmakeFlags =
+    [
+      "-Dprotobuf_USE_EXTERNAL_GTEST=ON"
+      "-Dprotobuf_ABSL_PROVIDER=package"
+    ]
+    ++ lib.optionals enableShared [
+      "-Dprotobuf_BUILD_SHARED_LIBS=ON"
+    ]
+    ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+      "-Dprotobuf_BUILD_TESTS=OFF"
+    ];
 
   doCheck =
     # FIXME: investigate.  24.x and 23.x have different errors.

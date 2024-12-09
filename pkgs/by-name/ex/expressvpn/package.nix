@@ -42,7 +42,7 @@ let
   };
 
   expressvpndFHS = buildFHSEnv {
-    name = "expressvpnd";
+    inherit pname version;
 
     # When connected, it directly creates/deletes resolv.conf to change the DNS entries.
     # Since it's running in an FHS environment, it has no effect on actual resolv.conf.

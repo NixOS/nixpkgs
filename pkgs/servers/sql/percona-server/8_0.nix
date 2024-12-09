@@ -42,11 +42,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "percona-server";
-  version = "8.0.37-29";
+  version = "8.0.39-30";
 
   src = fetchurl {
     url = "https://www.percona.com/downloads/Percona-Server-8.0/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
-    hash = "sha256-zZgq3AxCRYdte3dTUJiuMvVGdl9U01s8jxcAqDxZiNM=";
+    hash = "sha256-Ag+9tzmWpdF5vxWOFUsn65oJXIkb0HmoMbif7HcSoP8=";
   };
 
   nativeBuildInputs = [

@@ -14,7 +14,7 @@
 , webkitgtk_4_0
 , librsvg
 , gdk-pixbuf
-, libsoup
+, libsoup_2_4
 , glib-networking
 , graphicsmagick_q16
 , libva
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     webkitgtk_4_0
     librsvg
     gdk-pixbuf
-    libsoup
+    libsoup_2_4
     glib-networking
     graphicsmagick_q16
     hiredis

@@ -1844,6 +1844,12 @@
   "sec-release-25.05-notable-changes": [
     "release-notes.html#sec-release-25.05-notable-changes"
   ],
+  "sec-release-25.05-lib": [
+    "release-notes.html#sec-release-25.05-lib"
+  ],
+  "sec-release-25.05-lib-breaking": [
+    "release-notes.html#sec-release-25.05-lib-breaking"
+  ],
   "sec-release-24.11": [
     "release-notes.html#sec-release-24.11"
   ],
@@ -1867,6 +1873,21 @@
   ],
   "sec-release-24.11-migration-dto-compatible": [
     "release-notes.html#sec-release-24.11-migration-dto-compatible"
+  ],
+  "sec-release-24.11-wiki": [
+    "release-notes.html#sec-release-24.11-wiki"
+  ],
+  "sec-release-24.11-lib": [
+    "release-notes.html#sec-release-24.11-lib"
+  ],
+  "sec-release-24.11-lib-breaking": [
+    "release-notes.html#sec-release-24.11-lib-breaking"
+  ],
+  "sec-release-24.11-lib-additions-improvements": [
+    "release-notes.html#sec-release-24.11-lib-additions-improvements"
+  ],
+  "sec-release-24.11-lib-deprecations": [
+    "release-notes.html#sec-release-24.11-lib-deprecations"
   ],
   "sec-release-24.05": [
     "release-notes.html#sec-release-24.05"

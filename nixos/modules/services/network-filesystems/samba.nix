@@ -101,6 +101,19 @@ in
         };
       };
 
+      usershares = {
+        enable = lib.mkEnableOption "user-configurable Samba shares";
+        group = lib.mkOption {
+          type = lib.types.str;
+          default = "samba";
+          description = ''
+            Name of the group members of which will be allowed to create usershares.
+
+            The group will be created automatically.
+          '';
+        };
+      };
+
       nsswins = lib.mkEnableOption ''
         WINS NSS (Name Service Switch) plug-in.
 
@@ -306,6 +319,23 @@ in
           unitConfig.RequiresMountsFor = "/var/lib/samba";
 
           restartTriggers = [ configFile ];
+        };
+      })
+
+      (lib.mkIf (cfg.enable && cfg.usershares.enable) {
+        users.groups.${cfg.usershares.group} = {};
+
+        systemd.tmpfiles.settings."50-samba-usershares"."/var/lib/samba/usershares".d = {
+          user = "root";
+          group = cfg.usershares.group;
+          mode = "1775";  # sticky so users can't delete others' shares
+        };
+
+        # set some reasonable defaults
+        services.samba.settings.global = lib.mkDefault {
+          "usershare path" = "/var/lib/samba/usershares";
+          "usershare max shares" = 100;  # high enough to be considered ~unlimited
+          "usershare allow guests" = true;
         };
       })
     ];

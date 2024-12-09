@@ -9,7 +9,7 @@
 , itstool
 , wrapGAppsHook3
 , desktop-file-utils
-, libsoup
+, libsoup_2_4
 , json-glib
 , geoclue2
 , geocode-glib
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libsoup
+    libsoup_2_4
     json-glib
     geoclue2
     geocode-glib
@@ -63,6 +63,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "com.github.louis77.tuner";
-    maintainers = [ maintainers.abbe ];
+    maintainers = with maintainers; [
+      abbe
+      aleksana
+    ];
   };
 }

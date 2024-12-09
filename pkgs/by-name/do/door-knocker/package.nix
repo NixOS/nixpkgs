@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "door-knocker";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "tytan652";
     repo = "door-knocker";
     rev = finalAttrs.version;
-    hash = "sha256-932zUfCEN24hZxkCX9uJ2HpvmLNdTtbkXvv50Hu7KxE=";
+    hash = "sha256-n25Bcn1SJuTTRhl8u4M0DF5bAuWV2KVkFfMU65+np78=";
   };
 
   nativeBuildInputs = [

@@ -11,7 +11,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "dscribe";
+  pname = "dscribe";
   version = "2.1.1";
 
   src = fetchFromGitHub {

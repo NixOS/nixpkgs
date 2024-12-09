@@ -6,7 +6,7 @@
 , librest
 , gnome-online-accounts
 , gnome
-, libsoup
+, libsoup_2_4
 , json-glib
 , gobject-introspection
 , gtk-doc
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    libsoup
+    libsoup_2_4
     json-glib
     librest
   ];

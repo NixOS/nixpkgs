@@ -90,15 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteAllInPlace src/utils/file.cpp
   '';
 
-  postInstall =
-    lib.optionalString i3Support ''
-      wrapProgram $out/bin/polybar \
-        --prefix PATH : "${i3}/bin"
-    '';
-
-  postFixup = ''
+  postInstall = ''
     remove-references-to -t ${stdenv.cc} $out/bin/polybar
-  '';
+  '' + (lib.optionalString i3Support ''
+    wrapProgram $out/bin/polybar \
+      --prefix PATH : "${i3}/bin"
+  '');
 
   meta = with lib; {
     homepage = "https://polybar.github.io/";

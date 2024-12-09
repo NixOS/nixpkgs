@@ -40,15 +40,18 @@ in
       type = lib.types.enum [
         "scx_bpfland"
         "scx_central"
+        "scx_flash"
         "scx_flatcg"
         "scx_lavd"
         "scx_layered"
+        "scx_mitosis"
         "scx_nest"
         "scx_pair"
         "scx_qmap"
         "scx_rlfifo"
         "scx_rustland"
         "scx_rusty"
+        "scx_sdt"
         "scx_simple"
         "scx_userland"
       ];

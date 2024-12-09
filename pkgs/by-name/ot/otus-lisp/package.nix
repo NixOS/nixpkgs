@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "otus-lisp";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "yuriy-chumak";
     repo = "ol";
     rev = finalAttrs.version;
-    hash = "sha256-xwn2cvtw3co7MJ4J0FraEtZhKWVaaaoJYMrohyFF+us=";
+    hash = "sha256-5ixpTTXwJbLM2mJ/nwzjz0aKG/QGVLPScY8EaG7swGU=";
   };
 
   nativeBuildInputs = [ xxd ];

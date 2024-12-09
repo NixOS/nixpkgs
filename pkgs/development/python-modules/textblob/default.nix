@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "textblob";
-  version = "0.18.0";
+  version = "0.18.0.post0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-61B7Yr8ig6cfVr7T4PxO7H04jvdrA2mc+ZQWZXKo2vM=";
+    hash = "sha256-gTHFLGMLzfYdBMNZ+TnJjVuDagH7oiTZ564i/CdODMs=";
   };
 
   build-system = [ flit-core ];

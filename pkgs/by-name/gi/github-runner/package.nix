@@ -1,5 +1,7 @@
 {
+  bash,
   buildDotnetModule,
+  coreutils,
   darwin,
   dotnetCorePackages,
   fetchFromGitHub,
@@ -111,12 +113,17 @@ buildDotnetModule rec {
     [
       which
       git
+      # needed for `uname`
+      coreutils
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       darwin.autoSignDarwinBinariesHook
     ];
 
-  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc)
+    bash
+  ];
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;

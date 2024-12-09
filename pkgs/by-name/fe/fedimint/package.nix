@@ -1,28 +1,13 @@
 { lib
 , buildPackages
-, clang
 , fetchFromGitHub
-, libclang
-, libiconv
-, llvmPackages_12
 , openssl
 , pkg-config
 , protobuf
 , rustPlatform
-, stdenv
-, Security
-, SystemConfiguration
 }:
-let
-  # Rust rocksdb bindings have C++ compilation/linking errors on Darwin when using newer clang
-  # Forcing it to clang 12 fixes the issue.
-  buildRustPackage =
-    if stdenv.hostPlatform.isDarwin then
-      rustPlatform.buildRustPackage.override { stdenv = llvmPackages_12.stdenv; }
-    else
-      rustPlatform.buildRustPackage;
-in
-buildRustPackage rec {
+
+rustPlatform.buildRustPackage rec {
   pname = "fedimint";
   version = "0.4.4";
 
@@ -38,17 +23,11 @@ buildRustPackage rec {
   nativeBuildInputs = [
     protobuf
     pkg-config
-    clang
-    (lib.getLib libclang)
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    libiconv
-    Security
-    SystemConfiguration
   ];
 
   outputs = [ "out" "fedimintCli" "fedimint" "gateway" "gatewayCli" "devimint" ];
@@ -79,7 +58,6 @@ buildRustPackage rec {
   PROTOC = "${buildPackages.protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
   OPENSSL_DIR = openssl.dev;
-  LIBCLANG_PATH = "${lib.getLib libclang}/lib";
 
   FEDIMINT_BUILD_FORCE_GIT_HASH = "0000000000000000000000000000000000000000";
 

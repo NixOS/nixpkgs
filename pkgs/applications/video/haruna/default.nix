@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "haruna";
-  version = "1.1.2";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     owner = "multimedia";
     repo = "haruna";
     rev = "v${version}";
-    hash = "sha256-PjELW0evn53gIbScrM2bYEpb9U/TE/lOCD2DiJ1aodo=";
+    hash = "sha256-RxHCs5NiKORikbTyNwRD27aQfX5id4K/Lp1bQ8cAwVo=";
     domain = "invent.kde.org";
   };
 

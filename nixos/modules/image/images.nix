@@ -8,7 +8,21 @@
 let
   inherit (lib) types;
 
-  imageModules = { };
+  imageModules = {
+    azure = [ ../virtualisation/azure-image.nix ];
+    digital-ocean = [ ../virtualisation/digital-ocean-image.nix ];
+    google-compute = [ ../virtualisation/google-compute-image.nix ];
+    hyperv = [ ../virtualisation/hyperv-image.nix ];
+    linode = [ ../virtualisation/linode-image.nix ];
+    lxc = [ ../virtualisation/lxc-container.nix ];
+    lxc-metadata = [ ../virtualisation/lxc-image-metadata.nix ];
+    oci = [ ../virtualisation/oci-image.nix ];
+    proxmox = [ ../virtualisation/proxmox-image.nix ];
+    kubevirt = [ ../virtualisation/kubevirt.nix ];
+    vagrant-virtualbox = [ ../virtualisation/vagrant-virtualbox-image.nix ];
+    virtualbox = [ ../virtualisation/virtualbox-image.nix ];
+    vmware = [ ../virtualisation/vmware-image.nix ];
+  };
   imageConfigs = lib.mapAttrs (
     name: modules:
     extendModules {

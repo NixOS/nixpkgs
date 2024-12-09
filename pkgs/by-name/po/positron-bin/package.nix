@@ -41,7 +41,6 @@ stdenv.mkDerivation {
     [ makeShellWrapper ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
-      dpkg
       gtk3
       libglvnd
       libxkbcommon
@@ -62,6 +61,7 @@ stdenv.mkDerivation {
   nativeBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
+      dpkg
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       _7zz
@@ -71,8 +71,6 @@ stdenv.mkDerivation {
     # Needed to fix the "Zygote could not fork" error.
     (lib.getLib systemd)
   ];
-
-  postUnpack = lib.optionalString stdenv.hostPlatform.isLinux ''dpkg-deb --fsys-tarfile "$src" | tar -x --no-same-owner'';
 
   installPhase =
     if stdenv.hostPlatform.isDarwin then

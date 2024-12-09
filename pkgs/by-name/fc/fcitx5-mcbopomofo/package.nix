@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-mcbopomofo";
-  version = "2.8";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "openvanilla";
     repo = "fcitx5-mcbopomofo";
     rev = version;
-    hash = "sha256-VnAE+DIDEYAfHnHS/ufwohkUgmgjNyrCyJlA2g1p2aY=";
+    hash = "sha256-4z6kSzmtuypbT7oXBJqiOMwU6PVRH+vEBYcBWtv4fGE=";
   };
 
   nativeBuildInputs = [

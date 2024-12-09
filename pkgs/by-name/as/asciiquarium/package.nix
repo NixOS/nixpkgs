@@ -26,6 +26,6 @@ in stdenv.mkDerivation {
     homepage = "https://robobunny.com/projects/asciiquarium/html/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = [ maintainers.utdemir ];
+    maintainers = with maintainers; [ sigmasquadron utdemir ];
   };
 }

@@ -2,12 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle,
+  gradle_8,
   makeWrapper,
   jdk,
   gsettings-desktop-schemas,
 }:
-
+let
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mucommander";
   version = "1.5.2-1";

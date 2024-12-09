@@ -112,9 +112,9 @@ let
 in
 {
   ogre_14 = common {
-    version = "14.3.1";
-    hash = "sha256-rr8tetBfFdZPVvN3fYRWltf8/e6oLcLL0uhHKWanuVA=";
-    # https://github.com/OGRECave/ogre/blob/v14.3.1/Components/Overlay/CMakeLists.txt
+    version = "14.3.2";
+    hash = "sha256-MOTEI0OyGVCH1CVK/pH51r9QkrGspLC3sBIROYHklyk=";
+    # https://github.com/OGRECave/ogre/blob/v14.3.2/Components/Overlay/CMakeLists.txt
     imguiVersion = "1.91.2";
     imguiHash = "sha256-B7XXQNuEPcT1ID5nMYbAV+aNCG9gIrC9J7BLnYB8yjI=";
   };

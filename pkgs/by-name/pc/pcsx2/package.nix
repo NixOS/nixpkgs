@@ -17,6 +17,7 @@
   makeWrapper,
   pkg-config,
   qt6,
+  shaderc,
   soundtouch,
   strip-nondeterminism,
   vulkan-headers,
@@ -45,6 +46,7 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    (lib.cmakeBool "PACKAGE_MODE" true)
     (lib.cmakeBool "DISABLE_ADVANCE_SIMD" true)
     (lib.cmakeBool "USE_LINKED_FFMPEG" true)
     (lib.cmakeFeature "PCSX2_GIT_REV" finalAttrs.src.rev)
@@ -73,7 +75,7 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
     qttools
     qtwayland
     SDL2
-    sources.shaderc-patched
+    shaderc
     soundtouch
     vulkan-headers
     wayland
@@ -82,17 +84,12 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    cp -a bin/pcsx2-qt bin/resources $out/bin/
-
+  postInstall = ''
     install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/pixmaps/PCSX2.png
     install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.desktop $out/share/applications/PCSX2.desktop
 
-    zip -jq $out/bin/resources/patches.zip ${sources.pcsx2_patches.src}/patches/*
-    strip-nondeterminism $out/bin/resources/patches.zip
-    runHook postInstall
+    zip -jq $out/share/PCSX2/resources/patches.zip ${sources.pcsx2_patches.src}/patches/*
+    strip-nondeterminism $out/share/PCSX2/resources/patches.zip
   '';
 
   qtWrapperArgs =
@@ -100,7 +97,7 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
       libs = lib.makeLibraryPath (
         [
           vulkan-loader
-          sources.shaderc-patched
+          shaderc
         ]
         ++ cubeb.passthru.backendLibs
       );

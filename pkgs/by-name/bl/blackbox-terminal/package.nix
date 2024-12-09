@@ -44,6 +44,14 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/raggesilver/blackbox/-/commit/3978c9b666d27adba835dd47cf55e21515b6d6d9.patch";
       hash = "sha256-L/Ci4YqYNzb3F49bUwEWSjzr03MIPK9A5FEJCCct+7A=";
     })
+
+    # Fix build with GCC 14
+    # https://gitlab.gnome.org/GNOME/vala/-/merge_requests/369#note_1986032
+    # https://gitlab.gnome.org/raggesilver/blackbox/-/merge_requests/143
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/raggesilver/blackbox/-/commit/2f45717f1c18f710d9b9fbf21830027c8f0794e7.patch";
+      hash = "sha256-VlXttqOTbhD6Rp7ZODgsafOjeY+Lb5sZP277bC9ENXU=";
+    })
   ];
 
   postPatch = ''

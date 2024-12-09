@@ -2,10 +2,13 @@
 , stdenv
 , fetchgit
 , jdk_headless
-, gradle
+, gradle_8
 , makeWrapper
 }:
-
+let
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+in
 stdenv.mkDerivation rec {
   pname = "apksigner";
   version = "34.0.5-unstable-2024-03-06";

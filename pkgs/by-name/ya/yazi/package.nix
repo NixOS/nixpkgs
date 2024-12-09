@@ -9,7 +9,7 @@
     jq
     poppler_utils
     _7zz
-    ffmpegthumbnailer
+    ffmpeg
     fd
     ripgrep
     fzf
@@ -26,7 +26,7 @@
   jq,
   poppler_utils,
   _7zz,
-  ffmpegthumbnailer,
+  ffmpeg,
   fd,
   ripgrep,
   fzf,

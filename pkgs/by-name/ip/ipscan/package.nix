@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-UPkUwZV3NIeVfL3yYvqOhm4X5xW+40GOlZGy8WGhYmk=";
   };
 
-  sourceRoot = ".";
-  unpackCmd = "${dpkg}/bin/dpkg-deb -x $src .";
-
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+  ];
 
   buildInputs = [ jdk ];
 

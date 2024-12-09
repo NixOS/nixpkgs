@@ -535,7 +535,7 @@ in
 
     systemd.timers.seaf-gc = lib.mkIf cfg.gc.enable {
       timerConfig = {
-        randomizedDelaySec = cfg.gc.randomizedDelaySec;
+        RandomizedDelaySec = cfg.gc.randomizedDelaySec;
         Persistent = cfg.gc.persistent;
       };
     };

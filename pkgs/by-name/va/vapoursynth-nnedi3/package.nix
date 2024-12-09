@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   pkg-config,
   vapoursynth,
@@ -18,6 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-jd/PCXhbCZGMsoXjekbeqMSRVBJAy4INdpkTbZFjVO0=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "build-fixes-for-aarch64-apple-silicon.patch";
+      url = "https://github.com/dubhater/vapoursynth-nnedi3/commit/15c15080ed4406929aa0d2d6a3f83ca3e26bc979.patch";
+      hash = "sha256-8gNj4LixfrGq0MaIYdZuwSK/2iyh1E9s/uuSBJHZwx8=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

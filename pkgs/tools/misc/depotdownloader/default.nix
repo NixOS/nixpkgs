@@ -6,19 +6,19 @@
 
 buildDotnetModule rec {
   pname = "depotdownloader";
-  version = "2.7.3";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     owner = "SteamRE";
     repo = "DepotDownloader";
     rev = "DepotDownloader_${version}";
-    sha256 = "TKPUE9PzTUoYmhT1O+Qvb0lukPY6fGs70wSiCdEJUMQ=";
+    hash = "sha256-XcUWNr3l1Bsl8SRYm8OS7t2JYppfKJVrVWyM5OILFDA=";
   };
 
   projectFile = "DepotDownloader.sln";
   nugetDeps = ./deps.nix;
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
   passthru.updateScript = ./update.sh;
 

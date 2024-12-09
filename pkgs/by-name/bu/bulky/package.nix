@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bulky";
-  version = "3.4";
+  version = "3.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "bulky";
     rev = version;
-    hash = "sha256-YByzRDL/LuI/VwBHLRZ3+S2VnttYeuMgJpRLPhR/NCA=";
+    hash = "sha256-yGW2vEYGmd0FawbgB0lJoi5sId8MG9gNQa71wF1XupQ=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (python3.withPackages (p: with p; [ pygobject3 magic setproctitle ]))
+    (python3.withPackages (p: with p; [ pygobject3 magic setproctitle unidecode ]))
     gsettings-desktop-schemas
     gtk3
     glib

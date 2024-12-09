@@ -8,7 +8,7 @@
   cairo,
   stdenv,
   librsvg,
-  libsoup,
+  libsoup_2_4,
   fetchzip,
   openssl_3,
   webkitgtk_4_0,
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     gtk3
     cairo
     gdk-pixbuf
-    libsoup
+    libsoup_2_4
     glib
     dbus
     openssl_3
