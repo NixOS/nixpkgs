@@ -4,6 +4,7 @@
   fetchPypi,
   fasteners,
   jinja2,
+  packaging,
   pbr,
   python-jenkins,
   pyyaml,
@@ -39,6 +40,7 @@ buildPythonPackage rec {
   '';
 
   dependencies = [
+    packaging
     pbr
     python-jenkins
     pyyaml
