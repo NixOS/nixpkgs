@@ -1844,6 +1844,12 @@
   "sec-release-25.05-notable-changes": [
     "release-notes.html#sec-release-25.05-notable-changes"
   ],
+  "sec-release-25.05-lib": [
+    "release-notes.html#sec-release-25.05-lib"
+  ],
+  "sec-release-25.05-lib-breaking": [
+    "release-notes.html#sec-release-25.05-lib-breaking"
+  ],
   "sec-release-24.11": [
     "release-notes.html#sec-release-24.11"
   ],
