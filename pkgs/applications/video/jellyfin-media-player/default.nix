@@ -93,7 +93,7 @@ mkDerivation rec {
     description = "Jellyfin Desktop Client based on Plex Media Player";
     license = with licenses; [ gpl2Only mit ];
     platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
-    maintainers = with maintainers; [ jojosch kranzes ];
+    maintainers = with maintainers; [ jojosch kranzes paumr ];
     mainProgram = "jellyfinmediaplayer";
   };
 }
