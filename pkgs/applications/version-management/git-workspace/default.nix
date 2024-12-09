@@ -29,10 +29,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = git-workspace; };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Sync personal and work git repositories from multiple providers";
