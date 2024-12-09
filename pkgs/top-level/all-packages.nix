@@ -10398,6 +10398,12 @@ with pkgs;
 
   opencv = opencv4;
 
+  opencv-gtk = (opencv.override {
+    enableGtk3 = true;
+  }).overrideAttrs (finalAttrs: {
+    meta.platforms = lib.subtractLists lib.platforms.darwin finalAttrs.meta.platforms;
+  });
+
   openexr = openexr_2;
   openexr_2 = callPackage ../development/libraries/openexr { };
   openexr_3 = callPackage ../development/libraries/openexr/3.nix { };
