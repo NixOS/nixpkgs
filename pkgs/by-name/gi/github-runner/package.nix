@@ -243,7 +243,7 @@ buildDotnetModule rec {
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace $out/lib/github-runner/config.sh \
         --replace 'command -v ldd' 'command -v ${glibc.bin}/bin/ldd' \
-        --replace 'ldd ./bin' '${glibc.bin}/bin/ldd ${dotnet-runtime}/shared/Microsoft.NETCore.App/${dotnet-runtime.version}/' \
+        --replace 'ldd ./bin' '${glibc.bin}/bin/ldd ${dotnet-runtime}/share/dotnet/shared/Microsoft.NETCore.App/${dotnet-runtime.version}/' \
         --replace '/sbin/ldconfig' '${glibc.bin}/bin/ldconfig'
     ''
     + ''
