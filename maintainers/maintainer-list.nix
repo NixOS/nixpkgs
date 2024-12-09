@@ -16488,6 +16488,12 @@
     githubId = 1538622;
     name = "Michael Reilly";
   };
+  onahp = {
+    name = "Setephano Noovao";
+    email = "onahp@pm.me";
+    github = "onahp";
+    githubId = 54986259;
+  };
   ondt = {
     name = "Ondrej Telka";
     email = "nix@ondt.dev";
