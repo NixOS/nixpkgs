@@ -149,51 +149,52 @@ in
   config = mkIf cfg.enable {
     services.systembus-notify.enable = mkDefault cfg.enableNotifications;
 
-    systemd.services.earlyoom.serviceConfig.AmbientCapabilities = "CAP_KILL CAP_IPC_LOCK";
-    systemd.services.earlyoom.serviceConfig.CapabilityBoundingSet = "CAP_KILL CAP_IPC_LOCK";
-    systemd.services.earlyoom.serviceConfig.Nice = "-20";
-    systemd.services.earlyoom.serviceConfig.OOMScoreAdjust="-100";
-    systemd.services.earlyoom.serviceConfig.Restart="always";
-    systemd.services.earlyoom.serviceConfig.TasksMax = "10";
-    systemd.services.earlyoom.serviceConfig.MemoryMax = "50M";
-    systemd.services.earlyoom.serviceConfig.DynamicUser = "true";
-    systemd.services.earlyoom.serviceConfig.ProtectSystem = "strict";
-    systemd.services.earlyoom.serviceConfig.ProtectHome = "true";
-    systemd.services.earlyoom.serviceConfig.PrivateDevices = "true";
-    systemd.services.earlyoom.serviceConfig.ProtectClock = "true";
-    systemd.services.earlyoom.serviceConfig.ProtectHostname = "true";
-    systemd.services.earlyoom.serviceConfig.ProtectKernelLogs = "true";
-    systemd.services.earlyoom.serviceConfig.ProtectKernelModules = "true";
-    systemd.services.earlyoom.serviceConfig.ProtectKernelTunables = "true";
-    systemd.services.earlyoom.serviceConfig.ProtectControlGroups = "true";
-    systemd.services.earlyoom.serviceConfig.RestrictNamespaces = "true";
-    systemd.services.earlyoom.serviceConfig.RestrictRealtime = "true";
-    systemd.services.earlyoom.serviceConfig.LockPersonality = "true";
-    systemd.services.earlyoom.serviceConfig.PrivateNetwork = "true";
-    systemd.services.earlyoom.serviceConfig.IPAddressDeny = "true";
-    systemd.services.earlyoom.serviceConfig.RestrictAddressFamilies = "AF_UNIX";
-    systemd.services.earlyoom.serviceConfig.SystemCallArchitectures = "native";
-    systemd.services.earlyoom.serviceConfig.SystemCallFilter = ["@system-service" "~@resources @privileged" ];
+systemd.services.earlyoom = {
+  description = "Early OOM Daemon for Linux";
+  wantedBy = [ "multi-user.target" ];
+  path = optionals cfg.enableNotifications [ pkgs.dbus ];
+  serviceConfig = {
+    StandardError = "journal";
+    ExecStart = concatStringsSep " " ([ 
+      "${lib.getExe cfg.package}" 
+      ("-m ${toString cfg.freeMemThreshold}" 
+       + optionalString (cfg.freeMemKillThreshold != null) ",${toString cfg.freeMemKillThreshold}")
+      ("-s ${toString cfg.freeSwapThreshold}" 
+       + optionalString (cfg.freeSwapKillThreshold != null) ",${toString cfg.freeSwapKillThreshold}")
+      "-r ${toString cfg.reportInterval}"
+    ] 
+    ++ optionals cfg.enableDebugInfo [ "-d" ] 
+    ++ optionals cfg.enableNotifications [ "-n" ] 
+    ++ optionals (cfg.killHook != null) [ "-N ${escapeShellArg cfg.killHook}" ] 
+    ++ cfg.extraArgs);
 
-    systemd.services.earlyoom = {
-      description = "Early OOM Daemon for Linux";
-      wantedBy = [ "multi-user.target" ];
-      path = optionals cfg.enableNotifications [ pkgs.dbus ];
-      serviceConfig = {
-        StandardError = "journal";
-        ExecStart = concatStringsSep " " ([
-          "${lib.getExe cfg.package}"
-          ("-m ${toString cfg.freeMemThreshold}"
-           + optionalString (cfg.freeMemKillThreshold != null) ",${toString cfg.freeMemKillThreshold}")
-          ("-s ${toString cfg.freeSwapThreshold}"
-           + optionalString (cfg.freeSwapKillThreshold != null) ",${toString cfg.freeSwapKillThreshold}")
-          "-r ${toString cfg.reportInterval}"
-        ]
-        ++ optionals cfg.enableDebugInfo [ "-d" ]
-        ++ optionals cfg.enableNotifications [ "-n" ]
-        ++ optionals (cfg.killHook != null) [ "-N ${escapeShellArg cfg.killHook}" ]
-        ++ cfg.extraArgs);
-      };
-    };
+    AmbientCapabilities = "CAP_KILL CAP_IPC_LOCK";
+    CapabilityBoundingSet = "CAP_KILL CAP_IPC_LOCK";
+    Nice = "-20";
+    OOMScoreAdjust = "-100";
+    Restart = "always";
+    TasksMax = "10";
+    MemoryMax = "50M";
+    DynamicUser = "true";
+    ProtectSystem = "strict";
+    ProtectHome = "true";
+    PrivateDevices = "true";
+    ProtectClock = "true";
+    ProtectHostname = "true";
+    ProtectKernelLogs = "true";
+    ProtectKernelModules = "true";
+    ProtectKernelTunables = "true";
+    ProtectControlGroups = "true";
+    RestrictNamespaces = "true";
+    RestrictRealtime = "true";
+    LockPersonality = "true";
+    PrivateNetwork = "true";
+    IPAddressDeny = "true";
+    RestrictAddressFamilies = "AF_UNIX";
+    SystemCallArchitectures = "native";
+    SystemCallFilter = ["@system-service" "~@resources @privileged"];
+  };
+};
+
   };
 }
