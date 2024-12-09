@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -16,9 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-NaPVrgFbw77kxl2sw1nHhqr1ePn5TYhS2rS0et7qJKs=";
 
-  subPackages = [
-    "cmd/katana"
-  ];
+  subPackages = [ "cmd/katana" ];
 
   ldflags = [
     "-w"
@@ -27,10 +26,10 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Next-generation crawling and spidering framework";
-    mainProgram = "katana";
     homepage = "https://github.com/projectdiscovery/katana";
     changelog = "https://github.com/projectdiscovery/katana/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "katana";
   };
 }
