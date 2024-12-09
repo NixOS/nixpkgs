@@ -10274,7 +10274,7 @@
     name = "jdev082";
   };
   jdreaver = {
-    email = "johndreaver@gmail.com";
+    email = "me@davidreaver.com";
     github = "jdreaver";
     githubId = 1253071;
     name = "David Reaver";
