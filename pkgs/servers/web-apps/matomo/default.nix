@@ -19,17 +19,12 @@ let
     };
   };
   common = pname: { version, hash, beta ? null }:
-    let
-      fullVersion = version + lib.optionalString (beta != null) "-${toString beta}";
-      name = "${pname}-${fullVersion}";
-    in
-
-      stdenv.mkDerivation rec {
-        inherit name;
-        version = fullVersion;
+      stdenv.mkDerivation (finalAttrs: {
+        name = "${pname}-${finalAttrs.version}";
+        version = version + lib.optionalString (beta != null) "-${toString beta}";
 
         src = fetchurl {
-          url = "https://builds.matomo.org/matomo-${version}.tar.gz";
+          url = "https://builds.matomo.org/matomo-${finalAttrs.version}.tar.gz";
           inherit hash;
         };
 
@@ -45,7 +40,7 @@ let
           ./make-localhost-default-database-host.patch
           # This changes the default config for path.geoip2 so that it doesn't point
           # to the nix store.
-          (if lib.versionOlder version "5.0"
+          (if lib.versionOlder finalAttrs.version "5.0"
            then ./change-path-geoip2-4.x.patch
            else ./change-path-geoip2-5.x.patch)
         ];
@@ -120,6 +115,6 @@ let
           platforms = platforms.all;
           maintainers = with maintainers; [ florianjacob sebbel twey boozedog ] ++ teams.flyingcircus.members;
         };
-      };
+      });
 in
 lib.mapAttrs common versions
