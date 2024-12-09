@@ -24,6 +24,10 @@ buildDotnetModule rec {
 
   dotnetFlags = [ "-p:TargetFramework=net8.0" ];
 
+  passthru = {
+    updateScript = ./update.sh;
+  };
+
   meta = {
     changelog = "https://github.com/samuel-lucas6/Kryptor/releases/tag/v${version}";
     description = "Simple, modern, and secure encryption and signing tool that aims to be a better version of age and Minisign";
