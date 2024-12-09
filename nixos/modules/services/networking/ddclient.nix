@@ -167,14 +167,14 @@ in
         '';
       };
       usev4 = lib.mkOption {
-        default = "webv4, webv4=checkip.dyndns.com/, webv4-skip='Current IP Address: '";
+        default = "webv4, webv4=ipify-ipv4";
         type = str;
         description = ''
           Method to determine the IPv4 address to send to the dynamic DNS provider. Only used if `use` is not set.
         '';
       };
       usev6 = lib.mkOption {
-        default = "webv6, webv6=checkipv6.dyndns.com/, webv6-skip='Current IP Address: '";
+        default = "webv6, webv6=ipify-ipv6";
         type = str;
         description = ''
           Method to determine the IPv6 address to send to the dynamic DNS provider. Only used if `use` is not set.
