@@ -1,7 +1,6 @@
 {
   lib,
   aiohttp,
-  async-timeout,
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
@@ -13,19 +12,16 @@ buildPythonPackage rec {
   version = "0.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-/iUpbvD77MURTltnStm47PEqXnfVuHf4m3+h9V2cn68=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aiohttp
-    async-timeout
-  ];
+  dependencies = [ aiohttp ];
 
   # No tests
   doCheck = false;
