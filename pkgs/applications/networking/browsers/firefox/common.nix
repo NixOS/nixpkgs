@@ -279,6 +279,10 @@ buildStdenv.mkDerivation {
       url = "https://hg.mozilla.org/integration/autoland/raw-rev/23a9f6555c7c";
       hash = "sha256-CRywalJlRMFVLITEYXxpSq3jLPbUlWKNRHuKLwXqQfU=";
     })
+    # Python 3.12.8 compat
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1935621
+    # https://phabricator.services.mozilla.com/D231480
+    ./mozbz-1935621-attachment-9442305.patch
   ]
   ++ extraPatches;
 
