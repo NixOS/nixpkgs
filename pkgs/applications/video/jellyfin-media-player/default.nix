@@ -22,18 +22,18 @@
 , qtwebengine
 , qtx11extras
 , jellyfin-web
-, withDbus ? stdenv.isLinux
+, withDbus ? stdenv.hostPlatform.isLinux
 }:
 
 mkDerivation rec {
   pname = "jellyfin-media-player";
-  version = "1.10.1";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-media-player";
     rev = "v${version}";
-    sha256 = "sha256-l1jNrEUrDCc4R1CZ0b0Omjka6wTryjWqnEJbfCSJ0ZE=";
+    sha256 = "sha256-Jsn4kWQzUaQI9MpbsLJr6JSJk9ZSnMEcrebQ2DYegSU=";
   };
 
   patches = [
