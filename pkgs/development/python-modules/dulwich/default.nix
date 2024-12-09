@@ -4,7 +4,6 @@
   buildPythonPackage,
   fastimport,
   fetchFromGitHub,
-  fetchpatch2,
   gevent,
   geventhttpclient,
   git,
@@ -12,7 +11,7 @@
   gnupg,
   gpgme,
   paramiko,
-  unittestCheckHook,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
   setuptools-rust,
@@ -20,17 +19,17 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.22.5";
   pname = "dulwich";
-  format = "setuptools";
+  version = "0.22.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "dulwich";
-    rev = "refs/tags/dulwich-${version}";
-    hash = "sha256-/YqC7y8PU+H2qjPqqzdw6iSSSElK709izLTcs9qbt1I=";
+    tag = "v${version}";
+    hash = "sha256-sE5du5Nv2AOyiBpQ2hDJss1dVSVBzWypnGWk3/hI8UI=";
   };
 
   build-system = [
@@ -58,17 +57,21 @@ buildPythonPackage rec {
       geventhttpclient
       git
       glibcLocales
-      unittestCheckHook
+      pytestCheckHook
     ]
     ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  preCheck = ''
-    # requires swift config file
-    rm tests/contrib/test_swift_smoke.py
+  pytestFlagsArray = [ "tests" ];
 
-    # ImportError: attempted relative import beyond top-level package
-    rm tests/test_greenthreads.py
-  '';
+  disabledTests = [
+    # AssertionError: 'C:\\\\foo.bar\\\\baz' != 'C:\\foo.bar\\baz'
+    "test_file_win"
+  ];
+
+  disabledTestPaths = [
+    # requires swift config file
+    "tests/contrib/test_swift_smoke.py"
+  ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

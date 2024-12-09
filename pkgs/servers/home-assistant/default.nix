@@ -161,15 +161,6 @@ let
         doCheck = false; # no tests
       });
 
-      plugwise = super.plugwise.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.4";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-dlDytOSp/7npanxXH5uaDv29AP21UciEzIzDlMf6jf8=";
-        };
-      });
-
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
@@ -235,6 +226,21 @@ let
         };
       });
 
+      pylamarzocco = super.pylamarzocco.overridePythonAttrs (oldAttrs: rec {
+        version = "1.2.12";
+        src = fetchFromGitHub {
+          owner = "zweckj";
+          repo = "pylamarzocco";
+          tag = "v${version}";
+          hash = "sha256-h3Oh1y1tirOWh3I8piybLZfTKwyGk0zJJ6XmHvmbUW0=";
+        };
+        dependencies = with self; [
+          bleak
+          httpx
+          websockets
+        ];
+      });
+
       pymodbus = super.pymodbus.overridePythonAttrs (oldAttrs: rec {
         version = "3.6.9";
         src = fetchFromGitHub {
@@ -261,6 +267,16 @@ let
           repo = "pysnooz";
           rev = "refs/tags/v${version}";
           hash = "sha256-hJwIObiuFEAVhgZXYB9VCeAlewBBnk0oMkP83MUCpyU=";
+        };
+      });
+
+      python-linkplay = super.python-linkplay.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.20";
+        src = fetchFromGitHub {
+          owner = "Velleman";
+          repo = "python-linkplay";
+          tag = "v${version}";
+          hash = "sha256-UIWubFLHtf43co/aYXh3rxkjLJ77E+Sgkx25UFC5vcg=";
         };
       });
 
@@ -441,7 +457,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.11.3";
+  hassVersion = "2024.12.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -459,13 +475,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-9b4HPSCPYUUwKxn0JBw5uN6nI97jvgqBHFRUNhDue/k=";
+    hash = "sha256-Gmm8PfgxJYlTEGYKcteSMFbxDWFqmZ/Gt0qbuMe7oHg=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-W7Z6C3kMyEIkY/3zQHm1OMMN7Tuj3ThsubLo6KjVotw=";
+    hash = "sha256-oQ53syzdVjd8HiO83YloDczDXDweZY4muAFB4HR8SJQ=";
   };
 
   build-system = with python.pkgs; [
@@ -509,6 +525,8 @@ in python.pkgs.buildPythonApplication rec {
       src = ./patches/ffmpeg-path.patch;
       ffmpeg = "${lib.getExe ffmpeg-headless}";
     })
+
+    ./patches/watchdog5-compat.patch
   ];
 
   postPatch = ''
@@ -551,6 +569,7 @@ in python.pkgs.buildPythonApplication rec {
     python-slugify
     pyyaml
     requests
+    securetar
     sqlalchemy
     typing-extensions
     ulid-transform
