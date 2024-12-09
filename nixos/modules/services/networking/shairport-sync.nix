@@ -32,7 +32,10 @@ in
 
       config =  mkOption {
         type = configFormat.type;
-        default = {};
+        default = {
+          general.output_backend = "pa";
+          diagnostics.log_verbosity = 1;
+        };
         example = {
           general = {
             name = "NixOS Shairport";
@@ -64,7 +67,7 @@ in
 
       arguments = mkOption {
         type = types.str;
-        default = "-v -o pa";
+        default = "";
         description = ''
           Arguments to pass to the daemon. Defaults to a local pulseaudio
           server.
