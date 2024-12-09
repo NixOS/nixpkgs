@@ -12,7 +12,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "samuel-lucas6";
     repo = "Kryptor";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-BxUmDzmfvRelQDHb5uLcQ2YPL7ClxZNFGm/gQoDK8t8=";
   };
 
@@ -22,7 +22,7 @@ buildDotnetModule rec {
 
   executables = [ "kryptor" ];
 
-  dotnetFlags = [ "-p:IncludeNativeLibrariesForSelfExtract=true" ];
+  dotnetFlags = [ ];
 
   meta = {
     changelog = "https://github.com/samuel-lucas6/Kryptor/releases/tag/v${version}";
