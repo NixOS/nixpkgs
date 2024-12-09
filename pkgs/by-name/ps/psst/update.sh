@@ -35,9 +35,9 @@ src_hash=$(nix-prefetch-github jpochyla psst --rev "$rev" | jq -r .hash)
 src="https://raw.githubusercontent.com/jpochyla/psst/$rev"
 wget "${TOKEN_ARGS[@]}" "$src/Cargo.lock" -O Cargo.lock
 
-sed -i -E -e "s#version = \".*\"#version = \"$version\"#" default.nix
-sed -i -E -e "s#rev = \".*\"#rev = \"$rev\"#" default.nix
-sed -i -E -e "s#hash = \".*\"#hash = \"$src_hash\"#" default.nix
+sed -i -E -e "s#version = \".*\"#version = \"$version\"#" package.nix
+sed -i -E -e "s#rev = \".*\"#rev = \"$rev\"#" package.nix
+sed -i -E -e "s#hash = \".*\"#hash = \"$src_hash\"#" package.nix
 
 # Also update the git hash shown in the UI
 sed -i -E -e "s#GIT_VERSION: \&str = \".*\"#GIT_VERSION: \&str = \"$rev\"#" make-build-reproducible.patch

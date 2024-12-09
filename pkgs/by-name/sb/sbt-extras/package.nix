@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, which, curl, makeWrapper, jdk, writeScript
-, common-updater-scripts, cacert, git, nixfmt-classic, nix, jq, coreutils
+, common-updater-scripts, cacert, git, nix, jq, coreutils
 , gnused }:
 
 stdenv.mkDerivation rec {
@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
          curl
          cacert
          git
-         nixfmt-classic
          nix
          jq
          coreutils
@@ -56,12 +55,9 @@ stdenv.mkDerivation rec {
     oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
      latestSha="$(curl -L -s https://api.github.com/repos/paulp/sbt-extras/commits\?sha\=master\&since\=$oldVersion | jq -r '.[0].sha')"
     if [ ! "null" = "$latestSha" ]; then
-       nixpkgs="$(git rev-parse --show-toplevel)"
-       default_nix="$nixpkgs/pkgs/development/tools/build-managers/sbt-extras/default.nix"
        latestDate="$(curl -L -s https://api.github.com/repos/paulp/sbt-extras/commits/$latestSha | jq '.commit.committer.date' | sed 's|"\(.*\)T.*|\1|g')"
        update-source-version ${pname} "$latestSha" --version-key=rev
        update-source-version ${pname} "$latestDate" --ignore-same-hash
-       nixfmt "$default_nix"
      else
        echo "${pname} is already up-to-date"
      fi

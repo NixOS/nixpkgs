@@ -10,4 +10,4 @@ sha256=$(nix-prefetch-url "https://raw.github.com/chromium/chromium/$chromium_ve
 
 sed -e "0,/chromium_version/s/chromium_version = \".*\"/chromium_version = \"$chromium_version\"/" \
     -e "0,/sha256/s/sha256 = \".*\"/sha256 = \"$sha256\"/" \
-  --in-place ./default.nix
+  --in-place ./package.nix
