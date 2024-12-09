@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   fetchzip,
   appimageTools,
@@ -28,7 +28,7 @@ let
         hash = "sha256-kwZHy0FfOUFIWvyOj0ghlQz05U+Lnzl5TgC4T6bhm7o=";
       };
     }
-    .${stdenv.system} or (throw "osu-lazer-bin: ${stdenv.system} is unsupported.");
+    .${stdenvNoCC.system} or (throw "osu-lazer-bin: ${stdenvNoCC.system} is unsupported.");
 
   meta = {
     description = "Rhythm is just a *click* away (AppImage version for score submission and multiplayer, and binary distribution for Darwin systems)";
@@ -54,8 +54,8 @@ let
 
   passthru.updateScript = ./update.sh;
 in
-if stdenv.hostPlatform.isDarwin then
-  stdenv.mkDerivation {
+if stdenvNoCC.isDarwin then
+  stdenvNoCC.mkDerivation {
     inherit
       pname
       version
