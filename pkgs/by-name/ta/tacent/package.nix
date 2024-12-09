@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "bluescan";
     repo = "tacent";
-    rev = "refs/tags/${version}";
+    tag  = version;
     hash = "sha256-z8VuJS8OaVw5CeO/udvBEmcURKIy1oWVYUv6Ai8lTI8=";
   };
 
