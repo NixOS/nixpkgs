@@ -189,7 +189,7 @@ in
         if [[ "$USER" != mediagoblin ]]; then
          sudo='exec /run/wrappers/bin/sudo -u mediagoblin'
         fi
-        $sudo sh -c "cd /var/lib/mediagoblin; env GI_TYPELIB_PATH=${GI_TYPELIB_PATH} ${lib.getExe' finalPackage "gmg"} $@"
+        $sudo sh -c "cd /var/lib/mediagoblin; env GI_TYPELIB_PATH=${GI_TYPELIB_PATH} ${lib.getExe' finalPackage "gmg"} $*"
       '')
     ];
 
