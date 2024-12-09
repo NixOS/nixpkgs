@@ -1,4 +1,10 @@
-{ cmake, fetchFromGitHub, lib, ninja, stdenv, }:
+{
+  cmake,
+  fetchFromGitHub,
+  lib,
+  ninja,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tacent";
@@ -11,11 +17,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-z8VuJS8OaVw5CeO/udvBEmcURKIy1oWVYUv6Ai8lTI8=";
   };
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
   meta = {
-    description =
-      "C++ library providing linear algebra and various utility functions";
+    description = "C++ library providing linear algebra and various utility functions";
     longDescription = ''
       A C++ library implementing linear algebra, text and file IO, UTF-N conversions,
       containers, image loading/saving, image quantization/filtering, command-line parsing, etc.
