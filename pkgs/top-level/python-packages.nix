@@ -8503,6 +8503,10 @@ self: super: with self; {
 
   muscima = callPackage ../development/python-modules/muscima { };
 
+  music-assistant-client = callPackage ../development/python-modules/music-assistant-client { };
+
+  music-assistant-models = callPackage ../development/python-modules/music-assistant-models { };
+
   musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
 
   music-tag = callPackage ../development/python-modules/music-tag { };
@@ -10431,6 +10435,8 @@ self: super: with self; {
 
   pycketcasts = callPackage ../development/python-modules/pycketcasts { };
 
+  pycolorecho = callPackage ../development/python-modules/pycolorecho { };
+
   pycomm3 = callPackage ../development/python-modules/pycomm3 { };
 
   pycompliance = callPackage ../development/python-modules/pycompliance { };
@@ -11748,6 +11754,8 @@ self: super: with self; {
 
   pyialarm = callPackage ../development/python-modules/pyialarm { };
 
+  pyiceberg = callPackage ../development/python-modules/pyiceberg { };
+
   pyicloud = callPackage ../development/python-modules/pyicloud { };
 
   pyicu = callPackage ../development/python-modules/pyicu { };
@@ -11896,6 +11904,8 @@ self: super: with self; {
 
   py-libzfs = callPackage ../development/python-modules/py-libzfs { };
 
+  pyloggermanager = callPackage ../development/python-modules/pyloggermanager { };
+
   py-lru-cache = callPackage ../development/python-modules/py-lru-cache { };
 
   pylnk3 = callPackage ../development/python-modules/pylnk3 { };
@@ -11927,6 +11937,8 @@ self: super: with self; {
   pylxd = callPackage ../development/python-modules/pylxd { };
 
   pylzma = callPackage ../development/python-modules/pylzma { };
+
+  pym3u8downloader = callPackage ../development/python-modules/pym3u8downloader { };
 
   pymacaroons = callPackage ../development/python-modules/pymacaroons { };
 

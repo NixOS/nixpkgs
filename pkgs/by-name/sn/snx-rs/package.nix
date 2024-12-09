@@ -1,4 +1,4 @@
-{ fetchFromGitHub, rustPlatform, lib, pkg-config, openssl, glib, atk, gtk3, libsoup, webkitgtk_4_1 }:
+{ fetchFromGitHub, rustPlatform, lib, pkg-config, openssl, glib, atk, gtk3, libsoup_3, webkitgtk_4_1 }:
 rustPlatform.buildRustPackage {
   pname = "snx-rs";
   version = "2.2.3";
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl glib atk gtk3 libsoup webkitgtk_4_1 ];
+  buildInputs = [ openssl glib atk gtk3 libsoup_3 webkitgtk_4_1 ];
 
   checkFlags = [
     "--skip=platform::linux::net::tests::test_default_ip"

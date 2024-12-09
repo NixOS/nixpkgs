@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "wormhole-william";
@@ -20,6 +20,15 @@ buildGoModule rec {
     substituteInPlace wormhole/wormhole_test.go \
       --replace "TestWormholeDirectoryTransportSendRecvDirect" \
                 "SkipWormholeDirectoryTransportSendRecvDirect"
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd wormhole-william \
+      --bash <($out/bin/wormhole-william shell-completion bash) \
+      --fish <($out/bin/wormhole-william shell-completion fish) \
+      --zsh <($out/bin/wormhole-william shell-completion zsh)
   '';
 
   meta = with lib; {

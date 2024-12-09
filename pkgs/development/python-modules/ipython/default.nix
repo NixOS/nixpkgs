@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
+  pythonAtLeast,
   pythonOlder,
 
   # Build dependencies
@@ -42,13 +43,13 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.29.0";
+  version = "8.30.0";
   pyproject = true;
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QLYOFbIlkUUO73PkCgJ893vWUudXUj7rxb18fEmCkOs=";
+    hash = "sha256-ywpAWjBtKZWly7mQGJTSQHhKnzQTlMa6P0/oxuuJ/24=";
   };
 
   build-system = [ setuptools ];
@@ -101,6 +102,11 @@ buildPythonPackage rec {
     [
       # UnboundLocalError: local variable 'child' referenced before assignment
       "test_system_interrupt"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      # AttributeError: 'Pdb' object has no attribute 'curframe'. Did you mean: 'botframe'?
+      "test_run_debug_twice"
+      "test_run_debug_twice_with_breakpoint"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'

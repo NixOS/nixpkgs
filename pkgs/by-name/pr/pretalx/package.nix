@@ -93,6 +93,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "bleach"
     "celery"
     "css-inline"
     "cssutils"

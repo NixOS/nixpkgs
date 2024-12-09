@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, libsoup
+, libsoup_2_4
 , graphicsmagick
 , json-glib
 , wrapGAppsHook3
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     openexr_3
     sqlite
     libxslt
-    libsoup
+    libsoup_2_4
     graphicsmagick
     json-glib
     openjpeg

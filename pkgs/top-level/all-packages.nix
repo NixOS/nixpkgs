@@ -2059,10 +2059,6 @@ with pkgs;
 
   brasero = callPackage ../tools/cd-dvd/brasero/wrapper.nix { };
 
-  broot = callPackage ../tools/misc/broot {
-    inherit (darwin.apple_sdk.frameworks) Foundation Security;
-  };
-
   ssdfs-utils = callPackage ../tools/filesystems/ssdfs-utils { };
 
   btlejack = python3Packages.callPackage ../applications/radio/btlejack { };
@@ -3225,10 +3221,6 @@ with pkgs;
 
   schleuder-cli = callPackage ../tools/security/schleuder/cli { };
 
-  tealdeer = callPackage ../tools/misc/tealdeer {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   teamocil = callPackage ../tools/misc/teamocil { };
 
   tsm-client-withGui = callPackage ../by-name/ts/tsm-client/package.nix { enableGui = true; };
@@ -3518,7 +3510,7 @@ with pkgs;
   };
 
   gnome-decoder = callPackage ../applications/graphics/gnome-decoder {
-     inherit (gst_all_1) gstreamer gst-plugins-base;
+     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-rs;
      gst-plugins-bad = gst_all_1.gst-plugins-bad.override { enableZbar = true; };
   };
 
@@ -3701,7 +3693,7 @@ with pkgs;
 
   gvm-tools = with python3.pkgs; toPythonApplication gvm-tools;
 
-  gyroflow = qt6Packages.callPackage ../applications/video/gyroflow { };
+  gyroflow = callPackage ../applications/video/gyroflow { };
 
   gzip = callPackage ../tools/compression/gzip { };
 
@@ -3712,8 +3704,6 @@ with pkgs;
   plplot = callPackage ../development/libraries/plplot {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
-
-  haguichi = callPackage ../tools/networking/haguichi { };
 
   hashcat = callPackage ../tools/security/hashcat {
     inherit (darwin.apple_sdk.frameworks) Foundation IOKit Metal OpenCL;
@@ -7096,6 +7086,8 @@ with pkgs;
   babashka-unwrapped = callPackage ../development/interpreters/babashka { };
   babashka = callPackage ../development/interpreters/babashka/wrapped.nix { };
 
+  uiua-unstable = callPackage ../by-name/ui/uiua/package.nix { unstable = true; };
+
   # BQN interpreters and compilers
 
   mbqn = bqn;
@@ -9096,7 +9088,7 @@ with pkgs;
   geoclue2-with-demo-agent = geoclue2.override { withDemoAgent = true; };
 
   geocode-glib_2 = geocode-glib.override {
-    libsoup = libsoup_3;
+    libsoup_2_4 = libsoup_3;
   };
 
   geoipWithDatabase = makeOverridable (callPackage ../development/libraries/geoip) {
@@ -9109,8 +9101,6 @@ with pkgs;
   geos = callPackage ../development/libraries/geos { };
 
   geos_3_9 = callPackage ../development/libraries/geos/3.9.nix { };
-
-  geos_3_11 = callPackage ../development/libraries/geos/3.11.nix { };
 
   inherit (callPackages ../development/libraries/getdns { })
     getdns stubby;
@@ -9994,7 +9984,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon AudioToolbox;
   };
 
-  libsoup = callPackage ../development/libraries/libsoup { };
+  libsoup_2_4 = callPackage ../development/libraries/libsoup { };
 
   libsoup_3 = callPackage ../development/libraries/libsoup/3.x.nix { };
 
@@ -10665,6 +10655,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  reposilitePlugins = recurseIntoAttrs (callPackage ../by-name/re/reposilite/plugins.nix {});
+
   rhino = callPackage ../development/libraries/java/rhino {
     javac = jdk8;
     jvm = jre8;
@@ -11014,6 +11006,7 @@ with pkgs;
 
   webkitgtk_4_0 = callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzzFull;
+    libsoup = libsoup_2_4;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
     inherit (darwin) apple_sdk;
   };
@@ -13229,10 +13222,6 @@ with pkgs;
       stdenv;
   };
 
-  milkytracker = callPackage ../applications/audio/milkytracker {
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreAudio Foundation;
-  };
-
   ptcollab = callPackage ../by-name/pt/ptcollab/package.nix {
     stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
@@ -14636,10 +14625,6 @@ with pkgs;
 
   magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
 
-  magic-wormhole-rs = callPackage ../tools/networking/magic-wormhole-rs {
-    inherit (darwin.apple_sdk.frameworks) Security AppKit;
-  };
-
   magnetophonDSP = lib.recurseIntoAttrs {
     CharacterCompressor = callPackage ../applications/audio/magnetophonDSP/CharacterCompressor { };
     CompBus = callPackage ../applications/audio/magnetophonDSP/CompBus { };
@@ -15326,29 +15311,25 @@ with pkgs;
     keybinder3 = null;
     libappindicator-gtk3 = null;
     libmodplug = null;
-    libsoup = libsoup_3;
   };
 
   quodlibet-without-gst-plugins = quodlibet.override {
-    libsoup = libsoup_3;
     tag = "-without-gst-plugins";
     withGstPlugins = false;
   };
 
   quodlibet-xine = quodlibet.override {
-    libsoup = libsoup_3;
     tag = "-xine";
     withGstreamerBackend = false;
     withXineBackend = true;
   };
 
   quodlibet-full = quodlibet.override {
-    inherit gtksourceview webkitgtk_4_0;
+    inherit gtksourceview;
     kakasi = kakasi;
     keybinder3 = keybinder3;
     libappindicator-gtk3 = libappindicator-gtk3;
     libmodplug = libmodplug;
-    libsoup = libsoup_3;
     tag = "-full";
     withDbusPython = true;
     withMusicBrainzNgs = true;
@@ -15358,7 +15339,6 @@ with pkgs;
   };
 
   quodlibet-xine-full = quodlibet-full.override {
-    libsoup = libsoup_3;
     tag = "-xine-full";
     withGstreamerBackend = false;
     withXineBackend = true;
@@ -17368,10 +17348,6 @@ with pkgs;
     inherit (perlPackages) perl TextFormat;
   };
 
-  mmseqs2 = callPackage ../applications/science/biology/mmseqs2 {
-    inherit (llvmPackages) openmp;
-  };
-
   obitools3 = callPackage ../applications/science/biology/obitools/obitools3.nix { };
 
   raxml-mpi = raxml.override { useMpi = true; };
@@ -17703,9 +17679,10 @@ with pkgs;
 
   appcsxcad = libsForQt5.callPackage ../applications/science/electronics/appcsxcad { };
 
-  simulide_0_4_15 = simulide.override { versionNum = "0.4.15"; };
-  simulide_1_0_0 = simulide.override { versionNum = "1.0.0"; };
-  simulide_1_1_0 = simulide.override { versionNum = "1.1.0"; };
+  simulide_0_4_15 = callPackage ../by-name/si/simulide/package.nix { versionNum = "0.4.15"; };
+  simulide_1_0_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.0.0"; };
+  simulide_1_1_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.1.0"; };
+  simulide = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.0.0"; };
 
   eagle = libsForQt5.callPackage ../applications/science/electronics/eagle/eagle.nix { };
 
@@ -18500,10 +18477,6 @@ with pkgs;
 
   vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen {
     ffmpeg = ffmpeg-full;
-  };
-
-  vokoscreen-ng = libsForQt5.callPackage ../applications/video/vokoscreen-ng {
-    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly;
   };
 
   wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
