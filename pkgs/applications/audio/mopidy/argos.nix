@@ -8,53 +8,45 @@
   ninja,
   appstream-glib,
   desktop-file-utils,
-  python3,
   wrapGAppsHook3,
   gobject-introspection,
 }:
-stdenv.mkDerivation rec {
+python3Packages.buildPythonApplication rec {
   pname = "mopidy-argos";
   version = "1.14.0";
+  pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "orontee";
     repo = "argos";
     rev = "refs/tags/v${version}";
-    sha256 = "1G4o5gltRpgn4hu8+xBhx8YMjUwbmFRevFfmweQMFLA=";
+    hash = "sha256-1G4o5gltRpgn4hu8+xBhx8YMjUwbmFRevFfmweQMFLA=";
   };
+  postPatch = ''
+    patchShebangs build-aux/meson/postinstall.py
+  '';
 
   nativeBuildInputs = [
     pkg-config
     meson
     ninja
     appstream-glib
+    gobject-introspection
     desktop-file-utils
-    python3
     wrapGAppsHook3
-    python3Packages.wrapPython
   ];
 
-  propagatedBuildInputs =
-    [
-      gobject-introspection
-    ]
-    ++ (with python3Packages; [
-      aiohttp
-      pycairo
-      pygobject3
-      pyxdg
-      zeroconf
-    ]);
+  dependencies = with python3Packages; [
+    aiohttp
+    pycairo
+    pygobject3
+    pyxdg
+    zeroconf
+  ];
 
-  postPatch = ''
-    patchShebangs build-aux/meson/postinstall.py
-  '';
   dontWrapGApps = true;
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
-  postFixup = ''
-    wrapPythonPrograms
   '';
 
   meta = {
