@@ -8,6 +8,7 @@
   runCommand,
   scdoc,
   withNgSuffix ? true,
+  withReexec ? false,
   withShellFiles ? true,
 }:
 let
@@ -48,6 +49,7 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace nixos_rebuild/__init__.py \
       --subst-var-by executable ${executable} \
+      --subst-var-by withReexec ${lib.boolToString withReexec} \
       --subst-var-by withShellFiles ${lib.boolToString withShellFiles}
 
     substituteInPlace pyproject.toml \

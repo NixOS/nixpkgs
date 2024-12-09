@@ -48,6 +48,7 @@ let
   nixos-rebuild-ng = pkgs.nixos-rebuild-ng.override {
     nix = config.nix.package;
     withNgSuffix = false;
+    withReexec = true;
   };
 
   defaultConfigTemplate = ''

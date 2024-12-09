@@ -248,22 +248,14 @@ def reexec(
     flake_build_flags: dict[str, Args],
 ) -> None:
     drv = None
+    attr = "config.system.build.nixos-rebuild"
     try:
         # Need to set target_host=None, to avoid connecting to remote
         if flake := Flake.from_arg(args.flake, None):
-            drv = nix.build_flake(
-                "pkgs.nixos-rebuild-ng",
-                flake,
-                **flake_build_flags,
-                no_link=True,
-            )
+            drv = nix.build_flake(attr, flake, **flake_build_flags, no_link=True)
         else:
-            drv = nix.build(
-                "pkgs.nixos-rebuild-ng",
-                BuildAttr.from_arg(args.attr, args.file),
-                **build_flags,
-                no_out_link=True,
-            )
+            build_attr = BuildAttr.from_arg(args.attr, args.file)
+            drv = nix.build(attr, build_attr, **build_flags, no_out_link=True)
     except CalledProcessError:
         logger.warning("could not find a newer version of nixos-rebuild")
 
@@ -306,7 +298,7 @@ def execute(argv: list[str]) -> None:
     # Re-exec to a newer version of the script before building to ensure we get
     # the latest fixes
     if (
-        False  # disabled until we introduce `config.system.build.nixos-rebuild-ng`
+        "@withReexec@" == "true"
         and can_run
         and not args.fast
         and not os.environ.get("_NIXOS_REBUILD_REEXEC")
