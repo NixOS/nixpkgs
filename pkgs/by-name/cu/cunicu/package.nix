@@ -10,13 +10,13 @@
 }:
 buildGoModule rec {
   pname = "cunicu";
-  version = "0.5.53";
+  version = "0.5.65";
 
   src = fetchFromGitHub {
     owner = "cunicu";
     repo = "cunicu";
     rev = "v${version}";
-    hash = "sha256-y8JyXf+LdquhVr9G5wX1LdMF7wpj5PZG3xXGAWoypzA=";
+    hash = "sha256-U+aFGh6OykjBUQvpm4TGE1AMfK0CAgjXjszC634x+/g=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
 
-  vendorHash = "sha256-OiLVdEf6fcGHx0k0xC5sZwhnK0FiLgfdkz2zNgBbcgY=";
+  vendorHash = "sha256-g6qjtdxqwABjxm6kdqwtVgYHFqEvcU6PI4bCmebXt/U=";
 
   # These packages contain networking dependent tests which fail in the sandbox
   excludedPackages = [
