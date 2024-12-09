@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook, makeWrapper, installShellFiles }:
+{ lib, stdenv, fetchurl, autoPatchelfHook, makeWrapper, installShellFiles , go_1_22 }:
 
 let
   data = import ./data.nix {};
@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
       --zsh  <($out/bin/pulumi completion zsh)
   '';
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [ installShellFiles go_1_22 ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook makeWrapper ];
   buildInputs = [ stdenv.cc.cc.libgcc or null ];
 
   meta = with lib; {
@@ -37,6 +37,7 @@ in stdenv.mkDerivation {
       peterromfeldhk
       jlesquembre
       cpcloud
+      ohmymndy
     ];
     hydraPlatforms = [ ]; # Hydra fails with "Output limit exceeded"
   };
