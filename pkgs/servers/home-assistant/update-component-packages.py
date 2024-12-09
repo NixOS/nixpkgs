@@ -42,7 +42,7 @@ PKG_PREFERENCES = {
     "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
     "HAP-python": "hap-python",
     "ha-av": "av",
-    "numpy": "numpy_1",
+    "numpy": "numpy",
     "ollama-hass": "ollama",
     "paho-mqtt": "paho-mqtt_1",
     "pysuezV2": "pysuez",

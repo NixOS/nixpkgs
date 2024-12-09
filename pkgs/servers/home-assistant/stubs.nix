@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "homeassistant-stubs";
-  version = "2024.11.3";
+  version = "2024.12.1";
   pyproject = true;
 
   disabled = python.version != home-assistant.python.version;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "KapJI";
     repo = "homeassistant-stubs";
     rev = "refs/tags/${version}";
-    hash = "sha256-wctoMEduYZxGiSNgZWq4OPgBaiykwTY7FP8PhRsMh0I=";
+    hash = "sha256-j00wgk4oHZXNAJkosppVXMprDKeqvDMt+aq0MDms1gA=";
   };
 
   build-system = [
