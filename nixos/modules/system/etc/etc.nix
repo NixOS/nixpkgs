@@ -232,7 +232,7 @@ in
         echo "remounting /etc..."
 
         tmpMetadataMount=$(mktemp --directory -t nixos-etc-metadata.XXXXXXXXXX)
-        mount --type erofs ${config.system.build.etcMetadataImage} $tmpMetadataMount
+        mount --type erofs -o ro ${config.system.build.etcMetadataImage} $tmpMetadataMount
 
         # Mount the new /etc overlay to a temporary private mount.
         # This needs the indirection via a private bind mount because you
