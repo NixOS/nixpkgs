@@ -45,7 +45,8 @@ let
   };
 
   typoraFHS = buildFHSEnv {
-    name = "typora-fhs";
+    pname = "typora-fhs";
+    inherit version;
     targetPkgs = pkgs: (with pkgs; [
       typoraBase
       udev

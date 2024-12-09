@@ -12,7 +12,6 @@
   libpulseaudio,
   libdrm,
   mesa,
-  xdg-user-dirs,
   libva,
   libva1,
   libvdpau,
@@ -102,10 +101,6 @@ flutter324.buildFlutterApplication rec {
     ln -s ${lib.getLib libva}/lib/libva.so.2 $out/app/${pname}/lib/libva.so.2
     ln -s ${lib.getLib libva1}/lib/libva.so.1 $out/app/${pname}/lib/libva.so.1
     ln -s ${lib.getLib libvdpau}/lib/libvdpau.so.1  $out/app/${pname}/lib/libvdpau.so.1
-  '';
-
-  extraWrapProgramArgs = ''
-    --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
   '';
 
   meta = {

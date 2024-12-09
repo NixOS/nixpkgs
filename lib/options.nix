@@ -420,20 +420,17 @@ rec {
      Placeholders will not be quoted as they are not actual values:
        (showOption ["foo" "*" "bar"]) == "foo.*.bar"
        (showOption ["foo" "<name>" "bar"]) == "foo.<name>.bar"
+       (showOption ["foo" "<myPlaceholder>" "bar"]) == "foo.<myPlaceholder>.bar"
   */
   showOption = parts: let
+    # If the part is a named placeholder of the form "<...>" don't escape it.
+    # It may cause misleading escaping if somebody uses literally "<...>" in their option names.
+    # This is the trade-off to allow for placeholders in option names.
+    isNamedPlaceholder = builtins.match "\<(.*)\>";
     escapeOptionPart = part:
-      let
-        # We assume that these are "special values" and not real configuration data.
-        # If it is real configuration data, it is rendered incorrectly.
-        specialIdentifiers = [
-          "<name>"          # attrsOf (submodule {})
-          "*"               # listOf (submodule {})
-          "<function body>" # functionTo
-        ];
-      in if builtins.elem part specialIdentifiers
-         then part
-         else lib.strings.escapeNixIdentifier part;
+      if part == "*" || isNamedPlaceholder part != null
+        then part
+        else lib.strings.escapeNixIdentifier part;
     in (concatStringsSep ".") (map escapeOptionPart parts);
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
 

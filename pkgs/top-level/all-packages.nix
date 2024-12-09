@@ -7103,6 +7103,8 @@ with pkgs;
   babashka-unwrapped = callPackage ../development/interpreters/babashka { };
   babashka = callPackage ../development/interpreters/babashka/wrapped.nix { };
 
+  uiua-unstable = callPackage ../by-name/ui/uiua/package.nix { unstable = true; };
+
   # BQN interpreters and compilers
 
   mbqn = bqn;
@@ -11003,6 +11005,10 @@ with pkgs;
     gtkVersion = "4";
   };
 
+  vtfedit = callPackage ../by-name/vt/vtfedit/package.nix {
+    wine = wineWowPackages.staging;
+  };
+
   vtk_9 = libsForQt5.callPackage ../development/libraries/vtk/9.x.nix { };
 
   vtk_9_withQt5 = vtk_9.override { enableQt = true; };
@@ -14656,10 +14662,6 @@ with pkgs;
 
   magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
 
-  magic-wormhole-rs = callPackage ../tools/networking/magic-wormhole-rs {
-    inherit (darwin.apple_sdk.frameworks) Security AppKit;
-  };
-
   magnetophonDSP = lib.recurseIntoAttrs {
     CharacterCompressor = callPackage ../applications/audio/magnetophonDSP/CharacterCompressor { };
     CompBus = callPackage ../applications/audio/magnetophonDSP/CompBus { };
@@ -17383,10 +17385,6 @@ with pkgs;
     inherit (perlPackages) perl TextFormat;
   };
 
-  mmseqs2 = callPackage ../applications/science/biology/mmseqs2 {
-    inherit (llvmPackages) openmp;
-  };
-
   obitools3 = callPackage ../applications/science/biology/obitools/obitools3.nix { };
 
   raxml-mpi = raxml.override { useMpi = true; };
@@ -17718,9 +17716,10 @@ with pkgs;
 
   appcsxcad = libsForQt5.callPackage ../applications/science/electronics/appcsxcad { };
 
-  simulide_0_4_15 = simulide.override { versionNum = "0.4.15"; };
-  simulide_1_0_0 = simulide.override { versionNum = "1.0.0"; };
-  simulide_1_1_0 = simulide.override { versionNum = "1.1.0"; };
+  simulide_0_4_15 = callPackage ../by-name/si/simulide/package.nix { versionNum = "0.4.15"; };
+  simulide_1_0_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.0.0"; };
+  simulide_1_1_0 = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.1.0"; };
+  simulide = callPackage ../by-name/si/simulide/package.nix { versionNum = "1.0.0"; };
 
   eagle = libsForQt5.callPackage ../applications/science/electronics/eagle/eagle.nix { };
 
