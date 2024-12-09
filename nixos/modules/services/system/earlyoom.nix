@@ -149,6 +149,32 @@ in
   config = mkIf cfg.enable {
     services.systembus-notify.enable = mkDefault cfg.enableNotifications;
 
+    systemd.services.earlyoom.serviceConfig.AmbientCapabilities = "CAP_KILL CAP_IPC_LOCK";
+    systemd.services.earlyoom.serviceConfig.CapabilityBoundingSet = "CAP_KILL CAP_IPC_LOCK";
+    systemd.services.earlyoom.serviceConfig.Nice = "-20";
+    systemd.services.earlyoom.serviceConfig.OOMScoreAdjust="-100";
+    systemd.services.earlyoom.serviceConfig.Restart="always";
+    systemd.services.earlyoom.serviceConfig.TasksMax = "10";
+    systemd.services.earlyoom.serviceConfig.MemoryMax = "50M";
+    systemd.services.earlyoom.serviceConfig.DynamicUser = "true";
+    systemd.services.earlyoom.serviceConfig.ProtectSystem = "strict";
+    systemd.services.earlyoom.serviceConfig.ProtectHome = "true";
+    systemd.services.earlyoom.serviceConfig.PrivateDevices = "true";
+    systemd.services.earlyoom.serviceConfig.ProtectClock = "true";
+    systemd.services.earlyoom.serviceConfig.ProtectHostname = "true";
+    systemd.services.earlyoom.serviceConfig.ProtectKernelLogs = "true";
+    systemd.services.earlyoom.serviceConfig.ProtectKernelModules = "true";
+    systemd.services.earlyoom.serviceConfig.ProtectKernelTunables = "true";
+    systemd.services.earlyoom.serviceConfig.ProtectControlGroups = "true";
+    systemd.services.earlyoom.serviceConfig.RestrictNamespaces = "true";
+    systemd.services.earlyoom.serviceConfig.RestrictRealtime = "true";
+    systemd.services.earlyoom.serviceConfig.LockPersonality = "true";
+    systemd.services.earlyoom.serviceConfig.PrivateNetwork = "true";
+    systemd.services.earlyoom.serviceConfig.IPAddressDeny = "true";
+    systemd.services.earlyoom.serviceConfig.RestrictAddressFamilies = "AF_UNIX";
+    systemd.services.earlyoom.serviceConfig.SystemCallArchitectures = "native";
+    systemd.services.earlyoom.serviceConfig.SystemCallFilter = ["@system-service" "~@resources @privileged" ];
+
     systemd.services.earlyoom = {
       description = "Early OOM Daemon for Linux";
       wantedBy = [ "multi-user.target" ];
