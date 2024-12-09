@@ -1,4 +1,7 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+{
+  lib,
+  ...
+}:
 
 let
   configDir = "/var/lib/foobar";
@@ -122,7 +125,7 @@ in {
     # Cause a configuration change that requires a service restart as we added a new runtime dependency
     specialisation.newFeature = {
       inheritParentConfig = true;
-      configuration.services.home-assistant.config.backup = {};
+      configuration.services.home-assistant.config.prometheus = {};
     };
 
     specialisation.removeCustomThings = {
@@ -206,25 +209,25 @@ in {
     with subtest("Check extra components are considered in systemd unit hardening"):
         hass.succeed("systemctl show -p DeviceAllow home-assistant.service | grep -q char-ttyUSB")
 
-    with subtest("Check service reloads when configuration changes"):
+    with subtest("Check service restart from SIGHUP"):
         pid = hass.succeed("systemctl show --property=MainPID home-assistant.service")
         cursor = get_journal_cursor()
         hass.succeed("${system}/specialisation/differentName/bin/switch-to-configuration test")
-        new_pid = hass.succeed("systemctl show --property=MainPID home-assistant.service")
-        assert pid == new_pid, "The PID of the process should not change between process reloads"
         wait_for_homeassistant(cursor)
+        new_pid = hass.succeed("systemctl show --property=MainPID home-assistant.service")
+        assert pid != new_pid, "The PID of the process must change after sending SIGHUP"
 
     with subtest("Check service restarts when dependencies change"):
         pid = new_pid
         cursor = get_journal_cursor()
         hass.succeed("${system}/specialisation/newFeature/bin/switch-to-configuration test")
-        new_pid = hass.succeed("systemctl show --property=MainPID home-assistant.service")
-        assert pid != new_pid, "The PID of the process should change when its PYTHONPATH changess"
         wait_for_homeassistant(cursor)
+        new_pid = hass.succeed("systemctl show --property=MainPID home-assistant.service")
+        assert pid != new_pid, "The PID of the process must change when its PYTHONPATH changess"
 
     with subtest("Check that new components get setup after restart"):
         journal = get_journal_since(cursor)
-        for domain in ["backup"]:
+        for domain in ["prometheus"]:
             assert f"Setup of domain {domain} took" in journal, f"{domain} setup missing"
 
     with subtest("Check custom components and custom lovelace modules get removed"):
@@ -242,4 +245,4 @@ in {
         hass.log(hass.succeed("systemctl cat home-assistant.service"))
         hass.log(hass.succeed("systemd-analyze security home-assistant.service"))
   '';
-})
+}

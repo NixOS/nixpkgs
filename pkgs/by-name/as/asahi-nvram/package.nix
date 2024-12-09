@@ -5,14 +5,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "asahi-nvram";
-  version = "0.2.1";
+  version = "0.2.3";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-bFUFjHVTYj0eUmhijraOdeCvAt2UGX8+yyvooYN1Uo0=";
+    hash = "sha256-zfUvPHAPrYhzgeiirGuqZaWnLBH0PHsqOUy2e972bWM=";
   };
 
-  cargoHash = "sha256-WhySIQew8xxdwXLWkpvTYQZFiqCEPjEAjr7NVxfjDkU=";
+  cargoHash = "sha256-FP4qCJyzCOGaPDijp18m5K1YO+Ki9oDwblP2Vh8GsO0=";
   cargoDepsName = pname;
 
   meta = with lib; {

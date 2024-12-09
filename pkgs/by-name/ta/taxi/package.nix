@@ -6,7 +6,7 @@
 , libgee
 , libhandy
 , libsecret
-, libsoup
+, libsoup_2_4
 , meson
 , ninja
 , nix-update-script
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libgee
     libhandy
     libsecret
-    libsoup
+    libsoup_2_4
     pantheon.granite
   ];
 

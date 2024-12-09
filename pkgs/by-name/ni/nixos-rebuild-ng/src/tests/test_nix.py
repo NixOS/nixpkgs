@@ -94,7 +94,6 @@ def test_remote_build(mock_run: Any, monkeypatch: Any) -> None:
             call(
                 [
                     "nix-instantiate",
-                    "--raw",
                     "<nixpkgs/nixos>",
                     "--attr",
                     "preAttr.config.system.build.toplevel",

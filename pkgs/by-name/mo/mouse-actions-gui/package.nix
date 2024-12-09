@@ -14,7 +14,7 @@
   libXtst,
   libevdev,
   gtk3,
-  libsoup,
+  libsoup_2_4,
   webkitgtk_4_0,
 }:
 
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
 
     # Tauri deps
     gtk3
-    libsoup
+    libsoup_2_4
     webkitgtk_4_0
   ];
 

@@ -90,7 +90,16 @@ in
       })
     ];
 
+    postPatch = ''
+      substituteInPlace Makefile \
+        --replace-fail "gcc" "${stdenv.cc.targetPrefix}cc"
+    '';
+
     nativeBuildInputs = with pkgs; [ which ];
+
+    env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+      "-Wno-error=incompatible-function-pointer-types"
+    ]);
 
     installFlags = [
       "SYSTEM_INSTALL_DIR=${placeholder "out"}/${gimp.targetPluginDir}/bimp"
@@ -138,7 +147,11 @@ in
       ffmpegSrc=$(realpath extern_libs/ffmpeg)
     '';
 
-    configureFlags = ["--with-ffmpegsrcdir=${placeholder "ffmpegSrc"}"];
+    configureFlags = [
+      "--with-ffmpegsrcdir=${placeholder "ffmpegSrc"}"
+    ] ++ lib.optionals (!stdenv.hostPlatform.isx86) [
+      "--disable-libavformat"
+    ];
 
     hardeningDisable = [ "format" ];
 
@@ -152,6 +165,8 @@ in
       # The main code is given in GPLv3, but it has ffmpeg in it, and I think ffmpeg license
       # falls inside "free".
       license = with licenses; [ gpl3 free ];
+      # Depends on linux/soundcard.h
+      platforms = platforms.linux;
     };
   };
 
