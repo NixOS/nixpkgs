@@ -9,12 +9,17 @@
 , rust
 , rustc
 , stdenv
+, python3
 
 # This confusingly-named parameter indicates the *subdirectory of
 # `target/` from which to copy the build artifacts.  It is derived
 # from a stdenv platform (or a JSON file).
 , target ? stdenv.hostPlatform.rust.cargoShortTarget
 }:
+let
+ inherit (python3) pythonOnBuildForHost;
+ pythonInterpreter = pythonOnBuildForHost.interpreter;
+in
 {
   cargoBuildHook = callPackage ({ }:
     makeSetupHook {
@@ -75,6 +80,7 @@
       };
     } ./cargo-setup-hook.sh) {};
 
+
   maturinBuildHook = callPackage ({ pkgsHostTarget }:
     makeSetupHook {
       name = "maturin-build-hook.sh";
@@ -85,6 +91,7 @@
       ];
       substitutions = {
         inherit (rust.envVars) rustTargetPlatformSpec setEnv;
+        pythonInterpreter = builtins.elemAt (builtins.match "([0-9]+\.[0-9]+)\.*" python3.version) 0;
       };
     } ./maturin-build-hook.sh) {};
 
