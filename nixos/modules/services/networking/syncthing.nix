@@ -174,10 +174,10 @@ in {
         '';
       };
 
-      guiPasswordFile = mkOption{
+      guiPasswordFile = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = mdDoc ''
+        description = ''
           Path to file containing the plaintext password for Syncthing's GUI.
         '';
       };
