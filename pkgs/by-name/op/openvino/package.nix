@@ -1,5 +1,5 @@
 { lib
-, gcc12Stdenv
+, stdenv
 , fetchFromGitHub
 , fetchurl
 , cudaSupport ? opencv.cudaSupport or false
@@ -27,7 +27,7 @@
 , protobuf
 , pugixml
 , snappy
-, tbb_2021_5
+, tbb_2022_0
 , cudaPackages
 }:
 
@@ -35,8 +35,6 @@ let
   inherit (lib)
     cmakeBool
   ;
-
-  stdenv = gcc12Stdenv;
 
   # prevent scons from leaking in the default python version
   scons' = scons.override { inherit python3Packages; };
@@ -153,7 +151,7 @@ stdenv.mkDerivation rec {
     opencv.cxxdev
     pugixml
     snappy
-    tbb_2021_5
+    tbb_2022_0
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
   ];
