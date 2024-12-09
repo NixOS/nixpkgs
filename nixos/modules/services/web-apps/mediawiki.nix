@@ -89,7 +89,7 @@ let
           --set MEDIAWIKI_CONFIG ${mediawikiConfig} \
           --add-flags ${pkg}/share/mediawiki/maintenance/run.php
 
-        for i in changePassword createAndPromote deleteUserEmail resetUserEmail userOptions edit nukePage update importDump run; do
+        for i in changePassword createAndPromote deleteUserEmail renameUser resetUserEmail userOptions edit nukePage update importDump run; do
           script="$out/bin/mediawiki-$i"
         cat <<'EOF' >"$script"
         #!${pkgs.runtimeShell}
