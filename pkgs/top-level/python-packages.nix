@@ -16749,6 +16749,9 @@ self: super: with self; {
     else
       null;
 
+  standard-mailcap =
+    if pythonOlder "3.13" then null else callPackage ../development/python-modules/standard-mailcap { };
+
   standard-pipes =
     if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-pipes { } else null;
 
