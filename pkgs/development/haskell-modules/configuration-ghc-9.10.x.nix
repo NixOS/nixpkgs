@@ -62,7 +62,7 @@ self: super: {
   # already made the relevant changes.
   aeson = doDistribute self.aeson_2_2_3_0;
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_2_0;
-  auto-update = super.auto-update_0_2_2;
+  auto-update = doDistribute self.auto-update_0_2_6;
   dependent-sum-template = doJailbreak self.dependent-sum-template_0_2_0_1; # template-haskell < 2.22
   extensions = doDistribute self.extensions_0_1_0_2;
   fourmolu = doDistribute self.fourmolu_0_16_2_0;
@@ -70,7 +70,7 @@ self: super: {
   integer-conversion = doDistribute self.integer-conversion_0_1_1;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_1_20241103;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
-  http2 = doDistribute self.http2_5_3_5;
+  http2 = doDistribute self.http2_5_3_9;
   http-semantics = doDistribute self.http-semantics_0_3_0;
   lens = doDistribute self.lens_5_3_2;
   lukko = doDistribute self.lukko_0_1_2;
@@ -83,10 +83,10 @@ self: super: {
   rerebase = doDistribute self.rerebase_1_21_1;
   scientific = doDistribute self.scientific_0_3_8_0;
   semirings = doDistribute self.semirings_0_7;
-  time-manager = super.time-manager_0_1_1;
-  th-abstraction = doDistribute self.th-abstraction_0_7_0_0;
+  time-manager = doDistribute self.time-manager_0_2_2;
+  th-abstraction = doDistribute self.th-abstraction_0_7_1_0;
   uuid-types = doDistribute self.uuid-types_1_0_6;
-  warp = pkgs.haskell.lib.dontCheck super.warp_3_4_4; # test suite assumes it can freely call curl
+  warp = pkgs.haskell.lib.dontCheck super.warp_3_4_7; # test suite assumes it can freely call curl
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = doDistribute self.ghc-exactprint_1_9_0_0;
