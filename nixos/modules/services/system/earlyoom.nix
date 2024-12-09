@@ -155,17 +155,17 @@ systemd.services.earlyoom = {
   path = optionals cfg.enableNotifications [ pkgs.dbus ];
   serviceConfig = {
     StandardError = "journal";
-    ExecStart = concatStringsSep " " ([ 
-      "${lib.getExe cfg.package}" 
-      ("-m ${toString cfg.freeMemThreshold}" 
+    ExecStart = concatStringsSep " " ([
+      "${lib.getExe cfg.package}"
+      ("-m ${toString cfg.freeMemThreshold}"
        + optionalString (cfg.freeMemKillThreshold != null) ",${toString cfg.freeMemKillThreshold}")
-      ("-s ${toString cfg.freeSwapThreshold}" 
+      ("-s ${toString cfg.freeSwapThreshold}"
        + optionalString (cfg.freeSwapKillThreshold != null) ",${toString cfg.freeSwapKillThreshold}")
       "-r ${toString cfg.reportInterval}"
-    ] 
-    ++ optionals cfg.enableDebugInfo [ "-d" ] 
-    ++ optionals cfg.enableNotifications [ "-n" ] 
-    ++ optionals (cfg.killHook != null) [ "-N ${escapeShellArg cfg.killHook}" ] 
+    ]
+    ++ optionals cfg.enableDebugInfo [ "-d" ]
+    ++ optionals cfg.enableNotifications [ "-n" ]
+    ++ optionals (cfg.killHook != null) [ "-N ${escapeShellArg cfg.killHook}" ]
     ++ cfg.extraArgs);
 
     AmbientCapabilities = "CAP_KILL CAP_IPC_LOCK";
