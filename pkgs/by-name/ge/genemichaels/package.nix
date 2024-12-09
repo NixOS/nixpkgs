@@ -1,23 +1,29 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "genemichaels";
-  version = "0.1.21";
+  version = "0.5.7";
+
   src = fetchFromGitHub {
     owner = "andrewbaxter";
-    repo = pname;
-    rev = "158bb8eb705b073d84562554c1a6a63eedd44c6b";
-    hash = "sha256-rAJYukxptasexZzwWgtGlUbHhyyI6OJvSzVxGLBO9vM=";
+    repo = "genemichaels";
+    rev = "genemichaels-v${version}";
+    hash = "sha256-qPyIC9AbRQI+inBft7Dd5R5v+tXtJcZdiV4lBIBwpyM=";
   };
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes."markdown-1.0.0-alpha.5" = "sha256-pjIKzXvRKoMfFVIyIXdm+29vvUzCHiJ0rrZgr4K+Ih8=";
-  };
+
+  cargoHash = "sha256-yPxgYf8N3Dqns/uKhdM++jpzG7zTPhCVVq+7WA9G/SM=";
+
+  cargoBuildFlags = [ "--package ${pname}" ];
+
   meta = {
     description = "Even formats macros";
-    mainProgram = "genemichaels";
     homepage = "https://github.com/andrewbaxter/genemichaels";
     license = lib.licenses.isc;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ djacu ];
+    mainProgram = "genemichaels";
   };
 }
