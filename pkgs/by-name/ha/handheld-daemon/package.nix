@@ -8,19 +8,20 @@
   hidapi,
   coreutils,
   kmod,
+  efibootmgr,
   dbus,
   lsof,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "handheld-daemon";
-  version = "3.6.2";
+  version = "3.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hhd-dev";
     repo = "hhd";
     tag = "v${version}";
-    hash = "sha256-W1Ap6yTryBDozKe3aO413Fu0RBul9kEA9ACUTdYyOKM=";
+    hash = "sha256-DkVdYnSEeaNZj76lhdU+9Pl0yzam2A2QGa3aHCmSHEA=";
   };
 
   # This package relies on several programs expected to be on the user's PATH.
@@ -39,6 +40,9 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace src/hhd/controller/physical/imu.py \
       --replace-fail '"modprobe' '"${lib.getExe' kmod "modprobe"}'
+
+    substituteInPlace src/hhd/plugins/overlay/power.py \
+      --replace-fail '"efibootmgr"' '"${lib.getExe' efibootmgr "id"}"'
 
     substituteInPlace src/hhd/device/oxp/serial.py \
       --replace-fail "udevadm" "${lib.getExe' systemd "udevadm"}"
