@@ -1,24 +1,43 @@
-{ stdenv
-, lib
-, fetchgit
-, cmake
-, llvmPackages
-, enablePython ? false
-, python ? null
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  llvmPackages,
+  enablePython ? false,
+  python ? python3,
 }:
 
-let pyEnv = python.withPackages (p: with p; [ numpy scipy ]);
+let
+  pyEnv = python.withPackages (
+    p: with p; [
+      numpy
+      scipy
+      distutils
+    ]
+  );
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "taco";
   version = "unstable-2022-08-02";
 
-  src = fetchgit {
-    url = "https://github.com/tensor-compiler/${pname}.git";
+  src = fetchFromGitHub {
+    owner = "tensor-compiler";
+    repo = "taco";
     rev = "2b8ece4c230a5f0f0a74bc6f48e28edfb6c1c95e";
     fetchSubmodules = true;
     hash = "sha256-PnBocyRLiLALuVS3Gkt/yJeslCMKyK4zdsBI8BFaTSg=";
   };
+
+  src-new-pybind11 = python.pkgs.pybind11.src;
+
+  postPatch = ''
+    rm -rf python_bindings/pybind11/*
+    cp -r ${finalAttrs.src-new-pybind11}/* python_bindings/pybind11
+    find python_bindings/pybind11 -exec chmod +w {} \;
+  '';
 
   # Remove test cases from cmake build as they violate modern C++ expectations
   patches = [ ./taco.patch ];
@@ -31,7 +50,7 @@ in stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DOPENMP=ON"
-  ] ++ lib.optional enablePython "-DPYTHON=ON" ;
+  ] ++ lib.optional enablePython "-DPYTHON=ON";
 
   postInstall = lib.strings.optionalString enablePython ''
     mkdir -p $out/${python.sitePackages}
@@ -45,11 +64,11 @@ in stdenv.mkDerivation rec {
   # However, the python module works flawlessly.
   dontFixup = enablePython;
 
-  meta = with lib; {
+  meta = {
     description = "Computes sparse tensor expressions on CPUs and GPUs";
     mainProgram = "taco";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/tensor-compiler/taco";
-    maintainers = [ maintainers.sheepforce ];
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

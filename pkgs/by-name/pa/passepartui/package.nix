@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "passepartui";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "kardwen";
     repo = "passepartui";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ydX+Rjpfhi0K6f8pzjqWGF0O22gBco6Iot8fXSFNG5c=";
+    hash = "sha256-/rYdOurPlpGKCMAXTAhoWRn4NU3usPpJmef3f8V8EQA=";
   };
 
-  cargoHash = "sha256-/lgEQ6PmHagt8TlGUV2A95MbV8IQzUwyQ/UkoaGIVHE=";
+  cargoHash = "sha256-8TmrsRbFC1TyoiUNVVTEdvDLj0BIJmqM00OoPLpaoFQ=";
 
   passthru = {
     updateScript = nix-update-script { };
