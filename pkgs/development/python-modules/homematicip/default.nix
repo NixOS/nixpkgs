@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "homematicip";
-  version = "1.1.4";
+  version = "1.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "hahn-th";
     repo = "homematicip-rest-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-dKLbKoYbDri4xpvzK+Q1sqm9oEZOWMfx3n3SNNQh8Ys=";
+    hash = "sha256-rplzHb1F37Nii8C0zqeJCDgQQ8l/+ZmjQr2Lf6ssBLU=";
   };
 
   build-system = [
