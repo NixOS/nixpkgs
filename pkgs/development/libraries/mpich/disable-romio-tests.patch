@@ -1,0 +1,13 @@
+diff --git a/src/mpi/romio/Makefile.am b/src/mpi/romio/Makefile.am
+index a6429766f..658f1c563 100644
+--- a/src/mpi/romio/Makefile.am
++++ b/src/mpi/romio/Makefile.am
+@@ -56,7 +56,7 @@ nodist_include_HEADERS += include/mpio.h include/mpiof.h
+ 
+ # ------------------------------------------------------------------------
+ 
+-SUBDIRS = $(external_subdirs) . test
++SUBDIRS = $(external_subdirs)
+ DIST_SUBDIRS = test test-internal $(external_dist_subdirs)
+ 
+ # for the sake of parallel make and avoiding an excessive number of convenience

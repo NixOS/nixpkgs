@@ -1,0 +1,10 @@
+--- a/src/main.c	2021-02-09 13:54:32.847364236 +0100
++++ b/src/main.c	2021-02-09 10:41:51.541203271 +0100
+@@ -1350,6 +1351,7 @@
+                 vfs_file_monitor_clean();
+                 return 1;
+             }
++            gdk_set_allowed_backends("x11");
+             gtk_init (&argc, &argv);
+             int ret = custom_dialog_init( argc, argv );
+             if ( ret != 0 )

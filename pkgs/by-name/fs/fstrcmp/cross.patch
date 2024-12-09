@@ -1,0 +1,24 @@
+diff '--color=auto' -ur fstrcmp-0.7-D001-old/configure.ac fstrcmp-0.7.D001/configure.ac
+--- fstrcmp-0.7-D001-old/configure.ac	2014-03-04 19:13:45.000000000 -0500
++++ fstrcmp-0.7.D001/configure.ac	2020-04-02 13:57:52.805154634 -0400
+@@ -32,6 +32,8 @@
+ AC_OBJEXT
+ AC_EXEEXT
+ 
++LT_INIT
++
+ dnl @synopsis AC_ADD_CFLAGS
+ dnl
+ dnl Add the given option to CFLAGS, if it doesn't break the compiler
+diff '--color=auto' -ur fstrcmp-0.7-D001-old/Makefile.in fstrcmp-0.7.D001/Makefile.in
+--- fstrcmp-0.7-D001-old/Makefile.in	2014-03-04 19:13:45.000000000 -0500
++++ fstrcmp-0.7.D001/Makefile.in	2020-04-02 13:57:12.355269595 -0400
+@@ -37,6 +37,8 @@
+ srcdir = @srcdir@
+ VPATH = @srcdir@
+ 
++top_builddir = $(srcdir)
++
+ #
+ # the name of the install program to use
+ #

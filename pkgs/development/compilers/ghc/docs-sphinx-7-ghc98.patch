@@ -1,0 +1,8 @@
+Fix build of docs after sphinx update.
+https://github.com/sphinx-doc/sphinx/pull/11381
+https://gitlab.haskell.org/ghc/ghc/-/issues/24129
+--- a/docs/users_guide/rtd-theme/layout.html
++++ b/docs/users_guide/rtd-theme/layout.html
+@@ -28 +28 @@
+-    <link rel="stylesheet" href="{{ pathto('_static/' + style, 1) }}" type="text/css" />
++    <link rel="stylesheet" href="{{ pathto('_static/' + styles[-1], 1) }}" type="text/css" />

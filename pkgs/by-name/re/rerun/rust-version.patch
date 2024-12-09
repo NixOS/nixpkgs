@@ -1,0 +1,436 @@
+ BUILD.md                                                        | 4 ++--
+ CHANGELOG.md                                                    | 4 ++--
+ Cargo.toml                                                      | 2 +-
+ clippy.toml                                                     | 2 +-
+ crates/build/re_build_info/src/build_info.rs                    | 2 +-
+ crates/viewer/re_viewer/data/quick_start_guides/rust_connect.md | 2 +-
+ crates/viewer/re_viewer/data/quick_start_guides/rust_spawn.md   | 2 +-
+ docs/content/getting-started/installing-viewer.md               | 2 +-
+ docs/content/getting-started/quick-start/rust.md                | 2 +-
+ examples/rust/clock/Cargo.toml                                  | 2 +-
+ examples/rust/custom_data_loader/Cargo.toml                     | 2 +-
+ examples/rust/custom_space_view/Cargo.toml                      | 2 +-
+ examples/rust/custom_store_subscriber/Cargo.toml                | 2 +-
+ examples/rust/dna/Cargo.toml                                    | 2 +-
+ examples/rust/extend_viewer_ui/Cargo.toml                       | 2 +-
+ examples/rust/external_data_loader/Cargo.toml                   | 2 +-
+ examples/rust/incremental_logging/Cargo.toml                    | 2 +-
+ examples/rust/log_file/Cargo.toml                               | 2 +-
+ examples/rust/minimal/Cargo.toml                                | 2 +-
+ examples/rust/minimal_options/Cargo.toml                        | 2 +-
+ examples/rust/minimal_serve/Cargo.toml                          | 2 +-
+ examples/rust/objectron/Cargo.toml                              | 2 +-
+ examples/rust/raw_mesh/Cargo.toml                               | 2 +-
+ examples/rust/shared_recording/Cargo.toml                       | 2 +-
+ examples/rust/spawn_viewer/Cargo.toml                           | 2 +-
+ examples/rust/stdio/Cargo.toml                                  | 2 +-
+ examples/rust/template/Cargo.toml                               | 2 +-
+ rust-toolchain                                                  | 2 +-
+ scripts/clippy_wasm/clippy.toml                                 | 2 +-
+ scripts/lint.py                                                 | 2 +-
+ 30 files changed, 32 insertions(+), 32 deletions(-)
+
+diff --git a/BUILD.md b/BUILD.md
+index c0bc6e074..a74f86967 100644
+--- a/BUILD.md
++++ b/BUILD.md
+@@ -23,12 +23,12 @@ cd rerun
+ 
+ Now install the `pixi` package manager: <https://github.com/prefix-dev/pixi?tab=readme-ov-file#installation>
+ 
+-Make sure `cargo --version` prints `1.76.0` once you are done.
++Make sure `cargo --version` prints `1.80.0` once you are done.
+ 
+ If you are using an Apple-silicon Mac (M1, M2), make sure `rustc -vV` outputs `host: aarch64-apple-darwin`. If not, this should fix it:
+ 
+ ```sh
+-rustup set default-host aarch64-apple-darwin && rustup install 1.76.0
++rustup set default-host aarch64-apple-darwin && rustup install 1.80.0
+ ```
+ 
+ ## Building and running the Viewer
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 7efd062ea..82da0d411 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -672,7 +672,7 @@ As always there's a lot going on under the hood:
+ - New data APIs 6: cached archetype queries [#5673](https://github.com/rerun-io/rerun/pull/5673)
+ - Remove justfile & fully replace remaining commands with Pixi [#5892](https://github.com/rerun-io/rerun/pull/5892)
+ - Replace requirements-docs.txt with a Python doc Pixi environment [#5909](https://github.com/rerun-io/rerun/pull/5909)
+-- Update to Rust 1.76 [#5908](https://github.com/rerun-io/rerun/pull/5908)
++- Update to Rust 1.80 [#5908](https://github.com/rerun-io/rerun/pull/5908)
+ - Remove all dev/ci requirements.txt and fully replace with Pixi [#5939](https://github.com/rerun-io/rerun/pull/5939)
+ - Markdown linter [#6181](https://github.com/rerun-io/rerun/pull/6181)
+ 
+@@ -1337,7 +1337,7 @@ Check out our [migration guide](https://www.rerun.io/docs/reference/migration/mi
+ 
+ #### 📦 Dependencies
+ - Update egui and wgpu [#4111](https://github.com/rerun-io/rerun/pull/4111)
+-- Update Rust to 1.76.0 [#4390](https://github.com/rerun-io/rerun/pull/4390)
++- Update Rust to 1.80.0 [#4390](https://github.com/rerun-io/rerun/pull/4390)
+ 
+ #### 🤷 Other
+ #### 🤷 Other
+diff --git a/Cargo.toml b/Cargo.toml
+index 48ab565a3..a479a5394 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -24,7 +24,7 @@ homepage = "https://rerun.io"
+ include = ["../../LICENSE-APACHE", "../../LICENSE-MIT", "**/*.rs", "Cargo.toml"]
+ license = "MIT OR Apache-2.0"
+ repository = "https://github.com/rerun-io/rerun"
+-rust-version = "1.76"
++rust-version = "1.80"
+ version = "0.18.2"
+ 
+ [workspace.dependencies]
+diff --git a/clippy.toml b/clippy.toml
+index 70ff980b8..f3d9d04b4 100644
+--- a/clippy.toml
++++ b/clippy.toml
+@@ -3,7 +3,7 @@
+ # -----------------------------------------------------------------------------
+ # Section identical to the main scripts/clippy_wasm/clippy.toml:
+ 
+-msrv = "1.76"
++msrv = "1.80"
+ 
+ allow-unwrap-in-tests = true
+ 
+diff --git a/crates/build/re_build_info/src/build_info.rs b/crates/build/re_build_info/src/build_info.rs
+index 55abb7290..6efb10e3b 100644
+--- a/crates/build/re_build_info/src/build_info.rs
++++ b/crates/build/re_build_info/src/build_info.rs
+@@ -153,7 +153,7 @@ fn crate_version_from_build_info_string() {
+             patch: 0,
+             meta: Some(crate::crate_version::Meta::DevAlpha(7)),
+         },
+-        rustc_version: "1.76.0 (d5c2e9c34 2023-09-13)",
++        rustc_version: "1.80.0 (d5c2e9c34 2023-09-13)",
+         llvm_version: "16.0.5",
+         git_hash: "",
+         git_branch: "",
+diff --git a/crates/viewer/re_viewer/data/quick_start_guides/rust_connect.md b/crates/viewer/re_viewer/data/quick_start_guides/rust_connect.md
+index 1130ccd7e..c5b748b77 100644
+--- a/crates/viewer/re_viewer/data/quick_start_guides/rust_connect.md
++++ b/crates/viewer/re_viewer/data/quick_start_guides/rust_connect.md
+@@ -10,7 +10,7 @@ Let's try it out in a brand-new Rust project:
+ cargo init cube && cd cube && cargo add rerun --features native_viewer
+ ```
+ 
+-Note that the Rerun SDK requires a working installation of Rust 1.76+.
++Note that the Rerun SDK requires a working installation of Rust 1.80+.
+ 
+ ## Logging your own data
+ 
+diff --git a/crates/viewer/re_viewer/data/quick_start_guides/rust_spawn.md b/crates/viewer/re_viewer/data/quick_start_guides/rust_spawn.md
+index fc9cfc1c6..cde772f1a 100644
+--- a/crates/viewer/re_viewer/data/quick_start_guides/rust_spawn.md
++++ b/crates/viewer/re_viewer/data/quick_start_guides/rust_spawn.md
+@@ -10,7 +10,7 @@ Let's try it out in a brand-new Rust project:
+ cargo init cube && cd cube && cargo add rerun
+ ```
+ 
+-Note that the Rerun SDK requires a working installation of Rust 1.76+.
++Note that the Rerun SDK requires a working installation of Rust 1.80+.
+ 
+ ## Logging your own data
+ 
+diff --git a/docs/content/getting-started/installing-viewer.md b/docs/content/getting-started/installing-viewer.md
+index 8327753b2..55ebc55e8 100644
+--- a/docs/content/getting-started/installing-viewer.md
++++ b/docs/content/getting-started/installing-viewer.md
+@@ -40,7 +40,7 @@ There are many ways to install the viewer. Please pick whatever works best for y
+ -   Download `rerun-cli` for your platform from the [GitHub Release artifacts](https://github.com/rerun-io/rerun/releases/latest/).
+ -   Via Cargo
+     -   `cargo binstall rerun-cli` - download binaries via [`cargo binstall`](https://github.com/cargo-bins/cargo-binstall)
+-    -   `cargo install rerun-cli --locked` - build it from source (this requires Rust 1.76+)
++    -   `cargo install rerun-cli --locked` - build it from source (this requires Rust 1.80+)
+ -   Together with the Rerun [Python SDK](./quick-start/python.md):
+     -   `pip3 install rerun-sdk` - download it via pip
+     -   `conda install -c conda-forge rerun-sdk` - download via Conda
+diff --git a/docs/content/getting-started/quick-start/rust.md b/docs/content/getting-started/quick-start/rust.md
+index 45d1beb1a..c79bc34db 100644
+--- a/docs/content/getting-started/quick-start/rust.md
++++ b/docs/content/getting-started/quick-start/rust.md
+@@ -5,7 +5,7 @@ order: 3
+ 
+ ## Setup
+ 
+-The Rerun SDK for Rust requires a working installation of Rust 1.76+.
++The Rerun SDK for Rust requires a working installation of Rust 1.80+.
+ 
+ After you have [installed the viewer](../installing-viewer.md#installing-the-viewer) you can simply add [the Rerun crate](https://crates.io/crates/rerun) to your project with `cargo add rerun`.
+ 
+diff --git a/examples/rust/clock/Cargo.toml b/examples/rust/clock/Cargo.toml
+index ba2999675..7c038ebc4 100644
+--- a/examples/rust/clock/Cargo.toml
++++ b/examples/rust/clock/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "clock"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/examples/rust/custom_data_loader/Cargo.toml b/examples/rust/custom_data_loader/Cargo.toml
+index e5df4cf66..37cbe80cb 100644
+--- a/examples/rust/custom_data_loader/Cargo.toml
++++ b/examples/rust/custom_data_loader/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "custom_data_loader"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/examples/rust/custom_space_view/Cargo.toml b/examples/rust/custom_space_view/Cargo.toml
+index ae1babd40..5c012cf7c 100644
+--- a/examples/rust/custom_space_view/Cargo.toml
++++ b/examples/rust/custom_space_view/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "custom_space_view"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/examples/rust/custom_store_subscriber/Cargo.toml b/examples/rust/custom_store_subscriber/Cargo.toml
+index 627f21d7b..52d8d923e 100644
+--- a/examples/rust/custom_store_subscriber/Cargo.toml
++++ b/examples/rust/custom_store_subscriber/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "custom_store_subscriber"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/examples/rust/dna/Cargo.toml b/examples/rust/dna/Cargo.toml
+index 57909e2fe..f5332a40c 100644
+--- a/examples/rust/dna/Cargo.toml
++++ b/examples/rust/dna/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "dna"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/examples/rust/extend_viewer_ui/Cargo.toml b/examples/rust/extend_viewer_ui/Cargo.toml
+index 0a753fe36..e2442a638 100644
+--- a/examples/rust/extend_viewer_ui/Cargo.toml
++++ b/examples/rust/extend_viewer_ui/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "extend_viewer_ui"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/examples/rust/external_data_loader/Cargo.toml b/examples/rust/external_data_loader/Cargo.toml
+index a57a27743..7ee67583d 100644
+--- a/examples/rust/external_data_loader/Cargo.toml
++++ b/examples/rust/external_data_loader/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "rerun-loader-rust-file"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/examples/rust/incremental_logging/Cargo.toml b/examples/rust/incremental_logging/Cargo.toml
+index c7cfe3965..2bc68c06c 100644
+--- a/examples/rust/incremental_logging/Cargo.toml
++++ b/examples/rust/incremental_logging/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "incremental_logging"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/examples/rust/log_file/Cargo.toml b/examples/rust/log_file/Cargo.toml
+index 4f3b5a220..b78f3a49b 100644
+--- a/examples/rust/log_file/Cargo.toml
++++ b/examples/rust/log_file/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "log_file"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/examples/rust/minimal/Cargo.toml b/examples/rust/minimal/Cargo.toml
+index 77588cfb0..f5bc05637 100644
+--- a/examples/rust/minimal/Cargo.toml
++++ b/examples/rust/minimal/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "minimal"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/examples/rust/minimal_options/Cargo.toml b/examples/rust/minimal_options/Cargo.toml
+index 2f34f4890..6c9afe8c8 100644
+--- a/examples/rust/minimal_options/Cargo.toml
++++ b/examples/rust/minimal_options/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "minimal_options"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/examples/rust/minimal_serve/Cargo.toml b/examples/rust/minimal_serve/Cargo.toml
+index d2efcb718..7ca9ca96a 100644
+--- a/examples/rust/minimal_serve/Cargo.toml
++++ b/examples/rust/minimal_serve/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "minimal_serve"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/examples/rust/objectron/Cargo.toml b/examples/rust/objectron/Cargo.toml
+index 25d732cde..bf1029d56 100644
+--- a/examples/rust/objectron/Cargo.toml
++++ b/examples/rust/objectron/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "objectron"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/examples/rust/raw_mesh/Cargo.toml b/examples/rust/raw_mesh/Cargo.toml
+index a41df4804..a3d3b7081 100644
+--- a/examples/rust/raw_mesh/Cargo.toml
++++ b/examples/rust/raw_mesh/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "raw_mesh"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/examples/rust/shared_recording/Cargo.toml b/examples/rust/shared_recording/Cargo.toml
+index ded88fbfb..a238033d3 100644
+--- a/examples/rust/shared_recording/Cargo.toml
++++ b/examples/rust/shared_recording/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "shared_recording"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/examples/rust/spawn_viewer/Cargo.toml b/examples/rust/spawn_viewer/Cargo.toml
+index 8a73efc91..7495735d8 100644
+--- a/examples/rust/spawn_viewer/Cargo.toml
++++ b/examples/rust/spawn_viewer/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "spawn_viewer"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/examples/rust/stdio/Cargo.toml b/examples/rust/stdio/Cargo.toml
+index f55cea217..78493677e 100644
+--- a/examples/rust/stdio/Cargo.toml
++++ b/examples/rust/stdio/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "stdio"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/examples/rust/template/Cargo.toml b/examples/rust/template/Cargo.toml
+index 6e1ebafe4..eda133daa 100644
+--- a/examples/rust/template/Cargo.toml
++++ b/examples/rust/template/Cargo.toml
+@@ -2,7 +2,7 @@
+ name = "template"
+ version = "0.18.2"
+ edition = "2021"
+-rust-version = "1.76"
++rust-version = "1.80"
+ license = "MIT OR Apache-2.0"
+ publish = false
+ 
+diff --git a/rust-toolchain b/rust-toolchain
+index 871f56248..38e5e90f3 100644
+--- a/rust-toolchain
++++ b/rust-toolchain
+@@ -5,6 +5,6 @@
+ # to the user in the error, instead of "error: invalid channel name '[toolchain]'".
+ 
+ [toolchain]
+-channel = "1.76.0"
++channel = "1.80.0"
+ components = ["rustfmt", "clippy"]
+ targets = ["wasm32-unknown-unknown"]
+diff --git a/scripts/clippy_wasm/clippy.toml b/scripts/clippy_wasm/clippy.toml
+index 75729af1e..627a3650e 100644
+--- a/scripts/clippy_wasm/clippy.toml
++++ b/scripts/clippy_wasm/clippy.toml
+@@ -6,7 +6,7 @@
+ # -----------------------------------------------------------------------------
+ # Section identical to the main clippy.toml:
+ 
+-msrv = "1.76"
++msrv = "1.80"
+ 
+ allow-unwrap-in-tests = true
+ 
+diff --git a/scripts/lint.py b/scripts/lint.py
+index 695d12b6b..32a2c41e1 100755
+--- a/scripts/lint.py
++++ b/scripts/lint.py
+@@ -599,7 +599,7 @@ def test_lint_workspace_deps() -> None:
+         name = "clock"
+         version = "0.6.0-alpha.0"
+         edition = "2021"
+-        rust-version = "1.76"
++        rust-version = "1.80"
+         license = "MIT OR Apache-2.0"
+         publish = false
+ 

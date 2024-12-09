@@ -1,0 +1,18 @@
+diff --git a/xpra/scripts/main.py b/xpra/scripts/main.py
+index 7806612e05..4c7a0ec2dd 100755
+--- a/xpra/scripts/main.py
++++ b/xpra/scripts/main.py
+@@ -444,13 +444,7 @@ def run_mode(script_file: str, cmdline, error_cb, options, args, full_mode: str,
+             "seamless", "desktop", "shadow", "shadow-screen", "expand",
+             "upgrade", "upgrade-seamless", "upgrade-desktop",
+     ) and not display_is_remote and options.daemon and use_systemd_run(options.systemd_run):
+-        # make sure we run via the same interpreter,
+-        # inject it into the command line if we have to:
+         argv = list(cmdline)
+-        if argv[0].find("python") < 0:
+-            major, minor = sys.version_info.major, sys.version_info.minor
+-            python = which("python%i.%i" % (major, minor)) or which("python%i" % major) or which("python") or "python"
+-            argv.insert(0, python)
+         return systemd_run_wrap(mode, argv, options.systemd_run_args, user=getuid() != 0)
+     configure_env(options.env)
+     configure_logging(options, mode)

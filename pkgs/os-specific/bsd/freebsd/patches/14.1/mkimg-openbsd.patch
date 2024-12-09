@@ -1,0 +1,44 @@
+diff --git a/usr.bin/mkimg/gpt.c b/usr.bin/mkimg/gpt.c
+index ed3f008c394f..b4fb98682a4c 100644
+--- a/usr.bin/mkimg/gpt.c
++++ b/usr.bin/mkimg/gpt.c
+@@ -50,6 +50,7 @@ static mkimg_uuid_t gpt_uuid_freebsd_zfs = GPT_ENT_TYPE_FREEBSD_ZFS;
+ static mkimg_uuid_t gpt_uuid_mbr = GPT_ENT_TYPE_MBR;
+ static mkimg_uuid_t gpt_uuid_ms_basic_data = GPT_ENT_TYPE_MS_BASIC_DATA;
+ static mkimg_uuid_t gpt_uuid_prep_boot = GPT_ENT_TYPE_PREP_BOOT;
++static mkimg_uuid_t gpt_uuid_openbsd_ufs = GPT_ENT_TYPE_OPENBSD_DATA;
+ 
+ static struct mkimg_alias gpt_aliases[] = {
+     {	ALIAS_EFI, ALIAS_PTR2TYPE(&gpt_uuid_efi) },
+@@ -63,6 +64,7 @@ static struct mkimg_alias gpt_aliases[] = {
+     {	ALIAS_MBR, ALIAS_PTR2TYPE(&gpt_uuid_mbr) },
+     {	ALIAS_NTFS, ALIAS_PTR2TYPE(&gpt_uuid_ms_basic_data) },
+     {	ALIAS_PPCBOOT, ALIAS_PTR2TYPE(&gpt_uuid_prep_boot) },
++    {	ALIAS_OPENBSD_UFS, ALIAS_PTR2TYPE(&gpt_uuid_openbsd_ufs) },
+     {	ALIAS_NONE, 0 }		/* Keep last! */
+ };
+ 
+diff --git a/usr.bin/mkimg/scheme.c b/usr.bin/mkimg/scheme.c
+index 85ed94013e8d..00a3432c5328 100644
+--- a/usr.bin/mkimg/scheme.c
++++ b/usr.bin/mkimg/scheme.c
+@@ -56,6 +56,7 @@ static struct {
+ 	{ "mbr", ALIAS_MBR },
+ 	{ "ntfs", ALIAS_NTFS },
+ 	{ "prepboot", ALIAS_PPCBOOT },
++	{ "openbsd-ufs", ALIAS_OPENBSD_UFS },
+ 	{ NULL, ALIAS_NONE }		/* Keep last! */
+ };
+ 
+diff --git a/usr.bin/mkimg/scheme.h b/usr.bin/mkimg/scheme.h
+index 52614255595f..0c44f8653af2 100644
+--- a/usr.bin/mkimg/scheme.h
++++ b/usr.bin/mkimg/scheme.h
+@@ -45,6 +45,7 @@ enum alias {
+ 	ALIAS_MBR,
+ 	ALIAS_NTFS,
+ 	ALIAS_PPCBOOT,
++	ALIAS_OPENBSD_UFS,
+ 	/* end */
+ 	ALIAS_COUNT		/* Keep last! */
+ };

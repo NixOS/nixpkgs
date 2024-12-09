@@ -1,0 +1,15 @@
+--- a/src/kernel/mconfig_dot.ml
++++ b/src/kernel/mconfig_dot.ml
+@@ -126,10 +126,10 @@ module Configurator = struct
+       let prog, args =
+         match cfg with
+         | Dot_merlin ->
+-          let prog = "dot-merlin-reader" in
++          let prog = "@dot_merlin_reader@" in
+           prog, [| prog |]
+         | Dune ->
+-          let prog = "dune" in
++          let prog = "@dune@" in
+           prog, [| prog; "ocaml-merlin"; "--no-print-directory" |]
+       in
+       log ~title:"get_config" "Using %s configuration provider." (to_string cfg);

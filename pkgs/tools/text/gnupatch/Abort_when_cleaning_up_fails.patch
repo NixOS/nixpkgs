@@ -1,0 +1,51 @@
+From b7b028a77bd855f6f56b17c8837fc1cca77b469d Mon Sep 17 00:00:00 2001
+From: Andreas Gruenbacher <agruen@gnu.org>
+Date: Fri, 28 Jun 2019 00:30:25 +0200
+Subject: Abort when cleaning up fails
+
+When a fatal error triggers during cleanup, another attempt will be made to
+clean up, which will likely lead to the same fatal error.  So instead, bail out
+when that happens.
+src/patch.c (cleanup): Bail out when called recursively.
+(main): There is no need to call output_files() before cleanup() as cleanup()
+already does that.
+---
+ src/patch.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/src/patch.c b/src/patch.c
+index 4616a48..02fd982 100644
+--- a/src/patch.c
++++ b/src/patch.c
+@@ -685,7 +685,6 @@ main (int argc, char **argv)
+     }
+     if (outstate.ofp && (ferror (outstate.ofp) || fclose (outstate.ofp) != 0))
+       write_fatal ();
+-    output_files (NULL);
+     cleanup ();
+     delete_files ();
+     if (somefailed)
+@@ -1991,7 +1990,6 @@ void
+ fatal_exit (int sig)
+ {
+   cleanup ();
+-
+   if (sig)
+     exit_with_signal (sig);
+ 
+@@ -2011,6 +2009,12 @@ remove_if_needed (char const *name, bool *needs_removal)
+ static void
+ cleanup (void)
+ {
++  static bool already_cleaning_up;
++
++  if (already_cleaning_up)
++    return;
++  already_cleaning_up = true;
++
+   remove_if_needed (TMPINNAME, &TMPINNAME_needs_removal);
+   remove_if_needed (TMPOUTNAME, &TMPOUTNAME_needs_removal);
+   remove_if_needed (TMPPATNAME, &TMPPATNAME_needs_removal);
+-- 
+cgit v1.1
+

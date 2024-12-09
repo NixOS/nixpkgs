@@ -1,0 +1,38 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ivan Trubach <mr.trubach@icloud.com>
+Date: Sat, 27 Jul 2024 18:38:10 +0300
+Subject: [PATCH 06/19] Fix more non-Darwin stuff
+
+---
+ xar/include/xar.h.in | 1 +
+ xar/lib/linuxattr.c  | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/xar/include/xar.h.in b/xar/include/xar.h.in
+index 9c93798..3d24b4f 100644
+--- a/xar/include/xar.h.in
++++ b/xar/include/xar.h.in
+@@ -52,6 +52,7 @@ extern "C" {
+ #import <os/availability.h>
+ #else
+ #define API_DEPRECATED(...)
++#define API_AVAILABLE(...)
+ #endif
+ 
+ #pragma pack(4)
+diff --git a/xar/lib/linuxattr.c b/xar/lib/linuxattr.c
+index 0fec2bb..58ee6a8 100644
+--- a/xar/lib/linuxattr.c
++++ b/xar/lib/linuxattr.c
+@@ -226,7 +226,7 @@ int32_t xar_linuxattr_extract(xar_t x, xar_file_t f, const char* file, char *buf
+ 	if( statfs(file, &sfs) != 0 ) {
+ 		char *tmp, *bname;
+ 		tmp = strdup(file);
+-		bname = safe_dirname(tmp);
++		bname = xar_safe_dirname(tmp);
+ 		statfs(bname, &sfs);
+ 		free(tmp);
+ 		free(bname);
+-- 
+2.44.1
+

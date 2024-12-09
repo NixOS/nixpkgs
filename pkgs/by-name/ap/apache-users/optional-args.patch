@@ -1,0 +1,24 @@
+--- a/apache2.1.pl
++++ b/apache2.1.pl
+@@ -63,10 +63,10 @@ getopt ("h: l: p: e: s: t:" ,\%opts);
+ use LWP;
+ 
+ 
+-if (!(exists $opts{h})||!(exists $opts{p})||!(exists $opts{l})||!(exists $opts{e})){ &usage;}
++if (!(exists $opts{h})){ &usage;}
+ 
+ sub usage{
+-print "\nUSAGE: apache.pl [-h 1.2.3.4] [-l names] [-p 80] [-s (SSL Support 1=true 0=false)] [-e 403 (http code)] [-t threads]\n\n ";
++print "\nUSAGE: apache-users -h 1.2.3.4 [-l names] [-p 80] [-s (SSL Support 1=true 0=false)] [-e 403 (http code)] [-t threads]\n\n ";
+ exit 1;	
+ };
+ 
+@@ -75,7 +75,7 @@ if (exists $opts{h}){
+ }
+ if (exists $opts{l}){ 
+     $list=$opts{l};
+-}else {$list="names";}
++}else {$list="@out@/share/apache-users/names";}
+ if (exists $opts{p}){ 
+      $port=$opts{p};
+ }else{$port=80;}

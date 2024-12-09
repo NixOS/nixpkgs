@@ -1,0 +1,8 @@
+assignments {
+  sound-server {
+    // original config matches on /usr/bin/..., but this is NixOS
+    pipewire
+    pipewire-pulse
+    jackd
+  }
+}

@@ -1,0 +1,26 @@
+From b90b2c5989e9ddd3cfc79f56cb8a9194561bd4d7 Mon Sep 17 00:00:00 2001
+From: Tom Wieczorek <tom@bibbu.net>
+Date: Fri, 26 Jul 2024 11:08:45 +0200
+Subject: [PATCH] Don't strip binary when installing
+
+Doesn't play well with cross-compiling.
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 724c962..284cab3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -12,7 +12,7 @@ test: yx
+ 	(cd tests && ./do_tests.sh)
+ 
+ install: yx
+-	install -sDm0755 -t "$(PREFIX)"/bin yx
++	install -Dm0755 -t "$(PREFIX)"/bin yx
+ 	install -Dm0644 -t "$(PREFIX)"/share/man/man1 yx.1
+ 
+ clean:
+-- 
+2.42.2
+

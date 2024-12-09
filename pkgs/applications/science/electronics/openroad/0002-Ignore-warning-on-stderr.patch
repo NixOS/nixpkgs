@@ -1,0 +1,41 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Nicolas Benes <nbenes.gh@xandea.de>
+Date: Sun, 2 Apr 2023 04:57:17 +0200
+Subject: [PATCH] Ignore warning on stderr
+
+The following warning is written to stderr, which causes the overall
+test to fail:
+
+```
+sh: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+```
+
+diff --git a/src/dst/test/cpp_tests.tcl b/src/dst/test/cpp_tests.tcl
+index 9087c2c..63d0cb7 100644
+--- a/src/dst/test/cpp_tests.tcl
++++ b/src/dst/test/cpp_tests.tcl
+@@ -4,7 +4,7 @@ set test_dir [pwd]
+ set openroad_dir [file dirname [file dirname [file dirname $test_dir]]]
+ set tests_path [file join $openroad_dir "build" "src" "dst" "test" "cpp"]
+ 
+-set tests_list [split [exec sh -c "find $tests_path -maxdepth 1 -name 'Test*'"] \n]
++set tests_list [split [exec -ignorestderr sh -c "find $tests_path -maxdepth 1 -name 'Test*'"] \n]
+ 
+ foreach test $tests_list {
+     set test_name [file tail $test]
+diff --git a/src/odb/test/cpp_tests.tcl b/src/odb/test/cpp_tests.tcl
+index 091d576..6811760 100644
+--- a/src/odb/test/cpp_tests.tcl
++++ b/src/odb/test/cpp_tests.tcl
+@@ -4,7 +4,7 @@ set test_dir [pwd]
+ set openroad_dir [file dirname [file dirname [file dirname $test_dir]]]
+ set tests_path [file join $openroad_dir "build" "src" "odb" "test" "cpp"]
+ 
+-set tests_list [split [exec sh -c "find $tests_path -maxdepth 1 -name 'Test*' ! -name '*.cmake'"] \n]
++set tests_list [split [exec -ignorestderr sh -c "find $tests_path -maxdepth 1 -name 'Test*' ! -name '*.cmake'"] \n]
+ 
+ foreach test $tests_list {
+     set test_name [file tail $test]
+-- 
+2.38.4
+

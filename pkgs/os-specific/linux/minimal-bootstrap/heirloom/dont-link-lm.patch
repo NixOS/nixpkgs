@@ -1,0 +1,44 @@
+--- csplit/Makefile.mk
++++ csplit/Makefile.mk
+@@ -1,19 +1,19 @@
+ all: csplit csplit_sus csplit_su3
+ 
+ csplit: csplit.o
+-	$(LD) $(LDFLAGS) csplit.o $(LCOMMON) $(LWCHAR) $(LIBS) -lm -o csplit
++	$(LD) $(LDFLAGS) csplit.o $(LCOMMON) $(LWCHAR) $(LIBS) -o csplit
+ 
+ csplit.o: csplit.c
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(XO6FL) $(LARGEF) $(IWCHAR) $(ICOMMON) -c csplit.c
+ 
+ csplit_sus: csplit_sus.o
+-	$(LD) $(LDFLAGS) csplit_sus.o $(LUXRE) $(LCOMMON) $(LWCHAR) $(LIBS) -lm -o csplit_sus
++	$(LD) $(LDFLAGS) csplit_sus.o $(LUXRE) $(LCOMMON) $(LWCHAR) $(LIBS) -o csplit_sus
+ 
+ csplit_sus.o: csplit.c
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(XO6FL) $(LARGEF) $(IUXRE) $(IWCHAR) $(ICOMMON) -DSUS -c csplit.c -o csplit_sus.o
+ 
+ csplit_su3: csplit_su3.o
+-	$(LD) $(LDFLAGS) csplit_su3.o $(LUXRE) $(LCOMMON) $(LWCHAR) $(LIBS) -lm -o csplit_su3
++	$(LD) $(LDFLAGS) csplit_su3.o $(LUXRE) $(LCOMMON) $(LWCHAR) $(LIBS) -o csplit_su3
+ 
+ csplit_su3.o: csplit.c
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(XO6FL) $(LARGEF) $(IUXRE) $(IWCHAR) $(ICOMMON) -DSU3 -c csplit.c -o csplit_su3.o
+--- nawk/Makefile.mk
++++ nawk/Makefile.mk
+@@ -3,13 +3,13 @@ all: awk awk_sus awk_su3
+ OBJ = awk.lx.o b.o lib.o main.o parse.o proctab.o run.o tran.o
+ 
+ awk: awk.g.o $(OBJ) version.o
+-	$(LD) $(LDFLAGS) awk.g.o $(OBJ) version.o $(LUXRE) -lm $(LCOMMON) $(LWCHAR) $(LIBS) -o awk
++	$(LD) $(LDFLAGS) awk.g.o $(OBJ) version.o $(LUXRE) $(LCOMMON) $(LWCHAR) $(LIBS) -o awk
+ 
+ awk_sus: awk.g.o $(OBJ) version_sus.o
+-	$(LD) $(LDFLAGS) awk.g.o $(OBJ) version_sus.o $(LUXRE) -lm $(LCOMMON) $(LWCHAR) $(LIBS) -o awk_sus
++	$(LD) $(LDFLAGS) awk.g.o $(OBJ) version_sus.o $(LUXRE) $(LCOMMON) $(LWCHAR) $(LIBS) -o awk_sus
+ 
+ awk_su3: awk.g.2001.o $(OBJ) version_su3.o
+-	$(LD) $(LDFLAGS) awk.g.2001.o $(OBJ) version_su3.o $(LUXRE) -lm $(LCOMMON) $(LWCHAR) $(LIBS) -o awk_su3
++	$(LD) $(LDFLAGS) awk.g.2001.o $(OBJ) version_su3.o $(LUXRE) $(LCOMMON) $(LWCHAR) $(LIBS) -o awk_su3
+ 
+ awk.g.c: awk.g.y
+ 	$(YACC) -d awk.g.y

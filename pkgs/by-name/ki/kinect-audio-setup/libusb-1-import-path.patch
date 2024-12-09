@@ -1,0 +1,23 @@
+commit 02fd6c4355809e1bff7c66d478e88f30bedde13b
+Author: Nicolas Berbiche <nicolas@normie.dev>
+Date:   Wed May 5 23:14:56 2021 -0400
+
+    fix libusb include for Linux
+
+diff --git a/kinect_upload_fw/kinect_upload_fw.c b/kinect_upload_fw/kinect_upload_fw.c
+index 1bd4102..351c94f 100644
+--- a/kinect_upload_fw/kinect_upload_fw.c
++++ b/kinect_upload_fw/kinect_upload_fw.c
+@@ -35,7 +35,12 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <errno.h>
++
++#if defined(__FreeBSD__) || defined(__NetBSD__) || defined(_WIN32)
+ #include <libusb.h>
++#else
++#include <libusb-1.0/libusb.h>
++#endif
+ 
+ #include "endian.h"
+ 

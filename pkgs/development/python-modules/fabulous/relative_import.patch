@@ -1,0 +1,27 @@
+diff --git a/fabulous/prompt.py b/fabulous/prompt.py
+index 531176f..e395ab4 100644
+--- a/fabulous/prompt.py
++++ b/fabulous/prompt.py
+@@ -18,8 +18,7 @@
+ import sys
+ import os
+ import os.path
+-import term
+-from term import stdout, stderr, display
++from .term import stdout, stderr, display
+ 
+ __all__ = ["input_object","query","file_chooser"]
+ 
+diff --git a/fabulous/widget.py b/fabulous/widget.py
+index 31a2547..7ad889a 100644
+--- a/fabulous/widget.py
++++ b/fabulous/widget.py
+@@ -24,7 +24,7 @@ import os
+ import math
+ from datetime import datetime
+ # import textwrap
+-from term import stdout, display
++from .term import stdout, display
+ 
+ class ProgressBar(object):
+     """A 3-line progress bar, which looks like::

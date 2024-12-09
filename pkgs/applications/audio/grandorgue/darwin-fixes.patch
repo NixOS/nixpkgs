@@ -1,0 +1,13 @@
+diff --git a/resources/CMakeLists.txt b/resources/CMakeLists.txt
+index d231e3d1..73f389a2 100644
+--- a/resources/CMakeLists.txt
++++ b/resources/CMakeLists.txt
+@@ -62,7 +62,7 @@ if(WIN32)
+ 		     DEPENDS "${CMAKE_SOURCE_DIR}/resources/GrandOrgue.manifest")
+   LIST(APPEND DEPLIST "${RESOURCEDIR}/GOIcon.ico" "${RESOURCEDIR}/GrandOrgue.rc" "${RESOURCEDIR}/GrandOrgue.manifest")
+ elseif(APPLE)
+-   ADD_CUSTOM_COMMAND(OUTPUT "${RESOURCEDIR}/GrandOrgue.icns" COMMAND iconutil -c icns --output "${RESOURCEDIR}/GrandOrgue.icns" ${GENERATED_ICONS_DIR} DEPENDS ${GENERATED_ICONS})
++   ADD_CUSTOM_COMMAND(OUTPUT "${RESOURCEDIR}/GrandOrgue.icns" COMMAND png2icns "${RESOURCEDIR}/GrandOrgue.icns" ${GENERATED_ICONS_DIR}/*{16,32,128,256,512,1024}.png DEPENDS ${GENERATED_ICONS})
+    INSTALL(FILES "${RESOURCEDIR}/GrandOrgue.icns" DESTINATION "${RESOURCEINSTDIR}")
+    LIST(APPEND DEPLIST "${RESOURCEDIR}/GrandOrgue.icns")
+ elseif(UNIX)

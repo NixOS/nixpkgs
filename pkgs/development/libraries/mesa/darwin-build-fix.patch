@@ -1,0 +1,13 @@
+diff --git a/src/glx/glxext.c b/src/glx/glxext.c
+index eee9f040151..289691db26b 100644
+--- a/src/glx/glxext.c
++++ b/src/glx/glxext.c
+@@ -800,7 +800,7 @@ AllocAndFetchScreenConfigs(Display * dpy, struct glx_display * priv, Bool zink,
+ 
+ #if defined(GLX_USE_APPLE)
+       if (psc == NULL && priv->driswDisplay) {
+-         psc = priv->driswDisplay->createScreen(i, priv);
++         psc = priv->driswDisplay->createScreen(i, priv, driver_name_is_inferred);
+       }
+ #endif
+ 

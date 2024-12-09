@@ -1,0 +1,379 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/network_cmds/blob/main/network_cmds.xcodeproj/project.pbxproj
+
+# Project settings
+project('network_cmds', 'c', version : '@version@')
+add_global_arguments(
+    '-DTARGET_OS_OSX=1', # Needed for static builds.
+    # Many programs use old prototypes
+    '-Wno-deprecated-non-prototype',
+    # Suppresses suffixing symbols with '$UNIX2003', which causes link failures.
+    '-D__DARWIN_ONLY_UNIX_CONFORMANCE=1',
+    # Use 64-bit inode symbols without an '$INODE64' suffix, which causes link failures.
+    '-D__DARWIN_ONLY_64_BIT_INO_T=1',
+    # Per the Xcode project
+    '-DUSE_RFC2292BIS=1',
+    '-D__APPLE_USE_RFC_3542=1',
+    '-D__APPLE_API_OBSOLETE=1',
+    language : 'c',
+)
+
+
+# Generators
+rpcgen_bin = find_program('rpcgen')
+rpcgen = generator(
+    rpcgen_bin,
+    arguments : [ '-c', '-o', '@OUTPUT@', '@INPUT@' ],
+    output : '@BASENAME@_xdr.c',
+)
+
+rpcgen_header = generator(
+    rpcgen_bin,
+    arguments : [ '-h', '-o', '@OUTPUT@', '@INPUT@' ],
+    output : '@BASENAME@.h',
+)
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+
+libipsec = cc.find_library('ipsec')
+libresolv = cc.find_library('resolv')
+libpcap = dependency('pcap')
+openssl = dependency('openssl')
+
+
+# Internal Libraries
+corecrypto = declare_dependency(
+    dependencies : [ openssl ],
+    include_directories : 'compat',
+    link_with : static_library(
+        'corecrypto',
+        include_directories : 'compat',
+        sources : [
+            'compat/corecrypto/ccdigest.c',
+            'compat/corecrypto/ccsha1.c',
+            'compat/corecrypto/ccsha2.c',
+        ],
+    ),
+)
+
+libnetwork_cmds = declare_dependency(
+    include_directories : 'network_cmds_lib',
+    link_with : static_library(
+        'network_cmds',
+        include_directories : 'network_cmds_lib',
+        sources : [
+            'network_cmds_lib/network_cmds_lib.c',
+            'network_cmds_lib/network_cmds_lib_test.c',
+        ],
+    ),
+)
+
+
+# Binaries
+
+executable(
+    'arp',
+    dependencies : [ libnetwork_cmds ],
+    install : true,
+    sources : [ 'arp.tproj/arp.c' ],
+)
+install_man(
+    'arp.tproj/arp.8',
+    'arp.tproj/arp4.4',
+)
+
+executable(
+    'cfilutil',
+    dependencies : [ corecrypto ],
+    install : true,
+    sources : [
+        'cfilutil/cfilstat.c',
+        'cfilutil/cfilutil.c',
+    ],
+)
+install_man('cfilutil/cfilutil.1')
+
+executable(
+    'dnctl',
+    install : true,
+    sources : [ 'dnctl/dnctl.c' ],
+)
+install_man('dnctl/dnctl.8')
+
+executable(
+    'ecnprobe',
+    dependencies : [ libnetwork_cmds, libpcap ],
+    install : true,
+    sources : [
+        'ecnprobe/capture.c',
+        'ecnprobe/ecn.c',
+        'ecnprobe/ecn_probe.c',
+        'ecnprobe/gmt2local.c',
+        'ecnprobe/history.c',
+        'ecnprobe/inet.c',
+        'ecnprobe/session.c',
+        'ecnprobe/support.c',
+    ],
+)
+install_man('ecnprobe/ecnprobe.1')
+
+executable(
+    'frame_delay',
+    install : true,
+    sources : [ 'frame_delay/frame_delay.c' ],
+)
+install_man('frame_delay/frame_delay.8')
+
+executable(
+    'ifconfig',
+    c_args : [
+        '-DUSE_BONDS',
+        '-DUSE_VLANS',
+        '-DTARGET_OS_IPHONE=0', # Silence error related to undefined target macro
+    ],
+    install : true,
+    sources : [
+        'ifconfig.tproj/af_inet.c',
+        'ifconfig.tproj/af_inet6.c',
+        'ifconfig.tproj/af_link.c',
+        'ifconfig.tproj/ifbond.c',
+        'ifconfig.tproj/ifbridge.c',
+        'ifconfig.tproj/ifclone.c',
+        'ifconfig.tproj/ifconfig.c',
+        'ifconfig.tproj/iffake.c',
+        'ifconfig.tproj/ifmedia.c',
+        'ifconfig.tproj/ifvlan.c',
+        'ifconfig.tproj/nexus.c',
+    ],
+)
+install_man('ifconfig.tproj/ifconfig.8')
+
+executable(
+    'ip6addrctl',
+    install : true,
+    sources : [ 'ip6addrctl.tproj/ip6addrctl.c' ],
+)
+install_man('ip6addrctl.tproj/ip6addrctl.8')
+
+executable(
+    'kdumpd',
+    dependencies : [ libnetwork_cmds ],
+    install : true,
+    sources : [
+        'kdumpd.tproj/kdumpd.c',
+        'kdumpd.tproj/kdumpsubs.c',
+    ],
+)
+install_man('kdumpd.tproj/kdumpd.8')
+
+executable(
+    'mnc',
+    install : true,
+    sources : [
+        'mnc.tproj/mnc_main.c',
+        'mnc.tproj/mnc_multicast.c',
+        'mnc.tproj/mnc_opts.c',
+    ],
+)
+install_man('mnc.tproj/mnc.1')
+
+executable(
+    'mptcp_client',
+    install : true,
+    sources : [
+        'mptcp_client/conn_lib.c',
+        'mptcp_client/mptcp_client.c',
+    ],
+)
+install_man('mptcp_client/mptcp_client.1')
+
+executable(
+    'mtest',
+    install : true,
+    sources : [ 'mtest.tproj/mtest.c' ],
+)
+install_man('mtest.tproj/mtest.8')
+
+executable(
+    'ndp',
+    c_args : [
+        '-DINET6',
+        '-DISPEC_DEBUG',
+        '-DKAME_SCOPEID',
+    ],
+    install : true,
+    sources : [ 'ndp.tproj/ndp.c' ],
+)
+install_man('ndp.tproj/ndp.8')
+
+executable(
+    'netstat',
+    c_args : [
+       '-DINET6',
+       '-DIPSEC',
+    ],
+    dependencies : [ libnetwork_cmds ],
+    install : true,
+    sources : [
+        # 'netstat.tproj/bpf.c',
+        'netstat.tproj/data.c',
+        'netstat.tproj/if.c',
+        'netstat.tproj/inet.c',
+        'netstat.tproj/inet6.c',
+        'netstat.tproj/ipsec.c',
+        'netstat.tproj/main.c',
+        'netstat.tproj/mbuf.c',
+        'netstat.tproj/mcast.c',
+        'netstat.tproj/misc.c',
+        'netstat.tproj/mptcp.c',
+        'netstat.tproj/route.c',
+        'netstat.tproj/systm.c',
+        'netstat.tproj/tp_astring.c',
+        'netstat.tproj/unix.c',
+        'netstat.tproj/vsock.c',
+    ],
+)
+install_man('netstat.tproj/netstat.1')
+
+executable(
+    'ping',
+    dependencies : [ libnetwork_cmds ],
+    install : true,
+    sources : [
+        'ecnprobe/gmt2local.c',
+        'ping.tproj/ping.c'
+    ],
+)
+install_man('ping.tproj/ping.8')
+
+executable(
+    'ping6',
+    dependencies : [ libnetwork_cmds, libresolv ],
+    install : true,
+    sources : [
+        'ecnprobe/gmt2local.c',
+        'ping6.tproj/md5.c',
+        'ping6.tproj/ping6.c',
+    ],
+)
+install_man('ping6.tproj/ping6.8')
+
+executable(
+    'pktapctl',
+    install : true,
+    sources : [ 'pktapctl/pktapctl.c' ],
+)
+install_man('pktapctl/pktapctl.8')
+
+executable(
+    'pktmnglr',
+    install : true,
+    sources : [ 'pktmnglr/packet_mangler.c' ],
+)
+
+executable(
+    'rarpd',
+    c_args : [ '-DTFTP_DIR="tftpboot"' ],
+    install : true,
+    sources : [ 'rarpd.tproj/rarpd.c' ],
+)
+install_man('rarpd.tproj/rarpd.8')
+
+executable(
+    'route',
+    c_args : [
+       '-DINET6',
+       '-DIPSEC',
+    ],
+    dependencies : [ libnetwork_cmds ],
+    install : true,
+    sources : [ 'route.tproj/route.c' ],
+)
+install_man('route.tproj/route.8')
+
+# Depends on a bunch of IPv6 stuff from later SDKs (>11.3). Package once those become the default.
+# executable(
+#     'rtadvd',
+#     c_args : [
+#        '-DINET6',
+#        '-DHAVE_GETIFADDRS',
+#     ],
+#     install : true,
+#     sources : [
+#         'rtadvd.tproj/advcap.c',
+#         'rtadvd.tproj/config.c',
+#         'rtadvd.tproj/dump.c',
+#         'rtadvd.tproj/if.c',
+#         'rtadvd.tproj/rrenum.c',
+#         'rtadvd.tproj/rtadvd.c',
+#         'rtadvd.tproj/rtadvd_logging.c',
+#         'rtadvd.tproj/timer.c',
+#     ],
+# )
+# install_man(
+#   'rtadvd.tproj/rtadvd.8',
+#   'rtadvd.tproj/rtadvd.conf.5',
+# )
+
+executable(
+    'rtsol',
+    c_args : [
+       '-DINET6',
+       '-DHAVE_GETIFADDRS',
+    ],
+    install : true,
+    sources : [
+        'rtsol.tproj/dump.c',
+        'rtsol.tproj/if.c',
+        'rtsol.tproj/probe.c',
+        'rtsol.tproj/rtsock.c',
+        'rtsol.tproj/rtsol.c',
+        'rtsol.tproj/rtsold.c',
+    ],
+)
+install_man('rtsol.tproj/rtsol.8')
+
+executable(
+    'spray',
+    install : true,
+    sources : [
+        'spray.tproj/spray.c',
+        rpcgen_header.process('spray.tproj/spray.x'),
+        rpcgen.process('spray.tproj/spray.x'),
+    ],
+)
+install_man('spray.tproj/spray.8')
+
+executable(
+    'traceroute',
+    c_args : [ '-DHAVE_SOCKADDR_SA_LEN' ],
+    dependencies : [ libnetwork_cmds, libpcap ],
+    install : true,
+    sources : [
+        'traceroute.tproj/as.c',
+        'traceroute.tproj/findsaddr-socket.c',
+        'traceroute.tproj/ifaddrlist.c',
+        'traceroute.tproj/traceroute.c',
+        'traceroute.tproj/version.c',
+    ],
+)
+install_man('traceroute.tproj/traceroute.8')
+
+executable(
+    'traceroute6',
+    c_args : [
+        '-include', 'net/if_var.h', # Fix missing definition of `IFNAMSIZE`
+       '-DINET6',
+       '-DIPSEC',
+    ],
+    dependencies : [ libipsec, libnetwork_cmds, libpcap ],
+    include_directories : 'traceroute.tproj',
+    install : true,
+    sources : [
+        'traceroute.tproj/as.c',
+        'traceroute6.tproj/traceroute6.c'
+    ],
+)
+install_man('traceroute6.tproj/traceroute6.8')

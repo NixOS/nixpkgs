@@ -1,0 +1,16 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index bf5fe99..b559255 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -2,9 +2,8 @@
+ requires = ["setuptools>=64", "versioningit>=1.1.0"]
+ build-backend = "setuptools.build_meta"
+ 
+-[tool.versioningit.vcs]
+-method="git"
+-default-tag = "v0.0.0"
++[tool.versioningit]
++default-version = "@version@"
+ 
+ [tool.versioningit.write]
+ file = "src/isal/_version.py"
