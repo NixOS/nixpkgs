@@ -1,5 +1,3 @@
-diff --git a/src/linguist/shared/runqttool.cpp b/src/linguist/shared/runqttool.cpp
-index d355b9dc..94fef33f 100644
 --- a/src/linguist/shared/runqttool.cpp
 +++ b/src/linguist/shared/runqttool.cpp
 @@ -20,9 +20,21 @@ class FMT {
