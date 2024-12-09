@@ -2098,11 +2098,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   utilmacros = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "util-macros";
-    version = "1.20.1";
+    version = "1.20.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/util/util-macros-1.20.1.tar.xz";
-      sha256 = "1xffkcqv96vpk5pckisanrvg4w7i9ciqhs6yv7sc12p7vii8yc0b";
+      url = "mirror://xorg/individual/util/util-macros-1.20.2.tar.xz";
+      sha256 = "13ifr0dabci130xk04kp9bq16g9kbyzf8x1mgdyjsrsglbmnkhls";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
