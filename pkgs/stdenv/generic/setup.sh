@@ -1712,8 +1712,14 @@ runPhase() {
     startTime=$(date +"%s")
 
     # Evaluate the variable named $curPhase if it exists, otherwise the
-    # function named $curPhase.
-    eval "${!curPhase:-$curPhase}"
+    # function named $curPhase. Create a subshell with the errexit option so
+    # that invoking this function in the devshell behaves similarly to building
+    # the derivation (which uses the -e option).
+    (
+        set -e
+        eval "${!curPhase:-$curPhase}"
+    )
+    local status=$?
 
     endTime=$(date +"%s")
 
@@ -1725,6 +1731,7 @@ runPhase() {
 
         cd -- "${sourceRoot:-.}"
     fi
+    return $status
 }
 
 
