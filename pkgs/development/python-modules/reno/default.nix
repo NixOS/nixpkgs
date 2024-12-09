@@ -1,42 +1,48 @@
 {
+  buildPythonApplication,
+  dulwich,
+  docutils,
   lib,
-  fetchPypi,
+  fetchFromGitHub,
   git,
-  gnupg1,
-  python3Packages,
+  gnupg,
+  pbr,
+  pyyaml,
+  setuptools,
+  sphinx,
+  stestr,
+  testtools,
+  testscenarios,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "reno";
   version = "4.1.0";
   pyproject = true;
 
-  # Must be built from python sdist because of versioning quirks
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+ZLx/b0WIV7J3kevCBMdU6KDDJ54Q561Y86Nan9iU3A=";
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "reno";
+    rev = "refs/tags/${version}";
+    hash = "sha256-le9JtE0XODlYhTFsrjxFXG/Weshr+FyN4M4S3BMBLUE=";
   };
 
-  # remove b/c doesn't list all dependencies, and requires a few packages not in nixpkgs
-  postPatch = ''
-    rm test-requirements.txt
-  '';
+  env.PBR_VERSION = version;
 
-  build-system = with python3Packages; [
+  build-system = [
     setuptools
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = [
     dulwich
     pbr
     pyyaml
-    setuptools  # required for finding pkg_resources at runtime
+    setuptools
   ];
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = [
     # Python packages
     docutils
-    fixtures
     sphinx
     stestr
     testtools
@@ -44,12 +50,12 @@ python3Packages.buildPythonApplication rec {
 
     # Required programs to run all tests
     git
-    gnupg1
+    gnupg
   ];
 
   checkPhase = ''
     runHook preCheck
-    export HOME=$TMPDIR
+    export HOME=$(mktemp -d)
     stestr run -e <(echo "
       # Expects to be run from a git repository
       reno.tests.test_cache.TestCache.test_build_cache_db
@@ -79,6 +85,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "reno";
     homepage = "https://docs.openstack.org/reno/latest";
     license = licenses.asl20;
-    maintainers = teams.openstack.members ++ (with maintainers; [ drewrisinger guillaumekoenig ]);
+    maintainers = teams.openstack.members;
   };
 }
