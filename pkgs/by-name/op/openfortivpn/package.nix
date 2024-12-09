@@ -6,6 +6,7 @@
 , openssl
 , ppp
 , systemd
+, glib
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , withPpp ? stdenv.hostPlatform.isLinux
 }:
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
       --replace '$(DESTDIR)$(confdir)' /tmp
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config glib ];
 
   buildInputs = [
     openssl
@@ -39,7 +40,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
   ]
   ++ lib.optional withSystemd "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-  ++ lib.optional withPpp "--with-pppd=${ppp}/bin/pppd";
+  ++ lib.optional withPpp "--with-pppd=${ppp}/bin/pppd"
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-proc";
 
   enableParallelBuilding = true;
 
