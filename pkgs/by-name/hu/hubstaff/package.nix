@@ -4,9 +4,9 @@
 , curl, writeShellScript, common-updater-scripts, xmlstarlet }:
 
 let
-  url = "https://app.hubstaff.com/download/8495-standard-linux-1-6-28-release/sh";
-  version = "1.6.28-fafb0aba";
-  sha256 = "sha256:1y757477hhyflk3da11fvmyyglwlp6hrii1qn3ycb0l81xyxg9s0";
+  url = "https://app.hubstaff.com/download/8792-standard-linux-1-6-29-release/sh";
+  version = "1.6.29-7f771670";
+  sha256 = "sha256:09vdpsmaj26bmnbsyxp76g3677lzi8p86gz66qbdvxly6a4x1hq9";
 
   rpath = lib.makeLibraryPath
     [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
