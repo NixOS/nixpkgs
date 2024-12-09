@@ -181,7 +181,7 @@ def parse_args(
     }
 
     if args.help or args.action is None:
-        if "@withShellFiles@" == "true":
+        if "@withShellFiles@" == "true":  # type: ignore
             r = run(["man", "8", "@executable@"], check=False)
             parser.exit(r.returncode)
         else:
@@ -298,7 +298,7 @@ def execute(argv: list[str]) -> None:
     # Re-exec to a newer version of the script before building to ensure we get
     # the latest fixes
     if (
-        "@withReexec@" == "true"
+        "@withReexec@" == "true"  # type: ignore
         and can_run
         and not args.fast
         and not os.environ.get("_NIXOS_REBUILD_REEXEC")
