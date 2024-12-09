@@ -3,7 +3,7 @@
   stdenv,
   # Enables some expensive tests, useful for verifying an update
   afdko,
-  antlr4_9,
+  antlr4_13,
   booleanoperations,
   buildPythonPackage,
   cmake,
@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "4.0.1";
+  version = "4.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adobe-type-tools";
     repo = "afdko";
-    rev = "refs/tags/${version}";
-    hash = "sha256-I5GKPkbyQX8QNSZgNB3wPKdWwpx8Xkklesu1M7nhgp8=";
+    tag = version;
+    hash = "sha256:0955dvbydifhgx9gswbf5drsmmghry7iyf6jwz6qczhj86clswcm";
   };
 
   build-system = [ setuptools-scm ];
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    antlr4_9.runtime.cpp
+    antlr4_13.runtime.cpp
     libxml2.dev
   ];
 
@@ -59,11 +59,6 @@ buildPythonPackage rec {
     # Use antlr4 runtime from nixpkgs and link it dynamically
     ./use-dynamic-system-antlr4-runtime.patch
   ];
-
-  # Happy new year
-  postPatch = ''
-    substituteInPlace tests/tx_data/expected_output/alt-missing-glif.pfb --replace 2023 2024
-  '';
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
     "-Wno-error=incompatible-function-pointer-types"
