@@ -178,7 +178,7 @@ systemd.services.earlyoom = {
     ];
     Nice = -20;
     OOMScoreAdjust = -100;
-    Restart = always;
+    Restart = "always";
     TasksMax = 10;
     MemoryMax = 50M;
     DynamicUser = true;
