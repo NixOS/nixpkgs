@@ -11,6 +11,13 @@
   # A function to override the `goModules` derivation.
 , overrideModAttrs ? (finalAttrs: previousAttrs: { })
 
+  # A derivation that contains the vendored dependencies.
+  # Incompatible with `overrideModAttrs`.
+  # Remember to inherit relevant attrs like `vendorHash` and `proxyVendor`
+  # so the builder has the necessary information on how to handle the 
+  # modules derivation.
+, goModulesDrv ? null
+
   # Directory to the `go.mod` and `go.sum` relative to the `src`.
 , modRoot ? "./"
 
@@ -69,8 +76,9 @@ in
   args
   // {
 
-  inherit modRoot vendorHash deleteVendor proxyVendor;
-  goModules = if (finalAttrs.vendorHash == null) then "" else
+  inherit modRoot vendorHash deleteVendor proxyVendor goModulesDrv;
+  goModules = if (finalAttrs.goModulesDrv != null) then finalAttrs.goModulesDrv else
+    if (finalAttrs.vendorHash == null) then "" else
   (stdenv.mkDerivation {
     name = "${finalAttrs.name or "${finalAttrs.pname}-${finalAttrs.version}"}-go-modules";
 
