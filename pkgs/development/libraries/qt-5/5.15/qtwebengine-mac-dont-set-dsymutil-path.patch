@@ -1,0 +1,12 @@
+diff a/src/3rdparty/chromium/build/toolchain/mac/BUILD.gn b/src/3rdparty/chromium/build/toolchain/mac/BUILD.gn
+--- a/src/3rdparty/chromium/build/toolchain/mac/BUILD.gn
++++ b/src/3rdparty/chromium/build/toolchain/mac/BUILD.gn
+@@ -184,8 +184,6 @@ template("mac_toolchain") {
+     # If dSYMs are enabled, this flag will be added to the link tools.
+     if (_enable_dsyms) {
+       dsym_switch = " -Wcrl,dsym,{{root_out_dir}} "
+-      dsym_switch += "-Wcrl,dsymutilpath," +
+-                     "${prefix}dsymutil" + " "
+ 
+       dsym_output_dir =
+           "{{root_out_dir}}/{{target_output_name}}{{output_extension}}.dSYM"

@@ -1,0 +1,49 @@
+diff --git a/src/Main.hs b/src/Main.hs
+index 61da2f3..39e5c9b 100644
+--- a/src/Main.hs
++++ b/src/Main.hs
+@@ -73,11 +73,14 @@ main = do
+     config' <- sequence config
+     dir <- P.getDataDir
+     exitWith <=< lambdabotMain modulesInfo $
+-        [dataDir ==> dir, lbVersion ==> P.version] ++ config'
++        [dataDir ==> dir, lbVersion ==> P.version] ++ configInfo ++ config'
+ 
+ -- special online target for ghci use
+ online :: [String] -> IO ()
+ online strs = do
+     dir <- P.getDataDir
+-    void $ lambdabotMain modulesInfo
+-        [dataDir ==> dir, lbVersion ==> P.version, onStartupCmds ==> strs]
++    void $ lambdabotMain modulesInfo $
++        [dataDir ==> dir, lbVersion ==> P.version, onStartupCmds ==> strs] ++ configInfo
++
++configInfo :: [DSum Config Identity]
++configInfo = @config@
+diff --git a/src/Modules.hs b/src/Modules.hs
+index 036ea1f..eaafa50 100644
+--- a/src/Modules.hs
++++ b/src/Modules.hs
+@@ -14,10 +14,15 @@ import Lambdabot.Plugin.Reference
+ import Lambdabot.Plugin.Social
+ 
+ modulesInfo :: Modules
+-modulesInfo = $(modules $ corePlugins
+-    ++ haskellPlugins
+-    ++ ["irc", "localtime", "topic"] -- ircPlugins
+-    ++ ["dummy", "fresh", "todo"] -- miscPlugins
+-    ++ ["bf", "dice", "elite", "filter", "quote", "slap", "unlambda", "vixen"] -- noveltyPlugins
+-    ++ referencePlugins
+-    ++ socialPlugins)
++modulesInfo =
++  $(modules $
++    let oldDefaultModules =
++          corePlugins
++          ++ haskellPlugins
++          ++ ["irc", "localtime", "topic"] -- ircPlugins
++          ++ ["dummy", "fresh", "todo"] -- miscPlugins
++          ++ ["bf", "dice", "elite", "filter", "quote", "slap", "unlambda", "vixen"] -- noveltyPlugins
++          ++ referencePlugins
++          ++ socialPlugins
++    in @modules@
++   )

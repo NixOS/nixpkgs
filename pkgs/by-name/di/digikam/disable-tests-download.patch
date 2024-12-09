@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 43636fa9b9...e8da76c480 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -208,10 +208,6 @@
+     # For CI runners to run tests, the following custom target serves to perform the download automatically.
+     # If the directory "test-data" has already been created, the target becomes a "no-op".
+     #
+-    add_custom_command(OUTPUT ${CMAKE_SOURCE_DIR}/test-data 
+-                       COMMENT "Checkout unit-test data repository. Please wait..."
+-                       COMMAND git
+-                       ARGS clone https://invent.kde.org/graphics/digikam-test-data.git ${CMAKE_SOURCE_DIR}/test-data)
+     add_custom_target(test-data ALL DEPENDS ${CMAKE_SOURCE_DIR}/test-data)
+ 
+ endif()

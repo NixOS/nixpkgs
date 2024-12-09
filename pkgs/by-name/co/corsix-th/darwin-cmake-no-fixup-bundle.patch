@@ -1,0 +1,12 @@
+diff --git a/CorsixTH/CMakeLists.txt b/CorsixTH/CMakeLists.txt
+index 85856df3..f0f08277 100644
+--- a/CorsixTH/CMakeLists.txt
++++ b/CorsixTH/CMakeLists.txt
+@@ -293,7 +293,6 @@ if(NOT USE_SOURCE_DATADIRS)
+     install(CODE "
+       INCLUDE(BundleUtilities)
+       SET(BU_CHMOD_BUNDLE_ITEMS ON)
+-      FIXUP_BUNDLE(\"${CMAKE_INSTALL_PREFIX}/CorsixTH.app\" \"\" \"\")
+       ")
+     if(WITH_LUAROCKS)
+       install(CODE "execute_process(

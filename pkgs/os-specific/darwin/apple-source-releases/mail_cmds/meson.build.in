@@ -1,0 +1,72 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/mail_cmds/blob/main/mail_cmds.xcodeproj/project.pbxproj
+
+# Project settings
+project('mail_cmds', 'c', version : '@version@')
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+
+
+# Compatibility tests
+utimensat_test = '''
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+int main(int argc, char* argv[]) {
+    return utimensat(AT_FDCWD, NULL, NULL, 0);
+}
+'''
+
+has_utimensat = cc.compiles(utimensat_test, name : 'supports utimensat')
+utimensat_c_args = has_utimensat ? [ ] : [ '-include', 'time_compat.h', '-I' + meson.source_root() + '/compat' ]
+utimensat_sources = has_utimensat ? [ ] : [ 'compat/time_compat.c' ]
+
+compat_link_args = not has_utimensat ? [ '-Wl,-undefined,dynamic_lookup' ] : [ ]
+
+# Binaries
+executable(
+    'mail',
+    c_args : utimensat_c_args,
+    install : true,
+    link_args : compat_link_args,
+    sources : [
+        'mail/cmd1.c',
+        'mail/cmd2.c',
+        'mail/cmd3.c',
+        'mail/cmdtab.c',
+        'mail/collect.c',
+        'mail/edit.c',
+        'mail/fio.c',
+        'mail/getname.c',
+        'mail/head.c',
+        'mail/lex.c',
+        'mail/list.c',
+        'mail/main.c',
+        'mail/names.c',
+        'mail/popen.c',
+        'mail/quit.c',
+        'mail/send.c',
+        'mail/strings.c',
+        'mail/temp.c',
+        'mail/tty.c',
+        'mail/util.c',
+        'mail/v7.local.c',
+        'mail/vars.c',
+        'mail/version.c',
+        utimensat_sources,
+    ],
+)
+install_man('mail/mail.1')
+
+install_symlink(
+    'mailx',
+    install_dir : get_option('bindir'),
+    pointing_to : 'mail',
+)
+install_symlink(
+    'mailx.1',
+    install_dir : get_option('mandir') / 'man1',
+    pointing_to : 'mail.1',
+)

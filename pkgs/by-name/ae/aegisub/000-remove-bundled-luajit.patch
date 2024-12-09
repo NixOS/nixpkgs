@@ -1,0 +1,271 @@
+diff --git a/CMakeLists.test.txt b/CMakeLists.test.txt
+index 4d1a03177..62fab05c9 100644
+--- a/CMakeLists.test.txt
++++ b/CMakeLists.test.txt
+@@ -2,7 +2,7 @@ if(UNIX)
+     add_executable(aegisub-lua EXCLUDE_FROM_ALL
+         automation/tests/aegisub.cpp
+     )
+-    target_link_libraries(aegisub-lua PRIVATE libaegisub luabins luajit "Boost::locale" "ICU::in")
++    target_link_libraries(aegisub-lua PRIVATE libaegisub luabins luajit-5.1 "Boost::locale" "ICU::in")
+     add_custom_target(test-automation
+         COMMAND sh -c "$(luarocks path); ${PROJECT_BINARY_DIR}/aegisub-lua tests/busted.lua -p moon tests/modules"
+         VERBATIM
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ce2e355ff..4d4396451 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -13,210 +13,6 @@ if(NOT CMAKE_BUILD_TYPE)
+     set(CMAKE_BUILD_TYPE Release)
+ endif()
+ 
+-## Build bundled LuaJIT with aegisub specific patches
+-add_executable(luajit-minilua vendor/luajit/src/host/minilua.c)
+-if(NOT WIN32)
+-    target_link_libraries(luajit-minilua m)
+-endif()
+-if(WIN32)
+-    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+-        add_custom_command(
+-            OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/buildvm_arch.h"
+-            COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen"
+-            COMMAND luajit-minilua ../dynasm/dynasm.lua -LN -D WIN -D JIT -D FFI -D P64 -o "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/buildvm_arch.h" vm_x86.dasc
+-            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/vendor/luajit/src
+-        )
+-    else()
+-        add_custom_command(
+-            OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/buildvm_arch.h"
+-            COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen"
+-            COMMAND luajit-minilua ../dynasm/dynasm.lua -LN -D WIN -D JIT -D FFI -o "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/buildvm_arch.h" vm_x86.dasc
+-            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/vendor/luajit/src
+-        )
+-    endif()
+-elseif(APPLE)
+-    if(CMAKE_HOST_SYSTEM_PROCESSOR STREQUAL "arm64")
+-        add_custom_command(
+-            OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/buildvm_arch.h"
+-            COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen"
+-            COMMAND luajit-minilua ../dynasm/dynasm.lua -D ENDIAN_LE -D P64 -D FFI -D DUALNUM -D FPU -D HFABI -D NO_UNWIND -D VER=80 -o "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/buildvm_arch.h" vm_arm64.dasc
+-            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/vendor/luajit/src
+-        )
+-    else()
+-        add_custom_command(
+-            OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/buildvm_arch.h"
+-            COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen"
+-            COMMAND luajit-minilua ../dynasm/dynasm.lua -D P64 -D JIT -D FFI -D FPU -D HFABI -D VER= -o "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/buildvm_arch.h" vm_x64.dasc
+-            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/vendor/luajit/src
+-        )
+-    endif()
+-else()
+-    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+-        add_custom_command(
+-            OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/buildvm_arch.h"
+-            COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen"
+-            COMMAND luajit-minilua ../dynasm/dynasm.lua -D P64 -D JIT -D FFI -D FPU -D HFABI -D VER= -o "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/buildvm_arch.h" vm_x86.dasc
+-            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/vendor/luajit/src
+-        )
+-    else()
+-        add_custom_command(
+-            OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/buildvm_arch.h"
+-            COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen"
+-            COMMAND luajit-minilua ../dynasm/dynasm.lua -D JIT -D FFI -D FPU -D HFABI -D VER= -o "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/buildvm_arch.h" vm_x86.dasc
+-            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/vendor/luajit/src
+-        )
+-    endif()
+-endif()
+-
+-add_executable(luajit-buildvm
+-    vendor/luajit/src/host/buildvm.c
+-    vendor/luajit/src/host/buildvm_asm.c
+-    vendor/luajit/src/host/buildvm_peobj.c
+-    vendor/luajit/src/host/buildvm_lib.c
+-    vendor/luajit/src/host/buildvm_fold.c
+-
+-    "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/buildvm_arch.h"
+-)
+-target_compile_definitions(luajit-buildvm PRIVATE LUAJIT_ENABLE_LUA52COMPAT)
+-target_include_directories(luajit-buildvm PRIVATE vendor/luajit/src "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen")
+-
+-if(APPLE)
+-    add_custom_command(
+-        OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/lj_vm.s"
+-        COMMAND luajit-buildvm -m machasm -o "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/lj_vm.s"
+-    )
+-elseif(UNIX)
+-    add_custom_command(
+-        OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/lj_vm.s"
+-        COMMAND luajit-buildvm -m elfasm -o "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/lj_vm.s"
+-    )
+-elseif(MSVC)
+-    add_custom_command(
+-        OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/lj_vm.obj"
+-        COMMAND luajit-buildvm -m peobj -o "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/lj_vm.obj"
+-    )
+-endif()
+-add_custom_command(
+-    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/lj_ffdef.h"
+-    COMMAND luajit-buildvm -m ffdef -o "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/lj_ffdef.h" lib_base.c lib_math.c lib_bit.c lib_string.c lib_table.c lib_io.c lib_os.c lib_package.c lib_debug.c lib_jit.c lib_ffi.c
+-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/vendor/luajit/src
+-)
+-add_custom_command(
+-    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/lj_bcdef.h"
+-    COMMAND luajit-buildvm -m bcdef -o "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/lj_bcdef.h" lib_base.c lib_math.c lib_bit.c lib_string.c lib_table.c lib_io.c lib_os.c lib_package.c lib_debug.c lib_jit.c lib_ffi.c
+-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/vendor/luajit/src
+-)
+-add_custom_command(
+-    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/lj_folddef.h"
+-    COMMAND luajit-buildvm -m folddef -o "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/lj_folddef.h" lj_opt_fold.c
+-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/vendor/luajit/src
+-)
+-add_custom_command(
+-    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/lj_recdef.h"
+-    COMMAND luajit-buildvm -m recdef -o "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/lj_recdef.h" lib_base.c lib_math.c lib_bit.c lib_string.c lib_table.c lib_io.c lib_os.c lib_package.c lib_debug.c lib_jit.c lib_ffi.c
+-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/vendor/luajit/src
+-)
+-add_custom_command(
+-    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/lj_libdef.h"
+-    COMMAND luajit-buildvm -m libdef -o "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/lj_libdef.h" lib_base.c lib_math.c lib_bit.c lib_string.c lib_table.c lib_io.c lib_os.c lib_package.c lib_debug.c lib_jit.c lib_ffi.c
+-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/vendor/luajit/src
+-)
+-add_custom_command(
+-    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/jit/vmdef.lua"
+-    COMMAND luajit-buildvm -m vmdef -o "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/jit/vmdef.lua" lib_base.c lib_math.c lib_bit.c lib_string.c lib_table.c lib_io.c lib_os.c lib_package.c lib_debug.c lib_jit.c lib_ffi.c
+-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/vendor/luajit/src
+-)
+-
+-add_library(luajit STATIC
+-    vendor/luajit/src/lib_base.c
+-    vendor/luajit/src/lib_math.c
+-    vendor/luajit/src/lib_bit.c
+-    vendor/luajit/src/lib_string.c
+-    vendor/luajit/src/lib_table.c
+-    vendor/luajit/src/lib_io.c
+-    vendor/luajit/src/lib_os.c
+-    vendor/luajit/src/lib_package.c
+-    vendor/luajit/src/lib_debug.c
+-    vendor/luajit/src/lib_jit.c
+-    vendor/luajit/src/lib_ffi.c
+-    vendor/luajit/src/lj_gc.c
+-    vendor/luajit/src/lj_err.c
+-    vendor/luajit/src/lj_char.c
+-    vendor/luajit/src/lj_bc.c
+-    vendor/luajit/src/lj_obj.c
+-    vendor/luajit/src/lj_buf.c
+-    vendor/luajit/src/lj_str.c
+-    vendor/luajit/src/lj_tab.c
+-    vendor/luajit/src/lj_func.c
+-    vendor/luajit/src/lj_udata.c
+-    vendor/luajit/src/lj_meta.c
+-    vendor/luajit/src/lj_debug.c
+-    vendor/luajit/src/lj_state.c
+-    vendor/luajit/src/lj_dispatch.c
+-    vendor/luajit/src/lj_vmevent.c
+-    vendor/luajit/src/lj_vmmath.c
+-    vendor/luajit/src/lj_strscan.c
+-    vendor/luajit/src/lj_strfmt.c
+-    vendor/luajit/src/lj_strfmt_num.c
+-    vendor/luajit/src/lj_api.c
+-    vendor/luajit/src/lj_profile.c
+-    vendor/luajit/src/lj_lex.c
+-    vendor/luajit/src/lj_parse.c
+-    vendor/luajit/src/lj_bcread.c
+-    vendor/luajit/src/lj_bcwrite.c
+-    vendor/luajit/src/lj_load.c
+-    vendor/luajit/src/lj_ir.c
+-    vendor/luajit/src/lj_opt_mem.c
+-    vendor/luajit/src/lj_opt_fold.c
+-    vendor/luajit/src/lj_opt_narrow.c
+-    vendor/luajit/src/lj_opt_dce.c
+-    vendor/luajit/src/lj_opt_loop.c
+-    vendor/luajit/src/lj_opt_split.c
+-    vendor/luajit/src/lj_opt_sink.c
+-    vendor/luajit/src/lj_mcode.c
+-    vendor/luajit/src/lj_snap.c
+-    vendor/luajit/src/lj_record.c
+-    vendor/luajit/src/lj_crecord.c
+-    vendor/luajit/src/lj_ffrecord.c
+-    vendor/luajit/src/lj_asm.c
+-    vendor/luajit/src/lj_trace.c
+-    vendor/luajit/src/lj_gdbjit.c
+-    vendor/luajit/src/lj_ctype.c
+-    vendor/luajit/src/lj_cdata.c
+-    vendor/luajit/src/lj_cconv.c
+-    vendor/luajit/src/lj_ccall.c
+-    vendor/luajit/src/lj_ccallback.c
+-    vendor/luajit/src/lj_carith.c
+-    vendor/luajit/src/lj_clib.c
+-    vendor/luajit/src/lj_cparse.c
+-    vendor/luajit/src/lj_lib.c
+-    vendor/luajit/src/lj_alloc.c
+-    vendor/luajit/src/lib_aux.c
+-    vendor/luajit/src/lib_init.c
+-
+-    "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/lj_ffdef.h"
+-    "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/lj_bcdef.h"
+-    "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/lj_folddef.h"
+-    "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/lj_recdef.h"
+-    "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen/lj_libdef.h"
+-    # "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/jit/vmdef.lua"
+-)
+-target_compile_definitions(luajit PRIVATE LUAJIT_ENABLE_LUA52COMPAT)
+-target_include_directories(luajit PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/gen" PUBLIC "vendor/luajit/src")
+-if(WIN32)
+-    target_sources(luajit PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/lj_vm.obj")
+-else()
+-    enable_language(ASM)
+-    target_sources(luajit PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/vendor/luajit/src/lj_vm.s")
+-    target_link_libraries(luajit ${CMAKE_DL_LIBS})
+-endif()
+-if(APPLE)
+-    if(NOT CMAKE_HOST_SYSTEM_PROCESSOR STREQUAL "arm64")
+-        target_compile_definitions(luajit-buildvm PRIVATE LUAJIT_ENABLE_GC64)
+-        target_compile_definitions(luajit PRIVATE LUAJIT_ENABLE_GC64)
+-    endif()
+-endif()
+-
+ add_subdirectory(vendor/luabins)
+ 
+ ## libaegisub
+@@ -310,18 +106,18 @@ if(APPLE)
+ else()
+     target_precompile_headers(libaegisub PRIVATE "libaegisub/lagi_pre.h")
+ endif()
+-target_link_libraries(libaegisub PRIVATE luajit luabins)
++target_link_libraries(libaegisub PRIVATE luajit-5.1 luabins)
+ 
+ add_custom_command(
+     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/src/libresrc/default_config.cpp" "${CMAKE_CURRENT_BINARY_DIR}/src/libresrc/default_config.h"
+     DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/src/libresrc/default_config_platform.json"
+-    COMMAND luajit-minilua "${PROJECT_SOURCE_DIR}/tools/respack.lua" manifest.respack default_config.cpp default_config.h
++    COMMAND luajit "${PROJECT_SOURCE_DIR}/tools/respack.lua" manifest.respack default_config.cpp default_config.h
+     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/src/libresrc"
+ )
+ 
+ add_custom_command(
+     OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/src/libresrc/bitmap.cpp" "${CMAKE_CURRENT_BINARY_DIR}/src/libresrc/bitmap.h"
+-    COMMAND luajit-minilua ../../tools/respack.lua manifest.respack "${CMAKE_CURRENT_BINARY_DIR}/src/libresrc/bitmap.cpp" "${CMAKE_CURRENT_BINARY_DIR}/src/libresrc/bitmap.h"
++    COMMAND luajit ../../tools/respack.lua manifest.respack "${CMAKE_CURRENT_BINARY_DIR}/src/libresrc/bitmap.cpp" "${CMAKE_CURRENT_BINARY_DIR}/src/libresrc/bitmap.h"
+     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src/bitmaps
+ )
+ 
+@@ -496,7 +292,7 @@ add_executable(Aegisub WIN32
+     src/video_slider.cpp
+     src/visual_feature.cpp
+ )
+-target_link_libraries(Aegisub PRIVATE ${CMAKE_DL_LIBS} libaegisub luajit)
++target_link_libraries(Aegisub PRIVATE ${CMAKE_DL_LIBS} libaegisub luajit-5.1)
+ target_compile_definitions(Aegisub PRIVATE CMAKE_BUILD)
+ target_include_directories(Aegisub PRIVATE "src/libresrc" "${CMAKE_CURRENT_BINARY_DIR}/src/libresrc")
+ if(APPLE)
+diff --git a/vendor/luabins/CMakeLists.txt b/vendor/luabins/CMakeLists.txt
+index 1fe1d2031..e2761527b 100644
+--- a/vendor/luabins/CMakeLists.txt
++++ b/vendor/luabins/CMakeLists.txt
+@@ -36,4 +36,4 @@ add_library(luabins STATIC
+     src/savebuffer.c
+     src/write.c
+ )
+-target_link_libraries(luabins PRIVATE luajit)
+\ No newline at end of file
++target_link_libraries(luabins PRIVATE luajit-5.1)
+\ No newline at end of file

@@ -1,0 +1,41 @@
+From 6ab62c91d0db451b5e9ab000f0dba5471550b442 Mon Sep 17 00:00:00 2001
+From: Thomas A Caswell <tcaswell@gmail.com>
+Date: Tue, 28 May 2024 10:25:13 -0400
+Subject: [PATCH] MNT: fix compatibility with Python 3.14
+
+The ast.Str class was deprecated in 3.8 and will be removed in 3.14
+---
+ flit_core/flit_core/common.py | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/flit_core/flit_core/common.py b/flit_core/flit_core/common.py
+index 6625224b..8bcda3fb 100644
+--- a/flit_core/flit_core/common.py
++++ b/flit_core/flit_core/common.py
+@@ -148,6 +148,10 @@ def get_docstring_and_version_via_ast(target):
+         with target_path.open('rb') as f:
+             node = ast.parse(f.read())
+         for child in node.body:
++            if sys.version_info >= (3, 8):
++                target_type = ast.Constant
++            else:
++                target_type = ast.Str
+             # Only use the version from the given module if it's a simple
+             # string assignment to __version__
+             is_version_str = (
+@@ -157,10 +161,13 @@ def get_docstring_and_version_via_ast(target):
+                         and target.id == "__version__"
+                         for target in child.targets
+                     )
+-                    and isinstance(child.value, ast.Str)
++                    and isinstance(child.value, target_type)
+             )
+             if is_version_str:
+-                version = child.value.s
++                if sys.version_info >= (3, 8):
++                    version = child.value.value
++                else:
++                    version = child.value.s
+                 break
+     return ast.get_docstring(node), version
+ 

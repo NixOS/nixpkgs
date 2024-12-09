@@ -1,0 +1,46 @@
+From bb4767f8fc413ca4cb42879a9a226fd26f10e094 Mon Sep 17 00:00:00 2001
+From: Lucas Ransan <lucas@ransan.tk>
+Date: Tue, 3 Aug 2021 20:39:11 +0200
+Subject: [PATCH] force sqlite to be found
+
+---
+ src/CMakeLists.txt | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index a0f3fee..58b4d0b 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -9,7 +9,7 @@ set(INCLUDE_DIR include/)
+ list(FILTER sources EXCLUDE REGEX "(main|linenoise|utf8).c")
+ list(FILTER headers EXCLUDE REGEX "(linenoise|utf8).h")
+ 
+-find_library(SQLITE_LIB SQLite3)
++find_package(SQLite3 REQUIRED)
+ set(THREADS)
+ 
+ if(DISABLE_HTTP)
+@@ -20,16 +20,10 @@ else()
+     list(APPEND libraries curl)
+ endif()
+ 
+-if(NOT SQLITE_LIB)
+-    set(THREADS_PREFER_PTHREAD_FLAG ON)
+-    find_package(Threads REQUIRED)
+-    set(THREADS Threads::Threads)
+-else()
+-    list(FILTER sources EXCLUDE REGEX "sqlite3.c")
+-    list(FILTER headers EXCLUDE REGEX "sqlite3.h")
+-    list(APPEND libraries ${SQLITE_LIB})
+-    add_compile_definitions(INCLUDE_SQLITE_LIB)
+-endif()
++list(FILTER sources EXCLUDE REGEX "sqlite3.c")
++list(FILTER headers EXCLUDE REGEX "sqlite3.h")
++list(APPEND libraries ${SQLite3_LIBRARIES})
++add_compile_definitions(SQLite3_INCLUDE_DIR)
+ 
+ if(WIN32)
+     # ws2_32 is required for winsock2.h to work correctly
+-- 
+2.32.0
+
