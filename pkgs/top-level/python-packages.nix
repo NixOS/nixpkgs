@@ -9673,8 +9673,6 @@ self: super: with self; {
     enablePython = true;
   });
 
-  opentracing = callPackage ../development/python-modules/opentracing { };
-
   opentsne = callPackage ../development/python-modules/opentsne { };
 
   opentypespec = callPackage ../development/python-modules/opentypespec { };
