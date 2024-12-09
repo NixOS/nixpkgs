@@ -17,7 +17,6 @@
   pytestCheckHook,
   pythonOlder,
   redis,
-  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -38,12 +37,11 @@ buildPythonPackage rec {
   # analog to https://github.com/NixOS/nixpkgs/pull/171200
   patches = [ ./pep-621.patch ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
-    setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django-picklefield
     arrow
     blessed
