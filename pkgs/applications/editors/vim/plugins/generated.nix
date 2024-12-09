@@ -9163,12 +9163,12 @@ final: prev:
 
   nvim-lspconfig = buildVimPlugin {
     pname = "nvim-lspconfig";
-    version = "2024-12-02";
+    version = "2024-12-08";
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "nvim-lspconfig";
-      rev = "1aa9f36b6d542dafc0b4a38c48969d036003b00a";
-      sha256 = "1nhvsi0y4fb514ji3zw5d04qwidalajsv51j7748fsr023nnvfzs";
+      rev = "fc16fd4f9c5d72b45db0f45ee275db3a9a30481a";
+      sha256 = "1jriaindyc1mk2vqxn5wsds0zsqjsmsr302qb72262z0jg1ix5aa";
     };
     meta.homepage = "https://github.com/neovim/nvim-lspconfig/";
   };
