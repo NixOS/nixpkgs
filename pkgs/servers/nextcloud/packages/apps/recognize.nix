@@ -9,23 +9,48 @@
 
   # Current derivation only suports linux-x86_64 (contributions welcome, without libTensorflow builtin webassembly can be used)
   useLibTensorflow ? stdenv.isx86_64 && stdenv.isLinux,
+
+  ncVersion,
 }:
+let
+  latestVersionForNc = {
+    "30" = {
+      version = "8.2.0";
+      appHash = "sha256-CAORqBdxNQ0x+xIVY2zI07jvsKHaa7eH0jpVuP0eSW4=";
+      modelHash = "sha256-s8MQOLU490/Vr/U4GaGlbdrykOAQOKeWE5+tCzn6Dew=";
+    };
+    "29" = {
+      version = "7.1.0";
+      appHash = "sha256-qR4SrTHFAc4YWiZAsL94XcH4VZqYtkRLa0y+NdiFZus=";
+      modelHash = "sha256-M/j5wVOBLR7xMVJQWDUWAzLajRUBYEzHSNBsRSBUgfM=";
+    };
+    "28" = {
+      # Once this version is no longer supported, we can remove the getAppValue replacements below
+      # The getAppValueString stuff will need to remain
+      version = "6.1.0";
+      appHash = "sha256-225r2JnDOoURvLmzpmHp/QL6GDx9124/YTywbxH3/rk=";
+      modelHash = "sha256-4mhQM/ajpwjqTb8jSbEIdtSRrWZEOaMZQXAwcfSRQ/M=";
+    };
+  };
+  currentVersionInfo = latestVersionForNc.${ncVersion};
+in
 stdenv.mkDerivation rec {
+
   pname = "nextcloud-app-recognise";
-  version = "8.2.0";
+  version = currentVersionInfo.version;
 
   srcs =
     [
       (fetchurl {
         inherit version;
         url = "https://github.com/nextcloud/recognize/releases/download/v${version}/recognize-${version}.tar.gz";
-        hash = "sha256-CAORqBdxNQ0x+xIVY2zI07jvsKHaa7eH0jpVuP0eSW4=";
+        hash = currentVersionInfo.appHash;
       })
 
       (fetchurl {
         inherit version;
         url = "https://github.com/nextcloud/recognize/archive/refs/tags/v${version}.tar.gz";
-        hash = "sha256-s8MQOLU490/Vr/U4GaGlbdrykOAQOKeWE5+tCzn6Dew=";
+        hash = currentVersionInfo.modelHash;
       })
     ]
     ++ lib.optionals useLibTensorflow [
@@ -57,7 +82,9 @@ stdenv.mkDerivation rec {
     substituteInPlace recognize/lib/**/*.php \
       --replace-quiet "\$this->settingsService->getSetting('node_binary')" "'${nodejs}/bin/node'" \
       --replace-quiet "\$this->config->getAppValueString('node_binary', '""')" "'${nodejs}/bin/node'" \
-      --replace-quiet "\$this->config->getAppValueString('node_binary')" "'${nodejs}/bin/node'"
+      --replace-quiet "\$this->config->getAppValueString('node_binary')" "'${nodejs}/bin/node'" \
+      --replace-quiet "\$this->config->getAppValue('node_binary', '""')" "'${nodejs}/bin/node'" \
+      --replace-quiet "\$this->config->getAppValue('node_binary')" "'${nodejs}/bin/node'"
     test "$(grep "get[a-zA-Z]*('node_binary'" recognize/lib/**/*.php | wc -l)" -eq 0
 
 
