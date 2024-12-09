@@ -450,7 +450,9 @@ concatStringsSep() {
             -a*)
                 # \036 is the "record separator" character. We assume that this will never need to be part of
                 # an argument string we create here. If anyone ever hits this limitation: Feel free to refactor.
-                local IFS=$'\036' ;;
+                # To avoid leaking an unescaped rs character when dumping the environment with nix, we use printf
+                # in a subshell.
+                local IFS="$(printf '\036')" ;;
             *)
                 local IFS=" " ;;
 
