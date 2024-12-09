@@ -1,11 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, libxcb
-, installShellFiles
-, Security
-, AppKit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  libxcb,
+  installShellFiles,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "magic-wormhole-rs";
@@ -20,13 +19,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-+OcjILDwGg0eybzBgVIZeVelnQatPU6rgd/b6buvTRQ=";
 
-  buildInputs = [ libxcb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security AppKit ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libxcb ];
 
   nativeBuildInputs = [ installShellFiles ];
-
-  # all tests involve networking and are bound fail
-  doCheck = false;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd wormhole-rs \
@@ -40,7 +35,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/magic-wormhole/magic-wormhole.rs";
     changelog = "https://github.com/magic-wormhole/magic-wormhole.rs/raw/${version}/changelog.md";
     license = licenses.eupl12;
-    maintainers = with maintainers; [ zeri piegames ];
+    maintainers = with maintainers; [
+      zeri
+      piegames
+    ];
     mainProgram = "wormhole-rs";
   };
 }
