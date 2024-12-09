@@ -63,7 +63,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       Bartender improves your workflow with quick reveal, search, custom hotkeys and triggers, and lots more.
     '';
     homepage = "https://www.macbartender.com";
-    changelog = "https://www.macbartender.com/Bartender${lib.versions.major finalAttrs.version}/release_notes/";
+    changelog = "https://macbartender.com/B2/updates/${
+      builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
+    }/rnotes.html";
     license = [ lib.licenses.unfree ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [
