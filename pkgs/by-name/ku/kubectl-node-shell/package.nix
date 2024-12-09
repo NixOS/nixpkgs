@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "kubectl-node-shell";
-  version = "1.10.2";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "kvaps";
     repo = "kubectl-node-shell";
     rev = "v${version}";
-    hash = "sha256-lB1q+zvgXpjVfxjmYa404hHj0kNPLrzRr1wj8AEM6dQ=";
+    hash = "sha256-jLwnWp/XS4SOyf5v46DPy2Nc6LatF6AzNvHiGVNpsto=";
   };
 
   strictDeps = true;
