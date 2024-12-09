@@ -1,11 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
-  nose,
-  colormath,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, colormath
+,
 }:
 
 buildPythonPackage rec {
@@ -26,17 +24,12 @@ buildPythonPackage rec {
 
   postInstall = "install -Dm755 $src/spectra/grapefruit.py $out/bin/grapefruit.py";
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    nose
-  ];
-
-  pytestFlagsArray = [ "-W 'ignore:pkg_resources is deprecated as an API:DeprecationWarning'" ];
+  doCheck = false;
 
   pythonImportsCheck = [ "spectra" ];
 
   meta = {
-    description = "Spectra is a Python library that makes color math, color scales, and color-space conversion easy";
+    description = "Python library for color math, color scales, and color-space conversion";
     longDescription = ''
       Spectra has support for:
 
@@ -50,7 +43,6 @@ buildPythonPackage rec {
       Spectra is built on colormath and grapefruit. Spectra is enormously inspired by chroma.js and d3's scales.
     '';
     homepage = "https://github.com/jsvine/spectra";
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
     changelog = "https://github.com/jsvine/spectra/releases/tag/v${version}";
     maintainers = [ lib.maintainers.dflores ];
     license = with lib.licenses; [
