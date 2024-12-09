@@ -302,7 +302,7 @@ let
             Capabilities to configure for the container.
             When set to true, capability is added to the container.
             When set to false, capability is dropped from the container.
-            When null default runtime settings apply.
+            When null, default runtime settings apply.
           '';
           example = literalExpression ''
             {
