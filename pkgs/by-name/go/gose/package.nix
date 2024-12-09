@@ -7,13 +7,12 @@
   lib,
 }:
 let
-  version = "0.8.0";
-  rev = "a1e92b4bcdaf81d5b5e8f3edab60e33549e9009b";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     repo = "gose";
     owner = "stv0g";
-    inherit rev;
+    rev = "refs/tags/v${version}";
     hash = "sha256-Vcp9gMJ296KS8OFOIcWvvYrS+LrOVlN3KN20yJxoo5U=";
   };
 
@@ -51,7 +50,6 @@ buildGoModule {
     "-s"
     "-w"
     "-X main.version=${version}"
-    "-X main.commit=${rev}"
     "-X main.builtBy=Nix"
   ];
 
