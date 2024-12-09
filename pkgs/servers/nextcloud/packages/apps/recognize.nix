@@ -12,20 +12,20 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nextcloud-app-recognise";
-  version = "8.1.1";
+  version = "8.2.0";
 
   srcs =
     [
       (fetchurl {
         inherit version;
         url = "https://github.com/nextcloud/recognize/releases/download/v${version}/recognize-${version}.tar.gz";
-        hash = "sha256-RIa2HzX2hfgS7KHGGBsxEdUCqDqXeAs3Xi288qA1gU4=";
+        hash = "sha256-CAORqBdxNQ0x+xIVY2zI07jvsKHaa7eH0jpVuP0eSW4=";
       })
 
       (fetchurl {
         inherit version;
         url = "https://github.com/nextcloud/recognize/archive/refs/tags/v${version}.tar.gz";
-        hash = "sha256-op1Fdm40d8V6V+rfne0ECr60xRjBYrBPrCD3kaNeFfY=";
+        hash = "sha256-s8MQOLU490/Vr/U4GaGlbdrykOAQOKeWE5+tCzn6Dew=";
       })
     ]
     ++ lib.optionals useLibTensorflow [
