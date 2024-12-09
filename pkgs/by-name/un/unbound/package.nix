@@ -1,9 +1,10 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromGitHub
 , openssl
 , nettle
 , expat
+, flex
 , libevent
 , libsodium
 , protobufc
@@ -50,11 +51,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
-  version = "1.21.1";
+  version = "1.22.0";
 
-  src = fetchurl {
-    url = "https://nlnetlabs.nl/downloads/unbound/unbound-${finalAttrs.version}.tar.gz";
-    hash = "sha256-MDbSPCNiKzbTyH6UMRe97BrI+Bljbrl42AZBaw+p6kY=";
+  src = fetchFromGitHub {
+    owner = "NLnetLabs";
+    repo = "unbound";
+    rev = "refs/tags/release-${finalAttrs.version}";
+    hash = "sha256-CFsd8tdFL+JbxmDZoWdStvWcs9azSaLtMG8Ih5oXE/A=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
@@ -62,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     lib.optionals withMakeWrapper [ makeWrapper ]
     ++ lib.optionals withDNSTAP [ protobufc ]
-    ++ [ pkg-config ]
+    ++ [ pkg-config flex ]
     ++ lib.optionals withPythonModule [ swig ];
 
   buildInputs = [ openssl nettle expat libevent ]
