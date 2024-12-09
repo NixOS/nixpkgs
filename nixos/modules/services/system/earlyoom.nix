@@ -167,7 +167,7 @@ in
       ++ optionals cfg.enableNotifications [ "-n" ]
       ++ optionals (cfg.killHook != null) [ "-N ${escapeShellArg cfg.killHook}" ]
       ++ cfg.extraArgs);
-  
+
       AmbientCapabilities =  [
         "CAP_KILL"
         "CAP_IPC_LOCK"
