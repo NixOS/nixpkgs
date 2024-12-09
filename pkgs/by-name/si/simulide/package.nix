@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchbzr,
+  fetchFromGitHub,
   libsForQt5,
   versionNum ? "1.0.0",
 }:
@@ -28,11 +29,11 @@ let
       };
     };
     "1.1.0" = rec {
-      release = "SR0";
-      rev = "1917";
+      release = "SR1";
+      rev = "2005";
       src = fetchbzr {
         url = "https://code.launchpad.net/~arcachofo/simulide/1.1.0";
-        sha256 = "sha256-qNBaGWl89Le9uC1VFK+xYhrLzIvOIWjkQbutnrAmZ2M=";
+        sha256 = "sha256-YVQduUjPQF5KxMlm730FZTShHP/7JEcAMIFn+mQITrQ=";
         inherit rev;
       };
     };
