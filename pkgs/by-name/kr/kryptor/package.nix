@@ -16,13 +16,13 @@ buildDotnetModule rec {
     hash = "sha256-BxUmDzmfvRelQDHb5uLcQ2YPL7ClxZNFGm/gQoDK8t8=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
   projectFile = "src/Kryptor.sln";
   nugetDeps = ./deps.nix;
 
   executables = [ "kryptor" ];
 
-  dotnetFlags = [ ];
+  dotnetFlags = [ "-p:TargetFramework=net8.0" ];
 
   meta = {
     changelog = "https://github.com/samuel-lucas6/Kryptor/releases/tag/v${version}";
