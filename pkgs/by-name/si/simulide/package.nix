@@ -4,7 +4,7 @@
   fetchbzr,
   fetchFromGitHub,
   libsForQt5,
-  versionNum ? "1.0.0",
+  versionNum ? "1.1.0",
 }:
 
 let
