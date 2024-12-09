@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  distutils,
   dulwich,
   pbr,
   sphinx,
@@ -13,9 +14,6 @@ buildPythonPackage rec {
   pname = "openstackdocstheme";
   version = "3.4.0";
   pyproject = true;
-
-  # breaks on import due to distutils import through pbr.packaging
-  disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,6 +27,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    distutils
     dulwich
     pbr
     sphinx
