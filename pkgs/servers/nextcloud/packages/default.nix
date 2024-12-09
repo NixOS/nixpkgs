@@ -55,4 +55,6 @@ let
     ) generatedJson;
 
 in
-(lib.makeExtensible (_: (lib.makeScope newScope packages))).extend (import ./thirdparty.nix)
+(lib.makeExtensible (_: (lib.makeScope newScope packages))).extend (
+  import ./thirdparty.nix { inherit ncVersion; }
+)
