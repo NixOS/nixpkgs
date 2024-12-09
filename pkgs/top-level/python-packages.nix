@@ -3572,6 +3572,8 @@ self: super: with self; {
 
   django-q = callPackage ../development/python-modules/django-q { };
 
+  django-q2 = callPackage ../development/python-modules/django-q2 { };
+
   django-scheduler = callPackage ../development/python-modules/django-scheduler { };
 
   django-scim2 = callPackage ../development/python-modules/django-scim2 { };
