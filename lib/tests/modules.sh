@@ -190,6 +190,9 @@ checkConfigOutput '^420$' config.bare-submodule.deep ./declare-bare-submodule.ni
 checkConfigOutput '^2$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix ./define-shorthandOnlyDefinesConfig-true.nix
 checkConfigError 'The option .bare-submodule.deep. in .*/declare-bare-submodule-deep-option.nix. is already declared in .*/declare-bare-submodule-deep-option-duplicate.nix' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix  ./declare-bare-submodule-deep-option-duplicate.nix
 
+# Check that strMatching can be merged
+checkConfigOutput '^"strMatching.*"$' options.sm.type.name ./strMatching-merge.nix
+
 # Check integer types.
 # unsigned
 checkConfigOutput '^42$' config.value ./declare-int-unsigned-value.nix ./define-value-int-positive.nix
