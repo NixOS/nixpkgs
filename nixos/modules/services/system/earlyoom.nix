@@ -168,8 +168,14 @@ systemd.services.earlyoom = {
     ++ optionals (cfg.killHook != null) [ "-N ${escapeShellArg cfg.killHook}" ]
     ++ cfg.extraArgs);
 
-    AmbientCapabilities = "CAP_KILL CAP_IPC_LOCK";
-    CapabilityBoundingSet = "CAP_KILL CAP_IPC_LOCK";
+    AmbientCapabilities =  [
+      "CAP_KILL"
+      "CAP_IPC_LOCK"
+    ];
+    CapabilityBoundingSet = [
+      "CAP_KILL"
+      "CAP_IPC_LOCK"
+    ];
     Nice = "-20";
     OOMScoreAdjust = "-100";
     Restart = "always";
