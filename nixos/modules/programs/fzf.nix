@@ -12,7 +12,7 @@ in
   };
 
   config = lib.mkIf (cfg.keybindings || cfg.fuzzyCompletion) {
-    environment.systemPackages = lib.mkIf (cfg.keybindings || cfg.fuzzyCompletion) [ pkgs.fzf ];
+    environment.systemPackages = [ pkgs.fzf ];
 
     programs = {
       # load after programs.bash.completion.enable
