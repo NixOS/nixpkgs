@@ -458,6 +458,10 @@ let
       orga = "grafana";
       repo = "tree-sitter-river";
     };
+    "tree-sitter-twig" = {
+      orga = "kaermorchen";
+      repo = "tree-sitter-twig";
+    };
   };
 
   allGrammars =
