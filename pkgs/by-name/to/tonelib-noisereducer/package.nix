@@ -15,28 +15,19 @@
   libXrender,
   libjack2,
 }:
-
 stdenv.mkDerivation rec {
   pname = "tonelib-noisereducer";
-  version = "1.2.0";
+  version = "2.0";
 
   src = fetchurl {
-    url = "https://tonelib.net/download/221222/ToneLib-NoiseReducer-amd64.deb";
-    sha256 = "sha256-27JuFVmamIUUKRrpjlsE0E6x+5X9RutNGPiDf5dxitI=";
+    url = "https://tonelib.vip/download/24-12-01/ToneLib-NoiseReducer-amd64.deb";
+    hash = "sha256-R+JXoc6waKGPMaghlJ8BkLumDcjC7Oq0jx8tFjAKegE=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
   ];
-
-  buildInputs = [
-    (lib.getLib stdenv.cc.cc)
-    alsa-lib
-    freetype
-    libglvnd
-    mesa
-  ] ++ runtimeDependencies;
 
   runtimeDependencies = map lib.getLib [
     curl
@@ -47,10 +38,20 @@ stdenv.mkDerivation rec {
     libjack2
   ];
 
-  unpackCmd = "dpkg -x $curSrc source";
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc)
+    alsa-lib
+    freetype
+    libglvnd
+    mesa
+  ] ++ runtimeDependencies;
 
   installPhase = ''
-    mv usr $out
+    runHook preInstall
+
+    cp -r usr $out
+
+    runHook postInstall
   '';
 
   meta = {
