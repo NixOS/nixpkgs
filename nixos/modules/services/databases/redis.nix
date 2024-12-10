@@ -275,7 +275,7 @@ in {
               '';
             };
           };
-          config.settings = mkMerge [
+          config.settings = lib.mkMerge [
             {
               inherit (config) port logfile databases maxclients appendOnly;
               daemonize = false;
@@ -293,14 +293,14 @@ in {
               slowlog-log-slower-than = config.slowLogLogSlowerThan;
               slowlog-max-len = config.slowLogMaxLen;
             }
-            (mkIf (config.bind != null) { inherit (config) bind; })
-            (mkIf (config.unixSocket != null) {
+            (lib.mkIf (config.bind != null) { inherit (config) bind; })
+            (lib.mkIf (config.unixSocket != null) {
               unixsocket = config.unixSocket;
               unixsocketperm = toString config.unixSocketPerm;
             })
-            (mkIf (config.slaveOf != null) { slaveof = "${config.slaveOf.ip} ${toString config.slaveOf.port}"; })
-            (mkIf (config.masterAuth != null) { masterauth = config.masterAuth; })
-            (mkIf (config.requirePass != null) { requirepass = config.requirePass; })
+            (lib.mkIf (config.slaveOf != null) { slaveof = "${config.slaveOf.ip} ${toString config.slaveOf.port}"; })
+            (lib.mkIf (config.masterAuth != null) { masterauth = config.masterAuth; })
+            (lib.mkIf (config.requirePass != null) { requirepass = config.requirePass; })
           ];
         }));
         description = "Configuration of multiple `redis-server` instances.";
