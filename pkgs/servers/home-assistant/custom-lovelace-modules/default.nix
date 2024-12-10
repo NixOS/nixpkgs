@@ -17,6 +17,8 @@
 
   decluttering-card = callPackage ./decluttering-card { };
 
+  horizon-card = callPackage ./horizon-card { };
+
   hourly-weather = callPackage ./hourly-weather { };
 
   lg-webos-remote-control = callPackage ./lg-webos-remote-control { };
