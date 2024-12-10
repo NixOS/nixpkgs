@@ -10589,6 +10589,8 @@ self: super: with self; {
 
   python-juicenet = callPackage ../development/python-modules/python-juicenet { };
 
+  python-kadmin-rs = callPackage ../development/python-modules/python-kadmin-rs { };
+
   python-kasa = callPackage ../development/python-modules/python-kasa { };
 
   python-keycloak = callPackage ../development/python-modules/python-keycloak { };
