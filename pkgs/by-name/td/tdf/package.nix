@@ -20,14 +20,8 @@ rustPlatform.buildRustPackage {
     hash = "sha256-0as/tKw0nKkZn+5q5PlKwK+LZK0xWXDAdiD3valVjBs=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ratatui-0.29.0" = "sha256-Aeu8HnP4vhHCzu/gRFl7pLLwXv5FcRrlLsstT/AHDVA=";
-      "ratatui-image-3.0.0" = "sha256-IrWHtUuC7OypRAZFEE/UKrPzXT4u9k4jMeJEydcXZWs=";
-      "vb64-0.1.2" = "sha256-VvObgaJhHNah3exVQInFa5mhHjzEg0MaFqQdnCE5Pp8=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-krIPfi4SM4uCw7NLauudwh1tgAaB8enDWnMC5X16n48=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
