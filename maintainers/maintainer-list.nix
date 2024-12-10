@@ -16449,6 +16449,11 @@
     githubId = 7249506;
     name = "oida";
   };
+  oidro = {
+    github = "oidro";
+    githubId = 31112680;
+    name = "oidro";
+  };
   ok-nick = {
     email = "nick.libraries@gmail.com";
     github = "ok-nick";
