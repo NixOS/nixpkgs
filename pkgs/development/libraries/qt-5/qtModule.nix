@@ -35,8 +35,14 @@ mkDerivation (args // {
 
   nativeBuildInputs =
     (args.nativeBuildInputs or []) ++ [
-      perl qmake
+      perl
+      # `qmake`(`pkgsBuildHost.qt5.qmake`) propagates `qtbase` which causes there to be
+      # `pkgsBuildHost.qt5.qtbase` and the `pkgsHostTarget.qt5.qtbase.dev` in the build environment
+      (if (stdenv.buildPlatform != stdenv.hostPlatform) then pkgsHostTarget.qt5.qmake else qmake)
     ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      # .dev is required for binaries
+      # qmake propagates `qtbase` but on cross it's in `depsTargetTargetPropagated` so it's treated as a `buildInput`
+      # when qmake is in nativeBuildInputs
       pkgsHostTarget.qt5.qtbase.dev
     ];
   propagatedBuildInputs =
