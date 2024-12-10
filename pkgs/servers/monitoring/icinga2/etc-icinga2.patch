@@ -1,0 +1,13 @@
+diff --git a/config.h.cmake b/config.h.cmake
+index 16fa190..152bf43 100644
+--- a/config.h.cmake
++++ b/config.h.cmake
+@@ -13,7 +13,7 @@
+ 
+ #cmakedefine ICINGA2_UNITY_BUILD
+ 
+-#define ICINGA_CONFIGDIR "${ICINGA2_FULL_CONFIGDIR}"
++#define ICINGA_CONFIGDIR "/etc/icinga2"
+ #define ICINGA_DATADIR "${ICINGA2_FULL_DATADIR}"
+ #define ICINGA_LOGDIR "${ICINGA2_FULL_LOGDIR}"
+ #define ICINGA_CACHEDIR "${ICINGA2_FULL_CACHEDIR}"
