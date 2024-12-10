@@ -16,6 +16,7 @@
   xorg,
   udev,
   vulkan-loader,
+  nativeWayland ? false,
 }:
 
 buildDotnetModule rec {
@@ -69,6 +70,7 @@ buildDotnetModule rec {
     runHook preFixup
 
     wrapProgram $out/bin/osu! \
+      ${lib.optionalString nativeWayland "--set SDL_VIDEODRIVER wayland"} \
       --set OSU_EXTERNAL_UPDATE_PROVIDER 1
 
     for i in 16 32 48 64 96 128 256 512 1024; do
