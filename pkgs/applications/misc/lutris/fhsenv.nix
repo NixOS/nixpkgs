@@ -7,6 +7,7 @@
 let
 
   qt5Deps = pkgs: with pkgs.qt5; [ qtbase qtmultimedia ];
+  qt6Deps = pkgs: with pkgs.qt6; [ qtbase ];
   gnomeDeps = pkgs: with pkgs; [ zenity gtksourceview gnome-desktop libgnome-keyring webkitgtk_4_0 ];
   xorgDeps = pkgs: with pkgs.xorg; [
     libX11 libXrender libXrandr libxcb libXmu libpthreadstubs libXext libXdmcp
@@ -34,6 +35,9 @@ in buildFHSEnv {
   targetPkgs = pkgs: with pkgs; [
     lutris-unwrapped
 
+    # Appimages
+    fuse
+
     # Adventure Game Studio
     allegro dumb
 
@@ -49,8 +53,8 @@ in buildFHSEnv {
     # DGen // TODO: libarchive is broken
 
     # Dolphin
-    bluez ffmpeg gettext portaudio miniupnpc mbedtls_2 lzo sfml gsm
-    wavpack orc nettle gmp pcre vulkan-loader
+    bluez ffmpeg_6 gettext portaudio miniupnpc mbedtls_2 lzo sfml gsm
+    wavpack orc nettle gmp pcre vulkan-loader zstd
 
     # DOSBox
     SDL_net SDL_sound
@@ -86,9 +90,8 @@ in buildFHSEnv {
 
     # Redream // "redream is not available for the x86_64 architecture"
 
-
-    # rpcs3 // TODO: "error while loading shared libraries: libz.so.1..."
-    llvm
+    # RPCS3
+    llvm e2fsprogs libgpg-error
 
     # ScummVM
     nasm sndio
@@ -108,6 +111,7 @@ in buildFHSEnv {
     # ZDOOM
     soundfont-fluid bzip2 game-music-emu
   ] ++ qt5Deps pkgs
+    ++ qt6Deps pkgs
     ++ gnomeDeps pkgs
     ++ lib.optional steamSupport pkgs.steam
     ++ extraPkgs pkgs;
@@ -115,7 +119,7 @@ in buildFHSEnv {
   multiPkgs = pkgs: with pkgs; [
     # Common
     libsndfile libtheora libogg libvorbis libopus libGLU libpcap libpulseaudio
-    libao libevdev udev libgcrypt libxml2 libusb-compat-0_1 libpng libmpeg2 libv4l
+    libao libevdev udev libgcrypt libxml2 libusb1 libpng libmpeg2 libv4l
     libjpeg libxkbcommon libass libcdio libjack2 libsamplerate libzip libmad libaio
     libcap libtiff libva libgphoto2 libxslt libsndfile giflib zlib glib
     alsa-lib zziplib bash dbus keyutils zip cabextract freetype unzip coreutils
