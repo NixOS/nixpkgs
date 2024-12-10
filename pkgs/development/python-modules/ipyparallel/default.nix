@@ -31,11 +31,7 @@ buildPythonPackage rec {
 
   # We do not need the jupyterlab build dependency, because we do not need to
   # build any JS components; these are present already in the PyPI artifact.
-  #
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"jupyterlab==4.*",' ""
-  '';
+  removeBuildSystem = [ "jupyterlab" ];
 
   build-system = [ hatchling ];
 
