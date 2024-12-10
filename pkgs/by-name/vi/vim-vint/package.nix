@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 with python3Packages;
 
@@ -12,10 +16,18 @@ buildPythonApplication rec {
   };
 
   # For python 3.5 > version > 2.7 , a nested dependency (pythonPackages.hypothesis) fails.
-  disabled = ! pythonAtLeast "3.5";
+  disabled = !pythonAtLeast "3.5";
 
-  nativeCheckInputs = [ pytest pytest-cov ];
-  propagatedBuildInputs = [ ansicolor chardet pyyaml setuptools ];
+  nativeCheckInputs = [
+    pytest
+    pytest-cov
+  ];
+  propagatedBuildInputs = [
+    ansicolor
+    chardet
+    pyyaml
+    setuptools
+  ];
 
   # Unpin test dependency versions. This is fixed in master but not yet released.
   preCheck = ''

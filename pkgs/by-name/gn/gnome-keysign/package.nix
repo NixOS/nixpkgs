@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitLab
-, python3
-, wrapGAppsHook3
-, gobject-introspection
-, gtk3
-, glib
-, gst_all_1
+{
+  lib,
+  fetchFromGitLab,
+  python3,
+  wrapGAppsHook3,
+  gobject-introspection,
+  gtk3,
+  glib,
+  gst_all_1,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,13 +21,15 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-k77z8Yligzs4rHpPckRGcC5qnCHynHQRjdDkzxwt1Ss=";
   };
 
-  nativeBuildInputs = [
-    wrapGAppsHook3
-    gobject-introspection
-  ] ++ (with python3.pkgs; [
-    babel
-    babelgladeextractor
-  ]);
+  nativeBuildInputs =
+    [
+      wrapGAppsHook3
+      gobject-introspection
+    ]
+    ++ (with python3.pkgs; [
+      babel
+      babelgladeextractor
+    ]);
 
   buildInputs = [
     # TODO: add avahi support

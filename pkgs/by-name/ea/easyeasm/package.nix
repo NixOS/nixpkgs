@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, amass
-, alterx
-, oam-tools
-, subfinder
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  amass,
+  alterx,
+  oam-tools,
+  subfinder,
 }:
 
 buildGoModule rec {
@@ -32,12 +33,14 @@ buildGoModule rec {
 
   postFixup = ''
     wrapProgram $out/bin/easyeasm \
-      --prefix PATH : "${lib.makeBinPath [
-        amass
-        alterx
-        oam-tools
-        subfinder
-      ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          amass
+          alterx
+          oam-tools
+          subfinder
+        ]
+      }"
   '';
 
   meta = with lib; {

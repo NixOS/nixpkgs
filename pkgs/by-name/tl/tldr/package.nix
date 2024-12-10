@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, curl, libzip, pkg-config, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  libzip,
+  pkg-config,
+  installShellFiles,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tldr";
@@ -11,10 +19,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1L9frURnzfq0XvPBs8D+hBikybAw8qkb0DyZZtkZleY=";
   };
 
-  buildInputs = [ curl libzip ];
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  buildInputs = [
+    curl
+    libzip
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
-  makeFlags = ["CC=${stdenv.cc.targetPrefix}cc" "LD=${stdenv.cc.targetPrefix}cc" "CFLAGS="];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "LD=${stdenv.cc.targetPrefix}cc"
+    "CFLAGS="
+  ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -31,7 +49,11 @@ stdenv.mkDerivation rec {
     homepage = "https://tldr.sh";
     changelog = "https://github.com/tldr-pages/tldr-c-client/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ taeer carlosdagos kbdharun];
+    maintainers = with maintainers; [
+      taeer
+      carlosdagos
+      kbdharun
+    ];
     platforms = platforms.all;
     mainProgram = "tldr";
   };

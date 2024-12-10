@@ -1,9 +1,28 @@
-{ lib, stdenv, fetchurl, gtk2-x11 , pkg-config , python3 , gfortran , lesstif
-, cfitsio , getopt , perl , groff , which, darwin, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk2-x11,
+  pkg-config,
+  python3,
+  gfortran,
+  lesstif,
+  cfitsio,
+  getopt,
+  perl,
+  groff,
+  which,
+  darwin,
+  ncurses,
 }:
 
 let
-  python3Env = python3.withPackages(ps: with ps; [ numpy setuptools ]);
+  python3Env = python3.withPackages (
+    ps: with ps; [
+      numpy
+      setuptools
+    ]
+  );
 in
 
 stdenv.mkDerivation rec {
@@ -14,27 +33,51 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     # For each new release, the upstream developers of Gildas move the
     # source code of the previous release to a different directory
-    urls = [ "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
-      "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz" ];
+    urls = [
+      "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
+      "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz"
+    ];
     sha256 = "sha256-dZ03J3I1dgoSgSc9yGfO13ZvNawCSYKN3+SGvp1eyGA=";
   };
 
-  nativeBuildInputs = [ pkg-config groff perl getopt gfortran which ];
+  nativeBuildInputs = [
+    pkg-config
+    groff
+    perl
+    getopt
+    gfortran
+    which
+  ];
 
-  buildInputs = [ gtk2-x11 lesstif cfitsio python3Env ncurses ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation ]);
+  buildInputs =
+    [
+      gtk2-x11
+      lesstif
+      cfitsio
+      python3Env
+      ncurses
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks; [ CoreFoundation ]
+    );
 
-  patches = [ ./wrapper.patch ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin ([ ./clang.patch ./cpp-darwin.patch ]);
+  patches =
+    [ ./wrapper.patch ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin ([
+      ./clang.patch
+      ./cpp-darwin.patch
+    ]);
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
   # Workaround for https://github.com/NixOS/nixpkgs/issues/304528
   env.GAG_CPP = lib.optionalString stdenv.hostPlatform.isDarwin "${gfortran.outPath}/bin/cpp";
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks");
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks"
+  );
 
-  configurePhase=''
+  configurePhase = ''
     substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out
     substituteInPlace admin/wrapper.sh --replace '%%PYTHONHOME%%' ${python3Env}
     substituteInPlace utilities/main/gag-makedepend.pl --replace '/usr/bin/perl' ${perl}/bin/perl
@@ -44,7 +87,7 @@ stdenv.mkDerivation rec {
 
   userExec = "astro class greg imager mapping sic";
 
-  postInstall=''
+  postInstall = ''
     mkdir -p $out/bin
     cp -a ../gildas-exe-${srcVersion}/* $out
     mv $out/$GAG_EXEC_SYSTEM $out/libexec
@@ -68,7 +111,10 @@ stdenv.mkDerivation rec {
       plotting, widgets).'';
     homepage = "http://www.iram.fr/IRAMFR/GILDAS/gildas.html";
     license = lib.licenses.free;
-    maintainers = [ lib.maintainers.bzizou lib.maintainers.smaret ];
+    maintainers = [
+      lib.maintainers.bzizou
+      lib.maintainers.smaret
+    ];
     platforms = lib.platforms.all;
   };
 

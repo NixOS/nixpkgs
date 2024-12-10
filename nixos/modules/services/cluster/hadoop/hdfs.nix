@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.hadoop;
 
@@ -6,72 +11,87 @@ let
   hadoopConf = "${import ./conf.nix { inherit cfg pkgs lib; }}/";
 
   # Generator for HDFS service options
-  hadoopServiceOption = { serviceName, firewallOption ? true, extraOpts ? null }: {
-    enable = lib.mkEnableOption serviceName;
-    restartIfChanged = lib.mkOption {
-      type = lib.types.bool;
-      description = ''
-        Automatically restart the service on config change.
-        This can be set to false to defer restarts on clusters running critical applications.
-        Please consider the security implications of inadvertently running an older version,
-        and the possibility of unexpected behavior caused by inconsistent versions across a cluster when disabling this option.
-      '';
-      default = false;
-    };
-    extraFlags = lib.mkOption{
-      type = with lib.types; listOf str;
-      default = [];
-      description = "Extra command line flags to pass to ${serviceName}";
-      example = [
-        "-Dcom.sun.management.jmxremote"
-        "-Dcom.sun.management.jmxremote.port=8010"
-      ];
-    };
-    extraEnv = lib.mkOption{
-      type = with lib.types; attrsOf str;
-      default = {};
-      description = "Extra environment variables for ${serviceName}";
-    };
-  } // (lib.optionalAttrs firewallOption {
-    openFirewall = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Open firewall ports for ${serviceName}.";
-    };
-  }) // (lib.optionalAttrs (extraOpts != null) extraOpts);
+  hadoopServiceOption =
+    {
+      serviceName,
+      firewallOption ? true,
+      extraOpts ? null,
+    }:
+    {
+      enable = lib.mkEnableOption serviceName;
+      restartIfChanged = lib.mkOption {
+        type = lib.types.bool;
+        description = ''
+          Automatically restart the service on config change.
+          This can be set to false to defer restarts on clusters running critical applications.
+          Please consider the security implications of inadvertently running an older version,
+          and the possibility of unexpected behavior caused by inconsistent versions across a cluster when disabling this option.
+        '';
+        default = false;
+      };
+      extraFlags = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = [ ];
+        description = "Extra command line flags to pass to ${serviceName}";
+        example = [
+          "-Dcom.sun.management.jmxremote"
+          "-Dcom.sun.management.jmxremote.port=8010"
+        ];
+      };
+      extraEnv = lib.mkOption {
+        type = with lib.types; attrsOf str;
+        default = { };
+        description = "Extra environment variables for ${serviceName}";
+      };
+    }
+    // (lib.optionalAttrs firewallOption {
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Open firewall ports for ${serviceName}.";
+      };
+    })
+    // (lib.optionalAttrs (extraOpts != null) extraOpts);
 
   # Generator for HDFS service configs
   hadoopServiceConfig =
-    { name
-    , serviceOptions ? cfg.hdfs."${lib.toLower name}"
-    , description ? "Hadoop HDFS ${name}"
-    , User ? "hdfs"
-    , allowedTCPPorts ? [ ]
-    , preStart ? ""
-    , environment ? { }
-    , extraConfig ? { }
-    }: (
+    {
+      name,
+      serviceOptions ? cfg.hdfs."${lib.toLower name}",
+      description ? "Hadoop HDFS ${name}",
+      User ? "hdfs",
+      allowedTCPPorts ? [ ],
+      preStart ? "",
+      environment ? { },
+      extraConfig ? { },
+    }:
+    (
 
-      lib.mkIf serviceOptions.enable ( lib.mkMerge [{
-        systemd.services."hdfs-${lib.toLower name}" = {
-          inherit description preStart;
-          environment = environment // serviceOptions.extraEnv;
-          wantedBy = [ "multi-user.target" ];
-          inherit (serviceOptions) restartIfChanged;
-          serviceConfig = {
-            inherit User;
-            SyslogIdentifier = "hdfs-${lib.toLower name}";
-            ExecStart = "${cfg.package}/bin/hdfs --config ${hadoopConf} ${lib.toLower name} ${lib.escapeShellArgs serviceOptions.extraFlags}";
-            Restart = "always";
-          };
-        };
+      lib.mkIf serviceOptions.enable (
+        lib.mkMerge [
+          {
+            systemd.services."hdfs-${lib.toLower name}" = {
+              inherit description preStart;
+              environment = environment // serviceOptions.extraEnv;
+              wantedBy = [ "multi-user.target" ];
+              inherit (serviceOptions) restartIfChanged;
+              serviceConfig = {
+                inherit User;
+                SyslogIdentifier = "hdfs-${lib.toLower name}";
+                ExecStart = "${cfg.package}/bin/hdfs --config ${hadoopConf} ${lib.toLower name} ${lib.escapeShellArgs serviceOptions.extraFlags}";
+                Restart = "always";
+              };
+            };
 
-        services.hadoop.gatewayRole.enable = true;
+            services.hadoop.gatewayRole.enable = true;
 
-        networking.firewall.allowedTCPPorts = lib.mkIf
-          ((builtins.hasAttr "openFirewall" serviceOptions) && serviceOptions.openFirewall)
-          allowedTCPPorts;
-      } extraConfig])
+            networking.firewall.allowedTCPPorts = lib.mkIf (
+              (builtins.hasAttr "openFirewall" serviceOptions) && serviceOptions.openFirewall
+            ) allowedTCPPorts;
+          }
+          extraConfig
+        ]
+      )
     );
 
 in
@@ -96,21 +116,30 @@ in
       dataDirs = lib.mkOption {
         default = null;
         description = "Tier and path definitions for datanode storage.";
-        type = with lib.types; nullOr (listOf (submodule {
-          options = {
-            type = lib.mkOption {
-              type = enum [ "SSD" "DISK" "ARCHIVE" "RAM_DISK" ];
-              description = ''
-                Storage types ([SSD]/[DISK]/[ARCHIVE]/[RAM_DISK]) for HDFS storage policies.
-              '';
-            };
-            path = lib.mkOption {
-              type = path;
-              example = [ "/var/lib/hadoop/hdfs/dn" ];
-              description = "Determines where on the local filesystem a data node should store its blocks.";
-            };
-          };
-        }));
+        type =
+          with lib.types;
+          nullOr (
+            listOf (submodule {
+              options = {
+                type = lib.mkOption {
+                  type = enum [
+                    "SSD"
+                    "DISK"
+                    "ARCHIVE"
+                    "RAM_DISK"
+                  ];
+                  description = ''
+                    Storage types ([SSD]/[DISK]/[ARCHIVE]/[RAM_DISK]) for HDFS storage policies.
+                  '';
+                };
+                path = lib.mkOption {
+                  type = path;
+                  example = [ "/var/lib/hadoop/hdfs/dn" ];
+                  description = "Determines where on the local filesystem a data node should store its blocks.";
+                };
+              };
+            })
+          );
       };
     };
 
@@ -140,25 +169,30 @@ in
         8022 # namenode.servicerpc-address
         8019 # dfs.ha.zkfc.port
       ];
-      preStart = (lib.mkIf cfg.hdfs.namenode.formatOnInit
-        "${cfg.package}/bin/hdfs --config ${hadoopConf} namenode -format -nonInteractive || true"
+      preStart = (
+        lib.mkIf cfg.hdfs.namenode.formatOnInit "${cfg.package}/bin/hdfs --config ${hadoopConf} namenode -format -nonInteractive || true"
       );
     })
 
     (hadoopServiceConfig {
       name = "DataNode";
       # port numbers for datanode changed between hadoop 2 and 3
-      allowedTCPPorts = if lib.versionAtLeast cfg.package.version "3" then [
-        9864 # datanode.http.address
-        9866 # datanode.address
-        9867 # datanode.ipc.address
-      ] else [
-        50075 # datanode.http.address
-        50010 # datanode.address
-        50020 # datanode.ipc.address
-      ];
-      extraConfig.services.hadoop.hdfsSiteInternal."dfs.datanode.data.dir" = lib.mkIf (cfg.hdfs.datanode.dataDirs!= null)
-        (lib.concatMapStringsSep "," (x: "["+x.type+"]file://"+x.path) cfg.hdfs.datanode.dataDirs);
+      allowedTCPPorts =
+        if lib.versionAtLeast cfg.package.version "3" then
+          [
+            9864 # datanode.http.address
+            9866 # datanode.address
+            9867 # datanode.ipc.address
+          ]
+        else
+          [
+            50075 # datanode.http.address
+            50010 # datanode.address
+            50020 # datanode.ipc.address
+          ];
+      extraConfig.services.hadoop.hdfsSiteInternal."dfs.datanode.data.dir" = lib.mkIf (
+        cfg.hdfs.datanode.dataDirs != null
+      ) (lib.concatMapStringsSep "," (x: "[" + x.type + "]file://" + x.path) cfg.hdfs.datanode.dataDirs);
     })
 
     (hadoopServiceConfig {

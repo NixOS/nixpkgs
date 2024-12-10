@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
-, libkrun
-, makeWrapper
-, passt
-, sommelier
-, mesa
-, opengl-driver ? mesa.drivers
-, withSommelier ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
+  libkrun,
+  makeWrapper,
+  passt,
+  sommelier,
+  mesa,
+  opengl-driver ? mesa.drivers,
+  withSommelier ? false,
 }:
 
 rustPlatform.buildRustPackage rec {

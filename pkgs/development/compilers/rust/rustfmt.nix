@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, cargo
-, makeWrapper
-, rustPlatform
-, rustc
-, Security
-, asNightly ? false
+{
+  lib,
+  stdenv,
+  cargo,
+  makeWrapper,
+  rustPlatform,
+  rustc,
+  Security,
+  asNightly ? false,
 }:
 
 rustPlatform.buildRustPackage {
@@ -54,8 +55,14 @@ rustPlatform.buildRustPackage {
   meta = with lib; {
     description = "Tool for formatting Rust code according to style guidelines";
     homepage = "https://github.com/rust-lang-nursery/rustfmt";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     mainProgram = "rustfmt";
-    maintainers = with maintainers; [ globin basvandijk ];
+    maintainers = with maintainers; [
+      globin
+      basvandijk
+    ];
   };
 }

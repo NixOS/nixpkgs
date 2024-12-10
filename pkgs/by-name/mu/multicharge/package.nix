@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch2
-, gfortran
-, meson
-, ninja
-, pkg-config
-, python3
-, blas
-, lapack
-, mctc-lib
-, mstore
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch2,
+  gfortran,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  blas,
+  lapack,
+  mctc-lib,
+  mstore,
 }:
 
 assert !blas.isILP64 && !lapack.isILP64;
@@ -36,11 +37,25 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ gfortran meson ninja pkg-config python3 ];
+  nativeBuildInputs = [
+    gfortran
+    meson
+    ninja
+    pkg-config
+    python3
+  ];
 
-  buildInputs = [ blas lapack mctc-lib mstore ];
+  buildInputs = [
+    blas
+    lapack
+    mctc-lib
+    mstore
+  ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   doCheck = true;
 

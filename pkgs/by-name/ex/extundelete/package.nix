@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, e2fsprogs }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  e2fsprogs,
+}:
 
 stdenv.mkDerivation {
   version = "0.2.4";

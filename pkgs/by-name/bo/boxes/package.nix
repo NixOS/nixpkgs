@@ -1,4 +1,13 @@
-{ lib, gccStdenv, fetchFromGitHub, bison, flex, pcre2, libunistring, ncurses }:
+{
+  lib,
+  gccStdenv,
+  fetchFromGitHub,
+  bison,
+  flex,
+  pcre2,
+  libunistring,
+  ncurses,
+}:
 
 gccStdenv.mkDerivation rec {
   pname = "boxes";
@@ -13,9 +22,16 @@ gccStdenv.mkDerivation rec {
 
   # Building instructions:
   # https://boxes.thomasjensen.com/build.html#building-on-linux--unix
-  nativeBuildInputs = [ bison flex ];
+  nativeBuildInputs = [
+    bison
+    flex
+  ];
 
-  buildInputs = [ pcre2 libunistring ncurses ];
+  buildInputs = [
+    pcre2
+    libunistring
+    ncurses
+  ];
 
   dontConfigure = true;
 

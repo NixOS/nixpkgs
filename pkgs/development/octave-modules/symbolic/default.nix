@@ -1,8 +1,9 @@
-{ buildOctavePackage
-, lib
-, fetchFromGitHub
+{
+  buildOctavePackage,
+  lib,
+  fetchFromGitHub,
   # Octave's Python (Python 3)
-, python
+  python,
 }:
 
 let

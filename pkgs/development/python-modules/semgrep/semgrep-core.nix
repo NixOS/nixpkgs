@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchPypi, unzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchPypi,
+  unzip,
+}:
 
 let
   common = import ./common.nix { inherit lib; };

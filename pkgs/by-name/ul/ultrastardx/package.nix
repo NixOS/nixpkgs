@@ -1,34 +1,51 @@
-{ lib, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, pkg-config
-, lua
-, fpc
-, pcre
-, portaudio
-, freetype
-, libpng
-, SDL2
-, SDL2_image
-, SDL2_gfx
-, SDL2_mixer
-, SDL2_net, SDL2_ttf
-, ffmpeg
-, sqlite
-, zlib
-, libX11
-, libGLU
-, libGL
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  pkg-config,
+  lua,
+  fpc,
+  pcre,
+  portaudio,
+  freetype,
+  libpng,
+  SDL2,
+  SDL2_image,
+  SDL2_gfx,
+  SDL2_mixer,
+  SDL2_net,
+  SDL2_ttf,
+  ffmpeg,
+  sqlite,
+  zlib,
+  libX11,
+  libGLU,
+  libGL,
 }:
 
 let
   sharedLibs = [
-    pcre portaudio freetype
-    SDL2 SDL2_image SDL2_gfx SDL2_mixer SDL2_net SDL2_ttf
-    sqlite lua zlib libX11 libGLU libGL ffmpeg
+    pcre
+    portaudio
+    freetype
+    SDL2
+    SDL2_image
+    SDL2_gfx
+    SDL2_mixer
+    SDL2_net
+    SDL2_ttf
+    sqlite
+    lua
+    zlib
+    libX11
+    libGLU
+    libGL
+    ffmpeg
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "ultrastardx";
   version = "2024.10.0";
 
@@ -39,8 +56,14 @@ in stdenv.mkDerivation rec {
     hash = "sha256-X5LixPRAI7A8Ns3D2A24T05w0iHag1EJVqt0aW1ZBps=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ fpc libpng ] ++ sharedLibs;
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+  buildInputs = [
+    fpc
+    libpng
+  ] ++ sharedLibs;
 
   postPatch = ''
     substituteInPlace src/config.inc.in \
@@ -48,8 +71,10 @@ in stdenv.mkDerivation rec {
   '';
 
   preBuild =
-    let items = lib.concatMapStringsSep " " (x: "-rpath ${lib.getLib x}/lib") sharedLibs;
-    in ''
+    let
+      items = lib.concatMapStringsSep " " (x: "-rpath ${lib.getLib x}/lib") sharedLibs;
+    in
+    ''
       export NIX_LDFLAGS="$NIX_LDFLAGS ${items}"
     '';
 

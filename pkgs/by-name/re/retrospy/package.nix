@@ -1,10 +1,11 @@
-{ buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, copyDesktopItems
-, makeDesktopItem
-, lib
-, runCommandLocal
+{
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  copyDesktopItems,
+  makeDesktopItem,
+  lib,
+  runCommandLocal,
 }:
 let
   version = "6.6";
@@ -25,7 +26,9 @@ let
 
   retrospy-icons = runCommandLocal "retrospy-icons" { } ''
     mkdir -p $out/share/retrospy
-    ${builtins.concatStringsSep "\n" (map (e: "cp ${src}/${e}.ico $out/share/retrospy/${e}.ico") executables)}
+    ${builtins.concatStringsSep "\n" (
+      map (e: "cp ${src}/${e}.ico $out/share/retrospy/${e}.ico") executables
+    )}
   '';
 in
 buildDotnetModule {
@@ -54,16 +57,17 @@ buildDotnetModule {
 
   passthru.updateScript = ./update.sh;
 
-  desktopItems = map
-    (e: (makeDesktopItem {
+  desktopItems = map (
+    e:
+    (makeDesktopItem {
       name = e;
       exec = e;
       icon = "${retrospy-icons}/share/retrospy/${e}.ico";
       desktopName = "${e}";
       categories = [ "Utility" ];
       startupWMClass = e;
-    }))
-    executables;
+    })
+  ) executables;
 
   meta = {
     description = "Live controller viewer for Nintendo consoles as well as many other retro consoles and computers";
@@ -74,4 +78,3 @@ buildDotnetModule {
     platforms = lib.platforms.linux;
   };
 }
-

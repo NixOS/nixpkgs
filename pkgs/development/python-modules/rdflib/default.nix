@@ -52,12 +52,15 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [
-    pip
-    pytest-cov-stub
-    pytestCheckHook
-    setuptools
-  ] ++ optional-dependencies.networkx ++ optional-dependencies.html;
+  nativeCheckInputs =
+    [
+      pip
+      pytest-cov-stub
+      pytestCheckHook
+      setuptools
+    ]
+    ++ optional-dependencies.networkx
+    ++ optional-dependencies.html;
 
   pytestFlagsArray = [
     # requires network access

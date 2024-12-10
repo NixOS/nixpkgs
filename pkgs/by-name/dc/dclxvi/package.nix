@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation {
   pname = "dclxvi";
@@ -13,13 +17,15 @@ stdenv.mkDerivation {
 
   buildFlags = [ "libdclxvipairing.so" ];
 
-  patchPhase = ''
-    substituteInPlace Makefile \
-      --replace "gcc" "cc"
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace Makefile \
-      --replace "-soname=libdclxvipairing.so" "-install_name,libdclxvipairing.so"
-  '';
+  patchPhase =
+    ''
+      substituteInPlace Makefile \
+        --replace "gcc" "cc"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace Makefile \
+        --replace "-soname=libdclxvipairing.so" "-install_name,libdclxvipairing.so"
+    '';
 
   installPhase = ''
     mkdir -p $out/{include,lib}

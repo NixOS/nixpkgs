@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+}:
 
 stdenv.mkDerivation {
   pname = "netris";
@@ -24,7 +29,8 @@ stdenv.mkDerivation {
   dontAddPrefix = true;
 
   configureFlags = [
-    "--cc" "${stdenv.cc.targetPrefix}cc"
+    "--cc"
+    "${stdenv.cc.targetPrefix}cc"
     "-O2"
   ];
 

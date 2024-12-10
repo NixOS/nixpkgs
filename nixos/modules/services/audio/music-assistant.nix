@@ -13,13 +13,13 @@ let
     mkOption
     mkPackageOption
     types
-  ;
+    ;
 
   inherit (types)
     listOf
     enum
     str
-  ;
+    ;
 
   cfg = config.services.music-assistant;
 
@@ -38,7 +38,10 @@ in
 
     extraOptions = mkOption {
       type = listOf str;
-      default = [ "--config" "/var/lib/music-assistant" ];
+      default = [
+        "--config"
+        "/var/lib/music-assistant"
+      ];
       example = [
         "--log-level"
         "DEBUG"
@@ -50,7 +53,7 @@ in
 
     providers = mkOption {
       type = listOf (enum cfg.package.providerNames);
-      default = [];
+      default = [ ];
       example = [
         "opensubsonic"
         "snapcast"
@@ -74,9 +77,12 @@ in
       };
 
       serviceConfig = {
-        ExecStart = utils.escapeSystemdExecArgs ([
-          (lib.getExe cfg.package)
-        ] ++ cfg.extraOptions);
+        ExecStart = utils.escapeSystemdExecArgs (
+          [
+            (lib.getExe cfg.package)
+          ]
+          ++ cfg.extraOptions
+        );
         DynamicUser = true;
         StateDirectory = "music-assistant";
         AmbientCapabilities = "";

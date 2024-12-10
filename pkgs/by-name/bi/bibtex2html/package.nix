@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, ocaml, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  perl,
+}:
 
 stdenv.mkDerivation {
   pname = "bibtex2html";
@@ -11,13 +17,16 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ ocaml perl ];
+  nativeBuildInputs = [
+    ocaml
+    perl
+  ];
 
   meta = with lib; {
     description = "Collection of tools for translating from BibTeX to HTML";
     homepage = "https://www.lri.fr/~filliatr/bibtex2html/";
     license = licenses.gpl2Only;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [ maintainers.scolobb ];
   };
 }

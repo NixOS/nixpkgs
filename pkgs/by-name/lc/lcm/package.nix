@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, glib, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  glib,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lcm";
@@ -11,7 +18,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-IFHoJl5OtnUb+w3gLG5f578yAektjgrY9Uj2eUVoIrc=";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   nativeBuildInputs = [
     pkg-config

@@ -33,7 +33,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   dependencies = [
     jinja2
     packaging

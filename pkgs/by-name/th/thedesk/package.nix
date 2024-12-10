@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, alsa-lib, gtk3, libxshmfence, libgbm, nss }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  electron,
+  alsa-lib,
+  gtk3,
+  libxshmfence,
+  libgbm,
+  nss,
+}:
 
 stdenv.mkDerivation rec {
   pname = "thedesk";
@@ -16,7 +28,13 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [ alsa-lib gtk3 libxshmfence libgbm nss ];
+  buildInputs = [
+    alsa-lib
+    gtk3
+    libxshmfence
+    libgbm
+    nss
+  ];
 
   dontBuild = true;
   dontConfigure = true;

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, gitUpdater
-, cmake
-, nasm
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gitUpdater,
+  cmake,
+  nasm,
 
-# for passthru.tests
-, ffmpeg
+  # for passthru.tests
+  ffmpeg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,7 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     changelog = "https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with licenses; [ aom bsd3 ];
+    license = with licenses; [
+      aom
+      bsd3
+    ];
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.unix;
   };

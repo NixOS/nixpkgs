@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, nixosTests
-, smartmontools
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  nixosTests,
+  smartmontools,
 }:
 
 buildGoModule rec {
@@ -35,6 +36,9 @@ buildGoModule rec {
     homepage = "https://github.com/prometheus-community/smartctl_exporter";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ hexa Frostman ];
+    maintainers = with maintainers; [
+      hexa
+      Frostman
+    ];
   };
 }

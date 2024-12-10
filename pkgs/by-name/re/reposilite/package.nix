@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, makeWrapper, jre_headless }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  jre_headless,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "Reposilite";

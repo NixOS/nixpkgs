@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wabt";
@@ -13,7 +18,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  cmakeFlags = [ "-DBUILD_TESTS=OFF" "-DCMAKE_PROJECT_VERSION=${version}" ];
+  cmakeFlags = [
+    "-DBUILD_TESTS=OFF"
+    "-DCMAKE_PROJECT_VERSION=${version}"
+  ];
 
   meta = with lib; {
     description = "WebAssembly Binary Toolkit";

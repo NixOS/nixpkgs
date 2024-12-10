@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.stunnel;
@@ -6,21 +11,27 @@ let
 
   verifyRequiredField = type: field: n: c: {
     assertion = lib.hasAttr field c;
-    message =  "stunnel: \"${n}\" ${type} configuration - Field ${field} is required.";
+    message = "stunnel: \"${n}\" ${type} configuration - Field ${field} is required.";
   };
 
   verifyChainPathAssert = n: c: {
     assertion = (c.verifyHostname or null) == null || (c.verifyChain || c.verifyPeer);
-    message =  "stunnel: \"${n}\" client configuration - hostname verification " +
-      "is not possible without either verifyChain or verifyPeer enabled";
+    message =
+      "stunnel: \"${n}\" client configuration - hostname verification "
+      + "is not possible without either verifyChain or verifyPeer enabled";
   };
 
   removeNulls = lib.mapAttrs (_: lib.filterAttrs (_: v: v != null));
-  mkValueString = v:
-    if v == true then "yes"
-    else if v == false then "no"
-    else lib.generators.mkValueStringDefault {} v;
-  generateConfig = c:
+  mkValueString =
+    v:
+    if v == true then
+      "yes"
+    else if v == false then
+      "no"
+    else
+      lib.generators.mkValueStringDefault { } v;
+  generateConfig =
+    c:
     lib.generators.toINI {
       mkSectionName = lib.id;
       mkKeyValue = k: v: "${k} = ${mkValueString v}";
@@ -55,7 +66,16 @@ in
       };
 
       logLevel = lib.mkOption {
-        type = lib.types.enum [ "emerg" "alert" "crit" "err" "warning" "notice" "info" "debug" ];
+        type = lib.types.enum [
+          "emerg"
+          "alert"
+          "crit"
+          "err"
+          "warning"
+          "notice"
+          "info"
+          "debug"
+        ];
         default = "info";
         description = "Verbosity of stunnel output.";
       };
@@ -72,14 +92,23 @@ in
         description = "Enable support for the insecure SSLv3 protocol.";
       };
 
-
       servers = lib.mkOption {
         description = ''
           Define the server configurations.
 
           See "SERVICE-LEVEL OPTIONS" in {manpage}`stunnel(8)`.
         '';
-        type = with lib.types; attrsOf (attrsOf (nullOr (oneOf [bool int str])));
+        type =
+          with lib.types;
+          attrsOf (
+            attrsOf (
+              nullOr (oneOf [
+                bool
+                int
+                str
+              ])
+            )
+          );
         example = {
           fancyWebserver = {
             accept = 443;
@@ -98,24 +127,40 @@ in
 
           See "SERVICE-LEVEL OPTIONS" in {manpage}`stunnel(8)`.
         '';
-        type = with lib.types; attrsOf (attrsOf (nullOr (oneOf [bool int str])));
+        type =
+          with lib.types;
+          attrsOf (
+            attrsOf (
+              nullOr (oneOf [
+                bool
+                int
+                str
+              ])
+            )
+          );
 
-        apply = let
-          applyDefaults = c:
-            {
-              CAFile = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-              OCSPaia = true;
-              verifyChain = true;
-            } // c;
-          setCheckHostFromVerifyHostname = c:
-            # To preserve backward-compatibility with the old NixOS stunnel module
-            # definition, allow "verifyHostname" as an alias for "checkHost".
-            c // {
-              checkHost = c.checkHost or c.verifyHostname or null;
-              verifyHostname = null; # Not a real stunnel configuration setting
-            };
-          forceClient = c: c // { client = true; };
-        in lib.mapAttrs (_: c: forceClient (setCheckHostFromVerifyHostname (applyDefaults c)));
+        apply =
+          let
+            applyDefaults =
+              c:
+              {
+                CAFile = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+                OCSPaia = true;
+                verifyChain = true;
+              }
+              // c;
+            setCheckHostFromVerifyHostname =
+              c:
+              # To preserve backward-compatibility with the old NixOS stunnel module
+              # definition, allow "verifyHostname" as an alias for "checkHost".
+              c
+              // {
+                checkHost = c.checkHost or c.verifyHostname or null;
+                verifyHostname = null; # Not a real stunnel configuration setting
+              };
+            forceClient = c: c // { client = true; };
+          in
+          lib.mapAttrs (_: c: forceClient (setCheckHostFromVerifyHostname (applyDefaults c)));
 
         example = {
           foobar = {
@@ -129,14 +174,14 @@ in
     };
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
 
     assertions = lib.concatLists [
       (lib.singleton {
-        assertion = (lib.length (lib.attrValues cfg.servers) != 0) || ((lib.length (lib.attrValues cfg.clients)) != 0);
+        assertion =
+          (lib.length (lib.attrValues cfg.servers) != 0) || ((lib.length (lib.attrValues cfg.clients)) != 0);
         message = "stunnel: At least one server- or client-configuration has to be present.";
       })
 
@@ -151,19 +196,19 @@ in
     environment.systemPackages = [ pkgs.stunnel ];
 
     environment.etc."stunnel.cfg".text = ''
-      ${ lib.optionalString (cfg.user != null) "setuid = ${cfg.user}" }
-      ${ lib.optionalString (cfg.group != null) "setgid = ${cfg.group}" }
+      ${lib.optionalString (cfg.user != null) "setuid = ${cfg.user}"}
+      ${lib.optionalString (cfg.group != null) "setgid = ${cfg.group}"}
 
       debug = ${cfg.logLevel}
 
-      ${ lib.optionalString cfg.fipsMode "fips = yes" }
-      ${ lib.optionalString cfg.enableInsecureSSLv3 "options = -NO_SSLv3" }
+      ${lib.optionalString cfg.fipsMode "fips = yes"}
+      ${lib.optionalString cfg.enableInsecureSSLv3 "options = -NO_SSLv3"}
 
       ; ----- SERVER CONFIGURATIONS -----
-      ${ generateConfig cfg.servers }
+      ${generateConfig cfg.servers}
 
       ; ----- CLIENT CONFIGURATIONS -----
-      ${ generateConfig cfg.clients }
+      ${generateConfig cfg.clients}
     '';
 
     systemd.services.stunnel = {

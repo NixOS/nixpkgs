@@ -1,8 +1,11 @@
-{ fetchurl, stdenv, lib
-, updateAutotoolsGnuConfigScriptsHook
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableDarwinABICompat ? false
+{
+  fetchurl,
+  stdenv,
+  lib,
+  updateAutotoolsGnuConfigScriptsHook,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableDarwinABICompat ? false,
 }:
 
 # assert !stdenv.hostPlatform.isLinux || stdenv.hostPlatform != stdenv.buildPlatform; # TODO: improve on cross
@@ -31,7 +34,10 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch =
-    lib.optionalString ((stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isMinGW) || stdenv.cc.nativeLibc)
+    lib.optionalString
+      (
+        (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isMinGW) || stdenv.cc.nativeLibc
+      )
       ''
         sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
       ''

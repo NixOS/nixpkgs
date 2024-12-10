@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.opensmtpd;
@@ -10,12 +15,16 @@ let
     ln -s ${cfg.package}/sbin/smtpctl $out/bin/sendmail
   '';
 
-in {
+in
+{
 
   ###### interface
 
   imports = [
-    (lib.mkRenamedOptionModule [ "services" "opensmtpd" "addSendmailToSystemPath" ] [ "services" "opensmtpd" "setSendmail" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "opensmtpd" "addSendmailToSystemPath" ]
+      [ "services" "opensmtpd" "setSendmail" ]
+    )
   ];
 
   options = {
@@ -38,8 +47,11 @@ in {
 
       extraServerArgs = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
-        example = [ "-v" "-P mta" ];
+        default = [ ];
+        example = [
+          "-v"
+          "-P mta"
+        ];
         description = ''
           Extra command line arguments provided when the smtpd process
           is started.
@@ -60,7 +72,7 @@ in {
 
       procPackages = lib.mkOption {
         type = lib.types.listOf lib.types.package;
-        default = [];
+        default = [ ];
         description = ''
           Packages to search for filters, tables, queues, and schedulers.
 
@@ -71,7 +83,6 @@ in {
     };
 
   };
-
 
   ###### implementation
 
@@ -102,8 +113,9 @@ in {
       source = "${cfg.package}/bin/smtpctl";
     };
 
-    services.mail.sendmailSetuidWrapper = lib.mkIf cfg.setSendmail
-      (security.wrappers.smtpctl // { program = "sendmail"; });
+    services.mail.sendmailSetuidWrapper = lib.mkIf cfg.setSendmail (
+      security.wrappers.smtpctl // { program = "sendmail"; }
+    );
 
     systemd.tmpfiles.rules = [
       "d /var/spool/smtpd 711 root - - -"
@@ -111,17 +123,19 @@ in {
       "d /var/spool/smtpd/purge 700 smtpq root - -"
     ];
 
-    systemd.services.opensmtpd = let
-      procEnv = pkgs.buildEnv {
-        name = "opensmtpd-procs";
-        paths = [ cfg.package ] ++ cfg.procPackages;
-        pathsToLink = [ "/libexec/opensmtpd" ];
+    systemd.services.opensmtpd =
+      let
+        procEnv = pkgs.buildEnv {
+          name = "opensmtpd-procs";
+          paths = [ cfg.package ] ++ cfg.procPackages;
+          pathsToLink = [ "/libexec/opensmtpd" ];
+        };
+      in
+      {
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        serviceConfig.ExecStart = "${cfg.package}/sbin/smtpd -d -f ${conf} ${args}";
+        environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";
       };
-    in {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      serviceConfig.ExecStart = "${cfg.package}/sbin/smtpd -d -f ${conf} ${args}";
-      environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";
-    };
   };
 }

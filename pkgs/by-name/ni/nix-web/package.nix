@@ -1,16 +1,20 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitea
-, pkg-config
-, openssl
-, nixVersions
-, nixPackage ? nixVersions.stable
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitea,
+  pkg-config,
+  openssl,
+  nixVersions,
+  nixPackage ? nixVersions.stable,
+  darwin,
 }:
 
 let
-  cargoFlags = [ "-p" "nix-web" ];
+  cargoFlags = [
+    "-p"
+    "nix-web"
+  ];
 in
 rustPlatform.buildRustPackage rec {
   pname = "nix-web";
@@ -26,8 +30,15 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-romL/RALr/pmwUA8/SN4AOwc+Vndspd1Yrqs0AHPYRY=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) openssl
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
+  buildInputs =
+    lib.optional (!stdenv.hostPlatform.isDarwin) openssl
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Security
+        SystemConfiguration
+      ]
+    );
 
   postPatch = ''
     substituteInPlace nix-web/nix-web.service \

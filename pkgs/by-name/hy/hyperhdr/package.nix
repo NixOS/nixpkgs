@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, alsa-lib
-, flatbuffers
-, libjpeg_turbo
-, mbedtls
-, mdns
-, pipewire
-, qt6Packages
-, qmqtt
-, xz
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  alsa-lib,
+  flatbuffers,
+  libjpeg_turbo,
+  mbedtls,
+  mdns,
+  pipewire,
+  qt6Packages,
+  qmqtt,
+  xz,
 }:
 
 let
   inherit (lib)
     cmakeBool
-  ;
+    ;
 in
 
 stdenv.mkDerivation rec {

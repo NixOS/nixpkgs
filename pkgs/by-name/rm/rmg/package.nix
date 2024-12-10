@@ -1,32 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gitUpdater
-, boost
-, cmake
-, discord-rpc
-, freetype
-, hidapi
-, libpng
-, libsamplerate
-, minizip
-, nasm
-, pkg-config
-, qt6Packages
-, SDL2
-, speexdsp
-, vulkan-headers
-, vulkan-loader
-, which
-, xdg-user-dirs
-, zlib
-, withWayland ? false
-# Affects final license
-, withAngrylionRdpPlus ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  boost,
+  cmake,
+  discord-rpc,
+  freetype,
+  hidapi,
+  libpng,
+  libsamplerate,
+  minizip,
+  nasm,
+  pkg-config,
+  qt6Packages,
+  SDL2,
+  speexdsp,
+  vulkan-headers,
+  vulkan-loader,
+  which,
+  xdg-user-dirs,
+  zlib,
+  withWayland ? false,
+  # Affects final license
+  withAngrylionRdpPlus ? false,
 }:
 
 let
-  inherit (qt6Packages) qtbase qtsvg qtwayland wrapQtAppsHook;
+  inherit (qt6Packages)
+    qtbase
+    qtsvg
+    qtwayland
+    wrapQtAppsHook
+    ;
 in
 stdenv.mkDerivation rec {
   pname = "rmg";
@@ -73,9 +79,11 @@ stdenv.mkDerivation rec {
     "-DUSE_ANGRYLION=${lib.boolToString withAngrylionRdpPlus}"
   ];
 
-  qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
-  ] ++ lib.optional withWayland "--set RMG_WAYLAND 1";
+  qtWrapperArgs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
+    ]
+    ++ lib.optional withWayland "--set RMG_WAYLAND 1";
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 

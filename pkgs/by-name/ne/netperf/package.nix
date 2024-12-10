@@ -1,4 +1,11 @@
-{ libsmbios, lib, stdenv, autoreconfHook, fetchFromGitHub, fetchpatch }:
+{
+  libsmbios,
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation {
   pname = "netperf";
@@ -26,7 +33,10 @@ stdenv.mkDerivation {
   autoreconfPhase = ''
     autoreconf -i -I src/missing/m4
   '';
-  configureFlags = [ "--enable-demo" "CFLAGS=-D_GNU_SOURCE" ];
+  configureFlags = [
+    "--enable-demo"
+    "CFLAGS=-D_GNU_SOURCE"
+  ];
   enableParallelBuilding = true;
 
   meta = {

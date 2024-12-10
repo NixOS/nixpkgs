@@ -1,11 +1,13 @@
-{ cmake
-, fetchFromGitHub
-, fetchpatch
-, sqlite
-, postgresql
-, boost
-, darwin
-, lib, stdenv
+{
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+  sqlite,
+  postgresql,
+  boost,
+  darwin,
+  lib,
+  stdenv,
 }:
 let
   inherit (darwin.apple_sdk_11_0.frameworks) Kerberos;
@@ -30,16 +32,22 @@ stdenv.mkDerivation rec {
   ];
 
   # Do not build static libraries
-  cmakeFlags = [ "-DSOCI_STATIC=OFF" "-DCMAKE_CXX_STANDARD=11" "-DSOCI_TESTS=off" ];
+  cmakeFlags = [
+    "-DSOCI_STATIC=OFF"
+    "-DCMAKE_CXX_STANDARD=11"
+    "-DSOCI_TESTS=off"
+  ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    sqlite
-    postgresql
-    boost
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Kerberos
-  ];
+  buildInputs =
+    [
+      sqlite
+      postgresql
+      boost
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Kerberos
+    ];
 
   meta = with lib; {
     description = "Database access library for C++";

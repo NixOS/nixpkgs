@@ -1,18 +1,20 @@
-{ lib, stdenv
-, fetchFromGitHub
-, aws-c-auth
-, aws-c-cal
-, aws-c-common
-, aws-c-compression
-, aws-c-event-stream
-, aws-c-http
-, aws-c-io
-, aws-c-mqtt
-, aws-c-s3
-, aws-checksums
-, cmake
-, s2n-tls
-, nix
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  aws-c-auth,
+  aws-c-cal,
+  aws-c-common,
+  aws-c-compression,
+  aws-c-event-stream,
+  aws-c-http,
+  aws-c-io,
+  aws-c-mqtt,
+  aws-c-s3,
+  aws-checksums,
+  cmake,
+  s2n-tls,
+  nix,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +22,10 @@ stdenv.mkDerivation rec {
   # nixpkgs-update: no auto update
   version = "0.29.4";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "awslabs";

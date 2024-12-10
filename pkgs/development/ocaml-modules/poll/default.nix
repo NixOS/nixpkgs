@@ -1,10 +1,11 @@
-{ buildDunePackage
-, dune-configurator
-, fetchurl
-, kqueue
-, lib
-, ppx_expect
-, ppx_optcomp
+{
+  buildDunePackage,
+  dune-configurator,
+  fetchurl,
+  kqueue,
+  lib,
+  ppx_expect,
+  ppx_optcomp,
 }:
 
 buildDunePackage rec {

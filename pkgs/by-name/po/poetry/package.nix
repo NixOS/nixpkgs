@@ -1,8 +1,13 @@
-{ lib, python3, fetchFromGitHub }:
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+}:
 
 let
   newPackageOverrides =
-    self: super: {
+    self: super:
+    {
       poetry = self.callPackage ./unwrapped.nix { };
 
       # The versions of Poetry and poetry-core need to match exactly,
@@ -21,39 +26,48 @@ let
         };
         patches = [ ];
       });
-    } // (plugins self);
+    }
+    // (plugins self);
   python = python3.override (old: {
     self = python;
-    packageOverrides = lib.composeManyExtensions
-      ((if old ? packageOverrides then [ old.packageOverrides ] else [ ]) ++ [ newPackageOverrides ]);
+    packageOverrides = lib.composeManyExtensions (
+      (if old ? packageOverrides then [ old.packageOverrides ] else [ ]) ++ [ newPackageOverrides ]
+    );
   });
 
-  plugins = ps: with ps; {
-    poetry-audit-plugin = callPackage ./plugins/poetry-audit-plugin.nix { };
-    poetry-plugin-export = callPackage ./plugins/poetry-plugin-export.nix { };
-    poetry-plugin-up = callPackage ./plugins/poetry-plugin-up.nix { };
-    poetry-plugin-poeblix = callPackage ./plugins/poetry-plugin-poeblix.nix { };
-  };
+  plugins =
+    ps: with ps; {
+      poetry-audit-plugin = callPackage ./plugins/poetry-audit-plugin.nix { };
+      poetry-plugin-export = callPackage ./plugins/poetry-plugin-export.nix { };
+      poetry-plugin-up = callPackage ./plugins/poetry-plugin-up.nix { };
+      poetry-plugin-poeblix = callPackage ./plugins/poetry-plugin-poeblix.nix { };
+    };
 
   # selector is a function mapping pythonPackages to a list of plugins
   # e.g. poetry.withPlugins (ps: with ps; [ poetry-plugin-up ])
-  withPlugins = selector: let
-    selected = selector (plugins python.pkgs);
-  in python.pkgs.toPythonApplication (python.pkgs.poetry.overridePythonAttrs (old: {
-    dependencies = old.dependencies ++ selected;
+  withPlugins =
+    selector:
+    let
+      selected = selector (plugins python.pkgs);
+    in
+    python.pkgs.toPythonApplication (
+      python.pkgs.poetry.overridePythonAttrs (old: {
+        dependencies = old.dependencies ++ selected;
 
-    # save some build time when adding plugins by disabling tests
-    doCheck = selected == [ ];
+        # save some build time when adding plugins by disabling tests
+        doCheck = selected == [ ];
 
-    # Propagating dependencies leaks them through $PYTHONPATH which causes issues
-    # when used in nix-shell.
-    postFixup = ''
-      rm $out/nix-support/propagated-build-inputs
-    '';
+        # Propagating dependencies leaks them through $PYTHONPATH which causes issues
+        # when used in nix-shell.
+        postFixup = ''
+          rm $out/nix-support/propagated-build-inputs
+        '';
 
-    passthru = {
-      plugins = plugins python.pkgs;
-      inherit withPlugins python;
-    };
-  }));
-in withPlugins (ps: [ ])
+        passthru = {
+          plugins = plugins python.pkgs;
+          inherit withPlugins python;
+        };
+      })
+    );
+in
+withPlugins (ps: [ ])

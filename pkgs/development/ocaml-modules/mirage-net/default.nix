@@ -1,5 +1,12 @@
-{ lib, fetchurl, buildDunePackage
-, cstruct, fmt, lwt, macaddr, mirage-device
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  cstruct,
+  fmt,
+  lwt,
+  macaddr,
+  mirage-device,
 }:
 
 buildDunePackage rec {
@@ -13,7 +20,13 @@ buildDunePackage rec {
     hash = "sha256-Zo7/0Ye4GgqzJFCHDBXbuJ/5ETl/8ziolRgH4lDhlM4=";
   };
 
-  propagatedBuildInputs = [ cstruct fmt lwt macaddr mirage-device ];
+  propagatedBuildInputs = [
+    cstruct
+    fmt
+    lwt
+    macaddr
+    mirage-device
+  ];
 
   meta = {
     description = "Network signatures for MirageOS";

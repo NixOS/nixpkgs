@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, folly
-, gflags
-, glog
-, openssl
-, double-conversion
-, unstableGitUpdater
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  folly,
+  gflags,
+  glog,
+  openssl,
+  double-conversion,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
@@ -22,7 +23,13 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ folly gflags glog openssl double-conversion ];
+  buildInputs = [
+    folly
+    gflags
+    glog
+    openssl
+    double-conversion
+  ];
 
   # source is expected to be named wdt
   # https://github.com/facebook/wdt/blob/43319e59d0c77092468367cdadab37d12d7a2383/CMakeLists.txt#L238

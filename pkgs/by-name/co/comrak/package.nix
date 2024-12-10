@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "comrak";
@@ -19,6 +23,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kivikakk/comrak";
     changelog = "https://github.com/kivikakk/comrak/blob/v${version}/changelog.txt";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ figsoda kivikakk ];
+    maintainers = with maintainers; [
+      figsoda
+      kivikakk
+    ];
   };
 }

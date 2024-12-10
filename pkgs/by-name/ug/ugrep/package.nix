@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, brotli
-, bzip2
-, bzip3
-, lz4
-, makeWrapper
-, pcre2
-, testers
-, xz
-, zlib
-, zstd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  brotli,
+  bzip2,
+  bzip3,
+  lz4,
+  makeWrapper,
+  pcre2,
+  testers,
+  xz,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,7 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Ultra fast grep with interactive query UI";
     homepage = "https://github.com/Genivia/ugrep";
     changelog = "https://github.com/Genivia/ugrep/releases/tag/v${finalAttrs.version}";
-    maintainers = with maintainers; [ numkem mikaelfangel ];
+    maintainers = with maintainers; [
+      numkem
+      mikaelfangel
+    ];
     license = licenses.bsd3;
     platforms = platforms.all;
     mainProgram = "ug";

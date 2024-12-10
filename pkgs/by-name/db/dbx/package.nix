@@ -5,7 +5,10 @@
   python3,
 }:
 let
-  python = python3.override { self = python; packageOverrides = self: super: { pydantic = super.pydantic_1; }; };
+  python = python3.override {
+    self = python;
+    packageOverrides = self: super: { pydantic = super.pydantic_1; };
+  };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "dbx";
@@ -30,27 +33,24 @@ python.pkgs.buildPythonApplication rec {
 
   build-system = with python.pkgs; [ setuptools ];
 
-
-  propagatedBuildInputs =
-    with python.pkgs;
-    [
-      aiohttp
-      click
-      cookiecutter
-      cryptography
-      databricks-cli
-      jinja2
-      mlflow
-      pathspec
-      pydantic
-      pyyaml
-      requests
-      retry
-      rich
-      tenacity
-      typer
-      watchdog
-    ];
+  propagatedBuildInputs = with python.pkgs; [
+    aiohttp
+    click
+    cookiecutter
+    cryptography
+    databricks-cli
+    jinja2
+    mlflow
+    pathspec
+    pydantic
+    pyyaml
+    requests
+    retry
+    rich
+    tenacity
+    typer
+    watchdog
+  ];
 
   optional-dependencies = with python3.pkgs; {
     aws = [ boto3 ];

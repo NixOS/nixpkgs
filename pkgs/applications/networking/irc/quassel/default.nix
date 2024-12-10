@@ -1,27 +1,40 @@
-{ monolithic ? true # build monolithic Quassel
-, enableDaemon ? false # build Quassel daemon
-, client ? false # build Quassel client
-, tag ? "-kf5" # tag added to the package name
-, static ? false # link statically
+{
+  monolithic ? true, # build monolithic Quassel
+  enableDaemon ? false, # build Quassel daemon
+  client ? false, # build Quassel client
+  tag ? "-kf5", # tag added to the package name
+  static ? false, # link statically
 
-, lib, stdenv, fetchFromGitHub, cmake, makeWrapper, dconf
-, mkDerivation, qtbase, boost, zlib, qtscript
-, phonon, libdbusmenu, qca-qt5, openldap
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  makeWrapper,
+  dconf,
+  mkDerivation,
+  qtbase,
+  boost,
+  zlib,
+  qtscript,
+  phonon,
+  libdbusmenu,
+  qca-qt5,
+  openldap,
 
-, withKDE ? true # enable KDE integration
-, extra-cmake-modules
-, kconfigwidgets
-, kcoreaddons
-, knotifications
-, knotifyconfig
-, ktextwidgets
-, kwidgetsaddons
-, kxmlgui
+  withKDE ? true, # enable KDE integration
+  extra-cmake-modules,
+  kconfigwidgets,
+  kcoreaddons,
+  knotifications,
+  knotifyconfig,
+  ktextwidgets,
+  kwidgetsaddons,
+  kxmlgui,
 }:
 
 let
-    buildClient = monolithic || client;
-    buildCore = monolithic || enableDaemon;
+  buildClient = monolithic || client;
+  buildCore = monolithic || enableDaemon;
 in
 
 assert monolithic -> !client && !enableDaemon;
@@ -29,9 +42,10 @@ assert client || enableDaemon -> !monolithic;
 assert !buildClient -> !withKDE; # KDE is used by the client only
 
 let
-  edf = flag: feature: [("-D" + feature + (if flag then "=ON" else "=OFF"))];
+  edf = flag: feature: [ ("-D" + feature + (if flag then "=ON" else "=OFF")) ];
 
-in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
+in
+(if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
   pname = "quassel${tag}";
   version = "0.14.0";
 
@@ -45,20 +59,41 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
   # Prevent ``undefined reference to `qt_version_tag''' in SSL check
   env.NIX_CFLAGS_COMPILE = "-DQT_NO_VERSION_TAGGING=1";
 
-  nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ qtbase boost zlib ]
-    ++ lib.optionals buildCore [qtscript qca-qt5 openldap]
-    ++ lib.optionals buildClient [libdbusmenu phonon]
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+  ];
+  buildInputs =
+    [
+      qtbase
+      boost
+      zlib
+    ]
+    ++ lib.optionals buildCore [
+      qtscript
+      qca-qt5
+      openldap
+    ]
+    ++ lib.optionals buildClient [
+      libdbusmenu
+      phonon
+    ]
     ++ lib.optionals (buildClient && withKDE) [
-      extra-cmake-modules kconfigwidgets kcoreaddons
-      knotifications knotifyconfig ktextwidgets kwidgetsaddons
+      extra-cmake-modules
+      kconfigwidgets
+      kcoreaddons
+      knotifications
+      knotifyconfig
+      ktextwidgets
+      kwidgetsaddons
       kxmlgui
     ];
 
-  cmakeFlags = [
-    "-DEMBED_DATA=OFF"
-    "-DUSE_QT5=ON"
-  ]
+  cmakeFlags =
+    [
+      "-DEMBED_DATA=OFF"
+      "-DUSE_QT5=ON"
+    ]
     ++ edf static "STATIC"
     ++ edf monolithic "WANT_MONO"
     ++ edf enableDaemon "WANT_CORE"
@@ -71,8 +106,8 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
   postFixup =
     lib.optionalString enableDaemon ''
       wrapProgram "$out/bin/quasselcore" --suffix PATH : "${qtbase.bin}/bin"
-    '' +
-    lib.optionalString buildClient ''
+    ''
+    + lib.optionalString buildClient ''
       wrapQtApp "$out/bin/quassel${lib.optionalString client "client"}" \
         --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
     '';

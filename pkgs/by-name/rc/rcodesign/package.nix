@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, apple-sdk_11
-, uutils-coreutils
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  apple-sdk_11,
+  uutils-coreutils,
 }:
 
 rustPlatform.buildRustPackage rec {
