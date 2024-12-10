@@ -2,13 +2,11 @@
 // Since they are not, copy/paste them here.
 // TODO: Delete these and use the ones in the library as they become available.
 
-#include <string_view>
 #include "libnix-copy-paste.hh"
-#include <nix/print.hh>
+#include <nix/print.hh>                           // for Strings
 
-// NOLINTBEGIN
 // From nix/src/nix/repl.cc
-bool isVarName(std::string_view s)
+bool isVarName(const std::string_view & s)
 {
     if (s.size() == 0) return false;
     if (nix::isReservedKeyword(s)) return false;
@@ -22,4 +20,3 @@ bool isVarName(std::string_view s)
             return false;
     return true;
 }
-// NOLINTEND

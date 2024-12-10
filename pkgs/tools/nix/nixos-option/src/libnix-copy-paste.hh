@@ -1,5 +1,5 @@
 #pragma once
 
-#include <string_view>
+#include <nix/types.hh>
 
-bool isVarName(std::string_view s);
+bool isVarName(const std::string_view & s);
