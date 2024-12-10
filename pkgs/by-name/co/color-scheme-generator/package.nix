@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = 1;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Quickly generate color schemes for waybar from an image.";
     longDescription = ''
       color_scheme_generator is a command line utility used to analyze images and generate color themes from them given a path to an image.
