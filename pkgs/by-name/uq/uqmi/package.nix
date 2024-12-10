@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchgit, cmake, perl, libubox, json_c }:
+{
+  stdenv,
+  lib,
+  fetchgit,
+  cmake,
+  perl,
+  libubox,
+  json_c,
+}:
 
 stdenv.mkDerivation {
   pname = "uqmi";
@@ -15,23 +23,35 @@ stdenv.mkDerivation {
     patchShebangs .
   '';
 
-  nativeBuildInputs = [ cmake perl ];
-  buildInputs = [ libubox json_c ];
+  nativeBuildInputs = [
+    cmake
+    perl
+  ];
+  buildInputs = [
+    libubox
+    json_c
+  ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
-    # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
-    "-Wno-error=dangling-pointer"
-    "-Wno-error=maybe-uninitialized"
-  ] ++ lib.optionals stdenv.cc.isClang [
-    "-Wno-error=sometimes-uninitialized"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+      # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
+      "-Wno-error=dangling-pointer"
+      "-Wno-error=maybe-uninitialized"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "-Wno-error=sometimes-uninitialized"
+    ]
+  );
 
   meta = with lib; {
     description = "Tiny QMI command line utility";
     homepage = "https://git.openwrt.org/?p=project/uqmi.git;a=summary";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ fpletz mkg20001 ];
+    maintainers = with maintainers; [
+      fpletz
+      mkg20001
+    ];
     mainProgram = "uqmi";
   };
 }

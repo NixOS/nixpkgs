@@ -1,9 +1,12 @@
-{ runCommand
-, python3
+{
+  runCommand,
+  python3,
 }:
 
 let
-  env = { nativeBuildInputs = [ python3 ]; };
+  env = {
+    nativeBuildInputs = [ python3 ];
+  };
 in
 
 runCommand "nixos-test-driver-docstrings" env ''

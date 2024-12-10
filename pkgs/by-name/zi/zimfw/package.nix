@@ -1,4 +1,8 @@
-{ stdenv, lib, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "zimfw";
@@ -25,8 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description =
-      "The Zsh configuration framework with blazing speed and modular extensions";
+    description = "The Zsh configuration framework with blazing speed and modular extensions";
     homepage = "https://zimfw.sh";
     license = licenses.mit;
     maintainers = [ maintainers.joedevivo ];

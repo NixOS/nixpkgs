@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, buildNpmPackage
-, fetchFromGitHub
-, copyDesktopItems
-, makeDesktopItem
-, pkg-config
-, gtk3
-, libsoup
-, webkitgtk_4_0
+{
+  lib,
+  rustPlatform,
+  buildNpmPackage,
+  fetchFromGitHub,
+  copyDesktopItems,
+  makeDesktopItem,
+  pkg-config,
+  gtk3,
+  libsoup,
+  webkitgtk_4_0,
 }:
 
 rustPlatform.buildRustPackage rec {

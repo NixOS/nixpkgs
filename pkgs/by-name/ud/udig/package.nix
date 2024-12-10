@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchurl, unzip, makeWrapper, jre8, libXtst, gdal }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  unzip,
+  makeWrapper,
+  jre8,
+  libXtst,
+  gdal,
+}:
 let
   pname = "udig";
   version = "2.0.0";
@@ -13,29 +22,46 @@ let
       hash = "sha256-Ihk3InHB3/tEYRqH2ozhokz2GN8Gfig5DJkO/8P1LJs=";
     };
   };
-  src = srcs.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+  src =
+    srcs.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
   meta = with lib; {
     description = "User-friendly Desktop Internet GIS";
     homepage = "http://udig.refractions.net/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = with licenses; [ epl10 bsd3 ];
+    license = with licenses; [
+      epl10
+      bsd3
+    ];
     maintainers = with maintainers; [ sikmir ];
     platforms = builtins.attrNames srcs;
     mainProgram = "udig";
   };
 
   linux = stdenv.mkDerivation {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
 
-    nativeBuildInputs = [ unzip makeWrapper ];
+    nativeBuildInputs = [
+      unzip
+      makeWrapper
+    ];
 
     installPhase = ''
       install -dm755 $out/bin $out/opt/udig
       cp -r . $out/opt/udig
       makeWrapper $out/opt/udig/udig.sh $out/bin/udig \
         --prefix PATH : ${jre8}/bin \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ libXtst gdal ])}
+        --prefix LD_LIBRARY_PATH : ${
+          lib.makeLibraryPath ([
+            libXtst
+            gdal
+          ])
+        }
     '';
 
     postFixup = ''
@@ -46,9 +72,17 @@ let
   };
 
   darwin = stdenv.mkDerivation {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
 
-    nativeBuildInputs = [ unzip makeWrapper ];
+    nativeBuildInputs = [
+      unzip
+      makeWrapper
+    ];
 
     postPatch = ''
       substituteInPlace configuration/config.ini \
@@ -63,6 +97,4 @@ let
     '';
   };
 in
-if stdenv.hostPlatform.isDarwin
-then darwin
-else linux
+if stdenv.hostPlatform.isDarwin then darwin else linux

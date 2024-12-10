@@ -1,26 +1,27 @@
-{ autoPatchelfHook
-, cairo
-, copyDesktopItems
-, dbus
-, fetchurl
-, fontconfig
-, freetype
-, glib
-, gtk3
-, lib
-, libdrm
-, libGL
-, libkrb5
-, libsecret
-, libsForQt5
-, libunwind
-, libxkbcommon
-, makeDesktopItem
-, makeWrapper
-, openssl
-, stdenv
-, xorg
-, zlib
+{
+  autoPatchelfHook,
+  cairo,
+  copyDesktopItems,
+  dbus,
+  fetchurl,
+  fontconfig,
+  freetype,
+  glib,
+  gtk3,
+  lib,
+  libdrm,
+  libGL,
+  libkrb5,
+  libsecret,
+  libsForQt5,
+  libunwind,
+  libxkbcommon,
+  makeDesktopItem,
+  makeWrapper,
+  openssl,
+  stdenv,
+  xorg,
+  zlib,
 }:
 
 let
@@ -31,7 +32,10 @@ stdenv.mkDerivation rec {
   version = "8.4.240320";
 
   src = fetchurl {
-    inherit (srcs.${stdenv.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")) urls sha256;
+    inherit (srcs.${stdenv.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}"))
+      urls
+      sha256
+      ;
   };
 
   icon = fetchurl {
@@ -54,7 +58,12 @@ stdenv.mkDerivation rec {
 
   desktopItems = [ desktopItem ];
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems autoPatchelfHook libsForQt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+    autoPatchelfHook
+    libsForQt5.wrapQtAppsHook
+  ];
 
   # We just get a runfile in $src, so no need to unpack it.
   dontUnpack = true;

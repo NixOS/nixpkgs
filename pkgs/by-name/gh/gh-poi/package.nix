@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 
 buildGoModule rec {
@@ -14,7 +15,10 @@ buildGoModule rec {
     hash = "sha256-xLeIqTGwizvBmOgwisqoCrFY4KdWoWrA0YYgPWtQT/M=";
   };
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   vendorHash = "sha256-D/YZLwwGJWCekq9mpfCECzJyJ/xSlg7fC6leJh+e8i0=";
 

@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchurl
-, gnome
-, cmake
-, gettext
-, intltool
-, pkg-config
-, evolution-data-server
-, evolution
-, gtk3
-, libsoup_3
-, libical
-, json-glib
-, libmspack
-, webkitgtk_4_1
-, substituteAll
-, _experimental-update-script-combinators
-, glib
-, makeHardcodeGsettingsPatch
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gnome,
+  cmake,
+  gettext,
+  intltool,
+  pkg-config,
+  evolution-data-server,
+  evolution,
+  gtk3,
+  libsoup_3,
+  libical,
+  json-glib,
+  libmspack,
+  webkitgtk_4_1,
+  substituteAll,
+  _experimental-update-script-combinators,
+  glib,
+  makeHardcodeGsettingsPatch,
 }:
 
 stdenv.mkDerivation rec {

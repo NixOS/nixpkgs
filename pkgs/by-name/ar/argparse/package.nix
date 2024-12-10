@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "argparse";
@@ -24,9 +29,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Argument Parser for Modern C++";
-    homepage    = "https://github.com/p-ranav/argparse";
+    homepage = "https://github.com/p-ranav/argparse";
     maintainers = with maintainers; [ _2gn ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
     license = licenses.mit;
   };
 }

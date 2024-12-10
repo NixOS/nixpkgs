@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, fetchurl
-, buildGraalvmNativeImage
-, graalvmCEPackages
+{
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  buildGraalvmNativeImage,
+  graalvmCEPackages,
 }:
 
 buildGraalvmNativeImage rec {

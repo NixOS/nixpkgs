@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, lib
-, openssl
-, pkg-config
-, protobuf
-, rustPlatform
-, stdenv
+{
+  fetchFromGitHub,
+  lib,
+  openssl,
+  pkg-config,
+  protobuf,
+  rustPlatform,
+  stdenv,
 }:
 
 # Updating this package will force an update for prisma. The
@@ -57,10 +58,14 @@ rustPlatform.buildRustPackage rec {
   '';
 
   cargoBuildFlags = [
-    "-p" "query-engine"
-    "-p" "query-engine-node-api"
-    "-p" "schema-engine-cli"
-    "-p" "prisma-fmt"
+    "-p"
+    "query-engine"
+    "-p"
+    "query-engine-node-api"
+    "-p"
+    "schema-engine-cli"
+    "-p"
+    "prisma-fmt"
   ];
 
   postInstall = ''
@@ -76,7 +81,11 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     mainProgram = "prisma";
-    maintainers = with maintainers; [ pimeys tomhoule aqrln ];
+    maintainers = with maintainers; [
+      pimeys
+      tomhoule
+      aqrln
+    ];
   };
 }
 

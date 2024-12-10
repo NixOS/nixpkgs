@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, llvmPackages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  llvmPackages,
+}:
 
 let
   # mbuild is a custom build system used only to build xed
@@ -14,7 +20,8 @@ let
     };
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "xed";
   version = "2024.02.22";
 
@@ -25,7 +32,9 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-LF4iJ1/Z3OifCiir/kU3ufZqtiRLeaJeAwuBqP2BCF4=";
   };
 
-  nativeBuildInputs = [ mbuild ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.bintools ];
+  nativeBuildInputs = [
+    mbuild
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.bintools ];
 
   buildPhase = ''
     patchShebangs mfile.py
@@ -42,9 +51,9 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     broken = stdenv.hostPlatform.isAarch64;
     description = "Intel X86 Encoder Decoder (Intel XED)";
-    homepage    = "https://intelxed.github.io/";
-    license     = licenses.asl20;
-    platforms   = platforms.unix;
+    homepage = "https://intelxed.github.io/";
+    license = licenses.asl20;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ arturcygan ];
   };
 }

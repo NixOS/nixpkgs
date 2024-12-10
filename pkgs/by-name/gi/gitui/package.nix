@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, libiconv
-, openssl
-, pkg-config
-, xclip
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  libiconv,
+  openssl,
+  pkg-config,
+  xclip,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,13 +25,14 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
+  buildInputs =
+    [ openssl ]
     ++ lib.optional stdenv.hostPlatform.isLinux xclip
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-         libiconv
-         darwin.apple_sdk.frameworks.Security
-         darwin.apple_sdk.frameworks.AppKit
-       ];
+      libiconv
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.AppKit
+    ];
 
   postPatch = ''
     # The cargo config overrides linkers for some targets, breaking the build
@@ -58,6 +60,10 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/extrawurst/gitui/blob/v${version}/CHANGELOG.md";
     mainProgram = "gitui";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Br1ght0ne yanganto mfrw ];
+    maintainers = with lib.maintainers; [
+      Br1ght0ne
+      yanganto
+      mfrw
+    ];
   };
 }

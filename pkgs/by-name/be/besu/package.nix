@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, makeWrapper, jemalloc, jre, runCommand, testers }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jemalloc,
+  jre,
+  runCommand,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "besu";
@@ -19,7 +28,9 @@ stdenv.mkDerivation (finalAttrs: rec {
     cp -r lib $out/
     wrapProgram $out/bin/${pname} \
       --set JAVA_HOME "${jre}" \
-      --suffix ${if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"} : ${lib.makeLibraryPath buildInputs}
+      --suffix ${
+        if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"
+      } : ${lib.makeLibraryPath buildInputs}
   '';
 
   passthru.tests = {
@@ -27,15 +38,17 @@ stdenv.mkDerivation (finalAttrs: rec {
       package = finalAttrs.finalPackage;
       version = "v${version}";
     };
-    jemalloc = runCommand "${pname}-test-jemalloc"
-      {
-        nativeBuildInputs = [ finalAttrs.finalPackage ];
-        meta.platforms = with lib.platforms; linux;
-      } ''
-      # Expect to find this string in the output, ignore other failures.
-      (besu 2>&1 || true) | grep -q "# jemalloc: ${jemalloc.version}"
-      mkdir $out
-    '';
+    jemalloc =
+      runCommand "${pname}-test-jemalloc"
+        {
+          nativeBuildInputs = [ finalAttrs.finalPackage ];
+          meta.platforms = with lib.platforms; linux;
+        }
+        ''
+          # Expect to find this string in the output, ignore other failures.
+          (besu 2>&1 || true) | grep -q "# jemalloc: ${jemalloc.version}"
+          mkdir $out
+        '';
   };
 
   meta = with lib; {

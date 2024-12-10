@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, jdk, jre, makeBinaryWrapper, runCommand, python3Packages, writeText }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk,
+  jre,
+  makeBinaryWrapper,
+  runCommand,
+  python3Packages,
+  writeText,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "elasticmq-server";

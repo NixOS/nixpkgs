@@ -1,4 +1,9 @@
-{ lib, stdenv, perl, fetchurl }:
+{
+  lib,
+  stdenv,
+  perl,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ioport";
@@ -15,7 +20,10 @@ stdenv.mkDerivation rec {
     description = "Direct access to I/O ports from the command line";
     homepage = "https://people.redhat.com/rjones/ioport/";
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = [ maintainers.cleverca22 ];
   };
 }

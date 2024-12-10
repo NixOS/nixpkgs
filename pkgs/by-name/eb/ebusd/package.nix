@@ -1,4 +1,18 @@
-{ lib, stdenv, pkgs, fetchFromGitHub, fetchpatch, argparse, mosquitto, cmake, autoconf, automake, libtool, pkg-config, openssl }:
+{
+  lib,
+  stdenv,
+  pkgs,
+  fetchFromGitHub,
+  fetchpatch,
+  argparse,
+  mosquitto,
+  cmake,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ebusd";
@@ -52,5 +66,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ nathan-gs ];
     platforms = platforms.linux;
- };
+  };
 }

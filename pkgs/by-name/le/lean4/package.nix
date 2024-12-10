@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, git
-, gmp
-, perl
-, testers
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  git,
+  gmp,
+  perl,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -63,7 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/leanprover/lean4/blob/${finalAttrs.src.rev}/RELEASES.md";
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ danielbritten jthulhu ];
+    maintainers = with maintainers; [
+      danielbritten
+      jthulhu
+    ];
     mainProgram = "lean";
   };
 })

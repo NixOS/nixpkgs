@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, xorg, boost, gtest }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  xorg,
+  boost,
+  gtest,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xlayoutdisplay";
@@ -12,7 +20,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = with xorg; [ libX11 libXrandr libXcursor boost ];
+  buildInputs = with xorg; [
+    libX11
+    libXrandr
+    libXcursor
+    boost
+  ];
   nativeCheckInputs = [ gtest ];
 
   doCheck = true;

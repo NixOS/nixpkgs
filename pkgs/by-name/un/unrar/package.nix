@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchzip
+{
+  lib,
+  stdenv,
+  fetchzip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "AR=" "#AR="
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   # `make {unrar,lib}` call `make clean` implicitly
   # separate build into different dirs to avoid deleting them

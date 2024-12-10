@@ -1,4 +1,8 @@
-{ lib, fetchurl, buildGoModule }:
+{
+  lib,
+  fetchurl,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "boohu";
@@ -11,7 +15,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-AVK4zE/Hs9SN8Qj2WYj/am2B0R74QKYoMNf3sRRjnU4=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "New coffee-break roguelike game";

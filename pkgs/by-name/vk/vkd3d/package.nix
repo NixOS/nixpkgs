@@ -24,7 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5G+cdK3rJWlEbJN7uPspPyTtjVk4v/sTg134tZo1CTI=";
   };
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

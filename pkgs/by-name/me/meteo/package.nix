@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, nix-update-script
-, appstream
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook3
-, glib
-, glib-networking
-, gtk3
-, json-glib
-, libappindicator
-, libsoup
-, webkitgtk_4_0
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  nix-update-script,
+  appstream,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  vala,
+  wrapGAppsHook3,
+  glib,
+  glib-networking,
+  gtk3,
+  json-glib,
+  libappindicator,
+  libsoup,
+  webkitgtk_4_0,
 }:
 
 stdenv.mkDerivation rec {

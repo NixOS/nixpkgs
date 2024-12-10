@@ -1,7 +1,19 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkPackageOption mkIf mkOption types getExe;
+  inherit (lib)
+    mkEnableOption
+    mkPackageOption
+    mkIf
+    mkOption
+    types
+    getExe
+    ;
 
   cfg = config.services.opentelemetry-collector;
   opentelemetry-collector = cfg.package;
@@ -34,16 +46,16 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = [{
-      assertion = (
-        (cfg.settings == { }) != (cfg.configFile == null)
-      );
-      message = ''
-        Please specify a configuration for Opentelemetry Collector with either
-        'services.opentelemetry-collector.settings' or
-        'services.opentelemetry-collector.configFile'.
-      '';
-    }];
+    assertions = [
+      {
+        assertion = ((cfg.settings == { }) != (cfg.configFile == null));
+        message = ''
+          Please specify a configuration for Opentelemetry Collector with either
+          'services.opentelemetry-collector.settings' or
+          'services.opentelemetry-collector.configFile'.
+        '';
+      }
+    ];
 
     systemd.services.opentelemetry-collector = {
       description = "Opentelemetry Collector Service Daemon";
@@ -52,9 +64,10 @@ in
       serviceConfig =
         let
           conf =
-            if cfg.configFile == null
-            then settingsFormat.generate "config.yaml" cfg.settings
-            else cfg.configFile;
+            if cfg.configFile == null then
+              settingsFormat.generate "config.yaml" cfg.settings
+            else
+              cfg.configFile;
         in
         {
           ExecStart = "${getExe opentelemetry-collector} --config=file:${conf}";

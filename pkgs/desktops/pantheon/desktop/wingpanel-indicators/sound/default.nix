@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, gnome-settings-daemon
-, gtk3
-, granite
-, wingpanel
-, libnotify
-, pulseaudio
-, libcanberra-gtk3
-, libgee
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gnome-settings-daemon,
+  gtk3,
+  granite,
+  wingpanel,
+  libnotify,
+  pulseaudio,
+  libcanberra-gtk3,
+  libgee,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {

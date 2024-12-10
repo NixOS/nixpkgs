@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libXmu }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libXmu,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xclip";

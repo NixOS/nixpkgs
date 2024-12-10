@@ -1,36 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, SDL2
-, SDL2_ttf
-, copyDesktopItems
-, expat
-, flac
-, fontconfig
-, glm
-, installShellFiles
-, libXi
-, libXinerama
-, libjpeg
-, libpcap
-, libpulseaudio
-, makeDesktopItem
-, makeWrapper
-, papirus-icon-theme
-, pkg-config
-, portaudio
-, portmidi
-, pugixml
-, python3
-, qtbase
-, rapidjson
-, sqlite
-, utf8proc
-, which
-, writeScript
-, zlib
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  SDL2,
+  SDL2_ttf,
+  copyDesktopItems,
+  expat,
+  flac,
+  fontconfig,
+  glm,
+  installShellFiles,
+  libXi,
+  libXinerama,
+  libjpeg,
+  libpcap,
+  libpulseaudio,
+  makeDesktopItem,
+  makeWrapper,
+  papirus-icon-theme,
+  pkg-config,
+  portaudio,
+  portmidi,
+  pugixml,
+  python3,
+  qtbase,
+  rapidjson,
+  sqlite,
+  utf8proc,
+  which,
+  writeScript,
+  zlib,
+  darwin,
 }:
 
 let
@@ -48,7 +49,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-l1mgkPhYO/U/77veC0Mpyzr6hzz/FSkn+4GMAdLSfOk=";
   };
 
-  outputs = [ "out" "tools" ];
+  outputs = [
+    "out"
+    "tools"
+  ];
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -74,24 +78,35 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   # https://docs.mamedev.org/initialsetup/compilingmame.html
-  buildInputs = [
-    expat
-    zlib
-    flac
-    portmidi
-    portaudio
-    utf8proc
-    libjpeg
-    rapidjson
-    pugixml
-    glm
-    SDL2
-    SDL2_ttf
-    sqlite
-    qtbase
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libpulseaudio libXinerama libXi fontconfig ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libpcap CoreAudioKit ForceFeedback ];
+  buildInputs =
+    [
+      expat
+      zlib
+      flac
+      portmidi
+      portaudio
+      utf8proc
+      libjpeg
+      rapidjson
+      pugixml
+      glm
+      SDL2
+      SDL2_ttf
+      sqlite
+      qtbase
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      libpulseaudio
+      libXinerama
+      libXi
+      fontconfig
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libpcap
+      CoreAudioKit
+      ForceFeedback
+    ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -125,36 +140,45 @@ stdenv.mkDerivation rec {
       type = "Application";
       genericName = "MAME is a multi-purpose emulation framework";
       comment = "Play vintage games using the MAME emulator";
-      categories = [ "Game" "Emulator" ];
-      keywords = [ "Game" "Emulator" "Arcade" ];
+      categories = [
+        "Game"
+        "Emulator"
+      ];
+      keywords = [
+        "Game"
+        "Emulator"
+        "Arcade"
+      ];
     })
   ];
 
   # TODO: copy shaders from src/osd/modules/opengl/shader/glsl*.*h
   # to the final package after we figure out how they work
-  installPhase = let
-    icon = "${papirus-icon-theme}/share/icons/Papirus/32x32/apps/mame.svg";
-  in ''
-    runHook preInstall
+  installPhase =
+    let
+      icon = "${papirus-icon-theme}/share/icons/Papirus/32x32/apps/mame.svg";
+    in
+    ''
+      runHook preInstall
 
-    # mame
-    mkdir -p $out/opt/mame
+      # mame
+      mkdir -p $out/opt/mame
 
-    install -Dm755 mame -t $out/bin
-    install -Dm644 ${icon} $out/share/icons/hicolor/scalable/apps/mame.svg
-    installManPage docs/man/*.1 docs/man/*.6
-    cp -ar {artwork,bgfx,plugins,language,ctrlr,keymaps,hash} $out/opt/mame
+      install -Dm755 mame -t $out/bin
+      install -Dm644 ${icon} $out/share/icons/hicolor/scalable/apps/mame.svg
+      installManPage docs/man/*.1 docs/man/*.6
+      cp -ar {artwork,bgfx,plugins,language,ctrlr,keymaps,hash} $out/opt/mame
 
-    # mame-tools
-    for _tool in castool chdman floptool imgtool jedutil ldresample ldverify \
-                 nltool nlwav pngcmp regrep romcmp split srcclean testkeys \
-                 unidasm; do
-       install -Dm755 $_tool -t $tools/bin
-    done
-    mv $tools/bin/{,mame-}split
+      # mame-tools
+      for _tool in castool chdman floptool imgtool jedutil ldresample ldverify \
+                   nltool nlwav pngcmp regrep romcmp split srcclean testkeys \
+                   unidasm; do
+         install -Dm755 $_tool -t $tools/bin
+      done
+      mv $tools/bin/{,mame-}split
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   # man1 is the tools documentation, man6 is the emulator documentation
   # Need to be done in postFixup otherwise multi-output hook will move it back to $out
@@ -192,7 +216,10 @@ stdenv.mkDerivation rec {
       focus.
     '';
     changelog = "https://github.com/mamedev/mame/releases/download/mame${srcVersion}/whatsnew_${srcVersion}.txt";
-    license = with licenses; [ bsd3 gpl2Plus ];
+    license = with licenses; [
+      bsd3
+      gpl2Plus
+    ];
     maintainers = with maintainers; [ thiagokokada ];
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;

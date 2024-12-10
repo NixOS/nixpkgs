@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, pkg-config
-, autoreconfHook
-, wrapGAppsHook3
-, gtkmm3
-, libpulseaudio
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  autoreconfHook,
+  wrapGAppsHook3,
+  gtkmm3,
+  libpulseaudio,
 }:
 
 stdenv.mkDerivation rec {

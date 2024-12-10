@@ -1,7 +1,8 @@
-{ lib
-, buildNpmPackage
-, fetchNpmDeps
-, testers
+{
+  lib,
+  buildNpmPackage,
+  fetchNpmDeps,
+  testers,
 }:
 
 let

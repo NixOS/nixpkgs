@@ -68,11 +68,26 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram $out/bin/lms \
-      --prefix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath [libSM libICE]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.strings.makeLibraryPath [
+          libSM
+          libICE
+        ]
+      }"
     wrapProgram $out/bin/lms-metadata \
-      --prefix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath [libSM libICE]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.strings.makeLibraryPath [
+          libSM
+          libICE
+        ]
+      }"
     wrapProgram $out/bin/lms-recommendation \
-      --prefix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath [libSM libICE]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.strings.makeLibraryPath [
+          libSM
+          libICE
+        ]
+      }"
   '';
 
   meta = {

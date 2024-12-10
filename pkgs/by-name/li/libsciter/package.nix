@@ -1,12 +1,13 @@
-{ lib
-, glib
-, cairo
-, libuuid
-, pango
-, gtk3
-, stdenv
-, fetchurl
-, autoPatchelfHook
+{
+  lib,
+  glib,
+  cairo,
+  libuuid,
+  pango,
+  gtk3,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
 }:
 
 stdenv.mkDerivation {
@@ -22,7 +23,13 @@ stdenv.mkDerivation {
     autoPatchelfHook
   ];
 
-  buildInputs = [ glib cairo libuuid pango gtk3 ];
+  buildInputs = [
+    glib
+    cairo
+    libuuid
+    pango
+    gtk3
+  ];
 
   dontUnpack = true;
 

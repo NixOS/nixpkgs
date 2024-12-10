@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libxkbcommon
-, libinput
-, libglvnd
-, mesa
-, udev
-, wayland
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libxkbcommon,
+  libinput,
+  libglvnd,
+  mesa,
+  udev,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -43,7 +44,14 @@ rustPlatform.buildRustPackage rec {
   separateDebugInfo = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libxkbcommon libinput libglvnd mesa udev wayland ];
+  buildInputs = [
+    libxkbcommon
+    libinput
+    libglvnd
+    mesa
+    udev
+    wayland
+  ];
 
   postInstall = ''
     mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}

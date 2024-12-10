@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gettext, makeWrapper
-, ncurses, libdrm, libpciaccess, libxcb }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gettext,
+  makeWrapper,
+  ncurses,
+  libdrm,
+  libpciaccess,
+  libxcb,
+}:
 
 stdenv.mkDerivation rec {
   pname = "radeontop";
@@ -12,8 +22,17 @@ stdenv.mkDerivation rec {
     owner = "clbr";
   };
 
-  buildInputs = [ ncurses libdrm libpciaccess libxcb ];
-  nativeBuildInputs = [ pkg-config gettext makeWrapper ];
+  buildInputs = [
+    ncurses
+    libdrm
+    libpciaccess
+    libxcb
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+    makeWrapper
+  ];
 
   enableParallelBuilding = true;
 

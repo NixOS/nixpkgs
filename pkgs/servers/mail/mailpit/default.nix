@@ -18,7 +18,8 @@ let
 
   inherit (source)
     version
-    vendorHash;
+    vendorHash
+    ;
 
   src = fetchFromGitHub {
     owner = "axllent";

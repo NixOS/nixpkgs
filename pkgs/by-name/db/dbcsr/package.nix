@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, mpiCheckPhaseHook
-, pkg-config
-, fypp
-, gfortran
-, blas
-, lapack
-, python3
-, libxsmm
-, mpi
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  mpiCheckPhaseHook,
+  pkg-config,
+  fypp,
+  gfortran,
+  blas,
+  lapack,
+  python3,
+  libxsmm,
+  mpi,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +46,11 @@ stdenv.mkDerivation rec {
     fypp
   ];
 
-  buildInputs = [ blas lapack libxsmm ];
+  buildInputs = [
+    blas
+    lapack
+    libxsmm
+  ];
 
   propagatedBuildInputs = [ mpi ];
 

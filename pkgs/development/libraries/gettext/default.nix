@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, libiconv, bash, updateAutotoolsGnuConfigScriptsHook
+{
+  stdenv,
+  lib,
+  fetchurl,
+  libiconv,
+  bash,
+  updateAutotoolsGnuConfigScriptsHook,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -14,12 +20,13 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
     sha256 = "sha256-6MNlDh2M7odcTzVWQjgsHfgwWL1aEe6FVcDPJ21kbUU=";
   };
-  patches = [
-    ./absolute-paths.diff
-    # fix reproducibile output, in particular in the grub2 build
-    # https://savannah.gnu.org/bugs/index.php?59658
-    ./0001-msginit-Do-not-use-POT-Creation-Date.patch
-  ]
+  patches =
+    [
+      ./absolute-paths.diff
+      # fix reproducibile output, in particular in the grub2 build
+      # https://savannah.gnu.org/bugs/index.php?59658
+      ./0001-msginit-Do-not-use-POT-Creation-Date.patch
+    ]
     # An accidental inclusion in https://marc.info/?l=glibc-alpha&m=150511271003225&w=2
     # resulted in a getcwd prototype to be added in when it isn't needed.
     # Clang does not like this unless the "overridable" attribute was appied.
@@ -30,45 +37,56 @@ stdenv.mkDerivation rec {
     # Remove in 0.22.5 upgrade.
     ++ lib.optional (stdenv.cc.isClang && !stdenv.targetPlatform.isDarwin) ./fix-getcwd-clang.patch;
 
-  outputs = [ "out" "man" "doc" "info" ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+    "info"
+  ];
 
   hardeningDisable = [ "format" ];
 
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
 
-  configureFlags = [
-     "--disable-csharp"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # On cross building, gettext supposes that the wchar.h from libc
-    # does not fulfill gettext needs, so it tries to work with its
-    # own wchar.h file, which does not cope well with the system's
-    # wchar.h and stddef.h (gcc-4.3 - glibc-2.9)
-    "gl_cv_func_wcwidth_works=yes"
-  ];
+  configureFlags =
+    [
+      "--disable-csharp"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      # On cross building, gettext supposes that the wchar.h from libc
+      # does not fulfill gettext needs, so it tries to work with its
+      # own wchar.h file, which does not cope well with the system's
+      # wchar.h and stddef.h (gcc-4.3 - glibc-2.9)
+      "gl_cv_func_wcwidth_works=yes"
+    ];
 
-  postPatch = ''
-   substituteAllInPlace gettext-runtime/src/gettext.sh.in
-   substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
-   substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
-   substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
-  '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
-    sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
-    sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
-  '' + lib.optionalString stdenv.hostPlatform.isMinGW ''
-    sed -i "s/@GNULIB_CLOSE@/1/" */*/unistd.in.h
-  '';
+  postPatch =
+    ''
+      substituteAllInPlace gettext-runtime/src/gettext.sh.in
+      substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
+      substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
+      substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
+    ''
+    + lib.optionalString stdenv.hostPlatform.isCygwin ''
+      sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
+      sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
+    ''
+    + lib.optionalString stdenv.hostPlatform.isMinGW ''
+      sed -i "s/@GNULIB_CLOSE@/1/" */*/unistd.in.h
+    '';
 
   strictDeps = true;
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
   ];
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isMinGW) [
-    bash
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isCygwin) [
-    # HACK, see #10874 (and 14664)
-    libiconv
-  ];
+  buildInputs =
+    lib.optionals (!stdenv.hostPlatform.isMinGW) [
+      bash
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isCygwin) [
+      # HACK, see #10874 (and 14664)
+      libiconv
+    ];
 
   setupHooks = [
     ../../../build-support/setup-hooks/role.bash

@@ -1,10 +1,11 @@
-{ appimageTools
-, fetchurl
-, makeWrapper
-, pname
-, version
-, hash
-, metaCommon ? { }
+{
+  appimageTools,
+  fetchurl,
+  makeWrapper,
+  pname,
+  version,
+  hash,
+  metaCommon ? { },
 }:
 
 let

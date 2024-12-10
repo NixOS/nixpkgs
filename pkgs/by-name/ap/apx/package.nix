@@ -21,9 +21,16 @@ buildGoModule rec {
   vendorHash = "sha256-YHnPLjZWUYoARHF4V1Pm1LYdCJGubPCve0wQ5FpeXUg=";
 
   # podman needed for apx to not error when building shell completions
-  nativeBuildInputs = [ installShellFiles podman ];
+  nativeBuildInputs = [
+    installShellFiles
+    podman
+  ];
 
-  ldflags = [ "-s" "-w" "-X 'main.Version=v${version}'" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X 'main.Version=v${version}'"
+  ];
 
   postPatch = ''
     substituteInPlace config/apx.json \
@@ -54,7 +61,10 @@ buildGoModule rec {
     homepage = "https://github.com/Vanilla-OS/apx";
     changelog = "https://github.com/Vanilla-OS/apx/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dit7ya chewblacka ];
+    maintainers = with maintainers; [
+      dit7ya
+      chewblacka
+    ];
     mainProgram = "apx";
   };
 }

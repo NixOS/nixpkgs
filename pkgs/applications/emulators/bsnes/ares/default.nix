@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, alsa-lib
-, gtk3
-, gtksourceview3
-, libGL
-, libGLU
-, libX11
-, libXv
-, libao
-, libicns
-, libpulseaudio
-, openal
-, pkg-config
-, udev
-, which
-, wrapGAppsHook3
-, darwin
-, vulkan-loader
-, autoPatchelfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  alsa-lib,
+  gtk3,
+  gtksourceview3,
+  libGL,
+  libGLU,
+  libX11,
+  libXv,
+  libao,
+  libicns,
+  libpulseaudio,
+  openal,
+  pkg-config,
+  udev,
+  which,
+  wrapGAppsHook3,
+  darwin,
+  vulkan-loader,
+  autoPatchelfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,49 +40,57 @@ stdenv.mkDerivation (finalAttrs: {
     ./003-darwin-specific.patch
   ];
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    pkg-config
-    which
-    wrapGAppsHook3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libicns
-  ];
+  nativeBuildInputs =
+    [
+      autoPatchelfHook
+      pkg-config
+      which
+      wrapGAppsHook3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libicns
+    ];
 
-  buildInputs = [
-    SDL2
-    libao
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    gtk3
-    gtksourceview3
-    libGL
-    libGLU
-    libX11
-    libXv
-    libpulseaudio
-    openal
-    udev
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Cocoa
-    darwin.apple_sdk_11_0.frameworks.OpenAL
-  ];
+  buildInputs =
+    [
+      SDL2
+      libao
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+      gtk3
+      gtksourceview3
+      libGL
+      libGLU
+      libX11
+      libXv
+      libpulseaudio
+      openal
+      udev
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.Cocoa
+      darwin.apple_sdk_11_0.frameworks.OpenAL
+    ];
 
   appendRunpaths = [ (lib.makeLibraryPath [ vulkan-loader ]) ];
 
   enableParallelBuilding = true;
 
-  makeFlags = lib.optionals stdenv.hostPlatform.isLinux [
-    "hiro=gtk3"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "hiro=cocoa"
-    "lto=false"
-    "vulkan=false"
-  ] ++ [
-    "local=false"
-    "openmp=true"
-    "prefix=$(out)"
-  ];
+  makeFlags =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      "hiro=gtk3"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "hiro=cocoa"
+      "lto=false"
+      "vulkan=false"
+    ]
+    ++ [
+      "local=false"
+      "openmp=true"
+      "prefix=$(out)"
+    ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-mmacosx-version-min=10.14";
 
@@ -90,7 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open-source multi-system emulator with a focus on accuracy and preservation";
     mainProgram = "ares";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ Madouura AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      Madouura
+      AndersonTorres
+    ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

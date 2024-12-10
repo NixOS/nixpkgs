@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -45,7 +46,13 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "dufs";
     homepage = "https://github.com/sigoden/dufs";
     changelog = "https://github.com/sigoden/dufs/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ figsoda holymonson ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      figsoda
+      holymonson
+    ];
   };
 }

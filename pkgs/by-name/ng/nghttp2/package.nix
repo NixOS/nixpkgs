@@ -1,24 +1,38 @@
-{ lib
-, stdenv
-, fetchurl
-, installShellFiles
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  installShellFiles,
+  pkg-config,
 
-# Optional dependencies
-, enableApp ? with stdenv.hostPlatform; !isWindows && !isStatic
-, c-aresMinimal, libev, openssl, zlib
-, enableGetAssets ? false, libxml2
-, enableHpack ? false, jansson
-, enableHttp3 ? false, ngtcp2, nghttp3, quictls
-, enableJemalloc ? false, jemalloc
-, enablePython ? false, python3, ncurses
+  # Optional dependencies
+  enableApp ? with stdenv.hostPlatform; !isWindows && !isStatic,
+  c-aresMinimal,
+  libev,
+  openssl,
+  zlib,
+  enableGetAssets ? false,
+  libxml2,
+  enableHpack ? false,
+  jansson,
+  enableHttp3 ? false,
+  ngtcp2,
+  nghttp3,
+  quictls,
+  enableJemalloc ? false,
+  jemalloc,
+  enablePython ? false,
+  python3,
+  ncurses,
 
-# Unit tests ; we have to set TZDIR, which is a GNUism.
-, enableTests ? stdenv.hostPlatform.isGnu, cunit, tzdata
+  # Unit tests ; we have to set TZDIR, which is a GNUism.
+  enableTests ? stdenv.hostPlatform.isGnu,
+  cunit,
+  tzdata,
 
-# downstream dependencies, for testing
-, curl
-, libsoup
+  # downstream dependencies, for testing
+  curl,
+  libsoup,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus cannot use fetchpatch!
@@ -39,17 +53,31 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OmcN83joUrhaIpXyXk9RzCj1bg/MSWQIuMN2QpBTevU=";
   };
 
-  outputs = [ "out" "dev" "lib" "doc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "doc"
+    "man"
+  ];
 
-  nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals (enableApp) [ installShellFiles ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals (enableApp) [ installShellFiles ];
 
-  buildInputs = lib.optionals enableApp [ c-aresMinimal libev zlib ]
+  buildInputs =
+    lib.optionals enableApp [
+      c-aresMinimal
+      libev
+      zlib
+    ]
     ++ lib.optionals (enableApp && !enableHttp3) [ openssl ]
     ++ lib.optionals (enableGetAssets) [ libxml2 ]
     ++ lib.optionals (enableHpack) [ jansson ]
     ++ lib.optionals (enableJemalloc) [ jemalloc ]
-    ++ lib.optionals (enableHttp3) [ ngtcp2 nghttp3 quictls ]
+    ++ lib.optionals (enableHttp3) [
+      ngtcp2
+      nghttp3
+      quictls
+    ]
     ++ lib.optionals (enablePython) [ python3 ];
 
   enableParallelBuilding = true;
@@ -60,13 +88,20 @@ stdenv.mkDerivation rec {
     (lib.enableFeature enableHttp3 "http3")
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
-    "-faligned-allocation"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals
+      (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13")
+      [
+        "-faligned-allocation"
+      ]
+  );
 
   # Unit tests require CUnit and setting TZDIR environment variable
   doCheck = enableTests;
-  nativeCheckInputs = lib.optionals (enableTests) [ cunit tzdata ];
+  nativeCheckInputs = lib.optionals (enableTests) [
+    cunit
+    tzdata
+  ];
   preCheck = lib.optionalString (enableTests) ''
     export TZDIR=${tzdata}/share/zoneinfo
   '';
@@ -77,15 +112,19 @@ stdenv.mkDerivation rec {
     substituteInPlace ./config.guess --replace-fail /usr/bin/uname uname
   '';
 
-  postInstall = lib.optionalString (enableApp) ''
-    installShellCompletion --bash doc/bash_completion/{h2load,nghttp,nghttpd,nghttpx}
-  '' + lib.optionalString (!enableApp) ''
-    rm -r $out/bin
-  '' + lib.optionalString (enablePython) ''
-    patchShebangs $out/share/nghttp2
-  '' + lib.optionalString (!enablePython) ''
-    rm -r $out/share
-  '';
+  postInstall =
+    lib.optionalString (enableApp) ''
+      installShellCompletion --bash doc/bash_completion/{h2load,nghttp,nghttpd,nghttpx}
+    ''
+    + lib.optionalString (!enableApp) ''
+      rm -r $out/bin
+    ''
+    + lib.optionalString (enablePython) ''
+      patchShebangs $out/share/nghttp2
+    ''
+    + lib.optionalString (!enablePython) ''
+      rm -r $out/share
+    '';
 
   passthru.tests = {
     inherit curl libsoup;

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, sqlite, zlib, perl, testers }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  sqlite,
+  zlib,
+  perl,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tippecanoe";
@@ -11,7 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5HMyqUdoNFwZccXlsFms4C+jyfMVLCiCcFapC6y7e+M=";
   };
 
-  buildInputs = [ sqlite zlib ];
+  buildInputs = [
+    sqlite
+    zlib
+  ];
   nativeCheckInputs = [ perl ];
 
   makeFlags = [ "PREFIX=$(out)" ];

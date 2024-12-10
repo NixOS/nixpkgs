@@ -1,8 +1,9 @@
-{ fetchFromGitHub
-, installShellFiles
-, lib
-, rustPlatform
-, scdoc
+{
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  rustPlatform,
+  scdoc,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +19,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-n7Kaha22Rh/5AGoHUiAxnaZvHtZ+rPsmLHiUYfA0YPE=";
 
-  nativeBuildInputs = [ installShellFiles scdoc ];
+  nativeBuildInputs = [
+    installShellFiles
+    scdoc
+  ];
 
   preFixup = ''
     scdoc < docs/uair.1.scd > docs/uair.1

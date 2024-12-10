@@ -38,19 +38,21 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    SDL2
-    flac
-    gzip
-    libmad
-    libopus
-    libvorbis
-    opusfile
-    vulkan-loader
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    moltenvk
-    vulkan-headers
-  ];
+  buildInputs =
+    [
+      SDL2
+      flac
+      gzip
+      libmad
+      libopus
+      libvorbis
+      opusfile
+      vulkan-loader
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      moltenvk
+      vulkan-headers
+    ];
 
   buildFlags = [ "DO_USERDIRS=1" ];
 
@@ -84,7 +86,10 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ PopeRigby ylh ];
+    maintainers = with maintainers; [
+      PopeRigby
+      ylh
+    ];
     mainProgram = "vkquake";
   };
 }

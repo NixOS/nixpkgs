@@ -1,5 +1,14 @@
-{ lib, stdenv, gnu-efi, openssl, sbsigntool, perl, perlPackages,
-help2man, fetchzip }:
+{
+  lib,
+  stdenv,
+  gnu-efi,
+  openssl,
+  sbsigntool,
+  perl,
+  perlPackages,
+  help2man,
+  fetchzip,
+}:
 stdenv.mkDerivation rec {
   pname = "efitools";
   version = "1.9.2";

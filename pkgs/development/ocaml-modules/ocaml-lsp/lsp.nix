@@ -1,27 +1,28 @@
-{ buildDunePackage
-, lib
-, cppo
-, stdlib-shims
-, ppx_yojson_conv_lib
-, ocaml-syntax-shims
-, jsonrpc
-, omd
-, octavius
-, dune-build-info
-, dune-rpc
-, uutf
-, dyn
-, re
-, stdune
-, chrome-trace
-, csexp
-, result
-, pp
-, cmdliner
-, ordering
-, ocamlformat-rpc-lib
-, ocaml
-, version ?
+{
+  buildDunePackage,
+  lib,
+  cppo,
+  stdlib-shims,
+  ppx_yojson_conv_lib,
+  ocaml-syntax-shims,
+  jsonrpc,
+  omd,
+  octavius,
+  dune-build-info,
+  dune-rpc,
+  uutf,
+  dyn,
+  re,
+  stdune,
+  chrome-trace,
+  csexp,
+  result,
+  pp,
+  cmdliner,
+  ordering,
+  ocamlformat-rpc-lib,
+  ocaml,
+  version ?
     if lib.versionAtLeast ocaml.version "5.02" then
       "1.19.0"
     else if lib.versionAtLeast ocaml.version "4.14" then
@@ -31,20 +32,18 @@
     else if lib.versionAtLeast ocaml.version "4.12" then
       "1.9.0"
     else
-      "1.4.1"
+      "1.4.1",
 }:
 
-let jsonrpc_v = jsonrpc.override {
-  inherit version;
-}; in
+let
+  jsonrpc_v = jsonrpc.override {
+    inherit version;
+  };
+in
 buildDunePackage rec {
   pname = "lsp";
   inherit (jsonrpc_v) version src;
-  minimalOCamlVersion =
-    if lib.versionAtLeast version "1.7.0" then
-      "4.12"
-    else
-      "4.06";
+  minimalOCamlVersion = if lib.versionAtLeast version "1.7.0" then "4.12" else "4.06";
 
   # unvendor some (not all) dependencies.
   # They are vendored by upstream only because it is then easier to install
@@ -85,7 +84,14 @@ buildDunePackage rec {
         stdune
       ]
     else if lib.versionAtLeast version "1.7.0" then
-      [ re octavius dune-build-info omd cmdliner ocamlformat-rpc-lib ]
+      [
+        re
+        octavius
+        dune-build-info
+        omd
+        cmdliner
+        ocamlformat-rpc-lib
+      ]
     else
       [
         ppx_yojson_conv_lib
@@ -99,31 +105,38 @@ buildDunePackage rec {
   nativeBuildInputs = lib.optional (lib.versionOlder version "1.7.0") cppo;
 
   propagatedBuildInputs =
-    if lib.versionAtLeast version "1.14.0" then [
-      jsonrpc
-      ppx_yojson_conv_lib
-      uutf
-    ] else if lib.versionAtLeast version "1.10.0" then [
-      dyn
-      jsonrpc
-      ordering
-      ppx_yojson_conv_lib
-      stdune
-      uutf
-    ] else if lib.versionAtLeast version "1.7.0" then [
-      csexp
-      jsonrpc
-      (pp.override { version = "1.2.0"; })
-      ppx_yojson_conv_lib
-      result
-      uutf
-    ] else [
-      csexp
-      jsonrpc
-      ppx_yojson_conv_lib
-      stdlib-shims
-      uutf
-    ];
+    if lib.versionAtLeast version "1.14.0" then
+      [
+        jsonrpc
+        ppx_yojson_conv_lib
+        uutf
+      ]
+    else if lib.versionAtLeast version "1.10.0" then
+      [
+        dyn
+        jsonrpc
+        ordering
+        ppx_yojson_conv_lib
+        stdune
+        uutf
+      ]
+    else if lib.versionAtLeast version "1.7.0" then
+      [
+        csexp
+        jsonrpc
+        (pp.override { version = "1.2.0"; })
+        ppx_yojson_conv_lib
+        result
+        uutf
+      ]
+    else
+      [
+        csexp
+        jsonrpc
+        ppx_yojson_conv_lib
+        stdlib-shims
+        uutf
+      ];
 
   meta = jsonrpc.meta // {
     description = "LSP protocol implementation in OCaml";

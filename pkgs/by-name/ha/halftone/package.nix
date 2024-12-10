@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, wrapGAppsHook4
-, meson
-, ninja
-, pkg-config
-, appstream-glib
-, desktop-file-utils
-, gobject-introspection
-, glib
-, blueprint-compiler
-, libadwaita
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  wrapGAppsHook4,
+  meson,
+  ninja,
+  pkg-config,
+  appstream-glib,
+  desktop-file-utils,
+  gobject-introspection,
+  glib,
+  blueprint-compiler,
+  libadwaita,
+  python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {

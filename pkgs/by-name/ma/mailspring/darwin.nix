@@ -1,10 +1,11 @@
-{ stdenv
-, fetchurl
-, pname
-, version
-, meta
-, unzip
-, makeWrapper
+{
+  stdenv,
+  fetchurl,
+  pname,
+  version,
+  meta,
+  unzip,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -19,11 +19,12 @@
 }:
 
 let
-    inherit (libsForQt5)
-      qtbase
-      qtmultimedia
-      qttools
-      wrapQtAppsHook;
+  inherit (libsForQt5)
+    qtbase
+    qtmultimedia
+    qttools
+    wrapQtAppsHook
+    ;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mgba";
@@ -36,7 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wSt3kyjRxKBnDOVY10jq4cpv7uIaBUIcsZr6aU7XnMA=";
   };
 
-  outputs = [ "out" "dev" "doc" "lib" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "lib"
+    "man"
+  ];
 
   nativeBuildInputs = [
     SDL2
@@ -58,8 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtmultimedia
     qttools
-  ]
-  ++ lib.optionals enableDiscordRpc [ discord-rpc ];
+  ] ++ lib.optionals enableDiscordRpc [ discord-rpc ];
 
   cmakeFlags = [
     (lib.cmakeBool "USE_DISCORD_RPC" enableDiscordRpc)

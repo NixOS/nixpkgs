@@ -1,18 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, nixosTests
-, pkg-config
-, memstreamHook
-, CoreAudio
-, libobjc
-, libjack2
-, ncurses
-, alsa-lib
-, buildPackages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  nixosTests,
+  pkg-config,
+  memstreamHook,
+  CoreAudio,
+  libobjc,
+  libjack2,
+  ncurses,
+  alsa-lib,
+  buildPackages,
 
-## Additional optional output modes
-, enableVorbis ? false, libvorbis
+  ## Additional optional output modes
+  enableVorbis ? false,
+  libvorbis,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,51 +33,63 @@ stdenv.mkDerivation rec {
     ./configure-compat.patch
   ];
 
-  nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ memstreamHook ];
+  nativeBuildInputs = [
+    pkg-config
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ memstreamHook ];
 
-  buildInputs = [
-    libjack2
-    ncurses
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreAudio
-    libobjc
-  ] ++ lib.optionals enableVorbis [
-    libvorbis
-  ];
+  buildInputs =
+    [
+      libjack2
+      ncurses
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreAudio
+      libobjc
+    ]
+    ++ lib.optionals enableVorbis [
+      libvorbis
+    ];
 
-  enabledOutputModes = [
-    "jack"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "oss"
-    "alsa"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "darwin"
-  ] ++ lib.optionals enableVorbis [
-    "vorbis"
-  ];
+  enabledOutputModes =
+    [
+      "jack"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "oss"
+      "alsa"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "darwin"
+    ]
+    ++ lib.optionals enableVorbis [
+      "vorbis"
+    ];
 
-  configureFlags = [
-    "--enable-ncurses"
-    ("--enable-audio=" + builtins.concatStringsSep "," enabledOutputModes)
-    "lib_cv_va_copy=yes"
-    "lib_cv___va_copy=yes"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "--enable-alsaseq"
-    "--with-default-output=alsa"
-    "lib_cv_va_val_copy=yes"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "lib_cv_va_val_copy=no"
-    "timidity_cv_ccoption_rdynamic=yes"
-    # These configure tests fail because of incompatible function pointer conversions.
-    "ac_cv_func_vprintf=yes"
-    "ac_cv_func_popen=yes"
-    "ac_cv_func_vsnprintf=yes"
-    "ac_cv_func_snprintf=yes"
-    "ac_cv_func_open_memstream=yes"
-  ];
+  configureFlags =
+    [
+      "--enable-ncurses"
+      ("--enable-audio=" + builtins.concatStringsSep "," enabledOutputModes)
+      "lib_cv_va_copy=yes"
+      "lib_cv___va_copy=yes"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "--enable-alsaseq"
+      "--with-default-output=alsa"
+      "lib_cv_va_val_copy=yes"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "lib_cv_va_val_copy=no"
+      "timidity_cv_ccoption_rdynamic=yes"
+      # These configure tests fail because of incompatible function pointer conversions.
+      "ac_cv_func_vprintf=yes"
+      "ac_cv_func_popen=yes"
+      "ac_cv_func_vsnprintf=yes"
+      "ac_cv_func_snprintf=yes"
+      "ac_cv_func_open_memstream=yes"
+    ];
 
   makeFlags = [
     "AR=${stdenv.cc.targetPrefix}ar"

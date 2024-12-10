@@ -1,34 +1,37 @@
-{ stdenv
-, lib
-, makeWrapper
-, fetchurl
-, makeDesktopItem
-, copyDesktopItems
-, imagemagick
-, openjdk11
-, dpkg
-, writeScript
-, bash
-, stripJavaArchivesHook
-, tor
-, zip
-, xz
-, findutils
+{
+  stdenv,
+  lib,
+  makeWrapper,
+  fetchurl,
+  makeDesktopItem,
+  copyDesktopItems,
+  imagemagick,
+  openjdk11,
+  dpkg,
+  writeScript,
+  bash,
+  stripJavaArchivesHook,
+  tor,
+  zip,
+  xz,
+  findutils,
 }:
 
 let
-  bisq-launcher = args: writeScript "bisq-launcher" ''
-    #! ${bash}/bin/bash
+  bisq-launcher =
+    args:
+    writeScript "bisq-launcher" ''
+      #! ${bash}/bin/bash
 
-    # This is just a comment to convince Nix that Tor is a
-    # runtime dependency; The Tor binary is in a *.jar file,
-    # whereas Nix only scans for hashes in uncompressed text.
-    # ${bisq-tor}
+      # This is just a comment to convince Nix that Tor is a
+      # runtime dependency; The Tor binary is in a *.jar file,
+      # whereas Nix only scans for hashes in uncompressed text.
+      # ${bisq-tor}
 
-    classpath=@out@/lib/desktop.jar:@out@/lib/*
+      classpath=@out@/lib/desktop.jar:@out@/lib/*
 
-    exec "${openjdk11}/bin/java" -Djpackage.app-version=@version@ -XX:MaxRAM=8g -Xss1280k -XX:+UseG1GC -XX:MaxHeapFreeRatio=10 -XX:MinHeapFreeRatio=5 -XX:+UseStringDeduplication -Djava.net.preferIPv4Stack=true -classpath $classpath ${args} bisq.desktop.app.BisqAppMain "$@"
-  '';
+      exec "${openjdk11}/bin/java" -Djpackage.app-version=@version@ -XX:MaxRAM=8g -Xss1280k -XX:+UseG1GC -XX:MaxHeapFreeRatio=10 -XX:MinHeapFreeRatio=5 -XX:+UseStringDeduplication -Djava.net.preferIPv4Stack=true -classpath $classpath ${args} bisq.desktop.app.BisqAppMain "$@"
+    '';
 
   bisq-tor = writeScript "bisq-tor" ''
     #! ${bash}/bin/bash
@@ -63,7 +66,10 @@ stdenv.mkDerivation rec {
       icon = "bisq";
       desktopName = "Bisq ${version}";
       genericName = "Decentralized bitcoin exchange";
-      categories = [ "Network" "P2P" ];
+      categories = [
+        "Network"
+        "P2P"
+      ];
     })
 
     (makeDesktopItem {
@@ -72,7 +78,10 @@ stdenv.mkDerivation rec {
       icon = "bisq";
       desktopName = "Bisq ${version} (HiDPI)";
       genericName = "Decentralized bitcoin exchange";
-      categories = [ "Network" "P2P" ];
+      categories = [
+        "Network"
+        "P2P"
+      ];
     })
   ];
 
@@ -120,7 +129,10 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/bisq-network/bisq/releases/tag/v${version}";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
-    maintainers = with maintainers; [ juaningan emmanuelrosa ];
+    maintainers = with maintainers; [
+      juaningan
+      emmanuelrosa
+    ];
     platforms = [ "x86_64-linux" ];
     # Requires OpenJFX 11 or 16, which are both EOL.
     broken = true;

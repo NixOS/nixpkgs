@@ -1,26 +1,27 @@
-{ stdenv
-, fetchgit
-, lib
-, meson
-, ninja
-, pkg-config
-, makeFontsConf
-, openssl
-, libdrm
-, libevent
-, libyaml
-, gst_all_1
-, gtest
-, graphviz
-, doxygen
-, python3
-, python3Packages
-, systemd # for libudev
-, withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust
-, lttng-ust # withTracing
-, withQcam ? false
-, qt6 # withQcam
-, libtiff # withQcam
+{
+  stdenv,
+  fetchgit,
+  lib,
+  meson,
+  ninja,
+  pkg-config,
+  makeFontsConf,
+  openssl,
+  libdrm,
+  libevent,
+  libyaml,
+  gst_all_1,
+  gtest,
+  graphviz,
+  doxygen,
+  python3,
+  python3Packages,
+  systemd, # for libudev
+  withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust,
+  lttng-ust, # withTracing
+  withQcam ? false,
+  qt6, # withQcam
+  libtiff, # withQcam
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +34,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-rW1BG5blozQKA73P5vH5dGkwQG5JJzxdOU2GCB3xIns=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = ''
     patchShebangs src/py/ utils/
@@ -53,30 +57,36 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs = [
-    # IPA and signing
-    openssl
+  buildInputs =
+    [
+      # IPA and signing
+      openssl
 
-    # gstreamer integration
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+      # gstreamer integration
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
 
-    # cam integration
-    libevent
-    libdrm
+      # cam integration
+      libevent
+      libdrm
 
-    # hotplugging
-    systemd
+      # hotplugging
+      systemd
 
-    # pycamera
-    python3Packages.pybind11
+      # pycamera
+      python3Packages.pybind11
 
-    # yamlparser
-    libyaml
+      # yamlparser
+      libyaml
 
-    gtest
-  ] ++ lib.optionals withTracing [ lttng-ust ]
-    ++ lib.optionals withQcam [ libtiff qt6.qtbase qt6.qttools ];
+      gtest
+    ]
+    ++ lib.optionals withTracing [ lttng-ust ]
+    ++ lib.optionals withQcam [
+      libtiff
+      qt6.qtbase
+      qt6.qttools
+    ];
 
   nativeBuildInputs = [
     meson

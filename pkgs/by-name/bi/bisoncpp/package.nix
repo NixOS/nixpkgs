@@ -1,5 +1,12 @@
-{lib, stdenv, fetchurl, fetchFromGitLab
-, yodl, icmake, flexcpp, bobcat
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitLab,
+  yodl,
+  icmake,
+  flexcpp,
+  bobcat,
 }:
 stdenv.mkDerivation rec {
   pname = "bisonc++";
@@ -15,7 +22,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bobcat ];
 
-  nativeBuildInputs = [ yodl icmake flexcpp ];
+  nativeBuildInputs = [
+    yodl
+    icmake
+    flexcpp
+  ];
 
   setSourceRoot = ''
     sourceRoot="$(echo */bisonc++)"

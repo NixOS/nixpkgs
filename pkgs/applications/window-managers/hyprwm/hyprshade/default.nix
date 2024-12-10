@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, more-itertools
-, click
-, hyprland
-, makeWrapper
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  more-itertools,
+  click,
+  hyprland,
+  makeWrapper,
 }:
 
 buildPythonPackage rec {
@@ -25,7 +26,10 @@ buildPythonPackage rec {
     makeWrapper
   ];
 
-  propagatedBuildInputs = [ more-itertools click ];
+  propagatedBuildInputs = [
+    more-itertools
+    click
+  ];
 
   postFixup = ''
     wrapProgram $out/bin/hyprshade \

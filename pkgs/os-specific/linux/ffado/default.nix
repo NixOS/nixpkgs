@@ -79,19 +79,21 @@ stdenv.mkDerivation rec {
     "PYTHON_INTERPRETER=${python.interpreter}"
   ];
 
-  buildInputs = [
-    dbus
-    dbus_cplusplus
-    glibmm
-    libavc1394
-    libconfig
-    libiec61883
-    libraw1394
-    libxmlxx3
-    python
-  ] ++ lib.optionals (!stdenv.hostPlatform.isGnu) [
-    argp-standalone
-  ];
+  buildInputs =
+    [
+      dbus
+      dbus_cplusplus
+      glibmm
+      libavc1394
+      libconfig
+      libiec61883
+      libraw1394
+      libxmlxx3
+      python
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isGnu) [
+      argp-standalone
+    ];
 
   NIX_LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isGnu) "-largp";
 

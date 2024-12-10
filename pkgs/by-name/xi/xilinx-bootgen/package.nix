@@ -37,7 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Xilinx/bootgen";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.flokli lib.maintainers.jmbaur ];
+    maintainers = [
+      lib.maintainers.flokli
+      lib.maintainers.jmbaur
+    ];
     mainProgram = "bootgen";
   };
 })

@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wayland
-, wayland-protocols
-, wayland-scanner
-, wlr-protocols
-, libGL
-, bash
-, installExampleScripts ? true
-, makeWrapper
-, pipectl
-, slurp
-, rofi
-, scdoc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  wlr-protocols,
+  libGL,
+  bash,
+  installExampleScripts ? true,
+  makeWrapper,
+  pipectl,
+  slurp,
+  rofi,
+  scdoc,
 }:
 
 let
@@ -39,8 +40,20 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ cmake pkg-config wayland-scanner scdoc makeWrapper ];
-  buildInputs = [ libGL wayland wayland-protocols wlr-protocols bash ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wayland-scanner
+    scdoc
+    makeWrapper
+  ];
+  buildInputs = [
+    libGL
+    wayland
+    wayland-protocols
+    wlr-protocols
+    bash
+  ];
 
   postPatch = ''
     echo 'v${version}' > version.txt

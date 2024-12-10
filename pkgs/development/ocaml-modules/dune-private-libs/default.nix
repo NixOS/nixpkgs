@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, dune_3, stdune }:
+{
+  lib,
+  buildDunePackage,
+  dune_3,
+  stdune,
+}:
 
 buildDunePackage rec {
   pname = "dune-private-libs";

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, addDriverRunpath
-, makeWrapper
-, ocl-icd
-, vulkan-loader
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  addDriverRunpath,
+  makeWrapper,
+  ocl-icd,
+  vulkan-loader,
 }:
 
 let
@@ -27,12 +28,17 @@ stdenv.mkDerivation {
   inherit version;
   pname = "geekbench";
 
-  src = fetchurl (sources.${stdenv.system} or (throw "unsupported system ${stdenv.hostPlatform.system}"));
+  src = fetchurl (
+    sources.${stdenv.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
+  );
 
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+  ];
 
   buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
@@ -44,11 +50,13 @@ stdenv.mkDerivation {
 
     for f in geekbench6 geekbench_${processor} ${geekbench_avx2} ; do
       wrapProgram $out/bin/$f \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
-          addDriverRunpath.driverLink
-          ocl-icd
-          vulkan-loader
-        ]}"
+        --prefix LD_LIBRARY_PATH : "${
+          lib.makeLibraryPath [
+            addDriverRunpath.driverLink
+            ocl-icd
+            vulkan-loader
+          ]
+        }"
     done
 
     runHook postInstall
@@ -59,7 +67,10 @@ stdenv.mkDerivation {
     homepage = "https://geekbench.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ michalrus asininemonkey ];
+    maintainers = with maintainers; [
+      michalrus
+      asininemonkey
+    ];
     platforms = builtins.attrNames sources;
     mainProgram = "geekbench6";
   };

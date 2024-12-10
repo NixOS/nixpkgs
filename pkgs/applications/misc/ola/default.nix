@@ -1,18 +1,20 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, bison
-, flex
-, pkg-config
-, libftdi1
-, libuuid
-, cppunit
-, protobuf
-, zlib
-, avahi
-, libmicrohttpd
-, perl
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bison,
+  flex,
+  pkg-config,
+  libftdi1,
+  libuuid,
+  cppunit,
+  protobuf,
+  zlib,
+  avahi,
+  libmicrohttpd,
+  perl,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +28,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-8w8ZT3D/+8Pxl9z2KTXeydVxE5xiPjxZevgmMFgrblU=";
   };
 
-  nativeBuildInputs = [ autoreconfHook bison flex pkg-config perl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+    flex
+    pkg-config
+    perl
+  ];
   buildInputs = [
     # required for ola-ftdidmx plugin (support for 'dumb' FTDI devices)
     libftdi1
@@ -52,7 +60,10 @@ stdenv.mkDerivation rec {
     description = "Framework for controlling entertainment lighting equipment";
     homepage = "https://www.openlighting.org/ola/";
     maintainers = [ ];
-    license = with licenses; [ lgpl21 gpl2Plus ];
+    license = with licenses; [
+      lgpl21
+      gpl2Plus
+    ];
     platforms = platforms.all;
   };
 }

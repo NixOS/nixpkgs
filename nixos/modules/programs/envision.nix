@@ -14,7 +14,7 @@ in
     programs.envision = {
       enable = lib.mkEnableOption "envision";
 
-      package = lib.mkPackageOption pkgs "envision" {};
+      package = lib.mkPackageOption pkgs "envision" { };
 
       openFirewall = lib.mkEnableOption "the default ports in the firewall for the WiVRn server" // {
         default = true;

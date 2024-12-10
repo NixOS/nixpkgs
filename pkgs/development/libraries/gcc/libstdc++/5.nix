@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, flex, bison, file }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  flex,
+  bison,
+  file,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libstdc++5";
@@ -91,9 +99,19 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ flex bison file ];
+  nativeBuildInputs = [
+    flex
+    bison
+    file
+  ];
 
-  configureFlags = [ "--disable-multilib" "--enable-__cxa-atexit" "--enable-threads=posix" "--enable-languages=c++" "--enable-clocale=gnu" ];
+  configureFlags = [
+    "--disable-multilib"
+    "--enable-__cxa-atexit"
+    "--enable-threads=posix"
+    "--enable-languages=c++"
+    "--enable-clocale=gnu"
+  ];
 
   buildFLags = [ "all-target-libstdc++-v3" ];
 

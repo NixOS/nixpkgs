@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, python ? null
-, withPython ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python ? null,
+  withPython ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,9 +26,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Software package for jet finding in pp and e+e− collisions";
     mainProgram = "fastjet-config";
-    license     = lib.licenses.gpl2Plus;
-    homepage    = "http://fastjet.fr/";
-    platforms   = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    homepage = "http://fastjet.fr/";
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }

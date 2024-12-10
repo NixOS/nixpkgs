@@ -1,26 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, sassc
-, vala
-, pkg-config
-, libgee
-, gtk4
-, glib
-, gettext
-, gsettings-desktop-schemas
-, gobject-introspection
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  sassc,
+  vala,
+  pkg-config,
+  libgee,
+  gtk4,
+  glib,
+  gettext,
+  gsettings-desktop-schemas,
+  gobject-introspection,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "granite";
   version = "7.6.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "elementary";

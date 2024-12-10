@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchFromGitHub
-, libtool, pkg-config, automake, autoconf, intltool
-, gobject-introspection, gtk2, gtk-doc
-, clutter, clutter-gtk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libtool,
+  pkg-config,
+  automake,
+  autoconf,
+  intltool,
+  gobject-introspection,
+  gtk2,
+  gtk-doc,
+  clutter,
+  clutter-gtk,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,20 +33,30 @@ stdenv.mkDerivation rec {
       --replace '`which autoreconf`' '"x"'
   '';
 
-  configureFlags = [ "--enable-introspection"
-                     "--without-startup-notification"
-                     "--without-dbus"
-                     "--without-glade"
-                     "--without-clutter-imcontext"
-                     "--without-clutter-gesture"
-                   ];
+  configureFlags = [
+    "--enable-introspection"
+    "--without-startup-notification"
+    "--without-dbus"
+    "--without-glade"
+    "--without-clutter-imcontext"
+    "--without-clutter-gesture"
+  ];
 
   configureScript = "sh autogen.sh";
 
-  nativeBuildInputs = [ pkg-config automake autoconf intltool gobject-introspection ];
+  nativeBuildInputs = [
+    pkg-config
+    automake
+    autoconf
+    intltool
+    gobject-introspection
+  ];
   buildInputs = [
     libtool
-    gtk2 gtk-doc clutter clutter-gtk
+    gtk2
+    gtk-doc
+    clutter
+    clutter-gtk
   ];
 
   # patch to resolve GL errors

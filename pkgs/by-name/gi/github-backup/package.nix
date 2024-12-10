@@ -1,8 +1,9 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, git
-, git-lfs
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  git,
+  git-lfs,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -22,7 +23,13 @@ python3Packages.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ git git-lfs ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      git
+      git-lfs
+    ])
   ];
 
   # has no unit tests

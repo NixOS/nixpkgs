@@ -1,4 +1,15 @@
-{ cairo, fetchzip, glib, libsoup, gnome-common, gtk3, gobject-introspection, pkg-config, lib, stdenv }:
+{
+  cairo,
+  fetchzip,
+  glib,
+  libsoup,
+  gnome-common,
+  gtk3,
+  gobject-introspection,
+  pkg-config,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "osm-gps-map";
@@ -9,12 +20,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ciw28YXhR+GC6B2VPC+ZxjyhadOk3zYGuOssSgqjwH0=";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
-  nativeBuildInputs = [ pkg-config gobject-introspection gnome-common ];
+  nativeBuildInputs = [
+    pkg-config
+    gobject-introspection
+    gnome-common
+  ];
 
   buildInputs = [
-    cairo glib
+    cairo
+    glib
     gtk3
     libsoup
   ];

@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, makeWrapper
-, go
-, buf
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  makeWrapper,
+  go,
+  buf,
 }:
 
 buildGoModule rec {
@@ -29,7 +30,12 @@ buildGoModule rec {
 
   # Required for commands like `ignite version`, `ignite network` and others
   postFixup = ''
-    wrapProgram $out/bin/ignite --prefix PATH : ${lib.makeBinPath [ go buf ]}
+    wrapProgram $out/bin/ignite --prefix PATH : ${
+      lib.makeBinPath [
+        go
+        buf
+      ]
+    }
   '';
 
   meta = with lib; {

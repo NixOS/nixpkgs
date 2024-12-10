@@ -1,7 +1,8 @@
-{ lib
-, maven
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  maven,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 maven.buildMavenPackage rec {

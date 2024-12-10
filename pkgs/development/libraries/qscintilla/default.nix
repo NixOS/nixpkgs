@@ -1,21 +1,19 @@
-{ stdenv
-, lib
-, fetchurl
-, unzip
-, qtbase
-, qtmacextras ? null
-, qmake
-, fixDarwinDylibNames
-, darwin
+{
+  stdenv,
+  lib,
+  fetchurl,
+  unzip,
+  qtbase,
+  qtmacextras ? null,
+  qmake,
+  fixDarwinDylibNames,
+  darwin,
 }:
 
 let
-  stdenv' = if stdenv.hostPlatform.isDarwin then
-    darwin.apple_sdk_11_0.stdenv
-  else
-    stdenv
-  ;
-in stdenv'.mkDerivation rec {
+  stdenv' = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+in
+stdenv'.mkDerivation rec {
   pname = "qscintilla-qt5";
   version = "2.13.2";
 
@@ -30,8 +28,10 @@ in stdenv'.mkDerivation rec {
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ qtmacextras ];
 
-  nativeBuildInputs = [ unzip qmake ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
+  nativeBuildInputs = [
+    unzip
+    qmake
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   # Make sure that libqscintilla2.so is available in $out/lib since it is expected
   # by some packages such as sqlitebrowser

@@ -1,4 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "helm-s3";
@@ -23,7 +27,11 @@ buildGoModule rec {
     go test $(go list ./... | grep -vE '(awsutil|e2e)')
   '';
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   subPackages = [ "cmd/helm-s3" ];
 

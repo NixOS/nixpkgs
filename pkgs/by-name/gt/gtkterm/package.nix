@@ -1,4 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config, gtk3, vte, libgudev, wrapGAppsHook3, pcre2 }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  gtk3,
+  vte,
+  libgudev,
+  wrapGAppsHook3,
+  pcre2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gtkterm";

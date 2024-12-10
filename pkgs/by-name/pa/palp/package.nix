@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, dimensions ? 6 # works for <= dimensions dimensions, but is only optimized for that exact value
-, doSymlink ? true # symlink the executables to the default location (without dimension postfix)
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dimensions ? 6, # works for <= dimensions dimensions, but is only optimized for that exact value
+  doSymlink ? true, # symlink the executables to the default location (without dimension postfix)
 }:
 
 let
@@ -42,17 +43,19 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    for file in poly class cws nef mori; do
-      cp -p $file.x "$out/bin/$file-${dim}d.x"
-    done
-  '' + lib.optionalString doSymlink ''
-    cd $out/bin
-    for file in poly class cws nef mori; do
-      ln -sf $file-6d.x $file.x
-    done
-  '';
+  installPhase =
+    ''
+      mkdir -p $out/bin
+      for file in poly class cws nef mori; do
+        cp -p $file.x "$out/bin/$file-${dim}d.x"
+      done
+    ''
+    + lib.optionalString doSymlink ''
+      cd $out/bin
+      for file in poly class cws nef mori; do
+        ln -sf $file-6d.x $file.x
+      done
+    '';
 
   meta = with lib; {
     description = "Package for Analyzing Lattice Polytopes";

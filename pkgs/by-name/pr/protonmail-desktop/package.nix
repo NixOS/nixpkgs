@@ -47,7 +47,8 @@ stdenv.mkDerivation rec {
     [
       makeWrapper
     ]
-    ++ lib.optional stdenv.hostPlatform.isLinux dpkg ++ lib.optional stdenv.hostPlatform.isDarwin unzip;
+    ++ lib.optional stdenv.hostPlatform.isLinux dpkg
+    ++ lib.optional stdenv.hostPlatform.isDarwin unzip;
 
   installPhase =
     let

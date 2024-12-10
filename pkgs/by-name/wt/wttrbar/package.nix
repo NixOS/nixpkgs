@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,7 +18,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-EEc64pTAdVZZJtzHzACxZktUJMz10yuqdYG+N1CAD8k=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks; [ Security SystemConfiguration ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
+    with darwin.apple_sdk_11_0.frameworks;
+    [
+      Security
+      SystemConfiguration
+    ]
+  );
 
   cargoHash = "sha256-UXC7b0FDyKSRpYGJOLcG0mqZgKTLJA+eTqKMp1Zo1so=";
 

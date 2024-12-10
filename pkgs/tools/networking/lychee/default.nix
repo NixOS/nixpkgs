@@ -1,13 +1,14 @@
-{ callPackage
-, lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, Security
-, SystemConfiguration
-, testers
+{
+  callPackage,
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  Security,
+  SystemConfiguration,
+  testers,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,8 +26,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      SystemConfiguration
+    ];
 
   checkFlags = [
     #  Network errors for all of these tests
@@ -59,8 +64,14 @@ rustPlatform.buildRustPackage rec {
     description = "Fast, async, stream-based link checker written in Rust";
     homepage = "https://github.com/lycheeverse/lychee";
     downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/lychee-v${version}";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ totoroot tuxinaut ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [
+      totoroot
+      tuxinaut
+    ];
     mainProgram = "lychee";
   };
 }

@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, wireguard-tools
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  wireguard-tools,
 }:
 
 stdenv.mkDerivation {

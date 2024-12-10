@@ -1,5 +1,9 @@
-{ config, pkgs, lib, ... }:
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.xmrig;

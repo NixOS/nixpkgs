@@ -1,14 +1,15 @@
-{ fetchFromSourcehut
-, file
-, installShellFiles
-, less
-, lib
-, offpunk
-, python3Packages
-, testers
-, timg
-, xdg-utils
-, xsel
+{
+  fetchFromSourcehut,
+  file,
+  installShellFiles,
+  less,
+  lib,
+  offpunk,
+  python3Packages,
+  testers,
+  timg,
+  xdg-utils,
+  xsel,
 }:
 
 let
@@ -44,7 +45,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-Tiby+JjPc7eFQKziQFUdqcNgx9UhU4GNeRcI/aAzcvk=";
   };
 
-  nativeBuildInputs = [ python3Packages.hatchling installShellFiles ];
+  nativeBuildInputs = [
+    python3Packages.hatchling
+    installShellFiles
+  ];
   propagatedBuildInputs = otherDependencies ++ pythonDependencies;
 
   postInstall = ''

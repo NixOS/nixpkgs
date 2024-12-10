@@ -1,49 +1,70 @@
-{ lib, stdenv, dpkg, fetchurl, zip, nixosTests }:
+{
+  lib,
+  stdenv,
+  dpkg,
+  fetchurl,
+  zip,
+  nixosTests,
+}:
 
 let
-  generic = { version, sha256, suffix ? "", knownVulnerabilities ? [ ], ... } @ args:
-  stdenv.mkDerivation (args // {
-    pname = "unifi-controller";
+  generic =
+    {
+      version,
+      sha256,
+      suffix ? "",
+      knownVulnerabilities ? [ ],
+      ...
+    }@args:
+    stdenv.mkDerivation (
+      args
+      // {
+        pname = "unifi-controller";
 
-    src = fetchurl {
-      url = "https://dl.ubnt.com/unifi/${version}${suffix}/unifi_sysvinit_all.deb";
-      inherit sha256;
-    };
+        src = fetchurl {
+          url = "https://dl.ubnt.com/unifi/${version}${suffix}/unifi_sysvinit_all.deb";
+          inherit sha256;
+        };
 
-    nativeBuildInputs = [ dpkg ];
+        nativeBuildInputs = [ dpkg ];
 
-    unpackPhase = ''
-      runHook preUnpack
-      dpkg-deb -x $src ./
-      runHook postUnpack
-    '';
+        unpackPhase = ''
+          runHook preUnpack
+          dpkg-deb -x $src ./
+          runHook postUnpack
+        '';
 
-    installPhase = ''
-      runHook preInstall
+        installPhase = ''
+          runHook preInstall
 
-      mkdir -p $out
-      cd ./usr/lib/unifi
-      cp -ar dl lib webapps $out
+          mkdir -p $out
+          cd ./usr/lib/unifi
+          cp -ar dl lib webapps $out
 
-      runHook postInstall
-    '';
+          runHook postInstall
+        '';
 
-    passthru.tests = {
-      unifi = nixosTests.unifi;
-    };
+        passthru.tests = {
+          unifi = nixosTests.unifi;
+        };
 
-    meta = with lib; {
-      homepage = "http://www.ubnt.com/";
-      description = "Controller for Ubiquiti UniFi access points";
-      sourceProvenance = with sourceTypes; [ binaryBytecode ];
-      license = licenses.unfree;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ globin patryk27 ];
-      inherit knownVulnerabilities;
-    };
-  });
+        meta = with lib; {
+          homepage = "http://www.ubnt.com/";
+          description = "Controller for Ubiquiti UniFi access points";
+          sourceProvenance = with sourceTypes; [ binaryBytecode ];
+          license = licenses.unfree;
+          platforms = platforms.unix;
+          maintainers = with maintainers; [
+            globin
+            patryk27
+          ];
+          inherit knownVulnerabilities;
+        };
+      }
+    );
 
-in rec {
+in
+rec {
   # see https://community.ui.com/releases / https://www.ui.com/download/unifi
 
   unifi8 = generic {

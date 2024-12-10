@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
   # Project has no tests
   doCheck = false;
 
-   meta = with lib; {
+  meta = with lib; {
     description = "Tool that monitors, analyzes and limits the bandwidth";
     longDescription = ''
       A tool to monitor, analyze and limit the bandwidth (upload/download) of

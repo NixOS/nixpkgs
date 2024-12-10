@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, rofi-unwrapped
-, libqalculate
-, glib
-, cairo
-, gobject-introspection
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  rofi-unwrapped,
+  libqalculate,
+  glib,
+  cairo,
+  gobject-introspection,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,8 +49,10 @@ stdenv.mkDerivation rec {
     description = "Do live calculations in rofi!";
     homepage = "https://github.com/svenstaro/rofi-calc";
     license = licenses.mit;
-    maintainers = with maintainers; [ luc65r albakham ];
+    maintainers = with maintainers; [
+      luc65r
+      albakham
+    ];
     platforms = with platforms; linux;
   };
 }
-

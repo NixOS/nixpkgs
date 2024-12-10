@@ -1,19 +1,20 @@
-{ lib
-, bash
-, coreutils
-, fetchFromGitHub
-, findutils
-, gettext
-, gnused
-, inetutils
-, installShellFiles
-, jq
-, less
-, ncurses
-, nixos-option
-, stdenvNoCC
-, unixtools
-, unstableGitUpdater
+{
+  lib,
+  bash,
+  coreutils,
+  fetchFromGitHub,
+  findutils,
+  gettext,
+  gnused,
+  inetutils,
+  installShellFiles,
+  jq,
+  less,
+  ncurses,
+  nixos-option,
+  stdenvNoCC,
+  unixtools,
+  unstableGitUpdater,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -93,7 +94,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "home-manager";
-    maintainers = with lib.maintainers; [ AndersonTorres bryango ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      bryango
+    ];
     platforms = lib.platforms.unix;
   };
 })

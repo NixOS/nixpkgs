@@ -1,45 +1,52 @@
-{ channel, pname, version, sha256Hash }:
+{
+  channel,
+  pname,
+  version,
+  sha256Hash,
+}:
 
-{ android-tools
-, bash
-, buildFHSEnv
-, coreutils
-, dpkg
-, e2fsprogs
-, fetchurl
-, findutils
-, git
-, gnugrep
-, gnused
-, gnutar
-, gtk2, glib
-, gzip
-, fontsConf
-, fontconfig
-, freetype
-, libX11
-, libXext
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, makeFontsConf
-, makeWrapper
-, ncurses5
-, openssl
-, ps
-, python3
-, lib
-, stdenv
-, unzip
-, usbutils
-, which
-, runCommand
-, xkeyboard_config
-, zip
-, zlib
-, makeDesktopItem
-, tiling_wm ? false # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
+{
+  android-tools,
+  bash,
+  buildFHSEnv,
+  coreutils,
+  dpkg,
+  e2fsprogs,
+  fetchurl,
+  findutils,
+  git,
+  gnugrep,
+  gnused,
+  gnutar,
+  gtk2,
+  glib,
+  gzip,
+  fontsConf,
+  fontconfig,
+  freetype,
+  libX11,
+  libXext,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  makeFontsConf,
+  makeWrapper,
+  ncurses5,
+  openssl,
+  ps,
+  python3,
+  lib,
+  stdenv,
+  unzip,
+  usbutils,
+  which,
+  runCommand,
+  xkeyboard_config,
+  zip,
+  zlib,
+  makeDesktopItem,
+  tiling_wm ? false, # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
 }:
 
 let
@@ -66,52 +73,56 @@ let
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
         ${lib.optionalString tiling_wm "--set _JAVA_AWT_WM_NONREPARENTING 1"} \
         --set FONTCONFIG_FILE ${fontsConf} \
-        --prefix PATH : "${lib.makeBinPath [
+        --prefix PATH : "${
+          lib.makeBinPath [
 
-          # Checked in studio.sh
-          coreutils
-          findutils
-          gnugrep
-          which
-          gnused
+            # Checked in studio.sh
+            coreutils
+            findutils
+            gnugrep
+            which
+            gnused
 
-          # Used during setup wizard
-          gnutar
-          gzip
+            # Used during setup wizard
+            gnutar
+            gzip
 
-          # Runtime stuff
-          git
-          ps
-          usbutils
-          android-tools
+            # Runtime stuff
+            git
+            ps
+            usbutils
+            android-tools
 
-          # For Soong sync
-          openssl
-          python3
-          unzip
-          zip
-          e2fsprogs
-        ]}" \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
-          # Crash at startup without these
-          fontconfig
-          freetype
-          libXext
-          libXi
-          libXrender
-          libXtst
-          libX11
+            # For Soong sync
+            openssl
+            python3
+            unzip
+            zip
+            e2fsprogs
+          ]
+        }" \
+        --prefix LD_LIBRARY_PATH : "${
+          lib.makeLibraryPath [
+            # Crash at startup without these
+            fontconfig
+            freetype
+            libXext
+            libXi
+            libXrender
+            libXtst
+            libX11
 
-          # Support multiple monitors
-          libXrandr
+            # Support multiple monitors
+            libXrandr
 
-          # For GTKLookAndFeel
-          gtk2
-          glib
+            # For GTKLookAndFeel
+            gtk2
+            glib
 
-          # For Soong sync
-          e2fsprogs
-        ]}"
+            # For Soong sync
+            e2fsprogs
+          ]
+        }"
     '';
   };
 
@@ -121,7 +132,10 @@ let
     icon = pname;
     desktopName = "Android Studio for Platform (${channel} channel)";
     comment = "The official Android IDE for Android platform development";
-    categories = [ "Development" "IDE" ];
+    categories = [
+      "Development"
+      "IDE"
+    ];
     startupNotify = true;
     startupWMClass = "jetbrains-studio";
   };
@@ -141,8 +155,8 @@ let
       export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib:/usr/lib32
     '';
   };
-in runCommand
-  drvName
+in
+runCommand drvName
   {
     startScript = ''
       #!${bash}/bin/bash
@@ -160,7 +174,10 @@ in runCommand
         for Android Open Source Project (AOSP) platform developers who build with the Soong build system.
       '';
       homepage = "https://developer.android.com/studio/platform.html";
-      license = with licenses; [ asl20 unfree ]; # The code is under Apache-2.0, but:
+      license = with licenses; [
+        asl20
+        unfree
+      ]; # The code is under Apache-2.0, but:
       # If one selects Help -> Licenses in Android Studio, the dialog shows the following:
       # "Android Studio includes proprietary code subject to separate license,
       # including JetBrains CLion(R) (www.jetbrains.com/clion) and IntelliJ(R)

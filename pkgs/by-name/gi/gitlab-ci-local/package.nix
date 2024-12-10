@@ -1,9 +1,10 @@
-{ buildNpmPackage
-, fetchFromGitHub
-, lib
-, nix-update-script
-, gitlab-ci-local
-, testers
+{
+  buildNpmPackage,
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
+  gitlab-ci-local,
+  testers,
 }:
 
 buildNpmPackage rec {
@@ -32,7 +33,7 @@ buildNpmPackage rec {
     };
   };
 
-  meta = with lib;{
+  meta = with lib; {
     description = "Run gitlab pipelines locally as shell executor or docker executor";
     mainProgram = "gitlab-ci-local";
     longDescription = ''

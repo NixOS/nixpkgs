@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, openssl
-, db
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  openssl,
+  db,
 }:
 
 stdenv.mkDerivation rec {

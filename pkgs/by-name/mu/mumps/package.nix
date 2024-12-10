@@ -103,9 +103,12 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s $out/include/mumps_seq/mpi.h $out/include/mumps_mpi.h
     '';
 
-  nativeBuildInputs = [
-    gfortran
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames ++ lib.optional mpiSupport mpi;
+  nativeBuildInputs =
+    [
+      gfortran
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
+    ++ lib.optional mpiSupport mpi;
 
   # Parmetis should be placed before scotch to avoid conflict of header file "parmetis.h"
   buildInputs =

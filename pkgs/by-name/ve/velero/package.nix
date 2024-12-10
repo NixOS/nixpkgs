@@ -1,9 +1,14 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "velero";
   version = "1.14.1";
-
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
@@ -13,7 +18,8 @@ buildGoModule rec {
   };
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.Version=v${version}"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.ImageRegistry=velero"
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.GitTreeState=clean"
@@ -22,7 +28,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-HpPJXYBrk5qfV01VOqXGpn4waEONJa61mqLbEsuwrEs=";
 
-  excludedPackages = [ "issue-template-gen" "release-tools" "v1" "velero-restic-restore-helper" ];
+  excludedPackages = [
+    "issue-template-gen"
+    "release-tools"
+    "v1"
+    "velero-restic-restore-helper"
+  ];
 
   doCheck = false; # Tests expect a running cluster see https://github.com/vmware-tanzu/velero/tree/main/test/e2e
   doInstallCheck = true;
@@ -38,12 +49,13 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description =
-      "A utility for managing disaster recovery, specifically for your Kubernetes cluster resources and persistent volumes";
+    description = "A utility for managing disaster recovery, specifically for your Kubernetes cluster resources and persistent volumes";
     homepage = "https://velero.io/";
-    changelog =
-      "https://github.com/vmware-tanzu/velero/releases/tag/v${version}";
+    changelog = "https://github.com/vmware-tanzu/velero/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ maintainers.mbode maintainers.bryanasdev000 ];
+    maintainers = [
+      maintainers.mbode
+      maintainers.bryanasdev000
+    ];
   };
 }

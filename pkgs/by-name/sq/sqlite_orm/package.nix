@@ -1,8 +1,9 @@
-{ lib
-, cmake
-, fetchFromGitHub
-, sqlite
-, stdenv
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  sqlite,
+  stdenv,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sqlite_orm";

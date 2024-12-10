@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, python3
-, pkg-config
-, libbacktrace
-, bzip2
-, lz4
-, postgresql
-, libxml2
-, libyaml
-, zlib
-, libssh2
-, zstd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  python3,
+  pkg-config,
+  libbacktrace,
+  bzip2,
+  lz4,
+  postgresql,
+  libxml2,
+  libyaml,
+  zlib,
+  libssh2,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {

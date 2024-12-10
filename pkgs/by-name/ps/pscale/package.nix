@@ -1,9 +1,10 @@
-{ buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, lib
-, pscale
-, testers
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  pscale,
+  testers,
 }:
 
 buildGoModule rec {
@@ -20,7 +21,8 @@ buildGoModule rec {
   vendorHash = "sha256-R0ZabOquZQLONbW6p5xtYKLi8P3Q5JieM4EATT1a83U=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.version=v${version}"
     "-X main.commit=v${version}"
     "-X main.date=unknown"
@@ -47,6 +49,9 @@ buildGoModule rec {
     changelog = "https://github.com/planetscale/cli/releases/tag/v${version}";
     homepage = "https://www.planetscale.com/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ pimeys kashw2 ];
+    maintainers = with maintainers; [
+      pimeys
+      kashw2
+    ];
   };
 }

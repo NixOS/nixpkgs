@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -13,7 +18,7 @@ in
 
     extraFlags = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = "Extra command line options to pass to alertmanager-webhook-logger.";
     };
   };
@@ -58,9 +63,12 @@ in
         ProtectKernelLogs = true;
         ProtectControlGroups = true;
 
-        Restart  = "on-failure";
+        Restart = "on-failure";
 
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;

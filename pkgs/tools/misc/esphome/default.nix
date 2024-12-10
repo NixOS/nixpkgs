@@ -1,14 +1,15 @@
-{ lib
-, callPackage
-, python3Packages
-, fetchFromGitHub
-, installShellFiles
-, platformio
-, esptool
-, git
-, inetutils
-, stdenv
-, nixosTests
+{
+  lib,
+  callPackage,
+  python3Packages,
+  fetchFromGitHub,
+  installShellFiles,
+  platformio,
+  esptool,
+  git,
+  inetutils,
+  stdenv,
+  nixosTests,
 }:
 
 let
@@ -100,7 +101,14 @@ python.pkgs.buildPythonApplication rec {
     # esptool is used in esphome/__main__.py
     # git is used in esphome/writer.py
     # inetutils is used in esphome/dashboard/status/ping.py
-    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git inetutils ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        platformio
+        esptool
+        git
+        inetutils
+      ]
+    }"
     "--prefix PYTHONPATH : ${python.pkgs.makePythonPath dependencies}" # will show better error messages
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
@@ -147,7 +155,10 @@ python.pkgs.buildPythonApplication rec {
       mit # The C++/runtime codebase of the ESPHome project (file extensions .c, .cpp, .h, .hpp, .tcc, .ino)
       gpl3Only # The python codebase and all other parts of this codebase
     ];
-    maintainers = with maintainers; [ globin hexa ];
+    maintainers = with maintainers; [
+      globin
+      hexa
+    ];
     mainProgram = "esphome";
   };
 }

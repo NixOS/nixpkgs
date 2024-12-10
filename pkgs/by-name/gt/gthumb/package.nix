@@ -1,37 +1,39 @@
-{ stdenv
-, lib
-, fetchurl
-, gnome
-, pkg-config
-, meson
-, ninja
-, adwaita-icon-theme
-, exiv2
-, libheif
-, libjpeg
-, libtiff
-, gst_all_1
-, libraw
-, libsoup
-, libsecret
-, glib
-, gtk3
-, gsettings-desktop-schemas
-, libchamplain
-, librsvg
-, libwebp
-, libX11
-, json-glib
-, lcms2
-, bison
-, flex
-, clutter-gtk
-, wrapGAppsHook3
-, shared-mime-info
-, python3
-, desktop-file-utils
-, itstool
-, withWebservices ? true, webkitgtk_4_0
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gnome,
+  pkg-config,
+  meson,
+  ninja,
+  adwaita-icon-theme,
+  exiv2,
+  libheif,
+  libjpeg,
+  libtiff,
+  gst_all_1,
+  libraw,
+  libsoup,
+  libsecret,
+  glib,
+  gtk3,
+  gsettings-desktop-schemas,
+  libchamplain,
+  librsvg,
+  libwebp,
+  libX11,
+  json-glib,
+  lcms2,
+  bison,
+  flex,
+  clutter-gtk,
+  wrapGAppsHook3,
+  shared-mime-info,
+  python3,
+  desktop-file-utils,
+  itstool,
+  withWebservices ? true,
+  webkitgtk_4_0,
 }:
 
 stdenv.mkDerivation rec {

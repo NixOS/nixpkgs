@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, cmake, libuuid, gnutls, makeWrapper, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  libuuid,
+  gnutls,
+  makeWrapper,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "taskserver";
@@ -28,8 +37,14 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  buildInputs = [ libuuid gnutls ];
-  nativeBuildInputs = [ cmake makeWrapper ];
+  buildInputs = [
+    libuuid
+    gnutls
+  ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+  ];
 
   passthru.tests = { inherit (nixosTests) taskserver; };
 
@@ -38,6 +53,9 @@ stdenv.mkDerivation rec {
     homepage = "https://taskwarrior.org";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ matthiasbeyer makefu ];
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+      makefu
+    ];
   };
 }
