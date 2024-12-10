@@ -184,7 +184,7 @@ let
     };
 in
 buildFHSEnv {
-  inherit (wechat) name meta;
+  inherit (wechat) pname version meta;
   runScript = writeShellScript "wechat-uos-launcher" ''
     export QT_QPA_PLATFORM=xcb
     export QT_AUTO_SCREEN_SCALE_FACTOR=1
@@ -206,8 +206,6 @@ buildFHSEnv {
     mkdir -p $out/share/icons
     cp -r ${wechat.outPath}/opt/apps/com.tencent.wechat/entries/applications/com.tencent.wechat.desktop $out/share/applications
     cp -r ${wechat.outPath}/opt/apps/com.tencent.wechat/entries/icons/* $out/share/icons/
-
-    mv $out/bin/$name $out/bin/wechat-uos
 
     substituteInPlace $out/share/applications/com.tencent.wechat.desktop \
       --replace-quiet 'Exec=/usr/bin/wechat' "Exec=$out/bin/wechat-uos --"
