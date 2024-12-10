@@ -27,7 +27,7 @@ stdenv.mkDerivation (
     postPhases = [ "finalPhase" ];
   }
 
-  // args //
+  // (builtins.removeAttrs args ["lib" "stdenv"]) //
 
   {
     name = name + (lib.optionalString (src ? version) "-${src.version}");
@@ -67,7 +67,9 @@ stdenv.mkDerivation (
 
       # Propagate the release name of the source tarball.  This is
       # to get nice package names in channels.
-      test -n "$releaseName" && (echo "$releaseName" >> $out/nix-support/hydra-release-name)
+      if [[ -n "$releaseName" ]]; then
+        echo "$releaseName" >> $out/nix-support/hydra-release-name
+      fi
     '';
 
     meta = (lib.optionalAttrs (args ? meta) args.meta) // {
