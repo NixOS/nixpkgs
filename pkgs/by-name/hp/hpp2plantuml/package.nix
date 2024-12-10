@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "hpp2plantuml";
-  version = "0.8.5";
+  version = "0.8.6";
   format = "wheel";
 
   src = fetchPypi {
     inherit pname version format;
-    hash = "sha256-PfTJmBypI21AAK3sMojygQfrhnRqcMmVCW4dxGfDfQg=";
+    hash = "sha256-9FggDDOxWr4z1DBbvYLyvgs3CCguFjq3I4E9ULwL0+Q=";
   };
 
   propagatedBuildInputs = with python3Packages; [
