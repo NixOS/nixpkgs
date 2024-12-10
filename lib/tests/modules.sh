@@ -275,6 +275,11 @@ checkConfigError 'Module ..*disable-module-bad-key.nix. contains a disabledModul
 checkConfigOutput '^true$' 'config.positive.enable' ./disable-module-with-toString-key.nix
 checkConfigOutput '^false$' 'config.negative.enable' ./disable-module-with-toString-key.nix
 
+# Check whether disabling inline modules defined using lib.mk*Module via key works
+checkConfigOutput '^true$' 'config.group.enable' ./disable-removed-option-module.nix
+checkConfigError 'The option .group-a. does not exist.' 'config.group-b.enable' ./disable-renamed-option-module.nix
+checkConfigError 'The option .old-enable-a. does not exist.' 'config.new-enable' ./disable-merged-option-module.nix
+
 # Check _module.args.
 set -- config.enable ./declare-enable.nix ./define-enable-with-custom-arg.nix
 checkConfigError 'while evaluating the module argument .*custom.* in .*define-enable-with-custom-arg.nix.*:' "$@"
