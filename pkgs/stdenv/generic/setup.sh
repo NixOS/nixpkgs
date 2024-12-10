@@ -1,5 +1,21 @@
 # shellcheck shell=bash
 # shellcheck disable=1090,2154,2123,2034,2178,2048,2068,1091
+
+# TESTING
+
+# This file can be tested without mass-rebuild.
+# See `pkgs/test/setup/default.nix`.
+
+# DOCUMENTATION
+
+# This file is sourced by the derivation `builder` and is responsible for
+# some shell setup, loading scripts from inputs, and running phases and hooks.
+#
+# Comments in this file are implementation oriented. User facing documentation
+# is maintained outside of this file, so that it can be improved without mass
+# rebuilds.
+# See https://nixos.org/manual/nixpkgs/unstable/index.html#chap-stdenv
+
 __nixpkgs_setup_set_original=$-
 set -eu
 set -o pipefail
@@ -1643,6 +1659,45 @@ installCheckPhase() {
 }
 
 
+# Summarize the relevant state of a directory. Distinct NARs will produce
+# distinct manifests.
+# Note: these manifests are purely an internal construct of stdenv to verify
+#       that installCheckPhase does not alter outputs.
+unsortedDirectoryManifest() {
+    sha256sum $(find "$1" -type f) \
+        | sed -e 's/\([0-9a-fA-F]\{64\}\)[[:space:]]*\(.*\)/\2: file with contents sha256:\1/'
+    find "$1" -type d -printf '%p: directory\n'
+    find "$1" -type l -printf '%p: symlink to %l\n'
+    find "$1" -type f -executable -printf '%p: executable\n'
+}
+
+# Summarize the state of the outputs, see unsortedDirectoryManifest.
+outputsManifest() {
+    local output
+    for output in $outputs; do
+        unsortedDirectoryManifest "${!output}"
+    done | sort
+}
+
+saveOutputHashes() {
+    outputsManifest >"$TMPDIR/before-installCheck"
+}
+
+checkOutputHashes() {
+    outputsManifest >"$TMPDIR/after-installCheck"
+    if ! diff "$TMPDIR/before-installCheck" "$TMPDIR/after-installCheck" -U0 --color=auto; then
+        cat <<EOF
+ERROR: Files were changed during installCheckPhase.
+       See the output above for the diff from before to after the checks.
+       Please make sure that the installation process prior to the installation
+       checks is complete and that the software is configured not to write to
+       its installation directory.
+EOF
+        false
+    fi
+}
+
+
 distPhase() {
     runHook preDist
 
@@ -1713,6 +1768,10 @@ runPhase() {
     local startTime endTime
     startTime=$(date +"%s")
 
+    if [[ "$curPhase" = installCheckPhase && -z "${allowWriteInInstallCheck:-}" ]]; then
+        saveOutputHashes
+    fi
+
     # Evaluate the variable named $curPhase if it exists, otherwise the
     # function named $curPhase.
     eval "${!curPhase:-$curPhase}"
@@ -1726,6 +1785,10 @@ runPhase() {
         [ -n "${sourceRoot:-}" ] && chmod +x -- "${sourceRoot}"
 
         cd -- "${sourceRoot:-.}"
+    fi
+
+    if [[ "$curPhase" = installCheckPhase && -z "${allowWriteInInstallCheck:-}" ]]; then
+        checkOutputHashes
     fi
 }
 
