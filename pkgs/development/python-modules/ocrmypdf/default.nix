@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "16.6.2";
+  version = "16.7.0";
 
   disabled = pythonOlder "3.10";
 
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-065PeCsNfAvZTLyWz3toTrE/e944mzfuwRQvKXxdnd0=";
+    hash = "sha256-81maXJjdGlzWy3TaQ8cabjJl6ZE5tbfc8m/+Px7ONhs=";
   };
 
   patches = [
