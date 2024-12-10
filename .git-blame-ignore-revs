@@ -206,3 +206,6 @@ ce21e97a1f20dee15da85c084f9d1148d84f853b
 
 # treewide: migrate packages to pkgs/by-name, take 1
 571c71e6f73af34a229414f51585738894211408
+
+# treewide nixfmt reformat pass 1, master, staging and staging-next
+d9d87c51960050e89c79e4025082ed965e770d68
