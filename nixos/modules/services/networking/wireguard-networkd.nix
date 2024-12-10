@@ -128,7 +128,7 @@ in
     #
     # socketNamespace and interfaceNamespace can be implemented once networkd
     # supports setting a netdev's namespace. See:
-    # https://github.com/systemd/systemd/issues/11629
+    # https://github.com/systemd/systemd/issues/11103
     # https://github.com/systemd/systemd/pull/14915
 
     assertions = concatLists (
