@@ -162,16 +162,16 @@ rec {
   };
 
  # Switch standard build environment to target host platform
- stage2Stdenv = 
+ stage2Stdenv =
     let
       buildSystem = pkgs.stdenv.buildPlatform.system;
       hostSystem = pkgs.stdenv.hostPlatform.system;
-    in  if (buildSystem == hostSystem) then stdenv else 
+    in  if (buildSystem == hostSystem) then stdenv else
       let
-        targetArch = if ( hostSystem == "x86_64-linux") then  
+        targetArch = if ( hostSystem == "x86_64-linux") then
         "gnu64" else
         "aarch64-multiplatform";
-      in 
+      in
       pkgs.stdenv.override {
          buildPlatform = pkgs.stdenv.hostPlatform;
          cc = null;
@@ -201,7 +201,7 @@ rec {
 
     source ${stage2Stdenv}/setup
     export stdenv=${stage2Stdenv}
-    
+
     if ! test -e /bin/sh; then
       ${coreutils}/bin/mkdir -p /bin
       ${coreutils}/bin/ln -s ${bash}/bin/sh /bin/sh
