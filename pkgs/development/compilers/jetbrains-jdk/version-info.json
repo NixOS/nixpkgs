@@ -1,0 +1,10 @@
+{
+    "ideaVersion": "2024.2.1",
+    "javaVersion": "21.0.3",
+    "javaBuild": "13",
+    "build": "509.11",
+    "openjdkTag": "jbr-21.0.3+13",
+    "rev": "jb21.0.3-b509.11",
+    "hash": "sha256-zTstmrH4KteR40BVDRfxOrl8aUQ26acE+ywscBd8sw8=",
+    "SOURCE_DATE_EPOCH": 1723453663
+}
