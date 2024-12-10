@@ -191,6 +191,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       jtojnar
       x123
+      Luflosi
     ];
     platforms = lib.platforms.all;
     mainProgram = "inkscape";
