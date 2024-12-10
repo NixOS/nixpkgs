@@ -87,7 +87,7 @@ in
       };
 
       stateDir = mkOption {
-        type = types.str;
+        type = types.path;
         default = "/var/lib/redmine";
         description = "The state directory, logs and plugins are stored here.";
       };
