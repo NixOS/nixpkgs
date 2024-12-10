@@ -6,14 +6,14 @@
 
 buildNpmPackage rec {
   pname = "manicode";
-  version = "1.0.99";
+  version = "1.0.101";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/manicode/-/manicode-${version}.tgz";
-    hash = "sha256-LVTh8yOfP92zGSdxLpThC+U9E8cBjoL0+iMQOldNO8A=";
+    hash = "sha256-9cRKHF34Wt5tmvPuuChN2tEncfNDrXIIU+i6iHe6y+I=";
   };
 
-  npmDepsHash = "sha256-MAm/FE8M6BBDZD5Fy2k6GcM5Qv35jNeUwHcemmbUj/A=";
+  npmDepsHash = "sha256-b5BQBRO6MOqGKMwrFHyhauHm+gWsqKntkIJZw2jTFkA=";
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
