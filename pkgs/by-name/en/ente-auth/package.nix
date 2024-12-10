@@ -31,6 +31,11 @@ flutter324.buildFlutterApplication rec {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
+  patches = [
+    # Disable update notifications and auto-update functionality
+    ./0001-disable-updates.patch
+  ];
+
   postPatch = ''
     rmdir assets/simple-icons
     ln -s ${simple-icons} assets/simple-icons
