@@ -120,3 +120,6 @@ fb0e5be84331188a69b3edd31679ca6576edb75a
 
 # percona: apply nixfmt
 369350afcba8e6a231dd25b6a010c4e9dec713b9
+
+# treewide nixfmt reformat pass 1, master, staging and staging-next
+776b0b45a36ec8e9bcae8e8e93085dac5d8b5a3c
