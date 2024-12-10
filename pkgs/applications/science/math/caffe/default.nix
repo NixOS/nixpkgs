@@ -1,21 +1,31 @@
-{ config, stdenv, lib
-, fetchFromGitHub
-, fetchurl
-, fetchpatch
-, cmake
-, boost
-, gflags
-, glog
-, hdf5-cpp
-, opencv4
-, protobuf
-, doxygen
-, blas
-, Accelerate, CoreGraphics, CoreVideo
-, lmdbSupport ? true, lmdb
-, leveldbSupport ? true, leveldb, snappy
-, pythonSupport ? false, python ? null, numpy ? null
-, substituteAll
+{
+  config,
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  boost,
+  gflags,
+  glog,
+  hdf5-cpp,
+  opencv4,
+  protobuf,
+  doxygen,
+  blas,
+  Accelerate,
+  CoreGraphics,
+  CoreVideo,
+  lmdbSupport ? true,
+  lmdb,
+  leveldbSupport ? true,
+  leveldb,
+  snappy,
+  pythonSupport ? false,
+  python ? null,
+  numpy ? null,
+  substituteAll,
 }:
 
 let
@@ -38,48 +48,92 @@ stdenv.mkDerivation rec {
     sha256 = "104jp3cm823i3cdph7hgsnj6l77ygbwsy35mdmzhmsi4jxprd9j3";
   };
 
-  nativeBuildInputs = [ cmake doxygen ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+  ];
 
   cmakeFlags =
     # It's important that caffe is passed the major and minor version only because that's what
     # boost_python expects
-    [ (if pythonSupport then "-Dpython_version=${python.pythonVersion}" else "-DBUILD_python=OFF")
+    [
+      (if pythonSupport then "-Dpython_version=${python.pythonVersion}" else "-DBUILD_python=OFF")
       "-DBLAS=open"
       "-DCPU_ONLY=ON"
-    ] ++ ["-DUSE_LEVELDB=${toggle leveldbSupport}"]
-      ++ ["-DUSE_LMDB=${toggle lmdbSupport}"];
+    ]
+    ++ [ "-DUSE_LEVELDB=${toggle leveldbSupport}" ]
+    ++ [ "-DUSE_LMDB=${toggle lmdbSupport}" ];
 
-  buildInputs = [ boost gflags glog protobuf hdf5-cpp opencv4 blas ]
-                ++ lib.optional lmdbSupport lmdb
-                ++ lib.optionals leveldbSupport [ leveldb snappy ]
-                ++ lib.optionals pythonSupport [ python numpy ]
-                ++ lib.optionals stdenv.hostPlatform.isDarwin [ Accelerate CoreGraphics CoreVideo ]
-                ;
+  buildInputs =
+    [
+      boost
+      gflags
+      glog
+      protobuf
+      hdf5-cpp
+      opencv4
+      blas
+    ]
+    ++ lib.optional lmdbSupport lmdb
+    ++ lib.optionals leveldbSupport [
+      leveldb
+      snappy
+    ]
+    ++ lib.optionals pythonSupport [
+      python
+      numpy
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Accelerate
+      CoreGraphics
+      CoreVideo
+    ];
 
   propagatedBuildInputs = lib.optionals pythonSupport (
     # requirements.txt
-    let pp = python.pkgs; in ([
-      pp.numpy pp.scipy pp.scikit-image pp.h5py
-      pp.matplotlib pp.ipython pp.networkx
-      pp.pandas pp.python-dateutil pp.protobuf pp.gflags
-      pp.pyyaml pp.pillow pp.six
-    ] ++ lib.optional leveldbSupport pp.leveldb)
+    let
+      pp = python.pkgs;
+    in
+    (
+      [
+        pp.numpy
+        pp.scipy
+        pp.scikit-image
+        pp.h5py
+        pp.matplotlib
+        pp.ipython
+        pp.networkx
+        pp.pandas
+        pp.python-dateutil
+        pp.protobuf
+        pp.gflags
+        pp.pyyaml
+        pp.pillow
+        pp.six
+      ]
+      ++ lib.optional leveldbSupport pp.leveldb
+    )
   );
 
-  outputs = [ "bin" "out" ];
-  propagatedBuildOutputs = []; # otherwise propagates out -> bin cycle
+  outputs = [
+    "bin"
+    "out"
+  ];
+  propagatedBuildOutputs = [ ]; # otherwise propagates out -> bin cycle
 
-  patches = [
-    ./darwin.patch
-    (fetchpatch {
-       name = "support-opencv4";
-       url = "https://github.com/BVLC/caffe/pull/6638/commits/0a04cc2ccd37ba36843c18fea2d5cbae6e7dd2b5.patch";
-       hash = "sha256-ZegTvp0tTHlopQv+UzHDigs6XLkP2VfqLCWXl6aKJSI=";
-     })
-  ] ++ lib.optional pythonSupport (substituteAll {
-    src = ./python.patch;
-    inherit (python.sourceVersion) major minor;  # Should be changed in case of PyPy
-  });
+  patches =
+    [
+      ./darwin.patch
+      (fetchpatch {
+        name = "support-opencv4";
+        url = "https://github.com/BVLC/caffe/pull/6638/commits/0a04cc2ccd37ba36843c18fea2d5cbae6e7dd2b5.patch";
+        hash = "sha256-ZegTvp0tTHlopQv+UzHDigs6XLkP2VfqLCWXl6aKJSI=";
+      })
+    ]
+    ++ lib.optional pythonSupport (substituteAll {
+      src = ./python.patch;
+      inherit (python.sourceVersion) major minor; # Should be changed in case of PyPy
+    });
 
   postPatch = ''
     substituteInPlace src/caffe/util/io.cpp --replace \
@@ -92,19 +146,21 @@ stdenv.mkDerivation rec {
     export BOOST_LIBRARYDIR="${boost.out}/lib";
   '';
 
-  postInstall = ''
-    # Internal static library.
-    rm $out/lib/libproto.a
+  postInstall =
+    ''
+      # Internal static library.
+      rm $out/lib/libproto.a
 
-    # Install models
-    cp -a ../models $out/share/Caffe/models
+      # Install models
+      cp -a ../models $out/share/Caffe/models
 
-    moveToOutput "bin" "$bin"
-  '' + lib.optionalString pythonSupport ''
-    mkdir -p $out/${python.sitePackages}
-    mv $out/python/caffe $out/${python.sitePackages}
-    rm -rf $out/python
-  '';
+      moveToOutput "bin" "$bin"
+    ''
+    + lib.optionalString pythonSupport ''
+      mkdir -p $out/${python.sitePackages}
+      mv $out/python/caffe $out/${python.sitePackages}
+      rm -rf $out/python
+    '';
 
   doInstallCheck = false; # build takes more than 30 min otherwise
   installCheckPhase = ''
@@ -128,8 +184,7 @@ stdenv.mkDerivation rec {
     broken =
       (pythonSupport && (python.isPy310))
       || !(leveldbSupport -> (leveldb != null && snappy != null))
-      || !(pythonSupport -> (python != null && numpy != null))
-    ;
+      || !(pythonSupport -> (python != null && numpy != null));
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
   };

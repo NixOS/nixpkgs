@@ -1,17 +1,18 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitLab
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitLab,
 
-, isPy3k
-, isPyPy
+  isPy3k,
+  isPyPy,
 
-, distro
-, setuptools
-, psutil
-, certifi
-, setuptools-scm
+  distro,
+  setuptools,
+  psutil,
+  certifi,
+  setuptools-scm,
 
-, pkgs
+  pkgs,
 }:
 
 buildPythonPackage rec {
@@ -54,7 +55,10 @@ buildPythonPackage rec {
     description = "Backend part of Paperwork (Python API, no UI)";
     homepage = "https://openpaper.work/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ aszlig symphorien ];
+    maintainers = with lib.maintainers; [
+      aszlig
+      symphorien
+    ];
     platforms = lib.platforms.linux;
   };
 }

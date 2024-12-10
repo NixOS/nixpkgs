@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, gtk-doc
-, withShishi ? !stdenv.hostPlatform.isDarwin
-, shishi
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  gtk-doc,
+  withShishi ? !stdenv.hostPlatform.isDarwin,
+  shishi,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +23,10 @@ stdenv.mkDerivation rec {
     rm tests/krb5context.c
   '';
 
-  nativeBuildInputs = [ autoreconfHook gtk-doc ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gtk-doc
+  ];
 
   buildInputs = lib.optional withShishi shishi;
 

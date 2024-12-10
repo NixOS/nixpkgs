@@ -1,4 +1,12 @@
-{ fetchurl, lib, stdenv, makeWrapper, perl, openssh, rsync }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  makeWrapper,
+  perl,
+  openssh,
+  rsync,
+}:
 
 stdenv.mkDerivation rec {
   pname = "autobuild";
@@ -10,7 +18,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl openssh rsync ];
+  buildInputs = [
+    perl
+    openssh
+    rsync
+  ];
 
   doCheck = true;
 

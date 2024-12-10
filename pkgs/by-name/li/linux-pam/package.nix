@@ -1,7 +1,17 @@
-{ lib, stdenv, buildPackages, fetchurl
-, flex, cracklib, db4, gettext, audit, libxcrypt
-, nixosTests
-, autoreconfHook269, pkg-config-unwrapped
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  flex,
+  cracklib,
+  db4,
+  gettext,
+  audit,
+  libxcrypt,
+  nixosTests,
+  autoreconfHook269,
+  pkg-config-unwrapped,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,21 +28,33 @@ stdenv.mkDerivation rec {
   ];
 
   # Case-insensitivity workaround for https://github.com/linux-pam/linux-pam/issues/569
-  postPatch = lib.optionalString (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform != stdenv.hostPlatform) ''
-    rm CHANGELOG
-    touch ChangeLog
-  '';
+  postPatch =
+    lib.optionalString (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform != stdenv.hostPlatform)
+      ''
+        rm CHANGELOG
+        touch ChangeLog
+      '';
 
-  outputs = [ "out" "doc" "man" /* "modules" */ ];
+  outputs = [
+    "out"
+    "doc"
+    "man" # "modules"
+  ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   # autoreconfHook269 is needed for `suid-wrapper-path.patch` above.
   # pkg-config-unwrapped is needed for `AC_CHECK_LIB` and `AC_SEARCH_LIBS`
-  nativeBuildInputs = [ flex autoreconfHook269 pkg-config-unwrapped ]
-    ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
+  nativeBuildInputs = [
+    flex
+    autoreconfHook269
+    pkg-config-unwrapped
+  ] ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
 
-  buildInputs = [ cracklib db4 libxcrypt ]
-    ++ lib.optional stdenv.buildPlatform.isLinux audit;
+  buildInputs = [
+    cracklib
+    db4
+    libxcrypt
+  ] ++ lib.optional stdenv.buildPlatform.isLinux audit;
 
   enableParallelBuilding = true;
 
@@ -51,7 +73,12 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails
 
   passthru.tests = {
-    inherit (nixosTests) pam-oath-login pam-u2f shadow sssd-ldap;
+    inherit (nixosTests)
+      pam-oath-login
+      pam-u2f
+      shadow
+      sssd-ldap
+      ;
   };
 
   meta = with lib; {

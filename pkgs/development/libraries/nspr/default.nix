@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, CoreServices
-, buildPackages
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  CoreServices,
+  buildPackages,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,15 +20,20 @@ stdenv.mkDerivation rec {
     ./0001-Makefile-use-SOURCE_DATE_EPOCH-for-reproducibility.patch
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
   outputBin = "dev";
 
-  preConfigure = ''
-    cd nspr
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace configure --replace '@executable_path/' "$out/lib/"
-    substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
-  '';
+  preConfigure =
+    ''
+      cd nspr
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace configure --replace '@executable_path/' "$out/lib/"
+      substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
+    '';
 
   HOST_CC = "cc";
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -52,7 +58,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://firefox-source-docs.mozilla.org/nspr/index.html";
     description = "Netscape Portable Runtime, a platform-neutral API for system-level and libc-like functions";
-    maintainers = with maintainers; [ ajs124 hexa ];
+    maintainers = with maintainers; [
+      ajs124
+      hexa
+    ];
     platforms = platforms.all;
     license = licenses.mpl20;
   };

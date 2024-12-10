@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, gzip, popt, autoreconfHook
-, aclSupport ? stdenv.isLinux, acl
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gzip,
+  popt,
+  autoreconfHook,
+  aclSupport ? stdenv.isLinux,
+  acl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {

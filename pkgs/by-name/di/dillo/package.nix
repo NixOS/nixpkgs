@@ -17,15 +17,17 @@
   stdenv,
   which,
   # Configurable options
-  tlsLibrary? "libressl"
+  tlsLibrary ? "libressl",
 }:
 
 let
-  ssl = {
-    "libressl" = libressl;
-    "mbedtls" = mbedtls;
-    "openssl" = openssl;
-  }.${tlsLibrary} or (throw "Unrecognized tlsLibrary option: ${tlsLibrary}");
+  ssl =
+    {
+      "libressl" = libressl;
+      "mbedtls" = mbedtls;
+      "openssl" = openssl;
+    }
+    .${tlsLibrary} or (throw "Unrecognized tlsLibrary option: ${tlsLibrary}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dillo";
@@ -57,7 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
     ssl
   ];
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   strictDeps = true;
 

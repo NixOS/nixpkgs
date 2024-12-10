@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, nodejs_20
-, fetchFromGitHub
-, cctools
-, nix-update-script
-, nixosTests
-, perl
-, xcbuild
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  nodejs_20,
+  fetchFromGitHub,
+  cctools,
+  nix-update-script,
+  nixosTests,
+  perl,
+  xcbuild,
 }:
 
 buildNpmPackage rec {
@@ -54,7 +55,11 @@ buildNpmPackage rec {
       vaultwarden = nixosTests.vaultwarden.sqlite;
     };
     updateScript = nix-update-script {
-      extraArgs = [ "--commit" "--version=stable" "--version-regex=^cli-v(.*)$" ];
+      extraArgs = [
+        "--commit"
+        "--version=stable"
+        "--version-regex=^cli-v(.*)$"
+      ];
     };
   };
 

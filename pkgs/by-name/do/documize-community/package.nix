@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, go-bindata, go-bindata-assetfs, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  go-bindata,
+  go-bindata-assetfs,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "documize-community";
@@ -15,7 +22,10 @@ buildGoModule rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ go-bindata go-bindata-assetfs ];
+  nativeBuildInputs = [
+    go-bindata
+    go-bindata-assetfs
+  ];
 
   # This is really weird, but they've managed to screw up
   # their folder structure enough, you can only build by

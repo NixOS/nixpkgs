@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, substituteAll, PodParser }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  substituteAll,
+  PodParser,
+}:
 
 stdenv.mkDerivation {
   pname = "multiline";

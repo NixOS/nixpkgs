@@ -1,41 +1,44 @@
-{ pname
-, version
-, extraDesc ? ""
-, src
-, extraPatches ? []
-, extraNativeBuildInputs ? []
-, extraConfigureFlags ? []
-, extraMeta ? {}
+{
+  pname,
+  version,
+  extraDesc ? "",
+  src,
+  extraPatches ? [ ],
+  extraNativeBuildInputs ? [ ],
+  extraConfigureFlags ? [ ],
+  extraMeta ? { },
 }:
 
-{ lib, stdenv
-# This *is* correct, though unusual. as a way of getting krb5-config from the
-# package without splicing See: https://github.com/NixOS/nixpkgs/pull/107606
-, pkgs
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, zlib
-, openssl
-, libedit
-, ldns
-, pkg-config
-, pam
-, libredirect
-, etcDir ? null
-, withKerberos ? false
-, withLdns ? true
-, krb5
-, libfido2
-, libxcrypt
-, hostname
-, nixosTests
-, withSecurityKey ? !stdenv.hostPlatform.isStatic
-, withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl && withSecurityKey
-, withPAM ? stdenv.hostPlatform.isLinux
-, dsaKeysSupport ? false
-, linkOpenssl ? true
-, isNixos ? stdenv.hostPlatform.isLinux
+{
+  lib,
+  stdenv,
+  # This *is* correct, though unusual. as a way of getting krb5-config from the
+  # package without splicing See: https://github.com/NixOS/nixpkgs/pull/107606
+  pkgs,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  zlib,
+  openssl,
+  libedit,
+  ldns,
+  pkg-config,
+  pam,
+  libredirect,
+  etcDir ? null,
+  withKerberos ? false,
+  withLdns ? true,
+  krb5,
+  libfido2,
+  libxcrypt,
+  hostname,
+  nixosTests,
+  withSecurityKey ? !stdenv.hostPlatform.isStatic,
+  withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl && withSecurityKey,
+  withPAM ? stdenv.hostPlatform.isLinux,
+  dsaKeysSupport ? false,
+  linkOpenssl ? true,
+  isNixos ? stdenv.hostPlatform.isLinux,
 }:
 
 # FIDO support requires SK support
@@ -63,13 +66,21 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook pkg-config ]
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      pkg-config
+    ]
     # This is not the same as the krb5 from the inputs! pkgs.krb5 is
     # needed here to access krb5-config in order to cross compile. See:
     # https://github.com/NixOS/nixpkgs/pull/107606
     ++ lib.optional withKerberos pkgs.krb5
     ++ extraNativeBuildInputs;
-  buildInputs = [ zlib libedit ]
+  buildInputs =
+    [
+      zlib
+      libedit
+    ]
     ++ [ (if linkOpenssl then openssl else libxcrypt) ]
     ++ lib.optional withFIDO libfido2
     ++ lib.optional withKerberos krb5
@@ -90,27 +101,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
-  configureFlags = [
-    "--sbindir=\${out}/bin"
-    "--localstatedir=/var"
-    "--with-pid-dir=/run"
-    "--with-mantype=man"
-    "--with-libedit=yes"
-    "--disable-strip"
-    (lib.withFeature withPAM "pam")
-    (lib.enableFeature dsaKeysSupport "dsa-keys")
-  ] ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
+  configureFlags =
+    [
+      "--sbindir=\${out}/bin"
+      "--localstatedir=/var"
+      "--with-pid-dir=/run"
+      "--with-mantype=man"
+      "--with-libedit=yes"
+      "--disable-strip"
+      (lib.withFeature withPAM "pam")
+      (lib.enableFeature dsaKeysSupport "dsa-keys")
+    ]
+    ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
     ++ lib.optional (!withSecurityKey) "--disable-security-key"
     ++ lib.optional withFIDO "--with-security-key-builtin=yes"
-    ++ lib.optional withKerberos (assert krb5 != null; "--with-kerberos5=${lib.getDev krb5}")
+    ++ lib.optional withKerberos (
+      assert krb5 != null;
+      "--with-kerberos5=${lib.getDev krb5}"
+    )
     ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-libutil"
     ++ lib.optional (!linkOpenssl) "--without-openssl"
     ++ lib.optional withLdns "--with-ldns"
     ++ extraConfigureFlags;
 
-  ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null} = [ "-laudit" ]
-    ++ lib.optional withKerberos "-lkeyutils"
-    ++ lib.optional withLdns "-lcrypto";
+  ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null} =
+    [ "-laudit" ] ++ lib.optional withKerberos "-lkeyutils" ++ lib.optional withLdns "-lcrypto";
 
   buildFlags = [ "SSH_KEYSIGN=ssh-keysign" ];
 
@@ -168,9 +183,14 @@ stdenv.mkDerivation (finalAttrs: {
   # integration tests hard to get working on darwin with its shaky
   # sandbox
   # t-exec tests fail on musl
-  checkTarget = lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) "t-exec"
+  checkTarget =
+    lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) "t-exec"
     # other tests are less demanding of the environment
-    ++ [ "unit" "file-tests" "interop-tests" ];
+    ++ [
+      "unit"
+      "file-tests"
+      "interop-tests"
+    ];
 
   postInstall = ''
     # Install ssh-copy-id, it's very useful.
@@ -197,13 +217,16 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
-    description = "Implementation of the SSH protocol${extraDesc}";
-    homepage = "https://www.openssh.com/";
-    changelog = "https://www.openssh.com/releasenotes.html";
-    license = licenses.bsd2;
-    platforms = platforms.unix ++ platforms.windows;
-    maintainers = (extraMeta.maintainers or []) ++ (with maintainers; [ aneeshusa ]);
-    mainProgram = "ssh";
-  } // extraMeta;
+  meta =
+    with lib;
+    {
+      description = "Implementation of the SSH protocol${extraDesc}";
+      homepage = "https://www.openssh.com/";
+      changelog = "https://www.openssh.com/releasenotes.html";
+      license = licenses.bsd2;
+      platforms = platforms.unix ++ platforms.windows;
+      maintainers = (extraMeta.maintainers or [ ]) ++ (with maintainers; [ aneeshusa ]);
+      mainProgram = "ssh";
+    }
+    // extraMeta;
 })

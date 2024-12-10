@@ -3,22 +3,24 @@
 # This is separate because the CF build is completely different and part of
 # stdenv. Merging the two was kept outside of the scope of Swift work.
 
-{ lib
-, stdenv
-, fetchpatch
-, callPackage
-, cmake
-, ninja
-, swift
-, Dispatch
-, icu
-, libxml2
-, curl
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  callPackage,
+  cmake,
+  ninja,
+  swift,
+  Dispatch,
+  icu,
+  libxml2,
+  curl,
 }:
 
 let
   sources = callPackage ../sources.nix { };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "swift-corelibs-foundation";
 
   inherit (sources) version;
@@ -33,10 +35,21 @@ in stdenv.mkDerivation {
     })
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ cmake ninja swift ];
-  buildInputs = [ icu libxml2 curl ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    swift
+  ];
+  buildInputs = [
+    icu
+    libxml2
+    curl
+  ];
   propagatedBuildInputs = [ Dispatch ];
 
   preConfigure = ''

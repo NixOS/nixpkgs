@@ -1,83 +1,87 @@
-{ clangStdenv
-, lib
-, runCommandWith
-, writeShellScript
-, fetchFromGitHub
-, fetchpatch
-, nixosTests
+{
+  clangStdenv,
+  lib,
+  runCommandWith,
+  writeShellScript,
+  fetchFromGitHub,
+  fetchpatch,
+  nixosTests,
 
-, freetype
-, libjpeg
-, libpng
-, libtiff
-, giflib
-, libX11
-, libXext
-, libXrandr
-, libXcursor
-, libxkbfile
-, cairo
-, libglvnd
-, fontconfig
-, dbus
-, libGLU
-, fuse
-, ffmpeg
-, pulseaudio
+  freetype,
+  libjpeg,
+  libpng,
+  libtiff,
+  giflib,
+  libX11,
+  libXext,
+  libXrandr,
+  libXcursor,
+  libxkbfile,
+  cairo,
+  libglvnd,
+  fontconfig,
+  dbus,
+  libGLU,
+  fuse,
+  ffmpeg,
+  pulseaudio,
 
-, makeWrapper
-, python2
-, python3
-, cmake
-, ninja
-, pkg-config
-, bison
-, flex
+  makeWrapper,
+  python2,
+  python3,
+  cmake,
+  ninja,
+  pkg-config,
+  bison,
+  flex,
 
-, libbsd
-, openssl
+  libbsd,
+  openssl,
 
-, xdg-user-dirs
+  xdg-user-dirs,
 
-, addDriverRunpath
+  addDriverRunpath,
 
-# Whether to pre-compile Python 2 bytecode for performance.
-, compilePy2Bytecode ? false
+  # Whether to pre-compile Python 2 bytecode for performance.
+  compilePy2Bytecode ? false,
 }:
 let
   stdenv = clangStdenv;
 
   # The build system invokes clang to compile Darwin executables.
   # In this case, our cc-wrapper must not be used.
-  ccWrapperBypass = runCommandWith {
-    inherit stdenv;
-    name = "cc-wrapper-bypass";
-    runLocal = false;
-    derivationArgs = {
-      template = writeShellScript "template" ''
-        for (( i=1; i<=$#; i++)); do
-          j=$((i+1))
-          if [[ "''${!i}" == "-target" && "''${!j}" == *"darwin"* ]]; then
-            # their flags must take precedence
-            exec @unwrapped@ "$@" $NIX_CFLAGS_COMPILE
-          fi
-        done
-        exec @wrapped@ "$@"
+  ccWrapperBypass =
+    runCommandWith
+      {
+        inherit stdenv;
+        name = "cc-wrapper-bypass";
+        runLocal = false;
+        derivationArgs = {
+          template = writeShellScript "template" ''
+            for (( i=1; i<=$#; i++)); do
+              j=$((i+1))
+              if [[ "''${!i}" == "-target" && "''${!j}" == *"darwin"* ]]; then
+                # their flags must take precedence
+                exec @unwrapped@ "$@" $NIX_CFLAGS_COMPILE
+              fi
+            done
+            exec @wrapped@ "$@"
+          '';
+        };
+      }
+      ''
+        unwrapped_bin=${stdenv.cc.cc}/bin
+        wrapped_bin=${stdenv.cc}/bin
+
+        mkdir -p $out/bin
+
+        unwrapped=$unwrapped_bin/$CC wrapped=$wrapped_bin/$CC \
+          substituteAll $template $out/bin/$CC
+        unwrapped=$unwrapped_bin/$CXX wrapped=$wrapped_bin/$CXX \
+          substituteAll $template $out/bin/$CXX
+
+        chmod +x $out/bin/$CC $out/bin/$CXX
       '';
-    };
-  } ''
-    unwrapped_bin=${stdenv.cc.cc}/bin
-    wrapped_bin=${stdenv.cc}/bin
-
-    mkdir -p $out/bin
-
-    unwrapped=$unwrapped_bin/$CC wrapped=$wrapped_bin/$CC \
-      substituteAll $template $out/bin/$CC
-    unwrapped=$unwrapped_bin/$CXX wrapped=$wrapped_bin/$CXX \
-      substituteAll $template $out/bin/$CXX
-
-    chmod +x $out/bin/$CC $out/bin/$CXX
-  '';
 
   wrappedLibs = [
     # To find all of them: rg -w wrap_elf
@@ -106,7 +110,8 @@ let
     ffmpeg
     pulseaudio
   ];
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "darling";
   version = "unstable-2024-02-03";
 
@@ -124,7 +129,10 @@ in stdenv.mkDerivation {
     '';
   };
 
-  outputs = [ "out" "sdk" ];
+  outputs = [
+    "out"
+    "sdk"
+  ];
 
   patches = [
     # Fix 'clang: error: no such file or directory: .../signal/mach_excUser.c'
@@ -166,8 +174,7 @@ in stdenv.mkDerivation {
     ninja
     pkg-config
     python3
-  ]
-  ++ lib.optional compilePy2Bytecode python2;
+  ] ++ lib.optional compilePy2Bytecode python2;
   buildInputs = wrappedLibs ++ [
     libbsd
     openssl

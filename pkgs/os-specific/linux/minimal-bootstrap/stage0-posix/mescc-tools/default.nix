@@ -1,17 +1,18 @@
-{ lib
-, derivationWithMeta
-, hostPlatform
-, kaem-unwrapped
-, M1
-, M2
-, blood-elf-0
-, hex2
-, m2libc
-, src
-, version
-, platforms
-, m2libcArch
-, baseAddress
+{
+  lib,
+  derivationWithMeta,
+  hostPlatform,
+  kaem-unwrapped,
+  M1,
+  M2,
+  blood-elf-0,
+  hex2,
+  m2libc,
+  src,
+  version,
+  platforms,
+  m2libcArch,
+  baseAddress,
 }:
 
 let
@@ -19,7 +20,8 @@ let
   bloodFlag = if hostPlatform.is64bit then "--64" else " ";
 
   # We need a few tools from mescc-tools-extra to assemble the output folder
-  buildMesccToolsExtraUtil = name:
+  buildMesccToolsExtraUtil =
+    name:
     derivationWithMeta {
       pname = "mescc-tools-extra-${name}";
       builder = kaem-unwrapped;
@@ -62,7 +64,15 @@ let
             -o ''${out}
         '')
       ];
-      inherit version M1 M2 blood-elf-0 hex2 m2libc src;
+      inherit
+        version
+        M1
+        M2
+        blood-elf-0
+        hex2
+        m2libc
+        src
+        ;
     };
   mkdir = buildMesccToolsExtraUtil "mkdir";
   cp = buildMesccToolsExtraUtil "cp";
@@ -78,7 +88,23 @@ derivationWithMeta {
     "--file"
     ./build.kaem
   ];
-  inherit version M1 M2 blood-elf-0 hex2 mkdir cp chmod replace m2libc src m2libcArch baseAddress bloodFlag endianFlag;
+  inherit
+    version
+    M1
+    M2
+    blood-elf-0
+    hex2
+    mkdir
+    cp
+    chmod
+    replace
+    m2libc
+    src
+    m2libcArch
+    baseAddress
+    bloodFlag
+    endianFlag
+    ;
 
   meta = with lib; {
     description = "Collection of tools written for use in bootstrapping";

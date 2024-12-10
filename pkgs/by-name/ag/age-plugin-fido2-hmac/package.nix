@@ -5,7 +5,7 @@
   stdenv,
   libfido2,
   openssl,
-  libcbor
+  libcbor,
 }:
 let
   darwin_arch = if stdenv.hostPlatform.system == "aarch64-darwin" then "arm64" else "amd64";
@@ -35,7 +35,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-h4/tyq9oZt41IfRJmmsLHUpJiPJ7YuFu59ccM7jHsFo=";
 
-  ldflags = [ "-s" "-w" "-X main.version=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=v${version}"
+  ];
 
   buildInputs = [ libfido2 ];
 

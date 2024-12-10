@@ -48,7 +48,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-
   dependencies = [
     aiohttp
     blinker

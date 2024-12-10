@@ -1,15 +1,16 @@
-{ cmake
-, fetchgit
-, gd
-, gettext
-, git
-, lib
-, libjpeg
-, libpng
-, libusb1
-, pkg-config
-, stdenv
-, zlib
+{
+  cmake,
+  fetchgit,
+  gd,
+  gettext,
+  git,
+  lib,
+  libjpeg,
+  libpng,
+  libusb1,
+  pkg-config,
+  stdenv,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {

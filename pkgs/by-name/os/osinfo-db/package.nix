@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, osinfo-db-tools
-, gettext
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  osinfo-db-tools,
+  gettext,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {

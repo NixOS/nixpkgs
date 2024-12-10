@@ -35,13 +35,16 @@ stdenv.mkDerivation rec {
     ./yoda2_support.patch
   ];
 
-  buildInputs = [
-    boost
-    gfortran
-    gfortran.cc.lib
-    lhapdf
-    yoda
-  ] ++ lib.optional withPython python ++ lib.optional (withPython && python.isPy3k) ncurses;
+  buildInputs =
+    [
+      boost
+      gfortran
+      gfortran.cc.lib
+      lhapdf
+      yoda
+    ]
+    ++ lib.optional withPython python
+    ++ lib.optional (withPython && python.isPy3k) ncurses;
 
   propagatedBuildInputs =
     [

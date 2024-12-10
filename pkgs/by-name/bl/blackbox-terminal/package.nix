@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, vala
-, gtk4
-, vte-gtk4
-, json-glib
-, sassc
-, libadwaita
-, pcre2
-, libsixel
-, libxml2
-, librsvg
-, libgee
-, callPackage
-, python3
-, desktop-file-utils
-, wrapGAppsHook4
-, sixelSupport ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gtk4,
+  vte-gtk4,
+  json-glib,
+  sassc,
+  libadwaita,
+  pcre2,
+  libsixel,
+  libxml2,
+  librsvg,
+  libgee,
+  callPackage,
+  python3,
+  desktop-file-utils,
+  wrapGAppsHook4,
+  sixelSupport ? false,
 }:
 
 let
@@ -72,22 +73,28 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     gtk4
-    (vte-gtk4.overrideAttrs (old: {
-      src = fetchFromGitLab {
-        domain = "gitlab.gnome.org";
-        owner = "GNOME";
-        repo = "vte";
-        rev = "3c8f66be867aca6656e4109ce880b6ea7431b895";
-        hash = "sha256-vz9ircmPy2Q4fxNnjurkgJtuTSS49rBq/m61p1B43eU=";
-      };
-      patches = lib.optional (old ? patches) (lib.head old.patches);
-      postPatch = (old.postPatch or "") + ''
-        patchShebangs src/box_drawing_generate.sh
-      '';
-    } // lib.optionalAttrs sixelSupport {
-      buildInputs = old.buildInputs ++ [ libsixel ];
-      mesonFlags = old.mesonFlags ++ [ "-Dsixel=true" ];
-    }))
+    (vte-gtk4.overrideAttrs (
+      old:
+      {
+        src = fetchFromGitLab {
+          domain = "gitlab.gnome.org";
+          owner = "GNOME";
+          repo = "vte";
+          rev = "3c8f66be867aca6656e4109ce880b6ea7431b895";
+          hash = "sha256-vz9ircmPy2Q4fxNnjurkgJtuTSS49rBq/m61p1B43eU=";
+        };
+        patches = lib.optional (old ? patches) (lib.head old.patches);
+        postPatch =
+          (old.postPatch or "")
+          + ''
+            patchShebangs src/box_drawing_generate.sh
+          '';
+      }
+      // lib.optionalAttrs sixelSupport {
+        buildInputs = old.buildInputs ++ [ libsixel ];
+        mesonFlags = old.mesonFlags ++ [ "-Dsixel=true" ];
+      }
+    ))
     json-glib
     marble
     libadwaita
@@ -105,7 +112,10 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/raggesilver/blackbox";
     changelog = "https://gitlab.gnome.org/raggesilver/blackbox/-/raw/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chuangzhu linsui ];
+    maintainers = with maintainers; [
+      chuangzhu
+      linsui
+    ];
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "consul-template";
@@ -26,7 +31,10 @@ buildGoModule rec {
     description = "Generic template rendering and notifications with Consul";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ cpcloud pradeepchhetri ];
+    maintainers = with maintainers; [
+      cpcloud
+      pradeepchhetri
+    ];
     mainProgram = "consul-template";
   };
 }

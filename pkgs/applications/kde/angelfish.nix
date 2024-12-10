@@ -1,31 +1,32 @@
-{ lib
-, mkDerivation
-, cargo
-, cmake
-, corrosion
-, extra-cmake-modules
-, fetchpatch2
-, futuresql
-, kconfig
-, kcoreaddons
-, kdbusaddons
-, ki18n
-, kirigami-addons
-, kirigami2
-, knotifications
-, kpurpose
-, kwindowsystem
-, qcoro
-, qtfeedback
-, qtquickcontrols2
-, qqc2-desktop-style
-, qtwebengine
-, rustPlatform
-, rustc
-, srcs
+{
+  lib,
+  mkDerivation,
+  cargo,
+  cmake,
+  corrosion,
+  extra-cmake-modules,
+  fetchpatch2,
+  futuresql,
+  kconfig,
+  kcoreaddons,
+  kdbusaddons,
+  ki18n,
+  kirigami-addons,
+  kirigami2,
+  knotifications,
+  kpurpose,
+  kwindowsystem,
+  qcoro,
+  qtfeedback,
+  qtquickcontrols2,
+  qqc2-desktop-style,
+  qtwebengine,
+  rustPlatform,
+  rustc,
+  srcs,
 
-# provided as callPackage input to enable easier overrides through overlays
-, cargoSha256 ? "sha256-PSrTo7nGgH0KxA82RlBEwtOu80WMCBeaCxHj3n7SgEE="
+  # provided as callPackage input to enable easier overrides through overlays
+  cargoSha256 ? "sha256-PSrTo7nGgH0KxA82RlBEwtOu80WMCBeaCxHj3n7SgEE=",
 }:
 
 mkDerivation rec {

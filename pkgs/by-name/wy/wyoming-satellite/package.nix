@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -47,7 +48,6 @@ python3Packages.buildPythonApplication rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
 
   meta = with lib; {
     description = "Remote voice satellite using Wyoming protocol";

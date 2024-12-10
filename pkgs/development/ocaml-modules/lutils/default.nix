@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, fetchurl, camlp-streams, num }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  camlp-streams,
+  num,
+}:
 
 buildDunePackage rec {
   pname = "lutils";
@@ -12,7 +18,8 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [
-    camlp-streams num
+    camlp-streams
+    num
   ];
 
   meta = with lib; {

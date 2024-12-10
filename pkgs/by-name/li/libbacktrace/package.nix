@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableShared ? !stdenv.hostPlatform.isStatic
-, unstableGitUpdater
-, autoreconfHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  unstableGitUpdater,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation {

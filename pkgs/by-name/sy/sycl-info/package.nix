@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, ocl-icd
-, opencl-headers
-, lyra
-, nlohmann_json
-, ronn
-, doctest
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  ocl-icd,
+  opencl-headers,
+  lyra,
+  nlohmann_json,
+  ronn,
+  doctest,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,13 +47,12 @@ stdenv.mkDerivation rec {
   # Required for ronn to compile the manpage.
   RUBYOPT = "-KU -E utf-8:utf-8";
 
-  meta = with lib;
-    {
-      homepage = "https://github.com/codeplaysoftware/sycl-info";
-      description = "Tool to show information about available SYCL implementations";
-      mainProgram = "sycl-info";
-      platforms = platforms.linux;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ davidtwco ];
-    };
+  meta = with lib; {
+    homepage = "https://github.com/codeplaysoftware/sycl-info";
+    description = "Tool to show information about available SYCL implementations";
+    mainProgram = "sycl-info";
+    platforms = platforms.linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ davidtwco ];
+  };
 }

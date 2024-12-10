@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitLab
-, python3
-, xorg
-, libpulseaudio
-, pkg-config
-, patchelf
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitLab,
+  python3,
+  xorg,
+  libpulseaudio,
+  pkg-config,
+  patchelf,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,8 +27,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-uroO0PgnCkFRNYAZgdTZWgDDbBqq1ZM+dni/A2Qw9fg=";
 
-  buildInputs = [ xorg.libX11 xorg.libXScrnSaver libpulseaudio ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
-  nativeBuildInputs = [ pkg-config patchelf python3 ];
+  buildInputs = [
+    xorg.libX11
+    xorg.libXScrnSaver
+    libpulseaudio
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  nativeBuildInputs = [
+    pkg-config
+    patchelf
+    python3
+  ];
 
   buildNoDefaultFeatures = !stdenv.hostPlatform.isLinux;
   buildFeatures = lib.optional (!stdenv.hostPlatform.isLinux) "pulse";

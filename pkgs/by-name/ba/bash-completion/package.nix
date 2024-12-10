@@ -1,9 +1,12 @@
-{ lib, stdenv, fetchurl
-, autoreconfHook
-, perl
-, ps
-, python3Packages
-, bashInteractive
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  perl,
+  ps,
+  python3Packages,
+  bashInteractive,
 }:
 
 stdenv.mkDerivation rec {
@@ -59,12 +62,14 @@ stdenv.mkDerivation rec {
       --ignore=test/t/test_screen.py
   '';
 
-  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    sed -i -e 's/readlink -f/readlink/g' bash_completion completions/*
-  '' + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
-    # please remove this next release!
-    touch completions/{pkg_delete,freebsd-update,kldload,kldunload,portinstall,portsnap,portupgrade}
-  '';
+  prePatch =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      sed -i -e 's/readlink -f/readlink/g' bash_completion completions/*
+    ''
+    + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+      # please remove this next release!
+      touch completions/{pkg_delete,freebsd-update,kldload,kldunload,portinstall,portsnap,portupgrade}
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/scop/bash-completion";

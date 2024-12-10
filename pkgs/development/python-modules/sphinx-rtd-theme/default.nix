@@ -31,7 +31,6 @@ buildPythonPackage rec {
     sphinxcontrib-jquery
   ];
 
-
   nativeCheckInputs = [
     pytestCheckHook
     readthedocs-sphinx-ext

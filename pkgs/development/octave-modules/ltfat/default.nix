@@ -1,14 +1,15 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, fftw
-, fftwSinglePrec
-, fftwFloat
-, fftwLongDouble
-, lapack
-, blas
-, portaudio
-, jdk
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  fftw,
+  fftwSinglePrec,
+  fftwFloat,
+  fftwLongDouble,
+  lapack,
+  blas,
+  portaudio,
+  jdk,
 }:
 
 buildOctavePackage rec {

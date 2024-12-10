@@ -1,17 +1,18 @@
-{ lib
-, mkXfceDerivation
-, wayland-scanner
-, glib
-, gtk3
-, libX11
-, libXtst
-, libxfce4ui
-, libxfce4util
-, qrencode
-, xfce4-panel
-, xfconf
-, wayland
-, wlr-protocols
+{
+  lib,
+  mkXfceDerivation,
+  wayland-scanner,
+  glib,
+  gtk3,
+  libX11,
+  libXtst,
+  libxfce4ui,
+  libxfce4util,
+  qrencode,
+  xfce4-panel,
+  xfconf,
+  wayland,
+  wlr-protocols,
 }:
 
 mkXfceDerivation {

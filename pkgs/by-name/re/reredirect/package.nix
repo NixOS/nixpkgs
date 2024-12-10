@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "reredirect";
@@ -23,7 +27,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jerome-pouiller/reredirect";
     license = licenses.mit;
     maintainers = [ maintainers.tobim ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }
-

@@ -1,10 +1,11 @@
-{ buildGoModule
-, doppler
-, fetchFromGitHub
-, installShellFiles
-, lib
-, testers
-, stdenv
+{
+  buildGoModule,
+  doppler,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  testers,
+  stdenv,
 }:
 
 buildGoModule rec {
@@ -27,16 +28,18 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
-    mv $out/bin/cli $out/bin/doppler
-  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    export HOME=$TMPDIR
-    mkdir $HOME/.doppler # to avoid race conditions below
-    installShellCompletion --cmd doppler \
-      --bash <($out/bin/doppler completion bash) \
-      --fish <($out/bin/doppler completion fish) \
-      --zsh <($out/bin/doppler completion zsh)
-  '';
+  postInstall =
+    ''
+      mv $out/bin/cli $out/bin/doppler
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      export HOME=$TMPDIR
+      mkdir $HOME/.doppler # to avoid race conditions below
+      installShellCompletion --cmd doppler \
+        --bash <($out/bin/doppler completion bash) \
+        --fish <($out/bin/doppler completion fish) \
+        --zsh <($out/bin/doppler completion zsh)
+    '';
 
   passthru.tests.version = testers.testVersion {
     package = doppler;

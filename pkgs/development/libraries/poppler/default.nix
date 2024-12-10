@@ -90,14 +90,16 @@ stdenv.mkDerivation (finalAttrs: rec {
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-    pkg-config
-    python3
-  ] ++ lib.optionals (!minimal) [
-    glib # for glib-mkenums
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      ninja
+      pkg-config
+      python3
+    ]
+    ++ lib.optionals (!minimal) [
+      glib # for glib-mkenums
+    ];
 
   buildInputs =
     [

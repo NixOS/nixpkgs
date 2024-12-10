@@ -1,14 +1,15 @@
-{ autoPatchelfHook
-, curl
-, dpkg
-, dbus
-, fetchurl
-, lib
-, libnl
-, udev
-, cryptsetup
-, stdenv
-, nixosTests
+{
+  autoPatchelfHook,
+  curl,
+  dpkg,
+  dbus,
+  fetchurl,
+  lib,
+  libnl,
+  udev,
+  cryptsetup,
+  stdenv,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,4 +1,10 @@
-{ lib, buildKodiBinaryAddon, fetchFromGitHub, libretro, mgba }:
+{
+  lib,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  libretro,
+  mgba,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "kodi-libretro-mgba";

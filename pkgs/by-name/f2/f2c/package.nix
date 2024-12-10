@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation {
   pname = "f2c";
@@ -9,7 +13,10 @@ stdenv.mkDerivation {
     sha256 = "sha256-TTPve2fe31/Ad+xFAWy6NUIes2QyUi6NjFucN0pdb5k=";
   };
 
-  makeFlags = [ "-f" "makefile.u" ];
+  makeFlags = [
+    "-f"
+    "makefile.u"
+  ];
 
   # Ensure xsum binary is built from scratch
   preBuild = "rm xsum";

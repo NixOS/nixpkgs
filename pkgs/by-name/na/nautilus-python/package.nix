@@ -14,7 +14,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus-python";
   version = "4.0.1";
 

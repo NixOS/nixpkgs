@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fpc
-, lazarus
-, atk
-, cairo
-, gdk-pixbuf
-, glib
-, gtk2-x11
-, libX11
-, pango
-, hamlib
-, mariadb
-, tqsl
-, xdg-utils
-, xplanet
-, autoPatchelfHook
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fpc,
+  lazarus,
+  atk,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  gtk2-x11,
+  libX11,
+  pango,
+  hamlib,
+  mariadb,
+  tqsl,
+  xdg-utils,
+  xplanet,
+  autoPatchelfHook,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -62,7 +63,12 @@ stdenv.mkDerivation rec {
     ! grep -C src -RC0 "/usr"
   '';
 
-  nativeBuildInputs = [ lazarus fpc autoPatchelfHook wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    lazarus
+    fpc
+    autoPatchelfHook
+    wrapGAppsHook3
+  ];
   buildInputs = [
     atk
     cairo

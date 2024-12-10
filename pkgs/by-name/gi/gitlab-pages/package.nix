@@ -1,4 +1,8 @@
-{ buildGoModule, lib, fetchFromGitLab }:
+{
+  buildGoModule,
+  lib,
+  fetchFromGitLab,
+}:
 
 buildGoModule rec {
   pname = "gitlab-pages";

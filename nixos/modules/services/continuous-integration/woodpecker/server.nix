@@ -1,7 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 
 let
@@ -10,7 +11,6 @@ in
 {
   meta.maintainers = with lib.maintainers; [ ambroisie ];
 
-
   options = {
     services.woodpecker-server = {
       enable = lib.mkEnableOption "the Woodpecker-Server, a CI/CD application for automatic builds, deployments and tests";
@@ -18,16 +18,15 @@ in
       environment = lib.mkOption {
         default = { };
         type = lib.types.attrsOf lib.types.str;
-        example = lib.literalExpression
-          ''
-            {
-              WOODPECKER_HOST = "https://woodpecker.example.com";
-              WOODPECKER_OPEN = "true";
-              WOODPECKER_GITEA = "true";
-              WOODPECKER_GITEA_CLIENT = "ffffffff-ffff-ffff-ffff-ffffffffffff";
-              WOODPECKER_GITEA_URL = "https://git.example.com";
-            }
-          '';
+        example = lib.literalExpression ''
+          {
+            WOODPECKER_HOST = "https://woodpecker.example.com";
+            WOODPECKER_OPEN = "true";
+            WOODPECKER_GITEA = "true";
+            WOODPECKER_GITEA_CLIENT = "ffffffff-ffff-ffff-ffff-ffffffffffff";
+            WOODPECKER_GITEA_URL = "https://git.example.com";
+          }
+        '';
         description = "woodpecker-server config environment variables, for other options read the [documentation](https://woodpecker-ci.org/docs/administration/server-config)";
       };
       environmentFile = lib.mkOption {
@@ -95,4 +94,3 @@ in
     };
   };
 }
-

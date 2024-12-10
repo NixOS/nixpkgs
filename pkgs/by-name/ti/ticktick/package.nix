@@ -1,17 +1,18 @@
-{ lib
-, fetchurl
-, stdenv
-, wrapGAppsHook3
-, dpkg
-, autoPatchelfHook
-, glibc
-, gcc-unwrapped
-, nss
-, libdrm
-, libgbm
-, alsa-lib
-, xdg-utils
-, systemd
+{
+  lib,
+  fetchurl,
+  stdenv,
+  wrapGAppsHook3,
+  dpkg,
+  autoPatchelfHook,
+  glibc,
+  gcc-unwrapped,
+  nss,
+  libdrm,
+  libgbm,
+  alsa-lib,
+  xdg-utils,
+  systemd,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ticktick";

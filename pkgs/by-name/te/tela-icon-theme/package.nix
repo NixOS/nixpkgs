@@ -1,4 +1,11 @@
-{ lib, stdenvNoCC, fetchFromGitHub, gtk3, jdupes, hicolor-icon-theme }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  jdupes,
+  hicolor-icon-theme,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "tela-icon-theme";
@@ -11,7 +18,10 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-ZzF4U/cTy/7oSDQs4+dezewgNzS5zroba8wpcfPciW4=";
   };
 
-  nativeBuildInputs = [ gtk3 jdupes ];
+  nativeBuildInputs = [
+    gtk3
+    jdupes
+  ];
 
   propagatedBuildInputs = [ hicolor-icon-theme ];
 

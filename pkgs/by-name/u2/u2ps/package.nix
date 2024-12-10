@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ghostscript_headless
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ghostscript_headless,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

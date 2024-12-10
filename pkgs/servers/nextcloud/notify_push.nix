@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, nixosTests
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,9 +32,9 @@ rustPlatform.buildRustPackage rec {
       };
     };
     tests =
-      lib.filterAttrs
-        (key: lib.const (lib.hasPrefix "with-postgresql-and-redis" key))
-        nixosTests.nextcloud
+      lib.filterAttrs (
+        key: lib.const (lib.hasPrefix "with-postgresql-and-redis" key)
+      ) nixosTests.nextcloud
       // {
         inherit test_client;
       };

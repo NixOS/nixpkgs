@@ -23,7 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   preConfigure = "./bootstrap";
 
-  nativeBuildInputs = [ autoconf automake bison flex ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    bison
+    flex
+  ];
   buildInputs = [ readline ];
 
   env = {
@@ -55,7 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin;
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   meta = {
     description = "Composing and deciphering C (or C++) declarations or casts, aka ''gibberish.''";

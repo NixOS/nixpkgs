@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, libjpeg
-, libGLU
-, libGL
-, libglut
-, zlib
-, cmake
-, libX11
-, libxml2
-, libpng
-, libXxf86vm
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libjpeg,
+  libGLU,
+  libGL,
+  libglut,
+  zlib,
+  cmake,
+  libX11,
+  libxml2,
+  libpng,
+  libXxf86vm,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libjpeg libGLU libGL libglut zlib libX11 libxml2 libpng libXxf86vm ];
+  buildInputs = [
+    libjpeg
+    libGLU
+    libGL
+    libglut
+    zlib
+    libX11
+    libxml2
+    libpng
+    libXxf86vm
+  ];
 
   postPatch = ''
     sed -i -e '/GECKO/d' CMakeLists.txt

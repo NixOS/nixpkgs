@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fmt, lzo, pkg-config, zlib, zstd }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  fmt,
+  lzo,
+  pkg-config,
+  zlib,
+  zstd,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ntfs2btrfs";
@@ -11,9 +21,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-sZ8AWREe2jasy3hqLTjaLcOMCNsrDjz2eIuknA2TsEs=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ fmt lzo zlib zstd ];
+  buildInputs = [
+    fmt
+    lzo
+    zlib
+    zstd
+  ];
 
   meta = {
     description = "CLI tool which does in-place conversion of Microsoft's NTFS filesystem to the open-source filesystem Btrfs";

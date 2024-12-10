@@ -1,8 +1,9 @@
-{ lib
-, dotnet-sdk
-, buildPackages # buildDotnetModule
-, testers
-, runCommand
+{
+  lib,
+  dotnet-sdk,
+  buildPackages, # buildDotnetModule
+  testers,
+  runCommand,
 }:
 let
   # Note: without structured attributes, we can’t use derivation arguments that
@@ -22,9 +23,11 @@ let
   };
 in
 {
-  no-structured-attrs = testers.testBuildFailure (app.overrideAttrs {
-    __structuredAttrs = false;
-  });
+  no-structured-attrs = testers.testBuildFailure (
+    app.overrideAttrs {
+      __structuredAttrs = false;
+    }
+  );
 
   check-output = testers.testEqualContents {
     assertion = "buildDotnetModule sets AssemblyCopyrightAttribute with structured attributes";

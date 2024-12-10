@@ -31,7 +31,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "urllib3" ];
 
-
   build-system = [
     setuptools
     poetry-core

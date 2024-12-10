@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.icecast;
   configFile = pkgs.writeText "icecast.xml" ''
@@ -33,7 +38,8 @@ let
       ${cfg.extraConf}
     </icecast>
   '';
-in {
+in
+{
 
   ###### interface
 
@@ -104,7 +110,6 @@ in {
     };
 
   };
-
 
   ###### implementation
 
