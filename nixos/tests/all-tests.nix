@@ -1787,6 +1787,10 @@ in
   yggdrasil = runTest ./yggdrasil.nix;
   your_spotify = runTest ./your_spotify.nix;
   zammad = runTest ./zammad.nix;
+  zen-browser = runTest {
+    imports = [ ./firefox.nix ];
+    _module.args.firefoxPackage = pkgs.zen-browser;
+  };
   zenohd = runTest ./zenohd.nix;
   zeronet-conservancy = runTest ./zeronet-conservancy.nix;
   zfs = handleTest ./zfs.nix { };
