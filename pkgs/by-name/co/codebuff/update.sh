@@ -3,13 +3,13 @@
 
 set -euo pipefail
 
-version=$(npm view manicode version)
+version=$(npm view codebuff version)
 
 # Generate updated lock file
 cd "$(dirname "${BASH_SOURCE[0]}")"
-npm i --package-lock-only manicode@$version
+npm i --package-lock-only codebuff@"$version"
 rm -f package.json
 
 # Update version and hases
 cd -
-nix-update manicode --version "$version"
+nix-update codebuff --version "$version"
