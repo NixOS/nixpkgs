@@ -89,6 +89,14 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   dontDisableStatic = true;
 
+  preBuild = lib.optionalString nanoizeNewlib (
+    let
+      flags = "-Os -fdata-sections -ffunction-sections";
+    in ''
+    makeFlagsArray+=(CFLAGS="${flags}" CXXFLAGS="${flags}")
+    ''
+  );
+
   # apply necessary nano changes from https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/manifest/copy_nano_libraries.sh?rev=4c50be6ccb9c4205a5262a3925317073&hash=1375A7B0A1CD0DB9B9EB0D2B574ADF66
   postInstall = lib.optionalString nanoizeNewlib ''
     mkdir -p $out${finalAttrs.passthru.incdir}/newlib-nano
