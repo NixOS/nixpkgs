@@ -82,7 +82,7 @@ python3Packages.buildPythonApplication rec {
     craft-platforms
     craft-providers
     craft-store
-    debian
+    python-debian
     docutils
     jsonschema
     launchpadlib

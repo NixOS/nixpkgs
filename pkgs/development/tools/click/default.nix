@@ -3,7 +3,7 @@
   fetchFromGitLab,
   buildPythonApplication,
   autoreconfHook,
-  debian,
+  python-debian,
   perl,
   vala,
   pkg-config,
@@ -78,7 +78,7 @@ buildPythonApplication {
   ];
 
   propagatedBuildInputs = [
-    debian
+    python-debian
     pygobject3
     setuptools
   ];

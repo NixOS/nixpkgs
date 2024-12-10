@@ -8,6 +8,7 @@
   overrides,
   pydantic,
   setuptools,
+  python-debian,
   setuptools-scm,
   tabulate,
   pytest-check,
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     overrides
     pydantic
     tabulate
+    python-debian
   ];
 
   pythonImportsCheck = [ "craft_archives" ];
