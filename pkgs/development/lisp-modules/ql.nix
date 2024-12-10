@@ -283,6 +283,17 @@ let
     vk = super.vk.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.vulkan-loader ];
     });
+    gt = super.gt.overrideLispAttrs (o: {
+      systems = o.systems ++ [ "gt/full" ];
+      lispLibs = o.lispLibs ++ [
+        self.flexi-streams
+        self.cl-dot
+        self.file-attributes
+        self.asdf-encodings
+        self.arrow-macros
+        self.metabang-bind
+      ];
+    });
   });
 
   qlpkgs =
