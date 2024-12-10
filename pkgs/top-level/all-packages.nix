@@ -33845,9 +33845,7 @@ with pkgs;
     xwaylandSupport = false;
   };
 
-  chatterino2 = callPackage ../applications/networking/instant-messengers/chatterino2 {
-    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-  };
+  inherit (callPackages ../applications/networking/instant-messengers/chatterino2 { } ) chatterino2 chatterino2-unstable chatterino7 chatterino7-unstable;
 
   weston = callPackage ../applications/window-managers/weston { };
 
