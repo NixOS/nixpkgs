@@ -22,6 +22,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/MichaelAquilina/zsh-you-should-use";
     license = lib.licenses.gpl3;
     description = "ZSH plugin that reminds you to use existing aliases for commands you just typed";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tomodachi94 ];
   };
 })
