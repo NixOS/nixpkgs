@@ -219,6 +219,7 @@ buildPythonPackage rec {
       pyarrow
       pyarrow-hotfix
       numpy
+      packaging
       pandas
       rich
     ];
