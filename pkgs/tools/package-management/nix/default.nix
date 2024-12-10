@@ -1,13 +1,11 @@
 { lib
 , config
-, stdenv
 , aws-sdk-cpp
 , boehmgc
 , callPackage
 , fetchFromGitHub
 , fetchpatch2
 , runCommand
-, buildPackages
 , Security
 
 , storeDir ? "/nix/store"
@@ -15,9 +13,9 @@
 , confDir ? "/etc"
 }:
 let
-  boehmgc-nix_2_3 = boehmgc.override { enableLargeConfig = true; };
-
-  boehmgc-nix = boehmgc-nix_2_3.overrideAttrs (drv: {
+  boehmgc-nix = boehmgc.override {
+    enableLargeConfig = true;
+  }.overrideAttrs (drv: {
     patches = (drv.patches or [ ]) ++ [
       # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
       ./patches/boehmgc-coroutine-sp-fallback.patch
@@ -90,7 +88,7 @@ let
       {
         inherit Security storeDir stateDir confDir;
         boehmgc = boehmgc-nix;
-        aws-sdk-cpp = if lib.versionAtLeast args.version "2.12pre" then aws-sdk-cpp-nix else aws-sdk-cpp-old-nix;
+        aws-sdk-cpp = aws-sdk-cpp-nix;
       };
 
   # https://github.com/NixOS/nix/pull/7585
@@ -142,7 +140,10 @@ in lib.makeExtensible (self: ({
     ];
     self_attribute_name = "nix_2_3";
     maintainers = with lib.maintainers; [ flokli ];
-  }).override { boehmgc = boehmgc-nix_2_3; }).overrideAttrs {
+  }).override {
+    boehmgc = boehmgc.override { enableLargeConfig = true; };
+    aws-sdk-cpp = aws-sdk-cpp-old-nix;
+  }).overrideAttrs {
     # https://github.com/NixOS/nix/issues/10222
     # spurious test/add.sh failures
     enableParallelChecking = false;
