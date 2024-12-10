@@ -193,8 +193,8 @@ stdenv.mkDerivation rec {
   # Copying because unfortunately pointing Wireshark (when built as an appbundle) at $out/lib instead is nontrivial.
   postFixup = lib.optionalString isAppBundle ''
     rm -rf $out/Applications/Wireshark.app/Contents/MacOS/extcap $out/Applications/Wireshark.app/Contents/PlugIns
-    mkdir -p $out/Applications/Wireshark.app/Contents/PlugIns/wireshark
-    cp -r $out/lib/wireshark/plugins/4-2 $out/Applications/Wireshark.app/Contents/PlugIns/wireshark/4-2
+    mkdir -p $out/Applications/Wireshark.app/Contents/PlugIns
+    cp -r $out/lib/wireshark/plugins $out/Applications/Wireshark.app/Contents/PlugIns/wireshark
     cp -r $out/lib/wireshark/extcap $out/Applications/Wireshark.app/Contents/MacOS/extcap
   '';
 
