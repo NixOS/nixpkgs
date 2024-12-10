@@ -1,11 +1,12 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, stdenv
-, darwin
-, libsecret
-, pkg-config
-, python3
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
+  libsecret,
+  pkg-config,
+  python3,
 }:
 
 buildNpmPackage rec {
@@ -21,13 +22,21 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-+ptjsz2MDIB/aqu4UxkBLCcehtamFdmswNUsHs23LuE=";
 
-  nativeBuildInputs = [ pkg-config python3 ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    libsecret
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin; [
-    Security
-    apple_sdk.frameworks.AppKit
-  ]);
+  nativeBuildInputs = [
+    pkg-config
+    python3
+  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      libsecret
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin;
+      [
+        Security
+        apple_sdk.frameworks.AppKit
+      ]
+    );
 
   meta = {
     description = "An open source Azure Storage API compatible server";

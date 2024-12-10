@@ -1,17 +1,18 @@
-{ stdenv
-, cmake
-, curl
-, fetchFromGitHub
-, gss
-, hwloc
-, lib
-, libsodium
-, libuv
-, nix-update-script
-, openssl
-, pkg-config
-, zeromq
-, darwin
+{
+  stdenv,
+  cmake,
+  curl,
+  fetchFromGitHub,
+  gss,
+  hwloc,
+  lib,
+  libsodium,
+  libuv,
+  nix-update-script,
+  openssl,
+  pkg-config,
+  zeromq,
+  darwin,
 }:
 
 let
@@ -29,15 +30,29 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libuv zeromq libsodium gss hwloc openssl curl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    libuv
+    zeromq
+    libsodium
+    gss
+    hwloc
+    openssl
+    curl
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
 
-  cmakeFlags = ["-DWITH_LTO=OFF"];
+  cmakeFlags = [ "-DWITH_LTO=OFF" ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
-    "-faligned-allocation"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals
+      (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13")
+      [
+        "-faligned-allocation"
+      ]
+  );
 
   installPhase = ''
     runHook preInstall

@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, testers
-, boost
-, cmake
-, cmake-extras
-, dbus
-, dbus-cpp
-, gtest
-, libapparmor
-, libelf
-, pkg-config
-, process-cpp
-, properties-cpp
-, qtbase
-, qtdeclarative
-, sqlite
-, validatePkgConfig
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  testers,
+  boost,
+  cmake,
+  cmake-extras,
+  dbus,
+  dbus-cpp,
+  gtest,
+  libapparmor,
+  libelf,
+  pkg-config,
+  process-cpp,
+  properties-cpp,
+  qtbase,
+  qtdeclarative,
+  sqlite,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,21 +37,23 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  postPatch = ''
-    # Substitute systemd's prefix in pkg-config call
-    substituteInPlace data/CMakeLists.txt \
-      --replace-fail 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir)' 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
+  postPatch =
+    ''
+      # Substitute systemd's prefix in pkg-config call
+      substituteInPlace data/CMakeLists.txt \
+        --replace-fail 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir)' 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
 
-    substituteInPlace src/biometry/qml/Biometryd/CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      substituteInPlace src/biometry/qml/Biometryd/CMakeLists.txt \
+        --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
-    # For our automatic pkg-config output patcher to work, prefix must be used here
-    substituteInPlace data/biometryd.pc.in \
-      --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
-      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}' \
-  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
-  '';
+      # For our automatic pkg-config output patcher to work, prefix must be used here
+      substituteInPlace data/biometryd.pc.in \
+        --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
+        --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}' \
+    ''
+    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+      sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
+    '';
 
   strictDeps = true;
 

@@ -1,9 +1,15 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 let
   cfg = config.services.zfs.autoReplication;
   recursive = lib.optionalString cfg.recursive " --recursive";
   followDelete = lib.optionalString cfg.followDelete " --follow-delete";
-in {
+in
+{
   options = {
     services.zfs.autoReplication = {
       enable = lib.mkEnableOption "ZFS snapshot replication";

@@ -1,39 +1,43 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, qtbase
-, qtmultimedia
-, qscintilla
-, bison
-, flex
-, eigen
-, boost
-, libGLU, libGL
-, glew
-, opencsg
-, cgal_4
-, mpfr
-, gmp
-, glib
-, pkg-config
-, harfbuzz
-, gettext
-, freetype
-, fontconfig
-, double-conversion
-, lib3mf
-, libzip
-, mkDerivation
-, qtmacextras
-, qmake
-, spacenavSupport ? stdenv.hostPlatform.isLinux, libspnav
-, wayland
-, wayland-protocols
-, wrapGAppsHook3
-, qtwayland
-, cairo
-, openscad
-, runCommand
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  qtbase,
+  qtmultimedia,
+  qscintilla,
+  bison,
+  flex,
+  eigen,
+  boost,
+  libGLU,
+  libGL,
+  glew,
+  opencsg,
+  cgal_4,
+  mpfr,
+  gmp,
+  glib,
+  pkg-config,
+  harfbuzz,
+  gettext,
+  freetype,
+  fontconfig,
+  double-conversion,
+  lib3mf,
+  libzip,
+  mkDerivation,
+  qtmacextras,
+  qmake,
+  spacenavSupport ? stdenv.hostPlatform.isLinux,
+  libspnav,
+  wayland,
+  wayland-protocols,
+  wrapGAppsHook3,
+  qtwayland,
+  cairo,
+  openscad,
+  runCommand,
 }:
 
 mkDerivation rec {
@@ -60,23 +64,53 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ bison flex pkg-config gettext qmake wrapGAppsHook3];
+  nativeBuildInputs = [
+    bison
+    flex
+    pkg-config
+    gettext
+    qmake
+    wrapGAppsHook3
+  ];
 
-  buildInputs = [
-    eigen boost glew opencsg cgal_4 mpfr gmp glib
-    harfbuzz lib3mf libzip double-conversion freetype fontconfig
-    qtbase qtmultimedia qscintilla cairo
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libGLU libGL wayland wayland-protocols qtwayland ]
+  buildInputs =
+    [
+      eigen
+      boost
+      glew
+      opencsg
+      cgal_4
+      mpfr
+      gmp
+      glib
+      harfbuzz
+      lib3mf
+      libzip
+      double-conversion
+      freetype
+      fontconfig
+      qtbase
+      qtmultimedia
+      qscintilla
+      cairo
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libGLU
+      libGL
+      wayland
+      wayland-protocols
+      qtwayland
+    ]
     ++ lib.optional stdenv.hostPlatform.isDarwin qtmacextras
-    ++ lib.optional spacenavSupport libspnav
-  ;
+    ++ lib.optional spacenavSupport libspnav;
 
-  qmakeFlags = [
-    "VERSION=${version}"
-    "LIB3MF_INCLUDEPATH=${lib3mf.dev}/include/lib3mf/Bindings/Cpp"
-    "LIB3MF_LIBPATH=${lib3mf}/lib"
-  ] ++
-    lib.optionals spacenavSupport [
+  qmakeFlags =
+    [
+      "VERSION=${version}"
+      "LIB3MF_INCLUDEPATH=${lib3mf.dev}/include/lib3mf/Bindings/Cpp"
+      "LIB3MF_LIBPATH=${lib3mf}/lib"
+    ]
+    ++ lib.optionals spacenavSupport [
       "ENABLE_SPNAV=1"
       "SPNAV_INCLUDEPATH=${libspnav}/include"
       "SPNAV_LIBPATH=${libspnav}/lib"
@@ -115,17 +149,24 @@ mkDerivation rec {
     homepage = "https://openscad.org/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ bjornfor raskin gebner ];
+    maintainers = with lib.maintainers; [
+      bjornfor
+      raskin
+      gebner
+    ];
     mainProgram = "openscad";
   };
 
   passthru.tests = {
-    lib3mf_support = runCommand "${pname}-lib3mf-support-test" {
-      nativeBuildInputs = [ openscad ];
-    } ''
-      echo "cube([1, 1, 1]);" | openscad -o cube.3mf -
-      echo "import(\"cube.3mf\");" | openscad -o cube-import.3mf -
-      mv cube-import.3mf $out
-    '';
+    lib3mf_support =
+      runCommand "${pname}-lib3mf-support-test"
+        {
+          nativeBuildInputs = [ openscad ];
+        }
+        ''
+          echo "cube([1, 1, 1]);" | openscad -o cube.3mf -
+          echo "import(\"cube.3mf\");" | openscad -o cube-import.3mf -
+          mv cube-import.3mf $out
+        '';
   };
 }

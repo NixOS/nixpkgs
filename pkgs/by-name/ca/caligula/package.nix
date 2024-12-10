@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, llvmPackages
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  llvmPackages,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,12 +21,12 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-ma7JVbWSiKfkCXCDwA8DFm2+KPrWR+8nSdgGSqehNg8=";
 
   env = {
-     LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
-   };
-
+    LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
+  };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks; [
+    with darwin.apple_sdk.frameworks;
+    [
       Cocoa
       IOKit
       Foundation
@@ -39,7 +40,10 @@ rustPlatform.buildRustPackage rec {
     description = "User-friendly, lightweight TUI for disk imaging";
     homepage = "https://github.com/ifd3f/caligula/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ifd3f sodiboo ];
+    maintainers = with maintainers; [
+      ifd3f
+      sodiboo
+    ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "caligula";
   };

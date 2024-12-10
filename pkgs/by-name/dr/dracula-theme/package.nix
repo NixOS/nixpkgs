@@ -1,4 +1,10 @@
-{ lib, stdenvNoCC, fetchFromGitHub, unstableGitUpdater, gtk-engine-murrine }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  gtk-engine-murrine,
+}:
 
 let
   themeName = "Dracula";

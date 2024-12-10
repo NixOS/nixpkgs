@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchurl
-, libGL
-, libjpeg
-, libexif
-, giflib
-, libtiff
-, libpng
-, libwebp
-, libdrm
-, pkg-config
-, freetype
-, fontconfig
-, which
-, imagemagick
-, curl
-, sane-backends
-, libXpm
-, libepoxy
-, pixman
-, poppler
-, mesa
-, lirc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libGL,
+  libjpeg,
+  libexif,
+  giflib,
+  libtiff,
+  libpng,
+  libwebp,
+  libdrm,
+  pkg-config,
+  freetype,
+  fontconfig,
+  which,
+  imagemagick,
+  curl,
+  sane-backends,
+  libXpm,
+  libepoxy,
+  pixman,
+  poppler,
+  mesa,
+  lirc,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,7 +43,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config which ];
+  nativeBuildInputs = [
+    pkg-config
+    which
+  ];
   buildInputs = [
     libGL
     libexif
@@ -65,7 +69,12 @@ stdenv.mkDerivation rec {
     mesa
   ];
 
-  makeFlags = [ "prefix=$(out)" "verbose=yes" "STRIP=" "JPEG_VER=62" ];
+  makeFlags = [
+    "prefix=$(out)"
+    "verbose=yes"
+    "STRIP="
+    "JPEG_VER=62"
+  ];
 
   postPatch = ''
     sed -e 's@ cpp\>@ gcc -E -@' -i GNUmakefile

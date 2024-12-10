@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, protobuf
-, rustPlatform
-, fetchFromGitHub
-, Cocoa
-, pkgsBuildHost
-, openssl
-, pkg-config
+{
+  stdenv,
+  lib,
+  protobuf,
+  rustPlatform,
+  fetchFromGitHub,
+  Cocoa,
+  pkgsBuildHost,
+  openssl,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,12 +36,17 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ protobuf pkg-config ];
+  nativeBuildInputs = [
+    protobuf
+    pkg-config
+  ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
-  NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ "-framework" "AppKit" ];
+  NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    "-framework"
+    "AppKit"
+  ];
 
   PROTOC = "${pkgsBuildHost.protobuf}/bin/protoc";
 

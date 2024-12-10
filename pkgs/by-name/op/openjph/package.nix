@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, validatePkgConfig, testers, nix-update-script }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  validatePkgConfig,
+  testers,
+  nix-update-script,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openjph";
@@ -11,9 +19,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ljvdCrvKL3slVGqX97Ui65/6Doyucf2kdUEw6NWW9og=";
   };
 
-  nativeBuildInputs = [ cmake validatePkgConfig ];
+  nativeBuildInputs = [
+    cmake
+    validatePkgConfig
+  ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "OJPH_ENABLE_TIFF_SUPPORT" false)

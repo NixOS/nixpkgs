@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   receiverSubmodule = {
     options = {
@@ -108,7 +113,8 @@ let
     };
   };
 
-in {
+in
+{
   options = {
     services.postgresqlWalReceiver = {
       receivers = lib.mkOption {
@@ -133,65 +139,76 @@ in {
     };
   };
 
-  config = let
-    receivers = config.services.postgresqlWalReceiver.receivers;
-  in lib.mkIf (receivers != { }) {
-    users = {
-      users.postgres = {
-        uid = config.ids.uids.postgres;
-        group = "postgres";
-        description = "PostgreSQL server user";
+  config =
+    let
+      receivers = config.services.postgresqlWalReceiver.receivers;
+    in
+    lib.mkIf (receivers != { }) {
+      users = {
+        users.postgres = {
+          uid = config.ids.uids.postgres;
+          group = "postgres";
+          description = "PostgreSQL server user";
+        };
+
+        groups.postgres = {
+          gid = config.ids.gids.postgres;
+        };
       };
 
-      groups.postgres = {
-        gid = config.ids.gids.postgres;
-      };
+      assertions = lib.concatLists (
+        lib.attrsets.mapAttrsToList (name: config: [
+          {
+            assertion = config.compress > 0 -> lib.versionAtLeast config.postgresqlPackage.version "10";
+            message = "Invalid configuration for WAL receiver \"${name}\": compress requires PostgreSQL version >= 10.";
+          }
+        ]) receivers
+      );
+
+      systemd.tmpfiles.rules = lib.mapAttrsToList (name: config: ''
+        d ${lib.escapeShellArg config.directory} 0750 postgres postgres - -
+      '') receivers;
+
+      systemd.services = lib.mapAttrs' (
+        name: config:
+        lib.nameValuePair "postgresql-wal-receiver-${name}" {
+          description = "PostgreSQL WAL receiver (${name})";
+          wantedBy = [ "multi-user.target" ];
+          startLimitIntervalSec = 0; # retry forever, useful in case of network disruption
+
+          serviceConfig = {
+            User = "postgres";
+            Group = "postgres";
+            KillSignal = "SIGINT";
+            Restart = "always";
+            RestartSec = 60;
+          };
+
+          inherit (config) environment;
+
+          script =
+            let
+              receiverCommand =
+                postgresqlPackage:
+                if (lib.versionAtLeast postgresqlPackage.version "10") then
+                  "${postgresqlPackage}/bin/pg_receivewal"
+                else
+                  "${postgresqlPackage}/bin/pg_receivexlog";
+            in
+            ''
+              ${receiverCommand config.postgresqlPackage} \
+                --no-password \
+                --directory=${lib.escapeShellArg config.directory} \
+                --status-interval=${toString config.statusInterval} \
+                --dbname=${lib.escapeShellArg config.connection} \
+                ${lib.optionalString (config.compress > 0) "--compress=${toString config.compress}"} \
+                ${lib.optionalString (config.slot != "") "--slot=${lib.escapeShellArg config.slot}"} \
+                ${lib.optionalString config.synchronous "--synchronous"} \
+                ${lib.concatStringsSep " " config.extraArgs}
+            '';
+        }
+      ) receivers;
     };
-
-    assertions = lib.concatLists (lib.attrsets.mapAttrsToList (name: config: [
-      {
-        assertion = config.compress > 0 -> lib.versionAtLeast config.postgresqlPackage.version "10";
-        message = "Invalid configuration for WAL receiver \"${name}\": compress requires PostgreSQL version >= 10.";
-      }
-    ]) receivers);
-
-    systemd.tmpfiles.rules = lib.mapAttrsToList (name: config: ''
-      d ${lib.escapeShellArg config.directory} 0750 postgres postgres - -
-    '') receivers;
-
-    systemd.services = lib.mapAttrs' (name: config: lib.nameValuePair "postgresql-wal-receiver-${name}" {
-      description = "PostgreSQL WAL receiver (${name})";
-      wantedBy = [ "multi-user.target" ];
-      startLimitIntervalSec = 0; # retry forever, useful in case of network disruption
-
-      serviceConfig = {
-        User = "postgres";
-        Group = "postgres";
-        KillSignal = "SIGINT";
-        Restart = "always";
-        RestartSec = 60;
-      };
-
-      inherit (config) environment;
-
-      script = let
-        receiverCommand = postgresqlPackage:
-         if (lib.versionAtLeast postgresqlPackage.version "10")
-           then "${postgresqlPackage}/bin/pg_receivewal"
-           else "${postgresqlPackage}/bin/pg_receivexlog";
-      in ''
-        ${receiverCommand config.postgresqlPackage} \
-          --no-password \
-          --directory=${lib.escapeShellArg config.directory} \
-          --status-interval=${toString config.statusInterval} \
-          --dbname=${lib.escapeShellArg config.connection} \
-          ${lib.optionalString (config.compress > 0) "--compress=${toString config.compress}"} \
-          ${lib.optionalString (config.slot != "") "--slot=${lib.escapeShellArg config.slot}"} \
-          ${lib.optionalString config.synchronous "--synchronous"} \
-          ${lib.concatStringsSep " " config.extraArgs}
-      '';
-    }) receivers;
-  };
 
   meta.maintainers = with lib.maintainers; [ pacien ];
 }

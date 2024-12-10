@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "go-migrate";
@@ -16,7 +20,31 @@ buildGoModule rec {
 
   subPackages = [ "cmd/migrate" ];
 
-  tags = [ "cassandra" "clickhouse" "cockroachdb" "crate" "firebird" "mongodb" "multistmt" "mysql" "neo4j" "pgx" "pgx5" "postgres" "ql" "redshift" "rqlite" "shell" "snowflake" "spanner" "sqlite3" "sqlserver" "stub" "testing" "yugabytedb" ];
+  tags = [
+    "cassandra"
+    "clickhouse"
+    "cockroachdb"
+    "crate"
+    "firebird"
+    "mongodb"
+    "multistmt"
+    "mysql"
+    "neo4j"
+    "pgx"
+    "pgx5"
+    "postgres"
+    "ql"
+    "redshift"
+    "rqlite"
+    "shell"
+    "snowflake"
+    "spanner"
+    "sqlite3"
+    "sqlserver"
+    "stub"
+    "testing"
+    "yugabytedb"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/golang-migrate/migrate";

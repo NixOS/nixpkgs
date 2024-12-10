@@ -1,4 +1,23 @@
-{ lib, stdenv, fetchurl, fastjet, fastjet-contrib, ghostscript, hdf5, hepmc3, highfive, imagemagick, less, pkg-config, python3, rsync, texliveBasic, yoda, which, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fastjet,
+  fastjet-contrib,
+  ghostscript,
+  hdf5,
+  hepmc3,
+  highfive,
+  imagemagick,
+  less,
+  pkg-config,
+  python3,
+  rsync,
+  texliveBasic,
+  yoda,
+  which,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rivet";
@@ -9,25 +28,42 @@ stdenv.mkDerivation rec {
     hash = "sha256-ToaS1uilOWHHeYPra6SJPDdlzyP3BXieTYZb5Iku/3k=";
   };
 
-  latex = texliveBasic.withPackages (ps: with ps; [
-    collection-pstricks
-    collection-fontsrecommended
-    l3kernel
-    l3packages
-    mathastext
-    pgf
-    relsize
-    sansmath
-    sfmath
-    siunitx
-    xcolor
-    xkeyval
-    xstring
-  ]);
+  latex = texliveBasic.withPackages (
+    ps: with ps; [
+      collection-pstricks
+      collection-fontsrecommended
+      l3kernel
+      l3packages
+      mathastext
+      pgf
+      relsize
+      sansmath
+      sfmath
+      siunitx
+      xcolor
+      xkeyval
+      xstring
+    ]
+  );
 
-  nativeBuildInputs = [ rsync makeWrapper pkg-config ];
-  buildInputs = [ hepmc3 highfive imagemagick python3 latex python3.pkgs.yoda ];
-  propagatedBuildInputs = [ hdf5 fastjet fastjet-contrib ];
+  nativeBuildInputs = [
+    rsync
+    makeWrapper
+    pkg-config
+  ];
+  buildInputs = [
+    hepmc3
+    highfive
+    imagemagick
+    python3
+    latex
+    python3.pkgs.yoda
+  ];
+  propagatedBuildInputs = [
+    hdf5
+    fastjet
+    fastjet-contrib
+  ];
 
   preConfigure = ''
     substituteInPlace configure \
@@ -35,7 +71,9 @@ stdenv.mkDerivation rec {
     substituteInPlace bin/rivet-build.in \
       --replace-fail 'num_jobs=$(getconf _NPROCESSORS_ONLN)' 'num_jobs=''${NIX_BUILD_CORES:-$(getconf _NPROCESSORS_ONLN)}' \
       --replace-fail 'which' '"${which}/bin/which"' \
-      --replace-fail 'mycxx=' 'mycxx=${stdenv.cc}/bin/${if stdenv.cc.isClang or false then "clang++" else "g++"}  #' \
+      --replace-fail 'mycxx=' 'mycxx=${stdenv.cc}/bin/${
+        if stdenv.cc.isClang or false then "clang++" else "g++"
+      }  #' \
       --replace-fail 'mycxxflags="' "mycxxflags=\"$NIX_CFLAGS_COMPILE $NIX_CXXSTDLIB_COMPILE $NIX_CFLAGS_LINK "
   '';
 
@@ -73,9 +111,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Framework for comparison of experimental measurements from high-energy particle colliders to theory predictions";
-    license     = licenses.gpl3;
-    homepage    = "https://rivet.hepforge.org";
-    platforms   = platforms.unix;
+    license = licenses.gpl3;
+    homepage = "https://rivet.hepforge.org";
+    platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };
 }

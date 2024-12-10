@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -31,47 +37,73 @@ let
     };
   };
 
-  mkKubeConfig = name: conf: pkgs.writeText "${name}-kubeconfig" (builtins.toJSON {
-    apiVersion = "v1";
-    kind = "Config";
-    clusters = [{
-      name = "local";
-      cluster.certificate-authority = conf.caFile or cfg.caFile;
-      cluster.server = conf.server;
-    }];
-    users = [{
-      inherit name;
-      user = {
-        client-certificate = conf.certFile;
-        client-key = conf.keyFile;
-      };
-    }];
-    contexts = [{
-      context = {
-        cluster = "local";
-        user = name;
-      };
-      name = "local";
-    }];
-    current-context = "local";
-  });
+  mkKubeConfig =
+    name: conf:
+    pkgs.writeText "${name}-kubeconfig" (
+      builtins.toJSON {
+        apiVersion = "v1";
+        kind = "Config";
+        clusters = [
+          {
+            name = "local";
+            cluster.certificate-authority = conf.caFile or cfg.caFile;
+            cluster.server = conf.server;
+          }
+        ];
+        users = [
+          {
+            inherit name;
+            user = {
+              client-certificate = conf.certFile;
+              client-key = conf.keyFile;
+            };
+          }
+        ];
+        contexts = [
+          {
+            context = {
+              cluster = "local";
+              user = name;
+            };
+            name = "local";
+          }
+        ];
+        current-context = "local";
+      }
+    );
 
   caCert = secret "ca";
 
-  etcdEndpoints = ["https://${cfg.masterAddress}:2379"];
+  etcdEndpoints = [ "https://${cfg.masterAddress}:2379" ];
 
-  mkCert = { name, CN, hosts ? [], fields ? {}, action ? "",
-             privateKeyOwner ? "kubernetes", privateKeyGroup ? "kubernetes" }: rec {
-    inherit name caCert CN hosts fields action;
-    cert = secret name;
-    key = secret "${name}-key";
-    privateKeyOptions = {
-      owner = privateKeyOwner;
-      group = privateKeyGroup;
-      mode = "0600";
-      path = key;
+  mkCert =
+    {
+      name,
+      CN,
+      hosts ? [ ],
+      fields ? { },
+      action ? "",
+      privateKeyOwner ? "kubernetes",
+      privateKeyGroup ? "kubernetes",
+    }:
+    rec {
+      inherit
+        name
+        caCert
+        CN
+        hosts
+        fields
+        action
+        ;
+      cert = secret name;
+      key = secret "${name}-key";
+      privateKeyOptions = {
+        owner = privateKeyOwner;
+        group = privateKeyGroup;
+        mode = "0600";
+        path = key;
+      };
     };
-  };
 
   secret = name: "${cfg.secretsPath}/${name}.pem";
 
@@ -100,10 +132,16 @@ let
       default = null;
     };
   };
-in {
+in
+{
 
   imports = [
-    (mkRemovedOptionModule [ "services" "kubernetes" "addons" "dashboard" ] "Removed due to it being an outdated version")
+    (mkRemovedOptionModule [
+      "services"
+      "kubernetes"
+      "addons"
+      "dashboard"
+    ] "Removed due to it being an outdated version")
     (mkRemovedOptionModule [ "services" "kubernetes" "verbose" ] "")
   ];
 
@@ -118,8 +156,13 @@ in {
         addon manager, flannel and proxy services.
         Node role will enable flannel, docker, kubelet and proxy services.
       '';
-      default = [];
-      type = types.listOf (types.enum ["master" "node"]);
+      default = [ ];
+      type = types.listOf (
+        types.enum [
+          "master"
+          "node"
+        ]
+      );
     };
 
     package = mkPackageOption pkgs "kubernetes" { };
@@ -155,7 +198,7 @@ in {
 
     featureGates = mkOption {
       description = "List set of feature gates.";
-      default = {};
+      default = { };
       type = types.attrsOf types.bool;
     };
 
@@ -168,7 +211,7 @@ in {
     path = mkOption {
       description = "Packages added to the services' PATH environment variable. Both the bin and sbin subdirectories of each package are added.";
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
     };
 
     clusterCidr = mkOption {
@@ -225,7 +268,6 @@ in {
       };
     })
 
-
     (mkIf (all (el: el == "master") cfg.roles) {
       # if this node is only a master make it unschedulable by default
       services.kubernetes.kubelet.unschedulable = mkDefault true;
@@ -237,7 +279,7 @@ in {
     })
 
     # Using "services.kubernetes.roles" will automatically enable easyCerts and flannel
-    (mkIf (cfg.roles != []) {
+    (mkIf (cfg.roles != [ ]) {
       services.kubernetes.flannel.enable = mkDefault true;
       services.flannel.etcd.endpoints = mkDefault etcdEndpoints;
       services.kubernetes.easyCerts = mkDefault true;
@@ -269,42 +311,50 @@ in {
       };
     })
 
-    (mkIf (
-        cfg.apiserver.enable ||
-        cfg.scheduler.enable ||
-        cfg.controllerManager.enable ||
-        cfg.kubelet.enable ||
-        cfg.proxy.enable ||
-        cfg.addonManager.enable
-    ) {
-      systemd.targets.kubernetes = {
-        description = "Kubernetes";
-        wantedBy = [ "multi-user.target" ];
-      };
+    (mkIf
+      (
+        cfg.apiserver.enable
+        || cfg.scheduler.enable
+        || cfg.controllerManager.enable
+        || cfg.kubelet.enable
+        || cfg.proxy.enable
+        || cfg.addonManager.enable
+      )
+      {
+        systemd.targets.kubernetes = {
+          description = "Kubernetes";
+          wantedBy = [ "multi-user.target" ];
+        };
 
-      systemd.tmpfiles.rules = [
-        "d /opt/cni/bin 0755 root root -"
-        "d /run/kubernetes 0755 kubernetes kubernetes -"
-        "d ${cfg.dataDir} 0755 kubernetes kubernetes -"
-      ];
+        systemd.tmpfiles.rules = [
+          "d /opt/cni/bin 0755 root root -"
+          "d /run/kubernetes 0755 kubernetes kubernetes -"
+          "d ${cfg.dataDir} 0755 kubernetes kubernetes -"
+        ];
 
-      users.users.kubernetes = {
-        uid = config.ids.uids.kubernetes;
-        description = "Kubernetes user";
-        group = "kubernetes";
-        home = cfg.dataDir;
-        createHome = true;
-        homeMode = "755";
-      };
-      users.groups.kubernetes.gid = config.ids.gids.kubernetes;
+        users.users.kubernetes = {
+          uid = config.ids.uids.kubernetes;
+          description = "Kubernetes user";
+          group = "kubernetes";
+          home = cfg.dataDir;
+          createHome = true;
+          homeMode = "755";
+        };
+        users.groups.kubernetes.gid = config.ids.gids.kubernetes;
 
-      # dns addon is enabled by default
-      services.kubernetes.addons.dns.enable = mkDefault true;
+        # dns addon is enabled by default
+        services.kubernetes.addons.dns.enable = mkDefault true;
 
-      services.kubernetes.apiserverAddress = mkDefault ("https://${if cfg.apiserver.advertiseAddress != null
-                          then cfg.apiserver.advertiseAddress
-                          else "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"}");
-    })
+        services.kubernetes.apiserverAddress = mkDefault (
+          "https://${
+            if cfg.apiserver.advertiseAddress != null then
+              cfg.apiserver.advertiseAddress
+            else
+              "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"
+          }"
+        );
+      }
+    )
   ];
 
   meta.buildDocsInSandbox = false;

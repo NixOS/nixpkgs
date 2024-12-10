@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, php
-, writeShellScript
-, curl
-, jq
-, common-updater-scripts
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  php,
+  writeShellScript,
+  curl,
+  jq,
+  common-updater-scripts,
 }:
 
 assert lib.assertMsg (!php.ztsSupport) "blackfire only supports non zts versions of PHP";
@@ -60,17 +61,22 @@ let
     };
   };
 
-  makeSource = { system, phpMajor }:
+  makeSource =
+    { system, phpMajor }:
     let
       isLinux = builtins.match ".+-linux" system != null;
     in
     fetchurl {
-      url = "https://packages.blackfire.io/binaries/blackfire-php/${version}/blackfire-php-${if isLinux then "linux" else "darwin"}_${hashes.${system}.system}-php-${builtins.replaceStrings [ "." ] [ "" ] phpMajor}.so";
+      url = "https://packages.blackfire.io/binaries/blackfire-php/${version}/blackfire-php-${
+        if isLinux then "linux" else "darwin"
+      }_${hashes.${system}.system}-php-${builtins.replaceStrings [ "." ] [ "" ] phpMajor}.so";
       hash = hashes.${system}.hash.${phpMajor};
     };
 in
 
-assert lib.assertMsg (hashes ? ${system}.hash.${phpMajor}) "blackfire does not support PHP version ${phpMajor} on ${system}.";
+assert lib.assertMsg (
+  hashes ? ${system}.hash.${phpMajor}
+) "blackfire does not support PHP version ${phpMajor} on ${system}.";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "php-blackfire";
@@ -100,7 +106,13 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = writeShellScript "update-${finalAttrs.pname}" ''
       set -o errexit
-      export PATH="${lib.makeBinPath [ curl jq common-updater-scripts ]}"
+      export PATH="${
+        lib.makeBinPath [
+          curl
+          jq
+          common-updater-scripts
+        ]
+      }"
       NEW_VERSION=$(curl --silent https://blackfire.io/api/v1/releases | jq .probe.php --raw-output)
 
       if [[ "${version}" = "$NEW_VERSION" ]]; then
@@ -116,15 +128,16 @@ stdenv.mkDerivation (finalAttrs: {
     # All sources for updating by the update script.
     updateables =
       let
-        createName = { phpMajor, system }:
-          "php${builtins.replaceStrings [ "." ] [ "" ] phpMajor}_${system}";
+        createName =
+          { phpMajor, system }: "php${builtins.replaceStrings [ "." ] [ "" ] phpMajor}_${system}";
 
-        createUpdateable = sourceParams:
-          lib.nameValuePair
-            (createName sourceParams)
-            (finalAttrs.finalPackage.overrideAttrs (attrs: {
+        createUpdateable =
+          sourceParams:
+          lib.nameValuePair (createName sourceParams) (
+            finalAttrs.finalPackage.overrideAttrs (attrs: {
               src = makeSource sourceParams;
-            }));
+            })
+          );
       in
       lib.concatMapAttrs (
         system:
@@ -139,7 +152,13 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://blackfire.io/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ shyim ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "i686-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

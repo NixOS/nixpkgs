@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, gitUpdater
-, fetchFromGitHub
-, testers
-, cmake
-, pkg-config
-, boost
-, gtest
-, wayland
-, wayland-scanner
+{
+  stdenv,
+  lib,
+  gitUpdater,
+  fetchFromGitHub,
+  testers,
+  cmake,
+  pkg-config,
+  boost,
+  gtest,
+  wayland,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

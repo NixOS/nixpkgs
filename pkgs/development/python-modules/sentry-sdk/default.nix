@@ -1,64 +1,65 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, certifi
-, urllib3
+  # dependencies
+  certifi,
+  urllib3,
 
-# optional-dependencies
-, aiohttp
-, anthropic
-, asyncpg
-, apache-beam
-, bottle
-, celery
-, celery-redbeat
-, chalice
-, clickhouse-driver
-, django
-, falcon
-, fastapi
-, flask
-, blinker
-, markupsafe
-, grpcio
-, protobuf
-, httpx
-, huey
-, huggingface-hub
-, langchain
-, loguru
-, openai
-, tiktoken
-, pure-eval
-, executing
-, asttokens
-, pymongo
-, pyspark
-, quart
-, rq
-, sanic
-, sqlalchemy
-, starlette
-, tornado
+  # optional-dependencies
+  aiohttp,
+  anthropic,
+  asyncpg,
+  apache-beam,
+  bottle,
+  celery,
+  celery-redbeat,
+  chalice,
+  clickhouse-driver,
+  django,
+  falcon,
+  fastapi,
+  flask,
+  blinker,
+  markupsafe,
+  grpcio,
+  protobuf,
+  httpx,
+  huey,
+  huggingface-hub,
+  langchain,
+  loguru,
+  openai,
+  tiktoken,
+  pure-eval,
+  executing,
+  asttokens,
+  pymongo,
+  pyspark,
+  quart,
+  rq,
+  sanic,
+  sqlalchemy,
+  starlette,
+  tornado,
 
-# checks
-, ipdb
-, jsonschema
-, pip
-, pyrsistent
-, pysocks
-, pytest-asyncio
-, pytestCheckHook
-, pytest-forked
-, pytest-localserver
-, pytest-xdist
-, pytest-watch
-, responses
+  # checks
+  ipdb,
+  jsonschema,
+  pip,
+  pyrsistent,
+  pysocks,
+  pytest-asyncio,
+  pytestCheckHook,
+  pytest-forked,
+  pytest-localserver,
+  pytest-xdist,
+  pytest-watch,
+  responses,
 }:
 
 buildPythonPackage rec {

@@ -1,34 +1,39 @@
-{ stdenv
-, lib
-, autoPatchelfHook
-, copyDesktopItems
-, dbus
-, dpkg
-, fetchurl
-, gtk3
-, libpcap
-, makeDesktopItem
-, makeWrapper
-, nftables
-, nss
-, openssl
+{
+  stdenv,
+  lib,
+  autoPatchelfHook,
+  copyDesktopItems,
+  dbus,
+  dpkg,
+  fetchurl,
+  gtk3,
+  libpcap,
+  makeDesktopItem,
+  makeWrapper,
+  nftables,
+  nss,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cloudflare-warp";
   version = "2024.11.309";
 
-  suffix = {
-    aarch64-linux = "arm64";
-    x86_64-linux = "amd64";
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  suffix =
+    {
+      aarch64-linux = "arm64";
+      x86_64-linux = "amd64";
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
     url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}.0_${suffix}.deb";
-    hash = {
-      aarch64-linux = "sha256-pdCPN4NxaQqWNRPZY1CN03KnTdzl62vJ3JNfxGozI4k=";
-      x86_64-linux = "sha256-THxXETyy08rBmvghrc8HIQ2cBSLeNVl8SkD43CVY/tE=";
-    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    hash =
+      {
+        aarch64-linux = "sha256-pdCPN4NxaQqWNRPZY1CN03KnTdzl62vJ3JNfxGozI4k=";
+        x86_64-linux = "sha256-THxXETyy08rBmvghrc8HIQ2cBSLeNVl8SkD43CVY/tE=";
+      }
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   nativeBuildInputs = [
@@ -51,7 +56,11 @@ stdenv.mkDerivation rec {
     (makeDesktopItem {
       name = "com.cloudflare.WarpCli";
       desktopName = "Cloudflare Zero Trust Team Enrollment";
-      categories = [ "Utility" "Security" "ConsoleOnly" ];
+      categories = [
+        "Utility"
+        "Security"
+        "ConsoleOnly"
+      ];
       noDisplay = true;
       mimeTypes = [ "x-scheme-handler/com.cloudflare.warp" ];
       exec = "warp-cli --accept-tos registration token %u";
@@ -100,6 +109,9 @@ stdenv.mkDerivation rec {
       devpikachu
       marcusramberg
     ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

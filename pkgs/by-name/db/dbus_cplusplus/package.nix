@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, dbus, glib, pkg-config, expat }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  dbus,
+  glib,
+  pkg-config,
+  expat,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dbus-cplusplus";
@@ -13,8 +22,9 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchurl {
       name = "gcc-4.7.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/"
-          + "dbus-c++/files/dbus-c++-0.9.0-gcc-4.7.patch";
+      url =
+        "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/"
+        + "dbus-c++/files/dbus-c++-0.9.0-gcc-4.7.patch";
       sha256 = "0rwcz9pvc13b3yfr0lkifnfz0vb5q6dg240bzgf37ni4s8rpc72g";
     })
     (fetchpatch {
@@ -50,14 +60,20 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dbus glib expat ];
-
-  configureFlags = [
-    "--disable-ecore"
-    "--disable-tests"
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    "--disable-examples"
+  buildInputs = [
+    dbus
+    glib
+    expat
   ];
+
+  configureFlags =
+    [
+      "--disable-ecore"
+      "--disable-tests"
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      "--disable-examples"
+    ];
 
   meta = with lib; {
     homepage = "https://dbus-cplusplus.sourceforge.net";

@@ -1,11 +1,17 @@
-{ stdenv, virtualbox, kernel }:
+{
+  stdenv,
+  virtualbox,
+  kernel,
+}:
 
 stdenv.mkDerivation {
   pname = "virtualbox-modules";
   version = "${virtualbox.version}-${kernel.version}";
   src = virtualbox.modsrc;
   hardeningDisable = [
-    "fortify" "pic" "stackprotector"
+    "fortify"
+    "pic"
+    "stackprotector"
   ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

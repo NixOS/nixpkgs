@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, libexif
-, popt
-, libintl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  libexif,
+  popt,
+  libintl,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libexif";
     repo = pname;
-    rev = "${pname}-${builtins.replaceStrings ["."] ["_"] version}-release";
+    rev = "${pname}-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
     sha256 = "1xlb1gdwxm3rmw7vlrynhvjp9dkwmvw23mxisdbdmma7ah2nda3i";
   };
 
@@ -33,8 +34,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libexif popt libintl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libexif
+    popt
+    libintl
+  ];
 
   meta = with lib; {
     homepage = "https://libexif.github.io";

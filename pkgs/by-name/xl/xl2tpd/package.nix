@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, libpcap, ppp }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libpcap,
+  ppp,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xl2tpd";

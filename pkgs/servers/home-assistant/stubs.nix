@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, hatch-vcs
-, home-assistant
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
+  home-assistant,
+  python,
 }:
 
 buildPythonPackage rec {

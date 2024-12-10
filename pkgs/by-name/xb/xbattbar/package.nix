@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchgit, libX11, perl, ... }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  libX11,
+  perl,
+  ...
+}:
 
 stdenv.mkDerivation rec {
   pname = "xbattbar";
@@ -12,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "10w7gs0l4hzhdn38yqyr3az7n4ncmfnd6hhhly6lk5dg7k441ck6";
   };
 
-  buildInputs =  [ libX11 ];
+  buildInputs = [ libX11 ];
 
   # The following patches are applied:
   # - sys-by-default: remove the APM checker binary, make the sys checker

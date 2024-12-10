@@ -1,14 +1,18 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, texlive
-, texliveInfraOnly
-, buildPackages
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  texlive,
+  texliveInfraOnly,
+  buildPackages,
 }:
 
 let
-  buildPlatformTools = [ "pse2unic" "adobe2h" ];
+  buildPlatformTools = [
+    "pse2unic"
+    "adobe2h"
+  ];
   tex = texliveInfraOnly.withPackages (ps: [ ps.collection-fontsrecommended ]);
 in
 
@@ -41,10 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  preBuild = lib.optionalString (with stdenv; !buildPlatform.canExecute hostPlatform)
-    (lib.concatMapStringsSep "\n" (tool: ''
+  preBuild = lib.optionalString (with stdenv; !buildPlatform.canExecute hostPlatform) (
+    lib.concatMapStringsSep "\n" (tool: ''
       cp ${lib.getDev buildPackages.catdvi}/bin/${tool} .
-    '') buildPlatformTools);
+    '') buildPlatformTools
+  );
 
   nativeBuildInputs = [
     texlive.bin.core
@@ -55,10 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
     tex
   ];
 
-  makeFlags = [
-    "catdvi"  # to avoid running tests until checkPhase
-  ] ++ lib.optionals (with stdenv; !buildPlatform.canExecute hostPlatform)
-    (map (tool: "--assume-old=${tool}") buildPlatformTools);
+  makeFlags =
+    [
+      "catdvi" # to avoid running tests until checkPhase
+    ]
+    ++ lib.optionals (with stdenv; !buildPlatform.canExecute hostPlatform) (
+      map (tool: "--assume-old=${tool}") buildPlatformTools
+    );
 
   nativeCheckInputs = [
     texlive
@@ -72,15 +80,17 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,man/man1}
   '';
 
-  postInstall = lib.optionalString (with stdenv; buildPlatform.canExecute hostPlatform) ''
-    mkdir -p $dev/bin
-    ${lib.concatMapStringsSep "\n" (tool: ''
-      cp ${tool} $dev/bin/
-    '') buildPlatformTools}
-  '' + ''
-    mkdir -p $out/share
-    ln -s ${tex}/share/texmf-var $out/share/texmf
-  '';
+  postInstall =
+    lib.optionalString (with stdenv; buildPlatform.canExecute hostPlatform) ''
+      mkdir -p $dev/bin
+      ${lib.concatMapStringsSep "\n" (tool: ''
+        cp ${tool} $dev/bin/
+      '') buildPlatformTools}
+    ''
+    + ''
+      mkdir -p $out/share
+      ln -s ${tex}/share/texmf-var $out/share/texmf
+    '';
 
   meta = with lib; {
     homepage = "http://catdvi.sourceforge.net";

@@ -1,6 +1,7 @@
-{ stdenv
-, faircamp
-, ffmpeg
+{
+  stdenv,
+  faircamp,
+  ffmpeg,
 }:
 
 stdenv.mkDerivation {

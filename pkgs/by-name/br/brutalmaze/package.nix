@@ -1,4 +1,8 @@
-{ lib, fetchFromSourcehut, python3Packages }:
+{
+  lib,
+  fetchFromSourcehut,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "brutalmaze";

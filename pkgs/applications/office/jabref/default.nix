@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapGAppsHook3
-, makeDesktopItem
-, copyDesktopItems
-, unzip
-, xdg-utils
-, gtk3
-, jdk
-, gradle
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  makeDesktopItem,
+  copyDesktopItems,
+  unzip,
+  xdg-utils,
+  gtk3,
+  jdk,
+  gradle,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -131,7 +132,13 @@ stdenv.mkDerivation rec {
       binaryNativeCode # source bundles dependencies as jars
     ];
     license = licenses.mit;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ gebner linsui ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      gebner
+      linsui
+    ];
   };
 }

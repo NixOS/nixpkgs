@@ -1,8 +1,9 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
 }:
 
 mkDerivation rec {

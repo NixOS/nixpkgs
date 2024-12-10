@@ -1,9 +1,10 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
-, qt6
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  qt6,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -28,9 +29,8 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  postInstall =
-  ''
-      install -D FlashGBX/res/icon.png $out/share/icons/hicolor/256x256/apps/flashgbx.png
+  postInstall = ''
+    install -D FlashGBX/res/icon.png $out/share/icons/hicolor/256x256/apps/flashgbx.png
   '';
 
   pyproject = true;
@@ -41,17 +41,20 @@ python3Packages.buildPythonApplication rec {
     qt6.wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    pillow
-    pyserial
-    pyside6
-    python-dateutil
-    requests
-    setuptools
-    qt6.qtbase
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qt6.qtwayland
-  ];
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      pillow
+      pyserial
+      pyside6
+      python-dateutil
+      requests
+      setuptools
+      qt6.qtbase
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qt6.qtwayland
+    ];
 
   meta = with lib; {
     description = "GUI for reading and writing GB and GBA cartridges with the GBxCart RW";

@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, plan9port, darwin, ... }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  plan9port,
+  darwin,
+  ...
+}:
 
 stdenv.mkDerivation rec {
   pname = "osxsnarf";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "1vpg39mpc5avnv1j0yfx0x2ncvv38slmm83zv6nmm7alfwfjr2ss";
   };
 
-  buildInputs = [ plan9port darwin.apple_sdk.frameworks.Carbon ];
+  buildInputs = [
+    plan9port
+    darwin.apple_sdk.frameworks.Carbon
+  ];
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
   meta = with lib; {

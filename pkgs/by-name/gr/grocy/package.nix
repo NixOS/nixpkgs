@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, fetchYarnDeps
-, php
-, yarn
-, fixup-yarn-lock
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  php,
+  yarn,
+  fixup-yarn-lock,
+  nixosTests,
 }:
 
 php.buildComposerProject (finalAttrs: {

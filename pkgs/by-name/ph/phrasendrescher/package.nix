@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, openssl, libssh2, gpgme }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+  libssh2,
+  gpgme,
+}:
 
 stdenv.mkDerivation rec {
   pname = "phrasendrescher";
@@ -14,7 +21,11 @@ stdenv.mkDerivation rec {
       --replace 'SSL_LIB="ssl"' 'SSL_LIB="crypto"'
   '';
 
-  buildInputs = [ openssl libssh2 gpgme ];
+  buildInputs = [
+    openssl
+    libssh2
+    gpgme
+  ];
 
   configureFlags = [ "--with-plugins" ];
 

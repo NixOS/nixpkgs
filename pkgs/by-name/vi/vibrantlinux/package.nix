@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qt5
-, makeWrapper
-, libvibrant
-, libX11
-, libXrandr
-, libxcb
-, linuxPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt5,
+  makeWrapper,
+  libvibrant,
+  libX11,
+  libXrandr,
+  libxcb,
+  linuxPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,23 +22,27 @@ stdenv.mkDerivation rec {
     hash = "sha256-rvJiVId6221hTrfEIvVO9HTMhaZ6KY44Bu3a5MinPHI=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ] ++ (with qt5; [
-    qmake
-    wrapQtAppsHook
-  ]);
+  nativeBuildInputs =
+    [
+      makeWrapper
+    ]
+    ++ (with qt5; [
+      qmake
+      wrapQtAppsHook
+    ]);
 
-  buildInputs = [
-    libX11
-    libXrandr
-    libxcb
-    libvibrant
-    linuxPackages.nvidia_x11.settings.libXNVCtrl
-  ] ++ (with qt5; [
-    qtbase
-    qttools
-  ]);
+  buildInputs =
+    [
+      libX11
+      libXrandr
+      libxcb
+      libvibrant
+      linuxPackages.nvidia_x11.settings.libXNVCtrl
+    ]
+    ++ (with qt5; [
+      qtbase
+      qttools
+    ]);
 
   postPatch = ''
     substituteInPlace vibrantLinux.pro \

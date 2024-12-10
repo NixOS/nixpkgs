@@ -1,55 +1,56 @@
-{ lib
-, stdenv
-, gcc12Stdenv
-, alsa-lib
-, boost
-, bzip2
-, cmake
-, curl
-, fetchFromGitHub
-, fetchpatch
-, ffmpeg_6
-, fluidsynth
-, fmt
-, freetype
-, gettext
-, harfbuzz
-, hexdump
-, hidapi
-, icu
-, libaio
-, libevdev
-, libGL
-, libGLU
-, libjpeg
-, liblcf
-, libpcap
-, libpng
-, libsndfile
-, libvorbis
-, libxml2
-, libxmp
-, libzip
-, makeWrapper
-, mpg123
-, nasm
-, openssl
-, opusfile
-, pcre
-, pixman
-, pkg-config
-, portaudio
-, python3
-, retroarch
-, sfml
-, snappy
-, speexdsp
-, udev
-, which
-, xorg
-, xxd
-, xz
-, zlib
+{
+  lib,
+  stdenv,
+  gcc12Stdenv,
+  alsa-lib,
+  boost,
+  bzip2,
+  cmake,
+  curl,
+  fetchFromGitHub,
+  fetchpatch,
+  ffmpeg_6,
+  fluidsynth,
+  fmt,
+  freetype,
+  gettext,
+  harfbuzz,
+  hexdump,
+  hidapi,
+  icu,
+  libaio,
+  libevdev,
+  libGL,
+  libGLU,
+  libjpeg,
+  liblcf,
+  libpcap,
+  libpng,
+  libsndfile,
+  libvorbis,
+  libxml2,
+  libxmp,
+  libzip,
+  makeWrapper,
+  mpg123,
+  nasm,
+  openssl,
+  opusfile,
+  pcre,
+  pixman,
+  pkg-config,
+  portaudio,
+  python3,
+  retroarch,
+  sfml,
+  snappy,
+  speexdsp,
+  udev,
+  which,
+  xorg,
+  xxd,
+  xz,
+  zlib,
 }:
 
 let
@@ -57,12 +58,15 @@ let
 
   getCore = repo: (lib.getAttr repo hashesFile);
 
-  getCoreSrc = repo:
+  getCoreSrc =
+    repo:
     let
       inherit (getCore repo) src fetcher;
-      fetcherFn = {
-        inherit fetchFromGitHub;
-      }.${fetcher} or (throw "Unknown fetcher: ${fetcher}");
+      fetcherFn =
+        {
+          inherit fetchFromGitHub;
+        }
+        .${fetcher} or (throw "Unknown fetcher: ${fetcher}");
     in
     fetcherFn src;
 
@@ -76,15 +80,29 @@ let
     #   (see https://github.com/libretro/libretro-core-info/)
     # - repo: the repository name on GitHub
     # See `update_cores.py` for instruction on how to add a new core.
-    { core
-    , repo ? core
-    , src ? (getCoreSrc repo)
-    , version ? (getCoreVersion repo)
-    , ...
+    {
+      core,
+      repo ? core,
+      src ? (getCoreSrc repo),
+      version ? (getCoreVersion repo),
+      ...
     }@args:
-    import ./mkLibretroCore.nix ({
-      inherit lib stdenv core repo src version makeWrapper retroarch zlib;
-    } // args);
+    import ./mkLibretroCore.nix (
+      {
+        inherit
+          lib
+          stdenv
+          core
+          repo
+          src
+          version
+          makeWrapper
+          retroarch
+          zlib
+          ;
+      }
+      // args
+    );
 in
 {
   inherit mkLibretroCore;
@@ -163,7 +181,10 @@ in
     core = "mednafen-psx";
     repo = "beetle-psx";
     makefile = "Makefile";
-    makeFlags = [ "HAVE_HW=0" "HAVE_LIGHTREC=1" ];
+    makeFlags = [
+      "HAVE_HW=0"
+      "HAVE_LIGHTREC=1"
+    ];
     meta = {
       description = "Port of Mednafen's PSX Engine core to libretro";
       license = lib.licenses.gpl2Only;
@@ -173,9 +194,17 @@ in
   beetle-psx-hw = mkLibretroCore {
     core = "mednafen-psx-hw";
     repo = "beetle-psx";
-    extraBuildInputs = [ libGL libGLU ];
+    extraBuildInputs = [
+      libGL
+      libGLU
+    ];
     makefile = "Makefile";
-    makeFlags = [ "HAVE_VULKAN=1" "HAVE_OPENGL=1" "HAVE_HW=1" "HAVE_LIGHTREC=1" ];
+    makeFlags = [
+      "HAVE_VULKAN=1"
+      "HAVE_OPENGL=1"
+      "HAVE_HW=1"
+      "HAVE_LIGHTREC=1"
+    ];
     meta = {
       description = "Port of Mednafen's PSX Engine (with HW accel) core to libretro";
       license = lib.licenses.gpl2Only;
@@ -189,7 +218,10 @@ in
     meta = {
       description = "Port of Mednafen's Saturn core to libretro";
       license = lib.licenses.gpl2Only;
-      platforms = [ "aarch64-linux" "x86_64-linux" ];
+      platforms = [
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
     };
   };
 
@@ -275,7 +307,10 @@ in
         "target=libretro"
         "platform=${platform}"
       ];
-    extraBuildInputs = [ xorg.libX11 xorg.libXext ];
+    extraBuildInputs = [
+      xorg.libX11
+      xorg.libXext
+    ];
     postBuild = "cd bsnes/out";
     meta = {
       description = "Port of bsnes-hd to libretro";
@@ -318,7 +353,13 @@ in
 
   citra = mkLibretroCore rec {
     core = "citra";
-    extraBuildInputs = [ libGLU libGL boost ffmpeg_6 nasm ];
+    extraBuildInputs = [
+      libGLU
+      libGL
+      boost
+      ffmpeg_6
+      nasm
+    ];
     makefile = "Makefile";
     makeFlags = [
       "HAVE_FFMPEG_STATIC=0"
@@ -340,8 +381,14 @@ in
   desmume = mkLibretroCore {
     core = "desmume";
     preBuild = "cd desmume/src/frontend/libretro";
-    extraBuildInputs = [ libpcap libGLU libGL xorg.libX11 ];
-    makeFlags = lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
+    extraBuildInputs = [
+      libpcap
+      libGLU
+      libGL
+      xorg.libX11
+    ];
+    makeFlags =
+      lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
       ++ lib.optional (!stdenv.hostPlatform.isx86) "DESMUME_JIT=0";
     meta = {
       description = "Port of DeSmuME to libretro";
@@ -351,8 +398,14 @@ in
 
   desmume2015 = mkLibretroCore {
     core = "desmume2015";
-    extraBuildInputs = [ libpcap libGLU libGL xorg.libX11 ];
-    makeFlags = lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
+    extraBuildInputs = [
+      libpcap
+      libGLU
+      libGL
+      xorg.libX11
+    ];
+    makeFlags =
+      lib.optional stdenv.hostPlatform.isAarch32 "platform=armv-unix"
       ++ lib.optional (!stdenv.hostPlatform.isx86) "DESMUME_JIT=0";
     preBuild = "cd desmume";
     meta = {
@@ -363,17 +416,34 @@ in
 
   dolphin = mkLibretroCore {
     core = "dolphin";
-    extraNativeBuildInputs = [ cmake curl pkg-config ];
-    extraBuildInputs = [
-      libGLU
-      libGL
-      pcre
-      sfml
-      gettext
-      hidapi
-      libevdev
-      udev
-    ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil libXext libXrandr libXinerama libXxf86vm ]);
+    extraNativeBuildInputs = [
+      cmake
+      curl
+      pkg-config
+    ];
+    extraBuildInputs =
+      [
+        libGLU
+        libGL
+        pcre
+        sfml
+        gettext
+        hidapi
+        libevdev
+        udev
+      ]
+      ++ (with xorg; [
+        libSM
+        libX11
+        libXi
+        libpthreadstubs
+        libxcb
+        xcbutil
+        libXext
+        libXrandr
+        libXinerama
+        libXxf86vm
+      ]);
     makefile = "Makefile";
     cmakeFlags = [
       "-DLIBRETRO=ON"
@@ -412,8 +482,25 @@ in
 
   easyrpg = mkLibretroCore {
     core = "easyrpg";
-    extraNativeBuildInputs = [ cmake pkg-config ];
-    extraBuildInputs = [ fmt freetype harfbuzz liblcf libpng libsndfile libvorbis libxmp mpg123 opusfile pcre pixman speexdsp ];
+    extraNativeBuildInputs = [
+      cmake
+      pkg-config
+    ];
+    extraBuildInputs = [
+      fmt
+      freetype
+      harfbuzz
+      liblcf
+      libpng
+      libsndfile
+      libvorbis
+      libxmp
+      mpg123
+      opusfile
+      pcre
+      pixman
+      speexdsp
+    ];
     patches = [
       # The following patch is shared with easyrpg-player.
       # Update when new versions of liblcf and easyrpg-player are released.
@@ -478,13 +565,19 @@ in
   flycast = mkLibretroCore {
     core = "flycast";
     extraNativeBuildInputs = [ cmake ];
-    extraBuildInputs = [ libGL libGLU ];
+    extraBuildInputs = [
+      libGL
+      libGLU
+    ];
     cmakeFlags = [ "-DLIBRETRO=ON" ];
     makefile = "Makefile";
     meta = {
       description = "Flycast libretro port";
       license = lib.licenses.gpl2Only;
-      platforms = [ "aarch64-linux" "x86_64-linux" ];
+      platforms = [
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
     };
   };
 
@@ -574,12 +667,19 @@ in
   mame = mkLibretroCore {
     core = "mame";
     extraNativeBuildInputs = [ python3 ];
-    extraBuildInputs = [ alsa-lib libGLU libGL ];
+    extraBuildInputs = [
+      alsa-lib
+      libGLU
+      libGL
+    ];
     # Setting this is breaking compilation of src/3rdparty/genie for some reason
     makeFlags = [ "ARCH=" ];
     meta = {
       description = "Port of MAME to libretro";
-      license = with lib.licenses; [ bsd3 gpl2Plus ];
+      license = with lib.licenses; [
+        bsd3
+        gpl2Plus
+      ];
     };
   };
 
@@ -617,7 +717,12 @@ in
   mame2010 = mkLibretroCore {
     core = "mame2010";
     makefile = "Makefile";
-    makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "PTR64=1" "ARM_ENABLED=1" "X86_SH2DRC=0" "FORCE_DRC_C_BACKEND=1" ];
+    makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [
+      "PTR64=1"
+      "ARM_ENABLED=1"
+      "X86_SH2DRC=0"
+      "FORCE_DRC_C_BACKEND=1"
+    ];
     meta = {
       description = "Port of MAME ~2010 to libretro, compatible with MAME 0.139 sets";
       # MAME license, non-commercial clause
@@ -653,13 +758,19 @@ in
     NIX_CFLAGS_COMPILE = "-Wno-error -fpermissive";
     meta = {
       description = "Port of MAME ~2016 to libretro, compatible with MAME 0.174 sets";
-      license = with lib.licenses; [ bsd3 gpl2Plus ];
+      license = with lib.licenses; [
+        bsd3
+        gpl2Plus
+      ];
     };
   };
 
   melonds = mkLibretroCore {
     core = "melonds";
-    extraBuildInputs = [ libGL libGLU ];
+    extraBuildInputs = [
+      libGL
+      libGLU
+    ];
     makefile = "Makefile";
     meta = {
       description = "Port of MelonDS to libretro";
@@ -718,7 +829,13 @@ in
   mupen64plus = mkLibretroCore {
     core = "mupen64plus-next";
     repo = "mupen64plus";
-    extraBuildInputs = [ libGLU libGL libpng nasm xorg.libX11 ];
+    extraBuildInputs = [
+      libGLU
+      libGL
+      libpng
+      nasm
+      xorg.libX11
+    ];
     makefile = "Makefile";
     makeFlags = [
       "HAVE_PARALLEL_RDP=1"
@@ -797,7 +914,11 @@ in
 
   parallel-n64 = mkLibretroCore {
     core = "parallel-n64";
-    extraBuildInputs = [ libGLU libGL libpng ];
+    extraBuildInputs = [
+      libGLU
+      libGL
+      libpng
+    ];
     makefile = "Makefile";
     makeFlags = [
       "HAVE_PARALLEL=1"
@@ -872,10 +993,22 @@ in
 
   play = mkLibretroCore {
     core = "play";
-    extraBuildInputs = [ boost bzip2 curl openssl icu libGL libGLU xorg.libX11 ];
+    extraBuildInputs = [
+      boost
+      bzip2
+      curl
+      openssl
+      icu
+      libGL
+      libGLU
+      xorg.libX11
+    ];
     extraNativeBuildInputs = [ cmake ];
     makefile = "Makefile";
-    cmakeFlags = [ "-DBUILD_PLAY=OFF" "-DBUILD_LIBRETRO_CORE=ON" ];
+    cmakeFlags = [
+      "-DBUILD_PLAY=OFF"
+      "-DBUILD_LIBRETRO_CORE=ON"
+    ];
     postBuild = "cd Source/ui_libretro";
     # FIXME: workaround the following GCC 13 error:
     # error: 'printf' was not declared in this scop
@@ -888,8 +1021,18 @@ in
 
   ppsspp = mkLibretroCore {
     core = "ppsspp";
-    extraNativeBuildInputs = [ cmake pkg-config python3 ];
-    extraBuildInputs = [ libGLU libGL libzip snappy xorg.libX11 ];
+    extraNativeBuildInputs = [
+      cmake
+      pkg-config
+      python3
+    ];
+    extraBuildInputs = [
+      libGLU
+      libGL
+      libzip
+      snappy
+      xorg.libX11
+    ];
     makefile = "Makefile";
     cmakeFlags = [
       "-DLIBRETRO=ON"
@@ -945,7 +1088,10 @@ in
 
   sameboy = mkLibretroCore {
     core = "sameboy";
-    extraNativeBuildInputs = [ which hexdump ];
+    extraNativeBuildInputs = [
+      which
+      hexdump
+    ];
     preBuild = "cd libretro";
     makefile = "Makefile";
     meta = {
@@ -957,19 +1103,34 @@ in
   same_cdi = mkLibretroCore {
     core = "same_cdi";
     extraNativeBuildInputs = [ python3 ];
-    extraBuildInputs = [ alsa-lib libGLU libGL portaudio xorg.libX11 ];
+    extraBuildInputs = [
+      alsa-lib
+      libGLU
+      libGL
+      portaudio
+      xorg.libX11
+    ];
     # FIXME: build fail with GCC13:
     # error: 'uint8_t' in namespace 'std' does not name a type; did you mean 'wint_t'?
     stdenv = gcc12Stdenv;
     meta = {
       description = "SAME_CDI is a libretro core to play CD-i games";
-      license = with lib.licenses; [ bsd3 gpl2Plus ];
+      license = with lib.licenses; [
+        bsd3
+        gpl2Plus
+      ];
     };
   };
 
   scummvm = mkLibretroCore {
     core = "scummvm";
-    extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU libGL ];
+    extraBuildInputs = [
+      fluidsynth
+      libjpeg
+      libvorbis
+      libGLU
+      libGL
+    ];
     makefile = "Makefile";
     preConfigure = "cd backends/platform/libretro/build";
     meta = {
@@ -1094,7 +1255,10 @@ in
 
   tic80 = mkLibretroCore {
     core = "tic80";
-    extraNativeBuildInputs = [ cmake pkg-config ];
+    extraNativeBuildInputs = [
+      cmake
+      pkg-config
+    ];
     makefile = "Makefile";
     cmakeFlags = [
       "-DBUILD_LIBRETRO=ON"
@@ -1141,7 +1305,10 @@ in
 
   vecx = mkLibretroCore {
     core = "vecx";
-    extraBuildInputs = [ libGL libGLU ];
+    extraBuildInputs = [
+      libGL
+      libGLU
+    ];
     meta = {
       description = "Port of Vecx to libretro";
       license = lib.licenses.gpl3Only;

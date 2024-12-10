@@ -1,5 +1,10 @@
-{ lib, rustPlatform, fetchCrate
-, testers, nix-update-script, dotslash
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  testers,
+  nix-update-script,
+  dotslash,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,7 +38,10 @@ rustPlatform.buildRustPackage rec {
       your developers seamlessly get the tools they need, ensuring consistent
       builds across platforms.
     '';
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     mainProgram = "dotslash";
     maintainers = with maintainers; [ thoughtpolice ];
   };

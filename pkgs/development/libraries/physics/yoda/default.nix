@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, autoreconfHook
-, python
-, root
-, makeWrapper
-, zlib
-, withRootSupport ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  python,
+  root,
+  makeWrapper,
+  zlib,
+  withRootSupport ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,14 +27,17 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [
-    python
-  ] ++ (with python.pkgs; [
-    numpy
-    matplotlib
-  ]) ++ lib.optionals withRootSupport [
-    root
-  ];
+  buildInputs =
+    [
+      python
+    ]
+    ++ (with python.pkgs; [
+      numpy
+      matplotlib
+    ])
+    ++ lib.optionals withRootSupport [
+      root
+    ];
 
   propagatedBuildInputs = [
     zlib

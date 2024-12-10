@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "grpcurl";
@@ -15,7 +19,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-KsPrJC4hGrGEny8wVWE1EG00qn+b1Rrvh4qK27VzgLU=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   meta = with lib; {
     description = "Like cURL, but for gRPC: Command-line tool for interacting with gRPC servers";

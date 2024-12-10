@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -36,7 +41,8 @@ let
       ${cfg.extraConf}
     </icecast>
   '';
-in {
+in
+{
 
   ###### interface
 
@@ -107,7 +113,6 @@ in {
     };
 
   };
-
 
   ###### implementation
 

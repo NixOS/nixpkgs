@@ -1,4 +1,12 @@
-{ stdenv, fetchFromGitHub, cmake, bpp-core, bpp-seq, bpp-phyl, bpp-popgen }:
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  bpp-core,
+  bpp-seq,
+  bpp-phyl,
+  bpp-popgen,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bppsuite";
@@ -13,7 +21,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ bpp-core bpp-seq bpp-phyl bpp-popgen ];
+  buildInputs = [
+    bpp-core
+    bpp-seq
+    bpp-phyl
+    bpp-popgen
+  ];
 
   meta = bpp-core.meta // {
     homepage = "https://github.com/BioPP/bppsuite";

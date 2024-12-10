@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, yarnBuildHook
-, fetchzip
-, makeWrapper
-, makeDesktopItem
-, electron
-, desktopToDarwinBundle
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  yarnBuildHook,
+  fetchzip,
+  makeWrapper,
+  makeDesktopItem,
+  electron,
+  desktopToDarwinBundle,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,8 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ESYSHuHLNsn3EYKIe2p0kg142jyC0USB+Ef//oGeF08=";
   };
 
-  nativeBuildInputs = [ yarnBuildHook copyDesktopItems makeWrapper ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  nativeBuildInputs = [
+    yarnBuildHook
+    copyDesktopItems
+    makeWrapper
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   installPhase = ''
     runHook preInstall
@@ -74,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
       desktopName = "µPad";
       startupWMClass = "µPad";
       comment = finalAttrs.meta.description;
-      categories = ["Office"];
+      categories = [ "Office" ];
     })
   ];
 
@@ -82,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A powerful note-taking app that helps you organise + take notes without restrictions";
     homepage = "https://getmicropad.com/";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [rhysmdnz];
+    maintainers = with lib.maintainers; [ rhysmdnz ];
     inherit (electron.meta) platforms;
     mainProgram = "micropad";
   };

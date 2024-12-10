@@ -1,11 +1,13 @@
-{ lib, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, libiconv
-, Security
-, SystemConfiguration
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  libiconv,
+  Security,
+  SystemConfiguration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,8 +24,13 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-FeD0+s79orFDUVsb205W0pdXgDI+p1UrH3GIfKwUqDQ=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security SystemConfiguration ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      Security
+      SystemConfiguration
+    ];
 
   checkFlags = [ "--skip=tests::cli" ];
 

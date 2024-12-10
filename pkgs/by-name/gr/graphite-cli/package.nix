@@ -1,8 +1,9 @@
-{ lib
-, buildNpmPackage
-, fetchurl
-, git
-, installShellFiles
+{
+  lib,
+  buildNpmPackage,
+  fetchurl,
+  git,
+  installShellFiles,
 }:
 
 buildNpmPackage rec {

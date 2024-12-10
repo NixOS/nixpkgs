@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, wrapQtAppsHook
-, qmake
-, qtsvg
-, qtx11extras
-, graphviz
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  wrapQtAppsHook,
+  qmake,
+  qtsvg,
+  qtx11extras,
+  graphviz,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,12 +23,17 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/src";
 
-  patches = (substituteAll {
-    src = ./set-graphviz-path.patch;
-    inherit graphviz;
-  });
+  patches = (
+    substituteAll {
+      src = ./set-graphviz-path.patch;
+      inherit graphviz;
+    }
+  );
 
-  nativeBuildInputs = [ wrapQtAppsHook qmake ];
+  nativeBuildInputs = [
+    wrapQtAppsHook
+    qmake
+  ];
 
   buildInputs = if stdenv.hostPlatform.isDarwin then [ qtsvg ] else [ qtx11extras ];
 

@@ -1,5 +1,9 @@
-
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -55,7 +59,7 @@ in
 
       extraPackages = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExpression "[ pkgs.rsync ]";
         description = "Extra packages available to the system incrontab.";
       };
@@ -66,13 +70,14 @@ in
 
   config = mkIf cfg.enable {
 
-    warnings = optional (cfg.allow != null && cfg.deny != null)
-      "If `services.incron.allow` is set then `services.incron.deny` will be ignored.";
+    warnings = optional (
+      cfg.allow != null && cfg.deny != null
+    ) "If `services.incron.allow` is set then `services.incron.deny` will be ignored.";
 
     environment.systemPackages = [ pkgs.incron ];
 
-    security.wrappers.incrontab =
-    { setuid = true;
+    security.wrappers.incrontab = {
+      setuid = true;
       owner = "root";
       group = "root";
       source = "${pkgs.incron}/bin/incrontab";

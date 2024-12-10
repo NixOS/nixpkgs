@@ -20,7 +20,6 @@ buildPythonPackage rec {
     hash = "sha256-Pp4h0MBoYhczmxPq21cLiYpLUeFP+2JoACcFpBl3b0E=";
   };
 
-
   propagatedBuildInputs = [
     internetarchive
     docopt

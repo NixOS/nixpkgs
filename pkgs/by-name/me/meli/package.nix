@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, fetchzip
-, fetchpatch
-, rustPlatform
+{
+  stdenv,
+  lib,
+  fetchzip,
+  fetchpatch,
+  rustPlatform,
 
-# native build inputs
-, pkg-config
-, installShellFiles
-, makeWrapper
-, mandoc
-, rustfmt
-, file
+  # native build inputs
+  pkg-config,
+  installShellFiles,
+  makeWrapper,
+  mandoc,
+  rustfmt,
+  file,
 
-# build inputs
-, openssl
-, dbus
-, sqlite
+  # build inputs
+  openssl,
+  dbus,
+  sqlite,
 
-# runtime deps
-, gpgme
-, gnum4
+  # runtime deps
+  gpgme,
+  gnum4,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -47,7 +48,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # Needed to get openssl-sys to use pkg-config
-  OPENSSL_NO_VENDOR=1;
+  OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [
     pkg-config
@@ -81,9 +82,9 @@ rustPlatform.buildRustPackage rec {
   '';
 
   checkFlags = [
-    "--skip=conf::tests::test_config_parse"            # panicking due to sandbox
+    "--skip=conf::tests::test_config_parse" # panicking due to sandbox
     "--skip=utils::tests::test_shellexpandtrait_impls" # panicking due to sandbox
-    "--skip=utils::tests::test_shellexpandtrait"       # panicking due to sandbox
+    "--skip=utils::tests::test_shellexpandtrait" # panicking due to sandbox
   ];
 
   meta = with lib; {
@@ -92,7 +93,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "meli";
     homepage = "https://meli.delivery";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ _0x4A6F matthiasbeyer ];
+    maintainers = with maintainers; [
+      _0x4A6F
+      matthiasbeyer
+    ];
     platforms = platforms.linux;
   };
 }

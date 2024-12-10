@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, graphviz
-, imagemagick
-, linux_latest
-, makeFontsConf
-, perl
-, python3
-, which
+{
+  lib,
+  stdenv,
+  graphviz,
+  imagemagick,
+  linux_latest,
+  makeFontsConf,
+  perl,
+  python3,
+  which,
 }:
 
 stdenv.mkDerivation {

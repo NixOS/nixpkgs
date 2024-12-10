@@ -126,47 +126,50 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [
-    absl-py
-    afdko
-    axisregistry
-    babelfont
-    beautifulsoup4
-    brotli
-    bumpfontversion
-    font-v
-    fontfeatures
-    fontmake
-    fonttools
-    gflanguages
-    gfsubsets
-    glyphsets
-    glyphslib
-    jinja2
-    nanoemoji
-    networkx
-    ninja
-    ots-python
-    packaging
-    pillow
-    protobuf
-    pygit2
-    pygithub
-    pyyaml
-    requests
-    rich
-    ruamel-yaml
-    setuptools
-    skia-pathops
-    statmake
-    strictyaml
-    tabulate
-    ttfautohint-py
-    ufomerge
-    unidecode
-    vharfbuzz
-    vttlib
-  ] ++ fonttools.optional-dependencies.ufo ++ fontmake.optional-dependencies.json;
+  dependencies =
+    [
+      absl-py
+      afdko
+      axisregistry
+      babelfont
+      beautifulsoup4
+      brotli
+      bumpfontversion
+      font-v
+      fontfeatures
+      fontmake
+      fonttools
+      gflanguages
+      gfsubsets
+      glyphsets
+      glyphslib
+      jinja2
+      nanoemoji
+      networkx
+      ninja
+      ots-python
+      packaging
+      pillow
+      protobuf
+      pygit2
+      pygithub
+      pyyaml
+      requests
+      rich
+      ruamel-yaml
+      setuptools
+      skia-pathops
+      statmake
+      strictyaml
+      tabulate
+      ttfautohint-py
+      ufomerge
+      unidecode
+      vharfbuzz
+      vttlib
+    ]
+    ++ fonttools.optional-dependencies.ufo
+    ++ fontmake.optional-dependencies.json;
 
   optional-dependencies = {
     qa = [

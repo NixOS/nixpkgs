@@ -58,7 +58,12 @@ python3Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [
     "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${lib.makeBinPath [ xdg-utils ollama ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        xdg-utils
+        ollama
+      ]
+    }"
     # Declared but not used in src/window.py, for later reference
     # https://github.com/flatpak/flatpak/issues/3229
     "--set FLATPAK_DEST ${placeholder "out"}"

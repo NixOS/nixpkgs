@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildPgrxExtension
-, postgresql
-, nixosTests
-, cargo-pgrx_0_10_2
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  buildPgrxExtension,
+  postgresql,
+  nixosTests,
+  cargo-pgrx_0_10_2,
+  nix-update-script,
 }:
 
 (buildPgrxExtension.override { cargo-pgrx = cargo-pgrx_0_10_2; }) rec {

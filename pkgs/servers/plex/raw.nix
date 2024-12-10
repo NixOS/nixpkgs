@@ -1,10 +1,12 @@
-{ lib, stdenv
-, fetchurl
-, dpkg
-, writeScript
-, curl
-, jq
-, common-updater-scripts
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  writeScript,
+  curl,
+  jq,
+  common-updater-scripts,
 }:
 
 # The raw package that fetches and extracts the Plex RPM. Override the source
@@ -16,15 +18,22 @@ stdenv.mkDerivation rec {
   pname = "plexmediaserver";
 
   # Fetch the source
-  src = if stdenv.hostPlatform.system == "aarch64-linux" then fetchurl {
-    url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_arm64.deb";
-    sha256 = "118mqmqfpfskqa19869lg9riip64jz0c2jrvnkpdilvzzhy9ngwx";
-  } else fetchurl {
-    url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_amd64.deb";
-    sha256 = "10nis1hk3fc9bvgiz41x4gmgbzlz2cczz47a2x14liqxmiwqwl3v";
-  };
+  src =
+    if stdenv.hostPlatform.system == "aarch64-linux" then
+      fetchurl {
+        url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_arm64.deb";
+        sha256 = "118mqmqfpfskqa19869lg9riip64jz0c2jrvnkpdilvzzhy9ngwx";
+      }
+    else
+      fetchurl {
+        url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_amd64.deb";
+        sha256 = "10nis1hk3fc9bvgiz41x4gmgbzlz2cczz47a2x14liqxmiwqwl3v";
+      };
 
-  outputs = [ "out" "basedb" ];
+  outputs = [
+    "out"
+    "basedb"
+  ];
 
   nativeBuildInputs = [ dpkg ];
 
@@ -59,7 +68,13 @@ stdenv.mkDerivation rec {
   passthru.updateScript = writeScript "${pname}-updater" ''
     #!${stdenv.shell}
     set -eu -o pipefail
-    PATH=${lib.makeBinPath [curl jq common-updater-scripts]}:$PATH
+    PATH=${
+      lib.makeBinPath [
+        curl
+        jq
+        common-updater-scripts
+      ]
+    }:$PATH
 
     plexApiJson=$(curl -sS https://plex.tv/api/downloads/5.json)
     latestVersion="$(echo $plexApiJson | jq .computer.Linux.version | tr -d '"\n')"
@@ -78,7 +93,10 @@ stdenv.mkDerivation rec {
     homepage = "https://plex.tv/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     maintainers = with maintainers; [
       badmutex
       forkk

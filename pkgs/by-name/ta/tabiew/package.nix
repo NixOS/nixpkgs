@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tabiew";
@@ -18,7 +19,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   postInstall = ''
     installManPage target/manual/tabiew.1
@@ -32,8 +36,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false; # there are no tests
 
   meta = {
-    description =
-      "Lightweight, terminal-based application to view and query delimiter separated value formatted documents, such as CSV and TSV files";
+    description = "Lightweight, terminal-based application to view and query delimiter separated value formatted documents, such as CSV and TSV files";
     homepage = "https://github.com/shshemi/tabiew";
     changelog = "https://github.com/shshemi/tabiew/releases/tag/v${version}";
     license = lib.licenses.mit;

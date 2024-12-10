@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapGAppsHook3
-, cmake
-, gettext
-, maxima
-, wxGTK
-, adwaita-icon-theme
-, glib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  cmake,
+  gettext,
+  maxima,
+  wxGTK,
+  adwaita-icon-theme,
+  glib,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "wxmaxima";
   version = "24.08.0";
 

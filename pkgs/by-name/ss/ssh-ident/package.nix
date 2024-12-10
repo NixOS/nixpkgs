@@ -1,9 +1,15 @@
-{ stdenvNoCC, lib, fetchFromGitHub, python3, openssh}:
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  python3,
+  openssh,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "ssh-ident";
   version = "2016-04-21";
-  src = fetchFromGitHub  {
+  src = fetchFromGitHub {
     owner = "ccontavalli";
     repo = "ssh-ident";
     rev = "ebf8282728211dc4448d50f7e16e546ed03c22d2";

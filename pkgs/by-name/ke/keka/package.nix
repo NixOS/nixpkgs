@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, unzip
-, makeWrapper
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
+  makeWrapper,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "keka";
@@ -14,7 +15,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
   dontUnpack = true;
 
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall

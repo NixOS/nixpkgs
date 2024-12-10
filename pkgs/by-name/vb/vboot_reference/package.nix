@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitiles, pkg-config, libuuid, openssl, libyaml, xz }:
+{
+  lib,
+  stdenv,
+  fetchFromGitiles,
+  pkg-config,
+  libuuid,
+  openssl,
+  libyaml,
+  xz,
+}:
 
 stdenv.mkDerivation rec {
   version = "111.15329";
@@ -12,7 +21,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libuuid libyaml openssl xz ];
+  buildInputs = [
+    libuuid
+    libyaml
+    openssl
+    xz
+  ];
 
   enableParallelBuilding = true;
 

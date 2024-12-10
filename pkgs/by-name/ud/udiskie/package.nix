@@ -1,17 +1,18 @@
-{ lib
-, asciidoc
-, fetchFromGitHub
-, gobject-introspection
-, gtk3
-, installShellFiles
-, libappindicator-gtk3
-, libnotify
-, librsvg
-, python3Packages
-, udisks2
-, wrapGAppsHook3
-, testers
-, udiskie
+{
+  lib,
+  asciidoc,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk3,
+  installShellFiles,
+  libappindicator-gtk3,
+  libnotify,
+  librsvg,
+  python3Packages,
+  udisks2,
+  wrapGAppsHook3,
+  testers,
+  udiskie,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -106,6 +107,9 @@ python3Packages.buildPythonApplication rec {
       - password caching (requires python keyutils 0.3)
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres dotlambda ];
+    maintainers = with maintainers; [
+      AndersonTorres
+      dotlambda
+    ];
   };
 }

@@ -1,4 +1,8 @@
-{ lib, buildGo123Module, fetchFromGitHub }:
+{
+  lib,
+  buildGo123Module,
+  fetchFromGitHub,
+}:
 
 buildGo123Module rec {
   pname = "gotemplate";

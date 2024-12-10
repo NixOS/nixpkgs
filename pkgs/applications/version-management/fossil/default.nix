@@ -1,19 +1,21 @@
-{ lib, stdenv
-, installShellFiles
-, tcl
-, libiconv
-, fetchurl
-, fetchpatch
-, buildPackages
-, zlib
-, openssl
-, readline
-, withInternalSqlite ? true
-, sqlite
-, ed
-, which
-, tclPackages
-, withJson ? true
+{
+  lib,
+  stdenv,
+  installShellFiles,
+  tcl,
+  libiconv,
+  fetchurl,
+  fetchpatch,
+  buildPackages,
+  zlib,
+  openssl,
+  readline,
+  withInternalSqlite ? true,
+  sqlite,
+  ed,
+  which,
+  tclPackages,
+  withJson ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,9 +30,20 @@ stdenv.mkDerivation (finalAttrs: {
   # required for build time tool `./tools/translate.c`
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ installShellFiles tcl tclPackages.tcllib ];
+  nativeBuildInputs = [
+    installShellFiles
+    tcl
+    tclPackages.tcllib
+  ];
 
-  buildInputs = [ zlib openssl readline which ed ]
+  buildInputs =
+    [
+      zlib
+      openssl
+      readline
+      which
+      ed
+    ]
     ++ lib.optional stdenv.hostPlatform.isDarwin libiconv
     ++ lib.optional (!withInternalSqlite) sqlite;
 
@@ -44,22 +57,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (fetchpatch {
-       url = "https://fossil-scm.org/home/vpatch?from=8be0372c10510437&to=5ad708085a90365f";
-       extraPrefix = "";
-       hash = "sha256-KxF40wiEY3R1RFM0/YOmdNiedQHzs+vyMXslnqLtqQ4=";
-       name = "fossil-disable-tests.patch";
+      url = "https://fossil-scm.org/home/vpatch?from=8be0372c10510437&to=5ad708085a90365f";
+      extraPrefix = "";
+      hash = "sha256-KxF40wiEY3R1RFM0/YOmdNiedQHzs+vyMXslnqLtqQ4=";
+      name = "fossil-disable-tests.patch";
     })
     (fetchpatch {
-       url = "https://fossil-scm.org/home/vpatch?from=fb4e90b662803e47&to=17c01c549e73c6b8";
-       extraPrefix = "";
-       hash = "sha256-b0JSDWEBTlLWFr5rO+g0biPzUfVsdeAw71DR7/WQKzU=";
-       name = "fossil-fix-json-test.patch";
+      url = "https://fossil-scm.org/home/vpatch?from=fb4e90b662803e47&to=17c01c549e73c6b8";
+      extraPrefix = "";
+      hash = "sha256-b0JSDWEBTlLWFr5rO+g0biPzUfVsdeAw71DR7/WQKzU=";
+      name = "fossil-fix-json-test.patch";
     })
     (fetchpatch {
-       url = "https://fossil-scm.org/home/vpatch?from=5ad708085a90365f&to=fb4e90b662803e47";
-       extraPrefix = "";
-       hash = "sha256-bbWUrlhPxC/DQQDeC3gG0jGfxQ6F7YkxINqg3baf+j0=";
-       name = "fossil-comment-utf-tests.patch";
+      url = "https://fossil-scm.org/home/vpatch?from=5ad708085a90365f&to=fb4e90b662803e47";
+      extraPrefix = "";
+      hash = "sha256-bbWUrlhPxC/DQQDeC3gG0jGfxQ6F7YkxINqg3baf+j0=";
+      name = "fossil-comment-utf-tests.patch";
     })
   ];
 

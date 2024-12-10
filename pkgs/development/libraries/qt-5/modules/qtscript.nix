@@ -1,6 +1,13 @@
-{ qtModule, qtbase, qttools }:
+{
+  qtModule,
+  qtbase,
+  qttools,
+}:
 
 qtModule {
   pname = "qtscript";
-  propagatedBuildInputs = [ qtbase qttools ];
+  propagatedBuildInputs = [
+    qtbase
+    qttools
+  ];
 }

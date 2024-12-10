@@ -1,16 +1,18 @@
-{ lib, stdenv
-, fetchFromGitHub
-, substituteAll
-, appstream-glib
-, gettext
-, pkg-config
-, wrapGAppsHook3
-, gobject-introspection
-, autoreconfHook
-, gtk3
-, ibus
-, libhangul
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  appstream-glib,
+  gettext,
+  pkg-config,
+  wrapGAppsHook3,
+  gobject-introspection,
+  autoreconfHook,
+  gtk3,
+  ibus,
+  libhangul,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,10 +46,12 @@ stdenv.mkDerivation rec {
     gtk3
     ibus
     libhangul
-    (python3.withPackages (pypkgs: with pypkgs; [
-      pygobject3
-      (toPythonModule ibus)
-    ]))
+    (python3.withPackages (
+      pypkgs: with pypkgs; [
+        pygobject3
+        (toPythonModule ibus)
+      ]
+    ))
   ];
 
   meta = with lib; {

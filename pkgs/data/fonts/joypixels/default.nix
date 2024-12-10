@@ -1,23 +1,27 @@
-{ lib, stdenv
-, fetchurl
-, config
-, acceptLicense ? config.joypixels.acceptLicense or false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  config,
+  acceptLicense ? config.joypixels.acceptLicense or false,
 }:
 
 let
   inherit (stdenv.hostPlatform.parsed) kernel;
 
-  systemSpecific = {
-    darwin = rec {
-      systemTag =  "nix-darwin";
-      capitalized = systemTag;
-      fontFile = "JoyPixels-SBIX.ttf";
+  systemSpecific =
+    {
+      darwin = rec {
+        systemTag = "nix-darwin";
+        capitalized = systemTag;
+        fontFile = "JoyPixels-SBIX.ttf";
+      };
+    }
+    .${kernel.name} or rec {
+      systemTag = "nixos";
+      capitalized = "NixOS";
+      fontFile = "joypixels-android.ttf";
     };
-  }.${kernel.name} or rec {
-    systemTag = "nixos";
-    capitalized = "NixOS";
-    fontFile = "joypixels-android.ttf";
-  };
 
   joypixels-free-license = with systemSpecific; {
     spdxId = "LicenseRef-JoyPixels-Free";
@@ -65,13 +69,17 @@ stdenv.mkDerivation rec {
   pname = "joypixels";
   version = "8.0.0";
 
-  src = assert !acceptLicense -> throwLicense;
-    with systemSpecific; fetchurl {
+  src =
+    assert !acceptLicense -> throwLicense;
+    with systemSpecific;
+    fetchurl {
       name = fontFile;
       url = "https://cdn.joypixels.com/distributions/${systemTag}/font/${version}/${fontFile}";
-      sha256 = {
-        darwin = "0kj4nck6k91avhan9iy3n8hhk47xr44rd1lzljjx3w2yzw1w9zvv";
-      }.${kernel.name} or "1bkyclgmvl6ppbdvidc5xr1g6f215slf0glnh5p6fsfbxc5h95bw";
+      sha256 =
+        {
+          darwin = "0kj4nck6k91avhan9iy3n8hhk47xr44rd1lzljjx3w2yzw1w9zvv";
+        }
+        .${kernel.name} or "1bkyclgmvl6ppbdvidc5xr1g6f215slf0glnh5p6fsfbxc5h95bw";
     };
 
   dontUnpack = true;
@@ -93,19 +101,24 @@ stdenv.mkDerivation rec {
       available upon request).
     '';
     homepage = "https://www.joypixels.com/fonts";
-    hydraPlatforms = []; # Just a binary file download, nothing to cache.
+    hydraPlatforms = [ ]; # Just a binary file download, nothing to cache.
     license =
       let
         free-license = joypixels-free-license;
         appendix = joypixels-license-appendix;
-      in with systemSpecific; {
+      in
+      with systemSpecific;
+      {
         spdxId = "LicenseRef-JoyPixels-Free-with-${capitalized}-Appendix";
         fullName = "${free-license.fullName} with ${appendix.fullName}";
         url = free-license.url;
         appendixUrl = appendix.url;
         free = false;
       };
-    maintainers = with maintainers; [ toonn jtojnar ];
+    maintainers = with maintainers; [
+      toonn
+      jtojnar
+    ];
     # Not quite accurate since it's a font, not a program, but clearly
     # indicates we're not actually building it from source.
     sourceProvenance = [ sourceTypes.binaryNativeCode ];

@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchgit
-, autoreconfHook
-, lv2
-, pkg-config
-, qt5
-, alsa-lib
-, libjack2
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  lv2,
+  pkg-config,
+  qt5,
+  alsa-lib,
+  libjack2,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,13 +26,15 @@ stdenv.mkDerivation rec {
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    alsa-lib
-    lv2
-    libjack2
-  ] ++ (with qt5; [
-    qttools
-  ]);
+  buildInputs =
+    [
+      alsa-lib
+      lv2
+      libjack2
+    ]
+    ++ (with qt5; [
+      qttools
+    ]);
 
   meta = with lib; {
     description = "Advanced MIDI arpeggiator";

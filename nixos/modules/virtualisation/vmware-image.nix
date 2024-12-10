@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   boolToStr = value: if value then "on" else "off";
   cfg = config.vmware;
@@ -11,7 +16,8 @@ let
     "streamOptimized"
   ];
 
-in {
+in
+{
   options = {
     vmware = {
       baseImageSize = lib.mkOption {

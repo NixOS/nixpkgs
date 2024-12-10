@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchgit
-, alsa-lib
-, gtk3
-, libGL
-, libGLU
-, libX11
-, pkg-config
-, upx
-, xcbutil
+{
+  lib,
+  stdenv,
+  fetchgit,
+  alsa-lib,
+  gtk3,
+  libGL,
+  libGLU,
+  libX11,
+  pkg-config,
+  upx,
+  xcbutil,
 }:
 
 stdenv.mkDerivation {

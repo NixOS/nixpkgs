@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wayland
-, withNativeLibs ? false
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wayland,
+  withNativeLibs ? false,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,12 +20,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-C3vhZq5IHtbfg2mYYdQRqaLSA0iSER8zRaKi72FCd+E=";
 
-  cargoBuildFlags = [
-    "--package=wl-clipboard-rs"
-    "--package=wl-clipboard-rs-tools"
-  ] ++ lib.optionals withNativeLibs [
-    "--features=native_lib"
-  ];
+  cargoBuildFlags =
+    [
+      "--package=wl-clipboard-rs"
+      "--package=wl-clipboard-rs-tools"
+    ]
+    ++ lib.optionals withNativeLibs [
+      "--features=native_lib"
+    ];
 
   nativeBuildInputs = lib.optionals withNativeLibs [
     pkg-config
@@ -52,8 +55,14 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/YaLTeR/wl-clipboard-rs";
     changelog = "https://github.com/YaLTeR/wl-clipboard-rs/blob/v${version}/CHANGELOG.md";
     platforms = platforms.linux;
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     mainProgram = "wl-clip";
-    maintainers = with maintainers; [ thiagokokada donovanglover ];
+    maintainers = with maintainers; [
+      thiagokokada
+      donovanglover
+    ];
   };
 }

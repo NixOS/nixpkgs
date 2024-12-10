@@ -1,13 +1,24 @@
-{ config, lib, pkgs, ... }:
-let cfg = config.services.jotta-cli;
-in {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.services.jotta-cli;
+in
+{
   options = {
     services.jotta-cli = {
 
       enable = lib.mkEnableOption "Jottacloud Command-line Tool";
 
       options = lib.mkOption {
-        default = [ "stdoutlog" "datadir" "%h/.jottad/" ];
+        default = [
+          "stdoutlog"
+          "datadir"
+          "%h/.jottad/"
+        ];
         example = [ ];
         type = with lib.types; listOf str;
         description = "Command-line options passed to jottad.";

@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchzip, p7zip }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+  p7zip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "snap7";
@@ -14,7 +19,11 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   makefile = "x86_64_linux.mk";
   makeFlags = [ "LibInstall=$(out)/lib" ];

@@ -37,7 +37,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   dependencies = [
     async-timeout
     defang

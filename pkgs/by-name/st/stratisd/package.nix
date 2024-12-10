@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, cargo
-, rustc
-, pkg-config
-, asciidoc
-, ncurses
-, glibc
-, dbus
-, cryptsetup
-, util-linux
-, lvm2
-, python3
-, systemd
-, xfsprogs
-, thin-provisioning-tools
-, clevis
-, jose
-, jq
-, curl
-, tpm2-tools
-, coreutils
-, clevisSupport ? false
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  cargo,
+  rustc,
+  pkg-config,
+  asciidoc,
+  ncurses,
+  glibc,
+  dbus,
+  cryptsetup,
+  util-linux,
+  lvm2,
+  python3,
+  systemd,
+  xfsprogs,
+  thin-provisioning-tools,
+  clevis,
+  jose,
+  jq,
+  curl,
+  tpm2-tools,
+  coreutils,
+  clevisSupport ? false,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -77,22 +78,31 @@ stdenv.mkDerivation rec {
     (python3.withPackages (ps: [ ps.dbus-python ]))
   ];
 
-  outputs = [ "out" "initrd" ];
+  outputs = [
+    "out"
+    "initrd"
+  ];
 
-  env.EXECUTABLES_PATHS = lib.makeBinPath ([
-    xfsprogs
-    thin-provisioning-tools
-  ] ++ lib.optionals clevisSupport [
-    clevis
-    jose
-    jq
-    cryptsetup
-    curl
-    tpm2-tools
-    coreutils
-  ]);
+  env.EXECUTABLES_PATHS = lib.makeBinPath (
+    [
+      xfsprogs
+      thin-provisioning-tools
+    ]
+    ++ lib.optionals clevisSupport [
+      clevis
+      jose
+      jq
+      cryptsetup
+      curl
+      tpm2-tools
+      coreutils
+    ]
+  );
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" "INSTALL=install" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "INSTALL=install"
+  ];
   buildFlags = [ "build-all" ];
 
   doCheck = true;

@@ -1,21 +1,22 @@
-{ lib
-, buildPythonApplication
-, isPy3k
-, fetchFromGitHub
-, manuel
-, setuptools
-, docutils
-, lxml
-, svg-path
-, pygments
-, watchdog
-, fetchpatch
+{
+  lib,
+  buildPythonApplication,
+  isPy3k,
+  fetchFromGitHub,
+  manuel,
+  setuptools,
+  docutils,
+  lxml,
+  svg-path,
+  pygments,
+  watchdog,
+  fetchpatch,
 }:
 
 buildPythonApplication rec {
   pname = "hovercraft";
   version = "2.7";
-  disabled = ! isPy3k;
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "regebro";
@@ -25,7 +26,14 @@ buildPythonApplication rec {
   };
 
   nativeCheckInputs = [ manuel ];
-  propagatedBuildInputs = [ setuptools docutils lxml svg-path pygments watchdog ];
+  propagatedBuildInputs = [
+    setuptools
+    docutils
+    lxml
+    svg-path
+    pygments
+    watchdog
+  ];
   patches = [
     (fetchpatch {
       name = "fix tests with pygments 2.14";

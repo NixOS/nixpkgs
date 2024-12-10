@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, git
-, openssl
-, ps
-, fetchFromGitLab
-, sudo
-, python3Packages
-, gitUpdater
+{
+  stdenv,
+  lib,
+  git,
+  openssl,
+  ps,
+  fetchFromGitLab,
+  sudo,
+  python3Packages,
+  gitUpdater,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -110,16 +111,25 @@ python3Packages.buildPythonApplication rec {
     "test_version"
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ git openssl ]}" ];
+  makeWrapperArgs = [
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        git
+        openssl
+      ]
+    }"
+  ];
 
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description =
-      "Sophisticated chroot/build/flash tool to develop and install postmarketOS";
+    description = "Sophisticated chroot/build/flash tool to develop and install postmarketOS";
     homepage = "https://gitlab.com/postmarketOS/pmbootstrap";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ onny lucasew ];
+    maintainers = with maintainers; [
+      onny
+      lucasew
+    ];
     mainProgram = "pmbootstrap";
   };
 }

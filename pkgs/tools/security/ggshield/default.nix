@@ -21,7 +21,6 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ setuptools ];
 
-
   dependencies = with python3.pkgs; [
     appdirs
     charset-normalizer

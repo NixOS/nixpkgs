@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alacritty
-, cage
-, cairo
-, libxkbcommon
-, makeWrapper
-, mesa
-, meson
-, ninja
-, pkg-config
-, wayland-scanner
-, udev
-, unstableGitUpdater
-, wayland
-, wayland-protocols
-, wlroots
-, xwayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alacritty,
+  cage,
+  cairo,
+  libxkbcommon,
+  makeWrapper,
+  mesa,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  udev,
+  unstableGitUpdater,
+  wayland,
+  wayland-protocols,
+  wlroots,
+  xwayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,7 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/wio \
-      --prefix PATH ":" "${lib.makeBinPath [ alacritty cage ]}"
+      --prefix PATH ":" "${
+        lib.makeBinPath [
+          alacritty
+          cage
+        ]
+      }"
   '';
 
   passthru = {

@@ -10,7 +10,7 @@
 
   iptables,
   nftables,
-  gawk
+  gawk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,8 +24,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4TgM0NkvVvdSEJ01SULu+GqpfqokTTErHAt3QkxkLIs=";
   };
 
-  buildInputs = [ libcap zlib libnetfilter_queue libnfnetlink ];
-  nativeBuildInputs = [ iptables nftables gawk ];
+  buildInputs = [
+    libcap
+    zlib
+    libnetfilter_queue
+    libnfnetlink
+  ];
+  nativeBuildInputs = [
+    iptables
+    nftables
+    gawk
+  ];
 
   makeFlags = [ "TGT=${placeholder "out"}/bin" ];
 

@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, alsa-lib, glib, json-glib }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  alsa-lib,
+  glib,
+  json-glib,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aseq2json";
@@ -12,7 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/aseq2json";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsa-lib glib json-glib ];
+  buildInputs = [
+    alsa-lib
+    glib
+    json-glib
+  ];
 
   installPhase = ''
     install -D --target-directory "$out/bin" aseq2json

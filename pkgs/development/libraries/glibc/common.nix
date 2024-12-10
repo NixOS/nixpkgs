@@ -1,4 +1,5 @@
-/* Build configuration used to build glibc, Info files, and locale
+/*
+  Build configuration used to build glibc, Info files, and locale
    information.
 
    Note that this derivation has multiple outputs and does not respect the
@@ -22,26 +23,30 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-{ stdenv, lib
-, buildPackages
-, fetchurl
-, linuxHeaders ? null
-, gd ? null, libpng ? null
-, libidn2
-, bison
-, python3Minimal
+{
+  stdenv,
+  lib,
+  buildPackages,
+  fetchurl,
+  linuxHeaders ? null,
+  gd ? null,
+  libpng ? null,
+  libidn2,
+  bison,
+  python3Minimal,
 }:
 
-{ pname
-, withLinuxHeaders ? false
-, profilingLibraries ? false
-, withGd ? false
-, enableCET ? false
-, enableCETRuntimeDefault ? false
-, extraBuildInputs ? []
-, extraNativeBuildInputs ? []
-, ...
-} @ args:
+{
+  pname,
+  withLinuxHeaders ? false,
+  profilingLibraries ? false,
+  withGd ? false,
+  enableCET ? false,
+  enableCETRuntimeDefault ? false,
+  extraBuildInputs ? [ ],
+  extraNativeBuildInputs ? [ ],
+  ...
+}@args:
 
 let
   version = "2.40";
@@ -53,248 +58,297 @@ assert withLinuxHeaders -> linuxHeaders != null;
 assert withGd -> gd != null && libpng != null;
 assert enableCET == false -> !enableCETRuntimeDefault;
 
-stdenv.mkDerivation ({
-  version = version + patchSuffix;
+stdenv.mkDerivation (
+  {
+    version = version + patchSuffix;
 
-  enableParallelBuilding = true;
+    enableParallelBuilding = true;
 
-  patches =
-    [
-      /* No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-          $ git fetch --all -p && git checkout origin/release/2.39/master && git describe
-          glibc-2.40-36-g7073164add
-          $ git show --minimal --reverse glibc-2.40.. ':!ADVISORIES' > 2.40-master.patch
+    patches =
+      [
+        /*
+          No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
+           $ git fetch --all -p && git checkout origin/release/2.39/master && git describe
+           glibc-2.40-36-g7073164add
+           $ git show --minimal --reverse glibc-2.40.. ':!ADVISORIES' > 2.40-master.patch
 
-         To compare the archive contents zdiff can be used.
-          $ diff -u 2.40-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.40-master.patch
+          To compare the archive contents zdiff can be used.
+           $ diff -u 2.40-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.40-master.patch
 
-         Please note that each commit has changes to the file ADVISORIES excluded since
-         that conflicts with the directory advisories/ making cross-builds from
-         hosts with case-insensitive file-systems impossible.
-       */
-      ./2.40-master.patch
+          Please note that each commit has changes to the file ADVISORIES excluded since
+          that conflicts with the directory advisories/ making cross-builds from
+          hosts with case-insensitive file-systems impossible.
+        */
+        ./2.40-master.patch
 
-      /* Allow NixOS and Nix to handle the locale-archive. */
-      ./nix-locale-archive.patch
+        # Allow NixOS and Nix to handle the locale-archive.
+        ./nix-locale-archive.patch
 
-      /* Don't use /etc/ld.so.cache, for non-NixOS systems.  */
-      ./dont-use-system-ld-so-cache.patch
+        # Don't use /etc/ld.so.cache, for non-NixOS systems.
+        ./dont-use-system-ld-so-cache.patch
 
-      /* Don't use /etc/ld.so.preload, but /etc/ld-nix.so.preload.  */
-      ./dont-use-system-ld-so-preload.patch
+        # Don't use /etc/ld.so.preload, but /etc/ld-nix.so.preload.
+        ./dont-use-system-ld-so-preload.patch
 
-      /* The command "getconf CS_PATH" returns the default search path
-         "/bin:/usr/bin", which is inappropriate on NixOS machines. This
-         patch extends the search path by "/run/current-system/sw/bin". */
-      ./fix_path_attribute_in_getconf.patch
+        /*
+          The command "getconf CS_PATH" returns the default search path
+          "/bin:/usr/bin", which is inappropriate on NixOS machines. This
+          patch extends the search path by "/run/current-system/sw/bin".
+        */
+        ./fix_path_attribute_in_getconf.patch
 
-      ./fix-x64-abi.patch
+        ./fix-x64-abi.patch
 
-      /* https://github.com/NixOS/nixpkgs/pull/137601 */
-      ./nix-nss-open-files.patch
+        # https://github.com/NixOS/nixpkgs/pull/137601
+        ./nix-nss-open-files.patch
 
-      ./0001-Revert-Remove-all-usage-of-BASH-or-BASH-in-installed.patch
+        ./0001-Revert-Remove-all-usage-of-BASH-or-BASH-in-installed.patch
 
-      /* Patch derived from archlinux,
-         https://gitlab.archlinux.org/archlinux/packaging/packages/glibc/-/blob/e54d98e2d1aae4930ecad9404ef12234922d9dfd/reenable_DT_HASH.patch
+        /*
+          Patch derived from archlinux,
+          https://gitlab.archlinux.org/archlinux/packaging/packages/glibc/-/blob/e54d98e2d1aae4930ecad9404ef12234922d9dfd/reenable_DT_HASH.patch
 
-         See also https://github.com/ValveSoftware/Proton/issues/6051
-         & https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991
+          See also https://github.com/ValveSoftware/Proton/issues/6051
+          & https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991
+        */
+        ./reenable_DT_HASH.patch
+      ]
+      /*
+        NVCC does not support ARM intrinsics. Since <math.h> is pulled in by almost
+        every HPC piece of software, without this patch CUDA compilation on ARM
+        is effectively broken. See
+        https://forums.developer.nvidia.com/t/nvcc-fails-to-build-with-arm-neon-instructions-cpp-vs-cu/248355/2.
       */
-      ./reenable_DT_HASH.patch
-    ]
-    /* NVCC does not support ARM intrinsics. Since <math.h> is pulled in by almost
-       every HPC piece of software, without this patch CUDA compilation on ARM
-       is effectively broken. See
-       https://forums.developer.nvidia.com/t/nvcc-fails-to-build-with-arm-neon-instructions-cpp-vs-cu/248355/2.
-    */
-    ++ (
-      let
-        isAarch64 = stdenv.buildPlatform.isAarch64 || stdenv.hostPlatform.isAarch64;
-        isLinux = stdenv.buildPlatform.isLinux || stdenv.hostPlatform.isLinux;
-      in
-      lib.optional (isAarch64 && isLinux) ./0001-aarch64-math-vector.h-add-NVCC-include-guard.patch
-    )
-    ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
-    ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch
-    ++ lib.optional enableCETRuntimeDefault ./2.39-revert-cet-default-disable.patch;
+      ++ (
+        let
+          isAarch64 = stdenv.buildPlatform.isAarch64 || stdenv.hostPlatform.isAarch64;
+          isLinux = stdenv.buildPlatform.isLinux || stdenv.hostPlatform.isLinux;
+        in
+        lib.optional (isAarch64 && isLinux) ./0001-aarch64-math-vector.h-add-NVCC-include-guard.patch
+      )
+      ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
+      ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch
+      ++ lib.optional enableCETRuntimeDefault ./2.39-revert-cet-default-disable.patch;
 
-  postPatch =
-    ''
-      # Needed for glibc to build with the gnumake 3.82
-      # http://comments.gmane.org/gmane.linux.lfs.support/31227
-      sed -i 's/ot \$/ot:\n\ttouch $@\n$/' manual/Makefile
+    postPatch =
+      ''
+        # Needed for glibc to build with the gnumake 3.82
+        # http://comments.gmane.org/gmane.linux.lfs.support/31227
+        sed -i 's/ot \$/ot:\n\ttouch $@\n$/' manual/Makefile
 
-      # nscd needs libgcc, and we don't want it dynamically linked
-      # because we don't want it to depend on bootstrap-tools libs.
-      echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
+        # nscd needs libgcc, and we don't want it dynamically linked
+        # because we don't want it to depend on bootstrap-tools libs.
+        echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
 
-      # Ensure that `__nss_files_fopen` can still be wrapped by `libredirect`.
-      sed -i -e '/libc_hidden_def (__nss_files_fopen)/d' nss/nss_files_fopen.c
-      sed -i -e '/libc_hidden_proto (__nss_files_fopen)/d' include/nss_files.h
-    ''
-    # FIXME: find a solution for infinite recursion in cross builds.
-    # For now it's hopefully acceptable that IDN from libc doesn't reliably work.
-    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+        # Ensure that `__nss_files_fopen` can still be wrapped by `libredirect`.
+        sed -i -e '/libc_hidden_def (__nss_files_fopen)/d' nss/nss_files_fopen.c
+        sed -i -e '/libc_hidden_proto (__nss_files_fopen)/d' include/nss_files.h
+      ''
+      # FIXME: find a solution for infinite recursion in cross builds.
+      # For now it's hopefully acceptable that IDN from libc doesn't reliably work.
+      + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
 
-      # Ensure that libidn2 is found.
-      patch -p 1 <<EOF
-      --- a/inet/idna.c
-      +++ b/inet/idna.c
-      @@ -25,1 +25,1 @@
-      -#define LIBIDN2_SONAME "libidn2.so.0"
-      +#define LIBIDN2_SONAME "${lib.getLib libidn2}/lib/libidn2.so.0"
-      EOF
-    '';
+        # Ensure that libidn2 is found.
+        patch -p 1 <<EOF
+        --- a/inet/idna.c
+        +++ b/inet/idna.c
+        @@ -25,1 +25,1 @@
+        -#define LIBIDN2_SONAME "libidn2.so.0"
+        +#define LIBIDN2_SONAME "${lib.getLib libidn2}/lib/libidn2.so.0"
+        EOF
+      '';
 
-  configureFlags =
-    [ "-C"
-      "--enable-add-ons"
-      "--sysconfdir=/etc"
-      "--enable-stack-protector=strong"
-      "--enable-bind-now"
-      (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
-      (lib.enableFeature profilingLibraries "profile")
-      "--enable-fortify-source"
-    ] ++ lib.optionals (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64) [
-      # This feature is currently supported on
-      # i386, x86_64 and x32 with binutils 2.29 or later,
-      # and on aarch64 with binutils 2.30 or later.
-      # https://sourceware.org/glibc/wiki/PortStatus
-      "--enable-static-pie"
-    ] ++ lib.optionals (enableCET != false) [
-      # Enable Intel Control-flow Enforcement Technology (CET) support
-      "--enable-cet${if builtins.isString enableCET then "=${enableCET}"  else ""}"
-    ] ++ lib.optionals withLinuxHeaders [
-      "--enable-kernel=3.10.0" # RHEL 7 and derivatives, seems oldest still supported kernel
-    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      (lib.flip lib.withFeature "fp"
-         (stdenv.hostPlatform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"))
-      "--with-__thread"
-    ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch32) [
-      "--host=arm-linux-gnueabi"
-      "--build=arm-linux-gnueabi"
+    configureFlags =
+      [
+        "-C"
+        "--enable-add-ons"
+        "--sysconfdir=/etc"
+        "--enable-stack-protector=strong"
+        "--enable-bind-now"
+        (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
+        (lib.enableFeature profilingLibraries "profile")
+        "--enable-fortify-source"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64) [
+        # This feature is currently supported on
+        # i386, x86_64 and x32 with binutils 2.29 or later,
+        # and on aarch64 with binutils 2.30 or later.
+        # https://sourceware.org/glibc/wiki/PortStatus
+        "--enable-static-pie"
+      ]
+      ++ lib.optionals (enableCET != false) [
+        # Enable Intel Control-flow Enforcement Technology (CET) support
+        "--enable-cet${if builtins.isString enableCET then "=${enableCET}" else ""}"
+      ]
+      ++ lib.optionals withLinuxHeaders [
+        "--enable-kernel=3.10.0" # RHEL 7 and derivatives, seems oldest still supported kernel
+      ]
+      ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+        (lib.flip lib.withFeature "fp" (
+          stdenv.hostPlatform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"
+        ))
+        "--with-__thread"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch32) [
+        "--host=arm-linux-gnueabi"
+        "--build=arm-linux-gnueabi"
 
-      # To avoid linking with -lgcc_s (dynamic link)
-      # so the glibc does not depend on its compiler store path
-      "libc_cv_as_needed=no"
-    ]
-    ++ lib.optional withGd "--with-gd";
+        # To avoid linking with -lgcc_s (dynamic link)
+        # so the glibc does not depend on its compiler store path
+        "libc_cv_as_needed=no"
+      ]
+      ++ lib.optional withGd "--with-gd";
 
-  makeFlags = (args.makeFlags or []) ++ [
-    "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
-  ];
+    makeFlags = (args.makeFlags or [ ]) ++ [
+      "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+    ];
 
-  postInstall = (args.postInstall or "") + ''
-    moveToOutput bin/getent $getent
-  '';
+    postInstall =
+      (args.postInstall or "")
+      + ''
+        moveToOutput bin/getent $getent
+      '';
 
-  installFlags = [ "sysconfdir=$(out)/etc" ];
+    installFlags = [ "sysconfdir=$(out)/etc" ];
 
-  # out as the first output is an exception exclusive to glibc
+    # out as the first output is an exception exclusive to glibc
 
-  # getent is its own output, not kept in bin, since many things
-  # depend on getent but not on the locale generation tools in the bin
-  # output. This saves a couple of megabytes of closure size in many cases.
-  outputs = [ "out" "bin" "dev" "static" "getent" ];
+    # getent is its own output, not kept in bin, since many things
+    # depend on getent but not on the locale generation tools in the bin
+    # output. This saves a couple of megabytes of closure size in many cases.
+    outputs = [
+      "out"
+      "bin"
+      "dev"
+      "static"
+      "getent"
+    ];
 
-  strictDeps = true;
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison python3Minimal ] ++ extraNativeBuildInputs;
-  buildInputs = [ linuxHeaders ] ++ lib.optionals withGd [ gd libpng ] ++ extraBuildInputs;
+    strictDeps = true;
+    depsBuildBuild = [ buildPackages.stdenv.cc ];
+    nativeBuildInputs = [
+      bison
+      python3Minimal
+    ] ++ extraNativeBuildInputs;
+    buildInputs =
+      [ linuxHeaders ]
+      ++ lib.optionals withGd [
+        gd
+        libpng
+      ]
+      ++ extraBuildInputs;
 
-  env = {
-    linuxHeaders = lib.optionalString withLinuxHeaders linuxHeaders;
-    inherit (stdenv.hostPlatform) is64bit;
-    # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
-    # prevent a retained dependency on the bootstrap tools in the stdenv-linux
-    # bootstrap.
-    BASH_SHELL = "/bin/sh";
-  };
+    env = {
+      linuxHeaders = lib.optionalString withLinuxHeaders linuxHeaders;
+      inherit (stdenv.hostPlatform) is64bit;
+      # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
+      # prevent a retained dependency on the bootstrap tools in the stdenv-linux
+      # bootstrap.
+      BASH_SHELL = "/bin/sh";
+    };
 
-  # Used by libgcc, elf-header, and others to determine ABI
-  passthru = { inherit version; minorRelease = version; };
-}
+    # Used by libgcc, elf-header, and others to determine ABI
+    passthru = {
+      inherit version;
+      minorRelease = version;
+    };
+  }
 
-// (removeAttrs args [ "withLinuxHeaders" "withGd" "enableCET" "postInstall" "makeFlags" ]) //
+  // (removeAttrs args [
+    "withLinuxHeaders"
+    "withGd"
+    "enableCET"
+    "postInstall"
+    "makeFlags"
+  ])
+  //
 
-{
-  src = fetchurl {
-    url = "mirror://gnu/glibc/glibc-${version}.tar.xz";
-    inherit sha256;
-  };
+    {
+      src = fetchurl {
+        url = "mirror://gnu/glibc/glibc-${version}.tar.xz";
+        inherit sha256;
+      };
 
-  # Remove absolute paths from `configure' & co.; build out-of-tree.
-  preConfigure = ''
-    export PWD_P=$(type -tP pwd)
-    for i in configure io/ftwtest-sh; do
-        # Can't use substituteInPlace here because replace hasn't been
-        # built yet in the bootstrap.
-        sed -i "$i" -e "s^/bin/pwd^$PWD_P^g"
-    done
+      # Remove absolute paths from `configure' & co.; build out-of-tree.
+      preConfigure =
+        ''
+          export PWD_P=$(type -tP pwd)
+          for i in configure io/ftwtest-sh; do
+              # Can't use substituteInPlace here because replace hasn't been
+              # built yet in the bootstrap.
+              sed -i "$i" -e "s^/bin/pwd^$PWD_P^g"
+          done
 
-    mkdir ../build
-    cd ../build
+          mkdir ../build
+          cd ../build
 
-    configureScript="`pwd`/../$sourceRoot/configure"
+          configureScript="`pwd`/../$sourceRoot/configure"
 
-    ${lib.optionalString (stdenv.cc.libc != null)
-      ''makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"''
+          ${lib.optionalString (stdenv.cc.libc != null)
+            ''makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"''
+          }
+
+
+        ''
+        + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+          sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
+
+          cat > config.cache << "EOF"
+          libc_cv_forced_unwind=yes
+          libc_cv_c_cleanup=yes
+          libc_cv_gnu89_inline=yes
+          EOF
+
+          # ./configure has logic like
+          #
+          #     AR=`$CC -print-prog-name=ar`
+          #
+          # This searches various directories in the gcc and its wrapper. In nixpkgs,
+          # this returns the bare string "ar", which is build ar. This can result as
+          # a build failure with the following message:
+          #
+          #     libc_pic.a: error adding symbols: archive has no index; run ranlib to add one
+          #
+          # (Observed cross compiling from aarch64-linux -> armv7l-linux).
+          #
+          # Nixpkgs passes a correct value for AR and friends, so to use the correct
+          # set of tools, we only need to delete this special handling.
+          sed -i \
+            -e '/^AR=/d' \
+            -e '/^AS=/d' \
+            -e '/^LD=/d' \
+            -e '/^OBJCOPY=/d' \
+            -e '/^OBJDUMP=/d' \
+            $configureScript
+        '';
+
+      preBuild = lib.optionalString withGd "unset NIX_DONT_SET_RPATH";
+
+      doCheck = false; # fails
+
+      meta =
+        with lib;
+        {
+          homepage = "https://www.gnu.org/software/libc/";
+          description = "GNU C Library";
+
+          longDescription = ''
+            Any Unix-like operating system needs a C library: the library which
+            defines the "system calls" and other basic facilities such as
+            open, malloc, printf, exit...
+
+            The GNU C library is used as the C library in the GNU system and
+            most systems with the Linux kernel.
+          '';
+
+          license = licenses.lgpl2Plus;
+
+          maintainers = with maintainers; [
+            ma27
+            connorbaker
+          ];
+          platforms = platforms.linux;
+        }
+        // (args.meta or { });
     }
-
-
-  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
-
-    cat > config.cache << "EOF"
-    libc_cv_forced_unwind=yes
-    libc_cv_c_cleanup=yes
-    libc_cv_gnu89_inline=yes
-    EOF
-
-    # ./configure has logic like
-    #
-    #     AR=`$CC -print-prog-name=ar`
-    #
-    # This searches various directories in the gcc and its wrapper. In nixpkgs,
-    # this returns the bare string "ar", which is build ar. This can result as
-    # a build failure with the following message:
-    #
-    #     libc_pic.a: error adding symbols: archive has no index; run ranlib to add one
-    #
-    # (Observed cross compiling from aarch64-linux -> armv7l-linux).
-    #
-    # Nixpkgs passes a correct value for AR and friends, so to use the correct
-    # set of tools, we only need to delete this special handling.
-    sed -i \
-      -e '/^AR=/d' \
-      -e '/^AS=/d' \
-      -e '/^LD=/d' \
-      -e '/^OBJCOPY=/d' \
-      -e '/^OBJDUMP=/d' \
-      $configureScript
-  '';
-
-  preBuild = lib.optionalString withGd "unset NIX_DONT_SET_RPATH";
-
-  doCheck = false; # fails
-
-  meta = with lib; {
-    homepage = "https://www.gnu.org/software/libc/";
-    description = "GNU C Library";
-
-    longDescription = ''
-      Any Unix-like operating system needs a C library: the library which
-      defines the "system calls" and other basic facilities such as
-      open, malloc, printf, exit...
-
-      The GNU C library is used as the C library in the GNU system and
-      most systems with the Linux kernel.
-    '';
-
-    license = licenses.lgpl2Plus;
-
-    maintainers = with maintainers; [ ma27 connorbaker ];
-    platforms = platforms.linux;
-  } // (args.meta or {});
-})
+)

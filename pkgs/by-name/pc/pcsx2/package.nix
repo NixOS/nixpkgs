@@ -138,8 +138,6 @@ llvmPackages_17.stdenv.mkDerivation (finalAttrs: {
       govanify
       matteopacini
     ];
-    platforms = lib.systems.inspect.patternLogicalAnd
-      lib.systems.inspect.patterns.isLinux
-      lib.systems.inspect.patterns.isx86_64;
+    platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isLinux lib.systems.inspect.patterns.isx86_64;
   };
 })

@@ -1,18 +1,31 @@
-{ stdenv, lib, fetchurl, dpkg, makeWrapper , mono, gtk-sharp-3_0
-, glib, libusb1 , zlib, gtk3-x11, callPackage, writeTextDir
-, scopes ? [
-  "picocv"
-  "ps2000"
-  "ps2000a"
-  "ps3000"
-  "ps3000a"
-  "ps4000"
-  "ps4000a"
-  "ps5000"
-  "ps5000a"
-  "ps6000"
-  "ps6000a"
-] }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  mono,
+  gtk-sharp-3_0,
+  glib,
+  libusb1,
+  zlib,
+  gtk3-x11,
+  callPackage,
+  writeTextDir,
+  scopes ? [
+    "picocv"
+    "ps2000"
+    "ps2000a"
+    "ps3000"
+    "ps3000a"
+    "ps4000"
+    "ps4000a"
+    "ps5000"
+    "ps5000a"
+    "ps6000"
+    "ps6000a"
+  ],
+}:
 
 let
   shared_meta = lib: {
@@ -22,12 +35,22 @@ let
     license = lib.licenses.unfree;
   };
 
-  libpicoipp = callPackage ({ stdenv, lib, fetchurl, autoPatchelfHook, dpkg }:
+  libpicoipp = callPackage (
+    {
+      stdenv,
+      lib,
+      fetchurl,
+      autoPatchelfHook,
+      dpkg,
+    }:
     stdenv.mkDerivation rec {
       pname = "libpicoipp";
       inherit (sources.libpicoipp) version;
       src = fetchurl { inherit (sources.libpicoipp) url sha256; };
-      nativeBuildInputs = [ dpkg autoPatchelfHook ];
+      nativeBuildInputs = [
+        dpkg
+        autoPatchelfHook
+      ];
       buildInputs = [ (lib.getLib stdenv.cc.cc) ];
       sourceRoot = ".";
       unpackCmd = "dpkg-deb -x $src .";
@@ -42,15 +65,21 @@ let
         sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
         description = "library for picotech oscilloscope software";
       };
-    }) { };
+    }
+  ) { };
 
   # If we don't have a platform available, put a dummy version here, so at
   # least evaluation succeeds.
   sources =
     (lib.importJSON ./sources.json).${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
-  scopePkg = name:
-    { url, version, sha256 }:
+  scopePkg =
+    name:
+    {
+      url,
+      version,
+      sha256,
+    }:
     stdenv.mkDerivation rec {
       pname = "lib${name}";
       inherit version;
@@ -65,35 +94,51 @@ let
         cp -d opt/picoscope/lib/* $out/lib
          runHook postInstall
       '';
-      meta = with lib;
-        shared_meta lib // {
+      meta =
+        with lib;
+        shared_meta lib
+        // {
           description = "library for picotech oscilloscope ${name} series";
         };
     };
 
   scopePkgs = lib.mapAttrs scopePkg sources;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "picoscope";
   inherit (sources.picoscope) version;
 
   src = fetchurl { inherit (sources.picoscope) url sha256; };
 
-  nativeBuildInputs = [ dpkg makeWrapper ];
-  buildInputs = [ gtk-sharp-3_0 mono glib libusb1 zlib ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+  ];
+  buildInputs = [
+    gtk-sharp-3_0
+    mono
+    glib
+    libusb1
+    zlib
+  ];
 
   unpackCmd = "dpkg-deb -x $src .";
   sourceRoot = ".";
   scopeLibs = lib.attrVals (map (x: "lib${x}") scopes) scopePkgs;
-  MONO_PATH = "${gtk-sharp-3_0}/lib/mono/gtk-sharp-3.0:" + (lib.makeLibraryPath
-    ([
-      glib
-      gtk3-x11
-      gtk-sharp-3_0
-      libusb1
-      zlib
-      libpicoipp
-    ] ++ scopeLibs));
+  MONO_PATH =
+    "${gtk-sharp-3_0}/lib/mono/gtk-sharp-3.0:"
+    + (lib.makeLibraryPath (
+      [
+        glib
+        gtk3-x11
+        gtk-sharp-3_0
+        libusb1
+        zlib
+        libpicoipp
+      ]
+      ++ scopeLibs
+    ));
 
   installPhase = ''
     runHook preInstall
@@ -116,10 +161,11 @@ in stdenv.mkDerivation rec {
     SUBSYSTEMS=="usb", ATTRS{idVendor}=="0ce9", MODE="664",GROUP="pico"
   '';
 
-  meta = with lib;
-    shared_meta lib // {
-      description =
-        "Oscilloscope application that works with all PicoScope models";
+  meta =
+    with lib;
+    shared_meta lib
+    // {
+      description = "Oscilloscope application that works with all PicoScope models";
       longDescription = ''
         PicoScope for Linux is a powerful oscilloscope application that works
         with all PicoScope models. The most important features from PicoScope
@@ -134,4 +180,3 @@ in stdenv.mkDerivation rec {
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
     };
 }
-

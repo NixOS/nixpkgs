@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, tcl
-, tk
-, libX11
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  tcl,
+  tk,
+  libX11,
+  zlib,
 }:
 
 tcl.mkTclDerivation rec {

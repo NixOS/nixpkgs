@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, ronn
-, systemd
-, kmod
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  ronn,
+  systemd,
+  kmod,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,6 +1,7 @@
-{ lib
-, fetchPypi
-, python3
+{
+  lib,
+  fetchPypi,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python3
-, capnproto
-, gtest
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  capnproto,
+  gtest,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "UHDM";
     rev = "v${finalAttrs.version}";
     hash = "sha256-va8qAzsg589C6rLmG1uIMDr4X30qpBgRO1ZVKdEs5ok=";
-    fetchSubmodules = false;  # we use all dependencies from nix
+    fetchSubmodules = false; # we use all dependencies from nix
   };
 
   nativeBuildInputs = [
