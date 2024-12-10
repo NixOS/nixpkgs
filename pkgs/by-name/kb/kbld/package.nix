@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "kbld";
-  version = "0.44.1";
+  version = "0.45.0";
 
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "kbld";
     rev = "v${version}";
-    hash = "sha256-sEzCA32r3nSY1hT1r4EPPWsF9Kgn0rXnaAKlatFjZIo=";
+    hash = "sha256-C16toQq2zD+oeZneGT2Jzml5UKkB6XkRSQo6kyAHXD8=";
   };
 
   vendorHash = null;
