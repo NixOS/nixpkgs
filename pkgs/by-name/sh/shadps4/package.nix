@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nixosTests,
   alsa-lib,
   boost184,
   cmake,
@@ -122,9 +123,12 @@ stdenv.mkDerivation (finalAttrs: {
       $out/bin/shadps4
   '';
 
-  passthru.updateScript = unstableGitUpdater {
-    tagFormat = "v.*";
-    tagPrefix = "v.";
+  passthru = {
+    tests.openorbis-example = nixosTests.shadps4;
+    updateScript = unstableGitUpdater {
+      tagFormat = "v.*";
+      tagPrefix = "v.";
+    };
   };
 
   meta = {
