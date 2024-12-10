@@ -1,11 +1,12 @@
-{ lib
-, buildDotnetModule
-, fetchurl
-, unzip
-, dos2unix
-, msbuild
-, mono
-, dotnetCorePackages
+{
+  lib,
+  buildDotnetModule,
+  fetchurl,
+  unzip,
+  dos2unix,
+  msbuild,
+  mono,
+  dotnetCorePackages,
 }:
 buildDotnetModule rec {
   pname = "networkminer";
@@ -14,13 +15,19 @@ buildDotnetModule rec {
   src = fetchurl {
     # Upstream does not provide versioned releases, a mirror has been uploaded
     # to archive.org
-    url = "https://archive.org/download/networkminer-${lib.replaceStrings ["."] ["-"] version}/NetworkMiner_${lib.replaceStrings ["."] ["-"] version}_source.zip";
+    url = "https://archive.org/download/networkminer-${
+      lib.replaceStrings [ "." ] [ "-" ] version
+    }/NetworkMiner_${lib.replaceStrings [ "." ] [ "-" ] version}_source.zip";
     sha256 = "1n2312acq5rq0jizlcfk0crslx3wgcsd836p47nk3pnapzw0cqvv";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
 
-  nativeBuildInputs = [ unzip dos2unix msbuild ];
+  nativeBuildInputs = [
+    unzip
+    dos2unix
+    msbuild
+  ];
 
   patches = [
     # Store application data in XDG_DATA_DIRS instead of trying to write to nix store

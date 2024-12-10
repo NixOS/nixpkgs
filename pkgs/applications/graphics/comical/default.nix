@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, hexdump
-, wxGTK32
-, zlib
-, Cocoa
+{
+  lib,
+  stdenv,
+  fetchurl,
+  hexdump,
+  wxGTK32,
+  zlib,
+  Cocoa,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,12 +25,14 @@ stdenv.mkDerivation rec {
     hexdump
   ];
 
-  buildInputs = [
-    wxGTK32
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-  ];
+  buildInputs =
+    [
+      wxGTK32
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Cocoa
+    ];
 
   makeFlags = [
     "prefix=${placeholder "out"}"

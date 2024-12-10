@@ -1,4 +1,12 @@
-{ ctags, fetchurl, lib, libressl, ncurses, pkg-config, stdenv }:
+{
+  ctags,
+  fetchurl,
+  lib,
+  libressl,
+  ncurses,
+  pkg-config,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "catgirl";
@@ -19,8 +27,14 @@ stdenv.mkDerivation rec {
       "${lib.getBin libressl}"
   '';
 
-  nativeBuildInputs = [ ctags pkg-config ];
-  buildInputs = [ libressl ncurses ];
+  nativeBuildInputs = [
+    ctags
+    pkg-config
+  ];
+  buildInputs = [
+    libressl
+    ncurses
+  ];
   strictDeps = true;
 
   enableParallelBuilding = true;

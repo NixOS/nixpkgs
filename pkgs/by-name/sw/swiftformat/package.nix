@@ -1,4 +1,8 @@
-{ stdenv, lib, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 
 # This derivation is impure: it relies on an Xcode toolchain being installed
 # and available in the expected place. The values of sandboxProfile and
@@ -40,6 +44,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.bdesham ];
     platforms = platforms.darwin;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

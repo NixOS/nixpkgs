@@ -1,4 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, libGL, libX11, libXext, libXrandr, libXinerama, libXcursor, freetype, alsa-lib, cmake, pkg-config, gcc-unwrapped }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libGL,
+  libX11,
+  libXext,
+  libXrandr,
+  libXinerama,
+  libXcursor,
+  freetype,
+  alsa-lib,
+  cmake,
+  pkg-config,
+  gcc-unwrapped,
+}:
 
 stdenv.mkDerivation rec {
   pname = "delayarchitect";
@@ -12,10 +27,20 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
-    libGL libX11 libXext libXrandr libXinerama libXcursor freetype alsa-lib
+    libGL
+    libX11
+    libXext
+    libXrandr
+    libXinerama
+    libXcursor
+    freetype
+    alsa-lib
   ];
 
   cmakeFlags = [

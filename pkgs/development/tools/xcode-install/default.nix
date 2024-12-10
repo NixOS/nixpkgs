@@ -1,5 +1,6 @@
-{ lib
-, bundlerApp
+{
+  lib,
+  bundlerApp,
 }:
 
 bundlerApp {

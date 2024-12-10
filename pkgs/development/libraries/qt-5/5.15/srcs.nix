@@ -1,19 +1,22 @@
-{ lib, fetchgit, fetchFromGitHub }:
+{
+  lib,
+  fetchgit,
+  fetchFromGitHub,
+}:
 
 let
   version = "5.15.15";
 
-  mk = name: args:
-    {
-      inherit version;
-      src = fetchgit {
-        inherit (args) url rev sha256;
-        fetchLFS = false;
-        fetchSubmodules = true;
-        deepClone = false;
-        leaveDotGit = false;
-      };
+  mk = name: args: {
+    inherit version;
+    src = fetchgit {
+      inherit (args) url rev sha256;
+      fetchLFS = false;
+      fetchSubmodules = true;
+      deepClone = false;
+      leaveDotGit = false;
     };
+  };
 in
 lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
 // {

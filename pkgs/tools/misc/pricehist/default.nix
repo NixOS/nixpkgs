@@ -1,14 +1,15 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitLab
-, requests
-, lxml
-, cssselect
-, curlify
-, poetry-core
-, pytest-mock
-, responses
-, pytestCheckHook
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitLab,
+  requests,
+  lxml,
+  cssselect,
+  curlify,
+  poetry-core,
+  pytest-mock,
+  responses,
+  pytestCheckHook,
 }:
 
 buildPythonApplication rec {

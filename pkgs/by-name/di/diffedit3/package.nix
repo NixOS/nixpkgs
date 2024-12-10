@@ -1,5 +1,10 @@
-{ lib, rustPlatform, fetchCrate
-, testers, nix-update-script, diffedit3
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  testers,
+  nix-update-script,
+  diffedit3,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,4 +1,16 @@
-{ lib, stdenv, buildPackages, fetchurl, zlib, bzip2, perl, cpio, gawk, coreutils, ApplicationServices }:
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  zlib,
+  bzip2,
+  perl,
+  cpio,
+  gawk,
+  coreutils,
+  ApplicationServices,
+}:
 
 stdenv.mkDerivation rec {
   pname = "blast";
@@ -16,8 +28,8 @@ stdenv.mkDerivation rec {
     # These extra cause clang to hang on Darwin.
     "--with-flat-makefile"
     "--without-makefile-auto-update"
-    "--with-dll"  # build dynamic libraries (static are default)
-    ];
+    "--with-dll" # build dynamic libraries (static are default)
+  ];
 
   makeFlags = [ "all_projects=app/" ];
 
@@ -80,8 +92,14 @@ stdenv.mkDerivation rec {
 
   # perl is necessary in buildInputs so that installed perl scripts get patched
   # correctly
-  buildInputs = [ coreutils perl gawk zlib bzip2 cpio ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
+  buildInputs = [
+    coreutils
+    perl
+    gawk
+    zlib
+    bzip2
+    cpio
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
   hardeningDisable = [ "format" ];
 
   postInstall = ''

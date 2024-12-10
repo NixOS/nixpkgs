@@ -1,4 +1,9 @@
-{ lib, stdenv, zlib, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  zlib,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation {
   pname = "minizip";

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, postgresqlTestHook, buildPostgresqlExtension }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  postgresqlTestHook,
+  buildPostgresqlExtension,
+}:
 
 buildPostgresqlExtension (finalAttrs: {
   pname = "pg_roaringbitmap";

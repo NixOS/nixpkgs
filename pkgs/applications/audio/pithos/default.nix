@@ -1,6 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config, appstream-glib, glib
-, wrapGAppsHook3, pythonPackages, gtk3, adwaita-icon-theme, gobject-introspection
-, libnotify, libsecret, gst_all_1 }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  appstream-glib,
+  glib,
+  wrapGAppsHook3,
+  pythonPackages,
+  gtk3,
+  adwaita-icon-theme,
+  gobject-introspection,
+  libnotify,
+  libsecret,
+  gst_all_1,
+}:
 
 pythonPackages.buildPythonApplication rec {
   pname = "pithos";
@@ -8,7 +23,7 @@ pythonPackages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = pname;
-    repo  = pname;
+    repo = pname;
     rev = "refs/tags/${version}";
     hash = "sha256-3j6IoMi30BQ8WHK4BxbsW+/3XZx7rBFd47EBENa2GiQ=";
   };
@@ -20,14 +35,36 @@ pythonPackages.buildPythonApplication rec {
     patchShebangs meson_post_install.py
   '';
 
-  nativeBuildInputs = [ meson ninja pkg-config appstream-glib wrapGAppsHook3 gobject-introspection ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    appstream-glib
+    wrapGAppsHook3
+    gobject-introspection
+  ];
 
-  buildInputs = [ gtk3 libnotify libsecret glib ]
-    ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad ]);
+  buildInputs =
+    [
+      gtk3
+      libnotify
+      libsecret
+      glib
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-ugly
+      gst-plugins-bad
+    ]);
 
   propagatedBuildInputs =
-    [ adwaita-icon-theme ] ++
-    (with pythonPackages; [ pygobject3 pylast ]);
+    [ adwaita-icon-theme ]
+    ++ (with pythonPackages; [
+      pygobject3
+      pylast
+    ]);
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;

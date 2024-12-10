@@ -59,21 +59,24 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    attrs
-    autobahn
-    automat
-    click
-    humanize
-    iterable-io
-    pynacl
-    six
-    spake2
-    tqdm
-    twisted
-    txtorcon
-    zipstream-ng
-  ] ++ autobahn.optional-dependencies.twisted ++ twisted.optional-dependencies.tls;
+  dependencies =
+    [
+      attrs
+      autobahn
+      automat
+      click
+      humanize
+      iterable-io
+      pynacl
+      six
+      spake2
+      tqdm
+      twisted
+      txtorcon
+      zipstream-ng
+    ]
+    ++ autobahn.optional-dependencies.twisted
+    ++ twisted.optional-dependencies.tls;
 
   optional-dependencies = {
     dilation = [ noiseprotocol ];

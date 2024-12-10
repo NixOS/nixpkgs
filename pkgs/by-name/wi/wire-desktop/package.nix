@@ -1,20 +1,21 @@
-{ autoPatchelfHook
-, dpkg
-, fetchurl
-, makeDesktopItem
-, makeWrapper
-, stdenv
-, lib
-, udev
-, buildPackages
-, cpio
-, xar
-, libdbusmenu
-, alsa-lib
-, mesa
-, nss
-, nspr
-, systemd
+{
+  autoPatchelfHook,
+  dpkg,
+  fetchurl,
+  makeDesktopItem,
+  makeWrapper,
+  stdenv,
+  lib,
+  udev,
+  buildPackages,
+  cpio,
+  xar,
+  libdbusmenu,
+  alsa-lib,
+  mesa,
+  nss,
+  nspr,
+  systemd,
 }:
 
 let
@@ -25,21 +26,27 @@ let
 
   pname = "wire-desktop";
 
-  version = let
-    x86_64-darwin = "3.35.4861";
-  in {
-    inherit x86_64-darwin;
-    aarch64-darwin = x86_64-darwin;
-    x86_64-linux = "3.36.3462";
-  }.${system} or throwSystem;
+  version =
+    let
+      x86_64-darwin = "3.35.4861";
+    in
+    {
+      inherit x86_64-darwin;
+      aarch64-darwin = x86_64-darwin;
+      x86_64-linux = "3.36.3462";
+    }
+    .${system} or throwSystem;
 
-  hash = let
-    x86_64-darwin = "sha256-QPxslMEz1jOH2LceFOdCyVDtpya1SfJ8GWMIAIhie4U=";
-  in {
-    inherit x86_64-darwin;
-    aarch64-darwin = x86_64-darwin;
-    x86_64-linux = "sha256-tlX15AT4PcrmD2Vna99TGqo0b/8xv2YOAt03aCqSeXg=";
-  }.${system} or throwSystem;
+  hash =
+    let
+      x86_64-darwin = "sha256-QPxslMEz1jOH2LceFOdCyVDtpya1SfJ8GWMIAIhie4U=";
+    in
+    {
+      inherit x86_64-darwin;
+      aarch64-darwin = x86_64-darwin;
+      x86_64-linux = "sha256-tlX15AT4PcrmD2Vna99TGqo0b/8xv2YOAt03aCqSeXg=";
+    }
+    .${system} or throwSystem;
 
   meta = with lib; {
     description = "Modern, secure messenger for everyone";
@@ -66,7 +73,7 @@ let
     platforms = platforms.darwin ++ [
       "x86_64-linux"
     ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 
   linux = stdenv.mkDerivation rec {
@@ -78,7 +85,12 @@ let
     };
 
     desktopItem = makeDesktopItem {
-      categories = [ "Network" "InstantMessaging" "Chat" "VideoConference" ];
+      categories = [
+        "Network"
+        "InstantMessaging"
+        "Chat"
+        "VideoConference"
+      ];
       comment = "Secure messenger for everyone";
       desktopName = "Wire";
       exec = "wire-desktop %U";
@@ -180,6 +192,4 @@ let
   };
 
 in
-if stdenv.hostPlatform.isDarwin
-then darwin
-else linux
+if stdenv.hostPlatform.isDarwin then darwin else linux

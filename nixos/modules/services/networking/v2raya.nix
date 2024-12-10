@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -52,10 +57,16 @@ in
         };
 
         wantedBy = [ "multi-user.target" ];
-        path = with pkgs; [ iptables bash iproute2 ] ++ lib.optionals nftablesEnabled [ nftables ]; # required by v2rayA TProxy functionality
+        path =
+          with pkgs;
+          [
+            iptables
+            bash
+            iproute2
+          ]
+          ++ lib.optionals nftablesEnabled [ nftables ]; # required by v2rayA TProxy functionality
       };
   };
 
   meta.maintainers = with maintainers; [ elliot ];
 }
-

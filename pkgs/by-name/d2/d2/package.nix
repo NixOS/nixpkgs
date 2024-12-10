@@ -1,10 +1,11 @@
-{ lib
-, buildGo123Module
-, fetchFromGitHub
-, installShellFiles
-, git
-, testers
-, d2
+{
+  lib,
+  buildGo123Module,
+  fetchFromGitHub,
+  installShellFiles,
+  git,
+  testers,
+  d2,
 }:
 
 buildGo123Module rec {
@@ -52,6 +53,9 @@ buildGo123Module rec {
     homepage = "https://d2lang.com";
     changelog = "https://github.com/terrastruct/d2/releases/tag/v${version}";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ dit7ya kashw2 ];
+    maintainers = with maintainers; [
+      dit7ya
+      kashw2
+    ];
   };
 }

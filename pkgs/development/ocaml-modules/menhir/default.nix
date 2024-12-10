@@ -1,5 +1,9 @@
-{ buildDunePackage, substituteAll, ocaml
-, menhirLib, menhirSdk
+{
+  buildDunePackage,
+  substituteAll,
+  ocaml,
+  menhirLib,
+  menhirSdk,
 }:
 
 buildDunePackage rec {
@@ -9,7 +13,10 @@ buildDunePackage rec {
 
   inherit (menhirLib) version src;
 
-  buildInputs = [ menhirLib menhirSdk ];
+  buildInputs = [
+    menhirLib
+    menhirSdk
+  ];
 
   patches = [
     (substituteAll {

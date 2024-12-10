@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, autoreconfHook
-, cg3
-, fetchFromGitHub
-, fetchpatch
-, hfst
-, hfst-ospell
-, icu
-, libvoikko
-, makeWrapper
-, pkg-config
-, python3
-, zip
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  cg3,
+  fetchFromGitHub,
+  fetchpatch,
+  hfst,
+  hfst-ospell,
+  icu,
+  libvoikko,
+  makeWrapper,
+  pkg-config,
+  python3,
+  zip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

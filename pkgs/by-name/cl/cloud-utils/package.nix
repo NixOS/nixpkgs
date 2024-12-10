@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gitUpdater
-, makeWrapper
-, gawk
-, gnused
-, util-linux
-, file
-, wget
-, python3
-, qemu-utils
-, e2fsprogs
-, cdrkit
-, gptfdisk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  makeWrapper,
+  gawk,
+  gnused,
+  util-linux,
+  file,
+  wget,
+  python3,
+  qemu-utils,
+  e2fsprogs,
+  cdrkit,
+  gptfdisk,
 }:
 let
   # according to https://packages.debian.org/sid/cloud-image-utils + https://packages.debian.org/sid/admin/cloud-guest-utils
@@ -44,12 +45,20 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ python3 ];
-  installFlags = [ "LIBDIR=$(out)/lib" "BINDIR=$(out)/bin" "MANDIR=$(out)/man/man1" "DOCDIR=$(out)/doc" ];
+  installFlags = [
+    "LIBDIR=$(out)/lib"
+    "BINDIR=$(out)/bin"
+    "MANDIR=$(out)/man/man1"
+    "DOCDIR=$(out)/doc"
+  ];
 
   # $guest output contains all executables needed for cloud-init and $out the rest + $guest
   # This is similar to debian's package split into cloud-image-utils and cloud-guest-utils
   # The reason is to reduce the closure size
-  outputs = [ "out" "guest" ];
+  outputs = [
+    "out"
+    "guest"
+  ];
 
   postFixup = ''
     moveToOutput bin/ec2metadata $guest

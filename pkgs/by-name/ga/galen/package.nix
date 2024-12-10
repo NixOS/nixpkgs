@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, jre8, unzip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre8,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "galen";
@@ -14,13 +20,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   buildPhase = ''
-  mkdir -p $out/bin
+    mkdir -p $out/bin
   '';
 
   installPhase = ''
-  cat galen | sed -e "s,java,$jre8/bin/java," > $out/bin/galen
-  chmod +x $out/bin/galen
-  cp galen.jar $out/bin
+    cat galen | sed -e "s,java,$jre8/bin/java," > $out/bin/galen
+    chmod +x $out/bin/galen
+    cp galen.jar $out/bin
   '';
 
   meta = with lib; {

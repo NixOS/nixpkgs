@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libaio }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libaio,
+}:
 
 stdenv.mkDerivation rec {
   pname = "blktrace";

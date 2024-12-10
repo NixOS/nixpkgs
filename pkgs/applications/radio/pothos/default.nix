@@ -1,22 +1,23 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, doxygen
-, wrapQtAppsHook
-, pcre
-, poco
-, qtbase
-, qtsvg
-, qwt6_1
-, nlohmann_json
-, soapysdr-with-plugins
-, portaudio
-, alsa-lib
-, muparserx
-, python3
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  doxygen,
+  wrapQtAppsHook,
+  pcre,
+  poco,
+  qtbase,
+  qtsvg,
+  qwt6_1,
+  nlohmann_json,
+  soapysdr-with-plugins,
+  portaudio,
+  alsa-lib,
+  muparserx,
+  python3,
 }:
 
 mkDerivation rec {
@@ -42,11 +43,25 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config doxygen wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    doxygen
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
-    pcre poco qtbase qtsvg qwt6_1 nlohmann_json
-    soapysdr-with-plugins portaudio alsa-lib muparserx python3
+    pcre
+    poco
+    qtbase
+    qtsvg
+    qwt6_1
+    nlohmann_json
+    soapysdr-with-plugins
+    portaudio
+    alsa-lib
+    muparserx
+    python3
   ];
 
   postInstall = ''

@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, just
-, pkg-config
-, udev
-, util-linuxMinimal
-, dbus
-, glib
-, libinput
-, libxkbcommon
-, pulseaudio
-, wayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  just,
+  pkg-config,
+  udev,
+  util-linuxMinimal,
+  dbus,
+  glib,
+  libinput,
+  libxkbcommon,
+  pulseaudio,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,29 +29,49 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-f5OV//qzWQqIvq8BNtd2H1dWl7aqR0WJwmdimL4wcKQ=";
 
-  nativeBuildInputs = [ just pkg-config util-linuxMinimal ];
-  buildInputs = [ dbus glib libinput libxkbcommon pulseaudio wayland udev ];
+  nativeBuildInputs = [
+    just
+    pkg-config
+    util-linuxMinimal
+  ];
+  buildInputs = [
+    dbus
+    glib
+    libinput
+    libxkbcommon
+    pulseaudio
+    wayland
+    udev
+  ];
 
   dontUseJustBuild = true;
 
   justFlags = [
-    "--set" "prefix" (placeholder "out")
-    "--set" "target" "${stdenv.hostPlatform.rust.cargoShortTarget}/release"
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "target"
+    "${stdenv.hostPlatform.rust.cargoShortTarget}/release"
   ];
 
   # Force linking to libwayland-client, which is always dlopen()ed.
   "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" =
-    map (a: "-C link-arg=${a}") [
-      "-Wl,--push-state,--no-as-needed"
-      "-lwayland-client"
-      "-Wl,--pop-state"
-    ];
+    map (a: "-C link-arg=${a}")
+      [
+        "-Wl,--push-state,--no-as-needed"
+        "-lwayland-client"
+        "-Wl,--pop-state"
+      ];
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-applets";
     description = "Applets for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ qyliss nyabinary ];
+    maintainers = with maintainers; [
+      qyliss
+      nyabinary
+    ];
     platforms = platforms.linux;
   };
 }

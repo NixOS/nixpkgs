@@ -1,9 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch, darwin, callPackage
-, autoreconfHook
-, pkg-config
-, libtool
-, nixosTests
-, ...
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  darwin,
+  callPackage,
+  autoreconfHook,
+  pkg-config,
+  libtool,
+  nixosTests,
+  ...
 }@args:
 let
   plugins = callPackage ./plugins.nix args;
@@ -31,22 +37,30 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [
-    libtool
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.ApplicationServices
-  ] ++ plugins.buildInputs;
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+  buildInputs =
+    [
+      libtool
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.ApplicationServices
+    ]
+    ++ plugins.buildInputs;
 
-  configureFlags = [
-    "--localstatedir=/var"
-    "--disable-werror"
-  ] ++ plugins.configureFlags
-  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "--with-fp-layout=nothing" ];
+  configureFlags =
+    [
+      "--localstatedir=/var"
+      "--disable-werror"
+    ]
+    ++ plugins.configureFlags
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "--with-fp-layout=nothing" ];
 
   # do not create directories in /var during installPhase
   postConfigure = ''
-     substituteInPlace Makefile --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/' '#'
+    substituteInPlace Makefile --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/' '#'
   '';
 
   postInstall = ''

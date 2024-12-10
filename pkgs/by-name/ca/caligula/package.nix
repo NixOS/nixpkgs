@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,7 +27,10 @@ rustPlatform.buildRustPackage rec {
     description = "User-friendly, lightweight TUI for disk imaging";
     homepage = "https://github.com/ifd3f/caligula/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ifd3f sodiboo ];
+    maintainers = with maintainers; [
+      ifd3f
+      sodiboo
+    ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "caligula";
   };

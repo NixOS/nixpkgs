@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   nncpCfgFile = "/run/nncp.hjson";
@@ -6,11 +11,11 @@ let
   settingsFormat = pkgs.formats.json { };
   jsonCfgFile = settingsFormat.generate "nncp.json" programCfg.settings;
   pkg = programCfg.package;
-in {
+in
+{
   options.programs.nncp = {
 
-    enable =
-      lib.mkEnableOption "NNCP (Node to Node copy) utilities and configuration";
+    enable = lib.mkEnableOption "NNCP (Node to Node copy) utilities and configuration";
 
     group = lib.mkOption {
       type = lib.types.str;

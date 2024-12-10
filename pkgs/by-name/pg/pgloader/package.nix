@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchurl, makeWrapper, sbcl, sqlite, freetds, libzip, curl, git, cacert, openssl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  sbcl,
+  sqlite,
+  freetds,
+  libzip,
+  curl,
+  git,
+  cacert,
+  openssl,
+}:
 stdenv.mkDerivation rec {
   pname = "pgloader";
   version = "3.6.9";
@@ -8,10 +21,28 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-pdCcRmoJnrfVnkhbT0WqLrRbCtOEmRgGRsXK+3uByeA=";
   };
 
-  nativeBuildInputs = [ git makeWrapper ];
-  buildInputs = [ sbcl cacert sqlite freetds libzip curl openssl ];
+  nativeBuildInputs = [
+    git
+    makeWrapper
+  ];
+  buildInputs = [
+    sbcl
+    cacert
+    sqlite
+    freetds
+    libzip
+    curl
+    openssl
+  ];
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [ sqlite libzip curl git openssl freetds ];
+  LD_LIBRARY_PATH = lib.makeLibraryPath [
+    sqlite
+    libzip
+    curl
+    git
+    openssl
+    freetds
+  ];
 
   buildPhase = ''
     export PATH=$PATH:$out/bin

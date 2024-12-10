@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
-, lib
-, flutter
-, quickemu
-, zenity
+{
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  lib,
+  flutter,
+  quickemu,
+  zenity,
 }:
 flutter.buildFlutterApplication rec {
   pname = "quickgui";
@@ -22,7 +23,12 @@ flutter.buildFlutterApplication rec {
     window_size = "sha256-XelNtp7tpZ91QCEcvewVphNUtgQX7xrp5QP0oFo6DgM=";
   };
 
-  extraWrapProgramArgs = "--prefix PATH : ${lib.makeBinPath [ quickemu zenity ]}";
+  extraWrapProgramArgs = "--prefix PATH : ${
+    lib.makeBinPath [
+      quickemu
+      zenity
+    ]
+  }";
 
   nativeBuildInputs = [ copyDesktopItems ];
 
@@ -40,7 +46,10 @@ flutter.buildFlutterApplication rec {
       icon = "quickgui";
       desktopName = "Quickgui";
       comment = "An elegant virtual machine manager for the desktop";
-      categories = [ "Development" "System" ];
+      categories = [
+        "Development"
+        "System"
+      ];
     })
   ];
 
@@ -49,7 +58,10 @@ flutter.buildFlutterApplication rec {
     homepage = "https://github.com/quickemu-project/quickgui";
     changelog = "https://github.com/quickemu-project/quickgui/releases/";
     license = licenses.mit;
-    maintainers = with maintainers; [ flexiondotorg heyimnova ];
+    maintainers = with maintainers; [
+      flexiondotorg
+      heyimnova
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "quickgui";
   };

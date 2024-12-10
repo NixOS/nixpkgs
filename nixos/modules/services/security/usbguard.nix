@@ -1,11 +1,24 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
   cfg = config.services.usbguard;
 
   # valid policy options
-  policy = (types.enum [ "allow" "block" "reject" "keep" "apply-policy" ]);
+  policy = (
+    types.enum [
+      "allow"
+      "block"
+      "reject"
+      "keep"
+      "apply-policy"
+    ]
+  );
 
   # decide what file to use for rules
   ruleFile = if cfg.rules != null then pkgs.writeText "usbguard-rules" cfg.rules else cfg.ruleFile;
@@ -80,7 +93,11 @@ in
       };
 
       implicitPolicyTarget = mkOption {
-        type = types.enum [ "allow" "block" "reject" ];
+        type = types.enum [
+          "allow"
+          "block"
+          "reject"
+        ];
         default = "block";
         description = ''
           How to treat USB devices that don't match any rule in the policy.
@@ -110,7 +127,11 @@ in
       };
 
       insertedDevicePolicy = mkOption {
-        type = types.enum [ "block" "reject" "apply-policy" ];
+        type = types.enum [
+          "block"
+          "reject"
+          "apply-policy"
+        ];
         default = "apply-policy";
         description = ''
           How to treat USB devices that are already connected after the daemon
@@ -133,7 +154,10 @@ in
       IPCAllowedUsers = mkOption {
         type = types.listOf types.str;
         default = [ "root" ];
-        example = [ "root" "yourusername" ];
+        example = [
+          "root"
+          "yourusername"
+        ];
         description = ''
           A list of usernames that the daemon will accept IPC connections from.
         '';
@@ -160,7 +184,6 @@ in
       dbus.enable = mkEnableOption "USBGuard dbus daemon";
     };
   };
-
 
   ###### implementation
 
@@ -204,7 +227,10 @@ in
           ProtectSystem = true;
           ReadOnlyPaths = "-/";
           ReadWritePaths = "-/dev/shm -/tmp";
-          RestrictAddressFamilies = [ "AF_UNIX" "AF_NETLINK" ];
+          RestrictAddressFamilies = [
+            "AF_UNIX"
+            "AF_NETLINK"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           SystemCallArchitectures = "native";
@@ -232,10 +258,8 @@ in
 
     security.polkit.extraConfig =
       let
-        groupCheck = (lib.concatStrings (map
-          (g: "subject.isInGroup(\"${g}\") || ")
-          cfg.IPCAllowedGroups))
-        + "false";
+        groupCheck =
+          (lib.concatStrings (map (g: "subject.isInGroup(\"${g}\") || ") cfg.IPCAllowedGroups)) + "false";
       in
       optionalString cfg.dbus.enable ''
         polkit.addRule(function(action, subject) {
@@ -254,8 +278,17 @@ in
       '';
   };
   imports = [
-    (mkRemovedOptionModule [ "services" "usbguard" "IPCAccessControlFiles" ] "The usbguard module now hardcodes IPCAccessControlFiles to /var/lib/usbguard/IPCAccessControl.d.")
-    (mkRemovedOptionModule [ "services" "usbguard" "auditFilePath" ] "Removed usbguard module audit log files. Audit logs can be found in the systemd journal.")
-    (mkRenamedOptionModule [ "services" "usbguard" "implictPolicyTarget" ] [ "services" "usbguard" "implicitPolicyTarget" ])
+    (mkRemovedOptionModule [ "services" "usbguard" "IPCAccessControlFiles" ]
+      "The usbguard module now hardcodes IPCAccessControlFiles to /var/lib/usbguard/IPCAccessControl.d."
+    )
+    (mkRemovedOptionModule [
+      "services"
+      "usbguard"
+      "auditFilePath"
+    ] "Removed usbguard module audit log files. Audit logs can be found in the systemd journal.")
+    (mkRenamedOptionModule
+      [ "services" "usbguard" "implictPolicyTarget" ]
+      [ "services" "usbguard" "implicitPolicyTarget" ]
+    )
   ];
 }

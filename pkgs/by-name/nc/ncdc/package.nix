@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
-, zlib
-, bzip2
-, sqlite
-, pkg-config
-, glib
-, gnutls
-, perl
-, libmaxminddb
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  zlib,
+  bzip2,
+  sqlite,
+  pkg-config,
+  glib,
+  gnutls,
+  perl,
+  libmaxminddb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,8 +22,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Koq5rX1D8Bj8c7qLq9aJ36RKuozsU7iOR3AYXLl3ePc=";
   };
 
-  nativeBuildInputs = [ perl pkg-config ];
-  buildInputs = [ ncurses zlib bzip2 sqlite glib gnutls libmaxminddb ];
+  nativeBuildInputs = [
+    perl
+    pkg-config
+  ];
+  buildInputs = [
+    ncurses
+    zlib
+    bzip2
+    sqlite
+    glib
+    gnutls
+    libmaxminddb
+  ];
 
   configureFlags = [ "--with-geoip" ];
 

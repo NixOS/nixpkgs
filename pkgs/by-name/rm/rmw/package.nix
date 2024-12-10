@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {

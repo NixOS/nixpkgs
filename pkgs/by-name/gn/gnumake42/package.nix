@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchurl, guileSupport ? false, pkg-config ? null , guile ? null }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  guileSupport ? false,
+  pkg-config ? null,
+  guile ? null,
+}:
 
-assert guileSupport -> ( pkg-config != null && guile != null );
+assert guileSupport -> (pkg-config != null && guile != null);
 
 stdenv.mkDerivation rec {
   pname = "gnumake";
@@ -26,7 +33,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = lib.optionals guileSupport [ pkg-config ];
   buildInputs = lib.optionals guileSupport [ guile ];
 
-  configureFlags = lib.optional guileSupport "--with-guile"
+  configureFlags =
+    lib.optional guileSupport "--with-guile"
 
     # Make uses this test to decide whether it should keep track of
     # subseconds. Apple made this possible with APFS and macOS 10.13.
@@ -37,7 +45,11 @@ stdenv.mkDerivation rec {
     # See https://github.com/NixOS/nixpkgs/issues/51221 for discussion.
     ++ lib.optional stdenv.hostPlatform.isDarwin "ac_cv_struct_st_mtim_nsec=no";
 
-  outputs = [ "out" "man" "info" ];
+  outputs = [
+    "out"
+    "man"
+    "info"
+  ];
 
   meta = with lib; {
     description = "Tool to control the generation of non-source files from sources";

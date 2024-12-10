@@ -1,6 +1,11 @@
-{ rustPlatform, lib, fetchFromGitHub
-, zlib, openssl
-, pkg-config, protobuf
+{
+  rustPlatform,
+  lib,
+  fetchFromGitHub,
+  zlib,
+  openssl,
+  pkg-config,
+  protobuf,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "nearcore";

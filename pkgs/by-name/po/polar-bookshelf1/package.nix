@@ -1,42 +1,43 @@
-{ lib
-, stdenv
-, fetchurl
-, alsa-lib
-, at-spi2-atk
-, atk
-, autoPatchelfHook
-, cairo
-, cups
-, curl
-, dbus
-, dpkg
-, expat
-, fontconfig
-, gdk-pixbuf
-, glib
-, glibc
-, gsettings-desktop-schemas
-, gtk3
-, libX11
-, libXScrnSaver
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, libnghttp2
-, libudev0-shim
-, libxcb
-, makeWrapper
-, nspr
-, nss
-, openssl
-, pango
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  at-spi2-atk,
+  atk,
+  autoPatchelfHook,
+  cairo,
+  cups,
+  curl,
+  dbus,
+  dpkg,
+  expat,
+  fontconfig,
+  gdk-pixbuf,
+  glib,
+  glibc,
+  gsettings-desktop-schemas,
+  gtk3,
+  libX11,
+  libXScrnSaver,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  libnghttp2,
+  libudev0-shim,
+  libxcb,
+  makeWrapper,
+  nspr,
+  nss,
+  openssl,
+  pango,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -85,7 +86,13 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  runtimeLibs = lib.makeLibraryPath [ libudev0-shim glibc curl openssl libnghttp2 ];
+  runtimeLibs = lib.makeLibraryPath [
+    libudev0-shim
+    glibc
+    curl
+    openssl
+    libnghttp2
+  ];
 
   installPhase = ''
     mkdir -p $out/share/polar-bookshelf $out/bin $out/lib

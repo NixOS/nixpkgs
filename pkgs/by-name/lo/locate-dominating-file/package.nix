@@ -1,10 +1,11 @@
-{ bats
-, bash
-, fetchFromGitHub
-, lib
-, resholve
-, coreutils
-, getopt
+{
+  bats,
+  bash,
+  fetchFromGitHub,
+  lib,
+  resholve,
+  coreutils,
+  getopt,
 }:
 let
   version = "0.0.1";
@@ -25,9 +26,17 @@ resholve.mkDerivation {
     done
   '';
 
-  buildInputs = [ getopt coreutils ];
+  buildInputs = [
+    getopt
+    coreutils
+  ];
 
-  checkInputs = [ (bats.withLibraries (p: [ p.bats-support p.bats-assert ])) ];
+  checkInputs = [
+    (bats.withLibraries (p: [
+      p.bats-support
+      p.bats-assert
+    ]))
+  ];
 
   doCheck = true;
 

@@ -1,4 +1,11 @@
-{ lib, buildKodiAddon, fetchFromGitHub, requests, inputstream-adaptive, inputstreamhelper }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  requests,
+  inputstream-adaptive,
+  inputstreamhelper,
+}:
 
 buildKodiAddon rec {
   pname = "youtube";

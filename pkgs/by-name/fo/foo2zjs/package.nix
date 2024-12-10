@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, foomatic-filters, bc, ghostscript, systemd, vim, time }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  foomatic-filters,
+  bc,
+  ghostscript,
+  systemd,
+  vim,
+  time,
+}:
 
 stdenv.mkDerivation rec {
   pname = "foo2zjs";
@@ -9,7 +19,13 @@ stdenv.mkDerivation rec {
     sha256 = "14x3wizvncdy0xgvmcx541qanwb7bg76abygqy17bxycn1zh5r1x";
   };
 
-  buildInputs = [ foomatic-filters bc ghostscript systemd vim ];
+  buildInputs = [
+    foomatic-filters
+    bc
+    ghostscript
+    systemd
+    vim
+  ];
 
   patches = [
     ./no-hardcode-fw.diff
@@ -66,8 +82,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "ZjStream printer drivers";
-    maintainers = with maintainers;
-    [
+    maintainers = with maintainers; [
       raskin
     ];
     platforms = platforms.linux;

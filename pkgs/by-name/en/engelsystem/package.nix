@@ -1,9 +1,10 @@
-{ lib
-, fetchzip
-, nixosTests
-, php
-, stdenv
-, writeText
+{
+  lib,
+  fetchzip,
+  nixosTests,
+  php,
+  stdenv,
+  writeText,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,8 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     changelog = "https://github.com/engelsystem/engelsystem/releases/tag/v${version}";
-    description =
-      "Coordinate your volunteers in teams, assign them to work shifts or let them decide for themselves when and where they want to help with what";
+    description = "Coordinate your volunteers in teams, assign them to work shifts or let them decide for themselves when and where they want to help with what";
     homepage = "https://engelsystem.de";
     license = licenses.gpl2Only;
     mainProgram = "migrate";

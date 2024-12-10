@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, zlib, bzip2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  bzip2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cbc";
@@ -13,14 +19,19 @@ stdenv.mkDerivation rec {
   };
 
   # or-tools has a hard dependency on Cbc static libraries, so we build both
-  configureFlags = [ "-C" "--enable-static" ]
-    ++ lib.optionals stdenv.cc.isClang [ "CXXFLAGS=-std=c++14" ];
+  configureFlags = [
+    "-C"
+    "--enable-static"
+  ] ++ lib.optionals stdenv.cc.isClang [ "CXXFLAGS=-std=c++14" ];
 
   enableParallelBuilding = true;
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ zlib bzip2 ];
+  buildInputs = [
+    zlib
+    bzip2
+  ];
 
   # FIXME: move share/coin/Data to a separate output?
 

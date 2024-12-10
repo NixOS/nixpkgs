@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, lemon-graph
-, eigen
-, boost
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lemon-graph,
+  eigen,
+  boost,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

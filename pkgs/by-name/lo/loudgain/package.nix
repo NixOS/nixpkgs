@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, ffmpeg, libebur128
-, libresample, taglib, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  ffmpeg,
+  libebur128,
+  libresample,
+  taglib,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "loudgain";
@@ -26,8 +36,17 @@ stdenv.mkDerivation rec {
     ./support-ffmpeg-7.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ ffmpeg libebur128 libresample taglib zlib ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    ffmpeg
+    libebur128
+    libresample
+    taglib
+    zlib
+  ];
 
   postInstall = ''
     sed -e "1aPATH=$out/bin:\$PATH" -i "$out/bin/rgbpm"

@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchMavenArtifact }:
+{
+  lib,
+  stdenv,
+  fetchMavenArtifact,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sqlite-jdbc";
@@ -24,4 +28,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jraygauthier ];
   };
 }
-

@@ -1,26 +1,53 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, which, m4, python3, bison, flex, llvmPackages, ncurses, tbb
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  which,
+  m4,
+  python3,
+  bison,
+  flex,
+  llvmPackages,
+  ncurses,
+  tbb,
   # the default test target is sse4, but that is not supported by all Hydra agents
-, testedTargets ? if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32 then [ "neon-i32x4" ] else [ "sse2-i32x4" ]
+  testedTargets ?
+    if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32 then
+      [ "neon-i32x4" ]
+    else
+      [ "sse2-i32x4" ],
 }:
 
 stdenv.mkDerivation rec {
-  pname   = "ispc";
+  pname = "ispc";
   version = "1.25.3";
 
   dontFixCmake = true; # https://github.com/NixOS/nixpkgs/pull/232522#issuecomment-2133803566
 
   src = fetchFromGitHub {
-    owner  = pname;
-    repo   = pname;
-    rev    = "v${version}";
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
     sha256 = "sha256-baTJNfhOSYfJJnrutkW06AIMXpVP3eBpEes0GSI1yGY=";
   };
 
-  nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev tbb ];
+  nativeBuildInputs = [
+    cmake
+    which
+    m4
+    bison
+    flex
+    python3
+    llvmPackages.libllvm.dev
+    tbb
+  ];
 
   buildInputs = with llvmPackages; [
-    libllvm libclang openmp ncurses
+    libllvm
+    libclang
+    openmp
+    ncurses
   ];
 
   postPatch = ''
@@ -61,16 +88,32 @@ stdenv.mkDerivation rec {
     "-DCLANGPP_EXECUTABLE=${llvmPackages.clang}/bin/clang++"
     "-DISPC_INCLUDE_EXAMPLES=OFF"
     "-DISPC_INCLUDE_UTILS=OFF"
-    ("-DARM_ENABLED=" + (if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32 then "TRUE" else "FALSE"))
-    ("-DX86_ENABLED=" + (if stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isx86_32 then "TRUE" else "FALSE"))
+    (
+      "-DARM_ENABLED="
+      + (if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32 then "TRUE" else "FALSE")
+    )
+    (
+      "-DX86_ENABLED="
+      + (if stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isx86_32 then "TRUE" else "FALSE")
+    )
   ];
 
   meta = with lib; {
-    homepage    = "https://ispc.github.io/";
+    homepage = "https://ispc.github.io/";
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
     mainProgram = "ispc";
-    license     = licenses.bsd3;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]; # TODO: buildable on more platforms?
-    maintainers = with maintainers; [ aristid thoughtpolice athas alexfmpe ];
+    license = licenses.bsd3;
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ]; # TODO: buildable on more platforms?
+    maintainers = with maintainers; [
+      aristid
+      thoughtpolice
+      athas
+      alexfmpe
+    ];
   };
 }

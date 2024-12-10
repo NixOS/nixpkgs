@@ -110,7 +110,6 @@ buildPythonPackage rec {
     numpy
   ];
 
-
   preConfigure = ''
     ${python.pythonOnBuildForHost.interpreter} -m buildconfig.config
   '';

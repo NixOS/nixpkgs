@@ -1,30 +1,36 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, docutils
-, glib
-, meson
-, mesonEmulatorHook
-, ninja
-, nixosTests
-, pkg-config
-, gettext
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
-, buildPackages
-, gobject-introspection
-, gi-docgen
-, libxslt
-, fixDarwinDylibNames
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  docutils,
+  glib,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  nixosTests,
+  pkg-config,
+  gettext,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  gobject-introspection,
+  gi-docgen,
+  libxslt,
+  fixDarwinDylibNames,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "json-glib";
   version = "1.10.0";
 
-  outputs = [ "out" "dev" "installedTests" ]
-    ++ lib.optional withIntrospection "devdoc";
+  outputs = [
+    "out"
+    "dev"
+    "installedTests"
+  ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -49,22 +55,26 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    docutils # for rst2man, rst2html5
-    meson
-    ninja
-    pkg-config
-    gettext
-    glib
-    libxslt
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    fixDarwinDylibNames
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-    gi-docgen
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      docutils # for rst2man, rst2html5
+      meson
+      ninja
+      pkg-config
+      gettext
+      glib
+      libxslt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      fixDarwinDylibNames
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      gi-docgen
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   propagatedBuildInputs = [
     glib

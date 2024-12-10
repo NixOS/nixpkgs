@@ -212,36 +212,34 @@ backendStdenv.mkDerivation rec {
       mv pkg/builds/nsight_systems/target-linux-x64 $out/target-linux-x64
       mv pkg/builds/nsight_systems/host-linux-x64 $out/host-linux-x64
       rm $out/host-linux-x64/libstdc++.so*
-        ${
-          lib.optionalString (lib.versionAtLeast version "11.8" && lib.versionOlder version "12")
-            # error: auto-patchelf could not satisfy dependency libtiff.so.5 wanted by /nix/store/.......-cudatoolkit-12.0.1/host-linux-x64/Plugins/imageformats/libqtiff.so
-            # we only ship libtiff.so.6, so let's use qt plugins built by Nix.
-            # TODO: don't copy, come up with a symlink-based "merge"
-            ''
-              rsync ${lib.getLib qt6Packages.qtimageformats}/lib/qt-6/plugins/ $out/host-linux-x64/Plugins/ -aP
-            ''
+        ${lib.optionalString (lib.versionAtLeast version "11.8" && lib.versionOlder version "12")
+          # error: auto-patchelf could not satisfy dependency libtiff.so.5 wanted by /nix/store/.......-cudatoolkit-12.0.1/host-linux-x64/Plugins/imageformats/libqtiff.so
+          # we only ship libtiff.so.6, so let's use qt plugins built by Nix.
+          # TODO: don't copy, come up with a symlink-based "merge"
+          ''
+            rsync ${lib.getLib qt6Packages.qtimageformats}/lib/qt-6/plugins/ $out/host-linux-x64/Plugins/ -aP
+          ''
         }
-        ${
-          lib.optionalString (lib.versionAtLeast version "12")
-            # Use Qt plugins built by Nix.
-            ''
-              for qtlib in $out/host-linux-x64/Plugins/*/libq*.so; do
-                qtdir=$(basename $(dirname $qtlib))
-                filename=$(basename $qtlib)
-                for qtpkgdir in ${
-                  lib.concatMapStringsSep " " (x: qt6Packages.${x}) [
-                    "qtbase"
-                    "qtimageformats"
-                    "qtsvg"
-                    "qtwayland"
-                  ]
-                }; do
-                  if [ -e $qtpkgdir/lib/qt-6/plugins/$qtdir/$filename ]; then
-                    ln -snf $qtpkgdir/lib/qt-6/plugins/$qtdir/$filename $qtlib
-                  fi
-                done
+        ${lib.optionalString (lib.versionAtLeast version "12")
+          # Use Qt plugins built by Nix.
+          ''
+            for qtlib in $out/host-linux-x64/Plugins/*/libq*.so; do
+              qtdir=$(basename $(dirname $qtlib))
+              filename=$(basename $qtlib)
+              for qtpkgdir in ${
+                lib.concatMapStringsSep " " (x: qt6Packages.${x}) [
+                  "qtbase"
+                  "qtimageformats"
+                  "qtsvg"
+                  "qtwayland"
+                ]
+              }; do
+                if [ -e $qtpkgdir/lib/qt-6/plugins/$qtdir/$filename ]; then
+                  ln -snf $qtpkgdir/lib/qt-6/plugins/$qtdir/$filename $qtlib
+                fi
               done
-            ''
+            done
+          ''
         }
 
       rm -f $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?

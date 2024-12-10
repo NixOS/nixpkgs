@@ -1,10 +1,11 @@
-{ lib
-, fetchgit
-, fetchzip
-, python312
-, rtlcss
-, wkhtmltopdf
-, nixosTests
+{
+  lib,
+  fetchgit,
+  fetchzip,
+  python312,
+  rtlcss,
+  wkhtmltopdf,
+  nixosTests,
 }:
 
 let
@@ -13,7 +14,8 @@ let
   python = python312.override {
     self = python;
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "odoo";
   version = "${odoo_version}.${odoo_release}";
 
@@ -27,7 +29,13 @@ in python.pkgs.buildPythonApplication rec {
   };
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf rtlcss ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [
+      wkhtmltopdf
+      rtlcss
+    ]}"
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -94,6 +102,9 @@ in python.pkgs.buildPythonApplication rec {
     description = "Open Source ERP and CRM";
     homepage = "https://www.odoo.com/";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ mkg20001 siriobalmelli ];
+    maintainers = with maintainers; [
+      mkg20001
+      siriobalmelli
+    ];
   };
 }

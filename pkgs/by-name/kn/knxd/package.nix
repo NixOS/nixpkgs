@@ -1,16 +1,19 @@
-{ lib
-, stdenv
-, buildPackages
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, indent
-, perl
-, argp-standalone
-, fmt_9
-, libev
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
-, withUsb ? stdenv.hostPlatform.isLinux, libusb1
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  indent,
+  perl,
+  argp-standalone,
+  fmt_9,
+  libev,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  withUsb ? stdenv.hostPlatform.isLinux,
+  libusb1,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,9 +32,18 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '2i exit' tools/get_libfmt
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config indent perl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    indent
+    perl
+  ];
 
-  buildInputs = [ fmt_9 libev ]
+  buildInputs =
+    [
+      fmt_9
+      libev
+    ]
     ++ lib.optional withSystemd systemd
     ++ lib.optional withUsb libusb1
     ++ lib.optional stdenv.hostPlatform.isDarwin argp-standalone;

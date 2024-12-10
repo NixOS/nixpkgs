@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, pkg-config
-, libsecret
-, cmake
-, ninja
-, qt6
-, grpc
-, protobuf
-, zlib
-, gtest
-, sentry-native
-, protonmail-bridge
+{
+  lib,
+  stdenv,
+  pkg-config,
+  libsecret,
+  cmake,
+  ninja,
+  qt6,
+  grpc,
+  protobuf,
+  zlib,
+  gtest,
+  sentry-native,
+  protonmail-bridge,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

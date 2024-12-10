@@ -1,6 +1,18 @@
-{ stdenv, lib, fetchurl, pkg-config
-, curl, SDL2, libGLU, libGL, glew, ncurses, c-ares
-, Carbon, CoreServices }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  curl,
+  SDL2,
+  libGLU,
+  libGL,
+  glew,
+  ncurses,
+  c-ares,
+  Carbon,
+  CoreServices,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bzflag";
@@ -12,8 +24,20 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ curl SDL2 libGLU libGL glew ncurses c-ares ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon CoreServices ];
+  buildInputs =
+    [
+      curl
+      SDL2
+      libGLU
+      libGL
+      glew
+      ncurses
+      c-ares
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      CoreServices
+    ];
 
   meta = with lib; {
     description = "Multiplayer 3D Tank game";

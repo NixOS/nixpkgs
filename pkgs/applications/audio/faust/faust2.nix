@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, coreutils
-, fetchFromGitHub
-, makeWrapper
-, pkg-config
-, cmake
-, llvm
-, emscripten
-, openssl
-, libsndfile
-, libmicrohttpd
-, gnutls
-, libtasn1
-, p11-kit
-, vim
-, which
-, ncurses
-, fetchpatch
+{
+  lib,
+  stdenv,
+  coreutils,
+  fetchFromGitHub,
+  makeWrapper,
+  pkg-config,
+  cmake,
+  llvm,
+  emscripten,
+  openssl,
+  libsndfile,
+  libmicrohttpd,
+  gnutls,
+  libtasn1,
+  p11-kit,
+  vim,
+  which,
+  ncurses,
+  fetchpatch,
 }:
 
 with lib.strings;
@@ -38,19 +39,30 @@ let
     downloadPage = "https://github.com/grame-cncm/faust/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ magnetophon pmahoney ];
+    maintainers = with maintainers; [
+      magnetophon
+      pmahoney
+    ];
   };
 
   faust =
-    let ncurses_static = ncurses.override { enableStatic = true; };
-    in stdenv.mkDerivation {
+    let
+      ncurses_static = ncurses.override { enableStatic = true; };
+    in
+    stdenv.mkDerivation {
 
       pname = "faust";
       inherit version;
 
       inherit src;
 
-      nativeBuildInputs = [ makeWrapper pkg-config cmake vim which ];
+      nativeBuildInputs = [
+        makeWrapper
+        pkg-config
+        cmake
+        vim
+        which
+      ];
       buildInputs = [
         llvm
         emscripten
@@ -74,7 +86,10 @@ let
           --replace 'rm -rf $(TMP)' ' '
       '';
 
-      cmakeFlags = [ "-C../backends/all.cmake" "-C../targets/all.cmake" ];
+      cmakeFlags = [
+        "-C../backends/all.cmake"
+        "-C../targets/all.cmake"
+      ];
 
       postInstall = ''
         # syntax error when eval'd directly
@@ -97,8 +112,7 @@ let
       '';
 
       meta = meta // {
-        description =
-          "A functional programming language for realtime audio signal processing";
+        description = "A functional programming language for realtime audio signal processing";
         longDescription = ''
           FAUST (Functional Audio Stream) is a functional programming
           language specifically designed for real-time signal processing
@@ -121,9 +135,15 @@ let
 
   # Default values for faust2appl.
   faust2ApplBase =
-    { baseName, dir ? "tools/faust2appls", scripts ? [ baseName ], ... }@args:
+    {
+      baseName,
+      dir ? "tools/faust2appls",
+      scripts ? [ baseName ],
+      ...
+    }@args:
 
-    args // {
+    args
+    // {
       name = "${baseName}-${version}";
 
       inherit src;
@@ -151,8 +171,7 @@ let
       '';
 
       meta = meta // {
-        description =
-          "The ${baseName} script, part of faust functional programming language for realtime audio signal processing";
+        description = "The ${baseName} script, part of faust functional programming language for realtime audio signal processing";
       };
     };
 
@@ -172,65 +191,83 @@ let
   #
   # The build input 'faust' is automatically added to the
   # propagatedBuildInputs.
-  wrapWithBuildEnv = { baseName, propagatedBuildInputs ? [ ], ... }@args:
+  wrapWithBuildEnv =
+    {
+      baseName,
+      propagatedBuildInputs ? [ ],
+      ...
+    }@args:
 
-    stdenv.mkDerivation ((faust2ApplBase args) // {
+    stdenv.mkDerivation (
+      (faust2ApplBase args)
+      // {
 
-      nativeBuildInputs = [ pkg-config makeWrapper ];
+        nativeBuildInputs = [
+          pkg-config
+          makeWrapper
+        ];
 
-      propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;
+        propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;
 
-      libPath = lib.makeLibraryPath propagatedBuildInputs;
+        libPath = lib.makeLibraryPath propagatedBuildInputs;
 
-      postFixup = ''
+        postFixup = ''
 
-        # export parts of the build environment
-        for script in "$out"/bin/*; do
-          # e.g. NIX_CC_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu
-          nix_cc_wrapper_target_host="$(printenv | grep ^NIX_CC_WRAPPER_TARGET_HOST | sed 's/=.*//')"
+          # export parts of the build environment
+          for script in "$out"/bin/*; do
+            # e.g. NIX_CC_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu
+            nix_cc_wrapper_target_host="$(printenv | grep ^NIX_CC_WRAPPER_TARGET_HOST | sed 's/=.*//')"
 
-          # e.g. NIX_BINTOOLS_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu
-          nix_bintools_wrapper_target_host="$(printenv | grep ^NIX_BINTOOLS_WRAPPER_TARGET_HOST | sed 's/=.*//')"
+            # e.g. NIX_BINTOOLS_WRAPPER_TARGET_HOST_x86_64_unknown_linux_gnu
+            nix_bintools_wrapper_target_host="$(printenv | grep ^NIX_BINTOOLS_WRAPPER_TARGET_HOST | sed 's/=.*//')"
 
-          wrapProgram "$script" \
-            --set FAUSTLDDIR "${faust}/lib" \
-            --set FAUSTLIB "${faust}/share/faust" \
-            --set FAUSTINC "${faust}/include/faust" \
-            --set FAUSTARCH "${faust}/share/faust" \
-            --prefix PATH : "$PATH" \
-            --prefix PKG_CONFIG_PATH : "$PKG_CONFIG_PATH" \
-            --set NIX_CFLAGS_COMPILE "$NIX_CFLAGS_COMPILE" \
-            --set NIX_LDFLAGS "$NIX_LDFLAGS -lpthread" \
-            --set "$nix_cc_wrapper_target_host" "''${!nix_cc_wrapper_target_host}" \
-            --set "$nix_bintools_wrapper_target_host" "''${!nix_bintools_wrapper_target_host}" \
-            --prefix LIBRARY_PATH "$libPath"
-        done
-      '';
-    });
+            wrapProgram "$script" \
+              --set FAUSTLDDIR "${faust}/lib" \
+              --set FAUSTLIB "${faust}/share/faust" \
+              --set FAUSTINC "${faust}/include/faust" \
+              --set FAUSTARCH "${faust}/share/faust" \
+              --prefix PATH : "$PATH" \
+              --prefix PKG_CONFIG_PATH : "$PKG_CONFIG_PATH" \
+              --set NIX_CFLAGS_COMPILE "$NIX_CFLAGS_COMPILE" \
+              --set NIX_LDFLAGS "$NIX_LDFLAGS -lpthread" \
+              --set "$nix_cc_wrapper_target_host" "''${!nix_cc_wrapper_target_host}" \
+              --set "$nix_bintools_wrapper_target_host" "''${!nix_bintools_wrapper_target_host}" \
+              --prefix LIBRARY_PATH "$libPath"
+          done
+        '';
+      }
+    );
 
   # Builder for 'faust2appl' scripts, such as faust2firefox that
   # simply need to be wrapped with some dependencies on PATH.
   #
   # The build input 'faust' is automatically added to the PATH.
-  wrap = { baseName, runtimeInputs ? [ ], ... }@args:
+  wrap =
+    {
+      baseName,
+      runtimeInputs ? [ ],
+      ...
+    }@args:
 
     let
 
-      runtimePath =
-        concatStringsSep ":" (map (p: "${p}/bin") ([ faust ] ++ runtimeInputs));
+      runtimePath = concatStringsSep ":" (map (p: "${p}/bin") ([ faust ] ++ runtimeInputs));
 
     in
-      stdenv.mkDerivation ((faust2ApplBase args) // {
+    stdenv.mkDerivation (
+      (faust2ApplBase args)
+      // {
 
         nativeBuildInputs = [ makeWrapper ];
 
         postFixup = ''
-        for script in "$out"/bin/*; do
-          wrapProgram "$script" --prefix PATH : "${runtimePath}"
-        done
-      '';
+          for script in "$out"/bin/*; do
+            wrapProgram "$script" --prefix PATH : "${runtimePath}"
+          done
+        '';
 
-      });
+      }
+    );
 
 in
 faust

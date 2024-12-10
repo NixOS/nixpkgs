@@ -43,7 +43,7 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = "cd ${pname}";  # using sourceRoot would interfere with patches
+  postPatch = "cd ${pname}"; # using sourceRoot would interfere with patches
 
   build-system = [ setuptools ];
 

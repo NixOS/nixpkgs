@@ -1,5 +1,14 @@
-{ stdenv, cmake, lib, fetchFromGitLab,
-  qtmultimedia, qttools, qtwayland, wrapQtAppsHook, ... }:
+{
+  stdenv,
+  cmake,
+  lib,
+  fetchFromGitLab,
+  qtmultimedia,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
+  ...
+}:
 
 stdenv.mkDerivation rec {
   pname = "tipp10";
@@ -12,8 +21,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-e0sWH4pT7ej9XGK/Sg9XMX2bMqcXqtSaYI7KBZTXvp4=";
   };
 
-  nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
-  buildInputs = [ qtmultimedia qtwayland ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    qtmultimedia
+    qtwayland
+  ];
 
   meta = {
     description = "Learn and train typing with the ten-finger system";

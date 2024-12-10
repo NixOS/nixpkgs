@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, withShishi ? !stdenv.hostPlatform.isDarwin
-, shishi
+{
+  lib,
+  stdenv,
+  fetchurl,
+  withShishi ? !stdenv.hostPlatform.isDarwin,
+  shishi,
 }:
 
 stdenv.mkDerivation rec {

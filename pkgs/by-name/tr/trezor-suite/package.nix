@@ -1,26 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, appimageTools
-, tor
-, trezord
+{
+  lib,
+  stdenv,
+  fetchurl,
+  appimageTools,
+  tor,
+  trezord,
 }:
 
 let
   pname = "trezor-suite";
   version = "24.11.3";
 
-  suffix = {
-    aarch64-linux = "linux-arm64";
-    x86_64-linux  = "linux-x86_64";
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  suffix =
+    {
+      aarch64-linux = "linux-arm64";
+      x86_64-linux = "linux-x86_64";
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
     url = "https://github.com/trezor/trezor-suite/releases/download/v${version}/Trezor-Suite-${version}-${suffix}.AppImage";
-    hash = { # curl -Lfs https://github.com/trezor/trezor-suite/releases/download/v${version}/latest-linux{-arm64,}.yml | grep ^sha512 | sed 's/: /-/'
-      aarch64-linux = "sha512-erNWQTaj/WWoqy3TO7wb+ijQkwXjqfCjqvQN6/9gCVjbHswURWHX36P0rJg9vuQu6odi5EKtooDusIxjIUkQzA==";
-      x86_64-linux  = "sha512-BorpJI0Vi6fFRGo2lATcuBiI1vTLY8vfmnUXKckJkMCBiurs/ZR08ZxKPOTaoS61BzSanUCRwcovev294bcqkA==";
-    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    hash =
+      {
+        # curl -Lfs https://github.com/trezor/trezor-suite/releases/download/v${version}/latest-linux{-arm64,}.yml | grep ^sha512 | sed 's/: /-/'
+        aarch64-linux = "sha512-erNWQTaj/WWoqy3TO7wb+ijQkwXjqfCjqvQN6/9gCVjbHswURWHX36P0rJg9vuQu6odi5EKtooDusIxjIUkQzA==";
+        x86_64-linux = "sha512-BorpJI0Vi6fFRGo2lATcuBiI1vTLY8vfmnUXKckJkMCBiurs/ZR08ZxKPOTaoS61BzSanUCRwcovev294bcqkA==";
+      }
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -56,7 +62,10 @@ appimageTools.wrapType2 rec {
     changelog = "https://github.com/trezor/trezor-suite/releases/tag/v${version}";
     license = licenses.unfree;
     maintainers = with maintainers; [ prusnak ];
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "trezor-suite";
   };
 }

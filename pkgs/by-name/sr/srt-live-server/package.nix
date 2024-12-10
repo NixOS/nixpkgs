@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, srt
-, zlib
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  srt,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,10 @@ stdenv.mkDerivation rec {
     ./add-ctime-include.patch
   ];
 
-  buildInputs = [ srt zlib ];
+  buildInputs = [
+    srt
+    zlib
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"

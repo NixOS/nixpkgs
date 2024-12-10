@@ -21,7 +21,6 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ poetry-core ];
 
-
   dependencies = with python3.pkgs; [
     chardet
     charset-normalizer

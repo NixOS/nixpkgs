@@ -1,7 +1,19 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 let
-  inherit (lib) mkOption types mkDefault mkEnableOption literalExpression;
+  inherit (lib)
+    mkOption
+    types
+    mkDefault
+    mkEnableOption
+    literalExpression
+    ;
 
   cfg = config.services.xserver.desktopManager.gnome;
   serviceCfg = config.services.gnome;
@@ -51,14 +63,17 @@ let
   };
 
   flashbackEnabled = cfg.flashback.enableMetacity || lib.length cfg.flashback.customSessions > 0;
-  flashbackWms = lib.optional cfg.flashback.enableMetacity {
-    wmName = "metacity";
-    wmLabel = "Metacity";
-    wmCommand = "${pkgs.metacity}/bin/metacity";
-    enableGnomePanel = true;
-  } ++ cfg.flashback.customSessions;
+  flashbackWms =
+    lib.optional cfg.flashback.enableMetacity {
+      wmName = "metacity";
+      wmLabel = "Metacity";
+      wmCommand = "${pkgs.metacity}/bin/metacity";
+      enableGnomePanel = true;
+    }
+    ++ cfg.flashback.customSessions;
 
-  notExcluded = pkg: mkDefault (utils.disablePackageByName pkg config.environment.gnome.excludePackages);
+  notExcluded =
+    pkg: mkDefault (utils.disablePackageByName pkg config.environment.gnome.excludePackages);
 
 in
 
@@ -87,7 +102,7 @@ in
       };
 
       sessionPath = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         example = literalExpression "[ pkgs.gpaste ]";
         description = ''
@@ -118,7 +133,7 @@ in
       };
 
       extraGSettingsOverridePackages = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.path;
         description = "List of packages for which gsettings are overridden.";
       };
@@ -129,35 +144,37 @@ in
         enableMetacity = mkEnableOption "the standard GNOME Flashback session with Metacity";
 
         customSessions = mkOption {
-          type = types.listOf (types.submodule {
-            options = {
-              wmName = mkOption {
-                type = types.strMatching "[a-zA-Z0-9_-]+";
-                description = "A unique identifier for the window manager.";
-                example = "xmonad";
-              };
+          type = types.listOf (
+            types.submodule {
+              options = {
+                wmName = mkOption {
+                  type = types.strMatching "[a-zA-Z0-9_-]+";
+                  description = "A unique identifier for the window manager.";
+                  example = "xmonad";
+                };
 
-              wmLabel = mkOption {
-                type = types.str;
-                description = "The name of the window manager to show in the session chooser.";
-                example = "XMonad";
-              };
+                wmLabel = mkOption {
+                  type = types.str;
+                  description = "The name of the window manager to show in the session chooser.";
+                  example = "XMonad";
+                };
 
-              wmCommand = mkOption {
-                type = types.str;
-                description = "The executable of the window manager to use.";
-                example = literalExpression ''"''${pkgs.haskellPackages.xmonad}/bin/xmonad"'';
-              };
+                wmCommand = mkOption {
+                  type = types.str;
+                  description = "The executable of the window manager to use.";
+                  example = literalExpression ''"''${pkgs.haskellPackages.xmonad}/bin/xmonad"'';
+                };
 
-              enableGnomePanel = mkOption {
-                type = types.bool;
-                default = true;
-                example = false;
-                description = "Whether to enable the GNOME panel in this session.";
+                enableGnomePanel = mkOption {
+                  type = types.bool;
+                  default = true;
+                  example = false;
+                  description = "Whether to enable the GNOME panel in this session.";
+                };
               };
-            };
-          });
-          default = [];
+            }
+          );
+          default = [ ];
           description = "Other GNOME Flashback sessions to enable.";
         };
 
@@ -175,7 +192,7 @@ in
     };
 
     environment.gnome.excludePackages = mkOption {
-      default = [];
+      default = [ ];
       example = literalExpression "[ pkgs.totem ]";
       type = types.listOf types.package;
       description = "Which packages gnome should exclude from the default environment";
@@ -186,11 +203,13 @@ in
   config = lib.mkMerge [
     (lib.mkIf (cfg.enable || flashbackEnabled) {
       # Seed our configuration into nixos-generate-config
-      system.nixos-generate-config.desktopConfiguration = [''
-        # Enable the GNOME Desktop Environment.
-        services.xserver.displayManager.gdm.enable = true;
-        services.xserver.desktopManager.gnome.enable = true;
-      ''];
+      system.nixos-generate-config.desktopConfiguration = [
+        ''
+          # Enable the GNOME Desktop Environment.
+          services.xserver.displayManager.gdm.enable = true;
+          services.xserver.desktopManager.gnome.enable = true;
+        ''
+      ];
 
       services.gnome.core-os-services.enable = true;
       services.gnome.core-shell.enable = true;
@@ -225,13 +244,13 @@ in
           wmNames = map (wm: wm.wmName) flashbackWms;
           namesAreUnique = lib.unique wmNames == wmNames;
         in
-          assert (lib.assertMsg namesAreUnique "Flashback WM names must be unique.");
-          map
-            (wm:
-              pkgs.gnome-flashback.mkSessionForWm {
-                inherit (wm) wmName wmLabel wmCommand;
-              }
-            ) flashbackWms;
+        assert (lib.assertMsg namesAreUnique "Flashback WM names must be unique.");
+        map (
+          wm:
+          pkgs.gnome-flashback.mkSessionForWm {
+            inherit (wm) wmName wmLabel wmCommand;
+          }
+        ) flashbackWms;
 
       security.pam.services.gnome-flashback = {
         enableGnomeKeyring = true;
@@ -241,16 +260,21 @@ in
         pkgs.gnome-flashback
       ] ++ map pkgs.gnome-flashback.mkSystemdTargetForWm flashbackWms;
 
-      environment.systemPackages = [
-        pkgs.gnome-flashback
-        (pkgs.gnome-panel-with-modules.override {
-          panelModulePackages = cfg.flashback.panelModulePackages;
-        })
-      ]
-      # For /share/applications/${wmName}.desktop
-      ++ (map (wm: pkgs.gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }) flashbackWms)
-      # For /share/pkgs.gnome-session/sessions/gnome-flashback-${wmName}.session
-      ++ (map (wm: pkgs.gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }) flashbackWms);
+      environment.systemPackages =
+        [
+          pkgs.gnome-flashback
+          (pkgs.gnome-panel-with-modules.override {
+            panelModulePackages = cfg.flashback.panelModulePackages;
+          })
+        ]
+        # For /share/applications/${wmName}.desktop
+        ++ (map (
+          wm: pkgs.gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }
+        ) flashbackWms)
+        # For /share/pkgs.gnome-session/sessions/gnome-flashback-${wmName}.session
+        ++ (map (
+          wm: pkgs.gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }
+        ) flashbackWms);
     })
 
     (lib.mkIf serviceCfg.core-os-services.enable {
@@ -392,37 +416,37 @@ in
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-45/elements/core/meta-gnome-core-utilities.bst
     (lib.mkIf serviceCfg.core-utilities.enable {
-      environment.systemPackages =
-        utils.removePackagesByName
-          ([
-            pkgs.baobab
-            pkgs.epiphany
-            pkgs.gnome-text-editor
-            pkgs.gnome-calculator
-            pkgs.gnome-calendar
-            pkgs.gnome-characters
-            pkgs.gnome-clocks
-            pkgs.gnome-console
-            pkgs.gnome-contacts
-            pkgs.gnome-font-viewer
-            pkgs.gnome-logs
-            pkgs.gnome-maps
-            pkgs.gnome-music
-            pkgs.gnome-system-monitor
-            pkgs.gnome-weather
-            pkgs.loupe
-            pkgs.nautilus
-            pkgs.gnome-connections
-            pkgs.simple-scan
-            pkgs.snapshot
-            pkgs.totem
-            pkgs.yelp
-          ] ++ lib.optionals config.services.flatpak.enable [
-            # Since PackageKit Nix support is not there yet,
-            # only install gnome-software if flatpak is enabled.
-            pkgs.gnome-software
-          ])
-          config.environment.gnome.excludePackages;
+      environment.systemPackages = utils.removePackagesByName (
+        [
+          pkgs.baobab
+          pkgs.epiphany
+          pkgs.gnome-text-editor
+          pkgs.gnome-calculator
+          pkgs.gnome-calendar
+          pkgs.gnome-characters
+          pkgs.gnome-clocks
+          pkgs.gnome-console
+          pkgs.gnome-contacts
+          pkgs.gnome-font-viewer
+          pkgs.gnome-logs
+          pkgs.gnome-maps
+          pkgs.gnome-music
+          pkgs.gnome-system-monitor
+          pkgs.gnome-weather
+          pkgs.loupe
+          pkgs.nautilus
+          pkgs.gnome-connections
+          pkgs.simple-scan
+          pkgs.snapshot
+          pkgs.totem
+          pkgs.yelp
+        ]
+        ++ lib.optionals config.services.flatpak.enable [
+          # Since PackageKit Nix support is not there yet,
+          # only install gnome-software if flatpak is enabled.
+          pkgs.gnome-software
+        ]
+      ) config.environment.gnome.excludePackages;
 
       # Enable default program modules
       # Since some of these have a corresponding package, we only
@@ -486,7 +510,7 @@ in
         # it doesn't function well enough to be included
         # in default configurations.
         # https://github.com/NixOS/nixpkgs/issues/60908
-        /* pkgs.gnome-boxes */
+        # pkgs.gnome-boxes
       ] config.environment.gnome.excludePackages;
 
       services.sysprof.enable = notExcluded pkgs.sysprof;
