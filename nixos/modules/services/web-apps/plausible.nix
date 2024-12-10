@@ -160,6 +160,27 @@ in {
         };
       };
     };
+
+    googleOAuth = {
+      clientId = mkOption {
+        default = null;
+        type = types.str;
+        description = ''
+          The GOOGLE_CLIENT_ID from Google Cloud OAuth, as seen in
+          https://github.com/plausible/community-edition/wiki/google-integration
+        '';
+      };
+
+      clientSecretFile = mkOption {
+        default = null;
+        type = types.str;
+        description = ''
+          The path to a file containing the GOOGLE_CLIENT_SECRET from Google
+          Cloud OAuth, as seen in
+          https://github.com/plausible/community-edition/wiki/google-integration
+        '';
+      };
+    };
   };
 
   imports = [
@@ -261,6 +282,8 @@ in {
             SELFHOST = "true";
           } // (optionalAttrs (cfg.mail.smtp.user != null) {
             SMTP_USER_NAME = cfg.mail.smtp.user;
+          }) // (optionalAttrs (cfg.googleOAuth.clientId != null) {
+            GOOGLE_CLIENT_ID = cfg.googleOAuth.clientId;
           });
 
           path = [ cfg.package ]
@@ -275,6 +298,9 @@ in {
 
             ${lib.optionalString (cfg.mail.smtp.passwordFile != null)
               ''export SMTP_USER_PWD="$(< $CREDENTIALS_DIRECTORY/SMTP_USER_PWD )"''}
+
+            ${lib.optionalString (cfg.googleOAuth.clientSecretFile != null)
+              ''export GOOGLE_CLIENT_SECRET="$(< $CREDENTIALS_DIRECTORY/GOOGLE_CLIENT_SECRET )"''}
 
             ${lib.optionalString cfg.database.postgres.setup ''
               # setup
@@ -299,7 +325,8 @@ in {
             LoadCredential = [
               "ADMIN_USER_PWD:${cfg.adminUser.passwordFile}"
               "SECRET_KEY_BASE:${cfg.server.secretKeybaseFile}"
-            ] ++ lib.optionals (cfg.mail.smtp.passwordFile != null) [ "SMTP_USER_PWD:${cfg.mail.smtp.passwordFile}"];
+            ] ++ lib.optionals (cfg.mail.smtp.passwordFile != null) [ "SMTP_USER_PWD:${cfg.mail.smtp.passwordFile}"]
+              ++ lib.optionals (cfg.googleOAuth.clientSecretFile != null) [ "GOOGLE_CLIENT_SECRET:${cfg.googleOAuth.clientSecretFile}" ];
           };
         };
       }
