@@ -39,6 +39,7 @@ let
       qt6platform-plugins = callPackage ./library/qt6platform-plugins { };
       qt6integration = callPackage ./library/qt6integration { };
       qt6mpris = callPackage ./library/qt6mpris { };
+      treeland-protocols = callPackage ./library/treeland-protocols { };
 
       #### CORE
       deepin-kwin = callPackage ./core/deepin-kwin { };
