@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "nikolaizombie1";
     repo = "color_scheme_generator";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-tSoM6MP58vOoKRMQjNq8nKMiVTfS9N/mckchAPcUM0g=";
   };
 
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ perl ];
 
-  meta = with lib; {
+  meta = {
     description = "Quickly generate color schemes for waybar from an image.";
     longDescription = ''
       color_scheme_generator is a command line utility used to analyze images and generate color themes from them given a path to an image.
@@ -31,14 +31,7 @@ rustPlatform.buildRustPackage rec {
 
     '';
     homepage = "https://github.com/nikolaizombie1/color_scheme_generator";
-    license = licenses.gpl3;
-    maintainers = [
-      {
-        name = "Fabio J. Matos Nieves";
-        email = "fabio.matos999@gmail.com";
-        githubId = "70602908";
-        github = "nikolaizombie1";
-      }
-    ];
+    license = with lib.licenses; [ gpl3 ];
+    maintainers =  with lib.maintainers; [ nikolaizombie1 ];
   };
 }
