@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, audacious-plugins
-, fetchurl
-, gettext
-, meson
-, ninja
-, pkg-config
-, qtbase
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  audacious-plugins,
+  fetchurl,
+  gettext,
+  meson,
+  ninja,
+  pkg-config,
+  qtbase,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,14 +45,19 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A lightweight and versatile audio player";
     homepage = "https://audacious-media-player.org/";
-    maintainers = with maintainers; [ eelco ramkromberg ttuegel thiagokokada ];
+    maintainers = with maintainers; [
+      eelco
+      ramkromberg
+      ttuegel
+      thiagokokada
+    ];
     platforms = with platforms; linux;
     license = with licenses; [
       bsd2
-      bsd3 #https://github.com/audacious-media-player/audacious/blob/master/COPYING
+      bsd3 # https://github.com/audacious-media-player/audacious/blob/master/COPYING
       gpl2
       gpl3
-      lgpl2Plus #http://redmine.audacious-media-player.org/issues/46
+      lgpl2Plus # http://redmine.audacious-media-player.org/issues/46
     ];
   };
 }

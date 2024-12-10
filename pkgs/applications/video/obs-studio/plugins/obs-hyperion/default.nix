@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, obs-studio, libGL
-, qtbase, flatbuffers }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  obs-studio,
+  libGL,
+  qtbase,
+  flatbuffers,
+}:
 
 stdenv.mkDerivation rec {
   pname = "obs-hyperion";
@@ -12,8 +21,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UAfjafoZhhhHRSo+eUBLhHaCmn2GYFcYyRb9wHIp/9I=";
   };
 
-  nativeBuildInputs = [ cmake flatbuffers pkg-config ];
-  buildInputs = [ obs-studio flatbuffers libGL qtbase ];
+  nativeBuildInputs = [
+    cmake
+    flatbuffers
+    pkg-config
+  ];
+  buildInputs = [
+    obs-studio
+    flatbuffers
+    libGL
+    qtbase
+  ];
 
   dontWrapQtApps = true;
 

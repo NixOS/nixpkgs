@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, unzip
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mountain-duck";
@@ -29,7 +30,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://mountainduck.io";
     license = licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau Enzime ];
+    maintainers = with maintainers; [
+      emilytrau
+      Enzime
+    ];
     platforms = platforms.darwin;
   };
 })

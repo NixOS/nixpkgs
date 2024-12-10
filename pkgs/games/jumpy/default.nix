@@ -1,17 +1,18 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, pkg-config
-, zstd
-, stdenv
-, alsa-lib
-, libxkbcommon
-, udev
-, vulkan-loader
-, wayland
-, xorg
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  pkg-config,
+  zstd,
+  stdenv,
+  alsa-lib,
+  libxkbcommon,
+  udev,
+  vulkan-loader,
+  wayland,
+  xorg,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -39,24 +40,30 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    zstd
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-    libxkbcommon
-    udev
-    vulkan-loader
-    wayland
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Cocoa
-    rustPlatform.bindgenHook
-  ];
+  buildInputs =
+    [
+      zstd
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      alsa-lib
+      libxkbcommon
+      udev
+      vulkan-loader
+      wayland
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXi
+      xorg.libXrandr
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.Cocoa
+      rustPlatform.bindgenHook
+    ];
 
-  cargoBuildFlags = [ "--bin" "jumpy" ];
+  cargoBuildFlags = [
+    "--bin"
+    "jumpy"
+  ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -80,7 +87,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "jumpy";
     homepage = "https://fishfight.org/";
     changelog = "https://github.com/fishfolk/jumpy/releases/tag/v${version}";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

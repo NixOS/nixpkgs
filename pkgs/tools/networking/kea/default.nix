@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, fetchurl
+{
+  stdenv,
+  lib,
+  fetchurl,
 
-# build time
-, autoreconfHook
-, pkg-config
-, python3Packages
+  # build time
+  autoreconfHook,
+  pkg-config,
+  python3Packages,
 
-# runtime
-, withMysql ? stdenv.buildPlatform.system == stdenv.hostPlatform.system
-, withPostgres ? stdenv.buildPlatform.system == stdenv.hostPlatform.system
-, boost
-, libmysqlclient
-, log4cplus
-, openssl
-, postgresql
-, python3
+  # runtime
+  withMysql ? stdenv.buildPlatform.system == stdenv.hostPlatform.system,
+  withPostgres ? stdenv.buildPlatform.system == stdenv.hostPlatform.system,
+  boost,
+  libmysqlclient,
+  log4cplus,
+  openssl,
+  postgresql,
+  python3,
 
-# tests
-, nixosTests
+  # tests
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,27 +47,30 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  configureFlags = [
-    "--enable-perfdhcp"
-    "--enable-shell"
-    "--localstatedir=/var"
-    "--with-openssl=${lib.getDev openssl}"
-  ]
-  ++ lib.optional withPostgres "--with-pgsql=${postgresql}/bin/pg_config"
-  ++ lib.optional withMysql "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config";
+  configureFlags =
+    [
+      "--enable-perfdhcp"
+      "--enable-shell"
+      "--localstatedir=/var"
+      "--with-openssl=${lib.getDev openssl}"
+    ]
+    ++ lib.optional withPostgres "--with-pgsql=${postgresql}/bin/pg_config"
+    ++ lib.optional withMysql "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config";
 
   postConfigure = ''
     # Mangle embedded paths to dev-only inputs.
     sed -e "s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" -i config.report
   '';
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-  ] ++ (with python3Packages; [
-    sphinxHook
-    sphinx-rtd-theme
-  ]);
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      pkg-config
+    ]
+    ++ (with python3Packages; [
+      sphinxHook
+      sphinx-rtd-theme
+    ]);
 
   sphinxBuilders = [
     "html"
@@ -87,8 +91,12 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     kea = nixosTests.kea;
     prefix-delegation = nixosTests.systemd-networkd-ipv6-prefix-delegation;
-    networking-scripted = lib.recurseIntoAttrs { inherit (nixosTests.networking.scripted) dhcpDefault dhcpSimple dhcpOneIf; };
-    networking-networkd = lib.recurseIntoAttrs { inherit (nixosTests.networking.networkd) dhcpDefault dhcpSimple dhcpOneIf; };
+    networking-scripted = lib.recurseIntoAttrs {
+      inherit (nixosTests.networking.scripted) dhcpDefault dhcpSimple dhcpOneIf;
+    };
+    networking-networkd = lib.recurseIntoAttrs {
+      inherit (nixosTests.networking.networkd) dhcpDefault dhcpSimple dhcpOneIf;
+    };
   };
 
   meta = with lib; {
@@ -104,6 +112,9 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz hexa ];
+    maintainers = with maintainers; [
+      fpletz
+      hexa
+    ];
   };
 }

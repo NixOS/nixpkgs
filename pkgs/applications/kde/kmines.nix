@@ -1,4 +1,14 @@
-{ mkDerivation, lib, extra-cmake-modules, libkdegames, kconfig, kcrash, kdoctools, ki18n, kio }:
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  libkdegames,
+  kconfig,
+  kcrash,
+  kdoctools,
+  ki18n,
+  kio,
+}:
 
 mkDerivation {
   pname = "kmines";

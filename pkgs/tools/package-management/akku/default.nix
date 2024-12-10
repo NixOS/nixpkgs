@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, guile, curl, substituteAll }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  guile,
+  curl,
+  substituteAll,
+}:
 
 stdenv.mkDerivation rec {
   pname = "akku";
@@ -19,7 +28,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [ guile ];
 

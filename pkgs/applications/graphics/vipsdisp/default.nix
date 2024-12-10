@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, vips
-, gtk4
-, python3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  vips,
+  gtk4,
+  python3,
 }:
 
 stdenv.mkDerivation rec {

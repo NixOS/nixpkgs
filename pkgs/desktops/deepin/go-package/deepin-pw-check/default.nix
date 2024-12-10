@@ -1,15 +1,16 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, pkg-config
-, deepin-gettext-tools
-, gtk3
-, glib
-, libxcrypt
-, gettext
-, iniparser
-, cracklib
-, linux-pam
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  pkg-config,
+  deepin-gettext-tools,
+  gtk3,
+  glib,
+  libxcrypt,
+  gettext,
+  iniparser,
+  cracklib,
+  linux-pam,
 }:
 
 buildGoModule rec {

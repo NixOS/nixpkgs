@@ -1,16 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, brotli
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  brotli,
 }:
 
 stdenv.mkDerivation rec {
   pname = "brunsli";
   version = "0.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "google";
@@ -33,11 +37,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = ''
-    rm -r third_party
-  '' + lib.optionalString stdenv.isDarwin ''
-    rm -r build
-  '';
+  postPatch =
+    ''
+      rm -r third_party
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      rm -r build
+    '';
 
   nativeBuildInputs = [
     cmake

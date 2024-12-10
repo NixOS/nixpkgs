@@ -1,4 +1,11 @@
-{ lib, stdenv, jre, setJavaClassPath, coursier, makeWrapper }:
+{
+  lib,
+  stdenv,
+  jre,
+  setJavaClassPath,
+  coursier,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "firrtl";
@@ -19,7 +26,10 @@ stdenv.mkDerivation rec {
     outputHash = "sha256-xy3zdJZk6Q2HbEn5tRQ9Z0AjyXEteXepoWDaATjiUUw=";
   };
 
-  nativeBuildInputs = [ makeWrapper setJavaClassPath ];
+  nativeBuildInputs = [
+    makeWrapper
+    setJavaClassPath
+  ];
   buildInputs = [ deps ];
 
   dontUnpack = true;
@@ -36,13 +46,13 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/firrtl --firrtl-source "${''
-        circuit test:
-          module test:
-            input a: UInt<8>
-            input b: UInt<8>
-            output o: UInt
-            o <= add(a, not(b))
-      ''}" -o test.v
+      circuit test:
+        module test:
+          input a: UInt<8>
+          input b: UInt<8>
+          output o: UInt
+          o <= add(a, not(b))
+    ''}" -o test.v
     cat test.v
     grep -qFe "module test" -e "endmodule" test.v
   '';
@@ -56,6 +66,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.chisel-lang.org/firrtl/";
     license = licenses.asl20;
-    maintainers =  with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ dtzWill ];
   };
 }

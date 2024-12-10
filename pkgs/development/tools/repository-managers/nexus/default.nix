@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre_headless, gawk }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre_headless,
+  gawk,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nexus";
@@ -15,7 +22,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  patches = [ ./nexus-bin.patch ./nexus-vm-opts.patch ];
+  patches = [
+    ./nexus-bin.patch
+    ./nexus-vm-opts.patch
+  ];
 
   postPatch = ''
     substituteInPlace bin/nexus.vmoptions \
@@ -45,6 +55,10 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;
     platforms = platforms.all;
-    maintainers = with maintainers; [ aespinosa ironpinguin zaninime ];
+    maintainers = with maintainers; [
+      aespinosa
+      ironpinguin
+      zaninime
+    ];
   };
 }

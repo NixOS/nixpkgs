@@ -1,5 +1,10 @@
-{ lib, buildDunePackage
-, macaddr, ppx_sexp_conv, macaddr-cstruct, ounit2
+{
+  lib,
+  buildDunePackage,
+  macaddr,
+  ppx_sexp_conv,
+  macaddr-cstruct,
+  ounit2,
 }:
 
 buildDunePackage {
@@ -11,7 +16,10 @@ buildDunePackage {
 
   propagatedBuildInputs = [ ppx_sexp_conv ];
 
-  checkInputs = [ macaddr-cstruct ounit2 ];
+  checkInputs = [
+    macaddr-cstruct
+    ounit2
+  ];
   doCheck = true;
 
   meta = macaddr.meta // {

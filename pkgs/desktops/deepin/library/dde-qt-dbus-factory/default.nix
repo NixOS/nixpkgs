@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, qmake
-, qtbase
-, wrapQtAppsHook
-, python3
-, dtkcore
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  wrapQtAppsHook,
+  python3,
+  dtkcore,
 }:
 
 stdenv.mkDerivation rec {

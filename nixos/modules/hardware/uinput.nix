@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.hardware.uinput;
-in {
+in
+{
   options.hardware.uinput = {
     enable = lib.mkEnableOption "uinput support";
   };
@@ -10,7 +16,7 @@ in {
   config = lib.mkIf cfg.enable {
     boot.kernelModules = [ "uinput" ];
 
-    users.groups.uinput = {};
+    users.groups.uinput = { };
 
     services.udev.extraRules = ''
       SUBSYSTEM=="misc", KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"

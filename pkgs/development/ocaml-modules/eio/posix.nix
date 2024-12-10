@@ -1,11 +1,12 @@
-{ buildDunePackage
-, lib
-, stdenv
-, dune-configurator
-, eio
-, fmt
-, logs
-, iomux
+{
+  buildDunePackage,
+  lib,
+  stdenv,
+  dune-configurator,
+  eio,
+  fmt,
+  logs,
+  iomux,
 }:
 
 buildDunePackage {

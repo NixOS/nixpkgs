@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, libdaemon, bison, flex, check }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libdaemon,
+  bison,
+  flex,
+  check,
+}:
 
 stdenv.mkDerivation rec {
   pname = "radvd";
@@ -9,7 +18,12 @@ stdenv.mkDerivation rec {
     sha256 = "0h722f17h7cra1sjgrxhrrvx54mm47fs039909yhbabigxch8kjn";
   };
 
-  nativeBuildInputs = [ pkg-config bison flex check ];
+  nativeBuildInputs = [
+    pkg-config
+    bison
+    flex
+    check
+  ];
   buildInputs = [ libdaemon ];
 
   # Needed for cross-compilation

@@ -1,22 +1,22 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, unzip
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
 }:
 
 let
   makeSuperOTC =
-    { family
-    , description
-    , rev
-    , hash
-    , zip ? ""
-    , prefix ? ""
+    {
+      family,
+      description,
+      rev,
+      hash,
+      zip ? "",
+      prefix ? "",
     }:
     let
-      Family =
-        lib.toUpper (lib.substring 0 1 family) +
-        lib.substring 1 (lib.stringLength family) family;
+      Family = lib.toUpper (lib.substring 0 1 family) + lib.substring 1 (lib.stringLength family) family;
     in
     stdenvNoCC.mkDerivation rec {
       pname = "source-han-${family}";
@@ -29,11 +29,13 @@ let
 
       nativeBuildInputs = lib.optionals (zip == ".zip") [ unzip ];
 
-      unpackPhase = lib.optionalString (zip == "") ''
-        cp $src SourceHan${Family}.ttc${zip}
-      '' + lib.optionalString (zip == ".zip") ''
-        unzip $src
-      '';
+      unpackPhase =
+        lib.optionalString (zip == "") ''
+          cp $src SourceHan${Family}.ttc${zip}
+        ''
+        + lib.optionalString (zip == ".zip") ''
+          unzip $src
+        '';
 
       installPhase = ''
         runHook preInstall
@@ -47,20 +49,22 @@ let
         description = "An open source Pan-CJK ${description} typeface";
         homepage = "https://github.com/adobe-fonts/source-han-${family}";
         license = lib.licenses.ofl;
-        maintainers = with lib.maintainers; [ taku0 emily ];
+        maintainers = with lib.maintainers; [
+          taku0
+          emily
+        ];
       };
     };
 
   makeVariable =
-    { family
-    , version
-    , hash
-    , format
+    {
+      family,
+      version,
+      hash,
+      format,
     }:
     let
-      Family =
-        lib.toUpper (lib.substring 0 1 family) +
-        lib.substring 1 (lib.stringLength family) family;
+      Family = lib.toUpper (lib.substring 0 1 family) + lib.substring 1 (lib.stringLength family) family;
     in
     fetchurl {
       pname = "source-han-${family}-vf-${format}";
@@ -74,7 +78,10 @@ let
         description = "An open source Pan-CJK ${Family} typeface";
         homepage = "https://github.com/adobe-fonts/source-han-${family}";
         license = lib.licenses.ofl;
-        maintainers = with lib.maintainers; [ taku0 emily ];
+        maintainers = with lib.maintainers; [
+          taku0
+          emily
+        ];
       };
     };
 in

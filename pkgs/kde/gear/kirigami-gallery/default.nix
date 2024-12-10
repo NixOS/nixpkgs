@@ -5,7 +5,7 @@
 mkKdeDerivation {
   pname = "kirigami-gallery";
 
-  extraBuildInputs = [qtsvg];
+  extraBuildInputs = [ qtsvg ];
   # FIXME(qt5)
   meta.broken = true;
 }

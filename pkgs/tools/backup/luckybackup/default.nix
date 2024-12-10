@@ -1,6 +1,12 @@
-{ mkDerivation, lib, fetchurl
-, pkg-config, libtool, qmake
-, rsync, ssh
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  pkg-config,
+  libtool,
+  qmake,
+  rsync,
+  ssh,
 }:
 
 mkDerivation rec {
@@ -12,9 +18,16 @@ mkDerivation rec {
     sha256 = "0nwjsk1j33pm8882jbj8h6nxn6n5ab9dxqpqkay65pfbhcjay0g8";
   };
 
-  buildInputs = [ rsync ssh ];
+  buildInputs = [
+    rsync
+    ssh
+  ];
 
-  nativeBuildInputs = [ pkg-config libtool qmake ];
+  nativeBuildInputs = [
+    pkg-config
+    libtool
+    qmake
+  ];
 
   prePatch = ''
     for File in luckybackup.pro menu/luckybackup-pkexec \

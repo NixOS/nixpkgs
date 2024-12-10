@@ -1,74 +1,80 @@
-{ fetchurl
-, runCommand
-, lib
-, stdenv
-, pkg-config
-, gnome
-, gettext
-, gobject-introspection
-, cairo
-, colord
-, lcms2
-, pango
-, libstartup_notification
-, libcanberra
-, ninja
-, xvfb-run
-, libxcvt
-, libICE
-, libX11
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXtst
-, libxkbfile
-, xkeyboard_config
-, libxkbcommon
-, libXrender
-, libxcb
-, libXrandr
-, libXinerama
-, libXau
-, libinput
-, libdrm
-, libei
-, libdisplay-info
-, gsettings-desktop-schemas
-, glib
-, atk
-, gtk4
-, fribidi
-, harfbuzz
-, gnome-desktop
-, pipewire
-, libgudev
-, libwacom
-, libSM
-, xwayland
-, mesa
-, meson
-, gnome-settings-daemon
-, xorgserver
-, python3
-, wrapGAppsHook4
-, gi-docgen
-, sysprof
-, libsysprof-capture
-, desktop-file-utils
-, egl-wayland
-, graphene
-, wayland
-, wayland-protocols
+{
+  fetchurl,
+  runCommand,
+  lib,
+  stdenv,
+  pkg-config,
+  gnome,
+  gettext,
+  gobject-introspection,
+  cairo,
+  colord,
+  lcms2,
+  pango,
+  libstartup_notification,
+  libcanberra,
+  ninja,
+  xvfb-run,
+  libxcvt,
+  libICE,
+  libX11,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXtst,
+  libxkbfile,
+  xkeyboard_config,
+  libxkbcommon,
+  libXrender,
+  libxcb,
+  libXrandr,
+  libXinerama,
+  libXau,
+  libinput,
+  libdrm,
+  libei,
+  libdisplay-info,
+  gsettings-desktop-schemas,
+  glib,
+  atk,
+  gtk4,
+  fribidi,
+  harfbuzz,
+  gnome-desktop,
+  pipewire,
+  libgudev,
+  libwacom,
+  libSM,
+  xwayland,
+  mesa,
+  meson,
+  gnome-settings-daemon,
+  xorgserver,
+  python3,
+  wrapGAppsHook4,
+  gi-docgen,
+  sysprof,
+  libsysprof-capture,
+  desktop-file-utils,
+  egl-wayland,
+  graphene,
+  wayland,
+  wayland-protocols,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
   version = "46.2";
 
-  outputs = [ "out" "dev" "man" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
@@ -109,55 +115,57 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
   ];
 
-  buildInputs = [
-    cairo
-    egl-wayland
-    glib
-    gnome-desktop
-    gnome-settings-daemon
-    gsettings-desktop-schemas
-    atk
-    fribidi
-    harfbuzz
-    libcanberra
-    libdrm
-    libei
-    libdisplay-info
-    libgudev
-    libinput
-    libstartup_notification
-    libwacom
-    libSM
-    colord
-    lcms2
-    pango
-    pipewire
-    sysprof # for D-Bus interfaces
-    libsysprof-capture
-    xwayland
-    wayland
-    wayland-protocols
-  ] ++ [
-    # X11 client
-    gtk4
-    libICE
-    libX11
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXtst
-    libxkbfile
-    xkeyboard_config
-    libxkbcommon
-    libXrender
-    libxcb
-    libXrandr
-    libXinerama
-    libXau
-  ];
+  buildInputs =
+    [
+      cairo
+      egl-wayland
+      glib
+      gnome-desktop
+      gnome-settings-daemon
+      gsettings-desktop-schemas
+      atk
+      fribidi
+      harfbuzz
+      libcanberra
+      libdrm
+      libei
+      libdisplay-info
+      libgudev
+      libinput
+      libstartup_notification
+      libwacom
+      libSM
+      colord
+      lcms2
+      pango
+      pipewire
+      sysprof # for D-Bus interfaces
+      libsysprof-capture
+      xwayland
+      wayland
+      wayland-protocols
+    ]
+    ++ [
+      # X11 client
+      gtk4
+      libICE
+      libX11
+      libXcomposite
+      libXcursor
+      libXdamage
+      libXext
+      libXfixes
+      libXi
+      libXtst
+      libxkbfile
+      xkeyboard_config
+      libxkbcommon
+      libXrender
+      libxcb
+      libXrandr
+      libXinerama
+      libXau
+    ];
 
   postPatch = ''
     patchShebangs src/backends/native/gen-default-modes.py
@@ -182,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdir = "${finalAttrs.finalPackage}/lib/mutter-14";
 
     tests = {
-      libdirExists = runCommand "mutter-libdir-exists" {} ''
+      libdirExists = runCommand "mutter-libdir-exists" { } ''
         if [[ ! -d ${finalAttrs.finalPackage.libdir} ]]; then
           echo "passthru.libdir should contain a directory, “${finalAttrs.finalPackage.libdir}” is not one."
           exit 1

@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cacert
-, cmake
-, cmakerc
-, fmt
-, git
-, gzip
-, makeWrapper
-, meson
-, ninja
-, openssh
-, python3
-, zip
-, zstd
-, extraRuntimeDeps ? []
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cacert,
+  cmake,
+  cmakerc,
+  fmt,
+  git,
+  gzip,
+  makeWrapper,
+  meson,
+  ninja,
+  openssh,
+  python3,
+  zip,
+  zstd,
+  extraRuntimeDeps ? [ ],
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcpkg-tool";
@@ -44,31 +45,36 @@ stdenv.mkDerivation (finalAttrs: {
     "-DVCPKG_DEPENDENCY_CMAKERC=ON"
   ];
 
-  postFixup = let
-    # These are the most common binaries used by vcpkg
-    # Extra binaries can be added via overlay when needed
-    runtimeDeps = [
-      cacert
-      cmake
-      git
-      gzip
-      meson
-      ninja
-      openssh
-      python3
-      zip
-      zstd
-    ] ++ extraRuntimeDeps;
-  in ''
-    wrapProgram $out/bin/vcpkg --prefix PATH ${lib.makeBinPath runtimeDeps}
-  '';
+  postFixup =
+    let
+      # These are the most common binaries used by vcpkg
+      # Extra binaries can be added via overlay when needed
+      runtimeDeps = [
+        cacert
+        cmake
+        git
+        gzip
+        meson
+        ninja
+        openssh
+        python3
+        zip
+        zstd
+      ] ++ extraRuntimeDeps;
+    in
+    ''
+      wrapProgram $out/bin/vcpkg --prefix PATH ${lib.makeBinPath runtimeDeps}
+    '';
 
   meta = {
     description = "Components of microsoft/vcpkg's binary";
     mainProgram = "vcpkg";
     homepage = "https://github.com/microsoft/vcpkg-tool";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ guekka gracicot ];
+    maintainers = with lib.maintainers; [
+      guekka
+      gracicot
+    ];
     platforms = lib.platforms.all;
   };
 })

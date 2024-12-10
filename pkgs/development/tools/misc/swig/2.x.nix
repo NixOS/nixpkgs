@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, pcre }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  bison,
+  pcre,
+}:
 
 stdenv.mkDerivation rec {
   pname = "swig";
@@ -11,7 +20,12 @@ stdenv.mkDerivation rec {
     sha256 = "0khm9gh5pczfcihr0pbicaicc4v9kjm5ip2alvkhmbb3ga6njkcm";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool bison ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    bison
+  ];
   buildInputs = [ pcre ];
 
   configureFlags = [ "--without-tcl" ];

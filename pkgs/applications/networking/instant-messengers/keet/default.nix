@@ -1,4 +1,8 @@
-{ lib, appimageTools, fetchurl }:
+{
+  lib,
+  appimageTools,
+  fetchurl,
+}:
 
 let
   pname = "keet";
@@ -10,7 +14,8 @@ let
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit src pname version;
 
   extraInstallCommands = ''

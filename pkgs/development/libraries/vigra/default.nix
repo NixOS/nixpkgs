@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, cmake
-, fftw
-, fftwSinglePrec
-, hdf5
-, ilmbase
-, libjpeg
-, libpng
-, libtiff
-, openexr
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  fftw,
+  fftwSinglePrec,
+  hdf5,
+  ilmbase,
+  libjpeg,
+  libpng,
+  libtiff,
+  openexr,
+  python3,
 }:
 
 let
@@ -46,9 +47,12 @@ stdenv.mkDerivation rec {
 
   preConfigure = "cmakeFlags+=\" -DVIGRANUMPY_INSTALL_DIR=$out/${python.sitePackages}\"";
 
-  cmakeFlags = [ "-DWITH_OPENEXR=1" ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux")
-    [ "-DCMAKE_CXX_FLAGS=-fPIC" "-DCMAKE_C_FLAGS=-fPIC" ];
+  cmakeFlags =
+    [ "-DWITH_OPENEXR=1" ]
+    ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+      "-DCMAKE_CXX_FLAGS=-fPIC"
+      "-DCMAKE_C_FLAGS=-fPIC"
+    ];
 
   meta = with lib; {
     description = "Novel computer vision C++ library with customizable algorithms and data structures";

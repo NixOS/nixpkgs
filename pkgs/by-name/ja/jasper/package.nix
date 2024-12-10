@@ -1,15 +1,16 @@
-{ lib
-, cmake
-, fetchFromGitHub
-, freeglut
-, libGL
-, libheif
-, libjpeg
-, pkg-config
-, stdenv
-, enableHEIFCodec ? true
-, enableJPGCodec ? true
-, enableOpenGL ? true
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  freeglut,
+  libGL,
+  libheif,
+  libjpeg,
+  pkg-config,
+  stdenv,
+  enableHEIFCodec ? true,
+  enableJPGCodec ? true,
+  enableOpenGL ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,22 +24,32 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Hmmoe1lzUR1DBwgg30KGfsIDzSNe5shghaieEXX/am4=";
   };
 
-  outputs = [ "out" "dev" "doc" "lib" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "lib"
+    "man"
+  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs = [
-  ] ++ lib.optionals enableHEIFCodec [
-    libheif
-  ] ++ lib.optionals enableJPGCodec [
-    libjpeg
-  ] ++ lib.optionals enableOpenGL [
-    freeglut
-    libGL
-  ];
+  buildInputs =
+    [
+    ]
+    ++ lib.optionals enableHEIFCodec [
+      libheif
+    ]
+    ++ lib.optionals enableJPGCodec [
+      libjpeg
+    ]
+    ++ lib.optionals enableOpenGL [
+      freeglut
+      libGL
+    ];
 
   # Since "build" already exists and is populated, cmake tries to use it,
   # throwing uncomprehensible error messages...

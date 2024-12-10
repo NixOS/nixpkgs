@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchCrate, installShellFiles }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "trashy";
@@ -24,7 +29,10 @@ rustPlatform.buildRustPackage rec {
     description = "A simple, fast, and featureful alternative to rm and trash-cli";
     homepage = "https://github.com/oberblastmeister/trashy";
     changelog = "https://github.com/oberblastmeister/trashy/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ oberblastmeister ];
     mainProgram = "trash";
     # darwin is unsupported due to https://github.com/Byron/trash-rs/issues/8

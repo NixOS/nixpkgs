@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, runCommandLocal }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  runCommandLocal,
+}:
 
 let
   pname = "mbrola";
@@ -16,7 +21,7 @@ let
   voices = fetchFromGitHub {
     owner = "numediart";
     repo = "MBROLA-voices";
-    rev = "fe05a0ccef6a941207fd6aaad0b31294a1f93a51";  # using latest commit
+    rev = "fe05a0ccef6a941207fd6aaad0b31294a1f93a51"; # using latest commit
     sha256 = "1w0y2xjp9rndwdjagp2wxh656mdm3d6w9cs411g27rjyfy1205a0";
 
     name = "${pname}-voices-${version}";
@@ -53,14 +58,12 @@ let
   };
 
 in
-  runCommandLocal
-    "${pname}-${version}"
-    {
-      inherit pname version meta;
-    }
-    ''
-      mkdir -p "$out/share/mbrola"
-      ln -s '${voices}/data' "$out/share/mbrola/voices"
-      ln -s '${bin}/bin' "$out/"
-    ''
-
+runCommandLocal "${pname}-${version}"
+  {
+    inherit pname version meta;
+  }
+  ''
+    mkdir -p "$out/share/mbrola"
+    ln -s '${voices}/data' "$out/share/mbrola/voices"
+    ln -s '${bin}/bin' "$out/"
+  ''

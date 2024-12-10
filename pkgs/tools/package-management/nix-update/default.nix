@@ -1,10 +1,11 @@
-{ lib
-, python3
-, fetchFromGitHub
-, nix
-, nix-prefetch-git
-, nixpkgs-fmt
-, nixpkgs-review
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  nix,
+  nix-prefetch-git,
+  nixpkgs-fmt,
+  nixpkgs-review,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -24,7 +25,15 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ nix nix-prefetch-git nixpkgs-fmt nixpkgs-review ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      nix
+      nix-prefetch-git
+      nixpkgs-fmt
+      nixpkgs-review
+    ])
   ];
 
   checkPhase = ''
@@ -36,7 +45,11 @@ python3.pkgs.buildPythonApplication rec {
     inherit (src.meta) homepage;
     changelog = "https://github.com/Mic92/nix-update/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda mic92 zowoq ];
+    maintainers = with maintainers; [
+      figsoda
+      mic92
+      zowoq
+    ];
     mainProgram = "nix-update";
     platforms = platforms.all;
   };

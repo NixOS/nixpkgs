@@ -1,4 +1,10 @@
-{ interpreter, lib, gdb, writeText, runCommand }:
+{
+  interpreter,
+  lib,
+  gdb,
+  writeText,
+  runCommand,
+}:
 
 let
   crashme-py = writeText "crashme.py" ''
@@ -9,7 +15,8 @@ let
 
     sentinel_foo_bar()
   '';
-in runCommand "python-gdb" {} ''
+in
+runCommand "python-gdb" { } ''
   # test that gdb is able to recover the python stack frame of this segfault
   ${gdb}/bin/gdb -batch -ex 'set debug-file-directory ${interpreter.debug}/lib/debug' \
     -ex 'source ${interpreter}/share/gdb/libpython.py' \

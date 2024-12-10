@@ -1,5 +1,6 @@
-{ python3
-, rustPlatform
+{
+  python3,
+  rustPlatform,
 }:
 
 python3.pkgs.callPackage ./generic.nix {

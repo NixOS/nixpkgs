@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gfortran
-, python3
-, amd-blis
-, aocl-utils
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gfortran,
+  python3,
+  amd-blis,
+  aocl-utils,
 
-, withOpenMP ? true
-, blas64 ? false
-, withAMDOpt ? true
+  withOpenMP ? true,
+  blas64 ? false,
+  withAMDOpt ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,20 +33,28 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit blas64; };
 
-  nativeBuildInputs = [ cmake gfortran python3 ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+    python3
+  ];
 
-  buildInputs = [ amd-blis aocl-utils ];
+  buildInputs = [
+    amd-blis
+    aocl-utils
+  ];
 
-  cmakeFlags = [
-    "-DLIBAOCLUTILS_LIBRARY_PATH=${lib.getLib aocl-utils}/lib/libaoclutils${stdenv.hostPlatform.extensions.sharedLibrary}"
-    "-DLIBAOCLUTILS_INCLUDE_PATH=${lib.getDev aocl-utils}/include"
-    "-DENABLE_BUILTIN_LAPACK2FLAME=ON"
-    "-DENABLE_CBLAS_INTERFACES=ON"
-    "-DENABLE_EXT_LAPACK_INTERFACE=ON"
-  ]
-  ++ lib.optional (!withOpenMP) "-DENABLE_MULTITHREADING=OFF"
-  ++ lib.optional blas64 "-DENABLE_ILP64=ON"
-  ++ lib.optional withAMDOpt "-DENABLE_AMD_OPT=ON";
+  cmakeFlags =
+    [
+      "-DLIBAOCLUTILS_LIBRARY_PATH=${lib.getLib aocl-utils}/lib/libaoclutils${stdenv.hostPlatform.extensions.sharedLibrary}"
+      "-DLIBAOCLUTILS_INCLUDE_PATH=${lib.getDev aocl-utils}/include"
+      "-DENABLE_BUILTIN_LAPACK2FLAME=ON"
+      "-DENABLE_CBLAS_INTERFACES=ON"
+      "-DENABLE_EXT_LAPACK_INTERFACE=ON"
+    ]
+    ++ lib.optional (!withOpenMP) "-DENABLE_MULTITHREADING=OFF"
+    ++ lib.optional blas64 "-DENABLE_ILP64=ON"
+    ++ lib.optional withAMDOpt "-DENABLE_AMD_OPT=ON";
 
   postInstall = ''
     ln -s $out/lib/libflame.so $out/lib/liblapack.so.3

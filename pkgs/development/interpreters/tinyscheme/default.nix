@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, dos2unix
-, runCommand
-, tinyscheme
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dos2unix,
+  runCommand,
+  tinyscheme,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,21 +19,23 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ dos2unix ];
 
   prePatch = "dos2unix makefile";
-  patches = [
-    # The alternate macOS main makes use of `ccommand` which seems to be
-    # `MetroWerks CodeWarrier` specific:
-    # https://ptgmedia.pearsoncmg.com/imprint_downloads/informit/downloads/9780201703535/macfix.html
-    #
-    # In any case, this is not needed to build on macOS.
-    ./01-remove-macOS-main.patch
+  patches =
+    [
+      # The alternate macOS main makes use of `ccommand` which seems to be
+      # `MetroWerks CodeWarrier` specific:
+      # https://ptgmedia.pearsoncmg.com/imprint_downloads/informit/downloads/9780201703535/macfix.html
+      #
+      # In any case, this is not needed to build on macOS.
+      ./01-remove-macOS-main.patch
 
-    # We want to have the makefile pick up $CC, etc. so that we don't have
-    # to unnecessarily tie this package to the GCC stdenv.
-    ./02-use-toolchain-env-vars.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # On macOS the library suffix is .dylib:
-    ./03-macOS-SOsuf.patch
-  ];
+      # We want to have the makefile pick up $CC, etc. so that we don't have
+      # to unnecessarily tie this package to the GCC stdenv.
+      ./02-use-toolchain-env-vars.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # On macOS the library suffix is .dylib:
+      ./03-macOS-SOsuf.patch
+    ];
   postPatch = ''
     substituteInPlace scheme.c --replace "init.scm" "$out/lib/init.scm"
   '';
@@ -46,11 +49,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     # Checks that the program can run and exit:
-    simple = runCommand "${pname}-simple-test" {} ''
+    simple = runCommand "${pname}-simple-test" { } ''
       ${tinyscheme}/bin/tinyscheme <<<"(quit 0)"
       echo "success" > $out
     '';
-    fileIo = runCommand "${pname}-file-io-test" {} ''
+    fileIo = runCommand "${pname}-file-io-test" { } ''
       ${tinyscheme}/bin/tinyscheme <<EOF
         (call-with-output-file "$out"
           (lambda (p)
@@ -60,7 +63,7 @@ stdenv.mkDerivation rec {
             )))
       EOF
     '';
-    helpText = runCommand "${pname}-help-text-test" {} ''
+    helpText = runCommand "${pname}-help-text-test" { } ''
       ${tinyscheme}/bin/tinyscheme '-?' | tee > $out || :
       [[ "$(cat $out)" =~ ^Usage: ]]
     '';

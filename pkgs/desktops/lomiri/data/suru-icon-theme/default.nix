@@ -1,10 +1,11 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitLab
-, gitUpdater
-, gtk3
-, hicolor-icon-theme
-, ubuntu-themes
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  gtk3,
+  hicolor-icon-theme,
+  ubuntu-themes,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

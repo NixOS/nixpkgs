@@ -1,11 +1,15 @@
-{ buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, lib
-, libglvnd
-, pkg-config
-, subPackages ? ["." "netclient"]
-, xorg
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  libglvnd,
+  pkg-config,
+  subPackages ? [
+    "."
+    "netclient"
+  ],
+  xorg,
 }:
 
 buildGoModule rec {
@@ -39,7 +43,10 @@ buildGoModule rec {
     homepage = "https://netmaker.io";
     changelog = "https://github.com/gravitl/netmaker/-/releases/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ urandom qjoly ];
+    maintainers = with maintainers; [
+      urandom
+      qjoly
+    ];
     mainProgram = "netmaker";
   };
 }

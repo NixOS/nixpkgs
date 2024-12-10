@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchurl, fetchpatch, scons, pkg-config, SDL, libGL, zlib, smpeg
-, SDL_image, libvorbis, expat, zip, lua }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  scons,
+  pkg-config,
+  SDL,
+  libGL,
+  zlib,
+  smpeg,
+  SDL_image,
+  libvorbis,
+  expat,
+  zip,
+  lua,
+}:
 
 stdenv.mkDerivation rec {
   pname = "btanks";
@@ -10,9 +25,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-P9LOaitF96YMOxFPqa/xPLPdn7tqZc3JeYt2xPosQ0E=";
   };
 
-  nativeBuildInputs = [ scons pkg-config ];
+  nativeBuildInputs = [
+    scons
+    pkg-config
+  ];
 
-  buildInputs = [ SDL libGL zlib smpeg SDL_image libvorbis expat zip lua ];
+  buildInputs = [
+    SDL
+    libGL
+    zlib
+    smpeg
+    SDL_image
+    libvorbis
+    expat
+    zip
+    lua
+  ];
 
   enableParallelBuilding = true;
 

@@ -1,19 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, python3Packages
-, perl
-, zip
-, gitMinimal
-, ffmpeg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  python3Packages,
+  perl,
+  zip,
+  gitMinimal,
+  ffmpeg,
 }:
 
 let
 
   inherit (python3Packages)
-    python pytest nose3 cryptography pyyaml requests mock requests-mock
-    python-dateutil setuptools;
+    python
+    pytest
+    nose3
+    cryptography
+    pyyaml
+    requests
+    mock
+    requests-mock
+    python-dateutil
+    setuptools
+    ;
 
   version = "4.73";
 
@@ -30,10 +40,28 @@ stdenv.mkDerivation rec {
     hash = "sha256-e8ewsx2mx62JTUnpMoSRL44EGDllQuk/k9gRztOkWMc=";
   };
 
-  pythonPaths = [ cryptography pyyaml requests ];
-  buildInputs = [ python perl python-dateutil setuptools ] ++ pythonPaths;
-  nativeBuildInputs = [ gitMinimal zip makeWrapper ];
-  nativeCheckInputs = [ nose3 pytest mock requests-mock ];
+  pythonPaths = [
+    cryptography
+    pyyaml
+    requests
+  ];
+  buildInputs = [
+    python
+    perl
+    python-dateutil
+    setuptools
+  ] ++ pythonPaths;
+  nativeBuildInputs = [
+    gitMinimal
+    zip
+    makeWrapper
+  ];
+  nativeCheckInputs = [
+    nose3
+    pytest
+    mock
+    requests-mock
+  ];
 
   postPatch = ''
     substituteInPlace scripts/run-tests.sh \
@@ -43,7 +71,11 @@ stdenv.mkDerivation rec {
       lib/svtplay_dl/tests/test_postprocess.py
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "SYSCONFDIR=$(out)/etc" "PYTHON=${python.interpreter}" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "SYSCONFDIR=$(out)/etc"
+    "PYTHON=${python.interpreter}"
+  ];
 
   postInstall = ''
     wrapProgram "$out/bin/svtplay-dl" \

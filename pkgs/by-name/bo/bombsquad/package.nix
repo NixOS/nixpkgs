@@ -107,7 +107,10 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       unfree
     ];
-    maintainers = with lib.maintainers; [ syedahkam coffeeispower ];
+    maintainers = with lib.maintainers; [
+      syedahkam
+      coffeeispower
+    ];
     mainProgram = "bombsquad";
     platforms = lib.platforms.linux;
   };

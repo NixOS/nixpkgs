@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.microbin;
@@ -10,7 +15,15 @@ in
     package = lib.mkPackageOption pkgs "microbin" { };
 
     settings = lib.mkOption {
-      type = lib.types.submodule { freeformType = with lib.types; attrsOf (oneOf [ bool int str ]); };
+      type = lib.types.submodule {
+        freeformType =
+          with lib.types;
+          attrsOf (oneOf [
+            bool
+            int
+            str
+          ]);
+      };
       default = { };
       example = {
         MICROBIN_PORT = 8080;
@@ -59,7 +72,9 @@ in
     systemd.services.microbin = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = lib.mapAttrs (_: v: if lib.isBool v then lib.boolToString v else toString v) cfg.settings;
+      environment = lib.mapAttrs (
+        _: v: if lib.isBool v then lib.boolToString v else toString v
+      ) cfg.settings;
       serviceConfig = {
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         DevicePolicy = "closed";
@@ -78,7 +93,10 @@ in
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         ReadWritePaths = cfg.dataDir;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         StateDirectory = "microbin";

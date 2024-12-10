@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, nixosTests
-, autoreconfHook, pkg-config, libnl, iptables
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
+  autoreconfHook,
+  pkg-config,
+  libnl,
+  iptables,
 }:
 
 let
@@ -21,10 +28,19 @@ stdenv.mkDerivation {
     "man"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libnl iptables ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libnl
+    iptables
+  ];
 
-  makeFlags = [ "-C" "src/usr" ];
+  makeFlags = [
+    "-C"
+    "src/usr"
+  ];
 
   prePatch = ''
     sed -e 's%^XTABLES_SO_DIR = .*%XTABLES_SO_DIR = '"$out"'/lib/xtables%g' -i src/usr/iptables/Makefile

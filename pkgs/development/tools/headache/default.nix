@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, nix-update-script, ocamlPackages }:
+{
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  ocamlPackages,
+}:
 
 let
   inherit (ocamlPackages) buildDunePackage camomile;

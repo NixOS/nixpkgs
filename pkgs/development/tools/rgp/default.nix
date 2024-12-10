@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, makeWrapper
-, fetchurl
-, autoPatchelfHook
-, dbus
-, fontconfig
-, freetype
-, glib
-, libGLU
-, libglvnd
-, libX11
-, libxcb
-, libXi
-, ncurses
-, qtbase
-, qtdeclarative
-, zlib
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  fetchurl,
+  autoPatchelfHook,
+  dbus,
+  fontconfig,
+  freetype,
+  glib,
+  libGLU,
+  libglvnd,
+  libX11,
+  libxcb,
+  libXi,
+  ncurses,
+  qtbase,
+  qtdeclarative,
+  zlib,
 }:
 
 let
@@ -30,7 +31,10 @@ stdenv.mkDerivation {
     hash = "sha256-WSSiNiiIVw1wwt9vxgyirBDe+SPzH87LU1GlSdUhZB8=";
   };
 
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+  nativeBuildInputs = [
+    makeWrapper
+    autoPatchelfHook
+  ];
 
   buildInputs = [
     dbus

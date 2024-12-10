@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, coreutils
-, runCommand
-, runtimeShell
-, writeText
-, terraform-providers
-, installShellFiles
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+  runCommand,
+  runtimeShell,
+  writeText,
+  terraform-providers,
+  installShellFiles,
 }:
 
 let
-  package =  buildGoModule rec {
+  package = buildGoModule rec {
     pname = "opentofu";
     version = "1.7.1";
 
@@ -24,7 +25,12 @@ let
     };
 
     vendorHash = "sha256-cML742FfWFNIwGyIdRd3JWcfDlOXnJVgUXz4j5fa74Q=";
-    ldflags = [ "-s" "-w" "-X" "github.com/opentofu/opentofu/version.dev=no" ];
+    ldflags = [
+      "-s"
+      "-w"
+      "-X"
+      "github.com/opentofu/opentofu/version.dev=no"
+    ];
 
     postConfigure = ''
       # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
@@ -68,29 +74,33 @@ let
 
   full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p.actualProviders));
 
-  opentofu_plugins_test = let
-    mainTf = writeText "main.tf" ''
-      terraform {
-        required_providers {
-          random = {
-            source  = "registry.terraform.io/hashicorp/random"
+  opentofu_plugins_test =
+    let
+      mainTf = writeText "main.tf" ''
+        terraform {
+          required_providers {
+            random = {
+              source  = "registry.terraform.io/hashicorp/random"
+            }
           }
         }
-      }
 
-      resource "random_id" "test" {}
-    '';
-    opentofu = package.withPlugins (p: [ p.random ]);
-    test = runCommand "opentofu-plugin-test" {
-      buildInputs = [ opentofu ];
-    } ''
-      # make it fail outside of sandbox
-      export HTTP_PROXY=http://127.0.0.1:0 HTTPS_PROXY=https://127.0.0.1:0
-      cp ${mainTf} main.tf
-      tofu init
-      touch $out
-    '';
-  in
+        resource "random_id" "test" {}
+      '';
+      opentofu = package.withPlugins (p: [ p.random ]);
+      test =
+        runCommand "opentofu-plugin-test"
+          {
+            buildInputs = [ opentofu ];
+          }
+          ''
+            # make it fail outside of sandbox
+            export HTTP_PROXY=http://127.0.0.1:0 HTTPS_PROXY=https://127.0.0.1:0
+            cp ${mainTf} main.tf
+            tofu init
+            touch $out
+          '';
+    in
     test;
 
   plugins = removeAttrs terraform-providers [
@@ -99,18 +109,18 @@ let
     "recurseForDerivations"
   ];
 
-  withPlugins = plugins:
+  withPlugins =
+    plugins:
     let
       actualPlugins = plugins package.plugins;
 
       # Wrap PATH of plugins propagatedBuildInputs, plugins may have runtime dependencies on external binaries
-      wrapperInputs = lib.unique (lib.flatten
-        (lib.catAttrs "propagatedBuildInputs"
-          (builtins.filter (x: x != null) actualPlugins)));
+      wrapperInputs = lib.unique (
+        lib.flatten (lib.catAttrs "propagatedBuildInputs" (builtins.filter (x: x != null) actualPlugins))
+      );
 
       passthru = {
-        withPlugins = newplugins:
-          withPlugins (x: newplugins x ++ actualPlugins);
+        withPlugins = newplugins: withPlugins (x: newplugins x ++ actualPlugins);
 
         # Expose wrappers around the override* functions of the terraform
         # derivation.
@@ -132,21 +142,20 @@ let
         # 3. Specifying overrides on the wrapper is unsupported.
         #
         # See nixpkgs#158620 for details.
-        overrideDerivation = f:
-          (package.overrideDerivation f).withPlugins plugins;
-        overrideAttrs = f:
-          (package.overrideAttrs f).withPlugins plugins;
-        override = x:
-          (package.override x).withPlugins plugins;
+        overrideDerivation = f: (package.overrideDerivation f).withPlugins plugins;
+        overrideAttrs = f: (package.overrideAttrs f).withPlugins plugins;
+        override = x: (package.override x).withPlugins plugins;
       };
-      # Don't bother wrapping unless we actually have plugins, since the wrapper will stop automatic downloading
-      # of plugins, which might be counterintuitive if someone just wants a vanilla Terraform.
     in
-      if actualPlugins == [ ] then
-        package.overrideAttrs
-          (orig: { passthru = orig.passthru // passthru; })
-      else
-        lib.appendToName "with-plugins" (stdenv.mkDerivation {
+    # Don't bother wrapping unless we actually have plugins, since the wrapper will stop automatic downloading
+    # of plugins, which might be counterintuitive if someone just wants a vanilla Terraform.
+    if actualPlugins == [ ] then
+      package.overrideAttrs (orig: {
+        passthru = orig.passthru // passthru;
+      })
+    else
+      lib.appendToName "with-plugins" (
+        stdenv.mkDerivation {
           inherit (package) meta pname version;
           nativeBuildInputs = [ makeWrapper ];
 
@@ -179,6 +188,7 @@ let
               --set NIX_TERRAFORM_PLUGIN_DIR $out/libexec/terraform-providers \
               --prefix PATH : "${lib.makeBinPath wrapperInputs}"
           '';
-        });
+        }
+      );
 in
 package

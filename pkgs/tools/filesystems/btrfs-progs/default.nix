@@ -1,11 +1,21 @@
-{ lib, stdenv, fetchurl
-, buildPackages
-, pkg-config
-, zstd
-, acl, attr, e2fsprogs, libuuid, lzo, udev, zlib
-, runCommand, btrfs-progs
-, gitUpdater
-, udevSupport ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPackages,
+  pkg-config,
+  zstd,
+  acl,
+  attr,
+  e2fsprogs,
+  libuuid,
+  lzo,
+  udev,
+  zlib,
+  runCommand,
+  btrfs-progs,
+  gitUpdater,
+  udevSupport ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,16 +27,29 @@ stdenv.mkDerivation rec {
     hash = "sha256-DkCgaKJsKWnLAqlbqf74iNemNW4/RX/5KtJHfQhzVng=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ] ++ [
-    (buildPackages.python3.withPackages (ps: with ps; [
-      sphinx
-      sphinx-rtd-theme
-    ]))
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ [
+      (buildPackages.python3.withPackages (
+        ps: with ps; [
+          sphinx
+          sphinx-rtd-theme
+        ]
+      ))
+    ];
 
-  buildInputs = [ acl attr e2fsprogs libuuid lzo udev zlib zstd ];
+  buildInputs = [
+    acl
+    attr
+    e2fsprogs
+    libuuid
+    lzo
+    udev
+    zlib
+    zstd
+  ];
 
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally
@@ -36,21 +59,24 @@ stdenv.mkDerivation rec {
     install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
   '';
 
-  configureFlags = [
-    # Built separately, see python3Packages.btrfsutil
-    "--disable-python"
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    "--disable-backtrace"
-  ] ++ lib.optionals (!udevSupport) [
-    "--disable-libudev"
-  ];
+  configureFlags =
+    [
+      # Built separately, see python3Packages.btrfsutil
+      "--disable-python"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
+      "--disable-backtrace"
+    ]
+    ++ lib.optionals (!udevSupport) [
+      "--disable-libudev"
+    ];
 
   makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
 
   enableParallelBuilding = true;
 
   passthru.tests = {
-    simple-filesystem = runCommand "btrfs-progs-create-fs" {} ''
+    simple-filesystem = runCommand "btrfs-progs-create-fs" { } ''
       mkdir -p $out
       truncate -s110M $out/disc
       ${btrfs-progs}/bin/mkfs.btrfs $out/disc | tee $out/success

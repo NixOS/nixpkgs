@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, rustPlatform
-, cargo
-, pkg-config
-, meson
-, rustc
-, wrapGAppsHook4
-, desktop-file-utils
-, blueprint-compiler
-, ninja
-, gtk4
-, libadwaita
-, gst_all_1
-, ffmpeg-headless
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  rustPlatform,
+  cargo,
+  pkg-config,
+  meson,
+  rustc,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  blueprint-compiler,
+  ninja,
+  gtk4,
+  libadwaita,
+  gst_all_1,
+  ffmpeg-headless,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

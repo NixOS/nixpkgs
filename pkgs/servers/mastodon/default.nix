@@ -1,16 +1,25 @@
-{ lib, stdenv, nodejs-slim, bundlerEnv, nixosTests
-, yarn, callPackage, ruby, writeShellScript
-, fetchYarnDeps, fixup-yarn-lock
-, brotli
+{
+  lib,
+  stdenv,
+  nodejs-slim,
+  bundlerEnv,
+  nixosTests,
+  yarn,
+  callPackage,
+  ruby,
+  writeShellScript,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  brotli,
 
   # Allow building a fork or custom version of Mastodon:
-, pname ? "mastodon"
-, version ? srcOverride.version
-, patches ? []
+  pname ? "mastodon",
+  version ? srcOverride.version,
+  patches ? [ ],
   # src is a package
-, srcOverride ? callPackage ./source.nix { inherit patches; }
-, gemset ? ./. + "/gemset.nix"
-, yarnHash ? srcOverride.yarnHash
+  srcOverride ? callPackage ./source.nix { inherit patches; },
+  gemset ? ./. + "/gemset.nix",
+  yarnHash ? srcOverride.yarnHash,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +42,14 @@ stdenv.mkDerivation rec {
       hash = yarnHash;
     };
 
-    nativeBuildInputs = [ fixup-yarn-lock nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby brotli ];
+    nativeBuildInputs = [
+      fixup-yarn-lock
+      nodejs-slim
+      yarn
+      mastodonGems
+      mastodonGems.wrappedRuby
+      brotli
+    ];
 
     RAILS_ENV = "production";
     NODE_ENV = "production";
@@ -83,7 +99,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ mastodonGems.wrappedRuby ];
   nativeBuildInputs = [ brotli ];
-  buildInputs = [ mastodonGems nodejs-slim ];
+  buildInputs = [
+    mastodonGems
+    nodejs-slim
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -124,20 +143,22 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase = let
-    run-streaming = writeShellScript "run-streaming.sh" ''
-      # NixOS helper script to consistently use the same NodeJS version the package was built with.
-      ${nodejs-slim}/bin/node ./streaming
+  installPhase =
+    let
+      run-streaming = writeShellScript "run-streaming.sh" ''
+        # NixOS helper script to consistently use the same NodeJS version the package was built with.
+        ${nodejs-slim}/bin/node ./streaming
+      '';
+    in
+    ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp -r * $out/
+      ln -s ${run-streaming} $out/run-streaming.sh
+
+      runHook postInstall
     '';
-  in ''
-    runHook preInstall
-
-    mkdir -p $out
-    cp -r * $out/
-    ln -s ${run-streaming} $out/run-streaming.sh
-
-    runHook postInstall
-  '';
 
   passthru = {
     tests.mastodon = nixosTests.mastodon;
@@ -149,7 +170,16 @@ stdenv.mkDerivation rec {
     description = "Self-hosted, globally interconnected microblogging software based on ActivityPub";
     homepage = "https://joinmastodon.org";
     license = licenses.agpl3Plus;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ happy-river erictapen izorkin ghuntley ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      happy-river
+      erictapen
+      izorkin
+      ghuntley
+    ];
   };
 }

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, pkg-config
-, river
-, wayland
-, wayland-protocols
-, zig_0_11
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  pkg-config,
+  river,
+  wayland,
+  wayland-protocols,
+  zig_0_11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

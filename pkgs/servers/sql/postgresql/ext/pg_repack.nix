@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, openssl
-, postgresql
-, postgresqlTestHook
-, readline
-, testers
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  postgresql,
+  postgresqlTestHook,
+  readline,
+  testers,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

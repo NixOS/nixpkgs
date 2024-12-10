@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -76,7 +81,10 @@ in
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
     users.users = mkIf (cfg.user == "plexpy") {
-      plexpy = { group = cfg.group; uid = config.ids.uids.plexpy; };
+      plexpy = {
+        group = cfg.group;
+        uid = config.ids.uids.plexpy;
+      };
     };
   };
 }

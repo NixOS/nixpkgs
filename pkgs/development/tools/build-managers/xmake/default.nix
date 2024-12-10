@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, lua
-, readline
-, ncurses
-, lz4
-, tbox
-, xmake-core-sv
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  lua,
+  readline,
+  ncurses,
+  lz4,
+  tbox,
+  xmake-core-sv,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,4 +46,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ rewine ];
   };
 }
-

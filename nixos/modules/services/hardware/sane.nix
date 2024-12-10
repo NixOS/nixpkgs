@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -32,8 +37,17 @@ let
     LD_LIBRARY_PATH = [ "/etc/sane-libs" ];
   };
 
-  backends = [ pkg netConf ] ++ optional config.services.saned.enable sanedConf ++ config.hardware.sane.extraBackends;
-  saneConfig = pkgs.mkSaneConfig { paths = backends; inherit (config.hardware.sane) disabledDefaultBackends; };
+  backends =
+    [
+      pkg
+      netConf
+    ]
+    ++ optional config.services.saned.enable sanedConf
+    ++ config.hardware.sane.extraBackends;
+  saneConfig = pkgs.mkSaneConfig {
+    paths = backends;
+    inherit (config.hardware.sane) disabledDefaultBackends;
+  };
 
   enabled = config.hardware.sane.enable || config.services.saned.enable;
 
@@ -72,7 +86,7 @@ in
 
     hardware.sane.extraBackends = mkOption {
       type = types.listOf types.path;
-      default = [];
+      default = [ ];
       description = ''
         Packages providing extra SANE backends to enable.
 
@@ -87,7 +101,7 @@ in
 
     hardware.sane.disabledDefaultBackends = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "v4l" ];
       description = ''
         Names of backends which are enabled by default but should be disabled.
@@ -162,7 +176,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkMerge [
@@ -195,7 +208,10 @@ in
       systemd.sockets.saned = {
         description = "saned incoming socket";
         wantedBy = [ "sockets.target" ];
-        listenStreams = [ "0.0.0.0:6566" "[::]:6566" ];
+        listenStreams = [
+          "0.0.0.0:6566"
+          "[::]:6566"
+        ];
         socketConfig = {
           # saned needs to distinguish between IPv4 and IPv6 to open matching data sockets.
           BindIPv6Only = "ipv6-only";

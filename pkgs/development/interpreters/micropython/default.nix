@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, python3
-, libffi
-, readline
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  python3,
+  libffi,
+  readline,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,12 +30,20 @@ stdenv.mkDerivation rec {
     '';
   };
 
+  nativeBuildInputs = [
+    pkg-config
+    python3
+  ];
 
-  nativeBuildInputs = [ pkg-config python3 ];
+  buildInputs = [
+    libffi
+    readline
+  ];
 
-  buildInputs = [ libffi readline ];
-
-  makeFlags = [ "-C" "ports/unix" ]; # also builds mpy-cross
+  makeFlags = [
+    "-C"
+    "ports/unix"
+  ]; # also builds mpy-cross
 
   enableParallelBuilding = true;
 
@@ -42,10 +51,12 @@ stdenv.mkDerivation rec {
 
   __darwinAllowLocalNetworking = true; # needed for select_poll_eintr test
 
-  skippedTests = " -e select_poll_fd"
-    + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) " -e ffi_callback -e float_parse -e float_parse_doubleproc"
-    + lib.optionalString (stdenv.isLinux && stdenv.isAarch64) " -e float_parse"
-  ;
+  skippedTests =
+    " -e select_poll_fd"
+    + lib.optionalString (
+      stdenv.isDarwin && stdenv.isAarch64
+    ) " -e ffi_callback -e float_parse -e float_parse_doubleproc"
+    + lib.optionalString (stdenv.isLinux && stdenv.isAarch64) " -e float_parse";
 
   checkPhase = ''
     runHook preCheck
@@ -68,6 +79,9 @@ stdenv.mkDerivation rec {
     homepage = "https://micropython.org";
     platforms = platforms.unix;
     license = licenses.mit;
-    maintainers = with maintainers; [ prusnak sgo ];
+    maintainers = with maintainers; [
+      prusnak
+      sgo
+    ];
   };
 }

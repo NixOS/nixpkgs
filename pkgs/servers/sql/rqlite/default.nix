@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -16,12 +17,17 @@ buildGoModule rec {
 
   vendorHash = "sha256-c6HQukT32jK9B48FzW0WeY7VxPkNwDipKUTrrICsaKw=";
 
-  subPackages = [ "cmd/rqlite" "cmd/rqlited" "cmd/rqbench" ];
+  subPackages = [
+    "cmd/rqlite"
+    "cmd/rqlited"
+    "cmd/rqbench"
+  ];
 
   # Leaving other flags from https://github.com/rqlite/rqlite/blob/master/package.sh
   # since automatically retriving those is nontrivial and inessential
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/rqlite/rqlite/cmd.Version=${src.rev}"
   ];
 

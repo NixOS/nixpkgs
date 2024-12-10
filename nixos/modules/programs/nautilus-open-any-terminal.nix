@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.nautilus-open-any-terminal;
@@ -24,13 +29,18 @@ in
     ];
     programs.dconf = lib.optionalAttrs (cfg.terminal != null) {
       enable = true;
-      profiles.user.databases = [{
-        settings."com/github/stunkymonkey/nautilus-open-any-terminal".terminal = cfg.terminal;
-        lockAll = true;
-      }];
+      profiles.user.databases = [
+        {
+          settings."com/github/stunkymonkey/nautilus-open-any-terminal".terminal = cfg.terminal;
+          lockAll = true;
+        }
+      ];
     };
   };
   meta = {
-    maintainers = with lib.maintainers; [ stunkymonkey linsui ];
+    maintainers = with lib.maintainers; [
+      stunkymonkey
+      linsui
+    ];
   };
 }

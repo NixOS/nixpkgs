@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
-, curl
-, gtkmm3
-, glibmm
-, gnutls
-, yajl
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  curl,
+  gtkmm3,
+  glibmm,
+  gnutls,
+  yajl,
+  pkg-config,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "samrewritten";

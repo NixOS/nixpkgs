@@ -1,18 +1,19 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3
-, glibcLocales
-, gobject-introspection
-, wrapGAppsHook3
-, gtk3
-, keybinder3
-, libnotify
-, libutempter
-, vte
-, libwnck
-, dconf
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
+  glibcLocales,
+  gobject-introspection,
+  wrapGAppsHook3,
+  gtk3,
+  keybinder3,
+  libnotify,
+  libutempter,
+  vte,
+  libwnck,
+  dconf,
+  nixosTests,
 }:
 
 python3.pkgs.buildPythonApplication rec {

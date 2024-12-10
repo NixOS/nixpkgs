@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, python3
-, snagboot
-, testers
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pythonRelaxDepsHook,
+  python3,
+  snagboot,
+  testers,
+  gitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication rec {

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, mpi, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mpi,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lwgrp";
@@ -11,7 +17,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-f0tYn9FbrOz8iMoG8Is8vYDNfYHTfxLKNnyxJA+Msdk=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 

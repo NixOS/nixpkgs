@@ -1,36 +1,37 @@
-{ lib
-, stdenv
-, bash-completion
-, fetchurl
-, fetchpatch
-, gdbm
-, glib
-, gst_all_1
-, gsettings-desktop-schemas
-, gtk-vnc
-, gtk3
-, intltool
-, libcap
-, libgovirt
+{
+  lib,
+  stdenv,
+  bash-completion,
+  fetchurl,
+  fetchpatch,
+  gdbm,
+  glib,
+  gst_all_1,
+  gsettings-desktop-schemas,
+  gtk-vnc,
+  gtk3,
+  intltool,
+  libcap,
+  libgovirt,
   # Currently unsupported. According to upstream, libgovirt is for a very narrow
   # use-case and we don't currently cover it in Nixpkgs. It's safe to disable.
   # https://gitlab.com/virt-viewer/virt-viewer/-/issues/100#note_1265011223
   # Can be enabled again once this is merged:
   # https://gitlab.com/virt-viewer/virt-viewer/-/merge_requests/129
-, ovirtSupport ? false
-, libvirt
-, libvirt-glib
-, libxml2
-, meson
-, ninja
-, pkg-config
-, python3
-, shared-mime-info
-, spice-gtk
-, spice-protocol
-, spiceSupport ? true
-, vte
-, wrapGAppsHook3
+  ovirtSupport ? false,
+  libvirt,
+  libvirt-glib,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  shared-mime-info,
+  spice-gtk,
+  spice-protocol,
+  spiceSupport ? true,
+  vte,
+  wrapGAppsHook3,
 }:
 
 with lib;
@@ -64,27 +65,33 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    bash-completion
-    glib
-    gsettings-desktop-schemas
-    gtk-vnc
-    gtk3
-    libvirt
-    libvirt-glib
-    libxml2
-    vte
-  ] ++ optionals ovirtSupport [
-    libgovirt
-  ] ++ optionals spiceSupport ([
-    gdbm
-    spice-gtk
-    spice-protocol
-  ] ++ optionals stdenv.isLinux [
-    libcap
-  ]);
+  buildInputs =
+    [
+      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-good
+      bash-completion
+      glib
+      gsettings-desktop-schemas
+      gtk-vnc
+      gtk3
+      libvirt
+      libvirt-glib
+      libxml2
+      vte
+    ]
+    ++ optionals ovirtSupport [
+      libgovirt
+    ]
+    ++ optionals spiceSupport (
+      [
+        gdbm
+        spice-gtk
+        spice-protocol
+      ]
+      ++ optionals stdenv.isLinux [
+        libcap
+      ]
+    );
 
   # Required for USB redirection PolicyKit rules file
   propagatedUserEnvPkgs = optional spiceSupport spice-gtk;
@@ -101,7 +108,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A viewer for remote virtual machines";
-    maintainers = with maintainers; [ raskin atemu ];
+    maintainers = with maintainers; [
+      raskin
+      atemu
+    ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.gpl2;
   };

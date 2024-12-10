@@ -1,12 +1,13 @@
-{ cereal_1_3_2
-, cmake
-, fetchFromGitHub
-, fetchFromGitLab
-, glfw
-, glm
-, lib
-, spdlog
-, stdenv
+{
+  cereal_1_3_2,
+  cmake,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  glfw,
+  glm,
+  lib,
+  spdlog,
+  stdenv,
 }:
 
 let
@@ -127,7 +128,8 @@ let
 
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "mujoco";
   version = "3.1.5";
 
@@ -182,7 +184,10 @@ in stdenv.mkDerivation rec {
     homepage = "https://mujoco.org/";
     changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ samuela tmplt ];
+    maintainers = with maintainers; [
+      samuela
+      tmplt
+    ];
     broken = stdenv.isDarwin;
   };
 }

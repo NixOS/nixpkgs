@@ -1,24 +1,27 @@
-{ mkDerivation
-, cmake
-, fetchFromGitLab
-, nix-update-script
-, gst_all_1
-, lib
-, libpulseaudio
-, ninja
-, pcre
-, pkg-config
-, qtbase
-, qttools
-, taglib
-, zlib
-, python3
+{
+  mkDerivation,
+  cmake,
+  fetchFromGitLab,
+  nix-update-script,
+  gst_all_1,
+  lib,
+  libpulseaudio,
+  ninja,
+  pcre,
+  pkg-config,
+  qtbase,
+  qttools,
+  taglib,
+  zlib,
+  python3,
 }:
 
 let
-  py = python3.withPackages (ps: with ps; [
-    pydbus
-  ]);
+  py = python3.withPackages (
+    ps: with ps; [
+      pydbus
+    ]
+  );
 in
 mkDerivation rec {
   pname = "sayonara";
@@ -31,23 +34,29 @@ mkDerivation rec {
     sha256 = "sha256-tJ/8tGNkmTwWRCpPy/h85SP/6QDAgcaKWJdM5MSAXJw=";
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config qttools ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    qttools
+  ];
 
-  buildInputs = [
-    libpulseaudio
-    pcre
-    qtbase
-    taglib
-    zlib
-    py
-  ]
-  ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-  ]);
+  buildInputs =
+    [
+      libpulseaudio
+      pcre
+      qtbase
+      taglib
+      zlib
+      py
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+    ]);
 
   # we carry the patched taglib 1.11.1 that doesn't break ogg but sayonara just
   # checks for the version

@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, cln, pkg-config, readline, gmp, python3 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cln,
+  pkg-config,
+  readline,
+  gmp,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ginac";
@@ -11,10 +20,12 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ cln ];
 
-  buildInputs = [ readline ]
-    ++ lib.optional stdenv.isDarwin gmp;
+  buildInputs = [ readline ] ++ lib.optional stdenv.isDarwin gmp;
 
-  nativeBuildInputs = [ pkg-config python3 ];
+  nativeBuildInputs = [
+    pkg-config
+    python3
+  ];
 
   strictDeps = true;
 

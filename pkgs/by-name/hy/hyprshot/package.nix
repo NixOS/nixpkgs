@@ -1,13 +1,14 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, hyprland
-, jq
-, grim
-, slurp
-, wl-clipboard
-, libnotify
-, makeWrapper
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  hyprland,
+  jq,
+  grim,
+  slurp,
+  wl-clipboard,
+  libnotify,
+  makeWrapper,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -28,9 +29,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     install -Dm755 hyprshot -t "$out/bin"
     wrapProgram "$out/bin/hyprshot" \
-      --prefix PATH ":" ${lib.makeBinPath [
-          hyprland jq grim slurp wl-clipboard libnotify
-        ]}
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          hyprland
+          jq
+          grim
+          slurp
+          wl-clipboard
+          libnotify
+        ]
+      }
 
     runHook postInstall
   '';

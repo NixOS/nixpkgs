@@ -1,44 +1,45 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, runtimeShell
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, dde-qt-dbus-factory
-, docparser
-, dde-dock
-, cmake
-, qttools
-, qtx11extras
-, qtmultimedia
-, kcodecs
-, pkg-config
-, ffmpegthumbnailer
-, libsecret
-, libmediainfo
-, mediainfo
-, libzen
-, poppler
-, polkit-qt
-, polkit
-, wrapQtAppsHook
-, wrapGAppsHook3
-, lucenepp
-, boost
-, taglib
-, cryptsetup
-, glib
-, qtbase
-, util-dfm
-, deepin-pdfium
-, libuuid
-, libselinux
-, glibmm
-, pcre
-, udisks2
-, libisoburn
-, gsettings-qt
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  runtimeShell,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  dde-qt-dbus-factory,
+  docparser,
+  dde-dock,
+  cmake,
+  qttools,
+  qtx11extras,
+  qtmultimedia,
+  kcodecs,
+  pkg-config,
+  ffmpegthumbnailer,
+  libsecret,
+  libmediainfo,
+  mediainfo,
+  libzen,
+  poppler,
+  polkit-qt,
+  polkit,
+  wrapQtAppsHook,
+  wrapGAppsHook3,
+  lucenepp,
+  boost,
+  taglib,
+  cryptsetup,
+  glib,
+  qtbase,
+  util-dfm,
+  deepin-pdfium,
+  libuuid,
+  libselinux,
+  glibmm,
+  pcre,
+  udisks2,
+  libisoburn,
+  gsettings-qt,
 }:
 
 stdenv.mkDerivation rec {
@@ -148,4 +149,3 @@ stdenv.mkDerivation rec {
     maintainers = teams.deepin.members;
   };
 }
-

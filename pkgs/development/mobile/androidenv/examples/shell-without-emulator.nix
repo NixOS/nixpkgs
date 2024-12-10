@@ -3,7 +3,8 @@
 
   # If you copy this example out of nixpkgs, use these lines instead of the next.
   # This example pins nixpkgs: https://nix.dev/tutorials/towards-reproducibility-pinning-nixpkgs.html
-  /*nixpkgsSource ? (builtins.fetchTarball {
+  /*
+    nixpkgsSource ? (builtins.fetchTarball {
     name = "nixpkgs-20.09";
     url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
     sha256 = "1wg61h4gndm3vcprdcg7rc4s1v3jkm5xd7lw8r2f67w502y94gcy";
@@ -16,8 +17,8 @@
   # If you want to use the in-tree version of nixpkgs:
   pkgs ? import ../../../../.. {
     config.allowUnfree = true;
-  }
-, config ? pkgs.config
+  },
+  config ? pkgs.config,
 }:
 
 # Copy this file to your Android project.
@@ -34,7 +35,8 @@ let
   };
 
   # If you copy this example out of nixpkgs, something like this will work:
-  /*androidEnvNixpkgs = fetchTarball {
+  /*
+    androidEnvNixpkgs = fetchTarball {
     name = "androidenv";
     url = "https://github.com/NixOS/nixpkgs/archive/<fill me in from Git>.tar.gz";
     sha256 = "<fill me in with nix-prefetch-url --unpack>";
@@ -43,7 +45,8 @@ let
     androidEnv = pkgs.callPackage "${androidEnvNixpkgs}/pkgs/development/mobile/androidenv" {
     inherit config pkgs;
     licenseAccepted = true;
-    };*/
+    };
+  */
 
   # Otherwise, just use the in-tree androidenv:
   androidEnv = pkgs.callPackage ./.. {
@@ -85,7 +88,12 @@ let
 in
 pkgs.mkShell rec {
   name = "androidenv-example-without-emulator-demo";
-  packages = [ androidSdk platformTools jdk pkgs.android-studio ];
+  packages = [
+    androidSdk
+    platformTools
+    jdk
+    pkgs.android-studio
+  ];
 
   LANG = "C.UTF-8";
   LC_ALL = "C.UTF-8";
@@ -104,49 +112,58 @@ pkgs.mkShell rec {
 
   passthru.tests = {
 
-    shell-without-emulator-sdkmanager-packages-test = pkgs.runCommand "shell-without-emulator-sdkmanager-packages-test"
-      {
-        nativeBuildInputs = [ androidSdk jdk ];
-      } ''
-      output="$(sdkmanager --list)"
-      installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
-      echo "installed_packages_section: ''${installed_packages_section}"
+    shell-without-emulator-sdkmanager-packages-test =
+      pkgs.runCommand "shell-without-emulator-sdkmanager-packages-test"
+        {
+          nativeBuildInputs = [
+            androidSdk
+            jdk
+          ];
+        }
+        ''
+          output="$(sdkmanager --list)"
+          installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
+          echo "installed_packages_section: ''${installed_packages_section}"
 
-      packages=(
-        "build-tools;34.0.0" "cmdline-tools;11.0" \
-        "patcher;v4" "platform-tools" "platforms;android-34"
-      )
+          packages=(
+            "build-tools;34.0.0" "cmdline-tools;11.0" \
+            "patcher;v4" "platform-tools" "platforms;android-34"
+          )
 
-      for package in "''${packages[@]}"; do
-        if [[ ! $installed_packages_section =~ "$package" ]]; then
-          echo "$package package was not installed."
-          exit 1
-        fi
-      done
+          for package in "''${packages[@]}"; do
+            if [[ ! $installed_packages_section =~ "$package" ]]; then
+              echo "$package package was not installed."
+              exit 1
+            fi
+          done
 
-      touch "$out"
-    '';
+          touch "$out"
+        '';
 
-    shell-without-emulator-sdkmanager-excluded-packages-test = pkgs.runCommand "shell-without-emulator-sdkmanager-excluded-packages-test"
-      {
-        nativeBuildInputs = [ androidSdk jdk ];
-      } ''
-      output="$(sdkmanager --list)"
-      installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
+    shell-without-emulator-sdkmanager-excluded-packages-test =
+      pkgs.runCommand "shell-without-emulator-sdkmanager-excluded-packages-test"
+        {
+          nativeBuildInputs = [
+            androidSdk
+            jdk
+          ];
+        }
+        ''
+          output="$(sdkmanager --list)"
+          installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
 
-      excluded_packages=(
-        "emulator" "ndk"
-      )
+          excluded_packages=(
+            "emulator" "ndk"
+          )
 
-      for package in "''${excluded_packages[@]}"; do
-        if [[ $installed_packages_section =~ "$package" ]]; then
-          echo "$package package was installed, while it was excluded!"
-          exit 1
-        fi
-      done
+          for package in "''${excluded_packages[@]}"; do
+            if [[ $installed_packages_section =~ "$package" ]]; then
+              echo "$package package was installed, while it was excluded!"
+              exit 1
+            fi
+          done
 
-      touch "$out"
-    '';
+          touch "$out"
+        '';
   };
 }
-

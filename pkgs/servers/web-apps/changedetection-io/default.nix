@@ -1,70 +1,65 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
-  version = "0.45.22";
+  version = "0.47.06";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
     rev = "refs/tags/${version}";
-    hash = "sha256-q8Cflu5rYmV//l0MGM4LOep5v/tEHYm2u0A1E5k9kLk=";
+    hash = "sha256-kRoHCnXYWG09lrIiBA14OzhtbTqghXck5JXXNAMMtyc=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "apprise~=1.7.4" "apprise" \
-      --replace "cryptography~=3.4" "cryptography" \
-      --replace "dnspython~=2.4" "dnspython" \
-      --replace "pytest ~=7.2" "" \
-      --replace "pytest-flask ~=1.2" "" \
-      --replace "selenium~=4.14.0" "selenium" \
-      --replace "werkzeug~=3.0" "werkzeug"
-  '';
+  pythonRelaxDeps = true;
 
-  propagatedBuildInputs = with python3.pkgs; [
-    apprise
-    beautifulsoup4
-    brotli
-    chardet
-    cryptography
-    dnspython
-    eventlet
-    feedgen
-    flask
-    flask-compress
-    flask-cors
-    flask-expects-json
-    flask-login
-    flask-paginate
-    flask-restful
-    flask-wtf
-    inscriptis
-    jinja2
-    jinja2-time
-    jsonpath-ng
-    jq
-    loguru
-    lxml
-    paho-mqtt
-    pillow
-    playwright
-    pyee
-    pyppeteer
-    pytz
-    requests
-    selenium
-    setuptools
-    timeago
-    urllib3
-    validators
-    werkzeug
-    wtforms
-  ] ++ requests.optional-dependencies.socks;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      apprise
+      beautifulsoup4
+      brotli
+      chardet
+      cryptography
+      dnspython
+      eventlet
+      feedgen
+      flask
+      flask-compress
+      flask-cors
+      flask-expects-json
+      flask-login
+      flask-paginate
+      flask-restful
+      flask-wtf
+      inscriptis
+      jinja2
+      jinja2-time
+      jsonpath-ng
+      jq
+      loguru
+      lxml
+      paho-mqtt
+      pillow
+      playwright
+      pyee
+      pyppeteer
+      pytz
+      requests
+      selenium
+      setuptools
+      timeago
+      urllib3
+      validators
+      werkzeug
+      wtforms
+    ]
+    ++ requests.optional-dependencies.socks;
 
   # tests can currently not be run in one pytest invocation and without docker
   doCheck = false;

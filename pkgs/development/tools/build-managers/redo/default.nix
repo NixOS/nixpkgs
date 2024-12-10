@@ -1,4 +1,9 @@
-{lib, stdenv, fetchFromGitHub, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "redo";
@@ -10,7 +15,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-cA8UN4aQnJ8VyMW3mDOIPna4Ucw1kp8CirZTDhSoCpU=";
   };
 
-  nativeBuildInputs = [ perl /* for pod2man */ ];
+  nativeBuildInputs = [
+    perl # for pod2man
+  ];
 
   buildPhase = ''
     package/compile

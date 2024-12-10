@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "safecopy";
@@ -12,14 +16,14 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Data recovery tool for damaged hardware";
 
-    longDescription =
-      '' Safecopy is a data recovery tool which tries to extract as much data as possible from a
-         problematic (i.e. damaged sectors) source - like floppy drives, hard disk partitions, CDs,
-         tape devices, etc, where other tools like dd would fail due to I/O errors.
+    longDescription = ''
+      Safecopy is a data recovery tool which tries to extract as much data as possible from a
+              problematic (i.e. damaged sectors) source - like floppy drives, hard disk partitions, CDs,
+              tape devices, etc, where other tools like dd would fail due to I/O errors.
 
-         Safecopy includes a low level IO layer to read CDROM disks in raw mode, and issue device
-         resets and other helpful low level operations on a number of other device classes.
-       '';
+              Safecopy includes a low level IO layer to read CDROM disks in raw mode, and issue device
+              resets and other helpful low level operations on a number of other device classes.
+    '';
 
     homepage = "https://safecopy.sourceforge.net";
 

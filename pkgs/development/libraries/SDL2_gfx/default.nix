@@ -1,4 +1,12 @@
-{ lib, stdenv, darwin, fetchurl, pkg-config, SDL2, testers }:
+{
+  lib,
+  stdenv,
+  darwin,
+  fetchurl,
+  pkg-config,
+  SDL2,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_gfx";
@@ -11,11 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ SDL2 ]
-    ++ lib.optional stdenv.isDarwin darwin.libobjc;
+  buildInputs = [ SDL2 ] ++ lib.optional stdenv.isDarwin darwin.libobjc;
 
-  configureFlags = [(if stdenv.hostPlatform.isx86 then "--enable-mmx" else "--disable-mmx")]
-     ++ lib.optional stdenv.isDarwin "--disable-sdltest";
+  configureFlags = [
+    (if stdenv.hostPlatform.isx86 then "--enable-mmx" else "--disable-mmx")
+  ] ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
   passthru.tests.pkg-config = testers.hasPkgConfigModules {
     package = finalAttrs.finalPackage;

@@ -1,6 +1,11 @@
 # GNOME Keyring daemon.
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
 
@@ -28,14 +33,16 @@
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf config.services.gnome.gnome-keyring.enable {
 
     environment.systemPackages = [ pkgs.gnome.gnome-keyring ];
 
-    services.dbus.packages = [ pkgs.gnome.gnome-keyring pkgs.gcr ];
+    services.dbus.packages = [
+      pkgs.gnome.gnome-keyring
+      pkgs.gcr
+    ];
 
     xdg.portal.extraPortals = [ pkgs.gnome.gnome-keyring ];
 

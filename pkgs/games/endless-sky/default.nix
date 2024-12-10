@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, libpng
-, libjpeg
-, glew
-, openal
-, scons
-, libmad
-, libuuid
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  libpng,
+  libjpeg,
+  glew,
+  openal,
+  scons,
+  libmad,
+  libuuid,
 }:
 
 stdenv.mkDerivation rec {
@@ -63,7 +64,10 @@ stdenv.mkDerivation rec {
       cc-by-sa-40
       publicDomain
     ];
-    maintainers = with maintainers; [ lheckemann _360ied ];
+    maintainers = with maintainers; [
+      lheckemann
+      _360ied
+    ];
     platforms = platforms.linux; # Maybe other non-darwin Unix
   };
 }

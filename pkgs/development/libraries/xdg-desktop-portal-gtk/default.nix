@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, xdg-desktop-portal
-, gtk3
-, gnome
-, gnome-desktop
-, glib
-, wrapGAppsHook3
-, gsettings-desktop-schemas
-, buildPortalsInGnome ? true
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  xdg-desktop-portal,
+  gtk3,
+  gnome,
+  gnome-desktop,
+  glib,
+  wrapGAppsHook3,
+  gsettings-desktop-schemas,
+  buildPortalsInGnome ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,15 +33,17 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    glib
-    gtk3
-    xdg-desktop-portal
-  ] ++ lib.optionals buildPortalsInGnome [
-    gsettings-desktop-schemas # settings exposed by settings portal
-    gnome-desktop
-    gnome.gnome-settings-daemon # schemas needed for settings api (mostly useless now that fonts were moved to g-d-s, just mouse and xsettings)
-  ];
+  buildInputs =
+    [
+      glib
+      gtk3
+      xdg-desktop-portal
+    ]
+    ++ lib.optionals buildPortalsInGnome [
+      gsettings-desktop-schemas # settings exposed by settings portal
+      gnome-desktop
+      gnome.gnome-settings-daemon # schemas needed for settings api (mostly useless now that fonts were moved to g-d-s, just mouse and xsettings)
+    ];
 
   mesonFlags = lib.optionals (!buildPortalsInGnome) [
     "-Dwallpaper=disabled"

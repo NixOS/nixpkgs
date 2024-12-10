@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libfreeaptx";
@@ -11,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-eEUhOrKqb2hHWanY+knpY9FBEnjkkFTB+x6BZgMBpbo=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile \

@@ -1,4 +1,12 @@
-{ lib, stdenv, buildPythonApplication, fetchFromGitHub, python3Packages, pyqtwebengine, lilypond }:
+{
+  lib,
+  stdenv,
+  buildPythonApplication,
+  fetchFromGitHub,
+  python3Packages,
+  pyqtwebengine,
+  lilypond,
+}:
 
 buildPythonApplication rec {
   pname = "frescobaldi";

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, wxGTK32
-, boost
-, lua
-, zlib
-, bzip2
-, xylib
-, readline
-, gnuplot
-, swig3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  wxGTK32,
+  boost,
+  lua,
+  zlib,
+  bzip2,
+  xylib,
+  readline,
+  gnuplot,
+  swig3,
 }:
 
 stdenv.mkDerivation rec {

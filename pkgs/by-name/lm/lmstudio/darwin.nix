@@ -1,10 +1,11 @@
-{ stdenv
-, fetchurl
-, undmg
-, lib
-, meta
-, pname
-, version
+{
+  stdenv,
+  fetchurl,
+  undmg,
+  lib,
+  meta,
+  pname,
+  version,
 }:
 stdenv.mkDerivation {
   inherit meta pname version;
@@ -25,4 +26,3 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 }
-

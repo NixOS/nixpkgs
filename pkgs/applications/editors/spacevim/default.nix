@@ -1,15 +1,16 @@
-{ ripgrep
-, git
-, fzf
-, makeWrapper
-, vim-full
-, vimPlugins
-, fetchFromGitHub
-, lib
-, stdenv
-, formats
-, runCommand
-, spacevim_config ? import ./init.nix
+{
+  ripgrep,
+  git,
+  fzf,
+  makeWrapper,
+  vim-full,
+  vimPlugins,
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  formats,
+  runCommand,
+  spacevim_config ? import ./init.nix,
 }:
 
 let
@@ -19,7 +20,9 @@ let
     # Not clear at the moment how to import plugins such that
     # SpaceVim finds them and does not auto download them to
     # ~/.cache/vimfiles/repos
-    vimrcConfig.packages.myVimPackage = with vimPlugins; { start = [ ]; };
+    vimrcConfig.packages.myVimPackage = with vimPlugins; {
+      start = [ ];
+    };
   };
   spacevimdir = runCommand "SpaceVim.d" { } ''
     mkdir -p $out
@@ -36,7 +39,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:11snnh5q47nqhzjb9qya6hpnmlzc060958whqvqrh4hc7gnlnqp8";
   };
 
-  nativeBuildInputs = [ makeWrapper vim-customized ];
+  nativeBuildInputs = [
+    makeWrapper
+    vim-customized
+  ];
   buildInputs = [ vim-customized ];
 
   buildPhase = ''
@@ -60,7 +66,13 @@ stdenv.mkDerivation rec {
     # trailing slash very important for SPACEVIMDIR
     makeWrapper "${vim-customized}/bin/vim" "$out/bin/spacevim" \
         --add-flags "-u $out/SpaceVim/vimrc" --set SPACEVIMDIR "${spacevimdir}/" \
-        --prefix PATH : ${lib.makeBinPath [ fzf git ripgrep]}
+        --prefix PATH : ${
+          lib.makeBinPath [
+            fzf
+            git
+            ripgrep
+          ]
+        }
     runHook postInstall
   '';
 

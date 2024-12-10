@@ -1,57 +1,59 @@
-{ stdenv
-, lib
-, nix
-, perlPackages
-, buildEnv
-, makeWrapper
-, unzip
-, pkg-config
-, libpqxx
-, top-git
-, mercurial
-, darcs
-, subversion
-, breezy
-, openssl
-, bzip2
-, libxslt
-, perl
-, postgresql
-, prometheus-cpp
-, nukeReferences
-, git
-, nlohmann_json
-, docbook_xsl
-, openssh
-, openldap
-, gnused
-, coreutils
-, findutils
-, gzip
-, xz
-, gnutar
-, rpm
-, dpkg
-, cdrkit
-, pixz
-, boost
-, autoreconfHook
-, mdbook
-, foreman
-, python3
-, libressl
-, cacert
-, glibcLocales
-, fetchFromGitHub
-, fetchpatch2
-, nixosTests
+{
+  stdenv,
+  lib,
+  nix,
+  perlPackages,
+  buildEnv,
+  makeWrapper,
+  unzip,
+  pkg-config,
+  libpqxx,
+  top-git,
+  mercurial,
+  darcs,
+  subversion,
+  breezy,
+  openssl,
+  bzip2,
+  libxslt,
+  perl,
+  postgresql,
+  prometheus-cpp,
+  nukeReferences,
+  git,
+  nlohmann_json,
+  docbook_xsl,
+  openssh,
+  openldap,
+  gnused,
+  coreutils,
+  findutils,
+  gzip,
+  xz,
+  gnutar,
+  rpm,
+  dpkg,
+  cdrkit,
+  pixz,
+  boost,
+  autoreconfHook,
+  mdbook,
+  foreman,
+  python3,
+  libressl,
+  cacert,
+  glibcLocales,
+  fetchFromGitHub,
+  fetchpatch2,
+  nixosTests,
 }:
 
 let
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
-    paths = with perlPackages; lib.closePropagation
-      [
+    paths =
+      with perlPackages;
+      lib.closePropagation [
         AuthenSASL
         CatalystActionREST
         CatalystAuthenticationStoreDBIxClass
@@ -173,7 +175,12 @@ stdenv.mkDerivation rec {
       darcs
       gnused
       breezy
-    ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ]
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      rpm
+      dpkg
+      cdrkit
+    ]
   );
 
   nativeBuildInputs = [
@@ -265,6 +272,12 @@ stdenv.mkDerivation rec {
     homepage = "https://nixos.org/hydra";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lheckemann mindavi ] ++ teams.helsinki-systems.members;
+    maintainers =
+      with maintainers;
+      [
+        lheckemann
+        mindavi
+      ]
+      ++ teams.helsinki-systems.members;
   };
 }

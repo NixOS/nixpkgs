@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, postgresqlTestHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  postgresqlTestHook,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pg_squeeze";
@@ -7,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cybertec-postgresql";
     repo = "pg_squeeze";
-    rev = "REL${builtins.replaceStrings ["."] ["_"] finalAttrs.version}";
+    rev = "REL${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-YS13iIpQ4NJe0N6bRVa2RDxEMwEzBc2mjNYM5/Vqjn8=";
   };
 
@@ -29,7 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
     name = "pg_squeeze-test";
     dontUnpack = true;
     doCheck = true;
-    nativeCheckInputs = [ postgresqlTestHook (postgresql.withPackages (_: [ finalAttrs.finalPackage ])) ];
+    nativeCheckInputs = [
+      postgresqlTestHook
+      (postgresql.withPackages (_: [ finalAttrs.finalPackage ]))
+    ];
     failureHook = "postgresqlStop";
     postgresqlTestUserOptions = "LOGIN SUPERUSER";
     postgresqlExtraSettings = ''

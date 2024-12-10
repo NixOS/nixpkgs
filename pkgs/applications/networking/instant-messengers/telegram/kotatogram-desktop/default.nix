@@ -1,68 +1,69 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, callPackage
-, pkg-config
-, cmake
-, ninja
-, clang
-, python3
-, wrapQtAppsHook
-, removeReferencesTo
-, extra-cmake-modules
-, qtbase
-, qtimageformats
-, qtsvg
-, kwayland
-, lz4
-, xxHash
-, ffmpeg_4
-, openalSoft
-, minizip
-, libopus
-, alsa-lib
-, libpulseaudio
-, range-v3
-, tl-expected
-, hunspell
-, glibmm
-, jemalloc
-, rnnoise
-, abseil-cpp
-, microsoft-gsl
-, wayland
-, libicns
-, Cocoa
-, CoreFoundation
-, CoreServices
-, CoreText
-, CoreGraphics
-, CoreMedia
-, OpenGL
-, AudioUnit
-, ApplicationServices
-, Foundation
-, AGL
-, Security
-, SystemConfiguration
-, Carbon
-, AudioToolbox
-, VideoToolbox
-, VideoDecodeAcceleration
-, AVFoundation
-, CoreAudio
-, CoreVideo
-, CoreMediaIO
-, QuartzCore
-, AppKit
-, CoreWLAN
-, WebKit
-, IOKit
-, GSS
-, MediaPlayer
-, IOSurface
-, Metal
-, MetalKit
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  callPackage,
+  pkg-config,
+  cmake,
+  ninja,
+  clang,
+  python3,
+  wrapQtAppsHook,
+  removeReferencesTo,
+  extra-cmake-modules,
+  qtbase,
+  qtimageformats,
+  qtsvg,
+  kwayland,
+  lz4,
+  xxHash,
+  ffmpeg_4,
+  openalSoft,
+  minizip,
+  libopus,
+  alsa-lib,
+  libpulseaudio,
+  range-v3,
+  tl-expected,
+  hunspell,
+  glibmm,
+  jemalloc,
+  rnnoise,
+  abseil-cpp,
+  microsoft-gsl,
+  wayland,
+  libicns,
+  Cocoa,
+  CoreFoundation,
+  CoreServices,
+  CoreText,
+  CoreGraphics,
+  CoreMedia,
+  OpenGL,
+  AudioUnit,
+  ApplicationServices,
+  Foundation,
+  AGL,
+  Security,
+  SystemConfiguration,
+  Carbon,
+  AudioToolbox,
+  VideoToolbox,
+  VideoDecodeAcceleration,
+  AVFoundation,
+  CoreAudio,
+  CoreVideo,
+  CoreMediaIO,
+  QuartzCore,
+  AppKit,
+  CoreWLAN,
+  WebKit,
+  IOKit,
+  GSS,
+  MediaPlayer,
+  IOSurface,
+  Metal,
+  MetalKit,
 }:
 
 let
@@ -76,8 +77,23 @@ let
     # tg_owt should use the same compiler
     inherit stdenv;
 
-    inherit Cocoa AppKit IOKit IOSurface Foundation AVFoundation CoreMedia VideoToolbox
-      CoreGraphics CoreVideo OpenGL Metal MetalKit CoreFoundation ApplicationServices;
+    inherit
+      Cocoa
+      AppKit
+      IOKit
+      IOSurface
+      Foundation
+      AVFoundation
+      CoreMedia
+      VideoToolbox
+      CoreGraphics
+      CoreVideo
+      OpenGL
+      Metal
+      MetalKit
+      CoreFoundation
+      ApplicationServices
+      ;
   };
 in
 stdenv.mkDerivation rec {
@@ -97,91 +113,98 @@ stdenv.mkDerivation rec {
     ./shortcuts-binary-path.patch
   ];
 
-  postPatch = lib.optionalString stdenv.isLinux ''
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
-      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
-      --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
-      --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
-  '' + lib.optionalString stdenv.isDarwin ''
-    sed -i "13i#import <CoreAudio/CoreAudio.h>" Telegram/lib_webrtc/webrtc/mac/webrtc_media_devices_mac.mm
-    substituteInPlace Telegram/CMakeLists.txt \
-      --replace 'COMMAND iconutil' 'COMMAND png2icns' \
-      --replace '--convert icns' "" \
-      --replace '--output AppIcon.icns' 'AppIcon.icns' \
-      --replace "\''${appicon_path}" "\''${appicon_path}/icon_16x16.png \''${appicon_path}/icon_32x32.png \''${appicon_path}/icon_128x128.png \''${appicon_path}/icon_256x256.png \''${appicon_path}/icon_512x512.png"
-  '';
+  postPatch =
+    lib.optionalString stdenv.isLinux ''
+      substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
+        --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+      substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
+        --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
+      substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
+        --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      sed -i "13i#import <CoreAudio/CoreAudio.h>" Telegram/lib_webrtc/webrtc/mac/webrtc_media_devices_mac.mm
+      substituteInPlace Telegram/CMakeLists.txt \
+        --replace 'COMMAND iconutil' 'COMMAND png2icns' \
+        --replace '--convert icns' "" \
+        --replace '--output AppIcon.icns' 'AppIcon.icns' \
+        --replace "\''${appicon_path}" "\''${appicon_path}/icon_16x16.png \''${appicon_path}/icon_32x32.png \''${appicon_path}/icon_128x128.png \''${appicon_path}/icon_256x256.png \''${appicon_path}/icon_512x512.png"
+    '';
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    ninja
-    python3
-    wrapQtAppsHook
-    removeReferencesTo
-  ] ++ lib.optionals stdenv.isLinux [
-    # to build bundled libdispatch
-    clang
-    extra-cmake-modules
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      cmake
+      ninja
+      python3
+      wrapQtAppsHook
+      removeReferencesTo
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      # to build bundled libdispatch
+      clang
+      extra-cmake-modules
+    ];
 
-  buildInputs = [
-    qtbase
-    qtimageformats
-    qtsvg
-    lz4
-    xxHash
-    ffmpeg_4
-    openalSoft
-    minizip
-    libopus
-    range-v3
-    tl-expected
-    rnnoise
-    tg_owt
-    microsoft-gsl
-  ] ++ lib.optionals stdenv.isLinux [
-    kwayland
-    alsa-lib
-    libpulseaudio
-    hunspell
-    glibmm
-    jemalloc
-    wayland
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-    CoreFoundation
-    CoreServices
-    CoreText
-    CoreGraphics
-    CoreMedia
-    OpenGL
-    AudioUnit
-    ApplicationServices
-    Foundation
-    AGL
-    Security
-    SystemConfiguration
-    Carbon
-    AudioToolbox
-    VideoToolbox
-    VideoDecodeAcceleration
-    AVFoundation
-    CoreAudio
-    CoreVideo
-    CoreMediaIO
-    QuartzCore
-    AppKit
-    CoreWLAN
-    WebKit
-    IOKit
-    GSS
-    MediaPlayer
-    IOSurface
-    Metal
-    libicns
-  ];
+  buildInputs =
+    [
+      qtbase
+      qtimageformats
+      qtsvg
+      lz4
+      xxHash
+      ffmpeg_4
+      openalSoft
+      minizip
+      libopus
+      range-v3
+      tl-expected
+      rnnoise
+      tg_owt
+      microsoft-gsl
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      kwayland
+      alsa-lib
+      libpulseaudio
+      hunspell
+      glibmm
+      jemalloc
+      wayland
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Cocoa
+      CoreFoundation
+      CoreServices
+      CoreText
+      CoreGraphics
+      CoreMedia
+      OpenGL
+      AudioUnit
+      ApplicationServices
+      Foundation
+      AGL
+      Security
+      SystemConfiguration
+      Carbon
+      AudioToolbox
+      VideoToolbox
+      VideoDecodeAcceleration
+      AVFoundation
+      CoreAudio
+      CoreVideo
+      CoreMediaIO
+      QuartzCore
+      AppKit
+      CoreWLAN
+      WebKit
+      IOKit
+      GSS
+      MediaPlayer
+      IOSurface
+      Metal
+      libicns
+    ];
 
   enableParallelBuilding = true;
 

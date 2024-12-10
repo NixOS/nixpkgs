@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libminc, bicpl, freeglut, mesa_glu, GLUT }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libminc,
+  bicpl,
+  freeglut,
+  mesa_glu,
+  GLUT,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bicgl";
@@ -14,7 +24,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libminc bicpl mesa_glu ]
+  buildInputs =
+    [
+      libminc
+      bicpl
+      mesa_glu
+    ]
     ++ lib.optionals stdenv.isDarwin [ GLUT ]
     ++ lib.optionals stdenv.isLinux [ freeglut ];
 

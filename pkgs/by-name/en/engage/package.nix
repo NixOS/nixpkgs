@@ -1,7 +1,8 @@
-{ lib
-, installShellFiles
-, rustPlatform
-, fetchFromGitLab
+{
+  lib,
+  installShellFiles,
+  rustPlatform,
+  fetchFromGitLab,
 }:
 
 let
@@ -25,24 +26,25 @@ rustPlatform.buildRustPackage {
     installShellFiles
   ];
 
-  postInstall = "installShellCompletion --cmd ${pname} "
-    + builtins.concatStringsSep
-      " "
-      (builtins.map
-        (shell: "--${shell} <($out/bin/${pname} completions ${shell})")
-        [
-          "bash"
-          "fish"
-          "zsh"
-        ]
-      );
+  postInstall =
+    "installShellCompletion --cmd ${pname} "
+    + builtins.concatStringsSep " " (
+      builtins.map (shell: "--${shell} <($out/bin/${pname} completions ${shell})") [
+        "bash"
+        "fish"
+        "zsh"
+      ]
+    );
 
   meta = {
     description = "A task runner with DAG-based parallelism";
     mainProgram = "engage";
     homepage = "https://gitlab.computer.surgery/charles/engage";
     changelog = "https://gitlab.computer.surgery/charles/engage/-/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 mit ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     maintainers = with lib.maintainers; [ CobaltCause ];
   };
 }

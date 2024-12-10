@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libffi
-, pkg-config
-, wayland-protocols
-, wayland
-, xorg
-, darwin
-, nix-update-script
-, alsa-lib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libffi,
+  pkg-config,
+  wayland-protocols,
+  wayland,
+  xorg,
+  darwin,
+  nix-update-script,
+  alsa-lib,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,15 +33,17 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    libffi
-    wayland-protocols
-    wayland
-    xorg.libX11
-    alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-  ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [
+      libffi
+      wayland-protocols
+      wayland
+      xorg.libX11
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+    ];
 
   cmakeBuildType = "MinSizeRel";
 

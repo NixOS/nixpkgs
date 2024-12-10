@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchurl, common-updater-scripts, coreutils, git, gnused
-, makeWrapper, nix, nixfmt-classic, openjdk, writeScript, nixosTests, jq, cacert
-, curl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  common-updater-scripts,
+  coreutils,
+  git,
+  gnused,
+  makeWrapper,
+  nix,
+  nixfmt-classic,
+  openjdk,
+  writeScript,
+  nixosTests,
+  jq,
+  cacert,
+  curl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jenkins";
@@ -69,8 +84,14 @@ stdenv.mkDerivation rec {
     homepage = "https://jenkins.io/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
-    maintainers = with maintainers;
-      [ coconnor earldouglas nequissimus ] ++ teams.helsinki-systems.members;
+    maintainers =
+      with maintainers;
+      [
+        coconnor
+        earldouglas
+        nequissimus
+      ]
+      ++ teams.helsinki-systems.members;
     changelog = "https://www.jenkins.io/changelog-stable/#v${version}";
     mainProgram = "jenkins-cli";
     platforms = platforms.all;

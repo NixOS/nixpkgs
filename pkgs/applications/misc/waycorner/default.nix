@@ -1,10 +1,10 @@
-{ lib
-, makeWrapper
-, rustPlatform
-, pkg-config
-, fetchFromGitHub
-, wayland
-,
+{
+  lib,
+  makeWrapper,
+  rustPlatform,
+  pkg-config,
+  fetchFromGitHub,
+  wayland,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "waycorner";

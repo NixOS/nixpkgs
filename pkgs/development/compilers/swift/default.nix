@@ -1,10 +1,11 @@
-{ lib
-, pkgs
-, newScope
-, darwin
-, llvmPackages
-, llvmPackages_15
-, overrideCC
+{
+  lib,
+  pkgs,
+  newScope,
+  darwin,
+  llvmPackages,
+  llvmPackages_15,
+  overrideCC,
 }:
 
 let
@@ -25,8 +26,8 @@ let
     #
     # The following selects the correct Clang version, matching the version
     # used in Swift, and applies the same libc overrides as `apple_sdk.stdenv`.
-    clang = if pkgs.stdenv.isDarwin
-      then
+    clang =
+      if pkgs.stdenv.isDarwin then
         swiftLlvmPackages.clang.override rec {
           libc = apple_sdk.Libsystem;
           bintools = pkgs.bintools.override { inherit libc; };
@@ -44,12 +45,25 @@ let
     # `apple_sdk_11_0.callPackage`, with our clang on top.
     inherit (clang) bintools;
     stdenv = overrideCC pkgs.stdenv clang;
-    darwin = pkgs.darwin.overrideScope (_: prev: {
-      inherit apple_sdk;
-      inherit (apple_sdk) Libsystem LibsystemCross libcharset libunwind objc4 configd IOKit Security;
-      CF = apple_sdk.CoreFoundation // { __attrsFailEvaluation = true; };
-      __attrsFailEvaluation = true;
-    });
+    darwin = pkgs.darwin.overrideScope (
+      _: prev: {
+        inherit apple_sdk;
+        inherit (apple_sdk)
+          Libsystem
+          LibsystemCross
+          libcharset
+          libunwind
+          objc4
+          configd
+          IOKit
+          Security
+          ;
+        CF = apple_sdk.CoreFoundation // {
+          __attrsFailEvaluation = true;
+        };
+        __attrsFailEvaluation = true;
+      }
+    );
     xcodebuild = pkgs.xcbuild.override {
       inherit (apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
       inherit stdenv;
@@ -68,13 +82,17 @@ let
       useSwiftDriver = false;
     };
 
-    Dispatch = if stdenv.isDarwin
-      then null # part of libsystem
-      else callPackage ./libdispatch { swift = swiftNoSwiftDriver; };
+    Dispatch =
+      if stdenv.isDarwin then
+        null # part of libsystem
+      else
+        callPackage ./libdispatch { swift = swiftNoSwiftDriver; };
 
-    Foundation = if stdenv.isDarwin
-      then apple_sdk.frameworks.Foundation
-      else callPackage ./foundation { swift = swiftNoSwiftDriver; };
+    Foundation =
+      if stdenv.isDarwin then
+        apple_sdk.frameworks.Foundation
+      else
+        callPackage ./foundation { swift = swiftNoSwiftDriver; };
 
     # TODO: Apple distributes a binary XCTest with Xcode, but it is not part of
     # CLTools (or SUS), so would have to figure out how to fetch it. The binary
@@ -110,4 +128,5 @@ let
 
   };
 
-in self
+in
+self

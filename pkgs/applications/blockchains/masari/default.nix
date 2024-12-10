@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, unbound, openssl, boost
-, lmdb, miniupnpc, readline, git, libsodium, rapidjson, cppzmq }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  unbound,
+  openssl,
+  boost,
+  lmdb,
+  miniupnpc,
+  readline,
+  git,
+  libsodium,
+  rapidjson,
+  cppzmq,
+}:
 
 stdenv.mkDerivation rec {
   pname = "masari";
@@ -21,12 +36,21 @@ stdenv.mkDerivation rec {
     sed -i "1i #include <boost/mpl/contains.hpp>" contrib/epee/include/storages/portable_storage.h
   '';
 
-  nativeBuildInputs = [ cmake pkg-config git ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    git
+  ];
 
   buildInputs = [
-    boost miniupnpc openssl unbound
-    readline libsodium
-    rapidjson cppzmq
+    boost
+    miniupnpc
+    openssl
+    unbound
+    readline
+    libsodium
+    rapidjson
+    cppzmq
   ];
 
   meta = with lib; {

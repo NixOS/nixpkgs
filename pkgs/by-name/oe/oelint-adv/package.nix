@@ -1,7 +1,8 @@
-{ lib
-, nix-update-script
-, python3
-, fetchPypi
+{
+  lib,
+  nix-update-script,
+  python3,
+  fetchPypi,
 }:
 
 python3.pkgs.buildPythonApplication rec {

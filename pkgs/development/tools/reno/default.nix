@@ -1,11 +1,13 @@
-{ lib
-, git
-, gnupg1
-, python3Packages
-, fetchPypi
+{
+  lib,
+  git,
+  gnupg1,
+  python3Packages,
+  fetchPypi,
 }:
 
-with python3Packages; buildPythonApplication rec {
+with python3Packages;
+buildPythonApplication rec {
   pname = "reno";
   version = "3.1.0";
 
@@ -19,7 +21,7 @@ with python3Packages; buildPythonApplication rec {
     dulwich
     pbr
     pyyaml
-    setuptools  # required for finding pkg_resources at runtime
+    setuptools # required for finding pkg_resources at runtime
   ];
 
   nativeCheckInputs = [
@@ -55,6 +57,9 @@ with python3Packages; buildPythonApplication rec {
     mainProgram = "reno";
     homepage = "https://docs.openstack.org/reno/latest";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger guillaumekoenig ];
+    maintainers = with maintainers; [
+      drewrisinger
+      guillaumekoenig
+    ];
   };
 }

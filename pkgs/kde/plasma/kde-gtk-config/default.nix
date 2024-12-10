@@ -11,14 +11,18 @@ mkKdeDerivation {
 
   # The gtkconfig KDED module will crash the daemon if the GSettings schemas
   # aren't found.
-  patches = [./0001-gsettings-schemas-path.patch];
+  patches = [ ./0001-gsettings-schemas-path.patch ];
   preConfigure = ''
     NIX_CFLAGS_COMPILE+=" -DGSETTINGS_SCHEMAS_PATH=\"$GSETTINGS_SCHEMAS_PATH\""
   '';
 
-  extraNativeBuildInputs = [pkg-config wrapGAppsHook3 sass];
-  extraBuildInputs = [qtsvg];
+  extraNativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+    sass
+  ];
+  extraBuildInputs = [ qtsvg ];
   dontWrapGApps = true; # There is nothing to wrap
 
-  extraCmakeFlags = ["-DGLIB_SCHEMAS_DIR=${gsettings-desktop-schemas.out}/"];
+  extraCmakeFlags = [ "-DGLIB_SCHEMAS_DIR=${gsettings-desktop-schemas.out}/" ];
 }

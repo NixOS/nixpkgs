@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "go-chromecast";
@@ -13,7 +17,13 @@ buildGoModule rec {
 
   vendorHash = "sha256-cEUlCR/xtPJJSWplV1COwV6UfzSmVArF4V0pJRk+/Og=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" "-X main.date=unknown" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.commit=${src.rev}"
+    "-X main.date=unknown"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/vishen/go-chromecast";

@@ -1,4 +1,8 @@
-{ fetchFromGitHub, python3Packages, lib }:
+{
+  fetchFromGitHub,
+  python3Packages,
+  lib,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "check_systemd";

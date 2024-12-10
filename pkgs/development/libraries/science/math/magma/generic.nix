@@ -5,30 +5,30 @@
 #  supportedGpuTargets: List String
 # }
 
-{ autoPatchelfHook
-, blas
-, cmake
-, cudaPackages_11 ? null
-, cudaPackages
-, cudaSupport ? config.cudaSupport
-, fetchurl
-, gfortran
-, gpuTargets ? [ ] # Non-CUDA targets, that is HIP
-, rocmPackages_5
-, lapack
-, lib
-, libpthreadstubs
-, magmaRelease
-, ninja
-, python3
-, config
+{
+  autoPatchelfHook,
+  blas,
+  cmake,
+  cudaPackages_11 ? null,
+  cudaPackages,
+  cudaSupport ? config.cudaSupport,
+  fetchurl,
+  gfortran,
+  gpuTargets ? [ ], # Non-CUDA targets, that is HIP
+  rocmPackages_5,
+  lapack,
+  lib,
+  libpthreadstubs,
+  magmaRelease,
+  ninja,
+  python3,
+  config,
   # At least one back-end has to be enabled,
   # and we can't default to CUDA since it's unfree
-, rocmSupport ? !cudaSupport
-, static ? stdenv.hostPlatform.isStatic
-, stdenv
+  rocmSupport ? !cudaSupport,
+  static ? stdenv.hostPlatform.isStatic,
+  stdenv,
 }:
-
 
 let
   inherit (lib) lists strings trivial;
@@ -37,9 +37,7 @@ let
   # Per https://icl.utk.edu/magma/downloads, support for CUDA 12 wasn't added until 2.7.1.
   # If we're building a version prior to that, use the latest release of the 11.x series.
   effectiveCudaPackages =
-    if strings.versionOlder version "2.7.1"
-    then cudaPackages_11
-    else cudaPackages;
+    if strings.versionOlder version "2.7.1" then cudaPackages_11 else cudaPackages;
 
   inherit (effectiveCudaPackages) cudaAtLeast cudaFlags cudaOlder;
   inherit (cudaFlags) cudaCapabilities;
@@ -63,17 +61,16 @@ let
   unsupportedCustomGpuTargets = lists.subtractLists supportedCustomGpuTargets gpuTargets;
 
   # Use trivial.warnIf to print a warning if any unsupported GPU targets are specified.
-  gpuArchWarner = supported: unsupported:
-    trivial.throwIf (supported == [ ])
-      (
-        "No supported GPU targets specified. Requested GPU targets: "
-        + strings.concatStringsSep ", " unsupported
-      )
-      supported;
+  gpuArchWarner =
+    supported: unsupported:
+    trivial.throwIf (supported == [ ]) (
+      "No supported GPU targets specified. Requested GPU targets: "
+      + strings.concatStringsSep ", " unsupported
+    ) supported;
 
   gpuTargetString = strings.concatStringsSep "," (
     if gpuTargets != [ ] then
-    # If gpuTargets is specified, it always takes priority.
+      # If gpuTargets is specified, it always takes priority.
       gpuArchWarner supportedCustomGpuTargets unsupportedCustomGpuTargets
     else if rocmSupport then
       gpuArchWarner supportedRocmArches unsupportedRocmArches
@@ -110,7 +107,10 @@ stdenv.mkDerivation {
 
   # Magma doesn't have anything which could be run under doCheck, but it does build test suite executables.
   # These are moved to $test/bin/ and $test/lib/ in postInstall.
-  outputs = ["out" "test"];
+  outputs = [
+    "out"
+    "test"
+  ];
 
   # Fixup for the python test runners
   postPatch = ''
@@ -121,60 +121,74 @@ stdenv.mkDerivation {
         "print(f\"{cmdp} doesn't exist (original name: {cmd}, precision: {precision})\", file=sys.stderr)"
   '';
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    cmake
-    ninja
-    gfortran
-  ] ++ lists.optionals cudaSupport [
-    effectiveCudaPackages.cuda_nvcc
-  ];
+  nativeBuildInputs =
+    [
+      autoPatchelfHook
+      cmake
+      ninja
+      gfortran
+    ]
+    ++ lists.optionals cudaSupport [
+      effectiveCudaPackages.cuda_nvcc
+    ];
 
-  buildInputs = [
-    libpthreadstubs
-    lapack
-    blas
-    python3
-  ] ++ lists.optionals cudaSupport (with effectiveCudaPackages; [
-    cuda_cudart.dev # cuda_runtime.h
-    cuda_cudart.lib # cudart
-    cuda_cudart.static # cudart_static
-    libcublas.dev # cublas_v2.h
-    libcublas.lib # cublas
-    libcusparse.dev # cusparse.h
-    libcusparse.lib # cusparse
-  ] ++ lists.optionals (cudaOlder "11.8") [
-    cuda_nvprof.dev # <cuda_profiler_api.h>
-  ] ++ lists.optionals (cudaAtLeast "11.8") [
-    cuda_profiler_api.dev # <cuda_profiler_api.h>
-  ] ++ lists.optionals (cudaAtLeast "12.0") [
-    cuda_cccl.dev # <nv/target>
-  ]) ++ lists.optionals rocmSupport [
-    rocmPackages.clr
-    rocmPackages.hipblas
-    rocmPackages.hipsparse
-    rocmPackages.llvm.openmp
-  ];
+  buildInputs =
+    [
+      libpthreadstubs
+      lapack
+      blas
+      python3
+    ]
+    ++ lists.optionals cudaSupport (
+      with effectiveCudaPackages;
+      [
+        cuda_cudart.dev # cuda_runtime.h
+        cuda_cudart.lib # cudart
+        cuda_cudart.static # cudart_static
+        libcublas.dev # cublas_v2.h
+        libcublas.lib # cublas
+        libcusparse.dev # cusparse.h
+        libcusparse.lib # cusparse
+      ]
+      ++ lists.optionals (cudaOlder "11.8") [
+        cuda_nvprof.dev # <cuda_profiler_api.h>
+      ]
+      ++ lists.optionals (cudaAtLeast "11.8") [
+        cuda_profiler_api.dev # <cuda_profiler_api.h>
+      ]
+      ++ lists.optionals (cudaAtLeast "12.0") [
+        cuda_cccl.dev # <nv/target>
+      ]
+    )
+    ++ lists.optionals rocmSupport [
+      rocmPackages.clr
+      rocmPackages.hipblas
+      rocmPackages.hipsparse
+      rocmPackages.llvm.openmp
+    ];
 
-  cmakeFlags = [
-    (strings.cmakeFeature "GPU_TARGET" gpuTargetString)
-    (strings.cmakeBool "MAGMA_ENABLE_CUDA" cudaSupport)
-    (strings.cmakeBool "MAGMA_ENABLE_HIP" rocmSupport)
-    (strings.cmakeBool "BUILD_SHARED_LIBS" (!static))
-    # Set the Fortran name mangling scheme explicitly. We must set FORTRAN_CONVENTION manually because it will
-    # otherwise not be set in NVCC_FLAGS or DEVCCFLAGS (which we cannot modify).
-    # See https://github.com/NixOS/nixpkgs/issues/281656#issuecomment-1902931289
-    (strings.cmakeBool "USE_FORTRAN" true)
-    (strings.cmakeFeature "CMAKE_C_FLAGS" "-DADD_")
-    (strings.cmakeFeature "CMAKE_CXX_FLAGS" "-DADD_")
-    (strings.cmakeFeature "FORTRAN_CONVENTION" "-DADD_")
-  ] ++ lists.optionals cudaSupport [
-    (strings.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
-    (strings.cmakeFeature "MIN_ARCH" minArch) # Disarms magma's asserts
-  ] ++ lists.optionals rocmSupport [
-    (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clr}/bin/hipcc")
-    (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${rocmPackages.clr}/bin/hipcc")
-  ];
+  cmakeFlags =
+    [
+      (strings.cmakeFeature "GPU_TARGET" gpuTargetString)
+      (strings.cmakeBool "MAGMA_ENABLE_CUDA" cudaSupport)
+      (strings.cmakeBool "MAGMA_ENABLE_HIP" rocmSupport)
+      (strings.cmakeBool "BUILD_SHARED_LIBS" (!static))
+      # Set the Fortran name mangling scheme explicitly. We must set FORTRAN_CONVENTION manually because it will
+      # otherwise not be set in NVCC_FLAGS or DEVCCFLAGS (which we cannot modify).
+      # See https://github.com/NixOS/nixpkgs/issues/281656#issuecomment-1902931289
+      (strings.cmakeBool "USE_FORTRAN" true)
+      (strings.cmakeFeature "CMAKE_C_FLAGS" "-DADD_")
+      (strings.cmakeFeature "CMAKE_CXX_FLAGS" "-DADD_")
+      (strings.cmakeFeature "FORTRAN_CONVENTION" "-DADD_")
+    ]
+    ++ lists.optionals cudaSupport [
+      (strings.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
+      (strings.cmakeFeature "MIN_ARCH" minArch) # Disarms magma's asserts
+    ]
+    ++ lists.optionals rocmSupport [
+      (strings.cmakeFeature "CMAKE_C_COMPILER" "${rocmPackages.clr}/bin/hipcc")
+      (strings.cmakeFeature "CMAKE_CXX_COMPILER" "${rocmPackages.clr}/bin/hipcc")
+    ];
 
   # Magma doesn't have a test suite we can easily run, just loose executables, all of which require a GPU.
   doCheck = false;

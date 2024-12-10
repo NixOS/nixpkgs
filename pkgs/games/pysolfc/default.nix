@@ -1,9 +1,10 @@
-{ lib
-, fetchzip
-, buildPythonApplication
-, python3Packages
-, desktop-file-utils
-, freecell-solver
+{
+  lib,
+  fetchzip,
+  buildPythonApplication,
+  python3Packages,
+  desktop-file-utils,
+  freecell-solver,
 }:
 
 buildPythonApplication rec {

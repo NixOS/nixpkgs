@@ -80,7 +80,9 @@ buildPythonPackage rec {
       pytest-asyncio_0_21
       pytestCheckHook
     ]
-    ++ optional-dependencies.scram ++ optional-dependencies.serialization ++ optional-dependencies.xbr;
+    ++ optional-dependencies.scram
+    ++ optional-dependencies.serialization
+    ++ optional-dependencies.xbr;
 
   preCheck = ''
     # Run asyncio tests (requires twisted)

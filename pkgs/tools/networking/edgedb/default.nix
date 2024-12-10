@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, patchelf
-, fetchFromGitHub
-, rustPlatform
-, makeBinaryWrapper
-, pkg-config
-, curl
-, Security
-, CoreServices
-, libiconv
-, xz
-, perl
-, substituteAll
-# for passthru.tests:
-, edgedb
-, testers
+{
+  stdenv,
+  lib,
+  patchelf,
+  fetchFromGitHub,
+  rustPlatform,
+  makeBinaryWrapper,
+  pkg-config,
+  curl,
+  Security,
+  CoreServices,
+  libiconv,
+  xz,
+  perl,
+  substituteAll,
+  # for passthru.tests:
+  edgedb,
+  testers,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -41,11 +42,22 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ makeBinaryWrapper pkg-config perl ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    pkg-config
+    perl
+  ];
 
-  buildInputs = [
-    curl
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security libiconv xz ];
+  buildInputs =
+    [
+      curl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreServices
+      Security
+      libiconv
+      xz
+    ];
 
   checkFeatures = [ ];
 
@@ -67,8 +79,14 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "EdgeDB cli";
     homepage = "https://www.edgedb.com/docs/cli/index";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ ahirner kirillrdy ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      ahirner
+      kirillrdy
+    ];
     mainProgram = "edgedb";
   };
 }

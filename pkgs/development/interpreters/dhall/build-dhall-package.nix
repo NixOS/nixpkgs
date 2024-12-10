@@ -1,9 +1,18 @@
-{ dhall, dhall-docs, haskell, lib, lndir, runCommand, writeText }:
+{
+  dhall,
+  dhall-docs,
+  haskell,
+  lib,
+  lndir,
+  runCommand,
+  writeText,
+}:
 
-{ name
+{
+  name,
 
   # Expressions to add to the cache before interpreting the code
-, dependencies ? []
+  dependencies ? [ ],
 
   # A Dhall expression
   #
@@ -15,7 +24,7 @@
   #
   # You can add a dependency to the cache using the preceding `dependencies`
   # option
-, code
+  code,
 
   # `buildDhallPackage` can include both a "source distribution" in
   # `source.dhall` and a "binary distribution" in `binary.dhall`:
@@ -30,19 +39,19 @@
   # By default, `buildDhallPackage` only includes "binary.dhall" to conserve
   # space within the Nix store, but if you set the following `source` option to
   # `true` then the package will also include `source.dhall`.
-, source ? false
+  source ? false,
 
   # Directory to generate documentation for (i.e. as the `--input` option to the
   # `dhall-docs` command.)
   #
   # If `null`, then no documentation is generated.
-, documentationRoot ? null
+  documentationRoot ? null,
 
   # Base URL prepended to paths copied to the clipboard
   #
   # This is used in conjunction with `documentationRoot`, and is unused if
   # `documentationRoot` is `null`.
-, baseImportUrl ? null
+  baseImportUrl ? null,
 }:
 
 let
@@ -63,40 +72,42 @@ let
   sourceFile = "source.dhall";
 
 in
-  runCommand name { inherit dependencies; } ''
-    set -eu
+runCommand name { inherit dependencies; } ''
+  set -eu
 
-    mkdir -p ${cacheDhall}
+  mkdir -p ${cacheDhall}
 
-    for dependency in $dependencies; do
-      ${lndir}/bin/lndir -silent $dependency/${cacheDhall} ${cacheDhall}
-    done
+  for dependency in $dependencies; do
+    ${lndir}/bin/lndir -silent $dependency/${cacheDhall} ${cacheDhall}
+  done
 
-    export XDG_CACHE_HOME=$PWD/${cache}
+  export XDG_CACHE_HOME=$PWD/${cache}
 
-    mkdir -p $out/${cacheDhall}
+  mkdir -p $out/${cacheDhall}
 
-    ${dhallNoHTTP}/bin/dhall --alpha --file '${file}' > $out/${sourceFile}
+  ${dhallNoHTTP}/bin/dhall --alpha --file '${file}' > $out/${sourceFile}
 
-    SHA_HASH=$(${dhallNoHTTP}/bin/dhall hash <<< $out/${sourceFile})
+  SHA_HASH=$(${dhallNoHTTP}/bin/dhall hash <<< $out/${sourceFile})
 
-    HASH_FILE="''${SHA_HASH/sha256:/1220}"
+  HASH_FILE="''${SHA_HASH/sha256:/1220}"
 
-    ${dhallNoHTTP}/bin/dhall encode --file $out/${sourceFile} > $out/${cacheDhall}/$HASH_FILE
+  ${dhallNoHTTP}/bin/dhall encode --file $out/${sourceFile} > $out/${cacheDhall}/$HASH_FILE
 
-    echo "missing $SHA_HASH" > $out/binary.dhall
+  echo "missing $SHA_HASH" > $out/binary.dhall
 
-    ${lib.optionalString (!source) "rm $out/${sourceFile}"}
+  ${lib.optionalString (!source) "rm $out/${sourceFile}"}
 
-    ${lib.optionalString (documentationRoot != null) ''
+  ${lib.optionalString (documentationRoot != null) ''
     mkdir -p $out/${dataDhall}
 
-    XDG_DATA_HOME=$out/${data} ${dhall-docs}/bin/dhall-docs --output-link $out/docs ${lib.cli.toGNUCommandLineShell { } {
-      base-import-url = baseImportUrl;
+    XDG_DATA_HOME=$out/${data} ${dhall-docs}/bin/dhall-docs --output-link $out/docs ${
+      lib.cli.toGNUCommandLineShell { } {
+        base-import-url = baseImportUrl;
 
-      input = documentationRoot;
+        input = documentationRoot;
 
-      package-name = name;
-    }}
-    ''}
-  ''
+        package-name = name;
+      }
+    }
+  ''}
+''

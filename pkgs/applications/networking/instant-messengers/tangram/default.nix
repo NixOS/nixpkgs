@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, appstream-glib
-, desktop-file-utils
-, gdk-pixbuf
-, gettext
-, gjs
-, glib
-, glib-networking
-, gobject-introspection
-, gsettings-desktop-schemas
-, gtk4
-, libadwaita
-, gst_all_1
-, hicolor-icon-theme
-, meson
-, ninja
-, pkg-config
-, python3
-, webkitgtk_6_0
-, blueprint-compiler
-, wrapGAppsHook4
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  appstream-glib,
+  desktop-file-utils,
+  gdk-pixbuf,
+  gettext,
+  gjs,
+  glib,
+  glib-networking,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  gtk4,
+  libadwaita,
+  gst_all_1,
+  hicolor-icon-theme,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  webkitgtk_6_0,
+  blueprint-compiler,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,22 +50,24 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    gdk-pixbuf
-    gjs
-    glib
-    glib-networking
-    gsettings-desktop-schemas
-    gtk4
-    libadwaita
-    webkitgtk_6_0
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-libav
-    gst-plugins-base
-    (gst-plugins-good.override { gtkSupport = true; })
-    gst-plugins-bad
-  ]);
+  buildInputs =
+    [
+      gdk-pixbuf
+      gjs
+      glib
+      glib-networking
+      gsettings-desktop-schemas
+      gtk4
+      libadwaita
+      webkitgtk_6_0
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-libav
+      gst-plugins-base
+      (gst-plugins-good.override { gtkSupport = true; })
+      gst-plugins-bad
+    ]);
 
   dontPatchShebangs = true;
 
@@ -86,6 +89,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/sonnyp/Tangram";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ austinbutler chuangzhu ];
+    maintainers = with maintainers; [
+      austinbutler
+      chuangzhu
+    ];
   };
 }

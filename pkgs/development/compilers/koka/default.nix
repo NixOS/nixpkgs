@@ -1,34 +1,35 @@
-{ stdenv
-, pkgsHostTarget
-, cmake
-, makeWrapper
-, fetchpatch
-, mkDerivation
-, fetchFromGitHub
-, alex
-, lib
-, hpack
-, aeson
-, array
-, async
-, base
-, bytestring
-, co-log-core
-, cond
-, containers
-, directory
-, FloatingHex
-, isocline
-, lens
-, lsp
-, mtl
-, network
-, network-simple
-, parsec
-, process
-, text
-, text-rope
-, time
+{
+  stdenv,
+  pkgsHostTarget,
+  cmake,
+  makeWrapper,
+  fetchpatch,
+  mkDerivation,
+  fetchFromGitHub,
+  alex,
+  lib,
+  hpack,
+  aeson,
+  array,
+  async,
+  base,
+  bytestring,
+  co-log-core,
+  cond,
+  containers,
+  directory,
+  FloatingHex,
+  isocline,
+  lens,
+  lsp,
+  mtl,
+  network,
+  network-simple,
+  parsec,
+  process,
+  text,
+  text-rope,
+  time,
 }:
 
 let
@@ -45,7 +46,10 @@ let
     inherit version;
     src = "${src}/kklib";
     nativeBuildInputs = [ cmake ];
-    outputs = [ "out" "dev" ];
+    outputs = [
+      "out"
+      "dev"
+    ];
     postInstall = ''
       mkdir -p ''${!outputDev}/share/koka/v${version}
       cp -a ../../kklib ''${!outputDev}/share/koka/v${version}
@@ -97,7 +101,10 @@ mkDerivation rec {
     time
     kklib
   ];
-  executableToolDepends = [ alex makeWrapper ];
+  executableToolDepends = [
+    alex
+    makeWrapper
+  ];
   postInstall = ''
     mkdir -p $out/share/koka/v${version}
     cp -a lib $out/share/koka/v${version}
@@ -112,5 +119,8 @@ mkDerivation rec {
   homepage = "https://github.com/koka-lang/koka";
   changelog = "${homepage}/blob/master/doc/spec/news.mdk";
   license = lib.licenses.asl20;
-  maintainers = with lib.maintainers; [ siraben sternenseemann ];
+  maintainers = with lib.maintainers; [
+    siraben
+    sternenseemann
+  ];
 }

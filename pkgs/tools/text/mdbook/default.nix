@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, nix, rustPlatform, CoreServices, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix,
+  rustPlatform,
+  CoreServices,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook";
@@ -36,6 +44,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rust-lang/mdBook";
     changelog = "https://github.com/rust-lang/mdBook/blob/v${version}/CHANGELOG.md";
     license = [ licenses.mpl20 ];
-    maintainers = with maintainers; [ havvy Frostman matthiasbeyer ];
+    maintainers = with maintainers; [
+      havvy
+      Frostman
+      matthiasbeyer
+    ];
   };
 }

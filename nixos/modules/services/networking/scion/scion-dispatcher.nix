@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -44,7 +49,7 @@ in
   };
   config = mkIf cfg.enable {
     # Needed for group ownership of the dispatcher socket
-    users.groups.scion = {};
+    users.groups.scion = { };
 
     # scion programs hardcode path to dispatcher in /run/shm, and is not
     # configurable at runtime upstream plans to obsolete the dispatcher in
@@ -71,4 +76,3 @@ in
     };
   };
 }
-

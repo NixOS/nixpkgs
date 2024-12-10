@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, wrapGAppsHook3
-, withLibui ? true, gtk3
-, withUdisks ? stdenv.isLinux, udisks, glib
-, libX11 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  wrapGAppsHook3,
+  withLibui ? true,
+  gtk3,
+  withUdisks ? stdenv.isLinux,
+  udisks,
+  glib,
+  libX11,
+}:
 
 stdenv.mkDerivation rec {
   pname = "usbimager";
@@ -16,11 +25,18 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/src";
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
-  buildInputs = lib.optionals withUdisks [ udisks glib ]
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
+  buildInputs =
+    lib.optionals withUdisks [
+      udisks
+      glib
+    ]
     ++ lib.optional (!withLibui) libX11
     ++ lib.optional withLibui gtk3;
-    # libui is bundled with the source of usbimager as a compiled static library
+  # libui is bundled with the source of usbimager as a compiled static library
 
   postPatch = ''
     sed -i \
@@ -36,7 +52,8 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  makeFlags =  [ "PREFIX=$(out)" ]
+  makeFlags =
+    [ "PREFIX=$(out)" ]
     ++ lib.optional withLibui "USE_LIBUI=yes"
     ++ lib.optional withUdisks "USE_UDISKS2=yes";
 

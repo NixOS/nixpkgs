@@ -1,13 +1,14 @@
-{ lib
-, boost
-, fetchFromGitHub
-, libsodium
-, nixVersions
-, pkg-config
-, rustPlatform
-, stdenv
-, nix-update-script
-, nixosTests
+{
+  lib,
+  boost,
+  fetchFromGitHub,
+  libsodium,
+  nixVersions,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +25,8 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-dlmSn4cWU6RqEiUoQYNJFhxu3owplkxlbtszBxm+GbU=";
 
   nativeBuildInputs = [
-    pkg-config nixVersions.nix_2_21
+    pkg-config
+    nixVersions.nix_2_21
   ];
 
   buildInputs = [
@@ -35,7 +37,10 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex" "harmonia-v(.*)" ];
+      extraArgs = [
+        "--version-regex"
+        "harmonia-v(.*)"
+      ];
     };
     tests = { inherit (nixosTests) harmonia; };
   };

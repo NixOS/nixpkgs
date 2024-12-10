@@ -1,10 +1,11 @@
-{ lib
-, buildDunePackage
-, dyn
-, fetchurl
-, ocaml
-, ppx_expect
-, stdune
+{
+  lib,
+  buildDunePackage,
+  dyn,
+  fetchurl,
+  ocaml,
+  ppx_expect,
+  stdune,
 }:
 
 buildDunePackage rec {
@@ -16,7 +17,10 @@ buildDunePackage rec {
     hash = "sha256-hkihWuk/5pQpmc42iHQpo5E7YoKcRxTlIMwOehw7loI=";
   };
 
-  buildInputs = [ stdune dyn ];
+  buildInputs = [
+    stdune
+    dyn
+  ];
 
   checkInputs = [ ppx_expect ];
 

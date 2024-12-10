@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, freetype
-, cmake
-, static ? stdenv.hostPlatform.isStatic
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  freetype,
+  cmake,
+  static ? stdenv.hostPlatform.isStatic,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -13,13 +14,21 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "graphite2";
 
   src = fetchurl {
-    url = with finalAttrs; "https://github.com/silnrsi/graphite/releases/download/${version}/${pname}-${version}.tgz";
+    url =
+      with finalAttrs;
+      "https://github.com/silnrsi/graphite/releases/download/${version}/${pname}-${version}.tgz";
     sha256 = "1790ajyhk0ax8xxamnrk176gc9gvhadzy78qia4rd8jzm89ir7gr";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
   buildInputs = [ freetype ];
 
   patches = lib.optionals stdenv.isDarwin [ ./macosx.patch ];

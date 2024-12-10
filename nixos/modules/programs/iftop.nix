@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.programs.iftop;
-in {
+in
+{
   options = {
     programs.iftop.enable = lib.mkEnableOption "iftop + setcap wrapper";
   };

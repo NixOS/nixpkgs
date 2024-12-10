@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, python3
-, enableModTool ? true
-, removeReferencesTo
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  python3,
+  enableModTool ? true,
+  removeReferencesTo,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,14 +28,16 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  cmakeFlags = lib.optionals (!enableModTool) [
-    "-DENABLE_MODTOOL=OFF"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    "-DVOLK_CPU_FEATURES=OFF"
-    # offset 17912 in1: -0.0366274 in2: -0.0366173 tolerance was: 1e-05
-    # volk_32f_log2_32f: fail on arch neon
-    "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;qa_volk_32f_log2_32f"
-  ];
+  cmakeFlags =
+    lib.optionals (!enableModTool) [
+      "-DENABLE_MODTOOL=OFF"
+    ]
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+      "-DVOLK_CPU_FEATURES=OFF"
+      # offset 17912 in1: -0.0366274 in2: -0.0366173 tolerance was: 1e-05
+      # volk_32f_log2_32f: fail on arch neon
+      "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;qa_volk_32f_log2_32f"
+    ];
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''
     ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libvolk.so)

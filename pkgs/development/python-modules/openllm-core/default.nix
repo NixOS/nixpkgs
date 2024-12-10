@@ -73,14 +73,17 @@ buildPythonPackage rec {
       # vllm
     ];
     bentoml = [ bentoml ];
-    fine-tune = [
-      accelerate
-      bitsandbytes
-      datasets
-      peft
-      transformers
-      # trl
-    ] ++ transformers.optional-dependencies.torch ++ transformers.optional-dependencies.tokenizers;
+    fine-tune =
+      [
+        accelerate
+        bitsandbytes
+        datasets
+        peft
+        transformers
+        # trl
+      ]
+      ++ transformers.optional-dependencies.torch
+      ++ transformers.optional-dependencies.tokenizers;
     full =
       with optional-dependencies;
       (

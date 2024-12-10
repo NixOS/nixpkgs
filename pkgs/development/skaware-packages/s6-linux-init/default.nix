@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, skawarePackages
-, skalibs
-, execline
-, s6
-, targetPackages
+{
+  lib,
+  stdenv,
+  skawarePackages,
+  skalibs,
+  execline,
+  s6,
+  targetPackages,
 }:
 
 skawarePackages.buildPackage {
@@ -15,7 +16,12 @@ skawarePackages.buildPackage {
   description = "A set of minimalistic tools used to create a s6-based init system, including a /sbin/init binary, on a Linux kernel";
   platforms = lib.platforms.linux;
 
-  outputs = [ "bin" "dev" "doc" "out" ];
+  outputs = [
+    "bin"
+    "dev"
+    "doc"
+    "out"
+  ];
 
   configureFlags = [
     "--bindir=\${bin}/bin"

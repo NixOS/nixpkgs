@@ -1,20 +1,22 @@
-{ fetchurl
-, lib, stdenv
-, perl
-, libxml2
-, postgresql
-, geos
-, proj
-, gdalMinimal
-, json_c
-, pkg-config
-, file
-, protobufc
-, libiconv
-, pcre2
-, nixosTests
-, jitSupport
-, llvm
+{
+  fetchurl,
+  lib,
+  stdenv,
+  perl,
+  libxml2,
+  postgresql,
+  geos,
+  proj,
+  gdalMinimal,
+  json_c,
+  pkg-config,
+  file,
+  protobufc,
+  libiconv,
+  pcre2,
+  nixosTests,
+  jitSupport,
+  llvm,
 }:
 
 let
@@ -24,21 +26,34 @@ stdenv.mkDerivation rec {
   pname = "postgis";
   version = "3.4.2";
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchurl {
     url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
     sha256 = "sha256-yMh0wAukqYSocDCva/lUSCFQIGCtRz1clvHU0INcWJI=";
   };
 
-  buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc pcre2.dev ]
-                ++ lib.optional stdenv.isDarwin libiconv;
-  nativeBuildInputs = [ perl pkg-config ] ++ lib.optional jitSupport llvm;
+  buildInputs = [
+    libxml2
+    postgresql
+    geos
+    proj
+    gdal
+    json_c
+    protobufc
+    pcre2.dev
+  ] ++ lib.optional stdenv.isDarwin libiconv;
+  nativeBuildInputs = [
+    perl
+    pkg-config
+  ] ++ lib.optional jitSupport llvm;
   dontDisableStatic = true;
 
   # postgis config directory assumes /include /lib from the same root for json-c library
   env.NIX_LDFLAGS = "-L${lib.getLib json_c}/lib";
-
 
   preConfigure = ''
     sed -i 's@/usr/bin/file@${file}/bin/file@' configure
@@ -81,7 +96,13 @@ stdenv.mkDerivation rec {
     homepage = "https://postgis.net/";
     changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${version}/NEWS";
     license = licenses.gpl2;
-    maintainers = with maintainers; teams.geospatial.members ++ [ marcweber wolfgangwalther ];
+    maintainers =
+      with maintainers;
+      teams.geospatial.members
+      ++ [
+        marcweber
+        wolfgangwalther
+      ];
     inherit (postgresql.meta) platforms;
   };
 }

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, callPackage
-, fetchFromGitHub
-, rustPlatform
-, CoreServices
-, cmake
-, libiconv
-, useMimalloc ? false
-, doCheck ? true
-, nix-update-script
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  CoreServices,
+  cmake,
+  libiconv,
+  useMimalloc ? false,
+  doCheck ? true,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,8 +24,18 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-zttBYGaoHpZfqWHQ8OI5f9OkGHCHb8tDBMySwsYNa2U=";
   };
 
-  cargoBuildFlags = [ "--bin" "rust-analyzer" "--bin" "rust-analyzer-proc-macro-srv" ];
-  cargoTestFlags = [ "--package" "rust-analyzer" "--package" "proc-macro-srv-cli" ];
+  cargoBuildFlags = [
+    "--bin"
+    "rust-analyzer"
+    "--bin"
+    "rust-analyzer-proc-macro-srv"
+  ];
+  cargoTestFlags = [
+    "--package"
+    "rust-analyzer"
+    "--package"
+    "proc-macro-srv-cli"
+  ];
 
   # Code format check requires more dependencies but don't really matter for packaging.
   # So just ignore it.
@@ -64,7 +75,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A modular compiler frontend for the Rust language";
     homepage = "https://rust-analyzer.github.io";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     maintainers = with maintainers; [ oxalica ];
     mainProgram = "rust-analyzer";
   };

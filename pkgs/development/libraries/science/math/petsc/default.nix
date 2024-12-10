@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, darwin
-, gfortran
-, python3
-, blas
-, lapack
-, mpiSupport ? true
-, mpi                   # generic mpi dependency
-, openssh               # required for openmpi tests
-, petsc-withp4est ? false
-, p4est
-, zlib                  # propagated by p4est but required by petsc
-, petsc-optimized ? false
-, petsc-scalar-type ? "real"
-, petsc-precision ? "double"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  darwin,
+  gfortran,
+  python3,
+  blas,
+  lapack,
+  mpiSupport ? true,
+  mpi, # generic mpi dependency
+  openssh, # required for openmpi tests
+  petsc-withp4est ? false,
+  p4est,
+  zlib, # propagated by p4est but required by petsc
+  petsc-optimized ? false,
+  petsc-scalar-type ? "real",
+  petsc-precision ? "double",
 }:
 
 # This version of PETSc does not support a non-MPI p4est build
@@ -33,13 +34,17 @@ stdenv.mkDerivation rec {
   withp4est = petsc-withp4est;
 
   strictDeps = true;
-  nativeBuildInputs = [ python3 gfortran ]
+  nativeBuildInputs =
+    [
+      python3
+      gfortran
+    ]
     ++ lib.optional mpiSupport mpi
-    ++ lib.optional (mpiSupport && mpi.pname == "openmpi") openssh
-  ;
-  buildInputs = [ blas lapack ]
-    ++ lib.optional withp4est p4est
-  ;
+    ++ lib.optional (mpiSupport && mpi.pname == "openmpi") openssh;
+  buildInputs = [
+    blas
+    lapack
+  ] ++ lib.optional withp4est p4est;
 
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace config/install.py \
@@ -56,14 +61,19 @@ stdenv.mkDerivation rec {
     patchShebangs ./lib/petsc/bin
     configureFlagsArray=(
       $configureFlagsArray
-      ${if !mpiSupport then ''
-        "--with-mpi=0"
-      '' else ''
-        "--CC=mpicc"
-        "--with-cxx=mpicxx"
-        "--with-fc=mpif90"
-        "--with-mpi=1"
-      ''}
+      ${
+        if !mpiSupport then
+          ''
+            "--with-mpi=0"
+          ''
+        else
+          ''
+            "--CC=mpicc"
+            "--with-cxx=mpicxx"
+            "--with-fc=mpif90"
+            "--with-mpi=1"
+          ''
+      }
       ${lib.optionalString withp4est ''
         "--with-p4est=1"
         "--with-zlib-include=${zlib.dev}/include"

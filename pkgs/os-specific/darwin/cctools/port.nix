@@ -1,18 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook, memstreamHook
-, installShellFiles
-, libuuid
-, libobjc ? null, maloader ? null
-, enableTapiSupport ? true, libtapi
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  autoreconfHook,
+  memstreamHook,
+  installShellFiles,
+  libuuid,
+  libobjc ? null,
+  maloader ? null,
+  enableTapiSupport ? true,
+  libtapi,
+  fetchpatch,
 }:
 
 let
 
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
-  targetPrefix = lib.optionalString
-    (stdenv.targetPlatform != stdenv.hostPlatform)
-    "${stdenv.targetPlatform.config}-";
+  targetPrefix = lib.optionalString (
+    stdenv.targetPlatform != stdenv.hostPlatform
+  ) "${stdenv.targetPlatform.config}-";
 in
 
 # Non-Darwin alternatives
@@ -23,23 +33,31 @@ stdenv.mkDerivation {
   version = "973.0.1";
 
   src = fetchFromGitHub {
-    owner  = "tpoechtrager";
-    repo   = "cctools-port";
+    owner = "tpoechtrager";
+    repo = "cctools-port";
     # This is the commit before: https://github.com/tpoechtrager/cctools-port/pull/114
     # That specific change causes trouble for us (see the PR discussion), but
     # is also currently the last commit on master at the time of writing, so we
     # can just go back one step.
-    rev    = "457dc6ddf5244ebf94f28e924e3a971f1566bd66";
+    rev = "457dc6ddf5244ebf94f28e924e3a971f1566bd66";
     sha256 = "0ns12q7vg9yand4dmdsps1917cavfbw67yl5q7bm6kb4ia5kkx13";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
-  nativeBuildInputs = [ autoconf automake libtool autoreconfHook installShellFiles ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ memstreamHook ];
-  buildInputs = [ libuuid ]
-    ++ lib.optionals stdenv.isDarwin [ libobjc ]
-    ++ lib.optional enableTapiSupport libtapi;
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    autoreconfHook
+    installShellFiles
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ memstreamHook ];
+  buildInputs =
+    [ libuuid ] ++ lib.optionals stdenv.isDarwin [ libobjc ] ++ lib.optional enableTapiSupport libtapi;
 
   patches = [
     ./ld-ignore-rpath-link.patch
@@ -65,33 +83,38 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
-  configurePlatforms = [ "build" "host" ]
-    ++ lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
-  configureFlags = [ "--disable-clang-as" ]
+  configurePlatforms = [
+    "build"
+    "host"
+  ] ++ lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+  configureFlags =
+    [ "--disable-clang-as" ]
     ++ lib.optionals enableTapiSupport [
       "--enable-tapi-support"
       "--with-libtapi=${libtapi}"
     ];
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace cctools/Makefile.am --replace libobjc2 ""
-  '' + ''
-    sed -i -e 's/addStandardLibraryDirectories = true/addStandardLibraryDirectories = false/' cctools/ld64/src/ld/Options.cpp
+  postPatch =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace cctools/Makefile.am --replace libobjc2 ""
+    ''
+    + ''
+      sed -i -e 's/addStandardLibraryDirectories = true/addStandardLibraryDirectories = false/' cctools/ld64/src/ld/Options.cpp
 
-    # FIXME: there are far more absolute path references that I don't want to fix right now
-    substituteInPlace cctools/configure.ac \
-      --replace "-isystem /usr/local/include -isystem /usr/pkg/include" "" \
-      --replace "-L/usr/local/lib" "" \
+      # FIXME: there are far more absolute path references that I don't want to fix right now
+      substituteInPlace cctools/configure.ac \
+        --replace "-isystem /usr/local/include -isystem /usr/pkg/include" "" \
+        --replace "-L/usr/local/lib" "" \
 
-    # Appears to use new libdispatch API not available in macOS SDK 10.12.
-    substituteInPlace cctools/ld64/src/ld/libcodedirectory.c \
-      --replace "#define LIBCD_PARALLEL 1" ""
+      # Appears to use new libdispatch API not available in macOS SDK 10.12.
+      substituteInPlace cctools/ld64/src/ld/libcodedirectory.c \
+        --replace "#define LIBCD_PARALLEL 1" ""
 
-    patchShebangs tools
-    sed -i -e 's/which/type -P/' tools/*.sh
+      patchShebangs tools
+      sed -i -e 's/which/type -P/' tools/*.sh
 
-    cd cctools
-  '';
+      cd cctools
+    '';
 
   preInstall = ''
     installManPage ar/ar.{1,5}

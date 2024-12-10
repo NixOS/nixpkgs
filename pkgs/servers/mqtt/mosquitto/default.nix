@@ -1,52 +1,45 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, docbook_xsl
-, libxslt
-, c-ares
-, cjson
-, libuuid
-, libuv
-, libwebsockets
-, openssl
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd
-, uthash
-, fetchpatch
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  docbook_xsl,
+  libxslt,
+  c-ares,
+  cjson,
+  libuuid,
+  libuv,
+  libwebsockets,
+  openssl,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  uthash,
+  nixosTests,
 }:
 
 let
   # Mosquitto needs external poll enabled in libwebsockets.
-  libwebsockets' = (libwebsockets.override {
-    withExternalPoll = true;
-  }).overrideAttrs (old: {
-    # Avoid bug in firefox preventing websockets being created over http/2 connections
-    # https://github.com/eclipse/mosquitto/issues/1211#issuecomment-958137569
-    cmakeFlags = old.cmakeFlags ++ [ "-DLWS_WITH_HTTP2=OFF" ];
-  });
+  libwebsockets' =
+    (libwebsockets.override {
+      withExternalPoll = true;
+    }).overrideAttrs
+      (old: {
+        # Avoid bug in firefox preventing websockets being created over http/2 connections
+        # https://github.com/eclipse/mosquitto/issues/1211#issuecomment-958137569
+        cmakeFlags = old.cmakeFlags ++ [ "-DLWS_WITH_HTTP2=OFF" ];
+      });
 
 in
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "2.0.18";
+  version = "2.0.20";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Vs0blV2IhnlEAm0WtOartz+0vLesJfp78FNJCivRxHk=";
+    sha256 = "sha256-oZo6J6mxMC05jJ8RXIunOMB3kptA6FElchKlg4qmuQ8=";
   };
-
-  patches = lib.optionals stdenv.isDarwin [
-    (fetchpatch {
-      name = "revert-cmake-shared-to-module.patch"; # See https://github.com/eclipse/mosquitto/issues/2277
-      url = "https://github.com/eclipse/mosquitto/commit/e21eaeca37196439b3e89bb8fd2eb1903ef94845.patch";
-      sha256 = "14syi2c1rks8sl2aw09my276w45yq1iasvzkqcrqwy4drdqrf069";
-      revert = true;
-    })
-  ];
 
   postPatch = ''
     for f in html manpage ; do
@@ -55,9 +48,17 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
-  nativeBuildInputs = [ cmake docbook_xsl libxslt ];
+  nativeBuildInputs = [
+    cmake
+    docbook_xsl
+    libxslt
+  ];
 
   buildInputs = [
     c-ares

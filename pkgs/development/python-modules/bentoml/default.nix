@@ -109,9 +109,12 @@ let
       tracing-otlp
       tracing
       ;
-    triton = [
-      tritonclient
-    ] ++ tritonclient.optional-dependencies.http ++ tritonclient.optional-dependencies.grpc;
+    triton =
+      [
+        tritonclient
+      ]
+      ++ tritonclient.optional-dependencies.http
+      ++ tritonclient.optional-dependencies.grpc;
   };
 in
 buildPythonPackage {

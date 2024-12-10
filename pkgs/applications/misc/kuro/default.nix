@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, fetchYarnDeps
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, mkYarnPackage
-, electron_29
+{
+  lib,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  mkYarnPackage,
+  electron_29,
 }:
 
 let

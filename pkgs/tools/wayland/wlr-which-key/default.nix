@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, cairo
-, glib
-, libxkbcommon
-, pango
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  cairo,
+  glib,
+  libxkbcommon,
+  pango,
 }:
 
 rustPlatform.buildRustPackage rec {

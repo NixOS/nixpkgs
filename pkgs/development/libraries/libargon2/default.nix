@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, fixDarwinDylibNames }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  fixDarwinDylibNames,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libargon2";
@@ -23,15 +29,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags = [
-    "AR=${stdenv.cc.targetPrefix}ar" # Fix cross-compilation
-    "PREFIX=${placeholder "out"}"
-    "ARGON2_VERSION=${version}"
-    "LIBRARY_REL=lib"
-    "PKGCONFIG_REL=lib"
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-    "LIBRARIES=$(LIB_ST)"
-  ];
+  makeFlags =
+    [
+      "AR=${stdenv.cc.targetPrefix}ar" # Fix cross-compilation
+      "PREFIX=${placeholder "out"}"
+      "ARGON2_VERSION=${version}"
+      "LIBRARY_REL=lib"
+      "PKGCONFIG_REL=lib"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isStatic [
+      "LIBRARIES=$(LIB_ST)"
+    ];
 
   meta = with lib; {
     description = "A key derivation function that was selected as the winner of the Password Hashing Competition in July 2015";
@@ -43,8 +51,14 @@ stdenv.mkDerivation rec {
       recommends using Argon2 rather than legacy algorithms.
     '';
     homepage = "https://www.argon2.com/";
-    license = with licenses; [ asl20 cc0 ];
-    maintainers = with maintainers; [ taeer olynch ];
+    license = with licenses; [
+      asl20
+      cc0
+    ];
+    maintainers = with maintainers; [
+      taeer
+      olynch
+    ];
     mainProgram = "argon2";
     platforms = platforms.all;
   };

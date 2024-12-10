@@ -1,4 +1,12 @@
-{ darwin, fetchFromGitHub, rustPlatform, lib, stdenv, pkg-config, openssl }:
+{
+  darwin,
+  fetchFromGitHub,
+  rustPlatform,
+  lib,
+  stdenv,
+  pkg-config,
+  openssl,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "click";
@@ -15,7 +23,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+  buildInputs =
+    lib.optionals stdenv.isLinux [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   meta = with lib; {
@@ -23,7 +32,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/databricks/click";
     license = [ licenses.asl20 ];
     maintainers = [ maintainers.mbode ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     mainProgram = "click";
   };
 }

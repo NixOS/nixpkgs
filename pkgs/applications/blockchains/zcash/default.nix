@@ -1,6 +1,28 @@
-{ autoreconfHook, boost180, cargo, coreutils, curl, cxx-rs, db62, fetchFromGitHub
-, git, hexdump, lib, libevent, libsodium, makeWrapper, rustPlatform
-, pkg-config, Security, stdenv, testers, tl-expected, utf8cpp, util-linux, zcash, zeromq
+{
+  autoreconfHook,
+  boost180,
+  cargo,
+  coreutils,
+  curl,
+  cxx-rs,
+  db62,
+  fetchFromGitHub,
+  git,
+  hexdump,
+  lib,
+  libevent,
+  libsodium,
+  makeWrapper,
+  rustPlatform,
+  pkg-config,
+  Security,
+  stdenv,
+  testers,
+  tl-expected,
+  utf8cpp,
+  util-linux,
+  zcash,
+  zeromq,
 }:
 
 rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
@@ -9,7 +31,7 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
 
   src = fetchFromGitHub {
     owner = "zcash";
-    repo  = "zcash";
+    repo = "zcash";
     rev = "v${version}";
     hash = "sha256-XGq/cYUo43FcpmRDO2YiNLCuEQLsTFLBFC4M1wM29l8=";
   };
@@ -22,19 +44,29 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
 
   cargoHash = "sha256-Mz8mr/RDcOfwJvXhY19rZmWHP8mUeEf9GYD+3JAPNOw=";
 
-  nativeBuildInputs = [ autoreconfHook cargo cxx-rs git hexdump makeWrapper pkg-config ];
-
-  buildInputs = [
-    boost180
-    db62
-    libevent
-    libsodium
-    tl-expected
-    utf8cpp
-    zeromq
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
+  nativeBuildInputs = [
+    autoreconfHook
+    cargo
+    cxx-rs
+    git
+    hexdump
+    makeWrapper
+    pkg-config
   ];
+
+  buildInputs =
+    [
+      boost180
+      db62
+      libevent
+      libsodium
+      tl-expected
+      utf8cpp
+      zeromq
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Security
+    ];
 
   # Use the stdenv default phases (./configure; make) instead of the
   # ones from buildRustPackage.
@@ -73,13 +105,23 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
 
   postInstall = ''
     wrapProgram $out/bin/zcash-fetch-params \
-        --set PATH ${lib.makeBinPath [ coreutils curl util-linux ]}
+        --set PATH ${
+          lib.makeBinPath [
+            coreutils
+            curl
+            util-linux
+          ]
+        }
   '';
 
   meta = with lib; {
     description = "Peer-to-peer, anonymous electronic cash system";
     homepage = "https://z.cash/";
-    maintainers = with maintainers; [ rht tkerber centromere ];
+    maintainers = with maintainers; [
+      rht
+      tkerber
+      centromere
+    ];
     license = licenses.mit;
 
     # https://github.com/zcash/zcash/issues/4405

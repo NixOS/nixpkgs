@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchgit
-, flex, bison, fig2dev, imagemagick, netpbm, gtk2
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchgit,
+  flex,
+  bison,
+  fig2dev,
+  imagemagick,
+  netpbm,
+  gtk2,
+  pkg-config,
 }:
 
 with lib;

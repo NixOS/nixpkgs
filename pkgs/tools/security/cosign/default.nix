@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, buildGoModule
-, fetchFromGitHub
-, pcsclite
-, pkg-config
-, installShellFiles
-, PCSC
-, pivKeySupport ? true
-, pkcs11Support ? true
-, testers
-, cosign
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pcsclite,
+  pkg-config,
+  installShellFiles,
+  PCSC,
+  pivKeySupport ? true,
+  pkcs11Support ? true,
+  testers,
+  cosign,
 }:
 buildGoModule rec {
   pname = "cosign";
@@ -26,7 +27,10 @@ buildGoModule rec {
     lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
     ++ lib.optionals (stdenv.isDarwin && pivKeySupport) [ PCSC ];
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
   vendorHash = "sha256-LYdbHpucF/lUzMu0m5y0Gt3A/8ISUs9oLM79mTF/REM=";
 
@@ -34,7 +38,8 @@ buildGoModule rec {
     "cmd/cosign"
   ];
 
-  tags = [ ] ++ lib.optionals pivKeySupport [ "pivkey" ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
+  tags =
+    [ ] ++ lib.optionals pivKeySupport [ "pivkey" ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
 
   ldflags = [
     "-s"
@@ -74,6 +79,10 @@ buildGoModule rec {
     description = "Container Signing CLI with support for ephemeral keys and Sigstore signing";
     mainProgram = "cosign";
     license = licenses.asl20;
-    maintainers = with maintainers; [ lesuisse jk developer-guy ];
+    maintainers = with maintainers; [
+      lesuisse
+      jk
+      developer-guy
+    ];
   };
 }

@@ -1,7 +1,23 @@
-{ lib, mkDerivation, fetchFromGitHub, fetchpatch, qmake, qtbase
-, SDL, SDL_mixer, boost, curl, gsasl, libgcrypt, libircclient, protobuf, sqlite
-, wrapQtAppsHook
-, tinyxml2, target ? "client" }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchpatch,
+  qmake,
+  qtbase,
+  SDL,
+  SDL_mixer,
+  boost,
+  curl,
+  gsasl,
+  libgcrypt,
+  libircclient,
+  protobuf,
+  sqlite,
+  wrapQtAppsHook,
+  tinyxml2,
+  target ? "client",
+}:
 
 mkDerivation rec {
   pname = "pokerth-${target}";
@@ -41,7 +57,10 @@ mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     SDL
@@ -69,7 +88,10 @@ mkDerivation rec {
     description = "Poker game ${target}";
     mainProgram = "pokerth";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ obadz yana ];
+    maintainers = with maintainers; [
+      obadz
+      yana
+    ];
     platforms = platforms.all;
   };
 }

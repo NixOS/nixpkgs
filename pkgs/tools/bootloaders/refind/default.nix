@@ -1,25 +1,39 @@
-{ lib
-, stdenv
-, fetchurl
-, gnu-efi
-, nixosTests
-, efibootmgr
-, openssl
-, withSbsigntool ? false # currently, cross compiling sbsigntool is broken, so default to false
-, sbsigntool
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gnu-efi,
+  nixosTests,
+  efibootmgr,
+  openssl,
+  withSbsigntool ? false, # currently, cross compiling sbsigntool is broken, so default to false
+  sbsigntool,
+  makeWrapper,
 }:
 
 let
   archids = {
-    x86_64-linux = { hostarch = "x86_64"; efiPlatform = "x64"; };
-    i686-linux = rec { hostarch = "ia32"; efiPlatform = hostarch; };
-    aarch64-linux = { hostarch = "aarch64"; efiPlatform = "aa64"; };
+    x86_64-linux = {
+      hostarch = "x86_64";
+      efiPlatform = "x64";
+    };
+    i686-linux = rec {
+      hostarch = "ia32";
+      efiPlatform = hostarch;
+    };
+    aarch64-linux = {
+      hostarch = "aarch64";
+      efiPlatform = "aa64";
+    };
   };
 
   inherit
-    (archids.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}"))
-    hostarch efiPlatform;
+    (archids.${stdenv.hostPlatform.system}
+      or (throw "unsupported system: ${stdenv.hostPlatform.system}")
+    )
+    hostarch
+    efiPlatform
+    ;
 in
 
 stdenv.mkDerivation rec {
@@ -45,19 +59,24 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "stackprotector" ];
 
   makeFlags =
-    [ "prefix="
+    [
+      "prefix="
       "EFIINC=${gnu-efi}/include/efi"
       "EFILIB=${gnu-efi}/lib"
       "GNUEFILIB=${gnu-efi}/lib"
       "EFICRT0=${gnu-efi}/lib"
       "HOSTARCH=${hostarch}"
       "ARCH=${hostarch}"
-    ] ++ lib.optional stdenv.isAarch64 [
+    ]
+    ++ lib.optional stdenv.isAarch64 [
       # aarch64 is special for GNU-EFI, see BUILDING.txt
       "GNUEFI_ARM64_TARGET_SUPPORT=y"
     ];
 
-  buildFlags = [ "gnuefi" "fs_gnuefi" ];
+  buildFlags = [
+    "gnuefi"
+    "fs_gnuefi"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -119,7 +138,15 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/refind-install \
-      --prefix PATH : ${lib.makeBinPath ( [ efibootmgr openssl ] ++ lib.optional withSbsigntool sbsigntool )}
+      --prefix PATH : ${
+        lib.makeBinPath (
+          [
+            efibootmgr
+            openssl
+          ]
+          ++ lib.optional withSbsigntool sbsigntool
+        )
+      }
     wrapProgram $out/bin/refind-mvrefind \
       --prefix PATH : ${lib.makeBinPath [ efibootmgr ]}
   '';
@@ -146,8 +173,16 @@ stdenv.mkDerivation rec {
       Linux kernels that provide EFI stub support.
     '';
     homepage = "http://refind.sourceforge.net/";
-    maintainers = with maintainers; [ AndersonTorres samueldr chewblacka ];
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [
+      AndersonTorres
+      samueldr
+      chewblacka
+    ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     license = licenses.gpl3Plus;
   };
 

@@ -1,16 +1,39 @@
-{ pkgs, config, lib, ... } :
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
-  inherit (lib) mkIf concatStringsSep concatMapStrings toList mapAttrs
-    mapAttrsToList;
+  inherit (lib)
+    mkIf
+    concatStringsSep
+    concatMapStrings
+    toList
+    mapAttrs
+    mapAttrsToList
+    ;
   cfg = config.services.kerberos_server;
   kerberos = config.security.krb5.package;
   stateDir = "/var/heimdal";
-  aclFiles = mapAttrs
-    (name: {acl, ...}: pkgs.writeText "${name}.acl" (concatMapStrings ((
-      {principal, access, target, ...} :
-      "${principal}\t${concatStringsSep "," (toList access)}\t${target}\n"
-    )) acl)) cfg.realms;
+  aclFiles = mapAttrs (
+    name:
+    { acl, ... }:
+    pkgs.writeText "${name}.acl" (
+      concatMapStrings (
+        (
+          {
+            principal,
+            access,
+            target,
+            ...
+          }:
+          "${principal}\t${concatStringsSep "," (toList access)}\t${target}\n"
+        )
+      ) acl
+    )
+  ) cfg.realms;
 
   kdcConfigs = mapAttrsToList (name: value: ''
     database = {
@@ -34,8 +57,7 @@ in
       preStart = ''
         mkdir -m 0755 -p ${stateDir}
       '';
-      serviceConfig.ExecStart =
-        "${kerberos}/libexec/kadmind --config-file=/etc/heimdal-kdc/kdc.conf";
+      serviceConfig.ExecStart = "${kerberos}/libexec/kadmind --config-file=/etc/heimdal-kdc/kdc.conf";
       restartTriggers = [ kdcConfFile ];
     };
 
@@ -45,8 +67,7 @@ in
       preStart = ''
         mkdir -m 0755 -p ${stateDir}
       '';
-      serviceConfig.ExecStart =
-        "${kerberos}/libexec/kdc --config-file=/etc/heimdal-kdc/kdc.conf";
+      serviceConfig.ExecStart = "${kerberos}/libexec/kdc --config-file=/etc/heimdal-kdc/kdc.conf";
       restartTriggers = [ kdcConfFile ];
     };
 

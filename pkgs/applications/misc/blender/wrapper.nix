@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, blender
-, makeWrapper
-, extraModules ? []
+{
+  stdenv,
+  lib,
+  blender,
+  makeWrapper,
+  extraModules ? [ ],
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = blender.pname + "-wrapped";
@@ -10,7 +11,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit (blender) version meta;
 
-  nativeBuildInputs = [ blender.pythonPackages.wrapPython makeWrapper ];
+  nativeBuildInputs = [
+    blender.pythonPackages.wrapPython
+    makeWrapper
+  ];
   installPhase = ''
     mkdir $out/{share/applications,bin} -p
     sed 's/Exec=blender/Exec=${finalAttrs.finalPackage.pname}/g' $src/share/applications/blender.desktop > $out/share/applications/${finalAttrs.finalPackage.pname}.desktop

@@ -1,9 +1,16 @@
-{ lib, stdenv, fetchurl, libxml2, pkg-config
-, compressionSupport ? true, zlib ? null
-, sslSupport ? true, openssl ? null
-, static ? stdenv.hostPlatform.isStatic
-, shared ? !stdenv.hostPlatform.isStatic
-, bash
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libxml2,
+  pkg-config,
+  compressionSupport ? true,
+  zlib ? null,
+  sslSupport ? true,
+  openssl ? null,
+  static ? stdenv.hostPlatform.isStatic,
+  shared ? !stdenv.hostPlatform.isStatic,
+  bash,
 }:
 
 assert compressionSupport -> zlib != null;
@@ -11,7 +18,7 @@ assert sslSupport -> openssl != null;
 assert static || shared;
 
 let
-   inherit (lib) optionals;
+  inherit (lib) optionals;
 in
 
 stdenv.mkDerivation rec {
@@ -26,8 +33,11 @@ stdenv.mkDerivation rec {
   patches = optionals stdenv.isDarwin [ ./darwin-fix-configure.patch ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [libxml2 openssl bash]
-    ++ lib.optional compressionSupport zlib;
+  buildInputs = [
+    libxml2
+    openssl
+    bash
+  ] ++ lib.optional compressionSupport zlib;
 
   strictDeps = true;
 
@@ -42,7 +52,7 @@ stdenv.mkDerivation rec {
     export PKG_CONFIG="$(command -v "$PKG_CONFIG")"
   '';
 
-  passthru = {inherit compressionSupport sslSupport;};
+  passthru = { inherit compressionSupport sslSupport; };
 
   meta = with lib; {
     description = "An HTTP and WebDAV client library";

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -32,7 +37,7 @@ in
       description = "Safeeyes";
 
       wantedBy = [ "graphical-session.target" ];
-      partOf   = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
 
       startLimitIntervalSec = 350;
       startLimitBurst = 10;

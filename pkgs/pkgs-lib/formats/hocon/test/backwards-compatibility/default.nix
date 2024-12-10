@@ -1,9 +1,17 @@
-{ lib, formats, stdenvNoCC, writeText, ... }:
+{
+  lib,
+  formats,
+  stdenvNoCC,
+  writeText,
+  ...
+}:
 let
   hocon = formats.hocon { };
 
   expression = {
-    substitution = { __hocon_envvar = "PATH"; };
+    substitution = {
+      __hocon_envvar = "PATH";
+    };
     literal = {
       __hocon_unquoted_string = ''
         [
@@ -13,7 +21,9 @@ let
     };
 
     nested = {
-      substitution = { __hocon_envvar = "PATH"; };
+      substitution = {
+        __hocon_envvar = "PATH";
+      };
       literal = {
         __hocon_unquoted_string = ''
           [
@@ -37,29 +47,29 @@ let
 
   hocon-test-conf = hocon.generate "hocon-test.conf" expression;
 in
-  stdenvNoCC.mkDerivation {
-    name = "pkgs.formats.hocon-test-backwards-compatibility";
+stdenvNoCC.mkDerivation {
+  name = "pkgs.formats.hocon-test-backwards-compatibility";
 
-    dontUnpack = true;
-    dontBuild = true;
+  dontUnpack = true;
+  dontBuild = true;
 
-    doCheck = true;
-    checkPhase = ''
-      runHook preCheck
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
 
-      diff -U3 ${./expected.txt} ${hocon-test-conf}
+    diff -U3 ${./expected.txt} ${hocon-test-conf}
 
-      runHook postCheck
-    '';
+    runHook postCheck
+  '';
 
-    installPhase = ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir $out
-      cp ${./expected.txt} $out/expected.txt
-      cp ${hocon-test-conf} $out/hocon-test.conf
-      cp ${hocon-test-conf.passthru.json} $out/hocon-test.json
+    mkdir $out
+    cp ${./expected.txt} $out/expected.txt
+    cp ${hocon-test-conf} $out/hocon-test.conf
+    cp ${hocon-test-conf.passthru.json} $out/hocon-test.json
 
-      runHook postInstall
-    '';
-  }
+    runHook postInstall
+  '';
+}

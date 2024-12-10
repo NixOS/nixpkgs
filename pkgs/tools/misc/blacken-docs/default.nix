@@ -1,7 +1,8 @@
-{ black
-, fetchFromGitHub
-, lib
-, python3
+{
+  black,
+  fetchFromGitHub,
+  lib,
+  python3,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "blacken-docs";

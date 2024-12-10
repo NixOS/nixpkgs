@@ -1,4 +1,11 @@
-{ rustPlatform, lib, makeWrapper, patchelf, glibc, binutils }:
+{
+  rustPlatform,
+  lib,
+  makeWrapper,
+  patchelf,
+  glibc,
+  binutils,
+}:
 
 rustPlatform.buildRustPackage {
   pname = "make-initrd-ng";
@@ -12,7 +19,12 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Tool for copying binaries and their dependencies";
     mainProgram = "make-initrd-ng";
-    maintainers = with lib.maintainers; [ das_j elvishjerricco k900 lheckemann ];
+    maintainers = with lib.maintainers; [
+      das_j
+      elvishjerricco
+      k900
+      lheckemann
+    ];
     license = lib.licenses.mit;
   };
 }

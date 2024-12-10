@@ -1,8 +1,16 @@
-{ lib, stdenv, fetchFromGitHub
-, libedit, zlib, ncurses, expect
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libedit,
+  zlib,
+  ncurses,
+  expect,
 
-# darwin only below
-, Accelerate, CoreGraphics, CoreVideo
+  # darwin only below
+  Accelerate,
+  CoreGraphics,
+  CoreVideo,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,32 +19,49 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "kevinlawler";
-    repo  = "kerf1";
-    rev   = "4ec5b592b310b96d33654d20d6a511e6fffc0f9d";
-    hash  = "sha256-0sU2zOk5I69lQyrn1g0qsae7S/IBT6eA/911qp0GNkk=";
+    repo = "kerf1";
+    rev = "4ec5b592b310b96d33654d20d6a511e6fffc0f9d";
+    hash = "sha256-0sU2zOk5I69lQyrn1g0qsae7S/IBT6eA/911qp0GNkk=";
   };
 
   sourceRoot = "${src.name}/src";
-  buildInputs = [ libedit zlib ncurses ]
-    ++ lib.optionals stdenv.isDarwin ([
-      Accelerate
-    ] ++ lib.optionals stdenv.isx86_64 /* && isDarwin */ [
-      CoreGraphics CoreVideo
-    ]);
+  buildInputs =
+    [
+      libedit
+      zlib
+      ncurses
+    ]
+    ++ lib.optionals stdenv.isDarwin (
+      [
+        Accelerate
+      ]
+      ++
+        lib.optionals stdenv.isx86_64 # && isDarwin
+          [
+            CoreGraphics
+            CoreVideo
+          ]
+    );
 
   nativeCheckInputs = [ expect ];
   doCheck = true;
 
-  makeFlags = [ "kerf" "kerf_test" ];
+  makeFlags = [
+    "kerf"
+    "kerf_test"
+  ];
 
   # avoid a huge amount of warnings to make failures clearer
-  env.NIX_CFLAGS_COMPILE = toString (map (x: "-Wno-${x}") [
-    "void-pointer-to-int-cast"
-    "format"
-    "implicit-function-declaration"
-    "gnu-variable-sized-type-not-at-end"
-    "unused-result"
-  ] ++ lib.optionals stdenv.isDarwin [ "-fcommon" ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    map (x: "-Wno-${x}") [
+      "void-pointer-to-int-cast"
+      "format"
+      "implicit-function-declaration"
+      "gnu-variable-sized-type-not-at-end"
+      "unused-result"
+    ]
+    ++ lib.optionals stdenv.isDarwin [ "-fcommon" ]
+  );
 
   patchPhase = ''
     substituteInPlace ./Makefile \

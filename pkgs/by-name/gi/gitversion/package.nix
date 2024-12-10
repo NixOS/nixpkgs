@@ -1,5 +1,6 @@
-{ lib
-, buildDotnetGlobalTool
+{
+  lib,
+  buildDotnetGlobalTool,
 }:
 
 buildDotnetGlobalTool {

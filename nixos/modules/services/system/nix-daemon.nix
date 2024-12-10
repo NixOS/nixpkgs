@@ -5,7 +5,12 @@
    - nixos/modules/config/nix.nix: the nix.conf
    - nixos/modules/config/nix-remote-build.nix: the nix.conf
 */
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -40,8 +45,28 @@ in
 
 {
   imports = [
-    (mkRenamedOptionModuleWith { sinceRelease = 2205; from = [ "nix" "daemonIONiceLevel" ]; to = [ "nix" "daemonIOSchedPriority" ]; })
-    (mkRenamedOptionModuleWith { sinceRelease = 2211; from = [ "nix" "readOnlyStore" ]; to = [ "boot" "readOnlyNixStore" ]; })
+    (mkRenamedOptionModuleWith {
+      sinceRelease = 2205;
+      from = [
+        "nix"
+        "daemonIONiceLevel"
+      ];
+      to = [
+        "nix"
+        "daemonIOSchedPriority"
+      ];
+    })
+    (mkRenamedOptionModuleWith {
+      sinceRelease = 2211;
+      from = [
+        "nix"
+        "readOnlyStore"
+      ];
+      to = [
+        "boot"
+        "readOnlyNixStore"
+      ];
+    })
     (mkRemovedOptionModule [ "nix" "daemonNiceLevel" ] "Consider nix.daemonCPUSchedPolicy instead.")
   ];
 
@@ -70,7 +95,11 @@ in
       };
 
       daemonCPUSchedPolicy = mkOption {
-        type = types.enum [ "other" "batch" "idle" ];
+        type = types.enum [
+          "other"
+          "batch"
+          "idle"
+        ];
         default = "other";
         example = "batch";
         description = ''
@@ -96,11 +125,14 @@ in
           For more fine-grained resource control, please refer to
           {manpage}`systemd.resource-control(5)` and adjust
           {option}`systemd.services.nix-daemon` directly.
-      '';
+        '';
       };
 
       daemonIOSchedClass = mkOption {
-        type = types.enum [ "best-effort" "idle" ];
+        type = types.enum [
+          "best-effort"
+          "idle"
+        ];
         default = "best-effort";
         example = "idle";
         description = ''
@@ -119,7 +151,7 @@ in
           systems that experience only intermittent phases of high I/O load,
           such as desktop or portable computers used interactively. Other
           systems should use the `best-effort` class.
-      '';
+        '';
       };
 
       daemonIOSchedPriority = mkOption {
@@ -155,16 +187,13 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
-    environment.systemPackages =
-      [
-        nixPackage
-        pkgs.nix-info
-      ]
-      ++ optional (config.programs.bash.enableCompletion) pkgs.nix-bash-completions;
+    environment.systemPackages = [
+      nixPackage
+      pkgs.nix-info
+    ] ++ optional (config.programs.bash.enableCompletion) pkgs.nix-bash-completions;
 
     systemd.packages = [ nixPackage ];
 
@@ -181,68 +210,74 @@ in
 
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
-    systemd.services.nix-daemon =
-      {
-        path = [ nixPackage pkgs.util-linux config.programs.ssh.package ]
-          ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
+    systemd.services.nix-daemon = {
+      path = [
+        nixPackage
+        pkgs.util-linux
+        config.programs.ssh.package
+      ] ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
 
-        environment = cfg.envVars
-          // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt"; }
-          // config.networking.proxy.envVars;
+      environment =
+        cfg.envVars
+        // {
+          CURL_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt";
+        }
+        // config.networking.proxy.envVars;
 
-        unitConfig.RequiresMountsFor = "/nix/store";
+      unitConfig.RequiresMountsFor = "/nix/store";
 
-        serviceConfig =
-          {
-            CPUSchedulingPolicy = cfg.daemonCPUSchedPolicy;
-            IOSchedulingClass = cfg.daemonIOSchedClass;
-            IOSchedulingPriority = cfg.daemonIOSchedPriority;
-            LimitNOFILE = 1048576;
-          };
-
-        restartTriggers = [ config.environment.etc."nix/nix.conf".source ];
-
-        # `stopIfChanged = false` changes to switch behavior
-        # from   stop -> update units -> start
-        #   to   update units -> restart
-        #
-        # The `stopIfChanged` setting therefore controls a trade-off between a
-        # more predictable lifecycle, which runs the correct "version" of
-        # the `ExecStop` line, and on the other hand the availability of
-        # sockets during the switch, as the effectiveness of the stop operation
-        # depends on the socket being stopped as well.
-        #
-        # As `nix-daemon.service` does not make use of `ExecStop`, we prefer
-        # to keep the socket up and available. This is important for machines
-        # that run Nix-based services, such as automated build, test, and deploy
-        # services, that expect the daemon socket to be available at all times.
-        #
-        # Notably, the Nix client does not retry on failure to connect to the
-        # daemon socket, and the in-process RemoteStore instance will disable
-        # itself. This makes retries infeasible even for services that are
-        # aware of the issue. Failure to connect can affect not only new client
-        # processes, but also new RemoteStore instances in existing processes,
-        # as well as existing RemoteStore instances that have not saturated
-        # their connection pool.
-        #
-        # Also note that `stopIfChanged = true` does not kill existing
-        # connection handling daemons, as one might wish to happen before a
-        # breaking Nix upgrade (which is rare). The daemon forks that handle
-        # the individual connections split off into their own sessions, causing
-        # them not to be stopped by systemd.
-        # If a Nix upgrade does require all existing daemon processes to stop,
-        # nix-daemon must do so on its own accord, and only when the new version
-        # starts and detects that Nix's persistent state needs an upgrade.
-        stopIfChanged = false;
-
+      serviceConfig = {
+        CPUSchedulingPolicy = cfg.daemonCPUSchedPolicy;
+        IOSchedulingClass = cfg.daemonIOSchedClass;
+        IOSchedulingPriority = cfg.daemonIOSchedPriority;
+        LimitNOFILE = 1048576;
       };
+
+      restartTriggers = [ config.environment.etc."nix/nix.conf".source ];
+
+      # `stopIfChanged = false` changes to switch behavior
+      # from   stop -> update units -> start
+      #   to   update units -> restart
+      #
+      # The `stopIfChanged` setting therefore controls a trade-off between a
+      # more predictable lifecycle, which runs the correct "version" of
+      # the `ExecStop` line, and on the other hand the availability of
+      # sockets during the switch, as the effectiveness of the stop operation
+      # depends on the socket being stopped as well.
+      #
+      # As `nix-daemon.service` does not make use of `ExecStop`, we prefer
+      # to keep the socket up and available. This is important for machines
+      # that run Nix-based services, such as automated build, test, and deploy
+      # services, that expect the daemon socket to be available at all times.
+      #
+      # Notably, the Nix client does not retry on failure to connect to the
+      # daemon socket, and the in-process RemoteStore instance will disable
+      # itself. This makes retries infeasible even for services that are
+      # aware of the issue. Failure to connect can affect not only new client
+      # processes, but also new RemoteStore instances in existing processes,
+      # as well as existing RemoteStore instances that have not saturated
+      # their connection pool.
+      #
+      # Also note that `stopIfChanged = true` does not kill existing
+      # connection handling daemons, as one might wish to happen before a
+      # breaking Nix upgrade (which is rare). The daemon forks that handle
+      # the individual connections split off into their own sessions, causing
+      # them not to be stopped by systemd.
+      # If a Nix upgrade does require all existing daemon processes to stop,
+      # nix-daemon must do so on its own accord, and only when the new version
+      # starts and detects that Nix's persistent state needs an upgrade.
+      stopIfChanged = false;
+
+    };
 
     # Set up the environment variables for running Nix.
     environment.sessionVariables = cfg.envVars;
 
     nix.nrBuildUsers = mkDefault (
-      if cfg.settings.auto-allocate-uids or false then 0
-      else max 32 (if cfg.settings.max-jobs == "auto" then 0 else cfg.settings.max-jobs)
+      if cfg.settings.auto-allocate-uids or false then
+        0
+      else
+        max 32 (if cfg.settings.max-jobs == "auto" then 0 else cfg.settings.max-jobs)
     );
 
     users.users = nixbldUsers;

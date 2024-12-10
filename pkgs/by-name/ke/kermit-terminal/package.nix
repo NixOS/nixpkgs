@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gtk3
-, pcre
-, pkg-config
-, vte
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtk3,
+  pcre,
+  pkg-config,
+  vte,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XPHF33Nu+H8OcQFwsuUOhDBDWKm8sh5B36sfROeSWPg=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
     cmake

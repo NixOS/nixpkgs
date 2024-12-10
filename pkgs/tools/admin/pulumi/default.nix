@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, buildGoModule
-, coreutils
-, fetchFromGitHub
-, fetchpatch
-, installShellFiles
-, git
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  coreutils,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  git,
   # passthru
-, runCommand
-, makeWrapper
-, pulumi
-, pulumiPackages
+  runCommand,
+  makeWrapper,
+  pulumi,
+  pulumiPackages,
 }:
 
 buildGoModule rec {
@@ -57,26 +58,28 @@ buildGoModule rec {
     git
   ];
 
-  preCheck = ''
-    # The tests require `version.Version` to be unset
-    ldflags=''${ldflags//"$importpathFlags"/}
+  preCheck =
+    ''
+      # The tests require `version.Version` to be unset
+      ldflags=''${ldflags//"$importpathFlags"/}
 
-    # Create some placeholders for plugins used in tests. Otherwise, Pulumi
-    # tries to donwload them and fails, resulting in really long test runs
-    dummyPluginPath=$(mktemp -d)
-    for name in pulumi-{resource-pkg{A,B},-pkgB}; do
-      ln -s ${coreutils}/bin/true "$dummyPluginPath/$name"
-    done
+      # Create some placeholders for plugins used in tests. Otherwise, Pulumi
+      # tries to donwload them and fails, resulting in really long test runs
+      dummyPluginPath=$(mktemp -d)
+      for name in pulumi-{resource-pkg{A,B},-pkgB}; do
+        ln -s ${coreutils}/bin/true "$dummyPluginPath/$name"
+      done
 
-    export PATH=$dummyPluginPath''${PATH:+:}$PATH
+      export PATH=$dummyPluginPath''${PATH:+:}$PATH
 
-    # Code generation tests also download dependencies from network
-    rm codegen/{docs,dotnet,go,nodejs,python,schema}/*_test.go
-    rm -R codegen/{dotnet,go,nodejs,python}/gen_program_test
+      # Code generation tests also download dependencies from network
+      rm codegen/{docs,dotnet,go,nodejs,python,schema}/*_test.go
+      rm -R codegen/{dotnet,go,nodejs,python}/gen_program_test
 
-  '' + lib.optionalString stdenv.isDarwin ''
-    export PULUMI_HOME=$(mktemp -d)
-  '';
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      export PULUMI_HOME=$(mktemp -d)
+    '';
 
   checkFlags =
     let
@@ -124,15 +127,17 @@ buildGoModule rec {
 
   passthru = {
     pkgs = pulumiPackages;
-    withPackages = f: runCommand "${pulumi.name}-with-packages"
-      {
-        nativeBuildInputs = [ makeWrapper ];
-      }
-      ''
-        mkdir -p $out/bin
-        makeWrapper ${pulumi}/bin/pulumi $out/bin/pulumi \
-          --suffix PATH : ${lib.makeSearchPath "bin" (f pulumiPackages)}
-      '';
+    withPackages =
+      f:
+      runCommand "${pulumi.name}-with-packages"
+        {
+          nativeBuildInputs = [ makeWrapper ];
+        }
+        ''
+          mkdir -p $out/bin
+          makeWrapper ${pulumi}/bin/pulumi $out/bin/pulumi \
+            --suffix PATH : ${lib.makeSearchPath "bin" (f pulumiPackages)}
+        '';
   };
 
   meta = with lib; {

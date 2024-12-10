@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, alsa-lib
-, darwin
-, fetchFromGitHub
-, pkg-config
-, protobuf
-, rustPlatform
+{
+  lib,
+  stdenv,
+  alsa-lib,
+  darwin,
+  fetchFromGitHub,
+  pkg-config,
+  protobuf,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,18 +22,22 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-nnOHuAn+eGf+iiX3QbDTH4zHMQ6KV4QP6RnyBhLMrEc=";
 
-  nativeBuildInputs = [
-    protobuf
-    rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.isLinux [
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      protobuf
+      rustPlatform.bindgenHook
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      pkg-config
+    ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.AudioUnit
-  ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.AudioUnit
+    ];
 
   meta = with lib; {
     description = "An extensible music player daemon written in Rust";

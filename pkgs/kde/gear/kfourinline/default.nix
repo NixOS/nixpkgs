@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kfourinline";
 
-  extraBuildInputs = [qtsvg];
+  extraBuildInputs = [ qtsvg ];
 }

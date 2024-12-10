@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 with lib;
 let
@@ -13,12 +19,15 @@ let
     };
   } // cfg.extraConfig;
 
-  configFiles = [ "/etc/consul.json" "/etc/consul-addrs.json" ]
-    ++ cfg.extraConfigFiles;
+  configFiles = [
+    "/etc/consul.json"
+    "/etc/consul-addrs.json"
+  ] ++ cfg.extraConfigFiles;
 
   devices = attrValues (filterAttrs (_: i: i != null) cfg.interface);
-  systemdDevices = forEach devices
-    (i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device");
+  systemdDevices = forEach devices (
+    i: "sys-subsystem-net-devices-${utils.escapeSystemdPath i}.device"
+  );
 in
 {
   options = {
@@ -75,7 +84,11 @@ in
       };
 
       forceAddrFamily = mkOption {
-        type = types.enum [ "any" "ipv4" "ipv6" ];
+        type = types.enum [
+          "any"
+          "ipv4"
+          "ipv6"
+        ];
         default = "any";
         description = ''
           Whether to bind ipv4/ipv6 or both kind of addresses.
@@ -151,8 +164,8 @@ in
 
   };
 
-  config = mkIf cfg.enable (
-    mkMerge [{
+  config = mkIf cfg.enable (mkMerge [
+    {
 
       users.users.consul = {
         description = "Consul agent daemon user";
@@ -161,7 +174,7 @@ in
         # The shell is needed for health checks
         shell = "/run/current-system/sw/bin/bash";
       };
-      users.groups.consul = {};
+      users.groups.consul = { };
 
       environment = {
         etc."consul.json".text = builtins.toJSON configOptions;
@@ -181,64 +194,80 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ] ++ systemdDevices;
         bindsTo = systemdDevices;
-        restartTriggers = [ config.environment.etc."consul.json".source ]
-          ++ mapAttrsToList (_: d: d.source)
-            (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
+        restartTriggers =
+          [ config.environment.etc."consul.json".source ]
+          ++ mapAttrsToList (_: d: d.source) (
+            filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc
+          );
 
-        serviceConfig = {
-          ExecStart = "@${lib.getExe cfg.package} consul agent -config-dir /etc/consul.d"
-            + concatMapStrings (n: " -config-file ${n}") configFiles;
-          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-          PermissionsStartOnly = true;
-          User = if cfg.dropPrivileges then "consul" else null;
-          Restart = "on-failure";
-          TimeoutStartSec = "infinity";
-        } // (optionalAttrs (cfg.leaveOnStop) {
-          ExecStop = "${lib.getExe cfg.package} leave";
-        });
-
-        path = with pkgs; [ iproute2 gawk cfg.package ];
-        preStart = let
-          family = if cfg.forceAddrFamily == "ipv6" then
-            "-6"
-          else if cfg.forceAddrFamily == "ipv4" then
-            "-4"
-          else
-            "";
-        in ''
-          mkdir -m 0700 -p ${dataDir}
-          chown -R consul ${dataDir}
-
-          # Determine interface addresses
-          getAddrOnce () {
-            ip ${family} addr show dev "$1" scope global \
-              | awk -F '[ /\t]*' '/inet/ {print $3}' | head -n 1
+        serviceConfig =
+          {
+            ExecStart =
+              "@${lib.getExe cfg.package} consul agent -config-dir /etc/consul.d"
+              + concatMapStrings (n: " -config-file ${n}") configFiles;
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+            PermissionsStartOnly = true;
+            User = if cfg.dropPrivileges then "consul" else null;
+            Restart = "on-failure";
+            TimeoutStartSec = "infinity";
           }
-          getAddr () {
-            ADDR="$(getAddrOnce $1)"
-            LEFT=60 # Die after 1 minute
-            while [ -z "$ADDR" ]; do
-              sleep 1
-              LEFT=$(expr $LEFT - 1)
-              if [ "$LEFT" -eq "0" ]; then
-                echo "Address lookup timed out"
-                exit 1
-              fi
+          // (optionalAttrs (cfg.leaveOnStop) {
+            ExecStop = "${lib.getExe cfg.package} leave";
+          });
+
+        path = with pkgs; [
+          iproute2
+          gawk
+          cfg.package
+        ];
+        preStart =
+          let
+            family =
+              if cfg.forceAddrFamily == "ipv6" then
+                "-6"
+              else if cfg.forceAddrFamily == "ipv4" then
+                "-4"
+              else
+                "";
+          in
+          ''
+            mkdir -m 0700 -p ${dataDir}
+            chown -R consul ${dataDir}
+
+            # Determine interface addresses
+            getAddrOnce () {
+              ip ${family} addr show dev "$1" scope global \
+                | awk -F '[ /\t]*' '/inet/ {print $3}' | head -n 1
+            }
+            getAddr () {
               ADDR="$(getAddrOnce $1)"
-            done
-            echo "$ADDR"
-          }
-          echo "{" > /etc/consul-addrs.json
-          delim=" "
-        ''
-        + concatStrings (flip mapAttrsToList cfg.interface (name: i:
-          optionalString (i != null) ''
-            echo "$delim \"${name}_addr\": \"$(getAddr "${i}")\"" >> /etc/consul-addrs.json
-            delim=","
-          ''))
-        + ''
-          echo "}" >> /etc/consul-addrs.json
-        '';
+              LEFT=60 # Die after 1 minute
+              while [ -z "$ADDR" ]; do
+                sleep 1
+                LEFT=$(expr $LEFT - 1)
+                if [ "$LEFT" -eq "0" ]; then
+                  echo "Address lookup timed out"
+                  exit 1
+                fi
+                ADDR="$(getAddrOnce $1)"
+              done
+              echo "$ADDR"
+            }
+            echo "{" > /etc/consul-addrs.json
+            delim=" "
+          ''
+          + concatStrings (
+            flip mapAttrsToList cfg.interface (
+              name: i:
+              optionalString (i != null) ''
+                echo "$delim \"${name}_addr\": \"$(getAddr "${i}")\"" >> /etc/consul-addrs.json
+                delim=","
+              ''
+            )
+          )
+          + ''
+            echo "}" >> /etc/consul-addrs.json
+          '';
       };
     }
 

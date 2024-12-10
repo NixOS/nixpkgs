@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, unstableGitUpdater
-, meson
-, ninja
-, pkg-config
-, wayfire
-, libxkbcommon
-, libGL
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  meson,
+  ninja,
+  pkg-config,
+  wayfire,
+  libxkbcommon,
+  libGL,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

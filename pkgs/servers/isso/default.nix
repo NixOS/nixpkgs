@@ -1,4 +1,13 @@
-{ pkgs, nodejs, lib, python3Packages, fetchFromGitHub, nixosTests, fetchNpmDeps, npmHooks }:
+{
+  pkgs,
+  nodejs,
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  nixosTests,
+  fetchNpmDeps,
+  npmHooks,
+}:
 
 with python3Packages;
 

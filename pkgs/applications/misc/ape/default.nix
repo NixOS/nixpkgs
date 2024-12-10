@@ -1,9 +1,13 @@
-{ lib, stdenv, swiProlog, makeWrapper,
+{
+  lib,
+  stdenv,
+  swiProlog,
+  makeWrapper,
   fetchFromGitHub,
   lexiconPath ? "prolog/lexicon/clex_lexicon.pl",
   pname ? "ape",
   description ? "Parser for Attempto Controlled English (ACE)",
-  license ? with lib; licenses.lgpl3
+  license ? with lib; licenses.lgpl3,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,10 +18,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ swiProlog ];
 
   src = fetchFromGitHub {
-     owner = "Attempto";
-     repo = "APE";
-     rev = "113b81621262d7a395779465cb09397183e6f74c";
-     sha256 = "0xyvna2fbr18hi5yvm0zwh77q02dfna1g4g53z9mn2rmlfn2mhjh";
+    owner = "Attempto";
+    repo = "APE";
+    rev = "113b81621262d7a395779465cb09397183e6f74c";
+    sha256 = "0xyvna2fbr18hi5yvm0zwh77q02dfna1g4g53z9mn2rmlfn2mhjh";
   };
 
   patchPhase = ''

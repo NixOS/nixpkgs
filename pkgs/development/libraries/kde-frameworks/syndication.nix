@@ -1,6 +1,8 @@
-{ mkDerivation, lib
-, extra-cmake-modules
-, kcodecs
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kcodecs,
 }:
 
 mkDerivation {

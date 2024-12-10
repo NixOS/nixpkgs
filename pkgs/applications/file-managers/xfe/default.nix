@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, fox
-, fontconfig
-, freetype
-, pkg-config
-, gettext
-, xcbutil
-, gcc
-, intltool
-, file
-, libpng
-, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fox,
+  fontconfig,
+  freetype,
+  pkg-config,
+  gettext,
+  xcbutil,
+  gcc,
+  intltool,
+  file,
+  libpng,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-NTpowZCl4OTWrK2txh7f7t9WxGRdfM0M3KIyHq3nJUg=";
   };
 
-  nativeBuildInputs = [ pkg-config intltool ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ];
   buildInputs = [
     fox
     gettext

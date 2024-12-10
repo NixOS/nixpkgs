@@ -1,12 +1,14 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, libbladeRF
-, libusb1
-, ncurses
-, rtl-sdr
-, hackrf
-, limesuite
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libbladeRF,
+  libusb1,
+  ncurses,
+  rtl-sdr,
+  hackrf,
+  limesuite,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,10 +32,13 @@ stdenv.mkDerivation rec {
     hackrf
   ] ++ lib.optional stdenv.isLinux limesuite;
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
-    "-Wno-implicit-function-declaration -Wno-int-conversion -Wno-unknown-warning-option";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-implicit-function-declaration -Wno-int-conversion -Wno-unknown-warning-option";
 
-  buildFlags = [ "DUMP1090_VERSION=${version}" "dump1090" "view1090" ];
+  buildFlags = [
+    "DUMP1090_VERSION=${version}"
+    "dump1090"
+    "view1090"
+  ];
 
   doCheck = true;
 

@@ -1,18 +1,40 @@
-{ stdenv, lib, fetchurl, fetchpatch, runtimeShell, buildPackages
-, gettext, pkg-config, python3
-, avahi, libgphoto2, libieee1284, libjpeg, libpng, libtiff, libusb1, libv4l, net-snmp
-, curl, systemd, libxml2, poppler, gawk
-, sane-drivers
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  runtimeShell,
+  buildPackages,
+  gettext,
+  pkg-config,
+  python3,
+  avahi,
+  libgphoto2,
+  libieee1284,
+  libjpeg,
+  libpng,
+  libtiff,
+  libusb1,
+  libv4l,
+  net-snmp,
+  curl,
+  systemd,
+  libxml2,
+  poppler,
+  gawk,
+  sane-drivers,
+  nixosTests,
 
-# List of { src name backend } attibute sets - see installFirmware below:
-, extraFirmware ? []
+  # List of { src name backend } attibute sets - see installFirmware below:
+  extraFirmware ? [ ],
 
-# For backwards compatibility with older setups; use extraFirmware instead:
-, gt68xxFirmware ? null, snapscanFirmware ? null
+  # For backwards compatibility with older setups; use extraFirmware instead:
+  gt68xxFirmware ? null,
+  snapscanFirmware ? null,
 
-# Not included by default, scan snap drivers require fetching of unfree binaries.
-, scanSnapDriversUnfree ? false, scanSnapDriversPackage ? sane-drivers.epjitsu
+  # Not included by default, scan snap drivers require fetching of unfree binaries.
+  scanSnapDriversUnfree ? false,
+  scanSnapDriversPackage ? sane-drivers.epjitsu,
 }:
 
 stdenv.mkDerivation {
@@ -46,7 +68,11 @@ stdenv.mkDerivation {
       --replace 'cc -I' '$(CC_FOR_BUILD) -I'
   '';
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -56,75 +82,81 @@ stdenv.mkDerivation {
     python3
   ];
 
-  buildInputs = [
-    avahi
-    libgphoto2
-    libjpeg
-    libpng
-    libtiff
-    libusb1
-    curl
-    libxml2
-    poppler
-    gawk
-  ] ++ lib.optionals stdenv.isLinux [
-    libieee1284
-    libv4l
-    net-snmp
-    systemd
-  ];
+  buildInputs =
+    [
+      avahi
+      libgphoto2
+      libjpeg
+      libpng
+      libtiff
+      libusb1
+      curl
+      libxml2
+      poppler
+      gawk
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      libieee1284
+      libv4l
+      net-snmp
+      systemd
+    ];
 
   enableParallelBuilding = true;
 
   configureFlags =
-    lib.optional (avahi != null)   "--with-avahi"
-    ++ lib.optional (libusb1 != null) "--with-usb"
-  ;
+    lib.optional (avahi != null) "--with-avahi"
+    ++ lib.optional (libusb1 != null) "--with-usb";
 
   # autoconf check for HAVE_MMAP is never set on cross compilation.
   # The pieusb backend fails compilation if HAVE_MMAP is not set.
-  buildFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "CFLAGS=-DHAVE_MMAP=${if stdenv.hostPlatform.isLinux then "1" else "0"}" ];
+  buildFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "CFLAGS=-DHAVE_MMAP=${if stdenv.hostPlatform.isLinux then "1" else "0"}"
+  ];
 
-  postInstall = let
+  postInstall =
+    let
 
-    compatFirmware = extraFirmware
-      ++ lib.optional (gt68xxFirmware != null) {
-        src = gt68xxFirmware.fw;
-        inherit (gt68xxFirmware) name;
-        backend = "gt68xx";
-      }
-      ++ lib.optional (snapscanFirmware != null) {
-        src = snapscanFirmware;
-        name = "your-firmwarefile.bin";
-        backend = "snapscan";
-      };
+      compatFirmware =
+        extraFirmware
+        ++ lib.optional (gt68xxFirmware != null) {
+          src = gt68xxFirmware.fw;
+          inherit (gt68xxFirmware) name;
+          backend = "gt68xx";
+        }
+        ++ lib.optional (snapscanFirmware != null) {
+          src = snapscanFirmware;
+          name = "your-firmwarefile.bin";
+          backend = "snapscan";
+        };
 
-    installFirmware = f: ''
-      mkdir -p $out/share/sane/${f.backend}
-      ln -sv ${f.src} $out/share/sane/${f.backend}/${f.name}
-    '';
+      installFirmware = f: ''
+        mkdir -p $out/share/sane/${f.backend}
+        ln -sv ${f.src} $out/share/sane/${f.backend}/${f.name}
+      '';
 
-  in ''
-    mkdir -p $out/etc/udev/rules.d/ $out/etc/udev/hwdb.d
-    ./tools/sane-desc -m udev+hwdb -s doc/descriptions:doc/descriptions-external > $out/etc/udev/rules.d/49-libsane.rules
-    ./tools/sane-desc -m udev+hwdb -s doc/descriptions:doc/descriptions-external -m hwdb > $out/etc/udev/hwdb.d/20-sane.hwdb
-    # the created 49-libsane references /bin/sh
-    substituteInPlace $out/etc/udev/rules.d/49-libsane.rules \
-      --replace "RUN+=\"/bin/sh" "RUN+=\"${runtimeShell}"
+    in
+    ''
+      mkdir -p $out/etc/udev/rules.d/ $out/etc/udev/hwdb.d
+      ./tools/sane-desc -m udev+hwdb -s doc/descriptions:doc/descriptions-external > $out/etc/udev/rules.d/49-libsane.rules
+      ./tools/sane-desc -m udev+hwdb -s doc/descriptions:doc/descriptions-external -m hwdb > $out/etc/udev/hwdb.d/20-sane.hwdb
+      # the created 49-libsane references /bin/sh
+      substituteInPlace $out/etc/udev/rules.d/49-libsane.rules \
+        --replace "RUN+=\"/bin/sh" "RUN+=\"${runtimeShell}"
 
-    substituteInPlace $out/lib/libsane.la \
-      --replace "-ljpeg" "-L${lib.getLib libjpeg}/lib -ljpeg"
+      substituteInPlace $out/lib/libsane.la \
+        --replace "-ljpeg" "-L${lib.getLib libjpeg}/lib -ljpeg"
 
-    # net.conf conflicts with the file generated by the nixos module
-    rm $out/etc/sane.d/net.conf
+      # net.conf conflicts with the file generated by the nixos module
+      rm $out/etc/sane.d/net.conf
 
-  ''
-  + lib.optionalString scanSnapDriversUnfree ''
-    # the ScanSnap drivers live under the epjitsu subdirectory, which was already created by the build but is empty.
-    rmdir $out/share/sane/epjitsu
-    ln -svT ${scanSnapDriversPackage} $out/share/sane/epjitsu
-  ''
-  + lib.concatStrings (builtins.map installFirmware compatFirmware);
+    ''
+    + lib.optionalString scanSnapDriversUnfree ''
+      # the ScanSnap drivers live under the epjitsu subdirectory, which was already created by the build but is empty.
+      rmdir $out/share/sane/epjitsu
+      ln -svT ${scanSnapDriversPackage} $out/share/sane/epjitsu
+    ''
+    + lib.concatStrings (builtins.map installFirmware compatFirmware);
 
   # parallel install creates a bad symlink at $out/lib/sane/libsane.so.1 which prevents finding plugins
   # https://github.com/NixOS/nixpkgs/issues/224569

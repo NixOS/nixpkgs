@@ -1,4 +1,12 @@
-{ lib, buildKodiAddon, fetchFromGitHub, six, requests, infotagger, inputstreamhelper }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  six,
+  requests,
+  infotagger,
+  inputstreamhelper,
+}:
 
 buildKodiAddon rec {
   pname = "youtube";

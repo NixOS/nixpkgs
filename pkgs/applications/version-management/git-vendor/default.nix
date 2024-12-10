@@ -1,11 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, writeShellScriptBin, skawarePackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeShellScriptBin,
+  skawarePackages,
 }:
 
 let
   version = "1.3.0";
   sha256 = "sha256-CFv9gZQHeEiZctJFyB6PJ1dVNkrQ7PlVtgZuteQQTJ0=";
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "git-vendor";
   inherit version;
 
@@ -16,7 +22,12 @@ in stdenv.mkDerivation {
     inherit sha256;
   };
 
-  outputs = [ "bin" "man" "doc" "out" ];
+  outputs = [
+    "bin"
+    "man"
+    "doc"
+    "out"
+  ];
 
   PREFIX = (placeholder "out");
   BINPREFIX = "${placeholder "bin"}/bin";
@@ -28,7 +39,8 @@ in stdenv.mkDerivation {
   ];
 
   postInstall = ''
-    ${skawarePackages.cleanPackaging.commonFileActions {
+    ${
+      skawarePackages.cleanPackaging.commonFileActions {
         docFiles = [
           "LICENSE"
           "README.md"
@@ -40,7 +52,8 @@ in stdenv.mkDerivation {
           "man"
           "install.sh"
         ];
-      }} $doc/share/doc/git-vendor
+      }
+    } $doc/share/doc/git-vendor
   '';
 
   postFixup = ''

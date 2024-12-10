@@ -30,10 +30,13 @@ buildPythonPackage rec {
     yaml = [ pyyaml ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-mock
-  ] ++ passthru.optional-dependencies.timedelta ++ passthru.optional-dependencies.yaml;
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+      pytest-mock
+    ]
+    ++ passthru.optional-dependencies.timedelta
+    ++ passthru.optional-dependencies.yaml;
 
   disabledTests =
     [ ]

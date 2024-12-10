@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, curl, Security, CoreServices, CoreFoundation, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  curl,
+  Security,
+  CoreServices,
+  CoreFoundation,
+  libiconv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "wrangler";
@@ -15,8 +27,15 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ curl CoreFoundation CoreServices Security libiconv ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
+      curl
+      CoreFoundation
+      CoreServices
+      Security
+      libiconv
+    ];
 
   OPENSSL_NO_VENDOR = 1;
 
@@ -27,7 +46,10 @@ rustPlatform.buildRustPackage rec {
     description = "A CLI tool designed for folks who are interested in using Cloudflare Workers";
     mainProgram = "wrangler";
     homepage = "https://github.com/cloudflare/wrangler";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

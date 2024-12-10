@@ -1,15 +1,16 @@
-{ stdenv
-, autoconf
-, automake
-, fetchFromGitHub
-, fetchpatch
-, lib
-, libimobiledevice
-, libusb1
-, libplist
-, libtool
-, openssl
-, pkg-config
+{
+  stdenv,
+  autoconf,
+  automake,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  libimobiledevice,
+  libusb1,
+  libplist,
+  libtool,
+  openssl,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,10 +39,23 @@ stdenv.mkDerivation rec {
     ./0001-Don-t-compile-examples.patch
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
-  buildInputs = [ libimobiledevice libusb1 libplist openssl ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    pkg-config
+  ];
+  buildInputs = [
+    libimobiledevice
+    libusb1
+    libplist
+    openssl
+  ];
 
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh

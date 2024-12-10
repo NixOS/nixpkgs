@@ -13,15 +13,30 @@ with pkgs.lib;
 {
 
   # the derivation. use language extensions specified by args
-  ctagsWrapped = makeOverridable ( {args, name} :  pkgs.writeScriptBin name ''
-  #!${pkgs.runtimeShell}
-  exec ${pkgs.ctags}/bin/ctags ${concatStringsSep " " (map escapeShellArg args)} "$@"
-  '') {
-    args = let x = pkgs.ctagsWrapped; in concatLists [
-      x.defaultArgs x.phpLang x.jsLang x.nixLang x.asLang x.rubyLang
-    ];
-    name = "${ctags.name}-wrapped";
-  };
+  ctagsWrapped =
+    makeOverridable
+      (
+        { args, name }:
+        pkgs.writeScriptBin name ''
+          #!${pkgs.runtimeShell}
+          exec ${pkgs.ctags}/bin/ctags ${concatStringsSep " " (map escapeShellArg args)} "$@"
+        ''
+      )
+      {
+        args =
+          let
+            x = pkgs.ctagsWrapped;
+          in
+          concatLists [
+            x.defaultArgs
+            x.phpLang
+            x.jsLang
+            x.nixLang
+            x.asLang
+            x.rubyLang
+          ];
+        name = "${ctags.name}-wrapped";
+      };
 
   ### language arguments
 

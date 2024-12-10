@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "go-rice";
@@ -13,7 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-VlpdZcqg7yWUADN8oD/IAgAXVdzJeIeymx2Pu/7E21o=";
 
-  subPackages = [ "." "rice" ];
+  subPackages = [
+    "."
+    "rice"
+  ];
 
   meta = with lib; {
     description = "A Go package that makes working with resources such as html, js, css, images, templates very easy";

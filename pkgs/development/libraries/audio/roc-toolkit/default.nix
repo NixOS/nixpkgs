@@ -1,4 +1,5 @@
-{ stdenv,
+{
+  stdenv,
   lib,
   fetchFromGitHub,
   scons,
@@ -16,14 +17,17 @@
   opensslSupport ? true,
   openssl,
   soxSupport ? true,
-  sox
+  sox,
 }:
 
 stdenv.mkDerivation rec {
   pname = "roc-toolkit";
   version = "0.3.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "roc-streaming";
@@ -39,27 +43,36 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  propagatedBuildInputs = [
-    libuv
-    speexdsp
-  ] ++ lib.optional openfecSupport openfec
+  propagatedBuildInputs =
+    [
+      libuv
+      speexdsp
+    ]
+    ++ lib.optional openfecSupport openfec
     ++ lib.optional libunwindSupport libunwind
     ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional opensslSupport openssl
     ++ lib.optional soxSupport sox;
 
   sconsFlags =
-    [ "--build=${stdenv.buildPlatform.config}"
+    [
+      "--build=${stdenv.buildPlatform.config}"
       "--host=${stdenv.hostPlatform.config}"
-      "--prefix=${placeholder "out"}" ] ++
-    lib.optional (!opensslSupport) "--disable-openssl" ++
-    lib.optional (!soxSupport) "--disable-sox" ++
-    lib.optional (!libunwindSupport) "--disable-libunwind" ++
-    lib.optional (!pulseaudioSupport) "--disable-pulseaudio" ++
-    (if (!openfecSupport)
-       then ["--disable-openfec"]
-       else [ "--with-libraries=${openfec}/lib"
-              "--with-openfec-includes=${openfec.dev}/include" ]);
+      "--prefix=${placeholder "out"}"
+    ]
+    ++ lib.optional (!opensslSupport) "--disable-openssl"
+    ++ lib.optional (!soxSupport) "--disable-sox"
+    ++ lib.optional (!libunwindSupport) "--disable-libunwind"
+    ++ lib.optional (!pulseaudioSupport) "--disable-pulseaudio"
+    ++ (
+      if (!openfecSupport) then
+        [ "--disable-openfec" ]
+      else
+        [
+          "--with-libraries=${openfec}/lib"
+          "--with-openfec-includes=${openfec.dev}/include"
+        ]
+    );
 
   meta = with lib; {
     description = "Roc is a toolkit for real-time audio streaming over the network";

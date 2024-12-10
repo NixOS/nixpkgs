@@ -1,34 +1,35 @@
-{ asciidoc
-, dbus
-, docbook_xml_dtd_45
-, docbook_xsl
-, fetchFromGitHub
-, lib
-, libconfig
-, libdrm
-, libev
-, libGL
-, libepoxy
-, libX11
-, libxcb
-, libxdg_basedir
-, libXext
-, libxml2
-, libxslt
-, makeWrapper
-, meson
-, ninja
-, pcre2
-, pixman
-, pkg-config
-, stdenv
-, uthash
-, xcbutil
-, xcbutilimage
-, xcbutilrenderutil
-, xorgproto
-, xwininfo
-, withDebug ? false
+{
+  asciidoc,
+  dbus,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  fetchFromGitHub,
+  lib,
+  libconfig,
+  libdrm,
+  libev,
+  libGL,
+  libepoxy,
+  libX11,
+  libxcb,
+  libxdg_basedir,
+  libXext,
+  libxml2,
+  libxslt,
+  makeWrapper,
+  meson,
+  ninja,
+  pcre2,
+  pixman,
+  pkg-config,
+  stdenv,
+  uthash,
+  xcbutil,
+  xcbutilimage,
+  xcbutilrenderutil,
+  xorgproto,
+  xwininfo,
+  withDebug ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -88,12 +89,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   # In debug mode, also copy src directory to store. If you then run `gdb picom`
   # in the bin directory of picom store path, gdb finds the source files.
-  postInstall = ''
-    wrapProgram $out/bin/picom-trans \
-      --prefix PATH : ${lib.makeBinPath [ xwininfo ]}
-  '' + lib.optionalString withDebug ''
-    cp -r ../src $out/
-  '';
+  postInstall =
+    ''
+      wrapProgram $out/bin/picom-trans \
+        --prefix PATH : ${lib.makeBinPath [ xwininfo ]}
+    ''
+    + lib.optionalString withDebug ''
+      cp -r ../src $out/
+    '';
 
   meta = with lib; {
     description = "A fork of XCompMgr, a sample compositing manager for X servers";
@@ -113,7 +116,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.mit;
     homepage = "https://github.com/yshui/picom";
-    maintainers = with maintainers; [ ertes gepbird twey thiagokokada ];
+    maintainers = with maintainers; [
+      ertes
+      gepbird
+      twey
+      thiagokokada
+    ];
     platforms = platforms.linux;
     mainProgram = "picom";
   };

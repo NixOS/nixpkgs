@@ -5,6 +5,6 @@
 mkKdeDerivation {
   pname = "kjumpingcube";
 
-  extraBuildInputs = [qtsvg];
+  extraBuildInputs = [ qtsvg ];
   meta.mainProgram = "kjumpingcube";
 }

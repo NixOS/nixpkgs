@@ -1,27 +1,33 @@
-{ lib
-, stdenv
-, fetchurl
-, glib
-, meson
-, ninja
-, nixosTests
-, pkg-config
-, gettext
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
-, buildPackages
-, gobject-introspection
-, gi-docgen
-, libxslt
-, fixDarwinDylibNames
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  meson,
+  ninja,
+  nixosTests,
+  pkg-config,
+  gettext,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  gobject-introspection,
+  gi-docgen,
+  libxslt,
+  fixDarwinDylibNames,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "json-glib";
   version = "1.8.0";
 
-  outputs = [ "out" "dev" "installedTests" ]
-    ++ lib.optional withIntrospection "devdoc";
+  outputs = [
+    "out"
+    "dev"
+    "installedTests"
+  ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -39,19 +45,22 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gettext
-    glib
-    libxslt
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    fixDarwinDylibNames
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-    gi-docgen
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      gettext
+      glib
+      libxslt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      fixDarwinDylibNames
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      gi-docgen
+    ];
 
   propagatedBuildInputs = [
     glib

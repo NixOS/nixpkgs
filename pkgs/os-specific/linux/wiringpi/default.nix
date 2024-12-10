@@ -1,37 +1,41 @@
-{ lib
-, stdenv
-, symlinkJoin
-, fetchFromGitHub
-, libxcrypt
+{
+  lib,
+  stdenv,
+  symlinkJoin,
+  fetchFromGitHub,
+  libxcrypt,
 }:
 
 let
   version = "2.61-1";
-  mkSubProject = { subprj # The only mandatory argument
-  , buildInputs ? []
-  , src ? fetchFromGitHub {
-    owner = "WiringPi";
-    repo = "WiringPi";
-    rev = version;
-    sha256 = "sha256-VxAaPhaPXd9xYt663Ju6SLblqiSLizauhhuFqCqbO5M=";
-  }
-  }: stdenv.mkDerivation (finalAttrs: {
-    pname = "wiringpi-${subprj}";
-    inherit version src;
-    sourceRoot = "${src.name}/${subprj}";
-    inherit buildInputs;
-    # Remove (meant for other OSs) lines from Makefiles
-    preInstall = ''
-      sed -i "/chown root/d" Makefile
-      sed -i "/chmod/d" Makefile
-    '';
-    makeFlags = [
-      "DESTDIR=${placeholder "out"}"
-      "PREFIX=/."
-      # On NixOS we don't need to run ldconfig during build:
-      "LDCONFIG=echo"
-    ];
-  });
+  mkSubProject =
+    {
+      subprj, # The only mandatory argument
+      buildInputs ? [ ],
+      src ? fetchFromGitHub {
+        owner = "WiringPi";
+        repo = "WiringPi";
+        rev = version;
+        sha256 = "sha256-VxAaPhaPXd9xYt663Ju6SLblqiSLizauhhuFqCqbO5M=";
+      },
+    }:
+    stdenv.mkDerivation (finalAttrs: {
+      pname = "wiringpi-${subprj}";
+      inherit version src;
+      sourceRoot = "${src.name}/${subprj}";
+      inherit buildInputs;
+      # Remove (meant for other OSs) lines from Makefiles
+      preInstall = ''
+        sed -i "/chown root/d" Makefile
+        sed -i "/chmod/d" Makefile
+      '';
+      makeFlags = [
+        "DESTDIR=${placeholder "out"}"
+        "PREFIX=/."
+        # On NixOS we don't need to run ldconfig during build:
+        "LDCONFIG=echo"
+      ];
+    });
   passthru = {
     inherit mkSubProject;
     wiringPi = mkSubProject {

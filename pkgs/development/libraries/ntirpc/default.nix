@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, krb5, liburcu , libtirpc, libnsl
-} :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  krb5,
+  liburcu,
+  libtirpc,
+  libnsl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ntirpc";
@@ -19,7 +26,11 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ krb5 liburcu libnsl ];
+  buildInputs = [
+    krb5
+    liburcu
+    libnsl
+  ];
 
   postInstall = ''
     mkdir -p $out/etc

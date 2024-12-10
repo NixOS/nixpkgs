@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -8,75 +13,94 @@ let
   user = "invoiceplane";
   webserver = config.services.${cfg.webserver};
 
-  invoiceplane-config = hostName: cfg: pkgs.writeText "ipconfig.php" ''
-    IP_URL=http://${hostName}
-    ENABLE_DEBUG=false
-    DISABLE_SETUP=false
-    REMOVE_INDEXPHP=false
-    DB_HOSTNAME=${cfg.database.host}
-    DB_USERNAME=${cfg.database.user}
-    # NOTE: file_get_contents adds newline at the end of returned string
-    DB_PASSWORD=${optionalString (cfg.database.passwordFile != null) "trim(file_get_contents('${cfg.database.passwordFile}'), \"\\r\\n\")"}
-    DB_DATABASE=${cfg.database.name}
-    DB_PORT=${toString cfg.database.port}
-    SESS_EXPIRATION=864000
-    ENABLE_INVOICE_DELETION=false
-    DISABLE_READ_ONLY=false
-    ENCRYPTION_KEY=
-    ENCRYPTION_CIPHER=AES-256
-    SETUP_COMPLETED=false
-    REMOVE_INDEXPHP=true
-  '';
+  invoiceplane-config =
+    hostName: cfg:
+    pkgs.writeText "ipconfig.php" ''
+      IP_URL=http://${hostName}
+      ENABLE_DEBUG=false
+      DISABLE_SETUP=false
+      REMOVE_INDEXPHP=false
+      DB_HOSTNAME=${cfg.database.host}
+      DB_USERNAME=${cfg.database.user}
+      # NOTE: file_get_contents adds newline at the end of returned string
+      DB_PASSWORD=${
+        optionalString (
+          cfg.database.passwordFile != null
+        ) "trim(file_get_contents('${cfg.database.passwordFile}'), \"\\r\\n\")"
+      }
+      DB_DATABASE=${cfg.database.name}
+      DB_PORT=${toString cfg.database.port}
+      SESS_EXPIRATION=864000
+      ENABLE_INVOICE_DELETION=false
+      DISABLE_READ_ONLY=false
+      ENCRYPTION_KEY=
+      ENCRYPTION_CIPHER=AES-256
+      SETUP_COMPLETED=false
+      REMOVE_INDEXPHP=true
+    '';
 
-  mkPhpValue = v:
-    if isString v then escapeShellArg v
+  mkPhpValue =
+    v:
+    if isString v then
+      escapeShellArg v
     # NOTE: If any value contains a , (comma) this will not get escaped
-    else if isList v && any lib.strings.isCoercibleToString v then escapeShellArg (concatMapStringsSep "," toString v)
-    else if isInt v then toString v
-    else if isBool v then boolToString v
-    else abort "The Invoiceplane config value ${lib.generators.toPretty {} v} can not be encoded."
-  ;
+    else if isList v && any lib.strings.isCoercibleToString v then
+      escapeShellArg (concatMapStringsSep "," toString v)
+    else if isInt v then
+      toString v
+    else if isBool v then
+      boolToString v
+    else
+      abort "The Invoiceplane config value ${lib.generators.toPretty { } v} can not be encoded.";
 
-  extraConfig = hostName: cfg: let
-    settings = mapAttrsToList (k: v: "${k}=${mkPhpValue v}") cfg.settings;
-  in pkgs.writeText "extraConfig.php" ''
-    ${concatStringsSep "\n" settings}
-    ${toString cfg.extraConfig}
-  '';
-
-  pkg = hostName: cfg: pkgs.stdenv.mkDerivation rec {
-    pname = "invoiceplane-${hostName}";
-    version = src.version;
-    src = pkgs.invoiceplane;
-
-    postPatch = ''
-      # Patch index.php file to load additional config file
-      substituteInPlace index.php \
-        --replace-fail "require('vendor/autoload.php');" "require('vendor/autoload.php'); \$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, 'extraConfig.php'); \$dotenv->load();";
+  extraConfig =
+    hostName: cfg:
+    let
+      settings = mapAttrsToList (k: v: "${k}=${mkPhpValue v}") cfg.settings;
+    in
+    pkgs.writeText "extraConfig.php" ''
+      ${concatStringsSep "\n" settings}
+      ${toString cfg.extraConfig}
     '';
 
-    installPhase = ''
-      mkdir -p $out
-      cp -r * $out/
+  pkg =
+    hostName: cfg:
+    pkgs.stdenv.mkDerivation rec {
+      pname = "invoiceplane-${hostName}";
+      version = src.version;
+      src = pkgs.invoiceplane;
 
-      # symlink uploads and log directories
-      rm -r $out/uploads $out/application/logs $out/vendor/mpdf/mpdf/tmp
-      ln -sf ${cfg.stateDir}/uploads $out/
-      ln -sf ${cfg.stateDir}/logs $out/application/
-      ln -sf ${cfg.stateDir}/tmp $out/vendor/mpdf/mpdf/
+      postPatch = ''
+        # Patch index.php file to load additional config file
+        substituteInPlace index.php \
+          --replace-fail "require('vendor/autoload.php');" "require('vendor/autoload.php'); \$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, 'extraConfig.php'); \$dotenv->load();";
+      '';
 
-      # symlink the InvoicePlane config
-      ln -s ${cfg.stateDir}/ipconfig.php $out/ipconfig.php
+      installPhase = ''
+        mkdir -p $out
+        cp -r * $out/
 
-      # symlink the extraConfig file
-      ln -s ${extraConfig hostName cfg} $out/extraConfig.php
+        # symlink uploads and log directories
+        rm -r $out/uploads $out/application/logs $out/vendor/mpdf/mpdf/tmp
+        ln -sf ${cfg.stateDir}/uploads $out/
+        ln -sf ${cfg.stateDir}/logs $out/application/
+        ln -sf ${cfg.stateDir}/tmp $out/vendor/mpdf/mpdf/
 
-      # symlink additional templates
-      ${concatMapStringsSep "\n" (template: "cp -r ${template}/. $out/application/views/invoice_templates/pdf/") cfg.invoiceTemplates}
-    '';
-  };
+        # symlink the InvoicePlane config
+        ln -s ${cfg.stateDir}/ipconfig.php $out/ipconfig.php
 
-  siteOpts = { lib, name, ... }:
+        # symlink the extraConfig file
+        ln -s ${extraConfig hostName cfg} $out/extraConfig.php
+
+        # symlink additional templates
+        ${concatMapStringsSep "\n" (
+          template: "cp -r ${template}/. $out/application/views/invoice_templates/pdf/"
+        ) cfg.invoiceTemplates}
+      '';
+    };
+
+  siteOpts =
+    { lib, name, ... }:
     {
       options = {
 
@@ -136,7 +160,7 @@ let
 
         invoiceTemplates = mkOption {
           type = types.listOf types.path;
-          default = [];
+          default = [ ];
           description = ''
             List of path(s) to respective template(s) which are copied from the 'invoice_templates/pdf' directory.
 
@@ -167,7 +191,13 @@ let
         };
 
         poolConfig = mkOption {
-          type = with types; attrsOf (oneOf [ str int bool ]);
+          type =
+            with types;
+            attrsOf (oneOf [
+              str
+              int
+              bool
+            ]);
           default = {
             "pm" = "dynamic";
             "pm.max_children" = 32;
@@ -203,7 +233,7 @@ let
 
         settings = mkOption {
           type = types.attrsOf types.anything;
-          default = {};
+          default = { };
           description = ''
             Structural InvoicePlane configuration. Refer to
             <https://github.com/InvoicePlane/InvoicePlane/blob/master/ipconfig.php.example>
@@ -247,12 +277,15 @@ in
 
         options.sites = mkOption {
           type = types.attrsOf (types.submodule siteOpts);
-          default = {};
+          default = { };
           description = "Specification of one or more WordPress sites to serve";
         };
 
         options.webserver = mkOption {
-          type = types.enum [ "caddy" "nginx" ];
+          type = types.enum [
+            "caddy"
+            "nginx"
+          ];
           default = "caddy";
           example = "nginx";
           description = ''
@@ -260,169 +293,189 @@ in
           '';
         };
       };
-      default = {};
+      default = { };
       description = "InvoicePlane configuration.";
     };
 
   };
 
   # implementation
-  config = mkIf (eachSite != {}) (mkMerge [{
+  config = mkIf (eachSite != { }) (mkMerge [
+    {
 
-    warnings = flatten (mapAttrsToList (hostName: cfg: [
-      (optional (cfg.extraConfig != null) ''
-        services.invoiceplane.sites."${hostName}".extraConfig will be deprecated in future releases, please use the settings option now.
-      '')
-    ]) eachSite);
+      warnings = flatten (
+        mapAttrsToList (hostName: cfg: [
+          (optional (cfg.extraConfig != null) ''
+            services.invoiceplane.sites."${hostName}".extraConfig will be deprecated in future releases, please use the settings option now.
+          '')
+        ]) eachSite
+      );
 
-    assertions = flatten (mapAttrsToList (hostName: cfg: [
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
-        message = ''services.invoiceplane.sites."${hostName}".database.user must be ${user} if the database is to be automatically provisioned'';
-      }
-      { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
-        message = ''services.invoiceplane.sites."${hostName}".database.passwordFile cannot be specified if services.invoiceplane.sites."${hostName}".database.createLocally is set to true.'';
-      }
-      { assertion = cfg.cron.enable -> cfg.cron.key != null;
-        message = ''services.invoiceplane.sites."${hostName}".cron.key must be set in order to use cron service.'';
-      }
-    ]) eachSite);
+      assertions = flatten (
+        mapAttrsToList (hostName: cfg: [
+          {
+            assertion = cfg.database.createLocally -> cfg.database.user == user;
+            message = ''services.invoiceplane.sites."${hostName}".database.user must be ${user} if the database is to be automatically provisioned'';
+          }
+          {
+            assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
+            message = ''services.invoiceplane.sites."${hostName}".database.passwordFile cannot be specified if services.invoiceplane.sites."${hostName}".database.createLocally is set to true.'';
+          }
+          {
+            assertion = cfg.cron.enable -> cfg.cron.key != null;
+            message = ''services.invoiceplane.sites."${hostName}".cron.key must be set in order to use cron service.'';
+          }
+        ]) eachSite
+      );
 
-    services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
-      enable = true;
-      package = mkDefault pkgs.mariadb;
-      ensureDatabases = mapAttrsToList (hostName: cfg: cfg.database.name) eachSite;
-      ensureUsers = mapAttrsToList (hostName: cfg:
-        { name = cfg.database.user;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
-        }
-      ) eachSite;
-    };
-
-    services.phpfpm = {
-      phpPackage = pkgs.php81;
-      pools = mapAttrs' (hostName: cfg: (
-        nameValuePair "invoiceplane-${hostName}" {
-          inherit user;
-          group = webserver.group;
-          settings = {
-            "listen.owner" = webserver.user;
-            "listen.group" = webserver.group;
-          } // cfg.poolConfig;
-        }
-      )) eachSite;
-    };
-
-  }
-
-  {
-
-    systemd.tmpfiles.rules = flatten (mapAttrsToList (hostName: cfg: [
-      "d ${cfg.stateDir} 0750 ${user} ${webserver.group} - -"
-      "f ${cfg.stateDir}/ipconfig.php 0750 ${user} ${webserver.group} - -"
-      "d ${cfg.stateDir}/logs 0750 ${user} ${webserver.group} - -"
-      "d ${cfg.stateDir}/uploads 0750 ${user} ${webserver.group} - -"
-      "d ${cfg.stateDir}/uploads/archive 0750 ${user} ${webserver.group} - -"
-      "d ${cfg.stateDir}/uploads/customer_files 0750 ${user} ${webserver.group} - -"
-      "d ${cfg.stateDir}/uploads/temp 0750 ${user} ${webserver.group} - -"
-      "d ${cfg.stateDir}/uploads/temp/mpdf 0750 ${user} ${webserver.group} - -"
-      "d ${cfg.stateDir}/tmp 0750 ${user} ${webserver.group} - -"
-    ]) eachSite);
-
-    systemd.services.invoiceplane-config = {
-      serviceConfig.Type = "oneshot";
-      script = concatStrings (mapAttrsToList (hostName: cfg:
-        ''
-          mkdir -p ${cfg.stateDir}/logs \
-                   ${cfg.stateDir}/uploads
-          if ! grep -q IP_URL "${cfg.stateDir}/ipconfig.php"; then
-            cp "${invoiceplane-config hostName cfg}" "${cfg.stateDir}/ipconfig.php"
-          fi
-        '') eachSite);
-      wantedBy = [ "multi-user.target" ];
-    };
-
-    users.users.${user} = {
-      group = webserver.group;
-      isSystemUser = true;
-    };
-
-  }
-  {
-
-    # Cron service implementation
-
-    systemd.timers = mapAttrs' (hostName: cfg: (
-      nameValuePair "invoiceplane-cron-${hostName}" (mkIf cfg.cron.enable {
-        wantedBy = [ "timers.target" ];
-        timerConfig = {
-          OnBootSec = "5m";
-          OnUnitActiveSec = "5m";
-          Unit = "invoiceplane-cron-${hostName}.service";
-        };
-      })
-    )) eachSite;
-
-    systemd.services =
-      mapAttrs' (hostName: cfg: (
-        nameValuePair "invoiceplane-cron-${hostName}" (mkIf cfg.cron.enable {
-          serviceConfig = {
-            Type = "oneshot";
-            User = user;
-            ExecStart = "${pkgs.curl}/bin/curl --header 'Host: ${hostName}' http://localhost/invoices/cron/recur/${cfg.cron.key}";
+      services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
+        enable = true;
+        package = mkDefault pkgs.mariadb;
+        ensureDatabases = mapAttrsToList (hostName: cfg: cfg.database.name) eachSite;
+        ensureUsers = mapAttrsToList (hostName: cfg: {
+          name = cfg.database.user;
+          ensurePermissions = {
+            "${cfg.database.name}.*" = "ALL PRIVILEGES";
           };
-        })
-    )) eachSite;
+        }) eachSite;
+      };
 
-  }
+      services.phpfpm = {
+        phpPackage = pkgs.php81;
+        pools = mapAttrs' (
+          hostName: cfg:
+          (nameValuePair "invoiceplane-${hostName}" {
+            inherit user;
+            group = webserver.group;
+            settings = {
+              "listen.owner" = webserver.user;
+              "listen.group" = webserver.group;
+            } // cfg.poolConfig;
+          })
+        ) eachSite;
+      };
 
-  (mkIf (cfg.webserver == "caddy") {
-    services.caddy = {
-      enable = true;
-      virtualHosts = mapAttrs' (hostName: cfg: (
-        nameValuePair "http://${hostName}" {
-          extraConfig = ''
-            root * ${pkg hostName cfg}
-            file_server
-            php_fastcgi unix/${config.services.phpfpm.pools."invoiceplane-${hostName}".socket}
-          '';
-        }
-      )) eachSite;
-    };
-  })
+    }
 
-  (mkIf (cfg.webserver == "nginx") {
-    services.nginx = {
-      enable = true;
-      virtualHosts = mapAttrs' (hostName: cfg: (
-        nameValuePair hostName {
-          root = pkg hostName cfg;
-          extraConfig = ''
-            index index.php index.html index.htm;
+    {
 
-            if (!-e $request_filename){
-              rewrite ^(.*)$ /index.php break;
-            }
-          '';
+      systemd.tmpfiles.rules = flatten (
+        mapAttrsToList (hostName: cfg: [
+          "d ${cfg.stateDir} 0750 ${user} ${webserver.group} - -"
+          "f ${cfg.stateDir}/ipconfig.php 0750 ${user} ${webserver.group} - -"
+          "d ${cfg.stateDir}/logs 0750 ${user} ${webserver.group} - -"
+          "d ${cfg.stateDir}/uploads 0750 ${user} ${webserver.group} - -"
+          "d ${cfg.stateDir}/uploads/archive 0750 ${user} ${webserver.group} - -"
+          "d ${cfg.stateDir}/uploads/customer_files 0750 ${user} ${webserver.group} - -"
+          "d ${cfg.stateDir}/uploads/temp 0750 ${user} ${webserver.group} - -"
+          "d ${cfg.stateDir}/uploads/temp/mpdf 0750 ${user} ${webserver.group} - -"
+          "d ${cfg.stateDir}/tmp 0750 ${user} ${webserver.group} - -"
+        ]) eachSite
+      );
 
-          locations = {
-            "/setup".extraConfig = ''
-              rewrite ^(.*)$ http://${hostName}/ redirect;
+      systemd.services.invoiceplane-config = {
+        serviceConfig.Type = "oneshot";
+        script = concatStrings (
+          mapAttrsToList (hostName: cfg: ''
+            mkdir -p ${cfg.stateDir}/logs \
+                     ${cfg.stateDir}/uploads
+            if ! grep -q IP_URL "${cfg.stateDir}/ipconfig.php"; then
+              cp "${invoiceplane-config hostName cfg}" "${cfg.stateDir}/ipconfig.php"
+            fi
+          '') eachSite
+        );
+        wantedBy = [ "multi-user.target" ];
+      };
+
+      users.users.${user} = {
+        group = webserver.group;
+        isSystemUser = true;
+      };
+
+    }
+    {
+
+      # Cron service implementation
+
+      systemd.timers = mapAttrs' (
+        hostName: cfg:
+        (nameValuePair "invoiceplane-cron-${hostName}" (
+          mkIf cfg.cron.enable {
+            wantedBy = [ "timers.target" ];
+            timerConfig = {
+              OnBootSec = "5m";
+              OnUnitActiveSec = "5m";
+              Unit = "invoiceplane-cron-${hostName}.service";
+            };
+          }
+        ))
+      ) eachSite;
+
+      systemd.services = mapAttrs' (
+        hostName: cfg:
+        (nameValuePair "invoiceplane-cron-${hostName}" (
+          mkIf cfg.cron.enable {
+            serviceConfig = {
+              Type = "oneshot";
+              User = user;
+              ExecStart = "${pkgs.curl}/bin/curl --header 'Host: ${hostName}' http://localhost/invoices/cron/recur/${cfg.cron.key}";
+            };
+          }
+        ))
+      ) eachSite;
+
+    }
+
+    (mkIf (cfg.webserver == "caddy") {
+      services.caddy = {
+        enable = true;
+        virtualHosts = mapAttrs' (
+          hostName: cfg:
+          (nameValuePair "http://${hostName}" {
+            extraConfig = ''
+              root * ${pkg hostName cfg}
+              file_server
+              php_fastcgi unix/${config.services.phpfpm.pools."invoiceplane-${hostName}".socket}
+            '';
+          })
+        ) eachSite;
+      };
+    })
+
+    (mkIf (cfg.webserver == "nginx") {
+      services.nginx = {
+        enable = true;
+        virtualHosts = mapAttrs' (
+          hostName: cfg:
+          (nameValuePair hostName {
+            root = pkg hostName cfg;
+            extraConfig = ''
+              index index.php index.html index.htm;
+
+              if (!-e $request_filename){
+                rewrite ^(.*)$ /index.php break;
+              }
             '';
 
-            "~ .php$" = {
-              extraConfig = ''
-                fastcgi_split_path_info ^(.+\.php)(/.+)$;
-                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-                fastcgi_pass unix:${config.services.phpfpm.pools."invoiceplane-${hostName}".socket};
-                include ${config.services.nginx.package}/conf/fastcgi_params;
-                include ${config.services.nginx.package}/conf/fastcgi.conf;
+            locations = {
+              "/setup".extraConfig = ''
+                rewrite ^(.*)$ http://${hostName}/ redirect;
               '';
+
+              "~ .php$" = {
+                extraConfig = ''
+                  fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                  fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                  fastcgi_pass unix:${config.services.phpfpm.pools."invoiceplane-${hostName}".socket};
+                  include ${config.services.nginx.package}/conf/fastcgi_params;
+                  include ${config.services.nginx.package}/conf/fastcgi.conf;
+                '';
+              };
             };
-          };
-        }
-      )) eachSite;
-    };
-  })
+          })
+        ) eachSite;
+      };
+    })
 
   ]);
 }

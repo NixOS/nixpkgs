@@ -1,4 +1,12 @@
-{ fetchFromGitHub, lib, stdenv, gtk2, pkg-config, qmake, qtbase }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  gtk2,
+  pkg-config,
+  qmake,
+  qtbase,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qt6gtk2";
@@ -11,8 +19,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-g5ZCwTnNEJJ57zEwNqMxrl0EWYJMt3PquZ2IsmxQYqk=";
   };
 
-  buildInputs = [ gtk2 qtbase ];
-  nativeBuildInputs = [ pkg-config qmake ];
+  buildInputs = [
+    gtk2
+    qtbase
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+  ];
 
   dontWrapQtApps = true;
 

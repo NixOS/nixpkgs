@@ -1,18 +1,19 @@
-{ lib
-, fetchurl
-, cups
-, libssh
-, libXpm
-, nx-libs
-, openldap
-, openssh
-, qt5
-, qtbase
-, qtsvg
-, qtx11extras
-, qttools
-, phonon
-, pkg-config
+{
+  lib,
+  fetchurl,
+  cups,
+  libssh,
+  libXpm,
+  nx-libs,
+  openldap,
+  openssh,
+  qt5,
+  qtbase,
+  qtsvg,
+  qtx11extras,
+  qttools,
+  phonon,
+  pkg-config,
 }:
 
 qt5.mkDerivation rec {
@@ -44,19 +45,30 @@ qt5.mkDerivation rec {
   ];
 
   postPatch = ''
-     substituteInPlace src/onmainwindow.cpp --replace "/usr/sbin/sshd" "${openssh}/bin/sshd"
-     substituteInPlace Makefile \
-       --replace "SHELL=/bin/bash" "SHELL=$SHELL" \
-       --replace "lrelease-qt4" "${qttools.dev}/bin/lrelease" \
-       --replace "qmake-qt4" "${qtbase.dev}/bin/qmake" \
-       --replace "-o root -g root" ""
+    substituteInPlace src/onmainwindow.cpp --replace "/usr/sbin/sshd" "${openssh}/bin/sshd"
+    substituteInPlace Makefile \
+      --replace "SHELL=/bin/bash" "SHELL=$SHELL" \
+      --replace "lrelease-qt4" "${qttools.dev}/bin/lrelease" \
+      --replace "qmake-qt4" "${qtbase.dev}/bin/qmake" \
+      --replace "-o root -g root" ""
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "ETCDIR=$(out)/etc" "build_client" "build_man" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "ETCDIR=$(out)/etc"
+    "build_client"
+    "build_man"
+  ];
 
-  installTargets = [ "install_client" "install_man" ];
+  installTargets = [
+    "install_client"
+    "install_man"
+  ];
 
-  qtWrapperArgs = [ "--suffix PATH : ${nx-libs}/bin:${openssh}/libexec" "--set QT_QPA_PLATFORM xcb" ];
+  qtWrapperArgs = [
+    "--suffix PATH : ${nx-libs}/bin:${openssh}/libexec"
+    "--set QT_QPA_PLATFORM xcb"
+  ];
 
   meta = with lib; {
     description = "Graphical NoMachine NX3 remote desktop client";

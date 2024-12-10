@@ -1,4 +1,11 @@
-{ qcheck-core, reason, console, rely, fetchpatch, ... }:
+{
+  qcheck-core,
+  reason,
+  console,
+  rely,
+  fetchpatch,
+  ...
+}:
 
 {
   pname = "qcheck-rely";

@@ -1,33 +1,46 @@
-{ lib, stdenvNoCC, fetchFromGitHub, fetchzip, nix-update-script }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  fetchzip,
+  nix-update-script,
+}:
 
 let
   buildStyle =
-    { name
-    , stylePath ? name
-    , ...
+    {
+      name,
+      stylePath ? name,
+      ...
     }@args:
-    stdenvNoCC.mkDerivation ({
-      pname = "vale-style-${lib.toLower name}";
+    stdenvNoCC.mkDerivation (
+      {
+        pname = "vale-style-${lib.toLower name}";
 
-      dontConfigure = true;
-      dontBuild = true;
-      doCheck = false;
-      dontFixup = true;
+        dontConfigure = true;
+        dontBuild = true;
+        doCheck = false;
+        dontFixup = true;
 
-      installPhase = ''
-        runHook preInstall
-        mkdir -p $out/share/vale/styles
-        cp -R ${stylePath} "$out/share/vale/styles/${name}"
-        runHook postInstall
-      '';
+        installPhase = ''
+          runHook preInstall
+          mkdir -p $out/share/vale/styles
+          cp -R ${stylePath} "$out/share/vale/styles/${name}"
+          runHook postInstall
+        '';
 
-      passthru.updateScript = nix-update-script { };
+        passthru.updateScript = nix-update-script { };
 
-      meta = {
-        platforms = lib.platforms.all;
-        maintainers = with lib.maintainers; [ katexochen ];
-      } // (args.meta or { });
-    } // removeAttrs args [ "meta" "name" ]);
+        meta = {
+          platforms = lib.platforms.all;
+          maintainers = with lib.maintainers; [ katexochen ];
+        } // (args.meta or { });
+      }
+      // removeAttrs args [
+        "meta"
+        "name"
+      ]
+    );
 in
 {
   alex = buildStyle rec {

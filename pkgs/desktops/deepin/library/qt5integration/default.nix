@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, dtkwidget
-, cmake
-, pkg-config
-, qtbase
-, qtsvg
-, qtx11extras
-, lxqt
-, mtdev
-, xorg
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dtkwidget,
+  cmake,
+  pkg-config,
+  qtbase,
+  qtsvg,
+  qtx11extras,
+  lxqt,
+  mtdev,
+  xorg,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {

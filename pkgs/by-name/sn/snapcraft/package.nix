@@ -120,17 +120,20 @@ python3Packages.buildPythonApplication rec {
     wrapProgram $out/bin/snapcraft --prefix PATH : ${squashfsTools}/bin
   '';
 
-  nativeCheckInputs = with python3Packages; [
-    pytest-check
-    pytest-cov
-    pytest-mock
-    pytest-subprocess
-    pytestCheckHook
-    responses
-  ] ++ [
-    git
-    squashfsTools
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytest-check
+      pytest-cov
+      pytest-mock
+      pytest-subprocess
+      pytestCheckHook
+      responses
+    ]
+    ++ [
+      git
+      squashfsTools
+    ];
 
   preCheck = ''
     mkdir -p check-phase
@@ -139,31 +142,33 @@ python3Packages.buildPythonApplication rec {
 
   pytestFlagsArray = [ "tests/unit" ];
 
-  disabledTests = [
-    "test_bin_echo"
-    "test_classic_linter_filter"
-    "test_classic_linter"
-    "test_complex_snap_yaml"
-    "test_get_base_configuration_snap_channel"
-    "test_get_base_configuration_snap_instance_name_default"
-    "test_get_base_configuration_snap_instance_name_not_running_as_snap"
-    "test_get_extensions_data_dir"
-    "test_get_os_platform_alternative_formats"
-    "test_get_os_platform_linux"
-    "test_get_os_platform_windows"
-    "test_lifecycle_pack_components_with_output"
-    "test_lifecycle_pack_components"
-    "test_lifecycle_write_component_metadata"
-    "test_parse_info_integrated"
-    "test_patch_elf"
-    "test_remote_builder_init"
-    "test_setup_assets_remote_icon"
-    "test_snap_command_fallback"
-    "test_validate_architectures_supported"
-    "test_validate_architectures_unsupported"
-  ] ++ lib.optionals stdenv.isAarch64 [
-    "test_load_project"
-  ];
+  disabledTests =
+    [
+      "test_bin_echo"
+      "test_classic_linter_filter"
+      "test_classic_linter"
+      "test_complex_snap_yaml"
+      "test_get_base_configuration_snap_channel"
+      "test_get_base_configuration_snap_instance_name_default"
+      "test_get_base_configuration_snap_instance_name_not_running_as_snap"
+      "test_get_extensions_data_dir"
+      "test_get_os_platform_alternative_formats"
+      "test_get_os_platform_linux"
+      "test_get_os_platform_windows"
+      "test_lifecycle_pack_components_with_output"
+      "test_lifecycle_pack_components"
+      "test_lifecycle_write_component_metadata"
+      "test_parse_info_integrated"
+      "test_patch_elf"
+      "test_remote_builder_init"
+      "test_setup_assets_remote_icon"
+      "test_snap_command_fallback"
+      "test_validate_architectures_supported"
+      "test_validate_architectures_unsupported"
+    ]
+    ++ lib.optionals stdenv.isAarch64 [
+      "test_load_project"
+    ];
 
   disabledTestPaths = [
     "tests/unit/commands/test_remote.py"

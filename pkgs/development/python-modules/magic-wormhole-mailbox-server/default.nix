@@ -40,12 +40,15 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    attrs
-    six
-    twisted
-    autobahn
-  ] ++ autobahn.optional-dependencies.twisted ++ twisted.optional-dependencies.tls;
+  propagatedBuildInputs =
+    [
+      attrs
+      six
+      twisted
+      autobahn
+    ]
+    ++ autobahn.optional-dependencies.twisted
+    ++ twisted.optional-dependencies.tls;
 
   pythonImportsCheck = [ "wormhole_mailbox_server" ];
 

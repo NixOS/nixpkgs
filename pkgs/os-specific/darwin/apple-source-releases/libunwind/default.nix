@@ -10,8 +10,11 @@ appleDerivation {
   '';
 
   meta = with lib; {
-    maintainers = with maintainers; [ copumpkin lnl7 ];
-    platforms   = platforms.darwin;
-    license     = licenses.apple-psl20;
+    maintainers = with maintainers; [
+      copumpkin
+      lnl7
+    ];
+    platforms = platforms.darwin;
+    license = licenses.apple-psl20;
   };
 }

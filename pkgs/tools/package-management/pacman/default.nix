@@ -1,41 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, asciidoc
-, binutils
-, coreutils
-, curl
-, gpgme
-, installShellFiles
-, libarchive
-, makeWrapper
-, meson
-, ninja
-, openssl
-, perl
-, pkg-config
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  asciidoc,
+  binutils,
+  coreutils,
+  curl,
+  gpgme,
+  installShellFiles,
+  libarchive,
+  makeWrapper,
+  meson,
+  ninja,
+  openssl,
+  perl,
+  pkg-config,
+  zlib,
 
-# Compression tools in scripts/libmakepkg/util/compress.sh.in
-, gzip
-, bzip2
-, xz
-, zstd
-, lrzip
-, lzop
-, ncompress
-, lz4
-, lzip
+  # Compression tools in scripts/libmakepkg/util/compress.sh.in
+  gzip,
+  bzip2,
+  xz,
+  zstd,
+  lrzip,
+  lzop,
+  ncompress,
+  lz4,
+  lzip,
 
-# pacman-key runtime dependencies
-, gawk
-, gettext
-, gnugrep
-, gnupg
+  # pacman-key runtime dependencies
+  gawk,
+  gettext,
+  gnugrep,
+  gnupg,
 
-# Tells pacman where to find ALPM hooks provided by packages.
-# This path is very likely to be used in an Arch-like root.
-, sysHookDir ? "/usr/share/libalpm/hooks/"
+  # Tells pacman where to find ALPM hooks provided by packages.
+  # This path is very likely to be used in an Arch-like root.
+  sysHookDir ? "/usr/share/libalpm/hooks/",
 }:
 
 stdenv.mkDerivation (final: {
@@ -76,31 +77,35 @@ stdenv.mkDerivation (final: {
     ./dont-create-empty-dirs.patch
   ];
 
-  postPatch = let compressionTools = [
-    gzip
-    bzip2
-    xz
-    zstd
-    lrzip
-    lzop
-    ncompress
-    lz4
-    lzip
-  ]; in ''
-    echo 'export PATH=${lib.makeBinPath compressionTools}:$PATH' >> scripts/libmakepkg/util/compress.sh.in
-    substituteInPlace meson.build \
-      --replace "install_dir : SYSCONFDIR" "install_dir : '$out/etc'" \
-      --replace "join_paths(DATAROOTDIR, 'libalpm/hooks/')" "'${sysHookDir}'" \
-      --replace "join_paths(PREFIX, DATAROOTDIR, get_option('keyringdir'))" "'\$KEYRING_IMPORT_DIR'" \
-      --replace "join_paths(SYSCONFDIR, 'makepkg.conf.d/')" "'$out/etc/makepkg.conf.d/'"
-    substituteInPlace doc/meson.build \
-      --replace "/bin/true" "${coreutils}/bin/true"
-    substituteInPlace scripts/repo-add.sh.in \
-      --replace bsdtar "${libarchive}/bin/bsdtar"
-    substituteInPlace scripts/pacman-key.sh.in \
-      --replace "local KEYRING_IMPORT_DIR='@keyringdir@'" "" \
-      --subst-var-by keyringdir '\$KEYRING_IMPORT_DIR'
-  '';
+  postPatch =
+    let
+      compressionTools = [
+        gzip
+        bzip2
+        xz
+        zstd
+        lrzip
+        lzop
+        ncompress
+        lz4
+        lzip
+      ];
+    in
+    ''
+      echo 'export PATH=${lib.makeBinPath compressionTools}:$PATH' >> scripts/libmakepkg/util/compress.sh.in
+      substituteInPlace meson.build \
+        --replace "install_dir : SYSCONFDIR" "install_dir : '$out/etc'" \
+        --replace "join_paths(DATAROOTDIR, 'libalpm/hooks/')" "'${sysHookDir}'" \
+        --replace "join_paths(PREFIX, DATAROOTDIR, get_option('keyringdir'))" "'\$KEYRING_IMPORT_DIR'" \
+        --replace "join_paths(SYSCONFDIR, 'makepkg.conf.d/')" "'$out/etc/makepkg.conf.d/'"
+      substituteInPlace doc/meson.build \
+        --replace "/bin/true" "${coreutils}/bin/true"
+      substituteInPlace scripts/repo-add.sh.in \
+        --replace bsdtar "${libarchive}/bin/bsdtar"
+      substituteInPlace scripts/pacman-key.sh.in \
+        --replace "local KEYRING_IMPORT_DIR='@keyringdir@'" "" \
+        --subst-var-by keyringdir '\$KEYRING_IMPORT_DIR'
+    '';
 
   mesonFlags = [
     "--sysconfdir=/etc"
@@ -114,14 +119,16 @@ stdenv.mkDerivation (final: {
     wrapProgram $out/bin/makepkg \
       --prefix PATH : ${lib.makeBinPath [ binutils ]}
     wrapProgram $out/bin/pacman-key \
-      --prefix PATH : ${lib.makeBinPath [
-        "${placeholder "out"}"
-        coreutils
-        gawk
-        gettext
-        gnugrep
-        gnupg
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          "${placeholder "out"}"
+          coreutils
+          gawk
+          gettext
+          gnugrep
+          gnupg
+        ]
+      }
   '';
 
   meta = with lib; {

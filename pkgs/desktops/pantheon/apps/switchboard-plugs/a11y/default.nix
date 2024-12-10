@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, substituteAll
-, fetchFromGitHub
-, fetchpatch
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, granite
-, gtk3
-, switchboard
-, wingpanel-indicator-a11y
-, onboard
+{
+  lib,
+  stdenv,
+  substituteAll,
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libgee,
+  granite,
+  gtk3,
+  switchboard,
+  wingpanel-indicator-a11y,
+  onboard,
 }:
 
 stdenv.mkDerivation rec {

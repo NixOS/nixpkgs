@@ -1,15 +1,16 @@
-{ buildFHSEnv
-, dbus
-, fetchzip
-, fontconfig
-, freetype
-, glib
-, lib
-, libGL
-, stdenv
-, xkeyboard_config
-, xorg
-, zlib
+{
+  buildFHSEnv,
+  dbus,
+  fetchzip,
+  fontconfig,
+  freetype,
+  glib,
+  lib,
+  libGL,
+  stdenv,
+  xkeyboard_config,
+  xorg,
+  zlib,
 }:
 
 let
@@ -24,22 +25,24 @@ in
 buildFHSEnv {
   inherit name;
 
-  targetPkgs = pkgs: (with pkgs; [
-    dbus
-    fontconfig
-    freetype
-    glib
-    libGL
-    xkeyboard_config
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libXext
-    xorg.libXi
-    xorg.libXrender
-    xorg.libxcb
-    zlib
-  ]);
+  targetPkgs =
+    pkgs:
+    (with pkgs; [
+      dbus
+      fontconfig
+      freetype
+      glib
+      libGL
+      xkeyboard_config
+      xorg.libICE
+      xorg.libSM
+      xorg.libX11
+      xorg.libXext
+      xorg.libXi
+      xorg.libXrender
+      xorg.libxcb
+      zlib
+    ]);
 
   extraInstallCommands = ''
     install -Dvm644 ${src}/Driver/99-Kingst.rules \

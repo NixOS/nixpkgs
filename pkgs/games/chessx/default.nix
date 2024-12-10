@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, pkg-config
-, zlib
-, qtbase
-, qtsvg
-, qttools
-, qtmultimedia
-, qmake
-, fetchpatch
-, fetchurl
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  pkg-config,
+  zlib,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtmultimedia,
+  qmake,
+  fetchpatch,
+  fetchurl,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -66,7 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://chessx.sourceforge.io/";
     description = "Browse and analyse chess games";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ eclairevoyant luispedro ];
+    maintainers = with maintainers; [
+      eclairevoyant
+      luispedro
+    ];
     platforms = platforms.linux;
     mainProgram = "chessx";
   };

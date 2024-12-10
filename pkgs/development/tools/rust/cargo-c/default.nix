@@ -1,14 +1,15 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, pkg-config
-, curl
-, openssl
-, stdenv
-, CoreFoundation
-, libiconv
-, Security
-, rav1e
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  curl,
+  openssl,
+  stdenv,
+  CoreFoundation,
+  libiconv,
+  Security,
+  rav1e,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,12 +25,20 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-SfKDlcN+PW1twJu3YbmMsQOtFh6JHncAhdrVg+tweAE=";
 
-  nativeBuildInputs = [ pkg-config (lib.getDev curl) ];
-  buildInputs = [ openssl curl ] ++ lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    libiconv
-    Security
+  nativeBuildInputs = [
+    pkg-config
+    (lib.getDev curl)
   ];
+  buildInputs =
+    [
+      openssl
+      curl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreFoundation
+      libiconv
+      Security
+    ];
 
   # Ensure that we are avoiding build of the curl vendored in curl-sys
   doInstallCheck = stdenv.hostPlatform.libc == "glibc";

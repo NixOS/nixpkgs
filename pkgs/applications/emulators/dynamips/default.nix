@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libelf
-, libpcap
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libelf,
+  libpcap,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libelf libpcap ];
+  buildInputs = [
+    libelf
+    libpcap
+  ];
 
   cmakeFlags = [ "-DDYNAMIPS_CODE=stable" ];
 

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildGoModule
-, darwin
-, fetchFromGitHub
-, pcsclite
-, pkg-config
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  darwin,
+  fetchFromGitHub,
+  pcsclite,
+  pkg-config,
 }:
 
 buildGoModule rec {
@@ -22,14 +23,16 @@ buildGoModule rec {
 
   subPackages = [ "cmd/piv-agent" ];
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.shortCommit=${src.rev}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.shortCommit=${src.rev}"
+  ];
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
-  buildInputs =
-    if stdenv.isDarwin
-    then [ darwin.apple_sdk.frameworks.PCSC ]
-    else [ pcsclite ];
+  buildInputs = if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.PCSC ] else [ pcsclite ];
 
   meta = with lib; {
     description = "An SSH and GPG agent which you can use with your PIV hardware security device (e.g. a Yubikey)";

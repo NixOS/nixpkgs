@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, nasm
-, alsa-lib
-, ffmpeg_6
-, glew
-, glib
-, gtk2
-, libmad
-, libogg
-, libpulseaudio
-, libvorbis
-, udev
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  nasm,
+  alsa-lib,
+  ffmpeg_6,
+  glew,
+  glib,
+  gtk2,
+  libmad,
+  libogg,
+  libpulseaudio,
+  libvorbis,
+  udev,
+  xorg,
 }:
 
 stdenv.mkDerivation {
@@ -23,8 +24,8 @@ stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     owner = "stepmania";
-    repo  = "stepmania";
-    rev   = "d55acb1ba26f1c5b5e3048d6d6c0bd116625216f";
+    repo = "stepmania";
+    rev = "d55acb1ba26f1c5b5e3048d6d6c0bd116625216f";
     hash = "sha256-49H2Q61R4l/G0fWsjCjiAUXeWwG3lcsDpV5XvR3l3QE=";
   };
 
@@ -41,7 +42,10 @@ stdenv.mkDerivation {
     sed '1i#include <ctime>' -i src/arch/ArchHooks/ArchHooks.h # gcc12
   '';
 
-  nativeBuildInputs = [ cmake nasm ];
+  nativeBuildInputs = [
+    cmake
+    nasm
+  ];
 
   buildInputs = [
     alsa-lib

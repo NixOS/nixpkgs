@@ -1,29 +1,30 @@
-{ lib
-, pkg-config
-, fetchurl
-, meson
-, ninja
-, wrapGAppsHook3
-, gobject-introspection
-, gettext
-, yelp-tools
-, itstool
-, python3
-, gtk3
-, gnome
-, substituteAll
-, at-spi2-atk
-, at-spi2-core
-, dbus
-, xkbcomp
-, procps
-, lsof
-, coreutils
-, gsettings-desktop-schemas
-, speechd
-, brltty
-, liblouis
-, gst_all_1
+{
+  lib,
+  pkg-config,
+  fetchurl,
+  meson,
+  ninja,
+  wrapGAppsHook3,
+  gobject-introspection,
+  gettext,
+  yelp-tools,
+  itstool,
+  python3,
+  gtk3,
+  gnome,
+  substituteAll,
+  at-spi2-atk,
+  at-spi2-core,
+  dbus,
+  xkbcomp,
+  procps,
+  lsof,
+  coreutils,
+  gsettings-desktop-schemas,
+  speechd,
+  brltty,
+  liblouis,
+  gst_all_1,
 }:
 
 python3.pkgs.buildPythonApplication rec {

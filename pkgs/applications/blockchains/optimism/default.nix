@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, libpcap
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  libpcap,
 }:
 
 buildGoModule rec {
@@ -16,7 +17,11 @@ buildGoModule rec {
     fetchSubmodules = true;
   };
 
-  subPackages = [ "op-node/cmd" "op-proposer/cmd" "op-batcher/cmd" ];
+  subPackages = [
+    "op-node/cmd"
+    "op-proposer/cmd"
+    "op-batcher/cmd"
+  ];
 
   vendorHash = "sha256-yG910xpk2MHCD2LHh7aD09KMCux1X252fOHCsyUc/ks=";
 
@@ -24,7 +29,10 @@ buildGoModule rec {
     libpcap
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Optimism is Ethereum, scaled";

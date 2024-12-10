@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, sqlite
-, callPackage
-, nixosTests
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  sqlite,
+  callPackage,
+  nixosTests,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -56,7 +57,8 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   ldflags = [
-    "-X main.Version=${version}" "-X main.Mode=prod"
+    "-X main.Version=${version}"
+    "-X main.Mode=prod"
   ];
 
   meta = with lib; {

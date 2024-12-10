@@ -1,18 +1,22 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
 
-, pipewire
-, gitUpdater
+  pipewire,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lv2";
   version = "1.18.10";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "https://lv2plug.in/spec/${pname}-${version}.tar.xz";
@@ -28,22 +32,24 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ];
 
-  mesonFlags = [
-    # install validators to $dev
-    "--bindir=${placeholder "dev"}/bin"
+  mesonFlags =
+    [
+      # install validators to $dev
+      "--bindir=${placeholder "dev"}/bin"
 
-    # These are just example plugins. They pull in outdated gtk-2
-    # dependency and many other things. Upstream would like to
-    # eventually move them of the project:
-    #   https://gitlab.com/lv2/lv2/-/issues/57#note_1096060029
-    "-Dplugins=disabled"
-    # Pulls in spell checkers among other things.
-    "-Dtests=disabled"
-    # Avoid heavyweight python dependencies.
-    "-Ddocs=disabled"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-Dlv2dir=${placeholder "out"}/lib/lv2"
-  ];
+      # These are just example plugins. They pull in outdated gtk-2
+      # dependency and many other things. Upstream would like to
+      # eventually move them of the project:
+      #   https://gitlab.com/lv2/lv2/-/issues/57#note_1096060029
+      "-Dplugins=disabled"
+      # Pulls in spell checkers among other things.
+      "-Dtests=disabled"
+      # Avoid heavyweight python dependencies.
+      "-Ddocs=disabled"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "-Dlv2dir=${placeholder "out"}/lib/lv2"
+    ];
 
   passthru = {
     tests = {

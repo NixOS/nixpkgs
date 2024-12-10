@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "actor-framework";
@@ -30,6 +36,9 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.unix;
     changelog = "https://github.com/actor-framework/actor-framework/raw/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ bobakker tobim ];
+    maintainers = with maintainers; [
+      bobakker
+      tobim
+    ];
   };
 }

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, memstreamHook
-, CoreAudio
-, libobjc
-, libjack2
-, ncurses
-, alsa-lib
-, buildPackages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  memstreamHook,
+  CoreAudio,
+  libobjc,
+  libjack2,
+  ncurses,
+  alsa-lib,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,38 +28,45 @@ stdenv.mkDerivation rec {
     ./configure-compat.patch
   ];
 
-  nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ memstreamHook ];
-  buildInputs = [
-    libjack2
-    ncurses
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreAudio
-    libobjc
-  ];
+  nativeBuildInputs = [
+    pkg-config
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ memstreamHook ];
+  buildInputs =
+    [
+      libjack2
+      ncurses
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreAudio
+      libobjc
+    ];
 
-  configureFlags = [
-    "--enable-ncurses"
-    "lib_cv_va_copy=yes"
-    "lib_cv___va_copy=yes"
-  ] ++ lib.optionals stdenv.isLinux [
-    "--enable-audio=oss,alsa,jack"
-    "--enable-alsaseq"
-    "--with-default-output=alsa"
-    "lib_cv_va_val_copy=yes"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "--enable-audio=darwin,jack"
-    "lib_cv_va_val_copy=no"
-    "timidity_cv_ccoption_rdynamic=yes"
-    # These configure tests fail because of incompatible function pointer conversions.
-    "ac_cv_func_vprintf=yes"
-    "ac_cv_func_popen=yes"
-    "ac_cv_func_vsnprintf=yes"
-    "ac_cv_func_snprintf=yes"
-    "ac_cv_func_open_memstream=yes"
-  ];
+  configureFlags =
+    [
+      "--enable-ncurses"
+      "lib_cv_va_copy=yes"
+      "lib_cv___va_copy=yes"
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      "--enable-audio=oss,alsa,jack"
+      "--enable-alsaseq"
+      "--with-default-output=alsa"
+      "lib_cv_va_val_copy=yes"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "--enable-audio=darwin,jack"
+      "lib_cv_va_val_copy=no"
+      "timidity_cv_ccoption_rdynamic=yes"
+      # These configure tests fail because of incompatible function pointer conversions.
+      "ac_cv_func_vprintf=yes"
+      "ac_cv_func_popen=yes"
+      "ac_cv_func_vsnprintf=yes"
+      "ac_cv_func_snprintf=yes"
+      "ac_cv_func_open_memstream=yes"
+    ];
 
   makeFlags = [
     "AR=${stdenv.cc.targetPrefix}ar"

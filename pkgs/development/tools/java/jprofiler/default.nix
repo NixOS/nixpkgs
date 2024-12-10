@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchurl
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, _7zz
-, jdk
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  _7zz,
+  jdk,
 }:
 
 let
@@ -26,13 +27,21 @@ let
     maintainers = with maintainers; [ catap ];
   };
 
-  src = if stdenv.isLinux then fetchurl {
-    url = "https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_${lib.replaceStrings ["."] ["_"]  version}.tar.gz";
-    hash = "sha256-orjBSaC7NvKcak+RSEa9V05oL3EZIBnp7TyaX/8XFyg=";
-  } else fetchurl {
-    url = "https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_macos_${lib.replaceStrings ["."] ["_"]  version}.dmg";
-    hash = "sha256-OI6NSPqYws5Rv25U5jIPzkyJtB8LF04qHB3NPR9XBWg=";
-  };
+  src =
+    if stdenv.isLinux then
+      fetchurl {
+        url = "https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_${
+          lib.replaceStrings [ "." ] [ "_" ] version
+        }.tar.gz";
+        hash = "sha256-orjBSaC7NvKcak+RSEa9V05oL3EZIBnp7TyaX/8XFyg=";
+      }
+    else
+      fetchurl {
+        url = "https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_macos_${
+          lib.replaceStrings [ "." ] [ "_" ] version
+        }.dmg";
+        hash = "sha256-OI6NSPqYws5Rv25U5jIPzkyJtB8LF04qHB3NPR9XBWg=";
+      };
 
   srcIcon = fetchurl {
     url = "https://www.ej-technologies.com/assets/content/header-product-jprofiler@2x-24bc4d84bd2a4eb641a5c8531758ff7c.png";
@@ -50,9 +59,17 @@ let
   };
 
   linux = stdenv.mkDerivation {
-    inherit pname version src desktopItems;
+    inherit
+      pname
+      version
+      src
+      desktopItems
+      ;
 
-    nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+    nativeBuildInputs = [
+      makeWrapper
+      copyDesktopItems
+    ];
 
     installPhase = ''
       runHook preInstall
@@ -72,13 +89,18 @@ let
       runHook postInstall
     '';
 
-    meta = meta // { platforms = lib.platforms.linux; };
+    meta = meta // {
+      platforms = lib.platforms.linux;
+    };
   };
 
   darwin = stdenv.mkDerivation {
     inherit pname version src;
 
-    nativeBuildInputs = [ makeWrapper _7zz ];
+    nativeBuildInputs = [
+      makeWrapper
+      _7zz
+    ];
 
     unpackPhase = ''
       runHook preUnpack
@@ -96,7 +118,9 @@ let
       runHook postInstall
     '';
 
-    meta = meta // { platforms = lib.platforms.darwin; };
+    meta = meta // {
+      platforms = lib.platforms.darwin;
+    };
   };
 in
 if stdenv.isDarwin then darwin else linux

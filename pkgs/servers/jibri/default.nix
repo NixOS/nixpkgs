@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, dpkg, jdk11_headless, makeWrapper, writeText, xorg }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  jdk11_headless,
+  makeWrapper,
+  writeText,
+  xorg,
+}:
 
 let
   xorgModulePaths = writeText "module-paths" ''
@@ -20,7 +29,10 @@ stdenv.mkDerivation rec {
   };
 
   dontBuild = true;
-  nativeBuildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall

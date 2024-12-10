@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, uiua }:
+{
+  lib,
+  stdenvNoCC,
+  uiua,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "uiua386";

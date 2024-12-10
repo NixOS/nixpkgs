@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "fulcio";
@@ -79,6 +84,9 @@ buildGoModule rec {
       disconnected instance.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ lesuisse jk ];
+    maintainers = with maintainers; [
+      lesuisse
+      jk
+    ];
   };
 }

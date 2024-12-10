@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, udev
-, runtimeShellPackage
-, runtimeShell
-, nixosTests
-, enablePrivSep ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  udev,
+  runtimeShellPackage,
+  runtimeShell,
+  nixosTests,
+  enablePrivSep ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,29 +31,36 @@ stdenv.mkDerivation rec {
     substituteInPlace hooks/dhcpcd-run-hooks.in --replace /bin/sh ${runtimeShell}
   '';
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-  ]
-  ++ (
-    if ! enablePrivSep
-    then [ "--disable-privsep" ]
-    else [
-      "--enable-privsep"
-      # dhcpcd disables privsep if it can't find the default user,
-      # so we explicitly specify a user.
-      "--privsepuser=dhcpcd"
+  configureFlags =
+    [
+      "--sysconfdir=/etc"
+      "--localstatedir=/var"
     ]
-  );
+    ++ (
+      if !enablePrivSep then
+        [ "--disable-privsep" ]
+      else
+        [
+          "--enable-privsep"
+          # dhcpcd disables privsep if it can't find the default user,
+          # so we explicitly specify a user.
+          "--privsepuser=dhcpcd"
+        ]
+    );
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   # Hack to make installation succeed.  dhcpcd will still use /var/db
   # at runtime.
-  installFlags = [ "DBDIR=$(TMPDIR)/db" "SYSCONFDIR=${placeholder "out"}/etc" ];
+  installFlags = [
+    "DBDIR=$(TMPDIR)/db"
+    "SYSCONFDIR=${placeholder "out"}/etc"
+  ];
 
   # Check that the udev plugin got built.
-  postInstall = lib.optionalString (udev != null) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
+  postInstall = lib.optionalString (
+    udev != null
+  ) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
 
   passthru = {
     inherit enablePrivSep;

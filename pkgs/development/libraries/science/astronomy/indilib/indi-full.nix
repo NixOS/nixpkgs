@@ -1,4 +1,10 @@
-{ stdenv, lib, callPackage, fetchFromGitHub, indilib }:
+{
+  stdenv,
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  indilib,
+}:
 
 let
   inherit (indilib) version;
@@ -24,6 +30,5 @@ callPackage ./indi-with-drivers.nix {
   inherit version;
   extraDrivers = [
     indi-3rdparty
-  ] ++ lib.optional (stdenv.isx86_64 || stdenv.isAarch64) indi-firmware
-  ;
+  ] ++ lib.optional (stdenv.isx86_64 || stdenv.isAarch64) indi-firmware;
 }

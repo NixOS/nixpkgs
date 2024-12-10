@@ -45,20 +45,23 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    freetype
-    fluidsynth
-    SDL2
-    glib
-    openal
-    rtmidi
-    pcre2
-    jack2
-    libpcap
-    libslirp
-    qt5.qtbase
-    qt5.qttools
-  ] ++ lib.optional stdenv.isLinux alsa-lib ++ lib.optional enableVncRenderer libvncserver;
+  buildInputs =
+    [
+      freetype
+      fluidsynth
+      SDL2
+      glib
+      openal
+      rtmidi
+      pcre2
+      jack2
+      libpcap
+      libslirp
+      qt5.qtbase
+      qt5.qttools
+    ]
+    ++ lib.optional stdenv.isLinux alsa-lib
+    ++ lib.optional enableVncRenderer libvncserver;
 
   cmakeFlags =
     lib.optional stdenv.isDarwin "-DCMAKE_MACOSX_BUNDLE=OFF"

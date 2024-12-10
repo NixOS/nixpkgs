@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchgit
-, cmake
-, libjpeg
+{
+  lib,
+  stdenv,
+  fetchgit,
+  cmake,
+  libjpeg,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   # NEON does not work on aarch64, we disable it
-  cmakeFlags = lib.optionals stdenv.isAarch64 ["-DCMAKE_CXX_FLAGS=-DLIBYUV_DISABLE_NEON"];
+  cmakeFlags = lib.optionals stdenv.isAarch64 [ "-DCMAKE_CXX_FLAGS=-DLIBYUV_DISABLE_NEON" ];
 
   buildInputs = [ libjpeg ];
 

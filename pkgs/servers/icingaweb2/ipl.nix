@@ -1,4 +1,8 @@
-{ stdenvNoCC, lib, fetchFromGitHub }:
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "icingaweb2-ipl";

@@ -1,7 +1,8 @@
-{ lib
-, wakatime
-, buildFishPlugin
-, fetchFromGitHub
+{
+  lib,
+  wakatime,
+  buildFishPlugin,
+  fetchFromGitHub,
 }:
 
 buildFishPlugin rec {

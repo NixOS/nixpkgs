@@ -1,5 +1,15 @@
-{ lib, fetchgit, pkg-config, gettext, runCommand, makeWrapper
-, cpio, elfutils, kernel, gnumake, python3
+{
+  lib,
+  fetchgit,
+  pkg-config,
+  gettext,
+  runCommand,
+  makeWrapper,
+  cpio,
+  elfutils,
+  kernel,
+  gnumake,
+  python3,
 }:
 
 let
@@ -16,8 +26,17 @@ let
     pname = "systemtap";
     inherit version;
     src = fetchgit { inherit url rev sha256; };
-    nativeBuildInputs = [ pkg-config cpio python3 python3.pkgs.setuptools ];
-    buildInputs = [ elfutils gettext python3 ];
+    nativeBuildInputs = [
+      pkg-config
+      cpio
+      python3
+      python3.pkgs.setuptools
+    ];
+    buildInputs = [
+      elfutils
+      gettext
+      python3
+    ];
     enableParallelBuilding = true;
     env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ]; # Needed with GCC 12
   };
@@ -32,24 +51,34 @@ let
 
   pypkgs = with python3.pkgs; makePythonPath [ pyparsing ];
 
-in runCommand "systemtap-${kernel.version}-${version}" {
-  inherit stapBuild;
-  nativeBuildInputs = [ makeWrapper ];
-  meta = {
-    homepage = "https://sourceware.org/systemtap/";
-    description = "Provides a scripting language for instrumentation on a live kernel plus user-space";
-    license = lib.licenses.gpl2;
-    platforms = lib.systems.inspect.patterns.isGnu;
-  };
-} ''
-  mkdir -p $out/bin
-  for bin in $stapBuild/bin/*; do
-    ln -s $bin $out/bin
-  done
-  rm $out/bin/stap $out/bin/dtrace
-  makeWrapper $stapBuild/bin/stap $out/bin/stap \
-    --add-flags "--sysroot ${sysroot}" \
-    --prefix PATH : ${lib.makeBinPath [ stdenv.cc.cc stdenv.cc.bintools elfutils gnumake ]}
-  makeWrapper $stapBuild/bin/dtrace $out/bin/dtrace \
-    --prefix PYTHONPATH : ${pypkgs}
-''
+in
+runCommand "systemtap-${kernel.version}-${version}"
+  {
+    inherit stapBuild;
+    nativeBuildInputs = [ makeWrapper ];
+    meta = {
+      homepage = "https://sourceware.org/systemtap/";
+      description = "Provides a scripting language for instrumentation on a live kernel plus user-space";
+      license = lib.licenses.gpl2;
+      platforms = lib.systems.inspect.patterns.isGnu;
+    };
+  }
+  ''
+    mkdir -p $out/bin
+    for bin in $stapBuild/bin/*; do
+      ln -s $bin $out/bin
+    done
+    rm $out/bin/stap $out/bin/dtrace
+    makeWrapper $stapBuild/bin/stap $out/bin/stap \
+      --add-flags "--sysroot ${sysroot}" \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          stdenv.cc.cc
+          stdenv.cc.bintools
+          elfutils
+          gnumake
+        ]
+      }
+    makeWrapper $stapBuild/bin/dtrace $out/bin/dtrace \
+      --prefix PYTHONPATH : ${pypkgs}
+  ''

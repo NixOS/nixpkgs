@@ -1,14 +1,27 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, file, openssl, perl, perlPackages, nettools
-, withPerlTools ? false }: let
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  file,
+  openssl,
+  perl,
+  perlPackages,
+  nettools,
+  withPerlTools ? false,
+}:
+let
 
-  perlWithPkgs = perl.withPackages (ps: with ps; [
-    JSON
-    TermReadKey
-    Tk
-  ]);
+  perlWithPkgs = perl.withPackages (
+    ps: with ps; [
+      JSON
+      TermReadKey
+      Tk
+    ]
+  );
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "net-snmp";
   version = "5.9.4";
 
@@ -18,28 +31,37 @@ in stdenv.mkDerivation rec {
   };
 
   patches =
-    let fetchAlpinePatch = name: sha256: fetchurl {
-      url = "https://git.alpinelinux.org/aports/plain/main/net-snmp/${name}?id=ebb21045c31f4d5993238bcdb654f21d8faf8123";
-      inherit name sha256;
-    };
-  in [
-    (fetchAlpinePatch "fix-includes.patch" "0zpkbb6k366qpq4dax5wknwprhwnhighcp402mlm7950d39zfa3m")
-    (fetchAlpinePatch "netsnmp-swinst-crash.patch" "0gh164wy6zfiwiszh58fsvr25k0ns14r3099664qykgpmickkqid")
-    (fetchAlpinePatch "fix-fd_mask.patch" "/i9ve61HjDzqZt+u1wajNtSQoizl+KePvhcAt24HKd0=")
+    let
+      fetchAlpinePatch =
+        name: sha256:
+        fetchurl {
+          url = "https://git.alpinelinux.org/aports/plain/main/net-snmp/${name}?id=ebb21045c31f4d5993238bcdb654f21d8faf8123";
+          inherit name sha256;
+        };
+    in
+    [
+      (fetchAlpinePatch "fix-includes.patch" "0zpkbb6k366qpq4dax5wknwprhwnhighcp402mlm7950d39zfa3m")
+      (fetchAlpinePatch "netsnmp-swinst-crash.patch" "0gh164wy6zfiwiszh58fsvr25k0ns14r3099664qykgpmickkqid")
+      (fetchAlpinePatch "fix-fd_mask.patch" "/i9ve61HjDzqZt+u1wajNtSQoizl+KePvhcAt24HKd0=")
+    ];
+
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "lib"
   ];
 
-  outputs = [ "bin" "out" "dev" "lib" ];
-
-  configureFlags =
-    [ "--with-default-snmp-version=3"
-      "--with-sys-location=Unknown"
-      "--with-sys-contact=root@unknown"
-      "--with-logfile=/var/log/net-snmpd.log"
-      "--with-persistent-directory=/var/lib/net-snmp"
-      "--with-openssl=${openssl.dev}"
-      "--disable-embedded-perl"
-      "--without-perl-modules"
-    ] ++ lib.optional stdenv.isLinux "--with-mnttab=/proc/mounts";
+  configureFlags = [
+    "--with-default-snmp-version=3"
+    "--with-sys-location=Unknown"
+    "--with-sys-contact=root@unknown"
+    "--with-logfile=/var/log/net-snmpd.log"
+    "--with-persistent-directory=/var/lib/net-snmp"
+    "--with-openssl=${openssl.dev}"
+    "--disable-embedded-perl"
+    "--without-perl-modules"
+  ] ++ lib.optional stdenv.isLinux "--with-mnttab=/proc/mounts";
 
   postPatch = ''
     substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
@@ -52,15 +74,17 @@ in stdenv.mkDerivation rec {
       -e "/NETSNMP_CONFIGURE_OPTIONS/ s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g"
   '';
 
-  nativeBuildInputs = [ nettools file ];
-  buildInputs = [ openssl ]
-    ++ lib.optional withPerlTools perlWithPkgs;
+  nativeBuildInputs = [
+    nettools
+    file
+  ];
+  buildInputs = [ openssl ] ++ lib.optional withPerlTools perlWithPkgs;
 
   enableParallelBuilding = true;
   # Missing dependencies during relinking:
   #   ./.libs/libnetsnmpagent.so: file not recognized: file format not recognized
   enableParallelInstalling = false;
-  doCheck = false;  # tries to use networking
+  doCheck = false; # tries to use networking
 
   postInstall = ''
     for f in "$lib/lib/"*.la $bin/bin/net-snmp-config $bin/bin/net-snmp-create-v3-user; do

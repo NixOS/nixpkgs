@@ -1,4 +1,8 @@
-{lib, stdenv, fetchurl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "915resolution";
@@ -16,7 +20,10 @@ stdenv.mkDerivation rec {
     homepage = "http://915resolution.mango-lang.org/";
     description = "A tool to modify Intel 800/900 video BIOS";
     mainProgram = "915resolution";
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     license = licenses.publicDomain;
   };
 }

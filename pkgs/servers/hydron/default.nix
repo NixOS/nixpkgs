@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, gitUpdater
-, pkg-config
-, ffmpeg_4
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gitUpdater,
+  pkg-config,
+  ffmpeg_4,
 }:
 
 buildGoModule rec {
@@ -31,7 +32,7 @@ buildGoModule rec {
     homepage = "https://github.com/bakape/hydron";
     description = "High performance media tagger and organizer";
     license = with licenses; [ lgpl3Plus ];
-    knownVulnerabilities = [ "CVE-2023-4863" ];  # Via https://github.com/chai2010/webp dep
+    knownVulnerabilities = [ "CVE-2023-4863" ]; # Via https://github.com/chai2010/webp dep
     maintainers = with maintainers; [ Madouura ];
   };
 }

@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchPypi
-, kubernetes-helm
-, kind
-, docker
+{
+  lib,
+  python3,
+  fetchPypi,
+  kubernetes-helm,
+  kind,
+  docker,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -21,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     sed -i '/argparse/d' pyproject.toml
   '';
 
-   nativeBuildInputs = [
+  nativeBuildInputs = [
     python3.pkgs.poetry-core
   ];
 

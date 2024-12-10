@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, callPackage, jq, cmake, flex, bison, gecode, mpfr, cbc, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  callPackage,
+  jq,
+  cmake,
+  flex,
+  bison,
+  gecode,
+  mpfr,
+  cbc,
+  zlib,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minizinc";
@@ -11,9 +24,19 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-RpqjhjdG8u+gqO5SmKep5JpFhXh5GGX65qA15X+MNA4=";
   };
 
-  nativeBuildInputs = [ bison cmake flex jq ];
+  nativeBuildInputs = [
+    bison
+    cmake
+    flex
+    jq
+  ];
 
-  buildInputs = [ gecode mpfr cbc zlib ];
+  buildInputs = [
+    gecode
+    mpfr
+    cbc
+    zlib
+  ];
 
   postInstall = ''
     mkdir -p $out/share/minizinc/solvers/

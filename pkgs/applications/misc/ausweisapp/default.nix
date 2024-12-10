@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.ausweisapp.bund.de/open-source-software";
     license = lib.licenses.eupl12;
     mainProgram = "AusweisApp";
-    maintainers = with lib.maintainers; [b4dm4n];
+    maintainers = with lib.maintainers; [ b4dm4n ];
     platforms = lib.platforms.linux;
   };
 })

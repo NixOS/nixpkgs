@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, cacert
-, nixosTests
-, rustPlatform
-, fetchFromGitHub
-, darwin
+{
+  lib,
+  stdenv,
+  cacert,
+  nixosTests,
+  rustPlatform,
+  fetchFromGitHub,
+  darwin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "redlib";

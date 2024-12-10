@@ -1,4 +1,10 @@
-{ mkDerivation, ansi-terminal, base, fetchgit, lib }:
+{
+  mkDerivation,
+  ansi-terminal,
+  base,
+  fetchgit,
+  lib,
+}:
 mkDerivation {
   pname = "ansi-wl-pprint";
   version = "0.6.8.1";
@@ -10,7 +16,10 @@ mkDerivation {
   };
   isLibrary = true;
   isExecutable = true;
-  libraryHaskellDepends = [ ansi-terminal base ];
+  libraryHaskellDepends = [
+    ansi-terminal
+    base
+  ];
   homepage = "http://github.com/ekmett/ansi-wl-pprint";
   description = "The Wadler/Leijen Pretty Printer for colored ANSI terminal output";
   license = lib.licenses.bsd3;

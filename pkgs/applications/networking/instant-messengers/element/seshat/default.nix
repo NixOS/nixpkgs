@@ -1,9 +1,24 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, rust, sqlcipher, nodejs, python3, yarn, fixup-yarn-lock, CoreServices, fetchYarnDeps, removeReferencesTo }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  rust,
+  sqlcipher,
+  nodejs,
+  python3,
+  yarn,
+  fixup-yarn-lock,
+  CoreServices,
+  fetchYarnDeps,
+  removeReferencesTo,
+}:
 
 let
   pinData = lib.importJSON ./pin.json;
 
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "seshat-node";
   inherit (pinData) version cargoHash;
 
@@ -16,7 +31,12 @@ in rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/seshat-node/native";
 
-  nativeBuildInputs = [ nodejs python3 yarn fixup-yarn-lock ];
+  nativeBuildInputs = [
+    nodejs
+    python3
+    yarn
+    fixup-yarn-lock
+  ];
   buildInputs = [ sqlcipher ] ++ lib.optional stdenv.isDarwin CoreServices;
 
   npm_config_nodedir = nodejs;

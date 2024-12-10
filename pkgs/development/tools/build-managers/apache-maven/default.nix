@@ -1,9 +1,10 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, jdk
-, makeWrapper
-, callPackage
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  jdk,
+  makeWrapper,
+  callPackage,
 }:
 
 assert jdk != null;

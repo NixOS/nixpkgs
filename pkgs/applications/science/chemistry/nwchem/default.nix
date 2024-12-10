@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, pkgs
-, fetchFromGitHub
-, fetchurl
-, mpiCheckPhaseHook
-, which
-, openssh
-, gcc
-, gfortran
-, perl
-, mpi
-, blas
-, lapack
-, python3
-, tcsh
-, bash
-, automake
-, autoconf
-, libtool
-, makeWrapper
+{
+  lib,
+  stdenv,
+  pkgs,
+  fetchFromGitHub,
+  fetchurl,
+  mpiCheckPhaseHook,
+  which,
+  openssh,
+  gcc,
+  gfortran,
+  perl,
+  mpi,
+  blas,
+  lapack,
+  python3,
+  tcsh,
+  bash,
+  automake,
+  autoconf,
+  libtool,
+  makeWrapper,
 }:
 
 assert blas.isILP64 == lapack.isILP64;
@@ -210,7 +211,10 @@ stdenv.mkDerivation rec {
     description = "Open Source High-Performance Computational Chemistry";
     mainProgram = "nwchem";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ sheepforce markuskowa ];
+    maintainers = with maintainers; [
+      sheepforce
+      markuskowa
+    ];
     homepage = "https://nwchemgit.github.io";
     license = licenses.ecl20;
   };

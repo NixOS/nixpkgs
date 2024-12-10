@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, stanc
-, buildPackages
-, runtimeShell
-, runCommandCC
-, cmdstan
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  stanc,
+  buildPackages,
+  runtimeShell,
+  runCommandCC,
+  cmdstan,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,23 +32,26 @@ stdenv.mkDerivation rec {
     stanc
   ];
 
-  preConfigure = ''
-    patchShebangs test-all.sh runCmdStanTests.py stan/
-  ''
-  # Fix inclusion of hardcoded paths in PCH files, by building in the store.
-  + ''
-    mkdir -p $out/opt
-    cp -R . $out/opt/cmdstan
-    cd $out/opt/cmdstan
-    mkdir -p bin
-    ln -s ${buildPackages.stanc}/bin/stanc bin/stanc
-  '';
+  preConfigure =
+    ''
+      patchShebangs test-all.sh runCmdStanTests.py stan/
+    ''
+    # Fix inclusion of hardcoded paths in PCH files, by building in the store.
+    + ''
+      mkdir -p $out/opt
+      cp -R . $out/opt/cmdstan
+      cd $out/opt/cmdstan
+      mkdir -p bin
+      ln -s ${buildPackages.stanc}/bin/stanc bin/stanc
+    '';
 
-  makeFlags = [
-    "build"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "arch=${stdenv.hostPlatform.darwinArch}"
-  ];
+  makeFlags =
+    [
+      "build"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "arch=${stdenv.hostPlatform.darwinArch}"
+    ];
 
   # Disable inclusion of timestamps in PCH files when using Clang.
   env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-Xclang -fno-pch-timestamp";

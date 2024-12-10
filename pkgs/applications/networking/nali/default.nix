@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "nali";
@@ -17,7 +22,11 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   CGO_ENABLED = 0;
-  ldflags = [ "-s" "-w" "-X github.com/zu1k/nali/internal/constant.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/zu1k/nali/internal/constant.Version=${version}"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd nali \
@@ -30,7 +39,10 @@ buildGoModule rec {
     description = "An offline tool for querying IP geographic information and CDN provider";
     homepage = "https://github.com/zu1k/nali";
     license = licenses.mit;
-    maintainers = with maintainers; [ diffumist xyenon ];
+    maintainers = with maintainers; [
+      diffumist
+      xyenon
+    ];
     mainProgram = "nali";
   };
 }

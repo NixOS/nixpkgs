@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.appimage;
@@ -29,5 +34,8 @@ in
     environment.systemPackages = [ cfg.package ];
   };
 
-  meta.maintainers = with lib.maintainers; [ jopejoe1 atemu ];
+  meta.maintainers = with lib.maintainers; [
+    jopejoe1
+    atemu
+  ];
 }

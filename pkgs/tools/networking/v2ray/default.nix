@@ -1,7 +1,17 @@
-{ lib, fetchFromGitHub, symlinkJoin, buildGoModule, makeWrapper, nixosTests
-, nix-update-script
-, v2ray-geoip, v2ray-domain-list-community
-, assets ? [ v2ray-geoip v2ray-domain-list-community ]
+{
+  lib,
+  fetchFromGitHub,
+  symlinkJoin,
+  buildGoModule,
+  makeWrapper,
+  nixosTests,
+  nix-update-script,
+  v2ray-geoip,
+  v2ray-domain-list-community,
+  assets ? [
+    v2ray-geoip
+    v2ray-domain-list-community
+  ],
 }:
 
 buildGoModule rec {
@@ -19,7 +29,10 @@ buildGoModule rec {
   # https://github.com/Mic92/nix-update/pull/95
   vendorHash = "sha256-Z3jD7auUixTgrY9Cm0LoNRHIyEFbStMYpumTCqKv+x0=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   subPackages = [ "main" ];
 

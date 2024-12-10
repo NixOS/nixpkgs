@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, openssl, flex, bison, pkg-config, groff, libxml2, util-linux
-, coreutils, file, libtool, which, boost, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  flex,
+  bison,
+  pkg-config,
+  groff,
+  libxml2,
+  util-linux,
+  coreutils,
+  file,
+  libtool,
+  which,
+  boost,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,10 +31,21 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook pkg-config flex bison libxml2 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    flex
+    bison
+    libxml2
+  ];
   buildInputs = [
-    openssl groff libxml2 util-linux libtool
-    which boost
+    openssl
+    groff
+    libxml2
+    util-linux
+    libtool
+    which
+    boost
   ];
 
   enableParallelBuilding = true;

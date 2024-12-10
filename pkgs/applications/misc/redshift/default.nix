@@ -1,23 +1,56 @@
-{ lib, stdenv, fetchFromGitHub, fetchFromGitLab
-, autoconf, automake, gettext, intltool
-, libtool, pkg-config, wrapGAppsHook3, wrapPython, gobject-introspection
-, gtk3, python, pygobject3, pyxdg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  autoconf,
+  automake,
+  gettext,
+  intltool,
+  libtool,
+  pkg-config,
+  wrapGAppsHook3,
+  wrapPython,
+  gobject-introspection,
+  gtk3,
+  python,
+  pygobject3,
+  pyxdg,
 
-, withQuartz ? stdenv.isDarwin, ApplicationServices
-, withRandr ? stdenv.isLinux, libxcb
-, withDrm ? stdenv.isLinux, libdrm
+  withQuartz ? stdenv.isDarwin,
+  ApplicationServices,
+  withRandr ? stdenv.isLinux,
+  libxcb,
+  withDrm ? stdenv.isLinux,
+  libdrm,
 
-, withGeolocation ? true
-, withCoreLocation ? withGeolocation && stdenv.isDarwin, CoreLocation, Foundation, Cocoa
-, withGeoclue ? withGeolocation && stdenv.isLinux, geoclue
-, withAppIndicator ? stdenv.isLinux, libappindicator, libayatana-appindicator
+  withGeolocation ? true,
+  withCoreLocation ? withGeolocation && stdenv.isDarwin,
+  CoreLocation,
+  Foundation,
+  Cocoa,
+  withGeoclue ? withGeolocation && stdenv.isLinux,
+  geoclue,
+  withAppIndicator ? stdenv.isLinux,
+  libappindicator,
+  libayatana-appindicator,
 }:
 
 let
   mkRedshift =
-    { pname, version, src, meta }:
+    {
+      pname,
+      version,
+      src,
+      meta,
+    }:
     stdenv.mkDerivation rec {
-      inherit pname version src meta;
+      inherit
+        pname
+        version
+        src
+        meta
+        ;
 
       patches = lib.optionals (pname != "gammastep") [
         # https://github.com/jonls/redshift/pull/575
@@ -39,30 +72,40 @@ let
         python
       ];
 
-      configureFlags = [
-        "--enable-randr=${if withRandr then "yes" else "no"}"
-        "--enable-geoclue2=${if withGeoclue then "yes" else "no"}"
-        "--enable-drm=${if withDrm then "yes" else "no"}"
-        "--enable-quartz=${if withQuartz then "yes" else "no"}"
-        "--enable-corelocation=${if withCoreLocation then "yes" else "no"}"
-      ] ++ lib.optionals (pname == "gammastep") [
-        "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user/"
-        "--enable-apparmor"
+      configureFlags =
+        [
+          "--enable-randr=${if withRandr then "yes" else "no"}"
+          "--enable-geoclue2=${if withGeoclue then "yes" else "no"}"
+          "--enable-drm=${if withDrm then "yes" else "no"}"
+          "--enable-quartz=${if withQuartz then "yes" else "no"}"
+          "--enable-corelocation=${if withCoreLocation then "yes" else "no"}"
+        ]
+        ++ lib.optionals (pname == "gammastep") [
+          "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user/"
+          "--enable-apparmor"
+        ];
+
+      buildInputs =
+        [
+          gtk3
+        ]
+        ++ lib.optional withRandr libxcb
+        ++ lib.optional withGeoclue geoclue
+        ++ lib.optional withDrm libdrm
+        ++ lib.optional withQuartz ApplicationServices
+        ++ lib.optionals withCoreLocation [
+          CoreLocation
+          Foundation
+          Cocoa
+        ]
+        ++ lib.optional withAppIndicator (
+          if (pname != "gammastep") then libappindicator else libayatana-appindicator
+        );
+
+      pythonPath = [
+        pygobject3
+        pyxdg
       ];
-
-      buildInputs = [
-        gtk3
-      ] ++ lib.optional  withRandr        libxcb
-        ++ lib.optional  withGeoclue      geoclue
-        ++ lib.optional  withDrm          libdrm
-        ++ lib.optional  withQuartz       ApplicationServices
-        ++ lib.optionals withCoreLocation [ CoreLocation Foundation Cocoa ]
-        ++ lib.optional  withAppIndicator (if (pname != "gammastep")
-             then libappindicator
-             else libayatana-appindicator)
-        ;
-
-      pythonPath = [ pygobject3 pyxdg ];
 
       preConfigure = "./bootstrap";
 
@@ -79,17 +122,21 @@ let
 
       # the geoclue agent may inspect these paths and expect them to be
       # valid without having the correct $PATH set
-      postInstall = if (pname == "gammastep") then ''
-        substituteInPlace $out/share/applications/gammastep.desktop \
-          --replace 'Exec=gammastep' "Exec=$out/bin/gammastep"
-        substituteInPlace $out/share/applications/gammastep-indicator.desktop \
-          --replace 'Exec=gammastep-indicator' "Exec=$out/bin/gammastep-indicator"
-      '' else ''
-        substituteInPlace $out/share/applications/redshift.desktop \
-          --replace 'Exec=redshift' "Exec=$out/bin/redshift"
-        substituteInPlace $out/share/applications/redshift-gtk.desktop \
-          --replace 'Exec=redshift-gtk' "Exec=$out/bin/redshift-gtk"
-      '';
+      postInstall =
+        if (pname == "gammastep") then
+          ''
+            substituteInPlace $out/share/applications/gammastep.desktop \
+              --replace 'Exec=gammastep' "Exec=$out/bin/gammastep"
+            substituteInPlace $out/share/applications/gammastep-indicator.desktop \
+              --replace 'Exec=gammastep-indicator' "Exec=$out/bin/gammastep-indicator"
+          ''
+        else
+          ''
+            substituteInPlace $out/share/applications/redshift.desktop \
+              --replace 'Exec=redshift' "Exec=$out/bin/redshift"
+            substituteInPlace $out/share/applications/redshift-gtk.desktop \
+              --replace 'Exec=redshift-gtk' "Exec=$out/bin/redshift-gtk"
+          '';
 
       enableParallelBuilding = true;
     };
@@ -137,11 +184,15 @@ rec {
 
     meta = redshift.meta // {
       name = "${pname}-${version}";
-      longDescription = "Gammastep"
-        + lib.removePrefix "Redshift" redshift.meta.longDescription;
+      longDescription = "Gammastep" + lib.removePrefix "Redshift" redshift.meta.longDescription;
       homepage = "https://gitlab.com/chinstrap/gammastep";
       mainProgram = "gammastep";
-      maintainers = (with lib.maintainers; [ eclairevoyant primeos ]) ++ redshift.meta.maintainers;
+      maintainers =
+        (with lib.maintainers; [
+          eclairevoyant
+          primeos
+        ])
+        ++ redshift.meta.maintainers;
     };
   };
 }

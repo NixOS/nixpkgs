@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, qt5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  qt5,
 
-, cmake
+  cmake,
 
-, cairo
-, ffmpeg
-, freetype
-, ghostscript
-, glfw
-, libjpeg
-, libtiff
-, qhull
-, xorg
-, zeromq
+  cairo,
+  ffmpeg,
+  freetype,
+  ghostscript,
+  glfw,
+  libjpeg,
+  libtiff,
+  qhull,
+  xorg,
+  zeromq,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,59 +1,60 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, SDL2
-, alsa-lib
-, bullet
-, check
-, curl
-, dbus
-, doxygen
-, expat
-, fontconfig
-, freetype
-, fribidi
-, ghostscript
-, giflib
-, glib
-, gst_all_1
-, gtk3
-, harfbuzz
-, hicolor-icon-theme
-, ibus
-, jbig2dec
-, libGL
-, libdrm
-, libinput
-, libjpeg
-, libpng
-, libpulseaudio
-, libraw
-, librsvg
-, libsndfile
-, libspectre
-, libtiff
-, libwebp
-, libxkbcommon
-, luajit
-, lz4
-, mesa
-, mint-x-icons
-, openjpeg
-, openssl
-, poppler
-, python3Packages
-, systemd
-, udev
-, util-linux
-, wayland
-, wayland-protocols
-, writeText
-, xorg
-, zlib
-, directoryListingUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  SDL2,
+  alsa-lib,
+  bullet,
+  check,
+  curl,
+  dbus,
+  doxygen,
+  expat,
+  fontconfig,
+  freetype,
+  fribidi,
+  ghostscript,
+  giflib,
+  glib,
+  gst_all_1,
+  gtk3,
+  harfbuzz,
+  hicolor-icon-theme,
+  ibus,
+  jbig2dec,
+  libGL,
+  libdrm,
+  libinput,
+  libjpeg,
+  libpng,
+  libpulseaudio,
+  libraw,
+  librsvg,
+  libsndfile,
+  libspectre,
+  libtiff,
+  libwebp,
+  libxkbcommon,
+  luajit,
+  lz4,
+  mesa,
+  mint-x-icons,
+  openjpeg,
+  openssl,
+  poppler,
+  python3Packages,
+  systemd,
+  udev,
+  util-linux,
+  wayland,
+  wayland-protocols,
+  writeText,
+  xorg,
+  zlib,
+  directoryListingUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -210,8 +211,18 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Enlightenment foundation libraries";
     homepage = "https://enlightenment.org/";
-    license = with licenses; [ bsd2 lgpl2Only licenses.zlib ];
+    license = with licenses; [
+      bsd2
+      lgpl2Only
+      licenses.zlib
+    ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
+    maintainers =
+      with maintainers;
+      [
+        matejc
+        ftrvxmtrx
+      ]
+      ++ teams.enlightenment.members;
   };
 }

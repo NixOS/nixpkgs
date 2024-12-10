@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, m4, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  m4,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "autoconf";
@@ -10,7 +16,10 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ m4 perl ];
+  nativeBuildInputs = [
+    m4
+    perl
+  ];
   buildInputs = [ m4 ];
 
   # Work around a known issue in Cygwin.  See

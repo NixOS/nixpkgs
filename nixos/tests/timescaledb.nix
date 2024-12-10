@@ -1,9 +1,10 @@
 # mostly copied from ./postgresql.nix as it seemed unapproriate to
 # test additional extensions for postgresql there.
 
-{ system ? builtins.currentSystem
-, config ? { }
-, pkgs ? import ../.. { inherit system config; }
+{
+  system ? builtins.currentSystem,
+  config ? { },
+  pkgs ? import ../.. { inherit system config; },
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -41,53 +42,59 @@ let
       average(stats)
     FROM t;
   '';
-  make-postgresql-test = postgresql-name: postgresql-package: makeTest {
-    name = postgresql-name;
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ typetetris ];
-    };
-
-    nodes.machine = { ... }:
-      {
-        services.postgresql = {
-          enable = true;
-          package = postgresql-package;
-          extraPlugins = ps: with ps; [
-            timescaledb
-            timescaledb_toolkit
-          ];
-          settings = { shared_preload_libraries = "timescaledb, timescaledb_toolkit"; };
-        };
+  make-postgresql-test =
+    postgresql-name: postgresql-package:
+    makeTest {
+      name = postgresql-name;
+      meta = with pkgs.lib.maintainers; {
+        maintainers = [ typetetris ];
       };
 
-    testScript = ''
-      def check_count(statement, lines):
-          return 'test $(sudo -u postgres psql postgres -tAc "{}"|wc -l) -eq {}'.format(
-              statement, lines
-          )
+      nodes.machine =
+        { ... }:
+        {
+          services.postgresql = {
+            enable = true;
+            package = postgresql-package;
+            extraPlugins =
+              ps: with ps; [
+                timescaledb
+                timescaledb_toolkit
+              ];
+            settings = {
+              shared_preload_libraries = "timescaledb, timescaledb_toolkit";
+            };
+          };
+        };
+
+      testScript = ''
+        def check_count(statement, lines):
+            return 'test $(sudo -u postgres psql postgres -tAc "{}"|wc -l) -eq {}'.format(
+                statement, lines
+            )
 
 
-      machine.start()
-      machine.wait_for_unit("postgresql")
+        machine.start()
+        machine.wait_for_unit("postgresql")
 
-      with subtest("Postgresql with extensions timescaledb and timescaledb_toolkit is available just after unit start"):
-          machine.succeed(
-              "sudo -u postgres psql -f ${test-sql}"
-          )
+        with subtest("Postgresql with extensions timescaledb and timescaledb_toolkit is available just after unit start"):
+            machine.succeed(
+                "sudo -u postgres psql -f ${test-sql}"
+            )
 
-      machine.fail(check_count("SELECT * FROM sth;", 3))
-      machine.succeed(check_count("SELECT * FROM sth;", 5))
-      machine.fail(check_count("SELECT * FROM sth;", 4))
+        machine.fail(check_count("SELECT * FROM sth;", 3))
+        machine.succeed(check_count("SELECT * FROM sth;", 5))
+        machine.fail(check_count("SELECT * FROM sth;", 4))
 
-      machine.shutdown()
-    '';
+        machine.shutdown()
+      '';
 
-  };
-  applicablePostgresqlVersions = filterAttrs (_: value: versionAtLeast value.version "12") postgresql-versions;
+    };
+  applicablePostgresqlVersions = filterAttrs (
+    _: value: versionAtLeast value.version "12"
+  ) postgresql-versions;
 in
-mapAttrs'
-  (name: package: {
-    inherit name;
-    value = make-postgresql-test name package;
-  })
-  applicablePostgresqlVersions
+mapAttrs' (name: package: {
+  inherit name;
+  value = make-postgresql-test name package;
+}) applicablePostgresqlVersions

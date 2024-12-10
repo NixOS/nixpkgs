@@ -1,29 +1,59 @@
 # Getdns and Stubby are released together, see https://getdnsapi.net/releases/
 
-{ lib, stdenv, fetchurl, cmake, darwin, doxygen, libidn2, libyaml, openssl
-, systemd, unbound, yq }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  darwin,
+  doxygen,
+  libidn2,
+  libyaml,
+  openssl,
+  systemd,
+  unbound,
+  yq,
+}:
 let
   metaCommon = with lib; {
-    maintainers = with maintainers; [ leenaars ehmry ];
+    maintainers = with maintainers; [
+      leenaars
+      ehmry
+    ];
     license = licenses.bsd3;
     platforms = platforms.all;
   };
-in rec {
+in
+rec {
 
   getdns = stdenv.mkDerivation rec {
     pname = "getdns";
     version = "1.7.3";
-    outputs = [ "out" "dev" "lib" "man" ];
+    outputs = [
+      "out"
+      "dev"
+      "lib"
+      "man"
+    ];
 
     src = fetchurl {
-      url = with lib; "https://getdnsapi.net/releases/${pname}-${concatStringsSep "-" (splitVersion version)}/${pname}-${version}.tar.gz";
+      url =
+        with lib;
+        "https://getdnsapi.net/releases/${pname}-${concatStringsSep "-" (splitVersion version)}/${pname}-${version}.tar.gz";
       # upstream publishes hashes in hex format
       sha256 = "f1404ca250f02e37a118aa00cf0ec2cbe11896e060c6d369c6761baea7d55a2c";
     };
 
-    nativeBuildInputs = [ cmake doxygen ];
+    nativeBuildInputs = [
+      cmake
+      doxygen
+    ];
 
-    buildInputs = [ libidn2 openssl unbound ];
+    buildInputs = [
+      libidn2
+      openssl
+      unbound
+    ];
 
     # https://github.com/getdnsapi/getdns/issues/517
     postPatch = ''
@@ -34,8 +64,10 @@ in rec {
 
     postInstall = "rm -r $out/share/doc";
 
-    meta = with lib;
-      metaCommon // {
+    meta =
+      with lib;
+      metaCommon
+      // {
         description = "A modern asynchronous DNS API";
         longDescription = ''
           getdns is an implementation of a modern asynchronous DNS API; the
@@ -55,15 +87,27 @@ in rec {
   stubby = stdenv.mkDerivation rec {
     pname = "stubby";
     version = "0.4.3";
-    outputs = [ "out" "man" "stubbyExampleJson" ];
+    outputs = [
+      "out"
+      "man"
+      "stubbyExampleJson"
+    ];
 
     inherit (getdns) src;
     sourceRoot = "${getdns.pname}-${getdns.version}/stubby";
 
-    nativeBuildInputs = [ cmake doxygen yq ];
+    nativeBuildInputs = [
+      cmake
+      doxygen
+      yq
+    ];
 
-    buildInputs = [ getdns libyaml openssl systemd ]
-      ++ lib.optionals stdenv.isDarwin [ darwin.Security ];
+    buildInputs = [
+      getdns
+      libyaml
+      openssl
+      systemd
+    ] ++ lib.optionals stdenv.isDarwin [ darwin.Security ];
 
     postInstall = ''
       rm -r $out/share/doc
@@ -72,11 +116,12 @@ in rec {
         > $stubbyExampleJson
     '';
 
-    passthru.settingsExample = with builtins;
-      fromJSON (readFile stubby.stubbyExampleJson);
+    passthru.settingsExample = with builtins; fromJSON (readFile stubby.stubbyExampleJson);
 
-    meta = with lib;
-      metaCommon // {
+    meta =
+      with lib;
+      metaCommon
+      // {
         description = "A local DNS Privacy stub resolver (using DNS-over-TLS)";
         mainProgram = "stubby";
         longDescription = ''

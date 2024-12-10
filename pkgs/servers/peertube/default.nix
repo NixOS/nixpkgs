@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, callPackage
-, fetchurl
-, fetchFromGitHub
-, fetchYarnDeps
-, nixosTests
-, brotli
-, fixup-yarn-lock
-, jq
-, nodejs
-, which
-, yarn
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchurl,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  nixosTests,
+  brotli,
+  fixup-yarn-lock,
+  jq,
+  nodejs,
+  which,
+  yarn,
 }:
 let
   bcryptHostPlatformAttrs = {
@@ -35,8 +36,9 @@ let
       hash = "sha256-JMnELVUxoU1C57Tzue3Sg6OfDFAjfCnzgDit0BWzmlo=";
     };
   };
-  bcryptAttrs = bcryptHostPlatformAttrs."${stdenv.hostPlatform.system}" or
-    (throw "Unsupported architecture: ${stdenv.hostPlatform.system}");
+  bcryptAttrs =
+    bcryptHostPlatformAttrs."${stdenv.hostPlatform.system}"
+      or (throw "Unsupported architecture: ${stdenv.hostPlatform.system}");
   bcryptVersion = "5.1.1";
   bcryptLib = fetchurl {
     url = "https://github.com/kelektiv/node.bcrypt.js/releases/download/v${bcryptVersion}/bcrypt_lib-v${bcryptVersion}-napi-v3-${bcryptAttrs.arch}-${bcryptAttrs.libc}.tar.gz";
@@ -74,9 +76,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-9w3aLuiLs7SU00YwuE0ixfiD77gCakXT4YeRpfsgGz0=";
   };
 
-  outputs = [ "out" "cli" "runner" ];
+  outputs = [
+    "out"
+    "cli"
+    "runner"
+  ];
 
-  nativeBuildInputs = [ brotli fixup-yarn-lock jq which yarn ];
+  nativeBuildInputs = [
+    brotli
+    fixup-yarn-lock
+    jq
+    which
+    yarn
+  ];
 
   buildInputs = [ nodejs ];
 
@@ -187,7 +199,17 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.agpl3Plus;
     homepage = "https://joinpeertube.org/";
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-    maintainers = with maintainers; [ immae izorkin mohe2015 stevenroose ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+    maintainers = with maintainers; [
+      immae
+      izorkin
+      mohe2015
+      stevenroose
+    ];
   };
 }

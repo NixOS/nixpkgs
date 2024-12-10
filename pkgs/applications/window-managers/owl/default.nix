@@ -1,12 +1,13 @@
-{ lib
-, clangStdenv
-, fetchFromGitHub
-, gnustep
-, libxkbcommon
-, makeWrapper
-, wayland
-, wayland-scanner
-, darwin
+{
+  lib,
+  clangStdenv,
+  fetchFromGitHub,
+  gnustep,
+  libxkbcommon,
+  makeWrapper,
+  wayland,
+  wayland-scanner,
+  darwin,
 }:
 
 assert wayland.withLibraries;
@@ -36,27 +37,33 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    makeWrapper
-    wayland-scanner
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.DarwinTools
-    darwin.bootstrap_cmds
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    gnustep.make
-    gnustep.wrapGNUstepAppsHook
-  ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+      wayland-scanner
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.DarwinTools
+      darwin.bootstrap_cmds
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      gnustep.make
+      gnustep.wrapGNUstepAppsHook
+    ];
 
-  buildInputs = [
-    libxkbcommon
-    wayland
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    gnustep.back
-    gnustep.base
-    gnustep.gui
-  ];
+  buildInputs =
+    [
+      libxkbcommon
+      wayland
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Cocoa
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      gnustep.back
+      gnustep.base
+      gnustep.gui
+    ];
 
   preConfigure = ''
     mkdir -p build

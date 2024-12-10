@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, neon
-, procps
-, substituteAll
-, zlib
-, wrapperDir ? "/run/wrappers/bin"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  neon,
+  procps,
+  substituteAll,
+  zlib,
+  wrapperDir ? "/run/wrappers/bin",
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,16 +1,17 @@
-{ lib
-, cmake
-, dbus
-, fetchFromGitHub
-, fetchYarnDeps
-, freetype
-, gtk3
-, libsoup
-, mkYarnPackage
-, openssl
-, pkg-config
-, rustPlatform
-, webkitgtk
+{
+  lib,
+  cmake,
+  dbus,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  freetype,
+  gtk3,
+  libsoup,
+  mkYarnPackage,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  webkitgtk,
 }:
 
 let
@@ -73,8 +74,18 @@ rustPlatform.buildRustPackage {
     substituteInPlace tauri.conf.json --replace '"distDir": "../out/src",' '"distDir": "frontend-build/src",'
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ dbus openssl freetype libsoup gtk3 webkitgtk ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    dbus
+    openssl
+    freetype
+    libsoup
+    gtk3
+    webkitgtk
+  ];
 
   checkFlags = [
     # tries to mutate the parent directory

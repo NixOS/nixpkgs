@@ -1,37 +1,38 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wayland
-, dwayland
-, qtbase
-, qttools
-, qtx11extras
-, wrapQtAppsHook
-, extra-cmake-modules
-, gsettings-qt
-, libepoxy
-, kconfig
-, kconfigwidgets
-, kcoreaddons
-, kcrash
-, kdbusaddons
-, kiconthemes
-, kglobalaccel
-, kidletime
-, knotifications
-, kpackage
-, plasma-framework
-, kcmutils
-, knewstuff
-, kdecoration
-, kscreenlocker
-, breeze-qt5
-, libinput
-, mesa
-, lcms2
-, xorg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wayland,
+  dwayland,
+  qtbase,
+  qttools,
+  qtx11extras,
+  wrapQtAppsHook,
+  extra-cmake-modules,
+  gsettings-qt,
+  libepoxy,
+  kconfig,
+  kconfigwidgets,
+  kcoreaddons,
+  kcrash,
+  kdbusaddons,
+  kiconthemes,
+  kglobalaccel,
+  kidletime,
+  knotifications,
+  kpackage,
+  plasma-framework,
+  kcmutils,
+  knewstuff,
+  kdecoration,
+  kscreenlocker,
+  breeze-qt5,
+  libinput,
+  mesa,
+  lcms2,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -105,7 +106,10 @@ stdenv.mkDerivation rec {
     "-DKWIN_BUILD_RUNNERS=OFF"
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = with lib; {
     description = "Fork of kwin, an easy to use, but flexible, composited Window Manager";

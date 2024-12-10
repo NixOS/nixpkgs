@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, which }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  which,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-common";
@@ -11,9 +16,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ which ]; # autogen.sh which is using gnome-common tends to require which
 
-  patches = [(fetchurl {
-    name = "gnome-common-patch";
-    url = "https://bug697543.bugzilla-attachments.gnome.org/attachment.cgi?id=240935";
-    sha256 = "17abp7czfzirjm7qsn2czd03hdv9kbyhk3lkjxg2xsf5fky7z7jl";
-  })];
+  patches = [
+    (fetchurl {
+      name = "gnome-common-patch";
+      url = "https://bug697543.bugzilla-attachments.gnome.org/attachment.cgi?id=240935";
+      sha256 = "17abp7czfzirjm7qsn2czd03hdv9kbyhk3lkjxg2xsf5fky7z7jl";
+    })
+  ];
 }

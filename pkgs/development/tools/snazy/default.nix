@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -44,6 +45,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/chmouel/snazy/";
     changelog = "https://github.com/chmouel/snazy/releases/tag/${src.rev}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda jk ];
+    maintainers = with maintainers; [
+      figsoda
+      jk
+    ];
   };
 }

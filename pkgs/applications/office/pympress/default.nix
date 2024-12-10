@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, python3Packages
-, fetchPypi
-, wrapGAppsHook3
-, gtk3
-, gobject-introspection
-, libcanberra-gtk3
-, poppler_gi
-, withGstreamer ? stdenv.isLinux
-, withVLC ? stdenv.isLinux
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchPypi,
+  wrapGAppsHook3,
+  gtk3,
+  gobject-introspection,
+  libcanberra-gtk3,
+  poppler_gi,
+  withGstreamer ? stdenv.isLinux,
+  withVLC ? stdenv.isLinux,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -31,12 +32,15 @@ python3Packages.buildPythonApplication rec {
     poppler_gi
   ] ++ lib.optional withGstreamer libcanberra-gtk3;
 
-  propagatedBuildInputs = with python3Packages; [
-    pycairo
-    pygobject3
-    setuptools
-    watchdog
-  ] ++ lib.optional withVLC python-vlc;
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      pycairo
+      pygobject3
+      setuptools
+      watchdog
+    ]
+    ++ lib.optional withVLC python-vlc;
 
   doCheck = false; # there are no tests
 

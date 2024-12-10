@@ -1,22 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, file
-, docbook_xsl
-, gtk-doc ? null
-, buildDevDoc ? gtk-doc != null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  file,
+  docbook_xsl,
+  gtk-doc ? null,
+  buildDevDoc ? gtk-doc != null,
 
-# for passthru.tests
-, gnuradio
-, gst_all_1
-, qt6
-, vips
+  # for passthru.tests
+  gnuradio,
+  gst_all_1,
+  qt6,
+  vips,
 
-}: let
+}:
+let
   inherit (lib) optional optionals;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "orc";
   version = "0.4.39";
 
@@ -30,21 +33,30 @@ in stdenv.mkDerivation rec {
     sed -i '/memcpy_speed/d' testsuite/meson.build
   '';
 
-  outputs = [ "out" "dev" ]
-     ++ optional buildDevDoc "devdoc"
-  ;
+  outputs = [
+    "out"
+    "dev"
+  ] ++ optional buildDevDoc "devdoc";
   outputBin = "dev"; # compilation tools
 
-  mesonFlags =
-    optionals (!buildDevDoc) [ "-Dgtk_doc=disabled" ]
-  ;
+  mesonFlags = optionals (!buildDevDoc) [ "-Dgtk_doc=disabled" ];
 
-  nativeBuildInputs = [ meson ninja ]
-    ++ optionals buildDevDoc [ gtk-doc file docbook_xsl ]
-  ;
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+    ]
+    ++ optionals buildDevDoc [
+      gtk-doc
+      file
+      docbook_xsl
+    ];
 
   # https://gitlab.freedesktop.org/gstreamer/orc/-/issues/41
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12");
+  doCheck =
+    !(
+      stdenv.isLinux && stdenv.isAarch64 && stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12"
+    );
 
   passthru.tests = {
     inherit (gst_all_1) gst-plugins-good gst-plugins-bad gst-plugins-ugly;
@@ -58,7 +70,10 @@ in stdenv.mkDerivation rec {
     changelog = "https://cgit.freedesktop.org/gstreamer/orc/plain/RELEASE?h=${version}";
     # The source code implementing the Marsenne Twister algorithm is licensed
     # under the 3-clause BSD license. The rest is 2-clause BSD license.
-    license = with licenses; [ bsd3 bsd2 ];
+    license = with licenses; [
+      bsd3
+      bsd2
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ lilyinstarlight ];
   };

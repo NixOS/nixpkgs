@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, testers
-, cmake
-, cmake-extras
-, dbus
-, doxygen
-, gsettings-qt
-, gtest
-, intltool
-, json-glib
-, libapparmor
-, libqtdbustest
-, pkg-config
-, qdjango
-, qtbase
-, qtdeclarative
-, qtxmlpatterns
-, ubports-click
-, validatePkgConfig
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  testers,
+  cmake,
+  cmake-extras,
+  dbus,
+  doxygen,
+  gsettings-qt,
+  gtest,
+  intltool,
+  json-glib,
+  libapparmor,
+  libqtdbustest,
+  pkg-config,
+  qdjango,
+  qtbase,
+  qtdeclarative,
+  qtxmlpatterns,
+  ubports-click,
+  validatePkgConfig,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -97,13 +98,18 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     (lib.cmakeBool "ENABLE_CLICK" true)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
-      # Exclude tests
-      "-E" (lib.strings.escapeShellArg "(${lib.concatStringsSep "|" [
-        # Flaky, randomly failing in UserMetricsImplTest.AddTranslatedData (data not ready when signal is emitted?)
-        "^usermetricsoutput-unit-tests"
-      ]})")
-    ]))
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
+      lib.concatStringsSep ";" [
+        # Exclude tests
+        "-E"
+        (lib.strings.escapeShellArg "(${
+          lib.concatStringsSep "|" [
+            # Flaky, randomly failing in UserMetricsImplTest.AddTranslatedData (data not ready when signal is emitted?)
+            "^usermetricsoutput-unit-tests"
+          ]
+        })")
+      ]
+    ))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

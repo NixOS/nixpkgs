@@ -1,18 +1,19 @@
-{ buildGoModule
-, copyDesktopItems
-, fetchFromGitLab
-, lib
-, libGL
-, libX11
-, libXcursor
-, libXext
-, libXi
-, libXinerama
-, libXrandr
-, makeDesktopItem
-, mesa
-, pkg-config
-, stdenv
+{
+  buildGoModule,
+  copyDesktopItems,
+  fetchFromGitLab,
+  lib,
+  libGL,
+  libX11,
+  libXcursor,
+  libXext,
+  libXi,
+  libXinerama,
+  libXrandr,
+  makeDesktopItem,
+  mesa,
+  pkg-config,
+  stdenv,
 }:
 
 buildGoModule rec {
@@ -28,7 +29,10 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   buildInputs = [
     libGL

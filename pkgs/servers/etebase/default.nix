@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, withLdap ? true
-, python3
-, withPostgres ? true
-, nix-update-script
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  withLdap ? true,
+  python3,
+  withPostgres ? true,
+  nix-update-script,
+  nixosTests,
 }:
 
 let
@@ -29,22 +30,25 @@ python.pkgs.buildPythonPackage rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = with python.pkgs; [
-    aiofiles
-    django_4
-    fastapi
-    msgpack
-    pynacl
-    redis
-    uvicorn
-    websockets
-    watchfiles
-    uvloop
-    pyyaml
-    python-dotenv
-    httptools
-    typing-extensions
-  ] ++ lib.optional withLdap python-ldap
+  propagatedBuildInputs =
+    with python.pkgs;
+    [
+      aiofiles
+      django_4
+      fastapi
+      msgpack
+      pynacl
+      redis
+      uvicorn
+      websockets
+      watchfiles
+      uvloop
+      pyyaml
+      python-dotenv
+      httptools
+      typing-extensions
+    ]
+    ++ lib.optional withLdap python-ldap
     ++ lib.optional withPostgres psycopg2;
 
   postInstall = ''
@@ -54,7 +58,7 @@ python.pkgs.buildPythonPackage rec {
     chmod +x $out/bin/etebase-server
   '';
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
   passthru.python = python;
   # PYTHONPATH of all dependencies used by the package
   passthru.pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
@@ -68,6 +72,9 @@ python.pkgs.buildPythonPackage rec {
     mainProgram = "etebase-server";
     changelog = "https://github.com/etesync/server/blob/${version}/ChangeLog.md";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ felschr phaer ];
+    maintainers = with maintainers; [
+      felschr
+      phaer
+    ];
   };
 }

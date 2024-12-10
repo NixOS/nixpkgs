@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, unzip
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -31,7 +32,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://maccy.app";
     license = licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau Enzime ];
+    maintainers = with maintainers; [
+      emilytrau
+      Enzime
+    ];
     platforms = platforms.darwin;
   };
 })

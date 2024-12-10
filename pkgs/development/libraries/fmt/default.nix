@@ -1,23 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub, fetchpatch
-, cmake
-, enableShared ? !stdenv.hostPlatform.isStatic
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  enableShared ? !stdenv.hostPlatform.isStatic,
 
-# tests
-, mpd
-, openimageio
-, fcitx5
-, spdlog
+  # tests
+  mpd,
+  openimageio,
+  fcitx5,
+  spdlog,
 }:
 
 let
-  generic = { version, sha256, patches ? [ ] }:
+  generic =
+    {
+      version,
+      sha256,
+      patches ? [ ],
+    }:
     stdenv.mkDerivation {
       pname = "fmt";
       inherit version;
 
-      outputs = [ "out" "dev" ];
+      outputs = [
+        "out"
+        "dev"
+      ];
 
       src = fetchFromGitHub {
         owner = "fmtlib";
@@ -37,7 +47,12 @@ let
       doCheck = true;
 
       passthru.tests = {
-        inherit mpd openimageio fcitx5 spdlog;
+        inherit
+          mpd
+          openimageio
+          fcitx5
+          spdlog
+          ;
       };
 
       meta = with lib; {

@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchzip
-, dpkg
-, makeWrapper
-, callPackage
-, addOpenGLRunpath
-, electron
-, withTetrioPlus ? false
-, tetrio-plus ? null
+{
+  stdenv,
+  lib,
+  fetchzip,
+  dpkg,
+  makeWrapper,
+  callPackage,
+  addOpenGLRunpath,
+  electron,
+  withTetrioPlus ? false,
+  tetrio-plus ? null,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,19 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase =
     let
       tetrio-plus' =
-        if tetrio-plus == null
-        then
-          callPackage ./tetrio-plus.nix
-            {
-              tetrio-src = finalAttrs.src;
-              tetrio-version = finalAttrs.version;
-            }
-        else tetrio-plus;
+        if tetrio-plus == null then
+          callPackage ./tetrio-plus.nix {
+            tetrio-src = finalAttrs.src;
+            tetrio-version = finalAttrs.version;
+          }
+        else
+          tetrio-plus;
 
-      asarPath =
-        if withTetrioPlus
-        then "${tetrio-plus'}/app.asar"
-        else "opt/TETR.IO/resources/app.asar";
+      asarPath = if withTetrioPlus then "${tetrio-plus'}/app.asar" else "opt/TETR.IO/resources/app.asar";
     in
     ''
       runHook preInstall
@@ -74,7 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
       Play against friends and foes all over the world, or claim a spot on the leaderboards - the stacker future is yours!
     '';
     mainProgram = "tetrio";
-    maintainers = with lib.maintainers; [ wackbyte huantian ];
+    maintainers = with lib.maintainers; [
+      wackbyte
+      huantian
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };

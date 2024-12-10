@@ -1,7 +1,28 @@
-{ stdenv, lib, fetchurl, dpkg, autoPatchelfHook, makeWrapper, wrapGAppsHook3
-, alsa-lib, dbus, fontconfig, freetype, glib, gst_all_1, libGL
-, libinput, libpulseaudio, libsecret, libtiff, libxkbcommon
-, mesa, openssl, systemd, xorg }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  wrapGAppsHook3,
+  alsa-lib,
+  dbus,
+  fontconfig,
+  freetype,
+  glib,
+  gst_all_1,
+  libGL,
+  libinput,
+  libpulseaudio,
+  libsecret,
+  libtiff,
+  libxkbcommon,
+  mesa,
+  openssl,
+  systemd,
+  xorg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "alfaview";
@@ -75,7 +96,10 @@ stdenv.mkDerivation rec {
     homepage = "https://alfaview.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ wolfangaukang hexchen ];
+    maintainers = with maintainers; [
+      wolfangaukang
+      hexchen
+    ];
     mainProgram = "alfaview";
     platforms = [ "x86_64-linux" ];
   };

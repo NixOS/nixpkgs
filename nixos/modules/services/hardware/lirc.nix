@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.lirc;
-in {
+in
+{
 
   ###### interface
 
@@ -29,7 +35,7 @@ in {
 
       extraArguments = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Extra arguments to lircd.";
       };
     };
@@ -56,38 +62,43 @@ in {
       };
     };
 
-    systemd.services.lircd = let
-      configFile = pkgs.writeText "lircd.conf" (builtins.concatStringsSep "\n" cfg.configs);
-    in {
-      description = "LIRC daemon service";
-      after = [ "network.target" ];
+    systemd.services.lircd =
+      let
+        configFile = pkgs.writeText "lircd.conf" (builtins.concatStringsSep "\n" cfg.configs);
+      in
+      {
+        description = "LIRC daemon service";
+        after = [ "network.target" ];
 
-      unitConfig.Documentation = [ "man:lircd(8)" ];
+        unitConfig.Documentation = [ "man:lircd(8)" ];
 
-      serviceConfig = {
-        RuntimeDirectory = ["lirc" "lirc/lock"];
+        serviceConfig = {
+          RuntimeDirectory = [
+            "lirc"
+            "lirc/lock"
+          ];
 
-        # Service runtime directory and socket share same folder.
-        # Following hacks are necessary to get everything right:
+          # Service runtime directory and socket share same folder.
+          # Following hacks are necessary to get everything right:
 
-        # 1. prevent socket deletion during stop and restart
-        RuntimeDirectoryPreserve = true;
+          # 1. prevent socket deletion during stop and restart
+          RuntimeDirectoryPreserve = true;
 
-        # 2. fix runtime folder owner-ship, happens when socket activation
-        #    creates the folder
-        PermissionsStartOnly = true;
-        ExecStartPre = [
-          "${pkgs.coreutils}/bin/chown lirc /run/lirc/"
-        ];
+          # 2. fix runtime folder owner-ship, happens when socket activation
+          #    creates the folder
+          PermissionsStartOnly = true;
+          ExecStartPre = [
+            "${pkgs.coreutils}/bin/chown lirc /run/lirc/"
+          ];
 
-        ExecStart = ''
-          ${pkgs.lirc}/bin/lircd --nodaemon \
-            ${escapeShellArgs cfg.extraArguments} \
-            ${configFile}
-        '';
-        User = "lirc";
+          ExecStart = ''
+            ${pkgs.lirc}/bin/lircd --nodaemon \
+              ${escapeShellArgs cfg.extraArguments} \
+              ${configFile}
+          '';
+          User = "lirc";
+        };
       };
-    };
 
     users.users.lirc = {
       uid = config.ids.uids.lirc;

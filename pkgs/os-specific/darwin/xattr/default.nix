@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, python
-, ed
-, unifdef
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  python,
+  ed,
+  unifdef,
 }:
 
 buildPythonPackage rec {
@@ -35,7 +36,11 @@ buildPythonPackage rec {
   ];
 
   # need to use `out` instead of `bin` since buildPythonPackage ignores the latter
-  outputs = [ "out" "doc" "python" ];
+  outputs = [
+    "out"
+    "doc"
+    "python"
+  ];
 
   # We need to patch a reference to gnutar in an included Makefile
   postUnpack = ''
@@ -71,7 +76,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Display and manipulate extended attributes";
-    license = [ licenses.psfl licenses.mit ]; # see $doc/share/xattr/OpenSourceLicenses
+    license = [
+      licenses.psfl
+      licenses.mit
+    ]; # see $doc/share/xattr/OpenSourceLicenses
     maintainers = [ maintainers.sternenseemann ];
     homepage = "https://opensource.apple.com/source/python_modules/";
     platforms = lib.platforms.darwin;

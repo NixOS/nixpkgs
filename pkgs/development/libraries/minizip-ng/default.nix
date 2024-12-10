@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, gtest
-, pkg-config
-, zlib
-, bzip2
-, xz
-, zstd
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  gtest,
+  pkg-config,
+  zlib,
+  bzip2,
+  xz,
+  zstd,
+  openssl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,19 +24,30 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rP3WficGQZ2sSYnU9Tj0lVl36ShwV76fn/1lv+TrK2c=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ zlib bzip2 xz zstd openssl ];
-
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
-    "-DMZ_OPENSSL=ON"
-    "-DMZ_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
-    "-DMZ_BUILD_UNIT_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
-    "-DMZ_LIB_SUFFIX='-ng'"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # missing header file
-    "-DMZ_LIBCOMP=OFF"
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
+  buildInputs = [
+    zlib
+    bzip2
+    xz
+    zstd
+    openssl
+  ];
+
+  cmakeFlags =
+    [
+      "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
+      "-DMZ_OPENSSL=ON"
+      "-DMZ_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
+      "-DMZ_BUILD_UNIT_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
+      "-DMZ_LIB_SUFFIX='-ng'"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # missing header file
+      "-DMZ_LIBCOMP=OFF"
+    ];
 
   postInstall = ''
     # make lib findable as libminizip-ng even if compat is enabled
@@ -57,7 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fork of the popular zip manipulation library found in the zlib distribution";
     homepage = "https://github.com/zlib-ng/minizip-ng";
     license = licenses.zlib;
-    maintainers = with maintainers; [ gebner ris ];
+    maintainers = with maintainers; [
+      gebner
+      ris
+    ];
     platforms = platforms.unix;
   };
 })

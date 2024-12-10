@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, testers
-, unstableGitUpdater
-, cmake
-, coreutils
-, boost
-, gtest
-, lomiri
-, properties-cpp
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  testers,
+  unstableGitUpdater,
+  cmake,
+  coreutils,
+  boost,
+  gtest,
+  lomiri,
+  properties-cpp,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -70,8 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "A simple convenience library for handling processes in C++11";
     homepage = "https://gitlab.com/ubports/development/core/lib-cpp/process-cpp";
-    license = with licenses; [ gpl3Only lgpl3Only ];
-    maintainers = with maintainers; [ onny OPNA2608 ];
+    license = with licenses; [
+      gpl3Only
+      lgpl3Only
+    ];
+    maintainers = with maintainers; [
+      onny
+      OPNA2608
+    ];
     platforms = platforms.linux;
     pkgConfigModules = [ "process-cpp" ];
   };

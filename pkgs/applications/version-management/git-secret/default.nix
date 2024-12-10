@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, git, gnupg, gawk }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  git,
+  gnupg,
+  gawk,
+}:
 
 stdenv.mkDerivation rec {
   pname = "git-secret";
@@ -17,7 +25,13 @@ stdenv.mkDerivation rec {
     install -D git-secret $out/bin/git-secret
 
     wrapProgram $out/bin/git-secret \
-      --prefix PATH : "${lib.makeBinPath [ git gnupg gawk ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          git
+          gnupg
+          gawk
+        ]
+      }"
 
     mkdir $out/share
     cp -r man $out/share

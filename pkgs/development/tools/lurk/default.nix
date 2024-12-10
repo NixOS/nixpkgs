@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,6 +24,9 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/jakwai01/lurk/releases/tag/${src.rev}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ figsoda ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }

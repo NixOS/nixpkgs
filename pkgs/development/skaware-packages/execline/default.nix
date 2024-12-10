@@ -1,9 +1,15 @@
-{ lib, fetchFromGitHub, skawarePackages, skalibs }:
+{
+  lib,
+  fetchFromGitHub,
+  skawarePackages,
+  skalibs,
+}:
 
 let
   version = "2.9.5.1";
 
-in skawarePackages.buildPackage {
+in
+skawarePackages.buildPackage {
   inherit version;
 
   pname = "execline";
@@ -24,7 +30,13 @@ in skawarePackages.buildPackage {
 
   description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
 
-  outputs = [ "bin" "lib" "dev" "doc" "out" ];
+  outputs = [
+    "bin"
+    "lib"
+    "dev"
+    "doc"
+    "out"
+  ];
 
   # TODO: nsss support
   configureFlags = [

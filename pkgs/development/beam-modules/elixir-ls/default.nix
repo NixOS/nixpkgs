@@ -1,4 +1,11 @@
-{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease, nix-update-script }:
+{
+  lib,
+  elixir,
+  fetchFromGitHub,
+  fetchMixDeps,
+  mixRelease,
+  nix-update-script,
+}:
 # Based on the work of Hauleth
 # None of this would have happened without him
 
@@ -14,7 +21,12 @@ let
   };
 in
 mixRelease {
-  inherit pname version src elixir;
+  inherit
+    pname
+    version
+    src
+    elixir
+    ;
 
   stripDebug = true;
 

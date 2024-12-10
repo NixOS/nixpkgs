@@ -1,10 +1,11 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, alcotest
-, domain_shims
-, mdx
-, thread-table
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  alcotest,
+  domain_shims,
+  mdx,
+  thread-table,
 }:
 
 buildDunePackage rec {

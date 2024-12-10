@@ -1,4 +1,8 @@
-{lib, stdenv, fetchurl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "limitcpu";
@@ -9,11 +13,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lGmU7GDznwMJW4m9dOZguJwUyCq6dUVmk5jjArx7I0w=";
   };
 
-  buildFlags = with stdenv; [ (
-    if isDarwin then "osx"
-    else if isFreeBSD then "freebsd"
-    else "cpulimit"
-  ) ];
+  buildFlags = with stdenv; [
+    (
+      if isDarwin then
+        "osx"
+      else if isFreeBSD then
+        "freebsd"
+      else
+        "cpulimit"
+    )
+  ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -22,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "A tool to throttle the CPU usage of programs";
     platforms = with platforms; linux ++ freebsd;
     license = licenses.gpl2Only;
-    maintainers = [maintainers.rycee];
+    maintainers = [ maintainers.rycee ];
     mainProgram = "cpulimit";
   };
 }

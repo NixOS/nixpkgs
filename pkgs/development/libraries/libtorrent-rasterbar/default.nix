@@ -1,14 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, zlib, boost, openssl, python, ncurses, SystemConfiguration
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  zlib,
+  boost,
+  openssl,
+  python,
+  ncurses,
+  SystemConfiguration,
 }:
 
 let
   version = "2.0.10";
 
   # Make sure we override python, so the correct version is chosen
-  boostPython = boost.override { enablePython = true; inherit python; };
+  boostPython = boost.override {
+    enablePython = true;
+    inherit python;
+  };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "libtorrent-rasterbar";
   inherit version;
 
@@ -22,8 +35,13 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ boostPython openssl zlib python ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
+  buildInputs = [
+    boostPython
+    openssl
+    zlib
+    python
+    ncurses
+  ] ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
   # https://github.com/arvidn/libtorrent/issues/6865
   postPatch = ''
@@ -47,7 +65,11 @@ in stdenv.mkDerivation {
       --replace "\''${_IMPORT_PREFIX}/lib" "$out/lib"
   '';
 
-  outputs = [ "out" "dev" "python" ];
+  outputs = [
+    "out"
+    "dev"
+    "python"
+  ];
 
   cmakeFlags = [
     "-Dpython-bindings=on"

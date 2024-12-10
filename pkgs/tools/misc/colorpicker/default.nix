@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gtk2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gtk2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "colorpicker";

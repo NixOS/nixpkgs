@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, gtest
-, meson
-, nasm
-, ninja
-, pkg-config
-, stdenv
-, windows
+{
+  lib,
+  fetchFromGitHub,
+  gtest,
+  meson,
+  nasm,
+  ninja,
+  pkg-config,
+  stdenv,
+  windows,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ai7lcGcQQqpsLGSwHkSs7YAoEfGCIbxdClO6JpGA+MI=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -29,11 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    gtest
-  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
-    windows.pthreads
-  ];
+  buildInputs =
+    [
+      gtest
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [
+      windows.pthreads
+    ];
 
   strictDeps = true;
 

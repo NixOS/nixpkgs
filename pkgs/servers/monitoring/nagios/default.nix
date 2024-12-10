@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, perl
-, php
-, gd
-, libpng
-, openssl
-, zlib
-, unzip
-, nixosTests
-, nix-update-script
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  php,
+  gd,
+  libpng,
+  openssl,
+  zlib,
+  unzip,
+  nixosTests,
+  nix-update-script,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -66,7 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
       };
     };
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex" "nagios-(.*)" ];
+      extraArgs = [
+        "--version-regex"
+        "nagios-(.*)"
+      ];
     };
   };
 
@@ -77,6 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     mainProgram = "nagios";
-    maintainers = with lib.maintainers; [ immae thoughtpolice relrod anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      immae
+      thoughtpolice
+      relrod
+      anthonyroussel
+    ];
   };
 })

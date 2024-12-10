@@ -1,30 +1,40 @@
 # Global configuration for the SSH client.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
-  cfg  = config.programs.ssh;
+  cfg = config.programs.ssh;
 
-  askPasswordWrapper = pkgs.writeScript "ssh-askpass-wrapper"
-    ''
-      #! ${pkgs.runtimeShell} -e
-      export DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^DISPLAY=\(.*\)/\1/; t; d')"
-      export XAUTHORITY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^XAUTHORITY=\(.*\)/\1/; t; d')"
-      export WAYLAND_DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^WAYLAND_DISPLAY=\(.*\)/\1/; t; d')"
-      exec ${cfg.askPassword} "$@"
-    '';
+  askPasswordWrapper = pkgs.writeScript "ssh-askpass-wrapper" ''
+    #! ${pkgs.runtimeShell} -e
+    export DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^DISPLAY=\(.*\)/\1/; t; d')"
+    export XAUTHORITY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^XAUTHORITY=\(.*\)/\1/; t; d')"
+    export WAYLAND_DISPLAY="$(systemctl --user show-environment | ${pkgs.gnused}/bin/sed 's/^WAYLAND_DISPLAY=\(.*\)/\1/; t; d')"
+    exec ${cfg.askPassword} "$@"
+  '';
 
   knownHosts = builtins.attrValues cfg.knownHosts;
 
-  knownHostsText = (lib.flip (lib.concatMapStringsSep "\n") knownHosts
-    (h: assert h.hostNames != [];
-      lib.optionalString h.certAuthority "@cert-authority " + builtins.concatStringsSep "," h.hostNames + " "
+  knownHostsText =
+    (lib.flip (lib.concatMapStringsSep "\n") knownHosts (
+      h:
+      assert h.hostNames != [ ];
+      lib.optionalString h.certAuthority "@cert-authority "
+      + builtins.concatStringsSep "," h.hostNames
+      + " "
       + (if h.publicKey != null then h.publicKey else builtins.readFile h.publicKeyFile)
-    )) + "\n";
+    ))
+    + "\n";
 
-  knownHostsFiles = [ "/etc/ssh/ssh_known_hosts" ]
-    ++ builtins.map pkgs.copyPathToStore cfg.knownHostsFiles;
+  knownHostsFiles = [
+    "/etc/ssh/ssh_known_hosts"
+  ] ++ builtins.map pkgs.copyPathToStore cfg.knownHostsFiles;
 
 in
 {
@@ -73,8 +83,11 @@ in
 
       pubkeyAcceptedKeyTypes = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
-        example = [ "ssh-ed25519" "ssh-rsa" ];
+        default = [ ];
+        example = [
+          "ssh-ed25519"
+          "ssh-rsa"
+        ];
         description = ''
           Specifies the key lib.types that will be used for public key authentication.
         '';
@@ -82,8 +95,11 @@ in
 
       hostKeyAlgorithms = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
-        example = [ "ssh-ed25519" "ssh-rsa" ];
+        default = [ ];
+        example = [
+          "ssh-ed25519"
+          "ssh-rsa"
+        ];
         description = ''
           Specifies the host key algorithms that the client wants to use in order of preference.
         '';
@@ -133,67 +149,77 @@ in
       package = lib.mkPackageOption pkgs "openssh" { };
 
       knownHosts = lib.mkOption {
-        default = {};
-        type = lib.types.attrsOf (lib.types.submodule ({ name, config, options, ... }: {
-          options = {
-            certAuthority = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-              description = ''
-                This public key is an SSH certificate authority, rather than an
-                individual host's key.
-              '';
-            };
-            hostNames = lib.mkOption {
-              type = lib.types.listOf lib.types.str;
-              default = [ name ] ++ config.extraHostNames;
-              defaultText = lib.literalExpression "[ ${name} ] ++ config.${options.extraHostNames}";
-              description = ''
-                A list of host names and/or IP numbers used for accessing
-                the host's ssh service. This list includes the name of the
-                containing `knownHosts` attribute by default
-                for convenience. If you wish to configure multiple host keys
-                for the same host use multiple `knownHosts`
-                entries with different attribute names and the same
-                `hostNames` list.
-              '';
-            };
-            extraHostNames = lib.mkOption {
-              type = lib.types.listOf lib.types.str;
-              default = [];
-              description = ''
-                A list of additional host names and/or IP numbers used for
-                accessing the host's ssh service. This list is ignored if
-                `hostNames` is set explicitly.
-              '';
-            };
-            publicKey = lib.mkOption {
-              default = null;
-              type = lib.types.nullOr lib.types.str;
-              example = "ecdsa-sha2-nistp521 AAAAE2VjZHN...UEPg==";
-              description = ''
-                The public key data for the host. You can fetch a public key
-                from a running SSH server with the {command}`ssh-keyscan`
-                command. The public key should not include any host names, only
-                the key type and the key itself.
-              '';
-            };
-            publicKeyFile = lib.mkOption {
-              default = null;
-              type = lib.types.nullOr lib.types.path;
-              description = ''
-                The path to the public key file for the host. The public
-                key file is read at build time and saved in the Nix store.
-                You can fetch a public key file from a running SSH server
-                with the {command}`ssh-keyscan` command. The content
-                of the file should follow the same format as described for
-                the `publicKey` option. Only a single key
-                is supported. If a host has multiple keys, use
-                {option}`programs.ssh.knownHostsFiles` instead.
-              '';
-            };
-          };
-        }));
+        default = { };
+        type = lib.types.attrsOf (
+          lib.types.submodule (
+            {
+              name,
+              config,
+              options,
+              ...
+            }:
+            {
+              options = {
+                certAuthority = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = ''
+                    This public key is an SSH certificate authority, rather than an
+                    individual host's key.
+                  '';
+                };
+                hostNames = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  default = [ name ] ++ config.extraHostNames;
+                  defaultText = lib.literalExpression "[ ${name} ] ++ config.${options.extraHostNames}";
+                  description = ''
+                    A list of host names and/or IP numbers used for accessing
+                    the host's ssh service. This list includes the name of the
+                    containing `knownHosts` attribute by default
+                    for convenience. If you wish to configure multiple host keys
+                    for the same host use multiple `knownHosts`
+                    entries with different attribute names and the same
+                    `hostNames` list.
+                  '';
+                };
+                extraHostNames = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  default = [ ];
+                  description = ''
+                    A list of additional host names and/or IP numbers used for
+                    accessing the host's ssh service. This list is ignored if
+                    `hostNames` is set explicitly.
+                  '';
+                };
+                publicKey = lib.mkOption {
+                  default = null;
+                  type = lib.types.nullOr lib.types.str;
+                  example = "ecdsa-sha2-nistp521 AAAAE2VjZHN...UEPg==";
+                  description = ''
+                    The public key data for the host. You can fetch a public key
+                    from a running SSH server with the {command}`ssh-keyscan`
+                    command. The public key should not include any host names, only
+                    the key type and the key itself.
+                  '';
+                };
+                publicKeyFile = lib.mkOption {
+                  default = null;
+                  type = lib.types.nullOr lib.types.path;
+                  description = ''
+                    The path to the public key file for the host. The public
+                    key file is read at build time and saved in the Nix store.
+                    You can fetch a public key file from a running SSH server
+                    with the {command}`ssh-keyscan` command. The content
+                    of the file should follow the same format as described for
+                    the `publicKey` option. Only a single key
+                    is supported. If a host has multiple keys, use
+                    {option}`programs.ssh.knownHostsFiles` instead.
+                  '';
+                };
+              };
+            }
+          )
+        );
         description = ''
           The set of system-wide known SSH hosts. To make simple setups more
           convenient the name of an attribute in this set is used as a host name
@@ -218,7 +244,7 @@ in
       };
 
       knownHostsFiles = lib.mkOption {
-        default = [];
+        default = [ ];
         type = with lib.types; listOf path;
         description = ''
           Files containing SSH host keys to set as global known hosts.
@@ -241,7 +267,10 @@ in
       kexAlgorithms = lib.mkOption {
         type = lib.types.nullOr (lib.types.listOf lib.types.str);
         default = null;
-        example = [ "curve25519-sha256@libssh.org" "diffie-hellman-group-exchange-sha256" ];
+        example = [
+          "curve25519-sha256@libssh.org"
+          "diffie-hellman-group-exchange-sha256"
+        ];
         description = ''
           Specifies the available KEX (Key Exchange) algorithms.
         '';
@@ -250,7 +279,10 @@ in
       ciphers = lib.mkOption {
         type = lib.types.nullOr (lib.types.listOf lib.types.str);
         default = null;
-        example = [ "chacha20-poly1305@openssh.com" "aes256-gcm@openssh.com" ];
+        example = [
+          "chacha20-poly1305@openssh.com"
+          "aes256-gcm@openssh.com"
+        ];
         description = ''
           Specifies the ciphers allowed and their order of preference.
         '';
@@ -259,7 +291,10 @@ in
       macs = lib.mkOption {
         type = lib.types.nullOr (lib.types.listOf lib.types.str);
         default = null;
-        example = [ "hmac-sha2-512-etm@openssh.com" "hmac-sha1" ];
+        example = [
+          "hmac-sha2-512-etm@openssh.com"
+          "hmac-sha1"
+        ];
         description = ''
           Specifies the MAC (message authentication code) algorithms in order of preference. The MAC algorithm is used
           for data integrity protection.
@@ -271,73 +306,88 @@ in
 
   config = {
 
-    programs.ssh.setXAuthLocation =
-      lib.mkDefault (config.services.xserver.enable || config.programs.ssh.forwardX11 == true || config.services.openssh.settings.X11Forwarding);
+    programs.ssh.setXAuthLocation = lib.mkDefault (
+      config.services.xserver.enable
+      || config.programs.ssh.forwardX11 == true
+      || config.services.openssh.settings.X11Forwarding
+    );
 
     assertions =
-      [ { assertion = cfg.forwardX11 == true -> cfg.setXAuthLocation;
+      [
+        {
+          assertion = cfg.forwardX11 == true -> cfg.setXAuthLocation;
           message = "cannot enable X11 forwarding without setting XAuth location";
         }
-      ] ++ lib.flip lib.mapAttrsToList cfg.knownHosts (name: data: {
-        assertion = (data.publicKey == null && data.publicKeyFile != null) ||
-                    (data.publicKey != null && data.publicKeyFile == null);
-        message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
-      });
+      ]
+      ++ lib.flip lib.mapAttrsToList cfg.knownHosts (
+        name: data: {
+          assertion =
+            (data.publicKey == null && data.publicKeyFile != null)
+            || (data.publicKey != null && data.publicKeyFile == null);
+          message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
+        }
+      );
 
     # SSH configuration. Slight duplication of the sshd_config
     # generation in the sshd service.
-    environment.etc."ssh/ssh_config".text =
-      ''
-        # Custom options from `extraConfig`, to override generated options
-        ${cfg.extraConfig}
+    environment.etc."ssh/ssh_config".text = ''
+      # Custom options from `extraConfig`, to override generated options
+      ${cfg.extraConfig}
 
-        # Generated options from other settings
-        Host *
-        AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
-        GlobalKnownHostsFile ${builtins.concatStringsSep " " knownHostsFiles}
+      # Generated options from other settings
+      Host *
+      AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
+      GlobalKnownHostsFile ${builtins.concatStringsSep " " knownHostsFiles}
 
-        ${lib.optionalString cfg.setXAuthLocation "XAuthLocation ${pkgs.xorg.xauth}/bin/xauth"}
-        ${lib.optionalString (cfg.forwardX11 != null) "ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}"}
+      ${lib.optionalString cfg.setXAuthLocation "XAuthLocation ${pkgs.xorg.xauth}/bin/xauth"}
+      ${lib.optionalString (cfg.forwardX11 != null)
+        "ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}"
+      }
 
-        ${lib.optionalString (cfg.pubkeyAcceptedKeyTypes != []) "PubkeyAcceptedKeyTypes ${builtins.concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"}
-        ${lib.optionalString (cfg.hostKeyAlgorithms != []) "HostKeyAlgorithms ${builtins.concatStringsSep "," cfg.hostKeyAlgorithms}"}
-        ${lib.optionalString (cfg.kexAlgorithms != null) "KexAlgorithms ${builtins.concatStringsSep "," cfg.kexAlgorithms}"}
-        ${lib.optionalString (cfg.ciphers != null) "Ciphers ${builtins.concatStringsSep "," cfg.ciphers}"}
-        ${lib.optionalString (cfg.macs != null) "MACs ${builtins.concatStringsSep "," cfg.macs}"}
-      '';
+      ${lib.optionalString (
+        cfg.pubkeyAcceptedKeyTypes != [ ]
+      ) "PubkeyAcceptedKeyTypes ${builtins.concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"}
+      ${lib.optionalString (
+        cfg.hostKeyAlgorithms != [ ]
+      ) "HostKeyAlgorithms ${builtins.concatStringsSep "," cfg.hostKeyAlgorithms}"}
+      ${lib.optionalString (
+        cfg.kexAlgorithms != null
+      ) "KexAlgorithms ${builtins.concatStringsSep "," cfg.kexAlgorithms}"}
+      ${lib.optionalString (cfg.ciphers != null) "Ciphers ${builtins.concatStringsSep "," cfg.ciphers}"}
+      ${lib.optionalString (cfg.macs != null) "MACs ${builtins.concatStringsSep "," cfg.macs}"}
+    '';
 
     environment.etc."ssh/ssh_known_hosts".text = knownHostsText;
 
     # FIXME: this should really be socket-activated for über-awesomeness.
-    systemd.user.services.ssh-agent = lib.mkIf cfg.startAgent
-      { description = "SSH Agent";
-        wantedBy = [ "default.target" ];
-        unitConfig.ConditionUser = "!@system";
-        serviceConfig =
-          { ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
-            ExecStart =
-                "${cfg.package}/bin/ssh-agent " +
-                lib.optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ") +
-                lib.optionalString (cfg.agentPKCS11Whitelist != null) ("-P ${cfg.agentPKCS11Whitelist} ") +
-                "-a %t/ssh-agent";
-            StandardOutput = "null";
-            Type = "forking";
-            Restart = "on-failure";
-            SuccessExitStatus = "0 2";
-          };
-        # Allow ssh-agent to ask for confirmation. This requires the
-        # unit to know about the user's $DISPLAY (via ‘systemctl
-        # import-environment’).
-        environment.SSH_ASKPASS = lib.optionalString cfg.enableAskPassword askPasswordWrapper;
-        environment.DISPLAY = "fake"; # required to make ssh-agent start $SSH_ASKPASS
+    systemd.user.services.ssh-agent = lib.mkIf cfg.startAgent {
+      description = "SSH Agent";
+      wantedBy = [ "default.target" ];
+      unitConfig.ConditionUser = "!@system";
+      serviceConfig = {
+        ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
+        ExecStart =
+          "${cfg.package}/bin/ssh-agent "
+          + lib.optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ")
+          + lib.optionalString (cfg.agentPKCS11Whitelist != null) ("-P ${cfg.agentPKCS11Whitelist} ")
+          + "-a %t/ssh-agent";
+        StandardOutput = "null";
+        Type = "forking";
+        Restart = "on-failure";
+        SuccessExitStatus = "0 2";
       };
+      # Allow ssh-agent to ask for confirmation. This requires the
+      # unit to know about the user's $DISPLAY (via ‘systemctl
+      # import-environment’).
+      environment.SSH_ASKPASS = lib.optionalString cfg.enableAskPassword askPasswordWrapper;
+      environment.DISPLAY = "fake"; # required to make ssh-agent start $SSH_ASKPASS
+    };
 
-    environment.extraInit = lib.optionalString cfg.startAgent
-      ''
-        if [ -z "$SSH_AUTH_SOCK" -a -n "$XDG_RUNTIME_DIR" ]; then
-          export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent"
-        fi
-      '';
+    environment.extraInit = lib.optionalString cfg.startAgent ''
+      if [ -z "$SSH_AUTH_SOCK" -a -n "$XDG_RUNTIME_DIR" ]; then
+        export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent"
+      fi
+    '';
 
     environment.variables.SSH_ASKPASS = lib.optionalString cfg.enableAskPassword cfg.askPassword;
 

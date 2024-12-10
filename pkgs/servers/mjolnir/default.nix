@@ -1,11 +1,12 @@
-{ lib
-, mkYarnPackage
-, fetchFromGitHub
-, fetchYarnDeps
-, matrix-sdk-crypto-nodejs
-, makeWrapper
-, nodejs
-, nixosTests
+{
+  lib,
+  mkYarnPackage,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  matrix-sdk-crypto-nodejs,
+  makeWrapper,
+  nodejs,
+  nixosTests,
 }:
 
 mkYarnPackage rec {
@@ -27,7 +28,8 @@ mkYarnPackage rec {
   };
 
   packageResolutions = {
-    "@matrix-org/matrix-sdk-crypto-nodejs" = "${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs";
+    "@matrix-org/matrix-sdk-crypto-nodejs" =
+      "${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs";
   };
 
   nativeBuildInputs = [ makeWrapper ];

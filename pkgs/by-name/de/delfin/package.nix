@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, appstream
-, cargo
-, desktop-file-utils
-, fetchFromGitea
-, gitUpdater
-, gtk4
-, libadwaita
-, libepoxy
-, libglvnd
-, meson
-, mpv
-, ninja
-, openssl
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  appstream,
+  cargo,
+  desktop-file-utils,
+  fetchFromGitea,
+  gitUpdater,
+  gtk4,
+  libadwaita,
+  libepoxy,
+  libglvnd,
+  meson,
+  mpv,
+  ninja,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
@@ -70,7 +71,10 @@ stdenv.mkDerivation rec {
     description = "Stream movies and TV shows from Jellyfin";
     homepage = "https://www.delfin.avery.cafe/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ colinsane avery ];
+    maintainers = with maintainers; [
+      colinsane
+      avery
+    ];
     mainProgram = "delfin";
     platforms = platforms.linux;
   };

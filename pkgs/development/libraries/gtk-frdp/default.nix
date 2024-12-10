@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, vala
-, gobject-introspection
-, glib
-, gtk3
-, freerdp3
-, fuse3
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gobject-introspection,
+  glib,
+  gtk3,
+  freerdp3,
+  fuse3,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,10 +47,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
-    "-DTARGET_OS_IPHONE=0"
-    "-DTARGET_OS_WATCH=0"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.isDarwin [
+      "-DTARGET_OS_IPHONE=0"
+      "-DTARGET_OS_WATCH=0"
+    ]
+  );
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gtk-frdp";

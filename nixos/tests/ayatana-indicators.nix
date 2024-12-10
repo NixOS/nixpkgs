@@ -1,116 +1,139 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: let
-  user = "alice";
-in {
-  name = "ayatana-indicators";
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
+  let
+    user = "alice";
+  in
+  {
+    name = "ayatana-indicators";
 
-  meta = {
-    maintainers = lib.teams.lomiri.members;
-  };
-
-  nodes.machine = { config, ... }: {
-    imports = [
-      ./common/auto.nix
-      ./common/user-account.nix
-    ];
-
-    test-support.displayManager.auto = {
-      enable = true;
-      inherit user;
+    meta = {
+      maintainers = lib.teams.lomiri.members;
     };
 
-    services.xserver = {
-      enable = true;
-      desktopManager.mate.enable = true;
-    };
-    services.displayManager.defaultSession = lib.mkForce "mate";
+    nodes.machine =
+      { config, ... }:
+      {
+        imports = [
+          ./common/auto.nix
+          ./common/user-account.nix
+        ];
 
-    services.ayatana-indicators = {
-      enable = true;
-      packages = with pkgs; [
-        ayatana-indicator-datetime
-        ayatana-indicator-display
-        ayatana-indicator-messages
-        ayatana-indicator-power
-        ayatana-indicator-session
-        ayatana-indicator-sound
-      ] ++ (with pkgs.lomiri; [
-        lomiri-indicator-network
-        telephony-service
-      ]);
-    };
+        test-support.displayManager.auto = {
+          enable = true;
+          inherit user;
+        };
 
-    # Setup needed by some indicators
+        services.xserver = {
+          enable = true;
+          desktopManager.mate.enable = true;
+        };
+        services.displayManager.defaultSession = lib.mkForce "mate";
 
-    services.accounts-daemon.enable = true; # messages
+        services.ayatana-indicators = {
+          enable = true;
+          packages =
+            with pkgs;
+            [
+              ayatana-indicator-datetime
+              ayatana-indicator-display
+              ayatana-indicator-messages
+              ayatana-indicator-power
+              ayatana-indicator-session
+              ayatana-indicator-sound
+            ]
+            ++ (with pkgs.lomiri; [
+              lomiri-indicator-network
+              telephony-service
+            ]);
+        };
 
-    hardware.pulseaudio.enable = true; # sound
+        # Setup needed by some indicators
 
-    # Lomiri-ish setup for Lomiri indicators
-    # TODO move into a Lomiri module, once the package set is far enough for the DE to start
+        services.accounts-daemon.enable = true; # messages
 
-    networking.networkmanager.enable = true; # lomiri-network-indicator
-    # TODO potentially urfkill for lomiri-network-indicator?
+        hardware.pulseaudio.enable = true; # sound
 
-    services.dbus.packages = with pkgs.lomiri; [
-      libusermetrics
-    ];
+        # Lomiri-ish setup for Lomiri indicators
+        # TODO move into a Lomiri module, once the package set is far enough for the DE to start
 
-    environment.systemPackages = with pkgs.lomiri; [
-      lomiri-schemas
-    ];
+        networking.networkmanager.enable = true; # lomiri-network-indicator
+        # TODO potentially urfkill for lomiri-network-indicator?
 
-    services.telepathy.enable = true;
+        services.dbus.packages = with pkgs.lomiri; [
+          libusermetrics
+        ];
 
-    users.users.usermetrics = {
-      group = "usermetrics";
-      home = "/var/lib/usermetrics";
-      createHome = true;
-      isSystemUser = true;
-    };
+        environment.systemPackages = with pkgs.lomiri; [
+          lomiri-schemas
+        ];
 
-    users.groups.usermetrics = { };
-  };
+        services.telepathy.enable = true;
 
-  # TODO session indicator starts up in a semi-broken state, but works fine after a restart. maybe being started before graphical session is truly up & ready?
-  testScript = { nodes, ... }: let
-    runCommandOverServiceList = list: command:
-      lib.strings.concatMapStringsSep "\n" command list;
+        users.users.usermetrics = {
+          group = "usermetrics";
+          home = "/var/lib/usermetrics";
+          createHome = true;
+          isSystemUser = true;
+        };
 
-    runCommandOverAyatanaIndicators = runCommandOverServiceList
-      (builtins.filter
-        (service: !(lib.strings.hasPrefix "lomiri" service || lib.strings.hasPrefix "telephony-service" service))
-        nodes.machine.systemd.user.targets."ayatana-indicators".wants);
+        users.groups.usermetrics = { };
+      };
 
-    runCommandOverAllIndicators = runCommandOverServiceList
-      nodes.machine.systemd.user.targets."ayatana-indicators".wants;
-  in ''
-    start_all()
-    machine.wait_for_x()
+    # TODO session indicator starts up in a semi-broken state, but works fine after a restart. maybe being started before graphical session is truly up & ready?
+    testScript =
+      { nodes, ... }:
+      let
+        runCommandOverServiceList = list: command: lib.strings.concatMapStringsSep "\n" command list;
 
-    # Desktop environment should reach graphical-session.target
-    machine.wait_for_unit("graphical-session.target", "${user}")
+        runCommandOverAyatanaIndicators = runCommandOverServiceList (
+          builtins.filter (
+            service:
+            !(lib.strings.hasPrefix "lomiri" service || lib.strings.hasPrefix "telephony-service" service)
+          ) nodes.machine.systemd.user.targets."ayatana-indicators".wants
+        );
 
-    # MATE relies on XDG autostart to bring up the indicators.
-    # Not sure *when* XDG autostart fires them up, and awaiting pgrep success seems to misbehave?
-    machine.sleep(10)
+        runCommandOverAllIndicators =
+          runCommandOverServiceList
+            nodes.machine.systemd.user.targets."ayatana-indicators".wants;
+      in
+      ''
+        start_all()
+        machine.wait_for_x()
 
-    # Now check if all indicators were brought up successfully, and kill them for later
-  '' + (runCommandOverAyatanaIndicators (service: let serviceExec = builtins.replaceStrings [ "." ] [ "-" ] service; in ''
-    machine.wait_until_succeeds("pgrep -u ${user} -f ${serviceExec}")
-    machine.succeed("pkill -f ${serviceExec}")
-  '')) + ''
+        # Desktop environment should reach graphical-session.target
+        machine.wait_for_unit("graphical-session.target", "${user}")
 
-    # Ayatana target is the preferred way of starting up indicators on SystemD session, the graphical session is responsible for starting this if it supports them.
-    # Mate currently doesn't do this, so start it manually for checking (https://github.com/mate-desktop/mate-indicator-applet/issues/63)
-    machine.systemctl("start ayatana-indicators.target", "${user}")
-    machine.wait_for_unit("ayatana-indicators.target", "${user}")
+        # MATE relies on XDG autostart to bring up the indicators.
+        # Not sure *when* XDG autostart fires them up, and awaiting pgrep success seems to misbehave?
+        machine.sleep(10)
 
-    # Let all indicator services do their startups, potential post-launch crash & restart cycles so we can properly check for failures
-    # Not sure if there's a better way of awaiting this without false-positive potential
-    machine.sleep(10)
+        # Now check if all indicators were brought up successfully, and kill them for later
+      ''
+      + (runCommandOverAyatanaIndicators (
+        service:
+        let
+          serviceExec = builtins.replaceStrings [ "." ] [ "-" ] service;
+        in
+        ''
+          machine.wait_until_succeeds("pgrep -u ${user} -f ${serviceExec}")
+          machine.succeed("pkill -f ${serviceExec}")
+        ''
+      ))
+      + ''
 
-    # Now check if all indicator services were brought up successfully
-  '' + runCommandOverAllIndicators (service: ''
-    machine.wait_for_unit("${service}", "${user}")
-  '');
-})
+        # Ayatana target is the preferred way of starting up indicators on SystemD session, the graphical session is responsible for starting this if it supports them.
+        # Mate currently doesn't do this, so start it manually for checking (https://github.com/mate-desktop/mate-indicator-applet/issues/63)
+        machine.systemctl("start ayatana-indicators.target", "${user}")
+        machine.wait_for_unit("ayatana-indicators.target", "${user}")
+
+        # Let all indicator services do their startups, potential post-launch crash & restart cycles so we can properly check for failures
+        # Not sure if there's a better way of awaiting this without false-positive potential
+        machine.sleep(10)
+
+        # Now check if all indicator services were brought up successfully
+      ''
+      + runCommandOverAllIndicators (service: ''
+        machine.wait_for_unit("${service}", "${user}")
+      '');
+  }
+)

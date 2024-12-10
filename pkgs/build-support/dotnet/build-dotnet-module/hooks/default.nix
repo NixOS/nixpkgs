@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, which
-, coreutils
-, zlib
-, openssl
-, callPackage
-, makeSetupHook
-, makeWrapper
-, dotnet-sdk
-, dotnet-test-sdk
-, disabledTests
-, nuget-source
-, dotnet-runtime
-, runtimeDeps
-, buildType
-, runtimeId
+{
+  lib,
+  stdenv,
+  which,
+  coreutils,
+  zlib,
+  openssl,
+  callPackage,
+  makeSetupHook,
+  makeWrapper,
+  dotnet-sdk,
+  dotnet-test-sdk,
+  disabledTests,
+  nuget-source,
+  dotnet-runtime,
+  runtimeDeps,
+  buildType,
+  runtimeId,
 }:
 assert (builtins.isString runtimeId);
 
@@ -22,10 +23,14 @@ let
   libraryPath = lib.makeLibraryPath runtimeDeps;
 in
 {
-  dotnetConfigureHook = callPackage ({ }:
+  dotnetConfigureHook = callPackage (
+    { }:
     makeSetupHook {
       name = "dotnet-configure-hook";
-      propagatedBuildInputs = [ dotnet-sdk nuget-source ];
+      propagatedBuildInputs = [
+        dotnet-sdk
+        nuget-source
+      ];
       substitutions = {
         nugetSource = nuget-source;
         dynamicLinker = "${stdenv.cc}/nix-support/dynamic-linker";
@@ -38,42 +43,51 @@ in
         ];
         inherit runtimeId;
       };
-    } ./dotnet-configure-hook.sh) { };
+    } ./dotnet-configure-hook.sh
+  ) { };
 
-  dotnetBuildHook = callPackage ({ }:
+  dotnetBuildHook = callPackage (
+    { }:
     makeSetupHook {
       name = "dotnet-build-hook";
       propagatedBuildInputs = [ dotnet-sdk ];
       substitutions = {
         inherit buildType runtimeId;
       };
-    } ./dotnet-build-hook.sh) { };
+    } ./dotnet-build-hook.sh
+  ) { };
 
-  dotnetCheckHook = callPackage ({ }:
+  dotnetCheckHook = callPackage (
+    { }:
     makeSetupHook {
       name = "dotnet-check-hook";
       propagatedBuildInputs = [ dotnet-test-sdk ];
       substitutions = {
         inherit buildType runtimeId libraryPath;
-        disabledTests = lib.optionalString (disabledTests != [])
-          (let
-            escapedNames = lib.lists.map (n: lib.replaceStrings [","] ["%2C"] n) disabledTests;
+        disabledTests = lib.optionalString (disabledTests != [ ]) (
+          let
+            escapedNames = lib.lists.map (n: lib.replaceStrings [ "," ] [ "%2C" ] n) disabledTests;
             filters = lib.lists.map (n: "FullyQualifiedName!=${n}") escapedNames;
           in
-          "${lib.concatStringsSep "&" filters}");
+          "${lib.concatStringsSep "&" filters}"
+        );
       };
-    } ./dotnet-check-hook.sh) { };
+    } ./dotnet-check-hook.sh
+  ) { };
 
-  dotnetInstallHook = callPackage ({ }:
+  dotnetInstallHook = callPackage (
+    { }:
     makeSetupHook {
       name = "dotnet-install-hook";
       propagatedBuildInputs = [ dotnet-sdk ];
       substitutions = {
         inherit buildType runtimeId;
       };
-    } ./dotnet-install-hook.sh) { };
+    } ./dotnet-install-hook.sh
+  ) { };
 
-  dotnetFixupHook = callPackage ({ }:
+  dotnetFixupHook = callPackage (
+    { }:
     makeSetupHook {
       name = "dotnet-fixup-hook";
       propagatedBuildInputs = [ dotnet-runtime ];
@@ -85,5 +99,6 @@ in
         dirname = "${coreutils}/bin/dirname";
         realpath = "${coreutils}/bin/realpath";
       };
-    } ./dotnet-fixup-hook.sh) { };
+    } ./dotnet-fixup-hook.sh
+  ) { };
 }

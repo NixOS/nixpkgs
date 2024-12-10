@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, rustPlatform, pkg-config, dtc, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
+  pkg-config,
+  dtc,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -43,18 +50,30 @@ rustPlatform.buildRustPackage rec {
 
   cargoTestFlags = [
     "--workspace"
-    "--bins" "--lib" # Integration tests require root.
-    "--exclude" "net_util" # /dev/net/tun
-    "--exclude" "vmm"      # /dev/kvm
+    "--bins"
+    "--lib" # Integration tests require root.
+    "--exclude"
+    "net_util" # /dev/net/tun
+    "--exclude"
+    "vmm" # /dev/kvm
   ];
 
   meta = with lib; {
     homepage = "https://github.com/cloud-hypervisor/cloud-hypervisor";
     description = "Open source Virtual Machine Monitor (VMM) that runs on top of KVM";
     changelog = "https://github.com/cloud-hypervisor/cloud-hypervisor/releases/tag/v${version}";
-    license = with licenses; [ asl20 bsd3 ];
+    license = with licenses; [
+      asl20
+      bsd3
+    ];
     mainProgram = "cloud-hypervisor";
-    maintainers = with maintainers; [ offline qyliss ];
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [
+      offline
+      qyliss
+    ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 }

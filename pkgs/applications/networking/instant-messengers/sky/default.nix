@@ -1,16 +1,17 @@
-{ lib
-, mkDerivation
-, fetchurl
-, autoPatchelfHook
-, zstd
-, curl
-, ffmpeg
-, libjpeg_turbo
-, libpam-wrapper
-, libv4l
-, pulseaudio
-, zlib
-, xorg
+{
+  lib,
+  mkDerivation,
+  fetchurl,
+  autoPatchelfHook,
+  zstd,
+  curl,
+  ffmpeg,
+  libjpeg_turbo,
+  libpam-wrapper,
+  libv4l,
+  pulseaudio,
+  zlib,
+  xorg,
 }:
 
 mkDerivation rec {
@@ -22,7 +23,10 @@ mkDerivation rec {
     sha256 = "sha256-3xiq2b3CwNjRd09q0z8olrmLGhgkJGAVkZoJSIHom+k=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook zstd ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    zstd
+  ];
 
   buildInputs = [
     curl

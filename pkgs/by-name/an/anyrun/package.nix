@@ -1,19 +1,20 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook3
-, atk
-, cairo
-, gdk-pixbuf
-, glib
-, gtk3
-, pango
-, stdenv
-, darwin
-, wayland
-, gtk-layer-shell
-, unstableGitUpdater
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook3,
+  atk,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  pango,
+  stdenv,
+  darwin,
+  wayland,
+  gtk-layer-shell,
+  unstableGitUpdater,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,19 +39,22 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    atk
-    cairo
-    gdk-pixbuf
-    glib
-    gtk3
-    gtk-layer-shell
-    pango
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ] ++ lib.optionals stdenv.isLinux [
-    wayland
-  ];
+  buildInputs =
+    [
+      atk
+      cairo
+      gdk-pixbuf
+      glib
+      gtk3
+      gtk-layer-shell
+      pango
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      wayland
+    ];
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -68,7 +72,10 @@ rustPlatform.buildRustPackage rec {
     description = "A wayland-native, highly customizable runner";
     homepage = "https://github.com/kirottu/anyrun";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ eclairevoyant NotAShelf ];
+    maintainers = with lib.maintainers; [
+      eclairevoyant
+      NotAShelf
+    ];
     mainProgram = "anyrun";
   };
 }

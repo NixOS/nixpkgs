@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, gtk3
-, playerctl
-, libsoup
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gtk3,
+  playerctl,
+  libsoup,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gtk3 playerctl libsoup ];
+  buildInputs = [
+    gtk3
+    playerctl
+    libsoup
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

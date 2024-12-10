@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake
-, CoreServices
-, curlHTTP3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  CoreServices,
+  curlHTTP3,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +19,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optionals stdenv.isDarwin [

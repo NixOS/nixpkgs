@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchCrate
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchCrate,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +21,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Represent numbers in French language";
     homepage = "https://github.com/evenfurther/french-numbers";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     mainProgram = "french-numbers";
     maintainers = with maintainers; [ samueltardieu ];
   };

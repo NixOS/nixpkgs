@@ -1,4 +1,15 @@
-{lib, stdenv, which, coreutils, perl, fetchurl, makeWrapper, diffutils , writeScriptBin, bzip2}:
+{
+  lib,
+  stdenv,
+  which,
+  coreutils,
+  perl,
+  fetchurl,
+  makeWrapper,
+  diffutils,
+  writeScriptBin,
+  bzip2,
+}:
 
 # quick usage:
 # storeBackup.pl --sourceDir /home/user --backupDir /tmp/my_backup_destination
@@ -9,7 +20,8 @@
 
 # known impurity: test cases seem to bu using /tmp/storeBackup.lock ..
 
-let dummyMount = writeScriptBin "mount" "#!${stdenv.shell}";
+let
+  dummyMount = writeScriptBin "mount" "#!${stdenv.shell}";
 in
 
 stdenv.mkDerivation rec {
@@ -45,7 +57,12 @@ stdenv.mkDerivation rec {
       -e '1 s@/usr/bin/env perl@${perl.withPackages (p: [ p.DBFile ])}/bin/perl@'
 
     for p in $out/bin/*
-      do wrapProgram "$p" --prefix PATH ":" "${lib.makeBinPath [ which bzip2 ]}"
+      do wrapProgram "$p" --prefix PATH ":" "${
+        lib.makeBinPath [
+          which
+          bzip2
+        ]
+      }"
     done
 
     patchShebangs $out
@@ -110,7 +127,7 @@ stdenv.mkDerivation rec {
     description = "A backup suite that stores files on other disks";
     homepage = "https://savannah.nongnu.org/projects/storebackup";
     license = lib.licenses.gpl3Plus;
-    maintainers = [lib.maintainers.marcweber];
+    maintainers = [ lib.maintainers.marcweber ];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python3
-, pkg-config
-, libuuid
-, openjdk
-, gperftools
-, gtest
-, uhdm
-, antlr4
-, capnproto
-, nlohmann_json
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  pkg-config,
+  libuuid,
+  openjdk,
+  gperftools,
+  gtest,
+  uhdm,
+  antlr4,
+  capnproto,
+  nlohmann_json,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,17 +24,19 @@ stdenv.mkDerivation (finalAttrs: {
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
     hash = "sha256-iW2mQPmKfbAWaiEURyVly5IjJ3YpXjVBkm/UbUuwb6k=";
-    fetchSubmodules = false;  # we use all dependencies from nix
+    fetchSubmodules = false; # we use all dependencies from nix
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     openjdk
-    (python3.withPackages (p: with p; [
-      psutil
-      orderedmultidict
-    ]))
+    (python3.withPackages (
+      p: with p; [
+        psutil
+        orderedmultidict
+      ]
+    ))
     gtest
     antlr4
   ];

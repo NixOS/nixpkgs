@@ -1,6 +1,7 @@
-{ lib
-, stdenvNoCC
-, fira-mono
+{
+  lib,
+  stdenvNoCC,
+  fira-mono,
 }:
 
 stdenvNoCC.mkDerivation {

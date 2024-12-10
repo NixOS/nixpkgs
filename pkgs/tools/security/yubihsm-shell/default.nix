@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, openssl
-, libusb1
-, libedit
-, curl
-, gengetopt
-, pkg-config
-, pcsclite
-, help2man
-, darwin
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+  libusb1,
+  libedit,
+  curl,
+  gengetopt,
+  pkg-config,
+  pcsclite,
+  help2man,
+  darwin,
+  libiconv,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,17 +43,20 @@ stdenv.mkDerivation rec {
     gengetopt
   ];
 
-  buildInputs = [
-    libusb1
-    libedit
-    curl
-    openssl
-  ] ++ lib.optionals stdenv.isLinux [
-    pcsclite
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.PCSC
-    libiconv
-  ];
+  buildInputs =
+    [
+      libusb1
+      libedit
+      curl
+      openssl
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      pcsclite
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.PCSC
+      libiconv
+    ];
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
     "-DDISABLE_LTO=ON"

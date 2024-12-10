@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, testers
-, k0sctl
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  k0sctl,
 }:
 
 buildGoModule rec {
@@ -48,6 +49,9 @@ buildGoModule rec {
     homepage = "https://k0sproject.io/";
     license = licenses.asl20;
     mainProgram = "k0sctl";
-    maintainers = with maintainers; [ nickcao qjoly ];
+    maintainers = with maintainers; [
+      nickcao
+      qjoly
+    ];
   };
 }

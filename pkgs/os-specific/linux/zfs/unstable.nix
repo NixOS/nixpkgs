@@ -1,10 +1,11 @@
-{ callPackage
-, kernel ? null
-, stdenv
-, linuxKernel
-, nixosTests
-, ...
-} @ args:
+{
+  callPackage,
+  kernel ? null,
+  stdenv,
+  linuxKernel,
+  nixosTests,
+  ...
+}@args:
 
 let
   stdenv' = if kernel == null then stdenv else kernel.stdenv;

@@ -1,5 +1,9 @@
-{ lib, mkCoqDerivation, coq, version ? null
-, ssreflect
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  version ? null,
+  ssreflect,
 }:
 
 mkCoqDerivation {
@@ -7,10 +11,27 @@ mkCoqDerivation {
   owner = "arthuraa";
 
   inherit version;
-  defaultVersion = with lib.versions; lib.switch [coq.coq-version ssreflect.version] [
-    { cases = [(range "8.17" "8.19") (isGe "2.0.0")] ; out = "0.2.0"; }
-    { cases = [(range "8.11" "8.19") (isLe "2.0.0")] ; out = "0.1.1"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch
+      [ coq.coq-version ssreflect.version ]
+      [
+        {
+          cases = [
+            (range "8.17" "8.19")
+            (isGe "2.0.0")
+          ];
+          out = "0.2.0";
+        }
+        {
+          cases = [
+            (range "8.11" "8.19")
+            (isLe "2.0.0")
+          ];
+          out = "0.1.1";
+        }
+      ]
+      null;
 
   releaseRev = v: "v${v}";
 

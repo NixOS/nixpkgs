@@ -7,8 +7,10 @@
   config = lib.mkMerge [
 
     {
-      system.activationScripts.etc =
-        lib.stringAfter [ "users" "groups" ] config.system.build.etcActivationCommands;
+      system.activationScripts.etc = lib.stringAfter [
+        "users"
+        "groups"
+      ] config.system.build.etcActivationCommands;
     }
 
     (lib.mkIf config.system.etc.overlay.enable {
@@ -27,7 +29,8 @@
           message = "`system.etc.overlay.enable requires a newer kernel, at least version 6.6";
         }
         {
-          assertion = config.systemd.sysusers.enable -> (config.users.mutableUsers == config.system.etc.overlay.mutable);
+          assertion =
+            config.systemd.sysusers.enable -> (config.users.mutableUsers == config.system.etc.overlay.mutable);
           message = ''
             When using systemd-sysusers and mounting `/etc` via an overlay, users
             can only be mutable when `/etc` is mutable and vice versa.
@@ -35,7 +38,11 @@
         }
       ];
 
-      boot.initrd.availableKernelModules = [ "loop" "erofs" "overlay" ];
+      boot.initrd.availableKernelModules = [
+        "loop"
+        "erofs"
+        "overlay"
+      ];
 
       boot.initrd.systemd = {
         mounts = [
@@ -52,18 +59,22 @@
             where = "/sysroot/etc";
             what = "overlay";
             type = "overlay";
-            options = lib.concatStringsSep "," ([
-              "relatime"
-              "redirect_dir=on"
-              "metacopy=on"
-              "lowerdir=/run/etc-metadata::/sysroot${config.system.build.etcBasedir}"
-            ] ++ lib.optionals config.system.etc.overlay.mutable [
-              "rw"
-              "upperdir=/sysroot/.rw-etc/upper"
-              "workdir=/sysroot/.rw-etc/work"
-            ] ++ lib.optionals (!config.system.etc.overlay.mutable) [
-              "ro"
-            ]);
+            options = lib.concatStringsSep "," (
+              [
+                "relatime"
+                "redirect_dir=on"
+                "metacopy=on"
+                "lowerdir=/run/etc-metadata::/sysroot${config.system.build.etcBasedir}"
+              ]
+              ++ lib.optionals config.system.etc.overlay.mutable [
+                "rw"
+                "upperdir=/sysroot/.rw-etc/upper"
+                "workdir=/sysroot/.rw-etc/work"
+              ]
+              ++ lib.optionals (!config.system.etc.overlay.mutable) [
+                "ro"
+              ]
+            );
             wantedBy = [ "initrd-fs.target" ];
             before = [ "initrd-fs.target" ];
             requires = lib.mkIf config.system.etc.overlay.mutable [ "rw-etc.service" ];

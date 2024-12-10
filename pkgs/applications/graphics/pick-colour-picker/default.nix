@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pygobject3
-, pycairo
-, glib
-, gtk3
-, gobject-introspection
-, wrapGAppsHook3
-, python
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pygobject3,
+  pycairo,
+  glib,
+  gtk3,
+  gobject-introspection,
+  wrapGAppsHook3,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -54,6 +55,6 @@ buildPythonPackage rec {
       Pick lets you pick colours from anywhere on your screen. Choose the colour you want and Pick remembers it, names it, and shows you a screenshot so you can remember where you got it from.
 
       Zoom all the way in to pixels to pick just the right one. Show your colours in your choice of format: rgba() or hex, CSS or Gdk or Qt, whichever you prefer. Copy to the clipboard ready for pasting into code or graphics apps.
-      '';
+    '';
   };
 }

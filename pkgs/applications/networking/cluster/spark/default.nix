@@ -1,27 +1,49 @@
-{ lib
-, stdenv
-, fetchzip
-, makeWrapper
-, jdk8
-, python3
-, coreutils
-, hadoop
-, RSupport ? true
-, R
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchzip,
+  makeWrapper,
+  jdk8,
+  python3,
+  coreutils,
+  hadoop,
+  RSupport ? true,
+  R,
+  nixosTests,
 }:
 
 let
-  spark = { pname, version, hash, extraMeta ? {}, pysparkPython ? python3 }:
+  spark =
+    {
+      pname,
+      version,
+      hash,
+      extraMeta ? { },
+      pysparkPython ? python3,
+    }:
     stdenv.mkDerivation (finalAttrs: {
-      inherit pname version hash hadoop R pysparkPython;
+      inherit
+        pname
+        version
+        hash
+        hadoop
+        R
+        pysparkPython
+        ;
       inherit (finalAttrs.hadoop) jdk;
       src = fetchzip {
-        url = with finalAttrs; "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
+        url =
+          with finalAttrs;
+          "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
         inherit (finalAttrs) hash;
       };
       nativeBuildInputs = [ makeWrapper ];
-      buildInputs = with finalAttrs; [ jdk pysparkPython ]
+      buildInputs =
+        with finalAttrs;
+        [
+          jdk
+          pysparkPython
+        ]
         ++ lib.optional RSupport finalAttrs.R;
 
       installPhase = ''
@@ -32,10 +54,8 @@ let
             --run "[ -z $SPARK_DIST_CLASSPATH ] && export SPARK_DIST_CLASSPATH=$(${finalAttrs.hadoop}/bin/hadoop classpath)" \
             ${lib.optionalString RSupport ''--set SPARKR_R_SHELL "${finalAttrs.R}/bin/R"''} \
             --prefix PATH : "${
-              lib.makeBinPath (
-                [ finalAttrs.pysparkPython ] ++
-                (lib.optionals RSupport [ finalAttrs.R ])
-              )}"
+              lib.makeBinPath ([ finalAttrs.pysparkPython ] ++ (lib.optionals RSupport [ finalAttrs.R ]))
+            }"
         done
         ln -s ${finalAttrs.hadoop} "$out/opt/hadoop"
         ${lib.optionalString RSupport ''ln -s ${finalAttrs.R} "$out/opt/R"''}
@@ -46,9 +66,11 @@ let
           sparkPackage = finalAttrs.finalPackage;
         };
         # Add python packages to PYSPARK_PYTHON
-        withPythonPackages = f: finalAttrs.finalPackage.overrideAttrs (old: {
-          pysparkPython = old.pysparkPython.withPackages f;
-        });
+        withPythonPackages =
+          f:
+          finalAttrs.finalPackage.overrideAttrs (old: {
+            pysparkPython = old.pysparkPython.withPackages f;
+          });
       };
 
       meta = {
@@ -57,7 +79,12 @@ let
         sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
         license = lib.licenses.asl20;
         platforms = lib.platforms.all;
-        maintainers = with lib.maintainers; [ thoughtpolice offline kamilchm illustris ];
+        maintainers = with lib.maintainers; [
+          thoughtpolice
+          offline
+          kamilchm
+          illustris
+        ];
       } // extraMeta;
     });
 in

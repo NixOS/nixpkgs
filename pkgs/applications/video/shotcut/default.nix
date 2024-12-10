@@ -1,23 +1,24 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, wrapQtAppsHook
-, substituteAll
-, SDL2
-, frei0r
-, ladspaPlugins
-, gettext
-, mlt
-, jack1
-, pkg-config
-, fftw
-, qtbase
-, qttools
-, qtmultimedia
-, qtcharts
-, cmake
-, Cocoa
-, gitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  wrapQtAppsHook,
+  substituteAll,
+  SDL2,
+  frei0r,
+  ladspaPlugins,
+  gettext,
+  mlt,
+  jack1,
+  pkg-config,
+  fftw,
+  qtbase,
+  qttools,
+  qtmultimedia,
+  qtcharts,
+  cmake,
+  Cocoa,
+  gitUpdater,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotcut";
@@ -30,21 +31,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-iMg2XrTrLFZXXvnJ7lMdkxf/LTaL9bh9Nc2jsPOS0eo=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake wrapQtAppsHook ];
-  buildInputs = [
-    SDL2
-    frei0r
-    ladspaPlugins
-    gettext
-    mlt
-    fftw
-    qtbase
-    qttools
-    qtmultimedia
-    qtcharts
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    wrapQtAppsHook
   ];
+  buildInputs =
+    [
+      SDL2
+      frei0r
+      ladspaPlugins
+      gettext
+      mlt
+      fftw
+      qtbase
+      qttools
+      qtmultimedia
+      qtcharts
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Cocoa
+    ];
 
   env.NIX_CFLAGS_COMPILE = "-DSHOTCUT_NOUPGRADE";
   cmakeFlags = [
@@ -52,13 +59,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    (substituteAll { inherit mlt; src = ./fix-mlt-ffmpeg-path.patch; })
+    (substituteAll {
+      inherit mlt;
+      src = ./fix-mlt-ffmpeg-path.patch;
+    })
   ];
 
   qtWrapperArgs = [
     "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
     "--set LADSPA_PATH ${ladspaPlugins}/lib/ladspa"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([SDL2] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [jack1])}"
+    "--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath ([ SDL2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jack1 ])
+    }"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -84,7 +96,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://shotcut.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ goibhniu woffs peti ];
+    maintainers = with maintainers; [
+      goibhniu
+      woffs
+      peti
+    ];
     platforms = platforms.unix;
     mainProgram = "shotcut";
   };

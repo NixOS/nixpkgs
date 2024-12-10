@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libdrm
-, ffmpeg
-, wayland
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libdrm,
+  ffmpeg,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {

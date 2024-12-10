@@ -1,4 +1,10 @@
-{ buildDunePackage, fetchFromGitHub, lib, reason, ppxlib }:
+{
+  buildDunePackage,
+  fetchFromGitHub,
+  lib,
+  reason,
+  ppxlib,
+}:
 
 buildDunePackage rec {
   pname = "brisk-reconciler";

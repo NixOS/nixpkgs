@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchgit, ncurses, conf ? null }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  ncurses,
+  conf ? null,
+}:
 
 with lib;
 
@@ -18,14 +24,17 @@ stdenv.mkDerivation rec {
     substituteInPlace noice.c --replace 'printw(str);' 'printw("%s", str);'
   '';
 
-  configFile = optionalString (conf!=null) (builtins.toFile "config.def.h" conf);
-  preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
+  configFile = optionalString (conf != null) (builtins.toFile "config.def.h" conf);
+  preBuild = optionalString (conf != null) "cp ${configFile} config.def.h";
 
   buildInputs = [ ncurses ];
 
   buildFlags = [ "LDLIBS=-lncurses" ];
 
-  installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  installFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX="
+  ];
 
   meta = {
     description = "Small ncurses-based file browser";

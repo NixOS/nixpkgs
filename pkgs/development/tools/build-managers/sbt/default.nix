@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, jre
-, autoPatchelfHook
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  autoPatchelfHook,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,9 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/sbt $out/bin
     cp -ra . $out/share/sbt
     ln -sT ../share/sbt/bin/sbt $out/bin/sbt
-    ln -sT ../share/sbt/bin/sbtn-${
-      if (stdenv.hostPlatform.isAarch64) then "aarch64" else "x86_64"
-    }-${
+    ln -sT ../share/sbt/bin/sbtn-${if (stdenv.hostPlatform.isAarch64) then "aarch64" else "x86_64"}-${
       if (stdenv.isDarwin) then "apple-darwin" else "pc-linux"
     } $out/bin/sbtn
 
@@ -49,7 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
       binaryNativeCode
     ];
     description = "A build tool for Scala, Java and more";
-    maintainers = with maintainers; [ nequissimus kashw2 ];
+    maintainers = with maintainers; [
+      nequissimus
+      kashw2
+    ];
     platforms = platforms.unix;
   };
 })

@@ -1,13 +1,20 @@
-{ lib, stdenv, fetchFromGitLab , go-md2man, coreutils, substituteAll }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  go-md2man,
+  coreutils,
+  substituteAll,
+}:
 
 stdenv.mkDerivation rec {
   pname = "brillo";
   version = "1.4.12";
 
   src = fetchFromGitLab {
-    owner= "cameronnemo";
-    repo= "brillo";
-    rev= "v${version}";
+    owner = "cameronnemo";
+    repo = "brillo";
+    rev = "v${version}";
     sha256 = "sha256-dKGNioWGVAFuB4kySO+QGTnstyAD0bt4/6FBVwuRxJo=";
   };
 
@@ -20,7 +27,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ go-md2man ];
 
-  makeFlags = [ "PREFIX=$(out)" "AADIR=$(out)/etc/apparmor.d" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "AADIR=$(out)/etc/apparmor.d"
+  ];
 
   installTargets = [ "install-dist" ];
 
@@ -28,7 +38,10 @@ stdenv.mkDerivation rec {
     description = "Backlight and Keyboard LED control tool";
     homepage = "https://gitlab.com/cameronnemo/brillo";
     mainProgram = "brillo";
-    license = [ licenses.gpl3 licenses.bsd0 ];
+    license = [
+      licenses.gpl3
+      licenses.bsd0
+    ];
     platforms = platforms.linux;
     maintainers = [ maintainers.alexarice ];
   };

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, curl, python3, trurl, testers }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  python3,
+  trurl,
+  testers,
+}:
 
 stdenv.mkDerivation rec {
   pname = "trurl";
@@ -11,7 +19,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-TkYZk4SoGAc0dxtxil4FjEhA53M+/dRmhc2kJfxWze8=";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
   separateDebugInfo = stdenv.isLinux;
 
   enableParallelBuilding = true;

@@ -1,27 +1,28 @@
-{ boost175
-, c-ares
-, cmake
-, cryptopp
-, fetchFromGitHub
-, fmt_8
-, gnutls
-, hwloc
-, lib
-, libsystemtap
-, libtasn1
-, liburing
-, libxfs
-, lksctp-tools
-, llvmPackages_14
-, lz4
-, ninja
-, numactl
-, openssl
-, pkg-config
-, python3
-, ragel
-, valgrind
-, yaml-cpp
+{
+  boost175,
+  c-ares,
+  cmake,
+  cryptopp,
+  fetchFromGitHub,
+  fmt_8,
+  gnutls,
+  hwloc,
+  lib,
+  libsystemtap,
+  libtasn1,
+  liburing,
+  libxfs,
+  lksctp-tools,
+  llvmPackages_14,
+  lz4,
+  ninja,
+  numactl,
+  openssl,
+  pkg-config,
+  python3,
+  ragel,
+  valgrind,
+  yaml-cpp,
 }:
 let
   pname = "seastar";

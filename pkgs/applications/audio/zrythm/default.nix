@@ -1,65 +1,66 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchzip
-, alsa-lib
-, appstream
-, bash-completion
-, boost
-, breeze-icons
-, carla
-, chromaprint
-, cmake
-, curl
-, dbus
-, dconf
-, fftw
-, fftwFloat
-, flex
-, glib
-, graphviz
-, gtk4
-, gtksourceview5
-, guile
-, help2man
-, jq
-, kissfft
-, libadwaita
-, libbacktrace
-, libcyaml
-, libepoxy
-, libjack2
-, libpanel
-, libpulseaudio
-, libsamplerate
-, libsndfile
-, libxml2
-, libyaml
-, lilv
-, lv2
-, meson
-, ninja
-, pcre2
-, pkg-config
-, python3
-, rtaudio_6
-, rtmidi
-, rubberband
-, sassc
-, serd
-, sord
-, sox
-, soxr
-, sratom
-, texi2html
-, vamp-plugin-sdk
-, wrapGAppsHook4
-, writeScript
-, xdg-utils
-, xxHash
-, yyjson
-, zix
-, zstd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchzip,
+  alsa-lib,
+  appstream,
+  bash-completion,
+  boost,
+  breeze-icons,
+  carla,
+  chromaprint,
+  cmake,
+  curl,
+  dbus,
+  dconf,
+  fftw,
+  fftwFloat,
+  flex,
+  glib,
+  graphviz,
+  gtk4,
+  gtksourceview5,
+  guile,
+  help2man,
+  jq,
+  kissfft,
+  libadwaita,
+  libbacktrace,
+  libcyaml,
+  libepoxy,
+  libjack2,
+  libpanel,
+  libpulseaudio,
+  libsamplerate,
+  libsndfile,
+  libxml2,
+  libyaml,
+  lilv,
+  lv2,
+  meson,
+  ninja,
+  pcre2,
+  pkg-config,
+  python3,
+  rtaudio_6,
+  rtmidi,
+  rubberband,
+  sassc,
+  serd,
+  sord,
+  sox,
+  soxr,
+  sratom,
+  texi2html,
+  vamp-plugin-sdk,
+  wrapGAppsHook4,
+  writeScript,
+  xdg-utils,
+  xxHash,
+  yyjson,
+  zix,
+  zstd,
 }:
 
 let
@@ -204,7 +205,13 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://www.zrythm.org";
     description = "Automated and intuitive digital audio workstation";
-    maintainers = with maintainers; [ tshaynik magnetophon yuu astavie PowerUser64 ];
+    maintainers = with maintainers; [
+      tshaynik
+      magnetophon
+      yuu
+      astavie
+      PowerUser64
+    ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
     license = licenses.agpl3Plus;

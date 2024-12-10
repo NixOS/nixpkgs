@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   buildPythonApplication,
   fetchFromGitHub,
   poetry-core,
@@ -16,7 +17,7 @@
   regex,
   rich,
   tqdm,
-  yarl
+  yarl,
 }:
 buildPythonApplication {
   pname = "animdl";

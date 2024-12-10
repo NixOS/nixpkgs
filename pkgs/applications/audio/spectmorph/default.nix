@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config, libjack2, lv2, glib, qt5, libao, cairo, libsndfile, fftwFloat }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libjack2,
+  lv2,
+  glib,
+  qt5,
+  libao,
+  cairo,
+  libsndfile,
+  fftwFloat,
+}:
 
 stdenv.mkDerivation rec {
   pname = "spectmorph";
@@ -8,7 +21,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-H/PaczAkjxeu2Q6S/jazZ0PU9oCmhBzsLgbGLusxXm8=";
   };
 
-  buildInputs = [  libjack2 lv2 glib qt5.qtbase libao cairo libsndfile fftwFloat ];
+  buildInputs = [
+    libjack2
+    lv2
+    glib
+    qt5.qtbase
+    libao
+    cairo
+    libsndfile
+    fftwFloat
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -18,7 +40,10 @@ stdenv.mkDerivation rec {
     description = "Allows to analyze samples of musical instruments, and to combine them (morphing) to construct hybrid sounds";
     homepage = "https://spectmorph.org";
     license = licenses.gpl3;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = [ maintainers.magnetophon ];
   };
 }

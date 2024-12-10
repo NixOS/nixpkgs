@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, python3, makeWrapper, libxml2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  makeWrapper,
+  libxml2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "doclifter";
@@ -8,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3zb+H/rRmU87LWh0+kQtiRMZ4JwJ3tVrt8vQ/EeKx8Q=";
   };
   buildInputs = [ python3 ];
-  nativeBuildInputs = [ python3 makeWrapper ];
+  nativeBuildInputs = [
+    python3
+    makeWrapper
+  ];
 
   strictDeps = true;
 

@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, fetchurl
-, perl
-, pkg-config
-, libcap
-, libidn2
-, libtool
-, libxml2
-, openssl
-, libuv
-, nghttp2
-, jemalloc
-, enablePython ? false
-, python3
-, enableGSSAPI ? true
-, libkrb5
-, buildPackages
-, nixosTests
-, cmocka
-, tzdata
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchurl,
+  perl,
+  pkg-config,
+  libcap,
+  libidn2,
+  libtool,
+  libxml2,
+  openssl,
+  libuv,
+  nghttp2,
+  jemalloc,
+  enablePython ? false,
+  python3,
+  enableGSSAPI ? true,
+  libkrb5,
+  buildPackages,
+  nixosTests,
+  cmocka,
+  tzdata,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,26 +32,47 @@ stdenv.mkDerivation rec {
     hash = "sha256-58zpoWX3thnu/Egy8KjcFrAF0p44kK7WAIxQbqKGpec=";
   };
 
-  outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
+    "dnsutils"
+    "host"
+  ];
 
   patches = [
     ./dont-keep-configure-flags.patch
   ];
 
-  nativeBuildInputs = [ perl pkg-config ];
-  buildInputs = [ libidn2 libtool libxml2 openssl libuv nghttp2 jemalloc ]
+  nativeBuildInputs = [
+    perl
+    pkg-config
+  ];
+  buildInputs =
+    [
+      libidn2
+      libtool
+      libxml2
+      openssl
+      libuv
+      nghttp2
+      jemalloc
+    ]
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableGSSAPI libkrb5
     ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  configureFlags = [
-    "--localstatedir=/var"
-    "--without-lmdb"
-    "--with-libidn2"
-  ] ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
-  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
+  configureFlags =
+    [
+      "--localstatedir=/var"
+      "--without-lmdb"
+      "--with-libidn2"
+    ]
+    ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev
@@ -82,23 +104,27 @@ stdenv.mkDerivation rec {
   # TODO: investigate failures; see this and linked discussions:
   # https://github.com/NixOS/nixpkgs/pull/192962
   /*
-  doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux)
-    # https://gitlab.isc.org/isc-projects/bind9/-/issues/4269
-    && !is32bit;
+    doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux)
+      # https://gitlab.isc.org/isc-projects/bind9/-/issues/4269
+      && !is32bit;
   */
   checkTarget = "unit";
-  checkInputs = [
-    cmocka
-  ] ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
-    tzdata
-  ];
-  preCheck = lib.optionalString stdenv.hostPlatform.isMusl ''
-    # musl doesn't respect TZDIR, skip timezone-related tests
-    sed -i '/^ISC_TEST_ENTRY(isc_time_formatISO8601L/d' tests/isc/time_test.c
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Test timeouts on Darwin
-    sed -i '/^ISC_TEST_ENTRY(tcpdns_recv_one/d' tests/isc/netmgr_test.c
-  '';
+  checkInputs =
+    [
+      cmocka
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
+      tzdata
+    ];
+  preCheck =
+    lib.optionalString stdenv.hostPlatform.isMusl ''
+      # musl doesn't respect TZDIR, skip timezone-related tests
+      sed -i '/^ISC_TEST_ENTRY(isc_time_formatISO8601L/d' tests/isc/time_test.c
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Test timeouts on Darwin
+      sed -i '/^ISC_TEST_ENTRY(tcpdns_recv_one/d' tests/isc/netmgr_test.c
+    '';
 
   passthru = {
     tests = {
@@ -125,6 +151,10 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ globin ];
     platforms = platforms.unix;
 
-    outputsToInstall = [ "out" "dnsutils" "host" ];
+    outputsToInstall = [
+      "out"
+      "dnsutils"
+      "host"
+    ];
   };
 }

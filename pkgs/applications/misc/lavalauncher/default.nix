@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchgit
-, meson
-, ninja
-, pkg-config
-, scdoc
-, wayland-scanner
-, cairo
-, librsvg
-, libxkbcommon
-, wayland
-, wayland-protocols
+{
+  lib,
+  stdenv,
+  fetchgit,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland-scanner,
+  cairo,
+  librsvg,
+  libxkbcommon,
+  wayland,
+  wayland-protocols,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,13 @@ stdenv.mkDerivation rec {
   };
 
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wayland-scanner
+  ];
   buildInputs = [
     cairo
     librsvg

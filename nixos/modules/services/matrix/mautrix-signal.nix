@@ -1,7 +1,8 @@
-{ lib
-, config
-, pkgs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  ...
 }:
 let
   cfg = config.services.mautrix-signal;
@@ -111,7 +112,8 @@ in
 
     serviceDependencies = lib.mkOption {
       type = with lib.types; listOf str;
-      default = (lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit)
+      default =
+        (lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit)
         ++ (lib.optional config.services.matrix-conduit.enable "conduit.service");
       defaultText = lib.literalExpression ''
         (optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit)
@@ -154,15 +156,18 @@ in
     };
 
     # Note: this is defined here to avoid the docs depending on `config`
-    services.mautrix-signal.settings.homeserver = optOneOf (with config.services; [
-      (lib.mkIf matrix-synapse.enable (mkDefaults {
-        domain = matrix-synapse.settings.server_name;
-      }))
-      (lib.mkIf matrix-conduit.enable (mkDefaults {
-        domain = matrix-conduit.settings.global.server_name;
-        address = "http://localhost:${toString matrix-conduit.settings.global.port}";
-      }))
-    ]);
+    services.mautrix-signal.settings.homeserver = optOneOf (
+      with config.services;
+      [
+        (lib.mkIf matrix-synapse.enable (mkDefaults {
+          domain = matrix-synapse.settings.server_name;
+        }))
+        (lib.mkIf matrix-conduit.enable (mkDefaults {
+          domain = matrix-conduit.settings.global.server_name;
+          address = "http://localhost:${toString matrix-conduit.settings.global.port}";
+        }))
+      ]
+    );
 
     systemd.services.mautrix-signal = {
       description = "mautrix-signal, a Matrix-Signal puppeting bridge.";
@@ -240,7 +245,7 @@ in
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [ "@system-service" ];
         Type = "simple";
-        UMask = 0027;
+        UMask = 27;
       };
       restartTriggers = [ settingsFileUnsubstituted ];
     };

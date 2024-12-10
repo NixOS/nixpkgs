@@ -1,28 +1,29 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, testers
-, boost
-, cmake
-, cmake-extras
-, dbus
-, dbus-cpp
-, gdk-pixbuf
-, glib
-, gst_all_1
-, gtest
-, libapparmor
-, libexif
-, pkg-config
-, properties-cpp
-, qtbase
-, qtdeclarative
-, shared-mime-info
-, sqlite
-, taglib
-, udisks
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  testers,
+  boost,
+  cmake,
+  cmake-extras,
+  dbus,
+  dbus-cpp,
+  gdk-pixbuf,
+  glib,
+  gst_all_1,
+  gtest,
+  libapparmor,
+  libexif,
+  pkg-config,
+  properties-cpp,
+  qtbase,
+  qtdeclarative,
+  shared-mime-info,
+  sqlite,
+  taglib,
+  udisks,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,27 +60,29 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    boost
-    cmake-extras
-    dbus
-    dbus-cpp
-    gdk-pixbuf
-    glib
-    libapparmor
-    libexif
-    properties-cpp
-    qtbase
-    qtdeclarative
-    shared-mime-info
-    sqlite
-    taglib
-    udisks
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-  ]);
+  buildInputs =
+    [
+      boost
+      cmake-extras
+      dbus
+      dbus-cpp
+      gdk-pixbuf
+      glib
+      libapparmor
+      libexif
+      properties-cpp
+      qtbase
+      qtdeclarative
+      shared-mime-info
+      sqlite
+      taglib
+      udisks
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+    ]);
 
   checkInputs = [
     gtest

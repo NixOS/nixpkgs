@@ -1,4 +1,12 @@
-{ lib, rel, buildKodiBinaryAddon, fetchFromGitHub, pkg-config, glm, libGL }:
+{
+  lib,
+  rel,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  pkg-config,
+  glm,
+  libGL,
+}:
 
 buildKodiBinaryAddon rec {
   pname = "visualization-matrix";
@@ -12,7 +20,10 @@ buildKodiBinaryAddon rec {
     hash = "sha256-tojzPqt6VMccveqnhkl0yXS+/fLdxotmQO3jdtYlkFk=";
   };
 
-  extraBuildInputs = [ pkg-config libGL ];
+  extraBuildInputs = [
+    pkg-config
+    libGL
+  ];
 
   propagatedBuildInputs = [ glm ];
   meta = with lib; {

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.openvpn3;
@@ -11,9 +16,10 @@ in
       default = pkgs.openvpn3.override {
         enableSystemdResolved = config.services.resolved.enable;
       };
-      defaultText = lib.literalExpression ''pkgs.openvpn3.override {
-        enableSystemdResolved = config.services.resolved.enable;
-      }'';
+      defaultText = lib.literalExpression ''
+        pkgs.openvpn3.override {
+                enableSystemdResolved = config.services.resolved.enable;
+              }'';
       description = ''
         Which package to use for `openvpn3`.
       '';

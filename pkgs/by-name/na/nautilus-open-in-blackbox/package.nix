@@ -1,13 +1,19 @@
-{ python3, fetchFromGitHub, gnome, stdenv, lib }:
+{
+  python3,
+  fetchFromGitHub,
+  gnome,
+  stdenv,
+  lib,
+}:
 stdenv.mkDerivation rec {
   pname = "nautilus-open-in-blackbox";
   version = "0.1.1";
 
   src = fetchFromGitHub {
-      owner = "ppvan";
-      repo = "nautilus-open-in-blackbox";
-      rev = "refs/tags/${version}";
-      hash = "sha256-5rvh3qNalpjamcBVQrnAW6GxhwPPlRxP5h045YDqvrM=";
+    owner = "ppvan";
+    repo = "nautilus-open-in-blackbox";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5rvh3qNalpjamcBVQrnAW6GxhwPPlRxP5h045YDqvrM=";
   };
 
   # The Orignal Source code tries to execute `/usr/bin/blackbox` which is not valid in NixOS

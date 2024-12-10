@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -22,13 +23,16 @@ python3.pkgs.buildPythonApplication rec {
     poetry-core
   ];
 
-  dependencies = with python3.pkgs; [
-    beautifulsoup4
-    genanki
-    markdown
-    python-frontmatter
-    typer
-  ] ++ typer.optional-dependencies.all;
+  dependencies =
+    with python3.pkgs;
+    [
+      beautifulsoup4
+      genanki
+      markdown
+      python-frontmatter
+      typer
+    ]
+    ++ typer.optional-dependencies.all;
 
   # No tests available on Pypi and there is only a failing version assertion test in the repo.
   doCheck = false;

@@ -1,4 +1,10 @@
-{lib, stdenv, pkg-config, autoreconfHook, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  pkg-config,
+  autoreconfHook,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libspiro";
@@ -11,7 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/9UCrdq69RO22593qiA8pZ4qfY9UVGqlGYB9zatsOgw=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
 
   meta = with lib; {
     description = "A library that simplifies the drawing of beautiful curves";

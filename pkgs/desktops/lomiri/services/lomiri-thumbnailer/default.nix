@@ -1,32 +1,33 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, testers
-, boost
-, cmake
-, cmake-extras
-, doxygen
-, gst_all_1
-, gdk-pixbuf
-, gtest
-, makeFontsConf
-, libapparmor
-, libexif
-, libqtdbustest
-, librsvg
-, lomiri-api
-, persistent-cache-cpp
-, pkg-config
-, python3
-, qtbase
-, qtdeclarative
-, shared-mime-info
-, taglib
-, validatePkgConfig
-, wrapGAppsHook3
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  testers,
+  boost,
+  cmake,
+  cmake-extras,
+  doxygen,
+  gst_all_1,
+  gdk-pixbuf,
+  gtest,
+  makeFontsConf,
+  libapparmor,
+  libexif,
+  libqtdbustest,
+  librsvg,
+  lomiri-api,
+  persistent-cache-cpp,
+  pkg-config,
+  python3,
+  qtbase,
+  qtdeclarative,
+  shared-mime-info,
+  taglib,
+  validatePkgConfig,
+  wrapGAppsHook3,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -124,34 +125,40 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen
     gdk-pixbuf # setup hook
     pkg-config
-    (python3.withPackages (ps: with ps; lib.optionals finalAttrs.doCheck [
-      python-dbusmock
-      tornado
-    ]))
+    (python3.withPackages (
+      ps:
+      with ps;
+      lib.optionals finalAttrs.doCheck [
+        python-dbusmock
+        tornado
+      ]
+    ))
     validatePkgConfig
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    boost
-    cmake-extras
-    gdk-pixbuf
-    libapparmor
-    libexif
-    librsvg
-    lomiri-api
-    persistent-cache-cpp
-    qtbase
-    qtdeclarative
-    shared-mime-info
-    taglib
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    # maybe add ugly to cover all kinds of formats?
-  ]);
+  buildInputs =
+    [
+      boost
+      cmake-extras
+      gdk-pixbuf
+      libapparmor
+      libexif
+      librsvg
+      lomiri-api
+      persistent-cache-cpp
+      qtbase
+      qtdeclarative
+      shared-mime-info
+      taglib
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      # maybe add ugly to cover all kinds of formats?
+    ]);
 
   nativeCheckInputs = [
     shared-mime-info
@@ -170,10 +177,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     # error: use of old-style cast to 'std::remove_reference<_GstElement*>::type' {aka 'struct _GstElement*'}
     (lib.cmakeBool "Werror" false)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
-      # QSignalSpy tests in QML suite always fail, pass when running interactively
-      "-E" "^qml"
-    ]))
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
+      lib.concatStringsSep ";" [
+        # QSignalSpy tests in QML suite always fail, pass when running interactively
+        "-E"
+        "^qml"
+      ]
+    ))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -182,7 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck = ''
     # Fontconfig warnings breaks some tests
-    export FONTCONFIG_FILE=${makeFontsConf { fontDirectories = []; }}
+    export FONTCONFIG_FILE=${makeFontsConf { fontDirectories = [ ]; }}
     export HOME=$TMPDIR
 
     # Some tests need Qt plugins
@@ -208,7 +218,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "lomiri-thumbnailer-admin";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/blob/${finalAttrs.version}/ChangeLog";
-    license = with licenses; [ gpl3Only lgpl3Only ];
+    license = with licenses; [
+      gpl3Only
+      lgpl3Only
+    ];
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;
     pkgConfigModules = [

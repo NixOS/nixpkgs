@@ -1,30 +1,31 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, stdenv
-, python3
-, bubblewrap
-, systemd
-, pandoc
-, kmod
-, gnutar
-, util-linux
-, cpio
-, bash
-, coreutils
-, btrfs-progs
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  stdenv,
+  python3,
+  bubblewrap,
+  systemd,
+  pandoc,
+  kmod,
+  gnutar,
+  util-linux,
+  cpio,
+  bash,
+  coreutils,
+  btrfs-progs,
 
   # Python packages
-, setuptools
-, setuptools-scm
-, wheel
-, buildPythonApplication
-, pytestCheckHook
-, pefile
+  setuptools,
+  setuptools-scm,
+  wheel,
+  buildPythonApplication,
+  pytestCheckHook,
+  pefile,
 
   # Optional dependencies
-, withQemu ? false
-, qemu
+  withQemu ? false,
+  qemu,
 }:
 let
   # For systemd features used by mkosi, see
@@ -39,16 +40,21 @@ let
     withKernelInstall = true;
   };
 
-  python3pefile = python3.withPackages (ps: with ps; [
-    pefile
-  ]);
+  python3pefile = python3.withPackages (
+    ps: with ps; [
+      pefile
+    ]
+  );
 in
 buildPythonApplication rec {
   pname = "mkosi";
   version = "22";
   format = "pyproject";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "systemd";
@@ -59,15 +65,17 @@ buildPythonApplication rec {
 
   # Fix ctypes finding library
   # https://github.com/NixOS/nixpkgs/issues/7307
-  postPatch = lib.optionalString stdenv.isLinux ''
-    substituteInPlace mkosi/user.py \
-      --replace-fail 'ctypes.util.find_library("c")' "'${stdenv.cc.libc}/lib/libc.so.6'"
-    substituteInPlace mkosi/__init__.py \
-      --replace-fail '/usr/lib/systemd/ukify' "${systemdForMkosi}/lib/systemd/ukify"
-  '' + lib.optionalString withQemu ''
-    substituteInPlace mkosi/qemu.py \
-      --replace-fail "usr/share/qemu/firmware" "${qemu}/share/qemu/firmware"
-  '';
+  postPatch =
+    lib.optionalString stdenv.isLinux ''
+      substituteInPlace mkosi/user.py \
+        --replace-fail 'ctypes.util.find_library("c")' "'${stdenv.cc.libc}/lib/libc.so.6'"
+      substituteInPlace mkosi/__init__.py \
+        --replace-fail '/usr/lib/systemd/ukify' "${systemdForMkosi}/lib/systemd/ukify"
+    ''
+    + lib.optionalString withQemu ''
+      substituteInPlace mkosi/qemu.py \
+        --replace-fail "usr/share/qemu/firmware" "${qemu}/share/qemu/firmware"
+    '';
 
   nativeBuildInputs = [
     pandoc
@@ -76,19 +84,21 @@ buildPythonApplication rec {
     wheel
   ];
 
-  propagatedBuildInputs = [
-    bash
-    btrfs-progs
-    bubblewrap
-    coreutils
-    cpio
-    gnutar
-    kmod
-    systemdForMkosi
-    util-linux
-  ] ++ lib.optional withQemu [
-    qemu
-  ];
+  propagatedBuildInputs =
+    [
+      bash
+      btrfs-progs
+      bubblewrap
+      coreutils
+      cpio
+      gnutar
+      kmod
+      systemdForMkosi
+      util-linux
+    ]
+    ++ lib.optional withQemu [
+      qemu
+    ];
 
   postBuild = ''
     ./tools/make-man-page.sh
@@ -118,7 +128,10 @@ buildPythonApplication rec {
     changelog = "https://github.com/systemd/mkosi/releases/tag/v${version}";
     license = licenses.lgpl21Only;
     mainProgram = "mkosi";
-    maintainers = with maintainers; [ malt3 katexochen ];
+    maintainers = with maintainers; [
+      malt3
+      katexochen
+    ];
     platforms = platforms.linux;
     # `mkosi qemu` boot fails in the uefi shell, image isn't found.
     broken = withQemu;

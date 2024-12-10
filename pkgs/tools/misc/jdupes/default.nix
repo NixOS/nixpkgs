@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitea, libjodycode }:
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  libjodycode,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jdupes";
@@ -7,8 +12,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "jbruchon";
-    repo  = "jdupes";
-    rev   = "v${version}";
+    repo = "jdupes";
+    rev = "v${version}";
     hash = "sha256-hR5nl8G7TYVm4ol/jgo7iOb4dLr2MovgjKSXCD2UwMg=";
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The testdir
@@ -20,14 +25,17 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ] ++ lib.optionals stdenv.isLinux [
-    "ENABLE_DEDUPE=1"
-    "STATIC_DEDUPE_H=1"
-  ] ++ lib.optionals stdenv.cc.isGNU [
-    "HARDEN=1"
-  ];
+  makeFlags =
+    [
+      "PREFIX=${placeholder "out"}"
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      "ENABLE_DEDUPE=1"
+      "STATIC_DEDUPE_H=1"
+    ]
+    ++ lib.optionals stdenv.cc.isGNU [
+      "HARDEN=1"
+    ];
 
   enableParallelBuilding = true;
 

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitLab, perl, xkeyboard_config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  perl,
+  xkeyboard_config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ckbcomp";

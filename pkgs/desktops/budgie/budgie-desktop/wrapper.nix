@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, glib
-, xorg
-, wrapGAppsHook3
-, budgie-desktop
-, plugins ? [ ]
+{
+  lib,
+  stdenv,
+  glib,
+  xorg,
+  wrapGAppsHook3,
+  budgie-desktop,
+  plugins ? [ ],
 }:
 
 stdenv.mkDerivation {

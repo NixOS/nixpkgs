@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitLab, gradle, jre, perl, writeText, runtimeShell }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gradle,
+  jre,
+  perl,
+  writeText,
+  runtimeShell,
+}:
 
 let
   pname = "pdftk";
@@ -15,7 +24,10 @@ let
     pname = "${pname}-deps";
     inherit src version;
 
-    nativeBuildInputs = [ gradle perl ];
+    nativeBuildInputs = [
+      gradle
+      perl
+    ];
 
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
@@ -37,32 +49,33 @@ let
 
   # Point to our local deps repo
   gradleInit = writeText "init.gradle" ''
-    logger.lifecycle 'Replacing Maven repositories with ${deps}...'
-    gradle.projectsLoaded {
-      rootProject.allprojects {
-        buildscript {
+      logger.lifecycle 'Replacing Maven repositories with ${deps}...'
+      gradle.projectsLoaded {
+        rootProject.allprojects {
+          buildscript {
+            repositories {
+              clear()
+              maven { url '${deps}' }
+            }
+          }
           repositories {
             clear()
             maven { url '${deps}' }
           }
         }
-        repositories {
-          clear()
-          maven { url '${deps}' }
-        }
       }
-    }
 
-    settingsEvaluated { settings ->
-      settings.pluginManagement {
-        repositories {
-          maven { url '${deps}' }
+      settingsEvaluated { settings ->
+        settings.pluginManagement {
+          repositories {
+            maven { url '${deps}' }
+          }
         }
-      }
-  }
+    }
   '';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version src;
 
   nativeBuildInputs = [ gradle ];
@@ -90,10 +103,13 @@ in stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/pdftk-java/pdftk";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin averelld ];
+    maintainers = with maintainers; [
+      raskin
+      averelld
+    ];
     platforms = platforms.unix;
     mainProgram = "pdftk";
   };

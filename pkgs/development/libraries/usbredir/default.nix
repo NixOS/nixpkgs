@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitLab
-, pkg-config
-, meson
-, ninja
-, glib
-, libusb1
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitLab,
+  pkg-config,
+  meson,
+  ninja,
+  glib,
+  libusb1,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +42,10 @@ stdenv.mkDerivation rec {
     "-Dfuzzing=disabled"
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = with lib; {
     description = "USB traffic redirection protocol";

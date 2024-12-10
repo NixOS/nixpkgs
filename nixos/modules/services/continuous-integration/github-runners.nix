@@ -6,5 +6,8 @@
     ./github-runner/service.nix
   ];
 
-  meta.maintainers = with lib.maintainers; [ veehaitch newam ];
+  meta.maintainers = with lib.maintainers; [
+    veehaitch
+    newam
+  ];
 }

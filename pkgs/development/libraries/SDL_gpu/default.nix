@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, SDL2, libGLU }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  SDL2,
+  libGLU,
+}:
 
 stdenv.mkDerivation {
   pname = "SDL_gpu-unstable";
@@ -12,7 +19,10 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ SDL2 libGLU ];
+  buildInputs = [
+    SDL2
+    libGLU
+  ];
 
   cmakeFlags = [
     "-DSDL_gpu_BUILD_DEMOS=OFF"

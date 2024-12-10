@@ -1,17 +1,19 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchurl
-, fetchpatch
-, scons
-, pkg-config
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, libGLU
-, libGL
-, libpng
-, physfs
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  fetchpatch,
+  scons,
+  pkg-config,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  libGLU,
+  libGL,
+  libpng,
+  physfs,
+  unstableGitUpdater,
 }:
 
 let
@@ -32,9 +34,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-nEPMJiTeePAmourAksUNqyy5whs+8+qy/qrycfNw2lo=";
   };
 
-  nativeBuildInputs = [ pkg-config scons ];
+  nativeBuildInputs = [
+    pkg-config
+    scons
+  ];
 
-  buildInputs = [ libGLU libGL libpng physfs SDL2 SDL2_image SDL2_mixer ];
+  buildInputs = [
+    libGLU
+    libGL
+    libpng
+    physfs
+    SDL2
+    SDL2_image
+    SDL2_mixer
+  ];
 
   enableParallelBuilding = true;
 
@@ -50,7 +63,7 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/share/doc/dxx-rebirth *.txt
   '';
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Source Port of the Descent 1 and 2 engines";

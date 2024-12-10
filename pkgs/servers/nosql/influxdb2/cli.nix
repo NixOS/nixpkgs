@@ -1,6 +1,7 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
 
 let
@@ -13,7 +14,8 @@ let
     sha256 = "sha256-0Gyoy9T5pA+40k8kKybWBMtOfpKZxw3Vvp4ZB4ptcJs=";
   };
 
-in buildGoModule {
+in
+buildGoModule {
   pname = "influx-cli";
   version = version;
   inherit src;
@@ -21,7 +23,10 @@ in buildGoModule {
   vendorHash = "sha256-Ov0TPoMm0qi7kkWUUni677sCP1LwkT9+n3KHcAlQkDA=";
   subPackages = [ "cmd/influx" ];
 
-  ldflags = [ "-X main.commit=v${version}" "-X main.version=${version}" ];
+  ldflags = [
+    "-X main.commit=v${version}"
+    "-X main.version=${version}"
+  ];
 
   meta = with lib; {
     description = "CLI for managing resources in InfluxDB v2";

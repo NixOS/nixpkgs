@@ -1,4 +1,8 @@
-{ lib, python3, fetchFromGitHub }:
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+}:
 
 python3.pkgs.buildPythonApplication {
   pname = "loxodo";
@@ -13,7 +17,10 @@ python3.pkgs.buildPythonApplication {
 
   patches = [ ./wxpython.patch ];
 
-  propagatedBuildInputs = with python3.pkgs; [ six wxpython ];
+  propagatedBuildInputs = with python3.pkgs; [
+    six
+    wxpython
+  ];
 
   postInstall = ''
     mv $out/bin/loxodo.py $out/bin/loxodo
@@ -29,7 +36,7 @@ python3.pkgs.buildPythonApplication {
     EOF
   '';
 
-  doCheck = false;  # Tests are interactive.
+  doCheck = false; # Tests are interactive.
 
   meta = with lib; {
     description = "A Password Safe V3 compatible password vault";

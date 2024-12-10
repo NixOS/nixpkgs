@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, php }:
+{
+  lib,
+  fetchFromGitHub,
+  php,
+}:
 
 php.buildComposerProject (finalAttrs: {
   pname = "pest";

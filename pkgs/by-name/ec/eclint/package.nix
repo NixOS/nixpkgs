@@ -1,10 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitLab
+{
+  lib,
+  buildGoModule,
+  fetchFromGitLab,
 }:
 
-buildGoModule
-rec {
+buildGoModule rec {
   pname = "eclint";
   version = "0.5.0";
 

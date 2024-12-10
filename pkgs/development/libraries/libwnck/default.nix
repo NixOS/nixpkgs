@@ -1,31 +1,36 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, gtk-doc
-, docbook_xsl
-, docbook_xml_dtd_412
-, libX11
-, glib
-, gtk3
-, pango
-, cairo
-, libXres
-, libstartup_notification
-, gettext
-, gobject-introspection
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  pkg-config,
+  gtk-doc,
+  docbook_xsl,
+  docbook_xml_dtd_412,
+  libX11,
+  glib,
+  gtk3,
+  pango,
+  cairo,
+  libXres,
+  libstartup_notification,
+  gettext,
+  gobject-introspection,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libwnck";
   version = "43.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
   outputBin = "dev";
 
   src = fetchurl {
@@ -42,18 +47,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gettext
-    gobject-introspection
-    gtk-doc
-    docbook_xsl
-    docbook_xml_dtd_412
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      gettext
+      gobject-introspection
+      gtk-doc
+      docbook_xsl
+      docbook_xml_dtd_412
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     libX11

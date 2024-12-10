@@ -1,28 +1,40 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libtool
-, threadingSupport ? true # multi-threading
-, openglSupport ? false, freeglut, libGL, libGLU # OpenGL (required for vwebp)
-, pngSupport ? true, libpng # PNG image format
-, jpegSupport ? true, libjpeg # JPEG image format
-, tiffSupport ? true, libtiff # TIFF image format
-, gifSupport ? true, giflib # GIF image format
-, alignedSupport ? false # Force aligned memory operations
-, swap16bitcspSupport ? false # Byte swap for 16bit color spaces
-, experimentalSupport ? false # Experimental code
-, libwebpmuxSupport ? true # Build libwebpmux
-, libwebpdemuxSupport ? true # Build libwebpdemux
-, libwebpdecoderSupport ? true # Build libwebpdecoder
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libtool,
+  threadingSupport ? true, # multi-threading
+  openglSupport ? false,
+  freeglut,
+  libGL,
+  libGLU, # OpenGL (required for vwebp)
+  pngSupport ? true,
+  libpng, # PNG image format
+  jpegSupport ? true,
+  libjpeg, # JPEG image format
+  tiffSupport ? true,
+  libtiff, # TIFF image format
+  gifSupport ? true,
+  giflib, # GIF image format
+  alignedSupport ? false, # Force aligned memory operations
+  swap16bitcspSupport ? false, # Byte swap for 16bit color spaces
+  experimentalSupport ? false, # Experimental code
+  libwebpmuxSupport ? true, # Build libwebpmux
+  libwebpdemuxSupport ? true, # Build libwebpdemux
+  libwebpdecoderSupport ? true, # Build libwebpdecoder
 
-# for passthru.tests
-, freeimage
-, gd
-, graphicsmagick
-, haskellPackages
-, imagemagick
-, imlib2
-, libjxl
-, opencv
-, python3
-, vips
+  # for passthru.tests
+  freeimage,
+  gd,
+  graphicsmagick,
+  haskellPackages,
+  imagemagick,
+  imlib2,
+  libjxl,
+  opencv,
+  python3,
+  vips,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,10 +42,10 @@ stdenv.mkDerivation rec {
   version = "1.4.0";
 
   src = fetchFromGitHub {
-    owner  = "webmproject";
-    repo   = pname;
-    rev    = "v${version}";
-    hash   = "sha256-OR/VzKNn3mnwjf+G+RkEGAaaKrhVlAu1e2oTRwdsPj8=";
+    owner = "webmproject";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-OR/VzKNn3mnwjf+G+RkEGAaaKrhVlAu1e2oTRwdsPj8=";
   };
 
   configureFlags = [
@@ -51,9 +63,17 @@ stdenv.mkDerivation rec {
     (lib.enableFeature libwebpdecoderSupport "libwebpdecoder")
   ];
 
-  nativeBuildInputs = [ autoreconfHook libtool ];
-  buildInputs = [ ]
-    ++ lib.optionals openglSupport [ freeglut libGL libGLU ]
+  nativeBuildInputs = [
+    autoreconfHook
+    libtool
+  ];
+  buildInputs =
+    [ ]
+    ++ lib.optionals openglSupport [
+      freeglut
+      libGL
+      libGLU
+    ]
     ++ lib.optionals pngSupport [ libpng ]
     ++ lib.optionals jpegSupport [ libjpeg ]
     ++ lib.optionals tiffSupport [ libtiff ]
@@ -62,7 +82,15 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = {
-    inherit gd graphicsmagick imagemagick imlib2 libjxl opencv vips;
+    inherit
+      gd
+      graphicsmagick
+      imagemagick
+      imlib2
+      libjxl
+      opencv
+      vips
+      ;
     inherit (python3.pkgs) pillow imread;
     haskell-webp = haskellPackages.webp;
   };

@@ -1,4 +1,11 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin, git }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
+  git,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "git-nomad";

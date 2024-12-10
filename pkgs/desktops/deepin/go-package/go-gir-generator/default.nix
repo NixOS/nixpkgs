@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, go
-, pkg-config
-, libgudev
-, gobject-introspection
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  go,
+  pkg-config,
+  libgudev,
+  gobject-introspection,
 }:
 
 stdenv.mkDerivation rec {

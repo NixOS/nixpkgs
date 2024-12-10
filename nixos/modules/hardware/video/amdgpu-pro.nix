@@ -1,6 +1,11 @@
 # This module provides the proprietary AMDGPU-PRO drivers.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -20,8 +25,11 @@ in
 {
 
   config = mkIf enabled {
-    services.xserver.drivers = singleton
-      { name = "amdgpu"; modules = [ package ]; display = true; };
+    services.xserver.drivers = singleton {
+      name = "amdgpu";
+      modules = [ package ];
+      display = true;
+    };
 
     hardware.opengl.package = package;
     hardware.opengl.package32 = package32;
@@ -29,13 +37,14 @@ in
 
     boot.extraModulePackages = [ package.kmod ];
 
-    boot.kernelPackages = pkgs.linuxKernel.packagesFor
-      (pkgs.linuxKernel.kernels.linux_5_10.override {
+    boot.kernelPackages = pkgs.linuxKernel.packagesFor (
+      pkgs.linuxKernel.kernels.linux_5_10.override {
         structuredExtraConfig = {
           DEVICE_PRIVATE = kernel.yes;
           KALLSYMS_ALL = kernel.yes;
         };
-      });
+      }
+    );
 
     hardware.firmware = [ package.fw ];
 
@@ -55,7 +64,8 @@ in
     boot.initrd.services.udev.packages = [ package ];
 
     environment.systemPackages =
-      [ package.vulkan ] ++
+      [ package.vulkan ]
+      ++
       # this isn't really DRI, but we'll reuse this option for now
       optional config.hardware.opengl.driSupport32Bit package32.vulkan;
 

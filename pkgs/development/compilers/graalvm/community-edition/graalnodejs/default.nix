@@ -1,6 +1,7 @@
-{ stdenv
-, fetchurl
-, graalvmCEPackages
+{
+  stdenv,
+  fetchurl,
+  graalvmCEPackages,
 }:
 
 graalvmCEPackages.buildGraalvmProduct {

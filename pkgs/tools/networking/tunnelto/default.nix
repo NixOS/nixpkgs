@@ -1,9 +1,11 @@
-{ lib, stdenv
-, rustPlatform
-, fetchFromGitHub
-, openssl
-, pkg-config
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,9 +28,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
-  buildInputs = [ ]
-    ++ lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs =
+    [ ] ++ lib.optionals stdenv.isLinux [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Expose your local web server to the internet with a public URL";

@@ -1,4 +1,10 @@
-{lib, stdenv, fetchurl, ncurses, automake}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  automake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "aalib";
@@ -9,10 +15,17 @@ stdenv.mkDerivation rec {
     sha256 = "1vkh19gb76agvh4h87ysbrgy82hrw88lnsvhynjf4vng629dmpgv";
   };
 
-  outputs = [ "bin" "dev" "out" "man" "info" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+    "info"
+  ];
   setOutputFlags = false; # Doesn't support all the flags
 
-  patches = [ ./clang.patch ] # Fix implicit `int` on `main` error with newer versions of clang
+  patches =
+    [ ./clang.patch ] # Fix implicit `int` on `main` error with newer versions of clang
     ++ lib.optionals stdenv.isDarwin [ ./darwin.patch ];
 
   # The fuloong2f is not supported by aalib still
@@ -27,7 +40,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  configureFlags = [ "--without-x" "--with-ncurses=${ncurses.dev}" ];
+  configureFlags = [
+    "--without-x"
+    "--with-ncurses=${ncurses.dev}"
+  ];
 
   postInstall = ''
     mkdir -p $dev/bin

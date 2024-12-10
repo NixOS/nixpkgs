@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchFromGitHub
-, bash, python3, yosys
-, yices, boolector, z3, aiger
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bash,
+  python3,
+  yosys,
+  yices,
+  boolector,
+  z3,
+  aiger,
 }:
 
 stdenv.mkDerivation {
@@ -9,9 +17,9 @@ stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
-    repo  = "SymbiYosys";
-    rev   = "b409b1179e36d2a3fff66c85b7d4e271769a2d9e";
-    hash  = "sha256-S7of2upntiMkSdh4kf1RsrjriS31Eh8iEcVvG36isQg=";
+    repo = "SymbiYosys";
+    rev = "b409b1179e36d2a3fff66c85b7d4e271769a2d9e";
+    hash = "sha256-S7of2upntiMkSdh4kf1RsrjriS31Eh8iEcVvG36isQg=";
   };
 
   buildInputs = [ ];
@@ -48,15 +56,25 @@ stdenv.mkDerivation {
   '';
 
   doCheck = false; # not all provers are yet packaged...
-  nativeCheckInputs = [ python3 yosys boolector yices z3 aiger ];
+  nativeCheckInputs = [
+    python3
+    yosys
+    boolector
+    yices
+    z3
+    aiger
+  ];
   checkPhase = "make test";
 
   meta = {
     description = "Tooling for Yosys-based verification flows";
-    homepage    = "https://symbiyosys.readthedocs.io/";
-    license     = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ thoughtpolice emily ];
+    homepage = "https://symbiyosys.readthedocs.io/";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      emily
+    ];
     mainProgram = "sby";
-    platforms   = lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

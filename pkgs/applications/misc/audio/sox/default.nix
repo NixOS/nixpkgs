@@ -1,38 +1,39 @@
-{ config
-, lib
-, stdenv
-, fetchgit
-, autoreconfHook
-, autoconf-archive
-, pkg-config
-, CoreAudio
-, enableAlsa ? true
-, alsa-lib
-, enableLibao ? true
-, libao
-, enableLame ? config.sox.enableLame or false
-, lame
-, enableLibmad ? true
-, libmad
-, enableLibogg ? true
-, libogg
-, libvorbis
-, enableOpusfile ? true
-, opusfile
-, enableFLAC ? true
-, flac
-, enablePNG ? true
-, libpng
-, enableLibsndfile ? true
-, libsndfile
-, enableWavpack ? true
-, wavpack
+{
+  config,
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  autoconf-archive,
+  pkg-config,
+  CoreAudio,
+  enableAlsa ? true,
+  alsa-lib,
+  enableLibao ? true,
+  libao,
+  enableLame ? config.sox.enableLame or false,
+  lame,
+  enableLibmad ? true,
+  libmad,
+  enableLibogg ? true,
+  libogg,
+  libvorbis,
+  enableOpusfile ? true,
+  opusfile,
+  enableFLAC ? true,
+  flac,
+  enablePNG ? true,
+  libpng,
+  enableLibsndfile ? true,
+  libsndfile,
+  enableWavpack ? true,
+  wavpack,
   # amrnb and amrwb are unfree, disabled by default
-, enableAMR ? false
-, amrnb
-, amrwb
-, enableLibpulseaudio ? stdenv.isLinux && lib.meta.availableOn stdenv.hostPlatform libpulseaudio
-, libpulseaudio
+  enableAMR ? false,
+  amrnb,
+  amrwb,
+  enableLibpulseaudio ? stdenv.isLinux && lib.meta.availableOn stdenv.hostPlatform libpulseaudio,
+  libpulseaudio,
 }:
 
 stdenv.mkDerivation rec {
@@ -69,13 +70,19 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableLibao libao
     ++ lib.optional enableLame lame
     ++ lib.optional enableLibmad libmad
-    ++ lib.optionals enableLibogg [ libogg libvorbis ]
+    ++ lib.optionals enableLibogg [
+      libogg
+      libvorbis
+    ]
     ++ lib.optional enableOpusfile opusfile
     ++ lib.optional enableFLAC flac
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableLibsndfile libsndfile
     ++ lib.optional enableWavpack wavpack
-    ++ lib.optionals enableAMR [ amrnb amrwb ]
+    ++ lib.optionals enableAMR [
+      amrnb
+      amrwb
+    ]
     ++ lib.optional enableLibpulseaudio libpulseaudio
     ++ lib.optional stdenv.isDarwin CoreAudio;
 

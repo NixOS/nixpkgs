@@ -1,12 +1,21 @@
-{ lib, stdenv, fetchurl, pkg-config
-, libgcrypt, libgpg-error, libtasn1
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libgcrypt,
+  libgpg-error,
+  libtasn1,
 
-# Optional Dependencies
-, pam ? null, libidn ? null, gnutls ? null
+  # Optional Dependencies
+  pam ? null,
+  libidn ? null,
+  gnutls ? null,
 }:
 
 let
-  shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
+  shouldUsePkg =
+    pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
   optPam = shouldUsePkg pam;
   optLibidn = shouldUsePkg libidn;
@@ -23,52 +32,65 @@ stdenv.mkDerivation rec {
   };
 
   # Fixes support for gcrypt 1.6+
-  patches = [ ./gcrypt-fix.patch ./freebsd-unistd.patch ];
+  patches = [
+    ./gcrypt-fix.patch
+    ./freebsd-unistd.patch
+  ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libgcrypt libgpg-error libtasn1 optPam optLibidn optGnutls ];
+  buildInputs = [
+    libgcrypt
+    libgpg-error
+    libtasn1
+    optPam
+    optLibidn
+    optGnutls
+  ];
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    (enableFeature true                "libgcrypt")
-    (enableFeature (optPam != null)    "pam")
-    (enableFeature true                "ipv6")
-    (withFeature   (optLibidn != null) "stringprep")
+    (enableFeature true "libgcrypt")
+    (enableFeature (optPam != null) "pam")
+    (enableFeature true "ipv6")
+    (withFeature (optLibidn != null) "stringprep")
     (enableFeature (optGnutls != null) "starttls")
-    (enableFeature true                "des")
-    (enableFeature true                "3des")
-    (enableFeature true                "aes")
-    (enableFeature true                "md")
-    (enableFeature false               "null")
-    (enableFeature true                "arcfour")
+    (enableFeature true "des")
+    (enableFeature true "3des")
+    (enableFeature true "aes")
+    (enableFeature true "md")
+    (enableFeature false "null")
+    (enableFeature true "arcfour")
   ];
 
-  env.NIX_CFLAGS_COMPILE
-    = optionalString stdenv.isDarwin "-DBIND_8_COMPAT";
+  env.NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-DBIND_8_COMPAT";
 
   doCheck = true;
 
   installFlags = [ "sysconfdir=\${out}/etc" ];
 
   # Fix *.la files
-  postInstall = ''
-    sed -i $out/lib/libshi{sa,shi}.la \
-  '' + optionalString (optLibidn != null) ''
+  postInstall =
+    ''
+      sed -i $out/lib/libshi{sa,shi}.la \
+    ''
+    + optionalString (optLibidn != null) ''
       -e 's,\(-lidn\),-L${optLibidn.out}/lib \1,' \
-  '' + optionalString (optGnutls != null) ''
+    ''
+    + optionalString (optGnutls != null) ''
       -e 's,\(-lgnutls\),-L${optGnutls.out}/lib \1,' \
-  '' + ''
+    ''
+    + ''
       -e 's,\(-lgcrypt\),-L${libgcrypt.out}/lib \1,' \
       -e 's,\(-lgpg-error\),-L${libgpg-error.out}/lib \1,' \
       -e 's,\(-ltasn1\),-L${libtasn1.out}/lib \1,'
-  '';
+    '';
 
   meta = {
-    homepage    = "https://www.gnu.org/software/shishi/";
+    homepage = "https://www.gnu.org/software/shishi/";
     description = "An implementation of the Kerberos 5 network security system";
-    license     = licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

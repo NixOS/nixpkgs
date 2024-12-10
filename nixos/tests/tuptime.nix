@@ -1,16 +1,19 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
-  name = "tuptime";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ evils ];
-  };
+import ./make-test-python.nix (
+  { pkgs, ... }:
+  {
+    name = "tuptime";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ evils ];
+    };
 
-  nodes.machine = { pkgs, ... }: {
-    imports = [ ../modules/profiles/minimal.nix ];
-    services.tuptime.enable = true;
-  };
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        imports = [ ../modules/profiles/minimal.nix ];
+        services.tuptime.enable = true;
+      };
 
-  testScript =
-    ''
+    testScript = ''
       # see if it starts
       start_all()
       machine.wait_for_unit("multi-user.target")
@@ -25,5 +28,5 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       machine.succeed("tuptime | grep 'System shutdowns:[[:blank:]]*1 ok'")
       machine.shutdown()
     '';
-})
-
+  }
+)

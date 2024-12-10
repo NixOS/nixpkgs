@@ -29,7 +29,7 @@ buildHomeAssistantComponent rec {
     changelog = "https://github.com/astrandb/miele/releases/tag/v${version}";
     description = "A modern integration for Miele devices in Home Assistant";
     homepage = "https://github.com/astrandb/miele";
-    maintainers = with maintainers; [jamiemagee];
+    maintainers = with maintainers; [ jamiemagee ];
     license = licenses.mit;
   };
 }

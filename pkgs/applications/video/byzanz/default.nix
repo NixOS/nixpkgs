@@ -1,16 +1,18 @@
-{ lib, stdenv
-, fetchgit
-, wrapGAppsHook3
-, cairo
-, glib
-, gnome
-, gst_all_1
-, gtk3
-, intltool
-, libtool
-, pkg-config
-, which
-, xorg
+{
+  lib,
+  stdenv,
+  fetchgit,
+  wrapGAppsHook3,
+  cairo,
+  glib,
+  gnome,
+  gst_all_1,
+  gtk3,
+  intltool,
+  libtool,
+  pkg-config,
+  which,
+  xorg,
 }:
 
 stdenv.mkDerivation {
@@ -34,25 +36,30 @@ stdenv.mkDerivation {
     "-Wno-error=incompatible-pointer-types"
   ];
 
-  nativeBuildInputs = [ pkg-config intltool ];
-  buildInputs = [
-    which
-    gnome.gnome-common
-    glib
-    libtool
-    cairo
-    gtk3
-    xorg.xwininfo
-    xorg.libXdamage
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-bad
-    gst-plugins-good
-    gst-plugins-ugly
-    gst-libav
-    wrapGAppsHook3
-  ]);
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ];
+  buildInputs =
+    [
+      which
+      gnome.gnome-common
+      glib
+      libtool
+      cairo
+      gtk3
+      xorg.xwininfo
+      xorg.libXdamage
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-bad
+      gst-plugins-good
+      gst-plugins-ugly
+      gst-libav
+      wrapGAppsHook3
+    ]);
 
   meta = with lib; {
     description = "Tool to record a running X desktop to an animation suitable for presentation in a web browser";

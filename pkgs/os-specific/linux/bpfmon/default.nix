@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libpcap
-, yascreen
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libpcap,
+  yascreen,
 }:
 
 stdenv.mkDerivation rec {

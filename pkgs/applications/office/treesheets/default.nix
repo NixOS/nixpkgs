@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, wrapGAppsHook3
-, makeWrapper
-, wxGTK
-, Cocoa
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  wrapGAppsHook3,
+  makeWrapper,
+  wxGTK,
+  Cocoa,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,13 +29,17 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [
-    wxGTK
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-  ];
+  buildInputs =
+    [
+      wxGTK
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Cocoa
+    ];
 
-  env.NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${builtins.replaceStrings [ "unstable-" ] [ "" ] version}\"";
+  env.NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${
+    builtins.replaceStrings [ "unstable-" ] [ "" ] version
+  }\"";
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     shopt -s extglob

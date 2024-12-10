@@ -1,17 +1,18 @@
-{ bash
-, fetchFromGitHub
-, gawk
-, git
-, lib
-, makeWrapper
-, procps
-, stdenvNoCC
-, unixtools
-, unzip
-, wget
-, xdotool
-, xorg
-, yad
+{
+  bash,
+  fetchFromGitHub,
+  gawk,
+  git,
+  lib,
+  makeWrapper,
+  procps,
+  stdenvNoCC,
+  unixtools,
+  unzip,
+  wget,
+  xdotool,
+  xorg,
+  yad,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -35,20 +36,22 @@ stdenvNoCC.mkDerivation {
   installFlags = [ "PREFIX=\${out}" ];
 
   postInstall = ''
-    wrapProgram $out/bin/steamtinkerlaunch --prefix PATH : ${lib.makeBinPath [
-      bash
-      gawk
-      git
-      procps
-      unixtools.xxd
-      unzip
-      wget
-      xdotool
-      xorg.xprop
-      xorg.xrandr
-      xorg.xwininfo
-      yad
-    ]}
+    wrapProgram $out/bin/steamtinkerlaunch --prefix PATH : ${
+      lib.makeBinPath [
+        bash
+        gawk
+        git
+        procps
+        unixtools.xxd
+        unzip
+        wget
+        xdotool
+        xorg.xprop
+        xorg.xrandr
+        xorg.xwininfo
+        yad
+      ]
+    }
   '';
 
   meta = with lib; {
@@ -56,7 +59,10 @@ stdenvNoCC.mkDerivation {
     mainProgram = "steamtinkerlaunch";
     homepage = "https://github.com/sonic2kk/steamtinkerlaunch";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ urandom surfaceflinger ];
+    maintainers = with maintainers; [
+      urandom
+      surfaceflinger
+    ];
     platforms = lib.platforms.linux;
   };
 }

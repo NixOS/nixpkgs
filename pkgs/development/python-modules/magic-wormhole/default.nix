@@ -46,32 +46,38 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    spake2
-    pynacl
-    six
-    attrs
-    twisted
-    autobahn
-    automat
-    tqdm
-    click
-    humanize
-    iterable-io
-    txtorcon
-    zipstream-ng
-  ] ++ autobahn.optional-dependencies.twisted ++ twisted.optional-dependencies.tls;
+  propagatedBuildInputs =
+    [
+      spake2
+      pynacl
+      six
+      attrs
+      twisted
+      autobahn
+      automat
+      tqdm
+      click
+      humanize
+      iterable-io
+      txtorcon
+      zipstream-ng
+    ]
+    ++ autobahn.optional-dependencies.twisted
+    ++ twisted.optional-dependencies.tls;
 
   passthru.optional-dependencies = {
     dilation = [ noiseprotocol ];
   };
 
-  nativeCheckInputs = [
-    mock
-    magic-wormhole-transit-relay
-    magic-wormhole-mailbox-server
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.dilation ++ lib.optionals stdenv.isDarwin [ unixtools.locale ];
+  nativeCheckInputs =
+    [
+      mock
+      magic-wormhole-transit-relay
+      magic-wormhole-mailbox-server
+      pytestCheckHook
+    ]
+    ++ passthru.optional-dependencies.dilation
+    ++ lib.optionals stdenv.isDarwin [ unixtools.locale ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     # These tests doesn't work within Darwin's sandbox

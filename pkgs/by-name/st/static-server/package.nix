@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, curl
-, stdenv
-, testers
-, static-server
-, substituteAll
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  curl,
+  stdenv,
+  testers,
+  static-server,
+  substituteAll,
 }:
 
 buildGoModule rec {
@@ -33,7 +34,10 @@ buildGoModule rec {
     curl
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # tests sometimes fail with SIGQUIT on darwin
   doCheck = !stdenv.isDarwin;

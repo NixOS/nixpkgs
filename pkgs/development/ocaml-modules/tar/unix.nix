@@ -1,9 +1,10 @@
-{ lib
-, buildDunePackage
-, tar
-, cstruct-lwt
-, lwt
-, git
+{
+  lib,
+  buildDunePackage,
+  tar,
+  cstruct-lwt,
+  lwt,
+  git,
 }:
 
 buildDunePackage rec {

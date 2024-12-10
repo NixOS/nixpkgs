@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,9 +12,9 @@ stdenv.mkDerivation rec {
   version = "2023-03-31";
 
   src = fetchFromGitHub {
-    owner  = "samyk";
-    repo   = pname;
-    rev    = "8ec62cdae53a2d573c9f9c906133ca45bbd3360a";
+    owner = "samyk";
+    repo = pname;
+    rev = "8ec62cdae53a2d573c9f9c906133ca45bbd3360a";
     sha256 = "sha256-QodNw3ab8/TurKamg6AgMfQ08aalp4j6q663B+sWmRM=";
   };
 
@@ -31,11 +32,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = "http://samy.pl/pwnat/";
+    homepage = "http://samy.pl/pwnat/";
     description = "ICMP NAT to NAT client-server communication";
-    license     = lib.licenses.gpl3Plus;
-    maintainers = with maintainers; [viric];
-    platforms   = with platforms; linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with maintainers; [ viric ];
+    platforms = with platforms; linux;
     mainProgram = "pwnat";
   };
 }

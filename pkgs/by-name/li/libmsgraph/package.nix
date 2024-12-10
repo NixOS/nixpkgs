@@ -1,25 +1,30 @@
-{ stdenv
-, lib
-, fetchurl
-, gi-docgen
-, gobject-introspection
-, meson
-, ninja
-, pkg-config
-, uhttpmock_1_0
-, libxml2
-, glib
-, gnome-online-accounts
-, json-glib
-, libsoup_3
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gi-docgen,
+  gobject-introspection,
+  meson,
+  ninja,
+  pkg-config,
+  uhttpmock_1_0,
+  libxml2,
+  glib,
+  gnome-online-accounts,
+  json-glib,
+  libsoup_3,
+  gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmsgraph";
   version = "0.2.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/msgraph/${lib.versions.majorMinor finalAttrs.version}/msgraph-${finalAttrs.version}.tar.xz";

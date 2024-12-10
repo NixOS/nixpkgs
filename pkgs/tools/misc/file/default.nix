@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, file, zlib, libgnurx
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  file,
+  zlib,
+  libgnurx,
+  testers,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -19,7 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/Jf1ECm7DiyfTjv/79r2ePDgOe6HK53lwAKm0Jx4TYI=";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   patches = [
     # Upstream patch to fix 32-bit tests.
@@ -31,8 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   nativeBuildInputs = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
-  buildInputs = [ zlib ]
-    ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
+  buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
   # https://bugs.astron.com/view.php?id=382
   doCheck = !stdenv.buildPlatform.isMusl;

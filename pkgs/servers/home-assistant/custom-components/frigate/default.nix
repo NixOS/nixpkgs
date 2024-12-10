@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildHomeAssistantComponent
-, pytz
+{
+  lib,
+  fetchFromGitHub,
+  buildHomeAssistantComponent,
+  pytz,
 }:
 
 buildHomeAssistantComponent rec {

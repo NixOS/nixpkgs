@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libgamemode32
-, makeWrapper
-, meson
-, ninja
-, pkg-config
-, dbus
-, inih
-, systemd
-, appstream
-, findutils
-, gawk
-, procps
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libgamemode32,
+  makeWrapper,
+  meson,
+  ninja,
+  pkg-config,
+  dbus,
+  inih,
+  systemd,
+  appstream,
+  findutils,
+  gawk,
+  procps,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-kusb58nGxYA3U9GbZdW3hLjA3NmHc+af0VT4iGRewBw=";
   };
 
-  outputs = [ "out" "dev" "lib" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+    "man"
+  ];
 
   patches = [
     # Add @libraryPath@ template variable to fix loading the PRELOAD library
@@ -36,12 +42,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace data/gamemoderun \
-      --subst-var-by libraryPath ${lib.makeLibraryPath ([
-        (placeholder "lib")
-      ] ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
-        # Support wrapping 32bit applications on a 64bit linux system
-        libgamemode32
-      ])}
+      --subst-var-by libraryPath ${
+        lib.makeLibraryPath (
+          [
+            (placeholder "lib")
+          ]
+          ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+            # Support wrapping 32bit applications on a 64bit linux system
+            libgamemode32
+          ]
+        )
+      }
   '';
 
   nativeBuildInputs = [
@@ -83,11 +94,13 @@ stdenv.mkDerivation (finalAttrs: {
     done
 
     wrapProgram "$out/bin/gamemodelist" \
-      --prefix PATH : ${lib.makeBinPath [
-        findutils
-        gawk
-        procps
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          findutils
+          gawk
+          procps
+        ]
+      }
   '';
 
   passthru.updateScript = nix-update-script { };

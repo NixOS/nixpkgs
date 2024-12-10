@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchurl
-, cmake
-, perl
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  perl,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2H/hGZcit/qb1QjhNTg/8HiPvX1lXL75dXwjIS+MIXs=";
   };
 
-  nativeBuildInputs = [ cmake perl ];
+  nativeBuildInputs = [
+    cmake
+    perl
+  ];
 
   # https://github.com/shlomif/rinutils/issues/5
   # (variable was unused at time of writing)

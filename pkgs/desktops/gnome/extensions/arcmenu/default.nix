@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitLab, glib, gettext, substituteAll, gnome-menus }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  glib,
+  gettext,
+  substituteAll,
+  gnome-menus,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-arcmenu";
@@ -19,7 +27,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib gettext
+    glib
+    gettext
   ];
 
   makeFlags = [ "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions" ];

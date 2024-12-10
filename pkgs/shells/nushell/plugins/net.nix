@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, IOKit
-, CoreFoundation
-, unstableGitUpdater
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  IOKit,
+  CoreFoundation,
+  unstableGitUpdater,
 }:
 
 rustPlatform.buildRustPackage {

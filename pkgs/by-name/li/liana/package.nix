@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, cmake
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, expat
-, fontconfig
-, freetype
-, libGL
-, systemd
-, vulkan-loader
-, xorg
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  expat,
+  fontconfig,
+  freetype,
+  libGL,
+  systemd,
+  vulkan-loader,
+  xorg,
 }:
 
 let

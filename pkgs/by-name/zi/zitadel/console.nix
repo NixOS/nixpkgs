@@ -1,15 +1,17 @@
-{ generateProtobufCode
-, version
-, zitadelRepo
+{
+  generateProtobufCode,
+  version,
+  zitadelRepo,
 }:
 
-{ mkYarnPackage
-, fetchYarnDeps
-, lib
+{
+  mkYarnPackage,
+  fetchYarnDeps,
+  lib,
 
-, grpc-gateway
-, protoc-gen-grpc-web
-, protoc-gen-js
+  grpc-gateway,
+  protoc-gen-grpc-web,
+  protoc-gen-js,
 }:
 
 let

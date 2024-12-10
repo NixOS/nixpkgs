@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bzip2
-, nix
-, perl
-, makeWrapper
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bzip2,
+  nix,
+  perl,
+  makeWrapper,
+  nixosTests,
 }:
 
 let
@@ -30,12 +31,26 @@ stdenv.mkDerivation {
   installPhase = ''
     install -Dm0755 nix-serve.psgi $out/libexec/nix-serve/nix-serve.psgi
 
-    makeWrapper ${perl.withPackages(p: [ p.DBDSQLite p.Plack p.Starman nix.perl-bindings ])}/bin/starman $out/bin/nix-serve \
-                --prefix PATH : "${lib.makeBinPath [ bzip2 nix ]}" \
+    makeWrapper ${
+      perl.withPackages (p: [
+        p.DBDSQLite
+        p.Plack
+        p.Starman
+        nix.perl-bindings
+      ])
+    }/bin/starman $out/bin/nix-serve \
+                --prefix PATH : "${
+                  lib.makeBinPath [
+                    bzip2
+                    nix
+                  ]
+                }" \
                 --add-flags $out/libexec/nix-serve/nix-serve.psgi
   '';
 
-  /** The nix package that nix-serve got its nix perl bindings from. */
+  /**
+    The nix package that nix-serve got its nix perl bindings from.
+  */
   passthru.nix = nix;
 
   passthru.tests = {

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, chromium
-, grpc
-, haskellPackages
-, mercurial
-, python3Packages
-, abseil-cpp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  chromium,
+  grpc,
+  haskellPackages,
+  mercurial,
+  python3Packages,
+  abseil-cpp,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,9 +23,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-p4MdHjTk0SQsBPVkEy+EceAN/QTyzBDe7Pd1hJwOs3A=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
   propagatedBuildInputs = [ abseil-cpp ];
 
@@ -52,10 +59,12 @@ stdenv.mkDerivation rec {
     inherit
       chromium
       grpc
-      mercurial;
+      mercurial
+      ;
     inherit (python3Packages)
       fb-re2
-      google-re2;
+      google-re2
+      ;
     haskell-re2 = haskellPackages.re2;
   };
 
@@ -68,7 +77,10 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.bsd3;
     homepage = "https://github.com/google/re2";
-    maintainers = with maintainers; [ azahi networkexception ];
+    maintainers = with maintainers; [
+      azahi
+      networkexception
+    ];
     platforms = platforms.all;
   };
 }

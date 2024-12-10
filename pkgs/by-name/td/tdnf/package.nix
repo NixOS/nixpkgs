@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, curl
-, gpgme
-, libsolv
-, libxml2
-, pkg-config
-, python3
-, rpm
-, sqlite
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  curl,
+  gpgme,
+  libsolv,
+  libxml2,
+  pkg-config,
+  python3,
+  rpm,
+  sqlite,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -68,7 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tiny Dandified Yum";
     homepage = "https://github.com/vmware/tdnf";
     changelog = "https://github.com/vmware/tdnf/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl2 lgpl21 ];
+    license = with lib.licenses; [
+      gpl2
+      lgpl21
+    ];
     maintainers = [ lib.maintainers.malt3 ];
     mainProgram = "tdnf";
     # rpm only supports linux

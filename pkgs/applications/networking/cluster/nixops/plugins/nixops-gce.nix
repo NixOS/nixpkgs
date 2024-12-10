@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, unstableGitUpdater
-, poetry-core
-, cryptography
-, libcloud
-, nixops
-, nixos-modules-contrib
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  poetry-core,
+  cryptography,
+  libcloud,
+  nixops,
+  nixos-modules-contrib,
 }:
 
 buildPythonPackage {
@@ -43,7 +44,7 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "nixops_gcp" ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "NixOps Google Cloud Backend";

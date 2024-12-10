@@ -1,22 +1,31 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, libusb1
-, libftdi
-, cargo-readme
-, pkg-config
-, AppKit
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  libusb1,
+  libftdi,
+  cargo-readme,
+  pkg-config,
+  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "humility";
   version = "unstable-2023-11-08";
 
-  nativeBuildInputs = [ pkg-config cargo-readme ];
-  buildInputs = [ libusb1 libftdi ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
+  nativeBuildInputs = [
+    pkg-config
+    cargo-readme
   ];
+  buildInputs =
+    [
+      libusb1
+      libftdi
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit
+    ];
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";

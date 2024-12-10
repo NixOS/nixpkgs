@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, autoPatchelfHook
-, libcxx
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  autoPatchelfHook,
+  libcxx,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -12,18 +13,26 @@ stdenvNoCC.mkDerivation rec {
   src =
     let
       urlAndHash =
-        if stdenvNoCC.isLinux then {
-          url = "https://dl.google.com/android/maven2/com/android/tools/build/aapt2/${version}/aapt2-${version}-linux.jar";
-          hash = "sha256-P8eVIS6zaZGPh4Z7SXUiLtZaX1YIsSmGOdvF6Xb1WHI=";
-        } else if stdenvNoCC.isDarwin then {
-          url = "https://dl.google.com/android/maven2/com/android/tools/build/aapt2/${version}/aapt2-${version}-osx.jar";
-          hash = "sha256-hDfEPk3IJt+8FbRVEiHQbn24vsuOe6m36UcQsT6tGsQ=";
-        } else throw "Unsupport platform: ${stdenvNoCC.system}";
+        if stdenvNoCC.isLinux then
+          {
+            url = "https://dl.google.com/android/maven2/com/android/tools/build/aapt2/${version}/aapt2-${version}-linux.jar";
+            hash = "sha256-P8eVIS6zaZGPh4Z7SXUiLtZaX1YIsSmGOdvF6Xb1WHI=";
+          }
+        else if stdenvNoCC.isDarwin then
+          {
+            url = "https://dl.google.com/android/maven2/com/android/tools/build/aapt2/${version}/aapt2-${version}-osx.jar";
+            hash = "sha256-hDfEPk3IJt+8FbRVEiHQbn24vsuOe6m36UcQsT6tGsQ=";
+          }
+        else
+          throw "Unsupport platform: ${stdenvNoCC.system}";
     in
-    fetchzip (urlAndHash // {
-      extension = "zip";
-      stripRoot = false;
-    });
+    fetchzip (
+      urlAndHash
+      // {
+        extension = "zip";
+        stripRoot = false;
+      }
+    );
 
   nativeBuildInputs = lib.optionals stdenvNoCC.isLinux [ autoPatchelfHook ];
   buildInputs = lib.optionals stdenvNoCC.isLinux [ libcxx ];
@@ -46,4 +55,3 @@ stdenvNoCC.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }
-

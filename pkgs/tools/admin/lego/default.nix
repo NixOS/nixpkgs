@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, buildGoModule, nixosTests }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "lego";

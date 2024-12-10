@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, lib
-, wrapGAppsHook3
-, python3Packages
-, gtk3
-, poppler_gi
-, libhandy
+{
+  fetchFromGitHub,
+  lib,
+  wrapGAppsHook3,
+  python3Packages,
+  gtk3,
+  poppler_gi,
+  libhandy,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -19,11 +20,13 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-l//DeaIqUl6FdGFxM8yTKcTjVNvYMllorcoXoK33Iy4=";
   };
 
-  nativeBuildInputs = [
-    wrapGAppsHook3
-  ] ++ (with python3Packages; [
-    setuptools
-  ]);
+  nativeBuildInputs =
+    [
+      wrapGAppsHook3
+    ]
+    ++ (with python3Packages; [
+      setuptools
+    ]);
 
   buildInputs = [
     gtk3

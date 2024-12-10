@@ -1,25 +1,33 @@
-{ lib
-, stdenvNoCC
-, undmg
-, ...
+{
+  lib,
+  stdenvNoCC,
+  undmg,
+  ...
 }:
 
-{ meta
-, pname
-, product
-, productShort ? product
-, src
-, version
-, plugins ? [ ]
-, buildNumber
-, ...
+{
+  meta,
+  pname,
+  product,
+  productShort ? product,
+  src,
+  version,
+  plugins ? [ ],
+  buildNumber,
+  ...
 }:
 
 let
   loname = lib.toLower productShort;
 in
 stdenvNoCC.mkDerivation {
-  inherit pname meta src version plugins;
+  inherit
+    pname
+    meta
+    src
+    version
+    plugins
+    ;
   passthru.buildNumber = buildNumber;
   desktopName = product;
   dontFixup = true;

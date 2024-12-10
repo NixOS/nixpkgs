@@ -1,28 +1,29 @@
-{ stdenv
-, lib
-, pkg-config
-, autoreconfHook
-, pandoc
-, fetchurl
-, cpio
-, zlib
-, bzip2
-, file
-, elfutils
-, libbfd
-, libgcrypt
-, libarchive
-, nspr
-, nss
-, popt
-, db
-, xz
-, python
-, lua
-, llvmPackages
-, sqlite
-, zstd
-, libcap
+{
+  stdenv,
+  lib,
+  pkg-config,
+  autoreconfHook,
+  pandoc,
+  fetchurl,
+  cpio,
+  zlib,
+  bzip2,
+  file,
+  elfutils,
+  libbfd,
+  libgcrypt,
+  libarchive,
+  nspr,
+  nss,
+  popt,
+  db,
+  xz,
+  python,
+  lua,
+  llvmPackages,
+  sqlite,
+  zstd,
+  libcap,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,17 +35,47 @@ stdenv.mkDerivation rec {
     hash = "sha256-N/O0LAlmlB4q0/EP3jY5gkplkdBxl7qP0IacoHeeH1Y=";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ autoreconfHook pkg-config pandoc ];
-  buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    pandoc
+  ];
+  buildInputs =
+    [
+      cpio
+      zlib
+      zstd
+      bzip2
+      file
+      libarchive
+      libgcrypt
+      nspr
+      nss
+      db
+      xz
+      python
+      lua
+      sqlite
+    ]
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
     ++ lib.optional stdenv.isLinux libcap;
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
-  propagatedBuildInputs = [ popt nss db bzip2 libarchive libbfd ]
-    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
+  propagatedBuildInputs = [
+    popt
+    nss
+    db
+    bzip2
+    libarchive
+    libbfd
+  ] ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform elfutils) elfutils;
 
   env.NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 
@@ -89,7 +120,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.rpm.org/";
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
     description = "The RPM Package Manager";
     maintainers = with maintainers; [ copumpkin ];
     platforms = platforms.linux;

@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, prometheus-pushgateway }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  prometheus-pushgateway,
+}:
 
 buildGoModule rec {
   pname = "pushgateway";

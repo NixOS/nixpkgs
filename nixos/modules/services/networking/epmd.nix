@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -18,25 +23,26 @@ in
       '';
     };
     package = mkPackageOption pkgs "erlang" { };
-    listenStream = mkOption
-      {
-        type = types.str;
-        default = "[::]:4369";
-        description = ''
-          the listenStream used by the systemd socket.
-          see https://www.freedesktop.org/software/systemd/man/systemd.socket.html#ListenStream= for more information.
-          use this to change the port epmd will run on.
-          if not defined, epmd will use "[::]:4369"
-        '';
-      };
+    listenStream = mkOption {
+      type = types.str;
+      default = "[::]:4369";
+      description = ''
+        the listenStream used by the systemd socket.
+        see https://www.freedesktop.org/software/systemd/man/systemd.socket.html#ListenStream= for more information.
+        use this to change the port epmd will run on.
+        if not defined, epmd will use "[::]:4369"
+      '';
+    };
   };
 
   ###### implementation
   config = mkIf cfg.enable {
-    assertions = [{
-      assertion = cfg.listenStream == "[::]:4369" -> config.networking.enableIPv6;
-      message = "epmd listens by default on ipv6, enable ipv6 or change config.services.epmd.listenStream";
-    }];
+    assertions = [
+      {
+        assertion = cfg.listenStream == "[::]:4369" -> config.networking.enableIPv6;
+        message = "epmd listens by default on ipv6, enable ipv6 or change config.services.epmd.listenStream";
+      }
+    ];
     systemd.sockets.epmd = rec {
       description = "Erlang Port Mapper Daemon Activation Socket";
       wantedBy = [ "sockets.target" ];

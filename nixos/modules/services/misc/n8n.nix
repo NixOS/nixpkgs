@@ -1,10 +1,15 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.n8n;
-  format = pkgs.formats.json {};
+  format = pkgs.formats.json { };
   configFile = format.generate "n8n.json" cfg.settings;
 in
 {
@@ -19,7 +24,7 @@ in
 
     settings = mkOption {
       type = format.type;
-      default = {};
+      default = { };
       description = ''
         Configuration for n8n, see <https://docs.n8n.io/hosting/environment-variables/configuration-methods/>
         for supported values.

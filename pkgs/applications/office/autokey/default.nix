@@ -1,13 +1,14 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, wrapGAppsHook3
-, gobject-introspection
-, gtksourceview3
-, libappindicator-gtk3
-, libnotify
-, gnome
-, wmctrl
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  gobject-introspection,
+  gtksourceview3,
+  libappindicator-gtk3,
+  libnotify,
+  gnome,
+  wmctrl,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -24,7 +25,10 @@ python3Packages.buildPythonApplication rec {
   # Tests appear to be broken with import errors within the project structure
   doCheck = false;
 
-  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    gobject-introspection
+  ];
 
   buildInputs = [
     gtksourceview3
@@ -48,7 +52,7 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
 
   preFixup = ''
-    makeWrapperArgs+=(''${gappsWrapperArgs[@]} --prefix PATH : ${ lib.makeBinPath runtimeDeps })
+    makeWrapperArgs+=(''${gappsWrapperArgs[@]} --prefix PATH : ${lib.makeBinPath runtimeDeps})
   '';
 
   postInstall = ''

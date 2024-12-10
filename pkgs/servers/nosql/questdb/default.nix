@@ -3,7 +3,7 @@
   jdk17_headless,
   lib,
   makeBinaryWrapper,
-  stdenv
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,4 +1,11 @@
-{ buildGoModule, fetchFromGitHub, installShellFiles, lib, tenv, testers }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  tenv,
+  testers,
+}:
 
 buildGoModule rec {
   pname = "tenv";
@@ -17,7 +24,8 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.version=v${version}"
   ];
 
@@ -41,6 +49,10 @@ buildGoModule rec {
     description = "OpenTofu, Terraform, Terragrunt and Atmos version manager written in Go";
     homepage = "https://tofuutils.github.io/tenv";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ rmgpinto nmishin kvendingoldo ];
+    maintainers = with lib.maintainers; [
+      rmgpinto
+      nmishin
+      kvendingoldo
+    ];
   };
 }

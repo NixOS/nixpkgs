@@ -1,16 +1,17 @@
-{ lib
-, buildGoModule
-, fetchFromSourcehut
-, wrapGAppsHook3
-, wails
-, scdoc
-, installShellFiles
-, xorg
-, gtk3
-, webkitgtk
-, gsettings-desktop-schemas
-, snippetexpanderd
-, snippetexpanderx
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  wrapGAppsHook3,
+  wails,
+  scdoc,
+  installShellFiles,
+  xorg,
+  gtk3,
+  webkitgtk,
+  gsettings-desktop-schemas,
+  snippetexpanderd,
+  snippetexpanderx,
 }:
 
 buildGoModule rec {
@@ -59,7 +60,12 @@ buildGoModule rec {
   preFixup = ''
     gappsWrapperArgs+=(
       # Ensure snippetexpanderd and snippetexpanderx are available to start/stop.
-      --prefix PATH : ${lib.makeBinPath [ snippetexpanderd snippetexpanderx ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          snippetexpanderd
+          snippetexpanderx
+        ]
+      }
     )
   '';
 

@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.unifi;
@@ -63,7 +69,7 @@ in
           -unifi.username ${escapeShellArg cfg.unifiUsername} \
           -unifi.password ${escapeShellArg cfg.unifiPassword} \
           -unifi.timeout ${cfg.unifiTimeout} \
-          ${optionalString cfg.unifiInsecure "-unifi.insecure" } \
+          ${optionalString cfg.unifiInsecure "-unifi.insecure"} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };

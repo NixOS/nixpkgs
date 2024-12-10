@@ -1,20 +1,21 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3Packages
-, dnsmasq
-, gawk
-, getent
-, gobject-introspection
-, gtk3
-, kmod
-, lxc
-, iproute2
-, iptables
-, util-linux
-, wrapGAppsHook3
-, wl-clipboard
-, runtimeShell
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages,
+  dnsmasq,
+  gawk,
+  getent,
+  gobject-introspection,
+  gtk3,
+  kmod,
+  lxc,
+  iproute2,
+  iptables,
+  util-linux,
+  wrapGAppsHook3,
+  wl-clipboard,
+  runtimeShell,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -68,17 +69,30 @@ python3Packages.buildPythonApplication rec {
 
     patchShebangs --host $out/lib/waydroid/data/scripts
     wrapProgram $out/lib/waydroid/data/scripts/waydroid-net.sh \
-      --prefix PATH ":" ${lib.makeBinPath [ dnsmasq getent iproute2 iptables ]}
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          dnsmasq
+          getent
+          iproute2
+          iptables
+        ]
+      }
 
-    wrapPythonProgramsIn $out/lib/waydroid/ "${lib.concatStringsSep " " ([
-      "$out"
-    ] ++ propagatedBuildInputs ++ [
-      gawk
-      kmod
-      lxc
-      util-linux
-      wl-clipboard
-    ])}"
+    wrapPythonProgramsIn $out/lib/waydroid/ "${
+      lib.concatStringsSep " " (
+        [
+          "$out"
+        ]
+        ++ propagatedBuildInputs
+        ++ [
+          gawk
+          kmod
+          lxc
+          util-linux
+          wl-clipboard
+        ]
+      )
+    }"
 
     substituteInPlace $out/lib/waydroid/tools/helpers/*.py \
       --replace '"sh"' '"${runtimeShell}"'

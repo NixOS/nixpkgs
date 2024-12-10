@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, zarith, ff-sig, alcotest }:
+{
+  lib,
+  buildDunePackage,
+  zarith,
+  ff-sig,
+  alcotest,
+}:
 
 buildDunePackage {
   pname = "ff-pbt";

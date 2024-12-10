@@ -58,7 +58,10 @@ stdenv.mkDerivation rec {
     description = "3D CAD application";
     homepage = "https://dune3d.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ _0x4A6F jue89 ];
+    maintainers = with maintainers; [
+      _0x4A6F
+      jue89
+    ];
     mainProgram = "dune3d";
     platforms = platforms.linux;
   };

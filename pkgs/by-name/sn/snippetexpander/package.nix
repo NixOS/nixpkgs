@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromSourcehut
-, makeWrapper
-, scdoc
-, installShellFiles
-, snippetexpanderd
-, snippetexpanderx
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  makeWrapper,
+  scdoc,
+  installShellFiles,
+  snippetexpanderd,
+  snippetexpanderx,
 }:
 
 buildGoModule rec {
@@ -44,7 +45,12 @@ buildGoModule rec {
   postFixup = ''
     # Ensure snippetexpanderd and snippetexpanderx are available to start/stop.
     wrapProgram $out/bin/snippetexpander \
-      --prefix PATH : ${lib.makeBinPath [ snippetexpanderd snippetexpanderx ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          snippetexpanderd
+          snippetexpanderx
+        ]
+      }
   '';
 
   meta = {

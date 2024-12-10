@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, darwin
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
+{
+  lib,
+  stdenv,
+  darwin,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {

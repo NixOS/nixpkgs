@@ -1,4 +1,16 @@
-{ fetchFromGitHub, lib, stdenv, makeWrapper, unzip, libxml2, gmp, m4, uthash, which, pkg-config }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  makeWrapper,
+  unzip,
+  libxml2,
+  gmp,
+  m4,
+  uthash,
+  which,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "z88dk";
@@ -40,14 +52,27 @@ stdenv.mkDerivation rec {
     "git_count=0"
   ];
 
-  nativeBuildInputs = [ which makeWrapper unzip pkg-config ];
-  buildInputs = [ libxml2 m4 uthash gmp ];
+  nativeBuildInputs = [
+    which
+    makeWrapper
+    unzip
+    pkg-config
+  ];
+  buildInputs = [
+    libxml2
+    m4
+    uthash
+    gmp
+  ];
 
   preInstall = ''
     mkdir -p $out/{bin,share}
   '';
 
-  installTargets = [ "libs" "install" ];
+  installTargets = [
+    "libs"
+    "install"
+  ];
 
   meta = with lib; {
     homepage = "https://www.z88dk.org";

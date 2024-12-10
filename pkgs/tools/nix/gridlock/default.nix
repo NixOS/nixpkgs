@@ -1,17 +1,21 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "gridlock";
   version = "unstable-2023-08-29";
 
-  outputs = [ "out" "nyarr" ];
+  outputs = [
+    "out"
+    "nyarr"
+  ];
 
   src = fetchFromGitHub {
     owner = "lf-";
@@ -26,11 +30,13 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   postInstall = ''
     moveToOutput bin/nyarr $nyarr

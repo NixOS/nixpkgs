@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, cairo
-, cmake
-, fetchzip
-, freetype
-, libffi
-, libgit2
-, libpng
-, libuuid
-, makeBinaryWrapper
-, openssl
-, pixman
-, SDL2
+{
+  lib,
+  stdenv,
+  cairo,
+  cmake,
+  fetchzip,
+  freetype,
+  libffi,
+  libgit2,
+  libpng,
+  libuuid,
+  makeBinaryWrapper,
+  openssl,
+  pixman,
+  SDL2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -66,16 +67,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  preFixup = let
-    libPath = lib.makeLibraryPath (finalAttrs.buildInputs ++ [
-      stdenv.cc.cc.lib
-      "$out"
-    ]);
-  in ''
-    patchelf --allowed-rpath-prefixes "$NIX_STORE" --shrink-rpath "$out/bin/pharo"
-    ln -s "${libgit2}/lib/libgit2.so" $out/lib/libgit2.so.1.1
-    wrapProgram "$out/bin/pharo" --argv0 $out/bin/pharo --prefix LD_LIBRARY_PATH ":" "${libPath}"
-  '';
+  preFixup =
+    let
+      libPath = lib.makeLibraryPath (
+        finalAttrs.buildInputs
+        ++ [
+          stdenv.cc.cc.lib
+          "$out"
+        ]
+      );
+    in
+    ''
+      patchelf --allowed-rpath-prefixes "$NIX_STORE" --shrink-rpath "$out/bin/pharo"
+      ln -s "${libgit2}/lib/libgit2.so" $out/lib/libgit2.so.1.1
+      wrapProgram "$out/bin/pharo" --argv0 $out/bin/pharo --prefix LD_LIBRARY_PATH ":" "${libPath}"
+    '';
 
   meta = {
     description = "Clean and innovative Smalltalk-inspired environment";

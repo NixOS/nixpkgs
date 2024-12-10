@@ -24,10 +24,13 @@ buildPythonPackage rec {
     hash = "sha256-8Iq3sVp9/dZi4zNZIgNm38ntoA2koS/Ism+pIVATr4Q=";
   };
 
-  propagatedBuildInputs = [
-    argcomplete
-    requests
-  ] ++ requests.optional-dependencies.socks ++ lib.optionals (pythonAtLeast "3.12") [ looseversion ];
+  propagatedBuildInputs =
+    [
+      argcomplete
+      requests
+    ]
+    ++ requests.optional-dependencies.socks
+    ++ lib.optionals (pythonAtLeast "3.12") [ looseversion ];
 
   postInstall = ''
     wrapProgram $out/bin/sdkmanager \

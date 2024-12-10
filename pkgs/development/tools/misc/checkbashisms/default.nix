@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, perl, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  installShellFiles,
+}:
 stdenv.mkDerivation rec {
   version = "2.22.1";
   pname = "checkbashisms";

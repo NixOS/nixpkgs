@@ -1,31 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, gi-docgen
-, python3
-, glib
-, libusb1
-, json-glib
-, vala
-, hwdata
-, umockdev
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  gi-docgen,
+  python3,
+  glib,
+  libusb1,
+  json-glib,
+  vala,
+  hwdata,
+  umockdev,
 }:
 
 let
-  pythonEnv = python3.pythonOnBuildForHost.withPackages (ps: with ps; [
-    setuptools
-  ]);
+  pythonEnv = python3.pythonOnBuildForHost.withPackages (
+    ps: with ps; [
+      setuptools
+    ]
+  );
 in
 stdenv.mkDerivation rec {
   pname = "gusb";
   version = "0.4.9";
 
-  outputs = [ "bin" "out" "dev" "devdoc" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitHub {
     owner = "hughsie";

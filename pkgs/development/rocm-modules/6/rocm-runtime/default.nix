@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, rocmUpdateScript
-, pkg-config
-, cmake
-, xxd
-, rocm-device-libs
-, rocm-thunk
-, libelf
-, libdrm
-, numactl
-, valgrind
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  rocmUpdateScript,
+  pkg-config,
+  cmake,
+  xxd,
+  rocm-device-libs,
+  rocm-thunk,
+  libelf,
+  libdrm,
+  numactl,
+  valgrind,
+  libxml2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -79,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ ncsa ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "7.0.0";
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

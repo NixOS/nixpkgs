@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, fetchurl
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  fetchurl,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -25,12 +26,14 @@ buildGoModule rec {
   # We use go 1.22's workspace vendor command, which is not yet available
   # in the default version of go used in nixpkgs, nor is it used by upstream:
   # https://github.com/mattermost/mattermost/issues/26221#issuecomment-1945351597
-  overrideModAttrs = (_: {
-    buildPhase = ''
-      make setup-go-work
-      go work vendor -e
-    '';
-  });
+  overrideModAttrs = (
+    _: {
+      buildPhase = ''
+        make setup-go-work
+        go work vendor -e
+      '';
+    }
+  );
 
   webapp = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
@@ -73,7 +76,10 @@ buildGoModule rec {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex" "^v(9\.5\.[0-9]+)$" ];
+      extraArgs = [
+        "--version-regex"
+        "^v(9\.5\.[0-9]+)$"
+      ];
     };
     tests.mattermost = nixosTests.mattermost;
   };
@@ -81,8 +87,16 @@ buildGoModule rec {
   meta = with lib; {
     description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
     homepage = "https://www.mattermost.org";
-    license = with licenses; [ agpl3Only asl20 ];
-    maintainers = with maintainers; [ ryantm numinit kranzes mgdelacroix ];
+    license = with licenses; [
+      agpl3Only
+      asl20
+    ];
+    maintainers = with maintainers; [
+      ryantm
+      numinit
+      kranzes
+      mgdelacroix
+    ];
     mainProgram = "mattermost";
   };
 }

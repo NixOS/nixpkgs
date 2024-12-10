@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -8,23 +13,30 @@ let
   pkg = pkgs.matrix-appservice-irc;
   bin = "${pkg}/bin/matrix-appservice-irc";
 
-  jsonType = (pkgs.formats.json {}).type;
+  jsonType = (pkgs.formats.json { }).type;
 
-  configFile = pkgs.runCommand "matrix-appservice-irc.yml" {
-    # Because this program will be run at build time, we need `nativeBuildInputs`
-    nativeBuildInputs = [ (pkgs.python3.withPackages (ps: [ ps.jsonschema ])) pkgs.remarshal ];
-    preferLocalBuild = true;
+  configFile =
+    pkgs.runCommand "matrix-appservice-irc.yml"
+      {
+        # Because this program will be run at build time, we need `nativeBuildInputs`
+        nativeBuildInputs = [
+          (pkgs.python3.withPackages (ps: [ ps.jsonschema ]))
+          pkgs.remarshal
+        ];
+        preferLocalBuild = true;
 
-    config = builtins.toJSON cfg.settings;
-    passAsFile = [ "config" ];
-  } ''
-    # The schema is given as yaml, we need to convert it to json
-    remarshal --if yaml --of json -i ${pkg}/config.schema.yml -o config.schema.json
-    python -m jsonschema config.schema.json -i $configPath
-    cp "$configPath" "$out"
-  '';
+        config = builtins.toJSON cfg.settings;
+        passAsFile = [ "config" ];
+      }
+      ''
+        # The schema is given as yaml, we need to convert it to json
+        remarshal --if yaml --of json -i ${pkg}/config.schema.yml -o config.schema.json
+        python -m jsonschema config.schema.json -i $configPath
+        cp "$configPath" "$out"
+      '';
   registrationFile = "/var/lib/matrix-appservice-irc/registration.yml";
-in {
+in
+{
   options.services.matrix-appservice-irc = with types; {
     enable = mkEnableOption "the Matrix/IRC bridge";
 
@@ -68,14 +80,14 @@ in {
         <https://github.com/matrix-org/matrix-appservice-irc/blob/${pkgs.matrix-appservice-irc.version}/config.sample.yaml>
         for supported values
       '';
-      default = {};
+      default = { };
       type = submodule {
         freeformType = jsonType;
 
         options = {
           homeserver = mkOption {
             description = "Homeserver configuration";
-            default = {};
+            default = { };
             type = submodule {
               freeformType = jsonType;
 
@@ -97,7 +109,7 @@ in {
           };
 
           database = mkOption {
-            default = {};
+            default = { };
             description = "Configuration for the database";
             type = submodule {
               freeformType = jsonType;
@@ -121,7 +133,7 @@ in {
           };
 
           ircService = mkOption {
-            default = {};
+            default = { };
             description = "IRC bridge configuration";
             type = submodule {
               freeformType = jsonType;
@@ -224,7 +236,7 @@ in {
       };
     };
 
-    users.groups.matrix-appservice-irc = {};
+    users.groups.matrix-appservice-irc = { };
     users.users.matrix-appservice-irc = {
       description = "Service user for the Matrix-IRC bridge";
       group = "matrix-appservice-irc";

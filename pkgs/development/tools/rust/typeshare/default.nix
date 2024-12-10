@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,7 +34,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "typeshare";
     homepage = "https://github.com/1password/typeshare";
     changelog = "https://github.com/1password/typeshare/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

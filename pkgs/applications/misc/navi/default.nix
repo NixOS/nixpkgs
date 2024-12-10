@@ -1,4 +1,14 @@
-{ stdenv, fetchFromGitHub, lib, makeWrapper, rustPlatform, wget, libiconv, withFzf ? true, fzf }:
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  makeWrapper,
+  rustPlatform,
+  wget,
+  libiconv,
+  withFzf ? true,
+  fzf,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "navi";
@@ -20,13 +30,13 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     wrapProgram $out/bin/navi \
       --prefix PATH : "$out/bin" \
-      --prefix PATH : ${lib.makeBinPath([ wget ] ++ lib.optionals withFzf [ fzf ])}
+      --prefix PATH : ${lib.makeBinPath ([ wget ] ++ lib.optionals withFzf [ fzf ])}
   '';
 
   checkFlags = [
     # error: Found argument '--test-threads' which wasn't expected, or isn't valid in this context
     "--skip=test_parse_variable_line"
-   ];
+  ];
 
   meta = with lib; {
     description = "An interactive cheatsheet tool for the command-line and application launchers";

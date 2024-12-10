@@ -1,6 +1,22 @@
-{ stdenv, lib, fetchurl, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer
-, SDL2_net , SDL2_gfx, zlib, physfs, curl, libxml2, libpng, pkg-config
-, libGL, autoreconfHook }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  SDL2,
+  SDL2_image,
+  SDL2_ttf,
+  SDL2_mixer,
+  SDL2_net,
+  SDL2_gfx,
+  zlib,
+  physfs,
+  curl,
+  libxml2,
+  libpng,
+  pkg-config,
+  libGL,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "manaplus";
   version = "2.1.3.17";
@@ -11,15 +27,29 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkg-config
+    autoreconfHook
+    pkg-config
   ];
 
   buildInputs = [
-    SDL2 SDL2_image SDL2_ttf SDL2_mixer SDL2_net SDL2_gfx zlib
-    physfs curl libxml2 libpng libGL
+    SDL2
+    SDL2_image
+    SDL2_ttf
+    SDL2_mixer
+    SDL2_net
+    SDL2_gfx
+    zlib
+    physfs
+    curl
+    libxml2
+    libpng
+    libGL
   ];
 
-  configureFlags = [ "--with-sdl2" "--without-dyecmd" ];
+  configureFlags = [
+    "--with-sdl2"
+    "--without-dyecmd"
+  ];
 
   enableParallelBuilding = true;
 

@@ -1,14 +1,15 @@
-{ lib
-, which
-, stdenv
-, fetchzip
-, opaline
-, cmake
-, ocaml
-, findlib
-, hacl-star
-, ctypes
-, cppo
+{
+  lib,
+  which,
+  stdenv,
+  fetchzip,
+  opaline,
+  cmake,
+  ocaml,
+  findlib,
+  hacl-star,
+  ctypes,
+  cppo,
 }:
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-hacl-star-raw";

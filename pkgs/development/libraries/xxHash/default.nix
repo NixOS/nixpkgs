@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +37,10 @@ stdenv.mkDerivation rec {
       endian).
     '';
     homepage = "https://github.com/Cyan4973/xxHash";
-    license = with licenses; [ bsd2 gpl2 ];
+    license = with licenses; [
+      bsd2
+      gpl2
+    ];
     mainProgram = "xxhsum";
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.all;

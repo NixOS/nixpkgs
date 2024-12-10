@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, libjack2, libGL, pkg-config, xorg }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libjack2,
+  libGL,
+  pkg-config,
+  xorg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dragonfly-reverb";
@@ -18,7 +26,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libjack2 xorg.libX11 libGL
+    libjack2
+    xorg.libX11
+    libGL
   ];
 
   installPhase = ''
@@ -40,6 +50,6 @@ stdenv.mkDerivation rec {
     description = "A hall-style reverb based on freeverb3 algorithms";
     maintainers = [ maintainers.magnetophon ];
     license = licenses.gpl3Plus;
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
   };
 }

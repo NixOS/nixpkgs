@@ -62,7 +62,13 @@ in
   llvm-mode = callPackage ./manual-packages/llvm-mode { };
 
   lsp-bridge = callPackage ./manual-packages/lsp-bridge {
-    inherit (pkgs) python3 git go gopls pyright;
+    inherit (pkgs)
+      python3
+      git
+      go
+      gopls
+      pyright
+      ;
   };
 
   lspce = callPackage ./manual-packages/lspce { };

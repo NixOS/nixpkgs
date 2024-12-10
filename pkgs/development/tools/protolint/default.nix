@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "protolint";
   version = "0.49.7";
@@ -20,14 +24,16 @@ buildGoModule rec {
   #    util_test.go:35: open : no such file or directory
   excludedPackages = [ "internal" ];
 
-  ldflags = let
-    rev = builtins.substring 0 7 src.rev;
-  in [
-    "-X github.com/yoheimuta/protolint/internal/cmd.version=${version}"
-    "-X github.com/yoheimuta/protolint/internal/cmd.revision=${rev}"
-    "-X github.com/yoheimuta/protolint/internal/cmd/protocgenprotolint.version=${version}"
-    "-X github.com/yoheimuta/protolint/internal/cmd/protocgenprotolint.revision=${rev}"
-  ];
+  ldflags =
+    let
+      rev = builtins.substring 0 7 src.rev;
+    in
+    [
+      "-X github.com/yoheimuta/protolint/internal/cmd.version=${version}"
+      "-X github.com/yoheimuta/protolint/internal/cmd.revision=${rev}"
+      "-X github.com/yoheimuta/protolint/internal/cmd/protocgenprotolint.version=${version}"
+      "-X github.com/yoheimuta/protolint/internal/cmd/protocgenprotolint.revision=${rev}"
+    ];
 
   meta = with lib; {
     description = "A pluggable linter and fixer to enforce Protocol Buffer style and conventions";

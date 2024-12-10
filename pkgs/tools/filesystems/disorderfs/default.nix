@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, pkg-config, fuse, attr, asciidoc }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  fuse,
+  attr,
+  asciidoc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "disorderfs";
@@ -9,9 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-KqAMKVUykCgVdNyjacZjpVXqVdeob76v0iOuSd4TNIY=";
   };
 
-  nativeBuildInputs = [ pkg-config asciidoc ];
+  nativeBuildInputs = [
+    pkg-config
+    asciidoc
+  ];
 
-  buildInputs = [ fuse attr ];
+  buildInputs = [
+    fuse
+    attr
+  ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

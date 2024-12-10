@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, hostPlatform
-, lld
+{
+  lib,
+  fetchFromGitHub,
+  hostPlatform,
+  lld,
 }:
 
 let

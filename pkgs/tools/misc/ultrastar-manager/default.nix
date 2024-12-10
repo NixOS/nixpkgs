@@ -1,11 +1,31 @@
-{ lib, mkDerivation, fetchFromGitHub, pkg-config, symlinkJoin, qmake, diffPlugins
-, qtbase, qtmultimedia, taglib, libmediainfo, libzen, libbass }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  pkg-config,
+  symlinkJoin,
+  qmake,
+  diffPlugins,
+  qtbase,
+  qtmultimedia,
+  taglib,
+  libmediainfo,
+  libzen,
+  libbass,
+}:
 
 let
   version = "2019-04-23";
   rev = "ef4524e2239ddbb60f26e05bfba1f4f28cb7b54f";
   sha256 = "0dl2qp686vbs160b3i9qypb7sv37phy2wn21kgzljbk3wnci3yv4";
-  buildInputs = [ qtbase qtmultimedia taglib libmediainfo libzen libbass ];
+  buildInputs = [
+    qtbase
+    qtmultimedia
+    taglib
+    libmediainfo
+    libzen
+    libbass
+  ];
 
   plugins = [
     "albumartex"
@@ -16,15 +36,17 @@ let
     "lyric"
     "preparatory"
     "rename"
- ];
+  ];
 
   patchedSrc =
-    let src = fetchFromGitHub {
-      owner = "UltraStar-Deluxe";
-      repo = "UltraStar-Manager";
-      inherit rev sha256;
-    };
-    in mkDerivation {
+    let
+      src = fetchFromGitHub {
+        owner = "UltraStar-Deluxe";
+        repo = "UltraStar-Manager";
+        inherit rev sha256;
+      };
+    in
+    mkDerivation {
       name = "${src.name}-patched";
       inherit src;
 
@@ -56,34 +78,36 @@ let
     sed -e "s|QCore.*applicationDirPath()|QString(\"${path}\")|" -i "${file}"
   '';
 
-  buildPlugin = name: mkDerivation {
-    name = "ultrastar-manager-${name}-plugin-${version}";
-    src = patchedSrc;
+  buildPlugin =
+    name:
+    mkDerivation {
+      name = "ultrastar-manager-${name}-plugin-${version}";
+      src = patchedSrc;
 
-    buildInputs = [ qmake ] ++ buildInputs;
+      buildInputs = [ qmake ] ++ buildInputs;
 
-    postPatch = ''
-      sed -e "s|DESTDIR = .*$|DESTDIR = $out|" \
-          -i src/plugins/${name}/${name}.pro
+      postPatch = ''
+        sed -e "s|DESTDIR = .*$|DESTDIR = $out|" \
+            -i src/plugins/${name}/${name}.pro
 
-      # plugins use the application’s binary folder (wtf)
-      for f in $(grep -lr "QCoreApplication::applicationDirPath" src/plugins); do
-        ${patchApplicationPath "$f" "\$out"}
-      done
+        # plugins use the application’s binary folder (wtf)
+        for f in $(grep -lr "QCoreApplication::applicationDirPath" src/plugins); do
+          ${patchApplicationPath "$f" "\$out"}
+        done
 
-    '';
-    preConfigure = ''
-      cd src/plugins/${name}
-    '';
-  };
-
-  builtPlugins =
-    symlinkJoin {
-      name = "ultrastar-manager-plugins-${version}";
-      paths = map buildPlugin plugins;
+      '';
+      preConfigure = ''
+        cd src/plugins/${name}
+      '';
     };
 
-in mkDerivation {
+  builtPlugins = symlinkJoin {
+    name = "ultrastar-manager-plugins-${version}";
+    paths = map buildPlugin plugins;
+  };
+
+in
+mkDerivation {
   pname = "ultrastar-manager";
   inherit version;
   src = patchedSrc;

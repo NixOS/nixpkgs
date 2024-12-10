@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, buildTopkgPackage, cmdliner, odoc, b0 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildTopkgPackage,
+  cmdliner,
+  odoc,
+  b0,
+}:
 
 buildTopkgPackage rec {
   pname = "odig";
@@ -9,7 +17,11 @@ buildTopkgPackage rec {
     sha256 = "sha256-sYKvGYkxeF5FmrNQdOyMAtlsJqhlmUESi9SkPn/cjM4=";
   };
 
-  buildInputs = [ cmdliner odoc b0 ];
+  buildInputs = [
+    cmdliner
+    odoc
+    b0
+  ];
 
   meta = with lib; {
     description = "Lookup documentation of installed OCaml packages";

@@ -1,21 +1,22 @@
-{ lib
-, fetchFromGitHub
-, copyDesktopItems
-, stdenv
-, stdenvNoCC
-, rustc
-, rustPlatform
-, cargo
-, cargo-tauri
-, openssl
-, libayatana-appindicator
-, webkitgtk
-, pkg-config
-, makeDesktopItem
-, jq
-, moreutils
-, nodePackages
-, cacert
+{
+  lib,
+  fetchFromGitHub,
+  copyDesktopItems,
+  stdenv,
+  stdenvNoCC,
+  rustc,
+  rustPlatform,
+  cargo,
+  cargo-tauri,
+  openssl,
+  libayatana-appindicator,
+  webkitgtk,
+  pkg-config,
+  makeDesktopItem,
+  jq,
+  moreutils,
+  nodePackages,
+  cacert,
 }:
 
 stdenv.mkDerivation rec {
@@ -64,13 +65,15 @@ stdenv.mkDerivation rec {
     dontBuild = true;
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = {
-      x86_64-linux = "sha256-LJPjWNpVfdUu8F5BMhAzpTo/h6ax7lxY2EESHj5P390=";
-      aarch64-linux = "sha256-N1K4pV5rbWmO/KonvYegzBoWa6TYQIqhQyxH/sWjOJQ=";
-      i686-linux = "sha256-/Q7VZahYhLdKVFB25CanROYxD2etQOcRg+4bXZUMqTc=";
-      x86_64-darwin = "sha256-9biFAbFD7Bva7KPKztgCvcaoX8E6AlJBKkjlDQdP6Zw=";
-      aarch64-darwin = "sha256-to5Y0R9tm9b7jUQAK3eBylLhpu+w5oDd63FbBCBAvd8=";
-    }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+    outputHash =
+      {
+        x86_64-linux = "sha256-LJPjWNpVfdUu8F5BMhAzpTo/h6ax7lxY2EESHj5P390=";
+        aarch64-linux = "sha256-N1K4pV5rbWmO/KonvYegzBoWa6TYQIqhQyxH/sWjOJQ=";
+        i686-linux = "sha256-/Q7VZahYhLdKVFB25CanROYxD2etQOcRg+4bXZUMqTc=";
+        x86_64-darwin = "sha256-9biFAbFD7Bva7KPKztgCvcaoX8E6AlJBKkjlDQdP6Zw=";
+        aarch64-darwin = "sha256-to5Y0R9tm9b7jUQAK3eBylLhpu+w5oDd63FbBCBAvd8=";
+      }
+      .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -118,7 +121,10 @@ stdenv.mkDerivation rec {
       icon = "kiwi-talk";
       desktopName = "KiwiTalk";
       comment = "An UNOFFICIAL cross-platform KakaoTalk client";
-      categories = [ "Network" "InstantMessaging" ];
+      categories = [
+        "Network"
+        "InstantMessaging"
+      ];
       terminal = false;
     })
   ];
@@ -131,4 +137,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "kiwi-talk";
   };
- }
+}

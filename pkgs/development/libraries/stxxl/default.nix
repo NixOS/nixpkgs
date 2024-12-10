@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, parallelSupport ? (!stdenv.isDarwin)
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  parallelSupport ? (!stdenv.isDarwin),
 }:
 
 let

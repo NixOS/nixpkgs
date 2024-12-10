@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchurl
-, dpkg
-, util-linux
-, bash
-, makeWrapper
-, electron
-, asar
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  util-linux,
+  bash,
+  makeWrapper,
+  electron,
+  asar,
 }:
 
 let
@@ -13,13 +15,17 @@ let
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
-  sha256 = {
-    "x86_64-linux" = "139nlr191bsinx6ixpi2glcr03lsnzq7b0438h3245napsnjpx6p";
-  }."${system}" or throwSystem;
+  sha256 =
+    {
+      "x86_64-linux" = "139nlr191bsinx6ixpi2glcr03lsnzq7b0438h3245napsnjpx6p";
+    }
+    ."${system}" or throwSystem;
 
-  arch = {
-    "x86_64-linux" = "amd64";
-  }."${system}" or throwSystem;
+  arch =
+    {
+      "x86_64-linux" = "amd64";
+    }
+    ."${system}" or throwSystem;
 
 in
 
@@ -32,7 +38,10 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ makeWrapper asar ];
+  nativeBuildInputs = [
+    makeWrapper
+    asar
+  ];
 
   dontConfigure = true;
   dontBuild = true;

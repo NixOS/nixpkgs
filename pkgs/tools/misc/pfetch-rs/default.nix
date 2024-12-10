@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "pfetch-rs";
@@ -17,7 +23,6 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.AppKit
     darwin.apple_sdk.frameworks.DisplayServices
   ];
-
 
   meta = with lib; {
     description = "A rewrite of the pfetch system information tool in Rust";

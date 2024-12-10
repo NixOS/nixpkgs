@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, blas
-, superlu
-, suitesparse
-, python3
-, libintl
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  blas,
+  superlu,
+  suitesparse,
+  python3,
+  libintl,
+  libiconv,
 }:
 let
   # this is a fork version of fetk (http://www.fetk.org/)
@@ -79,15 +80,17 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs = [
-    fetk
-    suitesparse
-    blas
-    python3
-  ] ++ lib.optionals stdenv.isDarwin [
-    libintl
-    libiconv
-  ];
+  buildInputs =
+    [
+      fetk
+      suitesparse
+      blas
+      python3
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      libintl
+      libiconv
+    ];
 
   cmakeFlags = [
     "-DPYTHON_VERSION=${python3.version}"

@@ -1,10 +1,11 @@
-{ fetchFromGitHub
-, lib
-, gettext
-, pkgs
-, python3
-, umockdev
-, writeScript
+{
+  fetchFromGitHub,
+  lib,
+  gettext,
+  pkgs,
+  python3,
+  umockdev,
+  writeScript,
 }:
 
 let

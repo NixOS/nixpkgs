@@ -1,52 +1,61 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, substituteAll
-, pkg-config
-, gtk-doc
-, gobject-introspection
-, gjs
-, nixosTests
-, pkgsCross
-, curl
-, glib
-, systemd
-, xz
-, e2fsprogs
-, libsoup
-, glib-networking
-, wrapGAppsNoGuiHook
-, gpgme
-, which
-, makeWrapper
-, autoconf
-, automake
-, libtool
-, fuse3
-, util-linuxMinimal
-, libselinux
-, libsodium
-, libarchive
-, libcap
-, bzip2
-, bison
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, openssl
-, python3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  substituteAll,
+  pkg-config,
+  gtk-doc,
+  gobject-introspection,
+  gjs,
+  nixosTests,
+  pkgsCross,
+  curl,
+  glib,
+  systemd,
+  xz,
+  e2fsprogs,
+  libsoup,
+  glib-networking,
+  wrapGAppsNoGuiHook,
+  gpgme,
+  which,
+  makeWrapper,
+  autoconf,
+  automake,
+  libtool,
+  fuse3,
+  util-linuxMinimal,
+  libselinux,
+  libsodium,
+  libarchive,
+  libcap,
+  bzip2,
+  bison,
+  libxslt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_42,
+  openssl,
+  python3,
 }:
 
 let
-  testPython = python3.withPackages (p: with p; [
-    pyyaml
-  ]);
-in stdenv.mkDerivation rec {
+  testPython = python3.withPackages (
+    p: with p; [
+      pyyaml
+    ]
+  );
+in
+stdenv.mkDerivation rec {
   pname = "ostree";
   version = "2024.4";
 
-  outputs = [ "out" "dev" "man" "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "installedTests"
+  ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
@@ -128,16 +137,18 @@ in stdenv.mkDerivation rec {
     env NOCONFIGURE=1 ./autogen.sh
   '';
 
-  postFixup = let
-    typelibPath = lib.makeSearchPath "/lib/girepository-1.0" [
-      (placeholder "out")
-      gobject-introspection
-    ];
-  in ''
-    for test in $installedTests/libexec/installed-tests/libostree/*.js; do
-      wrapProgram "$test" --prefix GI_TYPELIB_PATH : "${typelibPath}"
-    done
-  '';
+  postFixup =
+    let
+      typelibPath = lib.makeSearchPath "/lib/girepository-1.0" [
+        (placeholder "out")
+        gobject-introspection
+      ];
+    in
+    ''
+      for test in $installedTests/libexec/installed-tests/libostree/*.js; do
+        wrapProgram "$test" --prefix GI_TYPELIB_PATH : "${typelibPath}"
+      done
+    '';
 
   passthru = {
     tests = {

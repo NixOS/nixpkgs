@@ -1,22 +1,37 @@
-{ stdenv, lib, fetchFromGitHub
-, gobject-introspection, makeWrapper, wrapGAppsHook3
-, gtk3, gst_all_1, python3
-, gettext, gnome, help2man, keybinder3, libnotify, librsvg, streamripper, udisks, webkitgtk
-, iconTheme ? gnome.adwaita-icon-theme
-, deviceDetectionSupport ? true
-, documentationSupport ? true
-, notificationSupport ? true
-, scalableIconSupport ? true
-, translationSupport ? true
-, ipythonSupport ? false
-, cdMetadataSupport ? false
-, lastfmSupport ? false
-, lyricsManiaSupport ? false
-, multimediaKeySupport ? false
-, musicBrainzSupport ? false
-, podcastSupport ? false
-, streamripperSupport ? false
-, wikipediaSupport ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gobject-introspection,
+  makeWrapper,
+  wrapGAppsHook3,
+  gtk3,
+  gst_all_1,
+  python3,
+  gettext,
+  gnome,
+  help2man,
+  keybinder3,
+  libnotify,
+  librsvg,
+  streamripper,
+  udisks,
+  webkitgtk,
+  iconTheme ? gnome.adwaita-icon-theme,
+  deviceDetectionSupport ? true,
+  documentationSupport ? true,
+  notificationSupport ? true,
+  scalableIconSupport ? true,
+  translationSupport ? true,
+  ipythonSupport ? false,
+  cdMetadataSupport ? false,
+  lastfmSupport ? false,
+  lyricsManiaSupport ? false,
+  multimediaKeySupport ? false,
+  musicBrainzSupport ? false,
+  podcastSupport ? false,
+  streamripperSupport ? false,
+  wikipediaSupport ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,44 +45,51 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9SK0nvGdz2j6qp1JTmSuLezxX/kB93CZReSfAnfKZzg=";
   };
 
-  nativeBuildInputs = [
-    gobject-introspection
-    makeWrapper
-    wrapGAppsHook3
-  ] ++ lib.optionals documentationSupport [
-    help2man
-    python3.pkgs.sphinx
-    python3.pkgs.sphinx-rtd-theme
-  ] ++ lib.optional translationSupport gettext;
+  nativeBuildInputs =
+    [
+      gobject-introspection
+      makeWrapper
+      wrapGAppsHook3
+    ]
+    ++ lib.optionals documentationSupport [
+      help2man
+      python3.pkgs.sphinx
+      python3.pkgs.sphinx-rtd-theme
+    ]
+    ++ lib.optional translationSupport gettext;
 
-  buildInputs = [
-    iconTheme
-    gtk3
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-    gst-libav
-  ]) ++ (with python3.pkgs; [
-    bsddb3
-    dbus-python
-    mutagen
-    pygobject3
-    pycairo
-    gst-python
-  ]) ++ lib.optional deviceDetectionSupport udisks
-  ++ lib.optional notificationSupport libnotify
-  ++ lib.optional scalableIconSupport librsvg
-  ++ lib.optional ipythonSupport python3.pkgs.ipython
-  ++ lib.optional cdMetadataSupport python3.pkgs.discid
-  ++ lib.optional lastfmSupport python3.pkgs.pylast
-  ++ lib.optional lyricsManiaSupport python3.pkgs.lxml
-  ++ lib.optional multimediaKeySupport keybinder3
-  ++ lib.optional (musicBrainzSupport || cdMetadataSupport) python3.pkgs.musicbrainzngs
-  ++ lib.optional podcastSupport python3.pkgs.feedparser
-  ++ lib.optional wikipediaSupport webkitgtk;
+  buildInputs =
+    [
+      iconTheme
+      gtk3
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+      gst-libav
+    ])
+    ++ (with python3.pkgs; [
+      bsddb3
+      dbus-python
+      mutagen
+      pygobject3
+      pycairo
+      gst-python
+    ])
+    ++ lib.optional deviceDetectionSupport udisks
+    ++ lib.optional notificationSupport libnotify
+    ++ lib.optional scalableIconSupport librsvg
+    ++ lib.optional ipythonSupport python3.pkgs.ipython
+    ++ lib.optional cdMetadataSupport python3.pkgs.discid
+    ++ lib.optional lastfmSupport python3.pkgs.pylast
+    ++ lib.optional lyricsManiaSupport python3.pkgs.lxml
+    ++ lib.optional multimediaKeySupport keybinder3
+    ++ lib.optional (musicBrainzSupport || cdMetadataSupport) python3.pkgs.musicbrainzngs
+    ++ lib.optional podcastSupport python3.pkgs.feedparser
+    ++ lib.optional wikipediaSupport webkitgtk;
 
   nativeCheckInputs = with python3.pkgs; [
     pytest
@@ -87,7 +109,9 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/exaile \
       --set PYTHONPATH $PYTHONPATH \
-      --prefix PATH : ${lib.makeBinPath ([ python3 ] ++ lib.optionals streamripperSupport [ streamripper ]) }
+      --prefix PATH : ${
+        lib.makeBinPath ([ python3 ] ++ lib.optionals streamripperSupport [ streamripper ])
+      }
   '';
 
   meta = with lib; {

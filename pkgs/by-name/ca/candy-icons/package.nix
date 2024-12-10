@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gtk3
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
 }:
 
 stdenvNoCC.mkDerivation {

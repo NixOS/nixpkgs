@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, fetchpatch, runCommand, bootstrap_cmds, coreutils, glibc, m4, runtimeShell }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  runCommand,
+  bootstrap_cmds,
+  coreutils,
+  glibc,
+  m4,
+  runtimeShell,
+}:
 
 let
   options = rec {
@@ -29,9 +40,12 @@ let
     };
     armv6l-linux = armv7l-linux;
   };
-  cfg = options.${stdenv.hostPlatform.system} or (throw "missing source url for platform ${stdenv.hostPlatform.system}");
+  cfg =
+    options.${stdenv.hostPlatform.system}
+      or (throw "missing source url for platform ${stdenv.hostPlatform.system}");
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "ccl";
   version = "1.12.2";
 
@@ -40,28 +54,42 @@ in stdenv.mkDerivation rec {
     sha256 = cfg.sha256;
   };
 
-  buildInputs = if stdenv.isDarwin then [ bootstrap_cmds m4 ] else [ glibc m4 ];
+  buildInputs =
+    if stdenv.isDarwin then
+      [
+        bootstrap_cmds
+        m4
+      ]
+    else
+      [
+        glibc
+        m4
+      ];
 
   CCL_RUNTIME = cfg.runtime;
   CCL_KERNEL = cfg.kernel;
 
-  postPatch = if stdenv.isDarwin then ''
-    substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
-      --replace "M4 = gm4"   "M4 = m4" \
-      --replace "dtrace"     "/usr/sbin/dtrace" \
-      --replace "/bin/rm"    "${coreutils}/bin/rm" \
-      --replace "/bin/echo"  "${coreutils}/bin/echo"
+  postPatch =
+    if stdenv.isDarwin then
+      ''
+        substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
+          --replace "M4 = gm4"   "M4 = m4" \
+          --replace "dtrace"     "/usr/sbin/dtrace" \
+          --replace "/bin/rm"    "${coreutils}/bin/rm" \
+          --replace "/bin/echo"  "${coreutils}/bin/echo"
 
-    substituteInPlace lisp-kernel/m4macros.m4 \
-      --replace "/bin/pwd" "${coreutils}/bin/pwd"
-  '' else ''
-    substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
-      --replace "/bin/rm"    "${coreutils}/bin/rm" \
-      --replace "/bin/echo"  "${coreutils}/bin/echo"
+        substituteInPlace lisp-kernel/m4macros.m4 \
+          --replace "/bin/pwd" "${coreutils}/bin/pwd"
+      ''
+    else
+      ''
+        substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
+          --replace "/bin/rm"    "${coreutils}/bin/rm" \
+          --replace "/bin/echo"  "${coreutils}/bin/echo"
 
-    substituteInPlace lisp-kernel/m4macros.m4 \
-      --replace "/bin/pwd" "${coreutils}/bin/pwd"
-  '';
+        substituteInPlace lisp-kernel/m4macros.m4 \
+          --replace "/bin/pwd" "${coreutils}/bin/pwd"
+      '';
 
   buildPhase = ''
     make -C lisp-kernel/${CCL_KERNEL} clean
@@ -84,11 +112,11 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Clozure Common Lisp";
-    homepage    = "https://ccl.clozure.com/";
+    homepage = "https://ccl.clozure.com/";
     maintainers = lib.teams.lisp.members;
-    platforms   = attrNames options;
+    platforms = attrNames options;
     # assembler failures during build, x86_64-darwin broken since 2020-10-14
-    broken      = (stdenv.isDarwin && stdenv.isx86_64);
-    license     = licenses.asl20;
+    broken = (stdenv.isDarwin && stdenv.isx86_64);
+    license = licenses.asl20;
   };
 }

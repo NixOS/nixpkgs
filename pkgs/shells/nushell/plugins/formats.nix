@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, rustPlatform
-, nushell
-, pkg-config
-, IOKit
-, Foundation
-, nix-update-script
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  nushell,
+  pkg-config,
+  IOKit,
+  Foundation,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,9 +14,11 @@ rustPlatform.buildRustPackage rec {
   inherit (nushell) version src;
   cargoHash = "sha256-+DTsBh3+nLjuwuk0rnxZeSQ+lM55PAhj+8e9L2bQdXU=";
 
-  nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
-  buildInputs = lib.optionals stdenv.isDarwin [ IOKit Foundation ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    IOKit
+    Foundation
+  ];
   cargoBuildFlags = [ "--package nu_plugin_formats" ];
 
   checkPhase = ''
@@ -32,7 +35,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "nu_plugin_formats";
     homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_formats";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ viraptor aidalgol ];
+    maintainers = with maintainers; [
+      viraptor
+      aidalgol
+    ];
     platforms = with platforms; all;
   };
 }

@@ -1,4 +1,13 @@
-{ lib, beamPackages, makeWrapper, rebar3, elixir, erlang, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  beamPackages,
+  makeWrapper,
+  rebar3,
+  elixir,
+  erlang,
+  fetchFromGitHub,
+  nixosTests,
+}:
 beamPackages.mixRelease rec {
   pname = "livebook";
   version = "0.12.1";
@@ -24,9 +33,14 @@ beamPackages.mixRelease rec {
 
   postInstall = ''
     wrapProgram $out/bin/livebook \
-      --prefix PATH : ${lib.makeBinPath [ elixir erlang ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          elixir
+          erlang
+        ]
+      } \
       --set MIX_REBAR3 ${rebar3}/bin/rebar3
-    '';
+  '';
 
   passthru.tests = {
     livebook-service = nixosTests.livebook-service;

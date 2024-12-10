@@ -1,5 +1,6 @@
-{ symlinkJoin
-, nickel
+{
+  symlinkJoin,
+  nickel,
 }:
 
 symlinkJoin {
@@ -10,7 +11,12 @@ symlinkJoin {
   paths = [ nickel.nls ];
 
   meta = {
-    inherit (nickel.meta) homepage changelog license maintainers;
+    inherit (nickel.meta)
+      homepage
+      changelog
+      license
+      maintainers
+      ;
     description = "A language server for the Nickel programming language";
     mainProgram = "nls";
     longDescription = ''

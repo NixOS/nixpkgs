@@ -14,5 +14,5 @@ mkKdeDerivation rec {
 
   dontStrip = true;
 
-  meta.license = [lib.licenses.lgpl3Plus];
+  meta.license = [ lib.licenses.lgpl3Plus ];
 }

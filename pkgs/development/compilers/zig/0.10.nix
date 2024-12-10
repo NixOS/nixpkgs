@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, llvmPackages
-, libxml2
-, zlib
-, coreutils
-, callPackage
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  llvmPackages,
+  libxml2,
+  zlib,
+  coreutils,
+  callPackage,
 }@args:
 
 import ./generic.nix args {
@@ -14,7 +15,10 @@ import ./generic.nix args {
 
   hash = "sha256-69QIkkKzApOGfrBdgtmxFMDytRkSh+0YiaJQPbXsBeo=";
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   patches = [
     # Backport alignment related panics from zig-master to 0.10.

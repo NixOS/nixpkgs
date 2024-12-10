@@ -1,5 +1,15 @@
-{ lib, stdenv, autoreconfHook, pkg-config, SDL2, SDL2_mixer, SDL2_net
-, fetchFromGitHub, fetchpatch, python3 }:
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  pkg-config,
+  SDL2,
+  SDL2_mixer,
+  SDL2_net,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "chocolate-doom";
@@ -22,7 +32,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   postPatch = ''
     sed -e 's#/games#/bin#g' -i src{,/setup}/Makefile.am
@@ -35,7 +48,11 @@ stdenv.mkDerivation rec {
     # for documentation
     python3
   ];
-  buildInputs = [ SDL2 SDL2_mixer SDL2_net ];
+  buildInputs = [
+    SDL2
+    SDL2_mixer
+    SDL2_net
+  ];
   enableParallelBuilding = true;
 
   meta = {

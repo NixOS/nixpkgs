@@ -1,40 +1,67 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkg-config
-, libX11, glfw, glew, fftwFloat, volk, zstd, AppKit
-# Sources
-, airspy_source ? true, airspy
-, airspyhf_source ? true, airspyhf
-, bladerf_source ? true, libbladeRF
-, file_source ? true
-, hackrf_source ? true, hackrf
-, limesdr_source ? true, limesuite
-, perseus_source ? false    # needs libperseus-sdr, not yet available in nixpks
-, plutosdr_source ? stdenv.isLinux, libiio, libad9361
-, rfspace_source ? true
-, rtl_sdr_source ? true, rtl-sdr-osmocom, libusb1  # osmocom better w/ rtlsdr v4
-, rtl_tcp_source ? true
-, sdrplay_source ? false, sdrplay
-, soapy_source ? true, soapysdr
-, spyserver_source ? true
-, usrp_source	? false, uhd, boost
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libX11,
+  glfw,
+  glew,
+  fftwFloat,
+  volk,
+  zstd,
+  AppKit,
+  # Sources
+  airspy_source ? true,
+  airspy,
+  airspyhf_source ? true,
+  airspyhf,
+  bladerf_source ? true,
+  libbladeRF,
+  file_source ? true,
+  hackrf_source ? true,
+  hackrf,
+  limesdr_source ? true,
+  limesuite,
+  perseus_source ? false, # needs libperseus-sdr, not yet available in nixpks
+  plutosdr_source ? stdenv.isLinux,
+  libiio,
+  libad9361,
+  rfspace_source ? true,
+  rtl_sdr_source ? true,
+  rtl-sdr-osmocom,
+  libusb1, # osmocom better w/ rtlsdr v4
+  rtl_tcp_source ? true,
+  sdrplay_source ? false,
+  sdrplay,
+  soapy_source ? true,
+  soapysdr,
+  spyserver_source ? true,
+  usrp_source ? false,
+  uhd,
+  boost,
 
-# Sinks
-, audio_sink ? true, rtaudio
-, network_sink ? true
-, portaudio_sink ? false, portaudio
+  # Sinks
+  audio_sink ? true,
+  rtaudio,
+  network_sink ? true,
+  portaudio_sink ? false,
+  portaudio,
 
-# Decoders
-, falcon9_decoder ? false
-, m17_decoder ? false, codec2
-, meteor_demodulator ? true
-, radio ? true
-, weather_sat_decoder ? false  # is missing some dsp/pll.h
+  # Decoders
+  falcon9_decoder ? false,
+  m17_decoder ? false,
+  codec2,
+  meteor_demodulator ? true,
+  radio ? true,
+  weather_sat_decoder ? false, # is missing some dsp/pll.h
 
-# Misc
-, discord_presence ? true
-, frequency_manager ? true
-, recorder ? true
-, rigctl_server ? true
-, scanner ? true
+  # Misc
+  discord_presence ? true,
+  frequency_manager ? true,
+  recorder ? true,
+  rigctl_server ? true,
+  scanner ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -67,9 +94,19 @@ stdenv.mkDerivation rec {
     substituteInPlace core/src/version.h --replace "1.1.0" "$version"
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ glfw glew fftwFloat volk zstd ]
+  buildInputs =
+    [
+      glfw
+      glew
+      fftwFloat
+      volk
+      zstd
+    ]
     ++ lib.optional stdenv.isDarwin AppKit
     ++ lib.optional stdenv.isLinux libX11
     ++ lib.optional airspy_source airspy
@@ -77,11 +114,20 @@ stdenv.mkDerivation rec {
     ++ lib.optional bladerf_source libbladeRF
     ++ lib.optional hackrf_source hackrf
     ++ lib.optional limesdr_source limesuite
-    ++ lib.optionals rtl_sdr_source [ rtl-sdr-osmocom libusb1 ]
+    ++ lib.optionals rtl_sdr_source [
+      rtl-sdr-osmocom
+      libusb1
+    ]
     ++ lib.optional sdrplay_source sdrplay
     ++ lib.optional soapy_source soapysdr
-    ++ lib.optionals plutosdr_source [ libiio libad9361 ]
-    ++ lib.optionals usrp_source [ uhd boost ]
+    ++ lib.optionals plutosdr_source [
+      libiio
+      libad9361
+    ]
+    ++ lib.optionals usrp_source [
+      uhd
+      boost
+    ]
     ++ lib.optional audio_sink rtaudio
     ++ lib.optional portaudio_sink portaudio
     ++ lib.optional m17_decoder codec2;

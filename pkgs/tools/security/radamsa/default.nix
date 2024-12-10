@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fetchFromGitLab, bash }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitLab,
+  bash,
+}:
 
 let
   # Fetch explicitly, otherwise build will try to do so
@@ -28,7 +34,10 @@ stdenv.mkDerivation rec {
     patchShebangs tests
   '';
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" "BINDIR=" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "BINDIR="
+  ];
 
   nativeCheckInputs = [ bash ];
   doCheck = true;
@@ -37,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "A general purpose fuzzer";
     mainProgram = "radamsa";
     longDescription = "Radamsa is a general purpose data fuzzer. It reads data from given sample files, or standard input if none are given, and outputs modified data. It is usually used to generate malformed data for testing programs.";
-    homepage =  "https://gitlab.com/akihe/radamsa";
+    homepage = "https://gitlab.com/akihe/radamsa";
     maintainers = [ ];
     platforms = lib.platforms.all;
   };

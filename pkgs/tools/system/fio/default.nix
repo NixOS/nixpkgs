@@ -1,26 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper
-, libaio, python3, zlib
-, withGnuplot ? false, gnuplot ? null }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  libaio,
+  python3,
+  zlib,
+  withGnuplot ? false,
+  gnuplot ? null,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fio";
   version = "3.37";
 
   src = fetchFromGitHub {
-    owner  = "axboe";
-    repo   = "fio";
-    rev    = "fio-${version}";
+    owner = "axboe";
+    repo = "fio";
+    rev = "fio-${version}";
     sha256 = "sha256-dKHTxVglH10aV44RuSeIFATn83DVdmCYtuaiS3b0+zo=";
   };
 
-  buildInputs = [ python3 zlib ]
-    ++ lib.optional (!stdenv.isDarwin) libaio;
+  buildInputs = [
+    python3
+    zlib
+  ] ++ lib.optional (!stdenv.isDarwin) libaio;
 
   # ./configure does not support autoconf-style --build=/--host=.
   # We use $CC instead.
   configurePlatforms = [ ];
 
-  nativeBuildInputs = [ makeWrapper python3.pkgs.wrapPython ];
+  nativeBuildInputs = [
+    makeWrapper
+    python3.pkgs.wrapPython
+  ];
 
   strictDeps = true;
 

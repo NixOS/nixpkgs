@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, bash
-, python3
-, installShellFiles
-, gawk
-, curl
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  bash,
+  python3,
+  installShellFiles,
+  gawk,
+  curl,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-plTBh2LAXkYVSxN0IZJQuPr7QxD7+OAqHl/Zl8JPCmg=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 
@@ -73,6 +77,10 @@ stdenv.mkDerivation rec {
     description = "Contains a set of utilities and settings for Linux deployments in EC2";
     homepage = "https://github.com/amazonlinux/amazon-ec2-utils";
     license = licenses.mit;
-    maintainers = with maintainers; [ ketzacoatl thefloweringash anthonyroussel ];
+    maintainers = with maintainers; [
+      ketzacoatl
+      thefloweringash
+      anthonyroussel
+    ];
   };
 }

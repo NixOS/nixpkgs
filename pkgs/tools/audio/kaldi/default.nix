@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, openblas
-, blas
-, lapack
-, icu
-, cmake
-, pkg-config
-, fetchFromGitHub
-, python3
-, Accelerate
-, _experimental-update-script-combinators
-, common-updater-scripts
-, ripgrep
-, unstableGitUpdater
-, writeShellScript
+{
+  lib,
+  stdenv,
+  openblas,
+  blas,
+  lapack,
+  icu,
+  cmake,
+  pkg-config,
+  fetchFromGitHub,
+  python3,
+  Accelerate,
+  _experimental-update-script-combinators,
+  common-updater-scripts,
+  ripgrep,
+  unstableGitUpdater,
+  writeShellScript,
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
@@ -36,12 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-DFETCHCONTENT_SOURCE_DIR_OPENFST:PATH=${finalAttrs.passthru.sources.openfst}"
   ];
 
-  buildInputs = [
-    openblas
-    icu
-  ] ++ lib.optionals stdenv.isDarwin [
-    Accelerate
-  ];
+  buildInputs =
+    [
+      openblas
+      icu
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Accelerate
+    ];
 
   nativeBuildInputs = [
     cmake
@@ -77,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     updateScript =
       let
-        updateSource = unstableGitUpdater {};
+        updateSource = unstableGitUpdater { };
         updateOpenfst = writeShellScript "update-openfst" ''
           hash=$(${ripgrep}/bin/rg --multiline --pcre2 --only-matching 'FetchContent_Declare\(\s*openfst[^)]*GIT_TAG\s*([0-9a-f]{40})' --replace '$1' "${finalAttrs.src}/cmake/third_party/openfst.cmake")
           ${common-updater-scripts}/bin/update-source-version kaldi.sources.openfst "$hash" --source-key=out "--version-key=rev"

@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, libX11, IOKit }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  libX11,
+  IOKit,
+}:
 
 stdenv.mkDerivation rec {
   version = "0.8";
@@ -28,8 +35,7 @@ stdenv.mkDerivation rec {
     ./configure-cfgfile-path.patch
   ];
 
-  buildInputs = [ libX11 ]
-    ++ lib.optional stdenv.isDarwin IOKit;
+  buildInputs = [ libX11 ] ++ lib.optional stdenv.isDarwin IOKit;
 
   configureFlags = [ "--disable-debug" ];
 

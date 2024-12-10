@@ -1,5 +1,22 @@
-{ lib, stdenv, fetchurl, pkgsi686Linux, dpkg, makeWrapper, coreutils, gnused, gawk, file, cups, util-linux, xxd, runtimeShell
-, ghostscript, a2ps, bash }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkgsi686Linux,
+  dpkg,
+  makeWrapper,
+  coreutils,
+  gnused,
+  gawk,
+  file,
+  cups,
+  util-linux,
+  xxd,
+  runtimeShell,
+  ghostscript,
+  a2ps,
+  bash,
+}:
 
 # Why:
 # The executable "brprintconf_mfcj880dw" binary is looking for "/opt/brother/Printers/%s/inf/br%sfunc" and "/opt/brother/Printers/%s/inf/br%src".
@@ -29,7 +46,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ cups ghostscript dpkg a2ps ];
+  buildInputs = [
+    cups
+    ghostscript
+    dpkg
+    a2ps
+  ];
 
   dontUnpack = true;
 
@@ -77,18 +99,32 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/brother/Printers/mfcj880dw/lpd/filtermfcj880dw $out/lib/cups/filter/brother_lpdwrapper_mfcj880dw
 
     wrapProgram $out/opt/brother/Printers/mfcj880dw/lpd/psconvertij2 \
-      --prefix PATH ":" ${ lib.makeBinPath [ coreutils gnused gawk ] }
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          coreutils
+          gnused
+          gawk
+        ]
+      }
     wrapProgram $out/opt/brother/Printers/mfcj880dw/lpd/filtermfcj880dw \
-      --prefix PATH ":" ${ lib.makeBinPath [ coreutils gnused file ghostscript a2ps ] }
-    '';
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          coreutils
+          gnused
+          file
+          ghostscript
+          a2ps
+        ]
+      }
+  '';
 
   meta = with lib; {
-    description  = "Brother MFC-J880DW LPR driver";
+    description = "Brother MFC-J880DW LPR driver";
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj880dw_us_eu_as&os=128";
-    homepage     = "http://www.brother.com/";
+    homepage = "http://www.brother.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license      = with licenses; unfree;
-    maintainers  = with maintainers; [ _6543 ];
-    platforms    = with platforms; linux;
+    license = with licenses; unfree;
+    maintainers = with maintainers; [ _6543 ];
+    platforms = with platforms; linux;
   };
 }

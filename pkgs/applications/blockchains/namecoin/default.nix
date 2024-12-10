@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkg-config, hexdump }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  boost,
+  libevent,
+  autoreconfHook,
+  db4,
+  miniupnpc,
+  eject,
+  pkg-config,
+  hexdump,
+}:
 
 stdenv.mkDerivation rec {
   pname = "namecoind";

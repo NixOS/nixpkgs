@@ -1,4 +1,10 @@
-{ stdenv, fetchYarnDeps, fixup-yarn-lock, callPackage, nodejs }:
+{
+  stdenv,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  callPackage,
+  nodejs,
+}:
 let
   common = callPackage ./common.nix { };
 in

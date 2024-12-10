@@ -1,21 +1,24 @@
-{ lib, ... }: {
+{ lib, ... }:
+{
 
   name = "activation-etc-overlay-mutable";
 
   meta.maintainers = with lib.maintainers; [ nikstur ];
 
-  nodes.machine = { pkgs, ... }: {
-    system.etc.overlay.enable = true;
-    system.etc.overlay.mutable = true;
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      system.etc.overlay.enable = true;
+      system.etc.overlay.mutable = true;
 
-    # Prerequisites
-    boot.initrd.systemd.enable = true;
-    boot.kernelPackages = pkgs.linuxPackages_latest;
+      # Prerequisites
+      boot.initrd.systemd.enable = true;
+      boot.kernelPackages = pkgs.linuxPackages_latest;
 
-    specialisation.new-generation.configuration = {
-      environment.etc."newgen".text = "newgen";
+      specialisation.new-generation.configuration = {
+        environment.etc."newgen".text = "newgen";
+      };
     };
-  };
 
   testScript = ''
     with subtest("/etc is mounted as an overlay"):

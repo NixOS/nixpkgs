@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, libwebp, pidgin, tdlib } :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  libwebp,
+  pidgin,
+  tdlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tdlib-purple";
@@ -25,11 +34,17 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libwebp pidgin tdlib ];
+  buildInputs = [
+    libwebp
+    pidgin
+    tdlib
+  ];
 
   cmakeFlags = [ "-DNoVoip=True" ]; # libtgvoip required
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ "-U__ARM_NEON__" ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ "-U__ARM_NEON__" ]
+  );
 
   meta = with lib; {
     homepage = "https://github.com/ars3niy/tdlib-purple";

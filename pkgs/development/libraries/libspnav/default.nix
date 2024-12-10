@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, libX11, fixDarwinDylibNames }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libX11,
+  fixDarwinDylibNames,
+}:
 
 stdenv.mkDerivation rec {
   version = "0.2.3";
@@ -20,7 +26,7 @@ stdenv.mkDerivation rec {
     ./configure-socket-path.patch
   ];
 
-  configureFlags = [ "--disable-debug"];
+  configureFlags = [ "--disable-debug" ];
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "AR=${stdenv.cc.targetPrefix}ar"

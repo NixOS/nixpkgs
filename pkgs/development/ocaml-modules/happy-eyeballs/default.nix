@@ -1,5 +1,12 @@
-{ lib, buildDunePackage, fetchurl
-, domain-name, duration, fmt, ipaddr, logs
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  domain-name,
+  duration,
+  fmt,
+  ipaddr,
+  logs,
 }:
 
 buildDunePackage rec {
@@ -26,6 +33,9 @@ buildDunePackage rec {
     description = "Connecting to a remote host via IP version 4 or 6";
     homepage = "https://github.com/roburio/happy-eyeballs";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ vbgl ulrikstrid ];
+    maintainers = with lib.maintainers; [
+      vbgl
+      ulrikstrid
+    ];
   };
 }

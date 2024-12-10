@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,7 +13,8 @@ let
   format = pkgs.formats.yaml { };
   configFile = format.generate "config.yml" cfg.settings;
 
-in {
+in
+{
   options = {
     services.go-autoconfig = {
 

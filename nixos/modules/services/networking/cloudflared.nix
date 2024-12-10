@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -124,7 +129,12 @@ let
     };
 
     proxyType = mkOption {
-      type = with types; nullOr (enum [ "" "socks" ]);
+      type =
+        with types;
+        nullOr (enum [
+          ""
+          "socks"
+        ]);
       default = null;
       example = "";
       description = ''
@@ -158,83 +168,97 @@ in
       description = ''
         Cloudflare tunnels.
       '';
-      type = types.attrsOf (types.submodule ({ name, ... }: {
-        options = {
-          inherit originRequest;
+      type = types.attrsOf (
+        types.submodule (
+          { name, ... }:
+          {
+            options = {
+              inherit originRequest;
 
-          credentialsFile = mkOption {
-            type = types.str;
-            description = ''
-              Credential file.
+              credentialsFile = mkOption {
+                type = types.str;
+                description = ''
+                  Credential file.
 
-              See [https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#credentials-file](Credentials file).
-            '';
-          };
-
-          warp-routing = {
-            enabled = mkOption {
-              type = with types; nullOr bool;
-              default = null;
-              description = ''
-                Enable warp routing.
-
-                See [https://developers.cloudflare.com/cloudflare-one/tutorials/warp-to-tunnel/](Connect from WARP to a private network on Cloudflare using Cloudflare Tunnel).
-              '';
-            };
-          };
-
-          default = mkOption {
-            type = types.str;
-            description = ''
-              Catch-all service if no ingress matches.
-
-              See `service`.
-            '';
-            example = "http_status:404";
-          };
-
-          ingress = mkOption {
-            type = with types; attrsOf (either str (submodule ({ hostname, ... }: {
-              options = {
-                inherit originRequest;
-
-                service = mkOption {
-                  type = with types; nullOr str;
-                  default = null;
-                  description = ''
-                    Service to pass the traffic.
-
-                    See [https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/#supported-protocols](Supported protocols).
-                  '';
-                  example = "http://localhost:80, tcp://localhost:8000, unix:/home/production/echo.sock, hello_world or http_status:404";
-                };
-
-                path = mkOption {
-                  type = with types; nullOr str;
-                  default = null;
-                  description = ''
-                    Path filter.
-
-                    If not specified, all paths will be matched.
-                  '';
-                  example = "/*.(jpg|png|css|js)";
-                };
-
+                  See [https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#credentials-file](Credentials file).
+                '';
               };
-            })));
-            default = { };
-            description = ''
-              Ingress rules.
 
-              See [https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/](Ingress rules).
-            '';
-            example = {
-              "*.domain.com" = "http://localhost:80";
-              "*.anotherone.com" = "http://localhost:80";
+              warp-routing = {
+                enabled = mkOption {
+                  type = with types; nullOr bool;
+                  default = null;
+                  description = ''
+                    Enable warp routing.
+
+                    See [https://developers.cloudflare.com/cloudflare-one/tutorials/warp-to-tunnel/](Connect from WARP to a private network on Cloudflare using Cloudflare Tunnel).
+                  '';
+                };
+              };
+
+              default = mkOption {
+                type = types.str;
+                description = ''
+                  Catch-all service if no ingress matches.
+
+                  See `service`.
+                '';
+                example = "http_status:404";
+              };
+
+              ingress = mkOption {
+                type =
+                  with types;
+                  attrsOf (
+                    either str (
+                      submodule (
+                        { hostname, ... }:
+                        {
+                          options = {
+                            inherit originRequest;
+
+                            service = mkOption {
+                              type = with types; nullOr str;
+                              default = null;
+                              description = ''
+                                Service to pass the traffic.
+
+                                See [https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/#supported-protocols](Supported protocols).
+                              '';
+                              example = "http://localhost:80, tcp://localhost:8000, unix:/home/production/echo.sock, hello_world or http_status:404";
+                            };
+
+                            path = mkOption {
+                              type = with types; nullOr str;
+                              default = null;
+                              description = ''
+                                Path filter.
+
+                                If not specified, all paths will be matched.
+                              '';
+                              example = "/*.(jpg|png|css|js)";
+                            };
+
+                          };
+                        }
+                      )
+                    )
+                  );
+                default = { };
+                description = ''
+                  Ingress rules.
+
+                  See [https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/local-management/ingress/](Ingress rules).
+                '';
+                example = {
+                  "*.domain.com" = "http://localhost:80";
+                  "*.anotherone.com" = "http://localhost:80";
+                };
+              };
             };
-          };
-        };
-      }));
+          }
+        )
+      );
 
       default = { };
       example = {
@@ -252,66 +276,74 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.targets =
-      mapAttrs'
-        (name: tunnel:
-          nameValuePair "cloudflared-tunnel-${name}" {
-            description = "Cloudflare tunnel '${name}' target";
-            requires = [ "cloudflared-tunnel-${name}.service" ];
-            after = [ "cloudflared-tunnel-${name}.service" ];
-            unitConfig.StopWhenUnneeded = true;
-          }
-        )
-        config.services.cloudflared.tunnels;
+    systemd.targets = mapAttrs' (
+      name: tunnel:
+      nameValuePair "cloudflared-tunnel-${name}" {
+        description = "Cloudflare tunnel '${name}' target";
+        requires = [ "cloudflared-tunnel-${name}.service" ];
+        after = [ "cloudflared-tunnel-${name}.service" ];
+        unitConfig.StopWhenUnneeded = true;
+      }
+    ) config.services.cloudflared.tunnels;
 
-    systemd.services =
-      mapAttrs'
-        (name: tunnel:
-          let
-            filterConfig = lib.attrsets.filterAttrsRecursive (_: v: ! builtins.elem v [ null [ ] { } ]);
+    systemd.services = mapAttrs' (
+      name: tunnel:
+      let
+        filterConfig = lib.attrsets.filterAttrsRecursive (
+          _: v:
+          !builtins.elem v [
+            null
+            [ ]
+            { }
+          ]
+        );
 
-            filterIngressSet = filterAttrs (_: v: builtins.typeOf v == "set");
-            filterIngressStr = filterAttrs (_: v: builtins.typeOf v == "string");
+        filterIngressSet = filterAttrs (_: v: builtins.typeOf v == "set");
+        filterIngressStr = filterAttrs (_: v: builtins.typeOf v == "string");
 
-            ingressesSet = filterIngressSet tunnel.ingress;
-            ingressesStr = filterIngressStr tunnel.ingress;
+        ingressesSet = filterIngressSet tunnel.ingress;
+        ingressesStr = filterIngressStr tunnel.ingress;
 
-            fullConfig = filterConfig {
-              tunnel = name;
-              "credentials-file" = tunnel.credentialsFile;
-              warp-routing = filterConfig tunnel.warp-routing;
-              originRequest = filterConfig tunnel.originRequest;
-              ingress =
-                (map
-                  (key: {
-                    hostname = key;
-                  } // getAttr key (filterConfig (filterConfig ingressesSet)))
-                  (attrNames ingressesSet))
-                ++
-                (map
-                  (key: {
-                    hostname = key;
-                    service = getAttr key ingressesStr;
-                  })
-                  (attrNames ingressesStr))
-                ++ [{ service = tunnel.default; }];
-            };
+        fullConfig = filterConfig {
+          tunnel = name;
+          "credentials-file" = tunnel.credentialsFile;
+          warp-routing = filterConfig tunnel.warp-routing;
+          originRequest = filterConfig tunnel.originRequest;
+          ingress =
+            (map (
+              key:
+              {
+                hostname = key;
+              }
+              // getAttr key (filterConfig (filterConfig ingressesSet))
+            ) (attrNames ingressesSet))
+            ++ (map (key: {
+              hostname = key;
+              service = getAttr key ingressesStr;
+            }) (attrNames ingressesStr))
+            ++ [ { service = tunnel.default; } ];
+        };
 
-            mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
-          in
-          nameValuePair "cloudflared-tunnel-${name}" ({
-            after = [ "network.target" "network-online.target" ];
-            wants = [ "network.target" "network-online.target" ];
-            wantedBy = [ "multi-user.target" ];
-            serviceConfig = {
-              User = cfg.user;
-              Group = cfg.group;
-              ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
-              Restart = "on-failure";
-            };
-          })
-        )
-        config.services.cloudflared.tunnels;
+        mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
+      in
+      nameValuePair "cloudflared-tunnel-${name}" ({
+        after = [
+          "network.target"
+          "network-online.target"
+        ];
+        wants = [
+          "network.target"
+          "network-online.target"
+        ];
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          User = cfg.user;
+          Group = cfg.group;
+          ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
+          Restart = "on-failure";
+        };
+      })
+    ) config.services.cloudflared.tunnels;
 
     users.users = mkIf (cfg.user == "cloudflared") {
       cloudflared = {
@@ -325,5 +357,8 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ bbigras anpin ];
+  meta.maintainers = with maintainers; [
+    bbigras
+    anpin
+  ];
 }

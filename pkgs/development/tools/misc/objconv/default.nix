@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, unzip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "objconv";
@@ -12,7 +17,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   unpackPhase = ''
     mkdir -p "$name"
@@ -34,7 +42,10 @@ stdenv.mkDerivation rec {
     mainProgram = "objconv";
     homepage = "https://www.agner.org/optimize/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ orivej vrthra ];
+    maintainers = with maintainers; [
+      orivej
+      vrthra
+    ];
     platforms = platforms.unix;
   };
 }

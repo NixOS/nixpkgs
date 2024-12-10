@@ -1,6 +1,7 @@
-{ lib
-, buildDunePackage
-, timedesc
+{
+  lib,
+  buildDunePackage,
+  timedesc,
 }:
 
 buildDunePackage {
@@ -12,4 +13,3 @@ buildDunePackage {
     description = "Virtual library for Timedesc time zone database backends";
   };
 }
-

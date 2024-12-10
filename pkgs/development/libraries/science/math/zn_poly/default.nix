@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gmp
-, python3
-, tune ? false # tune to hardware, impure
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gmp,
+  python3,
+  tune ? false, # tune to hardware, impure
 }:
 
 stdenv.mkDerivation rec {
@@ -38,7 +39,10 @@ stdenv.mkDerivation rec {
   # Tuning (either autotuning or with hand-written parameters) is possible
   # but not implemented here.
   # It seems buggy anyways (see homepage).
-  buildFlags = [ "all" "${libbasename}${libext}" ];
+  buildFlags = [
+    "all"
+    "${libbasename}${libext}"
+  ];
 
   configureFlags = lib.optionals (!tune) [
     "--disable-tuning"

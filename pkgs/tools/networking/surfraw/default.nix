@@ -1,4 +1,9 @@
-{lib, stdenv, fetchurl, perl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "surfraw";
@@ -18,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Provides a fast unix command line interface to a variety of popular WWW search engines and other artifacts of power";
     homepage = "https://gitlab.com/surfraw/Surfraw";
-    maintainers = [];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     license = lib.licenses.publicDomain;
   };

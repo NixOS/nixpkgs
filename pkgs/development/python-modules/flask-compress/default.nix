@@ -28,9 +28,12 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    flask
-  ] ++ lib.optionals (!isPyPy) [ brotli ] ++ lib.optionals isPyPy [ brotlicffi ];
+  propagatedBuildInputs =
+    [
+      flask
+    ]
+    ++ lib.optionals (!isPyPy) [ brotli ]
+    ++ lib.optionals isPyPy [ brotlicffi ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
