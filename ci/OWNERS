@@ -223,7 +223,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/top-level/java-packages.nix @NixOS/java
 
 # Jetbrains
-/pkgs/applications/editors/jetbrains @edwtjo
+/pkgs/applications/editors/jetbrains @edwtjo @leona-ya
 
 # Licenses
 /lib/licenses.nix @alyssais
