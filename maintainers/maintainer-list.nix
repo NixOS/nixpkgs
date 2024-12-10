@@ -9565,6 +9565,12 @@
     githubId = 24387926;
     name = "Gabriel Pereira";
   };
+  imide = {
+    email = "imide@imide.xyz";
+    github = "imide";
+    githubId = 43657624;
+    name = "imide";
+  };
   imincik = {
     email = "ivan.mincik@gmail.com";
     matrix = "@imincik:matrix.org";

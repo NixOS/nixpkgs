@@ -14,7 +14,7 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  version = "1.1.34";
+  version = "1.1.38";
   pname = "bun";
 
   src = passthru.sources.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
@@ -68,19 +68,27 @@ stdenvNoCC.mkDerivation rec {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
-        hash = "sha256-unFn4bexupfjtFA6Nxzi/vC1stzuBXYP5jPfwXbZDig=";
+        hash = "sha256-u8b7Dnu5nn6VABugUQXPCdC3nAaUHZ9u49CzTcFUFZA=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
-        hash = "sha256-BIYlEyRuyUdvipsCVEHTORlJoAnH+rv1ogv10JUHyOA=";
+        hash = "sha256-Owj9CzH3RVCeH+2caQyA0aMu8rPI0FlYP2Q/aWY5vSE=";
+      };
+      "aarch64-linux-musl" = fetchurl {
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64-musl.zip";
+        hash = "sha256-iK9MGuAC+lo/zcuHWxUfPjpODCs5OdkfjWQqBuTP3Q8=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64-baseline.zip";
-        hash = "sha256-gpcDIY1IYHO0N9Quw79VonhFHdgb/NFZns2hGNuQe9g=";
+        hash = "sha256-7lzgdES6OfY1RKUUEloV6AfuFyAkcvzG3uRnE0z5DoA=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
-        hash = "sha256-S8AA/1CWxTSHZ60E2ZNQXyEAOalYgCc6dte9CvD8Lx8=";
+        hash = "sha256-ph2lNX4o1Jd/zNSFH+1i/02j6jOFMAXH3ZPayAvFOTI=";
+      };
+      "x86_64-linux-musl" = fetchurl {
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64-musl.zip";
+        hash = "sha256-WBDsC946FYyypBfNbxI3EurJDqLhg6ZML5f8t6QNJJU=";
       };
     };
     updateScript = writeShellScript "update-bun" ''
@@ -109,11 +117,8 @@ stdenvNoCC.mkDerivation rec {
       lgpl21Only # javascriptcore and webkit
     ];
     mainProgram = "bun";
-    maintainers = with maintainers; [ DAlperin jk thilobillerbeck cdmistman coffeeispower diogomdp ];
+    maintainers = with maintainers; [ DAlperin jk thilobillerbeck cdmistman coffeeispower diogomdp imide ];
     platforms = builtins.attrNames passthru.sources;
-    # Broken for Musl at 2024-01-13, tracking issue:
-    # https://github.com/NixOS/nixpkgs/issues/280716
-    broken = stdenvNoCC.hostPlatform.isMusl;
 
     # Hangs when run via Rosetta 2 on Apple Silicon
     hydraPlatforms = lib.lists.remove "x86_64-darwin" lib.platforms.all;
