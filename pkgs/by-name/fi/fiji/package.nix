@@ -8,6 +8,7 @@
 , copyDesktopItems
 , runtimeShell
 , unzip
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,14 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper copyDesktopItems unzip ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    wrapGAppsHook3
+    makeWrapper
+    copyDesktopItems
+    unzip
+  ];
+
   buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
   desktopItems = [
@@ -39,6 +47,8 @@ stdenv.mkDerivation rec {
       startupWMClass = "fiji-Main";
     })
   ];
+
+  dontWrapGApps = true;
 
   installPhase = ''
     runHook preInstall
@@ -58,7 +68,8 @@ stdenv.mkDerivation rec {
 
     makeWrapper $out/bin/.fiji-launcher-hack $out/bin/fiji \
       --prefix PATH : ${lib.makeBinPath [ jdk11 ]} \
-      --set JAVA_HOME ${jdk11.home}
+      --set JAVA_HOME ${jdk11.home} \
+      ''${gappsWrapperArgs[@]}
 
     ln $out/fiji/images/icon.png $out/share/pixmaps/fiji.png
 
